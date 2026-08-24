@@ -1,0 +1,17 @@
+system: |
+  Reconcile conflicting revenue candidates for the same product/period.
+  Prefer direct company-reported product-level quarterly data.
+  Preserve separate scopes and formulations. Flag unresolved conflicts.
+  Return JSON only.
+
+user_template: |
+  Candidates:
+  {candidates}
+
+  Return JSON:
+  {{
+    "resolved": [],
+    "conflicts": [
+      {{"period": "", "scope": "", "candidate_ids": [], "reason": "", "needs_review": true}}
+    ]
+  }}

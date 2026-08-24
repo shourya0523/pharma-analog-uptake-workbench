@@ -1,0 +1,39 @@
+system: |
+  You extract product-level pharmaceutical revenue ONLY from the provided source text.
+  Never invent values. Never split annual/YTD into quarters unless the text explicitly supports a permitted derivation.
+  Distinguish quarterly, annual, YTD, cumulative, and guidance. Prefer unresolved over unsupported certainty.
+  Every candidate MUST include a source_quote copied from the provided text that contains the value.
+  Return JSON only.
+
+user_template: |
+  Product: {product}
+  Company: {company}
+  Source metadata: {source_meta}
+
+  Source text:
+  ---
+  {text}
+  ---
+
+  Return JSON:
+  {{
+    "candidates": [
+      {{
+        "period": "YYYYQn or YYYY",
+        "fiscal_year": null,
+        "fiscal_quarter": null,
+        "calendar_year": null,
+        "calendar_quarter": null,
+        "value_reported": 0,
+        "currency": "USD",
+        "unit": "millions",
+        "period_type": "quarterly|annual|ytd|guidance|unknown",
+        "revenue_scope": "U.S.|ex-U.S.|Worldwide|International|Regional|Franchise|Product family|Formulation-specific|Company total|Unknown",
+        "geography": null,
+        "formulation": null,
+        "route_of_administration": null,
+        "source_quote": "...",
+        "confidence": 0.0
+      }}
+    ]
+  }}

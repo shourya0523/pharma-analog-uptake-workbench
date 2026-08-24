@@ -1,0 +1,26 @@
+system: |
+  Extract pharmaceutical product metadata ONLY from provided evidence.
+  Mark interpreted fields with interpreted=true.
+  Every field must include source_quote or structured source_field and confidence.
+  Return JSON only.
+
+user_template: |
+  Product: {product}
+  Source metadata: {source_meta}
+  Source text:
+  ---
+  {text}
+  ---
+
+  Return JSON:
+  {{
+    "fields": [
+      {{
+        "field": "generic_name|manufacturer|fda_approval_date|therapeutic_area|indication|moa|roa|dosage_form|formulation|ticker|cik",
+        "value": "...",
+        "source_quote": "...",
+        "interpreted": false,
+        "confidence": 0.0
+      }}
+    ]
+  }}

@@ -1,0 +1,130 @@
+:root {
+  font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+  color: #0f172a;
+  background: #e8eef5;
+  line-height: 1.4;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; }
+a { color: #1d4ed8; }
+
+.shell { min-height: 100vh; }
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1.25rem;
+  background: #1e3a5f;
+  color: #fff;
+}
+.brand { font-weight: 700; letter-spacing: 0.01em; }
+.topbar nav { display: flex; gap: 1rem; }
+.topbar a { color: #dbeafe; text-decoration: none; }
+.topbar a.active { color: #fff; border-bottom: 2px solid #93c5fd; }
+
+.page { padding: 1.25rem; max-width: 1200px; margin: 0 auto; }
+.muted { color: #64748b; }
+.small { font-size: 0.85rem; }
+.error { color: #b91c1c; white-space: pre-wrap; }
+.card-block {
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+textarea, input {
+  width: 100%;
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  border: 1px solid #94a3b8;
+}
+button {
+  background: #1d4ed8;
+  color: #fff;
+  border: 0;
+  padding: 0.5rem 0.9rem;
+  cursor: pointer;
+}
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+.actions button { margin-right: 0.35rem; }
+.grid {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  font-size: 0.85rem;
+}
+.grid th, .grid td {
+  border: 1px solid #cbd5e1;
+  padding: 0.4rem 0.5rem;
+  vertical-align: top;
+}
+.grid th { background: #dbeafe; text-align: left; }
+.quote { color: #475569; font-size: 0.8rem; margin-top: 0.25rem; }
+.code {
+  background: #0f172a;
+  color: #e2e8f0;
+  padding: 0.75rem;
+  overflow: auto;
+  font-size: 0.8rem;
+}
+
+.dash-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: calc(100vh - 56px);
+  position: relative;
+}
+.filter-panel {
+  background: #2563eb;
+  color: #fff;
+  padding: 1rem;
+}
+.filter-panel h2, .filter-panel h3 { margin-top: 0; }
+.filter-panel label { display: block; margin: 0.6rem 0; font-size: 0.85rem; }
+.filter-panel input { background: #eff6ff; border: 0; }
+.dash-main { padding: 1rem; background: #f8fafc; }
+.chart-wrap {
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  min-height: 340px;
+}
+.dash-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+.dash-tabs button {
+  flex: 1;
+  background: #3b82f6;
+}
+.dash-tabs button.active {
+  background: #1e3a8a;
+  outline: 2px solid #fff;
+}
+.drawer {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 360px;
+  background: #fff;
+  border-left: 1px solid #94a3b8;
+  padding: 1rem;
+  overflow: auto;
+  box-shadow: -8px 0 24px rgba(15, 23, 42, 0.12);
+}
+.drawer .close {
+  float: right;
+  background: transparent;
+  color: #0f172a;
+  font-size: 1.4rem;
+}
+.linkish {
+  background: transparent;
+  color: #1d4ed8;
+  padding: 0;
+  text-decoration: underline;
+}

@@ -1,0 +1,17 @@
+system: |
+  Analyze completeness of pharmaceutical analog uptake data.
+  Prefer conservative scores. Never hide unresolved quarters.
+  Return JSON only.
+
+user_template: |
+  Profile: {profile}
+  Datapoints: {datapoints}
+  Unresolved quarters: {unresolved}
+
+  Return JSON:
+  {{
+    "completeness_pct": 0,
+    "missing_periods": [],
+    "limitations": [],
+    "recommended_next_steps": []
+  }}

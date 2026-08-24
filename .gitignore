@@ -1,0 +1,14 @@
+# Environment
+.env
+backend/.env
+backend/storage/
+**/__pycache__/
+**/.venv/
+**/node_modules/
+frontend/dist/
+.DS_Store
+*.pyc
+.pytest_cache/
+.ruff_cache/
+infra/cdk.out/
+*.egg-info/
