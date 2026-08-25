@@ -460,9 +460,17 @@ class PipelineOrchestrator:
         rows: list[DatapointORM] = []
         dropped_total = 0
         any_product_money = False
+        # Reading tables costs nothing, so every parsed source is read; only the
+        # LLM pass is capped.
         selected_sources = prioritize_sources_for_revenue(
-            sources, parsed, max_sources=get_settings().llm_max_extract_sources
+            sources, parsed, max_sources=max(len(list(sources)), 1)
         )
+        llm_source_ids = {
+            s.source_id
+            for s in prioritize_sources_for_revenue(
+                sources, parsed, max_sources=get_settings().llm_max_extract_sources
+            )
+        }
         if only_source_ids:
             selected_sources = [s for s in selected_sources if s.source_id in only_source_ids]
         extra = self._job_aliases or None
@@ -484,35 +492,45 @@ class PipelineOrchestrator:
             if evidence_meta.get("had_product_money_hits"):
                 any_product_money = True
 
-            # Skip LLM when filing has no product+$ evidence (avoid XBRL / company-total noise)
-            if evidence_meta.get("strategy") in {"no_product_mention", "empty"} or not evidence_meta.get(
-                "had_product_money_hits"
-            ):
+            # Skip the LLM when a filing has no product+$ evidence (avoid XBRL /
+            # company-total noise) or when it is beyond the extraction budget.
+            no_product_evidence = evidence_meta.get("strategy") in {
+                "no_product_mention",
+                "empty",
+            } or not evidence_meta.get("had_product_money_hits")
+            use_llm = src.source_id in llm_source_ids and not no_product_evidence
+            if not use_llm:
                 src_row = self.db.get(SourceDocumentORM, src.source_id)
                 if src_row:
-                    note = f"skip_revenue_llm strategy={evidence_meta.get('strategy')} product_money={evidence_meta.get('had_product_money_hits')}"
+                    reason = "no_product_evidence" if no_product_evidence else "over_source_budget"
+                    note = (
+                        f"skip_revenue_llm reason={reason} "
+                        f"strategy={evidence_meta.get('strategy')} "
+                        f"product_money={evidence_meta.get('had_product_money_hits')}"
+                    )
                     src_row.notes = f"{(src_row.notes or '').rstrip()} | {note}".strip(" |")
-                continue
 
-            result = await self.llm.extract_revenue(
-                product=job.drug_name,
-                company=job.manufacturer,
-                source_meta={
-                    "url": src.url,
-                    "type": src.source_type.value,
-                    "title": src.title,
-                    "filing_type": src.filing_type,
-                    "accession": src.accession_number,
-                    "evidence": evidence_meta,
-                    "reporting_period": period_context.describe() if period_context else None,
-                    "period_columns": (
-                        [str(period_context.year), str(period_context.comparative_year)]
-                        if period_context
-                        else None
-                    ),
-                },
-                text=llm_text,
-            )
+            result: dict[str, Any] = {"candidates": [], "spans": []}
+            if use_llm:
+                result = await self.llm.extract_revenue(
+                    product=job.drug_name,
+                    company=job.manufacturer,
+                    source_meta={
+                        "url": src.url,
+                        "type": src.source_type.value,
+                        "title": src.title,
+                        "filing_type": src.filing_type,
+                        "accession": src.accession_number,
+                        "evidence": evidence_meta,
+                        "reporting_period": period_context.describe() if period_context else None,
+                        "period_columns": (
+                            [str(period_context.year), str(period_context.comparative_year)]
+                            if period_context
+                            else None
+                        ),
+                    },
+                    text=llm_text,
+                )
             span_corpus = "\n\n".join(
                 (s.get("span_text") or "") for s in (result.get("spans") or [])
             ) or llm_text

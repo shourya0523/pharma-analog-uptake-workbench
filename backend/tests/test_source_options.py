@@ -65,6 +65,19 @@ def test_earnings_window_is_optional_and_plumbed_end_to_end():
     assert "filed_on > until" in exhibits
 
 
+def test_table_reading_is_not_limited_by_the_llm_source_budget():
+    """Table reading costs nothing, so llm_max_extract_sources must not truncate it."""
+    source = inspect.getsource(PipelineOrchestrator._extract_revenue)
+    assert "llm_source_ids" in source
+    assert "use_llm = src.source_id in llm_source_ids" in source
+    # The LLM call is conditional, while table extraction runs for every source
+    assert "if use_llm:" in source
+    llm_call_index = source.index("self.llm.extract_revenue")
+    table_call_index = source.index("extract_revenue_rows")
+    assert table_call_index > llm_call_index
+    assert "over_source_budget" in source
+
+
 def test_options_with_a_date_window_are_json_storable():
     """options_json is a JSON column, so a date-bearing option must serialise."""
     options = ExtractionOptions(earnings_since="2024-04-01", earnings_until="2025-03-01")
