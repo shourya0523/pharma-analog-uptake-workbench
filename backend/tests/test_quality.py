@@ -213,3 +213,40 @@ def test_parse_html_xbrl_no_xml_as_html_warning():
     assert doc.parsing_status.value == "success"
     assert any("250" in b for b in doc.text_blocks)
     assert doc.tables and doc.tables[0][0] == ["Opsumit", "250"]
+
+
+def test_prioritize_sources_handles_llm_search_without_unbound_text_len():
+    """LLM_SEARCH scoring used text_len before assignment and crashed extract_revenue."""
+    from app.domain.models import ParsedDocument, ParsingStatus, RetrievedSource, RetrievalStatus, SourceType
+    from app.parsing.evidence import prioritize_sources_for_revenue
+
+    sec = RetrievedSource(
+        source_id="sec1",
+        source_type=SourceType.SEC_FILING,
+        url="https://www.sec.gov/a",
+        filing_type="10-K",
+        retrieval_status=RetrievalStatus.SUCCESS,
+    )
+    search = RetrievedSource(
+        source_id="llm1",
+        source_type=SourceType.LLM_SEARCH,
+        url="https://www.sec.gov/b",
+        retrieval_status=RetrievalStatus.SUCCESS,
+    )
+    parsed = {
+        "sec1": ParsedDocument(
+            source_id="sec1",
+            text_blocks=["Tyvaso net product sales $372.5 million"],
+            parsing_status=ParsingStatus.SUCCESS,
+        ),
+        "llm1": ParsedDocument(
+            source_id="llm1",
+            text_blocks=["Tyvaso net product sales $238.4 million"],
+            parsing_status=ParsingStatus.SUCCESS,
+        ),
+    }
+    ordered = prioritize_sources_for_revenue([search, sec], parsed, max_sources=3)
+    assert [s.source_id for s in ordered] == ["sec1", "llm1"]
+    # Only LLM search sources should still sort without raising
+    only_search = prioritize_sources_for_revenue([search], parsed, max_sources=3)
+    assert [s.source_id for s in only_search] == ["llm1"]

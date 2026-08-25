@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import logging
 import re
 from pathlib import Path
 from typing import Any
@@ -12,6 +13,8 @@ from app.config import get_settings
 from app.llm.grounding import apply_structured_field_gates, enforce_verbatim_on_candidates, quote_is_verbatim
 from app.parsing.evidence import TOTAL_REVENUE_RE, product_aliases
 from app.quality.candidate_filters import quote_mentions_other_brand, quote_mentions_product
+
+logger = logging.getLogger(__name__)
 
 
 PROMPTS_DIR = Path(__file__).resolve().parent.parent / "prompts"
@@ -31,6 +34,17 @@ class OpenRouterClient:
             "X-Title": "Pharma Analog Uptake Workbench",
         }
 
+    def _raise_for_status(self, resp: httpx.Response, *, model: str, web: bool = False) -> None:
+        if resp.is_error:
+            logger.error(
+                "openrouter_http_error status=%s model=%s web=%s body=%s",
+                resp.status_code,
+                model,
+                web,
+                (resp.text or "")[:500],
+            )
+        resp.raise_for_status()
+
     async def chat_json(self, *, model: str, system: str, user: str) -> dict[str, Any]:
         payload = {
             "model": model,
@@ -47,7 +61,7 @@ class OpenRouterClient:
                 headers=self._headers(),
                 json=payload,
             )
-            resp.raise_for_status()
+            self._raise_for_status(resp, model=model)
             data = resp.json()
         content = data["choices"][0]["message"]["content"]
         return _parse_json_content(content)
@@ -104,7 +118,7 @@ class OpenRouterClient:
                 headers=self._headers(),
                 json=payload,
             )
-            resp.raise_for_status()
+            self._raise_for_status(resp, model=model, web=True)
             data = resp.json()
         message = data["choices"][0]["message"]
         parsed = _parse_json_content(message.get("content") or "{}")

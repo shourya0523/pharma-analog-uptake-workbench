@@ -176,13 +176,13 @@ def prioritize_sources_for_revenue(
     def score(src: RetrievedSource) -> tuple:
         doc = parsed.get(src.source_id)
         parse_ok = bool(doc and getattr(doc, "parsing_status", None) and doc.parsing_status.value == "success")
+        text_len = len(doc.full_text) if doc and parse_ok else 0
         if src.source_type == SourceType.OPENFDA:
             return (99, 0, 0)  # skip for revenue
         if src.source_type == SourceType.LLM_SEARCH:
             return (2 if parse_ok else 3, 4, -text_len)
         filing = (src.filing_type or "").upper()
         pri = FILING_PRIORITY.get(filing, 5)
-        text_len = len(doc.full_text) if doc and parse_ok else 0
         # Prefer longer narrative filings
         return (0 if parse_ok else 1, pri, -text_len)
 
