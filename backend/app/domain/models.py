@@ -107,6 +107,47 @@ class IssueSeverity(str, Enum):
     HIGH = "high"
 
 
+class LineOfTherapy(str, Enum):
+    FIRST_LINE = "1L"
+    SECOND_LINE_PLUS = "2L+"
+    THIRD_LINE_PLUS = "3L+"
+    SUBSEQUENT_UNSPECIFIED = "subsequent_unspecified"
+    ALL_LINES_OR_UNSPECIFIED = "all_lines_or_unspecified"
+    NOT_APPLICABLE = "not_applicable"
+    UNRESOLVED = "unresolved"
+
+
+class PeakEstimateType(str, Enum):
+    OBSERVED = "observed"
+    CONSENSUS = "consensus"
+    MODELED = "modeled"
+
+
+class CompetitiveIntensity(str, Enum):
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+
+
+class PharmaAssertion(BaseModel):
+    field_name: str
+    value: Any
+    source_url: str
+    source_section: str | None = None
+    source_quote: str | None = None
+    as_of_date: date | None = None
+    confidence: float = Field(default=0.0, ge=0.0, le=1.0)
+    validation_status: ValidationStatus = ValidationStatus.PENDING
+    extraction_method: str
+
+    @field_validator("source_url", "field_name", "extraction_method")
+    @classmethod
+    def required_text(cls, value: str) -> str:
+        if not value.strip():
+            raise ValueError("must not be blank")
+        return value.strip()
+
+
 class Citation(BaseModel):
     """Mandatory citation for every source-derived field."""
 
