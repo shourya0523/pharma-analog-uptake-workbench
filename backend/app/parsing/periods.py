@@ -50,6 +50,8 @@ _MONTHS_ENDED_RE = re.compile(
 _YEAR_QUARTER_RE = re.compile(r"^(?:FY)?(\d{4})\s*[-/\s]?\s*Q([1-4])$", re.I)
 _QUARTER_YEAR_RE = re.compile(r"^Q([1-4])\s*[-/\s]?\s*(?:FY)?(\d{4})$", re.I)
 _YEAR_ONLY_RE = re.compile(r"^(?:FY)?(\d{4})$", re.I)
+# Round-trip the non-quarterly labels this module emits
+_YEAR_PART_RE = re.compile(r"^(?:FY)?(\d{4})(H1|H2|M9)$", re.I)
 _ANY_YEAR_RE = re.compile(r"\b(19|20)(\d{2})\b")
 
 QUARTERLY_TYPES = {"quarterly"}
@@ -148,6 +150,9 @@ def normalize_period(
     match = _QUARTER_YEAR_RE.match(compact)
     if match:
         return f"{match.group(2)}Q{match.group(1)}"
+    match = _YEAR_PART_RE.match(compact)
+    if match:
+        return f"{match.group(1)}{match.group(2).upper()}"
 
     spelled = _MONTHS_ENDED_RE.search(label)
     if spelled:

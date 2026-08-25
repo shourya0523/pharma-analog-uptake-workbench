@@ -43,6 +43,7 @@ from app.parsing.documents import DocumentParser
 from app.parsing.evidence import build_revenue_llm_text, prioritize_sources_for_revenue, select_product_evidence_text
 from app.parsing.periods import detect_period_context, normalize_period
 from app.quality.candidate_filters import filter_revenue_candidates
+from app.quality.comparative import derive_comparative_candidates
 from app.quality.checks import apply_auto_pass_gate, quote_contains_value, run_quality_checks
 from app.quality.completeness import resolve_completeness_pct
 from app.quality.fast_judge import try_deterministic_judgment
@@ -524,6 +525,15 @@ class PipelineOrchestrator:
             )
             dropped = list(llm_dropped) + list(dropped)
             dropped_total += len(dropped)
+            comparatives = derive_comparative_candidates(kept, context=period_context)
+            if comparatives:
+                kept = list(kept) + comparatives
+                logger.info(
+                    "comparative_columns_derived job_id=%s source_id=%s count=%s",
+                    job.id,
+                    src.source_id,
+                    len(comparatives),
+                )
             src_row = self.db.get(SourceDocumentORM, src.source_id)
             if src_row and dropped:
                 reason_counts: dict[str, int] = {}
@@ -575,6 +585,8 @@ class PipelineOrchestrator:
                 issue_flags: list[str] = []
                 if cand.get("_reclassified"):
                     issue_flags.append("reclassified_company_total")
+                if cand.get("_derived_comparative"):
+                    issue_flags.append("derived_comparative_column")
                 if period is None:
                     issue_flags.append("period_unparsed")
                 elif period != raw_period:
@@ -734,6 +746,9 @@ class PipelineOrchestrator:
             }:
                 status = ValidationStatus.AUTO_PASS.value
             elif support == "partial":
+                status = ValidationStatus.NEEDS_REVIEW.value
+            if "derived_comparative_column" in (row.issue_flags or []):
+                # Reconstructed from a neighbouring table column, so always reviewed
                 status = ValidationStatus.NEEDS_REVIEW.value
             row.validation_status = status
             issues = list(judgment.get("issues") or [])
