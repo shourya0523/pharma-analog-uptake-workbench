@@ -41,6 +41,7 @@ from app.llm.aliases import merge_aliases
 from app.llm.client import LLMModules
 from app.parsing.documents import DocumentParser
 from app.parsing.evidence import build_revenue_llm_text, prioritize_sources_for_revenue, select_product_evidence_text
+from app.parsing.periods import detect_period_context, normalize_period
 from app.quality.candidate_filters import filter_revenue_candidates
 from app.quality.checks import apply_auto_pass_gate, quote_contains_value, run_quality_checks
 from app.quality.completeness import resolve_completeness_pct
@@ -477,6 +478,7 @@ class PipelineOrchestrator:
                 generic=job.generic_name,
                 extra_aliases=extra,
             )
+            period_context = detect_period_context(doc.full_text)
             if evidence_meta.get("had_product_money_hits"):
                 any_product_money = True
 
@@ -500,6 +502,12 @@ class PipelineOrchestrator:
                     "filing_type": src.filing_type,
                     "accession": src.accession_number,
                     "evidence": evidence_meta,
+                    "reporting_period": (
+                        f"{period_context.months} months ended month {period_context.month} "
+                        f"of {period_context.year}"
+                        if period_context
+                        else None
+                    ),
                 },
                 text=llm_text,
             )
@@ -530,6 +538,10 @@ class PipelineOrchestrator:
                 quote = (cand.get("source_quote") or "").strip()
                 url = src.url
                 period_type = (cand.get("period_type") or "unknown").lower()
+                raw_period = str(cand.get("period") or "unknown")
+                period = normalize_period(
+                    raw_period, period_type=period_type, context=period_context
+                )
                 dp_id = new_id()
                 value = cand.get("value_reported")
                 unit = cand.get("unit")
@@ -555,15 +567,23 @@ class PipelineOrchestrator:
                     "confidence": float(cand.get("confidence") or 0.5),
                     "validation_status": ValidationStatus.PENDING.value,
                     "interpreted": False,
+                    "period_reported": raw_period,
                 }
                 if src.source_type == SourceType.LLM_SEARCH:
                     citation["search_query"] = (src.metadata or {}).get("search_query")
                     citation["search_snippet"] = (src.metadata or {}).get("search_snippet")
+                issue_flags: list[str] = []
+                if cand.get("_reclassified"):
+                    issue_flags.append("reclassified_company_total")
+                if period is None:
+                    issue_flags.append("period_unparsed")
+                elif period != raw_period:
+                    issue_flags.append("period_normalized")
                 row = DatapointORM(
                     id=dp_id,
                     job_id=job.id,
                     source_id=src.source_id,
-                    period=str(cand.get("period") or "unknown"),
+                    period=period or "unknown",
                     fiscal_year=cand.get("fiscal_year"),
                     fiscal_quarter=cand.get("fiscal_quarter"),
                     calendar_year=cand.get("calendar_year"),
@@ -583,7 +603,7 @@ class PipelineOrchestrator:
                     confidence_score=float(cand.get("confidence") or 0.5),
                     validation_status=ValidationStatus.PENDING.value,
                     citation_json=citation,
-                    issue_flags=(["reclassified_company_total"] if cand.get("_reclassified") else None),
+                    issue_flags=issue_flags or None,
                 )
                 self.db.add(row)
                 rows.append(row)
