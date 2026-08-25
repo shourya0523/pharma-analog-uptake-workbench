@@ -17,7 +17,11 @@ from app.connectors.sources import (
     parse_filing_date,
 )
 from app.connectors.openfda import OpenFDAConnector
-from app.connectors.openfda_fields import earliest_approval_date
+from app.connectors.openfda_fields import (
+    earliest_approval_date,
+    openfda_brand_names,
+    select_openfda_result,
+)
 from app.db.models import (
     DatapointORM,
     DrugJobORM,
@@ -48,6 +52,7 @@ from app.quality.comparative import derive_comparative_candidates
 from app.quality.checks import apply_auto_pass_gate, quote_contains_value, run_quality_checks
 from app.quality.completeness import resolve_completeness_pct
 from app.quality.fast_judge import try_deterministic_judgment
+from app.quality.profile import is_missing_value
 from app.storage.filestore import FileStore, get_file_store
 from app.validation.sampling import select_validation_tasks
 from app.config import get_settings
@@ -325,6 +330,8 @@ class PipelineOrchestrator:
             return
         self._set_step(job, JobStep.EXTRACT_METADATA)
 
+        written: dict[str, str] = {}
+
         # Deterministic OpenFDA enrichment
         for src in sources:
             if src.source_type != SourceType.OPENFDA or src.retrieval_status != RetrievalStatus.SUCCESS:
@@ -337,7 +344,33 @@ class PipelineOrchestrator:
                     results = []
             if not results:
                 continue
-            openfda = results[0].get("openfda", {})
+            selected, matched_brand = select_openfda_result(
+                results,
+                product=job.drug_name,
+                generic=job.generic_name,
+                aliases=self._job_aliases,
+            )
+            if selected is None:
+                # Every result belongs to another product sharing the molecule
+                job.quality_flags = list(
+                    set((job.quality_flags or []) + ["openfda_no_brand_match"])
+                )
+                self.db.commit()
+                logger.info(
+                    "openfda_no_brand_match job_id=%s drug=%s brands=%s",
+                    job.id,
+                    job.drug_name,
+                    [b for r in results for b in openfda_brand_names(r)][:8],
+                )
+                continue
+            logger.info(
+                "openfda_matched job_id=%s drug=%s brand=%s application=%s",
+                job.id,
+                job.drug_name,
+                matched_brand,
+                selected.get("application_number"),
+            )
+            openfda = selected.get("openfda", {})
             mapping = {
                 "brand_name": (openfda.get("brand_name") or [None])[0],
                 "generic_name": (openfda.get("generic_name") or [None])[0],
@@ -346,12 +379,15 @@ class PipelineOrchestrator:
                 "dosage_form": (openfda.get("dosage_form") or [None])[0],
                 "pharmacologic_class": (openfda.get("pharm_class_epc") or [None])[0],
             }
-            approval, approval_field = earliest_approval_date(results)
+            # Scope the approval date to this application; the earliest date across
+            # all results belongs to whichever product was approved first.
+            approval, approval_field = earliest_approval_date([selected])
             if approval:
                 mapping["fda_approval_date"] = approval
             for field, value in mapping.items():
-                if not value:
+                if is_missing_value(value) or field in written:
                     continue
+                written[field] = str(value)
                 quote = (
                     approval_field
                     if field == "fda_approval_date" and approval_field
@@ -367,6 +403,8 @@ class PipelineOrchestrator:
                     "confidence": 0.9 if field == "fda_approval_date" else 0.85,
                     "validation_status": ValidationStatus.NEEDS_REVIEW.value,
                     "interpreted": False,
+                    "openfda_application_number": selected.get("application_number"),
+                    "openfda_matched_brand": matched_brand,
                 }
                 self.db.add(
                     DrugProfileFieldORM(
@@ -396,8 +434,13 @@ class PipelineOrchestrator:
                 source_meta={"url": src.url, "type": src.source_type.value, "title": src.title},
             )
             for field in result.get("fields", []):
-                if not field.get("value"):
+                name = field.get("field")
+                if not name or is_missing_value(field.get("value")):
                     continue
+                # OpenFDA is authoritative for the fields it supplies
+                if name in written:
+                    continue
+                written[name] = str(field["value"])
                 citation = {
                     "source_id": src.source_id,
                     "source_type": src.source_type.value,
@@ -413,7 +456,7 @@ class PipelineOrchestrator:
                     DrugProfileFieldORM(
                         id=new_id(),
                         job_id=job.id,
-                        field=field["field"],
+                        field=name,
                         value=str(field["value"]),
                         citation_json=citation,
                         validation_status=ValidationStatus.NEEDS_REVIEW.value,
@@ -421,6 +464,12 @@ class PipelineOrchestrator:
                 )
             break
         self.db.commit()
+        logger.info(
+            "metadata_extracted job_id=%s drug=%s fields=%s",
+            job.id,
+            job.drug_name,
+            sorted(written),
+        )
 
     async def _search_revenue_fallback(
         self, job: DrugJobORM, options: dict[str, Any]
