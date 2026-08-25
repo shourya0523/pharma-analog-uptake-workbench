@@ -2,24 +2,18 @@ from __future__ import annotations
 
 import csv
 import io
-from pathlib import Path
+import json
 
 from openpyxl import Workbook
 from sqlalchemy.orm import Session
 
+from app.dashboard.series import build_dashboard_preview
 from app.db.models import (
-    DatapointORM,
     DrugJobORM,
-    DrugProfileFieldORM,
     ExportORM,
-    QualityCheckORM,
-    SourceDocumentORM,
-    UnresolvedQuarterORM,
-    ValidationTaskORM,
 )
 from app.domain.models import new_id
 from app.storage.filestore import FileStore
-
 
 QUARTERLY_HEADERS = [
     "drug_name",
@@ -46,6 +40,77 @@ QUARTERLY_HEADERS = [
     "reviewer_notes",
     "issue_flags",
 ]
+
+PRODUCT_HEADERS = [
+    "job_id",
+    "canonical_product_id",
+    "product_name",
+    "company",
+    "therapeutic_area",
+    "fda_approval_date",
+    "approved_indications",
+    "indications_json",
+    "moa",
+    "pharmacologic_class",
+    "roa",
+    "approved_lot",
+    "competitive_intensity",
+    "competitive_raw_score",
+    "competitive_formula_version",
+    "competitive_cohort_size",
+    "competitive_low_coverage",
+    "peak_value",
+    "peak_type",
+    "peak_method",
+    "peak_as_of_date",
+    "peak_geography",
+    "peak_revenue_scope",
+    "peak_input_ids",
+    "uptake_methodology",
+    "source_url",
+    "completeness_pct",
+    "validation_status",
+]
+
+
+def product_export_rows(db: Session, run_id: str) -> tuple[list[str], list[list]]:
+    payload = build_dashboard_preview(db, run_id=run_id)
+    rows: list[list] = []
+    for product in payload["products"]:
+        peak = product.get("selected_peak") or {}
+        competition = product.get("competitive_snapshot") or {}
+        values = {
+            "job_id": product.get("job_id"),
+            "canonical_product_id": product.get("canonical_product_id"),
+            "product_name": product.get("product_name"),
+            "company": product.get("company"),
+            "therapeutic_area": product.get("therapeutic_area"),
+            "fda_approval_date": product.get("fda_approval_date"),
+            "approved_indications": product.get("approved_indications"),
+            "indications_json": json.dumps(product.get("indications") or []),
+            "moa": product.get("moa"),
+            "pharmacologic_class": product.get("pharmacologic_class"),
+            "roa": product.get("roa"),
+            "approved_lot": product.get("approved_lot"),
+            "competitive_intensity": product.get("competitive_intensity"),
+            "competitive_raw_score": competition.get("raw_score"),
+            "competitive_formula_version": competition.get("formula_version"),
+            "competitive_cohort_size": competition.get("cohort_size"),
+            "competitive_low_coverage": competition.get("low_coverage"),
+            "peak_value": peak.get("value"),
+            "peak_type": peak.get("type"),
+            "peak_method": peak.get("selection_reason"),
+            "peak_as_of_date": peak.get("as_of_date"),
+            "peak_geography": peak.get("geography"),
+            "peak_revenue_scope": peak.get("revenue_scope"),
+            "peak_input_ids": json.dumps(peak.get("input_ids") or []),
+            "uptake_methodology": "revenue_proxy_r4q" if product.get("uptake_ready") else None,
+            "source_url": product.get("source_link"),
+            "completeness_pct": product.get("completeness_score"),
+            "validation_status": product.get("validation_status"),
+        }
+        rows.append([values[header] for header in PRODUCT_HEADERS])
+    return PRODUCT_HEADERS, rows
 
 
 class ExportBuilder:
@@ -188,37 +253,10 @@ class ExportBuilder:
             return key, out.getvalue().encode()
 
         # products
-        prod_rows = []
-        for j in jobs:
-            fields = {f.field: f.value for f in j.profile_fields}
-            prod_rows.append(
-                [
-                    j.id,
-                    j.drug_name,
-                    j.generic_name,
-                    j.manufacturer,
-                    fields.get("therapeutic_area"),
-                    fields.get("moa"),
-                    fields.get("roa"),
-                    fields.get("fda_approval_date"),
-                    j.completeness_pct,
-                    j.status,
-                ]
-            )
+        product_headers, prod_rows = product_export_rows(self.db, run_id)
         key, data = write_csv(
             "products.csv",
-            [
-                "job_id",
-                "product_name",
-                "generic_name",
-                "manufacturer",
-                "therapeutic_area",
-                "moa",
-                "roa",
-                "fda_approval_date",
-                "completeness_pct",
-                "validation_status",
-            ],
+            product_headers,
             prod_rows,
         )
         await self.file_store.put(key, data, "text/csv")
