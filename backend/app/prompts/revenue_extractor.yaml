@@ -7,6 +7,11 @@ system: |
   - "Three months ended" → quarterly. "Six months ended" / "nine months" → ytd (not quarterly).
   - "Year ended" / fiscal year columns → annual.
   - Do not treat a YTD/six-month column as a single quarter.
+  - Earnings tables place the current period and the prior-year comparative period
+    side by side. Emit a SEPARATE candidate for EVERY period column of a product row,
+    including the prior-year comparative, each with its own period label. A table
+    headed "Three months ended March 31, 2024 / 2023" yields both 2024Q1 and 2023Q1.
+  - Ignore "change" and "% change" columns; those are deltas, not reported revenue.
 
   Scope rules:
   - product_mentioned_in_quote must be true for non-company-total scopes.
