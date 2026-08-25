@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+# ruff: noqa: B008, BLE001
 import csv
 import io
 import logging
@@ -12,27 +13,35 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session, joinedload
 
 from app.config import get_settings
+from app.dashboard.series import build_dashboard_preview
 from app.db.models import (
     DatapointORM,
     DrugJobORM,
-    ExtractionRunORM,
     ExportORM,
+    ExtractionRunORM,
     ReviewEventORM,
-    ValidationTaskORM,
     SessionLocal,
+    ValidationTaskORM,
     init_db,
 )
-from app.domain.models import DrugInput, ExtractionOptions, JobStatus, ValidationStatus, new_id
+from app.domain.models import (
+    DrugInput,
+    ExtractionOptions,
+    JobStatus,
+    ValidationStatus,
+    new_id,
+)
 from app.export.builder import ExportBuilder, TemplateMapper
 from app.jobs.queue import get_job_queue
 from app.jobs.run_status import refresh_run_status
 from app.logging_setup import configure_logging
 from app.observability import (
     TABLE_REGISTRY,
-    dedupe_jobs_by_analog,
     get_recent_logs,
-    overview as observability_overview,
     query_table,
+)
+from app.observability import (
+    overview as observability_overview,
 )
 from app.pipeline.orchestrator import PipelineOrchestrator
 from app.storage.filestore import get_file_store
@@ -461,66 +470,7 @@ def _unique_sorted(values: list[str | None]) -> list[str]:
 def dashboard_preview(run_id: str | None = None) -> dict[str, Any]:
     db = SessionLocal()
     try:
-        q = db.query(DrugJobORM).options(
-            joinedload(DrugJobORM.profile_fields),
-            joinedload(DrugJobORM.datapoints),
-        )
-        if run_id:
-            q = q.filter_by(run_id=run_id)
-        jobs = dedupe_jobs_by_analog(q.all())
-        products = []
-        series = []
-        for j in jobs:
-            fields = {f.field: f.value for f in j.profile_fields}
-            products.append(
-                {
-                    "job_id": j.id,
-                    "product_name": j.drug_name,
-                    "therapeutic_area": fields.get("therapeutic_area") or fields.get("pharmacologic_class"),
-                    "manufacturer": j.manufacturer or fields.get("manufacturer"),
-                    "fda_approval_date": fields.get("fda_approval_date"),
-                    "approved_indications": fields.get("indication") or j.indication,
-                    "moa": fields.get("moa"),
-                    "roa": fields.get("roa"),
-                    "treatment_type": fields.get("treatment_type"),
-                    "approved_lot": fields.get("approved_lot"),
-                    "reached_peak_yet": fields.get("reached_peak_yet"),
-                    "estimated_peak_revenue": fields.get("estimated_peak_revenue"),
-                    "time_to_peak": fields.get("time_to_peak"),
-                    "source_link": next((d.source_url for d in j.datapoints if d.source_url), None),
-                    "completeness_score": j.completeness_pct,
-                    "validation_status": j.status,
-                }
-            )
-            for d in j.datapoints:
-                series.append(
-                    {
-                        "product": j.drug_name,
-                        "period": d.period,
-                        "period_type": d.period_type,
-                        "value": d.value_normalized_usd_millions,
-                        "validation_status": d.validation_status,
-                        "source_url": d.source_url,
-                        "source_quote": d.source_quote,
-                        "citation": d.citation_json,
-                        "issue_flags": d.issue_flags,
-                        "reviewer_notes": d.reviewer_notes,
-                    }
-                )
-        filter_options = {
-            "product_name": _unique_sorted([p["product_name"] for p in products]),
-            "therapeutic_area": _unique_sorted([p["therapeutic_area"] for p in products]),
-            "moa": _unique_sorted([p["moa"] for p in products]),
-            "roa": _unique_sorted([p["roa"] for p in products]),
-            "manufacturer": _unique_sorted([p["manufacturer"] for p in products]),
-            "validation_status": _unique_sorted([p["validation_status"] for p in products]),
-        }
-        return {
-            "products": products,
-            "series": series,
-            "filter_options": filter_options,
-            "analog_count": len(products),
-        }
+        return build_dashboard_preview(db, run_id=run_id)
     finally:
         db.close()
 
