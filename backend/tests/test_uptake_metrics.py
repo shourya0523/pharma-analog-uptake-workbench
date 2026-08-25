@@ -22,21 +22,41 @@ def _quarter(index: int, value: float) -> SalesObservation:
 
 def test_rolling_four_quarter_uptake_marks_sparse_history():
     points = calculate_revenue_uptake(
-        observations=[_quarter(1, 10), _quarter(2, 20), _quarter(3, 30), _quarter(4, 40)],
+        observations=[
+            _quarter(1, 10),
+            _quarter(2, 20),
+            _quarter(3, 30),
+            _quarter(4, 40),
+        ],
         selected_annual_peak=200,
         launch_date=date(2024, 1, 1),
     )
 
-    assert [point.missing_reason for point in points[:3]] == ["insufficient_history"] * 3
+    assert [point.missing_reason for point in points[:3]] == [
+        "insufficient_history"
+    ] * 3
     assert points[3].value == 0.5
     assert points[3].metric_type == "revenue_proxy_r4q"
     assert points[3].input_ids == ["q1", "q2", "q3", "q4"]
 
 
 def test_first_period_reaching_ninety_percent_of_peak():
-    annual = [_quarter(1, 50), _quarter(2, 100), _quarter(3, 180), _quarter(4, 210)]
-    reached = time_to_ninety_percent_peak(annual, selected_peak=200, launch_date=date(2024, 1, 1))
-    assert reached.period == "2024Q3"
+    quarterly = [_quarter(1, 20), _quarter(2, 30), _quarter(3, 40), _quarter(4, 100)]
+    reached = time_to_ninety_percent_peak(
+        quarterly, selected_peak=200, launch_date=date(2024, 1, 1)
+    )
+    assert reached.period == "2024Q4"
+
+
+def test_nonconsecutive_quarters_do_not_form_a_rolling_year():
+    observations = [_quarter(1, 10), _quarter(2, 20), _quarter(4, 40), _quarter(5, 50)]
+    points = calculate_revenue_uptake(
+        observations=observations,
+        selected_annual_peak=200,
+        launch_date=date(2024, 1, 1),
+    )
+    assert points[-1].value is None
+    assert points[-1].missing_reason == "nonconsecutive_quarters"
 
 
 def test_missing_launch_anchor_returns_explicit_reason():
@@ -46,4 +66,3 @@ def test_missing_launch_anchor_returns_explicit_reason():
         launch_date=None,
     )
     assert points[0].missing_reason == "missing_launch_anchor"
-

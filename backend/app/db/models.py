@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import hashlib
+import json
 from datetime import datetime
 from typing import Any
 
@@ -15,6 +17,7 @@ from sqlalchemy import (
     Text,
     UniqueConstraint,
     create_engine,
+    event,
 )
 from sqlalchemy.orm import (
     DeclarativeBase,
@@ -38,10 +41,14 @@ class ExtractionRunORM(Base):
     status: Mapped[str] = mapped_column(String(32), default="queued")
     options_json: Mapped[dict[str, Any]] = mapped_column(JSON, default=dict)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
-    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
+    )
     error: Mapped[str | None] = mapped_column(Text, nullable=True)
 
-    jobs: Mapped[list[DrugJobORM]] = relationship(back_populates="run", cascade="all, delete-orphan")
+    jobs: Mapped[list[DrugJobORM]] = relationship(
+        back_populates="run", cascade="all, delete-orphan"
+    )
 
 
 class DrugJobORM(Base):
@@ -67,15 +74,27 @@ class DrugJobORM(Base):
     quality_flags: Mapped[list[Any]] = mapped_column(JSON, default=list)
     error: Mapped[str | None] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
-    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
+    )
 
     run: Mapped[ExtractionRunORM] = relationship(back_populates="jobs")
-    profile_fields: Mapped[list[DrugProfileFieldORM]] = relationship(cascade="all, delete-orphan")
-    sources: Mapped[list[SourceDocumentORM]] = relationship(cascade="all, delete-orphan")
+    profile_fields: Mapped[list[DrugProfileFieldORM]] = relationship(
+        cascade="all, delete-orphan"
+    )
+    sources: Mapped[list[SourceDocumentORM]] = relationship(
+        cascade="all, delete-orphan"
+    )
     datapoints: Mapped[list[DatapointORM]] = relationship(cascade="all, delete-orphan")
-    validation_tasks: Mapped[list[ValidationTaskORM]] = relationship(cascade="all, delete-orphan")
-    quality_checks: Mapped[list[QualityCheckORM]] = relationship(cascade="all, delete-orphan")
-    unresolved_quarters: Mapped[list[UnresolvedQuarterORM]] = relationship(cascade="all, delete-orphan")
+    validation_tasks: Mapped[list[ValidationTaskORM]] = relationship(
+        cascade="all, delete-orphan"
+    )
+    quality_checks: Mapped[list[QualityCheckORM]] = relationship(
+        cascade="all, delete-orphan"
+    )
+    unresolved_quarters: Mapped[list[UnresolvedQuarterORM]] = relationship(
+        cascade="all, delete-orphan"
+    )
 
 
 class DrugProfileFieldORM(Base):
@@ -121,7 +140,9 @@ class DatapointORM(Base):
     calendar_year: Mapped[int | None] = mapped_column(Integer, nullable=True)
     calendar_quarter: Mapped[int | None] = mapped_column(Integer, nullable=True)
     value_reported: Mapped[float | None] = mapped_column(Float, nullable=True)
-    value_normalized_usd_millions: Mapped[float | None] = mapped_column(Float, nullable=True)
+    value_normalized_usd_millions: Mapped[float | None] = mapped_column(
+        Float, nullable=True
+    )
     currency: Mapped[str | None] = mapped_column(String(16), nullable=True)
     unit: Mapped[str | None] = mapped_column(String(64), nullable=True)
     metric: Mapped[str] = mapped_column(String(64), default="revenue")
@@ -129,7 +150,9 @@ class DatapointORM(Base):
     revenue_scope: Mapped[str] = mapped_column(String(64), default="Unknown")
     geography: Mapped[str | None] = mapped_column(String(128), nullable=True)
     formulation: Mapped[str | None] = mapped_column(String(128), nullable=True)
-    route_of_administration: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    route_of_administration: Mapped[str | None] = mapped_column(
+        String(128), nullable=True
+    )
     source_url: Mapped[str] = mapped_column(Text)
     source_quote: Mapped[str] = mapped_column(Text)
     source_support: Mapped[str | None] = mapped_column(String(64), nullable=True)
@@ -212,7 +235,9 @@ class AnalogFamilyORM(Base):
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True)
     name: Mapped[str] = mapped_column(String(256), unique=True)
-    active_moiety_key: Mapped[str | None] = mapped_column(String(512), nullable=True, index=True)
+    active_moiety_key: Mapped[str | None] = mapped_column(
+        String(512), nullable=True, index=True
+    )
 
 
 class CanonicalProductORM(Base):
@@ -222,30 +247,44 @@ class CanonicalProductORM(Base):
     canonical_name: Mapped[str] = mapped_column(String(256))
     identity_key: Mapped[str] = mapped_column(String(512), unique=True)
     active_moieties_json: Mapped[list[Any]] = mapped_column(JSON, default=list)
-    current_commercial_owner: Mapped[str | None] = mapped_column(String(256), nullable=True)
+    current_commercial_owner: Mapped[str | None] = mapped_column(
+        String(256), nullable=True
+    )
     regulatory_sponsor: Mapped[str | None] = mapped_column(String(256), nullable=True)
     manufacturer: Mapped[str | None] = mapped_column(String(256), nullable=True)
-    application_number: Mapped[str | None] = mapped_column(String(64), nullable=True, index=True)
+    application_number: Mapped[str | None] = mapped_column(
+        String(64), nullable=True, index=True
+    )
     initial_approval_date: Mapped[Any | None] = mapped_column(Date, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
-    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
+    )
 
 
 class ProductFormulationORM(Base):
     __tablename__ = "product_formulations"
     __table_args__ = (
-        UniqueConstraint("product_id", "dosage_form", "route_source_term", "delivery_device"),
+        UniqueConstraint(
+            "product_id", "dosage_form", "route_source_term", "delivery_device"
+        ),
     )
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True)
-    product_id: Mapped[str] = mapped_column(ForeignKey("canonical_products.id"), index=True)
-    analog_family_id: Mapped[str | None] = mapped_column(ForeignKey("analog_families.id"), nullable=True, index=True)
+    product_id: Mapped[str] = mapped_column(
+        ForeignKey("canonical_products.id"), index=True
+    )
+    analog_family_id: Mapped[str | None] = mapped_column(
+        ForeignKey("analog_families.id"), nullable=True, index=True
+    )
     dosage_form: Mapped[str] = mapped_column(String(256))
     route_source_term: Mapped[str | None] = mapped_column(String(256), nullable=True)
     route_category: Mapped[str | None] = mapped_column(String(128), nullable=True)
     delivery_device: Mapped[str | None] = mapped_column(String(256), nullable=True)
     ndc_codes_json: Mapped[list[Any]] = mapped_column(JSON, default=list)
-    spl_set_id: Mapped[str | None] = mapped_column(String(64), nullable=True, index=True)
+    spl_set_id: Mapped[str | None] = mapped_column(
+        String(64), nullable=True, index=True
+    )
 
 
 class ProductIndicationORM(Base):
@@ -255,7 +294,9 @@ class ProductIndicationORM(Base):
     )
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True)
-    product_id: Mapped[str] = mapped_column(ForeignKey("canonical_products.id"), index=True)
+    product_id: Mapped[str] = mapped_column(
+        ForeignKey("canonical_products.id"), index=True
+    )
     disease: Mapped[str] = mapped_column(String(512))
     therapeutic_area: Mapped[str | None] = mapped_column(String(256), nullable=True)
     setting: Mapped[str | None] = mapped_column(String(256), nullable=True)
@@ -276,7 +317,9 @@ class MoAComponentORM(Base):
     __table_args__ = (UniqueConstraint("product_id", "active_ingredient", "moa_term"),)
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True)
-    product_id: Mapped[str] = mapped_column(ForeignKey("canonical_products.id"), index=True)
+    product_id: Mapped[str] = mapped_column(
+        ForeignKey("canonical_products.id"), index=True
+    )
     active_ingredient: Mapped[str | None] = mapped_column(String(256), nullable=True)
     moa_term: Mapped[str] = mapped_column(String(512))
     descriptive_text: Mapped[str | None] = mapped_column(Text, nullable=True)
@@ -287,8 +330,12 @@ class PeakSalesEstimateORM(Base):
     __tablename__ = "peak_sales_estimates"
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True)
-    product_id: Mapped[str] = mapped_column(ForeignKey("canonical_products.id"), index=True)
-    formulation_id: Mapped[str | None] = mapped_column(ForeignKey("product_formulations.id"), nullable=True)
+    product_id: Mapped[str] = mapped_column(
+        ForeignKey("canonical_products.id"), index=True
+    )
+    formulation_id: Mapped[str | None] = mapped_column(
+        ForeignKey("product_formulations.id"), nullable=True
+    )
     estimate_type: Mapped[str] = mapped_column(String(32), index=True)
     value: Mapped[float] = mapped_column(Float)
     currency: Mapped[str] = mapped_column(String(16))
@@ -305,7 +352,9 @@ class CompetitiveSnapshotORM(Base):
     __tablename__ = "competitive_snapshots"
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True)
-    indication_id: Mapped[str] = mapped_column(ForeignKey("product_indications.id"), index=True)
+    indication_id: Mapped[str] = mapped_column(
+        ForeignKey("product_indications.id"), index=True
+    )
     geography: Mapped[str] = mapped_column(String(128))
     as_of_date: Mapped[Any] = mapped_column(Date)
     formula_version: Mapped[str] = mapped_column(String(64))
@@ -316,7 +365,9 @@ class CompetitiveSnapshotORM(Base):
     same_moa_count: Mapped[int] = mapped_column(Integer, default=0)
     same_route_count: Mapped[int] = mapped_column(Integer, default=0)
     order_of_entry: Mapped[int | None] = mapped_column(Integer, nullable=True)
-    previous_launch_gap_months: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    previous_launch_gap_months: Mapped[int | None] = mapped_column(
+        Integer, nullable=True
+    )
     follower_launches_24m: Mapped[int] = mapped_column(Integer, default=0)
     raw_score: Mapped[float] = mapped_column(Float)
     cohort_percentile: Mapped[float | None] = mapped_column(Float, nullable=True)
@@ -331,8 +382,12 @@ class UptakeMetricORM(Base):
     __table_args__ = (UniqueConstraint("indication_id", "metric_type", "period"),)
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True)
-    indication_id: Mapped[str] = mapped_column(ForeignKey("product_indications.id"), index=True)
-    peak_estimate_id: Mapped[str | None] = mapped_column(ForeignKey("peak_sales_estimates.id"), nullable=True)
+    indication_id: Mapped[str] = mapped_column(
+        ForeignKey("product_indications.id"), index=True
+    )
+    peak_estimate_id: Mapped[str | None] = mapped_column(
+        ForeignKey("peak_sales_estimates.id"), nullable=True
+    )
     metric_type: Mapped[str] = mapped_column(String(64))
     period: Mapped[str] = mapped_column(String(32))
     months_since_launch: Mapped[int | None] = mapped_column(Integer, nullable=True)
@@ -345,13 +400,18 @@ class UptakeMetricORM(Base):
 
 class EvidenceAssertionORM(Base):
     __tablename__ = "evidence_assertions"
-    __table_args__ = (UniqueConstraint("entity_type", "entity_id", "field_name", "source_id", "value_json"),)
+    __table_args__ = (
+        UniqueConstraint(
+            "entity_type", "entity_id", "field_name", "source_id", "value_hash"
+        ),
+    )
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True)
     entity_type: Mapped[str] = mapped_column(String(64), index=True)
     entity_id: Mapped[str] = mapped_column(String(36), index=True)
     field_name: Mapped[str] = mapped_column(String(128))
     value_json: Mapped[Any] = mapped_column(JSON)
+    value_hash: Mapped[str] = mapped_column(String(64))
     source_id: Mapped[str | None] = mapped_column(String(36), nullable=True)
     source_url: Mapped[str] = mapped_column(Text)
     source_section: Mapped[str | None] = mapped_column(String(256), nullable=True)
@@ -364,13 +424,34 @@ class EvidenceAssertionORM(Base):
     selected: Mapped[bool] = mapped_column(Boolean, default=False)
 
 
+def evidence_value_hash(value: Any) -> str:
+    canonical = json.dumps(
+        value, sort_keys=True, separators=(",", ":"), ensure_ascii=True
+    )
+    return hashlib.sha256(canonical.encode()).hexdigest()
+
+
+@event.listens_for(EvidenceAssertionORM, "before_insert")
+@event.listens_for(EvidenceAssertionORM, "before_update")
+def _set_evidence_value_hash(
+    _mapper: Any, _connection: Any, assertion: EvidenceAssertionORM
+) -> None:
+    assertion.value_hash = evidence_value_hash(assertion.value_json)
+
+
 class DerivationLineageORM(Base):
     __tablename__ = "derivation_lineage"
-    __table_args__ = (UniqueConstraint("output_assertion_id", "input_assertion_id", "role"),)
+    __table_args__ = (
+        UniqueConstraint("output_assertion_id", "input_assertion_id", "role"),
+    )
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True)
-    output_assertion_id: Mapped[str] = mapped_column(ForeignKey("evidence_assertions.id"), index=True)
-    input_assertion_id: Mapped[str] = mapped_column(ForeignKey("evidence_assertions.id"), index=True)
+    output_assertion_id: Mapped[str] = mapped_column(
+        ForeignKey("evidence_assertions.id"), index=True
+    )
+    input_assertion_id: Mapped[str] = mapped_column(
+        ForeignKey("evidence_assertions.id"), index=True
+    )
     role: Mapped[str] = mapped_column(String(64), default="input")
     formula_version: Mapped[str | None] = mapped_column(String(64), nullable=True)
 
