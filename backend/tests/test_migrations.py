@@ -5,8 +5,8 @@ from pathlib import Path
 import pytest
 from sqlalchemy import create_engine, inspect, text
 from sqlalchemy.dialects import postgresql
-from sqlalchemy.schema import CreateTable
 from sqlalchemy.orm import Session
+from sqlalchemy.schema import CreateTable
 
 from app.db.migrations import BASELINE_TABLES, SchemaMismatchError, upgrade_database
 from app.db.models import EvidenceAssertionORM
