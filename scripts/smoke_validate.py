@@ -135,7 +135,14 @@ def main() -> int:
     parser.add_argument("--manufacturer", default="United Therapeutics")
     parser.add_argument("--ticker", default="UTHR")
     parser.add_argument("--known-source-url", default=None)
-    parser.add_argument("--sec-filings", action="store_true")
+    parser.add_argument("--sec-filings", action="store_true", help="fetch 10-K/10-Q primary filings")
+    parser.add_argument(
+        "--earnings-releases",
+        action="store_true",
+        help="fetch 8-K item 2.02 exhibit 99.x earnings releases (quarterly product revenue)",
+    )
+    parser.add_argument("--earnings-since", default=None, help="earliest exhibit filing date (ISO)")
+    parser.add_argument("--earnings-until", default=None, help="latest exhibit filing date (ISO)")
     parser.add_argument("--openfda", action="store_true")
     parser.add_argument("--timeout", type=int, default=600)
     parser.add_argument("--out", default=None)
@@ -157,6 +164,9 @@ def main() -> int:
             "drugs": [drug],
             "options": {
                 "sec_filings": args.sec_filings,
+                "earnings_releases": args.earnings_releases,
+                "earnings_since": args.earnings_since,
+                "earnings_until": args.earnings_until,
                 "openfda": args.openfda,
                 "company_ir": bool(args.known_source_url),
                 "quarterly_revenue": True,
