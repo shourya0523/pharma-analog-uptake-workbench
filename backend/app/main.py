@@ -480,7 +480,7 @@ def dashboard_preview(run_id: str | None = None) -> dict[str, Any]:
                     "manufacturer": j.manufacturer or fields.get("manufacturer"),
                     "fda_approval_date": fields.get("fda_approval_date"),
                     "approved_indications": fields.get("indication") or j.indication,
-                    "moa": fields.get("moa") or fields.get("pharmacologic_class"),
+                    "moa": fields.get("moa"),
                     "roa": fields.get("roa"),
                     "treatment_type": fields.get("treatment_type"),
                     "approved_lot": fields.get("approved_lot"),

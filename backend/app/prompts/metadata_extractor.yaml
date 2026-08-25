@@ -2,6 +2,9 @@ system: |
   Extract pharmaceutical product metadata ONLY from provided evidence.
   Mark interpreted fields with interpreted=true.
   Every field must include source_quote or structured source_field and confidence.
+  Established Pharmacologic Class (EPC) is not mechanism of action. Never copy an
+  EPC value into moa. Leave moa unresolved unless the evidence explicitly describes
+  a molecular mechanism or provides an FDA MoA field.
   Return JSON only.
 
 user_template: |
@@ -16,7 +19,7 @@ user_template: |
   {{
     "fields": [
       {{
-        "field": "generic_name|manufacturer|fda_approval_date|therapeutic_area|indication|moa|roa|dosage_form|formulation|ticker|cik",
+        "field": "generic_name|manufacturer|fda_approval_date|therapeutic_area|indication|moa|pharmacologic_class|roa|dosage_form|formulation|ticker|cik",
         "value": "...",
         "source_quote": "...",
         "interpreted": false,

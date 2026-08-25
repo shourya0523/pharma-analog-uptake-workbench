@@ -15,6 +15,7 @@ def new_id() -> str:
 class SourceType(str, Enum):
     SEC_FILING = "sec_filing"
     OPENFDA = "openfda"
+    DAILYMED = "dailymed"
     COMPANY_IR = "company_ir"
     EARNINGS_RELEASE = "earnings_release"
     INVESTOR_PRESENTATION = "investor_presentation"
