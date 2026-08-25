@@ -59,6 +59,23 @@ def quarter_of_month(month: int) -> int:
     return (month - 1) // 3 + 1
 
 
+MONTH_NAMES = {
+    1: "January",
+    2: "February",
+    3: "March",
+    4: "April",
+    5: "May",
+    6: "June",
+    7: "July",
+    8: "August",
+    9: "September",
+    10: "October",
+    11: "November",
+    12: "December",
+}
+LENGTH_WORDS = {3: "three", 6: "six", 9: "nine", 12: "twelve"}
+
+
 @dataclass(frozen=True)
 class PeriodContext:
     """The reporting period a document states for itself."""
@@ -70,6 +87,15 @@ class PeriodContext:
     @property
     def quarter(self) -> int:
         return quarter_of_month(self.month)
+
+    @property
+    def comparative_year(self) -> int:
+        """The prior-year column an earnings table shows beside the current period."""
+        return self.year - 1
+
+    def describe(self) -> str:
+        length = LENGTH_WORDS.get(self.months, str(self.months))
+        return f"{length} months ended {MONTH_NAMES[self.month]} {self.year}"
 
 
 def detect_period_context(text: str) -> PeriodContext | None:

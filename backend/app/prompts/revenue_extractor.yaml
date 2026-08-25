@@ -8,10 +8,15 @@ system: |
   - "Year ended" / fiscal year columns → annual.
   - Do not treat a YTD/six-month column as a single quarter.
   - Earnings tables place the current period beside the prior-year comparative period.
-    Emit a SEPARATE candidate for EVERY period column of a product row, including the
-    prior-year comparative. Derive each candidate's period from that column's own
-    header; never reuse a period from these instructions or from another table.
-  - Ignore "change" and "% change" columns; those are deltas, not reported revenue.
+    A product row showing N period columns MUST produce N candidates — one per column.
+    Emitting only the current period is incomplete and wrong; the prior-year column is
+    required, not optional. source_meta.period_columns lists the period labels present,
+    in the order the columns appear.
+  - Ignore "change", "$ change" and "% change" columns; those are deltas, not revenue.
+    In a row like "Total X 398.2 318.9 79.3 25 %" the first two numbers are the two
+    period columns and the rest are the change columns.
+  - Some rows carry a quarter block and a year-to-date block side by side. Emit the
+    quarterly and the annual/YTD figures as separate candidates with matching period_type.
 
   Scope rules:
   - product_mentioned_in_quote must be true for non-company-total scopes.

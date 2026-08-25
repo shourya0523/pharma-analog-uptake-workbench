@@ -502,9 +502,9 @@ class PipelineOrchestrator:
                     "filing_type": src.filing_type,
                     "accession": src.accession_number,
                     "evidence": evidence_meta,
-                    "reporting_period": (
-                        f"{period_context.months} months ended month {period_context.month} "
-                        f"of {period_context.year}"
+                    "reporting_period": period_context.describe() if period_context else None,
+                    "period_columns": (
+                        [str(period_context.year), str(period_context.comparative_year)]
                         if period_context
                         else None
                     ),

@@ -51,6 +51,12 @@ def test_detect_period_context_reads_the_documents_own_period():
     assert context.quarter == 2
 
 
+def test_period_context_describes_itself_and_its_comparative_column():
+    context = detect_period_context(UTHR_Q2_2024_EXHIBIT)
+    assert context.describe() == "three months ended June 2024"
+    assert context.comparative_year == 2023
+
+
 def test_detect_period_context_returns_none_without_a_stated_period():
     assert detect_period_context("Total Tyvaso 398.2 318.9 79.3 25 %") is None
     assert detect_period_context("") is None
