@@ -1,0 +1,9 @@
+{
+  "target_drug_count": 20,
+  "start_year": 2022,
+  "end_year": 2026,
+  "max_year_span": 5,
+  "reported_rows_file": "quarterly_revenue.jsonl",
+  "unresolved_rows_file": "unresolved_quarters.jsonl",
+  "edge_cases_file": "edge_cases.jsonl"
+}
