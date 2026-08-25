@@ -29,6 +29,7 @@ from app.db.models import (
     ExtractionRunORM,
     MoAComponentORM,
     ProductFormulationORM,
+    ProductIndicationORM,
     QualityCheckORM,
     SourceDocumentORM,
     UnresolvedQuarterORM,
@@ -53,6 +54,7 @@ from app.parsing.evidence import (
     select_product_evidence_text,
 )
 from app.parsing.fda_label import parse_label_record
+from app.parsing.indications import parse_indications
 from app.quality.candidate_filters import filter_revenue_candidates
 from app.quality.checks import (
     apply_auto_pass_gate,
@@ -492,6 +494,35 @@ class PipelineOrchestrator:
                                 moa_term=moa_term,
                                 descriptive_text=first_label.moa_summary,
                                 fda_epc_terms_json=epc_terms,
+                            )
+                        )
+                if first_label.indications_text:
+                    for indication in parse_indications(first_label.indications_text):
+                        existing_indication = (
+                            self.db.query(ProductIndicationORM)
+                            .filter_by(product_id=product.id, disease=indication.disease)
+                            .first()
+                        )
+                        if existing_indication:
+                            continue
+                        self.db.add(
+                            ProductIndicationORM(
+                                id=new_id(),
+                                product_id=product.id,
+                                disease=indication.disease,
+                                setting=indication.setting,
+                                population=indication.population,
+                                biomarker=indication.biomarker,
+                                approval_date=(
+                                    datetime.fromisoformat(approval).date()
+                                    if approval
+                                    else None
+                                ),
+                                launch_anchor_type=(
+                                    "indication_approval_date" if approval else None
+                                ),
+                                approved_lot=indication.approved_lot.value.value,
+                                approved_lot_quote=indication.source_quote,
                             )
                         )
                 for field, value in mapping.items():

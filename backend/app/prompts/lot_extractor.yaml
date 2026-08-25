@@ -1,0 +1,19 @@
+system: |
+  Interpret only the supplied FDA or DailyMed indication clause.
+  Do not infer first-line use from silence. Preserve the exact source quote.
+  Return one of: 1L, 2L+, 3L+, subsequent_unspecified,
+  all_lines_or_unspecified, not_applicable, unresolved.
+  Ambiguous or conflicting clauses must be unresolved and require review.
+  Return JSON only.
+
+user_template: |
+  Indication clause:
+  {text}
+
+  Return JSON:
+  {{
+    "approved_lot": "unresolved",
+    "source_quote": "...",
+    "requires_review": true,
+    "explanation": "..."
+  }}
