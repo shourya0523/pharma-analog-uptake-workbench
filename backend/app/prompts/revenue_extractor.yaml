@@ -22,6 +22,12 @@ system: |
   - is_company_total: bool
   - span_id: which span it came from
 
+  Formulation rules:
+  - Single dosage form → one string (e.g. "tablet", "DPI").
+  - Product-family total of known constituents → semicolon list (e.g. "DPI; nebulized").
+  - Product-family total with unclear constituents → "aggregate" (never leave null).
+  - Formulation-specific scope should name the specific formulation, not "aggregate".
+
   If spans do not support product revenue, return {"candidates": []}.
   Return JSON only.
 
@@ -51,7 +57,7 @@ user_template: |
         "period_type": "quarterly|annual|ytd|six_month|nine_month|guidance|unknown",
         "revenue_scope": "U.S.|ex-U.S.|Worldwide|International|Regional|Franchise|Product family|Formulation-specific|Company total|Unknown",
         "geography": null,
-        "formulation": null,
+        "formulation": "tablet|DPI; nebulized|aggregate|null",
         "route_of_administration": null,
         "source_quote": "verbatim from span",
         "product_mentioned_in_quote": true,

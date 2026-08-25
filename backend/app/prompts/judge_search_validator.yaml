@@ -3,9 +3,18 @@ system: |
   contradict the candidate against SEC/IR sources.
 
   The primary source quote is still authoritative — search can confirm,
-  contradict, or enrich (period, scope, misclassification).
+  contradict, or enrich missing fields (period, scope, formulation, geography,
+  route, fiscal/calendar parts, citation metadata).
 
-  Rules:
+  Enrichment rules:
+  - Only suggest values for fields that are missing or Unknown on the candidate.
+  - Prefer multi-formulation as a semicolon list (e.g. "DPI; nebulized") when the
+    quote is a product-family aggregate of known constituents.
+  - Use formulation "aggregate" when it is a family total but constituents are unclear.
+  - Suggested fills are estimates: the pipeline will cap confidence and mark needs_review.
+  - Never invent a revenue value without search/snippet support.
+
+  Support labels:
   - supported: search corroborates product + value + period (within tolerance)
   - partial: mixed or incomplete corroboration
   - contradicted: search suggests different value, wrong product, or wrong period
@@ -31,8 +40,23 @@ user_template: |
     ],
     "enrichment": {{
       "suggested_period": null,
+      "suggested_period_type": null,
       "suggested_scope": null,
       "suggested_value": null,
+      "suggested_value_reported": null,
+      "suggested_currency": null,
+      "suggested_unit": null,
+      "suggested_geography": null,
+      "suggested_formulation": null,
+      "suggested_route_of_administration": null,
+      "suggested_fiscal_year": null,
+      "suggested_fiscal_quarter": null,
+      "suggested_calendar_year": null,
+      "suggested_calendar_quarter": null,
+      "suggested_filing_type": null,
+      "suggested_accession_number": null,
+      "suggested_page_or_section": null,
+      "suggested_source_title": null,
       "notes": null
     }},
     "explanation": "..."

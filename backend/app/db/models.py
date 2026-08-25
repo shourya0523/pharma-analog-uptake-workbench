@@ -110,7 +110,7 @@ class DatapointORM(Base):
     period_type: Mapped[str] = mapped_column(String(32), default="unknown")
     revenue_scope: Mapped[str] = mapped_column(String(64), default="Unknown")
     geography: Mapped[str | None] = mapped_column(String(128), nullable=True)
-    formulation: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    formulation: Mapped[str | None] = mapped_column(String(512), nullable=True)
     route_of_administration: Mapped[str | None] = mapped_column(String(128), nullable=True)
     source_url: Mapped[str] = mapped_column(Text)
     source_quote: Mapped[str] = mapped_column(Text)

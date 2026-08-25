@@ -20,12 +20,13 @@ Each positive row follows the workbench datapoint/export fields and includes the
 5. Cross-check table headers so current-quarter values are not confused with prior-year or YTD columns.
 6. Keep every reported and unresolved period within the 2022–2026 benchmark window.
 7. Keep valid older records in the edge set, and require generic-only or dosage-only evidence to be rejected as branded revenue.
+8. Formulation is never left blank on product-family aggregates: use a semicolon list of constituents (e.g. `DPI; nebulized`) or the sentinel `aggregate` when constituents are unknown.
 
 Research performed on 2026-08-24. Source URLs and excerpts are stored per row so the set can be re-audited if issuers amend or move documents.
 
 ## Coverage notes
 
-- Tyvaso and Adcirca: United Therapeutics Q1 2023-Q4 2024 SEC earnings exhibits.
+- Tyvaso and Adcirca: United Therapeutics Q1 2023-Q4 2024 SEC earnings exhibits. Tyvaso product-family totals use formulation `DPI; nebulized`.
 - Opsumit: Johnson & Johnson Q1 2023-Q4 2024 SEC supplementary sales exhibits.
 - Letairis: Gilead Q1 2022-Q4 2023 SEC tables. In 2024, Gilead aggregates Letairis into Other products.
 - Tracleer, Veletri, and Ventavis: current issuer schedules do not separately report these products; they remain explicit non-disclosures.
