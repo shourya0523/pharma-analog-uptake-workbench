@@ -52,7 +52,12 @@ from app.quality.comparative import derive_comparative_candidates
 from app.quality.checks import apply_auto_pass_gate, quote_contains_value, run_quality_checks
 from app.quality.completeness import resolve_completeness_pct
 from app.quality.fast_judge import try_deterministic_judgment
-from app.quality.profile import is_missing_value
+from app.quality.profile import (
+    PRIORITY_JUDGE_FIELDS,
+    apply_profile_judgment,
+    is_missing_value,
+    values_conflict,
+)
 from app.storage.filestore import FileStore, get_file_store
 from app.validation.sampling import select_validation_tasks
 from app.config import get_settings
@@ -116,6 +121,8 @@ class PipelineOrchestrator:
             sources = await self._retrieve(job, options)
             parsed = await self._parse(job, sources)
             await self._extract_metadata(job, sources, parsed, options)
+            if options.get("product_metadata", True):
+                await self._judge_profile(job)
             datapoint_rows = await self._extract_revenue(
                 job, sources, parsed, options, skip_unresolved=get_settings().enable_llm_search
             )
@@ -331,6 +338,7 @@ class PipelineOrchestrator:
         self._set_step(job, JobStep.EXTRACT_METADATA)
 
         written: dict[str, str] = {}
+        conflicts: dict[str, dict[str, Any]] = {}
 
         # Deterministic OpenFDA enrichment
         for src in sources:
@@ -437,8 +445,16 @@ class PipelineOrchestrator:
                 name = field.get("field")
                 if not name or is_missing_value(field.get("value")):
                     continue
-                # OpenFDA is authoritative for the fields it supplies
                 if name in written:
+                    # Record the disagreement for the judge instead of silently
+                    # preferring one source; identical answers are just deduped.
+                    if values_conflict(written[name], field["value"]):
+                        conflicts[name] = {
+                            "value": str(field["value"]),
+                            "source_type": src.source_type.value,
+                            "source_url": src.url,
+                            "source_quote": field.get("source_quote") or "",
+                        }
                     continue
                 written[name] = str(field["value"])
                 citation = {
@@ -463,12 +479,102 @@ class PipelineOrchestrator:
                     )
                 )
             break
+
+        if conflicts:
+            for name, rival in conflicts.items():
+                row = (
+                    self.db.query(DrugProfileFieldORM)
+                    .filter_by(job_id=job.id, field=name)
+                    .first()
+                )
+                if row and row.citation_json:
+                    row.citation_json = {**row.citation_json, "conflicting_source": rival}
         self.db.commit()
         logger.info(
-            "metadata_extracted job_id=%s drug=%s fields=%s",
+            "metadata_extracted job_id=%s drug=%s fields=%s conflicts=%s",
             job.id,
             job.drug_name,
             sorted(written),
+            sorted(conflicts),
+        )
+
+    async def _judge_profile(self, job: DrugJobORM) -> None:
+        """Challenge profile fields with independent search and correct them.
+
+        Source registries carry errors, so a cited value is not assumed correct;
+        fields where two sources disagree are judged first, then the regulatory
+        fields where a wrong value is most costly.
+        """
+        settings = get_settings()
+        if not settings.enable_profile_judge:
+            return
+        if not settings.openrouter_api_key or not settings.enable_llm_search:
+            return
+        rows = self.db.query(DrugProfileFieldORM).filter_by(job_id=job.id).all()
+        if not rows:
+            return
+        self._set_step(job, JobStep.JUDGE_METADATA)
+
+        by_priority = sorted(
+            (r for r in rows if r.field in PRIORITY_JUDGE_FIELDS or (r.citation_json or {}).get("conflicting_source")),
+            key=lambda r: (
+                0 if (r.citation_json or {}).get("conflicting_source") else 1,
+                PRIORITY_JUDGE_FIELDS.index(r.field) if r.field in PRIORITY_JUDGE_FIELDS else 99,
+            ),
+        )[: settings.profile_judge_max_fields]
+
+        corrected = 0
+        for row in by_priority:
+            citation = row.citation_json or {}
+            judgment = await self.llm.judge_profile_field(
+                product=job.drug_name,
+                generic=job.generic_name,
+                aliases=self._job_aliases,
+                field=row.field,
+                value=row.value or "",
+                source={
+                    "source_type": citation.get("source_type"),
+                    "source_url": citation.get("source_url"),
+                    "source_quote": citation.get("source_quote"),
+                    "openfda_application_number": citation.get("openfda_application_number"),
+                    "conflicting_source": citation.get("conflicting_source"),
+                },
+            )
+            outcome = apply_profile_judgment(
+                row.field,
+                row.value or "",
+                judgment,
+                min_confidence=settings.profile_judge_min_confidence,
+            )
+            row.citation_json = {
+                **citation,
+                "judge_verdict": outcome.verdict,
+                "judge_flags": outcome.flags,
+                **({"correction": outcome.correction} if outcome.correction else {}),
+            }
+            if outcome.corrected:
+                row.value = outcome.value
+                corrected += 1
+                # A search-sourced correction always goes to a human
+                row.validation_status = ValidationStatus.NEEDS_REVIEW.value
+                job.quality_flags = list(
+                    set((job.quality_flags or []) + [f"profile_corrected:{row.field}"])
+                )
+            logger.info(
+                "profile_field_judged job_id=%s field=%s verdict=%s corrected=%s flags=%s",
+                job.id,
+                row.field,
+                outcome.verdict,
+                outcome.corrected,
+                outcome.flags,
+            )
+        self.db.commit()
+        logger.info(
+            "profile_judged job_id=%s drug=%s judged=%s corrected=%s",
+            job.id,
+            job.drug_name,
+            len(by_priority),
+            corrected,
         )
 
     async def _search_revenue_fallback(

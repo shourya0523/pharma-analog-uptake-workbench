@@ -342,6 +342,39 @@ class LLMModules:
             extra_aliases=extra_aliases,
         )
 
+    async def judge_profile_field(
+        self,
+        *,
+        product: str,
+        generic: str | None,
+        aliases: list[str] | None,
+        field: str,
+        value: str,
+        source: dict[str, Any],
+    ) -> dict[str, Any]:
+        """Check one profile field against independent web search.
+
+        Returns {} when search judging is unavailable, so callers keep the value
+        they already have rather than treating silence as a contradiction.
+        """
+        if not self.settings.openrouter_api_key or not self.settings.enable_llm_search:
+            return {}
+        prompt = load_prompt("profile_field_judge")
+        user = prompt["user_template"].format(
+            product=product,
+            generic=generic or "",
+            aliases=json.dumps((aliases or [])[:20]),
+            field=field,
+            value=value,
+            source=json.dumps(source)[:2000],
+        )
+        return await self.client.chat_json_with_web(
+            model=self.settings.openrouter_model_judge,
+            system=prompt["system"],
+            user=user,
+            fetch=True,
+        )
+
     async def reconcile(self, *, product: str, candidates: list[dict]) -> dict[str, Any]:
         prompt = load_prompt("conflict_reconciler")
         user = prompt["user_template"].format(

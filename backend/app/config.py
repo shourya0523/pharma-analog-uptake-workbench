@@ -32,6 +32,12 @@ class Settings(BaseSettings):
     cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
     llm_skip_judge_when_deterministic: bool = True
     llm_max_extract_sources: int = 6
+    # Independent-search judging of product profile fields. Source registries carry
+    # errors (openFDA lists Tyvaso, an inhaled product, as ORAL), so cited fields are
+    # challenged rather than passed through.
+    enable_profile_judge: bool = True
+    profile_judge_max_fields: int = 6
+    profile_judge_min_confidence: float = 0.6
     enable_llm_search: bool = True
     llm_search_max_queries: int = 4
     llm_search_max_urls: int = 5
