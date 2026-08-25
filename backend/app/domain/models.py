@@ -211,6 +211,10 @@ class ExtractionOptions(BaseModel):
     company_ir: bool = True
     openfda: bool = True
     earnings_releases: bool = True
+    # Bound earnings-exhibit retrieval to a filing-date window (ISO dates).
+    # Unset means the most recent earnings releases.
+    earnings_since: date | None = None
+    earnings_until: date | None = None
     transcripts: bool = False
     pdfs: bool = True
     llm_evidence_judge: bool = True

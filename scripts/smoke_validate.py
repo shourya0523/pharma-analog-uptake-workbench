@@ -141,6 +141,8 @@ def main() -> int:
         action="store_true",
         help="fetch 8-K item 2.02 exhibit 99.x earnings releases (quarterly product revenue)",
     )
+    parser.add_argument("--earnings-since", default=None, help="earliest exhibit filing date (ISO)")
+    parser.add_argument("--earnings-until", default=None, help="latest exhibit filing date (ISO)")
     parser.add_argument("--openfda", action="store_true")
     parser.add_argument("--timeout", type=int, default=600)
     parser.add_argument("--out", default=None)
@@ -163,6 +165,8 @@ def main() -> int:
             "options": {
                 "sec_filings": args.sec_filings,
                 "earnings_releases": args.earnings_releases,
+                "earnings_since": args.earnings_since,
+                "earnings_until": args.earnings_until,
                 "openfda": args.openfda,
                 "company_ir": bool(args.known_source_url),
                 "quarterly_revenue": True,

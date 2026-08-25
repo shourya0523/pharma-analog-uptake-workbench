@@ -31,6 +31,18 @@ async def _sec_throttle() -> None:
         _last_sec_request = asyncio.get_event_loop().time()
 
 
+def parse_filing_date(value: object) -> date | None:
+    """Lenient ISO date parse for EDGAR filingDate values and caller-supplied bounds."""
+    if isinstance(value, date):
+        return value
+    if not value:
+        return None
+    try:
+        return date.fromisoformat(str(value)[:10])
+    except ValueError:
+        return None
+
+
 def is_earnings_exhibit(filename: str) -> bool:
     """True for exhibit 99.x documents, which carry the product revenue tables.
 
@@ -138,11 +150,15 @@ class SECConnector:
         cik: str,
         recent: dict[str, Any],
         max_exhibits: int,
+        since: date | None = None,
+        until: date | None = None,
     ) -> list[RetrievedSource]:
         """Fetch exhibit 99.x earnings releases from 8-K item 2.02 filings.
 
         Quarterly product-level net sales are disclosed in these exhibits; the 8-K
         primary document is only a cover page, so retrieving it yields no revenue.
+        Without a date bound this takes the most recent filings; ``since``/``until``
+        target a historical window instead, which keeps a backfill bounded.
         """
         forms = recent.get("form", [])
         accessions = recent.get("accessionNumber", [])
@@ -161,6 +177,11 @@ class SECConnector:
                 continue
             accession = accessions[i]
             fdate = filing_dates[i] if i < len(filing_dates) else None
+            filed_on = parse_filing_date(fdate)
+            if (since and (filed_on is None or filed_on < since)) or (
+                until and (filed_on is None or filed_on > until)
+            ):
+                continue
             acc_nodash = accession.replace("-", "")
             documents = await self._list_filing_documents(client, cik_int, acc_nodash)
             exhibits = [name for name in documents if is_earnings_exhibit(name)]
@@ -233,6 +254,8 @@ class SECConnector:
         max_filings: int | None = None,
         include_primary: bool = True,
         include_earnings: bool | None = None,
+        earnings_since: date | None = None,
+        earnings_until: date | None = None,
     ) -> list[RetrievedSource]:
         """Retrieve primary filings and/or 8-K earnings-release exhibits.
 
@@ -359,6 +382,8 @@ class SECConnector:
                         cik=resolved,
                         recent=recent,
                         max_exhibits=settings.sec_max_earnings_exhibits,
+                        since=earnings_since,
+                        until=earnings_until,
                     )
                 )
 

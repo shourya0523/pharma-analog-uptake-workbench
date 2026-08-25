@@ -10,7 +10,12 @@ from sqlalchemy.orm import Session
 logger = logging.getLogger(__name__)
 
 from app.connectors.llm_search import LLMSearchConnector
-from app.connectors.sources import ManualURLConnector, SECConnector, TranscriptConnectorStub
+from app.connectors.sources import (
+    ManualURLConnector,
+    SECConnector,
+    TranscriptConnectorStub,
+    parse_filing_date,
+)
 from app.connectors.openfda import OpenFDAConnector
 from app.connectors.openfda_fields import earliest_approval_date
 from app.db.models import (
@@ -247,6 +252,8 @@ class PipelineOrchestrator:
                     company_name=job.manufacturer,
                     include_primary=want_primary,
                     include_earnings=want_earnings,
+                    earnings_since=parse_filing_date(options.get("earnings_since")),
+                    earnings_until=parse_filing_date(options.get("earnings_until")),
                 )
             )
         if options.get("openfda", True):
