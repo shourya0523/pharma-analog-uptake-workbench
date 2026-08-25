@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 import asyncio
+import logging
 from abc import ABC, abstractmethod
 from collections.abc import Awaitable, Callable
 from typing import Any
 
 from app.config import get_settings
+
+logger = logging.getLogger(__name__)
 
 
 JobHandler = Callable[[dict[str, Any]], Awaitable[None]]
@@ -41,13 +44,22 @@ class InProcessJobQueue(JobQueue):
         job_id = payload.get("job_id", job_type)
 
         async def _run() -> None:
-            async with self._sem:
-                assert self._handler
-                await self._handler({"job_type": job_type, **payload})
+            try:
+                async with self._sem:
+                    assert self._handler
+                    await self._handler({"job_type": job_type, **payload})
+            except Exception:
+                logger.exception(
+                    "queue_handler_failed job_type=%s job_id=%s run_id=%s",
+                    job_type,
+                    payload.get("job_id"),
+                    payload.get("run_id"),
+                )
 
         task = asyncio.create_task(_run())
         self._tasks.add(task)
         task.add_done_callback(self._tasks.discard)
+        logger.info("job_enqueued job_type=%s job_id=%s run_id=%s", job_type, job_id, payload.get("run_id"))
         return str(job_id)
 
     async def start(self, handler: JobHandler) -> None:

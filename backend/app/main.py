@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import csv
 import io
+import logging
 from typing import Any
 
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
@@ -24,9 +25,13 @@ from app.db.models import (
 from app.domain.models import DrugInput, ExtractionOptions, JobStatus, ValidationStatus, new_id
 from app.export.builder import ExportBuilder, TemplateMapper
 from app.jobs.queue import get_job_queue
+from app.jobs.run_status import refresh_run_status
+from app.logging_setup import configure_logging
 from app.pipeline.orchestrator import PipelineOrchestrator
 from app.storage.filestore import get_file_store
 
+configure_logging()
+logger = logging.getLogger(__name__)
 settings = get_settings()
 app = FastAPI(title=settings.app_name)
 app.add_middleware(
@@ -42,35 +47,34 @@ file_store = get_file_store()
 
 
 async def _handle_job(payload: dict[str, Any]) -> None:
+    job_id = payload["job_id"]
+    run_id = payload["run_id"]
     db = SessionLocal()
     try:
         orch = PipelineOrchestrator(db, file_store=file_store)
-        await orch.run_job(payload["job_id"])
-        run = db.get(ExtractionRunORM, payload["run_id"])
-        if run:
-            jobs = db.query(DrugJobORM).filter_by(run_id=run.id).all()
-            if all(
-                j.status
-                in {
-                    JobStatus.READY_FOR_REVIEW.value,
-                    JobStatus.COMPLETED.value,
-                    JobStatus.FAILED.value,
-                }
-                for j in jobs
-            ):
-                run.status = (
-                    "ready_for_review"
-                    if any(j.status == JobStatus.READY_FOR_REVIEW.value for j in jobs)
-                    else "completed"
-                )
-                db.commit()
+        await orch.run_job(job_id)
+    except Exception as exc:
+        logger.error("job_handler_failed job_id=%s run_id=%s error=%s", job_id, run_id, exc)
     finally:
+        try:
+            refresh_run_status(db, run_id)
+        except Exception:
+            logger.exception("run_status_update_failed run_id=%s", run_id)
         db.close()
 
 
 @app.on_event("startup")
 async def startup() -> None:
+    configure_logging()
     init_db()
+    logger.info(
+        "startup environment=%s storage=%s job_backend=%s llm_key_set=%s llm_search=%s",
+        settings.environment,
+        settings.storage_backend,
+        settings.job_backend,
+        bool(settings.openrouter_api_key),
+        settings.enable_llm_search,
+    )
     await job_queue.start(_handle_job)
 
 

@@ -1,10 +1,13 @@
 from __future__ import annotations
 
 import json
+import logging
 from datetime import datetime
 from typing import Any
 
 from sqlalchemy.orm import Session
+
+logger = logging.getLogger(__name__)
 
 from app.connectors.llm_search import LLMSearchConnector
 from app.connectors.sources import ManualURLConnector, SECConnector, TranscriptConnectorStub
@@ -74,14 +77,23 @@ class PipelineOrchestrator:
             job.status = status.value
         job.updated_at = datetime.utcnow()
         self.db.commit()
+        logger.info(
+            "job_step job_id=%s drug=%s step=%s status=%s",
+            job.id,
+            job.drug_name,
+            job.current_step,
+            job.status,
+        )
 
     async def run_job(self, job_id: str) -> None:
         job = self.db.get(DrugJobORM, job_id)
         if not job:
+            logger.warning("pipeline_skip missing_job job_id=%s", job_id)
             return
         try:
             job.status = JobStatus.RUNNING.value
             self.db.commit()
+            logger.info("pipeline_start job_id=%s drug=%s run_id=%s", job.id, job.drug_name, job.run_id)
 
             run = self.db.get(ExtractionRunORM, job.run_id)
             options = (run.options_json if run else {}) or {}
@@ -105,10 +117,29 @@ class PipelineOrchestrator:
             await self._quality_and_validation(job)
             await self._completeness(job)
             self._set_step(job, JobStep.READY_FOR_REVIEW, JobStatus.READY_FOR_REVIEW)
+            logger.info(
+                "pipeline_done job_id=%s drug=%s sources=%s candidates=%s auto_pass=%s needs_review=%s unresolved=%s completeness=%s",
+                job.id,
+                job.drug_name,
+                job.sources_found,
+                job.candidates_extracted,
+                job.auto_pass_count,
+                job.needs_review_count,
+                job.unresolved_count,
+                job.completeness_pct,
+            )
         except Exception as exc:
+            step = job.current_step if job else None
             job.status = JobStatus.FAILED.value
-            job.error = str(exc)
+            job.error = f"{type(exc).__name__}: {exc}"
             self.db.commit()
+            logger.exception(
+                "pipeline_failed job_id=%s drug=%s step=%s error=%s",
+                job_id,
+                getattr(job, "drug_name", None),
+                step,
+                job.error,
+            )
             raise
 
     async def _expand_aliases(self, job: DrugJobORM) -> list[str]:
@@ -186,6 +217,7 @@ class PipelineOrchestrator:
             if cik:
                 job.cik = cik
                 self.db.commit()
+                logger.info("cik_resolved job_id=%s drug=%s cik=%s via=sec", job.id, job.drug_name, cik)
         if not job.cik and get_settings().enable_llm_search:
             cik = await self.search.resolve_cik_from_search(
                 product=job.drug_name,
@@ -197,6 +229,7 @@ class PipelineOrchestrator:
                 job.cik = cik
                 job.quality_flags = list(set((job.quality_flags or []) + ["cik_from_llm_search"]))
                 self.db.commit()
+                logger.info("cik_resolved job_id=%s drug=%s cik=%s via=llm_search", job.id, job.drug_name, cik)
 
     async def _retrieve(self, job: DrugJobORM, options: dict[str, Any]) -> list:
         self._set_step(job, JobStep.SOURCE_RETRIEVE)
@@ -247,6 +280,13 @@ class PipelineOrchestrator:
         self._persist_sources(job, collected)
         job.sources_found = len(collected)
         self.db.commit()
+        logger.info(
+            "sources_retrieved job_id=%s drug=%s count=%s types=%s",
+            job.id,
+            job.drug_name,
+            len(collected),
+            sorted({getattr(s.source_type, "value", str(s.source_type)) for s in collected}),
+        )
         return collected
 
     async def _parse(self, job: DrugJobORM, sources: list) -> dict[str, Any]:
@@ -560,6 +600,15 @@ class PipelineOrchestrator:
 
         job.candidates_extracted = len(rows)
         self.db.commit()
+        logger.info(
+            "extract_revenue_done job_id=%s drug=%s kept=%s dropped=%s product_money=%s sources=%s",
+            job.id,
+            job.drug_name,
+            len(rows),
+            dropped_total,
+            any_product_money,
+            len(selected_sources),
+        )
         return rows
 
     async def _judge(self, job: DrugJobORM, rows: list[DatapointORM], sources: list, parsed: dict, options: dict) -> None:
