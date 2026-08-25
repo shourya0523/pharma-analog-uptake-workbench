@@ -38,6 +38,7 @@ from app.parsing.documents import DocumentParser
 from app.parsing.evidence import build_revenue_llm_text, prioritize_sources_for_revenue, select_product_evidence_text
 from app.quality.candidate_filters import filter_revenue_candidates
 from app.quality.checks import apply_auto_pass_gate, quote_contains_value, run_quality_checks
+from app.quality.completeness import resolve_completeness_pct
 from app.quality.fast_judge import try_deterministic_judgment
 from app.storage.filestore import FileStore, get_file_store
 from app.validation.sampling import select_validation_tasks
@@ -972,10 +973,18 @@ class PipelineOrchestrator:
 
         unresolved = self.db.query(UnresolvedQuarterORM).filter_by(job_id=job.id).all()
         job.unresolved_count = len(unresolved)
-        pct = result.get("completeness_pct")
-        if pct is None:
-            n = len([d for d in dps if d.period_type == PeriodType.QUARTERLY.value])
-            u = len([x for x in unresolved if "Q" in (x.period or "")])
-            pct = round(100 * n / max(n + u, 1), 1)
-        job.completeness_pct = float(pct)
+        job.completeness_pct = resolve_completeness_pct(
+            result.get("completeness_pct"),
+            quarterly_count=len([d for d in dps if d.period_type == PeriodType.QUARTERLY.value]),
+            unresolved_quarter_count=len([x for x in unresolved if "Q" in (x.period or "")]),
+        )
         self.db.commit()
+        logger.info(
+            "completeness job_id=%s drug=%s llm_pct=%s resolved_pct=%s quarterly=%s unresolved=%s",
+            job.id,
+            job.drug_name,
+            result.get("completeness_pct"),
+            job.completeness_pct,
+            len([d for d in dps if d.period_type == PeriodType.QUARTERLY.value]),
+            job.unresolved_count,
+        )

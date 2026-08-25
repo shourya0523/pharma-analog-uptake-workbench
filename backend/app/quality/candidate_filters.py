@@ -93,6 +93,18 @@ def is_xbrl_noise_quote(quote: str) -> bool:
     return False
 
 
+def is_placeholder_period(period: object) -> bool:
+    """True for prompt-skeleton echoes like "YYYY" or "YYYYQn" instead of a real period.
+
+    A real period label always carries a year digit; "unknown" stays allowed because the
+    orchestrator uses it for candidates whose period could not be determined.
+    """
+    label = str(period or "").strip()
+    if not label or label.lower() == "unknown":
+        return False
+    return not any(ch.isdigit() for ch in label)
+
+
 def filter_revenue_candidates(
     candidates: list[dict[str, Any]],
     *,
@@ -131,6 +143,10 @@ def filter_revenue_candidates(
 
         if is_xbrl_noise_quote(quote):
             dropped.append({**cand, "_drop_reason": "xbrl_taxonomy_noise"})
+            continue
+
+        if is_placeholder_period(cand.get("period")):
+            dropped.append({**cand, "_drop_reason": "placeholder_period"})
             continue
 
         if cand.get("is_company_total") is True:

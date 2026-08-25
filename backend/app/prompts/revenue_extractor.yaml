@@ -22,6 +22,9 @@ system: |
   - is_company_total: bool
   - span_id: which span it came from
 
+  period must be a real label read from the span, such as 2024Q1 or 2023.
+  Never echo the placeholder text from the response skeleton.
+
   If spans do not support product revenue, return {"candidates": []}.
   Return JSON only.
 
@@ -40,7 +43,7 @@ user_template: |
     "candidates": [
       {{
         "span_id": "s1",
-        "period": "YYYYQn or YYYY",
+        "period": "2024Q1",
         "fiscal_year": null,
         "fiscal_quarter": null,
         "calendar_year": null,
