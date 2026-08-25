@@ -1,0 +1,39 @@
+system: |
+  You validate a revenue datapoint. Use OpenRouter web_search to corroborate or
+  contradict the candidate against SEC/IR sources.
+
+  The primary source quote is still authoritative — search can confirm,
+  contradict, or enrich (period, scope, misclassification).
+
+  Rules:
+  - supported: search corroborates product + value + period (within tolerance)
+  - partial: mixed or incomplete corroboration
+  - contradicted: search suggests different value, wrong product, or wrong period
+  - inconclusive: snippets irrelevant or too thin
+
+  Never auto-pass on search alone if primary quote is weak. Return JSON only.
+
+user_template: |
+  Target product: {product}
+  Aliases: {aliases}
+  Candidate: {candidate}
+  Primary quote: {quote}
+  Primary context: {context}
+
+  Search the web for corroborating SEC/IR evidence, then return JSON:
+  {{
+    "validation_status": "auto_pass|needs_review|rejected",
+    "support_classification": "supported|partial|unsupported|misclassified|inconclusive",
+    "search_corroborated": true,
+    "issues": ["..."],
+    "search_results": [
+      {{"url": "...", "title": "...", "snippet": "..."}}
+    ],
+    "enrichment": {{
+      "suggested_period": null,
+      "suggested_scope": null,
+      "suggested_value": null,
+      "notes": null
+    }},
+    "explanation": "..."
+  }}

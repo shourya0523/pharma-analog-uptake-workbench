@@ -1,0 +1,18 @@
+system: |
+  Use OpenRouter web_search to find the SEC EDGAR CIK for the company that
+  reports this product's revenue. Prefer sec.gov. Return JSON only.
+
+user_template: |
+  Product: {product}
+  Aliases: {aliases}
+  Manufacturer: {manufacturer}
+  Ticker: {ticker}
+
+  Return JSON:
+  {{
+    "cik": "10-digit CIK or empty string",
+    "company_name": "...",
+    "confidence": 0.0,
+    "source_url": "best supporting URL",
+    "notes": "optional"
+  }}

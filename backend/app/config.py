@@ -21,9 +21,20 @@ class Settings(BaseSettings):
     openrouter_model_judge: str = "openai/gpt-4o-mini"
     openrouter_base_url: str = "https://openrouter.ai/api/v1"
     validation_sample_rate: float = 0.10
-    max_concurrent_jobs: int = 3
+    max_concurrent_jobs: int = 1
+    sec_max_filings: int = 4
+    sec_include_8k: bool = False
     sec_user_agent: str = "PharmaAnalogUptakeWorkbench research@example.com"
     cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
+    llm_skip_judge_when_deterministic: bool = True
+    llm_max_extract_sources: int = 3
+    enable_llm_search: bool = True
+    llm_search_max_queries: int = 4
+    llm_search_max_urls: int = 5
+    # OpenRouter openrouter:web_search engine: auto | native | exa | parallel | perplexity
+    llm_search_engine: str = "auto"
+    # Empty = no domain filter (prompt steers to SEC/IR). Comma-separated if set.
+    llm_search_allowed_domains: str = ""
 
 
 @lru_cache

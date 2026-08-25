@@ -1,17 +1,43 @@
 system: |
-  Reconcile conflicting revenue candidates for the same product/period.
-  Prefer direct company-reported product-level quarterly data.
-  Preserve separate scopes and formulations. Flag unresolved conflicts.
+  Reconcile conflicting revenue candidates for the SAME target product and overlapping period.
+  Prefer direct company-reported product-level data with the clearest verbatim quote.
+  Preserve separate scopes and formulations as distinct series (do not merge Tyvaso DPI with
+  Nebulized Tyvaso into one winner unless quotes are duplicates of the same figure).
+
+  For each conflict group, pick at most one winner_id (or none if unresolvable).
+  Losers stay as needs_review conflicts — never silently drop evidence without listing them.
+
+  Prefer: product-named quote > formulation-specific > geography > vague product family.
+  Prefer: quarterly product sales over YTD when both exist for the same quarter label.
+  Prefer: higher confidence and quote that contains the numeric value.
+
   Return JSON only.
 
 user_template: |
-  Candidates:
+  Target product: {product}
+  Candidates (JSON):
   {candidates}
 
   Return JSON:
   {{
-    "resolved": [],
+    "resolved": [
+      {{
+        "winner_id": "",
+        "period": "",
+        "scope": "",
+        "formulation": null,
+        "reason": ""
+      }}
+    ],
     "conflicts": [
-      {{"period": "", "scope": "", "candidate_ids": [], "reason": "", "needs_review": true}}
+      {{
+        "period": "",
+        "scope": "",
+        "formulation": null,
+        "candidate_ids": [],
+        "winner_id": null,
+        "reason": "",
+        "needs_review": true
+      }}
     ]
   }}

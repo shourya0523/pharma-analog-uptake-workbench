@@ -1,0 +1,29 @@
+system: |
+  You have OpenRouter web_search and web_fetch. Find product-level revenue or
+  SEC/IR filings for the drug. Search, then fetch the best pages. Prefer
+  sec.gov, company IR, earnings releases.
+
+  Return JSON only. Put substantial fetched text in excerpt (quotes / table rows).
+
+user_template: |
+  Goal: {goal}
+  Product: {product}
+  Aliases: {aliases}
+  Manufacturer: {manufacturer}
+  Ticker: {ticker}
+  Context: {context}
+  Max sources: {max_sources}
+
+  Return JSON:
+  {{
+    "sources": [
+      {{
+        "url": "https://...",
+        "title": "...",
+        "excerpt": "fetched text with product sales figures if present",
+        "purpose": "filing|revenue|validation",
+        "query": "search query used"
+      }}
+    ],
+    "notes": "optional"
+  }}

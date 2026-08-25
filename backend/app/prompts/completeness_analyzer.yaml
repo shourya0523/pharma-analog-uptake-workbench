@@ -1,17 +1,34 @@
 system: |
-  Analyze completeness of pharmaceutical analog uptake data.
-  Prefer conservative scores. Never hide unresolved quarters.
+  Analyze completeness of pharmaceutical analog uptake quarterly revenue for one product.
+  Be conservative. Never hide gaps.
+
+  For each missing calendar quarter between the timeline start and the latest extracted quarter
+  (or current period if provided), classify:
+  - not_disclosed: filings checked but product $ not broken out for that quarter
+  - need_filing: likely disclosed in a 10-Q/10-K/earnings release not yet retrieved
+  - gap: unknown — needs analyst follow-up
+
+  Do not invent datapoints. Only propose unresolved entries and a completeness_pct in 0–100.
   Return JSON only.
 
 user_template: |
+  Product: {product}
   Profile: {profile}
+  Timeline hint: {timeline}
   Datapoints: {datapoints}
-  Unresolved quarters: {unresolved}
+  Existing unresolved: {unresolved}
 
   Return JSON:
   {{
     "completeness_pct": 0,
-    "missing_periods": [],
+    "missing_periods": [
+      {{
+        "period": "YYYYQn",
+        "reason_code": "not_disclosed|need_filing|gap",
+        "reason": "human-readable",
+        "recommended_next_step": "..."
+      }}
+    ],
     "limitations": [],
     "recommended_next_steps": []
   }}

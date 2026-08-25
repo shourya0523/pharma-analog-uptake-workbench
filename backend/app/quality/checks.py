@@ -36,7 +36,13 @@ def quote_contains_value(quote: str, value: float | None) -> bool:
         if form.replace(",", "").lower() in q:
             return True
     # millions / billions wording
-    if re.search(rf"{re.escape(str(int(value)))}\s*(million|billion)", q):
+    if float(value).is_integer():
+        iv = int(value)
+        if re.search(rf"{iv}\s*(million|billion)", q):
+            return True
+    # $1,878.2 style already covered via comma strip; also try without trailing zeros
+    compact = f"{float(value):.10f}".rstrip("0").rstrip(".")
+    if compact and compact in q:
         return True
     return False
 
@@ -180,10 +186,19 @@ def apply_auto_pass_gate(datapoint: dict[str, Any], issues: list[QualityIssue]) 
         return "needs_review"
     if not datapoint.get("source_url") or not datapoint.get("source_quote"):
         return "needs_review"
-    if datapoint.get("period_type") in {"ytd", "annual", "guidance"}:
+    if datapoint.get("period_type") in {"ytd", "guidance", "six_month", "nine_month"}:
         return "needs_review"
     if datapoint.get("revenue_scope") == "Company total":
         return "needs_review"
     if (datapoint.get("confidence_score") or 0) < 0.7:
         return "needs_review"
-    return datapoint.get("validation_status") or "auto_pass"
+    # Preserve judge decision when already needs_review/rejected; allow auto_pass through
+    status = datapoint.get("validation_status") or "auto_pass"
+    if status in {"needs_review", "rejected", "follow_up", "unresolved"}:
+        return status
+    if status == "auto_pass":
+        return "auto_pass"
+    # pending + clean → auto_pass for quarterly/annual product lines
+    if datapoint.get("period_type") in {"quarterly", "annual"}:
+        return "auto_pass"
+    return status

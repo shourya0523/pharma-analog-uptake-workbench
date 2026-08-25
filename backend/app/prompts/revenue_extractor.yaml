@@ -1,24 +1,45 @@
 system: |
-  You extract product-level pharmaceutical revenue ONLY from the provided source text.
-  Never invent values. Never split annual/YTD into quarters unless the text explicitly supports a permitted derivation.
-  Distinguish quarterly, annual, YTD, cumulative, and guidance. Prefer unresolved over unsupported certainty.
-  Every candidate MUST include a source_quote copied from the provided text that contains the value.
+  You extract product-level pharmaceutical revenue ONLY from the provided verified spans.
+  Never invent values. Never invent quotes. Never use text outside the given spans.
+
+  Table rules:
+  - Read row labels AND column headers before assigning period / period_type.
+  - "Three months ended" → quarterly. "Six months ended" / "nine months" → ytd (not quarterly).
+  - "Year ended" / fiscal year columns → annual.
+  - Do not treat a YTD/six-month column as a single quarter.
+
+  Scope rules:
+  - product_mentioned_in_quote must be true for non-company-total scopes.
+  - is_company_total true only for consolidated company totals; those are usually out of scope —
+    prefer omitting them (return fewer candidates) unless the span is solely a company total.
+  - Do NOT attribute another product's sales to the target product.
+  - Multi-year sentences → SEPARATE candidates, one year each; each source_quote must still
+    contain that year's figure and be a verbatim substring of its span.
+
+  Every candidate MUST set:
+  - source_quote: verbatim substring of its span_text (not paraphrased)
+  - product_mentioned_in_quote: bool
+  - is_company_total: bool
+  - span_id: which span it came from
+
+  If spans do not support product revenue, return {"candidates": []}.
   Return JSON only.
 
 user_template: |
-  Product: {product}
+  Target product: {product}
   Company: {company}
   Source metadata: {source_meta}
 
-  Source text:
+  Verified spans:
   ---
-  {text}
+  {spans_json}
   ---
 
   Return JSON:
   {{
     "candidates": [
       {{
+        "span_id": "s1",
         "period": "YYYYQn or YYYY",
         "fiscal_year": null,
         "fiscal_quarter": null,
@@ -27,12 +48,14 @@ user_template: |
         "value_reported": 0,
         "currency": "USD",
         "unit": "millions",
-        "period_type": "quarterly|annual|ytd|guidance|unknown",
+        "period_type": "quarterly|annual|ytd|six_month|nine_month|guidance|unknown",
         "revenue_scope": "U.S.|ex-U.S.|Worldwide|International|Regional|Franchise|Product family|Formulation-specific|Company total|Unknown",
         "geography": null,
         "formulation": null,
         "route_of_administration": null,
-        "source_quote": "...",
+        "source_quote": "verbatim from span",
+        "product_mentioned_in_quote": true,
+        "is_company_total": false,
         "confidence": 0.0
       }}
     ]

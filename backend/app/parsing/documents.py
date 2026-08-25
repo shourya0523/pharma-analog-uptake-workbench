@@ -47,9 +47,12 @@ class DocumentParser:
         if source.storage_key and source.storage_key.endswith(".pdf"):
             return await self._parse_pdf(source, raw or b"")
 
-        text = source.raw_text
-        if not text and raw:
+        # Prefer full bytes from FileStore over in-memory raw_text (often truncated at retrieve)
+        text = None
+        if raw:
             text = raw.decode("utf-8", errors="ignore")
+        elif source.raw_text:
+            text = source.raw_text
         if not text:
             return ParsedDocument(
                 source_id=source.source_id,
@@ -75,17 +78,30 @@ class DocumentParser:
                 notes=str(exc),
             )
 
+    @staticmethod
+    def _make_soup(markup: str) -> BeautifulSoup:
+        """Parse SEC HTML or XBRL/XML without XMLParsedAsHTMLWarning.
+
+        Modern EDGAR primary docs are often XML-wrapped HTML (Workiva XBRL).
+        Use the XML parser when the payload declares XML; otherwise HTML/lxml.
+        """
+        head = markup.lstrip()[:256].lower()
+        if head.startswith("<?xml") or head.startswith("<xbrl") or head.startswith("<ix:"):
+            return BeautifulSoup(markup, "lxml-xml")
+        return BeautifulSoup(markup, "lxml")
+
     def _parse_html(self, source: RetrievedSource, html: str) -> ParsedDocument:
-        soup = BeautifulSoup(html, "lxml")
+        soup = self._make_soup(html)
         for tag in soup(["script", "style", "noscript"]):
             tag.decompose()
         text = soup.get_text("\n", strip=True)
-        # chunk long filings
-        chunks = [text[i : i + 12000] for i in range(0, min(len(text), 240000), 12000)]
+        # chunk long filings (keep enough for multi-year MD&A + product tables)
+        max_chars = 400_000
+        chunks = [text[i : i + 12000] for i in range(0, min(len(text), max_chars), 12000)]
         tables: list[list[list[str]]] = []
-        for table in soup.find_all("table")[:20]:
+        for table in soup.find_all("table")[:12]:
             rows = []
-            for tr in table.find_all("tr")[:50]:
+            for tr in table.find_all("tr")[:40]:
                 cells = [c.get_text(" ", strip=True) for c in tr.find_all(["td", "th"])]
                 if cells:
                     rows.append(cells)

@@ -22,6 +22,7 @@ class SourceType(str, Enum):
     QUARTERLY_REPORT = "quarterly_report"
     USER_URL = "user_url"
     TRANSCRIPT = "transcript"
+    LLM_SEARCH = "llm_search"
     OTHER = "other"
 
 

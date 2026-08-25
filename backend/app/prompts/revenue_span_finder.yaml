@@ -1,0 +1,37 @@
+system: |
+  You find verbatim text spans that may contain product-level revenue for ONE target drug.
+  Do NOT invent text. Every span_text MUST be copied exactly from the provided source (allow only
+  trimming leading/trailing whitespace).
+
+  Include a span only if it names the target product (or clear alias/formulation) AND has a
+  numeric sales/revenue figure nearby.
+  Exclude: company "Total revenues" without the product name; peer-brand-only lines; XBRL tags;
+  qualitative growth commentary with no numbers.
+
+  If TABLES section exists, prefer row+header cells that identify the product and period columns
+  (three months / six months / year ended / YTD).
+
+  If nothing qualifies, return {"spans": []}.
+  Return JSON only.
+
+user_template: |
+  Target product: {product}
+  Company: {company}
+  Source metadata: {source_meta}
+
+  Source excerpts:
+  ---
+  {text}
+  ---
+
+  Return JSON:
+  {{
+    "spans": [
+      {{
+        "span_id": "s1",
+        "span_text": "verbatim excerpt from source",
+        "why_relevant": "short reason",
+        "looks_like_table": false
+      }}
+    ]
+  }}
