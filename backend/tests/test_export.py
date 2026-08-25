@@ -11,7 +11,8 @@ from app.db.models import (
     MoAComponentORM,
     PeakSalesEstimateORM,
 )
-from app.export.builder import product_export_rows
+from app.export.builder import ExportBuilder, product_export_rows
+from app.storage.filestore import LocalFileStore
 
 
 def test_product_export_matches_normalized_dashboard_dimensions_and_lineage():
@@ -41,4 +42,27 @@ def test_product_export_matches_normalized_dashboard_dimensions_and_lineage():
     assert row["peak_method"] == "current_harmonized_consensus_median_v1"
     assert row["peak_input_ids"] == '["source-1"]'
     assert "competitive_formula_version" in headers
+
+
+async def test_powerbi_product_csv_uses_audited_normalized_headers(tmp_path):
+    engine = create_engine("sqlite://")
+    upgrade_database(engine)
+    store = LocalFileStore(str(tmp_path))
+    with Session(engine) as db:
+        db.add(ExtractionRunORM(id="run", status="completed"))
+        db.add(DrugJobORM(id="job", run_id="run", drug_name="Example", status="completed"))
+        db.commit()
+
+        exports = await ExportBuilder(db, store).export_powerbi_csvs("run")
+        products_export = next(item for item in exports if item.format == "products_csv")
+        data = (await store.get(products_export.storage_key)).decode()
+
+    headers = data.splitlines()[0].split(",")
+    assert headers == product_export_rows_header()
+
+
+def product_export_rows_header():
+    from app.export.builder import PRODUCT_HEADERS
+
+    return PRODUCT_HEADERS
 
