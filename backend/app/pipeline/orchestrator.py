@@ -42,6 +42,7 @@ from app.llm.client import LLMModules
 from app.parsing.documents import DocumentParser
 from app.parsing.evidence import build_revenue_llm_text, prioritize_sources_for_revenue, select_product_evidence_text
 from app.parsing.periods import detect_period_context, normalize_period
+from app.parsing.tables import extract_revenue_rows
 from app.quality.candidate_filters import filter_revenue_candidates
 from app.quality.comparative import derive_comparative_candidates
 from app.quality.checks import apply_auto_pass_gate, quote_contains_value, run_quality_checks
@@ -525,6 +526,42 @@ class PipelineOrchestrator:
             )
             dropped = list(llm_dropped) + list(dropped)
             dropped_total += len(dropped)
+
+            # Read the revenue table directly; the model omits rows unpredictably.
+            # These quotes come from the parsed table, not the model, so the
+            # verbatim gate that guards model output does not apply.
+            table_rows, table_dropped = filter_revenue_candidates(
+                extract_revenue_rows(
+                    doc.tables,
+                    product=job.drug_name,
+                    generic=job.generic_name,
+                    extra_aliases=extra,
+                ),
+                product=job.drug_name,
+                generic=job.generic_name,
+                extra_aliases=extra,
+            )
+            dropped_total += len(table_dropped)
+            if table_rows:
+                seen_rows = {
+                    (str(c.get("period")), round(float(c["value_reported"]), 3))
+                    for c in kept
+                    if c.get("value_reported") is not None
+                }
+                added = [
+                    row
+                    for row in table_rows
+                    if (str(row["period"]), round(float(row["value_reported"]), 3)) not in seen_rows
+                ]
+                kept = list(kept) + added
+                logger.info(
+                    "table_rows_extracted job_id=%s source_id=%s parsed=%s added=%s",
+                    job.id,
+                    src.source_id,
+                    len(table_rows),
+                    len(added),
+                )
+
             comparatives = derive_comparative_candidates(kept, context=period_context)
             if comparatives:
                 kept = list(kept) + comparatives
@@ -587,6 +624,8 @@ class PipelineOrchestrator:
                     issue_flags.append("reclassified_company_total")
                 if cand.get("_derived_comparative"):
                     issue_flags.append("derived_comparative_column")
+                if cand.get("_from_table"):
+                    issue_flags.append("extracted_from_table")
                 if period is None:
                     issue_flags.append("period_unparsed")
                 elif period != raw_period:
@@ -611,7 +650,7 @@ class PipelineOrchestrator:
                     route_of_administration=cand.get("route_of_administration"),
                     source_url=url,
                     source_quote=quote or "",
-                    extraction_method="llm",
+                    extraction_method="table" if cand.get("_from_table") else "llm",
                     confidence_score=float(cand.get("confidence") or 0.5),
                     validation_status=ValidationStatus.PENDING.value,
                     citation_json=citation,
