@@ -215,13 +215,17 @@ class SECConnector:
 class ManualURLConnector:
     def __init__(self, file_store: FileStore) -> None:
         self.file_store = file_store
+        self.settings = get_settings()
 
     async def retrieve(self, *, run_id: str, job_id: str, url: str) -> list[RetrievedSource]:
         sid = new_id()
         if not url:
             return []
+        headers: dict[str, str] = {"User-Agent": self.settings.sec_user_agent}
+        if "sec.gov" in url.lower():
+            headers["Accept-Encoding"] = "gzip, deflate"
         try:
-            async with httpx.AsyncClient(timeout=60, follow_redirects=True) as client:
+            async with httpx.AsyncClient(timeout=60, follow_redirects=True, headers=headers) as client:
                 resp = await client.get(url)
                 resp.raise_for_status()
                 content_type = resp.headers.get("content-type", "text/html")
