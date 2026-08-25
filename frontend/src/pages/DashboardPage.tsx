@@ -35,12 +35,23 @@ const FILTER_LABELS: Record<FilterKey, string> = {
 
 const CHART_COLORS = ['#1d4ed8', '#0f766e', '#b45309', '#7c3aed', '#be123c', '#0369a1', '#c2410c']
 
-function uniqueOptions(products: any[], key: FilterKey, apiOptions?: Record<string, string[]>): string[] {
-  const fromApi = apiOptions?.[key]
-  if (fromApi?.length) return fromApi
+function uniqueOptions(
+  products: any[],
+  key: FilterKey,
+  filters: Partial<Record<FilterKey, string>>,
+  apiOptions?: Record<string, string[]>,
+): string[] {
+  const scoped = products.filter((p: any) =>
+    FILTER_KEYS.every((k) => {
+      if (k === key) return true
+      const selected = filters[k]
+      if (!selected) return true
+      return String(p[k] || '').toLowerCase() === selected.toLowerCase()
+    }),
+  )
   const seen = new Set<string>()
   const out: string[] = []
-  for (const p of products) {
+  for (const p of scoped) {
     const raw = String(p[key] ?? '').trim()
     if (!raw) continue
     const k = raw.toLowerCase()
@@ -48,7 +59,9 @@ function uniqueOptions(products: any[], key: FilterKey, apiOptions?: Record<stri
     seen.add(k)
     out.push(raw)
   }
-  return out.sort((a, b) => a.localeCompare(b))
+  if (out.length) return out.sort((a, b) => a.localeCompare(b))
+  const fromApi = apiOptions?.[key]
+  return fromApi?.length ? [...fromApi] : []
 }
 
 export default function DashboardPage() {
@@ -98,7 +111,7 @@ export default function DashboardPage() {
   }, [q.data, products, tab])
 
   const names = useMemo(
-    () => Array.from(new Set(products.map((p: any) => p.product_name))),
+    () => Array.from(new Set(products.map((p: any) => String(p.product_name)))) as string[],
     [products],
   )
 
@@ -122,7 +135,7 @@ export default function DashboardPage() {
 
         <h3>Filters</h3>
         {FILTER_KEYS.map((f) => {
-          const options = uniqueOptions(allProducts, f, q.data?.filter_options)
+          const options = uniqueOptions(allProducts, f, filters, q.data?.filter_options)
           return (
             <label key={f} className="filter-field">
               <span>{FILTER_LABELS[f]}</span>
@@ -162,16 +175,16 @@ export default function DashboardPage() {
       <div className="dash-main">
         <div className="dash-toolbar">
           <div className="dash-tabs">
-            <button className={tab === 'annual' ? 'active' : ''} onClick={() => setTab('annual')}>
+            <button type="button" className={tab === 'annual' ? 'active' : ''} onClick={() => setTab('annual')}>
               Annual Uptake
             </button>
-            <button className={tab === 'quarterly' ? 'active' : ''} onClick={() => setTab('quarterly')}>
+            <button type="button" className={tab === 'quarterly' ? 'active' : ''} onClick={() => setTab('quarterly')}>
               Quarterly Uptake
             </button>
-            <button className={tab === 'monthly' ? 'active' : ''} onClick={() => setTab('monthly')}>
+            <button type="button" className={tab === 'monthly' ? 'active' : ''} onClick={() => setTab('monthly')}>
               Monthly Estimates
             </button>
-            <button className={tab === 'methodology' ? 'active' : ''} onClick={() => setTab('methodology')}>
+            <button type="button" className={tab === 'methodology' ? 'active' : ''} onClick={() => setTab('methodology')}>
               Methodology
             </button>
           </div>

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '../api/client'
 
@@ -32,8 +32,7 @@ export default function ObservabilityPage() {
         q: logQuery || undefined,
         logger: logLogger || undefined,
       }),
-    refetchInterval: pane === 'logs' ? 2000 : false,
-    enabled: pane === 'logs',
+    refetchInterval: pane === 'logs' ? 2000 : 8000,
   })
 
   const db = useQuery({
@@ -46,8 +45,16 @@ export default function ObservabilityPage() {
         job_id: jobId || undefined,
       }),
     refetchInterval: pane === 'database' ? 5000 : false,
-    enabled: pane === 'database',
+    enabled: pane === 'database' || pane === 'runs',
   })
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') setSelected(null)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
 
   const tables = overview.data?.available_tables || overview.data?.tables?.map((t: any) => t.name) || []
   const tableCounts = useMemo(() => {
@@ -64,14 +71,20 @@ export default function ObservabilityPage() {
     return Array.from(set).sort()
   }, [logs.data])
 
+  function openDatabase(name: string) {
+    setTable(name)
+    setPane('database')
+    setSelected(null)
+  }
+
   if (overview.isLoading) return <div className="page">Loading observability…</div>
 
   return (
-    <div className="obs-layout">
+    <div className={`obs-layout ${selected ? 'has-drawer' : ''}`}>
       <aside className="obs-side">
         <h1>Observability</h1>
         <p className="muted small">
-          Live logs, SQLite tables, and pipeline errors — click a row to inspect.
+          Interact with live logs and the workbench database. Click any row or tile to inspect.
         </p>
         <div className="obs-health">
           <span className={`pill ${overview.data?.health?.status === 'ok' ? 'ok' : 'bad'}`}>
@@ -81,7 +94,7 @@ export default function ObservabilityPage() {
           <span className="muted small">log buffer {overview.data?.log_buffer_size ?? 0}</span>
         </div>
 
-        <nav className="obs-nav">
+        <nav className="obs-nav" aria-label="Observability panes">
           {(
             [
               ['logs', 'Live logs'],
@@ -90,21 +103,28 @@ export default function ObservabilityPage() {
               ['runs', 'Recent runs'],
             ] as const
           ).map(([id, label]) => (
-            <button key={id} className={pane === id ? 'active' : ''} onClick={() => setPane(id)}>
+            <button
+              key={id}
+              type="button"
+              className={pane === id ? 'active' : ''}
+              onClick={() => {
+                setPane(id)
+                setSelected(null)
+              }}
+            >
               {label}
             </button>
           ))}
         </nav>
 
+        <h3 className="obs-section-label">Tables</h3>
         <div className="obs-stat-grid">
           {(overview.data?.tables || []).map((t: any) => (
             <button
               key={t.name}
-              className="obs-stat"
-              onClick={() => {
-                setTable(t.name)
-                setPane('database')
-              }}
+              type="button"
+              className={`obs-stat ${pane === 'database' && table === t.name ? 'active' : ''}`}
+              onClick={() => openDatabase(t.name)}
             >
               <strong>{t.count}</strong>
               <span>{t.name}</span>
@@ -130,17 +150,23 @@ export default function ObservabilityPage() {
       <section className="obs-main">
         {pane === 'logs' && (
           <>
+            <header className="obs-pane-head">
+              <h2>Live logs</h2>
+              <p className="muted small">Ring buffer from the API process. Click a line to inspect.</p>
+            </header>
+            <div className="obs-level-chips" role="group" aria-label="Log level filter">
+              {LEVELS.map((l) => (
+                <button
+                  key={l || 'all'}
+                  type="button"
+                  className={logLevel === l ? 'active' : ''}
+                  onClick={() => setLogLevel(l)}
+                >
+                  {l || 'All'}
+                </button>
+              ))}
+            </div>
             <div className="obs-filters">
-              <label>
-                Level
-                <select value={logLevel} onChange={(e) => setLogLevel(e.target.value)}>
-                  {LEVELS.map((l) => (
-                    <option key={l || 'all'} value={l}>
-                      {l || 'All levels'}
-                    </option>
-                  ))}
-                </select>
-              </label>
               <label>
                 Logger
                 <select value={logLogger} onChange={(e) => setLogLogger(e.target.value)}>
@@ -165,8 +191,9 @@ export default function ObservabilityPage() {
               {(logs.data?.logs || []).map((entry: any, i: number) => (
                 <button
                   key={`${entry.ts}-${i}`}
+                  type="button"
                   className={`obs-log-line level-${(entry.level || 'INFO').toLowerCase()}`}
-                  onClick={() => setSelected(entry)}
+                  onClick={() => setSelected({ kind: 'log', ...entry })}
                 >
                   <span className="ts">{entry.ts?.replace('T', ' ').replace('+00:00', 'Z')}</span>
                   <span className="lvl">{entry.level}</span>
@@ -174,13 +201,21 @@ export default function ObservabilityPage() {
                   <span className="msg">{entry.message}</span>
                 </button>
               ))}
-              {!logs.data?.logs?.length && <p className="muted">No matching log lines yet. Trigger a run to populate.</p>}
+              {!logs.data?.logs?.length && (
+                <p className="muted">No matching log lines yet. Trigger a run to populate.</p>
+              )}
             </div>
           </>
         )}
 
         {pane === 'database' && (
           <>
+            <header className="obs-pane-head">
+              <h2>Database · {table}</h2>
+              <p className="muted small">
+                Browse SQLite tables. Filter by run/job and search text columns. Click a row to inspect.
+              </p>
+            </header>
             <div className="obs-filters">
               <label>
                 Table
@@ -194,10 +229,7 @@ export default function ObservabilityPage() {
               </label>
               <label>
                 Run ID
-                <select
-                  value={runId}
-                  onChange={(e) => setRunId(e.target.value)}
-                >
+                <select value={runId} onChange={(e) => setRunId(e.target.value)}>
                   <option value="">Any run</option>
                   {(overview.data?.recent_runs || []).map((r: any) => (
                     <option key={r.id} value={r.id}>
@@ -221,6 +253,7 @@ export default function ObservabilityPage() {
             </div>
             <p className="muted small">
               Showing {db.data?.rows?.length ?? 0} of {db.data?.total ?? 0} rows
+              {db.isFetching ? ' · refreshing…' : ''}
             </p>
             <div className="table-scroll">
               <table className="grid obs-db-grid">
@@ -233,7 +266,11 @@ export default function ObservabilityPage() {
                 </thead>
                 <tbody>
                   {(db.data?.rows || []).map((row: any, idx: number) => (
-                    <tr key={row.id || idx} onClick={() => setSelected(row)} className="clickable">
+                    <tr
+                      key={row.id || idx}
+                      onClick={() => setSelected({ kind: 'row', table, ...row })}
+                      className="clickable"
+                    >
                       {(db.data?.columns || []).map((c: string) => (
                         <td key={c}>
                           {typeof row[c] === 'object' ? JSON.stringify(row[c]) : String(row[c] ?? '')}
@@ -248,93 +285,114 @@ export default function ObservabilityPage() {
         )}
 
         {pane === 'errors' && (
-          <div className="table-scroll">
-            <table className="grid">
-              <thead>
-                <tr>
-                  <th>Updated</th>
-                  <th>Drug</th>
-                  <th>Step</th>
-                  <th>Status</th>
-                  <th>Error</th>
-                  <th>Job</th>
-                </tr>
-              </thead>
-              <tbody>
-                {(overview.data?.recent_job_errors || []).map((j: any) => (
-                  <tr key={j.id} className="clickable" onClick={() => setSelected(j)}>
-                    <td>{j.updated_at}</td>
-                    <td>{j.drug_name}</td>
-                    <td>{j.current_step}</td>
-                    <td>{j.status}</td>
-                    <td className="error-cell">{j.error}</td>
-                    <td>
-                      <code>{j.id}</code>
-                    </td>
-                  </tr>
-                ))}
-                {!overview.data?.recent_job_errors?.length && (
+          <>
+            <header className="obs-pane-head">
+              <h2>Job errors</h2>
+              <p className="muted small">Failed pipeline jobs with persisted error text.</p>
+            </header>
+            <div className="table-scroll">
+              <table className="grid">
+                <thead>
                   <tr>
-                    <td colSpan={6} className="muted">
-                      No job errors recorded.
-                    </td>
+                    <th>Updated</th>
+                    <th>Drug</th>
+                    <th>Step</th>
+                    <th>Status</th>
+                    <th>Error</th>
+                    <th>Job</th>
                   </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {(overview.data?.recent_job_errors || []).map((j: any) => (
+                    <tr
+                      key={j.id}
+                      className="clickable"
+                      onClick={() => setSelected({ kind: 'job_error', ...j })}
+                    >
+                      <td>{j.updated_at}</td>
+                      <td>{j.drug_name}</td>
+                      <td>{j.current_step}</td>
+                      <td>{j.status}</td>
+                      <td className="error-cell">{j.error}</td>
+                      <td>
+                        <code>{j.id}</code>
+                      </td>
+                    </tr>
+                  ))}
+                  {!overview.data?.recent_job_errors?.length && (
+                    <tr>
+                      <td colSpan={6} className="muted">
+                        No job errors recorded.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
 
         {pane === 'runs' && (
-          <div className="table-scroll">
-            <table className="grid">
-              <thead>
-                <tr>
-                  <th>Created</th>
-                  <th>Status</th>
-                  <th>Jobs</th>
-                  <th>Run ID</th>
-                  <th>Error</th>
-                </tr>
-              </thead>
-              <tbody>
-                {(overview.data?.recent_runs || []).map((r: any) => (
-                  <tr
-                    key={r.id}
-                    className="clickable"
-                    onClick={() => {
-                      setSelected(r)
-                      setRunId(r.id)
-                    }}
-                  >
-                    <td>{r.created_at}</td>
-                    <td>{r.status}</td>
-                    <td>{r.job_count ?? '—'}</td>
-                    <td>
-                      <code>{r.id}</code>
-                    </td>
-                    <td>{r.error || '—'}</td>
-                  </tr>
-                ))}
-                {!overview.data?.recent_runs?.length && (
+          <>
+            <header className="obs-pane-head">
+              <h2>Recent runs</h2>
+              <p className="muted small">Click a run to scope the database browser to that run_id.</p>
+            </header>
+            <div className="table-scroll">
+              <table className="grid">
+                <thead>
                   <tr>
-                    <td colSpan={5} className="muted">
-                      No extraction runs yet.
-                    </td>
+                    <th>Created</th>
+                    <th>Status</th>
+                    <th>Jobs</th>
+                    <th>Run ID</th>
+                    <th>Error</th>
                   </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {(overview.data?.recent_runs || []).map((r: any) => (
+                    <tr
+                      key={r.id}
+                      className="clickable"
+                      onClick={() => {
+                        setSelected({ kind: 'run', ...r })
+                        setRunId(r.id)
+                        setPane('database')
+                        setTable('drug_jobs')
+                      }}
+                    >
+                      <td>{r.created_at}</td>
+                      <td>{r.status}</td>
+                      <td>{r.job_count ?? '—'}</td>
+                      <td>
+                        <code>{r.id}</code>
+                      </td>
+                      <td>{r.error || '—'}</td>
+                    </tr>
+                  ))}
+                  {!overview.data?.recent_runs?.length && (
+                    <tr>
+                      <td colSpan={5} className="muted">
+                        No extraction runs yet.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </section>
 
       {selected && (
-        <aside className="drawer obs-drawer">
-          <button className="close" onClick={() => setSelected(null)}>
-            ×
-          </button>
-          <h3>Inspect</h3>
+        <aside className="drawer obs-drawer" role="dialog" aria-label="Inspect selection">
+          <div className="obs-drawer-head">
+            <h3>Inspect</h3>
+            <button type="button" className="close" onClick={() => setSelected(null)} aria-label="Close">
+              ×
+            </button>
+          </div>
+          <p className="muted small">Press Esc to close</p>
           <pre className="code">{JSON.stringify(selected, null, 2)}</pre>
         </aside>
       )}

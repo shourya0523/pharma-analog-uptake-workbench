@@ -204,7 +204,45 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 }
 .obs-stat strong { font-size: 1.1rem; color: #f8fafc; }
 .obs-stat span { font-size: 0.68rem; word-break: break-all; }
-.obs-status-block h3 { margin: 0 0 0.4rem; font-size: 0.85rem; }
+.obs-section-label {
+  margin: 0 0 0.4rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+}
+.obs-pane-head { margin-bottom: 0.75rem; }
+.obs-pane-head h2 { margin: 0 0 0.2rem; font-size: 1.15rem; color: #f8fafc; }
+.obs-level-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.75rem;
+}
+.obs-level-chips button {
+  background: #1e293b;
+  color: #cbd5e1;
+  padding: 0.3rem 0.65rem;
+  font-size: 0.75rem;
+}
+.obs-level-chips button.active { background: #1d4ed8; color: #fff; }
+.obs-stat.active { border-color: #3b82f6; box-shadow: 0 0 0 1px #3b82f6; }
+.obs-drawer-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+.obs-drawer-head h3 { margin: 0; }
+.obs-drawer-head .close {
+  float: none;
+  background: #1e293b;
+  color: #e2e8f0;
+  font-size: 1.2rem;
+  line-height: 1;
+  padding: 0.2rem 0.55rem;
+}
+.obs-layout.has-drawer .obs-main { padding-right: 0.5rem; }
 .obs-status-block ul { list-style: none; padding: 0; margin: 0; }
 .obs-status-block li {
   display: flex;
