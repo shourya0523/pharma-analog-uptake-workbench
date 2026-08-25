@@ -235,7 +235,9 @@ class PipelineOrchestrator:
     async def _retrieve(self, job: DrugJobORM, options: dict[str, Any]) -> list:
         self._set_step(job, JobStep.SOURCE_RETRIEVE)
         collected = []
-        if options.get("sec_filings", True):
+        want_primary = bool(options.get("sec_filings", True))
+        want_earnings = bool(options.get("earnings_releases", True))
+        if want_primary or want_earnings:
             collected.extend(
                 await self.sec.retrieve(
                     run_id=job.run_id,
@@ -243,6 +245,8 @@ class PipelineOrchestrator:
                     cik=job.cik,
                     ticker=job.ticker,
                     company_name=job.manufacturer,
+                    include_primary=want_primary,
+                    include_earnings=want_earnings,
                 )
             )
         if options.get("openfda", True):
@@ -262,7 +266,8 @@ class PipelineOrchestrator:
             collected.extend(await self.transcripts.retrieve())
 
         sec_ok = any(
-            s.source_type == SourceType.SEC_FILING and s.retrieval_status == RetrievalStatus.SUCCESS
+            s.source_type in {SourceType.SEC_FILING, SourceType.EARNINGS_RELEASE}
+            and s.retrieval_status == RetrievalStatus.SUCCESS
             for s in collected
         )
         if get_settings().enable_llm_search and not sec_ok:

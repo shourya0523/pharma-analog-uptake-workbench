@@ -231,10 +231,19 @@ class SECConnector:
         ticker: str | None,
         company_name: str | None,
         max_filings: int | None = None,
+        include_primary: bool = True,
+        include_earnings: bool | None = None,
     ) -> list[RetrievedSource]:
+        """Retrieve primary filings and/or 8-K earnings-release exhibits.
+
+        Primary filings (10-K/10-Q) are large inline-XBRL documents that carry annual
+        totals; earnings exhibits are small and carry quarterly product breakouts. A
+        caller after quarterly revenue can skip the primary filings entirely.
+        """
         settings = self.settings
         max_filings = max_filings if max_filings is not None else settings.sec_max_filings
         include_8k = settings.sec_include_8k
+        include_earnings = settings.sec_earnings_exhibits if include_earnings is None else include_earnings
         allowed = set(self.PRIMARY) | (self.SECONDARY if include_8k else set())
 
         sources: list[RetrievedSource] = []
@@ -286,7 +295,7 @@ class SECConnector:
             indexed.sort(key=lambda t: (t[0], t[1]))
 
             picked = 0
-            for _pri, i, form in indexed:
+            for _pri, i, form in indexed if include_primary else []:
                 if picked >= max_filings:
                     break
                 accession = accessions[i]
@@ -341,7 +350,7 @@ class SECConnector:
                     )
                 picked += 1
 
-            if settings.sec_earnings_exhibits:
+            if include_earnings:
                 sources.extend(
                     await self._retrieve_earnings_exhibits(
                         client,

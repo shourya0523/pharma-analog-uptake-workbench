@@ -25,7 +25,7 @@ user_template: |
     "completeness_pct": 0,
     "missing_periods": [
       {{
-        "period": "2024Q3",
+        "period": "<missing calendar quarter>",
         "reason_code": "not_disclosed|need_filing|gap",
         "reason": "human-readable",
         "recommended_next_step": "..."

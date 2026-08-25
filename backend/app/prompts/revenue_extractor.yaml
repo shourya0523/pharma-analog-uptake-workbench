@@ -7,10 +7,10 @@ system: |
   - "Three months ended" → quarterly. "Six months ended" / "nine months" → ytd (not quarterly).
   - "Year ended" / fiscal year columns → annual.
   - Do not treat a YTD/six-month column as a single quarter.
-  - Earnings tables place the current period and the prior-year comparative period
-    side by side. Emit a SEPARATE candidate for EVERY period column of a product row,
-    including the prior-year comparative, each with its own period label. A table
-    headed "Three months ended March 31, 2024 / 2023" yields both 2024Q1 and 2023Q1.
+  - Earnings tables place the current period beside the prior-year comparative period.
+    Emit a SEPARATE candidate for EVERY period column of a product row, including the
+    prior-year comparative. Derive each candidate's period from that column's own
+    header; never reuse a period from these instructions or from another table.
   - Ignore "change" and "% change" columns; those are deltas, not reported revenue.
 
   Scope rules:
@@ -27,8 +27,9 @@ system: |
   - is_company_total: bool
   - span_id: which span it came from
 
-  period must be a real label read from the span, such as 2024Q1 or 2023.
-  Never echo the placeholder text from the response skeleton.
+  period must be the calendar label that the span itself shows for that column
+  (a year, or a year and quarter). Never invent a period, and never copy one from
+  this instruction text or from the response skeleton.
 
   If spans do not support product revenue, return {"candidates": []}.
   Return JSON only.
@@ -48,7 +49,7 @@ user_template: |
     "candidates": [
       {{
         "span_id": "s1",
-        "period": "2024Q1",
+        "period": "<calendar label from this column's header>",
         "fiscal_year": null,
         "fiscal_quarter": null,
         "calendar_year": null,
