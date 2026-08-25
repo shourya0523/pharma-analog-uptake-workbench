@@ -4,6 +4,7 @@ import SetupPage from './pages/SetupPage'
 import MonitorPage from './pages/MonitorPage'
 import ReviewPage from './pages/ReviewPage'
 import DashboardPage from './pages/DashboardPage'
+import ObservabilityPage from './pages/ObservabilityPage'
 import ExportPage from './pages/ExportPage'
 import './App.css'
 
@@ -20,6 +21,7 @@ export default function App() {
               <NavLink to="/">Setup</NavLink>
               <NavLink to="/monitor">Monitor</NavLink>
               <NavLink to="/dashboard">Dashboard</NavLink>
+              <NavLink to="/observability">Observability</NavLink>
               <NavLink to="/export">Export</NavLink>
             </nav>
           </header>
@@ -31,6 +33,7 @@ export default function App() {
               <Route path="/review/:jobId" element={<ReviewPage />} />
               <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/dashboard/:runId" element={<DashboardPage />} />
+              <Route path="/observability" element={<ObservabilityPage />} />
               <Route path="/export" element={<ExportPage />} />
             </Routes>
           </main>

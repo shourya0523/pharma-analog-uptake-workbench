@@ -20,4 +20,7 @@ def configure_logging(level: int = logging.INFO) -> None:
     logging.getLogger("httpx").setLevel(logging.WARNING)
     logging.getLogger("httpcore").setLevel(logging.WARNING)
     logging.getLogger("uvicorn.access").setLevel(logging.INFO)
+    from app.observability import attach_ring_buffer
+
+    attach_ring_buffer(level=level)
     _CONFIGURED = True
