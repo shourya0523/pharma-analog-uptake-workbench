@@ -996,7 +996,10 @@ class PipelineOrchestrator:
 
         job.auto_pass_count = sum(1 for d in dps if d.validation_status == ValidationStatus.AUTO_PASS.value)
         job.needs_review_count = sum(1 for d in dps if d.validation_status == ValidationStatus.NEEDS_REVIEW.value)
-        job.quality_flags = [i.issue_type for i in issues if i.severity == "high"]
+        # Merge, so provenance flags raised earlier in the pipeline survive
+        job.quality_flags = sorted(
+            set(job.quality_flags or []) | {i.issue_type for i in issues if i.severity == "high"}
+        )
 
         self._set_step(job, JobStep.VALIDATION_TASKS)
         conflict_ids = {d.id for d in dps if "conflict" in " ".join(d.issue_flags or [])}
