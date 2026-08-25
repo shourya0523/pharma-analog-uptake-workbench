@@ -4,7 +4,7 @@ import re
 from typing import Any
 
 from app.config import get_settings
-from app.domain.models import RetrievedSource, RetrievalStatus, SourceType, new_id
+from app.domain.models import RetrievalStatus, RetrievedSource, SourceType, new_id
 from app.llm.client import LLMModules
 from app.storage.filestore import FileStore
 

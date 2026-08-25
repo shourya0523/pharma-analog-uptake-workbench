@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+# ruff: noqa: BLE001
 import json
 import re
-from typing import Any
 
 from bs4 import BeautifulSoup
 
@@ -86,7 +86,7 @@ class DocumentParser:
         Use the XML parser when the payload declares XML; otherwise HTML/lxml.
         """
         head = markup.lstrip()[:256].lower()
-        if head.startswith("<?xml") or head.startswith("<xbrl") or head.startswith("<ix:"):
+        if head.startswith(("<?xml", "<xbrl", "<ix:")):
             return BeautifulSoup(markup, "lxml-xml")
         return BeautifulSoup(markup, "lxml")
 

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+# ruff: noqa: BLE001
 from abc import ABC, abstractmethod
 from pathlib import Path
 

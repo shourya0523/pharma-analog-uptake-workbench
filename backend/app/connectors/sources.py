@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+# ruff: noqa: BLE001, RUF012, SIM113
 import asyncio
 from datetime import date
 from typing import Any
@@ -7,9 +8,8 @@ from typing import Any
 import httpx
 
 from app.config import get_settings
-from app.domain.models import RetrievedSource, RetrievalStatus, SourceType, new_id
+from app.domain.models import RetrievalStatus, RetrievedSource, SourceType, new_id
 from app.storage.filestore import FileStore
-
 
 # Shared across connector instances so concurrent jobs don't stampede EDGAR
 _SEC_LOCK = asyncio.Lock()

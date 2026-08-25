@@ -10,9 +10,16 @@ import httpx
 import yaml
 
 from app.config import get_settings
-from app.llm.grounding import apply_structured_field_gates, enforce_verbatim_on_candidates, quote_is_verbatim
+from app.llm.grounding import (
+    apply_structured_field_gates,
+    enforce_verbatim_on_candidates,
+    quote_is_verbatim,
+)
 from app.parsing.evidence import TOTAL_REVENUE_RE, product_aliases
-from app.quality.candidate_filters import quote_mentions_other_brand, quote_mentions_product
+from app.quality.candidate_filters import (
+    quote_mentions_other_brand,
+    quote_mentions_product,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -612,6 +619,6 @@ def re_ytd_language(quote: str) -> bool:
         re.search(
             r"\b(six\s+months?\s+ended|nine\s+months?\s+ended|year[\s-]to[\s-]date|\bYTD\b|year\s+ended)\b",
             quote or "",
-            re.I,
+            re.IGNORECASE,
         )
     )

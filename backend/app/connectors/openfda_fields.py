@@ -11,9 +11,9 @@ def parse_openfda_date(raw: str | None) -> str | None:
     if len(s) == 8 and s.isdigit():
         return f"{s[0:4]}-{s[4:6]}-{s[6:8]}"
     try:
-        datetime.fromisoformat(s.replace("Z", "+00:00"))
+        datetime.fromisoformat(s)
         return s[:10]
-    except Exception:
+    except ValueError:
         return None
 
 
