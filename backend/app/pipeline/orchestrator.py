@@ -119,7 +119,7 @@ class PipelineOrchestrator:
     async def _expand_aliases(self, job: DrugJobORM) -> list[str]:
         settings = get_settings()
         base = merge_aliases(job.drug_name, job.generic_name)
-        if not settings.enable_llm_search or not settings.openrouter_api_key:
+        if not settings.enable_llm_search:
             self._job_aliases = base
             return base
         result = await self.llm.expand_aliases(

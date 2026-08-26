@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import json
 import re
 from pathlib import Path
@@ -7,7 +8,11 @@ from typing import Any
 
 import httpx
 import yaml
+from botocore.auth import SigV4Auth
+from botocore.awsrequest import AWSRequest
+from botocore.config import Config
 
+from app.aws_session import boto3_session
 from app.config import get_settings
 from app.llm.grounding import apply_structured_field_gates, enforce_verbatim_on_candidates, quote_is_verbatim
 from app.parsing.evidence import TOTAL_REVENUE_RE, product_aliases
@@ -17,66 +22,85 @@ from app.quality.candidate_filters import quote_mentions_other_brand, quote_ment
 PROMPTS_DIR = Path(__file__).resolve().parent.parent / "prompts"
 
 
-class OpenRouterClient:
+class BedrockClient:
+    """Amazon Bedrock transport: Converse (Claude) + Mantle Responses web search (GPT)."""
+
     def __init__(self) -> None:
         self.settings = get_settings()
+        self._runtime = None
 
-    def _headers(self) -> dict[str, str]:
-        if not self.settings.openrouter_api_key:
-            raise RuntimeError("OPENROUTER_API_KEY not set")
-        return {
-            "Authorization": f"Bearer {self.settings.openrouter_api_key}",
-            "Content-Type": "application/json",
-            "HTTP-Referer": "https://github.com/pharma-analog-uptake-workbench",
-            "X-Title": "Pharma Analog Uptake Workbench",
-        }
+    def _runtime_client(self):
+        if self._runtime is None:
+            self._runtime = boto3_session().client(
+                "bedrock-runtime",
+                config=Config(retries={"max_attempts": 5, "mode": "adaptive"}),
+            )
+        return self._runtime
+
+    def _converse_text(self, *, model: str, system: str, user: str) -> str:
+        resp = self._runtime_client().converse(
+            modelId=model,
+            system=[{"text": system}],
+            messages=[{"role": "user", "content": [{"text": user}]}],
+            inferenceConfig={
+                "maxTokens": self.settings.bedrock_max_tokens,
+                "temperature": 0.1,
+            },
+        )
+        parts = resp.get("output", {}).get("message", {}).get("content") or []
+        texts = [p.get("text", "") for p in parts if isinstance(p, dict) and "text" in p]
+        return "\n".join(t for t in texts if t)
 
     async def chat_json(self, *, model: str, system: str, user: str) -> dict[str, Any]:
-        payload = {
-            "model": model,
-            "messages": [
-                {"role": "system", "content": system},
-                {"role": "user", "content": user},
-            ],
-            "response_format": {"type": "json_object"},
-            "temperature": 0.1,
-        }
-        async with httpx.AsyncClient(timeout=120) as client:
-            resp = await client.post(
-                f"{self.settings.openrouter_base_url}/chat/completions",
-                headers=self._headers(),
-                json=payload,
-            )
-            resp.raise_for_status()
-            data = resp.json()
-        content = data["choices"][0]["message"]["content"]
+        content = await asyncio.to_thread(
+            self._converse_text,
+            model=model,
+            system=system,
+            user=user,
+        )
         return _parse_json_content(content)
 
-    def _web_tools(self, *, fetch: bool = False) -> list[dict[str, Any]]:
+    def _web_search_tool(self) -> dict[str, Any]:
+        return {"type": "web_search", "external_web_access": False}
+
+    def _domain_hint(self) -> str:
         domains = [
             d.strip()
             for d in (self.settings.llm_search_allowed_domains or "").split(",")
             if d.strip()
         ]
-        search_params: dict[str, Any] = {
-            "engine": self.settings.llm_search_engine or "auto",
-            "max_results": min(max(self.settings.llm_search_max_urls, 1), 10),
-            "max_total_results": min(max(self.settings.llm_search_max_urls * 2, 5), 20),
-            "search_context_size": "medium",
+        if not domains:
+            return ""
+        return (
+            " Prefer sources on these domains when possible: "
+            + ", ".join(domains)
+            + "."
+        )
+
+    def _mantle_responses(self, *, model: str, system: str, user: str) -> dict[str, Any]:
+        url = f"{self.settings.mantle_base_url}/responses"
+        payload = {
+            "model": model,
+            "instructions": system + self._domain_hint() + " Return valid JSON only.",
+            "input": user,
+            "tools": [self._web_search_tool()],
+            "temperature": 0.1,
+            "max_output_tokens": self.settings.bedrock_max_tokens,
         }
-        if domains:
-            search_params["allowed_domains"] = domains
-        tools: list[dict[str, Any]] = [{"type": "openrouter:web_search", "parameters": search_params}]
-        if fetch:
-            fetch_params: dict[str, Any] = {
-                "engine": "auto",
-                "max_uses": min(max(self.settings.llm_search_max_urls, 1), 8),
-                "max_content_tokens": 40000,
-            }
-            if domains:
-                fetch_params["allowed_domains"] = domains
-            tools.append({"type": "openrouter:web_fetch", "parameters": fetch_params})
-        return tools
+        body = json.dumps(payload).encode("utf-8")
+        session = boto3_session()
+        creds = session.get_credentials()
+        if creds is None:
+            raise RuntimeError("AWS credentials required for Bedrock Mantle web search")
+        frozen = creds.get_frozen_credentials()
+        headers = {"Content-Type": "application/json", "Accept": "application/json"}
+        aws_req = AWSRequest(method="POST", url=url, data=body, headers=headers)
+        SigV4Auth(frozen, "bedrock", self.settings.aws_region).add_auth(aws_req)
+        prepared = dict(aws_req.headers.items())
+        with httpx.Client(timeout=240) as client:
+            resp = client.post(url, content=body, headers=prepared)
+            resp.raise_for_status()
+            return resp.json()
 
     async def chat_json_with_web(
         self,
@@ -87,28 +111,17 @@ class OpenRouterClient:
         fetch: bool = False,
         timeout: float = 180,
     ) -> dict[str, Any]:
-        """JSON chat with OpenRouter native web_search (+ optional web_fetch) server tools."""
-        payload: dict[str, Any] = {
-            "model": model,
-            "messages": [
-                {"role": "system", "content": system},
-                {"role": "user", "content": user},
-            ],
-            "tools": self._web_tools(fetch=fetch),
-            "response_format": {"type": "json_object"},
-            "temperature": 0.1,
-        }
-        async with httpx.AsyncClient(timeout=timeout) as client:
-            resp = await client.post(
-                f"{self.settings.openrouter_base_url}/chat/completions",
-                headers=self._headers(),
-                json=payload,
-            )
-            resp.raise_for_status()
-            data = resp.json()
-        message = data["choices"][0]["message"]
-        parsed = _parse_json_content(message.get("content") or "{}")
-        citations = _citations_from_message(message)
+        """JSON chat with Bedrock native web_search (Search + Fetch in one tool)."""
+        _ = fetch, timeout  # Fetch is server-side via the same web_search tool
+        search_model = self.settings.bedrock_model_search
+        data = await asyncio.to_thread(
+            self._mantle_responses,
+            model=search_model,
+            system=system,
+            user=user,
+        )
+        text, citations = _text_and_citations_from_responses(data)
+        parsed = _parse_json_content(text or "{}")
         if citations and "search_results" not in parsed and "results" not in parsed:
             parsed["_citations"] = citations
         elif citations:
@@ -160,6 +173,50 @@ def _citations_from_message(message: dict[str, Any]) -> list[dict[str, str]]:
     return out
 
 
+def _text_and_citations_from_responses(data: dict[str, Any]) -> tuple[str, list[dict[str, str]]]:
+    """Parse Bedrock Mantle / OpenAI Responses API payload."""
+    if isinstance(data.get("output_text"), str) and data["output_text"].strip():
+        text = data["output_text"]
+    else:
+        chunks: list[str] = []
+        for item in data.get("output") or []:
+            if not isinstance(item, dict):
+                continue
+            if item.get("type") != "message":
+                continue
+            for block in item.get("content") or []:
+                if isinstance(block, dict) and block.get("type") == "output_text":
+                    chunks.append(block.get("text") or "")
+        text = "\n".join(chunks)
+
+    citations: list[dict[str, str]] = []
+    seen: set[str] = set()
+    for item in data.get("output") or []:
+        if not isinstance(item, dict) or item.get("type") != "message":
+            continue
+        for block in item.get("content") or []:
+            if not isinstance(block, dict):
+                continue
+            for ann in block.get("annotations") or []:
+                if not isinstance(ann, dict):
+                    continue
+                cite = ann.get("url_citation") if ann.get("type") == "url_citation" else ann
+                if not isinstance(cite, dict):
+                    cite = ann
+                url = (cite.get("url") or "").strip()
+                if not url or url in seen:
+                    continue
+                seen.add(url)
+                citations.append(
+                    {
+                        "url": url,
+                        "title": cite.get("title") or url,
+                        "snippet": cite.get("content") or cite.get("snippet") or "",
+                    }
+                )
+    return text, citations
+
+
 def _filter_hallucinated_spans(spans: list[dict[str, Any]], source_text: str) -> list[dict[str, Any]]:
     good: list[dict[str, Any]] = []
     for i, span in enumerate(spans):
@@ -174,8 +231,8 @@ def _filter_hallucinated_spans(spans: list[dict[str, Any]], source_text: str) ->
 
 
 class LLMModules:
-    def __init__(self, client: OpenRouterClient | None = None) -> None:
-        self.client = client or OpenRouterClient()
+    def __init__(self, client: BedrockClient | None = None) -> None:
+        self.client = client or BedrockClient()
         self.settings = get_settings()
 
     async def find_revenue_spans(
@@ -188,8 +245,6 @@ class LLMModules:
     ) -> list[dict[str, Any]]:
         prompt = load_prompt("revenue_span_finder")
         clipped = text[:50000]
-        if not self.settings.openrouter_api_key:
-            return []
         user = prompt["user_template"].format(
             product=product,
             company=company or "",
@@ -197,7 +252,7 @@ class LLMModules:
             text=clipped,
         )
         result = await self.client.chat_json(
-            model=self.settings.openrouter_model_extract,
+            model=self.settings.bedrock_model_extract,
             system=prompt["system"],
             user=user,
         )
@@ -215,9 +270,6 @@ class LLMModules:
         if not spans:
             return {"candidates": [], "spans": []}
         prompt = load_prompt("revenue_extractor")
-        if not self.settings.openrouter_api_key:
-            return {"candidates": [], "spans": spans, "note": "OPENROUTER_API_KEY missing; skipped LLM"}
-        # Cap span payload
         compact = [
             {
                 "span_id": s.get("span_id"),
@@ -234,12 +286,11 @@ class LLMModules:
             spans_json=json.dumps(compact, indent=2)[:48000],
         )
         result = await self.client.chat_json(
-            model=self.settings.openrouter_model_extract,
+            model=self.settings.bedrock_model_extract,
             system=prompt["system"],
             user=user,
         )
         candidates = result.get("candidates") or []
-        # Grounding gates
         corpus = "\n\n".join(s.get("span_text") or "" for s in compact)
         kept_v, drop_v = enforce_verbatim_on_candidates(candidates, source_text=corpus, spans=compact)
         kept_s, drop_s = apply_structured_field_gates(kept_v)
@@ -281,10 +332,8 @@ class LLMModules:
             source_meta=json.dumps(source_meta),
             text=text[:40000],
         )
-        if not self.settings.openrouter_api_key:
-            return {"fields": [], "note": "OPENROUTER_API_KEY missing; skipped LLM"}
         return await self.client.chat_json(
-            model=self.settings.openrouter_model_extract,
+            model=self.settings.bedrock_model_extract,
             system=prompt["system"],
             user=user,
         )
@@ -306,19 +355,11 @@ class LLMModules:
             quote=quote,
             context=context[:8000],
         )
-        if not self.settings.openrouter_api_key:
-            return {
-                "validation_status": "needs_review",
-                "support_classification": "unknown",
-                "issues": ["LLM judge unavailable"],
-                "explanation": "OPENROUTER_API_KEY missing",
-            }
         result = await self.client.chat_json(
-            model=self.settings.openrouter_model_judge,
+            model=self.settings.bedrock_model_judge,
             system=prompt["system"],
             user=user,
         )
-        # Deterministic hard vetoes after judge
         return apply_judge_hard_vetoes(
             product=product,
             candidate=candidate,
@@ -334,10 +375,8 @@ class LLMModules:
             product=product,
             candidates=json.dumps(candidates)[:40000],
         )
-        if not self.settings.openrouter_api_key:
-            return {"resolved": [], "conflicts": []}
         return await self.client.chat_json(
-            model=self.settings.openrouter_model_judge,
+            model=self.settings.bedrock_model_judge,
             system=prompt["system"],
             user=user,
         )
@@ -359,18 +398,8 @@ class LLMModules:
             datapoints=json.dumps(datapoints)[:20000],
             unresolved=json.dumps(unresolved),
         )
-        if not self.settings.openrouter_api_key:
-            n = len(datapoints)
-            u = len(unresolved)
-            pct = round(100 * n / max(n + u, 1), 1)
-            return {
-                "completeness_pct": pct,
-                "missing_periods": [x.get("period") for x in unresolved],
-                "limitations": [],
-                "recommended_next_steps": [],
-            }
         return await self.client.chat_json(
-            model=self.settings.openrouter_model_extract,
+            model=self.settings.bedrock_model_extract,
             system=prompt["system"],
             user=user,
         )
@@ -385,8 +414,6 @@ class LLMModules:
         indication: str | None = None,
     ) -> dict[str, Any]:
         prompt = load_prompt("alias_expander")
-        if not self.settings.openrouter_api_key:
-            return {"aliases": [], "parent_companies": [], "formulations": [], "search_terms": []}
         user = prompt["user_template"].format(
             product=product,
             generic=generic or "",
@@ -395,7 +422,7 @@ class LLMModules:
             indication=indication or "",
         )
         return await self.client.chat_json(
-            model=self.settings.openrouter_model_extract,
+            model=self.settings.bedrock_model_extract,
             system=prompt["system"],
             user=user,
         )
@@ -410,9 +437,9 @@ class LLMModules:
         ticker: str | None,
         context: str = "",
     ) -> dict[str, Any]:
-        """Search via OpenRouter openrouter:web_search server tool."""
+        """Search via Bedrock native web_search tool."""
         prompt = load_prompt("search_planner")
-        if not self.settings.openrouter_api_key or not self.settings.enable_llm_search:
+        if not self.settings.enable_llm_search:
             return {"results": []}
         user = prompt["user_template"].format(
             goal=goal,
@@ -423,7 +450,7 @@ class LLMModules:
             context=context[:4000],
         )
         return await self.client.chat_json_with_web(
-            model=self.settings.openrouter_model_extract,
+            model=self.settings.bedrock_model_search,
             system=prompt["system"],
             user=user,
             fetch=False,
@@ -440,9 +467,9 @@ class LLMModules:
         context: str = "",
         max_sources: int | None = None,
     ) -> dict[str, Any]:
-        """Search + fetch pages via OpenRouter web_search and web_fetch tools."""
+        """Search + fetch via Bedrock web_search (Search + Fetch operations)."""
         prompt = load_prompt("search_fetch")
-        if not self.settings.openrouter_api_key or not self.settings.enable_llm_search:
+        if not self.settings.enable_llm_search:
             return {"sources": []}
         user = prompt["user_template"].format(
             goal=goal,
@@ -454,7 +481,7 @@ class LLMModules:
             max_sources=max_sources or self.settings.llm_search_max_urls,
         )
         return await self.client.chat_json_with_web(
-            model=self.settings.openrouter_model_extract,
+            model=self.settings.bedrock_model_search,
             system=prompt["system"],
             user=user,
             fetch=True,
@@ -470,7 +497,7 @@ class LLMModules:
         ticker: str | None,
     ) -> dict[str, Any]:
         prompt = load_prompt("search_extract")
-        if not self.settings.openrouter_api_key or not self.settings.enable_llm_search:
+        if not self.settings.enable_llm_search:
             return {}
         user = prompt["user_template"].format(
             product=product,
@@ -479,7 +506,7 @@ class LLMModules:
             ticker=ticker or "",
         )
         return await self.client.chat_json_with_web(
-            model=self.settings.openrouter_model_extract,
+            model=self.settings.bedrock_model_search,
             system=prompt["system"],
             user=user,
             fetch=False,
@@ -495,9 +522,9 @@ class LLMModules:
         context: str,
         search_snippets: list[dict[str, str]] | None = None,
     ) -> dict[str, Any]:
-        """Judge with OpenRouter web_search; optional prefetched snippets as extra context."""
+        """Judge with Bedrock web_search; optional prefetched snippets as extra context."""
         prompt = load_prompt("judge_search_validator")
-        if not self.settings.openrouter_api_key or not self.settings.enable_llm_search:
+        if not self.settings.enable_llm_search:
             return {}
         extra = ""
         if search_snippets:
@@ -514,7 +541,7 @@ class LLMModules:
             context=(context[:4000] + extra),
         )
         result = await self.client.chat_json_with_web(
-            model=self.settings.openrouter_model_judge,
+            model=self.settings.bedrock_model_search,
             system=prompt["system"],
             user=user,
             fetch=False,
@@ -528,7 +555,6 @@ class LLMModules:
             extra_aliases=aliases,
         )
 
-    # Back-compat aliases used by older connector code paths
     async def plan_search(self, **kwargs: Any) -> dict[str, Any]:
         return await self.web_search(**kwargs)
 

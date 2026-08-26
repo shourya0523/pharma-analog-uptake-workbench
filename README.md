@@ -4,24 +4,24 @@ Source-first extraction and validation for pharmaceutical analog uptake data. Ci
 
 ## Stack
 
-- Backend: FastAPI (Python 3.12), SQLAlchemy, OpenRouter LLM
+- Backend: FastAPI (Python 3.12), SQLAlchemy, Amazon Bedrock (Claude Converse + Mantle Web Search)
 - Frontend: React + Vite + Recharts (Analog Product Explorer)
 - Local default: SQLite + local file store + in-process jobs
-- AWS MVP path: RDS Postgres + S3 + SQS/ECS via `FileStore` / `JobQueue` interfaces (`STORAGE_BACKEND=s3`, `JOB_BACKEND=sqs`)
+- AWS MVP: RDS Postgres + S3 + SQS/ECS via `FileStore` / `JobQueue` (`STORAGE_BACKEND=s3`, `JOB_BACKEND=sqs`) — see [`infra/README.md`](infra/README.md)
 
 ## Prerequisites
 
-- AWS CLI v2 + Agent Toolkit profile `Sandbox` (Region `us-east-1`)
+- AWS CLI v2 (`aws login`) for Bedrock and optional AWS deploy (Region `us-east-1`)
 - Node 20+
 - `uv` (https://docs.astral.sh/uv/)
-- OpenRouter API key for LLM extraction/judge (optional for connector-only smoke tests)
+- Bedrock model access for Claude (extract/judge) and GPT Mantle Web Search (optional local LLM search)
 
 ## Quick start (local)
 
 ```bash
 # Backend
 cd backend
-cp .env.example .env   # set OPENROUTER_API_KEY and SEC_USER_AGENT email
+cp .env.example .env   # set SEC_USER_AGENT email; AWS creds for Bedrock
 uv sync
 uv run uvicorn app.main:app --reload --port 8000
 
@@ -39,35 +39,16 @@ API docs: http://127.0.0.1:8000/docs
 
 Set `SEC_USER_AGENT` to a descriptive string with a contact email. Filings are cached under storage keys (local or S3).
 
-## Citations
+## Deploy to AWS
 
-- Every datapoint/profile field stores `source_url` + quote/field + confidence + validation status
-- Missing citation → high-severity quality flag; cannot auto-pass or export as confirmed
-- Dashboard drill-through shows citation metadata
+```bash
+cd infra
+source .venv/bin/activate
+pip install -r requirements.txt
+export CDK_DEFAULT_ACCOUNT=$(aws sts get-caller-identity --query Account --output text)
+export CDK_DEFAULT_REGION=us-east-1
+cdk bootstrap aws://$CDK_DEFAULT_ACCOUNT/$CDK_DEFAULT_REGION   # first time
+cdk deploy
+```
 
-## AWS (this account → later org)
-
-Current login profile: `Sandbox` / `us-east-1`.
-
-1. Create bucket + queue + RDS via `infra/` (CDK skeleton)
-2. Set env: `ENVIRONMENT=aws`, `STORAGE_BACKEND=s3`, `JOB_BACKEND=sqs`, `DATABASE_URL=postgresql+...`, `S3_BUCKET=...`, `SQS_QUEUE_URL=...`
-3. Deploy API/workers to ECS; frontend to S3+CloudFront
-
-**Org migration checklist**
-
-1. `aws login --profile <new-org-profile>`
-2. Add profile to `AWS_MCP_PROXY_PROFILES` in `~/.cursor/mcp.json`
-3. Redeploy parameterized stack (no account IDs in app code)
-4. Re-create secrets (OpenRouter, DB)
-
-Agent Toolkit credentials last 12 hours (renewable up to 90 days).
-
-## Export
-
-- Product workbook sheets: Quarterly Revenue, Source Audit Log, Unresolved Quarter Tracker, Drug Profile, Quality Checks
-- Power BI CSVs via Export page
-- Official Excel template mapper is stubbed until the workbook is provided
-
-## Seed
-
-`seed/example_drugs.csv` — PAH analogs aligned with the dashboard mockup.
+Use the `CloudFrontUrl` stack output. Frontend calls the API at `/api` on the same host.

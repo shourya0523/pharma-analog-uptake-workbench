@@ -1,11 +1,16 @@
 from __future__ import annotations
 
 import asyncio
+import json
+import logging
 from abc import ABC, abstractmethod
 from collections.abc import Awaitable, Callable
 from typing import Any
 
+from app.aws_session import boto3_session
 from app.config import get_settings
+
+logger = logging.getLogger(__name__)
 
 
 JobHandler = Callable[[dict[str, Any]], Awaitable[None]]
@@ -64,21 +69,19 @@ class SqsJobQueue(JobQueue):
     """AWS SQS-backed queue. Workers poll separately in ECS."""
 
     def __init__(self, queue_url: str | None = None) -> None:
-        import boto3
-
         settings = get_settings()
         self.queue_url = queue_url or settings.sqs_queue_url
         if not self.queue_url:
             raise ValueError("sqs_queue_url required for SqsJobQueue")
-        session = boto3.Session(profile_name=settings.aws_profile, region_name=settings.aws_region)
-        self.client = session.client("sqs")
+        self.client = boto3_session().client("sqs")
         self._handler: JobHandler | None = None
+        self._running = False
 
     async def enqueue(self, job_type: str, payload: dict[str, Any]) -> str:
-        import json
-
         body = json.dumps({"job_type": job_type, **payload})
-        resp = self.client.send_message(QueueUrl=self.queue_url, MessageBody=body)
+        resp = await asyncio.to_thread(
+            self.client.send_message, QueueUrl=self.queue_url, MessageBody=body
+        )
         return resp["MessageId"]
 
     async def start(self, handler: JobHandler) -> None:
@@ -86,7 +89,31 @@ class SqsJobQueue(JobQueue):
         self._handler = handler
 
     async def stop(self) -> None:
-        return None
+        self._running = False
+
+    async def poll(self, handler: JobHandler) -> None:
+        await self.start(handler)
+        self._running = True
+        while self._running:
+            resp = await asyncio.to_thread(
+                self.client.receive_message,
+                QueueUrl=self.queue_url,
+                MaxNumberOfMessages=1,
+                WaitTimeSeconds=20,
+                VisibilityTimeout=900,
+            )
+            for msg in resp.get("Messages", []):
+                payload = json.loads(msg["Body"])
+                try:
+                    assert self._handler
+                    await self._handler(payload)
+                    await asyncio.to_thread(
+                        self.client.delete_message,
+                        QueueUrl=self.queue_url,
+                        ReceiptHandle=msg["ReceiptHandle"],
+                    )
+                except Exception:
+                    logger.exception("SQS job failed job_id=%s", payload.get("job_id"))
 
 
 def get_job_queue() -> JobQueue:

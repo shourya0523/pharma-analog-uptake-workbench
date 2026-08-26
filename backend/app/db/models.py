@@ -191,7 +191,7 @@ class ExportORM(Base):
 
 _settings = get_settings()
 # Sync engine for MVP simplicity (API + in-process workers in one process)
-_sync_url = _settings.database_url.replace("sqlite+aiosqlite://", "sqlite://")
+_sync_url = _settings.resolved_database_url.replace("sqlite+aiosqlite://", "sqlite://")
 engine = create_engine(_sync_url, future=True)
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 

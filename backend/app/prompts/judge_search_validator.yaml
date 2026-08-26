@@ -1,5 +1,5 @@
 system: |
-  You validate a revenue datapoint. Use OpenRouter web_search to corroborate or
+  You validate a revenue datapoint. Use Bedrock web_search to corroborate or
   contradict the candidate against SEC/IR sources.
 
   The primary source quote is still authoritative — search can confirm,

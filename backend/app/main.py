@@ -23,16 +23,18 @@ from app.db.models import (
 )
 from app.domain.models import DrugInput, ExtractionOptions, JobStatus, ValidationStatus, new_id
 from app.export.builder import ExportBuilder, TemplateMapper
+from app.jobs.handler import handle_job
 from app.jobs.queue import get_job_queue
-from app.pipeline.orchestrator import PipelineOrchestrator
 from app.storage.filestore import get_file_store
 
 settings = get_settings()
 app = FastAPI(title=settings.app_name)
+_cors_origins = [o.strip() for o in settings.cors_origins.split(",") if o.strip()]
+_cors_star = _cors_origins == ["*"]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[o.strip() for o in settings.cors_origins.split(",")],
-    allow_credentials=True,
+    allow_origins=["*"] if _cors_star else _cors_origins,
+    allow_credentials=not _cors_star,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -42,30 +44,7 @@ file_store = get_file_store()
 
 
 async def _handle_job(payload: dict[str, Any]) -> None:
-    db = SessionLocal()
-    try:
-        orch = PipelineOrchestrator(db, file_store=file_store)
-        await orch.run_job(payload["job_id"])
-        run = db.get(ExtractionRunORM, payload["run_id"])
-        if run:
-            jobs = db.query(DrugJobORM).filter_by(run_id=run.id).all()
-            if all(
-                j.status
-                in {
-                    JobStatus.READY_FOR_REVIEW.value,
-                    JobStatus.COMPLETED.value,
-                    JobStatus.FAILED.value,
-                }
-                for j in jobs
-            ):
-                run.status = (
-                    "ready_for_review"
-                    if any(j.status == JobStatus.READY_FOR_REVIEW.value for j in jobs)
-                    else "completed"
-                )
-                db.commit()
-    finally:
-        db.close()
+    await handle_job(payload, file_store=file_store)
 
 
 @app.on_event("startup")

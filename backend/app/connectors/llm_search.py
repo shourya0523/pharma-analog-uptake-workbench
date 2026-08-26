@@ -33,7 +33,7 @@ def _normalize_results(payload: dict[str, Any]) -> list[dict[str, str]]:
 
 
 class LLMSearchConnector:
-    """OpenRouter native web_search / web_fetch fallback evidence."""
+    """Bedrock native web_search fallback evidence."""
 
     def __init__(self, file_store: FileStore, llm: LLMModules | None = None) -> None:
         self.file_store = file_store
@@ -141,9 +141,9 @@ class LLMSearchConnector:
                         "search_query": hit.get("query"),
                         "search_snippet": hit.get("snippet") or excerpt[:500],
                         "search_purpose": hit.get("purpose") or goal,
-                        "openrouter_web": True,
+                        "bedrock_web": True,
                     },
-                    notes="openrouter_web_search_fetch",
+                    notes="bedrock_web_search",
                 )
             )
         return sources

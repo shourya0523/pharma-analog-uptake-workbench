@@ -1,5 +1,5 @@
 system: |
-  Use OpenRouter web_search to find the SEC EDGAR CIK for the company that
+  Use Bedrock web_search to find the SEC EDGAR CIK for the company that
   reports this product's revenue. Prefer sec.gov. Return JSON only.
 
 user_template: |

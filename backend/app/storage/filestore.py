@@ -51,13 +51,13 @@ class LocalFileStore(FileStore):
 
 class S3FileStore(FileStore):
     def __init__(self, bucket: str | None = None, region: str | None = None) -> None:
-        import boto3
+        from app.aws_session import boto3_session
 
         settings = get_settings()
         self.bucket = bucket or settings.s3_bucket
         if not self.bucket:
             raise ValueError("s3_bucket required for S3FileStore")
-        session = boto3.Session(profile_name=settings.aws_profile, region_name=region or settings.aws_region)
+        session = boto3_session(**({"region_name": region} if region else {}))
         self.client = session.client("s3")
 
     async def put(self, key: str, data: bytes, content_type: str | None = None) -> str:
