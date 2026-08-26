@@ -105,7 +105,8 @@ class PasteRunRequest(BaseModel):
 
 
 def _create_run(db: Session, drugs: list[DrugInput], options: ExtractionOptions) -> ExtractionRunORM:
-    run = ExtractionRunORM(id=new_id(), status="queued", options_json=options.model_dump())
+    # mode="json" keeps dates/enums storable in the JSON column
+    run = ExtractionRunORM(id=new_id(), status="queued", options_json=options.model_dump(mode="json"))
     db.add(run)
     for d in drugs:
         db.add(

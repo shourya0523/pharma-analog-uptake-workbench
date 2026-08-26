@@ -69,6 +69,7 @@ class JobStep(str, Enum):
     SOURCE_RETRIEVE = "source_retrieve"
     PARSE_SOURCES = "parse_sources"
     EXTRACT_METADATA = "extract_metadata"
+    JUDGE_METADATA = "judge_metadata"
     EXTRACT_REVENUE = "extract_revenue"
     EVIDENCE_JUDGE = "evidence_judge"
     RECONCILE_CONFLICTS = "reconcile_conflicts"
@@ -253,6 +254,10 @@ class ExtractionOptions(BaseModel):
     company_ir: bool = True
     openfda: bool = True
     earnings_releases: bool = True
+    # Bound earnings-exhibit retrieval to a filing-date window (ISO dates).
+    # Unset means the most recent earnings releases.
+    earnings_since: date | None = None
+    earnings_until: date | None = None
     transcripts: bool = False
     pdfs: bool = True
     llm_evidence_judge: bool = True
