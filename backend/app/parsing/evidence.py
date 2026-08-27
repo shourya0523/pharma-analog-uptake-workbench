@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 import re
-from typing import Any, Iterable
+from collections.abc import Iterable
+from typing import Any
 
 from app.domain.models import ParsedDocument, RetrievedSource, SourceType
-
 
 MONEY_RE = re.compile(
     r"("
@@ -14,13 +14,13 @@ MONEY_RE = re.compile(
     r"|\b\d{1,3}(?:,\d{3})+\.\d+"
     r"|\b\d{2,4}\.\d\b"
     r")",
-    re.I,
+    re.IGNORECASE,
 )
 REVENUE_HINT_RE = re.compile(
     r"(net\s+product\s+sales|product\s+sales|net\s+sales|revenues?|sales)",
-    re.I,
+    re.IGNORECASE,
 )
-TOTAL_REVENUE_RE = re.compile(r"\btotal\s+revenues?\b", re.I)
+TOTAL_REVENUE_RE = re.compile(r"\btotal\s+revenues?\b", re.IGNORECASE)
 
 FILING_PRIORITY = {
     "10-K": 0,
@@ -61,7 +61,7 @@ def _alias_pattern(aliases: list[str]) -> re.Pattern[str] | None:
     if not aliases:
         return None
     parts = [re.escape(a) for a in sorted(aliases, key=len, reverse=True)]
-    return re.compile(r"(" + "|".join(parts) + r")", re.I)
+    return re.compile(r"(" + "|".join(parts) + r")", re.IGNORECASE)
 
 
 def select_product_evidence_text(
@@ -155,10 +155,9 @@ def format_tables_for_llm(
     blocks: list[str] = []
     for i, table in enumerate(tables):
         flat = " | ".join(" ".join(cell for cell in row) for row in table)
-        if aliases and not any(a in flat.lower() for a in aliases):
-            # Keep short money tables anyway (often product rows nearby)
-            if not MONEY_RE.search(flat):
-                continue
+        # Keep short money tables anyway (often product rows nearby).
+        if aliases and not any(a in flat.lower() for a in aliases) and not MONEY_RE.search(flat):
+            continue
         rendered = "\n".join("\t".join(cell for cell in row) for row in table[:40])
         blocks.append(f"[table {i}]\n{rendered}")
     out = "\n\n".join(blocks)

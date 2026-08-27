@@ -51,3 +51,72 @@ cdk deploy
 ```
 
 Use the `CloudFrontUrl` stack output. Frontend calls the API at `/api` on the same host.
+
+## Pharmaceutical data semantics
+
+- FDA Established Pharmacologic Class (EPC) and mechanism of action (MoA) are separate. EPC is never used as a MoA fallback.
+- Approved line of therapy is stored per indication and only assigned from explicit label wording. Label silence is `all_lines_or_unspecified`, not first line.
+- Canonical product, active moiety, formulation, delivery device, and analog family remain distinct. Shared moiety does not merge commercial revenue.
+- Peak estimates remain typed as `observed`, `consensus`, or `modeled`. The selected value records its policy, as-of date, scope, and source inputs.
+- Launch uptake is labeled `revenue_proxy_r4q`: rolling-four-quarter product sales divided by selected annual peak. The first three quarters are `insufficient_history`.
+- Competitive intensity uses `competitive_intensity_v1` and stored peer classifications. Cohorts under six launches use provisional thresholds and expose `low_coverage=true`.
+
+Public label, regulatory, SEC, company IR, and ClinicalTrials.gov sources are supported. Licensed consensus, claims, prescription, and patient-volume data use cited manual imports until credentials and redistribution rights are available. The application does not scrape paid vendors.
+
+Consensus/manual peak CSV columns are:
+
+```text
+product,estimate_type,value,currency,geography,revenue_scope,as_of_date,source_url
+```
+
+All columns are required. Cross-currency values remain unresolved unless a cited, period-compatible FX observation is stored.
+
+## Migrations and backfill
+
+Alembic is authoritative at startup. A legacy unversioned database is stamped only when its table/column fingerprint exactly matches the supported baseline; unknown schemas stop with remediation guidance.
+
+```bash
+# Back up backend/storage/workbench.db first
+cd backend
+uv run alembic upgrade head
+
+# Idempotent normalized metadata backfill
+cd ..
+uv run --project backend python scripts/backfill_pharma_metadata.py
+# optionally: --run-id <id> or --job-id <id>
+```
+
+Confirmed reviewer assertions always outrank automated backfill. Label re-fetch is intentionally skipped when no stable application number or SPL set ID is available.
+
+For a connector-free metadata smoke check:
+
+```bash
+uv run --project backend python scripts/smoke_validate.py --metadata-only
+```
+
+## AWS (this account → later org)
+
+Current login profile: `Sandbox` / `us-east-1`.
+
+1. Create bucket + queue + RDS via `infra/` (CDK skeleton)
+2. Set env: `ENVIRONMENT=aws`, `STORAGE_BACKEND=s3`, `JOB_BACKEND=sqs`, `DATABASE_URL=postgresql+...`, `S3_BUCKET=...`, `SQS_QUEUE_URL=...`
+3. Deploy API/workers to ECS; frontend to S3+CloudFront
+
+**Org migration checklist**
+
+1. `aws login --profile <new-org-profile>`
+2. Add profile to `AWS_MCP_PROXY_PROFILES` in `~/.cursor/mcp.json`
+3. Redeploy parameterized stack (no account IDs in app code)
+4. Re-create secrets (OpenRouter, DB)
+
+Agent Toolkit credentials last 12 hours (renewable up to 90 days).
+
+## Export
+
+- Product workbook sheets: Quarterly Revenue, Source Audit Log, Unresolved Quarter Tracker, Drug Profile, Quality Checks
+- Power BI product CSV includes normalized indications, MoA and EPC separately, approved LoT, competitive formula/coverage, typed peak method/inputs, uptake methodology, and source URL
+- Official Excel template mapper is stubbed until the workbook is provided
+
+## Seed
+
+`seed/example_drugs.csv` — PAH analogs aligned with the dashboard mockup.

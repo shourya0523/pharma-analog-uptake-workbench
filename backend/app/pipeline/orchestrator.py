@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+# ruff: noqa: BLE001, DTZ003
 import json
 import logging
 from datetime import datetime
@@ -9,24 +10,31 @@ from sqlalchemy.orm import Session
 
 logger = logging.getLogger(__name__)
 
+from app.config import get_settings
 from app.connectors.llm_search import LLMSearchConnector
-from app.connectors.sources import (
-    ManualURLConnector,
-    SECConnector,
-    TranscriptConnectorStub,
-    parse_filing_date,
-)
 from app.connectors.openfda import OpenFDAConnector
 from app.connectors.openfda_fields import (
     earliest_approval_date,
     openfda_brand_names,
     select_openfda_result,
 )
+from app.connectors.sources import (
+    ManualURLConnector,
+    SECConnector,
+    TranscriptConnectorStub,
+    parse_filing_date,
+)
 from app.db.models import (
+    AnalogFamilyORM,
+    CanonicalProductORM,
     DatapointORM,
     DrugJobORM,
     DrugProfileFieldORM,
+    EvidenceAssertionORM,
     ExtractionRunORM,
+    MoAComponentORM,
+    ProductFormulationORM,
+    ProductIndicationORM,
     QualityCheckORM,
     SourceDocumentORM,
     UnresolvedQuarterORM,
@@ -41,21 +49,33 @@ from app.domain.models import (
     ValidationStatus,
     new_id,
 )
+from app.identity.resolver import resolve_product_identity
 from app.llm.aliases import merge_aliases
 from app.llm.client import LLMModules
 from app.parsing.documents import DocumentParser
-from app.parsing.evidence import build_revenue_llm_text, prioritize_sources_for_revenue, select_product_evidence_text
+from app.parsing.evidence import (
+    build_revenue_llm_text,
+    prioritize_sources_for_revenue,
+    select_product_evidence_text,
+)
+from app.parsing.fda_label import parse_label_record
+from app.parsing.indications import parse_indications
 from app.parsing.periods import detect_period_context, normalize_period
 from app.parsing.tables import extract_revenue_rows
 from app.quality.candidate_filters import filter_revenue_candidates
+from app.quality.checks import (
+    apply_auto_pass_gate,
+    moa_epc_contamination_issue,
+    quote_contains_value,
+    run_quality_checks,
+)
 from app.quality.comparative import derive_comparative_candidates
-from app.quality.checks import apply_auto_pass_gate, quote_contains_value, run_quality_checks
+from app.quality.completeness import resolve_completeness_pct
 from app.quality.enrichment import (
     apply_field_enrichment,
     deterministic_formulation_fill,
     merge_enrichment_dicts,
 )
-from app.quality.completeness import resolve_completeness_pct
 from app.quality.fast_judge import try_deterministic_judgment
 from app.quality.profile import (
     PRIORITY_JUDGE_FIELDS,
@@ -65,8 +85,6 @@ from app.quality.profile import (
 )
 from app.storage.filestore import FileStore, get_file_store
 from app.validation.sampling import select_validation_tasks
-from app.config import get_settings
-
 
 SOURCE_PRIORITY = [
     SourceType.SEC_FILING,
@@ -80,6 +98,36 @@ SOURCE_PRIORITY = [
     SourceType.USER_URL,
     SourceType.OTHER,
 ]
+
+
+def persist_profile_field(
+    db: Session,
+    *,
+    job_id: str,
+    field: str,
+    value: str,
+    citation: dict[str, Any],
+    method: str,
+) -> DrugProfileFieldORM:
+    """Persist an assertion without replacing reviewer-confirmed metadata."""
+
+    confirmed = (
+        db.query(DrugProfileFieldORM)
+        .filter_by(job_id=job_id, field=field, validation_status=ValidationStatus.CONFIRMED.value)
+        .first()
+    )
+    if confirmed:
+        return confirmed
+    row = DrugProfileFieldORM(
+        id=new_id(),
+        job_id=job_id,
+        field=field,
+        value=value,
+        citation_json={**citation, "extraction_method": method},
+        validation_status=ValidationStatus.NEEDS_REVIEW.value,
+    )
+    db.add(row)
+    return row
 
 
 class PipelineOrchestrator:
@@ -384,13 +432,21 @@ class PipelineOrchestrator:
                 selected.get("application_number"),
             )
             openfda = selected.get("openfda", {})
+            first_label = parse_label_record(selected)
+            epc_terms = first_label.epc_terms
+            moa_terms = first_label.moa_terms
+            moa_value = "; ".join(moa_terms) or first_label.moa_summary
+            if moa_epc_contamination_issue(moa_value, epc_terms):
+                moa_value = None
             mapping = {
                 "brand_name": (openfda.get("brand_name") or [None])[0],
                 "generic_name": (openfda.get("generic_name") or [None])[0],
                 "manufacturer": (openfda.get("manufacturer_name") or [None])[0],
-                "roa": (openfda.get("route") or [None])[0],
-                "dosage_form": (openfda.get("dosage_form") or [None])[0],
-                "pharmacologic_class": (openfda.get("pharm_class_epc") or [None])[0],
+                "roa": "; ".join(first_label.routes) or None,
+                "dosage_form": "; ".join(first_label.dosage_forms) or None,
+                "pharmacologic_class": "; ".join(epc_terms) or None,
+                "moa": moa_value,
+                "active_ingredients": "; ".join(first_label.active_ingredients) or None,
             }
             # Scope the approval date to this application; the earliest date across
             # all results belongs to whichever product was approved first.
@@ -419,20 +475,136 @@ class PipelineOrchestrator:
                     "openfda_application_number": selected.get("application_number"),
                     "openfda_matched_brand": matched_brand,
                 }
-                self.db.add(
-                    DrugProfileFieldORM(
-                        id=new_id(),
-                        job_id=job.id,
-                        field=field,
-                        value=str(value),
-                        citation_json=citation,
-                        validation_status=ValidationStatus.NEEDS_REVIEW.value,
-                    )
+                persist_profile_field(
+                    self.db,
+                    job_id=job.id,
+                    field=field,
+                    value=str(value),
+                    citation=citation,
+                    method="structured_fda",
                 )
                 if field == "generic_name" and not job.generic_name:
                     job.generic_name = str(value)
                 if field == "manufacturer" and not job.manufacturer:
                     job.manufacturer = str(value)
+
+            if first_label.brand_names:
+                identity = resolve_product_identity(
+                    brand_name=first_label.brand_names[0],
+                    active_ingredients=first_label.active_ingredients,
+                    dosage_form=first_label.dosage_forms[0] if first_label.dosage_forms else None,
+                    route_terms=first_label.routes,
+                )
+                product = (
+                    self.db.query(CanonicalProductORM)
+                    .filter_by(identity_key=identity.identity_key)
+                    .first()
+                )
+                if not product:
+                    product = CanonicalProductORM(
+                        id=new_id(),
+                        canonical_name=identity.canonical_name,
+                        identity_key=identity.identity_key,
+                        active_moieties_json=identity.active_ingredients,
+                        current_commercial_owner=job.manufacturer,
+                        regulatory_sponsor=(openfda.get("manufacturer_name") or [None])[0],
+                        application_number=(
+                            first_label.application_numbers[0]
+                            if first_label.application_numbers
+                            else None
+                        ),
+                    )
+                    self.db.add(product)
+                    self.db.flush()
+                family = (
+                    self.db.query(AnalogFamilyORM)
+                    .filter_by(active_moiety_key=identity.analog_family_key)
+                    .first()
+                )
+                if not family:
+                    family = AnalogFamilyORM(
+                        id=new_id(),
+                        name=identity.analog_family_key.title(),
+                        active_moiety_key=identity.analog_family_key,
+                    )
+                    self.db.add(family)
+                    self.db.flush()
+                if not self.db.query(ProductFormulationORM).filter_by(product_id=product.id).first():
+                    self.db.add(
+                        ProductFormulationORM(
+                            id=new_id(),
+                            product_id=product.id,
+                            analog_family_id=family.id,
+                            dosage_form=identity.dosage_form or "unresolved",
+                            route_source_term="; ".join(first_label.routes) or None,
+                            route_category="; ".join(first_label.routes).lower() or None,
+                        )
+                    )
+                for moa_term in moa_terms:
+                    existing_moa = (
+                        self.db.query(MoAComponentORM)
+                        .filter_by(product_id=product.id, moa_term=moa_term)
+                        .first()
+                    )
+                    if not existing_moa:
+                        self.db.add(
+                            MoAComponentORM(
+                                id=new_id(),
+                                product_id=product.id,
+                                active_ingredient=None,
+                                moa_term=moa_term,
+                                descriptive_text=first_label.moa_summary,
+                                fda_epc_terms_json=epc_terms,
+                            )
+                        )
+                if first_label.indications_text:
+                    for indication in parse_indications(first_label.indications_text):
+                        existing_indication = (
+                            self.db.query(ProductIndicationORM)
+                            .filter_by(product_id=product.id, disease=indication.disease)
+                            .first()
+                        )
+                        if existing_indication:
+                            continue
+                        self.db.add(
+                            ProductIndicationORM(
+                                id=new_id(),
+                                product_id=product.id,
+                                disease=indication.disease,
+                                setting=indication.setting,
+                                population=indication.population,
+                                biomarker=indication.biomarker,
+                                approval_date=(
+                                    datetime.fromisoformat(approval).date()
+                                    if approval
+                                    else None
+                                ),
+                                launch_anchor_type=(
+                                    "indication_approval_date" if approval else None
+                                ),
+                                approved_lot=indication.approved_lot.value.value,
+                                approved_lot_quote=indication.source_quote,
+                            )
+                        )
+                for field, value in mapping.items():
+                    if value:
+                        self.db.add(
+                            EvidenceAssertionORM(
+                                id=new_id(),
+                                entity_type="product",
+                                entity_id=product.id,
+                                field_name=field,
+                                value_json={"value": value},
+                                source_id=src.source_id,
+                                source_url=src.url,
+                                source_section=f"openfda.{field}",
+                                source_quote=f"openfda.{field}",
+                                confidence=0.9,
+                                validation_status=ValidationStatus.NEEDS_REVIEW.value,
+                                extraction_method="structured_fda",
+                                selected=True,
+                            )
+                        )
 
         # LLM metadata from first successful narrative source
         for src in sources:
@@ -450,6 +622,16 @@ class PipelineOrchestrator:
                 name = field.get("field")
                 if not name or is_missing_value(field.get("value")):
                     continue
+                if name == "moa":
+                    epc_values = [
+                        row.value
+                        for row in self.db.query(DrugProfileFieldORM)
+                        .filter_by(job_id=job.id, field="pharmacologic_class")
+                        .all()
+                        if row.value
+                    ]
+                    if moa_epc_contamination_issue(str(field["value"]), epc_values):
+                        continue
                 if name in written:
                     # Record the disagreement for the judge instead of silently
                     # preferring one source; identical answers are just deduped.
@@ -473,15 +655,13 @@ class PipelineOrchestrator:
                     "validation_status": ValidationStatus.NEEDS_REVIEW.value,
                     "interpreted": bool(field.get("interpreted", True)),
                 }
-                self.db.add(
-                    DrugProfileFieldORM(
-                        id=new_id(),
-                        job_id=job.id,
-                        field=name,
-                        value=str(field["value"]),
-                        citation_json=citation,
-                        validation_status=ValidationStatus.NEEDS_REVIEW.value,
-                    )
+                persist_profile_field(
+                    self.db,
+                    job_id=job.id,
+                    field=name,
+                    value=str(field["value"]),
+                    citation=citation,
+                    method="bounded_llm",
                 )
             break
 
@@ -1013,10 +1193,11 @@ class PipelineOrchestrator:
                     )
 
             row.source_support = support
-            if quote_contains_value(row.source_quote or "", row.value_reported):
+            if quote_contains_value(
+                row.source_quote or "", row.value_reported
+            ) and "field_enrichment_applied" not in (row.issue_flags or []):
                 # Don't inflate confidence above enrichment cap when fields were estimated.
-                if "field_enrichment_applied" not in (row.issue_flags or []):
-                    row.confidence_score = max(float(row.confidence_score or 0), 0.85)
+                row.confidence_score = max(float(row.confidence_score or 0), 0.85)
             if support == "misclassified":
                 status = ValidationStatus.NEEDS_REVIEW.value
                 if row.revenue_scope != "Company total" and "total revenue" in (row.source_quote or "").lower():

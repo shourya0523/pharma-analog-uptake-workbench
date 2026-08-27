@@ -27,8 +27,8 @@ def select_validation_tasks(
 
     # Sort by period for early/recent heuristics
     ordered = sorted(datapoints, key=lambda d: d.get("period") or "")
-    early = set(d["id"] for d in ordered[:2]) if ordered else set()
-    recent = set(d["id"] for d in ordered[-2:]) if ordered else set()
+    early = {d["id"] for d in ordered[:2]} if ordered else set()
+    recent = {d["id"] for d in ordered[-2:]} if ordered else set()
 
     for dp in datapoints:
         conf = dp.get("confidence_score") or 0
@@ -46,7 +46,7 @@ def select_validation_tasks(
             add(dp, "needs_review")
 
     auto_pass = [d for d in datapoints if d.get("validation_status") == "auto_pass" and d["id"] not in seen]
-    sample_n = max(0, int(round(len(auto_pass) * settings.validation_sample_rate)))
+    sample_n = max(0, round(len(auto_pass) * settings.validation_sample_rate))
     for dp in random.sample(auto_pass, min(sample_n, len(auto_pass))):
         add(dp, "random_auto_pass_sample")
 

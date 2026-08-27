@@ -7,7 +7,8 @@ strings were being stored as though they were sourced values.
 from __future__ import annotations
 
 import re
-from dataclasses import dataclass, field as dataclass_field
+from dataclasses import dataclass
+from dataclasses import field as dataclass_field
 from typing import Any
 
 MISSING_VALUES = {

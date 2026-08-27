@@ -1,9 +1,17 @@
 from app.connectors.openfda_fields import earliest_approval_date, parse_openfda_date
 from app.llm.client import apply_judge_hard_vetoes, re_ytd_language
 from app.llm.grounding import enforce_verbatim_on_candidates, quote_is_verbatim
-from app.parsing.evidence import build_revenue_llm_text, product_aliases, select_product_evidence_text
+from app.parsing.evidence import (
+    build_revenue_llm_text,
+    product_aliases,
+    select_product_evidence_text,
+)
 from app.quality.candidate_filters import filter_revenue_candidates
-from app.quality.checks import apply_auto_pass_gate, quote_contains_value, run_quality_checks
+from app.quality.checks import (
+    apply_auto_pass_gate,
+    quote_contains_value,
+    run_quality_checks,
+)
 
 
 def test_quote_contains_value():
@@ -190,7 +198,7 @@ def test_parse_html_xbrl_no_xml_as_html_warning():
 
     from bs4 import XMLParsedAsHTMLWarning
 
-    from app.domain.models import RetrievedSource, RetrievalStatus, SourceType
+    from app.domain.models import RetrievalStatus, RetrievedSource, SourceType
     from app.parsing.documents import DocumentParser
 
     markup = (
@@ -217,7 +225,13 @@ def test_parse_html_xbrl_no_xml_as_html_warning():
 
 def test_prioritize_sources_handles_llm_search_without_unbound_text_len():
     """LLM_SEARCH scoring used text_len before assignment and crashed extract_revenue."""
-    from app.domain.models import ParsedDocument, ParsingStatus, RetrievedSource, RetrievalStatus, SourceType
+    from app.domain.models import (
+        ParsedDocument,
+        ParsingStatus,
+        RetrievalStatus,
+        RetrievedSource,
+        SourceType,
+    )
     from app.parsing.evidence import prioritize_sources_for_revenue
 
     sec = RetrievedSource(

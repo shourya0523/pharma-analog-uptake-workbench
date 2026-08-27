@@ -1,4 +1,7 @@
-from app.quality.candidate_filters import filter_revenue_candidates, is_placeholder_period
+from app.quality.candidate_filters import (
+    filter_revenue_candidates,
+    is_placeholder_period,
+)
 from app.quality.completeness import resolve_completeness_pct
 
 

@@ -12,57 +12,28 @@ import {
   YAxis,
 } from 'recharts'
 import { api } from '../api/client'
-
-const FILTER_KEYS = [
-  'product_name',
-  'therapeutic_area',
-  'moa',
-  'roa',
-  'manufacturer',
-  'validation_status',
-] as const
-
-type FilterKey = (typeof FILTER_KEYS)[number]
+import {
+  buildChartData,
+  calculateFilteredKpis,
+  filterProducts,
+  FILTER_KEYS,
+  type FilterKey,
+  uniqueOptions,
+} from './dashboardModel'
 
 const FILTER_LABELS: Record<FilterKey, string> = {
   product_name: 'Product / analog',
   therapeutic_area: 'Therapeutic area',
+  company: 'Company',
+  approval_period: 'Initial FDA approval',
+  competitive_intensity: 'Competitive intensity',
   moa: 'MOA',
   roa: 'ROA',
-  manufacturer: 'Manufacturer',
-  validation_status: 'Validation status',
+  peak_sales_bucket: 'Peak-sales potential',
+  indication_count: 'Approved indication count',
 }
 
 const CHART_COLORS = ['#1d4ed8', '#0f766e', '#b45309', '#7c3aed', '#be123c', '#0369a1', '#c2410c']
-
-function uniqueOptions(
-  products: any[],
-  key: FilterKey,
-  filters: Partial<Record<FilterKey, string>>,
-  apiOptions?: Record<string, string[]>,
-): string[] {
-  const scoped = products.filter((p: any) =>
-    FILTER_KEYS.every((k) => {
-      if (k === key) return true
-      const selected = filters[k]
-      if (!selected) return true
-      return String(p[k] || '').toLowerCase() === selected.toLowerCase()
-    }),
-  )
-  const seen = new Set<string>()
-  const out: string[] = []
-  for (const p of scoped) {
-    const raw = String(p[key] ?? '').trim()
-    if (!raw) continue
-    const k = raw.toLowerCase()
-    if (seen.has(k)) continue
-    seen.add(k)
-    out.push(raw)
-  }
-  if (out.length) return out.sort((a, b) => a.localeCompare(b))
-  const fromApi = apiOptions?.[key]
-  return fromApi?.length ? [...fromApi] : []
-}
 
 export default function DashboardPage() {
   const { runId } = useParams()
@@ -71,44 +42,15 @@ export default function DashboardPage() {
     queryFn: () => api.dashboard(runId),
     refetchInterval: 5000,
   })
-  const [tab, setTab] = useState<'annual' | 'quarterly' | 'monthly' | 'methodology'>('quarterly')
+  const [tab, setTab] = useState<'annual' | 'quarterly' | 'launch' | 'launch24' | 'methodology'>('quarterly')
   const [filters, setFilters] = useState<Partial<Record<FilterKey, string>>>({})
   const [drill, setDrill] = useState<any>(null)
 
-  const allProducts = q.data?.products || []
+  const allProducts = useMemo(() => q.data?.products || [], [q.data?.products])
 
-  const products = useMemo(() => {
-    return allProducts.filter((p: any) =>
-      FILTER_KEYS.every((k) => {
-        const selected = filters[k]
-        if (!selected) return true
-        return String(p[k] || '').toLowerCase() === selected.toLowerCase()
-      }),
-    )
-  }, [allProducts, filters])
-
-  const chartData = useMemo(() => {
-    const selected = new Set(products.map((p: any) => p.product_name))
-    let series = (q.data?.series || []).filter((s: any) => selected.has(s.product))
-    if (tab === 'quarterly') {
-      series = series.filter(
-        (s: any) => (s.period_type || '').toLowerCase() === 'quarterly' || /Q[1-4]/i.test(String(s.period)),
-      )
-    } else if (tab === 'annual') {
-      series = series.filter(
-        (s: any) =>
-          (s.period_type || '').toLowerCase() === 'annual' ||
-          (/^\d{4}$/.test(String(s.period)) && !/Q/i.test(String(s.period))),
-      )
-    }
-    const byPeriod: Record<string, any> = {}
-    for (const s of series) {
-      byPeriod[s.period] = byPeriod[s.period] || { period: s.period }
-      byPeriod[s.period][s.product] = s.value
-      byPeriod[s.period][`__meta_${s.product}`] = s
-    }
-    return Object.values(byPeriod).sort((a: any, b: any) => String(a.period).localeCompare(String(b.period)))
-  }, [q.data, products, tab])
+  const products = useMemo(() => filterProducts(allProducts, filters), [allProducts, filters])
+  const chartData = useMemo(() => buildChartData(q.data, products, tab), [q.data, products, tab])
+  const kpis = useMemo(() => calculateFilteredKpis(products), [products])
 
   const names = useMemo(
     () => Array.from(new Set(products.map((p: any) => String(p.product_name)))) as string[],
@@ -181,8 +123,11 @@ export default function DashboardPage() {
             <button type="button" className={tab === 'quarterly' ? 'active' : ''} onClick={() => setTab('quarterly')}>
               Quarterly Uptake
             </button>
-            <button type="button" className={tab === 'monthly' ? 'active' : ''} onClick={() => setTab('monthly')}>
-              Monthly Estimates
+            <button type="button" className={tab === 'launch' ? 'active' : ''} onClick={() => setTab('launch')}>
+              Launch-relative
+            </button>
+            <button type="button" className={tab === 'launch24' ? 'active' : ''} onClick={() => setTab('launch24')}>
+              First 24 months
             </button>
             <button type="button" className={tab === 'methodology' ? 'active' : ''} onClick={() => setTab('methodology')}>
               Methodology
@@ -190,13 +135,24 @@ export default function DashboardPage() {
           </div>
         </div>
 
+        <section className="kpi-grid" aria-label="Filtered cohort KPIs">
+          <article><span>Products tracked</span><strong>{kpis.productsTracked}</strong></article>
+          <article><span>Companies represented</span><strong>{kpis.companiesRepresented}</strong></article>
+          <article>
+            <span>Aggregate selected peak</span>
+            <strong>${kpis.aggregatePeak.toLocaleString()}M</strong>
+            <small>Coverage {kpis.peakCoverage}</small>
+          </article>
+          <article><span>Uptake-ready products</span><strong>{kpis.uptakeReady}</strong></article>
+        </section>
+
         <div className="chart-wrap">
-          {tab === 'monthly' ? (
-            <p className="muted">Monthly estimates unavailable unless derivable from source-backed data.</p>
-          ) : tab === 'methodology' ? (
+          {tab === 'methodology' ? (
             <div className="methodology">
-              <p>Analogs shown: {products.length} (deduplicated by product name)</p>
+              <p>Canonical products shown: {products.length} (formulations remain commercially distinct)</p>
               <p>Source-backed series points in view: {chartData.length} periods</p>
+              <p>Launch uptake is a rolling-four-quarter revenue proxy divided by the typed selected annual peak.</p>
+              <p>Competitive intensity uses the stored competitive_intensity_v1 peer cohort and score components.</p>
               <p>Click any chart point or Source cell for citation drill-through.</p>
             </div>
           ) : names.length === 0 ? (
@@ -241,8 +197,10 @@ export default function DashboardPage() {
                 <th>ROA</th>
                 <th>Treatment type</th>
                 <th>Approved LoT</th>
+                <th>Competitive intensity</th>
                 <th>Reached peak yet</th>
                 <th>Estimated peak revenue</th>
+                <th>Peak type</th>
                 <th>Time-to-peak</th>
                 <th>Link</th>
                 <th>Completeness</th>
@@ -253,17 +211,19 @@ export default function DashboardPage() {
               {products.map((p: any) => (
                 <tr key={p.job_id}>
                   <td>{p.product_name}</td>
-                  <td>{p.therapeutic_area}</td>
-                  <td>{p.manufacturer}</td>
-                  <td>{p.fda_approval_date}</td>
-                  <td>{p.approved_indications}</td>
-                  <td>{p.moa}</td>
-                  <td>{p.roa}</td>
-                  <td>{p.treatment_type}</td>
-                  <td>{p.approved_lot}</td>
-                  <td>{p.reached_peak_yet}</td>
-                  <td>{p.estimated_peak_revenue}</td>
-                  <td>{p.time_to_peak}</td>
+                  <td>{p.therapeutic_area || 'Unresolved'}</td>
+                  <td>{p.company || p.manufacturer || 'Unresolved'}</td>
+                  <td>{p.fda_approval_date || 'Unresolved'}</td>
+                  <td>{p.approved_indications || 'Unresolved'}</td>
+                  <td>{p.moa || 'Unresolved'}</td>
+                  <td>{p.roa || 'Unresolved'}</td>
+                  <td>{p.treatment_type || 'Not applicable'}</td>
+                  <td>{p.approved_lot || 'Unresolved'}</td>
+                  <td>{p.competitive_intensity || 'Unresolved'}</td>
+                  <td>{p.reached_peak_yet || 'Unresolved'}</td>
+                  <td>{p.estimated_peak_revenue ?? 'Unresolved'}</td>
+                  <td>{p.peak_type || 'Unresolved'}</td>
+                  <td>{p.time_to_peak || 'Unresolved'}</td>
                   <td>
                     {p.source_link ? (
                       <button

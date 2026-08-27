@@ -3,10 +3,17 @@ import json
 from collections import defaultdict
 from pathlib import Path
 
-from sqlalchemy import create_engine, inspect as sa_inspect, text
+from sqlalchemy import create_engine, text
+from sqlalchemy import inspect as sa_inspect
 from sqlalchemy.orm import sessionmaker
 
-from app.db.models import Base, DatapointORM, DrugJobORM, ExtractionRunORM, UnresolvedQuarterORM
+from app.db.models import (
+    Base,
+    DatapointORM,
+    DrugJobORM,
+    ExtractionRunORM,
+    UnresolvedQuarterORM,
+)
 from app.domain.models import (
     Citation,
     PeriodType,
@@ -16,6 +23,9 @@ from app.domain.models import (
     ValidationStatus,
     new_id,
 )
+from app.identity.resolver import resolve_product_identity
+from app.parsing.fda_label import parse_label_record
+from app.parsing.indications import parse_indications
 from app.quality.candidate_filters import filter_revenue_candidates
 from app.quality.checks import quote_contains_value, run_quality_checks
 
@@ -148,6 +158,32 @@ def test_gold_edge_cases_have_expected_disposition():
             assert not kept
             assert len(dropped) == 1
             assert dropped[0]["_drop_reason"] == row["expected_reason"]
+
+
+def test_gold_metadata_uses_production_parsers_and_identity_resolver():
+    rows = _load_jsonl(GOLD_DIR / "metadata.jsonl")
+    assert len({row["gold_id"] for row in rows}) == len(rows)
+    assert all(row["source_url"].startswith("https://") for row in rows)
+
+    for row in rows:
+        if row["case_type"] == "label":
+            parsed = parse_label_record(row["record"])
+            expected = row["expected"]
+            if "epc_terms" in expected:
+                assert parsed.epc_terms == expected["epc_terms"]
+                assert parsed.moa_terms == expected["moa_terms"]
+            else:
+                assert len(parsed.active_ingredients) == expected["ingredient_count"]
+                assert len(parsed.moa_terms) == expected["moa_count"]
+        elif row["case_type"] == "indication":
+            parsed = parse_indications(row["text"])[0]
+            assert parsed.approved_lot.value.value == row["expected"]["approved_lot"]
+            assert parsed.setting == row["expected"]["setting"]
+            assert parsed.population == row["expected"]["population"]
+        elif row["case_type"] == "identity":
+            identities = [resolve_product_identity(**product) for product in row["products"]]
+            assert identities[0].analog_family_key == identities[1].analog_family_key
+            assert identities[0].identity_key != identities[1].identity_key
 
 
 def _parse_json_cell(value):
