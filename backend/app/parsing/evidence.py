@@ -165,26 +165,40 @@ def format_tables_for_llm(
     return out[:max_chars]
 
 
+REVENUE_PRIMARY_SOURCE_TYPES = {
+    SourceType.EARNINGS_RELEASE,
+    SourceType.SEC_FILING,
+    SourceType.USER_URL,
+}
+
+
 def prioritize_sources_for_revenue(
     sources: list[RetrievedSource],
     parsed: dict[str, Any],
     *,
     max_sources: int = 4,
 ) -> list[RetrievedSource]:
-    """Prefer 10-K/10-Q with parse success; deprioritize empty 8-Ks."""
+    """Rank sources by how likely they state product revenue for a single period.
+
+    Earnings releases (8-K exhibit 99.x) come first: they break out product-level
+    quarterly net sales, whereas a 10-K only carries annual totals.
+    """
 
     def score(src: RetrievedSource) -> tuple:
         doc = parsed.get(src.source_id)
         parse_ok = bool(doc and getattr(doc, "parsing_status", None) and doc.parsing_status.value == "success")
+        text_len = len(doc.full_text) if doc and parse_ok else 0
         if src.source_type == SourceType.OPENFDA:
             return (99, 0, 0)  # skip for revenue
+        if src.source_type == SourceType.EARNINGS_RELEASE:
+            # Newest exhibit first so recent quarters are covered before older ones
+            return (0 if parse_ok else 2, 0, -(src.source_date.toordinal() if src.source_date else 0))
         if src.source_type == SourceType.LLM_SEARCH:
-            return (2 if parse_ok else 3, 4, -text_len)
+            return (1 if parse_ok else 3, 4, -text_len)
         filing = (src.filing_type or "").upper()
         pri = FILING_PRIORITY.get(filing, 5)
-        text_len = len(doc.full_text) if doc and parse_ok else 0
         # Prefer longer narrative filings
-        return (0 if parse_ok else 1, pri, -text_len)
+        return (0 if parse_ok else 2, 1 + pri, -text_len)
 
     eligible = [
         s
@@ -193,8 +207,8 @@ def prioritize_sources_for_revenue(
         and s.retrieval_status.value in {"success", "partial"}
     ]
     eligible.sort(key=score)
-    # Drop 8-Ks if we already have enough 10-K/10-Q
-    primary = [s for s in eligible if (s.filing_type or "").upper() in {"10-K", "10-Q", "20-F", "40-F"}]
+    # Prefer issuer-published documents over search results when enough are available
+    primary = [s for s in eligible if s.source_type in REVENUE_PRIMARY_SOURCE_TYPES]
     if len(primary) >= 2:
         return primary[:max_sources]
     return eligible[:max_sources]

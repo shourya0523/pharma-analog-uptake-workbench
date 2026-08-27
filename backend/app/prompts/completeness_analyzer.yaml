@@ -9,6 +9,8 @@ system: |
   - gap: unknown — needs analyst follow-up
 
   Do not invent datapoints. Only propose unresolved entries and a completeness_pct in 0–100.
+  completeness_pct must be your own computed coverage figure, never the placeholder from the
+  response skeleton.
   Return JSON only.
 
 user_template: |
@@ -23,7 +25,7 @@ user_template: |
     "completeness_pct": 0,
     "missing_periods": [
       {{
-        "period": "YYYYQn",
+        "period": "<missing calendar quarter>",
         "reason_code": "not_disclosed|need_filing|gap",
         "reason": "human-readable",
         "recommended_next_step": "..."

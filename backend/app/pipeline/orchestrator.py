@@ -1,15 +1,27 @@
 from __future__ import annotations
 
 import json
+import logging
 from datetime import datetime
 from typing import Any
 
 from sqlalchemy.orm import Session
 
+logger = logging.getLogger(__name__)
+
 from app.connectors.llm_search import LLMSearchConnector
-from app.connectors.sources import ManualURLConnector, SECConnector, TranscriptConnectorStub
+from app.connectors.sources import (
+    ManualURLConnector,
+    SECConnector,
+    TranscriptConnectorStub,
+    parse_filing_date,
+)
 from app.connectors.openfda import OpenFDAConnector
-from app.connectors.openfda_fields import earliest_approval_date
+from app.connectors.openfda_fields import (
+    earliest_approval_date,
+    openfda_brand_names,
+    select_openfda_result,
+)
 from app.db.models import (
     DatapointORM,
     DrugJobORM,
@@ -33,14 +45,24 @@ from app.llm.aliases import merge_aliases
 from app.llm.client import LLMModules
 from app.parsing.documents import DocumentParser
 from app.parsing.evidence import build_revenue_llm_text, prioritize_sources_for_revenue, select_product_evidence_text
+from app.parsing.periods import detect_period_context, normalize_period
+from app.parsing.tables import extract_revenue_rows
 from app.quality.candidate_filters import filter_revenue_candidates
+from app.quality.comparative import derive_comparative_candidates
 from app.quality.checks import apply_auto_pass_gate, quote_contains_value, run_quality_checks
 from app.quality.enrichment import (
     apply_field_enrichment,
     deterministic_formulation_fill,
     merge_enrichment_dicts,
 )
+from app.quality.completeness import resolve_completeness_pct
 from app.quality.fast_judge import try_deterministic_judgment
+from app.quality.profile import (
+    PRIORITY_JUDGE_FIELDS,
+    apply_profile_judgment,
+    is_missing_value,
+    values_conflict,
+)
 from app.storage.filestore import FileStore, get_file_store
 from app.validation.sampling import select_validation_tasks
 from app.config import get_settings
@@ -79,14 +101,23 @@ class PipelineOrchestrator:
             job.status = status.value
         job.updated_at = datetime.utcnow()
         self.db.commit()
+        logger.info(
+            "job_step job_id=%s drug=%s step=%s status=%s",
+            job.id,
+            job.drug_name,
+            job.current_step,
+            job.status,
+        )
 
     async def run_job(self, job_id: str) -> None:
         job = self.db.get(DrugJobORM, job_id)
         if not job:
+            logger.warning("pipeline_skip missing_job job_id=%s", job_id)
             return
         try:
             job.status = JobStatus.RUNNING.value
             self.db.commit()
+            logger.info("pipeline_start job_id=%s drug=%s run_id=%s", job.id, job.drug_name, job.run_id)
 
             run = self.db.get(ExtractionRunORM, job.run_id)
             options = (run.options_json if run else {}) or {}
@@ -95,6 +126,8 @@ class PipelineOrchestrator:
             sources = await self._retrieve(job, options)
             parsed = await self._parse(job, sources)
             await self._extract_metadata(job, sources, parsed, options)
+            if options.get("product_metadata", True):
+                await self._judge_profile(job)
             datapoint_rows = await self._extract_revenue(
                 job, sources, parsed, options, skip_unresolved=get_settings().enable_llm_search
             )
@@ -110,10 +143,29 @@ class PipelineOrchestrator:
             await self._quality_and_validation(job)
             await self._completeness(job)
             self._set_step(job, JobStep.READY_FOR_REVIEW, JobStatus.READY_FOR_REVIEW)
+            logger.info(
+                "pipeline_done job_id=%s drug=%s sources=%s candidates=%s auto_pass=%s needs_review=%s unresolved=%s completeness=%s",
+                job.id,
+                job.drug_name,
+                job.sources_found,
+                job.candidates_extracted,
+                job.auto_pass_count,
+                job.needs_review_count,
+                job.unresolved_count,
+                job.completeness_pct,
+            )
         except Exception as exc:
+            step = job.current_step if job else None
             job.status = JobStatus.FAILED.value
-            job.error = str(exc)
+            job.error = f"{type(exc).__name__}: {exc}"
             self.db.commit()
+            logger.exception(
+                "pipeline_failed job_id=%s drug=%s step=%s error=%s",
+                job_id,
+                getattr(job, "drug_name", None),
+                step,
+                job.error,
+            )
             raise
 
     async def _expand_aliases(self, job: DrugJobORM) -> list[str]:
@@ -191,6 +243,7 @@ class PipelineOrchestrator:
             if cik:
                 job.cik = cik
                 self.db.commit()
+                logger.info("cik_resolved job_id=%s drug=%s cik=%s via=sec", job.id, job.drug_name, cik)
         if not job.cik and get_settings().enable_llm_search:
             cik = await self.search.resolve_cik_from_search(
                 product=job.drug_name,
@@ -202,11 +255,14 @@ class PipelineOrchestrator:
                 job.cik = cik
                 job.quality_flags = list(set((job.quality_flags or []) + ["cik_from_llm_search"]))
                 self.db.commit()
+                logger.info("cik_resolved job_id=%s drug=%s cik=%s via=llm_search", job.id, job.drug_name, cik)
 
     async def _retrieve(self, job: DrugJobORM, options: dict[str, Any]) -> list:
         self._set_step(job, JobStep.SOURCE_RETRIEVE)
         collected = []
-        if options.get("sec_filings", True):
+        want_primary = bool(options.get("sec_filings", True))
+        want_earnings = bool(options.get("earnings_releases", True))
+        if want_primary or want_earnings:
             collected.extend(
                 await self.sec.retrieve(
                     run_id=job.run_id,
@@ -214,6 +270,10 @@ class PipelineOrchestrator:
                     cik=job.cik,
                     ticker=job.ticker,
                     company_name=job.manufacturer,
+                    include_primary=want_primary,
+                    include_earnings=want_earnings,
+                    earnings_since=parse_filing_date(options.get("earnings_since")),
+                    earnings_until=parse_filing_date(options.get("earnings_until")),
                 )
             )
         if options.get("openfda", True):
@@ -233,7 +293,8 @@ class PipelineOrchestrator:
             collected.extend(await self.transcripts.retrieve())
 
         sec_ok = any(
-            s.source_type == SourceType.SEC_FILING and s.retrieval_status == RetrievalStatus.SUCCESS
+            s.source_type in {SourceType.SEC_FILING, SourceType.EARNINGS_RELEASE}
+            and s.retrieval_status == RetrievalStatus.SUCCESS
             for s in collected
         )
         if get_settings().enable_llm_search and not sec_ok:
@@ -252,6 +313,13 @@ class PipelineOrchestrator:
         self._persist_sources(job, collected)
         job.sources_found = len(collected)
         self.db.commit()
+        logger.info(
+            "sources_retrieved job_id=%s drug=%s count=%s types=%s",
+            job.id,
+            job.drug_name,
+            len(collected),
+            sorted({getattr(s.source_type, "value", str(s.source_type)) for s in collected}),
+        )
         return collected
 
     async def _parse(self, job: DrugJobORM, sources: list) -> dict[str, Any]:
@@ -274,6 +342,9 @@ class PipelineOrchestrator:
             return
         self._set_step(job, JobStep.EXTRACT_METADATA)
 
+        written: dict[str, str] = {}
+        conflicts: dict[str, dict[str, Any]] = {}
+
         # Deterministic OpenFDA enrichment
         for src in sources:
             if src.source_type != SourceType.OPENFDA or src.retrieval_status != RetrievalStatus.SUCCESS:
@@ -286,7 +357,33 @@ class PipelineOrchestrator:
                     results = []
             if not results:
                 continue
-            openfda = results[0].get("openfda", {})
+            selected, matched_brand = select_openfda_result(
+                results,
+                product=job.drug_name,
+                generic=job.generic_name,
+                aliases=self._job_aliases,
+            )
+            if selected is None:
+                # Every result belongs to another product sharing the molecule
+                job.quality_flags = list(
+                    set((job.quality_flags or []) + ["openfda_no_brand_match"])
+                )
+                self.db.commit()
+                logger.info(
+                    "openfda_no_brand_match job_id=%s drug=%s brands=%s",
+                    job.id,
+                    job.drug_name,
+                    [b for r in results for b in openfda_brand_names(r)][:8],
+                )
+                continue
+            logger.info(
+                "openfda_matched job_id=%s drug=%s brand=%s application=%s",
+                job.id,
+                job.drug_name,
+                matched_brand,
+                selected.get("application_number"),
+            )
+            openfda = selected.get("openfda", {})
             mapping = {
                 "brand_name": (openfda.get("brand_name") or [None])[0],
                 "generic_name": (openfda.get("generic_name") or [None])[0],
@@ -295,12 +392,15 @@ class PipelineOrchestrator:
                 "dosage_form": (openfda.get("dosage_form") or [None])[0],
                 "pharmacologic_class": (openfda.get("pharm_class_epc") or [None])[0],
             }
-            approval, approval_field = earliest_approval_date(results)
+            # Scope the approval date to this application; the earliest date across
+            # all results belongs to whichever product was approved first.
+            approval, approval_field = earliest_approval_date([selected])
             if approval:
                 mapping["fda_approval_date"] = approval
             for field, value in mapping.items():
-                if not value:
+                if is_missing_value(value) or field in written:
                     continue
+                written[field] = str(value)
                 quote = (
                     approval_field
                     if field == "fda_approval_date" and approval_field
@@ -316,6 +416,8 @@ class PipelineOrchestrator:
                     "confidence": 0.9 if field == "fda_approval_date" else 0.85,
                     "validation_status": ValidationStatus.NEEDS_REVIEW.value,
                     "interpreted": False,
+                    "openfda_application_number": selected.get("application_number"),
+                    "openfda_matched_brand": matched_brand,
                 }
                 self.db.add(
                     DrugProfileFieldORM(
@@ -345,8 +447,21 @@ class PipelineOrchestrator:
                 source_meta={"url": src.url, "type": src.source_type.value, "title": src.title},
             )
             for field in result.get("fields", []):
-                if not field.get("value"):
+                name = field.get("field")
+                if not name or is_missing_value(field.get("value")):
                     continue
+                if name in written:
+                    # Record the disagreement for the judge instead of silently
+                    # preferring one source; identical answers are just deduped.
+                    if values_conflict(written[name], field["value"]):
+                        conflicts[name] = {
+                            "value": str(field["value"]),
+                            "source_type": src.source_type.value,
+                            "source_url": src.url,
+                            "source_quote": field.get("source_quote") or "",
+                        }
+                    continue
+                written[name] = str(field["value"])
                 citation = {
                     "source_id": src.source_id,
                     "source_type": src.source_type.value,
@@ -362,14 +477,110 @@ class PipelineOrchestrator:
                     DrugProfileFieldORM(
                         id=new_id(),
                         job_id=job.id,
-                        field=field["field"],
+                        field=name,
                         value=str(field["value"]),
                         citation_json=citation,
                         validation_status=ValidationStatus.NEEDS_REVIEW.value,
                     )
                 )
             break
+
+        if conflicts:
+            for name, rival in conflicts.items():
+                row = (
+                    self.db.query(DrugProfileFieldORM)
+                    .filter_by(job_id=job.id, field=name)
+                    .first()
+                )
+                if row and row.citation_json:
+                    row.citation_json = {**row.citation_json, "conflicting_source": rival}
         self.db.commit()
+        logger.info(
+            "metadata_extracted job_id=%s drug=%s fields=%s conflicts=%s",
+            job.id,
+            job.drug_name,
+            sorted(written),
+            sorted(conflicts),
+        )
+
+    async def _judge_profile(self, job: DrugJobORM) -> None:
+        """Challenge profile fields with independent search and correct them.
+
+        Source registries carry errors, so a cited value is not assumed correct;
+        fields where two sources disagree are judged first, then the regulatory
+        fields where a wrong value is most costly.
+        """
+        settings = get_settings()
+        if not settings.enable_profile_judge:
+            return
+        if not settings.openrouter_api_key or not settings.enable_llm_search:
+            return
+        rows = self.db.query(DrugProfileFieldORM).filter_by(job_id=job.id).all()
+        if not rows:
+            return
+        self._set_step(job, JobStep.JUDGE_METADATA)
+
+        by_priority = sorted(
+            (r for r in rows if r.field in PRIORITY_JUDGE_FIELDS or (r.citation_json or {}).get("conflicting_source")),
+            key=lambda r: (
+                0 if (r.citation_json or {}).get("conflicting_source") else 1,
+                PRIORITY_JUDGE_FIELDS.index(r.field) if r.field in PRIORITY_JUDGE_FIELDS else 99,
+            ),
+        )[: settings.profile_judge_max_fields]
+
+        corrected = 0
+        for row in by_priority:
+            citation = row.citation_json or {}
+            judgment = await self.llm.judge_profile_field(
+                product=job.drug_name,
+                generic=job.generic_name,
+                aliases=self._job_aliases,
+                field=row.field,
+                value=row.value or "",
+                source={
+                    "source_type": citation.get("source_type"),
+                    "source_url": citation.get("source_url"),
+                    "source_quote": citation.get("source_quote"),
+                    "openfda_application_number": citation.get("openfda_application_number"),
+                    "conflicting_source": citation.get("conflicting_source"),
+                },
+            )
+            outcome = apply_profile_judgment(
+                row.field,
+                row.value or "",
+                judgment,
+                min_confidence=settings.profile_judge_min_confidence,
+            )
+            row.citation_json = {
+                **citation,
+                "judge_verdict": outcome.verdict,
+                "judge_flags": outcome.flags,
+                **({"correction": outcome.correction} if outcome.correction else {}),
+            }
+            if outcome.corrected:
+                row.value = outcome.value
+                corrected += 1
+                # A search-sourced correction always goes to a human
+                row.validation_status = ValidationStatus.NEEDS_REVIEW.value
+                job.quality_flags = list(
+                    set((job.quality_flags or []) + [f"profile_corrected:{row.field}"])
+                )
+            logger.info(
+                "profile_field_judged job_id=%s field=%s verdict=%s corrected=%s flags=%s",
+                job.id,
+                row.field,
+                outcome.verdict,
+                outcome.corrected,
+                outcome.flags,
+            )
+        self.db.commit()
+        logger.info(
+            "profile_judged job_id=%s drug=%s judged=%s corrected=%s",
+            job.id,
+            job.drug_name,
+            len(by_priority),
+            corrected,
+        )
 
     async def _search_revenue_fallback(
         self, job: DrugJobORM, options: dict[str, Any]
@@ -409,9 +620,17 @@ class PipelineOrchestrator:
         rows: list[DatapointORM] = []
         dropped_total = 0
         any_product_money = False
+        # Reading tables costs nothing, so every parsed source is read; only the
+        # LLM pass is capped.
         selected_sources = prioritize_sources_for_revenue(
-            sources, parsed, max_sources=get_settings().llm_max_extract_sources
+            sources, parsed, max_sources=max(len(list(sources)), 1)
         )
+        llm_source_ids = {
+            s.source_id
+            for s in prioritize_sources_for_revenue(
+                sources, parsed, max_sources=get_settings().llm_max_extract_sources
+            )
+        }
         if only_source_ids:
             selected_sources = [s for s in selected_sources if s.source_id in only_source_ids]
         extra = self._job_aliases or None
@@ -429,32 +648,49 @@ class PipelineOrchestrator:
                 generic=job.generic_name,
                 extra_aliases=extra,
             )
+            period_context = detect_period_context(doc.full_text)
             if evidence_meta.get("had_product_money_hits"):
                 any_product_money = True
 
-            # Skip LLM when filing has no product+$ evidence (avoid XBRL / company-total noise)
-            if evidence_meta.get("strategy") in {"no_product_mention", "empty"} or not evidence_meta.get(
-                "had_product_money_hits"
-            ):
+            # Skip the LLM when a filing has no product+$ evidence (avoid XBRL /
+            # company-total noise) or when it is beyond the extraction budget.
+            no_product_evidence = evidence_meta.get("strategy") in {
+                "no_product_mention",
+                "empty",
+            } or not evidence_meta.get("had_product_money_hits")
+            use_llm = src.source_id in llm_source_ids and not no_product_evidence
+            if not use_llm:
                 src_row = self.db.get(SourceDocumentORM, src.source_id)
                 if src_row:
-                    note = f"skip_revenue_llm strategy={evidence_meta.get('strategy')} product_money={evidence_meta.get('had_product_money_hits')}"
+                    reason = "no_product_evidence" if no_product_evidence else "over_source_budget"
+                    note = (
+                        f"skip_revenue_llm reason={reason} "
+                        f"strategy={evidence_meta.get('strategy')} "
+                        f"product_money={evidence_meta.get('had_product_money_hits')}"
+                    )
                     src_row.notes = f"{(src_row.notes or '').rstrip()} | {note}".strip(" |")
-                continue
 
-            result = await self.llm.extract_revenue(
-                product=job.drug_name,
-                company=job.manufacturer,
-                source_meta={
-                    "url": src.url,
-                    "type": src.source_type.value,
-                    "title": src.title,
-                    "filing_type": src.filing_type,
-                    "accession": src.accession_number,
-                    "evidence": evidence_meta,
-                },
-                text=llm_text,
-            )
+            result: dict[str, Any] = {"candidates": [], "spans": []}
+            if use_llm:
+                result = await self.llm.extract_revenue(
+                    product=job.drug_name,
+                    company=job.manufacturer,
+                    source_meta={
+                        "url": src.url,
+                        "type": src.source_type.value,
+                        "title": src.title,
+                        "filing_type": src.filing_type,
+                        "accession": src.accession_number,
+                        "evidence": evidence_meta,
+                        "reporting_period": period_context.describe() if period_context else None,
+                        "period_columns": (
+                            [str(period_context.year), str(period_context.comparative_year)]
+                            if period_context
+                            else None
+                        ),
+                    },
+                    text=llm_text,
+                )
             span_corpus = "\n\n".join(
                 (s.get("span_text") or "") for s in (result.get("spans") or [])
             ) or llm_text
@@ -468,6 +704,51 @@ class PipelineOrchestrator:
             )
             dropped = list(llm_dropped) + list(dropped)
             dropped_total += len(dropped)
+
+            # Read the revenue table directly; the model omits rows unpredictably.
+            # These quotes come from the parsed table, not the model, so the
+            # verbatim gate that guards model output does not apply.
+            table_rows, table_dropped = filter_revenue_candidates(
+                extract_revenue_rows(
+                    doc.tables,
+                    product=job.drug_name,
+                    generic=job.generic_name,
+                    extra_aliases=extra,
+                ),
+                product=job.drug_name,
+                generic=job.generic_name,
+                extra_aliases=extra,
+            )
+            dropped_total += len(table_dropped)
+            if table_rows:
+                seen_rows = {
+                    (str(c.get("period")), round(float(c["value_reported"]), 3))
+                    for c in kept
+                    if c.get("value_reported") is not None
+                }
+                added = [
+                    row
+                    for row in table_rows
+                    if (str(row["period"]), round(float(row["value_reported"]), 3)) not in seen_rows
+                ]
+                kept = list(kept) + added
+                logger.info(
+                    "table_rows_extracted job_id=%s source_id=%s parsed=%s added=%s",
+                    job.id,
+                    src.source_id,
+                    len(table_rows),
+                    len(added),
+                )
+
+            comparatives = derive_comparative_candidates(kept, context=period_context)
+            if comparatives:
+                kept = list(kept) + comparatives
+                logger.info(
+                    "comparative_columns_derived job_id=%s source_id=%s count=%s",
+                    job.id,
+                    src.source_id,
+                    len(comparatives),
+                )
             src_row = self.db.get(SourceDocumentORM, src.source_id)
             if src_row and dropped:
                 reason_counts: dict[str, int] = {}
@@ -482,6 +763,10 @@ class PipelineOrchestrator:
                 quote = (cand.get("source_quote") or "").strip()
                 url = src.url
                 period_type = (cand.get("period_type") or "unknown").lower()
+                raw_period = str(cand.get("period") or "unknown")
+                period = normalize_period(
+                    raw_period, period_type=period_type, context=period_context
+                )
                 dp_id = new_id()
                 value = cand.get("value_reported")
                 unit = cand.get("unit")
@@ -507,15 +792,27 @@ class PipelineOrchestrator:
                     "confidence": float(cand.get("confidence") or 0.5),
                     "validation_status": ValidationStatus.PENDING.value,
                     "interpreted": False,
+                    "period_reported": raw_period,
                 }
                 if src.source_type == SourceType.LLM_SEARCH:
                     citation["search_query"] = (src.metadata or {}).get("search_query")
                     citation["search_snippet"] = (src.metadata or {}).get("search_snippet")
+                issue_flags: list[str] = []
+                if cand.get("_reclassified"):
+                    issue_flags.append("reclassified_company_total")
+                if cand.get("_derived_comparative"):
+                    issue_flags.append("derived_comparative_column")
+                if cand.get("_from_table"):
+                    issue_flags.append("extracted_from_table")
+                if period is None:
+                    issue_flags.append("period_unparsed")
+                elif period != raw_period:
+                    issue_flags.append("period_normalized")
                 row = DatapointORM(
                     id=dp_id,
                     job_id=job.id,
                     source_id=src.source_id,
-                    period=str(cand.get("period") or "unknown"),
+                    period=period or "unknown",
                     fiscal_year=cand.get("fiscal_year"),
                     fiscal_quarter=cand.get("fiscal_quarter"),
                     calendar_year=cand.get("calendar_year"),
@@ -531,11 +828,11 @@ class PipelineOrchestrator:
                     route_of_administration=cand.get("route_of_administration"),
                     source_url=url,
                     source_quote=quote or "",
-                    extraction_method="llm",
+                    extraction_method="table" if cand.get("_from_table") else "llm",
                     confidence_score=float(cand.get("confidence") or 0.5),
                     validation_status=ValidationStatus.PENDING.value,
                     citation_json=citation,
-                    issue_flags=(["reclassified_company_total"] if cand.get("_reclassified") else None),
+                    issue_flags=issue_flags or None,
                 )
                 self.db.add(row)
                 rows.append(row)
@@ -565,6 +862,15 @@ class PipelineOrchestrator:
 
         job.candidates_extracted = len(rows)
         self.db.commit()
+        logger.info(
+            "extract_revenue_done job_id=%s drug=%s kept=%s dropped=%s product_money=%s sources=%s",
+            job.id,
+            job.drug_name,
+            len(rows),
+            dropped_total,
+            any_product_money,
+            len(selected_sources),
+        )
         return rows
 
     async def _judge(self, job: DrugJobORM, rows: list[DatapointORM], sources: list, parsed: dict, options: dict) -> None:
@@ -729,6 +1035,9 @@ class PipelineOrchestrator:
                 status = ValidationStatus.AUTO_PASS.value
             elif support == "partial":
                 status = ValidationStatus.NEEDS_REVIEW.value
+            if "derived_comparative_column" in (row.issue_flags or []):
+                # Reconstructed from a neighbouring table column, so always reviewed
+                status = ValidationStatus.NEEDS_REVIEW.value
             row.validation_status = status
             issues = list(judgment.get("issues") or [])
             if row.issue_flags:
@@ -869,7 +1178,10 @@ class PipelineOrchestrator:
 
         job.auto_pass_count = sum(1 for d in dps if d.validation_status == ValidationStatus.AUTO_PASS.value)
         job.needs_review_count = sum(1 for d in dps if d.validation_status == ValidationStatus.NEEDS_REVIEW.value)
-        job.quality_flags = [i.issue_type for i in issues if i.severity == "high"]
+        # Merge, so provenance flags raised earlier in the pipeline survive
+        job.quality_flags = sorted(
+            set(job.quality_flags or []) | {i.issue_type for i in issues if i.severity == "high"}
+        )
 
         self._set_step(job, JobStep.VALIDATION_TASKS)
         conflict_ids = {d.id for d in dps if "conflict" in " ".join(d.issue_flags or [])}
@@ -999,10 +1311,18 @@ class PipelineOrchestrator:
 
         unresolved = self.db.query(UnresolvedQuarterORM).filter_by(job_id=job.id).all()
         job.unresolved_count = len(unresolved)
-        pct = result.get("completeness_pct")
-        if pct is None:
-            n = len([d for d in dps if d.period_type == PeriodType.QUARTERLY.value])
-            u = len([x for x in unresolved if "Q" in (x.period or "")])
-            pct = round(100 * n / max(n + u, 1), 1)
-        job.completeness_pct = float(pct)
+        job.completeness_pct = resolve_completeness_pct(
+            result.get("completeness_pct"),
+            quarterly_count=len([d for d in dps if d.period_type == PeriodType.QUARTERLY.value]),
+            unresolved_quarter_count=len([x for x in unresolved if "Q" in (x.period or "")]),
+        )
         self.db.commit()
+        logger.info(
+            "completeness job_id=%s drug=%s llm_pct=%s resolved_pct=%s quarterly=%s unresolved=%s",
+            job.id,
+            job.drug_name,
+            result.get("completeness_pct"),
+            job.completeness_pct,
+            len([d for d in dps if d.period_type == PeriodType.QUARTERLY.value]),
+            job.unresolved_count,
+        )

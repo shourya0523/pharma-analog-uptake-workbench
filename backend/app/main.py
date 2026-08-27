@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import csv
 import io
+import logging
 from typing import Any
 
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
@@ -23,10 +24,20 @@ from app.db.models import (
 )
 from app.domain.models import DrugInput, ExtractionOptions, JobStatus, ValidationStatus, new_id
 from app.export.builder import ExportBuilder, TemplateMapper
-from app.jobs.handler import handle_job
 from app.jobs.queue import get_job_queue
+from app.jobs.handler import handle_job
+from app.logging_setup import configure_logging
+from app.observability import (
+    TABLE_REGISTRY,
+    dedupe_jobs_by_analog,
+    get_recent_logs,
+    overview as observability_overview,
+    query_table,
+)
 from app.storage.filestore import get_file_store
 
+configure_logging()
+logger = logging.getLogger(__name__)
 settings = get_settings()
 app = FastAPI(title=settings.app_name)
 _cors_origins = [o.strip() for o in settings.cors_origins.split(",") if o.strip()]
@@ -44,12 +55,26 @@ file_store = get_file_store()
 
 
 async def _handle_job(payload: dict[str, Any]) -> None:
-    await handle_job(payload, file_store=file_store)
+    job_id = payload["job_id"]
+    run_id = payload["run_id"]
+    try:
+        await handle_job(payload, file_store=file_store)
+    except Exception as exc:
+        logger.error("job_handler_failed job_id=%s run_id=%s error=%s", job_id, run_id, exc)
 
 
 @app.on_event("startup")
 async def startup() -> None:
+    configure_logging()
     init_db()
+    logger.info(
+        "startup environment=%s storage=%s job_backend=%s llm_key_set=%s llm_search=%s",
+        settings.environment,
+        settings.storage_backend,
+        settings.job_backend,
+        bool(settings.openrouter_api_key),
+        settings.enable_llm_search,
+    )
     await job_queue.start(_handle_job)
 
 
@@ -64,7 +89,8 @@ class PasteRunRequest(BaseModel):
 
 
 def _create_run(db: Session, drugs: list[DrugInput], options: ExtractionOptions) -> ExtractionRunORM:
-    run = ExtractionRunORM(id=new_id(), status="queued", options_json=options.model_dump())
+    # mode="json" keeps dates/enums storable in the JSON column
+    run = ExtractionRunORM(id=new_id(), status="queued", options_json=options.model_dump(mode="json"))
     db.add(run)
     for d in drugs:
         db.add(
@@ -408,6 +434,23 @@ def validation_action(task_id: str, body: ValidationAction) -> dict[str, Any]:
         db.close()
 
 
+def _unique_sorted(values: list[str | None]) -> list[str]:
+    seen: set[str] = set()
+    out: list[str] = []
+    for raw in values:
+        if raw is None:
+            continue
+        text = str(raw).strip()
+        if not text:
+            continue
+        key = text.lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(text)
+    return sorted(out, key=str.lower)
+
+
 @app.get("/dashboard/preview")
 def dashboard_preview(run_id: str | None = None) -> dict[str, Any]:
     db = SessionLocal()
@@ -418,7 +461,7 @@ def dashboard_preview(run_id: str | None = None) -> dict[str, Any]:
         )
         if run_id:
             q = q.filter_by(run_id=run_id)
-        jobs = q.all()
+        jobs = dedupe_jobs_by_analog(q.all())
         products = []
         series = []
         for j in jobs:
@@ -448,6 +491,7 @@ def dashboard_preview(run_id: str | None = None) -> dict[str, Any]:
                     {
                         "product": j.drug_name,
                         "period": d.period,
+                        "period_type": d.period_type,
                         "value": d.value_normalized_usd_millions,
                         "validation_status": d.validation_status,
                         "source_url": d.source_url,
@@ -457,7 +501,72 @@ def dashboard_preview(run_id: str | None = None) -> dict[str, Any]:
                         "reviewer_notes": d.reviewer_notes,
                     }
                 )
-        return {"products": products, "series": series}
+        filter_options = {
+            "product_name": _unique_sorted([p["product_name"] for p in products]),
+            "therapeutic_area": _unique_sorted([p["therapeutic_area"] for p in products]),
+            "moa": _unique_sorted([p["moa"] for p in products]),
+            "roa": _unique_sorted([p["roa"] for p in products]),
+            "manufacturer": _unique_sorted([p["manufacturer"] for p in products]),
+            "validation_status": _unique_sorted([p["validation_status"] for p in products]),
+        }
+        return {
+            "products": products,
+            "series": series,
+            "filter_options": filter_options,
+            "analog_count": len(products),
+        }
+    finally:
+        db.close()
+
+
+@app.get("/observability")
+def observability_root() -> dict[str, Any]:
+    db = SessionLocal()
+    try:
+        snap = observability_overview(db)
+        snap["health"] = {"status": "ok", "environment": settings.environment}
+        snap["available_tables"] = list(TABLE_REGISTRY.keys())
+        return snap
+    finally:
+        db.close()
+
+
+@app.get("/observability/logs")
+def observability_logs(
+    limit: int = 200,
+    level: str | None = None,
+    q: str | None = None,
+    logger_name: str | None = None,
+) -> dict[str, Any]:
+    limit = max(1, min(limit, 1000))
+    entries = get_recent_logs(limit=limit, level=level, q=q, logger_name=logger_name)
+    return {"count": len(entries), "logs": entries}
+
+
+@app.get("/observability/db/{table}")
+def observability_db_table(
+    table: str,
+    limit: int = 100,
+    offset: int = 0,
+    run_id: str | None = None,
+    job_id: str | None = None,
+    q: str | None = None,
+) -> dict[str, Any]:
+    if table not in TABLE_REGISTRY:
+        raise HTTPException(404, f"Unknown table. Choose from: {', '.join(TABLE_REGISTRY)}")
+    limit = max(1, min(limit, 500))
+    offset = max(0, offset)
+    db = SessionLocal()
+    try:
+        return query_table(
+            db,
+            table,
+            limit=limit,
+            offset=offset,
+            run_id=run_id,
+            job_id=job_id,
+            q=q,
+        )
     finally:
         db.close()
 
