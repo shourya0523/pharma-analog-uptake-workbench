@@ -10,6 +10,7 @@ from aws_cdk import (
     aws_cloudfront as cloudfront,
     aws_cloudfront_origins as origins,
     aws_ec2 as ec2,
+    aws_ecr_assets as ecr_assets,
     aws_ecs as ecs,
     aws_elasticloadbalancingv2 as elbv2,
     aws_iam as iam,
@@ -31,9 +32,19 @@ OPENROUTER_MODEL_JUDGE = "openai/gpt-4o-mini"
 OPENROUTER_SECRET_NAME = "pharma-workbench/openrouter-api-key"
 
 
+def _context_bool(scope: Construct, key: str, default: bool = True) -> bool:
+    val = scope.node.try_get_context(key)
+    if val is None:
+        return default
+    if isinstance(val, bool):
+        return val
+    return str(val).strip().lower() in {"1", "true", "yes", "on"}
+
+
 class WorkbenchStack(Stack):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
+        enable_cloudfront = _context_bool(self, "enable_cloudfront", default=True)
 
         vpc = ec2.Vpc(
             self,
@@ -52,15 +63,6 @@ class WorkbenchStack(Stack):
         data_bucket = s3.Bucket(
             self,
             "Data",
-            encryption=s3.BucketEncryption.S3_MANAGED,
-            block_public_access=s3.BlockPublicAccess.BLOCK_ALL,
-            enforce_ssl=True,
-            removal_policy=RemovalPolicy.DESTROY,
-            auto_delete_objects=True,
-        )
-        web_bucket = s3.Bucket(
-            self,
-            "Web",
             encryption=s3.BucketEncryption.S3_MANAGED,
             block_public_access=s3.BlockPublicAccess.BLOCK_ALL,
             enforce_ssl=True,
@@ -115,7 +117,14 @@ class WorkbenchStack(Stack):
             description="OpenRouter API key for LLM extract, judge, and web search",
         )
 
-        image = ecs.ContainerImage.from_asset(str(BACKEND_DIR))
+        image = ecs.ContainerImage.from_asset(
+            str(BACKEND_DIR),
+            platform=ecr_assets.Platform.LINUX_ARM64,
+        )
+        fargate_platform = ecs.RuntimePlatform(
+            cpu_architecture=ecs.CpuArchitecture.ARM64,
+            operating_system_family=ecs.OperatingSystemFamily.LINUX,
+        )
 
         common_env = {
             "ENVIRONMENT": "aws",
@@ -131,7 +140,7 @@ class WorkbenchStack(Stack):
             "OPENROUTER_MODEL_JUDGE": OPENROUTER_MODEL_JUDGE,
             "ENABLE_LLM_SEARCH": "true",
             "LLM_SEARCH_ENGINE": "auto",
-            # Avoid CFN cycle with CloudFront; SPA is same-origin via /api proxy.
+            # SPA is same-origin via CloudFront /api proxy when CDN is enabled.
             "CORS_ORIGINS": "*",
         }
 
@@ -154,6 +163,7 @@ class WorkbenchStack(Stack):
             "ApiTask",
             cpu=512,
             memory_limit_mib=1024,
+            runtime_platform=fargate_platform,
         )
         grant_data_access(api_task.task_role, worker=False)
         api_container = api_task.add_container(
@@ -173,6 +183,7 @@ class WorkbenchStack(Stack):
             "WorkerTask",
             cpu=1024,
             memory_limit_mib=2048,
+            runtime_platform=fargate_platform,
         )
         grant_data_access(worker_task.task_role, worker=True)
         worker_task.add_container(
@@ -232,6 +243,27 @@ class WorkbenchStack(Stack):
             security_groups=[worker_sg],
             vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC),
             circuit_breaker=ecs.DeploymentCircuitBreaker(rollback=True),
+        )
+
+        CfnOutput(self, "ApiLoadBalancerDns", value=alb.load_balancer_dns_name)
+        CfnOutput(self, "ApiUrl", value=f"http://{alb.load_balancer_dns_name}")
+        CfnOutput(self, "DataBucketName", value=data_bucket.bucket_name)
+        CfnOutput(self, "JobsQueueUrl", value=jobs_queue.queue_url)
+        CfnOutput(self, "OpenRouterSecretArn", value=openrouter_secret.secret_arn)
+        CfnOutput(self, "OpenRouterSecretName", value=openrouter_secret.secret_name)
+
+        if not enable_cloudfront:
+            CfnOutput(self, "CloudFrontEnabled", value="false")
+            return
+
+        web_bucket = s3.Bucket(
+            self,
+            "Web",
+            encryption=s3.BucketEncryption.S3_MANAGED,
+            block_public_access=s3.BlockPublicAccess.BLOCK_ALL,
+            enforce_ssl=True,
+            removal_policy=RemovalPolicy.DESTROY,
+            auto_delete_objects=True,
         )
 
         api_rewrite = cloudfront.Function(
@@ -312,8 +344,4 @@ function handler(event) {
         )
 
         CfnOutput(self, "CloudFrontUrl", value=f"https://{distribution.distribution_domain_name}")
-        CfnOutput(self, "ApiLoadBalancerDns", value=alb.load_balancer_dns_name)
-        CfnOutput(self, "DataBucketName", value=data_bucket.bucket_name)
-        CfnOutput(self, "JobsQueueUrl", value=jobs_queue.queue_url)
-        CfnOutput(self, "OpenRouterSecretArn", value=openrouter_secret.secret_arn)
-        CfnOutput(self, "OpenRouterSecretName", value=openrouter_secret.secret_name)
+        CfnOutput(self, "CloudFrontEnabled", value="true")

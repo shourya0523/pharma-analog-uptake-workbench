@@ -50,4 +50,4 @@ cdk bootstrap aws://$CDK_DEFAULT_ACCOUNT/$CDK_DEFAULT_REGION   # first time
 cdk deploy
 ```
 
-Use the `CloudFrontUrl` stack output. Frontend calls the API at `/api` on the same host.
+Use the `ApiUrl` stack output (ALB). After AWS verifies CloudFront, deploy with `-c enable_cloudfront=true` and use `CloudFrontUrl` (`/api` same-origin).

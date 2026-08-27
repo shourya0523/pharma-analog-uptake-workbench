@@ -15,6 +15,7 @@
   "context": {
     "@aws-cdk/aws-ecs:arnFormatIncludesClusterName": true,
     "@aws-cdk/aws-rds:lowercaseDbIdentifier": true,
-    "@aws-cdk/aws-s3:serverAccessLogsUseBucketPolicy": true
+    "@aws-cdk/aws-s3:serverAccessLogsUseBucketPolicy": true,
+    "enable_cloudfront": false
   }
 }

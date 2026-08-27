@@ -6,8 +6,8 @@ Deploys the MVP:
 - RDS Postgres 16 (`db.t4g.micro`)
 - S3 (data + static web)
 - SQS job queue + DLQ
-- ECS Fargate API + worker (same image; worker runs `python -m app.worker`)
-- ALB (HTTP) + CloudFront (`/api*` → ALB with URI rewrite; SPA from S3)
+- ECS Fargate API + worker on ARM64 (Graviton; same image; worker runs `python -m app.worker`)
+- ALB (HTTP). CloudFront (`/api*` → ALB; SPA from S3) is optional via `enable_cloudfront`
 - Secrets Manager secret for `OPENROUTER_API_KEY` (injected into API + worker tasks)
 
 ## Prerequisites
@@ -83,9 +83,6 @@ Stack outputs **`OpenRouterSecretArn`** and **`OpenRouterSecretName`** for refer
 ## Deploy
 
 ```bash
-# Build SPA for CloudFront (/api proxy)
-cd ../frontend && VITE_API_URL=/api npm ci && VITE_API_URL=/api npm run build && cd ../infra
-
 export CDK_DEFAULT_ACCOUNT=$(aws sts get-caller-identity --query Account --output text)
 export CDK_DEFAULT_REGION=us-east-1
 
@@ -93,6 +90,15 @@ cdk bootstrap aws://$CDK_DEFAULT_ACCOUNT/$CDK_DEFAULT_REGION
 cdk synth
 cdk diff
 cdk deploy
+```
+
+Default `enable_cloudfront` is `false` (new accounts often cannot create distributions until AWS Support verifies the account). Backend is reachable at the `ApiUrl` output (`http://<ALB>`). Point a local UI at that URL with `VITE_API_URL`.
+
+After CloudFront is allowed:
+
+```bash
+cd ../frontend && VITE_API_URL=/api npm ci && VITE_API_URL=/api npm run build && cd ../infra
+cdk deploy -c enable_cloudfront=true
 ```
 
 Then set the OpenRouter secret (see above) and restart ECS services if they were already running.
@@ -104,4 +110,4 @@ Default models (override via ECS env in `stack.py` if needed):
 
 **Account activation:** new accounts must finish AWS signup (payment method / service activation) before `cdk bootstrap` / `cdk deploy`. Until then EC2, S3, ECS, RDS, and CloudFormation may return `OptInRequired` / `NotSignedUp`.
 
-Outputs include `CloudFrontUrl`.
+Outputs include `ApiUrl`. `CloudFrontUrl` appears only when `enable_cloudfront` is true.
