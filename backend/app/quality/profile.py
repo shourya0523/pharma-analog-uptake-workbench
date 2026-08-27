@@ -62,6 +62,55 @@ def values_conflict(left: object, right: object) -> bool:
     return not (a in b or b in a)
 
 
+# Dosage/formulation fields must stay scoped to the job brand, not sibling SKUs.
+SIBLING_SENSITIVE_FIELDS = frozenset({"dosage_form", "formulation", "roa"})
+
+_LABEL_SECTION_HEADER = re.compile(
+    r"^\s*\d+(?:\.\d+)*\s+(?:Mechanism of Action|INDICATIONS AND USAGE|CLINICAL PHARMACOLOGY)\b",
+    re.IGNORECASE,
+)
+
+
+def has_label_section_header(value: object) -> bool:
+    """True when a field still carries FDA label section numbering junk."""
+    return bool(_LABEL_SECTION_HEADER.search(str(value or "")))
+
+
+def blends_sibling_brand(
+    value: object,
+    *,
+    product: str,
+    aliases: list[str] | None = None,
+    source_quote: str | None = None,
+) -> bool:
+    """True when dosage/formulation text mixes a sibling branded formulation.
+
+    Example: job=Tyvaso, alias=Tyvaso DPI, value mentions both nebulized Tyvaso and
+    Tyvaso DPI powder. Shared molecule names alone are not enough.
+    """
+    product_n = normalize_value(product)
+    if not product_n:
+        return False
+    haystack = normalize_value(f"{value or ''} {source_quote or ''}")
+    if not haystack:
+        return False
+    for alias in aliases or []:
+        alias_n = normalize_value(alias)
+        if not alias_n or alias_n == product_n:
+            continue
+        # Sibling brand extensions: "tyvaso dpi", "nebulized tyvaso"
+        is_extension = (
+            alias_n.startswith(product_n + " ")
+            or alias_n.endswith(" " + product_n)
+            or f" {product_n} " in f" {alias_n} "
+        )
+        if not is_extension:
+            continue
+        if alias_n in haystack:
+            return True
+    return False
+
+
 # Judged first when present; every other content field is still judged after these.
 PRIORITY_JUDGE_FIELDS = (
     "roa",

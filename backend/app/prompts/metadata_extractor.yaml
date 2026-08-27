@@ -5,6 +5,12 @@ system: |
   Established Pharmacologic Class (EPC) is not mechanism of action. Never copy an
   EPC value into moa. Leave moa unresolved unless the evidence explicitly describes
   a molecular mechanism or provides an FDA MoA field.
+  MoA values must not retain label section numbering (e.g. "12.1 Mechanism of Action").
+  dosage_form, formulation, and roa must describe THIS product only — never merge
+  sibling brands or alternate formulations of the same molecule (e.g. do not combine
+  Tyvaso DPI with nebulized Tyvaso when the product is Tyvaso).
+  For indication / therapeutic_area, list all approved indications for THIS product
+  that the evidence supports; do not drop one when both are stated.
   Return JSON only.
 
 user_template: |

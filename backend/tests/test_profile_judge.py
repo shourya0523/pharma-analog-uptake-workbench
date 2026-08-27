@@ -13,6 +13,8 @@ from app.quality.profile import (
     PRIORITY_JUDGE_FIELDS,
     SKIP_JUDGE_FIELDS,
     apply_profile_judgment,
+    blends_sibling_brand,
+    has_label_section_header,
     normalize_value,
     select_profile_fields_for_judgment,
     values_conflict,
@@ -147,6 +149,30 @@ def test_judge_prompt_requires_a_cited_correction():
     assert "inconclusive" in text
     # The prompt must not present the stated value as trustworthy
     assert "do not assume the stated value is correct" in prompt["system"].lower()
+    assert "incomplete" in prompt["system"].lower()
+    assert "sibling" in prompt["system"].lower()
+
+
+def test_sibling_brand_blend_detection():
+    assert blends_sibling_brand(
+        "Inhalation Powder / Inhalation Solution",
+        product="Tyvaso",
+        aliases=["Tyvaso DPI", "Nebulized Tyvaso"],
+        source_quote="Tyvaso DPI® Inhalation Powder and Nebulized Tyvaso Inhalation Solution",
+    )
+    assert not blends_sibling_brand(
+        "Inhalation Solution",
+        product="Tyvaso",
+        aliases=["Tyvaso DPI", "Nebulized Tyvaso"],
+        source_quote="Tyvaso inhalation solution",
+    )
+
+
+def test_label_section_header_detection():
+    assert has_label_section_header(
+        "12.1 Mechanism of Action Treprostinil is a prostacyclin analogue."
+    )
+    assert not has_label_section_header("Treprostinil is a prostacyclin analogue.")
 
 
 def test_conflicting_sources_are_recorded_and_judged_first():
@@ -154,6 +180,8 @@ def test_conflicting_sources_are_recorded_and_judged_first():
     # Disagreements are kept for adjudication rather than one source silently winning
     assert "values_conflict(written[name], field[\"value\"])" in extract
     assert "conflicting_source" in extract
+    assert "blends_sibling_brand" in extract
+    assert "format_moa_profile_value" in extract
 
     judge = inspect.getsource(PipelineOrchestrator._judge_profile)
     assert "select_profile_fields_for_judgment" in judge

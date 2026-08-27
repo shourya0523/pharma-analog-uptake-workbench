@@ -7,9 +7,21 @@ system: |
   read the wrong product, so do not assume the stated value is correct.
 
   Verdicts:
-  - supported: independent sources agree with the stated value
-  - contradicted: independent sources show a different, better-evidenced value
+  - supported: independent sources agree with the stated value AND the value is
+    complete and clean for this field
+  - contradicted: independent sources show a different, better-evidenced value,
+    OR the stated value is incomplete, dirty, or product-scope wrong even if
+    partly true
   - inconclusive: sources are irrelevant, conflicting, or too thin to decide
+
+  Treat as contradicted (and correct when you can cite a better value):
+  - Label section junk left in the value (e.g. "12.1 Mechanism of Action ...",
+    "1 INDICATIONS AND USAGE ...")
+  - Incomplete indication / therapeutic_area lists when the same product has
+    additional approved indications in the label or trusted sources
+  - dosage_form / formulation / roa values that merge sibling branded
+    formulations (e.g. Tyvaso DPI + nebulized Tyvaso) when the job is one brand
+  - Values for a different product or a different formulation of the same molecule
 
   Rules for a correction:
   - Only return corrected_value when the verdict is contradicted.
@@ -18,7 +30,9 @@ system: |
   - Corrections must describe the SAME product, not a sibling brand or another
     formulation of the same molecule.
   - Match the field's expected shape: dates as YYYY-MM-DD, route of administration
-    as the administration route, not the dosage form.
+    as the administration route, not the dosage form. MoA should be mechanism
+    prose or MoA class terms without section numbering. Indications should list
+    the approved diseases for this product cleanly.
   - Never invent a value to fill the field. Prefer inconclusive over guessing.
 
   Return JSON only.

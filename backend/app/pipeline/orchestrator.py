@@ -58,7 +58,7 @@ from app.parsing.evidence import (
     prioritize_sources_for_revenue,
     select_product_evidence_text,
 )
-from app.parsing.fda_label import parse_label_record
+from app.parsing.fda_label import format_moa_profile_value, parse_label_record
 from app.parsing.indications import parse_indications
 from app.parsing.periods import detect_period_context, normalize_period
 from app.parsing.tables import extract_revenue_rows
@@ -78,7 +78,9 @@ from app.quality.enrichment import (
 )
 from app.quality.fast_judge import try_deterministic_judgment
 from app.quality.profile import (
+    SIBLING_SENSITIVE_FIELDS,
     apply_profile_judgment,
+    blends_sibling_brand,
     is_missing_value,
     select_profile_fields_for_judgment,
     values_conflict,
@@ -435,9 +437,18 @@ class PipelineOrchestrator:
             first_label = parse_label_record(selected)
             epc_terms = first_label.epc_terms
             moa_terms = first_label.moa_terms
-            moa_value = "; ".join(moa_terms) or first_label.moa_summary
+            moa_value = format_moa_profile_value(moa_terms, first_label.moa_summary)
             if moa_epc_contamination_issue(moa_value, epc_terms):
                 moa_value = None
+            parsed_indications = (
+                parse_indications(first_label.indications_text)
+                if first_label.indications_text
+                else []
+            )
+            indication_value = (
+                "; ".join(dict.fromkeys(ind.disease for ind in parsed_indications if ind.disease))
+                or None
+            )
             mapping = {
                 "brand_name": (openfda.get("brand_name") or [None])[0],
                 "generic_name": (openfda.get("generic_name") or [None])[0],
@@ -447,6 +458,8 @@ class PipelineOrchestrator:
                 "pharmacologic_class": "; ".join(epc_terms) or None,
                 "moa": moa_value,
                 "active_ingredients": "; ".join(first_label.active_ingredients) or None,
+                "indication": indication_value,
+                "therapeutic_area": indication_value,
             }
             # Scope the approval date to this application; the earliest date across
             # all results belongs to whichever product was approved first.
@@ -557,35 +570,34 @@ class PipelineOrchestrator:
                                 fda_epc_terms_json=epc_terms,
                             )
                         )
-                if first_label.indications_text:
-                    for indication in parse_indications(first_label.indications_text):
-                        existing_indication = (
-                            self.db.query(ProductIndicationORM)
-                            .filter_by(product_id=product.id, disease=indication.disease)
-                            .first()
+                for indication in parsed_indications:
+                    existing_indication = (
+                        self.db.query(ProductIndicationORM)
+                        .filter_by(product_id=product.id, disease=indication.disease)
+                        .first()
+                    )
+                    if existing_indication:
+                        continue
+                    self.db.add(
+                        ProductIndicationORM(
+                            id=new_id(),
+                            product_id=product.id,
+                            disease=indication.disease,
+                            setting=indication.setting,
+                            population=indication.population,
+                            biomarker=indication.biomarker,
+                            approval_date=(
+                                datetime.fromisoformat(approval).date()
+                                if approval
+                                else None
+                            ),
+                            launch_anchor_type=(
+                                "indication_approval_date" if approval else None
+                            ),
+                            approved_lot=indication.approved_lot.value.value,
+                            approved_lot_quote=indication.source_quote,
                         )
-                        if existing_indication:
-                            continue
-                        self.db.add(
-                            ProductIndicationORM(
-                                id=new_id(),
-                                product_id=product.id,
-                                disease=indication.disease,
-                                setting=indication.setting,
-                                population=indication.population,
-                                biomarker=indication.biomarker,
-                                approval_date=(
-                                    datetime.fromisoformat(approval).date()
-                                    if approval
-                                    else None
-                                ),
-                                launch_anchor_type=(
-                                    "indication_approval_date" if approval else None
-                                ),
-                                approved_lot=indication.approved_lot.value.value,
-                                approved_lot_quote=indication.source_quote,
-                            )
-                        )
+                    )
                 for field, value in mapping.items():
                     if value:
                         self.db.add(
@@ -632,6 +644,16 @@ class PipelineOrchestrator:
                     ]
                     if moa_epc_contamination_issue(str(field["value"]), epc_values):
                         continue
+                if name in SIBLING_SENSITIVE_FIELDS and blends_sibling_brand(
+                    field.get("value"),
+                    product=job.drug_name,
+                    aliases=self._job_aliases,
+                    source_quote=field.get("source_quote"),
+                ):
+                    job.quality_flags = list(
+                        set((job.quality_flags or []) + [f"sibling_blend_skipped:{name}"])
+                    )
+                    continue
                 if name in written:
                     # Record the disagreement for the judge instead of silently
                     # preferring one source; identical answers are just deduped.
