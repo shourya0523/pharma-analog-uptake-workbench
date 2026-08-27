@@ -22,6 +22,13 @@ from app.quality.checks import quote_contains_value, run_quality_checks
 REPO_ROOT = Path(__file__).resolve().parents[2]
 GOLD_DIR = REPO_ROOT / "seed" / "gold"
 
+ALLOWED_GOLD_SOURCE_TYPES = {
+    SourceType.SEC_FILING,
+    SourceType.EARNINGS_RELEASE,
+    SourceType.LLM_SEARCH,
+    SourceType.COMPANY_IR,
+}
+
 
 def _load_jsonl(path: Path) -> list[dict]:
     return [json.loads(line) for line in path.read_text().splitlines() if line.strip()]
@@ -76,7 +83,7 @@ def test_gold_revenue_rows_pass_production_validation():
         citation = _citation_from_gold(row)
         assert PeriodType(row["period_type"]) is PeriodType.QUARTERLY
         assert RevenueScope(row["revenue_scope"])
-        assert SourceType(row["source_type"]) is SourceType.SEC_FILING
+        assert SourceType(row["source_type"]) in ALLOWED_GOLD_SOURCE_TYPES
         assert ValidationStatus(row["validation_status"]) is ValidationStatus.CONFIRMED
         assert quote_contains_value(candidate.source_quote, candidate.value_reported)
         assert citation.source_url == row["source_url"]

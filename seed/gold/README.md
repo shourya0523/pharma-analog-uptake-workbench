@@ -1,39 +1,44 @@
 # Gold validation dataset
 
-Manually researched ground truth for the 20 products in `seed/example_drugs.csv`, constrained to 2022–2026.
+Ground truth for the 20 products in `seed/example_drugs.csv`, constrained to 2022–2026.
+
+The current set is built from the **OpenRouter web-search pipeline** (SEC earnings exhibits + LLM search fallback), with manual rows retained when the pipeline does not recover a period.
 
 ## Files
 
-- `quarterly_revenue.jsonl`: 62 product-quarter values copied from SEC filings or issuer-distributed financial schedules.
-- `unresolved_quarters.jsonl`: 13 modern quarters where the issuer does not separately disclose the product. These are non-disclosure labels, not zero revenue.
-- `edge_cases.jsonl`: historical out-of-window records plus generic/brand and dosage/revenue ambiguity cases.
-- `manifest.json`: required drug count and five-calendar-year boundary used by validation tests.
+- `quarterly_revenue.jsonl` — product-quarter values with citations
+- `unresolved_quarters.jsonl` — quarters with explicit non-disclosure (not zero revenue)
+- `edge_cases.jsonl` — out-of-window records and generic/dose false positives
+- `manifest.json` — drug count and calendar window for tests
+- `build_report.json` — last pipeline build summary (when regenerated)
+- `archive/manual-2026-08-24/` — prior manually researched gold (2026-08-24)
 
-Each positive row follows the workbench datapoint/export fields and includes the primary source URL, table excerpt, period, scope, units, and provenance.
+## Regenerate
+
+Requires `OPENROUTER_API_KEY` in `backend/.env`.
+
+```bash
+cd backend
+uv run python ../scripts/build_gold_web_search.py \
+  --manual-revenue ../seed/gold/archive/manual-2026-08-24/quarterly_revenue.jsonl \
+  --manual-unresolved ../seed/gold/archive/manual-2026-08-24/unresolved_quarters.jsonl
+```
+
+This runs each seed drug through `PipelineOrchestrator` with:
+
+- `earnings_releases` bounded to the manifest window (2022–2026)
+- OpenRouter `web_search` / `web_fetch` for CIK resolution and revenue fallback
+- Table extraction + evidence judge on retrieved SEC earnings exhibits
+
+Accepted pipeline rows must pass quote/value grounding and per-drug quality checks. Missing manual periods are backfilled from the archived manual gold.
 
 ## Method
 
-1. Search the issuer's SEC filings, investor-relations schedules, and issuer-distributed earnings releases.
-2. Accept only product-named quarterly values. Do not derive quarters from YTD or annual totals.
-3. Preserve the issuer's scope and currency. Values normalized as USD millions are normalized only when the source itself reports USD millions.
-4. Mark a quarter unresolved when the product is aggregated or omitted; never assign a franchise, company-total, or peer-product value.
-5. Cross-check table headers so current-quarter values are not confused with prior-year or YTD columns.
-6. Keep every reported and unresolved period within the 2022–2026 benchmark window.
-7. Keep valid older records in the edge set, and require generic-only or dosage-only evidence to be rejected as branded revenue.
-8. Formulation is never left blank on product-family aggregates: use a semicolon list of constituents (e.g. `DPI; nebulized`) or the sentinel `aggregate` when constituents are unknown.
+1. Retrieve issuer SEC earnings exhibits (8-K item 2.02 ex 99.x) and LLM search hits.
+2. Extract product-named quarterly values via table parser + LLM span extraction.
+3. Accept only rows with verbatim quotes containing the reported value.
+4. Deduplicate by drug / period / scope / geography / formulation.
+5. Mark unresolved when the issuer aggregates or omits the product.
+6. Backfill verified manual rows the pipeline did not recover.
 
-Research performed on 2026-08-24. Source URLs and excerpts are stored per row so the set can be re-audited if issuers amend or move documents.
-
-## Coverage notes
-
-- Tyvaso and Adcirca: United Therapeutics Q1 2023-Q4 2024 SEC earnings exhibits. Tyvaso product-family totals use formulation `DPI; nebulized`.
-- Opsumit: Johnson & Johnson Q1 2023-Q4 2024 SEC supplementary sales exhibits.
-- Letairis: Gilead Q1 2022-Q4 2023 SEC tables. In 2024, Gilead aggregates Letairis into Other products.
-- Tracleer, Veletri, and Ventavis: current issuer schedules do not separately report these products; they remain explicit non-disclosures.
-- Uptravi, Remodulin, and Orenitram: Q1-Q4 2024 SEC earnings exhibits.
-- Tyvaso DPI and Nebulized Tyvaso: formulation-specific Q1-Q4 2024 SEC values.
-- Winrevair and Adempas: Merck 2024 SEC values.
-- Yutrepia: Liquidia launch-quarter through Q4 2025 SEC values.
-- Revatio, Flolan, Alyq, Tadliq, and Liqrev: explicit recent non-disclosures.
-
-Run `cd backend && uv run pytest tests/test_gold_dataset.py` to validate JSONL integrity against the production domain model and quality filters.
+Run `cd backend && uv run pytest tests/test_gold_dataset.py` to validate JSONL integrity.

@@ -26,7 +26,9 @@ def _gold_value(drug: str, period: str) -> float:
         for line in (REPO_ROOT / "seed" / "gold" / "quarterly_revenue.jsonl").read_text().splitlines()
         if line.strip()
     ]
-    return next(r["value_reported"] for r in rows if r["drug_name"] == drug and r["period"] == period)
+    matches = [r for r in rows if r["drug_name"] == drug and r["period"] == period]
+    preferred = [r for r in matches if r.get("revenue_scope") == "Product family"]
+    return (preferred or matches)[0]["value_reported"]
 
 
 def test_parse_numbers_handles_currency_and_negatives():
