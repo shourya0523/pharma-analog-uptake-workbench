@@ -78,9 +78,9 @@ from app.quality.enrichment import (
 )
 from app.quality.fast_judge import try_deterministic_judgment
 from app.quality.profile import (
-    PRIORITY_JUDGE_FIELDS,
     apply_profile_judgment,
     is_missing_value,
+    select_profile_fields_for_judgment,
     values_conflict,
 )
 from app.storage.filestore import FileStore, get_file_store
@@ -684,11 +684,11 @@ class PipelineOrchestrator:
         )
 
     async def _judge_profile(self, job: DrugJobORM) -> None:
-        """Challenge profile fields with independent search and correct them.
+        """Challenge every profile field with independent search and correct them.
 
-        Source registries carry errors, so a cited value is not assumed correct;
-        fields where two sources disagree are judged first, then the regulatory
-        fields where a wrong value is most costly.
+        Source registries carry errors, so a cited value is not assumed correct.
+        Conflicts and high-cost regulatory fields are judged first; remaining
+        content fields follow. Internal payloads like llm_aliases are skipped.
         """
         settings = get_settings()
         if not settings.enable_profile_judge:
@@ -700,16 +700,12 @@ class PipelineOrchestrator:
             return
         self._set_step(job, JobStep.JUDGE_METADATA)
 
-        by_priority = sorted(
-            (r for r in rows if r.field in PRIORITY_JUDGE_FIELDS or (r.citation_json or {}).get("conflicting_source")),
-            key=lambda r: (
-                0 if (r.citation_json or {}).get("conflicting_source") else 1,
-                PRIORITY_JUDGE_FIELDS.index(r.field) if r.field in PRIORITY_JUDGE_FIELDS else 99,
-            ),
-        )[: settings.profile_judge_max_fields]
+        to_judge = select_profile_fields_for_judgment(
+            rows, max_fields=settings.profile_judge_max_fields
+        )
 
         corrected = 0
-        for row in by_priority:
+        for row in to_judge:
             citation = row.citation_json or {}
             judgment = await self.llm.judge_profile_field(
                 product=job.drug_name,
@@ -758,7 +754,7 @@ class PipelineOrchestrator:
             "profile_judged job_id=%s drug=%s judged=%s corrected=%s",
             job.id,
             job.drug_name,
-            len(by_priority),
+            len(to_judge),
             corrected,
         )
 

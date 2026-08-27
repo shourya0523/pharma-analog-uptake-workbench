@@ -11,8 +11,10 @@ from app.llm.client import load_prompt
 from app.pipeline.orchestrator import PipelineOrchestrator
 from app.quality.profile import (
     PRIORITY_JUDGE_FIELDS,
+    SKIP_JUDGE_FIELDS,
     apply_profile_judgment,
     normalize_value,
+    select_profile_fields_for_judgment,
     values_conflict,
 )
 
@@ -104,6 +106,37 @@ def test_regulatory_fields_are_prioritised_for_judging():
     assert "roa" in PRIORITY_JUDGE_FIELDS
     assert "fda_approval_date" in PRIORITY_JUDGE_FIELDS
     assert "dosage_form" in PRIORITY_JUDGE_FIELDS
+    assert "indication" in PRIORITY_JUDGE_FIELDS
+    assert "moa" in PRIORITY_JUDGE_FIELDS
+
+
+def test_select_profile_fields_judges_every_content_field():
+    class Row:
+        def __init__(self, field, value, conflict=False):
+            self.field = field
+            self.value = value
+            self.citation_json = {"conflicting_source": {"value": "x"}} if conflict else {}
+
+    rows = [
+        Row("llm_aliases", '{"aliases":[]}'),
+        Row("indication", "PAH"),
+        Row("moa", "prostacyclin analogue"),
+        Row("ticker", "UTHR"),
+        Row("roa", "ORAL", conflict=True),
+        Row("brand_name", "TYVASO"),
+        Row("empty", "not specified"),
+    ]
+    selected = select_profile_fields_for_judgment(rows)
+    names = [r.field for r in selected]
+    assert "llm_aliases" not in names
+    assert "empty" not in names
+    assert names[0] == "roa"  # conflicts first
+    assert set(names) == {"roa", "indication", "moa", "ticker", "brand_name"}
+    # Optional budget still works for operators
+    assert [r.field for r in select_profile_fields_for_judgment(rows, max_fields=2)] == [
+        "roa",
+        "moa",
+    ]
 
 
 def test_judge_prompt_requires_a_cited_correction():
@@ -123,8 +156,8 @@ def test_conflicting_sources_are_recorded_and_judged_first():
     assert "conflicting_source" in extract
 
     judge = inspect.getsource(PipelineOrchestrator._judge_profile)
-    assert "conflicting_source" in judge
-    assert "PRIORITY_JUDGE_FIELDS" in judge
+    assert "select_profile_fields_for_judgment" in judge
     assert "profile_judge_max_fields" in judge
+    assert "llm_aliases" in SKIP_JUDGE_FIELDS
     # Corrections always go back to a human
     assert "NEEDS_REVIEW" in judge
