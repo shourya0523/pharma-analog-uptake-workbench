@@ -1,11 +1,11 @@
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 
 from app.db.models import DrugJobORM
 from app.observability import dedupe_jobs_by_analog, normalize_analog_key
 
 
 def _job(name: str, completeness: float, hours_ago: int = 0, job_id: str = "a") -> DrugJobORM:
-    now = datetime.utcnow()
+    now = datetime.now(UTC)
     return DrugJobORM(
         id=job_id,
         run_id="run",

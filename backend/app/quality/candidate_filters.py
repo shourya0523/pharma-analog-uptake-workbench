@@ -5,7 +5,6 @@ from typing import Any
 
 from app.parsing.evidence import TOTAL_REVENUE_RE, product_aliases
 
-
 KNOWN_PEER_BRANDS = {
     "tyvaso",
     "remodulin",
@@ -61,9 +60,9 @@ def quote_mentions_generic_only(
 
 
 def value_is_dosage_not_revenue(quote: str, value: float) -> bool:
-    money_context = re.search(r"[$€£]|\b(?:usd|chf|eur|sales?|revenue|million|billion)\b", quote, re.I)
+    money_context = re.search(r"[$€£]|\b(?:usd|chf|eur|sales?|revenue|million|billion)\b", quote, re.IGNORECASE)
     value_text = re.escape(f"{value:g}")
-    dose_context = re.search(rf"(?<![\d.]){value_text}\s*(?:mcg|mg|g|ml|%)\b", quote, re.I)
+    dose_context = re.search(rf"(?<![\d.]){value_text}\s*(?:mcg|mg|g|ml|%)\b", quote, re.IGNORECASE)
     return bool(dose_context and not money_context)
 
 
@@ -88,9 +87,7 @@ def is_xbrl_noise_quote(quote: str) -> bool:
     q = quote or ""
     if re.search(r"\b\w+:\w+Member\b", q):
         return True
-    if re.fullmatch(r"[\w:.\-]+", q.strip()) and ":" in q and len(q) < 80:
-        return True
-    return False
+    return bool(re.fullmatch(r"[\w:.\-]+", q.strip()) and ":" in q and len(q) < 80)
 
 
 def is_placeholder_period(period: object) -> bool:
@@ -205,10 +202,12 @@ def filter_revenue_candidates(
             dropped.append({**cand, "_drop_reason": "dose_not_revenue"})
             continue
 
-        if num == 0.0:
-            if not mentions_product or not re.search(r"\b(zero|nil|no\s+sales|\$0)\b", quote, re.I):
-                dropped.append({**cand, "_drop_reason": "zero_value_unsupported"})
-                continue
+        if num == 0.0 and (
+            not mentions_product
+            or not re.search(r"\b(zero|nil|no\s+sales|\$0)\b", quote, re.IGNORECASE)
+        ):
+            dropped.append({**cand, "_drop_reason": "zero_value_unsupported"})
+            continue
 
         kept.append(cand)
 

@@ -57,9 +57,7 @@ def _is_blank(value: Any) -> bool:
         return True
     if isinstance(value, str) and not value.strip():
         return True
-    if isinstance(value, (list, dict)) and not value:
-        return True
-    return False
+    return isinstance(value, (list, dict)) and not value
 
 
 def _suggestion_key(field: str) -> str:

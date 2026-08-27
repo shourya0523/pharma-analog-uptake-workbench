@@ -9,7 +9,8 @@ does inconsistently, dropping whole tables on some runs.
 from __future__ import annotations
 
 import re
-from typing import Any, Iterable
+from collections.abc import Iterable
+from typing import Any
 
 from app.parsing.evidence import product_aliases
 from app.parsing.periods import MONTH_WORDS, MONTHS, quarter_of_month
@@ -17,10 +18,10 @@ from app.quality.candidate_filters import KNOWN_PEER_BRANDS
 from app.quality.comparative import ABS_TOLERANCE, parse_numbers
 
 _PERIOD_HEADER_RE = re.compile(
-    r"\b(three|six|nine|twelve)\s+months?\s+ended\s+([A-Za-z]{3,9})", re.I
+    r"\b(three|six|nine|twelve)\s+months?\s+ended\s+([A-Za-z]{3,9})", re.IGNORECASE
 )
 _YEAR_HEADER_RE = re.compile(r"\b(?:19|20)\d{2}\b")
-_YEAR_ENDED_RE = re.compile(r"\byear\s+ended\s+([A-Za-z]{3,9})", re.I)
+_YEAR_ENDED_RE = re.compile(r"\byear\s+ended\s+([A-Za-z]{3,9})", re.IGNORECASE)
 _FOOTNOTE_RE = re.compile(r"\(\d\)")
 
 PERIOD_TYPE_BY_MONTHS = {3: "quarterly", 6: "six_month", 9: "nine_month", 12: "annual"}

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+# ruff: noqa: BLE001, RUF012, SIM113
 import asyncio
 import logging
 import re
@@ -9,7 +10,7 @@ from typing import Any
 import httpx
 
 from app.config import get_settings
-from app.domain.models import RetrievedSource, RetrievalStatus, SourceType, new_id
+from app.domain.models import RetrievalStatus, RetrievedSource, SourceType, new_id
 from app.storage.filestore import FileStore
 
 logger = logging.getLogger(__name__)

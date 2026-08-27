@@ -15,7 +15,21 @@ class QualityIssue:
     status: str = "open"
 
 
-def _normalize_number_str(value: float | int | None) -> list[str]:
+def moa_epc_contamination_issue(moa: str | None, epc_terms: list[str]) -> QualityIssue | None:
+    normalized_moa = " ".join((moa or "").lower().split())
+    normalized_epc = {" ".join(term.lower().split()) for term in epc_terms}
+    if normalized_moa and normalized_moa in normalized_epc:
+        return QualityIssue(
+            "epc_used_as_moa",
+            "high",
+            None,
+            "Mechanism of action exactly matches an FDA Established Pharmacologic Class value.",
+            "Leave MoA unresolved until a distinct cited MoA field or label mechanism section is available.",
+        )
+    return None
+
+
+def _normalize_number_str(value: float | None) -> list[str]:
     if value is None:
         return []
     forms = {
@@ -42,9 +56,7 @@ def quote_contains_value(quote: str, value: float | None) -> bool:
             return True
     # $1,878.2 style already covered via comma strip; also try without trailing zeros
     compact = f"{float(value):.10f}".rstrip("0").rstrip(".")
-    if compact and compact in q:
-        return True
-    return False
+    return bool(compact and compact in q)
 
 
 def run_quality_checks(datapoints: list[dict[str, Any]], profile: dict[str, Any] | None = None) -> list[QualityIssue]:

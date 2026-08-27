@@ -5,21 +5,32 @@ from __future__ import annotations
 import logging
 import threading
 from collections import deque
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 from sqlalchemy import func, inspect
 from sqlalchemy.orm import Session
 
 from app.db.models import (
+    AnalogFamilyORM,
+    CanonicalProductORM,
+    CompetitiveSnapshotORM,
     DatapointORM,
+    DerivationLineageORM,
     DrugJobORM,
+    DrugProfileFieldORM,
+    EvidenceAssertionORM,
     ExportORM,
     ExtractionRunORM,
+    MoAComponentORM,
+    PeakSalesEstimateORM,
+    ProductFormulationORM,
+    ProductIndicationORM,
     QualityCheckORM,
     ReviewEventORM,
     SourceDocumentORM,
     UnresolvedQuarterORM,
+    UptakeMetricORM,
     ValidationTaskORM,
 )
 
@@ -30,6 +41,7 @@ _lock = threading.Lock()
 TABLE_REGISTRY: dict[str, Any] = {
     "extraction_runs": ExtractionRunORM,
     "drug_jobs": DrugJobORM,
+    "drug_profile_fields": DrugProfileFieldORM,
     "source_documents": SourceDocumentORM,
     "datapoints": DatapointORM,
     "review_events": ReviewEventORM,
@@ -37,6 +49,16 @@ TABLE_REGISTRY: dict[str, Any] = {
     "validation_tasks": ValidationTaskORM,
     "unresolved_quarters": UnresolvedQuarterORM,
     "exports": ExportORM,
+    "analog_families": AnalogFamilyORM,
+    "canonical_products": CanonicalProductORM,
+    "product_formulations": ProductFormulationORM,
+    "product_indications": ProductIndicationORM,
+    "moa_components": MoAComponentORM,
+    "peak_sales_estimates": PeakSalesEstimateORM,
+    "competitive_snapshots": CompetitiveSnapshotORM,
+    "uptake_metrics": UptakeMetricORM,
+    "evidence_assertions": EvidenceAssertionORM,
+    "derivation_lineage": DerivationLineageORM,
 }
 
 
@@ -46,7 +68,7 @@ class RingBufferHandler(logging.Handler):
     def emit(self, record: logging.LogRecord) -> None:
         try:
             entry = {
-                "ts": datetime.fromtimestamp(record.created, tz=timezone.utc).isoformat(),
+                "ts": datetime.fromtimestamp(record.created, tz=UTC).isoformat(),
                 "level": record.levelname,
                 "logger": record.name,
                 "message": record.getMessage(),
@@ -55,7 +77,7 @@ class RingBufferHandler(logging.Handler):
                 entry["exc_info"] = self.formatException(record.exc_info)
             with _lock:
                 _logs.append(entry)
-        except Exception:
+        except Exception:  # noqa: BLE001 - logging handlers must not propagate
             self.handleError(record)
 
 
@@ -133,11 +155,11 @@ def query_table(
     query = db.query(cls)
     cols = {c.key for c in inspect(cls).columns}
     if run_id and "run_id" in cols:
-        query = query.filter(getattr(cls, "run_id") == run_id)
+        query = query.filter(cls.run_id == run_id)
     if run_id and table == "extraction_runs" and "id" in cols:
         query = query.filter(cls.id == run_id)
     if job_id and "job_id" in cols:
-        query = query.filter(getattr(cls, "job_id") == job_id)
+        query = query.filter(cls.job_id == job_id)
     if job_id and table == "drug_jobs" and "id" in cols:
         query = query.filter(cls.id == job_id)
     if q:
@@ -152,7 +174,7 @@ def query_table(
 
             query = query.filter(or_(*[col.ilike(needle) for col in text_cols]))
     total = query.count()
-    order_col = getattr(cls, "created_at", None) or getattr(cls, "updated_at", None) or getattr(cls, "id")
+    order_col = getattr(cls, "created_at", None) or getattr(cls, "updated_at", None) or cls.id
     rows = query.order_by(order_col.desc() if hasattr(order_col, "desc") else order_col).offset(offset).limit(limit)
     return {
         "table": table,
@@ -210,6 +232,10 @@ def normalize_analog_key(name: str | None) -> str:
     return " ".join((name or "").strip().lower().split())
 
 
+def _timestamp_key(value: datetime | None) -> float:
+    return value.timestamp() if value else float("-inf")
+
+
 def dedupe_jobs_by_analog(jobs: list[DrugJobORM]) -> list[DrugJobORM]:
     """Keep one job per analog product name (case/whitespace-insensitive).
 
@@ -226,15 +252,17 @@ def dedupe_jobs_by_analog(jobs: list[DrugJobORM]) -> list[DrugJobORM]:
             continue
         prev_ts = prev.updated_at or prev.created_at
         job_ts = job.updated_at or job.created_at
+        prev_ts_key = _timestamp_key(prev_ts)
+        job_ts_key = _timestamp_key(job_ts)
         better = (
             (job.completeness_pct or 0) > (prev.completeness_pct or 0)
             or (
                 (job.completeness_pct or 0) == (prev.completeness_pct or 0)
-                and (job_ts or datetime.min) > (prev_ts or datetime.min)
+                and job_ts_key > prev_ts_key
             )
             or (
                 (job.completeness_pct or 0) == (prev.completeness_pct or 0)
-                and (job_ts or datetime.min) == (prev_ts or datetime.min)
+                and job_ts_key == prev_ts_key
                 and job.id > prev.id
             )
         )
