@@ -149,10 +149,8 @@ class DatapointORM(Base):
     period_type: Mapped[str] = mapped_column(String(32), default="unknown")
     revenue_scope: Mapped[str] = mapped_column(String(64), default="Unknown")
     geography: Mapped[str | None] = mapped_column(String(128), nullable=True)
-    formulation: Mapped[str | None] = mapped_column(String(128), nullable=True)
-    route_of_administration: Mapped[str | None] = mapped_column(
-        String(128), nullable=True
-    )
+    formulation: Mapped[str | None] = mapped_column(String(512), nullable=True)
+    route_of_administration: Mapped[str | None] = mapped_column(String(128), nullable=True)
     source_url: Mapped[str] = mapped_column(Text)
     source_quote: Mapped[str] = mapped_column(Text)
     source_support: Mapped[str | None] = mapped_column(String(64), nullable=True)
@@ -458,7 +456,7 @@ class DerivationLineageORM(Base):
 
 _settings = get_settings()
 # Sync engine for MVP simplicity (API + in-process workers in one process)
-_sync_url = _settings.database_url.replace("sqlite+aiosqlite://", "sqlite://")
+_sync_url = _settings.resolved_database_url.replace("sqlite+aiosqlite://", "sqlite://")
 engine = create_engine(_sync_url, future=True)
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 

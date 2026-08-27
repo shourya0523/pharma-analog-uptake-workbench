@@ -71,6 +71,11 @@ from app.quality.checks import (
 )
 from app.quality.comparative import derive_comparative_candidates
 from app.quality.completeness import resolve_completeness_pct
+from app.quality.enrichment import (
+    apply_field_enrichment,
+    deterministic_formulation_fill,
+    merge_enrichment_dicts,
+)
 from app.quality.fast_judge import try_deterministic_judgment
 from app.quality.profile import (
     PRIORITY_JUDGE_FIELDS,
@@ -214,7 +219,7 @@ class PipelineOrchestrator:
     async def _expand_aliases(self, job: DrugJobORM) -> list[str]:
         settings = get_settings()
         base = merge_aliases(job.drug_name, job.generic_name)
-        if not settings.enable_llm_search or not settings.openrouter_api_key:
+        if not settings.enable_llm_search:
             self._job_aliases = base
             return base
         result = await self.llm.expand_aliases(
@@ -1097,6 +1102,7 @@ class PipelineOrchestrator:
 
             support = judgment.get("support_classification")
             status = judgment.get("validation_status") or "needs_review"
+            enrichment: dict[str, Any] = {}
             if (
                 settings.enable_llm_search
                 and support in {"partial", "unsupported", "inconclusive", "misclassified"}
@@ -1112,19 +1118,85 @@ class PipelineOrchestrator:
                     judgment = {**judgment, **{k: v for k, v in search_judgment.items() if v is not None}}
                     support = judgment.get("support_classification")
                     status = judgment.get("validation_status") or status
-                    enrichment = search_judgment.get("enrichment") or {}
-                    if enrichment.get("notes"):
-                        judgment.setdefault("issues", []).append(
-                            f"search_enrichment:{enrichment.get('notes')}"
-                        )
+                    enrichment = merge_enrichment_dicts(search_judgment.get("enrichment") or {})
                     row.issue_flags = list(set((row.issue_flags or []) + ["llm_search_validated"]))
                     if search_judgment.get("search_corroborated"):
                         row.issue_flags = list(set((row.issue_flags or []) + ["search_corroborated"]))
                     if (row.citation_json or {}).get("source_type") == SourceType.LLM_SEARCH.value:
                         status = ValidationStatus.NEEDS_REVIEW.value
 
+            # Always try deterministic aggregate fill + LLM enrichment on blank fields.
+            enrichment = merge_enrichment_dicts(
+                deterministic_formulation_fill(
+                    {
+                        "revenue_scope": row.revenue_scope,
+                        "formulation": row.formulation,
+                    }
+                ),
+                enrichment,
+                judgment.get("enrichment") if isinstance(judgment.get("enrichment"), dict) else None,
+            )
+            if enrichment:
+                snapshot = {
+                    "period": row.period,
+                    "period_type": row.period_type,
+                    "revenue_scope": row.revenue_scope,
+                    "value_reported": row.value_reported,
+                    "value_normalized_usd_millions": row.value_normalized_usd_millions,
+                    "currency": row.currency,
+                    "unit": row.unit,
+                    "geography": row.geography,
+                    "formulation": row.formulation,
+                    "route_of_administration": row.route_of_administration,
+                    "fiscal_year": row.fiscal_year,
+                    "fiscal_quarter": row.fiscal_quarter,
+                    "calendar_year": row.calendar_year,
+                    "calendar_quarter": row.calendar_quarter,
+                    "confidence_score": row.confidence_score,
+                    "validation_status": status,
+                    "issue_flags": list(row.issue_flags or []),
+                    "citation_json": dict(row.citation_json or {}),
+                }
+                enriched, applied = apply_field_enrichment(snapshot, enrichment)
+                if applied:
+                    row.period = enriched.get("period") or row.period
+                    row.period_type = enriched.get("period_type") or row.period_type
+                    row.revenue_scope = enriched.get("revenue_scope") or row.revenue_scope
+                    if "value_reported" in applied:
+                        row.value_reported = enriched.get("value_reported")
+                    if "value_normalized_usd_millions" in applied:
+                        row.value_normalized_usd_millions = enriched.get("value_normalized_usd_millions")
+                    if "currency" in applied:
+                        row.currency = enriched.get("currency")
+                    if "unit" in applied:
+                        row.unit = enriched.get("unit")
+                    if "geography" in applied:
+                        row.geography = enriched.get("geography")
+                    if "formulation" in applied:
+                        row.formulation = enriched.get("formulation")
+                    if "route_of_administration" in applied:
+                        row.route_of_administration = enriched.get("route_of_administration")
+                    if "fiscal_year" in applied:
+                        row.fiscal_year = enriched.get("fiscal_year")
+                    if "fiscal_quarter" in applied:
+                        row.fiscal_quarter = enriched.get("fiscal_quarter")
+                    if "calendar_year" in applied:
+                        row.calendar_year = enriched.get("calendar_year")
+                    if "calendar_quarter" in applied:
+                        row.calendar_quarter = enriched.get("calendar_quarter")
+                    row.confidence_score = float(enriched.get("confidence_score") or row.confidence_score or 0)
+                    row.issue_flags = list(enriched.get("issue_flags") or row.issue_flags or [])
+                    row.citation_json = enriched.get("citation_json") or row.citation_json
+                    status = ValidationStatus.NEEDS_REVIEW.value
+                    judgment.setdefault("issues", []).append(
+                        f"field_enrichment:{','.join(applied)}"
+                    )
+
             row.source_support = support
-            if quote_contains_value(row.source_quote or "", row.value_reported):
+            if quote_contains_value(
+                row.source_quote or "", row.value_reported
+            ) and "field_enrichment_applied" not in (row.issue_flags or []):
+                # Don't inflate confidence above enrichment cap when fields were estimated.
                 row.confidence_score = max(float(row.confidence_score or 0), 0.85)
             if support == "misclassified":
                 status = ValidationStatus.NEEDS_REVIEW.value
@@ -1132,10 +1204,15 @@ class PipelineOrchestrator:
                     row.revenue_scope = "Company total"
             elif support == "unsupported":
                 status = ValidationStatus.NEEDS_REVIEW.value
-            elif support == "supported" and row.period_type in {
-                PeriodType.QUARTERLY.value,
-                PeriodType.ANNUAL.value,
-            }:
+            elif (
+                support == "supported"
+                and row.period_type
+                in {
+                    PeriodType.QUARTERLY.value,
+                    PeriodType.ANNUAL.value,
+                }
+                and "field_enrichment_applied" not in (row.issue_flags or [])
+            ):
                 status = ValidationStatus.AUTO_PASS.value
             elif support == "partial":
                 status = ValidationStatus.NEEDS_REVIEW.value

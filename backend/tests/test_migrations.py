@@ -36,6 +36,12 @@ def test_empty_database_upgrades_to_normalized_schema(tmp_path: Path):
         "derivation_lineage",
         "alembic_version",
     } <= tables
+    formulation = next(
+        column
+        for column in inspect(engine).get_columns("datapoints")
+        if column["name"] == "formulation"
+    )
+    assert formulation["type"].length == 512
 
 
 def test_existing_baseline_rows_survive_upgrade(tmp_path: Path):

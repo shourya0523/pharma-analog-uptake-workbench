@@ -163,6 +163,16 @@ def run_quality_checks(datapoints: list[dict[str, Any]], profile: dict[str, Any]
                     "Confirm unit (millions/thousands) from source.",
                 )
             )
+        if scope in {"Product family", "Formulation-specific", "Franchise"} and not (dp.get("formulation") or "").strip():
+            issues.append(
+                QualityIssue(
+                    "missing_formulation",
+                    "medium",
+                    dp_id,
+                    "Formulation blank on a product-family or formulation-specific row.",
+                    "Enrich with constituent list (e.g. DPI; nebulized), aggregate, or specific form; mark needs_review.",
+                )
+            )
 
         key = (dp.get("period"), dp.get("revenue_scope"), dp.get("formulation"), dp.get("geography"))
         if key in seen_keys:

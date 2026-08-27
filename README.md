@@ -4,17 +4,16 @@ Source-first extraction and validation for pharmaceutical analog uptake data. Ci
 
 ## Stack
 
-- Backend: FastAPI (Python 3.12), SQLAlchemy, OpenRouter LLM
+- Backend: FastAPI (Python 3.12), SQLAlchemy, OpenRouter (extract, judge, web search)
 - Frontend: React + Vite + Recharts (Analog Product Explorer)
 - Local default: SQLite + local file store + in-process jobs
-- AWS MVP path: RDS Postgres + S3 + SQS/ECS via `FileStore` / `JobQueue` interfaces (`STORAGE_BACKEND=s3`, `JOB_BACKEND=sqs`)
+- AWS MVP: RDS Postgres + S3 + SQS/ECS via `FileStore` / `JobQueue` (`STORAGE_BACKEND=s3`, `JOB_BACKEND=sqs`) — see [`infra/README.md`](infra/README.md)
 
 ## Prerequisites
 
-- AWS CLI v2 + Agent Toolkit profile `Sandbox` (Region `us-east-1`)
 - Node 20+
 - `uv` (https://docs.astral.sh/uv/)
-- OpenRouter API key for LLM extraction/judge (optional for connector-only smoke tests)
+- OpenRouter API key (https://openrouter.ai/keys) for LLM extract/judge/search
 
 ## Quick start (local)
 
@@ -39,11 +38,19 @@ API docs: http://127.0.0.1:8000/docs
 
 Set `SEC_USER_AGENT` to a descriptive string with a contact email. Filings are cached under storage keys (local or S3).
 
-## Citations
+## Deploy to AWS
 
-- Every datapoint/profile field stores `source_url` + quote/field + confidence + validation status
-- Missing citation → high-severity quality flag; cannot auto-pass or export as confirmed
-- Dashboard drill-through shows citation metadata
+```bash
+cd infra
+source .venv/bin/activate
+pip install -r requirements.txt
+export CDK_DEFAULT_ACCOUNT=$(aws sts get-caller-identity --query Account --output text)
+export CDK_DEFAULT_REGION=us-east-1
+cdk bootstrap aws://$CDK_DEFAULT_ACCOUNT/$CDK_DEFAULT_REGION   # first time
+cdk deploy
+```
+
+Use the `CloudFrontUrl` stack output. Frontend calls the API at `/api` on the same host.
 
 ## Pharmaceutical data semantics
 

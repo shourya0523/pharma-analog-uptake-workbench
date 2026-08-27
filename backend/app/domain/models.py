@@ -230,11 +230,19 @@ class RevenueCandidate(BaseModel):
     period_type: PeriodType = PeriodType.UNKNOWN
     revenue_scope: RevenueScope = RevenueScope.UNKNOWN
     geography: str | None = None
+    # Single value, "aggregate", or multi via "DPI; nebulized" (list input also accepted).
     formulation: str | None = None
     route_of_administration: str | None = None
     source_quote: str
     confidence: float = 0.0
     extraction_method: str = "llm"
+
+    @field_validator("formulation", mode="before")
+    @classmethod
+    def coerce_formulation(cls, v: Any) -> str | None:
+        from app.domain.formulations import coerce_formulation_value
+
+        return coerce_formulation_value(v)
 
 
 class DrugInput(BaseModel):

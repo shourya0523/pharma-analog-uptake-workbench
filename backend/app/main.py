@@ -32,8 +32,8 @@ from app.domain.models import (
     new_id,
 )
 from app.export.builder import ExportBuilder, TemplateMapper
+from app.jobs.handler import handle_job
 from app.jobs.queue import get_job_queue
-from app.jobs.run_status import refresh_run_status
 from app.logging_setup import configure_logging
 from app.observability import (
     TABLE_REGISTRY,
@@ -43,17 +43,18 @@ from app.observability import (
 from app.observability import (
     overview as observability_overview,
 )
-from app.pipeline.orchestrator import PipelineOrchestrator
 from app.storage.filestore import get_file_store
 
 configure_logging()
 logger = logging.getLogger(__name__)
 settings = get_settings()
 app = FastAPI(title=settings.app_name)
+_cors_origins = [o.strip() for o in settings.cors_origins.split(",") if o.strip()]
+_cors_star = _cors_origins == ["*"]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[o.strip() for o in settings.cors_origins.split(",")],
-    allow_credentials=True,
+    allow_origins=["*"] if _cors_star else _cors_origins,
+    allow_credentials=not _cors_star,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -65,18 +66,10 @@ file_store = get_file_store()
 async def _handle_job(payload: dict[str, Any]) -> None:
     job_id = payload["job_id"]
     run_id = payload["run_id"]
-    db = SessionLocal()
     try:
-        orch = PipelineOrchestrator(db, file_store=file_store)
-        await orch.run_job(job_id)
+        await handle_job(payload, file_store=file_store)
     except Exception as exc:
         logger.error("job_handler_failed job_id=%s run_id=%s error=%s", job_id, run_id, exc)
-    finally:
-        try:
-            refresh_run_status(db, run_id)
-        except Exception:
-            logger.exception("run_status_update_failed run_id=%s", run_id)
-        db.close()
 
 
 @app.on_event("startup")
