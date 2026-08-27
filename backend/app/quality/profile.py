@@ -62,7 +62,7 @@ def values_conflict(left: object, right: object) -> bool:
     return not (a in b or b in a)
 
 
-# Registry and filing values worth challenging even when no source disagrees
+# Judged first when present; every other content field is still judged after these.
 PRIORITY_JUDGE_FIELDS = (
     "roa",
     "dosage_form",
@@ -70,7 +70,41 @@ PRIORITY_JUDGE_FIELDS = (
     "moa",
     "pharmacologic_class",
     "formulation",
+    "indication",
+    "therapeutic_area",
 )
+
+# Internal / non-clinical payload fields — not product claims to challenge.
+SKIP_JUDGE_FIELDS = frozenset({"llm_aliases"})
+
+
+def select_profile_fields_for_judgment(
+    rows: list[Any],
+    *,
+    max_fields: int | None = None,
+) -> list[Any]:
+    """Return every judgable profile field, conflicts and priority fields first.
+
+    ``max_fields`` <= 0 or None means no cap: judge the full profile.
+    """
+    eligible = [
+        row
+        for row in rows
+        if getattr(row, "field", None)
+        and row.field not in SKIP_JUDGE_FIELDS
+        and not is_missing_value(getattr(row, "value", None))
+    ]
+    ordered = sorted(
+        eligible,
+        key=lambda r: (
+            0 if (getattr(r, "citation_json", None) or {}).get("conflicting_source") else 1,
+            PRIORITY_JUDGE_FIELDS.index(r.field) if r.field in PRIORITY_JUDGE_FIELDS else 99,
+            r.field,
+        ),
+    )
+    if max_fields is None or max_fields <= 0:
+        return ordered
+    return ordered[:max_fields]
 
 
 @dataclass

@@ -41,7 +41,8 @@ class Settings(BaseSettings):
     # errors (openFDA lists Tyvaso, an inhaled product, as ORAL), so cited fields are
     # challenged rather than passed through.
     enable_profile_judge: bool = True
-    profile_judge_max_fields: int = 6
+    # 0 = judge every content field (no cap). Positive values keep an optional budget.
+    profile_judge_max_fields: int = 0
     profile_judge_min_confidence: float = 0.6
     enable_llm_search: bool = True
     llm_search_max_queries: int = 4
