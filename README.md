@@ -4,24 +4,23 @@ Source-first extraction and validation for pharmaceutical analog uptake data. Ci
 
 ## Stack
 
-- Backend: FastAPI (Python 3.12), SQLAlchemy, Amazon Bedrock (Claude Converse + Mantle Web Search)
+- Backend: FastAPI (Python 3.12), SQLAlchemy, OpenRouter (extract, judge, web search)
 - Frontend: React + Vite + Recharts (Analog Product Explorer)
 - Local default: SQLite + local file store + in-process jobs
 - AWS MVP: RDS Postgres + S3 + SQS/ECS via `FileStore` / `JobQueue` (`STORAGE_BACKEND=s3`, `JOB_BACKEND=sqs`) — see [`infra/README.md`](infra/README.md)
 
 ## Prerequisites
 
-- AWS CLI v2 (`aws login`) for Bedrock and optional AWS deploy (Region `us-east-1`)
 - Node 20+
 - `uv` (https://docs.astral.sh/uv/)
-- Bedrock model access for Claude (extract/judge) and GPT Mantle Web Search (optional local LLM search)
+- OpenRouter API key (https://openrouter.ai/keys) for LLM extract/judge/search
 
 ## Quick start (local)
 
 ```bash
 # Backend
 cd backend
-cp .env.example .env   # set SEC_USER_AGENT email; AWS creds for Bedrock
+cp .env.example .env   # set OPENROUTER_API_KEY and SEC_USER_AGENT email
 uv sync
 uv run uvicorn app.main:app --reload --port 8000
 

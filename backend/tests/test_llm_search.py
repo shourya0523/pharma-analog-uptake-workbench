@@ -34,7 +34,7 @@ def test_filter_uses_extra_aliases():
     assert not dropped
 
 
-def test_normalize_bedrock_search_results():
+def test_normalize_openrouter_search_results():
     results = _normalize_results(
         {
             "results": [

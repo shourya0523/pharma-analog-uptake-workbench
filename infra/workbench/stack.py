@@ -17,6 +17,7 @@ from aws_cdk import (
     aws_rds as rds,
     aws_s3 as s3,
     aws_s3_deployment as s3deploy,
+    aws_secretsmanager as secretsmanager,
     aws_sqs as sqs,
 )
 from constructs import Construct
@@ -25,9 +26,9 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 BACKEND_DIR = REPO_ROOT / "backend"
 FRONTEND_DIR = REPO_ROOT / "frontend"
 
-BEDROCK_MODEL_EXTRACT = "us.anthropic.claude-sonnet-4-6"
-BEDROCK_MODEL_JUDGE = "us.anthropic.claude-sonnet-4-6"
-BEDROCK_MODEL_SEARCH = "openai.gpt-5.6-terra"
+OPENROUTER_MODEL_EXTRACT = "openai/gpt-4o-mini"
+OPENROUTER_MODEL_JUDGE = "openai/gpt-4o-mini"
+OPENROUTER_SECRET_NAME = "pharma-workbench/openrouter-api-key"
 
 
 class WorkbenchStack(Stack):
@@ -107,6 +108,13 @@ class WorkbenchStack(Stack):
 
         cluster = ecs.Cluster(self, "Cluster", vpc=vpc)
 
+        openrouter_secret = secretsmanager.Secret(
+            self,
+            "OpenRouterApiKey",
+            secret_name=OPENROUTER_SECRET_NAME,
+            description="OpenRouter API key for LLM extract, judge, and web search",
+        )
+
         image = ecs.ContainerImage.from_asset(str(BACKEND_DIR))
 
         common_env = {
@@ -119,13 +127,18 @@ class WorkbenchStack(Stack):
             "DB_HOST": db.db_instance_endpoint_address,
             "DB_NAME": "workbench",
             "SEC_USER_AGENT": "PharmaAnalogUptakeWorkbench research@example.com",
-            "BEDROCK_MODEL_EXTRACT": BEDROCK_MODEL_EXTRACT,
-            "BEDROCK_MODEL_JUDGE": BEDROCK_MODEL_JUDGE,
-            "BEDROCK_MODEL_SEARCH": BEDROCK_MODEL_SEARCH,
+            "OPENROUTER_MODEL_EXTRACT": OPENROUTER_MODEL_EXTRACT,
+            "OPENROUTER_MODEL_JUDGE": OPENROUTER_MODEL_JUDGE,
             "ENABLE_LLM_SEARCH": "true",
-            "BEDROCK_MAX_TOKENS": "4096",
+            "LLM_SEARCH_ENGINE": "auto",
             # Avoid CFN cycle with CloudFront; SPA is same-origin via /api proxy.
             "CORS_ORIGINS": "*",
+        }
+
+        common_secrets = {
+            "DB_USER": ecs.Secret.from_secrets_manager(db.secret, field="username"),
+            "DB_PASSWORD": ecs.Secret.from_secrets_manager(db.secret, field="password"),
+            "OPENROUTER_API_KEY": ecs.Secret.from_secrets_manager(openrouter_secret),
         }
 
         def grant_data_access(role: iam.IRole, *, worker: bool) -> None:
@@ -134,30 +147,7 @@ class WorkbenchStack(Stack):
                 jobs_queue.grant_consume_messages(role)
             else:
                 jobs_queue.grant_send_messages(role)
-            role.add_to_policy(
-                iam.PolicyStatement(
-                    actions=[
-                        "bedrock:InvokeModel",
-                        "bedrock:InvokeModelWithResponseStream",
-                    ],
-                    resources=["*"],
-                )
-            )
-            role.add_to_policy(
-                iam.PolicyStatement(
-                    actions=["bedrock-mantle:CreateInference"],
-                    resources=["*"],
-                )
-            )
-            role.add_to_policy(
-                iam.PolicyStatement(
-                    actions=[
-                        "bedrock-websearch:InvokeSearch",
-                        "bedrock-websearch:InvokeFetch",
-                    ],
-                    resources=["*"],
-                )
-            )
+            openrouter_secret.grant_read(role)
 
         api_task = ecs.FargateTaskDefinition(
             self,
@@ -174,10 +164,7 @@ class WorkbenchStack(Stack):
                 log_retention=logs.RetentionDays.ONE_WEEK,
             ),
             environment=common_env,
-            secrets={
-                "DB_USER": ecs.Secret.from_secrets_manager(db.secret, field="username"),
-                "DB_PASSWORD": ecs.Secret.from_secrets_manager(db.secret, field="password"),
-            },
+            secrets=common_secrets,
         )
         api_container.add_port_mappings(ecs.PortMapping(container_port=8000))
 
@@ -197,10 +184,7 @@ class WorkbenchStack(Stack):
                 log_retention=logs.RetentionDays.ONE_WEEK,
             ),
             environment=common_env,
-            secrets={
-                "DB_USER": ecs.Secret.from_secrets_manager(db.secret, field="username"),
-                "DB_PASSWORD": ecs.Secret.from_secrets_manager(db.secret, field="password"),
-            },
+            secrets=common_secrets,
         )
 
         alb = elbv2.ApplicationLoadBalancer(
@@ -331,3 +315,5 @@ function handler(event) {
         CfnOutput(self, "ApiLoadBalancerDns", value=alb.load_balancer_dns_name)
         CfnOutput(self, "DataBucketName", value=data_bucket.bucket_name)
         CfnOutput(self, "JobsQueueUrl", value=jobs_queue.queue_url)
+        CfnOutput(self, "OpenRouterSecretArn", value=openrouter_secret.secret_arn)
+        CfnOutput(self, "OpenRouterSecretName", value=openrouter_secret.secret_name)

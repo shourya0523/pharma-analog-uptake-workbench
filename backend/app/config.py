@@ -21,12 +21,10 @@ class Settings(BaseSettings):
     storage_backend: str = "local"  # local | s3
     job_backend: str = "inprocess"  # inprocess | sqs
     local_storage_root: str = "./storage"
-    # Bedrock models (Claude Converse for extract/judge; GPT + mantle web search for search)
-    bedrock_model_extract: str = "us.anthropic.claude-sonnet-4-6"
-    bedrock_model_judge: str = "us.anthropic.claude-sonnet-4-6"
-    bedrock_model_search: str = "openai.gpt-5.6-terra"
-    bedrock_mantle_base_url: str | None = None
-    bedrock_max_tokens: int = 4096
+    openrouter_api_key: str | None = None
+    openrouter_model_extract: str = "openai/gpt-4o-mini"
+    openrouter_model_judge: str = "openai/gpt-4o-mini"
+    openrouter_base_url: str = "https://openrouter.ai/api/v1"
     validation_sample_rate: float = 0.10
     max_concurrent_jobs: int = 1
     sec_max_filings: int = 4
@@ -38,6 +36,8 @@ class Settings(BaseSettings):
     enable_llm_search: bool = True
     llm_search_max_queries: int = 4
     llm_search_max_urls: int = 5
+    # OpenRouter openrouter:web_search engine: auto | native | exa | parallel | perplexity
+    llm_search_engine: str = "auto"
     # Empty = no domain filter (prompt steers to SEC/IR). Comma-separated if set.
     llm_search_allowed_domains: str = ""
 
@@ -49,12 +49,6 @@ class Settings(BaseSettings):
             name = self.db_name or "workbench"
             return f"postgresql+psycopg2://{user}:{password}@{self.db_host}:5432/{name}"
         return self.database_url
-
-    @property
-    def mantle_base_url(self) -> str:
-        if self.bedrock_mantle_base_url:
-            return self.bedrock_mantle_base_url.rstrip("/")
-        return f"https://bedrock-mantle.{self.aws_region}.api.aws/openai/v1"
 
 
 @lru_cache

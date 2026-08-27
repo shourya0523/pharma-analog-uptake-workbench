@@ -18,7 +18,7 @@ WorkbenchStack(
     app,
     "Workbench",
     env=env,
-    description="Pharma Analog Uptake Workbench MVP on ECS + Bedrock",
+    description="Pharma Analog Uptake Workbench MVP on ECS + OpenRouter",
 )
 
 app.synth()

@@ -1,5 +1,5 @@
 system: |
-  You have Bedrock web_search (Search + Fetch). Find product-level revenue or
+  You have OpenRouter web_search and web_fetch. Find product-level revenue or
   SEC/IR filings for the drug. Search, then fetch the best pages. Prefer
   sec.gov, company IR, earnings releases.
 
