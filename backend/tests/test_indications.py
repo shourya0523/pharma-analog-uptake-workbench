@@ -22,3 +22,38 @@ def test_indication_record_preserves_setting_population_and_biomarker():
     assert record.population == "adults"
     assert record.biomarker == "EGFR-positive"
 
+
+TYVASO_LABEL = (
+    "1 INDICATIONS AND USAGE Tyvaso is a prostacyclin mimetic indicated for the treatment of: "
+    "Pulmonary arterial hypertension (PAH; WHO Group 1) to improve exercise ability. "
+    "Studies establishing effectiveness predominately included patients with NYHA Functional Class III. "
+    "1.1 Pulmonary Arterial Hypertension Tyvaso is indicated for the treatment of "
+    "pulmonary arterial hypertension (PAH; WHO Group 1) to improve exercise ability. "
+    "Studies establishing effectiveness predominately included patients with NYHA Functional Class III. "
+    "1.2 Pulmonary Hypertension Associated with ILD Tyvaso is indicated for the treatment of "
+    "pulmonary hypertension associated with interstitial lung disease (PH-ILD; WHO Group 3) "
+    "to improve exercise ability. The study establishing effectiveness predominately included "
+    "patients with idiopathic interstitial pneumonia."
+)
+
+
+def test_tyvaso_style_label_splits_pah_and_ph_ild():
+    records = parse_indications(TYVASO_LABEL)
+    diseases = [r.disease.casefold() for r in records]
+    assert len(records) >= 2
+    assert any("pulmonary arterial hypertension" in d or "pah" in d for d in diseases)
+    assert any("interstitial lung disease" in d or "ph-ild" in d for d in diseases)
+    assert all(not d.startswith("1 indications") for d in diseases)
+    assert all("studies establishing" not in d for d in diseases)
+
+
+def test_winrevair_style_single_indication_is_clean():
+    records = parse_indications(
+        "1 INDICATIONS AND USAGE WINREVAIR is indicated for the treatment of adults with "
+        "pulmonary arterial hypertension (PAH, Group 1 pulmonary hypertension) to improve "
+        "exercise capacity and World Health Organization (WHO) functional class (FC)."
+    )
+    assert len(records) == 1
+    assert "pulmonary arterial hypertension" in records[0].disease.casefold()
+    assert "1 indications" not in records[0].disease.casefold()
+    assert records[0].population == "adults"
