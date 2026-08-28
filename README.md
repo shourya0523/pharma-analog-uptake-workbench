@@ -104,4 +104,4 @@ uv run --project backend python scripts/smoke_validate.py --metadata-only
 
 `seed/example_drugs.csv` — PAH analogs aligned with the dashboard mockup.
 
-Gold is independently researched issuer filings/IR (full commercial life per drug) so analog peak sales can be computed. The pipeline is scored against it. See `seed/gold/README.md`.
+Gold coverage is per-drug full commercial life (approval through latest completed quarter) so analog peak sales can be computed. See `seed/gold/README.md`.

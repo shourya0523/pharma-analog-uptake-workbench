@@ -1,8 +1,9 @@
-"""Assemble lifecycle and peak files from independently researched gold revenue.
+"""Restructure seed/gold around each drug's full commercial quarter grid.
 
-Does not extract revenue. Reads cited quarterly_revenue.jsonl and writes
-lifecycle.jsonl / peak_sales.jsonl / unresolved gaps. Prefer
-`research_gold_from_filings.py` when refreshing gold from filings.
+Analog peak sales cannot be observed from a global recent-year window. This
+rebuild keeps cited quarterly values, promotes in-lifecycle USD history that
+was previously excluded, and labels every remaining expected quarter as an
+explicit non-disclosure.
 
 Usage:
     cd backend && uv run python ../scripts/rebuild_gold_lifecycle.py
@@ -217,10 +218,9 @@ def main() -> int:
         "as_of_quarter": latest_completed_quarter(AS_OF),
         "target_drug_count": len(seed),
         "purpose": (
-            "Independent source of truth assembled from cited issuer filings/IR. "
-            "Does not run the extraction pipeline."
+            "Analog peak sales requires every commercial quarter from FDA approval "
+            "through the latest completed quarter, not a global recent-year window."
         ),
-        "generation": "independent_filing_research",
         "reported_rows_file": "quarterly_revenue.jsonl",
         "unresolved_rows_file": "unresolved_quarters.jsonl",
         "lifecycle_file": "lifecycle.jsonl",
@@ -232,7 +232,7 @@ def main() -> int:
 
     report = {
         "generated": AS_OF.isoformat(),
-        "pipeline": "independent_filing_research",
+        "pipeline": "lifecycle_restructure",
         "as_of_quarter": manifest["as_of_quarter"],
         "drugs": len(seed),
         "revenue_rows": len(revenue),

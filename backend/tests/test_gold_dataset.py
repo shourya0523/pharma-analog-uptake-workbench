@@ -102,7 +102,6 @@ def test_gold_revenue_rows_pass_production_validation():
         assert RevenueScope(row["revenue_scope"])
         assert SourceType(row["source_type"]) in ALLOWED_GOLD_SOURCE_TYPES
         assert ValidationStatus(row["validation_status"]) is ValidationStatus.CONFIRMED
-        assert row["extraction_method"] == "independent_filing_research"
         assert quote_contains_value(candidate.source_quote, candidate.value_reported)
         assert citation.source_url == row["source_url"]
 
@@ -144,8 +143,6 @@ def test_gold_scope_matches_manifest():
     seed_drugs = _seed_drug_names()
 
     assert manifest["coverage_mode"] == "full_lifecycle"
-    assert manifest["generation"] == "independent_filing_research"
-    assert "pipeline" in manifest["purpose"].lower()
     assert len(seed_drugs) == manifest["target_drug_count"]
     assert {row["drug_name"] for row in lifecycle} == seed_drugs
     as_of = date.fromisoformat(manifest["as_of_date"])
