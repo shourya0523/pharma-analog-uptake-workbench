@@ -568,6 +568,9 @@ def build_annual_rows() -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     for source in read_csv(SOURCE_DIR / "annual_product_sales.csv"):
         meta = ANNUAL_METADATA[source["drug_name"]]
+        value = float(source["value_reported"])
+        source_unit = "thousands" if "thousands" in source["source_quote"].lower() else source["unit"]
+        source_value = value * 1000 if source_unit == "thousands" else value
         rows.append(
             {
                 "gold_id": slug(meta["benchmark_identity"], source["period"]),
@@ -576,7 +579,7 @@ def build_annual_rows() -> list[dict[str, Any]]:
                 "manufacturer": meta["manufacturer"],
                 "benchmark_identity": meta["benchmark_identity"],
                 "period": source["period"],
-                "value_reported": float(source["value_reported"]),
+                "value_reported": value,
                 "currency": source["currency"],
                 "unit": source["unit"],
                 "metric": "revenue",
@@ -587,6 +590,8 @@ def build_annual_rows() -> list[dict[str, Any]]:
                 "source_type": "sec_filing" if "sec.gov" in source["source_url"] else "company_ir",
                 "source_url": source["source_url"],
                 "source_quote": source["source_quote"],
+                "source_value_reported": source_value,
+                "source_unit": source_unit,
                 "derivation": source["derivation"],
                 "series_role": source["series_role"],
                 "extraction_method": PROVENANCE,
