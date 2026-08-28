@@ -116,6 +116,16 @@ PRODUCT_METADATA = {
         "formulation": "inhalation powder",
         "route_of_administration": "inhalation",
     },
+    "Winrevair": {
+        "generic_name": "sotatercept-csrk",
+        "manufacturer": "Merck",
+        "benchmark_identity": "merck_winrevair_worldwide_reported",
+        "commercial_start_quarter": "2024Q1",
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "injection",
+        "route_of_administration": "subcutaneous",
+    },
 }
 
 ANNUAL_METADATA = {
@@ -133,6 +143,11 @@ ANNUAL_METADATA = {
         "generic_name": "epoprostenol",
         "manufacturer": "GSK",
         "benchmark_identity": "gsk_flolan_worldwide_partial",
+    },
+    "Tracleer": {
+        "generic_name": "bosentan",
+        "manufacturer": "Actelion/J&J",
+        "benchmark_identity": "actelion_tracleer_worldwide_reported_chf",
     },
 }
 
@@ -168,6 +183,17 @@ def normalize_label(value: str) -> str:
     value = re.sub(r"\(\d+\)", "", value)
     value = value.replace("®", "").replace("™", "")
     return re.sub(r"[^a-z0-9]+", " ", value.lower()).strip()
+
+
+def quote_contains_number(quote: str, value: float) -> bool:
+    normalized = quote.replace(",", "")
+    forms = {
+        str(value),
+        f"{value:g}",
+        f"{value:.1f}",
+        f"{value:.3f}",
+    }
+    return any(re.search(rf"(?<!\d){re.escape(form)}(?!\d)", normalized) for form in forms)
 
 
 def first_amount(cells: list[str]) -> float | None:
@@ -514,9 +540,27 @@ def build_yutrepia() -> list[dict[str, Any]]:
             source_quote=source["source_quote"],
             source_type="sec_filing",
             derivation=source["derivation"],
+            source_value=float(source["source_value_reported"]),
+            source_unit=source["source_unit"],
             notes="Liquidia product sales exclude separately reported service revenue.",
         )
         for source in read_csv(SOURCE_DIR / "yutrepia_quarterly.csv")
+    ]
+
+
+def build_winrevair() -> list[dict[str, Any]]:
+    return [
+        revenue_row(
+            drug_name="Winrevair",
+            period=source["period"],
+            value=float(source["value_reported"]),
+            source_url=source["source_url"],
+            source_quote=source["source_quote"],
+            source_type="company_ir",
+            derivation=source["derivation"],
+            notes="Merck worldwide product sales; alliance revenue is not used.",
+        )
+        for source in read_csv(SOURCE_DIR / "merck_winrevair_quarterly.csv")
     ]
 
 
@@ -524,6 +568,9 @@ def build_annual_rows() -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     for source in read_csv(SOURCE_DIR / "annual_product_sales.csv"):
         meta = ANNUAL_METADATA[source["drug_name"]]
+        value = float(source["value_reported"])
+        source_unit = "thousands" if "thousands" in source["source_quote"].lower() else source["unit"]
+        source_value = value * 1000 if source_unit == "thousands" else value
         rows.append(
             {
                 "gold_id": slug(meta["benchmark_identity"], source["period"]),
@@ -532,7 +579,7 @@ def build_annual_rows() -> list[dict[str, Any]]:
                 "manufacturer": meta["manufacturer"],
                 "benchmark_identity": meta["benchmark_identity"],
                 "period": source["period"],
-                "value_reported": float(source["value_reported"]),
+                "value_reported": value,
                 "currency": source["currency"],
                 "unit": source["unit"],
                 "metric": "revenue",
@@ -540,9 +587,11 @@ def build_annual_rows() -> list[dict[str, Any]]:
                 "period_basis": "calendar",
                 "revenue_scope": source["revenue_scope"],
                 "geography": source["geography"],
-                "source_type": "sec_filing",
+                "source_type": "sec_filing" if "sec.gov" in source["source_url"] else "company_ir",
                 "source_url": source["source_url"],
                 "source_quote": source["source_quote"],
+                "source_value_reported": source_value,
+                "source_unit": source_unit,
                 "derivation": source["derivation"],
                 "series_role": source["series_role"],
                 "extraction_method": PROVENANCE,
@@ -610,7 +659,8 @@ def observed_peak(drug_name: str, annual: list[dict[str, Any]], scope: str, geog
         "post_peak_years": len(later) if observed else 0,
         "selection_method": "independent_max_with_two_later_lower_years",
         "input_ids": maximum["input_ids"],
-        "benchmark_eligible": observed,
+        "benchmark_eligible": True,
+        "numeric_peak_available": observed,
     }
 
 
@@ -619,10 +669,33 @@ def build_peaks(quarterly: list[dict[str, Any]], annual: list[dict[str, Any]]) -
     for drug_name, meta in PRODUCT_METADATA.items():
         totals = full_annual_totals(quarterly, drug_name)
         if not totals:
+            observations = [row for row in quarterly if row["drug_name"] == drug_name]
+            highest = max(observations, key=lambda row: row["value_reported"])
+            peaks.append(
+                {
+                    "gold_id": slug(drug_name, "peak"),
+                    "drug_name": drug_name,
+                    "peak_status": "not_yet_observed",
+                    "peak_year": None,
+                    "peak_value": None,
+                    "currency": None,
+                    "unit": None,
+                    "revenue_scope": meta["revenue_scope"],
+                    "geography": meta["geography"],
+                    "highest_observed_period": highest["period"],
+                    "highest_observed_value": highest["value_reported"],
+                    "annual_observations": 0,
+                    "post_peak_years": 0,
+                    "selection_method": "insufficient_complete_years_product_still_growing",
+                    "input_ids": [highest["gold_id"]],
+                    "benchmark_eligible": True,
+                    "numeric_peak_available": False,
+                }
+            )
             continue
         peaks.append(observed_peak(drug_name, totals, meta["revenue_scope"], meta["geography"]))
 
-    for drug_name in ("Letairis", "Revatio"):
+    for drug_name in ("Letairis", "Revatio", "Tracleer"):
         series = [
             {
                 "period": row["period"],
@@ -637,6 +710,22 @@ def build_peaks(quarterly: list[dict[str, Any]], annual: list[dict[str, Any]]) -
         exemplar = next(row for row in annual if row["drug_name"] == drug_name)
         peaks.append(observed_peak(drug_name, series, exemplar["revenue_scope"], exemplar["geography"]))
     return sorted(peaks, key=lambda row: row["drug_name"])
+
+
+def build_exclusions() -> list[dict[str, Any]]:
+    return [
+        {
+            "gold_id": slug(source["drug_name"], "excluded"),
+            "drug_name": source["drug_name"],
+            "benchmark_status": "excluded",
+            "reason_code": source["reason_code"],
+            "source_url": source["source_url"],
+            "source_quote": source["source_quote"],
+            "details": source["details"],
+            "extraction_method": PROVENANCE,
+        }
+        for source in read_csv(SOURCE_DIR / "excluded_products.csv")
+    ]
 
 
 def coverage_rows(quarterly: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -677,7 +766,9 @@ def main() -> int:
     out_dir.mkdir(parents=True, exist_ok=True)
     client = ResearchClient(args.cache_dir)
     try:
-        quarterly = deduplicate(build_uthr(client) + build_uptravi(client) + build_yutrepia())
+        quarterly = deduplicate(
+            build_uthr(client) + build_uptravi(client) + build_yutrepia() + build_winrevair()
+        )
     finally:
         client.close()
     annual = sorted(build_annual_rows(), key=lambda row: (row["drug_name"], row["period"]))
@@ -687,11 +778,13 @@ def main() -> int:
         details = {row["drug_name"]: row["missing_quarters"] for row in incomplete}
         raise ValueError(f"Incomplete independently researched series: {details}")
     peaks = build_peaks(quarterly, annual)
+    exclusions = build_exclusions()
 
     write_jsonl(out_dir / "quarterly_revenue.jsonl", quarterly)
     write_jsonl(out_dir / "annual_revenue.jsonl", annual)
     write_jsonl(out_dir / "series_coverage.jsonl", coverage)
     write_jsonl(out_dir / "peak_sales.jsonl", peaks)
+    write_jsonl(out_dir / "excluded_products.jsonl", exclusions)
     (out_dir / "unresolved_quarters.jsonl").write_text("")
     report = {
         "generation": PROVENANCE,
@@ -702,7 +795,27 @@ def main() -> int:
         "quarterly_coverage_pct": 100.0,
         "observed_peaks": sum(row["peak_status"] == "observed" for row in peaks),
         "not_yet_observed_peaks": sum(row["peak_status"] == "not_yet_observed" for row in peaks),
+        "excluded_products": len(exclusions),
     }
+    manifest = {
+        "name": "independent_pah_peak_sales_gold",
+        "generation": PROVENANCE,
+        "as_of_quarter": AS_OF_QUARTER,
+        "target_product_count": len(PRODUCT_METADATA) + len(ANNUAL_METADATA) + len(exclusions) - 1,
+        "quarterly_series_count": len(coverage),
+        "annual_only_series_count": 3,
+        "excluded_product_count": len(exclusions),
+        "quarterly_coverage_pct": 100.0,
+        "reported_rows_file": "quarterly_revenue.jsonl",
+        "annual_rows_file": "annual_revenue.jsonl",
+        "coverage_file": "series_coverage.jsonl",
+        "peak_sales_file": "peak_sales.jsonl",
+        "excluded_products_file": "excluded_products.jsonl",
+        "source_manifest_directory": "source_manifests",
+        "gold_builder": "scripts/build_independent_gold.py",
+        "pipeline_code_allowed_in_builder": False,
+    }
+    (out_dir / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
     (out_dir / "build_report.json").write_text(json.dumps(report, indent=2) + "\n")
     print(json.dumps(report, indent=2))
     return 0
