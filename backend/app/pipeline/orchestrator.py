@@ -3,13 +3,14 @@ from __future__ import annotations
 # ruff: noqa: BLE001, DTZ003
 import json
 import logging
-from datetime import datetime
+from datetime import UTC, date, datetime
 from typing import Any
 
 from sqlalchemy.orm import Session
 
 logger = logging.getLogger(__name__)
 
+from app.analytics.lifecycle import latest_completed_quarter, parse_quarter_label
 from app.config import get_settings
 from app.connectors.llm_search import LLMSearchConnector
 from app.connectors.openfda import OpenFDAConnector
@@ -17,6 +18,7 @@ from app.connectors.openfda_fields import (
     earliest_approval_date,
     openfda_brand_names,
     select_openfda_result,
+    selected_approval_date,
 )
 from app.connectors.sources import (
     ManualURLConnector,
@@ -70,7 +72,7 @@ from app.quality.checks import (
     run_quality_checks,
 )
 from app.quality.comparative import derive_comparative_candidates
-from app.quality.completeness import resolve_completeness_pct
+from app.quality.completeness import lifecycle_gaps, resolve_completeness_pct
 from app.quality.enrichment import (
     apply_field_enrichment,
     deterministic_formulation_fill,
@@ -307,11 +309,78 @@ class PipelineOrchestrator:
                 self.db.commit()
                 logger.info("cik_resolved job_id=%s drug=%s cik=%s via=llm_search", job.id, job.drug_name, cik)
 
+    def _option_date(self, options: dict[str, Any], key: str) -> date | None:
+        return parse_filing_date(options.get(key))
+
+    def _as_of_date(self, options: dict[str, Any]) -> date:
+        return self._option_date(options, "as_of_date") or datetime.now(UTC).date()
+
+    def _earnings_exhibit_cap(self, options: dict[str, Any]) -> int:
+        explicit = options.get("earnings_max_exhibits")
+        if explicit:
+            return int(explicit)
+        settings = get_settings()
+        if options.get("lifecycle_coverage", True):
+            return max(settings.sec_max_earnings_exhibits, 24)
+        return settings.sec_max_earnings_exhibits
+
+    def _approval_date_from_fda_sources(self, sources: list, job: DrugJobORM) -> date | None:
+        for src in sources:
+            if src.source_type != SourceType.OPENFDA:
+                continue
+            results = (src.metadata or {}).get("results") or []
+            if not results:
+                continue
+            found = selected_approval_date(
+                results,
+                product=job.drug_name,
+                generic=job.generic_name,
+                aliases=self._job_aliases,
+            )
+            if found:
+                return found
+        return None
+
+    def _profile_approval_date(self, job: DrugJobORM) -> date | None:
+        rows = self.db.query(DrugProfileFieldORM).filter_by(job_id=job.id, field="fda_approval_date").all()
+        for row in rows:
+            parsed = self._option_date({"fda_approval_date": row.value}, "fda_approval_date")
+            if parsed:
+                return parsed
+        return None
+
+    def _lifecycle_search_context(self, job: DrugJobORM, options: dict[str, Any]) -> str:
+        approval = self._profile_approval_date(job)
+        as_of = self._as_of_date(options)
+        end = latest_completed_quarter(as_of)
+        start = approval.isoformat() if approval else "FDA approval / commercial launch"
+        return (
+            "Collect every product-level quarterly net sales figure from commercial launch "
+            f"({start}) through {end}. Analog peak sales requires the full quarter grid, "
+            "not a recent-year slice. Prefer SEC exhibit 99.1 and issuer IR product tables. "
+            "Do not stop after the most recent few quarters."
+        )
+
     async def _retrieve(self, job: DrugJobORM, options: dict[str, Any]) -> list:
         self._set_step(job, JobStep.SOURCE_RETRIEVE)
         collected = []
         want_primary = bool(options.get("sec_filings", True))
         want_earnings = bool(options.get("earnings_releases", True))
+        earnings_since = parse_filing_date(options.get("earnings_since"))
+        earnings_until = parse_filing_date(options.get("earnings_until"))
+
+        if options.get("openfda", True):
+            collected.extend(
+                await self.fda.retrieve(
+                    run_id=job.run_id,
+                    job_id=job.id,
+                    brand=job.drug_name,
+                    generic=job.generic_name,
+                )
+            )
+            if earnings_since is None and options.get("lifecycle_coverage", True):
+                earnings_since = self._approval_date_from_fda_sources(collected, job)
+
         if want_primary or want_earnings:
             collected.extend(
                 await self.sec.retrieve(
@@ -322,17 +391,9 @@ class PipelineOrchestrator:
                     company_name=job.manufacturer,
                     include_primary=want_primary,
                     include_earnings=want_earnings,
-                    earnings_since=parse_filing_date(options.get("earnings_since")),
-                    earnings_until=parse_filing_date(options.get("earnings_until")),
-                )
-            )
-        if options.get("openfda", True):
-            collected.extend(
-                await self.fda.retrieve(
-                    run_id=job.run_id,
-                    job_id=job.id,
-                    brand=job.drug_name,
-                    generic=job.generic_name,
+                    earnings_since=earnings_since,
+                    earnings_until=earnings_until,
+                    max_earnings_exhibits=self._earnings_exhibit_cap(options),
                 )
             )
         if job.known_source_url and options.get("company_ir", True):
@@ -356,7 +417,7 @@ class PipelineOrchestrator:
                 aliases=self._job_aliases,
                 manufacturer=job.manufacturer,
                 ticker=job.ticker,
-                context="SEC/IR filings with product net sales when CIK retrieval failed or no SEC filings.",
+                context=self._lifecycle_search_context(job, options),
             )
             collected.extend(search_sources)
 
@@ -364,11 +425,12 @@ class PipelineOrchestrator:
         job.sources_found = len(collected)
         self.db.commit()
         logger.info(
-            "sources_retrieved job_id=%s drug=%s count=%s types=%s",
+            "sources_retrieved job_id=%s drug=%s count=%s types=%s earnings_since=%s",
             job.id,
             job.drug_name,
             len(collected),
             sorted({getattr(s.source_type, "value", str(s.source_type)) for s in collected}),
+            earnings_since.isoformat() if earnings_since else None,
         )
         return collected
 
@@ -791,7 +853,7 @@ class PipelineOrchestrator:
             aliases=self._job_aliases,
             manufacturer=job.manufacturer,
             ticker=job.ticker,
-            context="Product-level quarterly or annual net sales from earnings release or IR.",
+            context=self._lifecycle_search_context(job, options),
         )
         if not search_sources:
             return [], {}
@@ -1420,39 +1482,38 @@ class PipelineOrchestrator:
             if d.period_type == PeriodType.QUARTERLY.value
             or ("Q" in (d.period or "") and d.period_type not in {"ytd", "annual", "six_month", "nine_month"})
         ]
-        periods = sorted({d.period for d in quarterly if d.period and d.period != "unknown"})
+        periods = sorted(
+            {d.period for d in quarterly if d.period and d.period != "unknown" and parse_quarter_label(d.period)},
+            key=lambda p: parse_quarter_label(p) or (9999, 9),
+        )
         existing = set(periods)
 
-        def period_key(p: str) -> tuple[int, int]:
-            try:
-                y = int(p[:4])
-                q = int(p[-1])
-                return y, q
-            except Exception:
-                return 9999, 9
+        run = self.db.get(ExtractionRunORM, job.run_id)
+        options = (run.options_json if run else {}) or {}
+        as_of = self._as_of_date(options)
+        approval = self._option_date({"fda_approval_date": profile.get("fda_approval_date")}, "fda_approval_date")
+        expected, missing = lifecycle_gaps(
+            approval_date=approval,
+            known_periods=periods,
+            as_of=as_of,
+            lifecycle_coverage=bool(options.get("lifecycle_coverage", True)),
+        )
+        expected_set = set(expected)
 
-        # Deterministic gap fill between min/max quarterly periods
-        if periods:
-            start, end = period_key(periods[0]), period_key(periods[-1])
-            y, q = start
-            while (y, q) <= end:
-                label = f"{y}Q{q}"
-                if label not in existing:
-                    self.db.add(
-                        UnresolvedQuarterORM(
-                            id=new_id(),
-                            job_id=job.id,
-                            period=label,
-                            reason_unresolved="No reliable product-level quarterly value extracted",
-                            sources_checked=[s.source_url for s in job.sources],
-                            recommended_next_step="Check SEC 10-Q MD&A / earnings release for product net sales",
-                            confidence_that_unavailable=0.3,
-                        )
-                    )
-                q += 1
-                if q > 4:
-                    q = 1
-                    y += 1
+        for label in missing:
+            if label in existing:
+                continue
+            self.db.add(
+                UnresolvedQuarterORM(
+                    id=new_id(),
+                    job_id=job.id,
+                    period=label,
+                    reason_unresolved="No reliable product-level quarterly value extracted for this lifecycle quarter",
+                    sources_checked=[s.source_url for s in job.sources],
+                    recommended_next_step="Check SEC 10-Q MD&A / earnings release for product net sales across the full commercial life",
+                    confidence_that_unavailable=0.3,
+                )
+            )
 
         unresolved = self.db.query(UnresolvedQuarterORM).filter_by(job_id=job.id).all()
         existing_unresolved = {u.period for u in unresolved}
@@ -1472,6 +1533,10 @@ class PipelineOrchestrator:
             unresolved=[{"period": u.period, "reason": u.reason_unresolved} for u in unresolved],
             timeline={
                 "fda_approval_date": profile.get("fda_approval_date"),
+                "as_of_quarter": latest_completed_quarter(as_of),
+                "lifecycle_start": expected[0] if expected else None,
+                "lifecycle_end": expected[-1] if expected else None,
+                "expected_quarter_count": len(expected),
                 "known_quarters": periods,
             },
         )
@@ -1492,7 +1557,9 @@ class PipelineOrchestrator:
                 nxt = miss.get("recommended_next_step") or "Review SEC 10-Q / earnings for product net sales"
             if not period or period in existing or period in existing_unresolved:
                 continue
-            if "Q" not in str(period):
+            if parse_quarter_label(str(period)) is None:
+                continue
+            if expected_set and str(period) not in expected_set:
                 continue
             conf = reason_map.get(code, reason_map["gap"])[1]
             self.db.add(
@@ -1510,18 +1577,27 @@ class PipelineOrchestrator:
 
         unresolved = self.db.query(UnresolvedQuarterORM).filter_by(job_id=job.id).all()
         job.unresolved_count = len(unresolved)
+        reported_in_lifecycle = [
+            d
+            for d in quarterly
+            if parse_quarter_label(d.period) and (not expected_set or d.period in expected_set)
+        ]
+        unresolved_in_lifecycle = [
+            x for x in unresolved if parse_quarter_label(x.period) and (not expected_set or x.period in expected_set)
+        ]
         job.completeness_pct = resolve_completeness_pct(
             result.get("completeness_pct"),
-            quarterly_count=len([d for d in dps if d.period_type == PeriodType.QUARTERLY.value]),
-            unresolved_quarter_count=len([x for x in unresolved if "Q" in (x.period or "")]),
+            quarterly_count=len(reported_in_lifecycle),
+            unresolved_quarter_count=len(unresolved_in_lifecycle),
         )
         self.db.commit()
         logger.info(
-            "completeness job_id=%s drug=%s llm_pct=%s resolved_pct=%s quarterly=%s unresolved=%s",
+            "completeness job_id=%s drug=%s llm_pct=%s resolved_pct=%s quarterly=%s unresolved=%s expected=%s",
             job.id,
             job.drug_name,
             result.get("completeness_pct"),
             job.completeness_pct,
-            len([d for d in dps if d.period_type == PeriodType.QUARTERLY.value]),
+            len(reported_in_lifecycle),
             job.unresolved_count,
+            len(expected),
         )

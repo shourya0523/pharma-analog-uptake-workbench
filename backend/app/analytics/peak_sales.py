@@ -135,6 +135,77 @@ def _mature_observed_peak(annual_sales: list[AnnualSales]) -> AnnualSales | None
     return None
 
 
+def comparable_key(row: AnnualSales | SalesObservation) -> tuple:
+    return (
+        row.currency,
+        row.geography,
+        row.revenue_scope,
+        row.period_basis,
+        row.formulation_scope,
+    )
+
+
+def group_annual_sales(annual_sales: list[AnnualSales]) -> dict[tuple, list[AnnualSales]]:
+    groups: dict[tuple, list[AnnualSales]] = {}
+    for row in annual_sales:
+        groups.setdefault(comparable_key(row), []).append(row)
+    return {key: sorted(rows, key=lambda item: item.period) for key, rows in groups.items()}
+
+
+def sales_observation_from_payload(row: dict) -> SalesObservation:
+    """Map a gold/datapoint payload onto the typed observation used by peak selection."""
+
+    value = row.get("value_normalized_usd_millions")
+    if value is None:
+        value = row.get("value_reported")
+    return SalesObservation(
+        id=str(row.get("id") or row.get("gold_id") or row.get("period") or ""),
+        period=str(row["period"]),
+        value=float(value),
+        currency=str(row.get("currency") or "USD"),
+        geography=str(row.get("geography") or "Worldwide"),
+        revenue_scope=str(row.get("revenue_scope") or "Unknown"),
+        period_type=str(row.get("period_type") or "quarterly"),
+        period_basis=str(row.get("period_basis") or "calendar"),
+        formulation_scope=row.get("formulation") or row.get("formulation_scope"),
+    )
+
+
+def select_peak_from_observations(
+    observations: list[SalesObservation],
+    *,
+    estimates: list[PeakEstimate] | None = None,
+    as_of_date: date,
+) -> SelectedPeak | None:
+    """Pick a peak from the longest comparable series that can support the policy."""
+
+    annual = aggregate_comparable_sales(observations)
+    groups = group_annual_sales(annual)
+    ranked = sorted(groups.values(), key=lambda rows: (-len(rows), rows[0].revenue_scope))
+    fallback: SelectedPeak | None = None
+    for series in ranked:
+        selected = select_peak_estimate(
+            annual_sales=series,
+            estimates=estimates or [],
+            as_of_date=as_of_date,
+        )
+        if selected is None:
+            continue
+        if selected.estimate_type == "observed":
+            return selected
+        if fallback is None:
+            fallback = selected
+    return fallback
+
+
+def complete_comparable_years(observations: list[SalesObservation]) -> int:
+    annual = aggregate_comparable_sales(observations)
+    if not annual:
+        return 0
+    longest = max(group_annual_sales(annual).values(), key=len)
+    return len(longest)
+
+
 def select_peak_estimate(
     *,
     annual_sales: list[AnnualSales],

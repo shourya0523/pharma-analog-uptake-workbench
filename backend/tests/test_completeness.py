@@ -50,3 +50,15 @@ def test_completeness_keeps_model_value_and_clamps_range():
 
 def test_completeness_zero_when_nothing_extracted():
     assert resolve_completeness_pct(0, quarterly_count=0, unresolved_quarter_count=4) == 0.0
+
+
+def test_orchestrator_completeness_fills_lifecycle_not_extracted_minmax():
+    import inspect
+
+    from app.pipeline.orchestrator import PipelineOrchestrator
+
+    source = inspect.getsource(PipelineOrchestrator._completeness)
+    assert "lifecycle_gaps" in source
+    assert "lifecycle_coverage" in source
+    search = inspect.getsource(PipelineOrchestrator._search_revenue_fallback)
+    assert "_lifecycle_search_context" in search

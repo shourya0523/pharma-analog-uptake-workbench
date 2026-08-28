@@ -1,5 +1,27 @@
 from __future__ import annotations
 
+from datetime import date
+
+from app.analytics.lifecycle import expected_quarters_for_job, missing_expected_quarters
+
+
+def lifecycle_gaps(
+    *,
+    approval_date: date | None,
+    known_periods: list[str],
+    as_of: date,
+    lifecycle_coverage: bool = True,
+) -> tuple[list[str], list[str]]:
+    """Return (expected quarters, missing quarters) for a job."""
+
+    expected = expected_quarters_for_job(
+        approval_date=approval_date,
+        known_periods=known_periods,
+        as_of=as_of,
+        lifecycle_coverage=lifecycle_coverage,
+    )
+    return expected, missing_expected_quarters(expected, set(known_periods))
+
 
 def resolve_completeness_pct(
     llm_pct: object,

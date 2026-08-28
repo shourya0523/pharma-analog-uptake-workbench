@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import re
 from collections.abc import Iterable
-from datetime import datetime
+from datetime import date, datetime
 from typing import Any
 
 MIN_ALIAS_LENGTH = 4
@@ -13,7 +13,15 @@ def _normalize(value: str) -> str:
 
 
 def openfda_brand_names(result: dict[str, Any]) -> list[str]:
-    return [str(name) for name in (result.get("openfda", {}).get("brand_name") or []) if name]
+    names: list[str] = []
+    for name in (result.get("openfda") or {}).get("brand_name") or []:
+        if name and str(name) not in names:
+            names.append(str(name))
+    for product in result.get("products") or []:
+        name = product.get("brand_name")
+        if name and str(name) not in names:
+            names.append(str(name))
+    return names
 
 
 def select_openfda_result(
@@ -98,3 +106,40 @@ def earliest_approval_date(results: list[dict[str, Any]]) -> tuple[str | None, s
         return None, None
     pool.sort(key=lambda x: x[0])
     return pool[0]
+
+
+def selected_approval_date(
+    results: list[dict[str, Any]],
+    *,
+    product: str,
+    generic: str | None = None,
+    aliases: Iterable[str] | None = None,
+) -> date | None:
+    """Earliest approval among applications whose brand matches this product."""
+
+    matching: list[dict[str, Any]] = []
+    generic_norm = _normalize(generic or "")
+    candidates: list[str] = []
+    for name in [product, *(aliases or [])]:
+        norm = _normalize(name)
+        if not norm or len(norm) < MIN_ALIAS_LENGTH or norm == generic_norm:
+            continue
+        if norm not in candidates:
+            candidates.append(norm)
+    for result in results:
+        for brand in openfda_brand_names(result):
+            brand_norm = _normalize(brand)
+            if brand_norm == generic_norm:
+                continue
+            if brand_norm in candidates:
+                matching.append(result)
+                break
+    if not matching:
+        selected, _ = select_openfda_result(
+            results, product=product, generic=generic, aliases=aliases
+        )
+        matching = [selected] if selected else []
+    iso, _ = earliest_approval_date(matching)
+    if not iso:
+        return None
+    return date.fromisoformat(iso)

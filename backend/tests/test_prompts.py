@@ -44,3 +44,12 @@ def test_every_prompt_loads():
         prompt = load_prompt(path.stem)
         assert prompt["system"].strip()
         assert prompt["user_template"].strip()
+
+
+def test_search_prompts_target_full_commercial_life():
+    planner = _prompt_text("search_planner").lower()
+    fetch = _prompt_text("search_fetch").lower()
+    completeness = _prompt_text("completeness_analyzer").lower()
+    assert "full commercial life" in planner
+    assert "full commercial life" in fetch
+    assert "full commercial life" in completeness or "commercial life" in completeness

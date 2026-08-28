@@ -120,7 +120,9 @@ def test_parse_openfda_date_handles_compact_and_iso():
 def test_brand_is_queried_before_the_molecule():
     """A combined brand-OR-generic search can exclude the product entirely."""
     scopes = [scope for scope, _ in search_queries("Opsumit", "macitentan")]
-    assert scopes == ["brand", "generic"]
+    assert scopes[0] == "brand"
+    assert "generic" in scopes
+    assert scopes.index("brand") < scopes.index("generic")
 
     brand_query = search_queries("Opsumit", "macitentan")[0][1]
     assert brand_query == 'openfda.brand_name:"Opsumit"'
@@ -128,7 +130,9 @@ def test_brand_is_queried_before_the_molecule():
 
 
 def test_search_queries_tolerate_missing_inputs():
-    assert search_queries("Tyvaso") == [("brand", 'openfda.brand_name:"Tyvaso"')]
+    queries = search_queries("Tyvaso")
+    assert queries[0] == ("brand", 'openfda.brand_name:"Tyvaso"')
+    assert ("brand_product", 'products.brand_name:"Tyvaso"') in queries
     assert search_queries("", "treprostinil") == [("generic", 'openfda.generic_name:"treprostinil"')]
     assert search_queries("", None) == []
 

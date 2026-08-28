@@ -103,3 +103,5 @@ uv run --project backend python scripts/smoke_validate.py --metadata-only
 ## Seed
 
 `seed/example_drugs.csv` — PAH analogs aligned with the dashboard mockup.
+
+Gold coverage is per-drug full commercial life (approval through latest completed quarter) so analog peak sales can be computed. See `seed/gold/README.md`.

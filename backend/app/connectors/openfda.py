@@ -24,6 +24,8 @@ def search_queries(brand: str, generic: str | None = None) -> list[tuple[str, st
     queries = []
     if brand and brand.strip():
         queries.append(("brand", f'openfda.brand_name:"{brand.strip()}"'))
+        # Older NDAs often omit openfda.brand_name; products.brand_name still matches.
+        queries.append(("brand_product", f'products.brand_name:"{brand.strip()}"'))
     if generic and generic.strip():
         queries.append(("generic", f'openfda.generic_name:"{generic.strip()}"'))
     return queries

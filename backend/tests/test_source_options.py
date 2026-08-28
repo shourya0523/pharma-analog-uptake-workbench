@@ -19,6 +19,7 @@ def test_extraction_options_expose_earnings_releases():
     options = ExtractionOptions()
     assert options.earnings_releases is True
     assert options.sec_filings is True
+    assert options.lifecycle_coverage is True
     assert ExtractionOptions(sec_filings=False).earnings_releases is True
 
 
@@ -27,6 +28,7 @@ def test_sec_retrieve_accepts_independent_primary_and_earnings_switches():
     assert params["include_primary"].default is True
     # None defers to the sec_earnings_exhibits setting
     assert params["include_earnings"].default is None
+    assert params["max_earnings_exhibits"].default is None
 
 
 def test_orchestrator_maps_both_options_into_retrieval():
@@ -57,8 +59,11 @@ def test_earnings_window_is_optional_and_plumbed_end_to_end():
     assert params["earnings_until"].default is None
 
     source = inspect.getsource(PipelineOrchestrator._retrieve)
-    assert 'earnings_since=parse_filing_date(options.get("earnings_since"))' in source
-    assert 'earnings_until=parse_filing_date(options.get("earnings_until"))' in source
+    assert "earnings_since = parse_filing_date(options.get(\"earnings_since\"))" in source
+    assert "earnings_until = parse_filing_date(options.get(\"earnings_until\"))" in source
+    assert "max_earnings_exhibits=self._earnings_exhibit_cap(options)" in source
+    assert source.index("self.fda.retrieve") < source.index("self.sec.retrieve")
+    assert "_approval_date_from_fda_sources" in source
 
     exhibits = inspect.getsource(SECConnector._retrieve_earnings_exhibits)
     assert "filed_on < since" in exhibits
