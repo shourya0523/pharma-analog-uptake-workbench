@@ -52,7 +52,7 @@ def test_actelion_schedule_parser_reads_ww_line_with_production_helpers():
         match = re.search(
             rf"{drug}\s*\nUS[^\n]*\nIntl[^\n]*\nWW\s+([^\n]+)",
             text,
-            re.I,
+            re.IGNORECASE,
         )
         assert match
         nums = parse_numbers(match.group(1))

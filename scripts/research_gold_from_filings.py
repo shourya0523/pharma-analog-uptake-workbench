@@ -27,7 +27,7 @@ from bs4 import BeautifulSoup
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "backend"))
 
-from app.analytics.gold_dataset import (  # noqa: E402
+from app.analytics.gold_dataset import (
     fill_lifecycle_unresolved,
     lifecycle_record,
     peak_record,
@@ -35,15 +35,15 @@ from app.analytics.gold_dataset import (  # noqa: E402
     revenue_gold_row,
     unresolved_row,
 )
-from app.analytics.lifecycle import latest_completed_quarter  # noqa: E402
-from app.config import get_settings  # noqa: E402
-from app.connectors.openfda import search_queries  # noqa: E402
-from app.connectors.openfda_fields import selected_approval_date  # noqa: E402
-from app.connectors.sources import is_earnings_exhibit, parse_filing_date  # noqa: E402
-from app.llm.aliases import merge_aliases  # noqa: E402
-from app.parsing.periods import MONTHS, quarter_of_month  # noqa: E402
-from app.quality.candidate_filters import filter_revenue_candidates  # noqa: E402
-from app.quality.comparative import ABS_TOLERANCE, parse_numbers  # noqa: E402
+from app.analytics.lifecycle import latest_completed_quarter
+from app.config import get_settings
+from app.connectors.openfda import search_queries
+from app.connectors.openfda_fields import selected_approval_date
+from app.connectors.sources import is_earnings_exhibit, parse_filing_date
+from app.llm.aliases import merge_aliases
+from app.parsing.periods import MONTHS, quarter_of_month
+from app.quality.candidate_filters import filter_revenue_candidates
+from app.quality.comparative import ABS_TOLERANCE, parse_numbers
 
 GOLD = REPO_ROOT / "seed" / "gold"
 SEED = REPO_ROOT / "seed" / "example_drugs.csv"
@@ -149,7 +149,7 @@ MERCK_IR_PDFS = [
     "https://www.merck.com/wp-content/uploads/sites/124/2024/07/2Q24-Merck-Other-Financial-Disclosures.pdf",
 ]
 
-_THREE_MONTHS = re.compile(r"three\s+months?\s+ended\s+([A-Za-z]+)", re.I)
+_THREE_MONTHS = re.compile(r"three\s+months?\s+ended\s+([A-Za-z]+)", re.IGNORECASE)
 _YEAR_RE = re.compile(r"\b(20\d{2})\b")
 
 
@@ -480,7 +480,7 @@ def parse_jnj_pdf(raw: bytes, url: str) -> list[dict]:
     ]
     rows_out: list[dict] = []
     for drug, pattern, scope, generic, notes in patterns:
-        match = re.search(pattern, text, re.I)
+        match = re.search(pattern, text, re.IGNORECASE)
         if not match:
             continue
         current = float(match.group(1).replace(",", ""))
@@ -570,7 +570,7 @@ def parse_merck_schedule(text: str, url: str) -> list[dict]:
     m = re.search(
         r"Winrevair\s+(\d[\d,]*)\s+(\d[\d,]*)\s+(\d[\d,]*)\s+(\d[\d,]*)\s+(\d[\d,]*)\s+(\d[\d,]*)\s+(\d[\d,]*)\s+(\d[\d,]*)\s+(\d[\d,]*)",
         one,
-        re.I,
+        re.IGNORECASE,
     )
     q_from_url = re.search(r"([1-4])Q(\d{2})", url)
     if m and q_from_url and q_from_url.group(1) == "2":
@@ -600,7 +600,7 @@ def parse_merck_schedule(text: str, url: str) -> list[dict]:
         am = re.search(
             r"Adempas(?:\s+\(\d+\))?\s+(\d[\d,]*)\s+(\d[\d,]*)\s+(\d[\d,]*)\s+(\d[\d,]*)\s+(\d[\d,]*)\s+(\d[\d,]*)\s+(\d[\d,]*)\s+(\d[\d,]*)\s+(\d[\d,]*)",
             one,
-            re.I,
+            re.IGNORECASE,
         )
         if am:
             anums = [float(x.replace(",", "")) for x in am.groups()]
@@ -630,7 +630,7 @@ def parse_merck_schedule(text: str, url: str) -> list[dict]:
     m4 = re.search(
         r"Winrevair\s+(\d[\d,]*)\s+(\d[\d,]*)\s+(\d[\d,]*)\s+(\d[\d,]*)\s+(\d[\d,]*)\s+(\d[\d,]*)\s+(\d[\d,]*)\s+(\d[\d,]*)\s+(\d[\d,]*)",
         one,
-        re.I,
+        re.IGNORECASE,
     )
     if m4 and q_from_url and q_from_url.group(1) == "4":
         year = 2000 + int(q_from_url.group(2))
@@ -662,7 +662,7 @@ def parse_merck_schedule(text: str, url: str) -> list[dict]:
         am = re.search(
             r"Adempas(?:\s+\(\d+\))?\s+(\d[\d,]*)\s+(\d[\d,]*)\s+(\d[\d,]*)\s+(\d[\d,]*)\s+(\d[\d,]*)\s+(\d[\d,]*)\s+(\d[\d,]*)\s+(\d[\d,]*)\s+(\d[\d,]*)",
             one,
-            re.I,
+            re.IGNORECASE,
         )
         if am:
             anums = [float(x.replace(",", "")) for x in am.groups()]
@@ -727,7 +727,7 @@ def parse_actelion_schedule(text: str, url: str = ACTELION_SALES_URL) -> list[di
         match = re.search(
             rf"{re.escape(drug)}\s*\nUS[^\n]*\nIntl[^\n]*\nWW\s+([^\n]+)",
             text,
-            re.I,
+            re.IGNORECASE,
         )
         if not match:
             print(f"actelion miss {drug}")
@@ -809,9 +809,9 @@ def parse_liquidia_tables(
     accession: str,
 ) -> list[dict]:
     soup_text = BeautifulSoup(html, "lxml").get_text(" ", strip=True)
-    if not re.search(r"YUTREPIA", soup_text, re.I):
+    if not re.search(r"YUTREPIA", soup_text, re.IGNORECASE):
         return []
-    thousands = bool(re.search(r"in thousands", soup_text, re.I))
+    thousands = bool(re.search(r"in thousands", soup_text, re.IGNORECASE))
     rows_out: list[dict] = []
     for table in tables:
         quarter = three_month_quarter(table)
