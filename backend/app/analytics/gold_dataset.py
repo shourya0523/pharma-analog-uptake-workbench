@@ -24,6 +24,49 @@ def slug(*parts: object) -> str:
     return re.sub(r"[^a-z0-9]+", "-", "-".join(str(p).lower() for p in parts if p is not None)).strip("-")
 
 
+def period_fields(period: str) -> dict:
+    year = int(period[:4])
+    quarter = int(period[-1])
+    return {
+        "period": period,
+        "fiscal_year": year,
+        "fiscal_quarter": quarter,
+        "calendar_year": year,
+        "calendar_quarter": quarter,
+        "period_type": "quarterly",
+    }
+
+
+def revenue_gold_row(**kwargs) -> dict:
+    """One independently cited product-quarter. Quote must contain the value."""
+
+    period = kwargs["period"]
+    value = float(kwargs["value_reported"])
+    quote = kwargs["source_quote"]
+    if not quote_contains_value(quote, value):
+        raise ValueError(f"quote does not contain {value} for {kwargs.get('drug_name')} {period}")
+    row = {
+        "metric": "revenue",
+        "currency": "USD",
+        "unit": "millions",
+        "confidence_score": 1.0,
+        "validation_status": "confirmed",
+        "extraction_method": "independent_filing_research",
+        **period_fields(period),
+        **kwargs,
+        "value_reported": value,
+    }
+    row.setdefault("value_normalized_usd_millions", value if row["currency"] == "USD" else None)
+    row["gold_id"] = slug(
+        row["drug_name"],
+        row["period"],
+        row.get("revenue_scope"),
+        row.get("geography"),
+        row.get("formulation"),
+    )
+    return row
+
+
 def reported_periods(rows: list[dict], drug_name: str) -> set[str]:
     return {row["period"] for row in rows if row["drug_name"] == drug_name}
 

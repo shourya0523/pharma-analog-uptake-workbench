@@ -1,12 +1,10 @@
-"""Build seed/gold JSONL from the OpenRouter web-search extraction pipeline.
+"""Evaluate the extraction pipeline against gold. Do not write seed/gold.
 
-Runs each drug in seed/example_drugs.csv through PipelineOrchestrator with
-default options (SEC earnings exhibits + LLM web search fallback), then writes
-quarterly_revenue.jsonl and unresolved_quarters.jsonl.
+Gold is independently researched ground truth. This script runs the pipeline so
+its output can be compared with seed/gold. Default output is a scratch directory.
 
 Usage:
-    cd backend && uv run python ../scripts/build_gold_web_search.py
-    cd backend && uv run python ../scripts/build_gold_web_search.py --drug Tyvaso
+    cd backend && uv run python ../scripts/build_gold_web_search.py --out-dir /tmp/pipeline-eval
 """
 
 # ruff: noqa: BLE001, DTZ011
@@ -52,6 +50,14 @@ from app.storage.filestore import get_file_store
 
 GOLD_DIR = REPO_ROOT / "seed" / "gold"
 MANIFEST_PATH = GOLD_DIR / "manifest.json"
+
+
+def pipeline_eval_targets_gold(out_dir: Path, gold_dir: Path = GOLD_DIR) -> bool:
+    """True when pipeline eval would overwrite independent gold."""
+
+    resolved = Path(out_dir).resolve()
+    gold = Path(gold_dir).resolve()
+    return resolved == gold or gold in resolved.parents
 
 ACCEPT_STATUSES = {
     ValidationStatus.CONFIRMED.value,
@@ -355,7 +361,11 @@ def _write_jsonl(path: Path, rows: list[dict]) -> None:
 async def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--drug", default=None, help="Single drug name (default: all seed drugs)")
-    parser.add_argument("--out-dir", default=str(GOLD_DIR))
+    parser.add_argument(
+        "--out-dir",
+        default="/tmp/pipeline-eval",
+        help="Scratch directory for pipeline output. Must not be seed/gold.",
+    )
     parser.add_argument("--db", default=None, help="SQLite path (default: temp under storage/)")
     parser.add_argument("--no-backfill-manual", action="store_true")
     parser.add_argument(
@@ -369,6 +379,10 @@ async def main() -> int:
         help="Manual unresolved_quarters.jsonl for backfill",
     )
     args = parser.parse_args()
+    out_dir = Path(args.out_dir).resolve()
+    if pipeline_eval_targets_gold(out_dir):
+        print("Refusing to write pipeline output into seed/gold. Gold is independent ground truth.", file=sys.stderr)
+        return 1
 
     settings = get_settings()
     if not settings.openrouter_api_key:
@@ -376,7 +390,6 @@ async def main() -> int:
         return 1
 
     manifest = json.loads(MANIFEST_PATH.read_text())
-    out_dir = Path(args.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
     db_path = Path(args.db) if args.db else REPO_ROOT / "backend" / "storage" / "gold_build.db"
@@ -398,7 +411,7 @@ async def main() -> int:
     )
 
     drugs = _load_drugs(args.drug)
-    print(f"Building gold for {len(drugs)} drug(s) -> {out_dir}")
+    print(f"Evaluating pipeline for {len(drugs)} drug(s) -> {out_dir}")
 
     revenue_rows: list[dict] = []
     unresolved_rows: list[dict] = []
