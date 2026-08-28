@@ -55,7 +55,7 @@ def is_earnings_exhibit(filename: str) -> bool:
     if not name.endswith((".htm", ".html", ".txt")):
         return False
     squashed = re.sub(r"[^a-z0-9]", "", name)
-    return "ex99" in squashed or "exhibit99" in squashed
+    return bool(re.search(r"ex+99", squashed)) or "exhibit99" in squashed
 
 
 class SECConnector:
