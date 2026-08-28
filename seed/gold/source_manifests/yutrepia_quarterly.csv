@@ -1,0 +1,6 @@
+period,value_reported,source_url,source_quote,derivation
+2025Q2,6.517,https://www.sec.gov/Archives/edgar/data/1819576/000110465926094410/lqda-20260630x10q.htm,"Product sales, net | $170,382 | $6,517 | $300,263 | $6,517 (USD thousands; Q2 2026, Q2 2025, H1 2026, H1 2025)",direct_prior_year_comparator
+2025Q3,51.669,https://www.sec.gov/Archives/edgar/data/1819576/000110465926023794/tm267579d3_ex99-1.htm,"FY2025 product sales $148.288 million less Q2 $6.517 million and Q4 $90.102 million yields Q3 $51.669 million; no Q1 sales before June launch.",full_year_less_other_reported_quarters
+2025Q4,90.102,https://www.sec.gov/Archives/edgar/data/1819576/000110465926023794/tm267579d3_ex99-1.htm,"Product sales, net | $90,102 | $148,288 (Q4 and FY2025; USD thousands)",direct_reported
+2026Q1,129.881,https://www.sec.gov/Archives/edgar/data/1819576/000110465926058252/lqda-20260331x10q.htm,"Product sales, net | $129,881 (USD thousands)",direct_reported
+2026Q2,170.382,https://www.sec.gov/Archives/edgar/data/1819576/000110465926094410/lqda-20260630x10q.htm,"Product sales, net | $170,382 | $6,517 | $300,263 | $6,517 (USD thousands; Q2 2026, Q2 2025, H1 2026, H1 2025)",direct_reported
