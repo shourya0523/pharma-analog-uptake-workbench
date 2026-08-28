@@ -1,36 +1,48 @@
-# Gold validation dataset
+# Independent peak-sales gold dataset
 
-Ground truth for the 20 products in `seed/example_drugs.csv`, constrained to 2022–2026.
+This directory is a source of truth built from issuer SEC filings and investor
+relations disclosures. It is not produced by the application extraction
+pipeline, an LLM, or pipeline post-processing.
 
-Built from the OpenRouter web-search pipeline, then **audited and filled** against issuer SEC/IR disclosures (see `audit_report.json`).
+All 20 products in `seed/example_drugs.csv` have one explicit disposition:
+
+- 12 have independently supported peak labels.
+- 9 of those also have complete quarter-by-quarter sales from commercial start
+  through 2026Q2, totaling 424 cited observations at 100% coverage.
+- 6 labels are observed numeric peaks.
+- 6 labels are `not_yet_observed` because the complete reported history is
+  still growing or lacks enough post-peak years.
+- 8 products are excluded with a cited reason because public reporting is
+  aggregated, scope-incomparable, private, or incomplete before the possible
+  peak. No sales are invented for them.
 
 ## Files
 
-- `quarterly_revenue.jsonl` — product-quarter values with citations
-- `unresolved_quarters.jsonl` — explicit non-disclosures (not zero revenue)
-- `edge_cases.jsonl` — out-of-window / generic-dose false positives
-- `manifest.json` — drug count and calendar window
-- `build_report.json` — last pipeline build summary
-- `audit_report.json` — last audit/fill summary
-- `archive/manual-2026-08-24/` — prior manually researched gold
+- `quarterly_revenue.jsonl`: complete independently reported quarterly series.
+- `annual_revenue.jsonl`: issuer-reported annual peak series and partial context.
+- `series_coverage.jsonl`: exact commercial-start-to-as-of coverage assertions.
+- `peak_sales.jsonl`: independent observed/not-yet-observed peak labels.
+- `excluded_products.jsonl`: evidence-backed benchmark exclusions.
+- `source_manifests/`: researched source indexes and manually modeled
+  direct/derived observations.
+- `manifest.json`: benchmark boundaries and provenance.
+- `build_report.json`: generated counts.
+- `unresolved_quarters.jsonl`: intentionally empty. Missing public histories are
+  exclusions, not fake quarter-level non-disclosures.
 
-## Gaps closed in audit (2026-08-27)
-
-- **Winrevair** 2025Q1–Q4 worldwide sales from Merck schedules
-- **Adempas** 2025Q1–Q4 Merck-recorded net sales (not alliance revenue)
-- **Opsumit** 2025Q1–Q4 as OPSUMIT/OPSYNVI product-family WW (J&J combined line)
-- **Uptravi** 2025Q1–Q4 worldwide from J&J other financial disclosures
-- Scope cleanup: Adcirca/Orenitram → U.S.; Tyvaso DPI/Nebulized → Formulation-specific; Remodulin → Worldwide
-- Expanded unresolved coverage for thin non-disclosures (Tracleer/Veletri/Ventavis/Revatio/Flolan/Alyq/Tadliq/Liqrev 2024Q1–Q4)
-
-## Regenerate pipeline gold
+## Rebuild
 
 ```bash
 cd backend
-uv run python ../scripts/build_gold_web_search.py \
-  --manual-revenue ../seed/gold/archive/manual-2026-08-24/quarterly_revenue.jsonl \
-  --manual-unresolved ../seed/gold/archive/manual-2026-08-24/unresolved_quarters.jsonl
-uv run python ../scripts/audit_fill_gold.py
+uv run python ../scripts/build_independent_gold.py
 ```
 
-Run `cd backend && uv run pytest tests/test_gold_dataset.py` to validate.
+The builder imports no `app`, orchestrator, extraction, quality-filter, or LLM
+code. It fails if any included quarterly series is incomplete.
+
+Validate with:
+
+```bash
+cd backend
+uv run pytest tests/test_gold_dataset.py
+```
