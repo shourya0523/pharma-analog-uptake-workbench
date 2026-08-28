@@ -540,6 +540,8 @@ def build_yutrepia() -> list[dict[str, Any]]:
             source_quote=source["source_quote"],
             source_type="sec_filing",
             derivation=source["derivation"],
+            source_value=float(source["source_value_reported"]),
+            source_unit=source["source_unit"],
             notes="Liquidia product sales exclude separately reported service revenue.",
         )
         for source in read_csv(SOURCE_DIR / "yutrepia_quarterly.csv")
