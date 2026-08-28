@@ -23,6 +23,9 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "backend"))
 
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session, sessionmaker
+
 from app.analytics.lifecycle import latest_completed_quarter
 from app.config import get_settings
 from app.db.models import (
@@ -44,8 +47,6 @@ from app.pipeline.orchestrator import PipelineOrchestrator
 from app.quality.candidate_filters import filter_revenue_candidates
 from app.quality.checks import quote_contains_value, run_quality_checks
 from app.storage.filestore import get_file_store
-from sqlalchemy import create_engine
-from sqlalchemy.orm import Session, sessionmaker
 
 GOLD_DIR = REPO_ROOT / "seed" / "gold"
 MANIFEST_PATH = GOLD_DIR / "manifest.json"

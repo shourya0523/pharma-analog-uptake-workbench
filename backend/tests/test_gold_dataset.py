@@ -4,6 +4,10 @@ from collections import defaultdict
 from datetime import date
 from pathlib import Path
 
+from sqlalchemy import create_engine, text
+from sqlalchemy import inspect as sa_inspect
+from sqlalchemy.orm import sessionmaker
+
 from app.analytics.gold_dataset import (
     lifecycle_record,
     peak_record,
@@ -31,9 +35,6 @@ from app.parsing.fda_label import parse_label_record
 from app.parsing.indications import parse_indications
 from app.quality.candidate_filters import filter_revenue_candidates
 from app.quality.checks import quote_contains_value, run_quality_checks
-from sqlalchemy import create_engine, text
-from sqlalchemy import inspect as sa_inspect
-from sqlalchemy.orm import sessionmaker
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 GOLD_DIR = REPO_ROOT / "seed" / "gold"
