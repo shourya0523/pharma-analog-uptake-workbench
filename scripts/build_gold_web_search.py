@@ -9,8 +9,6 @@ Usage:
     cd backend && uv run python ../scripts/build_gold_web_search.py --drug Tyvaso
 """
 
-# ruff: noqa: BLE001, DTZ011
-
 from __future__ import annotations
 
 import argparse
@@ -28,7 +26,6 @@ sys.path.insert(0, str(REPO_ROOT / "backend"))
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
-from app.analytics.lifecycle import latest_completed_quarter
 from app.config import get_settings
 from app.db.models import (
     Base,
@@ -37,14 +34,7 @@ from app.db.models import (
     ExtractionRunORM,
     UnresolvedQuarterORM,
 )
-from app.domain.models import (
-    DrugInput,
-    ExtractionOptions,
-    JobStatus,
-    RevenueCandidate,
-    ValidationStatus,
-    new_id,
-)
+from app.domain.models import DrugInput, ExtractionOptions, JobStatus, RevenueCandidate, ValidationStatus, new_id
 from app.pipeline.orchestrator import PipelineOrchestrator
 from app.quality.candidate_filters import filter_revenue_candidates
 from app.quality.checks import quote_contains_value, run_quality_checks
@@ -127,18 +117,12 @@ def _extraction_method(dp: DatapointORM) -> str:
 def _datapoint_to_gold(dp: DatapointORM, job: DrugJobORM, manifest: dict) -> dict | None:
     if dp.period_type != "quarterly":
         return None
-    as_of = date.fromisoformat(manifest["as_of_date"]) if manifest.get("as_of_date") else None
-    if as_of:
-        end = latest_completed_quarter(as_of)
-        if str(dp.period) > end:
-            return None
-    elif manifest.get("start_year") is not None:
-        try:
-            year = int(str(dp.period)[:4])
-        except ValueError:
-            return None
-        if year < manifest["start_year"] or year > manifest["end_year"]:
-            return None
+    try:
+        year = int(str(dp.period)[:4])
+    except ValueError:
+        return None
+    if year < manifest["start_year"] or year > manifest["end_year"]:
+        return None
     if dp.validation_status not in ACCEPT_STATUSES:
         return None
     if not _acceptable(dp):
@@ -234,17 +218,12 @@ def _normalize_sources(sources: list) -> list[dict]:
 
 
 def _unresolved_to_gold(row: UnresolvedQuarterORM, job: DrugJobORM, manifest: dict) -> dict | None:
-    if manifest.get("as_of_date"):
-        end = latest_completed_quarter(date.fromisoformat(manifest["as_of_date"]))
-        if str(row.period) > end:
-            return None
-    else:
-        try:
-            year = int(str(row.period)[:4])
-        except ValueError:
-            return None
-        if year < manifest["start_year"] or year > manifest["end_year"]:
-            return None
+    try:
+        year = int(str(row.period)[:4])
+    except ValueError:
+        return None
+    if year < manifest["start_year"] or year > manifest["end_year"]:
+        return None
     gold_id = _slug(f"{job.drug_name}-{row.period}-not-separately-disclosed")
     sources = _normalize_sources(row.sources_checked or [])
     if not sources:
@@ -389,12 +368,9 @@ async def main() -> int:
     SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
     db = SessionLocal()
 
-    as_of = date.fromisoformat(manifest["as_of_date"]) if manifest.get("as_of_date") else date.today()
     options = ExtractionOptions(
-        lifecycle_coverage=True,
-        as_of_date=as_of,
-        earnings_until=as_of,
-        earnings_max_exhibits=80,
+        earnings_since=date(manifest["start_year"], 1, 1),
+        earnings_until=date(manifest["end_year"], 12, 31),
     )
 
     drugs = _load_drugs(args.drug)

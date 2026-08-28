@@ -266,10 +266,6 @@ class ExtractionOptions(BaseModel):
     # Unset means the most recent earnings releases.
     earnings_since: date | None = None
     earnings_until: date | None = None
-    # When true, retrieval and completeness cover approval through as-of, not a recent slice.
-    lifecycle_coverage: bool = True
-    as_of_date: date | None = None
-    earnings_max_exhibits: int | None = None
     transcripts: bool = False
     pdfs: bool = True
     llm_evidence_judge: bool = True

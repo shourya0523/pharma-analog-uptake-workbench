@@ -1,42 +1,36 @@
 # Gold validation dataset
 
-Ground truth for the 20 products in `seed/example_drugs.csv`.
+Ground truth for the 20 products in `seed/example_drugs.csv`, constrained to 2022–2026.
 
-Coverage is **per-drug full commercial life**: every calendar quarter from FDA
-approval through the latest completed quarter (`as_of_quarter` in
-`manifest.json`). Analog peak sales cannot be observed from a global recent-year
-window; a peak requires the complete comparable quarter grid.
-
-The previous 2022–2026 window lives in `archive/window-2022-2026/`.
+Built from the OpenRouter web-search pipeline, then **audited and filled** against issuer SEC/IR disclosures (see `audit_report.json`).
 
 ## Files
 
-- `lifecycle.jsonl` — per-drug approval date, expected quarter span, coverage
-- `quarterly_revenue.jsonl` — cited product-quarter values
-- `unresolved_quarters.jsonl` — explicit non-disclosures for every remaining expected quarter (not zero revenue)
-- `peak_sales.jsonl` — selected peak from production `select_peak_from_observations`; `insufficient_lifecycle_history` when the comparable annual series is too short
-- `edge_cases.jsonl` — generic/dose false positives and cross-currency history without cited FX
-- `manifest.json` — `coverage_mode=full_lifecycle`, as-of quarter
-- `metadata.jsonl` — parser/identity fixtures
-- `build_report.json` / `audit_report.json`
+- `quarterly_revenue.jsonl` — product-quarter values with citations
+- `unresolved_quarters.jsonl` — explicit non-disclosures (not zero revenue)
+- `edge_cases.jsonl` — out-of-window / generic-dose false positives
+- `manifest.json` — drug count and calendar window
+- `build_report.json` — last pipeline build summary
+- `audit_report.json` — last audit/fill summary
+- `archive/manual-2026-08-24/` — prior manually researched gold
 
-## Regenerate
+## Gaps closed in audit (2026-08-27)
 
-Restructure the quarter grid (OpenFDA approval dates + existing cited rows):
+- **Winrevair** 2025Q1–Q4 worldwide sales from Merck schedules
+- **Adempas** 2025Q1–Q4 Merck-recorded net sales (not alliance revenue)
+- **Opsumit** 2025Q1–Q4 as OPSUMIT/OPSYNVI product-family WW (J&J combined line)
+- **Uptravi** 2025Q1–Q4 worldwide from J&J other financial disclosures
+- Scope cleanup: Adcirca/Orenitram → U.S.; Tyvaso DPI/Nebulized → Formulation-specific; Remodulin → Worldwide
+- Expanded unresolved coverage for thin non-disclosures (Tracleer/Veletri/Ventavis/Revatio/Flolan/Alyq/Tadliq/Liqrev 2024Q1–Q4)
 
-```bash
-cd backend
-uv run python ../scripts/rebuild_gold_lifecycle.py
-```
-
-New web-search extraction over the full life, then rebuild peaks/coverage:
+## Regenerate pipeline gold
 
 ```bash
 cd backend
 uv run python ../scripts/build_gold_web_search.py \
-  --manual-revenue ../seed/gold/archive/window-2022-2026/quarterly_revenue.jsonl \
-  --manual-unresolved ../seed/gold/archive/window-2022-2026/unresolved_quarters.jsonl
-uv run python ../scripts/rebuild_gold_lifecycle.py
+  --manual-revenue ../seed/gold/archive/manual-2026-08-24/quarterly_revenue.jsonl \
+  --manual-unresolved ../seed/gold/archive/manual-2026-08-24/unresolved_quarters.jsonl
+uv run python ../scripts/audit_fill_gold.py
 ```
 
-Run `cd backend && uv run pytest tests/test_gold_dataset.py tests/test_lifecycle.py` to validate.
+Run `cd backend && uv run pytest tests/test_gold_dataset.py` to validate.

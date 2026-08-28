@@ -1,68 +1,253 @@
 {
-  "generated": "2026-08-28",
-  "pipeline": "lifecycle_restructure",
-  "as_of_quarter": "2026Q2",
+  "generated": "2026-08-27",
+  "pipeline": "openrouter_web_search",
   "drugs": 20,
-  "revenue_rows": 155,
-  "unresolved_rows": 1003,
-  "promoted_lifecycle_history": 0,
-  "peak_eligible": 0,
+  "revenue_rows": 168,
+  "unresolved_rows": 25,
+  "summary": [
+    {
+      "drug": "Opsumit",
+      "status": "ready_for_review",
+      "datapoints": 0,
+      "gold_revenue": 0,
+      "unresolved": 41,
+      "quality_flags": [
+        "dropped_candidates:0",
+        "llm_search_revenue_fallback",
+        "no_product_revenue_candidates"
+      ]
+    },
+    {
+      "drug": "Adcirca",
+      "status": "ready_for_review",
+      "datapoints": 14,
+      "gold_revenue": 10,
+      "unresolved": 0,
+      "quality_flags": []
+    },
+    {
+      "drug": "Tyvaso",
+      "status": "ready_for_review",
+      "datapoints": 55,
+      "gold_revenue": 40,
+      "unresolved": 0,
+      "quality_flags": [
+        "profile_corrected:roa"
+      ]
+    },
+    {
+      "drug": "Letairis",
+      "status": "ready_for_review",
+      "datapoints": 0,
+      "gold_revenue": 0,
+      "unresolved": 66,
+      "quality_flags": [
+        "dropped_candidates:0",
+        "llm_search_revenue_fallback",
+        "no_product_revenue_candidates"
+      ]
+    },
+    {
+      "drug": "Tracleer",
+      "status": "ready_for_review",
+      "datapoints": 0,
+      "gold_revenue": 0,
+      "unresolved": 9,
+      "quality_flags": [
+        "dropped_candidates:0",
+        "llm_search_revenue_fallback",
+        "no_product_revenue_candidates"
+      ]
+    },
+    {
+      "drug": "Uptravi",
+      "status": "ready_for_review",
+      "datapoints": 0,
+      "gold_revenue": 0,
+      "unresolved": 32,
+      "quality_flags": [
+        "dropped_candidates:0",
+        "llm_search_revenue_fallback",
+        "no_product_revenue_candidates",
+        "profile_corrected:fda_approval_date",
+        "profile_corrected:roa"
+      ]
+    },
+    {
+      "drug": "Remodulin",
+      "status": "ready_for_review",
+      "datapoints": 19,
+      "gold_revenue": 12,
+      "unresolved": 0,
+      "quality_flags": []
+    },
+    {
+      "drug": "Orenitram",
+      "status": "ready_for_review",
+      "datapoints": 21,
+      "gold_revenue": 14,
+      "unresolved": 0,
+      "quality_flags": []
+    },
+    {
+      "drug": "Veletri",
+      "status": "ready_for_review",
+      "datapoints": 0,
+      "gold_revenue": 0,
+      "unresolved": 62,
+      "quality_flags": [
+        "dropped_candidates:0",
+        "llm_search_revenue_fallback",
+        "no_product_revenue_candidates"
+      ]
+    },
+    {
+      "drug": "Ventavis",
+      "status": "ready_for_review",
+      "datapoints": 0,
+      "gold_revenue": 0,
+      "unresolved": 12,
+      "quality_flags": [
+        "dropped_candidates:0",
+        "llm_search_revenue_fallback",
+        "no_product_revenue_candidates",
+        "openfda_no_brand_match"
+      ]
+    },
+    {
+      "drug": "Tyvaso DPI",
+      "status": "ready_for_review",
+      "datapoints": 41,
+      "gold_revenue": 35,
+      "unresolved": 0,
+      "quality_flags": []
+    },
+    {
+      "drug": "Nebulized Tyvaso",
+      "status": "ready_for_review",
+      "datapoints": 43,
+      "gold_revenue": 37,
+      "unresolved": 0,
+      "quality_flags": [
+        "profile_corrected:roa"
+      ]
+    },
+    {
+      "drug": "Winrevair",
+      "status": "ready_for_review",
+      "datapoints": 3,
+      "gold_revenue": 0,
+      "unresolved": 12,
+      "quality_flags": [
+        "source_evidence_missing_value",
+        "ytd_classified_as_quarterly"
+      ]
+    },
+    {
+      "drug": "Adempas",
+      "status": "ready_for_review",
+      "datapoints": 2,
+      "gold_revenue": 0,
+      "unresolved": 40,
+      "quality_flags": []
+    },
+    {
+      "drug": "Yutrepia",
+      "status": "ready_for_review",
+      "datapoints": 4,
+      "gold_revenue": 3,
+      "unresolved": 4,
+      "quality_flags": []
+    },
+    {
+      "drug": "Revatio",
+      "status": "ready_for_review",
+      "datapoints": 0,
+      "gold_revenue": 0,
+      "unresolved": 74,
+      "quality_flags": [
+        "dropped_candidates:0",
+        "llm_search_revenue_fallback",
+        "no_product_revenue_candidates",
+        "profile_corrected:fda_approval_date"
+      ]
+    },
+    {
+      "drug": "Flolan",
+      "status": "ready_for_review",
+      "datapoints": 0,
+      "gold_revenue": 0,
+      "unresolved": 116,
+      "quality_flags": [
+        "dropped_candidates:0",
+        "llm_search_revenue_fallback",
+        "no_product_revenue_candidates",
+        "profile_corrected:fda_approval_date"
+      ]
+    },
+    {
+      "drug": "Alyq",
+      "status": "ready_for_review",
+      "datapoints": 0,
+      "gold_revenue": 0,
+      "unresolved": 20,
+      "quality_flags": [
+        "dropped_candidates:0",
+        "llm_search_revenue_fallback",
+        "no_product_revenue_candidates",
+        "profile_corrected:fda_approval_date"
+      ]
+    },
+    {
+      "drug": "Tadliq",
+      "status": "ready_for_review",
+      "datapoints": 0,
+      "gold_revenue": 0,
+      "unresolved": 6,
+      "quality_flags": [
+        "dropped_candidates:0",
+        "llm_search_revenue_fallback",
+        "no_product_revenue_candidates"
+      ]
+    },
+    {
+      "drug": "Liqrev",
+      "status": "ready_for_review",
+      "datapoints": 0,
+      "gold_revenue": 0,
+      "unresolved": 4,
+      "quality_flags": [
+        "cik_from_llm_search",
+        "dropped_candidates:0",
+        "llm_search_revenue_fallback",
+        "no_product_revenue_candidates",
+        "openfda_no_brand_match",
+        "profile_corrected:dosage_form",
+        "profile_corrected:fda_approval_date",
+        "profile_corrected:formulation",
+        "profile_corrected:moa",
+        "profile_corrected:roa"
+      ]
+    }
+  ],
+  "postprocessed": true,
+  "methods": {
+    "manual_verified_web_search": 62,
+    "table_extraction_web_search": 79,
+    "earnings_exhibit_web_search": 27
+  },
   "revenue_by_drug": {
-    "Adcirca": 14,
-    "Adempas": 8,
+    "Adcirca": 18,
+    "Adempas": 4,
     "Letairis": 8,
-    "Nebulized Tyvaso": 12,
-    "Opsumit": 12,
-    "Orenitram": 10,
-    "Remodulin": 10,
-    "Tracleer": 1,
+    "Nebulized Tyvaso": 18,
+    "Opsumit": 8,
+    "Orenitram": 18,
+    "Remodulin": 16,
     "Tyvaso": 48,
-    "Tyvaso DPI": 12,
-    "Uptravi": 8,
-    "Winrevair": 7,
-    "Yutrepia": 5
-  },
-  "unresolved_by_drug": {
-    "Adcirca": 55,
-    "Adempas": 43,
-    "Alyq": 15,
-    "Flolan": 124,
-    "Letairis": 69,
-    "Liqrev": 13,
-    "Nebulized Tyvaso": 58,
-    "Opsumit": 39,
-    "Orenitram": 41,
-    "Remodulin": 87,
-    "Revatio": 85,
-    "Tadliq": 17,
-    "Tracleer": 98,
-    "Tyvaso": 54,
-    "Tyvaso DPI": 7,
-    "Uptravi": 35,
-    "Veletri": 73,
-    "Ventavis": 87,
-    "Winrevair": 3
-  },
-  "coverage_pct_by_drug": {
-    "Adcirca": 20.3,
-    "Adempas": 15.7,
-    "Alyq": 0.0,
-    "Flolan": 0.0,
-    "Letairis": 10.4,
-    "Liqrev": 0.0,
-    "Nebulized Tyvaso": 14.7,
-    "Opsumit": 23.5,
-    "Orenitram": 19.6,
-    "Remodulin": 10.3,
-    "Revatio": 0.0,
-    "Tadliq": 0.0,
-    "Tracleer": 1.0,
-    "Tyvaso": 20.6,
-    "Tyvaso DPI": 58.8,
-    "Uptravi": 18.6,
-    "Veletri": 0.0,
-    "Ventavis": 0.0,
-    "Winrevair": 70.0,
-    "Yutrepia": 100.0
+    "Tyvaso DPI": 17,
+    "Uptravi": 4,
+    "Winrevair": 3,
+    "Yutrepia": 6
   }
 }

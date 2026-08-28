@@ -1,13 +1,10 @@
 {
-  "coverage_mode": "full_lifecycle",
-  "as_of_date": "2026-08-28",
-  "as_of_quarter": "2026Q2",
   "target_drug_count": 20,
-  "purpose": "Analog peak sales requires every commercial quarter from FDA approval through the latest completed quarter, not a global recent-year window.",
+  "start_year": 2022,
+  "end_year": 2026,
+  "max_year_span": 5,
   "reported_rows_file": "quarterly_revenue.jsonl",
   "unresolved_rows_file": "unresolved_quarters.jsonl",
-  "lifecycle_file": "lifecycle.jsonl",
-  "peak_sales_file": "peak_sales.jsonl",
   "edge_cases_file": "edge_cases.jsonl",
   "metadata_file": "metadata.jsonl"
 }

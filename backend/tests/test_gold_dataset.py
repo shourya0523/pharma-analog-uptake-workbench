@@ -1,19 +1,12 @@
 import csv
 import json
 from collections import defaultdict
-from datetime import date
 from pathlib import Path
 
 from sqlalchemy import create_engine, text
 from sqlalchemy import inspect as sa_inspect
 from sqlalchemy.orm import sessionmaker
 
-from app.analytics.gold_dataset import (
-    lifecycle_record,
-    peak_record,
-    promote_lifecycle_history,
-)
-from app.analytics.lifecycle import expected_quarters_for_job, latest_completed_quarter
 from app.db.models import (
     Base,
     DatapointORM,
@@ -139,73 +132,16 @@ def test_gold_scope_matches_manifest():
     manifest = json.loads((GOLD_DIR / "manifest.json").read_text())
     reported = _load_jsonl(GOLD_DIR / manifest["reported_rows_file"])
     unresolved = _load_jsonl(GOLD_DIR / manifest["unresolved_rows_file"])
-    lifecycle = _load_jsonl(GOLD_DIR / manifest["lifecycle_file"])
     seed_drugs = _seed_drug_names()
 
-    assert manifest["coverage_mode"] == "full_lifecycle"
+    covered_drugs = {row["drug_name"] for row in reported + unresolved}
     assert len(seed_drugs) == manifest["target_drug_count"]
-    assert {row["drug_name"] for row in lifecycle} == seed_drugs
-    as_of = date.fromisoformat(manifest["as_of_date"])
-    assert manifest["as_of_quarter"] == latest_completed_quarter(as_of)
+    assert covered_drugs == seed_drugs
 
-    for row in lifecycle:
-        approval = date.fromisoformat(row["fda_approval_date"]) if row.get("fda_approval_date") else None
-        reported_p = {item["period"] for item in reported if item["drug_name"] == row["drug_name"]}
-        unresolved_p = {item["period"] for item in unresolved if item["drug_name"] == row["drug_name"]}
-        expected = expected_quarters_for_job(
-            approval_date=approval,
-            known_periods=sorted(reported_p | unresolved_p),
-            as_of=as_of,
-            lifecycle_coverage=True,
-        )
-        rebuilt = lifecycle_record(
-            drug_name=row["drug_name"],
-            approval_date=approval,
-            as_of=as_of,
-            reported=reported_p,
-            unresolved=unresolved_p,
-            approval_source_url=row.get("approval_source_url"),
-        )
-        assert row["expected_quarter_count"] == rebuilt["expected_quarter_count"]
-        assert row["lifecycle_start_quarter"] == rebuilt["lifecycle_start_quarter"]
-        assert row["lifecycle_end_quarter"] == rebuilt["lifecycle_end_quarter"]
-        assert set(expected) == (reported_p | unresolved_p)
-        assert reported_p <= set(expected)
-
-
-def test_gold_peak_sales_use_production_peak_selection():
-    manifest = json.loads((GOLD_DIR / "manifest.json").read_text())
-    reported = _load_jsonl(GOLD_DIR / manifest["reported_rows_file"])
-    peaks = _load_jsonl(GOLD_DIR / manifest["peak_sales_file"])
-    lifecycle = {row["drug_name"]: row for row in _load_jsonl(GOLD_DIR / manifest["lifecycle_file"])}
-    as_of = date.fromisoformat(manifest["as_of_date"])
-
-    assert {row["drug_name"] for row in peaks} == _seed_drug_names()
-    for row in peaks:
-        rebuilt = peak_record(
-            drug_name=row["drug_name"],
-            rows=[item for item in reported if item["drug_name"] == row["drug_name"]],
-            as_of=as_of,
-            expected_count=lifecycle[row["drug_name"]]["expected_quarter_count"],
-        )
-        assert row["selection_method"] == rebuilt["selection_method"]
-        assert row["estimate_type"] == rebuilt["estimate_type"]
-        assert row["value"] == rebuilt["value"]
-        assert row["peak_eligible"] == rebuilt["peak_eligible"]
-        assert row["complete_comparable_years"] == rebuilt["complete_comparable_years"]
-        assert lifecycle[row["drug_name"]]["peak_eligible"] == rebuilt["peak_eligible"]
-
-
-def test_promoted_lifecycle_history_lands_in_gold_revenue():
-    archive_edges = GOLD_DIR / "archive" / "window-2022-2026" / "edge_cases.jsonl"
-    edges = _load_jsonl(archive_edges if archive_edges.is_file() else GOLD_DIR / "edge_cases.jsonl")
-    reported = _load_jsonl(GOLD_DIR / "quarterly_revenue.jsonl")
-    keys = {(row["drug_name"], row["period"]) for row in reported}
-    promoted = [promote_lifecycle_history(edge) for edge in edges]
-    promoted = [row for row in promoted if row]
-    assert promoted, "USD issuer history previously excluded by the year window should become gold"
-    for row in promoted:
-        assert (row["drug_name"], row["period"]) in keys
+    years = [int(row["period"][:4]) for row in reported + unresolved]
+    assert min(years) >= manifest["start_year"]
+    assert max(years) <= manifest["end_year"]
+    assert max(years) - min(years) + 1 <= manifest["max_year_span"]
 
 
 def test_gold_edge_cases_have_expected_disposition():
@@ -221,7 +157,8 @@ def test_gold_edge_cases_have_expected_disposition():
             generic=row["generic_name"],
         )
 
-        if row["case_type"] == "cross_currency_unresolved":
+        if row["case_type"] == "old_record":
+            assert not (manifest["start_year"] <= candidate.calendar_year <= manifest["end_year"])
             assert len(kept) == 1
             assert not dropped
         else:
@@ -334,7 +271,7 @@ def test_gold_sqlite_roundtrip_reads_every_field(tmp_path):
         payload.setdefault("confidence_score", 0.0)
         payload.setdefault(
             "validation_status",
-            "rejected" if row["case_type"] not in {"old_record", "cross_currency_unresolved"} else "needs_review",
+            "rejected" if row["case_type"] != "old_record" else "needs_review",
         )
         db.add(
             DatapointORM(

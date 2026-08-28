@@ -257,7 +257,6 @@ class SECConnector:
         include_earnings: bool | None = None,
         earnings_since: date | None = None,
         earnings_until: date | None = None,
-        max_earnings_exhibits: int | None = None,
     ) -> list[RetrievedSource]:
         """Retrieve primary filings and/or 8-K earnings-release exhibits.
 
@@ -383,9 +382,7 @@ class SECConnector:
                         job_id=job_id,
                         cik=resolved,
                         recent=recent,
-                        max_exhibits=max_earnings_exhibits
-                        if max_earnings_exhibits is not None
-                        else settings.sec_max_earnings_exhibits,
+                        max_exhibits=settings.sec_max_earnings_exhibits,
                         since=earnings_since,
                         until=earnings_until,
                     )

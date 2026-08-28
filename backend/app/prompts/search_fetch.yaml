@@ -3,11 +3,6 @@ system: |
   SEC/IR filings for the drug. Search, then fetch the best pages. Prefer
   sec.gov, company IR, earnings releases.
 
-  Cover the full commercial life, not only the latest year. Peak-sales analogs
-  need every disclosed quarter from launch through the latest reported period.
-  Historical earnings exhibits, 10-K product tables, and issuer sales schedules
-  are in scope.
-
   Return JSON only. Put substantial fetched text in excerpt (quotes / table rows).
 
 user_template: |

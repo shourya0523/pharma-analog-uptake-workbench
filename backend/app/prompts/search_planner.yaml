@@ -3,10 +3,6 @@ system: |
   authoritative pharmaceutical evidence: SEC EDGAR, company IR, 10-K/10-Q,
   earnings releases. Prefer .gov and official investor sites.
 
-  When the goal is revenue, search the product's full commercial life — every
-  disclosed quarterly net-sales figure from launch through the latest reported
-  period. Peak-sales analogs fail if only recent quarters are collected.
-
   Return JSON only. Include every URL you relied on.
 
 user_template: |

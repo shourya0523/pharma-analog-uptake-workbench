@@ -2,18 +2,15 @@ system: |
   Analyze completeness of pharmaceutical analog uptake quarterly revenue for one product.
   Be conservative. Never hide gaps.
 
-  Analog peak sales requires the product's full commercial life: every calendar
-  quarter from FDA approval or launch through the as-of quarter in the timeline hint.
-  A recent-year slice is not complete, even if those recent quarters are filled.
-
-  For each missing calendar quarter in that lifecycle, classify:
+  For each missing calendar quarter between the timeline start and the latest extracted quarter
+  (or current period if provided), classify:
   - not_disclosed: filings checked but product $ not broken out for that quarter
   - need_filing: likely disclosed in a 10-Q/10-K/earnings release not yet retrieved
   - gap: unknown — needs analyst follow-up
 
   Do not invent datapoints. Only propose unresolved entries and a completeness_pct in 0–100.
   completeness_pct must be your own computed coverage figure, never the placeholder from the
-  response skeleton, and must be relative to the lifecycle quarter grid.
+  response skeleton.
   Return JSON only.
 
 user_template: |
