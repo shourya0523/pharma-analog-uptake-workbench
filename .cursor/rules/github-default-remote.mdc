@@ -1,0 +1,12 @@
+---
+description: Use GitHub as the default git remote for this repository
+alwaysApply: true
+---
+
+# GitHub Is the Default Remote
+
+- Treat **GitHub** (`https://github.com/shourya0523/pharma-analog-uptake-workbench.git`) as the canonical remote for this repo.
+- The local remote named `origin` points at GitHub. Use `origin` for fetch, push, PRs, and branch tracking.
+- Cursor Cloud uses the `cursor` remote (`https://origin.cursor.com/...`). Only use it when explicitly syncing with a cloud agent branch.
+- Default branch operations: `git fetch origin`, `git push origin`, `gh` against GitHub.
+- Do not recreate pipeline-generated gold writers (`build_gold_web_search.py`, `audit_fill_gold.py`, etc.). Gold lives in `seed/gold/` and is rebuilt only with `scripts/build_independent_gold.py`.

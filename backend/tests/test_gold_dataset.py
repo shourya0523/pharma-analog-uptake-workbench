@@ -118,6 +118,37 @@ def test_peaks_rebuild_from_independent_gold_builder():
 def test_legacy_pipeline_gold_writers_are_removed():
     assert not (REPO_ROOT / "scripts" / "build_gold_web_search.py").exists()
     assert not (REPO_ROOT / "scripts" / "audit_fill_gold.py").exists()
+    assert not (REPO_ROOT / "scripts" / "research_gold_from_filings.py").exists()
+    assert not (REPO_ROOT / "scripts" / "rebuild_gold_lifecycle.py").exists()
+
+
+def test_legacy_gold_artifacts_are_removed():
+    legacy_scripts = (
+        "build_lifecycle_gold.py",
+        "build_gold_web_search.py",
+        "audit_fill_gold.py",
+        "research_gold_from_filings.py",
+        "rebuild_gold_lifecycle.py",
+    )
+    for name in legacy_scripts:
+        assert not (REPO_ROOT / "scripts" / name).exists()
+        assert not (REPO_ROOT / "eval" / name).exists()
+
+    legacy_gold_files = (
+        "metadata.jsonl",
+        "peak_cases.jsonl",
+        "competitive_cases.jsonl",
+        "uptake_cases.jsonl",
+        "edge_cases.jsonl",
+        "audit_report.json",
+        "lifecycle.jsonl",
+    )
+    for name in legacy_gold_files:
+        assert not (GOLD / name).exists(), name
+
+    assert not (GOLD / "archive").exists()
+    assert not (REPO_ROOT / "eval" / "lifecycle_gold").exists()
+    assert not (REPO_ROOT / "eval" / "gold").exists()
 
 
 def test_every_research_manifest_uses_https_sources():

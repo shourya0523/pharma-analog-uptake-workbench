@@ -20,11 +20,8 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "backend"))
 
-from app.config import get_settings  # noqa: E402
-from app.domain.models import JobStatus  # noqa: E402
-from app.identity.resolver import resolve_product_identity  # noqa: E402
-from app.parsing.fda_label import parse_label_record  # noqa: E402
-from app.parsing.indications import parse_indications  # noqa: E402
+from app.config import get_settings
+from app.domain.models import JobStatus
 
 TERMINAL = {
     JobStatus.READY_FOR_REVIEW.value,
@@ -130,29 +127,6 @@ def compare_to_gold(datapoints: list[dict], gold: list[dict], tolerance: float =
     return {"matched": sum(1 for d in details if d["match"]), "total": len(details), "details": details}
 
 
-def validate_metadata_gold() -> int:
-    path = REPO_ROOT / "seed" / "gold" / "metadata.jsonl"
-    rows = [json.loads(line) for line in path.read_text().splitlines() if line.strip()]
-    for row in rows:
-        if row["case_type"] == "label":
-            parsed = parse_label_record(row["record"])
-            if "epc_terms" in row["expected"]:
-                assert parsed.epc_terms == row["expected"]["epc_terms"]
-                assert parsed.moa_terms == row["expected"]["moa_terms"]
-            else:
-                assert len(parsed.active_ingredients) == row["expected"]["ingredient_count"]
-                assert len(parsed.moa_terms) == row["expected"]["moa_count"]
-        elif row["case_type"] == "indication":
-            parsed = parse_indications(row["text"])[0]
-            assert parsed.approved_lot.value.value == row["expected"]["approved_lot"]
-        elif row["case_type"] == "identity":
-            identities = [resolve_product_identity(**item) for item in row["products"]]
-            assert identities[0].analog_family_key == identities[1].analog_family_key
-            assert identities[0].identity_key != identities[1].identity_key
-    print(f"metadata_gold_validated={len(rows)} production_parsers=true")
-    return len(rows)
-
-
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--base-url", default="http://127.0.0.1:8000")
@@ -172,11 +146,7 @@ def main() -> int:
     parser.add_argument("--openfda", action="store_true")
     parser.add_argument("--timeout", type=int, default=600)
     parser.add_argument("--out", default=None)
-    parser.add_argument("--metadata-only", action="store_true")
     args = parser.parse_args()
-    if args.metadata_only:
-        validate_metadata_gold()
-        return 0
 
     drug: dict[str, object] = {
         "drug_name": args.drug,
