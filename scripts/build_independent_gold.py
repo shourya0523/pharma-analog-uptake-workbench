@@ -151,6 +151,50 @@ ANNUAL_METADATA = {
     },
 }
 
+# Annual-average exchange rates for the non-USD annual manifests (Tracleer in
+# CHF, Flolan in GBP). Actelion and GSK never disclosed these figures in USD,
+# so no citable USD quote exists to reuse; these rates convert the reported
+# figure into a comparable value_normalized_usd_millions without altering the
+# as-reported value_reported/currency fields, which still match source_quote.
+#
+# CHF per 1 USD, annual average of daily noon buying rates. Source: Federal
+# Reserve H.10/G.5A "Foreign Exchange Rates" annual releases, cross-checked
+# against secondary aggregators (exchangerates.org, OFX). 2001-2016 span
+# matches Tracleer's reported history.
+FX_RATE_CHF_PER_USD: dict[int, float] = {
+    2001: 1.69, 2002: 1.55, 2003: 1.34, 2004: 1.24, 2005: 1.25, 2006: 1.25,
+    2007: 1.20, 2008: 1.08, 2009: 1.08, 2010: 1.0432, 2011: 0.8869,
+    2012: 0.94, 2013: 0.93, 2014: 0.92, 2015: 0.96, 2016: 1.0153,
+}
+
+# USD per 1 GBP, annual average of daily noon buying rates. Source: Federal
+# Reserve H.10/G.5A "Foreign Exchange Rates" annual releases. Covers Flolan's
+# 2010-2013 reported span.
+FX_RATE_USD_PER_GBP: dict[int, float] = {
+    2010: 1.5458, 2011: 1.6043, 2012: 1.5853, 2013: 1.5642,
+}
+
+FX_RATE_SOURCE = "federal_reserve_h10_g5a_annual_average"
+
+
+def usd_normalized(value: float, currency: str, year: int) -> tuple[float | None, float | None]:
+    """Return (value_normalized_usd_millions, fx_rate_to_usd) for a reported value.
+
+    fx_rate_to_usd is None (and the row is already-USD) when currency == "USD".
+    Returns (None, None) if no rate is available for the given currency/year,
+    so a missing rate fails loud (via the caller) rather than silently
+    reporting a false USD figure.
+    """
+    if currency == "USD":
+        return round(value, 6), None
+    if currency == "CHF" and year in FX_RATE_CHF_PER_USD:
+        rate = FX_RATE_CHF_PER_USD[year]
+        return round(value / rate, 6), rate
+    if currency == "GBP" and year in FX_RATE_USD_PER_GBP:
+        rate = FX_RATE_USD_PER_GBP[year]
+        return round(value * rate, 6), rate
+    return None, None
+
 
 def slug(*parts: object) -> str:
     return re.sub(r"[^a-z0-9]+", "-", "-".join(str(part).lower() for part in parts)).strip("-")
@@ -571,6 +615,12 @@ def build_annual_rows() -> list[dict[str, Any]]:
         value = float(source["value_reported"])
         source_unit = "thousands" if "thousands" in source["source_quote"].lower() else source["unit"]
         source_value = value * 1000 if source_unit == "thousands" else value
+        normalized_usd, fx_rate = usd_normalized(value, source["currency"], int(source["period"]))
+        if normalized_usd is None:
+            raise ValueError(
+                f"No FX rate for {source['drug_name']} {source['period']} ({source['currency']}); "
+                "add one to FX_RATE_CHF_PER_USD/FX_RATE_USD_PER_GBP before building gold."
+            )
         rows.append(
             {
                 "gold_id": slug(meta["benchmark_identity"], source["period"]),
@@ -582,6 +632,9 @@ def build_annual_rows() -> list[dict[str, Any]]:
                 "value_reported": value,
                 "currency": source["currency"],
                 "unit": source["unit"],
+                "value_normalized_usd_millions": normalized_usd,
+                "fx_rate_to_usd": fx_rate,
+                "fx_rate_source": FX_RATE_SOURCE if fx_rate is not None else None,
                 "metric": "revenue",
                 "period_type": "annual",
                 "period_basis": "calendar",
@@ -696,11 +749,17 @@ def build_peaks(quarterly: list[dict[str, Any]], annual: list[dict[str, Any]]) -
         peaks.append(observed_peak(drug_name, totals, meta["revenue_scope"], meta["geography"]))
 
     for drug_name in ("Letairis", "Revatio", "Tracleer"):
+        # Peak selection compares value_normalized_usd_millions, not the raw
+        # as-reported currency: Tracleer is CHF-denominated, and a strong-franc
+        # year can outrank a nominally larger CHF year once converted (e.g.
+        # 2011's franc surge). Comparing raw CHF/GBP/USD figures side by side
+        # would silently pick the wrong peak year and isn't comparable to the
+        # USD peaks reported for every other product in this file.
         series = [
             {
                 "period": row["period"],
-                "value_reported": row["value_reported"],
-                "currency": row["currency"],
+                "value_reported": row["value_normalized_usd_millions"],
+                "currency": "USD",
                 "unit": row["unit"],
                 "input_ids": [row["gold_id"]],
             }

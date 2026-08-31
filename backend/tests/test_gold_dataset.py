@@ -99,6 +99,26 @@ def test_quarterly_rows_are_unique_and_preserve_reported_units():
         assert row["sources"]
 
 
+def test_annual_and_peak_rows_are_usd_normalized():
+    manifest = json.loads((GOLD / "manifest.json").read_text())
+    annual = load_jsonl(manifest["annual_rows_file"])
+    peaks = load_jsonl(manifest["peak_sales_file"])
+
+    for row in annual:
+        assert row["value_normalized_usd_millions"] is not None, row["gold_id"]
+        if row["currency"] == "USD":
+            assert row["value_normalized_usd_millions"] == row["value_reported"], row["gold_id"]
+            assert row["fx_rate_to_usd"] is None
+            assert row["fx_rate_source"] is None
+        else:
+            assert row["fx_rate_to_usd"] is not None, row["gold_id"]
+            assert row["fx_rate_source"], row["gold_id"]
+
+    for row in peaks:
+        if row["peak_status"] == "observed":
+            assert row["currency"] == "USD", row["gold_id"]
+
+
 def test_peaks_rebuild_from_independent_gold_builder():
     builder = load_builder()
     manifest = json.loads((GOLD / "manifest.json").read_text())
