@@ -8,7 +8,7 @@ All 20 products in `seed/example_drugs.csv` have one explicit disposition:
 
 - 12 have independently supported peak labels.
 - 9 of those also have complete quarter-by-quarter sales from commercial start
-  through 2026Q2, totaling 424 cited observations at 100% coverage.
+  through 2026Q2, totaling 423 cited observations at 100% coverage.
 - 6 labels are observed numeric peaks.
 - 6 labels are `not_yet_observed` because the complete reported history is
   still growing or lacks enough post-peak years.

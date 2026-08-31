@@ -120,7 +120,12 @@ PRODUCT_METADATA = {
         "generic_name": "sotatercept-csrk",
         "manufacturer": "Merck",
         "benchmark_identity": "merck_winrevair_worldwide_reported",
-        "commercial_start_quarter": "2024Q1",
+        # Approved March 26, 2024 (5 days before quarter end); Merck's own
+        # prior-year comparison schedule discloses no separate Q1 2024
+        # figure, only Q2-Q4 + FY (see merck_winrevair_quarterly.csv), so the
+        # benchmarked series starts at the first quarter with real disclosed
+        # data rather than inventing a Q1 value.
+        "commercial_start_quarter": "2024Q2",
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
         "formulation": "injection",
@@ -420,7 +425,16 @@ def build_uthr(client: ResearchClient) -> list[dict[str, Any]]:
             if source_label not in direct:
                 continue
             raw_value, quote = direct[source_label]
-            source_unit = "thousands" if period < "2017Q1" else "millions"
+            # UTHR's exhibit tables switch from whole-dollar-thousands (e.g.
+            # "121,718") to one-decimal millions (e.g. "102.2") partway
+            # through 2016, not cleanly at the 2017Q1 boundary a date cutoff
+            # would assume. Infer the unit from the raw magnitude instead: no
+            # thousands-formatted quarterly figure in this series is ever
+            # below ~1,500 (a $1.5M+ quarter), and no millions-formatted one
+            # is ever above ~500 (no single UTHR product line has cleared
+            # $500M in a quarter), so 1,000 cleanly separates every observed
+            # value with wide margin on both sides.
+            source_unit = "thousands" if raw_value >= 1000 else "millions"
             value = raw_value / 1000 if source_unit == "thousands" else raw_value
             row = revenue_row(
                 drug_name=drug_name,

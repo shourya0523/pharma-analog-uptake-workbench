@@ -97,6 +97,19 @@ def test_quarterly_rows_are_unique_and_preserve_reported_units():
         assert row["unit"] == "millions"
         assert row["source_unit"] in {"thousands", "millions"}
         assert row["sources"]
+        # test_gold_rows_have_independent_provenance_and_citations only checks
+        # that source_quote contains source_value_reported (the pre-conversion
+        # number) — it never checks that value_reported is source_value_reported
+        # scaled correctly by source_unit. A wrong source_unit (e.g. UTHR's 2016
+        # rows, once misclassified as "thousands" when the exhibit had already
+        # switched to millions) would pass that check while shipping a value
+        # 1000x too small. Guard the actual scale relationship here instead.
+        expected = (
+            row["source_value_reported"] / 1000
+            if row["source_unit"] == "thousands"
+            else row["source_value_reported"]
+        )
+        assert row["value_reported"] == round(expected, 6), row["gold_id"]
 
 
 def test_annual_and_peak_rows_are_usd_normalized():
