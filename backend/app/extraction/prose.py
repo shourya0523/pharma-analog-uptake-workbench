@@ -12,6 +12,13 @@ number means. A sentence carries its unit and currency right next to the amount
 must also name exactly one period and one amount. A sentence mentioning several
 of either is ambiguous about which belongs to which, so it is refused rather
 than resolved by proximity.
+
+The one exception is an explicit pairing. "Sales were $336 million and $615
+million in the second quarter and first six months of 2025, respectively" is
+not ambiguous - "respectively" states the correspondence, and issuers use this
+construction constantly for quarter-plus-year-to-date. It is read only when the
+counts match exactly and the pairing word is present, so the relationship is
+still taken from what the sentence says rather than from word order alone.
 """
 
 from __future__ import annotations
@@ -60,6 +67,20 @@ _ANNUAL_WORD_RE = re.compile(
     re.IGNORECASE,
 )
 
+# "the second quarter and first six months of 2025" - one trailing year shared
+# by a quarter and a year-to-date period. Issuers pair these constantly, and
+# neither half matches the single-period patterns above because the quarter's
+# year only appears after the second phrase.
+_QUARTER_AND_YTD_RE = re.compile(
+    r"\b(?P<ordinal>first|second|third|fourth)\s+quarter\s+and\s+"
+    r"first\s+(?P<length>six|nine)\s+months\s+of\s+(?P<year>(?:19|20)\d{2})\b",
+    re.IGNORECASE,
+)
+
+# The word that turns several amounts and several periods from ambiguous into
+# an explicit, ordered correspondence.
+_PAIRING_RE = re.compile(r"\brespectively\b", re.IGNORECASE)
+
 _SENTENCE_SPLIT_RE = re.compile(r"(?<=[.;])\s+")
 
 
@@ -70,33 +91,63 @@ class _Period:
 
 
 def _periods_in(sentence: str) -> list[_Period]:
-    """Every reporting period the sentence names, in order."""
-    found: list[_Period] = []
+    """Every reporting period the sentence names, in the order it names them.
+
+    Textual order matters: when a sentence pairs several amounts with several
+    periods using "respectively", the correspondence is positional, so periods
+    discovered by different patterns still have to come back in reading order.
+    """
+    found: list[tuple[int, _Period]] = []
+    # The combined "<quarter> and first <six|nine> months of <year>" form is
+    # matched first and its span consumed, so the single-period patterns below
+    # cannot also claim the shared trailing year.
+    consumed: list[tuple[int, int]] = []
+    for match in _QUARTER_AND_YTD_RE.finditer(sentence):
+        year = int(match.group("year"))
+        quarter = _ORDINAL_TO_QUARTER[match.group("ordinal").lower()]
+        length = {"six": "six_month", "nine": "nine_month"}[match.group("length").lower()]
+        found.append((match.start(), _Period(f"{year}Q{quarter}", "quarterly")))
+        found.append((match.start("length"), _Period(str(year), length)))
+        consumed.append(match.span())
+
+    def claimed(position: int) -> bool:
+        return any(start <= position < end for start, end in consumed)
+
     for match in _PERIOD_ENDED_RE.finditer(sentence):
+        if claimed(match.start()):
+            continue
         year = int(match.group("year"))
         month = MONTHS.get((match.group("month") or "").lower())
         if not month:
             continue
         if match.group("annual") or (match.group("length") or "").lower() == "twelve":
-            found.append(_Period(str(year), "annual"))
+            found.append((match.start(), _Period(str(year), "annual")))
         elif match.group("quarter_word") or (match.group("length") or "").lower() == "three":
-            found.append(_Period(f"{year}Q{quarter_of_month(month)}", "quarterly"))
+            found.append(
+                (match.start(), _Period(f"{year}Q{quarter_of_month(month)}", "quarterly"))
+            )
         else:
             months = {"six": "six_month", "nine": "nine_month"}[(match.group("length")).lower()]
-            found.append(_Period(str(year), months))
+            found.append((match.start(), _Period(str(year), months)))
     for match in _ORDINAL_QUARTER_RE.finditer(sentence):
+        if claimed(match.start()):
+            continue
         quarter = _ORDINAL_TO_QUARTER[match.group("ordinal").lower()]
-        found.append(_Period(f"{int(match.group('year'))}Q{quarter}", "quarterly"))
+        found.append((match.start(), _Period(f"{int(match.group('year'))}Q{quarter}", "quarterly")))
     for match in _COMPACT_QUARTER_RE.finditer(sentence):
+        if claimed(match.start()):
+            continue
         quarter = match.group("q") or match.group("q2")
         year = match.group("year") or match.group("year2")
-        found.append(_Period(f"{int(year)}Q{int(quarter)}", "quarterly"))
+        found.append((match.start(), _Period(f"{int(year)}Q{int(quarter)}", "quarterly")))
     for match in _ANNUAL_WORD_RE.finditer(sentence):
-        found.append(_Period(str(int(match.group("year"))), "annual"))
+        if claimed(match.start()):
+            continue
+        found.append((match.start(), _Period(str(int(match.group("year"))), "annual")))
     # One period named twice ("fourth quarter 2003" then "Q4 2003") is still one
     # period; only genuinely different periods make a sentence ambiguous.
     unique: list[_Period] = []
-    for period in found:
+    for _, period in sorted(found, key=lambda item: item[0]):
         if period not in unique:
             unique.append(period)
     return unique
@@ -135,21 +186,32 @@ def read_prose(
             continue
         periods = _periods_in(sentence)
         amounts = _amounts_in(sentence)
-        if len(periods) != 1 or len(amounts) != 1:
+        if len(periods) == 1 and len(amounts) == 1:
+            pairs = [(periods[0], amounts[0])]
+        elif (
+            len(periods) > 1
+            and len(periods) == len(amounts)
+            and _PAIRING_RE.search(sentence)
+        ):
+            # "respectively" states the correspondence, so this is reading the
+            # sentence rather than guessing from proximity. Equal counts are
+            # required: if the sentence names three periods and two amounts,
+            # the pairing word does not say which was dropped.
+            pairs = list(zip(periods, amounts))
+        else:
             continue
-        amount, unit, currency = amounts[0]
-        period = periods[0]
-        values.append(
-            ExtractedValue(
-                product_label=product,
-                period=period.period,
-                period_type=period.period_type,
-                value_as_reported=amount,
-                unit_label=unit,
-                currency=currency,
-                source_quote=sentence.strip(),
-                fingerprint_signature="prose",
-                value_index=0,
+        for index, (period, (amount, unit, currency)) in enumerate(pairs):
+            values.append(
+                ExtractedValue(
+                    product_label=product,
+                    period=period.period,
+                    period_type=period.period_type,
+                    value_as_reported=amount,
+                    unit_label=unit,
+                    currency=currency,
+                    source_quote=sentence.strip(),
+                    fingerprint_signature="prose",
+                    value_index=index,
+                )
             )
-        )
     return values

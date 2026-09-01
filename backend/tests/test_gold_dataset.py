@@ -358,3 +358,33 @@ def test_catalog_counts_are_derived_not_hand_maintained():
     assert manifest["target_product_count"] == catalog["catalog_products"]
     assert manifest["annual_only_series_count"] == len(catalog["annual_only_products"])
     assert catalog["catalog_products"] == len(seed_names())
+
+
+def test_quarters_the_issuer_states_outright_cite_the_filing_not_the_schedule():
+    """Winrevair read 0% of its own span until these citations were fixed.
+
+    Every Winrevair row cited one IR schedule whose quote carried a
+    hand-written column legend - "(2025 Q1-Q4/FY = ...)". The values were right,
+    but the provenance was a human decoding a column layout, so nothing in the
+    series was independently readable and the product scored zero. Where Merck
+    states the quarter outright in a 10-Q, the row now cites that sentence, and
+    the extractor can be scored on it.
+    """
+    from app.extraction.prose import read_prose
+
+    rows = {
+        row["period"]: row
+        for row in load_jsonl("quarterly_revenue.jsonl")
+        if row["drug_name"] == "Winrevair"
+    }
+    stated_in_a_filing = {"2025Q1": 280.0, "2025Q2": 336.0, "2025Q3": 360.0, "2026Q1": 525.0}
+
+    for period, value in stated_in_a_filing.items():
+        row = rows[period]
+        assert row["source_url"].startswith("https://www.sec.gov/"), period
+        assert row["source_type"] == "sec_filing", period
+        assert row["value_reported"] == value
+        # The quote has to be text the extractor can actually read, not a
+        # schedule row that needs a legend to interpret.
+        read = {v.period: v.value_as_reported for v in read_prose(row["source_quote"], product="Winrevair")}
+        assert read.get(period) == value, f"{period} is cited but not readable"

@@ -644,7 +644,10 @@ def build_winrevair() -> list[dict[str, Any]]:
             value=float(source["value_reported"]),
             source_url=source["source_url"],
             source_quote=source["source_quote"],
-            source_type="company_ir",
+            # Quarters Merck states outright in a 10-Q cite the filing; the rest
+            # still come from its IR schedule, so the type follows the URL
+            # rather than assuming every row shares one provenance.
+            source_type="sec_filing" if "sec.gov" in source["source_url"] else "company_ir",
             derivation=source["derivation"],
             notes="Merck worldwide product sales; alliance revenue is not used.",
         )
@@ -946,9 +949,21 @@ def main() -> int:
         published = out_dir / "quarterly_revenue.jsonl"
         if not published.exists():
             raise SystemExit(f"--reuse-quarterly needs {published}, which does not exist")
-        quarterly = [
-            json.loads(line) for line in published.read_text().splitlines() if line.strip()
-        ]
+        # Only the fetching series are reused. Yutrepia and Winrevair are built
+        # straight from their manifests with no network, so rebuilding them is
+        # free - and reusing them instead would silently ignore an edit to
+        # those manifests, which is exactly the kind of staleness this flag
+        # must not introduce.
+        rebuilt = build_yutrepia() + build_winrevair()
+        rebuilt_drugs = {row["drug_name"] for row in rebuilt}
+        quarterly = deduplicate(
+            [
+                json.loads(line)
+                for line in published.read_text().splitlines()
+                if line.strip() and json.loads(line)["drug_name"] not in rebuilt_drugs
+            ]
+            + rebuilt
+        )
     else:
         client = ResearchClient(args.cache_dir)
         try:

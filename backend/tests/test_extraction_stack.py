@@ -309,3 +309,54 @@ def test_prose_reads_a_full_year_total():
     assert values[0].period == "2002"
     assert values[0].period_type == "annual"
     assert values[0].value_as_reported == 21.174
+
+
+def test_prose_pairs_quarter_and_year_to_date_when_the_sentence_says_respectively():
+    """The most common issuer construction of all, and it is not ambiguous.
+
+    Merck states Winrevair as "$336 million and $615 million in the second
+    quarter and first six months of 2025, respectively" every quarter. Refusing
+    it as multi-period left a whole product unreadable even though the sentence
+    states the correspondence outright. Neither half matches the single-period
+    patterns either: the quarter's year only appears after the second phrase.
+    """
+    from app.extraction.prose import read_prose
+
+    values = read_prose(
+        "Sales of Winrevair were $336 million and $615 million in the second "
+        "quarter and first six months of 2025, respectively, primarily "
+        "reflecting continued uptake in the U.S.",
+        product="Winrevair",
+    )
+    assert [(v.period, v.period_type, v.value_as_reported) for v in values] == [
+        ("2025Q2", "quarterly", 336.0),
+        ("2025", "six_month", 615.0),
+    ]
+
+
+def test_prose_pairing_needs_the_word_that_states_the_correspondence():
+    """Without "respectively" the same sentence is back to guessing by proximity.
+
+    This is the guard on the exception above: the pairing is read because the
+    sentence declares it, not because two numbers happen to precede two dates.
+    """
+    from app.extraction.prose import read_prose
+
+    values = read_prose(
+        "Sales of Winrevair were $336 million and $615 million in the second "
+        "quarter and first six months of 2025.",
+        product="Winrevair",
+    )
+    assert values == []
+
+
+def test_prose_pairing_refuses_a_mismatched_count():
+    """Three periods and two amounts does not say which period was dropped."""
+    from app.extraction.prose import read_prose
+
+    values = read_prose(
+        "Sales of Winrevair were $360 million and $976 million in the third "
+        "quarter and first nine months of 2025 and full-year 2024, respectively.",
+        product="Winrevair",
+    )
+    assert values == []
