@@ -33,47 +33,91 @@ carcinoma." Tadliq is a tadalafil oral suspension. The page is fabricated.
 quarter is missing (line ~855). The rule is strictly binary: a complete series
 to today, or excluded entirely.
 
-That rule, not the absence of data, is what discards Opsumit. The exclusion
-note concedes the series "can be reconstructed only through 2024Q4" — roughly
-45 citable quarters thrown away because the 46th changed reporting basis.
-Ventavis and Veletri have the same shape: clean until an acquirer stopped
-breaking them out.
-
 **A bounded series — an explicit, cited `series_end_quarter` with a reason —
 is the single highest-leverage change here**, and it is independent of any
-sourcing work. It converts three exclusions into three real series.
+sourcing work. This has since been implemented, so a product ending on a
+reporting change is no longer discarded for that alone.
+
+That removed the architectural blocker, but it did not convert the exclusions
+automatically. Opsumit was checked first, on the theory that the rule rather
+than the data was discarding ~45 quarters. Reading the filings showed the
+opposite: Opsumit's launch ramp genuinely is not obtainable, because it belongs
+to a Swiss issuer that never filed with the SEC. The exclusion holds — see
+below. Ventavis and Veletri have not yet been checked against primaries, and
+the same caution applies: a promising map entry is not a series.
 
 ---
 
-## Actelion family: two exclusions do not hold
+## Actelion family
 
-### Opsumit — exclusion is too aggressive
+### Opsumit — exclusion holds, but for a different reason
 
-A standalone series is publicly reconstructible from launch through 2024Q4.
+**Status: investigated against primary documents. The exclusion stands; the
+recorded reason was wrong and has been corrected.**
+
+This section originally called Opsumit the biggest available win — roughly 45
+quarters from launch through 2024Q4. Reading the actual filings does not
+support that. The blocker is not where the exclusion note said it was.
+
+**What was verified**, read directly from J&J 10-K sales tables on EDGAR:
+
+| Year | Opsumit worldwide (USD m) | Filing read |
+|---|---|---|
+| 2018 | 1,215 | FY2020 10-K (`jnj-20210103.htm`) |
+| 2019 | 1,327 | FY2020 10-K; confirmed again in FY2021 10-K |
+| 2020 | 1,639 | FY2020 10-K; confirmed again in FY2021 10-K |
+| 2021 | 1,819 | FY2021 10-K (`jnj-20220102.htm`) |
+| 2022 | 1,783 | FY2024 10-K (`jnj-20241229.htm`) |
+| 2023 | 1,973 | FY2024 10-K |
+| 2024 | 2,184 | FY2024 10-K |
+
+Each 10-K prints three fiscal years, so the filings overlap and cross-check.
+The US line agrees to the dollar across three independent filings (2020 =
+$1,008m in the FY2020, FY2021 and FY2022 10-Ks; 2022 = $1,132m in the FY2022
+and FY2024 10-Ks). These seven rows are now in `annual_revenue.jsonl` as
+`series_role: partial_context`, the same treatment Flolan gets.
+
+**Use the stated worldwide line, never US + International.** For 2019 J&J
+prints US 766 + International 562 but Worldwide **1,327**, not 1,328 — it
+sums unrounded figures and rounds once. Both filings that carry 2019 print
+1,327, so this is J&J's rounding, not a typo. Deriving the total would put a
+value in the dataset that appears in no filing.
+
+**Why the exclusion still holds.** The series is bounded at *both* ends, and
+the front boundary is the fatal one:
+
+- J&J acquired Actelion on 16 June 2017, so 2018 is its first full reported
+  year. In J&J's own words, "The Pulmonary Hypertension therapeutic area was
+  established with the acquisition of Actelion Ltd on June 16, 2017. Sales in
+  2018 represented a full year as compared to half a year in 2017."
+- Opsumit was approved in October 2013. The entire launch ramp — the part an
+  uptake workbench exists to measure — belongs to Actelion, a Swiss issuer
+  that was never an SEC registrant and filed nothing with the SEC.
+- At the back end, J&J merges Opsumit into a combined OPSUMIT/OPSYNVI line
+  from 2025, so the standalone series cannot be extended.
+
+A series that begins four years after launch and ends on a reporting change
+cannot be a peak benchmark: 2024's $2,184m is a highest-observed value on a
+still-rising curve, not a lifetime peak. That is the same defect Flolan is
+excluded for. `reason_code` moved from `reporting_scope_changed` to
+`incomplete_pre_peak_history` accordingly.
+
+**What would change the answer.** The quarterly route below is real; this
+environment simply cannot reach it. Both would need outbound network access:
 
 | Issuer | Document | Coverage | Currency |
 |---|---|---|---|
 | Actelion | Quarterly / FY press releases (GlobeNewswire; actelion.com is dead, mirrors survive) | 2013 launch – FY2016 | CHF |
 | Actelion | Annual Reports at `annualreportYYYY.actelion.com` + Financial Report PDFs | 2013–2016 | CHF |
 | J&J | **8-K Exhibit 99.2 "Supplementary Sales Data"**, filed with every quarterly earnings release, explicit OPSUMIT line with US / Intl / WW columns | 2017Q2 – 2024Q4 | USD |
-| J&J | 10-K MD&A major-product sales table (three fiscal years per filing) | annual | USD |
 
-The Exhibit 99.2 accession pattern under CIK 200406 is stable, so the full
-quarterly set is enumerable rather than hunted one at a time. Confirmed
-examples: `a8k2017q4exhibit992o.htm`, `a2019q2exhibit992o.htm`,
-`a2020q1exhibit992.htm`, and `a2025q1exhibit992.htm` — the last being the one
-that shows the combined `OPSUMIT/OPSYNVI` line, confirming the series ends
-rather than the data being absent.
-
-Real caveats, none of which justify total exclusion:
-- **Currency seam mid-2017**: CHF (Actelion) → USD (J&J), plus a change of
-  reporting regime. Needs FX normalization at the join.
-- **Likely 1H-2017 hole**: J&J closed the tender 16 June 2017, so its FY2017
-  figure is a ~6.5-month stub. Whether Actelion published standalone Q1 2017
-  product sales before delisting is unconfirmed. If not, 2017Q1–Q2 is the
-  genuine gap — two quarters, not eleven years.
-- Opsynvi was approved March 2024, so late-2024 Opsumit figures may already
-  reflect switch dynamics even while reported separately.
+The Exhibit 99.2 accession pattern under CIK 200406 is stable and enumerable
+(`a8k2017q4exhibit992o.htm`, `a2019q2exhibit992o.htm`, `a2020q1exhibit992.htm`,
+`a2025q1exhibit992.htm`). Those PDFs are hosted on J&J's IR CDN and are not in
+any SEC full-text index reachable here; the 8-K itself only points at the
+website. Recovering the Actelion CHF years would additionally need FX
+normalization at the mid-2017 seam and would still leave a likely 1H-2017 hole
+around the 16 June tender close.
 
 ### Ventavis — exclusion is too aggressive
 
@@ -236,7 +280,7 @@ surge moved the peak from 2010 to 2011.
 
 | Product | Recorded reason | Verdict | What exists |
 |---|---|---|---|
-| **Opsumit** | combined with Opsynvi from 2025 | **too aggressive** | ~2013/14–2024Q4; Actelion CHF then J&J USD 8-K Ex-99.2 |
+| **Opsumit** | ~~combined with Opsynvi from 2025~~ → `incomplete_pre_peak_history` | **holds** (checked against filings) | annual worldwide 2018–2024, verified and added as `partial_context`; pre-2018 belongs to Actelion, never an SEC registrant |
 | **Ventavis** | CoTherix 2006Q4 gap | **too aggressive** | 2005Q1–2006Q3 USD (CoTherix SEC) + 2007–2016 CHF (Actelion), US-only; one quarter genuinely missing |
 | **Veletri** | early quarters missing | **correct but partial** | ~2011–2016 CHF, US-only |
 | **Adempas** | Merck figure not worldwide | **correct**, reason understates | Bayer EUR territory series, contaminated by amortized collaboration income |

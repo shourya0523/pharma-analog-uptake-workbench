@@ -154,6 +154,17 @@ ANNUAL_METADATA = {
         "manufacturer": "Actelion/J&J",
         "benchmark_identity": "actelion_tracleer_worldwide_reported_chf",
     },
+    # Opsumit stays excluded from the quarterly catalog (see excluded_products)
+    # but carries annual context rows, the way Flolan does. J&J only owns the
+    # product from the Actelion acquisition on 16 June 2017, so 2018 is the
+    # first full year it reports - the launch ramp from the 2013 approval sits
+    # with Actelion, which was never an SEC registrant. A series that starts
+    # four years after launch cannot be a peak benchmark, so these are context.
+    "Opsumit": {
+        "generic_name": "macitentan",
+        "manufacturer": "Actelion/J&J",
+        "benchmark_identity": "jnj_opsumit_worldwide_partial",
+    },
 }
 
 # Annual-average exchange rates for the non-USD annual manifests (Tracleer in
@@ -952,9 +963,14 @@ def main() -> int:
         "name": "independent_pah_peak_sales_gold",
         "generation": PROVENANCE,
         "as_of_quarter": AS_OF_QUARTER,
-        "target_product_count": len(PRODUCT_METADATA) + len(ANNUAL_METADATA) + len(exclusions) - 1,
+        # Derived from catalog_coverage rather than counted here: a product can
+        # sit in both ANNUAL_METADATA and the exclusions (Flolan and Opsumit
+        # both do, supplying annual context while excluded from the quarterly
+        # catalog), and a hand-maintained offset silently goes stale each time
+        # that happens.
+        "target_product_count": catalog["catalog_products"],
         "quarterly_series_count": len(coverage),
-        "annual_only_series_count": 3,
+        "annual_only_series_count": len(catalog["annual_only_products"]),
         "excluded_product_count": len(exclusions),
         "quarterly_coverage_pct": 100.0,
         "reported_rows_file": "quarterly_revenue.jsonl",
