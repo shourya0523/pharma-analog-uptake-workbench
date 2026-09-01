@@ -65,6 +65,42 @@ cd backend
 uv run pytest tests/test_gold_dataset.py
 ```
 
+## Is this dataset complete?
+
+Yes, on the only definition that is checkable: every product in the seed
+catalog is accounted for, and no included series is missing a quarter of its
+own commercial span. `build_report.json` records this under
+`gold_completeness`, the builder refuses to emit an incomplete series, and
+`test_the_gold_dataset_is_complete_on_its_own_terms` pins it.
+
+    20 catalog products = 9 complete quarterly series (423 quarters, every one
+    covering its full span) + 3 annual benchmark series + 8 evidence-backed
+    exclusions
+
+**This is not the percentage `scripts/eval_completeness.py` prints.** That
+script scores the *pipeline* against this dataset — how many of the 423
+quarters it can read or derive on its own. A shortfall there is a capability
+the pipeline is missing, which is exactly what a benchmark is for. Reading it
+as a hole in the dataset gets the direction of the measurement backwards.
+
+The 8 exclusions are part of completeness rather than a shortfall in it. A
+product is excluded only with a citation showing why no comparable series
+exists, and in several cases the issuer never published one at all:
+
+- **Letairis** — Gilead reports it only inside an aggregate. Every quarterly
+  disclosure from 2018 through 2020 reads "Other product sales, which include
+  ... Letairis, Ranexa and AmBisome", with no standalone figure. A quarterly
+  Letairis series does not exist publicly, at any level of effort.
+- **Alyq, Tadliq, Liqrev** — no public product-level sales; the only figures
+  are CMS payer spend, which is pre-rebate by law and must never fill a
+  revenue column.
+- **Adempas** — Merck records only its own marketing territories, with Bayer's
+  Americas sales arriving as profit-share alliance revenue. Merck's quarterly
+  figure is real and citable but is not a worldwide product-sales series.
+
+Recording those as exclusions with evidence *is* the complete answer for them.
+Inventing a series would not be more complete, only less true.
+
 ## Known issue: Remodulin 2002Q4 does not satisfy its own arithmetic
 
 `2002Q4` is recorded as **$9.7 million**, derived as full-year less the first

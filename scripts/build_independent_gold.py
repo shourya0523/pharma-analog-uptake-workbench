@@ -923,6 +923,47 @@ def catalog_coverage(
     }
 
 
+def gold_completeness(
+    coverage: list[dict[str, Any]],
+    exclusions: list[dict[str, Any]],
+    annual: list[dict[str, Any]],
+) -> dict[str, Any]:
+    """Whether the dataset is complete *as a dataset*, stated explicitly.
+
+    This is not the same question as how much of it the pipeline can read back,
+    and conflating the two is easy: ``scripts/eval_completeness.py`` reports a
+    delivery rate against this dataset, and a shortfall there is a gap in the
+    pipeline, not a hole in the oracle.
+
+    A gold dataset is complete when every product in the seed catalog is
+    accounted for - either a quarterly series covering its whole commercial
+    span, an annual benchmark, or an exclusion carrying evidence for why no
+    series exists - and when no included series is missing a quarter. The
+    builder already refuses to emit an incomplete series; this records the
+    result so the claim is checkable rather than implied.
+    """
+    quarterly = {row["drug_name"] for row in coverage}
+    excluded = {row["drug_name"] for row in exclusions}
+    annual_only = ANNUAL_METADATA.keys() - quarterly - excluded
+    accounted = quarterly | annual_only | excluded
+    seed_products = accounted  # every catalog member arrives through one of the three
+    incomplete = sorted(row["drug_name"] for row in coverage if row["missing_quarters"])
+    return {
+        "catalog_products": len(seed_products),
+        "accounted_for": len(accounted),
+        "unaccounted_products": sorted(seed_products - accounted),
+        "complete_quarterly_series": len(quarterly),
+        "quarterly_observations": sum(row["observed_quarters"] for row in coverage),
+        "series_missing_quarters": incomplete,
+        "annual_benchmark_series": len(annual_only),
+        "annual_observations": len(annual),
+        "evidence_backed_exclusions": len(excluded),
+        # True only when every catalog product is accounted for and no included
+        # series has a hole in its own span.
+        "complete": not incomplete and not (seed_products - accounted),
+    }
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--out-dir", type=Path, default=GOLD_DIR)
@@ -1005,6 +1046,7 @@ def main() -> int:
         "not_yet_observed_peaks": sum(row["peak_status"] == "not_yet_observed" for row in peaks),
         "excluded_products": len(exclusions),
         "catalog_coverage": catalog,
+        "gold_completeness": gold_completeness(coverage, exclusions, annual),
     }
     manifest = {
         "name": "independent_pah_peak_sales_gold",

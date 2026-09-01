@@ -1,5 +1,12 @@
 """Measure how much of each product's commercial life the pipeline can deliver.
 
+This is a score for the *pipeline*, not a measure of the gold dataset. The
+dataset is complete on its own terms and the builder refuses to emit it
+otherwise: every included series covers its full commercial span, and
+``build_report.json`` records that under ``gold_completeness``. A shortfall
+here is therefore a capability the pipeline is missing, not a hole in the
+oracle - which is the entire point of scoring against an oracle.
+
 Accuracy answers "when the pipeline produces a number, is it right". That is
 not the question a user of this data asks. They ask whether the series is
 whole - whether every quarter from a product's launch to today is there - and a
@@ -77,9 +84,10 @@ def main() -> int:
     for row in rows:
         by_drug[row["drug_name"]].append(row)
 
+    print("pipeline delivery against the gold dataset (the dataset itself is complete)")
     print(
-        f"{'product':20} {'expected':>8} {'read':>6} {'+derived':>9} "
-        f"{'total':>6} {'gap':>5} {'complete':>9}"
+        f"{'product':20} {'in gold':>8} {'read':>6} {'+derived':>9} "
+        f"{'total':>6} {'undel':>6} {'delivered':>10}"
     )
     print("-" * 72)
 
@@ -188,7 +196,7 @@ def main() -> int:
         flag = "" if gap == 0 else "  <--"
         print(
             f"{drug:20} {expected:>8} {len(readable):>6} {len(derived):>9} "
-            f"{delivered:>6} {gap:>5} {100 * delivered / expected:>8.1f}%{flag}"
+            f"{delivered:>6} {gap:>6} {100 * delivered / expected:>9.1f}%{flag}"
         )
 
     expected, read, derived_count = totals
@@ -196,8 +204,8 @@ def main() -> int:
     print("-" * 72)
     print(
         f"{'ALL QUARTERLY':20} {expected:>8} {read:>6} {derived_count:>9} "
-        f"{delivered:>6} {expected - delivered:>5} "
-        f"{100 * delivered / expected:>8.1f}%"
+        f"{delivered:>6} {expected - delivered:>6} "
+        f"{100 * delivered / expected:>9.1f}%"
     )
     print(
         f"\nread-only completeness was {100 * read / expected:.1f}%; "

@@ -427,3 +427,33 @@ def test_yutrepia_quarters_cite_their_own_filing_in_the_issuer_column_order():
     # the filing states 51,669 exactly, matching what the arithmetic produced.
     assert rows["2025Q3"]["derivation"] == "direct_reported"
     assert rows["2025Q3"]["value_reported"] == 51.669
+
+
+def test_the_gold_dataset_is_complete_on_its_own_terms():
+    """Complete means every catalog product accounted for, no series with a hole.
+
+    This is deliberately not the number ``scripts/eval_completeness.py`` prints.
+    That script scores the *pipeline* against this dataset, and a shortfall
+    there is a capability the pipeline lacks. The oracle itself has to be whole,
+    or every score computed from it is meaningless.
+    """
+    report = json.loads((GOLD / "build_report.json").read_text())
+    completeness = report["gold_completeness"]
+
+    assert completeness["unaccounted_products"] == []
+    assert completeness["series_missing_quarters"] == []
+    assert completeness["accounted_for"] == completeness["catalog_products"]
+    assert completeness["catalog_products"] == len(seed_names())
+    assert completeness["complete"] is True
+
+    # Every included quarterly series covers its whole commercial span.
+    for series in load_jsonl("series_coverage.jsonl"):
+        assert series["coverage_pct"] == 100.0, series["drug_name"]
+        assert series["missing_quarters"] == [], series["drug_name"]
+        assert series["benchmark_eligible"], series["drug_name"]
+
+    # And each of the three ways a product can be accounted for is populated,
+    # so "complete" cannot be reached by quietly emptying a category.
+    assert completeness["complete_quarterly_series"] > 0
+    assert completeness["annual_benchmark_series"] > 0
+    assert completeness["evidence_backed_exclusions"] > 0

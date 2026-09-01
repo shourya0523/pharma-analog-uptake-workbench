@@ -39,5 +39,17 @@
     "quarterly_series_pct": 45.0,
     "quarterly_observations": 423,
     "bounded_series": []
+  },
+  "gold_completeness": {
+    "catalog_products": 20,
+    "accounted_for": 20,
+    "unaccounted_products": [],
+    "complete_quarterly_series": 9,
+    "quarterly_observations": 423,
+    "series_missing_quarters": [],
+    "annual_benchmark_series": 3,
+    "annual_observations": 63,
+    "evidence_backed_exclusions": 8,
+    "complete": true
   }
 }
