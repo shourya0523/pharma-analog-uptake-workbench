@@ -74,8 +74,9 @@ support that. The blocker is not where the exclusion note said it was.
 Each 10-K prints three fiscal years, so the filings overlap and cross-check.
 The US line agrees to the dollar across three independent filings (2020 =
 $1,008m in the FY2020, FY2021 and FY2022 10-Ks; 2022 = $1,132m in the FY2022
-and FY2024 10-Ks). These seven rows are now in `annual_revenue.jsonl` as
-`series_role: partial_context`, the same treatment Flolan gets.
+and FY2024 10-Ks). These seven rows are in `annual_revenue.jsonl` as
+`series_role: partial_context`, alongside the Actelion CHF rows for FY2013 and
+FY2014 recorded below — the same treatment Flolan gets.
 
 **Use the stated worldwide line, never US + International.** For 2019 J&J
 prints US 766 + International 562 but Worldwide **1,327**, not 1,328 — it
@@ -83,27 +84,28 @@ sums unrounded figures and rounds once. Both filings that carry 2019 print
 1,327, so this is J&J's rounding, not a typo. Deriving the total would put a
 value in the dataset that appears in no filing.
 
-**Why the exclusion still holds.** The series is bounded at *both* ends, and
-the front boundary is the fatal one:
+**Why the exclusion still holds.** Not because the launch ramp is unreachable
+— Actelion's own FY2013 and FY2014 figures were recovered, and are recorded
+below. The problem is the *middle*:
 
 - J&J acquired Actelion on 16 June 2017, so 2018 is its first full reported
   year. In J&J's own words, "The Pulmonary Hypertension therapeutic area was
   established with the acquisition of Actelion Ltd on June 16, 2017. Sales in
-  2018 represented a full year as compared to half a year in 2017."
-- Opsumit was approved in October 2013. The entire launch ramp — the part an
-  uptake workbench exists to measure — belongs to Actelion, a Swiss issuer
-  that was never an SEC registrant and filed nothing with the SEC.
+  2018 represented a full year as compared to half a year in 2017." 2017 is a
+  ~6.5-month stub, not a comparable year.
+- Actelion's FY2015 and FY2016 results releases are not reachable from here,
+  so 2015–2017 has no citable annual figure from either issuer.
 - At the back end, J&J merges Opsumit into a combined OPSUMIT/OPSYNVI line
   from 2025, so the standalone series cannot be extended.
 
-A series that begins four years after launch and ends on a reporting change
-cannot be a peak benchmark: 2024's $2,184m is a highest-observed value on a
-still-rising curve, not a lifetime peak. That is the same defect Flolan is
-excluded for. `reason_code` moved from `reporting_scope_changed` to
-`incomplete_pre_peak_history` accordingly.
+A series with a three-year hole before its maximum cannot be a peak benchmark:
+2024's $2,184m is a highest-observed value on a still-rising curve, not a
+lifetime peak. That is the same defect Flolan is excluded for. `reason_code`
+moved from `reporting_scope_changed` to `incomplete_pre_peak_history`
+accordingly.
 
 **What would change the answer.** The quarterly route below is real; this
-environment simply cannot reach it. Both would need outbound network access:
+environment cannot reach it. It would need outbound network access:
 
 | Issuer | Document | Coverage | Currency |
 |---|---|---|---|
@@ -111,13 +113,65 @@ environment simply cannot reach it. Both would need outbound network access:
 | Actelion | Annual Reports at `annualreportYYYY.actelion.com` + Financial Report PDFs | 2013–2016 | CHF |
 | J&J | **8-K Exhibit 99.2 "Supplementary Sales Data"**, filed with every quarterly earnings release, explicit OPSUMIT line with US / Intl / WW columns | 2017Q2 – 2024Q4 | USD |
 
-The Exhibit 99.2 accession pattern under CIK 200406 is stable and enumerable
-(`a8k2017q4exhibit992o.htm`, `a2019q2exhibit992o.htm`, `a2020q1exhibit992.htm`,
-`a2025q1exhibit992.htm`). Those PDFs are hosted on J&J's IR CDN and are not in
-any SEC full-text index reachable here; the 8-K itself only points at the
-website. Recovering the Actelion CHF years would additionally need FX
-normalization at the mid-2017 seam and would still leave a likely 1H-2017 hole
-around the 16 June tender close.
+The Exhibit 99.2 accession pattern under CIK 200406 is stable, so the full
+quarterly set is enumerable rather than hunted one at a time. Confirmed
+examples: `a8k2017q4exhibit992o.htm`, `a2019q2exhibit992o.htm`,
+`a2020q1exhibit992.htm`, and `a2025q1exhibit992.htm` — the last being the one
+that shows the combined `OPSUMIT/OPSYNVI` line, confirming the series ends
+rather than the data being absent. Those PDFs are hosted on J&J's IR CDN and
+are not in any SEC full-text index reachable here; the 8-K itself only points
+at the website. That is what puts the *quarterly* J&J series out of reach —
+the annual figures above come from the 10-Ks, which are indexed.
+
+#### Retrieved since: what the primary documents actually yield
+
+Working from the Actelion press releases themselves (via Bigdata.com, which
+indexes them in full including the `Sales by product` tables), these Opsumit
+figures are read out of the issuer's own tables rather than predicted:
+
+| Period | CHF m | How it is stated |
+|---|---|---|
+| 2013Q4 | 5 | FY2014 release, `Sales by product - quarterly`, Q4 2013 column |
+| 2014Q3 | 59 | 9M 2014 release, COO quote, and 112 − 53 from the two YTD figures |
+| 2014Q4 | 68 | FY2014 release, quarterly table; equals FY 180 − 9M 112 |
+| 2015Q3 | 147 | 9M 2016 release, Q3 2015 comparative column |
+| 2016Q1 | 178 | Q1 2016 release, financial highlights |
+| 2016Q3 | 218 | 9M 2016 release, Q3 2016 column |
+
+FY2013 = Q4 2013 = CHF 5m in the same document, which fixes the commercial
+start at 2013Q4 on the issuer's own arithmetic rather than on a launch date.
+
+The prediction above that only 2017Q1–Q2 is missing is too optimistic for the
+Actelion years. **2015Q1, 2015Q2, 2015Q4 and 2016Q4 are not separately citable
+from any source reachable here**: the FY2015 and FY2016 results releases carry
+those tables, but neither is in the Bigdata index and this sandbox has no
+outbound network. 2015H1 is known only as a CHF 207m pair (354 − 147), one
+equation in two unknowns, which the derivation stage correctly refuses.
+
+#### Where that leaves the series
+
+Both ends are partly citable and the middle is not:
+
+- **2013–2014**: Actelion annual, CHF, carried as context.
+- **2015–2017**: no citable annual figure at all. Actelion's FY2015/FY2016
+  releases are unreachable, and J&J's first figure is a ~6.5-month 2017 stub
+  from the 16 June acquisition, which is not a comparable year.
+- **2018–2024**: J&J annual, USD, read from the 10-K sales tables and carried
+  as context.
+- **2025 onward**: combined OPSUMIT/OPSYNVI line only.
+
+So Opsumit is not the clean win this document originally called it. Not
+because the figures do not exist — most of them do — but because the pre-peak
+middle is missing and the quarterly route is unreachable here. It stays
+excluded, and the two annual blocks are carried as context.
+
+Remaining caveats for anyone who does reach the quarterly sources:
+- **Currency seam mid-2017**: CHF (Actelion) → USD (J&J), plus a change of
+  reporting regime. Needs FX normalization at the join.
+- **1H-2017 hole**: whether Actelion published standalone Q1 2017 product
+  sales before delisting is still unconfirmed.
+- Opsynvi was approved March 2024, so late-2024 Opsumit figures may already
+  reflect switch dynamics even while reported separately.
 
 ### Ventavis — exclusion is too aggressive
 
@@ -280,7 +334,7 @@ surge moved the peak from 2010 to 2011.
 
 | Product | Recorded reason | Verdict | What exists |
 |---|---|---|---|
-| **Opsumit** | ~~combined with Opsynvi from 2025~~ → `incomplete_pre_peak_history` | **holds** (checked against filings) | annual worldwide 2018–2024, verified and added as `partial_context`; pre-2018 belongs to Actelion, never an SEC registrant |
+| **Opsumit** | ~~combined with Opsynvi from 2025~~ → `incomplete_pre_peak_history` | **holds** (checked against primary documents) | annual CHF FY2013–FY2014 (Actelion) and USD 2018–2024 (J&J 10-Ks), all verified and carried as `partial_context`; 2015–2017 not citable, quarterly route unreachable here |
 | **Ventavis** | CoTherix 2006Q4 gap | **too aggressive** | 2005Q1–2006Q3 USD (CoTherix SEC) + 2007–2016 CHF (Actelion), US-only; one quarter genuinely missing |
 | **Veletri** | early quarters missing | **correct but partial** | ~2011–2016 CHF, US-only |
 | **Adempas** | Merck figure not worldwide | **correct**, reason understates | Bayer EUR territory series, contaminated by amortized collaboration income |

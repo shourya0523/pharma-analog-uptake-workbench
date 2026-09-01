@@ -272,47 +272,62 @@ def test_catalog_coverage_counts_every_seed_product_exactly_once():
     )
 
 
-def test_partial_context_annual_rows_never_become_peak_benchmarks():
-    """A product excluded for missing pre-peak history can still carry annual rows.
+def test_an_excluded_product_may_carry_annual_context_but_never_a_benchmark():
+    """Annual figures are evidence; they are not a series and not a peak.
 
-    Flolan and Opsumit both do. The risk is that those rows quietly get treated
-    as a peak: Opsumit's observed maximum (2024) sits on a still-rising curve
-    whose first four years belong to Actelion, which never filed with the SEC,
-    so it is a highest-observed value and not a lifetime peak. Marking the rows
-    partial_context is what keeps them out of peak_sales.
+    Actelion published per-product annual sales for Opsumit, Veletri and
+    Ventavis, so each has a verified number rather than nothing at all. None of
+    them has a citable launch-to-end quarterly series, so none may acquire a
+    peak row or a coverage row on the strength of those annual figures - which
+    is how a product with two years of data would otherwise start being scored
+    as a benchmark it cannot support.
     """
-    annual = load_jsonl("annual_revenue.jsonl")
-    peaks = load_jsonl("peak_sales.jsonl")
-    excluded = {row["drug_name"] for row in load_jsonl("excluded_products.jsonl")}
-    peak_products = {row["drug_name"] for row in peaks}
+    manifest = json.loads((GOLD / "manifest.json").read_text())
+    annual = load_jsonl(manifest["annual_rows_file"])
+    peaks = load_jsonl(manifest["peak_sales_file"])
+    coverage = load_jsonl(manifest["coverage_file"])
+    excluded = {row["drug_name"] for row in load_jsonl(manifest["excluded_products_file"])}
 
-    for drug in excluded:
-        rows = [row for row in annual if row["drug_name"] == drug]
-        if not rows:
-            continue
-        assert {row["series_role"] for row in rows} == {"partial_context"}, (
-            f"{drug} is excluded but its annual rows are not marked partial_context"
-        )
-        assert drug not in peak_products, f"excluded {drug} leaked into peak_sales"
+    with_annual = {row["drug_name"] for row in annual}
+    context_only = with_annual & excluded
+    assert context_only, "the annual-context case must stay represented in the dataset"
+
+    peak_names = {row["drug_name"] for row in peaks}
+    coverage_names = {row["drug_name"] for row in coverage}
+    for drug_name in context_only:
+        assert drug_name not in peak_names, drug_name
+        assert drug_name not in coverage_names, drug_name
+        rows = [row for row in annual if row["drug_name"] == drug_name]
+        assert all(row["series_role"] == "partial_context" for row in rows), drug_name
+        # Context rows are held to the same evidence bar as benchmark rows: a
+        # real quote, a real source, and a comparable USD figure.
+        for row in rows:
+            assert row["source_quote"] and row["source_url"].startswith("https://")
+            assert row["value_normalized_usd_millions"] is not None, row["gold_id"]
 
 
 def test_opsumit_annual_series_matches_the_filings_it_cites():
-    """Pins the worldwide figures read from J&J's 10-K sales tables.
+    """Pins both eras of Opsumit's annual context rows.
 
-    J&J prints US 766 + International 562 for 2019 but states Worldwide 1,327,
-    not 1,328 - it sums unrounded figures and rounds once, and both filings
-    carrying 2019 agree. Deriving the total instead of reading the stated line
-    would put a value in the dataset that appears in no filing, so the stated
-    figure is what these rows carry.
+    The series deliberately spans two issuers: Actelion in CHF from the 2013
+    launch, J&J in USD from the 16 June 2017 acquisition. 2015-2017 is absent
+    because no annual figure is citable there, which is the gap that keeps the
+    product excluded - not an oversight to be quietly filled.
+
+    The USD rows carry J&J's stated worldwide line, never US + International.
+    For 2019 J&J prints 766 + 562 but states Worldwide 1,327, not 1,328: it
+    sums unrounded figures and rounds once, and both filings carrying 2019
+    agree. Deriving the total would put a value in the dataset that appears in
+    no filing.
     """
     rows = {
         row["period"]: row
         for row in load_jsonl("annual_revenue.jsonl")
         if row["drug_name"] == "Opsumit"
     }
-    assert {
-        period: row["value_reported"] for period, row in rows.items()
-    } == {
+    assert {period: row["value_reported"] for period, row in rows.items()} == {
+        "2013": 5.0,
+        "2014": 180.0,
         "2018": 1215.0,
         "2019": 1327.0,
         "2020": 1639.0,
@@ -321,23 +336,21 @@ def test_opsumit_annual_series_matches_the_filings_it_cites():
         "2023": 1973.0,
         "2024": 2184.0,
     }
-    for row in rows.values():
-        assert row["currency"] == "USD" and row["unit"] == "millions"
-        assert row["revenue_scope"] == "Worldwide"
-        assert row["source_url"].startswith("https://www.sec.gov/")
-        # The cited quote has to actually contain the figure it backs.
-        assert f"{int(row['value_reported']):,}" in row["source_quote"]
-    # The series starts in 2018 because J&J only owns the product from the
-    # 16 June 2017 Actelion acquisition, not because 2013-2017 was skipped.
-    assert min(rows) == "2018"
+    assert {row["currency"] for row in rows.values()} == {"CHF", "USD"}
+    for period, row in rows.items():
+        # The J&J era is USD read off SEC filings; the Actelion era is CHF and
+        # has no SEC source, which is exactly why the middle years are missing.
+        if row["currency"] == "USD":
+            assert row["source_url"].startswith("https://www.sec.gov/")
+            assert f"{int(row['value_reported']):,}" in row["source_quote"]
+        assert row["series_role"] == "partial_context"
 
 
 def test_catalog_counts_are_derived_not_hand_maintained():
     """A product may sit in both ANNUAL_METADATA and the exclusions.
 
-    Flolan and Opsumit both do. The manifest used to subtract a hardcoded 1 for
-    that overlap, which silently goes stale the moment a second product does
-    the same thing.
+    Four now do. The manifest used to subtract a hardcoded 1 for that overlap,
+    which would have reported 23 products in a 20-product catalog.
     """
     manifest = json.loads((GOLD / "manifest.json").read_text())
     report = json.loads((GOLD / "build_report.json").read_text())

@@ -154,16 +154,29 @@ ANNUAL_METADATA = {
         "manufacturer": "Actelion/J&J",
         "benchmark_identity": "actelion_tracleer_worldwide_reported_chf",
     },
-    # Opsumit stays excluded from the quarterly catalog (see excluded_products)
-    # but carries annual context rows, the way Flolan does. J&J only owns the
-    # product from the Actelion acquisition on 16 June 2017, so 2018 is the
-    # first full year it reports - the launch ramp from the 2013 approval sits
-    # with Actelion, which was never an SEC registrant. A series that starts
-    # four years after launch cannot be a peak benchmark, so these are context.
+    # Opsumit, Veletri and Ventavis stay excluded from the quarterly benchmark
+    # (no contiguous launch-to-end series is citable), but each carries annual
+    # context rows - the same role Flolan already has.
+    #
+    # Opsumit's annual series deliberately spans two issuers and two currencies:
+    # Actelion reported it in CHF from the 2013 launch, and J&J in USD from the
+    # 16 June 2017 acquisition, which is why 2018 is J&J's first full year. The
+    # 2015-2017 middle is not citable from here, so this is context and never a
+    # peak benchmark - 2024 is a highest-observed value on a rising curve.
     "Opsumit": {
         "generic_name": "macitentan",
         "manufacturer": "Actelion/J&J",
-        "benchmark_identity": "jnj_opsumit_worldwide_partial",
+        "benchmark_identity": "actelion_jnj_opsumit_worldwide_partial",
+    },
+    "Veletri": {
+        "generic_name": "epoprostenol",
+        "manufacturer": "Actelion",
+        "benchmark_identity": "actelion_veletri_worldwide_partial_chf",
+    },
+    "Ventavis": {
+        "generic_name": "iloprost",
+        "manufacturer": "Actelion",
+        "benchmark_identity": "actelion_ventavis_us_partial_chf",
     },
 }
 
@@ -911,6 +924,17 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--out-dir", type=Path, default=GOLD_DIR)
     parser.add_argument("--cache-dir", type=Path, default=CACHE_DIR)
+    parser.add_argument(
+        "--reuse-quarterly",
+        action="store_true",
+        help=(
+            "Read the quarterly rows back from OUT_DIR/quarterly_revenue.jsonl "
+            "instead of re-fetching their sources. Use this only when a build "
+            "changes nothing on the quarterly side (an annual-manifest edit, "
+            "say); the rows read back are still put through the full coverage "
+            "check, so a stale or incomplete series fails the build."
+        ),
+    )
     return parser.parse_args()
 
 
@@ -918,13 +942,21 @@ def main() -> int:
     args = parse_args()
     out_dir = args.out_dir.resolve()
     out_dir.mkdir(parents=True, exist_ok=True)
-    client = ResearchClient(args.cache_dir)
-    try:
-        quarterly = deduplicate(
-            build_uthr(client) + build_uptravi(client) + build_yutrepia() + build_winrevair()
-        )
-    finally:
-        client.close()
+    if args.reuse_quarterly:
+        published = out_dir / "quarterly_revenue.jsonl"
+        if not published.exists():
+            raise SystemExit(f"--reuse-quarterly needs {published}, which does not exist")
+        quarterly = [
+            json.loads(line) for line in published.read_text().splitlines() if line.strip()
+        ]
+    else:
+        client = ResearchClient(args.cache_dir)
+        try:
+            quarterly = deduplicate(
+                build_uthr(client) + build_uptravi(client) + build_yutrepia() + build_winrevair()
+            )
+        finally:
+            client.close()
     annual = sorted(build_annual_rows(), key=lambda row: (row["drug_name"], row["period"]))
     coverage = coverage_rows(quarterly)
     incomplete = [row for row in coverage if not row["benchmark_eligible"]]
@@ -963,12 +995,15 @@ def main() -> int:
         "name": "independent_pah_peak_sales_gold",
         "generation": PROVENANCE,
         "as_of_quarter": AS_OF_QUARTER,
-        # Derived from catalog_coverage rather than counted here: a product can
-        # sit in both ANNUAL_METADATA and the exclusions (Flolan and Opsumit
-        # both do, supplying annual context while excluded from the quarterly
-        # catalog), and a hand-maintained offset silently goes stale each time
-        # that happens.
-        "target_product_count": catalog["catalog_products"],
+        # A real union, not a hand-tuned offset: a product can sit in both
+        # ANNUAL_METADATA and the exclusions (four now do, supplying annual
+        # context while excluded from the quarterly catalog), and subtracting a
+        # fixed count goes stale the moment another one does.
+        "target_product_count": len(
+            set(PRODUCT_METADATA)
+            | set(ANNUAL_METADATA)
+            | {row["drug_name"] for row in exclusions}
+        ),
         "quarterly_series_count": len(coverage),
         "annual_only_series_count": len(catalog["annual_only_products"]),
         "excluded_product_count": len(exclusions),

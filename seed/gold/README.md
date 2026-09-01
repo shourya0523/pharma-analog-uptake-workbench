@@ -20,8 +20,13 @@ All 20 products in `seed/example_drugs.csv` have one explicit disposition:
 
 - `quarterly_revenue.jsonl`: complete independently reported quarterly series.
 - `annual_revenue.jsonl`: issuer-reported annual peak series and partial
-  context. `value_reported`/`currency` are as-disclosed (Tracleer is CHF,
-  Flolan is GBP — neither issuer ever quoted a USD figure). Every row also
+  context. `value_reported`/`currency` are as-disclosed (Tracleer, Opsumit,
+  Veletri and Ventavis are CHF, Flolan is GBP — no issuer ever quoted a USD
+  figure). Rows with `series_role: partial_context` belong to products that
+  are *excluded* from the quarterly benchmark: Actelion and GSK published
+  annual per-product figures for them, but no contiguous launch-to-end
+  quarterly series is citable, so they carry a verified number without
+  carrying a peak or a coverage assertion. Every row also
   carries `value_normalized_usd_millions`, converted with the annual-average
   FX rate in `fx_rate_to_usd`/`fx_rate_source` (`FX_RATE_USD_PER_CHF` /
   `FX_RATE_USD_PER_GBP` in the builder — the CHF table is sourced directly
