@@ -1,0 +1,11 @@
+period,value_reported,source_url,source_quote,derivation
+2024Q1,70,https://www.sec.gov/Archives/edgar/data/310158/000162828024020283/mrk-20240331.htm,"Adempas | 70 | 59 | 18 % | 18 %",direct_reported
+2024Q2,72,https://www.sec.gov/Archives/edgar/data/310158/000162828024034715/mrk-20240630.htm,"Adempas | 72 | 65 | 11 % | 15 % | 142 | 125 | 14 % | 17 %",direct_reported
+2024Q3,72,https://www.sec.gov/Archives/edgar/data/310158/000162828024045689/mrk-20240930.htm,"Adempas | 72 | 65 | 11 % | 13 % | 214 | 189 | 13 % | 15 %",direct_reported
+2024Q4,73,https://www.sec.gov/Archives/edgar/data/310158/000162828025007732/mrk-20241231.htm,"Full-year 2024 Adempas sales of $287 million less the reported first nine months of $214 million yields a fourth quarter of $73 million.",annual_less_reported_first_nine_months
+2025Q1,68,https://www.sec.gov/Archives/edgar/data/310158/000162828025021834/mrk-20250331.htm,"Adempas | 68 | 70 | (3) % | 1 %",direct_reported
+2025Q2,80,https://www.sec.gov/Archives/edgar/data/310158/000031015825000014/mrk-20250630.htm,"Adempas | 80 | 72 | 10 % | 6 % | 147 | 142 | 4 % | 4 %",direct_reported
+2025Q3,82,https://www.sec.gov/Archives/edgar/data/310158/000031015825000059/mrk-20250930.htm,"Adempas | 82 | 72 | 14 % | 7 % | 229 | 214 | 7 % | 5 %",direct_reported
+2025Q4,83,https://www.merck.com/wp-content/uploads/sites/124/2026/02/4Q25-Merck-Other-Financial-Disclosures.pdf,"Full-year 2025 Adempas sales of $312 million less the reported first nine months of $229 million yields a fourth quarter of $83 million.",annual_less_reported_first_nine_months
+2026Q1,78,https://www.sec.gov/Archives/edgar/data/310158/000162828026029802/mrk-20260331.htm,"Adempas | 78 | 68 | 15 % | 5 %",direct_reported
+2026Q2,78,https://www.sec.gov/Archives/edgar/data/310158/000031015826000212/mrk-20260630.htm,"Adempas | 78 | 80 | (2) % | (4) % | 156 | 147 | 6 % | 1 %",direct_reported

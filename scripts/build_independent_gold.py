@@ -116,6 +116,40 @@ PRODUCT_METADATA = {
         "formulation": "inhalation powder",
         "route_of_administration": "inhalation",
     },
+    "Adempas": {
+        "generic_name": "riociguat",
+        "manufacturer": "Merck",
+        "benchmark_identity": "merck_adempas_merck_territories_reported",
+        # Adempas launched in 2013Q4, but this series deliberately does not
+        # start there, for two reasons that are worth keeping separate.
+        #
+        # First, basis: until 2020Q1 Merck reported a single blended "Adempas"
+        # figure that mixed its own territory sales with its profit share from
+        # Bayer's territories. That blend is not a product-sales series, and it
+        # is why Adempas was excluded from this catalog. From 2020Q1 Merck
+        # splits the two, and the "Adempas" line is territory product sales.
+        #
+        # Second, provenance: Merck's 2020-2023 filings are not reachable here
+        # as filings, only as redistributed copies, so those quarters cannot be
+        # cited to the document that reports them. The series therefore starts
+        # at 2024Q1, the first quarter each figure carries a citation to its own
+        # filing. That boundary is about what can be evidenced, not about the
+        # product, which is why this is not a launch-to-date uptake series and
+        # never earns a peak.
+        "commercial_start_quarter": "2024Q1",
+        "launch_quarter": "2013Q4",
+        "series_start_reason": (
+            "Merck reported a blended territory-sales-plus-profit-share figure "
+            "for Adempas until 2020Q1 and split them from that quarter on; "
+            "2024Q1 is the earliest split quarter citable to its own filing "
+            "here. Scope and format benchmark, not a launch-to-date series."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Merck marketing territories",
+        "geography": "International",
+        "formulation": "tablet",
+        "route_of_administration": "oral",
+    },
     "Winrevair": {
         "generic_name": "sotatercept-csrk",
         "manufacturer": "Merck",
@@ -153,6 +187,13 @@ ANNUAL_METADATA = {
         "generic_name": "bosentan",
         "manufacturer": "Actelion/J&J",
         "benchmark_identity": "actelion_tracleer_worldwide_reported_chf",
+    },
+    # Adempas is a quarterly benchmark product; these annual rows exist only
+    # to carry the full-year totals its unstated fourth quarters derive from.
+    "Adempas": {
+        "generic_name": "riociguat",
+        "manufacturer": "Merck",
+        "benchmark_identity": "merck_adempas_merck_territories_annual",
     },
     # Opsumit, Veletri and Ventavis stay excluded from the quarterly benchmark
     # (no contiguous launch-to-end series is citable), but each carries annual
@@ -655,6 +696,34 @@ def build_winrevair() -> list[dict[str, Any]]:
     ]
 
 
+def build_adempas() -> list[dict[str, Any]]:
+    """Adempas as Merck reports it in its own marketing territories.
+
+    Not a worldwide series and not comparable to one: Bayer commercialises
+    Adempas in the Americas and Merck records only its share of those profits,
+    as alliance revenue, on a separate line. The line read here is product
+    sales in Merck's territories, which is a real reported quantity with a real
+    scope - and the scope is the point, since nothing else in this catalog
+    exercises a territory-split product.
+    """
+    return [
+        revenue_row(
+            drug_name="Adempas",
+            period=source["period"],
+            value=float(source["value_reported"]),
+            source_url=source["source_url"],
+            source_quote=source["source_quote"],
+            source_type="sec_filing" if "sec.gov" in source["source_url"] else "company_ir",
+            derivation=source["derivation"],
+            notes=(
+                "Merck-territory product sales only; alliance revenue from "
+                "Bayer's territories is a separate line and is not included."
+            ),
+        )
+        for source in read_csv(SOURCE_DIR / "merck_adempas_quarterly.csv")
+    ]
+
+
 def build_annual_rows() -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     for source in read_csv(SOURCE_DIR / "annual_product_sales.csv"):
@@ -767,6 +836,11 @@ def observed_peak(drug_name: str, annual: list[dict[str, Any]], scope: str, geog
 def build_peaks(quarterly: list[dict[str, Any]], annual: list[dict[str, Any]]) -> list[dict[str, Any]]:
     peaks: list[dict[str, Any]] = []
     for drug_name, meta in PRODUCT_METADATA.items():
+        if not meta.get("peak_eligible", True):
+            # A series that starts after launch cannot say where the peak is:
+            # its maximum is only the highest value inside the window it
+            # happens to cover. Adempas is the case - see its metadata.
+            continue
         totals = full_annual_totals(quarterly, drug_name)
         if not totals:
             observations = [row for row in quarterly if row["drug_name"] == drug_name]
@@ -887,6 +961,22 @@ def coverage_rows(quarterly: list[dict[str, Any]]) -> list[dict[str, Any]]:
                     "but states no series_end_reason; a short series must say why."
                 )
             row["series_end_reason"] = reason
+
+        # The same rule at the other end. A series that starts after the
+        # product went on sale is measuring part of its life, and a reader has
+        # to be told which part and why - otherwise the start looks like the
+        # launch and every rate computed from it is wrong.
+        launch = meta.get("launch_quarter")
+        if launch and launch != meta["commercial_start_quarter"]:
+            start_reason = meta.get("series_start_reason")
+            if not start_reason:
+                raise ValueError(
+                    f"{drug_name} starts at {meta['commercial_start_quarter']} but "
+                    f"launched at {launch} and states no series_start_reason; a "
+                    "series that begins after launch must say why."
+                )
+            row["launch_quarter"] = launch
+            row["series_start_reason"] = start_reason
         rows.append(row)
     return rows
 
@@ -995,7 +1085,7 @@ def main() -> int:
         # free - and reusing them instead would silently ignore an edit to
         # those manifests, which is exactly the kind of staleness this flag
         # must not introduce.
-        rebuilt = build_yutrepia() + build_winrevair()
+        rebuilt = build_yutrepia() + build_winrevair() + build_adempas()
         rebuilt_drugs = {row["drug_name"] for row in rebuilt}
         quarterly = deduplicate(
             [
@@ -1009,7 +1099,11 @@ def main() -> int:
         client = ResearchClient(args.cache_dir)
         try:
             quarterly = deduplicate(
-                build_uthr(client) + build_uptravi(client) + build_yutrepia() + build_winrevair()
+                build_uthr(client)
+                + build_uptravi(client)
+                + build_yutrepia()
+                + build_winrevair()
+                + build_adempas()
             )
         finally:
             client.close()

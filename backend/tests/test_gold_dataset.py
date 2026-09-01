@@ -3,6 +3,8 @@ import csv
 import importlib.util
 import json
 import re
+
+import pytest
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -41,15 +43,32 @@ def test_gold_builder_has_no_application_or_pipeline_imports():
 
 
 def test_every_target_product_is_benchmarked_or_evidence_backed_excluded():
+    """Three ways to be accounted for, not two.
+
+    A product used to be either peaked or excluded. Adempas is neither: it has
+    a complete, citable quarterly series that begins after launch, so it is a
+    real benchmark series whose maximum says nothing about a lifetime peak.
+    Collapsing that back into "excluded" would throw away usable data; leaving
+    it out of the accounting would hide a product.
+    """
     manifest = json.loads((GOLD / "manifest.json").read_text())
     peaks = load_jsonl(manifest["peak_sales_file"])
     excluded = load_jsonl(manifest["excluded_products_file"])
-    included_names = {row["drug_name"] for row in peaks}
+    coverage = load_jsonl(manifest["coverage_file"])
+    peaked = {row["drug_name"] for row in peaks}
     excluded_names = {row["drug_name"] for row in excluded}
-    assert included_names.isdisjoint(excluded_names)
-    assert included_names | excluded_names == seed_names()
+    series_without_peak = {row["drug_name"] for row in coverage} - peaked
+
+    assert peaked.isdisjoint(excluded_names)
+    assert series_without_peak.isdisjoint(excluded_names)
+    assert peaked | excluded_names | series_without_peak == seed_names()
     assert manifest["target_product_count"] == len(seed_names())
     assert all(row["benchmark_eligible"] for row in peaks)
+    # A series without a peak must be one that starts after launch, not an
+    # oversight: anything else with a full span should still be peaked.
+    for drug_name in series_without_peak:
+        series = next(row for row in coverage if row["drug_name"] == drug_name)
+        assert series.get("series_start_reason"), drug_name
 
 
 def test_every_quarterly_benchmark_series_has_exact_full_coverage():
@@ -457,3 +476,54 @@ def test_the_gold_dataset_is_complete_on_its_own_terms():
     assert completeness["complete_quarterly_series"] > 0
     assert completeness["annual_benchmark_series"] > 0
     assert completeness["evidence_backed_exclusions"] > 0
+
+
+def test_adempas_is_a_scoped_series_that_never_earns_a_peak():
+    """The only territory-split product in the catalog, and the reason it is here.
+
+    Bayer commercialises Adempas in the Americas; Merck records only its own
+    territories as product sales and Bayer's as a separate alliance-revenue
+    line. Merck blended the two into one figure until 2020Q1, which is what
+    made this product unusable before - the old exclusion was right about the
+    blend and wrong to conclude no series existed after the split.
+
+    The series starts after launch, so it is a scope-and-format benchmark, not
+    an uptake curve, and it must never acquire a peak row: its maximum is only
+    the largest value inside the window it happens to cover.
+    """
+    coverage = {row["drug_name"]: row for row in load_jsonl("series_coverage.jsonl")}
+    rows = [r for r in load_jsonl("quarterly_revenue.jsonl") if r["drug_name"] == "Adempas"]
+    peaks = {row["drug_name"] for row in load_jsonl("peak_sales.jsonl")}
+    excluded = {row["drug_name"] for row in load_jsonl("excluded_products.jsonl")}
+
+    assert "Adempas" in coverage and "Adempas" not in excluded
+    assert "Adempas" not in peaks, "a series that starts after launch cannot locate a peak"
+
+    series = coverage["Adempas"]
+    assert series["coverage_pct"] == 100.0 and series["missing_quarters"] == []
+    # A start later than launch has to be declared and explained.
+    assert series["launch_quarter"] == "2013Q4"
+    assert series["commercial_start_quarter"] == "2024Q1"
+    assert "series_start_reason" in series and series["series_start_reason"]
+
+    assert {r["revenue_scope"] for r in rows} == {"Merck marketing territories"}
+    assert {r["geography"] for r in rows} == {"International"}
+    assert {r["value_reported"] for r in rows} == {70.0, 72.0, 73.0, 68.0, 80.0, 82.0, 83.0, 78.0}
+
+
+def test_a_series_starting_after_launch_must_say_why():
+    """The guard, mirrored from the one on series_end_reason."""
+    builder = load_builder()
+    meta = dict(builder.PRODUCT_METADATA["Adempas"])
+    meta.pop("series_start_reason")
+    rows = [
+        {"drug_name": "Adempas", "period": "2024Q1", "value_reported": 70.0},
+        {"drug_name": "Adempas", "period": "2024Q2", "value_reported": 72.0},
+    ]
+    original = builder.PRODUCT_METADATA["Adempas"]
+    builder.PRODUCT_METADATA["Adempas"] = meta
+    try:
+        with pytest.raises(ValueError, match="series_start_reason"):
+            builder.coverage_rows(rows)
+    finally:
+        builder.PRODUCT_METADATA["Adempas"] = original

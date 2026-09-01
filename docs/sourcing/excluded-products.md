@@ -360,3 +360,32 @@ surge moved the peak from 2010 to 2011.
    amortization flag.
 7. **Alyq / Tadliq / Liqrev** — leave excluded; payer spend belongs in a
    separate table if it is wanted at all.
+
+---
+
+## Alternative sources: what the open web adds (and does not)
+
+Searched for non-SEC routes to the figures the filings index cannot reach.
+Two findings, one useful and one cautionary.
+
+**Bayer publishes quarterly statements that would give worldwide Adempas.**
+Merck reports only its own marketing territories; Bayer holds the Americas and
+publishes group quarterly statements as PDFs on `bayer.com`
+(`/sites/default/files/<year>-<month>/bayer-quarterly-statement-qN-YYYY.pdf`).
+Those documents carry Adempas sales for Bayer's territories, which is the half
+this dataset does not have. **They are not reachable from this environment**:
+outbound HTTP is blocked, so the pages can be located but not read. This is the
+single highest-value fetch for anyone with network access — it would turn the
+scoped Merck series into a worldwide one.
+
+**The web-search summarizer cannot be used as a data source, confirmed again.**
+Asked for Adempas sales, it returned "Bayer projected annual peak sales of
+€7.5 million from Adempas". Adempas is a blockbuster; the real figure is three
+orders of magnitude larger, and Merck's *territory* share alone was $312m in
+2025. The summarizer had misread a fragment. This is the same failure mode
+recorded at the top of this document, where it attributed one CHF figure to two
+different drugs.
+
+The rule stands and is worth restating because it survived a direct test: web
+search is for **locating documents**, never for reading values out of them. A
+figure enters `seed/gold/` only from the primary document itself.

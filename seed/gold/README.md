@@ -73,8 +73,8 @@ own commercial span. `build_report.json` records this under
 `gold_completeness`, the builder refuses to emit an incomplete series, and
 `test_the_gold_dataset_is_complete_on_its_own_terms` pins it.
 
-    20 catalog products = 9 complete quarterly series (423 quarters, every one
-    covering its full span) + 3 annual benchmark series + 8 evidence-backed
+    20 catalog products = 10 complete quarterly series (433 quarters, every one
+    covering its full span) + 3 annual benchmark series + 7 evidence-backed
     exclusions
 
 **This is not the percentage `scripts/eval_completeness.py` prints.** That
@@ -94,12 +94,53 @@ exists, and in several cases the issuer never published one at all:
 - **Alyq, Tadliq, Liqrev** — no public product-level sales; the only figures
   are CMS payer spend, which is pre-rebate by law and must never fill a
   revenue column.
-- **Adempas** — Merck records only its own marketing territories, with Bayer's
-  Americas sales arriving as profit-share alliance revenue. Merck's quarterly
-  figure is real and citable but is not a worldwide product-sales series.
+(**Adempas is no longer among them** — see below.)
 
 Recording those as exclusions with evidence *is* the complete answer for them.
 Inventing a series would not be more complete, only less true.
+
+## Adempas: a scoped series, not a worldwide one
+
+Adempas was excluded on the grounds that Merck's figure "includes amortized
+collaboration income, so it isn't a product-sales series". That was true of
+what Merck reported **until 2020Q1**: a single blended line mixing its own
+territory sales with its profit share from Bayer's territories. From 2020Q1
+Merck splits them, and the `Adempas` line is territory product sales with
+`Alliance Revenue - Adempas/Verquvo` reported separately. The exclusion was
+right about the blend and wrong to conclude that no series existed after it.
+
+The series is included with its scope stated in every row —
+`revenue_scope: Merck marketing territories`, `geography: International` —
+because Bayer commercialises Adempas in the Americas and those sales are never
+product revenue to Merck. **Do not compare it to a worldwide series.** It is
+the only territory-split product in the catalog, which is precisely why it is
+worth having: nothing else exercises that scope.
+
+It starts at 2024Q1 rather than the 2013Q4 launch, and carries a
+`series_start_reason` saying so. Two things pushed the boundary: the basis
+change above, and provenance — Merck's 2020–2023 filings are reachable here
+only as redistributed copies, so those quarters cannot be cited to the document
+that reports them. Because the series begins after launch it is a scope and
+format benchmark, never a peak: `peak_eligible` is false and a test enforces
+that it acquires no peak row.
+
+### Merck rounds, and the derivation shows it
+
+`eval_completeness.py` reports Adempas 2025Q4 as derived 82 against a gold
+value of 83. Gold is right and the derivation is not wrong either:
+
+| Route | Result |
+|---|---|
+| Merck's stated full year (312) less its stated nine months (229) | **83** |
+| 312 less the sum of the three stated quarters (68 + 80 + 82 = 230) | 82 |
+
+Merck's published nine-month figure is 229, not 230, because it rounds each
+period independently. The same thing appears in Winrevair (stated first half
+$615m against quarters summing to $616m) and in Adempas's own first half
+($147m against 68 + 80 = 148). The gold value is the one Merck states in its
+quarterly schedule. The disagreement is left visible rather than reconciled,
+because it is a real property of issuer disclosure that any consumer deriving
+quarters needs to know about.
 
 ## Known issue: Remodulin 2002Q4 does not satisfy its own arithmetic
 
