@@ -60,7 +60,15 @@ def test_every_quarterly_benchmark_series_has_exact_full_coverage():
     for row in revenue:
         by_drug.setdefault(row["drug_name"], set()).add(row["period"])
     for row in coverage:
-        expected = set(builder.quarter_range(row["commercial_start_quarter"], row["as_of_quarter"]))
+        # Against the series' own end, not the dataset's as-of quarter: a
+        # bounded series legitimately stops earlier, and checking it against
+        # as_of would fail it for quarters it never claimed to cover.
+        expected = set(
+            builder.quarter_range(
+                row["commercial_start_quarter"],
+                row.get("series_end_quarter", row["as_of_quarter"]),
+            )
+        )
         assert by_drug[row["drug_name"]] == expected
         assert row["observed_quarters"] == row["expected_quarters"] == len(expected)
         assert not row["missing_quarters"]
@@ -190,3 +198,75 @@ def test_every_research_manifest_uses_https_sources():
         for row in builder.read_csv(path):
             if "source_url" in row:
                 assert row["source_url"].startswith("https://"), (path.name, row["source_url"])
+
+
+def test_a_series_may_end_before_the_as_of_quarter_when_it_says_why():
+    """A product whose issuer stopped reporting it separately still has a series.
+
+    Requiring every series to run to the as-of quarter is what forced whole
+    products out of the dataset over a late reporting change: Opsumit is
+    reportable from 2013 through 2024Q4 and was excluded outright because J&J
+    merged it into a combined line in 2025. A bounded series keeps the years
+    that are real, provided it states where it stops and why.
+    """
+    builder = load_builder()
+    bounded = {
+        "benchmark_identity": "test_bounded",
+        "commercial_start_quarter": "2024Q1",
+        "series_end_quarter": "2024Q3",
+        "series_end_reason": "issuer merged the product into a combined line",
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+    }
+    rows = [
+        {"drug_name": "Bounded", "period": period}
+        for period in ("2024Q1", "2024Q2", "2024Q3")
+    ]
+
+    original = builder.PRODUCT_METADATA
+    builder.PRODUCT_METADATA = {"Bounded": bounded}
+    try:
+        coverage = builder.coverage_rows(rows)[0]
+        assert coverage["benchmark_eligible"]
+        assert coverage["series_end_quarter"] == "2024Q3"
+        assert coverage["expected_quarters"] == 3
+        assert coverage["series_end_reason"]
+
+        # A value past the stated end is not part of the span, because the
+        # basis changed there - it must not silently extend the series.
+        beyond = builder.coverage_rows(rows + [{"drug_name": "Bounded", "period": "2025Q1"}])[0]
+        assert not beyond["benchmark_eligible"]
+        assert beyond["quarters_beyond_series_end"] == ["2025Q1"]
+
+        # Ending early without saying why is refused outright.
+        builder.PRODUCT_METADATA = {
+            "Bounded": {**bounded, "series_end_reason": ""},
+        }
+        try:
+            builder.coverage_rows(rows)
+        except ValueError as exc:
+            assert "series_end_reason" in str(exc)
+        else:
+            raise AssertionError("a short series with no stated reason must fail")
+    finally:
+        builder.PRODUCT_METADATA = original
+
+
+def test_catalog_coverage_counts_every_seed_product_exactly_once():
+    """Coverage over included products alone always reads 100% and hides the gap."""
+    builder = load_builder()
+    manifest = json.loads((GOLD / "manifest.json").read_text())
+    coverage = load_jsonl(manifest["coverage_file"])
+    exclusions = load_jsonl(manifest["excluded_products_file"])
+
+    catalog = builder.catalog_coverage(coverage, exclusions)
+    assert catalog["catalog_products"] == len(seed_names())
+    # Flolan supplies annual context rows while being an excluded product; it
+    # must not be counted in both buckets.
+    assert not set(catalog["annual_only_products"]) & set(catalog["excluded_products"])
+    assert (
+        len(catalog["quarterly_series_products"])
+        + len(catalog["annual_only_products"])
+        + len(catalog["excluded_products"])
+        == len(seed_names())
+    )

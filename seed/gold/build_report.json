@@ -7,5 +7,37 @@
   "quarterly_coverage_pct": 100.0,
   "observed_peaks": 6,
   "not_yet_observed_peaks": 6,
-  "excluded_products": 8
+  "excluded_products": 8,
+  "catalog_coverage": {
+    "catalog_products": 20,
+    "quarterly_series_products": [
+      "Adcirca",
+      "Nebulized Tyvaso",
+      "Orenitram",
+      "Remodulin",
+      "Tyvaso",
+      "Tyvaso DPI",
+      "Uptravi",
+      "Winrevair",
+      "Yutrepia"
+    ],
+    "annual_only_products": [
+      "Letairis",
+      "Revatio",
+      "Tracleer"
+    ],
+    "excluded_products": [
+      "Adempas",
+      "Alyq",
+      "Flolan",
+      "Liqrev",
+      "Opsumit",
+      "Tadliq",
+      "Veletri",
+      "Ventavis"
+    ],
+    "quarterly_series_pct": 45.0,
+    "quarterly_observations": 423,
+    "bounded_series": []
+  }
 }

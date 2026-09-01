@@ -807,29 +807,93 @@ def build_exclusions() -> list[dict[str, Any]]:
     ]
 
 
+def series_end_quarter(meta: dict[str, Any]) -> str:
+    """The last quarter a product's series is expected to cover.
+
+    Defaults to the dataset's as-of quarter. A product whose issuer stopped
+    reporting it separately ends earlier, at a quarter named in its metadata
+    together with the reason - see ``series_end_reason``.
+    """
+    return meta.get("series_end_quarter") or AS_OF_QUARTER
+
+
 def coverage_rows(quarterly: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Coverage for every quarterly series, against its own expected span.
+
+    A series is complete when it covers commercial start through its end
+    quarter, which is normally the as-of quarter but is earlier for a product
+    whose reporting basis changed. Requiring every series to run to the as-of
+    quarter is what forced products into total exclusion over a late change:
+    Opsumit is reportable from 2013 to 2024Q4 and was dropped entirely because
+    J&J merged it into a combined line in 2025.
+    """
     rows: list[dict[str, Any]] = []
     by_drug: dict[str, set[str]] = defaultdict(set)
     for row in quarterly:
         by_drug[row["drug_name"]].add(row["period"])
     for drug_name, meta in PRODUCT_METADATA.items():
-        expected = quarter_range(meta["commercial_start_quarter"], AS_OF_QUARTER)
+        end_quarter = series_end_quarter(meta)
+        expected = quarter_range(meta["commercial_start_quarter"], end_quarter)
         observed = by_drug[drug_name]
         missing = [period for period in expected if period not in observed]
-        rows.append(
-            {
-                "drug_name": drug_name,
-                "benchmark_identity": meta["benchmark_identity"],
-                "commercial_start_quarter": meta["commercial_start_quarter"],
-                "as_of_quarter": AS_OF_QUARTER,
-                "expected_quarters": len(expected),
-                "observed_quarters": len(observed & set(expected)),
-                "coverage_pct": round(100 * len(observed & set(expected)) / len(expected), 1),
-                "missing_quarters": missing,
-                "benchmark_eligible": not missing,
-            }
-        )
+        # Values after a bounded series ends are not part of its span, and
+        # would silently extend a series past the point its basis changed.
+        beyond = sorted(period for period in observed if period > end_quarter)
+        row = {
+            "drug_name": drug_name,
+            "benchmark_identity": meta["benchmark_identity"],
+            "commercial_start_quarter": meta["commercial_start_quarter"],
+            "series_end_quarter": end_quarter,
+            "as_of_quarter": AS_OF_QUARTER,
+            "expected_quarters": len(expected),
+            "observed_quarters": len(observed & set(expected)),
+            "coverage_pct": round(100 * len(observed & set(expected)) / len(expected), 1),
+            "missing_quarters": missing,
+            "quarters_beyond_series_end": beyond,
+            "benchmark_eligible": not missing and not beyond,
+        }
+        if end_quarter != AS_OF_QUARTER:
+            reason = meta.get("series_end_reason")
+            if not reason:
+                raise ValueError(
+                    f"{drug_name} ends at {end_quarter} before the as-of quarter "
+                    "but states no series_end_reason; a short series must say why."
+                )
+            row["series_end_reason"] = reason
+        rows.append(row)
     return rows
+
+
+def catalog_coverage(
+    coverage: list[dict[str, Any]],
+    exclusions: list[dict[str, Any]],
+) -> dict[str, Any]:
+    """Completeness across the whole seed catalog, not just what is included.
+
+    Coverage measured only over included products always reads 100% and hides
+    the real question, which is how much of the catalog the dataset speaks to
+    at all. Reporting the excluded products alongside keeps that visible.
+    """
+    quarterly_products = sorted(row["drug_name"] for row in coverage)
+    excluded = sorted(row["drug_name"] for row in exclusions)
+    # An excluded product may still appear in ANNUAL_METADATA to supply context
+    # rows - Flolan does - so it is not an annual-only benchmark. Counting it as
+    # both would overstate the catalog.
+    annual_only = sorted(
+        ANNUAL_METADATA.keys() - {row["drug_name"] for row in coverage} - set(excluded)
+    )
+    total = len(quarterly_products) + len(annual_only) + len(excluded)
+    return {
+        "catalog_products": total,
+        "quarterly_series_products": quarterly_products,
+        "annual_only_products": annual_only,
+        "excluded_products": excluded,
+        "quarterly_series_pct": round(100 * len(quarterly_products) / total, 1),
+        "quarterly_observations": sum(row["observed_quarters"] for row in coverage),
+        "bounded_series": sorted(
+            row["drug_name"] for row in coverage if "series_end_reason" in row
+        ),
+    }
 
 
 def parse_args() -> argparse.Namespace:
@@ -854,10 +918,17 @@ def main() -> int:
     coverage = coverage_rows(quarterly)
     incomplete = [row for row in coverage if not row["benchmark_eligible"]]
     if incomplete:
-        details = {row["drug_name"]: row["missing_quarters"] for row in incomplete}
+        details = {
+            row["drug_name"]: {
+                "missing": row["missing_quarters"],
+                "beyond_series_end": row["quarters_beyond_series_end"],
+            }
+            for row in incomplete
+        }
         raise ValueError(f"Incomplete independently researched series: {details}")
     peaks = build_peaks(quarterly, annual)
     exclusions = build_exclusions()
+    catalog = catalog_coverage(coverage, exclusions)
 
     write_jsonl(out_dir / "quarterly_revenue.jsonl", quarterly)
     write_jsonl(out_dir / "annual_revenue.jsonl", annual)
@@ -875,6 +946,7 @@ def main() -> int:
         "observed_peaks": sum(row["peak_status"] == "observed" for row in peaks),
         "not_yet_observed_peaks": sum(row["peak_status"] == "not_yet_observed" for row in peaks),
         "excluded_products": len(exclusions),
+        "catalog_coverage": catalog,
     }
     manifest = {
         "name": "independent_pah_peak_sales_gold",
