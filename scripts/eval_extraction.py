@@ -23,7 +23,12 @@ is reported separately rather than blended into one flattering percentage:
 * ``prose``       - a figure stated in a sentence. Scored strictly: both the
                     period and the amount are read from the sentence.
 * ``positional_text`` - whitespace-delimited PDF text where columns are held by
-                    position. Not yet scored; the extractor for it is pending.
+                    position. Scored weakly for the same reason as
+                    ``wide_table``: the harness solves for the scope row, start
+                    column and column direction that explain every cited period.
+                    Requiring a unique solution does catch a reader that took
+                    the wrong geography or ran the columns backwards, but the
+                    gold values participate in finding it.
 * ``annotated_composite`` - a quote carrying a curator's column legend rather
                     than issuer table structure.
 * ``derived``     - arithmetic over other rows (bridges, subtractions), which is
@@ -49,6 +54,7 @@ sys.path.insert(0, str(REPO_ROOT / "backend"))
 
 from app.extraction.extract import map_values_to_blocks, tokenize_row  # noqa: E402
 from app.extraction.fingerprint import PeriodBlock  # noqa: E402
+from app.extraction.positional import read_positional_block  # noqa: E402
 from app.extraction.prose import read_prose  # noqa: E402
 
 GOLD = REPO_ROOT / "seed" / "gold"
@@ -234,6 +240,79 @@ def replay_wide_table(
     return tokens[position], None
 
 
+def solve_positional(
+    drug: str, quote: str, periods_to_values: dict[str, float]
+) -> tuple[tuple[str, int, int] | None, str | None]:
+    """Find the scope row, start column and direction that explain a PDF block.
+
+    A flattened exhibit does not say which column is which quarter, nor which
+    way the columns run - J&J prints most-recent-first, United Therapeutics
+    prints oldest-first. Rather than assume either, this solves for the single
+    (scope, offset, direction) under which every cited period lands on its own
+    value. Requiring one unique solution is what makes it a test: a reader that
+    grabbed the wrong geography, or ran the columns backwards, admits none.
+    """
+    rows = read_positional_block(quote, product=drug)
+    if not rows:
+        return None, "no_scope_rows_found"
+
+    indexed: dict[int, float] = {}
+    for period, value in periods_to_values.items():
+        index = _quarter_index(period)
+        if index is None:
+            return None, f"non_quarterly_period_{period}"
+        indexed[index] = value
+    base = min(indexed)
+
+    solutions: list[tuple[str, int, int]] = []
+    for row in rows:
+        values = row.values
+        for direction in (1, -1):
+            for offset in range(len(values)):
+                positions = {
+                    index: offset + direction * (index - base) for index in indexed
+                }
+                if any(not 0 <= pos < len(values) for pos in positions.values()):
+                    continue
+                if all(
+                    values[pos] is not None and abs(values[pos] - indexed[index]) < 1e-6
+                    for index, pos in positions.items()
+                ):
+                    solutions.append((row.scope, offset, direction))
+    if not solutions:
+        return None, "no_scope_offset_direction_aligns_all_periods"
+    if len({s[0] for s in solutions}) > 1:
+        return None, f"ambiguous_scope={sorted({s[0] for s in solutions})}"
+    return solutions[0], None
+
+
+def replay_positional(
+    row: dict[str, Any],
+    solved: dict[tuple[str, str], tuple[tuple[str, int, int] | None, str | None]],
+) -> tuple[float | None, str | None]:
+    key = (row["drug_name"], row["source_quote"])
+    solution, reason = solved[key]
+    if solution is None:
+        return None, reason
+    scope, offset, direction = solution
+    rows = read_positional_block(row["source_quote"], product=row["drug_name"])
+    values = next((r.values for r in rows if r.scope == scope), None)
+    if values is None:
+        return None, "scope_row_missing"
+    base = min(
+        index
+        for index in (_quarter_index(p) for p in _periods_for(*key))
+        if index is not None
+    )
+    index = _quarter_index(row["period"])
+    if index is None:
+        return None, "non_quarterly_period"
+    position = offset + direction * (index - base)
+    if not 0 <= position < len(values) or values[position] is None:
+        return None, "period_column_empty"
+    return values[position], None
+
+
 def replay_prose(row: dict[str, Any]) -> tuple[float | None, str | None]:
     """Recover the row's value from a sentence, with the period read from text."""
     values = read_prose(row.get("source_quote") or "", product=row["drug_name"])
@@ -278,10 +357,27 @@ def main() -> int:
     def replay_wide(row: dict[str, Any]) -> tuple[float | None, str | None]:
         return replay_wide_table(row, offsets)
 
+    positional_groups: dict[tuple[str, str], dict[str, float]] = defaultdict(dict)
+    for row in buckets["positional_text"]:
+        positional_groups[(row["drug_name"], row["source_quote"])][row["period"]] = float(
+            row["source_value_reported"]
+        )
+    _PERIOD_GROUPS.update(
+        {key: sorted(value) for key, value in positional_groups.items()}
+    )
+    solved_positional = {
+        key: solve_positional(key[0], key[1], values)
+        for key, values in positional_groups.items()
+    }
+
+    def replay_pos(row: dict[str, Any]) -> tuple[float | None, str | None]:
+        return replay_positional(row, solved_positional)
+
     replays = {
         "table_row": replay_table_row,
         "wide_table": replay_wide,
         "prose": replay_prose,
+        "positional_text": replay_pos,
     }
     overall_ok = overall_total = 0
     all_failures: list[tuple[str, dict[str, Any], str]] = []
@@ -304,6 +400,7 @@ def main() -> int:
             "table_row": "delimited issuer table rows",
             "wide_table": "retrospective multi-period tables",
             "prose": "figures stated in sentences",
+            "positional_text": "flattened PDF exhibit blocks",
         }[bucket]
         print(f"\nextraction accuracy on {label}")
         total_ok = total = 0

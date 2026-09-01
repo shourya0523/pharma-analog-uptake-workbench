@@ -182,3 +182,54 @@ def test_non_usd_filing_is_converted_not_passed_through_as_dollars():
     # the franc figure - passing it through unconverted would overstate it.
     assert tracleer_2010.value_normalized_usd_millions == 1582.1087
     assert tracleer_2010.fx_rate_to_usd == 0.9670
+
+
+# --- reading figures that are not in a delimited table ------------------------
+
+
+def test_sentence_states_its_own_unit_and_period():
+    """Older filings predate the product-sales exhibit and state sales in prose."""
+    from app.extraction.prose import read_prose
+
+    values = read_prose(
+        "Remodulin revenues for the quarter ended June 30, 2002 were "
+        "approximately $8.7 million.",
+        product="Remodulin",
+    )
+    assert len(values) == 1
+    assert values[0].period == "2002Q2"
+    assert values[0].value_as_reported == 8.7
+    assert values[0].unit_label == "millions"
+    assert values[0].currency == "USD"
+
+
+def test_sentence_naming_several_periods_is_refused():
+    """Which amount belongs to which period is not inferable from proximity."""
+    from app.extraction.prose import read_prose
+
+    values = read_prose(
+        "For the years ended December 31, 2016 and December 31, 2015 we "
+        "recognized $404.6 million and $470.1 million in Tyvaso net product sales.",
+        product="Tyvaso",
+    )
+    assert values == []
+
+
+def test_flattened_pdf_block_keeps_its_geographies_apart():
+    """PDF extraction loses the grid; the scope labels still separate the rows."""
+    from app.extraction.positional import read_positional_block
+
+    rows = read_positional_block(
+        "UPTRAVI US 102 91 77 68 56 35 236 Intl 8 9 8 4 1 - 13 "
+        "WW 110 100 85 72 57 35 249",
+        product="Uptravi",
+    )
+    by_scope = {row.scope: row.values for row in rows}
+
+    assert by_scope["United States"][0] == 102.0
+    assert by_scope["Worldwide"][0] == 110.0
+    # The dash is a period with nothing to report, and holds its column so the
+    # values after it stay on their own periods.
+    assert by_scope["International"] == (8.0, 9.0, 8.0, 4.0, 1.0, None, 13.0)
+    # US and worldwide must never be merged into one series.
+    assert by_scope["United States"] != by_scope["Worldwide"]
