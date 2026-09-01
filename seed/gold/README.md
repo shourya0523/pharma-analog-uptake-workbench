@@ -123,3 +123,44 @@ The Winrevair four are the interesting case: they are not a sourcing failure but
 a genuine limit on what a self-describing citation can carry. Merck states those
 quarters only in a schedule whose column order encodes a fact about the product,
 not about the table.
+
+### How to close them (for a session with network access)
+
+Each gap needs one specific document. The values are already known and
+cross-checked; what is missing is a citation that carries its own period.
+
+**Remodulin 2003Q4–2008Q4.** Each Q4 row already cites the FY 10-K that the
+annual total was read from — the URLs are in `uthr_remodulin_early.csv`. Fetch
+each, read "Remodulin net product sales" for the year, and add it to
+`annual_product_sales.csv`. The derivation stage then reproduces all six Q4s,
+since Q1–Q3 of every one of those years is already a direct citation. Nothing
+else is required.
+
+**Winrevair 2024Q2–Q4, 2025Q4.** Fetch Merck's quarterly *Other Financial
+Disclosures* schedule (linked from the row's `source_url`) and capture the
+Winrevair line **with the schedule's own period header row**, exactly the way
+Uptravi's rows carry J&J's exhibit header. That replaces the hand-written
+legend with the document's own declaration and `positional.py` handles the
+rest. Alternatively, Merck's 10-Q MD&A "Cardiovascular" table states them in
+the standard order and would work as a `table_row`:
+
+    Winrevair | 70  | - | - | - | 70  | - | - | -   (Q2 2024 10-Q)
+    Winrevair | 149 | - | - | - | 219 | - | - | -   (Q3 2024 10-Q)
+
+Both were read during sourcing and independently confirm the recorded values
+(219 = 70 + 149), but only from a redistributor's copy, so they are not cited
+here — see the note on provenance below. Adding Merck's stated full years
+(2024 $419m, 2025 $1,443m) as annual rows would additionally derive both Q4s.
+
+**Uptravi 2017Q2.** The quarter straddles J&J's 16 June 2017 acquisition of
+Actelion, so it needs Actelion's stub-period disclosure plus J&J's, not a
+single figure from either.
+
+### A note on provenance
+
+Several figures above were verified during sourcing but are *not* cited,
+because they were read in a redistributor's mirror of a filing rather than in
+the filing itself. Citing the SEC URL for text read elsewhere would assert that
+the document contains an exact string that was never checked against it — the
+same class of unverified provenance this dataset exists to eliminate. A gap
+with a known cause is worth more here than a citation that cannot be trusted.
