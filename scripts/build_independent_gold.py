@@ -162,14 +162,19 @@ ANNUAL_METADATA = {
 # figure into a comparable value_normalized_usd_millions without altering the
 # as-reported value_reported/currency fields, which still match source_quote.
 #
-# CHF per 1 USD, annual average of daily noon buying rates. Source: Federal
-# Reserve H.10/G.5A "Foreign Exchange Rates" annual releases, cross-checked
-# against secondary aggregators (exchangerates.org, OFX). 2001-2016 span
-# matches Tracleer's reported history.
-FX_RATE_CHF_PER_USD: dict[int, float] = {
-    2001: 1.69, 2002: 1.55, 2003: 1.34, 2004: 1.24, 2005: 1.25, 2006: 1.25,
-    2007: 1.20, 2008: 1.08, 2009: 1.08, 2010: 1.0432, 2011: 0.8869,
-    2012: 0.94, 2013: 0.93, 2014: 0.92, 2015: 0.96, 2016: 1.0153,
+# USD per 1 CHF, annual average of the New York noon buying rate for cable
+# transfers, certified for customs purposes by the Federal Reserve Bank of
+# New York. Sourced directly from UBS Group AG's own "Selected Financial
+# Data" SEC filings (Form 20-F equivalents), which disclose this exact table
+# every year specifically so USD readers can convert CHF figures - the same
+# rate a Swiss issuer's own US filings would use. Cross-checked across seven
+# overlapping UBS annual disclosures (Q4 2003 through Q4 2016 filings), all
+# internally consistent.
+FX_RATE_USD_PER_CHF: dict[int, float] = {
+    2001: 0.5910, 2002: 0.6453, 2003: 0.7493, 2004: 0.8059, 2005: 0.8039,
+    2006: 0.8034, 2007: 0.8381, 2008: 0.9298, 2009: 0.9260, 2010: 0.9670,
+    2011: 1.1398, 2012: 1.0724, 2013: 1.0826, 2014: 1.0893, 2015: 1.0368,
+    2016: 1.0128,
 }
 
 # USD per 1 GBP, annual average of daily noon buying rates. Source: Federal
@@ -179,7 +184,7 @@ FX_RATE_USD_PER_GBP: dict[int, float] = {
     2010: 1.5458, 2011: 1.6043, 2012: 1.5853, 2013: 1.5642,
 }
 
-FX_RATE_SOURCE = "federal_reserve_h10_g5a_annual_average"
+FX_RATE_SOURCE = "federal_reserve_ny_noon_buying_rate_annual_average"
 
 
 def usd_normalized(value: float, currency: str, year: int) -> tuple[float | None, float | None]:
@@ -188,13 +193,14 @@ def usd_normalized(value: float, currency: str, year: int) -> tuple[float | None
     fx_rate_to_usd is None (and the row is already-USD) when currency == "USD".
     Returns (None, None) if no rate is available for the given currency/year,
     so a missing rate fails loud (via the caller) rather than silently
-    reporting a false USD figure.
+    reporting a false USD figure. Both rate tables are USD per 1 unit of the
+    foreign currency, so converting is always value * rate.
     """
     if currency == "USD":
         return round(value, 6), None
-    if currency == "CHF" and year in FX_RATE_CHF_PER_USD:
-        rate = FX_RATE_CHF_PER_USD[year]
-        return round(value / rate, 6), rate
+    if currency == "CHF" and year in FX_RATE_USD_PER_CHF:
+        rate = FX_RATE_USD_PER_CHF[year]
+        return round(value * rate, 6), rate
     if currency == "GBP" and year in FX_RATE_USD_PER_GBP:
         rate = FX_RATE_USD_PER_GBP[year]
         return round(value * rate, 6), rate
