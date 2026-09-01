@@ -84,6 +84,7 @@ def main() -> int:
     print("-" * 72)
 
     totals = [0, 0, 0]
+    mismatches: list[str] = []
     for series in sorted(coverage, key=lambda c: c["drug_name"]):
         drug = series["drug_name"]
         expected = series["expected_quarters"]
@@ -127,10 +128,28 @@ def main() -> int:
                         }
                     )
                 )
-        derived = {
-            point.period
-            for point in complete_quarters_from_totals(known + annual_points)
-        }
+        derived_points = complete_quarters_from_totals(
+            known + annual_points,
+            # The series knows when the product started selling, so a
+            # launch-year total is not treated as covering quarters that
+            # predate the launch.
+            commercial_start=series.get("commercial_start_quarter"),
+        )
+        derived = {point.period for point in derived_points}
+        # A derived quarter counts as delivered only by period, so a derivation
+        # that lands on the wrong number would still read as coverage. Compare
+        # it against the gold value it is meant to reproduce and report any
+        # disagreement, since a confidently wrong figure is worse than a gap.
+        gold_values = {row["period"]: row["value_reported"] for row in drug_rows}
+        for point in derived_points:
+            expected_value = gold_values.get(point.period)
+            if expected_value is None:
+                continue
+            actual = point.value_normalized_usd_millions
+            if actual is None or abs(actual - expected_value) > 0.05:
+                mismatches.append(
+                    f"{drug} {point.period}: derived {actual:g} vs gold {expected_value:g}"
+                )
 
         # A family line before its formulation split resolves the formulation's
         # own series; Tyvaso's family total covers Nebulized Tyvaso pre-DPI.
@@ -175,6 +194,13 @@ def main() -> int:
         f"\nread-only completeness was {100 * read / expected:.1f}%; "
         f"derivation adds {derived_count} quarters"
     )
+    if mismatches:
+        print(
+            f"\n{len(mismatches)} derived quarter(s) disagree with the gold value "
+            "they reproduce:"
+        )
+        for line in mismatches:
+            print(f"  {line}")
     return 0
 
 

@@ -360,3 +360,37 @@ def test_prose_pairing_refuses_a_mismatched_count():
         product="Winrevair",
     )
     assert values == []
+
+
+def test_launch_year_total_covers_only_quarters_since_launch():
+    """A product's first year has no pre-launch quarters to account for.
+
+    Remodulin went on sale in 2002Q2, so United Therapeutics' full-year 2002
+    total is Q2 + Q3 + Q4. Requiring all four quarters made the launch year look
+    under-determined - two "missing" quarters instead of one - so it never
+    derived, even though the annual figure was cited.
+    """
+    from app.extraction.derive import complete_quarters_from_totals
+
+    points = [
+        _point("2002Q2", 8.7),
+        _point("2002Q3", 2.6),
+        _point("2002", 21.174, period_type="annual"),
+    ]
+    assert complete_quarters_from_totals(points) == []
+
+    derived = complete_quarters_from_totals(points, commercial_start="2002Q2")
+    assert [(p.period, round(p.value_normalized_usd_millions, 3)) for p in derived] == [
+        ("2002Q4", 9.874)
+    ]
+
+
+def test_a_total_from_before_launch_derives_nothing():
+    """A year the product did not sell in says nothing about any quarter."""
+    from app.extraction.derive import complete_quarters_from_totals
+
+    points = [
+        _point("2001", 5.0, period_type="annual"),
+        _point("2002Q2", 8.7),
+    ]
+    assert complete_quarters_from_totals(points, commercial_start="2002Q2") == []

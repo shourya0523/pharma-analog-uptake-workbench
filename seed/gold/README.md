@@ -64,3 +64,40 @@ Validate with:
 cd backend
 uv run pytest tests/test_gold_dataset.py
 ```
+
+## Known issue: Remodulin 2002Q4 does not satisfy its own arithmetic
+
+`2002Q4` is recorded as **$9.7 million**, derived as full-year less the first
+three quarters. Its own citations do not produce that number:
+
+| Period | Value | Precision |
+|---|---|---|
+| FY2002 | $21.174m | exact, quoted from the FY2002 10-K |
+| 2002Q2 | $8.7m | "approximately", from the Q2 10-Q |
+| 2002Q3 | $2.6m | "approximately", from the Q3 10-Q |
+
+21.174 − 8.7 − 2.6 = **9.874**. Rounding cannot close the gap: for the stated
+Q4 to be 9.7, the unrounded Q2 and Q3 would have to sum to 11.474, and no pair
+that rounds to 8.7 and 2.6 does — the reachable range for Q4 is about 9.78 to
+9.97. Remodulin's `commercial_start_quarter` is 2002Q2, so there is no Q1
+figure that could absorb the difference.
+
+`scripts/eval_completeness.py` reports this as a derived-vs-gold disagreement
+on every run, so it stays visible rather than silently counting as coverage.
+Of the 51 quarters derivation reproduces, this is the only one that disagrees.
+
+It is **not corrected here**, because correcting it would mean writing a value
+no reachable document states. Resolving it needs United Therapeutics' 2002 10-Qs
+and FY2002 10-K, which this environment cannot fetch: outbound HTTP is blocked,
+and the filings index in use does not reach back before roughly 2017. The most
+likely explanation is that the two "approximately" quarterly disclosures were
+rounded from figures the builder no longer records, but that is a hypothesis,
+not a finding.
+
+The seven `annual_less_reported_first_nine_months` Q4 rows for 2003–2008 have a
+related weakness: their `source_quote` describes the arithmetic ("annual sales
+less first-nine-month sales yields...") instead of citing the annual total that
+drove it. The values are unaffected, but the total is not recorded as a citable
+figure, so the pipeline cannot reproduce those derivations and they score as
+gaps. Recording each year's annual figure from the cited 10-K would close them;
+that too needs the pre-2017 filings.

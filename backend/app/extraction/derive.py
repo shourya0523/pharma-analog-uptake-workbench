@@ -52,12 +52,24 @@ def _year_of(period: str) -> int | None:
     return int(match.group(1)) if match else None
 
 
-def complete_quarters_from_totals(points: list[Datapoint]) -> list[Datapoint]:
+def complete_quarters_from_totals(
+    points: list[Datapoint], *, commercial_start: str | None = None
+) -> list[Datapoint]:
     """Derive the one quarter an issuer left implicit against a stated total.
 
     Applied only when every other quarter of that total is present, so the
     result is the single value the issuer's own arithmetic requires.
+
+    ``commercial_start`` names the quarter a product first sold. In its launch
+    year the annual total covers only the quarters from that point on, because
+    the earlier ones predate the product - they are structurally absent, not
+    missing data. Without this the launch year always looks under-determined
+    (two quarters unaccounted for rather than one) and never derives, which is
+    why Remodulin's 2002Q4 stayed a gap even though its full-year total was
+    cited. Pass it only when the start is actually known; the default keeps the
+    stricter all-four-quarters rule.
     """
+    start = _split(commercial_start or "")
     usable = [p for p in points if p.value_normalized_usd_millions is not None]
     quarters: dict[int, dict[int, Datapoint]] = defaultdict(dict)
     totals: dict[tuple[int, str], Datapoint] = {}
@@ -76,6 +88,16 @@ def complete_quarters_from_totals(points: list[Datapoint]) -> list[Datapoint]:
     derived: list[Datapoint] = []
     for (year, period_type), total in sorted(totals.items()):
         members = _QUARTERS_IN[period_type]
+        if start is not None:
+            start_year, start_quarter = start
+            if year < start_year:
+                # A total for a year the product did not sell in says nothing
+                # about any quarter; deriving from it would invent a figure.
+                continue
+            if year == start_year:
+                members = tuple(q for q in members if q >= start_quarter)
+                if not members:
+                    continue
         have = quarters.get(year, {})
         missing = [q for q in members if q not in have]
         if len(missing) != 1:
