@@ -2,6 +2,7 @@ import ast
 import csv
 import importlib.util
 import json
+import re
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -388,3 +389,41 @@ def test_quarters_the_issuer_states_outright_cite_the_filing_not_the_schedule():
         # schedule row that needs a legend to interpret.
         read = {v.period: v.value_as_reported for v in read_prose(row["source_quote"], product="Winrevair")}
         assert read.get(period) == value, f"{period} is cited but not readable"
+
+
+def test_yutrepia_quarters_cite_their_own_filing_in_the_issuer_column_order():
+    """Each quarter has to come from the filing that reports it as current.
+
+    Yutrepia's rows previously shared one quote from the Q2 2026 10-Q with a
+    hand-written legend naming the columns, which is a human decoding a layout.
+    Liquidia's statement of operations already prints the standard order -
+    quarter, prior-year quarter, year-to-date, prior-year year-to-date - so
+    citing each quarter's own filing makes the row self-describing and drops
+    the legend. Citing a later filing would put the quarter in the prior-year
+    column, where the value is right but the alignment is not.
+    """
+    rows = {
+        row["period"]: row
+        for row in load_jsonl("quarterly_revenue.jsonl")
+        if row["drug_name"] == "Yutrepia"
+    }
+    filing_year = {
+        "2025Q2": "20250630",
+        "2025Q3": "20250930",
+        "2026Q1": "20260331",
+        "2026Q2": "20260630",
+    }
+    for period, stamp in filing_year.items():
+        row = rows[period]
+        assert row["source_url"].startswith("https://www.sec.gov/"), period
+        assert stamp in row["source_url"], f"{period} does not cite its own filing"
+        # A unit note like "(USD thousands)" is a declaration; a legend naming
+        # which column is which period is the thing that has to be gone.
+        assert not re.search(r"\(([^)]*)(?:Q[1-4]\s*\d{4}|\d{4}\s*Q[1-4]|H[12]\s*\d{4})", row["source_quote"]), (
+            f"{period} still carries a column legend"
+        )
+
+    # 2025Q3 was a gold-side derivation until Liquidia's own Q3 10-Q was read;
+    # the filing states 51,669 exactly, matching what the arithmetic produced.
+    assert rows["2025Q3"]["derivation"] == "direct_reported"
+    assert rows["2025Q3"]["value_reported"] == 51.669
