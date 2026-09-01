@@ -85,17 +85,26 @@ def main() -> int:
 
     totals = [0, 0, 0]
     mismatches: list[str] = []
+    # Why each undelivered row is undelivered. A row can be present in gold and
+    # still unusable as a benchmark row, and the two reasons are different
+    # problems: a legend-annotated quote is a human decoding a column layout,
+    # which no extractor can reproduce, while a gold-side derivation is a value
+    # the pipeline is expected to recompute.
+    weak_citation = 0
+    gold_derived = 0
     for series in sorted(coverage, key=lambda c: c["drug_name"]):
         drug = series["drug_name"]
         expected = series["expected_quarters"]
         drug_rows = by_drug[drug]
 
-        readable = {
-            row["period"]
-            for row in drug_rows
-            if row["derivation"] not in DERIVED
-            and not _LEGEND_RE.search(row.get("source_quote", ""))
-        }
+        readable = set()
+        for row in drug_rows:
+            if row["derivation"] in DERIVED:
+                gold_derived += 1
+            elif _LEGEND_RE.search(row.get("source_quote", "")):
+                weak_citation += 1
+            else:
+                readable.add(row["period"])
 
         # What the derivation stage can add, given only the readable quarters
         # plus the annual totals the issuer published.
@@ -193,6 +202,11 @@ def main() -> int:
     print(
         f"\nread-only completeness was {100 * read / expected:.1f}%; "
         f"derivation adds {derived_count} quarters"
+    )
+    print(
+        f"\nof {read + weak_citation + gold_derived} gold rows: {read} carry a citation "
+        f"an extractor can read, {weak_citation} cite a schedule that needs a "
+        f"hand-written legend, {gold_derived} are gold-side derivations"
     )
     if mismatches:
         print(
