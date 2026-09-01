@@ -61,7 +61,7 @@ from app.parsing.evidence import (
 from app.parsing.fda_label import format_moa_profile_value, parse_label_record
 from app.parsing.indications import parse_indications
 from app.parsing.periods import detect_period_context, normalize_period
-from app.parsing.tables import extract_revenue_rows
+from app.extraction.candidates import extract_revenue_candidates
 from app.quality.candidate_filters import filter_revenue_candidates
 from app.quality.checks import (
     apply_auto_pass_gate,
@@ -906,13 +906,35 @@ class PipelineOrchestrator:
             # Read the revenue table directly; the model omits rows unpredictably.
             # These quotes come from the parsed table, not the model, so the
             # verbatim gate that guards model output does not apply.
+            #
+            # The table is fingerprinted first, so its numbers are scaled by the
+            # unit it declares and its year-to-date columns stay labelled as
+            # such. Assuming USD millions and a fixed quarter layout is what
+            # produced 1000x-wrong values and full-year totals filed as
+            # quarters in the dataset this pipeline is scored against.
+            fingerprinted, table_findings, table_skips = extract_revenue_candidates(
+                doc.tables,
+                product=job.drug_name,
+                generic=job.generic_name,
+                extra_aliases=extra,
+                context=doc.full_text[:4000],
+            )
+            for finding in table_findings:
+                logger.warning(
+                    "table_check job_id=%s source_id=%s %s",
+                    job.id,
+                    src.source_id,
+                    finding,
+                )
+            if table_skips:
+                logger.info(
+                    "table_skipped job_id=%s source_id=%s reasons=%s",
+                    job.id,
+                    src.source_id,
+                    table_skips,
+                )
             table_rows, table_dropped = filter_revenue_candidates(
-                extract_revenue_rows(
-                    doc.tables,
-                    product=job.drug_name,
-                    generic=job.generic_name,
-                    extra_aliases=extra,
-                ),
+                fingerprinted,
                 product=job.drug_name,
                 generic=job.generic_name,
                 extra_aliases=extra,

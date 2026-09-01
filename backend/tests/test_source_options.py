@@ -73,7 +73,7 @@ def test_table_reading_is_not_limited_by_the_llm_source_budget():
     # The LLM call is conditional, while table extraction runs for every source
     assert "if use_llm:" in source
     llm_call_index = source.index("self.llm.extract_revenue")
-    table_call_index = source.index("extract_revenue_rows")
+    table_call_index = source.index("extract_revenue_candidates")
     assert table_call_index > llm_call_index
     assert "over_source_budget" in source
 
