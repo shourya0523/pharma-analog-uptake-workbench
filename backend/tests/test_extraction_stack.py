@@ -233,3 +233,79 @@ def test_flattened_pdf_block_keeps_its_geographies_apart():
     assert by_scope["International"] == (8.0, 9.0, 8.0, 4.0, 1.0, None, 13.0)
     # US and worldwide must never be merged into one series.
     assert by_scope["United States"] != by_scope["Worldwide"]
+
+
+# --- completing a series from the issuer's own arithmetic ---------------------
+
+
+def test_unstated_fourth_quarter_is_derived_from_the_annual_total():
+    """Issuers often report three quarters and a year; Q4 is the difference."""
+    from app.extraction.derive import complete_quarters_from_totals
+
+    points = [
+        _point("2003Q1", 8.546),
+        _point("2003Q2", 11.729),
+        _point("2003Q3", 12.852),
+        _point("2003", 45.121, period_type="annual"),
+    ]
+    derived = complete_quarters_from_totals(points)
+    assert len(derived) == 1
+    assert derived[0].period == "2003Q4"
+    assert abs(derived[0].value_normalized_usd_millions - 11.994) < 1e-6
+    # Provenance says the pipeline computed it, not that the issuer printed it.
+    assert derived[0].normalization_status == "derived_from_period_total"
+
+
+def test_two_missing_quarters_derive_nothing():
+    """One equation cannot resolve two unknowns, so neither is invented."""
+    from app.extraction.derive import complete_quarters_from_totals
+
+    points = [
+        _point("2002Q2", 8.7),
+        _point("2002Q3", 2.6),
+        _point("2002", 21.174, period_type="annual"),
+    ]
+    assert complete_quarters_from_totals(points) == []
+
+
+def test_totals_that_contradict_their_quarters_derive_nothing():
+    """A negative residual means the inputs disagree; report no figure."""
+    from app.extraction.derive import complete_quarters_from_totals
+
+    points = [
+        _point("2024Q1", 100.0),
+        _point("2024Q2", 100.0),
+        _point("2024Q3", 100.0),
+        _point("2024", 250.0, period_type="annual"),
+    ]
+    assert complete_quarters_from_totals(points) == []
+
+
+def test_family_total_resolves_the_sole_formulation_before_a_split():
+    """Tyvaso was nebulized-only until the DPI inhaler launched in 2022Q2."""
+    from app.extraction.derive import propagate_sole_formulation
+
+    family = [_point("2021Q4", 119.7), _point("2022Q1", 172.0), _point("2022Q2", 198.0)]
+    derived = propagate_sole_formulation(
+        family, formulation_periods={"2022Q2", "2022Q3"}, formulation_label="Nebulized Tyvaso"
+    )
+    periods = {p.period for p in derived}
+
+    # Pre-split quarters carry over; once both formulations sell, the family
+    # total no longer identifies either one.
+    assert periods == {"2021Q4", "2022Q1"}
+    assert all(p.product_label == "Nebulized Tyvaso" for p in derived)
+    assert all(p.normalization_status == "derived_sole_formulation" for p in derived)
+
+
+def test_prose_reads_a_full_year_total():
+    """"Full-year 2002" is as common as "year ended", and unlocks derivation."""
+    from app.extraction.prose import read_prose
+
+    values = read_prose(
+        "Full-year 2002 Remodulin revenue was $21.174 million.", product="Remodulin"
+    )
+    assert len(values) == 1
+    assert values[0].period == "2002"
+    assert values[0].period_type == "annual"
+    assert values[0].value_as_reported == 21.174

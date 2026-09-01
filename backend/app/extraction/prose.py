@@ -52,6 +52,13 @@ _COMPACT_QUARTER_RE = re.compile(
     r"\bQ(?P<q>[1-4])\s*(?P<year>(?:19|20)\d{2})\b|\b(?P<year2>(?:19|20)\d{2})\s*Q(?P<q2>[1-4])\b",
     re.IGNORECASE,
 )
+# "full-year 2002" / "fiscal year 2002" / "FY2002" / "for the year 2002".
+# Issuers state annual figures this way at least as often as "year ended", and
+# an annual total is what lets an unstated fourth quarter be derived.
+_ANNUAL_WORD_RE = re.compile(
+    r"\b(?:full[-\s]?year|fiscal\s+year|FY|for\s+the\s+year)\s*(?P<year>(?:19|20)\d{2})\b",
+    re.IGNORECASE,
+)
 
 _SENTENCE_SPLIT_RE = re.compile(r"(?<=[.;])\s+")
 
@@ -84,6 +91,8 @@ def _periods_in(sentence: str) -> list[_Period]:
         quarter = match.group("q") or match.group("q2")
         year = match.group("year") or match.group("year2")
         found.append(_Period(f"{int(year)}Q{int(quarter)}", "quarterly"))
+    for match in _ANNUAL_WORD_RE.finditer(sentence):
+        found.append(_Period(str(int(match.group("year"))), "annual"))
     # One period named twice ("fourth quarter 2003" then "Q4 2003") is still one
     # period; only genuinely different periods make a sentence ambiguous.
     unique: list[_Period] = []
