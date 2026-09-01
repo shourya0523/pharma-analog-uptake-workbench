@@ -94,10 +94,32 @@ likely explanation is that the two "approximately" quarterly disclosures were
 rounded from figures the builder no longer records, but that is a hypothesis,
 not a finding.
 
-The seven `annual_less_reported_first_nine_months` Q4 rows for 2003–2008 have a
+The six `annual_less_reported_first_nine_months` Q4 rows for 2003–2008 have a
 related weakness: their `source_quote` describes the arithmetic ("annual sales
 less first-nine-month sales yields...") instead of citing the annual total that
 drove it. The values are unaffected, but the total is not recorded as a citable
 figure, so the pipeline cannot reproduce those derivations and they score as
 gaps. Recording each year's annual figure from the cited 10-K would close them;
 that too needs the pre-2017 filings.
+
+**Do not close them by adding an annual row computed as Q1+Q2+Q3+Q4.** Those
+four quarters already include the derived Q4, so the total would be
+reconstructed from the answer and the derivation would prove only that
+subtraction is the inverse of addition. The gap is real until an issuer-stated
+annual figure is read.
+
+## Remaining gaps and why
+
+11 of 423 quarters are not deliverable by the pipeline. Each has a specific,
+recorded cause rather than being unexplained:
+
+| Product | Quarters | Cause |
+|---|---|---|
+| Remodulin | 2003Q4–2008Q4 (6) | annual totals never recorded as citable figures; the cited 10-Ks predate the reachable filing index |
+| Winrevair | 2024Q2–Q4, 2025Q4 (4) | Merck's IR schedule runs 2025 Q1–Q4 then 2024 Q2–Q4, because the product was approved in March 2024 and has no separate Q1. Aligning it requires the approval date, which no extractor can read off the page — the same defect class this dataset pinned |
+| Uptravi | 2017Q2 (1) | the quarter spans J&J's acquisition of Actelion, so it is a bridge of two issuers' partial reporting |
+
+The Winrevair four are the interesting case: they are not a sourcing failure but
+a genuine limit on what a self-describing citation can carry. Merck states those
+quarters only in a schedule whose column order encodes a fact about the product,
+not about the table.
