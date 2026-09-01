@@ -270,3 +270,37 @@ def test_catalog_coverage_counts_every_seed_product_exactly_once():
         + len(catalog["excluded_products"])
         == len(seed_names())
     )
+
+
+def test_an_excluded_product_may_carry_annual_context_but_never_a_benchmark():
+    """Annual figures are evidence; they are not a series and not a peak.
+
+    Actelion published per-product annual sales for Opsumit, Veletri and
+    Ventavis, so each has a verified number rather than nothing at all. None of
+    them has a citable launch-to-end quarterly series, so none may acquire a
+    peak row or a coverage row on the strength of those annual figures - which
+    is how a product with two years of data would otherwise start being scored
+    as a benchmark it cannot support.
+    """
+    manifest = json.loads((GOLD / "manifest.json").read_text())
+    annual = load_jsonl(manifest["annual_rows_file"])
+    peaks = load_jsonl(manifest["peak_sales_file"])
+    coverage = load_jsonl(manifest["coverage_file"])
+    excluded = {row["drug_name"] for row in load_jsonl(manifest["excluded_products_file"])}
+
+    with_annual = {row["drug_name"] for row in annual}
+    context_only = with_annual & excluded
+    assert context_only, "the annual-context case must stay represented in the dataset"
+
+    peak_names = {row["drug_name"] for row in peaks}
+    coverage_names = {row["drug_name"] for row in coverage}
+    for drug_name in context_only:
+        assert drug_name not in peak_names, drug_name
+        assert drug_name not in coverage_names, drug_name
+        rows = [row for row in annual if row["drug_name"] == drug_name]
+        assert all(row["series_role"] == "partial_context" for row in rows), drug_name
+        # Context rows are held to the same evidence bar as benchmark rows: a
+        # real quote, a real source, and a comparable USD figure.
+        for row in rows:
+            assert row["source_quote"] and row["source_url"].startswith("https://")
+            assert row["value_normalized_usd_millions"] is not None, row["gold_id"]

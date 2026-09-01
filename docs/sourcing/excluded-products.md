@@ -65,6 +65,36 @@ examples: `a8k2017q4exhibit992o.htm`, `a2019q2exhibit992o.htm`,
 that shows the combined `OPSUMIT/OPSYNVI` line, confirming the series ends
 rather than the data being absent.
 
+#### Retrieved since: what the primary documents actually yield
+
+Working from the Actelion press releases themselves (via Bigdata.com, which
+indexes them in full including the `Sales by product` tables), these Opsumit
+figures are now read out of the issuer's own tables rather than predicted:
+
+| Period | CHF m | How it is stated |
+|---|---|---|
+| 2013Q4 | 5 | FY2014 release, `Sales by product - quarterly`, Q4 2013 column |
+| 2014Q3 | 59 | 9M 2014 release, COO quote, and 112 − 53 from the two YTD figures |
+| 2014Q4 | 68 | FY2014 release, quarterly table; equals FY 180 − 9M 112 |
+| 2015Q3 | 147 | 9M 2016 release, Q3 2015 comparative column |
+| 2016Q1 | 178 | Q1 2016 release, financial highlights |
+| 2016Q3 | 218 | 9M 2016 release, Q3 2016 column |
+
+FY2013 = Q4 2013 = CHF 5m in the same document, which fixes the commercial
+start at 2013Q4 on the issuer's own arithmetic rather than on a launch date.
+
+The prediction above that only 2017Q1–Q2 is missing is too optimistic for the
+Actelion years. **2015Q1, 2015Q2, 2015Q4 and 2016Q4 are not separately citable
+from any source reachable here**: the FY2015 and FY2016 results releases carry
+those tables, but neither is in the Bigdata index and this sandbox has no
+outbound network. 2015H1 is known only as a CHF 207m pair (354 − 147), one
+equation in two unknowns, which the derivation stage correctly refuses.
+
+So Opsumit is not the clean win this document called it — not because the
+figures do not exist, but because roughly four Actelion-era quarters and the
+whole J&J era are out of reach from this environment. It stays excluded, and
+FY2013/FY2014 are carried as annual context instead.
+
 Real caveats, none of which justify total exclusion:
 - **Currency seam mid-2017**: CHF (Actelion) → USD (J&J), plus a change of
   reporting regime. Needs FX normalization at the join.

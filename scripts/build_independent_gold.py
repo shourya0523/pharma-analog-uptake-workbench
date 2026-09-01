@@ -154,6 +154,26 @@ ANNUAL_METADATA = {
         "manufacturer": "Actelion/J&J",
         "benchmark_identity": "actelion_tracleer_worldwide_reported_chf",
     },
+    # Opsumit, Veletri and Ventavis stay excluded from the quarterly benchmark
+    # (no contiguous launch-to-end series is citable), but Actelion published
+    # per-product annual figures for them. Carrying those gives each product a
+    # verified number instead of nothing at all - the same annual-context role
+    # Flolan already has.
+    "Opsumit": {
+        "generic_name": "macitentan",
+        "manufacturer": "Actelion",
+        "benchmark_identity": "actelion_opsumit_worldwide_partial_chf",
+    },
+    "Veletri": {
+        "generic_name": "epoprostenol",
+        "manufacturer": "Actelion",
+        "benchmark_identity": "actelion_veletri_worldwide_partial_chf",
+    },
+    "Ventavis": {
+        "generic_name": "iloprost",
+        "manufacturer": "Actelion",
+        "benchmark_identity": "actelion_ventavis_us_partial_chf",
+    },
 }
 
 # Annual-average exchange rates for the non-USD annual manifests (Tracleer in
@@ -900,6 +920,17 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--out-dir", type=Path, default=GOLD_DIR)
     parser.add_argument("--cache-dir", type=Path, default=CACHE_DIR)
+    parser.add_argument(
+        "--reuse-quarterly",
+        action="store_true",
+        help=(
+            "Read the quarterly rows back from OUT_DIR/quarterly_revenue.jsonl "
+            "instead of re-fetching their sources. Use this only when a build "
+            "changes nothing on the quarterly side (an annual-manifest edit, "
+            "say); the rows read back are still put through the full coverage "
+            "check, so a stale or incomplete series fails the build."
+        ),
+    )
     return parser.parse_args()
 
 
@@ -907,13 +938,21 @@ def main() -> int:
     args = parse_args()
     out_dir = args.out_dir.resolve()
     out_dir.mkdir(parents=True, exist_ok=True)
-    client = ResearchClient(args.cache_dir)
-    try:
-        quarterly = deduplicate(
-            build_uthr(client) + build_uptravi(client) + build_yutrepia() + build_winrevair()
-        )
-    finally:
-        client.close()
+    if args.reuse_quarterly:
+        published = out_dir / "quarterly_revenue.jsonl"
+        if not published.exists():
+            raise SystemExit(f"--reuse-quarterly needs {published}, which does not exist")
+        quarterly = [
+            json.loads(line) for line in published.read_text().splitlines() if line.strip()
+        ]
+    else:
+        client = ResearchClient(args.cache_dir)
+        try:
+            quarterly = deduplicate(
+                build_uthr(client) + build_uptravi(client) + build_yutrepia() + build_winrevair()
+            )
+        finally:
+            client.close()
     annual = sorted(build_annual_rows(), key=lambda row: (row["drug_name"], row["period"]))
     coverage = coverage_rows(quarterly)
     incomplete = [row for row in coverage if not row["benchmark_eligible"]]
@@ -952,9 +991,13 @@ def main() -> int:
         "name": "independent_pah_peak_sales_gold",
         "generation": PROVENANCE,
         "as_of_quarter": AS_OF_QUARTER,
-        "target_product_count": len(PRODUCT_METADATA) + len(ANNUAL_METADATA) + len(exclusions) - 1,
+        "target_product_count": len(
+            set(PRODUCT_METADATA)
+            | set(ANNUAL_METADATA)
+            | {row["drug_name"] for row in exclusions}
+        ),
         "quarterly_series_count": len(coverage),
-        "annual_only_series_count": 3,
+        "annual_only_series_count": len(catalog["annual_only_products"]),
         "excluded_product_count": len(exclusions),
         "quarterly_coverage_pct": 100.0,
         "reported_rows_file": "quarterly_revenue.jsonl",
