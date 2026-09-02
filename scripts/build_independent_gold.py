@@ -150,6 +150,56 @@ PRODUCT_METADATA = {
         "formulation": "tablet",
         "route_of_administration": "oral",
     },
+    "Opsumit": {
+        "generic_name": "macitentan",
+        "manufacturer": "Johnson & Johnson",
+        # Deliberately not the annual entry's identity. ANNUAL_METADATA carries
+        # "actelion_jnj_opsumit_worldwide_partial", which splices Actelion's CHF
+        # years onto J&J's USD years to give context for a product older than
+        # either series; this is the single-issuer, single-currency quarterly
+        # series J&J actually reports, and the two must not be compared.
+        "benchmark_identity": "jnj_opsumit_worldwide_reported",
+        #
+        # Both ends of this series are bounded, and for different reasons.
+        #
+        # Start: Opsumit launched in 2013Q4 under Actelion, which reported it in
+        # CHF and only in part (see the excluded-products note for which
+        # quarters are stated and which are not). J&J acquired Actelion on
+        # 16 June 2017, so its first disclosure covers 16-30 June only - a
+        # 45-million stub that its 2Q2018 exhibit states outright as the 2017
+        # comparative. A 15-day stub is not a quarter, so the series starts at
+        # 2017Q3, the first full quarter J&J owned and reported the product.
+        #
+        # End: from 2025Q1 J&J reports a combined "OPSUMIT / OPSYNVI" line and
+        # restates FY2024 from 2,184 to 2,225 to match. Those later quarters are
+        # a different product identity, and splitting the combined line back
+        # apart would invent values, so the series stops at 2024Q4.
+        "commercial_start_quarter": "2017Q3",
+        "launch_quarter": "2013Q4",
+        "series_start_reason": (
+            "Opsumit launched in 2013Q4 under Actelion, which reported it in "
+            "CHF and only for scattered quarters. J&J has reported it in USD "
+            "since acquiring Actelion on 16 June 2017; its 2017Q2 figure covers "
+            "15 days of ownership, so the series starts at 2017Q3, the first "
+            "full quarter under one issuer in one currency. Uptake measured "
+            "from here is J&J-era uptake, not launch-to-date."
+        ),
+        "series_end_quarter": "2024Q4",
+        "series_end_reason": (
+            "From 2025Q1 J&J reports a combined OPSUMIT / OPSYNVI line and "
+            "restates FY2024 from 2,184 to 2,225 on that basis. Opsumit alone "
+            "is no longer separately reported, and allocating the combined "
+            "line would invent values."
+        ),
+        # The 2015-2017 middle of the product's life is not citable at all, so
+        # 2024's 2,184 is the highest observed value on a still-rising curve
+        # rather than a lifetime peak. Same shape as Adempas.
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "tablet",
+        "route_of_administration": "oral",
+    },
     "Winrevair": {
         "generic_name": "sotatercept-csrk",
         "manufacturer": "Merck",
@@ -724,6 +774,55 @@ def build_adempas() -> list[dict[str, Any]]:
     ]
 
 
+def build_opsumit() -> list[dict[str, Any]]:
+    """J&J-era Opsumit worldwide, 2017Q3 through 2024Q4.
+
+    Every quarter is the OPSUMIT "WW" row of the Sales of Key Products /
+    Franchises schedule J&J publishes with each earnings release, taken from
+    that quarter's own schedule wherever the document could be read - the same
+    rule Yutrepia is held to, because a later filing carries the quarter in its
+    prior-year column and reading the wrong column of a two-year table is the
+    exact failure this dataset exists to catch. Two quarters (2020Q2, 2020Q3)
+    are the prior-year column of the 2021 schedule instead, marked as such in
+    the manifest; the row there is labelled WW under a "2021 2020" header, so
+    there is no column to misread.
+
+    The check that matters is arithmetic, not provenance: J&J states a
+    full-year worldwide total in each Q4 schedule, and all seven full years in
+    this series sum to it exactly (2018 1,215; 2019 1,327; 2020 1,639; 2021
+    1,819; 2022 1,783; 2023 1,973; 2024 2,184). ``test_gold_dataset`` pins that
+    reconciliation so a mis-keyed quarter cannot pass silently.
+
+    Worldwide is read as reported and never summed from US + Intl. J&J rounds
+    each line independently, so in 2019Q1, 2021Q2 and 2024Q1 the two parts
+    differ from the stated worldwide figure by 1.
+    """
+    return [
+        revenue_row(
+            drug_name="Opsumit",
+            period=source["period"],
+            value=float(source["value_reported"]),
+            source_url=source["source_url"],
+            source_quote=source["source_quote"],
+            # The schedule is an IR document. It is also filed as 8-K Exhibit
+            # 99.2, but this cites the copy actually read, not the twin.
+            source_type="company_ir",
+            derivation=source["derivation"],
+            # The US and International figures of the same block travel with the
+            # row rather than inside the quote: the quote has to stay a clean
+            # table row so the extraction eval tests column alignment on it,
+            # but the corroborating lines are what make a mis-keyed quarter
+            # obvious to a reader.
+            notes=(
+                "J&J worldwide net trade sales as reported; not summed from "
+                "the US and International lines, which round independently. "
+                + source["context"]
+            ),
+        )
+        for source in read_csv(SOURCE_DIR / "jnj_opsumit_quarterly.csv")
+    ]
+
+
 def build_annual_rows() -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     for source in read_csv(SOURCE_DIR / "annual_product_sales.csv"):
@@ -1085,7 +1184,7 @@ def main() -> int:
         # free - and reusing them instead would silently ignore an edit to
         # those manifests, which is exactly the kind of staleness this flag
         # must not introduce.
-        rebuilt = build_yutrepia() + build_winrevair() + build_adempas()
+        rebuilt = build_yutrepia() + build_winrevair() + build_adempas() + build_opsumit()
         rebuilt_drugs = {row["drug_name"] for row in rebuilt}
         quarterly = deduplicate(
             [
@@ -1104,6 +1203,7 @@ def main() -> int:
                 + build_yutrepia()
                 + build_winrevair()
                 + build_adempas()
+                + build_opsumit()
             )
         finally:
             client.close()

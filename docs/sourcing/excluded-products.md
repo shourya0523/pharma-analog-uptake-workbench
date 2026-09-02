@@ -104,8 +104,17 @@ lifetime peak. That is the same defect Flolan is excluded for. `reason_code`
 moved from `reporting_scope_changed` to `incomplete_pre_peak_history`
 accordingly.
 
-**What would change the answer.** The quarterly route below is real; this
-environment cannot reach it. It would need outbound network access:
+**Resolved (2026-09-02).** The route below was reached through the Parallel
+Search connector, and Opsumit is no longer excluded: `seed/gold` now carries a
+30-quarter worldwide series for **2017Q3-2024Q4**, bounded at both ends and
+described in `seed/gold/README.md`. What is written below is the sourcing plan
+that produced it, kept because it records what was tried and in what order.
+Two claims in it are now false and marked as such: that the Exhibit 99.2 PDFs
+are unreachable, and that no contiguous series exists. The peak conclusion is
+unchanged - 2015-2017 is still not citable, so 2024 is still not a lifetime
+peak, and `peak_eligible` stays false.
+
+The quarterly route:
 
 | Issuer | Document | Coverage | Currency |
 |---|---|---|---|
@@ -347,10 +356,24 @@ surge moved the peak from 2010 to 2011.
 
 1. **Add bounded series** (`series_end_quarter` + cited reason) to the builder.
    This is the enabling change and needs no new sourcing.
-2. **Opsumit** — the largest clean win. Enumerate J&J 8-K Exhibit 99.2 across
-   CIK 200406 for 2017Q2–2024Q4, add Actelion CHF for 2013–2016, resolve the
-   1H-2017 stub. The existing positional-PDF reader already handles the
-   Exhibit 99.2 layout, since Uptravi comes from that same schedule.
+2. ~~**Opsumit** — the largest clean win.~~ **Done (2026-09-02.)** The J&J
+   Exhibit 99.2 schedules were fetched through the Parallel Search connector for
+   2017Q3–2024Q4 and built as a bounded quarterly series; catalog coverage went
+   50% → 55%. The 2017Q2 stub resolved to $45m and is deliberately *not* in the
+   series: it is 15 days of ownership, not a quarter. Actelion's CHF 2013–2016
+   quarters remain only partly disclosed and stay out, which is why the series
+   starts at 2017Q3 and carries a `series_start_reason` saying so.
+
+   One expectation here was wrong and worth recording: the rows did **not** go
+   through the positional-PDF reader that Uptravi uses. A positional block is
+   solved by finding the one (scope, offset, direction) that explains *all* the
+   periods citing it, and each Opsumit quarter cites its own filing — one period
+   per block, which cannot constrain three unknowns. It surfaced as an ambiguity
+   on 2021Q3, where the worldwide quarter (458) collides with the International
+   nine-month figure in the same block. Rendering each row as a pipe-delimited
+   table row instead puts it through `replay_table_row`, which checks column
+   alignment and enforces that a Q4 row's third number is the full year — a
+   stronger check, and the one that matches how the schedule is actually shaped.
 3. **Ventavis** — CoTherix filings give a clean 2005Q1–2006Q3 US series; decide
    whether one interpolated quarter is acceptable or whether Actelion's FY2007
    comparative closes it.
@@ -438,18 +461,25 @@ Each route to them was tested directly rather than assumed.
 
 **Superseded (2026-09-02): the Parallel Search connector closes this.** The
 recommendation below stands only for a session without that connector. With it,
-the J&J Exhibit 99.2 archive is readable and OPSUMIT worldwide has been pulled
-for 2017Q3-2023Q4, every year reconciling exactly to J&J's stated full year
-(2018 1,215; 2019 1,327; 2020 1,639; 2021 1,819; 2022 1,783; 2023 1,973). The
-same tables carry TRACLEER and the UPTRAVI US/International split, and the
-2017Q2 acquisition stub resolves to 45 (573 less the 528 of Q3+Q4).
+the J&J Exhibit 99.2 archive is readable, and OPSUMIT worldwide has been pulled
+for 2017Q3-2024Q4 and **built into `seed/gold`**, every year reconciling exactly
+to J&J's stated full year (2018 1,215; 2019 1,327; 2020 1,639; 2021 1,819;
+2022 1,783; 2023 1,973; 2024 2,184). The same tables carry TRACLEER and the
+UPTRAVI US/International split, and the 2017Q2 acquisition stub resolves to 45
+(573 less the 528 of Q3+Q4) — which is also the figure that would close the
+open Uptravi 2017Q2 gap, from the same 2Q2018 exhibit.
+
+One document in the archive resisted: the 3Q2020 schedule's text could not be
+read past its International row on repeated attempts, so 2020Q3 is cited to the
+3Q2021 schedule's prior-year column with a written legend. Every other quarter
+cites its own filing.
 
 **Without that connector, the highest-leverage change is an egress allowlist
 entry for `sec.gov`.** That one host unlocks Remodulin's 2003–2008 annual totals (closing
 six derivation gaps), Adempas back to 2020Q1, and the four Winrevair 2024
 quarters. Adding `s203.q4cdn.com` would additionally unlock J&J's Exhibit 99.2
-quarterly schedules, which is the only route to Opsumit and to Uptravi's
-US/International split.
+quarterly schedules, which was the only route to Opsumit and is still the
+route to Uptravi's US/International split.
 
 Failing that, uploading the specific PDFs is the working alternative and needs
 no policy change.

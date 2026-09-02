@@ -1,19 +1,20 @@
 {
   "generation": "independent_issuer_research",
   "as_of_quarter": "2026Q2",
-  "quarterly_rows": 433,
+  "quarterly_rows": 463,
   "annual_rows": 65,
-  "complete_quarterly_series": 10,
+  "complete_quarterly_series": 11,
   "quarterly_coverage_pct": 100.0,
   "observed_peaks": 6,
   "not_yet_observed_peaks": 6,
-  "excluded_products": 7,
+  "excluded_products": 6,
   "catalog_coverage": {
     "catalog_products": 20,
     "quarterly_series_products": [
       "Adcirca",
       "Adempas",
       "Nebulized Tyvaso",
+      "Opsumit",
       "Orenitram",
       "Remodulin",
       "Tyvaso",
@@ -31,25 +32,26 @@
       "Alyq",
       "Flolan",
       "Liqrev",
-      "Opsumit",
       "Tadliq",
       "Veletri",
       "Ventavis"
     ],
-    "quarterly_series_pct": 50.0,
-    "quarterly_observations": 433,
-    "bounded_series": []
+    "quarterly_series_pct": 55.0,
+    "quarterly_observations": 463,
+    "bounded_series": [
+      "Opsumit"
+    ]
   },
   "gold_completeness": {
     "catalog_products": 20,
     "accounted_for": 20,
     "unaccounted_products": [],
-    "complete_quarterly_series": 10,
-    "quarterly_observations": 433,
+    "complete_quarterly_series": 11,
+    "quarterly_observations": 463,
     "series_missing_quarters": [],
     "annual_benchmark_series": 3,
     "annual_observations": 65,
-    "evidence_backed_exclusions": 7,
+    "evidence_backed_exclusions": 6,
     "complete": true
   }
 }

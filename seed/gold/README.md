@@ -73,17 +73,17 @@ own commercial span. `build_report.json` records this under
 `gold_completeness`, the builder refuses to emit an incomplete series, and
 `test_the_gold_dataset_is_complete_on_its_own_terms` pins it.
 
-    20 catalog products = 10 complete quarterly series (433 quarters, every one
-    covering its full span) + 3 annual benchmark series + 7 evidence-backed
+    20 catalog products = 11 complete quarterly series (463 quarters, every one
+    covering its full span) + 3 annual benchmark series + 6 evidence-backed
     exclusions
 
 **This is not the percentage `scripts/eval_completeness.py` prints.** That
-script scores the *pipeline* against this dataset — how many of the 423
+script scores the *pipeline* against this dataset — how many of the 463
 quarters it can read or derive on its own. A shortfall there is a capability
 the pipeline is missing, which is exactly what a benchmark is for. Reading it
 as a hole in the dataset gets the direction of the measurement backwards.
 
-The 8 exclusions are part of completeness rather than a shortfall in it. A
+The 6 exclusions are part of completeness rather than a shortfall in it. A
 product is excluded only with a citation showing why no comparable series
 exists, and in several cases the issuer never published one at all:
 
@@ -94,7 +94,10 @@ exists, and in several cases the issuer never published one at all:
 - **Alyq, Tadliq, Liqrev** — no public product-level sales; the only figures
   are CMS payer spend, which is pre-rebate by law and must never fill a
   revenue column.
-(**Adempas is no longer among them** — see below.)
+(**Adempas and Opsumit are no longer among them** — see below. Both were
+excluded on conclusions that were true when written and stopped being true: one
+when the Bayer/Merck split was read properly, the other when J&J's exhibit
+archive turned out to be reachable after all.)
 
 Recording those as exclusions with evidence *is* the complete answer for them.
 Inventing a series would not be more complete, only less true.
@@ -174,23 +177,82 @@ fails for a reason that is a property of the disclosure, not of the effort:
 | Letairis | Gilead reports it only inside "Other product sales"; no standalone quarterly figure exists publicly |
 | Revatio | Pfizer discusses it only as a change driver, never a level |
 | Adempas (worldwide) | Bayer's half includes amortized collaboration payments; only Merck's territory line is product sales |
-| Opsumit | see below |
+| Opsumit (2013–2017, 2025–) | outside the bounded series below: Actelion's CHF quarters are only partly disclosed, and from 2025 J&J reports a combined OPSUMIT/OPSYNVI line |
 | Tracleer, Veletri, Ventavis | Actelion-era quarters; pre-2017 filings are not in the reachable index |
 | Alyq, Tadliq, Liqrev | no public product-level sales at all |
 
-### Opsumit: one stated quarter is not a year
+### Opsumit: a series bounded at both ends
 
-J&J's XBRL segment table does carry OPSUMIT, but only FY2024 is indexed here,
-and within it exactly one worldwide quarter is stated outright (2024Q2,
-$544m). The rest would have to be derived, and J&J's rounding makes that
-unsafe: deriving 2024Q3 U.S. from the stated nine months gives 406, while the
-stated percent change on that row implies 405. A derived value that
-contradicts the issuer's own stated figure is worse than an absent one, so
-Opsumit stays annual-only.
+Opsumit is the eleventh quarterly series and the first whose span is cut short
+at *both* ends. It runs **2017Q3–2024Q4, 30 quarters, worldwide, USD**, taken
+from the OPSUMIT `WW` row of the Sales of Key Products / Franchises schedule
+J&J publishes with each earnings release.
 
-The near-miss is worth recording because it is the kind of thing that reads as
-a win until it is checked: the figures are all there, they cross-check to the
-full year, and the series still cannot be built honestly.
+Both boundaries are declared in `series_coverage.jsonl` rather than silently
+applied, because a reader who mistakes either one gets a wrong answer from a
+right-looking series:
+
+- **`launch_quarter` 2013Q4, `commercial_start_quarter` 2017Q3.** Opsumit
+  launched under Actelion, which reported it in CHF and only for scattered
+  quarters. J&J acquired Actelion on 16 June 2017, so its first disclosure
+  covers 15 days — a $45m stub its 2Q2018 exhibit states outright as the 2017
+  comparative. A 15-day stub is not a quarter. Uptake measured from 2017Q3 is
+  J&J-era uptake, **not launch-to-date**.
+- **`series_end_quarter` 2024Q4.** From 2025Q1 J&J reports a combined
+  `OPSUMIT / OPSYNVI` line and restates FY2024 from 2,184 to 2,225 to match.
+  Splitting that back apart would invent values.
+
+Because the 2015–2017 middle of the product's life is not citable at all,
+2024's $2,184m is the highest observed value on a still-rising curve, not a
+lifetime peak. `peak_eligible` is false and no peak row is emitted — the same
+shape as Adempas.
+
+#### What makes it trustworthy
+
+Each quarter comes from a different document, so a mis-keyed or mis-aligned
+figure would not contradict anything *inside* the series. It does contradict
+the issuer: J&J states a full-year worldwide total in each Q4 schedule, and all
+seven complete years reproduce it exactly.
+
+| Year | Q1 | Q2 | Q3 | Q4 | Sum | J&J's stated FY |
+|---|---|---|---|---|---|---|
+| 2018 | 271 | 311 | 310 | 323 | 1,215 | 1,215 |
+| 2019 | 306 | 348 | 347 | 326 | 1,327 | 1,327 |
+| 2020 | 389 | 406 | 392 | 452 | 1,639 | 1,639 |
+| 2021 | 450 | 463 | 458 | 448 | 1,819 | 1,819 |
+| 2022 | 443 | 438 | 441 | 461 | 1,783 | 1,783 |
+| 2023 | 440 | 507 | 490 | 536 | 1,973 | 1,973 |
+| 2024 | 524 | 544 | 571 | 545 | 2,184 | 2,184 |
+
+`test_opsumit_quarters_sum_to_the_full_year_jnj_states` pins this. 2017 is
+absent from the table because J&J owned the product for part of that year only.
+
+Worldwide is read **as reported and never summed from US + International**:
+J&J rounds each line independently, so the parts differ from the stated
+worldwide figure by 1 in 2019Q1, 2021Q2 and 2024Q1. The US and International
+figures ride along in each row's `gold_notes` so this stays checkable.
+
+Every quarter cites its own quarter's schedule, with one exception: **2020Q3**
+cites the 3Q2021 schedule's prior-year column, because the 3Q2020 document's
+text could not be read past its International row. That row carries a written
+column legend naming what each column is, which is the same third citation form
+Winrevair uses — and it is why one Opsumit quarter is a gold-side derivation in
+`eval_completeness.py` rather than a direct read.
+
+#### What was wrong before, and why
+
+This section previously said Opsumit could not be a series, on the grounds that
+only one worldwide quarter (2024Q2, $544m) was stated outright and the rest
+would have to be derived — unsafely, since deriving 2024Q3 U.S. from the stated
+nine months gives 406 against a stated-percent-implied 405.
+
+That reasoning was sound and its premise was wrong. It rested on J&J's XBRL
+segment table being the only reachable source, which was true of the routes
+tested at the time. J&J's Exhibit 99.2 archive states **every** quarter
+outright, and nothing has to be derived. The bar did not move; the document
+became readable. The near-miss is still worth recording, because a derived
+series that contradicts the issuer's own figure reads as a win until it is
+checked.
 
 ## Known issue: Remodulin 2002Q4 does not satisfy its own arithmetic
 
@@ -237,7 +299,7 @@ annual figure is read.
 
 ## Remaining gaps and why
 
-11 of 423 quarters are not deliverable by the pipeline. Each has a specific,
+11 of 463 quarters are not deliverable by the pipeline. Each has a specific,
 recorded cause rather than being unexplained:
 
 | Product | Quarters | Cause |

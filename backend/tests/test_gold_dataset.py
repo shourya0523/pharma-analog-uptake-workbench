@@ -527,3 +527,124 @@ def test_a_series_starting_after_launch_must_say_why():
             builder.coverage_rows(rows)
     finally:
         builder.PRODUCT_METADATA["Adempas"] = original
+
+
+def test_opsumit_is_a_series_bounded_at_both_ends():
+    """The first product in the catalog whose series is cut short at both ends.
+
+    Opsumit was excluded outright until its two boundaries could be stated.
+    It launched in 2013Q4 under Actelion, which reported it in CHF and only for
+    scattered quarters; J&J has reported it in USD since acquiring Actelion on
+    16 June 2017, and from 2025Q1 folds it into a combined OPSUMIT / OPSYNVI
+    line. What is left in between is a clean 30-quarter single-issuer series,
+    and the point of this test is that both cuts are declared rather than
+    silently applied - a reader who takes 2017Q3 for the launch, or reads past
+    2024Q4 into the combined line, gets a wrong answer from a right-looking
+    series.
+    """
+    coverage = {row["drug_name"]: row for row in load_jsonl("series_coverage.jsonl")}
+    rows = [r for r in load_jsonl("quarterly_revenue.jsonl") if r["drug_name"] == "Opsumit"]
+    peaks = {row["drug_name"] for row in load_jsonl("peak_sales.jsonl")}
+    excluded = {row["drug_name"] for row in load_jsonl("excluded_products.jsonl")}
+
+    assert "Opsumit" in coverage
+    assert "Opsumit" not in excluded, "the exclusion was superseded by the J&J-era series"
+    assert "Opsumit" not in peaks, "2015-2017 is missing, so 2024 is not a lifetime peak"
+
+    series = coverage["Opsumit"]
+    assert series["coverage_pct"] == 100.0 and series["missing_quarters"] == []
+    assert series["commercial_start_quarter"] == "2017Q3"
+    assert series["launch_quarter"] == "2013Q4"
+    assert series["series_end_quarter"] == "2024Q4"
+    assert series["quarters_beyond_series_end"] == []
+    for field in ("series_start_reason", "series_end_reason"):
+        assert series[field], f"a bounded series must state its {field}"
+
+    assert len(rows) == 30
+    assert {r["geography"] for r in rows} == {"Worldwide"}
+    assert {r["currency"] for r in rows} == {"USD"}
+    assert {r["manufacturer"] for r in rows} == {"Johnson & Johnson"}
+
+
+def test_opsumit_quarters_sum_to_the_full_year_jnj_states():
+    """The arithmetic that makes this series trustworthy.
+
+    Each quarter is read from a different document, so a mis-keyed or
+    mis-aligned figure would not show up as an inconsistency anywhere inside
+    the series. It does show up here: J&J states a full-year worldwide total in
+    each Q4 schedule, and every complete year has to reproduce it exactly.
+    2017 is excluded because J&J owned the product for only part of that year.
+    """
+    stated_full_year = {
+        2018: 1215.0,
+        2019: 1327.0,
+        2020: 1639.0,
+        2021: 1819.0,
+        2022: 1783.0,
+        2023: 1973.0,
+        2024: 2184.0,
+    }
+    rows = [r for r in load_jsonl("quarterly_revenue.jsonl") if r["drug_name"] == "Opsumit"]
+    by_year: dict[int, list[float]] = {}
+    for row in rows:
+        by_year.setdefault(row["calendar_year"], []).append(row["value_reported"])
+
+    for year, total in stated_full_year.items():
+        quarters = by_year[year]
+        assert len(quarters) == 4, f"{year} has {len(quarters)} quarters"
+        assert sum(quarters) == total, (
+            f"{year} quarters sum to {sum(quarters)}, J&J states {total}"
+        )
+    # 2017 is the acquisition year: two quarters, and the 573 J&J reports for
+    # the year covers 16 June onwards, not twelve months.
+    assert sorted(by_year) == [2017, *stated_full_year]
+    assert len(by_year[2017]) == 2
+
+
+def test_opsumit_quarterly_and_annual_series_are_not_the_same_benchmark():
+    """Two Opsumit series exist on purpose, and must not be compared.
+
+    The annual rows splice Actelion's CHF years onto J&J's USD years to give
+    context for a product older than either; the quarterly rows are the single
+    issuer, single currency series J&J actually reports. Giving them one
+    identity would invite an uptake curve drawn across an acquisition and a
+    currency change.
+    """
+    quarterly = {
+        r["benchmark_identity"]
+        for r in load_jsonl("quarterly_revenue.jsonl")
+        if r["drug_name"] == "Opsumit"
+    }
+    annual = {
+        r["benchmark_identity"]
+        for r in load_jsonl("annual_revenue.jsonl")
+        if r["drug_name"] == "Opsumit"
+    }
+    assert quarterly == {"jnj_opsumit_worldwide_reported"}
+    assert annual == {"actelion_jnj_opsumit_worldwide_partial"}
+    assert not quarterly & annual
+
+
+def test_opsumit_worldwide_is_never_summed_from_us_and_international():
+    """Three quarters where summing the parts gives the wrong answer.
+
+    J&J rounds the US, International and Worldwide lines independently, so the
+    parts differ from the stated worldwide figure by 1 in 2019Q1, 2021Q2 and
+    2024Q1. Gold carries what the issuer states. The US and International
+    figures ride along in the row's notes precisely so this stays checkable.
+    """
+    rows = {
+        r["period"]: r
+        for r in load_jsonl("quarterly_revenue.jsonl")
+        if r["drug_name"] == "Opsumit"
+    }
+    for period, parts, stated in (
+        ("2019Q1", (172, 133), 306.0),
+        ("2021Q2", (290, 172), 463.0),
+        ("2024Q1", (356, 169), 524.0),
+    ):
+        row = rows[period]
+        assert row["value_reported"] == stated
+        assert sum(parts) != stated, f"{period} would not demonstrate anything"
+        for part in parts:
+            assert str(part) in row["gold_notes"]
