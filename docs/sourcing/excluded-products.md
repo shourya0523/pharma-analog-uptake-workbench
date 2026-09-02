@@ -434,9 +434,18 @@ Each route to them was tested directly rather than assumed.
 | Gmail, Calendar, Calendly, Vercel | Not document sources for this. Vercel's fetch is limited to Vercel-hosted URLs |
 | Microsoft 365 | Installed but not enabled in this chat, status unknown — untested |
 | **Uploading the PDF into the session** | **Works.** Proven end-to-end with Bayer's Q1 2024 and Q1 2026 quarterly statements |
+| **Parallel Search connector (`web_fetch`)** | **Works, and this is the answer.** It fetches server-side, so the session's egress policy does not apply. J&J's Exhibit 99.2 schedules, Merck's IR schedules and Bayer's statements all return their product tables. SEC.gov itself still fails (its own UA policy), but the SEC filings were already covered by the filings index — the IR PDFs were the real gap |
 
-**The single highest-leverage change is an egress allowlist entry for
-`sec.gov`.** That one host unlocks Remodulin's 2003–2008 annual totals (closing
+**Superseded (2026-09-02): the Parallel Search connector closes this.** The
+recommendation below stands only for a session without that connector. With it,
+the J&J Exhibit 99.2 archive is readable and OPSUMIT worldwide has been pulled
+for 2017Q3-2023Q4, every year reconciling exactly to J&J's stated full year
+(2018 1,215; 2019 1,327; 2020 1,639; 2021 1,819; 2022 1,783; 2023 1,973). The
+same tables carry TRACLEER and the UPTRAVI US/International split, and the
+2017Q2 acquisition stub resolves to 45 (573 less the 528 of Q3+Q4).
+
+**Without that connector, the highest-leverage change is an egress allowlist
+entry for `sec.gov`.** That one host unlocks Remodulin's 2003–2008 annual totals (closing
 six derivation gaps), Adempas back to 2020Q1, and the four Winrevair 2024
 quarters. Adding `s203.q4cdn.com` would additionally unlock J&J's Exhibit 99.2
 quarterly schedules, which is the only route to Opsumit and to Uptravi's
