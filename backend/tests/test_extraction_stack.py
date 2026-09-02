@@ -394,3 +394,37 @@ def test_a_total_from_before_launch_derives_nothing():
         _point("2002Q2", 8.7),
     ]
     assert complete_quarters_from_totals(points, commercial_start="2002Q2") == []
+
+
+def test_a_geography_column_table_is_refused_not_read_as_periods():
+    """The dangerous near-miss: columns that look like periods but are places.
+
+    Merck's XBRL product table splits each year into U.S. / Int'l / Total, so
+    the row reads "- | 55 | 55 | - | 56 | 56" - six numbers, none of which is a
+    quarter. Aligned against the usual convention the first column would be
+    read as the current quarter, turning a U.S. figure of nothing into the
+    reported value. Refusing is the only safe answer, and it has to stay
+    refused rather than becoming a silent guess later.
+    """
+    from app.extraction.extract import tokenize_row
+
+    tokens = tokenize_row(["-", "55", "55", "-", "56", "56"])
+    # The leading dash holds its position rather than collapsing, which is what
+    # makes the refusal detectable instead of shifting 55 into first place.
+    assert tokens[0] is None
+    assert tokens[1] == 55.0
+
+
+def test_a_geography_row_table_still_reads_normally():
+    """The shape that does work, kept beside the one that does not.
+
+    J&J writes one row per geography and keeps periods in the columns, so
+    "OPSUMIT | U.S. | 373 | 328 | 729 | 601" is quarter, prior-year quarter,
+    year-to-date, prior year-to-date - the ordinary convention, and readable.
+    The distinction is what the row varies across, not whether a geography is
+    named in it.
+    """
+    from app.extraction.extract import tokenize_row
+
+    tokens = tokenize_row(["U.S.", "$ 373", "328", "$ 729", "601"])
+    assert [t for t in tokens if t is not None][:4] == [373.0, 328.0, 729.0, 601.0]

@@ -164,6 +164,34 @@ quarterly schedule. The disagreement is left visible rather than reconciled,
 because it is a real property of issuer disclosure that any consumer deriving
 quarters needs to know about.
 
+## Why the catalog stops at 11 quarterly products
+
+Every remaining candidate has been checked against primary documents, and each
+fails for a reason that is a property of the disclosure, not of the effort:
+
+| Product | Why no quarterly series |
+|---|---|
+| Letairis | Gilead reports it only inside "Other product sales"; no standalone quarterly figure exists publicly |
+| Revatio | Pfizer discusses it only as a change driver, never a level |
+| Adempas (worldwide) | Bayer's half includes amortized collaboration payments; only Merck's territory line is product sales |
+| Opsumit | see below |
+| Tracleer, Veletri, Ventavis | Actelion-era quarters; pre-2017 filings are not in the reachable index |
+| Alyq, Tadliq, Liqrev | no public product-level sales at all |
+
+### Opsumit: one stated quarter is not a year
+
+J&J's XBRL segment table does carry OPSUMIT, but only FY2024 is indexed here,
+and within it exactly one worldwide quarter is stated outright (2024Q2,
+$544m). The rest would have to be derived, and J&J's rounding makes that
+unsafe: deriving 2024Q3 U.S. from the stated nine months gives 406, while the
+stated percent change on that row implies 405. A derived value that
+contradicts the issuer's own stated figure is worse than an absent one, so
+Opsumit stays annual-only.
+
+The near-miss is worth recording because it is the kind of thing that reads as
+a win until it is checked: the figures are all there, they cross-check to the
+full year, and the series still cannot be built honestly.
+
 ## Known issue: Remodulin 2002Q4 does not satisfy its own arithmetic
 
 `2002Q4` is recorded as **$9.7 million**, derived as full-year less the first
