@@ -428,3 +428,129 @@ def test_a_geography_row_table_still_reads_normally():
 
     tokens = tokenize_row(["U.S.", "$ 373", "328", "$ 729", "601"])
     assert [t for t in tokens if t is not None][:4] == [373.0, 328.0, 729.0, 601.0]
+
+
+def test_a_quarter_split_by_an_acquisition_is_assembled_from_dated_parts():
+    """The one quarter shape no single filing reports.
+
+    When a company changes hands mid-quarter the seller's last schedule stops
+    at the closing date and the buyer's first one starts there. Opsumit's and
+    Uptravi's 2017Q2 exist only as two partial figures, and adding them is only
+    safe if the parts are known to tile the quarter.
+    """
+    from app.extraction.derive import assemble_split_ownership_quarter
+
+    parts = [
+        {"covers": "2017-04-01/2017-06-15", "value": 216.0},
+        {"covers": "2017-06-16/2017-07-02", "value": 45.0},
+    ]
+    assert assemble_split_ownership_quarter("2017Q2", parts) == 261.0
+    # Order of the parts is not the caller's responsibility.
+    assert assemble_split_ownership_quarter("2017Q2", list(reversed(parts))) == 261.0
+
+
+def test_the_assembler_refuses_parts_that_do_not_tile_the_quarter():
+    """Every rejection here is a way two real numbers add up to a wrong one."""
+    from app.extraction.derive import assemble_split_ownership_quarter
+
+    def parts(first_end, second_start, second_end="2017-07-02"):
+        return [
+            {"covers": f"2017-04-01/{first_end}", "value": 216.0},
+            {"covers": f"{second_start}/{second_end}", "value": 45.0},
+        ]
+
+    # The closing day counted on both sides.
+    assert assemble_split_ownership_quarter("2017Q2", parts("2017-06-16", "2017-06-16")) is None
+    # A day neither issuer reported.
+    assert assemble_split_ownership_quarter("2017Q2", parts("2017-06-14", "2017-06-16")) is None
+    # Only one side of the quarter.
+    assert assemble_split_ownership_quarter(
+        "2017Q2", [{"covers": "2017-04-01/2017-06-15", "value": 216.0}]
+    ) is None
+    # Starts after the quarter does.
+    assert assemble_split_ownership_quarter(
+        "2017Q2",
+        [
+            {"covers": "2017-04-15/2017-06-15", "value": 216.0},
+            {"covers": "2017-06-16/2017-07-02", "value": 45.0},
+        ],
+    ) is None
+    # A whole extra month is a period mismatch, not a fiscal calendar.
+    assert assemble_split_ownership_quarter(
+        "2017Q2", parts("2017-06-15", "2017-06-16", "2017-07-31")
+    ) is None
+
+
+def test_the_assembler_allows_a_fiscal_quarter_end_that_is_not_a_month_end():
+    """J&J's fiscal Q2 2017 ended July 2, so no bridge is exactly calendar Q2.
+
+    Refusing the two-day overshoot would mean having no value for the quarter
+    at all, which is worse than a bounded and documented imprecision. Refusing
+    it silently would be worse still.
+    """
+    from app.extraction.derive import assemble_split_ownership_quarter
+
+    parts = [
+        {"covers": "2017-04-01/2017-06-15", "value": 216.0},
+        {"covers": "2017-06-16/2017-07-02", "value": 45.0},
+    ]
+    assert assemble_split_ownership_quarter("2017Q2", parts) == 261.0
+    assert assemble_split_ownership_quarter("2017Q2", parts, fiscal_slack_days=1) is None
+
+
+def test_prose_reads_an_amount_written_out_in_dollars():
+    """A figure too small for millions is printed in full, and still counts."""
+    from app.extraction.prose import read_prose
+
+    sentence = (
+        "Sales of Remodulin totaled approximately $205,000 in the three months "
+        "ended March 31, 2002."
+    )
+    values = read_prose(sentence, product="Remodulin")
+    assert len(values) == 1
+    assert values[0].period == "2002Q1"
+    assert values[0].value_as_reported == 205000.0
+    assert values[0].unit_label == "units"
+
+
+def test_prose_does_not_treat_every_bare_number_as_money():
+    """The guard that keeps the looser amount pattern from over-reading.
+
+    Without both conditions - a currency symbol and thousands separators - a
+    filing's bare years, section numbers and thresholds would all become
+    amounts, which is a far worse failure than missing one small figure.
+    """
+    from app.extraction.prose import _amounts_in
+
+    assert _amounts_in("Remodulin sales were 205000 in the quarter") == []
+    assert _amounts_in("royalties on net sales in excess of $25.0 million") == [
+        (25.0, "millions", "USD")
+    ]
+    assert _amounts_in("approximately $205,000 of revenues") == [
+        (205000.0, "units", "USD")
+    ]
+
+
+def test_prose_pairs_an_alternating_enumeration_without_a_pairing_word():
+    """Amount, period, amount, period - the structure states the pairing."""
+    from app.extraction.prose import read_prose
+
+    sentence = (
+        "Sales of Remodulin totaled approximately $205,000 in the three months "
+        "ended March 31, 2002, approximately $8.7 million in the three months "
+        "ended June 30, 2002, and approximately $2.6 million in the three "
+        "months ended September 30, 2002."
+    )
+    values = {v.period: v.value_as_reported for v in read_prose(sentence, product="Remodulin")}
+    assert values == {"2002Q1": 205000.0, "2002Q2": 8.7, "2002Q3": 2.6}
+
+
+def test_prose_leaves_a_sentence_that_does_not_strictly_alternate():
+    """Two amounts in a row is not an enumeration, and is not guessed at."""
+    from app.extraction.prose import read_prose
+
+    sentence = (
+        "Remodulin sales of $8.7 million and $2.6 million were recorded in the "
+        "three months ended June 30, 2002."
+    )
+    assert read_prose(sentence, product="Remodulin") == []

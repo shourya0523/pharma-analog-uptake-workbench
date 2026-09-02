@@ -39,7 +39,7 @@ _SYMBOL_TO_CURRENCY = {"$": "USD", "£": "GBP", "€": "EUR", "¥": "JPY"}
 _MONEY_RE = re.compile(
     r"(?P<currency>\$|£|€|¥|\bCHF\b|\bUSD\b|\bGBP\b|\bEUR\b)?\s*"
     r"(?P<amount>\d[\d,]*(?:\.\d+)?)\s*"
-    r"(?P<magnitude>million|billion|thousand)s?",
+    r"(?P<magnitude>million|billion|thousand)?s?",
     re.IGNORECASE,
 )
 
@@ -90,8 +90,8 @@ class _Period:
     period_type: str
 
 
-def _periods_in(sentence: str) -> list[_Period]:
-    """Every reporting period the sentence names, in the order it names them.
+def _periods_with_positions(sentence: str) -> list[tuple[int, _Period]]:
+    """Every reporting period the sentence names, with where it names it.
 
     Textual order matters: when a sentence pairs several amounts with several
     periods using "respectively", the correspondence is positional, so periods
@@ -147,21 +147,72 @@ def _periods_in(sentence: str) -> list[_Period]:
     # One period named twice ("fourth quarter 2003" then "Q4 2003") is still one
     # period; only genuinely different periods make a sentence ambiguous.
     unique: list[_Period] = []
-    for _, period in sorted(found, key=lambda item: item[0]):
+    positioned: list[tuple[int, _Period]] = []
+    for position, period in sorted(found, key=lambda item: item[0]):
         if period not in unique:
             unique.append(period)
-    return unique
+            positioned.append((position, period))
+    return positioned
+
+
+def _periods_in(sentence: str) -> list[_Period]:
+    """Every reporting period the sentence names, in reading order."""
+    return [period for _, period in _periods_with_positions(sentence)]
+
+
+def _amounts_with_positions(sentence: str) -> list[tuple[int, tuple[float, str, str]]]:
+    """Each money figure with where it appears, in reading order."""
+    amounts: list[tuple[int, tuple[float, str, str]]] = []
+    for match in _MONEY_RE.finditer(sentence):
+        magnitude = match.group("magnitude")
+        raw_amount = match.group("amount")
+        if magnitude:
+            unit = _MAGNITUDE_TO_UNIT[magnitude.lower()]
+        else:
+            # An amount too small to print in millions is written out in full:
+            # United Therapeutics reported Remodulin's first quarter on sale as
+            # "$205,000". Without this the figure is invisible and the quarter
+            # looks unreported rather than small.
+            #
+            # Two conditions keep this from swallowing every bare number in a
+            # filing: a currency symbol must be attached, and the amount must be
+            # written with thousands separators. That admits "$205,000" while
+            # leaving bare years and "$25.0" alone.
+            if not match.group("currency") or "," not in raw_amount:
+                continue
+            unit = "units"
+        raw = match.group("currency") or "$"
+        currency = _SYMBOL_TO_CURRENCY.get(raw, raw.upper())
+        amounts.append(
+            (match.start(), (float(raw_amount.replace(",", "")), unit, currency))
+        )
+    return amounts
 
 
 def _amounts_in(sentence: str) -> list[tuple[float, str, str]]:
     """(amount, unit, currency) for each money figure in the sentence."""
-    amounts: list[tuple[float, str, str]] = []
-    for match in _MONEY_RE.finditer(sentence):
-        raw = match.group("currency") or "$"
-        currency = _SYMBOL_TO_CURRENCY.get(raw, raw.upper())
-        unit = _MAGNITUDE_TO_UNIT[match.group("magnitude").lower()]
-        amounts.append((float(match.group("amount").replace(",", "")), unit, currency))
-    return amounts
+    return [amount for _, amount in _amounts_with_positions(sentence)]
+
+
+def _interleaved(
+    amounts: list[tuple[int, tuple[float, str, str]]],
+    periods: list[tuple[int, _Period]],
+) -> bool:
+    """True when the sentence alternates amount, period, amount, period, ...
+
+    An enumeration in this shape pairs each amount with the period that follows
+    it, with no ambiguity to resolve and no pairing word needed. Anything else -
+    two amounts in a row, a period before its amount, unequal counts - is not
+    this pattern and is left alone.
+    """
+    if len(amounts) < 2 or len(amounts) != len(periods):
+        return False
+    marks = sorted(
+        [(position, "amount") for position, _ in amounts]
+        + [(position, "period") for position, _ in periods]
+    )
+    expected = ["amount", "period"] * len(amounts)
+    return [kind for _, kind in marks] == expected
 
 
 def read_prose(
@@ -184,10 +235,20 @@ def read_prose(
         lowered = sentence.lower()
         if not any(alias in lowered for alias in aliases):
             continue
-        periods = _periods_in(sentence)
-        amounts = _amounts_in(sentence)
+        located_periods = _periods_with_positions(sentence)
+        located_amounts = _amounts_with_positions(sentence)
+        periods = [period for _, period in located_periods]
+        amounts = [amount for _, amount in located_amounts]
         if len(periods) == 1 and len(amounts) == 1:
             pairs = [(periods[0], amounts[0])]
+        elif _interleaved(located_amounts, located_periods):
+            # Each amount is followed by its own period before the next amount
+            # begins: "$205,000 in the three months ended March 31, 2002,
+            # $8.7 million in the three months ended June 30, 2002, and ...".
+            # The correspondence is stated by the sentence's structure, so this
+            # needs no pairing word - and unlike proximity guessing, a sentence
+            # that does not strictly alternate is rejected rather than assumed.
+            pairs = list(zip(periods, amounts))
         elif (
             len(periods) > 1
             and len(periods) == len(amounts)

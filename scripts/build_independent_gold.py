@@ -70,7 +70,11 @@ PRODUCT_METADATA = {
         "generic_name": "treprostinil",
         "manufacturer": "United Therapeutics",
         "benchmark_identity": "uthr_remodulin_reported",
-        "commercial_start_quarter": "2002Q2",
+        # 2002Q1 is $205 thousand of pre-approval supply - Remodulin was not
+        # approved until 21 May 2002 - but United Therapeutics reports it as
+        # Remodulin revenue, and the series mirrors the issuer. Leaving it out
+        # is what made the 2002Q4 derivation disagree with gold for so long.
+        "commercial_start_quarter": "2002Q1",
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
         "formulation": "injection",
@@ -174,15 +178,15 @@ PRODUCT_METADATA = {
         # restates FY2024 from 2,184 to 2,225 to match. Those later quarters are
         # a different product identity, and splitting the combined line back
         # apart would invent values, so the series stops at 2024Q4.
-        "commercial_start_quarter": "2017Q3",
+        "commercial_start_quarter": "2016Q1",
         "launch_quarter": "2013Q4",
         "series_start_reason": (
-            "Opsumit launched in 2013Q4 under Actelion, which reported it in "
-            "CHF and only for scattered quarters. J&J has reported it in USD "
-            "since acquiring Actelion on 16 June 2017; its 2017Q2 figure covers "
-            "15 days of ownership, so the series starts at 2017Q3, the first "
-            "full quarter under one issuer in one currency. Uptake measured "
-            "from here is J&J-era uptake, not launch-to-date."
+            "Opsumit launched in 2013Q4 under Actelion, whose own disclosures "
+            "were in CHF and covered only scattered quarters. J&J republished "
+            "Actelion's history in US dollars when it closed the acquisition, "
+            "but that schedule reaches back only to 2016Q1, which is where this "
+            "series starts. 2013Q4-2015Q4 has no US-dollar quarterly source, so "
+            "uptake measured from here is not launch-to-date."
         ),
         "series_end_quarter": "2024Q4",
         "series_end_reason": (
@@ -258,6 +262,22 @@ ANNUAL_METADATA = {
         "generic_name": "macitentan",
         "manufacturer": "Actelion/J&J",
         "benchmark_identity": "actelion_jnj_opsumit_worldwide_partial",
+    },
+    # Both of these already have complete quarterly series. Their annual rows
+    # exist for one reason: an issuer that states a full year but leaves one
+    # quarter implicit makes that quarter derivable, and without the annual
+    # total in gold the derivation has nothing to work from. That is why they
+    # carry series_role "derivation_input" rather than peak_benchmark or
+    # partial_context - they are neither a benchmark nor a fragment.
+    "Remodulin": {
+        "generic_name": "treprostinil",
+        "manufacturer": "United Therapeutics",
+        "benchmark_identity": "uthr_remodulin_reported",
+    },
+    "Winrevair": {
+        "generic_name": "sotatercept-csrk",
+        "manufacturer": "Merck",
+        "benchmark_identity": "merck_winrevair_worldwide_reported",
     },
     "Veletri": {
         "generic_name": "epoprostenol",
@@ -448,6 +468,7 @@ def revenue_row(
     source_value: float | None = None,
     source_unit: str = "millions",
     sources: list[dict[str, str]] | None = None,
+    bridge_components: list[dict[str, Any]] | None = None,
     notes: str = "",
 ) -> dict[str, Any]:
     meta = PRODUCT_METADATA[drug_name]
@@ -480,6 +501,10 @@ def revenue_row(
         "source_value_reported": source_value if source_value is not None else value,
         "source_unit": source_unit,
         "sources": sources or [{"source_url": source_url, "source_quote": source_quote}],
+        # Only a quarter split by an ownership change carries these: the dated
+        # parts that tile it, so a reader (and the pipeline) can check the sum
+        # instead of trusting it.
+        **({"bridge_components": bridge_components} if bridge_components else {}),
         "derivation": derivation,
         "precision": precision,
         "extraction_method": PROVENANCE,
@@ -591,21 +616,40 @@ def build_uthr(client: ResearchClient) -> list[dict[str, Any]]:
             )
         )
 
-    for source in read_csv(SOURCE_DIR / "uthr_remodulin_early.csv"):
-        rows.append(
-            revenue_row(
-                drug_name="Remodulin",
-                period=source["period"],
-                value=float(source["value_reported"]),
-                source_url=source["source_url"],
-                source_quote=source["source_quote"],
-                source_type="sec_filing",
-                derivation=source["derivation"],
-                precision=source["precision"],
-                notes="Early issuer history researched independently from filed reports.",
-            )
+    return deduplicate(rows + build_remodulin_early())
+
+
+def build_remodulin_early() -> list[dict[str, Any]]:
+    """Remodulin's 2002-2008 history, which comes from a manifest, not the wire.
+
+    Split out of ``build_uthr`` so that editing the manifest is enough to
+    rebuild these rows. Left inside it, a corrected figure needed a full
+    network rebuild to take effect, which is how a stale value survives an
+    edit that looks like it landed.
+    """
+    return [
+        revenue_row(
+            drug_name="Remodulin",
+            period=source["period"],
+            value=float(source["value_reported"]),
+            source_url=source["source_url"],
+            source_quote=source["source_quote"],
+            source_type="sec_filing",
+            derivation=source["derivation"],
+            precision=source["precision"],
+            # 2002Q1 is stated as "$205,000" - the currency base unit, not millions - so
+            # the row carries the as-reported value and its unit; every other
+            # row here is quoted in millions and leaves both blank.
+            source_value=(
+                float(source["source_value_reported"])
+                if source.get("source_value_reported")
+                else None
+            ),
+            source_unit=source.get("source_unit") or "millions",
+            notes="Early issuer history researched independently from filed reports.",
         )
-    return deduplicate(rows)
+        for source in read_csv(SOURCE_DIR / "uthr_remodulin_early.csv")
+    ]
 
 
 def pdf_text(raw: bytes) -> str:
@@ -618,6 +662,20 @@ def uptravi_ww(text: str) -> tuple[float, str]:
     if not match:
         raise ValueError("UPTRAVI WW row not found")
     return float(match.group(1).replace(",", "")), re.sub(r"\s+", " ", match.group(0))
+
+
+def uptravi_bridge_components(pre_close: float, post_close: float) -> list[dict[str, Any]]:
+    """The registered parts, checked against what this run actually read."""
+    registered = ACQUISITION_BRIDGES[("Uptravi", "2017Q2")]["bridge_components"]
+    read = [pre_close, post_close]
+    for component, value in zip(registered, read):
+        if abs(component["value"] - value) > 1e-6:
+            raise ValueError(
+                f"Uptravi 2017Q2 bridge component for {component['covers']} reads "
+                f"{value:g} but is registered as {component['value']:g}; one of the "
+                "two documents changed and the bridge must be re-checked."
+            )
+    return [dict(component) for component in registered]
 
 
 def build_uptravi(client: ResearchClient) -> list[dict[str, Any]]:
@@ -688,7 +746,13 @@ def build_uptravi(client: ResearchClient) -> list[dict[str, Any]]:
                 {"source_url": historical_url, "source_quote": quote},
                 {"source_url": q3_source["source_url"], "source_quote": q3_quote},
             ],
-            notes="Combines Actelion sales through June 15 with J&J's June 16-July 2 fiscal stub.",
+            bridge_components=uptravi_bridge_components(pre_close_q2, post_close_stub),
+            notes=(
+                "Combines Actelion sales through June 15 with J&J's June 16-July 2 "
+                "fiscal stub. The parts are contiguous and do not overlap, but J&J's "
+                "fiscal Q2 2017 ended July 2, so the assembled figure covers two days "
+                "more than calendar Q2 and cannot be made exact."
+            ),
         )
     )
 
@@ -774,6 +838,100 @@ def build_adempas() -> list[dict[str, Any]]:
     ]
 
 
+# 2017Q2 is the one Opsumit quarter no single issuer reports. Actelion's last
+# schedule stops at the 16 June 2017 closing date and J&J's first one starts
+# there, so the quarter exists only as 216 + 45. The parts are dated so the
+# composition can be checked rather than trusted - see
+# ``assemble_split_ownership_quarter``.
+ACQUISITION_BRIDGES = {
+    ("Opsumit", "2017Q2"): {
+    "bridge_components": [
+        {
+            "covers": "2017-04-01/2017-06-15",
+            "value": 216.0,
+            "issuer": "Actelion",
+            "source_url": (
+                "https://s203.q4cdn.com/636242992/files/doc_financials/2017/q2/"
+                "Actelion_Historical_Sales_Schedule.pdf"
+            ),
+        },
+        {
+            "covers": "2017-06-16/2017-07-02",
+            "value": 45.0,
+            "issuer": "Johnson & Johnson",
+            "source_url": (
+                "https://s203.q4cdn.com/636242992/files/doc_financials/2018/q2/"
+                "Sales_of_Key_Products_Franchises_2Q2018.pdf"
+            ),
+        },
+    ],
+    "sources": [
+        {
+            "source_url": (
+                "https://s203.q4cdn.com/636242992/files/doc_financials/2017/q2/"
+                "Actelion_Historical_Sales_Schedule.pdf"
+            ),
+            "source_quote": (
+                "OPSUMIT US 130 144 143 137 130 121 531 Intl 86 100 92 86 77 58 "
+                "313 WW 216 244 235 223 207 179 844 (Q2 column is through 6/15)"
+            ),
+        },
+        {
+            "source_url": (
+                "https://s203.q4cdn.com/636242992/files/doc_financials/2018/q2/"
+                "Sales_of_Key_Products_Franchises_2Q2018.pdf"
+            ),
+            "source_quote": (
+                "OPSUMIT US 180 24 * * - 329 24 * * - Intl 131 21 253 21 "
+                "WW 311 45 * * * 582 45 * * *"
+            ),
+        },
+    ],
+    },
+    # Uptravi's 2017Q2 is the same quarter and the same two documents. It is
+    # registered here rather than left to build_uptravi alone so that the row
+    # can be rebuilt from the manifest without refetching the PDFs; the network
+    # path still recomputes the values and asserts they agree.
+    ("Uptravi", "2017Q2"): {
+        "bridge_components": [
+            {
+                "covers": "2017-04-01/2017-06-15",
+                "value": 110.0,
+                "issuer": "Actelion",
+                "source_url": (
+                    "https://s203.q4cdn.com/636242992/files/doc_financials/2017/q2/"
+                    "Actelion_Historical_Sales_Schedule.pdf"
+                ),
+            },
+            {
+                "covers": "2017-06-16/2017-07-02",
+                "value": 9.0,
+                "issuer": "Johnson & Johnson",
+                "source_url": (
+                    "https://s203.q4cdn.com/636242992/files/doc_financials/2017/q3/"
+                    "Sales_of_Key_Products_Franchises_3Q2017.pdf"
+                ),
+            },
+        ],
+    },
+}
+
+
+def apply_acquisition_bridges(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Attach the dated parts to every bridged quarter, wherever it came from.
+
+    A bridge row built on a previous run and reused here has the value but not
+    the parts, and without the parts nothing can check the value. Filling them
+    in from the registry keeps the reuse path and the network path producing
+    the same row.
+    """
+    for row in rows:
+        bridge = ACQUISITION_BRIDGES.get((row["drug_name"], row["period"]))
+        if bridge and "bridge_components" not in row:
+            row["bridge_components"] = bridge["bridge_components"]
+    return rows
+
+
 def build_opsumit() -> list[dict[str, Any]]:
     """J&J-era Opsumit worldwide, 2017Q3 through 2024Q4.
 
@@ -814,9 +972,14 @@ def build_opsumit() -> list[dict[str, Any]]:
             # but the corroborating lines are what make a mis-keyed quarter
             # obvious to a reader.
             notes=(
-                "J&J worldwide net trade sales as reported; not summed from "
-                "the US and International lines, which round independently. "
+                "Worldwide net trade sales as reported; not summed from the US "
+                "and International lines, which round independently. "
                 + source["context"]
+            ),
+            **(
+                ACQUISITION_BRIDGES[("Opsumit", source["period"])]
+                if source["derivation"] == "acquisition_bridge_sum"
+                else {}
             ),
         )
         for source in read_csv(SOURCE_DIR / "jnj_opsumit_quarterly.csv")
@@ -1185,15 +1348,24 @@ def main() -> int:
         # those manifests, which is exactly the kind of staleness this flag
         # must not introduce.
         rebuilt = build_yutrepia() + build_winrevair() + build_adempas() + build_opsumit()
+        # Remodulin is only partly manifest-backed, so it is refreshed by
+        # period rather than by dropping the whole product.
+        early = build_remodulin_early()
+        early_keys = {(row["drug_name"], row["period"]) for row in early}
         rebuilt_drugs = {row["drug_name"] for row in rebuilt}
         quarterly = deduplicate(
             [
                 json.loads(line)
                 for line in published.read_text().splitlines()
-                if line.strip() and json.loads(line)["drug_name"] not in rebuilt_drugs
+                if line.strip()
+                and json.loads(line)["drug_name"] not in rebuilt_drugs
+                and (json.loads(line)["drug_name"], json.loads(line)["period"])
+                not in early_keys
             ]
             + rebuilt
+            + early
         )
+        quarterly = apply_acquisition_bridges(quarterly)
     else:
         client = ResearchClient(args.cache_dir)
         try:
@@ -1205,6 +1377,7 @@ def main() -> int:
                 + build_adempas()
                 + build_opsumit()
             )
+            quarterly = apply_acquisition_bridges(quarterly)
         finally:
             client.close()
     annual = sorted(build_annual_rows(), key=lambda row: (row["drug_name"], row["period"]))

@@ -73,12 +73,19 @@ own commercial span. `build_report.json` records this under
 `gold_completeness`, the builder refuses to emit an incomplete series, and
 `test_the_gold_dataset_is_complete_on_its_own_terms` pins it.
 
-    20 catalog products = 11 complete quarterly series (463 quarters, every one
+    20 catalog products = 11 complete quarterly series (470 quarters, every one
     covering its full span) + 3 annual benchmark series + 6 evidence-backed
     exclusions
 
+Every one of those 470 quarters is also reachable by the pipeline: it is either
+read from a citation, computed from an issuer's own stated total, or assembled
+from the two dated halves of a quarter split by an acquisition.
+`test_every_quarterly_row_is_reachable_by_the_pipeline` refuses a row that
+takes none of those routes, because a benchmark row nothing can reproduce
+measures nothing.
+
 **This is not the percentage `scripts/eval_completeness.py` prints.** That
-script scores the *pipeline* against this dataset — how many of the 463
+script scores the *pipeline* against this dataset — how many of the 470
 quarters it can read or derive on its own. A shortfall there is a capability
 the pipeline is missing, which is exactly what a benchmark is for. Reading it
 as a hole in the dataset gets the direction of the measurement backwards.
@@ -184,27 +191,28 @@ fails for a reason that is a property of the disclosure, not of the effort:
 ### Opsumit: a series bounded at both ends
 
 Opsumit is the eleventh quarterly series and the first whose span is cut short
-at *both* ends. It runs **2017Q3–2024Q4, 30 quarters, worldwide, USD**, taken
-from the OPSUMIT `WW` row of the Sales of Key Products / Franchises schedule
-J&J publishes with each earnings release.
+at *both* ends. It runs **2016Q1–2024Q4, 36 quarters, worldwide, USD**. From
+2017Q3 on, each quarter is the OPSUMIT `WW` row of the Sales of Key Products /
+Franchises schedule J&J publishes with each earnings release. Before that it is
+Actelion's own history, which J&J republished in US dollars when the
+acquisition closed — the same schedule Uptravi's early quarters come from.
 
 Both boundaries are declared in `series_coverage.jsonl` rather than silently
 applied, because a reader who mistakes either one gets a wrong answer from a
 right-looking series:
 
-- **`launch_quarter` 2013Q4, `commercial_start_quarter` 2017Q3.** Opsumit
-  launched under Actelion, which reported it in CHF and only for scattered
-  quarters. J&J acquired Actelion on 16 June 2017, so its first disclosure
-  covers 15 days — a $45m stub its 2Q2018 exhibit states outright as the 2017
-  comparative. A 15-day stub is not a quarter. Uptake measured from 2017Q3 is
-  J&J-era uptake, **not launch-to-date**.
+- **`launch_quarter` 2013Q4, `commercial_start_quarter` 2016Q1.** Opsumit
+  launched under Actelion, whose own disclosures were in CHF and covered only
+  scattered quarters. J&J republished Actelion's history in US dollars when the
+  acquisition closed, but that schedule reaches back only to 2016Q1, which is
+  where this series starts. 2013Q4–2015Q4 has no US-dollar quarterly source, so
+  uptake measured from here is **not launch-to-date**.
 - **`series_end_quarter` 2024Q4.** From 2025Q1 J&J reports a combined
   `OPSUMIT / OPSYNVI` line and restates FY2024 from 2,184 to 2,225 to match.
   Splitting that back apart would invent values.
 
-Because the 2015–2017 middle of the product's life is not citable at all,
-2024's $2,184m is the highest observed value on a still-rising curve, not a
-lifetime peak. `peak_eligible` is false and no peak row is emitted — the same
+Because 2013Q4–2015Q4 is not citable at all, 2024's $2,184m is the highest
+observed value on a still-rising curve, not a lifetime peak. `peak_eligible` is false and no peak row is emitted — the same
 shape as Adempas.
 
 #### What makes it trustworthy
@@ -214,8 +222,9 @@ figure would not contradict anything *inside* the series. It does contradict
 the issuer: J&J states a full-year worldwide total in each Q4 schedule, and all
 seven complete years reproduce it exactly.
 
-| Year | Q1 | Q2 | Q3 | Q4 | Sum | J&J's stated FY |
+| Year | Q1 | Q2 | Q3 | Q4 | Sum | Stated FY |
 |---|---|---|---|---|---|---|
+| 2016 | 179 | 207 | 223 | 235 | 844 | 844 |
 | 2018 | 271 | 311 | 310 | 323 | 1,215 | 1,215 |
 | 2019 | 306 | 348 | 347 | 326 | 1,327 | 1,327 |
 | 2020 | 389 | 406 | 392 | 452 | 1,639 | 1,639 |
@@ -224,8 +233,34 @@ seven complete years reproduce it exactly.
 | 2023 | 440 | 507 | 490 | 536 | 1,973 | 1,973 |
 | 2024 | 524 | 544 | 571 | 545 | 2,184 | 2,184 |
 
-`test_opsumit_quarters_sum_to_the_full_year_jnj_states` pins this. 2017 is
-absent from the table because J&J owned the product for part of that year only.
+`test_opsumit_quarters_sum_to_the_full_year_jnj_states` pins this. 2016 checks
+against the Actelion schedule's own Full Year column; 2018–2024 against J&J's.
+
+**2017 is the one year with nothing to check against.** Actelion reports
+through 15 June and J&J from 16 June, and neither publishes a twelve-month
+total. All four quarters are present, but the year is only verifiable against
+its parts.
+
+#### 2017Q2: the quarter no single issuer reports
+
+The acquisition closed on 16 June 2017, mid-quarter. Actelion's last schedule
+stops there and J&J's first one starts there, so 2017Q2 exists only as
+**216 + 45 = 261**. The schedule says so itself: its 2017 Q2 column is headed
+*"through 6/15"*, with a footnote that those figures "have not been previously
+disclosed".
+
+Adding two numbers is easy to get wrong in a way that looks right — counting
+the closing day on both sides, or dropping a stretch neither issuer covered —
+so the row carries the two parts **with their dates**, and
+`assemble_split_ownership_quarter` refuses to add them unless they tile the
+quarter: contiguous, non-overlapping, starting on 1 April.
+
+One thing it deliberately allows: J&J runs a 52/53-week fiscal calendar, and
+its second quarter of 2017 ended **2 July**, not 30 June. So the assembled
+figure covers two days more than calendar Q2 and *cannot* be made exact. The
+overshoot is bounded and recorded rather than hidden, because the alternative
+is having no value for the quarter at all. Uptravi's 2017Q2 (110 + 9 = 119) is
+the same quarter, the same two documents and the same caveat.
 
 Worldwide is read **as reported and never summed from US + International**:
 J&J rounds each line independently, so the parts differ from the stated
@@ -250,68 +285,75 @@ That reasoning was sound and its premise was wrong. It rested on J&J's XBRL
 segment table being the only reachable source, which was true of the routes
 tested at the time. J&J's Exhibit 99.2 archive states **every** quarter
 outright, and nothing has to be derived. The bar did not move; the document
-became readable. The near-miss is still worth recording, because a derived
+became readable.
+
+A second, later claim in this file was also wrong: that the Actelion era was
+not citable because it was reported in CHF. J&J republished it in US dollars,
+which is why the series now starts at 2016Q1 rather than 2017Q3. The near-miss is still worth recording, because a derived
 series that contradicts the issuer's own figure reads as a win until it is
 checked.
 
-## Known issue: Remodulin 2002Q4 does not satisfy its own arithmetic
+## Resolved: Remodulin 2002Q4 now satisfies its own arithmetic
 
-`2002Q4` is recorded as **$9.7 million**, derived as full-year less the first
-three quarters. Its own citations do not produce that number:
+`2002Q4` was recorded as **$9.7 million** and its own citations produced
+$9.874 million. The section that used to sit here documented the discrepancy
+and declined to correct it, on the grounds that no rounding of the cited
+figures reached 9.7.
 
-| Period | Value | Precision |
-|---|---|---|
-| FY2002 | $21.174m | exact, quoted from the FY2002 10-K |
-| 2002Q2 | $8.7m | "approximately", from the Q2 10-Q |
-| 2002Q3 | $2.6m | "approximately", from the Q3 10-Q |
+The cause was a missing row, not a rounding rule. United Therapeutics' third
+quarter 2002 10-Q states three quarters in one sentence:
 
-21.174 − 8.7 − 2.6 = **9.874**. Rounding cannot close the gap: for the stated
-Q4 to be 9.7, the unrounded Q2 and Q3 would have to sum to 11.474, and no pair
-that rounds to 8.7 and 2.6 does — the reachable range for Q4 is about 9.78 to
-9.97. Remodulin's `commercial_start_quarter` is 2002Q2, so there is no Q1
-figure that could absorb the difference.
+> Sales of Remodulin totaled approximately $205,000 in the three months ended
+> March 31, 2002, approximately $8.7 million in the three months ended June 30,
+> 2002, and approximately $2.6 million in the three months ended September 30,
+> 2002.
 
-`scripts/eval_completeness.py` reports this as a derived-vs-gold disagreement
-on every run, so it stays visible rather than silently counting as coverage.
-Of the 51 quarters derivation reproduces, this is the only one that disagrees.
+**2002Q1 was never recorded.** Remodulin was not approved until 21 May 2002, so
+$205,000 of pre-approval supply looked like nothing to carry — but the issuer
+reports it as Remodulin revenue, and the full-year total of $21.174 million
+includes it. Subtracting only Q2 and Q3 left the missing $205,000 sitting in
+Q4, which is exactly the 0.2 the arithmetic was out by.
 
-It is **not corrected here**, because correcting it would mean writing a value
-no reachable document states. Resolving it needs United Therapeutics' 2002 10-Qs
-and FY2002 10-K, which this environment cannot fetch: outbound HTTP is blocked,
-and the filings index in use does not reach back before roughly 2017. The most
-likely explanation is that the two "approximately" quarterly disclosures were
-rounded from figures the builder no longer records, but that is a hypothesis,
-not a finding.
+2002Q1 is now in the series, `commercial_start_quarter` moved to 2002Q1, and
+2002Q4 is $9.669 million — full year less the three stated quarters, matching
+what the pipeline derives. The figure is marked `approximate`, because all
+three inputs are "approximately" figures and a value derived from rounded
+inputs is not exact however many decimals it has.
 
-The six `annual_less_reported_first_nine_months` Q4 rows for 2003–2008 have a
-related weakness: their `source_quote` describes the arithmetic ("annual sales
-less first-nine-month sales yields...") instead of citing the annual total that
-drove it. The values are unaffected, but the total is not recorded as a citable
-figure, so the pipeline cannot reproduce those derivations and they score as
-gaps. Recording each year's annual figure from the cited 10-K would close them;
-that too needs the pre-2017 filings.
+Reading it also needed two things the prose reader could not do: an amount
+written out in full (`$205,000`, not "$0.2 million") and an enumeration that
+alternates amount, period, amount, period with no "respectively" to state the
+pairing. Both are now supported, and both are guarded against over-reading —
+see `test_prose_does_not_treat_every_bare_number_as_money`.
 
-**Do not close them by adding an annual row computed as Q1+Q2+Q3+Q4.** Those
-four quarters already include the derived Q4, so the total would be
-reconstructed from the answer and the derivation would prove only that
-subtraction is the inverse of addition. The gap is real until an issuer-stated
-annual figure is read.
+## Known difference: Adempas 2025Q4 is 83 by Merck's arithmetic and 82 by ours
+
+Merck states nine-month 2025 Adempas sales of **229** while its own quarters
+(68 + 80 + 82) sum to **230**. Both are true: Merck rounds each published period
+independently. Gold records **83** (312 less the stated nine months); the
+derivation recomputes **82** (312 less the summed quarters).
+
+Neither is a defect, so neither is "fixed". It is listed by name in
+`KNOWN_ROUNDING_DISAGREEMENTS` in `scripts/eval_completeness.py`, which is what
+makes a *new* disagreement mean something — an unlisted one fails that script
+instead of scrolling past as familiar noise.
 
 ## Remaining gaps and why
 
-11 of 463 quarters are not deliverable by the pipeline. Each has a specific,
-recorded cause rather than being unexplained:
+**There are none.** All 470 quarters are deliverable. This section used to list
+eleven that were not; what closed them is recorded here because the causes were
+different and only one was really about sourcing.
 
-| Product | Quarters | Cause |
+| Product | Quarters | What it turned out to be |
 |---|---|---|
-| Remodulin | 2003Q4–2008Q4 (6) | annual totals never recorded as citable figures; the cited 10-Ks predate the reachable filing index |
-| Winrevair | 2024Q2–Q4, 2025Q4 (4) | Merck's IR schedule runs 2025 Q1–Q4 then 2024 Q2–Q4, because the product was approved in March 2024 and has no separate Q1. Aligning it requires the approval date, which no extractor can read off the page — the same defect class this dataset pinned |
-| Uptravi | 2017Q2 (1) | the quarter spans J&J's acquisition of Actelion, so it is a bridge of two issuers' partial reporting |
+| Remodulin | 2003Q4–2008Q4 (6) | Not a sourcing problem. The annual totals were reachable all along — `sec.gov` is fetchable through the Parallel Search connector, which an earlier note wrongly recorded as failing. Worse, the six Q4 rows had quoted a sentence that restated their own value, so nothing could check them |
+| Winrevair | 2024Q2–Q4, 2025Q4 (4) | Merck's 10-Q states each quarter in the ordinary way, so two of them are now plain table rows and the other two derive from Merck's stated full years. The IR schedule whose column order encoded the approval date is no longer the only source |
+| Uptravi | 2017Q2 (1) | A real structural case, and the only one: the quarter spans J&J's acquisition of Actelion. It is now assembled by the pipeline from the two issuers' dated halves rather than left as a gap |
 
-The Winrevair four are the interesting case: they are not a sourcing failure but
-a genuine limit on what a self-describing citation can carry. Merck states those
-quarters only in a schedule whose column order encodes a fact about the product,
-not about the table.
+Three things were wrong in the old list rather than merely incomplete, and are
+worth keeping visible: `sec.gov` was recorded as unreachable when it was not;
+six Q4 rows carried self-referential quotes; and Remodulin's 2005Q4 was off by
+$1,000, which only showed up once the exact annual figure was in hand.
 
 ### How to close them (for a session with network access)
 

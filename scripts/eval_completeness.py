@@ -35,6 +35,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "backend"))
 
 from app.extraction.derive import (  # noqa: E402
+    assemble_split_ownership_quarter,
     complete_quarters_from_totals,
     propagate_sole_formulation,
 )
@@ -49,6 +50,20 @@ DERIVED = {
     "full_year_less_other_reported_quarters",
     "identity_normalization_pre_dpi",
 }
+# Disagreements that are the issuer's own rounding, not a defect. An issuer
+# that rounds each published period independently makes two true statements
+# that differ by 1: gold records the figure the issuer's own arithmetic gives,
+# and the derivation recomputes it from the quarters, which round differently.
+# Listing them by name is what lets a *new* disagreement mean something - an
+# unlisted one fails this script rather than scrolling past as familiar noise.
+KNOWN_ROUNDING_DISAGREEMENTS = {
+    ("Adempas", "2025Q4"): (
+        "Merck states nine-month 2025 Adempas sales of 229 while its own "
+        "quarters sum to 230, so 312 less the stated nine months gives the 83 "
+        "gold records and 312 less the summed quarters gives 82."
+    ),
+}
+
 _LEGEND_RE = re.compile(
     r"\([^)]*(?:Q[1-4]\s*\d{4}|\d{4}\s*Q[1-4]|H[12]\s*\d{4}|Q[1-4]-Q[1-4])[^)]*\)"
 )
@@ -100,6 +115,7 @@ def main() -> int:
     # the pipeline is expected to recompute.
     weak_citation = 0
     gold_derived = 0
+    bridged = 0
     for series in sorted(coverage, key=lambda c: c["drug_name"]):
         drug = series["drug_name"]
         expected = series["expected_quarters"]
@@ -164,9 +180,10 @@ def main() -> int:
                 continue
             actual = point.value_normalized_usd_millions
             if actual is None or abs(actual - expected_value) > 0.05:
-                mismatches.append(
-                    f"{drug} {point.period}: derived {actual:g} vs gold {expected_value:g}"
-                )
+                mismatches.append((
+                    (drug, point.period),
+                    f"{drug} {point.period}: derived {actual:g} vs gold {expected_value:g}",
+                ))
 
         # A family line before its formulation split resolves the formulation's
         # own series; Tyvaso's family total covers Nebulized Tyvaso pre-DPI.
@@ -186,6 +203,27 @@ def main() -> int:
                     family, formulation_periods=dpi, formulation_label=drug
                 )
             }
+
+        # A quarter split by an ownership change is assembled from the two
+        # issuers' dated partial figures rather than read or back-solved. It
+        # counts as delivered only if those parts actually tile the quarter and
+        # sum to what gold records - the check is in the pipeline, not here.
+        for row in drug_rows:
+            components = row.get("bridge_components")
+            if not components:
+                continue
+            assembled = assemble_split_ownership_quarter(row["period"], components)
+            if assembled is None:
+                continue
+            if abs(assembled - float(row["value_reported"])) < 0.05:
+                derived.add(row["period"])
+                bridged += 1
+            else:
+                mismatches.append((
+                    (drug, row["period"]),
+                    f"{drug} {row['period']}: bridge assembles {assembled:g} "
+                    f"vs gold {float(row['value_reported']):g}",
+                ))
 
         derived -= readable
         delivered = len(readable) + len(derived)
@@ -214,16 +252,27 @@ def main() -> int:
     print(
         f"\nof {read + weak_citation + gold_derived} gold rows: {read} carry a citation "
         f"an extractor can read, {weak_citation} cite a schedule that needs a "
-        f"hand-written legend, {gold_derived} are gold-side derivations"
+        f"hand-written legend, {gold_derived} are gold-side derivations "
+        f"(of which {bridged} are quarters assembled across an ownership change)"
     )
-    if mismatches:
+    known = [m for m in mismatches if m[0] in KNOWN_ROUNDING_DISAGREEMENTS]
+    unknown = [m for m in mismatches if m[0] not in KNOWN_ROUNDING_DISAGREEMENTS]
+    if known:
         print(
-            f"\n{len(mismatches)} derived quarter(s) disagree with the gold value "
-            "they reproduce:"
+            f"\n{len(known)} derived quarter(s) differ by the issuer's own "
+            "rounding, which is expected and recorded:"
         )
-        for line in mismatches:
+        for key, line in known:
             print(f"  {line}")
-    return 0
+            print(f"      {KNOWN_ROUNDING_DISAGREEMENTS[key]}")
+    if unknown:
+        print(
+            f"\n{len(unknown)} derived quarter(s) disagree with the gold value "
+            "they reproduce, and are not a recorded rounding difference:"
+        )
+        for _, line in unknown:
+            print(f"  {line}")
+    return 1 if unknown else 0
 
 
 if __name__ == "__main__":

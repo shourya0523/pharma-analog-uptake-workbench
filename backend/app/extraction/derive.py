@@ -28,6 +28,8 @@ import re
 from collections import defaultdict
 from dataclasses import replace
 
+from typing import Any
+
 from app.extraction.process import Datapoint
 
 _QUARTER_RE = re.compile(r"(\d{4})Q([1-4])")
@@ -158,3 +160,92 @@ def propagate_sole_formulation(
         for point in family
         if point.period < split_at and point.value_normalized_usd_millions is not None
     ]
+
+
+# A quarter split by an ownership change is covered by two issuers' partial
+# disclosures. The parts are dated, so the split can be checked rather than
+# assumed: they must tile the quarter exactly, with no gap and no overlap.
+_QUARTER_BOUNDS = {
+    1: ("01-01", "03-31"),
+    2: ("04-01", "06-30"),
+    3: ("07-01", "09-30"),
+    4: ("10-01", "12-31"),
+}
+
+
+def assemble_split_ownership_quarter(
+    period: str, components: list[dict[str, Any]], *, fiscal_slack_days: int = 7
+) -> float | None:
+    """Sum the partial-period figures that together cover one quarter.
+
+    When a company is acquired mid-quarter, neither issuer reports the whole
+    quarter: the seller's last schedule stops at the closing date and the
+    buyer's first one starts there. Johnson & Johnson closed its Actelion
+    acquisition on 16 June 2017, so Uptravi's and Opsumit's 2017Q2 exist only
+    as an April 1 - June 15 figure plus a June 16 onwards one.
+
+    This is not the residual arithmetic the rest of this module does, and it is
+    deliberately stricter about what it will add. Two numbers are easy to
+    combine in a way that looks right - double-counting the days on both sides
+    of the close, or silently dropping a stretch neither issuer covered - so
+    the parts must be contiguous, must not overlap, and must start at the
+    quarter's first day before they are summed.
+
+    The one thing not required is that they stop exactly at the quarter's last
+    day. Issuers on a 52/53-week fiscal calendar do not end quarters on month
+    ends: J&J's second quarter of 2017 ran to July 2, so its stub reaches two
+    days into calendar Q3 and no assembled figure can be exactly calendar Q2.
+    That overshoot is bounded by ``fiscal_slack_days`` and is a real, small
+    imprecision in any bridged quarter - it is documented rather than removed,
+    because the alternative is to have no value for the quarter at all. An
+    overshoot beyond the bound is a period mismatch, not a fiscal calendar, and
+    returns None.
+    """
+    parsed = _split(period)
+    if not parsed or not components:
+        return None
+    year, quarter = parsed
+    first, last = _QUARTER_BOUNDS[quarter]
+    quarter_start, quarter_end = f"{year}-{first}", f"{year}-{last}"
+
+    spans: list[tuple[str, str, float]] = []
+    for component in components:
+        covers = str(component.get("covers", ""))
+        value = component.get("value")
+        if value is None or covers.count("/") != 1:
+            return None
+        span_start, span_end = covers.split("/")
+        if not span_start <= span_end:
+            return None
+        spans.append((span_start, span_end, float(value)))
+
+    spans.sort()
+    if spans[0][0] != quarter_start:
+        return None
+    if spans[-1][1] < quarter_end or _days_between(quarter_end, spans[-1][1]) > fiscal_slack_days:
+        return None
+    for (_, earlier_end, _), (later_start, _, _) in zip(spans, spans[1:]):
+        # One comparison rejects both failure modes: an overlap makes the next
+        # part start on or before this one ends, and a gap makes it start more
+        # than one day after.
+        if _next_day(earlier_end) != later_start:
+            return None
+    return round(sum(value for _, _, value in spans), 6)
+
+
+def _days_between(earlier: str, later: str) -> int:
+    return (_as_date(later) - _as_date(earlier)).days
+
+
+def _as_date(value: str):
+    from datetime import date as _date
+
+    year, month, day = (int(part) for part in value.split("-"))
+    return _date(year, month, day)
+
+
+def _next_day(date: str) -> str:
+    from datetime import date as _date, timedelta
+
+    year, month, day = (int(part) for part in date.split("-"))
+    return (_date(year, month, day) + timedelta(days=1)).isoformat()

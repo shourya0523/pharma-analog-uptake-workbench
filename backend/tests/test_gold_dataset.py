@@ -123,7 +123,7 @@ def test_quarterly_rows_are_unique_and_preserve_reported_units():
         assert row["period_type"] == "quarterly"
         assert row["currency"] == "USD"
         assert row["unit"] == "millions"
-        assert row["source_unit"] in {"thousands", "millions"}
+        assert row["source_unit"] in {"units", "thousands", "millions"}
         assert row["sources"]
         # test_gold_rows_have_independent_provenance_and_citations only checks
         # that source_quote contains source_value_reported (the pre-conversion
@@ -132,11 +132,12 @@ def test_quarterly_rows_are_unique_and_preserve_reported_units():
         # rows, once misclassified as "thousands" when the exhibit had already
         # switched to millions) would pass that check while shipping a value
         # 1000x too small. Guard the actual scale relationship here instead.
-        expected = (
-            row["source_value_reported"] / 1000
-            if row["source_unit"] == "thousands"
-            else row["source_value_reported"]
-        )
+        # "units" is what the pipeline calls the currency's base unit, the
+        # scale a filing uses for an amount too small to print in millions:
+        # Remodulin's first quarter on sale was "$205,000". It needs its own
+        # divisor here or it would be read as 205,000 million.
+        scale = {"units": 1_000_000, "thousands": 1000, "millions": 1}
+        expected = row["source_value_reported"] / scale[row["source_unit"]]
         assert row["value_reported"] == round(expected, 6), row["gold_id"]
 
 
@@ -553,17 +554,26 @@ def test_opsumit_is_a_series_bounded_at_both_ends():
 
     series = coverage["Opsumit"]
     assert series["coverage_pct"] == 100.0 and series["missing_quarters"] == []
-    assert series["commercial_start_quarter"] == "2017Q3"
+    assert series["commercial_start_quarter"] == "2016Q1"
     assert series["launch_quarter"] == "2013Q4"
     assert series["series_end_quarter"] == "2024Q4"
     assert series["quarters_beyond_series_end"] == []
     for field in ("series_start_reason", "series_end_reason"):
         assert series[field], f"a bounded series must state its {field}"
 
-    assert len(rows) == 30
+    assert len(rows) == 36
     assert {r["geography"] for r in rows} == {"Worldwide"}
     assert {r["currency"] for r in rows} == {"USD"}
     assert {r["manufacturer"] for r in rows} == {"Johnson & Johnson"}
+
+    # 2017Q2 straddles the acquisition and is the only quarter no single issuer
+    # reports; it must carry the dated parts that make the sum checkable.
+    bridge = next(r for r in rows if r["period"] == "2017Q2")
+    assert bridge["derivation"] == "acquisition_bridge_sum"
+    assert [c["covers"] for c in bridge["bridge_components"]] == [
+        "2017-04-01/2017-06-15",
+        "2017-06-16/2017-07-02",
+    ]
 
 
 def test_opsumit_quarters_sum_to_the_full_year_jnj_states():
@@ -576,6 +586,8 @@ def test_opsumit_quarters_sum_to_the_full_year_jnj_states():
     2017 is excluded because J&J owned the product for only part of that year.
     """
     stated_full_year = {
+        # Actelion's own schedule, republished by J&J in US dollars.
+        2016: 844.0,
         2018: 1215.0,
         2019: 1327.0,
         2020: 1639.0,
@@ -595,10 +607,14 @@ def test_opsumit_quarters_sum_to_the_full_year_jnj_states():
         assert sum(quarters) == total, (
             f"{year} quarters sum to {sum(quarters)}, J&J states {total}"
         )
-    # 2017 is the acquisition year: two quarters, and the 573 J&J reports for
-    # the year covers 16 June onwards, not twelve months.
-    assert sorted(by_year) == [2017, *stated_full_year]
-    assert len(by_year[2017]) == 2
+    # 2017 is the acquisition year, and the one year with no full-year figure
+    # to check against: Actelion reports through 15 June and J&J from 16 June,
+    # and neither states a twelve-month total. All four quarters are present -
+    # 2017Q2 by assembling the two halves - but the year can only be checked
+    # against its parts, not against a published total.
+    assert sorted(by_year) == sorted({2017, *stated_full_year})
+    assert len(by_year[2017]) == 4
+    assert sum(by_year[2017]) == 244 + 261 + 259 + 269
 
 
 def test_opsumit_quarterly_and_annual_series_are_not_the_same_benchmark():
@@ -648,3 +664,110 @@ def test_opsumit_worldwide_is_never_summed_from_us_and_international():
         assert sum(parts) != stated, f"{period} would not demonstrate anything"
         for part in parts:
             assert str(part) in row["gold_notes"]
+
+
+def test_every_quarterly_row_is_reachable_by_the_pipeline():
+    """The end-to-end claim: no row sits in gold that nothing can reproduce.
+
+    A benchmark row the pipeline can neither read nor compute measures nothing.
+    Each of the four routes below is a real disclosure shape, and every row has
+    to take one of them - a row taking none is a gap, whatever its provenance.
+    """
+    rows = load_jsonl("quarterly_revenue.jsonl")
+    reproducible = {
+        "direct_reported",
+        "direct_prior_year_column",
+        "direct_prior_year_schedule",
+        "direct_reported_rounded",
+        "direct_retrospective_table",
+        "direct_jnj_retrospective_table",
+        "annual_less_reported_first_nine_months",
+        "full_year_less_other_reported_quarters",
+        "identity_normalization_pre_dpi",
+        "acquisition_bridge_sum",
+    }
+    unreachable = sorted(
+        {(row["drug_name"], row["period"], row["derivation"]) for row in rows}
+        - {
+            (row["drug_name"], row["period"], row["derivation"])
+            for row in rows
+            if row["derivation"] in reproducible
+        }
+    )
+    assert not unreachable, f"rows with no reproduction route: {unreachable}"
+
+
+def test_a_bridged_quarter_carries_parts_that_tile_it():
+    """Both acquisition bridges, checked against the pipeline's own assembler.
+
+    The row records a sum; these are the parts it is a sum of. Checking them
+    here means a bridge cannot be quietly edited to any convenient number.
+    """
+    import sys
+
+    sys.path.insert(0, str(REPO_ROOT / "backend"))
+    from app.extraction.derive import assemble_split_ownership_quarter
+
+    bridged = [
+        row
+        for row in load_jsonl("quarterly_revenue.jsonl")
+        if row["derivation"] == "acquisition_bridge_sum"
+    ]
+    assert {(row["drug_name"], row["period"]) for row in bridged} == {
+        ("Opsumit", "2017Q2"),
+        ("Uptravi", "2017Q2"),
+    }
+    for row in bridged:
+        components = row["bridge_components"]
+        assert len(components) == 2
+        assert {c["issuer"] for c in components} == {"Actelion", "Johnson & Johnson"}
+        assembled = assemble_split_ownership_quarter(row["period"], components)
+        assert assembled == row["value_reported"], row["gold_id"]
+
+
+def test_remodulin_fourth_quarters_reconcile_to_the_annual_totals_they_cite():
+    """Seven Q4s United Therapeutics never stated on their own.
+
+    Each is a full year less the three quarters that were stated. Before these
+    annual totals were sourced, the Q4 rows quoted a sentence that restated
+    their own value - which looks like a citation and proves nothing. The test
+    is that the arithmetic closes against a figure read from a filing.
+    """
+    annual = {
+        row["period"]: row["value_reported"]
+        for row in load_jsonl("annual_revenue.jsonl")
+        if row["drug_name"] == "Remodulin"
+    }
+    quarters: dict[int, dict[int, float]] = {}
+    for row in load_jsonl("quarterly_revenue.jsonl"):
+        if row["drug_name"] == "Remodulin":
+            quarters.setdefault(row["calendar_year"], {})[row["calendar_quarter"]] = row[
+                "value_reported"
+            ]
+
+    assert set(annual) == {"2002", "2003", "2004", "2005", "2006", "2007", "2008"}
+    for year_text, total in annual.items():
+        year = int(year_text)
+        stated = quarters[year]
+        assert len(stated) == 4, f"{year} has {len(stated)} quarters"
+        assert round(sum(stated.values()), 3) == total, year
+
+
+def test_winrevair_2024_quarters_cite_the_filings_that_state_them():
+    """The pair that used to need a hand-written legend to interpret.
+
+    Merck's IR schedule prints 2025 Q1-Q4 then 2024 Q2-Q4, an order that
+    encodes the March 2024 approval date rather than anything on the page. The
+    10-Q states each quarter in the ordinary way, so the legend is gone.
+    """
+    rows = {
+        row["period"]: row
+        for row in load_jsonl("quarterly_revenue.jsonl")
+        if row["drug_name"] == "Winrevair"
+    }
+    for period, value in (("2024Q2", 70.0), ("2024Q3", 149.0)):
+        row = rows[period]
+        assert row["value_reported"] == value
+        assert row["source_url"].startswith("https://www.sec.gov/")
+        assert row["derivation"] == "direct_reported"
+        assert "|" in row["source_quote"], "must be readable as a table row"

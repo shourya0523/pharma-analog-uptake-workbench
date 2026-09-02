@@ -457,7 +457,8 @@ Each route to them was tested directly rather than assumed.
 | Gmail, Calendar, Calendly, Vercel | Not document sources for this. Vercel's fetch is limited to Vercel-hosted URLs |
 | Microsoft 365 | Installed but not enabled in this chat, status unknown — untested |
 | **Uploading the PDF into the session** | **Works.** Proven end-to-end with Bayer's Q1 2024 and Q1 2026 quarterly statements |
-| **Parallel Search connector (`web_fetch`)** | **Works, and this is the answer.** It fetches server-side, so the session's egress policy does not apply. J&J's Exhibit 99.2 schedules, Merck's IR schedules and Bayer's statements all return their product tables. SEC.gov itself still fails (its own UA policy), but the SEC filings were already covered by the filings index — the IR PDFs were the real gap |
+| **Parallel Search connector (`web_fetch`)** | **Works, and this is the answer.** It fetches server-side, so the session's egress policy does not apply. J&J's Exhibit 99.2 schedules, Merck's IR schedules and Bayer's statements all return their product tables |
+| **`sec.gov` through the Parallel connector** | **Works.** An earlier version of this row said it failed on SEC's user-agent policy. That was wrong, and it was load-bearing: it is why Remodulin's 2003–2008 annual totals and Winrevair's 2024 quarters were written up as unreachable when both were one fetch away. Direct `curl` to sec.gov is still blocked at the org gateway (403 on CONNECT); the connector is not, because it fetches server-side |
 
 **Superseded (2026-09-02): the Parallel Search connector closes this.** The
 recommendation below stands only for a session without that connector. With it,
@@ -474,10 +475,18 @@ read past its International row on repeated attempts, so 2020Q3 is cited to the
 3Q2021 schedule's prior-year column with a written legend. Every other quarter
 cites its own filing.
 
+The same 2Q2017 Actelion Historical Sales Schedule also carries OPSUMIT and
+TRACLEER in US dollars back to 2016Q1, under a column headed "Q2 ... through
+6/15". That is what let the Opsumit series start at 2016Q1 rather than 2017Q3,
+and it falsified a claim made earlier in this file — that the Actelion era was
+unusable because Actelion reported in CHF. Actelion did; J&J republished it in
+dollars.
+
 **Without that connector, the highest-leverage change is an egress allowlist
-entry for `sec.gov`.** That one host unlocks Remodulin's 2003–2008 annual totals (closing
-six derivation gaps), Adempas back to 2020Q1, and the four Winrevair 2024
-quarters. Adding `s203.q4cdn.com` would additionally unlock J&J's Exhibit 99.2
+entry for `sec.gov`.** That one host unlocks Adempas back to 2020Q1. It would
+also have unlocked Remodulin's 2003–2008 annual totals and the four Winrevair
+2024 quarters, but those are closed: the connector reached the same filings, and
+`seed/gold` now carries every one of them. Adding `s203.q4cdn.com` would additionally unlock J&J's Exhibit 99.2
 quarterly schedules, which was the only route to Opsumit and is still the
 route to Uptravi's US/International split.
 
