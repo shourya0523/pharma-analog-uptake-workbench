@@ -368,15 +368,41 @@ surge moved the peak from 2010 to 2011.
 Searched for non-SEC routes to the figures the filings index cannot reach.
 Two findings, one useful and one cautionary.
 
-**Bayer publishes quarterly statements that would give worldwide Adempas.**
-Merck reports only its own marketing territories; Bayer holds the Americas and
-publishes group quarterly statements as PDFs on `bayer.com`
-(`/sites/default/files/<year>-<month>/bayer-quarterly-statement-qN-YYYY.pdf`).
-Those documents carry Adempas sales for Bayer's territories, which is the half
-this dataset does not have. **They are not reachable from this environment**:
-outbound HTTP is blocked, so the pages can be located but not read. This is the
-single highest-value fetch for anyone with network access — it would turn the
-scoped Merck series into a worldwide one.
+**Bayer's quarterly statements do NOT yield worldwide Adempas — checked.**
+This document previously called them "the single highest-value fetch", on the
+theory that Bayer holds the Americas and would supply the half Merck does not
+report. The statements have since been read, and that is wrong.
+
+Bayer does print the figure. "Best-selling Pharmaceuticals Products" (table
+A 8) gives Adempas™ in € million:
+
+| Q1 2023 | Q1 2024 | Q1 2025 | Q1 2026 |
+|---|---|---|---|
+| 152 | 171 | 183 | 186 |
+
+But the segment narrative on the facing page says what the figure is, in both
+statements and in identical words: *"As in the past, sales reflected the
+proportionate recognition of the upfront and milestone payments resulting from
+the sGC collaboration with Merck & Co., United States."* Bayer's Adempas line
+is product sales **plus** amortized collaboration payments. It is not a
+product-sales series, and adding it to Merck's territory sales would not
+produce worldwide Adempas — it would produce a number with collaboration income
+baked into one half.
+
+That vindicates the original exclusion note, which said Bayer's line "includes
+amortized collaboration income, so it isn't a product-sales series". The note
+was right about Bayer and wrong only in concluding that no Adempas series
+existed at all: Merck's post-2020 territory line is clean, and is what this
+catalog now carries, explicitly scoped.
+
+Sources read: Bayer Quarterly Statement as of March 31, 2024, pages 8-9; and
+as of March 31, 2026, page 10.
+`https://www.bayer.com/sites/default/files/2024-05/bayer-quarterly-statement-q1-2024.pdf`
+`https://www.bayer.com/sites/default/files/2026-05/bayer-quarterly-statement-q1-2026.pdf`
+
+**Do not add these figures to `seed/gold/`.** They belong in the same category
+as the CMS payer spend behind Alyq: real, citable, and not revenue as this
+dataset defines it.
 
 **The web-search summarizer cannot be used as a data source, confirmed again.**
 Asked for Adempas sales, it returned "Bayer projected annual peak sales of

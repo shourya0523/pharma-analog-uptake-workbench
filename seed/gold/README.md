@@ -116,6 +116,28 @@ product revenue to Merck. **Do not compare it to a worldwide series.** It is
 the only territory-split product in the catalog, which is precisely why it is
 worth having: nothing else exercises that scope.
 
+### Why it stays scoped: Bayer's half is not product sales
+
+The obvious completion is to add Bayer's Americas figures and call the result
+worldwide. That does not work, and Bayer's own statements say why. Bayer prints
+Adempas in its "Best-selling Pharmaceuticals Products" table (€152m, €171m,
+€183m, €186m for Q1 2023 through Q1 2026), but the facing narrative states, in
+both statements read and in identical words: *"As in the past, sales reflected
+the proportionate recognition of the upfront and milestone payments resulting
+from the sGC collaboration with Merck & Co., United States."*
+
+So Bayer's line is product sales plus amortized collaboration payments. Summing
+it with Merck's territory sales would yield a worldwide-looking number with
+collaboration income inside one half. The scope stays where it is, and the
+figure stays out of `seed/gold/` — see `docs/sourcing/excluded-products.md`.
+
+This is also the resolution of the original exclusion note, which said Bayer's
+line "includes amortized collaboration income, so it isn't a product-sales
+series". That was correct about Bayer. Its only error was concluding no Adempas
+series existed anywhere, when Merck's post-2020 split line is clean.
+
+### Series bounds
+
 It starts at 2024Q1 rather than the 2013Q4 launch, and carries a
 `series_start_reason` saying so. Two things pushed the boundary: the basis
 change above, and provenance — Merck's 2020–2023 filings are reachable here
