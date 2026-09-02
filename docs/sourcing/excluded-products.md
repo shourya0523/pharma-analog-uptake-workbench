@@ -415,3 +415,32 @@ different drugs.
 The rule stands and is worth restating because it survived a direct test: web
 search is for **locating documents**, never for reading values out of them. A
 figure enters `seed/gold/` only from the primary document itself.
+
+---
+
+## Egress and connectors: what was tested (2026-09-02)
+
+The unreachable documents behind every remaining gap are the same three:
+pre-2017 SEC filings, J&J's Exhibit 99.2 IR PDFs, and Merck's IR schedules.
+Each route to them was tested directly rather than assumed.
+
+| Route | Result |
+|---|---|
+| Direct HTTPS via the session proxy | **403 at the gateway.** The proxy itself is healthy (`enabled: true`, `selective: false`, no relay failures); the egress policy denies CONNECT to `www.sec.gov`, `efts.sec.gov`, `www.merck.com` and `s203.q4cdn.com`. The proxy README says to report such denials, not route around them |
+| Bigdata.com open-web lane (smart mode, "search the open web") | Returns indexed content only; will not retrieve a named IR PDF |
+| Bigdata.com index, `regulatory` + `filings` categories, pre-2017 | Empty. The filings floor is roughly 2017; news reaches back to about 2010 |
+| Bigdata.com news, 2006–2011 | UTHR results press releases exist (via Benzinga), but the per-product revenue table is cut off mid-chunk, and a redistributor's copy is weaker provenance than the 8-K it reproduces |
+| Google Drive | Connected and working; holds nothing pharma-related |
+| Gmail, Calendar, Calendly, Vercel | Not document sources for this. Vercel's fetch is limited to Vercel-hosted URLs |
+| Microsoft 365 | Installed but not enabled in this chat, status unknown — untested |
+| **Uploading the PDF into the session** | **Works.** Proven end-to-end with Bayer's Q1 2024 and Q1 2026 quarterly statements |
+
+**The single highest-leverage change is an egress allowlist entry for
+`sec.gov`.** That one host unlocks Remodulin's 2003–2008 annual totals (closing
+six derivation gaps), Adempas back to 2020Q1, and the four Winrevair 2024
+quarters. Adding `s203.q4cdn.com` would additionally unlock J&J's Exhibit 99.2
+quarterly schedules, which is the only route to Opsumit and to Uptravi's
+US/International split.
+
+Failing that, uploading the specific PDFs is the working alternative and needs
+no policy change.
