@@ -185,8 +185,95 @@ def audit_precision(quarterly: list[dict]) -> list[str]:
     return out
 
 
+# A fourth-quarter row whose quote carries four value columns states, in its
+# third column, the full year the issuer published - that is what a quarterly
+# exhibit's year-to-date block is in Q4. So the total a year has to reconcile
+# to is already inside the citation, and does not need a separate annual row.
+_LEGEND = re.compile(r"\([^)]*(?:Q[1-4]\s*\d{4}|\d{4}\s*Q[1-4]|columns are)[^)]*\)")
+
+
+def stated_full_year_from_q4_quote(row: dict) -> float | None:
+    """The issuer's own full-year figure, read out of a Q4 row's own quote.
+
+    Only for rows whose columns are known to be
+    [quarter, prior-year quarter, year-to-date, prior-year year-to-date]:
+    a direct fourth-quarter reading with exactly four values and no column
+    legend redefining what the columns are. Anything else returns None rather
+    than guessing, because reading the wrong column would invent a total and
+    then check the year against it.
+
+    The quote is in whatever unit the document used - United Therapeutics
+    states thousands, J&J and Gilead state millions - so the scale is learned
+    from the row itself: the first column is this row's own quarter, and the
+    row records that quarter in USD millions. If the ratio between them is not
+    a clean power of ten, the first column is not the quarter this row claims
+    and nothing further should be read off the line.
+    """
+    if row.get("derivation") != "direct_reported" or row.get("calendar_quarter") != 4:
+        return None
+    quote = row.get("source_quote") or ""
+    if _LEGEND.search(quote):
+        return None
+    cells = [cell.strip() for cell in quote.split("|")]
+    values = [cell for cell in cells[1:] if re.fullmatch(r"[\d,]+", cell)]
+    if len(values) != 4 or len(cells) - 1 != 4:
+        return None
+    quarter, _prior, year_to_date, _prior_ytd = (float(v.replace(",", "")) for v in values)
+    reported = row.get("value_normalized_usd_millions")
+    if not quarter or reported is None:
+        return None
+    scale = reported / quarter
+    if not any(abs(scale - power) < power * 1e-6 for power in (1e-6, 1e-3, 1.0, 1e3)):
+        return None
+    # The year-to-date column must at least contain the quarter it ends with.
+    # If it does not, the columns are not what this function assumes.
+    if year_to_date < quarter:
+        return None
+    return year_to_date * scale
+
+
+_NUMBER = re.compile(r"\d[\d,]*(?:\.\d+)?")
+
+
+def audit_value_appears_in_its_quote(rows: list[dict]) -> list[str]:
+    """The figure a row records has to be a figure its citation contains.
+
+    The most basic property provenance has, and the audit was not checking it:
+    a row could claim 2,701 while quoting a line that says 2,071 and every
+    check here would pass. The builder's own test asserts this, but the point
+    of this script is to read the published artifacts as a stranger who does
+    not have the builder - so it has to be asserted twice, independently.
+
+    Compared in the unit the document used (source_unit), because that is the
+    unit the quote is written in.
+    """
+    out: list[str] = []
+    for row in rows:
+        expected = row.get("source_value_reported")
+        quote = row.get("source_quote") or ""
+        if expected is None or not quote:
+            finding(out, f"{row['drug_name']} {row['period']}: no citation to check")
+            continue
+        found = [
+            float(token.replace(",", "")) for token in _NUMBER.findall(quote)
+        ]
+        if not any(abs(value - float(expected)) < 1e-6 for value in found):
+            finding(
+                out,
+                f"{row['drug_name']} {row['period']}: records {expected:g} "
+                f"({row.get('source_unit')}), which does not appear in its own quote",
+            )
+    return out
+
+
 def audit_year_reconciliation(quarterly: list[dict], annual: list[dict]) -> list[str]:
     """Every complete year against a published total for the same product.
+
+    Two sources of "published total", because relying on the annual file alone
+    made this check skip every product that has no annual row - which was 373
+    of 919 quarters, silently. The second source is the Q4 citation itself: a
+    quarterly exhibit's fourth-quarter year-to-date column *is* the issuer's
+    stated full year, so the total is already inside the evidence.
 
     Normalised USD on both sides. Comparing as-reported figures across a
     currency boundary is the false positive this check exists to avoid.
@@ -197,15 +284,28 @@ def audit_year_reconciliation(quarterly: list[dict], annual: list[dict]) -> list
         for row in annual
         if row.get("value_normalized_usd_millions") is not None
     }
+    from_quote: dict[tuple[str, int], float] = {}
     by_year: dict[tuple[str, int], dict[str, float]] = defaultdict(dict)
     for row in quarterly:
         usd = row.get("value_normalized_usd_millions")
         if usd is not None:
             by_year[(row["drug_name"], row["calendar_year"])][row["period"]] = usd
+        if row.get("currency") == "USD" and row.get("unit") == "millions":
+            stated = stated_full_year_from_q4_quote(row)
+            if stated is not None:
+                from_quote[(row["drug_name"], row["calendar_year"])] = stated
+
     for (drug, year), quarters in sorted(by_year.items()):
         if len(quarters) != 4:
             continue
         stated = totals.get((drug, str(year)))
+        source = "a published annual figure of"
+        if stated is None:
+            stated = from_quote.get((drug, year))
+            source = (
+                "the fourth-quarter year-to-date column of its own citation, which "
+                "states"
+            )
         if stated is None:
             continue
         gap = abs(sum(quarters.values()) - stated)
@@ -213,7 +313,7 @@ def audit_year_reconciliation(quarterly: list[dict], annual: list[dict]) -> list
             finding(
                 out,
                 f"{drug} {year}: quarters sum to {sum(quarters.values()):g} against "
-                f"a published {stated:g} (off by {gap:g})",
+                f"{source} {stated:g} (off by {gap:g})",
             )
     return out
 
@@ -327,6 +427,7 @@ def main() -> int:
         ("derivation labels match the cited document", audit_derivation_labels(quarterly)),
         ("quotes carry corroborating evidence", audit_self_referential_quotes(quarterly)),
         ("precision claims are supported", audit_precision(quarterly)),
+        ("values appear in their own citations", audit_value_appears_in_its_quote(quarterly + annual)),
         ("complete years reconcile to published totals", audit_year_reconciliation(quarterly, annual)),
         ("series attributes are stable", audit_series_consistency(quarterly)),
         ("manifests round-trip into gold", audit_manifest_round_trip(quarterly)),
