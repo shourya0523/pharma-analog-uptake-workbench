@@ -868,3 +868,24 @@ def test_no_single_issuer_supplies_more_than_four_fifths_of_the_catalog():
     share = top_count / len(rows)
     assert share < 0.80, f"{top_issuer} is {share:.1%} of the catalog"
     assert len(counts) >= 6, f"only {len(counts)} issuers: {sorted(counts)}"
+
+
+def test_the_independent_audit_finds_nothing():
+    """scripts/audit_gold.py, run in CI.
+
+    The audit checks a different list from this suite: it reads the published
+    artifacts as a stranger would and looks for the defect classes that have
+    actually shipped here - a stale derivation label, a quote that restates its
+    own value, a year that stops reconciling, a series whose scope drifts. Each
+    of its checks has been mutation-tested; running it here means a regression
+    fails the build rather than waiting for someone to run the script.
+    """
+    import subprocess
+    import sys
+
+    result = subprocess.run(
+        [sys.executable, str(REPO_ROOT / "scripts" / "audit_gold.py")],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0, result.stdout
