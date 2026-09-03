@@ -61,7 +61,17 @@ def test_every_target_product_is_benchmarked_or_evidence_backed_excluded():
 
     assert peaked.isdisjoint(excluded_names)
     assert series_without_peak.isdisjoint(excluded_names)
-    assert peaked | excluded_names | series_without_peak == seed_names()
+    # Comparators from other therapy areas are in the dataset but outside the
+    # catalog this claim is about, so they are subtracted before comparing.
+    # They are additive: they can never make a seed product look accounted for.
+    comparators = set(manifest.get("gold_completeness_comparators", [])) or set(
+        json.loads((GOLD / "build_report.json").read_text())["gold_completeness"][
+            "comparator_products"
+        ]
+    )
+    assert comparators.isdisjoint(seed_names())
+    accounted = (peaked | excluded_names | series_without_peak) - comparators
+    assert accounted == seed_names()
     assert manifest["target_product_count"] == len(seed_names())
     assert all(row["benchmark_eligible"] for row in peaks)
     # A series without a peak must be one that starts after launch, not an
@@ -285,11 +295,19 @@ def test_catalog_coverage_counts_every_seed_product_exactly_once():
     # Flolan supplies annual context rows while being an excluded product; it
     # must not be counted in both buckets.
     assert not set(catalog["annual_only_products"]) & set(catalog["excluded_products"])
+    # Comparators are outside the catalog and must not inflate its coverage: a
+    # product added from another therapy area is not one of the twenty covered.
+    comparators = set(catalog["comparator_products"])
+    assert comparators.isdisjoint(seed_names())
+    in_catalog = set(catalog["quarterly_series_products"]) - comparators
     assert (
-        len(catalog["quarterly_series_products"])
+        len(in_catalog)
         + len(catalog["annual_only_products"])
         + len(catalog["excluded_products"])
         == len(seed_names())
+    )
+    assert catalog["quarterly_series_pct"] == round(
+        100 * len(in_catalog) / len(seed_names()), 1
     )
 
 
@@ -889,3 +907,88 @@ def test_the_independent_audit_finds_nothing():
         text=True,
     )
     assert result.returncode == 0, result.stdout
+
+
+def test_the_catalog_spans_more_than_one_therapeutic_area():
+    """A benchmark drawn from one disease measures one disease's paperwork.
+
+    Pulmonary hypertension products share conventions - the same handful of
+    issuers, the same schedule shapes, the same slow curves. Comparators from
+    other areas break that: hepatitis C collapses as it cures its own market,
+    an antifungal holds a plateau for two decades, an angina drug loses 94% of
+    a quarter to generic entry. None of those shapes exists in the PAH catalog.
+    """
+    report = json.loads((GOLD / "build_report.json").read_text())
+    areas = set(report["gold_completeness"]["therapeutic_areas"])
+    assert len(areas) >= 4, sorted(areas)
+    assert "Pulmonary hypertension" in areas
+
+
+def test_comparators_are_additive_and_never_count_as_catalog_coverage():
+    """The completeness claim is about the seed catalog, and only that.
+
+    Before comparators existed, the catalog was defined as "whatever was
+    accounted for", which made completeness true by construction. It now reads
+    seed/example_drugs.csv, and products outside that file are reported
+    separately so they cannot flatter the coverage percentage.
+    """
+    report = json.loads((GOLD / "build_report.json").read_text())
+    completeness = report["gold_completeness"]
+    comparators = set(completeness["comparator_products"])
+
+    assert comparators, "this test is vacuous without at least one comparator"
+    assert comparators.isdisjoint(seed_names())
+    assert completeness["catalog_products"] == len(seed_names())
+    assert completeness["accounted_for"] == len(seed_names())
+    assert completeness["unaccounted_products"] == []
+    # The percentage counts catalog members only.
+    catalog = report["catalog_coverage"]
+    in_catalog = set(catalog["quarterly_series_products"]) - comparators
+    assert catalog["quarterly_series_pct"] == round(
+        100 * len(in_catalog) / len(seed_names()), 1
+    )
+
+
+def test_harvoni_is_the_collapse_the_catalog_otherwise_lacks():
+    """Twelve quarters from 3,017 to 232, and why it stops there.
+
+    Hepatitis C is curative, so the treatable population shrinks as the drug
+    works. No pulmonary hypertension series behaves like this, and a pipeline
+    that has only ever seen slow growth has never been asked to read one.
+    """
+    rows = sorted(
+        (r for r in load_jsonl("quarterly_revenue.jsonl") if r["drug_name"] == "Harvoni"),
+        key=lambda r: r["period"],
+    )
+    coverage = {r["drug_name"]: r for r in load_jsonl("series_coverage.jsonl")}["Harvoni"]
+
+    assert len(rows) == 12
+    assert rows[0]["value_reported"] == 3017.0
+    assert rows[-1]["value_reported"] == 232.0
+    assert rows[-1]["value_reported"] < rows[0]["value_reported"] / 10
+
+    # It ends because the line stops meaning Harvoni, not because sourcing did.
+    assert coverage["series_end_quarter"] == "2018Q4"
+    assert coverage["series_end_basis"] == "issuer_stopped_reporting"
+    assert "Asegua" in coverage["series_end_reason"]
+
+
+def test_every_comparator_year_reconciles_to_its_stated_full_year():
+    """The same arithmetic bar the PAH series are held to."""
+    stated = {
+        ("Ranexa", 2016): 677.0, ("Ranexa", 2017): 717.0,
+        ("Ranexa", 2018): 758.0, ("Ranexa", 2019): 216.0,
+        ("AmBisome", 2016): 356.0, ("AmBisome", 2017): 366.0,
+        ("AmBisome", 2018): 420.0, ("AmBisome", 2019): 407.0,
+        ("Harvoni", 2016): 9081.0, ("Harvoni", 2017): 4370.0,
+        ("Harvoni", 2018): 1222.0,
+    }
+    by_year: dict[tuple[str, int], list[float]] = {}
+    for row in load_jsonl("quarterly_revenue.jsonl"):
+        key = (row["drug_name"], row["calendar_year"])
+        if key in stated:
+            by_year.setdefault(key, []).append(row["value_reported"])
+    assert set(by_year) == set(stated)
+    for key, total in stated.items():
+        assert len(by_year[key]) == 4, key
+        assert sum(by_year[key]) == total, key

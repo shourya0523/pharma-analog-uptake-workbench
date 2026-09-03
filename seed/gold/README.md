@@ -73,11 +73,15 @@ own commercial span. `build_report.json` records this under
 `gold_completeness`, the builder refuses to emit an incomplete series, and
 `test_the_gold_dataset_is_complete_on_its_own_terms` pins it.
 
-    20 catalog products = 13 complete quarterly series (502 quarters, every one
-    covering its full span) + 1 annual benchmark series + 6 evidence-backed
-    exclusions
+    20 catalog products = 13 complete quarterly series + 1 annual benchmark
+    series + 6 evidence-backed exclusions
 
-Every one of those 502 quarters is also reachable by the pipeline: it is either
+    plus 3 comparator products from other therapeutic areas, which are additive
+    and never part of the completeness claim
+
+    546 quarters in total, every series covering its full declared span
+
+Every one of those 546 quarters is also reachable by the pipeline: it is either
 read from a citation, computed from an issuer's own stated total, or assembled
 from the two dated halves of a quarter split by an acquisition.
 `test_every_quarterly_row_is_reachable_by_the_pipeline` refuses a row that
@@ -85,7 +89,7 @@ takes none of those routes, because a benchmark row nothing can reproduce
 measures nothing.
 
 **This is not the percentage `scripts/eval_completeness.py` prints.** That
-script scores the *pipeline* against this dataset — how many of the 502
+script scores the *pipeline* against this dataset — how many of the 546
 quarters it can read or derive on its own. A shortfall there is a capability
 the pipeline is missing, which is exactly what a benchmark is for. Reading it
 as a hole in the dataset gets the direction of the measurement backwards.
@@ -178,7 +182,7 @@ quarters needs to know about.
 
 ### Concentration is the real limit, not product count
 
-United Therapeutics is **73% of these rows** — it publishes the longest
+United Therapeutics is **67% of these rows** — it publishes the longest
 per-product histories in the therapy area. A pipeline that read UTHR perfectly
 and every other issuer at half would still score above 85% overall, which is
 why `eval_completeness.py` prints delivery **by issuer** and why
@@ -187,16 +191,39 @@ more UTHR history is added without adding anyone else.
 
 | Issuer | Quarters | Share |
 |---|---|---|
-| United Therapeutics | 368 | 73.3% |
-| Actelion/J&J | 58 | 11.6% |
-| Johnson & Johnson | 36 | 7.2% |
-| Merck | 19 | 3.8% |
-| Gilead | 16 | 3.2% |
-| Liquidia | 5 | 1.0% |
+| United Therapeutics | 368 | 67.4% |
+| Gilead | 60 | 11.0% |
+| Actelion/J&J | 58 | 10.6% |
+| Johnson & Johnson | 36 | 6.6% |
+| Merck | 19 | 3.5% |
+| Liquidia | 5 | 0.9% |
 
 This is not closable by sourcing harder — the products left in the catalog are
-the ones with no series. It is closable only by adding issuers, which is what
-Tracleer (Actelion/J&J) and Letairis (Gilead) did: 78.3% down to 73.3%.
+the ones with no series. It is closable only by adding issuers and areas, which
+is what Tracleer, Letairis and then three Gilead comparators did: **78.3% down
+to 67.4%**.
+
+### Four therapeutic areas, and why that matters more than the count
+
+A catalog drawn from one disease measures one disease's paperwork. PAH products
+share issuers, schedule shapes and slow curves. Three comparators break that,
+and each contributes a shape the PAH catalog does not contain:
+
+| Product | Area | Window | What it does |
+|---|---|---|---|
+| **Harvoni** | Chronic hepatitis C | 2016Q1–2018Q4 | Collapses from 3,017 to 232 in twelve quarters — the drug cures its own market |
+| **AmBisome** | Invasive fungal infection | 2016Q1–2019Q4 | Flattest series here: a two-decade plateau, ~86–110 a quarter |
+| **Ranexa** | Chronic angina | 2016Q1–2019Q4 | A patent cliff: 177 a quarter to 11 in four quarters |
+
+They sit **outside** `seed/example_drugs.csv` and are reported separately in
+`comparator_products`. They cannot flatter the coverage percentage: a product
+added from another area is not one of the twenty PAH products covered.
+
+Adding them exposed a real defect. The completeness claim used to define the
+catalog as *whatever was accounted for* (`seed_products = accounted`), which
+made `complete: true` a tautology — the set could not contain anything the
+dataset had missed. It now reads the seed file. A tautology only shows itself
+when something arrives that it should have excluded.
 
 ### Products with no quarterly series
 
@@ -419,7 +446,7 @@ instead of scrolling past as familiar noise.
 
 ## Remaining gaps and why
 
-**There are none.** All 502 quarters are deliverable. This section used to list
+**There are none.** All 546 quarters are deliverable. This section used to list
 eleven that were not; what closed them is recorded here because the causes were
 different and only one was really about sourcing.
 

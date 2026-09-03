@@ -28,7 +28,8 @@ import pdfplumber
 from bs4 import BeautifulSoup
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-GOLD_DIR = REPO_ROOT / "seed" / "gold"
+SEED_DIR = REPO_ROOT / "seed"
+GOLD_DIR = SEED_DIR / "gold"
 SOURCE_DIR = GOLD_DIR / "source_manifests"
 CACHE_DIR = Path("/tmp/independent-gold-research")
 AS_OF_QUARTER = "2026Q2"
@@ -203,6 +204,86 @@ PRODUCT_METADATA = {
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
         "formulation": "tablet",
+        "route_of_administration": "oral",
+    },
+    "AmBisome": {
+        "generic_name": "amphotericin B liposome for injection",
+        "manufacturer": "Gilead",
+        "benchmark_identity": "gilead_ambisome_worldwide_reported",
+        "therapeutic_area": "Invasive fungal infection",
+        "commercial_start_quarter": "2016Q1",
+        "launch_quarter": "1997Q3",
+        "series_start_reason": (
+            "AmBisome has been on sale since 1997 and Gilead reports it "
+            "throughout; 2016Q1 is the earliest quarter sourced here. Nearly "
+            "twenty years after launch is a maturity plateau, not uptake - which "
+            "is what makes it useful: it is the flattest series in the catalog."
+        ),
+        "series_end_quarter": "2019Q4",
+        "series_end_basis": "sourcing_boundary",
+        "series_end_reason": (
+            "Gilead still reports AmBisome separately after this (FY2020 436, "
+            "FY2021 540). The series stops where sourcing stopped."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "liposomal injection",
+        "route_of_administration": "intravenous",
+    },
+    "Harvoni": {
+        "generic_name": "ledipasvir/sofosbuvir",
+        "manufacturer": "Gilead",
+        "benchmark_identity": "gilead_harvoni_worldwide_reported",
+        "therapeutic_area": "Chronic hepatitis C",
+        # The most violent curve in this dataset by a wide margin: 3,017 in one
+        # quarter down to 232 twelve quarters later, because hepatitis C is
+        # curative and the treatable population was being exhausted. Nothing in
+        # the PAH catalog behaves remotely like this, which is the point of
+        # having it.
+        "commercial_start_quarter": "2016Q1",
+        "launch_quarter": "2014Q4",
+        "series_start_reason": (
+            "Harvoni launched in 2014Q4 and had already passed its peak before "
+            "this window opens; 2016Q1 is the earliest quarter sourced here. The "
+            "series is the decline, not the rise."
+        ),
+        "series_end_quarter": "2018Q4",
+        "series_end_basis": "issuer_stopped_reporting",
+        "series_end_reason": (
+            "From 2019Q1 Gilead renames the line Ledipasvir/Sofosbuvir and folds "
+            "in the authorized generic sold by its own subsidiary Asegua. That "
+            "line is a different quantity from Harvoni-the-brand, and the two "
+            "cannot be separated from the published figures."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "tablet",
+        "route_of_administration": "oral",
+    },
+    "Ranexa": {
+        "generic_name": "ranolazine",
+        "manufacturer": "Gilead",
+        "benchmark_identity": "gilead_ranexa_us_reported",
+        "therapeutic_area": "Chronic angina",
+        "commercial_start_quarter": "2016Q1",
+        "launch_quarter": "2006Q1",
+        "series_start_reason": (
+            "Ranexa launched in 2006Q1; 2016Q1 is the earliest quarter sourced "
+            "here. Ten years after launch, and two before the cliff."
+        ),
+        "series_end_quarter": "2019Q4",
+        "series_end_basis": "sourcing_boundary",
+        "series_end_reason": (
+            "Gilead still reports Ranexa separately after this (FY2020 9, FY2021 "
+            "10). The series stops where sourcing stopped, one year after "
+            "generic entry took it from 177 a quarter to 11."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "U.S.",
+        "geography": "United States",
+        "formulation": "extended-release tablet",
         "route_of_administration": "oral",
     },
     "Letairis": {
@@ -1143,6 +1224,39 @@ def build_letairis() -> list[dict[str, Any]]:
     ]
 
 
+# Gilead reports these on the same schedule as Letairis, in the same table, so
+# one builder serves all of them. They are here for a reason unrelated to
+# pulmonary hypertension: a benchmark drawn from one therapy area measures how
+# well the pipeline reads that area's disclosure habits. Hepatitis C collapses,
+# an antifungal plateaus for two decades, an angina drug falls off a patent
+# cliff in two quarters - none of which any PAH series does.
+GILEAD_COMPARATORS = {
+    "Ranexa": "gilead_ranexa_quarterly.csv",
+    "AmBisome": "gilead_ambisome_quarterly.csv",
+    "Harvoni": "gilead_harvoni_quarterly.csv",
+}
+
+
+def build_gilead_comparators() -> list[dict[str, Any]]:
+    """Gilead products outside pulmonary hypertension, 2016-2019."""
+    rows: list[dict[str, Any]] = []
+    for drug_name, manifest in GILEAD_COMPARATORS.items():
+        rows.extend(
+            revenue_row(
+                drug_name=drug_name,
+                period=source["period"],
+                value=float(source["value_reported"]),
+                source_url=source["source_url"],
+                source_quote=source["source_quote"],
+                source_type="company_ir",
+                derivation=source["derivation"],
+                notes=source["context"],
+            )
+            for source in read_csv(SOURCE_DIR / manifest)
+        )
+    return rows
+
+
 def build_annual_rows() -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     for source in read_csv(SOURCE_DIR / "annual_product_sales.csv"):
@@ -1425,13 +1539,24 @@ def catalog_coverage(
     annual_only = sorted(
         ANNUAL_METADATA.keys() - {row["drug_name"] for row in coverage} - set(excluded)
     )
-    total = len(quarterly_products) + len(annual_only) + len(excluded)
+    # Comparators from other therapy areas are in the dataset but not in the
+    # catalog, and mixing them in would flatter the coverage percentage: three
+    # products added from outside would read as three more of the twenty
+    # covered. The catalog is the seed file, and the percentage is measured
+    # against it.
+    seed = seed_catalog()
+    comparators = sorted(
+        (set(quarterly_products) | set(annual_only)) - set(excluded) - seed
+    )
+    in_catalog = [drug for drug in quarterly_products if drug in seed]
+    total = len(seed)
     return {
         "catalog_products": total,
         "quarterly_series_products": quarterly_products,
+        "comparator_products": comparators,
         "annual_only_products": annual_only,
         "excluded_products": excluded,
-        "quarterly_series_pct": round(100 * len(quarterly_products) / total, 1),
+        "quarterly_series_pct": round(100 * len(in_catalog) / total, 1),
         "quarterly_observations": sum(row["observed_quarters"] for row in coverage),
         "bounded_series": sorted(
             row["drug_name"] for row in coverage if "series_end_reason" in row
@@ -1462,22 +1587,48 @@ def gold_completeness(
     excluded = {row["drug_name"] for row in exclusions}
     annual_only = ANNUAL_METADATA.keys() - quarterly - excluded
     accounted = quarterly | annual_only | excluded
-    seed_products = accounted  # every catalog member arrives through one of the three
+
+    # The catalog is what seed/example_drugs.csv lists, read from the file. It
+    # used to be defined as "whatever was accounted for", which made
+    # "complete" true by construction: the set could not contain anything the
+    # dataset had missed. Adding comparator products from other therapy areas
+    # is what exposed that - a tautology only shows itself when something
+    # arrives that it should have excluded.
+    seed_products = seed_catalog()
+    comparators = sorted((quarterly | annual_only) - seed_products)
+    unaccounted = sorted(seed_products - accounted)
     incomplete = sorted(row["drug_name"] for row in coverage if row["missing_quarters"])
     return {
         "catalog_products": len(seed_products),
-        "accounted_for": len(accounted),
-        "unaccounted_products": sorted(seed_products - accounted),
+        "accounted_for": len(seed_products & accounted),
+        "unaccounted_products": unaccounted,
         "complete_quarterly_series": len(quarterly),
         "quarterly_observations": sum(row["observed_quarters"] for row in coverage),
         "series_missing_quarters": incomplete,
         "annual_benchmark_series": len(annual_only),
         "annual_observations": len(annual),
         "evidence_backed_exclusions": len(excluded),
-        # True only when every catalog product is accounted for and no included
-        # series has a hole in its own span.
-        "complete": not incomplete and not (seed_products - accounted),
+        # Products outside the seed catalog entirely: comparators from other
+        # therapeutic areas. They are additive and never part of the
+        # completeness claim, which is about the pulmonary hypertension catalog.
+        "comparator_products": comparators,
+        "therapeutic_areas": sorted(
+            {
+                meta.get("therapeutic_area", "Pulmonary hypertension")
+                for name, meta in PRODUCT_METADATA.items()
+                if name in quarterly
+            }
+        ),
+        # True only when every seed-catalog product is accounted for and no
+        # included series has a hole in its own span.
+        "complete": not incomplete and not unaccounted,
     }
+
+
+def seed_catalog() -> set[str]:
+    """The products this dataset is answerable for, read from the seed file."""
+    with (SEED_DIR / "example_drugs.csv").open(newline="") as handle:
+        return {row["drug_name"] for row in csv.DictReader(handle)}
 
 
 def parse_args() -> argparse.Namespace:
@@ -1511,7 +1662,7 @@ def main() -> int:
         # free - and reusing them instead would silently ignore an edit to
         # those manifests, which is exactly the kind of staleness this flag
         # must not introduce.
-        rebuilt = build_yutrepia() + build_winrevair() + build_adempas() + build_opsumit() + build_tracleer() + build_letairis()
+        rebuilt = build_yutrepia() + build_winrevair() + build_adempas() + build_opsumit() + build_tracleer() + build_letairis() + build_gilead_comparators()
         # Remodulin is only partly manifest-backed, so it is refreshed by
         # period rather than by dropping the whole product.
         early = build_remodulin_early()
@@ -1542,6 +1693,7 @@ def main() -> int:
                 + build_opsumit()
                 + build_tracleer()
                 + build_letairis()
+                + build_gilead_comparators()
             )
             quarterly = apply_acquisition_bridges(quarterly)
         finally:
@@ -1568,6 +1720,7 @@ def main() -> int:
     write_jsonl(out_dir / "peak_sales.jsonl", peaks)
     write_jsonl(out_dir / "excluded_products.jsonl", exclusions)
     (out_dir / "unresolved_quarters.jsonl").write_text("")
+    completeness = gold_completeness(coverage, exclusions, annual)
     report = {
         "generation": PROVENANCE,
         "as_of_quarter": AS_OF_QUARTER,
@@ -1579,21 +1732,19 @@ def main() -> int:
         "not_yet_observed_peaks": sum(row["peak_status"] == "not_yet_observed" for row in peaks),
         "excluded_products": len(exclusions),
         "catalog_coverage": catalog,
-        "gold_completeness": gold_completeness(coverage, exclusions, annual),
+        "gold_completeness": completeness,
     }
     manifest = {
         "name": "independent_pah_peak_sales_gold",
         "generation": PROVENANCE,
         "as_of_quarter": AS_OF_QUARTER,
-        # A real union, not a hand-tuned offset: a product can sit in both
-        # ANNUAL_METADATA and the exclusions (four now do, supplying annual
-        # context while excluded from the quarterly catalog), and subtracting a
-        # fixed count goes stale the moment another one does.
-        "target_product_count": len(
-            set(PRODUCT_METADATA)
-            | set(ANNUAL_METADATA)
-            | {row["drug_name"] for row in exclusions}
-        ),
+        # The pulmonary hypertension catalog this dataset is answerable for,
+        # read from seed/example_drugs.csv. Comparator products from other
+        # therapy areas are counted separately and are never part of the
+        # completeness claim.
+        "target_product_count": len(seed_catalog()),
+        "comparator_product_count": len(completeness["comparator_products"]),
+        "therapeutic_areas": completeness["therapeutic_areas"],
         "quarterly_series_count": len(coverage),
         "annual_only_series_count": len(catalog["annual_only_products"]),
         "excluded_product_count": len(exclusions),

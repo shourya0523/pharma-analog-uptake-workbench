@@ -1,9 +1,9 @@
 {
   "generation": "independent_issuer_research",
   "as_of_quarter": "2026Q2",
-  "quarterly_rows": 502,
+  "quarterly_rows": 546,
   "annual_rows": 74,
-  "complete_quarterly_series": 13,
+  "complete_quarterly_series": 16,
   "quarterly_coverage_pct": 100.0,
   "observed_peaks": 6,
   "not_yet_observed_peaks": 6,
@@ -13,10 +13,13 @@
     "quarterly_series_products": [
       "Adcirca",
       "Adempas",
+      "AmBisome",
+      "Harvoni",
       "Letairis",
       "Nebulized Tyvaso",
       "Opsumit",
       "Orenitram",
+      "Ranexa",
       "Remodulin",
       "Tracleer",
       "Tyvaso",
@@ -24,6 +27,11 @@
       "Uptravi",
       "Winrevair",
       "Yutrepia"
+    ],
+    "comparator_products": [
+      "AmBisome",
+      "Harvoni",
+      "Ranexa"
     ],
     "annual_only_products": [
       "Revatio"
@@ -37,10 +45,13 @@
       "Ventavis"
     ],
     "quarterly_series_pct": 65.0,
-    "quarterly_observations": 502,
+    "quarterly_observations": 546,
     "bounded_series": [
+      "AmBisome",
+      "Harvoni",
       "Letairis",
       "Opsumit",
+      "Ranexa",
       "Tracleer"
     ]
   },
@@ -48,12 +59,23 @@
     "catalog_products": 20,
     "accounted_for": 20,
     "unaccounted_products": [],
-    "complete_quarterly_series": 13,
-    "quarterly_observations": 502,
+    "complete_quarterly_series": 16,
+    "quarterly_observations": 546,
     "series_missing_quarters": [],
     "annual_benchmark_series": 1,
     "annual_observations": 74,
     "evidence_backed_exclusions": 6,
+    "comparator_products": [
+      "AmBisome",
+      "Harvoni",
+      "Ranexa"
+    ],
+    "therapeutic_areas": [
+      "Chronic angina",
+      "Chronic hepatitis C",
+      "Invasive fungal infection",
+      "Pulmonary hypertension"
+    ],
     "complete": true
   }
 }

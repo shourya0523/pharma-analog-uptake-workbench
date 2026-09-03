@@ -3,7 +3,14 @@
   "generation": "independent_issuer_research",
   "as_of_quarter": "2026Q2",
   "target_product_count": 20,
-  "quarterly_series_count": 13,
+  "comparator_product_count": 3,
+  "therapeutic_areas": [
+    "Chronic angina",
+    "Chronic hepatitis C",
+    "Invasive fungal infection",
+    "Pulmonary hypertension"
+  ],
+  "quarterly_series_count": 16,
   "annual_only_series_count": 1,
   "excluded_product_count": 6,
   "quarterly_coverage_pct": 100.0,
