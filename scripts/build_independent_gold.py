@@ -371,6 +371,301 @@ PRODUCT_METADATA = {
         "formulation": "injection",
         "route_of_administration": "subcutaneous",
     },
+    # ---------------------------------------------------------------- J&J
+    # Eleven products from the same quarterly exhibit the Opsumit, Tracleer and
+    # Uptravi series already come from, 2018-2023. They are here to widen the
+    # benchmark in two directions at once: away from pulmonary hypertension,
+    # and away from single-brand lines. Four of these eleven are not one
+    # product - SIMPONI / SIMPONI ARIA is two presentations, ZYTIGA /
+    # abiraterone acetate includes J&J's own authorized generic, and INVEGA
+    # SUSTENNA / XEPLION / INVEGA TRINZA / TREVICTA is four brands on one
+    # line - so a pipeline that assumes an exhibit line is a molecule will
+    # read them and be wrong in a way no PAH series catches.
+    "Stelara": {
+        "generic_name": "ustekinumab",
+        "manufacturer": "Johnson & Johnson",
+        "benchmark_identity": "jnj_stelara_worldwide_reported",
+        "therapeutic_area": "Immunology",
+        "commercial_start_quarter": "2018Q1",
+        "launch_quarter": "2009Q4",
+        "series_start_reason": (
+            "Stelara launched in 2009Q4 and J&J reports it throughout; 2018Q1 "
+            "is the earliest quarter sourced here. Nine years after launch and "
+            "still compounding - a long, shallow climb from 1,061 a quarter to "
+            "2,753, which is a different shape from either a launch ramp or a "
+            "plateau."
+        ),
+        "series_end_quarter": "2023Q4",
+        "series_end_basis": "sourcing_boundary",
+        "series_end_reason": (
+            "J&J still reports Stelara separately after this; biosimilar entry "
+            "in 2025 makes the following years the interesting ones. The series "
+            "stops where sourcing stopped."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "injection",
+        "route_of_administration": "subcutaneous",
+    },
+    "Remicade": {
+        "generic_name": "infliximab",
+        "manufacturer": "Johnson & Johnson",
+        "benchmark_identity": "jnj_remicade_worldwide_reported",
+        "therapeutic_area": "Immunology",
+        "commercial_start_quarter": "2018Q1",
+        "launch_quarter": "1998Q3",
+        "series_start_reason": (
+            "Remicade launched in 1998 and peaked around 2016; 2018Q1 is the "
+            "earliest quarter sourced here, by which point biosimilar infliximab "
+            "was already taking it down. The series is a twenty-year-old brand "
+            "eroding, 1,389 a quarter to 429 - the slow counterpart to Harvoni's "
+            "collapse."
+        ),
+        "series_end_quarter": "2023Q4",
+        "series_end_basis": "sourcing_boundary",
+        "series_end_reason": (
+            "J&J still reports Remicade separately after this. The series stops "
+            "where sourcing stopped."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "injection",
+        "route_of_administration": "intravenous",
+    },
+    "Simponi": {
+        "generic_name": "golimumab",
+        "manufacturer": "Johnson & Johnson",
+        "benchmark_identity": "jnj_simponi_worldwide_reported",
+        "therapeutic_area": "Immunology",
+        "commercial_start_quarter": "2018Q1",
+        "launch_quarter": "2009Q2",
+        "series_start_reason": (
+            "J&J publishes this as SIMPONI / SIMPONI ARIA, one line covering the "
+            "subcutaneous and intravenous presentations together; there is no "
+            "published split. The recorded figure is the combined line, which is "
+            "what the exhibit states. 2018Q1 is the earliest quarter sourced."
+        ),
+        "series_end_quarter": "2023Q4",
+        "series_end_basis": "sourcing_boundary",
+        "series_end_reason": (
+            "J&J still reports the Simponi line separately after this. The "
+            "series stops where sourcing stopped."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "injection",
+        "route_of_administration": "subcutaneous or intravenous",
+    },
+    "Tremfya": {
+        "generic_name": "guselkumab",
+        "manufacturer": "Johnson & Johnson",
+        "benchmark_identity": "jnj_tremfya_worldwide_reported",
+        "therapeutic_area": "Immunology",
+        "commercial_start_quarter": "2019Q1",
+        "launch_quarter": "2017Q3",
+        "series_start_reason": (
+            "Tremfya launched in 2017Q3 but J&J folded it into Other Immunology "
+            "until the 2019 exhibits broke it out. 2019Q1 is the first quarter "
+            "with a stated line of its own, so the series opens five quarters "
+            "after launch and misses the first of the ramp."
+        ),
+        "series_end_quarter": "2023Q4",
+        "series_end_basis": "sourcing_boundary",
+        "series_end_reason": (
+            "J&J still reports Tremfya separately after this, and it keeps "
+            "growing. The series stops where sourcing stopped."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "injection",
+        "route_of_administration": "subcutaneous",
+    },
+    "Darzalex": {
+        "generic_name": "daratumumab",
+        "manufacturer": "Johnson & Johnson",
+        "benchmark_identity": "jnj_darzalex_worldwide_reported",
+        "therapeutic_area": "Oncology",
+        "commercial_start_quarter": "2018Q1",
+        "launch_quarter": "2015Q4",
+        "series_start_reason": (
+            "Darzalex launched in 2015Q4; 2018Q1 is the earliest quarter sourced "
+            "here. The steepest sustained climb in the catalog - 432 a quarter "
+            "to 2,550 over six years, without the plateau every PAH series "
+            "eventually reaches."
+        ),
+        "series_end_quarter": "2023Q4",
+        "series_end_basis": "sourcing_boundary",
+        "series_end_reason": (
+            "J&J still reports Darzalex separately after this and it is still "
+            "growing. The series stops where sourcing stopped."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "injection",
+        "route_of_administration": "intravenous or subcutaneous",
+    },
+    "Erleada": {
+        "generic_name": "apalutamide",
+        "manufacturer": "Johnson & Johnson",
+        "benchmark_identity": "jnj_erleada_worldwide_reported",
+        "therapeutic_area": "Oncology",
+        "commercial_start_quarter": "2019Q1",
+        "launch_quarter": "2018Q1",
+        "series_start_reason": (
+            "Erleada was approved in February 2018 but J&J carried it inside "
+            "Other Oncology for its first year; the 1Q2020 exhibit's "
+            "supplemental schedule restates 2018 as a single full-year figure "
+            "with no quarterly split. 2019Q1 is the first quarter stated on its "
+            "own, so the series starts one year after launch."
+        ),
+        "series_end_quarter": "2023Q4",
+        "series_end_basis": "sourcing_boundary",
+        "series_end_reason": (
+            "J&J still reports Erleada separately after this. The series stops "
+            "where sourcing stopped."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "tablet",
+        "route_of_administration": "oral",
+    },
+    "Imbruvica": {
+        "generic_name": "ibrutinib",
+        "manufacturer": "Johnson & Johnson",
+        "benchmark_identity": "jnj_imbruvica_worldwide_reported",
+        "therapeutic_area": "Oncology",
+        "commercial_start_quarter": "2018Q1",
+        "launch_quarter": "2013Q4",
+        "series_start_reason": (
+            "Imbruvica launched in 2013Q4; 2018Q1 is the earliest quarter "
+            "sourced here. J&J reports only its own share of a collaboration "
+            "with AbbVie, so this line is not the drug's worldwide sales - it is "
+            "J&J's half of them, which is exactly the distinction a pipeline "
+            "that reads exhibit lines as products will lose."
+        ),
+        "series_end_quarter": "2023Q4",
+        "series_end_basis": "sourcing_boundary",
+        "series_end_reason": (
+            "J&J still reports Imbruvica separately after this. The series stops "
+            "where sourcing stopped, four years into a decline."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "capsule or tablet",
+        "route_of_administration": "oral",
+    },
+    "Zytiga": {
+        "generic_name": "abiraterone acetate",
+        "manufacturer": "Johnson & Johnson",
+        "benchmark_identity": "jnj_zytiga_worldwide_reported",
+        "therapeutic_area": "Oncology",
+        "commercial_start_quarter": "2018Q1",
+        "launch_quarter": "2011Q2",
+        "series_start_reason": (
+            "J&J publishes this line as ZYTIGA / abiraterone acetate, brand and "
+            "its own authorized generic together. 2018Q1 opens the series at the "
+            "top of the curve: US sales fall from 845 a quarter to 9 as generic "
+            "abiraterone arrives, while international holds up for three more "
+            "years - one exhibit line containing two completely different "
+            "stories."
+        ),
+        "series_end_quarter": "2023Q4",
+        "series_end_basis": "sourcing_boundary",
+        "series_end_reason": (
+            "J&J still reports the Zytiga line separately after this. The series "
+            "stops where sourcing stopped."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "tablet",
+        "route_of_administration": "oral",
+    },
+    "Velcade": {
+        "generic_name": "bortezomib",
+        "manufacturer": "Johnson & Johnson",
+        "benchmark_identity": "jnj_velcade_worldwide_reported",
+        "therapeutic_area": "Oncology",
+        "commercial_start_quarter": "2018Q1",
+        "launch_quarter": "2003Q2",
+        "series_start_reason": (
+            "J&J holds ex-US rights to bortezomib, so its US column is a dash in "
+            "every quarter and the WW line equals the international line. 2018Q1 "
+            "is the earliest quarter sourced."
+        ),
+        "series_end_quarter": "2020Q4",
+        "series_end_basis": "issuer_stopped_reporting",
+        "series_end_reason": (
+            "The 1Q2021 exhibit's supplemental schedule states that Other "
+            "Oncology 'is inclusive of VELCADE, which was previously disclosed "
+            "separately'. From 2021Q1 there is no Velcade line to read - the "
+            "series ends because the issuer stopped reporting it, not because "
+            "sourcing ran out. The only series here that ends that way."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "injection",
+        "route_of_administration": "intravenous or subcutaneous",
+    },
+    "Xarelto": {
+        "generic_name": "rivaroxaban",
+        "manufacturer": "Johnson & Johnson",
+        "benchmark_identity": "jnj_xarelto_worldwide_reported",
+        "therapeutic_area": "Cardiovascular",
+        "commercial_start_quarter": "2018Q1",
+        "launch_quarter": "2011Q3",
+        "series_start_reason": (
+            "Bayer holds rivaroxaban outside the United States, so J&J's "
+            "international column is a dash and its worldwide figure equals its "
+            "US figure in all 24 quarters. The line is labelled worldwide and is "
+            "worldwide for J&J; it is not worldwide sales of the drug. 2018Q1 is "
+            "the earliest quarter sourced."
+        ),
+        "series_end_quarter": "2023Q4",
+        "series_end_basis": "sourcing_boundary",
+        "series_end_reason": (
+            "J&J still reports Xarelto separately after this. The series stops "
+            "where sourcing stopped."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "tablet",
+        "route_of_administration": "oral",
+    },
+    "Invega Sustenna": {
+        "generic_name": "paliperidone palmitate",
+        "manufacturer": "Johnson & Johnson",
+        "benchmark_identity": "jnj_invega_sustenna_worldwide_reported",
+        "therapeutic_area": "Neuroscience",
+        "commercial_start_quarter": "2018Q1",
+        "launch_quarter": "2009Q3",
+        "series_start_reason": (
+            "J&J publishes one line for four brands - INVEGA SUSTENNA, XEPLION, "
+            "INVEGA TRINZA and TREVICTA - which are the one-month and three-month "
+            "long-acting injectables under their US and ex-US names. No split is "
+            "published. 2018Q1 is the earliest quarter sourced."
+        ),
+        "series_end_quarter": "2023Q4",
+        "series_end_basis": "sourcing_boundary",
+        "series_end_reason": (
+            "J&J still reports the Invega Sustenna line separately after this. "
+            "The series stops where sourcing stopped."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "extended-release injectable suspension",
+        "route_of_administration": "intramuscular",
+    },
 }
 
 ANNUAL_METADATA = {
@@ -1257,6 +1552,46 @@ def build_gilead_comparators() -> list[dict[str, Any]]:
     return rows
 
 
+# The same eleven exhibit lines the J&J metadata block describes, one manifest
+# each. They read from the identical quarterly exhibit the Opsumit and Tracleer
+# series already use, which is the point: if the pipeline can read OPSUMIT off
+# a page it should be able to read DARZALEX off the same page, and any product
+# it cannot read is a fact about the pipeline rather than about the document.
+JNJ_COMPARATORS = {
+    "Stelara": "jnj_stelara_quarterly.csv",
+    "Remicade": "jnj_remicade_quarterly.csv",
+    "Simponi": "jnj_simponi_quarterly.csv",
+    "Tremfya": "jnj_tremfya_quarterly.csv",
+    "Darzalex": "jnj_darzalex_quarterly.csv",
+    "Erleada": "jnj_erleada_quarterly.csv",
+    "Imbruvica": "jnj_imbruvica_quarterly.csv",
+    "Zytiga": "jnj_zytiga_quarterly.csv",
+    "Velcade": "jnj_velcade_quarterly.csv",
+    "Xarelto": "jnj_xarelto_quarterly.csv",
+    "Invega Sustenna": "jnj_invega_sustenna_quarterly.csv",
+}
+
+
+def build_jnj_comparators() -> list[dict[str, Any]]:
+    """J&J products outside pulmonary hypertension, 2018-2023."""
+    rows: list[dict[str, Any]] = []
+    for drug_name, manifest in JNJ_COMPARATORS.items():
+        rows.extend(
+            revenue_row(
+                drug_name=drug_name,
+                period=source["period"],
+                value=float(source["value_reported"]),
+                source_url=source["source_url"],
+                source_quote=source["source_quote"],
+                source_type="company_ir",
+                derivation=source["derivation"],
+                notes=source["context"],
+            )
+            for source in read_csv(SOURCE_DIR / manifest)
+        )
+    return rows
+
+
 def build_annual_rows() -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     for source in read_csv(SOURCE_DIR / "annual_product_sales.csv"):
@@ -1662,7 +1997,7 @@ def main() -> int:
         # free - and reusing them instead would silently ignore an edit to
         # those manifests, which is exactly the kind of staleness this flag
         # must not introduce.
-        rebuilt = build_yutrepia() + build_winrevair() + build_adempas() + build_opsumit() + build_tracleer() + build_letairis() + build_gilead_comparators()
+        rebuilt = build_yutrepia() + build_winrevair() + build_adempas() + build_opsumit() + build_tracleer() + build_letairis() + build_gilead_comparators() + build_jnj_comparators()
         # Remodulin is only partly manifest-backed, so it is refreshed by
         # period rather than by dropping the whole product.
         early = build_remodulin_early()
@@ -1694,6 +2029,7 @@ def main() -> int:
                 + build_tracleer()
                 + build_letairis()
                 + build_gilead_comparators()
+                + build_jnj_comparators()
             )
             quarterly = apply_acquisition_bridges(quarterly)
         finally:
