@@ -178,52 +178,114 @@ quarterly schedule. The disagreement is left visible rather than reconciled,
 because it is a real property of issuer disclosure that any consumer deriving
 quarters needs to know about.
 
-## Issuer concentration, and why the catalog stops where it does
+## Concentration, and what "balanced" is held to mean
 
-### Concentration is the real limit, not product count
+### The numbers travel with the dataset
 
-United Therapeutics is **67% of these rows** — it publishes the longest
-per-product histories in the therapy area. A pipeline that read UTHR perfectly
-and every other issuer at half would still score above 85% overall, which is
-why `eval_completeness.py` prints delivery **by issuer** and why
-`test_no_single_issuer_supplies_more_than_four_fifths_of_the_catalog` fails if
-more UTHR history is added without adding anyone else.
+`build_report.json` carries a `concentration` block and `eval_completeness.py`
+prints it beside the delivery table, because a delivery rate is only as
+meaningful as the spread of rows it averages over. 97.8% across one issuer
+would say almost nothing.
+
+| Measure | Value | Target | |
+|---|---|---|---|
+| Largest issuer | United Therapeutics, 40.0% | < 40% | not met |
+| Largest product | Remodulin, 10.7% | < 10% | not met |
+| Largest therapeutic area | Pulmonary hypertension, 54.6% | < 60% | met |
+| Therapeutic areas | 9 | >= 6 | met |
+
+Two of four. The report says `balanced: false` and marks the two rows that are
+over, which is the honest reading and is better recorded than remembered.
+
+### Where the rows come from
 
 | Issuer | Quarters | Share |
 |---|---|---|
-| United Therapeutics | 368 | 67.4% |
-| Gilead | 60 | 11.0% |
-| Actelion/J&J | 58 | 10.6% |
-| Johnson & Johnson | 36 | 6.6% |
-| Merck | 19 | 3.5% |
-| Liquidia | 5 | 0.9% |
+| United Therapeutics | 368 | 40.0% |
+| Johnson & Johnson | 280 | 30.5% |
+| Gilead | 189 | 20.6% |
+| Actelion/J&J | 58 | 6.3% |
+| Merck | 19 | 2.1% |
+| Liquidia | 5 | 0.5% |
 
-This is not closable by sourcing harder — the products left in the catalog are
-the ones with no series. It is closable only by adding issuers and areas, which
-is what Tracleer, Letairis and then three Gilead comparators did: **78.3% down
-to 67.4%**.
+Single-issuer concentration has come down 78.3% → 67.4% → 40.0%. None of that
+was closable by sourcing harder inside pulmonary hypertension: the PAH products
+left in the catalog are the ones with no series at all. It was closable only by
+adding issuers and areas.
 
-### Four therapeutic areas, and why that matters more than the count
+### Nine therapeutic areas, and the shapes they contribute
 
 A catalog drawn from one disease measures one disease's paperwork. PAH products
-share issuers, schedule shapes and slow curves. Three comparators break that,
-and each contributes a shape the PAH catalog does not contain:
+share issuers, schedule shapes and slow curves. Each comparator group breaks
+that in a specific way:
 
 | Product | Area | Window | What it does |
 |---|---|---|---|
 | **Harvoni** | Chronic hepatitis C | 2016Q1–2018Q4 | Collapses from 3,017 to 232 in twelve quarters — the drug cures its own market |
+| **Epclusa** | Chronic hepatitis C | 2018Q1–2018Q4 | Four quarters, then the line stops being the brand |
 | **AmBisome** | Invasive fungal infection | 2016Q1–2019Q4 | Flattest series here: a two-decade plateau, ~86–110 a quarter |
 | **Ranexa** | Chronic angina | 2016Q1–2019Q4 | A patent cliff: 177 a quarter to 11 in four quarters |
+| **Biktarvy** | HIV | 2018Q2–2021Q4 | A launch ramp: 185 a quarter to 2,530 |
+| **Genvoya** | HIV | 2018Q1–2021Q4 | The mirror of Biktarvy — declines because its own maker's newer drug takes its patients, with no generic in it |
+| **Truvada** | HIV | 2018Q1–2021Q4 | Eleven flat quarters, then loss of exclusivity: 509 → 146 → 135 → 108 → 67 |
+| **Descovy**, **Odefsey** | HIV | 2018Q1–2021 | Nearly flat across sixteen quarters, next to two that are not |
+| **Stribild**, **Complera**, **Atripla** | HIV | 2018Q1–2021 | The small end of the range, deliberately: a benchmark of only large numbers tests only large numbers |
+| **Darzalex** | Oncology | 2018Q1–2023Q4 | The steepest sustained climb here: 432 → 2,550 over six years, no plateau |
+| **Zytiga** | Oncology | 2018Q1–2023Q4 | One line, two stories: US falls 845 → 9 on generic entry while international holds for three more years |
+| **Imbruvica** | Oncology | 2018Q1–2023Q4 | J&J's share of a collaboration, not the drug's worldwide sales |
+| **Velcade** | Oncology | 2018Q1–2020Q4 | Ends because the issuer stopped reporting it, not because sourcing ran out |
+| **Erleada**, **Tremfya** | Oncology, Immunology | 2019Q1–2023Q4 | Launches whose first year the issuer kept inside an "Other" line |
+| **Stelara** | Immunology | 2018Q1–2023Q4 | A nine-years-post-launch climb, 1,061 → 2,753 — neither ramp nor plateau |
+| **Remicade** | Immunology | 2018Q1–2023Q4 | Twenty-year brand eroding to biosimilars: the slow counterpart to Harvoni |
+| **Simponi** | Immunology | 2018Q1–2023Q4 | Two presentations on one line, no published split |
+| **Xarelto** | Cardiovascular | 2018Q1–2023Q4 | Labelled worldwide and *is* worldwide for J&J — Bayer holds ex-US, so the international column is a dash in all 24 quarters |
+| **Invega Sustenna** | Neuroscience | 2018Q1–2023Q4 | Four brands on one line |
 
-They sit **outside** `seed/example_drugs.csv` and are reported separately in
-`comparator_products`. They cannot flatter the coverage percentage: a product
-added from another area is not one of the twenty PAH products covered.
+Comparators sit **outside** `seed/example_drugs.csv` and are reported separately
+in `comparator_products`. They cannot flatter the coverage percentage: a product
+from another area is not one of the twenty PAH products covered.
 
 Adding them exposed a real defect. The completeness claim used to define the
 catalog as *whatever was accounted for* (`seed_products = accounted`), which
 made `complete: true` a tautology — the set could not contain anything the
 dataset had missed. It now reads the seed file. A tautology only shows itself
 when something arrives that it should have excluded.
+
+### Four exhibit lines that are not products
+
+The point of the J&J block is not volume. Four of its eleven lines are things a
+pipeline that treats an exhibit row as a molecule will read and be quietly
+wrong about:
+
+- `SIMPONI / SIMPONI ARIA` — subcutaneous and intravenous presentations, one line
+- `ZYTIGA / abiraterone acetate` — brand plus J&J's own authorized generic
+- `INVEGA SUSTENNA / XEPLION / INVEGA TRINZA / TREVICTA` — four brands
+- `Imbruvica` — J&J's share of an AbbVie collaboration, not worldwide sales
+
+`Complera / Eviplera` on the Gilead side is the opposite trap: one product under
+two regional names, which a reader might split into two.
+
+### Two provenance notes worth knowing
+
+**Quarters read from another release's prior-year column.** Gilead's pages for
+the second and third quarter 2020 releases no longer resolve. Both quarters are
+read instead off the prior-year columns of the 2021 releases. Each such quote
+carries the row *as that document prints it*, plus a legend naming which column
+is cited — never the row for the quarter being recorded. All sixteen are
+confirmed twice over, against the 2020 six-month and nine-month columns of the
+same releases. The same form covers Zytiga's 2022Q4 and three other quarters
+whose own release did not state the line.
+
+These 22 rows are why delivery is 899/919 rather than ~100%: the extractor does
+not read a column legend. That is a gap in the pipeline, not a hole in the
+oracle, and `eval_completeness.py` reports it as such rather than averaging it
+away.
+
+**Series that start late on purpose.** Biktarvy was approved 7 February 2018 and
+sold only in the United States that quarter, so Gilead gives it a single US line
+and no worldwide total. Recording a US line as worldwide would be an inference,
+so its series starts 2018Q2. Tremfya and Erleada start 2019Q1 for the same kind
+of reason: J&J carried both inside an "Other" line for their first year.
 
 ### Products with no quarterly series
 

@@ -869,14 +869,15 @@ def test_a_series_says_whether_its_end_is_the_issuer_or_the_sourcing():
     }
 
 
-def test_no_single_issuer_supplies_more_than_four_fifths_of_the_catalog():
+def test_no_single_issuer_dominates_the_catalog():
     """A concentration ceiling, so the benchmark cannot quietly become one company.
 
-    This is deliberately a loose bound rather than a target. United Therapeutics
-    is around three quarters of these rows because it publishes the longest
-    per-product histories in the therapy area, and that is not fixable by
-    sourcing harder - only by adding issuers. The test exists so that adding
-    more UTHR history without adding anyone else fails loudly.
+    This was 80% when United Therapeutics was three quarters of these rows,
+    which was a bound loose enough to be nearly free. Two comparator blocks
+    later - eleven J&J products and nine Gilead antivirals - UTHR is at 40.0%,
+    and the ceiling is set just above that so the gain cannot be given back.
+    It is a ratchet, not the target: `concentration` in build_report.json
+    carries the target, which is stricter and not yet met.
     """
     rows = load_jsonl("quarterly_revenue.jsonl")
     counts: dict[str, int] = {}
@@ -884,8 +885,40 @@ def test_no_single_issuer_supplies_more_than_four_fifths_of_the_catalog():
         counts[row["manufacturer"]] = counts.get(row["manufacturer"], 0) + 1
     top_issuer, top_count = max(counts.items(), key=lambda kv: kv[1])
     share = top_count / len(rows)
-    assert share < 0.80, f"{top_issuer} is {share:.1%} of the catalog"
+    assert share < 0.45, f"{top_issuer} is {share:.1%} of the catalog"
     assert len(counts) >= 6, f"only {len(counts)} issuers: {sorted(counts)}"
+
+
+def test_the_concentration_report_describes_the_rows_it_claims_to():
+    """The balance metrics have to be computed from the dataset, not asserted.
+
+    A report that says "largest issuer 40.0%" while the rows say something else
+    is worse than no report: it is a number people will quote. This recomputes
+    all three shares from quarterly_revenue.jsonl and requires the published
+    block to agree, and requires the block's own pass/fail flags to follow from
+    its own numbers rather than being written down separately.
+    """
+    rows = load_jsonl("quarterly_revenue.jsonl")
+    report = json.loads((GOLD / "build_report.json").read_text())
+    balance = report["concentration"]
+    assert balance["quarters"] == len(rows)
+
+    for field, key in (
+        ("manufacturer", "largest_issuer"),
+        ("drug_name", "largest_product"),
+        ("therapeutic_area", "largest_therapeutic_area"),
+    ):
+        counts: dict[str, int] = {}
+        for row in rows:
+            counts[row[field]] = counts.get(row[field], 0) + 1
+        name, count = max(counts.items(), key=lambda kv: kv[1])
+        assert balance[key] == name, key
+        assert balance[f"{key}_share"] == round(100 * count / len(rows), 1), key
+
+    areas = {row["therapeutic_area"] for row in rows}
+    assert balance["therapeutic_area_count"] == len(areas)
+    flags = [value for key, value in balance.items() if key.endswith("_within_target")]
+    assert balance["balanced"] == all(flags)
 
 
 def test_the_independent_audit_finds_nothing():
