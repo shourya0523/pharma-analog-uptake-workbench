@@ -232,6 +232,76 @@ def stated_full_year_from_q4_quote(row: dict) -> float | None:
     return year_to_date * scale
 
 
+# Periods a source URL announces about itself. Issuers name the quarter in the
+# path or the filename, which makes a citation checkable against the row it is
+# attached to without opening it.
+_ORDINALS = {"first": 1, "second": 2, "third": 3, "fourth": 4}
+_URL_PERIOD_PATTERNS = (
+    # J&J: .../doc_financials/2019/q2/Sales-of-Key-Products-...
+    re.compile(r"/doc_financials/(?P<year>\d{4})/q(?P<quarter>[1-4])/"),
+    # Gilead: .../2020/gilead-sciences-announces-fourth-quarter-and-full-year-2019-...
+    re.compile(
+        r"announces-(?P<ordinal>first|second|third|fourth)-quarter-and-full-year-"
+        r"(?P<year>\d{4})-"
+    ),
+    # Gilead: .../2019/gilead-sciences-announces-second-quarter-2019-financial-results
+    re.compile(
+        r"announces-(?P<ordinal>first|second|third|fourth)-quarter-(?P<year>\d{4})-"
+    ),
+    # Merck: .../4Q25-Merck-Other-Financial-Disclosures.pdf
+    re.compile(r"/(?P<quarter>[1-4])Q(?P<yy>\d{2})-"),
+)
+
+
+def period_a_url_announces(url: str) -> str | None:
+    """The quarter a source URL says it covers, or None if it does not say."""
+    for pattern in _URL_PERIOD_PATTERNS:
+        match = pattern.search(url)
+        if not match:
+            continue
+        parts = match.groupdict()
+        quarter = (
+            int(parts["quarter"])
+            if parts.get("quarter")
+            else _ORDINALS[parts["ordinal"]]
+        )
+        year = int(parts["year"]) if parts.get("year") else 2000 + int(parts["yy"])
+        return f"{year}Q{quarter}"
+    return None
+
+
+def audit_citation_period(rows: list[dict]) -> list[str]:
+    """A directly-read row has to cite the document for its own quarter.
+
+    Only for ``direct_reported``: a figure taken from a later release's
+    prior-year column cites that later release on purpose, and a derived figure
+    cites whichever document states the total it was derived from. Both say so
+    in their derivation, and both are excluded here rather than explained away.
+
+    This exists because manifests are generated from a period-to-URL mapping.
+    A mistake there is not a typo in one row - it is the same mistake in every
+    row of a series, which is exactly the kind of error that looks like data.
+    """
+    out: list[str] = []
+    checked = 0
+    for row in rows:
+        if row.get("derivation") != "direct_reported":
+            continue
+        announced = period_a_url_announces(row.get("source_url") or "")
+        if announced is None:
+            continue
+        checked += 1
+        if announced != row["period"]:
+            finding(
+                out,
+                f"{row['drug_name']} {row['period']}: cited document announces "
+                f"{announced}",
+            )
+    if not checked:
+        finding(out, "no citation announced a period; this check is doing nothing")
+    return out
+
+
 _NUMBER = re.compile(r"\d[\d,]*(?:\.\d+)?")
 
 
@@ -428,6 +498,7 @@ def main() -> int:
         ("quotes carry corroborating evidence", audit_self_referential_quotes(quarterly)),
         ("precision claims are supported", audit_precision(quarterly)),
         ("values appear in their own citations", audit_value_appears_in_its_quote(quarterly + annual)),
+        ("citations cover the quarter they are cited for", audit_citation_period(quarterly)),
         ("complete years reconcile to published totals", audit_year_reconciliation(quarterly, annual)),
         ("series attributes are stable", audit_series_consistency(quarterly)),
         ("manifests round-trip into gold", audit_manifest_round_trip(quarterly)),
