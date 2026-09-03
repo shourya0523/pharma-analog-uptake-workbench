@@ -469,10 +469,14 @@ PRODUCT_METADATA = {
             "series is a slow decline that ends in a cliff."
         ),
         "series_end_quarter": "2021Q4",
-        "series_end_basis": "sourcing_boundary",
+        "series_end_basis": "issuer_stopped_reporting",
         "series_end_reason": (
-            "Gilead still reports Atripla separately after this. The series "
-            "stops where sourcing stopped."
+            "Atripla has no line of its own from 2022. Gilead's 10-Q for the "
+            "quarter ended 31 March 2022 lists it nowhere in the revenue "
+            "disaggregation table and footnotes Other HIV as 'Includes Atripla, "
+            "Emtriva and Tybost'; the same footnote a year earlier read "
+            "'Includes Emtriva and Tybost'. The series ends because the issuer "
+            "stopped reporting it, not because sourcing ran out."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
