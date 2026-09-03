@@ -1603,6 +1603,10 @@ def main() -> int:
         "coverage_file": "series_coverage.jsonl",
         "peak_sales_file": "peak_sales.jsonl",
         "excluded_products_file": "excluded_products.jsonl",
+        # Not revenue rows: inputs with no single right answer, and the verdict
+        # each should reach. Kept in gold because "what the pipeline must refuse
+        # to answer" is part of the benchmark, not a test fixture.
+        "adjudication_cases_file": "adjudication_cases.jsonl",
         "source_manifest_directory": "source_manifests",
         "gold_builder": "scripts/build_independent_gold.py",
         "pipeline_code_allowed_in_builder": False,

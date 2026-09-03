@@ -349,6 +349,62 @@ alternates amount, period, amount, period with no "respectively" to state the
 pairing. Both are now supported, and both are guarded against over-reading —
 see `test_prose_does_not_treat_every_bare_number_as_money`.
 
+## When the pipeline should refuse to answer
+
+`adjudication_cases.jsonl` is the fourth gold artifact and the only one that is
+not revenue rows. It holds inputs that have **no single right answer**, and the
+verdict the pipeline must reach on each. Run it with:
+
+```bash
+cd backend && uv run python ../scripts/eval_adjudication.py
+```
+
+Three verdicts, and the distinction between the last two is the whole point:
+
+- **`resolved`** — one defensible answer. Almost everything.
+- **`needs_review`** — more than one defensible answer, and choosing is a
+  judgement a person should make. J&J's FY2024 Opsumit is **2,184** on the
+  standalone line and **2,225** on the combined OPSUMIT/OPSYNVI line it was
+  restated onto. Both are the issuer's own figures. Which belongs in a series
+  depends on whether the series tracks the molecule or the reported line, and a
+  pipeline that silently picks one has answered a question nobody asked.
+- **`impossible`** — no value is correct and none will become correct by trying
+  harder. A worldwide Adempas figure asked of issuers that report only their own
+  territories is impossible. So is a quarter whose two halves both include the
+  acquisition closing day: the overlap has been counted twice and no arithmetic
+  removes it.
+
+### The half that matters more
+
+A pipeline that asks for review whenever it is unsure is not careful, it is
+noise — the flags stop being read. So the eval reports, alongside the fixtures,
+**how many real gold rows trip any verdict. That number must be zero**, and
+`test_no_real_series_trips_the_adjudicator` enforces it.
+
+This is why the thresholds are deliberately loose. Issuers round each published
+period independently, so a stated nine-month figure and the sum of its own
+quarters differ by about a unit routinely — Merck's 2025 Adempas does. A check
+tight enough to call that a contradiction would fire on most healthy years here.
+
+### Fixtures are evidence, not imagination
+
+Nine of the thirteen are marked **`observed`**: they happened, in the documents
+this dataset is built from, and several were found by this repo's own evals —
+the Opsumit 2021Q3 scope collision came out of `eval_extraction.py`, and the
+Remodulin 2002 case is the state this dataset was actually in until the missing
+2002Q1 row was found. Four are **`constructed`**: real figures mutated to reach
+a branch healthy data never reaches. The label is in the file so nobody mistakes
+a synthetic case for evidence that issuers routinely publish contradictions.
+
+The guard earned its place on its first run. It flagged Tracleer 2016 as
+`parts_exceed_total` — quarters summing to 1,035 against a stated 1,020. That
+was the checker's bug, not the data's: the annual row is Actelion's **CHF**
+1,020 and the quarters are J&J's **dollar** conversion of the same year. In
+normalised USD it is 1,035 against 1,033.06, which resolves. Comparing
+as-reported figures across two currencies is exactly the category error the
+adjudicator exists to catch, and it caught it in its own harness first. That
+near-miss is now fixture `tracleer-2016-two-currency-paths`.
+
 ## Known difference: Adempas 2025Q4 is 83 by Merck's arithmetic and 82 by ours
 
 Merck states nine-month 2025 Adempas sales of **229** while its own quarters

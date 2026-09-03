@@ -12,6 +12,7 @@
   "coverage_file": "series_coverage.jsonl",
   "peak_sales_file": "peak_sales.jsonl",
   "excluded_products_file": "excluded_products.jsonl",
+  "adjudication_cases_file": "adjudication_cases.jsonl",
   "source_manifest_directory": "source_manifests",
   "gold_builder": "scripts/build_independent_gold.py",
   "pipeline_code_allowed_in_builder": false

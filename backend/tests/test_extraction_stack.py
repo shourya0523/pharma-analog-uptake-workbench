@@ -554,3 +554,102 @@ def test_prose_leaves_a_sentence_that_does_not_strictly_alternate():
         "three months ended June 30, 2002."
     )
     assert read_prose(sentence, product="Remodulin") == []
+
+
+def _adjudication_cases():
+    import json
+    from pathlib import Path
+
+    repo_root = Path(__file__).resolve().parents[2]
+    path = repo_root / "seed" / "gold" / "adjudication_cases.jsonl"
+    return [json.loads(line) for line in path.read_text().splitlines() if line.strip()]
+
+
+def test_edge_case_fixtures_reach_their_expected_verdicts():
+    """Every fixture, replayed through the adjudicator."""
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
+    from eval_adjudication import run_case
+
+    for case in _adjudication_cases():
+        status, code = run_case(case)
+        assert (status, code) == (
+            case["expect"]["status"],
+            case["expect"]["code"],
+        ), case["case_id"]
+
+
+def test_no_real_series_trips_the_adjudicator():
+    """The false-positive guard, and the more important half of this feature.
+
+    A pipeline that asks for review whenever it is unsure is not careful, it is
+    noise, and the flags stop being read. Every complete year and every bridged
+    quarter in the real catalog has to resolve cleanly; if a change to the
+    thresholds starts flagging healthy data, this fails and the thresholds are
+    what is wrong.
+    """
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
+    from eval_adjudication import real_rows_that_trip
+
+    tripped = real_rows_that_trip()
+    assert tripped == [], f"adjudicator flagged real data: {tripped}"
+
+
+def test_most_edge_cases_are_things_that_actually_happened():
+    """Fixtures should be evidence, not imagination.
+
+    A suite of invented contradictions would prove only that the code has
+    branches. The majority here are situations observed in the documents this
+    dataset is built from - several found by this repo's own evals - and the
+    rest are labelled as constructed so nobody mistakes them for evidence that
+    issuers routinely publish nonsense.
+    """
+    cases = _adjudication_cases()
+    provenance = {case["provenance"] for case in cases}
+    assert provenance <= {"observed", "constructed"}
+    observed = [case for case in cases if case["provenance"] == "observed"]
+    assert len(observed) > len(cases) / 2
+    for case in cases:
+        assert len(case["why"]) > 80, case["case_id"]
+
+
+def test_the_verdict_vocabulary_is_closed():
+    """Three statuses, and each fixture's code is reachable from the module."""
+    from app.extraction import adjudicate
+
+    assert {adjudicate.RESOLVED, adjudicate.NEEDS_REVIEW, adjudicate.IMPOSSIBLE} == {
+        "resolved",
+        "needs_review",
+        "impossible",
+    }
+    for case in _adjudication_cases():
+        assert case["expect"]["status"] in {"resolved", "needs_review", "impossible"}
+
+
+def test_rounding_between_a_total_and_its_own_parts_is_never_a_contradiction():
+    """The single most important non-firing case.
+
+    Issuers round each published period independently, so a stated total and
+    the sum of its parts differ by about a unit routinely. If that were
+    reported as a defect the warning would fire on most healthy years in this
+    dataset and be worthless.
+    """
+    from app.extraction.adjudicate import adjudicate_total_against_parts
+
+    # Merck's real 2025 Adempas: stated nine months 229, quarters sum 230.
+    verdict = adjudicate_total_against_parts(
+        229, {"Q1": 68, "Q2": 80, "Q3": 82}, expected_parts=3
+    )
+    assert verdict.resolved, verdict.detail
+
+    # Twice the tolerance is not rounding any more.
+    verdict = adjudicate_total_against_parts(
+        229, {"Q1": 68, "Q2": 80, "Q3": 90}, expected_parts=3
+    )
+    assert verdict.status == "impossible"
+    assert verdict.code == "parts_exceed_total"
