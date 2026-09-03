@@ -62,6 +62,7 @@ from app.parsing.fda_label import format_moa_profile_value, parse_label_record
 from app.parsing.indications import parse_indications
 from app.parsing.periods import detect_period_context, normalize_period
 from app.extraction.candidates import extract_revenue_candidates
+from app.extraction.fingerprint import UNIT_SCALE_TO_MILLIONS
 from app.quality.candidate_filters import filter_revenue_candidates
 from app.quality.checks import (
     apply_auto_pass_gate,
@@ -130,6 +131,30 @@ def persist_profile_field(
     )
     db.add(row)
     return row
+
+
+def scale_to_millions(value: float, unit: str | None) -> float:
+    """Convert a reported value to USD millions using its declared unit.
+
+    LLM candidates carry a free-text ``unit`` (see revenue_extractor.yaml)
+    rather than the canonical label the deterministic table path produces,
+    so this matches on substrings against the same UNIT_SCALE_TO_MILLIONS
+    table fingerprint.py uses, defaulting to "millions" (scale 1.0) when the
+    unit is missing or unrecognized - never silently truncating a "thousands"
+    or "units" figure the way an unconditional else-branch did.
+    """
+    label = (unit or "").strip().lower()
+    if "billion" in label:
+        scale = UNIT_SCALE_TO_MILLIONS["billions"]
+    elif "thousand" in label:
+        scale = UNIT_SCALE_TO_MILLIONS["thousands"]
+    elif "unit" in label:
+        scale = UNIT_SCALE_TO_MILLIONS["units"]
+    elif "million" in label:
+        scale = UNIT_SCALE_TO_MILLIONS["millions"]
+    else:
+        scale = UNIT_SCALE_TO_MILLIONS["millions"]
+    return value * scale
 
 
 class PipelineOrchestrator:
@@ -993,12 +1018,7 @@ class PipelineOrchestrator:
                 currency = cand.get("currency") or "USD"
                 normalized = cand.get("value_normalized_usd_millions")
                 if normalized is None and value is not None:
-                    if unit and "billion" in str(unit).lower():
-                        normalized = float(value) * 1000
-                    elif unit and "thousand" in str(unit).lower():
-                        normalized = float(value) / 1000
-                    else:
-                        normalized = float(value)
+                    normalized = scale_to_millions(float(value), unit)
 
                 citation = {
                     "source_id": src.source_id,
