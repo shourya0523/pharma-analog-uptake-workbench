@@ -371,6 +371,248 @@ PRODUCT_METADATA = {
         "formulation": "injection",
         "route_of_administration": "subcutaneous",
     },
+    # ------------------------------------------------------- Gilead antivirals
+    # Nine products off Gilead's quarterly PRODUCT SALES SUMMARY, 2018-2021.
+    # HIV is the one franchise in this catalog where a whole portfolio turns
+    # over inside the window: Biktarvy climbs from 185 a quarter to 2,530 while
+    # Genvoya, which it replaces, falls from 1,160 to 756 - two series driven by
+    # the same cause in opposite directions, which no single-product benchmark
+    # can express. Alongside them Truvada and Atripla lose US exclusivity in
+    # October 2020 and fall off a cliff in two quarters.
+    "Biktarvy": {
+        "generic_name": "bictegravir/emtricitabine/tenofovir alafenamide",
+        "manufacturer": "Gilead",
+        "benchmark_identity": "gilead_biktarvy_worldwide_reported",
+        "therapeutic_area": "HIV",
+        "commercial_start_quarter": "2018Q2",
+        "launch_quarter": "2018Q1",
+        "series_start_reason": (
+            "Biktarvy was approved 7 February 2018 and sold only in the United "
+            "States that quarter, so the release gives it a single US line and "
+            "no worldwide total. 2018Q2 is the first quarter Gilead states a "
+            "worldwide figure, which makes this a launch ramp read from its "
+            "second quarter rather than its first."
+        ),
+        "series_end_quarter": "2021Q4",
+        "series_end_basis": "sourcing_boundary",
+        "series_end_reason": (
+            "Gilead still reports Biktarvy separately after this and it is still "
+            "growing. The series stops where sourcing stopped."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "tablet",
+        "route_of_administration": "oral",
+    },
+    "Genvoya": {
+        "generic_name": "elvitegravir/cobicistat/emtricitabine/tenofovir alafenamide",
+        "manufacturer": "Gilead",
+        "benchmark_identity": "gilead_genvoya_worldwide_reported",
+        "therapeutic_area": "HIV",
+        "commercial_start_quarter": "2018Q1",
+        "launch_quarter": "2015Q4",
+        "series_start_reason": (
+            "Genvoya launched in 2015Q4; 2018Q1 is the earliest quarter sourced "
+            "here. It peaks at 1,206 in 2018Q4 and then declines - not from "
+            "patent loss but because Gilead's own Biktarvy takes its patients. A "
+            "decline with no generic in it."
+        ),
+        "series_end_quarter": "2021Q4",
+        "series_end_basis": "sourcing_boundary",
+        "series_end_reason": (
+            "Gilead still reports Genvoya separately after this. The series "
+            "stops where sourcing stopped."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "tablet",
+        "route_of_administration": "oral",
+    },
+    "Truvada": {
+        "generic_name": "emtricitabine/tenofovir disoproxil fumarate",
+        "manufacturer": "Gilead",
+        "benchmark_identity": "gilead_truvada_worldwide_reported",
+        "therapeutic_area": "HIV",
+        "commercial_start_quarter": "2018Q1",
+        "launch_quarter": "2004Q3",
+        "series_start_reason": (
+            "Truvada launched in 2004 and lost US exclusivity in October 2020. "
+            "2018Q1 is the earliest quarter sourced here, which puts eleven flat "
+            "quarters around 700 in front of the cliff: 509 in 2020Q3, then 146, "
+            "135, 108, 67, 61. The sharpest patent-cliff series in the catalog."
+        ),
+        "series_end_quarter": "2021Q4",
+        "series_end_basis": "sourcing_boundary",
+        "series_end_reason": (
+            "Gilead still reports Truvada separately after this. The series "
+            "stops where sourcing stopped, five quarters past the cliff."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "tablet",
+        "route_of_administration": "oral",
+    },
+    "Atripla": {
+        "generic_name": "efavirenz/emtricitabine/tenofovir disoproxil fumarate",
+        "manufacturer": "Gilead",
+        "benchmark_identity": "gilead_atripla_worldwide_reported",
+        "therapeutic_area": "HIV",
+        "commercial_start_quarter": "2018Q1",
+        "launch_quarter": "2006Q3",
+        "series_start_reason": (
+            "Atripla launched in 2006 and was already being switched away from "
+            "when this window opens; 2018Q1 is the earliest quarter sourced. It "
+            "then loses US exclusivity alongside Truvada in October 2020, so the "
+            "series is a slow decline that ends in a cliff."
+        ),
+        "series_end_quarter": "2021Q4",
+        "series_end_basis": "sourcing_boundary",
+        "series_end_reason": (
+            "Gilead still reports Atripla separately after this. The series "
+            "stops where sourcing stopped."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "tablet",
+        "route_of_administration": "oral",
+    },
+    "Descovy": {
+        "generic_name": "emtricitabine/tenofovir alafenamide",
+        "manufacturer": "Gilead",
+        "benchmark_identity": "gilead_descovy_worldwide_reported",
+        "therapeutic_area": "HIV",
+        "commercial_start_quarter": "2018Q1",
+        "launch_quarter": "2016Q2",
+        "series_start_reason": (
+            "Descovy launched in 2016Q2; 2018Q1 is the earliest quarter sourced "
+            "here. Unusually for this set it is nearly flat across sixteen "
+            "quarters - a backbone sold into both treatment and, from late 2019, "
+            "prevention, so two demand curves offset inside one line."
+        ),
+        "series_end_quarter": "2021Q4",
+        "series_end_basis": "sourcing_boundary",
+        "series_end_reason": (
+            "Gilead still reports Descovy separately after this. The series "
+            "stops where sourcing stopped."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "tablet",
+        "route_of_administration": "oral",
+    },
+    "Odefsey": {
+        "generic_name": "emtricitabine/rilpivirine/tenofovir alafenamide",
+        "manufacturer": "Gilead",
+        "benchmark_identity": "gilead_odefsey_worldwide_reported",
+        "therapeutic_area": "HIV",
+        "commercial_start_quarter": "2018Q1",
+        "launch_quarter": "2016Q2",
+        "series_start_reason": (
+            "Odefsey launched in 2016Q2; 2018Q1 is the earliest quarter sourced "
+            "here. The flattest HIV series in the set, which is what makes it "
+            "useful next to Biktarvy and Truvada."
+        ),
+        "series_end_quarter": "2021Q3",
+        "series_end_basis": "sourcing_boundary",
+        "series_end_reason": (
+            "Gilead reports Odefsey separately well past this quarter; the 2021 "
+            "fourth-quarter release's total line for it could not be read, so "
+            "the series stops one quarter short of the rest of this group "
+            "rather than carrying a figure that was not sourced."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "tablet",
+        "route_of_administration": "oral",
+    },
+    "Complera": {
+        "generic_name": "emtricitabine/rilpivirine/tenofovir disoproxil fumarate",
+        "manufacturer": "Gilead",
+        "benchmark_identity": "gilead_complera_worldwide_reported",
+        "therapeutic_area": "HIV",
+        "commercial_start_quarter": "2018Q1",
+        "launch_quarter": "2011Q3",
+        "series_start_reason": (
+            "Gilead publishes this line as Complera / Eviplera - one product "
+            "under its US and its European names, not two. 2018Q1 is the "
+            "earliest quarter sourced; the series is the slow switch away to the "
+            "tenofovir alafenamide generation."
+        ),
+        "series_end_quarter": "2021Q3",
+        "series_end_basis": "sourcing_boundary",
+        "series_end_reason": (
+            "Gilead reports the Complera line separately past this quarter; the "
+            "2021 fourth-quarter release's total line for it could not be read, "
+            "so the series stops one quarter short rather than carrying an "
+            "unsourced figure."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "tablet",
+        "route_of_administration": "oral",
+    },
+    "Stribild": {
+        "generic_name": "elvitegravir/cobicistat/emtricitabine/tenofovir disoproxil fumarate",
+        "manufacturer": "Gilead",
+        "benchmark_identity": "gilead_stribild_worldwide_reported",
+        "therapeutic_area": "HIV",
+        "commercial_start_quarter": "2018Q1",
+        "launch_quarter": "2012Q3",
+        "series_start_reason": (
+            "Stribild launched in 2012Q3 and is the tenofovir disoproxil "
+            "predecessor of Genvoya; 2018Q1 is the earliest quarter sourced. It "
+            "declines steadily throughout as its own successor takes its "
+            "patients - the smallest series in this group, which is why it is "
+            "here: a benchmark of only large numbers tests only large numbers."
+        ),
+        "series_end_quarter": "2021Q4",
+        "series_end_basis": "sourcing_boundary",
+        "series_end_reason": (
+            "Gilead still reports Stribild separately after this. The series "
+            "stops where sourcing stopped."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "tablet",
+        "route_of_administration": "oral",
+    },
+    "Epclusa": {
+        "generic_name": "sofosbuvir/velpatasvir",
+        "manufacturer": "Gilead",
+        "benchmark_identity": "gilead_epclusa_worldwide_reported",
+        "therapeutic_area": "Chronic hepatitis C",
+        "commercial_start_quarter": "2018Q1",
+        "launch_quarter": "2016Q3",
+        "series_start_reason": (
+            "Epclusa launched in 2016Q3 and had already passed its peak by the "
+            "time this window opens; 2018Q1 is the earliest quarter sourced. "
+            "Four quarters is all the brand gets before the line stops being "
+            "the brand."
+        ),
+        "series_end_quarter": "2018Q4",
+        "series_end_basis": "issuer_stopped_reporting",
+        "series_end_reason": (
+            "From 2019Q1 the line is renamed Sofosbuvir/Velpatasvir and, by the "
+            "release's own footnote, consists of sales of Epclusa and the "
+            "authorized generic sold by Gilead's subsidiary Asegua Therapeutics. "
+            "That is a different quantity from Epclusa the brand and the two "
+            "cannot be separated - the same break that ends the Harvoni series, "
+            "one quarter apart, which is why both are here."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "tablet",
+        "route_of_administration": "oral",
+    },
     # ---------------------------------------------------------------- J&J
     # Eleven products from the same quarterly exhibit the Opsumit, Tracleer and
     # Uptravi series already come from, 2018-2023. They are here to widen the
@@ -1529,6 +1771,15 @@ GILEAD_COMPARATORS = {
     "Ranexa": "gilead_ranexa_quarterly.csv",
     "AmBisome": "gilead_ambisome_quarterly.csv",
     "Harvoni": "gilead_harvoni_quarterly.csv",
+    "Atripla": "gilead_atripla_quarterly.csv",
+    "Biktarvy": "gilead_biktarvy_quarterly.csv",
+    "Complera": "gilead_complera_quarterly.csv",
+    "Descovy": "gilead_descovy_quarterly.csv",
+    "Epclusa": "gilead_epclusa_quarterly.csv",
+    "Genvoya": "gilead_genvoya_quarterly.csv",
+    "Odefsey": "gilead_odefsey_quarterly.csv",
+    "Stribild": "gilead_stribild_quarterly.csv",
+    "Truvada": "gilead_truvada_quarterly.csv",
 }
 
 
