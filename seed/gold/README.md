@@ -265,6 +265,26 @@ wrong about:
 `Complera / Eviplera` on the Gilead side is the opposite trap: one product under
 two regional names, which a reader might split into two.
 
+### Checked against a document the rows do not cite
+
+Every J&J quarter here comes from the quarterly Sales of Key Products/Franchises
+exhibit, and every internal check — the year-to-date columns, the stated full
+years — is drawn from that same family of documents. Consistent and wrong is a
+real outcome, so the two largest series are anchored to something else: J&J's
+Form 10-K, which states what share of total revenue its biggest products were,
+for a different purpose, rounded to a tenth of a percent.
+
+| | 10-K says | These rows give |
+|---|---|---|
+| Stelara, fiscal 2022 | ~10.2% | 9,723 / 94,943 = 10.2% |
+| Darzalex, fiscal 2022 | ~8.4% | 7,977 / 94,943 = 8.4% |
+| Stelara, fiscal 2023 | ~12.8% | 10,858 / 85,159 = 12.8% |
+| Darzalex, fiscal 2023 | ~11.4% | 9,744 / 85,159 = 11.4% |
+
+All four land on the published tenth.
+`test_the_two_largest_jnj_series_match_an_independent_disclosure` keeps them
+there.
+
 ### Two provenance notes worth knowing
 
 **Quarters read from another release's prior-year column.** Gilead's pages for

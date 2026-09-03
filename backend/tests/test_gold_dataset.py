@@ -921,6 +921,45 @@ def test_the_concentration_report_describes_the_rows_it_claims_to():
     assert balance["balanced"] == all(flags)
 
 
+def test_the_two_largest_jnj_series_match_an_independent_disclosure():
+    """Two series checked against a document they do not cite.
+
+    Every J&J quarter here comes from the quarterly Sales of Key
+    Products/Franchises exhibit, and every internal check - the year-to-date
+    columns, the stated full years - is drawn from that same family of
+    documents. Consistent and wrong is a real outcome, so this anchors the two
+    largest series to something else entirely: J&J's Form 10-K, which states
+    what share of total revenue its biggest products were, in a different
+    document, for a different purpose, rounded to a tenth of a percent.
+
+    From the 10-K for fiscal 2022 (filed February 2023): STELARA
+    "approximately 10.2%" and DARZALEX "approximately 8.4%" of total revenues.
+    From the 10-K for fiscal 2023: 12.8% and 11.4%. Total revenues are J&J's
+    own, 94,943 for 2022 and 85,159 for 2023 - the latter lower because
+    Consumer Health had been separated.
+
+    If a quarter in either series is ever restated or misread badly enough to
+    matter, the share moves off the published tenth and this fails.
+    """
+    rows = load_jsonl("quarterly_revenue.jsonl")
+    total_revenue = {2022: 94_943, 2023: 85_159}
+    stated_share = {
+        ("Stelara", 2022): 10.2,
+        ("Darzalex", 2022): 8.4,
+        ("Stelara", 2023): 12.8,
+        ("Darzalex", 2023): 11.4,
+    }
+    for (drug, year), share in stated_share.items():
+        quarters = [
+            row["value_normalized_usd_millions"]
+            for row in rows
+            if row["drug_name"] == drug and row["calendar_year"] == year
+        ]
+        assert len(quarters) == 4, f"{drug} {year}: {len(quarters)} quarters"
+        got = round(100 * sum(quarters) / total_revenue[year], 1)
+        assert got == share, f"{drug} {year}: {got}% of revenue, 10-K says {share}%"
+
+
 def test_the_independent_audit_finds_nothing():
     """scripts/audit_gold.py, run in CI.
 
