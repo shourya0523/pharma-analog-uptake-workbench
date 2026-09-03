@@ -18,7 +18,7 @@ import hashlib
 import json
 import re
 import time
-from collections import defaultdict
+from collections import Counter, defaultdict
 from io import BytesIO
 from pathlib import Path
 from typing import Any
@@ -1182,6 +1182,10 @@ def revenue_row(
         "period_basis": "calendar",
         "revenue_scope": meta["revenue_scope"],
         "geography": meta["geography"],
+        # Carried on the row, not only in the builder, so concentration can be
+        # measured from the published dataset rather than recomputed from code
+        # that a reader of seed/gold does not have.
+        "therapeutic_area": meta.get("therapeutic_area", "Pulmonary hypertension"),
         "formulation": meta["formulation"],
         "route_of_administration": meta["route_of_administration"],
         "source_type": source_type,
@@ -1890,6 +1894,38 @@ def build_annual_rows() -> list[dict[str, Any]]:
     return rows
 
 
+# Fields on a quarterly row that come from PRODUCT_METADATA rather than from
+# the document. Reused rows carry whatever these were when they were written,
+# so a metadata edit would otherwise land only on the series that happen to be
+# rebuilt - and adding a field would leave the reused rows without it.
+METADATA_FIELDS = (
+    "generic_name",
+    "manufacturer",
+    "benchmark_identity",
+    "revenue_scope",
+    "geography",
+    "therapeutic_area",
+    "formulation",
+    "route_of_administration",
+)
+
+
+def refresh_metadata_fields(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Re-apply product metadata to rows, whether rebuilt or reused.
+
+    The values and the provenance are the document's and are never touched;
+    only the attributes the builder attaches from PRODUCT_METADATA are.
+    """
+    for row in rows:
+        meta = PRODUCT_METADATA[row["drug_name"]]
+        for field in METADATA_FIELDS:
+            if field == "therapeutic_area":
+                row[field] = meta.get(field, "Pulmonary hypertension")
+            else:
+                row[field] = meta[field]
+    return rows
+
+
 def deduplicate(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     best: dict[tuple[str, str], dict[str, Any]] = {}
     rank = {
@@ -2150,6 +2186,52 @@ def catalog_coverage(
     }
 
 
+# What "balanced" means for this dataset, as numbers rather than as a feeling.
+# A benchmark whose rows are mostly one issuer measures that issuer's
+# disclosure habits; one whose rows are mostly one product measures that
+# product. These are the thresholds the catalog is held to, and
+# concentration() reports the distance to each so a regression is visible
+# rather than argued about.
+CONCENTRATION_TARGETS = {
+    "largest_issuer_share": 40.0,
+    "largest_product_share": 10.0,
+    "largest_therapeutic_area_share": 60.0,
+}
+MINIMUM_THERAPEUTIC_AREAS = 6
+
+
+def concentration(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    """How lopsided the dataset is, by issuer, product and therapeutic area."""
+    total = len(rows)
+    if not total:
+        return {}
+
+    def largest(field: str) -> tuple[str, int]:
+        counts = Counter(row[field] for row in rows)
+        return counts.most_common(1)[0]
+
+    result: dict[str, Any] = {"quarters": total}
+    for field, key in (
+        ("manufacturer", "largest_issuer"),
+        ("drug_name", "largest_product"),
+        ("therapeutic_area", "largest_therapeutic_area"),
+    ):
+        name, count = largest(field)
+        share = round(100 * count / total, 1)
+        result[key] = name
+        result[f"{key}_share"] = share
+        target = CONCENTRATION_TARGETS.get(f"{key}_share")
+        if target is not None:
+            result[f"{key}_within_target"] = share < target
+    areas = len({row["therapeutic_area"] for row in rows})
+    result["therapeutic_area_count"] = areas
+    result["therapeutic_areas_within_target"] = areas >= MINIMUM_THERAPEUTIC_AREAS
+    result["balanced"] = all(
+        value for key, value in result.items() if key.endswith("_within_target")
+    )
+    return result
+
+
 def gold_completeness(
     coverage: list[dict[str, Any]],
     exclusions: list[dict[str, Any]],
@@ -2266,7 +2348,7 @@ def main() -> int:
             + rebuilt
             + early
         )
-        quarterly = apply_acquisition_bridges(quarterly)
+        quarterly = apply_acquisition_bridges(refresh_metadata_fields(quarterly))
     else:
         client = ResearchClient(args.cache_dir)
         try:
@@ -2308,6 +2390,7 @@ def main() -> int:
     write_jsonl(out_dir / "excluded_products.jsonl", exclusions)
     (out_dir / "unresolved_quarters.jsonl").write_text("")
     completeness = gold_completeness(coverage, exclusions, annual)
+    balance = concentration(quarterly)
     report = {
         "generation": PROVENANCE,
         "as_of_quarter": AS_OF_QUARTER,
@@ -2320,6 +2403,7 @@ def main() -> int:
         "excluded_products": len(exclusions),
         "catalog_coverage": catalog,
         "gold_completeness": completeness,
+        "concentration": balance,
     }
     manifest = {
         "name": "independent_pah_peak_sales_gold",

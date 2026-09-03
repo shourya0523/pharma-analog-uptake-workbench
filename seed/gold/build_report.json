@@ -162,5 +162,20 @@
       "Pulmonary hypertension"
     ],
     "complete": true
+  },
+  "concentration": {
+    "quarters": 919,
+    "largest_issuer": "United Therapeutics",
+    "largest_issuer_share": 40.0,
+    "largest_issuer_within_target": false,
+    "largest_product": "Remodulin",
+    "largest_product_share": 10.7,
+    "largest_product_within_target": false,
+    "largest_therapeutic_area": "Pulmonary hypertension",
+    "largest_therapeutic_area_share": 54.6,
+    "largest_therapeutic_area_within_target": true,
+    "therapeutic_area_count": 9,
+    "therapeutic_areas_within_target": true,
+    "balanced": false
   }
 }

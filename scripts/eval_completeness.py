@@ -277,6 +277,34 @@ def main() -> int:
         flag = "" if ok == count else "  <--"
         print(f"{issuer:24} {count:>8} {share:>6.1f}% {100 * ok / count:>9.1f}%{flag}")
 
+    # Concentration, printed next to delivery because the two are read
+    # together: a delivery rate is only as meaningful as the spread of the rows
+    # it averages over. The numbers come from the build report so that this
+    # script and the dataset cannot drift apart on what "balanced" means.
+    report = json.loads((GOLD / "build_report.json").read_text())
+    balance = report.get("concentration")
+    if balance:
+        print(f"\n{'concentration':26}{'':20}{'share':>7} {'target':>8}")
+        print("-" * 62)
+        for key, target in (
+            ("largest issuer", "< 40%"),
+            ("largest product", "< 10%"),
+            ("largest therapeutic area", "< 60%"),
+        ):
+            field = key.replace(" ", "_")
+            share = balance[f"{field}_share"]
+            flag = "" if balance[f"{field}_within_target"] else "  <--"
+            print(f"{key:26}{balance[field]:20.20}{share:>6.1f}% {target:>8}{flag}")
+        areas_flag = "" if balance["therapeutic_areas_within_target"] else "  <--"
+        print(
+            f"{'therapeutic areas':26}{'':20}"
+            f"{balance['therapeutic_area_count']:>7} {'>= 6':>8}{areas_flag}"
+        )
+        print(
+            "\nbalanced" if balance["balanced"]
+            else "\nnot yet balanced: the marked rows are above target"
+        )
+
     known = [m for m in mismatches if m[0] in KNOWN_ROUNDING_DISAGREEMENTS]
     unknown = [m for m in mismatches if m[0] not in KNOWN_ROUNDING_DISAGREEMENTS]
     if known:
