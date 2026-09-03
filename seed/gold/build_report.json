@@ -1,9 +1,9 @@
 {
   "generation": "independent_issuer_research",
   "as_of_quarter": "2026Q2",
-  "quarterly_rows": 470,
+  "quarterly_rows": 502,
   "annual_rows": 74,
-  "complete_quarterly_series": 11,
+  "complete_quarterly_series": 13,
   "quarterly_coverage_pct": 100.0,
   "observed_peaks": 6,
   "not_yet_observed_peaks": 6,
@@ -13,10 +13,12 @@
     "quarterly_series_products": [
       "Adcirca",
       "Adempas",
+      "Letairis",
       "Nebulized Tyvaso",
       "Opsumit",
       "Orenitram",
       "Remodulin",
+      "Tracleer",
       "Tyvaso",
       "Tyvaso DPI",
       "Uptravi",
@@ -24,9 +26,7 @@
       "Yutrepia"
     ],
     "annual_only_products": [
-      "Letairis",
-      "Revatio",
-      "Tracleer"
+      "Revatio"
     ],
     "excluded_products": [
       "Alyq",
@@ -36,20 +36,22 @@
       "Veletri",
       "Ventavis"
     ],
-    "quarterly_series_pct": 55.0,
-    "quarterly_observations": 470,
+    "quarterly_series_pct": 65.0,
+    "quarterly_observations": 502,
     "bounded_series": [
-      "Opsumit"
+      "Letairis",
+      "Opsumit",
+      "Tracleer"
     ]
   },
   "gold_completeness": {
     "catalog_products": 20,
     "accounted_for": 20,
     "unaccounted_products": [],
-    "complete_quarterly_series": 11,
-    "quarterly_observations": 470,
+    "complete_quarterly_series": 13,
+    "quarterly_observations": 502,
     "series_missing_quarters": [],
-    "annual_benchmark_series": 3,
+    "annual_benchmark_series": 1,
     "annual_observations": 74,
     "evidence_backed_exclusions": 6,
     "complete": true

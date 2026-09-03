@@ -116,6 +116,7 @@ def main() -> int:
     weak_citation = 0
     gold_derived = 0
     bridged = 0
+    delivered_periods: dict[str, set[str]] = {}
     for series in sorted(coverage, key=lambda c: c["drug_name"]):
         drug = series["drug_name"]
         expected = series["expected_quarters"]
@@ -226,6 +227,7 @@ def main() -> int:
                 ))
 
         derived -= readable
+        delivered_periods[drug] = readable | derived
         delivered = len(readable) + len(derived)
         gap = expected - delivered
         totals[0] += expected
@@ -255,6 +257,26 @@ def main() -> int:
         f"hand-written legend, {gold_derived} are gold-side derivations "
         f"(of which {bridged} are quarters assembled across an ownership change)"
     )
+    # Delivery by issuer, because the overall number is dominated by whoever
+    # publishes the most quarters. United Therapeutics is three quarters of this
+    # dataset: a pipeline that read UTHR perfectly and every other issuer at
+    # half would still score above 85% overall. The share column is there to be
+    # uncomfortable - it is a property of the catalog, not of the pipeline.
+    by_issuer: dict[str, list[int]] = defaultdict(lambda: [0, 0])
+    for row in rows:
+        stat = by_issuer[row.get("manufacturer", "unknown")]
+        stat[0] += 1
+        if row["period"] in delivered_periods.get(row["drug_name"], set()):
+            stat[1] += 1
+    print(f"\n{'issuer':24} {'in gold':>8} {'share':>7} {'delivered':>10}")
+    print("-" * 52)
+    for issuer, (count, ok) in sorted(
+        by_issuer.items(), key=lambda kv: -kv[1][0]
+    ):
+        share = 100 * count / len(rows)
+        flag = "" if ok == count else "  <--"
+        print(f"{issuer:24} {count:>8} {share:>6.1f}% {100 * ok / count:>9.1f}%{flag}")
+
     known = [m for m in mismatches if m[0] in KNOWN_ROUNDING_DISAGREEMENTS]
     unknown = [m for m in mismatches if m[0] not in KNOWN_ROUNDING_DISAGREEMENTS]
     if known:

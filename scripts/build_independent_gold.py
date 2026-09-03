@@ -189,6 +189,7 @@ PRODUCT_METADATA = {
             "uptake measured from here is not launch-to-date."
         ),
         "series_end_quarter": "2024Q4",
+        "series_end_basis": "issuer_stopped_reporting",
         "series_end_reason": (
             "From 2025Q1 J&J reports a combined OPSUMIT / OPSYNVI line and "
             "restates FY2024 from 2,184 to 2,225 on that basis. Opsumit alone "
@@ -198,6 +199,76 @@ PRODUCT_METADATA = {
         # The 2015-2017 middle of the product's life is not citable at all, so
         # 2024's 2,184 is the highest observed value on a still-rising curve
         # rather than a lifetime peak. Same shape as Adempas.
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "tablet",
+        "route_of_administration": "oral",
+    },
+    "Letairis": {
+        "generic_name": "ambrisentan",
+        "manufacturer": "Gilead",
+        # As with Opsumit and Tracleer, the annual entry keeps its own identity
+        # and its own peak: it spans the product's whole life and knows where
+        # the maximum is, while this is the four-year window sourced quarter by
+        # quarter here.
+        "benchmark_identity": "gilead_letairis_us_reported",
+        "commercial_start_quarter": "2016Q1",
+        "launch_quarter": "2007Q2",
+        "series_start_reason": (
+            "Letairis launched in 2007Q2. Gilead has reported it separately in "
+            "its product sales summary throughout, but presented the figures in "
+            "thousands before 2015 and in millions after; 2016Q1 is the earliest "
+            "quarter sourced here on the current basis. Nine years after launch "
+            "is not an uptake curve."
+        ),
+        "series_end_quarter": "2019Q4",
+        # The first end in this catalog that is NOT the issuer changing what it
+        # reports, and the difference matters enough to record in the data
+        # rather than only in prose - see series_end_basis.
+        "series_end_basis": "sourcing_boundary",
+        "series_end_reason": (
+            "Gilead still reports Letairis separately after this: FY2020 is 314 "
+            "and FY2021 is 206. The series stops at 2019Q4 because that is what "
+            "has been sourced quarter by quarter here, not because the "
+            "disclosure changed. Anyone extending it will find the documents."
+        ),
+        # The window opens nine years after launch and contains the 2018 peak
+        # only by luck; the annual series is the peak authority for this product.
+        "peak_eligible": False,
+        "revenue_scope": "U.S.",
+        "geography": "United States",
+        "formulation": "tablet",
+        "route_of_administration": "oral",
+    },
+    "Tracleer": {
+        "generic_name": "bosentan",
+        "manufacturer": "Actelion/J&J",
+        # Distinct from the annual entry's identity, for the same reason as
+        # Opsumit: the annual rows are Actelion's CHF history and carry the
+        # product's real 2011 peak, while this is the US-dollar quarterly
+        # window J&J's schedules cover.
+        "benchmark_identity": "actelion_jnj_tracleer_worldwide_reported",
+        "commercial_start_quarter": "2016Q1",
+        "launch_quarter": "2001Q4",
+        "series_start_reason": (
+            "Tracleer launched in 2001Q4 and Actelion reported it in CHF. The "
+            "US-dollar quarterly history J&J republished on acquisition reaches "
+            "back only to 2016Q1, which is where this series starts - fifteen "
+            "years after launch and four years after the product peaked. It is "
+            "a decline-phase window, not an uptake curve."
+        ),
+        "series_end_quarter": "2019Q4",
+        "series_end_basis": "issuer_stopped_reporting",
+        "series_end_reason": (
+            "From 2020Q1 J&J folds Tracleer into Other PAH and restates prior "
+            "periods on that basis: the 1Q2020 schedule states that Other PAH "
+            "is inclusive of TRACLEER, which was previously disclosed "
+            "separately. The combined line cannot be split back apart."
+        ),
+        # The product peaked around 2011, long before this window opens. Its
+        # peak lives on the annual CHF series; taking a maximum from a
+        # declining tail would report less than a quarter of the truth.
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
@@ -892,6 +963,28 @@ ACQUISITION_BRIDGES = {
     # registered here rather than left to build_uptravi alone so that the row
     # can be rebuilt from the manifest without refetching the PDFs; the network
     # path still recomputes the values and asserts they agree.
+    ("Tracleer", "2017Q2"): {
+        "bridge_components": [
+            {
+                "covers": "2017-04-01/2017-06-15",
+                "value": 198.0,
+                "issuer": "Actelion",
+                "source_url": (
+                    "https://s203.q4cdn.com/636242992/files/doc_financials/2017/q2/"
+                    "Actelion_Historical_Sales_Schedule.pdf"
+                ),
+            },
+            {
+                "covers": "2017-06-16/2017-07-02",
+                "value": 26.0,
+                "issuer": "Johnson & Johnson",
+                "source_url": (
+                    "https://s203.q4cdn.com/636242992/files/doc_financials/2018/q2/"
+                    "Sales_of_Key_Products_Franchises_2Q2018.pdf"
+                ),
+            },
+        ],
+    },
     ("Uptravi", "2017Q2"): {
         "bridge_components": [
             {
@@ -983,6 +1076,70 @@ def build_opsumit() -> list[dict[str, Any]]:
             ),
         )
         for source in read_csv(SOURCE_DIR / "jnj_opsumit_quarterly.csv")
+    ]
+
+
+def build_tracleer() -> list[dict[str, Any]]:
+    """Tracleer worldwide, 2016Q1 through 2019Q4, across two issuers.
+
+    Sixteen quarters in one currency from two companies: Actelion's own history
+    as J&J republished it in US dollars, then J&J's quarterly schedules. It
+    matters to this dataset for a reason the numbers do not show - it is the
+    only series here observed entirely in decline, and the only one whose peak
+    lives in a different series, in a different currency. A benchmark made only
+    of rising curves would never catch a reader that assumes the last value is
+    the biggest.
+    """
+    return [
+        revenue_row(
+            drug_name="Tracleer",
+            period=source["period"],
+            value=float(source["value_reported"]),
+            source_url=source["source_url"],
+            source_quote=source["source_quote"],
+            source_type="company_ir",
+            derivation=source["derivation"],
+            notes=(
+                "Worldwide net trade sales as reported; not summed from the US "
+                "and International lines, which round independently. "
+                + source["context"]
+            ),
+            **(
+                ACQUISITION_BRIDGES[("Tracleer", source["period"])]
+                if source["derivation"] == "acquisition_bridge_sum"
+                else {}
+            ),
+        )
+        for source in read_csv(SOURCE_DIR / "jnj_tracleer_quarterly.csv")
+    ]
+
+
+def build_letairis() -> list[dict[str, Any]]:
+    """Letairis US, 2016Q1 through 2019Q4 - and the reason it is here at all.
+
+    Letairis was excluded from this catalog on the finding that Gilead reports
+    it only inside an aggregate. That is true of the narrative section of every
+    release, which folds it into a sentence about "Other product sales". It is
+    not true of the PRODUCT SALES SUMMARY table in the same document, which
+    states the line on its own. The exclusion had read the prose and stopped.
+
+    Gilead is the sixth issuer in this dataset and the only one outside the
+    J&J / United Therapeutics / Merck group, which is the point: a benchmark
+    drawn from one company's disclosure habits mostly measures how well the
+    pipeline reads that company.
+    """
+    return [
+        revenue_row(
+            drug_name="Letairis",
+            period=source["period"],
+            value=float(source["value_reported"]),
+            source_url=source["source_url"],
+            source_quote=source["source_quote"],
+            source_type="company_ir",
+            derivation=source["derivation"],
+            notes=source["context"],
+        )
+        for source in read_csv(SOURCE_DIR / "gilead_letairis_quarterly.csv")
     ]
 
 
@@ -1223,6 +1380,13 @@ def coverage_rows(quarterly: list[dict[str, Any]]) -> list[dict[str, Any]]:
                     "but states no series_end_reason; a short series must say why."
                 )
             row["series_end_reason"] = reason
+            # Why it ends, in a field a consumer can branch on. An end because
+            # the issuer stopped publishing the line is a fact about the world;
+            # an end because sourcing stopped is a fact about this dataset, and
+            # only the second one is closable by more work.
+            row["series_end_basis"] = meta.get(
+                "series_end_basis", "issuer_stopped_reporting"
+            )
 
         # The same rule at the other end. A series that starts after the
         # product went on sale is measuring part of its life, and a reader has
@@ -1347,7 +1511,7 @@ def main() -> int:
         # free - and reusing them instead would silently ignore an edit to
         # those manifests, which is exactly the kind of staleness this flag
         # must not introduce.
-        rebuilt = build_yutrepia() + build_winrevair() + build_adempas() + build_opsumit()
+        rebuilt = build_yutrepia() + build_winrevair() + build_adempas() + build_opsumit() + build_tracleer() + build_letairis()
         # Remodulin is only partly manifest-backed, so it is refreshed by
         # period rather than by dropping the whole product.
         early = build_remodulin_early()
@@ -1376,6 +1540,8 @@ def main() -> int:
                 + build_winrevair()
                 + build_adempas()
                 + build_opsumit()
+                + build_tracleer()
+                + build_letairis()
             )
             quarterly = apply_acquisition_bridges(quarterly)
         finally:

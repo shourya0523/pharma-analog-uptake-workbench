@@ -713,10 +713,11 @@ def test_a_bridged_quarter_carries_parts_that_tile_it():
         for row in load_jsonl("quarterly_revenue.jsonl")
         if row["derivation"] == "acquisition_bridge_sum"
     ]
-    assert {(row["drug_name"], row["period"]) for row in bridged} == {
-        ("Opsumit", "2017Q2"),
-        ("Uptravi", "2017Q2"),
-    }
+    # Every bridge in the catalog is the same quarter: the one J&J's Actelion
+    # acquisition split. If a bridge ever appears in another quarter it is
+    # either a new acquisition or a mistake, and either deserves a look.
+    assert {row["period"] for row in bridged} == {"2017Q2"}
+    assert {row["drug_name"] for row in bridged} >= {"Opsumit", "Tracleer", "Uptravi"}
     for row in bridged:
         components = row["bridge_components"]
         assert len(components) == 2
@@ -771,3 +772,99 @@ def test_winrevair_2024_quarters_cite_the_filings_that_state_them():
         assert row["source_url"].startswith("https://www.sec.gov/")
         assert row["derivation"] == "direct_reported"
         assert "|" in row["source_quote"], "must be readable as a table row"
+
+
+def test_tracleer_is_the_only_series_observed_wholly_in_decline():
+    """Every other series here rises. This one does not, and that is the point.
+
+    A benchmark built only from growing products never catches a reader that
+    assumes the last value is the largest, or that a series maximum is a
+    lifetime peak. Tracleer's window opens fifteen years after launch and four
+    years after the product peaked, so its highest quarter is its first.
+    """
+    rows = sorted(
+        (r for r in load_jsonl("quarterly_revenue.jsonl") if r["drug_name"] == "Tracleer"),
+        key=lambda r: r["period"],
+    )
+    coverage = {r["drug_name"]: r for r in load_jsonl("series_coverage.jsonl")}["Tracleer"]
+    peaks = {r["drug_name"] for r in load_jsonl("peak_sales.jsonl")}
+
+    assert len(rows) == 16
+    assert rows[0]["period"] == "2016Q1" and rows[-1]["period"] == "2019Q4"
+    assert rows[0]["value_reported"] == max(r["value_reported"] for r in rows)
+    assert rows[-1]["value_reported"] < rows[0]["value_reported"] / 4
+
+    # It still appears in peak_sales, but from the annual CHF series, which is
+    # the only place the real 2011 peak exists.
+    assert "Tracleer" in peaks
+    assert coverage["series_end_basis"] == "issuer_stopped_reporting"
+
+
+def test_letairis_series_exists_because_the_table_says_what_the_prose_does_not():
+    """The exclusion read the narrative and stopped at the aggregate.
+
+    Gilead's releases fold Letairis into a sentence about "Other product
+    sales", and this catalog excluded it on that basis. The PRODUCT SALES
+    SUMMARY table in the same document states the line on its own.
+    """
+    rows = [r for r in load_jsonl("quarterly_revenue.jsonl") if r["drug_name"] == "Letairis"]
+    excluded = {r["drug_name"] for r in load_jsonl("excluded_products.jsonl")}
+    coverage = {r["drug_name"]: r for r in load_jsonl("series_coverage.jsonl")}["Letairis"]
+
+    assert len(rows) == 16
+    assert "Letairis" not in excluded
+    assert {r["manufacturer"] for r in rows} == {"Gilead"}
+    assert {r["geography"] for r in rows} == {"United States"}
+    assert all(r["source_url"].startswith("https://www.gilead.com/") for r in rows)
+
+    stated_full_year = {2016: 819.0, 2017: 887.0, 2018: 943.0, 2019: 618.0}
+    by_year: dict[int, list[float]] = {}
+    for row in rows:
+        by_year.setdefault(row["calendar_year"], []).append(row["value_reported"])
+    for year, total in stated_full_year.items():
+        assert len(by_year[year]) == 4
+        assert sum(by_year[year]) == total, year
+
+    assert coverage["series_end_basis"] == "sourcing_boundary"
+
+
+def test_a_series_says_whether_its_end_is_the_issuer_or_the_sourcing():
+    """Two different facts that look identical in a coverage row.
+
+    A series that ends because the issuer stopped publishing the line is
+    finished - no amount of work extends it. A series that ends because
+    sourcing stopped is an open invitation. Collapsing them into one
+    "series_end_reason" string makes the second look like the first, and the
+    dataset then reads as more complete than it is.
+    """
+    coverage = load_jsonl("series_coverage.jsonl")
+    bounded = [row for row in coverage if "series_end_reason" in row]
+    assert bounded, "the catalog has bounded series; this test is not vacuous"
+
+    for row in bounded:
+        assert row["series_end_basis"] in {"issuer_stopped_reporting", "sourcing_boundary"}
+        assert row["series_end_reason"]
+    # Both kinds are present, so neither branch is untested.
+    assert {row["series_end_basis"] for row in bounded} == {
+        "issuer_stopped_reporting",
+        "sourcing_boundary",
+    }
+
+
+def test_no_single_issuer_supplies_more_than_four_fifths_of_the_catalog():
+    """A concentration ceiling, so the benchmark cannot quietly become one company.
+
+    This is deliberately a loose bound rather than a target. United Therapeutics
+    is around three quarters of these rows because it publishes the longest
+    per-product histories in the therapy area, and that is not fixable by
+    sourcing harder - only by adding issuers. The test exists so that adding
+    more UTHR history without adding anyone else fails loudly.
+    """
+    rows = load_jsonl("quarterly_revenue.jsonl")
+    counts: dict[str, int] = {}
+    for row in rows:
+        counts[row["manufacturer"]] = counts.get(row["manufacturer"], 0) + 1
+    top_issuer, top_count = max(counts.items(), key=lambda kv: kv[1])
+    share = top_count / len(rows)
+    assert share < 0.80, f"{top_issuer} is {share:.1%} of the catalog"
+    assert len(counts) >= 6, f"only {len(counts)} issuers: {sorted(counts)}"

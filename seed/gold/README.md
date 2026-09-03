@@ -73,11 +73,11 @@ own commercial span. `build_report.json` records this under
 `gold_completeness`, the builder refuses to emit an incomplete series, and
 `test_the_gold_dataset_is_complete_on_its_own_terms` pins it.
 
-    20 catalog products = 11 complete quarterly series (470 quarters, every one
-    covering its full span) + 3 annual benchmark series + 6 evidence-backed
+    20 catalog products = 13 complete quarterly series (502 quarters, every one
+    covering its full span) + 1 annual benchmark series + 6 evidence-backed
     exclusions
 
-Every one of those 470 quarters is also reachable by the pipeline: it is either
+Every one of those 502 quarters is also reachable by the pipeline: it is either
 read from a citation, computed from an issuer's own stated total, or assembled
 from the two dated halves of a quarter split by an acquisition.
 `test_every_quarterly_row_is_reachable_by_the_pipeline` refuses a row that
@@ -85,7 +85,7 @@ takes none of those routes, because a benchmark row nothing can reproduce
 measures nothing.
 
 **This is not the percentage `scripts/eval_completeness.py` prints.** That
-script scores the *pipeline* against this dataset — how many of the 470
+script scores the *pipeline* against this dataset — how many of the 502
 quarters it can read or derive on its own. A shortfall there is a capability
 the pipeline is missing, which is exactly what a benchmark is for. Reading it
 as a hole in the dataset gets the direction of the measurement backwards.
@@ -174,18 +174,41 @@ quarterly schedule. The disagreement is left visible rather than reconciled,
 because it is a real property of issuer disclosure that any consumer deriving
 quarters needs to know about.
 
-## Why the catalog stops at 11 quarterly products
+## Issuer concentration, and why the catalog stops where it does
+
+### Concentration is the real limit, not product count
+
+United Therapeutics is **73% of these rows** — it publishes the longest
+per-product histories in the therapy area. A pipeline that read UTHR perfectly
+and every other issuer at half would still score above 85% overall, which is
+why `eval_completeness.py` prints delivery **by issuer** and why
+`test_no_single_issuer_supplies_more_than_four_fifths_of_the_catalog` fails if
+more UTHR history is added without adding anyone else.
+
+| Issuer | Quarters | Share |
+|---|---|---|
+| United Therapeutics | 368 | 73.3% |
+| Actelion/J&J | 58 | 11.6% |
+| Johnson & Johnson | 36 | 7.2% |
+| Merck | 19 | 3.8% |
+| Gilead | 16 | 3.2% |
+| Liquidia | 5 | 1.0% |
+
+This is not closable by sourcing harder — the products left in the catalog are
+the ones with no series. It is closable only by adding issuers, which is what
+Tracleer (Actelion/J&J) and Letairis (Gilead) did: 78.3% down to 73.3%.
+
+### Products with no quarterly series
 
 Every remaining candidate has been checked against primary documents, and each
 fails for a reason that is a property of the disclosure, not of the effort:
 
 | Product | Why no quarterly series |
 |---|---|
-| Letairis | Gilead reports it only inside "Other product sales"; no standalone quarterly figure exists publicly |
 | Revatio | Pfizer discusses it only as a change driver, never a level |
 | Adempas (worldwide) | Bayer's half includes amortized collaboration payments; only Merck's territory line is product sales |
 | Opsumit (2013–2017, 2025–) | outside the bounded series below: Actelion's CHF quarters are only partly disclosed, and from 2025 J&J reports a combined OPSUMIT/OPSYNVI line |
-| Tracleer, Veletri, Ventavis | Actelion-era quarters; pre-2017 filings are not in the reachable index |
+| Veletri, Ventavis | Actelion-era quarters; pre-2017 filings are not in the reachable index |
 | Alyq, Tadliq, Liqrev | no public product-level sales at all |
 
 ### Opsumit: a series bounded at both ends
@@ -340,7 +363,7 @@ instead of scrolling past as familiar noise.
 
 ## Remaining gaps and why
 
-**There are none.** All 470 quarters are deliverable. This section used to list
+**There are none.** All 502 quarters are deliverable. This section used to list
 eleven that were not; what closed them is recorded here because the causes were
 different and only one was really about sourcing.
 
