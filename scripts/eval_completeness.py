@@ -259,10 +259,12 @@ def main() -> int:
         f"(of which {bridged} are quarters assembled across an ownership change)"
     )
     # Delivery by issuer, because the overall number is dominated by whoever
-    # publishes the most quarters. United Therapeutics is three quarters of this
-    # dataset: a pipeline that read UTHR perfectly and every other issuer at
-    # half would still score above 85% overall. The share column is there to be
-    # uncomfortable - it is a property of the catalog, not of the pipeline.
+    # publishes the most quarters. A single issuer at even a third of the
+    # dataset can hide a real gap: a pipeline that read that issuer perfectly
+    # and everyone else at half would still clear a comfortable overall score.
+    # The share column is there to be uncomfortable - it is a property of the
+    # catalog, not of the pipeline, and the exact split is printed below
+    # rather than restated here, where it would only go stale again.
     by_issuer: dict[str, list[int]] = defaultdict(lambda: [0, 0])
     for row in rows:
         stat = by_issuer[row.get("manufacturer", "unknown")]

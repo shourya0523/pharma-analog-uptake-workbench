@@ -874,11 +874,14 @@ def test_no_single_issuer_dominates_the_catalog():
     """A concentration ceiling, so the benchmark cannot quietly become one company.
 
     This was 80% when United Therapeutics was three quarters of these rows,
-    which was a bound loose enough to be nearly free. Two comparator blocks
-    later - eleven J&J products and nine Gilead antivirals - UTHR is at 40.0%,
-    and the ceiling is set just above that so the gain cannot be given back.
-    It is a ratchet, not the target: `concentration` in build_report.json
-    carries the target, which is stricter and not yet met.
+    a bound loose enough to be nearly free. It has been ratcheted down twice
+    since: to 45% after eleven J&J products and nine Gilead antivirals first
+    entered, then here, after the Gilead block was carried through 2024, with
+    UTHR at 37.1%. Each ratchet sits just above the dataset's actual share so
+    a later change cannot give the gain back without this failing. It is a
+    ratchet, not the target: `concentration` in build_report.json carries the
+    target (< 40%), which this dataset already clears - the ratchet exists to
+    protect that, not to state it.
     """
     rows = load_jsonl("quarterly_revenue.jsonl")
     counts: dict[str, int] = {}
@@ -886,7 +889,7 @@ def test_no_single_issuer_dominates_the_catalog():
         counts[row["manufacturer"]] = counts.get(row["manufacturer"], 0) + 1
     top_issuer, top_count = max(counts.items(), key=lambda kv: kv[1])
     share = top_count / len(rows)
-    assert share < 0.45, f"{top_issuer} is {share:.1%} of the catalog"
+    assert share < 0.39, f"{top_issuer} is {share:.1%} of the catalog"
     assert len(counts) >= 6, f"only {len(counts)} issuers: {sorted(counts)}"
 
 
@@ -1014,11 +1017,18 @@ def test_the_catalog_spans_more_than_one_therapeutic_area():
     issuers, the same schedule shapes, the same slow curves. Comparators from
     other areas break that: hepatitis C collapses as it cures its own market,
     an antifungal holds a plateau for two decades, an angina drug loses 94% of
-    a quarter to generic entry. None of those shapes exists in the PAH catalog.
+    a quarter to generic entry, HIV has a whole portfolio turning over inside
+    one issuer. None of those shapes exists in the PAH catalog.
+
+    The floor is the builder's own `MINIMUM_THERAPEUTIC_AREAS`, not a number
+    reproduced here - a bound written twice drifts when only one copy gets
+    updated, which is exactly how this test previously sat at ">= 4" for a
+    catalog that had reached nine areas.
     """
+    builder = load_builder()
     report = json.loads((GOLD / "build_report.json").read_text())
     areas = set(report["gold_completeness"]["therapeutic_areas"])
-    assert len(areas) >= 4, sorted(areas)
+    assert len(areas) >= builder.MINIMUM_THERAPEUTIC_AREAS, sorted(areas)
     assert "Pulmonary hypertension" in areas
 
 
@@ -1072,21 +1082,79 @@ def test_harvoni_is_the_collapse_the_catalog_otherwise_lacks():
 
 
 def test_every_comparator_year_reconciles_to_its_stated_full_year():
-    """The same arithmetic bar the PAH series are held to."""
-    stated = {
-        ("Ranexa", 2016): 677.0, ("Ranexa", 2017): 717.0,
-        ("Ranexa", 2018): 758.0, ("Ranexa", 2019): 216.0,
-        ("AmBisome", 2016): 356.0, ("AmBisome", 2017): 366.0,
-        ("AmBisome", 2018): 420.0, ("AmBisome", 2019): 407.0,
-        ("Harvoni", 2016): 9081.0, ("Harvoni", 2017): 4370.0,
-        ("Harvoni", 2018): 1222.0,
-    }
+    """The same arithmetic bar the PAH series are held to - for every comparator.
+
+    This used to pin three products (Ranexa, AmBisome, Harvoni) by a hardcoded
+    dict of their stated full years. That was the whole comparator catalog once;
+    it is now eleven of thirty-six series, so the dict was silently checking 11
+    of ~140 comparator product-years and saying nothing about the rest - the
+    exact failure shape `audit_year_reconciliation` was hardened against after
+    it did the same thing over the annual-totals file.
+
+    The fix here is the same one: read the total out of the evidence instead of
+    retyping it. Every comparator manifest states its own full year in the Q4
+    row's quote - "... twelve months 2022 and 2021 ... | q | prior_q | FY | prior_FY"
+    - so the stated totals are extracted straight from
+    `seed/gold/source_manifests/*.csv`, independently of the derivation logic
+    `audit_gold.py` uses on the built gold rows. Every product in
+    `GILEAD_COMPARATORS` and `JNJ_COMPARATORS` is covered automatically, present
+    ones and any added later, with no dict to remember to extend.
+    """
+    builder = load_builder()
+    comparators = {**builder.GILEAD_COMPARATORS, **builder.JNJ_COMPARATORS}
+    # "quarter | prior-year quarter | year-to-date | prior-year year-to-date":
+    # a direct fourth-quarter reading's third value is the stated full year.
+    quote_pattern = re.compile(
+        r"twelve months (\d{4}) and \d{4}.*?"
+        r"\|\s*[\d,]+\s*\|\s*[\d,]+\s*\|\s*([\d,]+)\s*\|\s*[\d,]+\s*$"
+    )
+    stated: dict[tuple[str, int], float] = {}
+    for drug_name, manifest in comparators.items():
+        path = GOLD / "source_manifests" / manifest
+        with path.open(newline="") as handle:
+            for row in csv.DictReader(handle):
+                if row["period"][-2:] != "Q4" or row["derivation"] != "direct_reported":
+                    continue
+                match = quote_pattern.search(row["source_quote"])
+                assert match, f"{drug_name} {row['period']}: no stated full year in its own quote"
+                year = int(match.group(1))
+                stated[(drug_name, year)] = float(match.group(2).replace(",", ""))
+
     by_year: dict[tuple[str, int], list[float]] = {}
     for row in load_jsonl("quarterly_revenue.jsonl"):
         key = (row["drug_name"], row["calendar_year"])
         if key in stated:
             by_year.setdefault(key, []).append(row["value_reported"])
-    assert set(by_year) == set(stated)
+
+    # Only years gold records with all four quarters are checked - the same
+    # line `audit_gold.py`'s own reconciliation draws. A launch-year total is
+    # a real exception, not an edge case to paper over: Biktarvy's series
+    # starts 2018Q2 because Gilead gave it no worldwide line in Q1 (a single
+    # US-only figure, deliberately not backfilled as worldwide), but Gilead's
+    # own "twelve months 2018" column bakes that excluded quarter back in -
+    # 578 + 386 + 185 = 1,149 against a stated 1,184, the missing 35 being
+    # exactly the Q1 figure gold does not carry. That gap is the policy
+    # working as intended, not a defect, so a partial year is skipped rather
+    # than asserted against a total it was never going to equal.
+    checked = 0
     for key, total in stated.items():
-        assert len(by_year[key]) == 4, key
-        assert sum(by_year[key]) == total, key
+        quarters = by_year.get(key)
+        assert quarters, f"{key}: stated in a manifest but absent from gold entirely"
+        if len(quarters) != 4:
+            continue
+        # J&J and Gilead round each published period on its own, so a summed
+        # year and the separately-rounded full year the issuer states can
+        # differ by the same +-1 that Merck's Adempas does in
+        # KNOWN_ROUNDING_DISAGREEMENTS. Across every year checked here that
+        # gap is never more than 1 - never 2, never scaled to the product's
+        # size - which is the rounding signature and not a misread; a gap of
+        # 2 or more still fails.
+        gap = sum(quarters) - total
+        assert abs(gap) <= 1, (
+            f"{key}: gold's four quarters sum to {sum(quarters):g}, "
+            f"the manifest's own Q4 quote states {total:g} (off by {gap:g})"
+        )
+        checked += 1
+
+    # Not vacuous: comfortably more than the eleven years the old dict covered.
+    assert checked >= 100, f"only {checked} stated comparator years found"
