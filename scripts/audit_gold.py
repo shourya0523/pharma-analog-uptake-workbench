@@ -43,6 +43,7 @@ _LATER_FILING_OK = {
     "direct_jnj_retrospective_table",
     "annual_less_reported_first_nine_months",
     "full_year_less_other_reported_quarters",
+    "year_to_date_less_reported_quarters",
     "identity_normalization_pre_dpi",
     "acquisition_bridge_sum",
 }

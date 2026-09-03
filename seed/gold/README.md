@@ -184,31 +184,33 @@ quarters needs to know about.
 
 `build_report.json` carries a `concentration` block and `eval_completeness.py`
 prints it beside the delivery table, because a delivery rate is only as
-meaningful as the spread of rows it averages over. 97.8% across one issuer
-would say almost nothing.
+meaningful as the spread of rows it averages over. 97% across one issuer would
+say almost nothing.
 
 | Measure | Value | Target | |
 |---|---|---|---|
-| Largest issuer | United Therapeutics, 40.0% | < 40% | not met |
-| Largest product | Remodulin, 10.7% | < 10% | not met |
-| Largest therapeutic area | Pulmonary hypertension, 54.6% | < 60% | met |
+| Largest issuer | United Therapeutics, 37.1% | < 40% | met |
+| Largest product | Remodulin, 9.9% | < 10% | met |
+| Largest therapeutic area | Pulmonary hypertension, 50.6% | < 60% | met |
 | Therapeutic areas | 9 | >= 6 | met |
 
-Two of four. The report says `balanced: false` and marks the two rows that are
-over, which is the honest reading and is better recorded than remembered.
+All four. Two tests hold this: one requires the report to describe the rows it
+claims to (recomputing every share from `quarterly_revenue.jsonl`), the other
+requires the rows to clear the bar. Both are needed — a correct report of a
+lopsided dataset would pass the first and fail the second.
 
 ### Where the rows come from
 
 | Issuer | Quarters | Share |
 |---|---|---|
-| United Therapeutics | 368 | 40.0% |
-| Johnson & Johnson | 280 | 30.5% |
-| Gilead | 189 | 20.6% |
-| Actelion/J&J | 58 | 6.3% |
-| Merck | 19 | 2.1% |
+| United Therapeutics | 368 | 37.1% |
+| Johnson & Johnson | 280 | 28.2% |
+| Gilead | 263 | 26.5% |
+| Actelion/J&J | 58 | 5.8% |
+| Merck | 19 | 1.9% |
 | Liquidia | 5 | 0.5% |
 
-Single-issuer concentration has come down 78.3% → 67.4% → 40.0%. None of that
+Single-issuer concentration has come down 78.3% → 67.4% → 37.1%. None of that
 was closable by sourcing harder inside pulmonary hypertension: the PAH products
 left in the catalog are the ones with no series at all. It was closable only by
 adding issuers and areas.
@@ -225,11 +227,12 @@ that in a specific way:
 | **Epclusa** | Chronic hepatitis C | 2018Q1–2018Q4 | Four quarters, then the line stops being the brand |
 | **AmBisome** | Invasive fungal infection | 2016Q1–2019Q4 | Flattest series here: a two-decade plateau, ~86–110 a quarter |
 | **Ranexa** | Chronic angina | 2016Q1–2019Q4 | A patent cliff: 177 a quarter to 11 in four quarters |
-| **Biktarvy** | HIV | 2018Q2–2021Q4 | A launch ramp: 185 a quarter to 2,530 |
-| **Genvoya** | HIV | 2018Q1–2021Q4 | The mirror of Biktarvy — declines because its own maker's newer drug takes its patients, with no generic in it |
-| **Truvada** | HIV | 2018Q1–2021Q4 | Eleven flat quarters, then loss of exclusivity: 509 → 146 → 135 → 108 → 67 |
-| **Descovy**, **Odefsey** | HIV | 2018Q1–2021 | Nearly flat across sixteen quarters, next to two that are not |
-| **Stribild**, **Complera**, **Atripla** | HIV | 2018Q1–2021 | The small end of the range, deliberately: a benchmark of only large numbers tests only large numbers |
+| **Biktarvy** | HIV | 2018Q2–2024Q4 | A launch ramp with no plateau in it yet: 185 a quarter to 3,774 |
+| **Genvoya** | HIV | 2018Q1–2024Q4 | The mirror of Biktarvy — declines because its own maker's newer drug takes its patients, with no generic in it |
+| **Truvada** | HIV | 2018Q1–2023Q4 | Eleven flat quarters, then loss of exclusivity: 509 → 146 → 135 → 108 → 67 |
+| **Descovy**, **Odefsey** | HIV | 2018Q1–2024Q4 | Nearly flat across twenty-eight quarters, next to two that are not |
+| **Stribild**, **Complera** | HIV | 2018Q1–2023Q4 | The small end of the range, deliberately: a benchmark of only large numbers tests only large numbers |
+| **Atripla** | HIV | 2018Q1–2021Q4 | Folded into Other HIV from 2022 — one of four series here that end because the issuer stopped reporting them |
 | **Darzalex** | Oncology | 2018Q1–2023Q4 | The steepest sustained climb here: 432 → 2,550 over six years, no plateau |
 | **Zytiga** | Oncology | 2018Q1–2023Q4 | One line, two stories: US falls 845 → 9 on generic entry while international holds for three more years |
 | **Imbruvica** | Oncology | 2018Q1–2023Q4 | J&J's share of a collaboration, not the drug's worldwide sales |
@@ -287,16 +290,25 @@ there.
 
 ### Two provenance notes worth knowing
 
-**Quarters read from another release's prior-year column.** Gilead's pages for
-the second and third quarter 2020 releases no longer resolve. Both quarters are
-read instead off the prior-year columns of the 2021 releases. Each such quote
+**Quarters read from another release's prior-year column.** Some issuer pages
+do not yield the quarter they cover: Gilead's second and third quarter 2020
+releases no longer resolve, and its first quarter 2023 release publishes its
+tables as images, so the page text contains only placeholders. Those quarters
+are read instead off the prior-year columns of a later release. Each such quote
 carries the row *as that document prints it*, plus a legend naming which column
-is cited — never the row for the quarter being recorded. All sixteen are
+is cited — never the row for the quarter being recorded. The 2020 pair is
 confirmed twice over, against the 2020 six-month and nine-month columns of the
-same releases. The same form covers Zytiga's 2022Q4 and three other quarters
-whose own release did not state the line.
+same releases; the 2023 set is confirmed against the six-month residual, which
+reproduces all four figures exactly. The same form covers Zytiga's 2022Q4 and
+several other quarters whose own release did not state the line.
 
-These 22 rows are why delivery is 899/919 rather than ~100%: the extractor does
+Three quarters take a further step. Complera, Stribild and Truvada do not
+survive into 2024, so no later release states their 2023Q1 — it is the stated
+six months less the stated second quarter, both in the same document. That the
+identical arithmetic reproduces the four prior-year-column figures exactly is
+the evidence it is sound where it has to stand alone.
+
+These 29 rows are why delivery is 964/993 rather than ~100%: the extractor does
 not read a column legend. That is a gap in the pipeline, not a hole in the
 oracle, and `eval_completeness.py` reports it as such rather than averaging it
 away.

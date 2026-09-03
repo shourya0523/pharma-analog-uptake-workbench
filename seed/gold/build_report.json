@@ -1,7 +1,7 @@
 {
   "generation": "independent_issuer_research",
   "as_of_quarter": "2026Q2",
-  "quarterly_rows": 919,
+  "quarterly_rows": 993,
   "annual_rows": 74,
   "complete_quarterly_series": 36,
   "quarterly_coverage_pct": 100.0,
@@ -85,7 +85,7 @@
       "Ventavis"
     ],
     "quarterly_series_pct": 65.0,
-    "quarterly_observations": 919,
+    "quarterly_observations": 993,
     "bounded_series": [
       "AmBisome",
       "Atripla",
@@ -120,7 +120,7 @@
     "accounted_for": 20,
     "unaccounted_products": [],
     "complete_quarterly_series": 36,
-    "quarterly_observations": 919,
+    "quarterly_observations": 993,
     "series_missing_quarters": [],
     "annual_benchmark_series": 1,
     "annual_observations": 74,
@@ -164,18 +164,18 @@
     "complete": true
   },
   "concentration": {
-    "quarters": 919,
+    "quarters": 993,
     "largest_issuer": "United Therapeutics",
-    "largest_issuer_share": 40.0,
-    "largest_issuer_within_target": false,
+    "largest_issuer_share": 37.1,
+    "largest_issuer_within_target": true,
     "largest_product": "Remodulin",
-    "largest_product_share": 10.7,
-    "largest_product_within_target": false,
+    "largest_product_share": 9.9,
+    "largest_product_within_target": true,
     "largest_therapeutic_area": "Pulmonary hypertension",
-    "largest_therapeutic_area_share": 54.6,
+    "largest_therapeutic_area_share": 50.6,
     "largest_therapeutic_area_within_target": true,
     "therapeutic_area_count": 9,
     "therapeutic_areas_within_target": true,
-    "balanced": false
+    "balanced": true
   }
 }

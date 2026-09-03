@@ -393,11 +393,12 @@ PRODUCT_METADATA = {
             "worldwide figure, which makes this a launch ramp read from its "
             "second quarter rather than its first."
         ),
-        "series_end_quarter": "2021Q4",
+        "series_end_quarter": "2024Q4",
         "series_end_basis": "sourcing_boundary",
         "series_end_reason": (
             "Gilead still reports Biktarvy separately after this and it is still "
-            "growing. The series stops where sourcing stopped."
+            "growing - 13,423 in 2024 against 185 in its first full quarter. The "
+            "series stops where sourcing stopped."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -418,11 +419,12 @@ PRODUCT_METADATA = {
             "patent loss but because Gilead's own Biktarvy takes its patients. A "
             "decline with no generic in it."
         ),
-        "series_end_quarter": "2021Q4",
+        "series_end_quarter": "2024Q4",
         "series_end_basis": "sourcing_boundary",
         "series_end_reason": (
             "Gilead still reports Genvoya separately after this. The series "
-            "stops where sourcing stopped."
+            "stops where sourcing stopped, seven years into a decline that "
+            "began the quarter Biktarvy launched."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -443,11 +445,15 @@ PRODUCT_METADATA = {
             "quarters around 700 in front of the cliff: 509 in 2020Q3, then 146, "
             "135, 108, 67, 61. The sharpest patent-cliff series in the catalog."
         ),
-        "series_end_quarter": "2021Q4",
-        "series_end_basis": "sourcing_boundary",
+        "series_end_quarter": "2023Q4",
+        "series_end_basis": "issuer_stopped_reporting",
         "series_end_reason": (
-            "Gilead still reports Truvada separately after this. The series "
-            "stops where sourcing stopped, five quarters past the cliff."
+            "Truvada has no line of its own from 2024. The first quarter 2024 "
+            "release footnotes Other HIV as 'Includes Atripla, "
+            "Complera/Eviplera, Emtriva, Sunlenca, Stribild, "
+            "Truvada and Tybost', so the line was folded in exactly as "
+            "Atripla's was two years earlier. The series ends because the "
+            "issuer stopped reporting it."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -497,7 +503,7 @@ PRODUCT_METADATA = {
             "quarters - a backbone sold into both treatment and, from late 2019, "
             "prevention, so two demand curves offset inside one line."
         ),
-        "series_end_quarter": "2021Q4",
+        "series_end_quarter": "2024Q4",
         "series_end_basis": "sourcing_boundary",
         "series_end_reason": (
             "Gilead still reports Descovy separately after this. The series "
@@ -521,13 +527,11 @@ PRODUCT_METADATA = {
             "here. The flattest HIV series in the set, which is what makes it "
             "useful next to Biktarvy and Truvada."
         ),
-        "series_end_quarter": "2021Q3",
+        "series_end_quarter": "2024Q4",
         "series_end_basis": "sourcing_boundary",
         "series_end_reason": (
-            "Gilead reports Odefsey separately well past this quarter; the 2021 "
-            "fourth-quarter release's total line for it could not be read, so "
-            "the series stops one quarter short of the rest of this group "
-            "rather than carrying a figure that was not sourced."
+            "Gilead still reports Odefsey separately after this. The series "
+            "stops where sourcing stopped."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -548,13 +552,15 @@ PRODUCT_METADATA = {
             "earliest quarter sourced; the series is the slow switch away to the "
             "tenofovir alafenamide generation."
         ),
-        "series_end_quarter": "2021Q3",
-        "series_end_basis": "sourcing_boundary",
+        "series_end_quarter": "2023Q4",
+        "series_end_basis": "issuer_stopped_reporting",
         "series_end_reason": (
-            "Gilead reports the Complera line separately past this quarter; the "
-            "2021 fourth-quarter release's total line for it could not be read, "
-            "so the series stops one quarter short rather than carrying an "
-            "unsourced figure."
+            "The Complera line disappears from 2024. The first quarter 2024 "
+            "release footnotes Other HIV as 'Includes Atripla, "
+            "Complera/Eviplera, Emtriva, Sunlenca, Stribild, "
+            "Truvada and Tybost', so the line was folded in exactly as "
+            "Atripla's was two years earlier. The series ends because the "
+            "issuer stopped reporting it."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -576,11 +582,15 @@ PRODUCT_METADATA = {
             "patients - the smallest series in this group, which is why it is "
             "here: a benchmark of only large numbers tests only large numbers."
         ),
-        "series_end_quarter": "2021Q4",
-        "series_end_basis": "sourcing_boundary",
+        "series_end_quarter": "2023Q4",
+        "series_end_basis": "issuer_stopped_reporting",
         "series_end_reason": (
-            "Gilead still reports Stribild separately after this. The series "
-            "stops where sourcing stopped."
+            "Stribild has no line of its own from 2024. The first quarter 2024 "
+            "release footnotes Other HIV as 'Includes Atripla, "
+            "Complera/Eviplera, Emtriva, Sunlenca, Stribild, "
+            "Truvada and Tybost', so the line was folded in exactly as "
+            "Atripla's was two years earlier. The series ends because the "
+            "issuer stopped reporting it."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",

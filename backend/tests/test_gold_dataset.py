@@ -701,6 +701,7 @@ def test_every_quarterly_row_is_reachable_by_the_pipeline():
         "direct_jnj_retrospective_table",
         "annual_less_reported_first_nine_months",
         "full_year_less_other_reported_quarters",
+        "year_to_date_less_reported_quarters",
         "identity_normalization_pre_dpi",
         "acquisition_bridge_sum",
     }
@@ -958,6 +959,31 @@ def test_the_two_largest_jnj_series_match_an_independent_disclosure():
         assert len(quarters) == 4, f"{drug} {year}: {len(quarters)} quarters"
         got = round(100 * sum(quarters) / total_revenue[year], 1)
         assert got == share, f"{drug} {year}: {got}% of revenue, 10-K says {share}%"
+
+
+def test_the_catalog_is_balanced():
+    """The four thresholds, asserted rather than reported.
+
+    "Balanced" started as a judgement held outside the repo: I could say the
+    dataset was 67% one issuer, but nothing would notice if the next hundred
+    rows made it 75% again. These are the bounds the catalog is held to, and
+    they are all met - largest issuer under 40%, largest product under 10%,
+    largest therapeutic area under 60%, at least six areas.
+
+    The neighbouring test checks the report describes the rows; this one
+    checks the rows clear the bar. Both are needed: a correct report of a
+    lopsided dataset would pass the first and fail this one.
+    """
+    report = json.loads((GOLD / "build_report.json").read_text())
+    balance = report["concentration"]
+    over = {
+        key: balance[key.replace("_within_target", "_share")]
+        for key, value in balance.items()
+        if key.endswith("_within_target") and not value
+    }
+    assert not over, f"above target: {over}"
+    assert balance["therapeutic_areas_within_target"], balance["therapeutic_area_count"]
+    assert balance["balanced"]
 
 
 def test_the_independent_audit_finds_nothing():

@@ -48,6 +48,7 @@ DERIVED = {
     "annual_less_reported_first_nine_months",
     "acquisition_bridge_sum",
     "full_year_less_other_reported_quarters",
+    "year_to_date_less_reported_quarters",
     "identity_normalization_pre_dpi",
 }
 # Disagreements that are the issuer's own rounding, not a defect. An issuer
