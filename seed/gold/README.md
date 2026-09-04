@@ -290,28 +290,35 @@ there.
 
 ### Two provenance notes worth knowing
 
-**Quarters read from another release's prior-year column.** Some issuer pages
-do not yield the quarter they cover: Gilead's second and third quarter 2020
-releases no longer resolve, and its first quarter 2023 release publishes its
-tables as images, so the page text contains only placeholders. Those quarters
-are read instead off the prior-year columns of a later release. Each such quote
-carries the row *as that document prints it*, plus a legend naming which column
-is cited — never the row for the quarter being recorded. The 2020 pair is
-confirmed twice over, against the 2020 six-month and nine-month columns of the
-same releases; the 2023 set is confirmed against the six-month residual, which
-reproduces all four figures exactly. The same form covers Zytiga's 2022Q4 and
-several other quarters whose own release did not state the line.
+**Every quarter is cited to the filing that reports it as current.** An earlier
+revision of this dataset read twenty-eight quarters off the *prior-year* column
+of a later release, each quote carrying a hand-written legend naming which
+column was cited. The stated reason was that Gilead's second and third quarter
+2020 releases "no longer resolve" and that its first quarter 2023 release
+"publishes its tables as images". Neither holds: all three pages resolve and
+their PRODUCT SALES SUMMARY tables are text. The quarters were re-read from
+their own releases and the legends are gone.
 
-Three quarters take a further step. Complera, Stribild and Truvada do not
-survive into 2024, so no later release states their 2023Q1 — it is the stated
-six months less the stated second quarter, both in the same document. That the
-identical arithmetic reproduces the four prior-year-column figures exactly is
-the evidence it is sound where it has to stand alone.
+This matters beyond tidiness. A legend is a human decoding a column layout, so
+a row carrying one is not independently readable, and `eval_extraction.py`
+excludes it from the denominator — accuracy read 899/899 precisely because the
+unscoreable rows were not counted. That is the same flattery this dataset was
+built to remove.
 
-These 29 rows are why delivery is 964/993 rather than ~100%: the extractor does
-not read a column legend. That is a gap in the pipeline, not a hole in the
-oracle, and `eval_completeness.py` reports it as such rather than averaging it
-away.
+Re-reading also corrected two values. Gilead states Complera / Eviplera and
+Stribild for the first quarter of 2023 outright, at $39 million and $28
+million; the six-month-less-second-quarter arithmetic that had stood in for
+them gave $38 million and $29 million. Gilead rounds each period
+independently, so the residual is off by a dollar in either direction — the
+same effect documented for Merck's Adempas below. Where an issuer states a
+figure, gold now takes the stated figure.
+
+One derivation remains that the pipeline cannot reproduce: Invega Sustenna
+2023Q2, full-year less the other three quarters. J&J's 2Q23 schedule does state
+it, but this environment's extractor truncates that PDF at the line above the
+INVEGA SUSTENNA worldwide total, and deriving the total as US plus
+International is forbidden here for the rounding reason recorded above. So the
+row stays an explicit derivation and delivery is 992/993 rather than 993/993.
 
 **Series that start late on purpose.** Biktarvy was approved 7 February 2018 and
 sold only in the United States that quarter, so Gilead gives it a single US line
@@ -411,12 +418,13 @@ J&J rounds each line independently, so the parts differ from the stated
 worldwide figure by 1 in 2019Q1, 2021Q2 and 2024Q1. The US and International
 figures ride along in each row's `gold_notes` so this stays checkable.
 
-Every quarter cites its own quarter's schedule, with one exception: **2020Q3**
-cites the 3Q2021 schedule's prior-year column, because the 3Q2020 document's
-text could not be read past its International row. That row carries a written
-column legend naming what each column is, which is the same third citation form
-Winrevair uses — and it is why one Opsumit quarter is a gold-side derivation in
-`eval_completeness.py` rather than a direct read.
+Every quarter cites its own quarter's schedule, with no exceptions. **2020Q3**
+previously cited the 3Q2021 schedule's prior-year column, on the grounds that
+the 3Q2020 document could not be read past its International row. It can: a
+second attempt with an objective naming the worldwide line returned
+`OPSUMIT ... WW 392 347 ... 1,187 1,001`, and the row now cites 3Q2020 directly.
+The truncation is real but intermittent and objective-dependent, not a property
+of the document — worth retrying before concluding a schedule is unreadable.
 
 #### What was wrong before, and why
 

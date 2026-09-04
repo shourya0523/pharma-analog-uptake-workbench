@@ -470,10 +470,13 @@ UPTRAVI US/International split, and the 2017Q2 acquisition stub resolves to 45
 (573 less the 528 of Q3+Q4) — which is also the figure that would close the
 open Uptravi 2017Q2 gap, from the same 2Q2018 exhibit.
 
-One document in the archive resisted: the 3Q2020 schedule's text could not be
-read past its International row on repeated attempts, so 2020Q3 is cited to the
-3Q2021 schedule's prior-year column with a written legend. Every other quarter
-cites its own filing.
+One document in the archive resisted at first: the 3Q2020 schedule truncated at
+its International row on repeated attempts. It yields to a fetch whose stated
+objective names the worldwide line, returning `OPSUMIT ... WW 392 347 ... 1,187
+1,001`, so 2020Q3 now cites its own filing like every other quarter. The same
+truncation recurs on the 2Q23 schedule at the INVEGA SUSTENNA worldwide line,
+so treat it as an intermittent extractor behaviour to retry against, not as a
+property of the archive.
 
 The same 2Q2017 Actelion Historical Sales Schedule also carries OPSUMIT and
 TRACLEER in US dollars back to 2016Q1, under a column headed "Q2 ... through
