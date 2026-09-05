@@ -222,3 +222,93 @@ def test_prose_ignores_an_amount_whose_revenue_tie_is_a_condition():
     )
     values = read_prose(text, product="Veldora")
     assert [(v.period, v.value_as_reported) for v in values] == [("2025Q2", 6.5)]
+
+
+def test_years_over_a_run_of_quarter_labels_anchor_the_sequence():
+    # A retrospective schedule: the years are printed once, over the run,
+    # and the quarters count down across the year boundary.
+    text = "\n".join([
+        "Historical Veldora Sales (In US Dollars, millions)",
+        "2017 2016",
+        "Q2 Q1 Q4 Q3 Q2 Q1 Full Year",
+        "through 6/15",
+        "VELDORA",
+        "US 130 144 143 137 130 121 531",
+        "Intl 86 100 92 86 77 58 313",
+        "WW 216 244 235 223 207 179 844",
+        "OTHER",
+        "US 35 43 43 42 43 54 182",
+    ])
+    report = read_document(_doc(text), product="Veldora")
+    by_key = {(o.period, o.geography): o for o in report.observations if o.method == "grid"}
+    assert by_key[("2016Q1", "Worldwide")].value_as_reported == 179
+    assert by_key[("2016Q4", "United States")].value_as_reported == 143
+    assert by_key[("2016", "Worldwide")].value_as_reported == 844
+    assert by_key[("2017Q2", "Worldwide")].covers is not None, "Q2 2017 runs only through June 15"
+
+
+def test_a_marked_section_covers_its_member_groups_and_ends_where_the_sum_does():
+    # The footnote on the franchise heading applies to the products that sum
+    # to it, and not to the next franchise, whose rows would exceed it.
+    text = "\n".join([
+        "REPORTED SALES ($MM)",
+        "SECOND QUARTER",
+        "2018 2017 Reported Operational Currency",
+        "RARE DISEASE(4)",
+        "US 429 37 * * -",
+        "Intl 236 48 * * *",
+        "WW 665 85 * * *",
+        "VELDORA",
+        "US 180 24 * * -",
+        "Intl 131 21 * * *",
+        "WW 311 45 * * *",
+        "OTHER RARE DISEASE",
+        "US 249 13 * * -",
+        "Intl 105 27 * * *",
+        "WW 354 40 * * *",
+        "IMMUNOLOGY",
+        "US 900 850 5.9% 5.9% -",
+        "Intl 700 650 7.7% 7.7% -",
+        "WW 1,600 1,500 6.7% 6.7% -",
+        "ZORBIX",
+        "US 400 380 5.3% 5.3% -",
+        "Intl 300 280 7.1% 7.1% -",
+        "WW 700 660 6.1% 6.1% -",
+        "(4) Products acquired from Actelion acquisition on June 16, 2017",
+    ])
+    doc = _doc(text)
+    veldora = {(o.period, o.geography): o for o in read_document(doc, product="Veldora").observations if o.method == "grid"}
+    assert veldora[("2017Q2", "Worldwide")].covers == ("2017-06-16", "2017-06-30")
+    zorbix = {(o.period, o.geography): o for o in read_document(doc, product="Zorbix").observations if o.method == "grid"}
+    assert zorbix[("2017Q2", "Worldwide")].covers is None
+    assert zorbix[("2017Q2", "Worldwide")].value_as_reported == 660
+
+
+def test_a_rows_own_geography_outranks_a_described_column_geography():
+    from app.extraction.columns import ColumnLayout, ColumnSpec
+    from app.extraction.readers import read_grids
+
+    text = "\n\n".join([
+        "Three Months Ended September 30, 2023 2022 % Change",
+        "VELDORA US 730 684 6.7%",
+        "Intl 299 348 -14.1%",
+        "WW 1,029 1,032 -0.3%",
+    ])
+    doc = _doc(text)
+    # A description that stamps one geography on every column, three times over.
+    described = [
+        ColumnLayout(
+            columns=(
+                ColumnSpec("value", 3, 9, 2023, geography=geo),
+                ColumnSpec("value", 3, 9, 2022, geography=geo),
+                ColumnSpec("change"),
+            ),
+            unit_label="millions", unit_declared=True, currency="USD", currency_declared=True, notes=("llm_fingerprint",),
+        )
+        for geo in ("United States", "International", "Worldwide")
+    ]
+    report = read_grids(doc, product="Veldora", described_layouts={0: described})
+    assert not [s for s in report.skipped if "ambiguous" in s], report.skipped
+    by_key = {(o.period, o.geography): o.value_as_reported for o in report.observations}
+    assert by_key[("2022Q3", "Worldwide")] == 1032
+    assert by_key[("2023Q3", "International")] == 299

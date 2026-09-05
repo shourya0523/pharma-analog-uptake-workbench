@@ -504,6 +504,11 @@ def recover_text_grids(text: str, *, max_header_lines: int = 12) -> list[Table]:
 def parse_text_document(text: str) -> tuple[list[str], list[Table]]:
     """Every grid a text document contains, whichever way it was flattened."""
     blocks, pipe_tables = parse_pipe_tables(text)
-    prose = "\n\n".join(blocks)
-    text_tables = recover_text_grids(prose)
+    # Grid recovery sees the text with its line structure intact: whether a
+    # newline is a wrapped paragraph or a row of a grid is its decision.
+    kept = [
+        line for line in text.splitlines()
+        if not _is_pipe_row(line) and not _MD_SEPARATOR_ROW_RE.match(line.strip())
+    ]
+    text_tables = recover_text_grids("\n".join(kept))
     return blocks, pipe_tables + text_tables

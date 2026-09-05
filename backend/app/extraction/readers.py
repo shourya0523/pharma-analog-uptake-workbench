@@ -376,6 +376,40 @@ _NOT_REVENUE_SECTION_RE = re.compile(
 _REVENUE_WORD_RE = re.compile(r"\b(?:revenues?|sales|turnover)\b", re.I)
 
 
+_PLAIN_NUMBER_RE = re.compile(r"^\(?-?[\d,]+(?:\.\d+)?\)?$")
+_HEADING_PERIOD_RE = re.compile(
+    r"\b(?:quarter|months?|year|ended|ending|fy|q[1-4]|[1-4]q|change|reported|operational|currency)\b|(?:19|20)\d{2}|[$%]",
+    re.I,
+)
+
+
+def _is_group_heading(text: str) -> bool:
+    """A short label with no period, change or unit vocabulary: a product or franchise name."""
+    text = text.strip()
+    if not text or is_value_token(text) or len(text.split()) > 8:
+        return False
+    return _HEADING_PERIOD_RE.search(text) is None
+
+
+def _plain_values(tokens: list[str], layouts: list[ColumnLayout]) -> dict[int, float]:
+    """Value-column figures of a row that fills a candidate layout exactly, with no blanks."""
+    for layout in layouts:
+        if len(tokens) != len(layout.columns):
+            continue
+        values: dict[int, float] = {}
+        for index, (token, column) in enumerate(zip(tokens, layout.columns)):
+            if column.kind != "value" or not _PLAIN_NUMBER_RE.match(token.strip()):
+                continue
+            digits = token.strip().strip("()").replace(",", "")
+            try:
+                number = float(digits)
+            except ValueError:
+                continue
+            values[index] = -number if token.strip().startswith("(") else number
+        return values
+    return {}
+
+
 def _fits(layout: ColumnLayout, rows: list[list[str]]) -> bool:
     """A layout inherited from an earlier grid must fit this grid's rows."""
     widths = [len(_row_label(row)[1]) for row in rows if _is_data_row(row)]
@@ -501,10 +535,28 @@ def read_grids(
         # A section label with a footnote marker ("PULMONARY HYPERTENSION
         # (4)") may be the last line of the header rather than a body row.
         section_markers: set[int] = set()
+        # A marked section ("PULMONARY HYPERTENSION (4)") covers the groups
+        # beneath it for as long as they fit inside the section's own rows:
+        # members sum to the section, and the first group that would push the
+        # sum past it opens a section of its own.
+        section_heading = ""
+        section_totals: dict[str, dict[int, float]] = {}
+        section_member_sums: dict[str, dict[int, float]] = {}
+        section_probe = False
         for row in header_rows[-3:]:
             text = " ".join(row)
             if len(text.split()) <= 6 and text.strip().isupper():
-                section_markers |= {int(m) for m in _MARKER_RE.findall(text)}
+                found_markers = {int(m) for m in _MARKER_RE.findall(text)}
+                if found_markers:
+                    section_markers |= found_markers
+                    section_heading = split_geography(clean_label(text))[0] or ""
+                    group_label = section_heading
+        # A bare label as the last header line ("OPSUMIT" above "US 130 ...")
+        # names the first group of rows.
+        if header_rows and not group_label:
+            last = [cell for cell in header_rows[-1] if cell and cell.strip()]
+            if len(last) == 1 and _is_group_heading(last[0]):
+                group_label = split_geography(clean_label(last[0]))[0] or ""
         group_rows: list[tuple[str | None, dict[int, float]]] = []
         cost_section = False
         # A label that wrapped onto the next line ends in a separator:
@@ -529,7 +581,13 @@ def read_grids(
                     if label_part:
                         group_label = label_part
                         group_markers = markers
-                        section_markers = markers if text.isupper() else section_markers
+                        if text.isupper():
+                            if markers:
+                                section_markers = markers
+                                section_heading = label_part
+                                section_totals, section_member_sums, section_probe = {}, {}, False
+                            elif section_markers:
+                                section_probe = True
                         group_rows = []
                         cost_section = (
                             _NOT_REVENUE_SECTION_RE.search(text) is not None
@@ -571,6 +629,28 @@ def read_grids(
                     group_label = label_part
                     group_markers = row_markers
                     group_rows = []
+            if (section_markers or section_probe) and not unlabelled:
+                plain = _plain_values(tokens, usable)
+                geo_key = geography or "Worldwide"
+                if section_probe:
+                    totals = section_totals.get(geo_key)
+                    contained = False
+                    if totals and plain:
+                        sums = section_member_sums.get(geo_key, {})
+                        shared = [c for c in plain if c in totals]
+                        contained = bool(shared) and all(
+                            sums.get(c, 0.0) + plain[c] <= totals[c] * 1.02 + 0.5 for c in shared
+                        )
+                    if not contained:
+                        section_markers, section_totals, section_member_sums = set(), {}, {}
+                    section_probe = False
+                if section_markers and plain:
+                    if product_part.lower() == section_heading.lower():
+                        section_totals.setdefault(geo_key, {}).update(plain)
+                    else:
+                        sums = section_member_sums.setdefault(geo_key, {})
+                        for col, value in plain.items():
+                            sums[col] = sums.get(col, 0.0) + value
             sole_product_line = False
             if product_part and not _matches_aliases(product_part, aliases):
                 # "Product sales, net" in a filing whose only named catalog
@@ -609,8 +689,11 @@ def read_grids(
                 continue
             best_penalty = min(f[0] for f in fits)
             best = [f for f in fits if f[0] == best_penalty]
+            # A row's own geography label ("Intl", "WW") is the geography of
+            # its figures; a geography a description puts on the columns
+            # applies only to rows that carry none.
             distinct = {
-                tuple(sorted((layout.columns[i].period or "", layout.columns[i].geography or "", v) for i, v in a.values.items()))
+                tuple(sorted((layout.columns[i].period or "", geography or layout.columns[i].geography or "", v) for i, v in a.values.items()))
                 for _, layout, a in best
             }
             if len(distinct) > 1:
@@ -677,7 +760,7 @@ def read_grids(
                             unit_label=unit_label,
                             currency=currency,
                             unit_declared=unit_declared,
-                            geography=spec.geography or row_geography,
+                            geography=row_geography or spec.geography,
                             covers=covers,
                             source_quote=quote,
                             method="grid",

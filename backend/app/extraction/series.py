@@ -172,8 +172,14 @@ def normalize_observations(observations: list[Observation]) -> list[_Norm]:
     undeclared: list[Observation] = []
     for obs in observations:
         if obs.unit_declared:
-            value, status = _to_usd_millions(obs.value_as_reported, obs.unit_label, obs.currency, obs.period)
-            declared.append(_Norm(obs, value, obs.unit_label, status))
+            unit_label = obs.unit_label
+            if unit_label in {"millions", "billions"} and abs(obs.value_as_reported) >= 1_000_000:
+                # "$45,121,000" printed in full inside a document whose
+                # context says millions: no product revenue is a trillion
+                # dollars, so the cell carries its own magnitude.
+                unit_label = "units"
+            value, status = _to_usd_millions(obs.value_as_reported, unit_label, obs.currency, obs.period)
+            declared.append(_Norm(obs, value, unit_label, status))
         else:
             undeclared.append(obs)
 

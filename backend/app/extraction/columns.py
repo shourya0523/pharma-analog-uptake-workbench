@@ -305,7 +305,42 @@ def tokenize_header(text: str) -> list[HeaderToken]:
             found.append(token)
             claimed.append((match.start(), match.end()))
     found.sort(key=lambda t: t.start)
-    return found
+    return _split_year_first_codes(found)
+
+
+_YEAR_FIRST_CODE_RE = re.compile(r"^((?:19|20)\d{2})(\s*)(Q[1-4])$", re.I)
+
+
+def _split_year_first_codes(tokens: list[HeaderToken]) -> list[HeaderToken]:
+    """"2017 2016 Q2 Q1 Q4 ...": the "2016 Q2" is a year and a bare quarter.
+
+    The year-first code ("2016 Q2") is read as one column only when it stands
+    alone. Between a bare year and a run of bare quarter labels it is the
+    last year of the year group followed by the first label of the run.
+    """
+    out: list[HeaderToken] = []
+    for index, token in enumerate(tokens):
+        match = _YEAR_FIRST_CODE_RE.match(token.text.strip()) if token.kind == "quarter_code" else None
+        previous = out[-1] if out else None
+        following = tokens[index + 1] if index + 1 < len(tokens) else None
+        if (
+            match
+            and previous is not None and previous.kind == "year"
+            and following is not None
+            and following.kind in {"quarter_code", "quarter_word", "ytd"}
+            and following.year is None
+        ):
+            year = int(match.group(1))
+            out.append(HeaderToken("year", match.group(1), token.start, year=year))
+            out.append(
+                HeaderToken(
+                    "quarter_code", match.group(3), token.start + len(match.group(1)) + len(match.group(2)),
+                    months=3, quarter=token.quarter, end_month=token.end_month, year=None,
+                )
+            )
+            continue
+        out.append(token)
+    return out
 
 
 # --------------------------------------------------------------------------
@@ -843,10 +878,14 @@ def build_layouts(
         if layouts_b:
             return layouts_b
 
-    # Case C: a run of quarter labels and no years at all in the header. The
-    # document's own years are the only anchors.
-    if undated and not year_runs and year_candidates:
-        sequences = _infer_years_for_sequence(undated, year_candidates)
+    # Case C: a run of quarter labels that carry no years of their own. The
+    # years printed over the run ("2017 2016" above "Q2 Q1 Q4 Q3 Q2 Q1 Full
+    # Year") anchor it; with none in the header, the document's own years
+    # are the only anchors.
+    header_years = sorted({t.year for run in year_runs for t in run if t.year is not None})
+    anchors = header_years or list(year_candidates or [])
+    if undated and anchors and (not year_runs or len(undated) > len(header_years)):
+        sequences = _infer_years_for_sequence(undated, anchors)
         for years in sequences:
             columns = [
                 ColumnSpec("value", t.months, t.end_month if t.months != 12 else 12, y, label=t.text)
