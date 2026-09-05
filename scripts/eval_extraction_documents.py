@@ -186,6 +186,18 @@ def main() -> int:
         if outcomes[name]:
             print(f"  {name:<18} {len(outcomes[name])}")
 
+    # Per issuer, because one blocked issuer can hide another that works.
+    per_issuer: dict[str, list[int]] = collections.defaultdict(lambda: [0, 0])
+    for name in ("read", "wrong_value", "not_found", "unreadable_document"):
+        for row in outcomes[name]:
+            tally = per_issuer[row["manufacturer"]]
+            tally[1] += 1
+            if name == "read":
+                tally[0] += 1
+    print("\nby issuer")
+    for issuer, (ok, total) in sorted(per_issuer.items(), key=lambda kv: -kv[1][1]):
+        print(f"   {issuer:<24}{ok:>5}/{total:<6}{ok / total:7.1%}")
+
     if outcomes["wrong_value"]:
         print("\nwrong value - the pipeline answered, and was wrong:")
         for row in sorted(outcomes["wrong_value"], key=lambda r: (r["drug_name"], r["period"]))[:15]:
