@@ -100,7 +100,7 @@ def test_parser_keeps_rows_the_document_prints_and_rejects_the_rest():
     rows = fp.grids[0].rows
     assert [r.row_index for r in rows] == [4]
     assert rows[0].label_width == 1 and rows[0].line == "own_revenue"
-    assert any("index_adjusted_to_4" in r for r in fp.rejected) and any("described_twice" in r for r in fp.rejected)
+    assert any("index_adjusted_to_4" in r for r in fp.adjusted) and any("described_twice" in r for r in fp.rejected)
     assert any("line_kind(expenses)" in r for r in fp.rejected)
     assert fp.grids[0].sections[0].heading_as_printed == "Immunology"
     assert [c.geography for c in fp.grids[0].layout.columns] == [
@@ -114,7 +114,7 @@ def test_parser_corrects_a_slipped_row_index_when_the_label_is_unique():
     ])
     fp = parse_fingerprint(payload, doc=_doc([GRID]), shown={0})
     assert fp.grids[0].rows[0].row_index == 4
-    assert any("index_adjusted_to_4" in r for r in fp.rejected)
+    assert any("index_adjusted_to_4" in r for r in fp.adjusted) and not fp.rejected
 
 
 def test_parser_rejects_grids_that_were_not_shown_and_bad_columns():

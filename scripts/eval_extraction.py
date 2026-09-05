@@ -55,7 +55,7 @@ sys.path.insert(0, str(REPO_ROOT / "backend"))
 from app.extraction.extract import map_values_to_blocks, tokenize_row  # noqa: E402
 from app.extraction.fingerprint import PeriodBlock  # noqa: E402
 from app.extraction.positional import read_positional_block  # noqa: E402
-from app.extraction.prose import read_prose  # noqa: E402
+from app.extraction.degraded.prose_reader import read_prose  # noqa: E402
 
 GOLD = REPO_ROOT / "seed" / "gold"
 

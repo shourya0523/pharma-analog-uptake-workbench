@@ -11,9 +11,10 @@ period forms, cross-document reconciliation.
 from __future__ import annotations
 
 from app.domain.models import ParsedDocument, ParsingStatus
-from app.extraction.columns import align_row, build_layouts, split_geography
-from app.extraction.prose import read_prose
-from app.extraction.readers import read_document
+from app.extraction.columns import align_row
+from app.extraction.degraded.header_grammar import build_layouts, split_geography
+from app.extraction.degraded.prose_reader import read_prose
+from app.extraction.reading import read_document
 from app.extraction.series import assemble_series
 from app.parsing.grids import parse_text_document, recover_text_grids
 
@@ -286,7 +287,7 @@ def test_a_marked_section_covers_its_member_groups_and_ends_where_the_sum_does()
 
 def test_a_rows_own_geography_outranks_a_described_column_geography():
     from app.extraction.columns import ColumnLayout, ColumnSpec
-    from app.extraction.readers import read_grids
+    from app.extraction.degraded.grid_reader import read_grids
 
     text = "\n\n".join([
         "Three Months Ended September 30, 2023 2022 % Change",

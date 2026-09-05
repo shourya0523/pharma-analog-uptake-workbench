@@ -26,7 +26,6 @@ and the values agree to the precision the gold row carries.
 from __future__ import annotations
 
 import re
-
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -180,7 +179,8 @@ def geographies_compatible(gold: str, pipeline: str) -> bool:
 
 
 def _label_key(label: Any) -> str:
-    return re.sub(r"[^a-z0-9]+", "", str(label or "").lower())
+    """"Europe & Rest of World" and "Europe and rest of world" name one region."""
+    return re.sub(r"[^a-z0-9]+", "", re.sub(r"\band\b", "", str(label or "").lower()))
 
 
 def _labels_agree(gold: ComparableRevenueRow, pipeline: ComparableRevenueRow) -> bool:

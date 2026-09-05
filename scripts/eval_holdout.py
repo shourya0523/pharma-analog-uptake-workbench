@@ -205,6 +205,13 @@ async def main() -> int:
         if gold:
             comparisons[name] = [compare(g, rows) for g in gold]
 
+    if fingerprinter is not None:
+        stats = dict(runner.fingerprint_stats)
+        stats["tiers"] = dict(stats["tiers"])
+        print(f"\nfingerprints: {stats}")
+        reads = {k: (dict(v) if isinstance(v, dict) else v) for k, v in runner.read_stats.items()}
+        print(f"reads: {reads}")
+
     if comparisons:
         print("\npipeline delivery against the held-out reference, from EDGAR sourcing alone")
         print(f"{'product':12} {'ref':>5} {'match':>6} {'value':>6} {'geo':>5} {'review':>7} {'missing':>8} {'delivered':>10}")

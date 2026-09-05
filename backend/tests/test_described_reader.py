@@ -166,3 +166,39 @@ def test_prose_keeps_actual_statements_that_are_grounded_and_counts_the_rest():
     assert report.dropped_prose == {"guidance": 1, "payment_or_financing": 1}
     assert "prose:2025Q3:quote_not_in_document" in report.skipped
     assert report.mode == "model"
+
+
+def test_two_columns_described_as_the_same_figure_place_nothing_and_ask_for_repair():
+    """A six-month column beside its quarter, both described as the quarter."""
+    grid = [
+        ["Three Months Ended June 30, Six Months Ended June 30,"],
+        ["2025 2024 2025 2024"],
+        ["US", "68,683", "63,793", "132,958", "120,142"],
+    ]
+    q2_25, q2_24 = ColumnSpec("value", 3, 6, 2025), ColumnSpec("value", 3, 6, 2024)
+    region = GridRegion(
+        grid_index=0, layout=_layout(q2_25, q2_24, q2_25, q2_24, unit="thousands"),
+        rows=(_row(2, "US", "Arikayce", "United States", "own_revenue"),),
+    )
+    observations, failures = read_described_grid(_doc([grid]), region, product="Arikayce", aliases=["Arikayce"])
+    assert not observations
+    assert [f.code for f in failures] == ["duplicate_columns"]
+    assert "c0 and c2 are both described as 2025Q2 quarterly" in failures[0].detail
+
+
+def test_two_grids_that_state_one_figure_differently_are_both_sent_back():
+    """A six-month grid described as the quarter contradicts the quarter's own grid."""
+    quarter = [["Three Months Ended June 30, 2025 2024"], ["US", "68,683", "63,793"]]
+    half = [["Six Months Ended June 30, 2025 2024"], ["US", "132,958", "120,142"]]
+    q2_25, q2_24 = ColumnSpec("value", 3, 6, 2025), ColumnSpec("value", 3, 6, 2024)
+    fingerprint = Fingerprint(grids=[
+        GridRegion(grid_index=0, layout=_layout(q2_25, q2_24, unit="thousands"),
+                   rows=(_row(1, "US", "Arikayce", "United States", "own_revenue"),)),
+        GridRegion(grid_index=1, layout=_layout(q2_25, q2_24, unit="thousands"),
+                   rows=(_row(1, "US", "Arikayce", "United States", "own_revenue"),)),
+    ])
+    report = read_described_document(_doc([quarter, half]), fingerprint, product="Arikayce")
+    assert report.observations == [], "both years of both grids are in doubt"
+    codes = {(f.grid_index, f.code) for f in report.failures}
+    assert codes == {(0, "contradicted_within_document"), (1, "contradicted_within_document")}
+    assert "132,958 thousands" in next(f.detail for f in report.failures if f.grid_index == 0)

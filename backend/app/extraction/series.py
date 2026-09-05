@@ -41,7 +41,7 @@ from app.extraction.adjudicate import (
     rounding_tolerance,
 )
 from app.extraction.derive import assemble_split_ownership_quarter
-from app.extraction.fingerprint import UNIT_SCALE_TO_MILLIONS
+from app.extraction.units import UNIT_SCALE_TO_MILLIONS
 from app.extraction.process import FX_USD_PER_UNIT
 from app.extraction.readers import Observation
 

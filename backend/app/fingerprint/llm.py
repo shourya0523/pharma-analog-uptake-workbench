@@ -27,13 +27,14 @@ import hashlib
 import json
 import logging
 import re
+from collections.abc import Iterable
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
 from app.config import get_settings
 from app.domain.models import ParsedDocument
-from app.extraction.columns import ColumnLayout, ColumnSpec
+from app.extraction.columns import _PERIOD_TYPE_BY_MONTHS, ColumnLayout, ColumnSpec
 from app.llm.client import OpenRouterClient, load_prompt
 from app.parsing.evidence import MONEY_RE, product_aliases
 from app.parsing.grids import is_value_token
@@ -62,7 +63,7 @@ SCOPES = ("product_own_revenue", "product_line_item_qualified", "company_total",
 # Grids shown to the model beyond those naming a product: any grid that says
 # it is about sales or revenue. This chooses what the model gets to see, not
 # what anything means; a grid it misses is a grid the model never described.
-_REVENUE_WORDS_RE = re.compile(r"\b(?:product\s+sales|net\s+sales|revenues?)\b", re.I)
+_REVENUE_WORDS_RE = re.compile(r"\b(?:product\s+sales|net\s+sales|revenues?)\b", re.IGNORECASE)
 
 
 # --------------------------------------------------------------------------
@@ -132,6 +133,7 @@ class Fingerprint:
     cached: bool = False
     model: str = ""
     rejected: list[str] = field(default_factory=list)
+    adjusted: list[str] = field(default_factory=list)   # corrections the parser made without dropping anything
     promotions: list[str] = field(default_factory=list)
     parts: int = 0
     calls: int = 0
@@ -149,11 +151,12 @@ class Fingerprint:
     def grid(self, index: int) -> GridRegion | None:
         return next((g for g in self.grids if g.grid_index == index), None)
 
-    def extend(self, other: "Fingerprint") -> None:
+    def extend(self, other: Fingerprint) -> None:
         self.grids.extend(other.grids)
         self.prose.extend(other.prose)
         self.raw.extend(other.raw)
         self.rejected.extend(other.rejected)
+        self.adjusted.extend(other.adjusted)
         self.promotions.extend(other.promotions)
 
 
@@ -266,7 +269,7 @@ def sketch_document(
     prose_blocks: list[str] = []
     text = doc.full_text
     if aliases:
-        pattern = re.compile("|".join(re.escape(a) for a in sorted(aliases, key=len, reverse=True)), re.I)
+        pattern = re.compile("|".join(re.escape(a) for a in sorted(aliases, key=len, reverse=True)), re.IGNORECASE)
         seen_spans: list[tuple[int, int]] = []
         for match in pattern.finditer(text):
             start = max(0, text.rfind("\n\n", 0, match.start()))
@@ -349,7 +352,7 @@ def _period_parts(period: str, period_type: str) -> tuple[int | None, int | None
         return 3, quarter * 3, year
     if months is None:
         return None, None, None
-    return months, months if months < 12 else 12, year
+    return months, min(12, months), year
 
 
 def _covers(value: Any) -> tuple[str, str] | None:
@@ -436,8 +439,36 @@ def _uniform_geography(layout: ColumnLayout) -> str | None:
     return next(iter(geos)) if len(geos) == 1 and None not in geos else None
 
 
+def duplicate_value_columns(layout: ColumnLayout) -> list[tuple[int, int]]:
+    """Pairs of value columns described as the same figure: same period, period type, geography and coverage.
+
+    A grid prints each figure once, so two such columns mean one of them is
+    another period or period type (a six-month column beside its quarter).
+    """
+    seen: dict[tuple, int] = {}
+    pairs: list[tuple[int, int]] = []
+    for index, column in enumerate(layout.columns):
+        if column.kind != "value":
+            continue
+        key = (column.months, column.end_month, column.year, column.geography, column.covers)
+        if key in seen:
+            pairs.append((seen[key], index))
+        else:
+            seen[key] = index
+    return pairs
+
+
+def describe_column(column: ColumnSpec) -> str:
+    if column.kind != "value":
+        return "change"
+    period_type = _PERIOD_TYPE_BY_MONTHS.get(column.months, f"{column.months} months")
+    period = f"{column.year}Q{(column.end_month - 1) // 3 + 1}" if column.months == 3 else \
+        (f"{column.year}" if column.months == 12 else f"{column.months} months to {column.year}-{column.end_month:02d}")
+    return f"{period} {period_type}" + (f" {column.geography}" if column.geography else "")
+
+
 def _parse_grid(region: dict[str, Any], *, doc: ParsedDocument | None, shown: set[int] | None, model: str,
-                rejected: list[str]) -> GridRegion | None:
+                rejected: list[str], adjusted: list[str]) -> GridRegion | None:
     try:
         index = int(region["grid_index"])
     except (KeyError, TypeError, ValueError):
@@ -465,7 +496,11 @@ def _parse_grid(region: dict[str, Any], *, doc: ParsedDocument | None, shown: se
             _replace(c, geography=None) if c.kind == "value" else c for c in layout.columns
         ))
         grid_geography = grid_geography or uniform
-        rejected.append(f"grid{index}:uniform_column_geography_taken_as_grid_geography")
+        adjusted.append(f"grid{index}:uniform_column_geography_taken_as_grid_geography")
+    for first, second in duplicate_value_columns(layout):
+        # Kept, so that the reader can hand the grid back for repair with the
+        # concrete failure; the reader places nothing from it meanwhile.
+        rejected.append(f"grid{index}:duplicate_columns(c{first},c{second})")
 
     sections: list[SectionDescription] = []
     for entry in region.get("sections") or []:
@@ -517,7 +552,7 @@ def _parse_grid(region: dict[str, Any], *, doc: ParsedDocument | None, shown: se
                 # when exactly one row prints that label.
                 matches = [i for i, r in enumerate(rows_of_grid) if ground_label(label, r) is not None and label]
                 if len(matches) == 1:
-                    rejected.append(f"grid{index}:row{row_index}:index_adjusted_to_{matches[0]}")
+                    adjusted.append(f"grid{index}:row{row_index}:index_adjusted_to_{matches[0]}")
                     row_index = matches[0]
                     width = ground_label(label, rows_of_grid[row_index])
             if width is None:
@@ -623,7 +658,7 @@ def parse_fingerprint(payload: dict[str, Any], *, doc: ParsedDocument | None = N
             continue
         kind = (region.get("kind") or "").lower()
         if kind in {"grid", "table"}:
-            grid = _parse_grid(region, doc=doc, shown=shown, model=model, rejected=result.rejected)
+            grid = _parse_grid(region, doc=doc, shown=shown, model=model, rejected=result.rejected, adjusted=result.adjusted)
             if grid is not None:
                 result.grids.append(grid)
         elif kind == "prose":

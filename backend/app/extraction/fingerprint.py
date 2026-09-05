@@ -71,12 +71,7 @@ _UNIT_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
 )
 
 # Scale to reach the canonical unit (millions).
-UNIT_SCALE_TO_MILLIONS: dict[str, float] = {
-    "billions": 1000.0,
-    "millions": 1.0,
-    "thousands": 0.001,
-    "units": 0.000001,
-}
+from app.extraction.units import UNIT_SCALE_TO_MILLIONS  # noqa: F401  (moved; legacy re-export)
 
 _CURRENCY_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
     ("CHF", re.compile(r"\bCHF\b|\bSwiss\s+francs?\b", re.I)),

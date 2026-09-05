@@ -14,13 +14,21 @@ from __future__ import annotations
 
 import re
 from collections import Counter, defaultdict
+from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Any, Iterable
+from typing import Any
 
 from app.domain.models import ParsedDocument
 from app.extraction.columns import Alignment, ColumnLayout, _tolerance, align_row
-from app.extraction.readers import Observation, ReadReport, _period_bounds
-from app.fingerprint.llm import Fingerprint, GridRegion, RowDescription, SectionDescription
+from app.extraction.readers import Observation, ReadReport, _period_bounds, _same_amount
+from app.fingerprint.llm import (
+    Fingerprint,
+    GridRegion,
+    RowDescription,
+    SectionDescription,
+    describe_column,
+    duplicate_value_columns,
+)
 from app.llm.grounding import quote_is_verbatim
 from app.parsing.evidence import product_aliases
 
@@ -30,7 +38,7 @@ PROSE_SCOPES = {"product_own_revenue", "product_line_item_qualified"}
 REPAIRABLE = {
     "more_cells_than_columns", "no_placement_satisfies_the_header", "ambiguous_alignment",
     "subtotal_not_sum_of_members", "coverage_outside_period", "product_row_not_described",
-    "too_many_blank_placements",
+    "too_many_blank_placements", "duplicate_columns", "contradicted_within_document",
 }
 
 
@@ -113,6 +121,19 @@ def read_described_grid(
     failures: list[VerificationFailure] = []
     observations: list[Observation] = []
     layout = region.layout
+    duplicates = duplicate_value_columns(layout)
+    if duplicates:
+        # Nothing is placed against a header that names one figure twice; the
+        # description goes back to the model with the columns spelled out.
+        if not any(r.product.lower() in names for r in region.rows):
+            return [], []
+        first, second = duplicates[0]
+        return [], [VerificationFailure(
+            region.grid_index, None, "duplicate_columns",
+            f"columns c{first} and c{second} are both described as {describe_column(layout.columns[first])}; "
+            "a grid prints each figure once, so one of them is another period or period type "
+            "(three months beside six or nine months, a quarter beside its year); re-read the header over each column",
+        )]
 
     # Every described row is placed, because subtotals are verified against
     # rows that may belong to no product of interest on their own.
@@ -169,7 +190,19 @@ def read_described_grid(
         section = _section_for(region, row.row_index)
         row_covers = row.covers or (section.covers if section else None)
         exact = row.line in EXACT_LINES
-        generic_line = row.line == "own_revenue" and not _label_names_product(row.label_as_printed, names)
+        # "Product revenues, net" assigned to the product because the filing
+        # sells nothing else is provisional: it stands only where the
+        # product's own rows leave a cell empty. A geography row ("U.S.",
+        # "Japan") under the product's group is the product's own row.
+        generic_line = (
+            row.line == "own_revenue"
+            and row.geography is None
+            and not _label_names_product(row.label_as_printed, names)
+            and not any(
+                other is not row and other.product.lower() in names and _label_names_product(other.label_as_printed, names)
+                for other in region.rows
+            )
+        )
         for col, value in sorted(alignment.values.items()):
             spec = layout.columns[col]
             if spec.kind != "value" or spec.period is None:
@@ -216,6 +249,7 @@ def read_described_grid(
                     source_url=source_url,
                     source_id=doc.source_id,
                     table_index=region.grid_index,
+                    row_index=row.row_index,
                     notes=tuple(notes),
                     geography_label=row.geography_as_printed or (spec.label if spec.geography else None),
                     described_product=row.product,
@@ -308,6 +342,50 @@ def read_described_prose(
     return observations, dropped, skipped
 
 
+def _contradictions(observations: list[Observation]) -> tuple[list[Observation], list[VerificationFailure]]:
+    """Grid readings of one figure that disagree within one document, and the failures that send them back.
+
+    A document states each figure once. Two grids that give different values
+    for the same product, period, period type, geography and coverage mean
+    one description put a column under the wrong period (a six-month column
+    beside its quarter, a year beside a quarter). The reader cannot tell
+    which, so neither is kept; the model is shown both.
+    """
+    groups: dict[tuple, list[Observation]] = defaultdict(list)
+    for o in observations:
+        if o.method == "grid" and o.line_item == "exact":
+            groups[(o.period, o.period_type, o.geography, o.covers)].append(o)
+    contradicted: list[Observation] = []
+    failures: list[VerificationFailure] = []
+    for (period, period_type, geography, _covers), group in groups.items():
+        if all(_same_amount(group[0], o) for o in group[1:]):
+            continue
+        contradicted.extend(group)
+        figure = f"{period} {period_type}" + (f" {geography}" if geography else "")
+        for o in group:
+            others = "; ".join(
+                f"grid {x.table_index} row r{x.row_index} ({x.source_quote[:40]!r}) states {x.value_as_reported:,g} {x.unit_label}"
+                for x in group if x is not o
+            )
+            failures.append(VerificationFailure(
+                o.table_index, o.row_index, "contradicted_within_document",
+                f"states {o.value_as_reported:,g} {o.unit_label} for {figure}, but {others} for the same figure in this "
+                "document; a document states each figure once, so one of these columns is another period or period type "
+                "(three months beside six or nine months, a quarter beside its year); re-read the header over each column",
+            ))
+    return contradicted, failures
+
+
+def _drop_contradicted(report: ReadReport) -> None:
+    contradicted, failures = _contradictions(report.observations)
+    if not contradicted:
+        return
+    gone = {id(o) for o in contradicted}
+    report.observations = [o for o in report.observations if id(o) not in gone]
+    report.failures = report.failures + failures
+    report.skipped = report.skipped + [f.key() for f in failures]
+
+
 def read_described_document(
     doc: ParsedDocument,
     fingerprint: Fingerprint | None,
@@ -329,7 +407,7 @@ def read_described_document(
         failures.extend(failed)
     prose, dropped, skipped = read_described_prose(doc, fingerprint, product=product, aliases=aliases, source_url=source_url)
     observations.extend(prose)
-    return ReadReport(
+    report = ReadReport(
         observations=observations,
         skipped=[f.key() for f in failures] + skipped,
         failures=failures,
@@ -337,6 +415,8 @@ def read_described_document(
         mode="model",
         dropped_prose=dict(dropped),
     )
+    _drop_contradicted(report)
+    return report
 
 
 async def read_with_repair(
@@ -378,4 +458,5 @@ async def read_with_repair(
             report.skipped = [s for s in report.skipped if not s.startswith(f"table{grid_index}:")] + [f.key() for f in failed_after]
             report.repairs += 1
             report.repaired_grids.append(grid_index)
+    _drop_contradicted(report)
     return report

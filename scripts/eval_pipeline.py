@@ -33,7 +33,8 @@ sys.path.insert(0, str(REPO_ROOT / "backend"))
 from app.benchmark.corpus import Corpus, GOLD_DIR  # noqa: E402
 from app.benchmark.schema import Comparison, compare, from_gold, from_series  # noqa: E402
 from app.extraction.described import read_with_repair
-from app.extraction.readers import Observation, read_document  # noqa: E402
+from app.extraction.readers import Observation  # noqa: E402
+from app.extraction.reading import read_document  # noqa: E402
 from app.fingerprint.llm import Fingerprint, LLMFingerprinter  # noqa: E402
 from app.extraction.series import Series, assemble_series, propagate_family  # noqa: E402
 from app.parsing.documents import DocumentParser  # noqa: E402

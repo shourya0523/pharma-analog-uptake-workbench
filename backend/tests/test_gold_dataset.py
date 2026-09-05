@@ -414,7 +414,7 @@ def test_quarters_the_issuer_states_outright_cite_the_filing_not_the_schedule():
     states the quarter outright in a 10-Q, the row now cites that sentence, and
     the extractor can be scored on it.
     """
-    from app.extraction.prose import read_prose
+    from app.extraction.degraded.prose_reader import read_prose
 
     rows = {
         row["period"]: row

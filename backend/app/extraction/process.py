@@ -12,7 +12,7 @@ from dataclasses import dataclass
 from typing import Any
 
 from app.extraction.extract import ExtractedValue
-from app.extraction.fingerprint import UNIT_SCALE_TO_MILLIONS
+from app.extraction.units import UNIT_SCALE_TO_MILLIONS
 
 # USD per 1 unit of foreign currency, annual average of the New York noon
 # buying rate certified by the Federal Reserve Bank of New York. Swiss and UK

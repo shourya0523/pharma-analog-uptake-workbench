@@ -102,6 +102,11 @@ async def main() -> int:
         described[url] = result
         return result
 
+    # Describe every cited document up front, as many at a time as the
+    # fingerprinter's own concurrency allows; the checks below then read cache.
+    todo = {row["source_url"]: row["manufacturer"] for row in quarterly}
+    await asyncio.gather(*(fingerprint(url, issuer) for url, issuer in todo.items()))
+
     for row in quarterly:
         url = row["source_url"]
         product = row["drug_name"]

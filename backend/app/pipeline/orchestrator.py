@@ -63,14 +63,15 @@ from app.parsing.fda_label import format_moa_profile_value, parse_label_record
 from app.parsing.indications import parse_indications
 from app.parsing.periods import detect_period_context, normalize_period
 from app.extraction.candidates import extract_revenue_candidates
-from app.extraction.readers import Observation, read_document
+from app.extraction.readers import Observation
+from app.extraction.reading import read_document
 from app.catalog.families import family_parent
 from app.extraction.described import read_described_document, read_with_repair
 from app.fingerprint.triage import triage
 from app.sourcing.edgar import EdgarIndex
 from app.extraction.series import Series, assemble_series, propagate_family
 from app.fingerprint.llm import Fingerprint, LLMFingerprinter
-from app.extraction.fingerprint import UNIT_SCALE_TO_MILLIONS
+from app.extraction.units import UNIT_SCALE_TO_MILLIONS
 from app.quality.candidate_filters import filter_revenue_candidates
 from app.quality.checks import (
     apply_auto_pass_gate,
