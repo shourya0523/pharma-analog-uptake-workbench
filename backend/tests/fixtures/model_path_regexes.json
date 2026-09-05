@@ -1,0 +1,92 @@
+[
+  {
+    "file": "app/extraction/described.py",
+    "pattern": "[\\d,.()%$\\-–—]+",
+    "why": "number formatting: a cell that is only digits and money punctuation is a value, not part of a label (undescribed product-row check)"
+  },
+  {
+    "file": "app/extraction/described.py",
+    "pattern": "\\d",
+    "why": "number formatting: does a cell carry any digit"
+  },
+  {
+    "file": "app/extraction/described.py",
+    "pattern": "\\s+",
+    "why": "whitespace folding before locating a model quote verbatim"
+  },
+  {
+    "file": "app/extraction/columns.py",
+    "pattern": "^(?P<neg>[\\(\\-–−])?\\$?\\s?(?P<num>[\\d,]*\\.?\\d+)\\)?(?P<pct>%)?$",
+    "why": "number formatting: negative, currency sign, thousands separators, percent"
+  },
+  {
+    "file": "app/extraction/series.py",
+    "pattern": "(\\d{4})",
+    "why": "contract format: the year in a canonical period string"
+  },
+  {
+    "file": "app/extraction/series.py",
+    "pattern": "(\\d{4})Q([1-4])",
+    "why": "contract format: canonical quarter string"
+  },
+  {
+    "file": "app/extraction/readers.py",
+    "pattern": "(\\d{4})",
+    "why": "contract format: the year in a canonical period string"
+  },
+  {
+    "file": "app/extraction/readers.py",
+    "pattern": "(\\d{4})Q([1-4])",
+    "why": "contract format: canonical quarter string"
+  },
+  {
+    "file": "app/extraction/readers.py",
+    "pattern": "\\d",
+    "why": "number formatting: does a cell carry any digit (data-row detection for the sketch)"
+  },
+  {
+    "file": "app/fingerprint/llm.py",
+    "pattern": "[A-Z]{3}",
+    "why": "contract format: an ISO currency code the model returned"
+  },
+  {
+    "file": "app/fingerprint/llm.py",
+    "pattern": "[\\s|®™'’‘`\\\"]+",
+    "why": "label normalisation for grounding: whitespace, trademark marks and quotes do not distinguish a printed label"
+  },
+  {
+    "file": "app/fingerprint/llm.py",
+    "pattern": "\\b(?:product\\s+sales|net\\s+sales|revenues?)\\b",
+    "why": "triage, fails open: a grid without the product's name but with revenue words is shown to the model in case it is a page-break continuation"
+  },
+  {
+    "file": "app/fingerprint/llm.py",
+    "pattern": "\\d{4}-\\d{2}-\\d{2}",
+    "why": "contract format: ISO dates in a coverage span the model returned"
+  },
+  {
+    "file": "app/fingerprint/llm.py",
+    "pattern": "^(\\d{4})(?:Q([1-4]))?$",
+    "why": "contract format: canonical period string the model returned"
+  },
+  {
+    "file": "app/sourcing/edgar.py",
+    "pattern": "[^A-Za-z0-9._-]",
+    "why": "cache file naming"
+  },
+  {
+    "file": "app/sourcing/edgar.py",
+    "pattern": "\\.(?:xml|xsd|jpg|jpeg|png|gif|zip|json|txt)$|-index(?:-headers)?\\.html?$|^R\\d+\\.htm$",
+    "why": "EDGAR artefacts: viewer pages, XBRL and images are not documents"
+  },
+  {
+    "file": "app/benchmark/schema.py",
+    "pattern": "[^a-z0-9]+",
+    "why": "scoring label normalisation: punctuation and spacing do not distinguish a printed geography label"
+  },
+  {
+    "file": "app/benchmark/schema.py",
+    "pattern": "\\band\\b",
+    "why": "scoring label normalisation: 'Europe & Rest of World' and 'Europe and rest of world' name one region"
+  }
+]
