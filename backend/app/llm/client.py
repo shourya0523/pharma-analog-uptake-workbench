@@ -52,7 +52,9 @@ class OpenRouterClient:
             )
         resp.raise_for_status()
 
-    async def chat_json(self, *, model: str, system: str, user: str) -> dict[str, Any]:
+    async def chat_json(self, *, model: str, system: str, user: str, max_tokens: int = 6000) -> dict[str, Any]:
+        # max_tokens bounds what the router reserves against the account's
+        # balance; without it a model's full output window is reserved.
         payload = {
             "model": model,
             "messages": [
@@ -61,6 +63,7 @@ class OpenRouterClient:
             ],
             "response_format": {"type": "json_object"},
             "temperature": 0.1,
+            "max_tokens": max_tokens,
         }
         async with httpx.AsyncClient(timeout=120) as client:
             resp = await client.post(

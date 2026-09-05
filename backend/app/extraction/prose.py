@@ -39,9 +39,15 @@ _SYMBOL_TO_CURRENCY = {"$": "USD", "£": "GBP", "€": "EUR", "¥": "JPY"}
 _MONEY_RE = re.compile(
     r"(?P<currency>\$|£|€|¥|\bCHF\b|\bUSD\b|\bGBP\b|\bEUR\b)?\s*"
     r"(?P<amount>\d[\d,]*(?:\.\d+)?)\s*"
-    r"(?P<magnitude>million|billion|thousand)?s?",
+    r"(?P<magnitude>million|billion|thousand)?s?"
+    r"(?:\s+(?P<currency_after>swiss\s+francs?|francs?|euros?|pounds?(?:\s+sterling)?|(?:u\.?s\.?\s+)?dollars?|CHF|USD|EUR|GBP|JPY|yen))?",
     re.IGNORECASE,
 )
+_CURRENCY_WORDS = {
+    "swiss franc": "CHF", "swiss francs": "CHF", "franc": "CHF", "francs": "CHF",
+    "euro": "EUR", "euros": "EUR", "pound": "GBP", "pounds": "GBP", "pounds sterling": "GBP",
+    "dollar": "USD", "dollars": "USD", "u.s. dollars": "USD", "us dollars": "USD", "yen": "JPY",
+}
 
 # "quarter ended June 30, 2002" / "three months ended September 30, 2016"
 _PERIOD_ENDED_RE = re.compile(
@@ -63,7 +69,8 @@ _COMPACT_QUARTER_RE = re.compile(
 # Issuers state annual figures this way at least as often as "year ended", and
 # an annual total is what lets an unstated fourth quarter be derived.
 _ANNUAL_WORD_RE = re.compile(
-    r"\b(?:full[-\s]?year|fiscal\s+year|FY|for\s+the\s+year)\s*(?P<year>(?:19|20)\d{2})\b",
+    r"\b(?:full[-\s]?year|fiscal\s+year|FY|for\s+the\s+(?:full\s+)?year|for\s+the\s+twelve\s+months\s+of)\s*(?P<year>(?:19|20)\d{2})\b"
+    r"|\b(?:for|during|in)\s+(?P<year_bare>(?:19|20)\d{2})\b(?!\s*Q[1-4])",
     re.IGNORECASE,
 )
 
@@ -82,6 +89,24 @@ _QUARTER_AND_YTD_RE = re.compile(
 _PAIRING_RE = re.compile(r"\brespectively\b", re.IGNORECASE)
 
 _SENTENCE_SPLIT_RE = re.compile(r"(?<=[.;])\s+")
+_PARAGRAPH_SPLIT_RE = re.compile(r"\n\s*\n")
+
+# A figure that is a movement, not a level: "increased by $3.7 million",
+# "grew $65.2 million", "a decrease of $80.7 million".
+_CHANGE_BEFORE_RE = re.compile(
+    r"\b(?:increas\w*|decreas\w*|grew|growth|declin\w*|rose|fell|dropp\w*|up|down|higher|lower|"
+    r"improv\w*|reduc\w*|change[sd]?)\s+(?:by\s+|of\s+)?(?:approximately\s+|about\s+)?$",
+    re.IGNORECASE,
+)
+_CHANGE_AFTER_RE = re.compile(
+    r"^\s*(?:increase|decrease|growth|decline|improvement|reduction|change)\b", re.IGNORECASE
+)
+# The product is mentioned only to be set aside, or as one of a list.
+_EXCLUDED_BEFORE_RE = re.compile(
+    r"\b(?:excluding|except(?:\s+for)?|other\s+than|net\s+of|besides|apart\s+from)\s+(?:sales\s+of\s+)?$",
+    re.IGNORECASE,
+)
+_REVENUE_NOUN = r"(?:net\s+)?(?:product\s+)?(?:sales|revenues?)"
 
 
 @dataclass(frozen=True)
@@ -143,7 +168,8 @@ def _periods_with_positions(sentence: str) -> list[tuple[int, _Period]]:
     for match in _ANNUAL_WORD_RE.finditer(sentence):
         if claimed(match.start()):
             continue
-        found.append((match.start(), _Period(str(int(match.group("year"))), "annual")))
+        year = match.group("year") or match.group("year_bare")
+        found.append((match.start(), _Period(str(int(year)), "annual")))
     # One period named twice ("fourth quarter 2003" then "Q4 2003") is still one
     # period; only genuinely different periods make a sentence ambiguous.
     unique: list[_Period] = []
@@ -158,6 +184,9 @@ def _periods_with_positions(sentence: str) -> list[tuple[int, _Period]]:
 def _periods_in(sentence: str) -> list[_Period]:
     """Every reporting period the sentence names, in reading order."""
     return [period for _, period in _periods_with_positions(sentence)]
+
+
+_AMOUNT_ENDS: dict[tuple[int, int], int] = {}
 
 
 def _amounts_with_positions(sentence: str) -> list[tuple[int, tuple[float, str, str]]]:
@@ -183,9 +212,14 @@ def _amounts_with_positions(sentence: str) -> list[tuple[int, tuple[float, str, 
             unit = "units"
         raw = match.group("currency") or "$"
         currency = _SYMBOL_TO_CURRENCY.get(raw, raw.upper())
+        after = (match.group("currency_after") or "").lower()
+        if after:
+            after = re.sub(r"\s+", " ", after)
+            currency = _CURRENCY_WORDS.get(after, after.upper() if len(after) == 3 else currency)
         amounts.append(
             (match.start(), (float(raw_amount.replace(",", "")), unit, currency))
         )
+        _AMOUNT_ENDS[(id(sentence), match.start())] = match.end()
     return amounts
 
 
@@ -215,6 +249,87 @@ def _interleaved(
     return [kind for _, kind in marks] == expected
 
 
+# A figure that is a condition or a threshold, not a statement of what was
+# earned: "if annual net sales exceed $25.0 million", "a milestone of $10 million".
+_CONDITIONAL_RE = re.compile(
+    r"\b(?:if|exceeds?|exceeding|in\s+excess\s+of|threshold|milestone|royalt\w*|would|could|may|might|"
+    r"expects?\s+to|anticipat\w*|up\s+to|at\s+least|guidance|target\w*|forecast\w*|project\w*)\b",
+    re.IGNORECASE,
+)
+
+
+def _is_change_amount(sentence: str, position: int, end: int) -> bool:
+    before = sentence[max(0, position - 40) : position]
+    after = sentence[end : end + 30]
+    return bool(_CHANGE_BEFORE_RE.search(before) or _CHANGE_AFTER_RE.match(after))
+
+
+def _is_conditional(sentence: str, position: int) -> bool:
+    """The amount sits in a clause that states a condition rather than a result."""
+    clause_start = max(sentence.rfind(",", 0, position), sentence.rfind(";", 0, position), 0)
+    window = sentence[max(clause_start, position - 80) : position]
+    return bool(_CONDITIONAL_RE.search(window))
+
+
+def _product_mentions(sentence: str, aliases: list[str]) -> list[tuple[int, int]]:
+    """Spans where the product is named as a subject, not set aside or listed."""
+    lowered = sentence.lower()
+    spans: list[tuple[int, int]] = []
+    for alias in aliases:
+        for match in re.finditer(re.escape(alias), lowered):
+            before = lowered[max(0, match.start() - 30) : match.start()]
+            if _EXCLUDED_BEFORE_RE.search(before):
+                continue
+            # Inside a parenthesised list of products.
+            open_paren = lowered.rfind("(", 0, match.start())
+            close_paren = lowered.find(")", match.end())
+            if open_paren != -1 and close_paren != -1 and "," in lowered[open_paren:close_paren]:
+                continue
+            spans.append(match.span())
+    return spans
+
+
+_SUBJECT_RE = re.compile(_REVENUE_NOUN, re.IGNORECASE)
+
+
+def _subject_names_product(sentence: str, position: int, aliases: list[str]) -> bool | None:
+    """Does the revenue phrase governing the amount at ``position`` name the product?
+
+    "Total Tyvaso revenues decreased to $457.5 million ... driven by nebulized
+    Tyvaso" ties the amount to Total Tyvaso, whatever the sentence says
+    later. The governing phrase is the last revenue noun before the amount
+    in the same clause; None when there is none to judge by.
+    """
+    clause_start = max(sentence.rfind(";", 0, position), 0)
+    before = sentence[clause_start:position]
+    nouns = list(_SUBJECT_RE.finditer(before))
+    if not nouns:
+        return None
+    noun = nouns[-1]
+    window = before[max(0, noun.start() - 60) : noun.end() + 40].lower()
+    return any(alias in window for alias in aliases)
+
+
+def _revenue_tied(sentence: str, aliases: list[str]) -> bool:
+    """True when a revenue noun is attached to the product's name.
+
+    "Remodulin revenues", "sales of Remodulin", "revenues from Remodulin",
+    "Tyvaso net product sales" all tie the figure to the product's own
+    revenue line. "sold $8.5 million of Remodulin to distributors" does not:
+    it is a statement about shipments, and is kept but ranked behind.
+    """
+    lowered = sentence.lower()
+    for alias in aliases:
+        escaped = re.escape(alias)
+        if re.search(rf"{_REVENUE_NOUN}\s+(?:of|from|for|on)\s+(?:the\s+)?{escaped}", lowered):
+            return True
+        if re.search(rf"{escaped}(?:['’]s)?\s+(?:\w+\s+){{0,2}}{_REVENUE_NOUN}", lowered):
+            return True
+        if re.search(rf"{_REVENUE_NOUN}\s+(?:\w+\s+){{0,3}}(?:of|from|for)\s+(?:the\s+)?{escaped}", lowered):
+            return True
+    return False
+
+
 def read_prose(
     text: str,
     *,
@@ -226,53 +341,97 @@ def read_prose(
 
     A sentence contributes a value only when it names exactly one period and
     one amount, so which number belongs to which period is stated rather than
-    inferred.
+    inferred. A sentence that states an amount for the product but no period
+    takes the period its paragraph established, the way MD&A prose does
+    ("Revenues for the three months ended June 30, 2002 were ... The increase
+    was due primarily to $8.7 million in sales of Remodulin"), and is marked
+    as having done so.
     """
     aliases = [alias.lower() for alias in product_aliases(product, generic, extra=extra_aliases)]
+    # A sentence about "treprostinil-based products" is about the molecule's
+    # family, not this brand; the generic name alone does not name the product.
+    if generic and generic.strip().lower() != product.strip().lower():
+        aliases = [a for a in aliases if a != generic.strip().lower()] or aliases
     values: list[ExtractedValue] = []
 
-    for sentence in _SENTENCE_SPLIT_RE.split(text or ""):
-        lowered = sentence.lower()
-        if not any(alias in lowered for alias in aliases):
-            continue
-        located_periods = _periods_with_positions(sentence)
-        located_amounts = _amounts_with_positions(sentence)
-        periods = [period for _, period in located_periods]
-        amounts = [amount for _, amount in located_amounts]
-        if len(periods) == 1 and len(amounts) == 1:
-            pairs = [(periods[0], amounts[0])]
-        elif _interleaved(located_amounts, located_periods):
-            # Each amount is followed by its own period before the next amount
-            # begins: "$205,000 in the three months ended March 31, 2002,
-            # $8.7 million in the three months ended June 30, 2002, and ...".
-            # The correspondence is stated by the sentence's structure, so this
-            # needs no pairing word - and unlike proximity guessing, a sentence
-            # that does not strictly alternate is rejected rather than assumed.
-            pairs = list(zip(periods, amounts))
-        elif (
-            len(periods) > 1
-            and len(periods) == len(amounts)
-            and _PAIRING_RE.search(sentence)
-        ):
-            # "respectively" states the correspondence, so this is reading the
-            # sentence rather than guessing from proximity. Equal counts are
-            # required: if the sentence names three periods and two amounts,
-            # the pairing word does not say which was dropped.
-            pairs = list(zip(periods, amounts))
-        else:
-            continue
-        for index, (period, (amount, unit, currency)) in enumerate(pairs):
-            values.append(
-                ExtractedValue(
-                    product_label=product,
-                    period=period.period,
-                    period_type=period.period_type,
-                    value_as_reported=amount,
-                    unit_label=unit,
-                    currency=currency,
-                    source_quote=sentence.strip(),
-                    fingerprint_signature="prose",
-                    value_index=index,
+    for paragraph in _PARAGRAPH_SPLIT_RE.split(text or ""):
+        paragraph_period: _Period | None = None
+        for sentence in _SENTENCE_SPLIT_RE.split(paragraph):
+            located_periods = _periods_with_positions(sentence)
+            # The paragraph's current period is the most recent one it has
+            # named so far; a comparative sentence names the current period
+            # first and the prior one after "compared to".
+            if located_periods:
+                quarterly = [p for _, p in located_periods if p.period_type == "quarterly"]
+                candidates = quarterly or [p for _, p in located_periods]
+                paragraph_period = max(candidates, key=lambda p: p.period)
+            if not _product_mentions(sentence, aliases):
+                continue
+            # A sentence that never says "sales" or "revenue" is not stating
+            # revenue, whatever product it names: expenses, milestones and
+            # inventory all come with dollar amounts and periods too.
+            if not re.search(_REVENUE_NOUN, sentence, re.IGNORECASE):
+                continue
+            located_amounts = [
+                (position, amount)
+                for position, amount in _amounts_with_positions(sentence)
+                if not _is_change_amount(sentence, position, _AMOUNT_ENDS.get((id(sentence), position), position))
+                and not _is_conditional(sentence, position)
+            ]
+            periods = [period for _, period in located_periods]
+            amounts = [amount for _, amount in located_amounts]
+            inherited = False
+            if not periods and len(amounts) == 1 and paragraph_period is not None and _revenue_tied(sentence, aliases):
+                periods = [paragraph_period]
+                located_periods = [(0, paragraph_period)]
+                inherited = True
+            if not _revenue_tied(sentence, aliases):
+                # The revenue noun belongs to something else ("Total product
+                # sales excluding X", "Other product sales, which include X"):
+                # the amount is not this product's.
+                continue
+            located_amounts = [
+                (position, amount)
+                for position, amount in located_amounts
+                if _subject_names_product(sentence, position, aliases) is not False
+            ]
+            amounts = [amount for _, amount in located_amounts]
+            if len(periods) == 1 and len(amounts) == 1:
+                pairs = [(periods[0], amounts[0])]
+            elif _interleaved(located_amounts, located_periods):
+                # Each amount is followed by its own period before the next amount
+                # begins: "$205,000 in the three months ended March 31, 2002,
+                # $8.7 million in the three months ended June 30, 2002, and ...".
+                # The correspondence is stated by the sentence's structure, so this
+                # needs no pairing word - and unlike proximity guessing, a sentence
+                # that does not strictly alternate is rejected rather than assumed.
+                pairs = list(zip(periods, amounts))
+            elif (
+                len(periods) > 1
+                and len(periods) == len(amounts)
+                and _PAIRING_RE.search(sentence)
+            ):
+                # "respectively" states the correspondence, so this is reading the
+                # sentence rather than guessing from proximity. Equal counts are
+                # required: if the sentence names three periods and two amounts,
+                # the pairing word does not say which was dropped.
+                pairs = list(zip(periods, amounts))
+            else:
+                continue
+            tied = _revenue_tied(sentence, aliases)
+            for index, (period, (amount, unit, currency)) in enumerate(pairs):
+                values.append(
+                    ExtractedValue(
+                        product_label=product,
+                        period=period.period,
+                        period_type=period.period_type,
+                        value_as_reported=amount,
+                        unit_label=unit,
+                        currency=currency,
+                        source_quote=sentence.strip(),
+                        fingerprint_signature="prose_inherited_period" if inherited else "prose",
+                        value_index=index,
+                        specificity=0 if not inherited else 1,
+                    )
                 )
-            )
     return values

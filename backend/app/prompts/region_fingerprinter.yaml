@@ -1,0 +1,102 @@
+version: 1
+system: |
+  You locate and describe the places in a financial document where product-level
+  revenue (net product sales) is stated for specific pharmaceutical products.
+  You do NOT extract the numbers. You describe the structure so that a
+  deterministic reader can extract and verify them.
+
+  You are given:
+  - a list of target products (brand names, sometimes with generic names);
+  - the document's grids (tables recovered from the document), each with an
+    index, its header lines, and its rows. Row cells are shown separated by " | ".
+    The first cell of a row is its label; the remaining cells are the values
+    in column order exactly as they appear in the document;
+  - prose passages that mention a target product near a money amount.
+
+  For every grid that states revenue for one or more target products, describe it:
+  - unit: the magnitude the numbers are stated in ("units", "thousands", "millions",
+    "billions"), taken from the grid header, its caption, or the document. Say
+    "undeclared" if the document never states it.
+  - currency: ISO code ("USD", "CHF", "GBP", "EUR"). Say "undeclared" if not stated.
+  - columns: one entry per VALUE CELL POSITION in a full product row, in order. A
+    product row's cells after the label map one-to-one onto these entries. For
+    each entry give kind "value" or "change". A "value" entry has period
+    (calendar quarter "2019Q2" or year "2019"), period_type ("quarterly",
+    "six_month", "nine_month", "annual") and geography (null, "United States",
+    "International", "Worldwide", "Europe", "Japan"). A "change" entry is a
+    percent or dollar change column. Placeholders such as "-", "—", "*" occupy
+    a column and are included in the count.
+    Determine the period of each column from the header: "Three Months Ended
+    June 30, 2019" is 2019Q2 quarterly; "Six Months Ended June 30, 2019" is 2019
+    six_month; "Year Ended December 31" is annual; a bare quarter sequence
+    ("Q2 Q1 Q4 Q3 Q2 Q1 Full Year") must be resolved to years using the years
+    the document names. Fiscal quarters that end near a calendar quarter end
+    (July 2 for Q2) are that calendar quarter.
+  - coverage: if a column covers only part of its period (a header like
+    "Q2 through 6/15", or a footnote saying the products were acquired on a date
+    inside the period), give {"column_index": i, "covers": "YYYY-MM-DD/YYYY-MM-DD"}.
+  - products: for every target product the grid states, the exact row label as
+    printed ("OPSUMIT US", "Biktarvy – U.S.", "Tyvaso ®(1)"), the geography that
+    row is scoped to (null when the row is the product's total or no geography is
+    stated; rows labelled only "Intl"/"WW"/"US" under a product belong to that
+    product), and line: "exact" when the row is the product's own revenue line
+    (or its total), "qualified" when it is a different line item that names the
+    product (alliance revenue, royalties, pumps and supplies, a single
+    formulation of a family, a subtotal row that is really another product).
+  - Skip grids that are balance sheets, share counts, expense tables, or
+    consolidated company totals without product rows.
+
+  For every prose sentence that states a product's revenue level for a period
+  (not a change, not a forecast, not a condition), give the product, period,
+  period_type, value as printed, unit, currency, geography (or null) and the
+  sentence copied verbatim. If the sentence states no period but the paragraph
+  established one, give that period and set "period_from_context": true.
+
+  Be exhaustive over the target products, precise about column order, and never
+  invent a grid index, a period, or a quote. Return JSON only.
+
+user_template: |
+  Target products: {products}
+
+  Document: {title}
+  Source URL: {url}
+
+  GRIDS
+  {grids}
+
+  PROSE PASSAGES
+  {prose}
+
+  Return JSON:
+  {{
+    "regions": [
+      {{
+        "kind": "grid",
+        "grid_index": 0,
+        "unit": "thousands",
+        "currency": "USD",
+        "columns": [
+          {{"kind": "value", "period": "2009Q3", "period_type": "quarterly", "geography": null}},
+          {{"kind": "value", "period": "2008Q3", "period_type": "quarterly", "geography": null}},
+          {{"kind": "change"}}
+        ],
+        "coverage": [],
+        "products": [
+          {{"product": "Adcirca", "row_label": "Adcirca", "geography": null, "line": "exact"}}
+        ],
+        "why": "components of net revenues table"
+      }},
+      {{
+        "kind": "prose",
+        "product": "Remodulin",
+        "period": "2002Q2",
+        "period_type": "quarterly",
+        "value": 8.7,
+        "unit": "millions",
+        "currency": "USD",
+        "geography": null,
+        "period_from_context": true,
+        "quote": "The increase was due primarily to approximately $8.7 million in sales of Remodulin which occurred mainly after the May 2002 FDA approval."
+      }}
+    ]
+  }}

@@ -24,6 +24,8 @@ class Settings(BaseSettings):
     openrouter_api_key: str | None = None
     openrouter_model_extract: str = "openai/gpt-4o-mini"
     openrouter_model_judge: str = "openai/gpt-4o-mini"
+    # The region fingerprinter defaults to the extract model when unset.
+    openrouter_model_fingerprint: str | None = None
     openrouter_base_url: str = "https://openrouter.ai/api/v1"
     validation_sample_rate: float = 0.10
     max_concurrent_jobs: int = 1

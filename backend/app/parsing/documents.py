@@ -7,7 +7,10 @@ import re
 from bs4 import BeautifulSoup
 
 from app.domain.models import ParsedDocument, ParsingStatus, RetrievedSource, SourceType
+from app.parsing.grids import normalize_cells, parse_text_document, recover_text_grids
 from app.storage.filestore import FileStore
+
+_TEXT_SUFFIXES = (".md", ".markdown", ".txt", ".text")
 
 
 class OCRStub:
@@ -47,6 +50,11 @@ class DocumentParser:
         if source.storage_key and source.storage_key.endswith(".pdf"):
             return await self._parse_pdf(source, raw or b"")
 
+        key = (source.storage_key or "").lower()
+        if key.endswith(_TEXT_SUFFIXES) or (raw is not None and self._looks_like_text(raw)):
+            text = raw.decode("utf-8", errors="ignore") if raw else (source.raw_text or "")
+            return self._parse_text(source, text)
+
         # Prefer full bytes from FileStore over in-memory raw_text (often truncated at retrieve)
         text = None
         if raw:
@@ -79,6 +87,36 @@ class DocumentParser:
             )
 
     @staticmethod
+    def _looks_like_text(raw: bytes) -> bool:
+        """Markdown or plain text rather than markup: no tags in the head."""
+        head = raw[:4000].decode("utf-8", errors="ignore").lstrip().lower()
+        if not head:
+            return False
+        if head.startswith(("<", "%pdf")):
+            return False
+        return "<html" not in head and "<table" not in head and "<div" not in head and "<p" not in head[:200]
+
+    def _parse_text(self, source: RetrievedSource, text: str) -> ParsedDocument:
+        """Markdown or plain text: pipe tables and flattened grids become tables."""
+        blocks, tables = parse_text_document(text)
+        if not blocks and not tables:
+            return ParsedDocument(
+                source_id=source.source_id,
+                parsing_status=ParsingStatus.FAILED,
+                notes="No text available",
+            )
+        max_chars = 400_000
+        prose = "\n\n".join(blocks)
+        chunks = [prose[i : i + 12000] for i in range(0, min(len(prose), max_chars), 12000)]
+        return ParsedDocument(
+            source_id=source.source_id,
+            text_blocks=chunks or [prose[:12000]],
+            tables=tables,
+            page_or_section="text body",
+            parsing_status=ParsingStatus.SUCCESS,
+        )
+
+    @staticmethod
     def _make_soup(markup: str) -> BeautifulSoup:
         """Parse SEC HTML or XBRL/XML without XMLParsedAsHTMLWarning.
 
@@ -99,14 +137,15 @@ class DocumentParser:
         max_chars = 400_000
         chunks = [text[i : i + 12000] for i in range(0, min(len(text), max_chars), 12000)]
         tables: list[list[list[str]]] = []
-        for table in soup.find_all("table")[:12]:
+        for table in soup.find_all("table"):
             rows = []
-            for tr in table.find_all("tr")[:40]:
-                cells = [c.get_text(" ", strip=True) for c in tr.find_all(["td", "th"])]
+            for tr in table.find_all("tr"):
+                cells = normalize_cells([c.get_text(" ", strip=True) for c in tr.find_all(["td", "th"])])
                 if cells:
                     rows.append(cells)
             if rows:
-                tables.append(rows)
+                caption = self._caption_before(table)
+                tables.append(([[caption]] if caption else []) + rows)
         return ParsedDocument(
             source_id=source.source_id,
             text_blocks=chunks or [text[:12000]],
@@ -115,6 +154,37 @@ class DocumentParser:
             parsing_status=ParsingStatus.SUCCESS,
         )
 
+    @staticmethod
+    def _caption_before(table, max_chars: int = 400) -> str | None:
+        """The prose immediately above a table, where its unit is usually declared.
+
+        Filings put "(in thousands)" in a sentence or a heading before the
+        table rather than inside it; without that sentence a grid declares
+        nothing about its numbers.
+        """
+        parts: list[str] = []
+        node = table
+        seen = 0
+        while node is not None and seen < 6:
+            node = node.find_previous(["p", "div", "span", "td", "b", "font", "h1", "h2", "h3", "h4"])
+            if node is None:
+                break
+            if node.find("table") is not None or node.find_parent("table") is not None:
+                seen += 1
+                continue
+            text = node.get_text(" ", strip=True)
+            if text:
+                parts.insert(0, text)
+                if sum(len(p) for p in parts) >= max_chars:
+                    break
+            seen += 1
+        unique: list[str] = []
+        for part in parts:
+            if not unique or part not in unique[-1]:
+                unique.append(part)
+        caption = " ".join(unique).strip()
+        return caption[-max_chars:] if caption else None
+
     async def _parse_pdf(self, source: RetrievedSource, raw: bytes) -> ParsedDocument:
         try:
             import pdfplumber
@@ -122,14 +192,18 @@ class DocumentParser:
             blocks: list[str] = []
             tables: list[list[list[str]]] = []
             with pdfplumber.open(__import__("io").BytesIO(raw)) as pdf:
-                for i, page in enumerate(pdf.pages[:40]):
+                for i, page in enumerate(pdf.pages):
                     t = page.extract_text() or ""
                     if t.strip():
                         blocks.append(f"[page {i + 1}]\n{t}")
                     extracted = page.extract_tables() or []
-                    for tbl in extracted[:5]:
-                        clean = [[(c or "") for c in row] for row in tbl]
-                        tables.append(clean)
+                    for tbl in extracted:
+                        clean = [normalize_cells([(c or "") for c in row]) for row in tbl]
+                        clean = [row for row in clean if row]
+                        if clean:
+                            tables.append(clean)
+            for block in blocks:
+                tables.extend(recover_text_grids(block))
             if not blocks:
                 _, status = await self.ocr.extract(raw)
                 return ParsedDocument(

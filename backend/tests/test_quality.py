@@ -220,7 +220,8 @@ def test_parse_html_xbrl_no_xml_as_html_warning():
     assert not any(issubclass(w.category, XMLParsedAsHTMLWarning) for w in caught)
     assert doc.parsing_status.value == "success"
     assert any("250" in b for b in doc.text_blocks)
-    assert doc.tables and doc.tables[0][0] == ["Opsumit", "250"]
+    # The table's caption rides along as its first row; the data row follows.
+    assert doc.tables and ["Opsumit", "250"] in doc.tables[0]
 
 
 def test_prioritize_sources_handles_llm_search_without_unbound_text_len():
