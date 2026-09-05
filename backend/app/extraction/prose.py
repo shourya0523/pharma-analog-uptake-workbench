@@ -446,7 +446,6 @@ def read_prose(
                 pairs = list(zip(periods, amounts))
             else:
                 continue
-            tied = _revenue_tied(sentence, aliases)
             for index, (period, (amount, unit, currency)) in enumerate(pairs):
                 values.append(
                     ExtractedValue(

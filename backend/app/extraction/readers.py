@@ -46,8 +46,8 @@ from app.extraction.columns import (
 from app.extraction.fingerprint import detect_currency, detect_unit
 from app.extraction.prose import read_prose
 from app.parsing.evidence import product_aliases
-from app.parsing.periods import MONTHS
 from app.parsing.grids import is_value_token, is_year_token
+from app.parsing.periods import MONTHS
 from app.parsing.tables import clean_label
 from app.quality.candidate_filters import KNOWN_PEER_BRANDS
 
@@ -799,7 +799,7 @@ def read_document(
     described: dict[int, list[ColumnLayout]] = defaultdict(list)
     if fingerprint is not None:
         for region in fingerprint.grids_for(product, aliases):
-            described[region.grid_index].append(region.layout)
+            described[region.grid_index].append(_column_geographies_only(region.layout))
     report = read_grids(
         doc, product=product, generic=generic, extra_aliases=extra_aliases, source_url=source_url,
         described_layouts=dict(described) or None, issuer_products=issuer_products,
@@ -879,6 +879,22 @@ def read_document(
         if named_grid or contradicted:
             report.observations = [o for o in report.observations if "generic_product_line" not in o.notes]
     return report
+
+
+def _column_geographies_only(layout: ColumnLayout) -> ColumnLayout:
+    """Keep a described geography only where it tells the columns apart.
+
+    A description that puts the same geography on every value column is
+    saying what the whole grid covers, which is the row's or the document's
+    to state, not a column's; the columns of such a grid have no geography.
+    """
+    from dataclasses import replace
+
+    value_geographies = {c.geography for c in layout.columns if c.kind == "value"}
+    if len(value_geographies) != 1 or None in value_geographies:
+        return layout
+    columns = tuple(replace(c, geography=None) if c.kind == "value" else c for c in layout.columns)
+    return replace(layout, columns=columns)
 
 
 def _same_amount(a: Observation, b: Observation) -> bool:

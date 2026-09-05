@@ -34,8 +34,6 @@ from dataclasses import dataclass, field, replace
 from typing import Any, Iterable
 
 from app.extraction.adjudicate import (
-    IMPOSSIBLE,
-    NEEDS_REVIEW,
     RESOLVED,
     Candidate,
     Verdict,
@@ -488,7 +486,7 @@ def derive_partial_remainders(
             obs = norm.observation
             if not obs.covers or norm.value_usd is None:
                 continue
-            start, end = obs.covers
+            start, _end = obs.covers
             year = _year_of(period)
             if year is None or not start.startswith(str(year)):
                 continue
@@ -558,7 +556,6 @@ def sum_geography_partitions(series_by_geo: dict[str | None, dict[tuple[str, str
         if any(v.status != RESOLVED or v.covers for v in parts.values()):
             continue
         total = round(sum(v.value_usd_millions for v in parts.values()), 6)
-        first = next(iter(parts.values()))
         out.append(
             SeriesValue(
                 product=product,

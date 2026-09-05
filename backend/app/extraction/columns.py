@@ -26,10 +26,11 @@ from __future__ import annotations
 
 import itertools
 import re
+from collections.abc import Iterable
 from dataclasses import dataclass, field, replace
 
 from app.extraction.fingerprint import detect_currency, detect_unit
-from app.parsing.grids import is_number_token, is_placeholder_token, is_year_token
+from app.parsing.grids import is_placeholder_token
 from app.parsing.periods import MONTHS, quarter_of_month
 
 # --------------------------------------------------------------------------
@@ -722,7 +723,7 @@ def build_layouts(
     change_tokens = [t for t in tokens if t.kind == "change"]
     text_end = len(header_text) + 1
 
-    def finish(columns: list[ColumnSpec], extra_notes: list[str] = []) -> ColumnLayout:
+    def finish(columns: list[ColumnSpec], extra_notes: Iterable[str] = ()) -> ColumnLayout:
         columns = _expand_geography(columns, geo_runs)
         columns = _attach_partials(columns, partials)
         return ColumnLayout(
@@ -731,7 +732,7 @@ def build_layouts(
             currency=currency,
             unit_declared=unit_declared,
             currency_declared=currency_declared,
-            notes=tuple(notes + extra_notes),
+            notes=tuple(notes) + tuple(extra_notes),
         )
 
     layouts: list[ColumnLayout] = []

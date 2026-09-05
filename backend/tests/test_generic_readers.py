@@ -312,3 +312,29 @@ def test_a_rows_own_geography_outranks_a_described_column_geography():
     by_key = {(o.period, o.geography): o.value_as_reported for o in report.observations}
     assert by_key[("2022Q3", "Worldwide")] == 1032
     assert by_key[("2023Q3", "International")] == 299
+
+
+def test_a_geography_on_every_described_column_is_not_a_column_geography():
+    from app.extraction.columns import ColumnLayout, ColumnSpec
+    from app.fingerprint.llm import Fingerprint, GridRegion
+
+    text = "\n\n".join([
+        "Three Months Ended September 30, 2025 2024 % Change",
+        "Veldora 82 72 14%",
+        "Zorbix 40 30 33%",
+    ])
+    doc = _doc(text)
+    layout = ColumnLayout(
+        columns=(
+            ColumnSpec("value", 3, 9, 2025, geography="Worldwide"),
+            ColumnSpec("value", 3, 9, 2024, geography="Worldwide"),
+            ColumnSpec("change"),
+        ),
+        unit_label="millions", unit_declared=True, currency="USD", currency_declared=True, notes=("llm_fingerprint",),
+    )
+    fingerprint = Fingerprint(grids=[GridRegion(grid_index=0, layout=layout, products=[{"product": "Veldora"}])])
+    report = read_document(doc, product="Veldora", fingerprint=fingerprint)
+    assert not [s for s in report.skipped if "ambiguous" in s], report.skipped
+    grid = [o for o in report.observations if o.method == "grid"]
+    assert {(o.period, o.value_as_reported) for o in grid} == {("2025Q3", 82.0), ("2024Q3", 72.0)}
+    assert all(o.geography is None for o in grid)

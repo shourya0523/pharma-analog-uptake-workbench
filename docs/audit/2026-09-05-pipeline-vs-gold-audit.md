@@ -184,13 +184,25 @@ geography matches its value to the precision gold carries.
 
 RESULTS_TABLE
 
-Held-out checks, in `backend/tests/test_generic_readers.py`: fifteen
+Held-out checks, in `backend/tests/test_generic_readers.py`: twenty
 layouts written from scratch (a euro full-year table with a change column,
 geography nested under two periods, a first-half header, rows split across
 paragraphs with a stray `$`, a grid whose own header must outrank the page
 header it also fits, a balance grid beside a revenue grid, a one-product
-issuer's generic "Product sales" line contradicted by prose). None appears
-in the corpus, and each exercises one rule the readers claim to be general.
+issuer's generic "Product sales" line contradicted by prose, a retrospective
+schedule whose years are printed once over a run of quarter labels, a
+footnoted franchise section whose members sum to it, a description that
+stamps one geography on every column, an amount tied to revenue only through
+a condition). None appears in the corpus, and each exercises one rule the
+readers claim to be general.
+
+The two renderings are the same 220 documents read two ways: the committed
+markdown is what a text renderer made of them, the raw run is the bytes the
+pipeline itself fetched (HTML parsed with BeautifulSoup, PDFs with
+pdfplumber). Every issuer's sales schedule PDF reaches the reader through a
+different physical shape in each - one cell per line with blank lines
+between rows in one, one row per line with no blank lines in the other -
+and both are read by the same code.
 
 What remains gold-side and is not fixed in the pipeline: the derivation
 preference for Remodulin 2005Q4 and 2002Q4 (section 6) is met through the

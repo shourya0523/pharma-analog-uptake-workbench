@@ -262,6 +262,14 @@ class _Line:
         return 0 < len(self.tokens) <= 3
 
     @property
+    def is_whole_row(self) -> bool:
+        """A label followed by at least two values: a row printed complete on one line."""
+        if not self.is_row_start:
+            return False
+        split = _split_row(self.tokens)
+        return split is not None and len(split[1]) >= 2
+
+    @property
     def is_row_start(self) -> bool:
         """A label followed by values: the head of a row whose remaining
         cells may have landed on the lines after it.
@@ -429,14 +437,16 @@ def recover_text_grids(text: str, *, max_header_lines: int = 12) -> list[Table]:
         paragraphs.append(" ".join(buffer))
 
     # Text extracted from a PDF page has no blank lines at all: every
-    # physical line is a row, a label or a header line, and joining them
-    # would fuse the grid into one paragraph. When the lines themselves
-    # read as rows, they are the units; otherwise the paragraphs are.
+    # physical line is a whole row ("US 397 391 1.6% ..."), a label or a
+    # header line, and joining them would fuse the grid into one
+    # paragraph. When most lines read as rows of their own, they are the
+    # units. A dump that puts one cell per line and a blank line between
+    # rows keeps its paragraphs: there the blank lines are the rows.
     units = paragraphs
     if len(physical) >= 6 and len(physical) * 2 >= len(paragraphs) * 3:
         candidates = [_Line(p, _TOKEN_RE.findall(p)) for p in physical]
-        row_like = sum(1 for l in candidates if l.is_row_start or l.is_streamable or l.is_short)
-        if row_like * 2 >= len(candidates):
+        whole_rows = sum(1 for l in candidates if l.is_whole_row)
+        if whole_rows * 3 >= len(candidates):
             units = physical
 
     lines = [_Line(p, _TOKEN_RE.findall(p)) for p in units]
