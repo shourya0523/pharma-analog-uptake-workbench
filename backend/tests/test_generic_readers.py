@@ -142,3 +142,73 @@ def test_series_derives_the_fourth_quarter_from_the_stated_year_to_date():
     fourth = series.resolved()["2023Q4"]
     assert fourth.route == "derived" and fourth.value_usd_millions == 33.0
     assert "nine_month" in fourth.detail
+
+
+def test_rows_split_across_paragraphs_are_streamed_back_together():
+    # A PDF sales schedule whose rows break after the first value, with the
+    # rest of each row and a stray "$" landing in paragraphs of their own.
+    text = "\n\n".join([
+        "REPORTED SALES ($MM)", "THIRD QUARTER", "2024 2023 Reported Operational Currency",
+        "VELDORA US 120 $", "110", "9.1% 9.1% -",
+        "Intl 80", "60", "33.3% 30.0% 3.3%",
+        "WW 200", "170", "17.6% 16.5% 1.1%",
+        "OTHER US 5", "6", "(16.7)% (16.7)% -",
+    ])
+    tables = recover_text_grids(text)
+    rows = {row[0]: row[1:] for table in tables for row in table if len(row) > 1}
+    assert rows["VELDORA US"] == ["120", "110", "9.1%", "9.1%", "-"]
+    assert rows["WW"] == ["200", "170", "17.6%", "16.5%", "1.1%"]
+    assert rows["OTHER US"] == ["5", "6", "(16.7)%", "(16.7)%", "-"]
+    doc = ParsedDocument(source_id="t", text_blocks=[text], tables=tables, parsing_status=ParsingStatus.SUCCESS)
+    report = read_document(doc, product="Veldora")
+    by_key = {(o.period, o.geography): o.value_as_reported for o in report.observations if o.method == "grid"}
+    assert by_key[("2024Q3", "Worldwide")] == 200
+    assert by_key[("2023Q3", "International")] == 60
+
+
+def test_a_grids_own_header_outranks_the_page_header_it_also_fits():
+    # The page header says 2005 / 2004; a later grid restates its own years.
+    # Both read the row without blanks, and the grid's own header wins.
+    text = "\n\n".join([
+        "Revenues for the Year Ended (in thousands) December 31, 2005 December 31, 2004",
+        "Veldora 90,000 70,000",
+        "Total revenues 95,000 74,000",
+        "Revenues for the Year Ended (in thousands) December 31, 2003 December 31, 2002",
+        "Veldora 45,121 21,174",
+        "Total revenues 53,341 30,120",
+    ])
+    report = read_document(_doc(text), product="Veldora")
+    assert not [s for s in report.skipped if "ambiguous" in s], report.skipped
+    values = {o.period: o.value_as_reported for o in report.observations if o.method == "grid"}
+    assert values == {"2005": 90000, "2004": 70000, "2003": 45121, "2002": 21174}
+
+
+def test_a_balance_grid_does_not_inherit_the_pages_period_columns():
+    text = "\n\n".join([
+        "Revenues Six Months Ended June 30, 2002 2001 (in thousands)",
+        "Veldora 8,900 -",
+        "4. INVENTORIES",
+        "June 30, 2002 December 31, 2001",
+        "Veldora 3,498 3,405",
+        "Veldora delivery pumps 2,113 1,283",
+        "Total inventories 6,619 6,025",
+    ])
+    report = read_document(_doc(text), product="Veldora")
+    values = [(o.period, o.value_as_reported) for o in report.observations if o.method == "grid"]
+    assert values == [("2002", 8900)]
+
+
+def test_a_generic_product_line_yields_to_the_products_own_stated_figure():
+    # A one-product issuer's "Product sales" line covers pumps and supplies
+    # too; the sentence naming the product's own figure proves it.
+    text = "\n\n".join([
+        "Veldora Therapeutics sells Veldora, its only approved product, and related delivery pumps. "
+        "Product sales consist of Veldora and delivery pumps.",
+        "Three Months Ended September 30, 2002 2001 (in thousands)",
+        "Product sales 4,358 505",
+        "Sales of Veldora totaled approximately $2.6 million in the three months ended September 30, 2002.",
+    ])
+    report = read_document(_doc(text), product="Veldora", issuer_products=["Veldora"])
+    assert not [o for o in report.observations if "generic_product_line" in o.notes]
+    prose = [o for o in report.observations if o.method == "prose" and o.period == "2002Q3"]
+    assert prose and prose[0].value_as_reported == 2.6

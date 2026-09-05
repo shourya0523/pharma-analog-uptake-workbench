@@ -53,6 +53,10 @@ _FOOTNOTE_RE = re.compile(r"^\(\s*[a-z0-9]{1,2}\s*\)$", re.I)
 _FOOTNOTE_MARKER_RE = re.compile(r"^\(\s*[a-z1-9]\s*\)$", re.I)
 
 _YEAR_RE = re.compile(r"^(?:19|20)\d{2}$")
+_MONTH_RE = re.compile(
+    r"^(?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\.?,?$", re.I
+)
+_DAY_TOKEN_RE = re.compile(r"^[0-3]?\d,?$")
 
 _MD_ESCAPE_RE = re.compile(r"\\([\\`*_{}\[\]()#+\-.!|>~])")
 _MD_EMPHASIS_RE = re.compile(r"(\*\*|__)(.*?)\1", re.S)
@@ -70,11 +74,17 @@ def clean_markup(text: str) -> str:
     return text
 
 
+_CURRENCY_PREFIX_RE = re.compile(r"^[$€£¥]\s*(?=[\d(\-–—−*])")
+
+
 def _clean_cell(cell: str) -> str:
     cell = clean_markup(cell).strip()
     match = _MD_ITALIC_CELL_RE.match(cell)
     if match:
         cell = match.group(1).strip()
+    # "$6,517" and "$—" are a number and a placeholder wearing a currency
+    # sign; the sign is declared by the header, not by the cell.
+    cell = _CURRENCY_PREFIX_RE.sub("", cell)
     return re.sub(r"\s+", " ", cell)
 
 
@@ -231,12 +241,36 @@ class _Line:
 
     @property
     def is_streamable(self) -> bool:
-        """One cell, or only value cells: part of a grid that lost its rows."""
+        """One cell, or only value cells: part of a grid that lost its rows.
+
+        A stray currency sign or a ``%`` the renderer detached from its
+        number is punctuation, not a cell, and does not make a line prose.
+        """
         if len(self.tokens) == 1:
             return True
-        return bool(self.tokens) and all(
-            is_value_token(t) or _FOOTNOTE_RE.match(t) for t in self.tokens
-        )
+        cells = [t for t in self.tokens if not _SYMBOL_ONLY_RE.match(t)]
+        return bool(cells) and all(is_value_token(t) or _FOOTNOTE_RE.match(t) for t in cells)
+
+    @property
+    def is_short(self) -> bool:
+        """Few cells: a label with one value, a two-word heading."""
+        return 0 < len(self.tokens) <= 3
+
+    @property
+    def is_row_start(self) -> bool:
+        """A label followed by values: the head of a row whose remaining
+        cells may have landed on the lines after it.
+
+        A label that names a period or contains a number is a header, and
+        never the start of a row that continues below.
+        """
+        split = _split_row([t for t in self.tokens if not _SYMBOL_ONLY_RE.match(t)])
+        if split is None:
+            return False
+        label, _values = split
+        if len(label) > 6 or any(is_number_token(t) for t in label):
+            return False
+        return not _PERIOD_WORD_RE.search(" ".join(label))
 
 
 def _split_row(tokens: list[str]) -> tuple[list[str], list[str]] | None:
@@ -255,6 +289,9 @@ def _split_row(tokens: list[str]) -> tuple[list[str], list[str]] | None:
     label = tokens[:index]
     values = [v for v in values if not _FOOTNOTE_RE.match(v)]
     if not values or not label or len(label) > 12:
+        return None
+    if _MONTH_RE.match(label[-1]) and _DAY_TOKEN_RE.match(values[0]):
+        # "December 31, 2004": a date in a header, not a label with values.
         return None
     if not any(is_number_token(v) for v in values):
         # A row of nothing but dashes ("Intl - - - - -") is still a row of
@@ -280,19 +317,31 @@ def _merge_single_token_runs(lines: list[_Line], min_run: int = 6) -> list[_Line
     """
     out: list[_Line] = []
     index = 0
+
+    def in_region(line: _Line) -> bool:
+        return line.is_short or line.is_streamable or line.is_row_start
+
     while index < len(lines):
-        if not lines[index].is_streamable:
+        if not in_region(lines[index]):
             out.append(lines[index])
             index += 1
             continue
+        # A region of short lines, bare value runs and row heads, most of
+        # them single cells or bare values, is a grid whose cells landed one
+        # or a few per line. Whole rows that happen to sit next to it pass
+        # through the stream unchanged: a word after a value run always
+        # starts a new row.
         run_end = index
-        while run_end < len(lines) and lines[run_end].is_streamable:
+        while run_end < len(lines) and in_region(lines[run_end]):
             run_end += 1
-        if run_end - index < min_run or not any(l.is_single_token for l in lines[index:run_end]):
-            out.extend(lines[index:run_end])
+        region = lines[index:run_end]
+        core = [l for l in region if l.is_short or l.is_streamable]
+        streamable = sum(1 for l in core if l.is_streamable)
+        if len(core) < min_run or streamable * 2 < len(core) or not any(l.is_single_token for l in core):
+            out.extend(region)
             index = run_end
             continue
-        stream = [token for line in lines[index:run_end] for token in line.tokens]
+        stream = [token for line in region for token in line.tokens]
         out.extend(_segment_stream(stream))
         index = run_end
     return out
@@ -303,7 +352,21 @@ def _segment_stream(stream: list[str]) -> list[_Line]:
     rows: list[_Line] = []
     current: list[str] = []
     in_values = False
-    for token in stream:
+    for index, token in enumerate(stream):
+        if _SYMBOL_ONLY_RE.match(token):
+            # "$" before a number is dropped; ")" or "%" after one is folded
+            # back onto it, as normalize_cells does for rendered cells. A
+            # "%" that opens a header phrase ("2021 % Change") is a word.
+            following = stream[index + 1] if index + 1 < len(stream) else ""
+            opens_phrase = _PERCENT_RE.match(token) and following[:1].isalpha()
+            if current and not opens_phrase and (_CLOSE_PAREN_RE.match(token) or _PERCENT_RE.match(token)):
+                previous = current[-1]
+                if _OPEN_PAREN_NUMBER_RE.match(previous) or (is_number_token(previous) and not is_year_token(previous)):
+                    current[-1] = previous + token.replace(" ", "")
+                    continue
+            if not opens_phrase:
+                continue
+        value = is_value_token(token) or _FOOTNOTE_RE.match(token) is not None
         value = is_value_token(token) or _FOOTNOTE_RE.match(token) is not None
         if value:
             in_values = in_values or is_value_token(token)
@@ -390,7 +453,14 @@ def recover_text_grids(text: str, *, max_header_lines: int = 12) -> list[Table]:
             current_rows.append([line.text])
             continue
         if current_rows:
+            # Group labels at the end of a grid ("4. INVENTORIES") were the
+            # title of the grid that starts here, not a group of the last.
+            trailing: list[_Line] = []
+            while current_rows and len(current_rows[-1]) == 1 and len(current_rows) > 1:
+                trailing.insert(0, _Line(current_rows[-1][0], _TOKEN_RE.findall(current_rows[-1][0])))
+                current_rows.pop()
             flush()
+            pending_header.extend(trailing)
         pending_header.append(line)
         if len(pending_header) > max_header_lines * 2:
             pending_header = pending_header[-max_header_lines:]

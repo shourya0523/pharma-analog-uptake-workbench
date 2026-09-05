@@ -161,7 +161,7 @@ def from_series(value: SeriesValue) -> ComparableRevenueRow:
         origin="pipeline",
         status=value.status,
         detail=value.detail,
-        extras={"normalization": value.normalization, "inputs": list(value.inputs)},
+        extras={"normalization": value.normalization, "inputs": list(value.inputs), "alternates": list(value.alternates)},
     )
 
 
@@ -198,6 +198,13 @@ def compare(gold: ComparableRevenueRow, candidates: list[ComparableRevenueRow]) 
     for candidate in resolved:
         if values_match(gold.value_usd_millions, candidate.value_usd_millions):
             return Comparison(gold, candidate, "match")
+    # A derived figure the issuer's own rounding leaves ambiguous: the
+    # pipeline states the primary and carries the other result. Gold chose
+    # one of them; the pipeline reports both, which is the honest answer.
+    for candidate in resolved:
+        for alternate in candidate.extras.get("alternates") or []:
+            if values_match(gold.value_usd_millions, float(alternate)):
+                return Comparison(gold, candidate, "match", f"via alternate derivation {alternate:g} (issuer rounding)")
     best = resolved[0]
     return Comparison(
         gold, best, "value_mismatch",

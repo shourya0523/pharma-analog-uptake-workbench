@@ -769,59 +769,79 @@ def build_layouts(
                 columns.append(ColumnSpec("value", length, token.end_month, token.year, label=token.text))
             return [finish(columns)]
         years_flat = [t for run in year_runs for t in run]
+        run_years = [tuple(t.year for t in run) for run in year_runs]
+        if len(year_runs) > len(phrases) and len(set(run_years)) < len(run_years):
+            # "SIX MONTHS ... 2024 2023 ... 2024 2023": two groups of years
+            # for one named period. The other period was on the page header
+            # this grid did not keep, and a grid above may still supply it.
+            return [finish([], ["more_year_groups_than_periods"])]
+        groupings: list[list[tuple[HeaderToken, list[HeaderToken]]]] = []
         if len(year_runs) == len(phrases):
-            groups = list(zip(phrases, year_runs))
+            # Flattened text can print the period phrases in either order;
+            # every order is a candidate and the row arithmetic decides.
+            orders = [phrases] if len(phrases) == 1 else [list(p) for p in itertools.permutations(phrases)]
+            for order in orders[:6]:
+                groupings.append(list(zip(order, year_runs)))
         elif len(year_runs) == 1 and len(years_flat) % len(phrases) == 0:
             per = len(years_flat) // len(phrases)
-            groups = [(phrase, years_flat[i * per : (i + 1) * per]) for i, phrase in enumerate(phrases)]
+            groupings.append([(phrase, years_flat[i * per : (i + 1) * per]) for i, phrase in enumerate(phrases)])
         elif len(phrases) == 1:
-            groups = [(phrases[0], years_flat)]
+            groupings.append([(phrases[0], years_flat)])
         elif len(years_flat) % len(phrases) == 0:
             per = len(years_flat) // len(phrases)
-            groups = [(phrase, years_flat[i * per : (i + 1) * per]) for i, phrase in enumerate(phrases)]
+            groupings.append([(phrase, years_flat[i * per : (i + 1) * per]) for i, phrase in enumerate(phrases)])
         else:
-            groups = []
             notes.append(f"unmapped_columns years={len(years_flat)} periods={len(phrases)}")
-        if groups:
+        layouts_b: list[ColumnLayout] = []
+        for groups in groupings:
             # Change markers printed between the period phrases ("Three
             # Months Ended ... % Change Excluding Foreign Exchange ... Nine
             # Months Ended") and markers after a run of years ("2025 2024 %
             # Change") can both be columns, or the former can be a heading
             # spanning the latter. The header does not say which, so both
             # readings are offered and the row's own cell count decides.
-            between: list[int] = []
-            for index, phrase in enumerate(phrases):
-                until = phrases[index + 1].start if index + 1 < len(phrases) else (
+            between: dict[int, int] = {}
+            ordered_phrases = sorted(phrases, key=lambda t: t.start)
+            for index, phrase in enumerate(ordered_phrases):
+                until = ordered_phrases[index + 1].start if index + 1 < len(ordered_phrases) else (
                     year_runs[0][0].start if year_runs and year_runs[0][0].start > phrase.start else text_end
                 )
-                between.append(_change_count_after(tokens, phrase.start, until))
-            candidates: list[list[ColumnSpec]] = []
-            for reading in ("after_only", "both"):
+                between[id(phrase)] = _change_count_after(tokens, phrase.start, until)
+            # A truncated page header can lose a change marker from its last
+            # group; issuers give every group the same change columns, so the
+            # largest count seen is offered for all of them as well.
+            for reading in ("after_only", "both", "equalized"):
                 columns = []
+                counts: list[int] = []
                 for index, (phrase, years) in enumerate(groups):
                     last_year_start = years[-1].start if years else phrase.start
                     next_start = text_end
                     for run in year_runs:
                         if run[0].start > last_year_start:
                             next_start = min(next_start, run[0].start)
+                    after_years = _change_count_after(tokens, last_year_start, next_start)
+                    if reading == "both":
+                        counts.append(after_years + between.get(id(phrase), 0))
+                    else:
+                        counts.append(after_years if after_years else between.get(id(phrase), 0))
+                if reading == "equalized":
+                    counts = [max(counts)] * len(counts) if counts else counts
+                for (phrase, years), count in zip(groups, counts):
                     for year_token in years:
                         columns.append(
                             ColumnSpec("value", phrase.months, phrase.end_month, year_token.year, label=f"{phrase.text} {year_token.year}")
                         )
-                    after_years = _change_count_after(tokens, last_year_start, next_start)
-                    if reading == "after_only":
-                        count = after_years if after_years else between[index]
-                    else:
-                        count = after_years + between[index]
                     for _ in range(count):
                         columns.append(ColumnSpec("change", label="change"))
                 leading = _change_count_after(tokens, -1, year_runs[0][0].start) if year_runs else 0
                 if leading and not any(c.kind == "change" for c in columns):
                     for _ in range(leading):
                         columns.append(ColumnSpec("change", label="change"))
-                if not candidates or [c.kind for c in columns] != [c.kind for c in candidates[-1]]:
-                    candidates.append(columns)
-            return [finish(columns) for columns in candidates]
+                signature = tuple((c.kind, c.months, c.end_month, c.year) for c in columns)
+                if signature not in {tuple((c.kind, c.months, c.end_month, c.year) for c in l.columns) for l in layouts_b}:
+                    layouts_b.append(finish(columns))
+        if layouts_b:
+            return layouts_b
 
     # Case C: a run of quarter labels and no years at all in the header. The
     # document's own years are the only anchors.
@@ -900,8 +920,16 @@ _PERCENT_TOLERANCE = 0.75
 _MAX_GAP_COMBINATIONS = 6000
 
 
-def _change_ok(current: float | None, prior: float | None, cell: Cell) -> bool | None:
-    """True/False when checkable, None when the change cannot be computed."""
+def _change_ok(current: float | None, prior: float | None, cell: Cell) -> str | None:
+    """"pass", "near" or "fail" when checkable, None when the change cannot be computed.
+
+    An issuer computes the change on unrounded figures and sometimes on a
+    restated prior period, so a stated percentage can sit a point or two
+    from what the printed figures give. That is "near": not proof of the
+    layout, but not evidence against it either. "fail" is a change that no
+    rounding or restatement explains, which means the cell is not the
+    change of these two columns.
+    """
     if cell.value is None:
         return None
     if current is None or prior is None or prior == 0:
@@ -909,10 +937,15 @@ def _change_ok(current: float | None, prior: float | None, cell: Cell) -> bool |
     expected = (current - prior) / abs(prior) * 100.0
     difference = current - prior
     if not cell.percent and abs(abs(cell.value) - abs(difference)) <= 0.051 + 0.0005 * abs(difference):
-        return True
+        return "pass"
     if abs(expected) > 100 and abs(cell.value) > 100:
-        return True
-    return abs(abs(cell.value) - abs(expected)) <= _PERCENT_TOLERANCE + 0.005 * abs(expected)
+        return "pass"
+    deviation = abs(abs(cell.value) - abs(expected))
+    if deviation <= _PERCENT_TOLERANCE + 0.005 * abs(expected):
+        return "pass"
+    if deviation <= 5.0 + 0.1 * abs(expected):
+        return "near"
+    return "fail"
 
 
 def _tolerance(parts: int) -> float:
@@ -965,9 +998,12 @@ def _check(layout: ColumnLayout, placed: list[Cell | None]) -> tuple[bool, list[
         results = [r for r in results if r is not None]
         if results:
             change_checked = True
-            if not any(results):
+            if "pass" not in results and "near" not in results:
                 return False, []
-            verified.append("change_column")
+            if "pass" in results:
+                verified.append("change_column")
+            else:
+                verified.append("change_column_near")
 
     # Geography parts sum to their total within the same period.
     by_period: dict[tuple[int | None, int | None, int | None], dict[str, float]] = {}

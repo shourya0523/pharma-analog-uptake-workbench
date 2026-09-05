@@ -186,14 +186,26 @@ def _specificity(label: str, aliases: list[str]) -> int:
 
 
 def _footnotes(text: str) -> dict[int, str]:
-    """Footnote number -> its text, for markers rows carry."""
-    notes: dict[int, str] = {}
+    """Footnote number -> its text, for markers rows carry.
+
+    "(1)" occurs both as a marker beside a label and as the start of the
+    note it refers to. The note is the occurrence followed by prose: mostly
+    words, not the numbers of the row the marker sits in.
+    """
+    best: dict[int, tuple[float, str]] = {}
     for match in _FOOTNOTE_DEF_RE.finditer(text):
         number = int(match.group(1))
         body = match.group(2).strip()
-        if number not in notes and len(body.split()) >= 2:
-            notes[number] = body
-    return notes
+        words = body.split()
+        if len(words) < 3:
+            continue
+        alphabetic = sum(1 for w in words if re.fullmatch(r"[A-Za-z][A-Za-z.,;'’-]*", w))
+        score = alphabetic / len(words)
+        if is_value_token(words[0]) or is_year_token(words[0]):
+            score -= 0.5
+        if score > best.get(number, (0.0, ""))[0]:
+            best[number] = (score, body)
+    return {number: body for number, (score, body) in best.items() if score >= 0.6}
 
 
 def _acquisition_date(text: str) -> str | None:
@@ -269,10 +281,13 @@ def _as_of_coverage(sentence: str, period: str, period_type: str) -> tuple[str, 
     return None
 
 
+# Vocabulary of grids that hold balances rather than flows. An income
+# statement also lists costs and expenses beside its revenue lines, so those
+# words are not in it.
 _NOT_REVENUE_GRID_RE = re.compile(
     r"\b(?:inventor(?:y|ies)|raw\s+materials|work[-\s]in[-\s]pro(?:cess|gress)|finished\s+goods|"
-    r"total\s+assets|total\s+liabilities|accounts\s+receivable|accrued|deferred\s+tax|"
-    r"cost\s+of\s+(?:product\s+)?sales|research\s+and\s+development\s+expense|per\s+share)\b",
+    r"total\s+assets|total\s+liabilities|accounts\s+receivable|deferred\s+tax(?:es)?|"
+    r"stockholders['’]?\s+equity|shares\s+outstanding)\b",
     re.I,
 )
 
@@ -284,9 +299,12 @@ def _is_revenue_grid(header_rows: list[list[str]], body: list[list[str]]) -> boo
     inventories, "Adcirca" royalty expense), so the label alone does not
     decide; the vocabulary of the whole grid does.
     """
-    labels = " ".join(row[0] for row in body if row and not is_value_token(row[0]))
+    # An inventory or balance grid announces itself in its caption and its
+    # first lines; an income statement's share counts come at the end.
+    labels = " ".join(row[0] for row in body[:3] if row and not is_value_token(row[0]))
     caption = _header_text(header_rows[-2:])
-    return not _NOT_REVENUE_GRID_RE.search(labels + " " + caption)
+    titles = " | ".join(_header_text([row]) for row in header_rows if len(_header_text([row]).split()) <= 8)
+    return not _NOT_REVENUE_GRID_RE.search(labels + " " + caption + " " + titles)
 
 
 _GENERIC_PRODUCT_LINE_RE = re.compile(
@@ -381,7 +399,7 @@ def read_grids(
     doc_years = _years_in(doc.full_text)
     observations: list[Observation] = []
     skipped: list[str] = []
-    inherited: ColumnLayout | None = None
+    inherited: list[ColumnLayout] = []
     footnotes = _footnotes(doc.full_text)
     sole_product = _is_sole_named_product(doc.full_text, product, aliases, issuer_products)
 
@@ -394,8 +412,8 @@ def read_grids(
             # header from its rows) declares the columns of the grid below.
             header_only = build_layouts(_header_text(header_rows), context=context_head, year_candidates=doc_years)
             usable_only = [l for l in header_only if l.usable]
-            if len(usable_only) == 1:
-                inherited = usable_only[0]
+            if usable_only:
+                inherited = usable_only
             continue
         header_text = _header_text(header_rows)
         local_years = _years_in(header_text + " " + _header_text(footer_rows))
@@ -404,21 +422,31 @@ def read_grids(
             context=context_head,
             year_candidates=local_years or doc_years,
         )
-        usable = [l for l in layouts if l.usable]
+        own = [l for l in layouts if l.usable]
         described = [l for l in (described_layouts or {}).get(table_index, []) if l.usable]
-        if described:
-            usable = described + [l for l in usable if l.signature not in {d.signature for d in described}]
-        if not usable and inherited is not None and _fits(inherited, body):
-            # A page header applies to every grid below it; a grid that
-            # restates only a section label inherits the page's columns.
-            usable = [inherited]
+        usable = described + [l for l in own if l.signature not in {d.signature for d in described}]
+        # A page header applies to every grid below it. A grid that restates
+        # only a section label, or whose header a page break truncated (and
+        # so reads as fewer columns than its rows have), also gets the page's
+        # candidate columns; the row's own cell count picks between them.
+        # The grid's own header outranks a page header it merely fits: when
+        # both read a row without blanks, the columns the grid itself
+        # declares are the reading, not an ambiguity.
+        layout_rank = {l.signature: 0 for l in usable}
+        # A header of bare dates ("June 30, 2002 December 31, 2001") is a
+        # balance grid; the page's period columns do not apply to it.
+        point_in_time = not own and any("point_in_time_columns" in l.notes for l in layouts)
+        for layout in [] if point_in_time else inherited:
+            if _fits(layout, body) and layout.signature not in {l.signature for l in usable}:
+                usable.append(layout)
+                layout_rank[layout.signature] = 1
         if not usable:
             reasons = ";".join(layouts[0].notes) if layouts else "no_layout"
             if any(_matches_aliases(_row_label(r)[0], aliases) for r in body):
                 skipped.append(f"table{table_index}:{reasons}")
             continue
-        if len(usable) == 1:
-            inherited = usable[0]
+        if own:
+            inherited = own
         # Unit: the grid's own header, then its caption/context, then the
         # document head. A grid that declares nothing keeps its values with
         # unit_declared=False so the series stage can decide.
@@ -436,8 +464,17 @@ def read_grids(
 
         group_label = ""
         group_markers: set[int] = set()
+        # A section label with a footnote marker ("PULMONARY HYPERTENSION
+        # (4)") may be the last line of the header rather than a body row.
         section_markers: set[int] = set()
+        for row in header_rows[-3:]:
+            text = " ".join(row)
+            if len(text.split()) <= 6 and text.strip().isupper():
+                section_markers |= {int(m) for m in _MARKER_RE.findall(text)}
         group_rows: list[tuple[str | None, dict[int, float]]] = []
+        # A label that wrapped onto the next line ends in a separator:
+        # "INVEGA SUSTENNA / XEPLION / INVEGA TRINZA /" then "TREVICTA US ...".
+        dangling = ""
         for row in body:
             if not _is_data_row(row):
                 # A single-cell group label ("OPSUMIT -", "Other products:",
@@ -446,6 +483,11 @@ def read_grids(
                 raw = " ".join(row)
                 markers = {int(m) for m in _MARKER_RE.findall(raw)}
                 text = clean_label(raw)
+                if dangling:
+                    text = f"{dangling} {text}".strip()
+                if re.search(r"(?:/|&|,|\band\b)\s*$", text):
+                    dangling = text
+                    continue
                 text = re.sub(r"[\s\-–—:]+$", "", text)
                 if text and not is_value_token(text):
                     label_part, _geo = split_geography(text)
@@ -454,8 +496,12 @@ def read_grids(
                         group_markers = markers
                         section_markers = markers if text.isupper() else section_markers
                         group_rows = []
+                dangling = ""
                 continue
             label, tokens = _row_label(row)
+            if dangling:
+                label = f"{dangling} {label}".strip()
+                dangling = ""
             row_markers = {int(m) for m in _MARKER_RE.findall(label)}
             label_part, geography = split_geography(clean_label(label))
             # Three kinds of row: a product row ("OPSUMIT US", "Biktarvy"),
@@ -498,7 +544,7 @@ def read_grids(
             # Every candidate layout is tried; the one the row fits without
             # blanks or label surgery wins, and a tie between different
             # readings is an ambiguity, not a choice.
-            fits: list[tuple[int, ColumnLayout, Alignment]] = []
+            fits: list[tuple[tuple[int, int], ColumnLayout, Alignment]] = []
             reasons: list[str] = []
             for layout in usable:
                 columns = len(layout.columns)
@@ -515,13 +561,17 @@ def read_grids(
                     reasons.append(reason)
                     continue
                 for alignment in alignments:
-                    fits.append((len(alignment.gaps) + shifted, layout, alignment))
+                    penalty = (len(alignment.gaps) + shifted, layout_rank.get(layout.signature, 1))
+                    fits.append((penalty, layout, alignment))
             if not fits:
                 skipped.append(f"table{table_index}:{label or '<unlabelled>'}:{';'.join(sorted(set(reasons)))}")
                 continue
             best_penalty = min(f[0] for f in fits)
             best = [f for f in fits if f[0] == best_penalty]
-            distinct = {tuple(sorted((layout.columns[i].period, layout.columns[i].geography, v) for i, v in a.values.items())) for _, layout, a in best}
+            distinct = {
+                tuple(sorted((layout.columns[i].period or "", layout.columns[i].geography or "", v) for i, v in a.values.items()))
+                for _, layout, a in best
+            }
             if len(distinct) > 1:
                 skipped.append(f"table{table_index}:{label or '<unlabelled>'}:ambiguous_alignment({len(distinct)})")
                 continue
@@ -687,4 +737,35 @@ def read_document(
                 source_id=doc.source_id,
             )
         )
+    # A generic "product sales" line stands in for the product only in a
+    # document that never names the product on a revenue line of its own,
+    # and never contradicts it: a sentence stating the product's own figure
+    # for a period the generic line covers at a different value shows the
+    # line to be the issuer's whole product revenue, not this product's.
+    generic_lines = [o for o in report.observations if "generic_product_line" in o.notes]
+    if generic_lines:
+        named = [o for o in report.observations if "generic_product_line" not in o.notes and o.line_item == "exact"]
+        named_grid = any(o.method == "grid" for o in named)
+        contradicted = any(
+            o.period == g.period and o.period_type == g.period_type and not o.covers
+            and not _same_amount(o, g)
+            for g in generic_lines
+            for o in named
+        )
+        if named_grid or contradicted:
+            report.observations = [o for o in report.observations if "generic_product_line" not in o.notes]
     return report
+
+
+def _same_amount(a: Observation, b: Observation) -> bool:
+    """Two observations of the same period state the same figure, to the coarser one's precision."""
+    from app.extraction.fingerprint import UNIT_SCALE_TO_MILLIONS
+
+    def millions(o: Observation) -> float | None:
+        scale = UNIT_SCALE_TO_MILLIONS.get(o.unit_label or "")
+        return None if scale is None else o.value_as_reported * scale
+
+    x, y = millions(a), millions(b)
+    if x is None or y is None:
+        return True
+    return abs(x - y) <= 0.05 * max(1.0, min(abs(x), abs(y)))

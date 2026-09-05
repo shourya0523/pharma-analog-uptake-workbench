@@ -258,9 +258,16 @@ _CONDITIONAL_RE = re.compile(
 )
 
 
+_BY_BEFORE_RE = re.compile(r"\bby\s+(?:approximately\s+|about\s+|roughly\s+|an?\s+(?:additional|further)\s+)?$", re.IGNORECASE)
+
+
 def _is_change_amount(sentence: str, position: int, end: int) -> bool:
     before = sentence[max(0, position - 40) : position]
     after = sentence[end : end + 30]
+    # "increase gross revenues of Zorbix by approximately $8.9 million":
+    # an amount introduced by "by" is a difference, whatever the verb.
+    if _BY_BEFORE_RE.search(before):
+        return True
     return bool(_CHANGE_BEFORE_RE.search(before) or _CHANGE_AFTER_RE.match(after))
 
 

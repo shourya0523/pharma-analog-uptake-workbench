@@ -27,6 +27,7 @@ Nothing here knows an issuer. The rules are about evidence:
 
 from __future__ import annotations
 
+import collections
 import re
 from collections import defaultdict
 from dataclasses import dataclass, field, replace
@@ -72,6 +73,11 @@ class SeriesValue:
     inputs: tuple[str, ...] = field(default_factory=tuple)
     covers: tuple[str, str] | None = None
     normalization: str = "ok"
+    # Other results the same evidence supports within the issuer's rounding:
+    # a full year less a stated nine months, or less the three quarters that
+    # sum to a different nine months. The primary is stated; these are kept
+    # visible rather than reconciled.
+    alternates: tuple[float, ...] = field(default_factory=tuple)
 
     def as_dict(self) -> dict[str, Any]:
         return {
@@ -92,6 +98,7 @@ class SeriesValue:
             "inputs": list(self.inputs),
             "covers": list(self.covers) if self.covers else None,
             "normalization": self.normalization,
+            "alternates": list(self.alternates),
         }
 
 
@@ -191,7 +198,7 @@ def normalize_observations(observations: list[Observation]) -> list[_Norm]:
             index = _quarter_index(obs.period)
             candidates: list[float] = []
             if index is not None:
-                for offset in (0, -1, 1, -2, 2, -3, 3, -4, 4):
+                for offset in (0, -1, 1, -2, 2, -3, 3, -4, 4, -5, 5, -6, 6, -7, 7, -8, 8):
                     candidates.extend(anchors.get((obs.geography, index + offset), []))
                     if candidates:
                         break
@@ -214,7 +221,22 @@ def normalize_observations(observations: list[Observation]) -> list[_Norm]:
                 anchors[(obs.geography, index)].append(value)
             progress = True
         pending = remaining
+    # A grid has one unit: an observation still undeclared adopts the unit
+    # its own grid's other rows were inferred to have.
+    inferred_by_grid: dict[tuple[str, int], collections.Counter] = defaultdict(collections.Counter)
+    for norm in out:
+        if norm.status == "unit_inferred_from_series" and norm.observation.table_index >= 0:
+            inferred_by_grid[(norm.observation.source_url, norm.observation.table_index)][norm.unit_label] += 1
+    still: list[Observation] = []
     for obs in pending:
+        counts = inferred_by_grid.get((obs.source_url, obs.table_index))
+        if counts:
+            unit = counts.most_common(1)[0][0]
+            value, status = _to_usd_millions(obs.value_as_reported, unit, obs.currency, obs.period)
+            out.append(_Norm(obs, value, unit, "unit_inferred_from_grid" if status == "ok" else status))
+            continue
+        still.append(obs)
+    for obs in still:
         out.append(_Norm(obs, None, obs.unit_label, "unit_not_declared"))
     return out
 
@@ -394,10 +416,21 @@ def derive_residual_quarters(
         target = missing[0]
         residual = total.value_usd_millions
         inputs = [total.period + ":" + period_type]
+        alternates: list[float] = []
         if subtotal is not None:
             residual -= subtotal.value_usd_millions
             inputs.append(f"{year}:{[k for k, v in _QUARTERS_IN.items() if v == covered][0]}")
             rest = [q for q in members if q != target and q not in covered]
+            # The same total less the quarters the sub-total is made of, when
+            # they are all stated: the issuer rounded each on its own, so the
+            # two can differ by a unit, and both are the issuer's arithmetic.
+            if all(q in have for q in covered):
+                by_parts = total.value_usd_millions - sum(have[q].value_usd_millions for q in covered)
+                for q in rest:
+                    by_parts -= have[q].value_usd_millions
+                primary = residual - sum(have[q].value_usd_millions for q in rest)
+                if abs(by_parts - primary) <= rounding_tolerance(len(covered)):
+                    alternates.append(round(by_parts, 6))
         else:
             rest = [q for q in members if q != target]
         for q in rest:
@@ -406,6 +439,7 @@ def derive_residual_quarters(
         if residual < -_NEGLIGIBLE:
             continue
         residual = round(max(residual, 0.0), 6)
+        alternates = [a for a in alternates if abs(a - residual) > 1e-9]
         period = f"{year}Q{target}"
         derived.append(
             SeriesValue(
@@ -424,6 +458,7 @@ def derive_residual_quarters(
                 source_urls=tuple(sorted(set(total.source_urls) | {u for q in rest for u in have[q].source_urls} | (set(subtotal.source_urls) if subtotal else set()))),
                 source_quote=total.source_quote,
                 inputs=tuple(inputs),
+                alternates=tuple(alternates),
             )
         )
         quarters[year][target] = derived[-1]

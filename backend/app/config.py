@@ -26,6 +26,9 @@ class Settings(BaseSettings):
     openrouter_model_judge: str = "openai/gpt-4o-mini"
     # The region fingerprinter defaults to the extract model when unset.
     openrouter_model_fingerprint: str | None = None
+    # Ask the model where each document states product revenue before the
+    # deterministic readers run; every description is verified by row.
+    enable_llm_fingerprint: bool = True
     openrouter_base_url: str = "https://openrouter.ai/api/v1"
     validation_sample_rate: float = 0.10
     max_concurrent_jobs: int = 1

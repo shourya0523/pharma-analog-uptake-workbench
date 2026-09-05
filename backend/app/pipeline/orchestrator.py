@@ -62,6 +62,10 @@ from app.parsing.fda_label import format_moa_profile_value, parse_label_record
 from app.parsing.indications import parse_indications
 from app.parsing.periods import detect_period_context, normalize_period
 from app.extraction.candidates import extract_revenue_candidates
+from app.extraction.readers import Observation, read_document
+from app.catalog.families import family_parent
+from app.extraction.series import Series, assemble_series, propagate_family
+from app.fingerprint.llm import Fingerprint, LLMFingerprinter
 from app.extraction.fingerprint import UNIT_SCALE_TO_MILLIONS
 from app.quality.candidate_filters import filter_revenue_candidates
 from app.quality.checks import (
@@ -133,6 +137,31 @@ def persist_profile_field(
     return row
 
 
+def _observation_candidate(observation: Observation) -> dict[str, Any]:
+    """A reader observation in the candidate shape the orchestrator persists."""
+    scale = {"units": 1e-6, "thousands": 1e-3, "millions": 1.0, "billions": 1e3}.get(observation.unit_label)
+    normalized = observation.value_as_reported * scale if (scale and observation.unit_declared and observation.currency == "USD") else None
+    return {
+        "period": observation.period,
+        "period_type": observation.period_type,
+        "value_reported": observation.value_as_reported,
+        "value_normalized_usd_millions": normalized,
+        "currency": observation.currency,
+        "unit": observation.unit_label,
+        "revenue_scope": observation.geography or "Unknown",
+        "geography": observation.geography,
+        "formulation": None,
+        "source_quote": observation.source_quote,
+        "product_mentioned_in_quote": True,
+        "is_company_total": False,
+        "confidence": 0.75 if observation.method == "grid" else 0.6,
+        "extraction_method": f"reader_{observation.method}",
+        "_from_reader": True,
+        "_reader_method": observation.method,
+        "_layout_notes": [n for n in observation.notes if n in {"unit_not_declared", "llm_fingerprint", "years_inferred_from_sequence"}],
+    }
+
+
 def scale_to_millions(value: float, unit: str | None) -> float:
     """Convert a reported value to USD millions using its declared unit.
 
@@ -158,6 +187,10 @@ def scale_to_millions(value: float, unit: str | None) -> float:
 
 
 class PipelineOrchestrator:
+    # Observations every job of this orchestrator produced, by job id, so a
+    # family's formulation can be resolved from its parent's line within a run.
+    _observations: dict[str, list[Observation]]
+
     def __init__(self, db: Session, file_store: FileStore | None = None, llm: LLMModules | None = None) -> None:
         self.db = db
         self.file_store = file_store or get_file_store()
@@ -214,6 +247,7 @@ class PipelineOrchestrator:
                     datapoint_rows = await self._extract_revenue(
                         job, sources, parsed, options, only_source_ids={s.source_id for s in extra_sources}
                     )
+            datapoint_rows = datapoint_rows + self._assemble_series(job, datapoint_rows)
             await self._judge(job, datapoint_rows, sources, parsed, options)
             await self._quality_and_validation(job)
             await self._completeness(job)
@@ -840,6 +874,11 @@ class PipelineOrchestrator:
         if not options.get("quarterly_revenue", True):
             return []
         self._set_step(job, JobStep.EXTRACT_REVENUE)
+        if not hasattr(self, "_observations"):
+            self._observations = {}
+        observations = self._observations.setdefault(job.id, [])
+        family = family_parent(job.drug_name)
+        fingerprinter = self._fingerprinter()
         rows: list[DatapointORM] = []
         dropped_total = 0
         any_product_money = False
@@ -985,6 +1024,46 @@ class PipelineOrchestrator:
                     len(added),
                 )
 
+            # Generic readers: grids of any physical form read by header
+            # vocabulary and row arithmetic, and sentences that tie an amount
+            # to the product. Their observations feed the series stage, and
+            # their exact-line values are candidates here too, so a document
+            # the fingerprinted table reader cannot read still yields rows.
+            fingerprint: Fingerprint | None = None
+            if fingerprinter is not None:
+                try:
+                    fingerprint = await fingerprinter.fingerprint(
+                        doc, products=[job.drug_name], generics={job.drug_name: job.generic_name},
+                        title=src.title or "", url=src.url,
+                    )
+                except Exception as exc:
+                    logger.warning("fingerprint_skipped job_id=%s source_id=%s error=%s", job.id, src.source_id, exc)
+            report = read_document(
+                doc, product=job.drug_name, generic=job.generic_name, extra_aliases=extra,
+                source_url=src.url, fingerprint=fingerprint,
+            )
+            observations.extend(report.observations)
+            if family:
+                # The same document carries the family line this formulation
+                # was reported under before the issuer split it out.
+                family_report = read_document(doc, product=family, source_url=src.url, fingerprint=fingerprint)
+                self._observations.setdefault(f"{job.id}:family", []).extend(family_report.observations)
+            if report.skipped:
+                logger.info("reader_skipped job_id=%s source_id=%s reasons=%s", job.id, src.source_id, report.skipped[:6])
+            seen_rows = {
+                (str(c.get("period")), round(float(c["value_reported"]), 3))
+                for c in kept
+                if c.get("value_reported") is not None
+            }
+            reader_rows = [
+                candidate
+                for candidate in (_observation_candidate(o) for o in report.observations if o.line_item == "exact" and not o.covers)
+                if (candidate["period"], round(float(candidate["value_reported"]), 3)) not in seen_rows
+            ]
+            if reader_rows:
+                kept = list(kept) + reader_rows
+                logger.info("reader_rows_extracted job_id=%s source_id=%s added=%s", job.id, src.source_id, len(reader_rows))
+
             comparatives = derive_comparative_candidates(kept, context=period_context)
             if comparatives:
                 kept = list(kept) + comparatives
@@ -1044,6 +1123,10 @@ class PipelineOrchestrator:
                     issue_flags.append("derived_comparative_column")
                 if cand.get("_from_table"):
                     issue_flags.append("extracted_from_table")
+                if cand.get("_from_reader"):
+                    issue_flags.append(f"read_by_{cand.get('_reader_method')}")
+                    if cand.get("_layout_notes"):
+                        issue_flags.extend(cand["_layout_notes"])
                 if period is None:
                     issue_flags.append("period_unparsed")
                 elif period != raw_period:
@@ -1068,7 +1151,11 @@ class PipelineOrchestrator:
                     route_of_administration=cand.get("route_of_administration"),
                     source_url=url,
                     source_quote=quote or "",
-                    extraction_method="table" if cand.get("_from_table") else "llm",
+                    extraction_method=(
+                        "table" if cand.get("_from_table")
+                        else f"reader_{cand.get('_reader_method')}" if cand.get("_from_reader")
+                        else "llm"
+                    ),
                     confidence_score=float(cand.get("confidence") or 0.5),
                     validation_status=ValidationStatus.PENDING.value,
                     citation_json=citation,
@@ -1112,6 +1199,104 @@ class PipelineOrchestrator:
             len(selected_sources),
         )
         return rows
+
+    def _fingerprinter(self) -> LLMFingerprinter | None:
+        settings = get_settings()
+        if not settings.enable_llm_fingerprint or not settings.openrouter_api_key:
+            return None
+        if not hasattr(self, "_fingerprinter_instance"):
+            try:
+                self._fingerprinter_instance = LLMFingerprinter()
+            except Exception as exc:
+                logger.warning("fingerprinter_unavailable error=%s", exc)
+                self._fingerprinter_instance = None
+        return self._fingerprinter_instance
+
+    def _assemble_series(self, job: DrugJobORM, rows: list[DatapointORM]) -> list[DatapointORM]:
+        """Reconcile every observation of the job into one series; persist what it adds.
+
+        Rows read directly are already datapoints. What this stage adds are
+        the quarters no document states outright: residuals against stated
+        totals, stubs of an acquisition quarter assembled from dated parts,
+        and a family line attributed to its sole formulation. Periods the
+        series cannot resolve become unresolved quarters with the verdict.
+        """
+        observations = getattr(self, "_observations", {}).get(job.id, [])
+        if not observations:
+            return []
+        self._set_step(job, JobStep.EXTRACT_REVENUE)
+        series: Series = assemble_series(observations, product=job.drug_name)
+        parent = family_parent(job.drug_name) or ""
+        if parent:
+            parent_job = next(
+                (j for j in self.db.query(DrugJobORM).filter_by(run_id=job.run_id).all() if j.drug_name == parent),
+                None,
+            )
+            parent_observations = getattr(self, "_observations", {}).get(parent_job.id, []) if parent_job else []
+            if not parent_observations:
+                parent_observations = getattr(self, "_observations", {}).get(f"{job.id}:family", [])
+            if parent_observations:
+                parent_series = assemble_series(parent_observations, product=parent)
+                siblings = sorted({
+                    o.period for o in parent_observations
+                    if o.method == "grid" and o.specificity and o.period_type == "quarterly"
+                    and job.drug_name.lower() not in o.product_label.lower() and parent.lower() in o.product_label.lower()
+                })
+                own = {v.period for v in series.values if v.period_type == "quarterly"}
+                series.values.extend(
+                    v for v in propagate_family(parent_series, product=job.drug_name, sibling_periods=siblings)
+                    if v.period not in own
+                )
+        existing = {(r.period, r.period_type) for r in rows}
+        added: list[DatapointORM] = []
+        for value in series.values:
+            if value.route == "read" or (value.period, value.period_type) in existing:
+                continue
+            row = DatapointORM(
+                id=new_id(),
+                job_id=job.id,
+                source_id=None,
+                period=value.period,
+                value_reported=value.value_as_reported,
+                value_normalized_usd_millions=value.value_usd_millions,
+                currency=value.currency,
+                unit=value.unit_label,
+                period_type=value.period_type,
+                revenue_scope=value.geography or "Unknown",
+                geography=value.geography,
+                source_url=value.source_urls[0] if value.source_urls else "",
+                source_quote=value.detail or value.source_quote,
+                extraction_method=value.route,
+                confidence_score=0.7,
+                validation_status=ValidationStatus.PENDING.value,
+                citation_json={
+                    "derivation": value.derivation,
+                    "inputs": list(value.inputs),
+                    "source_urls": list(value.source_urls),
+                    "detail": value.detail,
+                },
+                issue_flags=[f"series_{value.route}"],
+            )
+            self.db.add(row)
+            added.append(row)
+        for verdict in series.verdicts:
+            self.db.add(
+                UnresolvedQuarterORM(
+                    id=new_id(),
+                    job_id=job.id,
+                    period=verdict.period,
+                    reason_unresolved=f"{verdict.derivation}: {verdict.detail}"[:500],
+                    sources_checked=list(verdict.source_urls),
+                    recommended_next_step="Review the conflicting statements and confirm which line the series tracks",
+                    confidence_that_unavailable=0.2,
+                )
+            )
+        if added or series.verdicts:
+            self.db.commit()
+            logger.info(
+                "series_assembled job_id=%s drug=%s added=%s verdicts=%s", job.id, job.drug_name, len(added), len(series.verdicts)
+            )
+        return added
 
     async def _judge(self, job: DrugJobORM, rows: list[DatapointORM], sources: list, parsed: dict, options: dict) -> None:
         self._set_step(job, JobStep.EVIDENCE_JUDGE)
