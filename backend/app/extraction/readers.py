@@ -87,10 +87,18 @@ class Observation:
     source_id: str = ""
     table_index: int = -1
     notes: tuple[str, ...] = field(default_factory=tuple)
+    geography_label: str | None = None    # the geography as the document printed it
+    described_product: str | None = None  # the product the description assigned the row to
+    line_kind: str = ""                   # the description's line kind, when read from one
+    provisional: bool = False             # fills empty cells only; never seeds derivation on its own
 
     def as_dict(self) -> dict[str, Any]:
         return {
             "product_label": self.product_label,
+            "geography_label": self.geography_label,
+            "described_product": self.described_product,
+            "line_kind": self.line_kind,
+            "provisional": self.provisional,
             "period": self.period,
             "period_type": self.period_type,
             "value_as_reported": self.value_as_reported,
@@ -115,6 +123,12 @@ class Observation:
 class ReadReport:
     observations: list[Observation]
     skipped: list[str]
+    failures: list[Any] = field(default_factory=list)     # described.VerificationFailure
+    rejected: list[str] = field(default_factory=list)     # descriptions the parser did not ground
+    mode: str = "degraded"
+    dropped_prose: dict[str, int] = field(default_factory=dict)
+    repairs: int = 0
+    repaired_grids: list[int] = field(default_factory=list)
 
 
 def _is_year_row(row: list[str]) -> bool:
@@ -440,6 +454,7 @@ def read_grids(
     extra_aliases: Iterable[str] | None = None,
     source_url: str = "",
     described_layouts: dict[int, list[ColumnLayout]] | None = None,
+    mode: str = "degraded",
     issuer_products: Iterable[str] | None = None,
 ) -> ReadReport:
     """Every observation the document's grids state for this product.
@@ -491,6 +506,11 @@ def read_grids(
                 year_candidates=local_years or doc_years,
             )
         own = [l for l in layouts if l.usable]
+        if mode == "model":
+            # Model mode: the header grammar never interprets a grid. The
+            # description is the only candidate; a grid the model did not
+            # describe is not read.
+            own = []
         described = [l for l in (described_layouts or {}).get(table_index, []) if l.usable]
         usable = described + [l for l in own if l.signature not in {d.signature for d in described}]
         # A page header applies to every grid below it. A grid that restates
@@ -504,7 +524,7 @@ def read_grids(
         # A header of bare dates ("June 30, 2002 December 31, 2001") is a
         # balance grid; the page's period columns do not apply to it.
         point_in_time = not own and any("point_in_time_columns" in l.notes for l in layouts)
-        for layout in [] if point_in_time else inherited:
+        for layout in [] if (point_in_time or mode == "model") else inherited:
             if _fits(layout, body) and layout.signature not in {l.signature for l in usable}:
                 usable.append(layout)
                 layout_rank[layout.signature] = 1
@@ -791,14 +811,26 @@ def read_document(
     source_url: str = "",
     fingerprint: Any = None,
     issuer_products: Iterable[str] | None = None,
+    mode: str = "degraded",
 ) -> ReadReport:
     """Grid observations plus sentence observations, in one list.
+
+    ``mode="model"``: only the fingerprint's descriptions interpret the
+    document; the header grammar and the regex prose reader do not run.
+    ``mode="degraded"``: the grammar and regex readers, for runs with no
+    model; never scored.
 
     ``fingerprint`` is an optional ``app.fingerprint.llm.Fingerprint``: its
     grid descriptions become candidate layouts (verified per row) and its
     prose statements become observations only when the quoted sentence is
     in the document and the value is in the sentence.
     """
+    if mode == "model":
+        from app.extraction.described import read_described_document
+
+        return read_described_document(
+            doc, fingerprint, product=product, generic=generic, extra_aliases=extra_aliases, source_url=source_url,
+        )
     aliases = product_aliases(product, generic, extra=extra_aliases)
     described: dict[int, list[ColumnLayout]] = defaultdict(list)
     if fingerprint is not None:
@@ -806,7 +838,7 @@ def read_document(
             described[region.grid_index].append(_column_geographies_only(region.layout))
     report = read_grids(
         doc, product=product, generic=generic, extra_aliases=extra_aliases, source_url=source_url,
-        described_layouts=dict(described) or None, issuer_products=issuer_products,
+        described_layouts=dict(described) or None, issuer_products=issuer_products, mode=mode,
     )
     if fingerprint is not None:
         from app.llm.grounding import quote_is_verbatim
@@ -843,7 +875,7 @@ def read_document(
                     notes=("llm_fingerprint",),
                 )
             )
-    for value in read_prose(doc.full_text, product=product, generic=generic, extra_aliases=extra_aliases):
+    for value in [] if mode == "model" else read_prose(doc.full_text, product=product, generic=generic, extra_aliases=extra_aliases):
         covers = _as_of_coverage(value.source_quote, value.period, value.period_type)
         report.observations.append(
             Observation(

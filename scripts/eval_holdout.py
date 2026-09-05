@@ -144,7 +144,8 @@ async def main() -> int:
     parser.add_argument("--dump-series", action="store_true", help="print every series value, reference or not")
     parser.add_argument("--show-failures", action="store_true")
     parser.add_argument("--json")
-    parser.add_argument("--fingerprinter", choices=("grammar", "llm"), default="grammar")
+    parser.add_argument("--mode", choices=("model", "degraded"), default=None)
+    parser.add_argument("--fingerprinter", choices=("grammar", "llm"), default=None, help="deprecated alias")
     parser.add_argument("--model")
     parser.add_argument("--refetch", action="store_true")
     args = parser.parse_args()
@@ -177,8 +178,9 @@ async def main() -> int:
     # 2. Reading and assembly, per product.
     catalog = {issuer: [p["drug_name"] for p in rows] for issuer, rows in by_issuer.items()}
     generics = {p["drug_name"]: p["generic_name"] for p in products}
-    fingerprinter = LLMFingerprinter(model=args.model) if args.fingerprinter == "llm" else None
-    runner = Runner(corpus, fingerprinter=fingerprinter, catalog=catalog, generics=generics)  # type: ignore[arg-type]
+    mode = args.mode or ("model" if args.fingerprinter == "llm" else "degraded")
+    fingerprinter = LLMFingerprinter(model=args.model) if (mode == "model" or args.fingerprinter == "llm") else None
+    runner = Runner(corpus, fingerprinter=fingerprinter, catalog=catalog, generics=generics, mode=mode)  # type: ignore[arg-type]
 
     comparisons: dict[str, list[Comparison]] = {}
     pipeline_rows: dict[str, list] = {}

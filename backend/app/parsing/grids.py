@@ -405,6 +405,7 @@ def _segment_stream(stream: list[str]) -> list[_Line]:
 
 
 _YEAR_IN_TEXT_RE = re.compile(r"\b(?:19|20)\d{2}\b")
+_FOOTNOTE_LINE_RE = re.compile(r"^(?:\(\s*[a-z0-9]{1,2}\s*\)|[*†‡]{1,3})\s*\S")
 _PERIOD_WORD_RE = re.compile(
     r"\b(?:quarter|months?|year|ended|full[-\s]?year|q[1-4]|[1-4]q|fy)\b|(?:19|20)\d{2}",
     re.I,
@@ -486,7 +487,9 @@ def recover_text_grids(text: str, *, max_header_lines: int = 12) -> list[Table]:
         # its geography rows) and stays with the table as a one-cell row.
         # Anything else is header material for the next table, and ends
         # the current one.
-        if current_rows and _looks_like_group_label(line):
+        if current_rows and (_looks_like_group_label(line) or _FOOTNOTE_LINE_RE.match(line.text)):
+            # A group label, or a footnote the grid's markers point to
+            # ("(1) Products acquired ..."), stays with the grid.
             current_rows.append([line.text])
             continue
         if current_rows:

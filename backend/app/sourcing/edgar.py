@@ -22,11 +22,12 @@ import time
 from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
-from typing import Iterable
+from typing import Any, Iterable
 
 import httpx
 
 from app.config import get_settings
+from app.domain.models import RetrievalStatus, RetrievedSource, SourceType
 
 logger = logging.getLogger(__name__)
 
@@ -36,9 +37,6 @@ ARCHIVES = "https://www.sec.gov/Archives/edgar/data"
 TICKER_MAP = "https://www.sec.gov/files/company_tickers.json"
 
 REVENUE_FORMS = ("8-K", "10-Q", "10-K", "10-K405", "6-K", "20-F", "40-F")
-EARNINGS_ITEM = "2.02"
-_EXHIBIT_99_RE = re.compile(r"(?:^|[^a-z])(?:ex+|exh|exhibit)[-_]?99|99d\d|[_-]99[-_.]", re.I)
-_RELEASE_NAME_RE = re.compile(r"earnings|release|results|financial|sales|revenue", re.I)
 _INDEX_NOISE_RE = re.compile(
     r"\.(?:xml|xsd|jpg|jpeg|png|gif|zip|json|txt)$|-index(?:-headers)?\.html?$|^R\d+\.htm$", re.I
 )
@@ -129,6 +127,74 @@ class EdgarIndex:
             return []
         return [item.get("name", "") for item in data.get("directory", {}).get("item", []) if item.get("name")]
 
+    async def _throttled_get(self, client: httpx.AsyncClient, url: str) -> httpx.Response:
+        async with self._lock:
+            wait = _MIN_INTERVAL - (time.monotonic() - self._last)
+            if wait > 0:
+                await asyncio.sleep(wait)
+            self._last = time.monotonic()
+        return await client.get(url)
+
+    async def resolve_cik_for(self, *, ticker: str | None = None, name: str | None = None) -> str | None:
+        async with httpx.AsyncClient(headers=self.headers, timeout=60, follow_redirects=True) as client:
+            return await self.resolve_cik(client, ticker=ticker, name=name)
+
+    async def retrieve(
+        self,
+        *,
+        run_id: str,
+        job_id: str,
+        cik: str,
+        file_store: Any,
+        since: date | None = None,
+        until: date | None = None,
+        forms: Iterable[str] = REVENUE_FORMS,
+    ) -> list[RetrievedSource]:
+        """Every document of every filing in the window, fetched and stored.
+
+        Documents are cached under ``cache/sec/{accession}/{document}`` and
+        copied per job under ``sources/{run}/{job}/``. Which of them state
+        product revenue is nobody's decision here.
+        """
+        candidates = await self.candidates(cik, since=since, until=until, forms=forms)
+        sources: list[RetrievedSource] = []
+        async with httpx.AsyncClient(headers=self.headers, timeout=90, follow_redirects=True) as client:
+            for candidate in candidates:
+                acc = candidate.accession.replace("-", "")
+                suffix = ".pdf" if candidate.document.lower().endswith(".pdf") else ".htm"
+                cache_key = f"cache/sec/{acc}/{candidate.document.replace('/', '_')}"
+                source = RetrievedSource(
+                    source_type=SourceType.EARNINGS_RELEASE if candidate.form.split("/")[0] in {"8-K", "6-K"} else SourceType.SEC_FILING,
+                    url=candidate.url,
+                    title=f"{candidate.form} {candidate.document} {candidate.filing_date.isoformat()}",
+                    source_date=candidate.filing_date,
+                    filing_type=candidate.form,
+                    accession_number=candidate.accession,
+                    retrieval_status=RetrievalStatus.SUCCESS,
+                    metadata={"cik": cik, "kind": candidate.kind, "document": candidate.document,
+                              "description": candidate.description},
+                )
+                try:
+                    from_cache = await file_store.exists(cache_key)
+                    if from_cache:
+                        raw = await file_store.get(cache_key)
+                    else:
+                        response = await self._throttled_get(client, candidate.url)
+                        response.raise_for_status()
+                        raw = response.content
+                        await file_store.put(cache_key, raw, "application/pdf" if suffix == ".pdf" else "text/html")
+                    job_key = f"sources/{run_id}/{job_id}/{source.source_id}{suffix}"
+                    await file_store.put(job_key, raw, "application/pdf" if suffix == ".pdf" else "text/html")
+                    source.storage_key = job_key
+                    source.metadata["from_cache"] = from_cache
+                    source.notes = "sec_cache_hit" if from_cache else None
+                except Exception as exc:  # noqa: BLE001
+                    source.retrieval_status = RetrievalStatus.FAILED
+                    source.notes = f"fetch failed: {exc}"[:300]
+                    logger.warning("edgar_fetch_failed url=%s error=%s", candidate.url, exc)
+                sources.append(source)
+        return sources
+
     async def candidates(
         self,
         cik: str,
@@ -136,7 +202,7 @@ class EdgarIndex:
         since: date | None = None,
         until: date | None = None,
         forms: Iterable[str] = REVENUE_FORMS,
-        earnings_exhibits: bool = True,
+        earnings_exhibits: bool = True,  # kept for callers; every filing's documents are candidates
     ) -> list[SourceCandidate]:
         """Documents that can state product revenue, newest first."""
         wanted = set(forms)
@@ -156,53 +222,34 @@ class EdgarIndex:
                     continue
                 accession = str(row["accessionNumber"])
                 acc = accession.replace("-", "")
-                if base_form in {"8-K", "6-K"}:
-                    if not earnings_exhibits:
-                        continue
-                    items = str(row.get("items", ""))
-                    earnings_item = base_form != "8-K" or EARNINGS_ITEM in items or not items
-                    names = await self.documents_in(client, cik, accession)
-                    primary = str(row.get("primaryDocument", ""))
-                    for name in names:
-                        # An issuer that furnishes its release under Item 9.01
-                        # alone still names the document for what it is
-                        # ("alny2024q3earningsrelease.htm", "ex99-1"); those
-                        # are taken from any 8-K, the rest only from Item 2.02.
-                        if not earnings_item and not (_EXHIBIT_99_RE.search(name) or _RELEASE_NAME_RE.search(name)):
-                            continue
-                        # An earnings 8-K's exhibits are whatever documents it
-                        # carries besides its cover page: issuers name them
-                        # "ex99-1", "pressrelease0804", "sales-schedule" as they
-                        # please, so the name is not the test.
-                        # A 6-K's primary document is the report itself, not a cover.
-                        if _INDEX_NOISE_RE.search(name) or (name == primary and base_form != "6-K"):
-                            continue
-                        if not name.lower().endswith((".htm", ".html", ".pdf")):
-                            continue
-                        out.append(
-                            SourceCandidate(
-                                url=f"{ARCHIVES}/{cik_int}/{acc}/{name}",
-                                form=form,
-                                filing_date=filed,
-                                accession=accession,
-                                document=name,
-                                kind="earnings_exhibit",
-                                description=str(row.get("primaryDocDescription", "")),
-                            )
-                        )
-                    continue
+                names = await self.documents_in(client, cik, accession)
                 primary = str(row.get("primaryDocument", ""))
-                if not primary:
-                    continue
-                out.append(
-                    SourceCandidate(
-                        url=f"{ARCHIVES}/{cik_int}/{acc}/{primary}",
-                        form=form,
-                        filing_date=filed,
-                        accession=accession,
-                        document=primary,
-                        kind="primary",
-                        description=str(row.get("primaryDocDescription", "")),
+                for name in names:
+                    # Every document of the filing that is a document (not
+                    # an EDGAR viewer artefact) is a candidate. Which of them
+                    # states product revenue is not decided here: the
+                    # fingerprinter's sketch looks for the products in each
+                    # and nothing is asked of a document that names none.
+                    if _INDEX_NOISE_RE.search(name) or not name.lower().endswith((".htm", ".html", ".pdf")):
+                        continue
+                    if base_form in {"8-K", "6-K"}:
+                        # An 8-K cover page carries no figures of its own; a
+                        # 6-K's primary document is the report itself.
+                        if name == primary and base_form == "8-K":
+                            continue
+                        kind = "exhibit"
+                    else:
+                        kind = "primary" if name == primary else "exhibit"
+                    out.append(
+                        SourceCandidate(
+                            url=f"{ARCHIVES}/{cik_int}/{acc}/{name}",
+                            form=form,
+                            filing_date=filed,
+                            accession=accession,
+                            document=name,
+                            kind=kind,
+                            description=str(row.get("primaryDocDescription", "")),
+                        )
                     )
-                )
+                continue
         return out

@@ -24,11 +24,25 @@ class Settings(BaseSettings):
     openrouter_api_key: str | None = None
     openrouter_model_extract: str = "openai/gpt-4o-mini"
     openrouter_model_judge: str = "openai/gpt-4o-mini"
-    # The region fingerprinter defaults to the extract model when unset.
-    openrouter_model_fingerprint: str | None = None
-    # Ask the model where each document states product revenue before the
-    # deterministic readers run; every description is verified by row.
+    # The region fingerprinter: the model that describes where and how a
+    # document states product revenue. A fast model describes first; a part
+    # whose description the parser rejects or that leaves a product grid
+    # undescribed is described again by the strong model. Repairs always use
+    # the strong model. Empty fast model = strong model only.
+    openrouter_model_fingerprint: str = "anthropic/claude-sonnet-4.5"
+    openrouter_model_fingerprint_fast: str = "anthropic/claude-haiku-4.5"
+    # model: the description is the only interpreter (scored); degraded: the
+    # header grammar and regex prose readers, for runs with no model, never
+    # scored; auto: model when an API key is present, else degraded.
+    fingerprint_mode: str = "auto"
     enable_llm_fingerprint: bool = True
+    fingerprint_concurrency: int = 4
+    fingerprint_max_tokens: int = 16000
+    fingerprint_max_calls_per_job: int = 400
+    # The legacy two-pass LLM extractor and table fingerprint reader; off in
+    # model mode, kept until the cleanup phase.
+    legacy_revenue_extractors: bool = False
+    sec_history_years: int = 12
     openrouter_base_url: str = "https://openrouter.ai/api/v1"
     validation_sample_rate: float = 0.10
     max_concurrent_jobs: int = 1

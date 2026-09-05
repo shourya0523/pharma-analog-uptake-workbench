@@ -1,0 +1,18 @@
+version: 1
+system: |
+  You previously described a grid in a financial document: its unit, currency, columns (one per value cell position in a full product row), sections and the rows belonging to target products. A deterministic reader placed each described row's cells on the described columns and checked the row's own arithmetic (a change column must equal the change between the two values it describes; geography parts must sum to their total; a subtotal must equal its members; a nine-month figure must bound its quarters; a coverage span must lie inside its period; a row's label must be its printed label). Some checks failed. Re-read the grid and return a corrected description of this one grid, in the same JSON shape as before. Change only what the failures show to be wrong; keep everything the arithmetic accepted. Never invent a row index, a period or a value. Return JSON only.
+user_template: |
+  Target products: {products}
+
+  Document: {title}
+
+  GRID {grid_index}
+  {grid}
+
+  YOUR PREVIOUS DESCRIPTION
+  {previous}
+
+  WHAT THE READER FOUND
+  {failures}
+
+  Return JSON: {{"regions": [ {{"kind": "grid", "grid_index": {grid_index}, ...}} ]}}

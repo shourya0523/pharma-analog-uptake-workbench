@@ -32,6 +32,7 @@ sys.path.insert(0, str(REPO_ROOT / "backend"))
 
 from app.benchmark.corpus import Corpus, GOLD_DIR  # noqa: E402
 from app.benchmark.schema import Comparison, compare, from_gold, from_series  # noqa: E402
+from app.extraction.described import read_with_repair
 from app.extraction.readers import Observation, read_document  # noqa: E402
 from app.fingerprint.llm import Fingerprint, LLMFingerprinter  # noqa: E402
 from app.extraction.series import Series, assemble_series, propagate_family  # noqa: E402
@@ -78,15 +79,18 @@ def sibling_formulation_periods(parent_observations: list[Observation], *, famil
 
 class Runner:
     def __init__(self, corpus: Corpus, *, fingerprinter: LLMFingerprinter | None = None,
-                 catalog: dict[str, list[str]] | None = None, generics: dict[str, str | None] | None = None) -> None:
+                 catalog: dict[str, list[str]] | None = None, generics: dict[str, str | None] | None = None,
+                 mode: str = "degraded") -> None:
         self.corpus = corpus
+        self.mode = mode
         self.parser = DocumentParser(corpus.file_store())
         self.fingerprinter = fingerprinter
         self.catalog = catalog or {}          # issuer -> products
         self.generics = generics or {}
         self._parsed: dict[str, object] = {}
         self._fingerprints: dict[str, Fingerprint] = {}
-        self.fingerprint_stats = {"documents": 0, "cached": 0, "grids": 0, "prose": 0}
+        self.fingerprint_stats = {"documents": 0, "cached": 0, "grids": 0, "prose": 0, "promotions": 0, "tiers": defaultdict(int)}
+        self.read_stats = {"repairs": 0, "rejected": 0, "failures": defaultdict(int), "dropped_prose": defaultdict(int)}
 
     async def parsed(self, url: str):
         if url not in self._parsed:
@@ -111,6 +115,9 @@ class Runner:
                 self.fingerprint_stats["cached"] += int(result.cached)
                 self.fingerprint_stats["grids"] += len(result.grids)
                 self.fingerprint_stats["prose"] += len(result.prose)
+                self.fingerprint_stats["promotions"] += len(result.promotions)
+                for tier, count in result.tiers.items():
+                    self.fingerprint_stats["tiers"][tier] += count
         return self._fingerprints[url]
 
     async def observe(self, product: str, generic: str | None, urls: list[str], issuer: str | None = None) -> tuple[list[Observation], dict[str, list[str]]]:
@@ -125,10 +132,22 @@ class Runner:
                 skipped[url] = ["not_parsed"]
                 continue
             fingerprint = await self.fingerprint(url, issuer)
-            report = read_document(
-                doc, product=product, generic=generic, source_url=url, fingerprint=fingerprint,
-                issuer_products=self.catalog.get(issuer or "", []),
-            )
+            if self.mode == "model":
+                report = await read_with_repair(
+                    doc, fingerprint, self.fingerprinter, product=product, generic=generic, source_url=url,
+                    products=self.catalog.get(issuer or "", []) or [product], title=(source.title or "") if source else "",
+                )
+                self.read_stats["repairs"] += report.repairs
+                for failure in report.failures:
+                    self.read_stats["failures"][failure.code] += 1
+                for kind, count in report.dropped_prose.items():
+                    self.read_stats["dropped_prose"][kind] += count
+                self.read_stats["rejected"] += len(report.rejected)
+            else:
+                report = read_document(
+                    doc, product=product, generic=generic, source_url=url, fingerprint=fingerprint,
+                    issuer_products=self.catalog.get(issuer or "", []), mode=self.mode,
+                )
             observations.extend(report.observations)
             if report.skipped:
                 skipped[url] = report.skipped
@@ -143,8 +162,10 @@ async def main() -> int:
     parser.add_argument("--json", help="write every pipeline row and comparison to this path")
     parser.add_argument("--rendering", choices=("raw", "markdown"), default="raw",
                         help="raw: the bytes the pipeline fetched (falls back per document); markdown: the committed text rendering")
-    parser.add_argument("--fingerprinter", choices=("grammar", "llm"), default="grammar",
-                        help="llm: ask the model where and how each document states revenue, verified per row; grammar: header grammar only")
+    parser.add_argument("--mode", choices=("model", "degraded"), default=None,
+                        help="model: the fingerprint description is the only interpreter (scored mode); degraded: header grammar and regex prose, never scored")
+    parser.add_argument("--fingerprinter", choices=("grammar", "llm"), default=None,
+                        help="deprecated alias: llm = --mode model with the grammar still active (baseline before Phase 2); grammar = --mode degraded")
     parser.add_argument("--model", help="OpenRouter model for the fingerprinter")
     args = parser.parse_args()
 
@@ -160,10 +181,11 @@ async def main() -> int:
         if row["drug_name"] not in catalog[row["manufacturer"]]:
             catalog[row["manufacturer"]].append(row["drug_name"])
     generics_all = {row["drug_name"]: row.get("generic_name") for row in quarterly + annual}
-    fingerprinter = LLMFingerprinter(model=args.model) if args.fingerprinter == "llm" else None
-    runner = Runner(corpus, fingerprinter=fingerprinter, catalog=dict(catalog), generics=generics_all)
+    mode = args.mode or ("model" if args.fingerprinter == "llm" else "degraded")
+    fingerprinter = LLMFingerprinter(model=args.model) if (mode == "model" or args.fingerprinter == "llm") else None
+    runner = Runner(corpus, fingerprinter=fingerprinter, catalog=dict(catalog), generics=generics_all, mode=mode)
     if fingerprinter is not None:
-        print(f"fingerprinter: {fingerprinter.model} (enabled={fingerprinter.enabled})")
+        print(f"mode: {mode}; fingerprinter: {fingerprinter.model} (enabled={fingerprinter.enabled})")
 
     issuer_of = {row["drug_name"]: row["manufacturer"] for row in quarterly + annual}
     generic_of = {row["drug_name"]: row.get("generic_name") for row in quarterly + annual}
@@ -257,7 +279,11 @@ async def main() -> int:
             if result.outcome == "match" and result.pipeline:
                 routes[(result.gold.route, result.pipeline.route)] += 1
     if fingerprinter is not None:
-        print(f"\nfingerprints: {runner.fingerprint_stats}")
+        stats = dict(runner.fingerprint_stats)
+        stats["tiers"] = dict(stats["tiers"])
+        print(f"\nfingerprints: {stats}")
+        reads = {k: (dict(v) if isinstance(v, dict) else v) for k, v in runner.read_stats.items()}
+        print(f"reads: {reads}")
     print("\nmatched rows by route (gold -> pipeline)")
     for (g, p), count in sorted(routes.items()):
         print(f"  {g:>10} -> {p:<10} {count}")

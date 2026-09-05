@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import json
 import logging
 import re
@@ -27,6 +28,13 @@ logger = logging.getLogger(__name__)
 PROMPTS_DIR = Path(__file__).resolve().parent.parent / "prompts"
 
 
+_RETRY_STATUSES = {408, 409, 425, 429, 500, 502, 503, 504}
+
+
+class _Transient(Exception):
+    """A failure worth another attempt."""
+
+
 class OpenRouterClient:
     def __init__(self) -> None:
         self.settings = get_settings()
@@ -52,9 +60,14 @@ class OpenRouterClient:
             )
         resp.raise_for_status()
 
-    async def chat_json(self, *, model: str, system: str, user: str, max_tokens: int = 6000) -> dict[str, Any]:
-        # max_tokens bounds what the router reserves against the account's
-        # balance; without it a model's full output window is reserved.
+    async def chat_json(self, *, model: str, system: str, user: str, max_tokens: int = 6000,
+                        temperature: float = 0.1, timeout: float = 120.0, retries: int = 0) -> dict[str, Any]:
+        """One JSON answer. Transient failures are retried with backoff; an
+        answer that is not JSON is asked for once more.
+
+        max_tokens bounds what the router reserves against the account's
+        balance; without it a model's full output window is reserved.
+        """
         payload = {
             "model": model,
             "messages": [
@@ -62,19 +75,41 @@ class OpenRouterClient:
                 {"role": "user", "content": user},
             ],
             "response_format": {"type": "json_object"},
-            "temperature": 0.1,
+            "temperature": temperature,
             "max_tokens": max_tokens,
         }
-        async with httpx.AsyncClient(timeout=120) as client:
-            resp = await client.post(
-                f"{self.settings.openrouter_base_url}/chat/completions",
-                headers=self._headers(),
-                json=payload,
-            )
-            self._raise_for_status(resp, model=model)
-            data = resp.json()
-        content = data["choices"][0]["message"]["content"]
-        return _parse_json_content(content)
+        backoff = (2.0, 8.0, 30.0)
+        attempt = 0
+        asked_again = False
+        while True:
+            try:
+                async with httpx.AsyncClient(timeout=timeout) as client:
+                    resp = await client.post(
+                        f"{self.settings.openrouter_base_url}/chat/completions",
+                        headers=self._headers(),
+                        json=payload,
+                    )
+                    if resp.status_code in _RETRY_STATUSES and attempt < retries:
+                        raise _Transient(f"status {resp.status_code}")
+                    self._raise_for_status(resp, model=model)
+                    data = resp.json()
+                content = data["choices"][0]["message"]["content"]
+                parsed = _parse_json_content(content)
+                if "raw" in parsed and len(parsed) == 1 and not asked_again and retries:
+                    asked_again = True
+                    payload["messages"] = payload["messages"][:2] + [
+                        {"role": "assistant", "content": content[:4000]},
+                        {"role": "user", "content": "That was not valid JSON. Return the same answer as one JSON object only."},
+                    ]
+                    continue
+                return parsed
+            except (_Transient, httpx.TimeoutException, httpx.TransportError) as exc:
+                if attempt >= retries:
+                    raise
+                delay = backoff[min(attempt, len(backoff) - 1)]
+                logger.warning("openrouter_retry model=%s attempt=%s reason=%s delay=%s", model, attempt + 1, exc, delay)
+                attempt += 1
+                await asyncio.sleep(delay)
 
     def _web_tools(self, *, fetch: bool = False) -> list[dict[str, Any]]:
         domains = [

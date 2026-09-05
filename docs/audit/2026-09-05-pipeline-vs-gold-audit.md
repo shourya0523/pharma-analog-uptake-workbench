@@ -245,3 +245,27 @@ and both are read by the same code.
 What remains gold-side and is not fixed in the pipeline: the derivation
 preference for Remodulin 2005Q4 and 2002Q4 (section 6) is met through the
 alternate the series stage records, not by changing which figure it prefers.
+
+
+## 9. Model-first rebuild: baseline before the change
+
+The held-out test (section 8 and `seed/holdout`) showed that the gold number
+had been reached by adding header-vocabulary, label and prose rules per
+issuer, and that a sixth issuer needs more of them. The approved plan makes
+the fingerprint description the only interpreter on the scored path and
+demotes the grammar and regex readers to an unscored degraded mode.
+
+Phase 0 baseline, model-only (v1 contract, grammar layouts and regex prose
+disabled behind the fingerprinter, `--mode model`):
+
+| Set | delivered |
+|---|---|
+| Gold, markdown rendering | 915 / 993 (92.1%) |
+| Held-out, five unseen drugs | 44 / 111 (39.6%) |
+
+These are the honest starting points for the model-first design. The gold
+gap is the 74 rows the grammar was silently supplying (Tracleer and Uptravi
+in the Actelion retrospective schedule, Opsumit and Remodulin quarters read
+from prose); the held-out gap is mostly rows the v1 contract cannot express
+(row-level geography and line kind, prose statement kind) plus scoring that
+demands exact agreement with rounded reference figures.

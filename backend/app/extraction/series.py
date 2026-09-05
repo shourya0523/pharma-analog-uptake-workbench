@@ -76,9 +76,17 @@ class SeriesValue:
     # sum to a different nine months. The primary is stated; these are kept
     # visible rather than reconciled.
     alternates: tuple[float, ...] = field(default_factory=tuple)
+    # The geography as the document printed it, beside the canonical one.
+    geography_label: str | None = None
+    # A provisional value fills a cell nothing firmer states; it never seeds a
+    # derivation that a firm value would contradict. Prose statements, generic
+    # "product sales" lines and anything derived from them are provisional.
+    provisional: bool = False
 
     def as_dict(self) -> dict[str, Any]:
         return {
+            "geography_label": self.geography_label,
+            "provisional": self.provisional,
             "product": self.product,
             "period": self.period,
             "period_type": self.period_type,
@@ -312,6 +320,8 @@ def reconcile_period(norms: list[_Norm], product: str) -> SeriesValue | None:
             source_quote=obs.source_quote,
             covers=obs.covers,
             normalization=norm.status,
+            geography_label=obs.geography_label,
+            provisional=all(n.observation.provisional or "generic_product_line" in n.observation.notes for n in cluster),
         )
 
     if len(clusters) == 1:
@@ -641,12 +651,13 @@ def assemble_series(
     # family) is a different line item. It is evidence about the document's
     # structure, never a value of this product's series.
     observations = [o for o in observations if o.line_item == "exact"]
-    # A generic "product sales" line attributed to this product because the
-    # filing names no other is provisional: it stands only for periods the
-    # product's own stated and derived figures leave empty, because when the
-    # two exist and differ, the generic line was not this product's alone.
-    provisional = [o for o in observations if "generic_product_line" in o.notes]
-    observations = [o for o in observations if "generic_product_line" not in o.notes]
+    # Provisional evidence - a sentence, a generic "product sales" line
+    # attributed to this product because the filing names no other - stands
+    # only for cells the product's firm figures (grid rows and what they
+    # derive) leave empty. When the two exist and differ, the firm one is
+    # the product's own line and the provisional one was something else.
+    provisional = [o for o in observations if o.provisional or "generic_product_line" in o.notes]
+    observations = [o for o in observations if not (o.provisional or "generic_product_line" in o.notes)]
     norms = normalize_observations(observations)
     notes: list[str] = []
 
@@ -717,22 +728,110 @@ def assemble_series(
             if not added:
                 break
 
+    # A series the documents state with no geography is identified with the
+    # one geography it agrees with, when it agrees on at least two periods
+    # and contradicts none: the issuer printed the same line twice, once
+    # under a heading the reader could see and once without.
+    for note in _identify_unspecified(by_geo, product=product, commercial_start=commercial_start, values=values):
+        notes.append(note)
+
     if provisional:
         have = {(v.period, v.period_type, v.geography) for v in values}
         provisional_norms = normalize_observations(provisional + observations)
         buckets_p: dict[tuple[str, str, str | None], list[_Norm]] = defaultdict(list)
         for norm in provisional_norms:
             obs = norm.observation
-            if "generic_product_line" in obs.notes and (obs.period, obs.period_type, obs.geography) not in have:
+            if (obs.provisional or "generic_product_line" in obs.notes) and (obs.period, obs.period_type, obs.geography) not in have:
                 buckets_p[(obs.period, obs.period_type, obs.geography)].append(norm)
         for key in sorted(buckets_p, key=lambda k: (k[0], k[1], k[2] or "")):
             resolved = reconcile_period(buckets_p[key], product)
             if resolved is not None and resolved.status == RESOLVED:
-                values.append(replace(resolved, derivation="generic_product_line_of_sole_product"))
-                notes.append(f"{resolved.period}: generic product line taken as {product}'s")
+                generic = any("generic_product_line" in n.observation.notes for n in buckets_p[key])
+                derivation = "generic_product_line_of_sole_product" if generic else "prose_provisional"
+                value = replace(resolved, derivation=derivation, provisional=True)
+                values.append(value)
+                by_geo[value.geography][(value.period, value.period_type)] = value
+                notes.append(f"{resolved.period}: provisional ({derivation}) fills an empty cell")
+        # What provisional values let the totals determine is provisional too,
+        # and fills only cells still empty.
+        for geography, series in by_geo.items():
+            while True:
+                added = 0
+                for value in derive_residual_quarters(series, product=product, commercial_start=commercial_start):
+                    if (value.period, value.period_type) not in series:
+                        value = replace(value, provisional=True)
+                        series[(value.period, value.period_type)] = value
+                        values.append(value)
+                        added += 1
+                if not added:
+                    break
 
     values.sort(key=lambda v: (v.geography or "", v.period_type, v.period))
     return Series(product=product, values=values, verdicts=verdicts, notes=notes)
+
+
+def _identify_unspecified(
+    by_geo: dict[str | None, dict[tuple[str, str], SeriesValue]],
+    *,
+    product: str,
+    commercial_start: str | None,
+    values: list[SeriesValue],
+) -> list[str]:
+    """Relabel a geography-less series to the one geography it agrees with."""
+    unspecified = by_geo.get(None)
+    if not unspecified:
+        return []
+    candidates: dict[str, tuple[int, int]] = {}
+    for geography, series in by_geo.items():
+        if geography is None:
+            continue
+        agree = disagree = 0
+        for key, value in unspecified.items():
+            other = series.get(key)
+            if other is None:
+                continue
+            if _agree(value.value_usd_millions, other.value_usd_millions, _value_step(value, other)):
+                agree += 1
+            else:
+                disagree += 1
+        if agree:
+            candidates[geography] = (agree, disagree)
+    matches = [g for g, (agree, disagree) in candidates.items() if agree >= 2 and disagree == 0]
+    if len(matches) != 1:
+        return []
+    geography = matches[0]
+    moved = 0
+    for key, value in list(unspecified.items()):
+        if key in by_geo[geography]:
+            continue
+        relabelled = replace(value, geography=geography, detail=(value.detail + "; " if value.detail else "") + f"geography identified by agreement with {geography}")
+        by_geo[geography][key] = relabelled
+        values[values.index(value)] = relabelled
+        del unspecified[key]
+        moved += 1
+    if not moved:
+        return []
+    while True:
+        added = 0
+        for value in derive_residual_quarters(by_geo[geography], product=product, commercial_start=commercial_start):
+            if (value.period, value.period_type) not in by_geo[geography]:
+                by_geo[geography][(value.period, value.period_type)] = value
+                values.append(value)
+                added += 1
+        if not added:
+            break
+    return [f"{moved} geography-less values identified as {geography} by agreement on {candidates[geography][0]} periods"]
+
+
+def _value_step(a: SeriesValue, b: SeriesValue) -> float | None:
+    """The coarser stated precision of two values, in USD millions."""
+    steps = []
+    for value in (a, b):
+        text = f"{value.value_as_reported:g}"
+        decimals = len(text.split(".")[1]) if "." in text else 0
+        scale = UNIT_SCALE_TO_MILLIONS.get(value.unit_label, 1.0)
+        steps.append((10 ** (-decimals)) * scale)
+    return max(steps) if steps else None
 
 
 def propagate_family(

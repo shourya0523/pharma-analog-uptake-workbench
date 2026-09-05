@@ -3,7 +3,7 @@ from __future__ import annotations
 # ruff: noqa: BLE001, DTZ003
 import json
 import logging
-from datetime import datetime
+from datetime import date, datetime
 from typing import Any
 
 from sqlalchemy.orm import Session
@@ -56,6 +56,7 @@ from app.parsing.documents import DocumentParser
 from app.parsing.evidence import (
     build_revenue_llm_text,
     prioritize_sources_for_revenue,
+    product_aliases,
     select_product_evidence_text,
 )
 from app.parsing.fda_label import format_moa_profile_value, parse_label_record
@@ -64,6 +65,9 @@ from app.parsing.periods import detect_period_context, normalize_period
 from app.extraction.candidates import extract_revenue_candidates
 from app.extraction.readers import Observation, read_document
 from app.catalog.families import family_parent
+from app.extraction.described import read_described_document, read_with_repair
+from app.fingerprint.triage import triage
+from app.sourcing.edgar import EdgarIndex
 from app.extraction.series import Series, assemble_series, propagate_family
 from app.fingerprint.llm import Fingerprint, LLMFingerprinter
 from app.extraction.fingerprint import UNIT_SCALE_TO_MILLIONS
@@ -196,6 +200,7 @@ class PipelineOrchestrator:
         self.file_store = file_store or get_file_store()
         self.llm = llm or LLMModules()
         self.sec = SECConnector(self.file_store)
+        self.edgar = EdgarIndex()
         self.fda = OpenFDAConnector(self.file_store)
         self.manual = ManualURLConnector(self.file_store)
         self.transcripts = TranscriptConnectorStub()
@@ -371,7 +376,20 @@ class PipelineOrchestrator:
         collected = []
         want_primary = bool(options.get("sec_filings", True))
         want_earnings = bool(options.get("earnings_releases", True))
-        if want_primary or want_earnings:
+        settings = get_settings()
+        if (want_primary or want_earnings) and job.cik and not settings.legacy_revenue_extractors:
+            # Every document of every filing in the window; the fingerprinter
+            # decides per document whether it has anything to describe.
+            since = parse_filing_date(options.get("earnings_since")) or (
+                date.today().replace(year=date.today().year - settings.sec_history_years)
+            )
+            collected.extend(
+                await self.edgar.retrieve(
+                    run_id=job.run_id, job_id=job.id, cik=job.cik, file_store=self.file_store,
+                    since=since, until=parse_filing_date(options.get("earnings_until")),
+                )
+            )
+        elif want_primary or want_earnings:
             collected.extend(
                 await self.sec.retrieve(
                     run_id=job.run_id,
@@ -873,6 +891,8 @@ class PipelineOrchestrator:
     ) -> list[DatapointORM]:
         if not options.get("quarterly_revenue", True):
             return []
+        if self._model_mode():
+            return await self._extract_revenue_model(job, sources, parsed, only_source_ids=only_source_ids, skip_unresolved=skip_unresolved)
         self._set_step(job, JobStep.EXTRACT_REVENUE)
         if not hasattr(self, "_observations"):
             self._observations = {}
@@ -1083,88 +1103,7 @@ class PipelineOrchestrator:
             if src_row and result.get("note"):
                 src_row.notes = f"{(src_row.notes or '').rstrip()} | {result.get('note')}".strip(" |")
 
-            for cand in kept:
-                quote = (cand.get("source_quote") or "").strip()
-                url = src.url
-                period_type = (cand.get("period_type") or "unknown").lower()
-                raw_period = str(cand.get("period") or "unknown")
-                period = normalize_period(
-                    raw_period, period_type=period_type, context=period_context
-                )
-                dp_id = new_id()
-                value = cand.get("value_reported")
-                unit = cand.get("unit")
-                currency = cand.get("currency") or "USD"
-                normalized = cand.get("value_normalized_usd_millions")
-                if normalized is None and value is not None:
-                    normalized = scale_to_millions(float(value), unit)
-
-                citation = {
-                    "source_id": src.source_id,
-                    "source_type": src.source_type.value,
-                    "source_url": url,
-                    "source_title": src.title,
-                    "source_quote": quote,
-                    "retrieval_date": datetime.utcnow().isoformat(),
-                    "filing_type": src.filing_type,
-                    "accession_number": src.accession_number,
-                    "confidence": float(cand.get("confidence") or 0.5),
-                    "validation_status": ValidationStatus.PENDING.value,
-                    "interpreted": False,
-                    "period_reported": raw_period,
-                }
-                if src.source_type == SourceType.LLM_SEARCH:
-                    citation["search_query"] = (src.metadata or {}).get("search_query")
-                    citation["search_snippet"] = (src.metadata or {}).get("search_snippet")
-                issue_flags: list[str] = []
-                if cand.get("_reclassified"):
-                    issue_flags.append("reclassified_company_total")
-                if cand.get("_derived_comparative"):
-                    issue_flags.append("derived_comparative_column")
-                if cand.get("_from_table"):
-                    issue_flags.append("extracted_from_table")
-                if cand.get("_from_reader"):
-                    issue_flags.append(f"read_by_{cand.get('_reader_method')}")
-                    if cand.get("_layout_notes"):
-                        issue_flags.extend(cand["_layout_notes"])
-                if period is None:
-                    issue_flags.append("period_unparsed")
-                elif period != raw_period:
-                    issue_flags.append("period_normalized")
-                row = DatapointORM(
-                    id=dp_id,
-                    job_id=job.id,
-                    source_id=src.source_id,
-                    period=period or "unknown",
-                    fiscal_year=cand.get("fiscal_year"),
-                    fiscal_quarter=cand.get("fiscal_quarter"),
-                    calendar_year=cand.get("calendar_year"),
-                    calendar_quarter=cand.get("calendar_quarter"),
-                    value_reported=value,
-                    value_normalized_usd_millions=normalized,
-                    currency=currency,
-                    unit=unit,
-                    period_type=period_type,
-                    revenue_scope=cand.get("revenue_scope") or "Unknown",
-                    geography=cand.get("geography"),
-                    formulation=cand.get("formulation"),
-                    route_of_administration=cand.get("route_of_administration"),
-                    source_url=url,
-                    source_quote=quote or "",
-                    extraction_method=(
-                        "table" if cand.get("_from_table")
-                        else f"reader_{cand.get('_reader_method')}" if cand.get("_from_reader")
-                        else "llm"
-                    ),
-                    confidence_score=float(cand.get("confidence") or 0.5),
-                    validation_status=ValidationStatus.PENDING.value,
-                    citation_json=citation,
-                    issue_flags=issue_flags or None,
-                )
-                self.db.add(row)
-                rows.append(row)
-                if src_row:
-                    src_row.relevant_datapoints_found = (src_row.relevant_datapoints_found or 0) + 1
+            self._persist_candidates(job, src, kept, period_context, rows)
 
         if not rows and not skip_unresolved:
             reason = (
@@ -1200,9 +1139,201 @@ class PipelineOrchestrator:
         )
         return rows
 
+    def _persist_candidates(self, job: DrugJobORM, src: Any, kept: list[dict[str, Any]], period_context: Any, rows: list[DatapointORM]) -> None:
+        """Datapoint rows for the candidates a source yielded."""
+        src_row = self.db.get(SourceDocumentORM, src.source_id)
+        for cand in kept:
+            quote = (cand.get("source_quote") or "").strip()
+            url = src.url
+            period_type = (cand.get("period_type") or "unknown").lower()
+            raw_period = str(cand.get("period") or "unknown")
+            period = normalize_period(
+                raw_period, period_type=period_type, context=period_context
+            )
+            dp_id = new_id()
+            value = cand.get("value_reported")
+            unit = cand.get("unit")
+            currency = cand.get("currency") or "USD"
+            normalized = cand.get("value_normalized_usd_millions")
+            if normalized is None and value is not None:
+                normalized = scale_to_millions(float(value), unit)
+
+            citation = {
+                "source_id": src.source_id,
+                "source_type": src.source_type.value,
+                "source_url": url,
+                "source_title": src.title,
+                "source_quote": quote,
+                "retrieval_date": datetime.utcnow().isoformat(),
+                "filing_type": src.filing_type,
+                "accession_number": src.accession_number,
+                "confidence": float(cand.get("confidence") or 0.5),
+                "validation_status": ValidationStatus.PENDING.value,
+                "interpreted": False,
+                "period_reported": raw_period,
+            }
+            if src.source_type == SourceType.LLM_SEARCH:
+                citation["search_query"] = (src.metadata or {}).get("search_query")
+                citation["search_snippet"] = (src.metadata or {}).get("search_snippet")
+            issue_flags: list[str] = []
+            if cand.get("_reclassified"):
+                issue_flags.append("reclassified_company_total")
+            if cand.get("_derived_comparative"):
+                issue_flags.append("derived_comparative_column")
+            if cand.get("_from_table"):
+                issue_flags.append("extracted_from_table")
+            if cand.get("_from_reader"):
+                issue_flags.append(f"read_by_{cand.get('_reader_method')}")
+                if cand.get("_layout_notes"):
+                    issue_flags.extend(cand["_layout_notes"])
+            if period is None:
+                issue_flags.append("period_unparsed")
+            elif period != raw_period:
+                issue_flags.append("period_normalized")
+            row = DatapointORM(
+                id=dp_id,
+                job_id=job.id,
+                source_id=src.source_id,
+                period=period or "unknown",
+                fiscal_year=cand.get("fiscal_year"),
+                fiscal_quarter=cand.get("fiscal_quarter"),
+                calendar_year=cand.get("calendar_year"),
+                calendar_quarter=cand.get("calendar_quarter"),
+                value_reported=value,
+                value_normalized_usd_millions=normalized,
+                currency=currency,
+                unit=unit,
+                period_type=period_type,
+                revenue_scope=cand.get("revenue_scope") or "Unknown",
+                geography=cand.get("geography"),
+                formulation=cand.get("formulation"),
+                route_of_administration=cand.get("route_of_administration"),
+                source_url=url,
+                source_quote=quote or "",
+                extraction_method=(
+                    "table" if cand.get("_from_table")
+                    else f"reader_{cand.get('_reader_method')}" if cand.get("_from_reader")
+                    else "llm"
+                ),
+                confidence_score=float(cand.get("confidence") or 0.5),
+                validation_status=ValidationStatus.PENDING.value,
+                citation_json=citation,
+                issue_flags=issue_flags or None,
+            )
+            self.db.add(row)
+            rows.append(row)
+            if src_row:
+                src_row.relevant_datapoints_found = (src_row.relevant_datapoints_found or 0) + 1
+
+    async def _extract_revenue_model(
+        self,
+        job: DrugJobORM,
+        sources: list,
+        parsed: dict,
+        *,
+        only_source_ids: set[str] | None = None,
+        skip_unresolved: bool = False,
+    ) -> list[DatapointORM]:
+        """The scored path: the description is the only interpreter.
+
+        parse -> triage -> fingerprint -> read with one repair round ->
+        observations -> datapoints. Nothing here reads a header or a label.
+        """
+        self._set_step(job, JobStep.EXTRACT_REVENUE)
+        if not hasattr(self, "_observations"):
+            self._observations = {}
+        observations = self._observations.setdefault(job.id, [])
+        family = family_parent(job.drug_name)
+        fingerprinter = self._fingerprinter()
+        if fingerprinter is None:
+            job.quality_flags = list(set((job.quality_flags or []) + ["model_mode_without_fingerprinter"]))
+            self.db.commit()
+            return []
+        products = [job.drug_name] + ([family] if family else [])
+        generics = {job.drug_name: job.generic_name}
+        extra = self._job_aliases or None
+        aliases = product_aliases(job.drug_name, job.generic_name, extra=extra)
+        if family:
+            aliases = aliases + product_aliases(family, None)
+        rows: list[DatapointORM] = []
+        described_sources = 0
+        for src in sources:
+            if only_source_ids and src.source_id not in only_source_ids:
+                continue
+            doc = parsed.get(src.source_id)
+            if not doc or doc.parsing_status.value != "success" or src.source_type == SourceType.OPENFDA:
+                continue
+            src_row = self.db.get(SourceDocumentORM, src.source_id)
+            decision = triage(doc, aliases=aliases)
+            if not decision.fingerprint:
+                if src_row:
+                    src_row.notes = f"{(src_row.notes or '').rstrip()} | triage={decision.reason}".strip(" |")
+                continue
+            described_sources += 1
+            try:
+                fingerprint = await fingerprinter.fingerprint(
+                    doc, products=products, generics=generics, title=src.title or "", url=src.url,
+                )
+            except Exception as exc:  # noqa: BLE001
+                logger.warning("fingerprint_skipped job_id=%s source_id=%s error=%s", job.id, src.source_id, exc)
+                continue
+            report = await read_with_repair(
+                doc, fingerprint, fingerprinter, product=job.drug_name, generic=job.generic_name,
+                extra_aliases=extra, source_url=src.url, products=products, title=src.title or "",
+            )
+            observations.extend(report.observations)
+            if family:
+                family_report = read_described_document(doc, fingerprint, product=family, source_url=src.url)
+                self._observations.setdefault(f"{job.id}:family", []).extend(family_report.observations)
+            if src_row:
+                summary = (
+                    f"model_read parts={fingerprint.parts} tiers={dict(fingerprint.tiers)} rejected={len(fingerprint.rejected)} "
+                    f"failures={len(report.failures)} repairs={report.repairs} dropped_prose={report.dropped_prose}"
+                )
+                src_row.notes = f"{(src_row.notes or '').rstrip()} | {summary}".strip(" |")
+            kept = [
+                _observation_candidate(o)
+                for o in report.observations
+                if o.line_item == "exact" and not o.covers and not o.provisional
+            ]
+            self._persist_candidates(job, src, kept, detect_period_context(doc.full_text), rows)
+
+        if not rows and not skip_unresolved:
+            self.db.add(
+                UnresolvedQuarterORM(
+                    id=new_id(),
+                    job_id=job.id,
+                    period="product_revenue",
+                    reason_unresolved=(
+                        "No retrieved source names the product beside a figure"
+                        if not described_sources
+                        else "The model's descriptions yielded no verified product revenue row"
+                    ),
+                    sources_checked=[s.url for s in sources],
+                    recommended_next_step="Provide an IR/earnings URL with product-level sales, or confirm non-disclosure",
+                    confidence_that_unavailable=0.7 if not described_sources else 0.4,
+                )
+            )
+            job.quality_flags = list(set((job.quality_flags or []) + ["no_product_revenue_candidates"]))
+        job.candidates_extracted = len(rows)
+        self.db.commit()
+        logger.info(
+            "extract_revenue_model_done job_id=%s drug=%s kept=%s described_sources=%s fingerprint_calls=%s",
+            job.id, job.drug_name, len(rows), described_sources, fingerprinter.calls,
+        )
+        return rows
+
+    def _model_mode(self) -> bool:
+        settings = get_settings()
+        if settings.fingerprint_mode == "degraded" or not settings.enable_llm_fingerprint:
+            return False
+        if settings.fingerprint_mode == "model":
+            return True
+        return bool(settings.openrouter_api_key)
+
     def _fingerprinter(self) -> LLMFingerprinter | None:
         settings = get_settings()
-        if not settings.enable_llm_fingerprint or not settings.openrouter_api_key:
+        if not self._model_mode() or not settings.openrouter_api_key:
             return None
         if not hasattr(self, "_fingerprinter_instance"):
             try:
@@ -1275,7 +1406,7 @@ class PipelineOrchestrator:
                     "source_urls": list(value.source_urls),
                     "detail": value.detail,
                 },
-                issue_flags=[f"series_{value.route}"],
+                issue_flags=[f"series_{value.route}"] + (["series_provisional"] if value.provisional else []),
             )
             self.db.add(row)
             added.append(row)

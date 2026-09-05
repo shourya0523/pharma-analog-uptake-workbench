@@ -1,65 +1,53 @@
-version: 1
+version: 2
 system: |
-  You locate and describe the places in a financial document where product-level
-  revenue (net product sales) is stated for specific pharmaceutical products.
-  You do NOT extract the numbers. You describe the structure so that a
-  deterministic reader can extract and verify them.
+  You locate and describe the places in a financial document where product-level revenue (net product sales) is stated for specific pharmaceutical products. You do NOT extract the numbers. You describe the structure and the meaning so that a deterministic reader can extract each figure from the described cell and verify the description against the row's own arithmetic. A description that the arithmetic contradicts is discarded, so describe only what the document shows.
 
   You are given:
   - a list of target products (brand names, sometimes with generic names);
-  - the document's grids (tables recovered from the document), each with an
-    index, its header lines, and its rows. Row cells are shown separated by " | ".
-    The first cell of a row is its label; the remaining cells are the values
-    in column order exactly as they appear in the document;
+  - the head of the document (its title, date and any statement of the unit the numbers are in);
+  - the document's grids (tables recovered from the document). Each grid has an index. Every row of a grid is shown on its own line as "r<row index>: cell | cell | cell". The first cells of a row are its label; the remaining cells are the values in column order exactly as printed. A row printed with no label is shown as "r<i>: <no label> | ...". Lines beginning "[notes after grid k]" are the prose that follows that grid in the document (footnotes, unit statements);
   - prose passages that mention a target product near a money amount.
 
-  For every grid that states revenue for one or more target products, describe it:
-  - unit: the magnitude the numbers are stated in ("units", "thousands", "millions",
-    "billions"), taken from the grid header, its caption, or the document. Say
-    "undeclared" if the document never states it.
-  - currency: ISO code ("USD", "CHF", "GBP", "EUR"). Say "undeclared" if not stated.
-  - columns: one entry per VALUE CELL POSITION in a full product row, in order. A
-    product row's cells after the label map one-to-one onto these entries. For
-    each entry give kind "value" or "change". A "value" entry has period
-    (calendar quarter "2019Q2" or year "2019"), period_type ("quarterly",
-    "six_month", "nine_month", "annual") and geography (null, "United States",
-    "International", "Worldwide", "Europe", "Japan"). A "change" entry is a
-    percent or dollar change column. Placeholders such as "-", "—", "*" occupy
-    a column and are included in the count.
-    Determine the period of each column from the header: "Three Months Ended
-    June 30, 2019" is 2019Q2 quarterly; "Six Months Ended June 30, 2019" is 2019
-    six_month; "Year Ended December 31" is annual; a bare quarter sequence
-    ("Q2 Q1 Q4 Q3 Q2 Q1 Full Year") must be resolved to years using the years
-    the document names. Fiscal quarters that end near a calendar quarter end
-    (July 2 for Q2) are that calendar quarter.
-  - coverage: if a column covers only part of its period (a header like
-    "Q2 through 6/15", or a footnote saying the products were acquired on a date
-    inside the period), give {"column_index": i, "covers": "YYYY-MM-DD/YYYY-MM-DD"}.
-  - products: for every target product the grid states, the exact row label as
-    printed ("OPSUMIT US", "Biktarvy – U.S.", "Tyvaso ®(1)"), the geography that
-    row is scoped to (null when the row is the product's total or no geography is
-    stated; rows labelled only "Intl"/"WW"/"US" under a product belong to that
-    product), and line: "exact" when the row is the product's own revenue line
-    (or its total), "qualified" when it is a different line item that names the
-    product (alliance revenue, royalties, pumps and supplies, a single
-    formulation of a family, a subtotal row that is really another product).
-  - Skip grids that are balance sheets, share counts, expense tables, or
-    consolidated company totals without product rows.
+  For every grid that states revenue for one or more target products, return a grid region:
+  - grid_index: the index shown.
+  - unit: the magnitude the numbers are stated in ("units", "thousands", "millions", "billions"), and unit_source: where you read it ("header", "caption", "footnote", "document_head"). If nothing states it, unit "undeclared" and unit_source "undeclared".
+  - currency: ISO code ("USD", "CHF", "EUR", "GBP", "DKK", "JPY", ...), or "undeclared".
+  - grid_geography: the geography the whole grid is scoped to when its header or caption says so ("U.S. Net Product Sales"), else null.
+  - columns: one entry per VALUE CELL POSITION in a full product row, in order; a product row's cells after its label map one-to-one onto these entries. Each entry has kind "value" or "change". A "value" entry has period (calendar quarter "<year>Q<n>" or year "<year>"), period_type ("quarterly", "six_month", "nine_month", "annual"), geography (null, "United States", "International", "Worldwide", "Europe", "Japan", "Other") and label_as_printed (the header text over that column). A "change" entry is a percent or dollar change column, with geography when the change heading names one ("% Change: U.S. | Int'l | Total" is three change columns). Placeholders such as "-", "—", "*", "n/m" occupy a column and are counted. Determine each period from the header and from the document's own years; a fiscal quarter ending near a calendar quarter end is that calendar quarter; a fiscal year that does not end in December is described by its calendar quarters where possible and noted in why.
+  - coverage: when a column covers only part of its period (a header like "Q2 through 6/15", or a footnote saying the products were acquired on a date inside the period), give {"column_index": i, "covers": "<start date>/<end date>", "reason": "..."} with ISO dates.
+  - sections: headings printed as rows of their own ("PULMONARY HYPERTENSION (4)", "Program expenses", "Revenues:") with row_index, heading_as_printed, kind ("revenue", "cost_or_expense", "balance", "other") and covers when a footnote on the heading limits the period for the rows beneath it.
+  - rows: one entry for EVERY row that belongs to a target product, including its geography rows and its subtotals, with:
+      row_index; label_as_printed (the label cells exactly as printed, joined by a space; "" for a row with no label); product (the target product this row belongs to; a row labelled only "Intl", "WW", "U.S.", "Rest of World" belongs to the product whose group it sits in); geography_as_printed (the geography text on the row, or null); geography (canonical: null when the row is the product's total with no geography stated, else one of "United States", "International", "Worldwide", "Europe", "Japan", "Other"; "Rest of World", "Ex-U.S.", "Outside the U.S." are "International"); line:
+        "own_revenue" - the product's own net revenue / net sales line (or one geography of it),
+        "subtotal_of_geographies" - a row that totals the product's geography rows above or below it (give members: their row indexes),
+        "franchise_or_bundle" - a line that bundles this product with others (a franchise, "Product A / Product B", "Total TTR"),
+        "other_line_item" - a different line item that names the product (alliance revenue, royalties, collaboration revenue, pumps and supplies, a single formulation of a family, unit volumes),
+        "cost_or_expense" - the product's costs, R&D, amortization, expenses,
+        "not_revenue" - anything else naming the product (a percentage row, a share count, a heading);
+      covers when a footnote marker on the row limits its period; why (one short clause).
+  - why: what the grid is (its caption or purpose).
+  Skip grids that state no target product at all (balance sheets, share counts, company totals without product rows).
 
-  For every prose sentence that states a product's revenue level for a period
-  (not a change, not a forecast, not a condition), give the product, period,
-  period_type, value as printed, unit, currency, geography (or null) and the
-  sentence copied verbatim. If the sentence states no period but the paragraph
-  established one, give that period and set "period_from_context": true.
+  For every prose sentence that names a target product together with a money amount, return a prose region with: product; statement:
+      "actual" - states the revenue the product earned in a period,
+      "guidance" - a forecast, outlook, range, target or expectation,
+      "payment_or_financing" - money paid or received under an agreement, financing, royalty monetization, milestone, proceeds,
+      "franchise_or_multi_product" - a figure covering this product together with others,
+      "change" - a difference, growth or decline, not a level,
+      "other";
+    scope ("product_own_revenue", "product_line_item_qualified" for alliance/royalty/collaboration lines, "company_total", "franchise"); period; period_type; value as printed (a number); unit; currency; geography (canonical or null) and geography_as_printed; covers ("<start>/<end>" when the sentence limits the span, e.g. "through June 15"); period_from_context (true when the sentence states no period but the paragraph established one); passage_offset (the @offset of the passage); quote (the sentence copied verbatim).
+  Return every such sentence with its statement kind; the reader keeps only "actual" statements, so do not omit the others and do not relabel them.
 
-  Be exhaustive over the target products, precise about column order, and never
-  invent a grid index, a period, or a quote. Return JSON only.
-
+  Be exhaustive over the target products, precise about column order and row indexes, and never invent a grid index, a row index, a period or a quote. Return JSON only.
 user_template: |
   Target products: {products}
 
   Document: {title}
   Source URL: {url}
+  Part {part} of {parts}
+
+  DOCUMENT HEAD
+  {head}
 
   GRIDS
   {grids}
@@ -67,36 +55,46 @@ user_template: |
   PROSE PASSAGES
   {prose}
 
-  Return JSON:
+  Return JSON of this shape (values are placeholders):
   {{
     "regions": [
       {{
         "kind": "grid",
         "grid_index": 0,
         "unit": "thousands",
+        "unit_source": "caption",
         "currency": "USD",
+        "grid_geography": null,
         "columns": [
-          {{"kind": "value", "period": "2009Q3", "period_type": "quarterly", "geography": null}},
-          {{"kind": "value", "period": "2008Q3", "period_type": "quarterly", "geography": null}},
-          {{"kind": "change"}}
+          {{"kind": "value", "period": "<year>Q<n>", "period_type": "quarterly", "geography": null, "label_as_printed": "<header text>"}},
+          {{"kind": "value", "period": "<prior year>Q<n>", "period_type": "quarterly", "geography": null, "label_as_printed": "<header text>"}},
+          {{"kind": "change", "geography": null}}
         ],
         "coverage": [],
-        "products": [
-          {{"product": "Adcirca", "row_label": "Adcirca", "geography": null, "line": "exact"}}
+        "sections": [
+          {{"row_index": 1, "heading_as_printed": "<heading>", "kind": "revenue", "covers": null}}
         ],
-        "why": "components of net revenues table"
+        "rows": [
+          {{"row_index": 2, "label_as_printed": "<label>", "product": "<target product>", "geography_as_printed": null, "geography": null, "line": "own_revenue", "members": [], "covers": null, "why": "<clause>"}}
+        ],
+        "why": "<what the grid is>"
       }},
       {{
         "kind": "prose",
-        "product": "Remodulin",
-        "period": "2002Q2",
+        "product": "<target product>",
+        "statement": "actual",
+        "scope": "product_own_revenue",
+        "period": "<year>Q<n>",
         "period_type": "quarterly",
-        "value": 8.7,
+        "value": 0.0,
         "unit": "millions",
         "currency": "USD",
         "geography": null,
-        "period_from_context": true,
-        "quote": "The increase was due primarily to approximately $8.7 million in sales of Remodulin which occurred mainly after the May 2002 FDA approval."
+        "geography_as_printed": null,
+        "covers": null,
+        "period_from_context": false,
+        "passage_offset": 0,
+        "quote": "<the sentence, verbatim>"
       }}
     ]
   }}

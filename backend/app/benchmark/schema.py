@@ -25,6 +25,8 @@ and the values agree to the precision the gold row carries.
 
 from __future__ import annotations
 
+import re
+
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -43,6 +45,12 @@ _GEOGRAPHY_ALIASES = {
     "international": "international",
     "intl": "international",
     "ex-u.s.": "international",
+    "rest of world": "international",
+    "outside the united states": "international",
+    "other international": "international",
+    "europe": "europe",
+    "japan": "japan",
+    "other": "other",
 }
 
 # Comparison tolerances. Gold values are stated to at most three decimals of
@@ -139,7 +147,8 @@ def from_gold(row: dict[str, Any]) -> ComparableRevenueRow:
         source_urls=urls,
         source_quote=row.get("source_quote", ""),
         origin="gold",
-        extras={"revenue_scope": row.get("revenue_scope"), "gold_id": row.get("gold_id")},
+        extras={"revenue_scope": row.get("revenue_scope"), "gold_id": row.get("gold_id"),
+                "geography_label": row.get("geography")},
     )
 
 
@@ -161,7 +170,8 @@ def from_series(value: SeriesValue) -> ComparableRevenueRow:
         origin="pipeline",
         status=value.status,
         detail=value.detail,
-        extras={"normalization": value.normalization, "inputs": list(value.inputs), "alternates": list(value.alternates)},
+        extras={"normalization": value.normalization, "inputs": list(value.inputs), "alternates": list(value.alternates),
+                "provisional": value.provisional, "geography_label": value.geography_label},
     )
 
 
@@ -169,8 +179,47 @@ def geographies_compatible(gold: str, pipeline: str) -> bool:
     return gold == pipeline or pipeline == "unspecified"
 
 
-def values_match(gold: float, pipeline: float) -> bool:
-    return abs(gold - pipeline) <= max(ABSOLUTE_TOLERANCE, RELATIVE_TOLERANCE * abs(gold))
+def _label_key(label: Any) -> str:
+    return re.sub(r"[^a-z0-9]+", "", str(label or "").lower())
+
+
+def _labels_agree(gold: ComparableRevenueRow, pipeline: ComparableRevenueRow) -> bool:
+    """Two "other" geographies are the same only when the document printed the same label."""
+    if gold.geography != "other" or pipeline.geography != "other":
+        return True
+    a, b = _label_key(gold.extras.get("geography_label")), _label_key(pipeline.extras.get("geography_label"))
+    return not a or not b or a == b or a in b or b in a
+
+
+def stated_step(row: ComparableRevenueRow) -> float | None:
+    """The last digit a row states, in USD millions: 92.8 million -> 0.1; 1,514 thousand -> 0.001."""
+    if row.value_as_reported is None:
+        return None
+    text = f"{float(row.value_as_reported):g}"
+    if "e" in text:
+        return None
+    decimals = len(text.split(".")[1]) if "." in text else 0
+    scale = {"units": 1e-6, "thousands": 1e-3, "millions": 1.0, "billions": 1e3}.get((row.unit or "millions").lower())
+    if scale is None:
+        return None
+    return (10 ** (-decimals)) * scale
+
+
+def values_match(gold: float, pipeline: float, *, reference: ComparableRevenueRow | None = None) -> bool:
+    """Equal to the precision the reference states.
+
+    A reference that prints $92.8 million is matched by 92.823 read from a
+    grid in thousands; one that prints 1,514 thousand is not matched by
+    1.515. A derived reference (a year less nine months) carries the
+    rounding of two stated figures.
+    """
+    tolerance = max(ABSOLUTE_TOLERANCE, RELATIVE_TOLERANCE * abs(gold))
+    if reference is not None:
+        step = stated_step(reference)
+        if step:
+            inputs = 2 if reference.route in {"derived", "bridged"} else 1
+            tolerance = max(tolerance, 0.5 * step * inputs + 1e-9)
+    return abs(gold - pipeline) <= tolerance
 
 
 @dataclass(frozen=True)
@@ -186,18 +235,19 @@ def compare(gold: ComparableRevenueRow, candidates: list[ComparableRevenueRow]) 
     same = [c for c in candidates if c.key == gold.key and c.period_type == gold.period_type]
     if not same:
         return Comparison(gold, None, "missing", "no pipeline row for this period")
-    compatible = [c for c in same if geographies_compatible(gold.geography, c.geography)]
+    compatible = [c for c in same if geographies_compatible(gold.geography, c.geography) and _labels_agree(gold, c)]
     if not compatible:
         offered = ", ".join(sorted({c.geography for c in same}))
         return Comparison(gold, same[0], "geography_mismatch", f"gold {gold.geography}; pipeline {offered}")
     # Prefer the exact geography, then the resolved rows.
-    compatible.sort(key=lambda c: (c.geography != gold.geography, c.status != "resolved"))
+    compatible.sort(key=lambda c: (c.geography != gold.geography, c.status != "resolved", bool(c.extras.get("provisional"))))
     resolved = [c for c in compatible if c.status == "resolved"]
     if not resolved:
         return Comparison(gold, compatible[0], "needs_review", compatible[0].detail)
     for candidate in resolved:
-        if values_match(gold.value_usd_millions, candidate.value_usd_millions):
-            return Comparison(gold, candidate, "match")
+        if values_match(gold.value_usd_millions, candidate.value_usd_millions, reference=gold):
+            detail = "via provisional" if candidate.extras.get("provisional") else ""
+            return Comparison(gold, candidate, "match", detail)
     # A derived figure the issuer's own rounding leaves ambiguous: the
     # pipeline states the primary and carries the other result. Gold chose
     # one of them; the pipeline reports both, which is the honest answer.

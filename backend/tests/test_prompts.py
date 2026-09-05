@@ -11,7 +11,7 @@ from app.llm.client import PROMPTS_DIR, load_prompt
 from app.quality.candidate_filters import is_placeholder_period
 
 YEAR_RE = re.compile(r"\b(?:19|20)\d{2}\b")
-PERIOD_PROMPTS = ["revenue_extractor", "completeness_analyzer"]
+PERIOD_PROMPTS = ["revenue_extractor", "completeness_analyzer", "region_fingerprinter", "region_fingerprint_repair"]
 
 
 def _prompt_text(name: str) -> str:

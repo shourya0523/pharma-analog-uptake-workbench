@@ -145,7 +145,8 @@ class DocumentParser:
                     rows.append(cells)
             if rows:
                 caption = self._caption_before(table)
-                tables.append(([[caption]] if caption else []) + rows)
+                notes = self._notes_after(table)
+                tables.append(([[caption]] if caption else []) + rows + ([[notes]] if notes else []))
         return ParsedDocument(
             source_id=source.source_id,
             text_blocks=chunks or [text[:12000]],
@@ -184,6 +185,37 @@ class DocumentParser:
                 unique.append(part)
         caption = " ".join(unique).strip()
         return caption[-max_chars:] if caption else None
+
+    @staticmethod
+    def _notes_after(table, max_chars: int = 600) -> str | None:
+        """The prose immediately below a table: its footnotes and unit statements.
+
+        Kept with the grid as a trailing row so that whoever reads the grid
+        sees the notes its markers point to.
+        """
+        parts: list[str] = []
+        node = table
+        seen = 0
+        while node is not None and seen < 6:
+            node = node.find_next(["p", "div", "span", "td", "font", "li"])
+            if node is None:
+                break
+            if node.find_parent("table") is not None and node.find_parent("table") is not table:
+                break
+            if node.find_parent("table") is table:
+                continue
+            if node.find("table") is not None:
+                break
+            text = node.get_text(" ", strip=True)
+            if text:
+                if parts and text in parts[-1]:
+                    continue
+                parts.append(text)
+                if sum(len(p) for p in parts) >= max_chars:
+                    break
+            seen += 1
+        notes = " ".join(parts).strip()
+        return notes[:max_chars] if notes else None
 
     async def _parse_pdf(self, source: RetrievedSource, raw: bytes) -> ParsedDocument:
         try:
