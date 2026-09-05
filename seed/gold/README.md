@@ -604,9 +604,27 @@ rule the Yutrepia re-sourcing established.
     Gilead   +278 quarters, 12 products, 2005Q3 onward
     J&J      +144 quarters, 9 backfilled products and 3 new ones
 
-The extractors were written independently of this dataset and then checked
-against it: 66 of 66 overlapping Gilead values and 83 of 83 overlapping J&J
-values reproduced gold exactly, which is why the new quarters are trusted.
+### Why these quarters are trusted, and how far that goes
+
+Two checks, and the weaker one is the one that sounds stronger.
+
+The parsers never read `seed/gold/`; they go from filing to number. Where the
+new rows overlap quarters gold already held, 66 of 66 Gilead values and 83 of
+83 J&J values reproduced it exactly. That is worth having, but it is narrow:
+the same person wrote the parsers and the conventions they encode - take the
+unlabelled worldwide total after the regional lines, read only the current
+column - so a convention that is *wrong* would be reproduced with perfect
+agreement. It tests transcription and column alignment, not judgement. It is
+also not a held-out test, since the comparison ran during development, and it
+covers only 66 of 278 new Gilead rows and 83 of 144 new J&J rows.
+
+The check that carries the backfill is the year reconciliation. Every complete
+year's four quarters are summed against the full-year figure the issuer states
+in a *different column of the same table* - the "Twelve Months Ended" block
+beside the quarterly one - across **208 product-years and 832 quarters**. That
+is arithmetic the filing supplies rather than a convention chosen here, and it
+is what would catch a column read one place off. Every row must also contain
+its own value verbatim in its quote, and every series must be contiguous.
 
 ### What was deliberately not backfilled
 
