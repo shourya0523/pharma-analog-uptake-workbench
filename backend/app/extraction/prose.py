@@ -271,6 +271,26 @@ def _is_change_amount(sentence: str, position: int, end: int) -> bool:
     return bool(_CHANGE_BEFORE_RE.search(before) or _CHANGE_AFTER_RE.match(after))
 
 
+# A clause opener after the amount: what follows it is a condition, and a
+# revenue noun inside it does not tie the amount to revenue ("$25.0 million
+# remains available ... if we achieve aggregate net sales of X in excess of").
+_CONDITION_OPENER_RE = re.compile(
+    r"\b(?:if|upon|unless|should|once|whether|provided|in\s+the\s+event|subject\s+to|contingent)\b",
+    re.IGNORECASE,
+)
+
+
+def _tied_conditionally(sentence: str, position: int) -> bool:
+    """The only revenue noun that could tie this amount sits in a condition after it."""
+    if re.search(_REVENUE_NOUN, sentence[:position], re.IGNORECASE):
+        return False
+    after = sentence[position:]
+    noun = re.search(_REVENUE_NOUN, after, re.IGNORECASE)
+    if noun is None:
+        return False
+    return _CONDITION_OPENER_RE.search(after[: noun.start()]) is not None
+
+
 def _is_conditional(sentence: str, position: int) -> bool:
     """The amount sits in a clause that states a condition rather than a result."""
     clause_start = max(sentence.rfind(",", 0, position), sentence.rfind(";", 0, position), 0)
@@ -384,6 +404,7 @@ def read_prose(
                 for position, amount in _amounts_with_positions(sentence)
                 if not _is_change_amount(sentence, position, _AMOUNT_ENDS.get((id(sentence), position), position))
                 and not _is_conditional(sentence, position)
+                and not _tied_conditionally(sentence, position)
             ]
             periods = [period for _, period in located_periods]
             amounts = [amount for _, amount in located_amounts]

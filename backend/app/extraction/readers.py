@@ -354,6 +354,28 @@ def _header_text(rows: Iterable[list[str]]) -> str:
     return " ".join(" ".join(cell for cell in row if cell) for row in rows)
 
 
+_SENTENCE_RE = re.compile(r"[a-z][.;:]\s+[A-Z(]|[a-z]\.$")
+
+
+def _is_prose_row(row: list[str]) -> bool:
+    """A caption paragraph carried into the header, rather than a header line."""
+    cells = [cell for cell in row if cell and cell.strip()]
+    if len(cells) != 1:
+        return False
+    text = cells[0].strip()
+    return len(text.split()) > 16 or _SENTENCE_RE.search(text) is not None
+
+
+# A group label that opens a section of costs. Product rows beneath it are
+# the product's expenses, however the grid's columns read.
+_NOT_REVENUE_SECTION_RE = re.compile(
+    r"\b(?:expenses?|costs?|cost\s+of|research\s+and\s+development|r&d|amortization|"
+    r"depreciation|impairment|royalt(?:y|ies)\s+(?:expense|paid)|milestone\s+payments?)\b",
+    re.I,
+)
+_REVENUE_WORD_RE = re.compile(r"\b(?:revenues?|sales|turnover)\b", re.I)
+
+
 def _fits(layout: ColumnLayout, rows: list[list[str]]) -> bool:
     """A layout inherited from an earlier grid must fit this grid's rows."""
     widths = [len(_row_label(row)[1]) for row in rows if _is_data_row(row)]
@@ -417,11 +439,23 @@ def read_grids(
             continue
         header_text = _header_text(header_rows)
         local_years = _years_in(header_text + " " + _header_text(footer_rows))
-        layouts = build_layouts(
-            header_text,
-            context=context_head,
-            year_candidates=local_years or doc_years,
-        )
+        # The grid's own header lines outrank the prose above the grid: a
+        # paragraph that discusses "the year ended December 31, 2005 ... an
+        # increase of $42.3 million" names years and changes that are not
+        # columns. The prose still declares the unit, and is the header of
+        # last resort when the grid has no header lines of its own.
+        structural = [row for row in header_rows if not _is_prose_row(row)]
+        layouts: list[ColumnLayout] = []
+        if structural and len(structural) < len(header_rows):
+            layouts = build_layouts(
+                _header_text(structural), context=context_head, year_candidates=local_years or doc_years
+            )
+        if not any(l.usable for l in layouts):
+            layouts = build_layouts(
+                header_text,
+                context=context_head,
+                year_candidates=local_years or doc_years,
+            )
         own = [l for l in layouts if l.usable]
         described = [l for l in (described_layouts or {}).get(table_index, []) if l.usable]
         usable = described + [l for l in own if l.signature not in {d.signature for d in described}]
@@ -472,6 +506,7 @@ def read_grids(
             if len(text.split()) <= 6 and text.strip().isupper():
                 section_markers |= {int(m) for m in _MARKER_RE.findall(text)}
         group_rows: list[tuple[str | None, dict[int, float]]] = []
+        cost_section = False
         # A label that wrapped onto the next line ends in a separator:
         # "INVEGA SUSTENNA / XEPLION / INVEGA TRINZA /" then "TREVICTA US ...".
         dangling = ""
@@ -496,7 +531,13 @@ def read_grids(
                         group_markers = markers
                         section_markers = markers if text.isupper() else section_markers
                         group_rows = []
+                        cost_section = (
+                            _NOT_REVENUE_SECTION_RE.search(text) is not None
+                            and _REVENUE_WORD_RE.search(text) is None
+                        )
                 dangling = ""
+                continue
+            if cost_section and not _REVENUE_WORD_RE.search(" ".join(row[:1])):
                 continue
             label, tokens = _row_label(row)
             if dangling:

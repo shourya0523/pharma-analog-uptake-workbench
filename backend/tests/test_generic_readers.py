@@ -212,3 +212,13 @@ def test_a_generic_product_line_yields_to_the_products_own_stated_figure():
     assert not [o for o in report.observations if "generic_product_line" in o.notes]
     prose = [o for o in report.observations if o.method == "prose" and o.period == "2002Q3"]
     assert prose and prose[0].value_as_reported == 2.6
+
+
+def test_prose_ignores_an_amount_whose_revenue_tie_is_a_condition():
+    text = (
+        "Sales of Veldora totaled $6.5 million for the three months ended June 30, 2025. "
+        "A further $25.0 million remains available for funding upon mutual agreement if we "
+        "achieve aggregate net sales of Veldora in excess of $100.0 million."
+    )
+    values = read_prose(text, product="Veldora")
+    assert [(v.period, v.value_as_reported) for v in values] == [("2025Q2", 6.5)]

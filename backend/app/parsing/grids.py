@@ -77,8 +77,13 @@ def clean_markup(text: str) -> str:
 _CURRENCY_PREFIX_RE = re.compile(r"^[$€£¥]\s*(?=[\d(\-–—−*])")
 
 
+_INVISIBLE_RE = re.compile(r"[\u200b\u200c\u200d\u2060\ufeff]")
+
+
 def _clean_cell(cell: str) -> str:
-    cell = clean_markup(cell).strip()
+    # Zero-width characters are spacer cells in some filings' HTML; they
+    # hold no value and no column.
+    cell = clean_markup(_INVISIBLE_RE.sub("", cell)).strip()
     match = _MD_ITALIC_CELL_RE.match(cell)
     if match:
         cell = match.group(1).strip()
@@ -264,13 +269,34 @@ class _Line:
         A label that names a period or contains a number is a header, and
         never the start of a row that continues below.
         """
-        split = _split_row([t for t in self.tokens if not _SYMBOL_ONLY_RE.match(t)])
+        split = _split_row(self.tokens)
         if split is None:
             return False
         label, _values = split
         if len(label) > 6 or any(is_number_token(t) for t in label):
             return False
         return not _PERIOD_WORD_RE.search(" ".join(label))
+
+
+def _fold_symbols(tokens: list[str]) -> list[str]:
+    """Drop stray currency signs and fold a detached ``)`` or ``%`` onto its number.
+
+    A "%" that opens a header phrase ("2021 % Change") stays a word.
+    """
+    out: list[str] = []
+    for index, token in enumerate(tokens):
+        if not _SYMBOL_ONLY_RE.match(token):
+            out.append(token)
+            continue
+        following = tokens[index + 1] if index + 1 < len(tokens) else ""
+        if _PERCENT_RE.match(token) and following[:1].isalpha():
+            out.append(token)
+            continue
+        if out and (_CLOSE_PAREN_RE.match(token) or _PERCENT_RE.match(token)):
+            previous = out[-1]
+            if _OPEN_PAREN_NUMBER_RE.match(previous) or (is_number_token(previous) and not is_year_token(previous)):
+                out[-1] = previous + token.replace(" ", "")
+    return out
 
 
 def _split_row(tokens: list[str]) -> tuple[list[str], list[str]] | None:
@@ -280,6 +306,7 @@ def _split_row(tokens: list[str]) -> tuple[list[str], list[str]] | None:
     the label. A trailing run of value tokens must be preceded by at least one
     word, otherwise there is nothing the numbers are a row *of*.
     """
+    tokens = _fold_symbols(tokens)
     if not tokens:
         return None
     index = len(tokens)
@@ -352,20 +379,7 @@ def _segment_stream(stream: list[str]) -> list[_Line]:
     rows: list[_Line] = []
     current: list[str] = []
     in_values = False
-    for index, token in enumerate(stream):
-        if _SYMBOL_ONLY_RE.match(token):
-            # "$" before a number is dropped; ")" or "%" after one is folded
-            # back onto it, as normalize_cells does for rendered cells. A
-            # "%" that opens a header phrase ("2021 % Change") is a word.
-            following = stream[index + 1] if index + 1 < len(stream) else ""
-            opens_phrase = _PERCENT_RE.match(token) and following[:1].isalpha()
-            if current and not opens_phrase and (_CLOSE_PAREN_RE.match(token) or _PERCENT_RE.match(token)):
-                previous = current[-1]
-                if _OPEN_PAREN_NUMBER_RE.match(previous) or (is_number_token(previous) and not is_year_token(previous)):
-                    current[-1] = previous + token.replace(" ", "")
-                    continue
-            if not opens_phrase:
-                continue
+    for token in _fold_symbols(stream):
         value = is_value_token(token) or _FOOTNOTE_RE.match(token) is not None
         value = is_value_token(token) or _FOOTNOTE_RE.match(token) is not None
         if value:
@@ -402,9 +416,11 @@ def recover_text_grids(text: str, *, max_header_lines: int = 12) -> list[Table]:
     # newline inside a paragraph is just wrapping.
     paragraphs: list[str] = []
     buffer: list[str] = []
+    physical: list[str] = []
     for line in raw_lines:
         if line.strip() and not _HR_RE.match(line.strip()) and not _MD_SEPARATOR_ROW_RE.match(line.strip()):
             buffer.append(line.strip())
+            physical.append(line.strip())
         else:
             if buffer:
                 paragraphs.append(" ".join(buffer))
@@ -412,7 +428,18 @@ def recover_text_grids(text: str, *, max_header_lines: int = 12) -> list[Table]:
     if buffer:
         paragraphs.append(" ".join(buffer))
 
-    lines = [_Line(p, _TOKEN_RE.findall(p)) for p in paragraphs]
+    # Text extracted from a PDF page has no blank lines at all: every
+    # physical line is a row, a label or a header line, and joining them
+    # would fuse the grid into one paragraph. When the lines themselves
+    # read as rows, they are the units; otherwise the paragraphs are.
+    units = paragraphs
+    if len(physical) >= 6 and len(physical) * 2 >= len(paragraphs) * 3:
+        candidates = [_Line(p, _TOKEN_RE.findall(p)) for p in physical]
+        row_like = sum(1 for l in candidates if l.is_row_start or l.is_streamable or l.is_short)
+        if row_like * 2 >= len(candidates):
+            units = physical
+
+    lines = [_Line(p, _TOKEN_RE.findall(p)) for p in units]
     lines = _merge_single_token_runs(lines)
 
     tables: list[Table] = []
