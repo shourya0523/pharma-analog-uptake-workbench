@@ -109,12 +109,13 @@ own commercial span. `build_report.json` records this under
     20 catalog products = 13 complete quarterly series + 1 annual benchmark
     series + 6 evidence-backed exclusions
 
-    plus 3 comparator products from other therapeutic areas, which are additive
-    and never part of the completeness claim
+    plus 26 comparator products from other therapeutic areas, which are
+    additive and never part of the completeness claim
 
-    546 quarters in total, every series covering its full declared span
+    1,415 quarters in total across 39 series, every series covering its full
+    declared span
 
-Every one of those 546 quarters is also reachable by the pipeline: it is either
+Every one of those 1,415 quarters is also reachable by the pipeline: it is either
 read from a citation, computed from an issuer's own stated total, or assembled
 from the two dated halves of a quarter split by an acquisition.
 `test_every_quarterly_row_is_reachable_by_the_pipeline` refuses a row that
@@ -248,7 +249,7 @@ was closable by sourcing harder inside pulmonary hypertension: the PAH products
 left in the catalog are the ones with no series at all. It was closable only by
 adding issuers and areas.
 
-### Nine therapeutic areas, and the shapes they contribute
+### Twelve therapeutic areas, and the shapes they contribute
 
 A catalog drawn from one disease measures one disease's paperwork. PAH products
 share issuers, schedule shapes and slow curves. Each comparator group breaks
@@ -256,10 +257,10 @@ that in a specific way:
 
 | Product | Area | Window | What it does |
 |---|---|---|---|
-| **Harvoni** | Chronic hepatitis C | 2016Q1–2018Q4 | Collapses from 3,017 to 232 in twelve quarters — the drug cures its own market |
-| **Epclusa** | Chronic hepatitis C | 2018Q1–2018Q4 | Four quarters, then the line stops being the brand |
-| **AmBisome** | Invasive fungal infection | 2016Q1–2019Q4 | Flattest series here: a two-decade plateau, ~86–110 a quarter |
-| **Ranexa** | Chronic angina | 2016Q1–2019Q4 | A patent cliff: 177 a quarter to 11 in four quarters |
+| **Harvoni** | Chronic hepatitis C | 2014Q3–2018Q4 | The whole shape in eighteen quarters: 20 before US approval, 3,608 four quarters later, 232 at the end — the drug cures its own market |
+| **Epclusa** | Chronic hepatitis C | 2016Q3–2018Q4 | Launch quarter to the quarter the line stops being the brand |
+| **AmBisome** | Invasive fungal infection | 2005Q3–2019Q4 | Flattest series here, and now the longest: fifty-eight quarters that barely move, 55 to 110 in fifteen years |
+| **Ranexa** | Chronic angina | 2009Q2–2019Q4 | Forty-three quarters: a ramp from 36, a plateau, then a patent cliff from 177 a quarter to 11 in four |
 | **Biktarvy** | HIV | 2018Q2–2024Q4 | A launch ramp with no plateau in it yet: 185 a quarter to 3,774 |
 | **Genvoya** | HIV | 2018Q1–2024Q4 | The mirror of Biktarvy — declines because its own maker's newer drug takes its patients, with no generic in it |
 | **Truvada** | HIV | 2018Q1–2023Q4 | Eleven flat quarters, then loss of exclusivity: 509 → 146 → 135 → 108 → 67 |
@@ -357,7 +358,7 @@ states, which is the arithmetic that had been standing in for the citation.
 
 The lesson is the one above generalised: when a document resists, the figure
 is often in a *different* document from the same issuer for the same period,
-and that is a better move than retrying the same PDF. Delivery is 993/993.
+and that is a better move than retrying the same PDF. Delivery is 1,415/1,415.
 
 **Series that start late on purpose.** Biktarvy was approved 7 February 2018 and
 sold only in the United States that quarter, so Gilead gives it a single US line
@@ -584,6 +585,74 @@ Neither is a defect, so neither is "fixed". It is listed by name in
 `KNOWN_ROUNDING_DISAGREEMENTS` in `scripts/eval_completeness.py`, which is what
 makes a *new* disagreement mean something — an unlisted one fails that script
 instead of scrolling past as familiar noise.
+
+## The backfill: 993 quarters to 1,415, and what it cost
+
+Twenty-seven of the thirty-six series used to start well after their product
+launched, most of them for no better reason than that sourcing had stopped at
+2018Q1. For an *analog uptake* dataset that is close to fatal: an analog's
+value is its ramp, and a series that begins ten years in has no ramp, only a
+tail. Harvoni was recorded from 2016Q1 - after its peak. Letairis from 2016Q1,
+eight years after launch.
+
+Both issuers were re-read from scratch. Gilead's 8-K earnings exhibits carry a
+PRODUCT SALES SUMMARY back to 2005Q3; J&J publishes its Sales of Key
+Products/Franchises schedule back to 2014Q3. Every quarter cites the filing
+that reports it *as current*, never a prior-year comparative column - the same
+rule the Yutrepia re-sourcing established.
+
+    Gilead   +278 quarters, 12 products, 2005Q3 onward
+    J&J      +144 quarters, 9 backfilled products and 3 new ones
+
+The extractors were written independently of this dataset and then checked
+against it: 66 of 66 overlapping Gilead values and 83 of 83 overlapping J&J
+values reproduced gold exactly, which is why the new quarters are trusted.
+
+### What was deliberately not backfilled
+
+**Invega Sustenna.** J&J renamed that line five times between 2014 and 2018 as
+brands were folded into it - INVEGA SUSTENNA / XEPLION, then / INVEGA TRINZA,
+then / TRINZA / TREVICTA. The earlier quarters are a different quantity from
+the one gold records, so splicing them would break series identity the way
+mixing Tyvaso and Tyvaso DPI would.
+
+**Zytiga before 2017Q1.** The 2016Q4 schedule prints ZYTIGA's figures on a
+line of their own, below the US/Intl/WW labels rather than beside them. That
+is readable by eye and not by rule, so the quarter is refused rather than
+realigned by position, and the backfill starts after it.
+
+**2013Q3 and 2014Q2.** J&J's investor site does not serve those two schedules
+under any name tried, so a contiguous J&J run starts at 2014Q3 rather than
+2013Q1. Four quarters that *are* reachable sit before the gap and are left
+unused, because a series with a hole is worse than a shorter one.
+
+### Two things the filings themselves said
+
+**Harvoni sold before it was approved.** The Q3 2014 exhibit carries one line,
+`Harvoni - Europe 19,966` thousand, three weeks before the October 2014 US
+approval, and its nine-month column of 20,405 puts a further 439 thousand
+earlier still. The series starts there because that is when the issuer first
+reported revenue, not when the FDA acted.
+
+**Letairis and Ranexa were invisible for years.** Letairis was approved in June
+2007 and Ranexa launched in 2006Q1, but neither appears in a Gilead sales table
+until 2008Q1 and 2009Q2 respectively; both sat inside *Other products*. Their
+series start where the issuer first gives them a line, and the earlier absence
+is checkable in the same exhibits.
+
+### The benchmark got harder, which was the point
+
+Extraction accuracy went from 929/929 to **1,342/1,351 (99.33%)**. The nine
+failures are one pattern, not nine: a Gilead first-quarter quote carries three
+regional lines and then the unlabelled worldwide total, and the reader takes
+the first value row it finds - the U.S. line - instead of the total. Genvoya
+2016Q1 reads 141 where gold records 158; Harvoni 2015Q1 reads 3,016 where gold
+records 3,579.
+
+That is a real capability gap about *scope selection*, and it is worth more
+than the 100% it replaced: the old figure was 100% of a benchmark that
+contained none of these cases. It is recorded here rather than removed by
+rewriting the quotes, because the quote is what the document says.
 
 ## Remaining gaps and why
 

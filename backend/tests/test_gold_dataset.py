@@ -835,11 +835,24 @@ def test_letairis_series_exists_because_the_table_says_what_the_prose_does_not()
     excluded = {r["drug_name"] for r in load_jsonl("excluded_products.jsonl")}
     coverage = {r["drug_name"]: r for r in load_jsonl("series_coverage.jsonl")}["Letairis"]
 
-    assert len(rows) == 16
+    assert len(rows) == 48
     assert "Letairis" not in excluded
     assert {r["manufacturer"] for r in rows} == {"Gilead"}
     assert {r["geography"] for r in rows} == {"United States"}
-    assert all(r["source_url"].startswith("https://www.gilead.com/") for r in rows)
+    # Two hosts, because the series is sourced from two places: Gilead's
+    # newsroom for the later years, and the SEC exhibits for the backfill that
+    # carries it to the quarter the line first appears.
+    assert {r["source_url"].split("/")[2] for r in rows} == {
+        "www.gilead.com", "www.sec.gov"
+    }
+
+    # The series now starts where Gilead first breaks Letairis out - 2008Q1,
+    # the quarter after it stops being folded into Other products - so it
+    # carries its own launch ramp rather than only the plateau.
+    ordered = sorted(rows, key=lambda r: r["period"])
+    assert ordered[0]["period"] == "2008Q1"
+    assert ordered[0]["value_reported"] < 25
+    assert max(r["value_reported"] for r in rows) > 250
 
     stated_full_year = {2016: 819.0, 2017: 887.0, 2018: 943.0, 2019: 618.0}
     by_year: dict[int, list[float]] = {}
@@ -1075,10 +1088,17 @@ def test_harvoni_is_the_collapse_the_catalog_otherwise_lacks():
     )
     coverage = {r["drug_name"]: r for r in load_jsonl("series_coverage.jsonl")}["Harvoni"]
 
-    assert len(rows) == 12
-    assert rows[0]["value_reported"] == 3017.0
+    assert len(rows) == 18
+    # Gilead reports Harvoni before its October 2014 US approval: the third
+    # quarter of 2014 carries one line, Harvoni - Europe, 19,966 thousand. The
+    # series therefore holds the whole shape - a near-zero start, a peak four
+    # quarters later, and the collapse - not just the decline.
+    assert rows[0]["period"] == "2014Q3"
+    assert rows[0]["value_reported"] == 19.966
+    peak = max(rows, key=lambda r: r["value_reported"])
+    assert peak["value_reported"] == 3608.0 and peak["period"] == "2015Q2"
     assert rows[-1]["value_reported"] == 232.0
-    assert rows[-1]["value_reported"] < rows[0]["value_reported"] / 10
+    assert rows[-1]["value_reported"] < peak["value_reported"] / 10
 
     # It ends because the line stops meaning Harvoni, not because sourcing did.
     assert coverage["series_end_quarter"] == "2018Q4"
@@ -1113,17 +1133,43 @@ def test_every_comparator_year_reconciles_to_its_stated_full_year():
         r"twelve months (\d{4}) and \d{4}.*?"
         r"\|\s*[\d,]+\s*\|\s*[\d,]+\s*\|\s*([\d,]+)\s*\|\s*[\d,]+\s*$"
     )
+    # The backfilled quarters are quoted from the SEC exhibit rather than
+    # Gilead's newsroom, and the exhibit announces its columns in a header row -
+    # "Three Months Ended | Twelve Months Ended | December 31, | ... | 2013 |
+    # 2012" - instead of in a sentence. Same four-column shape, same third
+    # value, so the same reconciliation applies; only the way the filing states
+    # its columns differs. A nil column prints as an em-dash, which a
+    # prior-year figure legitimately may be.
+    exhibit_pattern = re.compile(
+        r"(?i:(?:twelve months|year) ended).*?\|\s*(\d{4})\s*\|.*?"
+        r"\|\s*[\d,]+\s*\|\s*(?:[\d,]+|—|-)\s*"
+        r"\|\s*([\d,]+)\s*\|\s*(?:[\d,]+|—|-)\s*$"
+    )
     stated: dict[tuple[str, int], float] = {}
+    # Which units a product-year was reported in. Gilead moved from thousands
+    # to millions partway through 2014, so a single year can mix the two.
+    year_units: dict[tuple[str, int], set[str]] = {}
     for drug_name, manifest in comparators.items():
         path = GOLD / "source_manifests" / manifest
         with path.open(newline="") as handle:
             for row in csv.DictReader(handle):
+                year_units.setdefault(
+                    (drug_name, int(row["period"][:4])), set()
+                ).add(row.get("source_unit") or "millions")
                 if row["period"][-2:] != "Q4" or row["derivation"] != "direct_reported":
                     continue
-                match = quote_pattern.search(row["source_quote"])
+                match = (quote_pattern.search(row["source_quote"])
+                         or exhibit_pattern.search(row["source_quote"]))
                 assert match, f"{drug_name} {row['period']}: no stated full year in its own quote"
                 year = int(match.group(1))
-                stated[(drug_name, year)] = float(match.group(2).replace(",", ""))
+                total = float(match.group(2).replace(",", ""))
+                # The exhibits state thousands before 2016 and millions after,
+                # and the row itself says which. Gold is millions throughout, so
+                # the stated total is converted rather than compared across
+                # units - the 1000x defect this dataset already carried once.
+                if (row.get("source_unit") or "millions") == "thousands":
+                    total /= 1000
+                stated[(drug_name, year)] = total
 
     by_year: dict[tuple[str, int], list[float]] = {}
     for row in load_jsonl("quarterly_revenue.jsonl"):
@@ -1155,9 +1201,20 @@ def test_every_comparator_year_reconciles_to_its_stated_full_year():
         # size - which is the rounding signature and not a misread; a gap of
         # 2 or more still fails.
         gap = sum(quarters) - total
-        assert abs(gap) <= 1, (
+        # A year reported in one unit throughout reconciles to within 1: that
+        # is the issuers' independent per-period rounding, and it holds across
+        # all 170 such years here. The handful of years where the issuer
+        # switched unit mid-year cannot: Gilead's 2014 quarters are exact to
+        # the thousand until Q4, while its stated full year is the sum of three
+        # separately rounded regional annuals (1,787 + 1,275 + 278 = 3,340
+        # against 3,338.764 of actual quarters). That is arithmetic about
+        # rounding, not a misread, and it is bounded - a genuinely misread
+        # quarter is out by hundreds, never by one.
+        tolerance = 1 if len(year_units.get(key, {"millions"})) == 1 else 1.5
+        assert abs(gap) <= tolerance, (
             f"{key}: gold's four quarters sum to {sum(quarters):g}, "
-            f"the manifest's own Q4 quote states {total:g} (off by {gap:g})"
+            f"the manifest's own Q4 quote states {total:g} (off by {gap:g}, "
+            f"tolerance {tolerance:g})"
         )
         checked += 1
 

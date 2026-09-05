@@ -90,13 +90,39 @@ _COLUMN_LEGEND_RE = re.compile(
 _MONEY_IN_PROSE_RE = re.compile(r"[$£€]\s?[\d,.]+\s*(?:million|billion|thousand)", re.I)
 
 
+_PERIOD_HEADER_CELL = re.compile(
+    r"^(?:(?:three|six|nine|twelve)\s+months?\s+ended.*"
+    r"|years?\s+ended.*"
+    r"|(?:january|february|march|april|may|june|july|august|september"
+    r"|october|november|december)\s+\d{1,2},?"
+    r"|(?:19|20)\d{2})$",
+    re.I,
+)
+
+
+def strip_period_header(cells: list[str]) -> list[str]:
+    """Drop the column heading a quote carries ahead of its product row.
+
+    A quote lifted from an exhibit may include the table's own heading -
+    "Three Months Ended | December 31, | 2013 | 2012" - so that the row's
+    columns are named by the document instead of by a hand-written legend.
+    That heading is not data. Read as values it shifts every column after it,
+    which is the same silent misalignment this harness exists to catch, so it
+    is removed before the row is aligned rather than counted.
+    """
+    index = 0
+    while index < len(cells) and _PERIOD_HEADER_CELL.match(cells[index].strip()):
+        index += 1
+    return cells[index:] if index < len(cells) else cells
+
+
 def classify(row: dict[str, Any]) -> str:
     quote = row.get("source_quote") or ""
     if row.get("derivation") in DERIVED:
         return "derived"
     if _COLUMN_LEGEND_RE.search(quote):
         return "annotated_composite"
-    cells = [cell.strip() for cell in quote.split("|")]
+    cells = strip_period_header([cell.strip() for cell in quote.split("|")])
     if len(cells) >= 3:
         numeric = sum(1 for cell in cells[1:] if re.fullmatch(r"[\d,.]+", cell))
         return "wide_table" if numeric >= 5 else "table_row"
@@ -123,7 +149,9 @@ def replay_table_row(row: dict[str, Any]) -> tuple[float | None, str | None]:
     year, quarter = int(match.group(1)), int(match.group(2))
     end_month = _END_MONTH_BY_QUARTER[quarter]
 
-    cells = [cell.strip() for cell in (row.get("source_quote") or "").split("|")]
+    cells = strip_period_header(
+        [cell.strip() for cell in (row.get("source_quote") or "").split("|")]
+    )
     if len(cells) < 2:
         return None, "unsplittable_quote"
 

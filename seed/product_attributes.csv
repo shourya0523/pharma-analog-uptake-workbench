@@ -42,3 +42,6 @@ Imbruvica,BTK inhibitor,kinase_inhibitor,Oral,2013,Oncology (haematological),cur
 Darzalex,Anti-CD38 monoclonal antibody,monoclonal_antibody,Intravenous,2015,Oncology (haematological),curated_reference,distinct_product
 Erleada,Androgen receptor inhibitor,androgen_axis_inhibitor,Oral,2018,Oncology (solid),curated_reference,distinct_product
 Invega Sustenna,D2/5-HT2A antagonist long-acting injectable,atypical_antipsychotic,Intramuscular,2009,Schizophrenia,curated_reference,distinct_product
+Invokana,SGLT2 inhibitor,sglt2_inhibition,Oral,2013,Type 2 diabetes,curated_reference,distinct_product
+Procrit,Erythropoiesis-stimulating agent,erythropoietin_receptor_agonism,Parenteral,1989,Anemia,curated_reference,distinct_product
+Concerta,Dopamine and norepinephrine reuptake inhibitor (extended release),cns_stimulant,Oral,2000,ADHD,curated_reference,distinct_product

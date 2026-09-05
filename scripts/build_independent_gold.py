@@ -211,13 +211,14 @@ PRODUCT_METADATA = {
         "manufacturer": "Gilead",
         "benchmark_identity": "gilead_ambisome_worldwide_reported",
         "therapeutic_area": "Invasive fungal infection",
-        "commercial_start_quarter": "2016Q1",
+        "commercial_start_quarter": "2005Q3",
         "launch_quarter": "1997Q3",
         "series_start_reason": (
             "AmBisome has been on sale since 1997 and Gilead reports it "
-            "throughout; 2016Q1 is the earliest quarter sourced here. Nearly "
-            "twenty years after launch is a maturity plateau, not uptake - which "
-            "is what makes it useful: it is the flattest series in the catalog."
+            "throughout, but the earliest 8-K exhibit carrying a PRODUCT SALES "
+            "SUMMARY is the third quarter of 2005. The series starts where the "
+            "issuer's own quarterly disclosure starts, not where the product "
+            "did."
         ),
         "series_end_quarter": "2019Q4",
         "series_end_basis": "sourcing_boundary",
@@ -241,12 +242,15 @@ PRODUCT_METADATA = {
         # curative and the treatable population was being exhausted. Nothing in
         # the PAH catalog behaves remotely like this, which is the point of
         # having it.
-        "commercial_start_quarter": "2016Q1",
-        "launch_quarter": "2014Q4",
+        "commercial_start_quarter": "2014Q3",
+        "launch_quarter": "2014Q3",
         "series_start_reason": (
-            "Harvoni launched in 2014Q4 and had already passed its peak before "
-            "this window opens; 2016Q1 is the earliest quarter sourced here. The "
-            "series is the decline, not the rise."
+            "Gilead reports Harvoni before its US approval: the third quarter "
+            "of 2014 carries a single line, Harvoni - Europe 19,966 thousand, "
+            "and the nine-month column shows 20,405, so 439 thousand was "
+            "recognised earlier still. The series therefore starts a quarter "
+            "before the October 2014 US approval, because that is when the "
+            "issuer first reported revenue."
         ),
         "series_end_quarter": "2018Q4",
         "series_end_basis": "issuer_stopped_reporting",
@@ -267,11 +271,13 @@ PRODUCT_METADATA = {
         "manufacturer": "Gilead",
         "benchmark_identity": "gilead_ranexa_us_reported",
         "therapeutic_area": "Chronic angina",
-        "commercial_start_quarter": "2016Q1",
+        "commercial_start_quarter": "2009Q2",
         "launch_quarter": "2006Q1",
         "series_start_reason": (
-            "Ranexa launched in 2006Q1; 2016Q1 is the earliest quarter sourced "
-            "here. Ten years after launch, and two before the cliff."
+            "Ranexa launched in 2006Q1 but sat inside Other products for three "
+            "years; it appears in no Gilead sales table before the second "
+            "quarter of 2009. The series starts where the issuer first reports "
+            "it separately."
         ),
         "series_end_quarter": "2019Q4",
         "series_end_basis": "sourcing_boundary",
@@ -294,14 +300,13 @@ PRODUCT_METADATA = {
         # the maximum is, while this is the four-year window sourced quarter by
         # quarter here.
         "benchmark_identity": "gilead_letairis_us_reported",
-        "commercial_start_quarter": "2016Q1",
+        "commercial_start_quarter": "2008Q1",
         "launch_quarter": "2007Q2",
         "series_start_reason": (
-            "Letairis launched in 2007Q2. Gilead has reported it separately in "
-            "its product sales summary throughout, but presented the figures in "
-            "thousands before 2015 and in millions after; 2016Q1 is the earliest "
-            "quarter sourced here on the current basis. Nine years after launch "
-            "is not an uptake curve."
+            "Letairis was approved in June 2007, but Gilead reported it inside "
+            "Other products until the first quarter of 2008 - it is named in "
+            "the 2007 releases and absent from their sales tables. The series "
+            "starts at the first quarter Gilead gives it a line of its own."
         ),
         "series_end_quarter": "2019Q4",
         # The first end in this catalog that is NOT the issuer changing what it
@@ -411,13 +416,13 @@ PRODUCT_METADATA = {
         "manufacturer": "Gilead",
         "benchmark_identity": "gilead_genvoya_worldwide_reported",
         "therapeutic_area": "HIV",
-        "commercial_start_quarter": "2018Q1",
+        "commercial_start_quarter": "2015Q4",
         "launch_quarter": "2015Q4",
         "series_start_reason": (
-            "Genvoya launched in 2015Q4; 2018Q1 is the earliest quarter sourced "
-            "here. It peaks at 1,206 in 2018Q4 and then declines - not from "
-            "patent loss but because Gilead's own Biktarvy takes its patients. A "
-            "decline with no generic in it."
+            "Genvoya is broken out from its launch quarter. It peaks at 1,206 "
+            "in 2018Q4 and then declines - not from patent loss but because "
+            "Gilead's own Biktarvy takes its patients. A decline with no "
+            "generic in it."
         ),
         "series_end_quarter": "2024Q4",
         "series_end_basis": "sourcing_boundary",
@@ -437,13 +442,15 @@ PRODUCT_METADATA = {
         "manufacturer": "Gilead",
         "benchmark_identity": "gilead_truvada_worldwide_reported",
         "therapeutic_area": "HIV",
-        "commercial_start_quarter": "2018Q1",
+        "commercial_start_quarter": "2005Q3",
         "launch_quarter": "2004Q3",
         "series_start_reason": (
             "Truvada launched in 2004 and lost US exclusivity in October 2020. "
-            "2018Q1 is the earliest quarter sourced here, which puts eleven flat "
-            "quarters around 700 in front of the cliff: 509 in 2020Q3, then 146, "
-            "135, 108, 67, 61. The sharpest patent-cliff series in the catalog."
+            "The earliest Gilead exhibit carrying a PRODUCT SALES SUMMARY is "
+            "the third quarter of 2005, so the series starts there - eleven "
+            "flat quarters around 700 lead into the cliff: 509 in 2020Q3, then "
+            "146, 135, 108, 67, 61. The sharpest patent-cliff series in the "
+            "catalog."
         ),
         "series_end_quarter": "2023Q4",
         "series_end_basis": "issuer_stopped_reporting",
@@ -466,13 +473,14 @@ PRODUCT_METADATA = {
         "manufacturer": "Gilead",
         "benchmark_identity": "gilead_atripla_worldwide_reported",
         "therapeutic_area": "HIV",
-        "commercial_start_quarter": "2018Q1",
+        "commercial_start_quarter": "2006Q3",
         "launch_quarter": "2006Q3",
         "series_start_reason": (
-            "Atripla launched in 2006 and was already being switched away from "
-            "when this window opens; 2018Q1 is the earliest quarter sourced. It "
-            "then loses US exclusivity alongside Truvada in October 2020, so the "
-            "series is a slow decline that ends in a cliff."
+            "Atripla was approved 12 July 2006 and Gilead breaks it out from "
+            "the quarter of launch, so the series runs from its first reported "
+            "quarter. It rises to 938 in 2013Q2 and then declines as Gilead's "
+            "own newer regimens take its patients - a full arc, launch to "
+            "displacement."
         ),
         "series_end_quarter": "2021Q4",
         "series_end_basis": "issuer_stopped_reporting",
@@ -495,13 +503,11 @@ PRODUCT_METADATA = {
         "manufacturer": "Gilead",
         "benchmark_identity": "gilead_descovy_worldwide_reported",
         "therapeutic_area": "HIV",
-        "commercial_start_quarter": "2018Q1",
+        "commercial_start_quarter": "2016Q2",
         "launch_quarter": "2016Q2",
         "series_start_reason": (
-            "Descovy launched in 2016Q2; 2018Q1 is the earliest quarter sourced "
-            "here. Unusually for this set it is nearly flat across sixteen "
-            "quarters - a backbone sold into both treatment and, from late 2019, "
-            "prevention, so two demand curves offset inside one line."
+            "Descovy is broken out from its launch quarter, so the series runs "
+            "from the first quarter Gilead reports it."
         ),
         "series_end_quarter": "2024Q4",
         "series_end_basis": "sourcing_boundary",
@@ -520,12 +526,12 @@ PRODUCT_METADATA = {
         "manufacturer": "Gilead",
         "benchmark_identity": "gilead_odefsey_worldwide_reported",
         "therapeutic_area": "HIV",
-        "commercial_start_quarter": "2018Q1",
+        "commercial_start_quarter": "2016Q3",
         "launch_quarter": "2016Q2",
         "series_start_reason": (
-            "Odefsey launched in 2016Q2; 2018Q1 is the earliest quarter sourced "
-            "here. The flattest HIV series in the set, which is what makes it "
-            "useful next to Biktarvy and Truvada."
+            "Odefsey is absent from the first and second quarter 2016 sales "
+            "tables and first appears in the third. The series starts where the "
+            "issuer first reports it separately."
         ),
         "series_end_quarter": "2024Q4",
         "series_end_basis": "sourcing_boundary",
@@ -544,13 +550,12 @@ PRODUCT_METADATA = {
         "manufacturer": "Gilead",
         "benchmark_identity": "gilead_complera_worldwide_reported",
         "therapeutic_area": "HIV",
-        "commercial_start_quarter": "2018Q1",
+        "commercial_start_quarter": "2011Q3",
         "launch_quarter": "2011Q3",
         "series_start_reason": (
             "Gilead publishes this line as Complera / Eviplera - one product "
-            "under its US and its European names, not two. 2018Q1 is the "
-            "earliest quarter sourced; the series is the slow switch away to the "
-            "tenofovir alafenamide generation."
+            "under two names - and breaks it out from launch, so the series "
+            "runs from its first reported quarter."
         ),
         "series_end_quarter": "2023Q4",
         "series_end_basis": "issuer_stopped_reporting",
@@ -573,14 +578,14 @@ PRODUCT_METADATA = {
         "manufacturer": "Gilead",
         "benchmark_identity": "gilead_stribild_worldwide_reported",
         "therapeutic_area": "HIV",
-        "commercial_start_quarter": "2018Q1",
+        "commercial_start_quarter": "2012Q4",
         "launch_quarter": "2012Q3",
         "series_start_reason": (
-            "Stribild launched in 2012Q3 and is the tenofovir disoproxil "
-            "predecessor of Genvoya; 2018Q1 is the earliest quarter sourced. It "
-            "declines steadily throughout as its own successor takes its "
-            "patients - the smallest series in this group, which is why it is "
-            "here: a benchmark of only large numbers tests only large numbers."
+            "Stribild was approved 27 August 2012. Gilead first breaks it out "
+            "in the fourth quarter 2012 release, whose twelve-month column of "
+            "57,536 thousand against a fourth quarter of 40,025 shows the "
+            "launch quarter did sell - it was simply not reported on its own "
+            "line."
         ),
         "series_end_quarter": "2023Q4",
         "series_end_basis": "issuer_stopped_reporting",
@@ -603,13 +608,11 @@ PRODUCT_METADATA = {
         "manufacturer": "Gilead",
         "benchmark_identity": "gilead_epclusa_worldwide_reported",
         "therapeutic_area": "Chronic hepatitis C",
-        "commercial_start_quarter": "2018Q1",
+        "commercial_start_quarter": "2016Q3",
         "launch_quarter": "2016Q3",
         "series_start_reason": (
-            "Epclusa launched in 2016Q3 and had already passed its peak by the "
-            "time this window opens; 2018Q1 is the earliest quarter sourced. "
-            "Four quarters is all the brand gets before the line stops being "
-            "the brand."
+            "Epclusa is broken out from its launch quarter, so the series runs "
+            "from the first quarter Gilead reports it."
         ),
         "series_end_quarter": "2018Q4",
         "series_end_basis": "issuer_stopped_reporting",
@@ -637,18 +640,99 @@ PRODUCT_METADATA = {
     # SUSTENNA / XEPLION / INVEGA TRINZA / TREVICTA is four brands on one
     # line - so a pipeline that assumes an exhibit line is a molecule will
     # read them and be wrong in a way no PAH series catches.
+    "Invokana": {
+        "generic_name": "canagliflozin",
+        "manufacturer": "Johnson & Johnson",
+        "benchmark_identity": "jnj_invokana_worldwide_reported",
+        "therapeutic_area": "Type 2 diabetes",
+        "commercial_start_quarter": "2015Q1",
+        "launch_quarter": "2013Q2",
+        "series_start_reason": (
+            "Invokana was approved in March 2013 but J&J carried it inside "
+            "Other Cardiovascular/Metabolism until the first quarter of 2015, "
+            "when INVOKANA / INVOKAMET first gets a line of its own. The "
+            "series starts where the issuer first reports it separately."
+        ),
+        "series_end_quarter": "2018Q4",
+        "series_end_basis": "sourcing_boundary",
+        "series_end_reason": (
+            "J&J still reports Invokana after this. The 2019Q1 schedule is "
+            "published only inside the full press release, whose layout this "
+            "sourcing pass does not read, so the series stops rather than "
+            "carry a hole."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "tablet",
+        "route_of_administration": "oral",
+    },
+    "Procrit": {
+        "generic_name": "epoetin alfa",
+        "manufacturer": "Johnson & Johnson",
+        "benchmark_identity": "jnj_procrit_worldwide_reported",
+        "therapeutic_area": "Anemia",
+        "commercial_start_quarter": "2014Q3",
+        "launch_quarter": "1989Q2",
+        "series_start_reason": (
+            "Procrit has been sold since 1989. J&J's Sales of Key "
+            "Products/Franchises schedule is reachable at its investor site "
+            "back to 2014Q3; the 2013Q3 and 2014Q2 schedules are not, so a "
+            "contiguous run starts there. A quarter of a century past launch, "
+            "this series is the long decline of a mature biologic under "
+            "biosimilar and label pressure - no launch ramp in it at all."
+        ),
+        "series_end_quarter": "2018Q4",
+        "series_end_basis": "sourcing_boundary",
+        "series_end_reason": (
+            "The 2019Q1 schedule is published only inside the full press "
+            "release, whose layout this sourcing pass does not read."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "injection",
+        "route_of_administration": "parenteral",
+    },
+    "Concerta": {
+        "generic_name": "methylphenidate hydrochloride extended-release",
+        "manufacturer": "Johnson & Johnson",
+        "benchmark_identity": "jnj_concerta_worldwide_reported",
+        "therapeutic_area": "ADHD",
+        "commercial_start_quarter": "2014Q3",
+        "launch_quarter": "2000Q3",
+        "series_start_reason": (
+            "Concerta was approved in August 2000. The schedule is reachable "
+            "back to 2014Q3, so the series starts there. J&J publishes this "
+            "as CONCERTA / METHYLPHENIDATE - the brand and its own authorised "
+            "generic on one line, the same brand-plus-generic shape as ZYTIGA "
+            "/ abiraterone acetate."
+        ),
+        "series_end_quarter": "2018Q4",
+        "series_end_basis": "sourcing_boundary",
+        "series_end_reason": (
+            "The 2019Q1 schedule is published only inside the full press "
+            "release, whose layout this sourcing pass does not read."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "tablet",
+        "route_of_administration": "oral",
+    },
     "Stelara": {
         "generic_name": "ustekinumab",
         "manufacturer": "Johnson & Johnson",
         "benchmark_identity": "jnj_stelara_worldwide_reported",
         "therapeutic_area": "Immunology",
-        "commercial_start_quarter": "2018Q1",
+        "commercial_start_quarter": "2014Q3",
         "launch_quarter": "2009Q4",
         "series_start_reason": (
-            "Stelara launched in 2009Q4 and J&J reports it throughout; 2018Q1 "
-            "is the earliest quarter sourced here. Nine years after launch and "
-            "still compounding - a long, shallow climb from 1,061 a quarter to "
-            "2,753, which is a different shape from either a launch ramp or a "
+            "J&J's Sales of Key Products/Franchises schedule is reachable at "
+            "its investor site back to 2014Q3 - the 2013Q3 and 2014Q2 "
+            "schedules are not - so a contiguous run starts there. Five years "
+            "after launch and still compounding, from 543 a quarter to 2,753: "
+            "a long shallow climb that is neither a launch ramp nor a "
             "plateau."
         ),
         "series_end_quarter": "2023Q4",
@@ -669,14 +753,14 @@ PRODUCT_METADATA = {
         "manufacturer": "Johnson & Johnson",
         "benchmark_identity": "jnj_remicade_worldwide_reported",
         "therapeutic_area": "Immunology",
-        "commercial_start_quarter": "2018Q1",
+        "commercial_start_quarter": "2014Q3",
         "launch_quarter": "1998Q3",
         "series_start_reason": (
-            "Remicade launched in 1998 and peaked around 2016; 2018Q1 is the "
-            "earliest quarter sourced here, by which point biosimilar infliximab "
-            "was already taking it down. The series is a twenty-year-old brand "
-            "eroding, 1,389 a quarter to 429 - the slow counterpart to Harvoni's "
-            "collapse."
+            "J&J's Sales of Key Products/Franchises schedule is reachable at "
+            "its investor site back to 2014Q3 - the 2013Q3 and 2014Q2 "
+            "schedules are not - so a contiguous run starts there. Remicade "
+            "launched in 1998 and had already peaked by then, so the series "
+            "is the decline - 1,782 a quarter down through biosimilar entry."
         ),
         "series_end_quarter": "2023Q4",
         "series_end_basis": "sourcing_boundary",
@@ -695,13 +779,14 @@ PRODUCT_METADATA = {
         "manufacturer": "Johnson & Johnson",
         "benchmark_identity": "jnj_simponi_worldwide_reported",
         "therapeutic_area": "Immunology",
-        "commercial_start_quarter": "2018Q1",
+        "commercial_start_quarter": "2014Q3",
         "launch_quarter": "2009Q2",
         "series_start_reason": (
-            "J&J publishes this as SIMPONI / SIMPONI ARIA, one line covering the "
-            "subcutaneous and intravenous presentations together; there is no "
-            "published split. The recorded figure is the combined line, which is "
-            "what the exhibit states. 2018Q1 is the earliest quarter sourced."
+            "J&J's Sales of Key Products/Franchises schedule is reachable at "
+            "its investor site back to 2014Q3 - the 2013Q3 and 2014Q2 "
+            "schedules are not - so a contiguous run starts there. J&J "
+            "publishes this as SIMPONI / SIMPONI ARIA, one line covering the "
+            "subcutaneous and intravenous presentations together."
         ),
         "series_end_quarter": "2023Q4",
         "series_end_basis": "sourcing_boundary",
@@ -720,13 +805,12 @@ PRODUCT_METADATA = {
         "manufacturer": "Johnson & Johnson",
         "benchmark_identity": "jnj_tremfya_worldwide_reported",
         "therapeutic_area": "Immunology",
-        "commercial_start_quarter": "2019Q1",
+        "commercial_start_quarter": "2018Q4",
         "launch_quarter": "2017Q3",
         "series_start_reason": (
-            "Tremfya launched in 2017Q3 but J&J folded it into Other Immunology "
-            "until the 2019 exhibits broke it out. 2019Q1 is the first quarter "
-            "with a stated line of its own, so the series opens five quarters "
-            "after launch and misses the first of the ramp."
+            "Tremfya launched in 2017Q3 but J&J folded it into Other "
+            "Immunology until the fourth quarter of 2018, when it first gets "
+            "a line of its own."
         ),
         "series_end_quarter": "2023Q4",
         "series_end_basis": "sourcing_boundary",
@@ -745,13 +829,14 @@ PRODUCT_METADATA = {
         "manufacturer": "Johnson & Johnson",
         "benchmark_identity": "jnj_darzalex_worldwide_reported",
         "therapeutic_area": "Oncology",
-        "commercial_start_quarter": "2018Q1",
+        "commercial_start_quarter": "2016Q4",
         "launch_quarter": "2015Q4",
         "series_start_reason": (
-            "Darzalex launched in 2015Q4; 2018Q1 is the earliest quarter sourced "
-            "here. The steepest sustained climb in the catalog - 432 a quarter "
-            "to 2,550 over six years, without the plateau every PAH series "
-            "eventually reaches."
+            "Darzalex was approved in November 2015 and first appears on "
+            "J&J's schedule in the fourth quarter of 2016; it sits inside "
+            "Other Oncology before that. The series starts at its first "
+            "reported quarter, which makes this the closest thing here to a "
+            "true launch ramp for a J&J product."
         ),
         "series_end_quarter": "2023Q4",
         "series_end_basis": "sourcing_boundary",
@@ -796,14 +881,13 @@ PRODUCT_METADATA = {
         "manufacturer": "Johnson & Johnson",
         "benchmark_identity": "jnj_imbruvica_worldwide_reported",
         "therapeutic_area": "Oncology",
-        "commercial_start_quarter": "2018Q1",
+        "commercial_start_quarter": "2015Q1",
         "launch_quarter": "2013Q4",
         "series_start_reason": (
-            "Imbruvica launched in 2013Q4; 2018Q1 is the earliest quarter "
-            "sourced here. J&J reports only its own share of a collaboration "
-            "with AbbVie, so this line is not the drug's worldwide sales - it is "
-            "J&J's half of them, which is exactly the distinction a pipeline "
-            "that reads exhibit lines as products will lose."
+            "Imbruvica launched in 2013Q4 but J&J carried it inside Other "
+            "Oncology until the first quarter of 2015, when it first gets a "
+            "line of its own. The series starts where the issuer first "
+            "reports it separately."
         ),
         "series_end_quarter": "2023Q4",
         "series_end_basis": "sourcing_boundary",
@@ -822,15 +906,15 @@ PRODUCT_METADATA = {
         "manufacturer": "Johnson & Johnson",
         "benchmark_identity": "jnj_zytiga_worldwide_reported",
         "therapeutic_area": "Oncology",
-        "commercial_start_quarter": "2018Q1",
+        "commercial_start_quarter": "2017Q1",
         "launch_quarter": "2011Q2",
         "series_start_reason": (
-            "J&J publishes this line as ZYTIGA / abiraterone acetate, brand and "
-            "its own authorized generic together. 2018Q1 opens the series at the "
-            "top of the curve: US sales fall from 845 a quarter to 9 as generic "
-            "abiraterone arrives, while international holds up for three more "
-            "years - one exhibit line containing two completely different "
-            "stories."
+            "J&J publishes this line as ZYTIGA / abiraterone acetate, brand "
+            "and its own authorised generic together. The backfill stops at "
+            "2017Q1 because the 2016Q4 schedule prints ZYTIGA's figures on a "
+            "line of their own, below the US/Intl/WW labels rather than "
+            "beside them; that quarter is refused rather than realigned by "
+            "position."
         ),
         "series_end_quarter": "2023Q4",
         "series_end_basis": "sourcing_boundary",
@@ -849,12 +933,14 @@ PRODUCT_METADATA = {
         "manufacturer": "Johnson & Johnson",
         "benchmark_identity": "jnj_velcade_worldwide_reported",
         "therapeutic_area": "Oncology",
-        "commercial_start_quarter": "2018Q1",
+        "commercial_start_quarter": "2014Q3",
         "launch_quarter": "2003Q2",
         "series_start_reason": (
-            "J&J holds ex-US rights to bortezomib, so its US column is a dash in "
-            "every quarter and the WW line equals the international line. 2018Q1 "
-            "is the earliest quarter sourced."
+            "J&J's Sales of Key Products/Franchises schedule is reachable at "
+            "its investor site back to 2014Q3 - the 2013Q3 and 2014Q2 "
+            "schedules are not - so a contiguous run starts there. J&J holds "
+            "ex-US rights to bortezomib, so its US column is a dash in every "
+            "quarter and the worldwide line is an international-only figure."
         ),
         "series_end_quarter": "2020Q4",
         "series_end_basis": "issuer_stopped_reporting",
@@ -876,14 +962,15 @@ PRODUCT_METADATA = {
         "manufacturer": "Johnson & Johnson",
         "benchmark_identity": "jnj_xarelto_worldwide_reported",
         "therapeutic_area": "Cardiovascular",
-        "commercial_start_quarter": "2018Q1",
+        "commercial_start_quarter": "2014Q3",
         "launch_quarter": "2011Q3",
         "series_start_reason": (
-            "Bayer holds rivaroxaban outside the United States, so J&J's "
-            "international column is a dash and its worldwide figure equals its "
-            "US figure in all 24 quarters. The line is labelled worldwide and is "
-            "worldwide for J&J; it is not worldwide sales of the drug. 2018Q1 is "
-            "the earliest quarter sourced."
+            "J&J's Sales of Key Products/Franchises schedule is reachable at "
+            "its investor site back to 2014Q3 - the 2013Q3 and 2014Q2 "
+            "schedules are not - so a contiguous run starts there. Bayer "
+            "holds rivaroxaban outside the United States, so J&J's "
+            "international column is a dash and the worldwide line is a US "
+            "figure."
         ),
         "series_end_quarter": "2023Q4",
         "series_end_basis": "sourcing_boundary",
@@ -1771,8 +1858,11 @@ def build_letairis() -> list[dict[str, Any]]:
             value=float(source["value_reported"]),
             source_url=source["source_url"],
             source_quote=source["source_quote"],
-            source_type="company_ir",
+            source_type=source.get("source_type") or "company_ir",
             derivation=source["derivation"],
+            source_unit=source.get("source_unit") or "millions",
+            source_value=float(source["source_value_reported"])
+            if source.get("source_value_reported") else None,
             notes=source["context"],
         )
         for source in read_csv(SOURCE_DIR / "gilead_letairis_quarterly.csv")
@@ -1801,21 +1891,36 @@ GILEAD_COMPARATORS = {
 }
 
 
+def gilead_row(drug_name: str, source: dict[str, str]) -> dict[str, Any]:
+    """One Gilead manifest row, honouring the unit and source it declares.
+
+    The backfilled quarters come from SEC exhibits and are stated in thousands;
+    the later ones come from Gilead's own newsroom in millions. Reading the unit
+    from the row rather than inferring it from the date is the whole lesson of
+    the 1000x defect this dataset already carried once.
+    """
+    unit = source.get("source_unit") or "millions"
+    reported = source.get("source_value_reported")
+    return revenue_row(
+        drug_name=drug_name,
+        period=source["period"],
+        value=float(source["value_reported"]),
+        source_url=source["source_url"],
+        source_quote=source["source_quote"],
+        source_type=source.get("source_type") or "company_ir",
+        derivation=source["derivation"],
+        source_unit=unit,
+        source_value=float(reported) if reported else None,
+        notes=source["context"],
+    )
+
+
 def build_gilead_comparators() -> list[dict[str, Any]]:
     """Gilead products outside pulmonary hypertension, 2016-2019."""
     rows: list[dict[str, Any]] = []
     for drug_name, manifest in GILEAD_COMPARATORS.items():
         rows.extend(
-            revenue_row(
-                drug_name=drug_name,
-                period=source["period"],
-                value=float(source["value_reported"]),
-                source_url=source["source_url"],
-                source_quote=source["source_quote"],
-                source_type="company_ir",
-                derivation=source["derivation"],
-                notes=source["context"],
-            )
+            gilead_row(drug_name, source)
             for source in read_csv(SOURCE_DIR / manifest)
         )
     return rows
@@ -1838,6 +1943,9 @@ JNJ_COMPARATORS = {
     "Velcade": "jnj_velcade_quarterly.csv",
     "Xarelto": "jnj_xarelto_quarterly.csv",
     "Invega Sustenna": "jnj_invega_sustenna_quarterly.csv",
+    "Invokana": "jnj_invokana_quarterly.csv",
+    "Procrit": "jnj_procrit_quarterly.csv",
+    "Concerta": "jnj_concerta_quarterly.csv",
 }
 
 
@@ -2284,15 +2392,19 @@ def coverage_rows(quarterly: list[dict[str, Any]]) -> list[dict[str, Any]]:
         # to be told which part and why - otherwise the start looks like the
         # launch and every rate computed from it is wrong.
         launch = meta.get("launch_quarter")
-        if launch and launch != meta["commercial_start_quarter"]:
-            start_reason = meta.get("series_start_reason")
-            if not start_reason:
-                raise ValueError(
-                    f"{drug_name} starts at {meta['commercial_start_quarter']} but "
-                    f"launched at {launch} and states no series_start_reason; a "
-                    "series that begins after launch must say why."
-                )
+        start_reason = meta.get("series_start_reason")
+        if launch and launch != meta["commercial_start_quarter"] and not start_reason:
+            raise ValueError(
+                f"{drug_name} starts at {meta['commercial_start_quarter']} but "
+                f"launched at {launch} and states no series_start_reason; a "
+                "series that begins after launch must say why."
+            )
+        # Published whenever stated, not only when the series starts late: a
+        # series that does begin at launch is itself worth saying out loud,
+        # and a reader should not have to infer it from two dates matching.
+        if launch:
             row["launch_quarter"] = launch
+        if start_reason:
             row["series_start_reason"] = start_reason
         rows.append(row)
     return rows
