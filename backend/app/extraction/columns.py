@@ -112,7 +112,7 @@ _TOKEN_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
         re.compile(
             r"%\s*change|\$\s*change|\b(?:percent(?:age)?\s+change|dollar\s+change|change|reported|operational|currency|"
             r"nom\.?\s*%?|ex[-\s]?exch\.?\s*%?|growth|constant\s+currenc\w*|local\s+currenc\w*|\bcer\b|variance|var\.|"
-            r"incr(?:ease)?/\(?decr(?:ease)?\)?)(?!\w)|%(?!\d)",
+            r"incr(?:ease)?/\(?decr(?:ease)?\)?)(?!\w)(?:\s*%(?!\s*change))?|%(?!\d)",
             re.I,
         ),
     ),
@@ -427,10 +427,26 @@ def _period_tokens(tokens: list[HeaderToken]) -> list[HeaderToken]:
                     )
                 resolved.append(token)
             return resolved
+        if len(dates) == 1:
+            # "Three Months Ended | Nine Months Ended | September 30," - one
+            # month-end shared by every length.
+            date = dates[0]
+            for token in periods:
+                if token.kind == "date":
+                    continue
+                if token.kind == "months_bare":
+                    months = token.months or 3
+                    token = replace(
+                        token, kind="months_ended", end_month=date.end_month, year=date.year,
+                        quarter=quarter_of_month(date.end_month) if months == 3 else None,
+                    )
+                resolved.append(token)
+            return resolved
     # A date with no length phrase anywhere in the header is a point in time
-    # (a balance-sheet column), not a reporting period; it names no column.
+    # (a balance-sheet column), not a reporting period; it names no column,
+    # and it marks the whole header as a balance rather than a flow.
     if dates and not bare and not any(t.kind == "months_ended" for t in periods):
-        periods = [t for t in periods if t.kind != "date"]
+        return [replace(dates[0], kind="point_in_time")]
     # A bare length with no date at all still names a period length; it is
     # kept so that year runs can attach to it ("Three Months Ended" + "2016 2015"
     # when the month sits in a caption the grid lost).
@@ -661,6 +677,10 @@ def build_layouts(
         notes.append("currency_not_declared")
 
     periods = _period_tokens(tokens)
+    if any(t.kind == "point_in_time" for t in periods):
+        return [ColumnLayout(columns=(), unit_label=unit_label, currency=currency,
+                             unit_declared=unit_declared, currency_declared=currency_declared,
+                             notes=tuple(notes + ["point_in_time_columns"]))]
     year_runs = _runs([t for t in tokens if t.kind in {"year", "change", "geography", "months_ended", "quarter_word", "quarter_code", "ytd", "date"}], "year")
     geo_runs = _runs(tokens, "geography")
     partials = [t for t in tokens if t.kind == "partial"]
@@ -763,40 +783,45 @@ def build_layouts(
             groups = []
             notes.append(f"unmapped_columns years={len(years_flat)} periods={len(phrases)}")
         if groups:
-            columns = []
             # Change markers printed between the period phrases ("Three
-            # Months Ended ... Dollar Change Percentage Change Year Ended
-            # ...") belong to the phrase they follow; markers after a run of
-            # years belong to that run. Whichever the header uses, each
-            # group gets its own change columns.
+            # Months Ended ... % Change Excluding Foreign Exchange ... Nine
+            # Months Ended") and markers after a run of years ("2025 2024 %
+            # Change") can both be columns, or the former can be a heading
+            # spanning the latter. The header does not say which, so both
+            # readings are offered and the row's own cell count decides.
             between: list[int] = []
             for index, phrase in enumerate(phrases):
                 until = phrases[index + 1].start if index + 1 < len(phrases) else (
                     year_runs[0][0].start if year_runs and year_runs[0][0].start > phrase.start else text_end
                 )
                 between.append(_change_count_after(tokens, phrase.start, until))
-            for index, (phrase, years) in enumerate(groups):
-                last_year_start = years[-1].start if years else phrase.start
-                next_start = text_end
-                for run in year_runs:
-                    if run[0].start > last_year_start:
-                        next_start = min(next_start, run[0].start)
-                for year_token in years:
-                    columns.append(
-                        ColumnSpec("value", phrase.months, phrase.end_month, year_token.year, label=f"{phrase.text} {year_token.year}")
-                    )
-                after_years = _change_count_after(tokens, last_year_start, next_start)
-                count = after_years if after_years else between[index]
-                for _ in range(count):
-                    columns.append(ColumnSpec("change", label="change"))
-            # Change markers printed before any year run (a "% Change"
-            # column heading above the years) are counted once at the end.
-            leading = _change_count_after(tokens, -1, year_runs[0][0].start) if year_runs else 0
-            trailing_declared = sum(1 for c in columns if c.kind == "change")
-            if leading and not trailing_declared:
-                for _ in range(leading):
-                    columns.append(ColumnSpec("change", label="change"))
-            return [finish(columns)]
+            candidates: list[list[ColumnSpec]] = []
+            for reading in ("after_only", "both"):
+                columns = []
+                for index, (phrase, years) in enumerate(groups):
+                    last_year_start = years[-1].start if years else phrase.start
+                    next_start = text_end
+                    for run in year_runs:
+                        if run[0].start > last_year_start:
+                            next_start = min(next_start, run[0].start)
+                    for year_token in years:
+                        columns.append(
+                            ColumnSpec("value", phrase.months, phrase.end_month, year_token.year, label=f"{phrase.text} {year_token.year}")
+                        )
+                    after_years = _change_count_after(tokens, last_year_start, next_start)
+                    if reading == "after_only":
+                        count = after_years if after_years else between[index]
+                    else:
+                        count = after_years + between[index]
+                    for _ in range(count):
+                        columns.append(ColumnSpec("change", label="change"))
+                leading = _change_count_after(tokens, -1, year_runs[0][0].start) if year_runs else 0
+                if leading and not any(c.kind == "change" for c in columns):
+                    for _ in range(leading):
+                        columns.append(ColumnSpec("change", label="change"))
+                if not candidates or [c.kind for c in columns] != [c.kind for c in candidates[-1]]:
+                    candidates.append(columns)
+            return [finish(columns) for columns in candidates]
 
     # Case C: a run of quarter labels and no years at all in the header. The
     # document's own years are the only anchors.
@@ -813,12 +838,25 @@ def build_layouts(
         if layouts:
             return layouts
 
-    # Case D: only years. "2013 2012 2011" over an annual table.
+    # Case D: only years. "2013 2012 2011" over an annual table, possibly
+    # with change columns after each year ("2024 % Change % Change 2023 ...").
     if not periods and year_runs:
         years_flat = [t for run in year_runs for t in run]
-        columns = [ColumnSpec("value", 12, 12, t.year, label=t.text) for t in years_flat]
-        for _ in change_tokens:
-            columns.append(ColumnSpec("change", label="change"))
+        if len({t.year for t in years_flat}) < len(years_flat):
+            # "2018 2017 ... 2018 2017" names two groups of periods the
+            # header did not spell out; reading them as annual columns would
+            # be a guess, and a page header above may still say what they are.
+            return [finish([], ["repeated_years_without_periods"])]
+        columns = []
+        for index, token in enumerate(years_flat):
+            columns.append(ColumnSpec("value", 12, 12, token.year, label=token.text))
+            until = years_flat[index + 1].start if index + 1 < len(years_flat) else text_end
+            for _ in range(_change_count_after(tokens, token.start, until)):
+                columns.append(ColumnSpec("change", label="change"))
+        leading = _change_count_after(tokens, -1, years_flat[0].start)
+        if leading and not any(c.kind == "change" for c in columns):
+            for _ in range(leading):
+                columns.append(ColumnSpec("change", label="change"))
         return [finish(columns, ["annual_assumed_from_bare_years"])]
 
     return [finish([], ["no_period_header"])]
@@ -892,7 +930,10 @@ def _check(layout: ColumnLayout, placed: list[Cell | None]) -> tuple[bool, list[
     for index, cell in enumerate(placed):
         if cell is not None and cell.percent and columns[index].kind != "change":
             return False, []
-        if cell is not None and cell.value is not None and cell.value < 0 and columns[index].kind == "value":
+        if (
+            cell is not None and cell.value is not None and cell.value < 0
+            and columns[index].kind == "value" and any(c is None for c in placed)
+        ):
             return False, []
 
     def value_at(index: int) -> float | None:

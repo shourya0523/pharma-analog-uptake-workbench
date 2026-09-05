@@ -322,6 +322,10 @@ class LLMFingerprinter:
             except Exception as exc:  # noqa: BLE001
                 logger.warning("fingerprint_failed url=%s error=%s", url, exc)
                 return Fingerprint(model=self.model)
+        if "raw" in payload and "regions" not in payload:
+            (self.cache_dir / f"{key}.failed.txt").write_text(str(payload.get("raw")))
+            logger.warning("fingerprint_unparsed url=%s", url)
+            return Fingerprint(raw=payload, model=self.model)
         cache_path.write_text(json.dumps(payload, indent=1))
         result = parse_fingerprint(payload)
         result.model = self.model

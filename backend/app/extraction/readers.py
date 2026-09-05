@@ -36,6 +36,7 @@ from typing import Any, Iterable
 
 from app.domain.models import ParsedDocument
 from app.extraction.columns import (
+    _GEO_HEAD_RE,
     Alignment,
     ColumnLayout,
     align_row,
@@ -117,9 +118,19 @@ class ReadReport:
 
 
 def _is_year_row(row: list[str]) -> bool:
-    """A header row listing the year columns: years and nothing else."""
+    """A header row listing the year columns.
+
+    "2024 | 2023 | 2022" on its own, or "Years Ended December 31 | 2024 |
+    2023 | 2022" with its label: every numeric cell is a year and there are
+    at least two of them. A revenue row prints thousands separators, so two
+    bare four-digit years in a row are column labels, not values.
+    """
     values = [cell for cell in row if is_value_token(cell)]
-    return bool(values) and all(is_year_token(cell) for cell in values) and len(values) == len(row)
+    if not values or not all(is_year_token(cell) for cell in values):
+        return False
+    if len(values) == len(row):
+        return True
+    return len(values) >= 2 and all(not re.search(r"\d", cell) for cell in row if not is_value_token(cell))
 
 
 def _is_data_row(row: list[str]) -> bool:
@@ -258,6 +269,26 @@ def _as_of_coverage(sentence: str, period: str, period_type: str) -> tuple[str, 
     return None
 
 
+_NOT_REVENUE_GRID_RE = re.compile(
+    r"\b(?:inventor(?:y|ies)|raw\s+materials|work[-\s]in[-\s]pro(?:cess|gress)|finished\s+goods|"
+    r"total\s+assets|total\s+liabilities|accounts\s+receivable|accrued|deferred\s+tax|"
+    r"cost\s+of\s+(?:product\s+)?sales|research\s+and\s+development\s+expense|per\s+share)\b",
+    re.I,
+)
+
+
+def _is_revenue_grid(header_rows: list[list[str]], body: list[list[str]]) -> bool:
+    """A grid of inventories, balances or expenses is not a revenue grid.
+
+    Its rows may still name the product ("Remodulin delivery pumps" among
+    inventories, "Adcirca" royalty expense), so the label alone does not
+    decide; the vocabulary of the whole grid does.
+    """
+    labels = " ".join(row[0] for row in body if row and not is_value_token(row[0]))
+    caption = _header_text(header_rows[-2:])
+    return not _NOT_REVENUE_GRID_RE.search(labels + " " + caption)
+
+
 _GENERIC_PRODUCT_LINE_RE = re.compile(
     r"^(?:net\s+)?product\s+(?:sales|revenues?)(?:,\s*net)?$|^(?:net\s+)?(?:sales|revenues?)\s+of\s+products?$",
     re.I,
@@ -322,7 +353,7 @@ def _shift_into_label(label: str, tokens: list[str], excess: int) -> tuple[str, 
     columns, and the surplus can only be a name.
     """
     moved = tokens[:excess]
-    if any(is_year_token(t) or not re.fullmatch(r"\d{1,3}", t) for t in moved):
+    if excess != 1 or any(is_year_token(t) or not re.fullmatch(r"\d{1,2}", t) for t in moved):
         return label, tokens
     return f"{label} {' '.join(moved)}".strip(), tokens[excess:]
 
@@ -356,7 +387,15 @@ def read_grids(
 
     for table_index, table in enumerate(doc.tables or []):
         header_rows, body, footer_rows = _split_table(table)
+        if body and not _is_revenue_grid(header_rows, body):
+            continue
         if not body:
+            # A grid of header rows and nothing else (a page break split the
+            # header from its rows) declares the columns of the grid below.
+            header_only = build_layouts(_header_text(header_rows), context=context_head, year_candidates=doc_years)
+            usable_only = [l for l in header_only if l.usable]
+            if len(usable_only) == 1:
+                inherited = usable_only[0]
             continue
         header_text = _header_text(header_rows)
         local_years = _years_in(header_text + " " + _header_text(footer_rows))
@@ -424,6 +463,19 @@ def read_grids(
             # label at all, which can only be the group's subtotal.
             unlabelled = not clean_label(label).strip()
             geography_only = not unlabelled and not label_part
+            # "US Exports", "Intl (excluding Japan)": a geography with a
+            # qualifier is a sub-row of the current product's group.
+            geography_sub_row = (
+                not unlabelled and not geography_only and geography is not None
+                and group_label and not _matches_aliases(label_part, aliases)
+                and _GEO_HEAD_RE.match(clean_label(label)) is not None
+            )
+            if geography_sub_row:
+                product_part = group_label
+                geography_only = True
+                sub_row_qualified = True
+            else:
+                sub_row_qualified = False
             if unlabelled or geography_only:
                 product_part = group_label
             else:
@@ -443,22 +495,38 @@ def read_grids(
             if not product_part:
                 continue
 
+            # Every candidate layout is tried; the one the row fits without
+            # blanks or label surgery wins, and a tie between different
+            # readings is an ambiguity, not a choice.
+            fits: list[tuple[int, ColumnLayout, Alignment]] = []
+            reasons: list[str] = []
             for layout in usable:
                 columns = len(layout.columns)
                 row_tokens = tokens
-                row_label = label
+                shifted = 0
                 if len(row_tokens) > columns:
-                    row_label, row_tokens = _shift_into_label(label, row_tokens, len(row_tokens) - columns)
+                    _label, row_tokens = _shift_into_label(label, row_tokens, len(row_tokens) - columns)
+                    shifted = len(tokens) - len(row_tokens)
+                    if len(row_tokens) > columns:
+                        reasons.append("more_cells_than_columns")
+                        continue
                 alignments, reason = align_row(row_tokens, layout)
                 if reason:
-                    skipped.append(f"table{table_index}:{label or '<unlabelled>'}:{reason}")
+                    reasons.append(reason)
                     continue
-                if len(alignments) > 1:
-                    skipped.append(
-                        f"table{table_index}:{label or '<unlabelled>'}:ambiguous_alignment({len(alignments)})"
-                    )
-                    continue
-                alignment: Alignment = alignments[0]
+                for alignment in alignments:
+                    fits.append((len(alignment.gaps) + shifted, layout, alignment))
+            if not fits:
+                skipped.append(f"table{table_index}:{label or '<unlabelled>'}:{';'.join(sorted(set(reasons)))}")
+                continue
+            best_penalty = min(f[0] for f in fits)
+            best = [f for f in fits if f[0] == best_penalty]
+            distinct = {tuple(sorted((layout.columns[i].period, layout.columns[i].geography, v) for i, v in a.values.items())) for _, layout, a in best}
+            if len(distinct) > 1:
+                skipped.append(f"table{table_index}:{label or '<unlabelled>'}:ambiguous_alignment({len(distinct)})")
+                continue
+            _penalty, layout, alignment = best[0]
+            for _once in (1,):
                 if unit_declared is False and layout.unit_declared:
                     unit_label, unit_declared = layout.unit_label, True
                 # An unlabelled row is the group's total only if it sums the
@@ -484,7 +552,7 @@ def read_grids(
                 quote = " ".join(cell for cell in row if cell and cell.strip())
                 if unlabelled:
                     quote = f"{group_label} {quote}"
-                specificity = 1 if sole_product_line else _specificity(product_part, aliases)
+                specificity = 1 if (sole_product_line or sub_row_qualified) else _specificity(product_part, aliases)
                 markers = row_markers | group_markers | section_markers
                 acquired_on = None
                 for marker in markers:

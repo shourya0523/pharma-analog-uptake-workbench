@@ -179,29 +179,43 @@ def normalize_observations(observations: list[Observation]) -> list[_Norm]:
             anchors[(norm.observation.geography, index)].append(norm.value_usd)
 
     out = list(declared)
-    for obs in undeclared:
-        index = _quarter_index(obs.period)
-        candidates: list[float] = []
-        if index is not None:
-            for offset in (0, -1, 1, -2, 2, -3, 3, -4, 4):
-                candidates.extend(anchors.get((obs.geography, index + offset), []))
-                if candidates:
-                    break
-        chosen: str | None = None
-        if candidates:
-            reference = sum(candidates) / len(candidates)
-            fits = []
-            for label, scale in UNIT_SCALE_TO_MILLIONS.items():
-                scaled = obs.value_as_reported * scale
-                if reference > 0 and 0.2 <= scaled / reference <= 5.0:
-                    fits.append(label)
-            if len(fits) == 1:
-                chosen = fits[0]
-        if chosen is None:
-            out.append(_Norm(obs, None, obs.unit_label, "unit_not_declared"))
-            continue
-        value, status = _to_usd_millions(obs.value_as_reported, chosen, obs.currency, obs.period)
-        out.append(_Norm(obs, value, chosen, "unit_inferred_from_series" if status == "ok" else status))
+    # Nearest declared neighbour first; an inferred value then anchors its
+    # own neighbours, so a long run of undeclared documents resolves from
+    # one declared quarter at either end.
+    pending = sorted(undeclared, key=lambda o: o.period)
+    progress = True
+    while pending and progress:
+        progress = False
+        remaining: list[Observation] = []
+        for obs in pending:
+            index = _quarter_index(obs.period)
+            candidates: list[float] = []
+            if index is not None:
+                for offset in (0, -1, 1, -2, 2, -3, 3, -4, 4):
+                    candidates.extend(anchors.get((obs.geography, index + offset), []))
+                    if candidates:
+                        break
+            chosen: str | None = None
+            if candidates:
+                reference = sum(candidates) / len(candidates)
+                fits = []
+                for label, scale in UNIT_SCALE_TO_MILLIONS.items():
+                    scaled = obs.value_as_reported * scale
+                    if reference > 0 and 0.2 <= scaled / reference <= 5.0:
+                        fits.append(label)
+                if len(fits) == 1:
+                    chosen = fits[0]
+            if chosen is None:
+                remaining.append(obs)
+                continue
+            value, status = _to_usd_millions(obs.value_as_reported, chosen, obs.currency, obs.period)
+            out.append(_Norm(obs, value, chosen, "unit_inferred_from_series" if status == "ok" else status))
+            if value is not None and index is not None and obs.period_type == "quarterly":
+                anchors[(obs.geography, index)].append(value)
+            progress = True
+        pending = remaining
+    for obs in pending:
+        out.append(_Norm(obs, None, obs.unit_label, "unit_not_declared"))
     return out
 
 
@@ -354,19 +368,30 @@ def derive_residual_quarters(
                 if not members:
                     continue
         have = quarters.get(year, {})
-        missing = [q for q in members if q not in have]
-        if len(missing) != 1:
-            continue
-        target = missing[0]
-        # The largest stated sub-total covering only present quarters.
+        # A stated sub-total (six or nine months) accounts for the quarters
+        # inside it whether or not they are stated individually, so a full
+        # year less a stated nine months determines the fourth quarter even
+        # when the first two are not known. The largest such sub-total is
+        # used; the issuer's own figure beats a sum of separately rounded
+        # quarters.
         subtotal: SeriesValue | None = None
         covered: tuple[int, ...] = ()
         for sub_type, sub_members in _QUARTERS_IN.items():
-            if len(sub_members) >= len(members) or target in sub_members:
+            if len(sub_members) >= len(members):
                 continue
             candidate = totals.get((year, sub_type))
-            if candidate is not None and len(sub_members) > len(covered):
+            if candidate is None or len(sub_members) <= len(covered):
+                continue
+            outside = [q for q in members if q not in sub_members and q not in have]
+            if len(outside) == 1:
                 subtotal, covered = candidate, sub_members
+        if subtotal is not None:
+            missing = [q for q in members if q not in have and q not in covered]
+        else:
+            missing = [q for q in members if q not in have]
+        if len(missing) != 1:
+            continue
+        target = missing[0]
         residual = total.value_usd_millions
         inputs = [total.period + ":" + period_type]
         if subtotal is not None:
@@ -459,6 +484,60 @@ def derive_partial_remainders(
                 )
             )
     return derived
+
+
+# Geographies that together are the whole world. A product whose total is
+# not printed but whose regional lines are is still stated worldwide.
+_PARTITIONS = (
+    frozenset({"United States", "International"}),
+    frozenset({"United States", "Europe", "International"}),
+    frozenset({"United States", "Europe", "Japan", "International"}),
+)
+
+
+def sum_geography_partitions(series_by_geo: dict[str | None, dict[tuple[str, str], SeriesValue]], *, product: str) -> list[SeriesValue]:
+    """Worldwide from regional lines that partition the world, when no total is stated."""
+    out: list[SeriesValue] = []
+    worldwide = series_by_geo.get("Worldwide", {})
+    periods: set[tuple[str, str]] = set()
+    for geography, series in series_by_geo.items():
+        if geography not in {"United States", "Europe", "Japan", "International"}:
+            continue
+        periods |= set(series)
+    for key in sorted(periods):
+        if key in worldwide:
+            continue
+        parts = {
+            geography: series[key]
+            for geography, series in series_by_geo.items()
+            if geography in {"United States", "Europe", "Japan", "International"} and key in series
+        }
+        if frozenset(parts) not in _PARTITIONS:
+            continue
+        if any(v.status != RESOLVED or v.covers for v in parts.values()):
+            continue
+        total = round(sum(v.value_usd_millions for v in parts.values()), 6)
+        first = next(iter(parts.values()))
+        out.append(
+            SeriesValue(
+                product=product,
+                period=key[0],
+                period_type=key[1],
+                geography="Worldwide",
+                value_usd_millions=total,
+                value_as_reported=total,
+                unit_label="millions",
+                currency="USD",
+                route="derived",
+                derivation="sum_of_geography_partition",
+                status=RESOLVED,
+                detail=" + ".join(f"{g} {v.value_usd_millions:g}" for g, v in sorted(parts.items())),
+                source_urls=tuple(sorted({u for v in parts.values() for u in v.source_urls})),
+                source_quote="; ".join(v.source_quote for v in parts.values()),
+                inputs=tuple(f"{g}:{key[0]}" for g in sorted(parts)),
+            )
+        )
+    return out
 
 
 def assemble_bridges(partials: list[SeriesValue], *, product: str) -> list[SeriesValue]:
@@ -580,6 +659,11 @@ def assemble_series(
         if (value.period, value.period_type) not in by_geo[value.geography]:
             by_geo[value.geography][(value.period, value.period_type)] = value
             values.append(value)
+
+    # Regional lines that partition the world state the worldwide figure.
+    for value in sum_geography_partitions(by_geo, product=product):
+        by_geo["Worldwide"][(value.period, value.period_type)] = value
+        values.append(value)
 
     # Residuals against stated totals, per geography, until nothing more
     # follows: a quarter derived from a nine-month total can be the one that

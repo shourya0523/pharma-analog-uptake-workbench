@@ -229,6 +229,15 @@ class _Line:
     def is_single_token(self) -> bool:
         return len(self.tokens) == 1
 
+    @property
+    def is_streamable(self) -> bool:
+        """One cell, or only value cells: part of a grid that lost its rows."""
+        if len(self.tokens) == 1:
+            return True
+        return bool(self.tokens) and all(
+            is_value_token(t) or _FOOTNOTE_RE.match(t) for t in self.tokens
+        )
+
 
 def _split_row(tokens: list[str]) -> tuple[list[str], list[str]] | None:
     """(label words, value tokens) when the tokens end in a numeric run.
@@ -248,6 +257,11 @@ def _split_row(tokens: list[str]) -> tuple[list[str], list[str]] | None:
     if not values or not label or len(label) > 12:
         return None
     if not any(is_number_token(v) for v in values):
+        # A row of nothing but dashes ("Intl - - - - -") is still a row of
+        # the grid: the issuer printed a line with nothing to report, and
+        # the rows after it still belong to the same product.
+        if len(values) >= 3 and len(label) <= 6:
+            return label, values
         return None
     return label, values
 
@@ -267,18 +281,18 @@ def _merge_single_token_runs(lines: list[_Line], min_run: int = 6) -> list[_Line
     out: list[_Line] = []
     index = 0
     while index < len(lines):
-        if not lines[index].is_single_token:
+        if not lines[index].is_streamable:
             out.append(lines[index])
             index += 1
             continue
         run_end = index
-        while run_end < len(lines) and lines[run_end].is_single_token:
+        while run_end < len(lines) and lines[run_end].is_streamable:
             run_end += 1
-        if run_end - index < min_run:
+        if run_end - index < min_run or not any(l.is_single_token for l in lines[index:run_end]):
             out.extend(lines[index:run_end])
             index = run_end
             continue
-        stream = [line.tokens[0] for line in lines[index:run_end]]
+        stream = [token for line in lines[index:run_end] for token in line.tokens]
         out.extend(_segment_stream(stream))
         index = run_end
     return out
@@ -305,6 +319,7 @@ def _segment_stream(stream: list[str]) -> list[_Line]:
     return rows
 
 
+_YEAR_IN_TEXT_RE = re.compile(r"\b(?:19|20)\d{2}\b")
 _PERIOD_WORD_RE = re.compile(
     r"\b(?:quarter|months?|year|ended|full[-\s]?year|q[1-4]|[1-4]q|fy)\b|(?:19|20)\d{2}",
     re.I,
@@ -380,6 +395,12 @@ def recover_text_grids(text: str, *, max_header_lines: int = 12) -> list[Table]:
         if len(pending_header) > max_header_lines * 2:
             pending_header = pending_header[-max_header_lines:]
     flush()
+    # Lines after the last grid that name years ("Historical Sales 2016 2017")
+    # are that grid's footer: the years its bare quarter labels refer to.
+    if tables and pending_header:
+        trailing = [[l.text] for l in pending_header[-4:] if _YEAR_IN_TEXT_RE.search(l.text)]
+        if trailing:
+            tables[-1] = tables[-1] + trailing
     return tables
 
 

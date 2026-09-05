@@ -161,8 +161,57 @@ def _parse_json_content(content: Any) -> dict[str, Any]:
     except json.JSONDecodeError:
         match = re.search(r"\{[\s\S]*\}", text)
         if match:
-            return json.loads(match.group(0))
+            try:
+                return json.loads(match.group(0))
+            except json.JSONDecodeError:
+                repaired = _repair_json(match.group(0))
+                if repaired is not None:
+                    return repaired
         return {"raw": text}
+
+
+def _repair_json(text: str) -> dict[str, Any] | None:
+    """Recover JSON a model spoiled with an unescaped quote inside a string.
+
+    Verbatim quotes copied from filings carry inch marks and nested quotes.
+    Scanning the text as a string-aware tokenizer, a double quote inside a
+    string that is not followed by a structural character is escaped; a
+    trailing comma before a closing bracket is dropped.
+    """
+    out: list[str] = []
+    in_string = False
+    escaped = False
+    for index, char in enumerate(text):
+        if in_string:
+            if escaped:
+                out.append(char)
+                escaped = False
+                continue
+            if char == "\\":
+                out.append(char)
+                escaped = True
+                continue
+            if char == '"':
+                rest = text[index + 1 :].lstrip()
+                if rest[:1] in {",", "}", "]", ":"} or not rest:
+                    in_string = False
+                    out.append(char)
+                else:
+                    out.append('\\"')
+                continue
+            if char == "\n":
+                out.append("\\n")
+                continue
+            out.append(char)
+            continue
+        if char == '"':
+            in_string = True
+        out.append(char)
+    candidate = re.sub(r",(\s*[}\]])", r"\1", "".join(out))
+    try:
+        return json.loads(candidate)
+    except json.JSONDecodeError:
+        return None
 
 
 def _citations_from_message(message: dict[str, Any]) -> list[dict[str, str]]:
