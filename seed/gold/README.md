@@ -313,12 +313,18 @@ independently, so the residual is off by a dollar in either direction — the
 same effect documented for Merck's Adempas below. Where an issuer states a
 figure, gold now takes the stated figure.
 
-One derivation remains that the pipeline cannot reproduce: Invega Sustenna
-2023Q2, full-year less the other three quarters. J&J's 2Q23 schedule does state
-it, but this environment's extractor truncates that PDF at the line above the
-INVEGA SUSTENNA worldwide total, and deriving the total as US plus
-International is forbidden here for the rounding reason recorded above. So the
-row stays an explicit derivation and delivery is 992/993 rather than 993/993.
+Invega Sustenna 2023Q2 was the last row standing on arithmetic rather than a
+citation. J&J's 2Q23 *schedule* would not yield it — the extractor truncates
+that PDF at the line above the INVEGA SUSTENNA worldwide total on three
+attempts with three different objectives — but the same figure is in J&J's
+Q2 2023 **Form 10-Q**, which states Worldwide 1,031 outright beside the
+prior-year 1,054 and the six-month 2,075 and 2,102. The row cites the 10-Q,
+and the four quarters of 2023 now sum to exactly the 4,115 full year J&J
+states, which is the arithmetic that had been standing in for the citation.
+
+The lesson is the one above generalised: when a document resists, the figure
+is often in a *different* document from the same issuer for the same period,
+and that is a better move than retrying the same PDF. Delivery is 993/993.
 
 **Series that start late on purpose.** Biktarvy was approved 7 February 2018 and
 sold only in the United States that quarter, so Gilead gives it a single US line
