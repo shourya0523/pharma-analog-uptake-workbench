@@ -25,6 +25,8 @@
   "peak_sales_file": "peak_sales.jsonl",
   "excluded_products_file": "excluded_products.jsonl",
   "adjudication_cases_file": "adjudication_cases.jsonl",
+  "product_profiles_file": "product_profiles.jsonl",
+  "product_attributes_source": "seed/product_attributes.csv",
   "source_manifest_directory": "source_manifests",
   "gold_builder": "scripts/build_independent_gold.py",
   "pipeline_code_allowed_in_builder": false

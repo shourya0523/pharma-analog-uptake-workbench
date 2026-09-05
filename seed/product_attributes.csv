@@ -1,0 +1,44 @@
+drug_name,moa,moa_class,route_of_administration,first_approval_year,indication_area,attribute_provenance,peer_universe_role
+Flolan,Prostacyclin (PGI2) analogue,prostacyclin_pathway,Intravenous,1995,Pulmonary arterial hypertension,curated_reference,distinct_product
+Tracleer,Dual endothelin receptor antagonist,endothelin_pathway,Oral,2001,Pulmonary arterial hypertension,curated_reference,distinct_product
+Remodulin,Prostacyclin (PGI2) analogue,prostacyclin_pathway,Parenteral,2002,Pulmonary arterial hypertension,curated_reference,distinct_product
+Ventavis,Prostacyclin (PGI2) analogue,prostacyclin_pathway,Inhaled,2004,Pulmonary arterial hypertension,curated_reference,distinct_product
+Revatio,PDE5 inhibitor,nitric_oxide_pathway,Oral,2005,Pulmonary arterial hypertension,curated_reference,distinct_product
+Letairis,Selective ETA endothelin receptor antagonist,endothelin_pathway,Oral,2007,Pulmonary arterial hypertension,curated_reference,distinct_product
+Tyvaso,Prostacyclin (PGI2) analogue,prostacyclin_pathway,Inhaled,2009,Pulmonary arterial hypertension,curated_reference,distinct_product
+Nebulized Tyvaso,Prostacyclin (PGI2) analogue,prostacyclin_pathway,Inhaled,2009,Pulmonary arterial hypertension,curated_reference,formulation_of:Tyvaso
+Adcirca,PDE5 inhibitor,nitric_oxide_pathway,Oral,2009,Pulmonary arterial hypertension,curated_reference,distinct_product
+Veletri,Prostacyclin (PGI2) analogue,prostacyclin_pathway,Intravenous,2010,Pulmonary arterial hypertension,curated_reference,distinct_product
+Opsumit,Dual endothelin receptor antagonist,endothelin_pathway,Oral,2013,Pulmonary arterial hypertension,curated_reference,distinct_product
+Orenitram,Prostacyclin (PGI2) analogue,prostacyclin_pathway,Oral,2013,Pulmonary arterial hypertension,curated_reference,distinct_product
+Adempas,Soluble guanylate cyclase stimulator,nitric_oxide_pathway,Oral,2013,Pulmonary arterial hypertension,curated_reference,distinct_product
+Uptravi,Selective IP prostacyclin receptor agonist,prostacyclin_pathway,Oral,2015,Pulmonary arterial hypertension,curated_reference,distinct_product
+Alyq,PDE5 inhibitor,nitric_oxide_pathway,Oral,2018,Pulmonary arterial hypertension,curated_reference,distinct_product
+Tyvaso DPI,Prostacyclin (PGI2) analogue,prostacyclin_pathway,Inhaled,2022,Pulmonary arterial hypertension,curated_reference,distinct_product
+Tadliq,PDE5 inhibitor,nitric_oxide_pathway,Oral,2022,Pulmonary arterial hypertension,curated_reference,distinct_product
+Liqrev,PDE5 inhibitor,nitric_oxide_pathway,Oral,2023,Pulmonary arterial hypertension,curated_reference,distinct_product
+Winrevair,Activin signalling inhibitor (ActRIIA-Fc fusion),activin_pathway,Subcutaneous,2024,Pulmonary arterial hypertension,curated_reference,distinct_product
+Yutrepia,Prostacyclin (PGI2) analogue,prostacyclin_pathway,Inhaled,2025,Pulmonary arterial hypertension,curated_reference,distinct_product
+AmBisome,Liposomal amphotericin B polyene antifungal,antifungal,Intravenous,1997,Invasive fungal infection,curated_reference,distinct_product
+Truvada,Two NRTIs (FTC/TDF),hiv_antiretroviral,Oral,2004,HIV,curated_reference,distinct_product
+Atripla,NNRTI plus two NRTIs (efavirenz/FTC/TDF),hiv_antiretroviral,Oral,2006,HIV,curated_reference,distinct_product
+Complera,NNRTI plus two NRTIs (rilpivirine/FTC/TDF),hiv_antiretroviral,Oral,2011,HIV,curated_reference,distinct_product
+Stribild,INSTI plus booster plus two NRTIs (elvitegravir/cobicistat/FTC/TDF),hiv_antiretroviral,Oral,2012,HIV,curated_reference,distinct_product
+Genvoya,INSTI plus booster plus two NRTIs (elvitegravir/cobicistat/FTC/TAF),hiv_antiretroviral,Oral,2015,HIV,curated_reference,distinct_product
+Descovy,Two NRTIs (FTC/TAF),hiv_antiretroviral,Oral,2016,HIV,curated_reference,distinct_product
+Odefsey,NNRTI plus two NRTIs (rilpivirine/FTC/TAF),hiv_antiretroviral,Oral,2016,HIV,curated_reference,distinct_product
+Biktarvy,INSTI plus two NRTIs (bictegravir/FTC/TAF),hiv_antiretroviral,Oral,2018,HIV,curated_reference,distinct_product
+Harvoni,NS5A inhibitor plus NS5B polymerase inhibitor,hcv_direct_acting_antiviral,Oral,2014,Hepatitis C,curated_reference,distinct_product
+Epclusa,NS5A inhibitor plus NS5B polymerase inhibitor,hcv_direct_acting_antiviral,Oral,2016,Hepatitis C,curated_reference,distinct_product
+Ranexa,Late sodium current inhibitor,antianginal,Oral,2006,Chronic angina,curated_reference,distinct_product
+Xarelto,Factor Xa inhibitor,anticoagulant,Oral,2011,Thrombosis,curated_reference,distinct_product
+Remicade,TNF-alpha inhibitor,tnf_inhibitor,Intravenous,1998,Immune-mediated inflammatory disease,curated_reference,distinct_product
+Simponi,TNF-alpha inhibitor,tnf_inhibitor,Subcutaneous,2009,Immune-mediated inflammatory disease,curated_reference,distinct_product
+Stelara,IL-12/IL-23 p40 inhibitor,interleukin_inhibitor,Subcutaneous,2009,Immune-mediated inflammatory disease,curated_reference,distinct_product
+Tremfya,IL-23 p19 inhibitor,interleukin_inhibitor,Subcutaneous,2017,Immune-mediated inflammatory disease,curated_reference,distinct_product
+Velcade,Proteasome inhibitor,proteasome_inhibitor,Intravenous,2003,Oncology (haematological),curated_reference,distinct_product
+Zytiga,CYP17 inhibitor,androgen_axis_inhibitor,Oral,2011,Oncology (solid),curated_reference,distinct_product
+Imbruvica,BTK inhibitor,kinase_inhibitor,Oral,2013,Oncology (haematological),curated_reference,distinct_product
+Darzalex,Anti-CD38 monoclonal antibody,monoclonal_antibody,Intravenous,2015,Oncology (haematological),curated_reference,distinct_product
+Erleada,Androgen receptor inhibitor,androgen_axis_inhibitor,Oral,2018,Oncology (solid),curated_reference,distinct_product
+Invega Sustenna,D2/5-HT2A antagonist long-acting injectable,atypical_antipsychotic,Intramuscular,2009,Schizophrenia,curated_reference,distinct_product

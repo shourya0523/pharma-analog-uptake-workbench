@@ -2087,6 +2087,147 @@ def series_end_quarter(meta: dict[str, Any]) -> str:
     return meta.get("series_end_quarter") or AS_OF_QUARTER
 
 
+# --- analog matching attributes ---------------------------------------------
+#
+# MoA, route and first-approval year are curated reference facts, not figures
+# read out of a filing. They are kept in seed/product_attributes.csv and carry
+# attribute_provenance so nothing here is ever mistaken for the citation-backed
+# revenue rows: those cite a document and a quote, these do not.
+#
+# Approval era and competitive intensity are NOT curated. They are derived from
+# those facts by the rules below, so that adding a product re-derives every
+# label instead of leaving a hand-assigned one to go stale.
+
+ATTRIBUTES_FILE = SEED_DIR / "product_attributes.csv"
+
+APPROVAL_ERA_BOUNDARIES = (2000, 2005, 2010, 2015, 2020, 2025)
+
+# The catalog is the PAH universe by construction, so a peer count taken from it
+# is a real count for that indication. It is not for any other area - our HIV or
+# oncology products are a handful of comparators, not those markets - so
+# intensity is left unassessed there rather than computed off a partial market.
+INTENSITY_UNIVERSE = "Pulmonary arterial hypertension"
+INTENSITY_RULE = "marketed_peer_count_at_launch_v1"
+INTENSITY_THRESHOLDS = ((1, "low"), (4, "medium"))
+
+
+def approval_era(year: int) -> str:
+    """A five-year bucket, open-ended at both ends."""
+    if year < APPROVAL_ERA_BOUNDARIES[0]:
+        return f"Pre-{APPROVAL_ERA_BOUNDARIES[0]}"
+    for lower in reversed(APPROVAL_ERA_BOUNDARIES):
+        if year >= lower:
+            return f"{lower}-{lower + 4}" if lower != APPROVAL_ERA_BOUNDARIES[-1] else f"{lower}+"
+    raise ValueError(year)
+
+
+def competitive_intensity(peers: int) -> str:
+    """Low/medium/high from how many peers were already marketed at launch.
+
+    The bands mirror the wording the legacy profile used - few direct
+    competitors, some established competition, a crowded market - but they are
+    applied to a count rather than assigned by hand, so the label is
+    reproducible and moves if the catalog changes.
+    """
+    for ceiling, label in INTENSITY_THRESHOLDS:
+        if peers <= ceiling:
+            return label
+    return "high"
+
+
+def read_product_attributes() -> dict[str, dict[str, Any]]:
+    """Curated attributes plus the labels derived from them, by drug name."""
+    rows = read_csv(ATTRIBUTES_FILE)
+    by_name = {row["drug_name"]: row for row in rows}
+    if len(by_name) != len(rows):
+        raise ValueError(f"duplicate drug_name in {ATTRIBUTES_FILE.name}")
+
+    # A formulation split shares its parent's approval - Nebulized Tyvaso is
+    # Tyvaso's nebulized form, separated here only so the revenue can be
+    # reported apart - so counting it as its own peer would inflate every later
+    # product's count by one.
+    universe = sorted(
+        (int(row["first_approval_year"]), row["drug_name"])
+        for row in rows
+        if row["indication_area"] == INTENSITY_UNIVERSE
+        and row["peer_universe_role"] == "distinct_product"
+    )
+
+    profiles: dict[str, dict[str, Any]] = {}
+    for row in rows:
+        year = int(row["first_approval_year"])
+        in_universe = row["indication_area"] == INTENSITY_UNIVERSE
+        if in_universe:
+            # Peers already on the market: approved strictly earlier, so a
+            # product never counts itself or anything launched alongside it.
+            peers = sum(1 for peer_year, name in universe if peer_year < year)
+            intensity: str | None = competitive_intensity(peers)
+            basis = INTENSITY_RULE
+        else:
+            peers = None
+            intensity = None
+            basis = "not_assessed_outside_catalog_universe"
+        profiles[row["drug_name"]] = {
+            "drug_name": row["drug_name"],
+            "moa": row["moa"],
+            "moa_class": row["moa_class"],
+            "route_of_administration": row["route_of_administration"],
+            "first_approval_year": year,
+            "approval_era": approval_era(year),
+            "indication_area": row["indication_area"],
+            "competitive_intensity_at_launch": intensity,
+            "marketed_peers_at_launch": peers,
+            "competitive_intensity_basis": basis,
+            "peer_universe_role": row["peer_universe_role"],
+            "attribute_provenance": row["attribute_provenance"],
+        }
+    return profiles
+
+
+MATCHING_FIELDS = (
+    "moa",
+    "moa_class",
+    "route_of_administration",
+    "approval_era",
+    "competitive_intensity_at_launch",
+)
+
+
+def attach_matching_attributes(
+    rows: list[dict[str, Any]], profiles: list[dict[str, Any]]
+) -> list[dict[str, Any]]:
+    """Copy the matching attributes onto product-level rows, in place.
+
+    This is part of building those files, not a decoration applied afterwards:
+    the peaks file on disk has to be exactly what the builder produces, or the
+    rebuild check that guards this dataset stops meaning anything.
+    """
+    by_name = {row["drug_name"]: row for row in profiles}
+    for row in rows:
+        attributes = by_name[row["drug_name"]]
+        for field in MATCHING_FIELDS:
+            row[field] = attributes[field]
+    return rows
+
+
+def build_product_profiles(names: set[str]) -> list[dict[str, Any]]:
+    """One profile per product that appears anywhere in the dataset."""
+    profiles = read_product_attributes()
+    missing = sorted(names - profiles.keys())
+    if missing:
+        raise ValueError(
+            f"No row in {ATTRIBUTES_FILE.name} for {missing}. Every product in the "
+            "dataset needs matching attributes, or analog selection silently "
+            "skips it."
+        )
+    unused = sorted(profiles.keys() - names)
+    if unused:
+        raise ValueError(
+            f"{ATTRIBUTES_FILE.name} describes {unused}, which is in no gold file."
+        )
+    return [profiles[name] for name in sorted(names)]
+
+
 def coverage_rows(quarterly: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Coverage for every quarterly series, against its own expected span.
 
@@ -2397,11 +2538,23 @@ def main() -> int:
     exclusions = build_exclusions()
     catalog = catalog_coverage(coverage, exclusions)
 
+    # Analog matching needs the attributes beside the series, not in a second
+    # file a consumer has to remember to join.
+    profiles = build_product_profiles(
+        {row["drug_name"] for row in quarterly}
+        | {row["drug_name"] for row in annual}
+        | {row["drug_name"] for row in coverage}
+        | {row["drug_name"] for row in exclusions}
+        | seed_catalog()
+    )
+    attach_matching_attributes(coverage + peaks + exclusions, profiles)
+
     write_jsonl(out_dir / "quarterly_revenue.jsonl", quarterly)
     write_jsonl(out_dir / "annual_revenue.jsonl", annual)
     write_jsonl(out_dir / "series_coverage.jsonl", coverage)
     write_jsonl(out_dir / "peak_sales.jsonl", peaks)
     write_jsonl(out_dir / "excluded_products.jsonl", exclusions)
+    write_jsonl(out_dir / "product_profiles.jsonl", profiles)
     (out_dir / "unresolved_quarters.jsonl").write_text("")
     completeness = gold_completeness(coverage, exclusions, annual)
     balance = concentration(quarterly)
@@ -2418,6 +2571,15 @@ def main() -> int:
         "catalog_coverage": catalog,
         "gold_completeness": completeness,
         "concentration": balance,
+        "product_profiles": {
+            "products": len(profiles),
+            "moa_classes": len({row["moa_class"] for row in profiles}),
+            "routes": sorted({row["route_of_administration"] for row in profiles}),
+            "approval_eras": sorted({row["approval_era"] for row in profiles}),
+            "competitive_intensity_assessed": sum(
+                row["competitive_intensity_at_launch"] is not None for row in profiles
+            ),
+        },
     }
     manifest = {
         "name": "independent_pah_peak_sales_gold",
@@ -2443,6 +2605,11 @@ def main() -> int:
         # each should reach. Kept in gold because "what the pipeline must refuse
         # to answer" is part of the benchmark, not a test fixture.
         "adjudication_cases_file": "adjudication_cases.jsonl",
+        # Curated matching attributes (mechanism, route, approval era) and the
+        # labels derived from them. Never citation-backed the way revenue rows
+        # are, and each row says so in attribute_provenance.
+        "product_profiles_file": "product_profiles.jsonl",
+        "product_attributes_source": "seed/product_attributes.csv",
         "source_manifest_directory": "source_manifests",
         "gold_builder": "scripts/build_independent_gold.py",
         "pipeline_code_allowed_in_builder": False,

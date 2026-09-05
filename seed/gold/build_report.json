@@ -177,5 +177,27 @@
     "therapeutic_area_count": 9,
     "therapeutic_areas_within_target": true,
     "balanced": true
+  },
+  "product_profiles": {
+    "products": 43,
+    "moa_classes": 16,
+    "routes": [
+      "Inhaled",
+      "Intramuscular",
+      "Intravenous",
+      "Oral",
+      "Parenteral",
+      "Subcutaneous"
+    ],
+    "approval_eras": [
+      "2000-2004",
+      "2005-2009",
+      "2010-2014",
+      "2015-2019",
+      "2020-2024",
+      "2025+",
+      "Pre-2000"
+    ],
+    "competitive_intensity_assessed": 20
   }
 }

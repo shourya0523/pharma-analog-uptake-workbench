@@ -177,7 +177,12 @@ def test_peaks_rebuild_from_independent_gold_builder():
     quarterly = load_jsonl(manifest["reported_rows_file"])
     annual = load_jsonl(manifest["annual_rows_file"])
     stored = load_jsonl(manifest["peak_sales_file"])
-    rebuilt = builder.build_peaks(quarterly, annual)
+    # Attributes are attached by the builder as part of producing the file, so
+    # a faithful rebuild has to include that step.
+    profiles = load_jsonl(manifest["product_profiles_file"])
+    rebuilt = builder.attach_matching_attributes(
+        builder.build_peaks(quarterly, annual), profiles
+    )
     assert stored == rebuilt
     observed = [row for row in stored if row["peak_status"] == "observed"]
     growing = [row for row in stored if row["peak_status"] == "not_yet_observed"]
@@ -1158,3 +1163,70 @@ def test_every_comparator_year_reconciles_to_its_stated_full_year():
 
     # Not vacuous: comfortably more than the eleven years the old dict covered.
     assert checked >= 100, f"only {checked} stated comparator years found"
+
+
+def test_every_product_carries_matching_attributes():
+    """Analog selection filters on these, so a missing one silently hides a product."""
+    manifest = json.loads((GOLD / "manifest.json").read_text())
+    profiles = load_jsonl(manifest["product_profiles_file"])
+    coverage = load_jsonl(manifest["coverage_file"])
+    peaks = load_jsonl(manifest["peak_sales_file"])
+    excluded = load_jsonl(manifest["excluded_products_file"])
+
+    by_name = {row["drug_name"]: row for row in profiles}
+    assert len(by_name) == len(profiles), "duplicate profile"
+
+    matching_fields = ("moa", "moa_class", "route_of_administration", "approval_era")
+    for row in profiles:
+        for field in matching_fields:
+            assert row[field], (row["drug_name"], field)
+        # Curated reference facts, never citation-backed the way revenue is.
+        # Saying so on every row is what stops the two being conflated.
+        assert row["attribute_provenance"] == "curated_reference", row["drug_name"]
+
+    # The attributes ride along on the product-level files so a consumer picking
+    # analogs does not have to join a second file and cannot forget to.
+    for row in coverage + peaks + excluded:
+        attributes = by_name[row["drug_name"]]
+        for field in matching_fields + ("competitive_intensity_at_launch",):
+            assert row[field] == attributes[field], (row["drug_name"], field)
+
+
+def test_competitive_intensity_is_derived_and_only_where_the_market_is_known():
+    """A label asserted by hand goes stale; one derived from a count does not.
+
+    Intensity is computed from how many products were already marketed in the
+    same indication at launch. That count is only real for the catalog's own
+    indication - our HIV and oncology products are a few comparators, not those
+    markets - so intensity is left unassessed there rather than computed off a
+    partial universe and presented as if it meant the same thing.
+    """
+    builder = load_builder()
+    manifest = json.loads((GOLD / "manifest.json").read_text())
+    profiles = load_jsonl(manifest["product_profiles_file"])
+
+    for row in profiles:
+        assessed = row["competitive_intensity_at_launch"] is not None
+        in_universe = row["indication_area"] == builder.INTENSITY_UNIVERSE
+        assert assessed == in_universe, row["drug_name"]
+        if not assessed:
+            assert row["marketed_peers_at_launch"] is None
+            assert row["competitive_intensity_basis"] == "not_assessed_outside_catalog_universe"
+            continue
+        assert row["competitive_intensity_basis"] == builder.INTENSITY_RULE
+        # The published count must reproduce the published label.
+        assert row["competitive_intensity_at_launch"] == builder.competitive_intensity(
+            row["marketed_peers_at_launch"]
+        ), row["drug_name"]
+
+    # The first product approved in the indication has no peers by definition,
+    # and nothing may claim fewer peers than a product approved before it.
+    universe = sorted(
+        (row["first_approval_year"], row["marketed_peers_at_launch"], row["drug_name"])
+        for row in profiles
+        if row["competitive_intensity_at_launch"] is not None
+        and row["peer_universe_role"] == "distinct_product"
+    )
+    assert universe[0][1] == 0, universe[0]
+    peers = [count for _year, count, _name in universe]
+    assert peers == sorted(peers), "peer counts must not decrease as approvals get later"

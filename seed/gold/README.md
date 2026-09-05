@@ -17,6 +17,39 @@ All 20 products in `seed/example_drugs.csv` have one explicit disposition:
   peak. No sales are invented for them.
 
 ## Files
+- `product_profiles.jsonl`: analog matching attributes, one row per product.
+  Mechanism, mechanism class, route, first approval year and indication area
+  are **curated reference facts** from `seed/product_attributes.csv` — they do
+  not cite a document and a quote the way every revenue row does, and each row
+  says so in `attribute_provenance`. Do not read them as the same kind of
+  evidence.
+
+  Approval era and competitive intensity are *not* curated. Both are derived by
+  the builder so that adding a product re-derives every label rather than
+  leaving a hand-assigned one to go stale. Era is a five-year bucket.
+  Intensity comes from `marketed_peer_count_at_launch_v1`: how many products in
+  the same indication were already approved when this one launched, banded 0-1
+  low, 2-4 medium, 5+ high. The published `marketed_peers_at_launch` count is
+  what produces the published label, and a test checks that it does.
+
+  Intensity is only assessed for the pulmonary hypertension catalog, because
+  that catalog *is* the indication universe by construction. Our HIV, oncology
+  and immunology entries are a handful of comparators rather than those
+  markets, so computing a peer count off them would be a number with the shape
+  of a measurement and none of the meaning. Those rows carry `null` and
+  `not_assessed_outside_catalog_universe` instead — and `analog_matching.py`
+  excludes an unknown attribute from the denominator rather than scoring it as
+  agreement, so the products we know least about cannot rank highest.
+
+  A formulation split shares its parent's approval. Nebulized Tyvaso is
+  Tyvaso's nebulized form, separated here only so the revenue reports apart, so
+  it is marked `formulation_of:Tyvaso` and excluded from the peer universe;
+  counting it would have inflated every later product's peer count by one.
+
+  The five matching fields also ride along on `series_coverage.jsonl`,
+  `peak_sales.jsonl` and `excluded_products.jsonl`, so selecting analogs needs
+  no second join.
+
 
 - `quarterly_revenue.jsonl`: complete independently reported quarterly series.
 - `annual_revenue.jsonl`: issuer-reported annual peak series and partial
