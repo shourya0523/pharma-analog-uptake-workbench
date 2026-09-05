@@ -672,6 +672,65 @@ than the 100% it replaced: the old figure was 100% of a benchmark that
 contained none of these cases. It is recorded here rather than removed by
 rewriting the quotes, because the quote is what the document says.
 
+## Two extraction metrics, and why there had to be two
+
+`source_quote` was doing two jobs that pull in opposite directions. As
+**evidence** it should carry enough context for a person to confirm the figure
+without reopening the filing. As a **test fixture** - which is what
+`eval_extraction.py` was using it as - it should be what the pipeline actually
+meets in production, which is the whole document, not a passage chosen when the
+row was sourced.
+
+Because the passage is written by hand, the score partly measured the prose.
+Widening these quotes to carry the document's own column header moved that
+number from 99.33% to 97.78% and back again in one afternoon, with no change to
+the pipeline at all. A metric that moves on formatting is not a metric of the
+software.
+
+So the two are now separate:
+
+| Script | What it measures | Current |
+|---|---|---|
+| `eval_extraction.py` | Column alignment: given the cited passage, is the right column recovered? | 1,342/1,351 (99.33%) |
+| `eval_extraction_documents.py` | End to end: given the whole cited filing, does the pipeline produce the figure? | 235/1,415 (16.61%) |
+
+`source_quote` goes back to being a receipt. `scripts/sourcing/fetch_documents.py`
+caches every document gold cites - 269 of 277; the eight misses are Actelion
+annual releases on third-party hosts - and the document eval reads those, using
+the app's own parser, the app's own entry point (`extract_revenue_candidates`)
+and the app's own limits.
+
+### What the document eval immediately found
+
+**16.61% is the real number, and the first version of the eval said 0%.** That
+was the harness, not the pipeline: it passed the drug name where the pipeline
+passes `doc.full_text[:4000]` as fingerprint context, and unit declarations live
+in that text. Fixing the harness moved it from 0 to 16.61 - a reminder that a
+low score is a claim about the measurement until proven otherwise.
+
+**The table ceiling is not the problem.** A Gilead 8-K exhibit holds 39 tables
+and the pipeline keeps 12; its PRODUCT SALES SUMMARY is the thirty-seventh. That
+sounds fatal, and `EVAL_UNCAPPED=1` prices it: lifting the ceiling moves the
+score to 17.88%, worth 18 rows. Worth fixing, not the blocker.
+
+**The fingerprint refuses the tables it does reach.** Every table in that
+exhibit comes back `no_period_header` and `unit_not_declared`, including the
+sales summary itself, whose heading reads:
+
+    ['', '', 'Three Months Ended']
+    ['', '', 'March\xa031,']
+    ['', '', '2016', '', '2015']
+
+The period phrase is split across three rows, the date carries a non-breaking
+space, and "(in millions)" sits outside the `<table>` element. The pipeline
+looks for a period phrase within a row. This is the gap worth closing, and it
+is invisible to a metric that hands the extractor a passage a human already
+picked out.
+
+**A 1000x unit error survives the checks.** Three UTHR 2012Q3 rows are read as
+31,804,000 where gold has 31.804 - the thousands scale applied twice. It is the
+same class of defect the original audit found in gold itself.
+
 ## Remaining gaps and why
 
 **There are none.** All 546 quarters are deliverable. This section used to list

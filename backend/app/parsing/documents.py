@@ -17,6 +17,46 @@ class OCRStub:
         return None, ParsingStatus.UNSUPPORTED
 
 
+# Document -> tables, as module-level functions so anything that needs the
+# pipeline's own reading of a file (the extraction eval, for one) uses this
+# path rather than a second implementation that could drift from it. The
+# limits are the pipeline's real limits and are deliberately not relaxed here.
+HTML_TABLE_LIMIT = 12
+HTML_ROW_LIMIT = 40
+PDF_PAGE_LIMIT = 40
+PDF_TABLE_LIMIT = 5
+
+
+def html_tables(soup: BeautifulSoup) -> list[list[list[str]]]:
+    tables: list[list[list[str]]] = []
+    for table in soup.find_all("table")[:HTML_TABLE_LIMIT]:
+        rows = []
+        for tr in table.find_all("tr")[:HTML_ROW_LIMIT]:
+            cells = [c.get_text(" ", strip=True) for c in tr.find_all(["td", "th"])]
+            if cells:
+                rows.append(cells)
+        if rows:
+            tables.append(rows)
+    return tables
+
+
+def pdf_tables(raw: bytes) -> tuple[list[str], list[list[list[str]]]]:
+    import io
+
+    import pdfplumber
+
+    blocks: list[str] = []
+    tables: list[list[list[str]]] = []
+    with pdfplumber.open(io.BytesIO(raw)) as pdf:
+        for index, page in enumerate(pdf.pages[:PDF_PAGE_LIMIT]):
+            text = page.extract_text() or ""
+            if text.strip():
+                blocks.append(f"[page {index + 1}]\n{text}")
+            for table in (page.extract_tables() or [])[:PDF_TABLE_LIMIT]:
+                tables.append([[(cell or "") for cell in row] for row in table])
+    return blocks, tables
+
+
 class DocumentParser:
     def __init__(self, file_store: FileStore) -> None:
         self.file_store = file_store
@@ -98,15 +138,7 @@ class DocumentParser:
         # chunk long filings (keep enough for multi-year MD&A + product tables)
         max_chars = 400_000
         chunks = [text[i : i + 12000] for i in range(0, min(len(text), max_chars), 12000)]
-        tables: list[list[list[str]]] = []
-        for table in soup.find_all("table")[:12]:
-            rows = []
-            for tr in table.find_all("tr")[:40]:
-                cells = [c.get_text(" ", strip=True) for c in tr.find_all(["td", "th"])]
-                if cells:
-                    rows.append(cells)
-            if rows:
-                tables.append(rows)
+        tables = html_tables(soup)
         return ParsedDocument(
             source_id=source.source_id,
             text_blocks=chunks or [text[:12000]],
@@ -119,17 +151,7 @@ class DocumentParser:
         try:
             import pdfplumber
 
-            blocks: list[str] = []
-            tables: list[list[list[str]]] = []
-            with pdfplumber.open(__import__("io").BytesIO(raw)) as pdf:
-                for i, page in enumerate(pdf.pages[:40]):
-                    t = page.extract_text() or ""
-                    if t.strip():
-                        blocks.append(f"[page {i + 1}]\n{t}")
-                    extracted = page.extract_tables() or []
-                    for tbl in extracted[:5]:
-                        clean = [[(c or "") for c in row] for row in tbl]
-                        tables.append(clean)
+            blocks, tables = pdf_tables(raw)
             if not blocks:
                 _, status = await self.ocr.extract(raw)
                 return ParsedDocument(

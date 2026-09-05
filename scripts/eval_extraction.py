@@ -1,4 +1,16 @@
-"""Score the extraction stack against the gold dataset's own source text.
+"""Score column alignment against the passage each gold row cites.
+
+This is NOT the end-to-end extraction metric. It hands the extractor the
+passage a gold row quotes as its evidence and asks whether the right column can
+be recovered from it - which is worth measuring on its own, but the passage was
+chosen and written when the row was sourced, so the score partly measures the
+prose. Widening these quotes to carry the document's own column header moved
+this number by 1.5 points in an afternoon with no change to the pipeline.
+
+For what the pipeline does with a whole filing, see
+``eval_extraction_documents.py``, which reads the cited document instead and
+leaves ``source_quote`` to be what it is meant to be: a receipt a human can
+check the figure against.
 
 Every gold row carries the verbatim text it was read from, the unit that text
 was stated in, and the number a careful human recovered from it. That makes the
@@ -431,7 +443,7 @@ def main() -> int:
             "prose": "figures stated in sentences",
             "positional_text": "flattened PDF exhibit blocks",
         }[bucket]
-        print(f"\nextraction accuracy on {label}")
+        print(f"\ncolumn alignment on {label}")
         total_ok = total = 0
         for product, (ok, count) in sorted(per_product.items()):
             total_ok += ok
@@ -445,7 +457,9 @@ def main() -> int:
     if overall_total:
         print(
             f"\nOVERALL {overall_ok}/{overall_total} "
-            f"{100 * overall_ok / overall_total:.2f}% of extractable gold rows"
+            f"{100 * overall_ok / overall_total:.2f}% column alignment on cited "
+            f"passages (not end-to-end extraction - see "
+            f"eval_extraction_documents.py)"
         )
 
     if all_failures and args.show_failures:
