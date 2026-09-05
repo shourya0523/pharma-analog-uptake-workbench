@@ -1,0 +1,914 @@
+[
+ {
+  "drug": "Trikafta",
+  "period": "2024Q3",
+  "geography": "Worldwide",
+  "value": 2585,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/875320/000087532024000221/ex-991_q32024.htm"
+ },
+ {
+  "drug": "Trikafta",
+  "period": "2024Q4",
+  "geography": "Worldwide",
+  "value": 2720.8,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/875320/000087532025000029/ex-991_q42024.htm"
+ },
+ {
+  "drug": "Trikafta",
+  "period": "2025Q1",
+  "geography": "Worldwide",
+  "value": 2535.5,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/875320/000087532025000171/ex-991_q12025.htm"
+ },
+ {
+  "drug": "Trikafta",
+  "period": "2025Q2",
+  "geography": "Worldwide",
+  "value": 2551.1,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/875320/000087532025000213/ex-991_q22025.htm"
+ },
+ {
+  "drug": "Trikafta",
+  "period": "2025Q3",
+  "geography": "Worldwide",
+  "value": 2653.6,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/875320/000087532025000230/ex-991_q32025.htm"
+ },
+ {
+  "drug": "Trikafta",
+  "period": "2025Q4",
+  "geography": "Worldwide",
+  "value": 2572.5,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/875320/000087532026000034/ex-991_q42025.htm"
+ },
+ {
+  "drug": "Trikafta",
+  "period": "2026Q1",
+  "geography": "Worldwide",
+  "value": 2354.7,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/875320/000087532026000171/ex-991_q12026.htm"
+ },
+ {
+  "drug": "Trikafta",
+  "period": "2026Q2",
+  "geography": "Worldwide",
+  "value": 2497.2,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/875320/000087532026000256/ex-991_q22026.htm"
+ },
+ {
+  "drug": "Skyrizi",
+  "period": "2024Q3",
+  "geography": "Worldwide",
+  "value": 3205,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1551152/000155115224000036/abbv-20240930xexhibit991.htm"
+ },
+ {
+  "drug": "Skyrizi",
+  "period": "2024Q3",
+  "geography": "United States",
+  "value": 2778,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1551152/000155115224000036/abbv-20240930xexhibit991.htm"
+ },
+ {
+  "drug": "Skyrizi",
+  "period": "2024Q3",
+  "geography": "International",
+  "value": 427,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1551152/000155115224000036/abbv-20240930xexhibit991.htm"
+ },
+ {
+  "drug": "Skyrizi",
+  "period": "2024Q4",
+  "geography": "Worldwide",
+  "value": 3778,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1551152/000155115225000011/abbv-20241231xexhibit991.htm"
+ },
+ {
+  "drug": "Skyrizi",
+  "period": "2024Q4",
+  "geography": "United States",
+  "value": 3312,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1551152/000155115225000011/abbv-20241231xexhibit991.htm"
+ },
+ {
+  "drug": "Skyrizi",
+  "period": "2024Q4",
+  "geography": "International",
+  "value": 466,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1551152/000155115225000011/abbv-20241231xexhibit991.htm"
+ },
+ {
+  "drug": "Skyrizi",
+  "period": "2025Q1",
+  "geography": "Worldwide",
+  "value": 3425,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1551152/000155115225000026/abbv-20250331xexhibit991.htm"
+ },
+ {
+  "drug": "Skyrizi",
+  "period": "2025Q1",
+  "geography": "United States",
+  "value": 2919,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1551152/000155115225000026/abbv-20250331xexhibit991.htm"
+ },
+ {
+  "drug": "Skyrizi",
+  "period": "2025Q1",
+  "geography": "International",
+  "value": 506,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1551152/000155115225000026/abbv-20250331xexhibit991.htm"
+ },
+ {
+  "drug": "Skyrizi",
+  "period": "2025Q2",
+  "geography": "Worldwide",
+  "value": 4423,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1551152/000155115225000036/abbv-20250630xexhibit991.htm"
+ },
+ {
+  "drug": "Skyrizi",
+  "period": "2025Q2",
+  "geography": "United States",
+  "value": 3843,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1551152/000155115225000036/abbv-20250630xexhibit991.htm"
+ },
+ {
+  "drug": "Skyrizi",
+  "period": "2025Q2",
+  "geography": "International",
+  "value": 580,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1551152/000155115225000036/abbv-20250630xexhibit991.htm"
+ },
+ {
+  "drug": "Skyrizi",
+  "period": "2025Q3",
+  "geography": "Worldwide",
+  "value": 4708,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1551152/000155115225000047/abbv-20250930xexhibit991.htm"
+ },
+ {
+  "drug": "Skyrizi",
+  "period": "2025Q3",
+  "geography": "United States",
+  "value": 4085,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1551152/000155115225000047/abbv-20250930xexhibit991.htm"
+ },
+ {
+  "drug": "Skyrizi",
+  "period": "2025Q3",
+  "geography": "International",
+  "value": 623,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1551152/000155115225000047/abbv-20250930xexhibit991.htm"
+ },
+ {
+  "drug": "Skyrizi",
+  "period": "2025Q4",
+  "geography": "Worldwide",
+  "value": 5006,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1551152/000155115226000004/abbv-20251231xexhibit991.htm"
+ },
+ {
+  "drug": "Skyrizi",
+  "period": "2025Q4",
+  "geography": "United States",
+  "value": 4355,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1551152/000155115226000004/abbv-20251231xexhibit991.htm"
+ },
+ {
+  "drug": "Skyrizi",
+  "period": "2025Q4",
+  "geography": "International",
+  "value": 651,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1551152/000155115226000004/abbv-20251231xexhibit991.htm"
+ },
+ {
+  "drug": "Skyrizi",
+  "period": "2026Q1",
+  "geography": "Worldwide",
+  "value": 4483,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1551152/000155115226000013/abbv-20260331xexhibit991.htm"
+ },
+ {
+  "drug": "Skyrizi",
+  "period": "2026Q1",
+  "geography": "United States",
+  "value": 3775,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1551152/000155115226000013/abbv-20260331xexhibit991.htm"
+ },
+ {
+  "drug": "Skyrizi",
+  "period": "2026Q1",
+  "geography": "International",
+  "value": 708,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1551152/000155115226000013/abbv-20260331xexhibit991.htm"
+ },
+ {
+  "drug": "Skyrizi",
+  "period": "2026Q2",
+  "geography": "Worldwide",
+  "value": 5505,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1551152/000155115226000023/abbv-20260630xexhibit991.htm"
+ },
+ {
+  "drug": "Skyrizi",
+  "period": "2026Q2",
+  "geography": "United States",
+  "value": 4767,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1551152/000155115226000023/abbv-20260630xexhibit991.htm"
+ },
+ {
+  "drug": "Skyrizi",
+  "period": "2026Q2",
+  "geography": "International",
+  "value": 738,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1551152/000155115226000023/abbv-20260630xexhibit991.htm"
+ },
+ {
+  "drug": "Repatha",
+  "period": "2024Q3",
+  "geography": "United States",
+  "value": 281,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/318154/000031815424000042/amgn-20240930earningsrelea.htm"
+ },
+ {
+  "drug": "Repatha",
+  "period": "2024Q3",
+  "geography": "International",
+  "value": 286,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/318154/000031815424000042/amgn-20240930earningsrelea.htm"
+ },
+ {
+  "drug": "Repatha",
+  "period": "2024Q3",
+  "geography": "Worldwide",
+  "value": 567,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/318154/000031815424000042/amgn-20240930earningsrelea.htm"
+ },
+ {
+  "drug": "Repatha",
+  "period": "2024Q4",
+  "geography": "United States",
+  "value": 315,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/318154/000031815425000005/amgn-20241231earningsrelea.htm"
+ },
+ {
+  "drug": "Repatha",
+  "period": "2024Q4",
+  "geography": "International",
+  "value": 291,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/318154/000031815425000005/amgn-20241231earningsrelea.htm"
+ },
+ {
+  "drug": "Repatha",
+  "period": "2024Q4",
+  "geography": "Worldwide",
+  "value": 606,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/318154/000031815425000005/amgn-20241231earningsrelea.htm"
+ },
+ {
+  "drug": "Repatha",
+  "period": "2025Q1",
+  "geography": "United States",
+  "value": 343,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/318154/000031815425000018/amgn-20250331earningsrelea.htm"
+ },
+ {
+  "drug": "Repatha",
+  "period": "2025Q1",
+  "geography": "International",
+  "value": 313,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/318154/000031815425000018/amgn-20250331earningsrelea.htm"
+ },
+ {
+  "drug": "Repatha",
+  "period": "2025Q1",
+  "geography": "Worldwide",
+  "value": 656,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/318154/000031815425000018/amgn-20250331earningsrelea.htm"
+ },
+ {
+  "drug": "Repatha",
+  "period": "2025Q2",
+  "geography": "United States",
+  "value": 361,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/318154/000031815425000054/amgn-20250630earningsrelea.htm"
+ },
+ {
+  "drug": "Repatha",
+  "period": "2025Q2",
+  "geography": "International",
+  "value": 335,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/318154/000031815425000054/amgn-20250630earningsrelea.htm"
+ },
+ {
+  "drug": "Repatha",
+  "period": "2025Q2",
+  "geography": "Worldwide",
+  "value": 696,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/318154/000031815425000054/amgn-20250630earningsrelea.htm"
+ },
+ {
+  "drug": "Repatha",
+  "period": "2025Q3",
+  "geography": "United States",
+  "value": 442,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/318154/000031815425000070/amgn-20250930earningsrelea.htm"
+ },
+ {
+  "drug": "Repatha",
+  "period": "2025Q3",
+  "geography": "International",
+  "value": 352,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/318154/000031815425000070/amgn-20250930earningsrelea.htm"
+ },
+ {
+  "drug": "Repatha",
+  "period": "2025Q3",
+  "geography": "Worldwide",
+  "value": 794,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/318154/000031815425000070/amgn-20250930earningsrelea.htm"
+ },
+ {
+  "drug": "Repatha",
+  "period": "2025Q4",
+  "geography": "United States",
+  "value": 517,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/318154/000031815426000003/amgn-20251231earningsrelea.htm"
+ },
+ {
+  "drug": "Repatha",
+  "period": "2025Q4",
+  "geography": "International",
+  "value": 353,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/318154/000031815426000003/amgn-20251231earningsrelea.htm"
+ },
+ {
+  "drug": "Repatha",
+  "period": "2025Q4",
+  "geography": "Worldwide",
+  "value": 870,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/318154/000031815426000003/amgn-20251231earningsrelea.htm"
+ },
+ {
+  "drug": "Repatha",
+  "period": "2026Q1",
+  "geography": "United States",
+  "value": 465,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/318154/000031815426000054/amgn-20260331earningsrelea.htm"
+ },
+ {
+  "drug": "Repatha",
+  "period": "2026Q1",
+  "geography": "International",
+  "value": 411,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/318154/000031815426000054/amgn-20260331earningsrelea.htm"
+ },
+ {
+  "drug": "Repatha",
+  "period": "2026Q1",
+  "geography": "Worldwide",
+  "value": 876,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/318154/000031815426000054/amgn-20260331earningsrelea.htm"
+ },
+ {
+  "drug": "Repatha",
+  "period": "2026Q2",
+  "geography": "United States",
+  "value": 510,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/318154/000031815426000124/amgn-20260630earningsrelea.htm"
+ },
+ {
+  "drug": "Repatha",
+  "period": "2026Q2",
+  "geography": "International",
+  "value": 443,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/318154/000031815426000124/amgn-20260630earningsrelea.htm"
+ },
+ {
+  "drug": "Repatha",
+  "period": "2026Q2",
+  "geography": "Worldwide",
+  "value": 953,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/318154/000031815426000124/amgn-20260630earningsrelea.htm"
+ },
+ {
+  "drug": "Arikayce",
+  "period": "2024Q3",
+  "geography": "Worldwide",
+  "value": 93.4,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1104506/000114036124044703/ef20037942_ex99-1.htm"
+ },
+ {
+  "drug": "Arikayce",
+  "period": "2024Q3",
+  "geography": "United States",
+  "value": 66.9,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1104506/000114036124044703/ef20037942_ex99-1.htm"
+ },
+ {
+  "drug": "Arikayce",
+  "period": "2024Q3",
+  "geography": "Other",
+  "value": 21,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1104506/000114036124044703/ef20037942_ex99-1.htm"
+ },
+ {
+  "drug": "Arikayce",
+  "period": "2024Q3",
+  "geography": "Other",
+  "value": 5.6,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1104506/000114036124044703/ef20037942_ex99-1.htm"
+ },
+ {
+  "drug": "Arikayce",
+  "period": "2024Q3",
+  "geography": "International",
+  "value": 26.6,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1104506/000114036125039789/ef20057768_ex99-1.htm"
+ },
+ {
+  "drug": "Arikayce",
+  "period": "2024Q4",
+  "geography": "Worldwide",
+  "value": 104.4,
+  "status": "quote_not_in_document",
+  "url": "https://www.sec.gov/Archives/edgar/data/1104506/000114036125005190/ef20043928_ex99-1.htm"
+ },
+ {
+  "drug": "Arikayce",
+  "period": "2024Q4",
+  "geography": "United States",
+  "value": 67.8,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1104506/000114036125005190/ef20043928_ex99-1.htm"
+ },
+ {
+  "drug": "Arikayce",
+  "period": "2024Q4",
+  "geography": "Other",
+  "value": 30.7,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1104506/000114036125005190/ef20043928_ex99-1.htm"
+ },
+ {
+  "drug": "Arikayce",
+  "period": "2024Q4",
+  "geography": "Other",
+  "value": 5.9,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1104506/000114036125005190/ef20043928_ex99-1.htm"
+ },
+ {
+  "drug": "Arikayce",
+  "period": "2024Q4",
+  "geography": "International",
+  "value": 36.7,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1104506/000114036126006116/ef20066055_ex99-1.htm"
+ },
+ {
+  "drug": "Arikayce",
+  "period": "2025Q1",
+  "geography": "Worldwide",
+  "value": 92.8,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1104506/000114036125017858/ef20048527_ex99-1.htm"
+ },
+ {
+  "drug": "Arikayce",
+  "period": "2025Q1",
+  "geography": "United States",
+  "value": 64.3,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1104506/000114036125017858/ef20048527_ex99-1.htm"
+ },
+ {
+  "drug": "Arikayce",
+  "period": "2025Q1",
+  "geography": "Other",
+  "value": 22.1,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1104506/000114036125017858/ef20048527_ex99-1.htm"
+ },
+ {
+  "drug": "Arikayce",
+  "period": "2025Q1",
+  "geography": "Other",
+  "value": 6.5,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1104506/000114036125017858/ef20048527_ex99-1.htm"
+ },
+ {
+  "drug": "Arikayce",
+  "period": "2025Q1",
+  "geography": "International",
+  "value": 28.5,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1104506/000114036126019430/ef20072589_ex99-1.htm"
+ },
+ {
+  "drug": "Arikayce",
+  "period": "2025Q2",
+  "geography": "Worldwide",
+  "value": 107.4,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1104506/000114036125029343/ef20053237_ex99-1.htm"
+ },
+ {
+  "drug": "Arikayce",
+  "period": "2025Q2",
+  "geography": "United States",
+  "value": 68.7,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1104506/000114036125029343/ef20053237_ex99-1.htm"
+ },
+ {
+  "drug": "Arikayce",
+  "period": "2025Q2",
+  "geography": "Other",
+  "value": 30.7,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1104506/000114036125029343/ef20053237_ex99-1.htm"
+ },
+ {
+  "drug": "Arikayce",
+  "period": "2025Q2",
+  "geography": "Other",
+  "value": 8.1,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1104506/000114036125029343/ef20053237_ex99-1.htm"
+ },
+ {
+  "drug": "Arikayce",
+  "period": "2025Q2",
+  "geography": "International",
+  "value": 38.7,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1104506/000114036126031502/ef20079469_ex99-1.htm"
+ },
+ {
+  "drug": "Arikayce",
+  "period": "2025Q3",
+  "geography": "Worldwide",
+  "value": 114.3,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1104506/000114036125039789/ef20057768_ex99-1.htm"
+ },
+ {
+  "drug": "Arikayce",
+  "period": "2025Q3",
+  "geography": "United States",
+  "value": 74,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1104506/000114036125039789/ef20057768_ex99-1.htm"
+ },
+ {
+  "drug": "Arikayce",
+  "period": "2025Q3",
+  "geography": "International",
+  "value": 40.3,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1104506/000114036125039789/ef20057768_ex99-1.htm"
+ },
+ {
+  "drug": "Arikayce",
+  "period": "2025Q4",
+  "geography": "Worldwide",
+  "value": 119.2,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1104506/000114036126006116/ef20066055_ex99-1.htm"
+ },
+ {
+  "drug": "Arikayce",
+  "period": "2025Q4",
+  "geography": "United States",
+  "value": 73.4,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1104506/000114036126006116/ef20066055_ex99-1.htm"
+ },
+ {
+  "drug": "Arikayce",
+  "period": "2025Q4",
+  "geography": "International",
+  "value": 45.9,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1104506/000114036126006116/ef20066055_ex99-1.htm"
+ },
+ {
+  "drug": "Arikayce",
+  "period": "2026Q1",
+  "geography": "Worldwide",
+  "value": 98.1,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1104506/000114036126019430/ef20072589_ex99-1.htm"
+ },
+ {
+  "drug": "Arikayce",
+  "period": "2026Q1",
+  "geography": "United States",
+  "value": 62.9,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1104506/000114036126019430/ef20072589_ex99-1.htm"
+ },
+ {
+  "drug": "Arikayce",
+  "period": "2026Q1",
+  "geography": "International",
+  "value": 35.2,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1104506/000114036126019430/ef20072589_ex99-1.htm"
+ },
+ {
+  "drug": "Arikayce",
+  "period": "2026Q2",
+  "geography": "Worldwide",
+  "value": 116.3,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1104506/000114036126031502/ef20079469_ex99-1.htm"
+ },
+ {
+  "drug": "Arikayce",
+  "period": "2026Q2",
+  "geography": "United States",
+  "value": 70.2,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1104506/000114036126031502/ef20079469_ex99-1.htm"
+ },
+ {
+  "drug": "Arikayce",
+  "period": "2026Q2",
+  "geography": "International",
+  "value": 46.1,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1104506/000114036126031502/ef20079469_ex99-1.htm"
+ },
+ {
+  "drug": "Amvuttra",
+  "period": "2024Q3",
+  "geography": "Worldwide",
+  "value": 258.59,
+  "status": "document_not_fetched",
+  "url": "https://www.sec.gov/Archives/edgar/data/1178670/000117867024000052/alny2024q3earningsrelease.htm"
+ },
+ {
+  "drug": "Amvuttra",
+  "period": "2024Q3",
+  "geography": "United States",
+  "value": 168.658,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1178670/000117867024000053/alny-20240930.htm"
+ },
+ {
+  "drug": "Amvuttra",
+  "period": "2024Q3",
+  "geography": "Other",
+  "value": 65.14,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1178670/000117867024000053/alny-20240930.htm"
+ },
+ {
+  "drug": "Amvuttra",
+  "period": "2024Q3",
+  "geography": "Other",
+  "value": 24.792,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1178670/000117867024000053/alny-20240930.htm"
+ },
+ {
+  "drug": "Amvuttra",
+  "period": "2024Q4",
+  "geography": "Worldwide",
+  "value": 286.51,
+  "status": "document_not_fetched",
+  "url": "https://www.sec.gov/Archives/edgar/data/1178670/000117867025000020/alny2024q4earningsrelease.htm"
+ },
+ {
+  "drug": "Amvuttra",
+  "period": "2025Q1",
+  "geography": "Worldwide",
+  "value": 309.992,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1178670/000117867025000052/alny-20250331.htm"
+ },
+ {
+  "drug": "Amvuttra",
+  "period": "2025Q1",
+  "geography": "United States",
+  "value": 197.964,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1178670/000117867025000052/alny-20250331.htm"
+ },
+ {
+  "drug": "Amvuttra",
+  "period": "2025Q1",
+  "geography": "Other",
+  "value": 80.088,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1178670/000117867025000052/alny-20250331.htm"
+ },
+ {
+  "drug": "Amvuttra",
+  "period": "2025Q1",
+  "geography": "Other",
+  "value": 31.94,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1178670/000117867025000052/alny-20250331.htm"
+ },
+ {
+  "drug": "Amvuttra",
+  "period": "2025Q2",
+  "geography": "Worldwide",
+  "value": 491.953,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1178670/000117867025000089/alny2025q2earningsrelease.htm"
+ },
+ {
+  "drug": "Amvuttra",
+  "period": "2025Q2",
+  "geography": "United States",
+  "value": 361.346,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1178670/000117867025000090/alny-20250630.htm"
+ },
+ {
+  "drug": "Amvuttra",
+  "period": "2025Q2",
+  "geography": "Other",
+  "value": 92.868,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1178670/000117867025000090/alny-20250630.htm"
+ },
+ {
+  "drug": "Amvuttra",
+  "period": "2025Q2",
+  "geography": "Other",
+  "value": 37.739,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1178670/000117867025000090/alny-20250630.htm"
+ },
+ {
+  "drug": "Amvuttra",
+  "period": "2025Q3",
+  "geography": "Worldwide",
+  "value": 685.303,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1178670/000162828025047342/alny2025q3earningsrelease.htm"
+ },
+ {
+  "drug": "Amvuttra",
+  "period": "2025Q3",
+  "geography": "United States",
+  "value": 530.347,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1178670/000162828025047345/alny-20250930.htm"
+ },
+ {
+  "drug": "Amvuttra",
+  "period": "2025Q3",
+  "geography": "Other",
+  "value": 111.944,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1178670/000162828025047345/alny-20250930.htm"
+ },
+ {
+  "drug": "Amvuttra",
+  "period": "2025Q3",
+  "geography": "Other",
+  "value": 43.012,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1178670/000162828025047345/alny-20250930.htm"
+ },
+ {
+  "drug": "Amvuttra",
+  "period": "2025Q4",
+  "geography": "Worldwide",
+  "value": 826.588,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1178670/000162828026007491/alny2025q4earningsrelease.htm"
+ },
+ {
+  "drug": "Amvuttra",
+  "period": "2026Q1",
+  "geography": "Worldwide",
+  "value": 889.931,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1178670/000162828026028601/alny2026q1earningsrelease.htm"
+ },
+ {
+  "drug": "Amvuttra",
+  "period": "2026Q1",
+  "geography": "United States",
+  "value": 702.554,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1178670/000162828026028605/alny-20260331.htm"
+ },
+ {
+  "drug": "Amvuttra",
+  "period": "2026Q1",
+  "geography": "Other",
+  "value": 113.313,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1178670/000162828026028605/alny-20260331.htm"
+ },
+ {
+  "drug": "Amvuttra",
+  "period": "2026Q1",
+  "geography": "Other",
+  "value": 74.064,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1178670/000162828026028605/alny-20260331.htm"
+ },
+ {
+  "drug": "Amvuttra",
+  "period": "2026Q2",
+  "geography": "Worldwide",
+  "value": 1011.762,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1178670/000117867026000060/alny2026q2earningsrelease.htm"
+ },
+ {
+  "drug": "Amvuttra",
+  "period": "2026Q2",
+  "geography": "United States",
+  "value": 809.079,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1178670/000117867026000062/alny-20260630.htm"
+ },
+ {
+  "drug": "Amvuttra",
+  "period": "2026Q2",
+  "geography": "Other",
+  "value": 119.01,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1178670/000117867026000062/alny-20260630.htm"
+ },
+ {
+  "drug": "Amvuttra",
+  "period": "2026Q2",
+  "geography": "Other",
+  "value": 83.673,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1178670/000117867026000062/alny-20260630.htm"
+ }
+]

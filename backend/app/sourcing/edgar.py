@@ -38,7 +38,10 @@ TICKER_MAP = "https://www.sec.gov/files/company_tickers.json"
 REVENUE_FORMS = ("8-K", "10-Q", "10-K", "10-K405", "6-K", "20-F", "40-F")
 EARNINGS_ITEM = "2.02"
 _EXHIBIT_99_RE = re.compile(r"(?:^|[^a-z])(?:ex+|exh|exhibit)[-_]?99|99d\d|[_-]99[-_.]", re.I)
-_INDEX_NOISE_RE = re.compile(r"\.(?:xml|xsd|jpg|jpeg|png|gif|zip|json|txt)$|-index\.htm$|^R\d+\.htm$", re.I)
+_RELEASE_NAME_RE = re.compile(r"earnings|release|results|financial|sales|revenue", re.I)
+_INDEX_NOISE_RE = re.compile(
+    r"\.(?:xml|xsd|jpg|jpeg|png|gif|zip|json|txt)$|-index(?:-headers)?\.html?$|^R\d+\.htm$", re.I
+)
 
 _MIN_INTERVAL = 0.12  # EDGAR fair-access: no more than ten requests per second
 
@@ -157,11 +160,16 @@ class EdgarIndex:
                     if not earnings_exhibits:
                         continue
                     items = str(row.get("items", ""))
-                    if base_form == "8-K" and EARNINGS_ITEM not in items and items:
-                        continue
+                    earnings_item = base_form != "8-K" or EARNINGS_ITEM in items or not items
                     names = await self.documents_in(client, cik, accession)
                     primary = str(row.get("primaryDocument", ""))
                     for name in names:
+                        # An issuer that furnishes its release under Item 9.01
+                        # alone still names the document for what it is
+                        # ("alny2024q3earningsrelease.htm", "ex99-1"); those
+                        # are taken from any 8-K, the rest only from Item 2.02.
+                        if not earnings_item and not (_EXHIBIT_99_RE.search(name) or _RELEASE_NAME_RE.search(name)):
+                            continue
                         # An earnings 8-K's exhibits are whatever documents it
                         # carries besides its cover page: issuers name them
                         # "ex99-1", "pressrelease0804", "sales-schedule" as they

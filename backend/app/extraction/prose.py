@@ -88,7 +88,10 @@ _QUARTER_AND_YTD_RE = re.compile(
 # an explicit, ordered correspondence.
 _PAIRING_RE = re.compile(r"\brespectively\b", re.IGNORECASE)
 
-_SENTENCE_SPLIT_RE = re.compile(r"(?<=[.;])\s+")
+# A sentence ends at a full stop, and a headline ends at the line break
+# beside its dash: "—Ends the Quarter with $1.5 Billion in Cash—\n—Reiterates
+# Guidance—" is two statements, not one.
+_SENTENCE_SPLIT_RE = re.compile(r"(?<=[.;])\s+|(?<=[—–])\s*\n\s*|\s*\n\s*(?=[—–])")
 _PARAGRAPH_SPLIT_RE = re.compile(r"\n\s*\n")
 
 # A figure that is a movement, not a level: "increased by $3.7 million",
@@ -291,6 +294,67 @@ def _tied_conditionally(sentence: str, position: int) -> bool:
     return _CONDITION_OPENER_RE.search(after[: noun.start()]) is not None
 
 
+# An amount that is money changing hands rather than revenue earned: "OrbiMed
+# paid us $150.0 million", "$150 Million in Proceeds", "$27.5 million of
+# payments to Blackstone".
+_PAYMENT_BEFORE_RE = re.compile(
+    r"\b(?:paid|pays?|payment|payments|received|receives?|receipt|proceeds|upfront|consideration|"
+    r"financ\w*|funding|loan|investments?|purchase\s+price|milestones?)\b[^$]{0,40}$",
+    re.IGNORECASE,
+)
+_PAYMENT_AFTER_RE = re.compile(
+    r"^\s*(?:in|of)\s+(?:net\s+|gross\s+|additional\s+|cash\s+)?(?:proceeds|payments?|cash|financing|funding|consideration)\b",
+    re.IGNORECASE,
+)
+# A sentence that is guidance, an outlook or a range states no result at all.
+_MODAL_BEFORE_RE = re.compile(
+    r"\b(?:guidance|outlook|anticipat\w*|expect\w*|forecast\w*|projection\w*|projected|projects|target\w*|"
+    r"estimat\w*|assum\w*|believ\w*|on\s+track|reiterat\w*|range\s+of|between)\b",
+    re.IGNORECASE,
+)
+# The second amount of a range: "$340 million to $360 million".
+_RANGE_BEFORE_RE = re.compile(r"(?:\d|million|billion|thousand)\s*(?:to|-|–)\s*(?:approximately\s+|about\s+)?$", re.IGNORECASE)
+# The revenue phrase right after an amount names its product: "$28.1 million
+# of US commercial sales of BRINSUPRI", "$5 million in Zorbix sales".
+_OBJECT_OF_SALES_RE = re.compile(
+    rf"^\s*(?:of|in|from)\s+(?:[\w.'-]+\s+){{0,3}}?{_REVENUE_NOUN}\s+(?:of|from|for)\s+(?:the\s+)?([A-Za-z][\w®™'-]*)",
+    re.IGNORECASE,
+)
+_OBJECT_PRODUCT_SALES_RE = re.compile(
+    rf"^\s*(?:of|in|from)\s+([A-Z][\w®™'-]+)\s+(?:net\s+)?(?:product\s+)?(?:sales|revenues?)\b",
+)
+_NOT_A_NAME = {
+    "product", "products", "net", "total", "our", "the", "global", "worldwide", "international", "us", "u.s.",
+    "commercial", "royalty", "royalties", "its", "their", "such", "these", "those", "all", "each", "other",
+}
+
+
+def _is_payment(sentence: str, position: int, end: int) -> bool:
+    clause_start = max(sentence.rfind(",", 0, position), sentence.rfind(";", 0, position), 0)
+    before = sentence[max(clause_start, position - 60) : position]
+    return bool(_PAYMENT_BEFORE_RE.search(before) or _PAYMENT_AFTER_RE.match(sentence[end : end + 40]))
+
+
+def _is_modal(sentence: str, position: int) -> bool:
+    """Guidance, outlook or a range anywhere before the amount in its sentence."""
+    clause_start = max(sentence.rfind(";", 0, position), 0)
+    return bool(_MODAL_BEFORE_RE.search(sentence[clause_start:position]) or _RANGE_BEFORE_RE.search(sentence[max(0, position - 30) : position]))
+
+
+def _names_other_product(sentence: str, end: int, aliases: list[str]) -> bool:
+    """The revenue phrase right after the amount names a product that is not this one."""
+    after = sentence[end : end + 90]
+    for pattern in (_OBJECT_OF_SALES_RE, _OBJECT_PRODUCT_SALES_RE):
+        match = pattern.match(after)
+        if not match:
+            continue
+        name = match.group(1).strip("®™'").lower()
+        if name in _NOT_A_NAME or len(name) < 3:
+            continue
+        return not any(name == alias.lower() or name in alias.lower() or alias.lower() in name for alias in aliases)
+    return False
+
+
 def _is_conditional(sentence: str, position: int) -> bool:
     """The amount sits in a clause that states a condition rather than a result."""
     clause_start = max(sentence.rfind(",", 0, position), sentence.rfind(";", 0, position), 0)
@@ -312,8 +376,16 @@ def _product_mentions(sentence: str, aliases: list[str]) -> list[tuple[int, int]
             close_paren = lowered.find(")", match.end())
             if open_paren != -1 and close_paren != -1 and "," in lowered[open_paren:close_paren]:
                 continue
+            # One item of a list ("sales of AMVUTTRA, ONPATTRO, GIVLAARI and
+            # OXLUMO"): the figure is the list's, not this product's.
+            if _LIST_BEFORE_RE.search(sentence[max(0, match.start() - 40) : match.start()]) or _LIST_AFTER_RE.match(sentence[match.end() : match.end() + 40]):
+                continue
             spans.append(match.span())
     return spans
+
+
+_LIST_BEFORE_RE = re.compile(r"[A-Z][\w®™'-]+(?:\s*\([^)]*\))?\s*(?:,|\band|&)\s*$")
+_LIST_AFTER_RE = re.compile(r"^[®™]?\s*(?:\([^)]*\)\s*)?(?:,\s*[A-Z][\w®™'-]+|\s+(?:and|&)\s+[A-Z][\w®™'-]+)")
 
 
 _SUBJECT_RE = re.compile(_REVENUE_NOUN, re.IGNORECASE)
@@ -405,6 +477,9 @@ def read_prose(
                 if not _is_change_amount(sentence, position, _AMOUNT_ENDS.get((id(sentence), position), position))
                 and not _is_conditional(sentence, position)
                 and not _tied_conditionally(sentence, position)
+                and not _is_payment(sentence, position, _AMOUNT_ENDS.get((id(sentence), position), position))
+                and not _is_modal(sentence, position)
+                and not _names_other_product(sentence, _AMOUNT_ENDS.get((id(sentence), position), position), aliases)
             ]
             periods = [period for _, period in located_periods]
             amounts = [amount for _, amount in located_amounts]

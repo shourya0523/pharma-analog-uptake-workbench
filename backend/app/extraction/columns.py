@@ -113,6 +113,7 @@ _TOKEN_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
         re.compile(
             r"%\s*change|\$\s*change|\b(?:percent(?:age)?\s+change|dollar\s+change|change|reported|operational|currency|"
             r"nom\.?\s*%?|ex[-\s]?exch\.?\s*%?|growth|constant\s+currenc\w*|local\s+currenc\w*|\bcer\b|variance|var\.|"
+            r"yoy|y/y|δ|delta|"
             r"incr(?:ease)?/\(?decr(?:ease)?\)?)(?!\w)(?:\s*%(?!\s*change))?|%(?!\d)",
             re.I,
         ),
@@ -306,7 +307,18 @@ def tokenize_header(text: str) -> list[HeaderToken]:
             found.append(token)
             claimed.append((match.start(), match.end()))
     found.sort(key=lambda t: t.start)
+    found = [t for t in found if not _is_comparison_reference(text, t)]
     return _split_year_first_codes(found)
+
+
+_COMPARISON_BEFORE_RE = re.compile(r"(?:\bvs\.?|\bversus|\bcompared\s+(?:to|with)|\bover|\bfrom)\s*$", re.I)
+
+
+def _is_comparison_reference(text: str, token: HeaderToken) -> bool:
+    """"% Change vs. 3Q24": the period after "vs." names what is compared, not a column."""
+    if token.kind not in {"quarter_code", "quarter_word", "year", "ytd", "date"}:
+        return False
+    return _COMPARISON_BEFORE_RE.search(text[max(0, token.start - 16) : token.start]) is not None
 
 
 _YEAR_FIRST_CODE_RE = re.compile(r"^((?:19|20)\d{2})(\s*)(Q[1-4])$", re.I)
@@ -609,13 +621,61 @@ def _infer_years_for_sequence(
     return results
 
 
+def _geography_groups(geos: list[str]) -> list[list[str]]:
+    """Split a geography run into the groups a header prints under its headings.
+
+    "U.S. ROW TOTAL TOTAL TOTAL" under "Q3 '25 Q3 '24 YOY" is three groups:
+    a partition that ends at its total, then a total on its own twice. A
+    group ends at a Worldwide label, or where a geography repeats.
+    """
+    groups: list[list[str]] = []
+    current: list[str] = []
+    for geo in geos:
+        if current and geo in current:
+            groups.append(current)
+            current = []
+        current.append(geo)
+        if geo == "Worldwide":
+            groups.append(current)
+            current = []
+    if current:
+        groups.append(current)
+    return groups
+
+
 def _expand_geography(columns: list[ColumnSpec], geo_runs: list[list[HeaderToken]]) -> list[ColumnSpec]:
-    """Nest a repeated geography run under each value column."""
+    """Nest a repeated geography run under each value column.
+
+    A run that falls into as many groups as the header has value columns,
+    or more, is read group by group: each value column takes the next
+    group, and the groups left over after the last value column are the
+    geographies of change columns ("% Change: U.S. Int'l Total").
+    """
     if not geo_runs:
         return columns
     values = [c for c in columns if c.kind == "value"]
     for run in geo_runs:
         geos = [t.geography for t in run]
+        groups = _geography_groups(geos)
+        if len(groups) >= 2 and len(values) >= 1 and len(groups) >= len(values) and len(set(geos)) >= 2:
+            expanded: list[ColumnSpec] = []
+            remaining = list(groups)
+            for column in columns:
+                if column.kind != "value":
+                    continue
+                group = remaining.pop(0)
+                for geo in group:
+                    expanded.append(replace(column, geography=geo, label=f"{column.label} {geo}".strip()))
+            changes = [c for c in columns if c.kind != "value"]
+            leftover = [geo for group in remaining for geo in group]
+            if leftover:
+                # The groups past the last value column sit under change
+                # headings ("% Change: U.S. Int'l Total", "YOY: Total"); they
+                # enumerate the change columns, whatever the headings said.
+                for geo in leftover:
+                    expanded.append(ColumnSpec("change", geography=geo, label=f"change {geo}"))
+                return expanded
+            return expanded + changes
         # A nesting names at least two different geographies; "total" on
         # its own is a word in a caption, not a column.
         if len(geos) < 2 or len(set(geos)) < 2:
@@ -1029,12 +1089,26 @@ def _check(layout: ColumnLayout, placed: list[Cell | None]) -> tuple[bool, list[
         while index < len(columns) and columns[index].kind == "change":
             changes.append(index)
             index += 1
-        if not changes or len(group) < 2:
+        if not changes:
             continue
-        current, prior = value_at(group[0]), value_at(group[1])
-        results = [
-            _change_ok(current, prior, placed[c]) for c in changes if placed[c] is not None
-        ]
+        results = []
+        for c in changes:
+            if placed[c] is None:
+                continue
+            geography = columns[c].geography
+            if geography is not None:
+                # "% Change: U.S. Int'l Total" describes the two value columns
+                # of that geography, wherever the header put them; with only
+                # one such column in the row there is nothing to check.
+                same = [i for i, col in enumerate(columns) if col.kind == "value" and col.geography == geography]
+                if len(same) < 2:
+                    continue
+                current, prior = value_at(same[0]), value_at(same[1])
+            elif len(group) >= 2:
+                current, prior = value_at(group[0]), value_at(group[1])
+            else:
+                continue
+            results.append(_change_ok(current, prior, placed[c]))
         results = [r for r in results if r is not None]
         if results:
             change_checked = True

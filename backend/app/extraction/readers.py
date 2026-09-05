@@ -601,6 +601,10 @@ def read_grids(
             if dangling:
                 label = f"{dangling} {label}".strip()
                 dangling = ""
+            # "ARIKAYCE external R&D expenses": the label itself says what
+            # the row measures, and it is not revenue.
+            if _NOT_REVENUE_SECTION_RE.search(label) and not _REVENUE_WORD_RE.search(label):
+                continue
             row_markers = {int(m) for m in _MARKER_RE.findall(label)}
             label_part, geography = split_geography(clean_label(label))
             # Three kinds of row: a product row ("OPSUMIT US", "Biktarvy"),
