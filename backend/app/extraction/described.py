@@ -42,6 +42,7 @@ REPAIRABLE = {
     "more_cells_than_columns", "no_placement_satisfies_the_header", "ambiguous_alignment",
     "subtotal_not_sum_of_members", "coverage_outside_period", "product_row_not_described",
     "too_many_blank_placements", "duplicate_columns", "contradicted_within_document", "duplicate_geography_rows",
+    "revenue_section_without_product_rows",
 }
 
 
@@ -129,6 +130,26 @@ def read_described_grid(
     failures: list[VerificationFailure] = []
     observations: list[Observation] = []
     layout = region.layout
+    # A section the description calls revenue with no product line described
+    # beneath it contradicts itself: the rows under it print figures that
+    # belong to some product (an issuer with one commercial product prints
+    # its sales as "Product sales, net").
+    revenue_sections = [s for s in region.sections if s.kind == "revenue"]
+    if revenue_sections and not any(r.line in READ_LINES for r in region.rows):
+        heading = revenue_sections[0]
+        beneath = [
+            f"r{i} {' '.join(c for c in rows[i] if c)[:60]!r}"
+            for i in range(heading.row_index + 1, min(len(rows), heading.row_index + 6))
+            if any(is_value_token(c) for c in rows[i][1:])
+        ]
+        if beneath:
+            return [], [VerificationFailure(
+                region.grid_index, heading.row_index, "revenue_section_without_product_rows",
+                f"section {heading.heading_as_printed!r} is described as revenue but no row beneath it is described as a "
+                f"product's line; rows beneath print figures: {'; '.join(beneath[:4])}. Describe each product's line, "
+                "including a generic 'Product sales' line when it is the issuer's one commercial product",
+            )]
+
     # A family's parent is its franchise: "Total Tyvaso" is Tyvaso's own
     # figure when the catalog lists Tyvaso's formulations beneath it.
     family_head = product.lower() in {p.lower() for p in family_parents().values()}

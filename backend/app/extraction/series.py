@@ -643,15 +643,6 @@ def assemble_bridges(partials: list[SeriesValue], *, product: str) -> list[Serie
 # Assembly
 # --------------------------------------------------------------------------
 
-def _one_currency(observations: list[Observation]) -> tuple[list[Observation], list[Observation]]:
-    """The observations in the currency most of them state, and the rest."""
-    counts = collections.Counter(o.currency for o in observations)
-    if len(counts) <= 1:
-        return observations, []
-    keep = counts.most_common(1)[0][0]
-    return [o for o in observations if o.currency == keep], [o for o in observations if o.currency != keep]
-
-
 def _geography_key(obs: Observation) -> str | None:
     return obs.geography
 
@@ -674,13 +665,20 @@ def assemble_series(
     # derive) leave empty. When the two exist and differ, the firm one is
     # the product's own line and the provisional one was something else.
     notes: list[str] = []
-    # The series is kept in the currency the issuer reports in. A figure a
-    # document states in another currency (a translated press release, an
-    # acquirer's restatement) is set aside and noted rather than mixed in.
-    observations, set_aside = _one_currency(observations)
-    if set_aside:
-        notes.append(f"{len(set_aside)} observations in other currencies set aside: "
-                     + ", ".join(sorted({o.currency for o in set_aside})))
+    # Arithmetic never crosses a currency. A product reported in two
+    # currencies over its life (an acquired issuer's francs, then the
+    # acquirer's dollars) is assembled once per currency and the series
+    # carries both, each value stating its own.
+    currencies = sorted({o.currency for o in observations})
+    if len(currencies) > 1:
+        merged = Series(product=product, values=[], verdicts=[], notes=[f"assembled per currency: {', '.join(currencies)}"])
+        for currency in currencies:
+            part = assemble_series([o for o in observations if o.currency == currency], product=product, commercial_start=commercial_start)
+            merged.values.extend(part.values)
+            merged.verdicts.extend(part.verdicts)
+            merged.notes.extend(part.notes)
+        merged.values.sort(key=lambda v: (v.geography or "", v.period_type, v.period, v.currency))
+        return merged
     # Regions the closed set does not name are all "Other"; each printed
     # region is its own series, told apart by its label ("Other: EMEA").
     observations = [

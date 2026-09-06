@@ -219,11 +219,12 @@ def test_a_series_keeps_the_issuers_currency_and_compares_in_it():
 
     series = assemble_series([obs("2025Q1", 17360), obs("2025Q2", 19528), obs("2025Q2", 19528, url="b"),
                               obs("2025Q2", 2900, currency="USD", url="c")], product="Wegovy")
-    by_period = {v.period: v for v in series.values}
-    assert by_period["2025Q2"].value_millions == 19528 and by_period["2025Q2"].currency == "DKK"
-    assert abs(by_period["2025Q2"].value_usd_millions - 19528 * 0.1511) < 0.01
-    assert not series.verdicts, "a USD figure is set aside, not reconciled against the DKK ones"
-    assert any("set aside" in note and "USD" in note for note in series.notes)
+    by_period = {(v.period, v.currency): v for v in series.values}
+    assert by_period[("2025Q2", "DKK")].value_millions == 19528
+    assert abs(by_period[("2025Q2", "DKK")].value_usd_millions - 19528 * 0.1511) < 0.01
+    assert not series.verdicts, "a USD figure is its own series, not reconciled against the DKK ones"
+    assert by_period[("2025Q2", "USD")].value_millions == 2900
+    assert any("per currency" in note for note in series.notes)
 
     gold = from_gold({"drug_name": "Wegovy", "period": "2025Q2", "geography": "Worldwide", "value_reported": 19528,
                       "unit": "millions", "currency": "DKK", "source_value_reported": 19528, "source_unit": "millions",
@@ -408,3 +409,39 @@ def test_each_printed_other_region_is_its_own_series():
     series = assemble_series([obs("EMEA", 2185), obs("Region China", 166), obs("Rest of World", 2126)], product="Wegovy")
     assert not series.verdicts
     assert {v.geography: v.value_millions for v in series.values} == {"Other: EMEA": 2185, "Other: Region China": 166, "Other: Rest of World": 2126}
+
+
+def test_a_product_reported_in_two_currencies_is_assembled_once_per_currency():
+    from app.extraction.series import assemble_series
+
+    def obs(period, value, currency, url):
+        return Observation(
+            product_label="Tracleer", period=period, period_type="quarterly", value_as_reported=value, unit_label="millions",
+            currency=currency, unit_declared=True, geography=None, covers=None, source_quote=f"Tracleer {value}", method="grid",
+            layout_signature="", verified=(), specificity=0, source_url=url,
+        )
+
+    series = assemble_series([obs("2016Q4", 229, "CHF", "a"), obs("2016Q4", 229, "USD", "j"), obs("2017Q1", 224, "USD", "j")], product="Tracleer")
+    assert not series.verdicts
+    assert sorted((v.period, v.currency, v.value_millions) for v in series.values) == [("2016Q4", "CHF", 229), ("2016Q4", "USD", 229), ("2017Q1", "USD", 224)]
+
+
+def test_a_revenue_section_with_no_product_line_beneath_it_is_sent_back():
+    grid = [
+        ["Three Months Ended June 30, 2026 2025"],
+        ["Revenues:"],
+        ["Product sales, net", "170,382", "6,470"],
+        ["Total revenues", "170,382", "6,470"],
+        ["Program expenses (1)"],
+        ["YUTREPIA", "12,000", "9,000"],
+    ]
+    q2_26, q2_25 = ColumnSpec("value", 3, 6, 2026), ColumnSpec("value", 3, 6, 2025)
+    region = GridRegion(
+        grid_index=0, layout=_layout(q2_26, q2_25, unit="thousands"),
+        sections=(SectionDescription(1, "Revenues:", "revenue"), SectionDescription(4, "Program expenses (1)", "cost_or_expense")),
+        rows=(_row(5, "YUTREPIA", "Yutrepia", None, "cost_or_expense"),),
+    )
+    observations, failures = read_described_grid(_doc([grid]), region, product="Yutrepia", aliases=["Yutrepia"])
+    assert not observations
+    assert [f.code for f in failures] == ["revenue_section_without_product_rows"]
+    assert "Product sales, net" in failures[0].detail

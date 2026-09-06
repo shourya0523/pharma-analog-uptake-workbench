@@ -68,6 +68,7 @@ _MONTHS_BY_TYPE = {"quarterly": 3, "six_month": 6, "nine_month": 9, "annual": 12
 UNIT_WORDS = ("units", "thousands", "millions", "billions")
 UNIT_SOURCES = ("header", "caption", "footnote", "document_head", "undeclared")
 GEOGRAPHIES = ("United States", "International", "Worldwide", "Europe", "Japan", "Other")
+_READ_LINES = {"own_revenue", "subtotal_of_geographies", "franchise_or_bundle", "other_line_item"}
 LINE_KINDS = (
     "own_revenue", "subtotal_of_geographies", "franchise_or_bundle", "other_line_item", "cost_or_expense", "not_revenue",
 )
@@ -845,6 +846,11 @@ class LLMFingerprinter:
         described_grids = {g.grid_index for g in described.grids if g.rows}
         for index in sorted(product_grids - described_grids):
             return f"grid{index}:product_rows_not_described"
+        for grid in described.grids:
+            # A revenue section the description names with no product line
+            # beneath it: the description contradicts itself.
+            if any(s.kind == "revenue" for s in grid.sections) and not any(r.line in _READ_LINES for r in grid.rows):
+                return f"grid{grid.grid_index}:revenue_section_without_product_rows"
         return None
 
     async def _describe_part(self, part: SketchPart, *, doc: ParsedDocument, products: list[str],
