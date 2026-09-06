@@ -79,12 +79,12 @@ class ComparableRevenueRow:
     value_as_reported: float | None
     unit: str | None
     currency: str
-    value_usd_millions: float | None = None      # at the year's average rate, when a rate is on file
     route: str
     derivation: str
     source_urls: tuple[str, ...]
     source_quote: str
     origin: str                                  # "gold" | "pipeline"
+    value_usd_millions: float | None = None      # at the year's average rate, when a rate is on file
     status: str = "resolved"
     detail: str = ""
     extras: dict[str, Any] = field(default_factory=dict)
