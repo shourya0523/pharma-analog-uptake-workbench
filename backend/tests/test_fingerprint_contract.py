@@ -158,3 +158,19 @@ def test_prose_statements_and_scopes_are_kept_as_the_model_labelled_them():
 
 def test_vocabularies_are_closed():
     assert "own_revenue" in LINE_KINDS and "actual" in STATEMENTS and "Other" in GEOGRAPHIES
+
+
+def test_a_product_named_with_its_generic_is_the_listed_product():
+    payload = _payload([
+        {"row_index": 4, "label_as_printed": "Skyrizi", "product": "Skyrizi (risankizumab)", "geography": None, "line": "own_revenue"},
+    ])
+    payload["regions"].append({
+        "kind": "prose", "product": "Skyrizi (risankizumab)", "statement": "actual", "scope": "product_own_revenue",
+        "period": "2025H1", "period_type": "six_month", "value": 8500, "unit": "millions", "currency": "USD",
+        "geography": None, "quote": "Skyrizi net revenues were $8.5 billion for the first half",
+    })
+    fp = parse_fingerprint(payload, doc=_doc([GRID]), shown={0})
+    assert fp.grids[0].rows[0].product == "Skyrizi"
+    assert fp.grids_for("Skyrizi", ["Skyrizi", "risankizumab"]) == fp.grids
+    assert (fp.prose[0].product, fp.prose[0].period, fp.prose[0].period_type) == ("Skyrizi", "2025Q2", "six_month")
+    assert not fp.rejected

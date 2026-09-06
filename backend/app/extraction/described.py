@@ -28,6 +28,7 @@ from app.fingerprint.llm import (
     SectionDescription,
     describe_column,
     duplicate_value_columns,
+    product_name,
 )
 from app.llm.grounding import quote_is_verbatim
 from app.parsing.evidence import product_aliases
@@ -58,7 +59,7 @@ class VerificationFailure:
 
 
 def _names(product: str, aliases: Iterable[str]) -> set[str]:
-    return {a.lower() for a in aliases} | {product.lower()}
+    return {product_name(a).lower() for a in aliases} | {product.lower()}
 
 
 def _section_for(region: GridRegion, row_index: int) -> SectionDescription | None:
@@ -70,9 +71,8 @@ def _current_periods(layout: ColumnLayout) -> dict[int | None, str]:
     """The latest period the layout carries for each period length."""
     current: dict[int | None, str] = {}
     for column in layout.columns:
-        if column.kind == "value" and column.period:
-            if column.period > current.get(column.months, ""):
-                current[column.months] = column.period
+        if column.kind == "value" and column.period and column.period > current.get(column.months, ""):
+            current[column.months] = column.period
     return current
 
 

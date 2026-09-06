@@ -49,6 +49,7 @@ CACHE_DIR = Path(__file__).resolve().parents[2] / "storage" / "fingerprints"
 # validating against them is validation of the model's output format, not a
 # reading of the document.
 _PERIOD_RE = re.compile(r"^(\d{4})(?:Q([1-4]))?$")
+_HALF_RE = re.compile(r"^(\d{4})H([12])$")
 _MONTHS_BY_TYPE = {"quarterly": 3, "six_month": 6, "nine_month": 9, "annual": 12}
 UNIT_WORDS = ("units", "thousands", "millions", "billions")
 UNIT_SOURCES = ("header", "caption", "footnote", "document_head", "undeclared")
@@ -141,11 +142,11 @@ class Fingerprint:
     shown_grids: tuple[int, ...] = ()
 
     def grids_for(self, product: str, aliases: Iterable[str]) -> list[GridRegion]:
-        names = {a.lower() for a in aliases} | {product.lower()}
+        names = {product_name(a).lower() for a in aliases} | {product.lower()}
         return [
             g for g in self.grids
-            if any(row.product.lower() in names for row in g.rows)
-            or any((p.get("product") or "").lower() in names for p in g.products)
+            if any(product_name(row.product).lower() in names for row in g.rows)
+            or any(product_name(p.get("product")).lower() in names for p in g.products)
         ]
 
     def grid(self, index: int) -> GridRegion | None:
@@ -341,7 +342,12 @@ def squash(text: str) -> str:
 
 def _period_parts(period: str, period_type: str) -> tuple[int | None, int | None, int | None]:
     """(months, end_month, year) for a described column."""
-    match = _PERIOD_RE.match((period or "").strip())
+    text = (period or "").strip()
+    half = _HALF_RE.match(text)
+    if half:
+        # "2026H1" is the six months to June; H2 is not a reporting period issuers state.
+        return (6, 6, int(half.group(1))) if half.group(2) == "1" else (None, None, None)
+    match = _PERIOD_RE.match(text)
     if not match:
         return None, None, None
     year = int(match.group(1))
@@ -361,6 +367,12 @@ def _covers(value: Any) -> tuple[str, str] | None:
         if re.fullmatch(r"\d{4}-\d{2}-\d{2}", start.strip()) and re.fullmatch(r"\d{4}-\d{2}-\d{2}", end.strip()):
             return start.strip(), end.strip()
     return None
+
+
+def product_name(value: Any) -> str:
+    """The product as the model named it, without the generic the listing showed beside it."""
+    text = re.sub(r"\s*\([^)]*\)\s*$", "", str(value or "").strip())
+    return text.strip()
 
 
 def _geography(value: Any) -> str | None:
@@ -534,7 +546,7 @@ def _parse_grid(region: dict[str, Any], *, doc: ParsedDocument | None, shown: se
         except (TypeError, ValueError):
             rejected.append(f"grid{index}:row:?:no_index")
             continue
-        product = str(entry.get("product") or "").strip()
+        product = product_name(entry.get("product"))
         line = str(entry.get("line") or "").strip()
         if not product:
             rejected.append(f"grid{index}:row{row_index}:no_product")
@@ -609,7 +621,11 @@ def _parse_prose(region: dict[str, Any], *, model: str, rejected: list[str]) -> 
     except (TypeError, ValueError):
         rejected.append("prose:value_not_numeric")
         return None
-    period = str(region.get("period") or "")
+    period = str(region.get("period") or "").strip()
+    period_type = str(region.get("period_type") or "")
+    half = _HALF_RE.match(period)
+    if half and half.group(2) == "1":
+        period, period_type = f"{half.group(1)}Q2", "six_month"
     if not _PERIOD_RE.match(period):
         rejected.append(f"prose:period({period})")
         return None
@@ -631,9 +647,9 @@ def _parse_prose(region: dict[str, Any], *, model: str, rejected: list[str]) -> 
     except (TypeError, ValueError):
         offset = None
     return ProseRegion(
-        product=str(region.get("product") or ""),
+        product=product_name(region.get("product")),
         period=period,
-        period_type=str(region.get("period_type") or ("quarterly" if "Q" in period else "annual")),
+        period_type=period_type or ("quarterly" if "Q" in period else "annual"),
         value=value,
         unit=unit if unit in UNIT_WORDS else "millions",
         currency=(region.get("currency") or "USD").upper(),
@@ -747,15 +763,29 @@ class LLMFingerprinter:
 
     @staticmethod
     def _needs_promotion(described: Fingerprint, part: SketchPart, doc: ParsedDocument, aliases: list[str]) -> str | None:
-        """Why the fast model's description of this part is not enough."""
-        if described.rejected:
-            return "rejected:" + described.rejected[0]
+        """Why the fast model's description of this part is not enough.
+
+        Only a rejection that can cost a product figure promotes: a product
+        grid whose columns did not parse or name one figure twice, a product
+        row the document does not print as described, or a product grid
+        with no row described. A dropped prose sentence or a duplicate row
+        description loses nothing worth a second model.
+        """
+        tables = doc.tables or []
+        product_grids = {
+            index for index in part.grid_indexes
+            if _mentions("\n".join(" ".join(r) for r in tables[index]), aliases) and any(_has_values(r) for r in tables[index])
+        }
+        for reason in described.rejected:
+            match = re.match(r"grid(\d+):(.*)", reason)
+            if not match or int(match.group(1)) not in product_grids:
+                continue
+            kind = match.group(2).split("(")[0].split(":")[-1]
+            if kind in {"columns_unparseable", "duplicate_columns", "label_not_grounded", "heading_not_grounded"}:
+                return "rejected:" + reason
         described_grids = {g.grid_index for g in described.grids if g.rows}
-        for index in part.grid_indexes:
-            rows = (doc.tables or [])[index]
-            if _mentions("\n".join(" ".join(r) for r in rows), aliases) and any(_has_values(r) for r in rows) \
-                    and index not in described_grids:
-                return f"grid{index}:product_rows_not_described"
+        for index in sorted(product_grids - described_grids):
+            return f"grid{index}:product_rows_not_described"
         return None
 
     async def _describe_part(self, part: SketchPart, *, doc: ParsedDocument, products: list[str],

@@ -45,6 +45,13 @@ HOLDOUT = REPO_ROOT / "seed" / "holdout"
 RAW_DIR = REPO_ROOT / "backend" / "storage" / "holdout" / "raw"
 
 
+def select_set(name: str) -> None:
+    """Point at a held-out set: seed/<name>/ for products and reference, storage/<name>/raw for documents."""
+    global HOLDOUT, RAW_DIR
+    HOLDOUT = REPO_ROOT / "seed" / name
+    RAW_DIR = REPO_ROOT / "backend" / "storage" / name / "raw"
+
+
 def load_products() -> list[dict]:
     with (HOLDOUT / "products.csv").open(newline="") as handle:
         return list(csv.DictReader(handle))
@@ -148,7 +155,9 @@ async def main() -> int:
     parser.add_argument("--fingerprinter", choices=("grammar", "llm"), default=None, help="deprecated alias")
     parser.add_argument("--model")
     parser.add_argument("--refetch", action="store_true")
+    parser.add_argument("--set", default="holdout", help="held-out set under seed/<set> (default: holdout)")
     args = parser.parse_args()
+    select_set(args.set)
 
     products = load_products()
     if args.drug:

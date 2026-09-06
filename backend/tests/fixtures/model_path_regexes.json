@@ -88,5 +88,20 @@
     "file": "app/benchmark/schema.py",
     "pattern": "\\band\\b",
     "why": "scoring label normalisation: 'Europe & Rest of World' and 'Europe and rest of world' name one region"
+  },
+  {
+    "file": "app/fingerprint/llm.py",
+    "pattern": "\\s*\\([^)]*\\)\\s*$",
+    "why": "contract normalisation: the listing shows 'Name (generic)' and the model may answer with the whole string; the trailing parenthetical is the generic, not part of the product name"
+  },
+  {
+    "file": "app/fingerprint/llm.py",
+    "pattern": "^(\\d{4})H([12])$",
+    "why": "contract format: a half-year period the model wrote as 2026H1 (six months to June)"
+  },
+  {
+    "file": "app/fingerprint/llm.py",
+    "pattern": "grid(\\d+):(.*)",
+    "why": "contract format: the parser's own rejection strings, read back to decide promotion"
   }
 ]
