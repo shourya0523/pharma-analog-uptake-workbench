@@ -10,6 +10,7 @@ from __future__ import annotations
 from app.domain.models import ParsedDocument, ParsingStatus
 from app.extraction.columns import ColumnLayout, ColumnSpec
 from app.extraction.described import read_described_document, read_described_grid
+from app.extraction.readers import Observation
 from app.fingerprint.llm import Fingerprint, GridRegion, ProseRegion, RowDescription, SectionDescription
 
 
@@ -202,3 +203,30 @@ def test_two_grids_that_state_one_figure_differently_are_both_sent_back():
     codes = {(f.grid_index, f.code) for f in report.failures}
     assert codes == {(0, "contradicted_within_document"), (1, "contradicted_within_document")}
     assert "132,958 thousands" in next(f.detail for f in report.failures if f.grid_index == 0)
+
+
+def test_a_series_keeps_the_issuers_currency_and_compares_in_it():
+    """A DKK series is reconciled in DKK, annotated in USD, and scored against a DKK reference in DKK."""
+    from app.benchmark.schema import compare, from_gold, from_series
+    from app.extraction.series import assemble_series
+
+    def obs(period, value, currency="DKK", unit="millions", url="a"):
+        return Observation(
+            product_label="Wegovy", period=period, period_type="quarterly", value_as_reported=value, unit_label=unit,
+            currency=currency, unit_declared=True, geography=None, covers=None, source_quote=f"Wegovy {value}",
+            method="grid", layout_signature="", verified=(), specificity=0, source_url=url,
+        )
+
+    series = assemble_series([obs("2025Q1", 17360), obs("2025Q2", 19528), obs("2025Q2", 19528, url="b"),
+                              obs("2025Q2", 2900, currency="USD", url="c")], product="Wegovy")
+    by_period = {v.period: v for v in series.values}
+    assert by_period["2025Q2"].value_millions == 19528 and by_period["2025Q2"].currency == "DKK"
+    assert abs(by_period["2025Q2"].value_usd_millions - 19528 * 0.1511) < 0.01
+    assert not series.verdicts, "a USD figure is set aside, not reconciled against the DKK ones"
+    assert any("set aside" in note and "USD" in note for note in series.notes)
+
+    gold = from_gold({"drug_name": "Wegovy", "period": "2025Q2", "geography": "Worldwide", "value_reported": 19528,
+                      "unit": "millions", "currency": "DKK", "source_value_reported": 19528, "source_unit": "millions",
+                      "derivation": "direct_reported", "source_url": "a", "source_quote": "Wegovy 19,528"})
+    result = compare(gold, [from_series(v) for v in series.values])
+    assert result.outcome == "match", result.detail

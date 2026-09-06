@@ -207,7 +207,7 @@ async def main() -> int:
         if args.dump_series:
             for value in sorted(series.values, key=lambda v: (v.period, v.geography or "")):
                 print(f"   {value.period:8} {value.period_type:10} {value.geography or '-':14} "
-                      f"{value.value_usd_millions:>10.3f}  {value.route:10} {value.detail or value.source_quote[:80]!r}")
+                      f"{value.value_millions:>10.3f} {value.currency}  {value.route:10} {value.detail or value.source_quote[:80]!r}")
             for verdict in series.verdicts:
                 print(f"   VERDICT {verdict.period} {verdict.geography or '-'} {verdict.status} {verdict.detail[:120]}")
         gold = [from_gold(r) for r in reference if r["drug_name"] == name]
@@ -246,14 +246,14 @@ async def main() -> int:
             print(f"\n{len(failures)} rows not delivered:")
             for result in failures:
                 g = result.gold
-                print(f"  {g.product:12} {g.period:8} [{result.outcome}] ref={g.value_usd_millions:g} {g.geography}")
+                print(f"  {g.product:12} {g.period:8} [{result.outcome}] ref={g.value_millions:g} {g.currency} {g.geography}")
                 print(f"      {result.detail[:200]}")
                 if result.pipeline:
                     print(f"      pipeline quote: {result.pipeline.source_quote[:140]!r}")
                 else:
                     same = [r for r in pipeline_rows[g.product] if r.period == g.period]
                     if same:
-                        print(f"      pipeline has for this period: {[(r.geography, r.value_usd_millions, r.status) for r in same][:6]}")
+                        print(f"      pipeline has for this period: {[(r.geography, r.value_millions, r.currency, r.status) for r in same][:6]}")
                     doc_skips = skipped_by_product.get(g.product, {}).get(g.source_urls[0], [])
                     if doc_skips:
                         print(f"      reader skipped in cited document: {doc_skips[:4]}")

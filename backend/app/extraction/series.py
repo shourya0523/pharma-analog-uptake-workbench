@@ -58,7 +58,7 @@ class SeriesValue:
     period: str
     period_type: str
     geography: str | None
-    value_usd_millions: float
+    value_millions: float               # in the issuer's reporting currency
     value_as_reported: float
     unit_label: str
     currency: str
@@ -83,6 +83,11 @@ class SeriesValue:
     # "product sales" lines and anything derived from them are provisional.
     provisional: bool = False
 
+    @property
+    def value_usd_millions(self) -> float | None:
+        """The figure in USD millions at the year's average rate, or None without a rate for the currency."""
+        return _usd(self.value_millions, self.currency, self.period)
+
     def as_dict(self) -> dict[str, Any]:
         return {
             "geography_label": self.geography_label,
@@ -91,7 +96,8 @@ class SeriesValue:
             "period": self.period,
             "period_type": self.period_type,
             "geography": self.geography,
-            "value_usd_millions": self.value_usd_millions,
+            "value_millions": self.value_millions,
+            "value_usd_millions": self.value_millions,
             "value_as_reported": self.value_as_reported,
             "unit_label": self.unit_label,
             "currency": self.currency,
@@ -130,13 +136,13 @@ class Series:
 @dataclass(frozen=True)
 class _Norm:
     observation: Observation
-    value_usd: float | None
+    value: float | None                 # millions of the observation's currency
     unit_label: str
     status: str
 
     @property
     def step(self) -> float:
-        """The size of the last stated digit, in USD millions.
+        """The size of the last stated digit, in millions.
 
         "$2.9 billion" is stated to a tenth of a billion, so it agrees with
         2,901 million; "121,718" thousand is stated to a thousand.
@@ -151,18 +157,20 @@ def _year_of(period: str) -> int | None:
     return int(match.group(1)) if match else None
 
 
-def _to_usd_millions(value: float, unit_label: str, currency: str, period: str) -> tuple[float | None, str]:
+def _to_millions(value: float, unit_label: str) -> tuple[float | None, str]:
+    """The figure in millions of its own currency; the series does its arithmetic there."""
     scale = UNIT_SCALE_TO_MILLIONS.get(unit_label)
     if scale is None:
         return None, "unknown_unit"
-    in_millions = value * scale
+    return round(value * scale, 6), "ok"
+
+
+def _usd(value_millions: float, currency: str, period: str) -> float | None:
     if currency == "USD":
-        return round(in_millions, 6), "ok"
+        return value_millions
     year = _year_of(period)
     rate = FX_USD_PER_UNIT.get(currency, {}).get(year) if year else None
-    if rate is None:
-        return None, f"no_fx_rate_for_{currency}_{year}"
-    return round(in_millions * rate, 6), "ok"
+    return None if rate is None else round(value_millions * rate, 6)
 
 
 def _quarter_index(period: str) -> int | None:
@@ -173,7 +181,7 @@ def _quarter_index(period: str) -> int | None:
 
 
 def normalize_observations(observations: list[Observation]) -> list[_Norm]:
-    """USD millions for every observation, inferring undeclared units from neighbours."""
+    """Millions of the reporting currency for every observation, inferring undeclared units from neighbours."""
     declared: list[_Norm] = []
     undeclared: list[Observation] = []
     for obs in observations:
@@ -184,7 +192,7 @@ def normalize_observations(observations: list[Observation]) -> list[_Norm]:
                 # context says millions: no product revenue is a trillion
                 # dollars, so the cell carries its own magnitude.
                 unit_label = "units"
-            value, status = _to_usd_millions(obs.value_as_reported, unit_label, obs.currency, obs.period)
+            value, status = _to_millions(obs.value_as_reported, unit_label)
             declared.append(_Norm(obs, value, unit_label, status))
         else:
             undeclared.append(obs)
@@ -194,8 +202,8 @@ def normalize_observations(observations: list[Observation]) -> list[_Norm]:
     anchors: dict[tuple[str | None, int], list[float]] = defaultdict(list)
     for norm in declared:
         index = _quarter_index(norm.observation.period)
-        if norm.value_usd is not None and index is not None and norm.observation.period_type == "quarterly":
-            anchors[(norm.observation.geography, index)].append(norm.value_usd)
+        if norm.value is not None and index is not None and norm.observation.period_type == "quarterly":
+            anchors[(norm.observation.geography, index)].append(norm.value)
 
     out = list(declared)
     # Nearest declared neighbour first; an inferred value then anchors its
@@ -227,7 +235,7 @@ def normalize_observations(observations: list[Observation]) -> list[_Norm]:
             if chosen is None:
                 remaining.append(obs)
                 continue
-            value, status = _to_usd_millions(obs.value_as_reported, chosen, obs.currency, obs.period)
+            value, status = _to_millions(obs.value_as_reported, chosen)
             out.append(_Norm(obs, value, chosen, "unit_inferred_from_series" if status == "ok" else status))
             if value is not None and index is not None and obs.period_type == "quarterly":
                 anchors[(obs.geography, index)].append(value)
@@ -244,7 +252,7 @@ def normalize_observations(observations: list[Observation]) -> list[_Norm]:
         counts = inferred_by_grid.get((obs.source_url, obs.table_index))
         if counts:
             unit = counts.most_common(1)[0][0]
-            value, status = _to_usd_millions(obs.value_as_reported, unit, obs.currency, obs.period)
+            value, status = _to_millions(obs.value_as_reported, unit)
             out.append(_Norm(obs, value, unit, "unit_inferred_from_grid" if status == "ok" else status))
             continue
         still.append(obs)
@@ -287,7 +295,7 @@ def _best_of_agreeing(group: list[_Norm]) -> _Norm:
 
 def reconcile_period(norms: list[_Norm], product: str) -> SeriesValue | None:
     """One value for one (period, geography) bucket, or a verdict."""
-    usable = [n for n in norms if n.value_usd is not None]
+    usable = [n for n in norms if n.value is not None]
     if not usable:
         return None
     first = usable[0].observation
@@ -295,7 +303,7 @@ def reconcile_period(norms: list[_Norm], product: str) -> SeriesValue | None:
     clusters: list[list[_Norm]] = []
     for norm in sorted(usable, key=lambda n: n.step):
         for cluster in clusters:
-            if _agree(cluster[0].value_usd, norm.value_usd, max(cluster[0].step, norm.step)):
+            if _agree(cluster[0].value, norm.value, max(cluster[0].step, norm.step)):
                 cluster.append(norm)
                 break
         else:
@@ -308,7 +316,7 @@ def reconcile_period(norms: list[_Norm], product: str) -> SeriesValue | None:
             period=obs.period,
             period_type=obs.period_type,
             geography=obs.geography,
-            value_usd_millions=norm.value_usd,
+            value_millions=norm.value,
             value_as_reported=obs.value_as_reported,
             unit_label=norm.unit_label,
             currency=obs.currency,
@@ -344,14 +352,14 @@ def reconcile_period(norms: list[_Norm], product: str) -> SeriesValue | None:
         return make(best, RESOLVED, "own-period statement outranks restatements", "direct_reported", current[0])
 
     candidates = [
-        Candidate(value=c[0].value_usd, scope=first.geography or "unspecified", basis="as_reported",
+        Candidate(value=c[0].value, scope=first.geography or "unspecified", basis="as_reported",
                   source=c[0].observation.source_url)
         for c in specific
     ]
     verdict: Verdict = adjudicate_reported_value(first.geography or "unspecified", candidates)
     best = _best_of_agreeing(specific[0])
     if verdict.resolved:
-        chosen = next(c for c in specific if _agree(c[0].value_usd, verdict.value))
+        chosen = next(c for c in specific if _agree(c[0].value, verdict.value))
         return make(_best_of_agreeing(chosen), RESOLVED, verdict.detail, verdict.code, chosen)
     return make(best, verdict.status, verdict.detail, verdict.code, specific[0])
 
@@ -428,27 +436,27 @@ def derive_residual_quarters(
         if len(missing) != 1:
             continue
         target = missing[0]
-        residual = total.value_usd_millions
+        residual = total.value_millions
         inputs = [total.period + ":" + period_type]
         alternates: list[float] = []
         if subtotal is not None:
-            residual -= subtotal.value_usd_millions
+            residual -= subtotal.value_millions
             inputs.append(f"{year}:{[k for k, v in _QUARTERS_IN.items() if v == covered][0]}")
             rest = [q for q in members if q != target and q not in covered]
             # The same total less the quarters the sub-total is made of, when
             # they are all stated: the issuer rounded each on its own, so the
             # two can differ by a unit, and both are the issuer's arithmetic.
             if all(q in have for q in covered):
-                by_parts = total.value_usd_millions - sum(have[q].value_usd_millions for q in covered)
+                by_parts = total.value_millions - sum(have[q].value_millions for q in covered)
                 for q in rest:
-                    by_parts -= have[q].value_usd_millions
-                primary = residual - sum(have[q].value_usd_millions for q in rest)
+                    by_parts -= have[q].value_millions
+                primary = residual - sum(have[q].value_millions for q in rest)
                 if abs(by_parts - primary) <= rounding_tolerance(len(covered)):
                     alternates.append(round(by_parts, 6))
         else:
             rest = [q for q in members if q != target]
         for q in rest:
-            residual -= have[q].value_usd_millions
+            residual -= have[q].value_millions
             inputs.append(have[q].period)
         if residual < -_NEGLIGIBLE:
             continue
@@ -461,14 +469,14 @@ def derive_residual_quarters(
                 period=period,
                 period_type="quarterly",
                 geography=total.geography,
-                value_usd_millions=residual,
+                value_millions=residual,
                 value_as_reported=residual,
                 unit_label="millions",
-                currency="USD",
+                currency=total.currency,
                 route="derived",
                 derivation="stated_total_less_stated_parts",
                 status=RESOLVED,
-                detail=f"{total.period} {period_type} {total.value_usd_millions:g} less {', '.join(inputs[1:])} yields {period} {residual:g}",
+                detail=f"{total.period} {period_type} {total.value_millions:g} less {', '.join(inputs[1:])} yields {period} {residual:g}",
                 source_urls=tuple(sorted(set(total.source_urls) | {u for q in rest for u in have[q].source_urls} | (set(subtotal.source_urls) if subtotal else set()))),
                 source_quote=total.source_quote,
                 inputs=tuple(inputs),
@@ -494,7 +502,7 @@ def derive_partial_remainders(
             continue
         for norm in norms:
             obs = norm.observation
-            if not obs.covers or norm.value_usd is None:
+            if not obs.covers or norm.value is None:
                 continue
             start, _end = obs.covers
             year = _year_of(period)
@@ -505,7 +513,7 @@ def derive_partial_remainders(
             later = [q for q in members if q > start_quarter]
             if not all((f"{year}Q{q}", "quarterly") in values for q in later):
                 continue
-            remainder = norm.value_usd - sum(values[(f"{year}Q{q}", "quarterly")].value_usd_millions for q in later)
+            remainder = norm.value - sum(values[(f"{year}Q{q}", "quarterly")].value_millions for q in later)
             if remainder < -_NEGLIGIBLE:
                 continue
             from calendar import monthrange
@@ -518,14 +526,14 @@ def derive_partial_remainders(
                     period=f"{year}Q{start_quarter}",
                     period_type="quarterly",
                     geography=obs.geography,
-                    value_usd_millions=round(max(remainder, 0.0), 6),
+                    value_millions=round(max(remainder, 0.0), 6),
                     value_as_reported=round(max(remainder, 0.0), 6),
                     unit_label="millions",
-                    currency="USD",
+                    currency=obs.currency,
                     route="derived",
                     derivation="dated_total_less_full_quarters",
                     status=RESOLVED,
-                    detail=f"{period} {period_type} from {start} ({norm.value_usd:g}) less {', '.join(f'{year}Q{q}' for q in later)}",
+                    detail=f"{period} {period_type} from {start} ({norm.value:g}) less {', '.join(f'{year}Q{q}' for q in later)}",
                     source_urls=(obs.source_url,),
                     source_quote=obs.source_quote,
                     inputs=(f"{period}:{period_type}",) + tuple(f"{year}Q{q}" for q in later),
@@ -565,21 +573,21 @@ def sum_geography_partitions(series_by_geo: dict[str | None, dict[tuple[str, str
             continue
         if any(v.status != RESOLVED or v.covers for v in parts.values()):
             continue
-        total = round(sum(v.value_usd_millions for v in parts.values()), 6)
+        total = round(sum(v.value_millions for v in parts.values()), 6)
         out.append(
             SeriesValue(
                 product=product,
                 period=key[0],
                 period_type=key[1],
                 geography="Worldwide",
-                value_usd_millions=total,
+                value_millions=total,
                 value_as_reported=total,
                 unit_label="millions",
-                currency="USD",
+                currency=next(iter(parts.values())).currency,
                 route="derived",
                 derivation="sum_of_geography_partition",
                 status=RESOLVED,
-                detail=" + ".join(f"{g} {v.value_usd_millions:g}" for g, v in sorted(parts.items())),
+                detail=" + ".join(f"{g} {v.value_millions:g}" for g, v in sorted(parts.items())),
                 source_urls=tuple(sorted({u for v in parts.values() for u in v.source_urls})),
                 source_quote="; ".join(v.source_quote for v in parts.values()),
                 inputs=tuple(f"{g}:{key[0]}" for g in sorted(parts)),
@@ -601,7 +609,7 @@ def assemble_bridges(partials: list[SeriesValue], *, product: str) -> list[Serie
         for part in parts:
             spans.setdefault(part.covers, part)
         components = [
-            {"covers": f"{p.covers[0]}/{p.covers[1]}", "value": p.value_usd_millions, "source_url": p.source_urls[0] if p.source_urls else ""}
+            {"covers": f"{p.covers[0]}/{p.covers[1]}", "value": p.value_millions, "source_url": p.source_urls[0] if p.source_urls else ""}
             for p in spans.values()
         ]
         if len(components) < 2:
@@ -615,10 +623,10 @@ def assemble_bridges(partials: list[SeriesValue], *, product: str) -> list[Serie
                 period=period,
                 period_type="quarterly",
                 geography=geography,
-                value_usd_millions=assembled,
+                value_millions=assembled,
                 value_as_reported=assembled,
                 unit_label="millions",
-                currency="USD",
+                currency=next(iter(spans.values())).currency,
                 route="bridged",
                 derivation="dated_parts_tile_the_quarter",
                 status=RESOLVED,
@@ -634,6 +642,15 @@ def assemble_bridges(partials: list[SeriesValue], *, product: str) -> list[Serie
 # --------------------------------------------------------------------------
 # Assembly
 # --------------------------------------------------------------------------
+
+def _one_currency(observations: list[Observation]) -> tuple[list[Observation], list[Observation]]:
+    """The observations in the currency most of them state, and the rest."""
+    counts = collections.Counter(o.currency for o in observations)
+    if len(counts) <= 1:
+        return observations, []
+    keep = counts.most_common(1)[0][0]
+    return [o for o in observations if o.currency == keep], [o for o in observations if o.currency != keep]
+
 
 def _geography_key(obs: Observation) -> str | None:
     return obs.geography
@@ -656,10 +673,17 @@ def assemble_series(
     # only for cells the product's firm figures (grid rows and what they
     # derive) leave empty. When the two exist and differ, the firm one is
     # the product's own line and the provisional one was something else.
+    notes: list[str] = []
+    # The series is kept in the currency the issuer reports in. A figure a
+    # document states in another currency (a translated press release, an
+    # acquirer's restatement) is set aside and noted rather than mixed in.
+    observations, set_aside = _one_currency(observations)
+    if set_aside:
+        notes.append(f"{len(set_aside)} observations in other currencies set aside: "
+                     + ", ".join(sorted({o.currency for o in set_aside})))
     provisional = [o for o in observations if o.provisional or "generic_product_line" in o.notes]
     observations = [o for o in observations if not (o.provisional or "generic_product_line" in o.notes)]
     norms = normalize_observations(observations)
-    notes: list[str] = []
 
     buckets: dict[tuple[str, str, str | None], list[_Norm]] = defaultdict(list)
     partial_norms: dict[tuple[str, str], list[_Norm]] = defaultdict(list)
@@ -790,7 +814,7 @@ def _identify_unspecified(
             other = series.get(key)
             if other is None:
                 continue
-            if _agree(value.value_usd_millions, other.value_usd_millions, _value_step(value, other)):
+            if _agree(value.value_millions, other.value_millions, _value_step(value, other)):
                 agree += 1
             else:
                 disagree += 1

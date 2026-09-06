@@ -7,7 +7,8 @@ field by field with ad hoc translation, both are reduced to this one shape
 and compared under rules stated here, once:
 
 * ``period`` is the calendar quarter or year (``2019Q3``, ``2019``);
-* ``value_usd_millions`` is the comparable number; ``value_as_reported`` and
+* ``value_millions`` in the issuer's reporting currency is the comparable number
+  (``value_usd_millions`` beside it where a rate is on file); ``value_as_reported`` and
   ``unit`` keep what the document printed;
 * ``geography`` is one of ``worldwide``, ``united_states``, ``international``,
   ``other`` or ``unspecified``. Gold always states one. The pipeline states
@@ -74,10 +75,11 @@ class ComparableRevenueRow:
     period: str
     period_type: str
     geography: str
-    value_usd_millions: float
+    value_millions: float                        # in ``currency``, the issuer's reporting currency
     value_as_reported: float | None
     unit: str | None
     currency: str
+    value_usd_millions: float | None = None      # at the year's average rate, when a rate is on file
     route: str
     derivation: str
     source_urls: tuple[str, ...]
@@ -97,6 +99,7 @@ class ComparableRevenueRow:
             "period": self.period,
             "period_type": self.period_type,
             "geography": self.geography,
+            "value_millions": self.value_millions,
             "value_usd_millions": self.value_usd_millions,
             "value_as_reported": self.value_as_reported,
             "unit": self.unit,
@@ -129,15 +132,15 @@ _GOLD_ROUTES = {
 def from_gold(row: dict[str, Any]) -> ComparableRevenueRow:
     """A gold quarterly or annual row in the common shape."""
     urls = tuple(s["source_url"] for s in row.get("sources") or [{"source_url": row["source_url"]}])
-    value = row.get("value_normalized_usd_millions")
-    if value is None:
-        value = row["value_reported"]
+    scale = {"units": 1e-6, "thousands": 1e-3, "millions": 1.0, "billions": 1e3}.get((row.get("unit") or "millions").lower(), 1.0)
+    usd = row.get("value_normalized_usd_millions")
     return ComparableRevenueRow(
         product=row["drug_name"],
         period=str(row["period"]),
         period_type=row.get("period_type", "quarterly"),
         geography=canonical_geography(row.get("geography")),
-        value_usd_millions=float(value),
+        value_millions=float(row["value_reported"]) * scale,
+        value_usd_millions=float(usd) if usd is not None else None,
         value_as_reported=row.get("source_value_reported", row.get("value_reported")),
         unit=row.get("source_unit") or row.get("unit"),
         currency=row.get("currency", "USD"),
@@ -158,7 +161,8 @@ def from_series(value: SeriesValue) -> ComparableRevenueRow:
         period=value.period,
         period_type=value.period_type,
         geography=canonical_geography(value.geography),
-        value_usd_millions=float(value.value_usd_millions),
+        value_millions=float(value.value_millions),
+        value_usd_millions=value.value_usd_millions,
         value_as_reported=value.value_as_reported,
         unit=value.unit_label,
         currency=value.currency,
@@ -226,8 +230,17 @@ def values_match(gold: float, pipeline: float, *, reference: ComparableRevenueRo
 class Comparison:
     gold: ComparableRevenueRow
     pipeline: ComparableRevenueRow | None
-    outcome: str          # match | value_mismatch | geography_mismatch | needs_review | missing
+    outcome: str          # match | value_mismatch | geography_mismatch | currency_mismatch | needs_review | missing
     detail: str = ""
+
+
+def comparable_values(gold: ComparableRevenueRow, pipeline: ComparableRevenueRow) -> tuple[float, float] | None:
+    """Both figures in one currency: the reference's when the pipeline states it, else USD when both have a rate."""
+    if gold.currency == pipeline.currency:
+        return gold.value_millions, pipeline.value_millions
+    if gold.value_usd_millions is not None and pipeline.value_usd_millions is not None:
+        return gold.value_usd_millions, pipeline.value_usd_millions
+    return None
 
 
 def compare(gold: ComparableRevenueRow, candidates: list[ComparableRevenueRow]) -> Comparison:
@@ -245,7 +258,8 @@ def compare(gold: ComparableRevenueRow, candidates: list[ComparableRevenueRow]) 
     if not resolved:
         return Comparison(gold, compatible[0], "needs_review", compatible[0].detail)
     for candidate in resolved:
-        if values_match(gold.value_usd_millions, candidate.value_usd_millions, reference=gold):
+        pair = comparable_values(gold, candidate)
+        if pair is not None and values_match(pair[0], pair[1], reference=gold):
             detail = "via provisional" if candidate.extras.get("provisional") else ""
             return Comparison(gold, candidate, "match", detail)
     # A derived figure the issuer's own rounding leaves ambiguous: the
@@ -253,10 +267,13 @@ def compare(gold: ComparableRevenueRow, candidates: list[ComparableRevenueRow]) 
     # one of them; the pipeline reports both, which is the honest answer.
     for candidate in resolved:
         for alternate in candidate.extras.get("alternates") or []:
-            if values_match(gold.value_usd_millions, float(alternate)):
+            if candidate.currency == gold.currency and values_match(gold.value_millions, float(alternate)):
                 return Comparison(gold, candidate, "match", f"via alternate derivation {alternate:g} (issuer rounding)")
     best = resolved[0]
+    if all(comparable_values(gold, c) is None for c in resolved):
+        offered = ", ".join(sorted({c.currency for c in resolved}))
+        return Comparison(gold, best, "currency_mismatch", f"gold in {gold.currency}; pipeline in {offered} with no rate to compare")
     return Comparison(
         gold, best, "value_mismatch",
-        f"gold {gold.value_usd_millions:g} vs pipeline {best.value_usd_millions:g} ({best.route}:{best.derivation})",
+        f"gold {gold.value_millions:g} {gold.currency} vs pipeline {best.value_millions:g} {best.currency} ({best.route}:{best.derivation})",
     )

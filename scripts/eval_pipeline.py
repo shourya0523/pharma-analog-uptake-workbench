@@ -293,14 +293,14 @@ async def main() -> int:
         print(f"\n{len(failures)} rows not delivered:")
         for result in failures[: args.max_failures]:
             g = result.gold
-            print(f"  {g.product:16} {g.period:8} [{result.outcome}] gold={g.value_usd_millions:g} {g.geography} {g.derivation}")
+            print(f"  {g.product:16} {g.period:8} [{result.outcome}] gold={g.value_millions:g} {g.currency} {g.geography} {g.derivation}")
             print(f"      {result.detail[:200]}")
             if result.pipeline:
                 print(f"      pipeline quote: {result.pipeline.source_quote[:140]!r}")
             else:
                 same = [r for r in pipeline_rows[g.product] if r.period == g.period]
                 if same:
-                    print(f"      pipeline has for this period: {[(r.geography, r.value_usd_millions, r.status) for r in same][:6]}")
+                    print(f"      pipeline has for this period: {[(r.geography, r.value_millions, r.currency, r.status) for r in same][:6]}")
                 doc_skips = skipped_by_product.get(g.product, {}).get(g.source_urls[0], [])
                 if doc_skips:
                     print(f"      reader skipped in cited document: {doc_skips[:4]}")
