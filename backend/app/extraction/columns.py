@@ -271,17 +271,20 @@ def _check(layout: ColumnLayout, placed: list[Cell | None]) -> tuple[bool, list[
                 verified.append("change_column_near")
 
     # Geography parts sum to their total within the same period.
-    by_period: dict[tuple[int | None, int | None, int | None], dict[str, float]] = {}
+    by_period: dict[tuple[int | None, int | None, int | None], list[tuple[str, float]]] = {}
     for index, column in enumerate(columns):
         if column.kind != "value" or column.geography is None:
             continue
         value = value_at(index)
         if value is None:
             continue
-        by_period.setdefault((column.months, column.end_month, column.year), {})[column.geography] = value
+        by_period.setdefault((column.months, column.end_month, column.year), []).append((column.geography, value))
     for parts in by_period.values():
-        total = parts.get("Worldwide")
-        components = [v for g, v in parts.items() if g != "Worldwide"]
+        # Several regions the closed set does not name are all "Other" and
+        # each is a part of its own.
+        totals = [v for g, v in parts if g == "Worldwide"]
+        total = totals[0] if totals else None
+        components = [v for g, v in parts if g != "Worldwide"]
         if total is not None and len(components) >= 2:
             if not _partitions(total, components):
                 return False, []

@@ -358,3 +358,21 @@ def test_a_column_header_with_a_unit_after_the_region_still_names_the_region():
     assert canonical_geography("U.S. (in millions)") == "united_states"
     assert canonical_geography("Europe and rest of world") == "other"
     assert canonical_geography("Otherwise") == "other", "a word that merely begins with an alias is not the alias"
+
+
+def test_a_sales_split_with_several_other_regions_is_verified_as_a_nested_partition():
+    grid = [["Total", "US Operations", "International Operations", "EUCAN", "Emerging Markets", "APAC", "Region China"],
+            ["Wegovy ®", "19,528", "13,767", "5,761", "2,000", "1,500", "1,261", "1,000"]]
+    q2 = lambda geo, label: ColumnSpec("value", 3, 6, 2025, geography=geo, label=label)  # noqa: E731
+    region = GridRegion(
+        grid_index=0,
+        layout=_layout(q2("Worldwide", "Total"), q2("United States", "US Operations"), q2("International", "International Operations"),
+                       q2("Europe", "EUCAN"), q2("Other", "Emerging Markets"), q2("Other", "APAC"), q2("Other", "Region China"), unit="millions"),
+        rows=(_row(1, "Wegovy ®", "Wegovy", None, "own_revenue"),),
+    )
+    observations, failures = read_described_grid(_doc([grid]), region, product="Wegovy", aliases=["Wegovy"])
+    assert not failures, [f.render() for f in failures]
+    assert sorted((o.geography, o.geography_label, o.value_as_reported) for o in observations) == sorted([
+        ("Worldwide", "Total", 19528), ("United States", "US Operations", 13767), ("International", "International Operations", 5761),
+        ("Europe", "EUCAN", 2000), ("Other", "Emerging Markets", 1500), ("Other", "APAC", 1261), ("Other", "Region China", 1000),
+    ])
