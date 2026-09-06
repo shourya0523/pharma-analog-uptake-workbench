@@ -118,5 +118,15 @@
     "file": "app/benchmark/schema.py",
     "pattern": "\\([^)]*\\)",
     "why": "scoring label normalisation: a parenthetical after a region names its unit, not a place"
+  },
+  {
+    "file": "app/fingerprint/llm.py",
+    "pattern": "\\((\\d{1,2}|[a-z])\\)\\s*(?=\\S)",
+    "why": "footnote-marker attachment (conversion): where a grid's note row defines a footnote"
+  },
+  {
+    "file": "app/fingerprint/llm.py",
+    "pattern": "\\((\\d{1,2}|[a-z])\\)",
+    "why": "footnote-marker attachment (conversion): a marker in a label cell, shown beside the note it points to"
   }
 ]

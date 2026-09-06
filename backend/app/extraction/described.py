@@ -29,9 +29,9 @@ from app.fingerprint.llm import (
     describe_column,
     duplicate_value_columns,
     product_name,
-    squash,
 )
 from app.llm.grounding import quote_is_verbatim
+from app.catalog.families import family_parents
 from app.parsing.evidence import product_aliases
 from app.parsing.grids import is_value_token
 
@@ -129,6 +129,9 @@ def read_described_grid(
     failures: list[VerificationFailure] = []
     observations: list[Observation] = []
     layout = region.layout
+    # A family's parent is its franchise: "Total Tyvaso" is Tyvaso's own
+    # figure when the catalog lists Tyvaso's formulations beneath it.
+    family_head = product.lower() in {p.lower() for p in family_parents().values()}
     duplicates = duplicate_value_columns(layout)
     if duplicates:
         # Nothing is placed against a header that names one figure twice; the
@@ -148,9 +151,8 @@ def read_described_grid(
     # them is another region or the subtotal of the others.
     by_geography: dict[str, list[RowDescription]] = defaultdict(list)
     for row in region.rows:
-        if row.product.lower() in names and row.line in EXACT_LINES and row.geography:
-            key = row.geography if row.geography != "Other" else f"Other:{squash(row.geography_as_printed or row.label_as_printed)}"
-            by_geography[key].append(row)
+        if row.product.lower() in names and row.line in EXACT_LINES and row.geography and row.geography != "Other":
+            by_geography[row.geography].append(row)
     for geography, rows_alike in by_geography.items():
         if len(rows_alike) > 1:
             first, second = rows_alike[0], rows_alike[1]
@@ -216,7 +218,7 @@ def read_described_grid(
                 continue
         section = _section_for(region, row.row_index)
         row_covers = row.covers or (section.covers if section else None)
-        exact = row.line in EXACT_LINES
+        exact = row.line in EXACT_LINES or (row.line == "franchise_or_bundle" and family_head and row.product.lower() in names)
         # "Product revenues, net" assigned to the product because the filing
         # sells nothing else is provisional: it stands only where the
         # product's own rows leave a cell empty. A geography row ("U.S.",

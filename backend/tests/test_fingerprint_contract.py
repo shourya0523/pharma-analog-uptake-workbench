@@ -185,3 +185,16 @@ def test_a_quarter_label_with_a_longer_period_type_is_the_span_ending_at_that_qu
     assert _period_parts("2026Q1", "annual") == (12, 3, 2026), "a fiscal year ending in March"
     assert _period_parts("2025", "nine_month") == (9, 9, 2025)
     assert _period_parts("2026H1", "") == (6, 6, 2026)
+
+
+def test_the_sketch_shows_a_footnote_beside_the_heading_that_points_to_it():
+    grid = [
+        ["REPORTED SALES ($MM)"],
+        ["PULMONARY HYPERTENSION (4)"],
+        ["OPSUMIT US", "180", "24"],
+        ["(4) Products acquired from Actelion acquisition on June 16, 2017. (5) Something else"],
+    ]
+    parts = sketch_document(_doc([grid]), aliases=["Opsumit"])
+    text = parts[0].grids_text
+    assert "r1: PULMONARY HYPERTENSION (4)   [note (4): Products acquired from Actelion acquisition on June 16, 2017]" in text
+    assert "r2: OPSUMIT US | 180 | 24" in text and "[note" not in text.split("r2:")[1].split("\n")[0]

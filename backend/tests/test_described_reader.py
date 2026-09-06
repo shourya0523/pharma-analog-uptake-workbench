@@ -314,7 +314,7 @@ def test_several_other_regions_in_one_grid_are_distinct_by_their_labels():
         ColumnSpec("value", 3, 9, 2024, geography="Other", label="Region China"),
     )
     assert duplicate_value_columns(layout) == []
-    twice = _layout(q3, ColumnSpec("value", 3, 9, 2024, geography="Other", label="EMEA"), ColumnSpec("value", 3, 9, 2024, geography="Other", label="EMEA"))
+    twice = _layout(q3, ColumnSpec("value", 3, 9, 2024, geography="Europe", label="EMEA"), ColumnSpec("value", 3, 9, 2024, geography="Europe", label="EMEA"))
     assert duplicate_value_columns(twice) == [(1, 2)]
 
 

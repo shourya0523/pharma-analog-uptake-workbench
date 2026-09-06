@@ -210,10 +210,53 @@ def _row_line(index: int, row: list[str]) -> str:
     return f"r{index}: " + " | ".join(cells)
 
 
+_FOOTNOTE_DEFINITION_RE = re.compile(r"\((\d{1,2}|[a-z])\)\s*(?=\S)")
+_FOOTNOTE_MARKER_RE = re.compile(r"\((\d{1,2}|[a-z])\)")
+
+
+def _footnotes(rows: list[list[str]]) -> dict[str, str]:
+    """Footnote texts a grid's own note rows define, by marker: "(4)" -> "Products acquired ... June 16, 2017"."""
+    notes: dict[str, str] = {}
+    for row in rows:
+        if len(row) != 1 or len(row[0]) < 12:
+            continue
+        text = row[0]
+        matches = list(_FOOTNOTE_DEFINITION_RE.finditer(text))
+        for i, match in enumerate(matches):
+            end = matches[i + 1].start() if i + 1 < len(matches) else len(text)
+            body = text[match.end():end].strip(" ;.")
+            if body and match.group(1) not in notes:
+                notes[match.group(1)] = body[:160]
+    return notes
+
+
+def _row_line_with_notes(index: int, row: list[str], notes: dict[str, str]) -> str:
+    """The row, and beside it the footnote each marker in its label cells points to."""
+    line = _row_line(index, row)
+    if not notes:
+        return line
+    attached = []
+    for cell in row:
+        if is_value_token(cell):
+            continue
+        for marker in _FOOTNOTE_MARKER_RE.findall(cell):
+            if marker in notes and marker not in attached:
+                attached.append(marker)
+    if attached:
+        line += "   [" + "; ".join(f"note ({m}): {notes[m]}" for m in attached) + "]"
+    return line
+
+
 def _grid_lines(rows: list[list[str]], keep: set[int] | None) -> str:
-    """Rows with their indexes; omitted runs are marked so indexes stay valid."""
+    """Rows with their indexes; omitted runs are marked so indexes stay valid.
+
+    A footnote a heading or label points to is shown beside that row as
+    well as in the note row that defines it, so what limits a section's
+    period is read where the section is.
+    """
     lines: list[str] = []
     omitted_from: int | None = None
+    notes = _footnotes(rows)
     for index, row in enumerate(rows):
         if keep is not None and index not in keep:
             if omitted_from is None:
@@ -222,7 +265,7 @@ def _grid_lines(rows: list[list[str]], keep: set[int] | None) -> str:
         if omitted_from is not None:
             lines.append(f"... (rows r{omitted_from}-r{index - 1} omitted)")
             omitted_from = None
-        lines.append(_row_line(index, row))
+        lines.append(_row_line_with_notes(index, row, notes))
     if omitted_from is not None:
         lines.append(f"... (rows r{omitted_from}-r{len(rows) - 1} omitted)")
     return "\n".join(lines)
@@ -474,12 +517,11 @@ def duplicate_value_columns(layout: ColumnLayout) -> list[tuple[int, int]]:
     seen: dict[tuple, int] = {}
     pairs: list[tuple[int, int]] = []
     for index, column in enumerate(layout.columns):
-        if column.kind != "value":
+        if column.kind != "value" or column.geography == "Other":
+            # Several regions the closed set does not name are all "Other"
+            # (EMEA beside Region China beside Rest of World): not one figure twice.
             continue
-        # Several regions the closed set does not name are all "Other"; the
-        # printed label tells them apart (EMEA beside Rest of World).
-        key = (column.months, column.end_month, column.year, column.geography, column.covers,
-               squash(column.label or "") if column.geography == "Other" else "")
+        key = (column.months, column.end_month, column.year, column.geography, column.covers)
         if key in seen:
             pairs.append((seen[key], index))
         else:
