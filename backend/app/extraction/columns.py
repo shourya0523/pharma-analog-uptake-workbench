@@ -167,6 +167,32 @@ def _tolerance(parts: int) -> float:
     return 0.5 * (parts + 1) + 0.01
 
 
+def _partitions(total: float, components: list[float]) -> bool:
+    """The regions account for the total, flat or nested.
+
+    Flat: every region sums to the total. Nested: some regions sum to the
+    total and the rest sum to one of those (United States + International =
+    Total, with International split into named regions beside it). Small
+    headers are searched exhaustively; nothing about which region nests in
+    which is assumed.
+    """
+    if abs(sum(components) - total) <= _tolerance(len(components)):
+        return True
+    n = len(components)
+    if n > 10:
+        return False
+    for mask in range(1, 1 << n):
+        chosen = [components[i] for i in range(n) if mask >> i & 1]
+        rest = [components[i] for i in range(n) if not mask >> i & 1]
+        if len(chosen) < 2 or not rest:
+            continue
+        if abs(sum(chosen) - total) > _tolerance(len(chosen)):
+            continue
+        if any(abs(sum(rest) - member) <= _tolerance(len(rest)) for member in chosen):
+            return True
+    return False
+
+
 def _check(layout: ColumnLayout, placed: list[Cell | None]) -> tuple[bool, list[str]]:
     """Every arithmetic relation the header declares must hold for this row."""
     columns = layout.columns
@@ -257,7 +283,7 @@ def _check(layout: ColumnLayout, placed: list[Cell | None]) -> tuple[bool, list[
         total = parts.get("Worldwide")
         components = [v for g, v in parts.items() if g != "Worldwide"]
         if total is not None and len(components) >= 2:
-            if abs(sum(components) - total) > _tolerance(len(components)):
+            if not _partitions(total, components):
                 return False, []
             verified.append("geography_sum")
 

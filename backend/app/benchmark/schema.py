@@ -53,6 +53,11 @@ _GEOGRAPHY_ALIASES = {
     "other": "other",
 }
 
+# Words a column header prints after the region to state its unit or
+# currency; they say nothing about where.
+_UNIT_WORDS = {"usd", "eur", "dkk", "chf", "gbp", "jpy", "$", "€", "£", "¥", "m", "mm", "bn", "k", "in", "million",
+               "millions", "billion", "billions", "thousand", "thousands", "units"}
+
 # Comparison tolerances. Gold values are stated to at most three decimals of
 # a million (thousands-based filings); anything closer than half a thousand
 # dollars is the same number.
@@ -61,9 +66,19 @@ RELATIVE_TOLERANCE = 1e-6
 
 
 def canonical_geography(label: str | None) -> str:
+    """The canonical geography a printed label names.
+
+    A column header carries more than the region ("Rest of world USD m",
+    "U.S. (in millions)"); the longest alias the label starts with, as a
+    whole word, is the region it names.
+    """
     if not label:
         return "unspecified"
-    key = label.strip().lower()
+    key = " ".join(re.sub(r"\([^)]*\)", " ", label.strip().lower()).split())
+    words = key.split()
+    while words and words[-1] in _UNIT_WORDS:
+        words.pop()
+    key = " ".join(words)
     if key in _GEOGRAPHY_ALIASES:
         return _GEOGRAPHY_ALIASES[key]
     return "other"

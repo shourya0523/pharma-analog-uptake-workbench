@@ -326,3 +326,35 @@ def test_a_change_column_compares_the_same_quarter_a_year_earlier_when_the_row_r
     observations, failures = read_described_grid(_doc([grid]), region, product="Wegovy", aliases=["Wegovy"])
     assert not failures, [f.render() for f in failures]
     assert {o.period: o.value_as_reported for o in observations}["2023Q3"] == 8178
+
+
+def test_descriptive_text_cells_between_the_label_and_the_figures_are_not_figures():
+    grid = [["Product", "Therapeutic area", "Indication", "US", "% change", "Rest of world", "% change", "% cc", "Total", "% change", "% cc"],
+            ["Kisqali", "Oncology", "HR+/HER2- metastatic breast cancer", "750", "100", "427", "25", "25", "1 177", "64", "64"]]
+    q2 = lambda geo: ColumnSpec("value", 3, 6, 2025, geography=geo)  # noqa: E731
+    chg = lambda geo: ColumnSpec("change", geography=geo, label="change")  # noqa: E731
+    region = GridRegion(
+        grid_index=0,
+        layout=_layout(q2("United States"), chg("United States"), q2("Other"), chg("Other"), chg("Other"), q2("Worldwide"), chg("Worldwide"), chg("Worldwide")),
+        rows=(_row(1, "Kisqali", "Kisqali", None, "own_revenue"),),
+    )
+    observations, failures = read_described_grid(_doc([grid]), region, product="Kisqali", aliases=["Kisqali"])
+    assert not failures, [f.render() for f in failures]
+    assert {o.geography: o.value_as_reported for o in observations} == {"United States": 750, "Other": 427, "Worldwide": 1177}
+
+
+def test_regions_may_nest_inside_a_total_and_an_international_subtotal():
+    from app.extraction.columns import _partitions
+
+    assert _partitions(19528, [13767, 5761, 2000, 1500, 1261, 1000])          # US + Intl = Total; regions sum to Intl
+    assert _partitions(100, [60, 40])                                          # flat
+    assert not _partitions(100, [60, 50, 20])                                  # nothing accounts for the total
+
+
+def test_a_column_header_with_a_unit_after_the_region_still_names_the_region():
+    from app.benchmark.schema import canonical_geography
+
+    assert canonical_geography("Rest of world USD m") == "international"
+    assert canonical_geography("U.S. (in millions)") == "united_states"
+    assert canonical_geography("Europe and rest of world") == "other"
+    assert canonical_geography("Otherwise") == "other", "a word that merely begins with an alias is not the alias"

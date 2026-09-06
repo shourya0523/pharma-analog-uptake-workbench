@@ -113,5 +113,10 @@
     "file": "app/fingerprint/llm.py",
     "pattern": "^(\\d{4})Q1[-–](\\d{4})Q([2-4])$",
     "why": "contract format: a year-to-date span the model wrote as a quarter range"
+  },
+  {
+    "file": "app/benchmark/schema.py",
+    "pattern": "\\([^)]*\\)",
+    "why": "scoring label normalisation: a parenthetical after a region names its unit, not a place"
   }
 ]

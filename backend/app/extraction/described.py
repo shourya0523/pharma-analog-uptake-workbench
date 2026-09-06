@@ -33,6 +33,7 @@ from app.fingerprint.llm import (
 )
 from app.llm.grounding import quote_is_verbatim
 from app.parsing.evidence import product_aliases
+from app.parsing.grids import is_value_token
 
 EXACT_LINES = {"own_revenue", "subtotal_of_geographies"}
 READ_LINES = EXACT_LINES | {"franchise_or_bundle", "other_line_item"}
@@ -85,6 +86,12 @@ def _inside(covers: tuple[str, str], period: str, period_type: str) -> bool:
 def _align(region: GridRegion, rows: list[list[str]], row: RowDescription) -> tuple[Alignment | None, VerificationFailure | None]:
     cells = rows[row.row_index]
     tokens = list(cells[row.label_width:])
+    # Descriptive text columns between the label and the figures (a
+    # therapeutic area, an indication) are part of what names the row, not
+    # figures: a cell that is not a number or a placeholder cannot fill a
+    # described column.
+    while tokens and not is_value_token(tokens[0]):
+        tokens.pop(0)
     layout = region.layout
     alignments, reason = align_row(tokens, layout)
     if reason:
