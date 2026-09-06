@@ -286,9 +286,16 @@ def _check(layout: ColumnLayout, placed: list[Cell | None]) -> tuple[bool, list[
         total = totals[0] if totals else None
         components = [v for g, v in parts if g != "Worldwide"]
         if total is not None and len(components) >= 2:
-            if not _partitions(total, components):
+            if _partitions(total, components):
+                verified.append("geography_sum")
+            elif any(c is None for c in placed):
+                # The sum decides between placements only; a row whose cells
+                # fill every column is placed, and the header's regions may
+                # nest in ways the columns alone do not state (a region and
+                # one of its countries printed side by side).
                 return False, []
-            verified.append("geography_sum")
+            else:
+                verified.append("geography_sum_unverified")
 
     # A longer period bounds and, when complete, equals its quarters.
     by_year: dict[tuple[int, str | None], dict[int, float]] = {}

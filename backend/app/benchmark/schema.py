@@ -178,7 +178,7 @@ def _pipeline_geography(value: SeriesValue) -> str:
     from its printed labels, so "Rest of World" read as Other compares as the
     reference's international row and "Europe and rest of world" as other.
     """
-    if (value.geography or "").lower() == "other" and value.geography_label:
+    if (value.geography or "").lower().startswith("other") and value.geography_label:
         return canonical_geography(value.geography_label)
     return canonical_geography(value.geography)
 

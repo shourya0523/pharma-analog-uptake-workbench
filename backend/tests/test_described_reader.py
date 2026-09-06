@@ -376,3 +376,35 @@ def test_a_sales_split_with_several_other_regions_is_verified_as_a_nested_partit
         ("Worldwide", "Total", 19528), ("United States", "US Operations", 13767), ("International", "International Operations", 5761),
         ("Europe", "EUCAN", 2000), ("Other", "Emerging Markets", 1500), ("Other", "APAC", 1261), ("Other", "Region China", 1000),
     ])
+
+
+def test_a_full_row_is_placed_even_when_its_regions_do_not_sum_flat_or_nested():
+    """North America beside its own United States: no column set sums cleanly, but there is nothing to place."""
+    grid = [["Total", "North America Operations", "US Operations", "International Operations", "EMEA", "Region China", "Rest of World"],
+            ["Wegovy ®", "17,304", "12,827", "12,488", "4,477", "2,185", "166", "2,126"]]
+    q3 = lambda geo, label: ColumnSpec("value", 3, 9, 2024, geography=geo, label=label)  # noqa: E731
+    region = GridRegion(
+        grid_index=0,
+        layout=_layout(q3("Worldwide", "Total"), q3("Other", "North America Operations"), q3("United States", "US Operations"),
+                       q3("International", "International Operations"), q3("Europe", "EMEA"), q3("Other", "Region China"), q3("Other", "Rest of World")),
+        rows=(_row(1, "Wegovy ®", "Wegovy", None, "own_revenue"),),
+    )
+    observations, failures = read_described_grid(_doc([grid]), region, product="Wegovy", aliases=["Wegovy"])
+    assert not failures, [f.render() for f in failures]
+    assert {o.geography_label: o.value_as_reported for o in observations}["US Operations"] == 12488
+    assert all("geography_sum_unverified" in o.verified for o in observations)
+
+
+def test_each_printed_other_region_is_its_own_series():
+    from app.extraction.series import assemble_series
+
+    def obs(label, value):
+        return Observation(
+            product_label="Wegovy", period="2024Q3", period_type="quarterly", value_as_reported=value, unit_label="millions",
+            currency="DKK", unit_declared=True, geography="Other", covers=None, source_quote=f"{label} {value}", method="grid",
+            layout_signature="", verified=(), specificity=0, geography_label=label,
+        )
+
+    series = assemble_series([obs("EMEA", 2185), obs("Region China", 166), obs("Rest of World", 2126)], product="Wegovy")
+    assert not series.verdicts
+    assert {v.geography: v.value_millions for v in series.values} == {"Other: EMEA": 2185, "Other: Region China": 166, "Other: Rest of World": 2126}

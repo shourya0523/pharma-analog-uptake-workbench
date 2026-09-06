@@ -681,6 +681,13 @@ def assemble_series(
     if set_aside:
         notes.append(f"{len(set_aside)} observations in other currencies set aside: "
                      + ", ".join(sorted({o.currency for o in set_aside})))
+    # Regions the closed set does not name are all "Other"; each printed
+    # region is its own series, told apart by its label ("Other: EMEA").
+    observations = [
+        replace(o, geography=f"Other: {o.geography_label.strip()}")
+        if o.geography == "Other" and o.geography_label and o.geography_label.strip() else o
+        for o in observations
+    ]
     provisional = [o for o in observations if o.provisional or "generic_product_line" in o.notes]
     observations = [o for o in observations if not (o.provisional or "generic_product_line" in o.notes)]
     norms = normalize_observations(observations)
