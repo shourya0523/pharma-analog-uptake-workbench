@@ -288,11 +288,12 @@ def _check(layout: ColumnLayout, placed: list[Cell | None]) -> tuple[bool, list[
         if total is not None and len(components) >= 2:
             if _partitions(total, components):
                 verified.append("geography_sum")
-            elif any(c is None for c in placed):
-                # The sum decides between placements only; a row whose cells
-                # fill every column is placed, and the header's regions may
-                # nest in ways the columns alone do not state (a region and
-                # one of its countries printed side by side).
+            elif any(c is None for c in placed) or all(g != "Other" for g, _ in parts):
+                # Named geographies relate in known ways, so a full row of
+                # them that does not sum is wrong. Regions the closed set
+                # does not name may nest in ways the columns alone do not
+                # state (a region and one of its countries side by side): a
+                # full row of those is placed and its sum left unverified.
                 return False, []
             else:
                 verified.append("geography_sum_unverified")
