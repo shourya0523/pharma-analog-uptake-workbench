@@ -22,15 +22,27 @@ class Settings(BaseSettings):
     job_backend: str = "inprocess"  # inprocess | sqs
     local_storage_root: str = "./storage"
     openrouter_api_key: str | None = None
-    openrouter_model_extract: str = "openai/gpt-4o-mini"
-    openrouter_model_judge: str = "openai/gpt-4o-mini"
+    # Legacy extractor and judge (gated off in model mode, deleted in the
+    # cleanup phase): the same cheap model as the fast fingerprint tier.
+    openrouter_model_extract: str = "z-ai/glm-5.3-flash"
+    openrouter_model_judge: str = "z-ai/glm-5.3-flash"
     # The region fingerprinter: the model that describes where and how a
     # document states product revenue. A fast model describes first; a part
     # whose description the parser rejects or that leaves a product grid
     # undescribed is described again by the strong model. Repairs always use
     # the strong model. Empty fast model = strong model only.
-    openrouter_model_fingerprint: str = "anthropic/claude-sonnet-4.5"
-    openrouter_model_fingerprint_fast: str = "anthropic/claude-haiku-4.5"
+    #
+    # Chosen 2026-09-06 on OpenRouter list prices and Artificial Analysis'
+    # independent index: GLM-5.3-Flash ($0.075/$0.25 per M tokens, index 57)
+    # first, Gemini 3.8 Flash ($0.75/$3.75, index 59, a different model
+    # family so promotion catches different mistakes) for promotions and
+    # repairs. Alternates if a provider misbehaves: deepseek/deepseek-v4-flash
+    # and deepseek/deepseek-v4-pro.
+    openrouter_model_fingerprint: str = "google/gemini-3.8-flash"
+    openrouter_model_fingerprint_fast: str = "z-ai/glm-5.3-flash"
+    # OpenRouter's unified reasoning control for the fingerprint calls: the
+    # description is a reading task and reasoning tokens bill as output.
+    fingerprint_reasoning_effort: str = "low"
     # model: the description is the only interpreter (scored); degraded: the
     # header grammar and regex prose readers, for runs with no model, never
     # scored; auto: model when an API key is present, else degraded.

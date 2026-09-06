@@ -61,14 +61,20 @@ class OpenRouterClient:
         resp.raise_for_status()
 
     async def chat_json(self, *, model: str, system: str, user: str, max_tokens: int = 6000,
-                        temperature: float = 0.1, timeout: float = 120.0, retries: int = 0) -> dict[str, Any]:
+                        temperature: float = 0.1, timeout: float = 120.0, retries: int = 0,
+                        reasoning_effort: str | None = None, require_parameters: bool = False) -> dict[str, Any]:
         """One JSON answer. Transient failures are retried with backoff; an
         answer that is not JSON is asked for once more.
 
         max_tokens bounds what the router reserves against the account's
         balance; without it a model's full output window is reserved.
+        reasoning_effort is OpenRouter's unified reasoning control (low,
+        medium, high), ignored by models without one; require_parameters
+        makes the router pick only providers that honour every parameter
+        sent, so a JSON answer is not left to a provider that ignores
+        response_format.
         """
-        payload = {
+        payload: dict[str, Any] = {
             "model": model,
             "messages": [
                 {"role": "system", "content": system},
@@ -78,6 +84,10 @@ class OpenRouterClient:
             "temperature": temperature,
             "max_tokens": max_tokens,
         }
+        if reasoning_effort:
+            payload["reasoning"] = {"effort": reasoning_effort}
+        if require_parameters:
+            payload["provider"] = {"require_parameters": True}
         backoff = (2.0, 8.0, 30.0)
         attempt = 0
         asked_again = False

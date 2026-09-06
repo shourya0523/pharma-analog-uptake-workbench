@@ -750,6 +750,7 @@ class LLMFingerprinter:
                 payload = await self.client.chat_json(
                     model=model, system=system, user=user, max_tokens=self.max_tokens,
                     temperature=0.0, timeout=300.0, retries=3,
+                    reasoning_effort=self.settings.fingerprint_reasoning_effort or None, require_parameters=True,
                 )
             except Exception as exc:  # noqa: BLE001
                 logger.warning("fingerprint_failed model=%s meta=%s error=%s", model, meta, exc)
