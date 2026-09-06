@@ -174,3 +174,14 @@ def test_a_product_named_with_its_generic_is_the_listed_product():
     assert fp.grids_for("Skyrizi", ["Skyrizi", "risankizumab"]) == fp.grids
     assert (fp.prose[0].product, fp.prose[0].period, fp.prose[0].period_type) == ("Skyrizi", "2025Q2", "six_month")
     assert not fp.rejected
+
+
+def test_a_quarter_label_with_a_longer_period_type_is_the_span_ending_at_that_quarter():
+    from app.fingerprint.llm import _period_parts
+
+    assert _period_parts("2026Q2", "quarterly") == (3, 6, 2026)
+    assert _period_parts("2026Q2", "six_month") == (6, 6, 2026)
+    assert _period_parts("2025Q3", "nine_month") == (9, 9, 2025)
+    assert _period_parts("2026Q1", "annual") == (12, 3, 2026), "a fiscal year ending in March"
+    assert _period_parts("2025", "nine_month") == (9, 9, 2025)
+    assert _period_parts("2026H1", "") == (6, 6, 2026)

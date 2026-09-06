@@ -102,7 +102,13 @@ class Cell:
     text: str = ""
 
 
-_NUMBER_CORE_RE = re.compile(r"^(?P<neg>[\(\-–−])?\$?\s?(?P<num>[\d,]*\.?\d+)\)?(?P<pct>%)?$")
+# A printed number: optional sign or opening parenthesis, a currency sign,
+# digits with thousands separators as a comma, space, no-break space or
+# apostrophe ("1,177", "1 177", "1'177"), decimals, a closing parenthesis and
+# a percent sign with or without a space before it ("+14.7 %").
+_NUMBER_CORE_RE = re.compile(
+    r"^(?P<neg>[\(\-–−])?\+?\$?\s?(?P<num>\d{1,3}(?:[ ,\u00a0\u202f']\d{3})+(?:\.\d+)?|[\d,]*\.?\d+)\)?\s?(?P<pct>%)?$"
+)
 
 
 def parse_cell(token: str) -> Cell | None:
@@ -112,7 +118,7 @@ def parse_cell(token: str) -> Cell | None:
     match = _NUMBER_CORE_RE.match(text)
     if not match:
         return None
-    value = float(match.group("num").replace(",", ""))
+    value = float(re.sub(r"[ ,\u00a0\u202f']", "", match.group("num")))
     if match.group("neg"):
         value = -value
     return Cell(value, percent=bool(match.group("pct")), text=text)
@@ -214,7 +220,17 @@ def _check(layout: ColumnLayout, placed: list[Cell | None]) -> tuple[bool, list[
                     continue
                 current, prior = value_at(same[0]), value_at(same[1])
             elif len(group) >= 2:
-                current, prior = value_at(group[0]), value_at(group[1])
+                # A change compares like periods: the first column against the
+                # same span a year earlier when the group has one (a run of
+                # quarters "Q3 2024 ... Q3 2023 | % change"), else its neighbour.
+                first = columns[group[0]]
+                like = [
+                    j for j in group[1:]
+                    if columns[j].months == first.months and columns[j].end_month == first.end_month
+                    and columns[j].geography == first.geography and columns[j].year == (first.year or 0) - 1
+                ]
+                current = value_at(group[0])
+                prior = value_at(like[0]) if like else value_at(group[1])
             else:
                 continue
             results.append(_change_ok(current, prior, placed[c]))

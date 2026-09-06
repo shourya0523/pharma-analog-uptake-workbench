@@ -38,7 +38,8 @@ Table = list[Row]
 # A numeric cell: optional sign or opening parenthesis, digits with optional
 # thousands separators and decimals, optional closing parenthesis and percent.
 _NUMBER_TOKEN_RE = re.compile(
-    r"^[\(\-–−]?\$?\s?\d[\d,]*(?:\.\d+)?\)?%?$|^[\(\-–−]?\$?\s?\.\d+\)?%?$"
+    r"^[\(\-–−]?\+?\$?\s?(?:\d{1,3}(?:[ ,\u00a0\u202f']\d{3})+|\d[\d,]*)(?:\.\d+)?\)?\s?%?$"
+    r"|^[\(\-–−]?\+?\$?\s?\.\d+\)?\s?%?$"
 )
 # Cells an issuer prints where a number would go: nothing to report.
 _PLACEHOLDER_TOKEN_RE = re.compile(

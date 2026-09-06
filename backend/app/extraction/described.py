@@ -29,6 +29,7 @@ from app.fingerprint.llm import (
     describe_column,
     duplicate_value_columns,
     product_name,
+    squash,
 )
 from app.llm.grounding import quote_is_verbatim
 from app.parsing.evidence import product_aliases
@@ -141,7 +142,8 @@ def read_described_grid(
     by_geography: dict[str, list[RowDescription]] = defaultdict(list)
     for row in region.rows:
         if row.product.lower() in names and row.line in EXACT_LINES and row.geography:
-            by_geography[row.geography].append(row)
+            key = row.geography if row.geography != "Other" else f"Other:{squash(row.geography_as_printed or row.label_as_printed)}"
+            by_geography[key].append(row)
     for geography, rows_alike in by_geography.items():
         if len(rows_alike) > 1:
             first, second = rows_alike[0], rows_alike[1]

@@ -290,3 +290,39 @@ def test_an_other_region_compares_by_its_printed_label():
     assert from_series(value("Other", "Europe and rest of world")).geography == "other"
     assert from_series(value("International", "Intl")).geography == "international"
     assert from_series(value("Japan", "Japan")).geography == "japan"
+
+
+def test_printed_numbers_with_spaced_thousands_plus_signs_and_spaced_percents_parse():
+    from app.extraction.columns import parse_cell
+    from app.parsing.grids import is_number_token
+
+    assert parse_cell("1 177").value == 1177 and parse_cell("2 133").value == 2133 and parse_cell("1'177").value == 1177
+    assert parse_cell("+14.7 %").value == 14.7 and parse_cell("+14.7 %").percent
+    assert parse_cell("(154)").value == -154 and parse_cell("3,476").value == 3476 and parse_cell("64").value == 64
+    assert parse_cell("1 17") is None, "a space only separates groups of three digits"
+    assert all(is_number_token(t) for t in ("1 177", "+29.2 %", "(154)", "3,476"))
+
+
+def test_several_other_regions_in_one_grid_are_distinct_by_their_labels():
+    from app.fingerprint.llm import duplicate_value_columns
+
+    q3 = ColumnSpec("value", 3, 9, 2024)
+    layout = _layout(
+        ColumnSpec("value", 3, 9, 2024, geography="Worldwide", label="Total"),
+        ColumnSpec("value", 3, 9, 2024, geography="Other", label="EMEA"),
+        ColumnSpec("value", 3, 9, 2024, geography="Other", label="Rest of World"),
+        ColumnSpec("value", 3, 9, 2024, geography="Other", label="Region China"),
+    )
+    assert duplicate_value_columns(layout) == []
+    twice = _layout(q3, ColumnSpec("value", 3, 9, 2024, geography="Other", label="EMEA"), ColumnSpec("value", 3, 9, 2024, geography="Other", label="EMEA"))
+    assert duplicate_value_columns(twice) == [(1, 2)]
+
+
+def test_a_change_column_compares_the_same_quarter_a_year_earlier_when_the_row_runs_seven_quarters():
+    grid = [["Q3 2024 Q2 2024 Q1 2024 Q4 2023 Q3 2023 Q2 2023 Q1 2023 % change"],
+            ["Wegovy", "17,304", "11,659", "9,377", "9,591", "8,178", "7,522", "4,614", "112%"]]
+    cols = [ColumnSpec("value", 3, m, y) for (m, y) in ((9, 2024), (6, 2024), (3, 2024), (12, 2023), (9, 2023), (6, 2023), (3, 2023))]
+    region = GridRegion(grid_index=0, layout=_layout(*cols, CHG), rows=(_row(1, "Wegovy", "Wegovy", None, "own_revenue"),))
+    observations, failures = read_described_grid(_doc([grid]), region, product="Wegovy", aliases=["Wegovy"])
+    assert not failures, [f.render() for f in failures]
+    assert {o.period: o.value_as_reported for o in observations}["2023Q3"] == 8178

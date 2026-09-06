@@ -15,11 +15,6 @@
     "why": "whitespace folding before locating a model quote verbatim"
   },
   {
-    "file": "app/extraction/columns.py",
-    "pattern": "^(?P<neg>[\\(\\-–−])?\\$?\\s?(?P<num>[\\d,]*\\.?\\d+)\\)?(?P<pct>%)?$",
-    "why": "number formatting: negative, currency sign, thousands separators, percent"
-  },
-  {
     "file": "app/extraction/series.py",
     "pattern": "(\\d{4})",
     "why": "contract format: the year in a canonical period string"
@@ -97,11 +92,26 @@
   {
     "file": "app/fingerprint/llm.py",
     "pattern": "^(\\d{4})H([12])$",
-    "why": "contract format: a half-year period the model wrote as 2026H1 (six months to June)"
+    "why": "contract format: a half-year the model wrote as YYYYH1 is the six months to June"
   },
   {
     "file": "app/fingerprint/llm.py",
     "pattern": "grid(\\d+):(.*)",
-    "why": "contract format: the parser's own rejection strings, read back to decide promotion"
+    "why": "contract format: reading the grid index out of the parser's own rejection strings"
+  },
+  {
+    "file": "app/extraction/columns.py",
+    "pattern": "^(?P<neg>[\\(\\-–−])?\\+?\\$?\\s?(?P<num>\\d{1,3}(?:[ ,\\u00a0\\u202f']\\d{3})+(?:\\.\\d+)?|[\\d,]*\\.?\\d+)\\)?\\s?(?P<pct>%)?$",
+    "why": "number formatting: sign, currency sign, thousands separated by comma, space, no-break space or apostrophe, decimals, percent with or without a space"
+  },
+  {
+    "file": "app/extraction/columns.py",
+    "pattern": "[ ,\\u00a0\\u202f']",
+    "why": "number formatting: strip thousands separators before float()"
+  },
+  {
+    "file": "app/fingerprint/llm.py",
+    "pattern": "^(\\d{4})Q1[-–](\\d{4})Q([2-4])$",
+    "why": "contract format: a year-to-date span the model wrote as a quarter range"
   }
 ]

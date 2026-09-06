@@ -50,6 +50,20 @@ CACHE_DIR = Path(__file__).resolve().parents[2] / "storage" / "fingerprints"
 # reading of the document.
 _PERIOD_RE = re.compile(r"^(\d{4})(?:Q([1-4]))?$")
 _HALF_RE = re.compile(r"^(\d{4})H([12])$")
+_RANGE_RE = re.compile(r"^(\d{4})Q1[-–](\d{4})Q([2-4])$")
+
+
+def _normalise_period(period: str) -> tuple[str, str | None]:
+    """A period the model wrote as a half or a range, in the contract's own terms."""
+    text = (period or "").strip()
+    half = _HALF_RE.match(text)
+    if half and half.group(2) == "1":
+        return f"{half.group(1)}Q2", "six_month"
+    span = _RANGE_RE.match(text)
+    if span and span.group(1) == span.group(2):
+        last = int(span.group(3))
+        return f"{span.group(1)}Q{last}", {2: "six_month", 3: "nine_month", 4: "annual"}[last]
+    return text, None
 _MONTHS_BY_TYPE = {"quarterly": 3, "six_month": 6, "nine_month": 9, "annual": 12}
 UNIT_WORDS = ("units", "thousands", "millions", "billions")
 UNIT_SOURCES = ("header", "caption", "footnote", "document_head", "undeclared")
@@ -342,22 +356,22 @@ def squash(text: str) -> str:
 
 def _period_parts(period: str, period_type: str) -> tuple[int | None, int | None, int | None]:
     """(months, end_month, year) for a described column."""
-    text = (period or "").strip()
-    half = _HALF_RE.match(text)
-    if half:
-        # "2026H1" is the six months to June; H2 is not a reporting period issuers state.
-        return (6, 6, int(half.group(1))) if half.group(2) == "1" else (None, None, None)
+    text, implied_type = _normalise_period(period)
+    if implied_type:
+        period_type = implied_type
     match = _PERIOD_RE.match(text)
     if not match:
         return None, None, None
     year = int(match.group(1))
     quarter = int(match.group(2)) if match.group(2) else None
     months = _MONTHS_BY_TYPE.get(period_type or ("quarterly" if quarter else "annual"))
-    if quarter:
-        # A quarter label with a longer type is a contradiction; trust the label.
-        return 3, quarter * 3, year
     if months is None:
         return None, None, None
+    if quarter:
+        # "2026Q2" with period_type six_month is the six months ending with
+        # that quarter (H1 2026); nine_month the nine months; annual a fiscal
+        # year ending there. The quarter names the end, the type the span.
+        return months, quarter * 3, year
     return months, min(12, months), year
 
 
@@ -462,7 +476,10 @@ def duplicate_value_columns(layout: ColumnLayout) -> list[tuple[int, int]]:
     for index, column in enumerate(layout.columns):
         if column.kind != "value":
             continue
-        key = (column.months, column.end_month, column.year, column.geography, column.covers)
+        # Several regions the closed set does not name are all "Other"; the
+        # printed label tells them apart (EMEA beside Rest of World).
+        key = (column.months, column.end_month, column.year, column.geography, column.covers,
+               squash(column.label or "") if column.geography == "Other" else "")
         if key in seen:
             pairs.append((seen[key], index))
         else:
@@ -621,11 +638,8 @@ def _parse_prose(region: dict[str, Any], *, model: str, rejected: list[str]) -> 
     except (TypeError, ValueError):
         rejected.append("prose:value_not_numeric")
         return None
-    period = str(region.get("period") or "").strip()
-    period_type = str(region.get("period_type") or "")
-    half = _HALF_RE.match(period)
-    if half and half.group(2) == "1":
-        period, period_type = f"{half.group(1)}Q2", "six_month"
+    period, implied_type = _normalise_period(str(region.get("period") or ""))
+    period_type = implied_type or str(region.get("period_type") or "")
     if not _PERIOD_RE.match(period):
         rejected.append(f"prose:period({period})")
         return None
