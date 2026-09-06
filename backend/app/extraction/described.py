@@ -39,7 +39,7 @@ PROSE_SCOPES = {"product_own_revenue", "product_line_item_qualified"}
 REPAIRABLE = {
     "more_cells_than_columns", "no_placement_satisfies_the_header", "ambiguous_alignment",
     "subtotal_not_sum_of_members", "coverage_outside_period", "product_row_not_described",
-    "too_many_blank_placements", "duplicate_columns", "contradicted_within_document",
+    "too_many_blank_placements", "duplicate_columns", "contradicted_within_document", "duplicate_geography_rows",
 }
 
 
@@ -134,6 +134,24 @@ def read_described_grid(
             "a grid prints each figure once, so one of them is another period or period type "
             "(three months beside six or nine months, a quarter beside its year); re-read the header over each column",
         )]
+
+    # A grid prints one figure per geography for a product: two own-revenue
+    # or subtotal rows of this product under the same geography mean one of
+    # them is another region or the subtotal of the others.
+    by_geography: dict[str, list[RowDescription]] = defaultdict(list)
+    for row in region.rows:
+        if row.product.lower() in names and row.line in EXACT_LINES and row.geography:
+            by_geography[row.geography].append(row)
+    for geography, rows_alike in by_geography.items():
+        if len(rows_alike) > 1:
+            first, second = rows_alike[0], rows_alike[1]
+            return [], [VerificationFailure(
+                region.grid_index, second.row_index, "duplicate_geography_rows",
+                f"rows r{first.row_index} ({first.label_as_printed!r}) and r{second.row_index} ({second.label_as_printed!r}) "
+                f"are both described as {geography} for {product}; a grid prints one figure per geography, so one of them "
+                "is another geography from the closed set (Europe, Japan, Other for a region the set does not name) or the "
+                "subtotal_of_geographies of the others, with its members listed; re-read each row's label",
+            )]
 
     # Every described row is placed, because subtotals are verified against
     # rows that may belong to no product of interest on their own.

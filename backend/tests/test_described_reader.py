@@ -249,3 +249,44 @@ def test_the_family_split_is_where_a_sibling_formulation_states_its_own_figure()
     periods = formulation_split_periods([obs("2022Q3"), obs("2022Q2"), obs("2022Q1", method="prose"),
                                          obs("2021Q4", line_item="qualified"), obs("2021Q3", provisional=True)])
     assert periods == ["2022Q2", "2022Q3"], "a sentence, a qualified line and a provisional figure are not the split"
+
+
+def test_two_rows_of_one_product_under_one_geography_are_sent_back():
+    grid = [
+        ["Three Months Ended September 30, 2024 2023"],
+        ["US", "66,868", "59,203"],
+        ["Japan", "20,983", "16,033"],
+        ["Europe and rest of world", "5,574", "3,836"],
+        ["International", "26,557", "19,869"],
+        ["Total product revenues, net", "93,425", "79,072"],
+    ]
+    q3_24, q3_23 = ColumnSpec("value", 3, 9, 2024), ColumnSpec("value", 3, 9, 2023)
+    region = GridRegion(
+        grid_index=0, layout=_layout(q3_24, q3_23, unit="thousands"),
+        rows=(
+            _row(1, "US", "Arikayce", "United States", "own_revenue"),
+            _row(2, "Japan", "Arikayce", "Japan", "own_revenue"),
+            _row(3, "Europe and rest of world", "Arikayce", "International", "own_revenue"),
+            _row(4, "International", "Arikayce", "International", "subtotal_of_geographies", members=(2, 3)),
+            _row(5, "Total product revenues, net", "Arikayce", "Worldwide", "subtotal_of_geographies", members=(1, 4)),
+        ),
+    )
+    observations, failures = read_described_grid(_doc([grid]), region, product="Arikayce", aliases=["Arikayce"])
+    assert not observations
+    assert [f.code for f in failures] == ["duplicate_geography_rows"]
+    assert "r3" in failures[0].detail and "r4" in failures[0].detail and "International" in failures[0].detail
+
+
+def test_an_other_region_compares_by_its_printed_label():
+    from app.benchmark.schema import from_series
+    from app.extraction.series import SeriesValue
+
+    def value(geography, label):
+        return SeriesValue(product="X", period="2025Q2", period_type="quarterly", geography=geography, value_millions=1.0,
+                           value_as_reported=1.0, unit_label="millions", currency="USD", route="read", derivation="direct_reported",
+                           status="resolved", detail="", source_urls=(), source_quote="", geography_label=label)
+
+    assert from_series(value("Other", "Rest of World")).geography == "international"
+    assert from_series(value("Other", "Europe and rest of world")).geography == "other"
+    assert from_series(value("International", "Intl")).geography == "international"
+    assert from_series(value("Japan", "Japan")).geography == "japan"

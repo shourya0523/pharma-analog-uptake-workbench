@@ -154,13 +154,27 @@ def from_gold(row: dict[str, Any]) -> ComparableRevenueRow:
     )
 
 
+def _pipeline_geography(value: SeriesValue) -> str:
+    """The canonical geography of a series value; an "Other" region is named by its printed label.
+
+    The contract keeps "International" for a line covering everything outside
+    the United States and files named regions under Europe, Japan or Other
+    with the printed label beside them. The reference is keyed the same way
+    from its printed labels, so "Rest of World" read as Other compares as the
+    reference's international row and "Europe and rest of world" as other.
+    """
+    if (value.geography or "").lower() == "other" and value.geography_label:
+        return canonical_geography(value.geography_label)
+    return canonical_geography(value.geography)
+
+
 def from_series(value: SeriesValue) -> ComparableRevenueRow:
     """A pipeline series value in the common shape."""
     return ComparableRevenueRow(
         product=value.product,
         period=value.period,
         period_type=value.period_type,
-        geography=canonical_geography(value.geography),
+        geography=_pipeline_geography(value),
         value_millions=float(value.value_millions),
         value_usd_millions=value.value_usd_millions,
         value_as_reported=value.value_as_reported,
