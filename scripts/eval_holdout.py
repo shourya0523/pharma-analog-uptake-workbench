@@ -188,7 +188,7 @@ async def main() -> int:
     catalog = {issuer: [p["drug_name"] for p in rows] for issuer, rows in by_issuer.items()}
     generics = {p["drug_name"]: p["generic_name"] for p in products}
     mode = args.mode or ("model" if args.fingerprinter == "llm" else "degraded")
-    fingerprinter = LLMFingerprinter(model=args.model) if (mode == "model" or args.fingerprinter == "llm") else None
+    fingerprinter = LLMFingerprinter(model=args.model, max_calls=10**6) if (mode == "model" or args.fingerprinter == "llm") else None
     runner = Runner(corpus, fingerprinter=fingerprinter, catalog=catalog, generics=generics, mode=mode)  # type: ignore[arg-type]
 
     comparisons: dict[str, list[Comparison]] = {}

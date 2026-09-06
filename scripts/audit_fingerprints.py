@@ -72,7 +72,7 @@ async def main() -> int:
 
     corpus = Corpus(rendering=args.rendering)
     doc_parser = DocumentParser(corpus.file_store())
-    fingerprinter = LLMFingerprinter(model=args.model)
+    fingerprinter = LLMFingerprinter(model=args.model, max_calls=10**6)
     print(f"contract v{fingerprinter.version}; strong={fingerprinter.model} fast={fingerprinter.fast_model}")
 
     parsed: dict[str, object] = {}

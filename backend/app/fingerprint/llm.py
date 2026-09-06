@@ -707,7 +707,8 @@ class LLMFingerprinter:
 
     def __init__(self, client: OpenRouterClient | None = None, *, model: str | None = None,
                  fast_model: str | None = None, cache_dir: Path = CACHE_DIR, concurrency: int | None = None,
-                 max_tokens: int | None = None, tiering: bool = True) -> None:
+                 max_tokens: int | None = None, tiering: bool = True,
+                 max_calls: int | None = None) -> None:
         self.settings = get_settings()
         self.client = client or OpenRouterClient()
         self.model = model or self.settings.openrouter_model_fingerprint
@@ -719,7 +720,8 @@ class LLMFingerprinter:
         self.cache_dir = cache_dir
         self.cache_dir.mkdir(parents=True, exist_ok=True)
         self.max_tokens = max_tokens or self.settings.fingerprint_max_tokens
-        self.max_calls = self.settings.fingerprint_max_calls_per_job
+        # The per-job budget guards production; an evaluation passes its own.
+        self.max_calls = max_calls if max_calls is not None else self.settings.fingerprint_max_calls_per_job
         self.calls = 0
         self._semaphore = asyncio.Semaphore(concurrency or self.settings.fingerprint_concurrency)
 

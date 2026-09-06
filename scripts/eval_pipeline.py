@@ -165,7 +165,7 @@ async def main() -> int:
             catalog[row["manufacturer"]].append(row["drug_name"])
     generics_all = {row["drug_name"]: row.get("generic_name") for row in quarterly + annual}
     mode = args.mode or ("model" if args.fingerprinter == "llm" else "degraded")
-    fingerprinter = LLMFingerprinter(model=args.model) if (mode == "model" or args.fingerprinter == "llm") else None
+    fingerprinter = LLMFingerprinter(model=args.model, max_calls=10**6) if (mode == "model" or args.fingerprinter == "llm") else None
     runner = Runner(corpus, fingerprinter=fingerprinter, catalog=dict(catalog), generics=generics_all, mode=mode)
     if fingerprinter is not None:
         print(f"mode: {mode}; fingerprinter: {fingerprinter.model} (enabled={fingerprinter.enabled})")
