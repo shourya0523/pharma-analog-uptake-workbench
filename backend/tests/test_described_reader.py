@@ -230,3 +230,22 @@ def test_a_series_keeps_the_issuers_currency_and_compares_in_it():
                       "derivation": "direct_reported", "source_url": "a", "source_quote": "Wegovy 19,528"})
     result = compare(gold, [from_series(v) for v in series.values])
     assert result.outcome == "match", result.detail
+
+
+def test_the_family_split_is_where_a_sibling_formulation_states_its_own_figure():
+    from app.catalog.families import family_parent, family_siblings
+    from app.extraction.series import formulation_split_periods
+
+    assert family_parent("Nebulized Tyvaso") == "Tyvaso" and family_siblings("Nebulized Tyvaso") == ["Tyvaso DPI"]
+    assert family_siblings("Tyvaso") == []
+
+    def obs(period, method="grid", line_item="exact", provisional=False):
+        return Observation(
+            product_label="Tyvaso DPI", period=period, period_type="quarterly", value_as_reported=1.0, unit_label="millions",
+            currency="USD", unit_declared=True, geography=None, covers=None, source_quote="Tyvaso DPI 1.0", method=method,
+            layout_signature="", verified=(), specificity=0, line_item=line_item, provisional=provisional,
+        )
+
+    periods = formulation_split_periods([obs("2022Q3"), obs("2022Q2"), obs("2022Q1", method="prose"),
+                                         obs("2021Q4", line_item="qualified"), obs("2021Q3", provisional=True)])
+    assert periods == ["2022Q2", "2022Q3"], "a sentence, a qualified line and a provisional figure are not the split"

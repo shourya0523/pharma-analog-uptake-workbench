@@ -14,7 +14,7 @@ Orenitram,Prostacyclin (PGI2) analogue,prostacyclin_pathway,Oral,2013,Pulmonary 
 Adempas,Soluble guanylate cyclase stimulator,nitric_oxide_pathway,Oral,2013,Pulmonary arterial hypertension,curated_reference,distinct_product
 Uptravi,Selective IP prostacyclin receptor agonist,prostacyclin_pathway,Oral,2015,Pulmonary arterial hypertension,curated_reference,distinct_product
 Alyq,PDE5 inhibitor,nitric_oxide_pathway,Oral,2018,Pulmonary arterial hypertension,curated_reference,distinct_product
-Tyvaso DPI,Prostacyclin (PGI2) analogue,prostacyclin_pathway,Inhaled,2022,Pulmonary arterial hypertension,curated_reference,distinct_product
+Tyvaso DPI,Prostacyclin (PGI2) analogue,prostacyclin_pathway,Inhaled,2022,Pulmonary arterial hypertension,curated_reference,formulation_of:Tyvaso
 Tadliq,PDE5 inhibitor,nitric_oxide_pathway,Oral,2022,Pulmonary arterial hypertension,curated_reference,distinct_product
 Liqrev,PDE5 inhibitor,nitric_oxide_pathway,Oral,2023,Pulmonary arterial hypertension,curated_reference,distinct_product
 Winrevair,Activin signalling inhibitor (ActRIIA-Fc fusion),activin_pathway,Subcutaneous,2024,Pulmonary arterial hypertension,curated_reference,distinct_product

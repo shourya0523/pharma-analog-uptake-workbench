@@ -858,6 +858,19 @@ def _value_step(a: SeriesValue, b: SeriesValue) -> float | None:
     return max(steps) if steps else None
 
 
+def formulation_split_periods(sibling_observations: Iterable[Observation]) -> list[str]:
+    """Quarters in which a sibling formulation is stated on a line of its own.
+
+    The family line before the first of these is the one formulation on
+    sale; nothing about labels decides it, only that the documents state
+    the sibling's own figure.
+    """
+    return sorted({
+        o.period for o in sibling_observations
+        if o.method == "grid" and o.period_type == "quarterly" and o.line_item == "exact" and not o.provisional
+    })
+
+
 def propagate_family(
     parent: Series,
     *,

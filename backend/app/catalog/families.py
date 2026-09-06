@@ -41,3 +41,12 @@ def family_parent(product: str) -> str | None:
         if child.lower() == wanted:
             return parent
     return None
+
+
+def family_siblings(product: str) -> list[str]:
+    """The other formulations of ``product``'s family: the lines whose own figures mark the family's split."""
+    parent = family_parent(product)
+    if not parent:
+        return []
+    wanted = product.strip().lower()
+    return sorted(child for child, p in family_parents().items() if p == parent and child.lower() != wanted)

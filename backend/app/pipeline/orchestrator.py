@@ -65,11 +65,11 @@ from app.parsing.periods import detect_period_context, normalize_period
 from app.extraction.candidates import extract_revenue_candidates
 from app.extraction.readers import Observation
 from app.extraction.reading import read_document
-from app.catalog.families import family_parent
+from app.catalog.families import family_parent, family_siblings
 from app.extraction.described import read_described_document, read_with_repair
 from app.fingerprint.triage import triage
 from app.sourcing.edgar import EdgarIndex
-from app.extraction.series import Series, assemble_series, propagate_family
+from app.extraction.series import Series, assemble_series, formulation_split_periods, propagate_family
 from app.fingerprint.llm import Fingerprint, LLMFingerprinter
 from app.extraction.units import UNIT_SCALE_TO_MILLIONS
 from app.quality.candidate_filters import filter_revenue_candidates
@@ -1069,6 +1069,9 @@ class PipelineOrchestrator:
                 # was reported under before the issuer split it out.
                 family_report = read_document(doc, product=family, source_url=src.url, fingerprint=fingerprint)
                 self._observations.setdefault(f"{job.id}:family", []).extend(family_report.observations)
+                for sibling in family_siblings(job.drug_name):
+                    sibling_report = read_document(doc, product=sibling, source_url=src.url, fingerprint=fingerprint)
+                    self._observations.setdefault(f"{job.id}:siblings", []).extend(sibling_report.observations)
             if report.skipped:
                 logger.info("reader_skipped job_id=%s source_id=%s reasons=%s", job.id, src.source_id, report.skipped[:6])
             seen_rows = {
@@ -1286,6 +1289,9 @@ class PipelineOrchestrator:
             if family:
                 family_report = read_described_document(doc, fingerprint, product=family, source_url=src.url)
                 self._observations.setdefault(f"{job.id}:family", []).extend(family_report.observations)
+                for sibling in family_siblings(job.drug_name):
+                    sibling_report = read_described_document(doc, fingerprint, product=sibling, source_url=src.url)
+                    self._observations.setdefault(f"{job.id}:siblings", []).extend(sibling_report.observations)
             if src_row:
                 summary = (
                     f"model_read parts={fingerprint.parts} tiers={dict(fingerprint.tiers)} rejected={len(fingerprint.rejected)} "
@@ -1369,11 +1375,8 @@ class PipelineOrchestrator:
                 parent_observations = getattr(self, "_observations", {}).get(f"{job.id}:family", [])
             if parent_observations:
                 parent_series = assemble_series(parent_observations, product=parent)
-                siblings = sorted({
-                    o.period for o in parent_observations
-                    if o.method == "grid" and o.specificity and o.period_type == "quarterly"
-                    and job.drug_name.lower() not in o.product_label.lower() and parent.lower() in o.product_label.lower()
-                })
+                # The split is where a sibling formulation is stated on its own line.
+                siblings = formulation_split_periods(getattr(self, "_observations", {}).get(f"{job.id}:siblings", []))
                 own = {v.period for v in series.values if v.period_type == "quarterly"}
                 series.values.extend(
                     v for v in propagate_family(parent_series, product=job.drug_name, sibling_periods=siblings)

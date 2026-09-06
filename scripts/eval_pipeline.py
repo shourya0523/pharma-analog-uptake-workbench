@@ -36,7 +36,8 @@ from app.extraction.described import read_with_repair
 from app.extraction.readers import Observation  # noqa: E402
 from app.extraction.reading import read_document  # noqa: E402
 from app.fingerprint.llm import Fingerprint, LLMFingerprinter  # noqa: E402
-from app.extraction.series import Series, assemble_series, propagate_family  # noqa: E402
+from app.catalog.families import family_siblings  # noqa: E402
+from app.extraction.series import Series, assemble_series, formulation_split_periods, propagate_family  # noqa: E402
 from app.parsing.documents import DocumentParser  # noqa: E402
 
 
@@ -57,25 +58,6 @@ def product_relations() -> dict[str, str]:
             if role.startswith("formulation_of:"):
                 relations[row["drug_name"]] = role.split(":", 1)[1]
     return relations
-
-
-def sibling_formulation_periods(parent_observations: list[Observation], *, family: str, product: str) -> list[str]:
-    """Periods in which the family line is stated for a formulation other than ``product``."""
-    periods: set[str] = set()
-    own = product.lower()
-    fam = family.lower()
-    for obs in parent_observations:
-        label = obs.product_label.lower()
-        if obs.method != "grid" or obs.period_type != "quarterly" or obs.specificity == 0:
-            continue
-        if len(label.split()) > 6:
-            continue
-        if label == own or own in label:
-            continue
-        if fam not in label or label.startswith("total"):
-            continue
-        periods.add(obs.period)
-    return sorted(periods)
 
 
 class Runner:
@@ -225,9 +207,12 @@ async def main() -> int:
             # The split is visible in the documents themselves: the first
             # period in which the family's line is broken out into a
             # formulation other than this one.
-            sibling_periods = sibling_formulation_periods(
-                observations_by_product.get(parent, []), family=parent, product=product
-            )
+            sibling_periods: set[str] = set()
+            for sibling in family_siblings(product):
+                if sibling not in observations_by_product:
+                    sibling_obs, _ = await runner.observe(sibling, generic_of.get(sibling), urls, issuer)
+                    observations_by_product[sibling] = sibling_obs
+                sibling_periods.update(formulation_split_periods(observations_by_product[sibling]))
             own_periods = {v.period for v in series.values if v.period_type == "quarterly"}
             for value in propagate_family(series_by_product[parent], product=product, sibling_periods=sibling_periods):
                 if value.period not in own_periods:
