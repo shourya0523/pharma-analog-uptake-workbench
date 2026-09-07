@@ -118,10 +118,26 @@ def _label_names_product(label: str, names: set[str]) -> bool:
     return any(name in lowered for name in names)
 
 
+def document_latest_period(fingerprint: Fingerprint) -> tuple[int, int] | None:
+    """The latest (year, end month) any described column of the document states: the period it reports on."""
+    ends = [
+        (c.year, c.end_month) for g in fingerprint.grids for c in g.layout.columns
+        if c.kind == "value" and c.year is not None and c.end_month is not None
+    ]
+    return max(ends) if ends else None
+
+
 def read_described_grid(
     doc: ParsedDocument, region: GridRegion, *, product: str, aliases: Iterable[str], source_url: str = "",
+    document_latest: tuple[int, int] | None = None,
 ) -> tuple[list[Observation], list[VerificationFailure]]:
-    """Observations for ``product`` from one described grid, and what could not be verified."""
+    """Observations for ``product`` from one described grid, and what could not be verified.
+
+    A column is the document's own-period statement when it ends where the
+    document's latest described period ends; a retrospective table of an
+    earlier quarter inside a later report is a restatement, however
+    recent its own columns are.
+    """
     tables = doc.tables or []
     if region.grid_index >= len(tables):
         return [], [VerificationFailure(region.grid_index, None, "no_such_grid", "the document has no grid with this index")]
@@ -271,7 +287,11 @@ def read_described_grid(
                 # column's period contains the span; the other columns are whole.
                 covers = row_covers
             notes = ["llm_fingerprint_v2"]
-            if spec.period == current.get(spec.months):
+            if document_latest is not None:
+                own_period = (spec.year, spec.end_month) == document_latest
+            else:
+                own_period = spec.period == current.get(spec.months)
+            if own_period:
                 notes.append("current_period_column")
             if covers and (spec.covers is None):
                 notes.append("coverage_from_description")
@@ -453,8 +473,10 @@ def read_described_document(
     aliases = product_aliases(product, generic, extra=extra_aliases)
     observations: list[Observation] = []
     failures: list[VerificationFailure] = []
+    latest = document_latest_period(fingerprint)
     for region in fingerprint.grids_for(product, aliases):
-        got, failed = read_described_grid(doc, region, product=product, aliases=aliases, source_url=source_url)
+        got, failed = read_described_grid(doc, region, product=product, aliases=aliases, source_url=source_url,
+                                          document_latest=latest)
         observations.extend(got)
         failures.extend(failed)
     prose, dropped, skipped = read_described_prose(doc, fingerprint, product=product, aliases=aliases, source_url=source_url)
@@ -502,7 +524,8 @@ async def read_with_repair(
         if repaired is None:
             continue
         before_obs = [o for o in report.observations if o.table_index == grid_index and o.method == "grid"]
-        got, failed_after = read_described_grid(doc, repaired, product=product, aliases=aliases, source_url=source_url)
+        got, failed_after = read_described_grid(doc, repaired, product=product, aliases=aliases, source_url=source_url,
+                                                document_latest=document_latest_period(fingerprint))
         repairable_after = [f for f in failed_after if f.code in REPAIRABLE]
         if len(repairable_after) < len(failed) or (len(got) > len(before_obs) and len(repairable_after) <= len(failed)):
             report.observations = [o for o in report.observations if not (o.table_index == grid_index and o.method == "grid")] + got

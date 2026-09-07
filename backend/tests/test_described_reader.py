@@ -494,3 +494,20 @@ def test_a_restated_figure_stays_visible_as_an_alternate_of_the_own_period_state
                       "currency": "DKK", "source_value_reported": 4816, "source_unit": "millions", "derivation": "direct_reported",
                       "source_url": "a", "source_quote": "Wegovy 4,816"})
     assert compare(gold, [from_series(value)]).outcome == "match"
+
+
+def test_a_retrospective_table_inside_a_later_report_is_a_restatement_not_the_own_period_statement():
+    from app.extraction.described import document_latest_period
+
+    q1_25 = ColumnSpec("value", 3, 3, 2025)
+    q3_24 = ColumnSpec("value", 3, 9, 2024)
+    fingerprint = Fingerprint(grids=[
+        GridRegion(grid_index=0, layout=_layout(q1_25, unit="millions"), rows=(_row(1, "Wegovy", "Wegovy", None, "own_revenue"),)),
+        GridRegion(grid_index=1, layout=_layout(q3_24, unit="millions"), rows=(_row(1, "Wegovy", "Wegovy", None, "own_revenue"),)),
+    ])
+    doc = _doc([[["Q1 2025"], ["Wegovy", "17,360"]], [["Q3 2024 restated"], ["Wegovy", "17,304"]]])
+    assert document_latest_period(fingerprint) == (2025, 3)
+    report = read_described_document(doc, fingerprint, product="Wegovy")
+    by_period = {o.period: o for o in report.observations}
+    assert "current_period_column" in by_period["2025Q1"].notes
+    assert "current_period_column" not in by_period["2024Q3"].notes
