@@ -6,10 +6,9 @@ figures belong to which period. Reading rows as the cells they happen to contain
 throws that away, and the period then has to be guessed from prose.
 """
 
-from bs4 import BeautifulSoup
-
-from app.extraction.fingerprint import column_periods
+from app.extraction.fingerprint import column_periods, stated_periods
 from app.parsing.documents import html_table_grid, html_tables
+from bs4 import BeautifulSoup
 
 # The shape Gilead files: the heading spans every value column, each year spans
 # its own three, and the figures themselves are spanned too.
@@ -126,4 +125,35 @@ def test_a_year_standing_alone_is_a_heading_not_a_figure():
 
 def test_a_table_that_opens_with_figures_declares_no_periods():
     grid = grid_of("<table><tr><td>Tyvaso</td><td>352.0</td></tr></table>")
+    assert column_periods(grid) == {}
+
+
+# The same issuer's press release, where the headings span and the body does
+# not. On screen the columns line up; in the markup they do not, and the
+# heading row's columns are not the columns the figures are written in.
+GILEAD_PRESS_RELEASE = """
+<table>
+  <tr><td colspan="13">PRODUCT SALES SUMMARY</td></tr>
+  <tr><td colspan="13">(in millions)</td></tr>
+  <tr><td colspan="5">Three Months Ended</td><td colspan="5">Six Months Ended</td></tr>
+  <tr><td colspan="5">June 30,</td><td colspan="5">June 30,</td></tr>
+  <tr><td colspan="2">2016</td><td colspan="2">2015</td>
+      <td colspan="2">2016</td><td colspan="2">2015</td></tr>
+  <tr><td>Harvoni &#8211; Japan</td><td>448</td><td>&#8212;</td><td>1,335</td><td>&#8212;</td></tr>
+</table>
+"""
+
+
+def test_headings_that_span_over_a_body_that_does_not_state_nothing():
+    """Read as geometry this says the label column is 2016 - so it is not geometry.
+
+    Taken at face value it also dates the six-month figure 1,335 as the prior
+    year's quarter, which is the kind of wrong number that looks right.
+    """
+    grid = grid_of(GILEAD_PRESS_RELEASE)
+    label_column = next(
+        index for index, cell in enumerate(grid[-1]) if cell and "Harvoni" in cell
+    )
+    _depth, stated = stated_periods(grid)
+    assert label_column in stated, "expected the raw geometry to cover the label"
     assert column_periods(grid) == {}

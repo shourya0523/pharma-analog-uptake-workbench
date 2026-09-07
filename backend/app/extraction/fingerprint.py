@@ -35,6 +35,11 @@ _PERIOD_PHRASE_RE = re.compile(
     r"\b(three|six|nine|twelve|year)s?\s*(?:months?\s*)?ended\s+([A-Za-z]{3,9})",
     re.IGNORECASE,
 )
+# The same heading with its date on the next line: "Three Months Ended" alone.
+_DANGLING_PHRASE_RE = re.compile(
+    r"\b(?:three|six|nine|twelve|year)s?\s*(?:months?\s*)?ended\s*[,:]?\s*$",
+    re.IGNORECASE,
+)
 _FIGURE_RE = re.compile(r"\(?-?[\d,]+(?:\.\d+)?\)?%?")
 _YEAR_RE = re.compile(r"\b((?:19|20)\d{2})\b")
 _PERCENT_RE = re.compile(r"%")
@@ -194,11 +199,25 @@ def _period_phrases(rows: list[list[str]], limit: int = 8) -> list[tuple[int, in
     Order matters: a 10-Q table reads "Three Months Ended June 30 ... Six Months
     Ended June 30", and the left-to-right order of those phrases is the
     left-to-right order of the value columns.
+
+    A heading that ends mid-phrase continues on the next row: Gilead's press
+    release prints "Three Months Ended" on one line and "June 30," on the next,
+    and neither line alone names a period. Only such a row carries forward -
+    joining rows wholesale would read two headings stacked above two blocks of
+    figures as one heading over one block.
     """
     phrases: list[tuple[int, int]] = []
+    carry: list[str] = []
     for row in rows[:limit]:
-        joined = " ".join(cell for cell in row if cell)
-        for match in _PERIOD_PHRASE_RE.finditer(joined):
+        cells = [cell.strip() for cell in row if cell and cell.strip()]
+        if carry and len(carry) == len(cells):
+            # The heading kept its columns when it broke, so each cell of this
+            # row finishes the cell above it: "Three Months Ended" | "Six Months
+            # Ended" over "June 30," | "June 30," is two headings, not one.
+            cells = [f"{above} {below}" for above, below in zip(carry, cells, strict=True)]
+        elif carry:
+            cells = [" ".join(carry), *cells]
+        for match in _PERIOD_PHRASE_RE.finditer(" ".join(cells)):
             word = match.group(1).lower()
             months = 12 if word == "year" else MONTH_WORDS.get(word, 3)
             month = MONTHS.get(match.group(2).lower())
@@ -206,11 +225,13 @@ def _period_phrases(rows: list[list[str]], limit: int = 8) -> list[tuple[int, in
                 phrases.append((months, month))
         if phrases:
             break
+        dangling = bool(cells) and all(_DANGLING_PHRASE_RE.search(cell) for cell in cells)
+        carry = cells if dangling else []
     return phrases
 
 
 def _year_row(rows: list[list[str]], limit: int = 10) -> list[int]:
-    """Years in column order, from the first header row listing at least two."""
+    """Years in column order, from the first row listing at least two."""
     for row in rows[:limit]:
         years = [int(year) for cell in row for year in _YEAR_RE.findall(cell or "")]
         if len(years) >= 2:
@@ -233,7 +254,7 @@ def _covering(grid: list[list[str | None]], row: int, column: int) -> str:
     return ""
 
 
-def column_periods(grid: list[list[str | None]]) -> dict[int, tuple[int, int, int]]:
+def stated_periods(grid: list[list[str | None]]) -> tuple[int, dict[int, tuple[int, int, int]]]:
     """(months, end month, year) per column, read from the headings above it.
 
     This is what a table states about itself and what flattening destroys. The
@@ -247,14 +268,14 @@ def column_periods(grid: list[list[str | None]]) -> dict[int, tuple[int, int, in
     headings short.
     """
     if not grid:
-        return {}
+        return 0, {}
     header_depth = 0
     for row in grid:
         if any(_is_figure(cell) for cell in row):
             break
         header_depth += 1
     if not header_depth:
-        return {}
+        return 0, {}
 
     width = max(len(row) for row in grid)
     everything = " ".join(
@@ -281,7 +302,47 @@ def column_periods(grid: list[list[str | None]]) -> dict[int, tuple[int, int, in
         if not month:
             continue
         periods[column] = (months, month, int(year_hit.group(0)))
+    return header_depth, periods
+
+
+def column_periods(grid: list[list[str | None]]) -> dict[int, tuple[int, int, int]]:
+    """(months, end month, year) per column, where the headings describe the body."""
+    header_depth, periods = stated_periods(grid)
+    if not periods or not _headings_describe_the_body(grid, header_depth, periods):
+        return {}
     return periods
+
+
+def _headings_describe_the_body(
+    grid: list[list[str | None]],
+    header_depth: int,
+    periods: dict[int, tuple[int, int, int]],
+) -> bool:
+    """Whether the headings' columns are the same columns the body uses.
+
+    A table can span its headings and not span its body, and then the two are
+    laid out in different columns that only line up on screen. Gilead's press
+    release does exactly that: the heading row spans "Three Months Ended" over
+    five columns and the year row spans each year over two, while every product
+    row is written as plain cells, so the label lands in a column the headings
+    say is 2016 and its four figures land under 2016, 2015, 2015, 2016.
+
+    The tell is that a period covers a column the body puts a row label in.
+    Where the two agree, the labels sit to the left of every period. Where they
+    disagree the geometry is describing a layout the numbers are not in, and
+    saying so is a guess dressed as a fact - the ragged reading, which infers
+    the columns and can refuse, is the safer answer.
+    """
+    for row in grid[header_depth:]:
+        origins = [(column, cell) for column, cell in enumerate(row) if cell]
+        if not origins:
+            continue
+        column, cell = origins[0]
+        if _is_figure(cell) or cell in {"$", "%"}:
+            continue
+        if column in periods:
+            return False
+    return True
 
 
 def _is_figure(cell: str | None) -> bool:

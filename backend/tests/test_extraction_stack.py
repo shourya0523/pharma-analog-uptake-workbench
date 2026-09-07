@@ -12,6 +12,8 @@ from app.extraction.check import run_checks
 from app.extraction.extract import map_values_to_blocks, read_table, tokenize_row
 from app.extraction.fingerprint import PeriodBlock, build_fingerprint
 from app.extraction.process import Datapoint, normalize_all
+from app.parsing.documents import flatten_grid, html_table_grid
+from bs4 import BeautifulSoup
 
 UTHR_THOUSANDS = [
     ["", "Three Months Ended September 30,", "", "", ""],
@@ -660,10 +662,6 @@ def test_rounding_between_a_total_and_its_own_parts_is_never_a_contradiction():
 # Everything above reads ragged rows and has to infer which column is which.
 # These read the same tables as rectangles, where the headings say it outright.
 
-from bs4 import BeautifulSoup  # noqa: E402
-
-from app.parsing.documents import flatten_grid, html_table_grid  # noqa: E402
-
 # Gilead splits one heading over two rows - "Three Months Ended" then
 # "March 31," - and spans the years beneath it.
 GILEAD_EXHIBIT = """
@@ -695,17 +693,17 @@ def read_exhibit(markup: str, product: str, context: str = "(in millions)"):
 
 
 def test_a_heading_split_across_rows_is_one_statement_again():
-    """Flat rows cannot join "Three Months Ended" to the "March 31," below it."""
+    """A heading broken over two lines is still one heading, in either reading.
+
+    Issuers break "Three Months Ended" from the "March 31," beneath it wherever
+    the column widths make them. Reading the heading a row at a time finds no
+    period in either line and refuses a table that says exactly what it means.
+    """
     grid, readout = read_exhibit(GILEAD_EXHIBIT, "Harvoni")
-
-    flat = read_table(flatten_grid(grid), product="Harvoni", context="(in millions)")
-    assert flat.values == [], "expected the ragged reading to refuse this table"
-    assert "no_period_header" in flat.skipped_reason
-
-    assert {(value.period, value.value_as_reported) for value in readout.values} == {
-        ("2016Q1", 1407.0),
-        ("2015Q1", 3016.0),
-    }
+    ragged = read_table(flatten_grid(grid), product="Harvoni", context="(in millions)")
+    expected = {("2016Q1", 1407.0), ("2015Q1", 3016.0)}
+    assert {(value.period, value.value_as_reported) for value in readout.values} == expected
+    assert {(value.period, value.value_as_reported) for value in ragged.values} == expected
 
 
 def test_the_quarter_and_the_year_to_date_keep_their_own_lengths():
@@ -739,3 +737,87 @@ def test_two_numbers_under_one_period_are_refused_not_guessed_between():
     _grid, readout = read_exhibit(ambiguous, "Tyvaso")
     assert readout.values == []
     assert "two_values_for_one_period" in readout.skipped_reason
+
+
+# Two headings stacked over two blocks of figures, not two periods side by side.
+STACKED_HEADINGS = [
+    ["", "Three Months Ended June 30,", ""],
+    ["", "2024", "2023"],
+    ["Tyvaso", "352.0", "276.5"],
+    ["", "Six Months Ended June 30,", ""],
+    ["", "2024", "2023"],
+    ["Tyvaso", "679.4", "521.9"],
+]
+
+
+def test_a_heading_carries_forward_only_when_it_ends_mid_phrase():
+    """The line below "Three Months Ended" continues it; the line below a whole
+    heading starts a new one. Reading every header row as one statement would
+    turn this table's two stacked headings into a quarter column beside a
+    year-to-date column, and file 276.5 as the six months to June 2023."""
+    fingerprint = build_fingerprint(STACKED_HEADINGS)
+    assert [(block.months, block.year) for block in fingerprint.blocks] == [
+        (3, 2024),
+        (3, 2023),
+    ]
+
+
+# --- One product, several lines ---------------------------------------------
+#
+# Gilead reports Harvoni by region and prints the worldwide figure as the sum
+# beneath. Every one of those lines names Harvoni, and gold's number is the sum.
+
+REGIONAL_LINES = [
+    ["($ in millions)", "Three Months Ended June 30,", ""],
+    ["", "2016", "2015"],
+    ["Harvoni – U.S.", "1,474", "2,826"],
+    ["Harvoni – Europe", "512", "623"],
+    ["Harvoni – Japan", "448", "—"],
+    ["Harvoni – Other International", "130", "159"],
+    ["2,564", "3,608", ""],
+]
+
+
+def test_the_product_is_the_total_not_whichever_region_comes_first():
+    readout = read_table(REGIONAL_LINES, product="Harvoni")
+    assert {(v.period, v.value_as_reported) for v in readout.values} == {
+        ("2016Q2", 2564.0),
+        ("2015Q2", 3608.0),
+    }
+
+
+def test_the_total_is_quoted_together_with_the_lines_it_sums():
+    """The quote has to let a reader check the arithmetic, not just the number."""
+    readout = read_table(REGIONAL_LINES, product="Harvoni")
+    quote = readout.values[0].source_quote
+    assert "Harvoni – U.S. 1,474" in quote and "2,564" in quote
+
+
+def test_a_total_printed_among_the_lines_is_found_by_the_same_arithmetic():
+    labelled = REGIONAL_LINES[:-1] + [["Harvoni – Total", "2,564", "3,608"]]
+    readout = read_table(labelled, product="Harvoni")
+    assert {(v.period, v.value_as_reported) for v in readout.values} == {
+        ("2016Q2", 2564.0),
+        ("2015Q2", 3608.0),
+    }
+
+
+def test_several_lines_and_no_total_is_refused_rather_than_picked_between():
+    readout = read_table(REGIONAL_LINES[:-1], product="Harvoni")
+    assert readout.values == []
+    assert "several_lines_no_total" in readout.skipped_reason
+
+
+def test_a_row_naming_the_product_alone_is_the_product():
+    """"Tyvaso" is the product; "Tyvaso DPI" is a formulation that shares its name."""
+    rows = [
+        ["($ in millions)", "Three Months Ended June 30,", ""],
+        ["", "2024", "2023"],
+        ["Tyvaso", "352.0", "276.5"],
+        ["Tyvaso DPI", "180.0", "90.0"],
+    ]
+    readout = read_table(rows, product="Tyvaso")
+    assert {(v.product_label, v.period, v.value_as_reported) for v in readout.values} == {
+        ("Tyvaso", "2024Q2", 352.0),
+        ("Tyvaso", "2023Q2", 276.5),
+    }

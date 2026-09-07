@@ -272,6 +272,104 @@ def read_values_by_column(
     return assigned, None
 
 
+def _names_the_product(label: str, product: str, generic: str | None) -> bool:
+    """Whether this row is the product itself rather than one of its lines.
+
+    "Tyvaso" is the product; "Tyvaso DPI" and "Harvoni - Japan" are lines within
+    or beside it. Both match the product's aliases, and the difference between
+    them is that one label is the name and nothing else.
+    """
+    words = lambda text: re.sub(r"[^a-z0-9 ]", " ", (text or "").lower()).split()
+    return words(label) in ([words(product)] + ([words(generic)] if generic else []))
+
+
+def _totals(assignments: Iterable[dict[int, float]]) -> dict[int, float]:
+    summed: dict[int, float] = {}
+    for assigned in assignments:
+        for index, value in assigned.items():
+            summed[index] = summed.get(index, 0.0) + value
+    return summed
+
+
+def _adds_up(candidate: dict[int, float], parts: dict[int, float], count: int) -> bool:
+    """Whether a row is the sum of the component rows, in every period at once.
+
+    Each component is printed rounded, so their sum can miss the printed total
+    by up to half a unit each way. Requiring every period to agree is what makes
+    the arithmetic an identification rather than a coincidence.
+    """
+    if not parts or set(candidate) != set(parts):
+        return False
+    return all(abs(candidate[index] - parts[index]) <= 0.5 * count for index in parts)
+
+
+def _resolve_matches(
+    matches: list[tuple[int, str, dict[int, float]]],
+    source_rows: list[list[str | None]],
+    product: str,
+    generic: str | None,
+    read_row,
+    quote_of,
+    *,
+    reach: int = 2,
+) -> tuple[list[tuple[str, str, dict[int, float]]], str | None]:
+    """Which of the rows naming a product is the product's revenue.
+
+    An issuer that reports a product by region prints a line per region and the
+    worldwide figure as their sum, and every one of those lines names the
+    product. Publishing each of them files four different numbers as the same
+    quarter's revenue - the defect this resolves - and picking the first is a
+    guess. So:
+
+    * one row names the product and nothing else - that row is the product;
+    * otherwise a row whose value is the sum of the others, in every period, is
+      the total the components add to. It may be one of the matched rows
+      ("Total Harvoni") or the unlabelled line printed beneath them, which is
+      how Gilead files it. The arithmetic is what identifies it, so no list of
+      region names is involved and an issuer inventing a new region changes
+      nothing;
+    * otherwise the table has several lines for this product and no total, and
+      which one is the product's revenue is exactly what has not been said.
+
+    The total's quote runs from the first component to the total itself, so the
+    number can be checked against the lines it sums.
+    """
+    if not matches:
+        return [], None
+    if len(matches) == 1:
+        position, label, assigned = matches[0]
+        return [(label, quote_of(source_rows[position]), assigned)], None
+
+    named = [m for m in matches if _names_the_product(m[1], product, generic)]
+    if len(named) == 1:
+        position, label, assigned = named[0]
+        return [(label, quote_of(source_rows[position]), assigned)], None
+
+    # A total printed among the matched rows.
+    for index, (position, _label, assigned) in enumerate(matches):
+        parts = [other[2] for other in matches[:index] + matches[index + 1 :]]
+        if _adds_up(assigned, _totals(parts), len(parts)):
+            first = min(other[0] for other in matches)
+            taken = source_rows[min(first, position) : max(first, position) + 1]
+            return [(product, quote_of(*taken), assigned)], None
+
+    # A total printed beneath them, with no label of its own.
+    parts = _totals(assigned for _, _, assigned in matches)
+    last = max(position for position, _, _ in matches)
+    for position in range(last + 1, min(last + 1 + reach, len(source_rows))):
+        cells = _origins(source_rows[position])
+        if not cells:
+            continue
+        labelled = cell_number(cells[0][1]) is None
+        assigned, _reason = read_row(source_rows[position], cells, labelled=labelled)
+        if assigned and _adds_up(assigned, parts, len(matches)):
+            first = min(other[0] for other in matches)
+            return [(product, quote_of(*source_rows[first : position + 1]), assigned)], None
+
+    labels = ", ".join(label for _, label, _ in matches)
+    return [], f"{labels}:several_lines_no_total"
+
+
 def read_table(
     rows: list[list[str]],
     *,
@@ -300,23 +398,49 @@ def read_table(
     source_rows: list[list[str | None]] = (
         grid if fingerprint.by_column and grid else [list(row) for row in rows]
     )
-    for row in source_rows:
+
+    def read_row(
+        row: list[str | None],
+        cells: list[tuple[int, str]],
+        *,
+        labelled: bool = True,
+    ) -> tuple[dict[int, float] | None, str | None]:
+        if fingerprint.by_column:
+            return read_values_by_column(row, fingerprint.blocks)
+        wanted = cells[1:] if labelled else cells
+        return map_values_to_blocks(
+            tokenize_row([cell for _, cell in wanted]), fingerprint.blocks
+        )
+
+    def quote_of(*rows_taken: list[str | None]) -> str:
+        return " ".join(
+            cell
+            for row in rows_taken
+            for _, cell in _origins(row)
+            if cell and cell.strip()
+        )
+
+    matches: list[tuple[int, str, dict[int, float]]] = []
+    for position, row in enumerate(source_rows):
         cells = _origins(row)
         if not cells:
             continue
         label = clean_label(cells[0][1])
         if not label or not _matches_product(label, aliases):
             continue
-        if fingerprint.by_column:
-            assigned, reason = read_values_by_column(row, fingerprint.blocks)
-        else:
-            assigned, reason = map_values_to_blocks(
-                tokenize_row([cell for _, cell in cells[1:]]), fingerprint.blocks
-            )
+        assigned, reason = read_row(row, cells)
         if assigned is None:
             skipped.append(f"{label}:{reason}")
             continue
-        quote = " ".join(cell for _, cell in cells if cell and cell.strip())
+        matches.append((position, label, assigned))
+
+    published, refusal = _resolve_matches(
+        matches, source_rows, product, generic, read_row, quote_of
+    )
+    if refusal:
+        skipped.append(refusal)
+
+    for label, quote, assigned in published:
         for value_index, value in sorted(assigned.items()):
             block = by_index[value_index]
             values.append(
