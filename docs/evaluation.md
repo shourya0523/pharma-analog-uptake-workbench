@@ -124,6 +124,16 @@ instance the citation names and confirms the fact it points at says what the
 datapoint says. Without it the tagged path publishes unaudited citations, which
 was true for one run and is the reason this exists.
 
+Currently **367/367** across 29 instances: every citation resolves to a fact,
+holds the value claimed, and names the member.
+
+Its first run said 262/367, and the 105 failures were the check's own. A
+citation was looked up by context id alone, and a context is a period and a set
+of dimensions rather than a fact - Johnson & Johnson tags a product's revenue and
+its percentage change against the same one. So a revenue figure was compared
+against a growth rate of -0.215 and called a disagreement. Keyed by context and
+element, nothing disagrees.
+
 **`scripts/eval_provenance.py`** takes each datapoint the pipeline published,
 opens the document it cites, and checks the quote is verbatim in it and the
 value present in the quote. It uses no gold answer at all — it audits the
