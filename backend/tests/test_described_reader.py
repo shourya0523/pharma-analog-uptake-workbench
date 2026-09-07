@@ -445,3 +445,15 @@ def test_a_revenue_section_with_no_product_line_beneath_it_is_sent_back():
     assert not observations
     assert [f.code for f in failures] == ["revenue_section_without_product_rows"]
     assert "Product sales, net" in failures[0].detail
+
+
+def test_two_other_regions_in_one_document_do_not_contradict_each_other():
+    grid = [["Q2 2025 Total EMEA Region China"], ["Wegovy ®", "19,528", "3,500", "1,334"]]
+    q2 = lambda geo, label: ColumnSpec("value", 3, 6, 2025, geography=geo, label=label)  # noqa: E731
+    fingerprint = Fingerprint(grids=[GridRegion(
+        grid_index=0, layout=_layout(q2("Worldwide", "Total"), q2("Other", "EMEA"), q2("Other", "Region China")),
+        rows=(_row(1, "Wegovy ®", "Wegovy", None, "own_revenue"),),
+    )])
+    report = read_described_document(_doc([grid]), fingerprint, product="Wegovy")
+    assert not report.failures, [f.render() for f in report.failures]
+    assert sorted(o.value_as_reported for o in report.observations) == [1334, 3500, 19528]

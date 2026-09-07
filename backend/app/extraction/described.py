@@ -404,7 +404,9 @@ def _contradictions(observations: list[Observation]) -> tuple[list[Observation],
     groups: dict[tuple, list[Observation]] = defaultdict(list)
     for o in observations:
         if o.method == "grid" and o.line_item == "exact":
-            groups[(o.period, o.period_type, o.geography, o.covers)].append(o)
+            # Regions the closed set does not name are told apart by label.
+            geography = f"Other:{o.geography_label or ''}" if o.geography == "Other" else o.geography
+            groups[(o.period, o.period_type, geography, o.covers)].append(o)
     contradicted: list[Observation] = []
     failures: list[VerificationFailure] = []
     for (period, period_type, geography, _covers), group in groups.items():
