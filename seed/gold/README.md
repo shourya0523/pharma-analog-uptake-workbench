@@ -692,7 +692,7 @@ So the two are now separate:
 | Script | What it measures | Needs gold for | Current |
 |---|---|---|---|
 | `eval_provenance.py` | Is the pipeline's own quote verbatim in the document it cites, and is its value in that quote? | nothing | 486/486 |
-| `eval_extraction_documents.py --discover` | Given product, issuer and quarter, does it find the filing and produce the figure? | the expected value | 10/20 recent |
+| `eval_extraction_documents.py --discover` | Given product, issuer and quarter, does it find the filing and produce the figure? | the expected value | 30/114 from 2024Q1 |
 | `eval_extraction_documents.py` | Given the cited filing, does it produce the figure? | the value and the URL | 235/1,415 |
 | `eval_column_alignment.py` | Diagnostic only: handed the passage, is the right column read? | the value and the passage | 1,342/1,351 |
 
@@ -759,8 +759,10 @@ quarter and lets it resolve the CIK, walk EDGAR and choose its own filings.
 That immediately found a limitation no hand-fed eval could: `SECConnector`
 reads only `filings.recent` from the submissions API and never the older
 shards, so it cannot see anything beyond roughly the last thousand filings -
-which is most of this dataset. Scored on quarters inside that window it reads
-half of them end to end.
+which is most of this dataset. Scored on the 114 quarters from 2024Q1 that do
+fall inside it, the pipeline reads 30 end to end: 35 rows still retrieve no
+filing at all even within the window, and 49 retrieve one and miss the figure
+in it.
 
 ## Remaining gaps and why
 
