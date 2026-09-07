@@ -34,7 +34,6 @@ DATE_LINE = re.compile(
     r"October|November|December)\s+\d{1,2},")
 YEAR = re.compile(r"^(19|20)\d{2}$")
 REGION_LINE = re.compile(r"-\s*(U\.S\.?|Europe|Japan|Other International|International|Other)$")
-THREE_MONTHS = re.compile(r"Three Months Ended\s+([A-Z][a-z]+)\s+(\d{1,2}),?\s*((?:19|20)\d{2})?")
 
 
 def text_of(html):

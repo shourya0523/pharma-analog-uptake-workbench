@@ -39,11 +39,3 @@ def numbers(cells):
             v = float(c.strip("()").replace(",", ""))
             vals.append(-v if neg else v)
     return vals
-
-def sales_table(html):
-    """The rows of the PRODUCT SALES SUMMARY, as (label, numbers, raw cells)."""
-    for table in rows_of(html):
-        flat = " ".join(" ".join(r) for r in table[:6]).upper()
-        if "PRODUCT SALES SUMMARY" in flat:
-            return [(r[0], numbers(r[1:]), r) for r in table]
-    return []

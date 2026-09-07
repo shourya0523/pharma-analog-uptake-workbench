@@ -11,45 +11,37 @@ heading reader was written during this work, lifted gold's documents by 18, and
 turned out to be worth exactly zero here even though three quarters of these
 documents use that phrasing. It was removed on the strength of this number.
 
-    SEC_CONTACT='project you@example.com' \
+    SEC_CONTACT='project you@example.com' HOLDOUT_DIR=/tmp/holdout \
         python scripts/eval_period_generalization.py --refresh
+
+The corpus itself is built by scripts/sourcing/fetch_holdout.py, which explains
+what is in it and why those four issuers.
 """
 
 from __future__ import annotations
 
-import argparse, json, os, pathlib, re, sys, time, urllib.request
+import argparse
+import json
+import os
+import pathlib
+import sys
 
 REPO = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "backend"))
 
-from bs4 import BeautifulSoup  # noqa: E402
-
-from app.extraction.fingerprint import build_fingerprint  # noqa: E402
-from app.parsing.documents import (  # noqa: E402
+from app.extraction.fingerprint import build_fingerprint
+from app.parsing.documents import (
     HTML_TABLE_LIMIT,
     flatten_grid,
     html_table_grid,
 )
-from app.parsing.periods import detect_period_context  # noqa: E402
+from app.parsing.periods import detect_period_context
+from bs4 import BeautifulSoup
 
 WORK = pathlib.Path(os.environ.get("HOLDOUT_DIR", "/tmp/holdout"))
-DOCS = WORK / "docs"
-EARNINGS_MONTHS = {1, 2, 4, 5, 7, 8, 10, 11}
 # Large pharmaceutical filers with no product in seed/gold. They are here to be
 # unfamiliar, so nothing about their conventions may be encoded anywhere.
 HELD_OUT = {"78003": "Pfizer", "1551152": "AbbVie", "318154": "Amgen", "59478": "EliLilly"}
-
-
-def expected_quarter(filed: str) -> str:
-    """The quarter an earnings 8-K filed on this date reports."""
-    year, month = int(filed[:4]), int(filed[5:7])
-    if month in (1, 2):
-        return f"{year - 1}Q4"
-    if month in (4, 5):
-        return f"{year}Q1"
-    if month in (7, 8):
-        return f"{year}Q2"
-    return f"{year}Q3"
 
 
 def text_of(path: pathlib.Path) -> str:
@@ -133,10 +125,14 @@ def score() -> int:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--refresh", action="store_true",
-                        help="re-download the held-out exhibits from EDGAR")
+                        help="re-fetch the corpus with scripts/sourcing/fetch_holdout.py")
     args = parser.parse_args()
     if args.refresh:
-        print("Refresh fetches from EDGAR; see the module docstring for SEC_CONTACT.")
+        import subprocess
+        subprocess.run(
+            [sys.executable, str(REPO / "scripts" / "sourcing" / "fetch_holdout.py")],
+            check=True,
+        )
     if not (WORK / "manifest.json").exists():
         raise SystemExit(
             f"No held-out corpus at {WORK}. Fetch it first (see the docstring), "

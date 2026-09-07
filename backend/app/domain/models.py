@@ -103,12 +103,6 @@ class PeriodType(str, Enum):
     UNKNOWN = "unknown"
 
 
-class IssueSeverity(str, Enum):
-    LOW = "low"
-    MEDIUM = "medium"
-    HIGH = "high"
-
-
 class LineOfTherapy(str, Enum):
     FIRST_LINE = "1L"
     SECOND_LINE_PLUS = "2L+"
@@ -180,12 +174,6 @@ class Citation(BaseModel):
             # Allow pending extraction; quality layer will flag before auto-pass
             pass
         return self
-
-
-class CitedValue(BaseModel):
-    field: str
-    value: Any
-    citation: Citation
 
 
 class RetrievedSource(BaseModel):
@@ -275,8 +263,3 @@ class ExtractionOptions(BaseModel):
     llm_evidence_judge: bool = True
     random_validation_sampling: bool = True
     use_uploaded_template: bool = False
-
-
-class RunCreate(BaseModel):
-    drugs: list[DrugInput]
-    options: ExtractionOptions = Field(default_factory=ExtractionOptions)

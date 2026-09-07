@@ -46,7 +46,6 @@ class OCRStub:
 HTML_TABLE_LIMIT = 80
 HTML_ROW_LIMIT = 200
 PDF_PAGE_LIMIT = 40
-PDF_TABLE_LIMIT = 5
 
 # A figure, as a filing prints one: thousands separators, a leading currency
 # sign, a trailing percent, parentheses for negatives.
@@ -358,17 +357,6 @@ def _table_regions(rows: list[list[dict]], gap: float) -> list[list[list[dict]]]
     return [region for region in regions if region]
 
 
-def pdf_page_grid(page) -> list[list[str | None]]:
-    """One page as a rectangle, with a heading occupying the columns it covers.
-
-    The result is in the same shape ``html_table_grid`` produces - a cell's text
-    at the column it starts in, ``None`` at the columns it continues over - so
-    nothing downstream needs to know which kind of document it came from.
-    """
-    rows, gap = _page_rows(page)
-    return _grid_of(rows, gap)
-
-
 def pdf_page_grids(page) -> list[list[list[str | None]]]:
     """Each table on the page as its own rectangle."""
     rows, gap = _page_rows(page)
@@ -487,12 +475,6 @@ def pdf_table_grids(raw: bytes) -> tuple[list[str], list[list[list[str | None]]]
                 if table_relevance(grid):
                     grids.append(grid)
     return blocks, grids
-
-
-def pdf_tables(raw: bytes) -> tuple[list[str], list[list[list[str]]]]:
-    """The same reading as ragged rows, derived from the same rectangles."""
-    blocks, grids = pdf_table_grids(raw)
-    return blocks, [rows for grid in grids if (rows := flatten_grid(grid))]
 
 
 class DocumentParser:
@@ -615,6 +597,3 @@ class DocumentParser:
                 notes=str(exc),
             )
 
-
-def strip_html_noise(text: str) -> str:
-    return re.sub(r"\s+", " ", text).strip()

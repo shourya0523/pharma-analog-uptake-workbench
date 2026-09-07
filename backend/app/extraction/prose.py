@@ -155,11 +155,6 @@ def _periods_with_positions(sentence: str) -> list[tuple[int, _Period]]:
     return positioned
 
 
-def _periods_in(sentence: str) -> list[_Period]:
-    """Every reporting period the sentence names, in reading order."""
-    return [period for _, period in _periods_with_positions(sentence)]
-
-
 def _amounts_with_positions(sentence: str) -> list[tuple[int, tuple[float, str, str]]]:
     """Each money figure with where it appears, in reading order."""
     amounts: list[tuple[int, tuple[float, str, str]]] = []
