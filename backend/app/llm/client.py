@@ -382,6 +382,41 @@ class LLMModules:
             fetch=True,
         )
 
+    async def resolve_xbrl_member(
+        self,
+        *,
+        issuer: str,
+        member: str,
+        siblings: list[str],
+        candidates: list[str],
+    ) -> dict[str, Any]:
+        """Which product an axis member names, when the string rules cannot say.
+
+        Asked once per member, and the answer is written to the register, so
+        this is not in the path of reading a filing.
+        """
+        if not self.settings.openrouter_api_key or not candidates:
+            return {}
+        prompt = load_prompt("xbrl_member_resolver")
+        user = prompt["user_template"].format(
+            issuer=issuer,
+            member=member,
+            siblings="\n".join(f"  - {s}" for s in sorted(siblings)[:40]) or "  (none)",
+            candidates="\n".join(f"  - {c}" for c in sorted(candidates)),
+        )
+        result = await self.client.chat_json(
+            model=self.settings.openrouter_model_judge,
+            system=prompt["system"],
+            user=user,
+        )
+        product = result.get("product")
+        # A model that invents a product outside the list is answering a
+        # different question; the answer is dropped rather than repaired.
+        if product and product not in candidates:
+            return {"product": None, "reason": f"model returned {product!r}, not a candidate",
+                    "confidence": 0.0}
+        return result
+
     async def reconcile(self, *, product: str, candidates: list[dict]) -> dict[str, Any]:
         prompt = load_prompt("conflict_reconciler")
         user = prompt["user_template"].format(
