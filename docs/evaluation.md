@@ -26,19 +26,28 @@ Measured over the whole corpus — all 1,415 gold rows, deduplicated to the 275
 
 | | rows | share |
 |---|---|---|
-| read correctly | 998 | 70.5% |
-| not found | 401 | 28.3% |
+| read correctly | 1,070 | 75.6% |
+| not found | 329 | 23.3% |
 | no readable filing | 13 | 0.9% |
 | **wrong value** | **3** | **0.2%** |
 
-| issuer | | |
-|---|---|---|
-| Johnson & Johnson | 359/424 | 84.7% |
-| Actelion/J&J | 46/58 | 79.3% |
-| United Therapeutics | 238/368 | 64.7% |
-| Gilead | 349/541 | 64.5% |
-| Merck | 6/19 | 31.6% |
-| Liquidia | 0/5 | 0.0% |
+| issuer | | | from tagged facts | from tables |
+|---|---|---|---|---|
+| Johnson & Johnson | 364/424 | 85.8% | 56 | 308 |
+| Merck | 16/19 | 84.2% | 15 | 1 |
+| Liquidia | 4/5 | 80.0% | 4 | 0 |
+| Actelion/J&J | 46/58 | 79.3% | 15 | 31 |
+| United Therapeutics | 268/368 | 72.8% | 105 | 163 |
+| Gilead | 372/541 | 68.8% | 110 | 262 |
+
+Reading the filer's tagged facts before its tables took this from 998 to 1,070
+and added no wrong values. The headline understates what changed: 305 answers
+now come from a declared fact, of which only 72 are new, so 233 rows that
+already worked no longer rest on inferring a period from a heading's geometry.
+
+Every gained row falls in 2019 or later, which is where detail tagging begins.
+Nothing in the code knows that date - a filing from before an issuer's own
+cutoff simply yields no product facts.
 
 Two things in that table are worth stating plainly. The pipeline sourcing for
 itself (70.5%) scores **higher** than the same pipeline handed the document
@@ -107,6 +116,13 @@ filers — so the corpus is made rather than found.
 Both read the corpus built by `scripts/sourcing/fetch_holdout.py`.
 
 ## The gate on provenance
+
+**`scripts/eval_tagged_provenance.py`** does the same for the tagged path,
+which the audit below cannot check: a fact has no prose to quote, so its receipt
+is the element, the context and the period instead. The check goes back to the
+instance the citation names and confirms the fact it points at says what the
+datapoint says. Without it the tagged path publishes unaudited citations, which
+was true for one run and is the reason this exists.
 
 **`scripts/eval_provenance.py`** takes each datapoint the pipeline published,
 opens the document it cites, and checks the quote is verbatim in it and the
