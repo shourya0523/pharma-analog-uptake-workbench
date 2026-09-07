@@ -24,6 +24,12 @@ sys.path.insert(0, str(REPO / "backend"))
 
 from bs4 import BeautifulSoup  # noqa: E402
 
+from app.extraction.fingerprint import build_fingerprint  # noqa: E402
+from app.parsing.documents import (  # noqa: E402
+    HTML_TABLE_LIMIT,
+    flatten_grid,
+    html_table_grid,
+)
 from app.parsing.periods import detect_period_context  # noqa: E402
 
 WORK = pathlib.Path(os.environ.get("HOLDOUT_DIR", "/tmp/holdout"))
@@ -53,6 +59,54 @@ def text_of(path: pathlib.Path) -> str:
     return soup.get_text("\n", strip=True)
 
 
+def soup_of(path: pathlib.Path) -> BeautifulSoup:
+    soup = BeautifulSoup(path.read_bytes().decode("utf-8", "ignore"), "lxml")
+    for tag in soup(["script", "style", "noscript"]):
+        tag.decompose()
+    return soup
+
+
+def score_tables() -> None:
+    """The same question for the table reader: does the geometry generalize?
+
+    A table's headings state which period covers which column. Reading that off
+    the rectangle is meant to be a property of HTML, not of any issuer's house
+    style, so it has to hold on filers nothing here was written against. The
+    ragged reading of the same tables is printed beside it: if the rectangle
+    only ever helps on the corpus gold cites, it is fitted to that corpus.
+    """
+    manifest = json.loads((WORK / "manifest.json").read_text())
+    flat_periods = geometry_periods = 0
+    flat_right = geometry_right = 0
+    tables = 0
+    for entry in manifest:
+        soup = soup_of(pathlib.Path(entry["path"]))
+        context = soup.get_text("\n", strip=True)[:4000]
+        grids = [
+            grid
+            for table in soup.find_all("table")[:HTML_TABLE_LIMIT]
+            if (grid := html_table_grid(table))
+        ]
+        for grid in grids:
+            rows = flatten_grid(grid)
+            if not rows:
+                continue
+            tables += 1
+            flat = build_fingerprint(rows, context)
+            geometry = build_fingerprint(rows, context, grid=grid)
+            if flat.blocks:
+                flat_periods += 1
+                flat_right += entry["expected"] in {b.period for b in flat.blocks}
+            if geometry.blocks:
+                geometry_periods += 1
+                geometry_right += entry["expected"] in {b.period for b in geometry.blocks}
+    print()
+    print(f"held-out tables: {tables}")
+    print(f"  periods found     ragged {flat_periods:>4}    geometry {geometry_periods:>4}")
+    print(f"  naming the filing's own quarter"
+          f"    ragged {flat_right:>4}    geometry {geometry_right:>4}")
+
+
 def score() -> int:
     manifest = json.loads((WORK / "manifest.json").read_text())
     correct, rows = 0, []
@@ -72,6 +126,7 @@ def score() -> int:
     for issuer, filed, want, got in rows:
         mark = "" if got == want else "   <-- wrong"
         print(f"   {issuer:<9}{filed}  expect {want}  got {got}{mark}")
+    score_tables()
     return 0
 
 

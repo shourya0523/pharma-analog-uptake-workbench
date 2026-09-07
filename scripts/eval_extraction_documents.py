@@ -46,7 +46,13 @@ from bs4 import BeautifulSoup  # noqa: E402
 
 from app.connectors.sources import SECConnector  # noqa: E402
 from app.extraction.candidates import extract_revenue_candidates  # noqa: E402
-from app.parsing.documents import DocumentParser, html_tables, pdf_tables  # noqa: E402
+from app.parsing.documents import (  # noqa: E402
+    HTML_TABLE_LIMIT,
+    DocumentParser,
+    flatten_grid,
+    html_table_grid,
+    pdf_tables,
+)
 from app.storage.filestore import FileStore  # noqa: E402
 
 GOLD = REPO / "seed" / "gold"
@@ -107,8 +113,13 @@ def document_text(path: pathlib.Path) -> str:
     return soup.get_text("\n", strip=True)[:4000]
 
 
-def tables_of(path: pathlib.Path, *, capped: bool = True) -> list[list[list[str]]]:
+def tables_of(
+    path: pathlib.Path, *, capped: bool = True
+) -> tuple[list[list[list[str]]], list[list[list[str | None]]]]:
     """The document as the pipeline sees it - same reader, same limits.
+
+    Returns the tables as ragged rows and as rectangles, in the same order and
+    from the same reading, which is how the pipeline itself carries them.
 
     ``capped=False`` lifts the pipeline's own ceiling on how many tables it
     keeps per document. It is not the headline measurement; it exists to price
@@ -118,23 +129,17 @@ def tables_of(path: pathlib.Path, *, capped: bool = True) -> list[list[list[str]
     raw = path.read_bytes()
     if path.suffix == ".pdf":
         _blocks, tables = pdf_tables(raw)
-        return tables
+        return tables, []
     markup = raw.decode("utf-8", "ignore")
     head = markup.lstrip()[:256].lower()
     parser = "lxml-xml" if head.startswith(("<?xml", "<xbrl", "<ix:")) else "lxml"
     soup = BeautifulSoup(markup, parser)
-    if capped:
-        return html_tables(soup)
-    rows_out = []
-    for table in soup.find_all("table"):
-        rows = []
-        for tr in table.find_all("tr"):
-            cells = [c.get_text(" ", strip=True) for c in tr.find_all(["td", "th"])]
-            if cells:
-                rows.append(cells)
-        if rows:
-            rows_out.append(rows)
-    return rows_out
+    found = soup.find_all("table")
+    grids = [
+        grid for table in (found if not capped else found[:HTML_TABLE_LIMIT])
+        if (grid := html_table_grid(table))
+    ]
+    return [rows for grid in grids if (rows := flatten_grid(grid))], grids
 
 
 class LocalCacheStore(FileStore):
@@ -195,7 +200,7 @@ async def discover_and_read(row: dict, store: "LocalCacheStore") -> list[dict]:
         readable += 1
         found, _findings, _skipped = extract_revenue_candidates(
             doc.tables, product=row["drug_name"], generic=row.get("generic_name"),
-            context=doc.full_text[:4000],
+            context=doc.full_text[:4000], grids=doc.table_grids,
         )
         candidates.extend(found)
     return candidates, readable
@@ -229,7 +234,7 @@ def main() -> int:
         by_document[row["source_url"]].append(row)
 
     outcomes: dict[str, list[dict]] = collections.defaultdict(list)
-    parsed_cache: dict[str, list[list[list[str]]]] = {}
+    parsed_cache: dict[str, tuple[list, list]] = {}
     context_cache: dict[str, str] = {}
 
     for url, group in by_document.items():
@@ -242,7 +247,7 @@ def main() -> int:
             if url not in parsed_cache:
                 parsed_cache[url] = tables_of(path, capped=CAPPED)
                 context_cache[url] = document_text(path)
-            tables = parsed_cache[url]
+            tables, grids = parsed_cache[url]
             context = context_cache[url]
         except Exception as exc:  # a document the pipeline cannot open at all
             for row in group:
@@ -255,6 +260,7 @@ def main() -> int:
                 product=row["drug_name"],
                 generic=row.get("generic_name"),
                 context=context,
+                grids=grids,
             )
             wanted = [
                 candidate

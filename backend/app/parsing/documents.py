@@ -27,19 +27,6 @@ PDF_PAGE_LIMIT = 40
 PDF_TABLE_LIMIT = 5
 
 
-def html_tables(soup: BeautifulSoup) -> list[list[list[str]]]:
-    tables: list[list[list[str]]] = []
-    for table in soup.find_all("table")[:HTML_TABLE_LIMIT]:
-        rows = []
-        for tr in table.find_all("tr")[:HTML_ROW_LIMIT]:
-            cells = [c.get_text(" ", strip=True) for c in tr.find_all(["td", "th"])]
-            if cells:
-                rows.append(cells)
-        if rows:
-            tables.append(rows)
-    return tables
-
-
 def html_table_grid(table) -> list[list[str | None]]:
     """One table as a rectangle, keeping what each cell spans.
 
@@ -62,7 +49,7 @@ def html_table_grid(table) -> list[list[str | None]]:
     origins, and a reader after a heading's extent walks the ``None``s.
     """
     filled: dict[tuple[int, int], str | None] = {}
-    for row_index, tr in enumerate(table.find_all("tr")):
+    for row_index, tr in enumerate(table.find_all("tr")[:HTML_ROW_LIMIT]):
         column = 0
         for cell in tr.find_all(["td", "th"]):
             while (row_index, column) in filled:
@@ -97,6 +84,27 @@ def html_table_grids(soup: BeautifulSoup) -> list[list[list[str | None]]]:
         for table in soup.find_all("table")[:HTML_TABLE_LIMIT]
         if (grid := html_table_grid(table))
     ]
+
+
+def flatten_grid(grid: list[list[str | None]]) -> list[list[str]]:
+    """A grid read back as ragged rows: the cells that are actually there.
+
+    The origins of a row, in order, are the cells the row was written with, so
+    this is the same reading ``html_tables`` always produced. Rows holding
+    nothing but continuations of a cell that began above contribute no cells of
+    their own and drop out, as they did when they were read a row at a time.
+    """
+    return [cells for row in grid if (cells := [cell for cell in row if cell is not None])]
+
+
+def html_tables(soup: BeautifulSoup) -> list[list[list[str]]]:
+    """The tables as ragged rows, derived from the same rectangles.
+
+    Deriving one view from the other is what keeps them aligned: table *n* of
+    this list and table *n* of ``html_table_grids`` are the same table, so a
+    period read off the grid can be trusted to describe the rows here.
+    """
+    return [rows for grid in html_table_grids(soup) if (rows := flatten_grid(grid))]
 
 
 def pdf_tables(raw: bytes) -> tuple[list[str], list[list[list[str]]]]:
@@ -197,11 +205,13 @@ class DocumentParser:
         # chunk long filings (keep enough for multi-year MD&A + product tables)
         max_chars = 400_000
         chunks = [text[i : i + 12000] for i in range(0, min(len(text), max_chars), 12000)]
-        tables = html_tables(soup)
+        grids = html_table_grids(soup)
+        tables = [rows for grid in grids if (rows := flatten_grid(grid))]
         return ParsedDocument(
             source_id=source.source_id,
             text_blocks=chunks or [text[:12000]],
             tables=tables,
+            table_grids=grids,
             page_or_section="html body",
             parsing_status=ParsingStatus.SUCCESS,
         )

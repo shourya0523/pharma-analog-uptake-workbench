@@ -207,6 +207,10 @@ class ParsedDocument(BaseModel):
     source_id: str
     text_blocks: list[str] = Field(default_factory=list)
     tables: list[list[list[str]]] = Field(default_factory=list)
+    # The same tables as rectangles, in the same order, where the parser could
+    # produce them: every cell occupies each column it spans, so a heading's
+    # reach - which period covers which figures - survives into extraction.
+    table_grids: list[list[list[str | None]]] = Field(default_factory=list)
     page_or_section: str | None = None
     parsing_status: ParsingStatus
     notes: str | None = None

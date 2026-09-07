@@ -35,6 +35,8 @@ _NUMBER_CELL_RE = re.compile(r"^[\s$(]*(-?[\d,]+(?:\.\d+)?)[\s)%]*$")
 # A value cell may carry a footnote or legend after the number, as in
 # "$6,517 (USD thousands)". The number still owns the column.
 _ANNOTATED_NUMBER_RE = re.compile(r"^[\s$]*(-?[\d,]+(?:\.\d+)?)\s*\(.*$")
+# A percentage is a change column, never a reported amount.
+_PERCENT_RE = re.compile(r"%")
 
 
 def tokenize_row(cells: list[str]) -> list[float | None]:
@@ -210,6 +212,66 @@ def map_values_to_blocks(
     return assigned, None
 
 
+def cell_number(cell: str | None) -> float | None:
+    """The number a single cell states, or None if it states something else.
+
+    Unlike ``tokenize_row`` this does not need dashes to hold their place: a
+    value read off a rectangle is identified by the column it sits in, so a
+    missing comparative cannot shift anything.
+    """
+    text = (cell or "").strip()
+    if not text or _PERCENT_RE.search(text):
+        return None
+    match = _NUMBER_CELL_RE.match(text) or _ANNOTATED_NUMBER_RE.match(text)
+    if not match:
+        return None
+    value = float(match.group(1).replace(",", ""))
+    return -value if text.startswith("(") and value > 0 else value
+
+
+def _origins(row: list[str | None]) -> list[tuple[int, str]]:
+    """(column, text) for the cells this row actually contains.
+
+    Columns holding None continue a cell that began to the left or above; they
+    are not cells of this row and carry no text of their own.
+    """
+    return [(column, cell) for column, cell in enumerate(row) if cell is not None]
+
+
+def read_values_by_column(
+    row: list[str | None],
+    blocks: tuple[PeriodBlock, ...],
+) -> tuple[dict[int, float] | None, str | None]:
+    """Assign a grid row's numbers to the columns whose headings name a period.
+
+    No inference is involved: a number belongs to the period stated over its own
+    column, and a number in a column no heading gives a period to - a change
+    column, a footnote marker - belongs to nothing and is dropped.
+
+    Two numbers landing on one period is the one case this cannot resolve, since
+    the table has not said which of them is the period's figure. The row is
+    refused rather than guessed at.
+    """
+    periods = {block.value_index: block for block in blocks}
+    assigned: dict[int, float] = {}
+    claimed: dict[str, int] = {}
+    for column, cell in _origins(row):
+        block = periods.get(column)
+        if block is None:
+            continue
+        value = cell_number(cell)
+        if value is None:
+            continue
+        key = f"{block.months}m@{block.end_month}:{block.year}"
+        if key in claimed and claimed[key] != column:
+            return None, "two_values_for_one_period"
+        claimed[key] = column
+        assigned[column] = value
+    if not assigned:
+        return None, "no_values"
+    return assigned, None
+
+
 def read_table(
     rows: list[list[str]],
     *,
@@ -217,9 +279,15 @@ def read_table(
     generic: str | None = None,
     extra_aliases: Iterable[str] | None = None,
     context: str = "",
+    grid: list[list[str | None]] | None = None,
 ) -> TableReadout:
-    """Fingerprint one table and read every product row it declares."""
-    fingerprint = build_fingerprint(rows, context)
+    """Fingerprint one table and read every product row it declares.
+
+    ``grid`` is the same table as a rectangle. When it is given the periods come
+    from the headings covering each column and the values are read by column;
+    without it the ragged rows are all there is and the columns are inferred.
+    """
+    fingerprint = build_fingerprint(rows, context, grid=grid)
     if not fingerprint.usable:
         reason = ";".join(fingerprint.notes) or "unusable_fingerprint"
         return TableReadout(fingerprint=fingerprint, values=[], skipped_reason=reason)
@@ -229,17 +297,26 @@ def read_table(
     values: list[ExtractedValue] = []
     skipped: list[str] = []
 
-    for row in rows:
-        if not row:
+    source_rows: list[list[str | None]] = (
+        grid if fingerprint.by_column and grid else [list(row) for row in rows]
+    )
+    for row in source_rows:
+        cells = _origins(row)
+        if not cells:
             continue
-        label = clean_label(row[0])
+        label = clean_label(cells[0][1])
         if not label or not _matches_product(label, aliases):
             continue
-        assigned, reason = map_values_to_blocks(tokenize_row(row[1:]), fingerprint.blocks)
+        if fingerprint.by_column:
+            assigned, reason = read_values_by_column(row, fingerprint.blocks)
+        else:
+            assigned, reason = map_values_to_blocks(
+                tokenize_row([cell for _, cell in cells[1:]]), fingerprint.blocks
+            )
         if assigned is None:
             skipped.append(f"{label}:{reason}")
             continue
-        quote = " ".join(cell for cell in row if cell and cell.strip())
+        quote = " ".join(cell for _, cell in cells if cell and cell.strip())
         for value_index, value in sorted(assigned.items()):
             block = by_index[value_index]
             values.append(
@@ -270,7 +347,15 @@ def read_tables(
     generic: str | None = None,
     extra_aliases: Iterable[str] | None = None,
     context: str = "",
+    grids: Iterable[list[list[str | None]]] | None = None,
 ) -> list[TableReadout]:
+    """Read every table. ``grids`` holds the same tables as rectangles, in order.
+
+    The two lists are produced from one reading of the document, so table *n* of
+    each is the same table; a shorter or absent ``grids`` simply means those
+    tables are read from their ragged rows.
+    """
+    rectangles = list(grids or [])
     return [
         read_table(
             rows,
@@ -278,6 +363,7 @@ def read_tables(
             generic=generic,
             extra_aliases=extra_aliases,
             context=context,
+            grid=rectangles[index] if index < len(rectangles) else None,
         )
-        for rows in tables or []
+        for index, rows in enumerate(tables or [])
     ]

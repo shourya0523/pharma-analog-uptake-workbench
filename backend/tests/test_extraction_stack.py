@@ -653,3 +653,89 @@ def test_rounding_between_a_total_and_its_own_parts_is_never_a_contradiction():
     )
     assert verdict.status == "impossible"
     assert verdict.code == "parts_exceed_total"
+
+
+# --- Read by column, when the table is available as a rectangle -------------
+#
+# Everything above reads ragged rows and has to infer which column is which.
+# These read the same tables as rectangles, where the headings say it outright.
+
+from bs4 import BeautifulSoup  # noqa: E402
+
+from app.parsing.documents import flatten_grid, html_table_grid  # noqa: E402
+
+# Gilead splits one heading over two rows - "Three Months Ended" then
+# "March 31," - and spans the years beneath it.
+GILEAD_EXHIBIT = """
+<table>
+  <tr><td></td><td></td><td colspan="7">Three Months Ended</td></tr>
+  <tr><td></td><td></td><td colspan="7">March 31,</td></tr>
+  <tr><td></td><td></td><td colspan="3">2016</td><td></td><td colspan="3">2015</td></tr>
+  <tr><td>Harvoni - U.S.</td><td></td><td colspan="2">1,407</td><td></td><td></td>
+      <td colspan="2">3,016</td><td></td></tr>
+</table>
+"""
+
+# A quarter, its year to date, and a change column between each pair of years.
+TEN_Q_EXHIBIT = """
+<table>
+  <tr><td></td><td colspan="5">Three Months Ended June 30,</td>
+      <td colspan="5">Six Months Ended June 30,</td></tr>
+  <tr><td></td><td colspan="2">2024</td><td colspan="2">2023</td><td>% Chg</td>
+      <td colspan="2">2024</td><td colspan="2">2023</td><td>% Chg</td></tr>
+  <tr><td>Tyvaso</td><td colspan="2">352.0</td><td colspan="2">276.5</td><td>27</td>
+      <td colspan="2">679.4</td><td colspan="2">521.9</td><td>30</td></tr>
+</table>
+"""
+
+
+def read_exhibit(markup: str, product: str, context: str = "(in millions)"):
+    grid = html_table_grid(BeautifulSoup(markup, "lxml").find("table"))
+    return grid, read_table(flatten_grid(grid), product=product, context=context, grid=grid)
+
+
+def test_a_heading_split_across_rows_is_one_statement_again():
+    """Flat rows cannot join "Three Months Ended" to the "March 31," below it."""
+    grid, readout = read_exhibit(GILEAD_EXHIBIT, "Harvoni")
+
+    flat = read_table(flatten_grid(grid), product="Harvoni", context="(in millions)")
+    assert flat.values == [], "expected the ragged reading to refuse this table"
+    assert "no_period_header" in flat.skipped_reason
+
+    assert {(value.period, value.value_as_reported) for value in readout.values} == {
+        ("2016Q1", 1407.0),
+        ("2015Q1", 3016.0),
+    }
+
+
+def test_the_quarter_and_the_year_to_date_keep_their_own_lengths():
+    _grid, readout = read_exhibit(TEN_Q_EXHIBIT, "Tyvaso")
+    by_period = {
+        (value.period, value.period_type): value.value_as_reported for value in readout.values
+    }
+    assert by_period == {
+        ("2024Q2", "quarterly"): 352.0,
+        ("2023Q2", "quarterly"): 276.5,
+        ("2024", "six_month"): 679.4,
+        ("2023", "six_month"): 521.9,
+    }
+
+
+def test_a_change_column_is_not_revenue():
+    """27 and 30 sit under "% Chg", which names no period, so they are dropped."""
+    _grid, readout = read_exhibit(TEN_Q_EXHIBIT, "Tyvaso")
+    assert 27.0 not in {value.value_as_reported for value in readout.values}
+    assert 30.0 not in {value.value_as_reported for value in readout.values}
+
+
+def test_two_numbers_under_one_period_are_refused_not_guessed_between():
+    """A heading covering both a figure and its change says which is which: nothing."""
+    ambiguous = """
+    <table>
+      <tr><td></td><td colspan="2">Three Months Ended June 30, 2024</td></tr>
+      <tr><td>Tyvaso</td><td>352.0</td><td>27</td></tr>
+    </table>
+    """
+    _grid, readout = read_exhibit(ambiguous, "Tyvaso")
+    assert readout.values == []
+    assert "two_values_for_one_period" in readout.skipped_reason

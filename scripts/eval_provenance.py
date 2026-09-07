@@ -49,7 +49,12 @@ from bs4 import BeautifulSoup  # noqa: E402
 from app.extraction.candidates import extract_revenue_candidates  # noqa: E402
 from app.llm.client import LLMModules  # noqa: E402
 from app.llm.grounding import quote_is_verbatim  # noqa: E402
-from app.parsing.documents import html_tables, pdf_tables  # noqa: E402
+from app.parsing.documents import (  # noqa: E402
+    HTML_TABLE_LIMIT,
+    flatten_grid,
+    html_table_grid,
+    pdf_tables,
+)
 from app.parsing.evidence import build_revenue_llm_text  # noqa: E402
 from app.quality.candidate_filters import filter_revenue_candidates  # noqa: E402
 
@@ -62,18 +67,24 @@ def cache_path(url: str) -> pathlib.Path:
     return CACHE / (digest + (".pdf" if url.lower().split("?")[0].endswith(".pdf") else ".html"))
 
 
-def document_text_and_tables(path: pathlib.Path) -> tuple[str, list]:
+def document_text_and_tables(path: pathlib.Path) -> tuple[str, list, list]:
+    """(text, tables as ragged rows, the same tables as rectangles)."""
     raw = path.read_bytes()
     if path.suffix == ".pdf":
         blocks, tables = pdf_tables(raw)
-        return "\n".join(blocks), tables
+        return "\n".join(blocks), tables, []
     markup = raw.decode("utf-8", "ignore")
     head = markup.lstrip()[:256].lower()
     parser = "lxml-xml" if head.startswith(("<?xml", "<xbrl", "<ix:")) else "lxml"
     soup = BeautifulSoup(markup, parser)
     for tag in soup(["script", "style", "noscript"]):
         tag.decompose()
-    return soup.get_text("\n", strip=True), html_tables(soup)
+    grids = [
+        grid for table in soup.find_all("table")[:HTML_TABLE_LIMIT]
+        if (grid := html_table_grid(table))
+    ]
+    tables = [rows for grid in grids if (rows := flatten_grid(grid))]
+    return soup.get_text("\n", strip=True), tables, grids
 
 
 def value_in_quote(value: float, quote: str) -> bool:
@@ -105,7 +116,7 @@ def main() -> int:
         pairs = pairs[: args.limit]
 
     llm = LLMModules() if args.with_llm else None
-    parsed: dict[str, tuple[str, list]] = {}
+    parsed: dict[str, tuple[str, list, list]] = {}
     tally = collections.Counter()
     offenders: list[dict] = []
 
@@ -118,13 +129,14 @@ def main() -> int:
             try:
                 parsed[url] = document_text_and_tables(path)
             except Exception:
-                parsed[url] = ("", [])
-        text, tables = parsed[url]
+                parsed[url] = ("", [], [])
+        text, tables, grids = parsed[url]
         if not tables:
             tally["document_unreadable"] += 1
             continue
         candidates, _findings, _skipped = extract_revenue_candidates(
-            tables, product=product, generic=generic or None, context=text[:4000]
+            tables, product=product, generic=generic or None, context=text[:4000],
+            grids=grids,
         )
         origin = {id(c): "table" for c in candidates}
         if llm is not None:
@@ -132,7 +144,7 @@ def main() -> int:
             from app.domain.models import ParsedDocument, ParsingStatus
 
             doc = ParsedDocument(
-                source_id="audit", text_blocks=[text], tables=tables,
+                source_id="audit", text_blocks=[text], tables=tables, table_grids=grids,
                 parsing_status=ParsingStatus.SUCCESS,
             )
             llm_text, _evidence = build_revenue_llm_text(

@@ -943,6 +943,7 @@ class PipelineOrchestrator:
                 generic=job.generic_name,
                 extra_aliases=extra,
                 context=doc.full_text[:4000],
+                grids=doc.table_grids,
             )
             for finding in table_findings:
                 logger.warning(

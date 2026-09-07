@@ -8,6 +8,7 @@ throws that away, and the period then has to be guessed from prose.
 
 from bs4 import BeautifulSoup
 
+from app.extraction.fingerprint import column_periods
 from app.parsing.documents import html_table_grid, html_tables
 
 # The shape Gilead files: the heading spans every value column, each year spans
@@ -78,3 +79,51 @@ def test_a_figure_sits_under_the_year_that_spans_its_column():
     prior = harvoni.index("3,016")
     assert year_over(current) == "2016"
     assert year_over(prior) == "2015"
+
+
+# A 10-Q states two lengths side by side: the quarter and the year to date. The
+# only thing that says which is which is how far each heading reaches.
+TEN_Q_SHAPE = """
+<table>
+  <tr><td></td><td colspan="5">Three Months Ended June 30,</td>
+      <td colspan="5">Six Months Ended June 30,</td></tr>
+  <tr><td></td><td colspan="2">2024</td><td colspan="2">2023</td><td>% Chg</td>
+      <td colspan="2">2024</td><td colspan="2">2023</td><td>% Chg</td></tr>
+  <tr><td>Tyvaso</td><td colspan="2">352.0</td><td colspan="2">276.5</td><td>27</td>
+      <td colspan="2">679.4</td><td colspan="2">521.9</td><td>30</td></tr>
+</table>
+"""
+
+
+def test_each_column_carries_the_period_stated_above_it():
+    periods = column_periods(grid_of(GILEAD_SHAPE))
+    # Three months ended March 31, under 2016 and under 2015 respectively.
+    assert periods[2] == (3, 3, 2016)
+    assert periods[3] == (3, 3, 2016)
+    assert periods[6] == (3, 3, 2015)
+    assert periods[7] == (3, 3, 2015)
+
+
+def test_a_quarter_and_the_year_to_date_are_told_apart_by_how_far_each_reaches():
+    periods = column_periods(grid_of(TEN_Q_SHAPE))
+    assert periods[1] == (3, 6, 2024)
+    assert periods[3] == (3, 6, 2023)
+    assert periods[6] == (6, 6, 2024)
+    assert periods[8] == (6, 6, 2023)
+
+
+def test_a_change_column_names_no_year_so_it_gets_no_period():
+    """The guard against booking a percentage as a quarter's revenue."""
+    periods = column_periods(grid_of(TEN_Q_SHAPE))
+    assert 5 not in periods and 10 not in periods
+
+
+def test_a_year_standing_alone_is_a_heading_not_a_figure():
+    """If the year row read as data the headings would stop one row short."""
+    grid = grid_of(GILEAD_SHAPE)
+    assert column_periods(grid), "expected the year row to be read as a heading"
+
+
+def test_a_table_that_opens_with_figures_declares_no_periods():
+    grid = grid_of("<table><tr><td>Tyvaso</td><td>352.0</td></tr></table>")
+    assert column_periods(grid) == {}

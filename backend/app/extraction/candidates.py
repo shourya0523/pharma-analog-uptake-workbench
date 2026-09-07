@@ -66,6 +66,7 @@ def extract_revenue_candidates(
     extra_aliases: Iterable[str] | None = None,
     context: str = "",
     quarterly_only: bool = True,
+    grids: Iterable[list[list[str | None]]] | None = None,
 ) -> tuple[list[dict[str, Any]], list[Finding], list[str]]:
     """Deterministic revenue candidates plus what the checks found.
 
@@ -79,6 +80,7 @@ def extract_revenue_candidates(
         generic=generic,
         extra_aliases=extra_aliases,
         context=context,
+        grids=grids,
     )
     values = [value for readout in readouts for value in readout.values]
     skipped = [readout.skipped_reason for readout in readouts if readout.skipped_reason]

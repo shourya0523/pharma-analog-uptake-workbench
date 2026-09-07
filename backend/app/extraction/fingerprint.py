@@ -35,6 +35,7 @@ _PERIOD_PHRASE_RE = re.compile(
     r"\b(three|six|nine|twelve|year)s?\s*(?:months?\s*)?ended\s+([A-Za-z]{3,9})",
     re.IGNORECASE,
 )
+_FIGURE_RE = re.compile(r"\(?-?[\d,]+(?:\.\d+)?\)?%?")
 _YEAR_RE = re.compile(r"\b((?:19|20)\d{2})\b")
 _PERCENT_RE = re.compile(r"%")
 
@@ -121,6 +122,13 @@ class TableFingerprint:
     unit_declared: bool
     currency_declared: bool
     notes: tuple[str, ...] = field(default_factory=tuple)
+    by_column: bool = False
+    """Whether ``value_index`` is a grid column rather than a position in a row.
+
+    Read off a rectangle, a block's index is the column the heading covers, and
+    a value belongs to it because it sits in that column. Read off ragged rows,
+    the index is the n-th number in the row and the mapping is an inference.
+    """
 
     @property
     def unit_scale_to_millions(self) -> float:
@@ -210,13 +218,120 @@ def _year_row(rows: list[list[str]], limit: int = 10) -> list[int]:
     return []
 
 
-def build_fingerprint(rows: list[list[str]], context: str = "") -> TableFingerprint:
-    """Fingerprint one table: unit, currency, and period-to-column mapping."""
+def _covering(grid: list[list[str | None]], row: int, column: int) -> str:
+    """What the cell covering this column in this row says.
+
+    A heading occupies the columns it spans: its text sits at the column it
+    starts in and the rest hold None, so the covering text is found by walking
+    left to the nearest origin.
+    """
+    while column >= 0:
+        cell = grid[row][column]
+        if cell is not None:
+            return cell
+        column -= 1
+    return ""
+
+
+def column_periods(grid: list[list[str | None]]) -> dict[int, tuple[int, int, int]]:
+    """(months, end month, year) per column, read from the headings above it.
+
+    This is what a table states about itself and what flattening destroys. The
+    heading rows are the leading rows that carry no figures; everything they say
+    over a column - the length phrase, the month, the year - is that column's
+    period, so a heading split across three rows reads as one statement again
+    and a prior-year column is distinguishable from a current one.
+
+    A year standing alone in a heading row is a heading, not a figure: refusing
+    that distinction is what made the year row look like data and cut the
+    headings short.
+    """
+    if not grid:
+        return {}
+    header_depth = 0
+    for row in grid:
+        if any(_is_figure(cell) for cell in row):
+            break
+        header_depth += 1
+    if not header_depth:
+        return {}
+
+    width = max(len(row) for row in grid)
+    everything = " ".join(
+        cell for row in grid[:header_depth] for cell in row if cell
+    )
+    fallback_phrase = _PERIOD_PHRASE_RE.search(everything)
+
+    periods: dict[int, tuple[int, int, int]] = {}
+    for column in range(width):
+        stacked = " ".join(
+            text
+            for row in range(header_depth)
+            if column < len(grid[row]) and (text := _covering(grid, row, column))
+        )
+        year_hit = _YEAR_RE.search(stacked)
+        if not year_hit:
+            continue
+        phrase = _PERIOD_PHRASE_RE.search(stacked) or fallback_phrase
+        if not phrase:
+            continue
+        word = phrase.group(1).lower()
+        months = 12 if word == "year" else MONTH_WORDS.get(word, 3)
+        month = MONTHS.get(phrase.group(2).lower())
+        if not month:
+            continue
+        periods[column] = (months, month, int(year_hit.group(0)))
+    return periods
+
+
+def _is_figure(cell: str | None) -> bool:
+    """A reported number, as opposed to a year naming a column."""
+    text = (cell or "").strip().replace("$", "").strip()
+    if not text or not _FIGURE_RE.fullmatch(text):
+        return False
+    return not _YEAR_RE.fullmatch(text)
+
+
+def build_fingerprint(
+    rows: list[list[str]],
+    context: str = "",
+    grid: list[list[str | None]] | None = None,
+) -> TableFingerprint:
+    """Fingerprint one table: unit, currency, and period-to-column mapping.
+
+    Given the table as a rectangle, the mapping is read from the headings that
+    cover each column - what the table states. Given only ragged rows, it falls
+    back to reading the period phrases and the year row as two ordered lists and
+    dividing one into the other, which is an inference and can be wrong when a
+    filing prints an uneven number of columns per period.
+    """
     unit_label, unit_declared = detect_unit(rows, context)
     currency, currency_declared = detect_currency(rows, context)
     header = _header_text(rows)
     has_change = bool(_PERCENT_RE.search(header))
     notes: list[str] = []
+
+    if grid:
+        by_column = column_periods(grid)
+        if by_column:
+            blocks = tuple(
+                PeriodBlock(months=months, end_month=end_month, year=year, value_index=column)
+                for column, (months, end_month, year) in sorted(by_column.items())
+            )
+            if not unit_declared:
+                notes.append("unit_not_declared")
+            if not currency_declared:
+                notes.append("currency_not_declared")
+            return TableFingerprint(
+                unit_label=unit_label,
+                currency=currency,
+                blocks=blocks,
+                has_change_columns=has_change,
+                unit_declared=unit_declared,
+                currency_declared=currency_declared,
+                notes=tuple(notes),
+                by_column=True,
+            )
 
     phrases = _period_phrases(rows)
     years = _year_row(rows)
