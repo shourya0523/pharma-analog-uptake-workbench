@@ -47,19 +47,55 @@ _PERCENT_RE = re.compile(r"%")
 # A currency may sit between "in" and the magnitude word ("in CHF millions",
 # "$ in millions", "in thousands of Swiss francs"), so unit detection has to
 # read past it rather than require the two words to be adjacent.
+#
+# The ISO-code alternative is a whole uppercase word, and says so twice over: it
+# opts out of the pattern's IGNORECASE, because case-folded ``[A-Z]{3}`` matches
+# any three-letter word at all, and it carries its own boundaries, because three
+# unanchored letters match inside a longer one. Without the first, "a revenue run
+# rate of one billion dollars" reads as "of <currency> billion"; without the
+# second, an all-caps dateline "...FINANCIAL RESULTS THOUSAND OAKS, Calif."
+# reads as "<currency> thousand". Both scale a whole table by the mistake.
 _CURRENCY_TOKEN = (
-    r"(?:[A-Z]{3}|US\$|U\.S\.|\$|£|€|dollars?|swiss\s+francs?|francs?|"
+    r"(?:\b(?-i:[A-Z]{3})\b|US\$|U\.S\.|\$|£|€|dollars?|swiss\s+francs?|francs?|"
     r"pounds?(?:\s+sterling)?|euros?|yen)"
+)
+
+# Quantities. A magnitude word does two unrelated jobs in a filing: "(dollars in
+# thousands)" declares the scale of the numbers printed below it, while "one
+# billion dollars", "hundreds of millions of dollars" and "tens of thousands of
+# patients" are amounts, which say nothing about any table. What separates them
+# is what comes immediately before - an amount is counted, so a quantity word
+# leads it. Reading an amount as a declaration is the same silent 1000x defect
+# this module exists to prevent, just arriving through the prose instead of the
+# header.
+_QUANTITY_BEFORE_RE = re.compile(
+    r"\b(?:one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|"
+    r"couple|few|several|many|dozens?|scores?|"
+    r"tens|hundreds?|thousands?|millions?|billions?)\s*\Z",
+    re.IGNORECASE,
 )
 
 
 def _unit_pattern(word: str) -> re.Pattern[str]:
-    """Match a magnitude declaration in any of the forms issuers print it."""
+    """Match a magnitude declaration in any of the forms issuers print it.
+
+    The trailing "millions of <currency>" form is what issuers who head a column
+    "Millions of CHF" print. Requiring the currency keeps it a declaration about
+    money: "thousands of patients" is a count, not a scale.
+    """
     return re.compile(
         rf"\b(?:in|of)\s+(?:{_CURRENCY_TOKEN}\s+){{0,2}}{word}\b"
         rf"|{_CURRENCY_TOKEN}\s*{word}\b"
-        rf"|\b{word}\s+of\b",
+        rf"|\b{word}\s+of\s+{_CURRENCY_TOKEN}\b",
         re.IGNORECASE,
+    )
+
+
+def _declares(scope: str, pattern: re.Pattern[str]) -> bool:
+    """True when this scope declares that magnitude rather than counting in it."""
+    return any(
+        not _QUANTITY_BEFORE_RE.search(scope[: match.start()])
+        for match in pattern.finditer(scope)
     )
 
 
@@ -177,7 +213,7 @@ def detect_unit(rows: list[list[str]], context: str = "") -> tuple[str, bool]:
         if not scope:
             continue
         for label, pattern in _UNIT_PATTERNS:
-            if pattern.search(scope):
+            if _declares(scope, pattern):
                 return label, True
     return "millions", False
 
