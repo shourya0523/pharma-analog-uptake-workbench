@@ -7,10 +7,15 @@ kind - the element, the context, the period and the value - and that audit does
 not know how to check it. Which means the tagged path publishes unaudited
 citations until this exists.
 
-The check is the same in spirit and stricter in practice. Go back to the
-instance the citation names, find the fact it points at, and confirm it says
-what the datapoint says. A quote can be verbatim and still be the wrong line;
-a context id resolves to exactly one fact or to none.
+The check is the same in spirit: go back to the instance the citation names,
+find the fact it points at, and confirm it says what the datapoint says.
+
+A context is not a fact. It is a period and a set of dimensions, and many facts
+share one - Johnson & Johnson tags a product's revenue and its percentage change
+against the same context, differing only by element. Looking a citation up by
+context alone finds whichever fact came last and reports a revenue figure as
+disagreeing with a change of -0.215. That is what this check did on its first
+run, on 105 of 367 datapoints, and the citation was right every time.
 
 Uses no gold. It audits the pipeline's own claim against the pipeline's own
 source, which is what makes it a provenance check rather than an accuracy one.
@@ -87,8 +92,9 @@ def main() -> int:
                     continue
                 raw = await store.get(source.storage_key)
                 tally["instances audited"] += 1
-                # Every fact in the instance, by the context the citation names.
-                by_context = {f.context_id: f for f in parse_facts(raw)}
+                # Keyed by context and element together: a context is a period
+                # and its dimensions, and several facts share one.
+                by_fact = {(f.context_id, f.element): f for f in parse_facts(raw)}
                 for product in products:
                     found, _notes = candidates_from_instance(
                         raw, product=product, issuer=issuer,
@@ -96,12 +102,14 @@ def main() -> int:
                     for candidate in found:
                         tally["datapoints"] += 1
                         context = candidate["xbrl_context"]
-                        fact = by_context.get(context)
+                        element = candidate["source_quote"].split(" ", 1)[0]
+                        fact = by_fact.get((context, element))
                         if fact is None:
-                            tally["context not in the instance"] += 1
-                            offenders.append(f"{issuer} {product}: context {context} absent")
+                            tally["citation names no fact in the instance"] += 1
+                            offenders.append(
+                                f"{issuer} {product}: {element} @ {context} absent")
                             continue
-                        tally["context resolves"] += 1
+                        tally["citation resolves to a fact"] += 1
                         if abs(fact.value - candidate["value_reported"]) > 0.005:
                             tally["value disagrees with the fact"] += 1
                             offenders.append(
@@ -121,10 +129,11 @@ def main() -> int:
     print(f"instances audited: {tally['instances audited']}")
     print(f"tagged datapoints published: {total}")
     if total:
-        for key in ("context resolves", "value matches the fact", "citation stands"):
+        for key in ("citation resolves to a fact", "value matches the fact",
+                    "citation stands"):
             print(f"  {key:<34}{tally[key]:>6}/{total}  {tally[key] / total:6.1%}")
-    for key in ("context not in the instance", "value disagrees with the fact",
-                "citation omits the member"):
+    for key in ("citation names no fact in the instance",
+                "value disagrees with the fact", "citation omits the member"):
         if tally[key]:
             print(f"  {key}: {tally[key]}")
     for line in offenders[:12]:
