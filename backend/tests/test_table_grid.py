@@ -229,3 +229,27 @@ def test_the_cap_sheds_the_least_table_like_rather_than_the_last():
     kept = _kept(markup)
     assert len(kept) == HTML_TABLE_LIMIT
     assert any("Alfacept" in (cell or "") for row in kept[-1] for cell in row)
+
+
+def test_a_long_schedule_is_not_cut_off_in_the_middle_of_a_product():
+    """A row cap that binds on an ordinary filing decides what the table says.
+
+    Gilead's product sales summary runs past forty rows. Cut there, Stribild's
+    U.S. line stayed in and its other regions and its total fell outside, so the
+    one line left was published as the product's worldwide revenue.
+    """
+    filler = "".join(
+        f"<tr><td>Filler {n}</td><td>{n}</td><td>{n}</td></tr>" for n in range(45)
+    )
+    markup = f"""
+    <table>
+      <tr><td></td><td colspan="2">Three Months Ended June 30,</td></tr>
+      <tr><td>($ in millions)</td><td>2025</td><td>2024</td></tr>
+      {filler}
+      <tr><td>Alfacept &#8211; U.S.</td><td>60</td><td>117</td></tr>
+      <tr><td>Alfacept &#8211; Europe</td><td>15</td><td>14</td></tr>
+      <tr><td>71</td><td>131</td><td></td></tr>
+    </table>
+    """
+    grid = grid_of(markup)
+    assert any(row[0] == "Alfacept – Europe" for row in grid)

@@ -33,8 +33,18 @@ class OCRStub:
 # ordinary filing the relevance test is the whole rule and this never binds; it
 # exists so that a document with a thousand tables cannot cost a thousand
 # tables' work.
+#
+# HTML_ROW_LIMIT is the same kind of valve, and was the same kind of mistake
+# before it was raised: at 40 it cut a Gilead product sales summary off in the
+# middle of Stribild, leaving its U.S. line in the table and its other regions
+# and its total outside, so the U.S. figure was published as the product's. A
+# row cap that binds on an ordinary filing decides what a table says. Figure-
+# bearing tables run to a 99th percentile of 63 rows in the gold corpus and 63
+# in a held-out one, and a maximum of 130; at 40 it truncated 11.4% and 12.0%
+# of them respectively, which is a rate high enough to be silently changing
+# answers rather than bounding work.
 HTML_TABLE_LIMIT = 80
-HTML_ROW_LIMIT = 40
+HTML_ROW_LIMIT = 200
 PDF_PAGE_LIMIT = 40
 PDF_TABLE_LIMIT = 5
 
