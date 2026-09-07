@@ -95,8 +95,8 @@ async def go():
                 tagged: list[dict] = []
                 for raw in instances:
                     got, _notes = candidates_from_instance(
-                        raw, product=row["drug_name"], products=PRODUCTS,
-                        register=REGISTER)
+                        raw, product=row["drug_name"], issuer=maker,
+                        products=PRODUCTS, register=REGISTER)
                     tagged.extend(got)
                 same = [c for c in tagged if str(c.get("period")) == row["period"]]
                 target = row["value_normalized_usd_millions"]
@@ -146,7 +146,9 @@ for state, n in outcome.most_common():
 print("\nby issuer")
 for maker, counts in sorted(per_issuer.items()):
     n = sum(counts.values())
-    print(f"  {maker:<22}{counts['read']:>5}/{n:<6}{counts['read']/n:7.1%}  "
-          f"{dict(counts)}")
+    correct = counts["read"] + counts["read_tagged"]
+    print(f"  {maker:<22}{correct:>5}/{n:<6}{correct/n:7.1%}   "
+          f"tagged {counts['read_tagged']:>4}  table {counts['read']:>4}  "
+          f"missed {n - correct:>4}")
 OUT.write_text(json.dumps(detail))
 print("\nper-row detail written to", OUT)

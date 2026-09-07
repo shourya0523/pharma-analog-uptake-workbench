@@ -46,11 +46,16 @@ def candidates_from_instance(
     raw: bytes,
     *,
     product: str,
+    issuer: str = "",
     products: list[str] | None = None,
-    register: dict[str, Resolution] | None = None,
+    register: dict[tuple[str, str], Resolution] | None = None,
     quarterly_only: bool = True,
 ) -> tuple[list[dict[str, Any]], list[str]]:
     """(candidates, notes) for one product, from one XBRL instance.
+
+    ``issuer`` keys the register lookup and is not optional in practice: without
+    it only the string rules apply, which is how this shipped in its first
+    measured run and why the model's decisions counted for nothing.
 
     An empty result is the ordinary case for a filing from before the issuer's
     tagging cutoff, and says so in the notes rather than looking like a failure
@@ -72,7 +77,11 @@ def candidates_from_instance(
     seen: set[tuple[str, float]] = set()
     for fact in facts:
         member = fact.product_member or ""
-        resolution = register.get(member) or match(member, known)
+        # Keyed by issuer and member together: us-gaap:ProductMember is Yutrepia
+        # for Liquidia, which markets one product, and a meaningless total for
+        # anyone else. Looking it up by member alone answers with whichever
+        # filer was written last.
+        resolution = register.get((issuer, member)) or match(member, known)
         if not resolution.resolved or resolution.product != product:
             continue
         value = _million(fact)
