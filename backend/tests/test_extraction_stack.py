@@ -59,6 +59,118 @@ def test_undeclared_unit_yields_nothing_rather_than_a_guess():
     assert read_table(rows, product="Tyvaso").values == []
 
 
+def test_an_amount_in_the_prose_is_not_the_table_s_unit_declaration():
+    """A quoted "one billion dollars" must not outrank "(dollars in thousands)".
+
+    Shape of a real earnings exhibit: the table itself carries no unit, so the
+    unit has to come from the surrounding prose - and that prose talks about
+    money in two different ways. The parenthetical above the table declares the
+    unit its numbers are printed in; the CEO quote further up states an amount.
+    Only the first is a declaration. Reading the second as one multiplies every
+    figure in the table by a billion instead of a thousand, and the result is a
+    plausible-looking number rather than a refusal, so nothing downstream can
+    catch it.
+    """
+    context = (
+        "UNITED THERAPEUTICS CORPORATION REPORTS THIRD QUARTER 2012 RESULTS\n"
+        "Total Revenues of $242.5 million\n"
+        "\u201cIt is certainly gratifying to see us closely approach, for the "
+        "first time, a revenue run rate of one billion dollars per year,\u201d "
+        "said the Chairman and Chief Executive Officer.\n"
+        "The table below summarizes the components of net revenues "
+        "(dollars in thousands):"
+    )
+    rows = [
+        ["", "", "Three Months Ended September 30,", "", "Percentage", ""],
+        ["", "", "2012", "", "2011", "", "Change", ""],
+        ["Cardiopulmonary products:", "", "", "", "", "", "", ""],
+        ["Remodulin", "", "$", "120,811", "", "$", "114,918", "", "5.1", "%"],
+        ["Tyvaso", "", "88,302", "", "66,330", "", "33.1", "%"],
+        ["Adcirca", "", "31,804", "", "19,772", "", "60.9", "%"],
+    ]
+
+    fingerprint = build_fingerprint(rows, context)
+    assert fingerprint.unit_label == "thousands"
+
+    candidates, _findings, _skipped = extract_revenue_candidates(
+        [rows], product="Remodulin", context=context
+    )
+    quarter = [c for c in candidates if c["period"] == "2012Q3"]
+    assert [c["value_normalized_usd_millions"] for c in quarter] == [120.811]
+
+
+def test_a_stated_amount_alone_declares_no_unit_at_all():
+    """With no declaration anywhere, the table is refused, not guessed at.
+
+    The generic form of the defect above: an amount written out in prose is a
+    quantity, not a statement about how the table's numbers are scaled. A
+    document that only ever states amounts has declared nothing, and the
+    fingerprint has to say so - an undeclared table yields no values.
+    """
+    rows = [
+        ["", "Three Months Ended September 30,", ""],
+        ["", "2012", "2011"],
+        ["Remodulin", "120,811", "114,918"],
+    ]
+    for prose in (
+        "a revenue run rate of one billion dollars per year",
+        "total revenues of $242.5 million for the quarter",
+        "the programme has cost hundreds of millions of dollars to date",
+    ):
+        fingerprint = build_fingerprint(rows, prose)
+        assert not fingerprint.unit_declared, prose
+        assert read_table(rows, product="Remodulin", context=prose).values == []
+
+
+def test_a_currency_code_is_a_whole_uppercase_word():
+    """An all-caps dateline is not a currency followed by a magnitude.
+
+    The ISO-code alternative is what lets "in CHF millions" read as a
+    declaration, and it matches three uppercase letters. Three letters left
+    unanchored also sit inside longer ones, so a press release headed
+    "AMGEN REPORTS THIRD QUARTER 2025 FINANCIAL RESULTS / THOUSAND OAKS, Calif."
+    offers "...RESU|LTS THOUSAND" as "<currency> thousand", and every figure in
+    the release comes out a thousandth of what the issuer printed.
+    """
+    rows = [
+        ["", "Three months ended September 30,", ""],
+        ["", "2025", "2024"],
+        ["Repatha", "794", "567"],
+    ]
+    context = (
+        "News Release One Amgen Center Drive Thousand Oaks, CA 91320-1799\n"
+        "AMGEN REPORTS THIRD QUARTER 2025 FINANCIAL RESULTS\n"
+        "THOUSAND OAKS, Calif. (Nov. 4, 2025) - Amgen today announced results."
+    )
+    fingerprint = build_fingerprint(rows, context)
+    assert not fingerprint.unit_declared
+    assert read_table(rows, product="Repatha", context=context).values == []
+
+
+def test_a_currency_between_in_and_the_magnitude_is_still_a_declaration():
+    """The fix must not cost the forms issuers really print.
+
+    A currency legitimately sits between "in" and the magnitude word, including
+    as a three-letter ISO code, and those are declarations.
+    """
+    rows = [
+        ["", "Three Months Ended September 30,", ""],
+        ["", "2012", "2011"],
+        ["Tracleer", "120,811", "114,918"],
+    ]
+    for prose, expected in (
+        ("in CHF millions", "millions"),
+        ("in USD thousands", "thousands"),
+        ("in millions of U.S. dollars", "millions"),
+        ("(dollars in thousands)", "thousands"),
+        ("$ in billions", "billions"),
+        ("in thousands of Swiss francs", "thousands"),
+    ):
+        fingerprint = build_fingerprint(rows, prose)
+        assert fingerprint.unit_declared, prose
+        assert fingerprint.unit_label == expected, prose
+
+
 def test_reported_values_normalize_to_the_same_scale_across_a_unit_change():
     """Both exhibits land near $100M; neither quarter becomes $0.1M."""
     thousands = normalize_all(read_table(UTHR_THOUSANDS, product="Tyvaso").values)
