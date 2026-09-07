@@ -170,15 +170,39 @@ class SECConnector:
         safe_doc = doc.replace("/", "_")
         return f"cache/sec/{accession.replace('-', '')}/{safe_doc}"
 
+    async def _get_with_retry(
+        self, client: httpx.AsyncClient, url: str, *, attempts: int = 4
+    ) -> httpx.Response:
+        """Fetch, retrying the refusals EDGAR gives when asked too quickly.
+
+        SEC returns 503 or 429 under load rather than a permanent error, and a
+        single one costs a whole filing. It is worth distinguishing from a real
+        failure: a document silently missing because of a rate limit reads
+        downstream as an issuer that discloses nothing, and moved three rows
+        between two runs of the same code while this had no retry at all.
+        """
+        delay = 1.0
+        for attempt in range(attempts):
+            await _sec_throttle()
+            response = await client.get(url)
+            if response.status_code not in (429, 503) or attempt == attempts - 1:
+                response.raise_for_status()
+                return response
+            logger.info(
+                "sec_backoff status=%s attempt=%s url=%s",
+                response.status_code, attempt + 1, url,
+            )
+            await asyncio.sleep(delay)
+            delay *= 2
+        raise RuntimeError("unreachable")
+
     async def _list_filing_documents(
         self, client: httpx.AsyncClient, cik_int: str, acc_nodash: str
     ) -> list[str]:
         """Document filenames inside one filing, via the EDGAR directory listing."""
         url = f"{self.ARCHIVES}/{cik_int}/{acc_nodash}/index.json"
         try:
-            await _sec_throttle()
-            resp = await client.get(url)
-            resp.raise_for_status()
+            resp = await self._get_with_retry(client, url)
             items = resp.json().get("directory", {}).get("item", [])
         except Exception as exc:
             logger.warning("sec_index_failed accession=%s error=%s", acc_nodash, exc)
@@ -201,9 +225,7 @@ class SECConnector:
         cached = await self._read_cache(cache_key)
         from_cache = cached is not None
         if cached is None:
-            await _sec_throttle()
-            resp = await client.get(url)
-            resp.raise_for_status()
+            resp = await self._get_with_retry(client, url)
             raw = resp.content
             await self.file_store.put(cache_key, raw, "text/html")
         else:
