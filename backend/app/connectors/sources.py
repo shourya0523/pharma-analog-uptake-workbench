@@ -92,6 +92,9 @@ class SECConnector:
     SECONDARY = {"6-K", "8-K"}
     # "Results of Operations and Financial Condition" — the earnings-release 8-K item
     EARNINGS_ITEM = "2.02"
+    # Older filings live in dated shards beside filings.recent. A bound keeps a
+    # wide window from walking a filer's whole history.
+    MAX_SUBMISSION_SHARDS = 4
 
     def __init__(self, file_store: FileStore) -> None:
         self.file_store = file_store
@@ -184,6 +187,59 @@ class SECConnector:
         job_key = f"sources/{run_id}/{job_id}/{source_id}.html"
         await self.file_store.put(job_key, raw, "text/html")
         return raw, from_cache, job_key
+
+    async def _filings_covering(
+        self,
+        client: "httpx.AsyncClient",
+        payload: dict[str, Any],
+        cik: str,
+        since: date | None,
+        until: date | None,
+    ) -> dict[str, Any]:
+        """The submissions index over a date window, not just the recent page.
+
+        ``filings.recent`` holds roughly the last thousand filings and nothing
+        older; everything before that lives in the shards named by
+        ``filings.files``, each with the range it covers. Reading only the
+        recent page makes a company's earlier years invisible - a quarterly
+        series from 2005 retrieves nothing at all and reports it as "no
+        relevant filings", which looks like the company never filed.
+
+        Only shards whose range overlaps the window are fetched, so a query
+        about last quarter still costs a single request.
+        """
+        recent = payload.get("filings", {}).get("recent", {}) or {}
+        shards = payload.get("filings", {}).get("files", []) or []
+        if not shards or (since is None and until is None):
+            return recent
+
+        merged: dict[str, Any] = {
+            key: list(value) for key, value in recent.items() if isinstance(value, list)
+        }
+        fetched = 0
+        for shard in shards:
+            if fetched >= self.MAX_SUBMISSION_SHARDS:
+                break
+            covers_from, covers_to = shard.get("filingFrom"), shard.get("filingTo")
+            if since and covers_to and covers_to < since.isoformat():
+                continue
+            if until and covers_from and covers_from > until.isoformat():
+                continue
+            name = shard.get("name")
+            if not name:
+                continue
+            try:
+                await _sec_throttle()
+                extra = await client.get(f"https://data.sec.gov/submissions/{name}")
+                extra.raise_for_status()
+                block = extra.json()
+            except Exception:
+                continue
+            fetched += 1
+            for key, value in block.items():
+                if isinstance(value, list) and key in merged:
+                    merged[key].extend(value)
+        return merged or recent
 
     async def _retrieve_earnings_exhibits(
         self,
@@ -347,7 +403,9 @@ class SECConnector:
                 )
                 return sources
 
-            recent = payload.get("filings", {}).get("recent", {})
+            recent = await self._filings_covering(
+                client, payload, resolved, earnings_since, earnings_until
+            )
             forms = recent.get("form", [])
             accessions = recent.get("accessionNumber", [])
             primary = recent.get("primaryDocument", [])
