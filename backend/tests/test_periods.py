@@ -103,3 +103,44 @@ def test_unusable_labels_return_none():
     assert normalize_period("unknown") is None
     assert normalize_period("") is None
     assert normalize_period(None) is None
+
+
+# Two headings taken verbatim from Gilead earnings exhibits, flattened the way
+# the document parser flattens them. Both used to date the document wrongly.
+GILEAD_SPLIT_HEADING = (
+    "Three Months Ended\nJune 30,\nSix Months Ended\nJune 30,\n"
+    "2007\n2006\n2007\n2006\nHIV products:\nTruvada - U.S.\n186,256\n207,738"
+)
+
+GILEAD_Q4_WITH_FOOTNOTES = (
+    "Three months ended\nDecember 31,\nYear ended\nDecember 31,\n"
+    "2005\n2004\n2005\n2004\nAmBisome\n55,596\n55,025\n"
+    # The comparative year is named more often than the reporting year, which
+    # is exactly how frequency-based selection went wrong.
+    "Results for the three months ended December 31, 2004 include the effect of "
+    "outstanding options. Shares used for the three months ended December 31, 2004 "
+    "differ. The three months ended December 31, 2004 exclude the make-whole payment. "
+    "Amounts for the three months ended December 31, 2004 are restated. "
+    "The three months ended December 31, 2005 include the effect of options."
+)
+
+
+def test_a_heading_split_across_lines_still_dates_the_document():
+    """The year sits a few tokens below the heading, not beside it.
+
+    Requiring adjacency dropped every three-month reading and left the document
+    to be dated by its year-to-date heading instead, which is how a quarterly
+    exhibit came to describe itself as a half-year one.
+    """
+    context = detect_period_context(GILEAD_SPLIT_HEADING)
+    assert context is not None
+    assert context.months == 3
+    assert (context.year, context.quarter) == (2007, 2)
+    assert context.describe() == "three months ended June 2007"
+
+
+def test_the_reporting_year_wins_over_a_more_repeated_comparative():
+    """A comparative year is earlier, however often the footnotes name it."""
+    context = detect_period_context(GILEAD_Q4_WITH_FOOTNOTES)
+    assert context is not None
+    assert (context.months, context.year, context.quarter) == (3, 2005, 4)

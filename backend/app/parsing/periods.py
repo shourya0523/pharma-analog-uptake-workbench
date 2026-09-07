@@ -100,20 +100,76 @@ class PeriodContext:
         return f"{length} months ended {MONTH_NAMES[self.month]} {self.year}"
 
 
+# How far past "... Ended <Month> <day>," to look for the year when the phrase
+# does not carry one. Issuers routinely print the heading and the year columns
+# on separate lines - "Three Months Ended | June 30, | Six Months Ended |
+# June 30, | 2007 | 2006" - and the years follow within a few short tokens.
+_YEAR_LOOKAHEAD = 120
+# The month sits closer to its heading than the year columns do.
+_MONTH_LOOKAHEAD = 40
+_NEXT_YEAR_RE = re.compile(r"\b((?:19|20)\d{2})\b")
+
+
+# The phrase alone. Issuers stack the headings and print the month and the year
+# columns below them - "Three Months Ended | Twelve Months Ended | December 31,
+# | December 31, | 2012 | 2011" - so neither the month nor the year can be
+# required to sit beside the words.
+_PERIOD_PHRASE_RE = re.compile(r"\b(three|six|nine|twelve)\s+months?\s+ended\b", re.I)
+_MONTH_DAY_RE = re.compile(
+    r"\b(january|february|march|april|may|june|july|august|september|october"
+    r"|november|december|jan|feb|mar|apr|jun|jul|aug|sep|sept|oct|nov|dec)"
+    r"\.?\s*(\d{1,2})?",
+    re.IGNORECASE,
+)
+
+
+def _month_near(text: str, end: int) -> tuple[int, int] | None:
+    """The first month named just after a period heading, and where it ends."""
+    window = text[end : end + _MONTH_LOOKAHEAD]
+    match = _MONTH_DAY_RE.search(window)
+    if not match:
+        return None
+    month = MONTHS.get(match.group(1).lower())
+    return (month, end + match.end()) if month else None
+
+
+def _year_near(text: str, end: int) -> int | None:
+    """The first four-digit year printed just after a period heading.
+
+    Requiring the year to sit immediately after the month is what made a split
+    heading unreadable: the three-month phrase captured no year at all, was
+    discarded, and the document was then dated by whichever other framing
+    happened to have a year beside it - usually the year-to-date one.
+    """
+    window = text[end : end + _YEAR_LOOKAHEAD]
+    match = _NEXT_YEAR_RE.search(window)
+    return int(match.group(1)) if match else None
+
+
 def detect_period_context(text: str) -> PeriodContext | None:
     """Infer the document's own reporting period from its "months ended" prose."""
+    text = text or ""
     counts: Counter[tuple[int, int, int]] = Counter()
-    for length_word, month_word, _day, year in _MONTHS_ENDED_RE.findall(text or ""):
-        months = MONTH_WORDS.get(length_word.lower())
-        month = MONTHS.get(month_word.lower())
-        if not months or not month or not year:
+    for match in _PERIOD_PHRASE_RE.finditer(text):
+        months = MONTH_WORDS.get(match.group(1).lower())
+        found = _month_near(text, match.end())
+        if not months or not found:
             continue
-        counts[(months, month, int(year))] += 1
+        month, after_month = found
+        year = _year_near(text, after_month)
+        if not year:
+            continue
+        counts[(months, month, year)] += 1
     if not counts:
         return None
-    # Prefer the quarterly framing, then the most frequently repeated statement
-    best = max(counts.items(), key=lambda kv: (kv[0][0] == 3, kv[1]))
-    months, month, year = best[0]
+    # Prefer the quarterly framing, then the latest year - never the most
+    # frequently repeated one. A comparative year is always earlier than the
+    # year being reported, and it is often named more often than the reporting
+    # year: a Q4 2005 release mentions "three months ended December 31, 2004"
+    # five times in its footnotes against four for 2005, which is how the
+    # document came to be dated a year early.
+    best = max(counts, key=lambda key: (key[0] == 3, key[2]))
+    months, month, year = best
     return PeriodContext(months=months, month=month, year=year)
 
 
