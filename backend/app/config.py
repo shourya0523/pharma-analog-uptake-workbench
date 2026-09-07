@@ -51,23 +51,15 @@ class Settings(BaseSettings):
     fingerprint_concurrency: int = 4
     fingerprint_max_tokens: int = 16000
     fingerprint_max_calls_per_job: int = 400
-    # The legacy two-pass LLM extractor and table fingerprint reader; off in
-    # model mode, kept until the cleanup phase.
-    legacy_revenue_extractors: bool = False
     sec_history_years: int = 12
     openrouter_base_url: str = "https://openrouter.ai/api/v1"
     validation_sample_rate: float = 0.10
     max_concurrent_jobs: int = 1
-    sec_max_filings: int = 4
-    sec_include_8k: bool = False
     # Quarterly product revenue lives in 8-K item 2.02 exhibit 99.x earnings releases,
     # not in the 8-K primary document.
-    sec_earnings_exhibits: bool = True
-    sec_max_earnings_exhibits: int = 6
     sec_user_agent: str = "PharmaAnalogUptakeWorkbench research@example.com"
     cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
     llm_skip_judge_when_deterministic: bool = True
-    llm_max_extract_sources: int = 6
     # Independent-search judging of product profile fields. Source registries carry
     # errors (openFDA lists Tyvaso, an inhaled product, as ORAL), so cited fields are
     # challenged rather than passed through.

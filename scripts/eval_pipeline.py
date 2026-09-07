@@ -147,8 +147,6 @@ async def main() -> int:
                         help="raw: the bytes the pipeline fetched (falls back per document); markdown: the committed text rendering")
     parser.add_argument("--mode", choices=("model", "degraded"), default=None,
                         help="model: the fingerprint description is the only interpreter (scored mode); degraded: header grammar and regex prose, never scored")
-    parser.add_argument("--fingerprinter", choices=("grammar", "llm"), default=None,
-                        help="deprecated alias: llm = --mode model with the grammar still active (baseline before Phase 2); grammar = --mode degraded")
     parser.add_argument("--model", help="OpenRouter model for the fingerprinter")
     args = parser.parse_args()
 
@@ -164,8 +162,8 @@ async def main() -> int:
         if row["drug_name"] not in catalog[row["manufacturer"]]:
             catalog[row["manufacturer"]].append(row["drug_name"])
     generics_all = {row["drug_name"]: row.get("generic_name") for row in quarterly + annual}
-    mode = args.mode or ("model" if args.fingerprinter == "llm" else "degraded")
-    fingerprinter = LLMFingerprinter(model=args.model, max_calls=10**6) if (mode == "model" or args.fingerprinter == "llm") else None
+    mode = args.mode or "model"
+    fingerprinter = LLMFingerprinter(model=args.model, max_calls=10**6) if mode == "model" else None
     runner = Runner(corpus, fingerprinter=fingerprinter, catalog=dict(catalog), generics=generics_all, mode=mode)
     if fingerprinter is not None:
         print(f"mode: {mode}; fingerprinter: {fingerprinter.model} (enabled={fingerprinter.enabled})")

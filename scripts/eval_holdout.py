@@ -152,7 +152,6 @@ async def main() -> int:
     parser.add_argument("--show-failures", action="store_true")
     parser.add_argument("--json")
     parser.add_argument("--mode", choices=("model", "degraded"), default=None)
-    parser.add_argument("--fingerprinter", choices=("grammar", "llm"), default=None, help="deprecated alias")
     parser.add_argument("--model")
     parser.add_argument("--refetch", action="store_true")
     parser.add_argument("--set", default="holdout", help="held-out set under seed/<set> (default: holdout)")
@@ -187,8 +186,8 @@ async def main() -> int:
     # 2. Reading and assembly, per product.
     catalog = {issuer: [p["drug_name"] for p in rows] for issuer, rows in by_issuer.items()}
     generics = {p["drug_name"]: p["generic_name"] for p in products}
-    mode = args.mode or ("model" if args.fingerprinter == "llm" else "degraded")
-    fingerprinter = LLMFingerprinter(model=args.model, max_calls=10**6) if (mode == "model" or args.fingerprinter == "llm") else None
+    mode = args.mode or "model"
+    fingerprinter = LLMFingerprinter(model=args.model, max_calls=10**6) if mode == "model" else None
     runner = Runner(corpus, fingerprinter=fingerprinter, catalog=catalog, generics=generics, mode=mode)  # type: ignore[arg-type]
 
     comparisons: dict[str, list[Comparison]] = {}

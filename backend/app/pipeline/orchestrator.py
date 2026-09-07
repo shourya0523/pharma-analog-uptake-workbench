@@ -20,7 +20,6 @@ from app.connectors.openfda_fields import (
 )
 from app.connectors.sources import (
     ManualURLConnector,
-    SECConnector,
     TranscriptConnectorStub,
     parse_filing_date,
 )
@@ -54,15 +53,12 @@ from app.llm.aliases import merge_aliases
 from app.llm.client import LLMModules
 from app.parsing.documents import DocumentParser
 from app.parsing.evidence import (
-    build_revenue_llm_text,
-    prioritize_sources_for_revenue,
     product_aliases,
     select_product_evidence_text,
 )
 from app.parsing.fda_label import format_moa_profile_value, parse_label_record
 from app.parsing.indications import parse_indications
 from app.parsing.periods import detect_period_context, normalize_period
-from app.extraction.candidates import extract_revenue_candidates
 from app.extraction.readers import Observation
 from app.extraction.reading import read_document
 from app.catalog.families import family_parent, family_siblings
@@ -70,16 +66,14 @@ from app.extraction.described import read_described_document, read_with_repair
 from app.fingerprint.triage import triage
 from app.sourcing.edgar import EdgarIndex
 from app.extraction.series import Series, assemble_series, formulation_split_periods, propagate_family
-from app.fingerprint.llm import Fingerprint, LLMFingerprinter
+from app.fingerprint.llm import LLMFingerprinter
 from app.extraction.units import UNIT_SCALE_TO_MILLIONS
-from app.quality.candidate_filters import filter_revenue_candidates
 from app.quality.checks import (
     apply_auto_pass_gate,
     moa_epc_contamination_issue,
     quote_contains_value,
     run_quality_checks,
 )
-from app.quality.comparative import derive_comparative_candidates
 from app.quality.completeness import resolve_completeness_pct
 from app.quality.enrichment import (
     apply_field_enrichment,
@@ -170,7 +164,7 @@ def _observation_candidate(observation: Observation) -> dict[str, Any]:
 def scale_to_millions(value: float, unit: str | None) -> float:
     """Convert a reported value to USD millions using its declared unit.
 
-    LLM candidates carry a free-text ``unit`` (see revenue_extractor.yaml)
+    Candidates carry a free-text ``unit`` as the document printed it
     rather than the canonical label the deterministic table path produces,
     so this matches on substrings against the same UNIT_SCALE_TO_MILLIONS
     table fingerprint.py uses, defaulting to "millions" (scale 1.0) when the
@@ -200,7 +194,6 @@ class PipelineOrchestrator:
         self.db = db
         self.file_store = file_store or get_file_store()
         self.llm = llm or LLMModules()
-        self.sec = SECConnector(self.file_store)
         self.edgar = EdgarIndex()
         self.fda = OpenFDAConnector(self.file_store)
         self.manual = ManualURLConnector(self.file_store)
@@ -354,7 +347,7 @@ class PipelineOrchestrator:
         self._set_step(job, JobStep.IDENTITY_RESOLVE)
         await self._expand_aliases(job)
         if not job.cik and (job.ticker or job.manufacturer):
-            cik = await self.sec.resolve_cik(job.ticker, job.manufacturer)
+            cik = await self.edgar.resolve_cik_for(ticker=job.ticker, name=job.manufacturer)
             if cik:
                 job.cik = cik
                 self.db.commit()
@@ -378,7 +371,7 @@ class PipelineOrchestrator:
         want_primary = bool(options.get("sec_filings", True))
         want_earnings = bool(options.get("earnings_releases", True))
         settings = get_settings()
-        if (want_primary or want_earnings) and job.cik and not settings.legacy_revenue_extractors:
+        if (want_primary or want_earnings) and job.cik:
             # Every document of every filing in the window; the fingerprinter
             # decides per document whether it has anything to describe.
             since = parse_filing_date(options.get("earnings_since")) or (
@@ -388,20 +381,6 @@ class PipelineOrchestrator:
                 await self.edgar.retrieve(
                     run_id=job.run_id, job_id=job.id, cik=job.cik, file_store=self.file_store,
                     since=since, until=parse_filing_date(options.get("earnings_until")),
-                )
-            )
-        elif want_primary or want_earnings:
-            collected.extend(
-                await self.sec.retrieve(
-                    run_id=job.run_id,
-                    job_id=job.id,
-                    cik=job.cik,
-                    ticker=job.ticker,
-                    company_name=job.manufacturer,
-                    include_primary=want_primary,
-                    include_earnings=want_earnings,
-                    earnings_since=parse_filing_date(options.get("earnings_since")),
-                    earnings_until=parse_filing_date(options.get("earnings_until")),
                 )
             )
         if options.get("openfda", True):
@@ -894,253 +873,73 @@ class PipelineOrchestrator:
             return []
         if self._model_mode():
             return await self._extract_revenue_model(job, sources, parsed, only_source_ids=only_source_ids, skip_unresolved=skip_unresolved)
+        return await self._extract_revenue_degraded(job, sources, parsed, only_source_ids=only_source_ids, skip_unresolved=skip_unresolved)
+
+    async def _extract_revenue_degraded(
+        self,
+        job: DrugJobORM,
+        sources: list,
+        parsed: dict,
+        *,
+        only_source_ids: set[str] | None = None,
+        skip_unresolved: bool = False,
+    ) -> list[DatapointORM]:
+        """The unscored path for a run with no model: the header grammar and regex prose readers.
+
+        Every datapoint it yields is flagged ``degraded_mode_reader``; nothing
+        here is measured against a reference, and nothing here decides a
+        scored result.
+        """
         self._set_step(job, JobStep.EXTRACT_REVENUE)
         if not hasattr(self, "_observations"):
             self._observations = {}
         observations = self._observations.setdefault(job.id, [])
         family = family_parent(job.drug_name)
-        fingerprinter = self._fingerprinter()
-        rows: list[DatapointORM] = []
-        dropped_total = 0
-        any_product_money = False
-        # Reading tables costs nothing, so every parsed source is read; only the
-        # LLM pass is capped.
-        selected_sources = prioritize_sources_for_revenue(
-            sources, parsed, max_sources=max(len(list(sources)), 1)
-        )
-        llm_source_ids = {
-            s.source_id
-            for s in prioritize_sources_for_revenue(
-                sources, parsed, max_sources=get_settings().llm_max_extract_sources
-            )
-        }
-        if only_source_ids:
-            selected_sources = [s for s in selected_sources if s.source_id in only_source_ids]
         extra = self._job_aliases or None
-
-        for src in selected_sources:
+        rows: list[DatapointORM] = []
+        checked: list[str] = []
+        for src in sources:
+            if only_source_ids and src.source_id not in only_source_ids:
+                continue
             doc = parsed.get(src.source_id)
-            if not doc or doc.parsing_status.value != "success":
+            if not doc or doc.parsing_status.value != "success" or src.source_type == SourceType.OPENFDA:
                 continue
-            if src.source_type == SourceType.OPENFDA:
-                continue
-
-            llm_text, evidence_meta = build_revenue_llm_text(
-                doc,
-                product=job.drug_name,
-                generic=job.generic_name,
-                extra_aliases=extra,
-            )
-            period_context = detect_period_context(doc.full_text)
-            if evidence_meta.get("had_product_money_hits"):
-                any_product_money = True
-
-            # Skip the LLM when a filing has no product+$ evidence (avoid XBRL /
-            # company-total noise) or when it is beyond the extraction budget.
-            no_product_evidence = evidence_meta.get("strategy") in {
-                "no_product_mention",
-                "empty",
-            } or not evidence_meta.get("had_product_money_hits")
-            use_llm = src.source_id in llm_source_ids and not no_product_evidence
-            if not use_llm:
-                src_row = self.db.get(SourceDocumentORM, src.source_id)
-                if src_row:
-                    reason = "no_product_evidence" if no_product_evidence else "over_source_budget"
-                    note = (
-                        f"skip_revenue_llm reason={reason} "
-                        f"strategy={evidence_meta.get('strategy')} "
-                        f"product_money={evidence_meta.get('had_product_money_hits')}"
-                    )
-                    src_row.notes = f"{(src_row.notes or '').rstrip()} | {note}".strip(" |")
-
-            result: dict[str, Any] = {"candidates": [], "spans": []}
-            if use_llm:
-                result = await self.llm.extract_revenue(
-                    product=job.drug_name,
-                    company=job.manufacturer,
-                    source_meta={
-                        "url": src.url,
-                        "type": src.source_type.value,
-                        "title": src.title,
-                        "filing_type": src.filing_type,
-                        "accession": src.accession_number,
-                        "evidence": evidence_meta,
-                        "reporting_period": period_context.describe() if period_context else None,
-                        "period_columns": (
-                            [str(period_context.year), str(period_context.comparative_year)]
-                            if period_context
-                            else None
-                        ),
-                    },
-                    text=llm_text,
-                )
-            span_corpus = "\n\n".join(
-                (s.get("span_text") or "") for s in (result.get("spans") or [])
-            ) or llm_text
-            llm_dropped = result.get("dropped") or []
-            kept, dropped = filter_revenue_candidates(
-                result.get("candidates") or [],
-                product=job.drug_name,
-                generic=job.generic_name,
-                extra_aliases=extra,
-                source_text=span_corpus,
-            )
-            dropped = list(llm_dropped) + list(dropped)
-            dropped_total += len(dropped)
-
-            # Read the revenue table directly; the model omits rows unpredictably.
-            # These quotes come from the parsed table, not the model, so the
-            # verbatim gate that guards model output does not apply.
-            #
-            # The table is fingerprinted first, so its numbers are scaled by the
-            # unit it declares and its year-to-date columns stay labelled as
-            # such. Assuming USD millions and a fixed quarter layout is what
-            # produced 1000x-wrong values and full-year totals filed as
-            # quarters in the dataset this pipeline is scored against.
-            fingerprinted, table_findings, table_skips = extract_revenue_candidates(
-                doc.tables,
-                product=job.drug_name,
-                generic=job.generic_name,
-                extra_aliases=extra,
-                context=doc.full_text[:4000],
-            )
-            for finding in table_findings:
-                logger.warning(
-                    "table_check job_id=%s source_id=%s %s",
-                    job.id,
-                    src.source_id,
-                    finding,
-                )
-            if table_skips:
-                logger.info(
-                    "table_skipped job_id=%s source_id=%s reasons=%s",
-                    job.id,
-                    src.source_id,
-                    table_skips,
-                )
-            table_rows, table_dropped = filter_revenue_candidates(
-                fingerprinted,
-                product=job.drug_name,
-                generic=job.generic_name,
-                extra_aliases=extra,
-            )
-            dropped_total += len(table_dropped)
-            if table_rows:
-                seen_rows = {
-                    (str(c.get("period")), round(float(c["value_reported"]), 3))
-                    for c in kept
-                    if c.get("value_reported") is not None
-                }
-                added = [
-                    row
-                    for row in table_rows
-                    if (str(row["period"]), round(float(row["value_reported"]), 3)) not in seen_rows
-                ]
-                kept = list(kept) + added
-                logger.info(
-                    "table_rows_extracted job_id=%s source_id=%s parsed=%s added=%s",
-                    job.id,
-                    src.source_id,
-                    len(table_rows),
-                    len(added),
-                )
-
-            # Generic readers: grids of any physical form read by header
-            # vocabulary and row arithmetic, and sentences that tie an amount
-            # to the product. Their observations feed the series stage, and
-            # their exact-line values are candidates here too, so a document
-            # the fingerprinted table reader cannot read still yields rows.
-            fingerprint: Fingerprint | None = None
-            if fingerprinter is not None:
-                try:
-                    fingerprint = await fingerprinter.fingerprint(
-                        doc, products=[job.drug_name], generics={job.drug_name: job.generic_name},
-                        title=src.title or "", url=src.url,
-                    )
-                except Exception as exc:
-                    logger.warning("fingerprint_skipped job_id=%s source_id=%s error=%s", job.id, src.source_id, exc)
+            checked.append(src.url)
             report = read_document(
                 doc, product=job.drug_name, generic=job.generic_name, extra_aliases=extra,
-                source_url=src.url, fingerprint=fingerprint,
+                source_url=src.url, mode="degraded",
             )
             observations.extend(report.observations)
             if family:
-                # The same document carries the family line this formulation
-                # was reported under before the issuer split it out.
-                family_report = read_document(doc, product=family, source_url=src.url, fingerprint=fingerprint)
+                family_report = read_document(doc, product=family, source_url=src.url, mode="degraded")
                 self._observations.setdefault(f"{job.id}:family", []).extend(family_report.observations)
                 for sibling in family_siblings(job.drug_name):
-                    sibling_report = read_document(doc, product=sibling, source_url=src.url, fingerprint=fingerprint)
+                    sibling_report = read_document(doc, product=sibling, source_url=src.url, mode="degraded")
                     self._observations.setdefault(f"{job.id}:siblings", []).extend(sibling_report.observations)
             if report.skipped:
                 logger.info("reader_skipped job_id=%s source_id=%s reasons=%s", job.id, src.source_id, report.skipped[:6])
-            seen_rows = {
-                (str(c.get("period")), round(float(c["value_reported"]), 3))
-                for c in kept
-                if c.get("value_reported") is not None
-            }
-            reader_rows = [
-                candidate
-                for candidate in (_observation_candidate(o) for o in report.observations if o.line_item == "exact" and not o.covers)
-                if (candidate["period"], round(float(candidate["value_reported"]), 3)) not in seen_rows
+            kept = [
+                dict(_observation_candidate(o), _degraded=True)
+                for o in report.observations if o.line_item == "exact" and not o.covers
             ]
-            if reader_rows:
-                kept = list(kept) + reader_rows
-                logger.info("reader_rows_extracted job_id=%s source_id=%s added=%s", job.id, src.source_id, len(reader_rows))
-
-            comparatives = derive_comparative_candidates(kept, context=period_context)
-            if comparatives:
-                kept = list(kept) + comparatives
-                logger.info(
-                    "comparative_columns_derived job_id=%s source_id=%s count=%s",
-                    job.id,
-                    src.source_id,
-                    len(comparatives),
-                )
-            src_row = self.db.get(SourceDocumentORM, src.source_id)
-            if src_row and dropped:
-                reason_counts: dict[str, int] = {}
-                for d in dropped:
-                    reason_counts[d.get("_drop_reason", "unknown")] = reason_counts.get(d.get("_drop_reason", "unknown"), 0) + 1
-                note = f"filtered_candidates={reason_counts}"
-                src_row.notes = f"{(src_row.notes or '').rstrip()} | {note}".strip(" |")
-            if src_row and result.get("note"):
-                src_row.notes = f"{(src_row.notes or '').rstrip()} | {result.get('note')}".strip(" |")
-
-            self._persist_candidates(job, src, kept, period_context, rows)
+            self._persist_candidates(job, src, kept, detect_period_context(doc.full_text), rows)
 
         if not rows and not skip_unresolved:
-            reason = (
-                "Product-specific revenue not disclosed (or not found) in retrieved SEC/IR sources"
-                if not any_product_money
-                else "Candidates extracted but all failed product/quote integrity filters"
-            )
             self.db.add(
                 UnresolvedQuarterORM(
                     id=new_id(),
                     job_id=job.id,
                     period="product_revenue",
-                    reason_unresolved=reason,
-                    sources_checked=[s.url for s in selected_sources],
-                    recommended_next_step="Provide IR/earnings URL with product-level sales, or confirm non-disclosure",
-                    confidence_that_unavailable=0.7 if not any_product_money else 0.4,
+                    reason_unresolved="Product-specific revenue not found by the degraded readers in retrieved sources",
+                    sources_checked=checked,
+                    recommended_next_step="Run with a model (OPENROUTER_API_KEY) so the documents are described, or provide an IR URL with product-level sales",
+                    confidence_that_unavailable=0.3,
                 )
             )
-            job.quality_flags = list(
-                set((job.quality_flags or []) + ["no_product_revenue_candidates", f"dropped_candidates:{dropped_total}"])
-            )
-
+            job.quality_flags = list(set((job.quality_flags or []) + ["no_product_revenue_candidates", "degraded_mode"]))
         job.candidates_extracted = len(rows)
         self.db.commit()
-        logger.info(
-            "extract_revenue_done job_id=%s drug=%s kept=%s dropped=%s product_money=%s sources=%s",
-            job.id,
-            job.drug_name,
-            len(rows),
-            dropped_total,
-            any_product_money,
-            len(selected_sources),
-        )
+        logger.info("extract_revenue_degraded_done job_id=%s drug=%s kept=%s sources=%s", job.id, job.drug_name, len(rows), len(checked))
         return rows
 
     def _persist_candidates(self, job: DrugJobORM, src: Any, kept: list[dict[str, Any]], period_context: Any, rows: list[DatapointORM]) -> None:
@@ -1186,6 +985,8 @@ class PipelineOrchestrator:
                 issue_flags.append("derived_comparative_column")
             if cand.get("_from_table"):
                 issue_flags.append("extracted_from_table")
+            if cand.get("_degraded"):
+                issue_flags.append("degraded_mode_reader")
             if cand.get("_from_reader"):
                 issue_flags.append(f"read_by_{cand.get('_reader_method')}")
                 if cand.get("_layout_notes"):

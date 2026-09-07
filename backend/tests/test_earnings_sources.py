@@ -1,7 +1,6 @@
 import json
 from pathlib import Path
 
-from app.connectors.sources import SECConnector, is_earnings_exhibit
 from app.domain.models import (
     ParsedDocument,
     ParsingStatus,
@@ -21,29 +20,6 @@ def _gold_source_filenames() -> set[str]:
         if line.strip()
     ]
     return {row["source_url"].rsplit("/", 1)[-1] for row in rows}
-
-
-def test_earnings_exhibit_matches_every_gold_exhibit_filename():
-    """Gold rows cite exhibit 99.x documents under several issuer naming conventions."""
-    exhibits = {name for name in _gold_source_filenames() if "ex" in name.lower()}
-    assert exhibits, "expected gold rows to cite exhibit documents"
-    assert all(is_earnings_exhibit(name) for name in exhibits), sorted(
-        name for name in exhibits if not is_earnings_exhibit(name)
-    )
-
-
-def test_earnings_exhibit_rejects_filing_boilerplate():
-    # Primary 8-K document, XBRL viewer pages, and filing metadata are not earnings exhibits
-    assert not is_earnings_exhibit("uthr-20240501.htm")
-    assert not is_earnings_exhibit("R39.htm")
-    assert not is_earnings_exhibit("FilingSummary.xml")
-    assert not is_earnings_exhibit("0001082554-24-000027-index.html")
-    assert not is_earnings_exhibit("ut_lungiconxredxlogo.jpg")
-    assert not is_earnings_exhibit("")
-
-
-def test_earnings_item_is_results_of_operations():
-    assert SECConnector.EARNINGS_ITEM == "2.02"
 
 
 def _source(source_id: str, source_type: SourceType, **kwargs) -> RetrievedSource:

@@ -12,8 +12,6 @@ import yaml
 
 from app.config import get_settings
 from app.llm.grounding import (
-    apply_structured_field_gates,
-    enforce_verbatim_on_candidates,
     quote_is_verbatim,
 )
 from app.parsing.evidence import TOTAL_REVENUE_RE, product_aliases
@@ -295,102 +293,6 @@ class LLMModules:
     def __init__(self, client: OpenRouterClient | None = None) -> None:
         self.client = client or OpenRouterClient()
         self.settings = get_settings()
-
-    async def find_revenue_spans(
-        self,
-        *,
-        product: str,
-        company: str | None,
-        source_meta: dict,
-        text: str,
-    ) -> list[dict[str, Any]]:
-        prompt = load_prompt("revenue_span_finder")
-        clipped = text[:50000]
-        if not self.settings.openrouter_api_key:
-            return []
-        user = prompt["user_template"].format(
-            product=product,
-            company=company or "",
-            source_meta=json.dumps(source_meta),
-            text=clipped,
-        )
-        result = await self.client.chat_json(
-            model=self.settings.openrouter_model_extract,
-            system=prompt["system"],
-            user=user,
-        )
-        spans = result.get("spans") or []
-        return _filter_hallucinated_spans(spans, clipped)
-
-    async def extract_revenue_from_spans(
-        self,
-        *,
-        product: str,
-        company: str | None,
-        source_meta: dict,
-        spans: list[dict[str, Any]],
-    ) -> dict[str, Any]:
-        if not spans:
-            return {"candidates": [], "spans": []}
-        prompt = load_prompt("revenue_extractor")
-        if not self.settings.openrouter_api_key:
-            return {"candidates": [], "spans": spans, "note": "OPENROUTER_API_KEY missing; skipped LLM"}
-        # Cap span payload
-        compact = [
-            {
-                "span_id": s.get("span_id"),
-                "span_text": (s.get("span_text") or "")[:4000],
-                "why_relevant": s.get("why_relevant"),
-                "looks_like_table": s.get("looks_like_table"),
-            }
-            for s in spans[:20]
-        ]
-        user = prompt["user_template"].format(
-            product=product,
-            company=company or "",
-            source_meta=json.dumps(source_meta),
-            spans_json=json.dumps(compact, indent=2)[:48000],
-        )
-        result = await self.client.chat_json(
-            model=self.settings.openrouter_model_extract,
-            system=prompt["system"],
-            user=user,
-        )
-        candidates = result.get("candidates") or []
-        # Grounding gates
-        corpus = "\n\n".join(s.get("span_text") or "" for s in compact)
-        kept_v, drop_v = enforce_verbatim_on_candidates(candidates, source_text=corpus, spans=compact)
-        kept_s, drop_s = apply_structured_field_gates(kept_v)
-        return {
-            "candidates": kept_s,
-            "spans": compact,
-            "dropped": drop_v + drop_s,
-        }
-
-    async def extract_revenue(
-        self,
-        *,
-        product: str,
-        company: str | None,
-        source_meta: dict,
-        text: str,
-    ) -> dict[str, Any]:
-        """Two-pass extract: find verbatim spans, then fill candidates from spans only."""
-        spans = await self.find_revenue_spans(
-            product=product,
-            company=company,
-            source_meta=source_meta,
-            text=text,
-        )
-        if not spans:
-            return {"candidates": [], "spans": [], "note": "no_product_revenue_spans"}
-        filled = await self.extract_revenue_from_spans(
-            product=product,
-            company=company,
-            source_meta=source_meta,
-            spans=spans,
-        )
-        return filled
 
     async def extract_metadata(self, *, product: str, text: str, source_meta: dict) -> dict[str, Any]:
         prompt = load_prompt("metadata_extractor")

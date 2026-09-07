@@ -7,7 +7,6 @@ code that is supposed to make them impossible.
 
 from __future__ import annotations
 
-from app.extraction.candidates import extract_revenue_candidates
 from app.extraction.check import run_checks
 from app.extraction.extract import map_values_to_blocks, read_table, tokenize_row
 from app.extraction.fingerprint import PeriodBlock, build_fingerprint
@@ -83,10 +82,6 @@ def test_year_to_date_column_is_never_emitted_as_a_quarter():
     assert by_period[("2024", "six_month")] == 70.0
     assert not any(v.period_type == "quarterly" and v.period == "2024" for v in readout.values)
 
-    candidates, _, _ = extract_revenue_candidates(
-        [MERCK_QUARTER_AND_YTD], product="Winrevair"
-    )
-    assert [c["period"] for c in candidates] == ["2024Q2"]
 
 
 def test_dash_holds_its_column_so_later_values_do_not_shift_left():

@@ -11,7 +11,7 @@ from app.llm.client import PROMPTS_DIR, load_prompt
 from app.quality.candidate_filters import is_placeholder_period
 
 YEAR_RE = re.compile(r"\b(?:19|20)\d{2}\b")
-PERIOD_PROMPTS = ["revenue_extractor", "completeness_analyzer", "region_fingerprinter", "region_fingerprint_repair"]
+PERIOD_PROMPTS = ["completeness_analyzer", "region_fingerprinter", "region_fingerprint_repair"]
 
 
 def _prompt_text(name: str) -> str:
@@ -32,8 +32,7 @@ def test_period_prompts_have_no_yyyy_placeholder():
 
 def test_prompt_period_examples_are_dropped_if_echoed():
     """Any period example a model copies verbatim must be rejected downstream."""
-    examples = re.findall(r'"period":\s*"([^"]*)"', _prompt_text("revenue_extractor"))
-    examples += re.findall(r'"period":\s*"([^"]*)"', _prompt_text("completeness_analyzer"))
+    examples = re.findall(r'"period":\s*"([^"]*)"', _prompt_text("completeness_analyzer"))
     assert examples, "expected the response skeletons to define a period field"
     for example in examples:
         assert is_placeholder_period(example), f"echoing {example!r} would be stored as a real period"
