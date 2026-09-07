@@ -53,7 +53,7 @@ from app.parsing.documents import (  # noqa: E402
     HTML_TABLE_LIMIT,
     flatten_grid,
     html_table_grid,
-    pdf_tables,
+    pdf_table_grids,
 )
 from app.parsing.evidence import build_revenue_llm_text  # noqa: E402
 from app.quality.candidate_filters import filter_revenue_candidates  # noqa: E402
@@ -71,8 +71,9 @@ def document_text_and_tables(path: pathlib.Path) -> tuple[str, list, list]:
     """(text, tables as ragged rows, the same tables as rectangles)."""
     raw = path.read_bytes()
     if path.suffix == ".pdf":
-        blocks, tables = pdf_tables(raw)
-        return "\n".join(blocks), tables, []
+        blocks, grids = pdf_table_grids(raw)
+        tables = [rows for grid in grids if (rows := flatten_grid(grid))]
+        return "\n".join(blocks), tables, grids
     markup = raw.decode("utf-8", "ignore")
     head = markup.lstrip()[:256].lower()
     parser = "lxml-xml" if head.startswith(("<?xml", "<xbrl", "<ix:")) else "lxml"

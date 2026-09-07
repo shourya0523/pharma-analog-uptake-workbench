@@ -51,7 +51,7 @@ from app.parsing.documents import (  # noqa: E402
     flatten_grid,
     html_table_grid,
     html_table_grids,
-    pdf_tables,
+    pdf_table_grids,
 )
 from app.storage.filestore import FileStore  # noqa: E402
 
@@ -102,7 +102,7 @@ def document_text(path: pathlib.Path) -> str:
     """
     raw = path.read_bytes()
     if path.suffix == ".pdf":
-        blocks, _tables = pdf_tables(raw)
+        blocks, _grids = pdf_table_grids(raw)
         return "\n".join(blocks)[:4000]
     markup = raw.decode("utf-8", "ignore")
     head = markup.lstrip()[:256].lower()
@@ -133,8 +133,8 @@ def tables_of(
     """
     raw = path.read_bytes()
     if path.suffix == ".pdf":
-        _blocks, tables = pdf_tables(raw)
-        return tables, []
+        _blocks, grids = pdf_table_grids(raw)
+        return [rows for grid in grids if (rows := flatten_grid(grid))], grids
     markup = raw.decode("utf-8", "ignore")
     head = markup.lstrip()[:256].lower()
     parser = "lxml-xml" if head.startswith(("<?xml", "<xbrl", "<ix:")) else "lxml"

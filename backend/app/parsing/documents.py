@@ -329,6 +329,35 @@ def _column_edges(rows: list[list[dict]], gap: float) -> list[tuple[float, float
     return [(left, right) for left, right in merged]
 
 
+def _table_regions(rows: list[list[dict]], gap: float) -> list[list[list[dict]]]:
+    """A page's rows split where one table ends and the next begins.
+
+    A page is not a table. Johnson & Johnson's schedule prints its consumer
+    products, restates its whole heading, and prints its pharmaceuticals below,
+    and reading that as one table dates the second heading's own rows against
+    the first heading's columns.
+
+    The break is a band of white far wider than the space between rows, with a
+    heading rather than more figures on the other side of it. A wide band alone
+    is not enough - a schedule leaves one above its total line - and a heading
+    alone is not either, since the rows naming each product are headings too.
+    """
+    if len(rows) < 2:
+        return [rows] if rows else []
+    tops = [min(word["top"] for word in row) for row in rows]
+    bottoms = [max(word["bottom"] for word in row) for row in rows]
+    gaps = sorted(tops[index + 1] - bottoms[index] for index in range(len(rows) - 1))
+    typical = gaps[len(gaps) // 2] or 1.0
+    regions: list[list[list[dict]]] = [[rows[0]]]
+    for index in range(1, len(rows)):
+        band = tops[index] - bottoms[index - 1]
+        starts_a_heading = not _states_a_figure(_merge_into_cells(rows[index], gap))
+        if band > 4 * typical and starts_a_heading:
+            regions.append([])
+        regions[-1].append(rows[index])
+    return [region for region in regions if region]
+
+
 def pdf_page_grid(page) -> list[list[str | None]]:
     """One page as a rectangle, with a heading occupying the columns it covers.
 
@@ -336,12 +365,29 @@ def pdf_page_grid(page) -> list[list[str | None]]:
     at the column it starts in, ``None`` at the columns it continues over - so
     nothing downstream needs to know which kind of document it came from.
     """
+    rows, gap = _page_rows(page)
+    return _grid_of(rows, gap)
+
+
+def pdf_page_grids(page) -> list[list[list[str | None]]]:
+    """Each table on the page as its own rectangle."""
+    rows, gap = _page_rows(page)
+    return [
+        grid for region in _table_regions(rows, gap) if (grid := _grid_of(region, gap))
+    ]
+
+
+def _page_rows(page) -> tuple[list[list[dict]], float]:
     words = page.extract_words()
     if not words:
-        return []
+        return [], 5.0
     widths = sorted(char["width"] for char in page.chars) or [5.0]
-    gap = PDF_COLUMN_GAP * (widths[len(widths) // 2] or 5.0)
-    rows = _pdf_text_rows(words)
+    return _pdf_text_rows(words), PDF_COLUMN_GAP * (widths[len(widths) // 2] or 5.0)
+
+
+def _grid_of(rows: list[list[dict]], gap: float) -> list[list[str | None]]:
+    if not rows:
+        return []
     columns = _column_edges(rows, gap)
     if len(columns) < 2:
         return []
@@ -368,12 +414,50 @@ def pdf_page_grid(page) -> list[list[str | None]]:
         )
         return [nearest]
 
+    body = [row for row in rows if _states_a_figure(_merge_into_cells(row, gap))]
+    figure_columns = sorted(
+        {
+            index
+            for row in body
+            for left, right, text in _merge_into_cells(row, gap)
+            if _FIGURE.match(text.strip())
+            for index in touching(left, right)
+        }
+    )
+
+    def heading_reach(cells: list[tuple[float, float, str]]) -> dict[int, list[int]]:
+        """Which figure columns each heading on this row is the heading for.
+
+        In markup a heading declares how far it reaches. On a page it only has
+        its own width, and a heading centred over five columns of figures is
+        narrower than they are - "FOURTH QUARTER" set over the four columns and
+        the currency sign beneath it touches two of them. So reach is decided
+        the way a reader decides it: every column of figures belongs to the
+        heading standing nearest above it.
+
+        Columns that hold no figures - the row labels, a column holding only a
+        currency sign - are not offered to any heading, which is what keeps a
+        period heading from claiming the column the products are named in.
+        """
+        if not cells or not figure_columns:
+            return {}
+        middles = [(left + right) / 2 for left, right, _text in cells]
+        claimed: dict[int, list[int]] = {}
+        for column in figure_columns:
+            start, end = columns[column]
+            middle = (start + end) / 2
+            nearest = min(range(len(cells)), key=lambda i: abs(middles[i] - middle))
+            claimed.setdefault(nearest, []).append(column)
+        return claimed
+
     grid: list[list[str | None]] = []
     for row in rows:
+        cells = _merge_into_cells(row, gap)
         line: list[str | None] = [None] * len(columns)
         taken = [False] * len(columns)
-        for left, right, text in _merge_into_cells(row, gap):
-            covered = touching(left, right)
+        reach = {} if _states_a_figure(cells) else heading_reach(cells)
+        for index, (left, right, text) in enumerate(cells):
+            covered = sorted(set(touching(left, right)) | set(reach.get(index, [])))
             start = covered[0]
             while start < len(columns) and taken[start]:
                 start += 1
@@ -399,9 +483,9 @@ def pdf_table_grids(raw: bytes) -> tuple[list[str], list[list[list[str | None]]]
             text = page.extract_text() or ""
             if text.strip():
                 blocks.append(f"[page {index + 1}]\n{text}")
-            grid = pdf_page_grid(page)
-            if grid and table_relevance(grid):
-                grids.append(grid)
+            for grid in pdf_page_grids(page):
+                if table_relevance(grid):
+                    grids.append(grid)
     return blocks, grids
 
 
@@ -507,7 +591,8 @@ class DocumentParser:
         try:
             import pdfplumber
 
-            blocks, tables = pdf_tables(raw)
+            blocks, grids = pdf_table_grids(raw)
+            tables = [rows for grid in grids if (rows := flatten_grid(grid))]
             if not blocks:
                 _, status = await self.ocr.extract(raw)
                 return ParsedDocument(
@@ -519,6 +604,7 @@ class DocumentParser:
                 source_id=source.source_id,
                 text_blocks=blocks,
                 tables=tables,
+                table_grids=grids,
                 page_or_section="pdf pages",
                 parsing_status=ParsingStatus.SUCCESS,
             )

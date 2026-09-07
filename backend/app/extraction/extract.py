@@ -312,6 +312,7 @@ def _resolve_matches(
     quote_of,
     *,
     naming: int,
+    quote_from: dict[int, int],
     reach: int = 2,
 ) -> tuple[list[tuple[str, str, dict[int, float]]], str | None]:
     """Which of the rows naming a product is the product's revenue.
@@ -342,18 +343,20 @@ def _resolve_matches(
     # is a component, and publishing it as the product is the same mistake.
     if naming == 1:
         position, label, assigned = matches[0]
-        return [(label, quote_of(source_rows[position]), assigned)], None
+        taken = source_rows[quote_from.get(position, position) : position + 1]
+        return [(label, quote_of(*taken), assigned)], None
 
     named = [m for m in matches if _names_the_product(m[1], product, generic)]
     if len(named) == 1:
         position, label, assigned = named[0]
-        return [(label, quote_of(source_rows[position]), assigned)], None
+        taken = source_rows[quote_from.get(position, position) : position + 1]
+        return [(label, quote_of(*taken), assigned)], None
 
     # A total printed among the matched rows.
     for index, (position, _label, assigned) in enumerate(matches):
         parts = [other[2] for other in matches[:index] + matches[index + 1 :]]
         if _adds_up(assigned, _totals(parts), len(parts)):
-            first = min(other[0] for other in matches)
+            first = min(quote_from.get(other[0], other[0]) for other in matches)
             taken = source_rows[min(first, position) : max(first, position) + 1]
             return [(product, quote_of(*taken), assigned)], None
 
@@ -367,11 +370,11 @@ def _resolve_matches(
         labelled = cell_number(cells[0][1]) is None
         assigned, _reason = read_row(source_rows[position], cells, labelled=labelled)
         if assigned and _adds_up(assigned, parts, len(matches)):
-            first = min(other[0] for other in matches)
+            first = min(quote_from.get(other[0], other[0]) for other in matches)
             return [(product, quote_of(*source_rows[first : position + 1]), assigned)], None
 
     labels = ", ".join(label for _, label, _ in matches)
-    unread = " unread=%d" % (naming - len(matches)) if naming > len(matches) else ""
+    unread = f" unread={naming - len(matches)}" if naming > len(matches) else ""
     return [], f"{labels}:several_lines_no_total{unread}"
 
 
@@ -474,23 +477,39 @@ def _read_table(
         )
 
     matches: list[tuple[int, str, dict[int, float]]] = []
+    quote_from: dict[int, int] = {}
+    section: tuple[int, str] | None = None
     naming = 0
     for position, row in enumerate(source_rows):
         cells = _origins(row)
         if not cells:
             continue
         label = clean_label(cells[0][1])
-        if not label or not _matches_product(label, aliases):
+        if not label:
             continue
+        if not any(cell_number(cell) is not None for _column, cell in cells[1:]):
+            # A label with no figures beside it heads the rows below rather than
+            # stating anything itself. Johnson & Johnson prints the product that
+            # way - "DARZALEX" alone, then "US", "Intl", "WW" beneath it - so
+            # the rows carrying the numbers never name the product at all.
+            section = (position, label)
+            continue
+        scoped, start = label, position
+        if not _matches_product(label, aliases):
+            if not section or not _matches_product(f"{section[1]} {label}", aliases):
+                continue
+            scoped, start = f"{section[1]} {label}", section[0]
         naming += 1
         assigned, reason = read_row(row, cells)
         if assigned is None:
-            skipped.append(f"{label}:{reason}")
+            skipped.append(f"{scoped}:{reason}")
             continue
-        matches.append((position, label, assigned))
+        quote_from[position] = start
+        matches.append((position, scoped, assigned))
 
     published, refusal = _resolve_matches(
-        matches, source_rows, product, generic, read_row, quote_of, naming=naming
+        matches, source_rows, product, generic, read_row, quote_of,
+        naming=naming, quote_from=quote_from,
     )
     if refusal:
         skipped.append(refusal)

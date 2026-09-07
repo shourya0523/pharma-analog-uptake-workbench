@@ -30,9 +30,30 @@ from dataclasses import dataclass, field
 
 from app.parsing.periods import MONTH_WORDS, MONTHS, quarter_of_month
 
-# "Three months ended June 30," / "Nine Months Ended September 30" / "Year ended"
+# A filing names a column's period in one of two ways. Either it anchors the
+# period to a date - "Three months ended June 30," - or it names the period
+# itself: "FOURTH QUARTER", "NINE MONTHS", "Full Year". Both forms are read,
+# the anchored one first, because it says more.
+#
+# The unanchored form carries an assumption the anchored one does not: it names
+# the issuer's own fourth quarter, and calling that the calendar year's fourth
+# quarter is right only for a filer whose year ends in December. It is used
+# because for these filings there is nothing else - Johnson & Johnson's sales
+# schedule prints "FOURTH QUARTER" over "TWELVE MONTHS" and names no month
+# anywhere on the page - and it earns its place on issuers this corpus does not
+# contain: of 123 held-out tables that state a year and no anchored phrase, 25
+# name their period this way.
 _PERIOD_PHRASE_RE = re.compile(
     r"\b(three|six|nine|twelve|year)s?\s*(?:months?\s*)?ended\s+([A-Za-z]{3,9})",
+    re.IGNORECASE,
+)
+_ORDINAL_QUARTERS = {"first": 3, "second": 6, "third": 9, "fourth": 12}
+# "months" not followed by "ended", so a heading broken before its date still
+# carries forward to the row holding the date instead of being read here.
+_NAMED_PERIOD_RE = re.compile(
+    r"\b(first|second|third|fourth)\s+quarter\b"
+    r"|\b(three|six|nine|twelve)\s+months\b(?!\s*ended)"
+    r"|\b(?:full|fiscal)\s+year\b",
     re.IGNORECASE,
 )
 # The same heading with its date on the next line: "Three Months Ended" alone.
@@ -101,10 +122,22 @@ def _declares(scope: str, pattern: re.Pattern[str]) -> bool:
 
 # Most specific first: "thousands" and "billions" before "millions", so a header
 # reading "in thousands" is never matched by a stray later "million".
+# The abbreviations, which a schedule uses where a press release writes the
+# word: "($MM)", "$bn". Held out, these appear nowhere - the four issuers write
+# "millions" in full - so unlike the rest of this module's vocabulary they rest
+# on the convention being unambiguous rather than on a corpus, and they are
+# written narrowly for that reason: MM only beside a currency sign or "in", and
+# never a bare M, which means thousands as often as millions.
+_ABBREVIATED_UNITS: tuple[tuple[str, re.Pattern[str]], ...] = (
+    ("billions", re.compile(r"(?:[$€£¥]\s*|\bin\s+)(?:BN|B)\b")),
+    ("millions", re.compile(r"(?:[$€£¥]\s*|\bin\s+)MM\b")),
+)
+
 _UNIT_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
     ("billions", _unit_pattern(r"billions?")),
     ("thousands", _unit_pattern(r"thousands?")),
     ("millions", _unit_pattern(r"millions?")),
+    *_ABBREVIATED_UNITS,
 )
 
 # Scale to reach the canonical unit (millions).
@@ -229,6 +262,33 @@ def detect_currency(rows: list[list[str]], context: str = "") -> tuple[str, bool
     return "USD", False
 
 
+def _named_periods(text: str) -> list[tuple[int, int]]:
+    """(months, end month) for each period this text names without a date."""
+    found: list[tuple[int, int]] = []
+    for match in _NAMED_PERIOD_RE.finditer(text):
+        ordinal, counted = match.group(1), match.group(2)
+        if ordinal:
+            found.append((3, _ORDINAL_QUARTERS[ordinal.lower()]))
+        elif counted:
+            months = MONTH_WORDS.get(counted.lower(), 3)
+            found.append((months, months))
+        else:
+            found.append((12, 12))
+    return found
+
+
+def _periods_named_in(text: str) -> list[tuple[int, int]]:
+    """Every period this heading names, in the order it names them."""
+    anchored: list[tuple[int, int]] = []
+    for match in _PERIOD_PHRASE_RE.finditer(text):
+        word = match.group(1).lower()
+        months = 12 if word == "year" else MONTH_WORDS.get(word, 3)
+        month = MONTHS.get(match.group(2).lower())
+        if month:
+            anchored.append((months, month))
+    return anchored or _named_periods(text)
+
+
 def _period_phrases(rows: list[list[str]], limit: int = 8) -> list[tuple[int, int]]:
     """Ordered (months, end month) declared by the table header.
 
@@ -253,12 +313,7 @@ def _period_phrases(rows: list[list[str]], limit: int = 8) -> list[tuple[int, in
             cells = [f"{above} {below}" for above, below in zip(carry, cells, strict=True)]
         elif carry:
             cells = [" ".join(carry), *cells]
-        for match in _PERIOD_PHRASE_RE.finditer(" ".join(cells)):
-            word = match.group(1).lower()
-            months = 12 if word == "year" else MONTH_WORDS.get(word, 3)
-            month = MONTHS.get(match.group(2).lower())
-            if month:
-                phrases.append((months, month))
+        phrases.extend(_periods_named_in(" ".join(cells)))
         if phrases:
             break
         dangling = bool(cells) and all(_DANGLING_PHRASE_RE.search(cell) for cell in cells)
@@ -317,7 +372,7 @@ def stated_periods(grid: list[list[str | None]]) -> tuple[int, dict[int, tuple[i
     everything = " ".join(
         cell for row in grid[:header_depth] for cell in row if cell
     )
-    fallback_phrase = _PERIOD_PHRASE_RE.search(everything)
+    fallback = _periods_named_in(everything)[:1]
 
     periods: dict[int, tuple[int, int, int]] = {}
     for column in range(width):
@@ -329,14 +384,10 @@ def stated_periods(grid: list[list[str | None]]) -> tuple[int, dict[int, tuple[i
         year_hit = _YEAR_RE.search(stacked)
         if not year_hit:
             continue
-        phrase = _PERIOD_PHRASE_RE.search(stacked) or fallback_phrase
-        if not phrase:
+        named = _periods_named_in(stacked) or fallback
+        if not named:
             continue
-        word = phrase.group(1).lower()
-        months = 12 if word == "year" else MONTH_WORDS.get(word, 3)
-        month = MONTHS.get(phrase.group(2).lower())
-        if not month:
-            continue
+        months, month = named[0]
         periods[column] = (months, month, int(year_hit.group(0)))
     return header_depth, periods
 
@@ -371,7 +422,9 @@ def _headings_describe_the_body(
     """
     for row in grid[header_depth:]:
         origins = [(column, cell) for column, cell in enumerate(row) if cell]
-        if not origins:
+        if not any(_is_figure(cell) for _column, cell in origins):
+            # Not a row of the body: a section heading, a repeated title. It
+            # states no figures, so it says nothing about where the figures are.
             continue
         column, cell = origins[0]
         if _is_figure(cell) or cell in {"$", "%"}:
