@@ -269,3 +269,110 @@ in the Actelion retrospective schedule, Opsumit and Remodulin quarters read
 from prose); the held-out gap is mostly rows the v1 contract cannot express
 (row-level geography and line kind, prose statement kind) plus scoring that
 demands exact agreement with rounded reference figures.
+
+## 10. Model-first rebuild: results
+
+*2026-09-07.* The scored path now has one interpreter, the fingerprint
+description (contract version 4, `backend/app/prompts/region_fingerprinter.yaml`).
+Deterministic code sources documents, converts them to text and grids, grounds
+every described label and quote in the document's own text, verifies the
+arithmetic of every described row (blank placement under change, year-to-date,
+geography-sum and subtotal checks; two columns described as one figure; one
+figure stated two ways in one document; a revenue section described with none
+of the issuer's product rows), reconciles across documents, assembles series
+in the issuer's reporting currency and scores. The header grammar and the
+regex prose reader survive only as `--mode degraded`, which the evals print
+and never score, and `backend/tests/test_no_shape_rules_on_model_path.py`
+fails on any new interpretation regex or degraded import on the model path.
+
+### Models
+
+| Tier | Model | Price (in / out, $ per M tokens) | Role |
+|---|---|---|---|
+| fast | `z-ai/glm-5.3-flash` | 0.075 / 0.25 | first description of every sketch part |
+| strong | `google/gemini-3.8-flash` | 0.75 / 3.75 | parts whose description the verifier rejects on a product figure; every repair round |
+
+Both requests carry `reasoning: {effort: low}` and
+`provider: {require_parameters: true}` (only providers that honour
+`response_format` are routed to). No Claude model remains in any default;
+the descriptions the earlier Claude runs left in the cache were purged with
+`scripts/fingerprint_cache.py --purge-model`.
+
+### Gates
+
+| Set | Command | Rows | Delivered |
+|---|---|---|---|
+| Gold, committed markdown rendering | `eval_pipeline.py --mode model --rendering markdown` | 993 | 993 (100.0%) |
+| Gold, raw HTML and PDF fetched by the pipeline | `eval_pipeline.py --mode model --rendering raw` | 993 | 993 (100.0%) |
+| Gold, markdown, second run from an empty cache (variance) | `eval_pipeline.py --mode model --rendering markdown --cache-dir <empty>` | 993 | 993 (100.0%) |
+| Held-out set 1: Skyrizi, Trikafta, Repatha, Arikayce, Amvuttra (EDGAR sourcing alone) | `eval_holdout.py --mode model` | 111 | 111 (100.0%) |
+| Held-out set 2: Wegovy (DKK, 6-K), Dupixent (EUR, 6-K), Kisqali (USD, PDF annuals) | `eval_holdout.py --set holdout2 --mode model` | 126 | 126 (100.0%) |
+
+Every held-out reference row was built by independent reading and verified
+mechanically before the pipeline ran (quote verbatim in the cited document,
+value in the quote); the held-out issuers needed no code change that names
+them, and the enforcement test guarantees none was added.
+
+What the gold markdown run reports about itself: 243 documents described
+(400 grid regions, 800 prose regions), 136 of 280 sketch parts promoted to
+the strong tier, 78 repair rounds, 715 rejected regions (nearly all prose
+sentences whose figure is not a number or whose quote is not verbatim), and
+these verifier failures by code, each of which cost the row it names rather
+than inventing one:
+
+    ambiguous_alignment 13, product_row_not_described 20,
+    contradicted_within_document 16, subtotal_members_unaligned 6,
+    no_placement_satisfies_the_header 3, unparseable_cell 2,
+    revenue_section_without_product_rows 1
+
+Prose the model described but the reader dropped, by the statement kind the
+model gave it: change 248, franchise_or_multi_product 111, other 94,
+payment_or_financing 49, guidance 23, scope:franchise 17.
+
+The raw run (the bytes the pipeline fetched, HTML and PDF) describes the
+same 243 documents through a different physical shape: 408 grid regions,
+804 prose regions, 164 of 283 parts promoted, 62 repairs, and failures
+ambiguous_alignment 9, product_row_not_described 49, subtotal_members_unaligned
+3, unparseable_cell 4, no_placement_satisfies_the_header 1,
+revenue_section_without_product_rows 1. The one raw-only miss found on the
+way, six rows of Gilead's sales schedule whose geography-total rows print
+no label, was a parser defect (the model echoed the sketch's own
+`<no label>` placeholder and the parser rejected it as ungrounded); the
+fix is in `fingerprint/llm.py` and names no issuer.
+
+The variance run describes every part again from an empty cache: 404 grid
+regions, 817 prose regions, 135 promotions, 75 repairs, and the same 993
+rows delivered. Descriptions differ between runs (13 against 20
+`product_row_not_described`, 11 against 13 `ambiguous_alignment`) and the
+verifier and reconciler absorb the difference.
+
+Routes, gold against pipeline, markdown / raw: read -> read 861 / 856,
+read -> derived 68 / 73, derived -> derived 8 / 8, derived -> read 3 / 3,
+propagated -> propagated 46 / 46, propagated -> derived 4 / 4,
+bridged -> bridged 3 / 3.
+Two rows (Remodulin 2002Q4 and 2005Q4) still match through the alternate
+derivation the series stage records beside its preferred figure (section 6).
+
+### Cost
+
+Every fingerprint call now records the router's own accounting (prompt and
+completion tokens, cost in USD) in the cache entry's metadata, and both
+evals print the sum for the calls a run made. The variance run is a full
+description of the gold corpus (markdown rendering) from an empty cache:
+
+| Model | Calls | Prompt tokens | Completion tokens | Cost |
+|---|---|---|---|---|
+| `z-ai/glm-5.3-flash` | 280 | 1,626,390 | 797,853 | $0.35 |
+| `google/gemini-3.8-flash` | 227 | 1,320,466 | 459,869 | $2.71 |
+| total | 507 | | | $3.06 |
+
+So a full re-description of the gold corpus after a contract change costs
+about $3 (the earlier Claude pair was estimated at $43 for the same work),
+a re-read from the cache costs nothing, and a held-out issuer costs on the
+order of a dollar. Wall clock for the full description is about 50 minutes
+at concurrency 4, bounded by the strong tier's response time.
+
+### Tree
+
+Recorded at commit 8e0ebc1; `backend/tests` (330 tests) passes on the
+same tree, `ruff` is clean on every file the rebuild touched.
