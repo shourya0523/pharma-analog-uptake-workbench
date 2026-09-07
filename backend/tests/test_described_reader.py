@@ -532,3 +532,38 @@ def test_a_region_restated_under_a_new_name_matches_the_reference_row_that_carri
                       "source_url": "a", "source_quote": "Wegovy 2,211"})
     result = compare(gold, [from_series(value)])
     assert result.outcome == "match" and "restatement" in result.detail
+
+
+def test_an_acquirers_first_weeks_filed_under_the_quarter_cover_what_the_sellers_partial_leaves():
+    """Actelion states April 1 to June 15 with dates; J&J prints its June 16 to 30 weeks under Q2. The quarter is their sum."""
+    from app.extraction.series import assemble_series
+
+    def obs(value, url, covers=None, period="2017Q2", period_type="quarterly"):
+        return Observation(
+            product_label="Opsumit", period=period, period_type=period_type, value_as_reported=value, unit_label="millions",
+            currency="USD", unit_declared=True, geography="Worldwide", covers=covers, source_quote=f"WW {value}", method="grid",
+            layout_signature="", verified=(), specificity=0, source_url=url,
+        )
+
+    series = assemble_series([
+        obs(216, "actelion", covers=("2017-04-01", "2017-06-15")),
+        obs(45, "jnj"),
+        obs(244, "actelion", period="2017Q1"),
+        obs(45, "jnj", period="2017", period_type="six_month"),
+    ], product="Opsumit")
+    by_period = {(v.period, v.period_type): v for v in series.values}
+    quarter = by_period[("2017Q2", "quarterly")]
+    assert quarter.value_millions == 261 and quarter.route == "bridged"
+    assert by_period[("2017Q1", "quarterly")].value_millions == 244, "a six-month figure below its first quarter determines nothing"
+
+
+def test_a_coverage_span_equal_to_the_whole_period_is_no_limit():
+    grid = [["Q2 2017 Q1 2017"], ["WW", "216", "244"]]
+    partial = ColumnSpec("value", 3, 6, 2017, covers=("2017-04-01", "2017-06-15"))
+    whole = ColumnSpec("value", 3, 3, 2017, covers=("2017-01-01", "2017-03-31"))
+    region = GridRegion(grid_index=0, layout=_layout(partial, whole), rows=(_row(1, "WW", "Opsumit", "Worldwide", "own_revenue"),))
+    observations, failures = read_described_grid(_doc([grid]), region, product="Opsumit", aliases=["Opsumit"])
+    assert not failures
+    by_period = {o.period: o for o in observations}
+    assert by_period["2017Q2"].covers == ("2017-04-01", "2017-06-15")
+    assert by_period["2017Q1"].covers is None

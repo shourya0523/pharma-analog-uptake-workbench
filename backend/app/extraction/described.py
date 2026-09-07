@@ -274,6 +274,9 @@ def read_described_grid(
             if spec.kind != "value" or spec.period is None:
                 continue
             covers = spec.covers
+            if covers and covers == _period_bounds(spec.period, spec.period_type):
+                # A span that is the whole period is no limit at all.
+                covers = None
             if covers and not _inside(covers, spec.period, spec.period_type):
                 # The description tied this span to this column; the column's
                 # period does not contain it.
@@ -282,6 +285,8 @@ def read_described_grid(
                     f"{row.label_as_printed!r} c{col}: coverage {covers[0]}/{covers[1]} is not inside {spec.period}",
                 ))
                 covers = None
+            if row_covers and row_covers == _period_bounds(spec.period, spec.period_type):
+                row_covers = None
             if covers is None and row_covers and _inside(row_covers, spec.period, spec.period_type):
                 # A footnote on the row or its section limits whichever
                 # column's period contains the span; the other columns are whole.

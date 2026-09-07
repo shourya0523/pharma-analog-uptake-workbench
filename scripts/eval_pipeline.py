@@ -82,18 +82,25 @@ class Runner:
         return self._parsed[url]
 
     async def fingerprint(self, url: str, issuer: str | None):
+        """The description of a document for one issuer's product list.
+
+        A document two issuers cite (an acquirer's release cited for the
+        acquired products under their own issuer name) is described once per
+        product list, because the model describes the products it is asked for.
+        """
         if self.fingerprinter is None:
             return None
-        if url not in self._fingerprints:
+        key = (url, issuer or "")
+        if key not in self._fingerprints:
             source, doc = await self.parsed(url)
             if doc is None:
-                self._fingerprints[url] = Fingerprint()
+                self._fingerprints[key] = Fingerprint()
             else:
                 products = self.catalog.get(issuer or "", [])
                 result = await self.fingerprinter.fingerprint(
                     doc, products=products, generics=self.generics, title=(source.title or "") if source else "", url=url
                 )
-                self._fingerprints[url] = result
+                self._fingerprints[key] = result
                 self.fingerprint_stats["documents"] += 1
                 self.fingerprint_stats["cached"] += int(result.cached)
                 self.fingerprint_stats["grids"] += len(result.grids)
@@ -101,7 +108,7 @@ class Runner:
                 self.fingerprint_stats["promotions"] += len(result.promotions)
                 for tier, count in result.tiers.items():
                     self.fingerprint_stats["tiers"][tier] += count
-        return self._fingerprints[url]
+        return self._fingerprints[key]
 
     async def observe(self, product: str, generic: str | None, urls: list[str], issuer: str | None = None) -> tuple[list[Observation], dict[str, list[str]]]:
         observations: list[Observation] = []

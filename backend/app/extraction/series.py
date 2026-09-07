@@ -43,7 +43,7 @@ from app.extraction.adjudicate import (
 from app.extraction.derive import assemble_split_ownership_quarter
 from app.extraction.units import UNIT_SCALE_TO_MILLIONS
 from app.extraction.process import FX_USD_PER_UNIT
-from app.extraction.readers import Observation
+from app.extraction.readers import Observation, _period_bounds
 
 _QUARTER_RE = re.compile(r"(\d{4})Q([1-4])")
 _QUARTERS_IN = {"annual": (1, 2, 3, 4), "nine_month": (1, 2, 3), "six_month": (1, 2)}
@@ -388,6 +388,58 @@ def _split(period: str) -> tuple[int, int] | None:
     return (int(match.group(1)), int(match.group(2))) if match else None
 
 
+def _tolerance_of(a: SeriesValue, b: SeriesValue) -> float:
+    step = _value_step(a, b) or 0.0
+    return step + 1e-6
+
+
+def _complement(covers: tuple[str, str], period: str, period_type: str) -> tuple[str, str] | None:
+    """The part of the period a stated partial span leaves, when it is one contiguous span."""
+    from datetime import date, timedelta
+
+    bounds = _period_bounds(period, period_type)
+    if not bounds:
+        return None
+    start, end = date.fromisoformat(bounds[0]), date.fromisoformat(bounds[1])
+    a, b = date.fromisoformat(covers[0]), date.fromisoformat(covers[1])
+    if a <= start and b < end:
+        return ((b + timedelta(days=1)).isoformat(), end.isoformat())
+    if b >= end and a > start:
+        return (start.isoformat(), (a - timedelta(days=1)).isoformat())
+    return None
+
+
+def infer_coverage_from_partials(observations: list[Observation]) -> list[Observation]:
+    """A figure filed as a whole period but smaller than a stated partial of it covers the rest of the period.
+
+    The issuer that acquired a product mid-quarter prints its own weeks
+    under the quarter's heading; the seller's schedule states the earlier
+    span with dates. A whole-period figure cannot be smaller than a part
+    of it, so the smaller figure is the remainder, and only when the
+    partial leaves one contiguous remainder to cover.
+    """
+    by_key: dict[tuple, list[Observation]] = defaultdict(list)
+    for o in observations:
+        by_key[(o.period, o.period_type, o.geography, o.currency)].append(o)
+    out: list[Observation] = []
+    for group in by_key.values():
+        partials = [o for o in group if o.covers]
+        spans = {o.covers for o in partials}
+        if len(spans) != 1:
+            out.extend(group)
+            continue
+        covers = next(iter(spans))
+        largest_partial = max(o.value_as_reported * UNIT_SCALE_TO_MILLIONS.get(o.unit_label, 1.0) for o in partials)
+        remainder = _complement(covers, group[0].period, group[0].period_type)
+        for o in group:
+            whole = o.value_as_reported * UNIT_SCALE_TO_MILLIONS.get(o.unit_label, 1.0)
+            if not o.covers and remainder and whole < largest_partial and o.method == "grid":
+                out.append(replace(o, covers=remainder, notes=tuple(o.notes) + ("coverage_inferred_from_partial",)))
+            else:
+                out.append(o)
+    return out
+
+
 def derive_residual_quarters(
     values: dict[tuple[str, str], SeriesValue],
     *,
@@ -427,6 +479,11 @@ def derive_residual_quarters(
                 if not members:
                     continue
         have = quarters.get(year, {})
+        if any(have[q].value_millions > total.value_millions + _tolerance_of(total, have[q]) for q in members if q in have):
+            # A year-to-date figure below one of its own quarters is not the
+            # whole span it is filed under (an acquirer's first partial
+            # months); it determines nothing.
+            continue
         # A stated sub-total (six or nine months) accounts for the quarters
         # inside it whether or not they are stated individually, so a full
         # year less a stated nine months determines the fourth quarter even
@@ -701,6 +758,7 @@ def assemble_series(
         if o.geography == "Other" and o.geography_label and o.geography_label.strip() else o
         for o in observations
     ]
+    observations = infer_coverage_from_partials(observations)
     provisional = [o for o in observations if o.provisional or "generic_product_line" in o.notes]
     observations = [o for o in observations if not (o.provisional or "generic_product_line" in o.notes)]
     norms = normalize_observations(observations)
