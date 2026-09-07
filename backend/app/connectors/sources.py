@@ -44,6 +44,26 @@ def parse_filing_date(value: object) -> date | None:
         return None
 
 
+# Corporate suffixes carry no identity: "Gilead Sciences, Inc." and "Gilead
+# Sciences Inc" are the same registrant, and the SEC title uses whichever the
+# filer registered with.
+_REGISTRANT_SUFFIXES = {
+    "inc", "incorporated", "corp", "corporation", "co", "company", "ltd",
+    "limited", "plc", "llc", "lp", "sa", "nv", "ag", "holdings", "group",
+}
+
+
+def normalize_registrant(name: str) -> str:
+    """A company name reduced to what identifies it, for exact comparison."""
+    cleaned = re.sub(r"[^a-z0-9&\s]", " ", (name or "").lower())
+    words = [
+        word
+        for word in cleaned.split()
+        if word not in _REGISTRANT_SUFFIXES and word != "&"
+    ]
+    return " ".join(words)
+
+
 def is_earnings_exhibit(filename: str) -> bool:
     """True for exhibit 99.x documents, which carry the product revenue tables.
 
@@ -82,6 +102,18 @@ class SECConnector:
         }
 
     async def resolve_cik(self, ticker: str | None, company_name: str | None) -> str | None:
+        """The registrant's CIK, or None rather than a guess.
+
+        A ticker is exact and is tried first. A company name is not: the SEC
+        title carries punctuation and a corporate suffix that a caller rarely
+        reproduces, so both sides are normalized before comparing. What this
+        must never do is return the nearest match - an unanchored substring
+        search made "United" resolve to an unrelated registrant, and every
+        figure taken from that company's filings would then have been attributed
+        to United Therapeutics with nothing downstream able to notice. Several
+        matches means the question was ambiguous, and the honest answer to an
+        ambiguous question is no answer.
+        """
         if not ticker and not company_name:
             return None
         await _sec_throttle()
@@ -89,14 +121,23 @@ class SECConnector:
             resp = await client.get(self.TICKER_MAP)
             resp.raise_for_status()
             data = resp.json()
+
         needle_t = (ticker or "").upper().strip()
-        needle_n = (company_name or "").lower().strip()
-        for row in data.values():
-            if needle_t and str(row.get("ticker", "")).upper() == needle_t:
-                return str(row["cik_str"]).zfill(10)
-            if needle_n and needle_n in str(row.get("title", "")).lower():
-                return str(row["cik_str"]).zfill(10)
-        return None
+        if needle_t:
+            for row in data.values():
+                if str(row.get("ticker", "")).upper() == needle_t:
+                    return str(row["cik_str"]).zfill(10)
+            return None
+
+        needle_n = normalize_registrant(company_name or "")
+        if not needle_n:
+            return None
+        matches = {
+            str(row["cik_str"]).zfill(10)
+            for row in data.values()
+            if normalize_registrant(str(row.get("title", ""))) == needle_n
+        }
+        return matches.pop() if len(matches) == 1 else None
 
     def _cache_key(self, accession: str, doc: str) -> str:
         safe_doc = doc.replace("/", "_")

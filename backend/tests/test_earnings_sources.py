@@ -99,3 +99,23 @@ def test_openfda_still_excluded_from_revenue_sources():
     exhibit = _source("ex991", SourceType.EARNINGS_RELEASE, filing_type="8-K")
     ordered = prioritize_sources_for_revenue([fda, exhibit], _parsed("fda", "ex991"), max_sources=4)
     assert [s.source_id for s in ordered] == ["ex991"]
+
+
+def test_a_company_name_never_resolves_to_the_nearest_registrant():
+    """Ambiguity must produce no answer, not the first alphabetical match.
+
+    An unanchored substring search resolved "United" to an unrelated registrant.
+    Every figure read from that company's filings would then have been filed
+    under United Therapeutics, and nothing downstream could have noticed.
+    """
+    from app.connectors.sources import normalize_registrant
+
+    assert normalize_registrant("Gilead Sciences, Inc.") == "gilead sciences"
+    assert normalize_registrant("Gilead Sciences Inc") == "gilead sciences"
+    # The suffix and the ampersand carry no identity either.
+    assert normalize_registrant("MERCK & CO., INC.") == "merck"
+    assert normalize_registrant("Merck & Co Inc") == "merck"
+    # A bare first word is not the company, so it cannot match one.
+    assert normalize_registrant("United") != normalize_registrant(
+        "United Therapeutics Corp"
+    )

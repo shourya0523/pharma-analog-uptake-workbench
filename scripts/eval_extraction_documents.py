@@ -53,14 +53,17 @@ GOLD = REPO / "seed" / "gold"
 CACHE = pathlib.Path(os.environ.get("DOCUMENT_CACHE", "/tmp/gold-documents"))
 TOLERANCE = 0.51  # the issuers' own independent per-period rounding
 
-# Gold names the issuer as it appears on the filing; EDGAR needs the registrant.
-REGISTRANT = {
-    "United Therapeutics": "United Therapeutics Corp",
-    "Gilead": "Gilead Sciences Inc",
-    "Johnson & Johnson": "Johnson & Johnson",
-    "Actelion/J&J": "Johnson & Johnson",
-    "Merck": "Merck & Co Inc",
-    "Liquidia": "Liquidia Corp",
+# Gold names the issuer as it appears on the filing. EDGAR is asked by ticker,
+# which is exact - resolving by company name is substring-matched against the
+# registrant title, so it both misses on punctuation and can land on the wrong
+# company entirely.
+TICKER = {
+    "United Therapeutics": "UTHR",
+    "Gilead": "GILD",
+    "Johnson & Johnson": "JNJ",
+    "Actelion/J&J": "JNJ",
+    "Merck": "MRK",
+    "Liquidia": "LQDA",
 }
 QUARTER_END = {1: (3, 31), 2: (6, 30), 3: (9, 30), 4: (12, 31)}
 # EVAL_UNCAPPED=1 lifts the pipeline's ceiling on tables kept per document.
@@ -168,14 +171,15 @@ async def discover_and_read(row: dict, store: "LocalCacheStore") -> list[dict]:
     """
     import datetime as _dt
 
-    company = REGISTRANT.get(row["manufacturer"], row["manufacturer"])
+    ticker = TICKER.get(row["manufacturer"])
     year, quarter = int(row["period"][:4]), int(row["period"][-1])
     month, day = QUARTER_END[quarter]
     end = _dt.date(year, month, day)
     connector = SECConnector(store)
     sources = await connector.retrieve(
-        run_id="discover", job_id="discover", cik=None, ticker=None,
-        company_name=company, include_primary=False, include_earnings=True,
+        run_id="discover", job_id="discover", cik=None, ticker=ticker,
+        company_name=None if ticker else row["manufacturer"],
+        include_primary=False, include_earnings=True,
         earnings_since=end + _dt.timedelta(days=5),
         earnings_until=end + _dt.timedelta(days=120),
     )
