@@ -311,6 +311,7 @@ def _resolve_matches(
     read_row,
     quote_of,
     *,
+    naming: int,
     reach: int = 2,
 ) -> tuple[list[tuple[str, str, dict[int, float]]], str | None]:
     """Which of the rows naming a product is the product's revenue.
@@ -336,7 +337,10 @@ def _resolve_matches(
     """
     if not matches:
         return [], None
-    if len(matches) == 1:
+    # How many rows name the product, not how many of them could be read: a
+    # component whose numbers did not parse still means the row that did parse
+    # is a component, and publishing it as the product is the same mistake.
+    if naming == 1:
         position, label, assigned = matches[0]
         return [(label, quote_of(source_rows[position]), assigned)], None
 
@@ -367,7 +371,13 @@ def _resolve_matches(
             return [(product, quote_of(*source_rows[first : position + 1]), assigned)], None
 
     labels = ", ".join(label for _, label, _ in matches)
-    return [], f"{labels}:several_lines_no_total"
+    unread = " unread=%d" % (naming - len(matches)) if naming > len(matches) else ""
+    return [], f"{labels}:several_lines_no_total{unread}"
+
+
+# A row putting two figures under one period is the table saying its headings
+# and its body are not in the same columns, so the geometry describes neither.
+_GEOMETRY_CONTRADICTED = "two_values_for_one_period"
 
 
 def read_table(
@@ -379,12 +389,55 @@ def read_table(
     context: str = "",
     grid: list[list[str | None]] | None = None,
 ) -> TableReadout:
-    """Fingerprint one table and read every product row it declares.
+    """Read one table, by its geometry where that describes it and not otherwise.
 
-    ``grid`` is the same table as a rectangle. When it is given the periods come
-    from the headings covering each column and the values are read by column;
-    without it the ragged rows are all there is and the columns are inferred.
+    ``grid`` is the same table as a rectangle. Given it, a value's period is the
+    one the headings covering its column state; without it the ragged rows are
+    all there is and the columns have to be inferred.
+
+    A rectangle can still fail to describe the table it came from - Gilead's
+    press release spans "2021" over three columns while its product rows write
+    figures in two of them and 2020's figure in the third. The body says so
+    itself: a row puts two of its figures under one period, which cannot happen
+    where the headings and the figures share columns. One such row condemns the
+    reading for the whole table, not just for itself, because the rows that did
+    not trip it were read against the same headings and are right only by luck -
+    the U.S. line there reads correctly while Europe's does not.
     """
+    readout = _read_table(
+        rows,
+        product=product,
+        generic=generic,
+        extra_aliases=extra_aliases,
+        context=context,
+        grid=grid,
+    )
+    if (
+        grid
+        and readout.fingerprint.by_column
+        and _GEOMETRY_CONTRADICTED in (readout.skipped_reason or "")
+    ):
+        return _read_table(
+            rows,
+            product=product,
+            generic=generic,
+            extra_aliases=extra_aliases,
+            context=context,
+            grid=None,
+        )
+    return readout
+
+
+def _read_table(
+    rows: list[list[str]],
+    *,
+    product: str,
+    generic: str | None = None,
+    extra_aliases: Iterable[str] | None = None,
+    context: str = "",
+    grid: list[list[str | None]] | None = None,
+) -> TableReadout:
+    """One reading of one table, either by column or from the ragged rows."""
     fingerprint = build_fingerprint(rows, context, grid=grid)
     if not fingerprint.usable:
         reason = ";".join(fingerprint.notes) or "unusable_fingerprint"
@@ -421,6 +474,7 @@ def read_table(
         )
 
     matches: list[tuple[int, str, dict[int, float]]] = []
+    naming = 0
     for position, row in enumerate(source_rows):
         cells = _origins(row)
         if not cells:
@@ -428,6 +482,7 @@ def read_table(
         label = clean_label(cells[0][1])
         if not label or not _matches_product(label, aliases):
             continue
+        naming += 1
         assigned, reason = read_row(row, cells)
         if assigned is None:
             skipped.append(f"{label}:{reason}")
@@ -435,7 +490,7 @@ def read_table(
         matches.append((position, label, assigned))
 
     published, refusal = _resolve_matches(
-        matches, source_rows, product, generic, read_row, quote_of
+        matches, source_rows, product, generic, read_row, quote_of, naming=naming
     )
     if refusal:
         skipped.append(refusal)

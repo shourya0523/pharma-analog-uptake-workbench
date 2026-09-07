@@ -838,17 +838,40 @@ def test_a_change_column_is_not_revenue():
     assert 30.0 not in {value.value_as_reported for value in readout.values}
 
 
-def test_two_numbers_under_one_period_are_refused_not_guessed_between():
-    """A heading covering both a figure and its change says which is which: nothing."""
-    ambiguous = """
-    <table>
-      <tr><td></td><td colspan="2">Three Months Ended June 30, 2024</td></tr>
-      <tr><td>Tyvaso</td><td>352.0</td><td>27</td></tr>
-    </table>
+# The shape that shows a rectangle can be built and still describe nothing: the
+# year spans three columns while the rows beneath write figures in two of them,
+# so which column holds 2020 depends on which row you look at. Real, from a
+# Gilead press release; the names here are invented.
+HEADINGS_OUT_OF_STEP_WITH_THE_BODY = """
+<table>
+  <tr><td colspan="9">(in millions)</td></tr>
+  <tr><td colspan="9">Three Months Ended</td></tr>
+  <tr><td colspan="9">March 31,</td></tr>
+  <tr><td></td><td colspan="3">2021</td><td colspan="5">2020</td></tr>
+  <tr><td>Alfacept &#8211; U.S.</td><td>$</td><td>1,465</td><td>$</td><td>1,412</td></tr>
+  <tr><td>Alfacept &#8211; Europe</td><td colspan="2">216</td><td colspan="2">181</td></tr>
+  <tr><td>Alfacept &#8211; Other</td><td colspan="2">143</td><td colspan="2">100</td></tr>
+  <tr><td colspan="2">1,824</td><td colspan="2">1,693</td></tr>
+</table>
+"""
+
+
+def test_one_row_out_of_step_condemns_the_reading_for_the_whole_table():
+    """The rows that did not trip the check were read against the same headings.
+
+    Europe's 216 and 181 both land under "2021", which cannot happen where the
+    headings and the figures share columns. The U.S. line reads correctly under
+    the same headings - by luck, because its currency signs happen to push its
+    figures into the right columns - and trusting it because it did not fail is
+    how the table's own contradiction gets published as a number.
     """
-    _grid, readout = read_exhibit(ambiguous, "Tyvaso")
-    assert readout.values == []
-    assert "two_values_for_one_period" in readout.skipped_reason
+    grid, readout = read_exhibit(HEADINGS_OUT_OF_STEP_WITH_THE_BODY, "Alfacept")
+    assert not readout.fingerprint.by_column, "expected the geometry to be dropped"
+    assert {(v.period, v.value_as_reported) for v in readout.values} == {
+        ("2021Q1", 1824.0),
+        ("2020Q1", 1693.0),
+    }
+    assert 1465.0 not in {v.value_as_reported for v in readout.values}
 
 
 # Two headings stacked over two blocks of figures, not two periods side by side.
@@ -933,3 +956,21 @@ def test_a_row_naming_the_product_alone_is_the_product():
         ("Tyvaso", "2024Q2", 352.0),
         ("Tyvaso", "2023Q2", 276.5),
     }
+
+
+def test_a_line_that_did_not_parse_still_counts_as_a_line():
+    """Whether a row is a component is not decided by whether its numbers read.
+
+    Dropping the rows that failed and then finding one row left is how a single
+    region gets published as the product, so the count is of rows naming the
+    product, not of rows that could be read.
+    """
+    rows = [
+        ["($ in millions)", "Three Months Ended June 30,", ""],
+        ["", "2016", "2015"],
+        ["Harvoni – U.S.", "1,474", "2,826"],
+        ["Harvoni – Europe", "512", "623", "1,067", "1,100", "42"],
+    ]
+    readout = read_table(rows, product="Harvoni")
+    assert readout.values == []
+    assert "several_lines_no_total" in readout.skipped_reason
