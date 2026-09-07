@@ -12,7 +12,7 @@ from dataclasses import dataclass
 from typing import Any
 
 from app.extraction.extract import ExtractedValue
-from app.extraction.fingerprint import UNIT_SCALE_TO_MILLIONS
+from app.extraction.units import UNIT_SCALE_TO_MILLIONS
 
 # USD per 1 unit of foreign currency, annual average of the New York noon
 # buying rate certified by the Federal Reserve Bank of New York. Swiss and UK
@@ -28,6 +28,10 @@ FX_USD_PER_UNIT: dict[str, dict[int, float]] = {
         2016: 1.0128,
     },
     "GBP": {2010: 1.5458, 2011: 1.6043, 2012: 1.5853, 2013: 1.5642},
+    # IRS yearly average rates (foreign units per USD, inverted here), 2022-2025;
+    # 2026 is the year-to-date average to early September 2026.
+    "EUR": {2022: 1.0515, 2023: 1.0823, 2024: 1.0823, 2025: 1.1287, 2026: 1.1625},
+    "DKK": {2022: 0.1413, 2023: 0.1451, 2024: 0.1450, 2025: 0.1511, 2026: 0.1555},
 }
 
 

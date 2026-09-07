@@ -9,7 +9,8 @@ import inspect
 import json
 from datetime import date
 
-from app.connectors.sources import SECConnector, parse_filing_date
+from app.connectors.sources import parse_filing_date
+from app.sourcing.edgar import EdgarIndex
 from app.domain.models import ExtractionOptions
 from app.main import _create_run
 from app.pipeline.orchestrator import PipelineOrchestrator
@@ -22,19 +23,18 @@ def test_extraction_options_expose_earnings_releases():
     assert ExtractionOptions(sec_filings=False).earnings_releases is True
 
 
-def test_sec_retrieve_accepts_independent_primary_and_earnings_switches():
-    params = inspect.signature(SECConnector.retrieve).parameters
-    assert params["include_primary"].default is True
-    # None defers to the sec_earnings_exhibits setting
-    assert params["include_earnings"].default is None
+def test_edgar_retrieve_takes_a_window_and_no_item_or_name_rule():
+    params = inspect.signature(EdgarIndex.retrieve).parameters
+    assert "since" in params and "until" in params
+    assert not any(name in params for name in ("include_earnings", "include_primary", "earnings_only"))
 
 
 def test_orchestrator_maps_both_options_into_retrieval():
     source = inspect.getsource(PipelineOrchestrator._retrieve)
     assert 'options.get("sec_filings", True)' in source
     assert 'options.get("earnings_releases", True)' in source
-    assert "include_primary=want_primary" in source
-    assert "include_earnings=want_earnings" in source
+    assert "self.edgar.retrieve(" in source
+    assert "SECConnector" not in source
 
 
 def test_parse_filing_date_handles_edgar_and_caller_values():
@@ -52,30 +52,18 @@ def test_earnings_window_is_optional_and_plumbed_end_to_end():
     assert options.earnings_since is None and options.earnings_until is None
     assert ExtractionOptions(earnings_since="2024-01-01").earnings_since == date(2024, 1, 1)
 
-    params = inspect.signature(SECConnector.retrieve).parameters
-    assert params["earnings_since"].default is None
-    assert params["earnings_until"].default is None
-
     source = inspect.getsource(PipelineOrchestrator._retrieve)
-    assert 'earnings_since=parse_filing_date(options.get("earnings_since"))' in source
-    assert 'earnings_until=parse_filing_date(options.get("earnings_until"))' in source
-
-    exhibits = inspect.getsource(SECConnector._retrieve_earnings_exhibits)
-    assert "filed_on < since" in exhibits
-    assert "filed_on > until" in exhibits
+    assert 'parse_filing_date(options.get("earnings_since"))' in source
+    assert 'until=parse_filing_date(options.get("earnings_until"))' in source
 
 
-def test_table_reading_is_not_limited_by_the_llm_source_budget():
-    """Table reading costs nothing, so llm_max_extract_sources must not truncate it."""
+def test_extraction_dispatches_on_mode_and_never_mixes_readers():
+    """Model mode reads descriptions only; degraded mode reads with the grammar readers only and says so."""
     source = inspect.getsource(PipelineOrchestrator._extract_revenue)
-    assert "llm_source_ids" in source
-    assert "use_llm = src.source_id in llm_source_ids" in source
-    # The LLM call is conditional, while table extraction runs for every source
-    assert "if use_llm:" in source
-    llm_call_index = source.index("self.llm.extract_revenue")
-    table_call_index = source.index("extract_revenue_candidates")
-    assert table_call_index > llm_call_index
-    assert "over_source_budget" in source
+    assert "_extract_revenue_model" in source and "_extract_revenue_degraded" in source
+    degraded = inspect.getsource(PipelineOrchestrator._extract_revenue_degraded)
+    assert 'mode="degraded"' in degraded and "_degraded=True" in degraded
+    assert "extract_revenue_candidates" not in degraded and "self.llm.extract_revenue" not in degraded
 
 
 def test_options_with_a_date_window_are_json_storable():

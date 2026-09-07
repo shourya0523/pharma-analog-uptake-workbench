@@ -63,15 +63,15 @@ _UNIT_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
     ("billions", _unit_pattern(r"billions?")),
     ("thousands", _unit_pattern(r"thousands?")),
     ("millions", _unit_pattern(r"millions?")),
+    # Abbreviated declarations: "($MM)", "$ MM", "USD MM", "(000s)", "$000",
+    # "in 000's", "($M)", "($B)".
+    ("billions", re.compile(r"\(\s*\$\s*B\s*\)|\$\s*B\b|\bUSD\s*B\b", re.I)),
+    ("thousands", re.compile(r"\(\s*\$?\s*000['’]?s?\s*\)|\$\s*000['’]?s?\b|\bin\s+000['’]?s\b|\$\s*K\b|\(\s*\$\s*K\s*\)", re.I)),
+    ("millions", re.compile(r"\(\s*\$\s*MM?\s*\)|\$\s*MM\b|\bUSD\s*MM?\b|\bMM\b|\$\s*M\b", re.I)),
 )
 
 # Scale to reach the canonical unit (millions).
-UNIT_SCALE_TO_MILLIONS: dict[str, float] = {
-    "billions": 1000.0,
-    "millions": 1.0,
-    "thousands": 0.001,
-    "units": 0.000001,
-}
+from app.extraction.units import UNIT_SCALE_TO_MILLIONS  # noqa: F401  (moved; legacy re-export)
 
 _CURRENCY_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
     ("CHF", re.compile(r"\bCHF\b|\bSwiss\s+francs?\b", re.I)),

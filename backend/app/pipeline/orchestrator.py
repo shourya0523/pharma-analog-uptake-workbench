@@ -3,7 +3,7 @@ from __future__ import annotations
 # ruff: noqa: BLE001, DTZ003
 import json
 import logging
-from datetime import datetime
+from datetime import date, datetime
 from typing import Any
 
 from sqlalchemy.orm import Session
@@ -20,7 +20,6 @@ from app.connectors.openfda_fields import (
 )
 from app.connectors.sources import (
     ManualURLConnector,
-    SECConnector,
     TranscriptConnectorStub,
     parse_filing_date,
 )
@@ -54,23 +53,27 @@ from app.llm.aliases import merge_aliases
 from app.llm.client import LLMModules
 from app.parsing.documents import DocumentParser
 from app.parsing.evidence import (
-    build_revenue_llm_text,
-    prioritize_sources_for_revenue,
+    product_aliases,
     select_product_evidence_text,
 )
 from app.parsing.fda_label import format_moa_profile_value, parse_label_record
 from app.parsing.indications import parse_indications
 from app.parsing.periods import detect_period_context, normalize_period
-from app.extraction.candidates import extract_revenue_candidates
-from app.extraction.fingerprint import UNIT_SCALE_TO_MILLIONS
-from app.quality.candidate_filters import filter_revenue_candidates
+from app.extraction.readers import Observation
+from app.extraction.reading import read_document
+from app.catalog.families import family_parent, family_siblings
+from app.extraction.described import read_described_document, read_with_repair
+from app.fingerprint.triage import triage
+from app.sourcing.edgar import EdgarIndex
+from app.extraction.series import Series, assemble_series, formulation_split_periods, propagate_family
+from app.fingerprint.llm import LLMFingerprinter
+from app.extraction.units import UNIT_SCALE_TO_MILLIONS
 from app.quality.checks import (
     apply_auto_pass_gate,
     moa_epc_contamination_issue,
     quote_contains_value,
     run_quality_checks,
 )
-from app.quality.comparative import derive_comparative_candidates
 from app.quality.completeness import resolve_completeness_pct
 from app.quality.enrichment import (
     apply_field_enrichment,
@@ -133,10 +136,35 @@ def persist_profile_field(
     return row
 
 
+def _observation_candidate(observation: Observation) -> dict[str, Any]:
+    """A reader observation in the candidate shape the orchestrator persists."""
+    scale = {"units": 1e-6, "thousands": 1e-3, "millions": 1.0, "billions": 1e3}.get(observation.unit_label)
+    normalized = observation.value_as_reported * scale if (scale and observation.unit_declared and observation.currency == "USD") else None
+    return {
+        "period": observation.period,
+        "period_type": observation.period_type,
+        "value_reported": observation.value_as_reported,
+        "value_normalized_usd_millions": normalized,
+        "currency": observation.currency,
+        "unit": observation.unit_label,
+        "revenue_scope": observation.geography or "Unknown",
+        "geography": observation.geography,
+        "formulation": None,
+        "source_quote": observation.source_quote,
+        "product_mentioned_in_quote": True,
+        "is_company_total": False,
+        "confidence": 0.75 if observation.method == "grid" else 0.6,
+        "extraction_method": f"reader_{observation.method}",
+        "_from_reader": True,
+        "_reader_method": observation.method,
+        "_layout_notes": [n for n in observation.notes if n in {"unit_not_declared", "llm_fingerprint", "years_inferred_from_sequence"}],
+    }
+
+
 def scale_to_millions(value: float, unit: str | None) -> float:
     """Convert a reported value to USD millions using its declared unit.
 
-    LLM candidates carry a free-text ``unit`` (see revenue_extractor.yaml)
+    Candidates carry a free-text ``unit`` as the document printed it
     rather than the canonical label the deterministic table path produces,
     so this matches on substrings against the same UNIT_SCALE_TO_MILLIONS
     table fingerprint.py uses, defaulting to "millions" (scale 1.0) when the
@@ -158,11 +186,15 @@ def scale_to_millions(value: float, unit: str | None) -> float:
 
 
 class PipelineOrchestrator:
+    # Observations every job of this orchestrator produced, by job id, so a
+    # family's formulation can be resolved from its parent's line within a run.
+    _observations: dict[str, list[Observation]]
+
     def __init__(self, db: Session, file_store: FileStore | None = None, llm: LLMModules | None = None) -> None:
         self.db = db
         self.file_store = file_store or get_file_store()
         self.llm = llm or LLMModules()
-        self.sec = SECConnector(self.file_store)
+        self.edgar = EdgarIndex()
         self.fda = OpenFDAConnector(self.file_store)
         self.manual = ManualURLConnector(self.file_store)
         self.transcripts = TranscriptConnectorStub()
@@ -214,6 +246,7 @@ class PipelineOrchestrator:
                     datapoint_rows = await self._extract_revenue(
                         job, sources, parsed, options, only_source_ids={s.source_id for s in extra_sources}
                     )
+            datapoint_rows = datapoint_rows + self._assemble_series(job, datapoint_rows)
             await self._judge(job, datapoint_rows, sources, parsed, options)
             await self._quality_and_validation(job)
             await self._completeness(job)
@@ -314,7 +347,7 @@ class PipelineOrchestrator:
         self._set_step(job, JobStep.IDENTITY_RESOLVE)
         await self._expand_aliases(job)
         if not job.cik and (job.ticker or job.manufacturer):
-            cik = await self.sec.resolve_cik(job.ticker, job.manufacturer)
+            cik = await self.edgar.resolve_cik_for(ticker=job.ticker, name=job.manufacturer)
             if cik:
                 job.cik = cik
                 self.db.commit()
@@ -337,18 +370,17 @@ class PipelineOrchestrator:
         collected = []
         want_primary = bool(options.get("sec_filings", True))
         want_earnings = bool(options.get("earnings_releases", True))
-        if want_primary or want_earnings:
+        settings = get_settings()
+        if (want_primary or want_earnings) and job.cik:
+            # Every document of every filing in the window; the fingerprinter
+            # decides per document whether it has anything to describe.
+            since = parse_filing_date(options.get("earnings_since")) or (
+                date.today().replace(year=date.today().year - settings.sec_history_years)
+            )
             collected.extend(
-                await self.sec.retrieve(
-                    run_id=job.run_id,
-                    job_id=job.id,
-                    cik=job.cik,
-                    ticker=job.ticker,
-                    company_name=job.manufacturer,
-                    include_primary=want_primary,
-                    include_earnings=want_earnings,
-                    earnings_since=parse_filing_date(options.get("earnings_since")),
-                    earnings_until=parse_filing_date(options.get("earnings_until")),
+                await self.edgar.retrieve(
+                    run_id=job.run_id, job_id=job.id, cik=job.cik, file_store=self.file_store,
+                    since=since, until=parse_filing_date(options.get("earnings_until")),
                 )
             )
         if options.get("openfda", True):
@@ -839,279 +871,368 @@ class PipelineOrchestrator:
     ) -> list[DatapointORM]:
         if not options.get("quarterly_revenue", True):
             return []
+        if self._model_mode():
+            return await self._extract_revenue_model(job, sources, parsed, only_source_ids=only_source_ids, skip_unresolved=skip_unresolved)
+        return await self._extract_revenue_degraded(job, sources, parsed, only_source_ids=only_source_ids, skip_unresolved=skip_unresolved)
+
+    async def _extract_revenue_degraded(
+        self,
+        job: DrugJobORM,
+        sources: list,
+        parsed: dict,
+        *,
+        only_source_ids: set[str] | None = None,
+        skip_unresolved: bool = False,
+    ) -> list[DatapointORM]:
+        """The unscored path for a run with no model: the header grammar and regex prose readers.
+
+        Every datapoint it yields is flagged ``degraded_mode_reader``; nothing
+        here is measured against a reference, and nothing here decides a
+        scored result.
+        """
         self._set_step(job, JobStep.EXTRACT_REVENUE)
-        rows: list[DatapointORM] = []
-        dropped_total = 0
-        any_product_money = False
-        # Reading tables costs nothing, so every parsed source is read; only the
-        # LLM pass is capped.
-        selected_sources = prioritize_sources_for_revenue(
-            sources, parsed, max_sources=max(len(list(sources)), 1)
-        )
-        llm_source_ids = {
-            s.source_id
-            for s in prioritize_sources_for_revenue(
-                sources, parsed, max_sources=get_settings().llm_max_extract_sources
-            )
-        }
-        if only_source_ids:
-            selected_sources = [s for s in selected_sources if s.source_id in only_source_ids]
+        if not hasattr(self, "_observations"):
+            self._observations = {}
+        observations = self._observations.setdefault(job.id, [])
+        family = family_parent(job.drug_name)
         extra = self._job_aliases or None
-
-        for src in selected_sources:
+        rows: list[DatapointORM] = []
+        checked: list[str] = []
+        for src in sources:
+            if only_source_ids and src.source_id not in only_source_ids:
+                continue
             doc = parsed.get(src.source_id)
-            if not doc or doc.parsing_status.value != "success":
+            if not doc or doc.parsing_status.value != "success" or src.source_type == SourceType.OPENFDA:
                 continue
-            if src.source_type == SourceType.OPENFDA:
-                continue
-
-            llm_text, evidence_meta = build_revenue_llm_text(
-                doc,
-                product=job.drug_name,
-                generic=job.generic_name,
-                extra_aliases=extra,
+            checked.append(src.url)
+            report = read_document(
+                doc, product=job.drug_name, generic=job.generic_name, extra_aliases=extra,
+                source_url=src.url, mode="degraded",
             )
-            period_context = detect_period_context(doc.full_text)
-            if evidence_meta.get("had_product_money_hits"):
-                any_product_money = True
-
-            # Skip the LLM when a filing has no product+$ evidence (avoid XBRL /
-            # company-total noise) or when it is beyond the extraction budget.
-            no_product_evidence = evidence_meta.get("strategy") in {
-                "no_product_mention",
-                "empty",
-            } or not evidence_meta.get("had_product_money_hits")
-            use_llm = src.source_id in llm_source_ids and not no_product_evidence
-            if not use_llm:
-                src_row = self.db.get(SourceDocumentORM, src.source_id)
-                if src_row:
-                    reason = "no_product_evidence" if no_product_evidence else "over_source_budget"
-                    note = (
-                        f"skip_revenue_llm reason={reason} "
-                        f"strategy={evidence_meta.get('strategy')} "
-                        f"product_money={evidence_meta.get('had_product_money_hits')}"
-                    )
-                    src_row.notes = f"{(src_row.notes or '').rstrip()} | {note}".strip(" |")
-
-            result: dict[str, Any] = {"candidates": [], "spans": []}
-            if use_llm:
-                result = await self.llm.extract_revenue(
-                    product=job.drug_name,
-                    company=job.manufacturer,
-                    source_meta={
-                        "url": src.url,
-                        "type": src.source_type.value,
-                        "title": src.title,
-                        "filing_type": src.filing_type,
-                        "accession": src.accession_number,
-                        "evidence": evidence_meta,
-                        "reporting_period": period_context.describe() if period_context else None,
-                        "period_columns": (
-                            [str(period_context.year), str(period_context.comparative_year)]
-                            if period_context
-                            else None
-                        ),
-                    },
-                    text=llm_text,
-                )
-            span_corpus = "\n\n".join(
-                (s.get("span_text") or "") for s in (result.get("spans") or [])
-            ) or llm_text
-            llm_dropped = result.get("dropped") or []
-            kept, dropped = filter_revenue_candidates(
-                result.get("candidates") or [],
-                product=job.drug_name,
-                generic=job.generic_name,
-                extra_aliases=extra,
-                source_text=span_corpus,
-            )
-            dropped = list(llm_dropped) + list(dropped)
-            dropped_total += len(dropped)
-
-            # Read the revenue table directly; the model omits rows unpredictably.
-            # These quotes come from the parsed table, not the model, so the
-            # verbatim gate that guards model output does not apply.
-            #
-            # The table is fingerprinted first, so its numbers are scaled by the
-            # unit it declares and its year-to-date columns stay labelled as
-            # such. Assuming USD millions and a fixed quarter layout is what
-            # produced 1000x-wrong values and full-year totals filed as
-            # quarters in the dataset this pipeline is scored against.
-            fingerprinted, table_findings, table_skips = extract_revenue_candidates(
-                doc.tables,
-                product=job.drug_name,
-                generic=job.generic_name,
-                extra_aliases=extra,
-                context=doc.full_text[:4000],
-            )
-            for finding in table_findings:
-                logger.warning(
-                    "table_check job_id=%s source_id=%s %s",
-                    job.id,
-                    src.source_id,
-                    finding,
-                )
-            if table_skips:
-                logger.info(
-                    "table_skipped job_id=%s source_id=%s reasons=%s",
-                    job.id,
-                    src.source_id,
-                    table_skips,
-                )
-            table_rows, table_dropped = filter_revenue_candidates(
-                fingerprinted,
-                product=job.drug_name,
-                generic=job.generic_name,
-                extra_aliases=extra,
-            )
-            dropped_total += len(table_dropped)
-            if table_rows:
-                seen_rows = {
-                    (str(c.get("period")), round(float(c["value_reported"]), 3))
-                    for c in kept
-                    if c.get("value_reported") is not None
-                }
-                added = [
-                    row
-                    for row in table_rows
-                    if (str(row["period"]), round(float(row["value_reported"]), 3)) not in seen_rows
-                ]
-                kept = list(kept) + added
-                logger.info(
-                    "table_rows_extracted job_id=%s source_id=%s parsed=%s added=%s",
-                    job.id,
-                    src.source_id,
-                    len(table_rows),
-                    len(added),
-                )
-
-            comparatives = derive_comparative_candidates(kept, context=period_context)
-            if comparatives:
-                kept = list(kept) + comparatives
-                logger.info(
-                    "comparative_columns_derived job_id=%s source_id=%s count=%s",
-                    job.id,
-                    src.source_id,
-                    len(comparatives),
-                )
-            src_row = self.db.get(SourceDocumentORM, src.source_id)
-            if src_row and dropped:
-                reason_counts: dict[str, int] = {}
-                for d in dropped:
-                    reason_counts[d.get("_drop_reason", "unknown")] = reason_counts.get(d.get("_drop_reason", "unknown"), 0) + 1
-                note = f"filtered_candidates={reason_counts}"
-                src_row.notes = f"{(src_row.notes or '').rstrip()} | {note}".strip(" |")
-            if src_row and result.get("note"):
-                src_row.notes = f"{(src_row.notes or '').rstrip()} | {result.get('note')}".strip(" |")
-
-            for cand in kept:
-                quote = (cand.get("source_quote") or "").strip()
-                url = src.url
-                period_type = (cand.get("period_type") or "unknown").lower()
-                raw_period = str(cand.get("period") or "unknown")
-                period = normalize_period(
-                    raw_period, period_type=period_type, context=period_context
-                )
-                dp_id = new_id()
-                value = cand.get("value_reported")
-                unit = cand.get("unit")
-                currency = cand.get("currency") or "USD"
-                normalized = cand.get("value_normalized_usd_millions")
-                if normalized is None and value is not None:
-                    normalized = scale_to_millions(float(value), unit)
-
-                citation = {
-                    "source_id": src.source_id,
-                    "source_type": src.source_type.value,
-                    "source_url": url,
-                    "source_title": src.title,
-                    "source_quote": quote,
-                    "retrieval_date": datetime.utcnow().isoformat(),
-                    "filing_type": src.filing_type,
-                    "accession_number": src.accession_number,
-                    "confidence": float(cand.get("confidence") or 0.5),
-                    "validation_status": ValidationStatus.PENDING.value,
-                    "interpreted": False,
-                    "period_reported": raw_period,
-                }
-                if src.source_type == SourceType.LLM_SEARCH:
-                    citation["search_query"] = (src.metadata or {}).get("search_query")
-                    citation["search_snippet"] = (src.metadata or {}).get("search_snippet")
-                issue_flags: list[str] = []
-                if cand.get("_reclassified"):
-                    issue_flags.append("reclassified_company_total")
-                if cand.get("_derived_comparative"):
-                    issue_flags.append("derived_comparative_column")
-                if cand.get("_from_table"):
-                    issue_flags.append("extracted_from_table")
-                if period is None:
-                    issue_flags.append("period_unparsed")
-                elif period != raw_period:
-                    issue_flags.append("period_normalized")
-                row = DatapointORM(
-                    id=dp_id,
-                    job_id=job.id,
-                    source_id=src.source_id,
-                    period=period or "unknown",
-                    fiscal_year=cand.get("fiscal_year"),
-                    fiscal_quarter=cand.get("fiscal_quarter"),
-                    calendar_year=cand.get("calendar_year"),
-                    calendar_quarter=cand.get("calendar_quarter"),
-                    value_reported=value,
-                    value_normalized_usd_millions=normalized,
-                    currency=currency,
-                    unit=unit,
-                    period_type=period_type,
-                    revenue_scope=cand.get("revenue_scope") or "Unknown",
-                    geography=cand.get("geography"),
-                    formulation=cand.get("formulation"),
-                    route_of_administration=cand.get("route_of_administration"),
-                    source_url=url,
-                    source_quote=quote or "",
-                    extraction_method="table" if cand.get("_from_table") else "llm",
-                    confidence_score=float(cand.get("confidence") or 0.5),
-                    validation_status=ValidationStatus.PENDING.value,
-                    citation_json=citation,
-                    issue_flags=issue_flags or None,
-                )
-                self.db.add(row)
-                rows.append(row)
-                if src_row:
-                    src_row.relevant_datapoints_found = (src_row.relevant_datapoints_found or 0) + 1
+            observations.extend(report.observations)
+            if family:
+                family_report = read_document(doc, product=family, source_url=src.url, mode="degraded")
+                self._observations.setdefault(f"{job.id}:family", []).extend(family_report.observations)
+                for sibling in family_siblings(job.drug_name):
+                    sibling_report = read_document(doc, product=sibling, source_url=src.url, mode="degraded")
+                    self._observations.setdefault(f"{job.id}:siblings", []).extend(sibling_report.observations)
+            if report.skipped:
+                logger.info("reader_skipped job_id=%s source_id=%s reasons=%s", job.id, src.source_id, report.skipped[:6])
+            kept = [
+                dict(_observation_candidate(o), _degraded=True)
+                for o in report.observations if o.line_item == "exact" and not o.covers
+            ]
+            self._persist_candidates(job, src, kept, detect_period_context(doc.full_text), rows)
 
         if not rows and not skip_unresolved:
-            reason = (
-                "Product-specific revenue not disclosed (or not found) in retrieved SEC/IR sources"
-                if not any_product_money
-                else "Candidates extracted but all failed product/quote integrity filters"
-            )
             self.db.add(
                 UnresolvedQuarterORM(
                     id=new_id(),
                     job_id=job.id,
                     period="product_revenue",
-                    reason_unresolved=reason,
-                    sources_checked=[s.url for s in selected_sources],
-                    recommended_next_step="Provide IR/earnings URL with product-level sales, or confirm non-disclosure",
-                    confidence_that_unavailable=0.7 if not any_product_money else 0.4,
+                    reason_unresolved="Product-specific revenue not found by the degraded readers in retrieved sources",
+                    sources_checked=checked,
+                    recommended_next_step="Run with a model (OPENROUTER_API_KEY) so the documents are described, or provide an IR URL with product-level sales",
+                    confidence_that_unavailable=0.3,
                 )
             )
-            job.quality_flags = list(
-                set((job.quality_flags or []) + ["no_product_revenue_candidates", f"dropped_candidates:{dropped_total}"])
-            )
+            job.quality_flags = list(set((job.quality_flags or []) + ["no_product_revenue_candidates", "degraded_mode"]))
+        job.candidates_extracted = len(rows)
+        self.db.commit()
+        logger.info("extract_revenue_degraded_done job_id=%s drug=%s kept=%s sources=%s", job.id, job.drug_name, len(rows), len(checked))
+        return rows
 
+    def _persist_candidates(self, job: DrugJobORM, src: Any, kept: list[dict[str, Any]], period_context: Any, rows: list[DatapointORM]) -> None:
+        """Datapoint rows for the candidates a source yielded."""
+        src_row = self.db.get(SourceDocumentORM, src.source_id)
+        for cand in kept:
+            quote = (cand.get("source_quote") or "").strip()
+            url = src.url
+            period_type = (cand.get("period_type") or "unknown").lower()
+            raw_period = str(cand.get("period") or "unknown")
+            period = normalize_period(
+                raw_period, period_type=period_type, context=period_context
+            )
+            dp_id = new_id()
+            value = cand.get("value_reported")
+            unit = cand.get("unit")
+            currency = cand.get("currency") or "USD"
+            normalized = cand.get("value_normalized_usd_millions")
+            if normalized is None and value is not None:
+                normalized = scale_to_millions(float(value), unit)
+
+            citation = {
+                "source_id": src.source_id,
+                "source_type": src.source_type.value,
+                "source_url": url,
+                "source_title": src.title,
+                "source_quote": quote,
+                "retrieval_date": datetime.utcnow().isoformat(),
+                "filing_type": src.filing_type,
+                "accession_number": src.accession_number,
+                "confidence": float(cand.get("confidence") or 0.5),
+                "validation_status": ValidationStatus.PENDING.value,
+                "interpreted": False,
+                "period_reported": raw_period,
+            }
+            if src.source_type == SourceType.LLM_SEARCH:
+                citation["search_query"] = (src.metadata or {}).get("search_query")
+                citation["search_snippet"] = (src.metadata or {}).get("search_snippet")
+            issue_flags: list[str] = []
+            if cand.get("_reclassified"):
+                issue_flags.append("reclassified_company_total")
+            if cand.get("_derived_comparative"):
+                issue_flags.append("derived_comparative_column")
+            if cand.get("_from_table"):
+                issue_flags.append("extracted_from_table")
+            if cand.get("_degraded"):
+                issue_flags.append("degraded_mode_reader")
+            if cand.get("_from_reader"):
+                issue_flags.append(f"read_by_{cand.get('_reader_method')}")
+                if cand.get("_layout_notes"):
+                    issue_flags.extend(cand["_layout_notes"])
+            if period is None:
+                issue_flags.append("period_unparsed")
+            elif period != raw_period:
+                issue_flags.append("period_normalized")
+            row = DatapointORM(
+                id=dp_id,
+                job_id=job.id,
+                source_id=src.source_id,
+                period=period or "unknown",
+                fiscal_year=cand.get("fiscal_year"),
+                fiscal_quarter=cand.get("fiscal_quarter"),
+                calendar_year=cand.get("calendar_year"),
+                calendar_quarter=cand.get("calendar_quarter"),
+                value_reported=value,
+                value_normalized_usd_millions=normalized,
+                currency=currency,
+                unit=unit,
+                period_type=period_type,
+                revenue_scope=cand.get("revenue_scope") or "Unknown",
+                geography=cand.get("geography"),
+                formulation=cand.get("formulation"),
+                route_of_administration=cand.get("route_of_administration"),
+                source_url=url,
+                source_quote=quote or "",
+                extraction_method=(
+                    "table" if cand.get("_from_table")
+                    else f"reader_{cand.get('_reader_method')}" if cand.get("_from_reader")
+                    else "llm"
+                ),
+                confidence_score=float(cand.get("confidence") or 0.5),
+                validation_status=ValidationStatus.PENDING.value,
+                citation_json=citation,
+                issue_flags=issue_flags or None,
+            )
+            self.db.add(row)
+            rows.append(row)
+            if src_row:
+                src_row.relevant_datapoints_found = (src_row.relevant_datapoints_found or 0) + 1
+
+    async def _extract_revenue_model(
+        self,
+        job: DrugJobORM,
+        sources: list,
+        parsed: dict,
+        *,
+        only_source_ids: set[str] | None = None,
+        skip_unresolved: bool = False,
+    ) -> list[DatapointORM]:
+        """The scored path: the description is the only interpreter.
+
+        parse -> triage -> fingerprint -> read with one repair round ->
+        observations -> datapoints. Nothing here reads a header or a label.
+        """
+        self._set_step(job, JobStep.EXTRACT_REVENUE)
+        if not hasattr(self, "_observations"):
+            self._observations = {}
+        observations = self._observations.setdefault(job.id, [])
+        family = family_parent(job.drug_name)
+        fingerprinter = self._fingerprinter()
+        if fingerprinter is None:
+            job.quality_flags = list(set((job.quality_flags or []) + ["model_mode_without_fingerprinter"]))
+            self.db.commit()
+            return []
+        products = [job.drug_name] + ([family] if family else [])
+        generics = {job.drug_name: job.generic_name}
+        extra = self._job_aliases or None
+        aliases = product_aliases(job.drug_name, job.generic_name, extra=extra)
+        if family:
+            aliases = aliases + product_aliases(family, None)
+        rows: list[DatapointORM] = []
+        described_sources = 0
+        for src in sources:
+            if only_source_ids and src.source_id not in only_source_ids:
+                continue
+            doc = parsed.get(src.source_id)
+            if not doc or doc.parsing_status.value != "success" or src.source_type == SourceType.OPENFDA:
+                continue
+            src_row = self.db.get(SourceDocumentORM, src.source_id)
+            decision = triage(doc, aliases=aliases)
+            if not decision.fingerprint:
+                if src_row:
+                    src_row.notes = f"{(src_row.notes or '').rstrip()} | triage={decision.reason}".strip(" |")
+                continue
+            described_sources += 1
+            try:
+                fingerprint = await fingerprinter.fingerprint(
+                    doc, products=products, generics=generics, title=src.title or "", url=src.url,
+                )
+            except Exception as exc:  # noqa: BLE001
+                logger.warning("fingerprint_skipped job_id=%s source_id=%s error=%s", job.id, src.source_id, exc)
+                continue
+            report = await read_with_repair(
+                doc, fingerprint, fingerprinter, product=job.drug_name, generic=job.generic_name,
+                extra_aliases=extra, source_url=src.url, products=products, title=src.title or "",
+            )
+            observations.extend(report.observations)
+            if family:
+                family_report = read_described_document(doc, fingerprint, product=family, source_url=src.url)
+                self._observations.setdefault(f"{job.id}:family", []).extend(family_report.observations)
+                for sibling in family_siblings(job.drug_name):
+                    sibling_report = read_described_document(doc, fingerprint, product=sibling, source_url=src.url)
+                    self._observations.setdefault(f"{job.id}:siblings", []).extend(sibling_report.observations)
+            if src_row:
+                summary = (
+                    f"model_read parts={fingerprint.parts} tiers={dict(fingerprint.tiers)} rejected={len(fingerprint.rejected)} "
+                    f"failures={len(report.failures)} repairs={report.repairs} dropped_prose={report.dropped_prose}"
+                )
+                src_row.notes = f"{(src_row.notes or '').rstrip()} | {summary}".strip(" |")
+            kept = [
+                _observation_candidate(o)
+                for o in report.observations
+                if o.line_item == "exact" and not o.covers and not o.provisional
+            ]
+            self._persist_candidates(job, src, kept, detect_period_context(doc.full_text), rows)
+
+        if not rows and not skip_unresolved:
+            self.db.add(
+                UnresolvedQuarterORM(
+                    id=new_id(),
+                    job_id=job.id,
+                    period="product_revenue",
+                    reason_unresolved=(
+                        "No retrieved source names the product beside a figure"
+                        if not described_sources
+                        else "The model's descriptions yielded no verified product revenue row"
+                    ),
+                    sources_checked=[s.url for s in sources],
+                    recommended_next_step="Provide an IR/earnings URL with product-level sales, or confirm non-disclosure",
+                    confidence_that_unavailable=0.7 if not described_sources else 0.4,
+                )
+            )
+            job.quality_flags = list(set((job.quality_flags or []) + ["no_product_revenue_candidates"]))
         job.candidates_extracted = len(rows)
         self.db.commit()
         logger.info(
-            "extract_revenue_done job_id=%s drug=%s kept=%s dropped=%s product_money=%s sources=%s",
-            job.id,
-            job.drug_name,
-            len(rows),
-            dropped_total,
-            any_product_money,
-            len(selected_sources),
+            "extract_revenue_model_done job_id=%s drug=%s kept=%s described_sources=%s fingerprint_calls=%s",
+            job.id, job.drug_name, len(rows), described_sources, fingerprinter.calls,
         )
         return rows
+
+    def _model_mode(self) -> bool:
+        settings = get_settings()
+        if settings.fingerprint_mode == "degraded" or not settings.enable_llm_fingerprint:
+            return False
+        if settings.fingerprint_mode == "model":
+            return True
+        return bool(settings.openrouter_api_key)
+
+    def _fingerprinter(self) -> LLMFingerprinter | None:
+        settings = get_settings()
+        if not self._model_mode() or not settings.openrouter_api_key:
+            return None
+        if not hasattr(self, "_fingerprinter_instance"):
+            try:
+                self._fingerprinter_instance = LLMFingerprinter()
+            except Exception as exc:
+                logger.warning("fingerprinter_unavailable error=%s", exc)
+                self._fingerprinter_instance = None
+        return self._fingerprinter_instance
+
+    def _assemble_series(self, job: DrugJobORM, rows: list[DatapointORM]) -> list[DatapointORM]:
+        """Reconcile every observation of the job into one series; persist what it adds.
+
+        Rows read directly are already datapoints. What this stage adds are
+        the quarters no document states outright: residuals against stated
+        totals, stubs of an acquisition quarter assembled from dated parts,
+        and a family line attributed to its sole formulation. Periods the
+        series cannot resolve become unresolved quarters with the verdict.
+        """
+        observations = getattr(self, "_observations", {}).get(job.id, [])
+        if not observations:
+            return []
+        self._set_step(job, JobStep.EXTRACT_REVENUE)
+        series: Series = assemble_series(observations, product=job.drug_name)
+        parent = family_parent(job.drug_name) or ""
+        if parent:
+            parent_job = next(
+                (j for j in self.db.query(DrugJobORM).filter_by(run_id=job.run_id).all() if j.drug_name == parent),
+                None,
+            )
+            parent_observations = getattr(self, "_observations", {}).get(parent_job.id, []) if parent_job else []
+            if not parent_observations:
+                parent_observations = getattr(self, "_observations", {}).get(f"{job.id}:family", [])
+            if parent_observations:
+                parent_series = assemble_series(parent_observations, product=parent)
+                # The split is where a sibling formulation is stated on its own line.
+                siblings = formulation_split_periods(getattr(self, "_observations", {}).get(f"{job.id}:siblings", []))
+                own = {v.period for v in series.values if v.period_type == "quarterly"}
+                series.values.extend(
+                    v for v in propagate_family(parent_series, product=job.drug_name, sibling_periods=siblings)
+                    if v.period not in own
+                )
+        existing = {(r.period, r.period_type) for r in rows}
+        added: list[DatapointORM] = []
+        for value in series.values:
+            if value.route == "read" or (value.period, value.period_type) in existing:
+                continue
+            row = DatapointORM(
+                id=new_id(),
+                job_id=job.id,
+                source_id=None,
+                period=value.period,
+                value_reported=value.value_as_reported,
+                value_normalized_usd_millions=value.value_usd_millions,
+                currency=value.currency,
+                unit=value.unit_label,
+                period_type=value.period_type,
+                revenue_scope=value.geography or "Unknown",
+                geography=value.geography,
+                source_url=value.source_urls[0] if value.source_urls else "",
+                source_quote=value.detail or value.source_quote,
+                extraction_method=value.route,
+                confidence_score=0.7,
+                validation_status=ValidationStatus.PENDING.value,
+                citation_json={
+                    "derivation": value.derivation,
+                    "inputs": list(value.inputs),
+                    "source_urls": list(value.source_urls),
+                    "detail": value.detail,
+                },
+                issue_flags=[f"series_{value.route}"] + (["series_provisional"] if value.provisional else []),
+            )
+            self.db.add(row)
+            added.append(row)
+        for verdict in series.verdicts:
+            self.db.add(
+                UnresolvedQuarterORM(
+                    id=new_id(),
+                    job_id=job.id,
+                    period=verdict.period,
+                    reason_unresolved=f"{verdict.derivation}: {verdict.detail}"[:500],
+                    sources_checked=list(verdict.source_urls),
+                    recommended_next_step="Review the conflicting statements and confirm which line the series tracks",
+                    confidence_that_unavailable=0.2,
+                )
+            )
+        if added or series.verdicts:
+            self.db.commit()
+            logger.info(
+                "series_assembled job_id=%s drug=%s added=%s verdicts=%s", job.id, job.drug_name, len(added), len(series.verdicts)
+            )
+        return added
 
     async def _judge(self, job: DrugJobORM, rows: list[DatapointORM], sources: list, parsed: dict, options: dict) -> None:
         self._set_step(job, JobStep.EVIDENCE_JUDGE)

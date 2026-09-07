@@ -74,6 +74,9 @@ class ExtractedValue:
     source_quote: str
     fingerprint_signature: str
     value_index: int
+    # 0 when the text ties the figure to the product's own revenue line;
+    # 1 when the tie is weaker (a shipment, a period carried from context).
+    specificity: int = 0
 
     def as_dict(self) -> dict[str, Any]:
         return {

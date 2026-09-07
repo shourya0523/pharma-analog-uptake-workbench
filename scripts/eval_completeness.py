@@ -40,7 +40,7 @@ from app.extraction.derive import (  # noqa: E402
     propagate_sole_formulation,
 )
 from app.extraction.process import Datapoint  # noqa: E402
-from app.extraction.prose import read_prose  # noqa: E402
+from app.extraction.degraded.prose_reader import read_prose  # noqa: E402
 
 GOLD = REPO_ROOT / "seed" / "gold"
 

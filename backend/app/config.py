@@ -22,21 +22,44 @@ class Settings(BaseSettings):
     job_backend: str = "inprocess"  # inprocess | sqs
     local_storage_root: str = "./storage"
     openrouter_api_key: str | None = None
-    openrouter_model_extract: str = "openai/gpt-4o-mini"
-    openrouter_model_judge: str = "openai/gpt-4o-mini"
+    # Legacy extractor and judge (gated off in model mode, deleted in the
+    # cleanup phase): the same cheap model as the fast fingerprint tier.
+    openrouter_model_extract: str = "z-ai/glm-5.3-flash"
+    openrouter_model_judge: str = "z-ai/glm-5.3-flash"
+    # The region fingerprinter: the model that describes where and how a
+    # document states product revenue. A fast model describes first; a part
+    # whose description the parser rejects or that leaves a product grid
+    # undescribed is described again by the strong model. Repairs always use
+    # the strong model. Empty fast model = strong model only.
+    #
+    # Chosen 2026-09-06 on OpenRouter list prices and Artificial Analysis'
+    # independent index: GLM-5.3-Flash ($0.075/$0.25 per M tokens, index 57)
+    # first, Gemini 3.8 Flash ($0.75/$3.75, index 59, a different model
+    # family so promotion catches different mistakes) for promotions and
+    # repairs. Alternates if a provider misbehaves: deepseek/deepseek-v4-flash
+    # and deepseek/deepseek-v4-pro.
+    openrouter_model_fingerprint: str = "google/gemini-3.8-flash"
+    openrouter_model_fingerprint_fast: str = "z-ai/glm-5.3-flash"
+    # OpenRouter's unified reasoning control for the fingerprint calls: the
+    # description is a reading task and reasoning tokens bill as output.
+    fingerprint_reasoning_effort: str = "low"
+    # model: the description is the only interpreter (scored); degraded: the
+    # header grammar and regex prose readers, for runs with no model, never
+    # scored; auto: model when an API key is present, else degraded.
+    fingerprint_mode: str = "auto"
+    enable_llm_fingerprint: bool = True
+    fingerprint_concurrency: int = 4
+    fingerprint_max_tokens: int = 16000
+    fingerprint_max_calls_per_job: int = 400
+    sec_history_years: int = 12
     openrouter_base_url: str = "https://openrouter.ai/api/v1"
     validation_sample_rate: float = 0.10
     max_concurrent_jobs: int = 1
-    sec_max_filings: int = 4
-    sec_include_8k: bool = False
     # Quarterly product revenue lives in 8-K item 2.02 exhibit 99.x earnings releases,
     # not in the 8-K primary document.
-    sec_earnings_exhibits: bool = True
-    sec_max_earnings_exhibits: int = 6
     sec_user_agent: str = "PharmaAnalogUptakeWorkbench research@example.com"
     cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
     llm_skip_judge_when_deterministic: bool = True
-    llm_max_extract_sources: int = 6
     # Independent-search judging of product profile fields. Source registries carry
     # errors (openFDA lists Tyvaso, an inhaled product, as ORAL), so cited fields are
     # challenged rather than passed through.

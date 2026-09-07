@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import json
 import logging
 import re
@@ -11,8 +12,6 @@ import yaml
 
 from app.config import get_settings
 from app.llm.grounding import (
-    apply_structured_field_gates,
-    enforce_verbatim_on_candidates,
     quote_is_verbatim,
 )
 from app.parsing.evidence import TOTAL_REVENUE_RE, product_aliases
@@ -25,6 +24,13 @@ logger = logging.getLogger(__name__)
 
 
 PROMPTS_DIR = Path(__file__).resolve().parent.parent / "prompts"
+
+
+_RETRY_STATUSES = {408, 409, 425, 429, 500, 502, 503, 504}
+
+
+class _Transient(Exception):
+    """A failure worth another attempt."""
 
 
 class OpenRouterClient:
@@ -52,26 +58,75 @@ class OpenRouterClient:
             )
         resp.raise_for_status()
 
-    async def chat_json(self, *, model: str, system: str, user: str) -> dict[str, Any]:
-        payload = {
+    async def chat_json(self, *, model: str, system: str, user: str, max_tokens: int = 6000,
+                        temperature: float = 0.1, timeout: float = 120.0, retries: int = 0,
+                        reasoning_effort: str | None = None, require_parameters: bool = False,
+                        usage: dict[str, Any] | None = None) -> dict[str, Any]:
+        """One JSON answer. Transient failures are retried with backoff; an
+        answer that is not JSON is asked for once more.
+
+        max_tokens bounds what the router reserves against the account's
+        balance; without it a model's full output window is reserved.
+        reasoning_effort is OpenRouter's unified reasoning control (low,
+        medium, high), ignored by models without one; require_parameters
+        makes the router pick only providers that honour every parameter
+        sent, so a JSON answer is not left to a provider that ignores
+        response_format. A usage dict, when given, is filled with the
+        router's accounting for the call (prompt and completion tokens and
+        the cost in USD, summed over re-asks) so a run can state what it
+        cost.
+        """
+        payload: dict[str, Any] = {
             "model": model,
             "messages": [
                 {"role": "system", "content": system},
                 {"role": "user", "content": user},
             ],
             "response_format": {"type": "json_object"},
-            "temperature": 0.1,
+            "temperature": temperature,
+            "max_tokens": max_tokens,
         }
-        async with httpx.AsyncClient(timeout=120) as client:
-            resp = await client.post(
-                f"{self.settings.openrouter_base_url}/chat/completions",
-                headers=self._headers(),
-                json=payload,
-            )
-            self._raise_for_status(resp, model=model)
-            data = resp.json()
-        content = data["choices"][0]["message"]["content"]
-        return _parse_json_content(content)
+        if reasoning_effort:
+            payload["reasoning"] = {"effort": reasoning_effort}
+        if require_parameters:
+            payload["provider"] = {"require_parameters": True}
+        if usage is not None:
+            payload["usage"] = {"include": True}
+        backoff = (2.0, 8.0, 30.0)
+        attempt = 0
+        asked_again = False
+        while True:
+            try:
+                async with httpx.AsyncClient(timeout=timeout) as client:
+                    resp = await client.post(
+                        f"{self.settings.openrouter_base_url}/chat/completions",
+                        headers=self._headers(),
+                        json=payload,
+                    )
+                    if resp.status_code in _RETRY_STATUSES and attempt < retries:
+                        raise _Transient(f"status {resp.status_code}")
+                    self._raise_for_status(resp, model=model)
+                    data = resp.json()
+                content = data["choices"][0]["message"]["content"]
+                if usage is not None:
+                    for name in ("prompt_tokens", "completion_tokens", "cost"):
+                        usage[name] = usage.get(name, 0) + (data.get("usage") or {}).get(name, 0)
+                parsed = _parse_json_content(content)
+                if "raw" in parsed and len(parsed) == 1 and not asked_again and retries:
+                    asked_again = True
+                    payload["messages"] = payload["messages"][:2] + [
+                        {"role": "assistant", "content": content[:4000]},
+                        {"role": "user", "content": "That was not valid JSON. Return the same answer as one JSON object only."},
+                    ]
+                    continue
+                return parsed
+            except (_Transient, httpx.TimeoutException, httpx.TransportError) as exc:
+                if attempt >= retries:
+                    raise
+                delay = backoff[min(attempt, len(backoff) - 1)]
+                logger.warning("openrouter_retry model=%s attempt=%s reason=%s delay=%s", model, attempt + 1, exc, delay)
+                attempt += 1
+                await asyncio.sleep(delay)
 
     def _web_tools(self, *, fetch: bool = False) -> list[dict[str, Any]]:
         domains = [
@@ -158,8 +213,57 @@ def _parse_json_content(content: Any) -> dict[str, Any]:
     except json.JSONDecodeError:
         match = re.search(r"\{[\s\S]*\}", text)
         if match:
-            return json.loads(match.group(0))
+            try:
+                return json.loads(match.group(0))
+            except json.JSONDecodeError:
+                repaired = _repair_json(match.group(0))
+                if repaired is not None:
+                    return repaired
         return {"raw": text}
+
+
+def _repair_json(text: str) -> dict[str, Any] | None:
+    """Recover JSON a model spoiled with an unescaped quote inside a string.
+
+    Verbatim quotes copied from filings carry inch marks and nested quotes.
+    Scanning the text as a string-aware tokenizer, a double quote inside a
+    string that is not followed by a structural character is escaped; a
+    trailing comma before a closing bracket is dropped.
+    """
+    out: list[str] = []
+    in_string = False
+    escaped = False
+    for index, char in enumerate(text):
+        if in_string:
+            if escaped:
+                out.append(char)
+                escaped = False
+                continue
+            if char == "\\":
+                out.append(char)
+                escaped = True
+                continue
+            if char == '"':
+                rest = text[index + 1 :].lstrip()
+                if rest[:1] in {",", "}", "]", ":"} or not rest:
+                    in_string = False
+                    out.append(char)
+                else:
+                    out.append('\\"')
+                continue
+            if char == "\n":
+                out.append("\\n")
+                continue
+            out.append(char)
+            continue
+        if char == '"':
+            in_string = True
+        out.append(char)
+    candidate = re.sub(r",(\s*[}\]])", r"\1", "".join(out))
+    try:
+        return json.loads(candidate)
+    except json.JSONDecodeError:
+        return None
 
 
 def _citations_from_message(message: dict[str, Any]) -> list[dict[str, str]]:
@@ -198,102 +302,6 @@ class LLMModules:
     def __init__(self, client: OpenRouterClient | None = None) -> None:
         self.client = client or OpenRouterClient()
         self.settings = get_settings()
-
-    async def find_revenue_spans(
-        self,
-        *,
-        product: str,
-        company: str | None,
-        source_meta: dict,
-        text: str,
-    ) -> list[dict[str, Any]]:
-        prompt = load_prompt("revenue_span_finder")
-        clipped = text[:50000]
-        if not self.settings.openrouter_api_key:
-            return []
-        user = prompt["user_template"].format(
-            product=product,
-            company=company or "",
-            source_meta=json.dumps(source_meta),
-            text=clipped,
-        )
-        result = await self.client.chat_json(
-            model=self.settings.openrouter_model_extract,
-            system=prompt["system"],
-            user=user,
-        )
-        spans = result.get("spans") or []
-        return _filter_hallucinated_spans(spans, clipped)
-
-    async def extract_revenue_from_spans(
-        self,
-        *,
-        product: str,
-        company: str | None,
-        source_meta: dict,
-        spans: list[dict[str, Any]],
-    ) -> dict[str, Any]:
-        if not spans:
-            return {"candidates": [], "spans": []}
-        prompt = load_prompt("revenue_extractor")
-        if not self.settings.openrouter_api_key:
-            return {"candidates": [], "spans": spans, "note": "OPENROUTER_API_KEY missing; skipped LLM"}
-        # Cap span payload
-        compact = [
-            {
-                "span_id": s.get("span_id"),
-                "span_text": (s.get("span_text") or "")[:4000],
-                "why_relevant": s.get("why_relevant"),
-                "looks_like_table": s.get("looks_like_table"),
-            }
-            for s in spans[:20]
-        ]
-        user = prompt["user_template"].format(
-            product=product,
-            company=company or "",
-            source_meta=json.dumps(source_meta),
-            spans_json=json.dumps(compact, indent=2)[:48000],
-        )
-        result = await self.client.chat_json(
-            model=self.settings.openrouter_model_extract,
-            system=prompt["system"],
-            user=user,
-        )
-        candidates = result.get("candidates") or []
-        # Grounding gates
-        corpus = "\n\n".join(s.get("span_text") or "" for s in compact)
-        kept_v, drop_v = enforce_verbatim_on_candidates(candidates, source_text=corpus, spans=compact)
-        kept_s, drop_s = apply_structured_field_gates(kept_v)
-        return {
-            "candidates": kept_s,
-            "spans": compact,
-            "dropped": drop_v + drop_s,
-        }
-
-    async def extract_revenue(
-        self,
-        *,
-        product: str,
-        company: str | None,
-        source_meta: dict,
-        text: str,
-    ) -> dict[str, Any]:
-        """Two-pass extract: find verbatim spans, then fill candidates from spans only."""
-        spans = await self.find_revenue_spans(
-            product=product,
-            company=company,
-            source_meta=source_meta,
-            text=text,
-        )
-        if not spans:
-            return {"candidates": [], "spans": [], "note": "no_product_revenue_spans"}
-        filled = await self.extract_revenue_from_spans(
-            product=product,
-            company=company,
-            source_meta=source_meta,
-            spans=spans,
-        )
-        return filled
 
     async def extract_metadata(self, *, product: str, text: str, source_meta: dict) -> dict[str, Any]:
         prompt = load_prompt("metadata_extractor")

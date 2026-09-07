@@ -7,7 +7,6 @@ code that is supposed to make them impossible.
 
 from __future__ import annotations
 
-from app.extraction.candidates import extract_revenue_candidates
 from app.extraction.check import run_checks
 from app.extraction.extract import map_values_to_blocks, read_table, tokenize_row
 from app.extraction.fingerprint import PeriodBlock, build_fingerprint
@@ -83,10 +82,6 @@ def test_year_to_date_column_is_never_emitted_as_a_quarter():
     assert by_period[("2024", "six_month")] == 70.0
     assert not any(v.period_type == "quarterly" and v.period == "2024" for v in readout.values)
 
-    candidates, _, _ = extract_revenue_candidates(
-        [MERCK_QUARTER_AND_YTD], product="Winrevair"
-    )
-    assert [c["period"] for c in candidates] == ["2024Q2"]
 
 
 def test_dash_holds_its_column_so_later_values_do_not_shift_left():
@@ -189,7 +184,7 @@ def test_non_usd_filing_is_converted_not_passed_through_as_dollars():
 
 def test_sentence_states_its_own_unit_and_period():
     """Older filings predate the product-sales exhibit and state sales in prose."""
-    from app.extraction.prose import read_prose
+    from app.extraction.degraded.prose_reader import read_prose
 
     values = read_prose(
         "Remodulin revenues for the quarter ended June 30, 2002 were "
@@ -205,7 +200,7 @@ def test_sentence_states_its_own_unit_and_period():
 
 def test_sentence_naming_several_periods_is_refused():
     """Which amount belongs to which period is not inferable from proximity."""
-    from app.extraction.prose import read_prose
+    from app.extraction.degraded.prose_reader import read_prose
 
     values = read_prose(
         "For the years ended December 31, 2016 and December 31, 2015 we "
@@ -300,7 +295,7 @@ def test_family_total_resolves_the_sole_formulation_before_a_split():
 
 def test_prose_reads_a_full_year_total():
     """"Full-year 2002" is as common as "year ended", and unlocks derivation."""
-    from app.extraction.prose import read_prose
+    from app.extraction.degraded.prose_reader import read_prose
 
     values = read_prose(
         "Full-year 2002 Remodulin revenue was $21.174 million.", product="Remodulin"
@@ -320,7 +315,7 @@ def test_prose_pairs_quarter_and_year_to_date_when_the_sentence_says_respectivel
     states the correspondence outright. Neither half matches the single-period
     patterns either: the quarter's year only appears after the second phrase.
     """
-    from app.extraction.prose import read_prose
+    from app.extraction.degraded.prose_reader import read_prose
 
     values = read_prose(
         "Sales of Winrevair were $336 million and $615 million in the second "
@@ -340,7 +335,7 @@ def test_prose_pairing_needs_the_word_that_states_the_correspondence():
     This is the guard on the exception above: the pairing is read because the
     sentence declares it, not because two numbers happen to precede two dates.
     """
-    from app.extraction.prose import read_prose
+    from app.extraction.degraded.prose_reader import read_prose
 
     values = read_prose(
         "Sales of Winrevair were $336 million and $615 million in the second "
@@ -352,7 +347,7 @@ def test_prose_pairing_needs_the_word_that_states_the_correspondence():
 
 def test_prose_pairing_refuses_a_mismatched_count():
     """Three periods and two amounts does not say which period was dropped."""
-    from app.extraction.prose import read_prose
+    from app.extraction.degraded.prose_reader import read_prose
 
     values = read_prose(
         "Sales of Winrevair were $360 million and $976 million in the third "
@@ -500,7 +495,7 @@ def test_the_assembler_allows_a_fiscal_quarter_end_that_is_not_a_month_end():
 
 def test_prose_reads_an_amount_written_out_in_dollars():
     """A figure too small for millions is printed in full, and still counts."""
-    from app.extraction.prose import read_prose
+    from app.extraction.degraded.prose_reader import read_prose
 
     sentence = (
         "Sales of Remodulin totaled approximately $205,000 in the three months "
@@ -520,7 +515,7 @@ def test_prose_does_not_treat_every_bare_number_as_money():
     filing's bare years, section numbers and thresholds would all become
     amounts, which is a far worse failure than missing one small figure.
     """
-    from app.extraction.prose import _amounts_in
+    from app.extraction.degraded.prose_reader import _amounts_in
 
     assert _amounts_in("Remodulin sales were 205000 in the quarter") == []
     assert _amounts_in("royalties on net sales in excess of $25.0 million") == [
@@ -533,7 +528,7 @@ def test_prose_does_not_treat_every_bare_number_as_money():
 
 def test_prose_pairs_an_alternating_enumeration_without_a_pairing_word():
     """Amount, period, amount, period - the structure states the pairing."""
-    from app.extraction.prose import read_prose
+    from app.extraction.degraded.prose_reader import read_prose
 
     sentence = (
         "Sales of Remodulin totaled approximately $205,000 in the three months "
@@ -547,7 +542,7 @@ def test_prose_pairs_an_alternating_enumeration_without_a_pairing_word():
 
 def test_prose_leaves_a_sentence_that_does_not_strictly_alternate():
     """Two amounts in a row is not an enumeration, and is not guessed at."""
-    from app.extraction.prose import read_prose
+    from app.extraction.degraded.prose_reader import read_prose
 
     sentence = (
         "Remodulin sales of $8.7 million and $2.6 million were recorded in the "

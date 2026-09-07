@@ -1,0 +1,1010 @@
+[
+ {
+  "drug": "Wegovy",
+  "period": "2024Q1",
+  "geography": "Worldwide",
+  "value": 9377.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828025022877/caq12025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2024Q1",
+  "geography": "United States",
+  "value": 8232.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828025022877/caq12025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2024Q1",
+  "geography": "International",
+  "value": 1145.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828025022877/caq12025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2024Q1",
+  "geography": "Other",
+  "value": 1.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828025022877/caq12025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2024Q1",
+  "geography": "Other",
+  "value": 1075.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828025022877/caq12025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2024Q1",
+  "geography": "Other",
+  "value": 69.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828025022877/caq12025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2024Q2",
+  "geography": "Worldwide",
+  "value": 11659.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828024035364/caq22024.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2024Q2",
+  "geography": "United States",
+  "value": 9907.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828024035364/caq22024.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2024Q2",
+  "geography": "International",
+  "value": 1752.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828025038087/caq22025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2024Q2",
+  "geography": "Other",
+  "value": 1560.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828024035364/caq22024.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2024Q2",
+  "geography": "Other",
+  "value": 1648.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828025038087/caq22025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2024Q2",
+  "geography": "Other",
+  "value": 104.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828025038087/caq22025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2024Q2",
+  "geography": "Other",
+  "value": 10098.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828024035364/caq22024.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2024Q2",
+  "geography": "Other",
+  "value": 1.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828024035364/caq22024.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2024Q3",
+  "geography": "Worldwide",
+  "value": 17304.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828024045439/caq32024.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2024Q3",
+  "geography": "United States",
+  "value": 12488.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828024045439/caq32024.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2024Q3",
+  "geography": "International",
+  "value": 4816.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828025022877/caq12025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2024Q3",
+  "geography": "Other",
+  "value": 633.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828025022877/caq12025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2024Q3",
+  "geography": "Other",
+  "value": 2185.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828024045439/caq32024.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2024Q3",
+  "geography": "Other",
+  "value": 2211.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828025022877/caq12025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2024Q3",
+  "geography": "Other",
+  "value": 1806.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828025022877/caq12025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2024Q3",
+  "geography": "Other",
+  "value": 12827.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828024045439/caq32024.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2024Q3",
+  "geography": "Other",
+  "value": 166.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828024045439/caq32024.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2024Q3",
+  "geography": "Other",
+  "value": 2126.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828024045439/caq32024.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2024Q4",
+  "geography": "Worldwide",
+  "value": 19866.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828025003924/caq42024.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2024Q4",
+  "geography": "United States",
+  "value": 15143.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828025003924/caq42024.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2024Q4",
+  "geography": "International",
+  "value": 4723.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828025022877/caq12025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2024Q4",
+  "geography": "Other",
+  "value": 1224.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828025022877/caq12025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2024Q4",
+  "geography": "Other",
+  "value": 2624.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828025003924/caq42024.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2024Q4",
+  "geography": "Other",
+  "value": 2771.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828025022877/caq12025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2024Q4",
+  "geography": "Other",
+  "value": 698.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828025022877/caq12025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2024Q4",
+  "geography": "Other",
+  "value": 15623.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828025003924/caq42024.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2024Q4",
+  "geography": "Other",
+  "value": 30.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828025003924/caq42024.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2024Q4",
+  "geography": "Other",
+  "value": 1589.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828025003924/caq42024.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2025Q1",
+  "geography": "Worldwide",
+  "value": 17360.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828025022877/caq12025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2025Q1",
+  "geography": "United States",
+  "value": 11854.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828025022877/caq12025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2025Q1",
+  "geography": "International",
+  "value": 5506.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828025022877/caq12025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2025Q1",
+  "geography": "Other",
+  "value": 853.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828025022877/caq12025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2025Q1",
+  "geography": "Other",
+  "value": 2679.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828025022877/caq12025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2025Q1",
+  "geography": "Other",
+  "value": 1288.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828025022877/caq12025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2025Q1",
+  "geography": "Other",
+  "value": 686.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828025022877/caq12025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2025Q2",
+  "geography": "Worldwide",
+  "value": 19528.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828025038087/caq22025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2025Q2",
+  "geography": "United States",
+  "value": 12862.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828025038087/caq22025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2025Q2",
+  "geography": "International",
+  "value": 6666.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828025038087/caq22025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2025Q2",
+  "geography": "Other",
+  "value": 1676.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828025038087/caq22025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2025Q2",
+  "geography": "Other",
+  "value": 3500.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828025038087/caq22025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2025Q2",
+  "geography": "Other",
+  "value": 1334.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828025038087/caq22025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2025Q2",
+  "geography": "Other",
+  "value": 156.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000162828025038087/caq22025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2025Q3",
+  "geography": "Worldwide",
+  "value": 20354.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000035327825000005/caq32025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2025Q3",
+  "geography": "United States",
+  "value": 12532.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000035327825000005/caq32025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2025Q3",
+  "geography": "International",
+  "value": 7822.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000035327825000005/caq32025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2025Q3",
+  "geography": "Other",
+  "value": 1837.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000035327825000005/caq32025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2025Q3",
+  "geography": "Other",
+  "value": 4382.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000035327825000005/caq32025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2025Q3",
+  "geography": "Other",
+  "value": 1495.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000035327825000005/caq32025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2025Q3",
+  "geography": "Other",
+  "value": 108.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000035327825000005/caq32025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2025Q4",
+  "geography": "Worldwide",
+  "value": 21864.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000035327826000006/caq42025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2025Q4",
+  "geography": "United States",
+  "value": 13767.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000035327826000006/caq42025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2025Q4",
+  "geography": "International",
+  "value": 8097.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000035327826000006/caq42025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2025Q4",
+  "geography": "Other",
+  "value": 1446.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000035327826000006/caq42025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2025Q4",
+  "geography": "Other",
+  "value": 4822.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000035327826000006/caq42025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2025Q4",
+  "geography": "Other",
+  "value": 1983.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000035327826000006/caq42025.htm"
+ },
+ {
+  "drug": "Wegovy",
+  "period": "2025Q4",
+  "geography": "Other",
+  "value": -154.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/353278/000035327826000006/caq42025.htm"
+ },
+ {
+  "drug": "Dupixent",
+  "period": "2024Q2",
+  "geography": "Worldwide",
+  "value": 3303.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140424000018/pressreleaseq22024english.htm"
+ },
+ {
+  "drug": "Dupixent",
+  "period": "2024Q2",
+  "geography": "United States",
+  "value": 2407.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140424000018/pressreleaseq22024english.htm"
+ },
+ {
+  "drug": "Dupixent",
+  "period": "2024Q2",
+  "geography": "Europe",
+  "value": 399.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140424000018/pressreleaseq22024english.htm"
+ },
+ {
+  "drug": "Dupixent",
+  "period": "2024Q2",
+  "geography": "Other",
+  "value": 497.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140424000018/pressreleaseq22024english.htm"
+ },
+ {
+  "drug": "Dupixent",
+  "period": "2024Q3",
+  "geography": "Worldwide",
+  "value": 3476.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140424000020/pressreleaseq32024english.htm"
+ },
+ {
+  "drug": "Dupixent",
+  "period": "2024Q3",
+  "geography": "United States",
+  "value": 2556.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140424000020/pressreleaseq32024english.htm"
+ },
+ {
+  "drug": "Dupixent",
+  "period": "2024Q3",
+  "geography": "Europe",
+  "value": 417.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140424000020/pressreleaseq32024english.htm"
+ },
+ {
+  "drug": "Dupixent",
+  "period": "2024Q3",
+  "geography": "Other",
+  "value": 503.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140424000020/pressreleaseq32024english.htm"
+ },
+ {
+  "drug": "Dupixent",
+  "period": "2024Q4",
+  "geography": "Worldwide",
+  "value": 3458.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140425000002/pressreleaseq42024english.htm"
+ },
+ {
+  "drug": "Dupixent",
+  "period": "2024Q4",
+  "geography": "United States",
+  "value": 2551.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140425000002/pressreleaseq42024english.htm"
+ },
+ {
+  "drug": "Dupixent",
+  "period": "2024Q4",
+  "geography": "Europe",
+  "value": 431.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140425000002/pressreleaseq42024english.htm"
+ },
+ {
+  "drug": "Dupixent",
+  "period": "2024Q4",
+  "geography": "Other",
+  "value": 476.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140425000002/pressreleaseq42024english.htm"
+ },
+ {
+  "drug": "Dupixent",
+  "period": "2025Q1",
+  "geography": "Worldwide",
+  "value": 3480.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140425000013/pressreleaseq12025english.htm"
+ },
+ {
+  "drug": "Dupixent",
+  "period": "2025Q1",
+  "geography": "United States",
+  "value": 2476.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140425000013/pressreleaseq12025english.htm"
+ },
+ {
+  "drug": "Dupixent",
+  "period": "2025Q1",
+  "geography": "Europe",
+  "value": 459.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140425000013/pressreleaseq12025english.htm"
+ },
+ {
+  "drug": "Dupixent",
+  "period": "2025Q1",
+  "geography": "Other",
+  "value": 545.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140425000013/pressreleaseq12025english.htm"
+ },
+ {
+  "drug": "Dupixent",
+  "period": "2025Q2",
+  "geography": "Worldwide",
+  "value": 3832.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140425000020/pressreleaseq22025english.htm"
+ },
+ {
+  "drug": "Dupixent",
+  "period": "2025Q2",
+  "geography": "United States",
+  "value": 2807.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140425000020/pressreleaseq22025english.htm"
+ },
+ {
+  "drug": "Dupixent",
+  "period": "2025Q2",
+  "geography": "Europe",
+  "value": 485.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140425000020/pressreleaseq22025english.htm"
+ },
+ {
+  "drug": "Dupixent",
+  "period": "2025Q2",
+  "geography": "Other",
+  "value": 540.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140425000020/pressreleaseq22025english.htm"
+ },
+ {
+  "drug": "Dupixent",
+  "period": "2025Q3",
+  "geography": "Worldwide",
+  "value": 4156.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140425000026/pressreleaseq32025english.htm"
+ },
+ {
+  "drug": "Dupixent",
+  "period": "2025Q3",
+  "geography": "United States",
+  "value": 3073.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140425000026/pressreleaseq32025english.htm"
+ },
+ {
+  "drug": "Dupixent",
+  "period": "2025Q3",
+  "geography": "Europe",
+  "value": 504.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140425000026/pressreleaseq32025english.htm"
+ },
+ {
+  "drug": "Dupixent",
+  "period": "2025Q3",
+  "geography": "Other",
+  "value": 579.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140425000026/pressreleaseq32025english.htm"
+ },
+ {
+  "drug": "Dupixent",
+  "period": "2025Q4",
+  "geography": "Worldwide",
+  "value": 4246.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140426000001/pressreleaseq42025english.htm"
+ },
+ {
+  "drug": "Dupixent",
+  "period": "2025Q4",
+  "geography": "United States",
+  "value": 3182.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140426000001/pressreleaseq42025english.htm"
+ },
+ {
+  "drug": "Dupixent",
+  "period": "2025Q4",
+  "geography": "Europe",
+  "value": 509.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140426000001/pressreleaseq42025english.htm"
+ },
+ {
+  "drug": "Dupixent",
+  "period": "2025Q4",
+  "geography": "Other",
+  "value": 555.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140426000001/pressreleaseq42025english.htm"
+ },
+ {
+  "drug": "Dupixent",
+  "period": "2026Q1",
+  "geography": "Worldwide",
+  "value": 4170.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140426000004/pressreleaseq12026english.htm"
+ },
+ {
+  "drug": "Dupixent",
+  "period": "2026Q1",
+  "geography": "United States",
+  "value": 3023.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140426000004/pressreleaseq12026english.htm"
+ },
+ {
+  "drug": "Dupixent",
+  "period": "2026Q1",
+  "geography": "Europe",
+  "value": 563.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140426000004/pressreleaseq12026english.htm"
+ },
+ {
+  "drug": "Dupixent",
+  "period": "2026Q1",
+  "geography": "Other",
+  "value": 584.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140426000004/pressreleaseq12026english.htm"
+ },
+ {
+  "drug": "Dupixent",
+  "period": "2026Q2",
+  "geography": "Worldwide",
+  "value": 5154.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140426000008/pressreleaseq22026english.htm"
+ },
+ {
+  "drug": "Dupixent",
+  "period": "2026Q2",
+  "geography": "United States",
+  "value": 3899.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140426000008/pressreleaseq22026english.htm"
+ },
+ {
+  "drug": "Dupixent",
+  "period": "2026Q2",
+  "geography": "Europe",
+  "value": 583.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140426000008/pressreleaseq22026english.htm"
+ },
+ {
+  "drug": "Dupixent",
+  "period": "2026Q2",
+  "geography": "Other",
+  "value": 672.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140426000008/pressreleaseq22026english.htm"
+ },
+ {
+  "drug": "Kisqali",
+  "period": "2024Q1",
+  "geography": "Worldwide",
+  "value": 627.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1114448/000137036825000010/a250429-99_2.htm"
+ },
+ {
+  "drug": "Kisqali",
+  "period": "2024Q2",
+  "geography": "United States",
+  "value": 375.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1114448/000137036824000019/nvs-20240630-99_2.htm"
+ },
+ {
+  "drug": "Kisqali",
+  "period": "2024Q2",
+  "geography": "Other",
+  "value": 342.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1114448/000137036824000019/nvs-20240630-99_2.htm"
+ },
+ {
+  "drug": "Kisqali",
+  "period": "2024Q2",
+  "geography": "Worldwide",
+  "value": 717.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1114448/000137036824000019/nvs-20240630-99_2.htm"
+ },
+ {
+  "drug": "Kisqali",
+  "period": "2024Q3",
+  "geography": "United States",
+  "value": 441.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1114448/000137036824000022/a241029-99_2.htm"
+ },
+ {
+  "drug": "Kisqali",
+  "period": "2024Q3",
+  "geography": "Other",
+  "value": 346.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1114448/000137036824000022/a241029-99_2.htm"
+ },
+ {
+  "drug": "Kisqali",
+  "period": "2024Q3",
+  "geography": "Worldwide",
+  "value": 787.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1114448/000137036824000022/a241029-99_2.htm"
+ },
+ {
+  "drug": "Kisqali",
+  "period": "2024Q4",
+  "geography": "United States",
+  "value": 549.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1114448/000137036825000007/a250131-99_2.htm"
+ },
+ {
+  "drug": "Kisqali",
+  "period": "2024Q4",
+  "geography": "Other",
+  "value": 353.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1114448/000137036825000007/a250131-99_2.htm"
+ },
+ {
+  "drug": "Kisqali",
+  "period": "2024Q4",
+  "geography": "Worldwide",
+  "value": 902.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1114448/000137036825000007/a250131-99_2.htm"
+ },
+ {
+  "drug": "Kisqali",
+  "period": "2025Q1",
+  "geography": "United States",
+  "value": 586.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1114448/000137036825000010/a250429-99_2.htm"
+ },
+ {
+  "drug": "Kisqali",
+  "period": "2025Q1",
+  "geography": "Other",
+  "value": 370.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1114448/000137036825000010/a250429-99_2.htm"
+ },
+ {
+  "drug": "Kisqali",
+  "period": "2025Q1",
+  "geography": "Worldwide",
+  "value": 956.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1114448/000137036825000010/a250429-99_2.htm"
+ },
+ {
+  "drug": "Kisqali",
+  "period": "2025Q2",
+  "geography": "United States",
+  "value": 750.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1114448/000137036825000012/nvs-20250630-99_2.htm"
+ },
+ {
+  "drug": "Kisqali",
+  "period": "2025Q2",
+  "geography": "Other",
+  "value": 427.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1114448/000137036825000012/nvs-20250630-99_2.htm"
+ },
+ {
+  "drug": "Kisqali",
+  "period": "2025Q2",
+  "geography": "Worldwide",
+  "value": 1177.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1114448/000137036825000012/nvs-20250630-99_2.htm"
+ },
+ {
+  "drug": "Kisqali",
+  "period": "2025Q3",
+  "geography": "United States",
+  "value": 844.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1114448/000111444825000003/a251028-99_2.htm"
+ },
+ {
+  "drug": "Kisqali",
+  "period": "2025Q3",
+  "geography": "Other",
+  "value": 485.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1114448/000111444825000003/a251028-99_2.htm"
+ },
+ {
+  "drug": "Kisqali",
+  "period": "2025Q3",
+  "geography": "Worldwide",
+  "value": 1329.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1114448/000111444825000003/a251028-99_2.htm"
+ },
+ {
+  "drug": "Kisqali",
+  "period": "2025Q4",
+  "geography": "United States",
+  "value": 795.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1114448/000111444826000007/a260204-99_2.htm"
+ },
+ {
+  "drug": "Kisqali",
+  "period": "2025Q4",
+  "geography": "Other",
+  "value": 526.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1114448/000111444826000007/a260204-99_2.htm"
+ },
+ {
+  "drug": "Kisqali",
+  "period": "2025Q4",
+  "geography": "Worldwide",
+  "value": 1321.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1114448/000111444826000007/a260204-99_2.htm"
+ },
+ {
+  "drug": "Kisqali",
+  "period": "2026Q1",
+  "geography": "United States",
+  "value": 925.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1114448/000111444826000010/a260428-99_2.htm"
+ },
+ {
+  "drug": "Kisqali",
+  "period": "2026Q1",
+  "geography": "Other",
+  "value": 591.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1114448/000111444826000010/a260428-99_2.htm"
+ },
+ {
+  "drug": "Kisqali",
+  "period": "2026Q1",
+  "geography": "Worldwide",
+  "value": 1516.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1114448/000111444826000010/a260428-99_2.htm"
+ },
+ {
+  "drug": "Kisqali",
+  "period": "2026Q2",
+  "geography": "United States",
+  "value": 1045.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1114448/000111444826000012/nvs-20260630-99_2.htm"
+ },
+ {
+  "drug": "Kisqali",
+  "period": "2026Q2",
+  "geography": "Other",
+  "value": 650.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1114448/000111444826000012/nvs-20260630-99_2.htm"
+ },
+ {
+  "drug": "Kisqali",
+  "period": "2026Q2",
+  "geography": "Worldwide",
+  "value": 1695.0,
+  "status": "ok",
+  "url": "https://www.sec.gov/Archives/edgar/data/1114448/000111444826000012/nvs-20260630-99_2.htm"
+ }
+]
