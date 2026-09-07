@@ -19,14 +19,22 @@ The score is then a property of the pipeline rather than of the prose.
 Rows whose document is not cached are reported separately and never counted as
 passes: an unreachable filing is a gap in the evidence, not a success.
 
-``--discover`` goes one step further and stops handing the pipeline a URL. Gold
-then supplies only the product, the issuer and the quarter - the pipeline
-resolves the issuer's CIK, walks EDGAR for earnings exhibits around that
-quarter, and reads whatever it finds. Finding the right filing is part of the
-job, so a number that leaves it out is not an end-to-end number:
+``--discover`` stops handing the pipeline a URL. Gold then supplies only the
+product, the issuer and the quarter - the pipeline resolves the issuer's CIK,
+walks EDGAR for earnings exhibits around that quarter, and reads whatever it
+finds. That is the pipeline's score. This one, without it, is a diagnostic:
 
     DOCUMENT_CACHE=/tmp/gold-documents python scripts/eval_extraction_documents.py
     python scripts/eval_extraction_documents.py --discover --limit 40
+
+The difference is not academic, and the warning above was already here while it
+was being ignored. Gold cites Johnson & Johnson's investor-relations PDFs, so
+this eval scored the pipeline on reading a PDF, which drove a PDF reader to be
+built. Meanwhile the connector took one exhibit per earnings 8-K and J&J puts
+its schedules in the second one, so sourcing for itself the pipeline scored
+0/24 on those quarters. Deleting ``[:1]`` took it to 23/24, from filings on
+EDGAR in HTML, which is where it had always been able to look. A measurement
+that removes the step that was broken cannot report that it is broken.
 """
 
 from __future__ import annotations
@@ -294,6 +302,9 @@ def main() -> int:
 
     scored = len(rows) - len(outcomes["no_document"])
     read = len(outcomes["read"])
+    print("DIAGNOSTIC: the pipeline is handed the document, so this measures")
+    print("reading and not sourcing. Run --discover for the pipeline's score.")
+    print()
     print(f"gold quarterly rows: {len(rows)}")
     print(f"  documents cited:   {len(by_document)}")
     print(f"  not cached:        {len(outcomes['no_document'])} rows (not scored)")
