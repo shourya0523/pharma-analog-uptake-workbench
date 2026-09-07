@@ -129,7 +129,7 @@ def document_latest_period(fingerprint: Fingerprint) -> tuple[int, int] | None:
 
 def read_described_grid(
     doc: ParsedDocument, region: GridRegion, *, product: str, aliases: Iterable[str], source_url: str = "",
-    document_latest: tuple[int, int] | None = None,
+    document_latest: tuple[int, int] | None = None, issuer_products: Iterable[str] | None = None,
 ) -> tuple[list[Observation], list[VerificationFailure]]:
     """Observations for ``product`` from one described grid, and what could not be verified.
 
@@ -159,11 +159,14 @@ def read_described_grid(
             if any(is_value_token(c) for c in rows[i][1:])
         ]
         if beneath:
+            listed = [p for p in (issuer_products or []) if p]
+            sole = (f" This issuer's only listed product is {listed[0]}, so a line that names no product "
+                    f"('Product sales, net', 'Net product revenue') is {listed[0]}'s own_revenue." if len(listed) == 1 else "")
             return [], [VerificationFailure(
                 region.grid_index, heading.row_index, "revenue_section_without_product_rows",
                 f"section {heading.heading_as_printed!r} is described as revenue but no row beneath it is described as a "
                 f"product's line; rows beneath print figures: {'; '.join(beneath[:4])}. Describe each product's line, "
-                "including a generic 'Product sales' line when it is the issuer's one commercial product",
+                "including a generic 'Product sales' line when it is the issuer's one commercial product." + sole,
             )]
 
     # A family's parent is its franchise: "Total Tyvaso" is Tyvaso's own
@@ -471,6 +474,7 @@ def read_described_document(
     generic: str | None = None,
     extra_aliases: Iterable[str] | None = None,
     source_url: str = "",
+    issuer_products: Iterable[str] | None = None,
 ) -> ReadReport:
     """Everything the description lets the reader verify, for one product."""
     if fingerprint is None:
@@ -481,7 +485,7 @@ def read_described_document(
     latest = document_latest_period(fingerprint)
     for region in fingerprint.grids_for(product, aliases):
         got, failed = read_described_grid(doc, region, product=product, aliases=aliases, source_url=source_url,
-                                          document_latest=latest)
+                                          document_latest=latest, issuer_products=issuer_products)
         observations.extend(got)
         failures.extend(failed)
     prose, dropped, skipped = read_described_prose(doc, fingerprint, product=product, aliases=aliases, source_url=source_url)
@@ -511,7 +515,8 @@ async def read_with_repair(
     title: str = "",
 ) -> ReadReport:
     """Read; then, once, hand each grid the reader could not verify back to the model."""
-    report = read_described_document(doc, fingerprint, product=product, generic=generic, extra_aliases=extra_aliases, source_url=source_url)
+    report = read_described_document(doc, fingerprint, product=product, generic=generic, extra_aliases=extra_aliases,
+                                     source_url=source_url, issuer_products=products)
     if fingerprint is None or fingerprinter is None:
         return report
     aliases = product_aliases(product, generic, extra=extra_aliases)
@@ -530,7 +535,7 @@ async def read_with_repair(
             continue
         before_obs = [o for o in report.observations if o.table_index == grid_index and o.method == "grid"]
         got, failed_after = read_described_grid(doc, repaired, product=product, aliases=aliases, source_url=source_url,
-                                                document_latest=document_latest_period(fingerprint))
+                                                document_latest=document_latest_period(fingerprint), issuer_products=products)
         repairable_after = [f for f in failed_after if f.code in REPAIRABLE]
         if len(repairable_after) < len(failed) or (len(got) > len(before_obs) and len(repairable_after) <= len(failed)):
             report.observations = [o for o in report.observations if not (o.table_index == grid_index and o.method == "grid")] + got
