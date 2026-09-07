@@ -65,6 +65,10 @@ the score, because it makes the pipeline find its own filings. The same script
 without the flag hands it the document and measures only reading; that is a
 diagnostic and it prints so before it prints a number.
 
+Currently **998 of gold's 1,415 quarters (70.5%) are read correctly with the
+pipeline sourcing for itself**, against 3 wrong values. Coverage by issuer and
+what the remainder consists of are in `docs/evaluation.md`.
+
 ## Pharmaceutical data semantics
 
 - FDA Established Pharmacologic Class (EPC) and mechanism of action (MoA) are separate. EPC is never used as a MoA fallback.

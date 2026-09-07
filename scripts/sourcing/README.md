@@ -1,6 +1,7 @@
 # Sourcing scripts
 
-The code that produced the 2005–2018 backfill in `seed/gold/`. It is here so
+The code that produced the 2005–2018 backfill in `seed/gold/`, plus the
+fetcher for the held-out corpus the pipeline is gated against. It is here so
 the provenance of those rows is inspectable and re-runnable, not because the
 application depends on it — nothing in `backend/` imports any of it, and the
 gold builder does not either.
@@ -34,6 +35,16 @@ re-running the extractor costs nothing and never refetches.
 `jnj_extract_jnj.py` rebuilds each line from pdfplumber word boxes rather than
 the PDF's own text layer: some of these schedules split a number in two ("1
 ,613" for 1,613), which a naive read turns into the value 1.
+
+## The held-out corpus
+
+    SEC_CONTACT='...' HOLDOUT_DIR=/tmp/holdout python scripts/sourcing/fetch_holdout.py
+
+Earnings exhibits from four issuers that appear nowhere in `seed/gold/` -
+Pfizer, AbbVie, Amgen, Eli Lilly. Unlike everything else here it feeds no gold
+row; it exists so that a change tuned until gold's documents pass can be caught
+being tuned. Two evals read it, and one of them prints the PDF geometry against
+the same documents' markup. See [`docs/evaluation.md`](../../docs/evaluation.md).
 
 ## Both writers are additive
 

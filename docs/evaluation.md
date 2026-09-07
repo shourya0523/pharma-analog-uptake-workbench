@@ -12,8 +12,48 @@ that product's revenue. Finding the right filing is part of the job, so this is
 the only number that describes the pipeline.
 
 ```bash
-python scripts/eval_extraction_documents.py --discover --limit 40
+python scripts/eval_extraction_documents.py --discover --limit 40   # a sample
+SEC_CONTACT='...' python scripts/eval_coverage.py /tmp/coverage.json  # the corpus
 ```
+
+`eval_coverage.py` answers the same question for every row. What the pipeline
+finds is decided by the issuer and the quarter rather than the product, so it
+does one EDGAR walk per (issuer, quarter) pair — 275 of them behind 1,415 rows —
+and writes a per-row record that the next run can be diffed against.
+
+Measured over the whole corpus — all 1,415 gold rows, deduplicated to the 275
+(issuer, quarter) pairs that decide what the pipeline finds:
+
+| | rows | share |
+|---|---|---|
+| read correctly | 998 | 70.5% |
+| not found | 401 | 28.3% |
+| no readable filing | 13 | 0.9% |
+| **wrong value** | **3** | **0.2%** |
+
+| issuer | | |
+|---|---|---|
+| Johnson & Johnson | 359/424 | 84.7% |
+| Actelion/J&J | 46/58 | 79.3% |
+| United Therapeutics | 238/368 | 64.7% |
+| Gilead | 349/541 | 64.5% |
+| Merck | 6/19 | 31.6% |
+| Liquidia | 0/5 | 0.0% |
+
+Two things in that table are worth stating plainly. The pipeline sourcing for
+itself (70.5%) scores **higher** than the same pipeline handed the document
+gold cites (65.2%), because gold cites investor-relations PDFs and press
+releases while EDGAR's 8-K exhibits are better structured — so the reading
+score was never an upper bound on the real one, and treating it as the headline
+understated the pipeline while pointing the work in the wrong direction. And
+Johnson & Johnson, which read 0/424 for this entire project, is now the best
+covered issuer in the set, from HTML that was always on EDGAR.
+
+What is left is mostly one shape: 2000s quarters read at 93% and everything
+after at ~75%, and the misses concentrate in products whose sales an issuer
+folds into a franchise line rather than reporting separately — Nebulized Tyvaso
+(68), Atripla (37), Truvada (36), AmBisome (34). That is a disclosure boundary,
+not a parsing one.
 
 ## The diagnostics
 

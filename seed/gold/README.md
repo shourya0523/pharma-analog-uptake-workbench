@@ -691,10 +691,17 @@ So the two are now separate:
 
 | Script | What it measures | Needs gold for | Current |
 |---|---|---|---|
-| `eval_provenance.py` | Is the pipeline's own quote verbatim in the document it cites, and is its value in that quote? | nothing | 486/486 |
-| `eval_extraction_documents.py --discover` | Given product, issuer and quarter, does it find the filing and produce the figure? | the expected value | 30/114 from 2024Q1 |
-| `eval_extraction_documents.py` | Given the cited filing, does it produce the figure? | the value and the URL | 235/1,415 |
+| `eval_extraction_documents.py --discover` | **The score.** Given product, issuer and quarter, does it find the filing and produce the figure? | the expected value | 998/1,415 |
+| `eval_provenance.py` | Is the pipeline's own quote verbatim in the document it cites, and is its value in that quote? | nothing | 1,875/1,877 |
+| `eval_extraction_documents.py` | Diagnostic: given the cited filing, does it produce the figure? | the value and the URL | 922/1,415 |
 | `eval_column_alignment.py` | Diagnostic only: handed the passage, is the right column read? | the value and the passage | 1,342/1,351 |
+
+The first two rows are the ones to read. The third is below the first, which is
+worth pausing on: the pipeline finding its own filings does *better* than the
+pipeline handed the documents this dataset cites, because gold cites
+investor-relations PDFs and press releases where EDGAR carries better-structured
+8-K exhibits. A gold row is a claim about what the number is, not a claim that
+its URL is the best route to it.
 
 `source_quote` goes back to being a receipt. `scripts/sourcing/fetch_documents.py`
 caches every document gold cites - 269 of 277; the eight misses are Actelion
