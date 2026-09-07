@@ -164,8 +164,17 @@ fix that landed alongside:
 | geometry only where it describes the body | 274/1415 (19.4%) | 3 |
 | + broken headings, + regional totals | 334/1415 (23.6%) | 3 |
 | + unit declaration | 337/1415 (23.8%) | 0 |
+| + tables chosen by content, not position | 525/1415 (37.1%) | 6 |
+| + dropping a geometry the body contradicts | 575/1415 (40.6%) | 3 |
+| + a row cap that does not cut a table in half | 635/1415 (44.9%) | 0 |
 
-Provenance over the same run: 660 datapoints published, 660 with a quote
+Twice a change raised the score and added wrong values at the same time, and
+both times the wrong values were the finding: a rectangle that describes nothing,
+and a cap that leaves a product's U.S. line in the table while its other regions
+fall outside. Neither is visible in the headline number, and a run that reported
+only "read correctly" would have accepted both.
+
+Provenance over the same run: 1317 datapoints published, 1317 with a quote
 verbatim in the document they cite and the value present in that quote. The
 regional total is quoted together with the lines it sums, so the arithmetic that
 identified it can be checked by a reader.
@@ -176,6 +185,10 @@ quarter, 27 and 23 by geometry. The gain is on the corpus whose layouts these
 rules describe, and the guard against having fitted them to it is that the
 held-out number never moved against them.
 
-The remaining failure is not dating. Of 1,078 gold rows the pipeline still
-cannot read, 1,017 are documents where no table it keeps contains a row naming
-the product at all.
+The remaining failure is not dating, and after selection was fixed it is not
+retrieval either. It is the format boundary this note already named: Johnson &
+Johnson publishes its product sales as PDF, and 424 of the 780 rows still unread
+are that one issuer. Its schedules yield tables that state no period and no unit,
+so nothing in this work reaches them - a PDF has no `colspan`, and the equivalent
+signal is the horizontal extent of a heading's text box against the columns
+beneath it. That is the next piece of work, and it is a different piece.
