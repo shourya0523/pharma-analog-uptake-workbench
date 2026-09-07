@@ -376,3 +376,51 @@ at concurrency 4, bounded by the strong tier's response time.
 
 Recorded at commit 8e0ebc1; `backend/tests` (330 tests) passes on the
 same tree, `ruff` is clean on every file the rebuild touched.
+
+## 11. Gold expansion: sixteen Eli Lilly series (gate not yet re-run)
+
+*2026-09-07.* `seed/gold` grew from 993 to 1,367 quarterly rows: sixteen
+Lilly products read from the Selected Revenue Highlights table of Lilly's
+8-K earnings exhibits (2017Q4 onward) and, for four of them, from the 10-Q's
+Disaggregation of Revenue table in 2025-2026, with one derived quarter
+(Jardiance 2025Q4, 10-K full year less the 10-Q nine months). The corpus
+grew by 41 documents (35 exhibits, 5 10-Qs, 1 10-K), rendered to markdown
+from the HTML the pipeline's own HTTP path fetched and marked
+`httpx:edgar_html_rendered_to_markdown` in the corpus manifest. The gold
+side is described in `seed/gold/README.md`; every row was built without
+pipeline code, and `test_gold_dataset.py`, `audit_gold.py`,
+`eval_completeness.py` (1,367/1,367) and `eval_adjudication.py` (no real
+row trips a verdict) are green.
+
+The model-mode gate has **not** been re-run over the new rows: a run
+restricted to the sixteen products was started and stopped part way, with
+its descriptions left in the cache. The unscored degraded mode was run to
+completion for orientation only:
+
+| Set | Command | Rows | Delivered |
+|---|---|---|---|
+| Lilly series, committed markdown, degraded mode (unscored) | `eval_pipeline.py --mode degraded --rendering markdown --product ...` | 374 | 348 (93.0%) |
+
+All 348 matches are direct reads. The 26 misses are concentrated where the
+documents change shape in 2025-2026 and say nothing yet about the model
+path: the 10-Q disaggregation grid (`no_placement_satisfies_the_header` on
+Trulicity and Taltz 2025Q1-Q3; Zepbound 2025Q1-2026Q1 and Verzenio 2026
+missing), the release narrative's rounded "$3.84 billion" outranking the
+table's 3,841.8 (Mounjaro and Verzenio 2025-2026 value mismatches), the
+10-K collaboration table read without a declared unit (Jardiance 2025Q4),
+and one `needs_review` on Trulicity 2018Q1, where the slide-style
+first-quarter 2019 release's flattened row `Trulicity 879.7 678.3 30%` was
+aligned to the wrong column. Each is a reader capability to measure on the
+model path, which is what the block was added to exercise; none is a gold
+defect (every value is confirmed against the 10-Q or 10-K, see
+`test_lilly_release_quarters_match_the_10k_and_10q_they_do_not_cite`).
+
+To complete the gate on the new rows:
+
+    cd backend && uv run python ../scripts/eval_pipeline.py --mode model --rendering markdown
+    cd backend && uv run python ../scripts/eval_pipeline.py --mode model --rendering raw
+
+The previous 993 rows are byte-identical to the ones the gates in section
+10 were measured on, so their result stands; the fingerprint cache makes the
+re-read of their documents free and the Lilly documents cost on the order of
+a dollar.

@@ -922,6 +922,430 @@ PRODUCT_METADATA = {
         "formulation": "extended-release injectable suspension",
         "route_of_administration": "intramuscular",
     },
+    # ---------------------------------------------------------------- Eli Lilly
+    # Sixteen products from Lilly's quarterly earnings release, the Selected
+    # Revenue Highlights table filed as an 8-K exhibit, 2017Q4 onward, with
+    # four of them carried into 2025-2026 from the 10-Q. A seventh issuer and
+    # five therapy areas the dataset did not have: diabetes, obesity,
+    # osteoporosis, migraine and urology. What the block adds that no other
+    # issuer here does: two launch-to-date series of the largest launch in the
+    # industry's history (Mounjaro, Zepbound) beside the incumbent they
+    # displace (Trulicity), a product that is the same molecule as a catalog
+    # product under another brand (Cialis / Adcirca), a slide-style release
+    # with no table markup (2018Q1), a table that switches from tenths of a
+    # million to whole millions mid-series (2025Q4), and a 10-K that states a
+    # year only by geography, which is where two series stop.
+    "Mounjaro": {
+        "generic_name": "tirzepatide",
+        "manufacturer": "Eli Lilly",
+        "benchmark_identity": "lilly_mounjaro_worldwide_reported",
+        "therapeutic_area": "Diabetes",
+        "commercial_start_quarter": "2022Q2",
+        # A launch-to-date series running to the as-of quarter: the peak is
+        # not yet observed, which is a label and not an exclusion.
+        "peak_eligible": True,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "injection",
+        "route_of_administration": "subcutaneous",
+    },
+    "Zepbound": {
+        "generic_name": "tirzepatide",
+        "manufacturer": "Eli Lilly",
+        "benchmark_identity": "lilly_zepbound_worldwide_reported",
+        "therapeutic_area": "Obesity",
+        "commercial_start_quarter": "2023Q4",
+        # A launch-to-date series running to the as-of quarter: the peak is
+        # not yet observed, which is a label and not an exclusion.
+        "peak_eligible": True,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "injection",
+        "route_of_administration": "subcutaneous",
+    },
+    "Verzenio": {
+        "generic_name": "abemaciclib",
+        "manufacturer": "Eli Lilly",
+        "benchmark_identity": "lilly_verzenio_worldwide_reported",
+        "therapeutic_area": "Oncology",
+        "commercial_start_quarter": "2017Q4",
+        "launch_quarter": "2017Q3",
+        "series_start_reason": (
+            "Verzenio was approved and launched in the United States on 28 "
+            "September 2017, two days before the quarter ended, and Lilly's "
+            "third-quarter 2017 release names the launch without stating a "
+            "revenue figure for it. 2017Q4 is the first quarter the issuer "
+            "states, so the series begins there rather than at launch."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "tablet",
+        "route_of_administration": "oral",
+    },
+    "Trulicity": {
+        "generic_name": "dulaglutide",
+        "manufacturer": "Eli Lilly",
+        "benchmark_identity": "lilly_trulicity_worldwide_reported",
+        "therapeutic_area": "Diabetes",
+        "commercial_start_quarter": "2017Q4",
+        "launch_quarter": "2014Q4",
+        "series_start_reason": (
+            "Trulicity launched in 2014Q4; 2017Q4 is the earliest quarter sourced "
+            "here. The series runs through its peak and into the decline that its "
+            "own maker's Mounjaro causes - the diabetes counterpart of Genvoya "
+            "giving way to Biktarvy."
+        ),
+        "series_end_quarter": "2025Q3",
+        "series_end_basis": "sourcing_boundary",
+        "series_end_reason": (
+            "From 2025 the release table no longer lists Trulicity and the "
+            "quarters are read from the 10-Q instead; the 10-K states the 2025 "
+            "year only as U.S. and outside-U.S. columns, so a worldwide fourth "
+            "quarter would have to be summed across geographies and then "
+            "subtracted from the nine months, two inferences this dataset does "
+            "not make. The 2026 10-Qs state the line again, but a series cannot "
+            "skip a quarter, so it ends here."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "injection",
+        "route_of_administration": "subcutaneous",
+    },
+    "Taltz": {
+        "generic_name": "ixekizumab",
+        "manufacturer": "Eli Lilly",
+        "benchmark_identity": "lilly_taltz_worldwide_reported",
+        "therapeutic_area": "Immunology",
+        "commercial_start_quarter": "2017Q4",
+        "launch_quarter": "2016Q2",
+        "series_start_reason": (
+            "Taltz launched in 2016Q2; 2017Q4 is the earliest quarter sourced "
+            "here, still early in a long climb."
+        ),
+        "series_end_quarter": "2025Q3",
+        "series_end_basis": "sourcing_boundary",
+        "series_end_reason": (
+            "The same boundary as Trulicity: from 2025 the quarters come from the "
+            "10-Q, the 10-K states the year only by geography, and the fourth "
+            "quarter of 2025 cannot be reached without summing columns. The "
+            "series ends at the last quarter the issuer states as one worldwide "
+            "figure."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "injection",
+        "route_of_administration": "subcutaneous",
+    },
+    "Jardiance": {
+        "generic_name": "empagliflozin",
+        "manufacturer": "Eli Lilly",
+        "benchmark_identity": "lilly_jardiance_worldwide_reported",
+        "therapeutic_area": "Diabetes",
+        "commercial_start_quarter": "2017Q4",
+        "launch_quarter": "2014Q3",
+        "series_start_reason": (
+            "Jardiance launched in 2014Q3; 2017Q4 is the earliest quarter sourced "
+            "here. The line is Lilly's revenue from its Boehringer Ingelheim "
+            "collaboration and includes the Glyxambi, Synjardy and Trijardy XR "
+            "combinations by the release's own footnote, so it is a collaboration "
+            "family line, not one product's sales - the same trap as Imbruvica, "
+            "in a different therapy area."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "tablet",
+        "route_of_administration": "oral",
+    },
+    "Humalog": {
+        "generic_name": "insulin lispro",
+        "manufacturer": "Eli Lilly",
+        "benchmark_identity": "lilly_humalog_worldwide_reported",
+        "therapeutic_area": "Diabetes",
+        "commercial_start_quarter": "2017Q4",
+        "launch_quarter": "1996Q3",
+        "series_start_reason": (
+            "Humalog launched in 1996; 2017Q4 is the earliest quarter sourced "
+            "here, more than twenty years in. The line includes Insulin Lispro, "
+            "Lilly's lower-list-price version of the same molecule, so it is a "
+            "brand plus its own authorized alternative on one line - the Zytiga "
+            "shape - and its quarters move with U.S. price and rebate estimates "
+            "rather than with volume."
+        ),
+        "series_end_quarter": "2024Q4",
+        "series_end_basis": "issuer_stopped_reporting",
+        "series_end_reason": (
+            "From 2025Q1 Lilly's 10-Q folds Humalog into an Other cardiometabolic "
+            "health line and the release table no longer lists it, so no issuer "
+            "document states a Humalog figure after 2024."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "injection",
+        "route_of_administration": "subcutaneous",
+    },
+    "Alimta": {
+        "generic_name": "pemetrexed",
+        "manufacturer": "Eli Lilly",
+        "benchmark_identity": "lilly_alimta_worldwide_reported",
+        "therapeutic_area": "Oncology",
+        "commercial_start_quarter": "2017Q4",
+        "launch_quarter": "2004Q1",
+        "series_start_reason": (
+            "Alimta launched in 2004Q1; 2017Q4 is the earliest quarter sourced "
+            "here. Six years of a plateau near 500 a quarter, then U.S. generic "
+            "entry in 2022 takes it to 45 - the patent cliff Ranexa shows, at "
+            "four times the scale."
+        ),
+        "series_end_quarter": "2023Q4",
+        "series_end_basis": "issuer_stopped_reporting",
+        "series_end_reason": (
+            "From 2024Q1 Lilly's 10-Q folds Alimta into Other oncology and the "
+            "release table no longer lists it, so no issuer document states an "
+            "Alimta figure after 2023."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "injection",
+        "route_of_administration": "intravenous",
+    },
+    "Cyramza": {
+        "generic_name": "ramucirumab",
+        "manufacturer": "Eli Lilly",
+        "benchmark_identity": "lilly_cyramza_worldwide_reported",
+        "therapeutic_area": "Oncology",
+        "commercial_start_quarter": "2017Q4",
+        "launch_quarter": "2014Q2",
+        "series_start_reason": (
+            "Cyramza launched in 2014Q2; 2017Q4 is the earliest quarter sourced "
+            "here. The flattest large series in this block: twenty-five quarters "
+            "between 184 and 284."
+        ),
+        "series_end_quarter": "2023Q4",
+        "series_end_basis": "sourcing_boundary",
+        "series_end_reason": (
+            "Lilly's earnings release lists a product in its Selected Revenue "
+            "Highlights table only while it counts as a growth or established "
+            "product of note; after this quarter the line drops out of the "
+            "release table, although the Form 10-Q's Disaggregation of Revenue "
+            "table goes on stating it. The series stops where the sourced "
+            "document family stops carrying the line, not where the issuer stops "
+            "reporting it."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "injection",
+        "route_of_administration": "intravenous",
+    },
+    "Olumiant": {
+        "generic_name": "baricitinib",
+        "manufacturer": "Eli Lilly",
+        "benchmark_identity": "lilly_olumiant_worldwide_reported",
+        "therapeutic_area": "Immunology",
+        "commercial_start_quarter": "2017Q4",
+        "launch_quarter": "2017Q1",
+        "series_start_reason": (
+            "Olumiant was approved in the European Union in February 2017 and in "
+            "the United States in June 2018; 2017Q4 is the earliest quarter "
+            "sourced here, three quarters into its launch. The series carries a "
+            "one-off: the COVID-19 treatment authorisation lifts 2021Q3 to 407 "
+            "from 208 and the line falls back within two quarters."
+        ),
+        "series_end_quarter": "2023Q4",
+        "series_end_basis": "sourcing_boundary",
+        "series_end_reason": (
+            "Lilly's earnings release lists a product in its Selected Revenue "
+            "Highlights table only while it counts as a growth or established "
+            "product of note; after this quarter the line drops out of the "
+            "release table, although the Form 10-Q's Disaggregation of Revenue "
+            "table goes on stating it. The series stops where the sourced "
+            "document family stops carrying the line, not where the issuer stops "
+            "reporting it."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "tablet",
+        "route_of_administration": "oral",
+    },
+    "Emgality": {
+        "generic_name": "galcanezumab",
+        "manufacturer": "Eli Lilly",
+        "benchmark_identity": "lilly_emgality_worldwide_reported",
+        "therapeutic_area": "Neuroscience",
+        "commercial_start_quarter": "2018Q4",
+        "launch_quarter": "2018Q3",
+        "series_start_reason": (
+            "Emgality was approved and launched in the United States on 27 "
+            "September 2018, three days before the quarter ended, and the third- "
+            "quarter 2018 release names the launch without stating a figure. "
+            "2018Q4 is the first quarter the issuer states, at 4.9, so the series "
+            "is a launch ramp from its first stated quarter."
+        ),
+        "series_end_quarter": "2023Q4",
+        "series_end_basis": "sourcing_boundary",
+        "series_end_reason": (
+            "Lilly's earnings release lists a product in its Selected Revenue "
+            "Highlights table only while it counts as a growth or established "
+            "product of note; after this quarter the line drops out of the "
+            "release table, although the Form 10-Q's Disaggregation of Revenue "
+            "table goes on stating it. The series stops where the sourced "
+            "document family stops carrying the line, not where the issuer stops "
+            "reporting it."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "injection",
+        "route_of_administration": "subcutaneous",
+    },
+    "Retevmo": {
+        "generic_name": "selpercatinib",
+        "manufacturer": "Eli Lilly",
+        "benchmark_identity": "lilly_retevmo_worldwide_reported",
+        "therapeutic_area": "Oncology",
+        "commercial_start_quarter": "2020Q2",
+        "series_end_quarter": "2023Q4",
+        "series_end_basis": "issuer_stopped_reporting",
+        "series_end_reason": (
+            "From 2024Q1 Lilly's 10-Q folds Retevmo into Other oncology and the "
+            "release table no longer lists it, so no issuer document states a "
+            "Retevmo figure after 2023. The fifteen quarters it does state are a "
+            "complete launch-to-date series from the quarter of approval."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "capsule or tablet",
+        "route_of_administration": "oral",
+    },
+    "Forteo": {
+        "generic_name": "teriparatide",
+        "manufacturer": "Eli Lilly",
+        "benchmark_identity": "lilly_forteo_worldwide_reported",
+        "therapeutic_area": "Osteoporosis",
+        "commercial_start_quarter": "2017Q4",
+        "launch_quarter": "2002Q4",
+        "series_start_reason": (
+            "Forteo launched in 2002Q4; 2017Q4 is the earliest quarter sourced "
+            "here, at the top of its curve. Twenty-one quarters of erosion from "
+            "513 to 160 as biosimilar and generic teriparatide arrive market by "
+            "market."
+        ),
+        "series_end_quarter": "2022Q4",
+        "series_end_basis": "sourcing_boundary",
+        "series_end_reason": (
+            "Lilly's earnings release lists a product in its Selected Revenue "
+            "Highlights table only while it counts as a growth or established "
+            "product of note; after this quarter the line drops out of the "
+            "release table, although the Form 10-Q's Disaggregation of Revenue "
+            "table goes on stating it. The series stops where the sourced "
+            "document family stops carrying the line, not where the issuer stops "
+            "reporting it."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "injection",
+        "route_of_administration": "subcutaneous",
+    },
+    "Humulin": {
+        "generic_name": "human insulin",
+        "manufacturer": "Eli Lilly",
+        "benchmark_identity": "lilly_humulin_worldwide_reported",
+        "therapeutic_area": "Diabetes",
+        "commercial_start_quarter": "2017Q4",
+        "launch_quarter": "1982Q4",
+        "series_start_reason": (
+            "Humulin launched in 1982, the first recombinant biologic on the "
+            "market; 2017Q4 is the earliest quarter sourced here, forty years in. "
+            "The oldest brand in the dataset and a plateau near 300 a quarter "
+            "that only begins to slip in 2022."
+        ),
+        "series_end_quarter": "2022Q4",
+        "series_end_basis": "sourcing_boundary",
+        "series_end_reason": (
+            "Lilly's earnings release lists a product in its Selected Revenue "
+            "Highlights table only while it counts as a growth or established "
+            "product of note; after this quarter the line drops out of the "
+            "release table, although the Form 10-Q's Disaggregation of Revenue "
+            "table goes on stating it. The series stops where the sourced "
+            "document family stops carrying the line, not where the issuer stops "
+            "reporting it."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "injection",
+        "route_of_administration": "subcutaneous",
+    },
+    "Basaglar": {
+        "generic_name": "insulin glargine",
+        "manufacturer": "Eli Lilly",
+        "benchmark_identity": "lilly_basaglar_worldwide_reported",
+        "therapeutic_area": "Diabetes",
+        "commercial_start_quarter": "2017Q4",
+        "launch_quarter": "2015Q1",
+        "series_start_reason": (
+            "Basaglar (Abasaglar in Europe) launched in 2015; 2017Q4 is the "
+            "earliest quarter sourced here, a year into its U.S. launch. A "
+            "follow-on biologic's whole arc in twenty-one quarters: ramp to 307, "
+            "then decline as U.S. pricing turns against it."
+        ),
+        "series_end_quarter": "2022Q4",
+        "series_end_basis": "sourcing_boundary",
+        "series_end_reason": (
+            "Lilly's earnings release lists a product in its Selected Revenue "
+            "Highlights table only while it counts as a growth or established "
+            "product of note; after this quarter the line drops out of the "
+            "release table, although the Form 10-Q's Disaggregation of Revenue "
+            "table goes on stating it. The series stops where the sourced "
+            "document family stops carrying the line, not where the issuer stops "
+            "reporting it."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "injection",
+        "route_of_administration": "subcutaneous",
+    },
+    "Cialis": {
+        "generic_name": "tadalafil",
+        "manufacturer": "Eli Lilly",
+        "benchmark_identity": "lilly_cialis_worldwide_reported",
+        "therapeutic_area": "Urology",
+        "commercial_start_quarter": "2017Q4",
+        "launch_quarter": "2003Q1",
+        "series_start_reason": (
+            "Cialis launched in Europe in early 2003 and in the United States "
+            "that November; 2017Q4 is the earliest quarter sourced here, a year "
+            "before U.S. generic tadalafil. Nine quarters that go 597 to 184: the "
+            "loss-of-exclusivity cliff, on the same molecule the pulmonary "
+            "hypertension catalog carries as Adcirca."
+        ),
+        "series_end_quarter": "2019Q4",
+        "series_end_basis": "sourcing_boundary",
+        "series_end_reason": (
+            "Lilly's earnings release lists a product in its Selected Revenue "
+            "Highlights table only while it counts as a growth or established "
+            "product of note; after this quarter the line drops out of the "
+            "release table, although the Form 10-Q's Disaggregation of Revenue "
+            "table goes on stating it. The series stops where the sourced "
+            "document family stops carrying the line, not where the issuer stops "
+            "reporting it."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "tablet",
+        "route_of_administration": "oral",
+    },
 }
 
 ANNUAL_METADATA = {
@@ -981,6 +1405,14 @@ ANNUAL_METADATA = {
         "generic_name": "sotatercept-csrk",
         "manufacturer": "Merck",
         "benchmark_identity": "merck_winrevair_worldwide_reported",
+    },
+    # Jardiance's 2025 total is stated only in the 10-K's collaboration note;
+    # it is here as a derivation input so the pipeline can reach 2025Q4 the
+    # same way gold does, full year less the nine months the 10-Q states.
+    "Jardiance": {
+        "generic_name": "empagliflozin",
+        "manufacturer": "Eli Lilly",
+        "benchmark_identity": "lilly_jardiance_worldwide_annual",
     },
     "Veletri": {
         "generic_name": "epoprostenol",
@@ -1861,6 +2293,57 @@ def build_jnj_comparators() -> list[dict[str, Any]]:
     return rows
 
 
+# Sixteen Lilly lines, one manifest each, read from the Selected Revenue
+# Highlights table of the quarterly release and, where the release stops
+# listing a product that the 10-Q still states, from the 10-Q. The manifest
+# carries the derivation of every row; the one derived row (Jardiance 2025Q4)
+# is marked approximate, since a whole-million annual figure less a nine-month
+# figure stated to a tenth is not exact to a tenth.
+LILLY_COMPARATORS = {
+    "Mounjaro": "lilly_mounjaro_quarterly.csv",
+    "Zepbound": "lilly_zepbound_quarterly.csv",
+    "Verzenio": "lilly_verzenio_quarterly.csv",
+    "Trulicity": "lilly_trulicity_quarterly.csv",
+    "Taltz": "lilly_taltz_quarterly.csv",
+    "Jardiance": "lilly_jardiance_quarterly.csv",
+    "Humalog": "lilly_humalog_quarterly.csv",
+    "Alimta": "lilly_alimta_quarterly.csv",
+    "Cyramza": "lilly_cyramza_quarterly.csv",
+    "Olumiant": "lilly_olumiant_quarterly.csv",
+    "Emgality": "lilly_emgality_quarterly.csv",
+    "Retevmo": "lilly_retevmo_quarterly.csv",
+    "Forteo": "lilly_forteo_quarterly.csv",
+    "Humulin": "lilly_humulin_quarterly.csv",
+    "Basaglar": "lilly_basaglar_quarterly.csv",
+    "Cialis": "lilly_cialis_quarterly.csv",
+}
+
+
+def build_lilly_comparators() -> list[dict[str, Any]]:
+    """Lilly products outside pulmonary hypertension, 2017Q4 onward."""
+    rows: list[dict[str, Any]] = []
+    for drug_name, manifest in LILLY_COMPARATORS.items():
+        for source in read_csv(SOURCE_DIR / manifest):
+            derived = source["derivation"] != "direct_reported"
+            rows.append(
+                revenue_row(
+                    drug_name=drug_name,
+                    period=source["period"],
+                    value=float(source["value_reported"]),
+                    source_url=source["source_url"],
+                    source_quote=source["source_quote"],
+                    source_type="sec_filing",
+                    derivation=source["derivation"],
+                    # A residual of a whole-million annual figure and a
+                    # nine-month figure stated to a tenth is good to about
+                    # half a million, whatever decimals it prints.
+                    precision="approximate" if derived else "as_reported",
+                    notes=source["context"],
+                )
+            )
+    return rows
+
+
 def build_annual_rows() -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     for source in read_csv(SOURCE_DIR / "annual_product_sales.csv"):
@@ -2485,7 +2968,7 @@ def main() -> int:
         # free - and reusing them instead would silently ignore an edit to
         # those manifests, which is exactly the kind of staleness this flag
         # must not introduce.
-        rebuilt = build_yutrepia() + build_winrevair() + build_adempas() + build_opsumit() + build_tracleer() + build_letairis() + build_gilead_comparators() + build_jnj_comparators()
+        rebuilt = build_yutrepia() + build_winrevair() + build_adempas() + build_opsumit() + build_tracleer() + build_letairis() + build_gilead_comparators() + build_jnj_comparators() + build_lilly_comparators()
         # Remodulin is only partly manifest-backed, so it is refreshed by
         # period rather than by dropping the whole product.
         early = build_remodulin_early()
@@ -2518,6 +3001,7 @@ def main() -> int:
                 + build_letairis()
                 + build_gilead_comparators()
                 + build_jnj_comparators()
+                + build_lilly_comparators()
             )
             quarterly = apply_acquisition_bridges(quarterly)
         finally:

@@ -6,15 +6,21 @@ pipeline, an LLM, or pipeline post-processing.
 
 All 20 products in `seed/example_drugs.csv` have one explicit disposition:
 
-- 12 have independently supported peak labels.
-- 9 of those also have complete quarter-by-quarter sales from commercial start
-  through 2026Q2, totaling 423 cited observations at 100% coverage.
-- 6 labels are observed numeric peaks.
-- 6 labels are `not_yet_observed` because the complete reported history is
-  still growing or lacks enough post-peak years.
-- 8 products are excluded with a cited reason because public reporting is
-  aggregated, scope-incomparable, private, or incomplete before the possible
-  peak. No sales are invented for them.
+- 13 have a complete quarterly series over their declared span, 1 has an
+  annual benchmark series, and 6 are excluded with a cited reason because
+  public reporting is aggregated, scope-incomparable, private, or incomplete
+  before the possible peak. No sales are invented for them.
+- 12 carry an independent peak label: 6 observed numeric peaks and 6
+  `not_yet_observed`, because the reported history is still growing or lacks
+  enough post-peak years.
+
+Beside the catalog sit 39 comparator series from seven issuers and twelve
+other therapeutic areas (see *Concentration* below). They are additive:
+they widen the shapes the benchmark contains and never count toward the
+catalog's coverage. Two of them (Mounjaro, Zepbound) are launch-to-date
+series and carry `not_yet_observed` peak labels of their own. In total the
+dataset holds 52 quarterly series and 1,367 cited quarters, every series
+covering its full declared span.
 
 ## Files
 - `product_profiles.jsonl`: analog matching attributes, one row per product.
@@ -109,12 +115,12 @@ own commercial span. `build_report.json` records this under
     20 catalog products = 13 complete quarterly series + 1 annual benchmark
     series + 6 evidence-backed exclusions
 
-    plus 3 comparator products from other therapeutic areas, which are additive
-    and never part of the completeness claim
+    plus 39 comparator products from other therapeutic areas, which are
+    additive and never part of the completeness claim
 
-    546 quarters in total, every series covering its full declared span
+    1,367 quarters in total, every series covering its full declared span
 
-Every one of those 546 quarters is also reachable by the pipeline: it is either
+Every one of those 1,367 quarters is also reachable by the pipeline: it is either
 read from a citation, computed from an issuer's own stated total, or assembled
 from the two dated halves of a quarter split by an acquisition.
 `test_every_quarterly_row_is_reachable_by_the_pipeline` refuses a row that
@@ -122,7 +128,7 @@ takes none of those routes, because a benchmark row nothing can reproduce
 measures nothing.
 
 **This is not the percentage `scripts/eval_completeness.py` prints.** That
-script scores the *pipeline* against this dataset — how many of the 546
+script scores the *pipeline* against this dataset — how many of the 1,367
 quarters it can read or derive on its own. A shortfall there is a capability
 the pipeline is missing, which is exactly what a benchmark is for. Reading it
 as a hole in the dataset gets the direction of the measurement backwards.
@@ -222,10 +228,10 @@ say almost nothing.
 
 | Measure | Value | Target | |
 |---|---|---|---|
-| Largest issuer | United Therapeutics, 37.1% | < 40% | met |
-| Largest product | Remodulin, 9.9% | < 10% | met |
-| Largest therapeutic area | Pulmonary hypertension, 50.6% | < 60% | met |
-| Therapeutic areas | 9 | >= 6 | met |
+| Largest issuer | Eli Lilly, 27.4% | < 40% | met |
+| Largest product | Remodulin, 7.2% | < 10% | met |
+| Largest therapeutic area | Pulmonary hypertension, 36.7% | < 60% | met |
+| Therapeutic areas | 13 | >= 6 | met |
 
 All four. Two tests hold this: one requires the report to describe the rows it
 claims to (recomputing every share from `quarterly_revenue.jsonl`), the other
@@ -236,19 +242,22 @@ lopsided dataset would pass the first and fail the second.
 
 | Issuer | Quarters | Share |
 |---|---|---|
-| United Therapeutics | 368 | 37.1% |
-| Johnson & Johnson | 280 | 28.2% |
-| Gilead | 263 | 26.5% |
-| Actelion/J&J | 58 | 5.8% |
-| Merck | 19 | 1.9% |
-| Liquidia | 5 | 0.5% |
+| Eli Lilly | 374 | 27.4% |
+| United Therapeutics | 368 | 26.9% |
+| Johnson & Johnson | 280 | 20.5% |
+| Gilead | 263 | 19.2% |
+| Actelion/J&J | 58 | 4.2% |
+| Merck | 19 | 1.4% |
+| Liquidia | 5 | 0.4% |
 
-Single-issuer concentration has come down 78.3% → 67.4% → 37.1%. None of that
+Single-issuer concentration has come down 78.3% → 67.4% → 37.1% → 27.4%, and
+the largest issuer is no longer the catalog's own: sixteen Lilly series put
+Eli Lilly a handful of quarters ahead of United Therapeutics. None of that
 was closable by sourcing harder inside pulmonary hypertension: the PAH products
 left in the catalog are the ones with no series at all. It was closable only by
 adding issuers and areas.
 
-### Nine therapeutic areas, and the shapes they contribute
+### Thirteen therapeutic areas, and the shapes they contribute
 
 A catalog drawn from one disease measures one disease's paperwork. PAH products
 share issuers, schedule shapes and slow curves. Each comparator group breaks
@@ -276,6 +285,16 @@ that in a specific way:
 | **Simponi** | Immunology | 2018Q1–2023Q4 | Two presentations on one line, no published split |
 | **Xarelto** | Cardiovascular | 2018Q1–2023Q4 | Labelled worldwide and *is* worldwide for J&J — Bayer holds ex-US, so the international column is a dash in all 24 quarters |
 | **Invega Sustenna** | Neuroscience | 2018Q1–2023Q4 | Four brands on one line |
+| **Mounjaro** | Diabetes | 2022Q2–2026Q2 | Launch to date, from 16.0 in the quarter of approval to 9,943: the steepest ramp in the dataset and the only one that starts at zero |
+| **Zepbound** | Obesity | 2023Q4–2026Q2 | The same molecule under a second brand, launch to date from 175.8 |
+| **Trulicity** | Diabetes | 2017Q4–2025Q3 | Peak and decline, 649 → 1,977 → 1,052, as its own maker's Mounjaro takes its patients — Genvoya and Biktarvy, in diabetes |
+| **Verzenio** | Oncology | 2017Q4–2026Q2 | Nearly launch to date: 21 in its first stated quarter to 1,604 |
+| **Jardiance** | Diabetes | 2017Q4–2026Q2 | A collaboration family line (Glyxambi, Synjardy, Trijardy XR inside it) with a one-time $300m in 2024Q4 — Imbruvica's trap, and a one-off on top |
+| **Humalog** | Diabetes | 2017Q4–2024Q4 | Brand plus its own lower-price Insulin Lispro on one line; moves with U.S. rebate estimates, not volume |
+| **Alimta** | Oncology | 2017Q4–2023Q4 | Six years near 500, then U.S. generic entry takes it to 45: Ranexa's cliff at four times the scale |
+| **Cialis** | Urology | 2017Q4–2019Q4 | Loss of exclusivity, 597 → 184, on the molecule the catalog carries as **Adcirca** — one moiety, two brands, never one line |
+| **Taltz**, **Cyramza**, **Olumiant**, **Emgality**, **Retevmo** | Immunology, Oncology, Neuroscience | 2017Q4–2023Q4 | A long climb, the flattest large series here, a COVID-era one-off spike (Olumiant 2021Q3), and two launch ramps from a first stated quarter of 4.9 and 6.3 |
+| **Forteo**, **Humulin**, **Basaglar** | Osteoporosis, Diabetes | 2017Q4–2022Q4 | Twenty years of erosion; the oldest brand in the dataset (1982) on a plateau; a follow-on biologic's whole arc |
 
 Comparators sit **outside** `seed/example_drugs.csv` and are reported separately
 in `comparator_products`. They cannot flatter the coverage percentage: a product
@@ -357,7 +376,9 @@ states, which is the arithmetic that had been standing in for the citation.
 
 The lesson is the one above generalised: when a document resists, the figure
 is often in a *different* document from the same issuer for the same period,
-and that is a better move than retrying the same PDF. Delivery is 993/993.
+and that is a better move than retrying the same PDF. Delivery was 993/993 on
+the dataset as it stood then; the Lilly block below has not yet been through
+the model-mode gate (see the audit document).
 
 **Series that start late on purpose.** Biktarvy was approved 7 February 2018 and
 sold only in the United States that quarter, so Gilead gives it a single US line
@@ -484,6 +505,85 @@ which is why the series now starts at 2016Q1 rather than 2017Q3. The near-miss i
 series that contradicts the issuer's own figure reads as a win until it is
 checked.
 
+## Eli Lilly: sixteen series from one release table
+
+Lilly is the seventh issuer and the first whose series come from an SEC-filed
+earnings release rather than an issuer-site page or a sales-schedule PDF. Every
+quarter from 2017Q4 through 2024 is the product's line in the *Selected Revenue
+Highlights* table of the release Lilly files as an 8-K exhibit, in three rows
+of three or six columns: the quarter, the same quarter a year earlier, a
+percentage change, and from the second quarter on a year-to-date block laid
+out the same way. The 2025 and 2026 quarters of four products come from the
+*Disaggregation of Revenue* table of the Form 10-Q, whose Total column
+reproduces the release figure wherever both exist.
+
+What the block contributes, beyond 374 quarters and five therapy areas the
+dataset had none of:
+
+- **A launch that starts at zero.** Mounjaro is stated from the quarter of its
+  approval (2022Q2, $16.0m) and Zepbound from its own (2023Q4, $175.8m). Both
+  run to the as-of quarter, so both carry a peak label — `not_yet_observed`,
+  the first comparators to have one. Retevmo is the third launch-to-date
+  series and carries none: Lilly folded it into *Other oncology* in 2024
+  while it was still rising, and a series the issuer stops stating cannot say
+  where its peak is.
+- **The incumbent beside the launch.** Trulicity climbs from 649 to 1,977 and
+  falls back to 1,052 over the same quarters Mounjaro rises. The dataset
+  already had this shape once (Genvoya giving way to Biktarvy); having it in a
+  second area from a second issuer makes it a pattern.
+- **One molecule, two brands.** Cialis is tadalafil; so is Adcirca, in the
+  pulmonary hypertension catalog. The README's own rule — shared moiety does
+  not merge commercial revenue — now has a pair to be tested against.
+- **A document with no table markup.** The first-quarter 2018 release is
+  slide-style HTML: the same table reaches a text reader as one run of words
+  and figures in row order. The rows cite it as they would any other release
+  and the pipeline is expected to recover the grid.
+- **A precision change mid-series.** Lilly prints tenths of a million through
+  the third-quarter 2025 release and whole millions from the fourth-quarter
+  2025 release on. The rows record what each release prints; the year checks
+  below tolerate the resulting sum-of-roundings.
+
+### Where the series stop, and why each stops where it does
+
+| End | Basis | Products | What the documents say |
+|---|---|---|---|
+| 2026Q2 | as-of quarter | Mounjaro, Zepbound, Verzenio, Jardiance | still stated, in the release or the 10-Q |
+| 2025Q3 | `sourcing_boundary` | Trulicity, Taltz | From 2025 the release table lists only the newest products, so the 2025 quarters are read from the 10-Q. The 10-K states the year **only as U.S. and outside-U.S. columns**. A worldwide fourth quarter would have to be summed across geographies and then subtracted from nine months — two inferences this dataset does not make — and a series cannot skip a quarter, so it ends at the last quarter the issuer states as one figure, even though the 2026 10-Qs state the line again |
+| 2024Q4 | `issuer_stopped_reporting` | Humalog | folded into *Other cardiometabolic health* from 2025Q1 |
+| 2023Q4 | `issuer_stopped_reporting` | Alimta, Retevmo | folded into *Other oncology* from 2024Q1 |
+| 2023Q4, 2022Q4, 2019Q4 | `sourcing_boundary` | Cyramza, Olumiant, Emgality; Forteo, Humulin, Basaglar; Cialis | dropped from the release table; the 10-Q goes on stating each of them, so these are closable by reading 10-Qs |
+
+Jardiance is the one product that crosses the 2025 boundary by derivation.
+Its 2025 total is not in the 10-K's revenue note (geography columns only)
+but is stated outright in the 10-K's **collaboration note** — 3,432, in a
+three-year table whose 2024 and 2023 figures (3,341 and 2,745) reproduce the
+release-table full years (3,340.9 and 2,744.7). 2025Q4 is therefore 3,432
+less the nine months the third-quarter 10-Q states (2,663.4), or 768.6,
+marked `approximate` because a whole-million figure less a tenth-of-a-million
+figure is good to about half a million whatever decimals it prints. The
+annual figure is also carried in `annual_revenue.jsonl` as a
+`derivation_input` row so the pipeline can reach the quarter the same way.
+
+### Checked against documents the rows do not cite
+
+Every Lilly release quarter reconciles to its own release's year-to-date
+column and to the prior-year column of the release a year later (the
+extraction that built the manifests checked both; the only differences are
+the whole-million roundings from 2025Q4 on). That is still one document
+family, so
+`test_lilly_release_quarters_match_the_10k_and_10q_they_do_not_cite` anchors
+the block to two others: the 10-K's MD&A table states 2025 Mounjaro, Zepbound
+and Verzenio as 22,965, 13,542 and 5,723, which the release quarters sum to
+within a unit; the 10-K's collaboration note states Jardiance for 2023 and
+2024; and the 10-Q's Disaggregation of Revenue table restates every 2025
+quarter of the three release-table products and the 2024 quarters of
+Trulicity, Taltz and Humalog as prior-year comparatives, to the tenth.
+
+Zepbound's line is worldwide, not U.S.: Lilly's narrative describes "U.S.
+Zepbound revenue", but the 10-Q's split shows the table line is U.S. plus a
+small outside-U.S. figure (2,305.4 + 6.5 = 2,311.9 in 2025Q1; 4,873 + 55 =
+4,928 in 2026Q2), which is what the rows record.
+
 ## Resolved: Remodulin 2002Q4 now satisfies its own arithmetic
 
 `2002Q4` was recorded as **$9.7 million** and its own citations produced
@@ -587,7 +687,7 @@ instead of scrolling past as familiar noise.
 
 ## Remaining gaps and why
 
-**There are none.** All 546 quarters are deliverable. This section used to list
+**There are none.** All 1,367 quarters are deliverable. This section used to list
 eleven that were not; what closed them is recorded here because the causes were
 different and only one was really about sourcing.
 

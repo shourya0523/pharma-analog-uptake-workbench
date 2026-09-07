@@ -74,11 +74,14 @@ def test_every_target_product_is_benchmarked_or_evidence_backed_excluded():
     assert accounted == seed_names()
     assert manifest["target_product_count"] == len(seed_names())
     assert all(row["benchmark_eligible"] for row in peaks)
-    # A series without a peak must be one that starts after launch, not an
-    # oversight: anything else with a full span should still be peaked.
+    # A series without a peak must be one whose window does not cover the
+    # product's reported life - it starts after launch, or the issuer stopped
+    # stating the line before the as-of quarter (Retevmo: complete from the
+    # quarter of approval, folded into Other oncology while still rising) -
+    # not an oversight: anything else with a full span should still be peaked.
     for drug_name in series_without_peak:
         series = next(row for row in coverage if row["drug_name"] == drug_name)
-        assert series.get("series_start_reason"), drug_name
+        assert series.get("series_start_reason") or series.get("series_end_reason"), drug_name
 
 
 def test_every_quarterly_benchmark_series_has_exact_full_coverage():
@@ -881,12 +884,14 @@ def test_no_single_issuer_dominates_the_catalog():
     This was 80% when United Therapeutics was three quarters of these rows,
     a bound loose enough to be nearly free. It has been ratcheted down twice
     since: to 45% after eleven J&J products and nine Gilead antivirals first
-    entered, then here, after the Gilead block was carried through 2024, with
-    UTHR at 37.1%. Each ratchet sits just above the dataset's actual share so
-    a later change cannot give the gain back without this failing. It is a
-    ratchet, not the target: `concentration` in build_report.json carries the
-    target (< 40%), which this dataset already clears - the ratchet exists to
-    protect that, not to state it.
+    entered, to 39% after the Gilead block was carried through 2024 with UTHR
+    at 37.1%, and here to 28% after sixteen Lilly series made Eli Lilly the
+    largest issuer at 27.4% and took United Therapeutics to 26.9%. Each
+    ratchet sits just above the dataset's actual share so a later change
+    cannot give the gain back without this failing. It is a ratchet, not the
+    target: `concentration` in build_report.json carries the target (< 40%),
+    which this dataset already clears - the ratchet exists to protect that,
+    not to state it.
     """
     rows = load_jsonl("quarterly_revenue.jsonl")
     counts: dict[str, int] = {}
@@ -894,8 +899,8 @@ def test_no_single_issuer_dominates_the_catalog():
         counts[row["manufacturer"]] = counts.get(row["manufacturer"], 0) + 1
     top_issuer, top_count = max(counts.items(), key=lambda kv: kv[1])
     share = top_count / len(rows)
-    assert share < 0.39, f"{top_issuer} is {share:.1%} of the catalog"
-    assert len(counts) >= 6, f"only {len(counts)} issuers: {sorted(counts)}"
+    assert share < 0.28, f"{top_issuer} is {share:.1%} of the catalog"
+    assert len(counts) >= 7, f"only {len(counts)} issuers: {sorted(counts)}"
 
 
 def test_the_concentration_report_describes_the_rows_it_claims_to():
@@ -1106,12 +1111,20 @@ def test_every_comparator_year_reconciles_to_its_stated_full_year():
     ones and any added later, with no dict to remember to extend.
     """
     builder = load_builder()
-    comparators = {**builder.GILEAD_COMPARATORS, **builder.JNJ_COMPARATORS}
+    comparators = {
+        **builder.GILEAD_COMPARATORS,
+        **builder.JNJ_COMPARATORS,
+        **builder.LILLY_COMPARATORS,
+    }
     # "quarter | prior-year quarter | year-to-date | prior-year year-to-date":
     # a direct fourth-quarter reading's third value is the stated full year.
+    # Lilly prints tenths of a million, and a launch-year fourth quarter has
+    # a dash where the prior year would be (Mounjaro 2022Q4, Zepbound 2023Q4),
+    # so a prior-year cell may be a dash; the full year itself never is.
     quote_pattern = re.compile(
         r"twelve months (\d{4}) and \d{4}.*?"
-        r"\|\s*[\d,]+\s*\|\s*[\d,]+\s*\|\s*([\d,]+)\s*\|\s*[\d,]+\s*$"
+        r"\|\s*[\d,]+(?:\.\d+)?\s*\|\s*(?:[\d,]+(?:\.\d+)?|-)\s*"
+        r"\|\s*([\d,]+(?:\.\d+)?)\s*\|\s*(?:[\d,]+(?:\.\d+)?|-)\s*$"
     )
     stated: dict[tuple[str, int], float] = {}
     for drug_name, manifest in comparators.items():
@@ -1131,6 +1144,10 @@ def test_every_comparator_year_reconciles_to_its_stated_full_year():
         if key in stated:
             by_year.setdefault(key, []).append(row["value_reported"])
 
+    # A year a comparator series reads partly from the 10-Q has no release-table
+    # fourth quarter to state it (Trulicity and Taltz end at 2025Q3), and the
+    # 10-Q rows are not fourth quarters; those years simply have no stated
+    # total here and are covered by the audit's own reconciliation instead.
     # Only years gold records with all four quarters are checked - the same
     # line `audit_gold.py`'s own reconciliation draws. A launch-year total is
     # a real exception, not an edge case to paper over: Biktarvy's series
@@ -1153,7 +1170,9 @@ def test_every_comparator_year_reconciles_to_its_stated_full_year():
         # KNOWN_ROUNDING_DISAGREEMENTS. Across every year checked here that
         # gap is never more than 1 - never 2, never scaled to the product's
         # size - which is the rounding signature and not a misread; a gap of
-        # 2 or more still fails.
+        # 2 or more still fails. Lilly's fourth-quarter 2025 release rounds
+        # to whole millions a year whose first three quarters were stated to
+        # a tenth, so its gap is the sum of four roundings, still under 1.
         gap = sum(quarters) - total
         assert abs(gap) <= 1, (
             f"{key}: gold's four quarters sum to {sum(quarters):g}, "
@@ -1163,6 +1182,56 @@ def test_every_comparator_year_reconciles_to_its_stated_full_year():
 
     # Not vacuous: comfortably more than the eleven years the old dict covered.
     assert checked >= 100, f"only {checked} stated comparator years found"
+
+
+def test_lilly_release_quarters_match_the_10k_and_10q_they_do_not_cite():
+    """The Lilly release-table series checked against Lilly's Form 10-K and 10-Q.
+
+    Every Lilly quarter through 2024 is read from the Selected Revenue
+    Highlights table of the earnings release, and the year-to-date columns
+    that reconcile it come from the same releases. The same "consistent and
+    wrong" risk the J&J check above guards against applies, so the block is
+    anchored to documents the release rows do not cite: the 10-K's MD&A
+    revenue table (fiscal 2025, whole millions) and its collaboration note
+    (Jardiance, three years), and the 10-Q's Disaggregation of Revenue
+    table (each 2025 quarter, to a tenth). A release row that was misread or
+    mis-keyed would break one of these.
+    """
+    rows = load_jsonl("quarterly_revenue.jsonl")
+
+    def quarters(drug: str, year: int) -> list[float]:
+        return [
+            r["value_reported"] for r in rows
+            if r["drug_name"] == drug and r["calendar_year"] == year
+        ]
+
+    # Form 10-K for fiscal 2025, MD&A "revenue by product", whole millions;
+    # the release rounds each quarter on its own, so the sum may differ by a
+    # unit from the printed year, never more.
+    for drug, stated in {"Mounjaro": 22_965, "Zepbound": 13_542, "Verzenio": 5_723}.items():
+        year = quarters(drug, 2025)
+        assert len(year) == 4, (drug, year)
+        assert abs(sum(year) - stated) <= 1, f"{drug} 2025: {sum(year):g} vs 10-K {stated}"
+
+    # The 10-K's collaboration note states Jardiance revenue for three years.
+    for year, stated in {2023: 2_745, 2024: 3_341}.items():
+        total = sum(quarters("Jardiance", year))
+        assert abs(total - stated) <= 1, f"Jardiance {year}: {total:g} vs 10-K {stated}"
+
+    # Form 10-Q, Disaggregation of Revenue, Total column for the three months.
+    # These are the release-table quarters restated in a different document.
+    by_period = {(r["drug_name"], r["period"]): r["value_reported"] for r in rows}
+    tenq = {
+        ("Mounjaro", "2025Q1"): 3_841.8, ("Mounjaro", "2025Q2"): 5_198.9, ("Mounjaro", "2025Q3"): 6_515.1,
+        ("Zepbound", "2025Q1"): 2_311.9, ("Zepbound", "2025Q2"): 3_381.4, ("Zepbound", "2025Q3"): 3_588.1,
+        ("Verzenio", "2025Q1"): 1_158.9, ("Verzenio", "2025Q2"): 1_489.3, ("Verzenio", "2025Q3"): 1_470.2,
+        # And the prior-year comparatives the 2025 10-Qs print for 2024.
+        ("Trulicity", "2024Q1"): 1_456.3, ("Trulicity", "2024Q2"): 1_245.6, ("Trulicity", "2024Q3"): 1_301.4,
+        ("Taltz", "2024Q1"): 604.1, ("Taltz", "2024Q2"): 824.7, ("Taltz", "2024Q3"): 879.6,
+        ("Humalog", "2024Q1"): 538.7,
+    }
+    for key, stated in tenq.items():
+        assert by_period[key] == stated, (key, by_period[key], stated)
 
 
 def test_every_product_carries_matching_attributes():

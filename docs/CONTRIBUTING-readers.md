@@ -82,7 +82,7 @@ the document offers before asking what words it uses.
 
 ## Gates
 
-- gold: `uv run python ../scripts/eval_pipeline.py --mode model --rendering markdown` and `--rendering raw`, 993/993, twice (the second from an empty description cache);
+- gold: `uv run python ../scripts/eval_pipeline.py --mode model --rendering markdown` and `--rendering raw`, every row, twice (the second from an empty description cache). Last recorded 993/993 on the pre-Lilly dataset; the dataset is now 1,367 rows and the sixteen Lilly series have not yet been through this gate (audit document, section 11);
 - held-out 1: `uv run python ../scripts/eval_holdout.py --mode model`, 111/111;
 - held-out 2: a 6-K filer in a non-USD currency and a PDF-only issuer, 100%;
 - `uv run pytest tests -q` green, `uv run ruff check app tests` clean.

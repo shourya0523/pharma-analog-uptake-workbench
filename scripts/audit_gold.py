@@ -216,7 +216,8 @@ def stated_full_year_from_q4_quote(row: dict) -> float | None:
     if _LEGEND.search(quote):
         return None
     cells = [cell.strip() for cell in quote.split("|")]
-    values = [cell for cell in cells[1:] if re.fullmatch(r"[\d,]+", cell)]
+    # Lilly states tenths of a million; the cell is still one printed figure.
+    values = [cell for cell in cells[1:] if re.fullmatch(r"[\d,]+(?:\.\d+)?", cell)]
     if len(values) != 4 or len(cells) - 1 != 4:
         return None
     quarter, _prior, year_to_date, _prior_ytd = (float(v.replace(",", "")) for v in values)
@@ -251,6 +252,10 @@ _URL_PERIOD_PATTERNS = (
     ),
     # Merck: .../4Q25-Merck-Other-Financial-Disclosures.pdf
     re.compile(r"/(?P<quarter>[1-4])Q(?P<yy>\d{2})-"),
+    # Lilly: .../q424lillysalesandearningsp.htm
+    re.compile(r"/q(?P<quarter>[1-4])(?P<yy>\d{2})lilly"),
+    # An EDGAR primary document stamped with its period end: lly-20250630.htm
+    re.compile(r"/[a-z]+-(?P<year>\d{4})(?P<month>0[3-9]|1[0-2])(?:30|31)\.htm$"),
 )
 
 
@@ -261,11 +266,17 @@ def period_a_url_announces(url: str) -> str | None:
         if not match:
             continue
         parts = match.groupdict()
-        quarter = (
-            int(parts["quarter"])
-            if parts.get("quarter")
-            else _ORDINALS[parts["ordinal"]]
-        )
+        if parts.get("month"):
+            # A 10-Q or 10-K names its period end, not a quarter: the first
+            # three are quarterly reports, December is the year itself, and
+            # a fourth quarter read from a 10-K is never a direct read.
+            quarter = {"03": 1, "06": 2, "09": 3, "12": 4}[parts["month"]]
+        else:
+            quarter = (
+                int(parts["quarter"])
+                if parts.get("quarter")
+                else _ORDINALS[parts["ordinal"]]
+            )
         year = int(parts["year"]) if parts.get("year") else 2000 + int(parts["yy"])
         return f"{year}Q{quarter}"
     return None

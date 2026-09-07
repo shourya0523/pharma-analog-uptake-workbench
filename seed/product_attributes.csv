@@ -42,3 +42,19 @@ Imbruvica,BTK inhibitor,kinase_inhibitor,Oral,2013,Oncology (haematological),cur
 Darzalex,Anti-CD38 monoclonal antibody,monoclonal_antibody,Intravenous,2015,Oncology (haematological),curated_reference,distinct_product
 Erleada,Androgen receptor inhibitor,androgen_axis_inhibitor,Oral,2018,Oncology (solid),curated_reference,distinct_product
 Invega Sustenna,D2/5-HT2A antagonist long-acting injectable,atypical_antipsychotic,Intramuscular,2009,Schizophrenia,curated_reference,distinct_product
+Mounjaro,Dual GIP/GLP-1 receptor agonist (tirzepatide),incretin_agonist,Subcutaneous,2022,Type 2 diabetes,curated_reference,distinct_product
+Zepbound,Dual GIP/GLP-1 receptor agonist (tirzepatide),incretin_agonist,Subcutaneous,2023,Obesity,curated_reference,distinct_product
+Trulicity,GLP-1 receptor agonist,incretin_agonist,Subcutaneous,2014,Type 2 diabetes,curated_reference,distinct_product
+Jardiance,SGLT2 inhibitor,sglt2_inhibitor,Oral,2014,Type 2 diabetes,curated_reference,distinct_product
+Humalog,Rapid-acting insulin analogue,insulin,Subcutaneous,1996,Diabetes,curated_reference,distinct_product
+Humulin,Recombinant human insulin,insulin,Subcutaneous,1982,Diabetes,curated_reference,distinct_product
+Basaglar,Long-acting insulin analogue (follow-on insulin glargine),insulin,Subcutaneous,2014,Diabetes,curated_reference,distinct_product
+Verzenio,CDK4/6 inhibitor,kinase_inhibitor,Oral,2017,Oncology (solid),curated_reference,distinct_product
+Alimta,Antifolate antimetabolite,antimetabolite,Intravenous,2004,Oncology (solid),curated_reference,distinct_product
+Cyramza,Anti-VEGFR2 monoclonal antibody,monoclonal_antibody,Intravenous,2014,Oncology (solid),curated_reference,distinct_product
+Retevmo,RET kinase inhibitor,kinase_inhibitor,Oral,2020,Oncology (solid),curated_reference,distinct_product
+Taltz,IL-17A inhibitor,interleukin_inhibitor,Subcutaneous,2016,Immune-mediated inflammatory disease,curated_reference,distinct_product
+Olumiant,JAK1/JAK2 inhibitor,kinase_inhibitor,Oral,2017,Immune-mediated inflammatory disease,curated_reference,distinct_product
+Emgality,Anti-CGRP monoclonal antibody,monoclonal_antibody,Subcutaneous,2018,Migraine,curated_reference,distinct_product
+Forteo,Parathyroid hormone analogue (anabolic),bone_anabolic,Subcutaneous,2002,Osteoporosis,curated_reference,distinct_product
+Cialis,PDE5 inhibitor,nitric_oxide_pathway,Oral,2002,Erectile dysfunction and BPH,curated_reference,distinct_product
