@@ -80,6 +80,10 @@ class SeriesValue:
     # alternates are other statements of this figure (a reorganised region
     # restated under a new name); aligned with ``alternates``.
     alternate_labels: tuple[str | None, ...] = field(default_factory=tuple)
+    # For a derived value: the coarsest stated step among its inputs, in
+    # millions. A year stated to a tenth less a nine months stated to a
+    # tenth determines the quarter to a tenth, not to a thousandth.
+    precision: float | None = None
     # The geography as the document printed it, beside the canonical one.
     geography_label: str | None = None
     # A provisional value fills a cell nothing firmer states; it never seeds a
@@ -116,6 +120,7 @@ class SeriesValue:
             "normalization": self.normalization,
             "alternates": list(self.alternates),
             "alternate_labels": list(self.alternate_labels),
+            "precision": self.precision,
         }
 
 
@@ -553,6 +558,10 @@ def derive_residual_quarters(
                 source_quote=total.source_quote,
                 inputs=tuple(inputs),
                 alternates=tuple(alternates),
+                precision=max(
+                    [_value_step(total, have[q]) or 0.0 for q in rest] + ([_value_step(total, subtotal) or 0.0] if subtotal else [])
+                    + [_value_step(total, total) or 0.0]
+                ),
             )
         )
         quarters[year][target] = derived[-1]
@@ -854,19 +863,38 @@ def assemble_series(
                 values.append(value)
                 by_geo[value.geography][(value.period, value.period_type)] = value
                 notes.append(f"{resolved.period}: provisional ({derivation}) fills an empty cell")
-        # What provisional values let the totals determine is provisional too,
-        # and fills only cells still empty.
+        # What provisional values let the totals determine is provisional too.
+        # It fills cells still empty, and it replaces a quarter a sentence
+        # filled when the total it is taken from is firm: a stated year less
+        # its stated parts outranks a sentence about the quarter.
         for geography, series in by_geo.items():
+            tentative = {
+                key: v for key, v in series.items()
+                if v.provisional and v.route == "read" and key[1] == "quarterly"
+            }
+            for key in tentative:
+                del series[key]
             while True:
                 added = 0
                 for value in derive_residual_quarters(series, product=product, commercial_start=commercial_start):
-                    if (value.period, value.period_type) not in series:
-                        value = replace(value, provisional=True)
-                        series[(value.period, value.period_type)] = value
-                        values.append(value)
-                        added += 1
+                    key = (value.period, value.period_type)
+                    if key in series:
+                        continue
+                    total_key = tuple(value.inputs[0].split(":", 1)) if value.inputs else None
+                    total = series.get(total_key) if total_key else None
+                    if key in tentative and (total is None or total.provisional):
+                        continue
+                    value = replace(value, provisional=True)
+                    series[key] = value
+                    values.append(value)
+                    if key in tentative:
+                        values.remove(tentative.pop(key))
+                        notes.append(f"{value.period}: a firm total less stated parts replaces the sentence")
+                    added += 1
                 if not added:
                     break
+            for key, v in tentative.items():
+                series.setdefault(key, v)
 
     values.sort(key=lambda v: (v.geography or "", v.period_type, v.period))
     return Series(product=product, values=values, verdicts=verdicts, notes=notes)

@@ -567,3 +567,28 @@ def test_a_coverage_span_equal_to_the_whole_period_is_no_limit():
     by_period = {o.period: o for o in observations}
     assert by_period["2017Q2"].covers == ("2017-04-01", "2017-06-15")
     assert by_period["2017Q1"].covers is None
+
+
+def test_a_firm_year_less_a_provisional_nine_months_outranks_a_sentence_about_the_quarter_and_carries_their_precision():
+    from app.benchmark.schema import compare, from_gold, from_series
+    from app.extraction.series import assemble_series
+
+    def obs(period, period_type, value, unit, method, provisional):
+        return Observation(
+            product_label="Remodulin", period=period, period_type=period_type, value_as_reported=value, unit_label=unit,
+            currency="USD", unit_declared=True, geography=None, covers=None, source_quote=f"Remodulin {value}", method=method,
+            layout_signature="", verified=(), specificity=0, provisional=provisional, source_url=period,
+        )
+
+    series = assemble_series([
+        obs("2002", "annual", 21174, "thousands", "grid", False),
+        obs("2002", "nine_month", 11.5, "millions", "prose", True),
+        obs("2002Q4", "quarterly", 8.5, "millions", "prose", True),
+    ], product="Remodulin")
+    quarter = {(v.period, v.period_type): v for v in series.values}[("2002Q4", "quarterly")]
+    assert quarter.route == "derived" and abs(quarter.value_millions - 9.674) < 1e-6 and quarter.provisional
+    assert quarter.precision == 0.1
+    gold = from_gold({"drug_name": "Remodulin", "period": "2002Q4", "geography": "Worldwide", "value_reported": 9.669, "unit": "millions",
+                      "currency": "USD", "source_value_reported": 9.669, "source_unit": "millions",
+                      "derivation": "annual_less_reported_first_nine_months", "source_url": "a", "source_quote": "x"})
+    assert compare(gold, [from_series(quarter)]).outcome == "match"

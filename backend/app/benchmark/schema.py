@@ -203,7 +203,7 @@ def from_series(value: SeriesValue) -> ComparableRevenueRow:
         status=value.status,
         detail=value.detail,
         extras={"normalization": value.normalization, "inputs": list(value.inputs), "alternates": list(value.alternates),
-                "alternate_labels": list(value.alternate_labels),
+                "alternate_labels": list(value.alternate_labels), "precision": value.precision,
                 "provisional": value.provisional, "geography_label": value.geography_label},
     )
 
@@ -259,7 +259,8 @@ def stated_step(row: ComparableRevenueRow) -> float | None:
     return (10 ** (-decimals)) * scale
 
 
-def values_match(gold: float, pipeline: float, *, reference: ComparableRevenueRow | None = None) -> bool:
+def values_match(gold: float, pipeline: float, *, reference: ComparableRevenueRow | None = None,
+                 candidate: ComparableRevenueRow | None = None) -> bool:
     """Equal to the precision the reference states.
 
     A reference that prints $92.8 million is matched by 92.823 read from a
@@ -273,6 +274,10 @@ def values_match(gold: float, pipeline: float, *, reference: ComparableRevenueRo
         if step:
             inputs = 2 if reference.route in {"derived", "bridged"} else 1
             tolerance = max(tolerance, 0.5 * step * inputs + 1e-9)
+    if candidate is not None and candidate.extras.get("precision"):
+        # A pipeline value derived from coarser inputs is stated to their
+        # precision: two figures agree within the sum of their half-steps.
+        tolerance += 0.5 * float(candidate.extras["precision"])
     return abs(gold - pipeline) <= tolerance
 
 
@@ -316,7 +321,7 @@ def compare(gold: ComparableRevenueRow, candidates: list[ComparableRevenueRow]) 
         return Comparison(gold, compatible[0], "needs_review", compatible[0].detail)
     for candidate in resolved:
         pair = comparable_values(gold, candidate)
-        if pair is not None and values_match(pair[0], pair[1], reference=gold):
+        if pair is not None and values_match(pair[0], pair[1], reference=gold, candidate=candidate):
             detail = "via provisional" if candidate.extras.get("provisional") else ""
             return Comparison(gold, candidate, "match", detail)
     # A derived figure the issuer's own rounding leaves ambiguous: the
