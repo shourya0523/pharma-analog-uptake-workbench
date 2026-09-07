@@ -65,9 +65,11 @@ the score, because it makes the pipeline find its own filings. The same script
 without the flag hands it the document and measures only reading; that is a
 diagnostic and it prints so before it prints a number.
 
-Currently **998 of gold's 1,415 quarters (70.5%) are read correctly with the
-pipeline sourcing for itself**, against 3 wrong values. Coverage by issuer and
-what the remainder consists of are in `docs/evaluation.md`.
+Currently **1,070 of gold's 1,415 quarters (75.6%) are read correctly with the
+pipeline sourcing for itself**, against 3 wrong values. 305 of those answers
+come from facts the filer tagged in its own XBRL instance rather than from a
+table read positionally. Coverage by issuer and what the remainder consists of
+are in `docs/evaluation.md`.
 
 ## Pharmaceutical data semantics
 

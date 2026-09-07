@@ -50,7 +50,7 @@ Nothing in the code knows that date - a filing from before an issuer's own
 cutoff simply yields no product facts.
 
 Two things in that table are worth stating plainly. The pipeline sourcing for
-itself (70.5%) scores **higher** than the same pipeline handed the document
+itself (75.6%) scores **higher** than the same pipeline handed the document
 gold cites (65.2%), because gold cites investor-relations PDFs and press
 releases while EDGAR's 8-K exhibits are better structured — so the reading
 score was never an upper bound on the real one, and treating it as the headline
