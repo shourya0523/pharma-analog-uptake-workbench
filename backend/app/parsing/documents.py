@@ -217,21 +217,198 @@ def html_tables(soup: BeautifulSoup) -> list[list[list[str]]]:
     return [rows for grid in html_table_grids(soup) if (rows := flatten_grid(grid))]
 
 
-def pdf_tables(raw: bytes) -> tuple[list[str], list[list[list[str]]]]:
+# --- PDF, where the layout is positions rather than markup -----------------
+#
+# An HTML table states its own structure: a cell says how many columns it
+# spans, and everything the pipeline reads off a table's geometry follows from
+# that. A PDF states nothing. It is a list of glyphs at coordinates, and the
+# columns exist only because the numbers happen to line up on the page.
+#
+# Recovering them is the classical problem, and the classical answer is the one
+# used here: group the glyphs into the rows they sit on, find the vertical
+# whitespace no figure crosses, and call those the column boundaries. Camelot's
+# "stream" reader and pdfplumber's "text" strategy are both this method, after
+# Nurminen's 2013 thesis; the deep-learning readers trained on FinTabNet solve
+# the harder problem of doing it from an image, which is not the problem here
+# because these filings carry their text.
+#
+# What matters for this pipeline is the last step, which the general-purpose
+# readers do not do: a heading whose text crosses several of those boundaries
+# is a heading that spans them. That is the PDF's equivalent of ``colspan``,
+# and producing it here means a PDF and an HTML filing arrive at the extractor
+# in the same shape, and every rule already written about a table's geometry
+# applies to both.
+#
+# The tagged-PDF route was measured and rejected: 33 of the 53 cached PDFs
+# carry a structure tree, but they are Excel exports whose every cell is a bare
+# /TD - not one object in the corpus declares /ColSpan - so the tags cost the
+# marked-content machinery and give back less than the coordinates do.
+
+# A gap wider than this many median character widths separates columns rather
+# than words. Measured over the corpus rather than chosen: gaps within a cell
+# cluster between 0.5 and 1.1 character widths, gaps between columns at 2 and
+# above, and the band between 1.4 and 1.9 holds 21 of 19,500 gaps. Stating it
+# in character widths rather than points is what makes it hold for a filing set
+# in a different size.
+PDF_COLUMN_GAP = 1.5
+
+
+def _pdf_text_rows(words: list[dict]) -> list[list[dict]]:
+    """Words grouped into the rows they are printed on.
+
+    Two words share a row when their vertical extents overlap: a row is a band
+    on the page, not a coordinate, because a superscript footnote marker and
+    the figure beside it do not share a baseline.
+    """
+    rows: list[list[dict]] = []
+    for word in sorted(words, key=lambda w: (w["top"], w["x0"])):
+        if rows:
+            band = rows[-1]
+            top = min(w["top"] for w in band)
+            bottom = max(w["bottom"] for w in band)
+            overlap = min(bottom, word["bottom"]) - max(top, word["top"])
+            if overlap > 0.5 * min(bottom - top, word["bottom"] - word["top"]):
+                band.append(word)
+                continue
+        rows.append([word])
+    return [sorted(row, key=lambda w: w["x0"]) for row in rows]
+
+
+def _merge_into_cells(row: list[dict], gap: float) -> list[tuple[float, float, str]]:
+    """(left, right, text) for each cell, merging words a space apart."""
+    cells: list[tuple[float, float, str]] = []
+    for word in row:
+        if cells and word["x0"] - cells[-1][1] < gap:
+            left, _right, text = cells[-1]
+            cells[-1] = (left, word["x1"], f"{text} {word['text']}")
+        else:
+            cells.append((word["x0"], word["x1"], word["text"]))
+    return cells
+
+
+_BARE_YEAR = re.compile(r"^(?:19|20)\d{2}$")
+
+
+def _states_a_figure(cells: list[tuple[float, float, str]]) -> bool:
+    """Whether this row is a row of numbers rather than a heading.
+
+    Two things make this the cell test rather than the word test. A bare year is
+    a heading, not a figure. And a footnote marker is a word inside a heading -
+    "Operational (1)" - so asking of words counts the year row as data, and its
+    heading then bridges two columns, after which every figure to the right of
+    the join lands one column late.
+    """
+    return any(
+        _FIGURE.match(text.strip()) and not _BARE_YEAR.match(text.strip())
+        for _left, _right, text in cells
+    )
+
+
+def _column_edges(rows: list[list[dict]], gap: float) -> list[tuple[float, float]]:
+    """The columns, as the spans of page the figures occupy.
+
+    The body decides where the columns are and the headings say what they mean.
+    Letting the headings vote would be circular: a heading spanning five columns
+    is exactly the thing whose extent is to be measured against them, and a
+    title centred over the page would place a boundary through the middle of a
+    column of numbers.
+    """
+    spans: list[list[float]] = []
+    for row in rows:
+        cells = _merge_into_cells(row, gap)
+        if not _states_a_figure(cells):
+            continue
+        spans.extend([left, right] for left, right, _text in cells)
+    spans.sort()
+    merged: list[list[float]] = []
+    for left, right in spans:
+        if merged and left - merged[-1][1] < gap:
+            merged[-1][1] = max(merged[-1][1], right)
+        else:
+            merged.append([left, right])
+    return [(left, right) for left, right in merged]
+
+
+def pdf_page_grid(page) -> list[list[str | None]]:
+    """One page as a rectangle, with a heading occupying the columns it covers.
+
+    The result is in the same shape ``html_table_grid`` produces - a cell's text
+    at the column it starts in, ``None`` at the columns it continues over - so
+    nothing downstream needs to know which kind of document it came from.
+    """
+    words = page.extract_words()
+    if not words:
+        return []
+    widths = sorted(char["width"] for char in page.chars) or [5.0]
+    gap = PDF_COLUMN_GAP * (widths[len(widths) // 2] or 5.0)
+    rows = _pdf_text_rows(words)
+    columns = _column_edges(rows, gap)
+    if len(columns) < 2:
+        return []
+
+    def touching(left: float, right: float) -> list[int]:
+        """The columns this cell sits over, by overlap rather than by its edges.
+
+        A figure is set right against its column and a heading is centred over
+        several, so neither edge alone says where a cell belongs; what it covers
+        does. A cell falling in the space between columns is attached to the one
+        it is nearest, since that space is the margin of a column, not a column.
+        """
+        hit = [
+            index
+            for index, (start, end) in enumerate(columns)
+            if min(end, right) - max(start, left) > -gap / 2
+        ]
+        if hit:
+            return hit
+        middle = (left + right) / 2
+        nearest = min(
+            range(len(columns)),
+            key=lambda i: min(abs(columns[i][0] - middle), abs(columns[i][1] - middle)),
+        )
+        return [nearest]
+
+    grid: list[list[str | None]] = []
+    for row in rows:
+        line: list[str | None] = [None] * len(columns)
+        taken = [False] * len(columns)
+        for left, right, text in _merge_into_cells(row, gap):
+            covered = touching(left, right)
+            start = covered[0]
+            while start < len(columns) and taken[start]:
+                start += 1
+            if start >= len(columns):
+                continue
+            line[start] = text
+            for column in range(start, max(covered[-1], start) + 1):
+                taken[column] = True
+        grid.append(line)
+    return grid
+
+
+def pdf_table_grids(raw: bytes) -> tuple[list[str], list[list[list[str | None]]]]:
+    """(text blocks, one rectangle per page that states figures)."""
     import io
 
     import pdfplumber
 
     blocks: list[str] = []
-    tables: list[list[list[str]]] = []
+    grids: list[list[list[str | None]]] = []
     with pdfplumber.open(io.BytesIO(raw)) as pdf:
         for index, page in enumerate(pdf.pages[:PDF_PAGE_LIMIT]):
             text = page.extract_text() or ""
             if text.strip():
                 blocks.append(f"[page {index + 1}]\n{text}")
-            for table in (page.extract_tables() or [])[:PDF_TABLE_LIMIT]:
-                tables.append([[(cell or "") for cell in row] for row in table])
-    return blocks, tables
+            grid = pdf_page_grid(page)
+            if grid and table_relevance(grid):
+                grids.append(grid)
+    return blocks, grids
+
+
+def pdf_tables(raw: bytes) -> tuple[list[str], list[list[list[str]]]]:
+    """The same reading as ragged rows, derived from the same rectangles."""
+    blocks, grids = pdf_table_grids(raw)
+    return blocks, [rows for grid in grids if (rows := flatten_grid(grid))]
 
 
 class DocumentParser:
