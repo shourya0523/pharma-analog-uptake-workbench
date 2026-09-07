@@ -204,10 +204,13 @@ def _has_values(row: list[str]) -> bool:
     return any(is_value_token(cell) for cell in row[1:]) or (bool(row) and is_value_token(row[0]))
 
 
+NO_LABEL = "<no label>"
+
+
 def _row_line(index: int, row: list[str]) -> str:
     cells = list(row)
     if cells and is_value_token(cells[0]):
-        cells = ["<no label>"] + cells
+        cells = [NO_LABEL] + cells
     return f"r{index}: " + " | ".join(cells)
 
 
@@ -615,6 +618,9 @@ def _parse_grid(region: dict[str, Any], *, doc: ParsedDocument | None, shown: se
             rejected.append(f"grid{index}:row{row_index}:line_kind({line})")
             continue
         label = str(entry.get("label_as_printed") if entry.get("label_as_printed") is not None else "")
+        if label.strip().lower() == NO_LABEL:
+            # The sketch's own placeholder for a row that prints figures only.
+            label = ""
         width: int | None = None
         if rows_of_grid is not None:
             if 0 <= row_index < len(rows_of_grid):

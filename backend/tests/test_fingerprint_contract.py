@@ -198,3 +198,20 @@ def test_the_sketch_shows_a_footnote_beside_the_heading_that_points_to_it():
     text = parts[0].grids_text
     assert "r1: PULMONARY HYPERTENSION (4)   [note (4): Products acquired from Actelion acquisition on June 16, 2017]" in text
     assert "r2: OPSUMIT US | 180 | 24" in text and "[note" not in text.split("r2:")[1].split("\n")[0]
+
+
+def test_parser_accepts_the_sketch_placeholder_for_a_row_that_prints_figures_only():
+    # A total row printed without a label is shown to the model as "<no label>";
+    # the model echoing that placeholder describes the row, not a label the
+    # document lacks.
+    grid = [row[:] for row in GRID]
+    grid.insert(6, ["4,708", "623", "5,331", "1.0", "2.0", "3.0"])
+    payload = _payload([
+        {"row_index": 4, "label_as_printed": "Skyrizi", "product": "Skyrizi", "geography": "United States", "line": "own_revenue"},
+        {"row_index": 6, "label_as_printed": "<no label>", "product": "Skyrizi", "geography": None,
+         "line": "subtotal_of_geographies", "members": [4]},
+    ])
+    fp = parse_fingerprint(payload, doc=_doc([grid]), shown={0})
+    rows = {r.row_index: r for r in fp.grids[0].rows}
+    assert 6 in rows and rows[6].label_as_printed == "" and rows[6].label_width == 0
+    assert not any("label_not_grounded" in r for r in fp.rejected)
