@@ -288,7 +288,17 @@ class SECConnector:
             if not exhibits:
                 logger.info("sec_no_earnings_exhibit accession=%s date=%s", accession, fdate)
                 continue
-            for doc in exhibits[:1]:  # one exhibit 99.1 per earnings 8-K
+            # Every exhibit, not the first one. An issuer that separates its
+            # press release from its schedules puts the prose in EX-99.1 and the
+            # product-level sales in EX-99.2, and taking one exhibit per filing
+            # takes the wrong one: Johnson & Johnson's EX-99.1 carries no table
+            # at all while its EX-99.2 carries twenty-two. Nothing in the
+            # numbering says which is which, so the way to not choose wrongly is
+            # not to choose - reading an exhibit that holds no product table
+            # costs a parse, and skipping the one that does costs the quarter.
+            for doc in exhibits[:max_exhibits]:
+                if len(sources) >= max_exhibits:
+                    break
                 sid = new_id()
                 url = f"{self.ARCHIVES}/{cik_int}/{acc_nodash}/{doc}"
                 try:

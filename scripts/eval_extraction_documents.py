@@ -347,9 +347,13 @@ def run_discovery(rows: list[dict], args) -> int:
                 outcomes["error"].append({**row, "why": f"{type(exc).__name__}: {exc}"})
                 continue
             if not readable:
-                # The pipeline never got a document to read, which is a
-                # different failure from reading one and missing the figure.
-                outcomes["no_filing_retrieved"].append(row)
+                # Nothing readable came back. That is not the same as nothing
+                # coming back, and reading it as the latter cost real time: an
+                # issuer whose press release is prose and whose schedules are a
+                # separate exhibit lands here when only the prose is fetched,
+                # which looks like a connector finding no filing and is a
+                # connector discarding the exhibit with the numbers in it.
+                outcomes["no_readable_document"].append(row)
                 continue
             state, value = "not_found", None
             same = [c for c in candidates if str(c.get("period")) == row["period"]]
@@ -370,9 +374,9 @@ def run_discovery(rows: list[dict], args) -> int:
     print("pipeline finds its own filings - gold supplies product, issuer and quarter only")
     print(f"  rows tested        {scored}")
     print(f"  read correctly     {read}/{scored}  {read / max(scored, 1):.2%}")
-    if outcomes["no_filing_retrieved"]:
-        print(f"  no filing retrieved  {len(outcomes['no_filing_retrieved'])}"
-              "   <- the connector found nothing to read")
+    if outcomes["no_readable_document"]:
+        print(f"  no readable document {len(outcomes['no_readable_document'])}"
+              "   <- filings were found; none of them parsed to a table")
     for name in ("wrong_value", "not_found", "error"):
         if outcomes[name]:
             print(f"  {name:<18} {len(outcomes[name])}")
