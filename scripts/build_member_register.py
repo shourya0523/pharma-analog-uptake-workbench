@@ -23,6 +23,7 @@ from __future__ import annotations
 import argparse
 import asyncio
 import collections
+import csv
 import json
 import os
 import pathlib
@@ -44,7 +45,13 @@ from app.llm.client import LLMModules
 from app.parsing.xbrl import parse_facts, product_facts
 
 UA = os.environ.get("SEC_CONTACT")
-GOLD = REPO / "seed" / "gold" / "quarterly_revenue.jsonl"
+
+# The products the pipeline tracks, and their issuers. Deliberately NOT
+# seed/gold: gold is the answer key, and a register built from it would carry
+# the key's decisions into a file the pipeline reads at run time. This is
+# curated reference data, which gold itself is built from - the dependency runs
+# that way round and must not be reversed.
+ATTRIBUTES = REPO / "seed" / "product_attributes.csv"
 
 # The issuers gold tracks. A new issuer is added here and the register regrows.
 ISSUERS = {
@@ -141,11 +148,10 @@ def main() -> int:
     if not UA:
         raise SystemExit("Set SEC_CONTACT, e.g. 'project you@example.com'")
 
-    products_by_issuer: dict[str, list[str]] = collections.defaultdict(list)
-    for row in (json.loads(line) for line in GOLD.read_text().splitlines() if line.strip()):
-        maker = row["manufacturer"].replace("Actelion/J&J", "Johnson & Johnson")
-        if row["drug_name"] not in products_by_issuer[maker]:
-            products_by_issuer[maker].append(row["drug_name"])
+    with ATTRIBUTES.open(newline="") as handle:
+        products = sorted({row["drug_name"].strip()
+                           for row in csv.DictReader(handle) if row.get("drug_name")})
+    print(f"{len(products)} products in seed/product_attributes.csv")
 
     print("collecting members from the newest filings")
     tagged = members_by_issuer()
@@ -155,7 +161,10 @@ def main() -> int:
     pending: list[tuple[str, str, list[str], list[str]]] = []
     kept = by_rules = 0
     for issuer, members in tagged.items():
-        candidates = products_by_issuer.get(issuer, [])
+        # Every product we track is a candidate for every issuer. Narrowing the
+        # list per issuer would need a product-to-issuer mapping, and the only
+        # one to hand is gold's.
+        candidates = products
         for member in sorted(members):
             if (issuer, member) in existing:
                 kept += 1
