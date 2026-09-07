@@ -47,10 +47,10 @@ from bs4 import BeautifulSoup  # noqa: E402
 from app.connectors.sources import SECConnector  # noqa: E402
 from app.extraction.candidates import extract_revenue_candidates  # noqa: E402
 from app.parsing.documents import (  # noqa: E402
-    HTML_TABLE_LIMIT,
     DocumentParser,
     flatten_grid,
     html_table_grid,
+    html_table_grids,
     pdf_tables,
 )
 from app.storage.filestore import FileStore  # noqa: E402
@@ -121,10 +121,15 @@ def tables_of(
     Returns the tables as ragged rows and as rectangles, in the same order and
     from the same reading, which is how the pipeline itself carries them.
 
-    ``capped=False`` lifts the pipeline's own ceiling on how many tables it
-    keeps per document. It is not the headline measurement; it exists to price
-    that ceiling, because a Gilead 8-K exhibit holds 39 tables and prints its
-    PRODUCT SALES SUMMARY in the thirty-seventh.
+    The capped reading is ``html_table_grids`` itself rather than a copy of it
+    here, because a copy is how "same reader, same limits" stops being true:
+    while this function selected tables by position, it went on reporting the
+    pipeline's number after the pipeline had stopped selecting that way.
+
+    ``capped=False`` keeps every table in the document, selecting nothing. It
+    is not the headline measurement; it exists to price the selection, because
+    a Gilead 8-K exhibit holds 39 tables and prints its PRODUCT SALES SUMMARY
+    in the thirty-seventh.
     """
     raw = path.read_bytes()
     if path.suffix == ".pdf":
@@ -134,11 +139,10 @@ def tables_of(
     head = markup.lstrip()[:256].lower()
     parser = "lxml-xml" if head.startswith(("<?xml", "<xbrl", "<ix:")) else "lxml"
     soup = BeautifulSoup(markup, parser)
-    found = soup.find_all("table")
-    grids = [
-        grid for table in (found if not capped else found[:HTML_TABLE_LIMIT])
-        if (grid := html_table_grid(table))
-    ]
+    if capped:
+        grids = html_table_grids(soup)
+    else:
+        grids = [grid for table in soup.find_all("table") if (grid := html_table_grid(table))]
     return [rows for grid in grids if (rows := flatten_grid(grid))], grids
 
 

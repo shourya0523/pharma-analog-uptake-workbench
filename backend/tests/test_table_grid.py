@@ -7,7 +7,13 @@ throws that away, and the period then has to be guessed from prose.
 """
 
 from app.extraction.fingerprint import column_periods, stated_periods
-from app.parsing.documents import html_table_grid, html_tables
+from app.parsing.documents import (
+    HTML_TABLE_LIMIT,
+    flatten_grid,
+    html_table_grid,
+    html_table_grids,
+    html_tables,
+)
 from bs4 import BeautifulSoup
 
 # The shape Gilead files: the heading spans every value column, each year spans
@@ -144,6 +150,24 @@ GILEAD_PRESS_RELEASE = """
 """
 
 
+# --- which tables are kept -------------------------------------------------
+#
+# Selection is by what a table contains, not where it sits. These fixtures name
+# no issuer and no product: they are a layout table, a schedule, and a filing
+# that prints the schedule last.
+
+LAYOUT = "<table><tr><td>&nbsp;</td></tr></table>"
+SPACER_WITH_A_STRAY_SIGN = "<table><tr><td>$</td><td>&nbsp;</td></tr></table>"
+SCHEDULE = """
+<table>
+  <tr><td></td><td colspan="3">Three Months Ended June 30,</td></tr>
+  <tr><td>($ in millions)</td><td>2025</td><td>2024</td></tr>
+  <tr><td>Alfacept</td><td>1,204</td><td>988</td></tr>
+  <tr><td>Betamine</td><td>533</td><td>&#8212;</td></tr>
+</table>
+"""
+
+
 def test_headings_that_span_over_a_body_that_does_not_state_nothing():
     """Read as geometry this says the label column is 2016 - so it is not geometry.
 
@@ -157,3 +181,51 @@ def test_headings_that_span_over_a_body_that_does_not_state_nothing():
     _depth, stated = stated_periods(grid)
     assert label_column in stated, "expected the raw geometry to cover the label"
     assert column_periods(grid) == {}
+
+
+def _kept(markup):
+    return html_table_grids(BeautifulSoup(markup, "lxml"))
+
+
+def test_a_schedule_printed_after_many_layout_tables_is_still_kept():
+    """The whole point: position must not decide, content must."""
+    markup = "<body>" + LAYOUT * 60 + SCHEDULE + "</body>"
+    kept = _kept(markup)
+    assert len(kept) == 1
+    assert any("Alfacept" in (cell or "") for row in kept[0] for cell in row)
+
+
+def test_a_layout_table_with_no_labelled_figure_is_dropped():
+    assert _kept("<body>" + LAYOUT * 5 + SPACER_WITH_A_STRAY_SIGN + "</body>") == []
+
+
+def test_a_single_line_item_is_enough_to_be_kept():
+    """A one-product issuer prints one row; it is still a sales table."""
+    assert len(_kept("<table><tr><td>Alfacept</td><td>250</td></tr></table>")) == 1
+
+
+def test_kept_tables_stay_in_document_order():
+    markup = "<body>" + SCHEDULE + LAYOUT * 3 + GILEAD_SHAPE + "</body>"
+    kept = _kept(markup)
+    assert len(kept) == 2
+    assert any("Alfacept" in (cell or "") for row in kept[0] for cell in row)
+    assert any("Genvoya" in (cell or "") for row in kept[1] for cell in row)
+
+
+def test_the_rows_and_the_rectangles_describe_the_same_tables():
+    """If these ever drift, a value gets stamped with another table's period."""
+    markup = "<body>" + LAYOUT * 40 + SCHEDULE + LAYOUT * 5 + GILEAD_SHAPE + "</body>"
+    soup = BeautifulSoup(markup, "lxml")
+    grids, rows = html_table_grids(soup), html_tables(soup)
+    assert len(grids) == len(rows) == 2
+    for grid, table in zip(grids, rows, strict=True):
+        assert flatten_grid(grid) == table
+
+
+def test_the_cap_sheds_the_least_table_like_rather_than_the_last():
+    """When the safety valve binds, a real schedule outranks a bare figure."""
+    thin = "<table><tr><td>Item</td><td>1</td></tr></table>"
+    markup = "<body>" + thin * HTML_TABLE_LIMIT + SCHEDULE + "</body>"
+    kept = _kept(markup)
+    assert len(kept) == HTML_TABLE_LIMIT
+    assert any("Alfacept" in (cell or "") for row in kept[-1] for cell in row)

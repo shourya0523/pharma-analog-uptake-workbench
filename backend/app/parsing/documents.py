@@ -21,10 +21,43 @@ class OCRStub:
 # pipeline's own reading of a file (the extraction eval, for one) uses this
 # path rather than a second implementation that could drift from it. The
 # limits are the pipeline's real limits and are deliberately not relaxed here.
-HTML_TABLE_LIMIT = 12
+#
+# HTML_TABLE_LIMIT is a safety valve on work, not the way tables are chosen.
+# Which tables are kept is decided by `table_relevance` below; the limit only
+# bounds a pathological document, and when it binds it drops the least
+# table-like rather than whatever happened to be printed last.
+#
+# It is set above the 95th percentile of tables-that-state-figures per document
+# in both the gold corpus and a held-out one (earnings exhibits settle at 12-17;
+# the tail is 10-K and 10-Q filings, one of which offers 225). So for an
+# ordinary filing the relevance test is the whole rule and this never binds; it
+# exists so that a document with a thousand tables cannot cost a thousand
+# tables' work.
+HTML_TABLE_LIMIT = 80
 HTML_ROW_LIMIT = 40
 PDF_PAGE_LIMIT = 40
 PDF_TABLE_LIMIT = 5
+
+# A figure, as a filing prints one: thousands separators, a leading currency
+# sign, a trailing percent, parentheses for negatives.
+_FIGURE = re.compile(r"^\(?\s*[$€£¥]?\s*-?\d[\d,]*(\.\d+)?\s*\)?\s*%?$")
+# A table that declares money: a currency sign, a unit statement, an ISO code.
+_MONEY = re.compile(
+    r"[$€£¥]|\bin\s+(millions|thousands|billions)\b|\b(USD|EUR|GBP|CHF|JPY|DKK|SEK|NOK|AUD|CAD)\b",
+    re.IGNORECASE,
+)
+# A table that declares a period: a period heading, a quarter, a year, a month.
+_PERIOD = re.compile(
+    r"\b(month|quarter|year|period|week|half)s?\s+ended\b|\bQ[1-4]\b|\b(19|20)\d\d\b"
+    r"|\b(january|february|march|april|may|june|july|august|september|october"
+    r"|november|december)\b",
+    re.IGNORECASE,
+)
+# One line item is enough to be worth reading: an issuer with a single product
+# prints a single row, and a sales schedule row often carries one figure and a
+# dash for the year it did not sell in. What is excluded is the table with no
+# labelled figure anywhere in it.
+MIN_FIGURE_ROWS = 1
 
 
 def html_table_grid(table) -> list[list[str | None]]:
@@ -77,13 +110,80 @@ def html_table_grid(table) -> list[list[str | None]]:
     ]
 
 
+def _figure_rows(grid: list[list[str | None]]) -> int:
+    """Rows shaped like a line item: a text label, then a figure.
+
+    This is the shape a product sales line has - ``Skyrizi | 3,843 | 580 |
+    4,423`` - and it is also the shape of every other financial line item,
+    which is the point: the test is "does this row state figures against a
+    name", not "is this name a product we know".
+
+    One figure is enough. Gilead files ``Genvoya - U.S. | 141 | -``, a figure
+    beside an em dash for the quarter the product did not sell in; demanding
+    two would drop the launch quarter of every product in the schedule.
+    """
+    count = 0
+    for row in grid:
+        cells = [cell.strip() for cell in row if cell is not None and cell.strip()]
+        if len(cells) < 2 or len(cells[0]) < 2 or _FIGURE.match(cells[0]):
+            continue
+        if any(_FIGURE.match(cell) for cell in cells[1:]):
+            count += 1
+    return count
+
+
+def table_relevance(grid: list[list[str | None]]) -> int:
+    """How much this table looks like a table of financial data. 0 = discard.
+
+    A document's table order says nothing about where its figures are: a
+    Gilead 8-K earnings exhibit holds 39 tables and prints its PRODUCT SALES
+    SUMMARY in the thirty-seventh, behind three dozen layout and cover tables.
+    Keeping the first N therefore keeps the wrong N. What separates the sales
+    schedule from a spacer is not its position but its content - it states
+    figures against row labels, and it declares what those figures are in
+    (money) or what they cover (a period).
+
+    The gate is the figures. Money and period markers only *rank* what got
+    through, because they are evidence rather than requirements: a schedule
+    that declares "(in millions)" in the sentence above it rather than inside
+    the grid is still a schedule, and 37% of the layout tables in these
+    filings carry a stray "$" that means nothing.
+
+    No test here names an issuer, a product, a heading word or a section, so
+    nothing in it can learn one filer's layout.
+    """
+    figures = _figure_rows(grid)
+    if figures < MIN_FIGURE_ROWS:
+        return 0
+    text = " ".join(cell for row in grid for cell in row if cell)
+    # More line items is more of a schedule; declaring money and a period is
+    # more of a financial statement. Used only to order the survivors, so that
+    # the cap - if it ever binds - sheds the weakest rather than the last.
+    return (
+        figures
+        + 2 * bool(_MONEY.search(text))
+        + 2 * bool(_PERIOD.search(text))
+    )
+
+
 def html_table_grids(soup: BeautifulSoup) -> list[list[list[str | None]]]:
-    """Every table the pipeline keeps, as rectangles rather than ragged rows."""
-    return [
-        grid
-        for table in soup.find_all("table")[:HTML_TABLE_LIMIT]
-        if (grid := html_table_grid(table))
-    ]
+    """The tables worth keeping, as rectangles rather than ragged rows.
+
+    Selection is by relevance, not by position, and the result stays in
+    document order so that index *n* here and index *n* of ``html_tables``
+    remain the same table.
+    """
+    scored: list[tuple[int, int, list[list[str | None]]]] = []
+    for position, table in enumerate(soup.find_all("table")):
+        grid = html_table_grid(table)
+        if not grid:
+            continue
+        relevance = table_relevance(grid)
+        if relevance:
+            scored.append((position, relevance, grid))
+    if len(scored) > HTML_TABLE_LIMIT:
+        scored = sorted(scored, key=lambda item: (-item[1], item[0]))[:HTML_TABLE_LIMIT]
+    return [grid for _position, _relevance, grid in sorted(scored, key=lambda i: i[0])]
 
 
 def flatten_grid(grid: list[list[str | None]]) -> list[list[str]]:
