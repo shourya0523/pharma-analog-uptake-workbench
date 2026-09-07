@@ -119,3 +119,63 @@ of a heading's text box against the columns beneath it, which is available from
 issuers, the documents where the prototype finds no quarterly column at all are
 those whose press releases tabulate only year-to-date figures - for those, no
 method can report a quarter the document does not print.
+
+## What was built, and what the recommendation missed
+
+Recommendations 1-3 are implemented: `html_table_grid` expands spans into a
+rectangle, `html_tables` is derived from it so the two views cannot drift apart,
+and `build_fingerprint` reads each column's period from the headings covering it
+when a rectangle is available, falling back to the prose inference otherwise.
+
+The note assumed geometry, once preserved, could be trusted. It cannot. A filer
+may span its headings and not span its body, and the two then occupy different
+columns that line up only on screen. Gilead's press release spans "Three Months
+Ended" over five columns and each year over two, while every product row is
+plain cells: read as geometry, the label column is 2016 and the six-month figure
+is dated as the prior year's quarter. Taking the rectangle at its word raised
+the document eval from 235/1415 to 280/1415 and, in the same change, turned
+three correct refusals into wrong values - the trade this pipeline exists to
+refuse. The geometry is used only where a period does not cover a column the
+body puts a row label in.
+
+Two things the note did not identify turned out to matter more than the
+rectangle on this corpus:
+
+* A heading broken across rows is one heading. "Three Months Ended" over
+  "June 30," names a period and neither line alone does, and when the two rows
+  carry the same number of cells the heading kept its columns when it broke, so
+  they join cell by cell. Joining header rows wholesale instead reads two
+  headings stacked above two blocks of figures as two periods side by side, and
+  cost three tables on the held-out issuers.
+* Several rows naming one product are lines within it. An issuer reporting by
+  region prints a line per region and the worldwide figure as their sum; every
+  line matches the product, and publishing each files four numbers as one
+  quarter's revenue. The row that is the sum of the others in every period is
+  the total - the arithmetic identifies it, so no list of region names exists
+  anywhere in the code.
+
+Measured end to end over the documents gold cites, and with the unit-declaration
+fix that landed alongside:
+
+| | read correctly | wrong values |
+|---|---|---|
+| before | 235/1415 (16.6%) | 3 |
+| column geometry alone | 280/1415 (19.8%) | 6 |
+| geometry only where it describes the body | 274/1415 (19.4%) | 3 |
+| + broken headings, + regional totals | 334/1415 (23.6%) | 3 |
+| + unit declaration | 337/1415 (23.8%) | 0 |
+
+Provenance over the same run: 660 datapoints published, 660 with a quote
+verbatim in the document they cite and the value present in that quote. The
+regional total is quoted together with the lines it sums, so the arithmetic that
+identified it can be checked by a reader.
+
+On the four held-out issuers the table numbers are unchanged throughout - 26
+tables given a period by the ragged reading and 22 naming the filing's own
+quarter, 27 and 23 by geometry. The gain is on the corpus whose layouts these
+rules describe, and the guard against having fitted them to it is that the
+held-out number never moved against them.
+
+The remaining failure is not dating. Of 1,078 gold rows the pipeline still
+cannot read, 1,017 are documents where no table it keeps contains a row naming
+the product at all.
