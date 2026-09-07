@@ -334,7 +334,7 @@ their PRODUCT SALES SUMMARY tables are text. The quarters were re-read from
 their own releases and the legends are gone.
 
 This matters beyond tidiness. A legend is a human decoding a column layout, so
-a row carrying one is not independently readable, and `eval_extraction.py`
+a row carrying one is not independently readable, and `eval_column_alignment.py`
 excludes it from the denominator — accuracy read 899/899 precisely because the
 unscoreable rows were not counted. That is the same flattery this dataset was
 built to remove.
@@ -559,7 +559,7 @@ tight enough to call that a contradiction would fire on most healthy years here.
 
 Nine of the thirteen are marked **`observed`**: they happened, in the documents
 this dataset is built from, and several were found by this repo's own evals —
-the Opsumit 2021Q3 scope collision came out of `eval_extraction.py`, and the
+the Opsumit 2021Q3 scope collision came out of `eval_column_alignment.py`, and the
 Remodulin 2002 case is the state this dataset was actually in until the missing
 2002Q1 row was found. Four are **`constructed`**: real figures mutated to reach
 a branch healthy data never reaches. The label is in the file so nobody mistakes
@@ -677,7 +677,7 @@ rewriting the quotes, because the quote is what the document says.
 `source_quote` was doing two jobs that pull in opposite directions. As
 **evidence** it should carry enough context for a person to confirm the figure
 without reopening the filing. As a **test fixture** - which is what
-`eval_extraction.py` was using it as - it should be what the pipeline actually
+`eval_column_alignment.py` was using it as - it should be what the pipeline actually
 meets in production, which is the whole document, not a passage chosen when the
 row was sourced.
 
@@ -689,10 +689,12 @@ software.
 
 So the two are now separate:
 
-| Script | What it measures | Current |
-|---|---|---|
-| `eval_extraction.py` | Column alignment: given the cited passage, is the right column recovered? | 1,342/1,351 (99.33%) |
-| `eval_extraction_documents.py` | End to end: given the whole cited filing, does the pipeline produce the figure? | 235/1,415 (16.61%) |
+| Script | What it measures | Needs gold for | Current |
+|---|---|---|---|
+| `eval_provenance.py` | Is the pipeline's own quote verbatim in the document it cites, and is its value in that quote? | nothing | 486/486 |
+| `eval_extraction_documents.py --discover` | Given product, issuer and quarter, does it find the filing and produce the figure? | the expected value | 10/20 recent |
+| `eval_extraction_documents.py` | Given the cited filing, does it produce the figure? | the value and the URL | 235/1,415 |
+| `eval_column_alignment.py` | Diagnostic only: handed the passage, is the right column read? | the value and the passage | 1,342/1,351 |
 
 `source_quote` goes back to being a receipt. `scripts/sourcing/fetch_documents.py`
 caches every document gold cites - 269 of 277; the eight misses are Actelion
@@ -730,6 +732,35 @@ picked out.
 **A 1000x unit error survives the checks.** Three UTHR 2012Q3 rows are read as
 31,804,000 where gold has 31.804 - the thousands scale applied twice. It is the
 same class of defect the original audit found in gold itself.
+
+### Provenance is checkable without gold at all
+
+A gold row's `source_quote` is a receipt a human wrote. The pipeline's
+`source_quote` is the pipeline's claim about where it read a number. They are
+different objects, and feeding the first in as the pipeline's input tests
+neither sourcing nor citation - the pipeline never has to find or cite
+anything. `eval_column_alignment.py` does exactly that, which is why it is
+labelled a diagnostic and its figure must never be reported as an extraction
+score.
+
+Most of what is worth knowing needs no answer key:
+
+* does the pipeline's quote appear verbatim in the document it cites?
+* does its value appear in its own quote?
+* does it find a filing that reports this product and quarter at all?
+
+All three are decidable from the filings. Gold is only needed for the last
+question - whether the number is right - because nothing but a human reading
+the document can establish that. `eval_provenance.py` asks the first two and
+reports 486/486, across both the table reader and the model pass.
+
+`--discover` asks the third. It hands the pipeline a product, an issuer and a
+quarter and lets it resolve the CIK, walk EDGAR and choose its own filings.
+That immediately found a limitation no hand-fed eval could: `SECConnector`
+reads only `filings.recent` from the submissions API and never the older
+shards, so it cannot see anything beyond roughly the last thousand filings -
+which is most of this dataset. Scored on quarters inside that window it reads
+half of them end to end.
 
 ## Remaining gaps and why
 

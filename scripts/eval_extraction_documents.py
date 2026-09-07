@@ -18,10 +18,20 @@ The score is then a property of the pipeline rather than of the prose.
 
 Rows whose document is not cached are reported separately and never counted as
 passes: an unreachable filing is a gap in the evidence, not a success.
+
+``--discover`` goes one step further and stops handing the pipeline a URL. Gold
+then supplies only the product, the issuer and the quarter - the pipeline
+resolves the issuer's CIK, walks EDGAR for earnings exhibits around that
+quarter, and reads whatever it finds. Finding the right filing is part of the
+job, so a number that leaves it out is not an end-to-end number:
+
+    DOCUMENT_CACHE=/tmp/gold-documents python scripts/eval_extraction_documents.py
+    python scripts/eval_extraction_documents.py --discover --limit 40
 """
 
 from __future__ import annotations
 
+import argparse
 import collections
 import hashlib
 import json
@@ -34,12 +44,25 @@ sys.path.insert(0, str(REPO / "backend"))
 
 from bs4 import BeautifulSoup  # noqa: E402
 
+from app.connectors.sources import SECConnector  # noqa: E402
 from app.extraction.candidates import extract_revenue_candidates  # noqa: E402
-from app.parsing.documents import html_tables, pdf_tables  # noqa: E402
+from app.parsing.documents import DocumentParser, html_tables, pdf_tables  # noqa: E402
+from app.storage.filestore import FileStore  # noqa: E402
 
 GOLD = REPO / "seed" / "gold"
 CACHE = pathlib.Path(os.environ.get("DOCUMENT_CACHE", "/tmp/gold-documents"))
 TOLERANCE = 0.51  # the issuers' own independent per-period rounding
+
+# Gold names the issuer as it appears on the filing; EDGAR needs the registrant.
+REGISTRANT = {
+    "United Therapeutics": "United Therapeutics Corp",
+    "Gilead": "Gilead Sciences Inc",
+    "Johnson & Johnson": "Johnson & Johnson",
+    "Actelion/J&J": "Johnson & Johnson",
+    "Merck": "Merck & Co Inc",
+    "Liquidia": "Liquidia Corp",
+}
+QUARTER_END = {1: (3, 31), 2: (6, 30), 3: (9, 30), 4: (12, 31)}
 # EVAL_UNCAPPED=1 lifts the pipeline's ceiling on tables kept per document.
 # It is a diagnostic, not the headline: it prices that ceiling rather than
 # pretending the pipeline does not have one.
@@ -111,8 +134,90 @@ def tables_of(path: pathlib.Path, *, capped: bool = True) -> list[list[list[str]
     return rows_out
 
 
+class LocalCacheStore(FileStore):
+    """Whatever the connector downloads is kept beside the run, not in S3."""
+
+    def __init__(self, root: pathlib.Path) -> None:
+        self.root = root
+        root.mkdir(parents=True, exist_ok=True)
+
+    async def put(self, key: str, data: bytes, content_type: str | None = None) -> str:
+        path = self.root / key.replace("/", "_")
+        path.write_bytes(data)
+        return str(path)
+
+    async def get(self, key: str) -> bytes:
+        path = pathlib.Path(key)
+        if not path.exists():
+            path = self.root / key.replace("/", "_")
+        return path.read_bytes()
+
+    async def exists(self, key: str) -> bool:
+        return (self.root / key.replace("/", "_")).exists() or pathlib.Path(key).exists()
+
+    def public_uri(self, key: str) -> str:
+        return f"file://{key}"
+
+
+async def discover_and_read(row: dict, store: "LocalCacheStore") -> list[dict]:
+    """Let the pipeline find its own filings for this product and quarter.
+
+    Gold contributes the product, the issuer and the quarter. Everything after
+    that - which filings exist, which are earnings exhibits, what they say - is
+    the pipeline's own work, which is the part a handed-over URL skips.
+    """
+    import datetime as _dt
+
+    company = REGISTRANT.get(row["manufacturer"], row["manufacturer"])
+    year, quarter = int(row["period"][:4]), int(row["period"][-1])
+    month, day = QUARTER_END[quarter]
+    end = _dt.date(year, month, day)
+    connector = SECConnector(store)
+    sources = await connector.retrieve(
+        run_id="discover", job_id="discover", cik=None, ticker=None,
+        company_name=company, include_primary=False, include_earnings=True,
+        earnings_since=end + _dt.timedelta(days=5),
+        earnings_until=end + _dt.timedelta(days=120),
+    )
+    parser = DocumentParser(store)
+    candidates: list[dict] = []
+    readable = 0
+    for source in sources:
+        if source.retrieval_status.value not in {"success", "partial"}:
+            continue
+        doc = await parser.parse(source)
+        if doc.parsing_status.value != "success" or not doc.tables:
+            continue
+        readable += 1
+        found, _findings, _skipped = extract_revenue_candidates(
+            doc.tables, product=row["drug_name"], generic=row.get("generic_name"),
+            context=doc.full_text[:4000],
+        )
+        candidates.extend(found)
+    return candidates, readable
+
+
 def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--limit", type=int, default=0)
+    ap.add_argument("--since", default="",
+                    help="only rows from this period onward, e.g. 2024Q1. The "
+                         "SEC connector reads only the recent-submissions "
+                         "window, so older quarters are unreachable to it.")
+    ap.add_argument(
+        "--discover", action="store_true",
+        help="the pipeline finds its own filings; gold supplies only the "
+             "product, the issuer and the quarter",
+    )
+    args = ap.parse_args()
+
     rows = load_rows()
+    if args.since:
+        rows = [row for row in rows if row["period"] >= args.since]
+    if args.limit:
+        rows = rows[: args.limit]
+    if args.discover:
+        return run_discovery(rows, args)
     # One parse per document, not one per row: a Gilead exhibit backs a dozen
     # products and re-reading it for each would say nothing extra.
     by_document: dict[str, list[dict]] = collections.defaultdict(list)
@@ -210,6 +315,56 @@ def main() -> int:
         print("\nno value found for that product and quarter, by product:")
         for name, count in worst.most_common(12):
             print(f"   {name:<20}{count}")
+    return 0
+
+
+def run_discovery(rows: list[dict], args) -> int:
+    """Score the pipeline when it has to locate the filing itself."""
+    import asyncio
+
+    store = LocalCacheStore(pathlib.Path(os.environ.get("DISCOVER_CACHE", "/tmp/discovered")))
+    outcomes: dict[str, list[dict]] = collections.defaultdict(list)
+
+    async def go() -> None:
+        for row in rows:
+            try:
+                candidates, readable = await discover_and_read(row, store)
+            except Exception as exc:
+                outcomes["error"].append({**row, "why": f"{type(exc).__name__}: {exc}"})
+                continue
+            if not readable:
+                # The pipeline never got a document to read, which is a
+                # different failure from reading one and missing the figure.
+                outcomes["no_filing_retrieved"].append(row)
+                continue
+            state, value = "not_found", None
+            same = [c for c in candidates if str(c.get("period")) == row["period"]]
+            target = row["value_normalized_usd_millions"]
+            if same:
+                values = [float(c["value_normalized_usd_millions"]) for c in same
+                          if c.get("value_normalized_usd_millions") is not None]
+                if any(abs(v - target) <= TOLERANCE for v in values):
+                    state, value = "read", target
+                elif values:
+                    state = "wrong_value"
+                    value = min(values, key=lambda v: abs(v - target))
+            outcomes[state].append({**row, "read": value})
+
+    asyncio.run(go())
+    scored = len(rows)
+    read = len(outcomes["read"])
+    print("pipeline finds its own filings - gold supplies product, issuer and quarter only")
+    print(f"  rows tested        {scored}")
+    print(f"  read correctly     {read}/{scored}  {read / max(scored, 1):.2%}")
+    if outcomes["no_filing_retrieved"]:
+        print(f"  no filing retrieved  {len(outcomes['no_filing_retrieved'])}"
+              "   <- the connector found nothing to read")
+    for name in ("wrong_value", "not_found", "error"):
+        if outcomes[name]:
+            print(f"  {name:<18} {len(outcomes[name])}")
+    if outcomes["error"]:
+        reasons = collections.Counter(r["why"].split(":")[0] for r in outcomes["error"])
+        print("  error kinds:", dict(reasons))
     return 0
 
 

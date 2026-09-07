@@ -1,16 +1,23 @@
-"""Score column alignment against the passage each gold row cites.
+"""A diagnostic: given the right passage, is the right column read?
 
-This is NOT the end-to-end extraction metric. It hands the extractor the
-passage a gold row quotes as its evidence and asks whether the right column can
-be recovered from it - which is worth measuring on its own, but the passage was
-chosen and written when the row was sourced, so the score partly measures the
-prose. Widening these quotes to carry the document's own column header moved
-this number by 1.5 points in an afternoon with no change to the pipeline.
+NOT an extraction metric, and never to be reported as one. It hands the
+extractor the passage a gold row cites as its evidence, which is a category
+error if read as a measure of the pipeline: a gold row's ``source_quote`` is a
+receipt a human wrote when sourcing the figure, while the pipeline's own
+``source_quote`` is the pipeline's claim about where it read a number. They are
+different objects, and feeding the first in as input means the pipeline never
+has to find or cite anything - so nothing here says a word about provenance.
 
-For what the pipeline does with a whole filing, see
-``eval_extraction_documents.py``, which reads the cited document instead and
-leaves ``source_quote`` to be what it is meant to be: a receipt a human can
-check the figure against.
+What it is good for is isolating one failure. When a value is wrong and the
+document eval cannot say whether the extractor found the wrong table or the
+wrong column within the right table, this answers the second half.
+
+The metrics that mean something:
+
+* ``eval_extraction_documents.py`` - the whole filing in, the value out, with
+  ``--discover`` to make the pipeline find the filing itself.
+* ``eval_provenance.py`` - are the pipeline's own citations real? No gold at
+  all; it checks the pipeline's quote against the document the pipeline cites.
 
 Every gold row carries the verbatim text it was read from, the unit that text
 was stated in, and the number a careful human recovered from it. That makes the
@@ -47,8 +54,8 @@ is reported separately rather than blended into one flattering percentage:
                     a processing result rather than something read off a page.
 
 Usage:
-    cd backend && uv run python ../scripts/eval_extraction.py
-    cd backend && uv run python ../scripts/eval_extraction.py --show-failures
+    cd backend && uv run python ../scripts/eval_column_alignment.py
+    cd backend && uv run python ../scripts/eval_column_alignment.py --show-failures
 """
 
 from __future__ import annotations
@@ -456,10 +463,12 @@ def main() -> int:
 
     if overall_total:
         print(
-            f"\nOVERALL {overall_ok}/{overall_total} "
-            f"{100 * overall_ok / overall_total:.2f}% column alignment on cited "
-            f"passages (not end-to-end extraction - see "
-            f"eval_extraction_documents.py)"
+            f"\nDIAGNOSTIC ONLY {overall_ok}/{overall_total} "
+            f"{100 * overall_ok / overall_total:.2f}% - columns read correctly "
+            f"when handed the passage.\nThis is not an extraction score and "
+            f"must not be reported as one: the passage came from gold, so the "
+            f"pipeline neither found nor cited anything.\nSee "
+            f"eval_extraction_documents.py and eval_provenance.py."
         )
 
     if all_failures and args.show_failures:
