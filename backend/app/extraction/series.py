@@ -76,6 +76,10 @@ class SeriesValue:
     # sum to a different nine months. The primary is stated; these are kept
     # visible rather than reconciled.
     alternates: tuple[float, ...] = field(default_factory=tuple)
+    # The printed region label each alternate was stated under, when the
+    # alternates are other statements of this figure (a reorganised region
+    # restated under a new name); aligned with ``alternates``.
+    alternate_labels: tuple[str | None, ...] = field(default_factory=tuple)
     # The geography as the document printed it, beside the canonical one.
     geography_label: str | None = None
     # A provisional value fills a cell nothing firmer states; it never seeds a
@@ -111,6 +115,7 @@ class SeriesValue:
             "covers": list(self.covers) if self.covers else None,
             "normalization": self.normalization,
             "alternates": list(self.alternates),
+            "alternate_labels": list(self.alternate_labels),
         }
 
 
@@ -313,7 +318,12 @@ def reconcile_period(norms: list[_Norm], product: str) -> SeriesValue | None:
         obs = norm.observation
         # What the other statements of this figure say (a restatement after a
         # reorganisation) stays visible beside the chosen one.
-        others = tuple(sorted({round(c[0].value, 6) for c in clusters if c is not cluster and c[0].value is not None}))
+        others_by_value: dict[float, str | None] = {}
+        for c in clusters:
+            if c is not cluster and c[0].value is not None:
+                others_by_value.setdefault(round(c[0].value, 6), c[0].observation.geography_label)
+        others = tuple(sorted(others_by_value))
+        other_labels = tuple(others_by_value[v] for v in others)
         return SeriesValue(
             product=product,
             period=obs.period,
@@ -333,6 +343,7 @@ def reconcile_period(norms: list[_Norm], product: str) -> SeriesValue | None:
             normalization=norm.status,
             geography_label=obs.geography_label,
             alternates=others,
+            alternate_labels=other_labels,
             provisional=all(n.observation.provisional or "generic_product_line" in n.observation.notes for n in cluster),
         )
 

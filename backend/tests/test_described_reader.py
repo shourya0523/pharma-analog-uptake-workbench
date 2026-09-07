@@ -511,3 +511,24 @@ def test_a_retrospective_table_inside_a_later_report_is_a_restatement_not_the_ow
     by_period = {o.period: o for o in report.observations}
     assert "current_period_column" in by_period["2025Q1"].notes
     assert "current_period_column" not in by_period["2024Q3"].notes
+
+
+def test_a_region_restated_under_a_new_name_matches_the_reference_row_that_carries_that_name():
+    from app.benchmark.schema import compare, from_gold, from_series
+    from app.extraction.series import assemble_series
+
+    def obs(value, label, url, notes=()):
+        return Observation(
+            product_label="Wegovy", period="2024Q3", period_type="quarterly", value_as_reported=value, unit_label="millions",
+            currency="DKK", unit_declared=True, geography="Europe", covers=None, source_quote=f"Wegovy {value}", method="grid",
+            layout_signature="", verified=(), specificity=0, source_url=url, notes=tuple(notes), geography_label=label,
+        )
+
+    series = assemble_series([obs(2185, "EMEA", "q3", notes=("current_period_column",)), obs(2211, "EUCAN", "q1-next")], product="Wegovy")
+    value = series.values[0]
+    assert value.value_millions == 2185 and value.alternates == (2211,) and value.alternate_labels == ("EUCAN",)
+    gold = from_gold({"drug_name": "Wegovy", "period": "2024Q3", "geography": "EUCAN", "value_reported": 2211, "unit": "millions",
+                      "currency": "DKK", "source_value_reported": 2211, "source_unit": "millions", "derivation": "direct_reported",
+                      "source_url": "a", "source_quote": "Wegovy 2,211"})
+    result = compare(gold, [from_series(value)])
+    assert result.outcome == "match" and "restatement" in result.detail

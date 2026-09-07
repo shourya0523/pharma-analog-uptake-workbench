@@ -203,6 +203,7 @@ def from_series(value: SeriesValue) -> ComparableRevenueRow:
         status=value.status,
         detail=value.detail,
         extras={"normalization": value.normalization, "inputs": list(value.inputs), "alternates": list(value.alternates),
+                "alternate_labels": list(value.alternate_labels),
                 "provisional": value.provisional, "geography_label": value.geography_label},
     )
 
@@ -220,6 +221,20 @@ def _same_printed_region(gold: ComparableRevenueRow, pipeline: ComparableRevenue
     """Both rows carry a printed region label and it is the same region."""
     a, b = _label_key(gold.extras.get("geography_label")), _label_key(pipeline.extras.get("geography_label"))
     return bool(a) and bool(b) and (a == b or a in b or b in a)
+
+
+def _alternate_under_the_same_label(gold: ComparableRevenueRow, pipeline: ComparableRevenueRow) -> float | None:
+    """A restatement the pipeline carries beside its chosen value, printed under the reference's region label."""
+    wanted = _label_key(gold.extras.get("geography_label"))
+    if not wanted:
+        return None
+    alternates = pipeline.extras.get("alternates") or []
+    labels = pipeline.extras.get("alternate_labels") or []
+    for value, label in zip(alternates, labels):
+        key = _label_key(label)
+        if key and (key == wanted or key in wanted or wanted in key):
+            return float(value)
+    return None
 
 
 def _labels_agree(gold: ComparableRevenueRow, pipeline: ComparableRevenueRow) -> bool:
@@ -288,6 +303,7 @@ def compare(gold: ComparableRevenueRow, candidates: list[ComparableRevenueRow]) 
     compatible = [
         c for c in same
         if (geographies_compatible(gold.geography, c.geography) and _labels_agree(gold, c)) or _same_printed_region(gold, c)
+        or _alternate_under_the_same_label(gold, c) is not None
     ]
     if not compatible:
         offered = ", ".join(sorted({c.geography for c in same}))
@@ -307,6 +323,9 @@ def compare(gold: ComparableRevenueRow, candidates: list[ComparableRevenueRow]) 
     # pipeline states the primary and carries the other result. Gold chose
     # one of them; the pipeline reports both, which is the honest answer.
     for candidate in resolved:
+        restated = _alternate_under_the_same_label(gold, candidate)
+        if restated is not None and candidate.currency == gold.currency and values_match(gold.value_millions, restated, reference=gold):
+            return Comparison(gold, candidate, "match", f"via restatement {restated:g} under the reference's label")
         for alternate in candidate.extras.get("alternates") or []:
             if candidate.currency == gold.currency and values_match(gold.value_millions, float(alternate)):
                 return Comparison(gold, candidate, "match", f"via alternate derivation {alternate:g} (issuer rounding)")
