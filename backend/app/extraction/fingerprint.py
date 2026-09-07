@@ -20,6 +20,25 @@ Two real defects motivated this module, both found by auditing the gold dataset:
 Both are prevented here by reading the table's own declarations instead of
 inferring them from context, and by refusing to guess when the declaration is
 absent - an unfingerprintable table yields no values rather than wrong ones.
+
+Where the period comes from, in order of preference:
+
+1. **The columns.** Given the table as a rectangle, a column's period is what
+   the headings covering it say - the length phrase, the month, the year - so a
+   heading split over three rows reads as one statement and a prior-year column
+   is distinguishable from a current one. This is what the table states.
+2. **The ragged rows.** Without a rectangle, the period phrases and the year row
+   are read as two ordered lists and one is divided into the other. That is an
+   inference, and it is wrong when a filing prints an uneven number of columns
+   per period, so it reports ``unmapped_columns`` rather than guessing.
+
+Geometry is preferred but not trusted blindly, because a filer can span its
+headings and not span its body, and the rectangle then describes a layout the
+numbers are not in. Two checks catch that and send the table back to (2): a
+period may not cover a column the body puts a row label in, and a row putting
+two of its figures under one period condemns the reading for the whole table -
+the rows that did not trip it were read against the same headings and are right
+only by luck.
 """
 
 from __future__ import annotations

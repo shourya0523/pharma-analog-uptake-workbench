@@ -1,11 +1,17 @@
-"""Canonical period labels for extracted revenue.
+"""Canonical period labels for extracted revenue, read from a document's prose.
 
 Models are reliable at reading which *year* column a figure sits in, but not at
 naming the reporting period: given a table headed "Three Months Ended June 30,"
 they will happily label a value with the press-release date instead. Earnings
-releases always state their own period in prose ("three months ended June 30,
-2024"), so the period length and quarter are derived from the document and only
-the year is taken from the candidate.
+releases state their own period in prose ("three months ended June 30, 2024"),
+so the period length and quarter are derived from the document and only the year
+is taken from the candidate.
+
+This resolves **one** period for a whole document, which is the right answer
+only for a value read out of prose. A figure in a table belongs to its own
+column, and every prior-year comparative in every filing is a value this would
+date wrongly - so for tables it is the fallback, behind the column geometry in
+``app/extraction/fingerprint.py``. See docs/research/sec-table-period-context.md.
 """
 
 from __future__ import annotations
