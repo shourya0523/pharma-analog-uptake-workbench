@@ -1,0 +1,84 @@
+# How this pipeline is measured
+
+Five evals. They do not measure the same thing, and the difference between two
+of them is where most of the mistakes in this project have been made.
+
+## The score
+
+**`scripts/eval_extraction_documents.py --discover`.** Gold supplies only the
+product, the issuer and the quarter. The pipeline resolves the CIK, walks EDGAR
+for earnings exhibits around that quarter, reads what it finds, and is asked for
+that product's revenue. Finding the right filing is part of the job, so this is
+the only number that describes the pipeline.
+
+```bash
+python scripts/eval_extraction_documents.py --discover --limit 40
+```
+
+## The diagnostics
+
+**`scripts/eval_extraction_documents.py`** (no flag) hands the pipeline the
+document gold cites. It measures reading with sourcing removed. It is fast,
+deterministic and offline, which is why it is easy to start treating as the
+score — and doing so has a specific cost, recorded here because it was paid:
+gold cites Johnson & Johnson's investor-relations PDFs, so this eval reported
+J&J at 0/424 and a PDF reader was built to fix it. The pipeline cannot source a
+PDF at all — `is_earnings_exhibit` accepts only `.htm`, `.html`, `.txt`, and no
+EDGAR filer in a sample of sixteen publishes a PDF earnings exhibit. Sourcing
+for itself over the same quarters the pipeline scored 0/24, because the
+connector took one exhibit per 8-K and J&J puts its schedules in the second.
+Deleting `[:1]` took it to 23/24, from HTML on EDGAR, where it had always been.
+A measurement that removes the step that is broken cannot report that it is
+broken. The script now prints that warning before it prints a score.
+
+**`scripts/eval_column_alignment.py`** replays each gold row's `source_quote`
+and asks whether the figure can be recovered from it. That measures column
+alignment and nothing else — it is scored on a passage a human chose, so
+widening the quotes moved it 1.5 points with no code change. Diagnostic only,
+and the script says so.
+
+## The gates against fitting to gold
+
+Gold is 39 products from six issuers. A rule tuned until those documents pass
+is fitted to them, and the way to notice is to keep a corpus that cannot be
+tuned against.
+
+**`scripts/eval_period_generalization.py`** scores period detection on earnings
+exhibits from Pfizer, AbbVie, Amgen and Eli Lilly — none of which appears
+anywhere in gold. A change that moves gold a lot and this barely is fitted. That
+is not hypothetical: a "FIRST QUARTER" heading reader lifted gold by 18 rows and
+was worth exactly zero here, even though three quarters of these documents use
+that phrasing. It was deleted on the strength of that number.
+
+**`scripts/eval_pdf_geometry.py`** renders those same held-out exhibits to PDF
+with a browser and requires the geometry to recover what the markup states. One
+document, read two ways, must say the same thing, so it needs no answer key.
+EDGAR carries no PDF earnings exhibits to hold out — checked across sixteen
+filers — so the corpus is made rather than found.
+
+Both read the corpus built by `scripts/sourcing/fetch_holdout.py`.
+
+## The gate on provenance
+
+**`scripts/eval_provenance.py`** takes each datapoint the pipeline published,
+opens the document it cites, and checks the quote is verbatim in it and the
+value present in the quote. It uses no gold answer at all — it audits the
+pipeline's own claim against the pipeline's own source. Coverage can be argued
+about; a citation that does not stand up cannot.
+
+## Reading a number honestly
+
+Three habits earned their place here:
+
+- **A number that moves when you work on it is the one you start believing.**
+  The reading score went up all session and the sourcing score was run once and
+  left alone.
+- **A low score is a claim about the measurement until proven otherwise.**
+  Three times a bad number was a harness bug — a fingerprint context that
+  production passes and the harness did not, an eval calling a function it had
+  stopped importing, a discovery label that said "found nothing" when it meant
+  "found nothing readable".
+- **Report the wrong answers, not just the misses.** Twice a change raised the
+  score *and* added wrong values in the same step — a rectangle that described
+  nothing, and a row cap that cut a product's table in half. Neither is visible
+  in "read correctly".

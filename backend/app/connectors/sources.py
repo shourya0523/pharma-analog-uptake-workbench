@@ -1,3 +1,27 @@
+"""Finding the filings that report a product's quarterly sales.
+
+This is the step every extraction score is conditional on, and the easiest one
+to leave out of a measurement. Handing the pipeline a URL and asking whether it
+can read the document tests the reader; only walking EDGAR from an issuer name
+and a quarter tests the pipeline.
+
+The walk is: resolve the issuer to a CIK, list its 8-K filings that carry item
+2.02 (results of operations) in the window around the quarter, and take the
+EX-99 exhibits attached to them. The primary 8-K document is a cover page and
+holds no figures.
+
+Two rules here were bought with wrong answers:
+
+* An issuer is resolved by ticker first, then by an exact match on its
+  normalised name, and an ambiguous name resolves to nothing. Matching on a
+  prefix once resolved "United" to a company that was not United Therapeutics,
+  and a filing from the wrong company is worse than no filing.
+* Every EX-99 exhibit of an earnings 8-K is read, not the first. Johnson &
+  Johnson puts its press release in EX-99.1 and its product sales schedules in
+  EX-99.2, so taking one exhibit per filing took the one with no table in it -
+  which read as "this issuer does not disclose product sales" for 424 rows.
+"""
+
 from __future__ import annotations
 
 # ruff: noqa: BLE001, RUF012, SIM113

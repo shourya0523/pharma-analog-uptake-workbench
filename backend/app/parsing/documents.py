@@ -1,3 +1,33 @@
+"""A filing, read as a table of figures - whether it is markup or a page.
+
+Two kinds of document arrive here and they state their structure very
+differently.
+
+An **HTML filing** states it outright. A cell declares how many columns it
+spans, so which period covers which figures is written down, and the work is to
+keep that rather than throw it away. ``html_table_grid`` expands the spans into
+a rectangle where a cell's text sits at the column it starts in and the columns
+it continues over hold ``None``.
+
+A **PDF filing** states nothing. It is glyphs at coordinates, and its columns
+exist only because the numbers line up on the page. ``pdf_page_grids`` recovers
+them the classical way - group the glyphs into rows, find the vertical
+whitespace no figure crosses - and then does the step the general-purpose
+readers do not: a heading whose text crosses those boundaries is a heading that
+spans them.
+
+Both produce the same rectangle, so nothing downstream needs to know which kind
+of document it came from, and every rule about a table's geometry applies to
+both. ``flatten_grid`` reads a rectangle back as the ragged rows a table was
+written with, and ``html_tables`` is defined in terms of it, so the two views
+of a document cannot drift apart - table *n* of one is table *n* of the other.
+
+Which tables are kept is decided by ``table_relevance``: a table is worth
+reading if it has a line-item row, a text label followed by a figure. A
+document's table order says nothing about where its figures are - a Gilead 8-K
+holds 39 tables and prints its product sales summary in the thirty-seventh.
+"""
+
 from __future__ import annotations
 
 # ruff: noqa: BLE001

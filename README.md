@@ -52,6 +52,19 @@ cdk deploy
 
 Use the `ApiUrl` stack output (ALB). After AWS verifies CloudFront, deploy with `-c enable_cloudfront=true` and use `CloudFrontUrl` (`/api` same-origin).
 
+## How extraction works, and how it is measured
+
+- [`docs/pipeline.md`](docs/pipeline.md) — the stages a run walks, how a filing
+  becomes a rectangle whether it is HTML or PDF, and the rules that make the
+  pipeline refuse rather than guess.
+- [`docs/evaluation.md`](docs/evaluation.md) — the five evals, what each one
+  measures, and which single number is the pipeline's score.
+
+The short version of the second: `eval_extraction_documents.py --discover` is
+the score, because it makes the pipeline find its own filings. The same script
+without the flag hands it the document and measures only reading; that is a
+diagnostic and it prints so before it prints a number.
+
 ## Pharmaceutical data semantics
 
 - FDA Established Pharmacologic Class (EPC) and mechanism of action (MoA) are separate. EPC is never used as a MoA fallback.
