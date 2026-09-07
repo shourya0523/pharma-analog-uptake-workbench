@@ -843,10 +843,14 @@ def assemble_series(
     # one geography it agrees with, when it agrees on at least two periods
     # and contradicts none: the issuer printed the same line twice, once
     # under a heading the reader could see and once without.
-    for note in _identify_unspecified(by_geo, product=product, commercial_start=commercial_start, values=values):
-        notes.append(note)
+    identified_notes, identified = _identify_unspecified(by_geo, product=product, commercial_start=commercial_start, values=values)
+    notes.extend(identified_notes)
 
     if provisional:
+        if identified:
+            # The issuer's geography-less line was identified with one
+            # geography; its sentences about the same line belong there too.
+            provisional = [replace(o, geography=identified) if o.geography is None else o for o in provisional]
         have = {(v.period, v.period_type, v.geography) for v in values}
         provisional_norms = normalize_observations(provisional + observations)
         buckets_p: dict[tuple[str, str, str | None], list[_Norm]] = defaultdict(list)
@@ -906,11 +910,11 @@ def _identify_unspecified(
     product: str,
     commercial_start: str | None,
     values: list[SeriesValue],
-) -> list[str]:
+) -> tuple[list[str], str | None]:
     """Relabel a geography-less series to the one geography it agrees with."""
     unspecified = by_geo.get(None)
     if not unspecified:
-        return []
+        return [], None
     candidates: dict[str, tuple[int, int]] = {}
     for geography, series in by_geo.items():
         if geography is None:
@@ -928,7 +932,7 @@ def _identify_unspecified(
             candidates[geography] = (agree, disagree)
     matches = [g for g, (agree, disagree) in candidates.items() if agree >= 2 and disagree == 0]
     if len(matches) != 1:
-        return []
+        return [], None
     geography = matches[0]
     moved = 0
     for key, value in list(unspecified.items()):
@@ -940,7 +944,7 @@ def _identify_unspecified(
         del unspecified[key]
         moved += 1
     if not moved:
-        return []
+        return [], None
     while True:
         added = 0
         for value in derive_residual_quarters(by_geo[geography], product=product, commercial_start=commercial_start):
@@ -950,7 +954,7 @@ def _identify_unspecified(
                 added += 1
         if not added:
             break
-    return [f"{moved} geography-less values identified as {geography} by agreement on {candidates[geography][0]} periods"]
+    return [f"{moved} geography-less values identified as {geography} by agreement on {candidates[geography][0]} periods"], geography
 
 
 def _value_step(a: SeriesValue, b: SeriesValue) -> float | None:

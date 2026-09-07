@@ -592,3 +592,28 @@ def test_a_firm_year_less_a_provisional_nine_months_outranks_a_sentence_about_th
                       "currency": "USD", "source_value_reported": 9.669, "source_unit": "millions",
                       "derivation": "annual_less_reported_first_nine_months", "source_url": "a", "source_quote": "x"})
     assert compare(gold, [from_series(quarter)]).outcome == "match"
+
+
+def test_sentences_about_an_identified_geography_less_line_join_its_geography():
+    """The grid line was identified as Worldwide by agreement; the sentences about the same line follow it."""
+    from app.extraction.series import assemble_series
+
+    def obs(period, period_type, value, unit, method, provisional, geography=None, url="a"):
+        return Observation(
+            product_label="Remodulin", period=period, period_type=period_type, value_as_reported=value, unit_label=unit,
+            currency="USD", unit_declared=True, geography=geography, covers=None, source_quote=f"Remodulin {value}", method=method,
+            layout_signature="", verified=(), specificity=0, provisional=provisional, source_url=url,
+        )
+
+    series = assemble_series([
+        obs("2003Q1", "quarterly", 8546, "thousands", "grid", False, geography="Worldwide", url="ww"),
+        obs("2003Q2", "quarterly", 11729, "thousands", "grid", False, geography="Worldwide", url="ww"),
+        obs("2003Q1", "quarterly", 8546, "thousands", "grid", False),
+        obs("2003Q2", "quarterly", 11729, "thousands", "grid", False),
+        obs("2002", "annual", 21174, "thousands", "grid", False),
+        obs("2002", "nine_month", 11.5, "millions", "prose", True),
+        obs("2002Q4", "quarterly", 8.5, "millions", "prose", True),
+    ], product="Remodulin")
+    by_key = {(v.period, v.period_type, v.geography): v for v in series.values}
+    quarter = by_key[("2002Q4", "quarterly", "Worldwide")]
+    assert quarter.route == "derived" and abs(quarter.value_millions - 9.674) < 1e-6
