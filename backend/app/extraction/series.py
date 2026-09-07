@@ -311,6 +311,9 @@ def reconcile_period(norms: list[_Norm], product: str) -> SeriesValue | None:
 
     def make(norm: _Norm, status: str, detail: str, code: str, cluster: list[_Norm]) -> SeriesValue:
         obs = norm.observation
+        # What the other statements of this figure say (a restatement after a
+        # reorganisation) stays visible beside the chosen one.
+        others = tuple(sorted({round(c[0].value, 6) for c in clusters if c is not cluster and c[0].value is not None}))
         return SeriesValue(
             product=product,
             period=obs.period,
@@ -329,6 +332,7 @@ def reconcile_period(norms: list[_Norm], product: str) -> SeriesValue | None:
             covers=obs.covers,
             normalization=norm.status,
             geography_label=obs.geography_label,
+            alternates=others,
             provisional=all(n.observation.provisional or "generic_product_line" in n.observation.notes for n in cluster),
         )
 

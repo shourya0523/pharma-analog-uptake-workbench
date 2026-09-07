@@ -457,3 +457,40 @@ def test_two_other_regions_in_one_document_do_not_contradict_each_other():
     report = read_described_document(_doc([grid]), fingerprint, product="Wegovy")
     assert not report.failures, [f.render() for f in report.failures]
     assert sorted(o.value_as_reported for o in report.observations) == [1334, 3500, 19528]
+
+
+def test_the_same_printed_region_compares_whatever_canonical_name_each_side_gave_it():
+    from app.benchmark.schema import compare, from_gold, from_series
+    from app.extraction.series import SeriesValue
+
+    gold = from_gold({"drug_name": "Wegovy", "period": "2025Q2", "geography": "EUCAN", "value_reported": 3500, "unit": "millions",
+                      "currency": "DKK", "source_value_reported": 3500, "source_unit": "millions", "derivation": "direct_reported",
+                      "source_url": "a", "source_quote": "Wegovy 3,500"})
+    assert gold.geography == "other"
+    value = SeriesValue(product="Wegovy", period="2025Q2", period_type="quarterly", geography="Europe", value_millions=3500.0,
+                        value_as_reported=3500.0, unit_label="millions", currency="DKK", route="read", derivation="direct_reported",
+                        status="resolved", detail="", source_urls=(), source_quote="", geography_label="EUCAN")
+    total = SeriesValue(product="Wegovy", period="2025Q2", period_type="quarterly", geography="Worldwide", value_millions=19528.0,
+                        value_as_reported=19528.0, unit_label="millions", currency="DKK", route="read", derivation="direct_reported",
+                        status="resolved", detail="", source_urls=(), source_quote="", geography_label="Total")
+    assert compare(gold, [from_series(total), from_series(value)]).outcome == "match"
+
+
+def test_a_restated_figure_stays_visible_as_an_alternate_of_the_own_period_statement():
+    from app.benchmark.schema import compare, from_gold, from_series
+    from app.extraction.series import assemble_series
+
+    def obs(value, url, notes=()):
+        return Observation(
+            product_label="Wegovy", period="2024Q3", period_type="quarterly", value_as_reported=value, unit_label="millions",
+            currency="DKK", unit_declared=True, geography="International", covers=None, source_quote=f"Wegovy {value}",
+            method="grid", layout_signature="", verified=(), specificity=0, source_url=url, notes=tuple(notes),
+        )
+
+    series = assemble_series([obs(4477, "q3", notes=("current_period_column",)), obs(4816, "q1-next"), obs(4816, "q2-next")], product="Wegovy")
+    value = series.values[0]
+    assert value.value_millions == 4477 and value.alternates == (4816,)
+    gold = from_gold({"drug_name": "Wegovy", "period": "2024Q3", "geography": "International", "value_reported": 4816, "unit": "millions",
+                      "currency": "DKK", "source_value_reported": 4816, "source_unit": "millions", "derivation": "direct_reported",
+                      "source_url": "a", "source_quote": "Wegovy 4,816"})
+    assert compare(gold, [from_series(value)]).outcome == "match"

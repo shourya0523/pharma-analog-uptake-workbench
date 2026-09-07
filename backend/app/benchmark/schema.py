@@ -216,6 +216,12 @@ def _label_key(label: Any) -> str:
     return re.sub(r"[^a-z0-9]+", "", re.sub(r"\band\b", "", str(label or "").lower()))
 
 
+def _same_printed_region(gold: ComparableRevenueRow, pipeline: ComparableRevenueRow) -> bool:
+    """Both rows carry a printed region label and it is the same region."""
+    a, b = _label_key(gold.extras.get("geography_label")), _label_key(pipeline.extras.get("geography_label"))
+    return bool(a) and bool(b) and (a == b or a in b or b in a)
+
+
 def _labels_agree(gold: ComparableRevenueRow, pipeline: ComparableRevenueRow) -> bool:
     """Two "other" geographies are the same only when the document printed the same label."""
     if gold.geography != "other" or pipeline.geography != "other":
@@ -277,12 +283,18 @@ def compare(gold: ComparableRevenueRow, candidates: list[ComparableRevenueRow]) 
     same = [c for c in candidates if c.key == gold.key and c.period_type == gold.period_type]
     if not same:
         return Comparison(gold, None, "missing", "no pipeline row for this period")
-    compatible = [c for c in same if geographies_compatible(gold.geography, c.geography) and _labels_agree(gold, c)]
+    # The same printed region is the same geography whatever canonical name
+    # each side filed it under (EUCAN as Europe on one side, as other on the other).
+    compatible = [
+        c for c in same
+        if (geographies_compatible(gold.geography, c.geography) and _labels_agree(gold, c)) or _same_printed_region(gold, c)
+    ]
     if not compatible:
         offered = ", ".join(sorted({c.geography for c in same}))
         return Comparison(gold, same[0], "geography_mismatch", f"gold {gold.geography}; pipeline {offered}")
     # Prefer the exact geography, then the resolved rows.
-    compatible.sort(key=lambda c: (c.geography != gold.geography, c.status != "resolved", bool(c.extras.get("provisional"))))
+    compatible.sort(key=lambda c: (not _same_printed_region(gold, c) and c.geography != gold.geography,
+                                   c.status != "resolved", bool(c.extras.get("provisional"))))
     resolved = [c for c in compatible if c.status == "resolved"]
     if not resolved:
         return Comparison(gold, compatible[0], "needs_review", compatible[0].detail)
