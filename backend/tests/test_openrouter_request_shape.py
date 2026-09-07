@@ -43,3 +43,22 @@ async def test_chat_json_omits_the_optional_fields_by_default(monkeypatch):
     client.settings.openrouter_api_key = "test"
     await client.chat_json(model="m", system="s", user="u")
     assert "reasoning" not in seen and "provider" not in seen
+
+
+@pytest.mark.asyncio
+async def test_chat_json_fills_the_usage_sink_from_the_router_accounting(monkeypatch):
+    seen: dict = {}
+
+    async def fake_post(self, url, headers=None, json=None):  # noqa: A002
+        seen.update(json)
+        body = {"choices": [{"message": {"content": "{\"regions\": []}"}}],
+                "usage": {"prompt_tokens": 1200, "completion_tokens": 300, "cost": 0.00017}}
+        return httpx.Response(200, json=body, request=httpx.Request("POST", url))
+
+    monkeypatch.setattr(httpx.AsyncClient, "post", fake_post)
+    client = OpenRouterClient()
+    client.settings.openrouter_api_key = "test"
+    usage: dict = {}
+    await client.chat_json(model="m", system="s", user="u", usage=usage)
+    assert seen["usage"] == {"include": True}
+    assert usage == {"prompt_tokens": 1200, "completion_tokens": 300, "cost": 0.00017}

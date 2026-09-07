@@ -60,7 +60,8 @@ class OpenRouterClient:
 
     async def chat_json(self, *, model: str, system: str, user: str, max_tokens: int = 6000,
                         temperature: float = 0.1, timeout: float = 120.0, retries: int = 0,
-                        reasoning_effort: str | None = None, require_parameters: bool = False) -> dict[str, Any]:
+                        reasoning_effort: str | None = None, require_parameters: bool = False,
+                        usage: dict[str, Any] | None = None) -> dict[str, Any]:
         """One JSON answer. Transient failures are retried with backoff; an
         answer that is not JSON is asked for once more.
 
@@ -70,7 +71,10 @@ class OpenRouterClient:
         medium, high), ignored by models without one; require_parameters
         makes the router pick only providers that honour every parameter
         sent, so a JSON answer is not left to a provider that ignores
-        response_format.
+        response_format. A usage dict, when given, is filled with the
+        router's accounting for the call (prompt and completion tokens and
+        the cost in USD, summed over re-asks) so a run can state what it
+        cost.
         """
         payload: dict[str, Any] = {
             "model": model,
@@ -86,6 +90,8 @@ class OpenRouterClient:
             payload["reasoning"] = {"effort": reasoning_effort}
         if require_parameters:
             payload["provider"] = {"require_parameters": True}
+        if usage is not None:
+            payload["usage"] = {"include": True}
         backoff = (2.0, 8.0, 30.0)
         attempt = 0
         asked_again = False
@@ -102,6 +108,9 @@ class OpenRouterClient:
                     self._raise_for_status(resp, model=model)
                     data = resp.json()
                 content = data["choices"][0]["message"]["content"]
+                if usage is not None:
+                    for name in ("prompt_tokens", "completion_tokens", "cost"):
+                        usage[name] = usage.get(name, 0) + (data.get("usage") or {}).get(name, 0)
                 parsed = _parse_json_content(content)
                 if "raw" in parsed and len(parsed) == 1 and not asked_again and retries:
                     asked_again = True

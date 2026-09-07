@@ -275,6 +275,10 @@ async def main() -> int:
         stats = dict(runner.fingerprint_stats)
         stats["tiers"] = dict(stats["tiers"])
         print(f"\nfingerprints: {stats}")
+        if fingerprinter.usage:
+            spent = {m: {k: round(v, 4) for k, v in u.items()} for m, u in fingerprinter.usage.items()}
+            print(f"usage (this run's calls, as the router accounted them): {spent}; "
+                  f"total ${sum(u['cost'] for u in fingerprinter.usage.values()):.2f}")
         reads = {k: (dict(v) if isinstance(v, dict) else v) for k, v in runner.read_stats.items()}
         print(f"reads: {reads}")
     print("\nmatched rows by route (gold -> pipeline)")

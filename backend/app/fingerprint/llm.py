@@ -766,6 +766,8 @@ class LLMFingerprinter:
         # The per-job budget guards production; an evaluation passes its own.
         self.max_calls = max_calls if max_calls is not None else self.settings.fingerprint_max_calls_per_job
         self.calls = 0
+        # Per model: calls, prompt_tokens, completion_tokens, cost (USD), as the router accounts them.
+        self.usage: dict[str, dict[str, float]] = {}
         self._semaphore = asyncio.Semaphore(concurrency or self.settings.fingerprint_concurrency)
 
     @property
@@ -803,6 +805,7 @@ class LLMFingerprinter:
         if self.calls >= self.max_calls:
             logger.warning("fingerprint_budget_exhausted calls=%s", self.calls)
             return None, False
+        usage: dict[str, Any] = {}
         async with self._semaphore:
             self.calls += 1
             try:
@@ -810,16 +813,25 @@ class LLMFingerprinter:
                     model=model, system=system, user=user, max_tokens=self.max_tokens,
                     temperature=0.0, timeout=300.0, retries=3,
                     reasoning_effort=self.settings.fingerprint_reasoning_effort or None, require_parameters=True,
+                    usage=usage,
                 )
             except Exception as exc:  # noqa: BLE001
                 logger.warning("fingerprint_failed model=%s meta=%s error=%s", model, meta, exc)
                 return None, False
+        self._account(model, usage)
+        meta = {**meta, "usage": usage}
         if "raw" in payload and "regions" not in payload:
             (self.cache_dir / f"{key}.failed.txt").write_text(str(payload.get("raw")))
             logger.warning("fingerprint_unparsed model=%s meta=%s", model, meta)
             return None, False
         self._write_cache(key, payload, meta)
         return payload, False
+
+    def _account(self, model: str, usage: dict[str, Any]) -> None:
+        totals = self.usage.setdefault(model, {"calls": 0, "prompt_tokens": 0, "completion_tokens": 0, "cost": 0.0})
+        totals["calls"] += 1
+        for name in ("prompt_tokens", "completion_tokens", "cost"):
+            totals[name] += usage.get(name, 0) or 0
 
     @staticmethod
     def _needs_promotion(described: Fingerprint, part: SketchPart, doc: ParsedDocument, aliases: list[str]) -> str | None:
