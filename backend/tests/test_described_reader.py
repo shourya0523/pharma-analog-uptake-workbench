@@ -617,3 +617,26 @@ def test_sentences_about_an_identified_geography_less_line_join_its_geography():
     by_key = {(v.period, v.period_type, v.geography): v for v in series.values}
     quarter = by_key[("2002Q4", "quarterly", "Worldwide")]
     assert quarter.route == "derived" and abs(quarter.value_millions - 9.674) < 1e-6
+
+
+def test_a_sentence_that_names_a_printed_line_reads_the_line_at_its_printed_precision():
+    text = ("Product sales, net, were $51.7 million for the three months ended September 30, 2025. "
+            "We began shipping YUTREPIA in June 2025.")
+    grid = [
+        ["Three Months Ended September 30, 2025 2024"],
+        ["Revenues:"],
+        ["Product sales, net", "51,669", "—"],
+        ["Service revenue, net", "2,673", "4,448"],
+    ]
+    q3_25, q3_24 = ColumnSpec("value", 3, 9, 2025), ColumnSpec("value", 3, 9, 2024)
+    fingerprint = Fingerprint(
+        grids=[GridRegion(grid_index=0, layout=_layout(q3_25, q3_24, unit="thousands"),
+                          sections=(SectionDescription(1, "Revenues:", "revenue"),), rows=())],
+        prose=[ProseRegion("Yutrepia", "2025Q3", "quarterly", 51.7, "millions", "USD", None,
+                           "Product sales, net, were $51.7 million for the three months ended September 30, 2025.", statement="actual")],
+    )
+    report = read_described_document(_doc([grid], text), fingerprint, product="Yutrepia", issuer_products=["Yutrepia"])
+    printed = [o for o in report.observations if "grid_line_named_by_sentence" in o.notes]
+    assert len(printed) == 1
+    assert printed[0].value_as_reported == 51669 and printed[0].unit_label == "thousands" and printed[0].provisional
+    assert printed[0].period == "2025Q3"

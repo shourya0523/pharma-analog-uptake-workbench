@@ -15,7 +15,7 @@ from __future__ import annotations
 import re
 from collections import Counter, defaultdict
 from collections.abc import Iterable
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import Any
 
 from app.domain.models import ParsedDocument
@@ -29,6 +29,7 @@ from app.fingerprint.llm import (
     describe_column,
     duplicate_value_columns,
     product_name,
+    squash,
 )
 from app.llm.grounding import quote_is_verbatim
 from app.catalog.families import family_parents
@@ -466,6 +467,65 @@ def _drop_contradicted(report: ReadReport) -> None:
     report.skipped = report.skipped + [f.key() for f in failures]
 
 
+def _printed_lines_named_by_sentences(
+    doc: ParsedDocument, fingerprint: Fingerprint, sentences: list[Observation], document_latest: tuple[int, int] | None,
+) -> list[Observation]:
+    """The grid line a sentence names, at the precision the grid prints.
+
+    "Product sales, net, were $51.7 million for the three months" names a
+    line the same document prints as "Product sales, net | 51,669". The
+    sentence carries the attribution (which product, provisionally); the
+    line carries the figure to the thousand. When the line's label is in
+    the sentence and the figure agrees at the sentence's precision, the
+    line is read under the sentence's attribution. Nothing here decides
+    what a label means: the sentence did.
+    """
+    tables = doc.tables or []
+    out: list[Observation] = []
+    for sentence in sentences:
+        quote = squash(sentence.source_quote)
+        for region in fingerprint.grids:
+            if region.grid_index >= len(tables):
+                continue
+            for row_index, cells in enumerate(tables[region.grid_index]):
+                label_cells = []
+                for cell in cells:
+                    if is_value_token(cell):
+                        break
+                    label_cells.append(cell)
+                label = squash(" ".join(label_cells))
+                if len(label) < 6 or label not in quote or len(label_cells) >= len(cells):
+                    continue
+                tokens = list(cells[len(label_cells):])
+                alignments, reason = align_row(tokens, region.layout)
+                if reason or len({tuple(sorted(a.values.items())) for a in alignments}) != 1:
+                    continue
+                for column, value in alignments[0].values.items():
+                    spec = region.layout.columns[column]
+                    if spec.kind != "value" or spec.period != sentence.period or spec.period_type != sentence.period_type:
+                        continue
+                    if spec.geography and sentence.geography and spec.geography != sentence.geography:
+                        continue
+                    printed = Observation(
+                        product_label=sentence.product_label, period=spec.period, period_type=spec.period_type,
+                        value_as_reported=value, unit_label=region.layout.unit_label, currency=region.layout.currency,
+                        unit_declared=region.layout.unit_declared, geography=sentence.geography or spec.geography or region.grid_geography,
+                        covers=sentence.covers, source_quote=" ".join(c for c in cells if c and c.strip()), method="grid",
+                        layout_signature=region.layout.signature, verified=alignments[0].verified, specificity=sentence.specificity,
+                        line_item=sentence.line_item, source_url=sentence.source_url, source_id=sentence.source_id,
+                        table_index=region.grid_index, row_index=row_index,
+                        notes=tuple(sentence.notes) + ("grid_line_named_by_sentence",),
+                        geography_label=sentence.geography_label, described_product=sentence.described_product,
+                        line_kind=sentence.line_kind, provisional=True,
+                    )
+                    if _same_amount(sentence, printed) and (document_latest is None or (spec.year, spec.end_month) != document_latest
+                                                             or "current_period_column" not in printed.notes):
+                        if document_latest is not None and (spec.year, spec.end_month) == document_latest:
+                            printed = replace(printed, notes=printed.notes + ("current_period_column",))
+                        out.append(printed)
+    return out
+
+
 def read_described_document(
     doc: ParsedDocument,
     fingerprint: Fingerprint | None,
@@ -490,6 +550,7 @@ def read_described_document(
         failures.extend(failed)
     prose, dropped, skipped = read_described_prose(doc, fingerprint, product=product, aliases=aliases, source_url=source_url)
     observations.extend(prose)
+    observations.extend(_printed_lines_named_by_sentences(doc, fingerprint, prose, latest))
     report = ReadReport(
         observations=observations,
         skipped=[f.key() for f in failures] + skipped,
