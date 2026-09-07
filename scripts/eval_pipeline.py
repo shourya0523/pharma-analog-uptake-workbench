@@ -155,6 +155,7 @@ async def main() -> int:
     parser.add_argument("--mode", choices=("model", "degraded"), default=None,
                         help="model: the fingerprint description is the only interpreter (scored mode); degraded: header grammar and regex prose, never scored")
     parser.add_argument("--model", help="OpenRouter model for the fingerprinter")
+    parser.add_argument("--cache-dir", help="fingerprint cache directory (an empty one measures run-to-run variance)")
     args = parser.parse_args()
 
     quarterly = load_jsonl("quarterly_revenue.jsonl")
@@ -170,7 +171,8 @@ async def main() -> int:
             catalog[row["manufacturer"]].append(row["drug_name"])
     generics_all = {row["drug_name"]: row.get("generic_name") for row in quarterly + annual}
     mode = args.mode or "model"
-    fingerprinter = LLMFingerprinter(model=args.model, max_calls=10**6) if mode == "model" else None
+    cache_kwargs = {"cache_dir": Path(args.cache_dir)} if args.cache_dir else {}
+    fingerprinter = LLMFingerprinter(model=args.model, max_calls=10**6, **cache_kwargs) if mode == "model" else None
     runner = Runner(corpus, fingerprinter=fingerprinter, catalog=dict(catalog), generics=generics_all, mode=mode)
     if fingerprinter is not None:
         print(f"mode: {mode}; fingerprinter: {fingerprinter.model} (enabled={fingerprinter.enabled})")
