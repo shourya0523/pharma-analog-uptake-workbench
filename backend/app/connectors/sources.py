@@ -214,7 +214,7 @@ class SECConnector:
 
     async def _filings_covering(
         self,
-        client: "httpx.AsyncClient",
+        client: httpx.AsyncClient,
         payload: dict[str, Any],
         cik: str,
         since: date | None,
@@ -257,7 +257,8 @@ class SECConnector:
                 extra = await client.get(f"https://data.sec.gov/submissions/{name}")
                 extra.raise_for_status()
                 block = extra.json()
-            except Exception:
+            except Exception as exc:
+                logger.info("sec_submissions_shard_failed name=%s error=%s", name, exc)
                 continue
             fetched += 1
             for key, value in block.items():
@@ -377,6 +378,83 @@ class SECConnector:
         )
         return sources
 
+    async def _retrieve_xbrl_instances(
+        self,
+        client: httpx.AsyncClient,
+        *,
+        run_id: str,
+        job_id: str,
+        cik: str,
+        recent: dict[str, Any],
+        max_filings: int,
+        since: date | None,
+        until: date | None,
+    ) -> list[RetrievedSource]:
+        """The tagged instance from each 10-Q or 10-K covering this window.
+
+        A quarterly report states its product revenue in XBRL - the period, the
+        unit and the product as declared facts rather than as a table to read.
+        The 8-K exhibits fetched beside these carry no tagging at all, so this
+        is the only route to a figure the filer has stated rather than printed.
+
+        It reaches back only as far as the filer's own tagging does: detail
+        tagging of the revenue note arrived with inline XBRL, phased by filer
+        size from 2019 to 2021, and a filing from before that yields an instance
+        with no product facts in it. Nothing here needs to know the date - the
+        reader simply finds nothing, which is the correct answer.
+        """
+        cik_int = str(int(cik))
+        forms = recent.get("form", [])
+        accessions = recent.get("accessionNumber", [])
+        filing_dates = recent.get("filingDate", [])
+        sources: list[RetrievedSource] = []
+        for index, form in enumerate(forms):
+            if len(sources) >= max_filings:
+                break
+            if form not in {"10-Q", "10-K"}:
+                continue
+            filed_on = parse_filing_date(filing_dates[index] if index < len(filing_dates) else None)
+            if (since and (filed_on is None or filed_on < since)) or (
+                until and (filed_on is None or filed_on > until)
+            ):
+                continue
+            accession = accessions[index]
+            acc_nodash = accession.replace("-", "")
+            documents = await self._list_filing_documents(client, cik_int, acc_nodash)
+            # The extracted instance a filer ships beside an inline-XBRL
+            # document: same facts, without the presentation wrapped round them.
+            instances = [name for name in documents if name.endswith("_htm.xml")]
+            if not instances:
+                logger.info("sec_no_xbrl_instance accession=%s form=%s", accession, form)
+                continue
+            sid = new_id()
+            url = f"{self.ARCHIVES}/{cik_int}/{acc_nodash}/{instances[0]}"
+            try:
+                _raw, from_cache, job_key = await self._fetch_document(
+                    client, url=url, accession=accession, doc=instances[0],
+                    run_id=run_id, job_id=job_id, source_id=sid,
+                )
+            except Exception as exc:
+                logger.info("sec_xbrl_fetch_failed accession=%s error=%s", accession, exc)
+                continue
+            sources.append(
+                RetrievedSource(
+                    source_id=sid,
+                    source_type=(SourceType.ANNUAL_REPORT if form == "10-K"
+                                 else SourceType.QUARTERLY_REPORT),
+                    url=url,
+                    title=f"{form} XBRL instance {filing_dates[index] if index < len(filing_dates) else ''}".strip(),
+                    source_date=filed_on,
+                    filing_type=form,
+                    accession_number=accession,
+                    storage_key=job_key,
+                    retrieval_status=RetrievalStatus.SUCCESS,
+                    metadata={"cik": cik, "from_cache": from_cache, "xbrl_instance": True},
+                )
+            )
+        logger.info("sec_xbrl_instances cik=%s retrieved=%s", cik, len(sources))
+        return sources
+
     async def retrieve(
         self,
         *,
@@ -388,6 +466,7 @@ class SECConnector:
         max_filings: int | None = None,
         include_primary: bool = True,
         include_earnings: bool | None = None,
+        include_xbrl: bool = False,
         earnings_since: date | None = None,
         earnings_until: date | None = None,
     ) -> list[RetrievedSource]:
@@ -508,6 +587,20 @@ class SECConnector:
                         )
                     )
                 picked += 1
+
+            if include_xbrl:
+                sources.extend(
+                    await self._retrieve_xbrl_instances(
+                        client,
+                        run_id=run_id,
+                        job_id=job_id,
+                        cik=resolved,
+                        recent=recent,
+                        max_filings=settings.sec_max_earnings_exhibits,
+                        since=earnings_since,
+                        until=earnings_until,
+                    )
+                )
 
             if include_earnings:
                 sources.extend(

@@ -20,6 +20,7 @@ diffed against the last one to see which rows a change moved.
 # ruff: noqa: BLE001 - a walk that fails is an issuer scored as unreachable
 import asyncio
 import collections
+import csv
 import json
 import os
 import pathlib
@@ -31,6 +32,8 @@ sys.path.insert(0, str(REPO / "scripts")); sys.path.insert(0, str(REPO / "backen
 import eval_extraction_documents as E
 from app.connectors.sources import SECConnector
 from app.extraction.candidates import extract_revenue_candidates
+from app.extraction.members import load_register
+from app.extraction.tagged import candidates_from_instance
 from app.parsing.documents import DocumentParser
 
 OUT = pathlib.Path(sys.argv[1] if len(sys.argv) > 1 else "/tmp/coverage.json")
@@ -41,6 +44,12 @@ for row in rows:
 print(f"{len(rows)} rows, {len(groups)} (issuer, quarter) pairs", flush=True)
 
 store = E.LocalCacheStore(pathlib.Path(os.environ.get("DISCOVER_CACHE", "/tmp/discovered")))
+TAGGED = os.environ.get("USE_XBRL", "1") != "0"
+REGISTER = load_register() if TAGGED else {}
+with (REPO / "seed" / "product_attributes.csv").open(newline="") as _handle:
+    PRODUCTS = sorted({r["drug_name"].strip() for r in csv.DictReader(_handle) if r.get("drug_name")})
+print(f"xbrl: {'on' if TAGGED else 'off'}  register: {len(REGISTER)} members  "
+      f"products: {len(PRODUCTS)}")
 outcome = collections.Counter()
 per_issuer = collections.defaultdict(collections.Counter)
 detail = []
@@ -58,6 +67,7 @@ async def go():
                 run_id="coverage", job_id="coverage", cik=None, ticker=ticker,
                 company_name=None if ticker else maker,
                 include_primary=False, include_earnings=True,
+                include_xbrl=TAGGED,
                 earnings_since=end + _dt.timedelta(days=5),
                 earnings_until=end + _dt.timedelta(days=120))
         except Exception:
@@ -66,13 +76,39 @@ async def go():
             continue
         parser = DocumentParser(store)
         docs = []
+        instances: list[bytes] = []
         for source in sources:
             if source.retrieval_status.value not in {"success", "partial"}:
+                continue
+            if source.metadata.get("xbrl_instance"):
+                raw = await store.get(source.storage_key) if source.storage_key else None
+                if raw:
+                    instances.append(raw)
                 continue
             doc = await parser.parse(source)
             if doc.parsing_status.value == "success" and doc.tables:
                 docs.append(doc)
         for row in group:
+            if TAGGED and instances:
+                # The filer's own assertion, tried before anything is read off
+                # a page. Nothing here narrows what the table reader then sees.
+                tagged: list[dict] = []
+                for raw in instances:
+                    got, _notes = candidates_from_instance(
+                        raw, product=row["drug_name"], products=PRODUCTS,
+                        register=REGISTER)
+                    tagged.extend(got)
+                same = [c for c in tagged if str(c.get("period")) == row["period"]]
+                target = row["value_normalized_usd_millions"]
+                values = [float(c["value_normalized_usd_millions"]) for c in same]
+                if values:
+                    hit = any(abs(v - target) <= E.TOLERANCE for v in values)
+                    state = "read_tagged" if hit else "wrong_value_tagged"
+                    outcome[state] += 1
+                    per_issuer[maker][state] += 1
+                    detail.append({**row, "state": "read" if hit else "wrong_value",
+                                   "read": target if hit else values[0], "via": "xbrl"})
+                    continue
             if not docs:
                 outcome["no_readable_filing"] += 1
                 per_issuer[maker]["no_readable_filing"] += 1
@@ -97,7 +133,7 @@ async def go():
                 state, read = "not_found", None
             outcome[state] += 1
             per_issuer[maker][state] += 1
-            detail.append({**row, "state": state, "read": read})
+            detail.append({**row, "state": state, "read": read, "via": "table"})
         if index % 25 == 0:
             print(f"  {index}/{len(groups)} pairs  {time.time()-started:.0f}s "
                   f"read={outcome['read']}", flush=True)
