@@ -102,6 +102,14 @@ that identified it. `scripts/eval_provenance.py` audits this from outside.
 failing a check is held back rather than published, and the finding names the
 period and the reason.
 
+## What this design is not
+
+The filers tag product-level revenue in XBRL from 2019 onward, and the pipeline
+reads none of it — it fetches 8-K earnings exhibits, which are untagged, and not
+the 10-Q and 10-K, which are. Everything above about recovering a period from
+geometry is inference standing in for something the filer has already declared.
+See [`docs/plans/2026-09-07-002-structured-first-extraction.md`](plans/2026-09-07-002-structured-first-extraction.md).
+
 ## Reading further
 
 - [`docs/evaluation.md`](evaluation.md) — what each eval measures, and which

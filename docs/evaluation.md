@@ -49,11 +49,19 @@ understated the pipeline while pointing the work in the wrong direction. And
 Johnson & Johnson, which read 0/424 for this entire project, is now the best
 covered issuer in the set, from HTML that was always on EDGAR.
 
-What is left is mostly one shape: 2000s quarters read at 93% and everything
-after at ~75%, and the misses concentrate in products whose sales an issuer
-folds into a franchise line rather than reporting separately — Nebulized Tyvaso
-(68), Atripla (37), Truvada (36), AmBisome (34). That is a disclosure boundary,
-not a parsing one.
+What is left has two shapes. By era:
+
+| | read | |
+|---|---|---|
+| 2002–2009 | 7/99 | 7.1% |
+| 2010–2019 | 606/799 | 75.8% |
+| 2020–2026 | 385/517 | 74.5% |
+
+The 2000s are all but unreachable — EDGAR's older filings are `.txt` submissions
+and the 8-K earnings exhibit as a separate HTML document is a later convention.
+The rest concentrates in products an issuer folds into a franchise line rather
+than reporting separately: Nebulized Tyvaso (68), Atripla (37), Truvada (36),
+AmBisome (34).
 
 ## The diagnostics
 
