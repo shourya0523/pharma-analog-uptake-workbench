@@ -10,8 +10,12 @@ Gold contributes the product, the issuer, the quarter and the expected value.
 Everything else - which filings exist, which are earnings exhibits, which
 exhibit holds the schedule, what the table says - is the pipeline's own work.
 
-    SEC_CONTACT='project you@example.com' DISCOVER_CACHE=/tmp/discovered \
+    SEC_USER_AGENT='project you@example.com' DISCOVER_CACHE=/tmp/discovered \
         python scripts/eval_coverage.py /tmp/coverage.json
+
+The connector reads SEC_USER_AGENT, not SEC_CONTACT: the sourcing scripts under
+scripts/sourcing/ make their own requests and read the latter, and setting only
+that one here leaves EDGAR seeing the default User-Agent.
 
 The JSON is one record per gold row with the state it reached, so a run can be
 diffed against the last one to see which rows a change moved.
@@ -36,6 +40,7 @@ from app.extraction.derive import complete_series
 from app.extraction.members import load_register
 from app.extraction.tagged import candidates_from_instance
 from app.parsing.documents import DocumentParser
+from app.pipeline.orchestrator import SOURCE_PRIORITY
 
 OUT = pathlib.Path(sys.argv[1] if len(sys.argv) > 1 else "/tmp/coverage.json")
 rows = E.load_rows()
@@ -75,16 +80,20 @@ SIBLINGS = {
 }
 print(f"xbrl: {'on' if TAGGED else 'off'}  register: {len(REGISTER)} members  "
       f"products: {len(PRODUCTS)}")
-# What a document is for, lowest first. The tagged facts inside the 10-Q and
-# 10-K outrank everything and are read before any of this; these ranks order
-# what is left, which is prose and HTML tables. An 8-K earnings exhibit is a
-# product-sales schedule and nothing else, so its tables are about the question
-# being asked; a 10-K's tables are mostly about something else.
-_AUTHORITY = {"8-K": 0, "10-Q": 1, "10-K": 2}
+# What a document is for, lowest first - the pipeline's own ranking, imported
+# rather than restated. A private table here ranked by filing type and said the
+# opposite of what the pipeline does: it put the 8-K earnings exhibit first,
+# while SOURCE_PRIORITY puts SEC_FILING (the 10-K and 10-Q) above
+# EARNINGS_RELEASE. So the eval and the thing it measures disagreed about which
+# of two candidates wins, and only one of them was the product's behaviour.
+# Whichever ranking is better, there can only be one, and it belongs to the
+# pipeline.
+_PRIORITY = {source_type.value: rank for rank, source_type in enumerate(SOURCE_PRIORITY)}
 
 
 def _authority(source) -> int:
-    return _AUTHORITY.get((source.filing_type or "").upper(), 3)
+    source_type = getattr(source.source_type, "value", str(source.source_type))
+    return _PRIORITY.get(source_type, len(_PRIORITY))
 
 
 def _agrees(values: list[float], target: float) -> bool:
