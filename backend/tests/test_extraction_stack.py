@@ -1233,3 +1233,46 @@ def test_tracking_nothing_loses_nothing():
 
     sentence = "Tyvaso and Tyvaso DPI generated $42.2 million in the second quarter of 2022."
     assert read_prose(sentence, product="Tyvaso", catalog=[]) != []
+
+
+def test_a_change_in_revenue_is_not_revenue():
+    """"increased revenues by $3.6 million" says how much it moved.
+
+    The sentence names one product, one period and one amount, so it passes
+    every other guard. An amount introduced by "by" is a difference; the same
+    sentence saying "totaled", "were" or "grew to" states the figure itself.
+    """
+    from app.extraction.prose import read_prose
+
+    delta = (
+        "The impact of the price change was to increase revenues from Remodulin "
+        "by approximately $3.6 million for the three months ended June 30, 2004."
+    )
+    assert read_prose(delta, product="Remodulin", catalog=["Remodulin"]) == []
+
+    level = "Sales of Remodulin for the three months ended June 30, 2004 totaled $16.2 million."
+    assert [v.value_as_reported for v in read_prose(level, product="Remodulin", catalog=["Remodulin"])] == [16.2]
+
+
+def test_a_figure_dated_inside_its_period_is_not_that_period_s_total():
+    """A running total is not the quarter's total.
+
+    "As of November 9, 2002 ... for the fourth quarter of 2002" is forty days
+    into a quarter with ten weeks still to run, and the $8.5m it reports is
+    short of the $9.7m the quarter finished on.
+    """
+    from app.extraction.prose import read_prose
+
+    running = (
+        "As of November 9, 2002, sales of Remodulin for the fourth quarter of "
+        "2002 totaled approximately $8.5 million."
+    )
+    assert read_prose(running, product="Remodulin", catalog=["Remodulin"]) == []
+
+
+def test_a_period_that_has_ended_is_not_a_cutoff():
+    """"the three months ended June 30" names a period, it does not truncate one."""
+    from app.extraction.prose import read_prose
+
+    sentence = "Sales of Remodulin totaled approximately $8.7 million in the three months ended June 30, 2002."
+    assert [v.period for v in read_prose(sentence, product="Remodulin", catalog=["Remodulin"])] == ["2002Q2"]

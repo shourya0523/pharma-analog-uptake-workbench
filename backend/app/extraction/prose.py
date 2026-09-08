@@ -227,6 +227,26 @@ def _catalog() -> tuple[str, ...]:
     return tuple(load_products())
 
 
+# An amount introduced by "by" is a difference, not a level: "increased
+# revenues by $3.6 million" says how much revenue moved, not what it was.
+# "totaled $8.5 million", "were $120.8 million" and "grew to $325.8 million"
+# all state the figure itself.
+_DIFFERENCE_RE = re.compile(r"\bby\s+(?:approximately\s+|about\s+|roughly\s+)?$", re.IGNORECASE)
+
+# A figure stated to a date part-way through the period it names is that
+# period's running total, not its total: "As of November 9, 2002, sales for the
+# fourth quarter of 2002 totaled approximately $8.5 million" is forty days into
+# a quarter that has ten weeks left to run.
+_PART_PERIOD_RE = re.compile(
+    r"\b(?:as of|through|as at|to date)\b(?![^.]*\bend(?:ed|ing)\b)", re.IGNORECASE
+)
+
+
+def _states_a_level(sentence: str, position: int) -> bool:
+    """Whether the amount at ``position`` is revenue rather than a move in it."""
+    return not _DIFFERENCE_RE.search(sentence[:position])
+
+
 def _named_products(sentence: str, catalog: Iterable[str]) -> set[str]:
     """Which tracked products a sentence names.
 
@@ -298,8 +318,16 @@ def read_prose(
             # The sentence covers more than this product, or the name it does
             # carry is a longer one belonging to something else.
             continue
+        if _PART_PERIOD_RE.search(sentence):
+            # The figure is stated to a date inside the period it names, so it
+            # is what had been sold by then rather than what the period sold.
+            continue
         located_periods = _periods_with_positions(sentence)
-        located_amounts = _amounts_with_positions(sentence)
+        located_amounts = [
+            (position, amount)
+            for position, amount in _amounts_with_positions(sentence)
+            if _states_a_level(sentence, position)
+        ]
         periods = [period for _, period in located_periods]
         amounts = [amount for _, amount in located_amounts]
         if len(periods) == 1 and len(amounts) == 1:
