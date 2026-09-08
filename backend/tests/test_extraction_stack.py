@@ -1135,3 +1135,46 @@ def test_a_sentence_does_not_pre_empt_a_derivation():
         "the derivation gate must compare claim strength, not mere presence"
     )
     assert "if candidate[\"period\"] in reported_periods" not in source
+    assert "derivable" in source, (
+        "the derivation's inputs must be filtered too - see the test below for "
+        "why the gate alone is a no-op"
+    )
+
+
+def test_a_wrong_sentence_must_not_stop_a_quarter_being_derived():
+    """`complete_series` reads any candidate for a period as that period answered.
+
+    So a sentence misreading Q1 does not merely outrank the derivation - it
+    stops the derivation being *computed*, because Q1 is no longer missing.
+    That is upstream of any rule about which claim wins, which is why ranking
+    the producers moved exactly zero rows over the corpus: there was never a
+    derived candidate for the ranking to prefer.
+
+    The numbers here are the real case. Nebulized Tyvaso 2013Q1 is 94.645 in
+    gold and the prose reader emitted 1.0 for it.
+    """
+    from app.extraction.derive import complete_series
+
+    def candidate(period, value, method="table_fingerprint", period_type="quarterly"):
+        return {"period": period, "period_type": period_type, "value_reported": value,
+                "value_normalized_usd_millions": value, "currency": "USD",
+                "unit": "millions", "source_quote": f"{period} {value}",
+                "extraction_method": method}
+
+    year = candidate("2013", 400.0, period_type="annual")
+    rest = [candidate("2013Q2", 100.0), candidate("2013Q3", 100.0),
+            candidate("2013Q4", 105.355)]
+
+    derived = complete_series({"X": [year, *rest]}, product="X")
+    assert [(c["period"], c["value_normalized_usd_millions"]) for c in derived] == [
+        ("2013Q1", 94.645)
+    ]
+
+    # The same series with a sentence's wrong figure standing in for Q1.
+    blocked = complete_series(
+        {"X": [year, *rest, candidate("2013Q1", 1.0, "prose_sentence")]}, product="X"
+    )
+    assert blocked == [], (
+        "this is the defect: nothing is derived, so nothing can be ranked. "
+        "The caller must keep weak readings out of the derivation's inputs."
+    )

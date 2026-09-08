@@ -1248,10 +1248,20 @@ class PipelineOrchestrator:
         # the year it did state and the three quarters it did, which is the
         # issuer's arithmetic rather than an estimate - and it is applied only
         # where every other quarter of that total is present.
-        derived = complete_series(
-            {job.drug_name: [self._candidate_of(row) for row in rows]},
-            product=job.drug_name,
-        )
+        # Only figures at least as strong as a derivation count as reported
+        # when deciding which quarter is missing. `complete_series` treats any
+        # candidate for a period as that period being answered, so a sentence
+        # reading 1.0 made the quarter non-missing and the derivation was never
+        # computed at all - which is upstream of the ranking below, and is why
+        # ranking alone moved nothing. The weak reading is not discarded; it is
+        # simply not evidence about what still needs deriving.
+        derived_rank = claim_rank("derived_from_period_total")
+        derivable = [
+            self._candidate_of(row)
+            for row in rows
+            if claim_rank(row.extraction_method) <= derived_rank
+        ]
+        derived = complete_series({job.drug_name: derivable}, product=job.drug_name)
         # Only a stronger claim pre-empts a derivation. Skipping every period
         # anything had been found for meant a sentence reading 1.0 did not lose
         # to a family total that derives exactly to 94.645 - it stopped that
@@ -1262,7 +1272,6 @@ class PipelineOrchestrator:
             rank = claim_rank(row.extraction_method)
             if rank < strongest.get(row.period, len(CLAIM_STRENGTH) + 1):
                 strongest[row.period] = rank
-        derived_rank = claim_rank("derived_from_period_total")
         for candidate in derived:
             if strongest.get(str(candidate["period"]), len(CLAIM_STRENGTH) + 1) <= derived_rank:
                 continue

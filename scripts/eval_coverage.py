@@ -257,8 +257,13 @@ for record in detail:
         derived_cache[(maker, product)] = {
             str(candidate["period"]): candidate
             for candidate in complete_series(
-                {name: pool[(maker, name)] for name in
-                 {product, family, *SIBLINGS.get(product, ())} if name},
+                # Only claims at least as strong as a derivation count as
+                # already-reported. complete_series reads any candidate for a
+                # period as that period being answered, so a sentence stopped
+                # the quarter it misread from ever being derived.
+                {name: [c for c in pool[(maker, name)]
+                        if claim_rank(c.get("extraction_method")) <= _DERIVED_RANK]
+                 for name in {product, family, *SIBLINGS.get(product, ())} if name},
                 product=product, family=family,
                 siblings=SIBLINGS.get(product, ()),
                 sibling_first_year=min(
