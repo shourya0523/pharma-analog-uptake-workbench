@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import logging
 import re
+from collections.abc import Iterable
 from pathlib import Path
 from typing import Any
 
@@ -648,13 +649,16 @@ def apply_judge_hard_vetoes(
     judgment: dict[str, Any],
     generic: str | None = None,
     extra_aliases: list[str] | None = None,
+    peer_names: Iterable[str] | None = None,
 ) -> dict[str, Any]:
     """Force misclassified/needs_review for known bad patterns even if model is soft."""
     issues = list(judgment.get("issues") or [])
     q = quote or ""
     period_type = (candidate.get("period_type") or "").lower()
     mentions = quote_mentions_product(q, product, generic, extra_aliases=extra_aliases)
-    other = quote_mentions_other_brand(q, product, generic, extra_aliases=extra_aliases)
+    other = quote_mentions_other_brand(
+        q, product, generic, extra_aliases=extra_aliases, peer_names=peer_names
+    )
     veto = False
 
     if TOTAL_REVENUE_RE.search(q) and not mentions:

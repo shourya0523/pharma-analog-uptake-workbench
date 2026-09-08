@@ -14,7 +14,7 @@ from typing import Any
 
 from app.parsing.evidence import product_aliases
 from app.parsing.periods import MONTH_WORDS, MONTHS, quarter_of_month
-from app.quality.candidate_filters import KNOWN_PEER_BRANDS
+from app.quality.candidate_filters import names_a_competing_product
 from app.quality.comparative import ABS_TOLERANCE, parse_numbers
 
 _PERIOD_HEADER_RE = re.compile(
@@ -68,17 +68,18 @@ def _scope_for(label: str, product: str) -> str:
     return "Formulation-specific"
 
 
-def _matches_product(label: str, aliases: list[str], product: str) -> bool:
+def _row_labels(rows: list[list[str]]) -> list[str]:
+    """The first cell of every row: this table's own list of what it reports."""
+    return [clean_label(row[0]) for row in rows if row and clean_label(row[0])]
+
+
+def _matches_product(
+    label: str, aliases: list[str], product: str, siblings: list[str] | None = None
+) -> bool:
     normalized = label.lower()
     if not any(alias.lower() in normalized for alias in aliases):
         return False
-    own = {alias.lower() for alias in aliases}
-    for brand in KNOWN_PEER_BRANDS:
-        if brand in own:
-            continue
-        if re.search(rf"\b{re.escape(brand)}\b", normalized):
-            return False
-    return True
+    return names_a_competing_product(label, aliases, siblings) is None
 
 
 def _row_is_consistent(values: list[float]) -> bool:
@@ -109,11 +110,12 @@ def extract_revenue_rows(
         quarter = quarter_of_month(month)
         period_type = PERIOD_TYPE_BY_MONTHS.get(months, "unknown")
 
+        siblings = _row_labels(rows)
         for row in rows:
             if not row:
                 continue
             label = clean_label(row[0])
-            if not label or not _matches_product(label, aliases, product):
+            if not label or not _matches_product(label, aliases, product, siblings):
                 continue
             values = parse_numbers(" ".join(row[1:]))
             if len(values) < 2:
