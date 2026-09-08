@@ -120,7 +120,38 @@ def window_dates(first: int, last: int) -> tuple[dt.date, dt.date]:
             dt.date(last, 12, 31) + dt.timedelta(days=120))
 
 
-def scored_state(published: list[dict], held: list[dict], target: float) -> tuple[str, float | None, str | None]:
+# Three vocabularies share one `revenue_scope` field and they do not line up.
+# Gold's says what the issuer's line covers: "U.S." for United Therapeutics'
+# Letairis and Orenitram, which are sold essentially only there, "Worldwide"
+# for Gilead's Truvada. The deterministic readers' says granularity - "Product
+# family", "Formulation-specific" - and never names a geography at all. The
+# LLM extractor's names a geography: "U.S.", "Europe", "Other International".
+#
+# So a granularity label cannot be matched against a geographic one, and a
+# rule that tried - a region answers only the same region - scored Letairis
+# and Orenitram at zero, because their gold rows say "U.S." and the reader
+# that answered them says "Product family".
+#
+# One case does need separating, and only one. Gilead breaks Truvada out by
+# region beside a worldwide total: 744 in the U.S. and 768 worldwide for
+# 2019Q4. A datapoint that names a single region is not that total, and
+# scoring it against a worldwide gold row calls a correct regional figure a
+# misread. Nothing else here is asserted.
+_REGIONS = {"U.S.", "ex-U.S.", "Europe", "International", "Other International", "Regional"}
+
+
+def answers_scope(datapoint_scope: str | None, gold_scope: str | None) -> bool:
+    """Whether a datapoint is about the series a gold row asks for.
+
+    One rule: a line labelled with a single region is not the worldwide total.
+    A label that names no geography claims none, and answers whatever is asked.
+    """
+    got, want = (datapoint_scope or "").strip(), (gold_scope or "").strip()
+    return not (want == "Worldwide" and got in _REGIONS)
+
+
+def scored_state(published: list[dict], held: list[dict], target: float,
+                 off_series: list[dict] | None = None) -> tuple[str, float | None, str | None]:
     """What the pipeline did with one gold quarter.
 
     A published figure is judged first and alone: it is what a consumer with no
@@ -128,6 +159,7 @@ def scored_state(published: list[dict], held: list[dict], target: float) -> tupl
     answer - reconciliation is supposed to have demoted one of them, and when
     it has not, that is a failure of the stage rather than a coin to flip.
     """
+    off_series = off_series or []
     if published:
         values = [float(c["value"]) for c in published]
         if max(values) - min(values) > E.TOLERANCE:
@@ -139,6 +171,12 @@ def scored_state(published: list[dict], held: list[dict], target: float) -> tupl
         best = min(held, key=lambda c: abs(float(c["value"]) - target))
         hit = abs(float(best["value"]) - target) <= E.TOLERANCE
         return ("held_correct" if hit else "held_wrong"), float(best["value"]), best["status"]
+    if off_series:
+        # Something was published for this quarter, about a different series.
+        # Not an answer to the question gold asked, and not a wrong value
+        # either - the datapoint says which region it is about.
+        best = min(off_series, key=lambda c: abs(float(c["value"]) - target))
+        return "published_other_scope", float(best["value"]), best["status"]
     return "no_datapoint", None, None
 
 
@@ -196,14 +234,21 @@ async def run_one(orch, db, *, product: str, issuer: str, rows: list[dict],
     records = []
     for row in rows:
         got = by_period.get(row["period"], [])
-        published = [c for c in got if c["status"] in PUBLISHED]
-        held = [c for c in got if c["status"] not in PUBLISHED]
+        # Only datapoints about the series gold asked for are scored against
+        # it. The rest are kept and reported, not discarded: publishing a
+        # regional line where the product's own line was wanted is a real
+        # outcome, it is just not a misread.
+        mine = [c for c in got if answers_scope(c["scope"], row.get("revenue_scope"))]
+        off_series = [c for c in got if c not in mine and c["status"] in PUBLISHED]
+        published = [c for c in mine if c["status"] in PUBLISHED]
+        held = [c for c in mine if c["status"] not in PUBLISHED]
         target = float(row["value_normalized_usd_millions"])
-        state, read, status = scored_state(published, held, target)
+        state, read, status = scored_state(published, held, target, off_series)
         records.append({
             "drug_name": product, "manufacturer": issuer, "period": row["period"],
-            "gold": target, "read": read, "state": state, "status": status,
-            "candidates": got, "job_id": job.id,
+            "gold": target, "gold_scope": row.get("revenue_scope"),
+            "read": read, "state": state, "status": status,
+            "candidates": got, "off_series": len(off_series), "job_id": job.id,
         })
     return {
         "product": product, "issuer": issuer, "window": f"{first}-{last}",
@@ -254,6 +299,7 @@ def report(jobs: list[dict], *, scope: str) -> None:
         ("published_conflict", "published, conflicting", "reconciliation left two"),
         ("held_correct", "held for review, correct", "the judge's cost"),
         ("held_wrong", "held for review, wrong", "the judge's catch"),
+        ("published_other_scope", "published, another series", "a region, not this line"),
         ("no_datapoint", "no datapoint at all", ""),
     ):
         n = states.get(name, 0)
@@ -262,6 +308,14 @@ def report(jobs: list[dict], *, scope: str) -> None:
 
     published = states.get("published_correct", 0)
     print(f"\n  PUBLISHED ACCURACY   {published}/{total}  {published / total:.1%}")
+
+    # A regional line published where the gold row asks for the worldwide total
+    # is not scored against it, so say how often that happened rather than let
+    # the scope rule quietly absorb it.
+    off = sum(1 for r in records if r.get("off_series"))
+    if off:
+        print(f"  off-series published  {off} gold quarters also had a single-region "
+              "line published beside them")
 
     # The judge's catch rate on reader errors, which is the figure this eval
     # exists to make visible. "Wrong" here means a datapoint whose value
@@ -285,6 +339,8 @@ def report(jobs: list[dict], *, scope: str) -> None:
     split: dict[str, collections.Counter] = collections.defaultdict(collections.Counter)
     for r in records:
         for c in r["candidates"]:
+            if not answers_scope(c["scope"], r.get("gold_scope")):
+                continue
             agrees = abs(float(c["value"]) - r["gold"]) <= E.TOLERANCE
             split[c["status"]]["correct" if agrees else "wrong"] += 1
     if split:

@@ -105,3 +105,65 @@ def test_only_the_pipeline_ranks_sources():
         + "\n  ".join(offenders)
         + "\nImport it from app.pipeline.orchestrator instead of restating it."
     )
+
+
+def _eval_module():
+    """The end-to-end eval, imported the way it imports itself."""
+    import importlib.util
+    import sys
+
+    for path in (str(REPO / "scripts"), str(REPO / "backend")):
+        if path not in sys.path:
+            sys.path.insert(0, path)
+    spec = importlib.util.spec_from_file_location(
+        "eval_pipeline_end_to_end", SCRIPTS / "eval_pipeline_end_to_end.py"
+    )
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def test_a_region_is_not_the_worldwide_total_and_nothing_else_is_claimed():
+    """Three vocabularies share `revenue_scope`, and only one pair is comparable.
+
+    Gold says what the issuer's line covers - "U.S." for United Therapeutics'
+    Letairis, which is sold essentially only there, "Worldwide" for Gilead's
+    Truvada. The deterministic readers say granularity, "Product family" or
+    "Formulation-specific", and name no geography. The LLM extractor names a
+    geography.
+
+    A first version of this rule required a region to match the same region,
+    which is coherent and wrong: it scored Letairis and Orenitram at zero,
+    because their gold rows say "U.S." and the reader that answered them says
+    "Product family". Re-scoring the stored runs caught it before it was ever
+    reported. The rule that survived asserts one thing only.
+    """
+    answers_scope = _eval_module().answers_scope
+
+    # The case that needs separating: Gilead prints Truvada by region and in
+    # total, 744 U.S. against 768 worldwide for 2019Q4.
+    assert not answers_scope("U.S.", "Worldwide")
+    assert not answers_scope("Europe", "Worldwide")
+    assert not answers_scope("Other International", "Worldwide")
+
+    # A granularity label names no geography, so it answers whatever is asked.
+    assert answers_scope("Product family", "Worldwide")
+    assert answers_scope("Product family", "U.S.")
+    assert answers_scope("Formulation-specific", "U.S.")
+    assert answers_scope("Formulation-specific", "Product family")
+    assert answers_scope(None, "Worldwide")
+
+    # A gold row that is not worldwide asserts nothing about regions here.
+    assert answers_scope("U.S.", "U.S.")
+    assert answers_scope("U.S.", "Product family")
+
+
+def test_a_held_answer_outranks_a_published_one_from_another_series():
+    """Reporting order: what the pipeline did about *this* series comes first."""
+    module = _eval_module()
+    held = [{"value": 768.0, "status": "needs_review"}]
+    off = [{"value": 744.0, "status": "auto_pass"}]
+
+    assert module.scored_state([], held, 768.0, off)[0] == "held_correct"
+    assert module.scored_state([], [], 768.0, off)[0] == "published_other_scope"
+    assert module.scored_state([], [], 768.0, [])[0] == "no_datapoint"
