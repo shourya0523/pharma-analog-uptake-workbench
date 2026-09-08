@@ -136,24 +136,46 @@ Measured over the whole corpus — all 1,415 gold rows, deduplicated to the 275
 
 | | rows | share |
 |---|---|---|
-| read correctly | 1,070 | 75.6% |
-| not found | 329 | 23.3% |
-| no readable filing | 13 | 0.9% |
-| **wrong value** | **3** | **0.2%** |
+| read correctly | 1,307 | 92.4% |
+| not found | 80 | 5.7% |
+| **wrong value** | **16** | **1.1%** |
+| no readable filing | 12 | 0.8% |
 
-| issuer | | | from tagged facts | from tables |
-|---|---|---|---|---|
-| Johnson & Johnson | 364/424 | 85.8% | 56 | 308 |
-| Merck | 16/19 | 84.2% | 15 | 1 |
-| Liquidia | 4/5 | 80.0% | 4 | 0 |
-| Actelion/J&J | 46/58 | 79.3% | 15 | 31 |
-| United Therapeutics | 268/368 | 72.8% | 105 | 163 |
-| Gilead | 372/541 | 68.8% | 110 | 262 |
+| issuer | | | tagged | schedule | derived | prose | wrong | missed |
+|---|---|---|---|---|---|---|---|---|
+| Gilead | 535/541 | 98.9% | 110 | 420 | 0 | 5 | 3 | 3 |
+| Johnson & Johnson | 390/424 | 92.0% | 146 | 243 | 1 | 0 | 1 | 33 |
+| United Therapeutics | 316/368 | 85.9% | 105 | 167 | 44 | 0 | 10 | 42 |
+| Actelion/J&J | 46/58 | 79.3% | 24 | 22 | 0 | 0 | 2 | 10 |
+| Merck | 16/19 | 84.2% | 15 | 1 | 0 | 0 | 0 | 3 |
+| Liquidia | 4/5 | 80.0% | 4 | 0 | 0 | 0 | 0 | 1 |
+| **total** | **1,307/1,415** | **92.4%** | **404** | **853** | **45** | **5** | **16** | **92** |
+
+Do not quote 1,315 for this code. That figure belongs to the code before the
+prose reader was wired in, and the difference between them is the point of the
+last two columns.
+
+Split by producer, the error is not spread across the readers. It is one of
+them:
+
+| producer | correct | wrong |
+|---|---|---|
+| tagged XBRL facts | 404 | 0 |
+| schedules | 853 | 3 |
+| derivations | 45 | 0 |
+| **prose sentences** | **5** | **13** |
+
+That split is only visible because the per-row detail names the reader that
+answered rather than the branch it arrived on; while it said "table" for
+everything the tagged path did not answer, these thirteen were attributed to
+the table reader. Two rows show the mechanism without needing the code:
+Nebulized Tyvaso 2022Q2 reads 42.2 and Tyvaso DPI 2022Q2 reads 42.2, one
+sentence attributed to two sibling products, where gold is 198 and 3.
 
 Reading the filer's tagged facts before its tables took this from 998 to 1,070
-and added no wrong values. The headline understates what changed: 305 answers
-now come from a declared fact, of which only 72 are new, so 233 rows that
-already worked no longer rest on inferring a period from a heading's geometry.
+and added no wrong values, and the corpus has moved on since; 404 answers now
+come from a declared fact rather than from inferring a period out of a
+heading's geometry.
 
 Every gained row falls in 2019 or later, which is where detail tagging begins.
 Nothing in the code knows that date - a filing from before an issuer's own
