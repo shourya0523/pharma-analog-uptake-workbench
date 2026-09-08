@@ -339,6 +339,59 @@ with web search and `profile_judge_max_fields = 0` means uncapped. For any
 revenue question, `--no-metadata` removes that stage entirely; aliases come
 from `_identity`, which still runs, so revenue extraction is unaffected.
 
+## 5f. The pipeline is unsafe before about 2010, and the judge is not the guard
+
+`003` asked whether the LLM extractor already reaches Remodulin 2002-2009, the
+largest block of misses. It was run, for eleven cents, and the answer is worse
+than "no".
+
+| | |
+|---|---|
+| published, correct | **3/32** |
+| **published, WRONG** | **9/32, 28%** |
+| no datapoint at all | 20/32 |
+| **judge catch rate** | **1 of 10 wrong datapoints held back** |
+
+Compare the same eval on 2018-19: 32/32 and 24/24, no wrong values, 4 of 4
+caught. **The era is the variable, not the pipeline's quality.** Every
+reassuring number this document reports comes from years where a
+well-structured earnings exhibit exists.
+
+Three mechanisms, all verified from the per-row artifact.
+
+**The prose reader reads a total and calls it the product.** Eight of the ten
+wrong values are its, and every one is high by 4-8%:
+
+    2005Q1  gold 21.465  published 23.2   (+8.1%)
+    2006Q1  gold 31.304  published 33.2   (+6.1%)
+    2008Q3  gold 72.081  published 75.0   (+4.1%)
+
+Never low, always a little high, which is what reading total revenues instead
+of one product's net sales looks like. This is section 4's question answered
+from a second direction: on the corpus the reader trades 5 correct for 9 wrong,
+and in the era it was written for it publishes a systematic overstatement.
+
+**The search judge corroborated them.** Those rows carry
+`llm_search_validated` and `search_corroborated`. `judge_with_search` did not
+merely fail to catch the error, it affirmed it — a figure close to the right
+one is exactly what a search will find support for.
+
+**A 1000× unit error was published.** Remodulin 2009Q3, gold 87.4, published
+**87,400**, flagged `deterministic:product_quote_value_ok`. The reason it
+passed is structural: `try_deterministic_judgment` checks
+`candidate["value_reported"]` against the quote, and the figure a consumer gets
+is `value_normalized_usd_millions`. The quote says 87.4, `value_reported` is
+87.4, the check passes — and **nothing anywhere validates the normalized value
+against the quote**, so a scaling error between the two is invisible to every
+gate. A missing unit was already known to produce 1000× errors; this is the
+same failure surviving the judge that exists to catch it.
+
+**What to conclude about the judge.** Its 4-of-4 catch rate at 2018-19 was
+reported here as a strength. It is four datapoints, in an era where the
+deterministic table reader produces almost no errors to catch. Given ten real
+errors it caught one. The judge is not the thing keeping wrong values out of
+the 2018-19 numbers; the table reader not making mistakes is.
+
 ## 6. Tools worth knowing about
 
 - `--rescore FILE` re-runs the scoring over a stored run without running
@@ -378,7 +431,12 @@ site. Every error below is that rule, unlearned and relearned.
    against a connector that dropped three of its six filings; the ceiling on
    that number was retrieval, not reading, and it should now move.
 2. **Decide the prose reader**, on section 4's numbers.
-3. **Remodulin 2002-2009, 28 of the 90 remaining misses.** `003` says "the LLM
+3. **Decide what the pipeline does before about 2010.** Section 5f: it
+   publishes 28% of that era wrong and the judge catches a tenth of it.
+   Refusing the era outright would be consistent with this project's own rule
+   and is probably the honest short-term answer. The old text follows.
+
+   ~~**Remodulin 2002-2009, 28 of the 90 remaining misses.**~~ `003` says "the LLM
    extractor may already handle these" and that has never been tested, because
    the end-to-end eval is the only thing that runs the extractor over the
    corpus. It was launched and died on the key limit above, so the question is

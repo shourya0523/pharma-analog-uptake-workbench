@@ -66,6 +66,12 @@ over quarters: a quarter where one reader was wrong and another right scores as
 answered, and counting by quarter reported "no wrong values to catch" for
 exactly that run.
 
+**These numbers are era-bound, and the era is doing the work.** The same eval
+over Remodulin 2002-2009 publishes 3 of 32 correct, **9 of 32 wrong**, and the
+judge holds back 1 of 10 wrong datapoints rather than 4 of 4. Do not read the
+tables above as the pipeline's accuracy; read them as its accuracy where a
+well-structured earnings exhibit exists.
+
 **Fifty-six quarters over seven products is a sample, not the corpus**, and
 both sets are 2018-19, which is the easiest era: detail tagging has begun and
 the earnings exhibit is an established convention. No corpus-wide figure for
