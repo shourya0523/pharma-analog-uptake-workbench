@@ -1120,6 +1120,13 @@ class PipelineOrchestrator:
         rows.extend(tagged_rows)
         derivation_pool.extend(tagged_totals)
 
+        # A period a tagged fact already answered for this filing. The filer's
+        # own XBRL is the strongest claim there is; nothing needs a second
+        # reading of the same quarter in the same document.
+        tagged_periods: dict[str, set[str]] = {}
+        for row in tagged_rows:
+            tagged_periods.setdefault(str(row.source_id or ""), set()).add(str(row.period))
+
         for src in selected_sources:
             doc = parsed.get(src.source_id)
             if not doc or doc.parsing_status.value != "success":
@@ -1127,78 +1134,28 @@ class PipelineOrchestrator:
             if src.source_type == SourceType.OPENFDA:
                 continue
 
-            llm_text, evidence_meta = build_revenue_llm_text(
-                doc,
-                product=job.drug_name,
-                generic=job.generic_name,
-                extra_aliases=extra,
-            )
             period_context = detect_period_context(doc.full_text)
-            if evidence_meta.get("had_product_money_hits"):
-                any_product_money = True
 
-            # Skip the LLM when a filing has no product+$ evidence (avoid XBRL /
-            # company-total noise) or when it is beyond the extraction budget.
-            no_product_evidence = evidence_meta.get("strategy") in {
-                "no_product_mention",
-                "empty",
-            } or not evidence_meta.get("had_product_money_hits")
-            use_llm = src.source_id in llm_source_ids and not no_product_evidence
-            if not use_llm:
-                src_row = self.db.get(SourceDocumentORM, src.source_id)
-                if src_row:
-                    reason = "no_product_evidence" if no_product_evidence else "over_source_budget"
-                    note = (
-                        f"skip_revenue_llm reason={reason} "
-                        f"strategy={evidence_meta.get('strategy')} "
-                        f"product_money={evidence_meta.get('had_product_money_hits')}"
-                    )
-                    src_row.notes = f"{(src_row.notes or '').rstrip()} | {note}".strip(" |")
-
-            result: dict[str, Any] = {"candidates": [], "spans": []}
-            if use_llm:
-                result = await self.llm.extract_revenue(
-                    product=job.drug_name,
-                    company=job.manufacturer,
-                    source_meta={
-                        "url": src.url,
-                        "type": src.source_type.value,
-                        "title": src.title,
-                        "filing_type": src.filing_type,
-                        "accession": src.accession_number,
-                        "evidence": evidence_meta,
-                        "reporting_period": period_context.describe() if period_context else None,
-                        "period_columns": (
-                            [str(period_context.year), str(period_context.comparative_year)]
-                            if period_context
-                            else None
-                        ),
-                    },
-                    text=llm_text,
-                )
-            span_corpus = "\n\n".join(
-                (s.get("span_text") or "") for s in (result.get("spans") or [])
-            ) or llm_text
-            llm_dropped = result.get("dropped") or []
-            kept, dropped = filter_revenue_candidates(
-                result.get("candidates") or [],
-                product=job.drug_name,
-                generic=job.generic_name,
-                extra_aliases=extra,
-                source_text=span_corpus,
-            )
-            dropped = list(llm_dropped) + list(dropped)
-            dropped_total += len(dropped)
-
-            # Read the revenue table directly; the model omits rows unpredictably.
-            # These quotes come from the parsed table, not the model, so the
-            # verbatim gate that guards model output does not apply.
+            # The deterministic readers run first, and the model is what
+            # happens when they come back empty.
             #
-            # The table is fingerprinted first, so its numbers are scaled by the
-            # unit it declares and its year-to-date columns stay labelled as
-            # such. Assuming USD millions and a fixed quarter layout is what
-            # produced 1000x-wrong values and full-year totals filed as
-            # quarters in the dataset this pipeline is scored against.
+            # It used to be the other way around: the model ran on every
+            # in-budget filing and the table reader was bolted on beside it
+            # because "the model omits rows unpredictably". The backstop then
+            # outgrew the thing it was backing - it reads tagged facts, it
+            # fingerprints a table for the unit it declares, it runs on every
+            # source rather than the first few - and `CLAIM_STRENGTH` was
+            # updated to say so, ranking `llm` below every deterministic
+            # producer. What never moved was the call site.
+            #
+            # So the model was still being asked about quarters that were
+            # already answered, and its answer could not win: two rows for one
+            # period are sorted by `claim_rank` and the loser is flagged
+            # `conflict_with_higher_priority_source`. An eager model call could
+            # only agree - costing a request to confirm what was already known
+            # - or disagree and manufacture a `needs_review` row for a human to
+            # adjudicate, having already lost. Asking it only where nothing
+            # else could answer keeps every row it can actually contribute.
             fingerprinted, table_findings, table_skips = extract_revenue_candidates(
                 doc.tables,
                 product=job.drug_name,
@@ -1248,26 +1205,109 @@ class PipelineOrchestrator:
                 extra_aliases=extra,
             )
             dropped_total += len(table_dropped)
-            if table_rows:
-                seen_rows = {
-                    (str(c.get("period")), round(float(c["value_reported"]), 3))
-                    for c in kept
-                    if c.get("value_reported") is not None
-                }
-                added = [
-                    row
-                    for row in table_rows
-                    if (str(row["period"]), round(float(row["value_reported"]), 3)) not in seen_rows
-                ]
-                kept = list(kept) + added
+            kept = list(table_rows)
+
+            # Which quarters of this filing already have a deterministic
+            # answer. A period in here is not put to the model, and a model row
+            # for one is not merged: it is the losing side of a conflict that
+            # has already been decided.
+            answered = set(tagged_periods.get(str(src.source_id), set()))
+            answered.update(
+                str(row.get("period"))
+                for row in table_rows
+                if row.get("value_reported") is not None
+            )
+
+            llm_text, evidence_meta = build_revenue_llm_text(
+                doc,
+                product=job.drug_name,
+                generic=job.generic_name,
+                extra_aliases=extra,
+            )
+            if evidence_meta.get("had_product_money_hits"):
+                any_product_money = True
+
+            # Skip the LLM when a filing has no product+$ evidence (avoid XBRL /
+            # company-total noise), when it is beyond the extraction budget, or
+            # now when the deterministic readers have already answered it.
+            no_product_evidence = evidence_meta.get("strategy") in {
+                "no_product_mention",
+                "empty",
+            } or not evidence_meta.get("had_product_money_hits")
+            # A finding means a table was read but something about the reading
+            # is suspect, so the filing is worth a second opinion even though
+            # it produced rows.
+            deterministic_answered = bool(answered) and not table_findings
+            use_llm = (
+                src.source_id in llm_source_ids
+                and not no_product_evidence
+                and not deterministic_answered
+            )
+            if not use_llm:
+                src_row = self.db.get(SourceDocumentORM, src.source_id)
+                if src_row:
+                    if deterministic_answered:
+                        reason = "deterministic_answered"
+                    elif no_product_evidence:
+                        reason = "no_product_evidence"
+                    else:
+                        reason = "over_source_budget"
+                    note = (
+                        f"skip_revenue_llm reason={reason} "
+                        f"strategy={evidence_meta.get('strategy')} "
+                        f"product_money={evidence_meta.get('had_product_money_hits')}"
+                    )
+                    src_row.notes = f"{(src_row.notes or '').rstrip()} | {note}".strip(" |")
+
+            result: dict[str, Any] = {"candidates": [], "spans": []}
+            if use_llm:
+                result = await self.llm.extract_revenue(
+                    product=job.drug_name,
+                    company=job.manufacturer,
+                    source_meta={
+                        "url": src.url,
+                        "type": src.source_type.value,
+                        "title": src.title,
+                        "filing_type": src.filing_type,
+                        "accession": src.accession_number,
+                        "evidence": evidence_meta,
+                        "reporting_period": period_context.describe() if period_context else None,
+                        "period_columns": (
+                            [str(period_context.year), str(period_context.comparative_year)]
+                            if period_context
+                            else None
+                        ),
+                    },
+                    text=llm_text,
+                )
+            span_corpus = "\n\n".join(
+                (s.get("span_text") or "") for s in (result.get("spans") or [])
+            ) or llm_text
+            llm_dropped = result.get("dropped") or []
+            llm_kept, dropped = filter_revenue_candidates(
+                result.get("candidates") or [],
+                product=job.drug_name,
+                generic=job.generic_name,
+                extra_aliases=extra,
+                source_text=span_corpus,
+            )
+            dropped = list(llm_dropped) + list(dropped)
+            dropped_total += len(dropped)
+
+            # Only the quarters nothing else answered.
+            added = [row for row in llm_kept if str(row.get("period")) not in answered]
+            if added:
+                kept = kept + added
+            if llm_kept or table_rows:
                 logger.info(
-                    "table_rows_extracted job_id=%s source_id=%s parsed=%s added=%s",
+                    "revenue_rows_extracted job_id=%s source_id=%s "
+                    "deterministic=%s llm_offered=%s llm_added=%s",
                     job.id,
                     src.source_id,
                     len(table_rows),
+                    len(llm_kept),
                     len(added),
                 )
-
             comparatives = derive_comparative_candidates(kept, context=period_context)
             if comparatives:
                 kept = list(kept) + comparatives
