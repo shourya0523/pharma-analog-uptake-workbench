@@ -46,6 +46,7 @@ from __future__ import annotations
 import argparse
 import collections
 import hashlib
+import gzip
 import json
 import os
 import pathlib
@@ -164,25 +165,45 @@ def tables_of(
 
 
 class LocalCacheStore(FileStore):
-    """Whatever the connector downloads is kept beside the run, not in S3."""
+    """Whatever the connector downloads is kept beside the run, not in S3.
+
+    Held gzipped. A full-corpus run walks every issuer and quarter in gold and
+    keeps each filing it reads, and stored raw that came to 30GB - which is the
+    whole of this environment's writable allowance, so the run died of a full
+    disk partway through rather than of anything to do with extraction. Filings
+    are HTML and inline XBRL, which is the most compressible thing there is;
+    the same corpus costs a few gigabytes this way.
+
+    Plain files still read, so a cache written before this stays usable.
+    """
 
     def __init__(self, root: pathlib.Path) -> None:
         self.root = root
         root.mkdir(parents=True, exist_ok=True)
 
+    def _path(self, key: str) -> pathlib.Path:
+        return self.root / (key.replace("/", "_") + ".gz")
+
     async def put(self, key: str, data: bytes, content_type: str | None = None) -> str:
-        path = self.root / key.replace("/", "_")
-        path.write_bytes(data)
+        path = self._path(key)
+        path.write_bytes(gzip.compress(data, compresslevel=6))
         return str(path)
 
     async def get(self, key: str) -> bytes:
         path = pathlib.Path(key)
         if not path.exists():
+            path = self._path(key)
+        if not path.exists():  # a cache written before this class compressed
             path = self.root / key.replace("/", "_")
-        return path.read_bytes()
+        raw = path.read_bytes()
+        return gzip.decompress(raw) if path.suffix == ".gz" else raw
 
     async def exists(self, key: str) -> bool:
-        return (self.root / key.replace("/", "_")).exists() or pathlib.Path(key).exists()
+        return (
+            self._path(key).exists()
+            or (self.root / key.replace("/", "_")).exists()
+            or pathlib.Path(key).exists()
+        )
 
     def public_uri(self, key: str) -> str:
         return f"file://{key}"
