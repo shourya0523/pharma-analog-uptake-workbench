@@ -229,6 +229,40 @@ which is a gate that did not run, not a gate that passed. The corpus itself
 comes from `scripts/sourcing/fetch_holdout.py`, which
 `eval_period_generalization.py --refresh` will call for you.
 
+## 5d. The OpenRouter key hit its monthly limit
+
+Every LLM call now returns
+
+    403 Key limit exceeded (monthly limit)
+
+so `eval_pipeline_end_to_end.py` cannot run at all until the key is topped up
+or replaced: `run_job` calls the model in `_identity` before it does anything
+else, so a job dies at `identity_resolve` and reports zero for every quarter.
+
+**A run in that state prints `0/32` and looks exactly like a measurement.** It
+is not one. Check the per-job `step` column — `identity_resolve` or
+`judge_metadata` with an ERROR beside it means the run never happened. The one
+that exhausted the budget has been deleted rather than left on disk where it
+could be mistaken for data.
+
+Everything that does not call a model still works and is how the corpus
+numbers in this document were produced: `eval_coverage.py`,
+`eval_period_generalization.py`, `eval_pdf_geometry.py`,
+`eval_provenance.py`, `eval_tagged_provenance.py`.
+
+What spent it, so the next session can budget rather than guess: five
+end-to-end runs of 6-8 jobs each. A job is not one call — `_identity` expands
+aliases, `_judge_profile` judges *every* content field with search
+(`profile_judge_max_fields = 0` means no cap), and the evidence judge runs per
+datapoint where the deterministic fast path does not short-circuit. The
+revenue extraction itself is the cheap part.
+
+Two ways to spend less next time. `--no-metadata` skips the profile stages,
+which answer no revenue question and are most of the per-job cost. And record
+every field you might want *before* the first run: this session re-ran the same
+32-quarter sample largely to add one field to the output, which `--rescore`
+cannot recover after the fact.
+
 ## 6. Tools worth knowing about
 
 - `--rescore FILE` re-runs the scoring over a stored run without running
@@ -268,8 +302,18 @@ site. Every error below is that rule, unlearned and relearned.
    against a connector that dropped three of its six filings; the ceiling on
    that number was retrieval, not reading, and it should now move.
 2. **Decide the prose reader**, on section 4's numbers.
-3. **`003` section 8 item 4** — the remaining misses by cause — is still open
-   and unchanged: Remodulin 2002-2009, Invega Sustenna's franchise line,
+3. **Remodulin 2002-2009, 28 of the 90 remaining misses.** `003` says "the LLM
+   extractor may already handle these" and that has never been tested, because
+   the end-to-end eval is the only thing that runs the extractor over the
+   corpus. It was launched and died on the key limit above, so the question is
+   still open and is now one command:
+
+       python scripts/eval_pipeline_end_to_end.py \
+           --product "United Therapeutics:Remodulin" --years 2002-2009
+
+   If it reads them, the deterministic floor understates the pipeline in the
+   era everyone has written off, and 92.8% is not the ceiling it looks like.
+   The rest of item 4 is unchanged: Invega Sustenna's franchise line (21),
    Actelion's 2017 acquisition year, the Tyvaso split-quarter cases.
 4. **A corpus end-to-end run**, once someone decides the LLM budget is worth
    the number. Everything before that is a sample.
