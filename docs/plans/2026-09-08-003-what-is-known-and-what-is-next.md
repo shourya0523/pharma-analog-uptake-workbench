@@ -61,7 +61,8 @@ Recomputed from per-row artifacts, not from logs.
 
 | figure | value | what it measures |
 |---|---|---|
-| deterministic coverage | **1,315/1,415 (92.9%)**, 7 emitted-wrong | readers + sourcing, no LLM, no judge |
+| deterministic coverage, current code | **1,307/1,415 (92.4%)**, 16 emitted-wrong | readers + sourcing, no LLM, no judge |
+| deterministic coverage, without the prose reader | 1,315/1,415 (92.9%), 7 emitted-wrong | same, code before prose was wired |
 | starting point this session | 1,070/1,415 (75.6%) | same |
 | per issuer | Gilead 98.9%, J&J 92.0%, UTHR 87.8%, Merck 89.5%, Actelion 79.3%, Liquidia 80% | same |
 | reading diagnostic | 922/1,415 (65.2%) | handed the document gold cites |
@@ -193,9 +194,25 @@ places at once.
 2. **Delete `_AUTHORITY` from `scripts/eval_coverage.py`** and use
    `SOURCE_PRIORITY`. Two rankings that disagree is the copy-drift this repo
    warns about elsewhere.
-3. **Finish or discard `coverage_v7`** — the run testing ranked source
-   precedence with `include_primary=True`. If it does not beat 1,315, revert
-   to earnings-exhibit sourcing and say so in the docs.
+3. **A weak reading pre-empts an exact derivation. This is the next fix.**
+   `coverage_v7` (ranked precedence, `include_primary=True`) finished at
+   1,307/1,415 with 16 emitted-wrong: zero gained against the 1,315 run and
+   eight lost, seven of them Nebulized Tyvaso. The mechanism is not sourcing.
+   Derivations run only over rows left `not_found`, so any earlier reader that
+   produces *something* for a period blocks the derivation — and a prose
+   sentence or a 10-Q table producing 1.00 for a quarter whose family total
+   derives exactly to 94.64 turns a correct answer into a wrong one.
+
+   Ranking by document was the wrong axis. A derivation over published figures
+   is a stronger claim than a sentence, and the order should be by the
+   strength of the claim: tagged fact, then schedule, then exact derivation,
+   then prose. Primary-filing HTML is now off again in the eval — measured
+   twice, zero gain, forty minutes a run — but that is a speed decision, not
+   the fix.
+
+   Note the honest consequence: the deterministic floor for the **current**
+   code is **1,307**, not 1,315. The higher figure belongs to code without the
+   prose reader. Do not quote 1,315 for code that has it.
 4. **The remaining ~100 misses**, by cause: Remodulin 2002-2009 (29, prose in
    10-Qs — the LLM extractor may already handle these), Invega Sustenna (21,
    franchise line naming four brands), Actelion 2017 acquisition year (19,

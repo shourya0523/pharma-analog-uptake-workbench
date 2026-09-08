@@ -130,7 +130,11 @@ async def go():
             sources = await SECConnector(store).retrieve(
                 run_id="coverage", job_id="coverage", cik=None, ticker=ticker,
                 company_name=None if ticker else maker,
-                include_primary=True, include_earnings=True,
+                # Measured twice: adding the 10-K and 10-Q gained zero rows
+                # both pooled and ranked, and costs about forty minutes a run.
+                # Their tagged facts are fetched regardless, above, and those
+                # outrank everything; what is skipped here is their HTML.
+                include_primary=False, include_earnings=True,
                 include_xbrl=TAGGED,
                 earnings_since=end + _dt.timedelta(days=5),
                 earnings_until=end + _dt.timedelta(days=120))
