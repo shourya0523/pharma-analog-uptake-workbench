@@ -1342,14 +1342,34 @@ class PipelineOrchestrator:
                     if (row.citation_json or {}).get("source_type") == SourceType.LLM_SEARCH.value:
                         status = ValidationStatus.NEEDS_REVIEW.value
 
-            # Always try deterministic aggregate fill + LLM enrichment on blank fields.
+            # A "Product family" row with no formulation is one line covering the
+            # whole family, and "aggregate" is the word for that. Writing it
+            # restates the scope the row already carries rather than estimating
+            # anything, so it goes on the row directly.
+            #
+            # It used to go through apply_field_enrichment, whose contract is
+            # that any fill forces needs_review and caps confidence at 0.55.
+            # That contract is right for a model's suggestion about a blank
+            # field and wrong for a tautology, and the cost was the pipeline's
+            # entire output: two thirds of the datapoints landing on a gold
+            # quarter carried field_enrichment_applied, in 26 of 27 cases for
+            # this fill alone, and the flag disqualifies a row from auto_pass
+            # twice over - directly, and by holding confidence under the 0.7
+            # the quality gate needs. Measured over four products across two
+            # issuers and two years: 21 datapoints the judge had already called
+            # "supported", with nothing else against them, every one of them
+            # withheld, and 18 of the 32 gold quarters answered correctly and
+            # not published for this reason and no other.
+            fill = deterministic_formulation_fill(
+                {"revenue_scope": row.revenue_scope, "formulation": row.formulation}
+            )
+            if fill:
+                row.formulation = fill["suggested_formulation"]
+
+            # LLM enrichment on whatever is still blank. A suggestion about a
+            # field nobody read off the document is an estimate, and it keeps
+            # the review that estimates get.
             enrichment = merge_enrichment_dicts(
-                deterministic_formulation_fill(
-                    {
-                        "revenue_scope": row.revenue_scope,
-                        "formulation": row.formulation,
-                    }
-                ),
                 enrichment,
                 judgment.get("enrichment") if isinstance(judgment.get("enrichment"), dict) else None,
             )
