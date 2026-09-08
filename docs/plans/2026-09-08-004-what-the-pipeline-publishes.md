@@ -105,16 +105,51 @@ blurring it.
 today and matching `003`'s amended figure exactly. The end-to-end sample above.
 The producer split in section 4.
 
-**Justified but thinly measured.** Both fixes in section 2 were found by
+**Measured on held-out products.** Both fixes in section 2 were found by
 reading the failures of *one* 32-quarter sample and then measured on that same
-sample, which is how a fix gets fitted to its own evidence. Their defence is
-that both arguments are structural — a restatement cannot be evidence, a
-declined verdict is not a verdict — and a held-out run over Xarelto, Stelara
-and Uptravi was started for exactly this reason.
+sample, which is how a fix gets fitted to its own evidence. So they were re-run
+over Uptravi, Stelara and Xarelto in 2018–19 — two issuers, no row any fix was
+derived from:
+
+| | |
+|---|---|
+| published, correct | 15/24 |
+| published, wrong | 0 |
+| **held for review, correct** | **0** |
+| no datapoint at all | 9 |
+
+Of everything the pipeline found there, it published all of it and got all of
+it right. On the tuned sample the same pipeline had withheld 21 of 32 correct
+answers. The fixes generalise.
 
 **Not measured at all.** Any corpus-wide end-to-end figure. 32 quarters is a
 sample; the corpus is 1,415 rows and would cost real money to run. Do not quote
 100% as the pipeline's accuracy.
+
+## 5a. The exhibit budget was cutting quarters in half
+
+The 9 held-out quarters with no datapoint were not a reading failure. Every
+product missed exactly Q2 2018, Q2 2019 and Q3 2019, identically across two
+issuers, which is too regular to be about products.
+
+`sec_max_earnings_exhibits` is 6 and counted **exhibits**. Johnson & Johnson
+files two EX-99 documents per earnings 8-K — the press release and the
+product-sales schedule — so six exhibits bought three quarters and the rest of
+the window was dropped. Worse, the budget cut mid-filing: 2019Q3 got
+`a2019q3exhibit991.htm` and stopped, leaving `a2019q3exhibit992.htm` behind.
+That quarter was retrieved and could not be read.
+
+This is the failure the connector already carries a comment about. "Every EX-99
+exhibit, not the first one" was bought with a wrong answer once, and capping by
+document count reintroduced it for any filer whose window outlasts its budget.
+
+The budget now counts filings and a filing brings all of its exhibits. Same J&J
+window: 6 documents over 3 quarters became 11 over 6.
+
+**The lesson is the shape of the evidence, not the fix.** A failure that lands
+on the same periods across unrelated products is a property of retrieval. Per-
+product theorising would have chased J&J's franchise lines and Actelion's
+acquisition year, both of which are real and neither of which was this.
 
 ## 6. Tools worth knowing about
 
@@ -151,9 +186,9 @@ site. Every error below is that rule, unlearned and relearned.
 
 ## 8. Next, in order
 
-1. **Finish the held-out end-to-end run** (Xarelto, Stelara, Uptravi, 2018–19)
-   and compare it to sample 4. If it does not look like it, section 2's fixes
-   are fitted and this document's headline is wrong.
+1. **Re-run the held-out set with the retrieval fix in.** 15/24 was measured
+   against a connector that dropped three of its six filings; the ceiling on
+   that number was retrieval, not reading, and it should now move.
 2. **Decide the prose reader**, on section 4's numbers.
 3. **`003` section 8 item 4** — the remaining misses by cause — is still open
    and unchanged: Remodulin 2002-2009, Invega Sustenna's franchise line,
