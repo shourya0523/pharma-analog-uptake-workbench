@@ -318,16 +318,26 @@ def report(jobs: list[dict], *, scope: str) -> None:
               "line published beside them")
 
     # The judge's catch rate on reader errors, which is the figure this eval
-    # exists to make visible. "Wrong" here means a datapoint whose value
-    # disagrees with gold; "caught" means it did not reach a consumer.
-    wrong = states.get("published_wrong", 0) + states.get("held_wrong", 0) \
-        + states.get("published_conflict", 0)
-    caught = states.get("held_wrong", 0)
+    # exists to make visible. It is counted over datapoints, not over quarters:
+    # a quarter where one reader was wrong and another was right scores as
+    # answered, and counting by quarter therefore reported "no wrong values to
+    # catch" for a run in which three readers were wrong and all three were
+    # held. The question is what happened to each wrong figure, so each wrong
+    # figure is what gets counted.
+    wrong = caught = 0
+    for r in records:
+        for c in r["candidates"]:
+            if not answers_scope(c["scope"], r.get("gold_scope")):
+                continue
+            if abs(float(c["value"]) - r["gold"]) <= E.TOLERANCE:
+                continue
+            wrong += 1
+            caught += c["status"] not in PUBLISHED
     if wrong:
-        print(f"  judge catch rate     {caught}/{wrong} wrong values held back  "
+        print(f"  judge catch rate     {caught}/{wrong} wrong datapoints held back  "
               f"{caught / wrong:.1%}")
     else:
-        print("  judge catch rate     no wrong values to catch")
+        print("  judge catch rate     no wrong datapoints to catch")
     answered = published + states.get("held_correct", 0)
     if answered:
         print(f"  withheld correct     {states.get('held_correct', 0)}/{answered} of the "

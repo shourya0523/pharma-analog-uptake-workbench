@@ -90,3 +90,62 @@ async def test_a_formulation_the_document_stated_is_left_alone(tmp_path):
 
     assert row.formulation == "nebulized"
     assert row.validation_status == ValidationStatus.AUTO_PASS.value
+
+
+@pytest.mark.asyncio
+async def test_an_unsettled_conflict_falls_through_to_the_ranking(tmp_path):
+    """A conflict the model declines to settle must not demote everything.
+
+    `conflicts` entries carry `candidate_ids` and a `winner_id`. With no
+    winner named, every id in the entry was marked a loser, and the
+    source-priority fallback then skipped the group because it already
+    contained losers - so a schedule reading 54.0 and a sentence reading 13.4
+    were both withheld and the quarter went unanswered. Measured once in a
+    sample of 32: Orenitram 2019Q2.
+    """
+    db, orch, job, table_row = _job(tmp_path, revenue_scope="Product family", formulation=None)
+    prose_row = DatapointORM(
+        id=new_id(), job_id=job.id, source_id="s1", period="2019Q3",
+        value_reported=13.4, value_normalized_usd_millions=13.4,
+        currency="USD", unit="millions", period_type="quarterly",
+        revenue_scope="Product family", formulation=None,
+        source_url="https://example.invalid/ex99.htm",
+        source_quote="quantities sold decreased by $13.4 million",
+        extraction_method="prose", confidence_score=0.75,
+        validation_status=ValidationStatus.PENDING.value,
+        citation_json={"source_type": "earnings_release"}, issue_flags=[],
+    )
+    table_row.citation_json = {"source_type": "earnings_release"}
+    db.add(prose_row)
+    db.commit()
+
+    class _Undecided:
+        """A reconciler that reports the disagreement and picks no winner."""
+
+        async def reconcile(self, **_kwargs):
+            return {"conflicts": [{"candidate_ids": [table_row.id, prose_row.id]}]}
+
+    orch.llm = _Undecided()
+    await orch._reconcile_with_llm(job, [table_row, prose_row])
+
+    assert prose_row.validation_status == ValidationStatus.NEEDS_REVIEW.value
+    assert table_row.validation_status != ValidationStatus.NEEDS_REVIEW.value, (
+        "the schedule is the stronger claim and must survive the fallback"
+    )
+
+
+def test_a_schedule_outranks_a_sentence_from_the_same_exhibit():
+    """SOURCE_PRIORITY ranks documents; it cannot separate two readers of one.
+
+    An 8-K exhibit carries both a product-sales schedule and narrative around
+    it, so both candidates are `earnings_release` and the source ranking leaves
+    them tied. The tie was then broken by extraction order.
+    """
+    from app.pipeline.orchestrator import claim_rank
+
+    assert claim_rank("xbrl_fact") < claim_rank("table")
+    assert claim_rank("table") < claim_rank("derived_from_period_total")
+    assert claim_rank("derived_from_period_total") < claim_rank("prose")
+    assert claim_rank("table") < claim_rank("prose")
+    # An unknown producer ranks last rather than first.
+    assert claim_rank(None) > claim_rank("prose")

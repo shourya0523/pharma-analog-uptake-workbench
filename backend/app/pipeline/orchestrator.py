@@ -106,6 +106,29 @@ SOURCE_PRIORITY = [
 ]
 
 
+# How strong a claim each producer makes, strongest first. This is a different
+# axis from SOURCE_PRIORITY, which ranks the document a figure came from: a
+# product-sales schedule and a sentence of narrative can sit in the same 8-K
+# exhibit, so the source type does not separate them and the schedule is
+# plainly the better claim. Ordered by how much has to be inferred - a tagged
+# fact states its own period, unit and product; a schedule declares its unit
+# and its columns; a derivation is exact arithmetic over figures the issuer
+# published; a sentence and a model's reading are recovered from running text.
+CLAIM_STRENGTH = {
+    "xbrl_fact": 0,
+    "table": 1,
+    "derived_from_period_total": 2,
+    "derived_sole_formulation": 2,
+    "llm": 3,
+    "prose": 4,
+}
+
+
+def claim_rank(extraction_method: str | None) -> int:
+    """Where a producer sits in CLAIM_STRENGTH; unknown producers rank last."""
+    return CLAIM_STRENGTH.get(str(extraction_method or ""), len(CLAIM_STRENGTH))
+
+
 def persist_profile_field(
     db: Session,
     *,
@@ -1510,8 +1533,17 @@ class PipelineOrchestrator:
             for item in result.get("conflicts") or []:
                 ids = item.get("candidate_ids") or []
                 wid = item.get("winner_id")
-                if wid:
-                    winners.add(wid)
+                if not wid:
+                    # The model saw the disagreement and declined to settle it.
+                    # That is a question for the ranking below, not a verdict
+                    # against everything in the group: marking them all losers
+                    # withheld the right answer along with the wrong one, and
+                    # then the fallback skipped the group because it already
+                    # had losers in it. One measured instance - Orenitram
+                    # 2019Q2, a schedule reading 54.0 beside a sentence reading
+                    # 13.4, both demoted, nothing published.
+                    continue
+                winners.add(wid)
                 for cid in ids:
                     if cid != wid:
                         losers.add(cid)
@@ -1528,7 +1560,15 @@ class PipelineOrchestrator:
                 continue
             if any(r.id in losers for r in group):
                 continue
-            group.sort(key=lambda r: priority_index.get((r.citation_json or {}).get("source_type", ""), 99))
+            # The document first, then how strong a claim the producer makes,
+            # then confidence. Source type alone leaves a sentence and a
+            # schedule from one exhibit tied, and the tie was broken by
+            # whichever happened to be extracted first.
+            group.sort(key=lambda r: (
+                priority_index.get((r.citation_json or {}).get("source_type", ""), 99),
+                claim_rank(r.extraction_method),
+                -float(r.confidence_score or 0),
+            ))
             winners.add(group[0].id)
             for loser in group[1:]:
                 losers.add(loser.id)
