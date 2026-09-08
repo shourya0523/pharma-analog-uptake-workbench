@@ -1178,3 +1178,58 @@ def test_a_wrong_sentence_must_not_stop_a_quarter_being_derived():
         "this is the defect: nothing is derived, so nothing can be ranked. "
         "The caller must keep weak readings out of the derivation's inputs."
     )
+
+
+def test_a_sentence_naming_two_products_answers_for_neither():
+    """One period, one amount, one product - the third was missing.
+
+    A sentence was accepted whenever an alias appeared anywhere in it, so a
+    sentence covering a brand and its new formulation answered a question about
+    either of them with the same figure. In the quarter Tyvaso DPI went on
+    sale, its $3.0m and nebulized Tyvaso's $198.0m were both read as the one
+    number the sentence happened to carry.
+    """
+    from app.extraction.prose import read_prose
+
+    catalog = ["Tyvaso", "Tyvaso DPI", "Nebulized Tyvaso", "Remodulin"]
+    both = (
+        "Tyvaso and Tyvaso DPI together generated revenues of $42.2 million "
+        "in the second quarter of 2022."
+    )
+    for product in ("Tyvaso", "Tyvaso DPI", "Nebulized Tyvaso"):
+        assert read_prose(both, product=product, catalog=catalog) == [], product
+
+
+def test_the_longest_product_name_in_a_sentence_wins():
+    """"Tyvaso DPI" names one product, and is not evidence of two.
+
+    The same rule the member register resolves by: a shorter product name sits
+    inside a longer one far more often than it is a second product.
+    """
+    from app.extraction.prose import read_prose
+
+    catalog = ["Tyvaso", "Tyvaso DPI", "Nebulized Tyvaso"]
+    sentence = "Tyvaso DPI revenues were $3.0 million in the second quarter of 2022."
+
+    for_dpi = read_prose(sentence, product="Tyvaso DPI", catalog=catalog)
+    assert [(v.period, v.value_as_reported) for v in for_dpi] == [("2022Q2", 3.0)]
+    # The sentence is about the inhaler, so it says nothing about the nebulized
+    # product or about the brand line as a whole.
+    assert read_prose(sentence, product="Tyvaso", catalog=catalog) == []
+    assert read_prose(sentence, product="Nebulized Tyvaso", catalog=catalog) == []
+
+
+def test_a_sentence_about_one_product_still_reads():
+    from app.extraction.prose import read_prose
+
+    sentence = "Remodulin revenues were $120.8 million in the third quarter of 2012."
+    values = read_prose(sentence, product="Remodulin", catalog=["Remodulin", "Tyvaso"])
+    assert [(v.period, v.value_as_reported) for v in values] == [("2012Q3", 120.8)]
+
+
+def test_tracking_nothing_loses_nothing():
+    """Ambiguity is measured against the products we could confuse it with."""
+    from app.extraction.prose import read_prose
+
+    sentence = "Tyvaso and Tyvaso DPI generated $42.2 million in the second quarter of 2022."
+    assert read_prose(sentence, product="Tyvaso", catalog=[]) != []

@@ -26,8 +26,10 @@ from __future__ import annotations
 import re
 from collections.abc import Iterable
 from dataclasses import dataclass
+from functools import lru_cache
 
 from app.extraction.extract import ExtractedValue
+from app.extraction.members import load_products, words
 from app.parsing.evidence import product_aliases
 from app.parsing.periods import MONTHS, quarter_of_month
 
@@ -219,18 +221,70 @@ def _interleaved(
     return [kind for _, kind in marks] == expected
 
 
+@lru_cache(maxsize=1)
+def _catalog() -> tuple[str, ...]:
+    """The products this pipeline tracks, from its own reference data."""
+    return tuple(load_products())
+
+
+def _named_products(sentence: str, catalog: Iterable[str]) -> set[str]:
+    """Which tracked products a sentence names.
+
+    Names are matched as whole words and the longest wins where two overlap: a
+    sentence saying "Tyvaso DPI" names that product, and is not evidence that
+    it also names Tyvaso. This is the rule the XBRL member register already
+    resolves by, for the same reason - a shorter product name sits inside a
+    longer one far more often than it is a second product.
+    """
+    tokens = words(sentence)
+    spans: list[tuple[int, int, str]] = []
+    for product in catalog:
+        parts = words(product)
+        if not parts:
+            continue
+        width = len(parts)
+        spans += [
+            (start, width, product)
+            for start in range(len(tokens) - width + 1)
+            if tokens[start : start + width] == parts
+        ]
+    return {
+        product
+        for start, width, product in spans
+        if not any(
+            other_start <= start
+            and start + width <= other_start + other_width
+            and other_width > width
+            for other_start, other_width, _ in spans
+        )
+    }
+
+
 def read_prose(
     text: str,
     *,
     product: str,
     generic: str | None = None,
     extra_aliases: Iterable[str] | None = None,
+    catalog: Iterable[str] | None = None,
 ) -> list[ExtractedValue]:
     """Revenue figures stated in sentences that name this product.
 
-    A sentence contributes a value only when it names exactly one period and
-    one amount, so which number belongs to which period is stated rather than
-    inferred.
+    A sentence contributes a value only when it names exactly one period, one
+    amount and one product, so what each number belongs to is stated rather
+    than inferred.
+
+    The third of those was missing, and it is the same principle as the other
+    two. A sentence was accepted whenever an alias appeared anywhere in it, so
+    a sentence naming two products answered a question about either of them
+    with the same figure: Tyvaso DPI's first quarter on sale, $3.0m, and
+    nebulized Tyvaso's $198.0m, were both read as 42.2. A sentence covering two
+    products has not said which one its amount belongs to, exactly as a
+    sentence carrying two amounts has not said which period each belongs to.
+
+    ``catalog`` is what to count as a product, defaulting to the ones this
+    pipeline tracks. Ambiguity is a property of the sentence against the things
+    it could be confused with, so a caller tracking nothing loses nothing.
     """
     aliases = [alias.lower() for alias in product_aliases(product, generic, extra=extra_aliases)]
     values: list[ExtractedValue] = []
@@ -238,6 +292,11 @@ def read_prose(
     for sentence in _SENTENCE_SPLIT_RE.split(text or ""):
         lowered = sentence.lower()
         if not any(alias in lowered for alias in aliases):
+            continue
+        known = _named_products(sentence, catalog if catalog is not None else _catalog())
+        if len(known) > 1 or (known and product not in known):
+            # The sentence covers more than this product, or the name it does
+            # carry is a longer one belonging to something else.
             continue
         located_periods = _periods_with_positions(sentence)
         located_amounts = _amounts_with_positions(sentence)
