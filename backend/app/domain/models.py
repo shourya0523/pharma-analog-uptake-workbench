@@ -199,6 +199,10 @@ class ParsedDocument(BaseModel):
     # produce them: every cell occupies each column it spans, so a heading's
     # reach - which period covers which figures - survives into extraction.
     table_grids: list[list[list[str | None]]] = Field(default_factory=list)
+    # What introduces each table, in the same order: a table declares its unit
+    # in its own caption, and the document's first unit declaration belongs to
+    # whichever schedule happens to come first.
+    table_captions: list[str] = Field(default_factory=list)
     page_or_section: str | None = None
     parsing_status: ParsingStatus
     notes: str | None = None

@@ -59,6 +59,8 @@ from app.parsing.documents import (  # noqa: E402
     flatten_grid,
     html_table_grid,
     html_table_grids,
+    table_caption,
+    _selected_tables,
     pdf_table_grids,
 )
 from app.storage.filestore import FileStore  # noqa: E402
@@ -142,16 +144,19 @@ def tables_of(
     raw = path.read_bytes()
     if path.suffix == ".pdf":
         _blocks, grids = pdf_table_grids(raw)
-        return [rows for grid in grids if (rows := flatten_grid(grid))], grids
+        return [rows for grid in grids if (rows := flatten_grid(grid))], grids, []
     markup = raw.decode("utf-8", "ignore")
     head = markup.lstrip()[:256].lower()
     parser = "lxml-xml" if head.startswith(("<?xml", "<xbrl", "<ix:")) else "lxml"
     soup = BeautifulSoup(markup, parser)
     if capped:
-        grids = html_table_grids(soup)
+        selected = _selected_tables(soup)
     else:
-        grids = [grid for table in soup.find_all("table") if (grid := html_table_grid(table))]
-    return [rows for grid in grids if (rows := flatten_grid(grid))], grids
+        selected = [(table, grid) for table in soup.find_all("table")
+                    if (grid := html_table_grid(table))]
+    grids = [grid for _element, grid in selected]
+    captions = [table_caption(element) for element, _grid in selected]
+    return [rows for grid in grids if (rows := flatten_grid(grid))], grids, captions
 
 
 class LocalCacheStore(FileStore):
@@ -212,7 +217,7 @@ async def discover_and_read(row: dict, store: "LocalCacheStore") -> list[dict]:
         readable += 1
         found, _findings, _skipped = extract_revenue_candidates(
             doc.tables, product=row["drug_name"], generic=row.get("generic_name"),
-            context=doc.full_text[:4000], grids=doc.table_grids,
+            context=doc.full_text[:4000], grids=doc.table_grids, captions=doc.table_captions,
         )
         candidates.extend(found)
     return candidates, readable
@@ -259,7 +264,7 @@ def main() -> int:
             if url not in parsed_cache:
                 parsed_cache[url] = tables_of(path, capped=CAPPED)
                 context_cache[url] = document_text(path)
-            tables, grids = parsed_cache[url]
+            tables, grids, captions = parsed_cache[url]
             context = context_cache[url]
         except Exception as exc:  # a document the pipeline cannot open at all
             for row in group:
@@ -273,6 +278,7 @@ def main() -> int:
                 generic=row.get("generic_name"),
                 context=context,
                 grids=grids,
+                captions=captions,
             )
             wanted = [
                 candidate

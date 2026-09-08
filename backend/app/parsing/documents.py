@@ -34,7 +34,7 @@ from __future__ import annotations
 import json
 import re
 
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
 
 from app.domain.models import ParsedDocument, ParsingStatus, RetrievedSource, SourceType
 from app.storage.filestore import FileStore
@@ -74,6 +74,10 @@ class OCRStub:
 # of them respectively, which is a rate high enough to be silently changing
 # answers rather than bounding work.
 HTML_TABLE_LIMIT = 80
+# How much of the run-up to a table is its caption. A unit declaration sits in
+# the line or two directly above the table; 600 characters covers the title,
+# the "(unaudited)" and the unit without reaching into the schedule above.
+CAPTION_CHARS = 600
 HTML_ROW_LIMIT = 200
 PDF_PAGE_LIMIT = 40
 
@@ -205,6 +209,55 @@ def table_relevance(grid: list[list[str | None]]) -> int:
     )
 
 
+def table_caption(table: Tag) -> str:
+    """The text a table is introduced by, read backwards from its own start.
+
+    A table states its unit in the sentence above it - "PRODUCT SALES SUMMARY
+    (unaudited) (in thousands)" - and not anywhere else. Searching the document
+    for a unit instead finds whichever declaration comes first, which in a
+    Gilead earnings exhibit is the "(in millions)" over the guidance table, five
+    schedules above the product sales stated in thousands.
+
+    So the walk stops at the previous table: text belonging to another schedule
+    describes that schedule. A table nested inside a layout table is still this
+    table, so its own ancestors do not stop the walk.
+    """
+    ancestors = {id(parent) for parent in table.find_parents("table")}
+    parts: list[str] = []
+    budget = CAPTION_CHARS
+    for node in table.find_all_previous(string=True):
+        owner = node.find_parent("table")
+        if owner is not None and id(owner) not in ancestors:
+            break
+        chunk = " ".join(node.split())
+        if not chunk:
+            continue
+        parts.append(chunk)
+        budget -= len(chunk) + 1
+        if budget <= 0:
+            break
+    return " ".join(reversed(parts))[-CAPTION_CHARS:]
+
+
+def _selected_tables(soup: BeautifulSoup) -> list[tuple[Tag, list[list[str | None]]]]:
+    """The tables worth keeping, as (element, rectangle), in document order.
+
+    One selection, from which the grids, the ragged rows and the captions are
+    all derived, so table *n* means the same table in each of them.
+    """
+    scored: list[tuple[int, int, Tag, list[list[str | None]]]] = []
+    for position, table in enumerate(soup.find_all("table")):
+        grid = html_table_grid(table)
+        if not grid:
+            continue
+        relevance = table_relevance(grid)
+        if relevance:
+            scored.append((position, relevance, table, grid))
+    if len(scored) > HTML_TABLE_LIMIT:
+        scored = sorted(scored, key=lambda item: (-item[1], item[0]))[:HTML_TABLE_LIMIT]
+    return [(table, grid) for _p, _r, table, grid in sorted(scored, key=lambda i: i[0])]
+
+
 def html_table_grids(soup: BeautifulSoup) -> list[list[list[str | None]]]:
     """The tables worth keeping, as rectangles rather than ragged rows.
 
@@ -212,17 +265,12 @@ def html_table_grids(soup: BeautifulSoup) -> list[list[list[str | None]]]:
     document order so that index *n* here and index *n* of ``html_tables``
     remain the same table.
     """
-    scored: list[tuple[int, int, list[list[str | None]]]] = []
-    for position, table in enumerate(soup.find_all("table")):
-        grid = html_table_grid(table)
-        if not grid:
-            continue
-        relevance = table_relevance(grid)
-        if relevance:
-            scored.append((position, relevance, grid))
-    if len(scored) > HTML_TABLE_LIMIT:
-        scored = sorted(scored, key=lambda item: (-item[1], item[0]))[:HTML_TABLE_LIMIT]
-    return [grid for _position, _relevance, grid in sorted(scored, key=lambda i: i[0])]
+    return [grid for _table, grid in _selected_tables(soup)]
+
+
+def html_table_captions(soup: BeautifulSoup) -> list[str]:
+    """What introduces each kept table, aligned with ``html_table_grids``."""
+    return [table_caption(table) for table, _grid in _selected_tables(soup)]
 
 
 def flatten_grid(grid: list[list[str | None]]) -> list[list[str]]:
@@ -588,13 +636,16 @@ class DocumentParser:
         # chunk long filings (keep enough for multi-year MD&A + product tables)
         max_chars = 400_000
         chunks = [text[i : i + 12000] for i in range(0, min(len(text), max_chars), 12000)]
-        grids = html_table_grids(soup)
+        selected = _selected_tables(soup)
+        grids = [grid for _element, grid in selected]
+        captions = [table_caption(element) for element, _grid in selected]
         tables = [rows for grid in grids if (rows := flatten_grid(grid))]
         return ParsedDocument(
             source_id=source.source_id,
             text_blocks=chunks or [text[:12000]],
             tables=tables,
             table_grids=grids,
+            table_captions=captions,
             page_or_section="html body",
             parsing_status=ParsingStatus.SUCCESS,
         )

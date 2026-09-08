@@ -50,6 +50,21 @@ with (REPO / "seed" / "product_attributes.csv").open(newline="") as _handle:
     PRODUCTS = sorted({r["drug_name"].strip() for r in csv.DictReader(_handle) if r.get("drug_name")})
 print(f"xbrl: {'on' if TAGGED else 'off'}  register: {len(REGISTER)} members  "
       f"products: {len(PRODUCTS)}")
+def _agrees(values: list[float], target: float) -> bool:
+    """Whether the pipeline answered this period, with one answer.
+
+    Crediting the row when *any* candidate matches scores a reader that emits
+    the right figure beside a wrong one as if it had read the table, and the
+    wrong figure is what a consumer with no answer key would have to choose
+    between. Two candidates that disagree are not an answer, so this counts them
+    as the failure they are.
+    """
+    if not values:
+        return False
+    spread = max(values) - min(values)
+    return spread <= E.TOLERANCE and abs(values[0] - target) <= E.TOLERANCE
+
+
 outcome = collections.Counter()
 per_issuer = collections.defaultdict(collections.Counter)
 detail = []
@@ -102,7 +117,7 @@ async def go():
                 target = row["value_normalized_usd_millions"]
                 values = [float(c["value_normalized_usd_millions"]) for c in same]
                 if values:
-                    hit = any(abs(v - target) <= E.TOLERANCE for v in values)
+                    hit = _agrees(values, target)
                     state = "read_tagged" if hit else "wrong_value_tagged"
                     outcome[state] += 1
                     per_issuer[maker][state] += 1
@@ -119,13 +134,13 @@ async def go():
                 got, _f, _s = extract_revenue_candidates(
                     doc.tables, product=row["drug_name"],
                     generic=row.get("generic_name"), context=doc.full_text[:4000],
-                    grids=doc.table_grids)
+                    grids=doc.table_grids, captions=doc.table_captions)
                 found.extend(got)
             target = row["value_normalized_usd_millions"]
             same = [c for c in found if str(c.get("period")) == row["period"]
                     and c.get("value_normalized_usd_millions") is not None]
             values = [float(c["value_normalized_usd_millions"]) for c in same]
-            if any(abs(v - target) <= E.TOLERANCE for v in values):
+            if _agrees(values, target):
                 state, read = "read", target
             elif values:
                 state, read = "wrong_value", min(values, key=lambda v: abs(v - target))

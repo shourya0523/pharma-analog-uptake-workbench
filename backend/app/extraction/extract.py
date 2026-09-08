@@ -283,8 +283,26 @@ def _names_the_product(label: str, product: str, generic: str | None) -> bool:
     return words(label) in ([words(product)] + ([words(generic)] if generic else []))
 
 
-def _totals(assignments: Iterable[dict[int, float]]) -> dict[int, float]:
-    summed: dict[int, float] = {}
+def _regroup(assigned: dict[int, float], period_of) -> dict[object, float]:
+    """A row's values keyed by the period they are in, not the column they sit in.
+
+    Two columns can state the same period. A filer prints the currency symbol in
+    its own cell on the first line of a block and leaves it off the lines below,
+    so "Harvoni - U.S." carries its figure one column to the right of "Harvoni -
+    Europe" while both are the same quarter. Adding the components up by column
+    then compares the U.S. line against nothing and the rest against a total
+    they cannot reach, and the table is refused for having no total when the
+    total is printed directly beneath it.
+    """
+    summed: dict[object, float] = {}
+    for index, value in assigned.items():
+        key = period_of(index)
+        summed[key] = summed.get(key, 0.0) + value
+    return summed
+
+
+def _totals(assignments: Iterable[dict[object, float]]) -> dict[object, float]:
+    summed: dict[object, float] = {}
     for assigned in assignments:
         for index, value in assigned.items():
             summed[index] = summed.get(index, 0.0) + value
@@ -313,6 +331,7 @@ def _resolve_matches(
     *,
     naming: int,
     quote_from: dict[int, int],
+    period_of=None,
     reach: int = 2,
 ) -> tuple[list[tuple[str, str, dict[int, float]]], str | None]:
     """Which of the rows naming a product is the product's revenue.
@@ -338,6 +357,10 @@ def _resolve_matches(
     """
     if not matches:
         return [], None
+    # Components add up within a period. Which column a figure sits in is how
+    # the page is set, not what the figure is about.
+    period_of = period_of or (lambda index: index)
+    grouped = lambda assigned: _regroup(assigned, period_of)
     # How many rows name the product, not how many of them could be read: a
     # component whose numbers did not parse still means the row that did parse
     # is a component, and publishing it as the product is the same mistake.
@@ -355,13 +378,13 @@ def _resolve_matches(
     # A total printed among the matched rows.
     for index, (position, _label, assigned) in enumerate(matches):
         parts = [other[2] for other in matches[:index] + matches[index + 1 :]]
-        if _adds_up(assigned, _totals(parts), len(parts)):
+        if _adds_up(grouped(assigned), _totals(grouped(p) for p in parts), len(parts)):
             first = min(quote_from.get(other[0], other[0]) for other in matches)
             taken = source_rows[min(first, position) : max(first, position) + 1]
             return [(product, quote_of(*taken), assigned)], None
 
     # A total printed beneath them, with no label of its own.
-    parts = _totals(assigned for _, _, assigned in matches)
+    parts = _totals(grouped(assigned) for _, _, assigned in matches)
     last = max(position for position, _, _ in matches)
     for position in range(last + 1, min(last + 1 + reach, len(source_rows))):
         cells = _origins(source_rows[position])
@@ -369,7 +392,7 @@ def _resolve_matches(
             continue
         labelled = cell_number(cells[0][1]) is None
         assigned, _reason = read_row(source_rows[position], cells, labelled=labelled)
-        if assigned and _adds_up(assigned, parts, len(matches)):
+        if assigned and _adds_up(grouped(assigned), parts, len(matches)):
             first = min(quote_from.get(other[0], other[0]) for other in matches)
             return [(product, quote_of(*source_rows[first : position + 1]), assigned)], None
 
@@ -507,9 +530,15 @@ def _read_table(
         quote_from[position] = start
         matches.append((position, scoped, assigned))
 
+    # Two columns can name the same period; the arithmetic that identifies a
+    # total is about periods, so it groups the columns the table has equated.
+    def period_of(index: int) -> object:
+        block = by_index.get(index)
+        return f"{block.months}m@{block.end_month}:{block.year}" if block else index
+
     published, refusal = _resolve_matches(
         matches, source_rows, product, generic, read_row, quote_of,
-        naming=naming, quote_from=quote_from,
+        naming=naming, quote_from=quote_from, period_of=period_of,
     )
     if refusal:
         skipped.append(refusal)
@@ -546,21 +575,32 @@ def read_tables(
     extra_aliases: Iterable[str] | None = None,
     context: str = "",
     grids: Iterable[list[list[str | None]]] | None = None,
+    captions: Iterable[str] | None = None,
 ) -> list[TableReadout]:
     """Read every table. ``grids`` holds the same tables as rectangles, in order.
 
-    The two lists are produced from one reading of the document, so table *n* of
+    The lists are produced from one reading of the document, so table *n* of
     each is the same table; a shorter or absent ``grids`` simply means those
     tables are read from their ragged rows.
+
+    ``captions`` is what introduces each table. A table declares its unit above
+    itself, so its own caption is read before the document-wide ``context``,
+    which otherwise supplies whichever declaration appears first in the filing -
+    a different schedule's, stated in different units.
     """
     rectangles = list(grids or [])
+    introductions = list(captions or [])
     return [
         read_table(
             rows,
             product=product,
             generic=generic,
             extra_aliases=extra_aliases,
-            context=context,
+            context=(
+                f"{introductions[index]}\n{context}"
+                if index < len(introductions) and introductions[index]
+                else context
+            ),
             grid=rectangles[index] if index < len(rectangles) else None,
         )
         for index, rows in enumerate(tables or [])
