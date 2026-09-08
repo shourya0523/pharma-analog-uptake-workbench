@@ -16,6 +16,10 @@ The score is then a property of the pipeline rather than of the prose.
         python scripts/sourcing/fetch_documents.py
     DOCUMENT_CACHE=/tmp/gold-documents python scripts/eval_extraction_documents.py
 
+fetch_documents.py reads SEC_CONTACT; --discover drives the app's own connector,
+which reads SEC_USER_AGENT. Setting one and not the other leaves whichever half
+of that is not covered talking to EDGAR as the default User-Agent.
+
 Rows whose document is not cached are reported separately and never counted as
 passes: an unreachable filing is a gap in the evidence, not a success.
 
