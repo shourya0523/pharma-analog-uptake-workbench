@@ -137,16 +137,20 @@ sample, which is how a fix gets fitted to its own evidence. So they were re-run
 over Uptravi, Stelara and Xarelto in 2018–19 — two issuers, no row any fix was
 derived from:
 
-| | |
-|---|---|
-| published, correct | 15/24 |
-| published, wrong | 0 |
-| **held for review, correct** | **0** |
-| no datapoint at all | 9 |
+| | first run | with the retrieval fix |
+|---|---|---|
+| published, correct | 15/24 | **24/24** |
+| published, wrong | 0 | 0 |
+| **held for review, correct** | **0** | **0** |
+| no datapoint at all | 9 | 0 |
 
-Of everything the pipeline found there, it published all of it and got all of
-it right. On the tuned sample the same pipeline had withheld 21 of 32 correct
+Of everything the pipeline found, it published all of it and got all of it
+right — in the first run, and again when retrieval stopped losing nine
+quarters. On the tuned sample the same pipeline had withheld 21 of 32 correct
 answers. The fixes generalise.
+
+The nine gaps were section 5a's exhibit budget and nothing else: fixing it took
+the held-out set to 24/24 with no change to any reader.
 
 **Not measured at all.** Any corpus-wide end-to-end figure. 32 quarters is a
 sample; the corpus is 1,415 rows and would cost real money to run. Do not quote

@@ -41,26 +41,37 @@ The hit rate is not the interesting part. Correctness is crossed against
 | held & wrong | the judge earning its cost |
 | held & correct | the judge's cost, in answers withheld |
 
-Over the 32 gold quarters of `--sample`, most recently:
+Two sets, most recently. `--sample` is the four products this session's fixes
+were developed against; the held-out set is Uptravi, Stelara and Xarelto over
+the same years, from two issuers none of that work touched.
 
-| | |
-|---|---|
-| published, correct | **31/32, 96.9%** |
-| published, wrong | **0** |
-| held for review, correct | 1 |
-| `auto_pass` precision | 34 correct, 0 wrong |
-| **judge catch rate** | **3/3 wrong datapoints held back** |
+| | `--sample` (32) | held out (24) |
+|---|---|---|
+| published, correct | **32/32** | **24/24** |
+| published, wrong | 0 | 0 |
+| held for review, correct | 0 | 0 |
+| no datapoint at all | 0 | 0 |
+| `auto_pass` precision | 38 correct, 0 wrong | 24 correct, 0 wrong |
+| judge catch rate | 4/4 held back | no wrong values arose |
 
-That last row is what this eval was built for and it had never been measured.
-Three readers were wrong in that run - a sentence reading 13.4 for Orenitram, a
-model reading 1.3, a sentence reading 13.4 for Tyvaso - and all three were held
-back. Count it over datapoints and not over quarters: a quarter where one
-reader was wrong and another right scores as answered, and counting by quarter
-reported "no wrong values to catch" for exactly that run.
+The held-out column is the one that means anything about generalisation, and it
+was 15/24 an hour earlier: the nine gaps were quarters the earnings-exhibit
+budget had dropped, not quarters the readers failed on.
 
-**Thirty-two quarters over four products is a sample, not the corpus.** No
-corpus-wide figure for the pipeline exists yet, and none should be quoted until
-one is run.
+The catch rate is what this eval was built for and it had never been measured.
+Four readers were wrong in the sample run - two sentences reading 13.4 for
+different products, a model reading 1.3 against a gold of 50.9, and a model
+reading -15.5 - and all four were held back. Count it over datapoints and not
+over quarters: a quarter where one reader was wrong and another right scores as
+answered, and counting by quarter reported "no wrong values to catch" for
+exactly that run.
+
+**Fifty-six quarters over seven products is a sample, not the corpus**, and
+both sets are 2018-19, which is the easiest era: detail tagging has begun and
+the earnings exhibit is an established convention. No corpus-wide figure for
+the pipeline exists, and none should be quoted until one is run. The
+deterministic floor says the 2000s are close to unreachable, and nothing here
+tested them.
 
 Two things this eval found on its first outing, which is the argument for
 having it:
