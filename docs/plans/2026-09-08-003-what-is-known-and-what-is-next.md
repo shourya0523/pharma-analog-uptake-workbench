@@ -1,7 +1,19 @@
 # What is known, what is quirky, and what to do next
 
+> **Amended after this file was first written.** Two corrections, both in the
+> sections below, stated here because they change what the numbers mean:
+>
+> * The deterministic floor for the **current** code is **1,307/1,415**, not
+>   1,315. The higher figure belongs to code without the prose reader.
+> * The `coverage_v7` run finished — do not re-run it. Ranked precedence with
+>   `include_primary=True` gained zero rows and lost eight. The cause is not
+>   sourcing: **a derivation is applied only to rows nothing was found for, so
+>   any weaker reader that produces anything for a period blocks it.** Ranking
+>   by document was the wrong axis; rank by the strength of the claim instead.
+>   See section 8, item 3 — it is now the most valuable next fix.
+
 Written at the end of a session that took deterministic coverage from
-1,070/1,415 to 1,315/1,415 and, more usefully, found out what that number
+1,070/1,415 to 1,307/1,415 and, more usefully, found out what that number
 actually measures. Read the second section before trusting any figure in the
 first.
 
