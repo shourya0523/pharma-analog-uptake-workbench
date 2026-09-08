@@ -14,6 +14,11 @@ gold audit found.
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:  # a type only; periods.py must not import this module back
+    from app.parsing.periods import PeriodContext
+
 import re
 from collections.abc import Iterable
 from dataclasses import dataclass
@@ -427,6 +432,7 @@ def read_table(
     extra_aliases: Iterable[str] | None = None,
     context: str = "",
     grid: list[list[str | None]] | None = None,
+    period_context: "PeriodContext | None" = None,
 ) -> TableReadout:
     """Read one table, by its geometry where that describes it and not otherwise.
 
@@ -450,6 +456,7 @@ def read_table(
         extra_aliases=extra_aliases,
         context=context,
         grid=grid,
+        period_context=period_context,
     )
     if (
         grid
@@ -463,6 +470,7 @@ def read_table(
             extra_aliases=extra_aliases,
             context=context,
             grid=None,
+            period_context=period_context,
         )
     return readout
 
@@ -475,9 +483,10 @@ def _read_table(
     extra_aliases: Iterable[str] | None = None,
     context: str = "",
     grid: list[list[str | None]] | None = None,
+    period_context: "PeriodContext | None" = None,
 ) -> TableReadout:
     """One reading of one table, either by column or from the ragged rows."""
-    fingerprint = build_fingerprint(rows, context, grid=grid)
+    fingerprint = build_fingerprint(rows, context, grid=grid, period_context=period_context)
     if not fingerprint.usable:
         reason = ";".join(fingerprint.notes) or "unusable_fingerprint"
         return TableReadout(fingerprint=fingerprint, values=[], skipped_reason=reason)
@@ -589,6 +598,7 @@ def read_tables(
     context: str = "",
     grids: Iterable[list[list[str | None]]] | None = None,
     captions: Iterable[str] | None = None,
+    period_context: "PeriodContext | None" = None,
 ) -> list[TableReadout]:
     """Read every table. ``grids`` holds the same tables as rectangles, in order.
 
@@ -615,6 +625,7 @@ def read_tables(
                 else context
             ),
             grid=rectangles[index] if index < len(rectangles) else None,
+            period_context=period_context,
         )
         for index, rows in enumerate(tables or [])
     ]

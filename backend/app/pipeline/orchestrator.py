@@ -1164,6 +1164,11 @@ class PipelineOrchestrator:
                 context=doc.full_text[:4000],
                 grids=doc.table_grids, captions=doc.table_captions,
                 prose=doc.full_text,
+                # What the filing says it covers, for a schedule that states no
+                # period itself. Computed just above and, until now, handed only
+                # to the model - while the reader four lines down was skipping
+                # tables for want of exactly this.
+                period_context=period_context,
                 # The totals as well as the quarters. A quarter the issuer
                 # never stated on its own is the difference between a total it
                 # did state and the quarters it did, and `complete_series`

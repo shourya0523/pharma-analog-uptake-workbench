@@ -120,7 +120,18 @@ _NEXT_YEAR_RE = re.compile(r"\b((?:19|20)\d{2})\b")
 # columns below them - "Three Months Ended | Twelve Months Ended | December 31,
 # | December 31, | 2012 | 2011" - so neither the month nor the year can be
 # required to sit beside the words.
-_PERIOD_PHRASE_RE = re.compile(r"\b(three|six|nine|twelve)\s+months?\s+ended\b", re.I)
+# A filing that covers two spans at once names them together: "the three and
+# six months ended June 28, 2026". Matching a single word here read only the
+# second of them, so a second-quarter exhibit was dated H1 and a third-quarter
+# one M9 - the preference for the quarterly framing below could not fire,
+# because the quarterly framing was never counted. Every span named by one
+# phrase is captured, and they are separated after the match.
+_PERIOD_PHRASE_RE = re.compile(
+    r"\b((?:three|six|nine|twelve)(?:\s+and\s+(?:three|six|nine|twelve))*)"
+    r"\s+months?\s+ended\b",
+    re.I,
+)
+_SPAN_WORD_RE = re.compile(r"three|six|nine|twelve", re.I)
 _MONTH_DAY_RE = re.compile(
     r"\b(january|february|march|april|may|june|july|august|september|october"
     r"|november|december|jan|feb|mar|apr|jun|jul|aug|sep|sept|oct|nov|dec)"
@@ -157,15 +168,22 @@ def detect_period_context(text: str) -> PeriodContext | None:
     text = text or ""
     counts: Counter[tuple[int, int, int]] = Counter()
     for match in _PERIOD_PHRASE_RE.finditer(text):
-        months = MONTH_WORDS.get(match.group(1).lower())
+        spans = [
+            MONTH_WORDS[word.lower()]
+            for word in _SPAN_WORD_RE.findall(match.group(1))
+            if word.lower() in MONTH_WORDS
+        ]
         found = _month_near(text, match.end())
-        if not months or not found:
+        if not spans or not found:
             continue
         month, after_month = found
         year = _year_near(text, after_month)
         if not year:
             continue
-        counts[(months, month, year)] += 1
+        # Both spans end on the same date and are equally stated; which one is
+        # the document's own period is decided below, not here.
+        for months in spans:
+            counts[(months, month, year)] += 1
     if not counts:
         return None
     # Prefer the quarterly framing, then the latest year - never the most
