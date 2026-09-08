@@ -167,3 +167,48 @@ def test_a_held_answer_outranks_a_published_one_from_another_series():
     assert module.scored_state([], held, 768.0, off)[0] == "held_correct"
     assert module.scored_state([], [], 768.0, off)[0] == "published_other_scope"
     assert module.scored_state([], [], 768.0, [])[0] == "no_datapoint"
+
+
+def test_reading_order_and_authority_are_separate_questions():
+    """Two rankings, opposite answers, both correct about their own question.
+
+    `SOURCE_PRIORITY` ranks authority — which figure wins when two disagree —
+    and puts the audited 10-K above an 8-K press exhibit. `DOCUMENT_FITNESS`
+    ranks where to look for a product's quarterly sales, and puts the 8-K item
+    2.02 exhibit first, because it is a product-sales schedule while a 10-K
+    names a product across dozens of tables for other reasons.
+
+    Ordering the read by authority is what the eval did for one commit. It was
+    invisible while the connector ignored the date window and fetched primary
+    filings that covered the wrong years; once they covered the right ones, a
+    10-K's incidental table began answering quarters before the schedule built
+    to state them, and 13 rows that had read correctly stopped being found.
+    """
+    from app.domain.models import SourceType
+    from app.pipeline.orchestrator import SOURCE_PRIORITY, reading_rank
+
+    authority = {t: i for i, t in enumerate(SOURCE_PRIORITY)}
+
+    assert authority[SourceType.SEC_FILING] < authority[SourceType.EARNINGS_RELEASE]
+    assert reading_rank(SourceType.EARNINGS_RELEASE) < reading_rank(SourceType.SEC_FILING)
+    assert reading_rank("earnings_release") < reading_rank("sec_filing")
+    assert reading_rank("something_else") == reading_rank(SourceType.OTHER) + 1
+
+
+def test_the_coverage_eval_orders_documents_by_fitness_not_authority():
+    """The eval must not restate either ranking, and must pick the right one."""
+    tree = ast.parse((SCRIPTS / "eval_coverage.py").read_text())
+    imported = {
+        alias.name
+        for node in ast.walk(tree)
+        if isinstance(node, ast.ImportFrom)
+        for alias in node.names
+    }
+    names = {n.id for n in ast.walk(tree) if isinstance(n, ast.Name)}
+    assert "reading_rank" in imported
+    # Checked against the names the code actually uses, not the file's text: a
+    # comment explaining why authority is the wrong ranking here mentions it,
+    # and an earlier version of this guard was satisfied by exactly that.
+    assert "SOURCE_PRIORITY" not in imported | names, (
+        "ordering the read by authority is the inversion this guards against"
+    )

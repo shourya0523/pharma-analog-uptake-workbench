@@ -40,7 +40,7 @@ from app.extraction.derive import complete_series
 from app.extraction.members import load_register
 from app.extraction.tagged import candidates_from_instance
 from app.parsing.documents import DocumentParser
-from app.pipeline.orchestrator import SOURCE_PRIORITY, claim_rank
+from app.pipeline.orchestrator import claim_rank, reading_rank
 
 OUT = pathlib.Path(sys.argv[1] if len(sys.argv) > 1 else "/tmp/coverage.json")
 rows = E.load_rows()
@@ -80,20 +80,16 @@ SIBLINGS = {
 }
 print(f"xbrl: {'on' if TAGGED else 'off'}  register: {len(REGISTER)} members  "
       f"products: {len(PRODUCTS)}")
-# What a document is for, lowest first - the pipeline's own ranking, imported
-# rather than restated. A private table here ranked by filing type and said the
-# opposite of what the pipeline does: it put the 8-K earnings exhibit first,
-# while SOURCE_PRIORITY puts SEC_FILING (the 10-K and 10-Q) above
-# EARNINGS_RELEASE. So the eval and the thing it measures disagreed about which
-# of two candidates wins, and only one of them was the product's behaviour.
-# Whichever ranking is better, there can only be one, and it belongs to the
-# pipeline.
-_PRIORITY = {source_type.value: rank for rank, source_type in enumerate(SOURCE_PRIORITY)}
+# Which document to read first, from the pipeline's own DOCUMENT_FITNESS.
+# Not SOURCE_PRIORITY: that ranks which figure wins when two disagree, and the
+# audited 10-K wins that. This ranks where to look, and an 8-K item 2.02 exhibit
+# is a product-sales schedule while a 10-K mentions a product in dozens of
+# tables for other reasons. Ordering by authority instead cost 13 rows that had
+# been reading correctly.
 
 
 def _authority(source) -> int:
-    source_type = getattr(source.source_type, "value", str(source.source_type))
-    return _PRIORITY.get(source_type, len(_PRIORITY))
+    return reading_rank(source.source_type)
 
 
 def _agrees(values: list[float], target: float) -> bool:

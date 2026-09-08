@@ -135,6 +135,43 @@ def claim_rank(extraction_method: str | None) -> int:
     return CLAIM_STRENGTH.get(str(extraction_method or ""), len(CLAIM_STRENGTH))
 
 
+# Which document to read first for a product's quarterly sales, best first.
+#
+# This is not SOURCE_PRIORITY and it is not a second copy of it: they answer
+# different questions and give opposite answers, both correctly. SOURCE_PRIORITY
+# ranks *authority* - which figure wins when two disagree - and puts the audited
+# 10-K above an 8-K press exhibit. This ranks *fitness for the question*: an 8-K
+# item 2.02 exhibit is a product-sales schedule and nothing else, while a 10-K
+# names a product across dozens of tables for dozens of reasons. The best
+# authority is the worse place to look.
+#
+# Getting this backwards costs rows rather than correctness: measured over the
+# corpus, ordering by authority let a primary filing's incidental table answer a
+# quarter before the schedule built to state it, and 13 rows that had read
+# correctly stopped being found.
+DOCUMENT_FITNESS = [
+    SourceType.EARNINGS_RELEASE,
+    SourceType.SEC_FILING,
+    SourceType.QUARTERLY_REPORT,
+    SourceType.ANNUAL_REPORT,
+    SourceType.INVESTOR_PRESENTATION,
+    SourceType.COMPANY_IR,
+    SourceType.TRANSCRIPT,
+    SourceType.LLM_SEARCH,
+    SourceType.USER_URL,
+    SourceType.OTHER,
+]
+
+
+def reading_rank(source_type: Any) -> int:
+    """Where a source sits in DOCUMENT_FITNESS; anything unknown reads last."""
+    value = getattr(source_type, "value", str(source_type))
+    for rank, known in enumerate(DOCUMENT_FITNESS):
+        if known.value == value:
+            return rank
+    return len(DOCUMENT_FITNESS)
+
+
 def persist_profile_field(
     db: Session,
     *,
