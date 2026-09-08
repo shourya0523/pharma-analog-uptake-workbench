@@ -274,7 +274,15 @@ about; a citation that does not stand up cannot.
 
 ## Reading a number honestly
 
-Three habits earned their place here:
+Four habits earned their place here:
+
+- **Check what the run could reach before comparing what it found.** A corpus
+  run taken while EDGAR was throttling reported 30 connector errors and 43
+  unreadable filings against a baseline's zero and twelve, and 46 fewer rows
+  read. That reads as a large regression from the change under test, and a
+  change to how a quarter is derived cannot make a filing unreadable.
+  `connector_error` and `no_readable_filing` are printed; read them first, and
+  compare on the rows both runs could read.
 
 - **A number that moves when you work on it is the one you start believing.**
   The reading score went up all session and the sourcing score was run once and

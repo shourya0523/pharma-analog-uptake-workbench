@@ -177,6 +177,30 @@ on the same periods across unrelated products is a property of retrieval. Per-
 product theorising would have chased J&J's franchise lines and Actelion's
 acquisition year, both of which are real and neither of which was this.
 
+## 5b. EDGAR throttles, and a throttled run looks like a regression
+
+`003` says a coverage run varies by about ±3 between identical invocations
+because EDGAR returns 503s under load. That understates what happens when a
+session runs walks back to back for an afternoon. The run scoring the
+derivation pair came back with **30 connector errors and 43 rows with no
+readable filing**, against zero and twelve in the baseline an hour earlier —
+same code path for retrieval, same cache, 46 fewer rows read.
+
+Nothing about the change could produce that. A derivation cannot make a filing
+unreadable.
+
+So, two habits:
+
+* **Read `connector_error` and `no_readable_filing` before reading the score.**
+  They are printed and they were being skipped. If either has moved, the run is
+  measuring EDGAR's availability and the comparison is void.
+* **Compare on rows both runs could read.** Restricting to the intersection
+  turned an apparent 46-row regression into the +6 / −4 the change actually
+  made. The per-row artifact exists so this is a filter, not a re-run.
+
+Leave a few minutes between corpus walks. A run costs about twelve minutes; a
+contaminated one costs that plus the time spent believing it.
+
 ## 6. Tools worth knowing about
 
 - `--rescore FILE` re-runs the scoring over a stored run without running
