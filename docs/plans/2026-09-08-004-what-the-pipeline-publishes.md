@@ -209,6 +209,26 @@ So, two habits:
 Leave a few minutes between corpus walks. A run costs about twelve minutes; a
 contaminated one costs that plus the time spent believing it.
 
+## 5c. The held-out gates, re-run
+
+`003` item 5 requires these after any reader change. Nothing here changed how a
+number is read — the changes are to labels, gating, ranking and retrieval — and
+the gates agree:
+
+| gate | recorded in `003` | now |
+|---|---|---|
+| period detection, four filers absent from gold | 118 geometry / 80 ragged | 118 / 80 |
+| PDF geometry agreement | 99.1% | 1319/1331, 99.1% |
+
+`eval_pdf_geometry.py` needs `--render` on a fresh container. Without it every
+document counts `not_rendered` and the script prints
+
+    held-out documents rendered and read both ways: 0
+
+which is a gate that did not run, not a gate that passed. The corpus itself
+comes from `scripts/sourcing/fetch_holdout.py`, which
+`eval_period_generalization.py --refresh` will call for you.
+
 ## 6. Tools worth knowing about
 
 - `--rescore FILE` re-runs the scoring over a stored run without running
