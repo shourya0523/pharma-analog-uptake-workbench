@@ -1011,7 +1011,9 @@ class PipelineOrchestrator:
         self.db.add(row)
         return row
 
-    async def _tagged_revenue(self, job: DrugJobORM, sources: list) -> list[DatapointORM]:
+    async def _tagged_revenue(
+        self, job: DrugJobORM, sources: list
+    ) -> tuple[list[DatapointORM], list[dict[str, Any]]]:
         """Revenue this issuer tagged for this product, from its XBRL instances.
 
         Empty is the ordinary answer for a filing from before the issuer's
@@ -1019,6 +1021,7 @@ class PipelineOrchestrator:
         instance that tags no product-level revenue simply yields nothing.
         """
         rows: list[DatapointORM] = []
+        totals: list[dict[str, Any]] = []
         register = load_register()
         for src in sources:
             if not (src.metadata or {}).get("xbrl_instance") or not src.storage_key:
@@ -1032,6 +1035,12 @@ class PipelineOrchestrator:
             try:
                 found, notes = candidates_from_instance(
                     raw,
+                    # The year as well as its quarters. A fourth quarter is the
+                    # year minus the three quarters stated, so dropping the
+                    # twelve-month facts here left the derivation with nothing
+                    # to subtract from - the table reader already keeps them
+                    # for the same reason.
+                    quarterly_only=False,
                     product=job.drug_name,
                     issuer=job.manufacturer or "",
                     # Every product this pipeline tracks, not just the one
@@ -1054,10 +1063,19 @@ class PipelineOrchestrator:
             for note in notes:
                 logger.info("xbrl_note job_id=%s source_id=%s %s", job.id, src.source_id, note)
             for candidate in found:
+                # A twelve-month fact is not an answer to a quarter, so it is
+                # not stored as a datapoint; it is what the fourth quarter is
+                # derived against.
+                if candidate.get("period_type") != PeriodType.QUARTERLY.value:
+                    totals.append(candidate)
+                    continue
                 rows.append(self._datapoint_from_candidate(job, src, candidate))
-        if rows:
-            logger.info("xbrl_facts job_id=%s drug=%s facts=%d", job.id, job.drug_name, len(rows))
-        return rows
+        if rows or totals:
+            logger.info(
+                "xbrl_facts job_id=%s drug=%s quarters=%d totals=%d",
+                job.id, job.drug_name, len(rows), len(totals),
+            )
+        return rows, totals
 
     async def _extract_revenue(
         self,
@@ -1098,7 +1116,9 @@ class PipelineOrchestrator:
         # geometry read off it, so where one exists it is the better claim; the
         # table reader still runs, and the two are reconciled downstream like
         # any other pair of candidates.
-        rows.extend(await self._tagged_revenue(job, selected_sources))
+        tagged_rows, tagged_totals = await self._tagged_revenue(job, selected_sources)
+        rows.extend(tagged_rows)
+        derivation_pool.extend(tagged_totals)
 
         for src in selected_sources:
             doc = parsed.get(src.source_id)

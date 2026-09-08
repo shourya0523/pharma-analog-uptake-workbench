@@ -162,9 +162,15 @@ async def go():
                 for raw in instances:
                     got, _notes = candidates_from_instance(
                         raw, product=row["drug_name"], issuer=maker,
+                        # The year as well as its quarters: a fourth quarter is
+                        # the year minus the three that were stated, and the
+                        # twelve-month facts were being dropped before the
+                        # derivation could subtract from them.
+                        quarterly_only=False,
                         products=PRODUCTS, register=REGISTER)
                     tagged.extend(got)
                 pool[(maker, row["drug_name"])].extend(tagged)
+                tagged = [c for c in tagged if c.get("period_type") == "quarterly"]
                 same = [c for c in tagged if str(c.get("period")) == row["period"]]
                 target = row["value_normalized_usd_millions"]
                 values = [float(c["value_normalized_usd_millions"]) for c in same]
