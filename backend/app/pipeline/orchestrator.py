@@ -136,6 +136,27 @@ def persist_profile_field(
     return row
 
 
+# How a deterministic candidate was obtained, from the reader that produced it.
+# The reader's own label is used, and only if it is one this module recognises:
+# the LLM branch and the deterministic branch share this code path, so trusting
+# the key outright would let model output name its own provenance.
+_DETERMINISTIC_METHODS = {"table_fingerprint": "table", "prose_sentence": "prose"}
+
+
+def _deterministic_method(candidate: dict[str, Any]) -> str:
+    """``table``, ``prose`` or ``llm`` for a candidate about to be stored.
+
+    A sentence read by ``extraction/prose.py`` used to be stored as ``table``,
+    because both readers reach this point through the same call and the label
+    was decided by which branch it was on rather than by what produced it. That
+    is the mistake this project keeps making: a field stamped on a whole branch,
+    then read back as though it described the row.
+    """
+    if not candidate.get("_from_table"):
+        return "llm"
+    return _DETERMINISTIC_METHODS.get(str(candidate.get("extraction_method") or ""), "table")
+
+
 def scale_to_millions(value: float, unit: str | None) -> float:
     """Convert a reported value to USD millions using its declared unit.
 
@@ -849,13 +870,22 @@ class PipelineOrchestrator:
         }
 
     def _datapoint_from_candidate(self, job: DrugJobORM, src, candidate: dict) -> DatapointORM:
-        """A tagged fact stored as a datapoint.
+        """A tagged fact, or a derived quarter, stored as a datapoint.
 
-        Nothing is normalized on the way in because nothing was inferred: the
-        period, the unit and the currency are the filer's own, and the quote is
-        the citation naming the fact rather than a line of prose.
+        Nothing is normalized on the way in because nothing was inferred: for a
+        tagged fact the period, the unit and the currency are the filer's own
+        and the quote is the citation naming the fact rather than a line of
+        prose; for a derivation they come from the figures it subtracted.
+
+        How the value was obtained is the candidate's to say. This wrote
+        ``xbrl_fact`` for everything it stored, so a quarter that
+        ``complete_series`` derived by arithmetic was exported as a figure the
+        filer had tagged - a claim about provenance, in a column a reader uses
+        to decide how much to trust the number, that was false for every
+        derived row.
         """
         period = str(candidate.get("period") or "unknown")
+        derived = bool(candidate.get("_derived"))
         row = DatapointORM(
             id=new_id(),
             job_id=job.id,
@@ -870,7 +900,7 @@ class PipelineOrchestrator:
             formulation=candidate.get("formulation"),
             source_url=src.url,
             source_quote=candidate.get("source_quote") or "",
-            extraction_method="xbrl_fact",
+            extraction_method=str(candidate.get("extraction_method") or "xbrl_fact"),
             confidence_score=float(candidate.get("confidence") or 0.9),
             validation_status=ValidationStatus.PENDING.value,
             citation_json={
@@ -884,7 +914,7 @@ class PipelineOrchestrator:
                 "interpreted": False,
                 "period_reported": period,
             },
-            issue_flags=["extracted_from_xbrl"],
+            issue_flags=["derived_from_reported_series"] if derived else ["extracted_from_xbrl"],
         )
         self.db.add(row)
         return row
@@ -1173,7 +1203,7 @@ class PipelineOrchestrator:
                     route_of_administration=cand.get("route_of_administration"),
                     source_url=url,
                     source_quote=quote or "",
-                    extraction_method="table" if cand.get("_from_table") else "llm",
+                    extraction_method=_deterministic_method(cand),
                     confidence_score=float(cand.get("confidence") or 0.5),
                     validation_status=ValidationStatus.PENDING.value,
                     citation_json=citation,

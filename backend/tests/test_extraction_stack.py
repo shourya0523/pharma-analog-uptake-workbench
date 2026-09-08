@@ -1017,3 +1017,87 @@ def test_a_total_is_found_when_the_currency_symbol_shifts_one_line():
     ]
     readout = read_table(rows, product="Harvoni", context="(in millions)", grid=grid)
     assert [value.value_as_reported for value in readout.values] == [3608.0]
+
+
+def test_a_sentence_is_not_labelled_as_a_table_read():
+    """``extraction_method`` names the reader, not the branch it arrived on.
+
+    ``read_prose`` and ``read_tables`` produce the same ``Datapoint`` and reach
+    the candidate contract through one function, which stamped every value it
+    emitted as ``table_fingerprint``. The export carries that column for a
+    reader deciding how much to trust a figure, so a sentence was presented as
+    a row read out of a declared table.
+    """
+    from app.extraction.candidates import _as_candidate
+    from app.extraction.process import Datapoint
+
+    def point(signature: str) -> Datapoint:
+        return Datapoint(
+            product_label="Remodulin", period="2005Q2", period_type="quarterly",
+            value_normalized_usd_millions=17.4, value_as_reported=17.4,
+            source_unit="millions", source_currency="USD", fx_rate_to_usd=None,
+            source_quote="Remodulin revenues were $17.4 million in the quarter.",
+            fingerprint_signature=signature, normalization_status="ok",
+        )
+
+    assert _as_candidate(point("prose"), "Remodulin")["extraction_method"] == "prose_sentence"
+    assert _as_candidate(point("u=millions|c=USD"), "Remodulin")["extraction_method"] == "table_fingerprint"
+
+
+def test_a_derived_quarter_is_not_stored_as_a_tagged_fact():
+    """The filer tagged it, or arithmetic produced it. Not both.
+
+    ``_datapoint_from_candidate`` is shared by the XBRL reader and the
+    derivations and hardcoded ``xbrl_fact``, so a quarter obtained by
+    subtracting three quarters from a stated total was exported as a figure the
+    issuer had tagged - and flagged ``extracted_from_xbrl`` besides.
+    """
+    from sqlalchemy import create_engine
+    from sqlalchemy.orm import sessionmaker
+
+    from app.db.models import Base, DrugJobORM, ExtractionRunORM
+    from app.domain.models import new_id
+    from app.pipeline.orchestrator import PipelineOrchestrator
+
+    engine = create_engine("sqlite:///:memory:")
+    Base.metadata.create_all(engine)
+    db = sessionmaker(bind=engine, autoflush=False, autocommit=False)()
+    run = ExtractionRunORM(id=new_id(), status="running", options_json={})
+    db.add(run)
+    job = DrugJobORM(id=new_id(), run_id=run.id, drug_name="Tyvaso", status="running")
+    db.add(job)
+    db.commit()
+    orch = PipelineOrchestrator.__new__(PipelineOrchestrator)
+    orch.db = db
+
+    class _Src:
+        source_id = "s1"
+        url = "https://example.invalid/8-k.htm"
+        filing_type = "8-K"
+        accession_number = "0000000000-00-000000"
+
+    base = {"period": "2020Q4", "period_type": "quarterly", "value_reported": 100.0,
+            "value_normalized_usd_millions": 100.0, "source_quote": "q"}
+    tagged = orch._datapoint_from_candidate(
+        job, _Src(), {**base, "extraction_method": "xbrl_fact", "xbrl_member": "TyvasoMember"})
+    derived = orch._datapoint_from_candidate(
+        job, _Src(), {**base, "extraction_method": "derived_from_period_total", "_derived": True})
+
+    assert tagged.extraction_method == "xbrl_fact"
+    assert tagged.issue_flags == ["extracted_from_xbrl"]
+    assert derived.extraction_method == "derived_from_period_total"
+    assert derived.issue_flags == ["derived_from_reported_series"]
+
+
+def test_model_output_cannot_name_its_own_provenance():
+    """A candidate the model produced is ``llm`` whatever it calls itself.
+
+    The LLM branch and the deterministic branch store rows through the same
+    code, so the reader's label is honoured only from a reader.
+    """
+    from app.pipeline.orchestrator import _deterministic_method
+
+    assert _deterministic_method({"_from_table": True, "extraction_method": "prose_sentence"}) == "prose"
+    assert _deterministic_method({"_from_table": True, "extraction_method": "table_fingerprint"}) == "table"
+    assert _deterministic_method({"extraction_method": "table_fingerprint"}) == "llm"
+    assert _deterministic_method({"_from_table": True, "extraction_method": "hand_audited"}) == "table"

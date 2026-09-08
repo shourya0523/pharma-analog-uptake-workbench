@@ -40,6 +40,11 @@ def _scope_for(label: str, product: str) -> str:
 
 def _as_candidate(point: Datapoint, product: str) -> dict[str, Any]:
     scope = _scope_for(point.product_label, product)
+    # A sentence and a table row arrive here as the same Datapoint, and only
+    # the fingerprint says which: ``read_prose`` signs its values "prose". They
+    # were all labelled as table reads, which made the extraction method in the
+    # export a statement about this function rather than about the document.
+    from_prose = point.fingerprint_signature == "prose"
     return {
         "period": point.period,
         "period_type": point.period_type,
@@ -53,7 +58,7 @@ def _as_candidate(point: Datapoint, product: str) -> dict[str, Any]:
         "product_mentioned_in_quote": True,
         "is_company_total": False,
         "confidence": TABLE_CONFIDENCE,
-        "extraction_method": "table_fingerprint",
+        "extraction_method": "prose_sentence" if from_prose else "table_fingerprint",
         "fingerprint_signature": point.fingerprint_signature,
         "_from_table": True,
     }
