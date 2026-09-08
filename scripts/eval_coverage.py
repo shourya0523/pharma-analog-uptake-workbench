@@ -40,7 +40,7 @@ from app.extraction.derive import complete_series
 from app.extraction.members import load_register
 from app.extraction.tagged import candidates_from_instance
 from app.parsing.documents import DocumentParser
-from app.pipeline.orchestrator import SOURCE_PRIORITY
+from app.pipeline.orchestrator import SOURCE_PRIORITY, claim_rank
 
 OUT = pathlib.Path(sys.argv[1] if len(sys.argv) > 1 else "/tmp/coverage.json")
 rows = E.load_rows()
@@ -177,7 +177,8 @@ async def go():
                     outcome[state] += 1
                     per_issuer[maker][state] += 1
                     detail.append({**row, "state": "read" if hit else "wrong_value",
-                                   "read": target if hit else values[0], "via": "xbrl"})
+                                   "read": target if hit else values[0],
+                                   "via": "xbrl_fact", "outcome_state": state})
                     continue
             if not docs:
                 outcome["no_readable_filing"] += 1
@@ -226,7 +227,7 @@ async def go():
             # report what actually answered.
             chosen = min(same, key=lambda c: abs(
                 float(c["value_normalized_usd_millions"]) - target)) if same else None
-            detail.append({**row, "state": state, "read": read,
+            detail.append({**row, "state": state, "read": read, "outcome_state": state,
                            "via": chosen.get("extraction_method") if chosen else None})
         if index % 25 == 0:
             print(f"  {index}/{len(groups)} pairs  {time.time()-started:.0f}s "
@@ -239,8 +240,16 @@ asyncio.run(go())
 # figure read off a page. Both derivations are exact arithmetic over values the
 # issuer published; neither invents a number.
 derived_cache: dict[tuple[str, str], dict[str, dict]] = {}
+# A derivation is exact arithmetic over figures the issuer published, so it is
+# a stronger claim than a sentence. Applying it only where nothing was found
+# meant any weaker reader that produced *something* for a period pre-empted it:
+# a sentence offering 1.0 for a quarter whose family total derives exactly to
+# 94.645 did not lose to the better answer, it stopped it being computed.
+_DERIVED_RANK = claim_rank("derived_from_period_total")
 for record in detail:
-    if record["state"] != "not_found":
+    if record["state"] == "no_readable_filing":
+        continue
+    if record["state"] != "not_found" and claim_rank(record.get("via")) <= _DERIVED_RANK:
         continue
     maker, product = record["manufacturer"], record["drug_name"]
     if (maker, product) not in derived_cache:
@@ -264,8 +273,9 @@ for record in detail:
     value = candidate["value_normalized_usd_millions"]
     target = record["value_normalized_usd_millions"]
     hit = abs(float(value) - float(target)) <= E.TOLERANCE
-    outcome["not_found"] -= 1
-    per_issuer[maker]["not_found"] -= 1
+    was = record.get("outcome_state", record["state"])
+    outcome[was] -= 1
+    per_issuer[maker][was] -= 1
     state = "read_derived" if hit else "wrong_value_derived"
     outcome[state] += 1
     per_issuer[maker][state] += 1

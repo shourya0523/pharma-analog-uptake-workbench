@@ -1101,3 +1101,37 @@ def test_model_output_cannot_name_its_own_provenance():
     assert _deterministic_method({"_from_table": True, "extraction_method": "table_fingerprint"}) == "table"
     assert _deterministic_method({"extraction_method": "table_fingerprint"}) == "llm"
     assert _deterministic_method({"_from_table": True, "extraction_method": "hand_audited"}) == "table"
+
+
+def test_a_sentence_does_not_pre_empt_a_derivation():
+    """Derivations run where nothing stronger answered, not where nothing did.
+
+    `complete_series` was applied only to periods no row existed for, so any
+    reader that produced anything at all pre-empted it. A sentence offering 1.0
+    for a quarter whose family total derives exactly to 94.645 did not lose to
+    the better answer - it stopped the better answer being computed. Measured
+    over the corpus, the prose reader emitted 13 of the 16 wrong values while
+    contributing 5 correct ones.
+
+    A tagged fact and a schedule still pre-empt a derivation. They are the
+    stronger claims.
+    """
+    import inspect
+
+    from app.pipeline.orchestrator import CLAIM_STRENGTH, PipelineOrchestrator, claim_rank
+
+    # The ranking is by how much had to be inferred.
+    assert claim_rank("xbrl_fact") < claim_rank("table") < claim_rank(
+        "derived_from_period_total") < claim_rank("prose")
+    # Both spellings resolve: candidates carry the reader's label, stored rows
+    # carry the shorter one the export uses.
+    assert claim_rank("table_fingerprint") == claim_rank("table")
+    assert claim_rank("prose_sentence") == claim_rank("prose")
+    # An unrecognised producer ranks below everything rather than above it.
+    assert claim_rank("something_new") > max(CLAIM_STRENGTH.values())
+
+    source = inspect.getsource(PipelineOrchestrator._extract_revenue)
+    assert "strongest" in source and "derived_rank" in source, (
+        "the derivation gate must compare claim strength, not mere presence"
+    )
+    assert "if candidate[\"period\"] in reported_periods" not in source

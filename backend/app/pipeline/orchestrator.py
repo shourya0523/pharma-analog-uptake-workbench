@@ -114,13 +114,19 @@ SOURCE_PRIORITY = [
 # fact states its own period, unit and product; a schedule declares its unit
 # and its columns; a derivation is exact arithmetic over figures the issuer
 # published; a sentence and a model's reading are recovered from running text.
+# Two spellings reach this, and both are listed rather than normalised in one
+# of them: a candidate carries the reader's own label ("table_fingerprint",
+# "prose_sentence") and a stored datapoint carries the shorter one the export
+# uses. One ranking, both vocabularies.
 CLAIM_STRENGTH = {
     "xbrl_fact": 0,
     "table": 1,
+    "table_fingerprint": 1,
     "derived_from_period_total": 2,
     "derived_sole_formulation": 2,
     "llm": 3,
     "prose": 4,
+    "prose_sentence": 4,
 }
 
 
@@ -1246,9 +1252,19 @@ class PipelineOrchestrator:
             {job.drug_name: [self._candidate_of(row) for row in rows]},
             product=job.drug_name,
         )
-        reported_periods = {row.period for row in rows}
+        # Only a stronger claim pre-empts a derivation. Skipping every period
+        # anything had been found for meant a sentence reading 1.0 did not lose
+        # to a family total that derives exactly to 94.645 - it stopped that
+        # total ever being computed. Where a weaker reader answered, both now
+        # stand and reconciliation ranks them.
+        strongest: dict[str, int] = {}
+        for row in rows:
+            rank = claim_rank(row.extraction_method)
+            if rank < strongest.get(row.period, len(CLAIM_STRENGTH) + 1):
+                strongest[row.period] = rank
+        derived_rank = claim_rank("derived_from_period_total")
         for candidate in derived:
-            if candidate["period"] in reported_periods:
+            if strongest.get(str(candidate["period"]), len(CLAIM_STRENGTH) + 1) <= derived_rank:
                 continue
             source = next((s for s in selected_sources), None)
             if source is None:
