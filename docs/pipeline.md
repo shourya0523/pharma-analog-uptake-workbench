@@ -140,6 +140,45 @@ of them becomes reachable only from a script. That test exists because three of
 them had been written, tested, measured in an eval and never called by the
 pipeline, so the coverage figure described something the product could not do.
 
+## Which of two answers wins
+
+Two candidates for one quarter are ranked, never pooled, and there are two
+rankings because there are two questions.
+
+`SOURCE_PRIORITY` ranks the **document**: a 10-K or 10-Q above an 8-K earnings
+release, and both above anything found by search. `CLAIM_STRENGTH` ranks the
+**producer**, by how much it had to infer — a tagged fact states its own period,
+unit and product; a schedule declares its unit and its columns; a derivation is
+exact arithmetic over figures the issuer published; a sentence and a model's
+reading are recovered from running text.
+
+The second exists because the first cannot answer the question. A product-sales
+schedule and the narrative around it sit in the same 8-K exhibit, so they tie on
+source, and the tie used to be settled by whichever was extracted first — which
+once meant a sentence reading 13.4 could beat a schedule reading 54.0.
+
+They apply in two places. Reconciliation sorts by document, then claim, then
+confidence, and marks the losers `needs_review`. And a derivation is computed
+only from figures at least as strong as itself: `complete_series` treats any
+candidate for a period as that period being answered, so a sentence misreading
+a quarter used to stop that quarter's derivation being computed at all, which is
+upstream of any ranking and looked exactly like a ranking that did nothing.
+
+## What gets published
+
+A datapoint leaves the pipeline as `auto_pass` — published — or as
+`needs_review`, which is a gap awaiting a person rather than an answer. The
+evidence judge decides on the quote, quality checks can override, and a
+confidence below 0.7 fails the gate.
+
+Be careful what is treated as evidence of doubt here. A deterministic fill that
+restates something the row already says is not an estimate and must not be
+flagged as one: writing `aggregate` into `formulation` because the scope is
+already `Product family` once forced review and capped confidence at 0.55, and
+that single rule withheld two thirds of everything the readers found.
+`scripts/eval_pipeline_end_to_end.py` is the eval that can see this, because it
+scores what was published rather than what was extracted.
+
 ## Reading further
 
 - [`docs/evaluation.md`](evaluation.md) — what each eval measures, and which
