@@ -118,3 +118,44 @@ def test_the_register_round_trips(tmp_path):
         "uthr:TyvasoMember": "Tyvaso",
         "uthr:TyvasoDPIMember": "Tyvaso DPI",
     }
+
+
+def test_the_pipeline_resolves_a_member_against_every_product_it_tracks():
+    """A one-name list gives `match` nothing to prefer, and it prefers wrongly.
+
+    `match` decides between a member's possible readings by taking the longest
+    product name that ends it — the comment in members.py says
+    "NebulizedTyvaso is Nebulized Tyvaso, not Tyvaso". That comparison needs
+    the sibling to be in the list. The orchestrator omitted `products`, so
+    `candidates_from_instance` fell back to `[product]` and, asked for Tyvaso,
+    resolved `uthr:NebulizedTyvasoMember` to Tyvaso by suffix: a sibling
+    formulation's tagged revenue accepted as the product's own, from the
+    highest-trust reader there is.
+
+    Only the register was masking it, and the register does not cover every
+    issuer.
+    """
+    from app.extraction.members import load_products, match
+
+    products = load_products()
+    assert "Nebulized Tyvaso" in products and "Tyvaso" in products
+
+    impoverished = match("uthr:NebulizedTyvasoMember", ["Tyvaso"])
+    assert impoverished.product == "Tyvaso", "the bug, pinned so the fix is legible"
+
+    informed = match("uthr:NebulizedTyvasoMember", products)
+    assert informed.product == "Nebulized Tyvaso"
+    assert informed.method == "exact"
+
+
+def test_the_orchestrator_passes_that_list_to_the_tagged_reader():
+    """The loader existing is not the fix; calling it is."""
+    import inspect
+
+    from app.pipeline.orchestrator import PipelineOrchestrator
+
+    source = inspect.getsource(PipelineOrchestrator._tagged_revenue)
+    assert "products=load_products()" in source, (
+        "candidates_from_instance falls back to [product] when products is "
+        "omitted, which is the condition the test above describes"
+    )

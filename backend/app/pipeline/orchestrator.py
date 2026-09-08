@@ -63,7 +63,7 @@ from app.parsing.indications import parse_indications
 from app.parsing.periods import detect_period_context, normalize_period
 from app.extraction.candidates import extract_revenue_candidates
 from app.extraction.derive import complete_series
-from app.extraction.members import load_register
+from app.extraction.members import load_products, load_register
 from app.extraction.tagged import candidates_from_instance
 from app.extraction.fingerprint import UNIT_SCALE_TO_MILLIONS
 from app.quality.candidate_filters import filter_revenue_candidates
@@ -997,6 +997,19 @@ class PipelineOrchestrator:
                     raw,
                     product=job.drug_name,
                     issuer=job.manufacturer or "",
+                    # Every product this pipeline tracks, not just the one
+                    # being asked for. `match` prefers the longest product name
+                    # ending a member - that is how NebulizedTyvaso is
+                    # Nebulized Tyvaso rather than Tyvaso - and with a one-name
+                    # list there is nothing to prefer, so
+                    # `uthr:NebulizedTyvasoMember` suffix-matched to Tyvaso and
+                    # a sibling formulation's tagged revenue was accepted as
+                    # the product's own. Only the register was catching it, and
+                    # the register does not cover every issuer.
+                    #
+                    # This can only narrow: a resolution to any other product
+                    # is dropped by the `!= product` filter downstream.
+                    products=load_products(),
                     register=register,
                 )
             except Exception:  # noqa: BLE001 - a malformed instance is not this job's failure

@@ -34,6 +34,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 REGISTER_PATH = Path(__file__).resolve().parents[3] / "seed" / "xbrl_members.csv"
+PRODUCTS_PATH = Path(__file__).resolve().parents[3] / "seed" / "product_attributes.csv"
 REGISTER_FIELDS = ("issuer", "member", "product", "method", "confidence", "note")
 
 # A model told to abstain when unsure, that answers anyway and then reports low
@@ -114,6 +115,33 @@ def match(member: str, products: list[str]) -> Resolution:
             "" if exact else f"product is the trailing words of {member.split(':')[-1]}",
         )
     return Resolution(member, None, "unmatched", 0.0, "no product's words end this member")
+
+
+def load_products(path: Path | None = None) -> list[str]:
+    """Every product this pipeline tracks, for resolving a member against.
+
+    `match` decides between a member's possible readings by preferring the
+    longest product name that ends it - "NebulizedTyvaso is Nebulized Tyvaso,
+    not Tyvaso". That comparison can only be made against products it has been
+    told about, so asked with a one-name list it has nothing to prefer and
+    `uthr:NebulizedTyvasoMember` suffix-matches to Tyvaso: a sibling
+    formulation's tagged revenue accepted as the product's own.
+
+    This is pipeline reference data, not the answer key. The register is built
+    from it, and `product_attributes.csv` is one of the files
+    `test_gold_is_not_an_input` names as a legitimate pipeline input.
+    """
+    target = path or PRODUCTS_PATH
+    if not target.exists():
+        return []
+    with target.open(newline="") as handle:
+        return sorted(
+            {
+                name
+                for row in csv.DictReader(handle)
+                if (name := (row.get("drug_name") or "").strip())
+            }
+        )
 
 
 def load_register(path: Path | None = None) -> dict[tuple[str, str], Resolution]:
