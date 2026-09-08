@@ -60,8 +60,11 @@ Use the `ApiUrl` stack output (ALB). After AWS verifies CloudFront, deploy with 
 - [`docs/evaluation.md`](docs/evaluation.md) — the five evals, what each one
   measures, and which single number is the pipeline's score.
 
-The short version of the second: `eval_extraction_documents.py --discover` is
-the score, because it makes the pipeline find its own filings. The same script
+The short version of the second: `eval_extraction_documents.py --discover`
+makes the readers find their own filings, which is the honest way to measure
+finding. It is not the whole pipeline - it runs none of the twelve stages in
+`run_job`, so the LLM extractor, the evidence judge and conflict reconciliation
+are all absent from it. Treat it as the deterministic floor. The same script
 without the flag hands it the document and measures only reading; that is a
 diagnostic and it prints so before it prints a number.
 

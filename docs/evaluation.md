@@ -3,6 +3,34 @@
 Five evals. They do not measure the same thing, and the difference between two
 of them is where most of the mistakes in this project have been made.
 
+## What these evals do not measure
+
+`eval_coverage.py` and `eval_extraction_documents.py` call the readers
+directly. Checked mechanically, they exercise **none** of the twelve stages in
+`orchestrator.run_job` and call no LLM entry point at all. What they measure is
+the deterministic extraction floor: the XBRL reader, the table reader and the
+derivations, with sourcing included.
+
+Four things the pipeline does are therefore absent from every number below.
+
+* **The LLM extractor** (`orchestrator.py:1001`), run over up to six documents
+  per job, its output gated by `filter_revenue_candidates` so a quote that is
+  not verbatim in the source is dropped.
+* **The evidence judge** (`JobStep.EVIDENCE_JUDGE`), which judges each
+  datapoint against its own quote, with a deterministic fast path and hard
+  vetoes before any model is called.
+* **Reconciliation** (`JobStep.RECONCILE_CONFLICTS`), which groups candidates
+  by period, scope and formulation, has the model pick a winner among those
+  that disagree, and falls back to `SOURCE_PRIORITY` - which ranks
+  `SEC_FILING`, the 10-K and 10-Q, above `EARNINGS_RELEASE`. Losers are marked
+  `needs_review`, not published.
+* **The search fallback**, quality checks, and completeness.
+
+So a "wrong value" here is a figure a reader *emitted*, not one the pipeline
+*published*: two stages stand between them, and most disagreements would be
+routed to review. Read these numbers as a floor on what can be found without a
+model, and an upper bound on the error rate that would survive.
+
 ## The score
 
 **`scripts/eval_extraction_documents.py --discover`.** Gold supplies only the
