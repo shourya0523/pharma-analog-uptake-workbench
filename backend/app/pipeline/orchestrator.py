@@ -1073,6 +1073,10 @@ class PipelineOrchestrator:
             return []
         self._set_step(job, JobStep.EXTRACT_REVENUE)
         rows: list[DatapointORM] = []
+        # Period totals, kept aside rather than stored: they are not answers to
+        # a quarterly question, they are what a missing quarter is subtracted
+        # from.
+        derivation_pool: list[dict[str, Any]] = []
         dropped_total = 0
         any_product_money = False
         # Reading tables costs nothing, so every parsed source is read; only the
@@ -1183,7 +1187,26 @@ class PipelineOrchestrator:
                 context=doc.full_text[:4000],
                 grids=doc.table_grids, captions=doc.table_captions,
                 prose=doc.full_text,
+                # The totals as well as the quarters. A quarter the issuer
+                # never stated on its own is the difference between a total it
+                # did state and the quarters it did, and `complete_series`
+                # cannot compute that without the total: asked for quarters
+                # only, it received quarters only and derived nothing, in every
+                # job this pipeline has ever run. Only the quarters are stored;
+                # the totals exist to be subtracted from.
+                quarterly_only=False,
             )
+            period_totals = [
+                candidate
+                for candidate in fingerprinted
+                if candidate.get("period_type") != PeriodType.QUARTERLY.value
+            ]
+            fingerprinted = [
+                candidate
+                for candidate in fingerprinted
+                if candidate.get("period_type") == PeriodType.QUARTERLY.value
+            ]
+            derivation_pool.extend(period_totals)
             for finding in table_findings:
                 logger.warning(
                     "table_check job_id=%s source_id=%s %s",
@@ -1352,7 +1375,9 @@ class PipelineOrchestrator:
             for row in rows
             if claim_rank(row.extraction_method) <= derived_rank
         ]
-        derived = complete_series({job.drug_name: derivable}, product=job.drug_name)
+        derived = complete_series(
+            {job.drug_name: derivable + derivation_pool}, product=job.drug_name
+        )
         # Only a stronger claim pre-empts a derivation. Skipping every period
         # anything had been found for meant a sentence reading 1.0 did not lose
         # to a family total that derives exactly to 94.645 - it stopped that
