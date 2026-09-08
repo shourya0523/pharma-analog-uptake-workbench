@@ -119,3 +119,51 @@ def test_a_company_name_never_resolves_to_the_nearest_registrant():
     assert normalize_registrant("United") != normalize_registrant(
         "United Therapeutics Corp"
     )
+
+
+async def test_the_budget_counts_filings_so_a_filing_is_never_split(monkeypatch):
+    """A quarter's exhibits are one disclosure; the cap must not cut between them.
+
+    Johnson & Johnson files two EX-99 documents per earnings 8-K, the press
+    release and the product-sales schedule. While the budget counted exhibits,
+    six of them bought three quarters - and the sixth took a press release and
+    left behind the schedule it belongs to, so that quarter was retrieved and
+    still unreadable. Measured over Uptravi, Stelara and Xarelto in 2018 and
+    2019: 9 of 24 gold quarters had no datapoint at all, every Q2 and the one
+    Q3 whose schedule fell the wrong side of the cut.
+    """
+    from app.connectors.sources import SECConnector
+    from app.storage.filestore import LocalFileStore
+
+    connector = SECConnector(LocalFileStore("/tmp"))
+
+    async def _documents(self, client, cik_int, acc_nodash):
+        return [f"{acc_nodash}exhibit991.htm", f"{acc_nodash}exhibit992.htm"]
+
+    async def _fetch(self, client, *, url, accession, doc, run_id, job_id, source_id):
+        return b"<html></html>", False, f"key/{doc}"
+
+    monkeypatch.setattr(SECConnector, "_list_filing_documents", _documents)
+    monkeypatch.setattr(SECConnector, "_fetch_document", _fetch)
+
+    quarters = ["2019-10-15", "2019-07-16", "2019-04-16", "2019-01-22"]
+    recent = {
+        "form": ["8-K"] * len(quarters),
+        "accessionNumber": [f"000020040619-{n:06d}" for n in range(len(quarters))],
+        "filingDate": quarters,
+        "items": ["2.02"] * len(quarters),
+    }
+
+    sources = await connector._retrieve_earnings_exhibits(
+        None, run_id="r", job_id="j", cik="0000200406", recent=recent, max_exhibits=3
+    )
+
+    by_accession: dict[str, int] = {}
+    for source in sources:
+        by_accession[source.accession_number] = by_accession.get(source.accession_number, 0) + 1
+
+    assert len(by_accession) == 3, "the budget is three filings, not three documents"
+    assert set(by_accession.values()) == {2}, (
+        "every filing taken must bring both of its exhibits - taking the press "
+        "release without the schedule retrieves the quarter and cannot read it"
+    )

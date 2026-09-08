@@ -313,9 +313,18 @@ class SECConnector:
         items = recent.get("items", [])
         cik_int = str(int(cik))
 
+        # The budget counts filings, not exhibits, because a filing is a
+        # quarter and its exhibits are one disclosure split across documents.
+        # Counting exhibits truncated mid-filing: Johnson & Johnson files two
+        # EX-99s per 8-K, so six exhibits bought three quarters, and the sixth
+        # took a press release while leaving behind the product-sales schedule
+        # it belongs to. Measured over Uptravi, Stelara and Xarelto in 2018 and
+        # 2019, that lost 9 of 24 quarters - every Q2, and the one Q3 whose
+        # schedule fell the wrong side of the cut.
         sources: list[RetrievedSource] = []
+        filings_read = 0
         for i, form in enumerate(forms):
-            if len(sources) >= max_exhibits:
+            if filings_read >= max_exhibits:
                 break
             if form != "8-K":
                 continue
@@ -343,9 +352,8 @@ class SECConnector:
             # numbering says which is which, so the way to not choose wrongly is
             # not to choose - reading an exhibit that holds no product table
             # costs a parse, and skipping the one that does costs the quarter.
-            for doc in exhibits[:max_exhibits]:
-                if len(sources) >= max_exhibits:
-                    break
+            filings_read += 1
+            for doc in exhibits:
                 sid = new_id()
                 url = f"{self.ARCHIVES}/{cik_int}/{acc_nodash}/{doc}"
                 try:
