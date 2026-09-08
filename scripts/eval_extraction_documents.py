@@ -239,6 +239,9 @@ def main() -> int:
         help="the pipeline finds its own filings; gold supplies only the "
              "product, the issuer and the quarter",
     )
+    ap.add_argument("--json", default="",
+                    help="write one record per scored row, so a run can be "
+                         "restricted or diffed without being repeated")
     args = ap.parse_args()
 
     rows = load_rows()
@@ -309,6 +312,14 @@ def main() -> int:
                         "label": best.get("product_label") or best.get("scope", "?"),
                     }
                 )
+
+    if args.json:
+        pathlib.Path(args.json).write_text(json.dumps([
+            {"drug_name": row["drug_name"], "manufacturer": row["manufacturer"],
+             "period": row["period"], "state": state,
+             "value_normalized_usd_millions": row.get("value_normalized_usd_millions")}
+            for state, group in outcomes.items() for row in group
+        ]))
 
     scored = len(rows) - len(outcomes["no_document"])
     read = len(outcomes["read"])
