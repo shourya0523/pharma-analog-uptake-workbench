@@ -47,6 +47,7 @@ import argparse
 import asyncio
 import collections
 import datetime as dt
+import itertools
 import json
 import logging
 import os
@@ -370,25 +371,25 @@ def report(jobs: list[dict], *, scope: str) -> None:
         for method, n in methods.most_common():
             print(f"  {method:<28}{n:>5}")
 
-    # Reconciliation adjudicates only within a group, and the group key carries
-    # revenue_scope. The deterministic readers emit "Product family" or
-    # "Formulation-specific"; the model emits from the whole RevenueScope
-    # vocabulary, geography included. Where two candidates for one quarter
-    # disagree and sit in different groups, no stage ever compares them.
-    disagreeing = paired = 0
+    # Reconciliation adjudicates within a group keyed on (period, scope,
+    # formulation), so two candidates in different groups are never compared.
+    # Only candidates about the *same series* should be: a U.S. line and a
+    # worldwide line disagreeing is not a conflict, it is two right answers to
+    # different questions, and counting those made this look far worse than it
+    # is. So the pairs counted here are ones that answer the same gold row and
+    # still disagree - where a comparison is owed.
+    owed = compared = 0
     for r in records:
-        got = r["candidates"]
-        if len(got) < 2:
-            continue
-        values = [float(c["value"]) for c in got]
-        if max(values) - min(values) <= E.TOLERANCE:
-            continue
-        disagreeing += 1
-        if len({tuple(c["reconcile_key"]) for c in got}) < len(got):
-            paired += 1
-    if disagreeing:
-        print(f"\nquarters with candidates that disagree      {disagreeing}")
-        print(f"  of those, any two sharing a reconcile key  {paired}"
+        got = [c for c in r["candidates"]
+               if answers_scope(c["scope"], r.get("gold_scope"))]
+        for first, second in itertools.combinations(got, 2):
+            if abs(float(first["value"]) - float(second["value"])) <= E.TOLERANCE:
+                continue
+            owed += 1
+            compared += first.get("reconcile_key") == second.get("reconcile_key")
+    if owed:
+        print(f"\ndisagreeing pairs about the same series     {owed}")
+        print(f"  of those, sharing a reconciliation group   {compared}"
               "   <- the rest were never compared")
 
     bad = [r for r in records if r["state"] in {"published_wrong", "published_conflict"}]

@@ -1,15 +1,95 @@
 # How this pipeline is measured
 
-Five evals. They do not measure the same thing, and the difference between two
+Six evals. They do not measure the same thing, and the difference between two
 of them is where most of the mistakes in this project have been made.
 
-## What these evals do not measure
+## The score
+
+**`scripts/eval_pipeline_end_to_end.py`.** It creates an extraction run and a
+job per (product, issuer, window), calls `PipelineOrchestrator.run_job`, and
+scores the datapoints the pipeline **published** - `validation_status`
+`auto_pass`, the only state it will stand behind without a reviewer. Every
+stage is therefore in the number, including the ones that cost money.
+
+Everything else on this page measures a part. This measures the product.
+
+    SEC_USER_AGENT='project you@example.com' \
+    OPENROUTER_MODEL_EXTRACT=openai/gpt-4o-mini \
+    OPENROUTER_MODEL_JUDGE=openai/gpt-4o-mini \
+        python scripts/eval_pipeline_end_to_end.py --sample --out /tmp/e2e.json
+
+    python scripts/eval_pipeline_end_to_end.py --rescore /tmp/e2e.json
+
+`--sample` is four products across two issuers over 2018 and 2019, which
+straddles the XBRL detail-tagging cutoff so both the table reader and the
+filer's own tagged facts are exercised. A window is one year by default because
+the connector's exhibit ceiling is six: asking one job for eight years of
+quarters silently drops most of them and then scores the pipeline on filings it
+was never handed.
+
+`--rescore` re-runs the scoring over a stored run without running anything or
+calling any model. Use it before believing a change to how a gold row is
+matched - see "Reading a number honestly" below for why that is not optional.
+
+The hit rate is not the interesting part. Correctness is crossed against
+`validation_status`, which splits four ways that were never separable before:
+
+| | |
+|---|---|
+| published & correct | the score |
+| published & wrong | handed to a consumer with a citation, uncheckable |
+| held & wrong | the judge earning its cost |
+| held & correct | the judge's cost, in answers withheld |
+
+Over the 32 gold quarters of `--sample`, most recently:
+
+| | |
+|---|---|
+| published, correct | **31/32, 96.9%** |
+| published, wrong | **0** |
+| held for review, correct | 1 |
+| `auto_pass` precision | 34 correct, 0 wrong |
+| **judge catch rate** | **3/3 wrong datapoints held back** |
+
+That last row is what this eval was built for and it had never been measured.
+Three readers were wrong in that run - a sentence reading 13.4 for Orenitram, a
+model reading 1.3, a sentence reading 13.4 for Tyvaso - and all three were held
+back. Count it over datapoints and not over quarters: a quarter where one
+reader was wrong and another right scores as answered, and counting by quarter
+reported "no wrong values to catch" for exactly that run.
+
+**Thirty-two quarters over four products is a sample, not the corpus.** No
+corpus-wide figure for the pipeline exists yet, and none should be quoted until
+one is run.
+
+Two things this eval found on its first outing, which is the argument for
+having it:
+
+* The pipeline published **34%** of what its readers had already found, with
+  nothing wrong and twenty-one correct answers withheld. A deterministic fill
+  writing "aggregate" into `formulation` - restating a scope the row already
+  carried - went through the path built for a model's guess at a blank field,
+  which forces review and caps confidence below the quality gate's floor.
+* A conflict the model declined to settle marked every candidate a loser, and
+  the deterministic fallback then skipped the group because it already
+  contained losers. A schedule reading 54.0 beside a sentence reading 13.4:
+  both withheld.
+
+Neither is visible to any eval that calls the readers directly, because neither
+is in the readers.
+
+## What the other evals do not measure
 
 `eval_coverage.py` and `eval_extraction_documents.py` call the readers
 directly. Checked mechanically, they exercise **none** of the twelve stages in
 `orchestrator.run_job` and call no LLM entry point at all. What they measure is
 the deterministic extraction floor: the XBRL reader, the table reader and the
 derivations, with sourcing included.
+
+`backend/tests/test_the_eval_runs_the_pipeline.py` fails the suite if no script
+drives `run_job`, because an eval that re-implements the pipeline can drift
+from it and did, in four places at once, while its figures were being quoted as
+the pipeline's.
 
 Four things the pipeline does are therefore absent from every number below.
 
@@ -31,17 +111,19 @@ So a "wrong value" here is a figure a reader *emitted*, not one the pipeline
 routed to review. Read these numbers as a floor on what can be found without a
 model, and an upper bound on the error rate that would survive.
 
-## The score
+## The floor, with sourcing
 
 **`scripts/eval_extraction_documents.py --discover`.** Gold supplies only the
 product, the issuer and the quarter. The pipeline resolves the CIK, walks EDGAR
 for earnings exhibits around that quarter, reads what it finds, and is asked for
-that product's revenue. Finding the right filing is part of the job, so this is
-the only number that describes the pipeline.
+that product's revenue. Finding the right filing is part of the job, so this
+describes everything the pipeline does except the stages that decide whether a
+figure is fit to publish - which turned out to be where two thirds of its
+output was going.
 
 ```bash
 python scripts/eval_extraction_documents.py --discover --limit 40   # a sample
-SEC_CONTACT='...' python scripts/eval_coverage.py /tmp/coverage.json  # the corpus
+SEC_USER_AGENT='...' python scripts/eval_coverage.py /tmp/coverage.json  # the corpus
 ```
 
 `eval_coverage.py` answers the same question for every row. What the pipeline
