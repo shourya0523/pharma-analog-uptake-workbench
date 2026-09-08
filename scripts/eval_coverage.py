@@ -32,6 +32,7 @@ sys.path.insert(0, str(REPO / "scripts")); sys.path.insert(0, str(REPO / "backen
 import eval_extraction_documents as E
 from app.connectors.sources import SECConnector
 from app.extraction.candidates import extract_revenue_candidates
+from app.extraction.derive import complete_series
 from app.extraction.members import load_register
 from app.extraction.tagged import candidates_from_instance
 from app.parsing.documents import DocumentParser
@@ -47,7 +48,26 @@ store = E.LocalCacheStore(pathlib.Path(os.environ.get("DISCOVER_CACHE", "/tmp/di
 TAGGED = os.environ.get("USE_XBRL", "1") != "0"
 REGISTER = load_register() if TAGGED else {}
 with (REPO / "seed" / "product_attributes.csv").open(newline="") as _handle:
-    PRODUCTS = sorted({r["drug_name"].strip() for r in csv.DictReader(_handle) if r.get("drug_name")})
+    _ATTRS = [r for r in csv.DictReader(_handle) if r.get("drug_name")]
+PRODUCTS = sorted({r["drug_name"].strip() for r in _ATTRS})
+# Which product is a formulation of which family, from the pipeline's own
+# reference data. Gold says nothing here; seed/product_attributes.csv carries
+# "formulation_of:Tyvaso" because that is a fact about the product.
+FAMILY_OF = {
+    r["drug_name"].strip(): r["peer_universe_role"].split(":", 1)[1].strip()
+    for r in _ATTRS
+    if (r.get("peer_universe_role") or "").startswith("formulation_of:")
+}
+SIBLINGS = {
+    product: sorted(
+        {other for other, fam in FAMILY_OF.items() if fam == family and other != product}
+        | {other["drug_name"].strip() for other in _ATTRS
+           if other["drug_name"].strip() != product
+           and other["drug_name"].strip() != family
+           and other["drug_name"].strip().startswith(family + " ")}
+    )
+    for product, family in FAMILY_OF.items()
+}
 print(f"xbrl: {'on' if TAGGED else 'off'}  register: {len(REGISTER)} members  "
       f"products: {len(PRODUCTS)}")
 def _agrees(values: list[float], target: float) -> bool:
@@ -68,6 +88,9 @@ def _agrees(values: list[float], target: float) -> bool:
 outcome = collections.Counter()
 per_issuer = collections.defaultdict(collections.Counter)
 detail = []
+# Every candidate the run extracted, so a series can be completed from what the
+# issuer published across its filings rather than from one quarter's document.
+pool: dict[tuple[str, str], list[dict]] = collections.defaultdict(list)
 
 async def go():
     import datetime as _dt
@@ -113,6 +136,7 @@ async def go():
                         raw, product=row["drug_name"], issuer=maker,
                         products=PRODUCTS, register=REGISTER)
                     tagged.extend(got)
+                pool[(maker, row["drug_name"])].extend(tagged)
                 same = [c for c in tagged if str(c.get("period")) == row["period"]]
                 target = row["value_normalized_usd_millions"]
                 values = [float(c["value_normalized_usd_millions"]) for c in same]
@@ -134,8 +158,11 @@ async def go():
                 got, _f, _s = extract_revenue_candidates(
                     doc.tables, product=row["drug_name"],
                     generic=row.get("generic_name"), context=doc.full_text[:4000],
-                    grids=doc.table_grids, captions=doc.table_captions)
+                    grids=doc.table_grids, captions=doc.table_captions,
+                    quarterly_only=False)
                 found.extend(got)
+            pool[(maker, row["drug_name"])].extend(found)
+            found = [c for c in found if c.get("period_type") == "quarterly"]
             target = row["value_normalized_usd_millions"]
             same = [c for c in found if str(c.get("period")) == row["period"]
                     and c.get("value_normalized_usd_millions") is not None]
@@ -154,6 +181,42 @@ async def go():
                   f"read={outcome['read']}", flush=True)
 
 asyncio.run(go())
+
+# Stage 3b: the quarters a product's own series implies. Applied only to rows
+# nothing was found for, so a derivation can fill a gap and never overrule a
+# figure read off a page. Both derivations are exact arithmetic over values the
+# issuer published; neither invents a number.
+derived_cache: dict[tuple[str, str], dict[str, dict]] = {}
+for record in detail:
+    if record["state"] != "not_found":
+        continue
+    maker, product = record["manufacturer"], record["drug_name"]
+    if (maker, product) not in derived_cache:
+        family = FAMILY_OF.get(product)
+        derived_cache[(maker, product)] = {
+            str(candidate["period"]): candidate
+            for candidate in complete_series(
+                {name: pool[(maker, name)] for name in
+                 {product, family, *SIBLINGS.get(product, ())} if name},
+                product=product, family=family,
+                siblings=SIBLINGS.get(product, ()),
+            )
+        }
+    candidate = derived_cache[(maker, product)].get(record["period"])
+    if candidate is None:
+        continue
+    value = candidate["value_normalized_usd_millions"]
+    target = record["value_normalized_usd_millions"]
+    hit = abs(float(value) - float(target)) <= E.TOLERANCE
+    outcome["not_found"] -= 1
+    per_issuer[maker]["not_found"] -= 1
+    state = "read_derived" if hit else "wrong_value_derived"
+    outcome[state] += 1
+    per_issuer[maker][state] += 1
+    record["state"] = "read" if hit else "wrong_value"
+    record["read"] = float(value)
+    record["via"] = candidate["extraction_method"]
+
 total = sum(outcome.values())
 print(f"\nrows scored {total}")
 for state, n in outcome.most_common():
@@ -161,9 +224,10 @@ for state, n in outcome.most_common():
 print("\nby issuer")
 for maker, counts in sorted(per_issuer.items()):
     n = sum(counts.values())
-    correct = counts["read"] + counts["read_tagged"]
+    correct = counts["read"] + counts["read_tagged"] + counts["read_derived"]
     print(f"  {maker:<22}{correct:>5}/{n:<6}{correct/n:7.1%}   "
           f"tagged {counts['read_tagged']:>4}  table {counts['read']:>4}  "
+          f"derived {counts['read_derived']:>3}  "
           f"missed {n - correct:>4}")
 OUT.write_text(json.dumps(detail))
 print("\nper-row detail written to", OUT)

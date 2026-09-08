@@ -62,6 +62,9 @@ from app.parsing.fda_label import format_moa_profile_value, parse_label_record
 from app.parsing.indications import parse_indications
 from app.parsing.periods import detect_period_context, normalize_period
 from app.extraction.candidates import extract_revenue_candidates
+from app.extraction.derive import complete_series
+from app.extraction.members import load_register
+from app.extraction.tagged import candidates_from_instance
 from app.extraction.fingerprint import UNIT_SCALE_TO_MILLIONS
 from app.quality.candidate_filters import filter_revenue_candidates
 from app.quality.checks import (
@@ -347,6 +350,11 @@ class PipelineOrchestrator:
                     company_name=job.manufacturer,
                     include_primary=want_primary,
                     include_earnings=want_earnings,
+                    # The 10-Q and 10-K carry the filer's own tagged facts. A
+                    # figure it tagged states its period, its unit and which
+                    # product it belongs to, so nothing about it has to be
+                    # recovered from how a page is laid out.
+                    include_xbrl=want_primary or want_earnings,
                     earnings_since=parse_filing_date(options.get("earnings_since")),
                     earnings_until=parse_filing_date(options.get("earnings_until")),
                 )
@@ -827,6 +835,95 @@ class PipelineOrchestrator:
         parsed = await self._parse(job, search_sources)
         return search_sources, parsed
 
+    @staticmethod
+    def _candidate_of(row: DatapointORM) -> dict:
+        """A stored datapoint read back as the candidate it came from."""
+        return {
+            "period": row.period,
+            "period_type": row.period_type,
+            "value_reported": row.value_reported,
+            "value_normalized_usd_millions": row.value_normalized_usd_millions,
+            "currency": row.currency,
+            "unit": row.unit,
+            "source_quote": row.source_quote,
+        }
+
+    def _datapoint_from_candidate(self, job: DrugJobORM, src, candidate: dict) -> DatapointORM:
+        """A tagged fact stored as a datapoint.
+
+        Nothing is normalized on the way in because nothing was inferred: the
+        period, the unit and the currency are the filer's own, and the quote is
+        the citation naming the fact rather than a line of prose.
+        """
+        period = str(candidate.get("period") or "unknown")
+        row = DatapointORM(
+            id=new_id(),
+            job_id=job.id,
+            source_id=src.source_id,
+            period=period,
+            value_reported=float(candidate["value_reported"]),
+            value_normalized_usd_millions=float(candidate["value_normalized_usd_millions"]),
+            currency=candidate.get("currency") or "USD",
+            unit=candidate.get("unit") or "units",
+            period_type=candidate.get("period_type") or "quarterly",
+            revenue_scope=candidate.get("revenue_scope") or "Product family",
+            formulation=candidate.get("formulation"),
+            source_url=src.url,
+            source_quote=candidate.get("source_quote") or "",
+            extraction_method="xbrl_fact",
+            confidence_score=float(candidate.get("confidence") or 0.9),
+            validation_status=ValidationStatus.PENDING.value,
+            citation_json={
+                "source_url": src.url,
+                "filing_type": src.filing_type,
+                "accession": src.accession_number,
+                "xbrl_member": candidate.get("xbrl_member"),
+                "xbrl_context": candidate.get("xbrl_context"),
+                "member_resolved_by": candidate.get("member_resolved_by"),
+                "validation_status": ValidationStatus.PENDING.value,
+                "interpreted": False,
+                "period_reported": period,
+            },
+            issue_flags=["extracted_from_xbrl"],
+        )
+        self.db.add(row)
+        return row
+
+    async def _tagged_revenue(self, job: DrugJobORM, sources: list) -> list[DatapointORM]:
+        """Revenue this issuer tagged for this product, from its XBRL instances.
+
+        Empty is the ordinary answer for a filing from before the issuer's
+        detail-tagging cutoff. Nothing here knows what that cutoff is: an
+        instance that tags no product-level revenue simply yields nothing.
+        """
+        rows: list[DatapointORM] = []
+        register = load_register()
+        for src in sources:
+            if not (src.metadata or {}).get("xbrl_instance") or not src.storage_key:
+                continue
+            try:
+                raw = await self.file_store.get(src.storage_key)
+            except Exception:  # noqa: BLE001 - an instance we cannot read is not an error
+                continue
+            if not raw:
+                continue
+            try:
+                found, notes = candidates_from_instance(
+                    raw,
+                    product=job.drug_name,
+                    issuer=job.manufacturer or "",
+                    register=register,
+                )
+            except Exception:  # noqa: BLE001 - a malformed instance is not this job's failure
+                continue
+            for note in notes:
+                logger.info("xbrl_note job_id=%s source_id=%s %s", job.id, src.source_id, note)
+            for candidate in found:
+                rows.append(self._datapoint_from_candidate(job, src, candidate))
+        if rows:
+            logger.info("xbrl_facts job_id=%s drug=%s facts=%d", job.id, job.drug_name, len(rows))
+        return rows
+
     async def _extract_revenue(
         self,
         job: DrugJobORM,
@@ -857,6 +954,12 @@ class PipelineOrchestrator:
         if only_source_ids:
             selected_sources = [s for s in selected_sources if s.source_id in only_source_ids]
         extra = self._job_aliases or None
+
+        # The filer's own assertions come first. A tagged fact needs no
+        # geometry read off it, so where one exists it is the better claim; the
+        # table reader still runs, and the two are reconciled downstream like
+        # any other pair of candidates.
+        rows.extend(await self._tagged_revenue(job, selected_sources))
 
         for src in selected_sources:
             doc = parsed.get(src.source_id)
@@ -1079,6 +1182,28 @@ class PipelineOrchestrator:
                 rows.append(row)
                 if src_row:
                     src_row.relevant_datapoints_found = (src_row.relevant_datapoints_found or 0) + 1
+
+        # Stage 3b: the quarters this product's own series implies. A fourth
+        # quarter an issuer never stated on its own is the difference between
+        # the year it did state and the three quarters it did, which is the
+        # issuer's arithmetic rather than an estimate - and it is applied only
+        # where every other quarter of that total is present.
+        derived = complete_series(
+            {job.drug_name: [self._candidate_of(row) for row in rows]},
+            product=job.drug_name,
+        )
+        reported_periods = {row.period for row in rows}
+        for candidate in derived:
+            if candidate["period"] in reported_periods:
+                continue
+            source = next((s for s in selected_sources), None)
+            if source is None:
+                break
+            rows.append(self._datapoint_from_candidate(job, source, candidate))
+        if derived:
+            logger.info(
+                "derived_quarters job_id=%s drug=%s derived=%d", job.id, job.drug_name, len(derived)
+            )
 
         if not rows and not skip_unresolved:
             reason = (

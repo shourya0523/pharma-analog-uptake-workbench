@@ -28,6 +28,7 @@ import re
 from collections import defaultdict
 from dataclasses import replace
 
+from collections.abc import Iterable
 from typing import Any
 
 from app.extraction.process import Datapoint
@@ -36,6 +37,11 @@ _QUARTER_RE = re.compile(r"(\d{4})Q([1-4])")
 
 # Quarters constituting each longer reporting period.
 _QUARTERS_IN = {"annual": (1, 2, 3, 4), "nine_month": (1, 2, 3), "six_month": (1, 2)}
+
+# A derived quarter is exact arithmetic over figures the issuer published, so
+# it is scored just below a figure read straight off the page rather than as a
+# guess - and it says which inputs produced it.
+DERIVED_CONFIDENCE = 0.7
 
 # Derived quarters inherit rounding from their inputs, so a residual this small
 # is arithmetic noise rather than a real amount.
@@ -249,3 +255,96 @@ def _next_day(date: str) -> str:
 
     year, month, day = (int(part) for part in date.split("-"))
     return (_date(year, month, day) + timedelta(days=1)).isoformat()
+
+
+def _as_datapoint(candidate: dict[str, Any]) -> Datapoint | None:
+    """A candidate dict read back as the observation it was made from."""
+    value = candidate.get("value_normalized_usd_millions")
+    if value is None or not candidate.get("period"):
+        return None
+    return Datapoint(
+        product_label=candidate.get("product_label") or candidate.get("formulation") or "",
+        period=str(candidate["period"]),
+        period_type=candidate.get("period_type") or "quarterly",
+        value_normalized_usd_millions=float(value),
+        value_as_reported=float(candidate.get("value_reported") or value),
+        source_unit=candidate.get("unit") or "millions",
+        source_currency=candidate.get("currency") or "USD",
+        fx_rate_to_usd=None,
+        source_quote=candidate.get("source_quote") or "",
+        fingerprint_signature=candidate.get("fingerprint_signature") or "",
+        normalization_status="reported",
+    )
+
+
+def complete_series(
+    reported: dict[str, list[dict[str, Any]]],
+    *,
+    product: str,
+    family: str | None = None,
+    siblings: Iterable[str] = (),
+    commercial_start: str | None = None,
+) -> list[dict[str, Any]]:
+    """The quarters this product's own series implies, beyond those reported.
+
+    ``reported`` holds the candidates already extracted, keyed by the product
+    they were extracted for: this product, and - where the caller knows of them
+    - the family line it belongs to and the sibling formulations that share it.
+
+    Two derivations apply, and both are arithmetic over figures the issuer
+    published rather than estimates:
+
+    * the quarter left implicit against a stated total, when every other quarter
+      of that total is present;
+    * the family total, before any sibling formulation appears in the data, when
+      this product is a formulation of that family. When the split happened is
+      read off the siblings' own first appearance rather than from a date in
+      this file, so a formulation launching earlier or later than expected moves
+      the boundary by itself.
+
+    Nothing under-determined is derived. A period on or after the split, or a
+    year missing two quarters, stays the gap it is.
+    """
+    own = [point for c in reported.get(product, []) if (point := _as_datapoint(c))]
+    derived = list(complete_quarters_from_totals(own, commercial_start=commercial_start))
+
+    if family and family != product:
+        split_periods = {
+            str(candidate["period"])
+            for name in siblings
+            for candidate in reported.get(name, [])
+            if candidate.get("period")
+        }
+        if split_periods:
+            family_points = [
+                point
+                for candidate in reported.get(family, [])
+                if (point := _as_datapoint(candidate))
+                and point.period_type == "quarterly"
+            ]
+            already = {point.period for point in own} | {p.period for p in derived}
+            derived += [
+                point
+                for point in propagate_sole_formulation(
+                    family_points,
+                    formulation_periods=split_periods,
+                    formulation_label=product,
+                )
+                if point.period not in already
+            ]
+
+    return [
+        {
+            "period": point.period,
+            "period_type": point.period_type,
+            "value_reported": point.value_as_reported,
+            "value_normalized_usd_millions": point.value_normalized_usd_millions,
+            "currency": point.source_currency,
+            "unit": point.source_unit,
+            "source_quote": point.source_quote,
+            "confidence": DERIVED_CONFIDENCE,
+            "extraction_method": point.normalization_status,
+            "_derived": True,
+        }
+        for point in derived
+    ]
