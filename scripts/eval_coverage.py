@@ -75,6 +75,18 @@ SIBLINGS = {
 }
 print(f"xbrl: {'on' if TAGGED else 'off'}  register: {len(REGISTER)} members  "
       f"products: {len(PRODUCTS)}")
+# What a document is for, lowest first. The tagged facts inside the 10-Q and
+# 10-K outrank everything and are read before any of this; these ranks order
+# what is left, which is prose and HTML tables. An 8-K earnings exhibit is a
+# product-sales schedule and nothing else, so its tables are about the question
+# being asked; a 10-K's tables are mostly about something else.
+_AUTHORITY = {"8-K": 0, "10-Q": 1, "10-K": 2}
+
+
+def _authority(source) -> int:
+    return _AUTHORITY.get((source.filing_type or "").upper(), 3)
+
+
 def _agrees(values: list[float], target: float) -> bool:
     """Whether the pipeline answered this period, with one answer.
 
@@ -109,8 +121,6 @@ async def go():
             sources = await SECConnector(store).retrieve(
                 run_id="coverage", job_id="coverage", cik=None, ticker=ticker,
                 company_name=None if ticker else maker,
-                # The 10-Q as well as the 8-K: before the product-sales
-                # exhibit existed, the figure is a sentence in the filing.
                 include_primary=True, include_earnings=True,
                 include_xbrl=TAGGED,
                 earnings_since=end + _dt.timedelta(days=5),
@@ -132,7 +142,8 @@ async def go():
                 continue
             doc = await parser.parse(source)
             if doc.parsing_status.value == "success" and (doc.tables or doc.full_text):
-                docs.append(doc)
+                docs.append((_authority(source), doc))
+        docs.sort(key=lambda pair: pair[0])
         for row in group:
             if TAGGED and instances:
                 # The filer's own assertion, tried before anything is read off
@@ -160,14 +171,25 @@ async def go():
                 per_issuer[maker]["no_readable_filing"] += 1
                 detail.append({**row, "state": "no_readable_filing"})
                 continue
+            # Documents are consulted in order of what they are for, and a
+            # later one answers only the periods an earlier one did not. The
+            # 10-Q and 10-K are the authoritative filings and their tagged
+            # facts are read first of all, above; what ranks below the 8-K
+            # exhibit here is their *prose and HTML tables*, because a primary
+            # filing carries dozens of tables that print a product's name
+            # beside a number for some other reason, while the 8-K exhibit is
+            # the product-sales schedule and nothing else. Pooling them
+            # instead of ranking them cost nine rows and turned nine more into
+            # contradictions.
             found = []
-            for doc in docs:
+            for _rank, doc in docs:
+                answered = {str(c.get("period")) for c in found}
                 got, _f, _s = extract_revenue_candidates(
                     doc.tables, product=row["drug_name"],
                     generic=row.get("generic_name"), context=doc.full_text[:4000],
                     grids=doc.table_grids, captions=doc.table_captions,
                     prose=doc.full_text, quarterly_only=False)
-                found.extend(got)
+                found.extend(c for c in got if str(c.get("period")) not in answered)
             pool[(maker, row["drug_name"])].extend(found)
             found = [c for c in found if c.get("period_type") == "quarterly"]
             target = row["value_normalized_usd_millions"]

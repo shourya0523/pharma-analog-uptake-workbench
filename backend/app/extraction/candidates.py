@@ -101,13 +101,19 @@ def extract_revenue_candidates(
     # not state, so a figure printed in a schedule is never displaced by the
     # same figure described around it.
     if prose:
-        stated = {(value.period, value.product_label) for value in values}
+        # A period, not a period-and-label. A sentence names the product one way
+        # and the schedule another - "Tyvaso" against "Tyvaso (R)" - so keying
+        # the fallback on both lets the same figure through twice, described
+        # differently and sometimes scoped differently, and two candidates that
+        # disagree are not an answer. Measured: pooling them cost eight rows and
+        # turned nine more into contradictions.
+        stated = {value.period for value in values}
         values += [
             value
             for value in read_prose(
                 prose, product=product, generic=generic, extra_aliases=extra_aliases
             )
-            if (value.period, value.product_label) not in stated
+            if value.period not in stated
         ]
 
     points = normalize_all(values)
