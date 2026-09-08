@@ -268,10 +268,6 @@ def html_table_grids(soup: BeautifulSoup) -> list[list[list[str | None]]]:
     return [grid for _table, grid in _selected_tables(soup)]
 
 
-def html_table_captions(soup: BeautifulSoup) -> list[str]:
-    """What introduces each kept table, aligned with ``html_table_grids``."""
-    return [table_caption(table) for table, _grid in _selected_tables(soup)]
-
 
 def flatten_grid(grid: list[list[str | None]]) -> list[list[str]]:
     """A grid read back as ragged rows: the cells that are actually there.
