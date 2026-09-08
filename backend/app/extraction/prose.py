@@ -81,7 +81,16 @@ _QUARTER_AND_YTD_RE = re.compile(
 # an explicit, ordered correspondence.
 _PAIRING_RE = re.compile(r"\brespectively\b", re.IGNORECASE)
 
-_SENTENCE_SPLIT_RE = re.compile(r"(?<=[.;])\s+")
+# A sentence ends at its terminator, and the closing quote, bracket or
+# footnote mark that may follow it belongs to the sentence rather than to
+# the next one. Requiring whitespace *immediately* after the terminator
+# meant a paragraph ending `studies.”` never split, so a sentence naming a
+# product ran on into the one after it: United Therapeutics' 2005 release
+# mentions Remodulin in a sentence about clinical trials and states total
+# company revenues in the next, and the reader paired the product from one
+# with the amount from the other. Every such pairing was high by 4-8%,
+# because a company total is a little larger than the product.
+_SENTENCE_SPLIT_RE = re.compile(r"(?<=[.;])[\"'\u201d\u2019)\]]*\s+")
 
 
 @dataclass(frozen=True)

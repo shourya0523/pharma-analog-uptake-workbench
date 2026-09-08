@@ -167,3 +167,60 @@ async def test_the_budget_counts_filings_so_a_filing_is_never_split(monkeypatch)
         "every filing taken must bring both of its exhibits - taking the press "
         "release without the schedule retrieves the quarter and cannot read it"
     )
+
+
+async def test_primary_filings_respect_the_window_they_were_fetched_for(monkeypatch):
+    """A job for 2005 must not be handed the 2026 annual report.
+
+    `_filings_covering` merges EDGAR's archive shards precisely so an older
+    quarter can be reached - its docstring says a 2005 series otherwise
+    "retrieves nothing at all and reports it as no relevant filings". The
+    window was then applied to the earnings exhibits and to the XBRL instances
+    and skipped here, so this loop took the newest 10-K and 10-Q on the merged
+    list every time.
+
+    What it cost: United Therapeutics' 10-Q for Q2 2005 carries a table row
+    reading `Remodulin $ 28,456`, which the existing table reader parses as
+    28.456 - gold exactly. Twenty-eight Remodulin quarters were not unreachable,
+    they were unqueried, and the prose reader filled the gap with total company
+    revenues from the 8-K instead.
+    """
+    from datetime import date
+
+    from app.connectors.sources import SECConnector
+    from app.storage.filestore import LocalFileStore
+
+    connector = SECConnector(LocalFileStore("/tmp"))
+    fetched: list[str] = []
+
+    async def _fetch(self, client, *, url, accession, doc, run_id, job_id, source_id):
+        fetched.append(doc)
+        return b"<html></html>", False, f"key/{doc}"
+
+    async def _covering(self, client, payload, cik, since, until):
+        # Newest first, exactly as EDGAR returns and as the merge leaves it.
+        return {
+            "form": ["10-K", "10-Q", "10-K", "10-Q"],
+            "accessionNumber": [f"000108255{n}-05-00000{n}" for n in range(4)],
+            "filingDate": ["2026-02-25", "2026-05-01", "2005-02-25", "2005-08-03"],
+            "primaryDocument": ["fy2026.htm", "q2026.htm", "fy2005.htm", "q2005.htm"],
+            "items": ["", "", "", ""],
+        }
+
+    monkeypatch.setattr(SECConnector, "_filings_covering", _covering)
+    monkeypatch.setattr(SECConnector, "_fetch_document", _fetch)
+
+    sources = await connector.retrieve(
+        run_id="r", job_id="j", cik="0001082554", ticker=None, company_name=None,
+        include_primary=True, include_earnings=False, include_xbrl=False,
+        earnings_since=date(2005, 4, 5), earnings_until=date(2005, 8, 30),
+    )
+    assert sources  # the call itself must still work
+
+    assert "q2005.htm" in fetched, "the 10-Q covering the window is the point"
+    assert "fy2005.htm" in fetched, "a 10-K filed in February reports the year before"
+    assert "fy2026.htm" not in fetched, (
+        "a job for 2005 was handed the 2026 annual report, which says nothing "
+        "about 2005"
+    )
+    assert "q2026.htm" not in fetched

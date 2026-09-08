@@ -24,11 +24,11 @@ Two rules here were bought with wrong answers:
 
 from __future__ import annotations
 
-# ruff: noqa: BLE001, RUF012, SIM113
+# ruff: noqa: BLE001, RUF012
 import asyncio
 import logging
 import re
-from datetime import date
+from datetime import date, timedelta
 from typing import Any
 
 import httpx
@@ -554,6 +554,12 @@ class SECConnector:
             primary = recent.get("primaryDocument", [])
             filing_dates = recent.get("filingDate", [])
 
+            # A primary filing reports the period it covers, so it is useful for
+            # a window that ends a little after the window closes: a 10-K filed
+            # in February reports the year before it.
+            since_bound = earnings_since - timedelta(days=400) if earnings_since else None
+            until_bound = earnings_until + timedelta(days=120) if earnings_until else None
+
             indexed: list[tuple[int, int, str]] = []
             for i, form in enumerate(forms):
                 if form not in allowed:
@@ -569,6 +575,18 @@ class SECConnector:
                 accession = accessions[i]
                 doc = primary[i]
                 fdate = filing_dates[i] if i < len(filing_dates) else None
+                # The window applies here too. `_filings_covering` goes to the
+                # trouble of merging the archive shards so a 2005 quarter can
+                # be reached at all, and then this loop took the newest 10-K
+                # and 10-Q on the list regardless: a job for 2005 was handed
+                # the 2026 annual report, which says nothing about 2005. Every
+                # pre-2010 quarter was being asked of the wrong documents, and
+                # the era looked unreachable when it was unqueried.
+                filed_on = parse_filing_date(fdate)
+                if since_bound and (filed_on is None or filed_on < since_bound):
+                    continue
+                if until_bound and (filed_on is None or filed_on > until_bound):
+                    continue
                 acc_nodash = accession.replace("-", "")
                 cik_int = str(int(resolved))
                 url = f"{self.ARCHIVES}/{cik_int}/{acc_nodash}/{doc}"

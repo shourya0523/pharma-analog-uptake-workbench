@@ -130,11 +130,12 @@ async def go():
             sources = await SECConnector(store).retrieve(
                 run_id="coverage", job_id="coverage", cik=None, ticker=ticker,
                 company_name=None if ticker else maker,
-                # Measured twice: adding the 10-K and 10-Q gained zero rows
-                # both pooled and ranked, and costs about forty minutes a run.
-                # Their tagged facts are fetched regardless, above, and those
-                # outrank everything; what is skipped here is their HTML.
-                include_primary=False, include_earnings=True,
+                # Back on, because the measurement that turned it off is void.
+                # "Adding the 10-K and 10-Q gained zero rows" was taken while
+                # the connector ignored the date window for primary filings, so
+                # a 2005 quarter was being asked of the 2026 annual report. Of
+                # course they gained nothing: they were the wrong documents.
+                include_primary=True, include_earnings=True,
                 include_xbrl=TAGGED,
                 earnings_since=end + _dt.timedelta(days=5),
                 earnings_until=end + _dt.timedelta(days=120))
