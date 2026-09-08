@@ -289,16 +289,40 @@ and held-out runs, the LLM extractor answered **zero** gold quarters that a
 deterministic reader had not already answered; it added six duplicates and two
 wrong values, both of which the judge held.
 
+That argues for a cheap extract model, and **the measurement says not to
+bother**. Three runs of the same six held-out jobs, cost read off
+`GET /api/v1/key` either side:
+
+| configuration | result | cost |
+|---|---|---|
+| `gpt-4o-mini` extract, metadata on | 24/24 | ~$0.85 |
+| `gpt-4o-mini` extract, metadata **off** | 24/24 | **$0.1077** |
+| `gpt-oss-20b` extract, metadata off | 24/24 | $0.1116 |
+
+The cheaper extractor saved nothing — it came out marginally *dearer*, which is
+noise, and the point is that the difference is noise. **The entire saving is
+`--no-metadata`**, about eight times, and the extract model is not a meaningful
+cost component because the extract calls are a small share of a job.
+
+So: **keep `openai/gpt-4o-mini` for both.** Switching the extractor buys no
+money and spends a known quantity for an unknown one. The lever is the profile
+stages, not the model.
+
 | call | model | blended $/M | note |
 |---|---|---|---|
-| extract | `openai/gpt-oss-20b` | 0.041 | gated, and its unique contribution measured zero |
+| extract | `openai/gpt-4o-mini` | 0.200 | no cheaper model measurably reduces a run |
 | judge | `openai/gpt-4o-mini` | 0.200 | 4/4 catch, 0 false publishes — no headroom above, real risk below |
 
-Blended at roughly 8:1 in:out, which is this pipeline's shape. For comparison:
-`openai/gpt-5.6-luna` is 0.311 and **`openai/gpt-4o` is 3.333** — 16.7× the
-judge model actually used, and the judge model serves the majority of calls
-including the web-search ones. A repository `.env` setting `gpt-4o` as judge is
-the single most expensive thing about a run.
+All three runs published `{'table': 30}` and nothing else: **not one LLM
+datapoint survived the verbatim gate on any of them**, whichever extractor ran.
+On this era the deterministic table reader is doing all of the work.
+
+Blended at roughly 8:1 in:out, which is this pipeline's shape. The judge is
+where a model choice still costs real money, because it serves the majority of
+calls including the web-search ones: `openai/gpt-5.6-luna` is 0.311 and
+**`openai/gpt-4o` is 3.333**, 16.7× the judge model actually used. An
+environment setting `gpt-4o` as judge is the single most expensive thing about
+a run.
 
 Any replacement must support `response_format: {"type": "json_object"}`, which
 the client sends on every call. Filtering OpenRouter's model list on that plus
