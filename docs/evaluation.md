@@ -147,20 +147,20 @@ Measured over the whole corpus — all 1,415 gold rows, deduplicated to the 275
 
 | | rows | share |
 |---|---|---|
-| read correctly | 1,307 | 92.4% |
-| not found | 80 | 5.7% |
-| **wrong value** | **16** | **1.1%** |
-| no readable filing | 12 | 0.8% |
+| read correctly | 1,313 | 92.8% |
+| not found | 77 | 5.4% |
+| **wrong value** | **12** | **0.8%** |
+| no readable filing | 13 | 0.9% |
 
 | issuer | | | tagged | schedule | derived | prose | wrong | missed |
 |---|---|---|---|---|---|---|---|---|
 | Gilead | 535/541 | 98.9% | 110 | 420 | 0 | 5 | 3 | 3 |
 | Johnson & Johnson | 390/424 | 92.0% | 146 | 243 | 1 | 0 | 1 | 33 |
-| United Therapeutics | 316/368 | 85.9% | 105 | 167 | 44 | 0 | 10 | 42 |
+| United Therapeutics | 322/368 | 87.5% | 105 | 167 | 50 | 0 | 6 | 40 |
 | Actelion/J&J | 46/58 | 79.3% | 24 | 22 | 0 | 0 | 2 | 10 |
 | Merck | 16/19 | 84.2% | 15 | 1 | 0 | 0 | 0 | 3 |
 | Liquidia | 4/5 | 80.0% | 4 | 0 | 0 | 0 | 0 | 1 |
-| **total** | **1,307/1,415** | **92.4%** | **404** | **853** | **45** | **5** | **16** | **92** |
+| **total** | **1,313/1,415** | **92.8%** | **404** | **853** | **51** | **5** | **12** | **90** |
 
 Do not quote 1,315 for this code. That figure belongs to the code before the
 prose reader was wired in, and the difference between them is the point of the
@@ -173,8 +173,8 @@ them:
 |---|---|---|
 | tagged XBRL facts | 404 | 0 |
 | schedules | 853 | 3 |
-| derivations | 45 | 0 |
-| **prose sentences** | **5** | **13** |
+| derivations | 51 | 0 |
+| **prose sentences** | **5** | **9** |
 
 That split is only visible because the per-row detail names the reader that
 answered rather than the branch it arrived on; while it said "table" for

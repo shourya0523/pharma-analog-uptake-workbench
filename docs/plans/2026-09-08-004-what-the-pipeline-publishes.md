@@ -93,27 +93,31 @@ computed, and there is no derived candidate for any ranking to prefer. The
 corpus came back identical in every bucket, not one row moved.
 
 The fix is to keep weak readings out of the derivation's *inputs* (`8b95356`),
-after which the ranking decides between them. Measured over the 1,342 rows
-readable in both runs:
+after which the ranking decides between them. Confirmed on a clean corpus run:
 
-| | base | with both | delta |
-|---|---|---|---|
-| read | 1,255 | 1,261 | **+6** |
-| wrong value | 14 | 10 | **−4** |
-| not found | 73 | 71 | −2 |
+| | base | with both |
+|---|---|---|
+| read | 1,307 | **1,313** |
+| wrong value | 16 | **12** |
+| not found | 80 | 77 |
+
+Seven rows changed state and **no row regressed** — nothing that read correctly
+stopped doing so.
 
 All four recovered wrong values are Nebulized Tyvaso — 2013Q1, 2013Q2, 2019Q4,
 2020Q3 — each a `prose_sentence` misreading replaced by a
 `derived_sole_formulation` correct one. That is the product `003` predicted
 would move.
 
-**Read that table's caveat.** The run's own headline was 1,261 against a 1,307
-baseline, which looks like a large regression and is not one: it carried 30
-connector errors and 31 extra `no_readable_filing` rows where the baseline had
-zero and 12. EDGAR was throttling, almost certainly because this session had
-been running back-to-back walks. A clean re-run is owed before the +6/−4 is
-quoted as settled. It does not help a period no derivation reaches, which still
-receives a sentence's answer.
+The first attempt to measure this reported 1,261 and looked like a large
+regression. It was a throttled run — 30 connector errors, 31 extra
+`no_readable_filing` rows — and restricting to rows both runs could read
+predicted exactly the +6 / −4 the clean run then produced. Section 5b is about
+that.
+
+It does not help a period no derivation reaches, which still receives a
+sentence's answer: prose is now 5 correct against 9 wrong rather than 5 against
+13.
 
 **Under this project's own rule — a wrong value with a citation is worse than a
 gap — 5 for 13 is a bad trade.** Deleting `app/extraction/prose.py` is the
