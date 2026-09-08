@@ -85,9 +85,35 @@ right ones. The mechanism is visible without reading code: Nebulized Tyvaso
 two sibling products, where gold is 198 and 3. Descovy 2021Q4 reads 5,800
 against a gold of 473.
 
-Ranking derivations above it (commit `50bb701`) recovers the quarters it was
-blocking. It does not help a period no derivation reaches, which still receives
-a sentence's answer.
+Ranking derivations above it (`50bb701`) does nothing on its own, and the
+reason is worth keeping: `complete_series` reads any candidate for a period as
+that period being answered, so a sentence misreading 2013Q1 as 1.0 does not
+lose to the family total that derives to 94.645 — it stops that total being
+computed, and there is no derived candidate for any ranking to prefer. The
+corpus came back identical in every bucket, not one row moved.
+
+The fix is to keep weak readings out of the derivation's *inputs* (`8b95356`),
+after which the ranking decides between them. Measured over the 1,342 rows
+readable in both runs:
+
+| | base | with both | delta |
+|---|---|---|---|
+| read | 1,255 | 1,261 | **+6** |
+| wrong value | 14 | 10 | **−4** |
+| not found | 73 | 71 | −2 |
+
+All four recovered wrong values are Nebulized Tyvaso — 2013Q1, 2013Q2, 2019Q4,
+2020Q3 — each a `prose_sentence` misreading replaced by a
+`derived_sole_formulation` correct one. That is the product `003` predicted
+would move.
+
+**Read that table's caveat.** The run's own headline was 1,261 against a 1,307
+baseline, which looks like a large regression and is not one: it carried 30
+connector errors and 31 extra `no_readable_filing` rows where the baseline had
+zero and 12. EDGAR was throttling, almost certainly because this session had
+been running back-to-back walks. A clean re-run is owed before the +6/−4 is
+quoted as settled. It does not help a period no derivation reaches, which still
+receives a sentence's answer.
 
 **Under this project's own rule — a wrong value with a citation is worse than a
 gap — 5 for 13 is a bad trade.** Deleting `app/extraction/prose.py` is the
