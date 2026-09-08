@@ -412,7 +412,7 @@ the 2018-19 numbers; the table reader not making mistakes is.
   datapoints, or if any script under `scripts/` restates a source ranking
   instead of importing `SOURCE_PRIORITY`.
 
-## 7. Three ways this session was wrong, all the same way
+## 7. Six ways this session was wrong, all the same way
 
 `003` section 7 said: any field used to draw a conclusion, read its assignment
 site. Every error below is that rule, unlearned and relearned.
@@ -431,6 +431,24 @@ site. Every error below is that rule, unlearned and relearned.
 3. **Reading a field whose writer had changed.** Computed a per-issuer table
    showing zero tagged reads for every issuer, from a JSON written before the
    `via` label was renamed. Caught only because zero was impossible.
+4. **Believing a score from a run that could not reach its inputs.** A corpus
+   run reported 46 fewer rows read and it was EDGAR throttling — 30 connector
+   errors against a baseline's zero. A derivation cannot make a filing
+   unreadable, which is the tell. Section 5b.
+5. **Diagnosing an outage from one status code.** Announced the LLM budget was
+   spent, on a 403 and a plausible story. `GET /api/v1/key` said just under 10
+   remaining of 90, and the same key answered 200 minutes later. The endpoint
+   that would have said so was never called. Section 5d.
+6. **Letting a sound argument stand in for a measurement.** Recommended a
+   cheaper extract model because the extract path is verbatim-gated and its
+   unique contribution measured zero. Both true, and the switch saved nothing —
+   a control run put the whole saving on `--no-metadata`. The argument
+   established that it would be *safe*, never that it would *help*. Section 5e.
+
+The first three are `003`'s rule about assignment sites. The last three are the
+same rule one level up: a number, a status code and an argument, each believed
+without asking what produced it. Every one was caught by a check that cost
+seconds or cents, and every one had been reported before that check was run.
 
 ## 8. Next, in order
 
