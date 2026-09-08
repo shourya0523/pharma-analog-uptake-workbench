@@ -974,3 +974,46 @@ def test_a_line_that_did_not_parse_still_counts_as_a_line():
     readout = read_table(rows, product="Harvoni")
     assert readout.values == []
     assert "several_lines_no_total" in readout.skipped_reason
+
+
+def test_a_nil_dash_is_the_zero_it_means():
+    """A line that sold nothing everywhere is a line, not a heading.
+
+    Reading its dashes as "no figures here" makes the row look like a label
+    with nothing under it, so the label is carried onto the next product and
+    the line stops counting towards its own total.
+    """
+    from app.extraction.extract import cell_number
+
+    assert cell_number("—") == 0.0
+    assert cell_number("-") == 0.0
+    assert cell_number("") is None
+    assert cell_number("Atripla") is None
+
+
+def test_a_total_is_found_when_the_currency_symbol_shifts_one_line():
+    """A filer prints "$" in its own cell on the first line of a block only.
+
+    That puts the first component one column right of its siblings while both
+    state the same quarter. Adding the components up column by column then
+    reaches no total, and the table is refused for having none with the total
+    printed directly beneath it.
+    """
+    rows = [
+        ["", "Three Months Ended June 30,"],
+        ["", "2015"],
+        ["Harvoni - U.S.", "$", "2,826"],
+        ["Harvoni - Europe", "623"],
+        ["Harvoni - Other International", "159"],
+        ["", "3,608"],
+    ]
+    grid = [
+        [None, "Three Months Ended June 30,", None],
+        [None, "2015", None],
+        ["Harvoni - U.S.", "$", "2,826"],
+        ["Harvoni - Europe", None, "623"],
+        ["Harvoni - Other International", None, "159"],
+        [None, None, "3,608"],
+    ]
+    readout = read_table(rows, product="Harvoni", context="(in millions)", grid=grid)
+    assert [value.value_as_reported for value in readout.values] == [3608.0]

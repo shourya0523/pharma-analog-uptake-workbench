@@ -212,6 +212,11 @@ def map_values_to_blocks(
     return assigned, None
 
 
+# What a filer prints in a value column to mean nil: an em dash, an en dash,
+# a hyphen, and the same with a trailing footnote marker stripped already.
+_NIL_CELLS = frozenset({"\u2014", "\u2013", "-", "\u2212"})
+
+
 def cell_number(cell: str | None) -> float | None:
     """The number a single cell states, or None if it states something else.
 
@@ -222,6 +227,14 @@ def cell_number(cell: str | None) -> float | None:
     text = (cell or "").strip()
     if not text or _PERCENT_RE.search(text):
         return None
+    # A dash standing alone in a value column is nil, and reads as the zero it
+    # means. Treating it as "no number here" makes a line that sold nothing
+    # everywhere - Atripla in Europe in 2007, every comparative column of a
+    # product's first quarter - look like a heading with no figures, so the
+    # label is carried onto the next product and the line stops counting
+    # towards its own total.
+    if text in _NIL_CELLS:
+        return 0.0
     match = _NUMBER_CELL_RE.match(text) or _ANNOTATED_NUMBER_RE.match(text)
     if not match:
         return None

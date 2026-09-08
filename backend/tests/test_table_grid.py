@@ -253,3 +253,37 @@ def test_a_long_schedule_is_not_cut_off_in_the_middle_of_a_product():
     """
     grid = grid_of(markup)
     assert any(row[0] == "Alfacept – Europe" for row in grid)
+
+
+def test_a_table_declares_its_unit_above_itself():
+    """The document's first unit declaration belongs to whichever table it sits over.
+
+    A Gilead earnings exhibit states "(in millions)" over its guidance table and
+    "(in thousands)" over the product sales summary five schedules later. A
+    reader given the front of the document reads the first and scales the second
+    by a thousand.
+    """
+    from app.parsing.documents import table_caption
+
+    html = """
+    <p>FULL YEAR GUIDANCE (in millions)</p>
+    <table><tr><td>Revenues</td><td>1,000</td></tr></table>
+    <p>PRODUCT SALES SUMMARY (unaudited) (in thousands)</p>
+    <table><tr><td>Atripla</td><td>744,512</td></tr></table>
+    """
+    soup = BeautifulSoup(html, "lxml")
+    first, second = soup.find_all("table")
+    assert "in millions" in table_caption(first)
+    assert "in thousands" in table_caption(second)
+    assert "in millions" not in table_caption(second), "the caption stops at the table above"
+
+
+def test_a_caption_is_not_taken_from_the_schedule_above_it():
+    from app.parsing.documents import table_caption
+
+    soup = BeautifulSoup(
+        "<p>FIRST (in millions)</p><table><tr><td>a</td><td>1</td></tr></table>"
+        "<table><tr><td>b</td><td>2</td></tr></table>",
+        "lxml",
+    )
+    assert table_caption(soup.find_all("table")[1]) == ""

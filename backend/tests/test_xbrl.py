@@ -9,7 +9,13 @@ from __future__ import annotations
 
 from datetime import date
 
-from app.parsing.xbrl import Fact, filer_category, parse_facts, product_facts
+from app.parsing.xbrl import (
+    PRODUCT_AXIS,
+    Fact,
+    filer_category,
+    parse_facts,
+    product_facts,
+)
 
 INSTANCE = b"""<?xml version="1.0" encoding="UTF-8"?>
 <xbrl xmlns="http://www.xbrl.org/2003/instance"
@@ -124,3 +130,68 @@ def test_an_untagged_filing_states_nothing_rather_than_guessing():
     </xbrl>"""
     assert product_facts(parse_facts(plain)) == []
     assert filer_category(plain) is None
+
+
+def test_a_fiscal_year_ending_in_january_is_the_year_it_covers():
+    """A 52/53-week filer closes its year days into the next one.
+
+    Reading the label off the end date files fiscal 2022 as 2023, on top of
+    the real 2023, with a citation apiece saying both are tagged.
+    """
+    fiscal_2022 = Fact(
+        element="us-gaap:Revenues", value=1.0,
+        start=date(2022, 1, 3), end=date(2023, 1, 1),
+    )
+    assert fiscal_2022.period == "2022"
+    fourth_quarter = Fact(
+        element="us-gaap:Revenues", value=1.0,
+        start=date(2022, 10, 3), end=date(2023, 1, 1),
+    )
+    assert fourth_quarter.period == "2022Q4"
+
+
+def test_a_gross_profit_is_not_a_revenue():
+    """The element has to be a revenue, not merely contain the word."""
+    facts = [
+        Fact(element="uthr:GrossProfitExcludingOtherRevenue", value=113_700_000.0,
+             members={PRODUCT_AXIS: "uthr:RemodulinMember"},
+             start=date(2020, 4, 1), end=date(2020, 6, 30)),
+        Fact(element="us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+             value=119_000_000.0, members={PRODUCT_AXIS: "uthr:RemodulinMember"},
+             start=date(2020, 4, 1), end=date(2020, 6, 30)),
+    ]
+    assert [f.value for f in product_facts(facts)] == [119_000_000.0]
+
+
+def test_the_total_is_the_least_qualified_statement_about_a_product():
+    """An arrangement's share of a product is a part of it, not another view.
+
+    Which axes subset a figure is not knowable from a list of axis names, so
+    the total is whichever statement the filer qualified least.
+    """
+    plain = Fact(element="us-gaap:Revenues", value=41_300_000.0,
+                 members={PRODUCT_AXIS: "uthr:AdcircaMember"},
+                 start=date(2022, 1, 1), end=date(2022, 12, 31))
+    lilly = Fact(element="us-gaap:Revenues", value=1_000_000.0,
+                 members={PRODUCT_AXIS: "uthr:AdcircaMember",
+                          "us-gaap:TypeOfArrangementAxis": "uthr:EliLillyAndCompanyMember"},
+                 start=date(2022, 1, 1), end=date(2022, 12, 31))
+    assert [f.value for f in product_facts([plain, lilly])] == [41_300_000.0]
+
+
+def test_a_segment_qualifier_takes_nothing_away():
+    """J&J tags every product under its segment; there is no plainer fact."""
+    segmented = Fact(element="us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+                     value=10_858_000_000.0,
+                     members={PRODUCT_AXIS: "jnj:StelaraMember",
+                              "us-gaap:StatementBusinessSegmentsAxis": "jnj:InnovativeMedicineMember"},
+                     start=date(2023, 1, 2), end=date(2023, 12, 31))
+    assert [f.value for f in product_facts([segmented])] == [10_858_000_000.0]
+
+
+def test_a_forecast_is_not_a_report():
+    forecast = Fact(element="us-gaap:Revenues", value=5.0,
+                    members={PRODUCT_AXIS: "mrk:KoselugoMember",
+                             "srt:StatementScenarioAxis": "srt:ScenarioForecastMember"},
+                    start=date(2026, 1, 1), end=date(2026, 3, 31))
+    assert product_facts([forecast]) == []
