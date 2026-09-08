@@ -386,6 +386,13 @@ against the quote**, so a scaling error between the two is invisible to every
 gate. A missing unit was already known to produce 1000× errors; this is the
 same failure surviving the judge that exists to catch it.
 
+The scale check added for the last of these was verified not to hold anything
+back: the held-out set re-run with it in place is 24/24 again, and it fired on
+zero of the 30 datapoints. The unit shapes the deterministic reader actually
+emits — 1,514 thousands as 1.514, 2.5 billions as 2,500 — all agree with
+`scale_to_millions`, so it is inert in normal operation. It is not measured on
+the era that produced the error, because doing so needs the 2000s.
+
 **What to conclude about the judge.** Its 4-of-4 catch rate at 2018-19 was
 reported here as a strength. It is four datapoints, in an era where the
 deterministic table reader produces almost no errors to catch. Given ten real
