@@ -217,7 +217,17 @@ async def go():
                 state, read = "not_found", None
             outcome[state] += 1
             per_issuer[maker][state] += 1
-            detail.append({**row, "state": state, "read": read, "via": "table"})
+            # Which reader produced this figure, taken from the candidate
+            # rather than from the branch it arrived on. Stamping "table" on
+            # everything that was not tagged folded the prose reader into the
+            # table reader's number, and a conclusion about which reader caused
+            # a regression was drawn from that label and was wrong. The
+            # candidates now carry an honest extraction_method, so the eval can
+            # report what actually answered.
+            chosen = min(same, key=lambda c: abs(
+                float(c["value_normalized_usd_millions"]) - target)) if same else None
+            detail.append({**row, "state": state, "read": read,
+                           "via": chosen.get("extraction_method") if chosen else None})
         if index % 25 == 0:
             print(f"  {index}/{len(groups)} pairs  {time.time()-started:.0f}s "
                   f"read={outcome['read']}", flush=True)
