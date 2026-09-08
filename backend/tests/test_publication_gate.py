@@ -149,3 +149,52 @@ def test_a_schedule_outranks_a_sentence_from_the_same_exhibit():
     assert claim_rank("table") < claim_rank("prose")
     # An unknown producer ranks last rather than first.
     assert claim_rank(None) > claim_rank("prose")
+
+
+def test_a_figure_and_its_normalisation_that_disagree_cannot_publish():
+    """Every check reads `value_reported`; a consumer reads the normalized one.
+
+    Remodulin 2009Q3 arrived from the model reported as 87.4 with 87,400 beside
+    it as USD millions, and was published carrying
+    `deterministic:product_quote_value_ok` - because the judge confirms 87.4
+    against a quote that says 87.4, and nothing anywhere looked at the figure
+    that reaches a reader. Gold is 87.4.
+
+    The candidate's own two numbers are enough to catch it: 87.4 in millions is
+    87.4, not 87,400.
+    """
+    from app.pipeline.orchestrator import _scale_disagrees
+
+    # The real row.
+    assert _scale_disagrees(87.4, 87400.0, "millions", "USD")
+    # The ordinary cases stay silent.
+    assert not _scale_disagrees(87.4, 87.4, "millions", "USD")
+    assert not _scale_disagrees(1514.0, 1.514, "thousands", "USD")
+    assert not _scale_disagrees(2.5, 2500.0, "billions", "USD")
+    # Rounding is not a scaling error.
+    assert not _scale_disagrees(87.4, 87.41, "millions", "USD")
+    # An exchange rate this function does not model must not be called one.
+    assert not _scale_disagrees(87.4, 95.2, "millions", "CHF")
+    # Missing figures are somebody else's problem.
+    assert not _scale_disagrees(None, 87400.0, "millions", "USD")
+    assert not _scale_disagrees(87.4, None, "millions", "USD")
+
+
+@pytest.mark.asyncio
+async def test_the_gate_holds_a_row_whose_figures_disagree(tmp_path):
+    """The flag has to reach the status, not just sit in the issue list.
+
+    The judge answers "supported" here, because the quote does carry the
+    as-reported figure - that is precisely why this row published.
+    """
+    db, orch, job, row = _job(tmp_path, revenue_scope="Product family", formulation=None)
+    row.issue_flags = ["normalization_disagrees_with_unit"]
+    db.commit()
+
+    await orch._judge(job, [row], [], {}, {})
+
+    assert row.source_support == "supported", "the quote does support 121.0"
+    assert row.validation_status == ValidationStatus.NEEDS_REVIEW.value, (
+        "a row whose own two figures cannot both be right must not publish, "
+        "however well the quote supports the one the judge reads"
+    )

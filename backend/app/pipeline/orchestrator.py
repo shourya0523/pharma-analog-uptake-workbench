@@ -186,6 +186,32 @@ def _deterministic_method(candidate: dict[str, Any]) -> str:
     return _DETERMINISTIC_METHODS.get(str(candidate.get("extraction_method") or ""), "table")
 
 
+# How far apart a declared figure and its normalization must be before the
+# difference can only be a scaling error. Ten times is already impossible from
+# rounding; the error this exists for is a thousand.
+_SCALE_DISAGREEMENT = 10.0
+
+
+def _scale_disagrees(
+    value: float | None, normalized: float | None, unit: str | None, currency: str | None
+) -> bool:
+    """Whether a candidate's own two figures cannot both be right.
+
+    Checked only for USD, because `scale_to_millions` models the unit and not
+    an exchange rate, and only at an order of magnitude, because that is the
+    difference a mis-scaling makes and rounding cannot.
+    """
+    if value is None or normalized is None:
+        return False
+    if (currency or "USD").strip().upper() != "USD":
+        return False
+    expected = scale_to_millions(float(value), unit)
+    if not expected or not float(normalized):
+        return False
+    ratio = abs(float(normalized) / expected)
+    return ratio >= _SCALE_DISAGREEMENT or ratio <= 1 / _SCALE_DISAGREEMENT
+
+
 def scale_to_millions(value: float, unit: str | None) -> float:
     """Convert a reported value to USD millions using its declared unit.
 
@@ -1183,6 +1209,19 @@ class PipelineOrchestrator:
                 normalized = cand.get("value_normalized_usd_millions")
                 if normalized is None and value is not None:
                     normalized = scale_to_millions(float(value), unit)
+                # A candidate may supply its own normalization, and it was
+                # taken verbatim. Remodulin 2009Q3 arrived reported as 87.4
+                # with 87,400 beside it and was published, because every check
+                # downstream reads `value_reported` - the judge confirms 87.4
+                # against a quote saying 87.4 - while a consumer reads the
+                # normalized figure that nothing had looked at.
+                #
+                # Recomputed from the figure and unit the candidate declares
+                # itself. Only an order-of-magnitude disagreement is acted on,
+                # which is the shape a scaling error has; anything smaller can
+                # be rounding or an FX rate this function does not model, so it
+                # is left alone rather than guessed at.
+                mis_scaled = _scale_disagrees(value, normalized, unit, currency)
 
                 citation = {
                     "source_id": src.source_id,
@@ -1208,6 +1247,8 @@ class PipelineOrchestrator:
                     issue_flags.append("derived_comparative_column")
                 if cand.get("_from_table"):
                     issue_flags.append("extracted_from_table")
+                if mis_scaled:
+                    issue_flags.append("normalization_disagrees_with_unit")
                 if period is None:
                     issue_flags.append("period_unparsed")
                 elif period != raw_period:
@@ -1503,6 +1544,12 @@ class PipelineOrchestrator:
                 status = ValidationStatus.NEEDS_REVIEW.value
             if "derived_comparative_column" in (row.issue_flags or []):
                 # Reconstructed from a neighbouring table column, so always reviewed
+                status = ValidationStatus.NEEDS_REVIEW.value
+            if "normalization_disagrees_with_unit" in (row.issue_flags or []):
+                # The row's own two figures cannot both be right, and the judge
+                # cannot see it: it reads the quote against `value_reported`,
+                # which is the one that agrees. Nothing else looks at the
+                # normalized figure, which is the one published.
                 status = ValidationStatus.NEEDS_REVIEW.value
             row.validation_status = status
             issues = list(judgment.get("issues") or [])
