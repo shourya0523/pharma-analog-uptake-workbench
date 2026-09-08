@@ -389,6 +389,33 @@ def report(jobs: list[dict], *, scope: str) -> None:
                   f" published {r['read']:<10g} as {r['status']}")
 
 
+def rescore(path: pathlib.Path) -> int:
+    """Re-run the scoring over a stored run, changing nothing about the run.
+
+    Only the per-row state is recomputed; the candidates, their statuses and
+    their scopes are what the pipeline actually produced.
+    """
+    jobs = json.loads(path.read_text())
+    scopes = {(row["drug_name"], row["period"]): row.get("revenue_scope")
+              for row in E.load_rows()}
+    for job in jobs:
+        for record in job["records"]:
+            gold_scope = record.get("gold_scope") or scopes.get(
+                (record["drug_name"], record["period"]))
+            record["gold_scope"] = gold_scope
+            got = record["candidates"]
+            mine = [c for c in got if answers_scope(c.get("scope"), gold_scope)]
+            off = [c for c in got if c not in mine and c["status"] in PUBLISHED]
+            state, read, status = scored_state(
+                [c for c in mine if c["status"] in PUBLISHED],
+                [c for c in mine if c["status"] not in PUBLISHED],
+                float(record["gold"]), off,
+            )
+            record.update(state=state, read=read, status=status, off_series=len(off))
+    report(jobs, scope=f"re-scored from {path}")
+    return 0
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -407,7 +434,18 @@ def main() -> int:
                     help="skip the profile stages, which cost LLM calls and "
                          "answer no revenue question. Reported in the header.")
     ap.add_argument("--verbose", action="store_true", help="pipeline logs")
+    ap.add_argument("--rescore", default="",
+                    help="re-score a stored run with the current rules and "
+                         "print the report, running nothing and spending "
+                         "nothing. A stored run keeps every candidate with its "
+                         "status and scope, so a change to how a gold row is "
+                         "matched can be checked against real output before it "
+                         "is believed - which is how a scope rule that scored "
+                         "two whole products at zero was caught.")
     args = ap.parse_args()
+
+    if args.rescore:
+        return rescore(pathlib.Path(args.rescore))
 
     logging.basicConfig(level=logging.INFO if args.verbose else logging.WARNING,
                         format="%(levelname)s %(message)s")
