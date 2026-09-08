@@ -23,6 +23,7 @@ ENTRY_POINTS = {
     "candidates_from_instance": "app/extraction/tagged.py",
     "complete_series": "app/extraction/derive.py",
     "extract_revenue_candidates": "app/extraction/candidates.py",
+    "read_prose": "app/extraction/prose.py",
 }
 
 

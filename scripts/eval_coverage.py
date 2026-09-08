@@ -50,6 +50,11 @@ REGISTER = load_register() if TAGGED else {}
 with (REPO / "seed" / "product_attributes.csv").open(newline="") as _handle:
     _ATTRS = [r for r in csv.DictReader(_handle) if r.get("drug_name")]
 PRODUCTS = sorted({r["drug_name"].strip() for r in _ATTRS})
+APPROVED = {
+    r["drug_name"].strip(): int(r["first_approval_year"])
+    for r in _ATTRS
+    if (r.get("first_approval_year") or "").strip().isdigit()
+}
 # Which product is a formulation of which family, from the pipeline's own
 # reference data. Gold says nothing here; seed/product_attributes.csv carries
 # "formulation_of:Tyvaso" because that is a fact about the product.
@@ -104,7 +109,9 @@ async def go():
             sources = await SECConnector(store).retrieve(
                 run_id="coverage", job_id="coverage", cik=None, ticker=ticker,
                 company_name=None if ticker else maker,
-                include_primary=False, include_earnings=True,
+                # The 10-Q as well as the 8-K: before the product-sales
+                # exhibit existed, the figure is a sentence in the filing.
+                include_primary=True, include_earnings=True,
                 include_xbrl=TAGGED,
                 earnings_since=end + _dt.timedelta(days=5),
                 earnings_until=end + _dt.timedelta(days=120))
@@ -124,7 +131,7 @@ async def go():
                     instances.append(raw)
                 continue
             doc = await parser.parse(source)
-            if doc.parsing_status.value == "success" and doc.tables:
+            if doc.parsing_status.value == "success" and (doc.tables or doc.full_text):
                 docs.append(doc)
         for row in group:
             if TAGGED and instances:
@@ -159,7 +166,7 @@ async def go():
                     doc.tables, product=row["drug_name"],
                     generic=row.get("generic_name"), context=doc.full_text[:4000],
                     grids=doc.table_grids, captions=doc.table_captions,
-                    quarterly_only=False)
+                    prose=doc.full_text, quarterly_only=False)
                 found.extend(got)
             pool[(maker, row["drug_name"])].extend(found)
             found = [c for c in found if c.get("period_type") == "quarterly"]
@@ -200,6 +207,10 @@ for record in detail:
                  {product, family, *SIBLINGS.get(product, ())} if name},
                 product=product, family=family,
                 siblings=SIBLINGS.get(product, ()),
+                sibling_first_year=min(
+                    (APPROVED[name] for name in SIBLINGS.get(product, ()) if name in APPROVED),
+                    default=None,
+                ),
             )
         }
     candidate = derived_cache[(maker, product)].get(record["period"])

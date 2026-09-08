@@ -284,6 +284,7 @@ def complete_series(
     family: str | None = None,
     siblings: Iterable[str] = (),
     commercial_start: str | None = None,
+    sibling_first_year: int | None = None,
 ) -> list[dict[str, Any]]:
     """The quarters this product's own series implies, beyond those reported.
 
@@ -315,6 +316,13 @@ def complete_series(
             for candidate in reported.get(name, [])
             if candidate.get("period")
         }
+        if sibling_first_year:
+            # A sibling sells for a quarter or two before it is large enough to
+            # be reported on its own line. Its first appearance in the data is
+            # therefore later than its launch, and the quarters in between hold
+            # a family total that is no longer only this formulation. The year
+            # the sibling was approved bounds the split from the other side.
+            split_periods = split_periods | {f"{sibling_first_year}Q1"}
         if split_periods:
             family_points = [
                 point
@@ -347,4 +355,10 @@ def complete_series(
             "_derived": True,
         }
         for point in derived
+        # A quarter that derives to nothing is not a quarter the issuer left
+        # implicit. It is a total that does not cover the year: J&J's first
+        # Actelion year states only the months it owned the products, so
+        # subtracting the quarters it did report leaves zero where 224 was.
+        # Negative is impossible, and zero here has always been that.
+        if (point.value_normalized_usd_millions or 0) > 0
     ]

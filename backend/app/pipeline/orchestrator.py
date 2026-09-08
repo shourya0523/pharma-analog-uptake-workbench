@@ -1047,6 +1047,7 @@ class PipelineOrchestrator:
                 extra_aliases=extra,
                 context=doc.full_text[:4000],
                 grids=doc.table_grids, captions=doc.table_captions,
+                prose=doc.full_text,
             )
             for finding in table_findings:
                 logger.warning(

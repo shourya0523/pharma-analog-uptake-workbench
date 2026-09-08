@@ -22,6 +22,7 @@ from typing import Any
 
 from app.extraction.check import Finding, run_checks
 from app.extraction.extract import read_tables
+from app.extraction.prose import read_prose
 from app.extraction.process import Datapoint, normalize_all
 
 # Read straight off a declared table, so it carries the confidence the previous
@@ -68,12 +69,21 @@ def extract_revenue_candidates(
     quarterly_only: bool = True,
     grids: Iterable[list[list[str | None]]] | None = None,
     captions: Iterable[str] | None = None,
+    prose: str = "",
 ) -> tuple[list[dict[str, Any]], list[Finding], list[str]]:
     """Deterministic revenue candidates plus what the checks found.
 
     Returns (candidates, findings, skipped reasons). Skipped reasons name the
     tables that were passed over and why, so a source that produced nothing is
     distinguishable from a source that was never read.
+
+    ``prose`` is the document's running text. Issuers disclosed product sales
+    in sentences long before the product-sales exhibit existed, and a reader
+    that only reads tables has nothing at all for those years - United
+    Therapeutics stated Remodulin narratively from 2002 to 2009. A sentence
+    carries its unit beside the amount, so it declares more than a table header
+    does; what it must also do is name one period and one amount, or it is
+    refused.
     """
     readouts = read_tables(
         tables,
@@ -86,6 +96,19 @@ def extract_revenue_candidates(
     )
     values = [value for readout in readouts for value in readout.values]
     skipped = [readout.skipped_reason for readout in readouts if readout.skipped_reason]
+
+    # Sentences are read after tables and add only the periods the tables did
+    # not state, so a figure printed in a schedule is never displaced by the
+    # same figure described around it.
+    if prose:
+        stated = {(value.period, value.product_label) for value in values}
+        values += [
+            value
+            for value in read_prose(
+                prose, product=product, generic=generic, extra_aliases=extra_aliases
+            )
+            if (value.period, value.product_label) not in stated
+        ]
 
     points = normalize_all(values)
     findings = run_checks(points)
