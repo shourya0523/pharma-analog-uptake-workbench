@@ -102,13 +102,43 @@ that identified it. `scripts/eval_provenance.py` audits this from outside.
 failing a check is held back rather than published, and the finding names the
 period and the reason.
 
-## What this design is not
+## Four ways a number is obtained, in this order
 
-The filers tag product-level revenue in XBRL from 2019 onward, and the pipeline
-reads none of it — it fetches 8-K earnings exhibits, which are untagged, and not
-the 10-Q and 10-K, which are. Everything above about recovering a period from
-geometry is inference standing in for something the filer has already declared.
-See [`docs/plans/2026-09-07-002-structured-first-extraction.md`](plans/2026-09-07-002-structured-first-extraction.md).
+Everything above describes the table reader, which is the third of four and the
+only one that infers anything.
+
+**What the filer tagged.** From 2019 the filers tag product-level revenue in
+XBRL, and a tagged fact states its period, its unit, its currency and which
+product it belongs to. There is nothing to recover from a layout, so this is
+tried first and the citation names the element and the context rather than
+quoting a line. `app/parsing/xbrl.py` reads the instance;
+`app/extraction/tagged.py` decides which member is which product, through the
+register in `app/extraction/members.py`. When detail tagging began is a
+property of the issuer rather than a date in the code: a filing from before its
+own cutoff simply tags no product facts and says so.
+
+**What a sentence says.** Issuers disclosed product sales narratively long
+before the product-sales exhibit existed, and smaller ones never adopted one.
+`app/extraction/prose.py` reads a figure out of a sentence that names exactly
+one period and one amount; anything ambiguous about which number belongs to
+which period is refused rather than resolved by proximity. This is where United
+Therapeutics' first eight years of Remodulin live.
+
+**What a table prints.** The reader described above.
+
+**What the issuer's own arithmetic implies.** `app/extraction/derive.py`
+completes a series from figures already extracted: the quarter left implicit
+against a stated total, and the family total attributed to the one formulation
+on sale before a sibling appeared. Both are exact arithmetic over published
+figures, applied only when uniquely determined, and marked as derived with the
+inputs that produced them. A quarter that derives to zero or below is refused,
+because a total that does not cover the year cannot be subtracted from.
+
+Nothing here is enabled by a flag or read only by an eval: `app/` calls all
+four, and `backend/tests/test_capabilities_are_wired.py` fails the suite if any
+of them becomes reachable only from a script. That test exists because three of
+them had been written, tested, measured in an eval and never called by the
+pipeline, so the coverage figure described something the product could not do.
 
 ## Reading further
 

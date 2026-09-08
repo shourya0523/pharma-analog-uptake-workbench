@@ -137,9 +137,14 @@ def main() -> int:
             continue
         candidates, _findings, _skipped = extract_revenue_candidates(
             tables, product=product, generic=generic or None, context=text[:4000],
-            grids=grids,
+            grids=grids, prose=text,
         )
-        origin = {id(c): "table" for c in candidates}
+        # A sentence's quote is the sentence, and has to be in the document as
+        # verbatim as a table row's does, so the prose reader is audited by the
+        # same check rather than trusted because it quoted its own input.
+        origin = {
+            id(c): "table" if c.get("_from_table") else "prose" for c in candidates
+        }
         if llm is not None:
             import asyncio
             from app.domain.models import ParsedDocument, ParsingStatus
