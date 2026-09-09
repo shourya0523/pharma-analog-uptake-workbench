@@ -104,6 +104,42 @@ def is_earnings_exhibit(filename: str) -> bool:
     return bool(re.search(r"ex+(?:h(?:ibit)?)?9{2}", squashed))
 
 
+def _instance_document(documents: list[str]) -> str | None:
+    """The XBRL instance in one filing's directory, in either era's spelling.
+
+    A filing's facts live in its instance document, and how that document is
+    named changed with inline XBRL. Before it, the instance was a plain
+    ``uthr-20160930.xml`` beside the filing's HTML; after it, the HTML *is* the
+    instance and the filer ships an extracted copy as ``uthr-20250930_htm.xml``.
+
+    This selected on the ``_htm.xml`` spelling alone, so it saw the second and
+    silently skipped the first - every filer's pre-2019 filings, discarded one
+    at a time as "no instance". The comment here explained the resulting gap as
+    the SEC's, saying a filing from before 2019 "yields an instance with no
+    product facts in it", and that is not true: Gilead's 2013 Q3 instance tags
+    twelve products on the ProductOrService axis and United Therapeutics' 2016
+    Q3 instance tags five. Neither was ever fetched.
+
+    The anchor that works in both eras is the filing's own extension schema.
+    Exactly one ``.xsd`` is filed, the instance shares its stem, and the
+    linkbases beside it (``_cal``, ``_def``, ``_lab``, ``_pre``) do not - so
+    matching on the stem picks the instance without having to know the filer's
+    ticker, the period, or which era the filing belongs to.
+    """
+    names = [name for name in documents if name]
+    available = set(names)
+    for schema in sorted(name for name in names if name.endswith(".xsd")):
+        stem = schema[: -len(".xsd")]
+        # Inline filings ship both the schema and an extracted instance; the
+        # `_htm` copy is the instance and `{stem}.xml` is not present.
+        for candidate in (f"{stem}_htm.xml", f"{stem}.xml"):
+            if candidate in available:
+                return candidate
+    # A filing with no extension schema is unusual but not impossible; fall
+    # back to the spelling this used to look for rather than to nothing.
+    return next((name for name in names if name.endswith("_htm.xml")), None)
+
+
 class SECConnector:
     """SEC EDGAR submissions + filing retrieval. Always stores audit row status."""
 
@@ -427,11 +463,16 @@ class SECConnector:
         The 8-K exhibits fetched beside these carry no tagging at all, so this
         is the only route to a figure the filer has stated rather than printed.
 
-        It reaches back only as far as the filer's own tagging does: detail
-        tagging of the revenue note arrived with inline XBRL, phased by filer
-        size from 2019 to 2021, and a filing from before that yields an instance
-        with no product facts in it. Nothing here needs to know the date - the
-        reader simply finds nothing, which is the correct answer.
+        It reaches back only as far as the filer's own tagging does, and that is
+        a per-filer fact rather than a date: Gilead tags twelve products on the
+        ProductOrService axis in its 2013 Q3 instance and United Therapeutics
+        five in its 2016 Q3 one, while United Therapeutics' 2010 Q3 instance
+        carries no product axis at all. Nothing here needs to know when each
+        filer started - the reader simply finds nothing, which is the correct
+        answer for a filing that has nothing.
+
+        What did need fixing was reaching the instance in the first place; see
+        `_instance_document`.
         """
         cik_int = str(int(cik))
         forms = recent.get("form", [])
@@ -451,17 +492,15 @@ class SECConnector:
             accession = accessions[index]
             acc_nodash = accession.replace("-", "")
             documents = await self._list_filing_documents(client, cik_int, acc_nodash)
-            # The extracted instance a filer ships beside an inline-XBRL
-            # document: same facts, without the presentation wrapped round them.
-            instances = [name for name in documents if name.endswith("_htm.xml")]
-            if not instances:
+            instance = _instance_document(documents)
+            if not instance:
                 logger.info("sec_no_xbrl_instance accession=%s form=%s", accession, form)
                 continue
             sid = new_id()
-            url = f"{self.ARCHIVES}/{cik_int}/{acc_nodash}/{instances[0]}"
+            url = f"{self.ARCHIVES}/{cik_int}/{acc_nodash}/{instance}"
             try:
                 _raw, from_cache, job_key = await self._fetch_document(
-                    client, url=url, accession=accession, doc=instances[0],
+                    client, url=url, accession=accession, doc=instance,
                     run_id=run_id, job_id=job_id, source_id=sid,
                 )
             except Exception as exc:
