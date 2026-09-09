@@ -93,11 +93,22 @@ def match(member: str, products: list[str]) -> Resolution:
     parts = words(member)
     if not parts:
         return Resolution(member, None, "unknown", 0.0, "no words in member")
-    by_words: dict[tuple[str, ...], set[str]] = {}
+    # Keyed on the run's words joined up, not on the tuple of words, because
+    # only the *member* is a machine-generated identifier whose capitals mark
+    # word boundaries. A brand may carry a capital of its own - "AmBisome" -
+    # and `words` then splits the product into ["am", "bisome"] while the filer
+    # writing it plainly gives ["ambisome"]. Two words never equal one, so the
+    # match was impossible however the filer spelled it, and only a hand-added
+    # register entry was covering it.
+    #
+    # Runs still begin at the member's own token boundaries, so this stays a
+    # whole-word rule: "tyvaso" is not a trailing run of "TyvasoDPI" and does
+    # not become one by being joined up.
+    by_words: dict[str, set[str]] = {}
     for product in products:
-        by_words.setdefault(tuple(words(product)), set()).add(product)
+        by_words.setdefault("".join(words(product)), set()).add(product)
     for run in _suffixes(parts):
-        claimants = by_words.get(tuple(run))
+        claimants = by_words.get("".join(run))
         if not claimants:
             continue
         # Longest first, so a member ending in a shorter product's name goes to

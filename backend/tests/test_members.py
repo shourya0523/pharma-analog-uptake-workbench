@@ -159,3 +159,29 @@ def test_the_orchestrator_passes_that_list_to_the_tagged_reader():
         "candidates_from_instance falls back to [product] when products is "
         "omitted, which is the condition the test above describes"
     )
+
+
+def test_a_brand_that_capitalises_inside_its_own_name_still_resolves():
+    """`words` splits CamelCase because a member is a machine identifier.
+
+    A brand is not. "AmBisome" carries a capital as typography, so the splitter
+    turned the product into two words while a filer writing it plainly gave
+    one, and no member could ever match. Only a hand-added register entry was
+    covering it, which is the register doing the string rules' job for the five
+    issuers somebody happened to seed.
+
+    Invented names, so nothing here passes because a real brand is spelled in
+    the code.
+    """
+    known = ["NuVessa", "Calderon", "Nebulized Calderon"]
+
+    # However the filer spells the capital, it is the same product.
+    assert match("NuVessa", known).product == "NuVessa"
+    assert match("Nuvessa", known).product == "NuVessa"
+    assert match("acme:RespiratoryProductsNuVessaMember", known).product == "NuVessa"
+    assert match("acme:RespiratoryProductsNuvessaMember", known).product == "NuVessa"
+
+    # And the rule the splitter exists to enforce is untouched: a product is
+    # still only a *trailing* run, so a sibling formulation is not the parent.
+    assert match("acme:CalderonXRMember", known).product is None
+    assert match("acme:NebulizedCalderonMember", known).product == "Nebulized Calderon"
