@@ -1,0 +1,34 @@
+{
+ "cases": 4,
+ "passed": 4,
+ "results": [
+  {
+   "member": "CompleraEviplera",
+   "expected": "Complera",
+   "got": "Complera",
+   "reason": "CompleraEviplera refers to the same drug, marketed as Complera in the US and Eviplera in the EU.",
+   "ok": true
+  },
+  {
+   "member": "LDVSOF",
+   "expected": "Harvoni",
+   "got": "Harvoni",
+   "reason": "LDVSOF refers to the combination of ledipasvir and sofosbuvir, which is marketed as Harvoni.",
+   "ok": true
+  },
+  {
+   "member": "OPSUMITOPSYNVI",
+   "expected": null,
+   "got": null,
+   "reason": "The member OPSUMITOPSYNVI runs together the names of two different drugs, Opsumit and Opsynvi, which are not the same product.",
+   "ok": true
+  },
+  {
+   "member": "HIVProductSales",
+   "expected": null,
+   "got": null,
+   "reason": "The member 'HIVProductSales' is a category covering multiple products, not a single product.",
+   "ok": true
+  }
+ ]
+}

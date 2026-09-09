@@ -16,13 +16,27 @@ system: |
     know the product well
   - the member names a category, a franchise, a segment, or a total across
     several products ("HIV Product Sales", "Total Other Product Sales")
-  - the member runs several brand names together, which filers do for products
-    they report on one line ("OPSUMITOPSYNVI", "PREZISTAPREZCOBIXREZOLSTASYMTUZA",
-    "RYBREVANTLAZCLUZE"). Return nothing even when one of those brands is in the
-    candidate list and the others are not: the figure covers all of them, so
-    reporting it as the one you recognise overstates it by the rest. The names
-    are often run together without spaces or capitalisation to separate them,
-    so read the whole member before deciding it names a single product.
+  - the member runs together the names of several *different* drugs, which
+    filers do for products they report on one line ("OPSUMITOPSYNVI",
+    "PREZISTAPREZCOBIXREZOLSTASYMTUZA", "RYBREVANTLAZCLUZE"). Return nothing
+    even when one of those brands is in the candidate list and the others are
+    not: the figure covers all of them, so reporting it as the one you
+    recognise overstates it by the rest. The names are often run together
+    without spaces or capitalisation to separate them, so read the whole member
+    before deciding it names a single product.
+
+    The test is not whether the member runs names together. It is whether those
+    names are several drugs or one drug sold under more than one name. Compare:
+
+      OPSUMITOPSYNVI     two different drugs on one line  -> nothing
+      CompleraEviplera   one drug, US and EU trade names  -> that drug
+
+    Nothing in the spelling separates those two - they are equally similar as
+    strings - so this is exactly the judgement the string rules cannot make and
+    you are being asked for. The sibling members listed below are evidence: if
+    the issuer tags the other name separately elsewhere on the axis, the names
+    are separate products and this member is a combined line. If you are not
+    confident the names denote a single drug, return nothing.
   - the member is a catch-all for products the issuer no longer breaks out
     ("Other", "Other HIV")
   - the member names a service, a royalty, a collaboration or a revenue share
@@ -32,8 +46,11 @@ system: |
   Return a product when you have a specific reason, and say what it is. Two
   kinds of reason are usually sound:
   - the member is the same product under another name: a generic or chemical
-    name for a brand ("SofosbuvirVelpatasvir" for a brand sold under one), a
-    former brand name, or a co-formulation the issuer renamed
+    name for a brand ("SofosbuvirVelpatasvir" for a brand sold under one), the
+    initials of its generic components ("LDVSOF" for a ledipasvir/sofosbuvir
+    brand), a name it was sold under before it was branded, a trade name used
+    in another market ("Eviplera" for a brand sold as "Complera" in the US), or
+    a co-formulation the issuer renamed
   - the member is a generic tag such as us-gaap:ProductMember AND the issuer
     markets exactly one product, so its product revenue can only be that
     product's. Check the candidate list has exactly one entry before using
