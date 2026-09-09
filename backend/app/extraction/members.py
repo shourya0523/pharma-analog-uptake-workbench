@@ -88,11 +88,25 @@ def _suffixes(parts: list[str]) -> list[list[str]]:
     return [parts[i:] for i in range(len(parts))]
 
 
+# A member joining two names is a line covering both, and the trailing-run rule
+# would quietly award it to whichever is written last: `RemicadeAndSimponi`
+# resolved to Simponi, a figure that includes Remicade. The rules cannot tell a
+# joined pair from a category ending in a product's name, so they decline and
+# the model decides - which costs one call and can still resolve it, where
+# guessing costs a real number attributed to the wrong product.
+_JOINED = frozenset({"and", "plus"})
+_JOINING_MARKS = ("&", "+")
+
+
 def match(member: str, products: list[str]) -> Resolution:
     """Resolve one member against the products we track, or decline to."""
     parts = words(member)
     if not parts:
         return Resolution(member, None, "unknown", 0.0, "no words in member")
+    local = member.split(":")[-1]
+    if any(part in _JOINED for part in parts) or any(m in local for m in _JOINING_MARKS):
+        return Resolution(member, None, "joined", 0.0,
+                          "member joins names; a figure covering both is not one product's")
     # Keyed on the run's words joined up, not on the tuple of words, because
     # only the *member* is a machine-generated identifier whose capitals mark
     # word boundaries. A brand may carry a capital of its own - "AmBisome" -

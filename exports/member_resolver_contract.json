@@ -6,7 +6,7 @@
    "member": "CompleraEviplera",
    "expected": "Complera",
    "got": "Complera",
-   "reason": "CompleraEviplera refers to the same drug, marketed as Complera in the US and Eviplera in the EU.",
+   "reason": "CompleraEviplera refers to the same drug sold under different trade names in different markets, with Complera being the US trade name.",
    "ok": true
   },
   {
@@ -20,7 +20,7 @@
    "member": "OPSUMITOPSYNVI",
    "expected": null,
    "got": null,
-   "reason": "The member OPSUMITOPSYNVI runs together the names of two different drugs, Opsumit and Opsynvi, which are not the same product.",
+   "reason": "The member 'OPSUMITOPSYNVI' runs together the names of two different drugs, Opsumit and Opsynvi, which are not the same product.",
    "ok": true
   },
   {

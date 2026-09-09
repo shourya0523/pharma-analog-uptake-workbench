@@ -68,7 +68,11 @@ def test_two_products_that_read_the_same_resolve_to_nothing():
 def test_a_catch_all_member_matches_no_product():
     resolution = match("us-gaap:ProductAndServiceOtherMember", UTHR)
     assert resolution.product is None
-    assert resolution.method == "unmatched"
+    assert not resolution.resolved
+    # It declines as "joined" rather than "unmatched": the member carries an
+    # "And", and the rules stop at one before asking which trailing run wins.
+    # Either way it names no product, which is the claim being made here.
+    assert resolution.method in {"unmatched", "joined"}
 
 
 def test_the_register_is_consulted_before_the_rules(tmp_path):
@@ -185,3 +189,22 @@ def test_a_brand_that_capitalises_inside_its_own_name_still_resolves():
     # still only a *trailing* run, so a sibling formulation is not the parent.
     assert match("acme:CalderonXRMember", known).product is None
     assert match("acme:NebulizedCalderonMember", known).product == "Nebulized Calderon"
+
+
+def test_a_member_joining_two_names_is_not_the_last_one():
+    """`RemicadeAndSimponi` is a line covering both, not Simponi's revenue.
+
+    The trailing-run rule reads the last name in a member, which is right for a
+    category prefix ("HIVProductsBiktarvy") and wrong for a joined pair. The
+    rules cannot tell those apart, so they decline and the model decides: one
+    call, against a figure that includes another product being published as
+    this one's.
+    """
+    known = ["Calderon", "NuVessa"]
+    for member in ("CalderonAndNuVessa", "acme:CalderonAndNuVessaMember",
+                   "Calderon&NuVessa", "Calderon+NuVessa"):
+        outcome = match(member, known)
+        assert not outcome.resolved, f"{member} resolved to {outcome.product}"
+
+    # A category that merely ends in a product's name is still resolved.
+    assert match("acme:RespiratoryProductsNuVessa", known).product == "NuVessa"
