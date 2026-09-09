@@ -76,10 +76,6 @@ def extract_revenue_candidates(
     generic: str | None = None,
     extra_aliases: Iterable[str] | None = None,
     context: str = "",
-    # Defaults to False because a fourth quarter is never tagged or printed
-    # as a quarter - it is the year less the nine months - so a caller that
-    # takes the default and drops the totals silently loses every Q4.
-    quarterly_only: bool = False,
     grids: Iterable[list[list[str | None]]] | None = None,
     captions: Iterable[str] | None = None,
     prose: str = "",
@@ -146,6 +142,5 @@ def extract_revenue_candidates(
         for point in points
         if point.period not in rejected
         and point.value_normalized_usd_millions is not None
-        and (not quarterly_only or point.period_type == "quarterly")
     ]
     return [_as_candidate(point, product) for point in kept], findings, skipped

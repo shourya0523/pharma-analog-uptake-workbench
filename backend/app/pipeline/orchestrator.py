@@ -1065,7 +1065,6 @@ class PipelineOrchestrator:
                     # filer that tags nothing.
                     products=sorted({*load_products(), job.drug_name}),
                     register=register,
-                    quarterly_only=False,
                 )
             except Exception:  # noqa: BLE001 - a malformed extract is not this job's failure
                 logger.exception("notes_dataset_unreadable job_id=%s root=%s", job.id, root)
@@ -1120,12 +1119,6 @@ class PipelineOrchestrator:
             try:
                 found, notes = candidates_from_instance(
                     raw,
-                    # The year as well as its quarters. A fourth quarter is the
-                    # year minus the three quarters stated, so dropping the
-                    # twelve-month facts here left the derivation with nothing
-                    # to subtract from - the table reader already keeps them
-                    # for the same reason.
-                    quarterly_only=False,
                     product=job.drug_name,
                     issuer=job.manufacturer or "",
                     # Every product this pipeline tracks, not just the one
@@ -1260,15 +1253,13 @@ class PipelineOrchestrator:
                 # to the model - while the reader four lines down was skipping
                 # tables for want of exactly this.
                 period_context=period_context,
-                # The totals as well as the quarters. A quarter the issuer
-                # never stated on its own is the difference between a total it
-                # did state and the quarters it did, and `complete_series`
-                # cannot compute that without the total: asked for quarters
-                # only, it received quarters only and derived nothing, in every
-                # job this pipeline has ever run. Only the quarters are stored;
-                # the totals exist to be subtracted from.
-                quarterly_only=False,
             )
+            # A producer says everything it can about the source; which of
+            # those answers is a datapoint and which is something to subtract
+            # from is decided here, because only here are both destinations
+            # known. A quarter the issuer never stated on its own is the
+            # difference between a total it did state and the quarters it did,
+            # so the totals are routed, not discarded.
             period_totals = [
                 candidate
                 for candidate in fingerprinted

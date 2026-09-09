@@ -7,10 +7,17 @@ end-to-end runs covering roughly two hundred gold quarters the pipeline emitted
 ones, while `eval_coverage.py` credited 51 rows to derivations.
 
 The cause was one default. `_extract_revenue` called
-`extract_revenue_candidates` without `quarterly_only`, which defaults to True,
-so only quarterly points were ever stored — and `complete_series` derives a
-missing quarter by subtracting the quarters it has from a *total* it no longer
-received. Asked for quarters only, it derived nothing, every time.
+`extract_revenue_candidates` without `quarterly_only`, a parameter that then
+defaulted to True, so only quarterly points were ever stored — and
+`complete_series` derives a missing quarter by subtracting the quarters it has
+from a *total* it no longer received. Asked for quarters only, it derived
+nothing, every time.
+
+That parameter has since been removed rather than re-defaulted, because it
+duplicated a decision the orchestrator has to make anyway; see
+`test_totals_reach_the_derivation.py`. This test stays, because it checks the
+outcome — a derived row actually reaching the stage — and not the mechanism
+that happened to break it.
 
 A grep cannot see that. This drives the stage and looks at what came out.
 """

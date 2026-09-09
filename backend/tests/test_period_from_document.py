@@ -36,7 +36,6 @@ def test_a_table_stating_no_period_is_dated_by_its_document():
         product="Mounjaro",
         context="(Dollars in millions)",
         captions=["(Dollars in millions)"],
-        quarterly_only=False,
         period_context=PeriodContext(months=3, month=3, year=2025),
     )
     by_period = {c["period"]: c["value_normalized_usd_millions"] for c in candidates}
@@ -61,7 +60,6 @@ def test_a_repeated_year_refuses_the_document_period():
         product="Eliquis",
         context="(MILLIONS)",
         captions=["(MILLIONS)"],
-        quarterly_only=False,
         period_context=PeriodContext(months=3, month=6, year=2026),
     )
     assert candidates == [], "an ambiguous table must stay unread"

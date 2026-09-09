@@ -162,11 +162,6 @@ async def go():
                 for raw in instances:
                     got, _notes = candidates_from_instance(
                         raw, product=row["drug_name"], issuer=maker,
-                        # The year as well as its quarters: a fourth quarter is
-                        # the year minus the three that were stated, and the
-                        # twelve-month facts were being dropped before the
-                        # derivation could subtract from them.
-                        quarterly_only=False,
                         products=PRODUCTS, register=REGISTER)
                     tagged.extend(got)
                 pool[(maker, row["drug_name"])].extend(tagged)
@@ -205,7 +200,7 @@ async def go():
                     doc.tables, product=row["drug_name"],
                     generic=row.get("generic_name"), context=doc.full_text[:4000],
                     grids=doc.table_grids, captions=doc.table_captions,
-                    prose=doc.full_text, quarterly_only=False)
+                    prose=doc.full_text)
                 found.extend(c for c in got if str(c.get("period")) not in answered)
             pool[(maker, row["drug_name"])].extend(found)
             found = [c for c in found if c.get("period_type") == "quarterly"]

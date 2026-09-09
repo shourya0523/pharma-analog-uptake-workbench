@@ -81,7 +81,7 @@ def main() -> int:
             named += mentions
             found, _findings, _skipped = extract_revenue_candidates(
                 tables, product=product, context=text[:4000], grids=grids,
-                captions=captions, prose=text, quarterly_only=False,
+                captions=captions, prose=text,
             )
             quarterly = [
                 c for c in found

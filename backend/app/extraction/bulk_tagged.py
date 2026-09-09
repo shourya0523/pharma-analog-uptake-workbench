@@ -79,10 +79,6 @@ def candidates_from_notes(
     cik: int,
     products: list[str] | None = None,
     register: dict[tuple[str, str], Resolution] | None = None,
-    # Defaults to False because a fourth quarter is never tagged or printed
-    # as a quarter - it is the year less the nine months - so a caller that
-    # takes the default and drops the totals silently loses every Q4.
-    quarterly_only: bool = False,
     forms: Iterable[str] | None = None,
     dimensions: dict[str, str] | None = None,
 ) -> tuple[list[dict[str, Any]], list[str]]:
@@ -129,8 +125,6 @@ def candidates_from_notes(
                 continue
             if fact.unit and fact.unit != "USD":
                 notes.append(f"{member}: unit {fact.unit} is not USD")
-                continue
-            if quarterly_only and fact.months != 3:
                 continue
             signature = (fact.period or "", round(fact.value, 2))
             if signature in seen:

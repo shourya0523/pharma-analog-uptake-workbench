@@ -209,10 +209,9 @@ def test_year_to_date_column_is_never_emitted_as_a_quarter():
     assert [c["period"] for c in quarterly] == ["2024Q2"]
     assert all(c["period_type"] != "quarterly" for c in candidates if c["period"] == "2024")
 
-    # Asked for quarters alone, the totals go and so does anything to derive from.
-    quarters_only, _, _ = extract_revenue_candidates(
-        [MERCK_QUARTER_AND_YTD], product="Winrevair", quarterly_only=True
-    )
+    # A caller wanting quarters alone selects them, in the one line the
+    # orchestrator already writes. The reader has no say in it.
+    quarters_only = [c for c in candidates if c["period_type"] == "quarterly"]
     assert [c["period"] for c in quarters_only] == ["2024Q2"]
 
 
