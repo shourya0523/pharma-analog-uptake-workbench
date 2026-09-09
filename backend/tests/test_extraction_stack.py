@@ -200,7 +200,20 @@ def test_year_to_date_column_is_never_emitted_as_a_quarter():
     candidates, _, _ = extract_revenue_candidates(
         [MERCK_QUARTER_AND_YTD], product="Winrevair"
     )
-    assert [c["period"] for c in candidates] == ["2024Q2"]
+    # The six-month figure comes through - a fourth quarter is derived by
+    # subtracting from a total, so withholding totals is what loses Q4 - but it
+    # comes through *as* a six-month figure. Being emitted and being emitted as
+    # a quarter are different claims, and only the second is the error.
+    assert [c["period"] for c in candidates] == ["2024Q2", "2024"]
+    quarterly = [c for c in candidates if c["period_type"] == "quarterly"]
+    assert [c["period"] for c in quarterly] == ["2024Q2"]
+    assert all(c["period_type"] != "quarterly" for c in candidates if c["period"] == "2024")
+
+    # Asked for quarters alone, the totals go and so does anything to derive from.
+    quarters_only, _, _ = extract_revenue_candidates(
+        [MERCK_QUARTER_AND_YTD], product="Winrevair", quarterly_only=True
+    )
+    assert [c["period"] for c in quarters_only] == ["2024Q2"]
 
 
 def test_dash_holds_its_column_so_later_values_do_not_shift_left():
