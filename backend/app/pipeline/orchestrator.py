@@ -3,7 +3,9 @@ from __future__ import annotations
 # ruff: noqa: BLE001, DTZ003
 import json
 import logging
+import os
 from datetime import datetime
+from pathlib import Path
 from typing import Any
 
 from sqlalchemy.orm import Session
@@ -45,6 +47,7 @@ from app.domain.models import (
     JobStep,
     PeriodType,
     RetrievalStatus,
+    RetrievedSource,
     SourceType,
     ValidationStatus,
     new_id,
@@ -64,6 +67,7 @@ from app.parsing.periods import detect_period_context, normalize_period
 from app.extraction.candidates import extract_revenue_candidates
 from app.extraction.derive import complete_series
 from app.extraction.members import load_products, load_register
+from app.extraction.bulk_tagged import candidates_from_notes
 from app.extraction.tagged import candidates_from_instance
 from app.extraction.fingerprint import UNIT_SCALE_TO_MILLIONS
 from app.quality.candidate_filters import filter_revenue_candidates
@@ -1011,6 +1015,87 @@ class PipelineOrchestrator:
         self.db.add(row)
         return row
 
+    def _bulk_tagged_revenue(
+        self, job: DrugJobORM
+    ) -> tuple[list[DatapointORM], list[dict[str, Any]]]:
+        """The same tagged facts, from the Commission's bulk extracts.
+
+        `_tagged_revenue` can only read an instance the retrieve stage fetched,
+        which is capped and walks EDGAR filing by filing. The Financial
+        Statement and Notes Data Sets carry every filer's note-level facts for
+        a whole month in one file, so a quarter the walk never reached is
+        answered here without another request to sec.gov.
+
+        It is off unless `notes_dataset_dirs` names a downloaded extract, and
+        it adds nothing the instance path would have contradicted: both produce
+        the same claim about the same fact, and the reconciler treats a
+        duplicate as one answer rather than two votes.
+        """
+        settings = get_settings()
+        configured = [
+            Path(part)
+            for part in (settings.notes_dataset_dirs or "").split(os.pathsep)
+            if part.strip()
+        ]
+        if not configured or not job.cik:
+            return [], []
+        try:
+            cik = int(str(job.cik).lstrip("0") or "0")
+        except ValueError:
+            return [], []
+
+        register = load_register()
+        rows: list[DatapointORM] = []
+        totals: list[dict[str, Any]] = []
+        for root in configured:
+            if not (root / "num.tsv").exists():
+                logger.info("notes_dataset_missing job_id=%s root=%s", job.id, root)
+                continue
+            try:
+                found, notes = candidates_from_notes(
+                    root,
+                    product=job.drug_name,
+                    issuer=job.manufacturer or "",
+                    cik=cik,
+                    # Every product this pipeline tracks, so that a member
+                    # ending in a sibling's name goes to the sibling rather
+                    # than to this one - and the product actually being asked
+                    # for, which is not always in the catalog yet. Without it a
+                    # job for a new product resolves nothing and reads as a
+                    # filer that tags nothing.
+                    products=sorted({*load_products(), job.drug_name}),
+                    register=register,
+                    quarterly_only=False,
+                )
+            except Exception:  # noqa: BLE001 - a malformed extract is not this job's failure
+                logger.exception("notes_dataset_unreadable job_id=%s root=%s", job.id, root)
+                continue
+            for note in notes:
+                logger.info("notes_note job_id=%s root=%s %s", job.id, root.name, note)
+            for candidate in found:
+                # One source row per filing the facts were tagged in, so the
+                # citation resolves the same way the instance path's does.
+                src = RetrievedSource(
+                    source_type=SourceType.SEC_FILING,
+                    url=candidate.get("source_url") or "",
+                    title=f"XBRL facts, {candidate.get('xbrl_accession')}",
+                    filing_type="10-Q/10-K",
+                    accession_number=candidate.get("xbrl_accession"),
+                    retrieval_status=RetrievalStatus.SUCCESS,
+                    metadata={"notes_dataset": root.name},
+                )
+                self._persist_sources(job, [src])
+                if candidate.get("period_type") != PeriodType.QUARTERLY.value:
+                    totals.append(candidate)
+                    continue
+                rows.append(self._datapoint_from_candidate(job, src, candidate))
+        if rows or totals:
+            logger.info(
+                "notes_dataset_facts job_id=%s drug=%s quarters=%d totals=%d",
+                job.id, job.drug_name, len(rows), len(totals),
+            )
+        return rows, totals
+
     async def _tagged_revenue(
         self, job: DrugJobORM, sources: list
     ) -> tuple[list[DatapointORM], list[dict[str, Any]]]:
@@ -1119,6 +1204,12 @@ class PipelineOrchestrator:
         tagged_rows, tagged_totals = await self._tagged_revenue(job, selected_sources)
         rows.extend(tagged_rows)
         derivation_pool.extend(tagged_totals)
+
+        # The same class of claim, for filings the retrieve stage never reached.
+        # Off unless an extract has been downloaded and configured.
+        bulk_rows, bulk_totals = self._bulk_tagged_revenue(job)
+        rows.extend(bulk_rows)
+        derivation_pool.extend(bulk_totals)
 
         # A period a tagged fact already answered for this filing. The filer's
         # own XBRL is the strongest claim there is; nothing needs a second

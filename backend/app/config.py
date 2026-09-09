@@ -34,6 +34,12 @@ class Settings(BaseSettings):
     sec_earnings_exhibits: bool = True
     sec_max_earnings_exhibits: int = 6
     sec_user_agent: str = "PharmaAnalogUptakeWorkbench research@example.com"
+    # Unzipped Financial Statement and Notes Data Set directories, separated by
+    # os.pathsep. Each holds sub.tsv, dim.tsv and num.tsv as downloaded from
+    # sec.gov. Unset means the bulk tagged reader contributes nothing, which is
+    # the default: the extracts are hundreds of megabytes and are fetched
+    # deliberately rather than during a run.
+    notes_dataset_dirs: str = ""
     cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
     llm_skip_judge_when_deterministic: bool = True
     llm_max_extract_sources: int = 6

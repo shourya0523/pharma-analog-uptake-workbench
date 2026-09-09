@@ -277,3 +277,34 @@ were opened.
 - [XBRL US — disaggregated revenue tagging guidance](https://xbrl.us/data-rule/guid-revenuepr/)
 - [J&J — quarterly results](https://www.investor.jnj.com/financials/quarterly-results/default.aspx) · [Merck — financial information](https://www.merck.com/investor-relations/financial-information/)
 - [GlobalData Pharma Drug Sales & Forecasts](https://www.globaldata.com/marketplace/dataset/pharma-drug-sales-forecasts/) · [IQVIA data](https://www.iqvia.com/insights/the-iqvia-institute/available-iqvia-data) · [Cortellis](https://clarivate.com/life-sciences-healthcare/portfolio-strategy/competitive-intelligence/cortellis-competitive-intelligence-analytics/) · [Daloopa](https://daloopa.com/benefits/deepest-dataset)
+
+---
+
+## Postscript: the reader, built
+
+`app/parsing/notes_datasets.py` reads an extract; `app/extraction/bulk_tagged.py`
+turns its rows into revenue candidates; `PipelineOrchestrator._bulk_tagged_revenue`
+runs it as a stage, off unless `NOTES_DATASET_DIRS` names a downloaded extract.
+
+Rows are turned back into `xbrl.Fact` objects rather than into a parallel
+representation, so the standard-element list, the
+worldwide-is-the-absence-of-geography rule, the least-qualified-statement rule
+and the midpoint period label all apply unchanged and cannot drift from the
+instance path.
+
+Scored on ten issuers absent from gold, `seed/holdout`, `seed/holdout2` and
+`seed/holdout_labels`, over two monthly extracts, with no answer key -
+`scripts/eval_notes_ingest.py`:
+
+| | |
+|---|---|
+| product-quarters found | **280** across 9 issuers |
+| same quarter in two filings | **8/8 agree** |
+| regions add to the whole | **31/31 agree** |
+
+The second and third rows are the checks that matter. A quarter tagged in its
+own 10-Q and again a year later as a comparative is two filings stating one
+number, and they agree. Where a filer tags US and non-US beside the
+undimensioned figure, the parts add to the whole - which is the rule the reader
+relies on when it treats the absence of a geography axis as the worldwide
+total, confirmed here on filers nobody built it against.
