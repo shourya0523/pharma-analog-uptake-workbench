@@ -13,13 +13,20 @@ recovery is unnecessary where the statement exists:
     whether a row names the product    the ProductOrService axis member
     a region line vs the worldwide      the geographic axis, present or absent
 
-The catch is that it does not reach far. Detail tagging of the revenue note
-arrived with inline XBRL, phased by filer size: fiscal periods ending on or
-after 15 June 2019 for large accelerated filers, 2020 for accelerated, 2021 for
-everyone else. So the cutoff is a property of the issuer, not a date in this
-file - ``filer_category`` reads the issuer's own declaration of which it is, and
-``product_facts`` simply returns nothing for a filing that predates its own
-cutoff, which is the honest way for a reader to say "not here".
+How far this reaches is a property of the issuer rather than a date. The
+2019-2021 inline-XBRL phase-in made detail tagging of the revenue note
+mandatory; it did not invent it, and filers were tagging products on the
+product axis long before their own deadline - Gilead from 2009, United
+Therapeutics from 2011. ``filer_category`` reads the issuer's own declaration
+of which category it is in, and ``product_facts`` returns nothing for a filing
+that genuinely tagged nothing, which is the honest way for a reader to say "not
+here".
+
+Believing the phase-in was the start of tagging cost real coverage twice, in
+two places that each looked like a property of the data: the connector fetched
+only instances named the inline-era way, and this module knew the product axis
+only under the name the 2018 taxonomy gave it. Both silently read a fully
+tagged filing as an empty one.
 """
 
 from __future__ import annotations
@@ -30,7 +37,17 @@ import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field
 from datetime import date
 
+# The axis that says which product a fact is about, in both of its spellings.
+# It lived in the us-gaap namespace until the 2018 taxonomy moved the reporting
+# axes into srt, so a filing from before that names the same axis differently -
+# Gilead's 2013 Q3 instance and United Therapeutics' 2016 Q3 one both say
+# "us-gaap:ProductOrServiceAxis". Knowing only the modern spelling reads those
+# filings as having no product facts at all, which is what happened.
+#
+# PRODUCT_AXIS stays the canonical one: it is what a fact is keyed under once
+# `notes_datasets` normalises a bulk row, and what the tests construct.
 PRODUCT_AXIS = "srt:ProductOrServiceAxis"
+PRODUCT_AXES = (PRODUCT_AXIS, "us-gaap:ProductOrServiceAxis")
 GEOGRAPHIC_AXES = ("srt:StatementGeographicalAxis", "us-gaap:StatementGeographicalAxis")
 
 # What a revenue fact is called. Only the standard taxonomy's revenue elements
@@ -99,7 +116,10 @@ class Fact:
 
     @property
     def product_member(self) -> str | None:
-        return self.members.get(PRODUCT_AXIS)
+        for axis in PRODUCT_AXES:
+            if axis in self.members:
+                return self.members[axis]
+        return None
 
     @property
     def is_worldwide(self) -> bool:

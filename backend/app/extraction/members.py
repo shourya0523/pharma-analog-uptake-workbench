@@ -46,6 +46,12 @@ LLM_CONFIDENCE_FLOOR = 0.8
 # no longer breaks out. Recorded so the resolver stops asking about them.
 NOT_A_PRODUCT = "-"
 
+# `resolve` is called once per member per filing, so re-keying the register on
+# every call would be the same work repeated. Keyed on the register's identity
+# and length, and holding one entry, so a register that is rebuilt or added to
+# is re-indexed rather than answered from a stale index.
+_IDENTITY_CACHE: dict[int, tuple[int, dict[tuple[str, str], "Resolution"]]] = {}
+
 
 @dataclass(frozen=True)
 class Resolution:
@@ -62,6 +68,29 @@ class Resolution:
         if not self.product or self.product == NOT_A_PRODUCT:
             return False
         return self.method != "llm" or self.confidence >= LLM_CONFIDENCE_FLOOR
+
+
+def canonical_member(member: str) -> str:
+    """A member's identity, independent of which reader spelled it.
+
+    The same member reaches the register under two notations. An instance
+    document names it in full - ``gild:CompleraEvipleraMember`` - while the
+    bulk notes datasets store the segment stripped of both prefix and suffix,
+    as ``CompleraEviplera``. Keyed literally, a decision made from one source
+    is invisible to the other, and the register's whole premise is that a
+    decision is made once.
+
+    That cost exactly the quarters it sounds like it would: with the register
+    built from the bulk extracts, Complera read 16 of 16 sampled quarters
+    through the bulk reader and 0 of 16 through the filing's own instance,
+    which was the entire measured difference between the two paths.
+
+    Case goes too, because the same two spellings differ in it as well
+    (``Ambisome`` beside ``AmBisome``), and a filer's capitalisation of its own
+    member is not a distinction the register should have to carry twice.
+    """
+    local = re.sub(r"Member$", "", member.split(":")[-1])
+    return re.sub(r"[^a-z0-9]", "", local.lower())
 
 
 def words(text: str) -> list[str]:
@@ -226,4 +255,35 @@ def resolve(
     register = register if register is not None else load_register()
     if (issuer, member) in register:
         return register[(issuer, member)]
+    entry = _by_identity(register).get((issuer, canonical_member(member)))
+    if entry is not None:
+        return entry
     return match(member, products)
+
+
+def _by_identity(
+    register: dict[tuple[str, str], Resolution],
+) -> dict[tuple[str, str], Resolution]:
+    """The register re-keyed on member identity rather than on spelling.
+
+    Where two spellings of one member were decided differently, neither is
+    returned. That is a disagreement in the register, and answering it by
+    whichever row was read last is the same coin toss `match` refuses to make
+    for two products that read the same.
+    """
+    cached = _IDENTITY_CACHE.get(id(register))
+    if cached is not None and cached[0] == len(register):
+        return cached[1]
+    index: dict[tuple[str, str], Resolution] = {}
+    disputed: set[tuple[str, str]] = set()
+    for (issuer, member), entry in register.items():
+        key = (issuer, canonical_member(member))
+        seen = index.get(key)
+        if seen is not None and seen.product != entry.product:
+            disputed.add(key)
+        index[key] = entry
+    for key in disputed:
+        index.pop(key, None)
+    _IDENTITY_CACHE.clear()
+    _IDENTITY_CACHE[id(register)] = (len(register), index)
+    return index

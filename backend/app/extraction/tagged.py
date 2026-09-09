@@ -26,7 +26,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from app.extraction.members import Resolution, load_register, match
+from app.extraction.members import Resolution, load_register, resolve
 from app.parsing.xbrl import Fact, filer_category, parse_facts, product_facts
 
 # A tagged fact is the filer's own assertion, checked by the filer's auditors
@@ -76,11 +76,18 @@ def candidates_from_instance(
     seen: set[tuple[str, float]] = set()
     for fact in facts:
         member = fact.product_member or ""
-        # Keyed by issuer and member together: us-gaap:ProductMember is Yutrepia
-        # for Liquidia, which markets one product, and a meaningless total for
-        # anyone else. Looking it up by member alone answers with whichever
-        # filer was written last.
-        resolution = register.get((issuer, member)) or match(member, known)
+        # Through `resolve`, not by indexing the register here. The lookup is
+        # keyed by issuer and member together - us-gaap:ProductMember is
+        # Yutrepia for Liquidia, which markets one product, and a meaningless
+        # total for anyone else - but it is also keyed on the member's
+        # *identity* rather than its spelling, and that part was missing while
+        # this reader did its own lookup: the register built from the bulk
+        # extracts spells a member "CompleraEviplera" and an instance spells it
+        # "gild:CompleraEvipleraMember", so a decision already made and written
+        # down was invisible here. Complera read 0 of 16 sampled quarters
+        # through this reader and 16 of 16 through the bulk one, on the same
+        # register.
+        resolution = resolve(member, known, register, issuer=issuer)
         if not resolution.resolved or resolution.product != product:
             continue
         value = _million(fact)

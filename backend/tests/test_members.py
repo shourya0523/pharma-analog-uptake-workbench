@@ -208,3 +208,55 @@ def test_a_member_joining_two_names_is_not_the_last_one():
 
     # A category that merely ends in a product's name is still resolved.
     assert match("acme:RespiratoryProductsNuVessa", known).product == "NuVessa"
+
+
+def test_a_decision_reaches_the_reader_that_did_not_make_it():
+    """One member, two notations, and the register must answer to both.
+
+    The bulk notes datasets store a segment stripped of prefix and suffix
+    ("CompleraEviplera"); a filing's own instance names it in full
+    ("gild:CompleraEvipleraMember"). Keyed literally, the register built from
+    one is invisible to the other - which is what happened: Complera read 16 of
+    16 sampled quarters through the bulk reader and 0 of 16 through the
+    instance, on a decision that had already been made and written down.
+    """
+    from app.extraction.members import canonical_member
+
+    register = {("Gilead", "CompleraEviplera"): Resolution(
+        "CompleraEviplera", "Complera", "llm", 0.9, "US and EU trade names"
+    )}
+    for spelling in ("CompleraEviplera", "gild:CompleraEvipleraMember",
+                     "CompleraEvipleraMember", "Compleraeviplera"):
+        assert resolve(spelling, GILEAD, register, issuer="Gilead").product == "Complera", spelling
+    assert canonical_member("gild:CompleraEvipleraMember") == "compleraeviplera"
+
+
+def test_the_issuer_is_still_part_of_the_key():
+    """Re-keying on identity must not merge two filers' taxonomies."""
+    register = {("Liquidia", "us-gaap:ProductMember"): Resolution(
+        "us-gaap:ProductMember", "Yutrepia", "llm", 1.0, "sole marketed product"
+    )}
+    assert resolve("ProductMember", [], register, issuer="Liquidia").product == "Yutrepia"
+    assert resolve("ProductMember", UTHR, register,
+                   issuer="United Therapeutics").product is None
+
+
+def test_two_spellings_decided_differently_answer_neither():
+    """A disagreement in the register is not settled by row order."""
+    register = {
+        ("Acme", "CalderonXR"): Resolution("CalderonXR", "Calderon", "human", 1.0, ""),
+        ("Acme", "acme:CalderonXRMember"): Resolution(
+            "acme:CalderonXRMember", "NuVessa", "human", 1.0, "corrected"
+        ),
+    }
+    assert resolve("acme:CalderonXRMember", [], register, issuer="Acme").product == "NuVessa", (
+        "an exact key still wins outright; only the identity fallback abstains"
+    )
+    assert resolve("CalderonXRMember", [], register, issuer="Acme").product is None
+
+
+def test_an_edit_to_the_register_is_not_answered_from_a_stale_index():
+    register = {("Acme", "Foo"): Resolution("Foo", "NuVessa", "human", 1.0, "")}
+    assert resolve("acme:FooMember", [], register, issuer="Acme").product == "NuVessa"
+    register[("Acme", "Bar")] = Resolution("Bar", "Calderon", "human", 1.0, "")
+    assert resolve("acme:BarMember", [], register, issuer="Acme").product == "Calderon"
