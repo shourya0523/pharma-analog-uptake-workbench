@@ -42,6 +42,20 @@ def _million(fact: Fact) -> float | None:
     return fact.value / 1_000_000.0
 
 
+def rounding_uncertainty(fact: Fact) -> float | None:
+    """How far a tagged fact may sit from the true figure, in USD millions.
+
+    Half the unit the filer rounded to. A fact tagged `decimals="-6"` is within
+    half a million of the truth; one tagged `INF` is exact; one that says
+    nothing gets None, because unknown precision is not the same as exact and
+    a derivation over it cannot be bounded.
+    """
+    unit = fact.rounding_unit
+    if unit is None:
+        return None
+    return unit / 2.0 / 1_000_000.0
+
+
 def candidates_from_instance(
     raw: bytes,
     *,
@@ -117,6 +131,7 @@ def candidates_from_instance(
             "xbrl_member": member,
             "xbrl_context": fact.context_id,
             "member_resolved_by": resolution.method,
+            "rounding_uncertainty_usd_millions": rounding_uncertainty(fact),
             "_from_table": False,
             "_from_xbrl": True,
         })

@@ -46,6 +46,12 @@ class Datapoint:
     source_quote: str
     fingerprint_signature: str
     normalization_status: str
+    # How far this value may sit from the true figure because of how its source
+    # rounded, in USD millions. None means the source did not say, which is not
+    # the same as zero: a derivation over an unbounded input cannot be bounded
+    # either. Defaulted so every existing construction site keeps working and
+    # says "unknown" rather than "exact".
+    rounding_uncertainty_usd_millions: float | None = None
 
     def as_dict(self) -> dict[str, Any]:
         return {
@@ -60,6 +66,7 @@ class Datapoint:
             "source_quote": self.source_quote,
             "fingerprint_signature": self.fingerprint_signature,
             "normalization_status": self.normalization_status,
+            "rounding_uncertainty_usd_millions": self.rounding_uncertainty_usd_millions,
         }
 
 

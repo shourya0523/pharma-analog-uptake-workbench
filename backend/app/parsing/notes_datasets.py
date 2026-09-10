@@ -72,6 +72,22 @@ class Submission:
         )
 
 
+# NUM spells the filer's `decimals` attribute `dcml`, and writes INF - a value
+# tagged exactly - as 32767 rather than as a word. Reading the column under its
+# XBRL name silently yields nothing, which looks exactly like a filer that
+# declared no precision, so the bound would be unknown for every bulk-read fact
+# and nobody would see a difference.
+_DECIMALS_INF = "32767"
+
+
+def _decimals(raw: object) -> str | None:
+    """NUM's `dcml` as the `decimals` attribute it stands for."""
+    text = str(raw or "").strip()
+    if not text:
+        return None
+    return "INF" if text == _DECIMALS_INF else text
+
+
 def _segments_to_members(segments: str) -> dict[str, str]:
     """The `{axis}={member};` pairs DIM stores, as xbrl.py spells them."""
     members: dict[str, str] = {}
@@ -185,6 +201,6 @@ def iter_facts(
                 start=start,
                 end=end,
                 unit=(row.get("uom") or "").strip() or None,
-                decimals=None,
+                decimals=_decimals(row.get("dcml")),
                 context_id=f"{adsh}:{row.get('dimh') or ''}",
             )

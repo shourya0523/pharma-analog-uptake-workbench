@@ -30,7 +30,7 @@ from pathlib import Path
 from typing import Any, Iterable
 
 from app.extraction.members import Resolution, load_register, match
-from app.extraction.tagged import TAGGED_CONFIDENCE
+from app.extraction.tagged import TAGGED_CONFIDENCE, rounding_uncertainty
 from app.parsing.notes_datasets import (
     Submission,
     iter_facts,
@@ -148,6 +148,7 @@ def candidates_from_notes(
                 "xbrl_context": fact.context_id,
                 "xbrl_accession": adsh,
                 "member_resolved_by": resolution.method,
+                "rounding_uncertainty_usd_millions": rounding_uncertainty(fact),
                 "_from_table": False,
                 "_from_xbrl": True,
                 "_from_notes_dataset": True,

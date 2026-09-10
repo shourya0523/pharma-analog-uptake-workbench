@@ -1006,6 +1006,14 @@ class PipelineOrchestrator:
                 "xbrl_member": candidate.get("xbrl_member"),
                 "xbrl_context": candidate.get("xbrl_context"),
                 "member_resolved_by": candidate.get("member_resolved_by"),
+                # How far this figure may sit from the truth given how its
+                # sources rounded, in USD millions. Absent means unknown, not
+                # exact. A derived quarter inherits one rounding per input, so
+                # this is the difference between a reader treating it as exact
+                # and knowing it is a million either way.
+                "rounding_uncertainty_usd_millions": candidate.get(
+                    "rounding_uncertainty_usd_millions"
+                ),
                 "validation_status": ValidationStatus.PENDING.value,
                 "interpreted": False,
                 "period_reported": period,
