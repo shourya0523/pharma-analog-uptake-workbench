@@ -6,28 +6,28 @@
    "member": "CompleraEviplera",
    "expected": "Complera",
    "got": "Complera",
-   "reason": "CompleraEviplera refers to the same drug sold under different trade names in different markets, with Complera being the US trade name.",
+   "reason": "CompleraEviplera refers to the same product sold under different market names, Complera in the US and Eviplera in the EU.",
    "ok": true
   },
   {
    "member": "LDVSOF",
    "expected": "Harvoni",
    "got": "Harvoni",
-   "reason": "LDVSOF refers to the combination of ledipasvir and sofosbuvir, which is marketed as Harvoni.",
+   "reason": "LDVSOF represents the initials of the generic components ledipasvir/sofosbuvir, which is the composition of Harvoni.",
    "ok": true
   },
   {
    "member": "OPSUMITOPSYNVI",
    "expected": null,
    "got": null,
-   "reason": "The member 'OPSUMITOPSYNVI' runs together the names of two different drugs, Opsumit and Opsynvi, which are not the same product.",
+   "reason": "The member OPSUMITOPSYNVI is tagged beside OPSUMIT, indicating it is a roll-up and not a single product.",
    "ok": true
   },
   {
    "member": "HIVProductSales",
    "expected": null,
    "got": null,
-   "reason": "The member 'HIVProductSales' is a category covering multiple products, not a single product.",
+   "reason": "The member 'HIVProductSales' is a category covering multiple products, not a specific product.",
    "ok": true
   }
  ]
