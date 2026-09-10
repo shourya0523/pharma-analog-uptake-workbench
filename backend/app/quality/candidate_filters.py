@@ -10,7 +10,24 @@ from app.parsing.evidence import SCOPE_PATTERNS, TOTAL_REVENUE_RE, product_alias
 # A label states more than one product by joining names with one of these. A
 # hyphen is deliberately absent: "Harvoni - Europe" is one product under a
 # geography, and it is the commonest label shape there is.
-_JOINER_RE = re.compile(r"\s*(?:/|\+|&|;|,|\band\b|\bwith\b|\bplus\b)\s*", re.IGNORECASE)
+_JOINER_RE = re.compile(r"\s*(?:\+|&|;|,|\band\b|\bwith\b|\bplus\b)\s*", re.IGNORECASE)
+
+# A slash is not in that list, because a slash is what a filer writes between
+# the names of ONE product: a brand and its generic ("CONCERTA/METHYLPHENIDATE"),
+# a brand and the name it carries in another market ("PROCRIT/EPREX",
+# "Complera/Eviplera"), a brand and its own combination ("INVOKANA/INVOKAMET"),
+# or a brand and its other presentations ("SIMPONI / SIMPONI ARIA",
+# "INVEGA SUSTENNA/XEPLION/TRINZA/TREVICTA"). Treating it as a product joiner
+# refused every one of those lines, and for four Johnson & Johnson products the
+# refused line was the only figure the issuer ever published.
+#
+# What still separates products is the shape the filer uses for products:
+# commas and "and", as in Biogen's "share of pre-tax profits in the U.S. for
+# RITUXAN, GAZYVA and LUNSUMIO". And a slash-joined name that turns out to have
+# a row of its own in the same table IS a separate product, so the line covers
+# both - which is the same evidence the XBRL member resolver uses, applied to
+# printed labels instead of axis members.
+_SLASH_RE = re.compile(r"\s*/\s*")
 
 # Words that qualify a product rather than name one. A part made only of these
 # is not a competing brand.
@@ -22,6 +39,14 @@ _QUALIFIER_WORDS = frozenset(
         "inc", "corp", "corporation", "ltd", "co", "plc", "sa", "ag", "nv",
         "llc", "gmbh", "group", "segment", "division", "business", "unit",
         "including", "excluding", "less", "and", "or",
+        # A slice of a product's own sales, not another product. Johnson &
+        # Johnson prints "US", "US Exports", "Intl" and "WW" beneath each brand,
+        # and every one of those rows belongs to the brand above it. Without
+        # this, "US Exports" reduces to "exports", which is a name no product
+        # has and every product's row carries - so the guard read Remicade's own
+        # export line as a competitor's and the brand's worldwide total, which
+        # only adds up with that line, could not be identified at all.
+        "export", "exports", "region", "regions", "geography", "geographic",
     }
 )
 
@@ -79,22 +104,29 @@ def names_a_competing_product(
     waves the identical line through for every product we have not seen.
     """
     own = {alias.lower() for alias in aliases}
+    named = _own_rows(siblings, own)
     parts = [p for p in _JOINER_RE.split(label or "") if p and p.strip()]
 
     for part in parts:
-        stripped = _strip_noise(part)
-        if not stripped:
-            continue
-        if any(alias in stripped or stripped in alias for alias in own):
-            continue
-        if _is_spelling_variant(stripped, own):
-            continue
-        # A part naming no brand but marking breadth still means the line
-        # covers more than this product.
-        if all(word in _AGGREGATE_WORDS for word in stripped.split()):
-            return stripped
-        if len(parts) > 1:
-            return stripped
+        for segment in _SLASH_RE.split(part):
+            stripped = _strip_noise(segment)
+            if not stripped:
+                continue
+            if any(alias in stripped or stripped in alias for alias in own):
+                continue
+            if _is_spelling_variant(stripped, own):
+                continue
+            # A part naming no brand but marking breadth still means the line
+            # covers more than this product.
+            if all(word in _AGGREGATE_WORDS for word in stripped.split()):
+                return stripped
+            if len(parts) > 1:
+                return stripped
+            # Slash-joined, so this is another name for the same product unless
+            # the filer prints it on a row of its own - and then the line covers
+            # two things the filer reports separately.
+            if stripped in named:
+                return stripped
 
     # A name with its own row elsewhere in the table is a product of this
     # issuer, whether or not a joiner separated it here.
@@ -113,6 +145,21 @@ def names_a_competing_product(
         if re.search(rf"\b{re.escape(name)}\b", normalized):
             return name
     return None
+
+
+def _own_rows(siblings: Iterable[str] | None, own: set[str]) -> set[str]:
+    """The names this table gives a row of their own, ours excluded."""
+    rows: set[str] = set()
+    for sibling in siblings or ():
+        name = _strip_noise(sibling)
+        if not name or len(name) < 3:
+            continue
+        if all(word in _AGGREGATE_WORDS for word in name.split()):
+            continue
+        if any(alias in name or name in alias for alias in own):
+            continue
+        rows.add(name)
+    return rows
 
 
 def _normalize(s: str) -> str:
