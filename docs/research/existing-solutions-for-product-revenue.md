@@ -184,7 +184,9 @@ commercial data vendor. Useful as the incremental/live path where the monthly
 bulk file is too coarse. *Quota specifics for the free tier were not verified.*
 
 **Issuer IR files, for what XBRL cannot reach.** J&J publishes "Sales of Key
-Products/Franchises" schedules per quarter back to at least 2013 and links a
+Products/Franchises" schedules quarterly; gold cites them from 2014 and the
+4Q2013 file fetches, while 3Q2013 404s under the same naming, so the archive
+reaches 2013 and "every quarter" is not established there. It also links a
 historical-sales archive; Merck posts "Other Financial Disclosures (Excel)"
 each quarter. These are the documents gold already cites and the branch already
 reads — worth keeping for the untagged 8-K quarters and pre-2009, not worth

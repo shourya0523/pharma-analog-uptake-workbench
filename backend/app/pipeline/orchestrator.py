@@ -152,7 +152,10 @@ def claim_rank(extraction_method: str | None) -> int:
 # Getting this backwards costs rows rather than correctness: measured over the
 # corpus, ordering by authority let a primary filing's incidental table answer a
 # quarter before the schedule built to state it, and 13 rows that had read
-# correctly stopped being found.
+# correctly stopped being found. That figure is from an end-to-end run and is
+# the one claim in this file a later audit could not re-derive without another
+# one; the ordering it argues for is separately visible in what each document
+# is for.
 DOCUMENT_FITNESS = [
     SourceType.EARNINGS_RELEASE,
     SourceType.SEC_FILING,
