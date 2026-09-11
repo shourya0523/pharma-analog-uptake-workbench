@@ -207,7 +207,12 @@ class Fact:
         where = " ".join(f"{axis.split(':')[-1]}={member.split(':')[-1]}"
                          for axis, member in sorted(self.members.items()))
         span = f"{self.start}..{self.end}" if self.start else "instant"
-        return f"{self.element} [{span}] {where} = {self.value:g}".strip()
+        # Written out, not in the shortest form. `:g` renders anything from a
+        # million upwards in scientific notation, and a citation that does not
+        # contain the figure it cites cannot be checked against it - which is
+        # what every reader downstream does before publishing.
+        amount = f"{self.value:,.4f}".rstrip("0").rstrip(".")
+        return f"{self.element} [{span}] {where} = {amount}".strip()
 
 
 def _prefixes(raw: bytes) -> dict[str, str]:
@@ -357,23 +362,46 @@ def revenue_elements(facts: list[Fact], *, names_a_product=None) -> frozenset[st
     company breaks its products out by revenue far more often than by anything
     else, so the count separates them without a vocabulary of element names.
 
-    Ties are kept rather than broken, because a filer stating product revenue
-    under two elements has two of them and picking one would drop a product.
+    Counting alone is not enough, and the shape that defeats it is ordinary: a
+    filer reporting product profitability tags one cost against every revenue,
+    so the two tie exactly and a cost of goods sold is read as a sale. What
+    separates them is that a cost is a part of what it is taken from - for the
+    same product and period it is smaller, every time. So an element another
+    element beats wherever both appear is dropped as a component of it.
+
+    A genuine tie survives: two elements a filer states revenue under are of
+    the same size, neither dominates, and dropping either would lose a product.
     """
     counts: dict[str, int] = {}
+    values: dict[tuple[str, str, int | None], dict[str, float]] = {}
     for fact in facts:
+        member = _product_member(fact, names_a_product)
         if (
             fact.from_standard_taxonomy
             and fact.states_an_amount
             and fact.months
-            and _product_member(fact, names_a_product)
+            and member
             and not _is_hypothetical(fact)
         ):
             counts[fact.element] = counts.get(fact.element, 0) + 1
+            key = (member, fact.period or "", fact.months)
+            values.setdefault(key, {})[fact.element] = fact.value
     if not counts:
         return frozenset()
     most = max(counts.values())
-    return frozenset(element for element, n in counts.items() if n == most)
+    top = {element for element, n in counts.items() if n == most}
+    if len(top) < 2:
+        return frozenset(top)
+    return frozenset(
+        element for element in top
+        if not any(_dominates(other, element, values) for other in top if other != element)
+    )
+
+
+def _dominates(bigger: str, smaller: str, values: dict) -> bool:
+    """Whether one element outranks another everywhere the two are comparable."""
+    shared = [row for row in values.values() if bigger in row and smaller in row]
+    return bool(shared) and all(row[bigger] > row[smaller] for row in shared)
 
 
 def _is_a_slice(candidates: list[Fact], members: list[str]) -> set[int]:

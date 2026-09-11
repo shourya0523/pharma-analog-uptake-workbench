@@ -152,3 +152,96 @@ def test_a_deduction_tagged_beside_the_sales_it_reduces_is_not_revenue():
     )
     assert found == []
     assert any("is not a revenue" in note for note in notes), notes
+
+
+def test_the_tagged_reader_is_not_fed_the_document_ranking():
+    """Instances reach it whether or not they rank as reading material.
+
+    `prioritize_sources_for_revenue` ranks documents by how much prose and
+    layout are worth reading, and it keeps only the source types in
+    `REVENUE_PRIMARY_SOURCE_TYPES` once two of them exist. A retrieved XBRL
+    instance is labelled by the report it belongs to, so it is never one of
+    those - and handing the ranked subset to the tagged reader dropped every
+    instance whenever the filer had two other filings in the window. The
+    ranking bounds the expensive readers; this one costs a parse of a document
+    already fetched.
+    """
+    import inspect
+
+    from app.pipeline.orchestrator import PipelineOrchestrator
+
+    source = inspect.getsource(PipelineOrchestrator._extract_revenue)
+    call = "await self._tagged_revenue(job, "
+    assert call + "sources)" in source, (
+        "the tagged reader takes every retrieved source; `_tagged_revenue` "
+        "already keeps only those carrying an instance"
+    )
+    assert call + "selected_sources)" not in source
+
+
+def test_a_fact_cites_a_figure_that_can_be_found_in_its_own_citation():
+    """A tagged fact has no prose, so its citation is the evidence.
+
+    Every stage before publication checks that the value appears in the text
+    cited for it. Rendered in the shortest form, anything from a million
+    upwards becomes scientific notation - so the citation did not contain the
+    figure it cites, the deterministic judge could not clear it, and the
+    highest-trust claim the pipeline has went to a reviewer instead of being
+    published.
+    """
+    from app.quality.checks import quote_contains_value
+    from app.quality.fast_judge import try_deterministic_judgment
+
+    fact = Fact(element="ifrs-full:Revenue", value=1_941_000_000.0, unit="USD",
+                decimals="-6", members={OWN_AXIS: "acme:CalderonMember"}, **QUARTER)
+    assert "e+" not in fact.citation, fact.citation
+    assert quote_contains_value(fact.citation, fact.value)
+
+    judgment = try_deterministic_judgment(
+        product="Calderon", generic=None, quote=fact.citation,
+        candidate={"period_type": "quarterly", "revenue_scope": "Product family",
+                   "value_reported": fact.value},
+    )
+    assert judgment and judgment["validation_status"] == "auto_pass", judgment
+
+    # A figure with real decimals keeps them rather than being rounded away.
+    fraction = Fact(element="ifrs-full:Revenue", value=1_941_500_000.25, unit="USD",
+                    members={OWN_AXIS: "acme:CalderonMember"}, **QUARTER)
+    assert quote_contains_value(fraction.citation, fraction.value), fraction.citation
+
+
+def test_a_cost_tagged_against_every_sale_is_not_read_as_the_sale():
+    """Counting alone ties, and the shape that ties it is ordinary.
+
+    A filer reporting product profitability tags one cost against every
+    revenue, so both elements carry the same number of facts. What separates
+    them is that a cost is a part of what it is taken from: for the same
+    product and period it is the smaller of the two, every time.
+    """
+    facts = []
+    for member, revenue, cost in (("acme:CalderonMember", 225_300_000.0, 15_000_000.0),
+                                  ("acme:NuVessaMember", 205_100_000.0, 13_200_000.0)):
+        facts.append(_fact(member, revenue,
+                           element="us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax"))
+        facts.append(_fact(member, cost, element="us-gaap:CostOfGoodsAndServicesSold"))
+    both = _names("Calderon", "NuVessa")
+    assert revenue_elements(facts, names_a_product=both) == {
+        "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax"
+    }
+    assert [f.value for f in product_facts(facts, names_a_product=both)] == [
+        225_300_000.0, 205_100_000.0
+    ]
+
+
+def test_two_elements_a_filer_states_revenue_under_both_survive():
+    """A real tie is not broken; dropping either would lose a product."""
+    facts = [
+        _fact("acme:CalderonMember", 225_300_000.0, element="us-gaap:Revenues"),
+        _fact("acme:NuVessaMember", 205_100_000.0,
+              element="us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax"),
+    ]
+    both = _names("Calderon", "NuVessa")
+    assert revenue_elements(facts, names_a_product=both) == {
+        "us-gaap:Revenues",
+        "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+    }, "neither element appears beside the other, so neither can be shown to be a part of it"

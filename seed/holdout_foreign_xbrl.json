@@ -14,7 +14,11 @@
     "member": "gmab:DARZALEXMember",
     "period": "2026Q2",
     "printed_in_the_filing": 744.0,
-    "caveat": "royalty income on another company's sales, not this issuer's product revenue"
+    "caveat": "royalty income on another company's sales, not this issuer's product revenue",
+    "scored": [
+      "reader",
+      "pipeline"
+    ]
   },
   {
     "issuer": "GENMAB A/S",
@@ -31,7 +35,11 @@
     "member": "gmab:KesimptaMember",
     "period": "2026Q2",
     "printed_in_the_filing": 143.0,
-    "caveat": "royalty income on another company's sales, not this issuer's product revenue"
+    "caveat": "royalty income on another company's sales, not this issuer's product revenue",
+    "scored": [
+      "reader",
+      "pipeline"
+    ]
   },
   {
     "issuer": "GENMAB A/S",
@@ -48,7 +56,11 @@
     "member": "gmab:TepezzaMember",
     "period": "2026Q2",
     "printed_in_the_filing": 31.0,
-    "caveat": "royalty income on another company's sales, not this issuer's product revenue"
+    "caveat": "royalty income on another company's sales, not this issuer's product revenue",
+    "scored": [
+      "reader",
+      "pipeline"
+    ]
   },
   {
     "issuer": "GENMAB A/S",
@@ -61,7 +73,11 @@
     "primary_document": "gmab-20260630.htm",
     "product": "Other Royalty Products",
     "expect": "nothing",
-    "why": "an aggregate of the products not broken out"
+    "why": "an aggregate of the products not broken out",
+    "scored": [
+      "reader",
+      "pipeline"
+    ]
   },
   {
     "issuer": "GENMAB A/S",
@@ -74,7 +90,11 @@
     "primary_document": "gmab-20260630.htm",
     "product": "Darzalex And Kesimpta",
     "expect": "nothing",
-    "why": "one line covering two products"
+    "why": "one line covering two products",
+    "scored": [
+      "reader",
+      "pipeline"
+    ]
   },
   {
     "issuer": "GENMAB A/S",
@@ -87,7 +107,11 @@
     "primary_document": "gmab-20260630.htm",
     "product": "Tepkinly",
     "expect": "nothing",
-    "why": "tagged, but the filing states it only over six months - there is no quarter to read"
+    "why": "tagged, but the filing states it only over six months - there is no quarter to read",
+    "scored": [
+      "reader",
+      "pipeline"
+    ]
   },
   {
     "issuer": "ARGENX SE",
@@ -100,7 +124,11 @@
     "primary_document": "argx-20260630.htm",
     "product": "Rebates And Chargebacks",
     "expect": "nothing",
-    "why": "a gross-to-net deduction, tagged on srt:ProductOrServiceAxis"
+    "why": "a gross-to-net deduction, tagged on srt:ProductOrServiceAxis",
+    "scored": [
+      "reader"
+    ],
+    "not_scored_end_to_end": "the filer prints a line with this label, so the table reader may read it from the page and be right to"
   },
   {
     "issuer": "ARGENX SE",
@@ -113,7 +141,11 @@
     "primary_document": "argx-20260630.htm",
     "product": "Distribution Fees And Product Returns",
     "expect": "nothing",
-    "why": "a gross-to-net deduction, tagged on srt:ProductOrServiceAxis"
+    "why": "a gross-to-net deduction, tagged on srt:ProductOrServiceAxis",
+    "scored": [
+      "reader"
+    ],
+    "not_scored_end_to_end": "the filer prints a line with this label, so the table reader may read it from the page and be right to"
   },
   {
     "issuer": "BioNTech SE",
@@ -126,7 +158,11 @@
     "primary_document": "bntx-20251231.htm",
     "product": "Other Sales",
     "expect": "nothing",
-    "why": "a revenue category on srt:ProductOrServiceAxis"
+    "why": "a revenue category on srt:ProductOrServiceAxis",
+    "scored": [
+      "reader"
+    ],
+    "not_scored_end_to_end": "the filer prints a line with this label, so the table reader may read it from the page and be right to"
   },
   {
     "issuer": "BioNTech SE",
@@ -139,7 +175,11 @@
     "primary_document": "bntx-20251231.htm",
     "product": "Covid 19 Vaccine Revenues",
     "expect": "nothing",
-    "why": "a revenue category, not a brand, on srt:ProductOrServiceAxis"
+    "why": "a revenue category, not a brand, on srt:ProductOrServiceAxis",
+    "scored": [
+      "reader"
+    ],
+    "not_scored_end_to_end": "the filer prints a line with this label, so the table reader may read it from the page and be right to"
   },
   {
     "issuer": "Alvotech",
@@ -152,7 +192,11 @@
     "primary_document": "alvo-20260630_d2.htm",
     "product": "Product Revenue",
     "expect": "nothing",
-    "why": "a revenue category on ifrs-full:ProductsAndServicesAxis"
+    "why": "a revenue category on ifrs-full:ProductsAndServicesAxis",
+    "scored": [
+      "reader"
+    ],
+    "not_scored_end_to_end": "the filer prints a line with this label, so the table reader may read it from the page and be right to"
   },
   {
     "issuer": "Alvotech",
@@ -165,7 +209,11 @@
     "primary_document": "alvo-20260630_d2.htm",
     "product": "License Revenue",
     "expect": "nothing",
-    "why": "a revenue category on ifrs-full:ProductsAndServicesAxis"
+    "why": "a revenue category on ifrs-full:ProductsAndServicesAxis",
+    "scored": [
+      "reader"
+    ],
+    "not_scored_end_to_end": "the filer prints a line with this label, so the table reader may read it from the page and be right to"
   },
   {
     "issuer": "Grifols SA",
@@ -178,7 +226,11 @@
     "primary_document": "grfs-20251231x20f.htm",
     "product": "Biopharma",
     "expect": "nothing",
-    "why": "a reporting segment"
+    "why": "a reporting segment",
+    "scored": [
+      "reader"
+    ],
+    "not_scored_end_to_end": "the filer prints a line with this label, so the table reader may read it from the page and be right to"
   },
   {
     "issuer": "DR REDDYS LABORATORIES LTD",
@@ -191,7 +243,11 @@
     "primary_document": "rdy0899_20f.htm",
     "product": "Global Generic",
     "expect": "nothing",
-    "why": "a reporting segment"
+    "why": "a reporting segment",
+    "scored": [
+      "reader"
+    ],
+    "not_scored_end_to_end": "the filer prints a line with this label, so the table reader may read it from the page and be right to"
   },
   {
     "issuer": "HUTCHMED (China) Ltd",
@@ -204,7 +260,11 @@
     "primary_document": "hcm-20260730x6k.htm",
     "product": "Oncology Or Immunology Segment",
     "expect": "nothing",
-    "why": "a reporting segment"
+    "why": "a reporting segment",
+    "scored": [
+      "reader"
+    ],
+    "not_scored_end_to_end": "the filer prints a line with this label, so the table reader may read it from the page and be right to"
   },
   {
     "issuer": "Indivior Pharmaceuticals, Inc.",
@@ -217,7 +277,11 @@
     "primary_document": "indv-20231231.htm",
     "product": "Parent Company",
     "expect": "nothing",
-    "why": "a legal entity"
+    "why": "a legal entity",
+    "scored": [
+      "reader"
+    ],
+    "not_scored_end_to_end": "the filer prints a line with this label, so the table reader may read it from the page and be right to"
   },
   {
     "issuer": "GENMAB A/S",
@@ -230,6 +294,10 @@
     "primary_document": "gmab-20260630.htm",
     "product": "Tagrisso",
     "expect": "nothing",
-    "why": "a product this filer does not sell"
+    "why": "a product this filer does not sell",
+    "scored": [
+      "reader",
+      "pipeline"
+    ]
   }
 ]

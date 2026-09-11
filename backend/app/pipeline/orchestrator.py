@@ -1208,7 +1208,18 @@ class PipelineOrchestrator:
         # geometry read off it, so where one exists it is the better claim; the
         # table reader still runs, and the two are reconciled downstream like
         # any other pair of candidates.
-        tagged_rows, tagged_totals = await self._tagged_revenue(job, selected_sources)
+        #
+        # Every source, not the prioritised ones. `prioritize_sources_for_revenue`
+        # ranks documents by how much prose and layout is worth reading, and
+        # keeps the types in `REVENUE_PRIMARY_SOURCE_TYPES` when two of them
+        # exist - which an XBRL instance is not, because a retrieved instance is
+        # labelled by the report it belongs to. Passing the ranked subset here
+        # fed the highest-trust reader on the output of a ranking that exists to
+        # bound the most expensive ones, and dropped every instance whenever the
+        # filer had two other filings in the window. `_tagged_revenue` reads
+        # only what carries `xbrl_instance`, so handing it everything costs a
+        # dictionary lookup per source.
+        tagged_rows, tagged_totals = await self._tagged_revenue(job, sources)
         rows.extend(tagged_rows)
         derivation_pool.extend(tagged_totals)
 
