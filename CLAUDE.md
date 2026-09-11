@@ -1,15 +1,61 @@
 # Working rules for this repository
 
-Three rules. They exist because each was broken, and the cost was not a wrong
+Four rules. They exist because each was broken, and the cost was not a wrong
 number - it was a measurement that had stopped meaning anything, or a
 conclusion asserted from something that looked like evidence.
 
-Two of them are enforced by tests. The first is not enforceable, and is the one
-that goes wrong most.
+Rules 3 and 4 are enforced by tests. Rules 1 and 2 are not enforceable, and are
+the ones that go wrong most. Rule 1 is how the other three get broken.
 
 ---
 
-## 1. A claim about data needs the command that showed it
+## 1. Derive the list; do not write it down
+
+Auditing this branch end to end: every failure of rules 3 and 4 - the two about
+the answer key - was a hand-maintained list. Rule 2's failures split, about
+evenly, between a list used as a filter and a generalisation from one or two
+observations. Nothing else accounted for any of them.
+
+(The first draft of this paragraph said "every single failure, all of them",
+which was itself a generalisation nobody had counted. Rule 2 applies to this
+file.)
+
+    what was written down              what it silently excluded
+    ---------------------------------  --------------------------------------
+    form in ("8-K", "10-Q")            8-K/A, which held the Actelion financials
+    name.endswith("_htm.xml")          every instance filed before inline XBRL
+    row.get("decimals")                the column, which NUM calls `dcml`
+    PRODUCT_AXIS = "srt:..."           the same axis before the 2018 taxonomy
+    KNOWN_PEER_BRANDS                  every brand that is not one of gold's 21
+    three answer-key filenames         seed/holdout_labels, and gold's own
+                                       annual_revenue.jsonl
+    "gold" meaning quarterly_revenue   gold is a directory
+
+Each of those reads at a glance as a reasonable list. Each produced a confident
+absence that belonged to the list rather than to the data.
+
+The same audit found the derived versions all held:
+
+- `test_capabilities_are_wired` rglobs for capabilities instead of naming four
+- `DOCUMENT_FITNESS` ranks the `SourceType` enum exhaustively
+- `_instance_document` anchors on the filing's own `.xsd` stem, so it needs no
+  ticker, no period and no adoption date
+- `names_a_competing_product` reads the sibling rows the document prints,
+  instead of a catalogue of brands we happen to hold
+- `_declared_slack` takes the tolerance from what the sources declared, instead
+  of a fraction of the value
+
+So: when about to write a literal list of names, columns, forms or files, ask
+what produces that list. If the producer can be reached at run time - a glob, an
+enum, an index, the document itself - use it. Where a literal really is
+necessary, say in a comment what it is a snapshot of and what would make it
+stale.
+
+Rule 2's corollary about filters is this rule in its most common disguise.
+
+---
+
+## 2. A claim about data needs the command that showed it
 
 Do not state what a file, a column, an API or a document contains without
 running something that shows it, in the same turn. This applies hardest when
@@ -26,7 +72,7 @@ Some real ones:
   filings with `form in ("8-K", "10-Q")`. The Actelion financial statements are
   an `8-K/A`. The conclusion survived; the scan that produced it did not.
 - "The `seed/xbrl_members.csv` pattern applied to URLs" - two files sharing a
-  format do not share a property. See rule 2.
+  format do not share a property. See rule 3.
 
 The habit that works: when about to write "X contains Y", run the thing that
 prints Y first. When reporting, show the number rather than the impression -
@@ -39,7 +85,7 @@ was, or the absence you found is the filter's, not the data's.
 
 ---
 
-## 2. Nothing the pipeline reads may come from the answer key
+## 3. Nothing the pipeline reads may come from the answer key
 
 `seed/gold/` scores the pipeline. `seed/product_attributes.csv`,
 `seed/xbrl_members.csv` and `seed/example_drugs.csv` are what it runs on. The
@@ -68,7 +114,7 @@ different hat.
 
 ---
 
-## 3. Every scored change is measured on a set it was not built from
+## 4. Every scored change is measured on a set it was not built from
 
 Gold is an oracle for finding defects, never a scorer for the fix. `seed/holdout`,
 `seed/holdout2`, `seed/holdout_labels` and `seed/holdout_members` are each spent
@@ -92,7 +138,7 @@ Two things that follow:
 ## Checks worth running
 
     cd backend && ./.venv/bin/pytest -q                     # everything
-    ./.venv/bin/pytest tests/test_gold_is_not_an_input.py    # rules 2 and 3
+    ./.venv/bin/pytest tests/test_gold_is_not_an_input.py    # rules 3 and 4
 
 Evals under `scripts/eval_*.py` score against held-out sets and need
 `OPENROUTER_API_KEY`. They are not part of the test run, and a change to a
