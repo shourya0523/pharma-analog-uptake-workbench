@@ -60,7 +60,7 @@ Use the `ApiUrl` stack output (ALB). After AWS verifies CloudFront, deploy with 
 - [`docs/evaluation.md`](docs/evaluation.md) — the five evals, what each one
   measures, and which single number is the pipeline's score.
 
-The short version of the second: `eval_extraction_documents.py --discover`
+The short version of the second: an end-to-end run
 makes the readers find their own filings, which is the honest way to measure
 finding. It is not the whole pipeline - it runs none of the twelve stages in
 `run_job`, so the LLM extractor, the evidence judge and conflict reconciliation
@@ -119,7 +119,7 @@ uv run --project backend python scripts/export_member_register.py
 For a connector-free metadata smoke check:
 
 ```bash
-uv run --project backend python scripts/smoke_validate.py --metadata-only
+uv run --project backend python scripts/eval.py --cases seed/cases/gold_sample.json
 ```
 
 ## Export

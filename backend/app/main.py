@@ -283,6 +283,13 @@ def get_job(job_id: str) -> dict[str, Any]:
                     "currency": d.currency,
                     "unit": d.unit,
                     "period_type": d.period_type,
+                    # Which reader produced this. A caller comparing two
+                    # figures for one quarter is comparing claims of different
+                    # strength - a fact the filer tagged against a number read
+                    # off a page - and could not see which was which. Nothing
+                    # outside the database could, so a reader that had stopped
+                    # answering looked the same as one with nothing to say.
+                    "extraction_method": d.extraction_method,
                     "revenue_scope": d.revenue_scope,
                     "geography": d.geography,
                     "formulation": d.formulation,

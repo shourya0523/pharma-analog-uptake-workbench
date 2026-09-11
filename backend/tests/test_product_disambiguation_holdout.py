@@ -1,6 +1,6 @@
 """The product-identity gate, run as part of the suite.
 
-`scripts/eval_product_disambiguation.py` scores the same fixture and prints the
+The end-to-end eval scores the same question through the API and prints the
 detail. This keeps it from becoming a script nobody runs, the way three readers
 here were once written, tested, measured and never called.
 

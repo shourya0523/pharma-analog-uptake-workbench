@@ -475,7 +475,7 @@ def test_yutrepia_quarters_cite_their_own_filing_in_the_issuer_column_order():
 def test_the_gold_dataset_is_complete_on_its_own_terms():
     """Complete means every catalog product accounted for, no series with a hole.
 
-    This is deliberately not the number ``scripts/eval_completeness.py`` prints.
+    This is deliberately not the number an end-to-end run reports.
     That script scores the *pipeline* against this dataset, and a shortfall
     there is a capability the pipeline lacks. The oracle itself has to be whole,
     or every score computed from it is meaningless.

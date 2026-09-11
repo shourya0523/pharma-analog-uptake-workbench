@@ -1,0 +1,282 @@
+[
+  {
+    "drug_name": "Truvada",
+    "manufacturer": "Gilead",
+    "ticker": "GILD",
+    "generic_name": "emtricitabine/tenofovir disoproxil fumarate",
+    "options": {
+      "earnings_since": "2018-04-05",
+      "earnings_until": "2019-05-05",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "source": "seed/gold/quarterly_revenue.jsonl",
+    "expect": [
+      {
+        "period": "2018Q1",
+        "value_normalized_usd_millions": 652.0,
+        "gold_id": "gilead-truvada-worldwide-reported-2018q1"
+      },
+      {
+        "period": "2018Q2",
+        "value_normalized_usd_millions": 765.0,
+        "gold_id": "gilead-truvada-worldwide-reported-2018q2"
+      },
+      {
+        "period": "2018Q3",
+        "value_normalized_usd_millions": 757.0,
+        "gold_id": "gilead-truvada-worldwide-reported-2018q3"
+      },
+      {
+        "period": "2018Q4",
+        "value_normalized_usd_millions": 823.0,
+        "gold_id": "gilead-truvada-worldwide-reported-2018q4"
+      }
+    ]
+  },
+  {
+    "drug_name": "Truvada",
+    "manufacturer": "Gilead",
+    "ticker": "GILD",
+    "generic_name": "emtricitabine/tenofovir disoproxil fumarate",
+    "options": {
+      "earnings_since": "2019-04-05",
+      "earnings_until": "2020-05-04",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "source": "seed/gold/quarterly_revenue.jsonl",
+    "expect": [
+      {
+        "period": "2019Q1",
+        "value_normalized_usd_millions": 606.0,
+        "gold_id": "gilead-truvada-worldwide-reported-2019q1"
+      },
+      {
+        "period": "2019Q2",
+        "value_normalized_usd_millions": 718.0,
+        "gold_id": "gilead-truvada-worldwide-reported-2019q2"
+      },
+      {
+        "period": "2019Q3",
+        "value_normalized_usd_millions": 721.0,
+        "gold_id": "gilead-truvada-worldwide-reported-2019q3"
+      },
+      {
+        "period": "2019Q4",
+        "value_normalized_usd_millions": 768.0,
+        "gold_id": "gilead-truvada-worldwide-reported-2019q4"
+      }
+    ]
+  },
+  {
+    "drug_name": "Letairis",
+    "manufacturer": "Gilead",
+    "ticker": "GILD",
+    "generic_name": "ambrisentan",
+    "options": {
+      "earnings_since": "2018-04-05",
+      "earnings_until": "2019-05-05",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "source": "seed/gold/quarterly_revenue.jsonl",
+    "expect": [
+      {
+        "period": "2018Q1",
+        "value_normalized_usd_millions": 204.0,
+        "gold_id": "gilead-letairis-us-reported-2018q1"
+      },
+      {
+        "period": "2018Q2",
+        "value_normalized_usd_millions": 244.0,
+        "gold_id": "gilead-letairis-us-reported-2018q2"
+      },
+      {
+        "period": "2018Q3",
+        "value_normalized_usd_millions": 241.0,
+        "gold_id": "gilead-letairis-us-reported-2018q3"
+      },
+      {
+        "period": "2018Q4",
+        "value_normalized_usd_millions": 254.0,
+        "gold_id": "gilead-letairis-us-reported-2018q4"
+      }
+    ]
+  },
+  {
+    "drug_name": "Letairis",
+    "manufacturer": "Gilead",
+    "ticker": "GILD",
+    "generic_name": "ambrisentan",
+    "options": {
+      "earnings_since": "2019-04-05",
+      "earnings_until": "2020-05-04",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "source": "seed/gold/quarterly_revenue.jsonl",
+    "expect": [
+      {
+        "period": "2019Q1",
+        "value_normalized_usd_millions": 197.0,
+        "gold_id": "gilead-letairis-us-reported-2019q1"
+      },
+      {
+        "period": "2019Q2",
+        "value_normalized_usd_millions": 204.0,
+        "gold_id": "gilead-letairis-us-reported-2019q2"
+      },
+      {
+        "period": "2019Q3",
+        "value_normalized_usd_millions": 121.0,
+        "gold_id": "gilead-letairis-us-reported-2019q3"
+      },
+      {
+        "period": "2019Q4",
+        "value_normalized_usd_millions": 96.0,
+        "gold_id": "gilead-letairis-us-reported-2019q4"
+      }
+    ]
+  },
+  {
+    "drug_name": "Tyvaso",
+    "manufacturer": "United Therapeutics",
+    "ticker": "UTHR",
+    "generic_name": "treprostinil",
+    "options": {
+      "earnings_since": "2018-04-05",
+      "earnings_until": "2019-05-05",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "source": "seed/gold/quarterly_revenue.jsonl",
+    "expect": [
+      {
+        "period": "2018Q1",
+        "value_normalized_usd_millions": 94.6,
+        "gold_id": "uthr-tyvaso-total-reported-2018q1"
+      },
+      {
+        "period": "2018Q2",
+        "value_normalized_usd_millions": 105.9,
+        "gold_id": "uthr-tyvaso-total-reported-2018q2"
+      },
+      {
+        "period": "2018Q3",
+        "value_normalized_usd_millions": 107.8,
+        "gold_id": "uthr-tyvaso-total-reported-2018q3"
+      },
+      {
+        "period": "2018Q4",
+        "value_normalized_usd_millions": 106.9,
+        "gold_id": "uthr-tyvaso-total-reported-2018q4"
+      }
+    ]
+  },
+  {
+    "drug_name": "Tyvaso",
+    "manufacturer": "United Therapeutics",
+    "ticker": "UTHR",
+    "generic_name": "treprostinil",
+    "options": {
+      "earnings_since": "2019-04-05",
+      "earnings_until": "2020-05-04",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "source": "seed/gold/quarterly_revenue.jsonl",
+    "expect": [
+      {
+        "period": "2019Q1",
+        "value_normalized_usd_millions": 103.8,
+        "gold_id": "uthr-tyvaso-total-reported-2019q1"
+      },
+      {
+        "period": "2019Q2",
+        "value_normalized_usd_millions": 109.6,
+        "gold_id": "uthr-tyvaso-total-reported-2019q2"
+      },
+      {
+        "period": "2019Q3",
+        "value_normalized_usd_millions": 110.8,
+        "gold_id": "uthr-tyvaso-total-reported-2019q3"
+      },
+      {
+        "period": "2019Q4",
+        "value_normalized_usd_millions": 91.4,
+        "gold_id": "uthr-tyvaso-total-reported-2019q4"
+      }
+    ]
+  },
+  {
+    "drug_name": "Orenitram",
+    "manufacturer": "United Therapeutics",
+    "ticker": "UTHR",
+    "generic_name": "treprostinil",
+    "options": {
+      "earnings_since": "2018-04-05",
+      "earnings_until": "2019-05-05",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "source": "seed/gold/quarterly_revenue.jsonl",
+    "expect": [
+      {
+        "period": "2018Q1",
+        "value_normalized_usd_millions": 52.2,
+        "gold_id": "uthr-orenitram-reported-2018q1"
+      },
+      {
+        "period": "2018Q2",
+        "value_normalized_usd_millions": 49.5,
+        "gold_id": "uthr-orenitram-reported-2018q2"
+      },
+      {
+        "period": "2018Q3",
+        "value_normalized_usd_millions": 53.8,
+        "gold_id": "uthr-orenitram-reported-2018q3"
+      },
+      {
+        "period": "2018Q4",
+        "value_normalized_usd_millions": 49.6,
+        "gold_id": "uthr-orenitram-reported-2018q4"
+      }
+    ]
+  },
+  {
+    "drug_name": "Orenitram",
+    "manufacturer": "United Therapeutics",
+    "ticker": "UTHR",
+    "generic_name": "treprostinil",
+    "options": {
+      "earnings_since": "2019-04-05",
+      "earnings_until": "2020-05-04",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "source": "seed/gold/quarterly_revenue.jsonl",
+    "expect": [
+      {
+        "period": "2019Q1",
+        "value_normalized_usd_millions": 58.4,
+        "gold_id": "uthr-orenitram-reported-2019q1"
+      },
+      {
+        "period": "2019Q2",
+        "value_normalized_usd_millions": 54.0,
+        "gold_id": "uthr-orenitram-reported-2019q2"
+      },
+      {
+        "period": "2019Q3",
+        "value_normalized_usd_millions": 62.0,
+        "gold_id": "uthr-orenitram-reported-2019q3"
+      },
+      {
+        "period": "2019Q4",
+        "value_normalized_usd_millions": 50.9,
+        "gold_id": "uthr-orenitram-reported-2019q4"
+      }
+    ]
+  }
+]

@@ -9,7 +9,7 @@ shape that produces that; the reply itself was not captured. Because
 `llm.extract_revenue` call, one oddly-shaped reply failed the whole drug job
 rather than that single source.
 
-Found by `scripts/eval_foreign_filer_reader.py`, which is the only thing that
+Found by running the pipeline over non-US filings, which is the only thing that
 has ever run this path over non-US filings.
 """
 

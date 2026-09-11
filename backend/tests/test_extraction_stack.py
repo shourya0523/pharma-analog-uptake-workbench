@@ -7,6 +7,9 @@ code that is supposed to make them impossible.
 
 from __future__ import annotations
 
+import json
+import pathlib
+
 from app.extraction.candidates import extract_revenue_candidates
 from app.extraction.check import run_checks
 from app.extraction.extract import map_values_to_blocks, read_table, tokenize_row
@@ -14,6 +17,13 @@ from app.extraction.fingerprint import PeriodBlock, build_fingerprint
 from app.extraction.process import Datapoint, normalize_all
 from app.parsing.documents import flatten_grid, html_table_grid
 from bs4 import BeautifulSoup
+from app.extraction.adjudicate import (
+    Candidate,
+    adjudicate_positional_solutions,
+    adjudicate_reported_value,
+    adjudicate_split_ownership_quarter,
+    adjudicate_total_against_parts,
+)
 
 EXHIBIT_IN_THOUSANDS = [
     ["", "Three Months Ended September 30,", "", "", ""],
@@ -693,12 +703,6 @@ def _adjudication_cases():
 
 def test_edge_case_fixtures_reach_their_expected_verdicts():
     """Every fixture, replayed through the adjudicator."""
-    import sys
-    from pathlib import Path
-
-    sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
-    from eval_adjudication import run_case
-
     for case in _adjudication_cases():
         status, code = run_case(case)
         assert (status, code) == (
@@ -716,12 +720,6 @@ def test_no_real_series_trips_the_adjudicator():
     thresholds starts flagging healthy data, this fails and the thresholds are
     what is wrong.
     """
-    import sys
-    from pathlib import Path
-
-    sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
-    from eval_adjudication import real_rows_that_trip
-
     tripped = real_rows_that_trip()
     assert tripped == [], f"adjudicator flagged real data: {tripped}"
 
@@ -1289,3 +1287,97 @@ def test_a_period_that_has_ended_is_not_a_cutoff():
 
     sentence = "Sales of Remodulin totaled approximately $8.7 million in the three months ended June 30, 2002."
     assert [v.period for v in read_prose(sentence, product="Remodulin", catalog=["Remodulin"])] == ["2002Q2"]
+
+
+# --- the adjudicator, replayed ----------------------------------------------
+#
+# These two ran from a script that also printed a report. The test imported
+# them across the repo, which made a test depend on a harness; the harness is
+# gone and the logic lives with the assertions that use it.
+
+GOLD = pathlib.Path(__file__).resolve().parents[2] / "seed" / "gold"
+
+
+def run_case(case: dict) -> tuple[str, str]:
+    kind, inputs = case["kind"], case["inputs"]
+    if kind == "reported_value":
+        if "solutions" in inputs:
+            verdict = adjudicate_positional_solutions(
+                inputs["requested_scope"],
+                [tuple(solution) for solution in inputs["solutions"]],
+            )
+        else:
+            verdict = adjudicate_reported_value(
+                inputs["requested_scope"],
+                [Candidate(**candidate) for candidate in inputs["candidates"]],
+            )
+    elif kind == "total_against_parts":
+        verdict = adjudicate_total_against_parts(
+            inputs["total"], inputs["parts"], expected_parts=inputs["expected_parts"]
+        )
+    elif kind == "split_ownership":
+        verdict = adjudicate_split_ownership_quarter(
+            inputs["period"], inputs["components"]
+        )
+    else:
+        raise ValueError(f"unknown fixture kind: {kind}")
+    return verdict.status, verdict.code
+
+
+def real_rows_that_trip() -> list[str]:
+    """Every complete year in gold, put through the same checks.
+
+    This is the false-positive guard. Each series is grouped into calendar
+    years, and any year with all four quarters is checked against the total
+    those quarters imply - the same call the pipeline makes when deriving. None
+    of them may come back as anything other than resolved.
+    """
+    quarterly = [
+        json.loads(line)
+        for line in (GOLD / "quarterly_revenue.jsonl").read_text().splitlines()
+        if line.strip()
+    ]
+    annual = [
+        json.loads(line)
+        for line in (GOLD / "annual_revenue.jsonl").read_text().splitlines()
+        if line.strip()
+    ]
+    # Normalised USD on both sides, never as-reported. Tracleer's annual series
+    # is Actelion's CHF and its quarterly series is J&J's own dollar conversion
+    # of the same history: comparing 1,020 francs against 1,035 dollars reports
+    # a contradiction that is only a currency. This is the category error the
+    # adjudicator is meant to catch, and it caught it here first.
+    totals = {
+        (row["drug_name"], str(row["period"])): row["value_normalized_usd_millions"]
+        for row in annual
+        if row.get("value_normalized_usd_millions") is not None
+    }
+
+    by_year: dict[tuple[str, int], dict[str, float]] = {}
+    for row in quarterly:
+        key = (row["drug_name"], row["calendar_year"])
+        usd = row.get("value_normalized_usd_millions")
+        if usd is None:
+            continue
+        by_year.setdefault(key, {})[row["period"]] = usd
+
+    tripped = []
+    for (drug, year), quarters in sorted(by_year.items()):
+        stated = totals.get((drug, str(year)))
+        if stated is None:
+            # No published year to check against; the quarters stand on their
+            # own citations and there is nothing here to adjudicate.
+            continue
+        verdict = adjudicate_total_against_parts(
+            stated, quarters, expected_parts=len(quarters)
+        )
+        if not verdict.resolved:
+            tripped.append(f"{drug} {year}: {verdict.code} - {verdict.detail}")
+
+    for row in quarterly:
+        components = row.get("bridge_components")
+        if components:
+            verdict = adjudicate_split_ownership_quarter(row["period"], components)
+            if not verdict.resolved:
+                tripped.append(f"{row['drug_name']} {row['period']}: {verdict.code}")
+    return tripped

@@ -94,7 +94,8 @@ product's revenue is exactly what the table has not said.
 A published datapoint quotes the passage it came from, and that quote must be
 verbatim in the document cited, with the value present in it. A regional total
 is quoted together with the lines it sums, so a reader can check the arithmetic
-that identified it. `scripts/eval_provenance.py` audits this from outside.
+that identified it. An end-to-end run audits this from outside, by reading
+the published datapoints back through the API.
 
 ## Where the numbers are checked
 
@@ -201,7 +202,7 @@ restates something the row already says is not an estimate and must not be
 flagged as one: writing `aggregate` into `formulation` because the scope is
 already `Product family` once forced review and capped confidence at 0.55, and
 that single rule withheld two thirds of everything the readers found.
-`scripts/eval_pipeline_end_to_end.py` is the eval that can see this, because it
+`scripts/eval.py` is the eval that can see this, because it
 scores what was published rather than what was extracted.
 
 ## Reading further

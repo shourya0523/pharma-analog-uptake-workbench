@@ -1,0 +1,135 @@
+[
+  {
+    "drug_name": "Darzalex",
+    "manufacturer": "GENMAB A/S",
+    "ticker": "GMAB",
+    "options": {
+      "earnings_since": "2026-01-18",
+      "earnings_until": "2026-09-15",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "source": "0001434265-26-000108 (6-K filed 2026-08-06)",
+    "expect": [
+      {
+        "period": "2026Q2",
+        "value_normalized_usd_millions": 744.0,
+        "why": "tagged on the filer's own RoyaltiesByProduct axis"
+      }
+    ]
+  },
+  {
+    "drug_name": "Kesimpta",
+    "manufacturer": "GENMAB A/S",
+    "ticker": "GMAB",
+    "options": {
+      "earnings_since": "2026-01-18",
+      "earnings_until": "2026-09-15",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "source": "0001434265-26-000108 (6-K filed 2026-08-06)",
+    "expect": [
+      {
+        "period": "2026Q2",
+        "value_normalized_usd_millions": 143.0,
+        "why": "tagged on the filer's own RoyaltiesByProduct axis"
+      }
+    ]
+  },
+  {
+    "drug_name": "Tepezza",
+    "manufacturer": "GENMAB A/S",
+    "ticker": "GMAB",
+    "options": {
+      "earnings_since": "2026-01-18",
+      "earnings_until": "2026-09-15",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "source": "0001434265-26-000108 (6-K filed 2026-08-06)",
+    "expect": [
+      {
+        "period": "2026Q2",
+        "value_normalized_usd_millions": 31.0,
+        "why": "tagged on the filer's own RoyaltiesByProduct axis"
+      }
+    ]
+  },
+  {
+    "drug_name": "Other Royalty Products",
+    "manufacturer": "GENMAB A/S",
+    "ticker": "GMAB",
+    "options": {
+      "earnings_since": "2026-01-18",
+      "earnings_until": "2026-09-15",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "source": "0001434265-26-000108 (6-K filed 2026-08-06)",
+    "expect": [
+      {
+        "period": "2026Q2",
+        "value_normalized_usd_millions": null,
+        "why": "an aggregate of the products not broken out"
+      }
+    ]
+  },
+  {
+    "drug_name": "Darzalex And Kesimpta",
+    "manufacturer": "GENMAB A/S",
+    "ticker": "GMAB",
+    "options": {
+      "earnings_since": "2026-01-18",
+      "earnings_until": "2026-09-15",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "source": "0001434265-26-000108 (6-K filed 2026-08-06)",
+    "expect": [
+      {
+        "period": "2026Q2",
+        "value_normalized_usd_millions": null,
+        "why": "one line covering two products"
+      }
+    ]
+  },
+  {
+    "drug_name": "Tepkinly",
+    "manufacturer": "GENMAB A/S",
+    "ticker": "GMAB",
+    "options": {
+      "earnings_since": "2026-01-18",
+      "earnings_until": "2026-09-15",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "source": "0001434265-26-000108 (6-K filed 2026-08-06)",
+    "expect": [
+      {
+        "period": "2026Q2",
+        "value_normalized_usd_millions": null,
+        "why": "tagged, but the filing states it only over six months - there is no quarter to read"
+      }
+    ]
+  },
+  {
+    "drug_name": "Tagrisso",
+    "manufacturer": "GENMAB A/S",
+    "ticker": "GMAB",
+    "options": {
+      "earnings_since": "2026-01-18",
+      "earnings_until": "2026-09-15",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "source": "0001434265-26-000108 (6-K filed 2026-08-06)",
+    "expect": [
+      {
+        "period": "2026Q2",
+        "value_normalized_usd_millions": null,
+        "why": "a product this filer does not sell"
+      }
+    ]
+  }
+]

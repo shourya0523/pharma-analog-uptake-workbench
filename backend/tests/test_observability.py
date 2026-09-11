@@ -35,3 +35,27 @@ def test_dedupe_jobs_keeps_best_completeness_per_analog():
     assert by_key["tyvaso"].id == "better"
     assert by_key["adcirca"].id == "adc"
     assert "Adcirca" in names or "  Adcirca " in names
+
+
+def test_a_published_figure_says_which_reader_produced_it():
+    """A caller comparing two figures for one quarter compares claims.
+
+    `CLAIM_STRENGTH` ranks a tagged fact above a number read off a page, and
+    the pipeline reconciles on that rank - but the rank was invisible from
+    outside, so a reader that had stopped answering looked exactly like one
+    with nothing to say. That is how the tagged path stayed dead: the only way
+    to see which reader answered was to open the database.
+    """
+    import ast
+    import pathlib
+
+    main = (pathlib.Path(__file__).resolve().parents[1] / "app" / "main.py").read_text()
+    tree = ast.parse(main)
+    keys = {
+        node.value
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Constant) and isinstance(node.value, str)
+    }
+    assert "extraction_method" in keys, (
+        "the datapoint payload must name the reader that produced the figure"
+    )
