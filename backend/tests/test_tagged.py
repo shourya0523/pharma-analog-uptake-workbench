@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
-from app.extraction.members import Resolution
+from app.extraction.members import (
+    VERDICT_NO_CANDIDATE_MATCH,
+    Resolution,
+    fingerprint,
+)
 from app.extraction.tagged import candidates_from_instance
 from tests.test_xbrl import INSTANCE
 
@@ -107,3 +111,72 @@ def test_the_same_member_means_different_things_to_different_filers():
     for_gilead, _ = candidates_from_instance(
         generic, product="Yutrepia", issuer="Gilead", register=register)
     assert for_gilead == []
+
+
+# An instance tagging a product the register was built without. The
+# member is unambiguous - the filer wrote the product's name into it - so the
+# string rules place it the moment the product is on the list.
+GILEAD_INSTANCE = b"""<?xml version="1.0" encoding="UTF-8"?>
+<xbrl xmlns="http://www.xbrl.org/2003/instance"
+      xmlns:xbrli="http://www.xbrl.org/2003/instance"
+      xmlns:xbrldi="http://xbrl.org/2006/xbrldi"
+      xmlns:us-gaap="http://fasb.org/us-gaap/2024"
+      xmlns:srt="http://fasb.org/srt/2024"
+      xmlns:dei="http://xbrl.sec.gov/dei/2024"
+      xmlns:gild="http://www.gilead.com/20240930">
+  <context id="q3">
+    <entity><identifier scheme="http://www.sec.gov/CIK">0000882095</identifier></entity>
+    <period><startDate>2024-07-01</startDate><endDate>2024-09-30</endDate></period>
+  </context>
+  <context id="q3-trod">
+    <entity><identifier scheme="http://www.sec.gov/CIK">0000882095</identifier>
+      <segment><xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">gild:TrodelvyMember</xbrldi:explicitMember></segment>
+    </entity>
+    <period><startDate>2024-07-01</startDate><endDate>2024-09-30</endDate></period>
+  </context>
+  <unit id="usd"><measure>iso4217:USD</measure></unit>
+  <dei:EntityFilerCategory contextRef="q3">Large Accelerated Filer</dei:EntityFilerCategory>
+  <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="q3-trod" unitRef="usd" decimals="-5">332300000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+</xbrl>
+"""
+
+
+def test_a_drug_uploaded_at_run_time_is_read_rather_than_vetoed():
+    """The same rule at the read path, where the fact is either kept or lost.
+
+    A register entry saying `gild:TrodelvyMember` named nothing in a list
+    without Trodelvy must not answer for a run that uploads Trodelvy: the rules
+    place that member outright, and the alternative is a fact the filer tagged
+    going unread.
+    """
+    judged_against = ["Biktarvy", "Descovy"]
+    register = {
+        ("Gilead", "gild:TrodelvyMember"): Resolution(
+            "gild:TrodelvyMember", None, "llm", 1.0,
+            "names a product not in the candidate list",
+            verdict=VERDICT_NO_CANDIDATE_MATCH,
+            candidates_fingerprint=fingerprint(judged_against),
+        )
+    }
+
+    vetoed, _ = candidates_from_instance(
+        GILEAD_INSTANCE, product="Trodelvy", issuer="Gilead",
+        products=judged_against, register=register)
+    assert vetoed == [], "the list the decision was made against is unchanged"
+
+    learned: dict[tuple[str, str], Resolution] = {}
+    found, _ = candidates_from_instance(
+        GILEAD_INSTANCE, product="Trodelvy", issuer="Gilead",
+        products=[*judged_against, "Trodelvy"], register=register, learned=learned)
+
+    assert [c["value_normalized_usd_millions"] for c in found] == [332.3]
+    assert learned[("Gilead", "gild:TrodelvyMember")].product == "Trodelvy"
+
+
+def test_what_the_register_already_holds_is_not_relearned():
+    """`learned` is for decisions with nowhere to go, not a copy of the store."""
+    learned: dict[tuple[str, str], Resolution] = {}
+    candidates_from_instance(
+        INSTANCE, product="Nebulized Tyvaso", issuer=ISSUER,
+        register=REGISTER, learned=learned)
+    assert learned == {}

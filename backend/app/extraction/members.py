@@ -24,18 +24,43 @@ and nothing downstream would notice. The rule here is instead:
 What the rules cannot settle goes to a model, and whatever it decides is written
 to the register with its reasoning, so the decision is made once, is reviewable
 in a diff, and never has to be made again.
+
+One decision is not like that, and telling the two apart is what ``verdict``
+is for. "This member is a category total" is a fact about the member, and holds
+against any list. "This member named nothing in the candidate list" is a fact
+about the list, and against a different list it claims nothing at all. Written
+down as the same answer, the second becomes a veto: a member recorded as naming
+no product while a drug went untracked stays unplaceable for the run that
+uploads that drug, even where the string rules would place it outright. So a
+negative carries a fingerprint of the list it was judged against and binds only
+for that list, while a resolution to a product binds for every list.
 """
 
 from __future__ import annotations
 
 import csv
+import hashlib
 import re
 from dataclasses import dataclass
 from pathlib import Path
 
 REGISTER_PATH = Path(__file__).resolve().parents[3] / "seed" / "xbrl_members.csv"
 PRODUCTS_PATH = Path(__file__).resolve().parents[3] / "seed" / "product_attributes.csv"
-REGISTER_FIELDS = ("issuer", "member", "product", "method", "confidence", "note")
+REGISTER_FIELDS = (
+    "issuer", "member", "product", "verdict", "method", "confidence",
+    "candidates_fingerprint", "note",
+)
+
+# What a decision claims, and therefore how long it lasts.
+VERDICT_PRODUCT = "product"
+# The member names no single product and never will: an issuer's category line,
+# a total, a share of someone else's revenue. True of the member itself, so it
+# holds against any product list. Only a person sets this - a model asked which
+# product a member names cannot distinguish "none of these" from "none at all".
+VERDICT_NOT_A_PRODUCT = "not_a_product"
+# Nothing in the candidate list matched. Says nothing about the member beyond
+# that list, and binds only for the list it was decided against.
+VERDICT_NO_CANDIDATE_MATCH = "no_candidate_match"
 
 # A model told to abstain when unsure, that answers anyway and then reports low
 # confidence, has said it is guessing. Below this the answer is kept in the
@@ -53,6 +78,17 @@ NOT_A_PRODUCT = "-"
 _IDENTITY_CACHE: dict[int, tuple[int, dict[tuple[str, str], "Resolution"]]] = {}
 
 
+def fingerprint(products: list[str]) -> str:
+    """Identify a candidate list, so a decision can say what it was judged against.
+
+    Order and duplicates do not change which products were on offer, so neither
+    changes the fingerprint. Adding or removing one does, which is the whole
+    point: that is exactly when a negative decision stops applying.
+    """
+    canonical = "\n".join(sorted({p.strip() for p in products if p and p.strip()}))
+    return hashlib.sha256(canonical.encode()).hexdigest()[:16]
+
+
 @dataclass(frozen=True)
 class Resolution:
     """What a member was taken to mean, and on what basis."""
@@ -62,12 +98,37 @@ class Resolution:
     method: str
     confidence: float = 1.0
     note: str = ""
+    verdict: str = ""
+    candidates_fingerprint: str = ""
 
     @property
     def resolved(self) -> bool:
         if not self.product or self.product == NOT_A_PRODUCT:
             return False
         return self.method != "llm" or self.confidence >= LLM_CONFIDENCE_FLOOR
+
+    @property
+    def claim(self) -> str:
+        """The verdict, derived for a decision recorded before there was one."""
+        if self.verdict:
+            return self.verdict
+        return VERDICT_PRODUCT if self.resolved else VERDICT_NO_CANDIDATE_MATCH
+
+    def binds(self, products: list[str]) -> bool:
+        """Whether this decision still answers for a run asking about ``products``.
+
+        A member that names a product names it whoever is asking. A member that
+        names no product *at all* is equally durable. What does not survive a
+        change of list is "nothing here matched" - and answering with that is
+        how a drug the rules would place gets silently dropped instead.
+        """
+        if self.resolved or self.claim == VERDICT_NOT_A_PRODUCT:
+            return True
+        if not self.candidates_fingerprint:
+            # Decided against a list nobody wrote down. Treat it as spent
+            # rather than as a veto of unknown provenance.
+            return False
+        return self.candidates_fingerprint == fingerprint(products)
 
 
 def canonical_member(member: str) -> str:
@@ -234,6 +295,8 @@ def load_register(path: Path | None = None) -> dict[tuple[str, str], Resolution]
                 method=row["method"],
                 confidence=float(row["confidence"] or 0),
                 note=row.get("note", ""),
+                verdict=row.get("verdict", ""),
+                candidates_fingerprint=row.get("candidates_fingerprint", "") or "",
             )
             for row in csv.DictReader(handle)
         }
@@ -252,8 +315,10 @@ def save_register(entries: dict[tuple[str, str], Resolution], path: Path | None 
                 "issuer": issuer,
                 "member": entry.member,
                 "product": entry.product or "",
+                "verdict": entry.claim,
                 "method": entry.method,
                 "confidence": f"{entry.confidence:g}",
+                "candidates_fingerprint": entry.candidates_fingerprint,
                 "note": entry.note,
             })
 
@@ -264,19 +329,42 @@ def resolve(
     register: dict[tuple[str, str], Resolution] | None = None,
     issuer: str = "",
 ) -> Resolution:
-    """The register first, then the rules. A model is asked only for the rest.
+    """The register first where it still applies, then the rules.
+
+    The register is tried under both its keys - the member as spelled, then the
+    member's identity, because the bulk extracts write "CalderonXR" where an
+    instance writes ``acme:CalderonXRMember``.
+
+    "Where it still applies" is the rest. A decision that nothing matched is
+    only as good as the list it was made against, so against a different list
+    the rules run again rather than the old answer standing.
 
     Returning an unresolved answer is not a failure - it is how a member the
     rules cannot place stays out of the data until someone or something decides
     what it is.
     """
     register = register if register is not None else load_register()
-    if (issuer, member) in register:
-        return register[(issuer, member)]
-    entry = _by_identity(register).get((issuer, canonical_member(member)))
-    if entry is not None:
+    entry = stored(register, issuer, member)
+    if entry is not None and entry.binds(products):
         return entry
     return match(member, products)
+
+
+def stored(
+    register: dict[tuple[str, str], Resolution],
+    issuer: str,
+    member: str,
+) -> Resolution | None:
+    """The decision on record for this member, under either of the register's keys.
+
+    Separate from `resolve` because a caller that writes decisions down needs
+    to know whether one came from the register or from the rules, and cannot
+    tell from the answer alone.
+    """
+    return (
+        register.get((issuer, member))
+        or _by_identity(register).get((issuer, canonical_member(member)))
+    )
 
 
 def _by_identity(

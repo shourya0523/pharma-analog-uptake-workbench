@@ -11,7 +11,11 @@ spelled in the code.
 from __future__ import annotations
 
 from app.extraction.members import (
+    VERDICT_NO_CANDIDATE_MATCH,
+    VERDICT_NOT_A_PRODUCT,
+    VERDICT_PRODUCT,
     Resolution,
+    fingerprint,
     load_register,
     match,
     resolve,
@@ -92,6 +96,82 @@ def test_the_register_is_consulted_before_the_rules(tmp_path):
                    issuer="Acme Pharma").product == "Tavoral"
 
 
+def test_a_no_match_does_not_outrank_the_rules_for_a_list_it_never_saw():
+    """A negative is only about the list that produced it.
+
+    `gild:TrodelvyMember` recorded as naming no product, against a list with no
+    Trodelvy in it, is the register agreeing with the rules - not a fact about
+    the member. Add Trodelvy and the rules place it outright; a register that
+    answered first would have the drug absent from a filing that reports it.
+    """
+    judged_against = ["Biktarvy", "Descovy"]
+    register = {
+        ("Gilead", "gild:TrodelvyMember"): Resolution(
+            "gild:TrodelvyMember", None, "llm", 1.0,
+            "names a product not in the candidate list",
+            verdict=VERDICT_NO_CANDIDATE_MATCH,
+            candidates_fingerprint=fingerprint(judged_against),
+        )
+    }
+
+    stands = resolve("gild:TrodelvyMember", judged_against, register, issuer="Gilead")
+    assert stands.product is None, "same list, same answer - nothing has changed"
+
+    uploaded = resolve("gild:TrodelvyMember", [*judged_against, "Trodelvy"],
+                       register, issuer="Gilead")
+    assert uploaded.product == "Trodelvy"
+    assert uploaded.method == "exact"
+
+
+def test_a_member_that_names_no_product_at_all_stays_settled():
+    """The other half of the split, and the reason it is a reviewer's call.
+
+    A category total is a fact about the member, so it holds against any list.
+    A model asked which of these products a member names cannot report that -
+    "none of these" is all it can see - so `not_a_product` is only ever set by
+    a person, and this is what setting it buys them.
+    """
+    register = {
+        ("Gilead", "gild:HIVProductSalesMember"): Resolution(
+            "gild:HIVProductSalesMember", None, "human", 1.0, "a category, not a product",
+            verdict=VERDICT_NOT_A_PRODUCT,
+        )
+    }
+    for products in (["Biktarvy"], ["Biktarvy", "Trodelvy"], []):
+        assert resolve("gild:HIVProductSalesMember", products,
+                       register, issuer="Gilead").product is None
+
+
+def test_a_negative_with_no_list_recorded_is_spent_rather_than_binding():
+    """Provenance the row does not carry cannot be taken on trust."""
+    register = {
+        ("Gilead", "gild:TrodelvyMember"): Resolution(
+            "gild:TrodelvyMember", None, "llm", 1.0, "no list recorded",
+            verdict=VERDICT_NO_CANDIDATE_MATCH,
+        )
+    }
+    assert resolve("gild:TrodelvyMember", ["Trodelvy"], register,
+                   issuer="Gilead").product == "Trodelvy"
+
+
+def test_the_fingerprint_tracks_the_list_and_not_how_it_was_written():
+    assert fingerprint(["Tyvaso", "Remodulin"]) == fingerprint(["Remodulin", "Tyvaso ", "Tyvaso"])
+    assert fingerprint(["Tyvaso"]) != fingerprint(["Tyvaso", "Remodulin"])
+
+
+def test_a_positive_holds_whoever_is_asking():
+    """Only negatives are relative to a list. A member that names a product
+    names it whether or not the asker happens to track it."""
+    register = {
+        ("United Therapeutics", "uthr:TyvasoDPIMember"): Resolution(
+            "uthr:TyvasoDPIMember", "Tyvaso DPI", "exact", 1.0, "",
+            verdict=VERDICT_PRODUCT,
+        )
+    }
+    assert resolve("uthr:TyvasoDPIMember", [], register,
+                   issuer="United Therapeutics").product == "Tyvaso DPI"
+
+
 def test_one_member_name_can_mean_different_things_to_different_filers():
     """us-gaap:ProductMember is Monovex for a one-product issuer and a total
     for everyone else, so the issuer has to be part of the key."""
@@ -169,16 +249,25 @@ def test_the_pipeline_resolves_a_member_against_every_product_it_tracks():
 
 
 def test_the_orchestrator_passes_that_list_to_the_tagged_reader():
-    """The loader existing is not the fix; calling it is."""
+    """The loader existing is not the fix; calling it is.
+
+    The list is now the tracked products *and* the drugs this run was asked
+    about, because a drug uploaded at run time is otherwise a drug no member
+    can name - the rules would be asked to place `gild:TrodelvyMember` against
+    a list with no Trodelvy in it.
+    """
     import inspect
 
     from app.pipeline.orchestrator import PipelineOrchestrator
 
     source = inspect.getsource(PipelineOrchestrator._tagged_revenue)
-    assert "products=load_products()" in source, (
+    assert "products=products" in source, (
         "candidates_from_instance falls back to [product] when products is "
         "omitted, which is the condition the test above describes"
     )
+    candidates = inspect.getsource(PipelineOrchestrator._candidate_products)
+    assert "load_products()" in candidates and "run_products" in candidates
+
 
 
 def test_a_brand_that_capitalises_inside_its_own_name_still_resolves():

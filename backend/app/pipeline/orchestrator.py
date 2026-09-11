@@ -66,7 +66,8 @@ from app.parsing.indications import parse_indications
 from app.parsing.periods import detect_period_context, normalize_period
 from app.extraction.candidates import extract_revenue_candidates
 from app.extraction.derive import complete_series
-from app.extraction.members import load_products, load_register
+from app.extraction import member_store
+from app.extraction.members import Resolution, load_products
 from app.extraction.bulk_tagged import candidates_from_notes
 from app.extraction.tagged import candidates_from_instance
 from app.extraction.fingerprint import UNIT_SCALE_TO_MILLIONS
@@ -1051,7 +1052,8 @@ class PipelineOrchestrator:
         except ValueError:
             return [], []
 
-        register = load_register()
+        register = member_store.load_register(self.db)
+        products = self._candidate_products(job)
         rows: list[DatapointORM] = []
         totals: list[dict[str, Any]] = []
         for root in configured:
@@ -1064,13 +1066,7 @@ class PipelineOrchestrator:
                     product=job.drug_name,
                     issuer=job.manufacturer or "",
                     cik=cik,
-                    # Every product this pipeline tracks, so that a member
-                    # ending in a sibling's name goes to the sibling rather
-                    # than to this one - and the product actually being asked
-                    # for, which is not always in the catalog yet. Without it a
-                    # job for a new product resolves nothing and reads as a
-                    # filer that tags nothing.
-                    products=sorted({*load_products(), job.drug_name}),
+                    products=products,
                     register=register,
                 )
             except Exception:  # noqa: BLE001 - a malformed extract is not this job's failure
@@ -1102,6 +1098,23 @@ class PipelineOrchestrator:
             )
         return rows, totals
 
+    def _candidate_products(self, job: DrugJobORM) -> list[str]:
+        """The products a member may resolve to for this job.
+
+        Everything the pipeline tracks, so that a member ending in a sibling's
+        name goes to the sibling rather than to this one - and every drug this
+        run was asked about, which is not always in the catalog yet. Without
+        the second, a drug uploaded at run time is a drug no member can ever
+        name: the rules would be asked to place `acme:CalderonMember` against a
+        list with no Calderon in it, and would rightly decline.
+
+        This can only narrow what is published: a resolution to any product
+        other than the one asked for is dropped downstream.
+        """
+        return sorted(
+            set(load_products()) | set(member_store.run_products(self.db, job.run_id))
+        )
+
     async def _tagged_revenue(
         self, job: DrugJobORM, sources: list
     ) -> tuple[list[DatapointORM], list[dict[str, Any]]]:
@@ -1113,7 +1126,9 @@ class PipelineOrchestrator:
         """
         rows: list[DatapointORM] = []
         totals: list[dict[str, Any]] = []
-        register = load_register()
+        register = member_store.load_register(self.db)
+        products = self._candidate_products(job)
+        learned: dict[tuple[str, str], Resolution] = {}
         for src in sources:
             if not (src.metadata or {}).get("xbrl_instance") or not src.storage_key:
                 continue
@@ -1128,20 +1143,9 @@ class PipelineOrchestrator:
                     raw,
                     product=job.drug_name,
                     issuer=job.manufacturer or "",
-                    # Every product this pipeline tracks, not just the one
-                    # being asked for. `match` prefers the longest product name
-                    # ending a member - that is how NebulizedCalderon is
-                    # Nebulized Calderon rather than Calderon - and with a
-                    # one-name list there is nothing to prefer, so
-                    # `acme:NebulizedCalderonMember` suffix-matched to Calderon
-                    # and a sibling formulation's tagged revenue was accepted as
-                    # the product's own. Only the register was catching it, and
-                    # the register does not cover every issuer.
-                    #
-                    # This can only narrow: a resolution to any other product
-                    # is dropped by the `!= product` filter downstream.
-                    products=load_products(),
+                    products=products,
                     register=register,
+                    learned=learned,
                 )
             except Exception:  # noqa: BLE001 - a malformed instance is not this job's failure
                 continue
@@ -1155,6 +1159,9 @@ class PipelineOrchestrator:
                     totals.append(candidate)
                     continue
                 rows.append(self._datapoint_from_candidate(job, src, candidate))
+        if learned:
+            written = member_store.record_many(self.db, learned, products=products)
+            logger.info("xbrl_members_learned job_id=%s members=%d", job.id, written)
         if rows or totals:
             logger.info(
                 "xbrl_facts job_id=%s drug=%s quarters=%d totals=%d",

@@ -454,6 +454,46 @@ class DerivationLineageORM(Base):
     formula_version: Mapped[str | None] = mapped_column(String(64), nullable=True)
 
 
+class XbrlMemberResolutionORM(Base):
+    """Which product a filer's XBRL member names, kept where a run can add to it.
+
+    The same decisions live in ``seed/xbrl_members.csv``, which seeds this table
+    and stays the reviewable copy. The table is the live one because the file
+    cannot be: it sits in the source tree, and a deployment runs several workers
+    over containers that are thrown away, so a mapping learned during a run has
+    nowhere to go.
+
+    ``verdict`` separates two negatives that read alike. "This member is a
+    category total" is a fact about the member and holds against any product
+    list. "This member named nothing in the candidate list" is a fact about the
+    list, and ``candidates_fingerprint`` records which list, so it is not read
+    as the first.
+    """
+
+    __tablename__ = "xbrl_member_resolutions"
+    __table_args__ = (UniqueConstraint("issuer", "member"),)
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    issuer: Mapped[str] = mapped_column(String(256), index=True)
+    member: Mapped[str] = mapped_column(String(512))
+    product: Mapped[str | None] = mapped_column(String(256), nullable=True)
+    # "product" | "not_a_product" | "no_candidate_match" - see members.py
+    verdict: Mapped[str] = mapped_column(String(32), default="no_candidate_match")
+    method: Mapped[str] = mapped_column(String(32), default="unmatched")
+    confidence: Mapped[float] = mapped_column(Float, default=0.0)
+    # Set only on a negative: the product list the decision was made against, so
+    # a run asking about a different list is not answered from this one.
+    candidates_fingerprint: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    note: Mapped[str] = mapped_column(Text, default="")
+    # A person who settles a member outranks anything automated, the same rule
+    # the metadata backfill follows.
+    validation_status: Mapped[str] = mapped_column(String(32), default="pending")
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
+    )
+
+
 _settings = get_settings()
 # Sync engine for MVP simplicity (API + in-process workers in one process)
 _sync_url = _settings.resolved_database_url.replace("sqlite+aiosqlite://", "sqlite://")
