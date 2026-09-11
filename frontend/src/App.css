@@ -330,6 +330,86 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 .obs-drawer .close { color: #e2e8f0; }
 .obs-layout .muted { color: #94a3b8; }
 
+/* Library, product detail, review queue and intake. Extends the vocabulary
+   above rather than introducing a second one: same blue, same square corners,
+   same dense tables. */
+.main-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.9rem; }
+.main-head h1 { margin: 0; font-size: 1.15rem; }
+button.ghost { background: #fff; color: #1e3a5f; border: 1px solid #94a3b8; }
+button.danger { background: #fff; color: #991b1b; border: 1px solid #fca5a5; }
+.bulk-bar { display: flex; align-items: center; gap: 0.6rem; padding: 0.6rem 0.9rem; background: #dbeafe; border-bottom: 1px solid #cbd5e1; font-size: 0.82rem; }
+.name-link { font-weight: 600; }
+.queue-cell { display: flex; flex-direction: column; gap: 0.2rem; align-items: flex-start; }
+.completeness-bar { width: 58px; height: 6px; background: #e2e8f0; position: relative; }
+.completeness-bar i { position: absolute; left: 0; top: 0; bottom: 0; background: #2563eb; display: block; }
+
+.pill.ok { background: #d1fae5; color: #065f46; }
+.pill.flagged { background: #fef3c7; color: #92400e; }
+.pill.missing { background: #fee2e2; color: #7f1d1d; }
+.pill.sched { background: #dbeafe; color: #1e3a8a; }
+.pill.oneoff { background: #e2e8f0; color: #334155; }
+.pill.conf { background: #eff6ff; color: #1e3a8a; }
+.pill.reason { background: #e2e8f0; color: #334155; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.7rem; }
+a.pill { text-decoration: none; }
+a.pill:hover { outline: 2px solid #93c5fd; }
+
+.crumb { font-size: 0.8rem; color: #64748b; margin-bottom: 0.6rem; }
+.identity { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; background: #fff; border: 1px solid #cbd5e1; border-top: 3px solid #2563eb; padding: 1rem; margin-bottom: 1rem; }
+.identity h1 { margin: 0 0 0.2rem; font-size: 1.3rem; }
+.identity-generic { font-weight: 400; color: #64748b; font-size: 1rem; }
+.identity .stats { display: flex; gap: 1.4rem; text-align: right; }
+.identity .stats span { display: block; color: #64748b; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.03em; }
+.identity .stats strong { font-size: 1.15rem; }
+.idchip { display: inline-block; margin-top: 0.35rem; font-size: 0.72rem; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: #334155; background: #e2e8f0; padding: 0.1rem 0.4rem; }
+
+.tabs { display: flex; gap: 0.25rem; align-items: center; margin-bottom: 0.9rem; border-bottom: 1px solid #cbd5e1; }
+.tabs button { background: transparent; color: #475569; padding: 0.6rem 0.9rem; border-bottom: 2px solid transparent; }
+.tabs button.active { color: #1d4ed8; border-bottom: 2px solid #1d4ed8; font-weight: 600; }
+.tabs .tab-link { margin-left: auto; font-size: 0.85rem; }
+
+.queue-item { background: #fff; border: 1px solid #cbd5e1; margin-bottom: 0.6rem; }
+.queue-item.missing { border-left: 3px solid #fca5a5; }
+.queue-item-head { display: flex; align-items: center; gap: 0.6rem; padding: 0.65rem 0.85rem; cursor: pointer; flex-wrap: wrap; }
+.queue-item-head:hover { background: #f8fafc; }
+.queue-item-head .chev { margin-left: auto; color: #94a3b8; }
+.queue-item-body { padding: 0.2rem 0.85rem 0.85rem; border-top: 1px solid #e2e8f0; }
+.value-row { display: flex; align-items: baseline; gap: 0.75rem; margin: 0.75rem 0 0.5rem; }
+.value-row .val { font-size: 1.5rem; font-weight: 700; }
+.field { margin: 0.55rem 0; }
+.field-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.03em; color: #64748b; margin-bottom: 0.2rem; }
+.quote-block { background: #f8fafc; border-left: 3px solid #94a3b8; padding: 0.5rem 0.65rem; font-size: 0.82rem; color: #334155; line-height: 1.45; }
+.judge-note { background: #eff6ff; border-left: 3px solid #2563eb; padding: 0.5rem 0.65rem; font-size: 0.82rem; color: #1e3a5f; line-height: 1.45; }
+.url-list { margin: 0; padding-left: 1.1rem; font-size: 0.8rem; color: #475569; line-height: 1.6; word-break: break-all; }
+.actions { display: flex; gap: 0.4rem; margin-top: 0.8rem; flex-wrap: wrap; align-items: center; }
+.edit-form { margin-top: 0.7rem; padding: 0.75rem; background: #f8fafc; border: 1px solid #cbd5e1; }
+.edit-form label { display: block; font-size: 0.79rem; color: #334155; margin-bottom: 0.4rem; }
+.edit-form select { width: 100%; margin: 0.5rem 0; padding: 0.5rem; border: 1px solid #94a3b8; background: #fff; }
+.gate-note { margin-top: 0.5rem; font-size: 0.77rem; color: #7f1d1d; background: #fef2f2; border-left: 3px solid #fca5a5; padding: 0.4rem 0.55rem; line-height: 1.4; }
+.req { color: #b91c1c; }
+
+.add-layout { display: grid; grid-template-columns: 1fr 320px; gap: 1rem; align-items: start; }
+.step-head { display: flex; gap: 0.6rem; align-items: baseline; margin-bottom: 0.6rem; }
+.step-head h2 { margin: 0; font-size: 0.98rem; }
+.step-head .muted { margin-left: auto; }
+.step-num { width: 20px; height: 20px; background: #1e3a5f; color: #fff; font-size: 0.72rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex: none; }
+.or-row { display: flex; align-items: center; gap: 0.75rem; margin-top: 0.5rem; }
+.radio-card { display: flex; gap: 0.6rem; align-items: flex-start; padding: 0.6rem 0.7rem; border: 1px solid #cbd5e1; cursor: pointer; margin-bottom: 0.5rem; }
+.radio-card.active { border-color: #1d4ed8; background: #eff6ff; box-shadow: inset 0 0 0 1px #1d4ed8; }
+.radio-card input { width: auto; margin: 0.2rem 0 0; }
+.rc-title { font-weight: 600; font-size: 0.86rem; display: block; }
+.rc-sub { color: #64748b; font-size: 0.79rem; line-height: 1.35; display: block; }
+.range-row { display: flex; gap: 0.75rem; margin-left: 1.8rem; }
+.range-row label { font-size: 0.8rem; color: #334155; }
+.side-stat { display: flex; justify-content: space-between; align-items: baseline; padding: 0.45rem 0; border-bottom: 1px solid #e2e8f0; font-size: 0.85rem; }
+.side-stat span { color: #475569; }
+.side-note { padding: 0.6rem 0.7rem; background: #f1f5f9; border-left: 3px solid #2563eb; color: #334155; font-size: 0.8rem; line-height: 1.4; }
+
+@media (max-width: 900px) {
+  .add-layout { grid-template-columns: 1fr; }
+  .identity { flex-direction: column; }
+  .identity .stats { text-align: left; flex-wrap: wrap; }
+}
+
 @media (max-width: 900px) {
   .dash-layout,
   .obs-layout { grid-template-columns: 1fr; }

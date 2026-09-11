@@ -6,6 +6,10 @@ import ReviewPage from './pages/ReviewPage'
 import DashboardPage from './pages/DashboardPage'
 import ObservabilityPage from './pages/ObservabilityPage'
 import ExportPage from './pages/ExportPage'
+import LibraryPage from './pages/LibraryPage'
+import ProductDetailPage from './pages/ProductDetailPage'
+import ReviewQueuePage from './pages/ReviewQueuePage'
+import AddProductsPage from './pages/AddProductsPage'
 import './App.css'
 
 const qc = new QueryClient()
@@ -18,16 +22,23 @@ export default function App() {
           <header className="topbar">
             <div className="brand">Pharmaceutical Analog Uptake Workbench</div>
             <nav>
-              <NavLink to="/">Setup</NavLink>
-              <NavLink to="/monitor">Monitor</NavLink>
+              <NavLink to="/" end>
+                Library
+              </NavLink>
+              <NavLink to="/review">Review</NavLink>
               <NavLink to="/dashboard">Dashboard</NavLink>
-              <NavLink to="/observability">Observability</NavLink>
+              <NavLink to="/monitor">Monitor</NavLink>
               <NavLink to="/export">Export</NavLink>
+              <NavLink to="/observability">Observability</NavLink>
             </nav>
           </header>
           <main>
             <Routes>
-              <Route path="/" element={<SetupPage />} />
+              <Route path="/" element={<LibraryPage />} />
+              <Route path="/add" element={<AddProductsPage />} />
+              <Route path="/products/:productId" element={<ProductDetailPage />} />
+              <Route path="/review" element={<ReviewQueuePage />} />
+              <Route path="/setup" element={<SetupPage />} />
               <Route path="/monitor" element={<MonitorPage />} />
               <Route path="/monitor/:runId" element={<MonitorPage />} />
               <Route path="/review/:jobId" element={<ReviewPage />} />
