@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import hashlib
 import json
+import logging
+import traceback
 from datetime import datetime
 from typing import Any
 
@@ -494,6 +496,8 @@ class XbrlMemberResolutionORM(Base):
     )
 
 
+logger = logging.getLogger(__name__)
+
 _settings = get_settings()
 # Sync engine for MVP simplicity (API + in-process workers in one process)
 _sync_url = _settings.resolved_database_url.replace("sqlite+aiosqlite://", "sqlite://")
@@ -513,6 +517,48 @@ def sqlite_connect_args(url: str) -> dict[str, Any]:
 
 
 engine = create_engine(_sync_url, future=True, connect_args=sqlite_connect_args(_sync_url))
+
+# Where each connection's open write transaction began: the first statement
+# that made it a writer, and the application frames that issued it. The
+# driver waits for a writer synchronously, on the event loop every job shares,
+# so a job that holds a write open across an await stalls every other job for
+# the whole timeout; when that happens, the writer's own frames are the only
+# thing that says who it was.
+_write_began: dict[int, tuple[str, str]] = {}
+_WRITES = ("INSERT", "UPDATE", "DELETE", "REPLACE")
+
+
+def _app_frames() -> str:
+    frames = [f"{f.filename.rsplit('/app/', 1)[-1]}:{f.lineno} {f.name}"
+              for f in traceback.extract_stack()[:-2] if "/app/" in f.filename]
+    return " < ".join(reversed(frames[-6:]))
+
+
+def watch_for_held_writes(target: Any) -> None:
+    """Attach the bookkeeping above to an engine."""
+
+    @event.listens_for(target, "before_cursor_execute")
+    def _note_writer(conn: Any, _cursor: Any, statement: str, *_args: Any) -> None:
+        dbapi = conn.connection.dbapi_connection
+        if not getattr(dbapi, "in_transaction", False) and statement.lstrip()[:7].upper().startswith(_WRITES):
+            _write_began[id(dbapi)] = (statement.split("\n", 1)[0][:80], _app_frames())
+
+    @event.listens_for(target, "commit")
+    @event.listens_for(target, "rollback")
+    def _writer_done(conn: Any) -> None:
+        _write_began.pop(id(conn.connection.dbapi_connection), None)
+
+    @event.listens_for(target, "handle_error")
+    def _who_holds_the_lock(context: Any) -> None:
+        if "database is locked" not in str(context.original_exception):
+            return
+        waiting = context.connection.connection.dbapi_connection if context.connection else None
+        for key, (statement, frames) in _write_began.items():
+            if key != id(waiting):
+                logger.error("write_lock_held_by statement=%r frames=%s", statement, frames)
+
+
+watch_for_held_writes(engine)
 
 
 @event.listens_for(engine, "connect")
