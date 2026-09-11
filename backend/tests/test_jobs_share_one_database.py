@@ -187,3 +187,33 @@ def test_a_lock_timeout_names_the_job_holding_the_write(tmp_path, caplog):
     assert len(held) == 1
     assert "INSERT INTO extraction_runs" in held[0]
     assert "test_jobs_share_one_database" in held[0] or "tests/" in held[0] or "frames=" in held[0]
+
+
+@pytest.mark.asyncio
+async def test_learning_a_member_leaves_no_write_open(tmp_path):
+    """The tagged reader records what it learned and hands the session back
+    with nothing pending, because the caller goes on to await the model."""
+    from test_a_filer_whose_taxonomy_we_do_not_know import INSTANCE
+
+    path, session = _database(tmp_path)
+    db = session()
+    job = _job(db)
+    store = LocalFileStore(str(tmp_path))
+    await store.put("acme-q2.xml", INSTANCE, "application/xml")
+    orch = PipelineOrchestrator(db, file_store=store)
+    source = RetrievedSource(
+        source_id="s1",
+        source_type=SourceType.SEC_FILING,
+        url="https://example.invalid/acme-20260630_htm.xml",
+        filing_type="10-Q",
+        retrieval_status=RetrievalStatus.SUCCESS,
+        storage_key="acme-q2.xml",
+        metadata={"xbrl_instance": True},
+    )
+
+    rows, _totals = await orch._tagged_revenue(job, [source])
+
+    assert [(r.period, r.value_normalized_usd_millions) for r in rows] == [("2026Q2", 1941.0)]
+    assert not db.connection().connection.dbapi_connection.in_transaction, (
+        "the session is still a writer after the step returned"
+    )

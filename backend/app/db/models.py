@@ -523,13 +523,16 @@ def sqlite_connect_args(url: str) -> dict[str, Any]:
     """Driver arguments for a SQLite URL; empty for any other database.
 
     SQLite admits one writer at a time, and the API process runs several jobs
-    that each commit as they go. The driver's default is to give up after five
-    seconds of waiting for the writer to finish, which is shorter than one
-    document parse, so a busy server would fail jobs on its own contention.
+    that each commit as they go. The driver waits for the writer synchronously,
+    on the event loop the jobs share, so the wait is a stall of the whole
+    server: long enough to outlast a commit that is genuinely in progress,
+    and short enough that a write left open across an await - which the wait
+    cannot end, since the holder needs the loop to finish - fails rather than
+    freezes the process.
     """
     if not url.startswith("sqlite"):
         return {}
-    return {"timeout": 60}
+    return {"timeout": 15}
 
 
 engine = create_engine(_sync_url, future=True, connect_args=sqlite_connect_args(_sync_url))
