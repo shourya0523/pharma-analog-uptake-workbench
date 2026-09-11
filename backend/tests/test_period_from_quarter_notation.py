@@ -1,14 +1,13 @@
 """Dating a filing that writes "Q2 2024" instead of "three months ended...".
 
 "Three months ended June 30, 2024" is a US convention. Outside it the same span
-is written "Q2 2024", and the phrase never appears at all: Novartis, Sanofi and
-Novo Nordisk use the quarter form 62, 55 and 59 times in the exhibits they file
-and the phrase not once. Every one of their filings therefore had no detectable
-period, which is what `fingerprint` refuses on and what left the model reader
-guessing the quarter for figures it had already read correctly.
+is written "Q2 2024", and the phrase never appears at all: such a filing states
+the quarter form on every schedule and "months ended" nowhere. It therefore had
+no detectable period, which is what `fingerprint` refuses on and what left the
+model reader guessing the quarter for figures it had already read correctly.
 
 The hard part is not recognising the notation, it is choosing among what a
-filing names. The counts below are the real ones.
+filing names. The repetition counts below are taken from real exhibits.
 """
 
 from __future__ import annotations
@@ -21,7 +20,7 @@ def _doc(*parts: str) -> str:
 
 
 def test_the_quarter_form_is_read():
-    context = detect_period_context(_doc("Novartis First Quarter 2025", "Q1 2025 " * 4))
+    context = detect_period_context(_doc("Acme First Quarter 2025", "Q1 2025 " * 4))
     assert (context.months, context.year, context.quarter) == (3, 2025, 1)
 
 
@@ -47,20 +46,20 @@ class TestChoosingAmongWhatTheFilingNames:
     """A document states its own period over and over and refers to others once."""
 
     def test_a_single_mention_of_a_later_quarter_does_not_date_the_filing(self):
-        """Novo Nordisk's Q1 2025 announcement expects a regulatory filing
-        "during the first quarter of 2026" - one sentence, one mention, against
-        45 for the quarter it is reporting."""
+        """A Q1 2025 announcement expects a regulatory filing "during the
+        first quarter of 2026" - one sentence, one mention, against 45 for the
+        quarter it is reporting."""
         doc = _doc(
             "Q1 2025 " * 45,
             "Q1 2024 " * 31,
-            "expects to file for the first regulatory approval of CagriSema "
-            "during the first quarter of 2026.",
+            "expects to file for the first regulatory approval of a pipeline "
+            "candidate during the first quarter of 2026.",
         )
         assert (detect_period_context(doc).year, detect_period_context(doc).quarter) == (2025, 1)
 
     def test_next_years_guidance_does_not_date_a_full_year_release(self):
-        """Sanofi's Q4 2024 release names 2024Q4 73 times and 2025Q2 three
-        times. Preferring the latest year dated it 2025Q2 - and dated every
+        """A Q4 2024 release names 2024Q4 73 times and 2025Q2 three times.
+        Preferring the latest year dated it 2025Q2 - and dated every
         full-year release into the next year, because that is where guidance
         lives."""
         doc = _doc("Q4 2024 " * 73, "Q4 2023 " * 20, "Q2 2025 " * 3, "Q4 2025")
@@ -68,7 +67,7 @@ class TestChoosingAmongWhatTheFilingNames:
         assert (context.year, context.quarter) == (2024, 4)
 
     def test_the_comparative_does_not_win_when_it_trails(self):
-        """Novartis names its own quarter 31 times and the comparative 27."""
+        """A filing names its own quarter 31 times and the comparative 27."""
         doc = _doc("Q1 2025 " * 31, "Q1 2024 " * 27)
         context = detect_period_context(doc)
         assert (context.year, context.quarter) == (2025, 1)

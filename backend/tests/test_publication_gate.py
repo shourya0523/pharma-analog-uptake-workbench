@@ -152,11 +152,11 @@ def test_a_schedule_outranks_a_sentence_from_the_same_exhibit():
 def test_a_figure_and_its_normalisation_that_disagree_cannot_publish():
     """Every check reads `value_reported`; a consumer reads the normalized one.
 
-    Remodulin 2009Q3 arrived from the model reported as 87.4 with 87,400 beside
-    it as USD millions, and was published carrying
+    A candidate arrived from the model reported as 87.4 with 87,400 beside it
+    as USD millions, and was published carrying
     `deterministic:product_quote_value_ok` - because the judge confirms 87.4
     against a quote that says 87.4, and nothing anywhere looked at the figure
-    that reaches a reader. Gold is 87.4.
+    that reaches a reader.
 
     The candidate's own two numbers are enough to catch it: 87.4 in millions is
     87.4, not 87,400.

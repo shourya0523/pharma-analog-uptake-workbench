@@ -166,10 +166,24 @@ rule 2's failure with a longer fuse.
 
 An example of *shape* is different, and is often the clearest thing available:
 
-    HIVProductsBiktarvy resolves to Biktarvy; TyvasoDPI does not resolve
-    to Tyvaso.
+    RespiratoryProductsCalderon resolves to Calderon; CalderonXR does not
+    resolve to Calderon.
 
 That is the rule made legible, not a result. Keep those.
+
+Spell it with an invented name. A comment reading `HIVProductsBiktarvy resolves
+to Biktarvy` teaches the next reader - and the next model - which brands the
+answer key holds, and they start reasoning about those brands instead of about
+the shape. That is rule 3's failure arriving through prose: the pipeline does
+not read the comment, but whoever changes the code does. Use `Calderon`,
+`Calderon XR`, `Nebulized Calderon`, `NuVessa`, the prefixes `acme:` and
+`beta:`; extend that vocabulary rather than reaching for a real brand. The same
+holds for issuers - "a filer", "an issuer", or an invented name.
+
+The exception is a real artifact the comment exists to cite: a captured API
+response, a quoted instance, a fixture taken from one filing. Cite it by
+accession or URL, so the next reader can fetch the thing itself, and keep the
+prose around it about the shape.
 
 ---
 

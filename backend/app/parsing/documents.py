@@ -24,8 +24,9 @@ of a document cannot drift apart - table *n* of one is table *n* of the other.
 
 Which tables are kept is decided by ``table_relevance``: a table is worth
 reading if it has a line-item row, a text label followed by a figure. A
-document's table order says nothing about where its figures are - a Gilead 8-K
-holds 39 tables and prints its product sales summary in the thirty-seventh.
+document's table order says nothing about where its figures are - an earnings
+exhibit can hold dozens of tables and print its product sales summary in the
+last of them.
 """
 
 from __future__ import annotations
@@ -65,9 +66,10 @@ class OCRStub:
 # tables' work.
 #
 # HTML_ROW_LIMIT is the same kind of valve, and was the same kind of mistake
-# before it was raised: at 40 it cut a Gilead product sales summary off in the
-# middle of Stribild, leaving its U.S. line in the table and its other regions
-# and its total outside, so the U.S. figure was published as the product's. A
+# before it was raised: at 40 it cut a product sales summary off in the middle
+# of a product, leaving that product's U.S. line in the table and its other
+# regions and its total outside, so the U.S. figure was published as the
+# product's own. A
 # row cap that binds on an ordinary filing decides what a table says. Set it
 # above the longest figure-bearing tables filers actually produce, so it bounds
 # pathological input and never an ordinary schedule.
@@ -118,9 +120,9 @@ def html_table_grid(table) -> list[list[str | None]]:
         None        a column covered by a cell that began to the left or above
 
     The distinction matters because spans are not only used for headings.
-    Gilead prints "141" with ``colspan=2``, so expanding text into every covered
-    column would report that value twice; a reader after figures takes the
-    origins, and a reader after a heading's extent walks the ``None``s.
+    A filer prints a figure with ``colspan=2``, so expanding text into every
+    covered column would report that value twice; a reader after figures takes
+    the origins, and a reader after a heading's extent walks the ``None``s.
     """
     filled: dict[tuple[int, int], str | None] = {}
     for row_index, tr in enumerate(table.find_all("tr")[:HTML_ROW_LIMIT]):
@@ -154,12 +156,12 @@ def html_table_grid(table) -> list[list[str | None]]:
 def _figure_rows(grid: list[list[str | None]]) -> int:
     """Rows shaped like a line item: a text label, then a figure.
 
-    This is the shape a product sales line has - ``Skyrizi | 3,843 | 580 |
+    This is the shape a product sales line has - ``Calderon | 3,843 | 580 |
     4,423`` - and it is also the shape of every other financial line item,
     which is the point: the test is "does this row state figures against a
     name", not "is this name a product we know".
 
-    One figure is enough. Gilead files ``Genvoya - U.S. | 141 | -``, a figure
+    One figure is enough. A filer writes ``Calderon - U.S. | 141 | -``, a figure
     beside an em dash for the quarter the product did not sell in; demanding
     two would drop the launch quarter of every product in the schedule.
     """
@@ -176,10 +178,10 @@ def _figure_rows(grid: list[list[str | None]]) -> int:
 def table_relevance(grid: list[list[str | None]]) -> int:
     """How much this table looks like a table of financial data. 0 = discard.
 
-    A document's table order says nothing about where its figures are: a
-    Gilead 8-K earnings exhibit holds 39 tables and prints its PRODUCT SALES
-    SUMMARY in the thirty-seventh, behind three dozen layout and cover tables.
-    Keeping the first N therefore keeps the wrong N. What separates the sales
+    A document's table order says nothing about where its figures are: an 8-K
+    earnings exhibit can hold dozens of tables and print its PRODUCT SALES
+    SUMMARY in the last of them, behind every layout and cover table in the
+    document. Keeping the first N therefore keeps the wrong N. What separates the sales
     schedule from a spacer is not its position but its content - it states
     figures against row labels, and it declares what those figures are in
     (money) or what they cover (a period).
@@ -212,9 +214,9 @@ def table_caption(table: Tag) -> str:
 
     A table states its unit in the sentence above it - "PRODUCT SALES SUMMARY
     (unaudited) (in thousands)" - and not anywhere else. Searching the document
-    for a unit instead finds whichever declaration comes first, which in a
-    Gilead earnings exhibit is the "(in millions)" over the guidance table, five
-    schedules above the product sales stated in thousands.
+    for a unit instead finds whichever declaration comes first, which may be an
+    "(in millions)" over a guidance table several schedules above a product
+    sales table stated in thousands.
 
     So the walk stops at the previous table: text belonging to another schedule
     describes that schedule. A table nested inside a layout table is still this
@@ -401,10 +403,10 @@ def _column_edges(rows: list[list[dict]], gap: float) -> list[tuple[float, float
 def _table_regions(rows: list[list[dict]], gap: float) -> list[list[list[dict]]]:
     """A page's rows split where one table ends and the next begins.
 
-    A page is not a table. Johnson & Johnson's schedule prints its consumer
-    products, restates its whole heading, and prints its pharmaceuticals below,
-    and reading that as one table dates the second heading's own rows against
-    the first heading's columns.
+    A page is not a table. A schedule prints one segment's products, restates
+    its whole heading, and prints another segment's below it, and reading that
+    as one table dates the second heading's own rows against the first
+    heading's columns.
 
     The break is a band of white far wider than the space between rows, with a
     heading rather than more figures on the other side of it. A wide band alone

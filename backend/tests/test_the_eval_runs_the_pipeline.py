@@ -126,22 +126,23 @@ def _eval_module():
 def test_a_region_is_not_the_worldwide_total_and_nothing_else_is_claimed():
     """Three vocabularies share `revenue_scope`, and only one pair is comparable.
 
-    Gold says what the issuer's line covers - "U.S." for United Therapeutics'
-    Letairis, which is sold essentially only there, "Worldwide" for Gilead's
-    Truvada. The deterministic readers say granularity, "Product family" or
+    Gold says what the issuer's line covers - "U.S." for a product sold
+    essentially only there, "Worldwide" for one broken out by region and in
+    total. The deterministic readers say granularity, "Product family" or
     "Formulation-specific", and name no geography. The LLM extractor names a
     geography.
 
     A first version of this rule required a region to match the same region,
-    which is coherent and wrong: it scored Letairis and Orenitram at zero,
-    because their gold rows say "U.S." and the reader that answered them says
-    "Product family". Re-scoring the stored runs caught it before it was ever
-    reported. The rule that survived asserts one thing only.
+    which is coherent and wrong: it scored at zero every product whose gold row
+    says "U.S." while the reader that answered it says "Product family".
+    Re-scoring the stored runs caught it before it was ever reported. The rule
+    that survived asserts one thing only.
     """
     answers_scope = _eval_module().answers_scope
 
-    # The case that needs separating: Gilead prints Truvada by region and in
-    # total, 744 U.S. against 768 worldwide for 2019Q4.
+    # The case that needs separating: a filer prints a product by region and
+    # in total, and the U.S. line is close enough to the worldwide one to pass
+    # for it.
     assert not answers_scope("U.S.", "Worldwide")
     assert not answers_scope("Europe", "Worldwide")
     assert not answers_scope("Other International", "Worldwide")

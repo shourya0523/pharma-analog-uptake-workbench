@@ -1105,8 +1105,8 @@ class PipelineOrchestrator:
         name goes to the sibling rather than to this one - and every drug this
         run was asked about, which is not always in the catalog yet. Without
         the second, a drug uploaded at run time is a drug no member can ever
-        name: the rules would be asked to place `gild:TrodelvyMember` against a
-        list with no Trodelvy in it, and would rightly decline.
+        name: the rules would be asked to place `acme:CalderonMember` against a
+        list with no Calderon in it, and would rightly decline.
 
         This can only narrow what is published: a resolution to any product
         other than the one asked for is dropped downstream.
@@ -1444,8 +1444,8 @@ class PipelineOrchestrator:
                 if normalized is None and value is not None:
                     normalized = scale_to_millions(float(value), unit)
                 # A candidate may supply its own normalization, and it was
-                # taken verbatim. Remodulin 2009Q3 arrived reported as 87.4
-                # with 87,400 beside it and was published, because every check
+                # taken verbatim. A candidate arrived reported as 87.4 with
+                # 87,400 beside it and was published, because every check
                 # downstream reads `value_reported` - the judge confirms 87.4
                 # against a quote saying 87.4 - while a consumer reads the
                 # normalized figure that nothing had looked at.

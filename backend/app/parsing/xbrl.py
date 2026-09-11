@@ -16,8 +16,8 @@ recovery is unnecessary where the statement exists:
 How far this reaches is a property of the issuer rather than a date. The
 2019-2021 inline-XBRL phase-in made detail tagging of the revenue note
 mandatory; it did not invent it, and filers were tagging products on the
-product axis long before their own deadline - Gilead from 2009, United
-Therapeutics from 2011. ``filer_category`` reads the issuer's own declaration
+product axis years before their own deadline. ``filer_category`` reads the
+issuer's own declaration
 of which category it is in, and ``product_facts`` returns nothing for a filing
 that genuinely tagged nothing, which is the honest way for a reader to say "not
 here".
@@ -39,10 +39,9 @@ from datetime import date
 
 # The axis that says which product a fact is about, in both of its spellings.
 # It lived in the us-gaap namespace until the 2018 taxonomy moved the reporting
-# axes into srt, so a filing from before that names the same axis differently -
-# Gilead's 2013 Q3 instance and United Therapeutics' 2016 Q3 one both say
-# "us-gaap:ProductOrServiceAxis". Knowing only the modern spelling reads those
-# filings as having no product facts at all, which is what happened.
+# axes into srt, so a filing from before that names the same axis differently:
+# it says "us-gaap:ProductOrServiceAxis". Knowing only the modern spelling reads
+# those filings as having no product facts at all, which is what happened.
 #
 # PRODUCT_AXIS stays the canonical one: it is what a fact is keyed under once
 # `notes_datasets` normalises a bulk row, and what the tests construct.
@@ -69,7 +68,7 @@ _REVENUE_ELEMENTS = frozenset({
     "us-gaap:SalesRevenueGoodsNet",
 })
 
-# A forecast is not a report. Merck tags next quarter's expectation for a
+# A forecast is not a report. A filer tags next quarter's expectation for a
 # product on the same axis as the quarters it has closed, and nothing else about
 # the fact says which it is.
 _HYPOTHETICAL = ("Forecast", "Scenario", "ProForma", "Restatement")
@@ -100,9 +99,9 @@ class Fact:
 
         Labelled from the middle of the period rather than its end, because
         filers on a 52/53-week fiscal calendar end a year in early January of
-        the next one. Johnson & Johnson's fiscal 2022 runs to 1 January 2023;
-        reading the end date alone files it as 2023, on top of the real 2023,
-        and both then carry a citation saying so.
+        the next one. A fiscal 2022 can run to 1 January 2023; reading the end
+        date alone files it as 2023, on top of the real 2023, and both then
+        carry a citation saying so.
         """
         if not (self.start and self.end):
             return None
@@ -281,11 +280,11 @@ def product_facts(facts: list[Fact], *, worldwide_only: bool = True) -> list[Fac
     a product the issuer folds into an "other" line, states nothing here.
 
     A filer qualifies a product's revenue in two different ways and only one of
-    them makes a smaller figure. United Therapeutics tags Adcirca's year twice -
-    once plainly at $41.3m, once under the Eli Lilly arrangement at $1.0m - and
-    the second is a part of the first. Johnson & Johnson tags every product
-    under its business segment, and that qualification takes nothing away,
-    because there is no less-qualified Stelara fact to be a part of.
+    them makes a smaller figure. One tags a product's year twice - once plainly,
+    once again under a collaboration arrangement that covers a part of it - and
+    the second is a part of the first. Another tags every product under its
+    business segment, and that qualification takes nothing away, because there
+    is no less-qualified fact about the same product for it to be a part of.
 
     So the total is not recognised from a list of axes that are known to be
     harmless; it is the least-qualified statement the filer makes about that

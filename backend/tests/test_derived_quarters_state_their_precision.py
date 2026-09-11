@@ -3,11 +3,11 @@
 A derived fourth quarter can disagree with the issuer's own printed one by a
 million while both are right about what they were computed from:
 
-    Complera 2022Q4    200 - (44 + 54 + 43)      = 59, issuer printed 58
-    Descovy 2022Q4   1,872 - (374 + 460 + 500)   = 538, issuer printed 537
-    Stribild 2022Q4    127 - (32 + 33 + 32)      = 30, issuer printed 29
-    Imbruvica 2022Q4 3,784 - (1,038 + 970 + 911) = 865, issuer printed 866
-    Simponi 2022Q4   2,184 - (571 + 566 + 545)   = 502, issuer printed 501
+    Emravir 2022Q4     200 - (44 + 54 + 43)      = 59, issuer printed 58
+    Cordexa 2022Q4   1,872 - (374 + 460 + 500)   = 538, issuer printed 537
+    Velantis 2022Q4    127 - (32 + 33 + 32)      = 30, issuer printed 29
+    Pyrenil 2022Q4   3,784 - (1,038 + 970 + 911) = 865, issuer printed 866
+    NuVessa 2022Q4   2,184 - (571 + 566 + 545)   = 502, issuer printed 501
 
 Every fact behind them carries `decimals="-6"`: the filer rounded to the
 nearest million before tagging. Four inputs rounded that way put the residual
@@ -25,7 +25,7 @@ from __future__ import annotations
 from app.extraction.derive import complete_series
 from app.parsing.xbrl import Fact
 
-# Gilead's 2022 Complera facts, as tagged.
+# One product's 2022 facts, as the filer tagged them.
 FY, Q1, Q2, Q3 = 200.0, 44.0, 54.0, 43.0
 HALF_A_MILLION = 0.5
 

@@ -89,9 +89,9 @@ def extract_revenue_candidates(
 
     ``prose`` is the document's running text. Issuers disclosed product sales
     in sentences long before the product-sales exhibit existed, and a reader
-    that only reads tables has nothing at all for those years - United
-    Therapeutics stated Remodulin narratively from 2002 to 2009. A sentence
-    carries its unit beside the amount, so it declares more than a table header
+    that only reads tables has nothing at all for those years - an issuer can
+    state a product narratively for most of a decade. A sentence carries its
+    unit beside the amount, so it declares more than a table header
     does; what it must also do is name one period and one amount, or it is
     refused.
 
@@ -117,7 +117,7 @@ def extract_revenue_candidates(
     # same figure described around it.
     if prose:
         # A period, not a period-and-label. A sentence names the product one way
-        # and the schedule another - "Tyvaso" against "Tyvaso (R)" - so keying
+        # and the schedule another - "Calderon" against "Calderon (R)" - so keying
         # the fallback on both lets the same figure through twice, described
         # differently and sometimes scoped differently, and two candidates that
         # disagree are not an answer.

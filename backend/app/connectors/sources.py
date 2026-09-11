@@ -14,12 +14,13 @@ Two rules here were bought with wrong answers:
 
 * An issuer is resolved by ticker first, then by an exact match on its
   normalised name, and an ambiguous name resolves to nothing. Matching on a
-  prefix once resolved "United" to a company that was not United Therapeutics,
-  and a filing from the wrong company is worse than no filing.
-* Every EX-99 exhibit of an earnings 8-K is read, not the first. Johnson &
-  Johnson puts its press release in EX-99.1 and its product sales schedules in
-  EX-99.2, so taking one exhibit per filing takes the one with no table in it,
-  which reads as "this issuer does not disclose product sales".
+  prefix resolves a one-word query to whichever registrant happens to start
+  with it, and a filing from the wrong company is worse than no filing.
+* Every EX-99 exhibit of an earnings 8-K is read, not the first. A filer that
+  separates its press release from its schedules puts the release in EX-99.1
+  and the product sales tables in EX-99.2, so taking one exhibit per filing
+  takes the one with no table in it, which reads as "this issuer does not
+  disclose product sales".
 """
 
 from __future__ import annotations
@@ -68,7 +69,7 @@ def parse_filing_date(value: object) -> date | None:
         return None
 
 
-# Corporate suffixes carry no identity: "Gilead Sciences, Inc." and "Gilead
+# Corporate suffixes carry no identity: "Acme Sciences, Inc." and "Acme
 # Sciences Inc" are the same registrant, and the SEC title uses whichever the
 # filer registered with.
 _REGISTRANT_SUFFIXES = {
@@ -91,16 +92,18 @@ def normalize_registrant(name: str) -> str:
 def is_earnings_exhibit(filename: str) -> bool:
     """True for exhibit 99.x documents, which carry the product revenue tables.
 
-    Issuers name these inconsistently (``uthrq12024-ex991.htm``,
-    ``exhibit991uthr12312024.htm``, ``tm2620809d1_ex99-1.htm``), so match on the
-    alphanumeric-only form of the name rather than a fixed pattern.
+    Issuers name these inconsistently - a ticker and a period
+    (``acmeq12024-ex991.htm``), the word spelled out in full
+    (``exhibit991acme12312024.htm``), or a filing agent's own identifier with no
+    company name in it at all (``tm1234567d1_ex99-1.htm``) - so match on the
+    alphanumeric-only form of the name rather than on a fixed pattern.
     """
     name = (filename or "").rsplit("/", 1)[-1].lower()
     if not name.endswith((".htm", ".html", ".txt")):
         return False
     squashed = re.sub(r"[^a-z0-9]", "", name)
-    # Written "ex991", "exx991" (a doubled x survives in UTHR's names),
-    # "exh991" as Gilead abbreviates it, or "exhibit991" in full.
+    # Written "ex991", "exx991" (a doubled x survives some filers' names),
+    # "exh991" where the word is abbreviated, or "exhibit991" in full.
     return bool(re.search(r"ex+(?:h(?:ibit)?)?9{2}", squashed))
 
 
@@ -109,24 +112,22 @@ def _instance_document(documents: list[str]) -> str | None:
 
     A filing's facts live in its instance document, and how that document is
     named changed with inline XBRL. Before it, the instance was a plain
-    ``uthr-20160930.xml`` beside the filing's HTML; after it, the HTML *is* the
-    instance and the filer ships an extracted copy as ``uthr-20250930_htm.xml``.
+    ``acme-20160930.xml`` beside the filing's HTML; after it, the HTML *is* the
+    instance and the filer ships an extracted copy as ``acme-20250930_htm.xml``.
 
     This selected on the ``_htm.xml`` spelling alone, so it saw the second and
     silently skipped the first - every filer's pre-2019 filings, discarded one
     at a time as "no instance". The comment here explained the resulting gap as
     the SEC's, saying a filing from before 2019 "yields an instance with no
-    product facts in it", and that is not true: Gilead's 2013 Q3 instance tags
-    twelve products on the ProductOrService axis and United Therapeutics' 2016
-    Q3 instance tags five. Neither was ever fetched.
+    product facts in it", and that is not true. Those instances tag products on
+    the ProductOrService axis; they were never fetched to find out.
 
     The anchor that works in both eras is the filing's own extension schema:
     the instance shares the ``.xsd``'s stem and the linkbases beside it
     (``_cal``, ``_def``, ``_lab``, ``_pre``) do not, so matching on the stem
     picks the instance without knowing the filer's ticker, the period, or which
-    era the filing belongs to. Every filing checked here carries one ``.xsd``;
-    the loop below does not rely on that, and takes the first stem that has an
-    instance beside it.
+    era the filing belongs to. A filing may carry more than one ``.xsd``, so the
+    loop takes the first stem that has an instance beside it.
     """
     names = [name for name in documents if name]
     available = set(names)
@@ -173,11 +174,11 @@ class SECConnector:
         title carries punctuation and a corporate suffix that a caller rarely
         reproduces, so both sides are normalized before comparing. What this
         must never do is return the nearest match - an unanchored substring
-        search made "United" resolve to an unrelated registrant, and every
-        figure taken from that company's filings would then have been attributed
-        to United Therapeutics with nothing downstream able to notice. Several
-        matches means the question was ambiguous, and the honest answer to an
-        ambiguous question is no answer.
+        search resolves a one-word query to whichever registrant happens to
+        contain it, and every figure taken from that company's filings would
+        then be attributed to the company that was asked for, with nothing
+        downstream able to notice. Several matches means the question was
+        ambiguous, and the honest answer to an ambiguous question is no answer.
         """
         if not ticker and not company_name:
             return None
@@ -216,8 +217,8 @@ class SECConnector:
         SEC returns 503 or 429 under load rather than a permanent error, and a
         single one costs a whole filing. It is worth distinguishing from a real
         failure: a document silently missing because of a rate limit reads
-        downstream as an issuer that discloses nothing, and moved three rows
-        between two runs of the same code while this had no retry at all.
+        downstream as an issuer that discloses nothing, so without a retry the
+        same code answers differently from one run to the next.
         """
         delay = 1.0
         for attempt in range(attempts):
@@ -353,8 +354,8 @@ class SECConnector:
 
         # The budget counts filings, not exhibits, because a filing is a
         # quarter and its exhibits are one disclosure split across documents.
-        # Counting exhibits truncated mid-filing: Johnson & Johnson files two
-        # EX-99s per 8-K, so a budget of six exhibits buys three quarters and
+        # Counting exhibits truncates mid-filing: where a filer attaches two
+        # EX-99s to each 8-K, a budget of six exhibits buys three quarters and
         # spends its last on a press release while leaving behind the
         # product-sales schedule that belongs with it.
         sources: list[RetrievedSource] = []
@@ -383,8 +384,8 @@ class SECConnector:
             # Every exhibit, not the first one. An issuer that separates its
             # press release from its schedules puts the prose in EX-99.1 and the
             # product-level sales in EX-99.2, and taking one exhibit per filing
-            # takes the wrong one: Johnson & Johnson's EX-99.1 carries no table
-            # at all while its EX-99.2 carries twenty-two. Nothing in the
+            # takes the wrong one: such a release carries no table at all while
+            # the schedule beside it carries every product. Nothing in the
             # numbering says which is which, so the way to not choose wrongly is
             # not to choose - reading an exhibit that holds no product table
             # costs a parse, and skipping the one that does costs the quarter.
@@ -464,12 +465,11 @@ class SECConnector:
         is the only route to a figure the filer has stated rather than printed.
 
         It reaches back only as far as the filer's own tagging does, and that is
-        a per-filer fact rather than a date: Gilead tags twelve products on the
-        ProductOrService axis in its 2013 Q3 instance and United Therapeutics
-        five in its 2016 Q3 one, while United Therapeutics' 2010 Q3 instance
-        carries no product axis at all. Nothing here needs to know when each
-        filer started - the reader simply finds nothing, which is the correct
-        answer for a filing that has nothing.
+        a per-filer fact rather than a date: one filer breaks its products out
+        on the ProductOrService axis years before another does, and the same
+        filer's earlier instances carry no product axis at all. Nothing here
+        needs to know when each filer started - the reader simply finds nothing,
+        which is the correct answer for a filing that has nothing.
 
         What did need fixing was reaching the instance in the first place; see
         `_instance_document`.

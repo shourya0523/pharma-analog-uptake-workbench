@@ -78,7 +78,7 @@ def test_the_instance_reader_consults_the_register_through_resolve():
     `candidates_from_instance` did its own `register.get((issuer, member))`,
     so it saw only members spelled exactly as the register wrote them. The
     register is largely built from the bulk extracts, which spell a member
-    without its prefix or its "Member" suffix, and the mismatch cost Complera
+    without its prefix or its "Member" suffix, and the mismatch cost a product
     every sampled quarter on this path while the bulk path had all of them.
     """
     import inspect

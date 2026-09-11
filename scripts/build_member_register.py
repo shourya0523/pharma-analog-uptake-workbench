@@ -1,9 +1,9 @@
 """Build the register that maps a filer's XBRL member names to our products.
 
-An axis member is a private invention - ``uthr:TyvasoDPIMember``,
-``gild:HIVProductsBiktarvyMember`` - and there is no central registry of them.
-This walks the issuers we track, collects every member they tag revenue on, and
-resolves each one:
+An axis member is a private invention - ``acme:CalderonXRMember``,
+``beta:RespiratoryProductsNuVessaMember`` - and there is no central registry of
+them. This walks the issuers we track, collects every member they tag revenue
+on, and resolves each one:
 
     string rules   whole-word matching, longest wins (app/extraction/members.py)
     a model        only for what the rules cannot place
@@ -19,7 +19,7 @@ than the only way it can ever grow.
     SEC_CONTACT='project you@example.com' python scripts/build_member_register.py
     SEC_CONTACT='...' python scripts/build_member_register.py --no-llm
     SEC_CONTACT='...' python scripts/build_member_register.py \
-        --issuer 'Bayer=1144967' --product Nubeqa
+        --issuer 'Acme Pharma=1234567' --product Calderon
 
 A member left unresolved is re-asked when the candidate list changes, because a
 decision that nothing matched was only ever about the list it was shown.

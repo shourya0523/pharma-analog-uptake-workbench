@@ -87,11 +87,10 @@ _PAIRING_RE = re.compile(r"\brespectively\b", re.IGNORECASE)
 # footnote mark that may follow it belongs to the sentence rather than to
 # the next one. Requiring whitespace *immediately* after the terminator
 # meant a paragraph ending `studies.”` never split, so a sentence naming a
-# product ran on into the one after it: United Therapeutics' 2005 release
-# mentions Remodulin in a sentence about clinical trials and states total
-# company revenues in the next, and the reader paired the product from one
-# with the amount from the other, which reads high because a company total is
-# larger than any one product in it.
+# product ran on into the one after it: a release mentions a product in a
+# sentence about clinical trials and states total company revenues in the next,
+# and the reader paired the product from one with the amount from the other,
+# which reads high because a company total is larger than any one product in it.
 _SENTENCE_SPLIT_RE = re.compile(r"(?<=[.;])[\"'\u201d\u2019)\]]*\s+")
 
 
@@ -176,9 +175,9 @@ def _amounts_with_positions(sentence: str) -> list[tuple[int, tuple[float, str, 
             unit = _MAGNITUDE_TO_UNIT[magnitude.lower()]
         else:
             # An amount too small to print in millions is written out in full:
-            # United Therapeutics reported Remodulin's first quarter on sale as
-            # "$205,000". Without this the figure is invisible and the quarter
-            # looks unreported rather than small.
+            # a product's first quarter on sale is reported as "$205,000".
+            # Without this the figure is invisible and the quarter looks
+            # unreported rather than small.
             #
             # Two conditions keep this from swallowing every bare number in a
             # filing: a currency symbol must be attached, and the amount must be
@@ -251,8 +250,8 @@ def _named_products(sentence: str, catalog: Iterable[str]) -> set[str]:
     """Which tracked products a sentence names.
 
     Names are matched as whole words and the longest wins where two overlap: a
-    sentence saying "Tyvaso DPI" names that product, and is not evidence that
-    it also names Tyvaso. This is the rule the XBRL member register already
+    sentence saying "Calderon XR" names that product, and is not evidence that
+    it also names Calderon. This is the rule the XBRL member register already
     resolves by, for the same reason - a shorter product name sits inside a
     longer one far more often than it is a second product.
     """
@@ -297,10 +296,11 @@ def read_prose(
     The third of those was missing, and it is the same principle as the other
     two. A sentence was accepted whenever an alias appeared anywhere in it, so
     a sentence naming two products answered a question about either of them
-    with the same figure: Tyvaso DPI's first quarter on sale, $3.0m, and
-    nebulized Tyvaso's $198.0m, were both read as 42.2. A sentence covering two
-    products has not said which one its amount belongs to, exactly as a
-    sentence carrying two amounts has not said which period each belongs to.
+    with the same figure: a sentence stating a new formulation's first quarter
+    on sale beside the established formulation's answered both with whichever
+    amount it found. A sentence covering two products has not said which one its
+    amount belongs to, exactly as a sentence carrying two amounts has not said
+    which period each belongs to.
 
     ``catalog`` is what to count as a product, defaulting to the ones this
     pipeline tracks. Ambiguity is a property of the sentence against the things

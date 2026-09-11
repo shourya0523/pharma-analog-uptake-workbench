@@ -44,7 +44,7 @@ class Settings(BaseSettings):
     llm_skip_judge_when_deterministic: bool = True
     llm_max_extract_sources: int = 6
     # Independent-search judging of product profile fields. Source registries carry
-    # errors (openFDA lists Tyvaso, an inhaled product, as ORAL), so cited fields are
+    # errors (openFDA gives an inhaled product's route as ORAL), so cited fields are
     # challenged rather than passed through.
     enable_profile_judge: bool = True
     # 0 = judge every content field (no cap). Positive values keep an optional budget.

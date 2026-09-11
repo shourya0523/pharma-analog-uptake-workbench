@@ -165,12 +165,10 @@ def _year_near(text: str, end: int) -> int | None:
 
 # The other way a filing names its period. "Three months ended June 30, 2024" is
 # a US convention; outside it, the same span is written "Q2 2024" and the phrase
-# above never appears. In one exhibit each from Novartis, Sanofi and Novo
-# Nordisk the quarter form appears 62, 55 and 59 times and "months ended" not
-# once; across the 25 exhibits `seed/holdout2` cites, none was datable by the
-# phrase and all 25 are datable by the quarter form - which is
-# what `fingerprint` refuses on, and what left the model reader guessing the
-# quarter for figures it had read correctly.
+# above never appears. A filing written that way states the quarter form on
+# every schedule and "months ended" nowhere, so it is not datable by the phrase
+# at all - which is what `fingerprint` refuses on, and what left the model
+# reader guessing the quarter for figures it had read correctly.
 #
 # A bare four-digit year is required, never "FY2026". A filer that writes its
 # year that way usually has a fiscal year that is not the calendar one, and the

@@ -8,8 +8,8 @@ within half a million of the truth whether it reads 30 or 3,000.
 That got it wrong in both directions at once. Against a derived fourth quarter
 and the issuer's own printed one, both a million apart by construction:
 
-    Descovy   538 vs 537   old allowance 2.69   too loose to catch a real gap
-    Stribild   30 vs  29   old allowance 0.15   tight enough to invent one
+    a large product   538 vs 537   old allowance 2.69   too loose to catch a gap
+    a small one        30 vs  29   old allowance 0.15   tight enough to invent one
 
 Where the datapoints declare their precision it is now summed and used. Where
 any of them does not - a table cell has no equivalent of XBRL's `decimals` -
@@ -26,7 +26,7 @@ HALF_A_MILLION = 0.5
 
 def _point(period, value, *, period_type="quarterly", uncertainty=None, layout="a"):
     return Datapoint(
-        product_label="Descovy",
+        product_label="Cordexa",
         period=period,
         period_type=period_type,
         value_normalized_usd_millions=value,
@@ -47,7 +47,7 @@ def _codes(findings):
 
 class TestTwoReadingsOfOnePeriod:
     def test_a_small_product_no_longer_conflicts_with_its_own_rounding(self):
-        """Stribild: 30 derived (+/-2) against 29 printed (+/-0.5).
+        """A small product: 30 derived (+/-2) against 29 printed (+/-0.5).
 
         The old allowance was 0.5% of 30, or 0.15, so a gap rounding fully
         explains was reported as an error at severity `error`.
@@ -59,7 +59,7 @@ class TestTwoReadingsOfOnePeriod:
         assert _codes(conflicting_values(points)) == []
 
     def test_a_large_product_now_catches_a_gap_the_fraction_waved_through(self):
-        """Two exhibit readings of Descovy, each to the nearest million.
+        """Two exhibit readings of one product, each to the nearest million.
 
         They can differ by at most one million and agree. Two apart is a real
         disagreement - and 0.5% of 538 is 2.69, so it used to pass.

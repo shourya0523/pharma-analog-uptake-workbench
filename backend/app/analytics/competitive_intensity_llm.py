@@ -175,9 +175,9 @@ def compare_to_rule(
 def peers_at_launch(profiles: list[dict[str, Any]], target: dict[str, Any]) -> list[Peer]:
     """The roster a product actually faced: same indication, approved earlier.
 
-    Formulation splits are excluded for the same reason the gold rule excludes
-    them - Nebulized Tyvaso is Tyvaso's own approval recorded twice, so showing
-    the model both would misstate the market.
+    Formulation splits are excluded for the same reason the benchmark rule
+    excludes them - Nebulized Calderon is Calderon's own approval recorded
+    twice, so showing the model both would misstate the market.
     """
     return [
         Peer(

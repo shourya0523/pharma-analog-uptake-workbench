@@ -6,10 +6,9 @@ the row yields nothing and records why, rather than emitting a value attributed
 to a period it may not belong to.
 
 That rule exists because the alignment step is where a wrong number looks most
-right. Merck's schedule dropped a "-" where a prior-year comparative belonged;
-anything that silently shifted the remaining numbers left would have booked a
-full-year total as a fourth-quarter figure - which is precisely the defect the
-gold audit found.
+right. A schedule drops a "-" where a prior-year comparative belongs, and
+anything that silently shifts the remaining numbers left then books a full-year
+total as a fourth-quarter figure.
 """
 
 from __future__ import annotations
@@ -230,8 +229,9 @@ def cell_number(cell: str | None) -> float | None:
         return None
     # A dash standing alone in a value column is nil, and reads as the zero it
     # means. Treating it as "no number here" makes a line that sold nothing
-    # everywhere - Atripla in Europe in 2007, every comparative column of a
-    # product's first quarter - look like a heading with no figures, so the
+    # everywhere - a product not yet launched in a region, every comparative
+    # column of a product's first quarter - look like a heading with no
+    # figures, so the
     # label is carried onto the next product and the line stops counting
     # towards its own total.
     if text in _NIL_CELLS:
@@ -289,9 +289,9 @@ def read_values_by_column(
 def _names_the_product(label: str, product: str, generic: str | None) -> bool:
     """Whether this row is the product itself rather than one of its lines.
 
-    "Tyvaso" is the product; "Tyvaso DPI" and "Harvoni - Japan" are lines within
-    or beside it. Both match the product's aliases, and the difference between
-    them is that one label is the name and nothing else.
+    "Calderon" is the product; "Calderon XR" and "Calderon - Japan" are lines
+    within or beside it. Both match the product's aliases, and the difference
+    between them is that one label is the name and nothing else.
     """
     words = lambda text: re.sub(r"[^a-z0-9 ]", " ", (text or "").lower()).split()
     return words(label) in ([words(product)] + ([words(generic)] if generic else []))
@@ -302,8 +302,9 @@ def _regroup(assigned: dict[int, float], period_of) -> dict[object, float]:
 
     Two columns can state the same period. A filer prints the currency symbol in
     its own cell on the first line of a block and leaves it off the lines below,
-    so "Harvoni - U.S." carries its figure one column to the right of "Harvoni -
-    Europe" while both are the same quarter. Adding the components up by column
+    so "Calderon - U.S." carries its figure one column to the right of
+    "Calderon - Europe" while both are the same quarter. Adding the components
+    up by column
     then compares the U.S. line against nothing and the rest against a total
     they cannot reach, and the table is refused for having no total when the
     total is printed directly beneath it.
@@ -359,9 +360,9 @@ def _resolve_matches(
     * one row names the product and nothing else - that row is the product;
     * otherwise a row whose value is the sum of the others, in every period, is
       the total the components add to. It may be one of the matched rows
-      ("Total Harvoni") or the unlabelled line printed beneath them, which is
-      how Gilead files it. The arithmetic is what identifies it, so no list of
-      region names is involved and an issuer inventing a new region changes
+      ("Total Calderon") or the unlabelled line printed beneath them, which is
+      how some filers write it. The arithmetic is what identifies it, so no list
+      of region names is involved and an issuer inventing a new region changes
       nothing;
     * otherwise the table has several lines for this product and no total, and
       which one is the product's revenue is exactly what has not been said.
@@ -436,9 +437,9 @@ def read_table(
     one the headings covering its column state; without it the ragged rows are
     all there is and the columns have to be inferred.
 
-    A rectangle can still fail to describe the table it came from - Gilead's
-    press release spans "2021" over three columns while its product rows write
-    figures in two of them and 2020's figure in the third. The body says so
+    A rectangle can still fail to describe the table it came from - a press
+    release spans "2021" over three columns while its product rows write figures
+    in two of them and 2020's figure in the third. The body says so
     itself: a row puts two of its figures under one period, which cannot happen
     where the headings and the figures share columns. One such row condemns the
     reading for the whole table, not just for itself, because the rows that did
@@ -539,9 +540,9 @@ def _read_table(
             continue
         if not any(cell_number(cell) is not None for _column, cell in cells[1:]):
             # A label with no figures beside it heads the rows below rather than
-            # stating anything itself. Johnson & Johnson prints the product that
-            # way - "DARZALEX" alone, then "US", "Intl", "WW" beneath it - so
-            # the rows carrying the numbers never name the product at all.
+            # stating anything itself. A filer prints the product that way -
+            # "CALDERON" alone, then "US", "Intl", "WW" beneath it - so the
+            # rows carrying the numbers never name the product at all.
             section = (position, label)
             continue
         scoped, start = label, position
