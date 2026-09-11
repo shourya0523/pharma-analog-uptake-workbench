@@ -35,6 +35,7 @@ from app.domain.models import (
 from app.export.builder import ExportBuilder, TemplateMapper
 from app.jobs.handler import handle_job
 from app.jobs.queue import get_job_queue
+from app.jobs.run_status import refresh_run_status
 from app.logging_setup import configure_logging
 from app.observability import (
     TABLE_REGISTRY,
@@ -122,6 +123,11 @@ def recover_stranded_jobs(db: Session, queue) -> tuple[int, int]:
             job.error = "server restarted while this job was running"
             abandoned += 1
     db.commit()
+    # A run whose last unfinished job was just abandoned is over, and nothing
+    # else will say so: the handler that settles a run's status only runs
+    # when a job it owned finishes.
+    for run_id in {job.run_id for job in stranded if job.status == JobStatus.FAILED.value}:
+        refresh_run_status(db, run_id)
     return requeued, abandoned
 
 

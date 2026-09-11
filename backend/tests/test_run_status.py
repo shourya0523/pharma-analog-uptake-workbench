@@ -94,3 +94,12 @@ def test_a_restart_requeues_what_was_waiting_and_owns_up_to_what_was_running():
     assert db.get(DrugJobORM, midway.id).status == JobStatus.FAILED.value
     assert "restarted" in db.get(DrugJobORM, midway.id).error
     assert db.get(DrugJobORM, done.id).status == JobStatus.READY_FOR_REVIEW.value
+    # The requeued job keeps this run open; a run with nothing left to run is
+    # settled at once, or it would read "running" for ever.
+    assert db.get(ExtractionRunORM, run.id).status == "running"
+    over = ExtractionRunORM(id=new_id(), status="running", options_json={})
+    only = DrugJobORM(id=new_id(), run_id=over.id, drug_name="Calderon XR",
+                      status=JobStatus.RUNNING.value, quality_flags=[])
+    db.add_all([over, only]); db.commit()
+    asyncio.run(go())
+    assert db.get(ExtractionRunORM, over.id).status == "failed"
