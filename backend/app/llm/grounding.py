@@ -13,7 +13,7 @@ def quote_is_verbatim(quote: str, source_text: str, *, min_len: int = 8) -> bool
     """True if quote appears in source_text (exact or whitespace-normalized)."""
     q = (quote or "").strip()
     if len(q) < min_len:
-        # Very short quotes like "Adcirca 6.7" — still require exact or normalized containment
+        # Very short quotes like "Calderon 6.7" — still require exact or normalized containment
         if not q:
             return False
         if q in (source_text or ""):

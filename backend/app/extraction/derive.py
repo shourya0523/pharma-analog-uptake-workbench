@@ -4,11 +4,12 @@ Reading every number a filing prints still leaves gaps, because issuers do not
 print every quarter. Two patterns account for most of them:
 
 * A fourth quarter is often never stated on its own. The issuer reports three
-  quarters and then a full year, and Q4 is the difference. United Therapeutics
-  disclosed Remodulin this way for seven straight years.
+  quarters and then a full year, and Q4 is the difference. An issuer can report
+  a product this way for years on end.
 * Before a product line splits into formulations, the family total *is* the one
-  formulation on sale: Tyvaso was nebulized-only until the DPI inhaler
-  launched, so every family figure before that is also the nebulized figure.
+  formulation on sale: a product sold in a single form until a second one
+  launches, so every family figure before that launch is also the first form's
+  figure.
 
 Both are exact arithmetic over values already extracted, not estimates, so they
 carry the same confidence as a directly reported number - but they are marked
@@ -95,7 +96,7 @@ def complete_quarters_from_totals(
     the earlier ones predate the product - they are structurally absent, not
     missing data. Without this the launch year always looks under-determined
     (two quarters unaccounted for rather than one) and never derives, which is
-    why Remodulin's 2002Q4 stayed a gap even though its full-year total was
+    why a launch year's Q4 stays a gap even though its full-year total is
     cited. Pass it only when the start is actually known; the default keeps the
     stricter all-four-quarters rule.
     """
@@ -216,9 +217,9 @@ def assemble_split_ownership_quarter(
 
     When a company is acquired mid-quarter, neither issuer reports the whole
     quarter: the seller's last schedule stops at the closing date and the
-    buyer's first one starts there. Johnson & Johnson closed its Actelion
-    acquisition on 16 June 2017, so Uptravi's and Opsumit's 2017Q2 exist only
-    as an April 1 - June 15 figure plus a June 16 onwards one.
+    buyer's first one starts there. An acquisition closing on 16 June leaves
+    that quarter stated only as an April 1 - June 15 figure plus a June 16
+    onwards one.
 
     This is not the residual arithmetic the rest of this module does, and it is
     deliberately stricter about what it will add. Two numbers are easy to
@@ -388,9 +389,10 @@ def complete_series(
         }
         for point in derived
         # A quarter that derives to nothing is not a quarter the issuer left
-        # implicit. It is a total that does not cover the year: J&J's first
-        # Actelion year states only the months it owned the products, so
-        # subtracting the quarters it did report leaves zero where 224 was.
-        # Negative is impossible, and zero here has always been that.
+        # implicit. It is a total that does not cover the year: an acquirer's
+        # first year with a product states only the months it owned it, so
+        # subtracting the quarters it did report leaves zero where a real
+        # figure belongs. Negative is impossible, and zero here has always
+        # been that.
         if (point.value_normalized_usd_millions or 0) > 0
     ]

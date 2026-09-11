@@ -15,20 +15,20 @@ from app.extraction.process import Datapoint, normalize_all
 from app.parsing.documents import flatten_grid, html_table_grid
 from bs4 import BeautifulSoup
 
-UTHR_THOUSANDS = [
+EXHIBIT_IN_THOUSANDS = [
     ["", "Three Months Ended September 30,", "", "", ""],
     ["(in thousands)", "2015", "2014", "% Change", ""],
     ["Tyvaso ®", "121,718", "119,685", "1.7", "%"],
 ]
 
 # Same issuer, same exhibit layout, one year later - stated in millions.
-UTHR_MILLIONS = [
+EXHIBIT_IN_MILLIONS = [
     ["", "Three Months Ended September 30,", "", "", ""],
     ["($ in millions)", "2016", "2015", "% Change", ""],
     ["Tyvaso ®", "101.8", "121.7", "(16.4", ")%"],
 ]
 
-MERCK_QUARTER_AND_YTD = [
+QUARTER_AND_YTD = [
     ["($ in millions)", "Three Months Ended June 30,", "", "Six Months Ended June 30,", ""],
     ["", "2024", "2023", "2024", "2023"],
     ["Winrevair", "70", "-", "70", "-"],
@@ -37,8 +37,8 @@ MERCK_QUARTER_AND_YTD = [
 
 def test_unit_comes_from_the_table_not_the_filing_date():
     """The 2016 exhibit says millions; nothing may assume otherwise."""
-    thousands = build_fingerprint(UTHR_THOUSANDS)
-    millions = build_fingerprint(UTHR_MILLIONS)
+    thousands = build_fingerprint(EXHIBIT_IN_THOUSANDS)
+    millions = build_fingerprint(EXHIBIT_IN_MILLIONS)
 
     assert thousands.unit_label == "thousands"
     assert thousands.unit_scale_to_millions == 0.001
@@ -175,8 +175,8 @@ def test_a_currency_between_in_and_the_magnitude_is_still_a_declaration():
 
 def test_reported_values_normalize_to_the_same_scale_across_a_unit_change():
     """Both exhibits land near $100M; neither quarter becomes $0.1M."""
-    thousands = normalize_all(read_table(UTHR_THOUSANDS, product="Tyvaso").values)
-    millions = normalize_all(read_table(UTHR_MILLIONS, product="Tyvaso").values)
+    thousands = normalize_all(read_table(EXHIBIT_IN_THOUSANDS, product="Tyvaso").values)
+    millions = normalize_all(read_table(EXHIBIT_IN_MILLIONS, product="Tyvaso").values)
 
     from_thousands = {p.period: p.value_normalized_usd_millions for p in thousands}
     from_millions = {p.period: p.value_normalized_usd_millions for p in millions}
@@ -189,8 +189,8 @@ def test_reported_values_normalize_to_the_same_scale_across_a_unit_change():
 
 
 def test_year_to_date_column_is_never_emitted_as_a_quarter():
-    """Merck's six-month column sits beside the quarter and must stay YTD."""
-    readout = read_table(MERCK_QUARTER_AND_YTD, product="Winrevair")
+    """A six-month column sits beside the quarter and must stay YTD."""
+    readout = read_table(QUARTER_AND_YTD, product="Winrevair")
     by_period = {(v.period, v.period_type): v.value_as_reported for v in readout.values}
 
     assert by_period[("2024Q2", "quarterly")] == 70.0
@@ -198,7 +198,7 @@ def test_year_to_date_column_is_never_emitted_as_a_quarter():
     assert not any(v.period_type == "quarterly" and v.period == "2024" for v in readout.values)
 
     candidates, _, _ = extract_revenue_candidates(
-        [MERCK_QUARTER_AND_YTD], product="Winrevair"
+        [QUARTER_AND_YTD], product="Winrevair"
     )
     # The six-month figure comes through - a fourth quarter is derived by
     # subtracting from a total, so withholding totals is what loses Q4 - but it
@@ -218,8 +218,8 @@ def test_year_to_date_column_is_never_emitted_as_a_quarter():
 def test_dash_holds_its_column_so_later_values_do_not_shift_left():
     """A printed dash is a column, not an absence.
 
-    Collapsing it is the mechanism that moved Merck's 2024 figures one quarter
-    left and booked the full-year total as Q4.
+    Collapsing it is the mechanism that moves a schedule's figures one quarter
+    left and books the full-year total as Q4.
     """
     assert tokenize_row(["70", "-", "70", "-"]) == [70.0, None, 70.0, None]
 
@@ -270,7 +270,7 @@ def test_check_catches_a_thousandfold_scale_break():
 
 
 def test_check_catches_a_total_recorded_as_a_quarter():
-    """Q1-Q4 that sum to twice the stated annual total is the Merck defect."""
+    """Q1-Q4 that sum to twice the stated annual total is the column defect."""
     points = [
         _point("2024Q1", 70),
         _point("2024Q2", 149),
@@ -440,10 +440,10 @@ def test_prose_reads_a_full_year_total():
 def test_prose_pairs_quarter_and_year_to_date_when_the_sentence_says_respectively():
     """The most common issuer construction of all, and it is not ambiguous.
 
-    Merck states Winrevair as "$336 million and $615 million in the second
+    An issuer states a product as "$336 million and $615 million in the second
     quarter and first six months of 2025, respectively" every quarter. Refusing
-    it as multi-period left a whole product unreadable even though the sentence
-    states the correspondence outright. Neither half matches the single-period
+    it as multi-period leaves a whole product unreadable even though the
+    sentence states the correspondence outright. Neither half matches the single-period
     patterns either: the quarter's year only appears after the second phrase.
     """
     from app.extraction.prose import read_prose
@@ -491,8 +491,8 @@ def test_prose_pairing_refuses_a_mismatched_count():
 def test_launch_year_total_covers_only_quarters_since_launch():
     """A product's first year has no pre-launch quarters to account for.
 
-    Remodulin went on sale in 2002Q2, so United Therapeutics' full-year 2002
-    total is Q2 + Q3 + Q4. Requiring all four quarters made the launch year look
+    A product goes on sale in 2002Q2, so its full-year 2002 total is
+    Q2 + Q3 + Q4. Requiring all four quarters made the launch year look
     under-determined - two "missing" quarters instead of one - so it never
     derived, even though the annual figure was cited.
     """
@@ -525,7 +525,7 @@ def test_a_total_from_before_launch_derives_nothing():
 def test_a_geography_column_table_is_refused_not_read_as_periods():
     """The dangerous near-miss: columns that look like periods but are places.
 
-    Merck's XBRL product table splits each year into U.S. / Int'l / Total, so
+    An XBRL product table splits each year into U.S. / Int'l / Total, so
     the row reads "- | 55 | 55 | - | 56 | 56" - six numbers, none of which is a
     quarter. Aligned against the usual convention the first column would be
     read as the current quarter, turning a U.S. figure of nothing into the
@@ -544,8 +544,8 @@ def test_a_geography_column_table_is_refused_not_read_as_periods():
 def test_a_geography_row_table_still_reads_normally():
     """The shape that does work, kept beside the one that does not.
 
-    J&J writes one row per geography and keeps periods in the columns, so
-    "OPSUMIT | U.S. | 373 | 328 | 729 | 601" is quarter, prior-year quarter,
+    A filer writes one row per geography and keeps periods in the columns, so
+    "CALDERON | U.S. | 373 | 328 | 729 | 601" is quarter, prior-year quarter,
     year-to-date, prior year-to-date - the ordinary convention, and readable.
     The distinction is what the row varies across, not whether a geography is
     named in it.
@@ -560,9 +560,9 @@ def test_a_quarter_split_by_an_acquisition_is_assembled_from_dated_parts():
     """The one quarter shape no single filing reports.
 
     When a company changes hands mid-quarter the seller's last schedule stops
-    at the closing date and the buyer's first one starts there. Opsumit's and
-    Uptravi's 2017Q2 exist only as two partial figures, and adding them is only
-    safe if the parts are known to tile the quarter.
+    at the closing date and the buyer's first one starts there. The acquired
+    products' 2017Q2 exists only as two partial figures, and adding them is
+    only safe if the parts are known to tile the quarter.
     """
     from app.extraction.derive import assemble_split_ownership_quarter
 
@@ -767,7 +767,7 @@ def test_rounding_between_a_total_and_its_own_parts_is_never_a_contradiction():
     """
     from app.extraction.adjudicate import adjudicate_total_against_parts
 
-    # Merck's real 2025 Adempas: stated nine months 229, quarters sum 230.
+    # Real figures from a filing: stated nine months 229, quarters sum 230.
     verdict = adjudicate_total_against_parts(
         229, {"Q1": 68, "Q2": 80, "Q3": 82}, expected_parts=3
     )
@@ -786,9 +786,9 @@ def test_rounding_between_a_total_and_its_own_parts_is_never_a_contradiction():
 # Everything above reads ragged rows and has to infer which column is which.
 # These read the same tables as rectangles, where the headings say it outright.
 
-# Gilead splits one heading over two rows - "Three Months Ended" then
+# A filer splits one heading over two rows - "Three Months Ended" then
 # "March 31," - and spans the years beneath it.
-GILEAD_EXHIBIT = """
+SPLIT_HEADING_EXHIBIT = """
 <table>
   <tr><td></td><td></td><td colspan="7">Three Months Ended</td></tr>
   <tr><td></td><td></td><td colspan="7">March 31,</td></tr>
@@ -823,7 +823,7 @@ def test_a_heading_split_across_rows_is_one_statement_again():
     the column widths make them. Reading the heading a row at a time finds no
     period in either line and refuses a table that says exactly what it means.
     """
-    grid, readout = read_exhibit(GILEAD_EXHIBIT, "Harvoni")
+    grid, readout = read_exhibit(SPLIT_HEADING_EXHIBIT, "Harvoni")
     ragged = read_table(flatten_grid(grid), product="Harvoni", context="(in millions)")
     expected = {("2016Q1", 1407.0), ("2015Q1", 3016.0)}
     assert {(value.period, value.value_as_reported) for value in readout.values} == expected
@@ -853,7 +853,7 @@ def test_a_change_column_is_not_revenue():
 # The shape that shows a rectangle can be built and still describe nothing: the
 # year spans three columns while the rows beneath write figures in two of them,
 # so which column holds 2020 depends on which row you look at. Real, from a
-# Gilead press release; the names here are invented.
+# press release; the names here are invented.
 HEADINGS_OUT_OF_STEP_WITH_THE_BODY = """
 <table>
   <tr><td colspan="9">(in millions)</td></tr>
@@ -911,8 +911,9 @@ def test_a_heading_carries_forward_only_when_it_ends_mid_phrase():
 
 # --- One product, several lines ---------------------------------------------
 #
-# Gilead reports Harvoni by region and prints the worldwide figure as the sum
-# beneath. Every one of those lines names Harvoni, and gold's number is the sum.
+# A filer reports a product by region and prints the worldwide figure as the
+# sum beneath. Every one of those lines names the product, and the figure that
+# answers for it is the sum.
 
 REGIONAL_LINES = [
     ["($ in millions)", "Three Months Ended June 30,", ""],

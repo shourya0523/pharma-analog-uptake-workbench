@@ -12,9 +12,9 @@ distinction that matters downstream:
   so is a quarter whose two halves overlap, because the overlap has been
   counted twice and no arithmetic removes it.
 * ``needs_review`` - more than one defensible answer exists, and choosing
-  between them is a judgement a person should make. J&J's 2024 Opsumit year is
-  2,184 on the standalone line and 2,225 on the combined OPSUMIT / OPSYNVI line
-  it was restated onto. Both are true. Which one belongs in a series depends on
+  between them is a judgement a person should make. A product's year is one
+  figure on its own standalone line and another on the combined line it was
+  later restated onto. Both are true. Which one belongs in a series depends on
   what the series is for, and a pipeline that silently picks one has answered a
   question nobody asked.
 
@@ -22,8 +22,8 @@ The rule these follow, and the reason the thresholds below are as loose as they
 are: a verdict other than ``resolved`` is a claim about the *documents*, never
 about the pipeline's confidence. Issuers round each published period
 independently, so a stated nine-month figure and the sum of its own quarters
-routinely differ by 1 - Merck's 2025 Adempas does. That is not a contradiction
-and must not be reported as one. Anything this module flags should be something
+routinely differ by 1. That is not a contradiction and must not be reported as
+one. Anything this module flags should be something
 a careful analyst reading the same pages would also stop at.
 
 ``test_no_real_gold_row_needs_review`` runs every quarter in ``seed/gold``
@@ -68,8 +68,8 @@ def rounding_tolerance(part_count: int) -> float:
 
     Each published period is rounded on its own, so a total and its parts can
     each be off by half a unit in either direction. With three quarters against
-    a stated nine months that is two units of slack, which is what lets Merck's
-    229-against-230 Adempas pass as the rounding it is.
+    a stated nine months that is two units of slack, which is what lets a
+    229-against-230 disagreement pass as the rounding it is.
 
     Deliberately generous. A tighter bound would make this module report the
     ordinary arithmetic of rounded financial statements as a defect, and a
@@ -205,8 +205,8 @@ def adjudicate_positional_solutions(
     period. Usually exactly one does.
 
     Sometimes more than one does, and it is not a near miss - it happens when
-    the same number genuinely appears in two rows. Opsumit's 2021Q3 worldwide
-    figure is 458, and 458 is also the International nine-month figure in the
+    the same number genuinely appears in two rows. A product's worldwide
+    quarter is 458, and 458 is also the International nine-month figure in the
     same block; with one period to constrain three unknowns, both rows explain
     it perfectly. Picking the requested scope because it is the one asked for
     would be assuming the answer: the whole point of solving for the row is not

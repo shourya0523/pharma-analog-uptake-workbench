@@ -5,11 +5,11 @@ violate, so a violation means the extraction is wrong even when no source was
 misread in an obvious way. Each check corresponds to a defect class these
 numbers have shown:
 
-* ``quarters_sum_to_period_total`` - Merck's 2024 schedule listed Q2-Q4 plus the
-  full year; reading it as Q1-Q4 booked the annual total as a quarter. Summing
-  quarters against their own stated total catches that immediately.
-* ``scale_continuity`` - United Therapeutics' exhibits switched from thousands
-  to millions mid-2016; a run of quarters 1000x off its neighbours is the
+* ``quarters_sum_to_period_total`` - a schedule listing Q2-Q4 plus the full
+  year, read as Q1-Q4, books the annual total as a quarter. Summing quarters
+  against their own stated total catches that immediately.
+* ``scale_continuity`` - an issuer's exhibits switch from thousands to millions
+  partway through a series; a run of quarters 1000x off its neighbours is the
   signature of a unit that was assumed rather than read.
 * ``value_supported_by_quote`` - a number that does not appear in the text cited
   for it was produced by the reader, not the issuer.

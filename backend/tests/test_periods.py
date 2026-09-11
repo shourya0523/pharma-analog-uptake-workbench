@@ -105,14 +105,14 @@ def test_unusable_labels_return_none():
     assert normalize_period(None) is None
 
 
-# Two headings taken verbatim from Gilead earnings exhibits, flattened the way
-# the document parser flattens them. Both used to date the document wrongly.
-GILEAD_SPLIT_HEADING = (
+# Two headings taken verbatim from earnings exhibits, flattened the way the
+# document parser flattens them. Both used to date the document wrongly.
+SPLIT_HEADING = (
     "Three Months Ended\nJune 30,\nSix Months Ended\nJune 30,\n"
     "2007\n2006\n2007\n2006\nHIV products:\nTruvada - U.S.\n186,256\n207,738"
 )
 
-GILEAD_Q4_WITH_FOOTNOTES = (
+Q4_WITH_FOOTNOTES = (
     "Three months ended\nDecember 31,\nYear ended\nDecember 31,\n"
     "2005\n2004\n2005\n2004\nAmBisome\n55,596\n55,025\n"
     # The comparative year is named more often than the reporting year, which
@@ -132,7 +132,7 @@ def test_a_heading_split_across_lines_still_dates_the_document():
     to be dated by its year-to-date heading instead, which is how a quarterly
     exhibit came to describe itself as a half-year one.
     """
-    context = detect_period_context(GILEAD_SPLIT_HEADING)
+    context = detect_period_context(SPLIT_HEADING)
     assert context is not None
     assert context.months == 3
     assert (context.year, context.quarter) == (2007, 2)
@@ -141,7 +141,7 @@ def test_a_heading_split_across_lines_still_dates_the_document():
 
 def test_the_reporting_year_wins_over_a_more_repeated_comparative():
     """A comparative year is earlier, however often the footnotes name it."""
-    context = detect_period_context(GILEAD_Q4_WITH_FOOTNOTES)
+    context = detect_period_context(Q4_WITH_FOOTNOTES)
     assert context is not None
     assert (context.months, context.year, context.quarter) == (3, 2005, 4)
 
@@ -149,12 +149,11 @@ def test_the_reporting_year_wins_over_a_more_repeated_comparative():
 def test_a_filing_covering_two_spans_is_dated_by_its_quarter():
     """"three and six months ended" names two spans, and the quarter is the one.
 
-    Matching a single span word here read only the second of them, so Pfizer's
-    second-quarter exhibit was dated 2026H1 and its third-quarter one 2026M9.
-    The preference for the quarterly framing could not fire, because the
-    quarterly framing was never counted. Four of six held-out Pfizer exhibits
-    were dated wrong, and that wrong period was handed to the model as the
-    filing's `reporting_period`.
+    Matching a single span word here read only the second of them, so a
+    second-quarter exhibit was dated 2026H1 and a third-quarter one 2026M9. The
+    preference for the quarterly framing could not fire, because the quarterly
+    framing was never counted, and that wrong period was handed to the model as
+    the filing's `reporting_period`.
     """
     context = detect_period_context(
         "Results for the three and six months ended June 28, 2026 are summarized below."

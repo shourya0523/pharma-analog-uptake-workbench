@@ -1,9 +1,9 @@
 """A schedule that states no period of its own is dated by its document.
 
 The table reader required each table to date itself - "Three Months Ended
-September 30, 2005" - and skipped the rest, which is most of them: Pfizer heads
-its product schedule by geography and then by year, and Lilly heads its
-"First-Quarter" and never writes "months ended" at all.
+September 30, 2005" - and skipped the rest, which is most of them: one filer
+heads its product schedule by geography and then by year, another heads its
+schedule "First-Quarter" and never writes "months ended" at all.
 
 `detect_period_context` already read the filing's own reporting period, and
 handed it only to the model. These tests cover giving it to the reader, and the
@@ -44,7 +44,7 @@ def test_a_table_stating_no_period_is_dated_by_its_document():
 def test_a_repeated_year_refuses_the_document_period():
     """Two bands over one year row means the columns are not divided by time.
 
-    Pfizer heads its schedule WORLDWIDE / UNITED STATES / TOTAL INTERNATIONAL
+    A filer heads its schedule WORLDWIDE / UNITED STATES / TOTAL INTERNATIONAL
     and prints 2026 and 2025 under each. Spreading one document period across
     all six would file three different values under the same quarter.
     """

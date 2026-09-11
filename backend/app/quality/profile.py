@@ -51,7 +51,7 @@ def normalize_value(value: object) -> str:
 def values_conflict(left: object, right: object) -> bool:
     """True when two source values for one field genuinely disagree.
 
-    Casing and whitespace differences ("TREPROSTINIL" vs "treprostinil") are the
+    Casing and whitespace differences ("CALDERINOL" vs "calderinol") are the
     same answer from two sources, not a conflict worth adjudicating.
     """
     if is_missing_value(left) or is_missing_value(right):
@@ -85,8 +85,8 @@ def blends_sibling_brand(
 ) -> bool:
     """True when dosage/formulation text mixes a sibling branded formulation.
 
-    Example: job=Tyvaso, alias=Tyvaso DPI, value mentions both nebulized Tyvaso and
-    Tyvaso DPI powder. Shared molecule names alone are not enough.
+    Example: job=Calderon, alias=Calderon XR, value mentions both the original
+    Calderon and Calderon XR. Shared molecule names alone are not enough.
     """
     product_n = normalize_value(product)
     if not product_n:
@@ -98,7 +98,7 @@ def blends_sibling_brand(
         alias_n = normalize_value(alias)
         if not alias_n or alias_n == product_n:
             continue
-        # Sibling brand extensions: "tyvaso dpi", "nebulized tyvaso"
+        # Sibling brand extensions: "calderon xr", "nebulized calderon"
         is_extension = (
             alias_n.startswith(product_n + " ")
             or alias_n.endswith(" " + product_n)

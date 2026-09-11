@@ -9,8 +9,8 @@ prevent.
 What it can still get wrong is identity, and that is the whole of the work here.
 An axis member is a name the filer invented, so which product it refers to comes
 from ``members.py`` and its register - never from matching the member's text
-against the product being asked for, which is how "Tyvaso" ends up answered with
-Tyvaso DPI's revenue.
+against the product being asked for, which is how "Calderon" ends up answered
+with Calderon XR's revenue.
 
 Two rules keep the answers honest:
 
@@ -94,8 +94,8 @@ def candidates_from_instance(
         # reader gets both of the register's keys: issuer-and-member, because
         # us-gaap:ProductMember is one issuer's sole product and a meaningless
         # total for everyone else; and the member's identity rather than its
-        # spelling, because the bulk extracts write "CompleraEviplera" where an
-        # instance writes "gild:CompleraEvipleraMember".
+        # spelling, because the bulk extracts write "CalderonXR" where an
+        # instance writes "acme:CalderonXRMember".
         resolution = resolve(member, known, register, issuer=issuer)
         if not resolution.resolved or resolution.product != product:
             continue

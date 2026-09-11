@@ -16,9 +16,9 @@ from app.extraction.fingerprint import UNIT_SCALE_TO_MILLIONS
 
 # USD per 1 unit of foreign currency, annual average of the New York noon
 # buying rate certified by the Federal Reserve Bank of New York. Swiss and UK
-# issuers report PAH products in their home currency (Actelion's Tracleer in
-# CHF, GSK's Flolan in GBP) and never restate them in USD, so a comparable
-# figure has to be derived. Sourced from UBS Group AG's "Selected Financial
+# issuers report a product's sales in their home currency and never restate
+# them in USD, so a comparable figure has to be derived. Sourced from UBS Group
+# AG's "Selected Financial
 # Data" SEC filings, which publish this table annually for exactly this use.
 FX_USD_PER_UNIT: dict[str, dict[int, float]] = {
     "CHF": {

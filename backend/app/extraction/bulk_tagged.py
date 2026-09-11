@@ -9,8 +9,9 @@ worldwide-is-the-absence-of-geography rule and the least-qualified-statement
 rule; `members.py` decides which product a member names.
 
 One thing differs and it matters. `DIM.segments` drops namespaces and the
-"Member" suffix, so `gild:HIVProductsBiktarvyMember` arrives as `Biktarvy`,
-and the register - keyed on the full member string as an instance spells it -
+"Member" suffix, so `acme:RespiratoryProductsNuVessaMember` arrives as
+`RespiratoryProductsNuVessa`, and the register - keyed on the full member
+string as an instance spells it -
 cannot be looked up directly. Resolution therefore runs structurally first, by
 the whole-word suffix match that needs no per-issuer seeding, and consults the
 register only for a member that structure could not place.

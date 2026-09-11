@@ -1,7 +1,8 @@
 """Recover the prior-year column that earnings tables print beside each figure.
 
-Earnings tables state two periods per product row ("Total Tyvaso 398.2 318.9 79.3
-25 %" is the current quarter, the prior-year quarter, then the change columns).
+Earnings tables state two periods per product row ("Total Calderon 398.2 318.9
+79.3 25 %" is the current quarter, the prior-year quarter, then the change
+columns).
 Models reliably return only the current column, so the comparative figure is
 recovered here instead — but only when the row's own arithmetic proves the column
 layout, so a number is never guessed into a datapoint.
@@ -23,7 +24,7 @@ PCT_TOLERANCE = 1.5
 def parse_numbers(text: str) -> list[float]:
     """Numeric cells of a table row, with parentheses read as negatives.
 
-    Leading footnote markers ("Tyvaso DPI (1) 258.3 ...") are dropped so that
+    Leading footnote markers ("Calderon XR (1) 258.3 ...") are dropped so that
     column positions line up; monetary cells in these tables always carry a
     decimal, footnote markers never do.
     """

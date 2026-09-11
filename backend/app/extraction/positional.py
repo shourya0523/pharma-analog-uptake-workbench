@@ -2,12 +2,12 @@
 
 Pulling text out of a PDF loses the grid: a product block that looked like
 
-    UPTRAVI      Q2'17  Q1'17  Q4'16 ...
+    CALDERON     Q2'17  Q1'17  Q4'16 ...
       US           102     91     77
       Intl           8      9      8
       WW           110    100     85
 
-arrives as one line - "UPTRAVI US 102 91 77 ... Intl 8 9 8 ... WW 110 100 85".
+arrives as one line - "CALDERON US 102 91 77 ... Intl 8 9 8 ... WW 110 100 85".
 The numbers are still in order and still grouped by their row label, so the
 structure is recoverable by splitting on the labels rather than on whitespace.
 

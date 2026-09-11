@@ -8,25 +8,25 @@ from typing import Any
 from app.parsing.evidence import SCOPE_PATTERNS, TOTAL_REVENUE_RE, product_aliases
 
 # A label states more than one product by joining names with one of these. A
-# hyphen is deliberately absent: "Harvoni - Europe" is one product under a
+# hyphen is deliberately absent: "Calderon - Europe" is one product under a
 # geography, and it is the commonest label shape there is.
 _JOINER_RE = re.compile(r"\s*(?:\+|&|;|,|\band\b|\bwith\b|\bplus\b)\s*", re.IGNORECASE)
 
 # A slash is not in that list, because a slash is what a filer writes between
-# the names of ONE product: a brand and its generic ("CONCERTA/METHYLPHENIDATE"),
-# a brand and the name it carries in another market ("PROCRIT/EPREX",
-# "Complera/Eviplera"), a brand and its own combination ("INVOKANA/INVOKAMET"),
-# or a brand and its other presentations ("SIMPONI / SIMPONI ARIA",
-# "INVEGA SUSTENNA/XEPLION/TRINZA/TREVICTA"). Treating it as a product joiner
-# refused every one of those lines, and for four Johnson & Johnson products the
-# refused line was the only figure the issuer ever published.
+# the names of ONE product: a brand and its generic ("CALDERON/CALDERINOL"), a
+# brand and the name it carries in another market ("CALDERON/CALDERIX"), a
+# brand and its own combination ("NUVESSA/NUVESSA-D"), or a brand and its other
+# presentations ("CALDERON / CALDERON XR", "NUVESSA IV/NUVESSA SC/NUVESSA
+# PEN"). Treating it as a product joiner refuses every one of those lines, and
+# a filer that reports a product only under its slashed label publishes no
+# other figure for it.
 #
 # What still separates products is the shape the filer uses for products:
-# commas and "and", as in Biogen's "share of pre-tax profits in the U.S. for
-# RITUXAN, GAZYVA and LUNSUMIO". And a slash-joined name that turns out to have
-# a row of its own in the same table IS a separate product, so the line covers
-# both - which is the same evidence the XBRL member resolver uses, applied to
-# printed labels instead of axis members.
+# commas and "and", as in "share of pre-tax profits in the U.S. for CALDERON,
+# NUVESSA and TAVORAL". And a slash-joined name that turns out to have a row of
+# its own in the same table IS a separate product, so the line covers both -
+# which is the same evidence the XBRL member resolver uses, applied to printed
+# labels instead of axis members.
 _SLASH_RE = re.compile(r"\s*/\s*")
 
 # Words that qualify a product rather than name one. A part made only of these
@@ -50,7 +50,7 @@ _QUALIFIER_WORDS = frozenset(
 
 # Words that say the line covers more than the product asked for. A part built
 # only from these is an aggregate, which is not this product's own revenue
-# even though no second brand is spelled out: "Tracleer and other products".
+# even though no second brand is spelled out: "Calderon and other products".
 _AGGREGATE_WORDS = frozenset(
     {"other", "others", "all", "combined", "franchise", "total", "aggregate", "products", "various", "misc", "miscellaneous"}
 )
@@ -71,8 +71,8 @@ def _is_spelling_variant(name: str, own: set[str]) -> bool:
     """Whether a name is the same product spelled for another market.
 
     A drug is often sold under one name in the US and a near-identical one in
-    Europe - Jazz prints "Epidiolex/Epidyolex" as a single line because it is a
-    single product. Refusing that line loses a real quarter. Two names that are
+    Europe, and a filer prints "Calderon/Calderyon" as a single line because it
+    is a single product. Refusing that line loses a real quarter. Two names that are
     genuinely different products for the same indication are not near-spellings
     of each other, so the distance does the work a name mapping would.
     """
@@ -134,7 +134,7 @@ def names_a_competing_product(
         if not name or len(name) < 3:
             continue
         # "Total revenues" reduces to "total", which is a word inside "Total
-        # Tyvaso" and names no product. A sibling has to be a name to rule a
+        # Calderon" and names no product. A sibling has to be a name to rule a
         # label out.
         if all(word in _AGGREGATE_WORDS for word in name.split()):
             continue

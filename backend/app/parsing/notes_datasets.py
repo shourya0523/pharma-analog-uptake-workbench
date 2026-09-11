@@ -15,9 +15,9 @@ missing half: "all of the combinations of XBRL axis and member used to tag any
 submission".
 
 What this does *not* replace is the document readers. An 8-K earnings exhibit
-carries no XBRL at all - United Therapeutics' 8-K of 31 July 2026 appears in
-these files with zero numeric facts - so a quarter whose only source is an
-earnings release is still a reading problem. And the sets begin in 2009, so
+carries no XBRL at all - such a filing appears in these files with zero numeric
+facts - so a quarter whose only source is an earnings release is still a reading
+problem. And the sets begin in 2009, so
 nothing before that is here at any price.
 
 The rows are turned back into `xbrl.Fact` objects rather than into a parallel
@@ -106,9 +106,8 @@ def _period_bounds(ddate: str, qtrs: int) -> tuple[date | None, date | None]:
     """Start and end dates for a duration stated as a count of quarters.
 
     `ddate` is the period end rounded to the nearest month end, which is the
-    Commission doing the 52/53-week correction for us: Johnson & Johnson's
-    fiscal year ending 1 January arrives here as 31 December, on the year it
-    belongs to.
+    Commission doing the 52/53-week correction for us: a fiscal year ending
+    1 January arrives here as 31 December, on the year it belongs to.
     """
     try:
         end = date(int(ddate[0:4]), int(ddate[4:6]), int(ddate[6:8]))

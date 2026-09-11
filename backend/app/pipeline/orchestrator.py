@@ -1130,11 +1130,11 @@ class PipelineOrchestrator:
                     issuer=job.manufacturer or "",
                     # Every product this pipeline tracks, not just the one
                     # being asked for. `match` prefers the longest product name
-                    # ending a member - that is how NebulizedTyvaso is
-                    # Nebulized Tyvaso rather than Tyvaso - and with a one-name
-                    # list there is nothing to prefer, so
-                    # `uthr:NebulizedTyvasoMember` suffix-matched to Tyvaso and
-                    # a sibling formulation's tagged revenue was accepted as
+                    # ending a member - that is how NebulizedCalderon is
+                    # Nebulized Calderon rather than Calderon - and with a
+                    # one-name list there is nothing to prefer, so
+                    # `acme:NebulizedCalderonMember` suffix-matched to Calderon
+                    # and a sibling formulation's tagged revenue was accepted as
                     # the product's own. Only the register was catching it, and
                     # the register does not cover every issuer.
                     #
@@ -1437,8 +1437,8 @@ class PipelineOrchestrator:
                 if normalized is None and value is not None:
                     normalized = scale_to_millions(float(value), unit)
                 # A candidate may supply its own normalization, and it was
-                # taken verbatim. Remodulin 2009Q3 arrived reported as 87.4
-                # with 87,400 beside it and was published, because every check
+                # taken verbatim. A candidate arrived reported as 87.4 with
+                # 87,400 beside it and was published, because every check
                 # downstream reads `value_reported` - the judge confirms 87.4
                 # against a quote saying 87.4 - while a consumer reads the
                 # normalized figure that nothing had looked at.

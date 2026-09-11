@@ -1,9 +1,9 @@
 """Reading a schedule that prints a product as a heading over geography rows.
 
-Johnson & Johnson tags no product on any axis before 2019 - its instances of
-that era carry plenty of facts and none of them sits on the product axis - so
-the only place those quarters exist is the printed
-"Sales of Key Products/Franchises" schedule attached to each quarterly 8-K.
+A filer can tag no product on any axis at all - its instances carry plenty of
+facts and none of them sits on the product axis - so the only place those
+quarters exist is the printed product-sales schedule attached to each quarterly
+8-K.
 
 That schedule prints a product as a heading with no figures on it, then the
 slices beneath:
@@ -17,18 +17,17 @@ slices beneath:
 The heading logic already existed. Two things stopped it working:
 
 * "US Exports" reduced to "exports", which is no product's name. The peer guard
-  read Remicade's own export line as a competitor's; the components then no
+  read the product's own export line as a competitor's; the components then no
   longer added to the total, the total could not be identified by its
   arithmetic, and the whole product was refused as "several lines and no total".
-  Few brands carry an export line, and the one that does is refused entirely.
+  Few brands carry an export line, and any that does is refused entirely.
 * A slash was treated as joining two products. It is what a filer writes
-  between the names of one: CONCERTA/METHYLPHENIDATE is a brand and its
-  generic, PROCRIT/EPREX one drug in two markets, INVOKANA/INVOKAMET a brand
-  and its own combination. Four products read zero of their eighteen quarters
-  because the only line the issuer ever published for them was refused.
+  between the names of one: a brand and its generic, one drug under the names
+  it carries in two markets, a brand and its own combination. A product whose
+  only published line is a slashed label reads none of its quarters at all.
 
-Rows and figures below are from the exhibit to Johnson & Johnson's 8-K of
-19 April 2016 (0000200406-16-000074).
+Rows and figures below are from the exhibit to the 8-K filed 19 April 2016
+under accession 0000200406-16-000074.
 """
 
 from __future__ import annotations

@@ -1,22 +1,22 @@
 """Which product a filer's XBRL member names.
 
-An axis member is a private invention. There is no registry: United Therapeutics
-writes ``uthr:TyvasoDPIMember`` and Gilead writes
-``gild:HIVProductsBiktarvyMember``, both meaning "this product", and either can
-rename between filings. So the mapping has to be built and kept, and this module
-is the register plus the rules for extending it.
+An axis member is a private invention. There is no registry: one filer writes
+``acme:CalderonXRMember`` and another ``beta:RespiratoryProductsNuVessaMember``,
+both meaning "this product", and either can rename between filings. So the
+mapping has to be built and kept, and this module is the register plus the rules
+for extending it.
 
-Matching by substring is the obvious approach and it is wrong. ``"tyvaso"`` is a
-substring of ``TyvasoDPIMember``, so a substring rule answers a question about
-Tyvaso with Tyvaso DPI's revenue - a real number, the wrong product, and nothing
-downstream would notice. The rule here is instead:
+Matching by substring is the obvious approach and it is wrong. ``"calderon"`` is
+a substring of ``CalderonXRMember``, so a substring rule answers a question
+about Calderon with Calderon XR's revenue - a real number, the wrong product,
+and nothing downstream would notice. The rule here is instead:
 
 * compare whole words, never fragments;
 * a product may match the member's full name or a trailing run of its words, so
-  ``HIVProductsBiktarvy`` resolves to Biktarvy while ``TyvasoDPI`` does not
-  resolve to Tyvaso;
-* where several products match, the longest wins - ``NebulizedTyvaso`` is
-  Nebulized Tyvaso rather than Tyvaso;
+  ``RespiratoryProductsNuVessa`` resolves to NuVessa while ``CalderonXR`` does
+  not resolve to Calderon;
+* where several products match, the longest wins - ``NebulizedCalderon`` is
+  Nebulized Calderon rather than Calderon;
 * where two products in the list read as the same words, nothing is returned.
   One of them would otherwise be picked silently by whichever the dictionary
   happened to keep.
@@ -74,13 +74,13 @@ def canonical_member(member: str) -> str:
     """A member's identity, independent of which reader spelled it.
 
     The same member reaches the register under two notations: an instance
-    document names it in full (``gild:CompleraEvipleraMember``) and the bulk
-    notes datasets store the segment stripped of prefix and suffix
-    (``CompleraEviplera``). Keyed literally, a decision made from one source is
+    document names it in full (``acme:CalderonXRMember``) and the bulk notes
+    datasets store the segment stripped of prefix and suffix (``CalderonXR``).
+    Keyed literally, a decision made from one source is
     invisible to the other, and the register exists so a decision is made once.
 
-    Case is dropped for the same reason - a filer writes both ``AmBisome`` and
-    ``Ambisome`` - so the register need not carry one member twice.
+    Case is dropped for the same reason - a filer writes a brand's internal
+    capital both ways - so the register need not carry one member twice.
     """
     local = re.sub(r"Member$", "", member.split(":")[-1])
     return re.sub(r"[^a-z0-9]", "", local.lower())
@@ -89,8 +89,8 @@ def canonical_member(member: str) -> str:
 def words(text: str) -> list[str]:
     """A member or product name as lowercase words.
 
-    ``uthr:NebulizedTyvasoMember`` and ``Nebulized Tyvaso`` both become
-    ``["nebulized", "tyvaso"]``, so the two vocabularies can be compared without
+    ``acme:NebulizedCalderonMember`` and ``Nebulized Calderon`` both become
+    ``["nebulized", "calderon"]``, so the two vocabularies can be compared without
     either having to know how the other punctuates.
     """
     local = text.split(":")[-1]
@@ -103,16 +103,16 @@ def words(text: str) -> list[str]:
 def _suffixes(parts: list[str]) -> list[list[str]]:
     """Every trailing run of words, longest first.
 
-    A filer often prefixes a member with its category - ``HIVProducts`` before
-    ``Biktarvy`` - so the product is at the end. Only trailing runs count: a
-    leading or middle match would let ``Tyvaso`` claim ``TyvasoDPI``.
+    A filer often prefixes a member with its category - ``RespiratoryProducts``
+    before ``NuVessa`` - so the product is at the end. Only trailing runs count:
+    a leading or middle match would let ``Calderon`` claim ``CalderonXR``.
     """
     return [parts[i:] for i in range(len(parts))]
 
 
 # A member joining two names is a line covering both, and the trailing-run rule
-# would quietly award it to whichever is written last: `RemicadeAndSimponi`
-# resolved to Simponi, a figure that includes Remicade. The rules cannot tell a
+# would quietly award it to whichever is written last: `CalderonAndNuVessa`
+# resolves to NuVessa, a figure that includes Calderon. The rules cannot tell a
 # joined pair from a category ending in a product's name, so they decline and
 # the model decides - which costs one call and can still resolve it, where
 # guessing costs a real number attributed to the wrong product.
@@ -123,11 +123,11 @@ _JOINING_MARKS = ("&", "+")
 # that product. The trailing-run rule reads the name at the end and hands the
 # residual to the one thing it is defined to exclude:
 #
-#   ProductsExcludingALDURAZYME -> Aldurazyme      (BioMarin files this)
+#   ProductsExcludingCalderon   -> Calderon
 #   AllProductsExceptNuVessa    -> NuVessa
 #   ProductsOtherThanCalderon   -> Calderon
 #
-# It is the `RemicadeAndSimponi` defect inverted - there the figure was too
+# It is the `CalderonAndNuVessa` defect inverted - there the figure was too
 # large, here it is the complement of the product it gets published as - and it
 # arrives at the top of CLAIM_STRENGTH, as a fact the filer tagged. The model
 # is not asked either: a line defined by what it leaves out is not any single
@@ -156,14 +156,14 @@ def match(member: str, products: list[str]) -> Resolution:
         )
     # Keyed on the run's words joined up, not on the tuple of words, because
     # only the *member* is a machine-generated identifier whose capitals mark
-    # word boundaries. A brand may carry a capital of its own - "AmBisome" -
-    # and `words` then splits the product into ["am", "bisome"] while the filer
-    # writing it plainly gives ["ambisome"]. Two words never equal one, so the
+    # word boundaries. A brand may carry a capital of its own - "NuVessa" -
+    # and `words` then splits the product into ["nu", "vessa"] while the filer
+    # writing it plainly gives ["nuvessa"]. Two words never equal one, so the
     # match was impossible however the filer spelled it, and only a hand-added
     # register entry was covering it.
     #
     # Runs still begin at the member's own token boundaries, so this stays a
-    # whole-word rule: "tyvaso" is not a trailing run of "TyvasoDPI" and does
+    # whole-word rule: "calderon" is not a trailing run of "CalderonXR" and does
     # not become one by being joined up.
     by_words: dict[str, set[str]] = {}
     for product in products:
@@ -173,7 +173,7 @@ def match(member: str, products: list[str]) -> Resolution:
         if not claimants:
             continue
         # Longest first, so a member ending in a shorter product's name goes to
-        # the longer one: NebulizedTyvaso is Nebulized Tyvaso, not Tyvaso.
+        # the longer one: NebulizedCalderon is Nebulized Calderon, not Calderon.
         if len(claimants) > 1:
             return Resolution(member, None, "ambiguous", 0.0,
                               f"these read the same: {', '.join(sorted(claimants))}")
@@ -193,11 +193,11 @@ def load_products(path: Path | None = None) -> list[str]:
     """Every product this pipeline tracks, for resolving a member against.
 
     `match` decides between a member's possible readings by preferring the
-    longest product name that ends it - "NebulizedTyvaso is Nebulized Tyvaso,
-    not Tyvaso". That comparison can only be made against products it has been
-    told about, so asked with a one-name list it has nothing to prefer and
-    `uthr:NebulizedTyvasoMember` suffix-matches to Tyvaso: a sibling
-    formulation's tagged revenue accepted as the product's own.
+    longest product name that ends it - "NebulizedCalderon is Nebulized
+    Calderon, not Calderon". That comparison can only be made against products
+    it has been told about, so asked with a one-name list it has nothing to
+    prefer and `acme:NebulizedCalderonMember` suffix-matches to Calderon: a
+    sibling formulation's tagged revenue accepted as the product's own.
 
     This is pipeline reference data, not the answer key. The register is built
     from it, and `product_attributes.csv` is one of the files
@@ -220,8 +220,8 @@ def load_register(path: Path | None = None) -> dict[tuple[str, str], Resolution]
     """The decisions already made, keyed by issuer and member.
 
     The issuer is part of the key because a member name is only unique within
-    one filer's taxonomy. ``us-gaap:ProductMember`` is Yutrepia for Liquidia,
-    which markets one product, and is a meaningless total for anyone else.
+    one filer's taxonomy. ``us-gaap:ProductMember`` is the product itself for a
+    filer that markets one, and a meaningless total for anyone else.
     """
     path = path or REGISTER_PATH
     if not path.exists():
