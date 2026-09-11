@@ -56,6 +56,12 @@ class DrugJobORM(Base):
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True)
     run_id: Mapped[str] = mapped_column(ForeignKey("extraction_runs.id"), index=True)
+    # Set once identity resolves the product. Nullable because a job that fails
+    # before or during identity never gets one, and rows predating this column
+    # are linked by the backfill rather than guessed at read time.
+    product_id: Mapped[str | None] = mapped_column(
+        ForeignKey("canonical_products.id"), nullable=True, index=True
+    )
     drug_name: Mapped[str] = mapped_column(String(256))
     generic_name: Mapped[str | None] = mapped_column(String(256), nullable=True)
     manufacturer: Mapped[str | None] = mapped_column(String(256), nullable=True)
@@ -201,6 +207,10 @@ class UnresolvedQuarterORM(Base):
     recommended_next_step: Mapped[str] = mapped_column(Text)
     confidence_that_unavailable: Mapped[float] = mapped_column(Float, default=0.0)
     reviewer_notes: Mapped[str | None] = mapped_column(Text, nullable=True)
+    # Null means still open. Set to what the reviewer decided - "value_entered",
+    # "not_disclosed" or "re_queued" - so a quarter someone has already dealt
+    # with stops coming back to the queue.
+    resolution: Mapped[str | None] = mapped_column(String(32), nullable=True)
 
 
 class ReviewEventORM(Base):
@@ -252,6 +262,12 @@ class CanonicalProductORM(Base):
     manufacturer: Mapped[str | None] = mapped_column(String(256), nullable=True)
     application_number: Mapped[str | None] = mapped_column(
         String(64), nullable=True, index=True
+    )
+    # "quarterly" re-runs the product as each issuer files; "one_off" leaves it
+    # alone until someone asks. Kept on the product rather than in a watchlist
+    # table: a product has exactly one cadence, and the Library filters on it.
+    cadence: Mapped[str] = mapped_column(
+        String(32), default="one_off", server_default="one_off"
     )
     initial_approval_date: Mapped[Any | None] = mapped_column(Date, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
