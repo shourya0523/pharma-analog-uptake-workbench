@@ -112,6 +112,17 @@ def is_earnings_exhibit(filename: str) -> bool:
     return bool(re.search(r"ex+(?:h(?:ibit)?)?9{2}", squashed))
 
 
+def _calculation_linkbase(documents: list[str]) -> str | None:
+    """The calculation linkbase in one filing's directory.
+
+    It is the file the filer's own arithmetic lives in - which element is
+    added into which total and which is taken away - and every XBRL filing
+    ships one beside the instance under the same stem with a ``_cal`` suffix.
+    Matched on the suffix alone, so it needs nothing the instance match needs.
+    """
+    return next((name for name in documents if name and name.endswith("_cal.xml")), None)
+
+
 def _instance_document(documents: list[str]) -> str | None:
     """The XBRL instance in one filing's directory, in either era's spelling.
 
@@ -525,6 +536,20 @@ class SECConnector:
             except Exception as exc:
                 logger.info("sec_xbrl_fetch_failed accession=%s error=%s", accession, exc)
                 continue
+            # The filing's arithmetic, so the reader can tell a sale from a
+            # cost of one without counting or guessing. Its absence is not a
+            # failure; the reader then asks about what it cannot place.
+            calculation_key = None
+            calculation = _calculation_linkbase(documents)
+            if calculation:
+                try:
+                    _raw, _cached, calculation_key = await self._fetch_document(
+                        client, url=f"{self.ARCHIVES}/{cik_int}/{acc_nodash}/{calculation}",
+                        accession=accession, doc=calculation,
+                        run_id=run_id, job_id=job_id, source_id=f"{sid}-cal",
+                    )
+                except Exception as exc:
+                    logger.info("sec_calculation_fetch_failed accession=%s error=%s", accession, exc)
             sources.append(
                 RetrievedSource(
                     source_id=sid,
@@ -537,7 +562,8 @@ class SECConnector:
                     accession_number=accession,
                     storage_key=job_key,
                     retrieval_status=RetrievalStatus.SUCCESS,
-                    metadata={"cik": cik, "from_cache": from_cache, "xbrl_instance": True},
+                    metadata={"cik": cik, "from_cache": from_cache, "xbrl_instance": True,
+                              "calculation_key": calculation_key},
                 )
             )
         logger.info("sec_xbrl_instances cik=%s retrieved=%s", cik, len(sources))

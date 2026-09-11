@@ -429,6 +429,31 @@ class LLMModules:
                     "confidence": 0.0}
         return result
 
+    async def judge_element(self, *, element: str, examples: list[str]) -> dict[str, Any]:
+        """Whether an element the filing's linkbase left unplaced measures revenue.
+
+        Empty when no key is set or the model will not commit; an element
+        without a verdict is left out of the reading rather than guessed at.
+        """
+        if not self.settings.openrouter_api_key:
+            return {}
+        prompt = load_prompt("xbrl_element_judge")
+        prefix = element.split(":")[0] if ":" in element else ""
+        user = prompt["user_template"].format(
+            element=element, prefix=prefix,
+            examples="\n".join(f"  - {e}" for e in examples[:12]) or "  (none)",
+        )
+        result = await self.client.chat_json(
+            model=self.settings.openrouter_model_judge,
+            system=prompt["system"], user=user,
+        )
+        verdict = result.get("is_revenue")
+        if verdict not in (True, False):
+            return {}
+        return {"is_revenue": bool(verdict),
+                "confidence": float(result.get("confidence") or 0.0),
+                "reason": str(result.get("reason") or "")}
+
     async def reconcile(self, *, product: str, candidates: list[dict]) -> dict[str, Any]:
         prompt = load_prompt("conflict_reconciler")
         user = prompt["user_template"].format(

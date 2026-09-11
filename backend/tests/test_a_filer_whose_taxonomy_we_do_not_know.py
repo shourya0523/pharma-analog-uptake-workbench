@@ -28,6 +28,19 @@ QUARTER = {"start": date(2026, 4, 1), "end": date(2026, 6, 30)}
 OWN_AXIS = "acme:PortfolioByBrandAxis"
 OWN_ELEMENT = "made-up:RevenueFromSaleOfGoods"
 
+# What a bare fact list cannot say for itself: a real filing's linkbase settles
+# which element is the sale, and these tests hand the answer over directly.
+REVENUE = {
+    "us-gaap:Revenues": True,
+    "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax": True,
+    "us-gaap:SalesRevenueGoodsNet": True,
+    "us-gaap:CostOfGoodsAndServicesSold": False,
+    "ifrs-full:Revenue": True,
+    "ifrs-full:RevenueFromSaleOfGoods": True,
+    "ifrs-full:CostOfSales": False,
+}
+
+
 
 def _fact(member, value, *, axis=OWN_AXIS, element="ifrs-full:RevenueFromSaleOfGoods",
           extra=None, unit="USD", standard=True, **period):
@@ -44,9 +57,9 @@ def _names(*products):
 
 def test_an_axis_this_code_cannot_name_is_still_the_product_axis():
     facts = [_fact("acme:CalderonMember", 1_941_000_000.0)]
-    assert product_facts(facts, names_a_product=_names("Calderon")) == facts
+    assert product_facts(facts, names_a_product=_names("Calderon"), verdicts=REVENUE) == facts
     # And named rather than found, the same filing states nothing at all.
-    assert product_facts(facts) == []
+    assert product_facts(facts, verdicts=REVENUE) == []
 
 
 def test_the_revenue_element_comes_from_what_the_filing_uses_it_for():
@@ -55,7 +68,8 @@ def test_the_revenue_element_comes_from_what_the_filing_uses_it_for():
              _fact("acme:NuVessaMember", 845_000_000.0),
              _fact("acme:CalderonMember", 12_000_000.0,
                    element="ifrs-full:CostOfSales")]
-    elements = revenue_elements(facts, names_a_product=_names("Calderon", "NuVessa"))
+    verdicts = {"ifrs-full:RevenueFromSaleOfGoods": True, "ifrs-full:CostOfSales": False}
+    elements = revenue_elements(facts, names_a_product=_names("Calderon", "NuVessa"), verdicts=verdicts)
     assert elements == {"ifrs-full:RevenueFromSaleOfGoods"}
 
 
@@ -64,14 +78,14 @@ def test_a_measure_the_filer_invented_is_not_read_as_revenue():
     facts = [_fact("acme:CalderonMember", 9_999_000_000.0,
                    element=OWN_ELEMENT, standard=False),
              _fact("acme:CalderonMember", 1_941_000_000.0)]
-    read = product_facts(facts, names_a_product=_names("Calderon"))
+    read = product_facts(facts, names_a_product=_names("Calderon"), verdicts=REVENUE)
     assert [f.value for f in read] == [1_941_000_000.0]
 
 
 def test_a_percentage_on_the_product_axis_is_not_a_figure():
     facts = [_fact("acme:CalderonMember", 7.0, unit="pure"),
              _fact("acme:CalderonMember", 1_941_000_000.0)]
-    read = product_facts(facts, names_a_product=_names("Calderon"))
+    read = product_facts(facts, names_a_product=_names("Calderon"), verdicts=REVENUE)
     assert [f.value for f in read] == [1_941_000_000.0]
 
 
@@ -89,7 +103,7 @@ def test_a_region_is_a_slice_when_the_filing_splits_the_product_on_that_axis():
         _fact("acme:CalderonMember", 512_000_000.0, extra={"acme:MarketsAxis": "EU"}),
         _fact("acme:CalderonMember", 584_000_000.0, extra={"acme:MarketsAxis": "RoW"}),
     ]
-    read = product_facts(facts, names_a_product=_names("Calderon"))
+    read = product_facts(facts, names_a_product=_names("Calderon"), verdicts=REVENUE)
     assert [f.value for f in read] == [whole.value], (
         "publishing a region as the product understates it by the rest of the world"
     )
@@ -101,8 +115,8 @@ def test_a_member_naming_two_products_is_not_either_of_them():
     # The resolver placing the joined member is the condition; two of a fact's
     # members naming products is what this refuses.
     crossed = [_fact("acme:CalderonMember", 1.0, extra={"acme:OtherAxis": "acme:NuVessaMember"})]
-    assert product_facts(crossed, names_a_product=both) == []
-    assert len(product_facts(facts, names_a_product=both)) == 1
+    assert product_facts(crossed, names_a_product=both, verdicts=REVENUE) == []
+    assert len(product_facts(facts, names_a_product=both, verdicts=REVENUE)) == 1
 
 
 INSTANCE = b"""<?xml version="1.0" encoding="UTF-8"?>
@@ -210,14 +224,45 @@ def test_a_fact_cites_a_figure_that_can_be_found_in_its_own_citation():
     assert quote_contains_value(fraction.citation, fraction.value), fraction.citation
 
 
-def test_a_cost_tagged_against_every_sale_is_not_read_as_the_sale():
-    """Counting alone ties, and the shape that ties it is ordinary.
+CALCULATION = b"""<?xml version="1.0" encoding="UTF-8"?>
+<link:linkbase xmlns:link="http://www.xbrl.org/2003/linkbase"
+               xmlns:xlink="http://www.w3.org/1999/xlink">
+  <link:calculationLink xlink:type="extended" xlink:role="http://acme.example/role/income">
+    <link:loc xlink:type="locator" xlink:href="us-gaap-2024.xsd#us-gaap_GrossProfit" xlink:label="gp"/>
+    <link:loc xlink:type="locator" xlink:href="us-gaap-2024.xsd#us-gaap_RevenueFromContractWithCustomerExcludingAssessedTax" xlink:label="rev"/>
+    <link:loc xlink:type="locator" xlink:href="us-gaap-2024.xsd#us-gaap_CostOfGoodsAndServicesSold" xlink:label="cogs"/>
+    <link:loc xlink:type="locator" xlink:href="us-gaap-2024.xsd#us-gaap_CostsAndExpenses" xlink:label="costs"/>
+    <link:loc xlink:type="locator" xlink:href="us-gaap-2024.xsd#us-gaap_ResearchAndDevelopmentExpense" xlink:label="rd"/>
+    <link:loc xlink:type="locator" xlink:href="us-gaap-2024.xsd#us-gaap_OperatingIncomeLoss" xlink:label="op"/>
+    <link:calculationArc xlink:type="arc" xlink:from="gp" xlink:to="rev" weight="1" order="1"/>
+    <link:calculationArc xlink:type="arc" xlink:from="gp" xlink:to="cogs" weight="-1" order="2"/>
+    <link:calculationArc xlink:type="arc" xlink:from="costs" xlink:to="rd" weight="1" order="1"/>
+    <link:calculationArc xlink:type="arc" xlink:from="op" xlink:to="rev" weight="1" order="1"/>
+    <link:calculationArc xlink:type="arc" xlink:from="op" xlink:to="costs" weight="-1" order="2"/>
+  </link:calculationLink>
+</link:linkbase>
+"""
+
+
+def test_the_linkbase_says_which_element_is_the_sale_and_which_the_cost_of_it():
+    """The filer's own arithmetic, not a count and not a name.
 
     A filer reporting product profitability tags one cost against every
-    revenue, so both elements carry the same number of facts. What separates
-    them is that a cost is a part of what it is taken from: for the same
-    product and period it is the smaller of the two, every time.
+    revenue, so any rule that counts ties exactly. What the filing states
+    outright is the sign each element carries in the total above it: revenue
+    is added into gross profit and cost of goods is taken from it. An expense
+    that is added into "costs and expenses" and then taken from operating
+    income is a cost too, by the path rather than by its own arc.
     """
+    from app.parsing.xbrl import parse_calculation
+
+    calculation = parse_calculation(CALCULATION)
+    assert calculation.settles("us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax") is True
+    assert calculation.settles("us-gaap:CostOfGoodsAndServicesSold") is False
+    assert calculation.settles("us-gaap:ResearchAndDevelopmentExpense") is False
+    assert calculation.settles("us-gaap:GrossProfit") is False, "a net is a result, not a base figure"
+    assert calculation.settles("us-gaap:Revenues") is None, "an element it never mentions is left open"
+
     facts = []
     for member, revenue, cost in (("acme:CalderonMember", 225_300_000.0, 15_000_000.0),
                                   ("acme:NuVessaMember", 205_100_000.0, 13_200_000.0)):
@@ -225,23 +270,161 @@ def test_a_cost_tagged_against_every_sale_is_not_read_as_the_sale():
                            element="us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax"))
         facts.append(_fact(member, cost, element="us-gaap:CostOfGoodsAndServicesSold"))
     both = _names("Calderon", "NuVessa")
-    assert revenue_elements(facts, names_a_product=both) == {
+    assert revenue_elements(facts, names_a_product=both, calculation=calculation) == {
         "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax"
     }
-    assert [f.value for f in product_facts(facts, names_a_product=both)] == [
+    assert [f.value for f in product_facts(facts, names_a_product=both, calculation=calculation, verdicts=REVENUE)] == [
         225_300_000.0, 205_100_000.0
     ]
 
 
-def test_two_elements_a_filer_states_revenue_under_both_survive():
-    """A real tie is not broken; dropping either would lose a product."""
-    facts = [
-        _fact("acme:CalderonMember", 225_300_000.0, element="us-gaap:Revenues"),
-        _fact("acme:NuVessaMember", 205_100_000.0,
-              element="us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax"),
-    ]
-    both = _names("Calderon", "NuVessa")
-    assert revenue_elements(facts, names_a_product=both) == {
-        "us-gaap:Revenues",
-        "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
-    }, "neither element appears beside the other, so neither can be shown to be a part of it"
+def test_an_element_the_linkbase_leaves_open_is_asked_about_and_otherwise_left_out():
+    """A royalty line tagged by product never enters the statements' arithmetic."""
+    from app.parsing.xbrl import parse_calculation, unsettled_elements
+
+    calculation = parse_calculation(CALCULATION)
+    facts = [_fact("acme:CalderonMember", 744_000_000.0, element="ifrs-full:Revenue")]
+    both = _names("Calderon")
+    assert unsettled_elements(facts, names_a_product=both, calculation=calculation) == {"ifrs-full:Revenue"}
+    assert revenue_elements(facts, names_a_product=both, calculation=calculation) == frozenset(), (
+        "nothing settled it, so it is not read"
+    )
+    assert revenue_elements(facts, names_a_product=both, calculation=calculation,
+                            verdicts={"ifrs-full:Revenue": True}) == {"ifrs-full:Revenue"}
+    assert revenue_elements(facts, names_a_product=both, calculation=calculation,
+                            verdicts={"ifrs-full:Revenue": False}) == frozenset()
+
+
+def test_two_claims_of_equal_strength_that_disagree_are_both_held(monkeypatch):
+    """A filer's own quarter and a later filing's comparative of it can differ.
+
+    Both are tagged facts, so they rank identically, and reconciliation used
+    to publish whichever sorted first while holding the other as the loser of
+    a conflict it had not lost. Where the strongest claims in a group disagree
+    by more than the precision their sources declared, nothing is published:
+    the documents contradict each other and a person has to look.
+    """
+    import asyncio
+
+    from sqlalchemy import create_engine
+    from sqlalchemy.orm import sessionmaker
+
+    from app.db.models import Base, DatapointORM, DrugJobORM, ExtractionRunORM
+    from app.domain.models import ValidationStatus, new_id
+    from app.pipeline.orchestrator import PipelineOrchestrator
+
+    engine = create_engine("sqlite:///:memory:")
+    Base.metadata.create_all(engine)
+    db = sessionmaker(bind=engine)()
+    run = ExtractionRunORM(id=new_id(), status="running", options_json={})
+    job = DrugJobORM(id=new_id(), run_id=run.id, drug_name="Calderon",
+                     manufacturer="Acme Pharma", status="running", quality_flags=[])
+    db.add_all([run, job]); db.commit()
+
+    def point(value, accession):
+        return DatapointORM(
+            id=new_id(), job_id=job.id, period="2018Q1", period_type="quarterly",
+            value_reported=value * 1e6, value_normalized_usd_millions=value,
+            currency="USD", unit="units", revenue_scope="Product family",
+            extraction_method="xbrl_fact", confidence_score=0.9,
+            source_url="https://example.invalid/filing",
+            validation_status=ValidationStatus.AUTO_PASS.value, issue_flags=[],
+            source_quote=f"acme:Revenue = {value * 1e6:,.0f}",
+            citation_json={"source_type": "quarterly_report", "accession": accession,
+                           "rounding_uncertainty_usd_millions": 0.5},
+        )
+
+    own_quarter, later_comparative = point(52.2, "0001-18-000001"), point(18.0, "0001-19-000001")
+    db.add_all([later_comparative, own_quarter]); db.commit()
+
+    orch = PipelineOrchestrator(db, file_store=None)
+
+    async def no_opinion(**_):
+        return {"resolved": [], "conflicts": []}
+
+    monkeypatch.setattr(orch.llm, "reconcile", no_opinion)
+    asyncio.run(orch._reconcile_with_llm(job, [later_comparative, own_quarter]))
+
+    statuses = {p.value_normalized_usd_millions: p.validation_status
+                for p in db.query(DatapointORM).all()}
+    assert statuses == {52.2: "needs_review", 18.0: "needs_review"}, statuses
+    assert all("equal_strength_claims_disagree" in p.issue_flags
+               for p in db.query(DatapointORM).all())
+
+
+def test_two_claims_of_equal_strength_that_agree_within_precision_still_publish(monkeypatch):
+    """The rule holds contradictions, not rounding."""
+    import asyncio
+
+    from sqlalchemy import create_engine
+    from sqlalchemy.orm import sessionmaker
+
+    from app.db.models import Base, DatapointORM, DrugJobORM, ExtractionRunORM
+    from app.domain.models import ValidationStatus, new_id
+    from app.pipeline.orchestrator import PipelineOrchestrator
+
+    engine = create_engine("sqlite:///:memory:")
+    Base.metadata.create_all(engine)
+    db = sessionmaker(bind=engine)()
+    run = ExtractionRunORM(id=new_id(), status="running", options_json={})
+    job = DrugJobORM(id=new_id(), run_id=run.id, drug_name="Calderon",
+                     manufacturer="Acme Pharma", status="running", quality_flags=[])
+    db.add_all([run, job]); db.commit()
+    rows = []
+    for value in (52.2, 52.0):
+        rows.append(DatapointORM(
+            id=new_id(), job_id=job.id, period="2018Q1", period_type="quarterly",
+            value_reported=value * 1e6, value_normalized_usd_millions=value,
+            currency="USD", unit="units", revenue_scope="Product family",
+            extraction_method="xbrl_fact", confidence_score=0.9,
+            source_url="https://example.invalid/filing",
+            validation_status=ValidationStatus.AUTO_PASS.value, issue_flags=[],
+            source_quote="x", citation_json={"source_type": "quarterly_report",
+                                             "rounding_uncertainty_usd_millions": 0.5}))
+    db.add_all(rows); db.commit()
+    orch = PipelineOrchestrator(db, file_store=None)
+
+    async def no_opinion(**_):
+        return {"resolved": [], "conflicts": []}
+
+    monkeypatch.setattr(orch.llm, "reconcile", no_opinion)
+    asyncio.run(orch._reconcile_with_llm(job, rows))
+    published = [p for p in db.query(DatapointORM).all() if p.validation_status == "auto_pass"]
+    assert len(published) == 1, "one of two agreeing figures is published, the other is a duplicate"
+
+
+def test_a_tagged_datapoint_says_which_document_it_came_from():
+    """Reconciliation ranks by document before it ranks by claim.
+
+    Every other producer writes `source_type` into the citation; the tagged
+    reader did not, so its rows fell to the last document tier - below a
+    number read off a page - and two tagged facts that contradicted each
+    other were never the strongest claims in their group, so the rule that
+    holds such a pair never saw them.
+    """
+    from sqlalchemy import create_engine
+    from sqlalchemy.orm import sessionmaker
+
+    from app.db.models import Base, DrugJobORM, ExtractionRunORM
+    from app.domain.models import RetrievalStatus, RetrievedSource, SourceType, new_id
+    from app.pipeline.orchestrator import PipelineOrchestrator
+
+    engine = create_engine("sqlite:///:memory:")
+    Base.metadata.create_all(engine)
+    db = sessionmaker(bind=engine)()
+    run = ExtractionRunORM(id=new_id(), status="running", options_json={})
+    job = DrugJobORM(id=new_id(), run_id=run.id, drug_name="Calderon",
+                     manufacturer="Acme Pharma", status="running", quality_flags=[])
+    db.add_all([run, job]); db.commit()
+    src = RetrievedSource(
+        source_id=new_id(), source_type=SourceType.QUARTERLY_REPORT,
+        url="https://example.invalid/acme-20260630_htm.xml", filing_type="6-K",
+        accession_number="0001-26-000001", retrieval_status=RetrievalStatus.SUCCESS,
+        metadata={"xbrl_instance": True},
+    )
+    candidate = {"period": "2026Q2", "period_type": "quarterly", "value_reported": 1_941_000_000.0,
+                 "value_normalized_usd_millions": 1941.0, "currency": "USD", "unit": "units",
+                 "revenue_scope": "Product family", "source_quote": "acme:Revenue = 1,941,000,000",
+                 "extraction_method": "xbrl_fact", "confidence": 0.9}
+    row = PipelineOrchestrator(db, file_store=None)._datapoint_from_candidate(job, src, candidate)
+    assert row.citation_json["source_type"] == SourceType.QUARTERLY_REPORT.value

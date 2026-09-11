@@ -52,6 +52,16 @@ from app.domain.models import (
     ValidationStatus,
     new_id,
 )
+from app.extraction import elements, member_store
+from app.extraction.bulk_tagged import candidates_from_notes
+from app.extraction.candidates import extract_revenue_candidates
+from app.extraction.check import _ROUNDING_ABSOLUTE as ROUNDING_ABSOLUTE
+from app.extraction.check import _ROUNDING_TOLERANCE as ROUNDING_TOLERANCE
+from app.extraction.derive import complete_series
+from app.extraction.elements import Verdict
+from app.extraction.fingerprint import UNIT_SCALE_TO_MILLIONS
+from app.extraction.members import Resolution, load_products, resolve
+from app.extraction.tagged import candidates_from_instance
 from app.identity.resolver import resolve_product_identity
 from app.llm.aliases import merge_aliases
 from app.llm.client import LLMModules
@@ -64,13 +74,7 @@ from app.parsing.evidence import (
 from app.parsing.fda_label import format_moa_profile_value, parse_label_record
 from app.parsing.indications import parse_indications
 from app.parsing.periods import detect_period_context, normalize_period
-from app.extraction.candidates import extract_revenue_candidates
-from app.extraction.derive import complete_series
-from app.extraction import member_store
-from app.extraction.members import Resolution, load_products
-from app.extraction.bulk_tagged import candidates_from_notes
-from app.extraction.tagged import candidates_from_instance
-from app.extraction.fingerprint import UNIT_SCALE_TO_MILLIONS
+from app.parsing.xbrl import parse_calculation, parse_facts, unsettled_elements
 from app.quality.candidate_filters import filter_revenue_candidates
 from app.quality.checks import (
     apply_auto_pass_gate,
@@ -1001,6 +1005,10 @@ class PipelineOrchestrator:
             validation_status=ValidationStatus.PENDING.value,
             citation_json={
                 "source_url": src.url,
+                # The document tier reconciliation ranks by, before the claim.
+                # Every other producer writes it; without it a tagged fact
+                # sorted below a number read off a page.
+                "source_type": src.source_type.value,
                 "filing_type": src.filing_type,
                 "accession": src.accession_number,
                 "xbrl_member": candidate.get("xbrl_member"),
@@ -1069,7 +1077,7 @@ class PipelineOrchestrator:
                     products=products,
                     register=register,
                 )
-            except Exception:  # noqa: BLE001 - a malformed extract is not this job's failure
+            except Exception:
                 logger.exception("notes_dataset_unreadable job_id=%s root=%s", job.id, root)
                 continue
             for note in notes:
@@ -1129,15 +1137,55 @@ class PipelineOrchestrator:
         register = member_store.load_register(self.db)
         products = self._candidate_products(job)
         learned: dict[tuple[str, str], Resolution] = {}
+        element_register = elements.load_register()
+        element_verdicts = elements.verdicts(element_register)
         for src in sources:
             if not (src.metadata or {}).get("xbrl_instance") or not src.storage_key:
                 continue
             try:
                 raw = await self.file_store.get(src.storage_key)
-            except Exception:  # noqa: BLE001 - an instance we cannot read is not an error
+            except Exception:
                 continue
             if not raw:
                 continue
+            # The filing's own arithmetic says which elements are sales and
+            # which are costs of them. What it leaves unplaced is asked of the
+            # model once per element and remembered, so the same question is
+            # never asked twice and never answered by counting.
+            calculation = None
+            calculation_key = (src.metadata or {}).get("calculation_key")
+            if calculation_key:
+                try:
+                    calculation = parse_calculation(await self.file_store.get(calculation_key))
+                except Exception:
+                    calculation = None
+            try:
+                facts = parse_facts(raw)
+            except Exception:
+                continue
+            def names_a_product(member: str, issuer: str = job.manufacturer or "") -> bool:
+                return resolve(member, products, register, issuer=issuer).resolved
+
+            for element in sorted(unsettled_elements(
+                facts, names_a_product=names_a_product, calculation=calculation
+            )):
+                if element in element_verdicts:
+                    continue
+                examples = [
+                    f"{f.members} {f.value:,.0f} {f.unit} {f.start}..{f.end}"
+                    for f in facts if f.element == element
+                ][:12]
+                answer = await self.llm.judge_element(element=element, examples=examples)
+                verdict = Verdict(
+                    element=element, is_revenue=answer.get("is_revenue"),
+                    method="llm", confidence=float(answer.get("confidence") or 0.0),
+                    note=answer.get("reason", ""),
+                )
+                element_register[element] = verdict
+                if verdict.usable:
+                    element_verdicts[element] = bool(verdict.is_revenue)
+                logger.info("xbrl_element_judged job_id=%s element=%s is_revenue=%s conf=%.2f",
+                            job.id, element, verdict.is_revenue, verdict.confidence)
             try:
                 found, notes = candidates_from_instance(
                     raw,
@@ -1146,8 +1194,10 @@ class PipelineOrchestrator:
                     products=products,
                     register=register,
                     learned=learned,
+                    calculation=calculation,
+                    verdicts=element_verdicts,
                 )
-            except Exception:  # noqa: BLE001 - a malformed instance is not this job's failure
+            except Exception:
                 continue
             for note in notes:
                 logger.info("xbrl_note job_id=%s source_id=%s %s", job.id, src.source_id, note)
@@ -1886,10 +1936,46 @@ class PipelineOrchestrator:
             for loser in group[1:]:
                 losers.add(loser.id)
 
+        # Neither the model nor the ranking may settle a disagreement between
+        # claims of equal strength. Two tagged facts for one product and
+        # period - one filing's own quarter and a later filing's comparative
+        # of it - rank identically, and whichever sorted first was published
+        # while the other was held as the loser of a conflict it had not lost.
+        # Where the strongest claims in a group disagree by more than the
+        # precision their sources declared, every one of them is held: the
+        # documents contradict each other, and that is a question for a
+        # person, not a coin toss dressed as a verdict.
+        contested: set[str] = set()
+        for group in by_key.values():
+            if len(group) < 2:
+                continue
+            tier = lambda r: (
+                priority_index.get((r.citation_json or {}).get("source_type", ""), 99),
+                claim_rank(r.extraction_method),
+            )
+            top = min(tier(r) for r in group)
+            strongest = [r for r in group if tier(r) == top
+                         and r.value_normalized_usd_millions is not None]
+            if len(strongest) < 2:
+                continue
+            values = [float(r.value_normalized_usd_millions) for r in strongest]
+            declared = [(r.citation_json or {}).get("rounding_uncertainty_usd_millions")
+                        for r in strongest]
+            if all(d is not None for d in declared):
+                slack = sum(float(d) for d in declared)
+            else:
+                slack = max(ROUNDING_ABSOLUTE, ROUNDING_TOLERANCE * max(abs(v) for v in values))
+            if max(values) - min(values) > slack:
+                contested.update(r.id for r in strongest)
+        winners -= contested
+        losers |= contested
+
         for row in rows:
             if row.id in losers:
                 row.validation_status = ValidationStatus.NEEDS_REVIEW.value
-                row.issue_flags = list(set((row.issue_flags or []) + ["conflict_with_higher_priority_source"]))
+                flag = ("equal_strength_claims_disagree" if row.id in contested
+                        else "conflict_with_higher_priority_source")
+                row.issue_flags = list(set((row.issue_flags or []) + [flag]))
                 if row.citation_json:
                     row.citation_json = {**row.citation_json, "validation_status": row.validation_status}
         self.db.commit()

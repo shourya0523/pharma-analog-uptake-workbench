@@ -1,0 +1,14 @@
+element,is_revenue,method,confidence,note
+ifrs-full:Revenue,true,human,1,IFRS top-line revenue
+ifrs-full:RevenueFromContractsWithCustomers,true,human,1,IFRS 15 revenue
+ifrs-full:RevenueFromSaleOfGoods,true,human,1,IFRS revenue from goods
+us-gaap:Revenues,true,human,1,ASC top-line revenue
+us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax,true,human,1,ASC 606 revenue
+us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax,true,human,1,ASC 606 revenue gross of assessed tax
+us-gaap:SalesRevenueNet,true,human,1,pre-606 net sales
+us-gaap:SalesRevenueGoodsNet,true,human,1,pre-606 net sales of goods
+us-gaap:CostOfGoodsAndServicesSold,false,human,1,a cost of the sale
+us-gaap:CostOfRevenue,false,human,1,a cost of the sale
+us-gaap:GrossProfit,false,human,1,revenue less cost; a result not a base figure
+ifrs-full:CostOfSales,false,human,1,a cost of the sale
+ifrs-full:GrossProfit,false,human,1,revenue less cost; a result not a base figure

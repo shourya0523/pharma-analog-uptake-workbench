@@ -29,6 +29,7 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any, Iterable
 
+from app.extraction import elements
 from app.extraction.members import Resolution, load_register, match
 from app.extraction.tagged import TAGGED_CONFIDENCE, rounding_uncertainty
 from app.parsing.notes_datasets import (
@@ -104,6 +105,7 @@ def candidates_from_notes(
 
     register = register if register is not None else load_register()
     known = products if products is not None else [product]
+    element_verdicts = elements.verdicts(elements.load_register())
 
     # The same way the instance reader finds the product axis: by asking the
     # resolver, not by naming the axis. `DIM` strips a segment to its bare name
@@ -128,7 +130,10 @@ def candidates_from_notes(
 
     for adsh in sorted(subs, key=lambda a: subs[a].filed):
         submission: Submission = subs[adsh]
-        facts = product_facts(by_submission.get(adsh, []), names_a_product=names_a_product)
+        # No linkbase travels with a bulk extract, so only elements the
+        # register has already placed are read here.
+        facts = product_facts(by_submission.get(adsh, []), names_a_product=names_a_product,
+                              verdicts=element_verdicts)
         product_axis_facts += len(facts)
         for fact in facts:
             member = _product_member(fact, names_a_product) or ""

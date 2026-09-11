@@ -91,7 +91,7 @@ def score(case: dict, datapoints: list[dict]) -> list[dict]:
         spread = {round(d["value_normalized_usd_millions"], 3) for d in published}
         if len(spread) > 1:
             state = "published, conflicting"
-            read = sorted(spread)[-1]
+            read = max(spread)
         elif target is None:
             state = "correctly silent" if not published else "answered anyway"
             read = published[0]["value_normalized_usd_millions"] if published else None
@@ -155,6 +155,7 @@ def main() -> int:
         detail = get(args.base, f"/jobs/{job['id']}")
         datapoints = detail.get("datapoints") or []
         results.append({
+            "run_id": created["run_id"], "job_id": job["id"],
             "drug_name": case["drug_name"], "manufacturer": case.get("manufacturer"),
             "job_status": job["status"], "error": job.get("error"),
             "sources_found": job.get("sources_found"),

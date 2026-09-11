@@ -25,7 +25,7 @@ SEED = REPO / "seed"
 # Files under seed/ that the pipeline itself reads. Gold is not among them.
 # A script that writes one of these and also reads gold is the channel this
 # test exists to close.
-PIPELINE_INPUTS = ("product_attributes.csv", "xbrl_members.csv", "example_drugs.csv")
+PIPELINE_INPUTS = ("product_attributes.csv", "xbrl_members.csv", "xbrl_elements.csv", "example_drugs.csv")
 
 # The gold builder reads pipeline reference data and writes gold. That is the
 # permitted direction and the reason this test is about direction rather than

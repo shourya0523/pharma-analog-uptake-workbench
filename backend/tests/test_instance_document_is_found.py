@@ -129,3 +129,37 @@ async def test_a_filing_is_taken_for_its_xbrl_and_not_for_its_form(monkeypatch):
         "a filing the index says carries no XBRL costs no directory listing"
     )
     assert sources[0].url.endswith("acme-20260630x6k_htm.xml")
+
+
+async def test_the_calculation_linkbase_travels_with_the_instance(monkeypatch):
+    """The filing's arithmetic is what tells a sale from the cost of one.
+
+    Fetched beside the instance and handed to the reader by key, so the
+    element is never decided by counting or by name where the filer has
+    already stated its sign.
+    """
+    from app.connectors.sources import SECConnector
+    from app.storage.filestore import LocalFileStore
+
+    connector = SECConnector(LocalFileStore("/tmp"))
+    fetched: list[str] = []
+
+    async def _documents(self, client, cik_int, acc_nodash):
+        return ["acme-20260630.xsd", "acme-20260630_htm.xml", "acme-20260630_cal.xml",
+                "acme-20260630_pre.xml", "acme-20260630.htm"]
+
+    async def _fetch(self, client, *, url, accession, doc, run_id, job_id, source_id):
+        fetched.append(doc)
+        return b"<x/>", False, f"key/{doc}"
+
+    monkeypatch.setattr(SECConnector, "_list_filing_documents", _documents)
+    monkeypatch.setattr(SECConnector, "_fetch_document", _fetch)
+    recent = {"form": ["6-K"], "accessionNumber": ["0001-26-000001"],
+              "filingDate": ["2026-07-27"], "isXBRL": [1]}
+    sources = await connector._retrieve_xbrl_instances(
+        None, run_id="r", job_id="j", cik="0000000001", recent=recent,
+        max_filings=5, since=None, until=None,
+    )
+    assert fetched == ["acme-20260630_htm.xml", "acme-20260630_cal.xml"]
+    assert sources[0].metadata["calculation_key"] == "key/acme-20260630_cal.xml"
+    assert "_pre.xml" not in " ".join(fetched), "the presentation linkbase says nothing about signs"

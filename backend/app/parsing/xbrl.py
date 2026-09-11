@@ -353,55 +353,146 @@ def _product_member(fact: Fact, names_a_product) -> str | None:
     return found[0] if len(found) == 1 else None
 
 
-def revenue_elements(facts: list[Fact], *, names_a_product=None) -> frozenset[str]:
-    """Which elements this filing states product revenue in.
+@dataclass(frozen=True)
+class Calculation:
+    """What a filing's calculation linkbase says about its elements.
 
-    Read from the instance instead of named. Among facts that are money, cover
-    a span of time, come from a published taxonomy and sit on the axis naming a
-    product, the element the filer uses most is the one it reports sales in: a
-    company breaks its products out by revenue far more often than by anything
-    else, so the count separates them without a vocabulary of element names.
+    Every SEC XBRL filing ships one beside the instance. It states, per
+    element, how that element enters the total above it: with weight +1 it is
+    added, with weight -1 it is taken away. That is the filer's own machine-
+    readable statement of which figures are costs and which are the thing the
+    costs come out of, and it is exact where a count or a name is a guess.
 
-    Counting alone is not enough, and the shape that defeats it is ordinary: a
-    filer reporting product profitability tags one cost against every revenue,
-    so the two tie exactly and a cost of goods sold is read as a sale. What
-    separates them is that a cost is a part of what it is taken from - for the
-    same product and period it is smaller, every time. So an element another
-    element beats wherever both appear is dropped as a component of it.
-
-    A genuine tie survives: two elements a filer states revenue under are of
-    the same size, neither dominates, and dropping either would lose a product.
+    ``sign`` maps an element to the sign it carries once every path to a root
+    is walked: -1 for anything that is subtracted anywhere along the way, so a
+    research expense that is added into "costs and expenses" and then taken
+    from operating income reads as a cost. ``nets`` are elements that have
+    something subtracted from them - gross profit, operating income - which
+    are results rather than base figures.
     """
-    counts: dict[str, int] = {}
-    values: dict[tuple[str, str, int | None], dict[str, float]] = {}
-    for fact in facts:
-        member = _product_member(fact, names_a_product)
-        if (
-            fact.from_standard_taxonomy
-            and fact.states_an_amount
-            and fact.months
-            and member
-            and not _is_hypothetical(fact)
-        ):
-            counts[fact.element] = counts.get(fact.element, 0) + 1
-            key = (member, fact.period or "", fact.months)
-            values.setdefault(key, {})[fact.element] = fact.value
-    if not counts:
-        return frozenset()
-    most = max(counts.values())
-    top = {element for element, n in counts.items() if n == most}
-    if len(top) < 2:
-        return frozenset(top)
+
+    sign: dict[str, int]
+    nets: frozenset[str]
+
+    def settles(self, element: str) -> bool | None:
+        """True for a base figure nothing is taken from and that is not itself
+        taken away; False for a cost or a net; None where the linkbase never
+        mentions the element."""
+        if element in self.nets:
+            return False
+        if element in self.sign:
+            return self.sign[element] > 0
+        return None
+
+
+def parse_calculation(raw: bytes) -> Calculation:
+    """The calculation linkbase, read for signs rather than for totals."""
+    root = ET.fromstring(raw)
+    xlink = "{http://www.w3.org/1999/xlink}"
+    label_to_element: dict[str, str] = {}
+    for node in root.iter():
+        if node.tag.endswith("}loc"):
+            href = node.get(xlink + "href", "")
+            fragment = href.split("#", 1)[1] if "#" in href else ""
+            # A locator names the element as `prefix_Local`; the instance
+            # spells the same element `prefix:Local`.
+            label_to_element[node.get(xlink + "label", "")] = fragment.replace("_", ":", 1)
+    parents: dict[str, list[tuple[str, int]]] = {}
+    nets: set[str] = set()
+    for node in root.iter():
+        if not node.tag.endswith("}calculationArc"):
+            continue
+        parent = label_to_element.get(node.get(xlink + "from", ""))
+        child = label_to_element.get(node.get(xlink + "to", ""))
+        if not parent or not child:
+            continue
+        try:
+            weight = 1 if float(node.get("weight", "1")) >= 0 else -1
+        except ValueError:
+            weight = 1
+        parents.setdefault(child, []).append((parent, weight))
+        if weight < 0:
+            nets.add(parent)
+
+    sign: dict[str, int] = {}
+
+    def resolve(element: str, seen: frozenset[str]) -> int:
+        if element in sign:
+            return sign[element]
+        if element in seen:
+            return 1
+        value = 1
+        for parent, weight in parents.get(element, []):
+            if weight < 0 or resolve(parent, seen | {element}) < 0:
+                value = -1
+                break
+        sign[element] = value
+        return value
+
+    for element in list(parents):
+        resolve(element, frozenset())
+    for element in nets:
+        sign.setdefault(element, 1)
+    return Calculation(sign=sign, nets=frozenset(nets))
+
+
+def _candidate_elements(facts: list[Fact], names_a_product) -> frozenset[str]:
+    """Elements that could state product revenue, by what the fact is.
+
+    Money, over a span of time, from a published taxonomy, on the axis that
+    names a product, and not a forecast. This says what a number is; what it
+    means - a sale or a cost of one - is the calculation linkbase's to say.
+    """
     return frozenset(
-        element for element in top
-        if not any(_dominates(other, element, values) for other in top if other != element)
+        fact.element
+        for fact in facts
+        if fact.from_standard_taxonomy
+        and fact.states_an_amount
+        and fact.months
+        and _product_member(fact, names_a_product)
+        and not _is_hypothetical(fact)
     )
 
 
-def _dominates(bigger: str, smaller: str, values: dict) -> bool:
-    """Whether one element outranks another everywhere the two are comparable."""
-    shared = [row for row in values.values() if bigger in row and smaller in row]
-    return bool(shared) and all(row[bigger] > row[smaller] for row in shared)
+def unsettled_elements(
+    facts: list[Fact], *, names_a_product=None, calculation: Calculation | None = None
+) -> frozenset[str]:
+    """Candidate elements the filing's own linkbase does not place."""
+    return frozenset(
+        element for element in _candidate_elements(facts, names_a_product)
+        if calculation is None or calculation.settles(element) is None
+    )
+
+
+def revenue_elements(
+    facts: list[Fact],
+    *,
+    names_a_product=None,
+    calculation: Calculation | None = None,
+    verdicts: dict[str, bool] | None = None,
+) -> frozenset[str]:
+    """Which elements this filing states product revenue in.
+
+    The filing says so itself: its calculation linkbase gives each element
+    the sign it carries in the total above it, so a cost of goods sold is the
+    element with weight -1 under gross profit and revenue is the one with
+    weight +1. Nothing is counted and nothing is compared; the filer's own
+    arithmetic is read.
+
+    ``verdicts`` covers what the linkbase leaves unplaced - an element tagged
+    on the product axis but absent from the statements' arithmetic. Those are
+    answered once per element, by a model, and remembered. An element neither
+    source places is left out rather than guessed at.
+    """
+    verdicts = verdicts or {}
+    chosen = set()
+    for element in _candidate_elements(facts, names_a_product):
+        settled = calculation.settles(element) if calculation else None
+        if settled is None:
+            settled = verdicts.get(element)
+        if settled:
+            chosen.add(element)
+    return frozenset(chosen)
 
 
 def _is_a_slice(candidates: list[Fact], members: list[str]) -> set[int]:
@@ -436,7 +527,12 @@ def _is_a_slice(candidates: list[Fact], members: list[str]) -> set[int]:
 
 
 def product_facts(
-    facts: list[Fact], *, worldwide_only: bool = True, names_a_product=None
+    facts: list[Fact],
+    *,
+    worldwide_only: bool = True,
+    names_a_product=None,
+    calculation: Calculation | None = None,
+    verdicts: dict[str, bool] | None = None,
 ) -> list[Fact]:
     """Revenue facts sitting on the product axis, each the whole of its product.
 
@@ -460,7 +556,8 @@ def product_facts(
     period, with any qualifier the filing itself uses to split that product
     read as a slice of it.
     """
-    elements = revenue_elements(facts, names_a_product=names_a_product)
+    elements = revenue_elements(facts, names_a_product=names_a_product,
+                                calculation=calculation, verdicts=verdicts)
     candidates: list[Fact] = []
     members: list[str] = []
     for fact in facts:

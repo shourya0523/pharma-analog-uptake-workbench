@@ -1081,8 +1081,11 @@ def test_a_derived_quarter_is_not_stored_as_a_tagged_fact():
     orch = PipelineOrchestrator.__new__(PipelineOrchestrator)
     orch.db = db
 
+    from app.domain.models import SourceType
+
     class _Src:
         source_id = "s1"
+        source_type = SourceType.EARNINGS_RELEASE
         url = "https://example.invalid/8-k.htm"
         filing_type = "8-K"
         accession_number = "0000000000-00-000000"

@@ -18,6 +18,19 @@ from __future__ import annotations
 
 from app.parsing.xbrl import PRODUCT_AXIS, Fact, parse_facts, product_facts
 
+# What a bare fact list cannot say for itself: a real filing's linkbase settles
+# which element is the sale, and these tests hand the answer over directly.
+REVENUE = {
+    "us-gaap:Revenues": True,
+    "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax": True,
+    "us-gaap:SalesRevenueGoodsNet": True,
+    "us-gaap:CostOfGoodsAndServicesSold": False,
+    "ifrs-full:Revenue": True,
+    "ifrs-full:RevenueFromSaleOfGoods": True,
+    "ifrs-full:CostOfSales": False,
+}
+
+
 
 def _instance(axis: str) -> bytes:
     """One product, one quarter, in whichever spelling of the axis is asked."""
@@ -42,14 +55,14 @@ def _instance(axis: str) -> bytes:
 
 def test_the_pre_2018_spelling_is_the_same_axis():
     """The defect: this instance read as having no product facts at all."""
-    facts = product_facts(parse_facts(_instance("us-gaap:ProductOrServiceAxis")))
+    facts = product_facts(parse_facts(_instance("us-gaap:ProductOrServiceAxis")), verdicts=REVENUE)
     assert [f.product_member for f in facts] == ["gild:TruvadaMember"]
     assert facts[0].period == "2013Q3"
     assert facts[0].value == 823_583_000.0
 
 
 def test_the_modern_spelling_is_unchanged():
-    facts = product_facts(parse_facts(_instance(PRODUCT_AXIS)))
+    facts = product_facts(parse_facts(_instance(PRODUCT_AXIS)), verdicts=REVENUE)
     assert [f.product_member for f in facts] == ["gild:TruvadaMember"]
 
 
@@ -60,7 +73,7 @@ def test_an_unrelated_axis_still_names_no_product():
     instance actually carries, and that filing has no product breakdown - the
     correct reading of it is still nothing.
     """
-    assert product_facts(parse_facts(_instance("us-gaap:StatementClassOfStockAxis"))) == []
+    assert product_facts(parse_facts(_instance("us-gaap:StatementClassOfStockAxis")), verdicts=REVENUE) == []
 
 
 def test_a_fact_keyed_under_either_name_reports_its_product():

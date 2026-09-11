@@ -26,8 +26,10 @@ from __future__ import annotations
 
 from typing import Any
 
+from app.extraction import elements
 from app.extraction.members import Resolution, load_register, resolve, stored
 from app.parsing.xbrl import (
+    Calculation,
     Fact,
     _product_member,
     filer_category,
@@ -69,6 +71,8 @@ def candidates_from_instance(
     issuer: str = "",
     products: list[str] | None = None,
     register: dict[tuple[str, str], Resolution] | None = None,
+    calculation: Calculation | None = None,
+    verdicts: dict[str, bool] | None = None,
     learned: dict[tuple[str, str], Resolution] | None = None,
 ) -> tuple[list[dict[str, Any]], list[str]]:
     """(candidates, notes) for one product, from one XBRL instance.
@@ -87,6 +91,10 @@ def candidates_from_instance(
     notes: list[str] = []
     register = register if register is not None else load_register()
     known = products if products is not None else [product]
+    # What the filing's linkbase does not settle, the element register may:
+    # decisions made once, by a person or a model, keyed by the element alone.
+    if verdicts is None:
+        verdicts = elements.verdicts(elements.load_register())
 
     # How the product axis is found. A filer states products on whatever axis
     # its taxonomy gives it, so the axis is not named here - each member is put
@@ -100,7 +108,8 @@ def candidates_from_instance(
             placed[member] = resolve(member, known, register, issuer=issuer).resolved
         return placed[member]
 
-    facts = product_facts(parse_facts(raw), names_a_product=names_a_product)
+    facts = product_facts(parse_facts(raw), names_a_product=names_a_product,
+                          calculation=calculation, verdicts=verdicts)
     if not facts:
         category = filer_category(raw) or "unknown filer category"
         notes.append(f"no product-level facts tagged ({category})")
