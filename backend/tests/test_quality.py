@@ -178,6 +178,24 @@ def test_judge_hard_veto_company_total():
     assert out["validation_status"] == "needs_review"
 
 
+def test_a_tagged_citation_names_the_product_the_way_the_taxonomy_spells_it():
+    """The veto reads prose and tagged citations alike.
+
+    A member spells a two-word brand as one identifier, and the veto for a
+    quote that never names the product was tripping on every such brand, so
+    the reader with the strongest evidence was held for review on exactly
+    the products whose names have a space in them.
+    """
+    judgment = {"support_classification": "supported", "validation_status": "auto_pass", "issues": []}
+    candidate = {"period_type": "quarterly", "revenue_scope": "Product family"}
+    tagged = "us-gaap:Revenue [2026-04-01..2026-06-30] ProductOrServiceAxis=CalderonXrMember = 8,411,000"
+    out = apply_judge_hard_vetoes(product="Calderon XR", candidate=candidate, quote=tagged, judgment=judgment)
+    assert "hard_veto:product_missing_from_quote" not in out["issues"]
+    sibling = "us-gaap:Revenue [2026-04-01..2026-06-30] ProductOrServiceAxis=NuVessaMember = 8,411,000"
+    out = apply_judge_hard_vetoes(product="Calderon XR", candidate=candidate, quote=sibling, judgment=judgment)
+    assert "hard_veto:product_missing_from_quote" in out["issues"]
+
+
 def test_judge_hard_veto_ytd_as_quarterly():
     assert re_ytd_language("for the six months ended June 30, 2026")
     out = apply_judge_hard_vetoes(

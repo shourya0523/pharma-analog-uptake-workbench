@@ -156,9 +156,15 @@ def words(text: str) -> list[str]:
     """
     local = text.split(":")[-1]
     local = re.sub(r"Member$", "", local)
-    spaced = re.sub(r"(?<=[a-z0-9])(?=[A-Z])", " ", local)
-    spaced = re.sub(r"(?<=[A-Z])(?=[A-Z][a-z])", " ", spaced)
-    return [w for w in re.split(r"[^A-Za-z0-9]+", spaced.lower()) if w]
+    return [w for w in re.split(r"[^A-Za-z0-9]+", split_camel(local).lower()) if w]
+
+
+def split_camel(text: str) -> str:
+    """``NebulizedCalderonXR`` as ``Nebulized Calderon XR``: a space wherever a
+    capital follows a lowercase letter or digit, or begins a new word after a
+    run of capitals."""
+    spaced = re.sub(r"(?<=[a-z0-9])(?=[A-Z])", " ", text)
+    return re.sub(r"(?<=[A-Z])(?=[A-Z][a-z])", " ", spaced)
 
 
 def _suffixes(parts: list[str]) -> list[list[str]]:

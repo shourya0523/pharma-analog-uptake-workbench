@@ -5,6 +5,7 @@ from collections.abc import Iterable
 from difflib import SequenceMatcher
 from typing import Any
 
+from app.extraction.members import split_camel
 from app.parsing.evidence import SCOPE_PATTERNS, TOTAL_REVENUE_RE, product_aliases
 
 # A label states more than one product by joining names with one of these. A
@@ -170,9 +171,17 @@ def quote_mentions_product(
     generic: str | None = None,
     extra_aliases: list[str] | None = None,
 ) -> bool:
+    """Whether the quote names the product, however the quote spells it.
+
+    Prose spells a name as people do. A tagged fact's citation spells it as
+    the filer's taxonomy does - one identifier, capitals for word breaks, no
+    spaces - so ``CalderonXrMember`` has to be read as ``Calderon XR`` before
+    it can be found. Both spellings are tried.
+    """
     q = _normalize(quote)
+    spaced = _normalize(split_camel(quote))
     for alias in product_aliases(product, generic, extra=extra_aliases):
-        if alias.lower() in q:
+        if alias.lower() in q or _normalize(split_camel(alias)) in spaced:
             return True
     return False
 
