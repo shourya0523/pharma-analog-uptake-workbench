@@ -21,6 +21,15 @@ REVENUE_HINT_RE = re.compile(
     re.IGNORECASE,
 )
 TOTAL_REVENUE_RE = re.compile(r"\btotal\s+revenues?\b", re.IGNORECASE)
+# Words a filer uses for money that is revenue but not the product's sales: a
+# milestone or licence payment from a partner is recognised as revenue in the
+# quarter it is earned, and is often stated beside the product whose sales
+# triggered it. This is the vocabulary seen so far, not a closed list; a
+# filer describing the same thing in other words is not caught by it.
+NON_PRODUCT_REVENUE_RE = re.compile(
+    r"\b(milestone|licen[cs]e\s+revenues?|licensing\s+revenues?|upfront\s+payment)\b",
+    re.IGNORECASE,
+)
 
 # Geography and scope labels that split a product block into rows. Ordered so
 # the longer spellings match before their abbreviations. Read by the positional

@@ -17,7 +17,11 @@ from app.llm.grounding import (
     enforce_verbatim_on_candidates,
     quote_is_verbatim,
 )
-from app.parsing.evidence import TOTAL_REVENUE_RE, product_aliases
+from app.parsing.evidence import (
+    NON_PRODUCT_REVENUE_RE,
+    TOTAL_REVENUE_RE,
+    product_aliases,
+)
 from app.quality.candidate_filters import (
     quote_mentions_other_brand,
     quote_mentions_product,
@@ -733,6 +737,11 @@ def apply_judge_hard_vetoes(
         veto = True
     if period_type == "quarterly" and re_ytd_language(q):
         issues.append("hard_veto:ytd_language_as_quarterly")
+        veto = True
+    # A milestone earned on the product's sales is stated in the same sentence
+    # as the product, so naming the product does not clear it.
+    if NON_PRODUCT_REVENUE_RE.search(q) and (candidate.get("revenue_scope") or "") not in {"Company total", ""}:
+        issues.append("hard_veto:milestone_or_license_revenue")
         veto = True
     if not mentions and (candidate.get("revenue_scope") or "") not in {"Company total", ""}:
         aliases = product_aliases(product, generic, extra=extra_aliases)
