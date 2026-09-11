@@ -163,8 +163,99 @@ def _year_near(text: str, end: int) -> int | None:
     return int(match.group(1)) if match else None
 
 
+# The other way a filing names its period. "Three months ended June 30, 2024" is
+# a US convention; outside it, the same span is written "Q2 2024" and the phrase
+# above never appears. Novartis, Sanofi and Novo Nordisk use the quarter form 62,
+# 55 and 59 times respectively in the exhibits they file, and "months ended" not
+# once, so every one of their filings had no detectable period at all - which is
+# what `fingerprint` refuses on, and what left the model reader guessing the
+# quarter for figures it had read correctly.
+#
+# A bare four-digit year is required, never "FY2026". A filer that writes its
+# year that way usually has a fiscal year that is not the calendar one, and the
+# quarter number then says nothing about which months it covers - which is
+# exactly the inference below.
+_QUARTER_FORMS = (
+    re.compile(r"\bQ([1-4])\s*[-/ ]?\s*((?:19|20)\d{2})\b", re.I),
+    re.compile(r"\b((?:19|20)\d{2})\s*[-/ ]?\s*Q([1-4])\b", re.I),
+    re.compile(r"\b(first|second|third|fourth)\s+quarter\s+(?:of\s+)?"
+               r"((?:19|20)\d{2})\b", re.I),
+)
+_SPAN_FORMS = (
+    # (regex, months, month the span ends in)
+    (re.compile(r"\bH1\s*[-/ ]?\s*((?:19|20)\d{2})\b", re.I), 6, 6),
+    (re.compile(r"\b9M\s*[-/ ]?\s*((?:19|20)\d{2})\b", re.I), 9, 9),
+)
+_QUARTER_WORDS = {"first": 1, "second": 2, "third": 3, "fourth": 4}
+
+
+def _quarter_notation(text: str) -> PeriodContext | None:
+    """The document's period from "Q2 2024" notation, when no phrase states it.
+
+    Choosing among what a filing names is the whole difficulty, and it goes
+    wrong in both directions. Taking the latest year dates Sanofi's
+    second-quarter release 2025, because it carries next year's guidance as
+    "H1 2025" and "H2 2025"; it also dates Novo Nordisk's first-quarter 2025
+    announcement 2026, on one sentence expecting a regulatory filing "during
+    the first quarter of 2026". Taking the most-named period instead would date
+    a release by whichever comparative it happens to repeat most, which is the
+    mistake the phrase-based path above documents.
+
+    What separates them is how a document treats its own period: it states it
+    over and over - in the title, the headers, every table - while a quarter it
+    merely refers to is named once or twice. The margin is not close:
+
+        Sanofi Q4 2024      2024Q4 x73   against 2025Q2 x3  (next year's guidance)
+        Sanofi Q2 2026      2026Q2 x81   against 2027Q2 x2
+        Novo Nordisk Q1 25  2025Q1 x45   against 2026Q1 x1  (an expected filing)
+        Novartis Q1 2025    2025Q1 x31   against 2024Q1 x27 (the comparative)
+
+    So the most-named wins, and the year only breaks a tie. Ordering it the
+    other way - latest year first, as the phrase-based path above does - dates
+    every full-year release into the next year, because that is where the
+    guidance is.
+
+    The comparative is the thing frequency could plausibly lose to, and the
+    phrase-based path above documents a filing where it does. It does not
+    happen in this notation in anything measured here: a comparative trails the
+    period being reported in all four cases above, most of them by a wide
+    margin. If that ever reverses, this is the line that will be wrong.
+    """
+    # Collected by position first, because the forms overlap: in "Q2 2024 Q2
+    # 2024" the year-first pattern also matches the "2024 Q2" that spans the
+    # two, and counting both inflates whichever period a document happens to
+    # repeat adjacently. One mention is one mention wherever it is read from.
+    seen: list[tuple[int, int, tuple[int, int, int]]] = []
+    for pattern in _QUARTER_FORMS:
+        for match in pattern.finditer(text):
+            first, second = match.group(1), match.group(2)
+            if first.lower() in _QUARTER_WORDS:
+                quarter, year = _QUARTER_WORDS[first.lower()], int(second)
+            elif first.isdigit() and len(first) == 4:
+                year, quarter = int(first), int(second)
+            else:
+                quarter, year = int(first), int(second)
+            seen.append((match.start(), match.end(), (3, quarter * 3, year)))
+
+    counts: Counter[tuple[int, int, int]] = Counter()
+    taken_to = -1
+    for start, end, key in sorted(seen):
+        if start < taken_to:
+            continue
+        counts[key] += 1
+        taken_to = end
+    if not counts:
+        for pattern, months, month in _SPAN_FORMS:
+            for match in pattern.finditer(text):
+                counts[(months, month, int(match.group(1)))] += 1
+    if not counts:
+        return None
+    months, month, year = max(counts, key=lambda key: (counts[key], key[2], key[1]))
+    return PeriodContext(months=months, month=month, year=year)
+
+
 def detect_period_context(text: str) -> PeriodContext | None:
-    """Infer the document's own reporting period from its "months ended" prose."""
+    """Infer the document's own reporting period from the way it names one."""
     text = text or ""
     counts: Counter[tuple[int, int, int]] = Counter()
     for match in _PERIOD_PHRASE_RE.finditer(text):
@@ -185,7 +276,10 @@ def detect_period_context(text: str) -> PeriodContext | None:
         for months in spans:
             counts[(months, month, year)] += 1
     if not counts:
-        return None
+        # No filing states its period both ways, so this is a different
+        # convention rather than a second opinion, and it only ever runs where
+        # there was no answer at all.
+        return _quarter_notation(text)
     # Prefer the quarterly framing, then the latest year - never the most
     # frequently repeated one. A comparative year is always earlier than the
     # year being reported, and it is often named more often than the reporting

@@ -1,15 +1,15 @@
 {
  "documents": 25,
- "matched": 9,
+ "matched": 16,
  "key_rows": 27,
  "wrong": 1,
  "by_product": {
   "Kisqali": [
-   3,
+   9,
    10
   ],
   "Dupixent": [
-   6,
+   7,
    9
   ],
   "Wegovy": [
@@ -21,35 +21,38 @@
   {
    "product": "Kisqali",
    "url": "https://www.sec.gov/Archives/edgar/data/1114448/000111444825000003/a251028-99_2.htm",
-   "error": "AttributeError: 'str' object has no attribute 'get'",
    "wanted": 1,
-   "matched": 0
+   "offered": 4,
+   "kept": 4,
+   "dropped": 0,
+   "matched": 1,
+   "wrong": [],
+   "absent": [],
+   "period_context": "three months ended September 2025"
   },
   {
    "product": "Kisqali",
    "url": "https://www.sec.gov/Archives/edgar/data/1114448/000111444826000007/a260204-99_2.htm",
    "wanted": 1,
-   "offered": 4,
-   "kept": 4,
+   "offered": 2,
+   "kept": 2,
    "dropped": 0,
-   "matched": 0,
+   "matched": 1,
    "wrong": [],
-   "absent": [
-    "2025Q4"
-   ],
-   "period_context": null
+   "absent": [],
+   "period_context": "three months ended December 2025"
   },
   {
    "product": "Kisqali",
    "url": "https://www.sec.gov/Archives/edgar/data/1114448/000111444826000010/a260428-99_2.htm",
    "wanted": 1,
-   "offered": 3,
-   "kept": 3,
+   "offered": 2,
+   "kept": 2,
    "dropped": 0,
    "matched": 1,
    "wrong": [],
    "absent": [],
-   "period_context": null
+   "period_context": "three months ended March 2026"
   },
   {
    "product": "Kisqali",
@@ -58,26 +61,22 @@
    "offered": 4,
    "kept": 4,
    "dropped": 0,
-   "matched": 0,
+   "matched": 1,
    "wrong": [],
-   "absent": [
-    "2026Q2"
-   ],
-   "period_context": null
+   "absent": [],
+   "period_context": "three months ended June 2026"
   },
   {
    "product": "Kisqali",
    "url": "https://www.sec.gov/Archives/edgar/data/1114448/000137036824000019/nvs-20240630-99_2.htm",
    "wanted": 1,
-   "offered": 3,
-   "kept": 3,
+   "offered": 4,
+   "kept": 4,
    "dropped": 0,
-   "matched": 0,
+   "matched": 1,
    "wrong": [],
-   "absent": [
-    "2024Q2"
-   ],
-   "period_context": null
+   "absent": [],
+   "period_context": "three months ended June 2024"
   },
   {
    "product": "Kisqali",
@@ -86,38 +85,34 @@
    "offered": 4,
    "kept": 4,
    "dropped": 0,
-   "matched": 0,
+   "matched": 1,
    "wrong": [],
-   "absent": [
-    "2024Q3"
-   ],
-   "period_context": null
+   "absent": [],
+   "period_context": "three months ended September 2024"
   },
   {
    "product": "Kisqali",
    "url": "https://www.sec.gov/Archives/edgar/data/1114448/000137036825000007/a250131-99_2.htm",
    "wanted": 1,
-   "offered": 6,
-   "kept": 6,
+   "offered": 4,
+   "kept": 4,
    "dropped": 0,
-   "matched": 0,
+   "matched": 1,
    "wrong": [],
-   "absent": [
-    "2024Q4"
-   ],
-   "period_context": null
+   "absent": [],
+   "period_context": "three months ended December 2024"
   },
   {
    "product": "Kisqali",
    "url": "https://www.sec.gov/Archives/edgar/data/1114448/000137036825000010/a250429-99_2.htm",
    "wanted": 2,
-   "offered": 3,
-   "kept": 3,
+   "offered": 2,
+   "kept": 2,
    "dropped": 0,
    "matched": 2,
    "wrong": [],
    "absent": [],
-   "period_context": null
+   "period_context": "three months ended March 2025"
   },
   {
    "product": "Kisqali",
@@ -135,7 +130,7 @@
     ]
    ],
    "absent": [],
-   "period_context": null
+   "period_context": "three months ended June 2025"
   },
   {
    "product": "Dupixent",
@@ -147,7 +142,7 @@
    "matched": 1,
    "wrong": [],
    "absent": [],
-   "period_context": null
+   "period_context": "three months ended June 2024"
   },
   {
    "product": "Dupixent",
@@ -159,7 +154,7 @@
    "matched": 1,
    "wrong": [],
    "absent": [],
-   "period_context": null
+   "period_context": "three months ended September 2024"
   },
   {
    "product": "Dupixent",
@@ -173,7 +168,7 @@
    "absent": [
     "2024Q4"
    ],
-   "period_context": null
+   "period_context": "three months ended December 2024"
   },
   {
    "product": "Dupixent",
@@ -187,23 +182,11 @@
    "absent": [
     "2025Q1"
    ],
-   "period_context": null
+   "period_context": "three months ended March 2025"
   },
   {
    "product": "Dupixent",
    "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140425000020/pressreleaseq22025english.htm",
-   "wanted": 1,
-   "offered": 2,
-   "kept": 2,
-   "dropped": 0,
-   "matched": 1,
-   "wrong": [],
-   "absent": [],
-   "period_context": null
-  },
-  {
-   "product": "Dupixent",
-   "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140425000026/pressreleaseq32025english.htm",
    "wanted": 1,
    "offered": 2,
    "kept": 1,
@@ -211,7 +194,19 @@
    "matched": 1,
    "wrong": [],
    "absent": [],
-   "period_context": null
+   "period_context": "three months ended June 2025"
+  },
+  {
+   "product": "Dupixent",
+   "url": "https://www.sec.gov/Archives/edgar/data/1121404/000112140425000026/pressreleaseq32025english.htm",
+   "wanted": 1,
+   "offered": 1,
+   "kept": 1,
+   "dropped": 0,
+   "matched": 1,
+   "wrong": [],
+   "absent": [],
+   "period_context": "three months ended September 2025"
   },
   {
    "product": "Dupixent",
@@ -220,12 +215,10 @@
    "offered": 1,
    "kept": 1,
    "dropped": 0,
-   "matched": 0,
+   "matched": 1,
    "wrong": [],
-   "absent": [
-    "2025Q4"
-   ],
-   "period_context": null
+   "absent": [],
+   "period_context": "three months ended December 2025"
   },
   {
    "product": "Dupixent",
@@ -237,7 +230,7 @@
    "matched": 1,
    "wrong": [],
    "absent": [],
-   "period_context": null
+   "period_context": "three months ended March 2026"
   },
   {
    "product": "Dupixent",
@@ -249,7 +242,7 @@
    "matched": 1,
    "wrong": [],
    "absent": [],
-   "period_context": null
+   "period_context": "three months ended June 2026"
   },
   {
    "product": "Wegovy",
@@ -263,7 +256,7 @@
    "absent": [
     "2025Q3"
    ],
-   "period_context": null
+   "period_context": "three months ended September 2025"
   },
   {
    "product": "Wegovy",
@@ -277,7 +270,7 @@
    "absent": [
     "2025Q4"
    ],
-   "period_context": null
+   "period_context": "three months ended December 2025"
   },
   {
    "product": "Wegovy",
@@ -291,7 +284,7 @@
    "absent": [
     "2024Q2"
    ],
-   "period_context": null
+   "period_context": "three months ended June 2024"
   },
   {
    "product": "Wegovy",
@@ -305,7 +298,7 @@
    "absent": [
     "2024Q3"
    ],
-   "period_context": null
+   "period_context": "three months ended September 2024"
   },
   {
    "product": "Wegovy",
@@ -319,7 +312,7 @@
    "absent": [
     "2024Q4"
    ],
-   "period_context": null
+   "period_context": "three months ended December 2024"
   },
   {
    "product": "Wegovy",
@@ -334,7 +327,7 @@
     "2024Q1",
     "2025Q1"
    ],
-   "period_context": null
+   "period_context": "three months ended March 2025"
   },
   {
    "product": "Wegovy",
@@ -348,7 +341,7 @@
    "absent": [
     "2025Q2"
    ],
-   "period_context": null
+   "period_context": "three months ended June 2025"
   }
  ]
 }
