@@ -8,7 +8,12 @@ from sqlalchemy.dialects import postgresql
 from sqlalchemy.orm import Session
 from sqlalchemy.schema import CreateTable
 
-from app.db.migrations import BASELINE_TABLES, SchemaMismatchError, upgrade_database
+from app.db.migrations import (
+    BASELINE_001_COLUMNS,
+    BASELINE_TABLES,
+    SchemaMismatchError,
+    upgrade_database,
+)
 from app.db.models import EvidenceAssertionORM
 
 
@@ -65,6 +70,51 @@ def test_existing_baseline_rows_survive_upgrade(tmp_path: Path):
             ).scalar_one()
             == "completed"
         )
+
+
+def test_recorded_baseline_is_still_a_subset_of_what_001_creates(tmp_path: Path):
+    """The recorded columns must stay real.
+
+    Revision 001 builds from the live models, so what it creates grows as they
+    do and can never equal a frozen list. What must hold is that every column
+    the guard expects still exists - a renamed or dropped baseline column would
+    otherwise leave the guard describing a schema nobody has.
+    """
+
+    engine = create_engine(_url(tmp_path / "baseline.db"))
+    upgrade_database(engine, target_revision="001")
+
+    inspector = inspect(engine)
+    for table in sorted(BASELINE_TABLES):
+        actual = {column["name"] for column in inspector.get_columns(table)}
+        assert set(BASELINE_001_COLUMNS[table]) <= actual, table
+
+
+def test_legacy_baseline_still_stamps_after_a_column_is_added_to_a_baseline_table(
+    tmp_path: Path,
+):
+    """A database frozen at an older revision is old, not corrupt.
+
+    drug_jobs gained product_id in 004. An unversioned copy that predates it has
+    to be recognised and stamped, which it was not while the expected
+    fingerprint was read back from the live models.
+    """
+
+    engine = create_engine(_url(tmp_path / "legacy.db"))
+    # Built from the recorded columns rather than from today's models, which is
+    # the whole point: this is the shape a database on disk actually has.
+    with engine.begin() as conn:
+        for table in sorted(BASELINE_TABLES):
+            columns = ", ".join(
+                f"{name} TEXT PRIMARY KEY" if name == "id" else f"{name} TEXT"
+                for name in BASELINE_001_COLUMNS[table]
+            )
+            conn.execute(text(f"CREATE TABLE {table} ({columns})"))
+
+    upgrade_database(engine)
+
+    columns = {column["name"] for column in inspect(engine).get_columns("drug_jobs")}
+    assert "product_id" in columns
 
 
 def test_unknown_unversioned_schema_is_refused(tmp_path: Path):
