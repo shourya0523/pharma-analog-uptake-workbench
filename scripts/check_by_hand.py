@@ -17,6 +17,7 @@ import argparse
 import json
 import re
 import sys
+import time
 import urllib.request
 from pathlib import Path
 
@@ -24,9 +25,25 @@ UA = "pharma-analog-research mehr.anand@bitsdime.com"
 CACHE = Path("/tmp/evalrun/byhand")
 
 
+def _read(url: str, *, attempts: int = 5) -> bytes:
+    """One HTTP read, retried: the API is busy running jobs and EDGAR is slow."""
+    delay = 5.0
+    for attempt in range(attempts):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": UA})
+            with urllib.request.urlopen(req, timeout=120) as r:
+                return r.read()
+        except Exception as exc:
+            if attempt == attempts - 1:
+                raise
+            print(f"      ({type(exc).__name__} on {url[-60:]}; retrying in {delay:.0f}s)")
+            time.sleep(delay)
+            delay *= 2
+    raise RuntimeError("unreachable")
+
+
 def get_json(url: str) -> dict:
-    with urllib.request.urlopen(url, timeout=120) as r:
-        return json.loads(r.read().decode())
+    return json.loads(_read(url).decode())
 
 
 def fetch(url: str) -> bytes | None:
@@ -34,10 +51,8 @@ def fetch(url: str) -> bytes | None:
     path = CACHE / re.sub(r"[^A-Za-z0-9]", "_", url)[-150:]
     if path.exists():
         return path.read_bytes()
-    req = urllib.request.Request(url, headers={"User-Agent": UA})
     try:
-        with urllib.request.urlopen(req, timeout=120) as r:
-            raw = r.read()
+        raw = _read(url)
     except Exception as exc:  # noqa: BLE001
         print(f"      fetch failed: {exc}")
         return None
@@ -91,9 +106,33 @@ def check_instance(raw: bytes, drug: str, period_start: str | None, value: float
 
 
 def printed_sibling(url: str) -> str | None:
-    """The human-readable filing beside an extracted instance."""
+    """The human-readable filing beside an extracted instance.
+
+    An inline filing's instance is extracted from the document itself, so the
+    document is the instance's own name without the suffix. An older instance
+    was filed as a separate file, and the document beside it is whatever the
+    issuer's submissions index names as the filing's primary document.
+    """
     if url.endswith("_htm.xml"):
         return url[: -len("_htm.xml")] + ".htm"
+    m = re.search(r"/edgar/data/(\d+)/(\d{10})(\d{2})(\d{6})/", url)
+    if not m:
+        return None
+    cik, folder = m.group(1), url[: m.end()]
+    accession = f"{m.group(2)}-{m.group(3)}-{m.group(4)}"
+    submissions = fetch(f"https://data.sec.gov/submissions/CIK{int(cik):010d}.json")
+    if not submissions:
+        return None
+    index = json.loads(submissions)
+    shards = [index.get("filings", {}).get("recent", {})]
+    for older in index.get("filings", {}).get("files", []):
+        shard = fetch("https://data.sec.gov/submissions/" + older["name"])
+        if shard:
+            shards.append(json.loads(shard))
+    for shard in shards:
+        for number, primary in zip(shard.get("accessionNumber", []), shard.get("primaryDocument", [])):
+            if number == accession and primary:
+                return folder + primary
     return None
 
 
