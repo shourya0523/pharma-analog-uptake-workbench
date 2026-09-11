@@ -165,9 +165,10 @@ def _year_near(text: str, end: int) -> int | None:
 
 # The other way a filing names its period. "Three months ended June 30, 2024" is
 # a US convention; outside it, the same span is written "Q2 2024" and the phrase
-# above never appears. Novartis, Sanofi and Novo Nordisk use the quarter form 62,
-# 55 and 59 times respectively in the exhibits they file, and "months ended" not
-# once, so every one of their filings had no detectable period at all - which is
+# above never appears. In one exhibit each from Novartis, Sanofi and Novo
+# Nordisk the quarter form appears 62, 55 and 59 times and "months ended" not
+# once; across the 25 exhibits `seed/holdout2` cites, none was datable by the
+# phrase and all 25 are datable by the quarter form - which is
 # what `fingerprint` refuses on, and what left the model reader guessing the
 # quarter for figures it had read correctly.
 #
@@ -220,6 +221,15 @@ def _quarter_notation(text: str) -> PeriodContext | None:
     happen in this notation in anything measured here: a comparative trails the
     period being reported in all four cases above, most of them by a wide
     margin. If that ever reverses, this is the line that will be wrong.
+
+    Where the numbers come from, and what they are worth: the four counts are
+    from `seed/holdout2`'s documents, and this rule was revised three times
+    against them - latest-year, then latest-year-among-repeated, then this. So
+    25/25 on those documents is in-sample and is not evidence of anything.
+    The out-of-sample check is Johnson & Johnson's quarterly earnings exhibits,
+    a different issuer writing "FIRST QUARTER 2016" over geography rows: 42 of
+    42, against ground truth taken from each filing's date rather than from its
+    text. `seed/holdout2` is now spent for anything that touches this function.
     """
     # Collected by position first, because the forms overlap: in "Q2 2024 Q2
     # 2024" the year-first pattern also matches the "2024 Q2" that spans the

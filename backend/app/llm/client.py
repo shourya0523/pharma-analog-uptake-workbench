@@ -185,11 +185,13 @@ def _citations_from_message(message: dict[str, Any]) -> list[dict[str, str]]:
 def _filter_hallucinated_spans(spans: list[Any], source_text: str) -> list[dict[str, Any]]:
     """Spans the source actually contains, from whatever shape the model sent.
 
-    A span is meant to be an object carrying `span_text`. A model sometimes
-    returns the list as bare strings instead, and every reader downstream calls
-    `.get` on it: on one of Novartis's 6-K exhibits that raised AttributeError
-    out of `extract_revenue`, which the orchestrator does not guard, so a single
-    oddly-shaped reply failed the whole job rather than that one source.
+    A span is meant to be an object carrying `span_text`, and every reader
+    downstream calls `.get` on it. On one of Novartis's 6-K exhibits
+    `extract_revenue` raised `AttributeError: 'str' object has no attribute
+    'get'`, which the orchestrator does not guard, so a single reply failed the
+    whole job rather than that one source. The reply itself was not captured;
+    what the exception establishes is that a non-mapping element reached this
+    loop, and a string is the shape that produces it.
 
     A string is a span with no id and no rationale, which is exactly what the
     verbatim check needs, so it is read as one rather than discarded.

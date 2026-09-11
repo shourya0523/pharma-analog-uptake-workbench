@@ -26,6 +26,13 @@ States, EUCAN, Region China - and every reader in this pipeline returns the
 worldwide figure only, so scoring against them would be measuring a question
 nobody asked. The same exclusion is applied when gold scores the SEC path.
 
+What the number is worth, as of the last run: 16/27, up from 9/27. That rise
+came from teaching `detect_period_context` the quarter notation, and that rule
+was developed against these same 25 documents - so the second number is
+in-sample and this set is spent as a scorer for anything touching document
+dating. The 9/27 was clean. A further change to the reader needs a set drawn
+from issuers this one does not use.
+
     OPENROUTER_API_KEY=... python scripts/eval_foreign_filer_reader.py [--limit N]
 """
 

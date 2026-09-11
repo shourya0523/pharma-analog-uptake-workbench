@@ -1,95 +1,15 @@
 {
- "cases": 24,
- "passed": 23,
+ "cases": 18,
+ "passed": 17,
  "resolve": [
-  16,
-  17
+  7,
+  8
  ],
  "refuse": [
-  7,
-  7
+  10,
+  10
  ],
  "results": [
-  {
-   "issuer": "Pfizer",
-   "member": "pfe:ChantixChampixMember",
-   "expected": "Chantix",
-   "got": "Chantix",
-   "reason": "ChantixChampix refers to the same product under its US and EU trade names.",
-   "ok": true
-  },
-  {
-   "issuer": "Pfizer",
-   "member": "pfe:XalatanXalacomMember",
-   "expected": "Xalatan",
-   "got": "Xalatan",
-   "reason": "The member 'XalatanXalacom' refers to Xalatan and its combination product Xalacom, which is a single product line.",
-   "ok": true
-  },
-  {
-   "issuer": "Pfizer",
-   "member": "pfe:ZithromaxZmaxMember",
-   "expected": "Zithromax",
-   "got": "Zithromax",
-   "reason": "ZithromaxZmaxMember refers to Zithromax, as Zmax is an extended-release formulation of Zithromax.",
-   "ok": true
-  },
-  {
-   "issuer": "Pfizer",
-   "member": "pfe:InflectraRemsimaMember",
-   "expected": "Inflectra",
-   "got": "Inflectra",
-   "reason": "The member 'InflectraRemsima' refers to Inflectra, which is marketed as Remsima in some regions.",
-   "ok": true
-  },
-  {
-   "issuer": "Pfizer",
-   "member": "pfe:NurtecODTVyduraMember",
-   "expected": "Nurtec ODT",
-   "got": "Nurtec ODT",
-   "reason": "The member 'pfe:NurtecODTVyduraMember' refers to the same product under its US and EU trade names, Nurtec ODT and Vydura.",
-   "ok": true
-  },
-  {
-   "issuer": "Pfizer",
-   "member": "pfe:ZosynTazocinMember",
-   "expected": "Zosyn",
-   "got": "Zosyn",
-   "reason": "ZosynTazocin refers to the same product, known as Zosyn in the US and Tazocin in other markets.",
-   "ok": true
-  },
-  {
-   "issuer": "Pfizer",
-   "member": "pfe:XanaxXanaxXRMember",
-   "expected": "Xanax",
-   "got": "Xanax",
-   "reason": "XanaxXanaxXR is one product, Xanax and its extended-release form.",
-   "ok": true
-  },
-  {
-   "issuer": "Jazz Pharmaceuticals",
-   "member": "jazz:EpidiolexEpidyolexMember",
-   "expected": "Epidiolex",
-   "got": "Epidiolex",
-   "reason": "EpidiolexEpidyolex is the same product under its US and EU trade names.",
-   "ok": true
-  },
-  {
-   "issuer": "Jazz Pharmaceuticals",
-   "member": "jazz:ErwinazeAndErwinaseMember",
-   "expected": "Erwinaze",
-   "got": "Erwinaze",
-   "reason": "Erwinaze and Erwinase are the same product under different names in different markets.",
-   "ok": true
-  },
-  {
-   "issuer": "Jazz Pharmaceuticals",
-   "member": "jazz:DefitelioDefibrotideMember",
-   "expected": "Defitelio",
-   "got": "Defitelio",
-   "reason": "The member 'jazz:DefitelioDefibrotideMember' refers to Defitelio, as 'Defibrotide' is the generic name for Defitelio.",
-   "ok": true
-  },
   {
    "issuer": "Organon",
    "member": "ogn:CozaarHyzaarMember",
@@ -103,7 +23,7 @@
    "member": "ogn:NexplanonImplanonNXTMember",
    "expected": "Nexplanon",
    "got": "Nexplanon",
-   "reason": "NexplanonImplanonNXT is one implant under two market names, Nexplanon and Implanon NXT.",
+   "reason": "NexplanonImplanonNXTMember refers to one implant under two market names, Nexplanon and Implanon NXT.",
    "ok": true
   },
   {
@@ -111,7 +31,7 @@
    "member": "ogn:MarvelonMercilonMember",
    "expected": "Marvelon",
    "got": "Marvelon",
-   "reason": "The member ogn:MarvelonMercilonMember refers to Marvelon, as it is a combination of Marvelon and Mercilon, which are related products.",
+   "reason": "The member name 'MarvelonMercilon' suggests a combination of Marvelon and Mercilon, and since Mercilon is not tagged separately, it is likely a single product line for Marvelon.",
    "ok": true
   },
   {
@@ -127,7 +47,7 @@
    "member": "bmy:OnglyzaKombiglyzeMember",
    "expected": "Onglyza",
    "got": "Onglyza",
-   "reason": "The member name 'OnglyzaKombiglyze' refers to Onglyza and its combination product Kombiglyze, which is a single product line.",
+   "reason": "The member 'bmy:OnglyzaKombiglyzeMember' refers to Onglyza and its combination product Kombiglyze, which is a formulation of Onglyza.",
    "ok": true
   },
   {
@@ -135,16 +55,8 @@
    "member": "bmy:AvaproAvalideMember",
    "expected": "Avapro",
    "got": null,
-   "reason": "AvaproAvalideMember is a roll-up over AvaproAvalideAndPlavixMember, which is tagged separately.",
+   "reason": "The member is a roll-up over Avapro and Avalide, and Avapro is tagged separately.",
    "ok": false
-  },
-  {
-   "issuer": "Alkermes",
-   "member": "alks:AristadaAndAristadaInitioMember",
-   "expected": "Aristada",
-   "got": "Aristada",
-   "reason": "The member 'AristadaAndAristadaInitio' refers to a brand and its initiation dose, which is considered one product for reporting purposes.",
-   "ok": true
   },
   {
    "issuer": "Bristol-Myers Squibb",
@@ -155,35 +67,11 @@
    "ok": true
   },
   {
-   "issuer": "Pfizer",
-   "member": "pfe:BraftoviMektoviMember",
-   "expected": null,
-   "got": null,
-   "reason": "Braftovi and Mektovi are tagged separately, indicating this member is a roll-up.",
-   "ok": true
-  },
-  {
    "issuer": "Incyte",
    "member": "incy:JKFIAndICLUSIGProductMember",
    "expected": null,
    "got": null,
    "reason": "The member is a roll-up over Iclusig and Jakafi, both of which are tagged separately.",
-   "ok": true
-  },
-  {
-   "issuer": "Biogen",
-   "member": "biib:FUMADERMAndADUHELMMember",
-   "expected": null,
-   "got": null,
-   "reason": "The member FUMADERMAndADUHELMMember names two unrelated medicines, Fumaderm and Aduhelm, and neither is tagged separately.",
-   "ok": true
-  },
-  {
-   "issuer": "Jazz Pharmaceuticals",
-   "member": "jazz:TotalOxybateMember",
-   "expected": null,
-   "got": null,
-   "reason": "The member 'TotalOxybateMember' suggests a category or total across several products, not a single product.",
    "ok": true
   },
   {
@@ -199,7 +87,71 @@
    "member": "bmy:HepatitisCPortfolioMember",
    "expected": null,
    "got": null,
-   "reason": "The member names a category of products related to Hepatitis C, not a specific product from the candidate list.",
+   "reason": "The member 'HepatitisCPortfolioMember' is a category and does not match any specific product in the candidate list.",
+   "ok": true
+  },
+  {
+   "issuer": "Viatris",
+   "member": "vtrs:EpiPenAutoInjectorsMember",
+   "expected": "EpiPen",
+   "got": "EpiPen",
+   "reason": "The member 'vtrs:EpiPenAutoInjectorsMember' refers to EpiPen, as it is the same product under another name.",
+   "ok": true
+  },
+  {
+   "issuer": "Eli Lilly",
+   "member": "lly:CyramzaMemberDomain",
+   "expected": "Cyramza",
+   "got": "Cyramza",
+   "reason": "The member 'lly:CyramzaMemberDomain' directly corresponds to the product Cyramza.",
+   "ok": true
+  },
+  {
+   "issuer": "Ionis",
+   "member": "ions:SPINRAZARoyaltiesMember",
+   "expected": null,
+   "got": null,
+   "reason": "The member names royalties rather than a product's own sales.",
+   "ok": true
+  },
+  {
+   "issuer": "Incyte",
+   "member": "incy:JAKAVIRoyaltyRevenuesMember",
+   "expected": null,
+   "got": null,
+   "reason": "The member names a royalty revenue rather than a product's own sales.",
+   "ok": true
+  },
+  {
+   "issuer": "Viatris",
+   "member": "vtrs:ComplexGXAndBiosimilarsMember",
+   "expected": null,
+   "got": null,
+   "reason": "The member 'ComplexGXAndBiosimilarsMember' appears to be a category or roll-up rather than a specific product.",
+   "ok": true
+  },
+  {
+   "issuer": "Bristol-Myers Squibb",
+   "member": "bmy:InLineProductsAndNewProductPortfolioMember",
+   "expected": null,
+   "got": null,
+   "reason": "The member 'InLineProductsAndNewProductPortfolioMember' is a category that includes multiple products, not a single product.",
+   "ok": true
+  },
+  {
+   "issuer": "Teva",
+   "member": "teva:GenericsMediciansIncludingOtcAndBiosimilarsMember",
+   "expected": null,
+   "got": null,
+   "reason": "The member names a category that includes generics, OTC, and biosimilars, not a specific product.",
+   "ok": true
+  },
+  {
+   "issuer": "Eli Lilly",
+   "member": "lly:OtherOncologyMember",
+   "expected": null,
+   "got": null,
+   "reason": "The member 'OtherOncologyMember' is a catch-all category for oncology products not individually listed, and does not specifically name any candidate product.",
    "ok": true
   }
  ]

@@ -120,11 +120,13 @@ def _instance_document(documents: list[str]) -> str | None:
     twelve products on the ProductOrService axis and United Therapeutics' 2016
     Q3 instance tags five. Neither was ever fetched.
 
-    The anchor that works in both eras is the filing's own extension schema.
-    Exactly one ``.xsd`` is filed, the instance shares its stem, and the
-    linkbases beside it (``_cal``, ``_def``, ``_lab``, ``_pre``) do not - so
-    matching on the stem picks the instance without having to know the filer's
-    ticker, the period, or which era the filing belongs to.
+    The anchor that works in both eras is the filing's own extension schema:
+    the instance shares the ``.xsd``'s stem and the linkbases beside it
+    (``_cal``, ``_def``, ``_lab``, ``_pre``) do not, so matching on the stem
+    picks the instance without knowing the filer's ticker, the period, or which
+    era the filing belongs to. Every filing checked here carries one ``.xsd``;
+    the loop below does not rely on that, and takes the first stem that has an
+    instance beside it.
     """
     names = [name for name in documents if name]
     available = set(names)

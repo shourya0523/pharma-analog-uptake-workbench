@@ -126,6 +126,22 @@ def _suffixes(parts: list[str]) -> list[list[str]]:
 _JOINED = frozenset({"and", "plus"})
 _JOINING_MARKS = ("&", "+")
 
+# A member can also name a product in order to say the line is everything BUT
+# that product. The trailing-run rule reads the name at the end and hands the
+# residual to the one thing it is defined to exclude:
+#
+#   ProductsExcludingALDURAZYME -> Aldurazyme      (BioMarin files this)
+#   AllProductsExceptNuVessa    -> NuVessa
+#   ProductsOtherThanCalderon   -> Calderon
+#
+# It is the `RemicadeAndSimponi` defect inverted - there the figure was too
+# large, here it is the complement of the product it gets published as - and it
+# arrives at the top of CLAIM_STRENGTH, as a fact the filer tagged. The model
+# is not asked either: a line defined by what it leaves out is not any single
+# product's revenue, whoever reads it.
+_EXCLUDING = frozenset({"excluding", "excluded", "except", "excludes",
+                        "other", "than", "outside", "without"})
+
 
 def match(member: str, products: list[str]) -> Resolution:
     """Resolve one member against the products we track, or decline to."""
@@ -136,6 +152,15 @@ def match(member: str, products: list[str]) -> Resolution:
     if any(part in _JOINED for part in parts) or any(m in local for m in _JOINING_MARKS):
         return Resolution(member, None, "joined", 0.0,
                           "member joins names; a figure covering both is not one product's")
+    # The marker has to sit before the trailing run, because that is the run the
+    # rules below would otherwise read as the product. A member ending in one
+    # ("HIV Other") names no product either, and the rules decline it as
+    # unmatched without help.
+    if any(part in _EXCLUDING for part in parts[:-1]):
+        return Resolution(
+            member, None, "excluding", 0.0,
+            "member names a product to exclude it; the line is everything but that",
+        )
     # Keyed on the run's words joined up, not on the tuple of words, because
     # only the *member* is a machine-generated identifier whose capitals mark
     # word boundaries. A brand may carry a capital of its own - "AmBisome" -

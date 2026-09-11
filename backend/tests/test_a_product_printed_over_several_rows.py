@@ -16,11 +16,12 @@ slices beneath:
 
 The heading logic already existed. Two things stopped it working:
 
-* "US Exports" reduced to "exports", a word every product's rows carry and no
-  product is called, so the peer guard read Remicade's own export line as a
-  competitor's. Without it the components no longer added to the total, the
-  total could not be identified by its arithmetic, and the whole product was
-  refused as "several lines and no total".
+* "US Exports" reduced to "exports", which is no product's name. The peer guard
+  read Remicade's own export line as a competitor's; the components then no
+  longer added to the total, the total could not be identified by its
+  arithmetic, and the whole product was refused as "several lines and no total".
+  Only Remicade carries that row - 1 of 48 blocks in this exhibit - so the rule
+  is rare in the rows and total in its effect on the product it hits.
 * A slash was treated as joining two products. It is what a filer writes
   between the names of one: CONCERTA/METHYLPHENIDATE is a brand and its
   generic, PROCRIT/EPREX one drug in two markets, INVOKANA/INVOKAMET a brand
@@ -76,7 +77,7 @@ def test_the_worldwide_line_is_the_products_revenue():
 
 
 def test_an_export_line_is_the_products_own_and_not_a_competitors():
-    """The defect, stated on the guard itself: every product has this row."""
+    """The defect, stated on the guard itself."""
     siblings = ["REMICADE", "US", "US Exports (3)", "Intl", "WW", "STELARA"]
     assert names_a_competing_product("REMICADE US Exports (3)", ["remicade"], siblings) is None
     assert names_a_competing_product("REMICADE US", ["remicade"], siblings) is None

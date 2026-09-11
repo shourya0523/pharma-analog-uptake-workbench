@@ -31,6 +31,32 @@ def _issuers(*paths: Path) -> set[str]:
     return seen
 
 
+def _every_other_answer_key() -> set[str]:
+    """Every issuer any other set under seed/ is already spent on.
+
+    Naming three files by hand is how this test passed while the property it
+    exists to enforce was broken: `seed/holdout_labels` scores the peer guard
+    on Alkermes, Biogen and Jazz Pharmaceuticals, this file was built reusing
+    all three, and nothing said so. Discovering the keys instead means a set
+    added later cannot be forgotten here.
+    """
+    spent: set[str] = set()
+    for path in sorted(REPO.glob("seed/*/*.jsonl")) + sorted(REPO.glob("seed/*/*.json")):
+        if HOLDOUT.samefile(path) if path.exists() and HOLDOUT.exists() else False:
+            continue
+        text = path.read_text()
+        if path.suffix == ".jsonl":
+            spent |= {json.loads(line).get("manufacturer", "")
+                      for line in text.splitlines() if line.strip()}
+        else:
+            payload = json.loads(text)
+            cases = payload.get("cases") if isinstance(payload, dict) else payload
+            for case in cases or ():
+                if isinstance(case, dict) and case.get("issuer"):
+                    spent.add(case["issuer"])
+    return {name for name in spent if name}
+
+
 # What kind of company it is, rather than which one. "Pharmaceuticals" is in
 # both "Vertex Pharmaceuticals" and "Jazz Pharmaceuticals" and distinguishes
 # neither.
@@ -49,11 +75,7 @@ def _identifying(issuer: str) -> set[str]:
 
 def test_no_case_comes_from_a_scored_issuer():
     payload = json.loads(HOLDOUT.read_text())
-    spent = _issuers(
-        REPO / "seed" / "gold" / "quarterly_revenue.jsonl",
-        REPO / "seed" / "holdout" / "quarterly_revenue.jsonl",
-        REPO / "seed" / "holdout2" / "quarterly_revenue.jsonl",
-    )
+    spent = _every_other_answer_key()
     # "Actelion/J&J" names Johnson & Johnson, so compare on the identifying
     # words rather than on the string an answer key happened to write.
     scored = {w for issuer in spent for w in _identifying(issuer)}
@@ -82,7 +104,31 @@ def test_every_case_carries_its_own_evidence():
 
 
 def test_a_refusal_case_offers_something_wrong_to_return():
-    """`AvaproAvalideAndPlavix` is only a test if Plavix is returnable."""
-    cases = {c["member"]: c for c in json.loads(HOLDOUT.read_text())["cases"]}
-    assert "Plavix" in cases["bmy:AvaproAvalideAndPlavixMember"]["candidates"]
-    assert "Braftovi" in cases["pfe:BraftoviMektoviMember"]["candidates"]
+    """A refusal is only a test if something wrong was available to return.
+
+    `AvaproAvalideAndPlavix` tests nothing if Plavix is not among the
+    candidates: refusing is then the only answer possible. Checked as a
+    property rather than by naming members, because the version of this test
+    that named them broke the moment the set was rebuilt - and naming them is
+    what let the set drift from the issuers it claimed.
+    """
+    import re
+
+    cases = json.loads(HOLDOUT.read_text())["cases"]
+    refusals = [c for c in cases if not c["expected"]]
+    assert all(c["candidates"] for c in refusals), "a refusal with nothing to return"
+
+    # A category ("Other Oncology") is a fair refusal even though it names no
+    # candidate - the failure it tests is returning any product for a category.
+    # What the set must also hold is the hard kind: a member that names a
+    # candidate and must still be refused, because the figure covers it and
+    # more. Without one, the roll-up rule is never exercised.
+    rollups = [
+        c["member"] for c in refusals
+        if any(re.sub(r"[^a-z0-9]", "", cand.lower())
+               in re.sub(r"[^a-z0-9]", "", c["member"].split(":")[-1].lower())
+               for cand in c["candidates"])
+    ]
+    assert rollups, (
+        "no refusal case names one of its own candidates, so nothing here "
+        "tests a roll-up - only whether a category is refused")

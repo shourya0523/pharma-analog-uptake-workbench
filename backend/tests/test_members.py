@@ -260,3 +260,31 @@ def test_an_edit_to_the_register_is_not_answered_from_a_stale_index():
     assert resolve("acme:FooMember", [], register, issuer="Acme").product == "NuVessa"
     register[("Acme", "Bar")] = Resolution("Bar", "Calderon", "human", 1.0, "")
     assert resolve("acme:BarMember", [], register, issuer="Acme").product == "Calderon"
+
+
+def test_a_member_naming_a_product_to_exclude_it_is_not_that_product():
+    """`ProductsExcludingAldurazyme` is everything BUT Aldurazyme.
+
+    The trailing-run rule reads the name at the end, so a residual line was
+    resolved to the one product it is defined to leave out - and at the top of
+    CLAIM_STRENGTH, as a fact the filer tagged. It is the `RemicadeAndSimponi`
+    defect inverted: there the figure was too large, here it is the complement
+    of what it gets published as.
+
+    Found by auditing the branch, in a member BioMarin actually files.
+    """
+    known = ["Calderon", "NuVessa", "Nebulized Calderon"]
+    for member in ("acme:ProductsExcludingCalderonMember",
+                   "acme:RevenueExcludingNuVessaMember",
+                   "acme:AllProductsExceptCalderonMember",
+                   "acme:ProductsOtherThanNuVessaMember"):
+        outcome = match(member, known)
+        assert not outcome.resolved, f"{member} resolved to {outcome.product}"
+        assert outcome.method == "excluding"
+
+    # The marker has to sit before the trailing run. A category prefix that
+    # merely ends in a product's name still resolves, and a member ending in a
+    # marker names no product either way.
+    assert match("acme:RespiratoryProductsCalderonMember", known).product == "Calderon"
+    assert match("acme:NebulizedCalderonMember", known).product == "Nebulized Calderon"
+    assert not match("acme:CalderonOtherMember", known).resolved

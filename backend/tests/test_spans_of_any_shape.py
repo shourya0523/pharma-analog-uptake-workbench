@@ -1,9 +1,11 @@
 """A model that returns spans as strings must not fail the job.
 
 `find_revenue_spans` asks for objects carrying `span_text`, and every reader
-below calls `.get` on what comes back. On one of Novartis's 6-K exhibits the
-model answered with bare strings, `_filter_hallucinated_spans` raised
-AttributeError, and because `orchestrator._extract_revenue` does not wrap its
+below calls `.get` on what comes back. On one of Novartis's 6-K exhibits
+`_filter_hallucinated_spans` raised `AttributeError: 'str' object has no
+attribute 'get'` - so a non-mapping element reached it, and a string is the
+shape that produces that; the reply itself was not captured. Because
+`orchestrator._extract_revenue` does not wrap its
 `llm.extract_revenue` call, one oddly-shaped reply failed the whole drug job
 rather than that single source.
 

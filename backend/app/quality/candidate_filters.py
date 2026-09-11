@@ -40,12 +40,13 @@ _QUALIFIER_WORDS = frozenset(
         "llc", "gmbh", "group", "segment", "division", "business", "unit",
         "including", "excluding", "less", "and", "or",
         # A slice of a product's own sales, not another product. Johnson &
-        # Johnson prints "US", "US Exports", "Intl" and "WW" beneath each brand,
-        # and every one of those rows belongs to the brand above it. Without
-        # this, "US Exports" reduces to "exports", which is a name no product
-        # has and every product's row carries - so the guard read Remicade's own
-        # export line as a competitor's and the brand's worldwide total, which
-        # only adds up with that line, could not be identified at all.
+        # Johnson prints "US", "Intl" and "WW" beneath each brand, and for one
+        # of them - Remicade, 1 of 48 blocks in the 2016 Q1 exhibit - a "US
+        # Exports" line as well. "US Exports" reduces to "exports", a name no
+        # product has, so the guard read Remicade's own export line as a
+        # competitor's; the components then no longer summed to the worldwide
+        # figure, and with no row identifiable as the total the whole product
+        # was refused. Rare in the rows, total in its effect on the one it hits.
         "export", "exports", "region", "regions", "geography", "geographic",
     }
 )
