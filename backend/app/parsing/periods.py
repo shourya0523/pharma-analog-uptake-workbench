@@ -67,6 +67,25 @@ def quarter_of_month(month: int) -> int:
     return (month - 1) // 3 + 1
 
 
+def fiscal_period_end(month: int, day: int | None, year: int | None = None) -> tuple[int, int | None]:
+    """The month a period belongs to, given the date it is stated to end on.
+
+    A filer on a 52/53-week calendar closes each quarter on the Saturday or
+    Sunday nearest the calendar quarter's end, so its first quarter is stated
+    as ending on April 1 or 2, and its year on January 3. Read by the month
+    alone, that first quarter becomes the second and that year the next one.
+    No fiscal period ends in the first week of a month and means that month,
+    so a day that early names the month before - and the year before, when
+    the month before is December.
+    """
+    if day and day <= 7:
+        month -= 1
+        if month == 0:
+            month = 12
+            year = year - 1 if year is not None else None
+    return month, year
+
+
 MONTH_NAMES = {
     1: "January",
     2: "February",
@@ -126,9 +145,12 @@ _NEXT_YEAR_RE = re.compile(r"\b((?:19|20)\d{2})\b")
 # one M9 - the preference for the quarterly framing below could not fire,
 # because the quarterly framing was never counted. Every span named by one
 # phrase is captured, and they are separated after the match.
+# A filing that reports a year names it as "fiscal year ended" or "year
+# ended", and rarely as twelve months; without that form a 10-K names no
+# period at all and is dated from whichever quarter its text mentions most.
 _PERIOD_PHRASE_RE = re.compile(
-    r"\b((?:three|six|nine|twelve)(?:\s+and\s+(?:three|six|nine|twelve))*)"
-    r"\s+months?\s+ended\b",
+    r"\b((?:three|six|nine|twelve)(?:\s+and\s+(?:three|six|nine|twelve))*"
+    r"\s+months?|(?:fiscal\s+)?years?)\s+ended\b",
     re.I,
 )
 _SPAN_WORD_RE = re.compile(r"three|six|nine|twelve", re.I)
@@ -140,14 +162,20 @@ _MONTH_DAY_RE = re.compile(
 )
 
 
-def _month_near(text: str, end: int) -> tuple[int, int] | None:
-    """The first month named just after a period heading, and where it ends."""
+def _month_near(text: str, end: int) -> tuple[int, int, bool] | None:
+    """The month a period heading's end date falls in, where the date ends,
+    and whether the date sat in the first week of the month after."""
     window = text[end : end + _MONTH_LOOKAHEAD]
     match = _MONTH_DAY_RE.search(window)
     if not match:
         return None
     month = MONTHS.get(match.group(1).lower())
-    return (month, end + match.end()) if month else None
+    if not month:
+        return None
+    day = int(match.group(2)) if match.group(2) else None
+    stated = month
+    month, _ = fiscal_period_end(month, day)
+    return month, end + match.end(), month != stated
 
 
 def _year_near(text: str, end: int) -> int | None:
@@ -247,14 +275,16 @@ def detect_period_context(text: str) -> PeriodContext | None:
             MONTH_WORDS[word.lower()]
             for word in _SPAN_WORD_RE.findall(match.group(1))
             if word.lower() in MONTH_WORDS
-        ]
+        ] or ([12] if "year" in match.group(1).lower() else [])
         found = _month_near(text, match.end())
         if not spans or not found:
             continue
-        month, after_month = found
+        month, after_month, rolled_back = found
         year = _year_near(text, after_month)
         if not year:
             continue
+        if rolled_back and month == 12:
+            year -= 1
         # Both spans end on the same date and are equally stated; which one is
         # the document's own period is decided below, not here.
         for months in spans:
@@ -264,13 +294,23 @@ def detect_period_context(text: str) -> PeriodContext | None:
         # convention rather than a second opinion, and it only ever runs where
         # there was no answer at all.
         return _quarter_notation(text)
-    # Prefer the quarterly framing, then the latest year - never the most
-    # frequently repeated one. A comparative year is always earlier than the
-    # year being reported, and it is often named more often than the reporting
-    # year: a Q4 2005 release mentions "three months ended December 31, 2004"
-    # five times in its footnotes against four for 2005, which is how the
-    # document came to be dated a year early.
-    best = max(counts, key=lambda key: (key[0] == 3, key[2]))
+    # The span the document reports is the one it names throughout. A
+    # quarterly release names its quarter and its year-to-date span about
+    # equally, and is read as the quarter; an annual report names the year on
+    # every statement and a quarter only in passing, and is read as the year.
+    # So the quarterly framing is preferred unless another span is named more
+    # than twice as often.
+    by_span: Counter[int] = Counter()
+    for (months, _month, _year), n in counts.items():
+        by_span[months] += n
+    framing = 3 if by_span[3] * 2 >= max(by_span.values()) else max(by_span, key=by_span.get)
+    # Then the latest year - never the most frequently repeated one. A
+    # comparative year is always earlier than the year being reported, and it
+    # is often named more often than the reporting year: a Q4 2005 release
+    # mentions "three months ended December 31, 2004" five times in its
+    # footnotes against four for 2005, which is how the document came to be
+    # dated a year early.
+    best = max((key for key in counts if key[0] == framing), key=lambda key: key[2])
     months, month, year = best
     return PeriodContext(months=months, month=month, year=year)
 
@@ -318,6 +358,8 @@ def normalize_period(
         month = MONTHS.get(spelled.group(2).lower())
         year_text = spelled.group(4)
         year = int(year_text) if year_text else (context.year if context else None)
+        if month:
+            month, year = fiscal_period_end(month, int(spelled.group(3)) if spelled.group(3) else None, year)
         if year:
             # Trust the document's period end over a date the model may have taken
             # from the release headline; fall back to the month it reported.

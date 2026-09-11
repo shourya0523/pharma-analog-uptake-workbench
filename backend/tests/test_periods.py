@@ -176,3 +176,56 @@ def test_three_and_nine_is_read_as_the_third_quarter():
     )
     assert context is not None
     assert (context.months, context.month, context.year) == (3, 9, 2025)
+
+
+def test_a_period_ending_in_the_first_days_of_a_month_belongs_to_the_month_before():
+    """A filer on a 52/53-week calendar states its first quarter as ending on
+    April 1 or 2 and its year on January 3; read by the month alone, the first
+    quarter becomes the second and the year the next one."""
+    from app.parsing.periods import detect_period_context, fiscal_period_end, normalize_period
+
+    assert fiscal_period_end(4, 1) == (3, None)
+    assert fiscal_period_end(1, 3, 2021) == (12, 2020)
+    assert fiscal_period_end(4, 30, 2018) == (4, 2018)
+    assert fiscal_period_end(3, None, 2018) == (3, 2018)
+
+    first_quarter = ("Fiscal first quarter ended April 1, 2018. Sales for the three months "
+                     "ended April 1, 2018 rose against the three months ended April 2, 2017.")
+    context = detect_period_context(first_quarter)
+    assert (context.months, context.month, context.year) == (3, 3, 2018)
+    assert normalize_period("three months ended January 3, 2021") == "2020Q4"
+
+
+def test_a_filing_that_names_a_year_throughout_is_dated_as_a_year():
+    """An annual report names "fiscal year ended" on every statement and the
+    fourth quarter only in passing; a quarterly release names its quarter and
+    its year-to-date span about equally. The first is a year, the second a
+    quarter."""
+    from app.parsing.periods import detect_period_context
+
+    annual = ("Annual report for the fiscal year ended December 31, 2017. " * 3
+              + "Sales in the fourth quarter 2017 and fourth quarter of 2017 grew; "
+              + "the year ended December 31, 2017 compared with the year ended December 31, 2016.")
+    context = detect_period_context(annual)
+    assert (context.months, context.year) == (12, 2017)
+
+    release = ("Three months ended December 31, 2017 and year ended December 31, 2017. " * 3
+               + "Three months ended December 31, 2016 and year ended December 31, 2016.")
+    context = detect_period_context(release)
+    assert (context.months, context.month, context.year) == (3, 12, 2017)
+
+
+def test_a_table_headed_by_a_fiscal_quarter_end_is_read_into_that_quarter():
+    from app.extraction.fingerprint import _periods_named_in
+    from app.parsing.tables import extract_revenue_rows
+
+    rows = [
+        ["", "Fiscal First Quarter Ended"],
+        ["", "Three Months Ended April 1, 2018", "Three Months Ended April 2, 2017"],
+        ["", "2018", "2017"],
+        ["Calderon", "1,389", "1,672"],
+    ]
+    found = extract_revenue_rows([rows], product="Calderon")
+    assert {(c["period"], c["value_reported"]) for c in found} == {("2018Q1", 1389.0), ("2017Q1", 1672.0)}
+    assert _periods_named_in("Three Months Ended April 1,") == [(3, 3)]
+    assert _periods_named_in("Year Ended January 3,") == [(12, 12)]

@@ -13,15 +13,15 @@ from collections.abc import Iterable
 from typing import Any
 
 from app.parsing.evidence import product_aliases
-from app.parsing.periods import MONTH_WORDS, MONTHS, quarter_of_month
+from app.parsing.periods import MONTH_WORDS, MONTHS, fiscal_period_end, quarter_of_month
 from app.quality.candidate_filters import names_a_competing_product
 from app.quality.comparative import ABS_TOLERANCE, parse_numbers
 
 _PERIOD_HEADER_RE = re.compile(
-    r"\b(three|six|nine|twelve)\s+months?\s+ended\s+([A-Za-z]{3,9})", re.IGNORECASE
+    r"\b(three|six|nine|twelve)\s+months?\s+ended\s+([A-Za-z]{3,9})\.?\s*(\d{1,2})?", re.IGNORECASE
 )
 _YEAR_HEADER_RE = re.compile(r"\b(?:19|20)\d{2}\b")
-_YEAR_ENDED_RE = re.compile(r"\byear\s+ended\s+([A-Za-z]{3,9})", re.IGNORECASE)
+_YEAR_ENDED_RE = re.compile(r"\byear\s+ended\s+([A-Za-z]{3,9})\.?\s*(\d{1,2})?", re.IGNORECASE)
 _FOOTNOTE_RE = re.compile(r"\(\d\)")
 
 PERIOD_TYPE_BY_MONTHS = {3: "quarterly", 6: "six_month", 9: "nine_month", 12: "annual"}
@@ -42,11 +42,13 @@ def _period_header(rows: list[list[str]]) -> tuple[int, int] | None:
         if match:
             month = MONTHS.get(match.group(2).lower())
             if month:
+                month, _ = fiscal_period_end(month, int(match.group(3)) if match.group(3) else None)
                 return MONTH_WORDS.get(match.group(1).lower(), 3), month
         annual = _YEAR_ENDED_RE.search(joined)
         if annual:
             month = MONTHS.get(annual.group(1).lower())
             if month:
+                month, _ = fiscal_period_end(month, int(annual.group(2)) if annual.group(2) else None)
                 return 12, month
     return None
 
