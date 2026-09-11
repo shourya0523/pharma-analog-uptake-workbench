@@ -215,10 +215,9 @@ def test_a_decision_reaches_the_reader_that_did_not_make_it():
 
     The bulk notes datasets store a segment stripped of prefix and suffix
     ("CompleraEviplera"); a filing's own instance names it in full
-    ("gild:CompleraEvipleraMember"). Keyed literally, the register built from
-    one is invisible to the other - which is what happened: Complera read 16 of
-    16 sampled quarters through the bulk reader and 0 of 16 through the
-    instance, on a decision that had already been made and written down.
+    ("gild:CompleraEvipleraMember"). Keyed literally, a register built from one
+    is invisible to the other, and the product reads through whichever reader
+    happened to write it and through no other.
     """
     from app.extraction.members import canonical_member
 

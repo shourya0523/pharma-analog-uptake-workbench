@@ -1,20 +1,20 @@
 """A producer says what it read. What is kept is the caller's decision.
 
 A fourth quarter is never tagged and never printed as a quarter. A 10-K reports
-the year: Gilead's FY2015 10-K carries 45 product facts and every one of them is
-twelve months long. So Q4 exists only as the year less the nine months, and
-`complete_series` can only compute it if the producer handed over the totals.
+the year, and every product fact in one is twelve months long. So Q4 exists only
+as the year less the nine months, and `complete_series` can only compute it if
+the producer handed over the totals.
 
 `quarterly_only` let a producer drop those totals before the caller ever saw
 them, and it cost this project the fourth quarter three times:
 
 * `_extract_revenue` called `extract_revenue_candidates` without the argument,
-  and eleven end-to-end runs emitted zero derived rows - see
+  and the pipeline emitted no derived rows at all - see
   `test_derivation_is_reachable.py`, which was written for that.
 * The orchestrator's call to `candidates_from_instance` carried a five-line
   comment explaining why it had to pass False, which is a scar, not a design.
-* A coverage measurement of the bulk reader took the default and lost 182 of
-  684 rows - 26.6% of the band - to a flag nobody meant to set.
+* A coverage measurement of the bulk reader took the default and lost every
+  fourth quarter in the band to a flag nobody meant to set.
 
 Twice the call site was fixed and the parameter left in place, so the next
 caller walked into it. The parameter is now gone. It duplicated a decision the

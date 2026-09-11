@@ -11,10 +11,9 @@ confidence at 0.55 - is the correct contract for a model's guess at a blank
 field. The row was then disqualified from auto_pass twice: by the flag, and by
 a confidence the quality gate's 0.7 floor rejects.
 
-Measured over four products, two issuers and two years before the fix: 27 of
-the 41 quarterly datapoints landing on a gold quarter carried
-`field_enrichment_applied`, for this fill alone in 26 of them; 21 of those had
-been judged "supported" with nothing else against them and none was published.
+Before the fix most datapoints landing on an answerable quarter carried
+`field_enrichment_applied` for this fill alone, including ones the judge had
+called "supported" with nothing else against them, and none was published.
 """
 
 from __future__ import annotations
@@ -100,8 +99,7 @@ async def test_an_unsettled_conflict_falls_through_to_the_ranking(tmp_path):
     winner named, every id in the entry was marked a loser, and the
     source-priority fallback then skipped the group because it already
     contained losers - so a schedule reading 54.0 and a sentence reading 13.4
-    were both withheld and the quarter went unanswered. Measured once in a
-    sample of 32: Orenitram 2019Q2.
+    were both withheld and the quarter went unanswered.
     """
     db, orch, job, table_row = _job(tmp_path, revenue_scope="Product family", formulation=None)
     prose_row = DatapointORM(

@@ -182,7 +182,7 @@ def test_reading_order_and_authority_are_separate_questions():
     invisible while the connector ignored the date window and fetched primary
     filings that covered the wrong years; once they covered the right ones, a
     10-K's incidental table began answering quarters before the schedule built
-    to state them, and 13 rows that had read correctly stopped being found.
+    to state them, and rows that had read correctly stopped being found.
     """
     from app.domain.models import SourceType
     from app.pipeline.orchestrator import SOURCE_PRIORITY, reading_rank

@@ -1,7 +1,7 @@
 """A derived quarter is exact arithmetic on figures that were already rounded.
 
-Five fourth quarters in a measured run disagreed with the answer key by
-exactly one million, and all five reproduce:
+A derived fourth quarter can disagree with the issuer's own printed one by a
+million while both are right about what they were computed from:
 
     Complera 2022Q4    200 - (44 + 54 + 43)      = 59, issuer printed 58
     Descovy 2022Q4   1,872 - (374 + 460 + 500)   = 538, issuer printed 537

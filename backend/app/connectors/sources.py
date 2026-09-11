@@ -18,8 +18,8 @@ Two rules here were bought with wrong answers:
   and a filing from the wrong company is worse than no filing.
 * Every EX-99 exhibit of an earnings 8-K is read, not the first. Johnson &
   Johnson puts its press release in EX-99.1 and its product sales schedules in
-  EX-99.2, so taking one exhibit per filing took the one with no table in it -
-  which read as "this issuer does not disclose product sales" for 424 rows.
+  EX-99.2, so taking one exhibit per filing takes the one with no table in it,
+  which reads as "this issuer does not disclose product sales".
 """
 
 from __future__ import annotations
@@ -354,11 +354,9 @@ class SECConnector:
         # The budget counts filings, not exhibits, because a filing is a
         # quarter and its exhibits are one disclosure split across documents.
         # Counting exhibits truncated mid-filing: Johnson & Johnson files two
-        # EX-99s per 8-K, so six exhibits bought three quarters, and the sixth
-        # took a press release while leaving behind the product-sales schedule
-        # it belongs to. Measured over Uptravi, Stelara and Xarelto in 2018 and
-        # 2019, that lost 9 of 24 quarters - every Q2, and the one Q3 whose
-        # schedule fell the wrong side of the cut.
+        # EX-99s per 8-K, so a budget of six exhibits buys three quarters and
+        # spends its last on a press release while leaving behind the
+        # product-sales schedule that belongs with it.
         sources: list[RetrievedSource] = []
         filings_read = 0
         for i, form in enumerate(forms):

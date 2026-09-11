@@ -120,8 +120,7 @@ def extract_revenue_candidates(
         # and the schedule another - "Tyvaso" against "Tyvaso (R)" - so keying
         # the fallback on both lets the same figure through twice, described
         # differently and sometimes scoped differently, and two candidates that
-        # disagree are not an answer. Measured: pooling them cost eight rows and
-        # turned nine more into contradictions.
+        # disagree are not an answer.
         stated = {value.period for value in values}
         values += [
             value

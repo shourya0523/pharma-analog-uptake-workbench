@@ -2,8 +2,8 @@
 
 These are arithmetic and continuity properties a real revenue series cannot
 violate, so a violation means the extraction is wrong even when no source was
-misread in an obvious way. Each check corresponds to a defect class that
-actually reached a shipped dataset:
+misread in an obvious way. Each check corresponds to a defect class these
+numbers have shown:
 
 * ``quarters_sum_to_period_total`` - Merck's 2024 schedule listed Q2-Q4 plus the
   full year; reading it as Q1-Q4 booked the annual total as a quarter. Summing

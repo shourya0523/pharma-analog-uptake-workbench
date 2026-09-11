@@ -1121,9 +1121,9 @@ def test_a_sentence_does_not_pre_empt_a_derivation():
     `complete_series` was applied only to periods no row existed for, so any
     reader that produced anything at all pre-empted it. A sentence offering 1.0
     for a quarter whose family total derives exactly to 94.645 did not lose to
-    the better answer - it stopped the better answer being computed. Measured
-    over the corpus, the prose reader emitted 13 of the 16 wrong values while
-    contributing 5 correct ones.
+    the better answer - it stopped the better answer being computed. The prose
+    reader is the weakest producer there is, and it was silencing the
+    strongest.
 
     A tagged fact and a schedule still pre-empt a derivation. They are the
     stronger claims.

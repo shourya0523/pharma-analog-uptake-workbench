@@ -210,12 +210,12 @@ def test_a_new_file_the_pipeline_reads_has_to_be_declared():
 
     The question to answer in the commit that adds one is whether it is a cache
     or a mechanism: delete it, and does the pipeline still work on a product it
-    has never seen? seed/xbrl_members.csv passes - 76 of its 363 members
-    resolve from the string rules alone and the other 287 go to the model that
-    decided them in the first place, so removing it costs calls, not
-    capability. A table of document URLs fails: remove it and there is no rule
-    that produces a URL, because none exists. Cost in time is a cache; cost in
-    capability is the answer key wearing a different hat.
+    has never seen? seed/xbrl_members.csv passes - without it the string rules
+    resolve what they can and the rest goes to the model that decided them
+    originally, so removing it costs calls. A table of document URLs fails:
+    remove it and nothing produces a URL, because no such rule exists. Cost in
+    time is a cache; cost in capability is the answer key wearing a different
+    hat.
     """
     undeclared = sorted(_seed_files_the_app_reads() - set(PIPELINE_INPUTS))
     assert not undeclared, (

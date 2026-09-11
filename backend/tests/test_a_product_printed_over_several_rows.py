@@ -1,8 +1,8 @@
 """Reading a schedule that prints a product as a heading over geography rows.
 
-Johnson & Johnson tags no product on any axis before 2019 - all four of its
-2016 XBRL instances carry between 685 and 2,031 facts and not one of them sits
-on the product axis - so the only place those quarters exist is the printed
+Johnson & Johnson tags no product on any axis before 2019 - its instances of
+that era carry plenty of facts and none of them sits on the product axis - so
+the only place those quarters exist is the printed
 "Sales of Key Products/Franchises" schedule attached to each quarterly 8-K.
 
 That schedule prints a product as a heading with no figures on it, then the
@@ -20,8 +20,7 @@ The heading logic already existed. Two things stopped it working:
   read Remicade's own export line as a competitor's; the components then no
   longer added to the total, the total could not be identified by its
   arithmetic, and the whole product was refused as "several lines and no total".
-  Only Remicade carries that row - 1 of 48 blocks in this exhibit - so the rule
-  is rare in the rows and total in its effect on the product it hits.
+  Few brands carry an export line, and the one that does is refused entirely.
 * A slash was treated as joining two products. It is what a filer writes
   between the names of one: CONCERTA/METHYLPHENIDATE is a brand and its
   generic, PROCRIT/EPREX one drug in two markets, INVOKANA/INVOKAMET a brand

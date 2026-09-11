@@ -7,9 +7,8 @@ print every quarter. Two patterns account for most of them:
   quarters and then a full year, and Q4 is the difference. United Therapeutics
   disclosed Remodulin this way for seven straight years.
 * Before a product line splits into formulations, the family total *is* the one
-  formulation on sale. Tyvaso was nebulized-only from 2009 until the DPI
-  inhaler launched in 2022Q2, so every family figure in those 50 quarters is
-  also the nebulized figure.
+  formulation on sale: Tyvaso was nebulized-only until the DPI inhaler
+  launched, so every family figure before that is also the nebulized figure.
 
 Both are exact arithmetic over values already extracted, not estimates, so they
 carry the same confidence as a directly reported number - but they are marked

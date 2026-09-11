@@ -1668,16 +1668,11 @@ class PipelineOrchestrator:
             # It used to go through apply_field_enrichment, whose contract is
             # that any fill forces needs_review and caps confidence at 0.55.
             # That contract is right for a model's suggestion about a blank
-            # field and wrong for a tautology, and the cost was the pipeline's
-            # entire output: two thirds of the datapoints landing on a gold
-            # quarter carried field_enrichment_applied, in 26 of 27 cases for
-            # this fill alone, and the flag disqualifies a row from auto_pass
-            # twice over - directly, and by holding confidence under the 0.7
-            # the quality gate needs. Measured over four products across two
-            # issuers and two years: 21 datapoints the judge had already called
-            # "supported", with nothing else against them, every one of them
-            # withheld, and 18 of the 32 gold quarters answered correctly and
-            # not published for this reason and no other.
+            # field and wrong for a tautology. The flag disqualifies a row from
+            # auto_pass twice over - directly, and by holding confidence under
+            # the threshold the quality gate needs - so applying it here
+            # withholds rows the judge has already called supported, with
+            # nothing else against them.
             fill = deterministic_formulation_fill(
                 {"revenue_scope": row.revenue_scope, "formulation": row.formulation}
             )
@@ -1840,9 +1835,8 @@ class PipelineOrchestrator:
                     # against everything in the group: marking them all losers
                     # withheld the right answer along with the wrong one, and
                     # then the fallback skipped the group because it already
-                    # had losers in it. One measured instance - Orenitram
-                    # 2019Q2, a schedule reading 54.0 beside a sentence reading
-                    # 13.4, both demoted, nothing published.
+                    # had losers in it: a schedule and a sentence disagreeing,
+                    # both demoted, nothing published.
                     continue
                 winners.add(wid)
                 for cid in ids:

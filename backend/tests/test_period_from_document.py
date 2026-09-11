@@ -1,11 +1,9 @@
 """A schedule that states no period of its own is dated by its document.
 
 The table reader required each table to date itself - "Three Months Ended
-September 30, 2005" - and skipped the rest. Across the 24 held-out earnings
-exhibits that was 140 tables, and the deterministic reader produced three
-candidates from the whole corpus. Pfizer heads its product schedule by
-geography and then by year; Lilly heads its "First-Quarter" and never writes
-"months ended" at all.
+September 30, 2005" - and skipped the rest, which is most of them: Pfizer heads
+its product schedule by geography and then by year, and Lilly heads its
+"First-Quarter" and never writes "months ended" at all.
 
 `detect_period_context` already read the filing's own reporting period, and
 handed it only to the model. These tests cover giving it to the reader, and the

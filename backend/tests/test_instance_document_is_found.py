@@ -14,8 +14,8 @@ from __future__ import annotations
 
 from app.connectors.sources import _instance_document
 
-# United Therapeutics 10-Q, filed 2016-10-27 (0001104659-16-152292).
-# Its instance carries 100 facts on srt:ProductOrServiceAxis, five products.
+# United Therapeutics 10-Q, filed 2016-10-27 (0001104659-16-152292). Its
+# instance tags products on the ProductOrService axis.
 UTHR_2016 = [
     "FilingSummary.xml", "uthr-20160930.xsd", "uthr-20160930.xml",
     "uthr-20160930_cal.xml", "uthr-20160930_def.xml",

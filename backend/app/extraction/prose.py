@@ -90,8 +90,8 @@ _PAIRING_RE = re.compile(r"\brespectively\b", re.IGNORECASE)
 # product ran on into the one after it: United Therapeutics' 2005 release
 # mentions Remodulin in a sentence about clinical trials and states total
 # company revenues in the next, and the reader paired the product from one
-# with the amount from the other. Every such pairing was high by 4-8%,
-# because a company total is a little larger than the product.
+# with the amount from the other, which reads high because a company total is
+# larger than any one product in it.
 _SENTENCE_SPLIT_RE = re.compile(r"(?<=[.;])[\"'\u201d\u2019)\]]*\s+")
 
 
