@@ -83,3 +83,24 @@ def test_a_job_is_read_back_one_collection_at_a_time():
                and n.func.id.endswith("load")}
     assert "joinedload" not in loaders, "a joined load on a collection multiplies rows"
     assert "selectinload" in loaders
+
+
+def test_the_log_buffer_keeps_the_traceback_of_a_failed_job():
+    """A handler that raised on every exception record kept none of them,
+    which is when the buffer is read."""
+    import logging
+
+    from app.observability import RingBufferHandler, _logs
+
+    handler = RingBufferHandler()
+    log = logging.getLogger("test.ring")
+    log.addHandler(handler)
+    try:
+        try:
+            raise ValueError("Calderon has no such quarter")
+        except ValueError:
+            log.exception("pipeline_failed")
+    finally:
+        log.removeHandler(handler)
+    entry = next(e for e in reversed(_logs) if e["message"] == "pipeline_failed")
+    assert "Calderon has no such quarter" in entry["exc_info"]
