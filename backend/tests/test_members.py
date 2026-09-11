@@ -99,27 +99,27 @@ def test_the_register_is_consulted_before_the_rules(tmp_path):
 def test_a_no_match_does_not_outrank_the_rules_for_a_list_it_never_saw():
     """A negative is only about the list that produced it.
 
-    `gild:TrodelvyMember` recorded as naming no product, against a list with no
-    Trodelvy in it, is the register agreeing with the rules - not a fact about
-    the member. Add Trodelvy and the rules place it outright; a register that
-    answered first would have the drug absent from a filing that reports it.
+    `acme:CalderonMember` recorded as naming no product, against a list with no
+    Calderon in it, is the register agreeing with the rules - not a fact about
+    the member. Add Calderon and the rules place it outright; a register that
+    answered first would have the product absent from a filing that reports it.
     """
-    judged_against = ["Biktarvy", "Descovy"]
+    judged_against = ["Veltrexa", "Cordexa"]
     register = {
-        ("Gilead", "gild:TrodelvyMember"): Resolution(
-            "gild:TrodelvyMember", None, "llm", 1.0,
+        ("Acme Pharma", "acme:CalderonMember"): Resolution(
+            "acme:CalderonMember", None, "llm", 1.0,
             "names a product not in the candidate list",
             verdict=VERDICT_NO_CANDIDATE_MATCH,
             candidates_fingerprint=fingerprint(judged_against),
         )
     }
 
-    stands = resolve("gild:TrodelvyMember", judged_against, register, issuer="Gilead")
+    stands = resolve("acme:CalderonMember", judged_against, register, issuer="Acme Pharma")
     assert stands.product is None, "same list, same answer - nothing has changed"
 
-    uploaded = resolve("gild:TrodelvyMember", [*judged_against, "Trodelvy"],
-                       register, issuer="Gilead")
-    assert uploaded.product == "Trodelvy"
+    uploaded = resolve("acme:CalderonMember", [*judged_against, "Calderon"],
+                       register, issuer="Acme Pharma")
+    assert uploaded.product == "Calderon"
     assert uploaded.method == "exact"
 
 
@@ -132,44 +132,45 @@ def test_a_member_that_names_no_product_at_all_stays_settled():
     a person, and this is what setting it buys them.
     """
     register = {
-        ("Gilead", "gild:HIVProductSalesMember"): Resolution(
-            "gild:HIVProductSalesMember", None, "human", 1.0, "a category, not a product",
-            verdict=VERDICT_NOT_A_PRODUCT,
+        ("Acme Pharma", "acme:RespiratoryProductSalesMember"): Resolution(
+            "acme:RespiratoryProductSalesMember", None, "human", 1.0,
+            "a category, not a product", verdict=VERDICT_NOT_A_PRODUCT,
         )
     }
-    for products in (["Biktarvy"], ["Biktarvy", "Trodelvy"], []):
-        assert resolve("gild:HIVProductSalesMember", products,
-                       register, issuer="Gilead").product is None
+    for products in (["Veltrexa"], ["Veltrexa", "Calderon"], []):
+        assert resolve("acme:RespiratoryProductSalesMember", products,
+                       register, issuer="Acme Pharma").product is None
 
 
 def test_a_negative_with_no_list_recorded_is_spent_rather_than_binding():
     """Provenance the row does not carry cannot be taken on trust."""
     register = {
-        ("Gilead", "gild:TrodelvyMember"): Resolution(
-            "gild:TrodelvyMember", None, "llm", 1.0, "no list recorded",
+        ("Acme Pharma", "acme:CalderonMember"): Resolution(
+            "acme:CalderonMember", None, "llm", 1.0, "no list recorded",
             verdict=VERDICT_NO_CANDIDATE_MATCH,
         )
     }
-    assert resolve("gild:TrodelvyMember", ["Trodelvy"], register,
-                   issuer="Gilead").product == "Trodelvy"
+    assert resolve("acme:CalderonMember", ["Calderon"], register,
+                   issuer="Acme Pharma").product == "Calderon"
 
 
 def test_the_fingerprint_tracks_the_list_and_not_how_it_was_written():
-    assert fingerprint(["Tyvaso", "Remodulin"]) == fingerprint(["Remodulin", "Tyvaso ", "Tyvaso"])
-    assert fingerprint(["Tyvaso"]) != fingerprint(["Tyvaso", "Remodulin"])
+    assert fingerprint(["Calderon", "Tavoral"]) == fingerprint(
+        ["Tavoral", "Calderon ", "Calderon"])
+    assert fingerprint(["Calderon"]) != fingerprint(["Calderon", "Tavoral"])
 
 
 def test_a_positive_holds_whoever_is_asking():
     """Only negatives are relative to a list. A member that names a product
     names it whether or not the asker happens to track it."""
     register = {
-        ("United Therapeutics", "uthr:TyvasoDPIMember"): Resolution(
-            "uthr:TyvasoDPIMember", "Tyvaso DPI", "exact", 1.0, "",
+        ("Acme Pharma", "acme:CalderonXRMember"): Resolution(
+            "acme:CalderonXRMember", "Calderon XR", "exact", 1.0, "",
             verdict=VERDICT_PRODUCT,
         )
     }
-    assert resolve("uthr:TyvasoDPIMember", [], register,
-                   issuer="United Therapeutics").product == "Tyvaso DPI"
+    assert resolve("acme:CalderonXRMember", [], register,
+                   issuer="Acme Pharma").product == "Calderon XR"
 
 
 def test_one_member_name_can_mean_different_things_to_different_filers():
