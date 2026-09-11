@@ -182,7 +182,11 @@ def test_a_period_ending_in_the_first_days_of_a_month_belongs_to_the_month_befor
     """A filer on a 52/53-week calendar states its first quarter as ending on
     April 1 or 2 and its year on January 3; read by the month alone, the first
     quarter becomes the second and the year the next one."""
-    from app.parsing.periods import detect_period_context, fiscal_period_end, normalize_period
+    from app.parsing.periods import (
+        detect_period_context,
+        fiscal_period_end,
+        normalize_period,
+    )
 
     assert fiscal_period_end(4, 1) == (3, None)
     assert fiscal_period_end(1, 3, 2021) == (12, 2020)
