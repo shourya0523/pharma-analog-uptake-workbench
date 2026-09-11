@@ -1,11 +1,11 @@
 # Working rules for this repository
 
-Four rules. They exist because each was broken, and the cost was not a wrong
+Five rules. They exist because each was broken, and the cost was not a wrong
 number - it was a measurement that had stopped meaning anything, or a
 conclusion asserted from something that looked like evidence.
 
-Rules 3 and 4 are enforced by tests. Rules 1 and 2 are not enforceable, and are
-the ones that go wrong most. Rule 1 is how the other three get broken.
+Rules 3 and 4 are enforced by tests. The rest are not enforceable, and are the
+ones that go wrong most. Rule 1 is how the others get broken.
 
 ---
 
@@ -132,6 +132,35 @@ Two things that follow:
   failure documented is worth more than a clean number nobody can trust.
 - **A set that only refuses is passed by a system that always refuses.** Both
   answers must be represented, and the guard test should say so.
+
+---
+
+## 5. A comment explains the code and nothing else
+
+A docstring says what the thing does, what it returns, and why a choice that
+looks arbitrary is not. That is all.
+
+Not in a comment or docstring: a measured result, a score, a count, a
+before-and-after, which eval produced it, what a past run showed, how a defect
+was found, what was tried first. Those belong in the commit message, where
+people look for history, and in the eval's own output, where the number can be
+produced again.
+
+The test: could this sentence be made false by a change to the code alone? Then
+it belongs here. Could it only be made false by re-running something? Then it
+belongs in the commit message.
+
+A number written in a comment cannot be checked from the file it sits in. It
+goes stale silently, and it reads with the same authority as the code beside
+it - so the next reader inherits a claim they have no way to test, which is
+rule 2's failure with a longer fuse.
+
+An example of *shape* is different, and is often the clearest thing available:
+
+    HIVProductsBiktarvy resolves to Biktarvy; TyvasoDPI does not resolve
+    to Tyvaso.
+
+That is the rule made legible, not a result. Keep those.
 
 ---
 

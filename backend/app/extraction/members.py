@@ -73,21 +73,14 @@ class Resolution:
 def canonical_member(member: str) -> str:
     """A member's identity, independent of which reader spelled it.
 
-    The same member reaches the register under two notations. An instance
-    document names it in full - ``gild:CompleraEvipleraMember`` - while the
-    bulk notes datasets store the segment stripped of both prefix and suffix,
-    as ``CompleraEviplera``. Keyed literally, a decision made from one source
-    is invisible to the other, and the register's whole premise is that a
-    decision is made once.
+    The same member reaches the register under two notations: an instance
+    document names it in full (``gild:CompleraEvipleraMember``) and the bulk
+    notes datasets store the segment stripped of prefix and suffix
+    (``CompleraEviplera``). Keyed literally, a decision made from one source is
+    invisible to the other, and the register exists so a decision is made once.
 
-    That cost exactly the quarters it sounds like it would: with the register
-    built from the bulk extracts, Complera read 16 of 16 sampled quarters
-    through the bulk reader and 0 of 16 through the filing's own instance,
-    which was the entire measured difference between the two paths.
-
-    Case goes too, because the same two spellings differ in it as well
-    (``Ambisome`` beside ``AmBisome``), and a filer's capitalisation of its own
-    member is not a distinction the register should have to carry twice.
+    Case is dropped for the same reason - a filer writes both ``AmBisome`` and
+    ``Ambisome`` - so the register need not carry one member twice.
     """
     local = re.sub(r"Member$", "", member.split(":")[-1])
     return re.sub(r"[^a-z0-9]", "", local.lower())

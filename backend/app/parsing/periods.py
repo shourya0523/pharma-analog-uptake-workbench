@@ -191,45 +191,21 @@ _QUARTER_WORDS = {"first": 1, "second": 2, "third": 3, "fourth": 4}
 
 
 def _quarter_notation(text: str) -> PeriodContext | None:
-    """The document's period from "Q2 2024" notation, when no phrase states it.
+    """The document's period from "Q2 2024" notation, when no phrase states one.
 
-    Choosing among what a filing names is the whole difficulty, and it goes
-    wrong in both directions. Taking the latest year dates Sanofi's
-    second-quarter release 2025, because it carries next year's guidance as
-    "H1 2025" and "H2 2025"; it also dates Novo Nordisk's first-quarter 2025
-    announcement 2026, on one sentence expecting a regulatory filing "during
-    the first quarter of 2026". Taking the most-named period instead would date
-    a release by whichever comparative it happens to repeat most, which is the
-    mistake the phrase-based path above documents.
+    A filing names several periods: the one it reports, the prior-year
+    comparative printed beside every figure, and periods it only refers to -
+    next year's guidance, an expected approval. Selection is by how often each
+    is named, because a document states its own period throughout - title,
+    headers, every table - and mentions the others once or twice.
 
-    What separates them is how a document treats its own period: it states it
-    over and over - in the title, the headers, every table - while a quarter it
-    merely refers to is named once or twice. The margin is not close:
+    The year only breaks a tie. Leading with it instead dates a full-year
+    release into the next year, since that is where the guidance is. Quarters
+    are preferred over half-years, a filing that states a quarter being one
+    that reports a quarter.
 
-        Sanofi Q4 2024      2024Q4 x73   against 2025Q2 x3  (next year's guidance)
-        Sanofi Q2 2026      2026Q2 x81   against 2027Q2 x2
-        Novo Nordisk Q1 25  2025Q1 x45   against 2026Q1 x1  (an expected filing)
-        Novartis Q1 2025    2025Q1 x31   against 2024Q1 x27 (the comparative)
-
-    So the most-named wins, and the year only breaks a tie. Ordering it the
-    other way - latest year first, as the phrase-based path above does - dates
-    every full-year release into the next year, because that is where the
-    guidance is.
-
-    The comparative is the thing frequency could plausibly lose to, and the
-    phrase-based path above documents a filing where it does. It does not
-    happen in this notation in anything measured here: a comparative trails the
-    period being reported in all four cases above, most of them by a wide
-    margin. If that ever reverses, this is the line that will be wrong.
-
-    Where the numbers come from, and what they are worth: the four counts are
-    from `seed/holdout2`'s documents, and this rule was revised three times
-    against them - latest-year, then latest-year-among-repeated, then this. So
-    25/25 on those documents is in-sample and is not evidence of anything.
-    The out-of-sample check is Johnson & Johnson's quarterly earnings exhibits,
-    a different issuer writing "FIRST QUARTER 2016" over geography rows: 42 of
-    42, against ground truth taken from each filing's date rather than from its
-    text. `seed/holdout2` is now spent for anything that touches this function.
+    What this accepts is a filing naming its comparative more often than its
+    own period; that is the case to look at first if a document dates wrongly.
     """
     # Collected by position first, because the forms overlap: in "Q2 2024 Q2
     # 2024" the year-first pattern also matches the "2024 Q2" that spans the

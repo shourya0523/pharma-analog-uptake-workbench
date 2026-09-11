@@ -15,12 +15,11 @@ cannot be looked up directly. Resolution therefore runs structurally first, by
 the whole-word suffix match that needs no per-issuer seeding, and consults the
 register only for a member that structure could not place.
 
-That ordering is deliberate. The register covers five issuers, all of them
-issuers gold contains, because those are the ones anybody has run the builder
-against. Depending on it first would make this reader work on exactly the
-filers already measured and return nothing everywhere else - a coverage cliff
-shaped like the answer set, which would then read as "the data is not tagged
-there" rather than "we never taught it these names".
+That ordering is deliberate. The register only covers issuers someone has run
+the builder against, so depending on it first would make this reader work for
+those filers and return nothing elsewhere - a coverage cliff shaped like
+whoever has been looked at, reading as "the data is not tagged there" rather
+than "we never taught it these names".
 """
 
 from __future__ import annotations

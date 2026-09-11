@@ -186,15 +186,12 @@ def _filter_hallucinated_spans(spans: list[Any], source_text: str) -> list[dict[
     """Spans the source actually contains, from whatever shape the model sent.
 
     A span is meant to be an object carrying `span_text`, and every reader
-    downstream calls `.get` on it. On one of Novartis's 6-K exhibits
-    `extract_revenue` raised `AttributeError: 'str' object has no attribute
-    'get'`, which the orchestrator does not guard, so a single reply failed the
-    whole job rather than that one source. The reply itself was not captured;
-    what the exception establishes is that a non-mapping element reached this
-    loop, and a string is the shape that produces it.
+    downstream calls `.get` on it. A model sometimes sends bare strings, and
+    the orchestrator does not guard its `extract_revenue` call, so one reply of
+    that shape fails the whole job rather than the single source it came from.
 
-    A string is a span with no id and no rationale, which is exactly what the
-    verbatim check needs, so it is read as one rather than discarded.
+    A string is a span with no id and no rationale, which is all the verbatim
+    check needs, so it is read as one rather than discarded.
     """
     good: list[dict[str, Any]] = []
     for i, raw in enumerate(spans or []):

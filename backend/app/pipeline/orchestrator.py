@@ -149,13 +149,9 @@ def claim_rank(extraction_method: str | None) -> int:
 # names a product across dozens of tables for dozens of reasons. The best
 # authority is the worse place to look.
 #
-# Getting this backwards costs rows rather than correctness: measured over the
-# corpus, ordering by authority let a primary filing's incidental table answer a
-# quarter before the schedule built to state it, and 13 rows that had read
-# correctly stopped being found. That figure is from an end-to-end run and is
-# the one claim in this file a later audit could not re-derive without another
-# one; the ordering it argues for is separately visible in what each document
-# is for.
+# Getting this backwards costs rows rather than correctness: ordering by
+# authority lets a primary filing's incidental table answer a quarter before
+# the schedule built to state it, and the schedule is then never read.
 DOCUMENT_FITNESS = [
     SourceType.EARNINGS_RELEASE,
     SourceType.SEC_FILING,

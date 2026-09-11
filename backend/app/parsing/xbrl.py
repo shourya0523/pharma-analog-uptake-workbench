@@ -118,19 +118,14 @@ class Fact:
     def rounding_unit(self) -> float | None:
         """What the filer rounded this value to, in the fact's own unit.
 
-        XBRL's ``decimals`` says how far a value is accurate: ``-6`` means the
-        filer rounded to the nearest million before tagging, so the number is
-        one of ...199,000,000, 200,000,000, 201,000,000 and the true figure is
-        within half a million of it. ``INF`` means exact.
+        XBRL's ``decimals`` says how far a value is accurate: ``-6`` is the
+        nearest million, so the true figure is within half a million of what is
+        tagged. ``INF`` is exact. None where the filer said nothing, which is
+        not the same as exact.
 
-        This matters because a fourth quarter is never tagged and has to be
-        derived, and a derivation over four separately rounded inputs inherits
-        all four roundings. Gilead's 2022 Complera figures are each tagged at
-        ``decimals="-6"``, and 200 - (44 + 54 + 43) gives 59 against the 58 the
-        issuer printed in its own fourth-quarter release. Both are right about
-        what they were computed from; only one of them says so.
-
-        None where the filer said nothing, which is not the same as exact.
+        Callers use this to bound a derived figure: a fourth quarter is never
+        tagged and is computed by subtraction, so it inherits the rounding of
+        every input it was computed from.
         """
         raw = (self.decimals or "").strip()
         if not raw:

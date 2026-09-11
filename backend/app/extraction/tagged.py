@@ -66,9 +66,9 @@ def candidates_from_instance(
 ) -> tuple[list[dict[str, Any]], list[str]]:
     """(candidates, notes) for one product, from one XBRL instance.
 
-    ``issuer`` keys the register lookup and is not optional in practice: without
-    it only the string rules apply, which is how this shipped in its first
-    measured run and why the model's decisions counted for nothing.
+    ``issuer`` keys the register lookup and is not optional in practice:
+    without it the register is never consulted, only the string rules apply,
+    and every decision the model has made counts for nothing.
 
     An empty result is the ordinary case for a filing from before the issuer's
     tagging cutoff, and says so in the notes rather than looking like a failure
@@ -90,17 +90,12 @@ def candidates_from_instance(
     seen: set[tuple[str, float]] = set()
     for fact in facts:
         member = fact.product_member or ""
-        # Through `resolve`, not by indexing the register here. The lookup is
-        # keyed by issuer and member together - us-gaap:ProductMember is
-        # Yutrepia for Liquidia, which markets one product, and a meaningless
-        # total for anyone else - but it is also keyed on the member's
-        # *identity* rather than its spelling, and that part was missing while
-        # this reader did its own lookup: the register built from the bulk
-        # extracts spells a member "CompleraEviplera" and an instance spells it
-        # "gild:CompleraEvipleraMember", so a decision already made and written
-        # down was invisible here. Complera read 0 of 16 sampled quarters
-        # through this reader and 16 of 16 through the bulk one, on the same
-        # register.
+        # Through `resolve` rather than indexing the register here, so this
+        # reader gets both of the register's keys: issuer-and-member, because
+        # us-gaap:ProductMember is one issuer's sole product and a meaningless
+        # total for everyone else; and the member's identity rather than its
+        # spelling, because the bulk extracts write "CompleraEviplera" where an
+        # instance writes "gild:CompleraEvipleraMember".
         resolution = resolve(member, known, register, issuer=issuer)
         if not resolution.resolved or resolution.product != product:
             continue
