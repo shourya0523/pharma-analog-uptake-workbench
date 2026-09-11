@@ -87,8 +87,20 @@ def test_filter_drops_company_total_and_other_brand_and_xbrl():
     assert kept[0]["value_reported"] == 452.6
     reasons = {d["_drop_reason"].split(":")[0] for d in dropped}
     assert "company_total_not_product" in reasons
-    assert "other_brand" in reasons
     assert "xbrl_taxonomy_noise" in reasons
+    # The sentence about another product is refused for naming no product of
+    # ours, without anyone having to hold a list of brand names.
+    assert "product_scope_without_product_in_quote" in reasons
+
+    # Told what else the document reports, the same sentence is refused by
+    # name. The peer list comes from the document, so this holds for an issuer
+    # whose products appear in no list in this repository.
+    _kept, dropped_with_peers = filter_revenue_candidates(
+        candidates, product="Tyvaso", peer_names=["Remodulin"]
+    )
+    assert "other_brand" in {
+        d["_drop_reason"].split(":")[0] for d in dropped_with_peers
+    }
 
 
 def test_filter_keeps_adcirca_product_line():

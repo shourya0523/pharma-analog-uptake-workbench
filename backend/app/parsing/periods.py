@@ -120,7 +120,18 @@ _NEXT_YEAR_RE = re.compile(r"\b((?:19|20)\d{2})\b")
 # columns below them - "Three Months Ended | Twelve Months Ended | December 31,
 # | December 31, | 2012 | 2011" - so neither the month nor the year can be
 # required to sit beside the words.
-_PERIOD_PHRASE_RE = re.compile(r"\b(three|six|nine|twelve)\s+months?\s+ended\b", re.I)
+# A filing that covers two spans at once names them together: "the three and
+# six months ended June 28, 2026". Matching a single word here read only the
+# second of them, so a second-quarter exhibit was dated H1 and a third-quarter
+# one M9 - the preference for the quarterly framing below could not fire,
+# because the quarterly framing was never counted. Every span named by one
+# phrase is captured, and they are separated after the match.
+_PERIOD_PHRASE_RE = re.compile(
+    r"\b((?:three|six|nine|twelve)(?:\s+and\s+(?:three|six|nine|twelve))*)"
+    r"\s+months?\s+ended\b",
+    re.I,
+)
+_SPAN_WORD_RE = re.compile(r"three|six|nine|twelve", re.I)
 _MONTH_DAY_RE = re.compile(
     r"\b(january|february|march|april|may|june|july|august|september|october"
     r"|november|december|jan|feb|mar|apr|jun|jul|aug|sep|sept|oct|nov|dec)"
@@ -152,22 +163,109 @@ def _year_near(text: str, end: int) -> int | None:
     return int(match.group(1)) if match else None
 
 
+# The other way a filing names its period. "Three months ended June 30, 2024" is
+# a US convention; outside it, the same span is written "Q2 2024" and the phrase
+# above never appears. In one exhibit each from Novartis, Sanofi and Novo
+# Nordisk the quarter form appears 62, 55 and 59 times and "months ended" not
+# once; across the 25 exhibits `seed/holdout2` cites, none was datable by the
+# phrase and all 25 are datable by the quarter form - which is
+# what `fingerprint` refuses on, and what left the model reader guessing the
+# quarter for figures it had read correctly.
+#
+# A bare four-digit year is required, never "FY2026". A filer that writes its
+# year that way usually has a fiscal year that is not the calendar one, and the
+# quarter number then says nothing about which months it covers - which is
+# exactly the inference below.
+_QUARTER_FORMS = (
+    re.compile(r"\bQ([1-4])\s*[-/ ]?\s*((?:19|20)\d{2})\b", re.I),
+    re.compile(r"\b((?:19|20)\d{2})\s*[-/ ]?\s*Q([1-4])\b", re.I),
+    re.compile(r"\b(first|second|third|fourth)\s+quarter\s+(?:of\s+)?"
+               r"((?:19|20)\d{2})\b", re.I),
+)
+_SPAN_FORMS = (
+    # (regex, months, month the span ends in)
+    (re.compile(r"\bH1\s*[-/ ]?\s*((?:19|20)\d{2})\b", re.I), 6, 6),
+    (re.compile(r"\b9M\s*[-/ ]?\s*((?:19|20)\d{2})\b", re.I), 9, 9),
+)
+_QUARTER_WORDS = {"first": 1, "second": 2, "third": 3, "fourth": 4}
+
+
+def _quarter_notation(text: str) -> PeriodContext | None:
+    """The document's period from "Q2 2024" notation, when no phrase states one.
+
+    A filing names several periods: the one it reports, the prior-year
+    comparative printed beside every figure, and periods it only refers to -
+    next year's guidance, an expected approval. Selection is by how often each
+    is named, because a document states its own period throughout - title,
+    headers, every table - and mentions the others once or twice.
+
+    The year only breaks a tie. Leading with it instead dates a full-year
+    release into the next year, since that is where the guidance is. Quarters
+    are preferred over half-years, a filing that states a quarter being one
+    that reports a quarter.
+
+    What this accepts is a filing naming its comparative more often than its
+    own period; that is the case to look at first if a document dates wrongly.
+    """
+    # Collected by position first, because the forms overlap: in "Q2 2024 Q2
+    # 2024" the year-first pattern also matches the "2024 Q2" that spans the
+    # two, and counting both inflates whichever period a document happens to
+    # repeat adjacently. One mention is one mention wherever it is read from.
+    seen: list[tuple[int, int, tuple[int, int, int]]] = []
+    for pattern in _QUARTER_FORMS:
+        for match in pattern.finditer(text):
+            first, second = match.group(1), match.group(2)
+            if first.lower() in _QUARTER_WORDS:
+                quarter, year = _QUARTER_WORDS[first.lower()], int(second)
+            elif first.isdigit() and len(first) == 4:
+                year, quarter = int(first), int(second)
+            else:
+                quarter, year = int(first), int(second)
+            seen.append((match.start(), match.end(), (3, quarter * 3, year)))
+
+    counts: Counter[tuple[int, int, int]] = Counter()
+    taken_to = -1
+    for start, end, key in sorted(seen):
+        if start < taken_to:
+            continue
+        counts[key] += 1
+        taken_to = end
+    if not counts:
+        for pattern, months, month in _SPAN_FORMS:
+            for match in pattern.finditer(text):
+                counts[(months, month, int(match.group(1)))] += 1
+    if not counts:
+        return None
+    months, month, year = max(counts, key=lambda key: (counts[key], key[2], key[1]))
+    return PeriodContext(months=months, month=month, year=year)
+
+
 def detect_period_context(text: str) -> PeriodContext | None:
-    """Infer the document's own reporting period from its "months ended" prose."""
+    """Infer the document's own reporting period from the way it names one."""
     text = text or ""
     counts: Counter[tuple[int, int, int]] = Counter()
     for match in _PERIOD_PHRASE_RE.finditer(text):
-        months = MONTH_WORDS.get(match.group(1).lower())
+        spans = [
+            MONTH_WORDS[word.lower()]
+            for word in _SPAN_WORD_RE.findall(match.group(1))
+            if word.lower() in MONTH_WORDS
+        ]
         found = _month_near(text, match.end())
-        if not months or not found:
+        if not spans or not found:
             continue
         month, after_month = found
         year = _year_near(text, after_month)
         if not year:
             continue
-        counts[(months, month, year)] += 1
+        # Both spans end on the same date and are equally stated; which one is
+        # the document's own period is decided below, not here.
+        for months in spans:
+            counts[(months, month, year)] += 1
     if not counts:
-        return None
+        # No filing states its period both ways, so this is a different
+        # convention rather than a second opinion, and it only ever runs where
+        # there was no answer at all.
+        return _quarter_notation(text)
     # Prefer the quarterly framing, then the latest year - never the most
     # frequently repeated one. A comparative year is always earlier than the
     # year being reported, and it is often named more often than the reporting

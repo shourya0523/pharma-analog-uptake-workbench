@@ -144,3 +144,36 @@ def test_the_reporting_year_wins_over_a_more_repeated_comparative():
     context = detect_period_context(GILEAD_Q4_WITH_FOOTNOTES)
     assert context is not None
     assert (context.months, context.year, context.quarter) == (3, 2005, 4)
+
+
+def test_a_filing_covering_two_spans_is_dated_by_its_quarter():
+    """"three and six months ended" names two spans, and the quarter is the one.
+
+    Matching a single span word here read only the second of them, so Pfizer's
+    second-quarter exhibit was dated 2026H1 and its third-quarter one 2026M9.
+    The preference for the quarterly framing could not fire, because the
+    quarterly framing was never counted. Four of six held-out Pfizer exhibits
+    were dated wrong, and that wrong period was handed to the model as the
+    filing's `reporting_period`.
+    """
+    context = detect_period_context(
+        "Results for the three and six months ended June 28, 2026 are summarized below."
+    )
+    assert context is not None
+    assert (context.months, context.month, context.year) == (3, 6, 2026)
+    assert context.describe().endswith("2026") or "three" in context.describe().lower()
+
+
+def test_a_filing_naming_only_the_longer_span_keeps_it():
+    """The fix must not turn every year-to-date document into a quarter."""
+    context = detect_period_context("For the six months ended June 28, 2026, revenues were")
+    assert context is not None
+    assert context.months == 6
+
+
+def test_three_and_nine_is_read_as_the_third_quarter():
+    context = detect_period_context(
+        "the three and nine months ended September 30, 2025 reflect"
+    )
+    assert context is not None
+    assert (context.months, context.month, context.year) == (3, 9, 2025)

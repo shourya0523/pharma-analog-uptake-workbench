@@ -142,12 +142,12 @@ GILEAD_INSTANCE = b"""<?xml version="1.0" encoding="UTF-8"?>
 
 
 def test_a_drug_uploaded_at_run_time_is_read_rather_than_vetoed():
-    """The defect that moved the register into the database, at the read path.
+    """The same rule at the read path, where the fact is either kept or lost.
 
-    The register holds `gild:TrodelvyMember` as naming no product, because
-    Trodelvy was not tracked when it was built. That answer was consulted
-    before the rules and returned regardless of what the run was asking about,
-    so a run that did upload Trodelvy skipped a fact Gilead had tagged.
+    A register entry saying `gild:TrodelvyMember` named nothing in a list
+    without Trodelvy must not answer for a run that uploads Trodelvy: the rules
+    place that member outright, and the alternative is a fact Gilead tagged
+    going unread.
     """
     judged_against = ["Biktarvy", "Descovy"]
     register = {

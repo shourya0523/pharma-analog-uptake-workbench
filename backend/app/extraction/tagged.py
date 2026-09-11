@@ -26,7 +26,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from app.extraction.members import Resolution, load_register, resolve
+from app.extraction.members import Resolution, load_register, resolve, stored
 from app.parsing.xbrl import Fact, filer_category, parse_facts, product_facts
 
 # A tagged fact is the filer's own assertion, checked by the filer's auditors
@@ -42,6 +42,20 @@ def _million(fact: Fact) -> float | None:
     return fact.value / 1_000_000.0
 
 
+def rounding_uncertainty(fact: Fact) -> float | None:
+    """How far a tagged fact may sit from the true figure, in USD millions.
+
+    Half the unit the filer rounded to. A fact tagged `decimals="-6"` is within
+    half a million of the truth; one tagged `INF` is exact; one that says
+    nothing gets None, because unknown precision is not the same as exact and
+    a derivation over it cannot be bounded.
+    """
+    unit = fact.rounding_unit
+    if unit is None:
+        return None
+    return unit / 2.0 / 1_000_000.0
+
+
 def candidates_from_instance(
     raw: bytes,
     *,
@@ -50,13 +64,12 @@ def candidates_from_instance(
     products: list[str] | None = None,
     register: dict[tuple[str, str], Resolution] | None = None,
     learned: dict[tuple[str, str], Resolution] | None = None,
-    quarterly_only: bool = True,
 ) -> tuple[list[dict[str, Any]], list[str]]:
     """(candidates, notes) for one product, from one XBRL instance.
 
-    ``issuer`` keys the register lookup and is not optional in practice: without
-    it only the string rules apply, which is how this shipped in its first
-    measured run and why the model's decisions counted for nothing.
+    ``issuer`` keys the register lookup and is not optional in practice:
+    without it the register is never consulted, only the string rules apply,
+    and every decision the model has made counts for nothing.
 
     ``learned`` collects the resolutions the rules made that the register did
     not already hold, so a caller with somewhere durable to put them can.
@@ -81,28 +94,27 @@ def candidates_from_instance(
     seen: set[tuple[str, float]] = set()
     for fact in facts:
         member = fact.product_member or ""
-        # Keyed by issuer and member together: us-gaap:ProductMember is Yutrepia
-        # for Liquidia, which markets one product, and a meaningless total for
-        # anyone else. Looking it up by member alone answers with whichever
-        # filer was written last.
+        # Through `resolve` rather than indexing the register here, so this
+        # reader gets both of the register's keys: issuer-and-member, because
+        # us-gaap:ProductMember is one issuer's sole product and a meaningless
+        # total for everyone else; and the member's identity rather than its
+        # spelling, because the bulk extracts write "CompleraEviplera" where an
+        # instance writes "gild:CompleraEvipleraMember".
         resolution = resolve(member, known, register, issuer=issuer)
-        # `resolve` hands back the stored decision itself when one applies, so
-        # anything else is new: a member the register has never seen, or one
-        # whose recorded "nothing matched" was about a different product list
-        # and has just been superseded by the rules. Worth writing down not
-        # because recomputing it is expensive - the string rules are free - but
-        # because a decision nobody can see is a decision nobody can correct.
-        # This is the row a reviewer overrides.
+        # Anything the register did not hand back is new: a member it has never
+        # seen, or one whose recorded "nothing matched" was about a different
+        # product list and has just been superseded by the rules. Worth writing
+        # down not because recomputing it is expensive - the string rules are
+        # free - but because a decision nobody can see is a decision nobody can
+        # correct. This is the row a reviewer overrides.
         if (resolution.resolved and learned is not None
-                and register.get((issuer, member)) is not resolution):
+                and stored(register, issuer, member) is not resolution):
             learned[(issuer, member)] = resolution
         if not resolution.resolved or resolution.product != product:
             continue
         value = _million(fact)
         if value is None:
             notes.append(f"{member}: unit {fact.unit} is not USD")
-            continue
-        if quarterly_only and fact.months != 3:
             continue
         signature = (fact.period or "", round(fact.value, 2))
         if signature in seen:
@@ -127,6 +139,7 @@ def candidates_from_instance(
             "xbrl_member": member,
             "xbrl_context": fact.context_id,
             "member_resolved_by": resolution.method,
+            "rounding_uncertainty_usd_millions": rounding_uncertainty(fact),
             "_from_table": False,
             "_from_xbrl": True,
         })

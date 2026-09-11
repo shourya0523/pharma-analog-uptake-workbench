@@ -465,6 +465,7 @@ def build_fingerprint(
     rows: list[list[str]],
     context: str = "",
     grid: list[list[str | None]] | None = None,
+    period_context: "PeriodContext | None" = None,
 ) -> TableFingerprint:
     """Fingerprint one table: unit, currency, and period-to-column mapping.
 
@@ -473,6 +474,19 @@ def build_fingerprint(
     back to reading the period phrases and the year row as two ordered lists and
     dividing one into the other, which is an inference and can be wrong when a
     filing prints an uneven number of columns per period.
+
+    ``period_context`` is the span the *document* says it covers, and it is
+    read only when the table states no period of its own. Some issuers never
+    put one in the table - Pfizer's product schedule is headed by geography and
+    then by year, and says "months ended" nowhere - so a reader that requires
+    the table to date itself skips them entirely.
+
+    It is a last resort, and it is refused when the year row repeats a year.
+    A repeated year means the columns are divided by something other than time
+    - three geography bands, or a quarter beside its year-to-date - and one
+    document period spread across them would file several different values
+    under the same quarter. That is the failure this whole module exists to
+    prevent, so an ambiguous table stays unread and says why.
     """
     unit_label, unit_declared = detect_unit(rows, context)
     currency, currency_declared = detect_currency(rows, context)
@@ -528,6 +542,20 @@ def build_fingerprint(
             notes.append(
                 f"unmapped_columns years={len(years)} periods={len(phrases)}"
             )
+    elif not phrases and period_context is not None and years:
+        if len(set(years)) == len(years):
+            blocks = tuple(
+                PeriodBlock(
+                    months=period_context.months,
+                    end_month=period_context.month,
+                    year=year,
+                    value_index=index,
+                )
+                for index, year in enumerate(years)
+            )
+            notes.append("period_from_document")
+        else:
+            notes.append(f"period_from_document_ambiguous years={years}")
     elif not phrases:
         notes.append("no_period_header")
     elif not years:

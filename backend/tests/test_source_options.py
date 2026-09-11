@@ -65,17 +65,42 @@ def test_earnings_window_is_optional_and_plumbed_end_to_end():
     assert "filed_on > until" in exhibits
 
 
-def test_table_reading_is_not_limited_by_the_llm_source_budget():
-    """Table reading costs nothing, so llm_max_extract_sources must not truncate it."""
+def test_deterministic_reading_runs_first_and_is_not_capped_by_the_llm_budget():
+    """The readers that cost nothing run on every source, before the model.
+
+    `llm_max_extract_sources` is a budget on model calls, and it must not
+    truncate table reading. The ordering matters for the same reason: whatever
+    the deterministic readers answer, the model is not asked about - two rows
+    for one period are resolved by `claim_rank`, which the model always loses,
+    so an eager call could only confirm what was known or manufacture a
+    `needs_review` row that had already lost.
+    """
     source = inspect.getsource(PipelineOrchestrator._extract_revenue)
     assert "llm_source_ids" in source
-    assert "use_llm = src.source_id in llm_source_ids" in source
-    # The LLM call is conditional, while table extraction runs for every source
     assert "if use_llm:" in source
-    llm_call_index = source.index("self.llm.extract_revenue")
-    table_call_index = source.index("extract_revenue_candidates")
-    assert table_call_index > llm_call_index
     assert "over_source_budget" in source
+
+    # Deterministic first, model second.
+    table_call_index = source.index("extract_revenue_candidates")
+    llm_call_index = source.index("self.llm.extract_revenue")
+    assert table_call_index < llm_call_index, (
+        "the deterministic reader must run before the model, so its answers "
+        "can suppress the model call"
+    )
+
+    # And the model is gated on what the deterministic pass already answered.
+    assert "deterministic_answered" in source
+    assert "not deterministic_answered" in source
+
+
+def test_a_period_already_answered_deterministically_is_not_put_to_the_model():
+    """The fallback merges only quarters nothing else answered."""
+    source = inspect.getsource(PipelineOrchestrator._extract_revenue)
+    # `answered` carries both the tagged facts and the table rows for a filing.
+    assert "answered = set(tagged_periods.get(" in source
+    assert "answered.update(" in source
+    merge = source[source.index("Only the quarters nothing else answered"):]
+    assert 'str(row.get("period")) not in answered' in merge
 
 
 def test_options_with_a_date_window_are_json_storable():

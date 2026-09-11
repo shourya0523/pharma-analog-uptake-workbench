@@ -14,6 +14,11 @@ gold audit found.
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:  # a type only; periods.py must not import this module back
+    from app.parsing.periods import PeriodContext
+
 import re
 from collections.abc import Iterable
 from dataclasses import dataclass
@@ -22,7 +27,7 @@ from typing import Any
 from app.extraction.fingerprint import PeriodBlock, TableFingerprint, build_fingerprint
 from app.parsing.evidence import product_aliases
 from app.parsing.tables import clean_label
-from app.quality.candidate_filters import KNOWN_PEER_BRANDS
+from app.quality.candidate_filters import names_a_competing_product
 
 
 # A change column is within this many percentage points of the computed change.
@@ -100,18 +105,14 @@ class TableReadout:
     skipped_reason: str | None = None
 
 
-def _matches_product(label: str, aliases: list[str]) -> bool:
+def _matches_product(
+    label: str, aliases: list[str], siblings: list[str] | None = None
+) -> bool:
     """True when the row label names this product and no competing brand."""
     normalized = label.lower()
     if not any(alias.lower() in normalized for alias in aliases):
         return False
-    own = {alias.lower() for alias in aliases}
-    for brand in KNOWN_PEER_BRANDS:
-        if brand in own:
-            continue
-        if re.search(rf"\b{re.escape(brand)}\b", normalized):
-            return False
-    return True
+    return names_a_competing_product(label, aliases, siblings) is None
 
 
 def _percent_change(current: float, prior: float) -> float | None:
@@ -427,6 +428,7 @@ def read_table(
     extra_aliases: Iterable[str] | None = None,
     context: str = "",
     grid: list[list[str | None]] | None = None,
+    period_context: "PeriodContext | None" = None,
 ) -> TableReadout:
     """Read one table, by its geometry where that describes it and not otherwise.
 
@@ -450,6 +452,7 @@ def read_table(
         extra_aliases=extra_aliases,
         context=context,
         grid=grid,
+        period_context=period_context,
     )
     if (
         grid
@@ -463,6 +466,7 @@ def read_table(
             extra_aliases=extra_aliases,
             context=context,
             grid=None,
+            period_context=period_context,
         )
     return readout
 
@@ -475,9 +479,10 @@ def _read_table(
     extra_aliases: Iterable[str] | None = None,
     context: str = "",
     grid: list[list[str | None]] | None = None,
+    period_context: "PeriodContext | None" = None,
 ) -> TableReadout:
     """One reading of one table, either by column or from the ragged rows."""
-    fingerprint = build_fingerprint(rows, context, grid=grid)
+    fingerprint = build_fingerprint(rows, context, grid=grid, period_context=period_context)
     if not fingerprint.usable:
         reason = ";".join(fingerprint.notes) or "unusable_fingerprint"
         return TableReadout(fingerprint=fingerprint, values=[], skipped_reason=reason)
@@ -512,6 +517,15 @@ def _read_table(
             if cell and cell.strip()
         )
 
+    # The table's own list of what it reports: every row's label. A product's
+    # competitors are whatever else the filer prints beside it, which is known
+    # per document and needs no catalogue of brand names.
+    sibling_labels = [
+        clean_label(cells[0][1])
+        for cells in (_origins(row) for row in source_rows)
+        if cells and clean_label(cells[0][1])
+    ]
+
     matches: list[tuple[int, str, dict[int, float]]] = []
     quote_from: dict[int, int] = {}
     section: tuple[int, str] | None = None
@@ -531,8 +545,10 @@ def _read_table(
             section = (position, label)
             continue
         scoped, start = label, position
-        if not _matches_product(label, aliases):
-            if not section or not _matches_product(f"{section[1]} {label}", aliases):
+        if not _matches_product(label, aliases, sibling_labels):
+            if not section or not _matches_product(
+                f"{section[1]} {label}", aliases, sibling_labels
+            ):
                 continue
             scoped, start = f"{section[1]} {label}", section[0]
         naming += 1
@@ -589,6 +605,7 @@ def read_tables(
     context: str = "",
     grids: Iterable[list[list[str | None]]] | None = None,
     captions: Iterable[str] | None = None,
+    period_context: "PeriodContext | None" = None,
 ) -> list[TableReadout]:
     """Read every table. ``grids`` holds the same tables as rectangles, in order.
 
@@ -615,6 +632,7 @@ def read_tables(
                 else context
             ),
             grid=rectangles[index] if index < len(rectangles) else None,
+            period_context=period_context,
         )
         for index, rows in enumerate(tables or [])
     ]

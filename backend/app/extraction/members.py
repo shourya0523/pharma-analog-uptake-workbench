@@ -25,17 +25,15 @@ What the rules cannot settle goes to a model, and whatever it decides is written
 to the register with its reasoning, so the decision is made once, is reviewable
 in a diff, and never has to be made again.
 
-One decision is not like that, and telling them apart is what ``verdict`` is
-for. "This member is a category total" is a fact about the member and holds for
-good. "This member named no product we were tracking" is a fact about the
-product list it was judged against, and the moment a run brings a different
-list it is worth nothing. Both used to be written down as a bare ``-``, and
-because the register is consulted before the rules, the second kind was a
-standing veto: ``gild:TrodelvyMember`` was recorded as naming no product
-because Trodelvy was not among the 46 in ``product_attributes.csv``, so a run
-that did ask for Trodelvy read that ``-`` and skipped a fact the string rules
-place on the first try. A negative now carries the fingerprint of the list it
-was judged against and binds only for that list.
+One decision is not like that, and telling the two apart is what ``verdict``
+is for. "This member is a category total" is a fact about the member, and holds
+against any list. "This member named nothing in the candidate list" is a fact
+about the list, and against a different list it claims nothing at all. Written
+down as the same answer, the second becomes a veto: a member recorded as naming
+no product while a drug went untracked stays unplaceable for the run that
+uploads that drug, even where the string rules would place it outright. So a
+negative carries a fingerprint of the list it was judged against and binds only
+for that list, while a resolution to a product binds for every list.
 """
 
 from __future__ import annotations
@@ -72,6 +70,12 @@ LLM_CONFIDENCE_FLOOR = 0.8
 # Members that name no single product: an issuer's catch-all for the products it
 # no longer breaks out. Recorded so the resolver stops asking about them.
 NOT_A_PRODUCT = "-"
+
+# `resolve` is called once per member per filing, so re-keying the register on
+# every call would be the same work repeated. Keyed on the register's identity
+# and length, and holding one entry, so a register that is rebuilt or added to
+# is re-indexed rather than answered from a stale index.
+_IDENTITY_CACHE: dict[int, tuple[int, dict[tuple[str, str], "Resolution"]]] = {}
 
 
 def fingerprint(products: list[str]) -> str:
@@ -127,6 +131,22 @@ class Resolution:
         return self.candidates_fingerprint == fingerprint(products)
 
 
+def canonical_member(member: str) -> str:
+    """A member's identity, independent of which reader spelled it.
+
+    The same member reaches the register under two notations: an instance
+    document names it in full (``gild:CompleraEvipleraMember``) and the bulk
+    notes datasets store the segment stripped of prefix and suffix
+    (``CompleraEviplera``). Keyed literally, a decision made from one source is
+    invisible to the other, and the register exists so a decision is made once.
+
+    Case is dropped for the same reason - a filer writes both ``AmBisome`` and
+    ``Ambisome`` - so the register need not carry one member twice.
+    """
+    local = re.sub(r"Member$", "", member.split(":")[-1])
+    return re.sub(r"[^a-z0-9]", "", local.lower())
+
+
 def words(text: str) -> list[str]:
     """A member or product name as lowercase words.
 
@@ -151,16 +171,66 @@ def _suffixes(parts: list[str]) -> list[list[str]]:
     return [parts[i:] for i in range(len(parts))]
 
 
+# A member joining two names is a line covering both, and the trailing-run rule
+# would quietly award it to whichever is written last: `RemicadeAndSimponi`
+# resolved to Simponi, a figure that includes Remicade. The rules cannot tell a
+# joined pair from a category ending in a product's name, so they decline and
+# the model decides - which costs one call and can still resolve it, where
+# guessing costs a real number attributed to the wrong product.
+_JOINED = frozenset({"and", "plus"})
+_JOINING_MARKS = ("&", "+")
+
+# A member can also name a product in order to say the line is everything BUT
+# that product. The trailing-run rule reads the name at the end and hands the
+# residual to the one thing it is defined to exclude:
+#
+#   ProductsExcludingALDURAZYME -> Aldurazyme      (BioMarin files this)
+#   AllProductsExceptNuVessa    -> NuVessa
+#   ProductsOtherThanCalderon   -> Calderon
+#
+# It is the `RemicadeAndSimponi` defect inverted - there the figure was too
+# large, here it is the complement of the product it gets published as - and it
+# arrives at the top of CLAIM_STRENGTH, as a fact the filer tagged. The model
+# is not asked either: a line defined by what it leaves out is not any single
+# product's revenue, whoever reads it.
+_EXCLUDING = frozenset({"excluding", "excluded", "except", "excludes",
+                        "other", "than", "outside", "without"})
+
+
 def match(member: str, products: list[str]) -> Resolution:
     """Resolve one member against the products we track, or decline to."""
     parts = words(member)
     if not parts:
         return Resolution(member, None, "unknown", 0.0, "no words in member")
-    by_words: dict[tuple[str, ...], set[str]] = {}
+    local = member.split(":")[-1]
+    if any(part in _JOINED for part in parts) or any(m in local for m in _JOINING_MARKS):
+        return Resolution(member, None, "joined", 0.0,
+                          "member joins names; a figure covering both is not one product's")
+    # The marker has to sit before the trailing run, because that is the run the
+    # rules below would otherwise read as the product. A member ending in one
+    # ("HIV Other") names no product either, and the rules decline it as
+    # unmatched without help.
+    if any(part in _EXCLUDING for part in parts[:-1]):
+        return Resolution(
+            member, None, "excluding", 0.0,
+            "member names a product to exclude it; the line is everything but that",
+        )
+    # Keyed on the run's words joined up, not on the tuple of words, because
+    # only the *member* is a machine-generated identifier whose capitals mark
+    # word boundaries. A brand may carry a capital of its own - "AmBisome" -
+    # and `words` then splits the product into ["am", "bisome"] while the filer
+    # writing it plainly gives ["ambisome"]. Two words never equal one, so the
+    # match was impossible however the filer spelled it, and only a hand-added
+    # register entry was covering it.
+    #
+    # Runs still begin at the member's own token boundaries, so this stays a
+    # whole-word rule: "tyvaso" is not a trailing run of "TyvasoDPI" and does
+    # not become one by being joined up.
+    by_words: dict[str, set[str]] = {}
     for product in products:
-        by_words.setdefault(tuple(words(product)), set()).add(product)
+        by_words.setdefault("".join(words(product)), set()).add(product)
     for run in _suffixes(parts):
-        claimants = by_words.get(tuple(run))
+        claimants = by_words.get("".join(run))
         if not claimants:
             continue
         # Longest first, so a member ending in a shorter product's name goes to
@@ -261,17 +331,65 @@ def resolve(
 ) -> Resolution:
     """The register first where it still applies, then the rules.
 
-    "Where it still applies" is the whole of the change from looking the member
-    up and taking whatever comes back. A decision that nothing matched is only
-    as good as the list it was made against, so against a different list the
-    rules run again rather than the old answer standing.
+    The register is tried under both its keys - the member as spelled, then the
+    member's identity, because the bulk extracts write "CompleraEviplera" where
+    an instance writes ``gild:CompleraEvipleraMember``.
+
+    "Where it still applies" is the rest. A decision that nothing matched is
+    only as good as the list it was made against, so against a different list
+    the rules run again rather than the old answer standing.
 
     Returning an unresolved answer is not a failure - it is how a member the
     rules cannot place stays out of the data until someone or something decides
     what it is.
     """
     register = register if register is not None else load_register()
-    entry = register.get((issuer, member))
+    entry = stored(register, issuer, member)
     if entry is not None and entry.binds(products):
         return entry
     return match(member, products)
+
+
+def stored(
+    register: dict[tuple[str, str], Resolution],
+    issuer: str,
+    member: str,
+) -> Resolution | None:
+    """The decision on record for this member, under either of the register's keys.
+
+    Separate from `resolve` because a caller that writes decisions down needs
+    to know whether one came from the register or from the rules, and cannot
+    tell from the answer alone.
+    """
+    return (
+        register.get((issuer, member))
+        or _by_identity(register).get((issuer, canonical_member(member)))
+    )
+
+
+def _by_identity(
+    register: dict[tuple[str, str], Resolution],
+) -> dict[tuple[str, str], Resolution]:
+    """The register re-keyed on member identity rather than on spelling.
+
+    Where two spellings of one member were decided differently, neither is
+    returned. That is a disagreement in the register, and answering it by
+    whichever row was read last is the same coin toss `match` refuses to make
+    for two products that read the same.
+    """
+    cached = _IDENTITY_CACHE.get(id(register))
+    if cached is not None and cached[0] == len(register):
+        return cached[1]
+    index: dict[tuple[str, str], Resolution] = {}
+    disputed: set[tuple[str, str]] = set()
+    for (issuer, member), entry in register.items():
+        key = (issuer, canonical_member(member))
+        seen = index.get(key)
+        if seen is not None and seen.product != entry.product:
+            disputed.add(key)
+        index[key] = entry
+    for key in disputed:
+        index.pop(key, None)
+    _IDENTITY_CACHE.clear()
+    _IDENTITY_CACHE[id(register)] = (len(register), index)
+    return index

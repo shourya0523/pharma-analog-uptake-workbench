@@ -1,16 +1,22 @@
 """The derivation must fire in the pipeline, not only in the eval.
 
 `test_capabilities_are_wired.py` checks that `complete_series` has a caller
-under `app/`. It has one, and it has never produced a datapoint: across eleven
-end-to-end runs covering roughly two hundred gold quarters the pipeline emitted
-273 table readings, 36 model readings, 14 prose readings and **zero** derived
-ones, while `eval_coverage.py` credited 51 rows to derivations.
+under `app/`. It has one, and having a caller is not the same as running: the
+pipeline emitted table, model and prose readings and never a derived one, while
+the coverage eval credited derivations for rows the pipeline had not produced.
 
 The cause was one default. `_extract_revenue` called
-`extract_revenue_candidates` without `quarterly_only`, which defaults to True,
-so only quarterly points were ever stored — and `complete_series` derives a
-missing quarter by subtracting the quarters it has from a *total* it no longer
-received. Asked for quarters only, it derived nothing, every time.
+`extract_revenue_candidates` without `quarterly_only`, a parameter that then
+defaulted to True, so only quarterly points were ever stored — and
+`complete_series` derives a missing quarter by subtracting the quarters it has
+from a *total* it no longer received. Asked for quarters only, it derived
+nothing, every time.
+
+That parameter has since been removed rather than re-defaulted, because it
+duplicated a decision the orchestrator has to make anyway; see
+`test_totals_reach_the_derivation.py`. This test stays, because it checks the
+outcome — a derived row actually reaching the stage — and not the mechanism
+that happened to break it.
 
 A grep cannot see that. This drives the stage and looks at what came out.
 """

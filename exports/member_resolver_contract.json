@@ -1,0 +1,34 @@
+{
+ "cases": 4,
+ "passed": 4,
+ "results": [
+  {
+   "member": "CompleraEviplera",
+   "expected": "Complera",
+   "got": "Complera",
+   "reason": "CompleraEviplera refers to the same product sold under different market names, Complera in the US and Eviplera in the EU.",
+   "ok": true
+  },
+  {
+   "member": "LDVSOF",
+   "expected": "Harvoni",
+   "got": "Harvoni",
+   "reason": "LDVSOF represents the initials of the generic components ledipasvir/sofosbuvir, which is the composition of Harvoni.",
+   "ok": true
+  },
+  {
+   "member": "OPSUMITOPSYNVI",
+   "expected": null,
+   "got": null,
+   "reason": "The member OPSUMITOPSYNVI is tagged beside OPSUMIT, indicating it is a roll-up and not a single product.",
+   "ok": true
+  },
+  {
+   "member": "HIVProductSales",
+   "expected": null,
+   "got": null,
+   "reason": "The member 'HIVProductSales' is a category covering multiple products, not a specific product.",
+   "ok": true
+  }
+ ]
+}

@@ -17,6 +17,11 @@ Two differences matter versus the reader it replaces:
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:  # a type only; periods.py must not import this module back
+    from app.parsing.periods import PeriodContext
+
 from collections.abc import Iterable
 from typing import Any
 
@@ -71,10 +76,10 @@ def extract_revenue_candidates(
     generic: str | None = None,
     extra_aliases: Iterable[str] | None = None,
     context: str = "",
-    quarterly_only: bool = True,
     grids: Iterable[list[list[str | None]]] | None = None,
     captions: Iterable[str] | None = None,
     prose: str = "",
+    period_context: "PeriodContext | None" = None,
 ) -> tuple[list[dict[str, Any]], list[Finding], list[str]]:
     """Deterministic revenue candidates plus what the checks found.
 
@@ -89,6 +94,10 @@ def extract_revenue_candidates(
     carries its unit beside the amount, so it declares more than a table header
     does; what it must also do is name one period and one amount, or it is
     refused.
+
+    ``period_context`` is the span the document says it covers, for the tables
+    that state no period of their own. ``build_fingerprint`` refuses it where
+    the columns are divided by anything but time.
     """
     readouts = read_tables(
         tables,
@@ -98,6 +107,7 @@ def extract_revenue_candidates(
         context=context,
         grids=grids,
         captions=captions,
+        period_context=period_context,
     )
     values = [value for readout in readouts for value in readout.values]
     skipped = [readout.skipped_reason for readout in readouts if readout.skipped_reason]
@@ -110,8 +120,7 @@ def extract_revenue_candidates(
         # and the schedule another - "Tyvaso" against "Tyvaso (R)" - so keying
         # the fallback on both lets the same figure through twice, described
         # differently and sometimes scoped differently, and two candidates that
-        # disagree are not an answer. Measured: pooling them cost eight rows and
-        # turned nine more into contradictions.
+        # disagree are not an answer.
         stated = {value.period for value in values}
         values += [
             value
@@ -132,6 +141,5 @@ def extract_revenue_candidates(
         for point in points
         if point.period not in rejected
         and point.value_normalized_usd_millions is not None
-        and (not quarterly_only or point.period_type == "quarterly")
     ]
     return [_as_candidate(point, product) for point in kept], findings, skipped

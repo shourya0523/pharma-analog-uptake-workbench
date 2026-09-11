@@ -3,7 +3,9 @@ from __future__ import annotations
 # ruff: noqa: BLE001, DTZ003
 import json
 import logging
+import os
 from datetime import datetime
+from pathlib import Path
 from typing import Any
 
 from sqlalchemy.orm import Session
@@ -45,6 +47,7 @@ from app.domain.models import (
     JobStep,
     PeriodType,
     RetrievalStatus,
+    RetrievedSource,
     SourceType,
     ValidationStatus,
     new_id,
@@ -65,6 +68,7 @@ from app.extraction.candidates import extract_revenue_candidates
 from app.extraction.derive import complete_series
 from app.extraction import member_store
 from app.extraction.members import Resolution, load_products
+from app.extraction.bulk_tagged import candidates_from_notes
 from app.extraction.tagged import candidates_from_instance
 from app.extraction.fingerprint import UNIT_SCALE_TO_MILLIONS
 from app.quality.candidate_filters import filter_revenue_candidates
@@ -146,10 +150,9 @@ def claim_rank(extraction_method: str | None) -> int:
 # names a product across dozens of tables for dozens of reasons. The best
 # authority is the worse place to look.
 #
-# Getting this backwards costs rows rather than correctness: measured over the
-# corpus, ordering by authority let a primary filing's incidental table answer a
-# quarter before the schedule built to state it, and 13 rows that had read
-# correctly stopped being found.
+# Getting this backwards costs rows rather than correctness: ordering by
+# authority lets a primary filing's incidental table answer a quarter before
+# the schedule built to state it, and the schedule is then never read.
 DOCUMENT_FITNESS = [
     SourceType.EARNINGS_RELEASE,
     SourceType.SEC_FILING,
@@ -1003,6 +1006,14 @@ class PipelineOrchestrator:
                 "xbrl_member": candidate.get("xbrl_member"),
                 "xbrl_context": candidate.get("xbrl_context"),
                 "member_resolved_by": candidate.get("member_resolved_by"),
+                # How far this figure may sit from the truth given how its
+                # sources rounded, in USD millions. Absent means unknown, not
+                # exact. A derived quarter inherits one rounding per input, so
+                # this is the difference between a reader treating it as exact
+                # and knowing it is a million either way.
+                "rounding_uncertainty_usd_millions": candidate.get(
+                    "rounding_uncertainty_usd_millions"
+                ),
                 "validation_status": ValidationStatus.PENDING.value,
                 "interpreted": False,
                 "period_reported": period,
@@ -1012,7 +1023,101 @@ class PipelineOrchestrator:
         self.db.add(row)
         return row
 
-    async def _tagged_revenue(self, job: DrugJobORM, sources: list) -> list[DatapointORM]:
+    def _bulk_tagged_revenue(
+        self, job: DrugJobORM
+    ) -> tuple[list[DatapointORM], list[dict[str, Any]]]:
+        """The same tagged facts, from the Commission's bulk extracts.
+
+        `_tagged_revenue` can only read an instance the retrieve stage fetched,
+        which is capped and walks EDGAR filing by filing. The Financial
+        Statement and Notes Data Sets carry every filer's note-level facts for
+        a whole month in one file, so a quarter the walk never reached is
+        answered here without another request to sec.gov.
+
+        It is off unless `notes_dataset_dirs` names a downloaded extract, and
+        it adds nothing the instance path would have contradicted: both produce
+        the same claim about the same fact, and the reconciler treats a
+        duplicate as one answer rather than two votes.
+        """
+        settings = get_settings()
+        configured = [
+            Path(part)
+            for part in (settings.notes_dataset_dirs or "").split(os.pathsep)
+            if part.strip()
+        ]
+        if not configured or not job.cik:
+            return [], []
+        try:
+            cik = int(str(job.cik).lstrip("0") or "0")
+        except ValueError:
+            return [], []
+
+        register = member_store.load_register(self.db)
+        products = self._candidate_products(job)
+        rows: list[DatapointORM] = []
+        totals: list[dict[str, Any]] = []
+        for root in configured:
+            if not (root / "num.tsv").exists():
+                logger.info("notes_dataset_missing job_id=%s root=%s", job.id, root)
+                continue
+            try:
+                found, notes = candidates_from_notes(
+                    root,
+                    product=job.drug_name,
+                    issuer=job.manufacturer or "",
+                    cik=cik,
+                    products=products,
+                    register=register,
+                )
+            except Exception:  # noqa: BLE001 - a malformed extract is not this job's failure
+                logger.exception("notes_dataset_unreadable job_id=%s root=%s", job.id, root)
+                continue
+            for note in notes:
+                logger.info("notes_note job_id=%s root=%s %s", job.id, root.name, note)
+            for candidate in found:
+                # One source row per filing the facts were tagged in, so the
+                # citation resolves the same way the instance path's does.
+                src = RetrievedSource(
+                    source_type=SourceType.SEC_FILING,
+                    url=candidate.get("source_url") or "",
+                    title=f"XBRL facts, {candidate.get('xbrl_accession')}",
+                    filing_type="10-Q/10-K",
+                    accession_number=candidate.get("xbrl_accession"),
+                    retrieval_status=RetrievalStatus.SUCCESS,
+                    metadata={"notes_dataset": root.name},
+                )
+                self._persist_sources(job, [src])
+                if candidate.get("period_type") != PeriodType.QUARTERLY.value:
+                    totals.append(candidate)
+                    continue
+                rows.append(self._datapoint_from_candidate(job, src, candidate))
+        if rows or totals:
+            logger.info(
+                "notes_dataset_facts job_id=%s drug=%s quarters=%d totals=%d",
+                job.id, job.drug_name, len(rows), len(totals),
+            )
+        return rows, totals
+
+    def _candidate_products(self, job: DrugJobORM) -> list[str]:
+        """The products a member may resolve to for this job.
+
+        Everything the pipeline tracks, so that a member ending in a sibling's
+        name goes to the sibling rather than to this one - and every drug this
+        run was asked about, which is not always in the catalog yet. Without
+        the second, a drug uploaded at run time is a drug no member can ever
+        name: the rules would be asked to place `gild:TrodelvyMember` against a
+        list with no Trodelvy in it, and would rightly decline.
+
+        This can only narrow what is published: a resolution to any product
+        other than the one asked for is dropped downstream.
+        """
+        return sorted(
+            set(load_products()) | set(member_store.run_products(self.db, job.run_id))
+        )
+
+    async def _tagged_revenue(
+        self, job: DrugJobORM, sources: list
+    ) -> tuple[list[DatapointORM], list[dict[str, Any]]]:
         """Revenue this issuer tagged for this product, from its XBRL instances.
 
         Empty is the ordinary answer for a filing from before the issuer's
@@ -1020,15 +1125,9 @@ class PipelineOrchestrator:
         instance that tags no product-level revenue simply yields nothing.
         """
         rows: list[DatapointORM] = []
+        totals: list[dict[str, Any]] = []
         register = member_store.load_register(self.db)
-        # The products a member is resolved against are the ones this pipeline
-        # tracks *and* the ones this run was asked about. Without the second,
-        # a drug uploaded at run time is a drug no member can ever name: the
-        # rules would be asked to place `gild:TrodelvyMember` against a list
-        # with no Trodelvy in it, and would rightly decline.
-        products = sorted(
-            set(load_products()) | set(member_store.run_products(self.db, job.run_id))
-        )
+        products = self._candidate_products(job)
         learned: dict[tuple[str, str], Resolution] = {}
         for src in sources:
             if not (src.metadata or {}).get("xbrl_instance") or not src.storage_key:
@@ -1044,18 +1143,6 @@ class PipelineOrchestrator:
                     raw,
                     product=job.drug_name,
                     issuer=job.manufacturer or "",
-                    # Every product in play, not just the one being asked
-                    # for. `match` prefers the longest product name
-                    # ending a member - that is how NebulizedTyvaso is
-                    # Nebulized Tyvaso rather than Tyvaso - and with a one-name
-                    # list there is nothing to prefer, so
-                    # `uthr:NebulizedTyvasoMember` suffix-matched to Tyvaso and
-                    # a sibling formulation's tagged revenue was accepted as
-                    # the product's own. Only the register was catching it, and
-                    # the register does not cover every issuer.
-                    #
-                    # This can only narrow: a resolution to any other product
-                    # is dropped by the `!= product` filter downstream.
                     products=products,
                     register=register,
                     learned=learned,
@@ -1065,13 +1152,22 @@ class PipelineOrchestrator:
             for note in notes:
                 logger.info("xbrl_note job_id=%s source_id=%s %s", job.id, src.source_id, note)
             for candidate in found:
+                # A twelve-month fact is not an answer to a quarter, so it is
+                # not stored as a datapoint; it is what the fourth quarter is
+                # derived against.
+                if candidate.get("period_type") != PeriodType.QUARTERLY.value:
+                    totals.append(candidate)
+                    continue
                 rows.append(self._datapoint_from_candidate(job, src, candidate))
         if learned:
             written = member_store.record_many(self.db, learned, products=products)
             logger.info("xbrl_members_learned job_id=%s members=%d", job.id, written)
-        if rows:
-            logger.info("xbrl_facts job_id=%s drug=%s facts=%d", job.id, job.drug_name, len(rows))
-        return rows
+        if rows or totals:
+            logger.info(
+                "xbrl_facts job_id=%s drug=%s quarters=%d totals=%d",
+                job.id, job.drug_name, len(rows), len(totals),
+            )
+        return rows, totals
 
     async def _extract_revenue(
         self,
@@ -1112,7 +1208,22 @@ class PipelineOrchestrator:
         # geometry read off it, so where one exists it is the better claim; the
         # table reader still runs, and the two are reconciled downstream like
         # any other pair of candidates.
-        rows.extend(await self._tagged_revenue(job, selected_sources))
+        tagged_rows, tagged_totals = await self._tagged_revenue(job, selected_sources)
+        rows.extend(tagged_rows)
+        derivation_pool.extend(tagged_totals)
+
+        # The same class of claim, for filings the retrieve stage never reached.
+        # Off unless an extract has been downloaded and configured.
+        bulk_rows, bulk_totals = self._bulk_tagged_revenue(job)
+        rows.extend(bulk_rows)
+        derivation_pool.extend(bulk_totals)
+
+        # A period a tagged fact already answered for this filing. The filer's
+        # own XBRL is the strongest claim there is; nothing needs a second
+        # reading of the same quarter in the same document.
+        tagged_periods: dict[str, set[str]] = {}
+        for row in tagged_rows:
+            tagged_periods.setdefault(str(row.source_id or ""), set()).add(str(row.period))
 
         for src in selected_sources:
             doc = parsed.get(src.source_id)
@@ -1121,78 +1232,28 @@ class PipelineOrchestrator:
             if src.source_type == SourceType.OPENFDA:
                 continue
 
-            llm_text, evidence_meta = build_revenue_llm_text(
-                doc,
-                product=job.drug_name,
-                generic=job.generic_name,
-                extra_aliases=extra,
-            )
             period_context = detect_period_context(doc.full_text)
-            if evidence_meta.get("had_product_money_hits"):
-                any_product_money = True
 
-            # Skip the LLM when a filing has no product+$ evidence (avoid XBRL /
-            # company-total noise) or when it is beyond the extraction budget.
-            no_product_evidence = evidence_meta.get("strategy") in {
-                "no_product_mention",
-                "empty",
-            } or not evidence_meta.get("had_product_money_hits")
-            use_llm = src.source_id in llm_source_ids and not no_product_evidence
-            if not use_llm:
-                src_row = self.db.get(SourceDocumentORM, src.source_id)
-                if src_row:
-                    reason = "no_product_evidence" if no_product_evidence else "over_source_budget"
-                    note = (
-                        f"skip_revenue_llm reason={reason} "
-                        f"strategy={evidence_meta.get('strategy')} "
-                        f"product_money={evidence_meta.get('had_product_money_hits')}"
-                    )
-                    src_row.notes = f"{(src_row.notes or '').rstrip()} | {note}".strip(" |")
-
-            result: dict[str, Any] = {"candidates": [], "spans": []}
-            if use_llm:
-                result = await self.llm.extract_revenue(
-                    product=job.drug_name,
-                    company=job.manufacturer,
-                    source_meta={
-                        "url": src.url,
-                        "type": src.source_type.value,
-                        "title": src.title,
-                        "filing_type": src.filing_type,
-                        "accession": src.accession_number,
-                        "evidence": evidence_meta,
-                        "reporting_period": period_context.describe() if period_context else None,
-                        "period_columns": (
-                            [str(period_context.year), str(period_context.comparative_year)]
-                            if period_context
-                            else None
-                        ),
-                    },
-                    text=llm_text,
-                )
-            span_corpus = "\n\n".join(
-                (s.get("span_text") or "") for s in (result.get("spans") or [])
-            ) or llm_text
-            llm_dropped = result.get("dropped") or []
-            kept, dropped = filter_revenue_candidates(
-                result.get("candidates") or [],
-                product=job.drug_name,
-                generic=job.generic_name,
-                extra_aliases=extra,
-                source_text=span_corpus,
-            )
-            dropped = list(llm_dropped) + list(dropped)
-            dropped_total += len(dropped)
-
-            # Read the revenue table directly; the model omits rows unpredictably.
-            # These quotes come from the parsed table, not the model, so the
-            # verbatim gate that guards model output does not apply.
+            # The deterministic readers run first, and the model is what
+            # happens when they come back empty.
             #
-            # The table is fingerprinted first, so its numbers are scaled by the
-            # unit it declares and its year-to-date columns stay labelled as
-            # such. Assuming USD millions and a fixed quarter layout is what
-            # produced 1000x-wrong values and full-year totals filed as
-            # quarters in the dataset this pipeline is scored against.
+            # It used to be the other way around: the model ran on every
+            # in-budget filing and the table reader was bolted on beside it
+            # because "the model omits rows unpredictably". The backstop then
+            # outgrew the thing it was backing - it reads tagged facts, it
+            # fingerprints a table for the unit it declares, it runs on every
+            # source rather than the first few - and `CLAIM_STRENGTH` was
+            # updated to say so, ranking `llm` below every deterministic
+            # producer. What never moved was the call site.
+            #
+            # So the model was still being asked about quarters that were
+            # already answered, and its answer could not win: two rows for one
+            # period are sorted by `claim_rank` and the loser is flagged
+            # `conflict_with_higher_priority_source`. An eager model call could
+            # only agree - costing a request to confirm what was already known
+            # - or disagree and manufacture a `needs_review` row for a human to
+            # adjudicate, having already lost. Asking it only where nothing
+            # else could answer keeps every row it can actually contribute.
             fingerprinted, table_findings, table_skips = extract_revenue_candidates(
                 doc.tables,
                 product=job.drug_name,
@@ -1201,15 +1262,18 @@ class PipelineOrchestrator:
                 context=doc.full_text[:4000],
                 grids=doc.table_grids, captions=doc.table_captions,
                 prose=doc.full_text,
-                # The totals as well as the quarters. A quarter the issuer
-                # never stated on its own is the difference between a total it
-                # did state and the quarters it did, and `complete_series`
-                # cannot compute that without the total: asked for quarters
-                # only, it received quarters only and derived nothing, in every
-                # job this pipeline has ever run. Only the quarters are stored;
-                # the totals exist to be subtracted from.
-                quarterly_only=False,
+                # What the filing says it covers, for a schedule that states no
+                # period itself. Computed just above and, until now, handed only
+                # to the model - while the reader four lines down was skipping
+                # tables for want of exactly this.
+                period_context=period_context,
             )
+            # A producer says everything it can about the source; which of
+            # those answers is a datapoint and which is something to subtract
+            # from is decided here, because only here are both destinations
+            # known. A quarter the issuer never stated on its own is the
+            # difference between a total it did state and the quarters it did,
+            # so the totals are routed, not discarded.
             period_totals = [
                 candidate
                 for candidate in fingerprinted
@@ -1242,26 +1306,109 @@ class PipelineOrchestrator:
                 extra_aliases=extra,
             )
             dropped_total += len(table_dropped)
-            if table_rows:
-                seen_rows = {
-                    (str(c.get("period")), round(float(c["value_reported"]), 3))
-                    for c in kept
-                    if c.get("value_reported") is not None
-                }
-                added = [
-                    row
-                    for row in table_rows
-                    if (str(row["period"]), round(float(row["value_reported"]), 3)) not in seen_rows
-                ]
-                kept = list(kept) + added
+            kept = list(table_rows)
+
+            # Which quarters of this filing already have a deterministic
+            # answer. A period in here is not put to the model, and a model row
+            # for one is not merged: it is the losing side of a conflict that
+            # has already been decided.
+            answered = set(tagged_periods.get(str(src.source_id), set()))
+            answered.update(
+                str(row.get("period"))
+                for row in table_rows
+                if row.get("value_reported") is not None
+            )
+
+            llm_text, evidence_meta = build_revenue_llm_text(
+                doc,
+                product=job.drug_name,
+                generic=job.generic_name,
+                extra_aliases=extra,
+            )
+            if evidence_meta.get("had_product_money_hits"):
+                any_product_money = True
+
+            # Skip the LLM when a filing has no product+$ evidence (avoid XBRL /
+            # company-total noise), when it is beyond the extraction budget, or
+            # now when the deterministic readers have already answered it.
+            no_product_evidence = evidence_meta.get("strategy") in {
+                "no_product_mention",
+                "empty",
+            } or not evidence_meta.get("had_product_money_hits")
+            # A finding means a table was read but something about the reading
+            # is suspect, so the filing is worth a second opinion even though
+            # it produced rows.
+            deterministic_answered = bool(answered) and not table_findings
+            use_llm = (
+                src.source_id in llm_source_ids
+                and not no_product_evidence
+                and not deterministic_answered
+            )
+            if not use_llm:
+                src_row = self.db.get(SourceDocumentORM, src.source_id)
+                if src_row:
+                    if deterministic_answered:
+                        reason = "deterministic_answered"
+                    elif no_product_evidence:
+                        reason = "no_product_evidence"
+                    else:
+                        reason = "over_source_budget"
+                    note = (
+                        f"skip_revenue_llm reason={reason} "
+                        f"strategy={evidence_meta.get('strategy')} "
+                        f"product_money={evidence_meta.get('had_product_money_hits')}"
+                    )
+                    src_row.notes = f"{(src_row.notes or '').rstrip()} | {note}".strip(" |")
+
+            result: dict[str, Any] = {"candidates": [], "spans": []}
+            if use_llm:
+                result = await self.llm.extract_revenue(
+                    product=job.drug_name,
+                    company=job.manufacturer,
+                    source_meta={
+                        "url": src.url,
+                        "type": src.source_type.value,
+                        "title": src.title,
+                        "filing_type": src.filing_type,
+                        "accession": src.accession_number,
+                        "evidence": evidence_meta,
+                        "reporting_period": period_context.describe() if period_context else None,
+                        "period_columns": (
+                            [str(period_context.year), str(period_context.comparative_year)]
+                            if period_context
+                            else None
+                        ),
+                    },
+                    text=llm_text,
+                )
+            span_corpus = "\n\n".join(
+                (s.get("span_text") or "") for s in (result.get("spans") or [])
+            ) or llm_text
+            llm_dropped = result.get("dropped") or []
+            llm_kept, dropped = filter_revenue_candidates(
+                result.get("candidates") or [],
+                product=job.drug_name,
+                generic=job.generic_name,
+                extra_aliases=extra,
+                source_text=span_corpus,
+            )
+            dropped = list(llm_dropped) + list(dropped)
+            dropped_total += len(dropped)
+
+            # Only the quarters nothing else answered.
+            added = [row for row in llm_kept if str(row.get("period")) not in answered]
+            if added:
+                kept = kept + added
+            if llm_kept or table_rows:
                 logger.info(
-                    "table_rows_extracted job_id=%s source_id=%s parsed=%s added=%s",
+                    "revenue_rows_extracted job_id=%s source_id=%s "
+                    "deterministic=%s llm_offered=%s llm_added=%s",
                     job.id,
                     src.source_id,
                     len(table_rows),
+                    len(llm_kept),
                     len(added),
                 )
-
             comparatives = derive_comparative_candidates(kept, context=period_context)
             if comparatives:
                 kept = list(kept) + comparatives
@@ -1528,16 +1675,11 @@ class PipelineOrchestrator:
             # It used to go through apply_field_enrichment, whose contract is
             # that any fill forces needs_review and caps confidence at 0.55.
             # That contract is right for a model's suggestion about a blank
-            # field and wrong for a tautology, and the cost was the pipeline's
-            # entire output: two thirds of the datapoints landing on a gold
-            # quarter carried field_enrichment_applied, in 26 of 27 cases for
-            # this fill alone, and the flag disqualifies a row from auto_pass
-            # twice over - directly, and by holding confidence under the 0.7
-            # the quality gate needs. Measured over four products across two
-            # issuers and two years: 21 datapoints the judge had already called
-            # "supported", with nothing else against them, every one of them
-            # withheld, and 18 of the 32 gold quarters answered correctly and
-            # not published for this reason and no other.
+            # field and wrong for a tautology. The flag disqualifies a row from
+            # auto_pass twice over - directly, and by holding confidence under
+            # the threshold the quality gate needs - so applying it here
+            # withholds rows the judge has already called supported, with
+            # nothing else against them.
             fill = deterministic_formulation_fill(
                 {"revenue_scope": row.revenue_scope, "formulation": row.formulation}
             )
@@ -1700,9 +1842,8 @@ class PipelineOrchestrator:
                     # against everything in the group: marking them all losers
                     # withheld the right answer along with the wrong one, and
                     # then the fallback skipped the group because it already
-                    # had losers in it. One measured instance - Orenitram
-                    # 2019Q2, a schedule reading 54.0 beside a sentence reading
-                    # 13.4, both demoted, nothing published.
+                    # had losers in it: a schedule and a sentence disagreeing,
+                    # both demoted, nothing published.
                     continue
                 winners.add(wid)
                 for cid in ids:

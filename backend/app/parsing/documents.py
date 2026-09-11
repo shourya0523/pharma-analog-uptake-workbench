@@ -68,11 +68,9 @@ class OCRStub:
 # before it was raised: at 40 it cut a Gilead product sales summary off in the
 # middle of Stribild, leaving its U.S. line in the table and its other regions
 # and its total outside, so the U.S. figure was published as the product's. A
-# row cap that binds on an ordinary filing decides what a table says. Figure-
-# bearing tables run to a 99th percentile of 63 rows in the gold corpus and 63
-# in a held-out one, and a maximum of 130; at 40 it truncated 11.4% and 12.0%
-# of them respectively, which is a rate high enough to be silently changing
-# answers rather than bounding work.
+# row cap that binds on an ordinary filing decides what a table says. Set it
+# above the longest figure-bearing tables filers actually produce, so it bounds
+# pathological input and never an ordinary schedule.
 HTML_TABLE_LIMIT = 80
 # How much of the run-up to a table is its caption. A unit declaration sits in
 # the line or two directly above the table; 600 characters covers the title,
@@ -189,8 +187,8 @@ def table_relevance(grid: list[list[str | None]]) -> int:
     The gate is the figures. Money and period markers only *rank* what got
     through, because they are evidence rather than requirements: a schedule
     that declares "(in millions)" in the sentence above it rather than inside
-    the grid is still a schedule, and 37% of the layout tables in these
-    filings carry a stray "$" that means nothing.
+    the grid is still a schedule, and a stray "$" appears in layout tables
+    often enough that requiring one would admit them and exclude schedules.
 
     No test here names an issuer, a product, a heading word or a section, so
     nothing in it can learn one filer's layout.
@@ -268,10 +266,6 @@ def html_table_grids(soup: BeautifulSoup) -> list[list[list[str | None]]]:
     return [grid for _table, grid in _selected_tables(soup)]
 
 
-def html_table_captions(soup: BeautifulSoup) -> list[str]:
-    """What introduces each kept table, aligned with ``html_table_grids``."""
-    return [table_caption(table) for table, _grid in _selected_tables(soup)]
-
 
 def flatten_grid(grid: list[list[str | None]]) -> list[list[str]]:
     """A grid read back as ragged rows: the cells that are actually there.
@@ -316,17 +310,15 @@ def html_tables(soup: BeautifulSoup) -> list[list[list[str]]]:
 # in the same shape, and every rule already written about a table's geometry
 # applies to both.
 #
-# The tagged-PDF route was measured and rejected: 33 of the 53 cached PDFs
-# carry a structure tree, but they are Excel exports whose every cell is a bare
-# /TD - not one object in the corpus declares /ColSpan - so the tags cost the
-# marked-content machinery and give back less than the coordinates do.
+# Not the tagged-PDF route: where these filings carry a structure tree at all
+# it is an Excel export whose cells are bare /TD with no /ColSpan, so the tags
+# cost the marked-content machinery and say less than the coordinates do.
 
 # A gap wider than this many median character widths separates columns rather
-# than words. Measured over the corpus rather than chosen: gaps within a cell
-# cluster between 0.5 and 1.1 character widths, gaps between columns at 2 and
-# above, and the band between 1.4 and 1.9 holds 21 of 19,500 gaps. Stating it
-# in character widths rather than points is what makes it hold for a filing set
-# in a different size.
+# than words. Within-cell gaps and between-column gaps fall into two clusters
+# with an empty band between them, and this sits in that band. Stated in
+# character widths rather than points, so it holds for a filing set in a
+# different type size.
 PDF_COLUMN_GAP = 1.5
 
 

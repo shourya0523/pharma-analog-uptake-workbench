@@ -72,7 +72,11 @@ def test_two_products_that_read_the_same_resolve_to_nothing():
 def test_a_catch_all_member_matches_no_product():
     resolution = match("us-gaap:ProductAndServiceOtherMember", UTHR)
     assert resolution.product is None
-    assert resolution.method == "unmatched"
+    assert not resolution.resolved
+    # It declines as "joined" rather than "unmatched": the member carries an
+    # "And", and the rules stop at one before asking which trailing run wins.
+    # Either way it names no product, which is the claim being made here.
+    assert resolution.method in {"unmatched", "joined"}
 
 
 def test_the_register_is_consulted_before_the_rules(tmp_path):
@@ -91,13 +95,12 @@ def test_the_register_is_consulted_before_the_rules(tmp_path):
 
 
 def test_a_no_match_does_not_outrank_the_rules_for_a_list_it_never_saw():
-    """The defect that moved the register into the database.
+    """A negative is only about the list that produced it.
 
-    `gild:TrodelvyMember` was recorded as naming no product, because Trodelvy
-    was not among the products tracked on the day the register was built. The
-    register is consulted before the rules, so a run that *did* ask for
-    Trodelvy read that answer and skipped a tagged fact the rules place on the
-    first try - the drug silently absent from a filing that reports it.
+    `gild:TrodelvyMember` recorded as naming no product, against a list with no
+    Trodelvy in it, is the register agreeing with the rules - not a fact about
+    the member. Add Trodelvy and the rules place it outright; a register that
+    answered first would have the drug absent from a filing that reports it.
     """
     judged_against = ["Biktarvy", "Descovy"]
     register = {
@@ -246,4 +249,130 @@ def test_the_orchestrator_passes_that_list_to_the_tagged_reader():
         "candidates_from_instance falls back to [product] when products is "
         "omitted, which is the condition the test above describes"
     )
-    assert "load_products()" in source and "run_products" in source
+    candidates = inspect.getsource(PipelineOrchestrator._candidate_products)
+    assert "load_products()" in candidates and "run_products" in candidates
+
+
+
+def test_a_brand_that_capitalises_inside_its_own_name_still_resolves():
+    """`words` splits CamelCase because a member is a machine identifier.
+
+    A brand is not. "AmBisome" carries a capital as typography, so the splitter
+    turned the product into two words while a filer writing it plainly gave
+    one, and no member could ever match. Only a hand-added register entry was
+    covering it, which is the register doing the string rules' job for the five
+    issuers somebody happened to seed.
+
+    Invented names, so nothing here passes because a real brand is spelled in
+    the code.
+    """
+    known = ["NuVessa", "Calderon", "Nebulized Calderon"]
+
+    # However the filer spells the capital, it is the same product.
+    assert match("NuVessa", known).product == "NuVessa"
+    assert match("Nuvessa", known).product == "NuVessa"
+    assert match("acme:RespiratoryProductsNuVessaMember", known).product == "NuVessa"
+    assert match("acme:RespiratoryProductsNuvessaMember", known).product == "NuVessa"
+
+    # And the rule the splitter exists to enforce is untouched: a product is
+    # still only a *trailing* run, so a sibling formulation is not the parent.
+    assert match("acme:CalderonXRMember", known).product is None
+    assert match("acme:NebulizedCalderonMember", known).product == "Nebulized Calderon"
+
+
+def test_a_member_joining_two_names_is_not_the_last_one():
+    """`RemicadeAndSimponi` is a line covering both, not Simponi's revenue.
+
+    The trailing-run rule reads the last name in a member, which is right for a
+    category prefix ("HIVProductsBiktarvy") and wrong for a joined pair. The
+    rules cannot tell those apart, so they decline and the model decides: one
+    call, against a figure that includes another product being published as
+    this one's.
+    """
+    known = ["Calderon", "NuVessa"]
+    for member in ("CalderonAndNuVessa", "acme:CalderonAndNuVessaMember",
+                   "Calderon&NuVessa", "Calderon+NuVessa"):
+        outcome = match(member, known)
+        assert not outcome.resolved, f"{member} resolved to {outcome.product}"
+
+    # A category that merely ends in a product's name is still resolved.
+    assert match("acme:RespiratoryProductsNuVessa", known).product == "NuVessa"
+
+
+def test_a_decision_reaches_the_reader_that_did_not_make_it():
+    """One member, two notations, and the register must answer to both.
+
+    The bulk notes datasets store a segment stripped of prefix and suffix
+    ("CompleraEviplera"); a filing's own instance names it in full
+    ("gild:CompleraEvipleraMember"). Keyed literally, a register built from one
+    is invisible to the other, and the product reads through whichever reader
+    happened to write it and through no other.
+    """
+    from app.extraction.members import canonical_member
+
+    register = {("Gilead", "CompleraEviplera"): Resolution(
+        "CompleraEviplera", "Complera", "llm", 0.9, "US and EU trade names"
+    )}
+    for spelling in ("CompleraEviplera", "gild:CompleraEvipleraMember",
+                     "CompleraEvipleraMember", "Compleraeviplera"):
+        assert resolve(spelling, GILEAD, register, issuer="Gilead").product == "Complera", spelling
+    assert canonical_member("gild:CompleraEvipleraMember") == "compleraeviplera"
+
+
+def test_the_issuer_is_still_part_of_the_key():
+    """Re-keying on identity must not merge two filers' taxonomies."""
+    register = {("Liquidia", "us-gaap:ProductMember"): Resolution(
+        "us-gaap:ProductMember", "Yutrepia", "llm", 1.0, "sole marketed product"
+    )}
+    assert resolve("ProductMember", [], register, issuer="Liquidia").product == "Yutrepia"
+    assert resolve("ProductMember", UTHR, register,
+                   issuer="United Therapeutics").product is None
+
+
+def test_two_spellings_decided_differently_answer_neither():
+    """A disagreement in the register is not settled by row order."""
+    register = {
+        ("Acme", "CalderonXR"): Resolution("CalderonXR", "Calderon", "human", 1.0, ""),
+        ("Acme", "acme:CalderonXRMember"): Resolution(
+            "acme:CalderonXRMember", "NuVessa", "human", 1.0, "corrected"
+        ),
+    }
+    assert resolve("acme:CalderonXRMember", [], register, issuer="Acme").product == "NuVessa", (
+        "an exact key still wins outright; only the identity fallback abstains"
+    )
+    assert resolve("CalderonXRMember", [], register, issuer="Acme").product is None
+
+
+def test_an_edit_to_the_register_is_not_answered_from_a_stale_index():
+    register = {("Acme", "Foo"): Resolution("Foo", "NuVessa", "human", 1.0, "")}
+    assert resolve("acme:FooMember", [], register, issuer="Acme").product == "NuVessa"
+    register[("Acme", "Bar")] = Resolution("Bar", "Calderon", "human", 1.0, "")
+    assert resolve("acme:BarMember", [], register, issuer="Acme").product == "Calderon"
+
+
+def test_a_member_naming_a_product_to_exclude_it_is_not_that_product():
+    """`ProductsExcludingAldurazyme` is everything BUT Aldurazyme.
+
+    The trailing-run rule reads the name at the end, so a residual line was
+    resolved to the one product it is defined to leave out - and at the top of
+    CLAIM_STRENGTH, as a fact the filer tagged. It is the `RemicadeAndSimponi`
+    defect inverted: there the figure was too large, here it is the complement
+    of what it gets published as.
+
+    Found by auditing the branch, in a member BioMarin actually files.
+    """
+    known = ["Calderon", "NuVessa", "Nebulized Calderon"]
+    for member in ("acme:ProductsExcludingCalderonMember",
+                   "acme:RevenueExcludingNuVessaMember",
+                   "acme:AllProductsExceptCalderonMember",
+                   "acme:ProductsOtherThanNuVessaMember"):
+        outcome = match(member, known)
+        assert not outcome.resolved, f"{member} resolved to {outcome.product}"
+        assert outcome.method == "excluding"
+
+    # The marker has to sit before the trailing run. A category prefix that
+    # merely ends in a product's name still resolves, and a member ending in a
+    # marker names no product either way.
+    assert match("acme:RespiratoryProductsCalderonMember", known).product == "Calderon"
+    assert match("acme:NebulizedCalderonMember", known).product == "Nebulized Calderon"
+    assert not match("acme:CalderonOtherMember", known).resolved

@@ -7,9 +7,8 @@ print every quarter. Two patterns account for most of them:
   quarters and then a full year, and Q4 is the difference. United Therapeutics
   disclosed Remodulin this way for seven straight years.
 * Before a product line splits into formulations, the family total *is* the one
-  formulation on sale. Tyvaso was nebulized-only from 2009 until the DPI
-  inhaler launched in 2022Q2, so every family figure in those 50 quarters is
-  also the nebulized figure.
+  formulation on sale: Tyvaso was nebulized-only until the DPI inhaler
+  launched, so every family figure before that is also the nebulized figure.
 
 Both are exact arithmetic over values already extracted, not estimates, so they
 carry the same confidence as a directly reported number - but they are marked
@@ -46,6 +45,29 @@ DERIVED_CONFIDENCE = 0.7
 # Derived quarters inherit rounding from their inputs, so a residual this small
 # is arithmetic noise rather than a real amount.
 _NEGLIGIBLE = 0.05
+
+
+def _combined_uncertainty(points: Iterable[Datapoint]) -> float | None:
+    """How far a difference of these figures may sit from the truth.
+
+    Each input is only as good as the precision its source rounded to, and a
+    subtraction inherits every one of them: a fourth quarter derived from a
+    stated year and three stated quarters, each rounded to the nearest million,
+    can be up to two million out. That is not error in the arithmetic - the
+    arithmetic is exact on what was published - it is error the publisher
+    already baked into the figures.
+
+    Unknown if any input's precision is unknown. A bound computed from the
+    subset that happened to declare one would be smaller than the truth, and a
+    bound that understates is worse than no bound.
+    """
+    total = 0.0
+    for point in points:
+        share = point.rounding_uncertainty_usd_millions
+        if share is None:
+            return None
+        total += share
+    return total
 
 
 def _split(period: str) -> tuple[int, int] | None:
@@ -119,6 +141,13 @@ def complete_quarters_from_totals(
             # rather than a figure that cannot be real.
             continue
         inputs = ", ".join(have[q].period for q in members if q != target)
+        uncertainty = _combined_uncertainty(
+            [total, *(have[q] for q in members if q != target)]
+        )
+        # Said in the quote as well as carried in the field, because the quote
+        # is what a reader sees beside the number and the whole point is that a
+        # derived quarter is not as precise as a tagged one.
+        bound = f", +/- {uncertainty:g} from input rounding" if uncertainty else ""
         point = replace(
             total,
             period=f"{year}Q{target}",
@@ -128,9 +157,10 @@ def complete_quarters_from_totals(
             source_quote=(
                 f"{total.period} {period_type} total "
                 f"{total.value_normalized_usd_millions:g} less reported {inputs} "
-                f"yields {year}Q{target} {max(residual, 0.0):g}"
+                f"yields {year}Q{target} {max(residual, 0.0):g}{bound}"
             ),
             normalization_status="derived_from_period_total",
+            rounding_uncertainty_usd_millions=uncertainty,
         )
         derived.append(point)
         quarters[year][target] = point
@@ -274,6 +304,7 @@ def _as_datapoint(candidate: dict[str, Any]) -> Datapoint | None:
         source_quote=candidate.get("source_quote") or "",
         fingerprint_signature=candidate.get("fingerprint_signature") or "",
         normalization_status="reported",
+        rounding_uncertainty_usd_millions=candidate.get("rounding_uncertainty_usd_millions"),
     )
 
 
@@ -352,6 +383,7 @@ def complete_series(
             "source_quote": point.source_quote,
             "confidence": DERIVED_CONFIDENCE,
             "extraction_method": point.normalization_status,
+            "rounding_uncertainty_usd_millions": point.rounding_uncertainty_usd_millions,
             "_derived": True,
         }
         for point in derived

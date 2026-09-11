@@ -16,13 +16,9 @@ system: |
     know the product well
   - the member names a category, a franchise, a segment, or a total across
     several products ("HIV Product Sales", "Total Other Product Sales")
-  - the member runs several brand names together, which filers do for products
-    they report on one line ("OPSUMITOPSYNVI", "PREZISTAPREZCOBIXREZOLSTASYMTUZA",
-    "RYBREVANTLAZCLUZE"). Return nothing even when one of those brands is in the
-    candidate list and the others are not: the figure covers all of them, so
-    reporting it as the one you recognise overstates it by the rest. The names
-    are often run together without spaces or capitalisation to separate them,
-    so read the whole member before deciding it names a single product.
+  - the member is a roll-up: it runs several names together AND the figure it
+    carries also exists on its own elsewhere on the axis. See the rule below,
+    which decides this - do not decide it from the spelling.
   - the member is a catch-all for products the issuer no longer breaks out
     ("Other", "Other HIV")
   - the member names a service, a royalty, a collaboration or a revenue share
@@ -32,19 +28,77 @@ system: |
   Return a product when you have a specific reason, and say what it is. Two
   kinds of reason are usually sound:
   - the member is the same product under another name: a generic or chemical
-    name for a brand ("SofosbuvirVelpatasvir" for a brand sold under one), a
-    former brand name, or a co-formulation the issuer renamed
+    name for a brand ("SofosbuvirVelpatasvir" for a brand sold under one), the
+    initials of its generic components ("LDVSOF" for a ledipasvir/sofosbuvir
+    brand), a name it was sold under before it was branded, a trade name used
+    in another market ("Eviplera" for a brand sold as "Complera" in the US), or
+    a co-formulation the issuer renamed
   - the member is a generic tag such as us-gaap:ProductMember AND the issuer
     markets exactly one product, so its product revenue can only be that
     product's. Check the candidate list has exactly one entry before using
     this reason, and say so.
+
+  A member that runs several names together
+  ----------------------------------------
+  Most of the members you are asked about do this, and most of them are one
+  product. Do not treat running names together as a reason to refuse. Compare:
+
+      ChantixChampix          one drug, US and EU trade names   -> that drug
+      AvaproAvalideAndPlavix  a roll-up over two tagged lines   -> nothing
+
+  Nothing in the spelling separates those. What separates them is already on
+  the axis. The list of other members the issuer tags in this same filing is
+  given to you below, and it decides:
+
+    a name run together with this one is ALSO tagged as its own member
+      -> this line is a roll-up over a figure that already exists separately,
+         so reporting it as one brand overstates it by the rest.
+         Return nothing.
+           AvaproAvalideAndPlavix, tagged beside Plavix and beside AvaproAvalide
+           BraftoviMektovi,        tagged beside Braftovi
+           OPSUMITOPSYNVI,         tagged beside OPSUMIT
+
+    none of them is tagged separately
+      -> this line IS the issuer's published figure for that product. There is
+         no finer figure to prefer, and returning nothing loses the only one
+         there is. Return the product the line is headed by.
+           CompleraEviplera   one drug under its US and EU trade names
+           PROCRITEPREX       one drug under its US and EU trade names
+           CozaarHyzaar       a brand and its fixed-dose combination
+           XanaxXanaxXR       a brand and its extended-release form
+           AristadaAndAristadaInitio        a brand and its initiation dose
+           NexplanonImplanonNXT             one implant under two market names
+           SimponiSimponiAria               one brand, injected two ways
+           INVEGASUSTENNAXEPLIONTRINZATREVICTA
+                              one medicine under its market names and dosing
+                              intervals
+
+  A brand together with its own combination, strength, formulation, route,
+  dosing interval, generic name, or the name it carries in another market is
+  ONE product for this purpose, whatever the regulator counts it as. That is
+  the issuer choosing how to report, and the reporting line is the answer.
+
+  The comparison runs one way only. What disqualifies this member is a sibling
+  that is one of the names inside IT. A sibling that contains this member's
+  names *and more* is a wider roll-up sitting above this line, and says nothing
+  against it: a filer often tags a product's line and a franchise total that
+  contains it. Ask "is a piece of me tagged on its own?", never "am I a piece
+  of something bigger?".
+
+  Read the siblings only as this filing lists them. A filer that renamed a
+  member between years leaves both spellings in the record, and that is a
+  rename, not two products.
+
+  The one case to refuse with no sibling evidence: names that are unrelated
+  medicines with no shared brand, put on one line for convenience. A figure
+  covering Fumaderm and Aduhelm is neither one's revenue.
 
   Never reason from the value. You are matching names, not reconciling numbers,
   and a number that happens to match is not evidence about identity.
 user_template: |
   Issuer: {issuer}
   XBRL member: {member}
-  Other members this issuer tags on the same axis:
+  Other members this issuer tags on the same axis, in this same filing:
   {siblings}
 
   Candidate products (the only ones you may return):

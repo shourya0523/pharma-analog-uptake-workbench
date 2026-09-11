@@ -463,12 +463,11 @@ class XbrlMemberResolutionORM(Base):
     over containers that are thrown away, so a mapping learned during a run has
     nowhere to go.
 
-    ``verdict`` is the column the file was missing. A negative decision used to
-    be a bare ``-`` that meant two different things - "this member is a category
-    total" and "this member named a product we were not tracking that day" - and
-    the second was being cached forever. Only the first is a fact about the
-    member. The second is a fact about the product list it was judged against,
-    which is what ``candidates_fingerprint`` records.
+    ``verdict`` separates two negatives that read alike. "This member is a
+    category total" is a fact about the member and holds against any product
+    list. "This member named nothing in the candidate list" is a fact about the
+    list, and ``candidates_fingerprint`` records which list, so it is not read
+    as the first.
     """
 
     __tablename__ = "xbrl_member_resolutions"

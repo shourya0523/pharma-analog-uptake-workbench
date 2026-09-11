@@ -24,15 +24,10 @@ import re
 from collections.abc import Iterable
 from dataclasses import dataclass
 
-from app.parsing.evidence import product_aliases
+from app.parsing.evidence import SCOPE_PATTERNS, product_aliases
 
-# Geography and scope labels that split a product block into rows. Ordered so
-# the longer spellings match before their abbreviations.
-_SCOPE_PATTERNS: tuple[tuple[str, str], ...] = (
-    ("Worldwide", r"worldwide|world\s*wide|\bWW\b|\bW\.W\.\b"),
-    ("International", r"international|\bIntl\.?\b|\bInt'l\b|outside\s+the\s+u\.?s\.?"),
-    ("United States", r"united\s+states|\bU\.?S\.?A?\b|domestic"),
-)
+# The scope vocabulary lives in evidence.py because the peer check reads it too.
+_SCOPE_PATTERNS = SCOPE_PATTERNS
 
 _NUMBER_RE = re.compile(r"-?\d[\d,]*(?:\.\d+)?")
 # A dash standing in for a period with nothing to report holds its column, the

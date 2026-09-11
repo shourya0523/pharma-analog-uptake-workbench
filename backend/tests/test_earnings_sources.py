@@ -126,11 +126,8 @@ async def test_the_budget_counts_filings_so_a_filing_is_never_split(monkeypatch)
 
     Johnson & Johnson files two EX-99 documents per earnings 8-K, the press
     release and the product-sales schedule. While the budget counted exhibits,
-    six of them bought three quarters - and the sixth took a press release and
-    left behind the schedule it belongs to, so that quarter was retrieved and
-    still unreadable. Measured over Uptravi, Stelara and Xarelto in 2018 and
-    2019: 9 of 24 gold quarters had no datapoint at all, every Q2 and the one
-    Q3 whose schedule fell the wrong side of the cut.
+    it could spend its last on a press release and leave behind the schedule
+    that belongs with it, so the quarter was retrieved and still unreadable.
     """
     from app.connectors.sources import SECConnector
     from app.storage.filestore import LocalFileStore

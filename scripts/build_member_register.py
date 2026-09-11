@@ -52,6 +52,11 @@ from app.extraction.members import (
     save_register,
 )
 from app.llm.client import LLMModules
+from app.parsing.notes_datasets import (
+    iter_facts,
+    load_dimensions,
+    load_submissions,
+)
 from app.parsing.xbrl import parse_facts, product_facts
 
 UA = os.environ.get("SEC_CONTACT")
@@ -104,6 +109,46 @@ def recent_instances(cik: int, forms=("10-Q", "10-K"), per_form: int = 2) -> lis
             taken[form] += 1
         time.sleep(0.15)
     return urls
+
+
+def members_from_notes(
+    roots: list[pathlib.Path], issuers: dict[str, int] | None = None
+) -> dict[str, set[str]]:
+    """Members an issuer tagged in the eras these extracts cover.
+
+    `recent_instances` reads the newest filings, which carry the *current*
+    names. That is the right source for what a filer tags today and no source
+    at all for what it tagged before: a brand renamed, a co-formulation the
+    issuer stopped breaking out, a drug tagged by its generic components until
+    it had a brand. Those members exist only in older filings, so the register
+    could never resolve them, and the pipeline read their quarters as an issuer
+    that tags nothing.
+
+    The bulk extracts carry every filer's members per month back to 2009 and
+    are already parsed by `notes_datasets`, so history costs a download rather
+    than a second walk over EDGAR's older instance layouts.
+    """
+    issuers = issuers or ISSUERS
+    by_cik = {cik: issuer for issuer, cik in issuers.items()}
+    found: dict[str, set[str]] = {issuer: set() for issuer in issuers}
+    for root in roots:
+        if not (root / "num.tsv").exists():
+            print(f"  {root.name}: not an extract, skipped")
+            continue
+        subs = load_submissions(root, ciks=set(by_cik), forms={"10-K", "10-Q"})
+        if not subs:
+            continue
+        dims = load_dimensions(root)
+        seen = 0
+        for adsh, fact in iter_facts(root, submissions=subs, dimensions=dims):
+            member = fact.product_member
+            if member:
+                found[by_cik[subs[adsh].cik]].add(member)
+                seen += 1
+        print(f"  {root.name:<12}{len(subs):>3} filings, {seen:>6} product facts")
+    for issuer, members in found.items():
+        print(f"  {issuer:<22}{len(members):>3} members tagged")
+    return found
 
 
 def members_by_issuer(issuers: dict[str, int] | None = None) -> dict[str, set[str]]:
@@ -164,6 +209,10 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--no-llm", action="store_true",
                         help="string rules only; leave the rest unresolved")
+    parser.add_argument("--from-notes", type=pathlib.Path, action="append", metavar="DIR",
+                        help="collect members from an unzipped Financial Statement and "
+                             "Notes Data Set instead of the newest filings; repeatable, "
+                             "and the way to reach members an issuer no longer uses")
     parser.add_argument("--issuer", action="append", default=[], metavar="NAME=CIK",
                         help="warm an issuer that is not in ISSUERS; repeatable")
     parser.add_argument("--product", action="append", default=[], metavar="NAME",
@@ -189,8 +238,12 @@ def main() -> int:
             raise SystemExit(f"--issuer wants NAME=CIK, got {pair!r}")
         issuers[name.strip()] = int(cik)
 
-    print("collecting members from the newest filings")
-    tagged = members_by_issuer(issuers)
+    if args.from_notes:
+        print(f"collecting members from {len(args.from_notes)} extract(s)")
+        tagged = members_from_notes(args.from_notes, issuers)
+    else:
+        print("collecting members from the newest filings")
+        tagged = members_by_issuer(issuers)
 
     existing = load_register()
     resolved: dict[tuple[str, str], Resolution] = dict(existing)

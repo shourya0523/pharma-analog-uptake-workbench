@@ -1,16 +1,15 @@
 """The member register, kept where a run can add to it.
 
-``members.py`` holds the rules; this holds the decisions. They used to live only
-in ``seed/xbrl_members.csv``, which works for a script somebody runs on a laptop
-and not for the product: the file sits in the source tree, a deployment runs
-several workers over containers that are discarded when the run ends, and the
-drugs a run is about arrive at upload time rather than at build time. A mapping
-learned while reading a filing had nowhere to go.
+``members.py`` holds the rules; this holds the decisions.
 
-So the file becomes the seed and the table becomes the store. The file is still
-the copy a human reads and edits - ``export_member_register.py`` writes it back
-out - and a row a person has confirmed is never overwritten by anything
-automated, which is the rule the metadata backfill already follows.
+The file seeds; the table stores. ``seed/xbrl_members.csv`` sits in the source
+tree, a deployment runs several workers over containers that are discarded when
+the run ends, and the drugs a run is about arrive at upload time rather than at
+build time - so a mapping learned while reading a filing has nowhere to go
+unless it goes here. The file remains the copy a human reads and edits, which
+``export_member_register.py`` writes back out, and a row a person has confirmed
+is never overwritten by anything automated - the rule the metadata backfill
+follows.
 """
 
 from __future__ import annotations

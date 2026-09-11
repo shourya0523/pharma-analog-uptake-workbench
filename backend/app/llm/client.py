@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import logging
 import re
+from collections.abc import Iterable
 from pathlib import Path
 from typing import Any
 
@@ -181,9 +182,20 @@ def _citations_from_message(message: dict[str, Any]) -> list[dict[str, str]]:
     return out
 
 
-def _filter_hallucinated_spans(spans: list[dict[str, Any]], source_text: str) -> list[dict[str, Any]]:
+def _filter_hallucinated_spans(spans: list[Any], source_text: str) -> list[dict[str, Any]]:
+    """Spans the source actually contains, from whatever shape the model sent.
+
+    A span is meant to be an object carrying `span_text`, and every reader
+    downstream calls `.get` on it. A model sometimes sends bare strings, and
+    the orchestrator does not guard its `extract_revenue` call, so one reply of
+    that shape fails the whole job rather than the single source it came from.
+
+    A string is a span with no id and no rationale, which is all the verbatim
+    check needs, so it is read as one rather than discarded.
+    """
     good: list[dict[str, Any]] = []
-    for i, span in enumerate(spans):
+    for i, raw in enumerate(spans or []):
+        span: dict[str, Any] = raw if isinstance(raw, dict) else {"span_text": str(raw or "")}
         text = (span.get("span_text") or "").strip()
         if not text:
             continue
@@ -648,13 +660,16 @@ def apply_judge_hard_vetoes(
     judgment: dict[str, Any],
     generic: str | None = None,
     extra_aliases: list[str] | None = None,
+    peer_names: Iterable[str] | None = None,
 ) -> dict[str, Any]:
     """Force misclassified/needs_review for known bad patterns even if model is soft."""
     issues = list(judgment.get("issues") or [])
     q = quote or ""
     period_type = (candidate.get("period_type") or "").lower()
     mentions = quote_mentions_product(q, product, generic, extra_aliases=extra_aliases)
-    other = quote_mentions_other_brand(q, product, generic, extra_aliases=extra_aliases)
+    other = quote_mentions_other_brand(
+        q, product, generic, extra_aliases=extra_aliases, peer_names=peer_names
+    )
     veto = False
 
     if TOTAL_REVENUE_RE.search(q) and not mentions:

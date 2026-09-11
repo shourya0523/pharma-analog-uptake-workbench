@@ -200,7 +200,19 @@ def test_year_to_date_column_is_never_emitted_as_a_quarter():
     candidates, _, _ = extract_revenue_candidates(
         [MERCK_QUARTER_AND_YTD], product="Winrevair"
     )
-    assert [c["period"] for c in candidates] == ["2024Q2"]
+    # The six-month figure comes through - a fourth quarter is derived by
+    # subtracting from a total, so withholding totals is what loses Q4 - but it
+    # comes through *as* a six-month figure. Being emitted and being emitted as
+    # a quarter are different claims, and only the second is the error.
+    assert [c["period"] for c in candidates] == ["2024Q2", "2024"]
+    quarterly = [c for c in candidates if c["period_type"] == "quarterly"]
+    assert [c["period"] for c in quarterly] == ["2024Q2"]
+    assert all(c["period_type"] != "quarterly" for c in candidates if c["period"] == "2024")
+
+    # A caller wanting quarters alone selects them, in the one line the
+    # orchestrator already writes. The reader has no say in it.
+    quarters_only = [c for c in candidates if c["period_type"] == "quarterly"]
+    assert [c["period"] for c in quarters_only] == ["2024Q2"]
 
 
 def test_dash_holds_its_column_so_later_values_do_not_shift_left():
@@ -1109,9 +1121,9 @@ def test_a_sentence_does_not_pre_empt_a_derivation():
     `complete_series` was applied only to periods no row existed for, so any
     reader that produced anything at all pre-empted it. A sentence offering 1.0
     for a quarter whose family total derives exactly to 94.645 did not lose to
-    the better answer - it stopped the better answer being computed. Measured
-    over the corpus, the prose reader emitted 13 of the 16 wrong values while
-    contributing 5 correct ones.
+    the better answer - it stopped the better answer being computed. The prose
+    reader is the weakest producer there is, and it was silencing the
+    strongest.
 
     A tagged fact and a schedule still pre-empt a derivation. They are the
     stronger claims.
@@ -1178,3 +1190,101 @@ def test_a_wrong_sentence_must_not_stop_a_quarter_being_derived():
         "this is the defect: nothing is derived, so nothing can be ranked. "
         "The caller must keep weak readings out of the derivation's inputs."
     )
+
+
+def test_a_sentence_naming_two_products_answers_for_neither():
+    """One period, one amount, one product - the third was missing.
+
+    A sentence was accepted whenever an alias appeared anywhere in it, so a
+    sentence covering a brand and its new formulation answered a question about
+    either of them with the same figure. In the quarter Tyvaso DPI went on
+    sale, its $3.0m and nebulized Tyvaso's $198.0m were both read as the one
+    number the sentence happened to carry.
+    """
+    from app.extraction.prose import read_prose
+
+    catalog = ["Tyvaso", "Tyvaso DPI", "Nebulized Tyvaso", "Remodulin"]
+    both = (
+        "Tyvaso and Tyvaso DPI together generated revenues of $42.2 million "
+        "in the second quarter of 2022."
+    )
+    for product in ("Tyvaso", "Tyvaso DPI", "Nebulized Tyvaso"):
+        assert read_prose(both, product=product, catalog=catalog) == [], product
+
+
+def test_the_longest_product_name_in_a_sentence_wins():
+    """"Tyvaso DPI" names one product, and is not evidence of two.
+
+    The same rule the member register resolves by: a shorter product name sits
+    inside a longer one far more often than it is a second product.
+    """
+    from app.extraction.prose import read_prose
+
+    catalog = ["Tyvaso", "Tyvaso DPI", "Nebulized Tyvaso"]
+    sentence = "Tyvaso DPI revenues were $3.0 million in the second quarter of 2022."
+
+    for_dpi = read_prose(sentence, product="Tyvaso DPI", catalog=catalog)
+    assert [(v.period, v.value_as_reported) for v in for_dpi] == [("2022Q2", 3.0)]
+    # The sentence is about the inhaler, so it says nothing about the nebulized
+    # product or about the brand line as a whole.
+    assert read_prose(sentence, product="Tyvaso", catalog=catalog) == []
+    assert read_prose(sentence, product="Nebulized Tyvaso", catalog=catalog) == []
+
+
+def test_a_sentence_about_one_product_still_reads():
+    from app.extraction.prose import read_prose
+
+    sentence = "Remodulin revenues were $120.8 million in the third quarter of 2012."
+    values = read_prose(sentence, product="Remodulin", catalog=["Remodulin", "Tyvaso"])
+    assert [(v.period, v.value_as_reported) for v in values] == [("2012Q3", 120.8)]
+
+
+def test_tracking_nothing_loses_nothing():
+    """Ambiguity is measured against the products we could confuse it with."""
+    from app.extraction.prose import read_prose
+
+    sentence = "Tyvaso and Tyvaso DPI generated $42.2 million in the second quarter of 2022."
+    assert read_prose(sentence, product="Tyvaso", catalog=[]) != []
+
+
+def test_a_change_in_revenue_is_not_revenue():
+    """"increased revenues by $3.6 million" says how much it moved.
+
+    The sentence names one product, one period and one amount, so it passes
+    every other guard. An amount introduced by "by" is a difference; the same
+    sentence saying "totaled", "were" or "grew to" states the figure itself.
+    """
+    from app.extraction.prose import read_prose
+
+    delta = (
+        "The impact of the price change was to increase revenues from Remodulin "
+        "by approximately $3.6 million for the three months ended June 30, 2004."
+    )
+    assert read_prose(delta, product="Remodulin", catalog=["Remodulin"]) == []
+
+    level = "Sales of Remodulin for the three months ended June 30, 2004 totaled $16.2 million."
+    assert [v.value_as_reported for v in read_prose(level, product="Remodulin", catalog=["Remodulin"])] == [16.2]
+
+
+def test_a_figure_dated_inside_its_period_is_not_that_period_s_total():
+    """A running total is not the quarter's total.
+
+    "As of November 9, 2002 ... for the fourth quarter of 2002" is forty days
+    into a quarter with ten weeks still to run, and the $8.5m it reports is
+    short of the $9.7m the quarter finished on.
+    """
+    from app.extraction.prose import read_prose
+
+    running = (
+        "As of November 9, 2002, sales of Remodulin for the fourth quarter of "
+        "2002 totaled approximately $8.5 million."
+    )
+    assert read_prose(running, product="Remodulin", catalog=["Remodulin"]) == []
+
+
+def test_a_period_that_has_ended_is_not_a_cutoff():
+    """"the three months ended June 30" names a period, it does not truncate one."""
+    from app.extraction.prose import read_prose
+
+    sentence = "Sales of Remodulin totaled approximately $8.7 million in the three months ended June 30, 2002."
+    assert [v.period for v in read_prose(sentence, product="Remodulin", catalog=["Remodulin"])] == ["2002Q2"]

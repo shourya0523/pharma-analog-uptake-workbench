@@ -165,6 +165,7 @@ async def go():
                         products=PRODUCTS, register=REGISTER)
                     tagged.extend(got)
                 pool[(maker, row["drug_name"])].extend(tagged)
+                tagged = [c for c in tagged if c.get("period_type") == "quarterly"]
                 same = [c for c in tagged if str(c.get("period")) == row["period"]]
                 target = row["value_normalized_usd_millions"]
                 values = [float(c["value_normalized_usd_millions"]) for c in same]
@@ -199,7 +200,7 @@ async def go():
                     doc.tables, product=row["drug_name"],
                     generic=row.get("generic_name"), context=doc.full_text[:4000],
                     grids=doc.table_grids, captions=doc.table_captions,
-                    prose=doc.full_text, quarterly_only=False)
+                    prose=doc.full_text)
                 found.extend(c for c in got if str(c.get("period")) not in answered)
             pool[(maker, row["drug_name"])].extend(found)
             found = [c for c in found if c.get("period_type") == "quarterly"]

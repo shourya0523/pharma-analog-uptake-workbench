@@ -103,7 +103,7 @@ def test_a_negative_is_stored_against_the_list_it_was_judged_against(tmp_path: P
 
 
 def test_a_drug_uploaded_at_run_time_is_read_from_the_seeded_register(tmp_path: Path):
-    """End to end on the real seed file, which is where the defect lived.
+    """The same rule, end to end on the seeded register rather than a fixture.
 
     Trodelvy is a Gilead product that `product_attributes.csv` does not track,
     so the register carries `gild:TrodelvyMember` as naming no product. Upload
@@ -138,13 +138,13 @@ def test_the_run_contributes_its_own_uploads_to_the_candidate_list(tmp_path: Pat
 
 
 def test_the_measured_corpus_sees_exactly_what_it_saw_before():
-    """The fix changes answers only for lists the register never judged.
+    """Against the list it was judged on, the register answers as it always did.
 
-    Every seeded negative was decided against the products in
-    `product_attributes.csv`, which is also the list the coverage eval resolves
-    against - so for that list every stored decision still binds and the score
-    is untouched. A change here is a change to what was measured, and should be
-    argued for rather than discovered.
+    Every seeded negative was decided against `product_attributes.csv`, so for
+    that list every stored decision still binds and nothing resolves
+    differently. A resolution that changes here changes what the pipeline reads
+    for products it already tracks, which is a thing to argue for rather than
+    to discover.
     """
     from app.extraction.members import load_register
 
