@@ -63,7 +63,8 @@ from app.parsing.indications import parse_indications
 from app.parsing.periods import detect_period_context, normalize_period
 from app.extraction.candidates import extract_revenue_candidates
 from app.extraction.derive import complete_series
-from app.extraction.members import load_products, load_register
+from app.extraction import member_store
+from app.extraction.members import Resolution, load_products
 from app.extraction.tagged import candidates_from_instance
 from app.extraction.fingerprint import UNIT_SCALE_TO_MILLIONS
 from app.quality.candidate_filters import filter_revenue_candidates
@@ -1019,7 +1020,16 @@ class PipelineOrchestrator:
         instance that tags no product-level revenue simply yields nothing.
         """
         rows: list[DatapointORM] = []
-        register = load_register()
+        register = member_store.load_register(self.db)
+        # The products a member is resolved against are the ones this pipeline
+        # tracks *and* the ones this run was asked about. Without the second,
+        # a drug uploaded at run time is a drug no member can ever name: the
+        # rules would be asked to place `gild:TrodelvyMember` against a list
+        # with no Trodelvy in it, and would rightly decline.
+        products = sorted(
+            set(load_products()) | set(member_store.run_products(self.db, job.run_id))
+        )
+        learned: dict[tuple[str, str], Resolution] = {}
         for src in sources:
             if not (src.metadata or {}).get("xbrl_instance") or not src.storage_key:
                 continue
@@ -1034,8 +1044,8 @@ class PipelineOrchestrator:
                     raw,
                     product=job.drug_name,
                     issuer=job.manufacturer or "",
-                    # Every product this pipeline tracks, not just the one
-                    # being asked for. `match` prefers the longest product name
+                    # Every product in play, not just the one being asked
+                    # for. `match` prefers the longest product name
                     # ending a member - that is how NebulizedTyvaso is
                     # Nebulized Tyvaso rather than Tyvaso - and with a one-name
                     # list there is nothing to prefer, so
@@ -1046,8 +1056,9 @@ class PipelineOrchestrator:
                     #
                     # This can only narrow: a resolution to any other product
                     # is dropped by the `!= product` filter downstream.
-                    products=load_products(),
+                    products=products,
                     register=register,
+                    learned=learned,
                 )
             except Exception:  # noqa: BLE001 - a malformed instance is not this job's failure
                 continue
@@ -1055,6 +1066,9 @@ class PipelineOrchestrator:
                 logger.info("xbrl_note job_id=%s source_id=%s %s", job.id, src.source_id, note)
             for candidate in found:
                 rows.append(self._datapoint_from_candidate(job, src, candidate))
+        if learned:
+            written = member_store.record_many(self.db, learned, products=products)
+            logger.info("xbrl_members_learned job_id=%s members=%d", job.id, written)
         if rows:
             logger.info("xbrl_facts job_id=%s drug=%s facts=%d", job.id, job.drug_name, len(rows))
         return rows

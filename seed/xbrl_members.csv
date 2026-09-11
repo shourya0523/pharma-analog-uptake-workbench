@@ -1,116 +1,116 @@
-issuer,member,product,method,confidence,note
-Gilead,gild:CellTherapyProductsTecartusMember,-,llm,1,The member 'gild:CellTherapyProductsTecartusMember' names a product not in the candidate list.
-Gilead,gild:CellTherapyProductsTotalCellTherapyProductSalesMember,-,llm,1,"The member 'CellTherapyProductsTotalCellTherapyProductSalesMember' refers to a category of cell therapy products, not a specific product from the candidate list."
-Gilead,gild:HIVProductSalesMember,-,llm,1,"The member 'HIVProductSalesMember' is a category for HIV products, not a specific product."
-Gilead,gild:HIVProductsBiktarvyMember,Biktarvy,suffix,0.9,product is the trailing words of HIVProductsBiktarvyMember
-Gilead,gild:HIVProductsDescovyMember,Descovy,suffix,0.9,product is the trailing words of HIVProductsDescovyMember
-Gilead,gild:HIVProductsGenvoyaMember,Genvoya,suffix,0.9,product is the trailing words of HIVProductsGenvoyaMember
-Gilead,gild:HIVProductsOdefseyMember,Odefsey,suffix,0.9,product is the trailing words of HIVProductsOdefseyMember
-Gilead,gild:HIVProductsOtherHIVMember,-,llm,1,"The member 'HIVProductsOtherHIVMember' is a catch-all for other HIV products not individually listed, and does not match any specific product in the candidate list."
-Gilead,gild:HIVProductsSymtuzaRevenueShareMember,-,llm,1,"The member names a revenue share for Symtuza, which is not in the candidate list."
-Gilead,gild:HIVProductsYeztugoMember,-,llm,0.9,The member 'HIVProductsYeztugoMember' does not match any product in the candidate list and may refer to a product not listed.
-Gilead,gild:LiverDiseaseMember,-,llm,1,"The member 'LiverDiseaseMember' is a category for liver disease products, not a specific product."
-Gilead,gild:LiverDiseaseProductsLivdelziMember,-,llm,0.9,The member 'gild:LiverDiseaseProductsLivdelziMember' does not match any candidate product name or known alternative name.
-Gilead,gild:LiverDiseaseProductsOtherLiverDiseaseMember,-,llm,1,The member names a category of liver disease products rather than a specific product.
-Gilead,gild:LiverDiseaseProductsSofosbuvirVelpatasvirMember,Epclusa,llm,1,SofosbuvirVelpatasvir is the chemical composition of Epclusa.
-Gilead,gild:LiverDiseaseProductsVemlidyMember,-,llm,1,"The member names a liver disease product, Vemlidy, which is not in the candidate list."
-Gilead,gild:OncologyProductMember,-,llm,0.9,The member 'OncologyProductMember' is a category for oncology products and does not specify a single product from the candidate list.
-Gilead,gild:OtherProductsAmBisomeMember,AmBisome,suffix,0.9,product is the trailing words of OtherProductsAmBisomeMember
-Gilead,gild:OtherProductsOtherMember,-,llm,1,"The member 'gild:OtherProductsOtherMember' is a catch-all for products not individually broken out, and does not specifically name any product from the candidate list."
-Gilead,gild:OtherProductsTotalOtherProductSalesMember,-,llm,1,"The member 'OtherProductsTotalOtherProductSalesMember' is a catch-all for products not individually broken out, and does not match any specific product in the candidate list."
-Gilead,gild:OtherProductsYescartaMember,-,llm,1,"The member 'OtherProductsYescartaMember' suggests a specific product, Yescarta, which is not in the candidate list."
-Gilead,gild:RoyaltyContractAndOtherMember,-,llm,1,"The member 'RoyaltyContractAndOtherMember' refers to royalties and other revenues, not a specific product."
-Gilead,gild:TrodelvyMember,-,llm,1,Trodelvy is not in the candidate list.
-Gilead,gild:VekluryMember,-,llm,1,Veklury is not in the candidate list.
-Gilead,us-gaap:ProductMember,-,llm,1,"The member us-gaap:ProductMember is generic and Gilead markets multiple products, so it cannot be mapped to a specific product."
-Johnson & Johnson,jnj:ADVANCEDMember,-,llm,0.9,The member 'jnj:ADVANCEDMember' does not clearly correspond to any specific product in the candidate list.
-Johnson & Johnson,jnj:AbiomedMember,-,llm,1,The member 'jnj:AbiomedMember' does not match any specific product in the candidate list and likely refers to a company or category rather than a single product.
-Johnson & Johnson,jnj:CAPLYTAMember,-,llm,1,"CAPLYTA is not in the candidate list, and it appears to be a distinct product name."
-Johnson & Johnson,jnj:CARVYKTIMember,-,llm,1,The member 'CARVYKTIMember' does not match any product in the candidate list.
-Johnson & Johnson,jnj:CONCERTAMethylphenidateMember,Concerta,llm,0.9,"The member 'jnj:CONCERTAMethylphenidateMember' refers to Concerta, as Methylphenidate is the active ingredient in Concerta."
-Johnson & Johnson,jnj:CONTACTLENSESOTHERMember,-,llm,1,"The member 'jnj:CONTACTLENSESOTHERMember' refers to contact lenses, which are not listed among the candidate products."
-Johnson & Johnson,jnj:COVID19Member,-,llm,0.9,The member 'jnj:COVID19Member' does not clearly correspond to any specific product in the candidate list.
-Johnson & Johnson,jnj:DARZALEXMember,Darzalex,exact,1,
-Johnson & Johnson,jnj:EDURANTrilpivirineMember,-,llm,1,"The member 'jnj:EDURANTrilpivirineMember' refers to Edurant, which is not in the candidate list."
-Johnson & Johnson,jnj:ELECTROPHYSIOLOGYMember,-,llm,1,"The member 'ELECTROPHYSIOLOGY' refers to a category of medical devices or procedures, not a specific product from the candidate list."
-Johnson & Johnson,jnj:ERLEADAMember,Erleada,exact,1,
-Johnson & Johnson,jnj:ErleadaMember,Erleada,exact,1,
-Johnson & Johnson,jnj:GENERALMember,-,llm,0.9,The member 'jnj:GENERALMember' is too generic and does not specifically identify any product from the candidate list.
-Johnson & Johnson,jnj:HIPSMember,-,llm,0.9,The member 'jnj:HIPSMember' does not clearly correspond to any specific product in the candidate list.
-Johnson & Johnson,jnj:IMBRUVICAMember,Imbruvica,exact,1,
-Johnson & Johnson,jnj:INVEGASUSTENNAXEPLIONTRINZATREVICTAMember,-,llm,1,"The member name combines multiple products, none of which match exactly one candidate product."
-Johnson & Johnson,jnj:KNEESMember,-,llm,1,"The member 'jnj:KNEESMember' refers to a category of products related to knees, not a specific product from the candidate list."
-Johnson & Johnson,jnj:OPSUMITMember,Opsumit,exact,1,
-Johnson & Johnson,jnj:OPSUMITOPSYNVIMember,-,llm,1,"The member 'OPSUMITOPSYNVI' runs together multiple brand names, so it does not correspond to a single product in the candidate list."
-Johnson & Johnson,jnj:OTHERNEUROSCIENCEMember,-,llm,1,"The member 'OTHERNEUROSCIENCEMember' refers to a category of neuroscience products, not a specific product from the candidate list."
-Johnson & Johnson,jnj:OtherCardiovascularMember,-,llm,1,The member 'OtherCardiovascularMember' is a catch-all category for cardiovascular products and does not specify a single product from the candidate list.
-Johnson & Johnson,jnj:OtherImmunologyMember,-,llm,1,"The member 'OtherImmunologyMember' is a catch-all category for immunology products not individually listed, and does not match any specific product in the candidate list."
-Johnson & Johnson,jnj:OtherInfectiousDiseasesMember,-,llm,1,"The member 'OtherInfectiousDiseasesMember' is a catch-all category for infectious disease products not individually listed, and does not match any specific product in the candidate list."
-Johnson & Johnson,jnj:OtherMember,-,llm,1,"The member 'jnj:OtherMember' is a catch-all category for products not individually broken out, and does not specifically name any product from the candidate list."
-Johnson & Johnson,jnj:OtherOncologyMember,-,llm,1,"The member 'OtherOncologyMember' is a catch-all category for oncology products not individually listed, and does not match any specific product in the candidate list."
-Johnson & Johnson,jnj:OtherPulmonaryHypertensionMember,-,llm,1,"The member 'OtherPulmonaryHypertensionMember' is a catch-all category for pulmonary hypertension products, not a specific product."
-Johnson & Johnson,jnj:PREZISTAPREZCOBIXREZOLSTASYMTUZAMember,-,llm,1,"The member name 'PREZISTAPREZCOBIXREZOLSTASYMTUZA' runs several brand names together, none of which match a single candidate product."
-Johnson & Johnson,jnj:RYBREVANTLAZCLUZEMember,-,llm,1,"The member name 'RYBREVANTLAZCLUZE' runs several brand names together, and none of them match a single candidate product."
-Johnson & Johnson,jnj:RemicadeMember,Remicade,exact,1,
-Johnson & Johnson,jnj:SPINEOTHERMember,-,llm,1,"The member 'SPINEOTHERMember' refers to a category of spine-related products, not a specific product from the candidate list."
-Johnson & Johnson,jnj:SPINESPORTSOTHERMember,-,llm,0.9,"The member 'SPINESPORTSOTHERMember' suggests a category or group of products related to spine and sports, not a specific product from the candidate list."
-Johnson & Johnson,jnj:SPRAVATOMember,-,llm,1,The member 'SPRAVATOMember' does not match any product in the candidate list.
-Johnson & Johnson,jnj:SURGICALMember,-,llm,0.9,The member 'jnj:SURGICALMember' is too generic and does not specifically match any single product in the candidate list.
-Johnson & Johnson,jnj:ShockwaveMedicalInc.Member,-,llm,1,"The member 'ShockwaveMedicalInc.Member' refers to Shockwave Medical Inc., which is not a product but a company, and none of the candidate products match this member."
-Johnson & Johnson,jnj:SimponiSimponiAriaMember,Simponi,llm,0.9,"The member 'SimponiSimponiAriaMember' includes 'Simponi', which matches the candidate product 'Simponi'."
-Johnson & Johnson,jnj:StelaraMember,Stelara,exact,1,
-Johnson & Johnson,jnj:TALVEYMember,-,llm,0.9,The member 'TALVEY' does not match any product in the candidate list and does not appear to be an alternative name for any of them.
-Johnson & Johnson,jnj:TECVAYLIMember,-,llm,1,"TECVAYLI is not in the candidate list, and it does not match any candidate product by another name."
-Johnson & Johnson,jnj:TRAUMAMember,-,llm,0.9,"The member 'TRAUMAMember' likely refers to a category of products related to trauma care, not a specific product from the candidate list."
-Johnson & Johnson,jnj:TecvayliMember,-,llm,1,The member 'jnj:TecvayliMember' names a product not in the candidate list.
-Johnson & Johnson,jnj:TremfyaMember,Tremfya,exact,1,
-Johnson & Johnson,jnj:UPTRAVIMember,Uptravi,exact,1,
-Johnson & Johnson,jnj:XareltoMember,Xarelto,exact,1,
-Johnson & Johnson,jnj:ZYTIGAMember,Zytiga,exact,1,
-Liquidia,us-gaap:ProductMember,Yutrepia,llm,0.9,"Liquidia markets only Yutrepia, so us-gaap:ProductMember can only refer to Yutrepia."
-Liquidia,us-gaap:ServiceMember,-,llm,1,"The member 'us-gaap:ServiceMember' refers to a service, not a product."
-Merck,mrk:AdempasMember,Adempas,exact,1,
-Merck,mrk:AllianceRevenueAdempasVerquvoMember,-,llm,1,"The member names a revenue alliance involving Adempas and Verquvo, not a single product."
-Merck,mrk:AllianceRevenueKoselugoMember,-,llm,1,"The member 'mrk:AllianceRevenueKoselugoMember' refers to alliance revenue for Koselugo, which is not in the candidate list."
-Merck,mrk:AllianceRevenueReblozylMember,-,llm,1,"The member 'mrk:AllianceRevenueReblozylMember' refers to alliance revenue from Reblozyl, which is not in the candidate list."
-Merck,mrk:AlliancerevenueLynparzaMember,-,llm,1,"The member 'mrk:AlliancerevenueLynparzaMember' refers to alliance revenue for Lynparza, which is not in the candidate list."
-Merck,mrk:BelsomraMember,-,llm,1,Belsomra is not in the candidate list.
-Merck,mrk:BridionMember,-,llm,1,The member 'mrk:BridionMember' does not match any of the candidate products.
-Merck,mrk:CapvaxiveMember,-,llm,0.8,The member 'mrk:CapvaxiveMember' does not clearly match any product in the candidate list.
-Merck,mrk:CompanionAnimalMember,-,llm,1,"The member 'CompanionAnimalMember' refers to a category of products related to companion animals, not a specific product from the candidate list."
-Merck,mrk:CompanionAnimalsMember,-,llm,1,"The member 'mrk:CompanionAnimalsMember' refers to a category of products related to companion animals, not a specific product from the candidate list."
-Merck,mrk:DelstrigoMember,-,llm,1,Delstrigo is not in the candidate list.
-Merck,mrk:DificidMember,-,llm,1,"Dificid is not in the candidate list, and it is a specific product name."
-Merck,mrk:GardasilGardasil9Member,-,llm,1,"The member 'mrk:GardasilGardasil9Member' names Gardasil and Gardasil 9, which are not in the candidate list."
-Merck,mrk:IsentressIsentressHDMember,-,llm,1,"The member 'IsentressIsentressHDMember' names Isentress, which is not in the candidate list."
-Merck,mrk:JanumetMember,-,llm,1,"Janumet is not in the candidate list, and it is a specific product name."
-Merck,mrk:JanuviaMember,-,llm,1,The member 'mrk:JanuviaMember' names a product not in the candidate list.
-Merck,mrk:KeytrudaMember,-,llm,1,The member 'mrk:KeytrudaMember' names a product not in the candidate list.
-Merck,mrk:KeytrudaQlexMember,-,llm,0.9,"The member 'mrk:KeytrudaQlexMember' appears to combine 'Keytruda' with another term 'Qlex', which does not match any candidate product."
-Merck,mrk:LagevrioMember,-,llm,1,Lagevrio is not in the candidate list.
-Merck,mrk:LenvimaMember,-,llm,1,Lenvima is not in the candidate list.
-Merck,mrk:LivestockMember,-,llm,1,"The member 'mrk:LivestockMember' refers to a category of products related to livestock, not a specific product from the candidate list."
-Merck,mrk:NoxafilMember,-,llm,1,Noxafil is not in the candidate list.
-Merck,mrk:OhtuvayreMember,-,llm,0.9,The member 'Ohtuvayre' does not match any product in the candidate list and does not clearly correspond to a known product under another name.
-Merck,mrk:OtherPharmaceuticalMember,-,llm,1,"The member 'OtherPharmaceuticalMember' is a catch-all for products not individually listed, and does not match any specific product in the candidate list."
-Merck,mrk:PifeltroMember,-,llm,1,"Pifeltro is not in the candidate list, and there is no indication it is another name for a listed product."
-Merck,mrk:Pneumovax23Member,-,llm,1,Pneumovax 23 is not in the candidate list.
-Merck,mrk:PrevymisMember,-,llm,1,Prevymis is not listed among the candidate products.
-Merck,mrk:ProQuadMMRIIVarivaxMember,-,llm,1,"The member 'mrk:ProQuadMMRIIVarivaxMember' names multiple products (ProQuad, M-M-R II, and Varivax) and none of them are in the candidate list."
-Merck,mrk:ReblozylMember,-,llm,1,Reblozyl is not in the candidate list.
-Merck,mrk:RemicadeMember,Remicade,exact,1,
-Merck,mrk:RotateqMember,-,llm,1,The member 'mrk:RotateqMember' does not match any product in the candidate list.
-Merck,mrk:SimponiMember,Simponi,exact,1,
-Merck,mrk:VaxneuvanceMember,-,llm,1,The member 'mrk:VaxneuvanceMember' does not match any product in the candidate list.
-Merck,mrk:VerquvoMember,-,llm,1,The member 'mrk:VerquvoMember' does not match any product in the candidate list.
-Merck,mrk:WeliregMember,-,llm,1,"Welireg is not in the candidate list, and there is no indication it is another name for a listed product."
-Merck,mrk:WinrevairMember,Winrevair,exact,1,
-Merck,mrk:ZerbaxaMember,-,llm,1,Zerbaxa is not in the candidate list.
-United Therapeutics,us-gaap:ProductAndServiceOtherMember,-,llm,1,"The member 'us-gaap:ProductAndServiceOtherMember' is a catch-all for products not individually broken out, and does not specifically name any product from the candidate list."
-United Therapeutics,uthr:AdcircaMember,Adcirca,exact,1,
-United Therapeutics,uthr:NebulizedTyvasoMember,Nebulized Tyvaso,exact,1,
-United Therapeutics,uthr:OrenitramMember,Orenitram,exact,1,
-United Therapeutics,uthr:RemodulinMember,Remodulin,exact,1,
-United Therapeutics,uthr:TyvasoDPIMember,Tyvaso DPI,exact,1,
-United Therapeutics,uthr:TyvasoMember,Tyvaso,exact,1,
-United Therapeutics,uthr:UnituxinMember,-,llm,1,Unituxin is not listed among the candidate products.
+issuer,member,product,verdict,method,confidence,candidates_fingerprint,note
+Gilead,gild:CellTherapyProductsTecartusMember,,no_candidate_match,llm,1,16de7911a46846a1,The member 'gild:CellTherapyProductsTecartusMember' names a product not in the candidate list.
+Gilead,gild:CellTherapyProductsTotalCellTherapyProductSalesMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member 'CellTherapyProductsTotalCellTherapyProductSalesMember' refers to a category of cell therapy products, not a specific product from the candidate list."
+Gilead,gild:HIVProductSalesMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member 'HIVProductSalesMember' is a category for HIV products, not a specific product."
+Gilead,gild:HIVProductsBiktarvyMember,Biktarvy,product,suffix,0.9,,product is the trailing words of HIVProductsBiktarvyMember
+Gilead,gild:HIVProductsDescovyMember,Descovy,product,suffix,0.9,,product is the trailing words of HIVProductsDescovyMember
+Gilead,gild:HIVProductsGenvoyaMember,Genvoya,product,suffix,0.9,,product is the trailing words of HIVProductsGenvoyaMember
+Gilead,gild:HIVProductsOdefseyMember,Odefsey,product,suffix,0.9,,product is the trailing words of HIVProductsOdefseyMember
+Gilead,gild:HIVProductsOtherHIVMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member 'HIVProductsOtherHIVMember' is a catch-all for other HIV products not individually listed, and does not match any specific product in the candidate list."
+Gilead,gild:HIVProductsSymtuzaRevenueShareMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member names a revenue share for Symtuza, which is not in the candidate list."
+Gilead,gild:HIVProductsYeztugoMember,,no_candidate_match,llm,0.9,16de7911a46846a1,The member 'HIVProductsYeztugoMember' does not match any product in the candidate list and may refer to a product not listed.
+Gilead,gild:LiverDiseaseMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member 'LiverDiseaseMember' is a category for liver disease products, not a specific product."
+Gilead,gild:LiverDiseaseProductsLivdelziMember,,no_candidate_match,llm,0.9,16de7911a46846a1,The member 'gild:LiverDiseaseProductsLivdelziMember' does not match any candidate product name or known alternative name.
+Gilead,gild:LiverDiseaseProductsOtherLiverDiseaseMember,,no_candidate_match,llm,1,16de7911a46846a1,The member names a category of liver disease products rather than a specific product.
+Gilead,gild:LiverDiseaseProductsSofosbuvirVelpatasvirMember,Epclusa,product,llm,1,,SofosbuvirVelpatasvir is the chemical composition of Epclusa.
+Gilead,gild:LiverDiseaseProductsVemlidyMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member names a liver disease product, Vemlidy, which is not in the candidate list."
+Gilead,gild:OncologyProductMember,,no_candidate_match,llm,0.9,16de7911a46846a1,The member 'OncologyProductMember' is a category for oncology products and does not specify a single product from the candidate list.
+Gilead,gild:OtherProductsAmBisomeMember,AmBisome,product,suffix,0.9,,product is the trailing words of OtherProductsAmBisomeMember
+Gilead,gild:OtherProductsOtherMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member 'gild:OtherProductsOtherMember' is a catch-all for products not individually broken out, and does not specifically name any product from the candidate list."
+Gilead,gild:OtherProductsTotalOtherProductSalesMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member 'OtherProductsTotalOtherProductSalesMember' is a catch-all for products not individually broken out, and does not match any specific product in the candidate list."
+Gilead,gild:OtherProductsYescartaMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member 'OtherProductsYescartaMember' suggests a specific product, Yescarta, which is not in the candidate list."
+Gilead,gild:RoyaltyContractAndOtherMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member 'RoyaltyContractAndOtherMember' refers to royalties and other revenues, not a specific product."
+Gilead,gild:TrodelvyMember,,no_candidate_match,llm,1,16de7911a46846a1,Trodelvy is not in the candidate list.
+Gilead,gild:VekluryMember,,no_candidate_match,llm,1,16de7911a46846a1,Veklury is not in the candidate list.
+Gilead,us-gaap:ProductMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member us-gaap:ProductMember is generic and Gilead markets multiple products, so it cannot be mapped to a specific product."
+Johnson & Johnson,jnj:ADVANCEDMember,,no_candidate_match,llm,0.9,16de7911a46846a1,The member 'jnj:ADVANCEDMember' does not clearly correspond to any specific product in the candidate list.
+Johnson & Johnson,jnj:AbiomedMember,,no_candidate_match,llm,1,16de7911a46846a1,The member 'jnj:AbiomedMember' does not match any specific product in the candidate list and likely refers to a company or category rather than a single product.
+Johnson & Johnson,jnj:CAPLYTAMember,,no_candidate_match,llm,1,16de7911a46846a1,"CAPLYTA is not in the candidate list, and it appears to be a distinct product name."
+Johnson & Johnson,jnj:CARVYKTIMember,,no_candidate_match,llm,1,16de7911a46846a1,The member 'CARVYKTIMember' does not match any product in the candidate list.
+Johnson & Johnson,jnj:CONCERTAMethylphenidateMember,Concerta,product,llm,0.9,,"The member 'jnj:CONCERTAMethylphenidateMember' refers to Concerta, as Methylphenidate is the active ingredient in Concerta."
+Johnson & Johnson,jnj:CONTACTLENSESOTHERMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member 'jnj:CONTACTLENSESOTHERMember' refers to contact lenses, which are not listed among the candidate products."
+Johnson & Johnson,jnj:COVID19Member,,no_candidate_match,llm,0.9,16de7911a46846a1,The member 'jnj:COVID19Member' does not clearly correspond to any specific product in the candidate list.
+Johnson & Johnson,jnj:DARZALEXMember,Darzalex,product,exact,1,,
+Johnson & Johnson,jnj:EDURANTrilpivirineMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member 'jnj:EDURANTrilpivirineMember' refers to Edurant, which is not in the candidate list."
+Johnson & Johnson,jnj:ELECTROPHYSIOLOGYMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member 'ELECTROPHYSIOLOGY' refers to a category of medical devices or procedures, not a specific product from the candidate list."
+Johnson & Johnson,jnj:ERLEADAMember,Erleada,product,exact,1,,
+Johnson & Johnson,jnj:ErleadaMember,Erleada,product,exact,1,,
+Johnson & Johnson,jnj:GENERALMember,,no_candidate_match,llm,0.9,16de7911a46846a1,The member 'jnj:GENERALMember' is too generic and does not specifically identify any product from the candidate list.
+Johnson & Johnson,jnj:HIPSMember,,no_candidate_match,llm,0.9,16de7911a46846a1,The member 'jnj:HIPSMember' does not clearly correspond to any specific product in the candidate list.
+Johnson & Johnson,jnj:IMBRUVICAMember,Imbruvica,product,exact,1,,
+Johnson & Johnson,jnj:INVEGASUSTENNAXEPLIONTRINZATREVICTAMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member name combines multiple products, none of which match exactly one candidate product."
+Johnson & Johnson,jnj:KNEESMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member 'jnj:KNEESMember' refers to a category of products related to knees, not a specific product from the candidate list."
+Johnson & Johnson,jnj:OPSUMITMember,Opsumit,product,exact,1,,
+Johnson & Johnson,jnj:OPSUMITOPSYNVIMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member 'OPSUMITOPSYNVI' runs together multiple brand names, so it does not correspond to a single product in the candidate list."
+Johnson & Johnson,jnj:OTHERNEUROSCIENCEMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member 'OTHERNEUROSCIENCEMember' refers to a category of neuroscience products, not a specific product from the candidate list."
+Johnson & Johnson,jnj:OtherCardiovascularMember,,no_candidate_match,llm,1,16de7911a46846a1,The member 'OtherCardiovascularMember' is a catch-all category for cardiovascular products and does not specify a single product from the candidate list.
+Johnson & Johnson,jnj:OtherImmunologyMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member 'OtherImmunologyMember' is a catch-all category for immunology products not individually listed, and does not match any specific product in the candidate list."
+Johnson & Johnson,jnj:OtherInfectiousDiseasesMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member 'OtherInfectiousDiseasesMember' is a catch-all category for infectious disease products not individually listed, and does not match any specific product in the candidate list."
+Johnson & Johnson,jnj:OtherMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member 'jnj:OtherMember' is a catch-all category for products not individually broken out, and does not specifically name any product from the candidate list."
+Johnson & Johnson,jnj:OtherOncologyMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member 'OtherOncologyMember' is a catch-all category for oncology products not individually listed, and does not match any specific product in the candidate list."
+Johnson & Johnson,jnj:OtherPulmonaryHypertensionMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member 'OtherPulmonaryHypertensionMember' is a catch-all category for pulmonary hypertension products, not a specific product."
+Johnson & Johnson,jnj:PREZISTAPREZCOBIXREZOLSTASYMTUZAMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member name 'PREZISTAPREZCOBIXREZOLSTASYMTUZA' runs several brand names together, none of which match a single candidate product."
+Johnson & Johnson,jnj:RYBREVANTLAZCLUZEMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member name 'RYBREVANTLAZCLUZE' runs several brand names together, and none of them match a single candidate product."
+Johnson & Johnson,jnj:RemicadeMember,Remicade,product,exact,1,,
+Johnson & Johnson,jnj:SPINEOTHERMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member 'SPINEOTHERMember' refers to a category of spine-related products, not a specific product from the candidate list."
+Johnson & Johnson,jnj:SPINESPORTSOTHERMember,,no_candidate_match,llm,0.9,16de7911a46846a1,"The member 'SPINESPORTSOTHERMember' suggests a category or group of products related to spine and sports, not a specific product from the candidate list."
+Johnson & Johnson,jnj:SPRAVATOMember,,no_candidate_match,llm,1,16de7911a46846a1,The member 'SPRAVATOMember' does not match any product in the candidate list.
+Johnson & Johnson,jnj:SURGICALMember,,no_candidate_match,llm,0.9,16de7911a46846a1,The member 'jnj:SURGICALMember' is too generic and does not specifically match any single product in the candidate list.
+Johnson & Johnson,jnj:ShockwaveMedicalInc.Member,,no_candidate_match,llm,1,16de7911a46846a1,"The member 'ShockwaveMedicalInc.Member' refers to Shockwave Medical Inc., which is not a product but a company, and none of the candidate products match this member."
+Johnson & Johnson,jnj:SimponiSimponiAriaMember,Simponi,product,llm,0.9,,"The member 'SimponiSimponiAriaMember' includes 'Simponi', which matches the candidate product 'Simponi'."
+Johnson & Johnson,jnj:StelaraMember,Stelara,product,exact,1,,
+Johnson & Johnson,jnj:TALVEYMember,,no_candidate_match,llm,0.9,16de7911a46846a1,The member 'TALVEY' does not match any product in the candidate list and does not appear to be an alternative name for any of them.
+Johnson & Johnson,jnj:TECVAYLIMember,,no_candidate_match,llm,1,16de7911a46846a1,"TECVAYLI is not in the candidate list, and it does not match any candidate product by another name."
+Johnson & Johnson,jnj:TRAUMAMember,,no_candidate_match,llm,0.9,16de7911a46846a1,"The member 'TRAUMAMember' likely refers to a category of products related to trauma care, not a specific product from the candidate list."
+Johnson & Johnson,jnj:TecvayliMember,,no_candidate_match,llm,1,16de7911a46846a1,The member 'jnj:TecvayliMember' names a product not in the candidate list.
+Johnson & Johnson,jnj:TremfyaMember,Tremfya,product,exact,1,,
+Johnson & Johnson,jnj:UPTRAVIMember,Uptravi,product,exact,1,,
+Johnson & Johnson,jnj:XareltoMember,Xarelto,product,exact,1,,
+Johnson & Johnson,jnj:ZYTIGAMember,Zytiga,product,exact,1,,
+Liquidia,us-gaap:ProductMember,Yutrepia,product,llm,0.9,,"Liquidia markets only Yutrepia, so us-gaap:ProductMember can only refer to Yutrepia."
+Liquidia,us-gaap:ServiceMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member 'us-gaap:ServiceMember' refers to a service, not a product."
+Merck,mrk:AdempasMember,Adempas,product,exact,1,,
+Merck,mrk:AllianceRevenueAdempasVerquvoMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member names a revenue alliance involving Adempas and Verquvo, not a single product."
+Merck,mrk:AllianceRevenueKoselugoMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member 'mrk:AllianceRevenueKoselugoMember' refers to alliance revenue for Koselugo, which is not in the candidate list."
+Merck,mrk:AllianceRevenueReblozylMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member 'mrk:AllianceRevenueReblozylMember' refers to alliance revenue from Reblozyl, which is not in the candidate list."
+Merck,mrk:AlliancerevenueLynparzaMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member 'mrk:AlliancerevenueLynparzaMember' refers to alliance revenue for Lynparza, which is not in the candidate list."
+Merck,mrk:BelsomraMember,,no_candidate_match,llm,1,16de7911a46846a1,Belsomra is not in the candidate list.
+Merck,mrk:BridionMember,,no_candidate_match,llm,1,16de7911a46846a1,The member 'mrk:BridionMember' does not match any of the candidate products.
+Merck,mrk:CapvaxiveMember,,no_candidate_match,llm,0.8,16de7911a46846a1,The member 'mrk:CapvaxiveMember' does not clearly match any product in the candidate list.
+Merck,mrk:CompanionAnimalMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member 'CompanionAnimalMember' refers to a category of products related to companion animals, not a specific product from the candidate list."
+Merck,mrk:CompanionAnimalsMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member 'mrk:CompanionAnimalsMember' refers to a category of products related to companion animals, not a specific product from the candidate list."
+Merck,mrk:DelstrigoMember,,no_candidate_match,llm,1,16de7911a46846a1,Delstrigo is not in the candidate list.
+Merck,mrk:DificidMember,,no_candidate_match,llm,1,16de7911a46846a1,"Dificid is not in the candidate list, and it is a specific product name."
+Merck,mrk:GardasilGardasil9Member,,no_candidate_match,llm,1,16de7911a46846a1,"The member 'mrk:GardasilGardasil9Member' names Gardasil and Gardasil 9, which are not in the candidate list."
+Merck,mrk:IsentressIsentressHDMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member 'IsentressIsentressHDMember' names Isentress, which is not in the candidate list."
+Merck,mrk:JanumetMember,,no_candidate_match,llm,1,16de7911a46846a1,"Janumet is not in the candidate list, and it is a specific product name."
+Merck,mrk:JanuviaMember,,no_candidate_match,llm,1,16de7911a46846a1,The member 'mrk:JanuviaMember' names a product not in the candidate list.
+Merck,mrk:KeytrudaMember,,no_candidate_match,llm,1,16de7911a46846a1,The member 'mrk:KeytrudaMember' names a product not in the candidate list.
+Merck,mrk:KeytrudaQlexMember,,no_candidate_match,llm,0.9,16de7911a46846a1,"The member 'mrk:KeytrudaQlexMember' appears to combine 'Keytruda' with another term 'Qlex', which does not match any candidate product."
+Merck,mrk:LagevrioMember,,no_candidate_match,llm,1,16de7911a46846a1,Lagevrio is not in the candidate list.
+Merck,mrk:LenvimaMember,,no_candidate_match,llm,1,16de7911a46846a1,Lenvima is not in the candidate list.
+Merck,mrk:LivestockMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member 'mrk:LivestockMember' refers to a category of products related to livestock, not a specific product from the candidate list."
+Merck,mrk:NoxafilMember,,no_candidate_match,llm,1,16de7911a46846a1,Noxafil is not in the candidate list.
+Merck,mrk:OhtuvayreMember,,no_candidate_match,llm,0.9,16de7911a46846a1,The member 'Ohtuvayre' does not match any product in the candidate list and does not clearly correspond to a known product under another name.
+Merck,mrk:OtherPharmaceuticalMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member 'OtherPharmaceuticalMember' is a catch-all for products not individually listed, and does not match any specific product in the candidate list."
+Merck,mrk:PifeltroMember,,no_candidate_match,llm,1,16de7911a46846a1,"Pifeltro is not in the candidate list, and there is no indication it is another name for a listed product."
+Merck,mrk:Pneumovax23Member,,no_candidate_match,llm,1,16de7911a46846a1,Pneumovax 23 is not in the candidate list.
+Merck,mrk:PrevymisMember,,no_candidate_match,llm,1,16de7911a46846a1,Prevymis is not listed among the candidate products.
+Merck,mrk:ProQuadMMRIIVarivaxMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member 'mrk:ProQuadMMRIIVarivaxMember' names multiple products (ProQuad, M-M-R II, and Varivax) and none of them are in the candidate list."
+Merck,mrk:ReblozylMember,,no_candidate_match,llm,1,16de7911a46846a1,Reblozyl is not in the candidate list.
+Merck,mrk:RemicadeMember,Remicade,product,exact,1,,
+Merck,mrk:RotateqMember,,no_candidate_match,llm,1,16de7911a46846a1,The member 'mrk:RotateqMember' does not match any product in the candidate list.
+Merck,mrk:SimponiMember,Simponi,product,exact,1,,
+Merck,mrk:VaxneuvanceMember,,no_candidate_match,llm,1,16de7911a46846a1,The member 'mrk:VaxneuvanceMember' does not match any product in the candidate list.
+Merck,mrk:VerquvoMember,,no_candidate_match,llm,1,16de7911a46846a1,The member 'mrk:VerquvoMember' does not match any product in the candidate list.
+Merck,mrk:WeliregMember,,no_candidate_match,llm,1,16de7911a46846a1,"Welireg is not in the candidate list, and there is no indication it is another name for a listed product."
+Merck,mrk:WinrevairMember,Winrevair,product,exact,1,,
+Merck,mrk:ZerbaxaMember,,no_candidate_match,llm,1,16de7911a46846a1,Zerbaxa is not in the candidate list.
+United Therapeutics,us-gaap:ProductAndServiceOtherMember,,no_candidate_match,llm,1,16de7911a46846a1,"The member 'us-gaap:ProductAndServiceOtherMember' is a catch-all for products not individually broken out, and does not specifically name any product from the candidate list."
+United Therapeutics,uthr:AdcircaMember,Adcirca,product,exact,1,,
+United Therapeutics,uthr:NebulizedTyvasoMember,Nebulized Tyvaso,product,exact,1,,
+United Therapeutics,uthr:OrenitramMember,Orenitram,product,exact,1,,
+United Therapeutics,uthr:RemodulinMember,Remodulin,product,exact,1,,
+United Therapeutics,uthr:TyvasoDPIMember,Tyvaso DPI,product,exact,1,,
+United Therapeutics,uthr:TyvasoMember,Tyvaso,product,exact,1,,
+United Therapeutics,uthr:UnituxinMember,,no_candidate_match,llm,1,16de7911a46846a1,Unituxin is not listed among the candidate products.

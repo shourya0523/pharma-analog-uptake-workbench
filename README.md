@@ -110,6 +110,12 @@ uv run --project backend python scripts/backfill_pharma_metadata.py
 
 Confirmed reviewer assertions always outrank automated backfill. Label re-fetch is intentionally skipped when no stable application number or SPL set ID is available.
 
+The XBRL member register — which product a filer's private axis member names — follows the same rule. `seed/xbrl_members.csv` seeds `xbrl_member_resolutions` on first upgrade; runs add to the table as they resolve members the file does not cover, and a row marked `validation_status='confirmed'` is never overwritten by anything automated. To read it back as a diff:
+
+```bash
+uv run --project backend python scripts/export_member_register.py
+```
+
 For a connector-free metadata smoke check:
 
 ```bash

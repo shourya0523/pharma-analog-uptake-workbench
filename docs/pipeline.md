@@ -113,9 +113,24 @@ product it belongs to. There is nothing to recover from a layout, so this is
 tried first and the citation names the element and the context rather than
 quoting a line. `app/parsing/xbrl.py` reads the instance;
 `app/extraction/tagged.py` decides which member is which product, through the
-register in `app/extraction/members.py`. When detail tagging began is a
-property of the issuer rather than a date in the code: a filing from before its
-own cutoff simply tags no product facts and says so.
+rules in `app/extraction/members.py` and the register those rules cannot
+settle. When detail tagging began is a property of the issuer rather than a
+date in the code: a filing from before its own cutoff simply tags no product
+facts and says so.
+
+The register lives in `xbrl_member_resolutions`, seeded from
+`seed/xbrl_members.csv` and added to as runs resolve members the file does not
+cover — the drugs a run is about arrive at upload time, and a file in the
+source tree is not somewhere a worker can write. `scripts/build_member_register.py`
+warms an issuer in bulk ahead of time; `scripts/export_member_register.py`
+writes the table back out as the reviewable copy. A decision that a member
+*names a product* is permanent. A decision that *nothing in the candidate list
+matched* is stored with a fingerprint of the list it was judged against and
+binds only for that list, because it is a fact about the list and not about the
+member — without that, a member recorded as unplaceable while a drug went
+untracked would still be unplaceable for the run that uploaded it. Only a
+reviewer records the third verdict, `not_a_product`, which is a member that
+names no single product at all: a category line or a total.
 
 **What a sentence says.** Issuers disclosed product sales narratively long
 before the product-sales exhibit existed, and smaller ones never adopted one.

@@ -26,7 +26,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from app.extraction.members import Resolution, load_register, match
+from app.extraction.members import Resolution, load_register, resolve
 from app.parsing.xbrl import Fact, filer_category, parse_facts, product_facts
 
 # A tagged fact is the filer's own assertion, checked by the filer's auditors
@@ -49,6 +49,7 @@ def candidates_from_instance(
     issuer: str = "",
     products: list[str] | None = None,
     register: dict[tuple[str, str], Resolution] | None = None,
+    learned: dict[tuple[str, str], Resolution] | None = None,
     quarterly_only: bool = True,
 ) -> tuple[list[dict[str, Any]], list[str]]:
     """(candidates, notes) for one product, from one XBRL instance.
@@ -56,6 +57,9 @@ def candidates_from_instance(
     ``issuer`` keys the register lookup and is not optional in practice: without
     it only the string rules apply, which is how this shipped in its first
     measured run and why the model's decisions counted for nothing.
+
+    ``learned`` collects the resolutions the rules made that the register did
+    not already hold, so a caller with somewhere durable to put them can.
 
     An empty result is the ordinary case for a filing from before the issuer's
     tagging cutoff, and says so in the notes rather than looking like a failure
@@ -81,7 +85,17 @@ def candidates_from_instance(
         # for Liquidia, which markets one product, and a meaningless total for
         # anyone else. Looking it up by member alone answers with whichever
         # filer was written last.
-        resolution = register.get((issuer, member)) or match(member, known)
+        resolution = resolve(member, known, register, issuer=issuer)
+        # `resolve` hands back the stored decision itself when one applies, so
+        # anything else is new: a member the register has never seen, or one
+        # whose recorded "nothing matched" was about a different product list
+        # and has just been superseded by the rules. Worth writing down not
+        # because recomputing it is expensive - the string rules are free - but
+        # because a decision nobody can see is a decision nobody can correct.
+        # This is the row a reviewer overrides.
+        if (resolution.resolved and learned is not None
+                and register.get((issuer, member)) is not resolution):
+            learned[(issuer, member)] = resolution
         if not resolution.resolved or resolution.product != product:
             continue
         value = _million(fact)

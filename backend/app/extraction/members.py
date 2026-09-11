@@ -24,18 +24,45 @@ downstream would notice. The rule here is instead:
 What the rules cannot settle goes to a model, and whatever it decides is written
 to the register with its reasoning, so the decision is made once, is reviewable
 in a diff, and never has to be made again.
+
+One decision is not like that, and telling them apart is what ``verdict`` is
+for. "This member is a category total" is a fact about the member and holds for
+good. "This member named no product we were tracking" is a fact about the
+product list it was judged against, and the moment a run brings a different
+list it is worth nothing. Both used to be written down as a bare ``-``, and
+because the register is consulted before the rules, the second kind was a
+standing veto: ``gild:TrodelvyMember`` was recorded as naming no product
+because Trodelvy was not among the 46 in ``product_attributes.csv``, so a run
+that did ask for Trodelvy read that ``-`` and skipped a fact the string rules
+place on the first try. A negative now carries the fingerprint of the list it
+was judged against and binds only for that list.
 """
 
 from __future__ import annotations
 
 import csv
+import hashlib
 import re
 from dataclasses import dataclass
 from pathlib import Path
 
 REGISTER_PATH = Path(__file__).resolve().parents[3] / "seed" / "xbrl_members.csv"
 PRODUCTS_PATH = Path(__file__).resolve().parents[3] / "seed" / "product_attributes.csv"
-REGISTER_FIELDS = ("issuer", "member", "product", "method", "confidence", "note")
+REGISTER_FIELDS = (
+    "issuer", "member", "product", "verdict", "method", "confidence",
+    "candidates_fingerprint", "note",
+)
+
+# What a decision claims, and therefore how long it lasts.
+VERDICT_PRODUCT = "product"
+# The member names no single product and never will: an issuer's category line,
+# a total, a share of someone else's revenue. True of the member itself, so it
+# holds against any product list. Only a person sets this - a model asked which
+# product a member names cannot distinguish "none of these" from "none at all".
+VERDICT_NOT_A_PRODUCT = "not_a_product"
+# Nothing in the candidate list matched. Says nothing about the member beyond
+# that list, and binds only for the list it was decided against.
+VERDICT_NO_CANDIDATE_MATCH = "no_candidate_match"
 
 # A model told to abstain when unsure, that answers anyway and then reports low
 # confidence, has said it is guessing. Below this the answer is kept in the
@@ -47,6 +74,17 @@ LLM_CONFIDENCE_FLOOR = 0.8
 NOT_A_PRODUCT = "-"
 
 
+def fingerprint(products: list[str]) -> str:
+    """Identify a candidate list, so a decision can say what it was judged against.
+
+    Order and duplicates do not change which products were on offer, so neither
+    changes the fingerprint. Adding or removing one does, which is the whole
+    point: that is exactly when a negative decision stops applying.
+    """
+    canonical = "\n".join(sorted({p.strip() for p in products if p and p.strip()}))
+    return hashlib.sha256(canonical.encode()).hexdigest()[:16]
+
+
 @dataclass(frozen=True)
 class Resolution:
     """What a member was taken to mean, and on what basis."""
@@ -56,12 +94,37 @@ class Resolution:
     method: str
     confidence: float = 1.0
     note: str = ""
+    verdict: str = ""
+    candidates_fingerprint: str = ""
 
     @property
     def resolved(self) -> bool:
         if not self.product or self.product == NOT_A_PRODUCT:
             return False
         return self.method != "llm" or self.confidence >= LLM_CONFIDENCE_FLOOR
+
+    @property
+    def claim(self) -> str:
+        """The verdict, derived for a decision recorded before there was one."""
+        if self.verdict:
+            return self.verdict
+        return VERDICT_PRODUCT if self.resolved else VERDICT_NO_CANDIDATE_MATCH
+
+    def binds(self, products: list[str]) -> bool:
+        """Whether this decision still answers for a run asking about ``products``.
+
+        A member that names a product names it whoever is asking. A member that
+        names no product *at all* is equally durable. What does not survive a
+        change of list is "nothing here matched" - and answering with that is
+        how a drug the rules would place gets silently dropped instead.
+        """
+        if self.resolved or self.claim == VERDICT_NOT_A_PRODUCT:
+            return True
+        if not self.candidates_fingerprint:
+            # Decided against a list nobody wrote down. Treat it as spent
+            # rather than as a veto of unknown provenance.
+            return False
+        return self.candidates_fingerprint == fingerprint(products)
 
 
 def words(text: str) -> list[str]:
@@ -162,6 +225,8 @@ def load_register(path: Path | None = None) -> dict[tuple[str, str], Resolution]
                 method=row["method"],
                 confidence=float(row["confidence"] or 0),
                 note=row.get("note", ""),
+                verdict=row.get("verdict", ""),
+                candidates_fingerprint=row.get("candidates_fingerprint", "") or "",
             )
             for row in csv.DictReader(handle)
         }
@@ -180,8 +245,10 @@ def save_register(entries: dict[tuple[str, str], Resolution], path: Path | None 
                 "issuer": issuer,
                 "member": entry.member,
                 "product": entry.product or "",
+                "verdict": entry.claim,
                 "method": entry.method,
                 "confidence": f"{entry.confidence:g}",
+                "candidates_fingerprint": entry.candidates_fingerprint,
                 "note": entry.note,
             })
 
@@ -192,13 +259,19 @@ def resolve(
     register: dict[tuple[str, str], Resolution] | None = None,
     issuer: str = "",
 ) -> Resolution:
-    """The register first, then the rules. A model is asked only for the rest.
+    """The register first where it still applies, then the rules.
+
+    "Where it still applies" is the whole of the change from looking the member
+    up and taking whatever comes back. A decision that nothing matched is only
+    as good as the list it was made against, so against a different list the
+    rules run again rather than the old answer standing.
 
     Returning an unresolved answer is not a failure - it is how a member the
     rules cannot place stays out of the data until someone or something decides
     what it is.
     """
     register = register if register is not None else load_register()
-    if (issuer, member) in register:
-        return register[(issuer, member)]
+    entry = register.get((issuer, member))
+    if entry is not None and entry.binds(products):
+        return entry
     return match(member, products)
