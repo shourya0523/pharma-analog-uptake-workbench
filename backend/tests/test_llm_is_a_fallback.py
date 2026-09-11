@@ -209,3 +209,42 @@ async def test_suppression_is_per_filing_not_across_them(tmp_path):
         "the model should have been asked about the unreadable filing and only "
         f"that one; it was asked about {sorted(asked)}"
     )
+
+
+def test_a_model_that_cannot_be_reached_answers_nothing_rather_than_raising(monkeypatch):
+    """A failed connection is that one question going unanswered.
+
+    Every caller already treats an empty answer as the model having nothing
+    to say - it is what the client returns when no key is set. A job that
+    raised instead threw away every figure the other readers had produced,
+    for a network blip, in whichever stage happened to ask: extraction,
+    identity, reconciliation.
+    """
+    import asyncio
+
+    import httpx
+
+    from app.llm.client import OpenRouterClient
+
+    calls = {"n": 0}
+
+    class FlakyClient:
+        def __init__(self, *a, **k): pass
+        async def __aenter__(self): return self
+        async def __aexit__(self, *a): return False
+        async def post(self, *a, **k):
+            calls["n"] += 1
+            raise httpx.ConnectError("")
+
+    monkeypatch.setattr(httpx, "AsyncClient", FlakyClient)
+    monkeypatch.setattr(asyncio, "sleep", _no_sleep)
+    client = OpenRouterClient.__new__(OpenRouterClient)
+    from app.config import get_settings
+    client.settings = get_settings()
+    answer = asyncio.run(client.chat_json(model="m", system="s", user="u"))
+    assert answer == {}
+    assert calls["n"] == OpenRouterClient.TRANSPORT_ATTEMPTS, "it is retried before it is given up on"
+
+
+async def _no_sleep(_seconds):
+    return None

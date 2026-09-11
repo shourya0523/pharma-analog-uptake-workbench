@@ -37,17 +37,65 @@ TERMINAL = {"ready_for_review", "completed", "failed", "cancelled"}
 PUBLISHED = {"auto_pass", "confirmed"}
 
 
+def _call(request, *, timeout: int, attempts: int = 12) -> dict:
+    """One HTTP call, patient with a server that is busy running jobs.
+
+    The in-process queue runs pipeline stages on the same event loop that
+    serves the API, so while several documents are being parsed a poll can go
+    unanswered for longer than a socket timeout. That is the server working,
+    not the server gone; a client that dies on it orphans every run it
+    started.
+    """
+    delay = 5.0
+    for attempt in range(attempts):
+        try:
+            with urllib.request.urlopen(request, timeout=timeout) as response:
+                return json.loads(response.read().decode())
+        except (TimeoutError, urllib.error.URLError, OSError) as exc:
+            if attempt == attempts - 1:
+                raise
+            print(f"    ({type(exc).__name__}; the server is busy - retrying in {delay:.0f}s)",
+                  flush=True)
+            time.sleep(delay)
+            delay = min(delay * 1.6, 60.0)
+    raise RuntimeError("unreachable")
+
+
 def post(base: str, path: str, body: dict) -> dict:
     request = urllib.request.Request(
         f"{base}{path}", data=json.dumps(body).encode(),
         headers={"Content-Type": "application/json"}, method="POST")
-    with urllib.request.urlopen(request, timeout=120) as response:
-        return json.loads(response.read().decode())
+    return _call(request, timeout=180)
 
 
-def get(base: str, path: str, timeout: int = 120) -> dict:
-    with urllib.request.urlopen(f"{base}{path}", timeout=timeout) as response:
-        return json.loads(response.read().decode())
+def get(base: str, path: str, timeout: int = 180) -> dict:
+    return _call(urllib.request.Request(f"{base}{path}"), timeout=timeout)
+
+
+def existing_runs(base: str) -> dict[str, str]:
+    """Runs already on the server, keyed the way batches are: by their options.
+
+    So a client that died mid-way, or a second invocation, scores the runs it
+    already started instead of starting them again.
+    """
+    found: dict[str, str] = {}
+    offset = 0
+    while True:
+        page = get(base, f"/observability/db/extraction_runs?limit=500&offset={offset}")
+        for row in page.get("rows", []):
+            options = row.get("options_json") or {}
+            key = json.dumps({k: options.get(k) for k in OPTION_KEYS if k in options},
+                             sort_keys=True)
+            found.setdefault(key, row["id"])
+        if offset + 500 >= page.get("total", 0):
+            return found
+        offset += 500
+
+
+# A run is matched back to its batch on the window alone. The server stores
+# every option with its default filled in, so matching on the full set never
+# matched anything and a re-attach started every run again.
+OPTION_KEYS = ("earnings_since", "earnings_until")
 
 
 def wait(base: str, run_id: str, *, timeout_s: int, quiet: bool) -> dict:
@@ -55,7 +103,7 @@ def wait(base: str, run_id: str, *, timeout_s: int, quiet: bool) -> dict:
     seen = None
     run: dict = {}
     while time.time() < deadline:
-        run = get(base, f"/runs/{run_id}", timeout=60)
+        run = get(base, f"/runs/{run_id}")
         states = [(j["drug_name"], j["status"], j["current_step"]) for j in run["jobs"]]
         if states != seen and not quiet:
             done = sum(1 for j in run["jobs"] if j["status"] in TERMINAL)
@@ -122,6 +170,9 @@ def main() -> int:
     ap.add_argument("--timeout", type=int, default=2400, help="seconds to wait per run")
     ap.add_argument("--out", default="/tmp/eval.json")
     ap.add_argument("--quiet", action="store_true")
+    ap.add_argument("--attach", action="store_true",
+                    help="score runs already on the server for these cases' windows "
+                         "instead of starting them again")
     args = ap.parse_args()
 
     path = pathlib.Path(args.cases)
@@ -140,29 +191,57 @@ def main() -> int:
               f"  cd backend && ./.venv/bin/uvicorn app.main:app --port 8000")
         return 2
 
+    # Cases sharing the same options go in one run, the way a person would
+    # paste a list of drugs for one window. Jobs are matched back to cases by
+    # drug name, which the API returns on each job.
+    DRUG_FIELDS = {"drug_name", "generic_name", "manufacturer", "ticker", "cik",
+                   "indication", "known_source_url"}
+    batches: dict[str, list[dict]] = {}
+    for case in cases:
+        batches.setdefault(json.dumps(case.get("options", {}), sort_keys=True), []).append(case)
+
     results = []
-    for index, case in enumerate(cases, 1):
-        print(f"  [{index}/{len(cases)}] {case['drug_name']} ({case.get('manufacturer','')})",
-              flush=True)
-        created = post(args.base, "/runs", {
-            "drugs": [{k: v for k, v in case.items()
-                       if k in {"drug_name", "generic_name", "manufacturer",
-                                "ticker", "cik", "indication", "known_source_url"}}],
-            "options": case.get("options", {}),
-        })
-        run = wait(args.base, created["run_id"], timeout_s=args.timeout, quiet=args.quiet)
-        job = run["jobs"][0]
-        detail = get(args.base, f"/jobs/{job['id']}")
-        datapoints = detail.get("datapoints") or []
-        results.append({
-            "run_id": created["run_id"], "job_id": job["id"],
-            "drug_name": case["drug_name"], "manufacturer": case.get("manufacturer"),
-            "job_status": job["status"], "error": job.get("error"),
-            "sources_found": job.get("sources_found"),
-            "datapoints": len(datapoints),
-            "rows": score(case, datapoints),
-            "source": case.get("source"),
-        })
+    already = existing_runs(args.base) if args.attach else {}
+    for index, (options_key, batch) in enumerate(batches.items(), 1):
+        options = json.loads(options_key)
+        match_key = json.dumps({k: options.get(k) for k in OPTION_KEYS if k in options},
+                               sort_keys=True)
+        if match_key in already:
+            run_id = already[match_key]
+            print(f"  [{index}/{len(batches)}] {len(batch)} drug(s): attached to run {run_id[:8]}",
+                  flush=True)
+        else:
+            print(f"  [{index}/{len(batches)}] {len(batch)} drug(s), options {options_key[:70]}",
+                  flush=True)
+            run_id = post(args.base, "/runs", {
+                "drugs": [{k: v for k, v in case.items() if k in DRUG_FIELDS} for case in batch],
+                "options": options,
+            })["run_id"]
+        created = {"run_id": run_id}
+        run = wait(args.base, run_id, timeout_s=args.timeout, quiet=args.quiet)
+        by_drug = {}
+        for job in run["jobs"]:
+            by_drug.setdefault(job["drug_name"].casefold(), []).append(job)
+        for case in batch:
+            job = (by_drug.get(case["drug_name"].casefold()) or [None]).pop(0)
+            if job is None:
+                results.append({"run_id": created["run_id"], "job_id": None,
+                                "drug_name": case["drug_name"], "manufacturer": case.get("manufacturer"),
+                                "job_status": "missing", "error": "no job for this drug",
+                                "sources_found": None, "datapoints": 0,
+                                "rows": score(case, []), "source": case.get("source")})
+                continue
+            detail = get(args.base, f"/jobs/{job['id']}")
+            datapoints = detail.get("datapoints") or []
+            results.append({
+                "run_id": created["run_id"], "job_id": job["id"],
+                "drug_name": case["drug_name"], "manufacturer": case.get("manufacturer"),
+                "job_status": job["status"], "error": job.get("error"),
+                "sources_found": job.get("sources_found"),
+                "datapoints": len(datapoints),
+                "rows": score(case, datapoints),
+                "source": case.get("source"),
+            })
 
     print(f"\n  {'drug':22} {'period':8} {'want':>10} {'read':>10}  state")
     tally: dict[str, int] = {}

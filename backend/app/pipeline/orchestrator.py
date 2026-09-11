@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-# ruff: noqa: BLE001, DTZ003
 import json
 import logging
 import os
@@ -8,6 +7,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+# ruff: noqa: BLE001, DTZ003
 from sqlalchemy.orm import Session
 
 logger = logging.getLogger(__name__)

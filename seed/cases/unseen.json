@@ -1,0 +1,274 @@
+[
+  {
+    "drug_name": "Cabometyx",
+    "manufacturer": "Exelixis Inc",
+    "ticker": "EXEL",
+    "options": {
+      "earnings_since": "2026-01-15",
+      "earnings_until": "2026-09-15",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "source": "0000939767-26-000098 (10-Q filed 2026-08-05, exel-20260703.htm) - product sales table, three months ended June 30, 2026: CABOMETYX $ 570,648",
+    "expect": [
+      {
+        "period": "2026Q2",
+        "value_normalized_usd_millions": 570.648
+      }
+    ]
+  },
+  {
+    "drug_name": "Cometriq",
+    "manufacturer": "Exelixis Inc",
+    "ticker": "EXEL",
+    "options": {
+      "earnings_since": "2026-01-15",
+      "earnings_until": "2026-09-15",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "source": "0000939767-26-000098 (10-Q filed 2026-08-05, exel-20260703.htm) - product sales table, three months ended June 30, 2026: COMETRIQ 2,377",
+    "expect": [
+      {
+        "period": "2026Q2",
+        "value_normalized_usd_millions": 2.377
+      }
+    ]
+  },
+  {
+    "drug_name": "Libtayo",
+    "manufacturer": "Regeneron Pharmaceuticals Inc",
+    "ticker": "REGN",
+    "options": {
+      "earnings_since": "2026-01-15",
+      "earnings_until": "2026-09-15",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "source": "0000872589-26-000025 (10-Q filed 2026-07-30, regn-20260630.htm) - product sales table, three months ended June 30, 2026: Total Libtayo Global 489.4 (U.S. 342.6, Rest of world 146.8)",
+    "expect": [
+      {
+        "period": "2026Q2",
+        "value_normalized_usd_millions": 489.4
+      }
+    ]
+  },
+  {
+    "drug_name": "Praluent",
+    "manufacturer": "Regeneron Pharmaceuticals Inc",
+    "ticker": "REGN",
+    "options": {
+      "earnings_since": "2026-01-15",
+      "earnings_until": "2026-09-15",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "source": "0000872589-26-000025 (10-Q filed 2026-07-30, regn-20260630.htm) - product sales table, three months ended June 30, 2026: Praluent U.S. 74.7",
+    "expect": [
+      {
+        "period": "2026Q2",
+        "value_normalized_usd_millions": 74.7
+      }
+    ]
+  },
+  {
+    "drug_name": "Evkeeza",
+    "manufacturer": "Regeneron Pharmaceuticals Inc",
+    "ticker": "REGN",
+    "options": {
+      "earnings_since": "2026-01-15",
+      "earnings_until": "2026-09-15",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "source": "0000872589-26-000025 (10-Q filed 2026-07-30, regn-20260630.htm) - product sales table, three months ended June 30, 2026: Evkeeza U.S. 53.3",
+    "expect": [
+      {
+        "period": "2026Q2",
+        "value_normalized_usd_millions": 53.3
+      }
+    ]
+  },
+  {
+    "drug_name": "Lynozyfic",
+    "manufacturer": "Regeneron Pharmaceuticals Inc",
+    "ticker": "REGN",
+    "options": {
+      "earnings_since": "2026-01-15",
+      "earnings_until": "2026-09-15",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "source": "0000872589-26-000025 (10-Q filed 2026-07-30, regn-20260630.htm) - product sales table, three months ended June 30, 2026: Lynozyfic Global 16.5",
+    "expect": [
+      {
+        "period": "2026Q2",
+        "value_normalized_usd_millions": 16.5
+      }
+    ]
+  },
+  {
+    "drug_name": "Lifyorli",
+    "manufacturer": "Corcept Therapeutics Inc",
+    "ticker": "CORT",
+    "options": {
+      "earnings_since": "2026-01-15",
+      "earnings_until": "2026-09-15",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "source": "0001628280-26-050613 (10-Q filed 2026-07-29, cort-20260630.htm) - product sales table, three months ended June 30, 2026: Lifyorli 47,564 (prior year: -)",
+    "expect": [
+      {
+        "period": "2026Q2",
+        "value_normalized_usd_millions": 47.564
+      }
+    ]
+  },
+  {
+    "drug_name": "Qelbree",
+    "manufacturer": "Supernus Pharmaceuticals Inc",
+    "ticker": "SUPN",
+    "options": {
+      "earnings_since": "2026-01-15",
+      "earnings_until": "2026-09-15",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "source": "0001356576-26-000037 (10-Q filed 2026-08-03, supn-20260630.htm) - product sales table, three months ended June 30, 2026: Qelbree $ 89,239",
+    "expect": [
+      {
+        "period": "2026Q2",
+        "value_normalized_usd_millions": 89.239
+      }
+    ]
+  },
+  {
+    "drug_name": "Gocovri",
+    "manufacturer": "Supernus Pharmaceuticals Inc",
+    "ticker": "SUPN",
+    "options": {
+      "earnings_since": "2026-01-15",
+      "earnings_until": "2026-09-15",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "source": "0001356576-26-000037 (10-Q filed 2026-08-03, supn-20260630.htm) - product sales table, three months ended June 30, 2026: GOCOVRI 37,530",
+    "expect": [
+      {
+        "period": "2026Q2",
+        "value_normalized_usd_millions": 37.53
+      }
+    ]
+  },
+  {
+    "drug_name": "Onapgo",
+    "manufacturer": "Supernus Pharmaceuticals Inc",
+    "ticker": "SUPN",
+    "options": {
+      "earnings_since": "2026-01-15",
+      "earnings_until": "2026-09-15",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "source": "0001356576-26-000037 (10-Q filed 2026-08-03, supn-20260630.htm) - product sales table, three months ended June 30, 2026: ONAPGO 13,546",
+    "expect": [
+      {
+        "period": "2026Q2",
+        "value_normalized_usd_millions": 13.546
+      }
+    ]
+  },
+  {
+    "drug_name": "Trokendi XR",
+    "manufacturer": "Supernus Pharmaceuticals Inc",
+    "ticker": "SUPN",
+    "options": {
+      "earnings_since": "2026-01-15",
+      "earnings_until": "2026-09-15",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "source": "0001356576-26-000037 (10-Q filed 2026-08-03, supn-20260630.htm) - product sales table, three months ended June 30, 2026: Trokendi XR 8,411",
+    "expect": [
+      {
+        "period": "2026Q2",
+        "value_normalized_usd_millions": 8.411
+      }
+    ]
+  },
+  {
+    "drug_name": "Oxtellar XR",
+    "manufacturer": "Supernus Pharmaceuticals Inc",
+    "ticker": "SUPN",
+    "options": {
+      "earnings_since": "2026-01-15",
+      "earnings_until": "2026-09-15",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "source": "0001356576-26-000037 (10-Q filed 2026-08-03, supn-20260630.htm) - product sales table, three months ended June 30, 2026: Oxtellar XR 8,782",
+    "expect": [
+      {
+        "period": "2026Q2",
+        "value_normalized_usd_millions": 8.782
+      }
+    ]
+  },
+  {
+    "drug_name": "Apokyn",
+    "manufacturer": "Supernus Pharmaceuticals Inc",
+    "ticker": "SUPN",
+    "options": {
+      "earnings_since": "2026-01-15",
+      "earnings_until": "2026-09-15",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "source": "0001356576-26-000037 (10-Q filed 2026-08-03, supn-20260630.htm) - product sales table, three months ended June 30, 2026: APOKYN 6,323",
+    "expect": [
+      {
+        "period": "2026Q2",
+        "value_normalized_usd_millions": 6.323
+      }
+    ]
+  },
+  {
+    "drug_name": "Qelbree",
+    "manufacturer": "Exelixis Inc",
+    "ticker": "EXEL",
+    "options": {
+      "earnings_since": "2026-01-15",
+      "earnings_until": "2026-09-15",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "source": "0000939767-26-000098 (10-Q filed 2026-08-05, exel-20260703.htm) - product sales table, three months ended June 30, 2026: not this filer's product",
+    "expect": [
+      {
+        "period": "2026Q2",
+        "value_normalized_usd_millions": null,
+        "why": "Supernus sells Qelbree, not Exelixis"
+      }
+    ]
+  },
+  {
+    "drug_name": "Cabometyx",
+    "manufacturer": "Supernus Pharmaceuticals Inc",
+    "ticker": "SUPN",
+    "options": {
+      "earnings_since": "2026-01-15",
+      "earnings_until": "2026-09-15",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "source": "0001356576-26-000037 (10-Q filed 2026-08-03, supn-20260630.htm) - product sales table, three months ended June 30, 2026: not this filer's product",
+    "expect": [
+      {
+        "period": "2026Q2",
+        "value_normalized_usd_millions": null,
+        "why": "Exelixis sells Cabometyx, not Supernus"
+      }
+    ]
+  }
+]

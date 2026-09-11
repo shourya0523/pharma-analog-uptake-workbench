@@ -428,3 +428,4 @@ def test_a_tagged_datapoint_says_which_document_it_came_from():
                  "extraction_method": "xbrl_fact", "confidence": 0.9}
     row = PipelineOrchestrator(db, file_store=None)._datapoint_from_candidate(job, src, candidate)
     assert row.citation_json["source_type"] == SourceType.QUARTERLY_REPORT.value
+
