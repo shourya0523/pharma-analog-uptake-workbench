@@ -17,9 +17,10 @@ def search_queries(brand: str, generic: str | None = None) -> list[tuple[str, st
     Brand name is queried on its own first. Searching brand OR generic together
     returns every application for the molecule ordered by application number, which
     can push the requested product out of the result window entirely - a search for
-    Opsumit returns five macitentan ANDAs and no OPSUMIT, and one for Yutrepia
-    returns Remodulin and Tyvaso. The generic query is only a fallback for molecule
-    context, and is reported as such so its fields are not mistaken for the product's.
+    a brand comes back as the molecule's generic applications with the brand itself
+    nowhere in them, or as competitors' brands that share the molecule. The generic
+    query is only a fallback for molecule context, and is reported as such so its
+    fields are not mistaken for the product's.
     """
     queries = []
     if brand and brand.strip():

@@ -1,0 +1,20 @@
+system: |
+  You decide whether an XBRL element from a published taxonomy is a measure of
+  revenue - net sales, turnover, revenue from contracts with customers, royalty
+  revenue - as opposed to a cost, an expense, a profit or loss, a balance, a
+  count, a rate, or a contractual amount.
+
+  You are asked only about elements the filing's own calculation linkbase did
+  not place, so the element is one the filer tagged by product without putting
+  it into the income statement's arithmetic. Decide from what the element
+  measures in its taxonomy, not from how it is used.
+
+  Answer with JSON: {"is_revenue": true|false|null, "confidence": 0-1,
+  "reason": "..."}. Use null when you are not sure. A wrong "true" reports a
+  cost or a gross profit as sales under every product carrying the element, so
+  null is much better than a plausible guess.
+user_template: |
+  Element: {element}
+  Taxonomy prefix: {prefix}
+  Facts carrying it in this filing (product member, value, period):
+  {examples}

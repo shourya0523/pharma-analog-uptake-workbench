@@ -7,6 +7,9 @@ code that is supposed to make them impossible.
 
 from __future__ import annotations
 
+import json
+import pathlib
+
 from app.extraction.candidates import extract_revenue_candidates
 from app.extraction.check import run_checks
 from app.extraction.extract import map_values_to_blocks, read_table, tokenize_row
@@ -14,21 +17,28 @@ from app.extraction.fingerprint import PeriodBlock, build_fingerprint
 from app.extraction.process import Datapoint, normalize_all
 from app.parsing.documents import flatten_grid, html_table_grid
 from bs4 import BeautifulSoup
+from app.extraction.adjudicate import (
+    Candidate,
+    adjudicate_positional_solutions,
+    adjudicate_reported_value,
+    adjudicate_split_ownership_quarter,
+    adjudicate_total_against_parts,
+)
 
-UTHR_THOUSANDS = [
+EXHIBIT_IN_THOUSANDS = [
     ["", "Three Months Ended September 30,", "", "", ""],
     ["(in thousands)", "2015", "2014", "% Change", ""],
     ["Tyvaso ®", "121,718", "119,685", "1.7", "%"],
 ]
 
 # Same issuer, same exhibit layout, one year later - stated in millions.
-UTHR_MILLIONS = [
+EXHIBIT_IN_MILLIONS = [
     ["", "Three Months Ended September 30,", "", "", ""],
     ["($ in millions)", "2016", "2015", "% Change", ""],
     ["Tyvaso ®", "101.8", "121.7", "(16.4", ")%"],
 ]
 
-MERCK_QUARTER_AND_YTD = [
+QUARTER_AND_YTD = [
     ["($ in millions)", "Three Months Ended June 30,", "", "Six Months Ended June 30,", ""],
     ["", "2024", "2023", "2024", "2023"],
     ["Winrevair", "70", "-", "70", "-"],
@@ -37,8 +47,8 @@ MERCK_QUARTER_AND_YTD = [
 
 def test_unit_comes_from_the_table_not_the_filing_date():
     """The 2016 exhibit says millions; nothing may assume otherwise."""
-    thousands = build_fingerprint(UTHR_THOUSANDS)
-    millions = build_fingerprint(UTHR_MILLIONS)
+    thousands = build_fingerprint(EXHIBIT_IN_THOUSANDS)
+    millions = build_fingerprint(EXHIBIT_IN_MILLIONS)
 
     assert thousands.unit_label == "thousands"
     assert thousands.unit_scale_to_millions == 0.001
@@ -175,8 +185,8 @@ def test_a_currency_between_in_and_the_magnitude_is_still_a_declaration():
 
 def test_reported_values_normalize_to_the_same_scale_across_a_unit_change():
     """Both exhibits land near $100M; neither quarter becomes $0.1M."""
-    thousands = normalize_all(read_table(UTHR_THOUSANDS, product="Tyvaso").values)
-    millions = normalize_all(read_table(UTHR_MILLIONS, product="Tyvaso").values)
+    thousands = normalize_all(read_table(EXHIBIT_IN_THOUSANDS, product="Tyvaso").values)
+    millions = normalize_all(read_table(EXHIBIT_IN_MILLIONS, product="Tyvaso").values)
 
     from_thousands = {p.period: p.value_normalized_usd_millions for p in thousands}
     from_millions = {p.period: p.value_normalized_usd_millions for p in millions}
@@ -189,8 +199,8 @@ def test_reported_values_normalize_to_the_same_scale_across_a_unit_change():
 
 
 def test_year_to_date_column_is_never_emitted_as_a_quarter():
-    """Merck's six-month column sits beside the quarter and must stay YTD."""
-    readout = read_table(MERCK_QUARTER_AND_YTD, product="Winrevair")
+    """A six-month column sits beside the quarter and must stay YTD."""
+    readout = read_table(QUARTER_AND_YTD, product="Winrevair")
     by_period = {(v.period, v.period_type): v.value_as_reported for v in readout.values}
 
     assert by_period[("2024Q2", "quarterly")] == 70.0
@@ -198,16 +208,28 @@ def test_year_to_date_column_is_never_emitted_as_a_quarter():
     assert not any(v.period_type == "quarterly" and v.period == "2024" for v in readout.values)
 
     candidates, _, _ = extract_revenue_candidates(
-        [MERCK_QUARTER_AND_YTD], product="Winrevair"
+        [QUARTER_AND_YTD], product="Winrevair"
     )
-    assert [c["period"] for c in candidates] == ["2024Q2"]
+    # The six-month figure comes through - a fourth quarter is derived by
+    # subtracting from a total, so withholding totals is what loses Q4 - but it
+    # comes through *as* a six-month figure. Being emitted and being emitted as
+    # a quarter are different claims, and only the second is the error.
+    assert [c["period"] for c in candidates] == ["2024Q2", "2024"]
+    quarterly = [c for c in candidates if c["period_type"] == "quarterly"]
+    assert [c["period"] for c in quarterly] == ["2024Q2"]
+    assert all(c["period_type"] != "quarterly" for c in candidates if c["period"] == "2024")
+
+    # A caller wanting quarters alone selects them, in the one line the
+    # orchestrator already writes. The reader has no say in it.
+    quarters_only = [c for c in candidates if c["period_type"] == "quarterly"]
+    assert [c["period"] for c in quarters_only] == ["2024Q2"]
 
 
 def test_dash_holds_its_column_so_later_values_do_not_shift_left():
     """A printed dash is a column, not an absence.
 
-    Collapsing it is the mechanism that moved Merck's 2024 figures one quarter
-    left and booked the full-year total as Q4.
+    Collapsing it is the mechanism that moves a schedule's figures one quarter
+    left and books the full-year total as Q4.
     """
     assert tokenize_row(["70", "-", "70", "-"]) == [70.0, None, 70.0, None]
 
@@ -258,7 +280,7 @@ def test_check_catches_a_thousandfold_scale_break():
 
 
 def test_check_catches_a_total_recorded_as_a_quarter():
-    """Q1-Q4 that sum to twice the stated annual total is the Merck defect."""
+    """Q1-Q4 that sum to twice the stated annual total is the column defect."""
     points = [
         _point("2024Q1", 70),
         _point("2024Q2", 149),
@@ -428,10 +450,10 @@ def test_prose_reads_a_full_year_total():
 def test_prose_pairs_quarter_and_year_to_date_when_the_sentence_says_respectively():
     """The most common issuer construction of all, and it is not ambiguous.
 
-    Merck states Winrevair as "$336 million and $615 million in the second
+    An issuer states a product as "$336 million and $615 million in the second
     quarter and first six months of 2025, respectively" every quarter. Refusing
-    it as multi-period left a whole product unreadable even though the sentence
-    states the correspondence outright. Neither half matches the single-period
+    it as multi-period leaves a whole product unreadable even though the
+    sentence states the correspondence outright. Neither half matches the single-period
     patterns either: the quarter's year only appears after the second phrase.
     """
     from app.extraction.prose import read_prose
@@ -479,8 +501,8 @@ def test_prose_pairing_refuses_a_mismatched_count():
 def test_launch_year_total_covers_only_quarters_since_launch():
     """A product's first year has no pre-launch quarters to account for.
 
-    Remodulin went on sale in 2002Q2, so United Therapeutics' full-year 2002
-    total is Q2 + Q3 + Q4. Requiring all four quarters made the launch year look
+    A product goes on sale in 2002Q2, so its full-year 2002 total is
+    Q2 + Q3 + Q4. Requiring all four quarters made the launch year look
     under-determined - two "missing" quarters instead of one - so it never
     derived, even though the annual figure was cited.
     """
@@ -513,7 +535,7 @@ def test_a_total_from_before_launch_derives_nothing():
 def test_a_geography_column_table_is_refused_not_read_as_periods():
     """The dangerous near-miss: columns that look like periods but are places.
 
-    Merck's XBRL product table splits each year into U.S. / Int'l / Total, so
+    An XBRL product table splits each year into U.S. / Int'l / Total, so
     the row reads "- | 55 | 55 | - | 56 | 56" - six numbers, none of which is a
     quarter. Aligned against the usual convention the first column would be
     read as the current quarter, turning a U.S. figure of nothing into the
@@ -532,8 +554,8 @@ def test_a_geography_column_table_is_refused_not_read_as_periods():
 def test_a_geography_row_table_still_reads_normally():
     """The shape that does work, kept beside the one that does not.
 
-    J&J writes one row per geography and keeps periods in the columns, so
-    "OPSUMIT | U.S. | 373 | 328 | 729 | 601" is quarter, prior-year quarter,
+    A filer writes one row per geography and keeps periods in the columns, so
+    "CALDERON | U.S. | 373 | 328 | 729 | 601" is quarter, prior-year quarter,
     year-to-date, prior year-to-date - the ordinary convention, and readable.
     The distinction is what the row varies across, not whether a geography is
     named in it.
@@ -548,9 +570,9 @@ def test_a_quarter_split_by_an_acquisition_is_assembled_from_dated_parts():
     """The one quarter shape no single filing reports.
 
     When a company changes hands mid-quarter the seller's last schedule stops
-    at the closing date and the buyer's first one starts there. Opsumit's and
-    Uptravi's 2017Q2 exist only as two partial figures, and adding them is only
-    safe if the parts are known to tile the quarter.
+    at the closing date and the buyer's first one starts there. The acquired
+    products' 2017Q2 exists only as two partial figures, and adding them is
+    only safe if the parts are known to tile the quarter.
     """
     from app.extraction.derive import assemble_split_ownership_quarter
 
@@ -681,12 +703,6 @@ def _adjudication_cases():
 
 def test_edge_case_fixtures_reach_their_expected_verdicts():
     """Every fixture, replayed through the adjudicator."""
-    import sys
-    from pathlib import Path
-
-    sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
-    from eval_adjudication import run_case
-
     for case in _adjudication_cases():
         status, code = run_case(case)
         assert (status, code) == (
@@ -704,12 +720,6 @@ def test_no_real_series_trips_the_adjudicator():
     thresholds starts flagging healthy data, this fails and the thresholds are
     what is wrong.
     """
-    import sys
-    from pathlib import Path
-
-    sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
-    from eval_adjudication import real_rows_that_trip
-
     tripped = real_rows_that_trip()
     assert tripped == [], f"adjudicator flagged real data: {tripped}"
 
@@ -755,7 +765,7 @@ def test_rounding_between_a_total_and_its_own_parts_is_never_a_contradiction():
     """
     from app.extraction.adjudicate import adjudicate_total_against_parts
 
-    # Merck's real 2025 Adempas: stated nine months 229, quarters sum 230.
+    # Real figures from a filing: stated nine months 229, quarters sum 230.
     verdict = adjudicate_total_against_parts(
         229, {"Q1": 68, "Q2": 80, "Q3": 82}, expected_parts=3
     )
@@ -774,9 +784,9 @@ def test_rounding_between_a_total_and_its_own_parts_is_never_a_contradiction():
 # Everything above reads ragged rows and has to infer which column is which.
 # These read the same tables as rectangles, where the headings say it outright.
 
-# Gilead splits one heading over two rows - "Three Months Ended" then
+# A filer splits one heading over two rows - "Three Months Ended" then
 # "March 31," - and spans the years beneath it.
-GILEAD_EXHIBIT = """
+SPLIT_HEADING_EXHIBIT = """
 <table>
   <tr><td></td><td></td><td colspan="7">Three Months Ended</td></tr>
   <tr><td></td><td></td><td colspan="7">March 31,</td></tr>
@@ -811,7 +821,7 @@ def test_a_heading_split_across_rows_is_one_statement_again():
     the column widths make them. Reading the heading a row at a time finds no
     period in either line and refuses a table that says exactly what it means.
     """
-    grid, readout = read_exhibit(GILEAD_EXHIBIT, "Harvoni")
+    grid, readout = read_exhibit(SPLIT_HEADING_EXHIBIT, "Harvoni")
     ragged = read_table(flatten_grid(grid), product="Harvoni", context="(in millions)")
     expected = {("2016Q1", 1407.0), ("2015Q1", 3016.0)}
     assert {(value.period, value.value_as_reported) for value in readout.values} == expected
@@ -841,7 +851,7 @@ def test_a_change_column_is_not_revenue():
 # The shape that shows a rectangle can be built and still describe nothing: the
 # year spans three columns while the rows beneath write figures in two of them,
 # so which column holds 2020 depends on which row you look at. Real, from a
-# Gilead press release; the names here are invented.
+# press release; the names here are invented.
 HEADINGS_OUT_OF_STEP_WITH_THE_BODY = """
 <table>
   <tr><td colspan="9">(in millions)</td></tr>
@@ -899,8 +909,9 @@ def test_a_heading_carries_forward_only_when_it_ends_mid_phrase():
 
 # --- One product, several lines ---------------------------------------------
 #
-# Gilead reports Harvoni by region and prints the worldwide figure as the sum
-# beneath. Every one of those lines names Harvoni, and gold's number is the sum.
+# A filer reports a product by region and prints the worldwide figure as the
+# sum beneath. Every one of those lines names the product, and the figure that
+# answers for it is the sum.
 
 REGIONAL_LINES = [
     ["($ in millions)", "Three Months Ended June 30,", ""],
@@ -1070,8 +1081,11 @@ def test_a_derived_quarter_is_not_stored_as_a_tagged_fact():
     orch = PipelineOrchestrator.__new__(PipelineOrchestrator)
     orch.db = db
 
+    from app.domain.models import SourceType
+
     class _Src:
         source_id = "s1"
+        source_type = SourceType.EARNINGS_RELEASE
         url = "https://example.invalid/8-k.htm"
         filing_type = "8-K"
         accession_number = "0000000000-00-000000"
@@ -1109,9 +1123,9 @@ def test_a_sentence_does_not_pre_empt_a_derivation():
     `complete_series` was applied only to periods no row existed for, so any
     reader that produced anything at all pre-empted it. A sentence offering 1.0
     for a quarter whose family total derives exactly to 94.645 did not lose to
-    the better answer - it stopped the better answer being computed. Measured
-    over the corpus, the prose reader emitted 13 of the 16 wrong values while
-    contributing 5 correct ones.
+    the better answer - it stopped the better answer being computed. The prose
+    reader is the weakest producer there is, and it was silencing the
+    strongest.
 
     A tagged fact and a schedule still pre-empt a derivation. They are the
     stronger claims.
@@ -1178,3 +1192,195 @@ def test_a_wrong_sentence_must_not_stop_a_quarter_being_derived():
         "this is the defect: nothing is derived, so nothing can be ranked. "
         "The caller must keep weak readings out of the derivation's inputs."
     )
+
+
+def test_a_sentence_naming_two_products_answers_for_neither():
+    """One period, one amount, one product - the third was missing.
+
+    A sentence was accepted whenever an alias appeared anywhere in it, so a
+    sentence covering a brand and its new formulation answered a question about
+    either of them with the same figure. In the quarter Tyvaso DPI went on
+    sale, its $3.0m and nebulized Tyvaso's $198.0m were both read as the one
+    number the sentence happened to carry.
+    """
+    from app.extraction.prose import read_prose
+
+    catalog = ["Tyvaso", "Tyvaso DPI", "Nebulized Tyvaso", "Remodulin"]
+    both = (
+        "Tyvaso and Tyvaso DPI together generated revenues of $42.2 million "
+        "in the second quarter of 2022."
+    )
+    for product in ("Tyvaso", "Tyvaso DPI", "Nebulized Tyvaso"):
+        assert read_prose(both, product=product, catalog=catalog) == [], product
+
+
+def test_the_longest_product_name_in_a_sentence_wins():
+    """"Tyvaso DPI" names one product, and is not evidence of two.
+
+    The same rule the member register resolves by: a shorter product name sits
+    inside a longer one far more often than it is a second product.
+    """
+    from app.extraction.prose import read_prose
+
+    catalog = ["Tyvaso", "Tyvaso DPI", "Nebulized Tyvaso"]
+    sentence = "Tyvaso DPI revenues were $3.0 million in the second quarter of 2022."
+
+    for_dpi = read_prose(sentence, product="Tyvaso DPI", catalog=catalog)
+    assert [(v.period, v.value_as_reported) for v in for_dpi] == [("2022Q2", 3.0)]
+    # The sentence is about the inhaler, so it says nothing about the nebulized
+    # product or about the brand line as a whole.
+    assert read_prose(sentence, product="Tyvaso", catalog=catalog) == []
+    assert read_prose(sentence, product="Nebulized Tyvaso", catalog=catalog) == []
+
+
+def test_a_sentence_about_one_product_still_reads():
+    from app.extraction.prose import read_prose
+
+    sentence = "Remodulin revenues were $120.8 million in the third quarter of 2012."
+    values = read_prose(sentence, product="Remodulin", catalog=["Remodulin", "Tyvaso"])
+    assert [(v.period, v.value_as_reported) for v in values] == [("2012Q3", 120.8)]
+
+
+def test_tracking_nothing_loses_nothing():
+    """Ambiguity is measured against the products we could confuse it with."""
+    from app.extraction.prose import read_prose
+
+    sentence = "Tyvaso and Tyvaso DPI generated $42.2 million in the second quarter of 2022."
+    assert read_prose(sentence, product="Tyvaso", catalog=[]) != []
+
+
+def test_a_change_in_revenue_is_not_revenue():
+    """"increased revenues by $3.6 million" says how much it moved.
+
+    The sentence names one product, one period and one amount, so it passes
+    every other guard. An amount introduced by "by" is a difference; the same
+    sentence saying "totaled", "were" or "grew to" states the figure itself.
+    """
+    from app.extraction.prose import read_prose
+
+    delta = (
+        "The impact of the price change was to increase revenues from Remodulin "
+        "by approximately $3.6 million for the three months ended June 30, 2004."
+    )
+    assert read_prose(delta, product="Remodulin", catalog=["Remodulin"]) == []
+
+    level = "Sales of Remodulin for the three months ended June 30, 2004 totaled $16.2 million."
+    assert [v.value_as_reported for v in read_prose(level, product="Remodulin", catalog=["Remodulin"])] == [16.2]
+
+
+def test_a_figure_dated_inside_its_period_is_not_that_period_s_total():
+    """A running total is not the quarter's total.
+
+    "As of November 9, 2002 ... for the fourth quarter of 2002" is forty days
+    into a quarter with ten weeks still to run, and the $8.5m it reports is
+    short of the $9.7m the quarter finished on.
+    """
+    from app.extraction.prose import read_prose
+
+    running = (
+        "As of November 9, 2002, sales of Remodulin for the fourth quarter of "
+        "2002 totaled approximately $8.5 million."
+    )
+    assert read_prose(running, product="Remodulin", catalog=["Remodulin"]) == []
+
+
+def test_a_period_that_has_ended_is_not_a_cutoff():
+    """"the three months ended June 30" names a period, it does not truncate one."""
+    from app.extraction.prose import read_prose
+
+    sentence = "Sales of Remodulin totaled approximately $8.7 million in the three months ended June 30, 2002."
+    assert [v.period for v in read_prose(sentence, product="Remodulin", catalog=["Remodulin"])] == ["2002Q2"]
+
+
+# --- the adjudicator, replayed ----------------------------------------------
+#
+# These two ran from a script that also printed a report. The test imported
+# them across the repo, which made a test depend on a harness; the harness is
+# gone and the logic lives with the assertions that use it.
+
+GOLD = pathlib.Path(__file__).resolve().parents[2] / "seed" / "gold"
+
+
+def run_case(case: dict) -> tuple[str, str]:
+    kind, inputs = case["kind"], case["inputs"]
+    if kind == "reported_value":
+        if "solutions" in inputs:
+            verdict = adjudicate_positional_solutions(
+                inputs["requested_scope"],
+                [tuple(solution) for solution in inputs["solutions"]],
+            )
+        else:
+            verdict = adjudicate_reported_value(
+                inputs["requested_scope"],
+                [Candidate(**candidate) for candidate in inputs["candidates"]],
+            )
+    elif kind == "total_against_parts":
+        verdict = adjudicate_total_against_parts(
+            inputs["total"], inputs["parts"], expected_parts=inputs["expected_parts"]
+        )
+    elif kind == "split_ownership":
+        verdict = adjudicate_split_ownership_quarter(
+            inputs["period"], inputs["components"]
+        )
+    else:
+        raise ValueError(f"unknown fixture kind: {kind}")
+    return verdict.status, verdict.code
+
+
+def real_rows_that_trip() -> list[str]:
+    """Every complete year in gold, put through the same checks.
+
+    This is the false-positive guard. Each series is grouped into calendar
+    years, and any year with all four quarters is checked against the total
+    those quarters imply - the same call the pipeline makes when deriving. None
+    of them may come back as anything other than resolved.
+    """
+    quarterly = [
+        json.loads(line)
+        for line in (GOLD / "quarterly_revenue.jsonl").read_text().splitlines()
+        if line.strip()
+    ]
+    annual = [
+        json.loads(line)
+        for line in (GOLD / "annual_revenue.jsonl").read_text().splitlines()
+        if line.strip()
+    ]
+    # Normalised USD on both sides, never as-reported. Tracleer's annual series
+    # is Actelion's CHF and its quarterly series is J&J's own dollar conversion
+    # of the same history: comparing 1,020 francs against 1,035 dollars reports
+    # a contradiction that is only a currency. This is the category error the
+    # adjudicator is meant to catch, and it caught it here first.
+    totals = {
+        (row["drug_name"], str(row["period"])): row["value_normalized_usd_millions"]
+        for row in annual
+        if row.get("value_normalized_usd_millions") is not None
+    }
+
+    by_year: dict[tuple[str, int], dict[str, float]] = {}
+    for row in quarterly:
+        key = (row["drug_name"], row["calendar_year"])
+        usd = row.get("value_normalized_usd_millions")
+        if usd is None:
+            continue
+        by_year.setdefault(key, {})[row["period"]] = usd
+
+    tripped = []
+    for (drug, year), quarters in sorted(by_year.items()):
+        stated = totals.get((drug, str(year)))
+        if stated is None:
+            # No published year to check against; the quarters stand on their
+            # own citations and there is nothing here to adjudicate.
+            continue
+        verdict = adjudicate_total_against_parts(
+            stated, quarters, expected_parts=len(quarters)
+        )
+        if not verdict.resolved:
+            tripped.append(f"{drug} {year}: {verdict.code} - {verdict.detail}")
+
+    for row in quarterly:
+        components = row.get("bridge_components")
+        if components:
+            verdict = adjudicate_split_ownership_quarter(row["period"], components)
+            if not verdict.resolved:
+                tripped.append(f"{row['drug_name']} {row['period']}: {verdict.code}")
+    return tripped

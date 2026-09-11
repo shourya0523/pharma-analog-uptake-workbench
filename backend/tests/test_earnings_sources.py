@@ -124,13 +124,10 @@ def test_a_company_name_never_resolves_to_the_nearest_registrant():
 async def test_the_budget_counts_filings_so_a_filing_is_never_split(monkeypatch):
     """A quarter's exhibits are one disclosure; the cap must not cut between them.
 
-    Johnson & Johnson files two EX-99 documents per earnings 8-K, the press
+    A filer attaches two EX-99 documents to each earnings 8-K, the press
     release and the product-sales schedule. While the budget counted exhibits,
-    six of them bought three quarters - and the sixth took a press release and
-    left behind the schedule it belongs to, so that quarter was retrieved and
-    still unreadable. Measured over Uptravi, Stelara and Xarelto in 2018 and
-    2019: 9 of 24 gold quarters had no datapoint at all, every Q2 and the one
-    Q3 whose schedule fell the wrong side of the cut.
+    it could spend its last on a press release and leave behind the schedule
+    that belongs with it, so the quarter was retrieved and still unreadable.
     """
     from app.connectors.sources import SECConnector
     from app.storage.filestore import LocalFileStore
@@ -179,11 +176,10 @@ async def test_primary_filings_respect_the_window_they_were_fetched_for(monkeypa
     and skipped here, so this loop took the newest 10-K and 10-Q on the merged
     list every time.
 
-    What it cost: United Therapeutics' 10-Q for Q2 2005 carries a table row
-    reading `Remodulin $ 28,456`, which the existing table reader parses as
-    28.456 - gold exactly. Twenty-eight Remodulin quarters were not unreachable,
-    they were unqueried, and the prose reader filled the gap with total company
-    revenues from the 8-K instead.
+    What it cost: a 10-Q from 2005 carries a table row the existing table
+    reader parses correctly. Those quarters were not unreachable, they were
+    unqueried, and the prose reader filled the gap with total company revenues
+    from the 8-K instead.
     """
     from datetime import date
 

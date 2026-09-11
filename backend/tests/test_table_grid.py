@@ -16,9 +16,9 @@ from app.parsing.documents import (
 )
 from bs4 import BeautifulSoup
 
-# The shape Gilead files: the heading spans every value column, each year spans
-# its own three, and the figures themselves are spanned too.
-GILEAD_SHAPE = """
+# A shape filers use: the heading spans every value column, each year spans its
+# own three, and the figures themselves are spanned too.
+SPANNED_SHAPE = """
 <table>
   <tr><td></td><td></td><td colspan="7">Three Months Ended</td></tr>
   <tr><td></td><td></td><td colspan="7">March 31,</td></tr>
@@ -37,18 +37,18 @@ def grid_of(markup: str) -> list[list[str | None]]:
 
 def test_ragged_rows_are_why_a_column_index_means_nothing():
     """The flat reading, for contrast: the rows are not the same width."""
-    rows = html_tables(BeautifulSoup(GILEAD_SHAPE, "lxml"))[0]
+    rows = html_tables(BeautifulSoup(SPANNED_SHAPE, "lxml"))[0]
     widths = {len(row) for row in rows}
     assert len(widths) > 1, "expected the flat reading to produce ragged rows"
 
 
 def test_every_row_is_the_same_width():
-    grid = grid_of(GILEAD_SHAPE)
+    grid = grid_of(SPANNED_SHAPE)
     assert len({len(row) for row in grid}) == 1
 
 
 def test_a_heading_covers_the_columns_it_spans():
-    grid = grid_of(GILEAD_SHAPE)
+    grid = grid_of(SPANNED_SHAPE)
     # "Three Months Ended" starts at column 2 and continues to the end.
     assert grid[0][2] == "Three Months Ended"
     assert all(cell is None for cell in grid[0][3:9])
@@ -60,7 +60,7 @@ def test_a_heading_covers_the_columns_it_spans():
 
 def test_a_spanned_figure_is_reported_once_not_twice():
     """Values span too. Repeating text into covered columns would double them."""
-    grid = grid_of(GILEAD_SHAPE)
+    grid = grid_of(SPANNED_SHAPE)
     harvoni = next(row for row in grid if row[0] == "Harvoni - U.S.")
     assert [cell for cell in harvoni if cell not in (None, "")] == [
         "Harvoni - U.S.", "1,407", "3,016",
@@ -69,7 +69,7 @@ def test_a_spanned_figure_is_reported_once_not_twice():
 
 def test_a_figure_sits_under_the_year_that_spans_its_column():
     """The whole point: the column index now carries the same meaning in both rows."""
-    grid = grid_of(GILEAD_SHAPE)
+    grid = grid_of(SPANNED_SHAPE)
     years = grid[2]
     harvoni = next(row for row in grid if row[0] == "Harvoni - U.S.")
 
@@ -101,7 +101,7 @@ TEN_Q_SHAPE = """
 
 
 def test_each_column_carries_the_period_stated_above_it():
-    periods = column_periods(grid_of(GILEAD_SHAPE))
+    periods = column_periods(grid_of(SPANNED_SHAPE))
     # Three months ended March 31, under 2016 and under 2015 respectively.
     assert periods[2] == (3, 3, 2016)
     assert periods[3] == (3, 3, 2016)
@@ -125,7 +125,7 @@ def test_a_change_column_names_no_year_so_it_gets_no_period():
 
 def test_a_year_standing_alone_is_a_heading_not_a_figure():
     """If the year row read as data the headings would stop one row short."""
-    grid = grid_of(GILEAD_SHAPE)
+    grid = grid_of(SPANNED_SHAPE)
     assert column_periods(grid), "expected the year row to be read as a heading"
 
 
@@ -205,7 +205,7 @@ def test_a_single_line_item_is_enough_to_be_kept():
 
 
 def test_kept_tables_stay_in_document_order():
-    markup = "<body>" + SCHEDULE + LAYOUT * 3 + GILEAD_SHAPE + "</body>"
+    markup = "<body>" + SCHEDULE + LAYOUT * 3 + SPANNED_SHAPE + "</body>"
     kept = _kept(markup)
     assert len(kept) == 2
     assert any("Alfacept" in (cell or "") for row in kept[0] for cell in row)
@@ -214,7 +214,7 @@ def test_kept_tables_stay_in_document_order():
 
 def test_the_rows_and_the_rectangles_describe_the_same_tables():
     """If these ever drift, a value gets stamped with another table's period."""
-    markup = "<body>" + LAYOUT * 40 + SCHEDULE + LAYOUT * 5 + GILEAD_SHAPE + "</body>"
+    markup = "<body>" + LAYOUT * 40 + SCHEDULE + LAYOUT * 5 + SPANNED_SHAPE + "</body>"
     soup = BeautifulSoup(markup, "lxml")
     grids, rows = html_table_grids(soup), html_tables(soup)
     assert len(grids) == len(rows) == 2
@@ -234,9 +234,9 @@ def test_the_cap_sheds_the_least_table_like_rather_than_the_last():
 def test_a_long_schedule_is_not_cut_off_in_the_middle_of_a_product():
     """A row cap that binds on an ordinary filing decides what the table says.
 
-    Gilead's product sales summary runs past forty rows. Cut there, Stribild's
-    U.S. line stayed in and its other regions and its total fell outside, so the
-    one line left was published as the product's worldwide revenue.
+    A product sales summary runs past forty rows. Cut there, one product's
+    U.S. line stays in while its other regions and its total fall outside, so
+    the one line left is published as the product's worldwide revenue.
     """
     filler = "".join(
         f"<tr><td>Filler {n}</td><td>{n}</td><td>{n}</td></tr>" for n in range(45)
@@ -258,7 +258,7 @@ def test_a_long_schedule_is_not_cut_off_in_the_middle_of_a_product():
 def test_a_table_declares_its_unit_above_itself():
     """The document's first unit declaration belongs to whichever table it sits over.
 
-    A Gilead earnings exhibit states "(in millions)" over its guidance table and
+    An earnings exhibit states "(in millions)" over its guidance table and
     "(in thousands)" over the product sales summary five schedules later. A
     reader given the front of the document reads the first and scales the second
     by a thousand.

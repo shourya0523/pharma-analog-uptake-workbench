@@ -26,8 +26,10 @@ from __future__ import annotations
 import re
 from collections.abc import Iterable
 from dataclasses import dataclass
+from functools import lru_cache
 
 from app.extraction.extract import ExtractedValue
+from app.extraction.members import load_products, words
 from app.parsing.evidence import product_aliases
 from app.parsing.periods import MONTHS, quarter_of_month
 
@@ -85,11 +87,10 @@ _PAIRING_RE = re.compile(r"\brespectively\b", re.IGNORECASE)
 # footnote mark that may follow it belongs to the sentence rather than to
 # the next one. Requiring whitespace *immediately* after the terminator
 # meant a paragraph ending `studies.”` never split, so a sentence naming a
-# product ran on into the one after it: United Therapeutics' 2005 release
-# mentions Remodulin in a sentence about clinical trials and states total
-# company revenues in the next, and the reader paired the product from one
-# with the amount from the other. Every such pairing was high by 4-8%,
-# because a company total is a little larger than the product.
+# product ran on into the one after it: a release mentions a product in a
+# sentence about clinical trials and states total company revenues in the next,
+# and the reader paired the product from one with the amount from the other,
+# which reads high because a company total is larger than any one product in it.
 _SENTENCE_SPLIT_RE = re.compile(r"(?<=[.;])[\"'\u201d\u2019)\]]*\s+")
 
 
@@ -174,9 +175,9 @@ def _amounts_with_positions(sentence: str) -> list[tuple[int, tuple[float, str, 
             unit = _MAGNITUDE_TO_UNIT[magnitude.lower()]
         else:
             # An amount too small to print in millions is written out in full:
-            # United Therapeutics reported Remodulin's first quarter on sale as
-            # "$205,000". Without this the figure is invisible and the quarter
-            # looks unreported rather than small.
+            # a product's first quarter on sale is reported as "$205,000".
+            # Without this the figure is invisible and the quarter looks
+            # unreported rather than small.
             #
             # Two conditions keep this from swallowing every bare number in a
             # filing: a currency symbol must be attached, and the amount must be
@@ -219,18 +220,91 @@ def _interleaved(
     return [kind for _, kind in marks] == expected
 
 
+@lru_cache(maxsize=1)
+def _catalog() -> tuple[str, ...]:
+    """The products this pipeline tracks, from its own reference data."""
+    return tuple(load_products())
+
+
+# An amount introduced by "by" is a difference, not a level: "increased
+# revenues by $3.6 million" says how much revenue moved, not what it was.
+# "totaled $8.5 million", "were $120.8 million" and "grew to $325.8 million"
+# all state the figure itself.
+_DIFFERENCE_RE = re.compile(r"\bby\s+(?:approximately\s+|about\s+|roughly\s+)?$", re.IGNORECASE)
+
+# A figure stated to a date part-way through the period it names is that
+# period's running total, not its total: "As of November 9, 2002, sales for the
+# fourth quarter of 2002 totaled approximately $8.5 million" is forty days into
+# a quarter that has ten weeks left to run.
+_PART_PERIOD_RE = re.compile(
+    r"\b(?:as of|through|as at|to date)\b(?![^.]*\bend(?:ed|ing)\b)", re.IGNORECASE
+)
+
+
+def _states_a_level(sentence: str, position: int) -> bool:
+    """Whether the amount at ``position`` is revenue rather than a move in it."""
+    return not _DIFFERENCE_RE.search(sentence[:position])
+
+
+def _named_products(sentence: str, catalog: Iterable[str]) -> set[str]:
+    """Which tracked products a sentence names.
+
+    Names are matched as whole words and the longest wins where two overlap: a
+    sentence saying "Calderon XR" names that product, and is not evidence that
+    it also names Calderon. This is the rule the XBRL member register already
+    resolves by, for the same reason - a shorter product name sits inside a
+    longer one far more often than it is a second product.
+    """
+    tokens = words(sentence)
+    spans: list[tuple[int, int, str]] = []
+    for product in catalog:
+        parts = words(product)
+        if not parts:
+            continue
+        width = len(parts)
+        spans += [
+            (start, width, product)
+            for start in range(len(tokens) - width + 1)
+            if tokens[start : start + width] == parts
+        ]
+    return {
+        product
+        for start, width, product in spans
+        if not any(
+            other_start <= start
+            and start + width <= other_start + other_width
+            and other_width > width
+            for other_start, other_width, _ in spans
+        )
+    }
+
+
 def read_prose(
     text: str,
     *,
     product: str,
     generic: str | None = None,
     extra_aliases: Iterable[str] | None = None,
+    catalog: Iterable[str] | None = None,
 ) -> list[ExtractedValue]:
     """Revenue figures stated in sentences that name this product.
 
-    A sentence contributes a value only when it names exactly one period and
-    one amount, so which number belongs to which period is stated rather than
-    inferred.
+    A sentence contributes a value only when it names exactly one period, one
+    amount and one product, so what each number belongs to is stated rather
+    than inferred.
+
+    The third of those was missing, and it is the same principle as the other
+    two. A sentence was accepted whenever an alias appeared anywhere in it, so
+    a sentence naming two products answered a question about either of them
+    with the same figure: a sentence stating a new formulation's first quarter
+    on sale beside the established formulation's answered both with whichever
+    amount it found. A sentence covering two products has not said which one its
+    amount belongs to, exactly as a sentence carrying two amounts has not said
+    which period each belongs to.
+
+    ``catalog`` is what to count as a product, defaulting to the ones this
+    pipeline tracks. Ambiguity is a property of the sentence against the things
+    it could be confused with, so a caller tracking nothing loses nothing.
     """
     aliases = [alias.lower() for alias in product_aliases(product, generic, extra=extra_aliases)]
     values: list[ExtractedValue] = []
@@ -239,8 +313,21 @@ def read_prose(
         lowered = sentence.lower()
         if not any(alias in lowered for alias in aliases):
             continue
+        known = _named_products(sentence, catalog if catalog is not None else _catalog())
+        if len(known) > 1 or (known and product not in known):
+            # The sentence covers more than this product, or the name it does
+            # carry is a longer one belonging to something else.
+            continue
+        if _PART_PERIOD_RE.search(sentence):
+            # The figure is stated to a date inside the period it names, so it
+            # is what had been sold by then rather than what the period sold.
+            continue
         located_periods = _periods_with_positions(sentence)
-        located_amounts = _amounts_with_positions(sentence)
+        located_amounts = [
+            (position, amount)
+            for position, amount in _amounts_with_positions(sentence)
+            if _states_a_level(sentence, position)
+        ]
         periods = [period for _, period in located_periods]
         amounts = [amount for _, amount in located_amounts]
         if len(periods) == 1 and len(amounts) == 1:

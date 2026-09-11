@@ -1,0 +1,4 @@
+drug_name,generic_name,manufacturer,ticker,cik,since
+Wegovy,semaglutide,Novo Nordisk,NVO,0000353278,2024-06-01
+Dupixent,dupilumab,Sanofi,SNY,0001121404,2024-06-01
+Kisqali,ribociclib,Novartis,NVS,0001114448,2024-06-01

@@ -7,8 +7,8 @@ always fills that field itself (see app/extraction/candidates.py). The
 orchestrator used to fall back to an inline if/elif/else that only handled
 "billion" and "thousand" substrings and silently assumed millions for
 anything else - including "units", which is off by a factor of one million
-(e.g. a Remodulin-style "205000 units" figure, 0.205 USD millions, would
-have been persisted as 205000 USD millions).
+(e.g. a "205000 units" figure, 0.205 USD millions, would have been persisted
+as 205000 USD millions).
 """
 
 from __future__ import annotations

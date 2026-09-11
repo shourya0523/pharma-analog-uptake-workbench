@@ -11,10 +11,9 @@ confidence at 0.55 - is the correct contract for a model's guess at a blank
 field. The row was then disqualified from auto_pass twice: by the flag, and by
 a confidence the quality gate's 0.7 floor rejects.
 
-Measured over four products, two issuers and two years before the fix: 27 of
-the 41 quarterly datapoints landing on a gold quarter carried
-`field_enrichment_applied`, for this fill alone in 26 of them; 21 of those had
-been judged "supported" with nothing else against them and none was published.
+Before the fix most datapoints landing on an answerable quarter carried
+`field_enrichment_applied` for this fill alone, including ones the judge had
+called "supported" with nothing else against them, and none was published.
 """
 
 from __future__ import annotations
@@ -100,8 +99,7 @@ async def test_an_unsettled_conflict_falls_through_to_the_ranking(tmp_path):
     winner named, every id in the entry was marked a loser, and the
     source-priority fallback then skipped the group because it already
     contained losers - so a schedule reading 54.0 and a sentence reading 13.4
-    were both withheld and the quarter went unanswered. Measured once in a
-    sample of 32: Orenitram 2019Q2.
+    were both withheld and the quarter went unanswered.
     """
     db, orch, job, table_row = _job(tmp_path, revenue_scope="Product family", formulation=None)
     prose_row = DatapointORM(
@@ -154,11 +152,11 @@ def test_a_schedule_outranks_a_sentence_from_the_same_exhibit():
 def test_a_figure_and_its_normalisation_that_disagree_cannot_publish():
     """Every check reads `value_reported`; a consumer reads the normalized one.
 
-    Remodulin 2009Q3 arrived from the model reported as 87.4 with 87,400 beside
-    it as USD millions, and was published carrying
+    A candidate arrived from the model reported as 87.4 with 87,400 beside it
+    as USD millions, and was published carrying
     `deterministic:product_quote_value_ok` - because the judge confirms 87.4
     against a quote that says 87.4, and nothing anywhere looked at the figure
-    that reaches a reader. Gold is 87.4.
+    that reaches a reader.
 
     The candidate's own two numbers are enough to catch it: 87.4 in millions is
     87.4, not 87,400.

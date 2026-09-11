@@ -1,0 +1,6 @@
+drug_name,generic_name,manufacturer,ticker,cik,since
+Skyrizi,risankizumab,AbbVie,ABBV,0001551152,2024-06-01
+Trikafta,elexacaftor/tezacaftor/ivacaftor and ivacaftor,Vertex Pharmaceuticals,VRTX,0000875320,2024-06-01
+Repatha,evolocumab,Amgen,AMGN,0000318154,2024-06-01
+Arikayce,amikacin liposome inhalation suspension,Insmed,INSM,0001104506,2024-06-01
+Amvuttra,vutrisiran,Alnylam Pharmaceuticals,ALNY,0001178670,2024-06-01

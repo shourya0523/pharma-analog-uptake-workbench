@@ -1,0 +1,158 @@
+{
+ "cases": 18,
+ "passed": 17,
+ "resolve": [
+  7,
+  8
+ ],
+ "refuse": [
+  10,
+  10
+ ],
+ "results": [
+  {
+   "issuer": "Organon",
+   "member": "ogn:CozaarHyzaarMember",
+   "expected": "Cozaar",
+   "got": "Cozaar",
+   "reason": "CozaarHyzaar is a brand and its fixed-dose combination, reported as one product.",
+   "ok": true
+  },
+  {
+   "issuer": "Organon",
+   "member": "ogn:NexplanonImplanonNXTMember",
+   "expected": "Nexplanon",
+   "got": "Nexplanon",
+   "reason": "NexplanonImplanonNXTMember refers to one implant under two market names, Nexplanon and Implanon NXT.",
+   "ok": true
+  },
+  {
+   "issuer": "Organon",
+   "member": "ogn:MarvelonMercilonMember",
+   "expected": "Marvelon",
+   "got": "Marvelon",
+   "reason": "The member name 'MarvelonMercilon' suggests a combination of Marvelon and Mercilon, and since Mercilon is not tagged separately, it is likely a single product line for Marvelon.",
+   "ok": true
+  },
+  {
+   "issuer": "Bristol-Myers Squibb",
+   "member": "bmy:PomalystImnovidMember",
+   "expected": "Pomalyst",
+   "got": "Pomalyst",
+   "reason": "Pomalyst and Imnovid are the same product under different market names.",
+   "ok": true
+  },
+  {
+   "issuer": "Bristol-Myers Squibb",
+   "member": "bmy:OnglyzaKombiglyzeMember",
+   "expected": "Onglyza",
+   "got": "Onglyza",
+   "reason": "The member 'bmy:OnglyzaKombiglyzeMember' refers to Onglyza and its combination product Kombiglyze, which is a formulation of Onglyza.",
+   "ok": true
+  },
+  {
+   "issuer": "Bristol-Myers Squibb",
+   "member": "bmy:AvaproAvalideMember",
+   "expected": "Avapro",
+   "got": null,
+   "reason": "The member is a roll-up over Avapro and Avalide, and Avapro is tagged separately.",
+   "ok": false
+  },
+  {
+   "issuer": "Bristol-Myers Squibb",
+   "member": "bmy:AvaproAvalideAndPlavixMember",
+   "expected": null,
+   "got": null,
+   "reason": "The member is a roll-up over AvaproAvalide and Plavix, both of which are tagged separately.",
+   "ok": true
+  },
+  {
+   "issuer": "Incyte",
+   "member": "incy:JKFIAndICLUSIGProductMember",
+   "expected": null,
+   "got": null,
+   "reason": "The member is a roll-up over Iclusig and Jakafi, both of which are tagged separately.",
+   "ok": true
+  },
+  {
+   "issuer": "Bristol-Myers Squibb",
+   "member": "bmy:SustivaFranchiseMember",
+   "expected": null,
+   "got": null,
+   "reason": "The member names a franchise, not a specific product.",
+   "ok": true
+  },
+  {
+   "issuer": "Bristol-Myers Squibb",
+   "member": "bmy:HepatitisCPortfolioMember",
+   "expected": null,
+   "got": null,
+   "reason": "The member 'HepatitisCPortfolioMember' is a category and does not match any specific product in the candidate list.",
+   "ok": true
+  },
+  {
+   "issuer": "Viatris",
+   "member": "vtrs:EpiPenAutoInjectorsMember",
+   "expected": "EpiPen",
+   "got": "EpiPen",
+   "reason": "The member 'vtrs:EpiPenAutoInjectorsMember' refers to EpiPen, as it is the same product under another name.",
+   "ok": true
+  },
+  {
+   "issuer": "Eli Lilly",
+   "member": "lly:CyramzaMemberDomain",
+   "expected": "Cyramza",
+   "got": "Cyramza",
+   "reason": "The member 'lly:CyramzaMemberDomain' directly corresponds to the product Cyramza.",
+   "ok": true
+  },
+  {
+   "issuer": "Ionis",
+   "member": "ions:SPINRAZARoyaltiesMember",
+   "expected": null,
+   "got": null,
+   "reason": "The member names royalties rather than a product's own sales.",
+   "ok": true
+  },
+  {
+   "issuer": "Incyte",
+   "member": "incy:JAKAVIRoyaltyRevenuesMember",
+   "expected": null,
+   "got": null,
+   "reason": "The member names a royalty revenue rather than a product's own sales.",
+   "ok": true
+  },
+  {
+   "issuer": "Viatris",
+   "member": "vtrs:ComplexGXAndBiosimilarsMember",
+   "expected": null,
+   "got": null,
+   "reason": "The member 'ComplexGXAndBiosimilarsMember' appears to be a category or roll-up rather than a specific product.",
+   "ok": true
+  },
+  {
+   "issuer": "Bristol-Myers Squibb",
+   "member": "bmy:InLineProductsAndNewProductPortfolioMember",
+   "expected": null,
+   "got": null,
+   "reason": "The member 'InLineProductsAndNewProductPortfolioMember' is a category that includes multiple products, not a single product.",
+   "ok": true
+  },
+  {
+   "issuer": "Teva",
+   "member": "teva:GenericsMediciansIncludingOtcAndBiosimilarsMember",
+   "expected": null,
+   "got": null,
+   "reason": "The member names a category that includes generics, OTC, and biosimilars, not a specific product.",
+   "ok": true
+  },
+  {
+   "issuer": "Eli Lilly",
+   "member": "lly:OtherOncologyMember",
+   "expected": null,
+   "got": null,
+   "reason": "The member 'OtherOncologyMember' is a catch-all category for oncology products not individually listed, and does not specifically name any candidate product.",
+   "ok": true
+  }
+ ]
+}

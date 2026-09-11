@@ -14,12 +14,13 @@ Two rules here were bought with wrong answers:
 
 * An issuer is resolved by ticker first, then by an exact match on its
   normalised name, and an ambiguous name resolves to nothing. Matching on a
-  prefix once resolved "United" to a company that was not United Therapeutics,
-  and a filing from the wrong company is worse than no filing.
-* Every EX-99 exhibit of an earnings 8-K is read, not the first. Johnson &
-  Johnson puts its press release in EX-99.1 and its product sales schedules in
-  EX-99.2, so taking one exhibit per filing took the one with no table in it -
-  which read as "this issuer does not disclose product sales" for 424 rows.
+  prefix resolves a one-word query to whichever registrant happens to start
+  with it, and a filing from the wrong company is worse than no filing.
+* Every EX-99 exhibit of an earnings 8-K is read, not the first. A filer that
+  separates its press release from its schedules puts the release in EX-99.1
+  and the product sales tables in EX-99.2, so taking one exhibit per filing
+  takes the one with no table in it, which reads as "this issuer does not
+  disclose product sales".
 """
 
 from __future__ import annotations
@@ -38,6 +39,11 @@ from app.domain.models import RetrievalStatus, RetrievedSource, SourceType, new_
 from app.storage.filestore import FileStore
 
 logger = logging.getLogger(__name__)
+
+# Which forms report a year rather than a quarter. This picks the label a
+# retrieved source carries; it decides nothing about what is read, and a form
+# not named here is labelled quarterly.
+ANNUAL_FORMS = frozenset({"10-K", "10-K405", "10-KT", "20-F", "40-F", "11-K"})
 
 
 # Shared across connector instances so concurrent jobs don't stampede EDGAR
@@ -68,7 +74,7 @@ def parse_filing_date(value: object) -> date | None:
         return None
 
 
-# Corporate suffixes carry no identity: "Gilead Sciences, Inc." and "Gilead
+# Corporate suffixes carry no identity: "Acme Sciences, Inc." and "Acme
 # Sciences Inc" are the same registrant, and the SEC title uses whichever the
 # filer registered with.
 _REGISTRANT_SUFFIXES = {
@@ -91,17 +97,66 @@ def normalize_registrant(name: str) -> str:
 def is_earnings_exhibit(filename: str) -> bool:
     """True for exhibit 99.x documents, which carry the product revenue tables.
 
-    Issuers name these inconsistently (``uthrq12024-ex991.htm``,
-    ``exhibit991uthr12312024.htm``, ``tm2620809d1_ex99-1.htm``), so match on the
-    alphanumeric-only form of the name rather than a fixed pattern.
+    Issuers name these inconsistently - a ticker and a period
+    (``acmeq12024-ex991.htm``), the word spelled out in full
+    (``exhibit991acme12312024.htm``), or a filing agent's own identifier with no
+    company name in it at all (``tm1234567d1_ex99-1.htm``) - so match on the
+    alphanumeric-only form of the name rather than on a fixed pattern.
     """
     name = (filename or "").rsplit("/", 1)[-1].lower()
     if not name.endswith((".htm", ".html", ".txt")):
         return False
     squashed = re.sub(r"[^a-z0-9]", "", name)
-    # Written "ex991", "exx991" (a doubled x survives in UTHR's names),
-    # "exh991" as Gilead abbreviates it, or "exhibit991" in full.
+    # Written "ex991", "exx991" (a doubled x survives some filers' names),
+    # "exh991" where the word is abbreviated, or "exhibit991" in full.
     return bool(re.search(r"ex+(?:h(?:ibit)?)?9{2}", squashed))
+
+
+def _calculation_linkbase(documents: list[str]) -> str | None:
+    """The calculation linkbase in one filing's directory.
+
+    It is the file the filer's own arithmetic lives in - which element is
+    added into which total and which is taken away - and every XBRL filing
+    ships one beside the instance under the same stem with a ``_cal`` suffix.
+    Matched on the suffix alone, so it needs nothing the instance match needs.
+    """
+    return next((name for name in documents if name and name.endswith("_cal.xml")), None)
+
+
+def _instance_document(documents: list[str]) -> str | None:
+    """The XBRL instance in one filing's directory, in either era's spelling.
+
+    A filing's facts live in its instance document, and how that document is
+    named changed with inline XBRL. Before it, the instance was a plain
+    ``acme-20160930.xml`` beside the filing's HTML; after it, the HTML *is* the
+    instance and the filer ships an extracted copy as ``acme-20250930_htm.xml``.
+
+    This selected on the ``_htm.xml`` spelling alone, so it saw the second and
+    silently skipped the first - every filer's pre-2019 filings, discarded one
+    at a time as "no instance". The comment here explained the resulting gap as
+    the SEC's, saying a filing from before 2019 "yields an instance with no
+    product facts in it", and that is not true. Those instances tag products on
+    the ProductOrService axis; they were never fetched to find out.
+
+    The anchor that works in both eras is the filing's own extension schema:
+    the instance shares the ``.xsd``'s stem and the linkbases beside it
+    (``_cal``, ``_def``, ``_lab``, ``_pre``) do not, so matching on the stem
+    picks the instance without knowing the filer's ticker, the period, or which
+    era the filing belongs to. A filing may carry more than one ``.xsd``, so the
+    loop takes the first stem that has an instance beside it.
+    """
+    names = [name for name in documents if name]
+    available = set(names)
+    for schema in sorted(name for name in names if name.endswith(".xsd")):
+        stem = schema[: -len(".xsd")]
+        # Inline filings ship both the schema and an extracted instance; the
+        # `_htm` copy is the instance and `{stem}.xml` is not present.
+        for candidate in (f"{stem}_htm.xml", f"{stem}.xml"):
+            if candidate in available:
+                return candidate
+    # A filing with no extension schema is unusual but not impossible; fall
+    # back to the spelling this used to look for rather than to nothing.
+    return next((name for name in names if name.endswith("_htm.xml")), None)
 
 
 class SECConnector:
@@ -135,11 +190,11 @@ class SECConnector:
         title carries punctuation and a corporate suffix that a caller rarely
         reproduces, so both sides are normalized before comparing. What this
         must never do is return the nearest match - an unanchored substring
-        search made "United" resolve to an unrelated registrant, and every
-        figure taken from that company's filings would then have been attributed
-        to United Therapeutics with nothing downstream able to notice. Several
-        matches means the question was ambiguous, and the honest answer to an
-        ambiguous question is no answer.
+        search resolves a one-word query to whichever registrant happens to
+        contain it, and every figure taken from that company's filings would
+        then be attributed to the company that was asked for, with nothing
+        downstream able to notice. Several matches means the question was
+        ambiguous, and the honest answer to an ambiguous question is no answer.
         """
         if not ticker and not company_name:
             return None
@@ -178,8 +233,8 @@ class SECConnector:
         SEC returns 503 or 429 under load rather than a permanent error, and a
         single one costs a whole filing. It is worth distinguishing from a real
         failure: a document silently missing because of a rate limit reads
-        downstream as an issuer that discloses nothing, and moved three rows
-        between two runs of the same code while this had no retry at all.
+        downstream as an issuer that discloses nothing, so without a retry the
+        same code answers differently from one run to the next.
         """
         delay = 1.0
         for attempt in range(attempts):
@@ -315,12 +370,10 @@ class SECConnector:
 
         # The budget counts filings, not exhibits, because a filing is a
         # quarter and its exhibits are one disclosure split across documents.
-        # Counting exhibits truncated mid-filing: Johnson & Johnson files two
-        # EX-99s per 8-K, so six exhibits bought three quarters, and the sixth
-        # took a press release while leaving behind the product-sales schedule
-        # it belongs to. Measured over Uptravi, Stelara and Xarelto in 2018 and
-        # 2019, that lost 9 of 24 quarters - every Q2, and the one Q3 whose
-        # schedule fell the wrong side of the cut.
+        # Counting exhibits truncates mid-filing: where a filer attaches two
+        # EX-99s to each 8-K, a budget of six exhibits buys three quarters and
+        # spends its last on a press release while leaving behind the
+        # product-sales schedule that belongs with it.
         sources: list[RetrievedSource] = []
         filings_read = 0
         for i, form in enumerate(forms):
@@ -347,8 +400,8 @@ class SECConnector:
             # Every exhibit, not the first one. An issuer that separates its
             # press release from its schedules puts the prose in EX-99.1 and the
             # product-level sales in EX-99.2, and taking one exhibit per filing
-            # takes the wrong one: Johnson & Johnson's EX-99.1 carries no table
-            # at all while its EX-99.2 carries twenty-two. Nothing in the
+            # takes the wrong one: such a release carries no table at all while
+            # the schedule beside it carries every product. Nothing in the
             # numbering says which is which, so the way to not choose wrongly is
             # not to choose - reading an exhibit that holds no product table
             # costs a parse, and skipping the one that does costs the quarter.
@@ -420,29 +473,47 @@ class SECConnector:
         since: date | None,
         until: date | None,
     ) -> list[RetrievedSource]:
-        """The tagged instance from each 10-Q or 10-K covering this window.
+        """The tagged instance from each filing in this window that carries one.
 
-        A quarterly report states its product revenue in XBRL - the period, the
-        unit and the product as declared facts rather than as a table to read.
-        The 8-K exhibits fetched beside these carry no tagging at all, so this
-        is the only route to a figure the filer has stated rather than printed.
+        A report states its product revenue in XBRL - the period, the unit and
+        the product as declared facts rather than as a table to read - and
+        which filings do that is not a property of the form. This asked only
+        10-Q and 10-K, which is a domestic filer's shape; a foreign private
+        issuer reports its quarter on a 6-K, and one of them tags the whole
+        product schedule inline. Asking by form read those filings as untagged
+        when they carry hundreds of product facts.
 
-        It reaches back only as far as the filer's own tagging does: detail
-        tagging of the revenue note arrived with inline XBRL, phased by filer
-        size from 2019 to 2021, and a filing from before that yields an instance
-        with no product facts in it. Nothing here needs to know the date - the
-        reader simply finds nothing, which is the correct answer.
+        So the form is not consulted. EDGAR states per filing whether it has
+        XBRL, which is the same question without the guess, and turns a
+        thousand filings into a few dozen; `_instance_document` then confirms
+        it from the filing's own directory. A filing the index says nothing
+        about is inspected anyway, up to a budget, so a missing flag costs
+        requests rather than coverage.
+
+        It reaches back only as far as the filer's own tagging does, and that
+        is a per-filer fact rather than a date. Nothing here needs to know when
+        each filer started - the reader simply finds nothing, which is the
+        correct answer for a filing that has nothing.
         """
         cik_int = str(int(cik))
         forms = recent.get("form", [])
         accessions = recent.get("accessionNumber", [])
         filing_dates = recent.get("filingDate", [])
+        tagged = recent.get("isXBRL", []) or []
         sources: list[RetrievedSource] = []
+        # Directory listings for filings the index does not classify. A bound on
+        # requests, not a claim about which filings are worth reading.
+        unclassified_budget = 25
         for index, form in enumerate(forms):
             if len(sources) >= max_filings:
                 break
-            if form not in {"10-Q", "10-K"}:
+            if index < len(tagged):
+                if not tagged[index]:
+                    continue
+            elif unclassified_budget <= 0:
                 continue
+            else:
+                unclassified_budget -= 1
             filed_on = parse_filing_date(filing_dates[index] if index < len(filing_dates) else None)
             if (since and (filed_on is None or filed_on < since)) or (
                 until and (filed_on is None or filed_on > until)
@@ -451,26 +522,38 @@ class SECConnector:
             accession = accessions[index]
             acc_nodash = accession.replace("-", "")
             documents = await self._list_filing_documents(client, cik_int, acc_nodash)
-            # The extracted instance a filer ships beside an inline-XBRL
-            # document: same facts, without the presentation wrapped round them.
-            instances = [name for name in documents if name.endswith("_htm.xml")]
-            if not instances:
+            instance = _instance_document(documents)
+            if not instance:
                 logger.info("sec_no_xbrl_instance accession=%s form=%s", accession, form)
                 continue
             sid = new_id()
-            url = f"{self.ARCHIVES}/{cik_int}/{acc_nodash}/{instances[0]}"
+            url = f"{self.ARCHIVES}/{cik_int}/{acc_nodash}/{instance}"
             try:
                 _raw, from_cache, job_key = await self._fetch_document(
-                    client, url=url, accession=accession, doc=instances[0],
+                    client, url=url, accession=accession, doc=instance,
                     run_id=run_id, job_id=job_id, source_id=sid,
                 )
             except Exception as exc:
                 logger.info("sec_xbrl_fetch_failed accession=%s error=%s", accession, exc)
                 continue
+            # The filing's arithmetic, so the reader can tell a sale from a
+            # cost of one without counting or guessing. Its absence is not a
+            # failure; the reader then asks about what it cannot place.
+            calculation_key = None
+            calculation = _calculation_linkbase(documents)
+            if calculation:
+                try:
+                    _raw, _cached, calculation_key = await self._fetch_document(
+                        client, url=f"{self.ARCHIVES}/{cik_int}/{acc_nodash}/{calculation}",
+                        accession=accession, doc=calculation,
+                        run_id=run_id, job_id=job_id, source_id=f"{sid}-cal",
+                    )
+                except Exception as exc:
+                    logger.info("sec_calculation_fetch_failed accession=%s error=%s", accession, exc)
             sources.append(
                 RetrievedSource(
                     source_id=sid,
-                    source_type=(SourceType.ANNUAL_REPORT if form == "10-K"
+                    source_type=(SourceType.ANNUAL_REPORT if form in ANNUAL_FORMS
                                  else SourceType.QUARTERLY_REPORT),
                     url=url,
                     title=f"{form} XBRL instance {filing_dates[index] if index < len(filing_dates) else ''}".strip(),
@@ -479,7 +562,8 @@ class SECConnector:
                     accession_number=accession,
                     storage_key=job_key,
                     retrieval_status=RetrievalStatus.SUCCESS,
-                    metadata={"cik": cik, "from_cache": from_cache, "xbrl_instance": True},
+                    metadata={"cik": cik, "from_cache": from_cache, "xbrl_instance": True,
+                              "calculation_key": calculation_key},
                 )
             )
         logger.info("sec_xbrl_instances cik=%s retrieved=%s", cik, len(sources))

@@ -1,9 +1,9 @@
 """Build the register that maps a filer's XBRL member names to our products.
 
-An axis member is a private invention - ``uthr:TyvasoDPIMember``,
-``gild:HIVProductsBiktarvyMember`` - and there is no central registry of them.
-This walks the issuers we track, collects every member they tag revenue on, and
-resolves each one:
+An axis member is a private invention - ``acme:CalderonXRMember``,
+``beta:RespiratoryProductsNuVessaMember`` - and there is no central registry of
+them. This walks the issuers we track, collects every member they tag revenue
+on, and resolves each one:
 
     string rules   whole-word matching, longest wins (app/extraction/members.py)
     a model        only for what the rules cannot place
@@ -11,10 +11,18 @@ resolves each one:
 
 The point of writing it down is that each decision is made once. The register is
 a small CSV in version control, so a mapping arrives as a reviewable diff rather
-than as behaviour that changed inside a model call.
+than as behaviour that changed inside a model call. That file seeds
+``xbrl_member_resolutions``, which is what a running deployment reads and adds
+to; this script is how the table is warmed in bulk before anyone asks, rather
+than the only way it can ever grow.
 
     SEC_CONTACT='project you@example.com' python scripts/build_member_register.py
     SEC_CONTACT='...' python scripts/build_member_register.py --no-llm
+    SEC_CONTACT='...' python scripts/build_member_register.py \
+        --issuer 'Acme Pharma=1234567' --product Calderon
+
+A member left unresolved is re-asked when the candidate list changes, because a
+decision that nothing matched was only ever about the list it was shown.
 """
 
 from __future__ import annotations
@@ -35,13 +43,20 @@ REPO = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "backend"))
 
 from app.extraction.members import (
-    NOT_A_PRODUCT,
+    VERDICT_NO_CANDIDATE_MATCH,
+    VERDICT_PRODUCT,
     Resolution,
+    fingerprint,
     load_register,
     match,
     save_register,
 )
 from app.llm.client import LLMModules
+from app.parsing.notes_datasets import (
+    iter_facts,
+    load_dimensions,
+    load_submissions,
+)
 from app.parsing.xbrl import parse_facts, product_facts
 
 UA = os.environ.get("SEC_CONTACT")
@@ -53,7 +68,8 @@ UA = os.environ.get("SEC_CONTACT")
 # that way round and must not be reversed.
 ATTRIBUTES = REPO / "seed" / "product_attributes.csv"
 
-# The issuers gold tracks. A new issuer is added here and the register regrows.
+# The issuers to warm in bulk. One more is `--issuer NAME=CIK` rather than an
+# edit here; this list is the set worth having before anyone asks.
 ISSUERS = {
     "Gilead": 882095,
     "Johnson & Johnson": 200406,
@@ -95,9 +111,49 @@ def recent_instances(cik: int, forms=("10-Q", "10-K"), per_form: int = 2) -> lis
     return urls
 
 
-def members_by_issuer() -> dict[str, set[str]]:
+def members_from_notes(
+    roots: list[pathlib.Path], issuers: dict[str, int] | None = None
+) -> dict[str, set[str]]:
+    """Members an issuer tagged in the eras these extracts cover.
+
+    `recent_instances` reads the newest filings, which carry the *current*
+    names. That is the right source for what a filer tags today and no source
+    at all for what it tagged before: a brand renamed, a co-formulation the
+    issuer stopped breaking out, a drug tagged by its generic components until
+    it had a brand. Those members exist only in older filings, so the register
+    could never resolve them, and the pipeline read their quarters as an issuer
+    that tags nothing.
+
+    The bulk extracts carry every filer's members per month back to 2009 and
+    are already parsed by `notes_datasets`, so history costs a download rather
+    than a second walk over EDGAR's older instance layouts.
+    """
+    issuers = issuers or ISSUERS
+    by_cik = {cik: issuer for issuer, cik in issuers.items()}
+    found: dict[str, set[str]] = {issuer: set() for issuer in issuers}
+    for root in roots:
+        if not (root / "num.tsv").exists():
+            print(f"  {root.name}: not an extract, skipped")
+            continue
+        subs = load_submissions(root, ciks=set(by_cik), forms={"10-K", "10-Q"})
+        if not subs:
+            continue
+        dims = load_dimensions(root)
+        seen = 0
+        for adsh, fact in iter_facts(root, submissions=subs, dimensions=dims):
+            member = fact.product_member
+            if member:
+                found[by_cik[subs[adsh].cik]].add(member)
+                seen += 1
+        print(f"  {root.name:<12}{len(subs):>3} filings, {seen:>6} product facts")
+    for issuer, members in found.items():
+        print(f"  {issuer:<22}{len(members):>3} members tagged")
+    return found
+
+
+def members_by_issuer(issuers: dict[str, int] | None = None) -> dict[str, set[str]]:
     found: dict[str, set[str]] = {}
-    for issuer, cik in ISSUERS.items():
+    for issuer, cik in (issuers or ISSUERS).items():
         members: set[str] = set()
         for url in recent_instances(cik):
             try:
@@ -118,6 +174,7 @@ async def ask_model(
     llm = LLMModules()
     answers: dict[tuple[str, str], Resolution] = {}
     for issuer, member, siblings, candidates in pending:
+        mark = fingerprint(candidates)
         try:
             reply = await llm.resolve_xbrl_member(
                 issuer=issuer, member=member, siblings=siblings, candidates=candidates
@@ -130,10 +187,18 @@ async def ask_model(
         confidence = float((reply or {}).get("confidence") or 0)
         answers[(issuer, member)] = Resolution(
             member=member,
-            product=product or NOT_A_PRODUCT,
+            product=product or None,
             method="llm",
             confidence=confidence,
             note=reason[:200],
+            # A model asked "which of these products does this member name" can
+            # answer "none of them". It cannot answer "none at all" - that the
+            # member is a category line rather than a product it has not been
+            # shown - so a refusal is recorded against this candidate list and
+            # not as a fact about the member. Only a reviewer sets
+            # `not_a_product`.
+            verdict=VERDICT_PRODUCT if product else VERDICT_NO_CANDIDATE_MATCH,
+            candidates_fingerprint="" if product else mark,
         )
         verdict = product or "(nothing)"
         print(f"    {member.split(':')[-1]:<44} -> {verdict}  [{confidence:.2f}] {reason[:70]}")
@@ -144,17 +209,41 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--no-llm", action="store_true",
                         help="string rules only; leave the rest unresolved")
+    parser.add_argument("--from-notes", type=pathlib.Path, action="append", metavar="DIR",
+                        help="collect members from an unzipped Financial Statement and "
+                             "Notes Data Set instead of the newest filings; repeatable, "
+                             "and the way to reach members an issuer no longer uses")
+    parser.add_argument("--issuer", action="append", default=[], metavar="NAME=CIK",
+                        help="warm an issuer that is not in ISSUERS; repeatable")
+    parser.add_argument("--product", action="append", default=[], metavar="NAME",
+                        help="extend the candidate list past product_attributes.csv; "
+                             "repeatable")
     args = parser.parse_args()
     if not UA:
         raise SystemExit("Set SEC_CONTACT, e.g. 'project you@example.com'")
 
     with ATTRIBUTES.open(newline="") as handle:
-        products = sorted({row["drug_name"].strip()
-                           for row in csv.DictReader(handle) if row.get("drug_name")})
+        products = {row["drug_name"].strip()
+                    for row in csv.DictReader(handle) if row.get("drug_name")}
     print(f"{len(products)} products in seed/product_attributes.csv")
+    if args.product:
+        products |= {name.strip() for name in args.product if name.strip()}
+        print(f"{len(args.product)} more from --product")
+    products = sorted(products)
 
-    print("collecting members from the newest filings")
-    tagged = members_by_issuer()
+    issuers = dict(ISSUERS)
+    for pair in args.issuer:
+        name, _, cik = pair.partition("=")
+        if not name.strip() or not cik.strip().isdigit():
+            raise SystemExit(f"--issuer wants NAME=CIK, got {pair!r}")
+        issuers[name.strip()] = int(cik)
+
+    if args.from_notes:
+        print(f"collecting members from {len(args.from_notes)} extract(s)")
+        tagged = members_from_notes(args.from_notes, issuers)
+    else:
+        print("collecting members from the newest filings")
+        tagged = members_by_issuer(issuers)
 
     existing = load_register()
     resolved: dict[tuple[str, str], Resolution] = dict(existing)
@@ -166,7 +255,12 @@ def main() -> int:
         # one to hand is gold's.
         candidates = products
         for member in sorted(members):
-            if (issuer, member) in existing:
+            prior = existing.get((issuer, member))
+            # `binds` rather than mere presence: a decision that nothing in the
+            # candidate list matched is spent the moment the list changes, and
+            # re-asking is the point of running this again after adding a
+            # product.
+            if prior is not None and prior.binds(candidates):
                 kept += 1
                 continue
             outcome = match(member, candidates)
@@ -184,9 +278,12 @@ def main() -> int:
         print("\nasking the model about the rest")
         resolved.update(asyncio.run(ask_model(pending)))
     elif pending:
-        for issuer, member, _siblings, _candidates in pending:
-            resolved[(issuer, member)] = Resolution(member, NOT_A_PRODUCT, "unmatched", 0.0,
-                                                    "string rules found no product")
+        for issuer, member, _siblings, candidates in pending:
+            resolved[(issuer, member)] = Resolution(
+                member, None, "unmatched", 0.0, "string rules found no product",
+                verdict=VERDICT_NO_CANDIDATE_MATCH,
+                candidates_fingerprint=fingerprint(candidates),
+            )
 
     save_register(resolved)
     named = sum(1 for r in resolved.values() if r.resolved)

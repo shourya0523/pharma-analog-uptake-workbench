@@ -66,6 +66,19 @@ INSTANCE = b"""<?xml version="1.0" encoding="UTF-8"?>
 </xbrl>
 """
 
+# What a bare fact list cannot say for itself: a real filing's linkbase settles
+# which element is the sale, and these tests hand the answer over directly.
+REVENUE = {
+    "us-gaap:Revenues": True,
+    "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax": True,
+    "us-gaap:SalesRevenueGoodsNet": True,
+    "us-gaap:CostOfGoodsAndServicesSold": False,
+    "ifrs-full:Revenue": True,
+    "ifrs-full:RevenueFromSaleOfGoods": True,
+    "ifrs-full:CostOfSales": False,
+}
+
+
 
 def test_a_fact_keeps_what_the_filer_said_about_it():
     facts = {f.context_id: f for f in parse_facts(INSTANCE)
@@ -93,7 +106,7 @@ def test_worldwide_is_the_absence_of_a_geography():
 
 
 def test_product_facts_are_the_quarters_on_the_product_axis():
-    facts = product_facts(parse_facts(INSTANCE))
+    facts = product_facts(parse_facts(INSTANCE), verdicts=REVENUE)
     assert {(f.product_member.split(":")[-1], f.period, f.value) for f in facts} == {
         ("NebulizedTyvasoMember", "2024Q3", 159_200_000.0),
         ("TyvasoDPIMember", "2024Q3", 274_600_000.0),
@@ -101,12 +114,12 @@ def test_product_facts_are_the_quarters_on_the_product_axis():
 
 
 def test_a_regional_line_is_excluded_unless_it_is_asked_for():
-    everywhere = product_facts(parse_facts(INSTANCE), worldwide_only=False)
+    everywhere = product_facts(parse_facts(INSTANCE), worldwide_only=False, verdicts=REVENUE)
     assert len(everywhere) == 3
 
 
 def test_cash_is_not_revenue_and_carries_no_product():
-    assert all("Cash" not in f.element for f in product_facts(parse_facts(INSTANCE)))
+    assert all("Cash" not in f.element for f in product_facts(parse_facts(INSTANCE), verdicts=REVENUE))
 
 
 def test_the_filing_states_which_filer_it_is():
@@ -115,7 +128,7 @@ def test_the_filing_states_which_filer_it_is():
 
 
 def test_a_fact_can_be_cited_precisely_enough_to_check():
-    fact = next(f for f in product_facts(parse_facts(INSTANCE))
+    fact = next(f for f in product_facts(parse_facts(INSTANCE), verdicts=REVENUE)
                 if "Nebulized" in (f.product_member or ""))
     citation = fact.citation
     assert "RevenueFromContractWithCustomerExcludingAssessedTax" in citation
@@ -128,7 +141,7 @@ def test_an_untagged_filing_states_nothing_rather_than_guessing():
       <context id="c"><period><startDate>2015-07-01</startDate><endDate>2015-09-30</endDate></period></context>
       <unit id="usd"><measure>iso4217:USD</measure></unit>
     </xbrl>"""
-    assert product_facts(parse_facts(plain)) == []
+    assert product_facts(parse_facts(plain), verdicts=REVENUE) == []
     assert filer_category(plain) is None
 
 
@@ -160,7 +173,7 @@ def test_a_gross_profit_is_not_a_revenue():
              value=119_000_000.0, members={PRODUCT_AXIS: "uthr:RemodulinMember"},
              start=date(2020, 4, 1), end=date(2020, 6, 30)),
     ]
-    assert [f.value for f in product_facts(facts)] == [119_000_000.0]
+    assert [f.value for f in product_facts(facts, verdicts=REVENUE)] == [119_000_000.0]
 
 
 def test_the_total_is_the_least_qualified_statement_about_a_product():
@@ -176,7 +189,7 @@ def test_the_total_is_the_least_qualified_statement_about_a_product():
                  members={PRODUCT_AXIS: "uthr:AdcircaMember",
                           "us-gaap:TypeOfArrangementAxis": "uthr:EliLillyAndCompanyMember"},
                  start=date(2022, 1, 1), end=date(2022, 12, 31))
-    assert [f.value for f in product_facts([plain, lilly])] == [41_300_000.0]
+    assert [f.value for f in product_facts([plain, lilly], verdicts=REVENUE)] == [41_300_000.0]
 
 
 def test_a_segment_qualifier_takes_nothing_away():
@@ -186,7 +199,7 @@ def test_a_segment_qualifier_takes_nothing_away():
                      members={PRODUCT_AXIS: "jnj:StelaraMember",
                               "us-gaap:StatementBusinessSegmentsAxis": "jnj:InnovativeMedicineMember"},
                      start=date(2023, 1, 2), end=date(2023, 12, 31))
-    assert [f.value for f in product_facts([segmented])] == [10_858_000_000.0]
+    assert [f.value for f in product_facts([segmented], verdicts=REVENUE)] == [10_858_000_000.0]
 
 
 def test_a_forecast_is_not_a_report():
@@ -194,4 +207,4 @@ def test_a_forecast_is_not_a_report():
                     members={PRODUCT_AXIS: "mrk:KoselugoMember",
                              "srt:StatementScenarioAxis": "srt:ScenarioForecastMember"},
                     start=date(2026, 1, 1), end=date(2026, 3, 31))
-    assert product_facts([forecast]) == []
+    assert product_facts([forecast], verdicts=REVENUE) == []

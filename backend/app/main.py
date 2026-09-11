@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 # ruff: noqa: B008, BLE001
+import asyncio
 import csv
 import io
 import logging
@@ -10,7 +11,7 @@ from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 from pydantic import BaseModel
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.orm import Session, selectinload
 
 from app.api.products import router as products_router
 from app.config import get_settings
@@ -35,6 +36,7 @@ from app.domain.models import (
 from app.export.builder import ExportBuilder, TemplateMapper
 from app.jobs.handler import handle_job
 from app.jobs.queue import get_job_queue
+from app.jobs.run_status import refresh_run_status
 from app.logging_setup import configure_logging
 from app.observability import (
     TABLE_REGISTRY,
@@ -88,6 +90,48 @@ async def startup() -> None:
         settings.enable_llm_search,
     )
     await job_queue.start(_handle_job)
+    db = SessionLocal()
+    try:
+        requeued, abandoned = recover_stranded_jobs(db, job_queue)
+    finally:
+        db.close()
+    if requeued or abandoned:
+        logger.warning("startup_recovery requeued=%d abandoned=%d", requeued, abandoned)
+
+
+def recover_stranded_jobs(db: Session, queue) -> tuple[int, int]:
+    """What a restart owes the jobs it interrupted.
+
+    The in-process queue lives in memory, so a restart forgets every job that
+    was waiting and every job that was half-way through. Left alone they sit
+    in the database as `queued` or `running` for ever, and a caller polling
+    the run never hears back. A job that had not started loses nothing by
+    being enqueued again. A job that was mid-flight is marked failed with the
+    reason, rather than restarted: `run_job` appends its datapoints, so
+    running it twice would publish each figure twice.
+    """
+    requeued = abandoned = 0
+    stranded = (
+        db.query(DrugJobORM)
+        .filter(DrugJobORM.status.in_([JobStatus.QUEUED.value, JobStatus.RUNNING.value]))
+        .all()
+    )
+    loop = asyncio.get_event_loop()
+    for job in stranded:
+        if job.status == JobStatus.QUEUED.value:
+            loop.create_task(queue.enqueue("drug_job", {"job_id": job.id, "run_id": job.run_id}))
+            requeued += 1
+        else:
+            job.status = JobStatus.FAILED.value
+            job.error = "server restarted while this job was running"
+            abandoned += 1
+    db.commit()
+    # A run whose last unfinished job was just abandoned is over, and nothing
+    # else will say so: the handler that settles a run's status only runs
+    # when a job it owned finishes.
+    for run_id in {job.run_id for job in stranded if job.status == JobStatus.FAILED.value}:
+        refresh_run_status(db, run_id)
+    return requeued, abandoned
 
 
 @app.get("/health")
@@ -244,13 +288,19 @@ def get_job(job_id: str) -> dict[str, Any]:
     try:
         job = (
             db.query(DrugJobORM)
+            # One query per collection, never a join across them. Joining six
+            # one-to-many collections onto one job multiplies their rows
+            # together - datapoints by sources by tasks by checks - into a
+            # Cartesian product that is de-duplicated in Python: a 50 KB
+            # response cost two gigabytes and thirteen seconds on the event
+            # loop, and a few of them at once was the whole machine.
             .options(
-                joinedload(DrugJobORM.profile_fields),
-                joinedload(DrugJobORM.datapoints),
-                joinedload(DrugJobORM.sources),
-                joinedload(DrugJobORM.unresolved_quarters),
-                joinedload(DrugJobORM.validation_tasks),
-                joinedload(DrugJobORM.quality_checks),
+                selectinload(DrugJobORM.profile_fields),
+                selectinload(DrugJobORM.datapoints),
+                selectinload(DrugJobORM.sources),
+                selectinload(DrugJobORM.unresolved_quarters),
+                selectinload(DrugJobORM.validation_tasks),
+                selectinload(DrugJobORM.quality_checks),
             )
             .filter_by(id=job_id)
             .first()
@@ -286,6 +336,13 @@ def get_job(job_id: str) -> dict[str, Any]:
                     "currency": d.currency,
                     "unit": d.unit,
                     "period_type": d.period_type,
+                    # Which reader produced this. A caller comparing two
+                    # figures for one quarter is comparing claims of different
+                    # strength - a fact the filer tagged against a number read
+                    # off a page - and could not see which was which. Nothing
+                    # outside the database could, so a reader that had stopped
+                    # answering looked the same as one with nothing to say.
+                    "extraction_method": d.extraction_method,
                     "revenue_scope": d.revenue_scope,
                     "geography": d.geography,
                     "formulation": d.formulation,

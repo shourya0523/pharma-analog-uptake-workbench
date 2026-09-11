@@ -1,0 +1,342 @@
+{
+ "purpose": "Does the reader tell a product's own revenue line from a line covering more than that product, on issuers it was never built against? Labels are printed row labels harvested from the product-revenue schedule of each issuer's own 8-K earnings exhibit.",
+ "built": "2026-09-08",
+ "absent_from": [
+  "seed/gold",
+  "seed/holdout",
+  "seed/holdout2"
+ ],
+ "answer_key": "Assigned by reading the printed label: 'shared' when the label names more than one product the issuer reports separately, 'own' otherwise. Two trade names for a single product are 'own' - the value is that product's.",
+ "cases": [
+  {
+   "issuer": "Biogen",
+   "cik": "0000875045",
+   "accession": "0000875045-26-000073",
+   "label": "TECFIDERA",
+   "product": "TECFIDERA",
+   "generic": null,
+   "expect": "own",
+   "note": "single product row in the product-revenue schedule"
+  },
+  {
+   "issuer": "Biogen",
+   "cik": "0000875045",
+   "accession": "0000875045-26-000073",
+   "label": "VUMERITY",
+   "product": "VUMERITY",
+   "generic": null,
+   "expect": "own",
+   "note": "single product row in the product-revenue schedule"
+  },
+  {
+   "issuer": "Biogen",
+   "cik": "0000875045",
+   "accession": "0000875045-26-000073",
+   "label": "AVONEX",
+   "product": "AVONEX",
+   "generic": null,
+   "expect": "own",
+   "note": "single product row in the product-revenue schedule"
+  },
+  {
+   "issuer": "Biogen",
+   "cik": "0000875045",
+   "accession": "0000875045-26-000073",
+   "label": "PLEGRIDY",
+   "product": "PLEGRIDY",
+   "generic": null,
+   "expect": "own",
+   "note": "single product row in the product-revenue schedule"
+  },
+  {
+   "issuer": "Biogen",
+   "cik": "0000875045",
+   "accession": "0000875045-26-000073",
+   "label": "TYSABRI",
+   "product": "TYSABRI",
+   "generic": null,
+   "expect": "own",
+   "note": "single product row in the product-revenue schedule"
+  },
+  {
+   "issuer": "Biogen",
+   "cik": "0000875045",
+   "accession": "0000875045-26-000073",
+   "label": "SPINRAZA",
+   "product": "SPINRAZA",
+   "generic": null,
+   "expect": "own",
+   "note": "single product row in the product-revenue schedule"
+  },
+  {
+   "issuer": "Biogen",
+   "cik": "0000875045",
+   "accession": "0000875045-26-000073",
+   "label": "SKYCLARYS",
+   "product": "SKYCLARYS",
+   "generic": null,
+   "expect": "own",
+   "note": "single product row in the product-revenue schedule"
+  },
+  {
+   "issuer": "Biogen",
+   "cik": "0000875045",
+   "accession": "0000875045-26-000073",
+   "label": "QALSODY",
+   "product": "QALSODY",
+   "generic": null,
+   "expect": "own",
+   "note": "single product row in the product-revenue schedule"
+  },
+  {
+   "issuer": "Biogen",
+   "cik": "0000875045",
+   "accession": "0000875045-26-000073",
+   "label": "SYFOVRE",
+   "product": "SYFOVRE",
+   "generic": null,
+   "expect": "own",
+   "note": "single product row in the product-revenue schedule"
+  },
+  {
+   "issuer": "Biogen",
+   "cik": "0000875045",
+   "accession": "0000875045-26-000073",
+   "label": "EMPAVELI",
+   "product": "EMPAVELI",
+   "generic": null,
+   "expect": "own",
+   "note": "single product row in the product-revenue schedule"
+  },
+  {
+   "issuer": "Biogen",
+   "cik": "0000875045",
+   "accession": "0000875045-26-000073",
+   "label": "BENEPALI",
+   "product": "BENEPALI",
+   "generic": null,
+   "expect": "own",
+   "note": "single product row in the product-revenue schedule"
+  },
+  {
+   "issuer": "Biogen",
+   "cik": "0000875045",
+   "accession": "0000875045-26-000073",
+   "label": "IMRALDI",
+   "product": "IMRALDI",
+   "generic": null,
+   "expect": "own",
+   "note": "single product row in the product-revenue schedule"
+  },
+  {
+   "issuer": "Biogen",
+   "cik": "0000875045",
+   "accession": "0000875045-26-000073",
+   "label": "FLIXABI",
+   "product": "FLIXABI",
+   "generic": null,
+   "expect": "own",
+   "note": "single product row in the product-revenue schedule"
+  },
+  {
+   "issuer": "Biogen",
+   "cik": "0000875045",
+   "accession": "0000875045-26-000073",
+   "label": "BYOOVIZ",
+   "product": "BYOOVIZ",
+   "generic": null,
+   "expect": "own",
+   "note": "single product row in the product-revenue schedule"
+  },
+  {
+   "issuer": "Biogen",
+   "cik": "0000875045",
+   "accession": "0000875045-26-000073",
+   "label": "ZURZUVAE",
+   "product": "ZURZUVAE",
+   "generic": null,
+   "expect": "own",
+   "note": "single product row in the product-revenue schedule"
+  },
+  {
+   "issuer": "Biogen",
+   "cik": "0000875045",
+   "accession": "0000875045-26-000073",
+   "label": "FAMPYRA",
+   "product": "FAMPYRA",
+   "generic": null,
+   "expect": "own",
+   "note": "single product row in the product-revenue schedule"
+  },
+  {
+   "issuer": "Biogen",
+   "cik": "0000875045",
+   "accession": "0000875045-26-000073",
+   "label": "TOFIDENCE",
+   "product": "TOFIDENCE",
+   "generic": null,
+   "expect": "own",
+   "note": "single product row in the product-revenue schedule"
+  },
+  {
+   "issuer": "Biogen",
+   "cik": "0000875045",
+   "accession": "0000875045-26-000073",
+   "label": "Biogen’s share of pre-tax profits in the U.S. for RITUXAN, GAZYVA and LUNSUMIO",
+   "product": "RITUXAN",
+   "generic": null,
+   "expect": "shared",
+   "note": "one line covering three separately marketed products"
+  },
+  {
+   "issuer": "Biogen",
+   "cik": "0000875045",
+   "accession": "0000875045-26-000073",
+   "label": "Biogen’s share of pre-tax profits in the U.S. for RITUXAN, GAZYVA and LUNSUMIO",
+   "product": "GAZYVA",
+   "generic": null,
+   "expect": "shared",
+   "note": "one line covering three separately marketed products"
+  },
+  {
+   "issuer": "Biogen",
+   "cik": "0000875045",
+   "accession": "0000875045-26-000073",
+   "label": "Biogen’s share of pre-tax profits in the U.S. for RITUXAN, GAZYVA and LUNSUMIO",
+   "product": "LUNSUMIO",
+   "generic": null,
+   "expect": "shared",
+   "note": "one line covering three separately marketed products"
+  },
+  {
+   "issuer": "Jazz Pharmaceuticals",
+   "cik": "0001232524",
+   "accession": "0001232524-26-000044",
+   "label": "Xywav",
+   "product": "Xywav",
+   "generic": null,
+   "expect": "own",
+   "note": "single product row"
+  },
+  {
+   "issuer": "Jazz Pharmaceuticals",
+   "cik": "0001232524",
+   "accession": "0001232524-26-000044",
+   "label": "Xyrem",
+   "product": "Xyrem",
+   "generic": null,
+   "expect": "own",
+   "note": "single product row"
+  },
+  {
+   "issuer": "Jazz Pharmaceuticals",
+   "cik": "0001232524",
+   "accession": "0001232524-26-000044",
+   "label": "Zepzelca",
+   "product": "Zepzelca",
+   "generic": null,
+   "expect": "own",
+   "note": "single product row"
+  },
+  {
+   "issuer": "Jazz Pharmaceuticals",
+   "cik": "0001232524",
+   "accession": "0001232524-26-000044",
+   "label": "Modeyso",
+   "product": "Modeyso",
+   "generic": null,
+   "expect": "own",
+   "note": "single product row"
+  },
+  {
+   "issuer": "Jazz Pharmaceuticals",
+   "cik": "0001232524",
+   "accession": "0001232524-26-000044",
+   "label": "Vyxeos",
+   "product": "Vyxeos",
+   "generic": null,
+   "expect": "own",
+   "note": "single product row"
+  },
+  {
+   "issuer": "Jazz Pharmaceuticals",
+   "cik": "0001232524",
+   "accession": "0001232524-26-000044",
+   "label": "Ziihera",
+   "product": "Ziihera",
+   "generic": null,
+   "expect": "own",
+   "note": "single product row"
+  },
+  {
+   "issuer": "Jazz Pharmaceuticals",
+   "cik": "0001232524",
+   "accession": "0001232524-26-000044",
+   "label": "Epidiolex/Epidyolex",
+   "product": "Epidiolex",
+   "generic": "cannabidiol",
+   "expect": "own",
+   "note": "one product under its US and EU trade names"
+  },
+  {
+   "issuer": "Jazz Pharmaceuticals",
+   "cik": "0001232524",
+   "accession": "0001232524-26-000044",
+   "label": "Rylaze/Enrylaze",
+   "product": "Rylaze",
+   "generic": null,
+   "expect": "own",
+   "note": "one product under its US and EU trade names"
+  },
+  {
+   "issuer": "Jazz Pharmaceuticals",
+   "cik": "0001232524",
+   "accession": "0001232524-26-000044",
+   "label": "Defitelio/defibrotide",
+   "product": "Defitelio",
+   "generic": "defibrotide",
+   "expect": "own",
+   "note": "brand beside its own generic name"
+  },
+  {
+   "issuer": "Alkermes",
+   "cik": "0001520262",
+   "accession": "0001193125-26-318844",
+   "label": "VIVITROL",
+   "product": "VIVITROL",
+   "generic": null,
+   "expect": "own",
+   "note": "single product row"
+  },
+  {
+   "issuer": "Alkermes",
+   "cik": "0001520262",
+   "accession": "0001193125-26-318844",
+   "label": "ARISTADA",
+   "product": "ARISTADA",
+   "generic": null,
+   "expect": "own",
+   "note": "single product row"
+  },
+  {
+   "issuer": "Alkermes",
+   "cik": "0001520262",
+   "accession": "0001193125-26-318844",
+   "label": "LYBALVI",
+   "product": "LYBALVI",
+   "generic": null,
+   "expect": "own",
+   "note": "single product row"
+  },
+  {
+   "issuer": "Alkermes",
+   "cik": "0001520262",
+   "accession": "0001193125-26-318844",
+   "label": "LUMRYZ",
+   "product": "LUMRYZ",
+   "generic": null,
+   "expect": "own",
+   "note": "single product row"
+  }
+ ]
+}

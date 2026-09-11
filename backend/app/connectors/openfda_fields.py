@@ -27,7 +27,8 @@ def select_openfda_result(
 
     A search on brand OR generic name returns every application sharing the
     molecule, so the first result is frequently a different product from the same
-    molecule (a Tyvaso query returns REMODULIN first). Only a brand-name match is
+    molecule - a query for one brand returns a competitor's brand ahead of it.
+    Only a brand-name match is
     accepted; the generic name is deliberately excluded from matching because it
     is shared with competitor and ANDA products.
 

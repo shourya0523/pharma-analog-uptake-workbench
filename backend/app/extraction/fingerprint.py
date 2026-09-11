@@ -9,13 +9,13 @@ wrong period.
 
 Two real defects motivated this module, both found by auditing the gold dataset:
 
-* United Therapeutics' earnings exhibits switch from whole-dollar thousands
-  ("121,718") to one-decimal millions ("102.2") partway through 2016. Code that
-  assumed a unit from the filing date divided four quarters by 1000 across five
-  products and produced a fake 99.9% revenue collapse.
-* Merck's prior-year comparison schedule lists 2024 as Q2/Q3/Q4 + FY, not
-  Q1-Q4. Code that assumed a fixed number of quarter columns per block consumed
-  the full-year total as if it were a quarter.
+* An issuer's earnings exhibits switch from whole-dollar thousands ("121,718")
+  to one-decimal millions ("102.2") partway through a year. Code that assumed a
+  unit from the filing date divided those quarters by 1000 and produced a
+  revenue collapse that never happened.
+* A prior-year comparison schedule lists a year as Q2/Q3/Q4 + FY, not Q1-Q4.
+  Code that assumed a fixed number of quarter columns per block consumed the
+  full-year total as if it were a quarter.
 
 Both are prevented here by reading the table's own declarations instead of
 inferring them from context, and by refusing to guess when the declaration is
@@ -57,11 +57,10 @@ from app.parsing.periods import MONTH_WORDS, MONTHS, quarter_of_month
 # The unanchored form carries an assumption the anchored one does not: it names
 # the issuer's own fourth quarter, and calling that the calendar year's fourth
 # quarter is right only for a filer whose year ends in December. It is used
-# because for these filings there is nothing else - Johnson & Johnson's sales
-# schedule prints "FOURTH QUARTER" over "TWELVE MONTHS" and names no month
-# anywhere on the page - and it earns its place on issuers this corpus does not
-# contain: of 123 held-out tables that state a year and no anchored phrase, 25
-# name their period this way.
+# because for such filings there is nothing else - a sales schedule prints
+# "FOURTH QUARTER" over "TWELVE MONTHS" and names no month anywhere on the page
+# - and a reader that refuses the unanchored form reads those schedules as
+# stating no period at all.
 _PERIOD_PHRASE_RE = re.compile(
     r"\b(three|six|nine|twelve|year)s?\s*(?:months?\s*)?ended\s+([A-Za-z]{3,9})",
     re.IGNORECASE,
@@ -315,9 +314,9 @@ def _period_phrases(rows: list[list[str]], limit: int = 8) -> list[tuple[int, in
     Ended June 30", and the left-to-right order of those phrases is the
     left-to-right order of the value columns.
 
-    A heading that ends mid-phrase continues on the next row: Gilead's press
-    release prints "Three Months Ended" on one line and "June 30," on the next,
-    and neither line alone names a period. Only such a row carries forward -
+    A heading that ends mid-phrase continues on the next row: a press release
+    prints "Three Months Ended" on one line and "June 30," on the next, and
+    neither line alone names a period. Only such a row carries forward -
     joining rows wholesale would read two headings stacked above two blocks of
     figures as one heading over one block.
     """
@@ -427,8 +426,8 @@ def _headings_describe_the_body(
     """Whether the headings' columns are the same columns the body uses.
 
     A table can span its headings and not span its body, and then the two are
-    laid out in different columns that only line up on screen. Gilead's press
-    release does exactly that: the heading row spans "Three Months Ended" over
+    laid out in different columns that only line up on screen. A press release
+    does exactly that: the heading row spans "Three Months Ended" over
     five columns and the year row spans each year over two, while every product
     row is written as plain cells, so the label lands in a column the headings
     say is 2016 and its four figures land under 2016, 2015, 2015, 2016.
@@ -465,6 +464,7 @@ def build_fingerprint(
     rows: list[list[str]],
     context: str = "",
     grid: list[list[str | None]] | None = None,
+    period_context: "PeriodContext | None" = None,
 ) -> TableFingerprint:
     """Fingerprint one table: unit, currency, and period-to-column mapping.
 
@@ -473,6 +473,19 @@ def build_fingerprint(
     back to reading the period phrases and the year row as two ordered lists and
     dividing one into the other, which is an inference and can be wrong when a
     filing prints an uneven number of columns per period.
+
+    ``period_context`` is the span the *document* says it covers, and it is
+    read only when the table states no period of its own. Some issuers never
+    put one in the table - a product schedule headed by geography and then by
+    year says "months ended" nowhere - so a reader that requires the table to
+    date itself skips them entirely.
+
+    It is a last resort, and it is refused when the year row repeats a year.
+    A repeated year means the columns are divided by something other than time
+    - three geography bands, or a quarter beside its year-to-date - and one
+    document period spread across them would file several different values
+    under the same quarter. That is the failure this whole module exists to
+    prevent, so an ambiguous table stays unread and says why.
     """
     unit_label, unit_declared = detect_unit(rows, context)
     currency, currency_declared = detect_currency(rows, context)
@@ -528,6 +541,20 @@ def build_fingerprint(
             notes.append(
                 f"unmapped_columns years={len(years)} periods={len(phrases)}"
             )
+    elif not phrases and period_context is not None and years:
+        if len(set(years)) == len(years):
+            blocks = tuple(
+                PeriodBlock(
+                    months=period_context.months,
+                    end_month=period_context.month,
+                    year=year,
+                    value_index=index,
+                )
+                for index, year in enumerate(years)
+            )
+            notes.append("period_from_document")
+        else:
+            notes.append(f"period_from_document_ambiguous years={years}")
     elif not phrases:
         notes.append("no_period_header")
     elif not years:

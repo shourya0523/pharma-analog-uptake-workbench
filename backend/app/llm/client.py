@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import asyncio
 import json
 import logging
 import re
+from collections.abc import Iterable
 from pathlib import Path
 from typing import Any
 
@@ -28,6 +30,10 @@ PROMPTS_DIR = Path(__file__).resolve().parent.parent / "prompts"
 
 
 class OpenRouterClient:
+    # How many times a connection to the model is tried before the question
+    # is treated as unanswered.
+    TRANSPORT_ATTEMPTS = 3
+
     def __init__(self) -> None:
         self.settings = get_settings()
 
@@ -62,16 +68,34 @@ class OpenRouterClient:
             "response_format": {"type": "json_object"},
             "temperature": 0.1,
         }
-        async with httpx.AsyncClient(timeout=120) as client:
-            resp = await client.post(
-                f"{self.settings.openrouter_base_url}/chat/completions",
-                headers=self._headers(),
-                json=payload,
-            )
-            self._raise_for_status(resp, model=model)
-            data = resp.json()
-        content = data["choices"][0]["message"]["content"]
-        return _parse_json_content(content)
+        # The model sits behind a network, and a connection that fails or
+        # times out is that one question going unanswered - the same outcome
+        # as the model having nothing to say, which every caller already
+        # handles as an empty dict. It is retried, because the endpoint is
+        # flaky in bursts; it is not raised, because one blip would otherwise
+        # end a job that already holds every figure the other readers found.
+        delay = 2.0
+        for attempt in range(self.TRANSPORT_ATTEMPTS):
+            try:
+                async with httpx.AsyncClient(timeout=120) as client:
+                    resp = await client.post(
+                        f"{self.settings.openrouter_base_url}/chat/completions",
+                        headers=self._headers(),
+                        json=payload,
+                    )
+                    self._raise_for_status(resp, model=model)
+                    data = resp.json()
+                content = data["choices"][0]["message"]["content"]
+                return _parse_json_content(content)
+            except httpx.TransportError as exc:
+                logger.warning("openrouter_unreachable attempt=%d/%d model=%s error=%s: %s",
+                               attempt + 1, self.TRANSPORT_ATTEMPTS, model,
+                               type(exc).__name__, exc)
+                if attempt == self.TRANSPORT_ATTEMPTS - 1:
+                    return {}
+                await asyncio.sleep(delay)
+                delay *= 2
+        return {}
 
     def _web_tools(self, *, fetch: bool = False) -> list[dict[str, Any]]:
         domains = [
@@ -181,9 +205,20 @@ def _citations_from_message(message: dict[str, Any]) -> list[dict[str, str]]:
     return out
 
 
-def _filter_hallucinated_spans(spans: list[dict[str, Any]], source_text: str) -> list[dict[str, Any]]:
+def _filter_hallucinated_spans(spans: list[Any], source_text: str) -> list[dict[str, Any]]:
+    """Spans the source actually contains, from whatever shape the model sent.
+
+    A span is meant to be an object carrying `span_text`, and every reader
+    downstream calls `.get` on it. A model sometimes sends bare strings, and
+    the orchestrator does not guard its `extract_revenue` call, so one reply of
+    that shape fails the whole job rather than the single source it came from.
+
+    A string is a span with no id and no rationale, which is all the verbatim
+    check needs, so it is read as one rather than discarded.
+    """
     good: list[dict[str, Any]] = []
-    for i, span in enumerate(spans):
+    for i, raw in enumerate(spans or []):
+        span: dict[str, Any] = raw if isinstance(raw, dict) else {"span_text": str(raw or "")}
         text = (span.get("span_text") or "").strip()
         if not text:
             continue
@@ -417,6 +452,31 @@ class LLMModules:
                     "confidence": 0.0}
         return result
 
+    async def judge_element(self, *, element: str, examples: list[str]) -> dict[str, Any]:
+        """Whether an element the filing's linkbase left unplaced measures revenue.
+
+        Empty when no key is set or the model will not commit; an element
+        without a verdict is left out of the reading rather than guessed at.
+        """
+        if not self.settings.openrouter_api_key:
+            return {}
+        prompt = load_prompt("xbrl_element_judge")
+        prefix = element.split(":")[0] if ":" in element else ""
+        user = prompt["user_template"].format(
+            element=element, prefix=prefix,
+            examples="\n".join(f"  - {e}" for e in examples[:12]) or "  (none)",
+        )
+        result = await self.client.chat_json(
+            model=self.settings.openrouter_model_judge,
+            system=prompt["system"], user=user,
+        )
+        verdict = result.get("is_revenue")
+        if verdict not in (True, False):
+            return {}
+        return {"is_revenue": bool(verdict),
+                "confidence": float(result.get("confidence") or 0.0),
+                "reason": str(result.get("reason") or "")}
+
     async def reconcile(self, *, product: str, candidates: list[dict]) -> dict[str, Any]:
         prompt = load_prompt("conflict_reconciler")
         user = prompt["user_template"].format(
@@ -648,13 +708,16 @@ def apply_judge_hard_vetoes(
     judgment: dict[str, Any],
     generic: str | None = None,
     extra_aliases: list[str] | None = None,
+    peer_names: Iterable[str] | None = None,
 ) -> dict[str, Any]:
     """Force misclassified/needs_review for known bad patterns even if model is soft."""
     issues = list(judgment.get("issues") or [])
     q = quote or ""
     period_type = (candidate.get("period_type") or "").lower()
     mentions = quote_mentions_product(q, product, generic, extra_aliases=extra_aliases)
-    other = quote_mentions_other_brand(q, product, generic, extra_aliases=extra_aliases)
+    other = quote_mentions_other_brand(
+        q, product, generic, extra_aliases=extra_aliases, peer_names=peer_names
+    )
     veto = False
 
     if TOTAL_REVENUE_RE.search(q) and not mentions:

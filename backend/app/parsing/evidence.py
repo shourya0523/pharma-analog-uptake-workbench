@@ -22,6 +22,17 @@ REVENUE_HINT_RE = re.compile(
 )
 TOTAL_REVENUE_RE = re.compile(r"\btotal\s+revenues?\b", re.IGNORECASE)
 
+# Geography and scope labels that split a product block into rows. Ordered so
+# the longer spellings match before their abbreviations. Read by the positional
+# reader, which splits a block on them, and by the peer check, which must not
+# mistake a label's geography half for a competing product: "Calderon - U.S."
+# names one product, not two.
+SCOPE_PATTERNS: tuple[tuple[str, str], ...] = (
+    ("Worldwide", r"worldwide|world\s*wide|\bWW\b|\bW\.W\.\b"),
+    ("International", r"international|\bIntl\.?\b|\bInt'l\b|outside\s+the\s+u\.?s\.?"),
+    ("United States", r"united\s+states|\bU\.?S\.?A?\b|domestic"),
+)
+
 FILING_PRIORITY = {
     "10-K": 0,
     "20-F": 0,
@@ -40,7 +51,7 @@ def product_aliases(product: str, generic: str | None = None, extra: Iterable[st
         cleaned = raw.strip()
         if cleaned and cleaned not in names:
             names.append(cleaned)
-        # Split franchise-style names: "OPSUMIT (macitentan)/OPSYNVI"
+        # Split franchise-style names: "CALDERON (calderinol)/CALDERON XR"
         for part in re.split(r"[/|,;]+", cleaned):
             part = re.sub(r"\(.*?\)", "", part).strip()
             if part and part not in names:

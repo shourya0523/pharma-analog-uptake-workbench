@@ -4,12 +4,12 @@ Reading every number a filing prints still leaves gaps, because issuers do not
 print every quarter. Two patterns account for most of them:
 
 * A fourth quarter is often never stated on its own. The issuer reports three
-  quarters and then a full year, and Q4 is the difference. United Therapeutics
-  disclosed Remodulin this way for seven straight years.
+  quarters and then a full year, and Q4 is the difference. An issuer can report
+  a product this way for years on end.
 * Before a product line splits into formulations, the family total *is* the one
-  formulation on sale. Tyvaso was nebulized-only from 2009 until the DPI
-  inhaler launched in 2022Q2, so every family figure in those 50 quarters is
-  also the nebulized figure.
+  formulation on sale: a product sold in a single form until a second one
+  launches, so every family figure before that launch is also the first form's
+  figure.
 
 Both are exact arithmetic over values already extracted, not estimates, so they
 carry the same confidence as a directly reported number - but they are marked
@@ -48,6 +48,29 @@ DERIVED_CONFIDENCE = 0.7
 _NEGLIGIBLE = 0.05
 
 
+def _combined_uncertainty(points: Iterable[Datapoint]) -> float | None:
+    """How far a difference of these figures may sit from the truth.
+
+    Each input is only as good as the precision its source rounded to, and a
+    subtraction inherits every one of them: a fourth quarter derived from a
+    stated year and three stated quarters, each rounded to the nearest million,
+    can be up to two million out. That is not error in the arithmetic - the
+    arithmetic is exact on what was published - it is error the publisher
+    already baked into the figures.
+
+    Unknown if any input's precision is unknown. A bound computed from the
+    subset that happened to declare one would be smaller than the truth, and a
+    bound that understates is worse than no bound.
+    """
+    total = 0.0
+    for point in points:
+        share = point.rounding_uncertainty_usd_millions
+        if share is None:
+            return None
+        total += share
+    return total
+
+
 def _split(period: str) -> tuple[int, int] | None:
     match = _QUARTER_RE.fullmatch(period or "")
     if not match:
@@ -73,7 +96,7 @@ def complete_quarters_from_totals(
     the earlier ones predate the product - they are structurally absent, not
     missing data. Without this the launch year always looks under-determined
     (two quarters unaccounted for rather than one) and never derives, which is
-    why Remodulin's 2002Q4 stayed a gap even though its full-year total was
+    why a launch year's Q4 stays a gap even though its full-year total is
     cited. Pass it only when the start is actually known; the default keeps the
     stricter all-four-quarters rule.
     """
@@ -119,6 +142,13 @@ def complete_quarters_from_totals(
             # rather than a figure that cannot be real.
             continue
         inputs = ", ".join(have[q].period for q in members if q != target)
+        uncertainty = _combined_uncertainty(
+            [total, *(have[q] for q in members if q != target)]
+        )
+        # Said in the quote as well as carried in the field, because the quote
+        # is what a reader sees beside the number and the whole point is that a
+        # derived quarter is not as precise as a tagged one.
+        bound = f", +/- {uncertainty:g} from input rounding" if uncertainty else ""
         point = replace(
             total,
             period=f"{year}Q{target}",
@@ -128,9 +158,10 @@ def complete_quarters_from_totals(
             source_quote=(
                 f"{total.period} {period_type} total "
                 f"{total.value_normalized_usd_millions:g} less reported {inputs} "
-                f"yields {year}Q{target} {max(residual, 0.0):g}"
+                f"yields {year}Q{target} {max(residual, 0.0):g}{bound}"
             ),
             normalization_status="derived_from_period_total",
+            rounding_uncertainty_usd_millions=uncertainty,
         )
         derived.append(point)
         quarters[year][target] = point
@@ -186,9 +217,9 @@ def assemble_split_ownership_quarter(
 
     When a company is acquired mid-quarter, neither issuer reports the whole
     quarter: the seller's last schedule stops at the closing date and the
-    buyer's first one starts there. Johnson & Johnson closed its Actelion
-    acquisition on 16 June 2017, so Uptravi's and Opsumit's 2017Q2 exist only
-    as an April 1 - June 15 figure plus a June 16 onwards one.
+    buyer's first one starts there. An acquisition closing on 16 June leaves
+    that quarter stated only as an April 1 - June 15 figure plus a June 16
+    onwards one.
 
     This is not the residual arithmetic the rest of this module does, and it is
     deliberately stricter about what it will add. Two numbers are easy to
@@ -274,6 +305,7 @@ def _as_datapoint(candidate: dict[str, Any]) -> Datapoint | None:
         source_quote=candidate.get("source_quote") or "",
         fingerprint_signature=candidate.get("fingerprint_signature") or "",
         normalization_status="reported",
+        rounding_uncertainty_usd_millions=candidate.get("rounding_uncertainty_usd_millions"),
     )
 
 
@@ -352,13 +384,15 @@ def complete_series(
             "source_quote": point.source_quote,
             "confidence": DERIVED_CONFIDENCE,
             "extraction_method": point.normalization_status,
+            "rounding_uncertainty_usd_millions": point.rounding_uncertainty_usd_millions,
             "_derived": True,
         }
         for point in derived
         # A quarter that derives to nothing is not a quarter the issuer left
-        # implicit. It is a total that does not cover the year: J&J's first
-        # Actelion year states only the months it owned the products, so
-        # subtracting the quarters it did report leaves zero where 224 was.
-        # Negative is impossible, and zero here has always been that.
+        # implicit. It is a total that does not cover the year: an acquirer's
+        # first year with a product states only the months it owned it, so
+        # subtracting the quarters it did report leaves zero where a real
+        # figure belongs. Negative is impossible, and zero here has always
+        # been that.
         if (point.value_normalized_usd_millions or 0) > 0
     ]
