@@ -84,3 +84,48 @@ def test_the_old_spelling_still_works_without_a_schema():
     """The schema is the anchor, not a requirement. If one is ever missing,
     finding the instance by its inline-era name beats finding nothing."""
     assert _instance_document(["gild-20250930_htm.xml"]) == "gild-20250930_htm.xml"
+
+
+async def test_a_filing_is_taken_for_its_xbrl_and_not_for_its_form(monkeypatch):
+    """Which filings carry facts is not a property of the form.
+
+    This asked only 10-Q and 10-K, which is a domestic filer's shape. A foreign
+    private issuer reports its quarter on a 6-K, and one that tags its product
+    schedule inline was read as having filed nothing. EDGAR states per filing
+    whether it has XBRL, which answers the same question without the guess.
+    """
+    from app.connectors.sources import SECConnector
+    from app.storage.filestore import LocalFileStore
+
+    connector = SECConnector(LocalFileStore("/tmp"))
+    listed: list[str] = []
+
+    async def _documents(self, client, cik_int, acc_nodash):
+        listed.append(acc_nodash)
+        return ["acme-20260630.xsd", "acme-20260630x6k_htm.xml",
+                "acme-20260630_lab.xml", "acme-20260630x6k.htm"]
+
+    async def _fetch(self, client, *, url, accession, doc, run_id, job_id, source_id):
+        return b"<xbrl/>", False, f"key/{doc}"
+
+    monkeypatch.setattr(SECConnector, "_list_filing_documents", _documents)
+    monkeypatch.setattr(SECConnector, "_fetch_document", _fetch)
+
+    recent = {
+        "form": ["6-K", "6-K", "4"],
+        "accessionNumber": ["0001-26-000001", "0001-26-000002", "0001-26-000003"],
+        "filingDate": ["2026-07-27", "2026-07-20", "2026-07-19"],
+        "isXBRL": [1, 0, 0],
+    }
+    sources = await connector._retrieve_xbrl_instances(
+        None, run_id="r", job_id="j", cik="0000000001", recent=recent,
+        max_filings=5, since=None, until=None,
+    )
+
+    assert [s.accession_number for s in sources] == ["0001-26-000001"], (
+        "the 6-K EDGAR flags as tagged is the one to take, and its form is not why"
+    )
+    assert listed == ["000126000001"], (
+        "a filing the index says carries no XBRL costs no directory listing"
+    )
+    assert sources[0].url.endswith("acme-20260630x6k_htm.xml")

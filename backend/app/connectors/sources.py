@@ -40,6 +40,11 @@ from app.storage.filestore import FileStore
 
 logger = logging.getLogger(__name__)
 
+# Which forms report a year rather than a quarter. This picks the label a
+# retrieved source carries; it decides nothing about what is read, and a form
+# not named here is labelled quarterly.
+ANNUAL_FORMS = frozenset({"10-K", "10-K405", "10-KT", "20-F", "40-F", "11-K"})
+
 
 # Shared across connector instances so concurrent jobs don't stampede EDGAR
 _SEC_LOCK = asyncio.Lock()
@@ -457,33 +462,47 @@ class SECConnector:
         since: date | None,
         until: date | None,
     ) -> list[RetrievedSource]:
-        """The tagged instance from each 10-Q or 10-K covering this window.
+        """The tagged instance from each filing in this window that carries one.
 
-        A quarterly report states its product revenue in XBRL - the period, the
-        unit and the product as declared facts rather than as a table to read.
-        The 8-K exhibits fetched beside these carry no tagging at all, so this
-        is the only route to a figure the filer has stated rather than printed.
+        A report states its product revenue in XBRL - the period, the unit and
+        the product as declared facts rather than as a table to read - and
+        which filings do that is not a property of the form. This asked only
+        10-Q and 10-K, which is a domestic filer's shape; a foreign private
+        issuer reports its quarter on a 6-K, and one of them tags the whole
+        product schedule inline. Asking by form read those filings as untagged
+        when they carry hundreds of product facts.
 
-        It reaches back only as far as the filer's own tagging does, and that is
-        a per-filer fact rather than a date: one filer breaks its products out
-        on the ProductOrService axis years before another does, and the same
-        filer's earlier instances carry no product axis at all. Nothing here
-        needs to know when each filer started - the reader simply finds nothing,
-        which is the correct answer for a filing that has nothing.
+        So the form is not consulted. EDGAR states per filing whether it has
+        XBRL, which is the same question without the guess, and turns a
+        thousand filings into a few dozen; `_instance_document` then confirms
+        it from the filing's own directory. A filing the index says nothing
+        about is inspected anyway, up to a budget, so a missing flag costs
+        requests rather than coverage.
 
-        What did need fixing was reaching the instance in the first place; see
-        `_instance_document`.
+        It reaches back only as far as the filer's own tagging does, and that
+        is a per-filer fact rather than a date. Nothing here needs to know when
+        each filer started - the reader simply finds nothing, which is the
+        correct answer for a filing that has nothing.
         """
         cik_int = str(int(cik))
         forms = recent.get("form", [])
         accessions = recent.get("accessionNumber", [])
         filing_dates = recent.get("filingDate", [])
+        tagged = recent.get("isXBRL", []) or []
         sources: list[RetrievedSource] = []
+        # Directory listings for filings the index does not classify. A bound on
+        # requests, not a claim about which filings are worth reading.
+        unclassified_budget = 25
         for index, form in enumerate(forms):
             if len(sources) >= max_filings:
                 break
-            if form not in {"10-Q", "10-K"}:
+            if index < len(tagged):
+                if not tagged[index]:
+                    continue
+            elif unclassified_budget <= 0:
                 continue
+            else:
+                unclassified_budget -= 1
             filed_on = parse_filing_date(filing_dates[index] if index < len(filing_dates) else None)
             if (since and (filed_on is None or filed_on < since)) or (
                 until and (filed_on is None or filed_on > until)
@@ -509,7 +528,7 @@ class SECConnector:
             sources.append(
                 RetrievedSource(
                     source_id=sid,
-                    source_type=(SourceType.ANNUAL_REPORT if form == "10-K"
+                    source_type=(SourceType.ANNUAL_REPORT if form in ANNUAL_FORMS
                                  else SourceType.QUARTERLY_REPORT),
                     url=url,
                     title=f"{form} XBRL instance {filing_dates[index] if index < len(filing_dates) else ''}".strip(),

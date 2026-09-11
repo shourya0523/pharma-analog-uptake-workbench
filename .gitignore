@@ -12,3 +12,6 @@ frontend/dist/
 .ruff_cache/
 infra/cdk.out/
 *.egg-info/
+
+# Eval caches: filings fetched from EDGAR, reproducible from the accession
+.cache/

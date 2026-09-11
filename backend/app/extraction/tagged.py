@@ -27,7 +27,13 @@ from __future__ import annotations
 from typing import Any
 
 from app.extraction.members import Resolution, load_register, resolve, stored
-from app.parsing.xbrl import Fact, filer_category, parse_facts, product_facts
+from app.parsing.xbrl import (
+    Fact,
+    _product_member,
+    filer_category,
+    parse_facts,
+    product_facts,
+)
 
 # A tagged fact is the filer's own assertion, checked by the filer's auditors
 # and machine-readable. It is a better claim than a number read off a page, and
@@ -79,21 +85,34 @@ def candidates_from_instance(
     to read something that was there.
     """
     notes: list[str] = []
-    facts = product_facts(parse_facts(raw))
+    register = register if register is not None else load_register()
+    known = products if products is not None else [product]
+
+    # How the product axis is found. A filer states products on whatever axis
+    # its taxonomy gives it, so the axis is not named here - each member is put
+    # to the same resolver that decides which product a member means, and the
+    # axis whose members it can place is the product axis. Memoised because
+    # every fact in the instance is asked.
+    placed: dict[str, bool] = {}
+
+    def names_a_product(member: str) -> bool:
+        if member not in placed:
+            placed[member] = resolve(member, known, register, issuer=issuer).resolved
+        return placed[member]
+
+    facts = product_facts(parse_facts(raw), names_a_product=names_a_product)
     if not facts:
         category = filer_category(raw) or "unknown filer category"
         notes.append(f"no product-level facts tagged ({category})")
         return [], notes
 
-    register = register if register is not None else load_register()
-    known = products if products is not None else [product]
     found: list[dict[str, Any]] = []
     # A filer tags the same figure in more than one place - once in the revenue
     # note, once in the segment table - so the instance carries it twice under
     # different context ids. Same product, same period, same number, one answer.
     seen: set[tuple[str, float]] = set()
     for fact in facts:
-        member = fact.product_member or ""
+        member = _product_member(fact, names_a_product) or ""
         # Through `resolve` rather than indexing the register here, so this
         # reader gets both of the register's keys: issuer-and-member, because
         # us-gaap:ProductMember is one issuer's sole product and a meaningless
@@ -115,6 +134,14 @@ def candidates_from_instance(
         value = _million(fact)
         if value is None:
             notes.append(f"{member}: unit {fact.unit} is not USD")
+            continue
+        if value <= 0:
+            # Revenue is not negative. A figure that is belongs to something
+            # subtracted from revenue - a rebate, a return, a chargeback - and
+            # filers tag those on the product axis beside the sales they reduce.
+            # The member reads like a product either way, so the sign is what
+            # separates them.
+            notes.append(f"{member}: {value:,.1f}m is not a revenue")
             continue
         signature = (fact.period or "", round(fact.value, 2))
         if signature in seen:

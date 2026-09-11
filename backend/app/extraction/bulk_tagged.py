@@ -37,7 +37,7 @@ from app.parsing.notes_datasets import (
     load_dimensions,
     load_submissions,
 )
-from app.parsing.xbrl import Fact, product_facts
+from app.parsing.xbrl import Fact, _product_member, product_facts
 
 # Forms whose XBRL exhibits carry the notes. An 8-K earnings exhibit is not
 # tagged at all, so asking for one returns nothing and would look like a
@@ -104,6 +104,20 @@ def candidates_from_notes(
 
     register = register if register is not None else load_register()
     known = products if products is not None else [product]
+
+    # The same way the instance reader finds the product axis: by asking the
+    # resolver, not by naming the axis. `DIM` strips a segment to its bare name
+    # so the spelling here is the extract's rather than the filing's, which is
+    # one more reason not to decide on it.
+    placed: dict[str, bool] = {}
+
+    def names_a_product(member: str) -> bool:
+        if member not in placed:
+            resolution = _resolve(member, product=product, issuer=issuer,
+                                  known=known, register=register)
+            placed[member] = resolution is not None and resolution.resolved
+        return placed[member]
+
     found: list[dict[str, Any]] = []
     # The same figure is tagged in the revenue note and again in the segment
     # table, and a later filing repeats it as a prior-year comparative. Same
@@ -114,10 +128,10 @@ def candidates_from_notes(
 
     for adsh in sorted(subs, key=lambda a: subs[a].filed):
         submission: Submission = subs[adsh]
-        facts = product_facts(by_submission.get(adsh, []))
+        facts = product_facts(by_submission.get(adsh, []), names_a_product=names_a_product)
         product_axis_facts += len(facts)
         for fact in facts:
-            member = fact.product_member or ""
+            member = _product_member(fact, names_a_product) or ""
             resolution = _resolve(
                 member, product=product, issuer=issuer, known=known, register=register
             )
@@ -125,6 +139,10 @@ def candidates_from_notes(
                 continue
             if fact.unit and fact.unit != "USD":
                 notes.append(f"{member}: unit {fact.unit} is not USD")
+                continue
+            if fact.value <= 0:
+                # Revenue is not negative; see `tagged.py`.
+                notes.append(f"{member}: {fact.value / 1e6:,.1f}m is not a revenue")
                 continue
             signature = (fact.period or "", round(fact.value, 2))
             if signature in seen:

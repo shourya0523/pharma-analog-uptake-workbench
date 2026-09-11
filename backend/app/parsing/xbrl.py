@@ -37,36 +37,50 @@ import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field
 from datetime import date
 
-# The axis that says which product a fact is about, in both of its spellings.
+# The product axis under the spellings this module can name without being told.
 # It lived in the us-gaap namespace until the 2018 taxonomy moved the reporting
-# axes into srt, so a filing from before that names the same axis differently:
-# it says "us-gaap:ProductOrServiceAxis". Knowing only the modern spelling reads
-# those filings as having no product facts at all, which is what happened.
+# axes into srt, so a filing from before that says "us-gaap:ProductOrServiceAxis".
 #
-# PRODUCT_AXIS stays the canonical one: it is what a fact is keyed under once
-# `notes_datasets` normalises a bulk row, and what the tests construct.
+# These are a fallback, not the rule. A filer states products on whatever axis
+# its taxonomy gives it - an IFRS filer uses
+# ``ifrs-full:ProductsAndServicesAxis``, and one of them also invents
+# ``<prefix>:ProductPortfolioAxis`` of its own - so no list of spellings can be
+# the way this is decided. ``product_facts`` takes a ``names_a_product``
+# predicate and finds the axis by asking which of a fact's members resolves to
+# a product; these names are what it falls back to when no caller supplies one,
+# and what ``notes_datasets`` keys a normalised bulk row under.
 PRODUCT_AXIS = "srt:ProductOrServiceAxis"
 PRODUCT_AXES = (PRODUCT_AXIS, "us-gaap:ProductOrServiceAxis")
 GEOGRAPHIC_AXES = ("srt:StatementGeographicalAxis", "us-gaap:StatementGeographicalAxis")
 
-# What a revenue fact is called. Only the standard taxonomy's revenue elements
-# count: a filer's own extension is, by definition, a measure the taxonomy has
-# no name for, and reading one as the product's revenue is how
-# ``uthr:GrossProfitExcludingOtherRevenue`` came to be published beside the
-# revenue it is derived from - two different figures for one quarter, each with
-# a citation saying it was tagged.
+# The bodies that publish a taxonomy. Everything else in an instance is the
+# filer's own extension, and an extension is by definition a measure the
+# taxonomy has no name for - reading one as revenue is how
+# ``<prefix>:GrossProfitExcludingOtherRevenue`` came to be published beside the
+# revenue it is derived from, two figures for one quarter each citing a tag.
 #
-# Matching on the word "Revenue" is what admitted them. It also admits a
-# percentage (``CollaborationArrangementPercentOfGlobalProductRevenues``) and a
-# contract term (``...NetProductSalesThreshold``), neither of which is money.
-_REVENUE_ELEMENTS = frozenset({
-    "us-gaap:Revenues",
-    "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
-    "us-gaap:RevenueFromContractWithCustomerIncludingAssessedTax",
-    # Pre-606 names, for filings tagged before the standard was adopted.
-    "us-gaap:SalesRevenueNet",
-    "us-gaap:SalesRevenueGoodsNet",
+# What separates the two is authorship rather than spelling, so this is a
+# snapshot of who the standard-setters are, not of what they call things. It
+# goes stale when a filing cites a taxonomy published somewhere new; the
+# failure is then that its facts read as extensions and are left unread, which
+# is the safe direction. Hosts, because the year and the taxonomy name are in
+# the path and change every year.
+_STANDARD_TAXONOMY_HOSTS = ("fasb.org", "xbrl.ifrs.org", "xbrl.sec.gov", "xbrl.org")
+
+# The same question for a fact that arrives with no namespaces to read: from an
+# instance `parse_facts` answers it from the URI above, but a bulk extract row
+# carries only a prefix, and so does a Fact built in a test. The bulk reader
+# already makes the distinction - a standard tag's version is the taxonomy
+# ("us-gaap/2025") and an extension's is the accession that defined it - so the
+# prefix is a faithful fallback there. It is only ever a fallback.
+_STANDARD_TAXONOMY_PREFIXES = frozenset({
+    "us-gaap", "ifrs-full", "ifrs", "srt", "dei", "country", "currency", "invest",
 })
+
+# A currency, as ISO 4217 writes one. `parse_units` reduces a unit to its
+# measures, so money is three letters and a rate, a count or a percentage is
+# not ("USD/shares", "pure", "item", "shares").
+_CURRENCY_UNIT = re.compile(r"[A-Z]{3}\Z")
 
 # A forecast is not a report. A filer tags next quarter's expectation for a
 # product on the same axis as the quarters it has closed, and nothing else about
@@ -86,6 +100,34 @@ class Fact:
     unit: str | None = None
     decimals: str | None = None
     context_id: str = ""
+    # Whether the element comes from a published taxonomy rather than from the
+    # filer's own extension. `parse_facts` reads it from the instance; None
+    # where there was no namespace to read, and the prefix answers instead.
+    standard_element: bool | None = None
+
+    @property
+    def from_standard_taxonomy(self) -> bool:
+        """Whether a standard-setter named this element, rather than the filer.
+
+        An extension is by definition a measure the taxonomy has no name for,
+        so reading one as revenue publishes something the filer never called
+        revenue.
+        """
+        if self.standard_element is not None:
+            return self.standard_element
+        prefix, _, local = self.element.partition(":")
+        return bool(local) and prefix in _STANDARD_TAXONOMY_PREFIXES
+
+    @property
+    def states_an_amount(self) -> bool:
+        """Whether nothing about the unit says this is not money.
+
+        A percentage or a count declares itself - "pure", "item", "shares" - and
+        a rate carries a divisor. An absent unit is unknown rather than
+        non-money, so a fact is not dropped for a unit its source never
+        recorded.
+        """
+        return not self.unit or bool(_CURRENCY_UNIT.fullmatch(self.unit))
 
     @property
     def months(self) -> int | None:
@@ -225,9 +267,26 @@ def parse_units(root: ET.Element, prefixes: dict[str, str]) -> dict[str, str]:
     return units
 
 
+def _standard_namespaces(prefixes: dict[str, str]) -> set[str]:
+    """The prefixes in this instance that belong to a published taxonomy.
+
+    Read from the instance's own namespace declarations, so a filer using an
+    unusual prefix for a standard taxonomy is still read as standard, and one
+    declaring its extension as "us-gaap-ish" is not.
+    """
+    standard = set()
+    for uri, prefix in prefixes.items():
+        host = uri.split("//", 1)[-1].split("/", 1)[0].lower()
+        if any(host == known or host.endswith("." + known)
+               for known in _STANDARD_TAXONOMY_HOSTS):
+            standard.add(prefix)
+    return standard
+
+
 def parse_facts(raw: bytes) -> list[Fact]:
     """Every numeric fact in the instance, with its context resolved."""
     prefixes = _prefixes(raw)
+    standard = _standard_namespaces(prefixes)
     root = ET.fromstring(raw)
     contexts = parse_contexts(root, prefixes)
     units = parse_units(root, prefixes)
@@ -241,8 +300,10 @@ def parse_facts(raw: bytes) -> list[Fact]:
             continue
         members, start, end = contexts.get(context_id, ({}, None, None))
         sign = -1.0 if (node.get("sign") or "") == "-" else 1.0
+        element = _qname(node.tag, prefixes)
         facts.append(Fact(
-            element=_qname(node.tag, prefixes),
+            element=element,
+            standard_element=element.split(":")[0] in standard if ":" in element else True,
             value=sign * float(text),
             members=members,
             start=start,
@@ -273,11 +334,91 @@ def _is_hypothetical(fact: Fact) -> bool:
     )
 
 
-def product_facts(facts: list[Fact], *, worldwide_only: bool = True) -> list[Fact]:
+def _product_member(fact: Fact, names_a_product) -> str | None:
+    """Which of a fact's members names a product, by asking rather than by name.
+
+    ``names_a_product`` is the caller's resolver. A fact carrying exactly one
+    member it accepts is about that product; one carrying two is a cross-tab of
+    two products, which states neither on its own and is declined the way the
+    resolver declines a tie.
+    """
+    if names_a_product is None:
+        return fact.product_member
+    found = [member for member in fact.members.values() if names_a_product(member)]
+    return found[0] if len(found) == 1 else None
+
+
+def revenue_elements(facts: list[Fact], *, names_a_product=None) -> frozenset[str]:
+    """Which elements this filing states product revenue in.
+
+    Read from the instance instead of named. Among facts that are money, cover
+    a span of time, come from a published taxonomy and sit on the axis naming a
+    product, the element the filer uses most is the one it reports sales in: a
+    company breaks its products out by revenue far more often than by anything
+    else, so the count separates them without a vocabulary of element names.
+
+    Ties are kept rather than broken, because a filer stating product revenue
+    under two elements has two of them and picking one would drop a product.
+    """
+    counts: dict[str, int] = {}
+    for fact in facts:
+        if (
+            fact.from_standard_taxonomy
+            and fact.states_an_amount
+            and fact.months
+            and _product_member(fact, names_a_product)
+            and not _is_hypothetical(fact)
+        ):
+            counts[fact.element] = counts.get(fact.element, 0) + 1
+    if not counts:
+        return frozenset()
+    most = max(counts.values())
+    return frozenset(element for element, n in counts.items() if n == most)
+
+
+def _is_a_slice(candidates: list[Fact], members: list[str]) -> set[int]:
+    """Which facts are a piece of a product rather than the whole of it.
+
+    A filer states a region by adding an axis, so a piece carries a qualifier
+    the whole does not. Which axis that is cannot be known by name - an IFRS
+    filer splits by ``MarketsOfCustomersAxis``, a us-gaap one by
+    ``StatementGeographicalAxis``, and a filer may invent its own - so it is
+    read from what the filing does with it: an axis carrying more than one
+    member for the same product and period is a breakdown of that product, and
+    every fact carrying that axis is one of the pieces.
+
+    A filer disclosing a single region and no total defeats this, because one
+    member is not yet a breakdown. The named geographic axes are kept as a
+    second signal for that case.
+    """
+    split: dict[tuple[str, str, int | None], dict[str, set[str]]] = {}
+    keys = [(members[i], fact.period or "", fact.months)
+            for i, fact in enumerate(candidates)]
+    for i, fact in enumerate(candidates):
+        seen = split.setdefault(keys[i], {})
+        for axis, member in fact.members.items():
+            if member != members[i]:
+                seen.setdefault(axis, set()).add(member)
+    slices: set[int] = set()
+    for i, fact in enumerate(candidates):
+        broken = {axis for axis, values in split[keys[i]].items() if len(values) > 1}
+        if any(axis in broken for axis in fact.members) or not fact.is_worldwide:
+            slices.add(i)
+    return slices
+
+
+def product_facts(
+    facts: list[Fact], *, worldwide_only: bool = True, names_a_product=None
+) -> list[Fact]:
     """Revenue facts sitting on the product axis, each the whole of its product.
 
     Empty is a real answer: a filing from before the issuer's tagging cutoff, or
     a product the issuer folds into an "other" line, states nothing here.
+
+    ``names_a_product`` is how the product axis is found. Without it this reads
+    only the spellings in ``PRODUCT_AXES`` - enough for a bulk row already
+    normalised to them and for a us-gaap filing, and blind to every filer whose
+    taxonomy names the axis something else.
 
     A filer qualifies a product's revenue in two different ways and only one of
     them makes a smaller figure. One tags a product's year twice - once plainly,
@@ -286,33 +427,41 @@ def product_facts(facts: list[Fact], *, worldwide_only: bool = True) -> list[Fac
     business segment, and that qualification takes nothing away, because there
     is no less-qualified fact about the same product for it to be a part of.
 
-    So the total is not recognised from a list of axes that are known to be
-    harmless; it is the least-qualified statement the filer makes about that
-    product and period. An axis nobody has seen before subsets a figure or it
-    does not, and either way this reads it the same as the filer wrote it.
+    So the total is not recognised from a list of axes known to be harmless; it
+    is the least-qualified statement the filer makes about that product and
+    period, with any qualifier the filing itself uses to split that product
+    read as a slice of it.
     """
-    candidates = [
-        fact
-        for fact in facts
-        if fact.product_member
-        and fact.element in _REVENUE_ELEMENTS
-        and fact.period
-        and not _is_hypothetical(fact)
-        and (fact.is_worldwide or not worldwide_only)
-    ]
+    elements = revenue_elements(facts, names_a_product=names_a_product)
+    candidates: list[Fact] = []
+    members: list[str] = []
+    for fact in facts:
+        member = _product_member(fact, names_a_product)
+        # Every condition `revenue_elements` selected the element under has to
+        # hold of the fact as well: the element says what a number means, not
+        # that this particular one is money over a period.
+        if (
+            member
+            and fact.element in elements
+            and fact.states_an_amount
+            and fact.period
+            and not _is_hypothetical(fact)
+        ):
+            candidates.append(fact)
+            members.append(member)
     if not worldwide_only:
         # The caller has asked for the lines as well as the totals, so the
         # qualified facts are the point rather than something to see past.
         return candidates
+    slices = _is_a_slice(candidates, members)
+    kept = [(members[i], fact) for i, fact in enumerate(candidates) if i not in slices]
     plainest: dict[tuple[str, str, int | None], int] = {}
-    for fact in candidates:
-        key = (fact.product_member or "", fact.period or "", fact.months)
+    for member, fact in kept:
+        key = (member, fact.period or "", fact.months)
         qualifiers = len(fact.members) - 1
         if key not in plainest or qualifiers < plainest[key]:
             plainest[key] = qualifiers
     return [
-        fact
-        for fact in candidates
-        if len(fact.members) - 1
-        == plainest[(fact.product_member or "", fact.period or "", fact.months)]
+        fact for member, fact in kept
+        if len(fact.members) - 1 == plainest[(member, fact.period or "", fact.months)]
     ]
