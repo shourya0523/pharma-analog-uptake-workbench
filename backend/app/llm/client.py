@@ -182,9 +182,21 @@ def _citations_from_message(message: dict[str, Any]) -> list[dict[str, str]]:
     return out
 
 
-def _filter_hallucinated_spans(spans: list[dict[str, Any]], source_text: str) -> list[dict[str, Any]]:
+def _filter_hallucinated_spans(spans: list[Any], source_text: str) -> list[dict[str, Any]]:
+    """Spans the source actually contains, from whatever shape the model sent.
+
+    A span is meant to be an object carrying `span_text`. A model sometimes
+    returns the list as bare strings instead, and every reader downstream calls
+    `.get` on it: on one of Novartis's 6-K exhibits that raised AttributeError
+    out of `extract_revenue`, which the orchestrator does not guard, so a single
+    oddly-shaped reply failed the whole job rather than that one source.
+
+    A string is a span with no id and no rationale, which is exactly what the
+    verbatim check needs, so it is read as one rather than discarded.
+    """
     good: list[dict[str, Any]] = []
-    for i, span in enumerate(spans):
+    for i, raw in enumerate(spans or []):
+        span: dict[str, Any] = raw if isinstance(raw, dict) else {"span_text": str(raw or "")}
         text = (span.get("span_text") or "").strip()
         if not text:
             continue
