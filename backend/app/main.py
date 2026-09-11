@@ -13,6 +13,7 @@ from fastapi.responses import Response
 from pydantic import BaseModel
 from sqlalchemy.orm import Session, selectinload
 
+from app.api.products import router as products_router
 from app.config import get_settings
 from app.dashboard.series import build_dashboard_preview
 from app.db.models import (
@@ -60,6 +61,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(products_router)
 
 job_queue = get_job_queue()
 file_store = get_file_store()

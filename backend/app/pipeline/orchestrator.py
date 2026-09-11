@@ -688,6 +688,7 @@ class PipelineOrchestrator:
                     )
                     self.db.add(product)
                     self.db.flush()
+                job.product_id = product.id
                 family = (
                     self.db.query(AnalogFamilyORM)
                     .filter_by(active_moiety_key=identity.analog_family_key)
