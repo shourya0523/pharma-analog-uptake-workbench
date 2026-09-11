@@ -21,6 +21,9 @@ async def handle_job(payload: dict[str, Any], file_store: FileStore | None = Non
         await orch.run_job(job_id)
     finally:
         try:
+            # A job that failed inside a commit leaves the session unusable
+            # until it is rolled back; the run's status still has to be set.
+            db.rollback()
             refresh_run_status(db, run_id)
         except Exception:
             logger.exception("run_status_update_failed run_id=%s", run_id)

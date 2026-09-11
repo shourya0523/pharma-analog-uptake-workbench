@@ -497,7 +497,36 @@ class XbrlMemberResolutionORM(Base):
 _settings = get_settings()
 # Sync engine for MVP simplicity (API + in-process workers in one process)
 _sync_url = _settings.resolved_database_url.replace("sqlite+aiosqlite://", "sqlite://")
-engine = create_engine(_sync_url, future=True)
+
+
+def sqlite_connect_args(url: str) -> dict[str, Any]:
+    """Driver arguments for a SQLite URL; empty for any other database.
+
+    SQLite admits one writer at a time, and the API process runs several jobs
+    that each commit as they go. The driver's default is to give up after five
+    seconds of waiting for the writer to finish, which is shorter than one
+    document parse, so a busy server would fail jobs on its own contention.
+    """
+    if not url.startswith("sqlite"):
+        return {}
+    return {"timeout": 60}
+
+
+engine = create_engine(_sync_url, future=True, connect_args=sqlite_connect_args(_sync_url))
+
+
+@event.listens_for(engine, "connect")
+def _sqlite_wal(dbapi_connection: Any, _record: Any) -> None:
+    """Let readers proceed while a job is writing.
+
+    In the default rollback journal a reader blocks the writer's commit and a
+    writer blocks every reader, so the poll that asks how a run is going waits
+    on the job it is asking about. Write-ahead logging removes both waits; it
+    is a property of the file, so setting it on every connection is idempotent
+    and a no-op for an in-memory database.
+    """
+    if _sync_url.startswith("sqlite"):
+        dbapi_connection.execute("PRAGMA journal_mode=WAL")
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
 

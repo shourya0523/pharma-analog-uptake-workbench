@@ -354,6 +354,11 @@ class PipelineOrchestrator:
                 job.completeness_pct,
             )
         except Exception as exc:
+            # If the exception came out of a flush the session refuses every
+            # statement, reading an expired attribute included, until it is
+            # rolled back; without this the failure is never recorded and the
+            # job looks as though it were still running.
+            self.db.rollback()
             step = job.current_step if job else None
             job.status = JobStatus.FAILED.value
             job.error = f"{type(exc).__name__}: {exc}"
@@ -771,6 +776,12 @@ class PipelineOrchestrator:
                                 selected=True,
                             )
                         )
+
+        # The product and family rows above are complete, so they are committed
+        # here rather than at the end of the step: a flushed row is a write
+        # transaction, SQLite admits one writer, and the model calls below take
+        # long enough that every other job's commit would time out against it.
+        self.db.commit()
 
         # LLM metadata from first successful narrative source
         for src in sources:
