@@ -102,10 +102,10 @@ that identified it. `scripts/eval_provenance.py` audits this from outside.
 failing a check is held back rather than published, and the finding names the
 period and the reason.
 
-## Four ways a number is obtained, in this order
+## Five ways a number is obtained, in this order
 
-Everything above describes the table reader, which is the third of four and the
-only one that infers anything.
+Everything above describes the table reader, which is the fourth of five and
+the only one that infers anything.
 
 **What the filer tagged.** From 2019 the filers tag product-level revenue in
 XBRL, and a tagged fact states its period, its unit, its currency and which
@@ -131,6 +131,16 @@ member — without that, a member recorded as unplaceable while a drug went
 untracked would still be unplaceable for the run that uploaded it. Only a
 reviewer records the third verdict, `not_a_product`, which is a member that
 names no single product at all: a category line or a total.
+
+**What the filer tagged, read in bulk.** The same class of claim for filings
+the retrieve stage never reached. The SEC's Financial Statement and Notes Data
+Sets carry every filer's tagged facts and the axis members they were tagged on,
+so `app/parsing/notes_datasets.py` and `app/extraction/bulk_tagged.py` read a
+quarter out of an extract directory rather than out of a document that had to
+be found first. Off unless an extract is downloaded and configured in
+`notes_dataset_dirs`. Member identity is resolved through the same register:
+the extracts spell a member stripped of its prefix and suffix, which is why the
+register is keyed on identity as well as on the member as written.
 
 **What a sentence says.** Issuers disclosed product sales narratively long
 before the product-sales exhibit existed, and smaller ones never adopted one.

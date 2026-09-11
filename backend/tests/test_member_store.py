@@ -1,10 +1,10 @@
 """The member register as a store a run can add to, rather than a file it reads.
 
-The file could not be the store. It lives in the source tree, a deployment runs
+The file cannot be the store: it lives in the source tree, a deployment runs
 several workers over containers that are discarded when the run ends, and the
-drugs a run is about arrive at upload time - so a mapping learned while reading
-a filing had nowhere to go, and a mapping decided before the upload was decided
-against the wrong list.
+drugs a run is about arrive at upload time. So a mapping learned while reading
+a filing has nowhere to go, and a mapping decided before the upload was decided
+against a list that does not include it.
 """
 
 from __future__ import annotations
@@ -82,7 +82,7 @@ def test_a_reviewer_outranks_anything_automated(tmp_path: Path):
 
 
 def test_a_negative_is_stored_against_the_list_it_was_judged_against(tmp_path: Path):
-    """Storing it without that is what made the old file a standing veto."""
+    """A negative stored without it is a veto against every list, not one."""
     with _session(tmp_path) as db:
         member_store.record(
             db,

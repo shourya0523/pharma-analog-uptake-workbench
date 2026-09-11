@@ -113,7 +113,7 @@ def test_the_same_member_means_different_things_to_different_filers():
     assert for_gilead == []
 
 
-# A Gilead instance tagging a product the register was built without. The
+# A Gilead instance tagging a product the tracked list does not carry. The
 # member is unambiguous - the filer wrote the product's name into it - so the
 # string rules place it the moment the product is on the list.
 GILEAD_INSTANCE = b"""<?xml version="1.0" encoding="UTF-8"?>

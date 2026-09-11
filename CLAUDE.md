@@ -101,10 +101,19 @@ watch.
 commit message: remove the file, and does the pipeline still work on a product
 it has never seen?**
 
-- `seed/xbrl_members.csv` passes. Delete it and 76 of its 363 members still
-  resolve from the string rules, and the other 287 go to the model that decided
-  them originally. It costs 287 calls. It is a **cache** in front of a
-  procedure that works without it.
+- `seed/xbrl_members.csv` passes. Delete it and the members that the string
+  rules place still resolve; the rest go to the model that decided them
+  originally, at one call each. It is a **cache** in front of a procedure that
+  works without it. Do not quote a count here - the register grows and the
+  rules change under it, and the split is a `match` over the register away:
+
+        from app.extraction.members import load_register, load_products, match
+        sum(1 for _, m in load_register() if match(m, load_products()).resolved)
+
+  A cache only holds if a stored decision cannot answer a question it was not
+  asked. A negative recorded against one candidate list is not an answer for a
+  different list, and consulted as though it were, it stops the rules running
+  at all - which is the same file being the mechanism after all.
 - A table of document URLs fails. Delete it and nothing produces a URL from a
   product name, because no such procedure exists. It would be the **mechanism**,
   and its rows would be gold's `source_url` column.
