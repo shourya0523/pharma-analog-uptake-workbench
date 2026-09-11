@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import ast
 import pathlib
+import re
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
 APP = REPO / "backend" / "app"
@@ -115,3 +116,117 @@ def test_the_member_register_names_only_products_we_track_independently():
     assert named <= known, (
         f"register names products absent from product_attributes.csv: {sorted(named - known)}"
     )
+
+
+# ---------------------------------------------------------------------------
+# The two checks above are about code: a module that opens gold, a script that
+# reads gold and writes a pipeline input. Both were enough until the failure
+# arrived in a shape neither watches - a seed file written by hand, whose rows
+# were copied from gold's own columns. No script reads gold, no module names
+# it, and the file still carries the answer key's evidence into the thing being
+# scored.
+#
+# What was proposed was a table of investor-relations document URLs, "seeded
+# by pattern where the pattern is regular, hand-added for one-offs". Its rows
+# would have been gold's `source_url` column. Measuring against gold would then
+# have confirmed that a URL copied from gold fetches the document gold cited.
+# ---------------------------------------------------------------------------
+
+GOLD_ROWS = SEED / "gold" / "quarterly_revenue.jsonl"
+# The columns that are evidence rather than reference data. Product names are
+# deliberately excluded: gold is built from product_attributes.csv, so those
+# overlap by design and in the permitted direction.
+EVIDENCE_FIELDS = ("source_url", "source_quote", "gold_id")
+# Short strings collide by accident; a quote or a URL this long does not.
+DISTINCTIVE = 24
+
+
+def _gold_evidence() -> set[str]:
+    import json
+
+    if not GOLD_ROWS.exists():
+        return set()
+    values: set[str] = set()
+    for line in GOLD_ROWS.read_text().splitlines():
+        if not line.strip():
+            continue
+        row = json.loads(line)
+        for field in EVIDENCE_FIELDS:
+            value = str(row.get(field) or "").strip()
+            if len(value) >= DISTINCTIVE:
+                values.add(value)
+    return values
+
+
+def test_no_pipeline_input_carries_gold_evidence():
+    """A file the pipeline reads must not contain gold's URLs or quotes.
+
+    This is the value-level form of the rule the tests above enforce on code.
+    Overfitting to an answer key does not usually arrive as an import; it
+    arrives as someone reading the key and typing what it says into a file the
+    pipeline loads at run time.
+
+    Product names are not checked, and must not be: gold is built from
+    seed/product_attributes.csv, so the overlap there is the dependency running
+    in the direction that is allowed.
+    """
+    evidence = _gold_evidence()
+    assert evidence, "no gold evidence found to check against; this test would pass vacuously"
+    offenders: list[str] = []
+    for name in PIPELINE_INPUTS:
+        path = SEED / name
+        if not path.exists():
+            continue
+        text = path.read_text(errors="replace")
+        for value in evidence:
+            if value in text:
+                offenders.append(f"{name} contains gold {value[:70]!r}")
+                break
+    assert not offenders, (
+        "pipeline inputs carrying the answer key's own evidence:\n  "
+        + "\n  ".join(offenders)
+        + "\nBuild pipeline inputs from the documents, not from gold's citations."
+    )
+
+
+def _seed_files_the_app_reads() -> set[str]:
+    """Every file under seed/ that application code resolves a path to."""
+    found: set[str] = set()
+    pattern = re.compile(r'"seed"\s*/\s*"([^"]+)"|seed/([A-Za-z0-9_.-]+\.(?:csv|jsonl|json))')
+    for path in APP.rglob("*.py"):
+        for match in pattern.finditer(path.read_text()):
+            name = match.group(1) or match.group(2)
+            if name and "." in name:
+                found.add(name)
+    return found
+
+
+def test_a_new_file_the_pipeline_reads_has_to_be_declared():
+    """Adding a seed input should be a visible decision, not a side effect.
+
+    `PIPELINE_INPUTS` is what the checks above watch. A file wired into the
+    pipeline but missing from that list is unwatched by every one of them, and
+    nothing else would say so.
+
+    The question to answer in the commit that adds one is whether it is a cache
+    or a mechanism: delete it, and does the pipeline still work on a product it
+    has never seen? seed/xbrl_members.csv passes - 76 of its 363 members
+    resolve from the string rules alone and the other 287 go to the model that
+    decided them in the first place, so removing it costs calls, not
+    capability. A table of document URLs fails: remove it and there is no rule
+    that produces a URL, because none exists. Cost in time is a cache; cost in
+    capability is the answer key wearing a different hat.
+    """
+    undeclared = sorted(_seed_files_the_app_reads() - set(PIPELINE_INPUTS))
+    assert not undeclared, (
+        "the pipeline reads these seed files and they are not in PIPELINE_INPUTS:\n  "
+        + "\n  ".join(undeclared)
+        + "\nAdd them there - and say in the commit whether deleting the file "
+          "would cost time or cost capability."
+    )
+
+
+def test_every_declared_input_is_real_and_used():
+    """A stale name in the list quietly narrows every check above."""
+    missing = [name for name in PIPELINE_INPUTS if not (SEED / name).exists()]
+    assert not missing, f"PIPELINE_INPUTS names files that do not exist: {missing}"
