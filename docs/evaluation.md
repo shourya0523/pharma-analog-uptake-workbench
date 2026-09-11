@@ -36,13 +36,43 @@ from. They live in `seed/cases/`:
 | file | cases | oracle |
 |---|---|---|
 | `gold_sample.json` | 8 runs, 32 quarters | `seed/gold/quarterly_revenue.jsonl` |
+| `gold_all.json` | every product-year in gold, one run per window | `seed/gold/quarterly_revenue.jsonl` |
 | `foreign_xbrl.json` | 7 runs, 7 quarters | the figure printed in the filing each case cites |
+| `unseen.json` | issuers no answer key uses, one quarter each | the figure printed in the 10-Q each case cites |
 
 `value_normalized_usd_millions: null` means the run must come back with
 nothing for that quarter. A set that only refuses is passed by a system that
 always refuses, so both answers are represented.
 
 Adding a held-out set is a new file, not a new script.
+
+## A full run
+
+`gold_all.json` is hours of work for the server and a client that dies
+half-way orphans every run it started, so the client can rejoin:
+
+    python scripts/eval.py --cases seed/cases/gold_all.json --attach
+
+`--attach` scores the runs already on the server for each case's window
+instead of starting them again. A job that failed - the model endpoint was
+unreachable, the server restarted - is scored as it stands; run those cases
+again as fresh runs (`--case DRUG`, or a case file holding only them, without
+`--attach`) and read the two outputs together.
+
+## Checking by hand
+
+The score says a published figure matched the answer key. It does not say
+the figure is in the document the pipeline cited, which is what a reader will
+check first:
+
+    python scripts/check_by_hand.py --run <run_id>
+
+For every published quarterly figure it fetches the cited document and looks
+for the figure beside the product's name; for a tagged fact it finds the
+context that names the product and the fact filed against it, and then the
+same figure in the printed filing beside the instance. A figure it cannot
+find is either a document it cannot read or a wrong publication; look at
+each one.
 
 ## Reading the output
 
