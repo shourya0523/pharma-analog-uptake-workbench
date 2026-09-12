@@ -245,6 +245,12 @@ def test_a_model_that_cannot_be_reached_answers_nothing_rather_than_raising(monk
     assert answer == {}
     assert calls["n"] == OpenRouterClient.TRANSPORT_ATTEMPTS, "it is retried before it is given up on"
 
+    # The judge asks through the web-search variant; it is the same network.
+    calls["n"] = 0
+    answer = asyncio.run(client.chat_json_with_web(model="m", system="s", user="u"))
+    assert answer == {}
+    assert calls["n"] == OpenRouterClient.TRANSPORT_ATTEMPTS
+
 
 async def _no_sleep(_seconds):
     return None

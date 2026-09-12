@@ -47,7 +47,7 @@ import hashlib
 import re
 from dataclasses import dataclass, field
 
-from app.parsing.periods import MONTH_WORDS, MONTHS, quarter_of_month
+from app.parsing.periods import MONTH_WORDS, MONTHS, fiscal_period_end, quarter_of_month
 
 # A filing names a column's period in one of two ways. Either it anchors the
 # period to a date - "Three months ended June 30," - or it names the period
@@ -62,7 +62,7 @@ from app.parsing.periods import MONTH_WORDS, MONTHS, quarter_of_month
 # - and a reader that refuses the unanchored form reads those schedules as
 # stating no period at all.
 _PERIOD_PHRASE_RE = re.compile(
-    r"\b(three|six|nine|twelve|year)s?\s*(?:months?\s*)?ended\s+([A-Za-z]{3,9})",
+    r"\b(three|six|nine|twelve|year)s?\s*(?:months?\s*)?ended\s+([A-Za-z]{3,9})\.?\s*(\d{1,2})?",
     re.IGNORECASE,
 )
 _ORDINAL_QUARTERS = {"first": 3, "second": 6, "third": 9, "fourth": 12}
@@ -303,6 +303,7 @@ def _periods_named_in(text: str) -> list[tuple[int, int]]:
         months = 12 if word == "year" else MONTH_WORDS.get(word, 3)
         month = MONTHS.get(match.group(2).lower())
         if month:
+            month, _ = fiscal_period_end(month, int(match.group(3)) if match.group(3) else None)
             anchored.append((months, month))
     return anchored or _named_periods(text)
 

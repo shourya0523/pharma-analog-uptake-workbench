@@ -1223,6 +1223,12 @@ class PipelineOrchestrator:
                 rows.append(self._datapoint_from_candidate(job, src, candidate))
         if learned:
             written = member_store.record_many(self.db, learned, products=products)
+            # The savepoint inside record_many flushes everything pending, the
+            # rows above included, which makes this session a writer; the
+            # caller goes on to await the model for other sources, and a write
+            # held open across that stalls every other job. So it is committed
+            # here, where it was opened.
+            self.db.commit()
             logger.info("xbrl_members_learned job_id=%s members=%d", job.id, written)
         if rows or totals:
             logger.info(

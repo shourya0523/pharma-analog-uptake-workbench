@@ -220,3 +220,55 @@ async def test_primary_filings_respect_the_window_they_were_fetched_for(monkeypa
         "about 2005"
     )
     assert "q2026.htm" not in fetched
+
+
+
+def test_every_edgar_read_survives_a_dropped_connection_or_a_refusal(monkeypatch):
+    """EDGAR refuses with 503 under load and sometimes drops the connection
+    instead; either, unretried, reads downstream as an issuer with no filings.
+    The submissions index - the whole of what EDGAR knows about an issuer -
+    went through no retry at all."""
+    import asyncio
+
+    import httpx
+    import pytest
+
+    from app.connectors import sources as module
+    from app.connectors.sources import SECConnector
+
+    async def _now(*_a, **_k):
+        return None
+
+    monkeypatch.setattr(asyncio, "sleep", _now)
+    monkeypatch.setattr(module, "_sec_throttle", _now)
+
+    class Flaky:
+        def __init__(self, script):
+            self.script = list(script)
+            self.calls = 0
+
+        async def get(self, url):
+            self.calls += 1
+            step = self.script.pop(0)
+            if isinstance(step, Exception):
+                raise step
+            return httpx.Response(step, request=httpx.Request("GET", url), json={"ok": True})
+
+    connector = SECConnector.__new__(SECConnector)
+    client = Flaky([httpx.ConnectError(""), 503, 200])
+    response = asyncio.run(connector._get_with_retry(client, "https://data.sec.gov/submissions/CIK0000000001.json"))
+    assert response.status_code == 200 and client.calls == 3
+
+    client = Flaky([httpx.ConnectError("")] * 4)
+    with pytest.raises(httpx.ConnectError):
+        asyncio.run(connector._get_with_retry(client, "https://data.sec.gov/x", attempts=4))
+    assert client.calls == 4
+
+    # And the three reads that used to call the client directly now go
+    # through it: the ticker map, the submissions index, and its archive shards.
+    import inspect
+
+    for name in ("resolve_cik", "_filings_covering", "_retrieve_xbrl_instances", "retrieve"):
+        fn = getattr(SECConnector, name, None)
+        if fn is not None:
+            assert "client.get(" not in inspect.getsource(fn), name

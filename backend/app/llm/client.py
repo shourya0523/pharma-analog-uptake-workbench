@@ -17,7 +17,11 @@ from app.llm.grounding import (
     enforce_verbatim_on_candidates,
     quote_is_verbatim,
 )
-from app.parsing.evidence import TOTAL_REVENUE_RE, product_aliases
+from app.parsing.evidence import (
+    NON_PRODUCT_REVENUE_RE,
+    TOTAL_REVENUE_RE,
+    product_aliases,
+)
 from app.quality.candidate_filters import (
     quote_mentions_other_brand,
     quote_mentions_product,
@@ -68,34 +72,44 @@ class OpenRouterClient:
             "response_format": {"type": "json_object"},
             "temperature": 0.1,
         }
-        # The model sits behind a network, and a connection that fails or
-        # times out is that one question going unanswered - the same outcome
-        # as the model having nothing to say, which every caller already
-        # handles as an empty dict. It is retried, because the endpoint is
-        # flaky in bursts; it is not raised, because one blip would otherwise
-        # end a job that already holds every figure the other readers found.
+        data = await self._post(payload, model=model, timeout=120)
+        if not data:
+            return {}
+        content = data["choices"][0]["message"]["content"]
+        return _parse_json_content(content)
+
+    async def _post(
+        self, payload: dict[str, Any], *, model: str, timeout: float, web: bool = False
+    ) -> dict[str, Any] | None:
+        """One completion request; None when the model could not be reached.
+
+        The model sits behind a network, and a connection that fails or times
+        out is that one question going unanswered - the same outcome as the
+        model having nothing to say, which every caller already handles as an
+        empty answer. It is retried, because the endpoint is flaky in bursts;
+        it is not raised, because one blip would otherwise end a job that
+        already holds every figure the other readers found.
+        """
         delay = 2.0
         for attempt in range(self.TRANSPORT_ATTEMPTS):
             try:
-                async with httpx.AsyncClient(timeout=120) as client:
+                async with httpx.AsyncClient(timeout=timeout) as client:
                     resp = await client.post(
                         f"{self.settings.openrouter_base_url}/chat/completions",
                         headers=self._headers(),
                         json=payload,
                     )
-                    self._raise_for_status(resp, model=model)
-                    data = resp.json()
-                content = data["choices"][0]["message"]["content"]
-                return _parse_json_content(content)
+                    self._raise_for_status(resp, model=model, web=web)
+                    return resp.json()
             except httpx.TransportError as exc:
                 logger.warning("openrouter_unreachable attempt=%d/%d model=%s error=%s: %s",
                                attempt + 1, self.TRANSPORT_ATTEMPTS, model,
                                type(exc).__name__, exc)
                 if attempt == self.TRANSPORT_ATTEMPTS - 1:
-                    return {}
+                    return None
                 await asyncio.sleep(delay)
                 delay *= 2
-        return {}
+        return None
 
     def _web_tools(self, *, fetch: bool = False) -> list[dict[str, Any]]:
         domains = [
@@ -143,14 +157,9 @@ class OpenRouterClient:
             "response_format": {"type": "json_object"},
             "temperature": 0.1,
         }
-        async with httpx.AsyncClient(timeout=timeout) as client:
-            resp = await client.post(
-                f"{self.settings.openrouter_base_url}/chat/completions",
-                headers=self._headers(),
-                json=payload,
-            )
-            self._raise_for_status(resp, model=model, web=True)
-            data = resp.json()
+        data = await self._post(payload, model=model, timeout=timeout, web=True)
+        if not data:
+            return {}
         message = data["choices"][0]["message"]
         parsed = _parse_json_content(message.get("content") or "{}")
         citations = _citations_from_message(message)
@@ -728,6 +737,11 @@ def apply_judge_hard_vetoes(
         veto = True
     if period_type == "quarterly" and re_ytd_language(q):
         issues.append("hard_veto:ytd_language_as_quarterly")
+        veto = True
+    # A milestone earned on the product's sales is stated in the same sentence
+    # as the product, so naming the product does not clear it.
+    if NON_PRODUCT_REVENUE_RE.search(q) and (candidate.get("revenue_scope") or "") not in {"Company total", ""}:
+        issues.append("hard_veto:milestone_or_license_revenue")
         veto = True
     if not mentions and (candidate.get("revenue_scope") or "") not in {"Company total", ""}:
         aliases = product_aliases(product, generic, extra=extra_aliases)

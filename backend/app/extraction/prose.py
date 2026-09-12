@@ -31,7 +31,7 @@ from functools import lru_cache
 from app.extraction.extract import ExtractedValue
 from app.extraction.members import load_products, words
 from app.parsing.evidence import product_aliases
-from app.parsing.periods import MONTHS, quarter_of_month
+from app.parsing.periods import MONTHS, fiscal_period_end, quarter_of_month
 
 _MAGNITUDE_TO_UNIT = {"billion": "billions", "million": "millions", "thousand": "thousands"}
 _ORDINAL_TO_QUARTER = {"first": 1, "second": 2, "third": 3, "fourth": 4}
@@ -48,7 +48,7 @@ _MONEY_RE = re.compile(
 # "quarter ended June 30, 2002" / "three months ended September 30, 2016"
 _PERIOD_ENDED_RE = re.compile(
     r"\b(?:(?P<length>three|six|nine|twelve)\s+months?|(?P<quarter_word>quarter)|(?P<annual>year))\s+"
-    r"ended\s+(?P<month>[A-Za-z]{3,9})\s+\d{1,2},?\s+(?P<year>(?:19|20)\d{2})",
+    r"ended\s+(?P<month>[A-Za-z]{3,9})\s+(?P<day>\d{1,2}),?\s+(?P<year>(?:19|20)\d{2})",
     re.IGNORECASE,
 )
 # "first quarter 2003" / "fourth quarter of 2003"
@@ -130,6 +130,7 @@ def _periods_with_positions(sentence: str) -> list[tuple[int, _Period]]:
         month = MONTHS.get((match.group("month") or "").lower())
         if not month:
             continue
+        month, year = fiscal_period_end(month, int(match.group("day")), year)
         if match.group("annual") or (match.group("length") or "").lower() == "twelve":
             found.append((match.start(), _Period(str(year), "annual")))
         elif match.group("quarter_word") or (match.group("length") or "").lower() == "three":

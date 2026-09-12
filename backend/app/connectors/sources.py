@@ -198,10 +198,8 @@ class SECConnector:
         """
         if not ticker and not company_name:
             return None
-        await _sec_throttle()
         async with httpx.AsyncClient(headers=self.headers, timeout=30) as client:
-            resp = await client.get(self.TICKER_MAP)
-            resp.raise_for_status()
+            resp = await self._get_with_retry(client, self.TICKER_MAP)
             data = resp.json()
 
         needle_t = (ticker or "").upper().strip()
@@ -239,7 +237,17 @@ class SECConnector:
         delay = 1.0
         for attempt in range(attempts):
             await _sec_throttle()
-            response = await client.get(url)
+            try:
+                response = await client.get(url)
+            except httpx.TransportError as exc:
+                # A connection that drops is the same refusal without a status
+                # line; it reads downstream exactly as a 503 would.
+                if attempt == attempts - 1:
+                    raise
+                logger.info("sec_backoff error=%s attempt=%s url=%s", type(exc).__name__, attempt + 1, url)
+                await asyncio.sleep(delay)
+                delay *= 2
+                continue
             if response.status_code not in (429, 503) or attempt == attempts - 1:
                 response.raise_for_status()
                 return response
@@ -330,9 +338,7 @@ class SECConnector:
             if not name:
                 continue
             try:
-                await _sec_throttle()
-                extra = await client.get(f"https://data.sec.gov/submissions/{name}")
-                extra.raise_for_status()
+                extra = await self._get_with_retry(client, f"https://data.sec.gov/submissions/{name}")
                 block = extra.json()
             except Exception as exc:
                 logger.info("sec_submissions_shard_failed name=%s error=%s", name, exc)
@@ -613,18 +619,20 @@ class SECConnector:
         async with httpx.AsyncClient(headers=self.headers, timeout=60, follow_redirects=True) as client:
             sub_url = self.SUBMISSIONS.format(cik=resolved)
             try:
-                await _sec_throttle()
-                sub = await client.get(sub_url)
-                sub.raise_for_status()
+                sub = await self._get_with_retry(client, sub_url)
                 payload = sub.json()
             except Exception as exc:
+                # The index is the whole of what EDGAR knows about the issuer;
+                # without it there is no filing to read, and a job that goes on
+                # from here is answering from whatever the web search finds.
+                logger.warning("sec_submissions_failed cik=%s error=%s: %s", resolved, type(exc).__name__, exc)
                 sources.append(
                     RetrievedSource(
                         source_type=SourceType.SEC_FILING,
                         url=sub_url,
                         title="SEC submissions",
                         retrieval_status=RetrievalStatus.FAILED,
-                        notes=str(exc),
+                        notes=f"{type(exc).__name__}: {exc}",
                         metadata={"cik": resolved},
                     )
                 )

@@ -62,6 +62,10 @@ TABLE_REGISTRY: dict[str, Any] = {
 }
 
 
+# Rendering a traceback is a Formatter's job, not a Handler's.
+_traceback = logging.Formatter()
+
+
 class RingBufferHandler(logging.Handler):
     """Capture recent application logs for the Observability UI."""
 
@@ -74,7 +78,7 @@ class RingBufferHandler(logging.Handler):
                 "message": record.getMessage(),
             }
             if record.exc_info:
-                entry["exc_info"] = self.formatException(record.exc_info)
+                entry["exc_info"] = _traceback.formatException(record.exc_info)
             with _lock:
                 _logs.append(entry)
         except Exception:  # noqa: BLE001 - logging handlers must not propagate

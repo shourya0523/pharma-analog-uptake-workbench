@@ -105,6 +105,17 @@ def check_instance(raw: bytes, drug: str, period_start: str | None, value: float
     return None
 
 
+def names(drug: str, window: str) -> bool:
+    """Whether a stretch of the document names the product.
+
+    A document prints the brand; the name a person typed may carry more -
+    "Nebulized Calderon" for a document that says "Calderon" - so any word of
+    the name long enough to be a name of its own will do.
+    """
+    low = window.lower()
+    return any(word in low for word in drug.lower().split() if len(word) >= 4)
+
+
 def printed_sibling(url: str) -> str | None:
     """The human-readable filing beside an extracted instance.
 
@@ -171,7 +182,7 @@ def main() -> int:
                         for s in spellings(None, d["value_normalized_usd_millions"]):
                             for m in re.finditer(r"(?<![\d,.])" + re.escape(s) + r"(?![\d,])", stext):
                                 window = stext[max(0, m.start() - 300): m.end() + 60]
-                                if drug.lower().split()[0] in window.lower():
+                                if names(drug, window):
                                     printed = stext[max(0, m.start() - 90): m.end() + 40].strip()
                                     break
                             if printed:
@@ -190,7 +201,7 @@ def main() -> int:
                 for s in spellings(d.get("value_reported"), d["value_normalized_usd_millions"]):
                     for m in re.finditer(re.escape(s), text):
                         window = low[max(0, m.start() - 400): m.end() + 120]
-                        if drug.lower().split()[0] in window:
+                        if names(drug, window):
                             hit = text[max(0, m.start() - 110): m.end() + 40]
                             break
                     if hit:
