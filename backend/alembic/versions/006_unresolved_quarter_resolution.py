@@ -22,7 +22,7 @@ def _columns(table: str) -> set[str]:
 
 
 def upgrade() -> None:
-    # As in 004: a fresh database already has the column from the live models.
+    # As in 005: a fresh database already has the column from the live models.
     if "resolution" not in _columns("unresolved_quarters"):
         with op.batch_alter_table("unresolved_quarters") as batch_op:
             batch_op.add_column(sa.Column("resolution", sa.String(length=32), nullable=True))
