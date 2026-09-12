@@ -3,7 +3,16 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useSearchParams } from 'react-router-dom'
 import { api, type ReviewItem } from '../api/client'
 
-/** The reasons `select_validation_tasks` can attach, plus the two unresolved kinds. */
+/**
+ * Prose for each reason, keyed by the reason the API sends.
+ *
+ * A snapshot of what `app/validation/sampling.py` attaches, plus the two kinds
+ * the completeness stage records. It cannot be derived here - the producer is
+ * Python - so a reason added there and not here falls back to showing the
+ * reason itself, which is why the lookup below is guarded rather than indexed.
+ * Serving the prose from the queue endpoint, next to the producer, would remove
+ * this copy altogether.
+ */
 const REASON_HELP: Record<string, string> = {
   low_confidence: 'Confidence fell below the 0.7 gate.',
   conflict: 'Two candidates disagreed for this quarter and reconciliation picked one.',

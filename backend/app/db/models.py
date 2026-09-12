@@ -30,6 +30,7 @@ from sqlalchemy.orm import (
 )
 
 from app.config import get_settings
+from app.domain.models import Cadence
 
 
 class Base(DeclarativeBase):
@@ -265,11 +266,15 @@ class CanonicalProductORM(Base):
     application_number: Mapped[str | None] = mapped_column(
         String(64), nullable=True, index=True
     )
-    # "quarterly" re-runs the product as each issuer files; "one_off" leaves it
-    # alone until someone asks. Kept on the product rather than in a watchlist
-    # table: a product has exactly one cadence, and the Library filters on it.
+    # Whether the product is re-extracted as each issuer files, or left alone
+    # until someone asks. Kept on the product rather than in a watchlist table:
+    # a product has exactly one cadence, and the Library filters on it. The
+    # default is set both sides because `default=` alone never reaches a row
+    # written by raw SQL, which is how a migration writes one.
     cadence: Mapped[str] = mapped_column(
-        String(32), default="one_off", server_default="one_off"
+        String(32),
+        default=Cadence.ONE_OFF.value,
+        server_default=Cadence.ONE_OFF.value,
     )
     initial_approval_date: Mapped[Any | None] = mapped_column(Date, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)

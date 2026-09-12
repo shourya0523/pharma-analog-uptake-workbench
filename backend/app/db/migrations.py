@@ -41,10 +41,14 @@ def _fingerprint(engine: Engine, tables: set[str]) -> dict[str, tuple[str, ...]]
     }
 
 
-# The columns revision 001 actually creates. This is a historical fact, so it is
-# recorded rather than derived from the live models: reading it back from
-# Base.metadata made every later column added to a baseline table look like a
-# corrupt legacy database, and refused to stamp one that was merely old.
+# A snapshot of the columns an unversioned database on disk has: the ones
+# revision 001 created, taken from a database built by it. It cannot be derived,
+# because the only producer - revision 001 - builds from the live models and so
+# describes them as they are now rather than as they were then.
+#
+# Stale if a baseline column is renamed or dropped, which
+# test_recorded_baseline_is_still_a_subset_of_what_001_creates catches. Columns
+# added later belong in a revision, not here.
 BASELINE_001_COLUMNS: dict[str, tuple[str, ...]] = {
     "datapoints": (
         "calendar_quarter", "calendar_year", "citation_json", "confidence_score",

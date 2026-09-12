@@ -29,11 +29,23 @@ from app.db.models import (
     UnresolvedQuarterORM,
     ValidationTaskORM,
 )
-from app.domain.models import ValidationStatus, new_id
+from app.domain.models import (
+    Cadence,
+    UnresolvedResolution,
+    ValidationStatus,
+    new_id,
+)
 
 router = APIRouter(tags=["products"])
 
-CADENCES = {"quarterly", "one_off"}
+# Taken from the enums rather than restated, so adding a cadence or a
+# resolution does not need this module edited to accept it.
+CADENCES = {cadence.value for cadence in Cadence}
+RESOLUTION_BY_ACTION = {
+    "enter_value": UnresolvedResolution.VALUE_ENTERED.value,
+    "not_disclosed": UnresolvedResolution.NOT_DISCLOSED.value,
+    "re_queue": UnresolvedResolution.RE_QUEUED.value,
+}
 
 
 def _jobs_for(db: Session, product_id: str) -> list[DrugJobORM]:
@@ -458,8 +470,10 @@ def resolve_unresolved_quarter(
     here rather than written and rejected later.
     """
 
-    if body.action not in {"enter_value", "not_disclosed", "re_queue"}:
-        raise HTTPException(400, "action must be enter_value|not_disclosed|re_queue")
+    if body.action not in RESOLUTION_BY_ACTION:
+        raise HTTPException(
+            400, f"action must be one of {'|'.join(sorted(RESOLUTION_BY_ACTION))}"
+        )
 
     db = SessionLocal()
     try:
@@ -498,11 +512,7 @@ def resolve_unresolved_quarter(
             )
             db.add(datapoint)
             created_datapoint_id = datapoint.id
-            row.resolution = "value_entered"
-        elif body.action == "not_disclosed":
-            row.resolution = "not_disclosed"
-        else:
-            row.resolution = "re_queued"
+        row.resolution = RESOLUTION_BY_ACTION[body.action]
 
         if body.reviewer_notes:
             row.reviewer_notes = body.reviewer_notes

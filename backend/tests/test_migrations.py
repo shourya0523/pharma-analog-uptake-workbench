@@ -95,7 +95,7 @@ def test_legacy_baseline_still_stamps_after_a_column_is_added_to_a_baseline_tabl
 ):
     """A database frozen at an older revision is old, not corrupt.
 
-    drug_jobs gained product_id in 004. An unversioned copy that predates it has
+    drug_jobs gained product_id in 005. An unversioned copy that predates it has
     to be recognised and stamped, which it was not while the expected
     fingerprint was read back from the live models.
     """

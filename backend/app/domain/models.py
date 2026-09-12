@@ -119,6 +119,21 @@ class PeakEstimateType(str, Enum):
     MODELED = "modeled"
 
 
+class Cadence(str, Enum):
+    """How often a product is re-extracted."""
+
+    QUARTERLY = "quarterly"
+    ONE_OFF = "one_off"
+
+
+class UnresolvedResolution(str, Enum):
+    """What a reviewer decided about a quarter the pipeline could not fill."""
+
+    VALUE_ENTERED = "value_entered"
+    NOT_DISCLOSED = "not_disclosed"
+    RE_QUEUED = "re_queued"
+
+
 class CompetitiveIntensity(str, Enum):
     LOW = "low"
     MEDIUM = "medium"
