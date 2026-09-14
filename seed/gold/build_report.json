@@ -179,17 +179,17 @@
     "complete": true
   },
   "concentration": {
-    "quarters": 1415,
+    "quarters": 1789,
     "largest_issuer": "Gilead",
-    "largest_issuer_share": 38.2,
+    "largest_issuer_share": 30.2,
     "largest_issuer_within_target": true,
     "largest_product": "Remodulin",
-    "largest_product_share": 6.9,
+    "largest_product_share": 5.5,
     "largest_product_within_target": true,
     "largest_therapeutic_area": "Pulmonary hypertension",
-    "largest_therapeutic_area_share": 37.7,
+    "largest_therapeutic_area_share": 29.8,
     "largest_therapeutic_area_within_target": true,
-    "therapeutic_area_count": 12,
+    "therapeutic_area_count": 16,
     "therapeutic_areas_within_target": true,
     "balanced": true
   },
