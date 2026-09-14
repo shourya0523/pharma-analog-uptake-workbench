@@ -5,6 +5,24 @@ from typing import Any
 
 from app.config import get_settings
 
+# Below this a value is queued whatever else is true of it.
+LOW_CONFIDENCE = 0.7
+
+# Why a value is in the queue, in words, keyed by the reason `add` attaches
+# below. Served beside the queue so the page that shows a reason shows its
+# meaning from the same place the reason is decided. A reason added to
+# `select_validation_tasks` without a line here fails
+# `test_every_queue_reason_has_its_prose`.
+REASON_HELP: dict[str, str] = {
+    "low_confidence": f"Confidence fell below the {LOW_CONFIDENCE} gate.",
+    "conflict": "Two candidates disagreed for this quarter and reconciliation picked one.",
+    "ocr_derived": "Recovered from a PDF whose columns came from whitespace, not markup.",
+    "early_launch": "One of the first quarters after launch, which are often restated.",
+    "recent_period": "One of the two newest quarters, which are always sampled.",
+    "needs_review": "The evidence judge did not accept the quote as supporting the value.",
+    "random_auto_pass_sample": "A random QA sample of auto-passed rows.",
+}
+
 
 def select_validation_tasks(
     datapoints: list[dict[str, Any]],
@@ -32,7 +50,7 @@ def select_validation_tasks(
 
     for dp in datapoints:
         conf = dp.get("confidence_score") or 0
-        if conf < 0.7:
+        if conf < LOW_CONFIDENCE:
             add(dp, "low_confidence")
         if dp["id"] in conflict_ids:
             add(dp, "conflict")

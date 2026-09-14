@@ -3,28 +3,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useSearchParams } from 'react-router-dom'
 import { api, type ReviewItem } from '../api/client'
 
-/**
- * Prose for each reason, keyed by the reason the API sends.
- *
- * A snapshot of what `app/validation/sampling.py` attaches, plus the two kinds
- * the completeness stage records. It cannot be derived here - the producer is
- * Python - so a reason added there and not here falls back to showing the
- * reason itself, which is why the lookup below is guarded rather than indexed.
- * Serving the prose from the queue endpoint, next to the producer, would remove
- * this copy altogether.
- */
-const REASON_HELP: Record<string, string> = {
-  low_confidence: 'Confidence fell below the 0.7 gate.',
-  conflict: 'Two candidates disagreed for this quarter and reconciliation picked one.',
-  ocr_derived: 'Recovered from a PDF whose columns came from whitespace, not markup.',
-  early_launch: 'One of the first quarters after launch, which are often restated.',
-  recent_period: 'One of the two newest quarters, which are always sampled.',
-  needs_review: 'The evidence judge did not accept the quote as supporting the value.',
-  random_auto_pass_sample: 'A random QA sample of auto-passed rows.',
-  interior_gap: 'A quarter between quarters that were extracted, so a value is expected.',
-  not_disclosed: 'No product-level figure was found for this product at all.',
-}
-
 export default function ReviewQueuePage() {
   const qc = useQueryClient()
   const [params, setParams] = useSearchParams()
@@ -135,6 +113,7 @@ export default function ReviewQueuePage() {
             item={item}
             expanded={!!expanded[item.id]}
             onToggle={() => setExpanded({ ...expanded, [item.id]: !expanded[item.id] })}
+            help={q.data?.reason_help?.[item.reason] || item.reason}
             onResolved={() => {
               qc.invalidateQueries({ queryKey: ['review-queue'] })
               qc.invalidateQueries({ queryKey: ['products'] })
@@ -154,11 +133,14 @@ export default function ReviewQueuePage() {
 
 function QueueItem({
   item,
+  help,
   expanded,
   onToggle,
   onResolved,
 }: {
   item: ReviewItem
+  /** Why it is in the queue, in the words of the stage that put it there. */
+  help: string
   expanded: boolean
   onToggle: () => void
   onResolved: () => void
@@ -265,7 +247,7 @@ function QueueItem({
           )}
 
           <Field label="Why it is in the queue">
-            <div className="judge-note">{REASON_HELP[item.reason] || item.reason}</div>
+            <div className="judge-note">{help}</div>
           </Field>
 
           {!editing && (

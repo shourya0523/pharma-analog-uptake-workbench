@@ -35,6 +35,7 @@ from app.domain.models import (
     ValidationStatus,
     new_id,
 )
+from app.validation.sampling import REASON_HELP as FLAGGED_REASON_HELP
 
 router = APIRouter(tags=["products"])
 
@@ -46,6 +47,20 @@ RESOLUTION_BY_ACTION = {
     "not_disclosed": UnresolvedResolution.NOT_DISCLOSED.value,
     "re_queue": UnresolvedResolution.RE_QUEUED.value,
 }
+
+# A quarter the pipeline could not fill is one of two things, told apart by
+# the period the completeness stage recorded: the whole product, or one
+# quarter between quarters it did fill.
+WHOLE_PRODUCT_PERIOD = "product_revenue"
+MISSING_REASON_HELP: dict[str, str] = {
+    "not_disclosed": "No product-level figure was found for this product at all.",
+    "interior_gap": "A quarter between quarters that were extracted, so a value is expected.",
+}
+REASON_HELP: dict[str, str] = {**FLAGGED_REASON_HELP, **MISSING_REASON_HELP}
+
+
+def _missing_reason(period: str | None) -> str:
+    return "not_disclosed" if period == WHOLE_PRODUCT_PERIOD else "interior_gap"
 
 
 def _jobs_for(db: Session, product_id: str) -> list[DrugJobORM]:
@@ -425,9 +440,7 @@ def review_queue(
                         "product": product_names.get(job.product_id) or job.drug_name,
                         "job_id": job.id,
                         "period": row.period,
-                        "reason": "not_disclosed"
-                        if row.period == "product_revenue"
-                        else "interior_gap",
+                        "reason": _missing_reason(row.period),
                         "confidence": row.confidence_that_unavailable,
                         "reason_unresolved": row.reason_unresolved,
                         "sources_checked": row.sources_checked,
@@ -445,6 +458,7 @@ def review_queue(
             "total": len(items),
             "flagged": sum(1 for item in items if item["type"] == "flagged"),
             "missing": sum(1 for item in items if item["type"] == "missing"),
+            "reason_help": REASON_HELP,
         }
     finally:
         db.close()

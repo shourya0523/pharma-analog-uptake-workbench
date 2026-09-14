@@ -98,9 +98,14 @@ export const api = {
     if (params?.item_type) qs.set('item_type', params.item_type)
     if (params?.reason) qs.set('reason', params.reason)
     const suffix = qs.toString() ? `?${qs}` : ''
-    return req<{ items: ReviewItem[]; total: number; flagged: number; missing: number }>(
-      `/review/queue${suffix}`,
-    )
+    return req<{
+      items: ReviewItem[]
+      total: number
+      flagged: number
+      missing: number
+      /** Prose for each reason, served beside the stage that attaches it. */
+      reason_help: Record<string, string>
+    }>(`/review/queue${suffix}`)
   },
   resolveUnresolved: (id: string, body: unknown) =>
     req<any>(`/unresolved-quarters/${id}/actions`, json('POST', body)),
