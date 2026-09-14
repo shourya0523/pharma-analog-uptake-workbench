@@ -42,6 +42,7 @@ import urllib.request
 REPO = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "backend"))
 
+from app.extraction import elements
 from app.extraction.members import (
     VERDICT_NO_CANDIDATE_MATCH,
     VERDICT_PRODUCT,
@@ -57,7 +58,7 @@ from app.parsing.notes_datasets import (
     load_dimensions,
     load_submissions,
 )
-from app.parsing.xbrl import parse_facts, product_facts
+from app.parsing.xbrl import GEOGRAPHIC_AXES, parse_facts, revenue_elements
 
 UA = os.environ.get("SEC_CONTACT")
 
@@ -153,15 +154,24 @@ def members_from_notes(
 
 def members_by_issuer(issuers: dict[str, int] | None = None) -> dict[str, set[str]]:
     found: dict[str, set[str]] = {}
+    verdicts = elements.verdicts(elements.load_register())
     for issuer, cik in (issuers or ISSUERS).items():
         members: set[str] = set()
         for url in recent_instances(cik):
             try:
-                facts = product_facts(parse_facts(get(url)), worldwide_only=False)
+                facts = parse_facts(get(url))
             except Exception as exc:
                 print(f"  {issuer}: {url.rsplit('/', 1)[-1]}: {exc}")
                 continue
-            members.update(f.product_member for f in facts if f.product_member)
+            # Every member a revenue fact carries on an axis that is not a
+            # geography is a candidate for the register; which axis is the
+            # product axis is what resolving them decides, so nothing here
+            # may assume it.
+            stated_in = revenue_elements(facts, names_a_product=lambda _m: True, verdicts=verdicts)
+            for fact in facts:
+                if fact.element in stated_in:
+                    members.update(member for axis, member in fact.members.items()
+                                   if axis not in GEOGRAPHIC_AXES)
             time.sleep(0.15)
         found[issuer] = members
         print(f"  {issuer:<22}{len(members):>3} members tagged")
@@ -269,6 +279,18 @@ def main() -> int:
                 by_rules += 1
             else:
                 pending.append((issuer, member, sorted(members), candidates))
+
+    # A member the newest filings no longer tag still sits in the register,
+    # and if its decision was "nothing in the list matched" that decision is
+    # spent by the same list change. It is re-asked here, with the issuer's
+    # other recorded members as its siblings, so the register stays a cache
+    # of decisions rather than a cache of some decisions and some leftovers.
+    asked = {(issuer, member) for issuer, member, _s, _c in pending}
+    for (issuer, member), prior in existing.items():
+        if (issuer, member) in asked or prior.binds(products):
+            continue
+        siblings = sorted(m for i, m in existing if i == issuer and m != member)
+        pending.append((issuer, member, siblings, products))
 
     print(f"\nalready in the register: {kept}")
     print(f"resolved by the rules:   {by_rules}")
