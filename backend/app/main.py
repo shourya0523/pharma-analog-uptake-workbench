@@ -523,10 +523,10 @@ def _unique_sorted(values: list[str | None]) -> list[str]:
 
 
 @app.get("/dashboard/preview")
-def dashboard_preview(run_id: str | None = None) -> dict[str, Any]:
+def dashboard_preview(run_id: str | None = None, include_held: bool = False) -> dict[str, Any]:
     db = SessionLocal()
     try:
-        return build_dashboard_preview(db, run_id=run_id)
+        return build_dashboard_preview(db, run_id=run_id, include_held=include_held)
     finally:
         db.close()
 

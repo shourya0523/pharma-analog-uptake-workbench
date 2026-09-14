@@ -143,8 +143,13 @@ export const api = {
     req<any>(`/unresolved-quarters/${id}/actions`, json('POST', body)),
   patchProfileField: (id: string, body: unknown) =>
     req<any>(`/profile-fields/${id}`, json('PATCH', body)),
-  dashboard: (runId?: string) =>
-    req<any>(`/dashboard/preview${runId ? `?run_id=${runId}` : ''}`),
+  dashboard: (runId?: string, includeHeld = false) => {
+    const qs = new URLSearchParams()
+    if (runId) qs.set('run_id', runId)
+    if (includeHeld) qs.set('include_held', 'true')
+    const suffix = qs.toString() ? `?${qs}` : ''
+    return req<any>(`/dashboard/preview${suffix}`)
+  },
   observability: () => req<any>('/observability'),
   observabilityLogs: (params?: { limit?: number; level?: string; q?: string; logger?: string }) => {
     const qs = new URLSearchParams()

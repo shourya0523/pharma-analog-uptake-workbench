@@ -109,3 +109,37 @@ def test_dashboard_moa_does_not_fall_back_to_epc():
     assert product["moa"] is None
     assert product["pharmacologic_class"] == "Endothelin Receptor Antagonist [EPC]"
 
+
+
+def test_the_chart_draws_only_what_the_pipeline_stands_behind():
+    """A company total the judge held, and a sentence about a payment an
+    issuer may receive in a later year, were both datapoints with a status,
+    and the chart plotted them beside the confirmed quarters."""
+    engine = create_engine("sqlite://")
+    upgrade_database(engine)
+    with Session(engine) as db:
+        db.add(ExtractionRunORM(id="run", status="completed"))
+        db.add(DrugJobORM(id="job", run_id="run", drug_name="Calderon", status="ready_for_review"))
+        for period, value, status in (
+            ("2024Q1", 10, "auto_pass"),
+            ("2024Q2", 11, "confirmed"),
+            ("2024Q2", 20000, "needs_review"),
+            ("2028Q1", 50, "needs_review"),
+            ("2024Q3", 12, "rejected"),
+        ):
+            db.add(
+                DatapointORM(
+                    id=f"{period}-{status}", job_id="job", period=period,
+                    value_normalized_usd_millions=value, currency="USD",
+                    source_url="https://example.test/s", source_quote="q",
+                    period_type="quarterly", validation_status=status,
+                )
+            )
+        db.commit()
+
+        drawn = build_dashboard_preview(db, run_id="run")["series"]
+        assert sorted((p["period"], p["value"]) for p in drawn) == [("2024Q1", 10), ("2024Q2", 11)]
+
+        asked = build_dashboard_preview(db, run_id="run", include_held=True)["series"]
+        assert len(asked) == 5
+        assert {p["validation_status"] for p in asked} == {"auto_pass", "confirmed", "needs_review", "rejected"}

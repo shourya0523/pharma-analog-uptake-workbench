@@ -428,3 +428,5 @@ a.pill:hover { outline: 2px solid #93c5fd; }
 .queue-group .queue-item:first-child { border-top-width: 1px; }
 .queue-group-head + .queue-item { border-top-width: 0; }
 .pager { display: flex; align-items: center; gap: 0.75rem; margin: 0.5rem 0; }
+.filter-check { flex-direction: row; align-items: center; gap: 0.5rem; }
+.filter-check input { width: auto; }

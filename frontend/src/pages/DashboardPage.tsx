@@ -37,9 +37,12 @@ const CHART_COLORS = ['#1d4ed8', '#0f766e', '#b45309', '#7c3aed', '#be123c', '#0
 
 export default function DashboardPage() {
   const { runId } = useParams()
+  // Off by default: the chart draws the figures the pipeline stands behind,
+  // and the held ones only when asked, each still marked with its status.
+  const [includeHeld, setIncludeHeld] = useState(false)
   const q = useQuery({
-    queryKey: ['dash', runId],
-    queryFn: () => api.dashboard(runId),
+    queryKey: ['dash', runId, includeHeld],
+    queryFn: () => api.dashboard(runId, includeHeld),
     refetchInterval: 5000,
   })
   const [tab, setTab] = useState<'annual' | 'quarterly' | 'launch' | 'launch24' | 'methodology'>('quarterly')
@@ -109,8 +112,17 @@ export default function DashboardPage() {
         >
           Clear filters
         </button>
+        <label className="filter-field filter-check">
+          <input
+            type="checkbox"
+            checked={includeHeld}
+            onChange={(e) => setIncludeHeld(e.target.checked)}
+          />
+          <span>Show values held for review</span>
+        </label>
         <p className="muted small filter-hint">
           One row per analog (duplicates collapsed). Dropdowns use exact values from the run.
+          The chart draws auto-passed and confirmed figures unless held values are shown.
         </p>
       </aside>
 

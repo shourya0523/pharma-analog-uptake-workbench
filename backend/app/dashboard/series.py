@@ -13,7 +13,14 @@ from app.db.models import (
     ProductIndicationORM,
     UptakeMetricORM,
 )
+from app.domain.models import ValidationStatus
 from app.observability import dedupe_jobs_by_analog, normalize_analog_key
+
+# The figures a chart may draw without being asked: the pipeline passed them
+# or a person confirmed them. Everything else is a question in the queue -
+# a company total the judge held, a sentence about a payment an issuer may
+# receive - and drawn only when the viewer asks to see it.
+STANDS_BEHIND = frozenset({ValidationStatus.AUTO_PASS.value, ValidationStatus.CONFIRMED.value})
 
 
 def _unique_sorted(values: list[Any]) -> list[str]:
@@ -55,7 +62,14 @@ def _selected_profile(job: DrugJobORM) -> dict[str, str | None]:
     return values
 
 
-def build_dashboard_preview(db: Session, run_id: str | None = None) -> dict[str, Any]:
+def build_dashboard_preview(
+    db: Session, run_id: str | None = None, *, include_held: bool = False
+) -> dict[str, Any]:
+    """The dashboard's products and series.
+
+    ``include_held`` adds the datapoints the pipeline did not stand behind,
+    each still carrying its status, for a viewer who asks to see them.
+    """
     query = db.query(DrugJobORM).options(
         joinedload(DrugJobORM.profile_fields),
         joinedload(DrugJobORM.datapoints),
@@ -210,6 +224,8 @@ def build_dashboard_preview(db: Session, run_id: str | None = None) -> dict[str,
                 )
         products.append(product)
         for datapoint in job.datapoints:
+            if not include_held and datapoint.validation_status not in STANDS_BEHIND:
+                continue
             series.append(
                 {
                     "product": product["product_name"],

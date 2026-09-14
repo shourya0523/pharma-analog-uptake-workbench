@@ -1,8 +1,8 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { render, screen, within } from '@testing-library/react'
+import { cleanup, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { api } from '../api/client'
 import DashboardPage from './DashboardPage'
 import { buildChartData, calculateFilteredKpis, filterProducts } from './dashboardModel'
@@ -109,6 +109,7 @@ describe('DashboardPage', () => {
   beforeEach(() => {
     vi.mocked(api.dashboard).mockResolvedValue(payload)
   })
+  afterEach(cleanup)
 
   it('updates table and KPIs when filters change and opens source details', async () => {
     const user = userEvent.setup()
@@ -128,6 +129,16 @@ describe('DashboardPage', () => {
     expect(screen.getByText('Source drill-through')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: '×' }))
     expect(screen.queryByText('Source drill-through')).not.toBeInTheDocument()
+  })
+
+  it('asks for held values only when the viewer says so', async () => {
+    const user = userEvent.setup()
+    renderDashboard()
+    await screen.findByRole('cell', { name: 'Alpha' })
+    expect(api.dashboard).toHaveBeenLastCalledWith('run', false)
+
+    await user.click(screen.getByLabelText('Show values held for review'))
+    await waitFor(() => expect(api.dashboard).toHaveBeenLastCalledWith('run', true))
   })
 })
 
