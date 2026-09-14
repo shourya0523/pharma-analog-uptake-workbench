@@ -52,8 +52,10 @@ def _every_other_answer_key() -> set[str]:
             payload = json.loads(text)
             cases = payload.get("cases") if isinstance(payload, dict) else payload
             for case in cases or ():
-                if isinstance(case, dict) and case.get("issuer"):
-                    spent.add(case["issuer"])
+                if isinstance(case, dict):
+                    # A member case names its issuer; an eval case names the
+                    # manufacturer a person would type. Both are answer keys.
+                    spent.add(case.get("issuer") or case.get("manufacturer") or "")
     return {name for name in spent if name}
 
 

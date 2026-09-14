@@ -1,9 +1,10 @@
 {
  "what": "Combined-name XBRL members from issuers no answer key under seed/ uses. Rebuilt after an audit: the first version reused holdout_labels' three issuers, and used Pfizer, which seed/gold/annual_revenue.jsonl scores - gold is a directory and only its quarterly file had been checked.",
  "issuers_deliberately_excluded": [
-  "gold (every file, not only quarterly_revenue.jsonl): United Therapeutics, Gilead, Johnson & Johnson, Actelion/J&J, Merck, Liquidia, Pfizer, GSK, Actelion",
+  "gold (every file, not only quarterly_revenue.jsonl): United Therapeutics, Gilead, Johnson & Johnson, Actelion/J&J, Merck, Liquidia, Pfizer, GSK, Actelion, Eli Lilly",
   "holdout: Novo Nordisk, Sanofi, Novartis, Vertex, AbbVie, Amgen, Insmed, Alnylam",
-  "holdout_labels: Alkermes, Biogen, Jazz Pharmaceuticals"
+  "holdout_labels: Alkermes, Biogen, Jazz Pharmaceuticals",
+  "cases: Exelixis, Regeneron, Supernus"
  ],
  "siblings_are": "the other product members in the SAME instance the member appears in",
  "cases": [
@@ -425,45 +426,6 @@
    "why": "a brand and its presentation"
   },
   {
-   "issuer": "Eli Lilly",
-   "member": "lly:CyramzaMemberDomain",
-   "siblings": [
-    "lly:AlimtaMember",
-    "lly:BasaglarMember",
-    "lly:CardiovascularMember",
-    "lly:CialisMember",
-    "lly:CymbaltaMember",
-    "lly:EffientMember",
-    "lly:EndocrinologyMember",
-    "lly:ErbituxAPIMember",
-    "lly:ErbituxMember",
-    "lly:ForteoMember",
-    "lly:HumalogMember",
-    "lly:HumulinMember",
-    "lly:ImmunologyMember",
-    "lly:NeuroscienceMember",
-    "lly:OncologyMember",
-    "lly:OtherCardiovascularMember",
-    "lly:OtherEndocrinologyMember",
-    "lly:OtherImmunologyMember",
-    "lly:OtherNeuroscienceMember",
-    "lly:OtherOncologyMember",
-    "lly:OtherPharmaceuticalsMember",
-    "lly:StratteraMember",
-    "lly:TaltzMember",
-    "lly:TrulicityMemberMember",
-    "lly:ZyprexaMember"
-   ],
-   "candidates": [
-    "Alimta",
-    "Cyramza",
-    "Erbitux",
-    "Verzenio"
-   ],
-   "expected": "Cyramza",
-   "why": "a brand carrying a taxonomy suffix"
-  },
-  {
    "issuer": "Ionis",
    "member": "ions:SPINRAZARoyaltiesMember",
    "siblings": [
@@ -619,42 +581,67 @@
    "why": "a category, not a product"
   },
   {
-   "issuer": "Eli Lilly",
-   "member": "lly:OtherOncologyMember",
+   "issuer": "BioMarin",
+   "member": "bmrn:POMBILITIOPFOLDAMember",
    "siblings": [
-    "lly:AlimtaMember",
-    "lly:BasaglarMember",
-    "lly:CardiovascularMember",
-    "lly:CialisMember",
-    "lly:CymbaltaMember",
-    "lly:CyramzaMemberDomain",
-    "lly:EffientMember",
-    "lly:EndocrinologyMember",
-    "lly:ErbituxAPIMember",
-    "lly:ErbituxMember",
-    "lly:ForteoMember",
-    "lly:HumalogMember",
-    "lly:HumulinMember",
-    "lly:ImmunologyMember",
-    "lly:NeuroscienceMember",
-    "lly:OncologyMember",
-    "lly:OtherCardiovascularMember",
-    "lly:OtherEndocrinologyMember",
-    "lly:OtherImmunologyMember",
-    "lly:OtherNeuroscienceMember",
-    "lly:OtherPharmaceuticalsMember",
-    "lly:StratteraMember",
-    "lly:TaltzMember",
-    "lly:TrulicityMemberMember",
-    "lly:ZyprexaMember"
+    "bmrn:ALDURAZYMEMember",
+    "bmrn:BRINEURAMember",
+    "bmrn:GALAFOLDMember",
+    "bmrn:KUVANMember",
+    "bmrn:LaterStageClinicalProgramsMember",
+    "bmrn:MarketedProductsMember",
+    "bmrn:NAGLAZYMEMember",
+    "bmrn:PALYNZIQMember",
+    "bmrn:ProductsExcludingALDURAZYMEMember",
+    "bmrn:ROCTAVIANMember",
+    "bmrn:ResearchAndEarlyPipelineMember",
+    "bmrn:RoyaltyAndOtherMember",
+    "bmrn:VIMIZIMMember",
+    "bmrn:VOXZOGOMember",
+    "us-gaap:ProductMember"
    ],
    "candidates": [
-    "Alimta",
-    "Cyramza",
-    "Verzenio"
+    "Aldurazyme",
+    "Brineura",
+    "Kuvan",
+    "Naglazyme",
+    "Palynziq",
+    "Pombiliti",
+    "Roctavian",
+    "Vimizim",
+    "Voxzogo"
+   ],
+   "expected": "Pombiliti",
+   "why": "a brand and its combination, written as one all-capitals word; instance 0001048477-26-000016"
+  },
+  {
+   "issuer": "BioMarin",
+   "member": "bmrn:ProductsExcludingALDURAZYMEMember",
+   "siblings": [
+    "bmrn:ALDURAZYMEMember",
+    "bmrn:BRINEURAMember",
+    "bmrn:GALAFOLDMember",
+    "bmrn:KUVANMember",
+    "bmrn:LaterStageClinicalProgramsMember",
+    "bmrn:MarketedProductsMember",
+    "bmrn:NAGLAZYMEMember",
+    "bmrn:PALYNZIQMember",
+    "bmrn:POMBILITIOPFOLDAMember",
+    "bmrn:ROCTAVIANMember",
+    "bmrn:ResearchAndEarlyPipelineMember",
+    "bmrn:RoyaltyAndOtherMember",
+    "bmrn:VIMIZIMMember",
+    "bmrn:VOXZOGOMember",
+    "us-gaap:ProductMember"
+   ],
+   "candidates": [
+    "Aldurazyme",
+    "Naglazyme",
+    "Vimizim",
+    "Voxzogo"
    ],
    "expected": null,
-   "why": "an issuer's catch-all for what it no longer breaks out"
+   "why": "a roll-up that names the one brand it leaves out; instance 0001048477-26-000016"
   }
  ],
  "cases_are": "members the string rules decline when the expected answer IS among the candidates, which is the population the model is actually asked about. Selecting on an empty candidate list declines everything."

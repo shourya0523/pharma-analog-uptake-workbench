@@ -253,6 +253,17 @@ for now. Serve the prose from the queue endpoint next to the producer and
 delete the frontend copy. Small, and it touches `sampling.py`, so do it as
 its own commit.
 
+## 11a. The member holdout has no scorer
+
+`seed/holdout_members/combined_name_members.json` was scored by one of the
+nineteen eval scripts the consolidation deleted (`1cc1db6`); nothing reads
+it now except its own guard test. The API eval scores published figures,
+not member resolution. Give the set a scorer again - as a test that drives
+`resolve` over the cases and reports the number, or as a mode of
+`scripts/eval.py` that stays outside `app` - before the next change to
+`app/extraction/members.py` is made. Note the set's two Eli Lilly cases
+were replaced by two BioMarin cases when Lilly entered gold (rule 4).
+
 ## 11. The eval should score a re-run itself
 
 `scripts/eval.py` scores what it is given; folding a failed job's fresh run
