@@ -369,17 +369,38 @@ def bulk_cadence(body: BulkCadenceRequest) -> dict[str, Any]:
         db.close()
 
 
+QUEUE_PAGE_DEFAULT = 50
+QUEUE_PAGE_MAX = 500
+
+
+def _group_key(item: dict[str, Any]) -> tuple[str, str]:
+    """One question per product and quarter.
+
+    Several contested figures for one quarter are one thing for a reviewer to
+    decide, and the queue says so once, with the figures beneath it. A job
+    that resolved no product identity groups by the name it was given.
+    """
+    return (item["product_id"] or item["product"] or "", str(item["period"] or ""))
+
+
 @router.get("/review/queue")
 def review_queue(
     product_id: str | None = Query(default=None),
     item_type: str | None = Query(default=None),
     reason: str | None = Query(default=None),
+    limit: int = Query(default=QUEUE_PAGE_DEFAULT),
+    offset: int = Query(default=0),
 ) -> dict[str, Any]:
-    """Everything awaiting a person, across products.
+    """Everything awaiting a person, across products, a page at a time.
 
     Two streams, because the pipeline produces two: a value the judge flagged,
-    and a quarter it expected to find and could not.
+    and a quarter it expected to find and could not. Items are grouped by
+    product and quarter, and the page is a page of groups, so a quarter with
+    many contested figures is one row rather than one per figure. The counts
+    and the filter options describe the whole set, not the page.
     """
+    limit = max(1, min(limit, QUEUE_PAGE_MAX))
+    offset = max(0, offset)
 
     db = SessionLocal()
     try:
@@ -449,15 +470,55 @@ def review_queue(
                     }
                 )
 
-        if reason and item_type == "missing":
+        # The reason filter is applied after both streams are gathered, so the
+        # options offered are the reasons this product's and type's items
+        # carry, whichever one is selected.
+        reasons: dict[str, int] = {}
+        for item in items:
+            reasons[item["reason"]] = reasons.get(item["reason"], 0) + 1
+        if reason:
             items = [item for item in items if item["reason"] == reason]
 
-        items.sort(key=lambda item: (item["product"] or "", str(item["period"] or "")))
+        products: dict[str, str] = {}
+        for item in items:
+            if item["product_id"]:
+                products.setdefault(item["product_id"], item["product"])
+
+        grouped: dict[tuple[str, str], dict[str, Any]] = {}
+        for item in items:
+            group = grouped.get(_group_key(item))
+            if group is None:
+                group = grouped[_group_key(item)] = {
+                    "product_id": item["product_id"],
+                    "product": item["product"],
+                    "job_id": item["job_id"],
+                    "period": item["period"],
+                    "types": [],
+                    "reasons": [],
+                    "items": [],
+                }
+            if item["type"] not in group["types"]:
+                group["types"].append(item["type"])
+            if item["reason"] not in group["reasons"]:
+                group["reasons"].append(item["reason"])
+            group["items"].append(item)
+        groups = sorted(
+            grouped.values(),
+            key=lambda group: (group["product"] or "", str(group["period"] or "")),
+        )
         return {
-            "items": items,
+            "groups": groups[offset : offset + limit],
+            "groups_total": len(groups),
+            "limit": limit,
+            "offset": offset,
             "total": len(items),
             "flagged": sum(1 for item in items if item["type"] == "flagged"),
             "missing": sum(1 for item in items if item["type"] == "missing"),
+            "reasons": dict(sorted(reasons.items())),
+            "products": [
+                {"id": key, "name": name}
+                for key, name in sorted(products.items(), key=lambda kv: kv[1] or "")
+            ],
             "reason_help": REASON_HELP,
         }
     finally:

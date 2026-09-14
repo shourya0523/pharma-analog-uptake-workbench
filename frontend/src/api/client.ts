@@ -49,6 +49,35 @@ export type ProductRow = {
   last_run_status: string | null
 }
 
+/** One question for a reviewer: a product and a quarter, with every open item under it. */
+export type ReviewGroup = {
+  product_id: string | null
+  product: string
+  job_id: string
+  period: string
+  types: ('flagged' | 'missing')[]
+  reasons: string[]
+  items: ReviewItem[]
+}
+
+export type ReviewQueuePage = {
+  /** The page of groups asked for. */
+  groups: ReviewGroup[]
+  groups_total: number
+  limit: number
+  offset: number
+  /** Counts of the whole filtered set, not the page. */
+  total: number
+  flagged: number
+  missing: number
+  /** Reasons the product's and type's items carry, with their counts. */
+  reasons: Record<string, number>
+  /** Products with anything open, for the filter. */
+  products: { id: string; name: string }[]
+  /** Prose for each reason, served beside the stage that attaches it. */
+  reason_help: Record<string, string>
+}
+
 export type ReviewItem = {
   id: string
   type: 'flagged' | 'missing'
@@ -92,20 +121,21 @@ export const api = {
     req<any>(`/products/${productId}`, json('PATCH', { cadence })),
   setCadenceBulk: (productIds: string[], cadence: string) =>
     req<{ updated: number }>('/products/cadence', json('POST', { product_ids: productIds, cadence })),
-  reviewQueue: (params?: { product_id?: string; item_type?: string; reason?: string }) => {
+  reviewQueue: (params?: {
+    product_id?: string
+    item_type?: string
+    reason?: string
+    limit?: number
+    offset?: number
+  }) => {
     const qs = new URLSearchParams()
     if (params?.product_id) qs.set('product_id', params.product_id)
     if (params?.item_type) qs.set('item_type', params.item_type)
     if (params?.reason) qs.set('reason', params.reason)
+    if (params?.limit) qs.set('limit', String(params.limit))
+    if (params?.offset) qs.set('offset', String(params.offset))
     const suffix = qs.toString() ? `?${qs}` : ''
-    return req<{
-      items: ReviewItem[]
-      total: number
-      flagged: number
-      missing: number
-      /** Prose for each reason, served beside the stage that attaches it. */
-      reason_help: Record<string, string>
-    }>(`/review/queue${suffix}`)
+    return req<ReviewQueuePage>(`/review/queue${suffix}`)
   },
   resolveUnresolved: (id: string, body: unknown) =>
     req<any>(`/unresolved-quarters/${id}/actions`, json('POST', body)),

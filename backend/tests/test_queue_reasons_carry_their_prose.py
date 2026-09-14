@@ -14,7 +14,7 @@ import inspect
 
 from app.api import products as products_api
 from app.validation import sampling
-from tests.test_products_api import client  # noqa: F401
+from tests.test_products_api import _items, client  # noqa: F401
 
 
 def _reasons_attached_by(function) -> set[str]:
@@ -52,6 +52,6 @@ def test_the_missing_quarter_reasons_have_theirs_too():
 
 def test_the_prose_is_served_with_the_queue(client):  # noqa: F811
     body = client.get("/review/queue").json()
-    for item in body["items"]:
+    for item in _items(body):
         assert item["reason"] in body["reason_help"], item["reason"]
         assert body["reason_help"][item["reason"]].strip()

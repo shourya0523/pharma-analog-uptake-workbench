@@ -139,6 +139,11 @@ def client(monkeypatch):
     return TestClient(main.app)
 
 
+def _items(body: dict) -> list[dict]:
+    """The queue's items, flattened out of their product-and-quarter groups."""
+    return [item for group in body["groups"] for item in group["items"]]
+
+
 def test_library_lists_products_with_queue_counts_from_the_newest_job(client):
     body = client.get("/products").json()
 
@@ -209,24 +214,24 @@ def test_review_queue_carries_both_streams_with_their_real_reasons(client):
     assert body["flagged"] == 1
     assert body["missing"] == 2
 
-    flagged = next(item for item in body["items"] if item["type"] == "flagged")
+    flagged = next(item for item in _items(body) if item["type"] == "flagged")
     assert flagged["reason"] == "recent_period"
     assert flagged["product"] == "Opsumit"
     assert flagged["source_quote"] == "Opsumit 186.4"
 
-    whole_product = next(item for item in body["items"] if item["period"] == "product_revenue")
+    whole_product = next(item for item in _items(body) if item["period"] == "product_revenue")
     assert whole_product["reason"] == "not_disclosed"
     assert whole_product["product"] == "Yutrepia"
     assert whole_product["sources_checked"] == ["https://ir.liquidia.com"]
 
-    gap = next(item for item in body["items"] if item["period"] == "2025Q1")
+    gap = next(item for item in _items(body) if item["period"] == "2025Q1")
     assert gap["reason"] == "interior_gap"
 
 
 def test_review_queue_filters_to_one_product(client):
     body = client.get("/review/queue", params={"product_id": "prod-2"}).json()
     assert body["total"] == 1
-    assert body["items"][0]["product"] == "Yutrepia"
+    assert _items(body)[0]["product"] == "Yutrepia"
 
     flagged_only = client.get("/review/queue", params={"item_type": "flagged"}).json()
     assert flagged_only["missing"] == 0
@@ -279,7 +284,7 @@ def test_confirming_non_disclosure_closes_the_item_without_inventing_a_value(cli
 
     body = client.get("/review/queue").json()
     assert body["missing"] == 1
-    assert all(item["period"] != "product_revenue" for item in body["items"])
+    assert all(item["period"] != "product_revenue" for item in _items(body))
 
 
 def test_profile_field_edit_requires_a_citation_and_confirms_the_field(client):
@@ -302,3 +307,51 @@ def test_profile_field_edit_requires_a_citation_and_confirms_the_field(client):
     field = client.get("/products/prod-1").json()["profile"][0]
     assert field["value"] == "1L"
     assert field["citation"]["source_url"] == "https://dailymed.nlm.nih.gov/spl"
+
+
+def test_review_queue_says_a_contested_quarter_once(client):
+    """Several figures for one quarter are one question, with the figures under it."""
+    with products_api.SessionLocal() as db:
+        db.add(
+            DatapointORM(
+                id="dp-2", job_id="job-new", period="2026Q2",
+                value_normalized_usd_millions=190.1, revenue_scope="U.S.",
+                source_url="https://sec.gov/opsumit-8k", source_quote="Opsumit 190.1",
+                extraction_method="table", confidence_score=0.8,
+                validation_status="needs_review",
+            )
+        )
+        db.add(
+            ValidationTaskORM(
+                id="vt-2", job_id="job-new", datapoint_id="dp-2",
+                reason="conflict", confidence_score=0.8, status="open",
+            )
+        )
+        db.commit()
+
+    body = client.get("/review/queue").json()
+
+    assert body["total"] == 4
+    assert body["groups_total"] == 3
+    contested = next(g for g in body["groups"] if g["period"] == "2026Q2")
+    assert contested["product"] == "Opsumit"
+    assert sorted(contested["reasons"]) == ["conflict", "recent_period"]
+    assert sorted(item["datapoint_id"] for item in contested["items"]) == ["dp-1", "dp-2"]
+    # The options a reviewer filters by describe the whole set.
+    assert body["reasons"] == {"conflict": 1, "interior_gap": 1, "not_disclosed": 1, "recent_period": 1}
+    assert [p["name"] for p in body["products"]] == ["Opsumit", "Yutrepia"]
+
+
+def test_review_queue_pages_by_group_and_counts_the_whole_set(client):
+    page = client.get("/review/queue", params={"limit": 1, "offset": 1}).json()
+
+    assert len(page["groups"]) == 1
+    assert page["groups_total"] == 3
+    assert page["limit"] == 1 and page["offset"] == 1
+    # Sorted by product then period, so the second group is Opsumit's later one.
+    first = client.get("/review/queue", params={"limit": 1}).json()["groups"][0]
+    assert (first["product"], first["period"]) < (page["groups"][0]["product"], page["groups"][0]["period"])
+    assert page["total"] == 3 and page["flagged"] == 1 and page["missing"] == 2
+
+    beyond = client.get("/review/queue", params={"limit": 5000, "offset": 99}).json()
+    assert beyond["groups"] == [] and beyond["limit"] == products_api.QUEUE_PAGE_MAX

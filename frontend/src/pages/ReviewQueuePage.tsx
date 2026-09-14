@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useSearchParams } from 'react-router-dom'
-import { api, type ReviewItem } from '../api/client'
+import { api, type ReviewGroup, type ReviewItem } from '../api/client'
+
+const PAGE_SIZE = 50
 
 export default function ReviewQueuePage() {
   const qc = useQueryClient()
@@ -9,28 +11,36 @@ export default function ReviewQueuePage() {
   const productId = params.get('product') || ''
   const [itemType, setItemType] = useState('')
   const [reason, setReason] = useState('')
+  const [offset, setOffset] = useState(0)
   const [expanded, setExpanded] = useState<Record<string, boolean>>({})
 
   const q = useQuery({
-    queryKey: ['review-queue', productId, itemType, reason],
+    queryKey: ['review-queue', productId, itemType, reason, offset],
     queryFn: () =>
       api.reviewQueue({
         product_id: productId || undefined,
         item_type: itemType || undefined,
         reason: reason || undefined,
+        limit: PAGE_SIZE,
+        offset,
       }),
   })
 
-  const items = q.data?.items || []
-  const productNames = Array.from(
-    new Map(items.map((i) => [i.product_id, i.product])).entries(),
-  ).filter(([id]) => id) as [string, string][]
+  const groups = q.data?.groups || []
+  const groupsTotal = q.data?.groups_total ?? 0
+  const pageEnd = Math.min(offset + groups.length, groupsTotal)
 
   function setProduct(value: string) {
     const next = new URLSearchParams(params)
     if (value) next.set('product', value)
     else next.delete('product')
     setParams(next)
+    setOffset(0)
+  }
+
+  function invalidate() {
+    qc.invalidateQueries({ queryKey: ['review-queue'] })
+    qc.invalidateQueries({ queryKey: ['products'] })
   }
 
   if (q.isLoading) return <div className="page">Loading review queue…</div>
@@ -43,23 +53,30 @@ export default function ReviewQueuePage() {
           <h2>Review queue</h2>
           <p className="filter-sub">
             Quarters the judge flagged, and quarters the pipeline expected to find but
-            could not.
+            could not. One row per product and quarter; the figures in question sit
+            under it.
           </p>
         </div>
         <label className="filter-field">
           <span>Product</span>
           <select value={productId} onChange={(e) => setProduct(e.target.value)}>
             <option value="">All products</option>
-            {productNames.map(([id, name]) => (
-              <option key={id} value={id}>
-                {name}
+            {(q.data?.products || []).map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.name}
               </option>
             ))}
           </select>
         </label>
         <label className="filter-field">
           <span>Item type</span>
-          <select value={itemType} onChange={(e) => setItemType(e.target.value)}>
+          <select
+            value={itemType}
+            onChange={(e) => {
+              setItemType(e.target.value)
+              setOffset(0)
+            }}
+          >
             <option value="">Both</option>
             <option value="flagged">Flagged value</option>
             <option value="missing">Missing quarter</option>
@@ -67,15 +84,19 @@ export default function ReviewQueuePage() {
         </label>
         <label className="filter-field">
           <span>Flag reason</span>
-          <select value={reason} onChange={(e) => setReason(e.target.value)}>
+          <select
+            value={reason}
+            onChange={(e) => {
+              setReason(e.target.value)
+              setOffset(0)
+            }}
+          >
             <option value="">Any reason</option>
-            {Array.from(new Set(items.map((i) => i.reason)))
-              .sort()
-              .map((r) => (
-                <option key={r} value={r}>
-                  {r}
-                </option>
-              ))}
+            {Object.entries(q.data?.reasons || {}).map(([r, count]) => (
+              <option key={r} value={r}>
+                {r} ({count})
+              </option>
+            ))}
           </select>
         </label>
         <div className="filter-count">
@@ -91,6 +112,7 @@ export default function ReviewQueuePage() {
             setProduct('')
             setItemType('')
             setReason('')
+            setOffset(0)
           }}
         >
           Clear filters
@@ -100,34 +122,119 @@ export default function ReviewQueuePage() {
       <section className="dash-main">
         <div className="main-head">
           <div>
-            <h1>{items.length} items to work</h1>
+            <h1>{groupsTotal} questions to work</h1>
             <p className="muted small">
               Reasons come from the pipeline's own validation pass.
             </p>
           </div>
+          <Pager
+            from={groupsTotal ? offset + 1 : 0}
+            to={pageEnd}
+            total={groupsTotal}
+            onPrev={offset > 0 ? () => setOffset(Math.max(0, offset - PAGE_SIZE)) : undefined}
+            onNext={pageEnd < groupsTotal ? () => setOffset(offset + PAGE_SIZE) : undefined}
+          />
         </div>
 
-        {items.map((item) => (
-          <QueueItem
-            key={item.id}
-            item={item}
-            expanded={!!expanded[item.id]}
-            onToggle={() => setExpanded({ ...expanded, [item.id]: !expanded[item.id] })}
-            help={q.data?.reason_help?.[item.reason] || item.reason}
-            onResolved={() => {
-              qc.invalidateQueries({ queryKey: ['review-queue'] })
-              qc.invalidateQueries({ queryKey: ['products'] })
-            }}
+        {groups.map((group) => (
+          <QueueGroup
+            key={`${group.product_id || group.product}|${group.period}`}
+            group={group}
+            help={q.data?.reason_help || {}}
+            expanded={expanded}
+            onToggle={(id) => setExpanded({ ...expanded, [id]: !expanded[id] })}
+            onResolved={invalidate}
           />
         ))}
 
-        {!items.length && (
+        {!groups.length && (
           <div className="card-block">
             <p className="muted">Nothing is waiting on a person here.</p>
           </div>
         )}
+
+        {groups.length > 0 && (
+          <Pager
+            from={offset + 1}
+            to={pageEnd}
+            total={groupsTotal}
+            onPrev={offset > 0 ? () => setOffset(Math.max(0, offset - PAGE_SIZE)) : undefined}
+            onNext={pageEnd < groupsTotal ? () => setOffset(offset + PAGE_SIZE) : undefined}
+          />
+        )}
       </section>
     </div>
+  )
+}
+
+function Pager({
+  from,
+  to,
+  total,
+  onPrev,
+  onNext,
+}: {
+  from: number
+  to: number
+  total: number
+  onPrev?: () => void
+  onNext?: () => void
+}) {
+  return (
+    <div className="pager" aria-label="Queue pages">
+      <button className="ghost" disabled={!onPrev} onClick={onPrev}>
+        ← Previous
+      </button>
+      <span className="muted small">
+        {from}–{to} of {total}
+      </span>
+      <button className="ghost" disabled={!onNext} onClick={onNext}>
+        Next →
+      </button>
+    </div>
+  )
+}
+
+/** A product and a quarter, with every open item about it beneath. */
+function QueueGroup({
+  group,
+  help,
+  expanded,
+  onToggle,
+  onResolved,
+}: {
+  group: ReviewGroup
+  help: Record<string, string>
+  expanded: Record<string, boolean>
+  onToggle: (id: string) => void
+  onResolved: () => void
+}) {
+  const single = group.items.length === 1
+  return (
+    <section className="queue-group">
+      {!single && (
+        <header className="queue-group-head">
+          <strong>{group.product}</strong>
+          <span className="muted">{group.period}</span>
+          <span className="pill conf">{group.items.length} figures in question</span>
+          {group.reasons.map((r) => (
+            <span key={r} className="pill reason">
+              {r}
+            </span>
+          ))}
+        </header>
+      )}
+      {group.items.map((item) => (
+        <QueueItem
+          key={item.id}
+          item={item}
+          help={help[item.reason] || item.reason}
+          expanded={!!expanded[item.id]}
+          onToggle={() => onToggle(item.id)}
+          onResolved={onResolved}
+        />
+      ))}
+    </section>
   )
 }
 
