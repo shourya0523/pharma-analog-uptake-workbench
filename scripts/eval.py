@@ -12,8 +12,13 @@ produced. Every one of those scripts was right about the function it called and
 wrong about the product.
 
     python scripts/eval.py --cases seed/cases/gold_sample.json
+    python scripts/eval.py --members seed/holdout_members/combined_name_members.json
 
-`--base` points at a running server. Each case is what a person would type -
+`--base` points at a running server. `--members` scores the member resolver
+instead of the revenue pipeline: each case is a filer's XBRL member with the
+siblings tagged beside it and the products it may name, posted to the same
+route a reviewer would ask, and scored on whether it resolved to the expected
+product or refused when it should. Each case is what a person would type -
 the drug, who makes it, the ticker, the window - plus the figures the run
 should come back with, and where they came from.
 """
@@ -160,10 +165,57 @@ def score(case: dict, datapoints: list[dict]) -> list[dict]:
     return rows
 
 
+def score_members(base: str, path: pathlib.Path, out: pathlib.Path) -> int:
+    """Resolve every member in a holdout through the API and count the answers.
+
+    Both answers are scored: a member that must resolve to its product, and a
+    member that must be refused because the figure it carries covers more than
+    one. A resolver that always refuses passes the second and fails the first.
+    """
+    payload = json.loads(path.read_text())
+    cases = payload["cases"] if isinstance(payload, dict) else payload
+    rows = []
+    for case in cases:
+        try:
+            got = post(base, "/members/resolve", {
+                "issuer": case["issuer"], "member": case["member"],
+                "siblings": case.get("siblings") or [], "candidates": case["candidates"],
+            })
+        except (urllib.error.URLError, OSError) as exc:
+            got = {"product": f"ERROR {type(exc).__name__}", "decided_by": "", "note": ""}
+        rows.append({**{k: case.get(k) for k in ("issuer", "member", "expected", "why")},
+                     "got": got.get("product"), "decided_by": got.get("decided_by"),
+                     "note": got.get("note"), "ok": got.get("product") == case["expected"]})
+
+    resolve = [r for r in rows if r["expected"]]
+    refuse = [r for r in rows if not r["expected"]]
+    print(f"\n  {path}\n")
+    for label, group in (("must resolve", resolve), ("must refuse", refuse)):
+        print(f"  -- {label} --")
+        for r in group:
+            short = r["member"].split(":")[-1].replace("Member", "")
+            print(f"   {'ok ' if r['ok'] else 'BAD'} {short:40} -> {r['got']!s:16}"
+                  f" (wanted {r['expected']}; {r['decided_by']})")
+            if not r["ok"]:
+                print(f"        {r['why']}")
+                if r["note"]:
+                    print(f"        said: {r['note']}")
+        print()
+    good = sum(1 for r in rows if r["ok"])
+    print(f"  resolve {sum(1 for r in resolve if r['ok'])}/{len(resolve)}   "
+          f"refuse {sum(1 for r in refuse if r['ok'])}/{len(refuse)}   "
+          f"correct: {good}/{len(rows)}")
+    out.write_text(json.dumps(rows, indent=1, default=str))
+    print(f"  detail written to {out}")
+    return 0 if good == len(rows) else 1
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--cases", required=True, help="a JSON case file under seed/cases")
+    ap.add_argument("--cases", help="a JSON case file under seed/cases")
+    ap.add_argument("--members", help="a member holdout under seed/holdout_members, "
+                                      "scored through /members/resolve instead of a run")
     ap.add_argument("--base", default="http://127.0.0.1:8000")
     ap.add_argument("--case", action="append", default=[],
                     help="DRUG, repeatable; default is every case in the file")
@@ -174,6 +226,18 @@ def main() -> int:
                     help="score runs already on the server for these cases' windows "
                          "instead of starting them again")
     args = ap.parse_args()
+    if bool(args.cases) == bool(args.members):
+        ap.error("give exactly one of --cases or --members")
+
+    if args.members:
+        path = pathlib.Path(args.members)
+        try:
+            get(args.base, "/health", timeout=10)
+        except (urllib.error.URLError, OSError) as exc:
+            print(f"no API at {args.base} ({exc})")
+            return 2
+        return score_members(args.base, path if path.is_absolute() else REPO / path,
+                             pathlib.Path(args.out))
 
     path = pathlib.Path(args.cases)
     cases = json.loads((path if path.is_absolute() else REPO / path).read_text())
