@@ -287,3 +287,33 @@ def test_a_caption_is_not_taken_from_the_schedule_above_it():
         "lxml",
     )
     assert table_caption(soup.find_all("table")[1]) == ""
+
+
+def test_headings_over_columns_with_no_figures_in_them_describe_nothing():
+    """A release spans its period headings over the right-hand columns and
+    prints the product's figures in the left-hand ones. Column by column the
+    quarter then sits where no number is, every product row maps to nothing,
+    and the reader records several lines and no total - while the annual
+    table beside it, where the columns happen to align, is read. Headings that
+    cover no figure are refuted by the body and the ragged reading takes over.
+    """
+    from app.extraction.fingerprint import column_periods
+
+    grid = [
+        [None, None, None, None, None, None, None, None, "FIRST QUARTER", None, None],
+        [None, None, None, None, None, None, None, None, "2020", None, "2019"],
+        ["CALDERON", None, None, None, None, None, None, None, None, None, None],
+        ["US", None, None, "1,211", None, None, "1,055", None, None, None, None],
+        ["Intl", None, None, "335", None, None, "364", None, None, None, None],
+        ["WW", None, None, "1,546", None, None, "1,419", None, None, None, None],
+    ]
+    assert column_periods(grid) == {}
+
+    aligned = [
+        [None, "FIRST QUARTER", None],
+        [None, "2020", "2019"],
+        ["CALDERON", None, None],
+        ["US", "1,211", "1,055"],
+        ["WW", "1,546", "1,419"],
+    ]
+    assert set(column_periods(aligned)) == {1, 2}

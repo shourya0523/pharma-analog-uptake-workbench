@@ -26,9 +26,9 @@ from collections.abc import Iterable
 from typing import Any
 
 from app.extraction.check import Finding, run_checks
-from app.extraction.extract import read_tables
-from app.extraction.prose import read_prose
+from app.extraction.extract import QUESTION_FLAGS, read_tables
 from app.extraction.process import Datapoint, normalize_all
+from app.extraction.prose import read_prose
 
 # Read straight off a declared table, so it carries the confidence the previous
 # table reader used for the same provenance.
@@ -43,8 +43,37 @@ def _scope_for(label: str, product: str) -> str:
     return "Formulation-specific"
 
 
+# The scope a datapoint is published under, from the geography its label
+# named. Worldwide and no geography at all are the whole product; a region is
+# its own scope so the family figure and its parts never contest one period.
+_SCOPE_BY_GEOGRAPHY = {
+    None: "Product family",
+    "Worldwide": "Product family",
+    "United States": "U.S.",
+    "International": "International",
+}
+
+
+def _scope_of_point(point: Datapoint, product: str) -> tuple[str, str | None, str | None]:
+    """(revenue scope, geography, formulation) for one datapoint.
+
+    A table row's label was read by the table reader, which says what it
+    named; a sentence's label is the product itself. A label the reader could
+    not account for is published as Unknown, which no deterministic pass
+    accepts, so the judge sees it with the residue and a person settles it.
+    """
+    if point.fingerprint_signature == "prose":
+        scope = _scope_for(point.product_label, product)
+        return scope, None, None if scope == "Product family" else point.product_label
+    if "label_not_understood" in point.flags:
+        return "Unknown", None, None
+    if point.scope in _SCOPE_BY_GEOGRAPHY:
+        return _SCOPE_BY_GEOGRAPHY[point.scope], None, None
+    return "Regional", point.scope, None
+
+
 def _as_candidate(point: Datapoint, product: str) -> dict[str, Any]:
-    scope = _scope_for(point.product_label, product)
+    scope, geography, formulation = _scope_of_point(point, product)
     # A sentence and a table row arrive here as the same Datapoint, and only
     # the fingerprint says which: ``read_prose`` signs its values "prose". They
     # were all labelled as table reads, which made the extraction method in the
@@ -58,7 +87,11 @@ def _as_candidate(point: Datapoint, product: str) -> dict[str, Any]:
         "currency": point.source_currency,
         "unit": point.source_unit,
         "revenue_scope": scope,
-        "formulation": None if scope == "Product family" else point.product_label,
+        "geography": geography,
+        "formulation": formulation,
+        "label_flags": list(point.flags),
+        "label_residue": point.residue,
+        "combined_with": list(point.combined_with),
         "source_quote": point.source_quote,
         "product_mentioned_in_quote": True,
         "is_company_total": False,
@@ -79,7 +112,9 @@ def extract_revenue_candidates(
     grids: Iterable[list[list[str | None]]] | None = None,
     captions: Iterable[str] | None = None,
     prose: str = "",
-    period_context: "PeriodContext | None" = None,
+    period_context: PeriodContext | None = None,
+    footnotes: Iterable[Iterable[str]] | None = None,
+    products: Iterable[str] | None = None,
 ) -> tuple[list[dict[str, Any]], list[Finding], list[str]]:
     """Deterministic revenue candidates plus what the checks found.
 
@@ -108,6 +143,8 @@ def extract_revenue_candidates(
         grids=grids,
         captions=captions,
         period_context=period_context,
+        footnotes=footnotes,
+        products=products,
     )
     values = [value for readout in readouts for value in readout.values]
     skipped = [readout.skipped_reason for readout in readouts if readout.skipped_reason]
@@ -121,7 +158,12 @@ def extract_revenue_candidates(
         # the fallback on both lets the same figure through twice, described
         # differently and sometimes scoped differently, and two candidates that
         # disagree are not an answer.
-        stated = {value.period for value in values}
+        # A row published as a question - a label not understood, a partial
+        # period, a line combining products - has not stated the period; the
+        # sentence that does is not displaced by it.
+        stated = {
+            value.period for value in values if not (QUESTION_FLAGS & set(value.flags))
+        }
         values += [
             value
             for value in read_prose(

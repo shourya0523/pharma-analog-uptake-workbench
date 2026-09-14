@@ -25,16 +25,27 @@ from typing import Any
 
 from app.extraction.fingerprint import PeriodBlock, TableFingerprint, build_fingerprint
 from app.parsing.evidence import product_aliases
+from app.parsing.labels import (
+    FLAG_COMBINED,
+    FLAG_FAMILY_INCLUDES,
+    FLAG_NO_SALES,
+    FLAG_NOT_UNDERSTOOD,
+    FLAG_PARTIAL,
+    LabelReading,
+    NoteReading,
+    footnotes_by_mark,
+    names_product,
+    read_footnote,
+    read_label,
+)
 from app.parsing.tables import clean_label
-from app.quality.candidate_filters import names_a_competing_product
-
 
 # A change column is within this many percentage points of the computed change.
 _PERCENT_TOLERANCE = 0.6
 
 # Cells an issuer prints where a number would go, meaning "nothing to report".
 # They occupy a column, so they must hold their place during alignment.
-_PLACEHOLDER_RE = re.compile(r"^[\s$]*[-–—*]+[\s%)]*$|^\s*(?:n/?a|nm|not\s+meaningful)\s*$", re.I)
+_PLACEHOLDER_RE = re.compile(r"^[\s$]*[-–—*]+[\s%)]*$|^\s*(?:n/?a|nm|not\s+meaningful)\s*$", re.IGNORECASE)
 _NUMBER_CELL_RE = re.compile(r"^[\s$(]*(-?[\d,]+(?:\.\d+)?)[\s)%]*$")
 # A value cell may carry a footnote or legend after the number, as in
 # "$6,517 (USD thousands)". The number still owns the column.
@@ -80,6 +91,15 @@ class ExtractedValue:
     source_quote: str
     fingerprint_signature: str
     value_index: int
+    # What the label said beyond the product's name. ``scope`` is the
+    # geography it named (None for the whole product); ``combined_with`` the
+    # other products it joined; ``residue`` the words unaccounted for; and
+    # ``flags`` what follows - a combined line, a partial period, a label not
+    # understood - which decides whether the value can be published at all.
+    scope: str | None = None
+    combined_with: tuple[str, ...] = ()
+    residue: str = ""
+    flags: tuple[str, ...] = ()
 
     def as_dict(self) -> dict[str, Any]:
         return {
@@ -92,6 +112,10 @@ class ExtractedValue:
             "source_quote": self.source_quote,
             "fingerprint_signature": self.fingerprint_signature,
             "value_index": self.value_index,
+            "scope": self.scope,
+            "combined_with": list(self.combined_with),
+            "residue": self.residue,
+            "flags": list(self.flags),
         }
 
 
@@ -102,16 +126,6 @@ class TableReadout:
     fingerprint: TableFingerprint
     values: list[ExtractedValue]
     skipped_reason: str | None = None
-
-
-def _matches_product(
-    label: str, aliases: list[str], siblings: list[str] | None = None
-) -> bool:
-    """True when the row label names this product and no competing brand."""
-    normalized = label.lower()
-    if not any(alias.lower() in normalized for alias in aliases):
-        return False
-    return names_a_competing_product(label, aliases, siblings) is None
 
 
 def _percent_change(current: float, prior: float) -> float | None:
@@ -286,17 +300,6 @@ def read_values_by_column(
     return assigned, None
 
 
-def _names_the_product(label: str, product: str, generic: str | None) -> bool:
-    """Whether this row is the product itself rather than one of its lines.
-
-    "Calderon" is the product; "Calderon XR" and "Calderon - Japan" are lines
-    within or beside it. Both match the product's aliases, and the difference
-    between them is that one label is the name and nothing else.
-    """
-    words = lambda text: re.sub(r"[^a-z0-9 ]", " ", (text or "").lower()).split()
-    return words(label) in ([words(product)] + ([words(generic)] if generic else []))
-
-
 def _regroup(assigned: dict[int, float], period_of) -> dict[object, float]:
     """A row's values keyed by the period they are in, not the column they sit in.
 
@@ -336,71 +339,130 @@ def _adds_up(candidate: dict[int, float], parts: dict[int, float], count: int) -
     return all(abs(candidate[index] - parts[index]) <= 0.5 * count for index in parts)
 
 
+FLAG_REGIONS_NO_TOTAL = "region_rows_no_total"
+# A row carrying any of these is a question about the product, not an answer:
+# published so a person can settle it, never auto-passed, and never the row
+# that silences the others for its periods.
+QUESTION_FLAGS = frozenset({FLAG_NOT_UNDERSTOOD, FLAG_PARTIAL, FLAG_COMBINED})
+
+Match = tuple[int, str, dict[int, float], LabelReading, tuple[str, ...]]
+Published = tuple[int, str, str, dict[int, float], LabelReading, tuple[str, ...]]
+
+
 def _resolve_matches(
-    matches: list[tuple[int, str, dict[int, float]]],
+    matches: list[Match],
     source_rows: list[list[str | None]],
     product: str,
-    generic: str | None,
     read_row,
     quote_of,
     *,
-    naming: int,
     quote_from: dict[int, int],
     period_of=None,
     reach: int = 2,
-) -> tuple[list[tuple[str, str, dict[int, float]]], str | None]:
+) -> tuple[list[Published], str | None]:
     """Which of the rows naming a product is the product's revenue.
 
-    An issuer that reports a product by region prints a line per region and the
-    worldwide figure as their sum, and every one of those lines names the
-    product. Publishing each of them files four different numbers as the same
-    quarter's revenue - the defect this resolves - and picking the first is a
-    guess. So:
+    Every match arrives with its label read: whether the label is the whole
+    product, a region of it, a combined line over it and its siblings, or a
+    label with words nobody could account for. That reading decides:
 
-    * one row names the product and nothing else - that row is the product;
-    * otherwise a row whose value is the sum of the others, in every period, is
-      the total the components add to. It may be one of the matched rows
-      ("Total Calderon") or the unlabelled line printed beneath them, which is
-      how some filers write it. The arithmetic is what identifies it, so no list
-      of region names is involved and an issuer inventing a new region changes
-      nothing;
-    * otherwise the table has several lines for this product and no total, and
-      which one is the product's revenue is exactly what has not been said.
+    * a row that is the whole product, or a labelled total, is the product;
+    * region rows are components. Their total is the labelled total, or the
+      row beneath them whose figures equal their sums in every period - the
+      table proving which row is its total. With no total, each region is
+      published in its own scope and flagged, never as the family figure;
+    * a combined line is the family's figure, not the product's, and a row
+      whose label was not understood, or whose footnote made it a partial
+      period, states nothing certain about the product: each is published as
+      a question - it carries its flag and cannot be auto-passed - and is
+      never the answer that silences the rest.
 
-    The total's quote runs from the first component to the total itself, so the
-    number can be checked against the lines it sums.
+    The arithmetic is what identifies a total, so no list of region names is
+    involved and an issuer inventing a new region changes nothing.
     """
     if not matches:
         return [], None
-    # Components add up within a period. Which column a figure sits in is how
-    # the page is set, not what the figure is about.
     period_of = period_of or (lambda index: index)
     grouped = lambda assigned: _regroup(assigned, period_of)
-    # How many rows name the product, not how many of them could be read: a
-    # component whose numbers did not parse still means the row that did parse
-    # is a component, and publishing it as the product is the same mistake.
-    if naming == 1:
-        position, label, assigned = matches[0]
-        taken = source_rows[quote_from.get(position, position) : position + 1]
-        return [(label, quote_of(*taken), assigned)], None
 
-    named = [m for m in matches if _names_the_product(m[1], product, generic)]
-    if len(named) == 1:
-        position, label, assigned = named[0]
-        taken = source_rows[quote_from.get(position, position) : position + 1]
-        return [(label, quote_of(*taken), assigned)], None
+    def quote_for(position: int, first: int | None = None) -> str:
+        start = quote_from.get(position, position) if first is None else first
+        return quote_of(*source_rows[min(start, position) : position + 1])
 
-    # A total printed among the matched rows.
-    for index, (position, _label, assigned) in enumerate(matches):
+    def publish(match: Match, first: int | None = None, *, label: str | None = None,
+                extra: tuple[str, ...] = ()) -> Published:
+        position, scoped, assigned, reading, flags = match
+        return (position, label or scoped, quote_for(position, first), assigned, reading, flags + extra)
+
+    questions = [m for m in matches if QUESTION_FLAGS & set(m[4])]
+    plain = [m for m in matches if m not in questions]
+    wholes = [m for m in plain if m[3].whole or m[3].is_total]
+    regions = [m for m in plain if m not in wholes]
+
+    published: list[Published] = []
+    refusal: str | None = None
+
+    if len(wholes) == 1:
+        published.append(publish(wholes[0]))
+    elif wholes:
+        # The whole product printed more than once: one of them is the total
+        # the others add to, or the table has said the same thing twice.
+        total = _total_among(wholes, grouped)
+        if total is not None:
+            published.append(publish(total, min(quote_from.get(m[0], m[0]) for m in wholes)))
+        else:
+            values = [tuple(sorted(grouped(m[2]).items())) for m in wholes]
+            if all(v == values[0] for v in values):
+                published.append(publish(wholes[0]))
+            else:
+                refusal = ", ".join(m[1] for m in wholes) + ":several_lines_no_total"
+    elif regions:
+        total = _total_among(regions, grouped)
+        if total is not None:
+            published.append(publish(
+                total, min(quote_from.get(m[0], m[0]) for m in regions), label=product))
+        else:
+            beneath = _total_beneath(regions, source_rows, read_row, grouped, reach)
+            if beneath is not None:
+                position, assigned = beneath
+                first = min(quote_from.get(m[0], m[0]) for m in regions)
+                reading = LabelReading(label=product, matched=product, scope=None,
+                                       is_total=True, combined_with=(), residue="", marks=())
+                published.append((position, product, quote_of(*source_rows[first : position + 1]),
+                                  assigned, reading, ()))
+            else:
+                for match in regions:
+                    published.append(publish(match, extra=(FLAG_REGIONS_NO_TOTAL,)))
+
+    # A question is only worth asking where nothing answered: a row the
+    # reader could not account for, beside the product's own row for the same
+    # periods, is noise around an answer rather than a candidate for it.
+    answered = {key for _, _, _, assigned, _, _ in published for key in grouped(assigned)}
+    for match in questions:
+        if not set(grouped(match[2])) <= answered:
+            published.append(publish(match))
+    return published, refusal
+
+
+def _total_among(matches: list[Match], grouped) -> Match | None:
+    """The matched row whose figures are the sum of the others, in every period."""
+    for index, match in enumerate(matches):
         parts = [other[2] for other in matches[:index] + matches[index + 1 :]]
-        if _adds_up(grouped(assigned), _totals(grouped(p) for p in parts), len(parts)):
-            first = min(quote_from.get(other[0], other[0]) for other in matches)
-            taken = source_rows[min(first, position) : max(first, position) + 1]
-            return [(product, quote_of(*taken), assigned)], None
+        if parts and _adds_up(grouped(match[2]), _totals(grouped(p) for p in parts), len(parts)):
+            return match
+    return None
 
-    # A total printed beneath them, with no label of its own.
-    parts = _totals(grouped(assigned) for _, _, assigned in matches)
-    last = max(position for position, _, _ in matches)
+
+def _total_beneath(
+    matches: list[Match],
+    source_rows: list[list[str | None]],
+    read_row,
+    grouped,
+    reach: int,
+) -> tuple[int, dict[int, float]] | None:
+    """An unlabelled row printed beneath the components that sums them."""
+    parts = _totals(grouped(assigned) for _, _, assigned, _, _ in matches)
+    last = max(position for position, _, _, _, _ in matches)
     for position in range(last + 1, min(last + 1 + reach, len(source_rows))):
         cells = _origins(source_rows[position])
         if not cells:
@@ -408,12 +470,8 @@ def _resolve_matches(
         labelled = cell_number(cells[0][1]) is None
         assigned, _reason = read_row(source_rows[position], cells, labelled=labelled)
         if assigned and _adds_up(grouped(assigned), parts, len(matches)):
-            first = min(quote_from.get(other[0], other[0]) for other in matches)
-            return [(product, quote_of(*source_rows[first : position + 1]), assigned)], None
-
-    labels = ", ".join(label for _, label, _ in matches)
-    unread = f" unread={naming - len(matches)}" if naming > len(matches) else ""
-    return [], f"{labels}:several_lines_no_total{unread}"
+            return position, assigned
+    return None
 
 
 # A row putting two figures under one period is the table saying its headings
@@ -429,7 +487,9 @@ def read_table(
     extra_aliases: Iterable[str] | None = None,
     context: str = "",
     grid: list[list[str | None]] | None = None,
-    period_context: "PeriodContext | None" = None,
+    period_context: PeriodContext | None = None,
+    footnotes: Iterable[str] | None = None,
+    products: Iterable[str] | None = None,
 ) -> TableReadout:
     """Read one table, by its geometry where that describes it and not otherwise.
 
@@ -454,6 +514,8 @@ def read_table(
         context=context,
         grid=grid,
         period_context=period_context,
+        footnotes=footnotes,
+        products=products,
     )
     if (
         grid
@@ -468,6 +530,8 @@ def read_table(
             context=context,
             grid=None,
             period_context=period_context,
+            footnotes=footnotes,
+            products=products,
         )
     return readout
 
@@ -480,15 +544,25 @@ def _read_table(
     extra_aliases: Iterable[str] | None = None,
     context: str = "",
     grid: list[list[str | None]] | None = None,
-    period_context: "PeriodContext | None" = None,
+    period_context: PeriodContext | None = None,
+    footnotes: Iterable[str] | None = None,
+    products: Iterable[str] | None = None,
 ) -> TableReadout:
-    """One reading of one table, either by column or from the ragged rows."""
+    """One reading of one table, either by column or from the ragged rows.
+
+    ``footnotes`` are the notes printed under this table; ``products`` are the
+    other products the pipeline tracks or this run was asked about, which is
+    what lets a label be read as a combined line over named products rather
+    than as words nobody can account for.
+    """
     fingerprint = build_fingerprint(rows, context, grid=grid, period_context=period_context)
     if not fingerprint.usable:
         reason = ";".join(fingerprint.notes) or "unusable_fingerprint"
         return TableReadout(fingerprint=fingerprint, values=[], skipped_reason=reason)
 
     aliases = product_aliases(product, generic, extra=extra_aliases)
+    others = [p for p in (products or ()) if p]
+    notes = footnotes_by_mark(footnotes)
     by_index = {block.value_index: block for block in fingerprint.blocks}
     values: list[ExtractedValue] = []
     skipped: list[str] = []
@@ -519,7 +593,7 @@ def _read_table(
         )
 
     # The table's own list of what it reports: every row's label. A product's
-    # competitors are whatever else the filer prints beside it, which is known
+    # siblings are whatever else the filer prints beside it, which is known
     # per document and needs no catalogue of brand names.
     sibling_labels = [
         clean_label(cells[0][1])
@@ -527,16 +601,23 @@ def _read_table(
         if cells and clean_label(cells[0][1])
     ]
 
-    matches: list[tuple[int, str, dict[int, float]]] = []
+    def read(label: str) -> LabelReading:
+        # The other rows: a row is not its own sibling, or every label would
+        # read as a combined line over itself.
+        own_label = clean_label(label)
+        siblings = [s for s in sibling_labels if s != own_label and s not in own_label]
+        return read_label(label, aliases, products=others, siblings=siblings)
+
+    matches: list[Match] = []
     quote_from: dict[int, int] = {}
+    notes_of: dict[int, list[tuple[str, str, NoteReading]]] = {}
     section: tuple[int, str] | None = None
-    naming = 0
     for position, row in enumerate(source_rows):
         cells = _origins(row)
         if not cells:
             continue
-        label = clean_label(cells[0][1])
-        if not label:
+        label = (cells[0][1] or "").strip()
+        if not clean_label(label):
             continue
         if not any(cell_number(cell) is not None for _column, cell in cells[1:]):
             # A label with no figures beside it heads the rows below rather than
@@ -545,20 +626,54 @@ def _read_table(
             # rows carrying the numbers never name the product at all.
             section = (position, label)
             continue
-        scoped, start = label, position
-        if not _matches_product(label, aliases, sibling_labels):
-            if not section or not _matches_product(
-                f"{section[1]} {label}", aliases, sibling_labels
-            ):
+        reading, start = read(label), position
+        if not reading.names_product and section:
+            reading, start = read(f"{section[1]} {label}"), section[0]
+        if not reading.names_product:
+            continue
+        flags: list[str] = list(reading.flags)
+        combined = list(reading.combined_with)
+        # Each note the label cites, with what it says and which figures of
+        # the row it says it about: a note about the six-month column is not
+        # about the quarter beside it.
+        cited: list[tuple[str, str, NoteReading]] = []
+        for mark in reading.marks:
+            note = notes.get(mark)
+            if not note:
                 continue
-            scoped, start = f"{section[1]} {label}", section[0]
-        naming += 1
+            note_reading = read_footnote(note, aliases, products=others, siblings=sibling_labels)
+            cited.append((mark, note, note_reading))
+            combined.extend(n for n in note_reading.names if n not in combined)
+            # The label names a family the note says includes this product:
+            # "Calderon (1)" over "(1) includes Nebulized Calderon" is the
+            # family's line and cannot be Nebulized Calderon's own.
+            own_name = "".join(c for c in product.lower() if c.isalnum())
+            matched_name = "".join(c for c in (reading.matched or "").lower() if c.isalnum())
+            if matched_name != own_name and names_product(note, [product]):
+                flags.append(FLAG_FAMILY_INCLUDES)
+            # What a note says about who sold nothing, and about a partial
+            # period, is said of the figures it names - "no sales of NuVessa
+            # in Q1 2026" is not about the prior-year column beside it - so
+            # both are applied to each figure below, where its period is known.
+        if FLAG_FAMILY_INCLUDES in flags:
+            skipped.append(f"{reading.label}:{FLAG_FAMILY_INCLUDES}")
+            continue
+        if combined and FLAG_COMBINED not in flags:
+            flags.append(FLAG_COMBINED)
+        if combined != list(reading.combined_with):
+            reading = LabelReading(
+                label=reading.label, matched=reading.matched, scope=reading.scope,
+                is_total=reading.is_total, combined_with=tuple(combined),
+                residue=reading.residue, marks=reading.marks, flags=reading.flags,
+            )
         assigned, reason = read_row(row, cells)
         if assigned is None:
-            skipped.append(f"{scoped}:{reason}")
+            skipped.append(f"{reading.label}:{reason}")
             continue
         quote_from[position] = start
-        matches.append((position, scoped, assigned))
+        if cited:
+            notes_of[position] = cited
+        matches.append((position, reading.label, assigned, reading, tuple(flags)))
 
     # Two columns can name the same period; the arithmetic that identifies a
     # total is about periods, so it groups the columns the table has equated.
@@ -567,15 +682,37 @@ def _read_table(
         return f"{block.months}m@{block.end_month}:{block.year}" if block else index
 
     published, refusal = _resolve_matches(
-        matches, source_rows, product, generic, read_row, quote_of,
-        naming=naming, quote_from=quote_from, period_of=period_of,
+        matches, source_rows, product, read_row, quote_of,
+        quote_from=quote_from, period_of=period_of,
     )
     if refusal:
         skipped.append(refusal)
 
-    for label, quote, assigned in published:
+    for position, label, quote, assigned, reading, flags in published:
+        cited = notes_of.get(position, [])
         for value_index, value in sorted(assigned.items()):
             block = by_index[value_index]
+            # The notes about this figure travel with it, so whoever reads
+            # the quote reads what the marker pointed at - and a note about
+            # another column of the row is not attached to this one.
+            about = [(mark, note, reading_) for mark, note, reading_ in cited
+                     if reading_.applies_to(block.months, block.period)]
+            if any(FLAG_NO_SALES in r.flags for _, _, r in about):
+                # The note says this product sold nothing in this period:
+                # whatever the line states here is someone else's.
+                skipped.append(f"{label}:{block.period}:{FLAG_NO_SALES}")
+                continue
+            # "No sales of NuVessa" under "Calderon and NuVessa": for the
+            # period the note names, the line is Calderon's alone.
+            no_sales = {n for _, _, r in about for n in r.no_sales_of}
+            combined_with = tuple(n for n in reading.combined_with if n not in no_sales)
+            value_flags = tuple(
+                f for f in flags
+                if f != FLAG_PARTIAL and (f != FLAG_COMBINED or combined_with)
+            ) + tuple(
+                FLAG_PARTIAL for _ in [1] if any(FLAG_PARTIAL in r.flags for _, _, r in about)
+            )
+            suffix = "".join(f" [({mark}) {note}]" for mark, note, _ in about)
             values.append(
                 ExtractedValue(
                     product_label=label,
@@ -584,9 +721,13 @@ def _read_table(
                     value_as_reported=value,
                     unit_label=fingerprint.unit_label,
                     currency=fingerprint.currency,
-                    source_quote=quote,
+                    source_quote=f"{quote}{suffix}",
                     fingerprint_signature=fingerprint.signature,
                     value_index=value_index,
+                    scope=None if reading.is_total else reading.scope,
+                    combined_with=combined_with,
+                    residue=reading.residue,
+                    flags=value_flags,
                 )
             )
 
@@ -606,7 +747,9 @@ def read_tables(
     context: str = "",
     grids: Iterable[list[list[str | None]]] | None = None,
     captions: Iterable[str] | None = None,
-    period_context: "PeriodContext | None" = None,
+    period_context: PeriodContext | None = None,
+    footnotes: Iterable[Iterable[str]] | None = None,
+    products: Iterable[str] | None = None,
 ) -> list[TableReadout]:
     """Read every table. ``grids`` holds the same tables as rectangles, in order.
 
@@ -621,6 +764,8 @@ def read_tables(
     """
     rectangles = list(grids or [])
     introductions = list(captions or [])
+    notes = [list(n or ()) for n in (footnotes or [])]
+    known = list(products or ())
     return [
         read_table(
             rows,
@@ -634,6 +779,8 @@ def read_tables(
             ),
             grid=rectangles[index] if index < len(rectangles) else None,
             period_context=period_context,
+            footnotes=notes[index] if index < len(notes) else None,
+            products=known,
         )
         for index, rows in enumerate(tables or [])
     ]

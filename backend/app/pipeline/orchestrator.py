@@ -73,6 +73,7 @@ from app.parsing.evidence import (
 )
 from app.parsing.fda_label import format_moa_profile_value, parse_label_record
 from app.parsing.indications import parse_indications
+from app.parsing.labels import FLAG_COMBINED, FLAG_NOT_UNDERSTOOD, FLAG_PARTIAL
 from app.parsing.periods import detect_period_context, normalize_period
 from app.parsing.xbrl import parse_calculation, parse_facts, unsettled_elements
 from app.quality.candidate_filters import filter_revenue_candidates
@@ -214,6 +215,9 @@ def persist_profile_field(
 # The reader's own label is used, and only if it is one this module recognises:
 # the LLM branch and the deterministic branch share this code path, so trusting
 # the key outright would let model output name its own provenance.
+# The label flags that keep a figure from being published without a person.
+LABEL_FLAGS = frozenset({FLAG_NOT_UNDERSTOOD, FLAG_PARTIAL, FLAG_COMBINED})
+
 _DETERMINISTIC_METHODS = {"table_fingerprint": "table", "prose_sentence": "prose"}
 
 
@@ -1340,6 +1344,10 @@ class PipelineOrchestrator:
                 extra_aliases=extra,
                 context=doc.full_text[:4000],
                 grids=doc.table_grids, captions=doc.table_captions,
+                footnotes=doc.table_footnotes,
+                # The other products this run knows, so a label naming two of
+                # them reads as a combined line rather than as unknown words.
+                products=self._candidate_products(job),
                 prose=doc.full_text,
                 # What the filing says it covers, for a schedule that states no
                 # period itself. Computed just above and, until now, handed only
@@ -1560,6 +1568,16 @@ class PipelineOrchestrator:
                     issue_flags.append("derived_comparative_column")
                 if cand.get("_from_table"):
                     issue_flags.append("extracted_from_table")
+                # What the row label said beyond the name: a combined line, a
+                # partial period, words nobody could account for. The flags
+                # decide what the judge may do with the figure.
+                for flag in cand.get("label_flags") or []:
+                    if flag not in issue_flags:
+                        issue_flags.append(flag)
+                if cand.get("label_residue"):
+                    citation["label_residue"] = cand["label_residue"]
+                if cand.get("combined_with"):
+                    citation["combined_with"] = list(cand["combined_with"])
                 if mis_scaled:
                     issue_flags.append("normalization_disagrees_with_unit")
                 if period is None:
@@ -1681,14 +1699,22 @@ class PipelineOrchestrator:
         settings = get_settings()
         aliases = self._job_aliases or merge_aliases(job.drug_name, job.generic_name)
         for row in rows:
+            label_flags = [f for f in (row.issue_flags or []) if f in LABEL_FLAGS]
+            residue = (row.citation_json or {}).get("label_residue") or ""
             candidate = {
                 "period": row.period,
                 "value_reported": row.value_reported,
                 "period_type": row.period_type,
                 "revenue_scope": row.revenue_scope,
                 "formulation": row.formulation,
+                "label_flags": label_flags,
+                "label_residue": residue,
             }
             context = row.source_quote or ""
+            if residue:
+                # The judge is shown what the label said that the reader could
+                # not account for, which is the question it is being asked.
+                context = f"Row label words not accounted for: {residue}\n\n{context}"
             judgment = None
             if settings.llm_skip_judge_when_deterministic:
                 judgment = try_deterministic_judgment(
@@ -1723,6 +1749,14 @@ class PipelineOrchestrator:
 
             support = judgment.get("support_classification")
             status = judgment.get("validation_status") or "needs_review"
+            if label_flags and status == ValidationStatus.AUTO_PASS.value:
+                # A label the reader could not account for, or a footnote that
+                # made the figure a partial period, is a question for a person.
+                # The judge's reading is kept; the decision is not automated.
+                status = ValidationStatus.NEEDS_REVIEW.value
+                judgment = {**judgment, "validation_status": status,
+                            "issues": [*(judgment.get("issues") or []),
+                                       f"label:{','.join(label_flags)}"]}
             enrichment: dict[str, Any] = {}
             if (
                 settings.enable_llm_search

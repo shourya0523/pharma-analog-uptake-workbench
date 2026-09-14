@@ -33,6 +33,31 @@ def try_deterministic_judgment(
     if vetoed.get("support_classification") == "misclassified":
         return vetoed
 
+    flags = set(candidate.get("label_flags") or ())
+    if "partial_period" in flags:
+        # The footnote says the figure covers less than the quarter - the
+        # product changed hands inside it. No reading of the quote changes
+        # that, so no model is asked.
+        return {
+            "validation_status": "needs_review",
+            "support_classification": "partial",
+            "issues": ["deterministic:partial_period"],
+            "explanation": "The label's footnote says the figure is for part of the period",
+        }
+    if "combined_line" in flags:
+        # The line combines this product with others, so the figure is the
+        # family's. Which part is this product's is not in the quote.
+        return {
+            "validation_status": "needs_review",
+            "support_classification": "partial",
+            "issues": ["deterministic:combined_line"],
+            "explanation": "The row combines this product with others; the figure is the family's",
+        }
+    if "label_not_understood" in flags:
+        # The reader could not account for every word of the label; the judge
+        # is asked, with the residue, and a person decides.
+        return None
+
     if period_type in {"ytd", "six_month", "nine_month", "guidance"}:
         return {
             "validation_status": "needs_review",

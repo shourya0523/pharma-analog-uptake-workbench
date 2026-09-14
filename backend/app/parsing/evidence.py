@@ -36,9 +36,21 @@ NON_PRODUCT_REVENUE_RE = re.compile(
 # reader, which splits a block on them, and by the peer check, which must not
 # mistake a label's geography half for a competing product: "Calderon - U.S."
 # names one product, not two.
+# The geography words a product-sales schedule prints beside a name, as the
+# four issuers whose schedules were read spell them. A snapshot: a filer that
+# prints a region none of these name ("Calderon - Latin America") yields a
+# label with a residue rather than a scope, which is held for a person, not
+# misread - so a missing spelling costs a review, never a wrong figure.
 SCOPE_PATTERNS: tuple[tuple[str, str], ...] = (
-    ("Worldwide", r"worldwide|world\s*wide|\bWW\b|\bW\.W\.\b"),
-    ("International", r"international|\bIntl\.?\b|\bInt'l\b|outside\s+the\s+u\.?s\.?"),
+    ("Worldwide", r"worldwide|world\s*wide|\bWW\b|\bW\.W\.\b|\bglobal(?:ly)?\b"),
+    # "Other International" is a region beside Europe and Japan, not the
+    # all-outside-the-US line, so it is matched before "International" can
+    # claim the second word.
+    ("Rest of world", r"rest\s+of\s+(?:the\s+)?world|\bROW\b|other\s+international"),
+    ("International", (r"international|\bIntl\.?\b|\bInt'l\b|outside\s+(?:of\s+)?(?:the\s+)?u\.?s\.?"
+                       r"|\bex[-\s]?u\.?s\.?\b|\bnon[-\s]u\.?s\.?\b")),
+    ("Europe", r"\beurope\b|\beuropean\b|\bEU\b"),
+    ("Japan", r"\bjapan\b"),
     ("United States", r"united\s+states|\bU\.?S\.?A?\b|domestic"),
 )
 

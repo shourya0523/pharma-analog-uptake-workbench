@@ -34,6 +34,7 @@ from __future__ import annotations
 # ruff: noqa: BLE001
 import json
 import re
+from collections.abc import Iterator
 
 from bs4 import BeautifulSoup, Tag
 
@@ -237,6 +238,79 @@ def table_caption(table: Tag) -> str:
         if budget <= 0:
             break
     return " ".join(reversed(parts))[-CAPTION_CHARS:]
+
+
+# How much text under a table is read for its footnotes. A schedule's notes
+# are a few short lines; the next schedule's caption, which is what follows
+# them, is stopped at by the table it introduces rather than by this budget.
+FOOTNOTE_CHARS = 1500
+_FOOTNOTE_START_RE = re.compile(r"^\s*(?:\(\d{1,2}\)|\d{1,2}\)|[*+†‡]+)\s*\S")
+_FOOTNOTE_MARK_ONLY_RE = re.compile(r"^\s*(?:\(\d{1,2}\)|\d{1,2}\)|[*+†‡]+)\s*$")
+# What a filer's paragraph is, for the purpose of reading one note as one
+# thing: the nearest of these around a run of text.
+_PARAGRAPH_TAGS = ("p", "div", "li", "td", "th", "tr")
+
+
+def _paragraphs_after(table: Tag) -> Iterator[str]:
+    """The text under a table, a paragraph at a time, until the next table.
+
+    A note's marker and its words are often separate runs of text - "(1)" in
+    one span, the sentence in the next - so the unit is the paragraph they
+    share, not the run. Text belonging to the table itself is skipped, and a
+    table nested inside it does not end the walk.
+    """
+    ancestors = {id(parent) for parent in table.find_parents("table")}
+    current: Tag | None = None
+    chunks: list[str] = []
+    for node in table.find_all_next(string=True):
+        owner = node.find_parent("table")
+        if owner is not None and id(owner) not in ancestors and owner is not table:
+            break
+        if owner is table:
+            continue
+        chunk = " ".join(node.split())
+        if not chunk:
+            continue
+        paragraph = node.find_parent(_PARAGRAPH_TAGS)
+        if paragraph is not current and chunks:
+            yield " ".join(chunks)
+            chunks = []
+        current = paragraph
+        chunks.append(chunk)
+    if chunks:
+        yield " ".join(chunks)
+
+
+def table_footnotes(table: Tag) -> list[str]:
+    """The notes printed under a table, each beginning with its marker.
+
+    A label carries "(1)" and the note that explains it sits below the table,
+    not in it: "(1) includes Nebulized Calderon", "* for the period between
+    the acquisition date and quarter end". Each note is one paragraph; a
+    paragraph that is only the marker takes the next paragraph as its words.
+    The notes end at the first paragraph after them that carries no marker,
+    or at the next table, so a note belongs to the schedule above it and the
+    prose that follows the notes is not read as part of the last one.
+    """
+    lines: list[str] = []
+    budget = FOOTNOTE_CHARS
+    mark: str | None = None
+    for paragraph in _paragraphs_after(table):
+        budget -= len(paragraph) + 1
+        if mark is not None:
+            lines.append(f"{mark} {paragraph}")
+            mark = None
+        elif _FOOTNOTE_MARK_ONLY_RE.match(paragraph):
+            mark = paragraph.strip()
+        elif _FOOTNOTE_START_RE.match(paragraph):
+            lines.append(paragraph)
+        elif lines:
+            break
+        if budget <= 0:
+            break
+    if mark is not None:
+        lines.append(mark)
+    return lines
 
 
 def _selected_tables(soup: BeautifulSoup) -> list[tuple[Tag, list[list[str | None]]]]:
@@ -633,6 +707,7 @@ class DocumentParser:
         selected = _selected_tables(soup)
         grids = [grid for _element, grid in selected]
         captions = [table_caption(element) for element, _grid in selected]
+        footnotes = [table_footnotes(element) for element, _grid in selected]
         tables = [rows for grid in grids if (rows := flatten_grid(grid))]
         return ParsedDocument(
             source_id=source.source_id,
@@ -640,6 +715,7 @@ class DocumentParser:
             tables=tables,
             table_grids=grids,
             table_captions=captions,
+            table_footnotes=footnotes,
             page_or_section="html body",
             parsing_status=ParsingStatus.SUCCESS,
         )

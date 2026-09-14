@@ -106,23 +106,24 @@ def _usable(points: list[Datapoint]) -> list[Datapoint]:
 def quarters_sum_to_period_total(points: list[Datapoint]) -> list[Finding]:
     """Quarters must add up to the longer period reported alongside them."""
     findings: list[Finding] = []
-    quarters: dict[int, dict[int, Datapoint]] = defaultdict(dict)
-    totals: dict[tuple[int, str], Datapoint] = {}
+    quarters: dict[tuple[int, str], dict[int, Datapoint]] = defaultdict(dict)
+    totals: dict[tuple[int, str, str], Datapoint] = {}
 
     for point in _usable(points):
         year = _year_of(point.period)
         if year is None:
             continue
+        scope = point.scope or ""
         if point.period_type == "quarterly":
             index = _quarter_index(point.period)
             if index:
-                quarters[year][index] = point
+                quarters[(year, scope)][index] = point
         elif point.period_type in _MONTHS_BY_PERIOD_TYPE:
-            totals[(year, point.period_type)] = point
+            totals[(year, point.period_type, scope)] = point
 
-    for (year, period_type), total in sorted(totals.items()):
+    for (year, period_type, scope), total in sorted(totals.items()):
         needed = _MONTHS_BY_PERIOD_TYPE[period_type] // 3
-        available = quarters.get(year, {})
+        available = quarters.get((year, scope), {})
         if not all(index in available for index in range(1, needed + 1)):
             continue
         summed = sum(
@@ -230,11 +231,13 @@ def normalization_succeeded(points: list[Datapoint]) -> list[Finding]:
 def conflicting_values(points: list[Datapoint]) -> list[Finding]:
     """One period must not carry two materially different values."""
     findings: list[Finding] = []
-    by_period: dict[tuple[str, str], list[Datapoint]] = defaultdict(list)
+    # Keyed on scope as well as period: a region row and the worldwide row
+    # state different figures for one quarter and neither is wrong.
+    by_period: dict[tuple[str, str, str], list[Datapoint]] = defaultdict(list)
     for point in _usable(points):
-        by_period[(point.period, point.period_type)].append(point)
+        by_period[(point.period, point.period_type, point.scope or "")].append(point)
 
-    for (period, _), group in sorted(by_period.items()):
+    for (period, _, _scope), group in sorted(by_period.items()):
         values = sorted(p.value_normalized_usd_millions for p in group)
         if not values:
             continue

@@ -52,6 +52,15 @@ class Datapoint:
     # either. Defaulted so every existing construction site keeps working and
     # says "unknown" rather than "exact".
     rounding_uncertainty_usd_millions: float | None = None
+    # What the row label said beyond the product's name: the geography it
+    # named, the other products it joined, the words it left unaccounted for,
+    # and what follows from them. Carried from the reader so a figure is
+    # published in the scope its label gave it and held when the label was
+    # not understood.
+    scope: str | None = None
+    combined_with: tuple[str, ...] = ()
+    residue: str = ""
+    flags: tuple[str, ...] = ()
 
     def as_dict(self) -> dict[str, Any]:
         return {
@@ -98,6 +107,7 @@ def normalize(value: ExtractedValue) -> Datapoint:
             source_quote=value.source_quote,
             fingerprint_signature=value.fingerprint_signature,
             normalization_status="unknown_unit",
+            **_label_fields(value),
         )
 
     in_millions = value.value_as_reported * scale
@@ -114,6 +124,7 @@ def normalize(value: ExtractedValue) -> Datapoint:
             source_quote=value.source_quote,
             fingerprint_signature=value.fingerprint_signature,
             normalization_status="ok",
+            **_label_fields(value),
         )
 
     year = _year_of(value.period)
@@ -131,6 +142,7 @@ def normalize(value: ExtractedValue) -> Datapoint:
             source_quote=value.source_quote,
             fingerprint_signature=value.fingerprint_signature,
             normalization_status=f"no_fx_rate_for_{value.currency}_{year}",
+            **_label_fields(value),
         )
 
     return Datapoint(
@@ -145,7 +157,18 @@ def normalize(value: ExtractedValue) -> Datapoint:
         source_quote=value.source_quote,
         fingerprint_signature=value.fingerprint_signature,
         normalization_status="ok",
+        **_label_fields(value),
     )
+
+
+def _label_fields(value: ExtractedValue) -> dict[str, Any]:
+    """What the reader learned from the label, carried through unchanged."""
+    return {
+        "scope": value.scope,
+        "combined_with": value.combined_with,
+        "residue": value.residue,
+        "flags": value.flags,
+    }
 
 
 def normalize_all(values: list[ExtractedValue]) -> list[Datapoint]:

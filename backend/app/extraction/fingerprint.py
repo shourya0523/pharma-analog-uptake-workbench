@@ -43,6 +43,11 @@ only by luck.
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:  # a type only; periods.py must not import this module back
+    from app.parsing.periods import PeriodContext
+
 import hashlib
 import re
 from dataclasses import dataclass, field
@@ -439,18 +444,27 @@ def _headings_describe_the_body(
     saying so is a guess dressed as a fact - the ragged reading, which infers
     the columns and can refuse, is the safer answer.
     """
+    figure_columns: set[int] = set()
     for row in grid[header_depth:]:
         origins = [(column, cell) for column, cell in enumerate(row) if cell]
         if not any(_is_figure(cell) for _column, cell in origins):
             # Not a row of the body: a section heading, a repeated title. It
             # states no figures, so it says nothing about where the figures are.
             continue
+        figure_columns.update(column for column, cell in origins if _is_figure(cell))
         column, cell = origins[0]
         if _is_figure(cell) or cell in {"$", "%"}:
             continue
         if column in periods:
             return False
-    return True
+    # The second tell: the headings name periods over columns in which no row
+    # of the body prints a figure, while the figures sit in columns the
+    # headings say nothing about. A press release spans its heading over the
+    # right-hand columns and writes the product's figures in the left-hand
+    # ones, so the mapping puts the quarter where no number is and records
+    # every product as several lines and no total. Headings that cover no
+    # figure describe a layout the numbers are not in.
+    return not figure_columns or bool(figure_columns & set(periods))
 
 
 def _is_figure(cell: str | None) -> bool:

@@ -218,6 +218,9 @@ class ParsedDocument(BaseModel):
     # in its own caption, and the document's first unit declaration belongs to
     # whichever schedule happens to come first.
     table_captions: list[str] = Field(default_factory=list)
+    # The notes printed under each table, in the same order: a label's "(1)"
+    # is explained there, and the explanation can change what the row is.
+    table_footnotes: list[list[str]] = Field(default_factory=list)
     page_or_section: str | None = None
     parsing_status: ParsingStatus
     notes: str | None = None

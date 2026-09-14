@@ -10,13 +10,8 @@ from __future__ import annotations
 import json
 import pathlib
 
-from app.extraction.candidates import extract_revenue_candidates
-from app.extraction.check import run_checks
-from app.extraction.extract import map_values_to_blocks, read_table, tokenize_row
-from app.extraction.fingerprint import PeriodBlock, build_fingerprint
-from app.extraction.process import Datapoint, normalize_all
-from app.parsing.documents import flatten_grid, html_table_grid
 from bs4 import BeautifulSoup
+
 from app.extraction.adjudicate import (
     Candidate,
     adjudicate_positional_solutions,
@@ -24,6 +19,12 @@ from app.extraction.adjudicate import (
     adjudicate_split_ownership_quarter,
     adjudicate_total_against_parts,
 )
+from app.extraction.candidates import extract_revenue_candidates
+from app.extraction.check import run_checks
+from app.extraction.extract import map_values_to_blocks, read_table, tokenize_row
+from app.extraction.fingerprint import PeriodBlock, build_fingerprint
+from app.extraction.process import Datapoint, normalize_all
+from app.parsing.documents import flatten_grid, html_table_grid
 
 EXHIBIT_IN_THOUSANDS = [
     ["", "Three Months Ended September 30,", "", "", ""],
@@ -948,10 +949,18 @@ def test_a_total_printed_among_the_lines_is_found_by_the_same_arithmetic():
     }
 
 
-def test_several_lines_and_no_total_is_refused_rather_than_picked_between():
+def test_several_lines_and_no_total_publish_each_region_as_itself_and_never_as_the_product():
+    """Without a total the family figure is not in the table. What is in it
+    are the regions, each published in its own scope and flagged, so a
+    caller sees four regional figures and no worldwide one - never one of
+    the four dressed as the product."""
     readout = read_table(REGIONAL_LINES[:-1], product="Harvoni")
-    assert readout.values == []
-    assert "several_lines_no_total" in readout.skipped_reason
+    assert readout.values, "the regions the filer printed are answers in their own scope"
+    assert all(v.scope for v in readout.values), "no value passes as the whole product"
+    assert all("region_rows_no_total" in v.flags for v in readout.values)
+    assert {v.scope for v in readout.values} == {
+        "United States", "Europe", "Japan", "Rest of world",
+    }
 
 
 def test_a_row_naming_the_product_alone_is_the_product():
@@ -983,8 +992,13 @@ def test_a_line_that_did_not_parse_still_counts_as_a_line():
         ["Harvoni – Europe", "512", "623", "1,067", "1,100", "42"],
     ]
     readout = read_table(rows, product="Harvoni")
-    assert readout.values == []
-    assert "several_lines_no_total" in readout.skipped_reason
+    # The U.S. line is published as the U.S. line - its label says so - and
+    # never as the product, whether or not Europe's numbers could be read.
+    assert [(v.scope, v.flags) for v in readout.values] == [
+        ("United States", ("region_rows_no_total",)),
+        ("United States", ("region_rows_no_total",)),
+    ]
+    assert "Harvoni – Europe" in readout.skipped_reason
 
 
 def test_a_nil_dash_is_the_zero_it_means():
@@ -1132,7 +1146,11 @@ def test_a_sentence_does_not_pre_empt_a_derivation():
     """
     import inspect
 
-    from app.pipeline.orchestrator import CLAIM_STRENGTH, PipelineOrchestrator, claim_rank
+    from app.pipeline.orchestrator import (
+        CLAIM_STRENGTH,
+        PipelineOrchestrator,
+        claim_rank,
+    )
 
     # The ranking is by how much had to be inferred.
     assert claim_rank("xbrl_fact") < claim_rank("table") < claim_rank(
