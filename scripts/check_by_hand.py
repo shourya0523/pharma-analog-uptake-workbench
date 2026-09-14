@@ -105,15 +105,18 @@ def check_instance(raw: bytes, drug: str, period_start: str | None, value: float
     return None
 
 
-def names(drug: str, window: str) -> bool:
+def names(drug: str, window: str, generic: str | None = None) -> bool:
     """Whether a stretch of the document names the product.
 
     A document prints the brand; the name a person typed may carry more -
     "Nebulized Calderon" for a document that says "Calderon" - so any word of
-    the name long enough to be a name of its own will do.
+    the name long enough to be a name of its own will do. A filer that prints
+    the generic - "calderonib products" for Calderon - names it too, so the
+    job's generic name counts where the job has one.
     """
     low = window.lower()
-    return any(word in low for word in drug.lower().split() if len(word) >= 4)
+    words = [w for name in (drug, generic or "") for w in name.lower().split() if len(w) >= 4]
+    return any(word in low for word in words)
 
 
 def printed_sibling(url: str) -> str | None:
@@ -160,6 +163,7 @@ def main() -> int:
         for job in run["jobs"]:
             detail = get_json(f"{args.base}/jobs/{job['id']}")
             drug = job["drug_name"]
+            generic = detail.get("generic_name")
             for d in detail.get("datapoints") or []:
                 if d.get("validation_status") not in {"auto_pass", "confirmed"}:
                     continue
@@ -182,7 +186,7 @@ def main() -> int:
                         for s in spellings(None, d["value_normalized_usd_millions"]):
                             for m in re.finditer(r"(?<![\d,.])" + re.escape(s) + r"(?![\d,])", stext):
                                 window = stext[max(0, m.start() - 300): m.end() + 60]
-                                if names(drug, window):
+                                if names(drug, window, generic):
                                     printed = stext[max(0, m.start() - 90): m.end() + 40].strip()
                                     break
                             if printed:
@@ -201,7 +205,7 @@ def main() -> int:
                 for s in spellings(d.get("value_reported"), d["value_normalized_usd_millions"]):
                     for m in re.finditer(re.escape(s), text):
                         window = low[max(0, m.start() - 400): m.end() + 120]
-                        if names(drug, window):
+                        if names(drug, window, generic):
                             hit = text[max(0, m.start() - 110): m.end() + 40]
                             break
                     if hit:

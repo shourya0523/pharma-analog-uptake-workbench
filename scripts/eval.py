@@ -77,24 +77,62 @@ def get(base: str, path: str, timeout: int = 180) -> dict:
     return _call(urllib.request.Request(f"{base}{path}"), timeout=timeout)
 
 
+def window_key(options: dict) -> str:
+    return json.dumps({k: options.get(k) for k in OPTION_KEYS if k in options}, sort_keys=True)
+
+
+def runs_by_window(base: str) -> dict[str, list[dict]]:
+    """Every run on the server, newest first, keyed the way batches are: by
+    their window."""
+    rows: list[dict] = []
+    offset = 0
+    while True:
+        page = get(base, f"/observability/db/extraction_runs?limit=500&offset={offset}")
+        rows.extend(page.get("rows", []))
+        if offset + 500 >= page.get("total", 0):
+            break
+        offset += 500
+    rows.sort(key=lambda row: str(row.get("created_at") or ""), reverse=True)
+    found: dict[str, list[dict]] = {}
+    for row in rows:
+        found.setdefault(window_key(row.get("options_json") or {}), []).append(row)
+    return found
+
+
 def existing_runs(base: str) -> dict[str, str]:
-    """Runs already on the server, keyed the way batches are: by their options.
+    """The newest run already on the server for each window.
 
     So a client that died mid-way, or a second invocation, scores the runs it
     already started instead of starting them again.
     """
-    found: dict[str, str] = {}
-    offset = 0
-    while True:
-        page = get(base, f"/observability/db/extraction_runs?limit=500&offset={offset}")
-        for row in page.get("rows", []):
-            options = row.get("options_json") or {}
-            key = json.dumps({k: options.get(k) for k in OPTION_KEYS if k in options},
-                             sort_keys=True)
-            found.setdefault(key, row["id"])
-        if offset + 500 >= page.get("total", 0):
-            return found
-        offset += 500
+    return {key: rows[0]["id"] for key, rows in runs_by_window(base).items()}
+
+
+# A job in one of these states ran to the end and has an answer to score.
+FINISHED = {"ready_for_review", "completed"}
+
+
+def later_finished_job(
+    base: str, *, drug: str, key: str, scored_run: str, runs: dict[str, list[dict]]
+) -> tuple[str, dict] | None:
+    """The newest finished job for this drug and window in a run started after
+    the one being scored.
+
+    A job that failed - the server restarted under it, a fetch timed out - is
+    ordinarily run again by hand. Its fresh run is the pipeline's answer for
+    the case, and this is what folds it into the score. Only runs newer than
+    the scored one qualify: an older run scored older code.
+    """
+    rows = runs.get(key, [])
+    since = next((str(row.get("created_at") or "") for row in rows if row["id"] == scored_run), "")
+    for row in rows:
+        if row["id"] == scored_run or str(row.get("created_at") or "") <= since:
+            continue
+        run = get(base, f"/runs/{row['id']}")
+        for job in run.get("jobs", []):
+            if job["drug_name"].casefold() == drug.casefold() and job["status"] in FINISHED:
+                return row["id"], job
+    return None
 
 
 # A run is matched back to its batch on the window alone. The server stores
@@ -266,10 +304,10 @@ def main() -> int:
 
     results = []
     already = existing_runs(args.base) if args.attach else {}
+    rescored = 0
     for index, (options_key, batch) in enumerate(batches.items(), 1):
         options = json.loads(options_key)
-        match_key = json.dumps({k: options.get(k) for k in OPTION_KEYS if k in options},
-                               sort_keys=True)
+        match_key = window_key(options)
         if match_key in already:
             run_id = already[match_key]
             print(f"  [{index}/{len(batches)}] {len(batch)} drug(s): attached to run {run_id[:8]}",
@@ -286,6 +324,7 @@ def main() -> int:
         by_drug = {}
         for job in run["jobs"]:
             by_drug.setdefault(job["drug_name"].casefold(), []).append(job)
+        later_runs: dict[str, list[dict]] | None = None
         for case in batch:
             job = (by_drug.get(case["drug_name"].casefold()) or [None]).pop(0)
             if job is None:
@@ -295,12 +334,30 @@ def main() -> int:
                                 "sources_found": None, "datapoints": 0,
                                 "rows": score(case, []), "source": case.get("source")})
                 continue
+            scored_from = None
+            if job["status"] not in FINISHED:
+                # The job did not run to the end. If it was run again by hand
+                # and that run finished, the case is scored from there.
+                if later_runs is None:
+                    later_runs = runs_by_window(args.base)
+                found = later_finished_job(
+                    args.base, drug=case["drug_name"], key=match_key,
+                    scored_run=created["run_id"], runs=later_runs,
+                )
+                if found:
+                    scored_from = {"run_id": found[0], "job_id": found[1]["id"],
+                                   "instead_of": {"job_id": job["id"], "job_status": job["status"],
+                                                  "error": job.get("error")}}
+                    job = found[1]
+                    rescored += 1
             detail = get(args.base, f"/jobs/{job['id']}")
             datapoints = detail.get("datapoints") or []
             results.append({
-                "run_id": created["run_id"], "job_id": job["id"],
+                "run_id": scored_from["run_id"] if scored_from else created["run_id"],
+                "job_id": job["id"],
                 "drug_name": case["drug_name"], "manufacturer": case.get("manufacturer"),
                 "job_status": job["status"], "error": job.get("error"),
+                "scored_from_later_run": scored_from,
                 "sources_found": job.get("sources_found"),
                 "datapoints": len(datapoints),
                 "rows": score(case, datapoints),
@@ -319,6 +376,13 @@ def main() -> int:
                   + (f" ({row['method']})" if row["method"] else ""))
     total = sum(tally.values())
     print(f"\n  {total} expected figures across {len(results)} runs")
+    if rescored:
+        print(f"  {rescored} case(s) whose job did not finish were scored from a later run "
+              f"of the same drug and window")
+    unfinished = [r["drug_name"] for r in results if r["job_status"] not in FINISHED]
+    if unfinished:
+        print(f"  {len(unfinished)} case(s) with no finished job, scored as empty: "
+              + ", ".join(unfinished))
     for state, n in sorted(tally.items(), key=lambda kv: -kv[1]):
         print(f"    {state:22} {n:>4}  {100 * n / total:5.1f}%")
     good = tally.get("published, correct", 0) + tally.get("correctly silent", 0)
