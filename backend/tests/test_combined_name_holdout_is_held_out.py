@@ -16,74 +16,21 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from tests.answer_keys import identifying, scored_words
+
 REPO = Path(__file__).resolve().parents[2]
 HOLDOUT = REPO / "seed" / "holdout_members" / "combined_name_members.json"
 
 
-def _issuers(*paths: Path) -> set[str]:
-    seen: set[str] = set()
-    for path in paths:
-        if not path.exists():
-            continue
-        for line in path.read_text().splitlines():
-            if line.strip():
-                seen.add(json.loads(line).get("manufacturer", ""))
-    return seen
-
-
-def _every_other_answer_key() -> set[str]:
-    """Every issuer any other set under seed/ is already spent on.
-
-    Naming three files by hand is how this test passed while the property it
-    exists to enforce was broken: `seed/holdout_labels` scores the peer guard
-    on Alkermes, Biogen and Jazz Pharmaceuticals, this file was built reusing
-    all three, and nothing said so. Discovering the keys instead means a set
-    added later cannot be forgotten here.
-    """
-    spent: set[str] = set()
-    for path in sorted(REPO.glob("seed/*/*.jsonl")) + sorted(REPO.glob("seed/*/*.json")):
-        if HOLDOUT.samefile(path) if path.exists() and HOLDOUT.exists() else False:
-            continue
-        text = path.read_text()
-        if path.suffix == ".jsonl":
-            spent |= {json.loads(line).get("manufacturer", "")
-                      for line in text.splitlines() if line.strip()}
-        else:
-            payload = json.loads(text)
-            cases = payload.get("cases") if isinstance(payload, dict) else payload
-            for case in cases or ():
-                if isinstance(case, dict):
-                    # A member case names its issuer; an eval case names the
-                    # manufacturer a person would type. Both are answer keys.
-                    spent.add(case.get("issuer") or case.get("manufacturer") or "")
-    return {name for name in spent if name}
-
-
-# What kind of company it is, rather than which one. "Pharmaceuticals" is in
-# both "Vertex Pharmaceuticals" and "Jazz Pharmaceuticals" and distinguishes
-# neither.
-_COMPANY_WORDS = frozenset({
-    "pharmaceuticals", "pharma", "inc", "corp", "corporation", "company", "co",
-    "plc", "ltd", "limited", "holdings", "group", "sciences", "therapeutics",
-    "laboratories", "labs", "biosciences", "industries", "nv", "sa", "ag", "as",
-    "and", "the",
-})
-
-
-def _identifying(issuer: str) -> set[str]:
-    words = issuer.lower().replace("/", " ").replace("-", " ").replace("&", " ").split()
-    return {w for w in words if w not in _COMPANY_WORDS}
-
-
 def test_no_case_comes_from_a_scored_issuer():
     payload = json.loads(HOLDOUT.read_text())
-    spent = _every_other_answer_key()
-    # "Actelion/J&J" names Johnson & Johnson, so compare on the identifying
-    # words rather than on the string an answer key happened to write.
-    scored = {w for issuer in spent for w in _identifying(issuer)}
+    # Every other answer key under seed/ is discovered rather than named:
+    # naming three files by hand is how this test once passed while the
+    # property it exists to enforce was broken. See tests/answer_keys.py.
+    scored = scored_words(excluding=HOLDOUT)
     assert scored, "no answer keys found; this test would pass vacuously"
     for case in payload["cases"]:
-        overlap = scored & _identifying(case["issuer"])
+        overlap = scored & identifying(case["issuer"])
         assert not overlap, f"{case['issuer']} is already scored: {overlap}"
 
 

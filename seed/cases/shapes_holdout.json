@@ -1,0 +1,958 @@
+[
+  {
+    "drug_name": "FIRDAPSE",
+    "generic_name": "amifampridine",
+    "manufacturer": "Catalyst Pharmaceuticals Inc",
+    "ticker": "CPRX",
+    "cik": "0001369568",
+    "options": {
+      "earnings_since": "2023-01-15",
+      "earnings_until": "2024-05-05",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "shapes": [
+      "plain product row",
+      "annual report in window",
+      "inline-xbrl cover pages"
+    ],
+    "source": "10-Q table 'net product revenue disaggregated by product (in thousands)'; the Q4 2022 and Q4 2023 releases state the quarter in prose.",
+    "expect": [
+      {
+        "period": "2022Q4",
+        "value_normalized_usd_millions": 60.683,
+        "cite": "0001193125-23-071414 8-K 2023-03-15 'FIRDAPSE net product revenue of $61 million for Q4 2022'; 10-K 0001193125-23-071299 annual 213,938 less nine months 153,255 (10-Q 0001193125-23-273506 comparative) = 60,683; https://www.sec.gov/Archives/edgar/data/1369568/000119312523071414/d460335dex991.htm"
+      },
+      {
+        "period": "2023Q1",
+        "value_normalized_usd_millions": 57.526,
+        "cite": "0001193125-23-140701 10-Q Q1 2023 row 'FIRDAPSE \u00ae | 57,526 | 43,033'; https://www.sec.gov/Archives/edgar/data/1369568/000119312523140701/d499325d10q.htm"
+      },
+      {
+        "period": "2023Q2",
+        "value_normalized_usd_millions": 64.898,
+        "cite": "0001193125-23-207344 10-Q Q2 2023 row 'FIRDAPSE \u00ae | 64,898 | 53,049 | 122,424 | 96,082'; https://www.sec.gov/Archives/edgar/data/1369568/000119312523207344/d524408d10q.htm"
+      },
+      {
+        "period": "2023Q3",
+        "value_normalized_usd_millions": 66.224,
+        "cite": "0001193125-23-273506 10-Q Q3 2023 row 'FIRDAPSE \u00ae | 66,224 | 57,173 | 188,648 | 153,255'; https://www.sec.gov/Archives/edgar/data/1369568/000119312523273506/d540129d10q.htm"
+      },
+      {
+        "period": "2023Q4",
+        "value_normalized_usd_millions": 69.778,
+        "cite": "0001193125-24-051235 8-K 2024-02-29 'FIRDAPSE net product revenue of $69.8 million for Q4 2023'; 10-K 0001193125-24-050908 annual 258,426 less nine months 188,648 = 69,778; https://www.sec.gov/Archives/edgar/data/1369568/000119312524051235/d776053dex991.htm"
+      }
+    ]
+  },
+  {
+    "drug_name": "FYCOMPA",
+    "generic_name": "perampanel",
+    "manufacturer": "Catalyst Pharmaceuticals Inc",
+    "ticker": "CPRX",
+    "cik": "0001369568",
+    "options": {
+      "earnings_since": "2023-01-15",
+      "earnings_until": "2024-05-05",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "shapes": [
+      "owned by a non-SEC filer for part of the window",
+      "footnote: partial period since acquisition",
+      "guidance figures beside the product",
+      "must come back empty"
+    ],
+    "source": "U.S. rights bought from Eisai (no SEC filings) on 2023-01-24. The Q4 2022 release quotes Eisai's fiscal-year figure and a 2023 forecast for FYCOMPA; the Q1 2023 release footnotes its FYCOMPA row '* revenues are for the approximately 2 months that we owned the U.S. rights'; the 10-K footnotes the year the same way.",
+    "expect": [
+      {
+        "period": "2022Q4",
+        "value_normalized_usd_millions": null,
+        "why": "Eisai's quarter; no SEC filer of record. 8-K 0001193125-23-019083 says 'Net FYCOMPA revenues for the 2022 fiscal year ending March 31, 2023, are expected to be approximately $136 million' - a forecast of another company's fiscal year."
+      },
+      {
+        "period": "2023Q1",
+        "value_normalized_usd_millions": null,
+        "why": "partial period: 8-K 0001193125-23-140818 row 'FYCOMPA \u00ae Net Product Revenues* | 27.8' with '* FYCOMPA \u00ae revenues are for the approximately 2 months that we owned the U.S. rights'; 10-Q 0001193125-23-140701 prints 27,778 without the footnote. Expectation follows the plan's partial-period rule and definitional question 1."
+      },
+      {
+        "period": "2023Q2",
+        "value_normalized_usd_millions": 34.579,
+        "cite": "0001193125-23-207344 10-Q Q2 2023 row 'FYCOMPA \u00ae | 34,579 | \u2014 | 62,357 | \u2014'; https://www.sec.gov/Archives/edgar/data/1369568/000119312523207344/d524408d10q.htm"
+      },
+      {
+        "period": "2023Q3",
+        "value_normalized_usd_millions": 36.393,
+        "cite": "0001193125-23-273506 10-Q Q3 2023 row 'FYCOMPA \u00ae | 36,393 | \u2014 | 98,750 | \u2014'; https://www.sec.gov/Archives/edgar/data/1369568/000119312523273506/d540129d10q.htm"
+      },
+      {
+        "period": "2023Q4",
+        "value_normalized_usd_millions": 39.326,
+        "cite": "0001193125-24-051235 8-K 2024-02-29 'FYCOMPA net product revenue of $39.3 million for Q4 2023'; 10-K 0001193125-24-050908 annual 138,076 less nine months 98,750 = 39,326; https://www.sec.gov/Archives/edgar/data/1369568/000119312524051235/d776053dex991.htm"
+      }
+    ]
+  },
+  {
+    "drug_name": "AGAMREE",
+    "generic_name": "vamorolone",
+    "manufacturer": "Catalyst Pharmaceuticals Inc",
+    "ticker": "CPRX",
+    "cik": "0001369568",
+    "options": {
+      "earnings_since": "2024-04-05",
+      "earnings_until": "2025-05-05",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "shapes": [
+      "footnote: launch quarter, not an acquisition",
+      "N/A comparative cells in the release table"
+    ],
+    "source": "Launched 2024-03-13. The 10-Q Q1 2024 prints the row plain; later 10-Qs footnote the nine-month figure '* ... for the period between March 13, 2024 (date of commercial launch) and ...'. A launch-quarter figure is the product's whole revenue for the quarter, unlike an acquisition-date figure.",
+    "expect": [
+      {
+        "period": "2024Q1",
+        "value_normalized_usd_millions": 1.174,
+        "cite": "0001193125-24-134195 10-Q Q1 2024 row 'AGAMREE \u00ae | 1,174 | \u2014'; release 0001193125-24-134303 'AGAMREE net product revenues of $1.2 million for Q1 2024, reflecting approximately the first two weeks'; https://www.sec.gov/Archives/edgar/data/1369568/000119312524134195/d732534d10q.htm"
+      },
+      {
+        "period": "2024Q2",
+        "value_normalized_usd_millions": 8.746,
+        "cite": "0000950170-24-092745 10-Q Q2 2024 row 'AGAMREE\u00ae* | 8,746 | \u2014 | 9,920 | \u2014'; https://www.sec.gov/Archives/edgar/data/1369568/000095017024092745/cprx-20240630.htm"
+      },
+      {
+        "period": "2024Q3",
+        "value_normalized_usd_millions": 15.046,
+        "cite": "0000950170-24-122282 10-Q Q3 2024 row 'AGAMREE\u00ae* | 15,046 | \u2014 | 24,966 | \u2014'; https://www.sec.gov/Archives/edgar/data/1369568/000095017024122282/cprx-20240930.htm"
+      },
+      {
+        "period": "2024Q4",
+        "value_normalized_usd_millions": 21.075,
+        "derived": "annual 46.041 less nine months 24.966",
+        "cite": "0000950170-25-027714 10-K 2024 row 'AGAMREE\u00ae* | 46,041 | \u2014 | \u2014' less 10-Q Q3 nine months 24,966; release 0001193125-25-036816 table 'AGAMREE Product Revenue, Net | 46,041'; https://www.sec.gov/Archives/edgar/data/1369568/000095017025027714/cprx-20241231.htm"
+      }
+    ]
+  },
+  {
+    "drug_name": "Galafold",
+    "generic_name": "migalastat",
+    "manufacturer": "Amicus Therapeutics Inc",
+    "ticker": "FOLD",
+    "cik": "0001178879",
+    "options": {
+      "earnings_since": "2025-04-05",
+      "earnings_until": "2026-05-05",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "shapes": [
+      "Product - Region rows with a labelled Total row",
+      "a cost row naming the product (R&D 'Galafold \u00ae (Fabry disease)')",
+      "tags thousands, release prose one decimal"
+    ],
+    "source": "10-Q rows 'Galafold \u00ae U.S.' / 'Galafold \u00ae Ex-U.S.' / 'Total Galafold \u00ae sales' (in thousands); the same 10-Q's R&D table has a row 'Galafold \u00ae (Fabry disease)' with an expense figure. Releases print the total in thousands and the prose in one decimal.",
+    "expect": [
+      {
+        "period": "2025Q1",
+        "value_normalized_usd_millions": 104.244,
+        "cite": "0001178879-25-000006 10-Q Q1 2025 'Total Galafold \u00ae sales | 104,244 | 99,359'; https://www.sec.gov/Archives/edgar/data/1178879/000117887925000006/fold-20250331.htm"
+      },
+      {
+        "period": "2025Q2",
+        "value_normalized_usd_millions": 128.872,
+        "cite": "0001178879-25-000011 10-Q Q2 2025 'Total Galafold \u00ae sales | 128,872 | 110,817 | 233,116 | 210,176'; https://www.sec.gov/Archives/edgar/data/1178879/000117887925000011/fold-20250630.htm"
+      },
+      {
+        "period": "2025Q3",
+        "value_normalized_usd_millions": 138.347,
+        "cite": "0001178879-25-000015 10-Q Q3 2025 'Total Galafold \u00ae sales | 138,347 | 120,381 | 371,463 | 330,557'; https://www.sec.gov/Archives/edgar/data/1178879/000117887925000015/fold-20250930.htm"
+      },
+      {
+        "period": "2025Q4",
+        "value_normalized_usd_millions": 150.239,
+        "cite": "0001104659-26-018127 8-K 2026-02-20 row 'Galafold \u00ae | 150,239 | 127,497 ...' and 'Fourth quarter net product sales were $150.2 million'; https://www.sec.gov/Archives/edgar/data/1178879/000110465926018127/tm266897d1_ex99-1.htm"
+      }
+    ]
+  },
+  {
+    "drug_name": "Pombiliti",
+    "generic_name": "cipaglucosidase alfa-atga",
+    "manufacturer": "Amicus Therapeutics Inc",
+    "ticker": "FOLD",
+    "cik": "0001178879",
+    "options": {
+      "earnings_since": "2025-04-05",
+      "earnings_until": "2026-05-05",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "shapes": [
+      "row label naming two brands joined by '+' (co-administered therapy)",
+      "Product - Region rows with a labelled Total row"
+    ],
+    "source": "Every row is 'Pombiliti \u00ae + Opfolda \u00ae U.S. / Ex-U.S. / Total Pombiliti \u00ae + Opfolda \u00ae sales'. The two brands are one therapy sold together, so the combined line is the figure for either product asked. Depends on definitional question 2 only in the sense that a combined line is published for the asked product as the combination it is.",
+    "expect": [
+      {
+        "period": "2025Q1",
+        "value_normalized_usd_millions": 21.005,
+        "cite": "0001178879-25-000006 10-Q Q1 2025 'Total Pombiliti \u00ae + Opfolda \u00ae sales | 21,005 | 11,044'; https://www.sec.gov/Archives/edgar/data/1178879/000117887925000006/fold-20250331.htm"
+      },
+      {
+        "period": "2025Q2",
+        "value_normalized_usd_millions": 25.816,
+        "cite": "0001178879-25-000011 10-Q Q2 2025 'Total Pombiliti \u00ae + Opfolda \u00ae sales | 25,816 | 15,852 | 46,821 | 26,896'; https://www.sec.gov/Archives/edgar/data/1178879/000117887925000011/fold-20250630.htm"
+      },
+      {
+        "period": "2025Q3",
+        "value_normalized_usd_millions": 30.714,
+        "cite": "0001178879-25-000015 10-Q Q3 2025 'Total Pombiliti \u00ae + Opfolda \u00ae sales | 30,714 | 21,136 | 77,535 | 48,032'; https://www.sec.gov/Archives/edgar/data/1178879/000117887925000015/fold-20250930.htm"
+      },
+      {
+        "period": "2025Q4",
+        "value_normalized_usd_millions": 34.974,
+        "cite": "0001104659-26-018127 8-K 2026-02-20 row 'Pombiliti \u00ae + Opfolda \u00ae | 34,974 | 22,209 ...'; 10-K 0001178879-26-000005 annual 112,508 less nine months 77,535 = 34,973; https://www.sec.gov/Archives/edgar/data/1178879/000110465926018127/tm266897d1_ex99-1.htm"
+      }
+    ]
+  },
+  {
+    "drug_name": "ORLADEYO",
+    "generic_name": "berotralstat",
+    "manufacturer": "BioCryst Pharmaceuticals Inc",
+    "ticker": "BCRX",
+    "cik": "0000882796",
+    "options": {
+      "earnings_since": "2025-04-05",
+      "earnings_until": "2026-05-05",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "shapes": [
+      "product name on its own row above U.S. / Outside of U.S. / Total rows",
+      "labelled Total row",
+      "a later comparative that splits the same quarter into two rows"
+    ],
+    "source": "10-Q prints 'ORLADEYO:' as a heading row, then 'U.S.', 'Outside of U.S.', 'Total ORLADEYO' (in thousands). The 10-K 2025 prints 'U.S. / Rest of world / European ORLADEYO business / Total ORLADEYO'; the Q1 2026 10-Q, outside this window, restates 2025Q1 as 'ORLADEYO 122,707 / European ORLADEYO business 11,536 / Total ORLADEYO 134,243'.",
+    "expect": [
+      {
+        "period": "2025Q1",
+        "value_normalized_usd_millions": 134.243,
+        "cite": "0001628280-25-022658 10-Q Q1 2025 'Total ORLADEYO | 134,243 | 88,867'; release 0001171843-25-002739 'Q1 2025 ORLADEYO net revenue of $134.2 million'; https://www.sec.gov/Archives/edgar/data/882796/000162828025022658/bcrx-20250331.htm"
+      },
+      {
+        "period": "2025Q2",
+        "value_normalized_usd_millions": 156.837,
+        "cite": "0001628280-25-037795 10-Q Q2 2025 'Total ORLADEYO | 156,837 | 108,288 | 291,080 | 197,155'; https://www.sec.gov/Archives/edgar/data/882796/000162828025037795/bcrx-20250630.htm"
+      },
+      {
+        "period": "2025Q3",
+        "value_normalized_usd_millions": 159.077,
+        "cite": "0001628280-25-048785 10-Q Q3 2025 'Total ORLADEYO | 159,077 | 116,319 | 450,157 | 313,474'; https://www.sec.gov/Archives/edgar/data/882796/000162828025048785/bcrx-20250930.htm"
+      },
+      {
+        "period": "2025Q4",
+        "value_normalized_usd_millions": 151.682,
+        "cite": "0001171843-26-001119 8-K 2026-02-26 row 'ORLADEYO | 151,682 | 124,186 | 601,839 | 437,660'; 10-K 0001628280-26-012240 'Total ORLADEYO | 601,839' less nine months 450,157 = 151,682; https://www.sec.gov/Archives/edgar/data/882796/000117184326001119/exh_991.htm"
+      }
+    ]
+  },
+  {
+    "drug_name": "EXONDYS 51",
+    "generic_name": "eteplirsen",
+    "manufacturer": "Sarepta Therapeutics Inc",
+    "ticker": "SRPT",
+    "cik": "0000873303",
+    "options": {
+      "earnings_since": "2023-04-05",
+      "earnings_until": "2024-05-05",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "shapes": [
+      "no earnings 8-K: quarters only in 10-Qs, fourth quarter only as the 10-K annual",
+      "fourth quarter derivable only as annual less nine months"
+    ],
+    "source": "Sarepta furnished no quarterly earnings release on Form 8-K in 2023 (five 8-Ks in the year, none an earnings release; browse-edgar and the submissions API agree). The 10-Q MD&A table 'components of our net product revenues, by product' prints EXONDYS 51 separately in 2023.",
+    "expect": [
+      {
+        "period": "2023Q1",
+        "value_normalized_usd_millions": 132.571,
+        "cite": "0000950170-23-016654 10-Q Q1 2023 'EXONDYS 51 | 132,571 | 117,133 | 15,438 | 13 %'; https://www.sec.gov/Archives/edgar/data/873303/000095017023016654/srpt-20230331.htm"
+      },
+      {
+        "period": "2023Q2",
+        "value_normalized_usd_millions": 134.688,
+        "cite": "0000950170-23-037125 10-Q Q2 2023 'EXONDYS 51 | 134,688 | 126,377 | 8,311 | 7 %'; https://www.sec.gov/Archives/edgar/data/873303/000095017023037125/srpt-20230630.htm"
+      },
+      {
+        "period": "2023Q3",
+        "value_normalized_usd_millions": 142.297,
+        "cite": "0000950170-23-057414 10-Q Q3 2023 'EXONDYS 51 | 142,297 | 122,262 | 20,035 | 16 %'; https://www.sec.gov/Archives/edgar/data/873303/000095017023057414/srpt-20230930.htm"
+      },
+      {
+        "period": "2023Q4",
+        "value_normalized_usd_millions": 131.02,
+        "derived": "annual 540.576 less nine months 409.55600000000004",
+        "cite": "0000950170-24-022036 10-K 2023 'EXONDYS 51 | 540,576 | 511,749 | 28,827 | 6 %' less the three 10-Q quarters; no document states the quarter; https://www.sec.gov/Archives/edgar/data/873303/000095017024022036/srpt-20231231.htm"
+      }
+    ]
+  },
+  {
+    "drug_name": "ELEVIDYS",
+    "generic_name": "delandistrogene moxeparvovec",
+    "manufacturer": "Sarepta Therapeutics Inc",
+    "ticker": "SRPT",
+    "cik": "0000873303",
+    "options": {
+      "earnings_since": "2024-04-05",
+      "earnings_until": "2025-05-05",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "shapes": [
+      "product name on its own row above United States / Total rows",
+      "a milestone named beside the product",
+      "no earnings 8-K in 2024; fourth quarter stated in a January preliminary-results 8-K"
+    ],
+    "source": "10-Q note prints 'ELEVIDYS' as a heading row, then 'United States' and 'Total ELEVIDYS product revenue, net' (in thousands). The 2025 10-Qs name a $63.5 million milestone beside ELEVIDYS.",
+    "expect": [
+      {
+        "period": "2024Q1",
+        "value_normalized_usd_millions": 133.936,
+        "cite": "0000950170-24-051234 10-Q Q1 2024 'Total ELEVIDYS product revenue, net | 133,936 | \u2014'; https://www.sec.gov/Archives/edgar/data/873303/000095017024051234/srpt-20240331.htm"
+      },
+      {
+        "period": "2024Q2",
+        "value_normalized_usd_millions": 121.721,
+        "cite": "0000950170-24-092720 10-Q Q2 2024 'Total ELEVIDYS product revenue, net | 121,721 | \u2014 | 255,657 | \u2014'; https://www.sec.gov/Archives/edgar/data/873303/000095017024092720/srpt-20240630.htm"
+      },
+      {
+        "period": "2024Q3",
+        "value_normalized_usd_millions": 180.983,
+        "cite": "0000950170-24-122239 10-Q Q3 2024 'Total ELEVIDYS product revenue, net | 180,983 | 69,108 | 436,640 | 69,108'; https://www.sec.gov/Archives/edgar/data/873303/000095017024122239/srpt-20240930.htm"
+      },
+      {
+        "period": "2024Q4",
+        "value_normalized_usd_millions": 384.2,
+        "cite": "0000950170-25-027717 8-K 2025-02-26 'ELEVIDYS net product revenue for the quarter totaled $384.2 million'; 10-K 0000950170-25-029973 annual 820,791 less nine months 436,640 = 384,151; https://www.sec.gov/Archives/edgar/data/873303/000095017025027717/srpt-ex99_1.htm"
+      }
+    ]
+  },
+  {
+    "drug_name": "EXONDYS 51",
+    "generic_name": "eteplirsen",
+    "manufacturer": "Sarepta Therapeutics Inc",
+    "ticker": "SRPT",
+    "cik": "0000873303",
+    "options": {
+      "earnings_since": "2026-01-15",
+      "earnings_until": "2026-09-15",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "shapes": [
+      "product folded into a group line ('PMO Products') - must come back empty",
+      "must come back empty"
+    ],
+    "source": "From 2024 the 10-Q and 10-K print 'PMO Products' (EXONDYS 51, VYONDYS 53 and AMONDYS 45 together) and the releases say '$228.6 million of PMO net product revenues'. No 2026 document states an EXONDYS 51 figure.",
+    "expect": [
+      {
+        "period": "2025Q4",
+        "value_normalized_usd_millions": null,
+        "why": "10-K 0001193125-26-084144 prints 'PMO Products | 965,565' and no EXONDYS 51 row; the 2026-02-25 release names no PMO by figure."
+      },
+      {
+        "period": "2026Q1",
+        "value_normalized_usd_millions": null,
+        "why": "10-Q 0001193125-26-208893 prints 'PMO Products | 228,550'; release 0001193125-26-208966 '$228.6 million of PMO net product revenues'."
+      },
+      {
+        "period": "2026Q2",
+        "value_normalized_usd_millions": null,
+        "why": "10-Q 0001193125-26-335003 prints 'PMO Products | 230,564'; release 0001193125-26-335056 '$230.6 million of PMO net product revenue'."
+      }
+    ]
+  },
+  {
+    "drug_name": "ILUVIEN",
+    "generic_name": "fluocinolone acetonide intravitreal implant 0.19 mg",
+    "manufacturer": "ANI Pharmaceuticals Inc",
+    "ticker": "ANIP",
+    "cik": "0001023024",
+    "options": {
+      "earnings_since": "2026-01-15",
+      "earnings_until": "2026-09-15",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "shapes": [
+      "row label naming two brands joined by 'and', with a footnote saying the second had no sales",
+      "footnote read, not stripped"
+    ],
+    "source": "10-Q row 'ILUVIEN and YUTIQ (1) | 19,255 | 16,109' with '(1) There were no sales of YUTIQ in Q1 2026'; the Q4 2025 release row is 'ILUVIEN (2) | 19,843' with '(2) ... fourth quarter 2024 results include YUTIQ revenue'.",
+    "expect": [
+      {
+        "period": "2025Q4",
+        "value_normalized_usd_millions": 19.843,
+        "cite": "0001023024-26-000013 8-K 2026-02-27 row 'ILUVIEN (2) | 19,843 | 27,643 | (7,800) | (28.2) %' and 'ILUVIEN net revenues were $19.8 million for the fourth quarter of 2025'; https://www.sec.gov/Archives/edgar/data/1023024/000102302426000013/anip-20260227xexx991.htm"
+      },
+      {
+        "period": "2026Q1",
+        "value_normalized_usd_millions": 19.255,
+        "cite": "0001023024-26-000050 10-Q Q1 2026 row 'ILUVIEN and YUTIQ (1) | 19,255 | 16,109' with footnote (1) no YUTIQ sales; release 0001023024-26-000049 'ILUVIEN\u00ae net revenues were $19.3 million'; https://www.sec.gov/Archives/edgar/data/1023024/000102302426000050/anip-20260331.htm"
+      },
+      {
+        "period": "2026Q2",
+        "value_normalized_usd_millions": 18.718,
+        "cite": "0001023024-26-000069 10-Q Q2 2026 row 'ILUVIEN and YUTIQ (1) | 18,718 | 22,316 | 37,973 | 38,425' with footnote (1) no YUTIQ sales; release 0001023024-26-000068 'ILUVIEN\u00ae net revenues were $18.7 million'; https://www.sec.gov/Archives/edgar/data/1023024/000102302426000069/anip-20260630.htm"
+      }
+    ]
+  },
+  {
+    "drug_name": "YUTIQ",
+    "generic_name": "fluocinolone acetonide intravitreal implant 0.18 mg",
+    "manufacturer": "ANI Pharmaceuticals Inc",
+    "ticker": "ANIP",
+    "cik": "0001023024",
+    "options": {
+      "earnings_since": "2026-01-15",
+      "earnings_until": "2026-09-15",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "shapes": [
+      "a combined line whose footnote says this product had no sales - must come back empty",
+      "must come back empty"
+    ],
+    "source": "The only rows naming YUTIQ are 'ILUVIEN and YUTIQ (1)' whose footnote says there were no sales of YUTIQ in the quarter; the combined figure is ILUVIEN's alone.",
+    "expect": [
+      {
+        "period": "2025Q4",
+        "value_normalized_usd_millions": null,
+        "why": "release 0001023024-26-000013 prints the quarter as 'ILUVIEN (2)'; no document states a YUTIQ figure for the quarter."
+      },
+      {
+        "period": "2026Q1",
+        "value_normalized_usd_millions": null,
+        "why": "10-Q 0001023024-26-000050 footnote (1): 'There were no sales of YUTIQ in Q1 2026'."
+      },
+      {
+        "period": "2026Q2",
+        "value_normalized_usd_millions": null,
+        "why": "10-Q 0001023024-26-000069 footnote (1): 'There were no sales of YUTIQ during the quarters ended March 31, 2026 and June 30, 2026'."
+      }
+    ]
+  },
+  {
+    "drug_name": "NUPLAZID",
+    "generic_name": "pimavanserin",
+    "manufacturer": "Acadia Pharmaceuticals Inc",
+    "ticker": "ACAD",
+    "cik": "0001070494",
+    "options": {
+      "earnings_since": "2024-04-05",
+      "earnings_until": "2025-05-05",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "shapes": [
+      "issuer tags the figure in thousands (decimals=-3) and the release prints one decimal in millions",
+      "a cost row naming the product (R&D 'NUPLAZID (pimavanserin)')"
+    ],
+    "source": "10-Q row 'NUPLAZID | 129,923 | 118,462' tagged us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax scale=3 decimals=-3; the release says 'Net product sales of NUPLAZID were $129.9 million'. The same 10-Q's R&D table has 'NUPLAZID (pimavanserin) | 11,329'.",
+    "expect": [
+      {
+        "period": "2024Q1",
+        "value_normalized_usd_millions": 129.923,
+        "cite": "0000950170-24-056077 10-Q Q1 2024 'NUPLAZID | 129,923 | 118,462'; release 0000950170-24-055647 2024-05-08 '$129.9 million'; https://www.sec.gov/Archives/edgar/data/1070494/000095017024056077/acad-20240331.htm"
+      },
+      {
+        "period": "2024Q2",
+        "value_normalized_usd_millions": 157.409,
+        "cite": "0000950170-24-092163 10-Q Q2 2024 'NUPLAZID | 157,409 | 142,018 | 287,332 | 260,480'; https://www.sec.gov/Archives/edgar/data/1070494/000095017024092163/acad-20240630.htm"
+      },
+      {
+        "period": "2024Q3",
+        "value_normalized_usd_millions": 159.186,
+        "cite": "0000950170-24-122513 10-Q Q3 2024 'NUPLAZID | 159,186 | 144,828 | 446,518 | 405,308'; https://www.sec.gov/Archives/edgar/data/1070494/000095017024122513/acad-20240930.htm"
+      },
+      {
+        "period": "2024Q4",
+        "value_normalized_usd_millions": 162.867,
+        "cite": "0000950170-25-027759 8-K 2025-02-26 'Fourth quarter NUPLAZID net product sales of $162.9 million'; 10-K 0000950170-25-029253 annual 609,385 less nine months 446,518 = 162,867; https://www.sec.gov/Archives/edgar/data/1070494/000095017025029253/acad-20241231.htm"
+      }
+    ]
+  },
+  {
+    "drug_name": "DAYBUE",
+    "generic_name": "trofinetide",
+    "manufacturer": "Acadia Pharmaceuticals Inc",
+    "ticker": "ACAD",
+    "cik": "0001070494",
+    "options": {
+      "earnings_since": "2024-04-05",
+      "earnings_until": "2025-05-05",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "shapes": [
+      "issuer tags thousands and prints one decimal",
+      "dash comparative in the launch year"
+    ],
+    "source": "10-Q row 'DAYBUE | 75,908 | \u2014'; release prose '$75.9 million'.",
+    "expect": [
+      {
+        "period": "2024Q1",
+        "value_normalized_usd_millions": 75.908,
+        "cite": "0000950170-24-056077 10-Q Q1 2024 'DAYBUE | 75,908 | \u2014'; https://www.sec.gov/Archives/edgar/data/1070494/000095017024056077/acad-20240331.htm"
+      },
+      {
+        "period": "2024Q2",
+        "value_normalized_usd_millions": 84.554,
+        "cite": "0000950170-24-092163 10-Q Q2 2024 'DAYBUE | 84,554 | 23,217 | 160,462 | 23,217'; https://www.sec.gov/Archives/edgar/data/1070494/000095017024092163/acad-20240630.htm"
+      },
+      {
+        "period": "2024Q3",
+        "value_normalized_usd_millions": 91.215,
+        "cite": "0000950170-24-122513 10-Q Q3 2024 'DAYBUE | 91,215 | 66,871 | 251,677 | 90,088'; https://www.sec.gov/Archives/edgar/data/1070494/000095017024122513/acad-20240930.htm"
+      },
+      {
+        "period": "2024Q4",
+        "value_normalized_usd_millions": 96.735,
+        "cite": "0000950170-25-027759 8-K 2025-02-26 'Fourth quarter DAYBUE net product sales of $96.7 million'; 10-K 0000950170-25-029253 annual 348,412 less nine months 251,677 = 96,735; https://www.sec.gov/Archives/edgar/data/1070494/000095017025029253/acad-20241231.htm"
+      }
+    ]
+  },
+  {
+    "drug_name": "Nutrition",
+    "generic_name": null,
+    "manufacturer": "Perrigo Company plc",
+    "ticker": "PRGO",
+    "cik": "0001585364",
+    "options": {
+      "earnings_since": "2023-04-05",
+      "earnings_until": "2024-05-05",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "shapes": [
+      "52/53-week filer: quarters ended April 1, 2023 and July 1, 2023",
+      "annual report in window",
+      "release headings written 1Q'26-style in later years; 2023 headings name the date"
+    ],
+    "source": "Perrigo is the only SIC-2834 filer on a 52/53-week calendar that no answer key uses (derived from the XBRL frames API: entities whose CY2023Q1 revenue fact ends 2023-04-01/02). It prints no brand lines, so its CSCA category line 'Nutrition' (infant formula) stands in for the product; the shape under test is the dating. 10-Q table 'net sales by category (in millions)' under 'Three Months Ended | April 1, 2023 | April 2, 2022'.",
+    "expect": [
+      {
+        "period": "2023Q1",
+        "value_normalized_usd_millions": 139.9,
+        "cite": "0001585364-23-000058 10-Q quarter ended April 1, 2023 'Nutrition | 139.9 | 127.2'; release 0001193125-23-138849 same row; https://www.sec.gov/Archives/edgar/data/1585364/000158536423000058/prgo-20230401.htm"
+      },
+      {
+        "period": "2023Q2",
+        "value_normalized_usd_millions": 164.8,
+        "cite": "0001585364-23-000124 10-Q quarter ended July 1, 2023 'Nutrition | 164.8 | 125.1 | 304.7 | 252.3'; https://www.sec.gov/Archives/edgar/data/1585364/000158536423000124/prgo-20230701.htm"
+      },
+      {
+        "period": "2023Q3",
+        "value_normalized_usd_millions": 130.7,
+        "cite": "0001585364-23-000142 10-Q quarter ended September 30, 2023 'Nutrition | 130.7 | 124.4 | 435.4 | 376.7'; https://www.sec.gov/Archives/edgar/data/1585364/000158536423000142/prgo-20230930.htm"
+      },
+      {
+        "period": "2023Q4",
+        "value_normalized_usd_millions": 127.8,
+        "cite": "0001585364-24-000005 8-K 2024-02-27 'Nutrition | 127.8 | 143.7 | (11.1)% | 563.2 | 520.4 | 8.2%'; 10-K 0001585364-24-000009 annual 563.2; https://www.sec.gov/Archives/edgar/data/1585364/000158536424000005/cy23q4ex991pressrelease.htm"
+      }
+    ]
+  },
+  {
+    "drug_name": "Jornay PM",
+    "generic_name": "methylphenidate hydrochloride extended-release",
+    "manufacturer": "Collegium Pharmaceutical Inc",
+    "ticker": "COLL",
+    "cik": "0001267565",
+    "options": {
+      "earnings_since": "2024-04-05",
+      "earnings_until": "2025-05-05",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "shapes": [
+      "owned by a non-SEC filer (Ironshore, private) until 2024-09-03",
+      "must come back empty",
+      "fourth quarter derivable only as annual less nine months"
+    ],
+    "source": "Ironshore Therapeutics, a private company, sold Jornay PM until Collegium closed the acquisition on September 3, 2024. The Q3 2024 10-Q prints 'Jornay PM | 7,961 | \u2014 | 7,961 | \u2014' with no footnote; that quarter is left unscored (28 days of ownership; definitional question 1). The 10-K prints 'Jornay | 37,239 | \u2014 | \u2014'; no release states the fourth quarter.",
+    "expect": [
+      {
+        "period": "2024Q1",
+        "value_normalized_usd_millions": null,
+        "why": "Ironshore's quarter; Collegium's 10-Q 0001558370-24-007601 has no Jornay row. The July 2024 releases say only 'Net revenue for Jornay PM is expected to be in excess of $100 million in 2024'."
+      },
+      {
+        "period": "2024Q2",
+        "value_normalized_usd_millions": null,
+        "why": "Ironshore's quarter; 10-Q 0001558370-24-011586 has no Jornay row."
+      },
+      {
+        "period": "2024Q4",
+        "value_normalized_usd_millions": 29.278,
+        "derived": "annual 37.239 less nine months 7.961",
+        "cite": "0001558370-25-001801 10-K 2024 'Jornay | 37,239 | \u2014 | \u2014' less 10-Q Q3 0001558370-24-014858 'Jornay PM | 7,961'; the 2025-02-27 release states only a pro forma 2024 figure of $100.7 million; https://www.sec.gov/Archives/edgar/data/1267565/000155837025001801/coll-20241231x10k.htm"
+      }
+    ]
+  },
+  {
+    "drug_name": "Nucynta ER",
+    "generic_name": "tapentadol extended-release",
+    "manufacturer": "Collegium Pharmaceutical Inc",
+    "ticker": "COLL",
+    "cik": "0001267565",
+    "options": {
+      "earnings_since": "2024-04-05",
+      "earnings_until": "2025-05-05",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "shapes": [
+      "formulation row beside its sibling ('Nucynta IR')",
+      "fourth quarter derivable only as annual less nine months"
+    ],
+    "source": "10-Q rows 'Nucynta IR' and 'Nucynta ER' side by side (in thousands). Nucynta ER's figure is its own row, never the IR row or their sum.",
+    "expect": [
+      {
+        "period": "2024Q1",
+        "value_normalized_usd_millions": 19.186,
+        "cite": "0001558370-24-007601 10-Q Q1 2024 'Nucynta ER | 19,186 | 21,136'; https://www.sec.gov/Archives/edgar/data/1267565/000155837024007601/coll-20240331x10q.htm"
+      },
+      {
+        "period": "2024Q2",
+        "value_normalized_usd_millions": 19.272,
+        "cite": "0001558370-24-011586 10-Q Q2 2024 'Nucynta ER | 19,272 | 19,171 | 38,458 | 40,307'; https://www.sec.gov/Archives/edgar/data/1267565/000155837024011586/coll-20240630x10q.htm"
+      },
+      {
+        "period": "2024Q3",
+        "value_normalized_usd_millions": 19.773,
+        "cite": "0001558370-24-014858 10-Q Q3 2024 'Nucynta ER | 19,773 | 22,634 | 58,231 | 62,941'; https://www.sec.gov/Archives/edgar/data/1267565/000155837024014858/coll-20240930x10q.htm"
+      },
+      {
+        "period": "2024Q4",
+        "value_normalized_usd_millions": 17.536,
+        "derived": "annual 75.767 less nine months 58.231",
+        "cite": "0001558370-25-001801 10-K 2024 'Nucynta ER | 75,767 | 82,653 | 72,418' less nine months 58,231; https://www.sec.gov/Archives/edgar/data/1267565/000155837025001801/coll-20241231x10k.htm"
+      }
+    ]
+  },
+  {
+    "drug_name": "QINLOCK",
+    "generic_name": "ripretinib",
+    "manufacturer": "Deciphera Pharmaceuticals Inc",
+    "ticker": "DCPH",
+    "cik": "0001654151",
+    "options": {
+      "earnings_since": "2023-04-05",
+      "earnings_until": "2024-05-05",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "shapes": [
+      "region rows (U.S. / Rest of world) under a generic 'Total product revenues, net' - the product named only in the caption",
+      "prose-only release stating the quarter with its regions",
+      "MD&A prose stating an increase ('increased $8.2 million') beside the level"
+    ],
+    "source": "10-Q table 'Net product revenues by geography' with rows 'U.S.', 'Rest of world', 'Total product revenues, net'; the caption says 'our only source of product revenues was from the sales of QINLOCK'. Releases: 'Recorded $41.8 million in QINLOCK net product revenue in the third quarter of 2023, including $32.7 million in U.S. ... and $9.1 million in international'.",
+    "expect": [
+      {
+        "period": "2023Q1",
+        "value_normalized_usd_millions": 33.222,
+        "cite": "0001654151-23-000012 10-Q Q1 2023 'Total product revenues, net | 33,222 | 28,809'; release 0001193125-23-133112 '$33.2 million in QINLOCK net product revenue'; https://www.sec.gov/Archives/edgar/data/1654151/000165415123000012/dcph-20230331.htm"
+      },
+      {
+        "period": "2023Q2",
+        "value_normalized_usd_millions": 37.32,
+        "cite": "0001654151-23-000015 10-Q Q2 2023 'Total product revenues, net | 37,320 | 31,497 | 70,542 | 60,306'; release 0001193125-23-206772 '$37.3 million'; https://www.sec.gov/Archives/edgar/data/1654151/000165415123000015/dcph-20230630.htm"
+      },
+      {
+        "period": "2023Q3",
+        "value_normalized_usd_millions": 41.82,
+        "cite": "0001654151-23-000019 10-Q Q3 2023 'Total product revenues, net | 41,820 | 32,318 | 112,362 | 92,624'; release 0001193125-23-265657 '$41.8 million'; https://www.sec.gov/Archives/edgar/data/1654151/000165415123000019/dcph-20230930.htm"
+      },
+      {
+        "period": "2023Q4",
+        "value_normalized_usd_millions": 46.712,
+        "cite": "0001193125-24-024786 8-K 2024-02-06 'Recorded $46.7 million in QINLOCK net product revenue in the fourth quarter of 2023, including $35.3 million in U.S. ... and $11.4 million in international'; 10-K 0001654151-24-000004 annual 159,074 less nine months 112,362 = 46,712; https://www.sec.gov/Archives/edgar/data/1654151/000119312524024786/d128290dex991.htm"
+      }
+    ]
+  },
+  {
+    "drug_name": "QINLOCK",
+    "generic_name": "ripretinib",
+    "manufacturer": "Deciphera Pharmaceuticals Inc",
+    "ticker": "DCPH",
+    "cik": "0001654151",
+    "options": {
+      "earnings_since": "2024-04-05",
+      "earnings_until": "2025-05-05",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "shapes": [
+      "issuer acquired by a non-SEC filer (Ono Pharmaceutical) mid-window - later quarters must come back empty",
+      "must come back empty"
+    ],
+    "source": "Deciphera's last periodic report is the Q1 2024 10-Q (filed 2024-05-10); the tender offer by Ono closed in June 2024 and no later quarter is stated in any SEC filing.",
+    "expect": [
+      {
+        "period": "2024Q1",
+        "value_normalized_usd_millions": 42.55,
+        "cite": "0001654151-24-000018 10-Q Q1 2024 'Total product revenues, net | 42,550 | 33,222' under the caption 'only source of product revenues has been from the sales of QINLOCK'; https://www.sec.gov/Archives/edgar/data/1654151/000165415124000018/dcph-20240331.htm"
+      },
+      {
+        "period": "2024Q2",
+        "value_normalized_usd_millions": null,
+        "why": "no SEC filer of record: no 10-Q for the quarter ended June 30, 2024 exists for CIK 1654151."
+      },
+      {
+        "period": "2024Q3",
+        "value_normalized_usd_millions": null,
+        "why": "no SEC filer of record: no 10-Q for the quarter ended September 30, 2024 exists for CIK 1654151."
+      }
+    ]
+  },
+  {
+    "drug_name": "Ocaliva",
+    "generic_name": "obeticholic acid",
+    "manufacturer": "Intercept Pharmaceuticals Inc",
+    "ticker": "ICPT",
+    "cik": "0001270073",
+    "options": {
+      "earnings_since": "2023-04-05",
+      "earnings_until": "2024-05-05",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "shapes": [
+      "single-product issuer: the 10-Q prints 'Product revenue, net' with the brand only in prose",
+      "prose-only release ('Ocaliva net sales of $83.7 million, representing 17% growth')",
+      "issuer acquired by a non-SEC filer (Alfasigma) - later quarter must come back empty"
+    ],
+    "source": "Intercept's statements print 'Product revenue, net'; the releases say 'Ocaliva\u00ae net sales of $83.7 million'. Alfasigma S.p.A. completed the merger on 2023-11-08; no Q4 2023 figure exists in any SEC filing.",
+    "expect": [
+      {
+        "period": "2023Q1",
+        "value_normalized_usd_millions": 67.958,
+        "cite": "0001558370-23-007042 10-Q Q1 2023 'Product revenue, net | 67,958 | 59,146'; release 0001104659-23-050686 'Ocaliva\u00ae net sales of $68.0 million'; https://www.sec.gov/Archives/edgar/data/1270073/000155837023007042/icpt-20230331x10q.htm"
+      },
+      {
+        "period": "2023Q2",
+        "value_normalized_usd_millions": 83.718,
+        "cite": "0001558370-23-012896 10-Q Q2 2023 'Product revenue, net | 83,718 | 71,757 | 151,676 | 130,903'; release 0001104659-23-086579 'Ocaliva\u00ae net sales of $83.7 million'; https://www.sec.gov/Archives/edgar/data/1270073/000155837023012896/icpt-20230630x10q.htm"
+      },
+      {
+        "period": "2023Q3",
+        "value_normalized_usd_millions": 88.789,
+        "cite": "0001558370-23-017790 10-Q Q3 2023 'Product revenue, net | 88,789 | 77,588 | 240,465 | 208,491'; https://www.sec.gov/Archives/edgar/data/1270073/000155837023017790/icpt-20230930x10q.htm"
+      },
+      {
+        "period": "2023Q4",
+        "value_normalized_usd_millions": null,
+        "why": "Alfasigma's quarter: 8-K 0001104659-23-115782 (2023-11-08) reports the merger; no later periodic report exists for CIK 1270073."
+      }
+    ]
+  },
+  {
+    "drug_name": "AYVAKIT",
+    "generic_name": "avapritinib",
+    "manufacturer": "Blueprint Medicines Corp",
+    "ticker": "BPMC",
+    "cik": "0001597264",
+    "options": {
+      "earnings_since": "2025-01-15",
+      "earnings_until": "2025-12-31",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "shapes": [
+      "region rows (United States / Rest of World / Total product revenue) with the product named only in the caption ('AYVAKIT/AYVAKYT')",
+      "prose-only release stating the quarter with its regions",
+      "issuer acquired by a foreign filer (Sanofi) mid-window - the closing quarter must come back empty"
+    ],
+    "source": "10-Q: 'The Company generates product revenue from the sales of AYVAKIT/AYVAKYT' then rows 'United States | 129,446', 'Rest of World | 19,967', 'Total product revenue | 149,413'. Release: 'AYVAKIT net product revenues of $149.4 million for the first quarter of 2025, including $129.4 million in the US and $20 million ex-US'. Sanofi closed the acquisition on 2025-07-18; Blueprint filed no Q2 2025 10-Q.",
+    "expect": [
+      {
+        "period": "2024Q4",
+        "value_normalized_usd_millions": 144.1,
+        "cite": "0001558370-25-000903 8-K 2025-02-13 'In the fourth quarter of 2024, AYVAKIT achieved $144.1 million'; https://www.sec.gov/Archives/edgar/data/1597264/000155837025000903/bpmc-20250213xex99d1.htm"
+      },
+      {
+        "period": "2025Q1",
+        "value_normalized_usd_millions": 149.413,
+        "cite": "0001558370-25-006108 10-Q Q1 2025 'Total product revenue | 149,413 | 92,525'; release 0001558370-25-006050 '$149.4 million'; https://www.sec.gov/Archives/edgar/data/1597264/000155837025006108/bpmc-20250331x10q.htm"
+      },
+      {
+        "period": "2025Q2",
+        "value_normalized_usd_millions": null,
+        "why": "no SEC filer of record for the quarter: Blueprint filed no 10-Q for June 30, 2025 (acquisition closed 2025-07-18, 8-K 0001193125-25-160804), and Sanofi's Q2 2025 release predates the close."
+      }
+    ]
+  },
+  {
+    "drug_name": "FILSPARI",
+    "generic_name": "sparsentan",
+    "manufacturer": "Travere Therapeutics Inc",
+    "ticker": "TVTX",
+    "cik": "0001438533",
+    "options": {
+      "earnings_since": "2025-04-05",
+      "earnings_until": "2026-05-05",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "shapes": [
+      "plain product row",
+      "release table in thousands beside prose"
+    ],
+    "source": "10-Q and release table 'FILSPARI | 55,881 | 19,834' (in thousands).",
+    "expect": [
+      {
+        "period": "2025Q1",
+        "value_normalized_usd_millions": 55.881,
+        "cite": "0001438533-25-000025 8-K 2025-05-01 'FILSPARI | 55,881 | 19,834'; 10-Q 0001438533-25-000026; https://www.sec.gov/Archives/edgar/data/1438533/000143853325000025/a2025q1_8-kxex991.htm"
+      },
+      {
+        "period": "2025Q2",
+        "value_normalized_usd_millions": 71.887,
+        "cite": "0001438533-25-000045 8-K 2025-08-06 'FILSPARI | 71,887 | 27,125 | 127,768 | 46,959'; https://www.sec.gov/Archives/edgar/data/1438533/000143853325000045/a2025q2_8-kxex991.htm"
+      },
+      {
+        "period": "2025Q3",
+        "value_normalized_usd_millions": 90.9,
+        "cite": "0001438533-25-000055 8-K 2025-10-30 'FILSPARI | 90,900 | 35,619 | 218,668 | 82,578'; https://www.sec.gov/Archives/edgar/data/1438533/000143853325000055/a2025q3_8-kxex991.htm"
+      },
+      {
+        "period": "2025Q4",
+        "value_normalized_usd_millions": 103.337,
+        "cite": "0001438533-26-000013 8-K 2026-02-19 'FILSPARI | 103,337 | 49,644 | 322,005 | 132,222'; https://www.sec.gov/Archives/edgar/data/1438533/000143853326000013/aex991_2025q4x10xkearnings.htm"
+      }
+    ]
+  },
+  {
+    "drug_name": "Thiola",
+    "generic_name": "tiopronin",
+    "manufacturer": "Travere Therapeutics Inc",
+    "ticker": "TVTX",
+    "cik": "0001438533",
+    "options": {
+      "earnings_since": "2025-04-05",
+      "earnings_until": "2026-05-05",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "shapes": [
+      "row printed under the generic name ('Tiopronin products') covering the brand and its EC formulation",
+      "depends on definitional question 3"
+    ],
+    "source": "The brand appears only in prose ('Product sales consist of FILSPARI and tiopronin products (Thiola and Thiola EC)'); the table row is 'Tiopronin products'. Expected as the brand family's figure; if generic-named rows are ruled not to be the brand's, these become empty.",
+    "expect": [
+      {
+        "period": "2025Q1",
+        "value_normalized_usd_millions": 19.98,
+        "cite": "0001438533-25-000025 8-K 2025-05-01 'Tiopronin products | 19,980 | 20,150'; https://www.sec.gov/Archives/edgar/data/1438533/000143853325000025/a2025q1_8-kxex991.htm"
+      },
+      {
+        "period": "2025Q2",
+        "value_normalized_usd_millions": 22.955,
+        "cite": "0001438533-25-000045 8-K 2025-08-06 'Tiopronin products | 22,955 | 25,051 | 42,934 | 45,201'; https://www.sec.gov/Archives/edgar/data/1438533/000143853325000045/a2025q2_8-kxex991.htm"
+      },
+      {
+        "period": "2025Q3",
+        "value_normalized_usd_millions": 22.25,
+        "cite": "0001438533-25-000055 8-K 2025-10-30 'Tiopronin products | 22,250 | 25,382 | 65,184 | 70,583'; https://www.sec.gov/Archives/edgar/data/1438533/000143853325000055/a2025q3_8-kxex991.htm"
+      },
+      {
+        "period": "2025Q4",
+        "value_normalized_usd_millions": 23.271,
+        "cite": "0001438533-26-000013 8-K 2026-02-19 'Tiopronin products | 23,271 | 23,902 | 88,455 | 94,485'; https://www.sec.gov/Archives/edgar/data/1438533/000143853326000013/aex991_2025q4x10xkearnings.htm"
+      }
+    ]
+  },
+  {
+    "drug_name": "Livmarli",
+    "generic_name": "maralixibat",
+    "manufacturer": "Mirum Pharmaceuticals Inc",
+    "ticker": "MIRM",
+    "cik": "0001759425",
+    "options": {
+      "earnings_since": "2025-04-05",
+      "earnings_until": "2026-05-05",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "shapes": [
+      "an intangible-asset row 'Commercial milestones' in the same filing",
+      "fourth quarter derivable only as annual less nine months"
+    ],
+    "source": "10-Q row 'Livmarli | 73,224 | 42,845' (in thousands); the same filing's intangibles table prints 'Commercial milestones | 59,000 | ...'. The Q4 2025 release states only the year ('$360.0 million'); the quarter is the 10-K annual less the nine months.",
+    "expect": [
+      {
+        "period": "2025Q1",
+        "value_normalized_usd_millions": 73.224,
+        "cite": "0001759425-25-000032 10-Q Q1 2025 'Livmarli | 73,224 | 42,845'; release 0001759425-25-000030 '$73.2 million'; https://www.sec.gov/Archives/edgar/data/1759425/000175942525000032/mirm-20250331.htm"
+      },
+      {
+        "period": "2025Q2",
+        "value_normalized_usd_millions": 88.16,
+        "cite": "0001759425-25-000041 10-Q Q2 2025 'Livmarli | 88,160 | 47,231 | 161,384 | 90,076'; https://www.sec.gov/Archives/edgar/data/1759425/000175942525000041/mirm-20250630.htm"
+      },
+      {
+        "period": "2025Q3",
+        "value_normalized_usd_millions": 92.235,
+        "cite": "0001759425-25-000054 10-Q Q3 2025 'Livmarli | 92,235 | 59,126 | 253,619 | 149,202'; https://www.sec.gov/Archives/edgar/data/1759425/000175942525000054/mirm-20250930.htm"
+      },
+      {
+        "period": "2025Q4",
+        "value_normalized_usd_millions": 106.387,
+        "derived": "annual 360.006 less nine months 253.619",
+        "cite": "0001759425-26-000013 10-K 2025 'Livmarli | 360,006 | 213,295 | 146,711' less nine months 253,619; release 0001759425-26-000010 states only the year; https://www.sec.gov/Archives/edgar/data/1759425/000175942526000013/mirm-20251231.htm"
+      }
+    ]
+  },
+  {
+    "drug_name": "VYJUVEK",
+    "generic_name": "beremagene geperpavec",
+    "manufacturer": "Krystal Biotech Inc",
+    "ticker": "KRYS",
+    "cik": "0001711279",
+    "options": {
+      "earnings_since": "2025-04-05",
+      "earnings_until": "2026-05-05",
+      "openfda": false,
+      "product_metadata": false
+    },
+    "shapes": [
+      "prose-only: no product row anywhere; the 10-Q states the quarter in a sentence and the release in a headline",
+      "a cost row naming the product under its code name ('B-VEC') in the R&D table"
+    ],
+    "source": "10-Q: 'Net VYJUVEK product revenue was $88.2 million for the three months ended March 31, 2025, and $429.4 million in cumulative net product revenue since launch' - the cumulative figure sits in the same sentence. Release headline: '$88.2 million in 1Q VYJUVEK revenue and $429.4 million since launch'. The R&D table prints 'B-VEC | 1,973 | 2,129'.",
+    "expect": [
+      {
+        "period": "2025Q1",
+        "value_normalized_usd_millions": 88.2,
+        "cite": "0001711279-25-000044 10-Q Q1 2025 'Net VYJUVEK product revenue was $88.2 million for the three months ended March 31, 2025'; https://www.sec.gov/Archives/edgar/data/1711279/000171127925000044/krys-20250331.htm"
+      },
+      {
+        "period": "2025Q2",
+        "value_normalized_usd_millions": 96.0,
+        "cite": "0001711279-25-000077 10-Q Q2 2025 'Net VYJUVEK product revenue was $96.0 million for the three months ended June 30, 2025'; https://www.sec.gov/Archives/edgar/data/1711279/000171127925000077/krys-20250630.htm"
+      },
+      {
+        "period": "2025Q3",
+        "value_normalized_usd_millions": 97.8,
+        "cite": "0001711279-25-000087 10-Q Q3 2025 'Net VYJUVEK product revenue was $97.8 million for the three months ended September 30, 2025'; https://www.sec.gov/Archives/edgar/data/1711279/000171127925000087/krys-20250930.htm"
+      },
+      {
+        "period": "2025Q4",
+        "value_normalized_usd_millions": 107.1,
+        "cite": "0001711279-26-000018 8-K 2026-02-17 '$107.1 million in 4Q VYJUVEK revenue and $730.3 million since U.S. launch'; 10-K 0001711279-26-000016 annual $389.1 million less 282.0 = 107.1; https://www.sec.gov/Archives/edgar/data/1711279/000171127926000018/a4q25exhibit991pr.htm"
+      }
+    ]
+  }
+]

@@ -39,6 +39,7 @@ from. They live in `seed/cases/`:
 | `gold_all.json` | every product-year in gold, one run per window | `seed/gold/quarterly_revenue.jsonl` |
 | `foreign_xbrl.json` | 7 runs, 7 quarters | the figure printed in the filing each case cites |
 | `unseen.json` | issuers no answer key uses, one quarter each | the figure printed in the 10-Q each case cites |
+| `shapes_holdout.json` | issuers no answer key uses, drawn by the shape of what the filing prints (item 0 of `docs/plan-after-the-full-sweep.md`); both answers represented | the filing each figure cites by accession; an empty quarter says why |
 
 `value_normalized_usd_millions: null` means the run must come back with
 nothing for that quarter. A set that only refuses is passed by a system that
