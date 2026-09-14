@@ -264,6 +264,42 @@ not member resolution. Give the set a scorer again - as a test that drives
 `app/extraction/members.py` is made. Note the set's two Eli Lilly cases
 were replaced by two BioMarin cases when Lilly entered gold (rule 4).
 
+## 12. The Library shows a product because it has figures, not because it has a profile
+
+Found by running the built frontend against the full sweep's database.
+`GET /products` (`backend/app/api/products.py`) reads `canonical_products`,
+which only `_extract_metadata` creates, from an openFDA identity. Every eval
+run was made with `product_metadata: false`, so the home page said "No
+products under coverage yet" over 487 jobs and 7,369 datapoints, while the
+Dashboard - which reads datapoints - listed 52 analogs from the same file.
+A product exists because the pipeline published figures for it; the
+profile is an enrichment of that product, not its precondition. Derive the
+Library's rows from jobs and their datapoints (grouped by the product
+identity the job resolved, falling back to the drug name typed), and attach
+the canonical profile where one exists.
+
+## 13. The review queue pages, and groups what it says twice
+
+`GET /review/queue` returned 5,577 items in one 5.2 MB response and the
+page rendered all of it - 4,541 flagged values and 1,036 missing quarters
+as 336,000 characters. Its first eleven rows were `Adcirca 2008Q4 conflict`
+repeated, one per contested datapoint. Page the endpoint (limit and cursor,
+the way `/observability/db/{table}` already does) and group items by
+product and quarter so a reviewer sees one row per question, with the
+contested figures under it, rather than one row per figure.
+
+## 14. The Dashboard draws only what the pipeline stands behind
+
+`build_dashboard_preview` (`backend/app/dashboard/series.py`) emits every
+datapoint with its status and the chart plots them all, so the quarterly
+chart's 20,000-scale spike is a company total the judge held for review,
+and its x-axis reaches 2028Q1 because a sentence about a payment an issuer
+"may receive in 2027" became a needs_review datapoint. Two changes: the
+series carries only `auto_pass` and `confirmed` figures unless the viewer
+asks to see the rest, and the prose reader does not produce a period after
+the document's own - a period later than the filing's is a forecast, and
+is recorded as one or dropped, never as a quarter's revenue.
+
 ## 11. The eval should score a re-run itself
 
 `scripts/eval.py` scores what it is given; folding a failed job's fresh run
@@ -280,7 +316,9 @@ Item 0 first. Then 1, 2, 3 - one file's worth of table logic covering about
 fifty gold quarters and every wrong publication the hand-check found. Then 5
 (retrieval budgets), which is cheap and lifts many "no answer" quarters
 before any reader changes are scored. Then 4 and 6 as small parsers and
-vetoes; 7 and 8 next; 9, 10 and 11 last. Measure each on the item-0 set,
+vetoes; 7 and 8 next; 9, 10 and 11 last. The three frontend items (12-14)
+are independent of the readers and can go in parallel; 14's prose-reader
+half is a scored change like the rest. Measure each on the item-0 set,
 re-run the hand-check on every run, and put the numbers in the commit
 message - not in a comment.
 
