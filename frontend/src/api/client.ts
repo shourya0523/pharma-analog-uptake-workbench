@@ -39,7 +39,9 @@ export type ProductRow = {
   indication: string | null
   moa: string | null
   roa: string | null
-  cadence: string
+  /** Null where no profile was built: cadence is the profile's to set. */
+  cadence: string | null
+  has_profile: boolean
   completeness_pct: number
   quarters: number
   flagged: number

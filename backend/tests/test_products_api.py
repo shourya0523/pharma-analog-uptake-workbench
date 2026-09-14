@@ -125,6 +125,24 @@ def client(monkeypatch):
                 confidence_that_unavailable=0.3,
             )
         )
+        # A product the pipeline ran for and published, with no profile: it
+        # was added at run time, and no openFDA identity was ever resolved.
+        db.add(
+            DrugJobORM(
+                id="job-cal", run_id="run-new", product_id=None, drug_name="Calderon",
+                generic_name="calderonib", manufacturer="Acme", status="completed",
+                completeness_pct=50.0, created_at=newer + timedelta(minutes=2),
+            )
+        )
+        db.add(
+            DatapointORM(
+                id="dp-cal", job_id="job-cal", period="2026Q1",
+                value_normalized_usd_millions=12.5, revenue_scope="Product family",
+                source_url="https://sec.gov/acme-10q", source_quote="Calderon 12.5",
+                extraction_method="table", confidence_score=0.95,
+                validation_status="auto_pass",
+            )
+        )
         db.add(
             UnresolvedQuarterORM(
                 id="uq-2", job_id="job-yut", period="product_revenue",
@@ -147,14 +165,16 @@ def _items(body: dict) -> list[dict]:
 def test_library_lists_products_with_queue_counts_from_the_newest_job(client):
     body = client.get("/products").json()
 
-    assert body["total"] == 2
+    assert body["total"] == 3
     opsumit = next(row for row in body["products"] if row["name"] == "Opsumit")
     # 96.0 is the newer job; the older one at 70.0 must not win.
     assert opsumit["completeness_pct"] == 96.0
     assert opsumit["cadence"] == "quarterly"
+    assert opsumit["has_profile"] is True
     assert opsumit["flagged"] == 1
     assert opsumit["missing"] == 1
-    assert opsumit["quarters"] == 1
+    # Its one figure is held for review, so it is a question, not coverage.
+    assert opsumit["quarters"] == 0
     assert opsumit["moa"] == "Endothelin receptor antagonist"
     assert opsumit["indication"] == "Pulmonary arterial hypertension"
 
@@ -169,6 +189,46 @@ def test_library_filters_by_cadence_and_search(client):
 
     searched = client.get("/products", params={"q": "treprostinil"}).json()
     assert [row["name"] for row in searched["products"]] == ["Yutrepia"]
+
+
+def test_a_product_is_in_the_library_because_it_has_figures_not_because_it_has_a_profile(client):
+    """Every run made with product metadata off left `canonical_products`
+    empty, and the Library said nothing was under coverage over hundreds of
+    jobs. The row comes from the job; the profile is attached where one is."""
+    body = client.get("/products").json()
+    calderon = next(row for row in body["products"] if row["name"] == "Calderon")
+    assert calderon["id"] == "name:calderon"
+    assert calderon["has_profile"] is False
+    assert calderon["cadence"] is None
+    assert calderon["generic"] == "calderonib"
+    assert calderon["company"] == "Acme"
+    assert calderon["quarters"] == 1
+    assert calderon["last_job_id"] == "job-cal"
+
+    detail = client.get("/products/name:calderon").json()
+    assert detail["name"] == "Calderon" and detail["has_profile"] is False
+    assert [row["period"] for row in detail["quarters"]] == ["2026Q1"]
+    assert [entry["job_id"] for entry in detail["timeline"]] == ["job-cal"]
+    # Cadence is a property of the profile, so there is nothing to set it on.
+    assert client.patch("/products/name:calderon", json={"cadence": "quarterly"}).status_code == 404
+
+
+def test_a_job_named_like_a_profile_is_that_product(client):
+    """A run asked for "Opsumit" by name, before the identity was resolved,
+    is Opsumit's history, not a second product beside it."""
+    with products_api.SessionLocal() as db:
+        db.add(
+            DrugJobORM(
+                id="job-typed", run_id="run-old", product_id=None, drug_name="opsumit",
+                status="completed", completeness_pct=10.0,
+                created_at=datetime(2025, 6, 1),
+            )
+        )
+        db.commit()
+    body = client.get("/products").json()
+    assert body["total"] == 3
+    detail = client.get("/products/prod-1").json()
+    assert [entry["job_id"] for entry in detail["timeline"]] == ["job-new", "job-old", "job-typed"]
 
 
 def test_product_detail_carries_profile_quarters_and_every_run(client):
@@ -236,6 +296,18 @@ def test_review_queue_filters_to_one_product(client):
     flagged_only = client.get("/review/queue", params={"item_type": "flagged"}).json()
     assert flagged_only["missing"] == 0
     assert flagged_only["total"] == 1
+
+    with products_api.SessionLocal() as db:
+        db.add(
+            ValidationTaskORM(
+                id="vt-cal", job_id="job-cal", datapoint_id="dp-cal",
+                reason="recent_period", confidence_score=0.95, status="open",
+            )
+        )
+        db.commit()
+    by_name = client.get("/review/queue", params={"product_id": "name:calderon"}).json()
+    assert [item["id"] for item in _items(by_name)] == ["vt-cal"]
+    assert by_name["groups"][0]["product_id"] == "name:calderon"
 
 
 def test_entering_a_value_without_a_citation_is_refused(client):

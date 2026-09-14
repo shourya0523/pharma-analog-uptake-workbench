@@ -8,6 +8,12 @@ const CADENCE_LABEL: Record<string, string> = {
   one_off: 'One-off',
 }
 
+/** A row without a profile has no cadence: the pipeline ran it once, by name. */
+function cadenceLabel(p: ProductRow): string {
+  if (!p.cadence) return 'No profile'
+  return CADENCE_LABEL[p.cadence] || p.cadence
+}
+
 export default function LibraryPage() {
   const nav = useNavigate()
   const qc = useQueryClient()
@@ -75,8 +81,8 @@ export default function LibraryPage() {
         <div className="filter-panel-head">
           <h2>Product Library</h2>
           <p className="filter-sub">
-            Every analog under coverage. Cadence decides whether the pipeline re-runs it
-            each quarter.
+            Every product the pipeline has published figures for. Cadence decides
+            whether it re-runs each quarter, and is set on products with a profile.
           </p>
         </div>
         <label className="filter-field">
@@ -220,6 +226,8 @@ export default function LibraryPage() {
                       type="checkbox"
                       aria-label={`Select ${p.name}`}
                       checked={!!selected[p.id]}
+                      disabled={!p.has_profile}
+                      title={p.has_profile ? undefined : 'No profile to set a cadence on'}
                       onChange={() =>
                         setSelected({ ...selected, [p.id]: !selected[p.id] })
                       }
@@ -239,7 +247,7 @@ export default function LibraryPage() {
                   </td>
                   <td>
                     <span className={`pill ${p.cadence === 'quarterly' ? 'sched' : 'oneoff'}`}>
-                      {CADENCE_LABEL[p.cadence] || p.cadence}
+                      {cadenceLabel(p)}
                     </span>
                   </td>
                   <td>
@@ -247,7 +255,7 @@ export default function LibraryPage() {
                       <i style={{ width: `${Math.min(100, p.completeness_pct)}%` }} />
                     </div>
                     <div className="muted small">
-                      {p.completeness_pct}% · {p.quarters} qtrs
+                      {p.completeness_pct}% · {p.quarters} published qtrs
                     </div>
                   </td>
                   <td>

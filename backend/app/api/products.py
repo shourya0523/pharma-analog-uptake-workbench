@@ -35,6 +35,7 @@ from app.domain.models import (
     ValidationStatus,
     new_id,
 )
+from app.observability import normalize_analog_key
 from app.validation.sampling import REASON_HELP as FLAGGED_REASON_HELP
 
 router = APIRouter(tags=["products"])
@@ -63,20 +64,72 @@ def _missing_reason(period: str | None) -> str:
     return "not_disclosed" if period == WHOLE_PRODUCT_PERIOD else "interior_gap"
 
 
-def _jobs_for(db: Session, product_id: str) -> list[DrugJobORM]:
+# A product exists here because the pipeline ran for it. Its identity is the
+# canonical product the job resolved, or the one whose name the job was given,
+# or - where no profile was ever built - the name itself, keyed so the
+# Library, the detail page and the queue all agree on which rows are one
+# product. The prefix marks a key that is a name, not a row id.
+NAME_KEY_PREFIX = "name:"
+
+# Figures the pipeline stands behind; the rest are questions, not coverage.
+PUBLISHED_STATUSES = {ValidationStatus.AUTO_PASS.value, ValidationStatus.CONFIRMED.value}
+
+
+class _Identities:
+    """Which product each job is, resolved once per request."""
+
+    def __init__(self, db: Session) -> None:
+        self.by_id: dict[str, CanonicalProductORM] = {
+            product.id: product for product in db.query(CanonicalProductORM).all()
+        }
+        self.by_name: dict[str, CanonicalProductORM] = {
+            normalize_analog_key(product.canonical_name): product
+            for product in self.by_id.values()
+        }
+
+    def key(self, job: DrugJobORM) -> str:
+        if job.product_id:
+            return job.product_id
+        canonical = self.by_name.get(normalize_analog_key(job.drug_name))
+        if canonical:
+            return canonical.id
+        return NAME_KEY_PREFIX + normalize_analog_key(job.drug_name)
+
+    def canonical(self, key: str) -> CanonicalProductORM | None:
+        return self.by_id.get(key)
+
+    def name(self, key: str, job: DrugJobORM) -> str:
+        canonical = self.canonical(key)
+        return canonical.canonical_name if canonical else job.drug_name
+
+
+def _jobs_by_product(db: Session, identities: _Identities) -> dict[str, list[DrugJobORM]]:
+    """Every job, grouped by the product it is, each group newest first."""
+
+    grouped: dict[str, list[DrugJobORM]] = {}
+    for job in db.query(DrugJobORM).order_by(DrugJobORM.created_at.desc()).all():
+        grouped.setdefault(identities.key(job), []).append(job)
+    return grouped
+
+
+def _jobs_for(db: Session, product_key: str) -> list[DrugJobORM]:
     """Every job for a product, newest first."""
 
+    return _jobs_by_product(db, _Identities(db)).get(product_key, [])
+
+
+def _published_quarters(db: Session, job_id: str) -> int:
+    """Distinct periods with a figure the pipeline stands behind."""
+
     return (
-        db.query(DrugJobORM)
-        .filter(DrugJobORM.product_id == product_id)
-        .order_by(DrugJobORM.created_at.desc())
-        .all()
+        db.query(DatapointORM.period)
+        .filter(
+            DatapointORM.job_id == job_id,
+            DatapointORM.validation_status.in_(PUBLISHED_STATUSES),
+        )
+        .distinct()
+        .count()
     )
-
-
-def _latest_job(db: Session, product_id: str) -> DrugJobORM | None:
-    jobs = _jobs_for(db, product_id)
-    return jobs[0] if jobs else None
 
 
 def _open_queue_counts(db: Session, job_id: str) -> tuple[int, int]:
@@ -127,41 +180,51 @@ def list_products(
     cadence: str | None = Query(default=None),
     q: str | None = Query(default=None),
 ) -> dict[str, Any]:
-    """The Library: one row per canonical product, independent of any run."""
+    """The Library: one row per product the pipeline has run for.
+
+    A product is here because a job produced figures for it; the canonical
+    profile, where one was built, is attached to that row rather than being
+    the condition for it. A job that never resolved an identity is listed
+    under the name it was given.
+    """
 
     db = SessionLocal()
     try:
-        query = db.query(CanonicalProductORM)
-        if cadence:
-            query = query.filter(CanonicalProductORM.cadence == cadence)
-        products = query.order_by(CanonicalProductORM.canonical_name).all()
-
+        identities = _Identities(db)
         rows: list[dict[str, Any]] = []
-        for product in products:
-            job = _latest_job(db, product.id)
-            flagged, missing = _open_queue_counts(db, job.id) if job else (0, 0)
-            quarters = (
-                db.query(DatapointORM).filter(DatapointORM.job_id == job.id).count()
-                if job
-                else 0
-            )
-            formulation = _formulation(db, product.id)
+        for key, jobs in _jobs_by_product(db, identities).items():
+            job = jobs[0]
+            product = identities.canonical(key)
+            if cadence and (product.cadence if product else None) != cadence:
+                continue
+            flagged, missing = _open_queue_counts(db, job.id)
+            formulation = _formulation(db, product.id) if product else None
             row = {
-                "id": product.id,
-                "name": product.canonical_name,
-                "generic": ", ".join(product.active_moieties_json or []) or None,
-                "company": product.current_commercial_owner or product.regulatory_sponsor,
-                "indication": _indication_text(db, product.id),
-                "moa": _moa_text(db, product.id),
+                "id": key,
+                "name": identities.name(key, job),
+                "generic": (
+                    (", ".join(product.active_moieties_json or []) or None)
+                    if product
+                    else job.generic_name
+                ),
+                "company": (
+                    (product.current_commercial_owner or product.regulatory_sponsor)
+                    if product
+                    else None
+                ) or job.manufacturer,
+                "indication": (_indication_text(db, product.id) if product else None)
+                or job.indication,
+                "moa": _moa_text(db, product.id) if product else None,
                 "roa": formulation.route_category if formulation else None,
-                "cadence": product.cadence,
-                "completeness_pct": job.completeness_pct if job else 0.0,
-                "quarters": quarters,
+                "cadence": product.cadence if product else None,
+                "has_profile": product is not None,
+                "completeness_pct": job.completeness_pct,
+                "quarters": _published_quarters(db, job.id),
                 "flagged": flagged,
                 "missing": missing,
-                "last_job_id": job.id if job else None,
-                "last_run_at": job.created_at.isoformat() if job else None,
-                "last_run_status": job.status if job else None,
+                "last_job_id": job.id,
+                "last_run_at": job.created_at.isoformat(),
+                "last_run_status": job.status,
             }
             if q:
                 needle = q.strip().lower()
@@ -171,6 +234,7 @@ def list_products(
                 if needle not in haystack:
                     continue
             rows.append(row)
+        rows.sort(key=lambda row: (row["name"] or "").casefold())
         return {"products": rows, "total": len(rows)}
     finally:
         db.close()
@@ -182,22 +246,27 @@ def get_product(product_id: str) -> dict[str, Any]:
 
     db = SessionLocal()
     try:
-        product = db.get(CanonicalProductORM, product_id)
-        if not product:
+        identities = _Identities(db)
+        product = identities.canonical(product_id)
+        jobs = _jobs_by_product(db, identities).get(product_id, [])
+        if not product and not jobs:
             raise HTTPException(404, "product not found")
 
-        jobs = _jobs_for(db, product_id)
         latest = jobs[0] if jobs else None
-        formulation = _formulation(db, product_id)
+        formulation = _formulation(db, product_id) if product else None
         indication = (
             db.query(ProductIndicationORM)
             .filter(ProductIndicationORM.product_id == product_id)
             .first()
+            if product
+            else None
         )
         moa = (
             db.query(MoAComponentORM)
             .filter(MoAComponentORM.product_id == product_id)
             .first()
+            if product
+            else None
         )
 
         # Profile fields live on the job that extracted them; the product's
@@ -242,19 +311,29 @@ def get_product(product_id: str) -> dict[str, Any]:
         )
 
         return {
-            "id": product.id,
-            "name": product.canonical_name,
-            "generic": ", ".join(product.active_moieties_json or []) or None,
-            "company": product.current_commercial_owner or product.regulatory_sponsor,
-            "regulatory_sponsor": product.regulatory_sponsor,
-            "application_number": product.application_number,
+            "id": product_id,
+            "name": product.canonical_name if product else latest.drug_name,
+            "generic": (
+                (", ".join(product.active_moieties_json or []) or None)
+                if product
+                else latest.generic_name
+            ),
+            "company": (
+                (product.current_commercial_owner or product.regulatory_sponsor)
+                if product
+                else None
+            ) or (latest.manufacturer if latest else None),
+            "regulatory_sponsor": product.regulatory_sponsor if product else None,
+            "application_number": product.application_number if product else None,
             "initial_approval_date": (
                 product.initial_approval_date.isoformat()
-                if product.initial_approval_date
+                if product and product.initial_approval_date
                 else None
             ),
-            "cadence": product.cadence,
-            "indication": indication.disease if indication else None,
+            "cadence": product.cadence if product else None,
+            "has_profile": product is not None,
+            "indication": (indication.disease if indication else None)
+            or (latest.indication if latest else None),
             "therapeutic_area": indication.therapeutic_area if indication else None,
             "approved_lot": indication.approved_lot if indication else None,
             "approved_lot_quote": indication.approved_lot_quote if indication else None,
@@ -377,10 +456,9 @@ def _group_key(item: dict[str, Any]) -> tuple[str, str]:
     """One question per product and quarter.
 
     Several contested figures for one quarter are one thing for a reviewer to
-    decide, and the queue says so once, with the figures beneath it. A job
-    that resolved no product identity groups by the name it was given.
+    decide, and the queue says so once, with the figures beneath it.
     """
-    return (item["product_id"] or item["product"] or "", str(item["period"] or ""))
+    return (item["product_id"], str(item["period"] or ""))
 
 
 @router.get("/review/queue")
@@ -405,10 +483,7 @@ def review_queue(
     db = SessionLocal()
     try:
         items: list[dict[str, Any]] = []
-        product_names = {
-            product.id: product.canonical_name
-            for product in db.query(CanonicalProductORM).all()
-        }
+        identities = _Identities(db)
 
         if item_type in (None, "flagged"):
             task_query = (
@@ -417,17 +492,18 @@ def review_queue(
                 .join(DrugJobORM, DrugJobORM.id == ValidationTaskORM.job_id)
                 .filter(ValidationTaskORM.status == "open")
             )
-            if product_id:
-                task_query = task_query.filter(DrugJobORM.product_id == product_id)
             if reason:
                 task_query = task_query.filter(ValidationTaskORM.reason == reason)
             for task, dp, job in task_query.all():
+                key = identities.key(job)
+                if product_id and key != product_id:
+                    continue
                 items.append(
                     {
                         "id": task.id,
                         "type": "flagged",
-                        "product_id": job.product_id,
-                        "product": product_names.get(job.product_id) or job.drug_name,
+                        "product_id": key,
+                        "product": identities.name(key, job),
                         "job_id": job.id,
                         "datapoint_id": dp.id,
                         "period": dp.period,
@@ -450,15 +526,16 @@ def review_queue(
                 .join(DrugJobORM, DrugJobORM.id == UnresolvedQuarterORM.job_id)
                 .filter(UnresolvedQuarterORM.resolution.is_(None))
             )
-            if product_id:
-                missing_query = missing_query.filter(DrugJobORM.product_id == product_id)
             for row, job in missing_query.all():
+                key = identities.key(job)
+                if product_id and key != product_id:
+                    continue
                 items.append(
                     {
                         "id": row.id,
                         "type": "missing",
-                        "product_id": job.product_id,
-                        "product": product_names.get(job.product_id) or job.drug_name,
+                        "product_id": key,
+                        "product": identities.name(key, job),
                         "job_id": job.id,
                         "period": row.period,
                         "reason": _missing_reason(row.period),

@@ -35,12 +35,20 @@ export default function ProductDetailPage() {
           <div className="muted">
             {[product.company, product.moa, product.indication].filter(Boolean).join(' · ')}
           </div>
-          <div className="idchip">canonical_product_id: {product.id}</div>
+          <div className="idchip">
+            {product.has_profile ? 'canonical_product_id' : 'product key (no profile)'}: {product.id}
+          </div>
         </div>
         <div className="stats">
           <div>
             <span>Cadence</span>
-            <strong>{product.cadence === 'quarterly' ? 'Quarterly' : 'One-off'}</strong>
+            <strong>
+              {product.cadence === 'quarterly'
+                ? 'Quarterly'
+                : product.cadence
+                  ? 'One-off'
+                  : 'No profile'}
+            </strong>
           </div>
           <div>
             <span>Coverage</span>
