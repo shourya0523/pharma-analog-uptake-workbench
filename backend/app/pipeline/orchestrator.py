@@ -67,7 +67,8 @@ from app.extraction.members import Resolution, load_products, resolve
 from app.extraction.tagged import candidates_from_instance
 from app.identity.resolver import resolve_product_identity
 from app.llm.aliases import merge_aliases
-from app.llm.client import LLMModules, listed
+from app.domain.claims import stated_labels, stated_number, stated_text
+from app.llm.client import LLMModules, listed, mappings
 from app.parsing.documents import DocumentParser
 from app.parsing.evidence import (
     build_revenue_llm_text,
@@ -330,7 +331,7 @@ def scale_to_millions(value: float, unit: str | None) -> float:
     unit is missing or unrecognized - never silently truncating a "thousands"
     or "units" figure the way an unconditional else-branch did.
     """
-    label = (unit or "").strip().lower()
+    label = stated_text(unit).lower()
     if "billion" in label:
         scale = UNIT_SCALE_TO_MILLIONS["billions"]
     elif "thousand" in label:
@@ -1267,7 +1268,7 @@ class PipelineOrchestrator:
             },
             issue_flags=(
                 (["derived_from_reported_series"] if derived else ["extracted_from_xbrl"])
-                + list(candidate.get("label_flags") or [])
+                + stated_labels(candidate.get("label_flags"))
             ),
         )
         self.db.add(row)
@@ -1802,20 +1803,23 @@ class PipelineOrchestrator:
                 src_row.notes = f"{(src_row.notes or '').rstrip()} | {result.get('note')}".strip(" |")
 
             for cand in kept:
-                quote = (cand.get("source_quote") or "").strip()
+                quote = stated_text(cand.get("source_quote"))
                 url = src.url
-                period_type = (cand.get("period_type") or "unknown").lower()
+                period_type = stated_text(cand.get("period_type"), "unknown").lower()
                 raw_period = str(cand.get("period") or "unknown")
                 period = normalize_period(
                     raw_period, period_type=period_type, context=period_context
                 )
                 dp_id = new_id()
-                value = cand.get("value_reported")
-                unit = cand.get("unit")
-                currency = cand.get("currency") or "USD"
-                normalized = cand.get("value_normalized_usd_millions")
+                # The figure and the figure the candidate normalized itself,
+                # each read as a number so that a candidate quoting one as text
+                # still carries it and one holding an array carries nothing.
+                value = stated_number(cand.get("value_reported"))
+                unit = stated_text(cand.get("unit")) or None
+                currency = stated_text(cand.get("currency"), "USD")
+                normalized = stated_number(cand.get("value_normalized_usd_millions"))
                 if normalized is None and value is not None:
-                    normalized = scale_to_millions(float(value), unit)
+                    normalized = scale_to_millions(value, unit)
                 # A candidate may supply its own normalization, and it was
                 # taken verbatim. A candidate arrived reported as 87.4 with
                 # 87,400 beside it and was published, because every check
@@ -1839,7 +1843,7 @@ class PipelineOrchestrator:
                     "retrieval_date": datetime.utcnow().isoformat(),
                     "filing_type": src.filing_type,
                     "accession_number": src.accession_number,
-                    "confidence": float(cand.get("confidence") or 0.5),
+                    "confidence": stated_number(cand.get("confidence")) or 0.5,
                     "validation_status": ValidationStatus.PENDING.value,
                     "interpreted": False,
                     "period_reported": raw_period,
@@ -1857,7 +1861,7 @@ class PipelineOrchestrator:
                 # What the row label said beyond the name: a combined line, a
                 # partial period, words nobody could account for. The flags
                 # decide what the judge may do with the figure.
-                for flag in cand.get("label_flags") or []:
+                for flag in stated_labels(cand.get("label_flags")):
                     if flag not in issue_flags:
                         issue_flags.append(flag)
                 if cand.get("label_residue"):
@@ -2256,13 +2260,25 @@ class PipelineOrchestrator:
         losers: set[str] = set()
         if conflict_payload:
             result = await self.llm.reconcile(product=job.drug_name, candidates=conflict_payload)
-            for item in listed(result, "resolved"):
-                wid = item.get("winner_id")
+            # A verdict names a candidate. The reply is free text, and one that
+            # names anything else - the figure where the id belongs, an id for
+            # a group it was not shown - is not a verdict on any group here.
+            # The candidates are the ones just sent, so the names that may be
+            # admitted come from the payload rather than from a second list.
+            offered = {str(candidate["id"]) for candidate in conflict_payload}
+
+            def named(value: Any) -> str | None:
+                """The candidate a reply names, or None if it names a non-candidate."""
+                ident = str(value) if value is not None else ""
+                return ident if ident in offered else None
+
+            for item in mappings(result, "resolved"):
+                wid = named(item.get("winner_id"))
                 if wid:
                     winners.add(wid)
-            for item in listed(result, "conflicts"):
-                ids = item.get("candidate_ids") or []
-                wid = item.get("winner_id")
+            for item in mappings(result, "conflicts"):
+                ids = [cid for cid in map(named, item.get("candidate_ids") or []) if cid]
+                wid = named(item.get("winner_id"))
                 if not wid:
                     # The model saw the disagreement and declined to settle it.
                     # That is a question for the ranking below, not a verdict
@@ -2581,17 +2597,27 @@ class PipelineOrchestrator:
             "gap": ("Missing quarter — analyst follow-up required", 0.4),
         }
         for miss in listed(result, "missing_periods"):
-            if isinstance(miss, str):
+            # A missing period arrives either as the label on its own or as an
+            # object saying why it is missing. Only the second carries the
+            # fields read here, so the branch turns on being an object rather
+            # than on being a string: a reply is free to put a number, a null
+            # or a nested array in that list, and each of those is a label
+            # that no quarter answers to, not a reason to end the job.
+            if not isinstance(miss, dict):
                 period, code, reason, nxt = miss, "gap", "Missing period", "Review SEC filings"
             else:
                 period = miss.get("period")
-                code = (miss.get("reason_code") or "gap").lower()
+                code = stated_text(miss.get("reason_code"), "gap").lower()
                 default_reason, conf = reason_map.get(code, reason_map["gap"])
-                reason = miss.get("reason") or default_reason
-                nxt = miss.get("recommended_next_step") or "Review SEC 10-Q / earnings for product net sales"
+                reason = stated_text(miss.get("reason"), default_reason)
+                nxt = stated_text(
+                    miss.get("recommended_next_step"),
+                    "Review SEC 10-Q / earnings for product net sales",
+                )
+            period = str(period).strip() if period is not None else ""
             if not period or period in existing or period in existing_unresolved:
                 continue
-            if "Q" not in str(period):
+            if "Q" not in period:
                 continue
             conf = reason_map.get(code, reason_map["gap"])[1]
             self.db.add(

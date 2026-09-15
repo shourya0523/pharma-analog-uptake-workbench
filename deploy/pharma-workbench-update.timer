@@ -1,0 +1,15 @@
+# Checks the registry shortly after boot and every two minutes after that.
+#
+#   sudo cp deploy/pharma-workbench-update.{service,timer} /etc/systemd/system/
+#   sudo systemctl enable --now pharma-workbench-update.timer
+[Unit]
+Description=Check for newly published workbench images
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=2min
+# Spread the check so it does not land on the same second as anything else.
+RandomizedDelaySec=30
+
+[Install]
+WantedBy=timers.target

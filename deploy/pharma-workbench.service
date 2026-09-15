@@ -1,0 +1,25 @@
+# Brings the stack up at boot. `restart: unless-stopped` already returns the
+# containers after a reboot; this unit covers the case where they were removed
+# rather than stopped, and gives `systemctl start|stop pharma-workbench`.
+#
+#   sudo cp deploy/pharma-workbench.service /etc/systemd/system/
+#   sudo systemctl enable --now pharma-workbench
+#
+# WorkingDirectory must be the deploy/ directory of the clone.
+[Unit]
+Description=Pharmaceutical Analog Uptake Workbench
+Requires=docker.service
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/opt/pharma-analog-uptake-workbench/deploy
+ExecStart=/usr/bin/docker compose up -d --remove-orphans
+ExecStop=/usr/bin/docker compose down
+# A first build on a shared-core instance is slow and must not be killed.
+TimeoutStartSec=0
+
+[Install]
+WantedBy=multi-user.target

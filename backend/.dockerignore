@@ -1,0 +1,10 @@
+# The image builds its own environment from uv.lock. storage/ is a local run's
+# documents and database, which belong on the host volume, not in a layer.
+.venv
+storage
+.env
+.env.*
+__pycache__
+.pytest_cache
+.ruff_cache
+*.egg-info

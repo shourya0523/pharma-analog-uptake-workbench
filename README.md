@@ -8,6 +8,7 @@ Source-first extraction and validation for pharmaceutical analog uptake data. Ci
 - Frontend: React + Vite + Recharts (Analog Product Explorer)
 - Local default: SQLite + local file store + in-process jobs
 - AWS MVP: RDS Postgres + S3 + SQS/ECS via `FileStore` / `JobQueue` (`STORAGE_BACKEND=s3`, `JOB_BACKEND=sqs`) — see [`infra/README.md`](infra/README.md)
+- One small VM: SQLite + local disk + Caddy for TLS, UI and API on one origin — see [`docs/deploy-gcp.md`](docs/deploy-gcp.md)
 
 ## Prerequisites
 
@@ -38,7 +39,24 @@ API docs: http://127.0.0.1:8000/docs
 
 Set `SEC_USER_AGENT` to a descriptive string with a contact email. Filings are cached under storage keys (local or S3).
 
-## Deploy to AWS
+## Deploy
+
+### One VM (Google Cloud always-free e2-micro)
+
+Jobs run in the web process and take minutes, so the host must not sleep or
+throttle after the response. A plain VM serving the built UI and the API from
+one origin is the smallest thing that works:
+
+```bash
+cd deploy
+cp env.example .env   # SITE_ADDRESS, OPENROUTER_API_KEY, SEC_USER_AGENT
+docker compose up -d --build
+```
+
+Full walkthrough - instance, firewall, TLS, reboots, pruning - in
+[`docs/deploy-gcp.md`](docs/deploy-gcp.md).
+
+### AWS
 
 ```bash
 cd infra
