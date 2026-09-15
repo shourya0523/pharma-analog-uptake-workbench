@@ -63,8 +63,14 @@ _ORDINAL_QUARTER_RE = re.compile(
     re.IGNORECASE,
 )
 # "Q4 2016" / "2016Q4"
+# "Q4 2016" / "2016Q4" / "1Q 2025". The last is the ordinary way a US issuer
+# writes it in a release, and it was the one form not read here: a quote
+# saying "1Q 2025" named no period at all, so nothing downstream could tell
+# it apart from a quote that named the row's own quarter.
 _COMPACT_QUARTER_RE = re.compile(
-    r"\bQ(?P<q>[1-4])\s*(?P<year>(?:19|20)\d{2})\b|\b(?P<year2>(?:19|20)\d{2})\s*Q(?P<q2>[1-4])\b",
+    r"\bQ(?P<q>[1-4])\s*(?P<year>(?:19|20)\d{2})\b"
+    r"|\b(?P<year2>(?:19|20)\d{2})\s*Q(?P<q2>[1-4])\b"
+    r"|\b(?P<q3>[1-4])Q\s*(?P<year3>(?:19|20)\d{2})\b",
     re.IGNORECASE,
 )
 # "full-year 2002" / "fiscal year 2002" / "FY2002" / "for the year 2002".
@@ -104,6 +110,15 @@ _SENTENCE_SPLIT_RE = re.compile(r"(?<=[.;])[\"'\u201d\u2019)\]]*\s+")
 class _Period:
     period: str
     period_type: str
+
+
+def periods_named_in(text: str) -> set[str]:
+    """Every period this text names, as period keys ("2025Q1", "2025H1").
+
+    Empty where the text names none, which is the ordinary case for a table
+    row: the row carries figures and the header carries the period.
+    """
+    return {period.period for _position, period in _periods_with_positions(text or "")}
 
 
 def _periods_with_positions(sentence: str) -> list[tuple[int, _Period]]:
@@ -154,8 +169,8 @@ def _periods_with_positions(sentence: str) -> list[tuple[int, _Period]]:
     for match in _COMPACT_QUARTER_RE.finditer(sentence):
         if claimed(match.start()):
             continue
-        quarter = match.group("q") or match.group("q2")
-        year = match.group("year") or match.group("year2")
+        quarter = match.group("q") or match.group("q2") or match.group("q3")
+        year = match.group("year") or match.group("year2") or match.group("year3")
         found.append((match.start(), _Period(f"{int(year)}Q{int(quarter)}", "quarterly")))
     for match in _ANNUAL_WORD_RE.finditer(sentence):
         if claimed(match.start()):

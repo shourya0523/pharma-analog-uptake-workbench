@@ -130,3 +130,48 @@ def test_a_total_that_our_product_is_part_of_is_not_our_products_figure():
     ours = ("Calderon total net sales were $34.6 million for the three months ended "
             "June 30, 2023.")
     assert [v.value_as_reported for v in read_prose(ours, product="Calderon", catalog=())] == [34.6]
+
+
+def test_a_quote_that_names_a_period_must_name_the_rows_own():
+    """The extractor read a first-quarter release and answered a question
+    about the fourth, quoting the release verbatim: "1Q 2025 Calderon +
+    NuVessa reported revenue of $21.0M" stored against 2025Q4. Nothing caught
+    it - the quote named the product and carried the value, so the
+    deterministic judge passed it, and reconciliation preferred it to the
+    table row that held the real figure.
+
+    "1Q 2025" is how a US issuer ordinarily writes it, and it was the one
+    quarter notation the period reader did not know, so the quote named no
+    period at all and read as saying nothing about which quarter it was for.
+    """
+    from app.extraction.prose import periods_named_in
+
+    assert periods_named_in("1Q 2025 revenue of $21.0M") == {"2025Q1"}
+    assert periods_named_in("3Q 2024 sales") == {"2024Q3"}
+    # The forms already read still read.
+    assert periods_named_in("Q1 2025") == {"2025Q1"}
+    assert periods_named_in("2025Q4") == {"2025Q4"}
+
+    quote = "1Q 2025 Calderon + NuVessa reported revenue of $21.0M"
+    wrong = _judged_for(quote, 21.0, period="2025Q4")
+    assert wrong["validation_status"] == "needs_review"
+    assert "hard_veto:quote_states_a_different_period" in wrong["issues"]
+
+    right = _judged_for(quote, 21.0, period="2025Q1")
+    assert "hard_veto:quote_states_a_different_period" not in right["issues"]
+
+    # A table row carries no period of its own - the header has it - so a
+    # quote naming none says nothing either way and is left alone.
+    row = _judged_for("Calderon ® + NuVessa ® $ 34,974 $ 22,209", 34974.0, period="2025Q4")
+    assert "hard_veto:quote_states_a_different_period" not in row["issues"]
+
+
+def _judged_for(quote: str, value: float, *, period: str) -> dict:
+    return apply_judge_hard_vetoes(
+        product="Calderon",
+        candidate={"period": period, "period_type": "quarterly",
+                   "value_reported": value, "revenue_scope": "Product family"},
+        quote=quote,
+        judgment={"support_classification": "supported",
+                  "validation_status": "auto_pass", "issues": []},
+    )

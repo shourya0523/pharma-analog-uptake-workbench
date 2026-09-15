@@ -12,6 +12,7 @@ import httpx
 import yaml
 
 from app.config import get_settings
+from app.extraction.prose import periods_named_in
 from app.llm.grounding import (
     apply_structured_field_gates,
     enforce_verbatim_on_candidates,
@@ -808,6 +809,17 @@ def apply_judge_hard_vetoes(
         veto = True
     if period_type == "quarterly" and re_ytd_language(q):
         issues.append("hard_veto:ytd_language_as_quarterly")
+        veto = True
+    # A quote that names periods has said which one its figure is for, and a
+    # row that claims a different one is not supported by it. An extractor
+    # reading a Q1 release answered a question about Q4 with "1Q 2025 Calderon
+    # + NuVessa reported revenue of $21.0M", and every check downstream saw a
+    # quote naming the product and carrying the value, so it published.
+    # A quote naming no period - a table row, whose period is in the header -
+    # says nothing either way and is left alone.
+    named = periods_named_in(q)
+    if named and (candidate.get("period") or "") and candidate["period"] not in named:
+        issues.append("hard_veto:quote_states_a_different_period")
         veto = True
     # A milestone earned on the product's sales is stated in the same sentence
     # as the product, so naming the product does not clear it.
