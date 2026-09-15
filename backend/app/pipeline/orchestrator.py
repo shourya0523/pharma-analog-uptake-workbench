@@ -77,7 +77,10 @@ from app.parsing.indications import parse_indications
 from app.parsing.labels import FLAG_COMBINED, FLAG_NOT_UNDERSTOOD, FLAG_PARTIAL
 from app.parsing.periods import detect_period_context, normalize_period
 from app.parsing.xbrl import parse_calculation, parse_facts, unsettled_elements
-from app.quality.candidate_filters import filter_revenue_candidates
+from app.quality.candidate_filters import (
+    filter_revenue_candidates,
+    quote_mentions_product,
+)
 from app.quality.checks import (
     apply_auto_pass_gate,
     moa_epc_contamination_issue,
@@ -1284,6 +1287,43 @@ class PipelineOrchestrator:
             )
         return rows, totals
 
+    def _model_budget(
+        self,
+        job: DrugJobORM,
+        sources: list,
+        prepared: dict[str, dict[str, Any]],
+    ) -> set[str]:
+        """Which sources the model is asked about, by what each one holds.
+
+        Eligible is a source the deterministic readers did not answer and
+        that carries product-and-dollar evidence. Among those, first the ones
+        whose product tables were found and not read - the reader recorded
+        each with a reason - then the ones with the most product excerpts,
+        then the fitter document type, then the newer filing. The budget is
+        the configured count of sources; what changes is which ones.
+        """
+        aliases = self._job_aliases or None
+
+        def unread_product_table(state: dict[str, Any]) -> bool:
+            return any(
+                quote_mentions_product(skip, job.drug_name, job.generic_name, extra_aliases=aliases)
+                for skip in state.get("table_skips") or []
+            )
+
+        eligible = [
+            src for src in sources
+            if (state := prepared.get(src.source_id)) is not None
+            and not state["deterministic_answered"]
+            and not state["no_product_evidence"]
+        ]
+        eligible.sort(key=lambda src: (
+            0 if unread_product_table(prepared[src.source_id]) else 1,
+            -int((prepared[src.source_id]["evidence_meta"] or {}).get("window_count") or 0),
+            reading_rank(src.source_type),
+            -(src.source_date.toordinal() if src.source_date else 0),
+        ))
+        return {src.source_id for src in eligible[: get_settings().llm_max_extract_sources]}
+
     async def _extract_revenue(
         self,
         job: DrugJobORM,
@@ -1309,12 +1349,6 @@ class PipelineOrchestrator:
         selected_sources = prioritize_sources_for_revenue(
             sources, parsed, max_sources=max(len(list(sources)), 1)
         )
-        llm_source_ids = {
-            s.source_id
-            for s in prioritize_sources_for_revenue(
-                sources, parsed, max_sources=get_settings().llm_max_extract_sources
-            )
-        }
         if only_source_ids:
             selected_sources = [s for s in selected_sources if s.source_id in only_source_ids]
         extra = self._job_aliases or None
@@ -1351,6 +1385,14 @@ class PipelineOrchestrator:
         for row in tagged_rows:
             tagged_periods.setdefault(str(row.source_id or ""), set()).add(str(row.period))
 
+        # Two passes. The deterministic readers read every source first, and
+        # what they leave - the product tables they could not read, the
+        # product-and-dollar excerpts they found nothing in - is what decides
+        # which sources the model is asked about. Choosing the model's sources
+        # by document type and date, before anyone had looked inside them,
+        # spent the budget on the newest 8-Ks and left the 10-Qs with the
+        # product tables unread by both.
+        prepared: dict[str, dict[str, Any]] = {}
         for src in selected_sources:
             doc = parsed.get(src.source_id)
             if not doc or doc.parsing_status.value != "success":
@@ -1469,11 +1511,32 @@ class PipelineOrchestrator:
             # is suspect, so the filing is worth a second opinion even though
             # it produced rows.
             deterministic_answered = bool(answered) and not table_findings
-            use_llm = (
-                src.source_id in llm_source_ids
-                and not no_product_evidence
-                and not deterministic_answered
-            )
+            prepared[src.source_id] = {
+                "period_context": period_context,
+                "table_rows": table_rows,
+                "table_findings": table_findings,
+                "table_skips": table_skips,
+                "answered": answered,
+                "kept": kept,
+                "llm_text": llm_text,
+                "evidence_meta": evidence_meta,
+                "no_product_evidence": no_product_evidence,
+                "deterministic_answered": deterministic_answered,
+            }
+
+        llm_source_ids = self._model_budget(job, selected_sources, prepared)
+
+        for src in selected_sources:
+            state = prepared.get(src.source_id)
+            if state is None:
+                continue
+            period_context = state["period_context"]
+            table_rows, table_findings = state["table_rows"], state["table_findings"]
+            answered, kept = state["answered"], state["kept"]
+            llm_text, evidence_meta = state["llm_text"], state["evidence_meta"]
+            no_product_evidence = state["no_product_evidence"]
+            deterministic_answered = state["deterministic_answered"]
+            use_llm = src.source_id in llm_source_ids
             if not use_llm:
                 src_row = self.db.get(SourceDocumentORM, src.source_id)
                 if src_row:

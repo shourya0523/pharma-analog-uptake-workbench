@@ -106,7 +106,7 @@ async def test_a_filing_is_taken_for_its_xbrl_and_not_for_its_form(monkeypatch):
                 "acme-20260630_lab.xml", "acme-20260630x6k.htm"]
 
     async def _fetch(self, client, *, url, accession, doc, run_id, job_id, source_id):
-        return b"<xbrl/>", False, f"key/{doc}"
+        return (b'<xbrl xmlns:acme="http://acme.example/2026"><acme:CalderonSales contextRef="c" unitRef="usd">5</acme:CalderonSales></xbrl>', False, f"key/{doc}")
 
     monkeypatch.setattr(SECConnector, "_list_filing_documents", _documents)
     monkeypatch.setattr(SECConnector, "_fetch_document", _fetch)
@@ -150,7 +150,10 @@ async def test_the_calculation_linkbase_travels_with_the_instance(monkeypatch):
 
     async def _fetch(self, client, *, url, accession, doc, run_id, job_id, source_id):
         fetched.append(doc)
-        return b"<x/>", False, f"key/{doc}"
+        # The instance states a figure, so it is a report and not a cover page.
+        return (b'<xbrl xmlns:acme="http://acme.example/2026">'
+                b'<acme:CalderonSales contextRef="c" unitRef="usd">5</acme:CalderonSales></xbrl>',
+                False, f"key/{doc}")
 
     monkeypatch.setattr(SECConnector, "_list_filing_documents", _documents)
     monkeypatch.setattr(SECConnector, "_fetch_document", _fetch)

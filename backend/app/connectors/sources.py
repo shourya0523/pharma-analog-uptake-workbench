@@ -123,6 +123,36 @@ def _calculation_linkbase(documents: list[str]) -> str | None:
     return next((name for name in documents if name and name.endswith("_cal.xml")), None)
 
 
+# A filing whose form is one of these reports a period, and its instance
+# carries the financial statements. A snapshot of EDGAR's form families: a
+# new periodic form would need adding here, and until then is inspected at
+# the cost of a directory listing rather than skipped. Every other form with
+# inline XBRL - an 8-K, a proxy, a registration statement, an 11-K - carries a
+# cover page and nothing else, which is why a budget filled newest-first by
+# `isXBRL` alone held cover pages and no 10-Q.
+_PERIODIC_FORM_PREFIXES = ("10-K", "10-Q", "20-F", "40-F", "6-K")
+
+# A tagged number under any namespace but the cover page's own. Matched on
+# the raw instance rather than parsed, because the question is only whether
+# there is anything to parse.
+_FINANCIAL_FACT_RE = re.compile(rb"<(?!dei:)[\w.-]+:[\w.-]+\s[^>]*contextRef=")
+
+
+def _reports_a_period(form: str | None) -> bool:
+    return bool(form) and str(form).upper().startswith(_PERIODIC_FORM_PREFIXES)
+
+
+def _holds_financial_facts(raw: bytes) -> bool:
+    """Whether an instance states anything beyond its cover page.
+
+    Every filing with inline XBRL ships an instance, and for most filings it
+    holds the cover page's ``dei:`` facts and nothing else. Such an instance is
+    not a periodic report whatever its form, and does not count against
+    anything: the pipeline reads it, finds no product, and has spent a fetch.
+    """
+    return bool(_FINANCIAL_FACT_RE.search(raw or b""))
+
+
 def _instance_document(documents: list[str]) -> str | None:
     """The XBRL instance in one filing's directory, in either era's spelling.
 
@@ -382,8 +412,14 @@ class SECConnector:
         # product-sales schedule that belongs with it.
         sources: list[RetrievedSource] = []
         filings_read = 0
+        # Inside a window, every earnings filing the window holds: a
+        # thirteen-month window has four or five of them, and a fixed budget
+        # taken newest-first dropped its oldest quarter whenever the issuer
+        # furnished other item 2.02 filings in between. Outside a window the
+        # cap is what bounds a request for "the recent releases".
+        bounded = since is not None or until is not None
         for i, form in enumerate(forms):
-            if filings_read >= max_exhibits:
+            if not bounded and filings_read >= max_exhibits:
                 break
             if form != "8-K":
                 continue
@@ -510,8 +546,14 @@ class SECConnector:
         # Directory listings for filings the index does not classify. A bound on
         # requests, not a claim about which filings are worth reading.
         unclassified_budget = 25
+        # Inside a window the window is the bound: it holds one periodic report
+        # per fiscal period it covers, and nothing here knows a better number.
+        # A fixed budget taken newest-first was filled by the cover-page
+        # instances every 8-K and proxy carries, and the 10-Qs were never
+        # reached. Outside a window the caller's cap still applies.
+        bounded = since is not None or until is not None
         for index, form in enumerate(forms):
-            if len(sources) >= max_filings:
+            if not bounded and len(sources) >= max_filings:
                 break
             if index < len(tagged):
                 if not tagged[index]:
@@ -520,6 +562,8 @@ class SECConnector:
                 continue
             else:
                 unclassified_budget -= 1
+            if not _reports_a_period(form):
+                continue
             filed_on = parse_filing_date(filing_dates[index] if index < len(filing_dates) else None)
             if (since and (filed_on is None or filed_on < since)) or (
                 until and (filed_on is None or filed_on > until)
@@ -535,12 +579,15 @@ class SECConnector:
             sid = new_id()
             url = f"{self.ARCHIVES}/{cik_int}/{acc_nodash}/{instance}"
             try:
-                _raw, from_cache, job_key = await self._fetch_document(
+                raw, from_cache, job_key = await self._fetch_document(
                     client, url=url, accession=accession, doc=instance,
                     run_id=run_id, job_id=job_id, source_id=sid,
                 )
             except Exception as exc:
                 logger.info("sec_xbrl_fetch_failed accession=%s error=%s", accession, exc)
+                continue
+            if not _holds_financial_facts(raw):
+                logger.info("sec_xbrl_cover_page_only accession=%s form=%s", accession, form)
                 continue
             # The filing's arithmetic, so the reader can tell a sale from a
             # cost of one without counting or guessing. Its absence is not a

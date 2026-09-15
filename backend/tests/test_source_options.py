@@ -88,9 +88,11 @@ def test_deterministic_reading_runs_first_and_is_not_capped_by_the_llm_budget():
         "can suppress the model call"
     )
 
-    # And the model is gated on what the deterministic pass already answered.
-    assert "deterministic_answered" in source
-    assert "not deterministic_answered" in source
+    # And the model is gated on what the deterministic pass already answered:
+    # the budget is drawn only from sources the readers left unanswered.
+    budget = inspect.getsource(PipelineOrchestrator._model_budget)
+    assert "self._model_budget(" in source
+    assert 'not state["deterministic_answered"]' in budget
 
 
 def test_a_period_already_answered_deterministically_is_not_put_to_the_model():

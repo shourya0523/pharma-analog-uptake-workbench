@@ -1,0 +1,138 @@
+"""What the pipeline can read is decided by the window, not by a number.
+
+Two written-down budgets decided which filings a job could read. Every 8-K
+since 2019 carries an inline-XBRL cover page, so the instance budget of six,
+taken newest-first by EDGAR's `isXBRL` flag, was filled by cover pages and
+the 10-Qs were never fetched; the exhibit budget of six dropped the oldest
+quarter of a thirteen-month window whenever an issuer furnished other item
+2.02 filings in between.
+
+Inside a window the window is the bound: one periodic report per period it
+covers, every earnings filing it holds. An instance is taken for what it
+carries - a tagged number under any namespace but the cover page's - and a
+cover page counts for nothing.
+"""
+
+from __future__ import annotations
+
+from datetime import date
+
+from app.connectors.sources import (
+    SECConnector,
+    _holds_financial_facts,
+    _reports_a_period,
+)
+from app.storage.filestore import LocalFileStore
+
+COVER_PAGE = (
+    b'<xbrl xmlns:dei="http://xbrl.sec.gov/dei/2024">'
+    b'<dei:DocumentType contextRef="c">8-K</dei:DocumentType>'
+    b'<dei:EntityCommonStockSharesOutstanding contextRef="c">100</dei:EntityCommonStockSharesOutstanding>'
+    b"</xbrl>"
+)
+QUARTERLY_REPORT = (
+    b'<xbrl xmlns:dei="http://xbrl.sec.gov/dei/2024" xmlns:us-gaap="http://fasb.org/us-gaap/2024">'
+    b'<dei:DocumentType contextRef="c">10-Q</dei:DocumentType>'
+    b'<us-gaap:Revenues contextRef="c" unitRef="usd" decimals="-3">100000</us-gaap:Revenues>'
+    b"</xbrl>"
+)
+
+
+def test_an_instance_is_taken_for_what_it_states():
+    assert not _holds_financial_facts(COVER_PAGE)
+    assert _holds_financial_facts(QUARTERLY_REPORT)
+    assert _holds_financial_facts(b'<acme:CalderonSales contextRef="c">5</acme:CalderonSales>')
+
+
+def test_the_forms_that_report_a_period():
+    assert all(_reports_a_period(f) for f in ("10-Q", "10-K", "10-K/A", "10-QT", "20-F", "40-F", "6-K"))
+    assert not any(_reports_a_period(f) for f in ("8-K", "8-K/A", "DEF 14A", "S-8", "11-K", "4", None))
+
+
+async def test_cover_pages_do_not_fill_the_instance_budget(monkeypatch):
+    connector = SECConnector(LocalFileStore("/tmp"))
+    listed: list[str] = []
+
+    async def _documents(self, client, cik_int, acc_nodash):
+        listed.append(acc_nodash)
+        return [f"acme-{acc_nodash}.xsd", f"acme-{acc_nodash}_htm.xml"]
+
+    async def _fetch(self, client, *, url, accession, doc, run_id, job_id, source_id):
+        return (COVER_PAGE if "cover" in accession else QUARTERLY_REPORT), False, f"key/{doc}"
+
+    monkeypatch.setattr(SECConnector, "_list_filing_documents", _documents)
+    monkeypatch.setattr(SECConnector, "_fetch_document", _fetch)
+
+    # Newest first, as EDGAR lists them: seven cover-page filings before the
+    # first 10-Q, every one of them flagged as carrying XBRL.
+    forms = ["8-K", "DEF 14A", "8-K", "S-8", "8-K", "11-K", "8-K", "10-Q", "10-Q", "10-K", "10-Q"]
+    recent = {
+        "form": forms,
+        "accessionNumber": [f"0001-24-cover{n}" if f not in ("10-Q", "10-K") else f"0001-24-report{n}"
+                            for n, f in enumerate(forms)],
+        "filingDate": ["2024-11-01", "2024-10-20", "2024-10-01", "2024-09-15", "2024-09-01",
+                       "2024-08-20", "2024-08-10", "2024-08-05", "2024-05-05", "2024-02-25", "2023-11-05"],
+        "isXBRL": [1] * len(forms),
+    }
+    sources = await connector._retrieve_xbrl_instances(
+        None, run_id="r", job_id="j", cik="0000000001", recent=recent,
+        max_filings=6, since=date(2023, 10, 1), until=date(2024, 12, 31),
+    )
+    assert [s.filing_type for s in sources] == ["10-Q", "10-Q", "10-K", "10-Q"], (
+        "every periodic report in the window, and no cover page"
+    )
+    assert not any("cover" in acc for acc in listed), "a cover-page filing costs no listing"
+
+
+async def test_a_periodic_form_whose_instance_is_only_a_cover_page_counts_for_nothing(monkeypatch):
+    connector = SECConnector(LocalFileStore("/tmp"))
+
+    async def _documents(self, client, cik_int, acc_nodash):
+        return [f"acme-{acc_nodash}_htm.xml"]
+
+    async def _fetch(self, client, *, url, accession, doc, run_id, job_id, source_id):
+        return COVER_PAGE, False, f"key/{doc}"
+
+    monkeypatch.setattr(SECConnector, "_list_filing_documents", _documents)
+    monkeypatch.setattr(SECConnector, "_fetch_document", _fetch)
+    recent = {"form": ["10-Q"], "accessionNumber": ["0001-24-000001"],
+              "filingDate": ["2024-08-05"], "isXBRL": [1]}
+    sources = await connector._retrieve_xbrl_instances(
+        None, run_id="r", job_id="j", cik="0000000001", recent=recent,
+        max_filings=6, since=date(2024, 1, 1), until=date(2024, 12, 31),
+    )
+    assert sources == []
+
+
+async def test_every_earnings_filing_in_the_window_is_read(monkeypatch):
+    """A thirteen-month window holds five earnings releases; three other item
+    2.02 filings in between must not push the oldest quarter out."""
+    connector = SECConnector(LocalFileStore("/tmp"))
+
+    async def _documents(self, client, cik_int, acc_nodash):
+        return [f"{acc_nodash}ex991.htm"]
+
+    async def _fetch(self, client, *, url, accession, doc, run_id, job_id, source_id):
+        return b"<html></html>", False, f"key/{doc}"
+
+    monkeypatch.setattr(SECConnector, "_list_filing_documents", _documents)
+    monkeypatch.setattr(SECConnector, "_fetch_document", _fetch)
+    dates = ["2016-04-19", "2016-01-26", "2016-01-12", "2015-10-13", "2015-09-30",
+             "2015-07-14", "2015-06-15", "2015-04-14"]
+    recent = {
+        "form": ["8-K"] * len(dates),
+        "accessionNumber": [f"0000200406-16-{n:06d}" for n in range(len(dates))],
+        "filingDate": dates,
+        "items": ["2.02"] * len(dates),
+    }
+    sources = await connector._retrieve_earnings_exhibits(
+        None, run_id="r", job_id="j", cik="0000200406", recent=recent,
+        max_exhibits=6, since=date(2015, 4, 5), until=date(2016, 5, 5),
+    )
+    assert len(sources) == len(dates), "inside a window, the window is the budget"
+    assert "2015-04-14" in {s.source_date.isoformat() for s in sources}
+
+    unbounded = await connector._retrieve_earnings_exhibits(
+        None, run_id="r", job_id="j", cik="0000200406", recent=recent, max_exhibits=6,
+    )
+    assert len(unbounded) == 6, "with no window, the cap bounds a request for recent releases"
