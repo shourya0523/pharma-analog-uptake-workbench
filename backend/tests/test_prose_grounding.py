@@ -81,3 +81,52 @@ def test_the_prose_reader_does_not_produce_a_period_after_the_documents_own():
     assert periods == {"2025Q1"}
     # Without a document period nothing is known about what lies ahead.
     assert "2027Q1" in {v.period for v in read_prose(text, product="Calderon", catalog=["Calderon"])}
+
+
+# A sentence can name our product and still not state its figure. Three shapes,
+# all read from one quarter of one release, all published as the product's own.
+# Invented names: Calderon, NuVessa, Acme Pharma.
+
+def test_a_sibling_the_catalogue_never_heard_of_still_makes_a_sentence_ambiguous():
+    """The one-product rule was right and blind.
+
+    It asked a catalogue which products a sentence names, so a sibling the
+    catalogue does not hold was not a second product: the sentence read as
+    unambiguous and its figure was published for whichever product was asked.
+    The caller's own products answer for the run's drugs, and the filer's
+    trademark answers for the rest.
+    """
+    both = ("In the second quarter of 2024, Acme Pharma delivered $242.0 million in net "
+            "product sales, highlighted by growth in Calderon net sales and growth in "
+            "NuVessa net sales.")
+    blind = read_prose(both, product="Calderon", catalog=())
+    assert [v.value_as_reported for v in blind] == [242.0], "the defect, with nothing to see it"
+
+    told = read_prose(both, product="Calderon", catalog=(), products=["Calderon", "NuVessa"])
+    assert told == [], "a product the run was asked about is a product"
+
+
+def test_a_brand_the_filer_marks_is_a_product_whatever_the_catalogue_holds():
+    marked = ("Net product sales from Calderon ® and NuVessa ® were $242.0 million "
+              "for the three months ended June 30, 2024.")
+    assert read_prose(marked, product="Calderon", catalog=()) == []
+    # Our own mark is not a second product.
+    ours = ("Calderon ® net sales were approximately $34.6 million for the three months "
+            "ended June 30, 2023.")
+    assert [v.value_as_reported for v in read_prose(ours, product="Calderon", catalog=())] == [34.6]
+
+
+def test_a_total_that_our_product_is_part_of_is_not_our_products_figure():
+    """The hardest of the three: the sentence names one product we track, marks
+    only that one, and still states a figure covering two. What it does say is
+    the order - the aggregate heads the sentence and the product sits inside
+    the thing being aggregated."""
+    total = ("Total revenues, comprised of net product sales from Calderon ® and NuVessa, "
+             "were $242.0 million for the three months ended June 30, 2024.")
+    assert read_prose(total, product="Calderon", catalog=()) == []
+
+    # A total *of* our product is still our product's figure, and the order is
+    # what tells them apart.
+    ours = ("Calderon total net sales were $34.6 million for the three months ended "
+            "June 30, 2023.")
+    assert [v.value_as_reported for v in read_prose(ours, product="Calderon", catalog=())] == [34.6]
