@@ -33,11 +33,13 @@ from app.domain.models import (
     NO_FILER_OF_RECORD,
     PUBLISHED_STATUS_VALUES,
     Cadence,
+    PeriodType,
     UnresolvedResolution,
     ValidationStatus,
     new_id,
 )
 from app.observability import normalize_analog_key
+from app.quality.completeness import names_a_quarter, refresh_completeness
 from app.validation.sampling import REASON_HELP as FLAGGED_REASON_HELP
 
 router = APIRouter(tags=["products"])
@@ -651,6 +653,15 @@ def resolve_unresolved_quarter(
                 id=new_id(),
                 job_id=row.job_id,
                 period=row.period,
+                # Stated rather than left to the column default of "unknown".
+                # The completeness count reads period_type to decide what is a
+                # quarter, so a value entered for a gap that did not say so
+                # closed the gap without filling it.
+                period_type=(
+                    PeriodType.QUARTERLY.value
+                    if names_a_quarter(row.period)
+                    else PeriodType.UNKNOWN.value
+                ),
                 value_normalized_usd_millions=body.value_normalized_usd_millions,
                 currency="USD",
                 unit="millions",
@@ -686,11 +697,14 @@ def resolve_unresolved_quarter(
                 notes=body.reviewer_notes,
             )
         )
+        counted = refresh_completeness(db, db.get(DrugJobORM, row.job_id))
         db.commit()
         return {
             "id": row.id,
             "resolution": row.resolution,
             "datapoint_id": created_datapoint_id,
+            "completeness_pct": counted.pct,
+            "unresolved_count": counted.gaps,
         }
     finally:
         db.close()

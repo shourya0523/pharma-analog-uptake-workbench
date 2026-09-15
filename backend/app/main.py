@@ -47,6 +47,7 @@ from app.observability import (
 from app.observability import (
     overview as observability_overview,
 )
+from app.quality.completeness import refresh_completeness
 from app.storage.filestore import get_file_store
 
 configure_logging()
@@ -454,8 +455,15 @@ def patch_datapoint(datapoint_id: str, body: DatapointPatch) -> dict[str, Any]:
                 notes=body.reviewer_notes,
             )
         )
+        # Rejecting a figure removes the only answer its quarter had, so the
+        # counts derived from the answers are stale until they are retaken.
+        counted = refresh_completeness(db, db.get(DrugJobORM, dp.job_id))
         db.commit()
-        return {"id": dp.id, "validation_status": dp.validation_status}
+        return {
+            "id": dp.id,
+            "validation_status": dp.validation_status,
+            "completeness_pct": counted.pct,
+        }
     finally:
         db.close()
 
@@ -499,8 +507,13 @@ def validation_action(task_id: str, body: ValidationAction) -> dict[str, Any]:
                 notes=body.notes,
             )
         )
+        counted = refresh_completeness(db, db.get(DrugJobORM, task.job_id))
         db.commit()
-        return {"task_id": task.id, "datapoint_status": dp.validation_status}
+        return {
+            "task_id": task.id,
+            "datapoint_status": dp.validation_status,
+            "completeness_pct": counted.pct,
+        }
     finally:
         db.close()
 

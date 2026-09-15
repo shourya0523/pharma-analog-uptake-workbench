@@ -95,7 +95,7 @@ from app.quality.checks import (
     run_quality_checks,
 )
 from app.quality.comparative import derive_comparative_candidates
-from app.quality.completeness import resolve_completeness_pct
+from app.quality.completeness import refresh_completeness
 from app.quality.enrichment import (
     apply_field_enrichment,
     deterministic_formulation_fill,
@@ -2633,13 +2633,7 @@ class PipelineOrchestrator:
             )
             existing_unresolved.add(str(period))
 
-        unresolved = self.db.query(UnresolvedQuarterORM).filter_by(job_id=job.id).all()
-        job.unresolved_count = len(unresolved)
-        job.completeness_pct = resolve_completeness_pct(
-            result.get("completeness_pct"),
-            quarterly_count=len([d for d in dps if d.period_type == PeriodType.QUARTERLY.value]),
-            unresolved_quarter_count=len([x for x in unresolved if "Q" in (x.period or "")]),
-        )
+        counted = refresh_completeness(self.db, job, llm_pct=result.get("completeness_pct"))
         self.db.commit()
         logger.info(
             "completeness job_id=%s drug=%s llm_pct=%s resolved_pct=%s quarterly=%s unresolved=%s",
@@ -2647,6 +2641,6 @@ class PipelineOrchestrator:
             job.drug_name,
             result.get("completeness_pct"),
             job.completeness_pct,
-            len([d for d in dps if d.period_type == PeriodType.QUARTERLY.value]),
+            counted.quarters,
             job.unresolved_count,
         )

@@ -153,6 +153,20 @@ class UnresolvedResolution(str, Enum):
     NOT_DISCLOSED = "not_disclosed"
     RE_QUEUED = "re_queued"
 
+    @property
+    def answers_the_quarter(self) -> bool:
+        """Whether the decision closes the question or hands it back.
+
+        Two of these are answers - a value the reviewer cited, and a finding
+        that the issuer published none - and re-queueing is the job asking
+        the pipeline to try again, which leaves the quarter open.
+
+        Listed rather than excluded so that a resolution added later counts
+        as still open until someone says otherwise: understating how complete
+        a job is, is the safe direction to be wrong in.
+        """
+        return self in {UnresolvedResolution.VALUE_ENTERED, UnresolvedResolution.NOT_DISCLOSED}
+
 
 class CompetitiveIntensity(str, Enum):
     LOW = "low"
