@@ -13,6 +13,7 @@ import ast
 import inspect
 
 from app.api import products as products_api
+from app.domain.models import NO_FILER_OF_RECORD
 from app.validation import sampling
 from tests.test_products_api import _items, client  # noqa: F401
 
@@ -46,7 +47,8 @@ def test_every_queue_reason_has_its_prose():
 def test_the_missing_quarter_reasons_have_theirs_too():
     """The queue decides these two itself, so their prose sits beside them."""
     produced = {products_api._missing_reason(products_api.WHOLE_PRODUCT_PERIOD),
-                products_api._missing_reason("2024Q3")}
+                products_api._missing_reason("2024Q3"),
+                products_api._missing_reason("2024Q3", f"[{NO_FILER_OF_RECORD}] nobody filed")}
     assert produced == set(products_api.MISSING_REASON_HELP)
 
 

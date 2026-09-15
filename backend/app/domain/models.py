@@ -130,6 +130,13 @@ class Cadence(str, Enum):
     ONE_OFF = "one_off"
 
 
+# The code an unresolved quarter carries when no filing of the named issuer
+# covers it: the pipeline asked who reported the product then and nothing
+# stated a figure. Written as "[no_filer_of_record] ..." in the reason, and
+# read back by the review queue to say so.
+NO_FILER_OF_RECORD = "no_filer_of_record"
+
+
 class UnresolvedResolution(str, Enum):
     """What a reviewer decided about a quarter the pipeline could not fill."""
 

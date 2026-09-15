@@ -44,6 +44,7 @@ from app.db.models import (
     ValidationTaskORM,
 )
 from app.domain.models import (
+    NO_FILER_OF_RECORD,
     JobStatus,
     JobStep,
     PeriodType,
@@ -75,7 +76,11 @@ from app.parsing.evidence import (
 from app.parsing.fda_label import format_moa_profile_value, parse_label_record
 from app.parsing.indications import parse_indications
 from app.parsing.labels import FLAG_COMBINED, FLAG_NOT_UNDERSTOOD, FLAG_PARTIAL
-from app.parsing.periods import detect_period_context, normalize_period
+from app.parsing.periods import (
+    detect_period_context,
+    normalize_period,
+    quarters_reported_in,
+)
 from app.parsing.xbrl import parse_calculation, parse_facts, unsettled_elements
 from app.quality.candidate_filters import (
     filter_revenue_candidates,
@@ -388,6 +393,17 @@ class PipelineOrchestrator:
                     datapoint_rows = await self._extract_revenue(
                         job, sources, parsed, options, only_source_ids={s.source_id for s in extra_sources}
                     )
+            unfiled = self._quarters_no_filing_covers(job, sources, options, datapoint_rows)
+            searched: list = []
+            if unfiled and get_settings().enable_llm_search:
+                searched, extra_parsed = await self._search_quarters_fallback(job, unfiled)
+                if searched:
+                    sources = list(sources) + searched
+                    parsed = {**parsed, **extra_parsed}
+                    datapoint_rows = datapoint_rows + await self._extract_revenue(
+                        job, sources, parsed, options, only_source_ids={s.source_id for s in searched}
+                    )
+            self._record_unfiled_quarters(job, unfiled, datapoint_rows, searched)
             await self._judge(job, datapoint_rows, sources, parsed, options)
             await self._quality_and_validation(job)
             await self._completeness(job)
@@ -1017,6 +1033,104 @@ class PipelineOrchestrator:
         self.db.commit()
         parsed = await self._parse(job, search_sources)
         return search_sources, parsed
+
+    def _quarters_no_filing_covers(
+        self, job: DrugJobORM, sources: list, options: dict[str, Any], rows: list[DatapointORM]
+    ) -> list[str]:
+        """The window's quarters, when the given issuer filed nothing in it.
+
+        A product that changed hands - a filer with no SEC filings, then an
+        acquirer whose first release covers a stub - has quarters no filing
+        of the named issuer reports. The retrieval stage cannot say so: it
+        finds nothing and moves on. When no successful SEC filing or release
+        of this issuer is dated inside the window, every quarter the window
+        would have reported, and nothing answered, is such a quarter.
+        """
+        since = parse_filing_date(options.get("earnings_since"))
+        until = parse_filing_date(options.get("earnings_until"))
+        window = quarters_reported_in(since, until)
+        if not window:
+            return []
+        covered = any(
+            s.source_type in {SourceType.SEC_FILING, SourceType.EARNINGS_RELEASE}
+            and s.retrieval_status == RetrievalStatus.SUCCESS
+            and s.source_date is not None
+            and (since is None or s.source_date >= since)
+            and (until is None or s.source_date <= until)
+            for s in sources
+        )
+        if covered:
+            return []
+        answered = {row.period for row in rows}
+        return [quarter for quarter in window if quarter not in answered]
+
+    async def _search_quarters_fallback(
+        self, job: DrugJobORM, quarters: list[str]
+    ) -> tuple[list, dict[str, Any]]:
+        """Ask the search who reported these quarters for this product.
+
+        The issuer named on the job filed nothing for them, so the query
+        names the quarters and the product and lets the filer be found: an
+        acquirer's historical schedule, a predecessor's own release.
+        """
+        search_sources = await self.search.fallback_retrieve(
+            run_id=job.run_id,
+            job_id=job.id,
+            goal="quarters",
+            product=job.drug_name,
+            aliases=self._job_aliases,
+            manufacturer=job.manufacturer,
+            ticker=job.ticker,
+            context=(
+                f"Product-level net sales for {', '.join(quarters)}. "
+                f"{job.manufacturer or 'The named issuer'} filed nothing with the SEC "
+                f"in this window, so find who reported the product then: a predecessor "
+                f"or acquirer's earnings release, historical sales schedule, or IR document."
+            ),
+        )
+        if not search_sources:
+            return [], {}
+        self._persist_sources(job, search_sources)
+        job.sources_found = (job.sources_found or 0) + len(search_sources)
+        job.quality_flags = list(set((job.quality_flags or []) + ["llm_search_quarters_fallback"]))
+        self.db.commit()
+        parsed = await self._parse(job, search_sources)
+        return search_sources, parsed
+
+    def _record_unfiled_quarters(
+        self, job: DrugJobORM, quarters: list[str], rows: list[DatapointORM], searched: list
+    ) -> None:
+        """Say plainly which quarters have no filer of record.
+
+        Left to the completeness stage these would read as gaps to fill from
+        a filing not yet retrieved. There is no such filing: the reason is
+        recorded as its own kind, so a reviewer is asked who the filer was,
+        not to look again.
+        """
+        answered = {row.period for row in rows}
+        for quarter in quarters:
+            if quarter in answered:
+                continue
+            self.db.add(
+                UnresolvedQuarterORM(
+                    id=new_id(),
+                    job_id=job.id,
+                    period=quarter,
+                    reason_unresolved=(
+                        f"[{NO_FILER_OF_RECORD}] No SEC filer of record for {job.drug_name} in this "
+                        f"window: {job.manufacturer or 'the named issuer'} filed nothing in it, and "
+                        f"{len(searched)} document(s) found by search stated no figure"
+                    ),
+                    sources_checked=[s.url for s in searched],
+                    recommended_next_step=(
+                        "Name the issuer that reported this quarter - the product may have "
+                        "changed hands - or supply that issuer's own release"
+                    ),
+                    confidence_that_unavailable=0.6,
+                )
+            )
+        if quarters:
+            self.db.commit()
 
     @staticmethod
     def _candidate_of(row: DatapointORM) -> dict:
@@ -2305,6 +2419,11 @@ class PipelineOrchestrator:
         ]
         periods = sorted({d.period for d in quarterly if d.period and d.period != "unknown"})
         existing = set(periods)
+        # A quarter already recorded as unresolved - by the search stage, or a
+        # previous pass - is not recorded again as a gap.
+        existing |= {
+            u.period for u in self.db.query(UnresolvedQuarterORM).filter_by(job_id=job.id).all()
+        }
 
         def period_key(p: str) -> tuple[int, int]:
             try:
@@ -2332,11 +2451,16 @@ class PipelineOrchestrator:
                             confidence_that_unavailable=0.3,
                         )
                     )
+                    existing.add(label)
                 q += 1
                 if q > 4:
                     q = 1
                     y += 1
 
+        # Flushed first: the gaps just added are unresolved quarters too, and
+        # the model's list of missing periods must not record them a second
+        # time.
+        self.db.flush()
         unresolved = self.db.query(UnresolvedQuarterORM).filter_by(job_id=job.id).all()
         existing_unresolved = {u.period for u in unresolved}
         result = await self.llm.completeness(

@@ -17,6 +17,7 @@ date wrongly - so for tables it is the fallback, behind the column geometry in
 from __future__ import annotations
 
 import re
+from datetime import date, timedelta
 from collections import Counter
 from dataclasses import dataclass
 
@@ -403,3 +404,45 @@ def normalize_period(
             return _label(year, context.months, context.quarter)
         return str(year)
     return None
+
+
+# How long after a quarter ends a filer reports it: an earnings release or a
+# 10-Q within about two months, the fourth quarter with the annual report.
+# And the soonest any of them comes.
+_REPORT_LAG_DAYS = {1: 60, 2: 60, 3: 60, 4: 90}
+_REPORT_EARLIEST_DAYS = 20
+
+
+def quarter_end(year: int, quarter: int) -> date:
+    """The last day of a calendar quarter."""
+    month = quarter * 3
+    first_of_next = date(year + (month == 12), month % 12 + 1, 1)
+    return first_of_next - timedelta(days=1)
+
+
+def quarters_reported_in(since: date | None, until: date | None) -> list[str]:
+    """The quarters whose results a filer would report inside a window.
+
+    A window bounds retrieval by filing date, so the quarters it covers are
+    the ones whose reports fall in it: a quarter is in if a report at its
+    usual lag would land after the window opens and one at the earliest
+    would land before it closes. No window covers nothing.
+    """
+    if since is None and until is None:
+        return []
+    start = (since or until) - timedelta(days=max(_REPORT_LAG_DAYS.values()) + 10)
+    stop = until or (since + timedelta(days=366))
+    year, quarter = start.year, quarter_of_month(start.month)
+    found: list[str] = []
+    while True:
+        end = quarter_end(year, quarter)
+        if end > stop:
+            break
+        reported_by = end + timedelta(days=_REPORT_LAG_DAYS[quarter])
+        reported_from = end + timedelta(days=_REPORT_EARLIEST_DAYS)
+        if (since is None or reported_by >= since) and (until is None or reported_from <= until):
+            found.append(f"{year}Q{quarter}")
+        quarter += 1
+        if quarter > 4:
+            quarter, year = 1, year + 1
+    return found
