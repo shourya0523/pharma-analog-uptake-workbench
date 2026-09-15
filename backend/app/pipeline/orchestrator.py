@@ -2256,13 +2256,25 @@ class PipelineOrchestrator:
         losers: set[str] = set()
         if conflict_payload:
             result = await self.llm.reconcile(product=job.drug_name, candidates=conflict_payload)
+            # A verdict names a candidate. The reply is free text, and one that
+            # names anything else - the figure where the id belongs, an id for
+            # a group it was not shown - is not a verdict on any group here.
+            # The candidates are the ones just sent, so the names that may be
+            # admitted come from the payload rather than from a second list.
+            offered = {str(candidate["id"]) for candidate in conflict_payload}
+
+            def named(value: Any) -> str | None:
+                """The candidate a reply names, or None if it names a non-candidate."""
+                ident = str(value) if value is not None else ""
+                return ident if ident in offered else None
+
             for item in listed(result, "resolved"):
-                wid = item.get("winner_id")
+                wid = named(item.get("winner_id"))
                 if wid:
                     winners.add(wid)
             for item in listed(result, "conflicts"):
-                ids = item.get("candidate_ids") or []
-                wid = item.get("winner_id")
+                ids = [cid for cid in map(named, item.get("candidate_ids") or []) if cid]
+                wid = named(item.get("winner_id"))
                 if not wid:
                     # The model saw the disagreement and declined to settle it.
                     # That is a question for the ranking below, not a verdict
