@@ -30,6 +30,7 @@ import asyncio
 import logging
 import mimetypes
 import re
+import time
 from datetime import date, timedelta
 from typing import Any
 from urllib.parse import urlparse
@@ -51,16 +52,24 @@ ANNUAL_FORMS = frozenset({"10-K", "10-K405", "10-KT", "20-F", "40-F", "11-K"})
 # Shared across connector instances so concurrent jobs don't stampede EDGAR.
 # The floor is SEC's published guidance; the pace above it is not guessed but
 # observed, because what the endpoint will accept depends on who else is
-# asking from the same address. A refusal slows every caller, and a run of
-# successes speeds them back up.
+# asking from the same address. A refusal slows every caller, and a spell
+# without one speeds them back up.
 _SEC_LOCK = asyncio.Lock()
 _SEC_FLOOR_S = 0.12  # ~8 req/s, under SEC's 10/s guidance
 _SEC_CEILING_S = 4.0
-# How many consecutive successes it takes to halve the pace back down.
-_SEC_RECOVERY_RUN = 20
+# How long the endpoint must go without refusing before the pace halves.
+# Recovery is timed rather than counted: a counter of consecutive successes
+# is reset by every refusal, so under a steady trickle of them - which is
+# what a shared address gets - it never reaches its target and the pace
+# stays at the ceiling for the rest of the process. Elapsed quiet cannot be
+# starved that way. Each quiet window halves the pace, so the climb down
+# from the ceiling takes log2(ceiling/floor) of them.
+_SEC_RECOVERY_QUIET_S = 15.0
 
 _sec_pace = _SEC_FLOOR_S
-_sec_since_refusal = 0
+# Monotonic, and compared only against itself. `_last_sec_request` below is on
+# the event loop's clock for the same reason: neither is a wall time.
+_last_sec_refusal = 0.0
 _last_sec_request = 0.0
 
 
@@ -72,19 +81,23 @@ def sec_pace() -> float:
 def sec_saw_refusal(retry_after: float | None = None) -> None:
     """EDGAR refused for load. Slow every caller, and take its own number
     when it gave one."""
-    global _sec_pace, _sec_since_refusal
+    global _sec_pace, _last_sec_refusal
     _sec_pace = min(_SEC_CEILING_S, max(_sec_pace * 2, retry_after or 0.0))
-    _sec_since_refusal = 0
+    _last_sec_refusal = time.monotonic()
 
 
 def sec_saw_success() -> None:
-    global _sec_pace, _sec_since_refusal
+    """A request got through. Halve the pace once the endpoint has been quiet
+    for a full window, so a run that was throttled early does not stay slow
+    for the rest of its life."""
+    global _sec_pace, _last_sec_refusal
     if _sec_pace <= _SEC_FLOOR_S:
         return
-    _sec_since_refusal += 1
-    if _sec_since_refusal >= _SEC_RECOVERY_RUN:
-        _sec_pace = max(_SEC_FLOOR_S, _sec_pace / 2)
-        _sec_since_refusal = 0
+    if time.monotonic() - _last_sec_refusal < _SEC_RECOVERY_QUIET_S:
+        return
+    _sec_pace = max(_SEC_FLOOR_S, _sec_pace / 2)
+    # The halving is what this window bought; the next one starts here.
+    _last_sec_refusal = time.monotonic()
 
 
 def _retry_after_seconds(response: httpx.Response) -> float | None:
