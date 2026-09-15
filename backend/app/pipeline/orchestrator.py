@@ -67,6 +67,7 @@ from app.extraction.members import Resolution, load_products, resolve
 from app.extraction.tagged import candidates_from_instance
 from app.identity.resolver import resolve_product_identity
 from app.llm.aliases import merge_aliases
+from app.domain.claims import stated_labels, stated_number, stated_text
 from app.llm.client import LLMModules, listed, mappings
 from app.parsing.documents import DocumentParser
 from app.parsing.evidence import (
@@ -330,7 +331,7 @@ def scale_to_millions(value: float, unit: str | None) -> float:
     unit is missing or unrecognized - never silently truncating a "thousands"
     or "units" figure the way an unconditional else-branch did.
     """
-    label = (unit or "").strip().lower()
+    label = stated_text(unit).lower()
     if "billion" in label:
         scale = UNIT_SCALE_TO_MILLIONS["billions"]
     elif "thousand" in label:
@@ -1267,7 +1268,7 @@ class PipelineOrchestrator:
             },
             issue_flags=(
                 (["derived_from_reported_series"] if derived else ["extracted_from_xbrl"])
-                + list(candidate.get("label_flags") or [])
+                + stated_labels(candidate.get("label_flags"))
             ),
         )
         self.db.add(row)
@@ -1802,20 +1803,23 @@ class PipelineOrchestrator:
                 src_row.notes = f"{(src_row.notes or '').rstrip()} | {result.get('note')}".strip(" |")
 
             for cand in kept:
-                quote = (cand.get("source_quote") or "").strip()
+                quote = stated_text(cand.get("source_quote"))
                 url = src.url
-                period_type = (cand.get("period_type") or "unknown").lower()
+                period_type = stated_text(cand.get("period_type"), "unknown").lower()
                 raw_period = str(cand.get("period") or "unknown")
                 period = normalize_period(
                     raw_period, period_type=period_type, context=period_context
                 )
                 dp_id = new_id()
-                value = cand.get("value_reported")
-                unit = cand.get("unit")
-                currency = cand.get("currency") or "USD"
-                normalized = cand.get("value_normalized_usd_millions")
+                # The figure and the figure the candidate normalized itself,
+                # each read as a number so that a candidate quoting one as text
+                # still carries it and one holding an array carries nothing.
+                value = stated_number(cand.get("value_reported"))
+                unit = stated_text(cand.get("unit")) or None
+                currency = stated_text(cand.get("currency"), "USD")
+                normalized = stated_number(cand.get("value_normalized_usd_millions"))
                 if normalized is None and value is not None:
-                    normalized = scale_to_millions(float(value), unit)
+                    normalized = scale_to_millions(value, unit)
                 # A candidate may supply its own normalization, and it was
                 # taken verbatim. A candidate arrived reported as 87.4 with
                 # 87,400 beside it and was published, because every check
@@ -1839,7 +1843,7 @@ class PipelineOrchestrator:
                     "retrieval_date": datetime.utcnow().isoformat(),
                     "filing_type": src.filing_type,
                     "accession_number": src.accession_number,
-                    "confidence": float(cand.get("confidence") or 0.5),
+                    "confidence": stated_number(cand.get("confidence")) or 0.5,
                     "validation_status": ValidationStatus.PENDING.value,
                     "interpreted": False,
                     "period_reported": raw_period,
@@ -1857,7 +1861,7 @@ class PipelineOrchestrator:
                 # What the row label said beyond the name: a combined line, a
                 # partial period, words nobody could account for. The flags
                 # decide what the judge may do with the figure.
-                for flag in cand.get("label_flags") or []:
+                for flag in stated_labels(cand.get("label_flags")):
                     if flag not in issue_flags:
                         issue_flags.append(flag)
                 if cand.get("label_residue"):
@@ -2592,24 +2596,6 @@ class PipelineOrchestrator:
             "need_filing": ("Likely disclosed in a filing not yet retrieved", 0.35),
             "gap": ("Missing quarter — analyst follow-up required", 0.4),
         }
-        def stated(value: Any, default: str) -> str:
-            """A field the reply put in text, or the default it stands in for.
-
-            Three of the fields below are read as text - one as a key into
-            `reason_map`, two as prose the row stores - and the reply is free
-            to put a number, an array or an object in any of them. None of
-            those is a code or a sentence, so each is no answer, which is what
-            the field being absent already means.
-
-            Without it the code reaches `.lower()` on the first and hands the
-            second to a text column, which refuses it at the next flush - by
-            then inside whatever query triggered that flush, which is where
-            such a failure appears to come from.
-            """
-            if not isinstance(value, str):
-                return default
-            return value.strip() or default
-
         for miss in listed(result, "missing_periods"):
             # A missing period arrives either as the label on its own or as an
             # object saying why it is missing. Only the second carries the
@@ -2621,10 +2607,10 @@ class PipelineOrchestrator:
                 period, code, reason, nxt = miss, "gap", "Missing period", "Review SEC filings"
             else:
                 period = miss.get("period")
-                code = stated(miss.get("reason_code"), "gap").lower()
+                code = stated_text(miss.get("reason_code"), "gap").lower()
                 default_reason, conf = reason_map.get(code, reason_map["gap"])
-                reason = stated(miss.get("reason"), default_reason)
-                nxt = stated(
+                reason = stated_text(miss.get("reason"), default_reason)
+                nxt = stated_text(
                     miss.get("recommended_next_step"),
                     "Review SEC 10-Q / earnings for product net sales",
                 )
