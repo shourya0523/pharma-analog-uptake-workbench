@@ -312,6 +312,8 @@ Check the disk with `df -h /` and the storage root with
 
 ### Updating
 
+By hand, building on the box:
+
 ```bash
 cd /opt/pharma-analog-uptake-workbench
 git pull
@@ -320,6 +322,96 @@ cd deploy && docker compose up -d --build
 
 Interrupted jobs are requeued or failed with a reason at startup, so a deploy
 does not strand rows.
+
+Once continuous deployment is set up (below) you do not do this for code
+changes - the box picks them up itself.
+
+---
+
+## Continuous deployment
+
+`.github/workflows/ci.yml` runs the tests on every pull request. On a green
+push to `main` it also builds both images and publishes them to GitHub
+Container Registry. The VM polls the registry and restarts what changed.
+
+The direction matters: **the box pulls, nothing pushes to it.** GitHub holds no
+key to this machine, port 22 stays shut to the internet, and there is nothing
+to rotate. The cost is a delay of up to two minutes, and that the box follows
+whatever `main` last published rather than being told.
+
+Building in CI rather than here is the other half. A source build on two
+shared vCPUs takes about five minutes and leans on the swapfile; pulling a
+built image takes seconds.
+
+### One-time: make the packages public
+
+Images published by Actions are **private by default**, and a private image is
+the reason a first `docker compose pull` fails with `unauthorized`. After the
+first successful run of the `publish` job:
+
+1. Go to https://github.com/shourya0523?tab=packages
+2. Open `pharma-analog-uptake-workbench-api`
+3. **Package settings** -> **Danger Zone** -> **Change visibility** -> Public
+4. Repeat for `pharma-analog-uptake-workbench-web`
+
+The repository is public, so the images may as well be; it saves keeping a
+registry credential on the box. To keep them private instead, run
+`docker login ghcr.io` on the VM with a token carrying `read:packages`.
+
+### Install the timer
+
+```bash
+cd /opt/pharma-analog-uptake-workbench
+git pull
+sudo cp deploy/pharma-workbench-update.service deploy/pharma-workbench-update.timer \
+  /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable --now pharma-workbench-update.timer
+```
+
+Check it is scheduled, then force one pass rather than waiting:
+
+```bash
+systemctl list-timers pharma-workbench-update.timer
+sudo systemctl start pharma-workbench-update.service
+journalctl -u pharma-workbench-update.service -n 30 --no-pager
+```
+
+A pass with nothing new prints the pull and stops: `docker compose up -d`
+recreates a container only when its image id or configuration has changed, so
+an unchanged deploy does not interrupt a running job.
+
+### What the timer does not update
+
+**Only images.** `deploy/Caddyfile`, `deploy/docker-compose.yml` and the unit
+files live in git, and a change to one of those needs a `git pull` on the box.
+That is deliberate: a configuration change can take the site down in ways an
+application change cannot, so it waits for a person.
+
+```bash
+cd /opt/pharma-analog-uptake-workbench && git pull
+cd deploy && docker compose up -d
+```
+
+### Rolling back
+
+Every commit publishes a tag of its own SHA alongside the moving `main` tag.
+To pin the box to a known-good one, add it to `deploy/.env`:
+
+```bash
+echo 'IMAGE_TAG=<the 40-character commit sha>' >> deploy/.env
+cd deploy && docker compose up -d
+```
+
+The timer respects the pin - it pulls whatever `IMAGE_TAG` names - so a pinned
+box stays pinned. Delete the line and run `docker compose up -d` to follow
+`main` again.
+
+### Making the tests block a merge
+
+The workflow reports two checks, `backend` and `frontend`. To stop a red pull
+request merging, add them as required status checks under
+**Settings -> Branches -> Add branch ruleset** for `main`.
 
 ### Backing up
 

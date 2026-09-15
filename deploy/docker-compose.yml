@@ -13,6 +13,10 @@ x-logging: &logging
 
 services:
   api:
+    # Both, deliberately. `up -d --build` builds from source, which is how a
+    # box is brought up before CI has ever published; `pull` then `up -d`
+    # takes the image CI built, which is how it is updated afterwards.
+    image: ghcr.io/shourya0523/pharma-analog-uptake-workbench-api:${IMAGE_TAG:-main}
     build:
       context: ../backend
     restart: unless-stopped
@@ -42,6 +46,7 @@ services:
       start_period: 90s
 
   web:
+    image: ghcr.io/shourya0523/pharma-analog-uptake-workbench-web:${IMAGE_TAG:-main}
     build:
       context: ../frontend
     restart: unless-stopped
