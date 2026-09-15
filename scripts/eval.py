@@ -51,6 +51,7 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 from profile_contract import (
     COMPARISON,
     PARTITION,
+    PRODUCED_BY,
     PROSE,
     partition_agreement,
     values_agree,
@@ -353,7 +354,7 @@ def score_profiles(base: str, cases: list[dict], labels: dict[str, dict],
     identifying = drug_fields(base)
     batches: dict[str, list[dict]] = {}
     for case in cases:
-        options = {**case.get("options", {}), "product_metadata": True}
+        options = dict(case.get("options", {}))
         batches.setdefault(json.dumps(options, sort_keys=True), []).append(case)
 
     started = []
@@ -395,22 +396,30 @@ def score_profiles(base: str, cases: list[dict], labels: dict[str, dict],
                      "job_status": state, "died_at": step,
                      "expected": want, "observed": observed})
 
-    # A job that died fetching is not a derivation that refused, and scoring the
-    # two together reports an outage as a capability the pipeline lacks.
-    ran = [row for row in rows if row["job_status"] in FINISHED]
-    broken = [row for row in rows if row not in ran]
-    if broken:
-        # Where it died matters: a job that fell over after the attributes were
-        # derived is not a product the pipeline could not describe, and an
-        # exclusion list that does not say so reads as though it were.
-        print(f"\n  {len(broken)} case(s) whose job did not finish, excluded from the score:")
-        for row in broken:
+    # A job that died fetching is not a derivation that refused. What separates
+    # them is how far the job got: past the stage that derives these attributes
+    # and they exist, short of it and there was never an answer to score.
+    # Excluding on job status instead dropped every run that fell over later -
+    # and those are not a random sample, so the score moved with them.
+    order = {name: index for index, name in enumerate(get(base, "/pipeline/steps")["steps"])}
+    floor = order.get(PRODUCED_BY, 0)
+    scorable, short = [], []
+    for row in rows:
+        reached = order.get(row["died_at"], -1)
+        (scorable if row["job_status"] in FINISHED or reached > floor else short).append(row)
+
+    if short:
+        print(f"\n  {len(short)} case(s) that never reached {PRODUCED_BY}, nothing to score:")
+        for row in short:
+            print(f"    {row['drug_name']:24} {row['job_status']:10} at {row['died_at'] or 'no step'}")
+    late = [row for row in scorable if row["job_status"] not in FINISHED]
+    if late:
+        print(f"\n  {len(late)} case(s) whose job died after {PRODUCED_BY}, scored anyway:")
+        for row in late:
             print(f"    {row['drug_name']:24} {row['job_status']:10} at {row['died_at']}")
-        print("    (a step after extract_metadata means the profile was derived "
-              "and is being excluded anyway - see the detail file)")
-    rows = ran
+    rows = scorable
     if not rows:
-        print("\n  no case finished; nothing to score")
+        print("\n  no case reached the stage being scored; nothing to score")
         return 2
 
     # Attributes compared one product at a time.

@@ -423,8 +423,7 @@ class PipelineOrchestrator:
             sources = await self._retrieve(job, options)
             parsed = await self._parse(job, sources)
             await self._extract_metadata(job, sources, parsed, options)
-            if options.get("product_metadata", True):
-                await self._judge_profile(job)
+            await self._judge_profile(job)
             datapoint_rows = await self._extract_revenue(
                 job, sources, parsed, options, skip_unresolved=get_settings().enable_llm_search
             )
@@ -648,7 +647,7 @@ class PipelineOrchestrator:
                     generic=job.generic_name,
                 )
             )
-        if job.known_source_url and options.get("company_ir", True):
+        if job.known_source_url and options.get("follow_known_source_url", True):
             collected.extend(
                 await self.manual.retrieve(run_id=job.run_id, job_id=job.id, url=job.known_source_url)
             )
@@ -712,8 +711,6 @@ class PipelineOrchestrator:
         return parsed_map
 
     async def _extract_metadata(self, job: DrugJobORM, sources: list, parsed: dict, options: dict) -> None:
-        if not options.get("product_metadata", True):
-            return
         self._set_step(job, JobStep.EXTRACT_METADATA)
 
         written: dict[str, str] = {}
@@ -1693,8 +1690,6 @@ class PipelineOrchestrator:
         only_source_ids: set[str] | None = None,
         skip_unresolved: bool = False,
     ) -> list[DatapointORM]:
-        if not options.get("quarterly_revenue", True):
-            return []
         self._set_step(job, JobStep.EXTRACT_REVENUE)
         rows: list[DatapointORM] = []
         # Period totals, kept aside rather than stored: they are not answers to

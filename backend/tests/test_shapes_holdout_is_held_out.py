@@ -132,4 +132,27 @@ def test_cases_are_what_a_person_would_type():
     for case in _cases():
         assert "known_source_url" not in case, case["drug_name"]
         assert case["options"]["openfda"] is False
-        assert case["options"]["product_metadata"] is False
+
+
+def test_no_case_switches_off_a_stage():
+    """A case may choose which sources a run reads. It may not remove a stage.
+
+    A run with a source off is the pipeline working from less evidence. A run
+    with a stage off is a different pipeline reporting as a run, and the figures
+    it produces belong to the switch - which is how the whole profile stage went
+    unmeasured while every case file in the repo looked like it exercised the
+    pipeline. The options that did this are gone, and this fails if one comes
+    back rather than waiting for someone to notice the number.
+
+    Checked against the option model rather than a list of names, so an option
+    added there is covered without being remembered here.
+    """
+    from app.domain.models import ExtractionOptions
+
+    allowed = set(ExtractionOptions.model_fields)
+    for case in _cases():
+        unknown = sorted(set(case.get("options") or {}) - allowed)
+        assert not unknown, (
+            f"{case['drug_name']} sets {unknown}, which the run options do not "
+            f"define - a removed stage switch, or a typo that silently does nothing"
+        )

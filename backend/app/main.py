@@ -31,6 +31,7 @@ from app.domain.models import (
     DrugInput,
     ExtractionOptions,
     JobStatus,
+    JobStep,
     ValidationStatus,
     new_id,
 )
@@ -140,6 +141,24 @@ def recover_stranded_jobs(db: Session, queue) -> tuple[int, int]:
 @app.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok", "environment": settings.environment}
+
+
+@app.get("/pipeline/steps")
+def pipeline_steps() -> dict[str, list[str]]:
+    """The stages a job runs, in the order it runs them.
+
+    Published because a caller reading a job's `current_step` cannot otherwise
+    tell which stages already produced their answers. A job that failed in
+    `extract_revenue` has a profile; one that failed in `identity_resolve` has
+    nothing, and both read as "failed". A scorer that cannot tell them apart
+    either discards answers that exist or credits ones that do not - and
+    discarding is the worse of the two, because the runs it drops are not a
+    random sample of the runs it keeps.
+
+    Taken from the enum the pipeline itself advances through, so a stage added
+    there appears here without anyone republishing a list.
+    """
+    return {"steps": [step.value for step in JobStep]}
 
 
 class PasteRunRequest(BaseModel):

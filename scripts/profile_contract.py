@@ -34,6 +34,11 @@ PARTITION = "partition"
 # Free prose. Reported so a reader can see it, never scored for equality.
 PROSE = "prose"
 
+# The stage that derives these attributes. A run that reached past it has them
+# whatever happened later, and a run that did not has nothing to score - which
+# is a different thing from a product the pipeline could not describe.
+PRODUCED_BY = "extract_metadata"
+
 COMPARISON = {
     "moa": PROSE,
     "moa_class": PARTITION,

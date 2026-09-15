@@ -128,3 +128,32 @@ def test_every_run_is_started_before_any_is_waited_for():
                 f"{path.name} waits for a run inside the loop that starts them, so the "
                 f"next window is not submitted until this one finishes"
             )
+
+
+def test_no_case_file_sets_an_option_the_run_does_not_define():
+    """Every case file, not just the holdouts, is held to the option model.
+
+    `product_metadata: false` sat in all five case files and removed the whole
+    profile stage from every scored run; nothing failed, because an option a
+    case sets is just a key in a JSON blob. Reading the model means a switch
+    that has been removed cannot come back quietly, and a misspelt option -
+    which silently does nothing, and so reads as a run that behaved oddly -
+    fails here instead.
+    """
+    import json
+
+    from app.domain.models import ExtractionOptions
+
+    allowed = set(ExtractionOptions.model_fields)
+    offenders = []
+    for path in sorted((REPO / "seed").glob("*/*.json")):
+        payload = json.loads(path.read_text())
+        cases = payload.get("cases") if isinstance(payload, dict) else payload
+        if not isinstance(cases, list):
+            continue
+        for case in cases:
+            if not isinstance(case, dict) or not isinstance(case.get("options"), dict):
+                continue
+            for name in sorted(set(case["options"]) - allowed):
+                offenders.append(f"{path.name}: {case.get('drug_name')} sets {name}")
+    assert not offenders, "\n  ".join(["options no run defines:", *offenders])

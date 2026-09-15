@@ -310,10 +310,21 @@ class DrugInput(BaseModel):
 
 
 class ExtractionOptions(BaseModel):
-    quarterly_revenue: bool = True
-    product_metadata: bool = True
+    """Which sources a run may fetch, and the window it fetches them for.
+
+    Every option here selects a source. None of them removes a stage, and that
+    is the distinction the set is now kept to: a run with a source off is the
+    pipeline working from less evidence, and says so in what it publishes; a run
+    with a stage off is a different pipeline reporting as a run, and the
+    completeness figures it produces belong to the flag rather than to the
+    pipeline. `product_metadata` and `quarterly_revenue` were the second kind,
+    and every eval case in the repo set one of them false.
+
+    Unknown keys are ignored rather than rejected, so a stored run from before a
+    field was removed still loads.
+    """
+
     sec_filings: bool = True
-    company_ir: bool = True
     openfda: bool = True
     earnings_releases: bool = True
     # Bound earnings-exhibit retrieval to a filing-date window (ISO dates).
@@ -321,7 +332,10 @@ class ExtractionOptions(BaseModel):
     earnings_since: date | None = None
     earnings_until: date | None = None
     transcripts: bool = False
-    pdfs: bool = True
+    # Fetch the document the caller named on the drug, where it named one. Once
+    # called `company_ir`, which read as a switch over investor-relations
+    # sourcing; it gates one connector against `DrugInput.known_source_url` and
+    # nothing else, and a caller turning it off lost nothing they had not
+    # supplied themselves.
+    follow_known_source_url: bool = True
     llm_evidence_judge: bool = True
-    random_validation_sampling: bool = True
-    use_uploaded_template: bool = False
