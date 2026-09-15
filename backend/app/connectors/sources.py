@@ -32,6 +32,7 @@ import mimetypes
 import re
 from datetime import date, timedelta
 from typing import Any
+from urllib.parse import urlparse
 
 import httpx
 
@@ -923,6 +924,55 @@ class SECConnector:
             return None
 
 
+# A page we were pointed at, rather than one EDGAR's index led us to. The
+# pointer may come from a person or from a model, and either way the bytes
+# have to be ours: a citation is only checkable against a document we hold.
+PAGE_BYTES_LIMIT = 16_000_000
+_PRIVATE_HOSTS = ("localhost", "127.", "0.", "10.", "192.168.", "169.254.", "[::1]")
+
+
+def _is_fetchable(url: str) -> bool:
+    """Whether a URL is one we are willing to ask for.
+
+    The URL can come from a model, so the scheme is checked and an address
+    inside this machine or its network is refused: a fetch is a request made
+    on our own behalf, and the model does not decide where.
+    """
+    parsed = urlparse(url)
+    if parsed.scheme not in {"http", "https"} or not parsed.hostname:
+        return False
+    host = parsed.hostname.lower()
+    if host.endswith((".internal", ".local")):
+        return False
+    return not host.startswith(_PRIVATE_HOSTS)
+
+
+async def fetch_page(
+    file_store: FileStore, *, run_id: str, job_id: str, source_id: str, url: str,
+    user_agent: str,
+) -> tuple[bytes, str, str]:
+    """Fetch one page and store it. Returns (content, content type, storage key).
+
+    Raises on anything that leaves us without the document, because a source
+    we could not fetch is not a source: its quote would be checkable only
+    against whatever handed us the link.
+    """
+    if not _is_fetchable(url):
+        raise ValueError(f"refusing to fetch {url!r}")
+    headers: dict[str, str] = {"User-Agent": user_agent}
+    if "sec.gov" in url.lower():
+        headers["Accept-Encoding"] = "gzip, deflate"
+    async with httpx.AsyncClient(timeout=60, follow_redirects=True, headers=headers) as client:
+        resp = await client.get(url)
+        resp.raise_for_status()
+        content_type = resp.headers.get("content-type", "text/html")
+        content = resp.content[:PAGE_BYTES_LIMIT]
+    ext = "pdf" if "pdf" in content_type or url.lower().endswith(".pdf") else "html"
+    key = f"sources/{run_id}/{job_id}/{source_id}.{ext}"
+    await file_store.put(key, content, content_type)
+    return content, content_type, key
+
+
 class ManualURLConnector:
     def __init__(self, file_store: FileStore) -> None:
         self.file_store = file_store
@@ -932,30 +982,22 @@ class ManualURLConnector:
         sid = new_id()
         if not url:
             return []
-        headers: dict[str, str] = {"User-Agent": self.settings.sec_user_agent}
-        if "sec.gov" in url.lower():
-            headers["Accept-Encoding"] = "gzip, deflate"
         try:
-            async with httpx.AsyncClient(timeout=60, follow_redirects=True, headers=headers) as client:
-                resp = await client.get(url)
-                resp.raise_for_status()
-                content_type = resp.headers.get("content-type", "text/html")
-                ext = "pdf" if "pdf" in content_type or url.lower().endswith(".pdf") else "html"
-                key = f"sources/{run_id}/{job_id}/{sid}.{ext}"
-                await self.file_store.put(key, resp.content, content_type)
-                text = resp.text if ext == "html" else None
-                return [
-                    RetrievedSource(
-                        source_id=sid,
-                        source_type=SourceType.USER_URL,
-                        url=url,
-                        title=url,
-                        raw_text=None if key else (text[:500_000] if text else None),
-                        storage_key=key,
-                        retrieval_status=RetrievalStatus.SUCCESS,
-                        metadata={"content_type": content_type},
-                    )
-                ]
+            _content, content_type, key = await fetch_page(
+                self.file_store, run_id=run_id, job_id=job_id, source_id=sid, url=url,
+                user_agent=self.settings.sec_user_agent,
+            )
+            return [
+                RetrievedSource(
+                    source_id=sid,
+                    source_type=SourceType.USER_URL,
+                    url=url,
+                    title=url,
+                    storage_key=key,
+                    retrieval_status=RetrievalStatus.SUCCESS,
+                    metadata={"content_type": content_type},
+                )
+            ]
         except Exception as exc:
             return [
                 RetrievedSource(

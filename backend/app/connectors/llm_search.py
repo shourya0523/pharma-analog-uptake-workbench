@@ -1,12 +1,19 @@
 from __future__ import annotations
 
+import logging
 import re
 from typing import Any
 
+from bs4 import BeautifulSoup
+
 from app.config import get_settings
+from app.connectors.sources import fetch_page
 from app.domain.models import RetrievalStatus, RetrievedSource, SourceType, new_id
 from app.llm.client import LLMModules, listed
+from app.quality.sentences import sentences
 from app.storage.filestore import FileStore
+
+logger = logging.getLogger(__name__)
 
 
 def _normalize_results(payload: dict[str, Any]) -> list[dict[str, str]]:
@@ -123,27 +130,92 @@ class LLMSearchConnector:
                 continue
             excerpt = (hit.get("excerpt") or hit.get("snippet") or hit.get("content") or "").strip()
             sid = new_id()
-            storage_key = None
-            if excerpt:
-                key = f"sources/{run_id}/{job_id}/{sid}.txt"
-                await self.file_store.put(key, excerpt.encode("utf-8"), "text/plain")
-                storage_key = key
+            # The page is fetched here rather than taken from the model. What
+            # the model returns is a pointer and a claim about what is on the
+            # page; the document is what a figure is cited against, and until
+            # we hold it the quote check is checking the claim against itself.
+            try:
+                content, content_type, storage_key = await fetch_page(
+                    self.file_store, run_id=run_id, job_id=job_id, source_id=sid, url=url,
+                    user_agent=self.settings.sec_user_agent,
+                )
+            except Exception as exc:  # noqa: BLE001 - any failure leaves us without the page
+                logger.info("search_page_unfetchable url=%s error=%s", url, exc)
+                sources.append(
+                    RetrievedSource(
+                        source_id=sid,
+                        source_type=SourceType.LLM_SEARCH,
+                        url=url,
+                        title=hit.get("title") or url,
+                        retrieval_status=RetrievalStatus.FAILED,
+                        metadata={
+                            "search_query": hit.get("query"),
+                            "search_snippet": excerpt[:500],
+                            "search_purpose": hit.get("purpose") or goal,
+                            "openrouter_web": True,
+                            "excerpt_found_in_page": False,
+                        },
+                        notes=f"openrouter_web_search; page could not be fetched: {exc}",
+                    )
+                )
+                continue
+            found = excerpt_is_on_the_page(excerpt, content, content_type)
             sources.append(
                 RetrievedSource(
                     source_id=sid,
                     source_type=SourceType.LLM_SEARCH,
                     url=url,
                     title=hit.get("title") or url,
-                    raw_text=excerpt[:500_000] if excerpt else None,
                     storage_key=storage_key,
-                    retrieval_status=RetrievalStatus.SUCCESS if excerpt else RetrievalStatus.PARTIAL,
+                    retrieval_status=RetrievalStatus.SUCCESS,
                     metadata={
                         "search_query": hit.get("query"),
-                        "search_snippet": hit.get("snippet") or excerpt[:500],
+                        "search_snippet": excerpt[:500],
                         "search_purpose": hit.get("purpose") or goal,
                         "openrouter_web": True,
+                        "content_type": content_type,
+                        # Whether the passage the model reported is in the page
+                        # we fetched. The readers read the page either way; this
+                        # says whether the model described it or invented it.
+                        "excerpt_found_in_page": found,
                     },
-                    notes="openrouter_web_search",
+                    notes="openrouter_web_search"
+                    + ("" if found else "; the reported passage is not in the page"),
                 )
             )
         return sources
+
+
+def excerpt_is_on_the_page(excerpt: str, content: bytes, content_type: str) -> bool:
+    """Whether the passage a search reported is in the page we fetched.
+
+    Compared on visible text with whitespace collapsed, because a page prints
+    the same sentence across tags and lines. A long excerpt is accepted when
+    its longest sentence is there: a model asked for a passage returns one
+    joined from neighbouring lines more often than it returns a fabrication,
+    and the sentence carrying the figure is the part a citation rests on.
+    """
+    if not excerpt:
+        return False
+    if "pdf" in (content_type or "").lower():
+        return False
+    text = _visible(content)
+    if not text:
+        return False
+    needle = _flat(excerpt)
+    if needle and needle in text:
+        return True
+    longest = max((_flat(s) for s in sentences(excerpt)), key=len, default="")
+    return bool(longest) and len(longest) >= 40 and longest in text
+
+
+def _flat(text: str) -> str:
+    return " ".join(str(text).split()).casefold()
+
+
+def _visible(content: bytes) -> str:
+    markup = content.decode("utf-8", errors="ignore")
+    soup = BeautifulSoup(markup, "lxml")
+    for tag in soup(["script", "style"]):
+        tag.decompose()
+    return _flat(soup.get_text(" "))
