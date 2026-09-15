@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from app.domain.claims import stated_labels, stated_text
 from app.llm.client import apply_judge_hard_vetoes, re_ytd_language
 from app.quality.candidate_filters import quote_mentions_product
 from app.quality.checks import quote_contains_value
@@ -19,8 +20,8 @@ def try_deterministic_judgment(
 
     Returns None when the case is ambiguous and an LLM judge should run.
     """
-    period_type = (candidate.get("period_type") or "").lower()
-    scope = (candidate.get("revenue_scope") or "").strip()
+    period_type = stated_text(candidate.get("period_type")).lower()
+    scope = stated_text(candidate.get("revenue_scope"))
     value = candidate.get("value_reported")
 
     # Clear vetoes — no need for LLM
@@ -33,7 +34,7 @@ def try_deterministic_judgment(
     if vetoed.get("support_classification") == "misclassified":
         return vetoed
 
-    flags = set(candidate.get("label_flags") or ())
+    flags = set(stated_labels(candidate.get("label_flags")))
     if "partial_period" in flags:
         # The footnote says the figure covers less than the quarter - the
         # product changed hands inside it. No reading of the quote changes
@@ -43,15 +44,6 @@ def try_deterministic_judgment(
             "support_classification": "partial",
             "issues": ["deterministic:partial_period"],
             "explanation": "The label's footnote says the figure is for part of the period",
-        }
-    if "combined_line" in flags:
-        # The line combines this product with others, so the figure is the
-        # family's. Which part is this product's is not in the quote.
-        return {
-            "validation_status": "needs_review",
-            "support_classification": "partial",
-            "issues": ["deterministic:combined_line"],
-            "explanation": "The row combines this product with others; the figure is the family's",
         }
     if "label_not_understood" in flags:
         # The reader could not account for every word of the label; the judge

@@ -12,6 +12,7 @@ for the second case and not the first.
 from __future__ import annotations
 
 import asyncio
+import time
 
 import httpx
 import pytest
@@ -31,11 +32,11 @@ from app.pipeline.orchestrator import PipelineOrchestrator
 from app.storage.filestore import LocalFileStore
 
 
-def test_a_refusal_slows_every_caller_and_a_run_of_successes_speeds_them_up(monkeypatch):
+def test_a_refusal_slows_every_caller_and_quiet_speeds_them_up(monkeypatch):
     """The pace is observed, not guessed: what the endpoint accepts depends on
     who else is asking from the same address."""
     monkeypatch.setattr(module, "_sec_pace", module._SEC_FLOOR_S)
-    monkeypatch.setattr(module, "_sec_since_refusal", 0)
+    monkeypatch.setattr(module, "_last_sec_refusal", 0.0)
 
     sec_saw_refusal()
     doubled = sec_pace()
@@ -44,13 +45,55 @@ def test_a_refusal_slows_every_caller_and_a_run_of_successes_speeds_them_up(monk
     sec_saw_refusal(retry_after=3.0)
     assert sec_pace() >= 3.0, "EDGAR's own number wins when it gives one"
 
-    for _ in range(module._SEC_RECOVERY_RUN):
-        sec_saw_success()
-    assert sec_pace() < 3.0, "a run of successes brings the pace back down"
+    # Still inside the quiet window: a success this soon proves nothing.
+    sec_saw_success()
+    assert sec_pace() >= 3.0
+
+    _quiet(monkeypatch)
+    sec_saw_success()
+    assert sec_pace() < 3.0, "a quiet window brings the pace back down"
 
     monkeypatch.setattr(module, "_sec_pace", module._SEC_CEILING_S * 4)
     sec_saw_refusal()
     assert sec_pace() <= module._SEC_CEILING_S, "and it never runs away"
+
+
+def _quiet(monkeypatch):
+    """Put the last refusal a full recovery window into the past."""
+    monkeypatch.setattr(
+        module, "_last_sec_refusal",
+        time.monotonic() - module._SEC_RECOVERY_QUIET_S - 1,
+    )
+
+
+def test_a_trickle_of_refusals_does_not_pin_the_pace_at_the_ceiling(monkeypatch):
+    """Recovery counted consecutive successes, and every refusal reset the
+    count. A shared address gets a refusal every few seconds, so the count
+    never reached its target: the pace reached the ceiling early in a run and
+    stayed there, at one request every four seconds, for the rest of it.
+
+    Timed recovery cannot be starved that way - the endpoint either has been
+    quiet for a window or has not.
+    """
+    monkeypatch.setattr(module, "_sec_pace", module._SEC_CEILING_S)
+    monkeypatch.setattr(module, "_last_sec_refusal", time.monotonic())
+
+    # A long run of successes, interrupted now and then by a refusal, which is
+    # what the log of a throttled run actually shows.
+    for _ in range(200):
+        sec_saw_success()
+    assert sec_pace() == module._SEC_CEILING_S, "no quiet window has passed"
+
+    windows = 0
+    while sec_pace() > module._SEC_FLOOR_S and windows < 20:
+        _quiet(monkeypatch)
+        sec_saw_success()
+        windows += 1
+    assert sec_pace() == module._SEC_FLOOR_S
+    # Halving from the ceiling, so the climb down is logarithmic in the range
+    # rather than a number to keep in step with the constants.
+    import math
+    assert windows == math.ceil(math.log2(module._SEC_CEILING_S / module._SEC_FLOOR_S))
 
 
 def test_a_refused_document_is_waited_out_rather_than_recorded_as_missing(monkeypatch):

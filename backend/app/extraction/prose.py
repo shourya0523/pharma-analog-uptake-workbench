@@ -37,6 +37,7 @@ from app.extraction.extract import ExtractedValue
 from app.extraction.members import load_products, words
 from app.parsing.evidence import product_aliases
 from app.parsing.periods import MONTHS, fiscal_period_end, quarter_of_month
+from app.quality.candidate_filters import _AGGREGATE_WORDS
 
 _MAGNITUDE_TO_UNIT = {"billion": "billions", "million": "millions", "thousand": "thousands"}
 _ORDINAL_TO_QUARTER = {"first": 1, "second": 2, "third": 3, "fourth": 4}
@@ -62,8 +63,14 @@ _ORDINAL_QUARTER_RE = re.compile(
     re.IGNORECASE,
 )
 # "Q4 2016" / "2016Q4"
+# "Q4 2016" / "2016Q4" / "1Q 2025". The last is the ordinary way a US issuer
+# writes it in a release, and it was the one form not read here: a quote
+# saying "1Q 2025" named no period at all, so nothing downstream could tell
+# it apart from a quote that named the row's own quarter.
 _COMPACT_QUARTER_RE = re.compile(
-    r"\bQ(?P<q>[1-4])\s*(?P<year>(?:19|20)\d{2})\b|\b(?P<year2>(?:19|20)\d{2})\s*Q(?P<q2>[1-4])\b",
+    r"\bQ(?P<q>[1-4])\s*(?P<year>(?:19|20)\d{2})\b"
+    r"|\b(?P<year2>(?:19|20)\d{2})\s*Q(?P<q2>[1-4])\b"
+    r"|\b(?P<q3>[1-4])Q\s*(?P<year3>(?:19|20)\d{2})\b",
     re.IGNORECASE,
 )
 # "full-year 2002" / "fiscal year 2002" / "FY2002" / "for the year 2002".
@@ -103,6 +110,15 @@ _SENTENCE_SPLIT_RE = re.compile(r"(?<=[.;])[\"'\u201d\u2019)\]]*\s+")
 class _Period:
     period: str
     period_type: str
+
+
+def periods_named_in(text: str) -> set[str]:
+    """Every period this text names, as period keys ("2025Q1", "2025H1").
+
+    Empty where the text names none, which is the ordinary case for a table
+    row: the row carries figures and the header carries the period.
+    """
+    return {period.period for _position, period in _periods_with_positions(text or "")}
 
 
 def _periods_with_positions(sentence: str) -> list[tuple[int, _Period]]:
@@ -153,8 +169,8 @@ def _periods_with_positions(sentence: str) -> list[tuple[int, _Period]]:
     for match in _COMPACT_QUARTER_RE.finditer(sentence):
         if claimed(match.start()):
             continue
-        quarter = match.group("q") or match.group("q2")
-        year = match.group("year") or match.group("year2")
+        quarter = match.group("q") or match.group("q2") or match.group("q3")
+        year = match.group("year") or match.group("year2") or match.group("year3")
         found.append((match.start(), _Period(f"{int(year)}Q{int(quarter)}", "quarterly")))
     for match in _ANNUAL_WORD_RE.finditer(sentence):
         if claimed(match.start()):
@@ -285,6 +301,55 @@ def _named_products(sentence: str, catalog: Iterable[str]) -> set[str]:
     }
 
 
+def _introduced_as_an_aggregate(sentence: str, aliases: Iterable[str], position: int) -> bool:
+    """Whether the amount at ``position`` is introduced as a total, not as ours.
+
+    "Total revenues, comprised of net product sales from Calderon and NuVessa,
+    were $242.0 million" states a figure that covers two products, and names
+    ours among them - so neither the one-product rule nor the filer's marks
+    refuse it, and the figure was published as Calderon's own.
+
+    What the sentence does say is the order: the aggregate heads it and the
+    product appears inside the thing being aggregated. Where our name comes
+    first the aggregate is a total *of* our product - "Calderon total net
+    sales across both regions" - and is this product's figure. So the test is
+    position, not vocabulary: an aggregate word before the first mention of
+    our product, and before the amount.
+    """
+    lowered = sentence.casefold()
+    mentions = [lowered.find(alias) for alias in aliases if alias in lowered]
+    first_mention = min(mentions) if mentions else len(sentence)
+    for match in re.finditer(r"[a-z]+", lowered[:position]):
+        if match.group() in _AGGREGATE_WORDS and match.start() < first_mention:
+            return True
+    return False
+
+
+# A name the filer marks as its own: "Calderon(R)", "NuVessa (TM)". The mark
+# is the filer saying this is a brand, so it names a product whether or not
+# anyone tracks that product. Three characters or more, because a mark sits on
+# brands rather than on initials.
+_TRADEMARKED_RE = re.compile(r"([A-Za-z][A-Za-z0-9\-]{2,})\s*[\u00ae\u2122]")
+
+
+def _other_trademarked_products(sentence: str, aliases: Iterable[str]) -> set[str]:
+    """Marked names in this sentence that are not the product asked about.
+
+    `_named_products` can only see what its catalogue holds, so a sibling
+    nobody tracks is invisible to it and the sentence reads as unambiguous
+    when it is not. The filer's own mark answers without a catalogue: a
+    release naming two of its brands marks both, and a figure introduced
+    beside them has not said which one it belongs to.
+    """
+    ours = {alias.casefold() for alias in aliases}
+    return {
+        name
+        for name in _TRADEMARKED_RE.findall(sentence or "")
+        if name.casefold() not in ours
+        and not any(name.casefold() in alias or alias in name.casefold() for alias in ours)
+    }
+
+
 def _after_the_document(period: str, context: PeriodContext | None) -> bool:
     """Whether a period ends after the document's own reporting period.
 
@@ -317,6 +382,7 @@ def read_prose(
     extra_aliases: Iterable[str] | None = None,
     catalog: Iterable[str] | None = None,
     period_context: PeriodContext | None = None,
+    products: Iterable[str] | None = None,
 ) -> list[ExtractedValue]:
     """Revenue figures stated in sentences that name this product.
 
@@ -338,16 +404,24 @@ def read_prose(
     it could be confused with, so a caller tracking nothing loses nothing.
     """
     aliases = [alias.lower() for alias in product_aliases(product, generic, extra=extra_aliases)]
+    # The caller's products as well as the tracked ones: a run is asked about
+    # drugs the catalogue does not hold yet, and those are exactly the sentences
+    # this reader is asked to read.
+    known_products = tuple(catalog if catalog is not None else _catalog()) + tuple(products or ())
     values: list[ExtractedValue] = []
 
     for sentence in _SENTENCE_SPLIT_RE.split(text or ""):
         lowered = sentence.lower()
         if not any(alias in lowered for alias in aliases):
             continue
-        known = _named_products(sentence, catalog if catalog is not None else _catalog())
+        known = _named_products(sentence, known_products)
         if len(known) > 1 or (known and product not in known):
             # The sentence covers more than this product, or the name it does
             # carry is a longer one belonging to something else.
+            continue
+        if _other_trademarked_products(sentence, aliases):
+            # A brand the filer marks that is not ours. The catalogue above may
+            # never have heard of it; the mark says what it is regardless.
             continue
         if _PART_PERIOD_RE.search(sentence):
             # The figure is stated to a date inside the period it names, so it
@@ -358,6 +432,7 @@ def read_prose(
             (position, amount)
             for position, amount in _amounts_with_positions(sentence)
             if _states_a_level(sentence, position)
+            and not _introduced_as_an_aggregate(sentence, aliases, position)
         ]
         periods = [period for _, period in located_periods]
         amounts = [amount for _, amount in located_amounts]

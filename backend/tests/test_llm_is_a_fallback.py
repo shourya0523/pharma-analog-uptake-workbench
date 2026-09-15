@@ -254,3 +254,49 @@ def test_a_model_that_cannot_be_reached_answers_nothing_rather_than_raising(monk
 
 async def _no_sleep(_seconds):
     return None
+
+
+def test_a_busy_gateway_is_an_unanswered_question_not_a_dead_job(monkeypatch):
+    """A 504 from the gateway is the same event as a dropped connection.
+
+    The retry above caught `TransportError` only, so a refusal that arrived
+    with a status line went straight out as `HTTPStatusError`. Observed on a
+    shapes-holdout run: a job reached `completeness` - every figure already
+    read, judged and reconciled - and died there on one gateway timeout.
+
+    A status that says "not ever" must still be raised; only "not now" is
+    retried and then answered empty.
+    """
+    import asyncio
+
+    import httpx
+
+    from app.llm.client import OpenRouterClient
+
+    calls = {"n": 0}
+    status = {"code": 504}
+
+    class BusyClient:
+        def __init__(self, *a, **k): pass
+        async def __aenter__(self): return self
+        async def __aexit__(self, *a): return False
+        async def post(self, *a, **k):
+            calls["n"] += 1
+            request = httpx.Request("POST", "https://openrouter.invalid/api/v1/chat/completions")
+            return httpx.Response(status["code"], text="busy", request=request)
+
+    monkeypatch.setattr(httpx, "AsyncClient", BusyClient)
+    monkeypatch.setattr(asyncio, "sleep", _no_sleep)
+    client = OpenRouterClient.__new__(OpenRouterClient)
+    from app.config import get_settings
+    client.settings = get_settings()
+
+    assert asyncio.run(client.chat_json(model="m", system="s", user="u")) == {}
+    assert calls["n"] == OpenRouterClient.TRANSPORT_ATTEMPTS, "retried before it is given up on"
+
+    # A request the model will refuse however often it is asked still raises,
+    # so a bad key or a malformed payload is not swallowed as an empty answer.
+    calls["n"], status["code"] = 0, 401
+    with pytest.raises(httpx.HTTPStatusError):
+        asyncio.run(client.chat_json(model="m", system="s", user="u"))
+    assert calls["n"] == 1, "no point asking again"

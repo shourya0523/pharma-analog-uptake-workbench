@@ -12,6 +12,8 @@ import httpx
 import yaml
 
 from app.config import get_settings
+from app.domain.claims import stated_text
+from app.extraction.prose import periods_named_in
 from app.llm.grounding import (
     apply_structured_field_gates,
     enforce_verbatim_on_candidates,
@@ -42,6 +44,12 @@ class OpenRouterClient:
     # How many times a connection to the model is tried before the question
     # is treated as unanswered.
     TRANSPORT_ATTEMPTS = 3
+    # Statuses that say "not now" rather than "not ever": the gateway is busy
+    # or the upstream timed out. They are the same event as a dropped
+    # connection, arriving with a status line instead of without one, so they
+    # are retried and then treated as an unanswered question - not raised,
+    # which ended the whole job.
+    RETRYABLE_STATUSES = frozenset({408, 409, 425, 429, 500, 502, 503, 504, 520, 522, 524})
 
     def __init__(self) -> None:
         self.settings = get_settings()
@@ -110,6 +118,16 @@ class OpenRouterClient:
                 logger.warning("openrouter_unreachable attempt=%d/%d model=%s error=%s: %s",
                                attempt + 1, self.TRANSPORT_ATTEMPTS, model,
                                type(exc).__name__, exc)
+                if attempt == self.TRANSPORT_ATTEMPTS - 1:
+                    return None
+                await asyncio.sleep(delay)
+                delay *= 2
+            except httpx.HTTPStatusError as exc:
+                if exc.response.status_code not in self.RETRYABLE_STATUSES:
+                    raise
+                logger.warning("openrouter_busy attempt=%d/%d model=%s status=%s",
+                               attempt + 1, self.TRANSPORT_ATTEMPTS, model,
+                               exc.response.status_code)
                 if attempt == self.TRANSPORT_ATTEMPTS - 1:
                     return None
                 await asyncio.sleep(delay)
@@ -233,6 +251,23 @@ def listed(payload: dict[str, Any], key: str) -> list[Any]:
     return bare if isinstance(bare, list) else []
 
 
+def mappings(payload: dict[str, Any], key: str) -> list[dict[str, Any]]:
+    """The objects a reply was asked for, without the entries that are not objects.
+
+    `listed` returns the entries as they arrived, which is right for a list of
+    strings - aliases, formulations - and wrong wherever the caller goes on to
+    call `.get` on each entry. Two things put a non-object there. A model asked
+    for objects answers with strings; and a reply that is a bare array is
+    returned under every key, so a list of strings meant for one question is
+    also what the next `listed` call hands back.
+
+    An entry that is not an object cannot carry the fields such a caller reads,
+    so it is dropped rather than coerced: a string is a whole span, but it is
+    not a period, a value and a quote.
+    """
+    return [item for item in listed(payload, key) if isinstance(item, dict)]
+
+
 def _citations_from_message(message: dict[str, Any]) -> list[dict[str, str]]:
     out: list[dict[str, str]] = []
     for ann in message.get("annotations") or []:
@@ -341,7 +376,7 @@ class LLMModules:
             system=prompt["system"],
             user=user,
         )
-        candidates = listed(result, "candidates")
+        candidates = mappings(result, "candidates")
         # Grounding gates
         corpus = "\n\n".join(s.get("span_text") or "" for s in compact)
         kept_v, drop_v = enforce_verbatim_on_candidates(candidates, source_text=corpus, spans=compact)
@@ -803,7 +838,7 @@ def apply_judge_hard_vetoes(
     """Force misclassified/needs_review for known bad patterns even if model is soft."""
     issues = list(judgment.get("issues") or [])
     q = quote or ""
-    period_type = (candidate.get("period_type") or "").lower()
+    period_type = stated_text(candidate.get("period_type")).lower()
     mentions = quote_mentions_product(q, product, generic, extra_aliases=extra_aliases)
     other = quote_mentions_other_brand(
         q, product, generic, extra_aliases=extra_aliases, peer_names=peer_names
@@ -835,6 +870,17 @@ def apply_judge_hard_vetoes(
         veto = True
     if period_type == "quarterly" and re_ytd_language(q):
         issues.append("hard_veto:ytd_language_as_quarterly")
+        veto = True
+    # A quote that names periods has said which one its figure is for, and a
+    # row that claims a different one is not supported by it. An extractor
+    # reading a Q1 release answered a question about Q4 with "1Q 2025 Calderon
+    # + NuVessa reported revenue of $21.0M", and every check downstream saw a
+    # quote naming the product and carrying the value, so it published.
+    # A quote naming no period - a table row, whose period is in the header -
+    # says nothing either way and is left alone.
+    named = periods_named_in(q)
+    if named and (candidate.get("period") or "") and candidate["period"] not in named:
+        issues.append("hard_veto:quote_states_a_different_period")
         veto = True
     # A milestone earned on the product's sales is stated in the same sentence
     # as the product, so naming the product does not clear it.

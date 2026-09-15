@@ -43,7 +43,15 @@ from app.quality.candidate_filters import (
 # note: "(1)", "1)", "*", "**", "+", daggers. Superscript digits arrive as
 # plain digits from the HTML parser, so a bare trailing digit is not read as a
 # marker - "Calderon 2" would be a strength, not a note.
-_MARK_RE = re.compile(r"\((\d{1,2})\)|(?<![\w)])(\d{1,2})\)|(\*+|\+|†|‡)")
+#
+# A plus is both a marker and the joiner a filer writes between two brands it
+# sells as one therapy, and this runs before the joiner split, so reading it
+# as a marker everywhere erased the joiner: "Calderon + NuVessa" arrived as
+# "Calderon NuVessa", one name with a word of residue after it, and the line
+# was never seen to combine anything. A marker attaches to the thing it marks
+# and is followed by the row's numbers or by nothing; a joiner stands between
+# two names. So a plus followed by a letter is the joiner and is left alone.
+_MARK_RE = re.compile(r"\((\d{1,2})\)|(?<![\w)])(\d{1,2})\)|(\*+|\+(?!\s*[A-Za-z])|†|‡)")
 _FOOTNOTE_LINE_RE = re.compile(r"^\s*(?:\((\d{1,2})\)|(\d{1,2})\)|(\*+|\+|†|‡))\s*(.+?)\s*$")
 _TRADEMARK_RE = re.compile(r"[®™©]")
 # Names are joined on one line by these. A hyphen is not among them: "Calderon
@@ -181,6 +189,13 @@ def _scope_of(text: str) -> tuple[str | None, str]:
     return found, text
 
 
+# A name the filer marks as its own, read before the marks are stripped. The
+# products list can only answer for brands somebody tracks, and the sibling in
+# a co-administered pair is routinely one nobody does - so the line read as
+# this product's own. The filer's mark says it is a brand without a list.
+_TRADEMARKED_NAME_RE = re.compile(r"([A-Za-z][A-Za-z0-9\-]{2,})\s*[\u00ae\u2122]")
+
+
 def _names_one_of(part: str, names: Iterable[str]) -> str | None:
     """The name in ``names`` this part is, whole words only, longest first."""
     key = _joined(part)
@@ -210,7 +225,12 @@ def read_label(
     text = _MARK_RE.sub(" ", _TRADEMARK_RE.sub(" ", label or ""))
     own = [a for a in aliases if a]
     own_keys = {_joined(a) for a in own if _joined(a)}
-    others = [p for p in products if p and _joined(p) not in own_keys]
+    marked = _TRADEMARKED_NAME_RE.findall(label or "")
+    others = [
+        p
+        for p in [*products, *marked]
+        if p and _joined(p) not in own_keys
+    ]
     sibling_names = [s for s in siblings if s and _joined(s) not in own_keys]
 
     matched: str | None = None
@@ -238,14 +258,23 @@ def read_label(
             core = " ".join(words)
             if not core:
                 continue
-            # The whole piece is another product's name: a combined line.
-            other = _names_one_of(core, others) or _names_one_of(core, sibling_names)
+            bare = [w for w in words if w not in _QUALIFIER_WORDS and w not in _PLURAL_QUALIFIERS]
+            # The whole piece is another product's name: a combined line. The
+            # name is looked for with the qualifiers around it and without
+            # them, because a filer writes the joined name with the noun it
+            # shares: "Total Calderon + NuVessa sales" hangs "sales" off the
+            # second name, and that word alone made the piece match nothing.
+            other = (
+                _names_one_of(core, others)
+                or _names_one_of(core, sibling_names)
+                or _names_one_of(" ".join(bare), others)
+                or _names_one_of(" ".join(bare), sibling_names)
+            )
             if other and _joined(other) not in own_keys:
                 if other not in combined:
                     combined.append(other)
                 continue
             # The whole piece is the product's own name, or qualifiers around it.
-            bare = [w for w in words if w not in _QUALIFIER_WORDS and w not in _PLURAL_QUALIFIERS]
             if not bare:
                 continue
             piece_key = "".join(bare)

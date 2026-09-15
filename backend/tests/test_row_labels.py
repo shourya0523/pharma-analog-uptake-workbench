@@ -21,6 +21,7 @@ from app.extraction.candidates import extract_revenue_candidates
 from app.extraction.extract import read_table
 from app.parsing.documents import html_table_grid, table_footnotes
 from app.parsing.labels import read_footnote, read_label
+from app.pipeline.orchestrator import reported_as_for
 from app.quality.fast_judge import try_deterministic_judgment
 
 PRODUCTS = ["Calderon", "Calderon XR", "Nebulized Calderon", "NuVessa"]
@@ -195,10 +196,15 @@ def test_a_question_is_not_asked_beside_the_answer():
     }
 
 
-def test_a_combined_line_is_the_familys_figure_and_a_question_for_the_product():
-    """"Calderon / Calderon XR / NuVessa" states the family's revenue. Which
-    part is Calderon's is not on the page, so the row is published flagged,
-    for a person, and never auto-passed as Calderon's own."""
+def test_a_combined_line_is_published_as_the_pair_it_is():
+    """"Calderon / Calderon XR / NuVessa" is the three products' figure.
+
+    It is not Calderon's, and nobody publishes the split - a filer that sells
+    products together reports them together, and no agreed method divides a
+    co-administered regimen from outside. So the pair is the unit: published
+    under a name that says what it covers, with the siblings recorded, rather
+    than held for a person who has no more to go on than the reader does.
+    """
     readout = _read([["Calderon / Calderon XR / NuVessa", "100.0", "90.0"]])
     assert readout.values and all(
         v.combined_with == ("Calderon XR", "NuVessa") and "combined_line" in v.flags
@@ -210,13 +216,19 @@ def test_a_combined_line_is_the_familys_figure_and_a_question_for_the_product():
     assert candidates[0]["revenue_scope"] == "Product family"
     assert candidates[0]["combined_with"] == ["Calderon XR", "NuVessa"]
     assert "combined_line" in candidates[0]["label_flags"]
-    held = try_deterministic_judgment(
+
+    assert reported_as_for("Calderon", candidates[0]) == "Calderon + Calderon XR + NuVessa"
+    assert reported_as_for("Calderon", {"combined_with": []}) is None
+
+    # The judge no longer holds it on the strength of the flag alone; it is
+    # judged on its quote, like any other figure.
+    verdict = try_deterministic_judgment(
         product="Calderon", generic=None,
         candidate={"period": "2024Q2", "value_reported": 100.0, "period_type": "quarterly",
                    "revenue_scope": "Product family", "label_flags": ["combined_line"]},
         quote="Calderon / Calderon XR / NuVessa 100.0 90.0",
     )
-    assert held and held["validation_status"] == "needs_review"
+    assert verdict is None or verdict["validation_status"] != "needs_review"
 
 
 def test_a_combined_line_does_not_silence_the_products_own_row():
@@ -334,3 +346,44 @@ def test_every_question_flag_reaches_the_judge():
     from app.pipeline.orchestrator import LABEL_FLAGS
 
     assert QUESTION_FLAGS <= LABEL_FLAGS
+
+
+def test_a_plus_between_two_names_is_a_joiner_and_after_one_is_a_marker():
+    """A filer writes both with the same character.
+
+    Footnote marks are stripped before the label is split on its joiners, so
+    reading every plus as a mark erased the joiner: "Calderon + NuVessa"
+    arrived as "Calderon NuVessa" - one name with a word of residue after it -
+    and a line covering two products was never seen to combine anything. A
+    marker attaches to what it marks and is followed by the row's numbers or
+    by nothing; a joiner stands between two names.
+    """
+    joined = read_label("Calderon ® + NuVessa ®", aliases=["calderon"], products=["Calderon"])
+    assert joined.combined_with == ("NuVessa",)
+    assert "combined_line" in joined.flags
+    assert joined.marks == (), "the plus was the joiner, so it marks nothing"
+
+    marked = read_label("Calderon®+ 36,535", aliases=["calderon"], products=["Calderon"])
+    assert marked.marks == ("+",), "followed by the row's numbers, so it is a footnote mark"
+    assert marked.combined_with == ()
+
+
+def test_a_brand_the_filer_marks_is_a_sibling_without_a_catalogue():
+    """The products list answers only for brands somebody tracks, and the
+    other half of a co-administered pair is routinely one nobody does. The
+    filer's own mark says it is a brand without a list.
+
+    The shared noun comes with it: "Total Calderon + NuVessa sales" hangs
+    "sales" off the second name, and that word alone made the piece match
+    nothing.
+    """
+    for label in ("Calderon ® + NuVessa ®",
+                  "Total Calderon ® + NuVessa ® sales",
+                  "Calderon ® + NuVessa ® U.S."):
+        reading = read_label(label, aliases=["calderon"], products=["Calderon"])
+        assert reading.combined_with == ("NuVessa",), label
+        assert "combined_line" in reading.flags, label
+
+    # Our own mark is not a sibling.
+    own = read_label("Calderon ® net sales", aliases=["calderon"], products=["Calderon"])
+    assert own.combined_with == () and "combined_line" not in own.flags

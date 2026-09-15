@@ -45,8 +45,10 @@ from app.db.models import (
     UnresolvedQuarterORM,
     ValidationTaskORM,
 )
+from app.domain.claims import stated_labels, stated_number, stated_text
 from app.domain.models import (
     NO_FILER_OF_RECORD,
+    REPORTED_WITH_ANOTHER_PRODUCT,
     JobStatus,
     JobStep,
     PeriodType,
@@ -69,7 +71,7 @@ from app.extraction.members import Resolution, load_products, resolve
 from app.extraction.tagged import candidates_from_instance
 from app.identity.resolver import resolve_product_identity
 from app.llm.aliases import merge_aliases
-from app.llm.client import LLMModules, listed
+from app.llm.client import LLMModules, listed, mappings
 from app.parsing.documents import DocumentParser
 from app.parsing.evidence import (
     build_revenue_llm_text,
@@ -96,7 +98,7 @@ from app.quality.checks import (
     run_quality_checks,
 )
 from app.quality.comparative import derive_comparative_candidates
-from app.quality.completeness import resolve_completeness_pct
+from app.quality.completeness import refresh_completeness
 from app.quality.enrichment import (
     apply_field_enrichment,
     deterministic_formulation_fill,
@@ -238,6 +240,33 @@ def reading_rank(source_type: Any) -> int:
     return len(DOCUMENT_FITNESS)
 
 
+def reported_as_for(product: str, candidate: dict[str, Any]) -> str | None:
+    """What a figure is a figure for, where that is not the product asked about.
+
+    A filer that sells two products together prints one line for both, and
+    nobody publishes the split: there is no agreed way to divide a
+    co-administered regimen from outside, and the companies themselves report
+    the pair. So the pair is the honest unit, and this names it.
+
+    The order is the filer's, taken from where each name falls in the row the
+    quote holds, so that one printed line has one name however it was reached:
+    a row printed "NuVessa / Calderon" is the NuVessa + Calderon line whether
+    the question was about Calderon or about NuVessa. A name the quote does not
+    carry keeps its place behind the ones that do.
+
+    `None` for a row that is the product's own, which is almost all of them.
+    """
+    combined = list(candidate.get("combined_with") or ())
+    if not combined:
+        return None
+    names = [product, *combined]
+    quote = (candidate.get("source_quote") or "").lower()
+    def printed_at(pair: tuple[int, str]) -> tuple[int, int]:
+        position = quote.find(pair[1].lower())
+        return (len(quote) if position < 0 else position, pair[0])
+    return " + ".join(name for _, name in sorted(enumerate(names), key=printed_at))
+
+
 # The classifier answers in words; a stored citation carries a number.
 _CLASSIFIER_CONFIDENCE = {"high": 0.8, "medium": 0.6, "low": 0.4}
 
@@ -336,7 +365,7 @@ def scale_to_millions(value: float, unit: str | None) -> float:
     unit is missing or unrecognized - never silently truncating a "thousands"
     or "units" figure the way an unconditional else-branch did.
     """
-    label = (unit or "").strip().lower()
+    label = stated_text(unit).lower()
     if "billion" in label:
         scale = UNIT_SCALE_TO_MILLIONS["billions"]
     elif "thousand" in label:
@@ -420,6 +449,7 @@ class PipelineOrchestrator:
             self._record_unfiled_quarters(job, unfiled, datapoint_rows, searched)
             await self._judge(job, datapoint_rows, sources, parsed, options)
             await self._quality_and_validation(job)
+            self._record_quarters_only_reported_with_another_product(job, datapoint_rows)
             await self._completeness(job)
             self._set_step(job, JobStep.READY_FOR_REVIEW, JobStatus.READY_FOR_REVIEW)
             logger.info(
@@ -1259,6 +1289,56 @@ class PipelineOrchestrator:
         parsed = await self._parse(job, search_sources)
         return search_sources, parsed
 
+    def _record_quarters_only_reported_with_another_product(
+        self, job: DrugJobORM, rows: list[DatapointORM]
+    ) -> None:
+        """Say which quarters the issuer reports only as part of a pair.
+
+        Where every figure for a quarter is a line covering this product and
+        another, the pair's figure is published under the pair's name and the
+        product's own is not a number anybody discloses. Left unsaid, the
+        quarter reads as a gap the pipeline failed to fill, and a reviewer
+        goes looking for a figure that does not exist.
+        """
+        by_period: dict[str, list[DatapointORM]] = {}
+        for row in rows:
+            if row.period and row.period_type == PeriodType.QUARTERLY.value:
+                by_period.setdefault(row.period, []).append(row)
+        recorded = {
+            u.period
+            for u in self.db.query(UnresolvedQuarterORM).filter_by(job_id=job.id).all()
+        }
+        added = 0
+        for period, figures in sorted(by_period.items()):
+            if period in recorded or not all(f.reported_as for f in figures):
+                continue
+            names = sorted({f.reported_as for f in figures if f.reported_as})
+            self.db.add(
+                UnresolvedQuarterORM(
+                    id=new_id(),
+                    job_id=job.id,
+                    period=period,
+                    reason_unresolved=(
+                        f"[{REPORTED_WITH_ANOTHER_PRODUCT}] {job.drug_name} is reported only as "
+                        f"{', '.join(names)}; that figure is published under this quarter, and no "
+                        f"figure for {job.drug_name} alone is disclosed"
+                    ),
+                    sources_checked=sorted({f.source_url for f in figures if f.source_url}),
+                    recommended_next_step=(
+                        "Use the combined figure, or supply a source that reports this product "
+                        "on its own"
+                    ),
+                    confidence_that_unavailable=0.8,
+                )
+            )
+            added += 1
+        if added:
+            self.db.commit()
+            logger.info(
+                "reported_with_another_product job_id=%s drug=%s quarters=%d",
+                job.id, job.drug_name, added,
+            )
+
     def _record_unfiled_quarters(
         self, job: DrugJobORM, quarters: list[str], rows: list[DatapointORM], searched: list
     ) -> None:
@@ -1366,7 +1446,7 @@ class PipelineOrchestrator:
             },
             issue_flags=(
                 (["derived_from_reported_series"] if derived else ["extracted_from_xbrl"])
-                + list(candidate.get("label_flags") or [])
+                + stated_labels(candidate.get("label_flags"))
             ),
         )
         self.db.add(row)
@@ -1901,20 +1981,23 @@ class PipelineOrchestrator:
                 src_row.notes = f"{(src_row.notes or '').rstrip()} | {result.get('note')}".strip(" |")
 
             for cand in kept:
-                quote = (cand.get("source_quote") or "").strip()
+                quote = stated_text(cand.get("source_quote"))
                 url = src.url
-                period_type = (cand.get("period_type") or "unknown").lower()
+                period_type = stated_text(cand.get("period_type"), "unknown").lower()
                 raw_period = str(cand.get("period") or "unknown")
                 period = normalize_period(
                     raw_period, period_type=period_type, context=period_context
                 )
                 dp_id = new_id()
-                value = cand.get("value_reported")
-                unit = cand.get("unit")
-                currency = cand.get("currency") or "USD"
-                normalized = cand.get("value_normalized_usd_millions")
+                # The figure and the figure the candidate normalized itself,
+                # each read as a number so that a candidate quoting one as text
+                # still carries it and one holding an array carries nothing.
+                value = stated_number(cand.get("value_reported"))
+                unit = stated_text(cand.get("unit")) or None
+                currency = stated_text(cand.get("currency"), "USD")
+                normalized = stated_number(cand.get("value_normalized_usd_millions"))
                 if normalized is None and value is not None:
-                    normalized = scale_to_millions(float(value), unit)
+                    normalized = scale_to_millions(value, unit)
                 # A candidate may supply its own normalization, and it was
                 # taken verbatim. A candidate arrived reported as 87.4 with
                 # 87,400 beside it and was published, because every check
@@ -1938,7 +2021,7 @@ class PipelineOrchestrator:
                     "retrieval_date": datetime.utcnow().isoformat(),
                     "filing_type": src.filing_type,
                     "accession_number": src.accession_number,
-                    "confidence": float(cand.get("confidence") or 0.5),
+                    "confidence": stated_number(cand.get("confidence")) or 0.5,
                     "validation_status": ValidationStatus.PENDING.value,
                     "interpreted": False,
                     "period_reported": raw_period,
@@ -1956,7 +2039,7 @@ class PipelineOrchestrator:
                 # What the row label said beyond the name: a combined line, a
                 # partial period, words nobody could account for. The flags
                 # decide what the judge may do with the figure.
-                for flag in cand.get("label_flags") or []:
+                for flag in stated_labels(cand.get("label_flags")):
                     if flag not in issue_flags:
                         issue_flags.append(flag)
                 if cand.get("label_residue"):
@@ -1984,6 +2067,7 @@ class PipelineOrchestrator:
                     unit=unit,
                     period_type=period_type,
                     revenue_scope=cand.get("revenue_scope") or "Unknown",
+                    reported_as=reported_as_for(job.drug_name, cand),
                     geography=cand.get("geography"),
                     formulation=cand.get("formulation"),
                     route_of_administration=cand.get("route_of_administration"),
@@ -2355,13 +2439,25 @@ class PipelineOrchestrator:
         losers: set[str] = set()
         if conflict_payload:
             result = await self.llm.reconcile(product=job.drug_name, candidates=conflict_payload)
-            for item in listed(result, "resolved"):
-                wid = item.get("winner_id")
+            # A verdict names a candidate. The reply is free text, and one that
+            # names anything else - the figure where the id belongs, an id for
+            # a group it was not shown - is not a verdict on any group here.
+            # The candidates are the ones just sent, so the names that may be
+            # admitted come from the payload rather than from a second list.
+            offered = {str(candidate["id"]) for candidate in conflict_payload}
+
+            def named(value: Any) -> str | None:
+                """The candidate a reply names, or None if it names a non-candidate."""
+                ident = str(value) if value is not None else ""
+                return ident if ident in offered else None
+
+            for item in mappings(result, "resolved"):
+                wid = named(item.get("winner_id"))
                 if wid:
                     winners.add(wid)
-            for item in listed(result, "conflicts"):
-                ids = item.get("candidate_ids") or []
-                wid = item.get("winner_id")
+            for item in mappings(result, "conflicts"):
+                ids = [cid for cid in map(named, item.get("candidate_ids") or []) if cid]
+                wid = named(item.get("winner_id"))
                 if not wid:
                     # The model saw the disagreement and declined to settle it.
                     # That is a question for the ranking below, not a verdict
@@ -2680,17 +2776,27 @@ class PipelineOrchestrator:
             "gap": ("Missing quarter — analyst follow-up required", 0.4),
         }
         for miss in listed(result, "missing_periods"):
-            if isinstance(miss, str):
+            # A missing period arrives either as the label on its own or as an
+            # object saying why it is missing. Only the second carries the
+            # fields read here, so the branch turns on being an object rather
+            # than on being a string: a reply is free to put a number, a null
+            # or a nested array in that list, and each of those is a label
+            # that no quarter answers to, not a reason to end the job.
+            if not isinstance(miss, dict):
                 period, code, reason, nxt = miss, "gap", "Missing period", "Review SEC filings"
             else:
                 period = miss.get("period")
-                code = (miss.get("reason_code") or "gap").lower()
+                code = stated_text(miss.get("reason_code"), "gap").lower()
                 default_reason, conf = reason_map.get(code, reason_map["gap"])
-                reason = miss.get("reason") or default_reason
-                nxt = miss.get("recommended_next_step") or "Review SEC 10-Q / earnings for product net sales"
+                reason = stated_text(miss.get("reason"), default_reason)
+                nxt = stated_text(
+                    miss.get("recommended_next_step"),
+                    "Review SEC 10-Q / earnings for product net sales",
+                )
+            period = str(period).strip() if period is not None else ""
             if not period or period in existing or period in existing_unresolved:
                 continue
-            if "Q" not in str(period):
+            if "Q" not in period:
                 continue
             conf = reason_map.get(code, reason_map["gap"])[1]
             self.db.add(
@@ -2706,13 +2812,7 @@ class PipelineOrchestrator:
             )
             existing_unresolved.add(str(period))
 
-        unresolved = self.db.query(UnresolvedQuarterORM).filter_by(job_id=job.id).all()
-        job.unresolved_count = len(unresolved)
-        job.completeness_pct = resolve_completeness_pct(
-            result.get("completeness_pct"),
-            quarterly_count=len([d for d in dps if d.period_type == PeriodType.QUARTERLY.value]),
-            unresolved_quarter_count=len([x for x in unresolved if "Q" in (x.period or "")]),
-        )
+        counted = refresh_completeness(self.db, job, llm_pct=result.get("completeness_pct"))
         self.db.commit()
         logger.info(
             "completeness job_id=%s drug=%s llm_pct=%s resolved_pct=%s quarterly=%s unresolved=%s",
@@ -2720,6 +2820,6 @@ class PipelineOrchestrator:
             job.drug_name,
             result.get("completeness_pct"),
             job.completeness_pct,
-            len([d for d in dps if d.period_type == PeriodType.QUARTERLY.value]),
+            counted.quarters,
             job.unresolved_count,
         )

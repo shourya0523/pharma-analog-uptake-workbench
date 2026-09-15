@@ -159,6 +159,11 @@ class DatapointORM(Base):
     revenue_scope: Mapped[str] = mapped_column(String(64), default="Unknown")
     geography: Mapped[str | None] = mapped_column(String(128), nullable=True)
     formulation: Mapped[str | None] = mapped_column(String(512), nullable=True)
+    # What this figure is a figure for, where that is not the job's product:
+    # the line a filer prints for two products it sells together, in the
+    # filer's own words. Empty means the product's own figure. Nobody
+    # publishes the split of such a line, so the honest unit is the pair.
+    reported_as: Mapped[str | None] = mapped_column(String(512), nullable=True)
     route_of_administration: Mapped[str | None] = mapped_column(String(128), nullable=True)
     source_url: Mapped[str] = mapped_column(Text)
     source_quote: Mapped[str] = mapped_column(Text)

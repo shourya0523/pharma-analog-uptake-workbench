@@ -81,3 +81,97 @@ def test_the_prose_reader_does_not_produce_a_period_after_the_documents_own():
     assert periods == {"2025Q1"}
     # Without a document period nothing is known about what lies ahead.
     assert "2027Q1" in {v.period for v in read_prose(text, product="Calderon", catalog=["Calderon"])}
+
+
+# A sentence can name our product and still not state its figure. Three shapes,
+# all read from one quarter of one release, all published as the product's own.
+# Invented names: Calderon, NuVessa, Acme Pharma.
+
+def test_a_sibling_the_catalogue_never_heard_of_still_makes_a_sentence_ambiguous():
+    """The one-product rule was right and blind.
+
+    It asked a catalogue which products a sentence names, so a sibling the
+    catalogue does not hold was not a second product: the sentence read as
+    unambiguous and its figure was published for whichever product was asked.
+    The caller's own products answer for the run's drugs, and the filer's
+    trademark answers for the rest.
+    """
+    both = ("In the second quarter of 2024, Acme Pharma delivered $242.0 million in net "
+            "product sales, highlighted by growth in Calderon net sales and growth in "
+            "NuVessa net sales.")
+    blind = read_prose(both, product="Calderon", catalog=())
+    assert [v.value_as_reported for v in blind] == [242.0], "the defect, with nothing to see it"
+
+    told = read_prose(both, product="Calderon", catalog=(), products=["Calderon", "NuVessa"])
+    assert told == [], "a product the run was asked about is a product"
+
+
+def test_a_brand_the_filer_marks_is_a_product_whatever_the_catalogue_holds():
+    marked = ("Net product sales from Calderon ® and NuVessa ® were $242.0 million "
+              "for the three months ended June 30, 2024.")
+    assert read_prose(marked, product="Calderon", catalog=()) == []
+    # Our own mark is not a second product.
+    ours = ("Calderon ® net sales were approximately $34.6 million for the three months "
+            "ended June 30, 2023.")
+    assert [v.value_as_reported for v in read_prose(ours, product="Calderon", catalog=())] == [34.6]
+
+
+def test_a_total_that_our_product_is_part_of_is_not_our_products_figure():
+    """The hardest of the three: the sentence names one product we track, marks
+    only that one, and still states a figure covering two. What it does say is
+    the order - the aggregate heads the sentence and the product sits inside
+    the thing being aggregated."""
+    total = ("Total revenues, comprised of net product sales from Calderon ® and NuVessa, "
+             "were $242.0 million for the three months ended June 30, 2024.")
+    assert read_prose(total, product="Calderon", catalog=()) == []
+
+    # A total *of* our product is still our product's figure, and the order is
+    # what tells them apart.
+    ours = ("Calderon total net sales were $34.6 million for the three months ended "
+            "June 30, 2023.")
+    assert [v.value_as_reported for v in read_prose(ours, product="Calderon", catalog=())] == [34.6]
+
+
+def test_a_quote_that_names_a_period_must_name_the_rows_own():
+    """The extractor read a first-quarter release and answered a question
+    about the fourth, quoting the release verbatim: "1Q 2025 Calderon +
+    NuVessa reported revenue of $21.0M" stored against 2025Q4. Nothing caught
+    it - the quote named the product and carried the value, so the
+    deterministic judge passed it, and reconciliation preferred it to the
+    table row that held the real figure.
+
+    "1Q 2025" is how a US issuer ordinarily writes it, and it was the one
+    quarter notation the period reader did not know, so the quote named no
+    period at all and read as saying nothing about which quarter it was for.
+    """
+    from app.extraction.prose import periods_named_in
+
+    assert periods_named_in("1Q 2025 revenue of $21.0M") == {"2025Q1"}
+    assert periods_named_in("3Q 2024 sales") == {"2024Q3"}
+    # The forms already read still read.
+    assert periods_named_in("Q1 2025") == {"2025Q1"}
+    assert periods_named_in("2025Q4") == {"2025Q4"}
+
+    quote = "1Q 2025 Calderon + NuVessa reported revenue of $21.0M"
+    wrong = _judged_for(quote, 21.0, period="2025Q4")
+    assert wrong["validation_status"] == "needs_review"
+    assert "hard_veto:quote_states_a_different_period" in wrong["issues"]
+
+    right = _judged_for(quote, 21.0, period="2025Q1")
+    assert "hard_veto:quote_states_a_different_period" not in right["issues"]
+
+    # A table row carries no period of its own - the header has it - so a
+    # quote naming none says nothing either way and is left alone.
+    row = _judged_for("Calderon ® + NuVessa ® $ 34,974 $ 22,209", 34974.0, period="2025Q4")
+    assert "hard_veto:quote_states_a_different_period" not in row["issues"]
+
+
+def _judged_for(quote: str, value: float, *, period: str) -> dict:
+    return apply_judge_hard_vetoes(
+        product="Calderon",
+        candidate={"period": period, "period_type": "quarterly",
+                   "value_reported": value, "revenue_scope": "Product family"},
+        quote=quote,
+        judgment={"support_classification": "supported",
+                  "validation_status": "auto_pass", "issues": []},
+    )

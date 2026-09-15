@@ -145,6 +145,12 @@ class Cadence(str, Enum):
 # read back by the review queue to say so.
 NO_FILER_OF_RECORD = "no_filer_of_record"
 
+# The code an unresolved quarter carries when the issuer reports the product
+# only together with another one. The pair's figure is published under the
+# pair's name; the product's own is not a number anybody discloses, and this
+# says so rather than leaving the quarter looking like a gap to fill.
+REPORTED_WITH_ANOTHER_PRODUCT = "reported_with_another_product"
+
 
 class UnresolvedResolution(str, Enum):
     """What a reviewer decided about a quarter the pipeline could not fill."""
@@ -152,6 +158,20 @@ class UnresolvedResolution(str, Enum):
     VALUE_ENTERED = "value_entered"
     NOT_DISCLOSED = "not_disclosed"
     RE_QUEUED = "re_queued"
+
+    @property
+    def answers_the_quarter(self) -> bool:
+        """Whether the decision closes the question or hands it back.
+
+        Two of these are answers - a value the reviewer cited, and a finding
+        that the issuer published none - and re-queueing is the job asking
+        the pipeline to try again, which leaves the quarter open.
+
+        Listed rather than excluded so that a resolution added later counts
+        as still open until someone says otherwise: understating how complete
+        a job is, is the safe direction to be wrong in.
+        """
+        return self in {UnresolvedResolution.VALUE_ENTERED, UnresolvedResolution.NOT_DISCLOSED}
 
 
 class CompetitiveIntensity(str, Enum):

@@ -1,4 +1,5 @@
 import json
+import re
 from pathlib import Path
 
 from app.connectors.sources import SECConnector, is_earnings_exhibit
@@ -23,12 +24,41 @@ def _gold_source_filenames() -> set[str]:
     return {row["source_url"].rsplit("/", 1)[-1] for row in rows}
 
 
+def _exhibit_number(filename: str) -> str | None:
+    """The exhibit number a filing document's name states, if it states one.
+
+    Read independently of `is_earnings_exhibit`, so the test partitions gold's
+    citations by what they are rather than by what that function says they are.
+    """
+    squashed = re.sub(r"[^a-z0-9]", "", filename.lower())
+    match = re.search(r"ex+(?:h(?:ibit)?)?v?(\d{2})", squashed)
+    return match.group(1) if match else None
+
+
 def test_earnings_exhibit_matches_every_gold_exhibit_filename():
-    """Gold rows cite exhibit 99.x documents under several issuer naming conventions."""
-    exhibits = {name for name in _gold_source_filenames() if "ex" in name.lower()}
-    assert exhibits, "expected gold rows to cite exhibit documents"
-    assert all(is_earnings_exhibit(name) for name in exhibits), sorted(
-        name for name in exhibits if not is_earnings_exhibit(name)
+    """Gold cites two exhibit families and only one of them is an earnings release.
+
+    Exhibit 99.x is the earnings release carrying the product revenue tables,
+    under several issuer naming conventions. Exhibit 13 is the annual report
+    filed with a 10-K, which also carries product revenue but is not an
+    earnings exhibit and must not be matched as one - selecting on the letters
+    "ex" alone cannot tell them apart.
+    """
+    named = {
+        name: _exhibit_number(name)
+        for name in _gold_source_filenames()
+        if _exhibit_number(name)
+    }
+    earnings = {name for name, number in named.items() if number == "99"}
+    annual_report = {name for name, number in named.items() if number == "13"}
+    assert earnings, "expected gold rows to cite earnings exhibits"
+    assert annual_report, "expected gold rows to cite 10-K annual report exhibits"
+
+    assert all(is_earnings_exhibit(name) for name in earnings), sorted(
+        name for name in earnings if not is_earnings_exhibit(name)
+    )
+    assert not any(is_earnings_exhibit(name) for name in annual_report), sorted(
+        name for name in annual_report if is_earnings_exhibit(name)
     )
 
 
@@ -277,3 +307,57 @@ def test_every_edgar_read_survives_a_dropped_connection_or_a_refusal(monkeypatch
         fn = getattr(SECConnector, name, None)
         if fn is not None:
             assert "client.get(" not in inspect.getsource(fn), name
+
+
+async def test_the_window_reaches_one_reporting_lag_back_and_no_further(monkeypatch):
+    """A filing reports a period that ended before it, so the window is widened
+    by one reporting lag at each end - not by a year at one end.
+
+    Reaching 400 days back fetched filings that can only report periods well
+    before anything the window asks for, which was two fifths of every job's
+    retrieval against a rate-limited endpoint.
+    """
+    from datetime import date, timedelta
+
+    from app.connectors import sources as module
+    from app.connectors.sources import SECConnector
+    from app.storage.filestore import LocalFileStore
+
+    connector = SECConnector(LocalFileStore("/tmp"))
+    fetched: list[str] = []
+
+    async def _fetch(self, client, *, url, accession, doc, run_id, job_id, source_id):
+        fetched.append(doc)
+        return b"<html></html>", False, f"key/{doc}"
+
+    since, until = date(2005, 4, 5), date(2005, 8, 30)
+    lag = module.REPORTING_LAG.days
+    # One day inside each bound and one day outside it, so the test moves with
+    # the constant instead of restating the dates it happens to produce.
+    inside_back = since - timedelta(days=lag - 1)
+    outside_back = since - timedelta(days=lag + 1)
+    inside_fwd = until + timedelta(days=lag - 1)
+    outside_fwd = until + timedelta(days=lag + 1)
+
+    async def _covering(self, client, payload, cik, _since, _until):
+        return {
+            "form": ["10-K", "10-K", "10-Q", "10-Q"],
+            "accessionNumber": [f"000108255{n}-05-00000{n}" for n in range(4)],
+            "filingDate": [d.isoformat() for d in
+                           (inside_back, outside_back, inside_fwd, outside_fwd)],
+            "primaryDocument": ["in_back.htm", "out_back.htm", "in_fwd.htm", "out_fwd.htm"],
+            "items": ["", "", "", ""],
+        }
+
+    monkeypatch.setattr(SECConnector, "_filings_covering", _covering)
+    monkeypatch.setattr(SECConnector, "_fetch_document", _fetch)
+
+    await connector.retrieve(
+        run_id="r", job_id="j", cik="0001082554", ticker=None, company_name=None,
+        include_primary=True, include_earnings=False, include_xbrl=False,
+        earnings_since=since, earnings_until=until,
+    )
+    assert "in_back.htm" in fetched, "a report filed just before the window still reports into it"
+    assert "in_fwd.htm" in fetched, "a period ending inside the window is reported after it closes"
+    assert "out_back.htm" not in fetched, "a year back reports periods nothing asked for"
+    assert "out_fwd.htm" not in fetched

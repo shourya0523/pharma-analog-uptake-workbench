@@ -208,3 +208,84 @@ def test_two_filings_that_disagree_are_still_settled_by_tier(monkeypatch):
     by_method = _reconcile(monkeypatch, db, job, rows)
     assert by_method["xbrl_fact"].validation_status == ValidationStatus.AUTO_PASS.value
     assert "filing_contradicts_itself" not in by_method["table"].issue_flags
+
+
+def _reconcile_with(monkeypatch, db, job, rows, verdict):
+    """Reconcile with a model that answers `verdict`, whatever it names."""
+    orch = PipelineOrchestrator(db, file_store=None)
+
+    async def answers(**_):
+        return verdict
+
+    monkeypatch.setattr(orch.llm, "reconcile", answers)
+    db.add_all(rows); db.commit()
+    asyncio.run(orch._reconcile_with_llm(job, rows))
+    return {row.extraction_method: row for row in db.query(DatapointORM).all()}
+
+
+def test_a_winner_the_model_names_that_is_not_a_row_is_not_a_winner(monkeypatch):
+    """The model is asked for a row's id and can answer with something else.
+
+    Observed twice in one run: an id a character short of the one it was
+    given, and the figure's own value where an id was asked for. Taken on
+    trust, a name no row carries won its group - so every real row in the
+    group was demoted behind a winner that could never be published, and the
+    later lookup of that name raised, failing the job after retrieval,
+    extraction and judging had all succeeded.
+    """
+    db, job = _job()
+    rows = [
+        _point(job, 427.623, method="xbrl_fact", precision=0.0005),
+        _point(job, 431.0, method="table", precision=0.05),
+    ]
+    truncated = rows[0].id[:-1]
+    got = _reconcile_with(monkeypatch, db, job, rows, {
+        "resolved": [],
+        "conflicts": [{"candidate_ids": [r.id for r in rows], "winner_id": truncated}],
+    })
+    # The ranking settles it instead, and the job survives to say so.
+    assert got["xbrl_fact"].validation_status == "auto_pass"
+    assert got["table"].validation_status == "needs_review"
+
+
+def test_a_value_where_an_id_was_asked_for_is_not_a_winner(monkeypatch):
+    """The other shape the same run produced: the figure's own value, where
+    the model was asked which row won. It reaches the lookup by way of the
+    later-comparative branch, which asks what a winner's filing was."""
+    db, job = _job()
+    own = SourceDocumentORM(id=new_id(), job_id=job.id, source_type="quarterly_report",
+                            source_url="https://example.invalid/own", source_date="2021-08-05",
+                            retrieval_status="success")
+    later = SourceDocumentORM(id=new_id(), job_id=job.id, source_type="quarterly_report",
+                              source_url="https://example.invalid/later", source_date="2022-08-04",
+                              retrieval_status="success")
+    db.add_all([own, later]); db.commit()
+    rows = [
+        _point(job, 168.1, method="table", source_id=later.id, period="2021Q2"),
+        _point(job, 164.8, method="llm", source_id=own.id, period="2021Q2"),
+    ]
+    got = _reconcile_with(monkeypatch, db, job, rows, {
+        "resolved": [],
+        "conflicts": [{"candidate_ids": [r.id for r in rows], "winner_id": "22042.0"}],
+    })
+    # Every real row was a loser to a winner that does not exist, so the group
+    # had no winner and the ranking never ran: nothing published at all. With
+    # the name rejected the group is unsettled, and the ranking settles it.
+    assert got["llm"].validation_status == "auto_pass"
+    assert got["table"].validation_status == "needs_review"
+    assert "restated_in_later_filing" in got["table"].issue_flags
+
+
+def test_a_winner_the_model_names_that_is_a_row_still_wins(monkeypatch):
+    """The check must not reject the ids the model gets right."""
+    db, job = _job()
+    rows = [
+        _point(job, 427.623, method="xbrl_fact", precision=0.0005),
+        _point(job, 431.0, method="table", precision=0.05),
+    ]
+    got = _reconcile_with(monkeypatch, db, job, rows, {
+        "resolved": [],
+        "conflicts": [{"candidate_ids": [r.id for r in rows], "winner_id": rows[1].id}],
+    })
+    assert got["table"].validation_status == "auto_pass"
+    assert got["xbrl_fact"].validation_status == "needs_review"

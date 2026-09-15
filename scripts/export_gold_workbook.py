@@ -1,20 +1,25 @@
 """Export the gold dataset to a single Excel workbook.
 
 Every data sheet is a faithful dump of a gold file - no re-derivation, no
-rounding, no reordering of values. Quarterly Matrix and Product Summary are
-views over those sheets: a pivot and a per-product census, both generated here
-rather than written as Excel formulas, because an openpyxl-written formula
+rounding, no reordering of values. Quarterly Matrix, Launch-Aligned Matrix,
+Refresh Status and Product Summary are views over those sheets, all generated
+here rather than written as Excel formulas, because an openpyxl-written formula
 carries no cached value and reads back blank to pandas and to previewers until
 something recalculates it. Regenerate the workbook instead of editing it - this
 script is the only thing that should write to exports/.
 
 Reads seed/gold only. It must never import from the gold builder or from
-application code: this is a presentation of the oracle, not part of it.
+application code, and must never name a file the pipeline reads: this is a
+presentation of the oracle, not part of it, and a script that touches both
+directions is what backend/tests/test_gold_is_not_an_input.py fails. That is
+why first_approval_year is taken from gold's own product_profiles rather than
+from the reference data those profiles were built out of.
 
     python scripts/export_gold_workbook.py
 """
 
 import json
+from collections import defaultdict
 from pathlib import Path
 
 from openpyxl import Workbook
@@ -61,6 +66,25 @@ def flat(value):
     if isinstance(value, dict):
         return json.dumps(value, separators=(", ", ": "))
     return value
+
+
+def quarter_index(period):
+    """A monotonic integer for a ``YYYYQn`` label, so quarters can be subtracted."""
+    return int(period[:4]) * 4 + int(period[5]) - 1
+
+
+def quarters_between(start, end):
+    """Quarters from start to end inclusive; negative when end precedes start."""
+    return quarter_index(end) - quarter_index(start) + 1
+
+
+def launch_label(offset):
+    """The relative-quarter heading `offset` quarters after a series' anchor.
+
+    Offset 0 is the anchor quarter itself and reads Year 1 Q1, so the fifth
+    quarter after launch reads Year 2 Q1.
+    """
+    return f"Year {offset // 4 + 1} Q{offset % 4 + 1}"
 
 
 def write_sheet(wb, title, columns, rows, *, widths=None, formats=None, wrap=(), note=None):
@@ -197,15 +221,95 @@ C_COLS = [
     "as_of_quarter", "expected_quarters", "observed_quarters", "coverage_pct", "missing_quarters",
     "quarters_beyond_series_end", "benchmark_eligible",
 ]
+latest_quarter = max(row["period"] for row in quarterly)
+short_series = [row for row in coverage if row["series_end_quarter"] != latest_quarter]
+
 write_sheet(
     wb, "Series Coverage", C_COLS, coverage,
-    note="One row per quarterly series. missing_quarters is empty on every series - "
-         "coverage is 100% as of 2026Q2.",
+    note=f"One row per series the gold builder carries metadata for. Coverage is measured "
+         f"against each series' own series_end_quarter, not against the newest quarter in the "
+         f"dataset ({latest_quarter}), so a series that ends earlier is complete rather than "
+         f"short. {len(short_series)} of {len(coverage)} end before {latest_quarter}; "
+         f"series_end_basis says whether more sourcing could move that end, and the Refresh "
+         f"Status sheet ranks every series by how far behind it sits.",
     widths={"drug_name": 20, "benchmark_identity": 34, "moa": 38, "moa_class": 26,
             "route_of_administration": 20, "series_start_reason": 46, "series_end_reason": 46,
             "series_end_basis": 26, "missing_quarters": 24, "quarters_beyond_series_end": 24},
     formats={"coverage_pct": PCT},
     wrap=("moa", "series_start_reason", "series_end_reason"),
+)
+
+# ------------------------------------------------------------ refresh status
+# Series Coverage has a row only where the gold builder carries metadata for a
+# product, so it cannot answer "is this series current?" for a series the
+# builder does not know about. This sheet is a census of the series the data
+# actually holds, which is the wider set, and for each one it reports the
+# distance to the newest quarter anywhere in gold and whether that distance is
+# closable. An end because the issuer stopped publishing the line is a fact
+# about the world; an end because sourcing stopped is a fact about this
+# dataset, and only the second one is closable by refreshing.
+
+REFRESH_OUTLOOK = {
+    "issuer_stopped_reporting": "closed - issuer stopped reporting the line",
+    "sourcing_boundary": "extendable - sourcing stopped, the issuer did not",
+}
+
+coverage_by_name = {row["drug_name"]: row for row in coverage}
+observed_periods = defaultdict(set)
+series_facts = {}
+for row in quarterly:
+    observed_periods[row["drug_name"]].add(row["period"])
+    series_facts[row["drug_name"]] = (row["benchmark_identity"], row.get("manufacturer"))
+
+refresh = []
+for drug_name, periods in observed_periods.items():
+    seen = coverage_by_name.get(drug_name)
+    last_reported = max(periods)
+    end_quarter = seen["series_end_quarter"] if seen else last_reported
+    basis = (seen or {}).get("series_end_basis")
+    if end_quarter == latest_quarter:
+        outlook = "current"
+    elif seen is None:
+        # No coverage row means no metadata stated an end, so nothing says
+        # whether the issuer stopped or the sourcing did.
+        outlook = "unknown - series has no coverage row"
+    else:
+        outlook = REFRESH_OUTLOOK.get(basis, f"unstated basis: {basis}")
+    identity, manufacturer = series_facts[drug_name]
+    refresh.append({
+        "drug_name": drug_name,
+        "benchmark_identity": identity,
+        "manufacturer": manufacturer,
+        "first_reported_quarter": min(periods),
+        "last_reported_quarter": last_reported,
+        "series_end_quarter": end_quarter,
+        "latest_quarter_in_gold": latest_quarter,
+        "quarters_behind_latest": quarters_between(end_quarter, latest_quarter) - 1,
+        "refresh_outlook": outlook,
+        "series_end_basis": basis,
+        "in_series_coverage": seen is not None,
+        "series_end_reason": (seen or {}).get("series_end_reason"),
+    })
+refresh.sort(key=lambda item: (-item["quarters_behind_latest"], item["drug_name"]))
+
+behind = [item for item in refresh if item["quarters_behind_latest"] > 0]
+extendable = [item for item in behind if item["series_end_basis"] == "sourcing_boundary"]
+uncovered = [item for item in refresh if not item["in_series_coverage"]]
+write_sheet(
+    wb, "Refresh Status", list(refresh[0].keys()), refresh,
+    note=f"How current each quarterly series is, for planning a refresh. The newest quarter "
+         f"anywhere in gold is {latest_quarter}; {len(behind)} of {len(refresh)} series end "
+         f"before it. Of those, {len(extendable)} are marked sourcing_boundary, meaning the "
+         f"issuer kept publishing and this dataset stopped - those are the ones a refresh can "
+         f"move. {len(uncovered)} series have no Series Coverage row at all, so no end quarter "
+         f"or reason was ever stated for them. Sorted by how far behind each series sits.",
+    widths={"drug_name": 20, "benchmark_identity": 34, "manufacturer": 20,
+            "first_reported_quarter": 14, "last_reported_quarter": 14,
+            "series_end_quarter": 14, "latest_quarter_in_gold": 14,
+            "quarters_behind_latest": 13, "refresh_outlook": 40,
+            "series_end_basis": 24, "in_series_coverage": 13, "series_end_reason": 60},
+    formats={"quarters_behind_latest": "0"},
+    wrap=("refresh_outlook", "series_end_reason"),
 )
 
 K_COLS = [
@@ -296,23 +400,32 @@ write_sheet(
 )
 
 # ---------------------------------------------------------- quarterly matrix
-# Live SUMIFS over Quarterly Revenue rather than a second copy of the numbers,
-# so filtering or correcting the data sheet moves the matrix with it.
+# A pivot of Quarterly Revenue, generated rather than written as SUMIFS: an
+# openpyxl formula carries no cached value, so the cells would read back blank
+# until something recalculated the file.
 
 periods = sorted({row["period"] for row in quarterly})
 series = sorted({(row["drug_name"], row["benchmark_identity"], row["revenue_scope"])
                  for row in quarterly})
+# first_approval_year is a curated attribute, carried here from gold's own
+# profiles. A series whose product has no profile row leaves the column empty
+# rather than borrowing a year from somewhere else.
+approval_year = {row["drug_name"]: row.get("first_approval_year") for row in profiles}
 # The pivot reads from a dict keyed exactly as the data sheet stores each row,
 # so a value can only appear here if that same row appears there.
 cube = {(row["benchmark_identity"], row["period"]): row["value_normalized_usd_millions"]
         for row in quarterly}
 assert len(cube) == len(quarterly), "a series reports the same quarter twice"
 
+LEAD = ["drug_name", "benchmark_identity", "revenue_scope", "first_approval_year"]
+
 ws = wb.create_sheet("Quarterly Matrix")
-ws.cell(1, 1, "Reported revenue by series and quarter, USD millions. A pivot of the Quarterly "
-              "Revenue sheet - the same figures rearranged, nothing recomputed. A blank cell "
-              "means the quarter is outside that series' reported window, never a reported zero.").font = NOTE
-headers = ["drug_name", "benchmark_identity", "revenue_scope"] + periods
+ws.cell(1, 1, "Reported revenue by series and calendar quarter, USD millions. A pivot of the "
+              "Quarterly Revenue sheet - the same figures rearranged, nothing recomputed. A "
+              "blank cell means the quarter is outside that series' reported window, never a "
+              "reported zero. Launch-Aligned Matrix holds these same values against each "
+              "product's own launch instead of the calendar.").font = NOTE
+headers = LEAD + periods
 for index, name in enumerate(headers, start=1):
     cell = ws.cell(2, index, name)
     cell.font = HEAD
@@ -323,13 +436,15 @@ ws.row_dimensions[2].height = 30
 
 for offset, (drug, identity, scope) in enumerate(series):
     row_index = 3 + offset
-    for index, value in enumerate((drug, identity, scope), start=1):
+    for index, value in enumerate((drug, identity, scope, approval_year.get(drug)), start=1):
         cell = ws.cell(row_index, index, value)
         cell.font = BODY
         cell.border = GRID
+        if index == 4:
+            cell.number_format = "0"
         if offset % 2:
             cell.fill = BAND_FILL
-    for index, period in enumerate(periods, start=4):
+    for index, period in enumerate(periods, start=len(LEAD) + 1):
         cell = ws.cell(row_index, index, cube.get((identity, period)))
         cell.number_format = MONEY
         cell.font = BODY
@@ -337,17 +452,104 @@ for offset, (drug, identity, scope) in enumerate(series):
         if offset % 2:
             cell.fill = BAND_FILL
 
-ws.column_dimensions["A"].width = 20
-ws.column_dimensions["B"].width = 34
-ws.column_dimensions["C"].width = 24
-for index in range(4, 4 + len(periods)):
+for letter, width in zip("ABCD", (20, 34, 24, 13)):
+    ws.column_dimensions[letter].width = width
+for index in range(len(LEAD) + 1, len(LEAD) + 1 + len(periods)):
     ws.column_dimensions[get_column_letter(index)].width = 10
-ws.freeze_panes = "D3"
+ws.freeze_panes = ws.cell(3, len(LEAD) + 1)
+
+# ----------------------------------------------------- launch-aligned matrix
+# The same cube read against each product's own launch instead of the calendar,
+# so uptake curves can be compared side by side from their first quarter on
+# sale rather than from a shared date.
+#
+# The anchor is the launch quarter gold states, NOT the first quarter the
+# series reports. Those differ for most products here, and anchoring on the
+# first reported quarter would label a series that begins mid-life as Year 1 Q1
+# and align it against a genuine launch. Where the two differ the leading cells
+# are blank and quarters_from_launch_to_first_report says how many, so a reader
+# can see that the early curve is missing rather than flat.
+#
+#     a series launching 2019Q1 and first reported 2019Q3 puts its first value
+#     at Year 1 Q3, with Year 1 Q1 and Year 1 Q2 blank
+#
+# Where gold states no launch quarter the anchor falls back to the first
+# reported quarter, and the row says so: its Year 1 Q1 is where reporting
+# starts, which need not be where the product launched. The fallback is not
+# read as a launch date, because nothing in gold says it is one.
+
+ANCHOR_STATED = "launch quarter stated in gold"
+ANCHOR_ASSUMED = "no launch quarter in gold - anchored on first reported quarter"
+
+aligned = []
+for drug, identity, scope in series:
+    first_reported = min(observed_periods[drug])
+    launch = coverage_by_name.get(drug, {}).get("launch_quarter")
+    aligned.append({
+        "drug_name": drug,
+        "benchmark_identity": identity,
+        "revenue_scope": scope,
+        "first_approval_year": approval_year.get(drug),
+        "launch_anchor_quarter": launch or first_reported,
+        "alignment_basis": ANCHOR_STATED if launch else ANCHOR_ASSUMED,
+        "quarters_from_launch_to_first_report":
+            quarters_between(launch or first_reported, first_reported) - 1,
+    })
+
+A_LEAD = list(aligned[0].keys())
+span = max(quarters_between(row["launch_anchor_quarter"], max(observed_periods[row["drug_name"]]))
+           for row in aligned)
+
+la = wb.create_sheet("Launch-Aligned Matrix")
+la.cell(1, 1, f"The Quarterly Matrix values re-indexed to each product's own launch: Year 1 Q1 "
+              f"is the anchor quarter in launch_anchor_quarter, Year 2 Q1 the fifth quarter "
+              f"after it. Same figures, same blanks-are-not-zeros rule - only the column "
+              f"headings change. Read alignment_basis before comparing curves: a row anchored "
+              f"on a stated launch quarter is launch-to-date, a row anchored on its first "
+              f"reported quarter is not. quarters_from_launch_to_first_report is how much of "
+              f"the early curve gold does not hold; it is 0 where the series starts at launch.").font = NOTE
+headers = A_LEAD + [launch_label(offset) for offset in range(span)]
+for index, name in enumerate(headers, start=1):
+    cell = la.cell(2, index, name)
+    cell.font = HEAD
+    cell.fill = HEAD_FILL
+    cell.alignment = Alignment(vertical="center", horizontal="center", wrap_text=True)
+    cell.border = GRID
+la.row_dimensions[2].height = 30
+
+for offset, row in enumerate(aligned):
+    row_index = 3 + offset
+    for index, column in enumerate(A_LEAD, start=1):
+        cell = la.cell(row_index, index, row[column])
+        cell.font = BODY
+        cell.border = GRID
+        if column in ("first_approval_year", "quarters_from_launch_to_first_report"):
+            cell.number_format = "0"
+        if offset % 2:
+            cell.fill = BAND_FILL
+    for period in sorted(observed_periods[row["drug_name"]]):
+        index = len(A_LEAD) + quarters_between(row["launch_anchor_quarter"], period)
+        cell = la.cell(row_index, index, cube[(row["benchmark_identity"], period)])
+        cell.number_format = MONEY
+        cell.font = BODY
+        cell.border = GRID
+    # The banding has to be painted across the whole row, not only where the
+    # series reports, or a short series loses its stripe past its last quarter.
+    if offset % 2:
+        for index in range(len(A_LEAD) + 1, len(headers) + 1):
+            la.cell(row_index, index).fill = BAND_FILL
+
+for index, width in enumerate((20, 34, 24, 13, 15, 30, 15), start=1):
+    la.column_dimensions[get_column_letter(index)].width = width
+for index in range(len(A_LEAD) + 1, len(headers) + 1):
+    la.column_dimensions[get_column_letter(index)].width = 11
+la.freeze_panes = la.cell(3, len(A_LEAD) + 1)
 
 # ------------------------------------------------------- product summary
 # One row per product, joining the profile, the revenue sheets and the peak
 # sheet so a single product can be read without crossing four tabs. Every
-# number here is a formula over those sheets, so it moves when they do.
+# number here is generated from those sheets' own rows, for the same reason the
+# matrices are: a written formula would read back blank until recalculated.
 
 SUMMARY_STATUS = {}
 quarterly_products = {row["drug_name"] for row in quarterly}
@@ -479,13 +681,19 @@ CONTENTS = [
     ("Quarterly Revenue", len(quarterly),
      "Every reported quarter, with source URL and verbatim quote on each row."),
     ("Quarterly Matrix", len(series),
-     "The same quarters pivoted to series x period, one row per series."),
+     "The same quarters pivoted to series x calendar period, one row per series."),
+    ("Launch-Aligned Matrix", len(aligned),
+     "The same values re-indexed to Year 1 Q1 onwards from each product's own launch, "
+     "so uptake curves line up at the start of launch instead of at a shared date."),
     ("Annual Revenue", len(annual),
      "Annual figures: peak benchmarks in their own right, plus annual context for quarterly series."),
     ("Product Profiles", len(profiles),
      "Analog-matching attributes: mechanism, route, approval era, competitive intensity."),
     ("Series Coverage", len(coverage),
      "Per-series completeness: expected vs observed quarters, and any gaps."),
+    ("Refresh Status", len(refresh),
+     "How current each series is, and whether a series that stops early stops because the "
+     "issuer did or because sourcing did. Start here when planning a quarterly refresh."),
     ("Peak Sales", len(peaks),
      "Peak value and year per product, and whether the peak has actually been observed."),
     ("Excluded Products", len(excluded),
@@ -538,10 +746,16 @@ r += 1
 STATS = [
     ("Catalog products", report["catalog_coverage"]["catalog_products"],
      "All accounted for: a quarterly series, an annual benchmark, or an evidenced exclusion."),
-    ("Quarterly series", report["complete_quarterly_series"], "Every one complete."),
-    ("Quarterly observations", report["quarterly_rows"], ""),
+    ("Quarterly series", len(refresh),
+     f"Counted from the Quarterly Revenue sheet. The build report knows "
+     f"{report['complete_quarterly_series']} of them, and those are complete."),
+    ("Quarterly observations", len(quarterly),
+     "Counted from the Quarterly Revenue sheet."),
     ("Quarterly coverage", report["quarterly_coverage_pct"],
-     "No missing quarter in any series as of 2026Q2."),
+     "No missing quarter in any series, each measured to its own series_end_quarter."),
+    ("Series current to " + latest_quarter, len(refresh) - len(behind),
+     f"Of {len(refresh)} quarterly series. {len(extendable)} of the rest stop at a sourcing "
+     f"boundary rather than because the issuer stopped - see Refresh Status."),
     ("Annual observations", report["annual_rows"], ""),
     ("Observed peaks", report["observed_peaks"],
      "Products whose series has turned down and stayed down."),
@@ -561,6 +775,32 @@ for label, value, note in STATS:
     cell.alignment = Alignment(horizontal="left")
     read.cell(r, 3, note).font = BODY
     read.cell(r, 3).alignment = Alignment(vertical="top", wrap_text=True)
+    r += 1
+
+drift = [
+    (label, stated, counted)
+    for label, stated, counted in (
+        ("quarterly rows", report["quarterly_rows"], len(quarterly)),
+        ("quarterly series", report["complete_quarterly_series"], len(refresh)),
+        ("products with attributes", report["product_profiles"]["products"], len(profiles)),
+    )
+    if stated != counted
+]
+if drift:
+    r += 1
+    read.cell(r, 1, "BUILD REPORT IS BEHIND THE DATA").font = BOLD
+    r += 1
+    read.cell(r, 3, "The manifest and build report on the Build Manifest sheet were written by "
+                    "a build that did not produce every row now in the dataset, so their counts "
+                    "are lower than a census of the sheets: "
+                    + "; ".join(f"{label} {stated} stated vs {counted} counted"
+                                for label, stated, counted in drift)
+                    + ". The sheets are the data; the report is a record of one build. Anything "
+                      "derived from the report - Series Coverage, peaks, competitive intensity - "
+                      "covers only the series that build knew about, which Refresh Status "
+                      "flags per series.").font = BODY
+    read.cell(r, 3).alignment = Alignment(vertical="top", wrap_text=True)
+    read.row_dimensions[r].height = 76
     r += 1
 
 r += 1

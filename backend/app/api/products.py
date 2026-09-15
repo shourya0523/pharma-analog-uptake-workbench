@@ -38,12 +38,15 @@ from app.db.models import (
 from app.domain.models import (
     NO_FILER_OF_RECORD,
     PUBLISHED_STATUS_VALUES,
+    REPORTED_WITH_ANOTHER_PRODUCT,
     Cadence,
+    PeriodType,
     UnresolvedResolution,
     ValidationStatus,
     new_id,
 )
 from app.observability import normalize_analog_key
+from app.quality.completeness import names_a_quarter, refresh_completeness
 from app.validation.sampling import REASON_HELP as FLAGGED_REASON_HELP
 
 router = APIRouter(tags=["products"])
@@ -64,6 +67,11 @@ WHOLE_PRODUCT_PERIOD = "product_revenue"
 MISSING_REASON_HELP: dict[str, str] = {
     "not_disclosed": "No product-level figure was found for this product at all.",
     "interior_gap": "A quarter between quarters that were extracted, so a value is expected.",
+    REPORTED_WITH_ANOTHER_PRODUCT: (
+        "The issuer reports this product only together with another one. The pair's "
+        "figure is published for this quarter; a figure for this product alone is not "
+        "something anybody discloses."
+    ),
     NO_FILER_OF_RECORD: (
         "No filing of the named issuer covers this quarter, and a search for who "
         "reported the product then found no figure. Someone else may have been the filer."
@@ -73,8 +81,9 @@ REASON_HELP: dict[str, str] = {**FLAGGED_REASON_HELP, **MISSING_REASON_HELP}
 
 
 def _missing_reason(period: str | None, reason_unresolved: str | None = None) -> str:
-    if (reason_unresolved or "").startswith(f"[{NO_FILER_OF_RECORD}]"):
-        return NO_FILER_OF_RECORD
+    for code in (NO_FILER_OF_RECORD, REPORTED_WITH_ANOTHER_PRODUCT):
+        if (reason_unresolved or "").startswith(f"[{code}]"):
+            return code
     return "not_disclosed" if period == WHOLE_PRODUCT_PERIOD else "interior_gap"
 
 
@@ -455,6 +464,7 @@ def get_product(product_id: str) -> dict[str, Any]:
                     "value_normalized_usd_millions": dp.value_normalized_usd_millions,
                     "currency": dp.currency,
                     "revenue_scope": dp.revenue_scope,
+                    "reported_as": dp.reported_as,
                     "source_url": dp.source_url,
                     "source_quote": dp.source_quote,
                     "extraction_method": dp.extraction_method,
@@ -606,6 +616,7 @@ def review_queue(
                         "confidence": task.confidence_score,
                         "value_normalized_usd_millions": dp.value_normalized_usd_millions,
                         "revenue_scope": dp.revenue_scope,
+                        "reported_as": dp.reported_as,
                         "source_url": dp.source_url,
                         "source_quote": dp.source_quote,
                         "extraction_method": dp.extraction_method,
@@ -740,6 +751,15 @@ def resolve_unresolved_quarter(
                 id=new_id(),
                 job_id=row.job_id,
                 period=row.period,
+                # Stated rather than left to the column default of "unknown".
+                # The completeness count reads period_type to decide what is a
+                # quarter, so a value entered for a gap that did not say so
+                # closed the gap without filling it.
+                period_type=(
+                    PeriodType.QUARTERLY.value
+                    if names_a_quarter(row.period)
+                    else PeriodType.UNKNOWN.value
+                ),
                 value_normalized_usd_millions=body.value_normalized_usd_millions,
                 currency="USD",
                 unit="millions",
@@ -775,11 +795,14 @@ def resolve_unresolved_quarter(
                 notes=body.reviewer_notes,
             )
         )
+        counted = refresh_completeness(db, db.get(DrugJobORM, row.job_id))
         db.commit()
         return {
             "id": row.id,
             "resolution": row.resolution,
             "datapoint_id": created_datapoint_id,
+            "completeness_pct": counted.pct,
+            "unresolved_count": counted.gaps,
         }
     finally:
         db.close()

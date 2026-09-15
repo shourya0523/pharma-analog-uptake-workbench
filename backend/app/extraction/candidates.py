@@ -168,7 +168,7 @@ def extract_revenue_candidates(
             value
             for value in read_prose(
                 prose, product=product, generic=generic, extra_aliases=extra_aliases,
-                period_context=period_context,
+                period_context=period_context, products=products,
             )
             if value.period not in stated
         ]

@@ -190,27 +190,31 @@
       "row label naming two brands joined by '+' (co-administered therapy)",
       "Product - Region rows with a labelled Total row"
     ],
-    "source": "Every row is 'Pombiliti \u00ae + Opfolda \u00ae U.S. / Ex-U.S. / Total Pombiliti \u00ae + Opfolda \u00ae sales'. The two brands are one therapy sold together, so the combined line is the figure for either product asked. Depends on definitional question 2 only in the sense that a combined line is published for the asked product as the combination it is.",
+    "source": "Every row is 'Pombiliti \u00ae + Opfolda \u00ae U.S. / Ex-U.S. / Total Pombiliti \u00ae + Opfolda \u00ae sales'. The two brands are one therapy sold together and the filer discloses no split, so the figure is the pair's and is expected back under the pair's name; Pombiliti's own quarterly revenue is not disclosed by anyone and must not be published as though it were.",
     "expect": [
       {
         "period": "2025Q1",
         "value_normalized_usd_millions": 21.005,
-        "cite": "0001178879-25-000006 10-Q Q1 2025 'Total Pombiliti \u00ae + Opfolda \u00ae sales | 21,005 | 11,044'; https://www.sec.gov/Archives/edgar/data/1178879/000117887925000006/fold-20250331.htm"
+        "cite": "0001178879-25-000006 10-Q Q1 2025 'Total Pombiliti \u00ae + Opfolda \u00ae sales | 21,005 | 11,044'; https://www.sec.gov/Archives/edgar/data/1178879/000117887925000006/fold-20250331.htm",
+        "reported_as": "Pombiliti + Opfolda"
       },
       {
         "period": "2025Q2",
         "value_normalized_usd_millions": 25.816,
-        "cite": "0001178879-25-000011 10-Q Q2 2025 'Total Pombiliti \u00ae + Opfolda \u00ae sales | 25,816 | 15,852 | 46,821 | 26,896'; https://www.sec.gov/Archives/edgar/data/1178879/000117887925000011/fold-20250630.htm"
+        "cite": "0001178879-25-000011 10-Q Q2 2025 'Total Pombiliti \u00ae + Opfolda \u00ae sales | 25,816 | 15,852 | 46,821 | 26,896'; https://www.sec.gov/Archives/edgar/data/1178879/000117887925000011/fold-20250630.htm",
+        "reported_as": "Pombiliti + Opfolda"
       },
       {
         "period": "2025Q3",
         "value_normalized_usd_millions": 30.714,
-        "cite": "0001178879-25-000015 10-Q Q3 2025 'Total Pombiliti \u00ae + Opfolda \u00ae sales | 30,714 | 21,136 | 77,535 | 48,032'; https://www.sec.gov/Archives/edgar/data/1178879/000117887925000015/fold-20250930.htm"
+        "cite": "0001178879-25-000015 10-Q Q3 2025 'Total Pombiliti \u00ae + Opfolda \u00ae sales | 30,714 | 21,136 | 77,535 | 48,032'; https://www.sec.gov/Archives/edgar/data/1178879/000117887925000015/fold-20250930.htm",
+        "reported_as": "Pombiliti + Opfolda"
       },
       {
         "period": "2025Q4",
         "value_normalized_usd_millions": 34.974,
-        "cite": "0001104659-26-018127 8-K 2026-02-20 row 'Pombiliti \u00ae + Opfolda \u00ae | 34,974 | 22,209 ...'; 10-K 0001178879-26-000005 annual 112,508 less nine months 77,535 = 34,973; https://www.sec.gov/Archives/edgar/data/1178879/000110465926018127/tm266897d1_ex99-1.htm"
+        "cite": "0001104659-26-018127 8-K 2026-02-20 row 'Pombiliti \u00ae + Opfolda \u00ae | 34,974 | 22,209 ...'; 10-K 0001178879-26-000005 annual 112,508 less nine months 77,535 = 34,973; https://www.sec.gov/Archives/edgar/data/1178879/000110465926018127/tm266897d1_ex99-1.htm",
+        "reported_as": "Pombiliti + Opfolda"
       }
     ]
   },

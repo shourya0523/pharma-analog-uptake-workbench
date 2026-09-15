@@ -220,12 +220,6 @@ PRODUCT_METADATA = {
             "issuer's own quarterly disclosure starts, not where the product "
             "did."
         ),
-        "series_end_quarter": "2019Q4",
-        "series_end_basis": "sourcing_boundary",
-        "series_end_reason": (
-            "Gilead still reports AmBisome separately after this (FY2020 436, "
-            "FY2021 540). The series stops where sourcing stopped."
-        ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
@@ -279,12 +273,15 @@ PRODUCT_METADATA = {
             "quarter of 2009. The series starts where the issuer first reports "
             "it separately."
         ),
-        "series_end_quarter": "2019Q4",
-        "series_end_basis": "sourcing_boundary",
+        "series_end_quarter": "2020Q2",
+        "series_end_basis": "issuer_stopped_reporting",
         "series_end_reason": (
-            "Gilead still reports Ranexa separately after this (FY2020 9, FY2021 "
-            "10). The series stops where sourcing stopped, one year after "
-            "generic entry took it from 177 a quarter to 11."
+            "Gilead prints an em dash for Ranexa from the third quarter of 2020 - "
+            "the fourth-quarter 2021 summary shows the line as 5 for the quarter "
+            "against a dash a year earlier - and a dash is not a figure: it is "
+            "either nil or not stated, and the table does not say which. The "
+            "series stops at the last quarter carrying a number rather than "
+            "recording a zero the issuer did not print."
         ),
         "peak_eligible": False,
         "revenue_scope": "U.S.",
@@ -321,6 +318,14 @@ PRODUCT_METADATA = {
         ),
         # The window opens nine years after launch and contains the 2018 peak
         # only by luck; the annual series is the peak authority for this product.
+        "series_end_quarter": "2023Q4",
+        "series_end_basis": "issuer_stopped_reporting",
+        "series_end_reason": (
+            "Gilead prints the Letairis line through the fourth quarter of 2023 and "
+            "not afterwards: the first-quarter 2024 product sales summary has no "
+            "Letairis row at all. Ambrisentan lost exclusivity and the brand "
+            "stopped being stated separately."
+        ),
         "peak_eligible": False,
         "revenue_scope": "U.S.",
         "geography": "United States",
@@ -398,13 +403,6 @@ PRODUCT_METADATA = {
             "worldwide figure, which makes this a launch ramp read from its "
             "second quarter rather than its first."
         ),
-        "series_end_quarter": "2024Q4",
-        "series_end_basis": "sourcing_boundary",
-        "series_end_reason": (
-            "Gilead still reports Biktarvy separately after this and it is still "
-            "growing - 13,423 in 2024 against 185 in its first full quarter. The "
-            "series stops where sourcing stopped."
-        ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
@@ -423,13 +421,6 @@ PRODUCT_METADATA = {
             "in 2018Q4 and then declines - not from patent loss but because "
             "Gilead's own Biktarvy takes its patients. A decline with no "
             "generic in it."
-        ),
-        "series_end_quarter": "2024Q4",
-        "series_end_basis": "sourcing_boundary",
-        "series_end_reason": (
-            "Gilead still reports Genvoya separately after this. The series "
-            "stops where sourcing stopped, seven years into a decline that "
-            "began the quarter Biktarvy launched."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -509,12 +500,6 @@ PRODUCT_METADATA = {
             "Descovy is broken out from its launch quarter, so the series runs "
             "from the first quarter Gilead reports it."
         ),
-        "series_end_quarter": "2024Q4",
-        "series_end_basis": "sourcing_boundary",
-        "series_end_reason": (
-            "Gilead still reports Descovy separately after this. The series "
-            "stops where sourcing stopped."
-        ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
@@ -532,12 +517,6 @@ PRODUCT_METADATA = {
             "Odefsey is absent from the first and second quarter 2016 sales "
             "tables and first appears in the third. The series starts where the "
             "issuer first reports it separately."
-        ),
-        "series_end_quarter": "2024Q4",
-        "series_end_basis": "sourcing_boundary",
-        "series_end_reason": (
-            "Gilead still reports Odefsey separately after this. The series "
-            "stops where sourcing stopped."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -653,13 +632,12 @@ PRODUCT_METADATA = {
             "when INVOKANA / INVOKAMET first gets a line of its own. The "
             "series starts where the issuer first reports it separately."
         ),
-        "series_end_quarter": "2018Q4",
-        "series_end_basis": "sourcing_boundary",
+        "series_end_quarter": "2022Q4",
+        "series_end_basis": "issuer_stopped_reporting",
         "series_end_reason": (
-            "J&J still reports Invokana after this. The 2019Q1 schedule is "
-            "published only inside the full press release, whose layout this "
-            "sourcing pass does not read, so the series stops rather than "
-            "carry a hole."
+            "J&J stops printing the line after this quarter. The first-quarter 2023 "
+            "schedule footnotes the change: 'Other is inclusive of INVOKANA, which "
+            "was previously disclosed separately'."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -672,21 +650,21 @@ PRODUCT_METADATA = {
         "manufacturer": "Johnson & Johnson",
         "benchmark_identity": "jnj_procrit_worldwide_reported",
         "therapeutic_area": "Anemia",
-        "commercial_start_quarter": "2014Q3",
+        "commercial_start_quarter": "2005Q1",
         "launch_quarter": "1989Q2",
         "series_start_reason": (
-            "Procrit has been sold since 1989. J&J's Sales of Key "
-            "Products/Franchises schedule is reachable at its investor site "
-            "back to 2014Q3; the 2013Q3 and 2014Q2 schedules are not, so a "
-            "contiguous run starts there. A quarter of a century past launch, "
-            "this series is the long decline of a mature biologic under "
-            "biosimilar and label pressure - no launch ramp in it at all."
+            "J&J's Major Pharmaceutical Product Revenues table first appears in the "
+            "first-quarter 2005 Form 10-Q; the 10-Qs before it name products only "
+            "in prose and state no product-level figures at all. The series "
+            "therefore starts at the issuer's first product-level quarterly "
+            "disclosure, not at launch."
         ),
-        "series_end_quarter": "2018Q4",
-        "series_end_basis": "sourcing_boundary",
+        "series_end_quarter": "2021Q4",
+        "series_end_basis": "issuer_stopped_reporting",
         "series_end_reason": (
-            "The 2019Q1 schedule is published only inside the full press "
-            "release, whose layout this sourcing pass does not read."
+            "J&J stops printing the line after this quarter. The first-quarter 2022 "
+            "schedule footnotes the change: 'Other is inclusive of PROCRIT / EPREX, "
+            "which was previously disclosed separately'."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -699,20 +677,14 @@ PRODUCT_METADATA = {
         "manufacturer": "Johnson & Johnson",
         "benchmark_identity": "jnj_concerta_worldwide_reported",
         "therapeutic_area": "ADHD",
-        "commercial_start_quarter": "2014Q3",
+        "commercial_start_quarter": "2007Q1",
         "launch_quarter": "2000Q3",
         "series_start_reason": (
-            "Concerta was approved in August 2000. The schedule is reachable "
-            "back to 2014Q3, so the series starts there. J&J publishes this "
-            "as CONCERTA / METHYLPHENIDATE - the brand and its own authorised "
-            "generic on one line, the same brand-plus-generic shape as ZYTIGA "
-            "/ abiraterone acetate."
-        ),
-        "series_end_quarter": "2018Q4",
-        "series_end_basis": "sourcing_boundary",
-        "series_end_reason": (
-            "The 2019Q1 schedule is published only inside the full press "
-            "release, whose layout this sourcing pass does not read."
+            "J&J prints this product on its own line of the Major Pharmaceutical "
+            "Product Revenues table only from the first quarter of 2007Q1; the "
+            "earlier table carries a shorter list of products and folds this one "
+            "into Other. The series starts where the issuer first states it "
+            "separately, not at launch."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -725,22 +697,14 @@ PRODUCT_METADATA = {
         "manufacturer": "Johnson & Johnson",
         "benchmark_identity": "jnj_stelara_worldwide_reported",
         "therapeutic_area": "Immunology",
-        "commercial_start_quarter": "2014Q3",
+        "commercial_start_quarter": "2012Q1",
         "launch_quarter": "2009Q4",
         "series_start_reason": (
-            "J&J's Sales of Key Products/Franchises schedule is reachable at "
-            "its investor site back to 2014Q3 - the 2013Q3 and 2014Q2 "
-            "schedules are not - so a contiguous run starts there. Five years "
-            "after launch and still compounding, from 543 a quarter to 2,753: "
-            "a long shallow climb that is neither a launch ramp nor a "
-            "plateau."
-        ),
-        "series_end_quarter": "2023Q4",
-        "series_end_basis": "sourcing_boundary",
-        "series_end_reason": (
-            "J&J still reports Stelara separately after this; biosimilar entry "
-            "in 2025 makes the following years the interesting ones. The series "
-            "stops where sourcing stopped."
+            "J&J prints this product on its own line of the Major Pharmaceutical "
+            "Product Revenues table only from the first quarter of 2012Q1; the "
+            "earlier table carries a shorter list of products and folds this one "
+            "into Other. The series starts where the issuer first states it "
+            "separately, not at launch."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -753,20 +717,14 @@ PRODUCT_METADATA = {
         "manufacturer": "Johnson & Johnson",
         "benchmark_identity": "jnj_remicade_worldwide_reported",
         "therapeutic_area": "Immunology",
-        "commercial_start_quarter": "2014Q3",
+        "commercial_start_quarter": "2005Q1",
         "launch_quarter": "1998Q3",
         "series_start_reason": (
-            "J&J's Sales of Key Products/Franchises schedule is reachable at "
-            "its investor site back to 2014Q3 - the 2013Q3 and 2014Q2 "
-            "schedules are not - so a contiguous run starts there. Remicade "
-            "launched in 1998 and had already peaked by then, so the series "
-            "is the decline - 1,782 a quarter down through biosimilar entry."
-        ),
-        "series_end_quarter": "2023Q4",
-        "series_end_basis": "sourcing_boundary",
-        "series_end_reason": (
-            "J&J still reports Remicade separately after this. The series stops "
-            "where sourcing stopped."
+            "J&J's Major Pharmaceutical Product Revenues table first appears in the "
+            "first-quarter 2005 Form 10-Q; the 10-Qs before it name products only "
+            "in prose and state no product-level figures at all. The series "
+            "therefore starts at the issuer's first product-level quarterly "
+            "disclosure, not at launch."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -779,20 +737,14 @@ PRODUCT_METADATA = {
         "manufacturer": "Johnson & Johnson",
         "benchmark_identity": "jnj_simponi_worldwide_reported",
         "therapeutic_area": "Immunology",
-        "commercial_start_quarter": "2014Q3",
+        "commercial_start_quarter": "2012Q1",
         "launch_quarter": "2009Q2",
         "series_start_reason": (
-            "J&J's Sales of Key Products/Franchises schedule is reachable at "
-            "its investor site back to 2014Q3 - the 2013Q3 and 2014Q2 "
-            "schedules are not - so a contiguous run starts there. J&J "
-            "publishes this as SIMPONI / SIMPONI ARIA, one line covering the "
-            "subcutaneous and intravenous presentations together."
-        ),
-        "series_end_quarter": "2023Q4",
-        "series_end_basis": "sourcing_boundary",
-        "series_end_reason": (
-            "J&J still reports the Simponi line separately after this. The "
-            "series stops where sourcing stopped."
+            "J&J prints this product on its own line of the Major Pharmaceutical "
+            "Product Revenues table only from the first quarter of 2012Q1; the "
+            "earlier table carries a shorter list of products and folds this one "
+            "into Other. The series starts where the issuer first states it "
+            "separately, not at launch."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -811,12 +763,6 @@ PRODUCT_METADATA = {
             "Tremfya launched in 2017Q3 but J&J folded it into Other "
             "Immunology until the fourth quarter of 2018, when it first gets "
             "a line of its own."
-        ),
-        "series_end_quarter": "2023Q4",
-        "series_end_basis": "sourcing_boundary",
-        "series_end_reason": (
-            "J&J still reports Tremfya separately after this, and it keeps "
-            "growing. The series stops where sourcing stopped."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -838,12 +784,6 @@ PRODUCT_METADATA = {
             "reported quarter, which makes this the closest thing here to a "
             "true launch ramp for a J&J product."
         ),
-        "series_end_quarter": "2023Q4",
-        "series_end_basis": "sourcing_boundary",
-        "series_end_reason": (
-            "J&J still reports Darzalex separately after this and it is still "
-            "growing. The series stops where sourcing stopped."
-        ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
@@ -864,12 +804,6 @@ PRODUCT_METADATA = {
             "with no quarterly split. 2019Q1 is the first quarter stated on its "
             "own, so the series starts one year after launch."
         ),
-        "series_end_quarter": "2023Q4",
-        "series_end_basis": "sourcing_boundary",
-        "series_end_reason": (
-            "J&J still reports Erleada separately after this. The series stops "
-            "where sourcing stopped."
-        ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
@@ -889,12 +823,6 @@ PRODUCT_METADATA = {
             "line of its own. The series starts where the issuer first "
             "reports it separately."
         ),
-        "series_end_quarter": "2023Q4",
-        "series_end_basis": "sourcing_boundary",
-        "series_end_reason": (
-            "J&J still reports Imbruvica separately after this. The series stops "
-            "where sourcing stopped, four years into a decline."
-        ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
@@ -906,21 +834,22 @@ PRODUCT_METADATA = {
         "manufacturer": "Johnson & Johnson",
         "benchmark_identity": "jnj_zytiga_worldwide_reported",
         "therapeutic_area": "Oncology",
-        "commercial_start_quarter": "2017Q1",
+        "commercial_start_quarter": "2012Q1",
         "launch_quarter": "2011Q2",
         "series_start_reason": (
-            "J&J publishes this line as ZYTIGA / abiraterone acetate, brand "
-            "and its own authorised generic together. The backfill stops at "
-            "2017Q1 because the 2016Q4 schedule prints ZYTIGA's figures on a "
-            "line of their own, below the US/Intl/WW labels rather than "
-            "beside them; that quarter is refused rather than realigned by "
-            "position."
+            "J&J prints this product on its own line of the Major Pharmaceutical "
+            "Product Revenues table only from the first quarter of 2012Q1; the "
+            "earlier table carries a shorter list of products and folds this one "
+            "into Other. The series starts where the issuer first states it "
+            "separately, not at launch."
         ),
-        "series_end_quarter": "2023Q4",
-        "series_end_basis": "sourcing_boundary",
+        "series_end_quarter": "2025Q4",
+        "series_end_basis": "issuer_stopped_reporting",
         "series_end_reason": (
-            "J&J still reports the Zytiga line separately after this. The series "
-            "stops where sourcing stopped."
+            "J&J folds the line into another product from the first quarter of "
+            "2026, where the schedule footnotes it: 'Includes the sales of ZYTIGA "
+            "which were previously disclosed separately'. The brand is no longer a "
+            "line of its own."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -933,14 +862,14 @@ PRODUCT_METADATA = {
         "manufacturer": "Johnson & Johnson",
         "benchmark_identity": "jnj_velcade_worldwide_reported",
         "therapeutic_area": "Oncology",
-        "commercial_start_quarter": "2014Q3",
+        "commercial_start_quarter": "2011Q1",
         "launch_quarter": "2003Q2",
         "series_start_reason": (
-            "J&J's Sales of Key Products/Franchises schedule is reachable at "
-            "its investor site back to 2014Q3 - the 2013Q3 and 2014Q2 "
-            "schedules are not - so a contiguous run starts there. J&J holds "
-            "ex-US rights to bortezomib, so its US column is a dash in every "
-            "quarter and the worldwide line is an international-only figure."
+            "J&J prints this product on its own line of the Major Pharmaceutical "
+            "Product Revenues table only from the first quarter of 2011Q1; the "
+            "earlier table carries a shorter list of products and folds this one "
+            "into Other. The series starts where the issuer first states it "
+            "separately, not at launch."
         ),
         "series_end_quarter": "2020Q4",
         "series_end_basis": "issuer_stopped_reporting",
@@ -962,21 +891,14 @@ PRODUCT_METADATA = {
         "manufacturer": "Johnson & Johnson",
         "benchmark_identity": "jnj_xarelto_worldwide_reported",
         "therapeutic_area": "Cardiovascular",
-        "commercial_start_quarter": "2014Q3",
+        "commercial_start_quarter": "2013Q1",
         "launch_quarter": "2011Q3",
         "series_start_reason": (
-            "J&J's Sales of Key Products/Franchises schedule is reachable at "
-            "its investor site back to 2014Q3 - the 2013Q3 and 2014Q2 "
-            "schedules are not - so a contiguous run starts there. Bayer "
-            "holds rivaroxaban outside the United States, so J&J's "
-            "international column is a dash and the worldwide line is a US "
-            "figure."
-        ),
-        "series_end_quarter": "2023Q4",
-        "series_end_basis": "sourcing_boundary",
-        "series_end_reason": (
-            "J&J still reports Xarelto separately after this. The series stops "
-            "where sourcing stopped."
+            "J&J prints this product on its own line of the Major Pharmaceutical "
+            "Product Revenues table only from the first quarter of 2013Q1; the "
+            "earlier table carries a shorter list of products and folds this one "
+            "into Other. The series starts where the issuer first states it "
+            "separately, not at launch."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -989,25 +911,418 @@ PRODUCT_METADATA = {
         "manufacturer": "Johnson & Johnson",
         "benchmark_identity": "jnj_invega_sustenna_worldwide_reported",
         "therapeutic_area": "Neuroscience",
-        "commercial_start_quarter": "2018Q1",
+        "commercial_start_quarter": "2012Q1",
         "launch_quarter": "2009Q3",
         "series_start_reason": (
-            "J&J publishes one line for four brands - INVEGA SUSTENNA, XEPLION, "
-            "INVEGA TRINZA and TREVICTA - which are the one-month and three-month "
-            "long-acting injectables under their US and ex-US names. No split is "
-            "published. 2018Q1 is the earliest quarter sourced."
-        ),
-        "series_end_quarter": "2023Q4",
-        "series_end_basis": "sourcing_boundary",
-        "series_end_reason": (
-            "J&J still reports the Invega Sustenna line separately after this. "
-            "The series stops where sourcing stopped."
+            "J&J prints this product on its own line of the Major Pharmaceutical "
+            "Product Revenues table only from the first quarter of 2012Q1; the "
+            "earlier table carries a shorter list of products and folds this one "
+            "into Other. The series starts where the issuer first states it "
+            "separately, not at launch."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
         "formulation": "extended-release injectable suspension",
         "route_of_administration": "intramuscular",
+    },
+
+    # Eli Lilly comparators. Lilly states these on its own Selected Products
+    # line of the quarterly earnings release filed as an 8-K exhibit, so they
+    # read from one table per quarter the way the Gilead and J&J comparators
+    # do. Every series here starts at a sourcing boundary rather than a known
+    # launch, and each end reason names the release whose product table
+    # settles whether Lilly still prints the line.
+    "Alimta": {
+        "generic_name": "pemetrexed",
+        "manufacturer": "Eli Lilly",
+        "benchmark_identity": "lilly_alimta_worldwide_reported",
+        "therapeutic_area": "Oncology",
+        "commercial_start_quarter": "2017Q4",
+        "series_start_reason": (
+            "The fourth quarter of 2017 is the earliest Lilly release sourced here, "
+            "and this series starts there because sourcing does, not because the "
+            "product launched then. No launch quarter is established for it, so the "
+            "span is a window on the product's life and not a launch-to-date curve."
+        ),
+        "series_end_quarter": "2023Q4",
+        "series_end_basis": "issuer_stopped_reporting",
+        "series_end_reason": (
+            "Lilly narrowed Selected Products to seven lines in the first-quarter "
+            "2024 release - Mounjaro, Trulicity, Verzenio, Jardiance, Taltz, "
+            "Humalog and Zepbound - and this product is not among them."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "injection",
+        "route_of_administration": "intravenous",
+    },
+    "Basaglar": {
+        "generic_name": "insulin glargine",
+        "manufacturer": "Eli Lilly",
+        "benchmark_identity": "lilly_basaglar_worldwide_reported",
+        "therapeutic_area": "Diabetes",
+        "commercial_start_quarter": "2017Q4",
+        "series_start_reason": (
+            "The fourth quarter of 2017 is the earliest Lilly release sourced here, "
+            "and this series starts there because sourcing does, not because the "
+            "product launched then. No launch quarter is established for it, so the "
+            "span is a window on the product's life and not a launch-to-date curve."
+        ),
+        "series_end_quarter": "2022Q4",
+        "series_end_basis": "issuer_stopped_reporting",
+        "series_end_reason": (
+            "Lilly's Selected Products table in the first-quarter 2023 release "
+            "prints thirteen lines - Trulicity, Verzenio, Jardiance, Mounjaro, "
+            "Taltz, Humalog, Cyramza, Olumiant, Emgality, Tyvyt, Alimta, Retevmo "
+            "and COVID-19 antibodies - and this product is not among them."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "injection",
+        "route_of_administration": "subcutaneous",
+    },
+    "Cialis": {
+        "generic_name": "tadalafil",
+        "manufacturer": "Eli Lilly",
+        "benchmark_identity": "lilly_cialis_worldwide_reported",
+        "therapeutic_area": "Urology",
+        "commercial_start_quarter": "2017Q4",
+        "series_start_reason": (
+            "The fourth quarter of 2017 is the earliest Lilly release sourced here, "
+            "and this series starts there because sourcing does, not because the "
+            "product launched then. No launch quarter is established for it, so the "
+            "span is a window on the product's life and not a launch-to-date curve."
+        ),
+        "series_end_quarter": "2019Q4",
+        "series_end_basis": "issuer_stopped_reporting",
+        "series_end_reason": (
+            "Lilly's Selected Products table in the first-quarter 2020 release "
+            "prints fifteen product lines and Cialis is not among them. The brand "
+            "stopped being stated separately after 2019Q4."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "tablet",
+        "route_of_administration": "oral",
+    },
+    "Cyramza": {
+        "generic_name": "ramucirumab",
+        "manufacturer": "Eli Lilly",
+        "benchmark_identity": "lilly_cyramza_worldwide_reported",
+        "therapeutic_area": "Oncology",
+        "commercial_start_quarter": "2017Q4",
+        "series_start_reason": (
+            "The fourth quarter of 2017 is the earliest Lilly release sourced here, "
+            "and this series starts there because sourcing does, not because the "
+            "product launched then. No launch quarter is established for it, so the "
+            "span is a window on the product's life and not a launch-to-date curve."
+        ),
+        "series_end_quarter": "2023Q4",
+        "series_end_basis": "issuer_stopped_reporting",
+        "series_end_reason": (
+            "Lilly narrowed Selected Products to seven lines in the first-quarter "
+            "2024 release - Mounjaro, Trulicity, Verzenio, Jardiance, Taltz, "
+            "Humalog and Zepbound - and this product is not among them."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "injection",
+        "route_of_administration": "intravenous",
+    },
+    "Emgality": {
+        "generic_name": "galcanezumab",
+        "manufacturer": "Eli Lilly",
+        "benchmark_identity": "lilly_emgality_worldwide_reported",
+        "therapeutic_area": "Neuroscience",
+        "commercial_start_quarter": "2018Q4",
+        "series_start_reason": (
+            "The series starts in the first quarter Lilly states this product on a "
+            "Selected Products line of its own. Whether that is the product's "
+            "launch quarter is not established here, so the span is not read as "
+            "launch-to-date."
+        ),
+        "series_end_quarter": "2023Q4",
+        "series_end_basis": "issuer_stopped_reporting",
+        "series_end_reason": (
+            "Lilly narrowed Selected Products to seven lines in the first-quarter "
+            "2024 release - Mounjaro, Trulicity, Verzenio, Jardiance, Taltz, "
+            "Humalog and Zepbound - and this product is not among them."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "injection",
+        "route_of_administration": "subcutaneous",
+    },
+    "Forteo": {
+        "generic_name": "teriparatide",
+        "manufacturer": "Eli Lilly",
+        "benchmark_identity": "lilly_forteo_worldwide_reported",
+        "therapeutic_area": "Osteoporosis",
+        "commercial_start_quarter": "2017Q4",
+        "series_start_reason": (
+            "The fourth quarter of 2017 is the earliest Lilly release sourced here, "
+            "and this series starts there because sourcing does, not because the "
+            "product launched then. No launch quarter is established for it, so the "
+            "span is a window on the product's life and not a launch-to-date curve."
+        ),
+        "series_end_quarter": "2022Q4",
+        "series_end_basis": "issuer_stopped_reporting",
+        "series_end_reason": (
+            "Lilly's Selected Products table in the first-quarter 2023 release "
+            "prints thirteen lines - Trulicity, Verzenio, Jardiance, Mounjaro, "
+            "Taltz, Humalog, Cyramza, Olumiant, Emgality, Tyvyt, Alimta, Retevmo "
+            "and COVID-19 antibodies - and this product is not among them."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "injection",
+        "route_of_administration": "subcutaneous",
+    },
+    "Humalog": {
+        "generic_name": "insulin lispro",
+        "manufacturer": "Eli Lilly",
+        "benchmark_identity": "lilly_humalog_worldwide_reported",
+        "therapeutic_area": "Diabetes",
+        "commercial_start_quarter": "2017Q4",
+        "series_start_reason": (
+            "The fourth quarter of 2017 is the earliest Lilly release sourced here, "
+            "and this series starts there because sourcing does, not because the "
+            "product launched then. No launch quarter is established for it, so the "
+            "span is a window on the product's life and not a launch-to-date curve."
+        ),
+        "series_end_quarter": "2024Q4",
+        "series_end_basis": "issuer_stopped_reporting",
+        "series_end_reason": (
+            "From the first quarter of 2025 Lilly reports by therapeutic area - "
+            "Mounjaro, Zepbound, Trulicity and Jardiance by name, then Other and "
+            "Total cardiometabolic health, and the same shape for oncology, "
+            "immunology and neuroscience. Humalog sits inside Other cardiometabolic "
+            "health from that quarter and is no longer a line of its own."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "injection",
+        "route_of_administration": "subcutaneous",
+    },
+    "Humulin": {
+        "generic_name": "human insulin",
+        "manufacturer": "Eli Lilly",
+        "benchmark_identity": "lilly_humulin_worldwide_reported",
+        "therapeutic_area": "Diabetes",
+        "commercial_start_quarter": "2017Q4",
+        "series_start_reason": (
+            "The fourth quarter of 2017 is the earliest Lilly release sourced here, "
+            "and this series starts there because sourcing does, not because the "
+            "product launched then. No launch quarter is established for it, so the "
+            "span is a window on the product's life and not a launch-to-date curve."
+        ),
+        "series_end_quarter": "2022Q4",
+        "series_end_basis": "issuer_stopped_reporting",
+        "series_end_reason": (
+            "Lilly's Selected Products table in the first-quarter 2023 release "
+            "prints thirteen lines - Trulicity, Verzenio, Jardiance, Mounjaro, "
+            "Taltz, Humalog, Cyramza, Olumiant, Emgality, Tyvyt, Alimta, Retevmo "
+            "and COVID-19 antibodies - and this product is not among them."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "injection",
+        "route_of_administration": "subcutaneous",
+    },
+    "Jardiance": {
+        "generic_name": "empagliflozin",
+        "manufacturer": "Eli Lilly",
+        "benchmark_identity": "lilly_jardiance_worldwide_reported",
+        "therapeutic_area": "Diabetes",
+        "commercial_start_quarter": "2017Q4",
+        "series_start_reason": (
+            "The fourth quarter of 2017 is the earliest Lilly release sourced here, "
+            "and this series starts there because sourcing does, not because the "
+            "product launched then. No launch quarter is established for it, so the "
+            "span is a window on the product's life and not a launch-to-date curve."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "tablet",
+        "route_of_administration": "oral",
+    },
+    "Mounjaro": {
+        "generic_name": "tirzepatide",
+        "manufacturer": "Eli Lilly",
+        "benchmark_identity": "lilly_mounjaro_worldwide_reported",
+        "therapeutic_area": "Diabetes",
+        "commercial_start_quarter": "2022Q2",
+        "series_start_reason": (
+            "The series starts in the first quarter Lilly states this product on a "
+            "Selected Products line of its own. Whether that is the product's "
+            "launch quarter is not established here, so the span is not read as "
+            "launch-to-date."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "injection",
+        "route_of_administration": "subcutaneous",
+    },
+    "Olumiant": {
+        "generic_name": "baricitinib",
+        "manufacturer": "Eli Lilly",
+        "benchmark_identity": "lilly_olumiant_worldwide_reported",
+        "therapeutic_area": "Immunology",
+        "commercial_start_quarter": "2017Q4",
+        "series_start_reason": (
+            "The fourth quarter of 2017 is the earliest Lilly release sourced here, "
+            "and this series starts there because sourcing does, not because the "
+            "product launched then. No launch quarter is established for it, so the "
+            "span is a window on the product's life and not a launch-to-date curve."
+        ),
+        "series_end_quarter": "2023Q4",
+        "series_end_basis": "issuer_stopped_reporting",
+        "series_end_reason": (
+            "Lilly narrowed Selected Products to seven lines in the first-quarter "
+            "2024 release - Mounjaro, Trulicity, Verzenio, Jardiance, Taltz, "
+            "Humalog and Zepbound - and this product is not among them."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "tablet",
+        "route_of_administration": "oral",
+    },
+    "Retevmo": {
+        "generic_name": "selpercatinib",
+        "manufacturer": "Eli Lilly",
+        "benchmark_identity": "lilly_retevmo_worldwide_reported",
+        "therapeutic_area": "Oncology",
+        "commercial_start_quarter": "2020Q2",
+        "series_start_reason": (
+            "The series starts in the first quarter Lilly states this product on a "
+            "Selected Products line of its own. Whether that is the product's "
+            "launch quarter is not established here, so the span is not read as "
+            "launch-to-date."
+        ),
+        "series_end_quarter": "2023Q4",
+        "series_end_basis": "issuer_stopped_reporting",
+        "series_end_reason": (
+            "Lilly narrowed Selected Products to seven lines in the first-quarter "
+            "2024 release - Mounjaro, Trulicity, Verzenio, Jardiance, Taltz, "
+            "Humalog and Zepbound - and this product is not among them."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "capsule or tablet",
+        "route_of_administration": "oral",
+    },
+    "Taltz": {
+        "generic_name": "ixekizumab",
+        "manufacturer": "Eli Lilly",
+        "benchmark_identity": "lilly_taltz_worldwide_reported",
+        "therapeutic_area": "Immunology",
+        "commercial_start_quarter": "2017Q4",
+        "series_start_reason": (
+            "The fourth quarter of 2017 is the earliest Lilly release sourced here, "
+            "and this series starts there because sourcing does, not because the "
+            "product launched then. No launch quarter is established for it, so the "
+            "span is a window on the product's life and not a launch-to-date curve."
+        ),
+        "series_end_quarter": "2025Q3",
+        "series_end_basis": "issuer_stopped_reporting",
+        "series_end_reason": (
+            "The break is one quarter wide and the issuer's, not this dataset's. "
+            "Lilly's fourth-quarter 2025 release narrows Selected Products to "
+            "Mounjaro, Zepbound and Verzenio, and the 2025 Form 10-K states this "
+            "product only as full-year U.S. and outside-U.S. columns with no "
+            "worldwide total, so no worldwide 2025Q4 figure is published at all. "
+            "The line returns in the first quarter of 2026, where Lilly prints "
+            "U.S., outside-U.S. and Total by therapeutic area. The series cannot "
+            "cross the missing quarter without inventing it: the only route would "
+            "sum two regional columns into a full year Lilly never printed as a "
+            "total, then subtract nine months from that."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "injection",
+        "route_of_administration": "subcutaneous",
+    },
+    "Trulicity": {
+        "generic_name": "dulaglutide",
+        "manufacturer": "Eli Lilly",
+        "benchmark_identity": "lilly_trulicity_worldwide_reported",
+        "therapeutic_area": "Diabetes",
+        "commercial_start_quarter": "2017Q4",
+        "series_start_reason": (
+            "The fourth quarter of 2017 is the earliest Lilly release sourced here, "
+            "and this series starts there because sourcing does, not because the "
+            "product launched then. No launch quarter is established for it, so the "
+            "span is a window on the product's life and not a launch-to-date curve."
+        ),
+        "series_end_quarter": "2025Q3",
+        "series_end_basis": "issuer_stopped_reporting",
+        "series_end_reason": (
+            "The break is one quarter wide and the issuer's, not this dataset's. "
+            "Lilly's fourth-quarter 2025 release narrows Selected Products to "
+            "Mounjaro, Zepbound and Verzenio, and the 2025 Form 10-K states this "
+            "product only as full-year U.S. and outside-U.S. columns with no "
+            "worldwide total, so no worldwide 2025Q4 figure is published at all. "
+            "The line returns in the first quarter of 2026, where Lilly prints "
+            "U.S., outside-U.S. and Total by therapeutic area. The series cannot "
+            "cross the missing quarter without inventing it: the only route would "
+            "sum two regional columns into a full year Lilly never printed as a "
+            "total, then subtract nine months from that."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "injection",
+        "route_of_administration": "subcutaneous",
+    },
+    "Verzenio": {
+        "generic_name": "abemaciclib",
+        "manufacturer": "Eli Lilly",
+        "benchmark_identity": "lilly_verzenio_worldwide_reported",
+        "therapeutic_area": "Oncology",
+        "commercial_start_quarter": "2017Q4",
+        "series_start_reason": (
+            "The fourth quarter of 2017 is the earliest Lilly release sourced here, "
+            "and this series starts there because sourcing does, not because the "
+            "product launched then. No launch quarter is established for it, so the "
+            "span is a window on the product's life and not a launch-to-date curve."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "tablet",
+        "route_of_administration": "oral",
+    },
+    "Zepbound": {
+        "generic_name": "tirzepatide",
+        "manufacturer": "Eli Lilly",
+        "benchmark_identity": "lilly_zepbound_worldwide_reported",
+        "therapeutic_area": "Obesity",
+        "commercial_start_quarter": "2023Q4",
+        "series_start_reason": (
+            "The series starts in the first quarter Lilly states this product on a "
+            "Selected Products line of its own. Whether that is the product's "
+            "launch quarter is not established here, so the span is not read as "
+            "launch-to-date."
+        ),
+        "peak_eligible": False,
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
+        "formulation": "injection",
+        "route_of_administration": "subcutaneous",
     },
 }
 
@@ -1016,6 +1331,14 @@ ANNUAL_METADATA = {
         "generic_name": "ambrisentan",
         "manufacturer": "Gilead",
         "benchmark_identity": "gilead_letairis_us_reported",
+    },
+    # Jardiance's full year, the input its unstated fourth quarters derive
+    # from. Lilly reports the brand under a Boehringer Ingelheim collaboration,
+    # so the 10-K note rather than the release table carries the annual figure.
+    "Jardiance": {
+        "generic_name": "empagliflozin",
+        "manufacturer": "Eli Lilly",
+        "benchmark_identity": "lilly_jardiance_worldwide_annual",
     },
     "Revatio": {
         "generic_name": "sildenafil",
@@ -1950,7 +2273,14 @@ JNJ_COMPARATORS = {
 
 
 def build_jnj_comparators() -> list[dict[str, Any]]:
-    """J&J products outside pulmonary hypertension, 2018-2023."""
+    """J&J products outside pulmonary hypertension.
+
+    Two documents feed these series and they are not the same kind of source:
+    the quarterly Sales of Key Products/Franchises schedule on the investor
+    site, and the Major Pharmaceutical Product Revenues table filed in the
+    10-Q, which reaches back further. The manifest says which, so the row does
+    not claim to come from a press release when it came from a filing.
+    """
     rows: list[dict[str, Any]] = []
     for drug_name, manifest in JNJ_COMPARATORS.items():
         rows.extend(
@@ -1960,8 +2290,52 @@ def build_jnj_comparators() -> list[dict[str, Any]]:
                 value=float(source["value_reported"]),
                 source_url=source["source_url"],
                 source_quote=source["source_quote"],
-                source_type="company_ir",
+                source_type=source.get("source_type") or "company_ir",
                 derivation=source["derivation"],
+                precision=source.get("precision") or "as_reported",
+                notes=source["context"],
+            )
+            for source in read_csv(SOURCE_DIR / manifest)
+        )
+    return rows
+
+
+# Lilly prints one Selected Products table per quarterly release, so - like the
+# Gilead and J&J comparators - every product here reads off the same document
+# and a product the pipeline cannot find on that page is a fact about the
+# pipeline rather than about the document. The manifest name is derived from the
+# benchmark identity rather than spelled out per product.
+LILLY_COMPARATORS = {
+    drug_name: f"{meta['benchmark_identity'].removesuffix('_worldwide_reported')}_quarterly.csv"
+    for drug_name, meta in PRODUCT_METADATA.items()
+    if meta["manufacturer"] == "Eli Lilly"
+}
+
+
+def build_lilly_comparators() -> list[dict[str, Any]]:
+    """Eli Lilly products, read from the Selected Products table of each release."""
+    rows: list[dict[str, Any]] = []
+    for drug_name, manifest in LILLY_COMPARATORS.items():
+        rows.extend(
+            revenue_row(
+                drug_name=drug_name,
+                period=source["period"],
+                value=float(source["value_reported"]),
+                source_url=source["source_url"],
+                source_quote=source["source_quote"],
+                source_type=source["source_type"],
+                derivation=source["derivation"],
+                # A quarter backed out of a stated full year is approximate to
+                # the rounding of the figures it was taken from, and the
+                # manifest carries that rather than the builder assuming every
+                # Lilly row is a figure the issuer printed.
+                precision=source.get("precision") or "as_reported",
+                source_unit=source.get("source_unit") or "millions",
+                source_value=(
+                    float(source["source_value_reported"])
+                    if source.get("source_value_reported")
+                    else None
+                ),
                 notes=source["context"],
             )
             for source in read_csv(SOURCE_DIR / manifest)
@@ -2597,7 +2971,7 @@ def main() -> int:
         # free - and reusing them instead would silently ignore an edit to
         # those manifests, which is exactly the kind of staleness this flag
         # must not introduce.
-        rebuilt = build_yutrepia() + build_winrevair() + build_adempas() + build_opsumit() + build_tracleer() + build_letairis() + build_gilead_comparators() + build_jnj_comparators()
+        rebuilt = build_yutrepia() + build_winrevair() + build_adempas() + build_opsumit() + build_tracleer() + build_letairis() + build_gilead_comparators() + build_jnj_comparators() + build_lilly_comparators()
         # Remodulin is only partly manifest-backed, so it is refreshed by
         # period rather than by dropping the whole product.
         early = build_remodulin_early()
@@ -2630,6 +3004,7 @@ def main() -> int:
                 + build_letairis()
                 + build_gilead_comparators()
                 + build_jnj_comparators()
+                + build_lilly_comparators()
             )
             quarterly = apply_acquisition_bridges(quarterly)
         finally:
