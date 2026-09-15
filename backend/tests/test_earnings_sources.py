@@ -277,3 +277,57 @@ def test_every_edgar_read_survives_a_dropped_connection_or_a_refusal(monkeypatch
         fn = getattr(SECConnector, name, None)
         if fn is not None:
             assert "client.get(" not in inspect.getsource(fn), name
+
+
+async def test_the_window_reaches_one_reporting_lag_back_and_no_further(monkeypatch):
+    """A filing reports a period that ended before it, so the window is widened
+    by one reporting lag at each end - not by a year at one end.
+
+    Reaching 400 days back fetched filings that can only report periods well
+    before anything the window asks for, which was two fifths of every job's
+    retrieval against a rate-limited endpoint.
+    """
+    from datetime import date, timedelta
+
+    from app.connectors import sources as module
+    from app.connectors.sources import SECConnector
+    from app.storage.filestore import LocalFileStore
+
+    connector = SECConnector(LocalFileStore("/tmp"))
+    fetched: list[str] = []
+
+    async def _fetch(self, client, *, url, accession, doc, run_id, job_id, source_id):
+        fetched.append(doc)
+        return b"<html></html>", False, f"key/{doc}"
+
+    since, until = date(2005, 4, 5), date(2005, 8, 30)
+    lag = module.REPORTING_LAG.days
+    # One day inside each bound and one day outside it, so the test moves with
+    # the constant instead of restating the dates it happens to produce.
+    inside_back = since - timedelta(days=lag - 1)
+    outside_back = since - timedelta(days=lag + 1)
+    inside_fwd = until + timedelta(days=lag - 1)
+    outside_fwd = until + timedelta(days=lag + 1)
+
+    async def _covering(self, client, payload, cik, _since, _until):
+        return {
+            "form": ["10-K", "10-K", "10-Q", "10-Q"],
+            "accessionNumber": [f"000108255{n}-05-00000{n}" for n in range(4)],
+            "filingDate": [d.isoformat() for d in
+                           (inside_back, outside_back, inside_fwd, outside_fwd)],
+            "primaryDocument": ["in_back.htm", "out_back.htm", "in_fwd.htm", "out_fwd.htm"],
+            "items": ["", "", "", ""],
+        }
+
+    monkeypatch.setattr(SECConnector, "_filings_covering", _covering)
+    monkeypatch.setattr(SECConnector, "_fetch_document", _fetch)
+
+    await connector.retrieve(
+        run_id="r", job_id="j", cik="0001082554", ticker=None, company_name=None,
+        include_primary=True, include_earnings=False, include_xbrl=False,
+        earnings_since=since, earnings_until=until,
+    )
+    assert "in_back.htm" in fetched, "a report filed just before the window still reports into it"
+    assert "in_fwd.htm" in fetched, "a period ending inside the window is reported after it closes"
+    assert "out_back.htm" not in fetched, "a year back reports periods nothing asked for"
+    assert "out_fwd.htm" not in fetched

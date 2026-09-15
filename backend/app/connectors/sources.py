@@ -54,6 +54,11 @@ ANNUAL_FORMS = frozenset({"10-K", "10-K405", "10-KT", "20-F", "40-F", "11-K"})
 # observed, because what the endpoint will accept depends on who else is
 # asking from the same address. A refusal slows every caller, and a spell
 # without one speeds them back up.
+# How long after a period ends its report is filed: a 10-Q is due about 45
+# days after its quarter and a 10-K about 90 after its year, so a window of
+# filing dates reaches this far past the periods it means to cover.
+REPORTING_LAG = timedelta(days=120)
+
 _SEC_LOCK = asyncio.Lock()
 _SEC_FLOOR_S = 0.12  # ~8 req/s, under SEC's 10/s guidance
 _SEC_CEILING_S = 4.0
@@ -805,11 +810,22 @@ class SECConnector:
             primary = recent.get("primaryDocument", [])
             filing_dates = recent.get("filingDate", [])
 
-            # A primary filing reports the period it covers, so it is useful for
-            # a window that ends a little after the window closes: a 10-K filed
-            # in February reports the year before it.
-            since_bound = earnings_since - timedelta(days=400) if earnings_since else None
-            until_bound = earnings_until + timedelta(days=120) if earnings_until else None
+            # A filing reports a period that ended before it, so the filings
+            # that report a window's periods are not the filings inside it:
+            # the window is widened by one reporting lag at each end. Forward,
+            # because a period ending just inside the window is reported after
+            # it closes; backward, because the window may open after a period's
+            # own report was filed - the holdout's own rule allows a window to
+            # open 120 days after a quarter ends, and that quarter's 10-Q is
+            # filed about 45 days after it.
+            #
+            # The same lag both ways. It was 400 days backward, which reached
+            # filings that can only report periods a year before anything
+            # asked for: across two shapes-holdout runs those fetches produced
+            # four figures, three of them already read from a filing inside the
+            # window and the fourth for a period outside the window entirely.
+            since_bound = earnings_since - REPORTING_LAG if earnings_since else None
+            until_bound = earnings_until + REPORTING_LAG if earnings_until else None
 
             indexed: list[tuple[int, int, str]] = []
             for i, form in enumerate(forms):
