@@ -446,12 +446,56 @@ class PipelineOrchestrator:
             )
             raise
 
+    # What the model is asked when it expands a product's aliases, and so what
+    # a stored answer is an answer to. A stored decision cannot answer a
+    # question it was not asked: the same brand from a different filer, or
+    # under a different generic, is a different question.
+    ALIAS_QUESTION = ("drug_name", "generic_name", "manufacturer", "ticker")
+
+    def _aliases_already_expanded(self, job: DrugJobORM) -> list[str] | None:
+        """The answer a job that asked this same question already recorded.
+
+        Aliases are a property of the product, not of the run: every job in a
+        sweep bought its own copy from the model before it could read a single
+        filing, and in one run that was the longest stage of the job while
+        retrieval took two seconds. This is a cache in front of a procedure
+        that still works without it - delete every stored answer and the next
+        job asks the model again, at one call.
+        """
+        query = self.db.query(DrugProfileFieldORM).join(
+            DrugJobORM, DrugJobORM.id == DrugProfileFieldORM.job_id
+        ).filter(
+            DrugProfileFieldORM.field == "llm_aliases",
+            DrugJobORM.id != job.id,
+        )
+        for field in self.ALIAS_QUESTION:
+            asked = getattr(job, field)
+            column = getattr(DrugJobORM, field)
+            query = query.filter(column.is_(None) if asked is None else column == asked)
+        row = query.order_by(DrugProfileFieldORM.id.desc()).first()
+        if row is None:
+            return None
+        try:
+            stored = json.loads(row.value or "{}")
+        except json.JSONDecodeError:
+            return None
+        merged = stored.get("merged")
+        if not isinstance(merged, list) or not merged:
+            return None
+        return [str(alias) for alias in merged]
+
     async def _expand_aliases(self, job: DrugJobORM) -> list[str]:
         settings = get_settings()
         base = merge_aliases(job.drug_name, job.generic_name)
         if not settings.enable_llm_search:
             self._job_aliases = base
             return base
+        reused = self._aliases_already_expanded(job)
+        if reused is not None:
+            self._job_aliases = reused
+            logger.info("alias_expansion_reused job_id=%s drug=%s aliases=%d",
+                        job.id, job.drug_name, len(reused))
+            return reused
         result = await self.llm.expand_aliases(
             product=job.drug_name,
             generic=job.generic_name,

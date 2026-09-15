@@ -257,7 +257,10 @@ def main() -> int:
     ap.add_argument("--base", default="http://127.0.0.1:8000")
     ap.add_argument("--case", action="append", default=[],
                     help="DRUG, repeatable; default is every case in the file")
-    ap.add_argument("--timeout", type=int, default=2400, help="seconds to wait per run")
+    ap.add_argument("--timeout", type=int, default=7200,
+                    help="seconds to wait for the whole sweep; every run is started "
+                         "first and they proceed together, so this is one clock, "
+                         "not one per run")
     ap.add_argument("--out", default="/tmp/eval.json")
     ap.add_argument("--quiet", action="store_true")
     ap.add_argument("--attach", action="store_true",
@@ -305,6 +308,14 @@ def main() -> int:
     results = []
     already = existing_runs(args.base) if args.attach else {}
     rescored = 0
+
+    # Every run is started before any is waited for. The windows are
+    # independent and the server decides its own concurrency, so waiting for
+    # one batch before submitting the next left the pool running one or two
+    # jobs for much of a sweep and paid the slowest job of every batch in
+    # turn. Scoring still happens a batch at a time, in the order the cases
+    # were given.
+    started: list[tuple[str, str, list[dict]]] = []
     for index, (options_key, batch) in enumerate(batches.items(), 1):
         options = json.loads(options_key)
         match_key = window_key(options)
@@ -319,8 +330,13 @@ def main() -> int:
                 "drugs": [{k: v for k, v in case.items() if k in DRUG_FIELDS} for case in batch],
                 "options": options,
             })["run_id"]
+        started.append((run_id, match_key, batch))
+
+    deadline = time.time() + args.timeout
+    for run_id, match_key, batch in started:
         created = {"run_id": run_id}
-        run = wait(args.base, run_id, timeout_s=args.timeout, quiet=args.quiet)
+        run = wait(args.base, run_id,
+                   timeout_s=max(1, int(deadline - time.time())), quiet=args.quiet)
         by_drug = {}
         for job in run["jobs"]:
             by_drug.setdefault(job["drug_name"].casefold(), []).append(job)

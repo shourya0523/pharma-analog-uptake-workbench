@@ -79,3 +79,37 @@ def test_every_case_file_says_where_its_answers_came_from():
         for case in json.loads(path.read_text()):
             assert case.get("source"), f"{path.name}: {case['drug_name']} cites nothing"
             assert case.get("expect"), f"{path.name}: {case['drug_name']} expects nothing"
+
+
+def test_every_run_is_started_before_any_is_waited_for():
+    """The windows are independent; the server decides its own concurrency.
+
+    Waiting for one batch before submitting the next left the pool running
+    one or two jobs for most of a sweep and paid the slowest job of every
+    batch in turn. Sampled per minute, one sweep of twenty-four jobs ran at
+    six or seven jobs for four minutes and at one or two for nine.
+    """
+    for path in EVALS:
+        source = path.read_text()
+        if "/runs" not in source or "wait(" not in source:
+            continue
+        tree = ast.parse(source)
+        posts, waits = [], []
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Call) and isinstance(node.func, ast.Name):
+                if node.func.id == "post":
+                    posts.append(node.lineno)
+                elif node.func.id == "wait":
+                    waits.append(node.lineno)
+        if not posts or not waits:
+            continue
+        # The loop that starts runs must close before the loop that waits.
+        starts = [n for n in ast.walk(tree) if isinstance(n, ast.For)
+                  and any(p in range(n.lineno, (n.end_lineno or n.lineno) + 1) for p in posts)]
+        assert starts, f"{path.name}: no loop creates runs"
+        for loop in starts:
+            inside = range(loop.lineno, (loop.end_lineno or loop.lineno) + 1)
+            assert not any(w in inside for w in waits), (
+                f"{path.name} waits for a run inside the loop that starts them, so the "
+                f"next window is not submitted until this one finishes"
+            )
