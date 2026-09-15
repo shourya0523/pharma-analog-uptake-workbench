@@ -220,12 +220,6 @@ PRODUCT_METADATA = {
             "issuer's own quarterly disclosure starts, not where the product "
             "did."
         ),
-        "series_end_quarter": "2019Q4",
-        "series_end_basis": "sourcing_boundary",
-        "series_end_reason": (
-            "Gilead still reports AmBisome separately after this (FY2020 436, "
-            "FY2021 540). The series stops where sourcing stopped."
-        ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
@@ -279,12 +273,15 @@ PRODUCT_METADATA = {
             "quarter of 2009. The series starts where the issuer first reports "
             "it separately."
         ),
-        "series_end_quarter": "2019Q4",
-        "series_end_basis": "sourcing_boundary",
+        "series_end_quarter": "2020Q2",
+        "series_end_basis": "issuer_stopped_reporting",
         "series_end_reason": (
-            "Gilead still reports Ranexa separately after this (FY2020 9, FY2021 "
-            "10). The series stops where sourcing stopped, one year after "
-            "generic entry took it from 177 a quarter to 11."
+            "Gilead prints an em dash for Ranexa from the third quarter of 2020 - "
+            "the fourth-quarter 2021 summary shows the line as 5 for the quarter "
+            "against a dash a year earlier - and a dash is not a figure: it is "
+            "either nil or not stated, and the table does not say which. The "
+            "series stops at the last quarter carrying a number rather than "
+            "recording a zero the issuer did not print."
         ),
         "peak_eligible": False,
         "revenue_scope": "U.S.",
@@ -321,6 +318,14 @@ PRODUCT_METADATA = {
         ),
         # The window opens nine years after launch and contains the 2018 peak
         # only by luck; the annual series is the peak authority for this product.
+        "series_end_quarter": "2023Q4",
+        "series_end_basis": "issuer_stopped_reporting",
+        "series_end_reason": (
+            "Gilead prints the Letairis line through the fourth quarter of 2023 and "
+            "not afterwards: the first-quarter 2024 product sales summary has no "
+            "Letairis row at all. Ambrisentan lost exclusivity and the brand "
+            "stopped being stated separately."
+        ),
         "peak_eligible": False,
         "revenue_scope": "U.S.",
         "geography": "United States",
@@ -398,13 +403,6 @@ PRODUCT_METADATA = {
             "worldwide figure, which makes this a launch ramp read from its "
             "second quarter rather than its first."
         ),
-        "series_end_quarter": "2024Q4",
-        "series_end_basis": "sourcing_boundary",
-        "series_end_reason": (
-            "Gilead still reports Biktarvy separately after this and it is still "
-            "growing - 13,423 in 2024 against 185 in its first full quarter. The "
-            "series stops where sourcing stopped."
-        ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
@@ -423,13 +421,6 @@ PRODUCT_METADATA = {
             "in 2018Q4 and then declines - not from patent loss but because "
             "Gilead's own Biktarvy takes its patients. A decline with no "
             "generic in it."
-        ),
-        "series_end_quarter": "2024Q4",
-        "series_end_basis": "sourcing_boundary",
-        "series_end_reason": (
-            "Gilead still reports Genvoya separately after this. The series "
-            "stops where sourcing stopped, seven years into a decline that "
-            "began the quarter Biktarvy launched."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -509,12 +500,6 @@ PRODUCT_METADATA = {
             "Descovy is broken out from its launch quarter, so the series runs "
             "from the first quarter Gilead reports it."
         ),
-        "series_end_quarter": "2024Q4",
-        "series_end_basis": "sourcing_boundary",
-        "series_end_reason": (
-            "Gilead still reports Descovy separately after this. The series "
-            "stops where sourcing stopped."
-        ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
@@ -532,12 +517,6 @@ PRODUCT_METADATA = {
             "Odefsey is absent from the first and second quarter 2016 sales "
             "tables and first appears in the third. The series starts where the "
             "issuer first reports it separately."
-        ),
-        "series_end_quarter": "2024Q4",
-        "series_end_basis": "sourcing_boundary",
-        "series_end_reason": (
-            "Gilead still reports Odefsey separately after this. The series "
-            "stops where sourcing stopped."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
