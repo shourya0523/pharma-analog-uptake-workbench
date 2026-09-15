@@ -4,14 +4,7 @@
   "generic_name": "tadalafil",
   "manufacturer": "United Therapeutics",
   "ticker": "UTHR",
-  "options": {
-   "product_metadata": true,
-   "openfda": true,
-   "quarterly_revenue": false,
-   "sec_filings": false,
-   "earnings_releases": false,
-   "company_ir": false
-  },
+  "options": {},
   "source": "seed/gold/product_profiles.jsonl, which is seed/product_attributes.csv copied - so this set finds defects in the derivation and does not score a fix; seed/holdout_profiles does that"
  },
  {
@@ -19,14 +12,7 @@
   "generic_name": "riociguat",
   "manufacturer": "Merck",
   "ticker": "MRK",
-  "options": {
-   "product_metadata": true,
-   "openfda": true,
-   "quarterly_revenue": false,
-   "sec_filings": false,
-   "earnings_releases": false,
-   "company_ir": false
-  },
+  "options": {},
   "source": "seed/gold/product_profiles.jsonl, which is seed/product_attributes.csv copied - so this set finds defects in the derivation and does not score a fix; seed/holdout_profiles does that"
  },
  {
@@ -34,14 +20,7 @@
   "generic_name": "amphotericin B liposome for injection",
   "manufacturer": "Gilead",
   "ticker": "GILD",
-  "options": {
-   "product_metadata": true,
-   "openfda": true,
-   "quarterly_revenue": false,
-   "sec_filings": false,
-   "earnings_releases": false,
-   "company_ir": false
-  },
+  "options": {},
   "source": "seed/gold/product_profiles.jsonl, which is seed/product_attributes.csv copied - so this set finds defects in the derivation and does not score a fix; seed/holdout_profiles does that"
  },
  {
@@ -49,14 +28,7 @@
   "generic_name": "efavirenz/emtricitabine/tenofovir disoproxil fumarate",
   "manufacturer": "Gilead",
   "ticker": "GILD",
-  "options": {
-   "product_metadata": true,
-   "openfda": true,
-   "quarterly_revenue": false,
-   "sec_filings": false,
-   "earnings_releases": false,
-   "company_ir": false
-  },
+  "options": {},
   "source": "seed/gold/product_profiles.jsonl, which is seed/product_attributes.csv copied - so this set finds defects in the derivation and does not score a fix; seed/holdout_profiles does that"
  },
  {
@@ -64,14 +36,7 @@
   "generic_name": "bictegravir/emtricitabine/tenofovir alafenamide",
   "manufacturer": "Gilead",
   "ticker": "GILD",
-  "options": {
-   "product_metadata": true,
-   "openfda": true,
-   "quarterly_revenue": false,
-   "sec_filings": false,
-   "earnings_releases": false,
-   "company_ir": false
-  },
+  "options": {},
   "source": "seed/gold/product_profiles.jsonl, which is seed/product_attributes.csv copied - so this set finds defects in the derivation and does not score a fix; seed/holdout_profiles does that"
  },
  {
@@ -79,14 +44,7 @@
   "generic_name": "emtricitabine/rilpivirine/tenofovir disoproxil fumarate",
   "manufacturer": "Gilead",
   "ticker": "GILD",
-  "options": {
-   "product_metadata": true,
-   "openfda": true,
-   "quarterly_revenue": false,
-   "sec_filings": false,
-   "earnings_releases": false,
-   "company_ir": false
-  },
+  "options": {},
   "source": "seed/gold/product_profiles.jsonl, which is seed/product_attributes.csv copied - so this set finds defects in the derivation and does not score a fix; seed/holdout_profiles does that"
  },
  {
@@ -94,14 +52,7 @@
   "generic_name": "methylphenidate hydrochloride extended-release",
   "manufacturer": "Johnson & Johnson",
   "ticker": "JNJ",
-  "options": {
-   "product_metadata": true,
-   "openfda": true,
-   "quarterly_revenue": false,
-   "sec_filings": false,
-   "earnings_releases": false,
-   "company_ir": false
-  },
+  "options": {},
   "source": "seed/gold/product_profiles.jsonl, which is seed/product_attributes.csv copied - so this set finds defects in the derivation and does not score a fix; seed/holdout_profiles does that"
  },
  {
@@ -109,14 +60,7 @@
   "generic_name": "daratumumab",
   "manufacturer": "Johnson & Johnson",
   "ticker": "JNJ",
-  "options": {
-   "product_metadata": true,
-   "openfda": true,
-   "quarterly_revenue": false,
-   "sec_filings": false,
-   "earnings_releases": false,
-   "company_ir": false
-  },
+  "options": {},
   "source": "seed/gold/product_profiles.jsonl, which is seed/product_attributes.csv copied - so this set finds defects in the derivation and does not score a fix; seed/holdout_profiles does that"
  },
  {
@@ -124,14 +68,7 @@
   "generic_name": "sofosbuvir/velpatasvir",
   "manufacturer": "Gilead",
   "ticker": "GILD",
-  "options": {
-   "product_metadata": true,
-   "openfda": true,
-   "quarterly_revenue": false,
-   "sec_filings": false,
-   "earnings_releases": false,
-   "company_ir": false
-  },
+  "options": {},
   "source": "seed/gold/product_profiles.jsonl, which is seed/product_attributes.csv copied - so this set finds defects in the derivation and does not score a fix; seed/holdout_profiles does that"
  },
  {
@@ -139,14 +76,7 @@
   "generic_name": "apalutamide",
   "manufacturer": "Johnson & Johnson",
   "ticker": "JNJ",
-  "options": {
-   "product_metadata": true,
-   "openfda": true,
-   "quarterly_revenue": false,
-   "sec_filings": false,
-   "earnings_releases": false,
-   "company_ir": false
-  },
+  "options": {},
   "source": "seed/gold/product_profiles.jsonl, which is seed/product_attributes.csv copied - so this set finds defects in the derivation and does not score a fix; seed/holdout_profiles does that"
  },
  {
@@ -154,14 +84,7 @@
   "generic_name": "ledipasvir/sofosbuvir",
   "manufacturer": "Gilead",
   "ticker": "GILD",
-  "options": {
-   "product_metadata": true,
-   "openfda": true,
-   "quarterly_revenue": false,
-   "sec_filings": false,
-   "earnings_releases": false,
-   "company_ir": false
-  },
+  "options": {},
   "source": "seed/gold/product_profiles.jsonl, which is seed/product_attributes.csv copied - so this set finds defects in the derivation and does not score a fix; seed/holdout_profiles does that"
  },
  {
@@ -169,14 +92,7 @@
   "generic_name": "ibrutinib",
   "manufacturer": "Johnson & Johnson",
   "ticker": "JNJ",
-  "options": {
-   "product_metadata": true,
-   "openfda": true,
-   "quarterly_revenue": false,
-   "sec_filings": false,
-   "earnings_releases": false,
-   "company_ir": false
-  },
+  "options": {},
   "source": "seed/gold/product_profiles.jsonl, which is seed/product_attributes.csv copied - so this set finds defects in the derivation and does not score a fix; seed/holdout_profiles does that"
  },
  {
@@ -184,14 +100,7 @@
   "generic_name": "paliperidone palmitate",
   "manufacturer": "Johnson & Johnson",
   "ticker": "JNJ",
-  "options": {
-   "product_metadata": true,
-   "openfda": true,
-   "quarterly_revenue": false,
-   "sec_filings": false,
-   "earnings_releases": false,
-   "company_ir": false
-  },
+  "options": {},
   "source": "seed/gold/product_profiles.jsonl, which is seed/product_attributes.csv copied - so this set finds defects in the derivation and does not score a fix; seed/holdout_profiles does that"
  },
  {
@@ -199,14 +108,7 @@
   "generic_name": "canagliflozin",
   "manufacturer": "Johnson & Johnson",
   "ticker": "JNJ",
-  "options": {
-   "product_metadata": true,
-   "openfda": true,
-   "quarterly_revenue": false,
-   "sec_filings": false,
-   "earnings_releases": false,
-   "company_ir": false
-  },
+  "options": {},
   "source": "seed/gold/product_profiles.jsonl, which is seed/product_attributes.csv copied - so this set finds defects in the derivation and does not score a fix; seed/holdout_profiles does that"
  },
  {
@@ -214,14 +116,7 @@
   "generic_name": "ambrisentan",
   "manufacturer": "Gilead",
   "ticker": "GILD",
-  "options": {
-   "product_metadata": true,
-   "openfda": true,
-   "quarterly_revenue": false,
-   "sec_filings": false,
-   "earnings_releases": false,
-   "company_ir": false
-  },
+  "options": {},
   "source": "seed/gold/product_profiles.jsonl, which is seed/product_attributes.csv copied - so this set finds defects in the derivation and does not score a fix; seed/holdout_profiles does that"
  },
  {
@@ -229,14 +124,7 @@
   "generic_name": "epoetin alfa",
   "manufacturer": "Johnson & Johnson",
   "ticker": "JNJ",
-  "options": {
-   "product_metadata": true,
-   "openfda": true,
-   "quarterly_revenue": false,
-   "sec_filings": false,
-   "earnings_releases": false,
-   "company_ir": false
-  },
+  "options": {},
   "source": "seed/gold/product_profiles.jsonl, which is seed/product_attributes.csv copied - so this set finds defects in the derivation and does not score a fix; seed/holdout_profiles does that"
  },
  {
@@ -244,14 +132,7 @@
   "generic_name": "ranolazine",
   "manufacturer": "Gilead",
   "ticker": "GILD",
-  "options": {
-   "product_metadata": true,
-   "openfda": true,
-   "quarterly_revenue": false,
-   "sec_filings": false,
-   "earnings_releases": false,
-   "company_ir": false
-  },
+  "options": {},
   "source": "seed/gold/product_profiles.jsonl, which is seed/product_attributes.csv copied - so this set finds defects in the derivation and does not score a fix; seed/holdout_profiles does that"
  },
  {
@@ -259,14 +140,7 @@
   "generic_name": "infliximab",
   "manufacturer": "Johnson & Johnson",
   "ticker": "JNJ",
-  "options": {
-   "product_metadata": true,
-   "openfda": true,
-   "quarterly_revenue": false,
-   "sec_filings": false,
-   "earnings_releases": false,
-   "company_ir": false
-  },
+  "options": {},
   "source": "seed/gold/product_profiles.jsonl, which is seed/product_attributes.csv copied - so this set finds defects in the derivation and does not score a fix; seed/holdout_profiles does that"
  },
  {
@@ -274,14 +148,7 @@
   "generic_name": "golimumab",
   "manufacturer": "Johnson & Johnson",
   "ticker": "JNJ",
-  "options": {
-   "product_metadata": true,
-   "openfda": true,
-   "quarterly_revenue": false,
-   "sec_filings": false,
-   "earnings_releases": false,
-   "company_ir": false
-  },
+  "options": {},
   "source": "seed/gold/product_profiles.jsonl, which is seed/product_attributes.csv copied - so this set finds defects in the derivation and does not score a fix; seed/holdout_profiles does that"
  },
  {
@@ -289,14 +156,7 @@
   "generic_name": "ustekinumab",
   "manufacturer": "Johnson & Johnson",
   "ticker": "JNJ",
-  "options": {
-   "product_metadata": true,
-   "openfda": true,
-   "quarterly_revenue": false,
-   "sec_filings": false,
-   "earnings_releases": false,
-   "company_ir": false
-  },
+  "options": {},
   "source": "seed/gold/product_profiles.jsonl, which is seed/product_attributes.csv copied - so this set finds defects in the derivation and does not score a fix; seed/holdout_profiles does that"
  },
  {
@@ -304,14 +164,7 @@
   "generic_name": "bortezomib",
   "manufacturer": "Johnson & Johnson",
   "ticker": "JNJ",
-  "options": {
-   "product_metadata": true,
-   "openfda": true,
-   "quarterly_revenue": false,
-   "sec_filings": false,
-   "earnings_releases": false,
-   "company_ir": false
-  },
+  "options": {},
   "source": "seed/gold/product_profiles.jsonl, which is seed/product_attributes.csv copied - so this set finds defects in the derivation and does not score a fix; seed/holdout_profiles does that"
  },
  {
@@ -319,14 +172,7 @@
   "generic_name": "rivaroxaban",
   "manufacturer": "Johnson & Johnson",
   "ticker": "JNJ",
-  "options": {
-   "product_metadata": true,
-   "openfda": true,
-   "quarterly_revenue": false,
-   "sec_filings": false,
-   "earnings_releases": false,
-   "company_ir": false
-  },
+  "options": {},
   "source": "seed/gold/product_profiles.jsonl, which is seed/product_attributes.csv copied - so this set finds defects in the derivation and does not score a fix; seed/holdout_profiles does that"
  },
  {
@@ -334,14 +180,7 @@
   "generic_name": "abiraterone acetate",
   "manufacturer": "Johnson & Johnson",
   "ticker": "JNJ",
-  "options": {
-   "product_metadata": true,
-   "openfda": true,
-   "quarterly_revenue": false,
-   "sec_filings": false,
-   "earnings_releases": false,
-   "company_ir": false
-  },
+  "options": {},
   "source": "seed/gold/product_profiles.jsonl, which is seed/product_attributes.csv copied - so this set finds defects in the derivation and does not score a fix; seed/holdout_profiles does that"
  }
 ]

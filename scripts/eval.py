@@ -354,11 +354,13 @@ def score_profiles(base: str, cases: list[dict], labels: dict[str, dict],
         started.append((run_id, batch))
 
     deadline = time.time() + timeout_s
-    status: dict[str, str] = {}
+    status: dict[str, tuple[str, str]] = {}
     for run_id, _ in started:
         run = wait(base, run_id, timeout_s=max(1, int(deadline - time.time())), quiet=quiet)
         for job in run.get("jobs", []):
-            status[job["drug_name"].casefold()] = job["status"]
+            status[job["drug_name"].casefold()] = (
+                job["status"], str(job.get("current_step") or ""),
+            )
 
     # A product is named by the label it was found under, which is the brand as
     # the FDA spells it and not as the case was typed. Matching exactly reported
@@ -374,8 +376,9 @@ def score_profiles(base: str, cases: list[dict], labels: dict[str, dict],
             observed = get(base, f"/products/{urllib.parse.quote(product_id, safe='')}").get(
                 "analog_profile"
             ) or {}
+        state, step = status.get(name.casefold(), ("no job", ""))
         rows.append({"drug_name": name, "product_id": product_id,
-                     "job_status": status.get(name.casefold(), "no job"),
+                     "job_status": state, "died_at": step,
                      "expected": want, "observed": observed})
 
     # A job that died fetching is not a derivation that refused, and scoring the
@@ -383,9 +386,14 @@ def score_profiles(base: str, cases: list[dict], labels: dict[str, dict],
     ran = [row for row in rows if row["job_status"] in FINISHED]
     broken = [row for row in rows if row not in ran]
     if broken:
+        # Where it died matters: a job that fell over after the attributes were
+        # derived is not a product the pipeline could not describe, and an
+        # exclusion list that does not say so reads as though it were.
         print(f"\n  {len(broken)} case(s) whose job did not finish, excluded from the score:")
         for row in broken:
-            print(f"    {row['drug_name']:24} {row['job_status']}")
+            print(f"    {row['drug_name']:24} {row['job_status']:10} at {row['died_at']}")
+        print("    (a step after extract_metadata means the profile was derived "
+              "and is being excluded anyway - see the detail file)")
     rows = ran
     if not rows:
         print("\n  no case finished; nothing to score")

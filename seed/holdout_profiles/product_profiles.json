@@ -20,14 +20,7 @@
   {
    "drug_name": "Rystiggo",
    "manufacturer": "UCB",
-   "options": {
-    "product_metadata": true,
-    "openfda": true,
-    "quarterly_revenue": false,
-    "sec_filings": false,
-    "earnings_releases": false,
-    "company_ir": false
-   },
+   "options": {},
    "source": "openFDA BLA761286",
    "expect": {
     "route_of_administration": "Subcutaneous",
@@ -43,14 +36,7 @@
   {
    "drug_name": "Zilbrysq",
    "manufacturer": "UCB",
-   "options": {
-    "product_metadata": true,
-    "openfda": true,
-    "quarterly_revenue": false,
-    "sec_filings": false,
-    "earnings_releases": false,
-    "company_ir": false
-   },
+   "options": {},
    "source": "openFDA NDA216834",
    "expect": {
     "route_of_administration": "Subcutaneous",
@@ -66,14 +52,7 @@
   {
    "drug_name": "Soliris",
    "manufacturer": "Alexion",
-   "options": {
-    "product_metadata": true,
-    "openfda": true,
-    "quarterly_revenue": false,
-    "sec_filings": false,
-    "earnings_releases": false,
-    "company_ir": false
-   },
+   "options": {},
    "source": "openFDA BLA125166",
    "expect": {
     "route_of_administration": "Intravenous",
@@ -89,14 +68,7 @@
   {
    "drug_name": "Ultomiris",
    "manufacturer": "Alexion",
-   "options": {
-    "product_metadata": true,
-    "openfda": true,
-    "quarterly_revenue": false,
-    "sec_filings": false,
-    "earnings_releases": false,
-    "company_ir": false
-   },
+   "options": {},
    "source": "openFDA BLA761108",
    "expect": {
     "route_of_administration": "Intravenous",
@@ -112,14 +84,7 @@
   {
    "drug_name": "Ocrevus",
    "manufacturer": "Genentech",
-   "options": {
-    "product_metadata": true,
-    "openfda": true,
-    "quarterly_revenue": false,
-    "sec_filings": false,
-    "earnings_releases": false,
-    "company_ir": false
-   },
+   "options": {},
    "source": "openFDA BLA761053",
    "expect": {
     "route_of_administration": "Intravenous",
@@ -135,14 +100,7 @@
   {
    "drug_name": "Briumvi",
    "manufacturer": "TG Therapeutics",
-   "options": {
-    "product_metadata": true,
-    "openfda": true,
-    "quarterly_revenue": false,
-    "sec_filings": false,
-    "earnings_releases": false,
-    "company_ir": false
-   },
+   "options": {},
    "source": "openFDA BLA761238",
    "expect": {
     "route_of_administration": "Intravenous",
@@ -158,14 +116,7 @@
   {
    "drug_name": "Rexulti",
    "manufacturer": "Otsuka",
-   "options": {
-    "product_metadata": true,
-    "openfda": true,
-    "quarterly_revenue": false,
-    "sec_filings": false,
-    "earnings_releases": false,
-    "company_ir": false
-   },
+   "options": {},
    "source": "openFDA NDA205422",
    "expect": {
     "route_of_administration": "Oral",
@@ -181,14 +132,7 @@
   {
    "drug_name": "Latuda",
    "manufacturer": "Sumitomo Pharma",
-   "options": {
-    "product_metadata": true,
-    "openfda": true,
-    "quarterly_revenue": false,
-    "sec_filings": false,
-    "earnings_releases": false,
-    "company_ir": false
-   },
+   "options": {},
    "source": "openFDA NDA200603",
    "expect": {
     "route_of_administration": "Oral",
@@ -204,14 +148,7 @@
   {
    "drug_name": "Caplyta",
    "manufacturer": "Intra-Cellular Therapies",
-   "options": {
-    "product_metadata": true,
-    "openfda": true,
-    "quarterly_revenue": false,
-    "sec_filings": false,
-    "earnings_releases": false,
-    "company_ir": false
-   },
+   "options": {},
    "source": "openFDA NDA209500",
    "expect": {
     "route_of_administration": "Oral",
@@ -227,14 +164,7 @@
   {
    "drug_name": "Cresemba",
    "manufacturer": "Astellas",
-   "options": {
-    "product_metadata": true,
-    "openfda": true,
-    "quarterly_revenue": false,
-    "sec_filings": false,
-    "earnings_releases": false,
-    "company_ir": false
-   },
+   "options": {},
    "source": "openFDA NDA207500",
    "expect": {
     "route_of_administration": null,
@@ -250,14 +180,7 @@
   {
    "drug_name": "Baxdela",
    "manufacturer": "Melinta Therapeutics",
-   "options": {
-    "product_metadata": true,
-    "openfda": true,
-    "quarterly_revenue": false,
-    "sec_filings": false,
-    "earnings_releases": false,
-    "company_ir": false
-   },
+   "options": {},
    "source": "openFDA NDA208610",
    "expect": {
     "route_of_administration": null,
@@ -270,5 +193,6 @@
    },
    "why": "approved as an injection and as tablets, so the label states two routes and no one route"
   }
- ]
+ ],
+ "options": "Runs use the pipeline's shipped defaults. An eval that switches sources off measures a narrower pipeline than anyone runs - company IR, the SEC filings and the earnings exhibits all feed the narrative branch of the metadata stage - and the number it produces then belongs to the switches rather than to the pipeline."
 }

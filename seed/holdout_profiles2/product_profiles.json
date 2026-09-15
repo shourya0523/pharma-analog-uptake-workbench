@@ -21,14 +21,7 @@
   {
    "drug_name": "Gilotrif",
    "manufacturer": "Boehringer Ingelheim",
-   "options": {
-    "product_metadata": true,
-    "openfda": true,
-    "quarterly_revenue": false,
-    "sec_filings": false,
-    "earnings_releases": false,
-    "company_ir": false
-   },
+   "options": {},
    "source": "openFDA NDA201292",
    "expect": {
     "route_of_administration": "Oral",
@@ -44,14 +37,7 @@
   {
    "drug_name": "Alunbrig",
    "manufacturer": "Takeda",
-   "options": {
-    "product_metadata": true,
-    "openfda": true,
-    "quarterly_revenue": false,
-    "sec_filings": false,
-    "earnings_releases": false,
-    "company_ir": false
-   },
+   "options": {},
    "source": "openFDA NDA208772",
    "expect": {
     "route_of_administration": "Oral",
@@ -67,14 +53,7 @@
   {
    "drug_name": "Imfinzi",
    "manufacturer": "AstraZeneca",
-   "options": {
-    "product_metadata": true,
-    "openfda": true,
-    "quarterly_revenue": false,
-    "sec_filings": false,
-    "earnings_releases": false,
-    "company_ir": false
-   },
+   "options": {},
    "source": "openFDA BLA761069",
    "expect": {
     "route_of_administration": "Intravenous",
@@ -90,14 +69,7 @@
   {
    "drug_name": "Loqtorzi",
    "manufacturer": "Coherus BioSciences",
-   "options": {
-    "product_metadata": true,
-    "openfda": true,
-    "quarterly_revenue": false,
-    "sec_filings": false,
-    "earnings_releases": false,
-    "company_ir": false
-   },
+   "options": {},
    "source": "openFDA BLA761240",
    "expect": {
     "route_of_administration": "Intravenous",
@@ -113,14 +85,7 @@
   {
    "drug_name": "Calquence",
    "manufacturer": "AstraZeneca",
-   "options": {
-    "product_metadata": true,
-    "openfda": true,
-    "quarterly_revenue": false,
-    "sec_filings": false,
-    "earnings_releases": false,
-    "company_ir": false
-   },
+   "options": {},
    "source": "openFDA NDA210259",
    "expect": {
     "route_of_administration": "Oral",
@@ -136,14 +101,7 @@
   {
    "drug_name": "Lynparza",
    "manufacturer": "AstraZeneca",
-   "options": {
-    "product_metadata": true,
-    "openfda": true,
-    "quarterly_revenue": false,
-    "sec_filings": false,
-    "earnings_releases": false,
-    "company_ir": false
-   },
+   "options": {},
    "source": "openFDA NDA208558",
    "expect": {
     "route_of_administration": "Oral",
@@ -159,14 +117,7 @@
   {
    "drug_name": "Takhzyro",
    "manufacturer": "Takeda",
-   "options": {
-    "product_metadata": true,
-    "openfda": true,
-    "quarterly_revenue": false,
-    "sec_filings": false,
-    "earnings_releases": false,
-    "company_ir": false
-   },
+   "options": {},
    "source": "openFDA BLA761090",
    "expect": {
     "route_of_administration": "Subcutaneous",
@@ -182,14 +133,7 @@
   {
    "drug_name": "Vyepti",
    "manufacturer": "Lundbeck",
-   "options": {
-    "product_metadata": true,
-    "openfda": true,
-    "quarterly_revenue": false,
-    "sec_filings": false,
-    "earnings_releases": false,
-    "company_ir": false
-   },
+   "options": {},
    "source": "openFDA BLA761119",
    "expect": {
     "route_of_administration": "Intravenous",
@@ -205,14 +149,7 @@
   {
    "drug_name": "Nuzyra",
    "manufacturer": "Paratek Pharmaceuticals",
-   "options": {
-    "product_metadata": true,
-    "openfda": true,
-    "quarterly_revenue": false,
-    "sec_filings": false,
-    "earnings_releases": false,
-    "company_ir": false
-   },
+   "options": {},
    "source": "openFDA NDA209816",
    "expect": {
     "route_of_administration": null,
@@ -228,14 +165,7 @@
   {
    "drug_name": "Akynzeo",
    "manufacturer": "Helsinn",
-   "options": {
-    "product_metadata": true,
-    "openfda": true,
-    "quarterly_revenue": false,
-    "sec_filings": false,
-    "earnings_releases": false,
-    "company_ir": false
-   },
+   "options": {},
    "source": "openFDA NDA205718",
    "expect": {
     "route_of_administration": null,
@@ -248,5 +178,6 @@
    },
    "why": "approved as capsules and for injection, so the label states two routes and no one route"
   }
- ]
+ ],
+ "options": "Runs use the pipeline's shipped defaults. An eval that switches sources off measures a narrower pipeline than anyone runs - company IR, the SEC filings and the earnings exhibits all feed the narrative branch of the metadata stage - and the number it produces then belongs to the switches rather than to the pipeline."
 }
