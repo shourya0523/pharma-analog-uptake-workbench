@@ -233,6 +233,23 @@ def listed(payload: dict[str, Any], key: str) -> list[Any]:
     return bare if isinstance(bare, list) else []
 
 
+def mappings(payload: dict[str, Any], key: str) -> list[dict[str, Any]]:
+    """The objects a reply was asked for, without the entries that are not objects.
+
+    `listed` returns the entries as they arrived, which is right for a list of
+    strings - aliases, formulations - and wrong wherever the caller goes on to
+    call `.get` on each entry. Two things put a non-object there. A model asked
+    for objects answers with strings; and a reply that is a bare array is
+    returned under every key, so a list of strings meant for one question is
+    also what the next `listed` call hands back.
+
+    An entry that is not an object cannot carry the fields such a caller reads,
+    so it is dropped rather than coerced: a string is a whole span, but it is
+    not a period, a value and a quote.
+    """
+    return [item for item in listed(payload, key) if isinstance(item, dict)]
+
+
 def _citations_from_message(message: dict[str, Any]) -> list[dict[str, str]]:
     out: list[dict[str, str]] = []
     for ann in message.get("annotations") or []:
@@ -341,7 +358,7 @@ class LLMModules:
             system=prompt["system"],
             user=user,
         )
-        candidates = listed(result, "candidates")
+        candidates = mappings(result, "candidates")
         # Grounding gates
         corpus = "\n\n".join(s.get("span_text") or "" for s in compact)
         kept_v, drop_v = enforce_verbatim_on_candidates(candidates, source_text=corpus, spans=compact)

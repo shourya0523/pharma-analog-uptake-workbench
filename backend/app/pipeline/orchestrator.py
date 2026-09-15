@@ -67,7 +67,7 @@ from app.extraction.members import Resolution, load_products, resolve
 from app.extraction.tagged import candidates_from_instance
 from app.identity.resolver import resolve_product_identity
 from app.llm.aliases import merge_aliases
-from app.llm.client import LLMModules, listed
+from app.llm.client import LLMModules, listed, mappings
 from app.parsing.documents import DocumentParser
 from app.parsing.evidence import (
     build_revenue_llm_text,
@@ -2268,11 +2268,11 @@ class PipelineOrchestrator:
                 ident = str(value) if value is not None else ""
                 return ident if ident in offered else None
 
-            for item in listed(result, "resolved"):
+            for item in mappings(result, "resolved"):
                 wid = named(item.get("winner_id"))
                 if wid:
                     winners.add(wid)
-            for item in listed(result, "conflicts"):
+            for item in mappings(result, "conflicts"):
                 ids = [cid for cid in map(named, item.get("candidate_ids") or []) if cid]
                 wid = named(item.get("winner_id"))
                 if not wid:
@@ -2593,7 +2593,13 @@ class PipelineOrchestrator:
             "gap": ("Missing quarter — analyst follow-up required", 0.4),
         }
         for miss in listed(result, "missing_periods"):
-            if isinstance(miss, str):
+            # A missing period arrives either as the label on its own or as an
+            # object saying why it is missing. Only the second carries the
+            # fields read here, so the branch turns on being an object rather
+            # than on being a string: a reply is free to put a number, a null
+            # or a nested array in that list, and each of those is a label
+            # that no quarter answers to, not a reason to end the job.
+            if not isinstance(miss, dict):
                 period, code, reason, nxt = miss, "gap", "Missing period", "Review SEC filings"
             else:
                 period = miss.get("period")
@@ -2601,9 +2607,10 @@ class PipelineOrchestrator:
                 default_reason, conf = reason_map.get(code, reason_map["gap"])
                 reason = miss.get("reason") or default_reason
                 nxt = miss.get("recommended_next_step") or "Review SEC 10-Q / earnings for product net sales"
+            period = str(period).strip() if period is not None else ""
             if not period or period in existing or period in existing_unresolved:
                 continue
-            if "Q" not in str(period):
+            if "Q" not in period:
                 continue
             conf = reason_map.get(code, reason_map["gap"])[1]
             self.db.add(
