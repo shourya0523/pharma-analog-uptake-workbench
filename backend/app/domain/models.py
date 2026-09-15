@@ -52,6 +52,10 @@ class ValidationStatus(str, Enum):
     FOLLOW_UP = "follow_up"
     IMPORTED = "imported"
     UNRESOLVED = "unresolved"
+    # A second reading of a figure already published: it agrees with the
+    # published one within the precision the sources declared, so it is cited
+    # beside that figure and never published as a figure of its own.
+    CORROBORATES = "corroborates"
 
 
 class JobStatus(str, Enum):

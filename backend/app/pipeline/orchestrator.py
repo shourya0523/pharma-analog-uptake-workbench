@@ -3,7 +3,8 @@ from __future__ import annotations
 import json
 import logging
 import os
-from datetime import datetime
+import re
+from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -138,6 +139,48 @@ CLAIM_STRENGTH = {
     "prose": 4,
     "prose_sentence": 4,
 }
+
+
+# The two spellings of "the whole product": a sentence says Worldwide, a
+# schedule's family line says Product family. One group for reconciliation.
+_WHOLE_PRODUCT_SCOPES = frozenset({"Product family", "Worldwide"})
+
+# How long after a period ends its own report is filed: a 10-Q within about
+# 45 days, a 10-K within about 90. A filing later than this reports the
+# period as a comparative.
+_REPORTING_LAG_DAYS = 120
+
+
+def _scope_key(scope: str | None) -> str:
+    return "Product family" if (scope or "") in _WHOLE_PRODUCT_SCOPES else (scope or "")
+
+
+def period_end(period: str | None) -> date | None:
+    """The calendar day a period label ends on: 2024Q2 -> 30 June 2024."""
+    match = re.fullmatch(r"(\d{4})(?:Q([1-4]))?", period or "")
+    if not match:
+        return None
+    year, quarter = int(match.group(1)), int(match.group(2) or 4)
+    month = quarter * 3
+    return date(year + (month == 12), (month % 12) + 1, 1) - timedelta(days=1)
+
+
+def _agrees_within_declared_precision(winner: DatapointORM, other: DatapointORM) -> bool:
+    """Whether two figures for one period are one figure at two precisions.
+
+    The coarser of the two declared precisions bounds how far they may sit
+    apart and still be the same number; where either source declared none,
+    the fraction stands in, with the same floor the conflict check uses.
+    """
+    a = float(winner.value_normalized_usd_millions)
+    b = float(other.value_normalized_usd_millions)
+    declared = [(r.citation_json or {}).get("rounding_uncertainty_usd_millions")
+                for r in (winner, other)]
+    if all(d is not None for d in declared):
+        slack = max(float(d) for d in declared) * 2
+    else:
+        slack = ROUNDING_TOLERANCE * max(abs(a), abs(b))
+    return abs(a - b) <= max(slack, ROUNDING_ABSOLUTE)
 
 
 def claim_rank(extraction_method: str | None) -> int:
@@ -1911,12 +1954,34 @@ class PipelineOrchestrator:
             self.db.commit()
             return
 
-        # Deterministic grouping first
+        # Deterministic grouping first. "Worldwide" and "Product family" are
+        # both the whole product - a sentence says the first, a schedule the
+        # second - and grouped apart they were published twice for one quarter.
         priority_index = {t.value: i for i, t in enumerate(SOURCE_PRIORITY)}
         by_key: dict[tuple, list[DatapointORM]] = {}
         for row in rows:
-            key = (row.period, row.revenue_scope or "", row.formulation or "")
+            key = (row.period, _scope_key(row.revenue_scope), row.formulation or "")
             by_key.setdefault(key, []).append(row)
+        # When each source was filed, for telling the filing that reports a
+        # period from a later filing's comparative of it.
+        source_dates = {
+            src.id: src.source_date
+            for src in self.db.query(SourceDocumentORM).filter_by(job_id=job.id).all()
+        }
+
+        def reports_own_period(row: DatapointORM) -> int:
+            """0 for the filing that reports the period, 2 for a later one, 1 unknown.
+
+            The filing that reports a quarter states it; a filing a year later
+            prints it as a comparative, restated if the issuer recast anything
+            since. The first is the figure for the period; the second is what
+            the issuer later said about it, which is a different claim.
+            """
+            filed = parse_filing_date(source_dates.get(str(row.source_id or "")))
+            ends = period_end(row.period)
+            if filed is None or ends is None:
+                return 1
+            return 0 if filed <= ends + timedelta(days=_REPORTING_LAG_DAYS) else 2
 
         conflict_payload: list[dict[str, Any]] = []
         for group in by_key.values():
@@ -1980,6 +2045,7 @@ class PipelineOrchestrator:
             # schedule from one exhibit tied, and the tie was broken by
             # whichever happened to be extracted first.
             group.sort(key=lambda r: (
+                reports_own_period(r),
                 priority_index.get((r.citation_json or {}).get("source_type", ""), 99),
                 claim_rank(r.extraction_method),
                 -float(r.confidence_score or 0),
@@ -2002,6 +2068,7 @@ class PipelineOrchestrator:
             if len(group) < 2:
                 continue
             tier = lambda r: (
+                reports_own_period(r),
                 priority_index.get((r.citation_json or {}).get("source_type", ""), 99),
                 claim_rank(r.extraction_method),
             )
@@ -2022,11 +2089,51 @@ class PipelineOrchestrator:
         winners -= contested
         losers |= contested
 
+        # One figure, one publication. A claim that lost only on tier and
+        # agrees with the winner within the coarser of the two declared
+        # precisions is the same figure read twice - a tagged fact in
+        # thousands beside a printed one in millions with one decimal. It is
+        # cited beside the published figure, not published as a second one and
+        # not held as a conflict it never was.
+        corroborating: set[str] = set()
+        by_id = {row.id: row for row in rows}
+        for group in by_key.values():
+            winner = next((r for r in group if r.id in winners), None)
+            if winner is None or winner.value_normalized_usd_millions is None:
+                continue
+            for other in group:
+                if other.id == winner.id or other.id in contested:
+                    continue
+                if other.value_normalized_usd_millions is None:
+                    continue
+                if _agrees_within_declared_precision(winner, other):
+                    corroborating.add(other.id)
+                    cited = list((winner.citation_json or {}).get("corroborated_by") or [])
+                    cited.append({
+                        "datapoint_id": other.id,
+                        "source_url": other.source_url,
+                        "value_normalized_usd_millions": other.value_normalized_usd_millions,
+                        "extraction_method": other.extraction_method,
+                    })
+                    winner.citation_json = {**(winner.citation_json or {}), "corroborated_by": cited}
+
         for row in rows:
-            if row.id in losers:
+            if row.id in corroborating:
+                row.validation_status = ValidationStatus.CORROBORATES.value
+                row.issue_flags = list(set((row.issue_flags or []) + ["corroborates_published_figure"]))
+                if row.citation_json:
+                    row.citation_json = {**row.citation_json, "validation_status": row.validation_status}
+            elif row.id in losers:
                 row.validation_status = ValidationStatus.NEEDS_REVIEW.value
-                flag = ("equal_strength_claims_disagree" if row.id in contested
-                        else "conflict_with_higher_priority_source")
+                if row.id in contested:
+                    flag = "equal_strength_claims_disagree"
+                elif reports_own_period(row) == 2 and any(
+                    reports_own_period(by_id[w]) == 0 for w in winners
+                    if by_id[w].period == row.period
+                ):
+                    flag = "restated_in_later_filing"
+                else:
+                    flag = "conflict_with_higher_priority_source"
                 row.issue_flags = list(set((row.issue_flags or []) + [flag]))
                 if row.citation_json:
                     row.citation_json = {**row.citation_json, "validation_status": row.validation_status}

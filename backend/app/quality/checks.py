@@ -4,6 +4,8 @@ import re
 from dataclasses import dataclass
 from typing import Any
 
+from app.domain.models import ValidationStatus
+
 
 @dataclass
 class QualityIssue:
@@ -214,13 +216,16 @@ def apply_auto_pass_gate(datapoint: dict[str, Any], issues: list[QualityIssue]) 
         return "needs_review"
     if (datapoint.get("confidence_score") or 0) < 0.7:
         return "needs_review"
-    # Preserve judge decision when already needs_review/rejected; allow auto_pass through
-    status = datapoint.get("validation_status") or "auto_pass"
-    if status in {"needs_review", "rejected", "follow_up", "unresolved"}:
+    # A status other than pending is a decision an earlier stage made - the
+    # judge held the row, a person confirmed it, reconciliation found it a
+    # second reading of a figure already published - and the gate does not
+    # revisit it. Listing the statuses to preserve left out every status
+    # added after the list was written, and such a row fell through to the
+    # clause below and was published again under its own value.
+    status = datapoint.get("validation_status") or ValidationStatus.PENDING.value
+    if status != ValidationStatus.PENDING.value:
         return status
-    if status == "auto_pass":
-        return "auto_pass"
     # pending + clean → auto_pass for quarterly/annual product lines
     if datapoint.get("period_type") in {"quarterly", "annual"}:
-        return "auto_pass"
+        return ValidationStatus.AUTO_PASS.value
     return status

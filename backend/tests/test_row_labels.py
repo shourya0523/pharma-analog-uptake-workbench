@@ -324,3 +324,13 @@ def test_a_marker_alone_in_its_paragraph_takes_the_next_one():
     """
     table = BeautifulSoup(markup, "lxml").find("table")
     assert table_footnotes(table) == ["(1) includes Nebulized Calderon"]
+
+
+def test_every_question_flag_reaches_the_judge():
+    """The flags that make a row a question travel to the judge as label
+    flags; one left out of that set is read as an answer there, whatever
+    the reader said."""
+    from app.extraction.extract import QUESTION_FLAGS
+    from app.pipeline.orchestrator import LABEL_FLAGS
+
+    assert QUESTION_FLAGS <= LABEL_FLAGS
