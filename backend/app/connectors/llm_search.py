@@ -5,7 +5,7 @@ from typing import Any
 
 from app.config import get_settings
 from app.domain.models import RetrievalStatus, RetrievedSource, SourceType, new_id
-from app.llm.client import LLMModules
+from app.llm.client import LLMModules, listed
 from app.storage.filestore import FileStore
 
 
@@ -107,7 +107,7 @@ class LLMSearchConnector:
             context=context,
             max_sources=self.settings.llm_search_max_urls,
         )
-        sources_raw = payload.get("sources") or []
+        sources_raw = listed(payload, "sources")
         if not sources_raw:
             # Fall back to search-only snippets as thin sources
             sources_raw = _normalize_results(payload)

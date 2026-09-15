@@ -176,9 +176,24 @@ def load_prompt(name: str) -> dict[str, Any]:
         return yaml.safe_load(f)
 
 
+# Where a reply that should have been an object arrives as a bare array, the
+# array is kept under this key: the model answered the question and left off
+# the name, and `listed` reads it back for whichever name the caller expects.
+BARE_LIST = "_bare_list"
+
+
 def _parse_json_content(content: Any) -> dict[str, Any]:
+    """A model reply as a mapping, whatever shape it arrived in.
+
+    The return type was a promise the parse did not keep: asked for
+    ``{"spans": [...]}`` a model sometimes answers ``[...]``, and the caller's
+    ``.get`` raised on the list, which killed the job mid-pipeline rather than
+    costing it one answer.
+    """
     if isinstance(content, dict):
         return content
+    if isinstance(content, list):
+        return {BARE_LIST: content}
     if not content:
         return {}
     text = content if isinstance(content, str) else str(content)
@@ -186,13 +201,31 @@ def _parse_json_content(content: Any) -> dict[str, Any]:
     if text.startswith("```"):
         text = re.sub(r"^```(?:json)?\s*", "", text)
         text = re.sub(r"\s*```$", "", text)
+    parsed: Any
     try:
-        return json.loads(text)
+        parsed = json.loads(text)
     except json.JSONDecodeError:
-        match = re.search(r"\{[\s\S]*\}", text)
-        if match:
-            return json.loads(match.group(0))
-        return {"raw": text}
+        match = re.search(r"[\[{][\s\S]*[\]}]", text)
+        if not match:
+            return {"raw": text}
+        try:
+            parsed = json.loads(match.group(0))
+        except json.JSONDecodeError:
+            return {"raw": text}
+    if isinstance(parsed, dict):
+        return parsed
+    if isinstance(parsed, list):
+        return {BARE_LIST: parsed}
+    return {"raw": text}
+
+
+def listed(payload: dict[str, Any], key: str) -> list[Any]:
+    """The list a reply was asked for, keyed or bare."""
+    value = payload.get(key)
+    if isinstance(value, list):
+        return value
+    bare = payload.get(BARE_LIST)
+    return bare if isinstance(bare, list) else []
 
 
 def _citations_from_message(message: dict[str, Any]) -> list[dict[str, str]]:
@@ -266,7 +299,7 @@ class LLMModules:
             system=prompt["system"],
             user=user,
         )
-        spans = result.get("spans") or []
+        spans = listed(result, "spans")
         return _filter_hallucinated_spans(spans, clipped)
 
     async def extract_revenue_from_spans(
@@ -303,7 +336,7 @@ class LLMModules:
             system=prompt["system"],
             user=user,
         )
-        candidates = result.get("candidates") or []
+        candidates = listed(result, "candidates")
         # Grounding gates
         corpus = "\n\n".join(s.get("span_text") or "" for s in compact)
         kept_v, drop_v = enforce_verbatim_on_candidates(candidates, source_text=corpus, spans=compact)

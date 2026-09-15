@@ -64,7 +64,7 @@ from app.extraction.members import Resolution, load_products, resolve
 from app.extraction.tagged import candidates_from_instance
 from app.identity.resolver import resolve_product_identity
 from app.llm.aliases import merge_aliases
-from app.llm.client import LLMModules
+from app.llm.client import LLMModules, listed
 from app.parsing.documents import DocumentParser
 from app.parsing.evidence import (
     build_revenue_llm_text,
@@ -391,16 +391,16 @@ class PipelineOrchestrator:
         merged = merge_aliases(
             job.drug_name,
             job.generic_name,
-            llm_aliases=result.get("aliases"),
-            formulations=result.get("formulations"),
-            parent_companies=result.get("parent_companies"),
+            llm_aliases=listed(result, "aliases"),
+            formulations=listed(result, "formulations"),
+            parent_companies=listed(result, "parent_companies"),
         )
         self._job_aliases = merged
         payload = {
-            "aliases": result.get("aliases") or [],
-            "formulations": result.get("formulations") or [],
-            "parent_companies": result.get("parent_companies") or [],
-            "search_terms": result.get("search_terms") or [],
+            "aliases": listed(result, "aliases"),
+            "formulations": listed(result, "formulations"),
+            "parent_companies": listed(result, "parent_companies"),
+            "search_terms": listed(result, "search_terms"),
             "merged": merged,
         }
         self.db.add(
@@ -1469,11 +1469,11 @@ class PipelineOrchestrator:
                     text=llm_text,
                 )
             span_corpus = "\n\n".join(
-                (s.get("span_text") or "") for s in (result.get("spans") or [])
+                (s.get("span_text") or "") for s in listed(result, "spans")
             ) or llm_text
             llm_dropped = result.get("dropped") or []
             llm_kept, dropped = filter_revenue_candidates(
-                result.get("candidates") or [],
+                listed(result, "candidates"),
                 product=job.drug_name,
                 generic=job.generic_name,
                 extra_aliases=extra,
@@ -1942,11 +1942,11 @@ class PipelineOrchestrator:
         losers: set[str] = set()
         if conflict_payload:
             result = await self.llm.reconcile(product=job.drug_name, candidates=conflict_payload)
-            for item in result.get("resolved") or []:
+            for item in listed(result, "resolved"):
                 wid = item.get("winner_id")
                 if wid:
                     winners.add(wid)
-            for item in result.get("conflicts") or []:
+            for item in listed(result, "conflicts"):
                 ids = item.get("candidate_ids") or []
                 wid = item.get("winner_id")
                 if not wid:
@@ -2191,7 +2191,7 @@ class PipelineOrchestrator:
             "need_filing": ("Likely disclosed in a filing not yet retrieved", 0.35),
             "gap": ("Missing quarter — analyst follow-up required", 0.4),
         }
-        for miss in result.get("missing_periods") or []:
+        for miss in listed(result, "missing_periods"):
             if isinstance(miss, str):
                 period, code, reason, nxt = miss, "gap", "Missing period", "Review SEC filings"
             else:
