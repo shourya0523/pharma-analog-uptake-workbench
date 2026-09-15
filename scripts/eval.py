@@ -175,6 +175,17 @@ def score(case: dict, datapoints: list[dict]) -> list[dict]:
                     and abs(datapoint["value_normalized_usd_millions"] - target)
                     <= max(0.5, abs(target) * 0.01))
 
+        # What a figure is a figure for is part of the answer. Where a filer
+        # prints one line for two products it sells together, the value is the
+        # pair's, and returning it under the asked product's name alone is a
+        # different claim from the one the filing makes. A case says which by
+        # carrying `reported_as`; one that says nothing expects the product's
+        # own figure, which is `reported_as` empty.
+        wanted_as = want.get("reported_as") or None
+
+        def covers(datapoint: dict, wanted_as: str | None = wanted_as) -> bool:
+            return (datapoint.get("reported_as") or None) == wanted_as
+
         # Two published figures that disagree is its own outcome, and the one
         # this must never do is pick between them: taking the first would score
         # a quarter correct whenever the right answer was among the answers,
@@ -186,8 +197,11 @@ def score(case: dict, datapoints: list[dict]) -> list[dict]:
         elif target is None:
             state = "correctly silent" if not published else "answered anyway"
             read = published[0]["value_normalized_usd_millions"] if published else None
-        elif any(near(d) for d in published):
+        elif any(near(d) and covers(d) for d in published):
             state, read = "published, correct", next(
+                d["value_normalized_usd_millions"] for d in published if near(d) and covers(d))
+        elif any(near(d) for d in published):
+            state, read = "published, wrong identity", next(
                 d["value_normalized_usd_millions"] for d in published if near(d))
         elif published:
             state, read = "published, WRONG", published[0]["value_normalized_usd_millions"]
@@ -197,7 +211,7 @@ def score(case: dict, datapoints: list[dict]) -> list[dict]:
         else:
             state, read = "no answer", None
         rows.append({"period": want["period"], "want": target, "read": read,
-                     "state": state,
+                     "state": state, "reported_as": want.get("reported_as"),
                      "method": (published or here or [{}])[0].get("extraction_method"),
                      "candidates": len(here)})
     return rows

@@ -385,9 +385,17 @@ come before the table logic rather than after it.
   asks who reported the product in that window and, finding nothing, says
   `no_filer_of_record` rather than recording a gap to fill from a filing
   that does not exist.
-- **A combined line is the family's figure, never the sub-product's.** The
-  reader publishes it flagged `combined_line`, held for a person, unless a
-  footnote says the others sold nothing in that period. Gold needed no
+- **A combined line is the pair's figure, published as the pair's.**
+  *Revised.* The first answer held such a row for a person, flagged
+  `combined_line`, unless a footnote said the others sold nothing. That put a
+  reviewer in front of a question they cannot answer: the split is not in the
+  quote, and it is not anywhere else either. Issuers report the pair and
+  disclose no split, and no agreed method divides a co-administered regimen
+  from outside. So the row is published under a name that says what it
+  covers - the `reported_as` column, ordered as the filer prints the names -
+  and the asked product's own quarter is recorded unresolved as
+  `reported_with_another_product`, which says the pair's figure is the
+  disclosure and no figure for the product alone exists. Gold needed no
   relabelling: of its 68 `Nebulized Tyvaso` rows, 50 are the pre-DPI era
   where the issuer's only Tyvaso row was the nebulized one, and the other 18
   carry a label that names the formulation itself. No gold row takes a

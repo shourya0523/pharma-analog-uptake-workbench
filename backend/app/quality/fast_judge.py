@@ -44,15 +44,6 @@ def try_deterministic_judgment(
             "issues": ["deterministic:partial_period"],
             "explanation": "The label's footnote says the figure is for part of the period",
         }
-    if "combined_line" in flags:
-        # The line combines this product with others, so the figure is the
-        # family's. Which part is this product's is not in the quote.
-        return {
-            "validation_status": "needs_review",
-            "support_classification": "partial",
-            "issues": ["deterministic:combined_line"],
-            "explanation": "The row combines this product with others; the figure is the family's",
-        }
     if "label_not_understood" in flags:
         # The reader could not account for every word of the label; the judge
         # is asked, with the residue, and a person decides.

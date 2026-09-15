@@ -45,6 +45,7 @@ from app.db.models import (
 )
 from app.domain.models import (
     NO_FILER_OF_RECORD,
+    REPORTED_WITH_ANOTHER_PRODUCT,
     JobStatus,
     JobStep,
     PeriodType,
@@ -236,6 +237,33 @@ def reading_rank(source_type: Any) -> int:
     return len(DOCUMENT_FITNESS)
 
 
+def reported_as_for(product: str, candidate: dict[str, Any]) -> str | None:
+    """What a figure is a figure for, where that is not the product asked about.
+
+    A filer that sells two products together prints one line for both, and
+    nobody publishes the split: there is no agreed way to divide a
+    co-administered regimen from outside, and the companies themselves report
+    the pair. So the pair is the honest unit, and this names it.
+
+    The order is the filer's, taken from where each name falls in the row the
+    quote holds, so that one printed line has one name however it was reached:
+    a row printed "NuVessa / Calderon" is the NuVessa + Calderon line whether
+    the question was about Calderon or about NuVessa. A name the quote does not
+    carry keeps its place behind the ones that do.
+
+    `None` for a row that is the product's own, which is almost all of them.
+    """
+    combined = list(candidate.get("combined_with") or ())
+    if not combined:
+        return None
+    names = [product, *combined]
+    quote = (candidate.get("source_quote") or "").lower()
+    def printed_at(pair: tuple[int, str]) -> tuple[int, int]:
+        position = quote.find(pair[1].lower())
+        return (len(quote) if position < 0 else position, pair[0])
+    return " + ".join(name for _, name in sorted(enumerate(names), key=printed_at))
+
+
 def persist_profile_field(
     db: Session,
     *,
@@ -414,6 +442,7 @@ class PipelineOrchestrator:
             self._record_unfiled_quarters(job, unfiled, datapoint_rows, searched)
             await self._judge(job, datapoint_rows, sources, parsed, options)
             await self._quality_and_validation(job)
+            self._record_quarters_only_reported_with_another_product(job, datapoint_rows)
             await self._completeness(job)
             self._set_step(job, JobStep.READY_FOR_REVIEW, JobStatus.READY_FOR_REVIEW)
             logger.info(
@@ -1160,6 +1189,56 @@ class PipelineOrchestrator:
         parsed = await self._parse(job, search_sources)
         return search_sources, parsed
 
+    def _record_quarters_only_reported_with_another_product(
+        self, job: DrugJobORM, rows: list[DatapointORM]
+    ) -> None:
+        """Say which quarters the issuer reports only as part of a pair.
+
+        Where every figure for a quarter is a line covering this product and
+        another, the pair's figure is published under the pair's name and the
+        product's own is not a number anybody discloses. Left unsaid, the
+        quarter reads as a gap the pipeline failed to fill, and a reviewer
+        goes looking for a figure that does not exist.
+        """
+        by_period: dict[str, list[DatapointORM]] = {}
+        for row in rows:
+            if row.period and row.period_type == PeriodType.QUARTERLY.value:
+                by_period.setdefault(row.period, []).append(row)
+        recorded = {
+            u.period
+            for u in self.db.query(UnresolvedQuarterORM).filter_by(job_id=job.id).all()
+        }
+        added = 0
+        for period, figures in sorted(by_period.items()):
+            if period in recorded or not all(f.reported_as for f in figures):
+                continue
+            names = sorted({f.reported_as for f in figures if f.reported_as})
+            self.db.add(
+                UnresolvedQuarterORM(
+                    id=new_id(),
+                    job_id=job.id,
+                    period=period,
+                    reason_unresolved=(
+                        f"[{REPORTED_WITH_ANOTHER_PRODUCT}] {job.drug_name} is reported only as "
+                        f"{', '.join(names)}; that figure is published under this quarter, and no "
+                        f"figure for {job.drug_name} alone is disclosed"
+                    ),
+                    sources_checked=sorted({f.source_url for f in figures if f.source_url}),
+                    recommended_next_step=(
+                        "Use the combined figure, or supply a source that reports this product "
+                        "on its own"
+                    ),
+                    confidence_that_unavailable=0.8,
+                )
+            )
+            added += 1
+        if added:
+            self.db.commit()
+            logger.info(
+                "reported_with_another_product job_id=%s drug=%s quarters=%d",
+                job.id, job.drug_name, added,
+            )
+
     def _record_unfiled_quarters(
         self, job: DrugJobORM, quarters: list[str], rows: list[DatapointORM], searched: list
     ) -> None:
@@ -1885,6 +1964,7 @@ class PipelineOrchestrator:
                     unit=unit,
                     period_type=period_type,
                     revenue_scope=cand.get("revenue_scope") or "Unknown",
+                    reported_as=reported_as_for(job.drug_name, cand),
                     geography=cand.get("geography"),
                     formulation=cand.get("formulation"),
                     route_of_administration=cand.get("route_of_administration"),

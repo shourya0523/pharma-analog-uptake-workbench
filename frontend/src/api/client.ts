@@ -92,6 +92,7 @@ export type ReviewItem = {
   datapoint_id?: string
   value_normalized_usd_millions?: number | null
   revenue_scope?: string
+  reported_as?: string | null
   source_url?: string
   source_quote?: string
   extraction_method?: string

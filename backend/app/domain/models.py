@@ -145,6 +145,12 @@ class Cadence(str, Enum):
 # read back by the review queue to say so.
 NO_FILER_OF_RECORD = "no_filer_of_record"
 
+# The code an unresolved quarter carries when the issuer reports the product
+# only together with another one. The pair's figure is published under the
+# pair's name; the product's own is not a number anybody discloses, and this
+# says so rather than leaving the quarter looking like a gap to fill.
+REPORTED_WITH_ANOTHER_PRODUCT = "reported_with_another_product"
+
 
 class UnresolvedResolution(str, Enum):
     """What a reviewer decided about a quarter the pipeline could not fill."""

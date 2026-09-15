@@ -272,6 +272,9 @@ function QuartersTab({ product }: { product: any }) {
                   {q.value_normalized_usd_millions != null
                     ? `$${q.value_normalized_usd_millions}M`
                     : '—'}
+                  {q.reported_as && (
+                    <div className="quote">for {q.reported_as}, not this product alone</div>
+                  )}
                 </td>
                 <td>{q.revenue_scope}</td>
                 <td>
