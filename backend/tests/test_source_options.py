@@ -120,8 +120,15 @@ def test_run_creation_serialises_options_for_the_json_column():
 
 
 def test_earnings_release_satisfies_the_filing_check_for_search_fallback():
-    """An exhibit-only run already has issuer filings, so no LLM search fallback."""
+    """An exhibit-only run already has issuer filings, so no LLM search fallback.
+
+    Both kinds count as an issuer filing, and the check is now two questions
+    rather than one: what EDGAR listed, and what could be fetched of it. A
+    refusal is not an absence, so only the first decides whether the search
+    stands in for the issuer at all.
+    """
     source = inspect.getsource(PipelineOrchestrator._retrieve)
-    marker = source.split("sec_ok = any(", 1)[1].split(")", 1)[0]
-    assert "EARNINGS_RELEASE" in marker
-    assert "SEC_FILING" in marker
+    listed = source.split("sec_found = [", 1)[1].split("]", 1)[0]
+    assert "EARNINGS_RELEASE" in listed
+    assert "SEC_FILING" in listed
+    assert "not sec_ok and not sec_found" in source

@@ -48,9 +48,9 @@ from app.domain.models import (
     JobStatus,
     JobStep,
     PeriodType,
-    RevenueScope,
     RetrievalStatus,
     RetrievedSource,
+    RevenueScope,
     SourceType,
     ValidationStatus,
     new_id,
@@ -575,12 +575,23 @@ class PipelineOrchestrator:
         if options.get("transcripts", False):
             collected.extend(await self.transcripts.retrieve())
 
-        sec_ok = any(
-            s.source_type in {SourceType.SEC_FILING, SourceType.EARNINGS_RELEASE}
-            and s.retrieval_status == RetrievalStatus.SUCCESS
-            for s in collected
-        )
-        if get_settings().enable_llm_search and not sec_ok:
+        # What the search fallback is for is an issuer with nothing filed, not
+        # an issuer whose filings could not be fetched. EDGAR refuses under
+        # load, and a run that was refused looked exactly like a run that found
+        # nothing: the fallback then published investor-relations pages for a
+        # filer whose own quarterly reports were sitting behind a rate limit.
+        sec_found = [
+            s for s in collected
+            if s.source_type in {SourceType.SEC_FILING, SourceType.EARNINGS_RELEASE}
+        ]
+        sec_ok = any(s.retrieval_status == RetrievalStatus.SUCCESS for s in sec_found)
+        if sec_found and not sec_ok:
+            job.quality_flags = list(set((job.quality_flags or []) + ["sec_retrieval_failed"]))
+            logger.warning(
+                "sec_retrieval_failed job_id=%s drug=%s listed=%d fetched=0",
+                job.id, job.drug_name, len(sec_found),
+            )
+        if get_settings().enable_llm_search and not sec_ok and not sec_found:
             search_sources = await self.search.fallback_retrieve(
                 run_id=job.run_id,
                 job_id=job.id,

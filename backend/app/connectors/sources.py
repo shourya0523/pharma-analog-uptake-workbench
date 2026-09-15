@@ -46,17 +46,58 @@ logger = logging.getLogger(__name__)
 ANNUAL_FORMS = frozenset({"10-K", "10-K405", "10-KT", "20-F", "40-F", "11-K"})
 
 
-# Shared across connector instances so concurrent jobs don't stampede EDGAR
+# Shared across connector instances so concurrent jobs don't stampede EDGAR.
+# The floor is SEC's published guidance; the pace above it is not guessed but
+# observed, because what the endpoint will accept depends on who else is
+# asking from the same address. A refusal slows every caller, and a run of
+# successes speeds them back up.
 _SEC_LOCK = asyncio.Lock()
-_SEC_MIN_INTERVAL_S = 0.12  # ~8 req/s max, under SEC 10/s guidance
+_SEC_FLOOR_S = 0.12  # ~8 req/s, under SEC's 10/s guidance
+_SEC_CEILING_S = 4.0
+# How many consecutive successes it takes to halve the pace back down.
+_SEC_RECOVERY_RUN = 20
+
+_sec_pace = _SEC_FLOOR_S
+_sec_since_refusal = 0
 _last_sec_request = 0.0
+
+
+def sec_pace() -> float:
+    """The interval currently kept between requests, for tests and logging."""
+    return _sec_pace
+
+
+def sec_saw_refusal(retry_after: float | None = None) -> None:
+    """EDGAR refused for load. Slow every caller, and take its own number
+    when it gave one."""
+    global _sec_pace, _sec_since_refusal
+    _sec_pace = min(_SEC_CEILING_S, max(_sec_pace * 2, retry_after or 0.0))
+    _sec_since_refusal = 0
+
+
+def sec_saw_success() -> None:
+    global _sec_pace, _sec_since_refusal
+    if _sec_pace <= _SEC_FLOOR_S:
+        return
+    _sec_since_refusal += 1
+    if _sec_since_refusal >= _SEC_RECOVERY_RUN:
+        _sec_pace = max(_SEC_FLOOR_S, _sec_pace / 2)
+        _sec_since_refusal = 0
+
+
+def _retry_after_seconds(response: httpx.Response) -> float | None:
+    raw = response.headers.get("retry-after")
+    try:
+        return float(raw) if raw else None
+    except ValueError:
+        return None
 
 
 async def _sec_throttle() -> None:
     global _last_sec_request
     async with _SEC_LOCK:
         now = asyncio.get_event_loop().time()
-        wait = _SEC_MIN_INTERVAL_S - (now - _last_sec_request)
+        wait = _sec_pace - (now - _last_sec_request)
         if wait > 0:
             await asyncio.sleep(wait)
         _last_sec_request = asyncio.get_event_loop().time()
@@ -276,41 +317,59 @@ class SECConnector:
         safe_doc = doc.replace("/", "_")
         return f"cache/sec/{accession.replace('-', '')}/{safe_doc}"
 
+    # How long one document is worth waiting out a refusal for. A count of
+    # attempts was the wrong bound: four attempts with a doubling delay gave
+    # up after seven seconds, which is nothing to a rate limit, and the
+    # filing was then recorded as one the issuer had not made.
+    RETRY_BUDGET_S = 90.0
+
     async def _get_with_retry(
-        self, client: httpx.AsyncClient, url: str, *, attempts: int = 4
+        self, client: httpx.AsyncClient, url: str, *, budget_s: float | None = None
     ) -> httpx.Response:
-        """Fetch, retrying the refusals EDGAR gives when asked too quickly.
+        """Fetch, waiting out the refusals EDGAR gives when asked too quickly.
 
         SEC returns 503 or 429 under load rather than a permanent error, and a
-        single one costs a whole filing. It is worth distinguishing from a real
-        failure: a document silently missing because of a rate limit reads
-        downstream as an issuer that discloses nothing, so without a retry the
-        same code answers differently from one run to the next.
+        single one costs a whole filing. It is worth waiting out: a document
+        missing because of a rate limit reads downstream as an issuer that
+        discloses nothing, so without this the same code answers differently
+        from one run to the next. Each refusal also slows every other caller,
+        because the limit belongs to the endpoint and not to this request.
         """
+        deadline = asyncio.get_event_loop().time() + (
+            self.RETRY_BUDGET_S if budget_s is None else budget_s
+        )
         delay = 1.0
-        for attempt in range(attempts):
+        attempt = 0
+        while True:
+            attempt += 1
             await _sec_throttle()
+            last: Exception | None = None
             try:
                 response = await client.get(url)
             except httpx.TransportError as exc:
                 # A connection that drops is the same refusal without a status
                 # line; it reads downstream exactly as a 503 would.
-                if attempt == attempts - 1:
-                    raise
-                logger.info("sec_backoff error=%s attempt=%s url=%s", type(exc).__name__, attempt + 1, url)
-                await asyncio.sleep(delay)
-                delay *= 2
-                continue
-            if response.status_code not in (429, 503) or attempt == attempts - 1:
+                sec_saw_refusal()
+                last = exc
+                logger.info("sec_backoff error=%s attempt=%s url=%s", type(exc).__name__, attempt, url)
+            else:
+                if response.status_code not in (429, 503):
+                    sec_saw_success()
+                    response.raise_for_status()
+                    return response
+                sec_saw_refusal(_retry_after_seconds(response))
+                logger.info(
+                    "sec_backoff status=%s attempt=%s pace=%.2f url=%s",
+                    response.status_code, attempt, sec_pace(), url,
+                )
+            remaining = deadline - asyncio.get_event_loop().time()
+            if remaining <= 0:
+                if last is not None:
+                    raise last
                 response.raise_for_status()
                 return response
-            logger.info(
-                "sec_backoff status=%s attempt=%s url=%s",
-                response.status_code, attempt + 1, url,
-            )
-            await asyncio.sleep(delay)
-            delay *= 2
-        raise RuntimeError("unreachable")
+            await asyncio.sleep(min(delay, remaining))
+            delay = min(delay * 2, 30.0)
 
     async def _list_filing_documents(
         self, client: httpx.AsyncClient, cik_int: str, acc_nodash: str

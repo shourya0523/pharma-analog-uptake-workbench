@@ -259,10 +259,15 @@ def test_every_edgar_read_survives_a_dropped_connection_or_a_refusal(monkeypatch
     response = asyncio.run(connector._get_with_retry(client, "https://data.sec.gov/submissions/CIK0000000001.json"))
     assert response.status_code == 200 and client.calls == 3
 
-    client = Flaky([httpx.ConnectError("")] * 4)
+    # A refusal that never lets up ends as the error it was, once the budget
+    # for that one document is spent. The budget is time, not a count of
+    # attempts: four attempts with a doubling delay gave up after seven
+    # seconds, which is nothing to a rate limit, and the filing was then
+    # recorded as one the issuer had never made.
+    client = Flaky([httpx.ConnectError("")] * 50)
     with pytest.raises(httpx.ConnectError):
-        asyncio.run(connector._get_with_retry(client, "https://data.sec.gov/x", attempts=4))
-    assert client.calls == 4
+        asyncio.run(connector._get_with_retry(client, "https://data.sec.gov/x", budget_s=0))
+    assert client.calls == 1
 
     # And the three reads that used to call the client directly now go
     # through it: the ticker map, the submissions index, and its archive shards.
