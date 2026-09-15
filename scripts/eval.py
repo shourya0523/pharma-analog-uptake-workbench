@@ -58,12 +58,6 @@ from profile_contract import (
 
 REPO = pathlib.Path(__file__).resolve().parents[1]
 
-# What a person types to identify a product, plus the window options. Shared
-# with the revenue mode's own list by being the same question: which keys of a
-# case describe the drug rather than the answer.
-PROFILE_DRUG_FIELDS = {"drug_name", "generic_name", "manufacturer", "ticker", "cik",
-                       "indication", "known_source_url"}
-
 # The attributes compared one product at a time, in the order they are printed.
 # Taken from the contract so an attribute added there is scored here.
 SCORED_ATTRIBUTES = tuple(
@@ -99,6 +93,33 @@ def _call(request, *, timeout: int, attempts: int = 12) -> dict:
             time.sleep(delay)
             delay = min(delay * 1.6, 60.0)
     raise RuntimeError("unreachable")
+
+
+# Which keys of a case identify the drug rather than hold the answer. The API
+# publishes them - a run takes a list of these objects - so they are read from
+# the server rather than written here, where a field added to the input would
+# be dropped from every run this starts and nothing would say so. The name is
+# the schema's, so it goes stale only if the route stops taking that type.
+DRUG_INPUT_SCHEMA = "DrugInput"
+
+
+def drug_fields(base: str) -> set[str]:
+    """The identifying keys of a case, from the schema the server publishes."""
+    schema = (
+        get(base, "/openapi.json")
+        .get("components", {})
+        .get("schemas", {})
+        .get(DRUG_INPUT_SCHEMA, {})
+        .get("properties", {})
+    )
+    if not schema:
+        raise RuntimeError(
+            f"the server publishes no {DRUG_INPUT_SCHEMA} schema, so which case "
+            f"keys describe the drug cannot be read from it. Fix the route or "
+            f"the schema name rather than listing the fields here: a list "
+            f"written here drops a field added to the input, silently."
+        )
+    return set(schema)
 
 
 def post(base: str, path: str, body: dict) -> dict:
@@ -315,6 +336,7 @@ def score_profiles(base: str, cases: list[dict], labels: dict[str, dict],
     so what is scored is what a reader would see, not what a reader could have
     got by calling the derivation directly with fields chosen by the test.
     """
+    identifying = drug_fields(base)
     batches: dict[str, list[dict]] = {}
     for case in cases:
         options = {**case.get("options", {}), "product_metadata": True}
@@ -325,7 +347,7 @@ def score_profiles(base: str, cases: list[dict], labels: dict[str, dict],
         print(f"  [{index}/{len(batches)}] {len(batch)} drug(s), options {options_key[:70]}",
               flush=True)
         run_id = post(base, "/runs", {
-            "drugs": [{k: v for k, v in case.items() if k in PROFILE_DRUG_FIELDS}
+            "drugs": [{k: v for k, v in case.items() if k in identifying}
                       for case in batch],
             "options": json.loads(options_key),
         })["run_id"]
@@ -507,8 +529,7 @@ def main() -> int:
     # Cases sharing the same options go in one run, the way a person would
     # paste a list of drugs for one window. Jobs are matched back to cases by
     # drug name, which the API returns on each job.
-    DRUG_FIELDS = {"drug_name", "generic_name", "manufacturer", "ticker", "cik",
-                   "indication", "known_source_url"}
+    DRUG_FIELDS = drug_fields(args.base)
     batches: dict[str, list[dict]] = {}
     for case in cases:
         batches.setdefault(json.dumps(case.get("options", {}), sort_keys=True), []).append(case)

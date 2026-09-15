@@ -176,3 +176,39 @@ def test_a_curated_product_gets_nothing_from_the_curated_file():
         assert derived.route_of_administration is None
         assert derived.first_approval_year is None
         assert derived.indication_area is None
+
+
+def test_one_product_and_a_whole_catalogue_are_judged_the_same():
+    """A cohort answers for all its members at once, and asking about one
+    product must give what asking about all of them gave.
+
+    Deriving a catalogue takes the batch answer so that each cohort is built
+    once rather than once per member. That is only sound while the two agree,
+    and nothing else here would notice them drifting apart.
+    """
+    from app.analytics.profile_attributes import intensity_by_product
+
+    catalog = [
+        profile(f"Peer{index}", year=1996 + index, area=f"Area{index % 3}",
+                moa_class=f"path{index % 2}", route="Oral" if index % 2 else "Inhaled")
+        for index in range(12)
+    ]
+    batch = intensity_by_product([row for row in catalog])
+    for row in catalog:
+        one = competitive_intensity(row, [other for other in catalog
+                                          if other["drug_name"] != row["drug_name"]])
+        assert one == batch[row["drug_name"]], row["drug_name"]
+
+
+def test_a_product_the_catalogue_cannot_place_is_left_out_of_the_batch():
+    """Without an indication or a year there is no cohort to judge it in, and a
+    missing key is what `derive_analog_profile` turns into a refusal."""
+    from app.analytics.profile_attributes import intensity_by_product
+
+    placed = profile("Calderon", year=2004)
+    no_area = {**profile("NuVessa", year=2004), "indication_area": None}
+    no_year = {**profile("Othermol"), "first_approval_year": None}
+
+    batch = intensity_by_product([placed, no_area, no_year])
+    assert "Calderon" in batch
+    assert "NuVessa" not in batch and "Othermol" not in batch

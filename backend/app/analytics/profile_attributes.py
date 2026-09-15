@@ -153,18 +153,27 @@ class AnalogProfile:
         }
 
 
-# Attributes a caller may reasonably expect and that this can fail to ground.
-# Derived from the dataclass rather than listed, so a field added above is
-# reported as unresolved without anyone remembering to add it here.
-_REPORTABLE = (
-    "moa",
-    "moa_class",
-    "route_of_administration",
-    "first_approval_year",
-    "approval_era",
-    "indication_area",
-    "competitive_intensity_at_launch",
+# What the attributes say about where they came from, rather than what the
+# product is. These are always answered, so they are never what `unresolved` is
+# reporting and never what an answer key is compared against - a key curated by
+# a person and a row derived here disagree on them by definition, and should.
+PROVENANCE_FIELDS = frozenset(
+    {"drug_name", "attribute_provenance", "competitive_intensity_basis", "unresolved"}
 )
+
+
+def _reportable() -> tuple[str, ...]:
+    """The attributes `unresolved` speaks for: every one that says what the
+    product is.
+
+    Taken from the dataclass rather than listed beside it, because a list
+    written here is one a field added above would not appear in - and the
+    attribute would then be missing from the profile with nothing saying so,
+    which is the single failure `unresolved` exists to prevent.
+    """
+    return tuple(
+        name for name in AnalogProfile.__dataclass_fields__ if name not in PROVENANCE_FIELDS
+    )
 
 
 def _classified(target: dict[str, object], peer: dict[str, object]) -> str:
@@ -213,30 +222,14 @@ def peers_marketed_at_launch(
     ]
 
 
-def competitive_intensity(
-    target: dict[str, object], catalogue: list[dict[str, object]]
-) -> tuple[str | None, int | None]:
-    """The label and the peer count this product faced, judged within its cohort.
+def _cohort_snapshots(rows: list[dict[str, object]]) -> list:
+    """One snapshot per product in a single indication's cohort.
 
-    The cohort is every product the catalogue holds for the same indication, so
-    the label says how this launch compared with the others we can see rather
-    than against a threshold picked in advance. A catalogue that holds no
-    indication for the product cannot place it, and says so with None rather
-    than with the label an empty roster would produce - which would read as
-    "launched into an open market" for a product we simply know nothing about.
+    Every product in the cohort is measured against the same roster rule, so the
+    percentile `categorize_snapshots` puts it at is a comparison with the other
+    launches into that indication rather than with a threshold picked in advance.
     """
-    if target.get("first_approval_year") is None or not target.get("indication_area"):
-        return None, None
-
-    cohort = [
-        row
-        for row in catalogue
-        if row.get("indication_area") == target.get("indication_area")
-        and row.get("first_approval_year") is not None
-    ]
-    by_name = {str(row.get("drug_name")): row for row in cohort}
-    by_name[str(target.get("drug_name"))] = target
-
+    by_name = {str(row.get("drug_name")): row for row in rows}
     snapshots = []
     for name, row in sorted(by_name.items()):
         peers = peers_marketed_at_launch(row, list(by_name.values()))
@@ -264,13 +257,62 @@ def competitive_intensity(
                 ],
             )
         )
+    return snapshots
 
-    mine = next(
-        item
-        for item in categorize_snapshots(snapshots)
-        if item.indication_id == str(target.get("drug_name"))
-    )
-    return mine.category, len(mine.peer_ids)
+
+def intensity_by_product(
+    catalogue: list[dict[str, object]],
+) -> dict[str, tuple[str | None, int | None]]:
+    """The label and peer count for every product, each judged within its own area.
+
+    A cohort answers for all of its members at once, so deriving a whole
+    catalogue costs one pass per indication rather than one per product. Asking
+    per product repeats every cohort once for each of its members, which on a
+    catalogue concentrated in one indication - which is what an analog workbench
+    accumulates - is the difference between a page that loads and one that does
+    not.
+    """
+    by_area: dict[str, list[dict[str, object]]] = {}
+    for row in catalogue:
+        area = row.get("indication_area")
+        if not area or row.get("first_approval_year") is None:
+            continue
+        by_area.setdefault(str(area), []).append(row)
+
+    found: dict[str, tuple[str | None, int | None]] = {}
+    for rows in by_area.values():
+        for item in categorize_snapshots(_cohort_snapshots(rows)):
+            found[item.indication_id] = (item.category, len(item.peer_ids))
+    return found
+
+
+def competitive_intensity(
+    target: dict[str, object], catalogue: list[dict[str, object]]
+) -> tuple[str | None, int | None]:
+    """The label and the peer count this one product faced.
+
+    The cohort is every product the catalogue holds for the same indication, so
+    the label says how this launch compared with the others we can see. A
+    catalogue that holds no indication for the product cannot place it, and says
+    so with None rather than with the label an empty roster would produce -
+    which would read as "launched into an open market" for a product we simply
+    know nothing about.
+
+    The judgement itself is `intensity_by_product`, so the rule exists once and
+    a caller deriving one product and a caller deriving a catalogue cannot get
+    different answers for the same product.
+    """
+    if target.get("first_approval_year") is None or not target.get("indication_area"):
+        return None, None
+
+    name = str(target.get("drug_name"))
+    cohort = {
+        str(row.get("drug_name")): row
+        for row in catalogue
+        if row.get("indication_area") == target.get("indication_area")
+    }
+    cohort[name] = target
+    return intensity_by_product(list(cohort.values())).get(name, (None, None))
 
 
 def derive_analog_profile(
@@ -279,6 +321,7 @@ def derive_analog_profile(
     fields: dict[str, object],
     route_terms: list[str] | None = None,
     catalogue: list[dict[str, object]] | None = None,
+    intensity: tuple[str | None, int | None] | None = None,
 ) -> AnalogProfile:
     """Build a product's analog attributes from its extracted profile fields.
 
@@ -312,7 +355,9 @@ def derive_analog_profile(
         "peer_universe_role": peer_universe_role(drug_name, names),
     }
 
-    label, peer_count = competitive_intensity(target, rows)
+    label, peer_count = (
+        intensity if intensity is not None else competitive_intensity(target, rows)
+    )
     profile = AnalogProfile(
         drug_name=drug_name,
         moa=target["moa"],
@@ -329,7 +374,7 @@ def derive_analog_profile(
     return replace(
         profile,
         unresolved=tuple(
-            name for name in _REPORTABLE if getattr(profile, name) in (None, "")
+            name for name in _reportable() if getattr(profile, name) in (None, "")
         ),
     )
 

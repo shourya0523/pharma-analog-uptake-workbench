@@ -15,18 +15,9 @@ from __future__ import annotations
 import importlib.util
 from pathlib import Path
 
-from app.analytics.profile_attributes import AnalogProfile
+from app.analytics.profile_attributes import PROVENANCE_FIELDS, AnalogProfile
 
 CONTRACT = Path(__file__).resolve().parents[2] / "scripts" / "profile_contract.py"
-
-# Attributes that say where a value came from rather than what it is. They are
-# not compared with an answer key because they describe the producer: an answer
-# key curated by a person and a row derived by the pipeline disagree on them by
-# definition, and should.
-PROVENANCE_FIELDS = frozenset(
-    {"drug_name", "attribute_provenance", "competitive_intensity_basis"}
-)
-
 
 def _contract():
     spec = importlib.util.spec_from_file_location("profile_contract", CONTRACT)

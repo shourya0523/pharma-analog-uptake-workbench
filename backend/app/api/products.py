@@ -17,7 +17,11 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from app.analytics.analog_matching import ProductProfile, rank_analogs
-from app.analytics.profile_attributes import AnalogProfile, derive_analog_profile
+from app.analytics.profile_attributes import (
+    AnalogProfile,
+    derive_analog_profile,
+    intensity_by_product,
+)
 from app.db.models import (
     CanonicalProductORM,
     DatapointORM,
@@ -232,9 +236,16 @@ def _analog_catalog(db: Session) -> dict[str, AnalogProfile]:
         for key, (name, fields, routes) in stored.items()
     }
     rows = [profile.as_row() for profile in first_pass.values()]
+    # Judged for the whole catalogue in one pass per indication; asking per
+    # product repeats each cohort once for every member of it.
+    intensity = intensity_by_product(rows)
     return {
         key: derive_analog_profile(
-            drug_name=name, fields=fields, route_terms=routes, catalogue=rows
+            drug_name=name,
+            fields=fields,
+            route_terms=routes,
+            catalogue=rows,
+            intensity=intensity.get(name, (None, None)),
         )
         for key, (name, fields, routes) in stored.items()
     }

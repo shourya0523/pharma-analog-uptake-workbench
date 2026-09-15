@@ -142,10 +142,10 @@ def test_missing_value_placeholders_are_recognised():
 
 
 # ---------------------------------------------------------------------------
-# Which application a product's attributes are read from. Both cases below are
-# defects the profile holdout surfaced: one product's attributes taken from a
-# sibling formulation's application, and its first approval taken from a later
-# one of its own.
+# Which of a product's applications its attributes are read from. One brand can
+# name several - a sibling formulation filed under its own application, and a
+# second presentation of the product itself filed years after the first - and
+# the two below are the readings that pick the wrong one.
 # ---------------------------------------------------------------------------
 
 def _application(number, brand, approved):
