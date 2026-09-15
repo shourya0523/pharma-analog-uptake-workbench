@@ -835,7 +835,11 @@ def test_letairis_series_exists_because_the_table_says_what_the_prose_does_not()
     excluded = {r["drug_name"] for r in load_jsonl("excluded_products.jsonl")}
     coverage = {r["drug_name"]: r for r in load_jsonl("series_coverage.jsonl")}["Letairis"]
 
-    assert len(rows) == 48
+    # Counted from the series' own declared span rather than written down: a
+    # literal here goes stale every time the series is legitimately extended,
+    # and a count that has to be edited to keep a test passing stops testing
+    # anything.
+    assert len(rows) == coverage["expected_quarters"]
     assert "Letairis" not in excluded
     assert {r["manufacturer"] for r in rows} == {"Gilead"}
     assert {r["geography"] for r in rows} == {"United States"}
@@ -862,7 +866,9 @@ def test_letairis_series_exists_because_the_table_says_what_the_prose_does_not()
         assert len(by_year[year]) == 4
         assert sum(by_year[year]) == total, year
 
-    assert coverage["series_end_basis"] == "sourcing_boundary"
+    # The end is the issuer's, not this dataset's: Gilead's first-quarter 2024
+    # product sales summary has no Letairis row at all.
+    assert coverage["series_end_basis"] == "issuer_stopped_reporting"
 
 
 def test_a_series_says_whether_its_end_is_the_issuer_or_the_sourcing():
@@ -881,11 +887,33 @@ def test_a_series_says_whether_its_end_is_the_issuer_or_the_sourcing():
     for row in bounded:
         assert row["series_end_basis"] in {"issuer_stopped_reporting", "sourcing_boundary"}
         assert row["series_end_reason"]
-    # Both kinds are present, so neither branch is untested.
-    assert {row["series_end_basis"] for row in bounded} == {
-        "issuer_stopped_reporting",
-        "sourcing_boundary",
+
+    # Both branches are exercised against the builder rather than against the
+    # published rows. Requiring the dataset itself to contain a
+    # sourcing_boundary series makes closing the last one - which is the whole
+    # point of chasing them - fail this test, so what is checked here is that
+    # the builder still carries each basis onto the coverage row it describes.
+    builder = load_builder()
+    base = {
+        "benchmark_identity": "test_basis",
+        "commercial_start_quarter": "2024Q1",
+        "series_end_quarter": "2024Q2",
+        "series_end_reason": "stated",
+        "revenue_scope": "Worldwide",
+        "geography": "Worldwide",
     }
+    rows = [{"drug_name": "Basis", "period": p} for p in ("2024Q1", "2024Q2")]
+    original = builder.PRODUCT_METADATA
+    try:
+        for basis in ("issuer_stopped_reporting", "sourcing_boundary"):
+            builder.PRODUCT_METADATA = {"Basis": {**base, "series_end_basis": basis}}
+            assert builder.coverage_rows(rows)[0]["series_end_basis"] == basis
+        # Unstated, the basis defaults to the issuer's - the conservative
+        # reading, since it is the one that does not invite pointless work.
+        builder.PRODUCT_METADATA = {"Basis": dict(base)}
+        assert builder.coverage_rows(rows)[0]["series_end_basis"] == "issuer_stopped_reporting"
+    finally:
+        builder.PRODUCT_METADATA = original
 
 
 def test_no_single_issuer_dominates_the_catalog():
