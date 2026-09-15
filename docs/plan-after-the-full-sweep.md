@@ -326,3 +326,83 @@ Open definitional questions to put to the user before scoring: Actelion's
 pre-acquisition quarters (item 9); whether a combined `Tyvaso` line is
 Nebulized Tyvaso's figure or nobody's; whether Gilead's rows printed under
 generic names (`Ledipasvir/Sofosbuvir`) are the brand's figure.
+
+---
+
+## Where this stands
+
+Written at the end of the session that worked this plan. Every number below
+is from `seed/cases/shapes_holdout.json` (item 0's set, 92 expected figures
+across 24 product-years), measured through the API, with
+`scripts/check_by_hand.py` run over every run used.
+
+    item     what landed                                        scored by
+    -------  -------------------------------------------------  -----------
+    0        shapes_holdout.json and its guard test             baseline
+    1, 3     row labels by residue; footnotes; region rows      its own run
+    2        one figure, one publication                        its own run
+    5        retrieval bounded by the window; model budget      the last run
+    4        quarter-notation headings; geography columns       the last run
+    6        prose grounding; no period after the document      the last run
+    8        every quarter two published totals determine       the last run
+    9        no filer of record; a gap recorded once            the last run
+    7        a filing that contradicts itself                   the last run
+    10       queue reason prose served with the queue           its tests
+    11       the eval scores a failed job's later run           its tests
+    11a      the member holdout has a scorer again              15/18 correct
+    12       Library rows derived from jobs                     its tests
+    13       the review queue pages and groups                  its tests
+    14       dashboard draws what the pipeline stands behind    its tests
+
+Items 1 and 2 were measured one at a time. That cost an hour a change and
+told us little: the run-to-run spread from the model was wider than most
+of these changes, and the model answered six quarters in one run that it
+had answered differently or not at all in the next. The rest of the plan
+landed together and one run scores the set. Items 10 to 14 change what is
+served and drawn, not what is read, so the held-out set does not measure
+them; each carries its own test.
+
+Two defects were found by measuring rather than by reading, and both are
+fixed: the publication gate preserved a hand-written list of statuses and
+republished a figure reconciliation had set aside, and a model reply that
+arrived as a bare JSON array raised `AttributeError` in every caller,
+killing three of twenty-four jobs mid-pipeline.
+
+### What the runs showed about where the figures go
+
+Of the 33 quarters with no published figure in item 1's run, 21 had no
+filing that states them retrieved at all: 13 had only 8-Ks that are not
+the earnings release, 6 had only the annual report, 2 had nothing in the
+quarter's reporting window. Those 24 jobs fetched 176 8-Ks, 70 annual
+reports, 56 quarterly reports and 29 proxies and registration statements.
+Retrieval, not reading, is the ceiling, which is why item 5 should have
+come before the table logic rather than after it.
+
+### The three definitional questions, answered
+
+- **Actelion's pre-acquisition quarters stay in gold.** There is no SEC
+  filing of the named issuer for them, so item 9 is the answer: the pipeline
+  asks who reported the product in that window and, finding nothing, says
+  `no_filer_of_record` rather than recording a gap to fill from a filing
+  that does not exist.
+- **A combined line is the family's figure, never the sub-product's.** The
+  reader publishes it flagged `combined_line`, held for a person, unless a
+  footnote says the others sold nothing in that period. Gold needed no
+  relabelling: of its 68 `Nebulized Tyvaso` rows, 50 are the pre-DPI era
+  where the issuer's only Tyvaso row was the nebulized one, and the other 18
+  carry a label that names the formulation itself. No gold row takes a
+  combined line as a sub-product's figure.
+- **A row printed under the generic name is the brand's** when the generic
+  is the product's own. `scripts/check_by_hand.py` now reads the job's
+  generic name for the same reason.
+
+### What still fails, left documented rather than tuned away
+
+- The member holdout is spent: 15 of its 18 cases correct, 5 of 8 resolved,
+  10 of 10 refused. The two misses are a trailing-run rule reading a
+  combined member as the last name in it; the third is the model declining a
+  member it could have placed.
+- No unspent issuer in the item-0 draw printed a product table with an
+  unlabelled total, so that shape is not represented in the set.
+- Item 4's geography column groups are not exercised by the set either: no
+  case's filer splits a schedule by geography above its period row.
