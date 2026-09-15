@@ -151,9 +151,9 @@ _NEXT_YEAR_RE = re.compile(r"\b((?:19|20)\d{2})\b")
 _PERIOD_PHRASE_RE = re.compile(
     r"\b((?:three|six|nine|twelve)(?:\s+and\s+(?:three|six|nine|twelve))*"
     r"\s+months?|(?:fiscal\s+)?years?)\s+ended\b",
-    re.I,
+    re.IGNORECASE,
 )
-_SPAN_WORD_RE = re.compile(r"three|six|nine|twelve", re.I)
+_SPAN_WORD_RE = re.compile(r"three|six|nine|twelve", re.IGNORECASE)
 _MONTH_DAY_RE = re.compile(
     r"\b(january|february|march|april|may|june|july|august|september|october"
     r"|november|december|jan|feb|mar|apr|jun|jul|aug|sep|sept|oct|nov|dec)"
@@ -203,15 +203,23 @@ def _year_near(text: str, end: int) -> int | None:
 # quarter number then says nothing about which months it covers - which is
 # exactly the inference below.
 _QUARTER_FORMS = (
-    re.compile(r"\bQ([1-4])\s*[-/ ]?\s*((?:19|20)\d{2})\b", re.I),
-    re.compile(r"\b((?:19|20)\d{2})\s*[-/ ]?\s*Q([1-4])\b", re.I),
+    re.compile(r"\bQ([1-4])\s*[-/ ]?\s*((?:19|20)\d{2})\b", re.IGNORECASE),
+    re.compile(r"\b((?:19|20)\d{2})\s*[-/ ]?\s*Q([1-4])\b", re.IGNORECASE),
     re.compile(r"\b(first|second|third|fourth)\s+quarter\s+(?:of\s+)?"
-               r"((?:19|20)\d{2})\b", re.I),
+               r"((?:19|20)\d{2})\b", re.IGNORECASE),
+    # The quarter number first: "2Q 2024", "2Q24", "1Q'26". A two-digit year
+    # is this century's; no filing read this way predates it.
+    re.compile(r"\b([1-4])Q\s*'?\s*((?:19|20)\d{2}|\d{2})(?!\d)", re.IGNORECASE),
+    re.compile(r"\bQ([1-4])\s*'(\d{2})(?!\d)", re.IGNORECASE),
 )
+
+
+def _year_of_form(digits: str) -> int:
+    return int(digits) if len(digits) == 4 else 2000 + int(digits)
 _SPAN_FORMS = (
     # (regex, months, month the span ends in)
-    (re.compile(r"\bH1\s*[-/ ]?\s*((?:19|20)\d{2})\b", re.I), 6, 6),
-    (re.compile(r"\b9M\s*[-/ ]?\s*((?:19|20)\d{2})\b", re.I), 9, 9),
+    (re.compile(r"\bH1\s*[-/ ]?\s*((?:19|20)\d{2})\b", re.IGNORECASE), 6, 6),
+    (re.compile(r"\b9M\s*[-/ ]?\s*((?:19|20)\d{2})\b", re.IGNORECASE), 9, 9),
 )
 _QUARTER_WORDS = {"first": 1, "second": 2, "third": 3, "fourth": 4}
 
@@ -246,7 +254,7 @@ def _quarter_notation(text: str) -> PeriodContext | None:
             elif first.isdigit() and len(first) == 4:
                 year, quarter = int(first), int(second)
             else:
-                quarter, year = int(first), int(second)
+                quarter, year = int(first), _year_of_form(second)
             seen.append((match.start(), match.end(), (3, quarter * 3, year)))
 
     counts: Counter[tuple[int, int, int]] = Counter()
@@ -262,7 +270,15 @@ def _quarter_notation(text: str) -> PeriodContext | None:
                 counts[(months, month, int(match.group(1)))] += 1
     if not counts:
         return None
-    months, month, year = max(counts, key=lambda key: (counts[key], key[2], key[1]))
+    # The period a document reports is named throughout it; so is the
+    # comparative printed beside every figure, and often more times. Choosing
+    # by count alone dated a release by its comparative. So among the periods
+    # named throughout - at least half as often as the most-named one - the
+    # latest is the document's own, as the phrase path already reasons; a
+    # period named once or twice, next year's guidance, is not among them.
+    most = max(counts.values())
+    throughout = [key for key, n in counts.items() if n * 2 >= most]
+    months, month, year = max(throughout, key=lambda key: (key[2], key[1]))
     return PeriodContext(months=months, month=month, year=year)
 
 

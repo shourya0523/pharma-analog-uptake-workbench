@@ -290,7 +290,9 @@ def read_values_by_column(
         value = cell_number(cell)
         if value is None:
             continue
-        key = f"{block.months}m@{block.end_month}:{block.year}"
+        # A period under two geography headings is two columns of one period,
+        # and the scope is what tells them apart.
+        key = f"{block.months}m@{block.end_month}:{block.year}:{block.scope or ''}"
         if key in claimed and claimed[key] != column:
             return None, "two_values_for_one_period"
         claimed[key] = column
@@ -472,6 +474,17 @@ def _total_beneath(
         if assigned and _adds_up(grouped(assigned), parts, len(matches)):
             return position, assigned
     return None
+
+
+def _split_by_column_scope(
+    assigned: dict[int, float], by_index: dict[int, PeriodBlock]
+) -> dict[str | None, dict[int, float]]:
+    """A row's values grouped by the geography their columns are headed by."""
+    groups: dict[str | None, dict[int, float]] = {}
+    for index, value in assigned.items():
+        block = by_index.get(index)
+        groups.setdefault(block.scope if block else None, {})[index] = value
+    return groups
 
 
 # A row putting two figures under one period is the table saying its headings
@@ -673,7 +686,20 @@ def _read_table(
         quote_from[position] = start
         if cited:
             notes_of[position] = cited
-        matches.append((position, reading.label, assigned, reading, tuple(flags)))
+        # A table split by geography above its period row puts one row's
+        # figures under several scopes. Each scope is its own line of the
+        # product - the worldwide column the whole, the others regions - and
+        # is resolved beside the rows exactly as a printed region row is.
+        for column_scope, part in _split_by_column_scope(assigned, by_index).items():
+            scoped_reading = reading
+            if column_scope is not None and reading.scope is None:
+                scoped_reading = LabelReading(
+                    label=reading.label, matched=reading.matched,
+                    scope=None if column_scope == "Worldwide" else column_scope,
+                    is_total=reading.is_total, combined_with=reading.combined_with,
+                    residue=reading.residue, marks=reading.marks, flags=reading.flags,
+                )
+            matches.append((position, reading.label, part, scoped_reading, tuple(flags)))
 
     # Two columns can name the same period; the arithmetic that identifies a
     # total is about periods, so it groups the columns the table has equated.

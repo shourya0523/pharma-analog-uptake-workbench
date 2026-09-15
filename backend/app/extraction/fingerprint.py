@@ -52,6 +52,7 @@ import hashlib
 import re
 from dataclasses import dataclass, field
 
+from app.parsing.evidence import SCOPE_PATTERNS
 from app.parsing.periods import MONTH_WORDS, MONTHS, fiscal_period_end, quarter_of_month
 
 # A filing names a column's period in one of two ways. Either it anchors the
@@ -79,6 +80,63 @@ _NAMED_PERIOD_RE = re.compile(
     r"|\b(?:full|fiscal)\s+year\b",
     re.IGNORECASE,
 )
+# A heading written in quarter notation - "2Q 2024", "Q2 2024", "1Q'26" - and
+# a year-to-date heading written by its closing month, "June YTD 2024". The
+# same spellings `periods.py` reads off a document, so a schedule headed one
+# way and a release headed the other are dated by one vocabulary.
+_QUARTER_HEADING_RE = re.compile(
+    r"\b(?:([1-4])Q|Q([1-4]))\s*'?\s*((?:19|20)\d{2}|\d{2})(?!\d)"
+    r"|\b((?:19|20)\d{2})\s*[-/ ]?\s*Q([1-4])\b",
+    re.IGNORECASE,
+)
+_YTD_HEADING_RE = re.compile(
+    r"\b(january|february|march|april|may|june|july|august|september|october|"
+    r"november|december|jan|feb|mar|apr|jun|jul|aug|sep|sept|oct|nov|dec)\.?\s+YTD"
+    r"(?:\s*'?\s*((?:19|20)\d{2}|\d{2})(?!\d))?",
+    re.IGNORECASE,
+)
+
+
+def _quarter_headings(text: str) -> list[tuple[int, int]]:
+    """(quarter, year) for each quarter-notation heading in the text."""
+    found: list[tuple[int, int]] = []
+    for match in _QUARTER_HEADING_RE.finditer(text):
+        if match.group(4):
+            year, quarter = int(match.group(4)), int(match.group(5))
+        else:
+            quarter = int(match.group(1) or match.group(2))
+            digits = match.group(3)
+            year = int(digits) if len(digits) == 4 else 2000 + int(digits)
+        found.append((quarter, year))
+    return found
+
+
+def _ytd_headings(text: str) -> list[tuple[int, int | None]]:
+    """(closing month, year or None) for each "<Month> YTD" heading."""
+    found: list[tuple[int, int | None]] = []
+    for match in _YTD_HEADING_RE.finditer(text):
+        month = MONTHS.get(match.group(1).lower())
+        if not month:
+            continue
+        digits = match.group(2)
+        year = None if not digits else (int(digits) if len(digits) == 4 else 2000 + int(digits))
+        found.append((month, year))
+    return found
+
+
+def _heading_year(text: str) -> int | None:
+    """The year a heading names, in any of its spellings."""
+    hit = _YEAR_RE.search(text)
+    if hit:
+        return int(hit.group(0))
+    quarters = _quarter_headings(text)
+    if quarters:
+        return quarters[0][1]
+    for _month, year in _ytd_headings(text):
+        if year:
+            return year
+    return None
+
 # The same heading with its date on the next line: "Three Months Ended" alone.
 _DANGLING_PHRASE_RE = re.compile(
     r"\b(?:three|six|nine|twelve|year)s?\s*(?:months?\s*)?ended\s*[,:]?\s*$",
@@ -172,11 +230,15 @@ UNIT_SCALE_TO_MILLIONS: dict[str, float] = {
 }
 
 _CURRENCY_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
-    ("CHF", re.compile(r"\bCHF\b|\bSwiss\s+francs?\b", re.I)),
-    ("GBP", re.compile(r"£|\bGBP\b|\bpounds?\s+sterling\b|\bsterling\b", re.I)),
-    ("EUR", re.compile(r"€|\bEUR\b|\beuros?\b", re.I)),
-    ("JPY", re.compile(r"¥|\bJPY\b|\byen\b", re.I)),
-    ("USD", re.compile(r"\bUS\$|\bUSD\b|\bU\.S\.\s+dollars?\b|\bdollars?\b|\$", re.I)),
+    ("CHF", re.compile(r"\bCHF\b|\bSwiss\s+francs?\b", re.IGNORECASE)),
+    ("GBP", re.compile(r"£|\bGBP\b|\bpounds?\s+sterling\b|\bsterling\b", re.IGNORECASE)),
+    ("EUR", re.compile(r"€|\bEUR\b|\beuros?\b", re.IGNORECASE)),
+    ("JPY", re.compile(r"¥|\bJPY\b|\byen\b", re.IGNORECASE)),
+    ("USD", re.compile(r"\bUS\$|\bUSD\b|\bU\.S\.\s+dollars?\b|\bdollars?\b|\$", re.IGNORECASE)),
+)
+
+_SCOPE_RES: tuple[tuple[str, re.Pattern[str]], ...] = tuple(
+    (label, re.compile(pattern, re.IGNORECASE)) for label, pattern in SCOPE_PATTERNS
 )
 
 MONTHS_TO_PERIOD_TYPE: dict[int, str] = {
@@ -195,6 +257,9 @@ class PeriodBlock:
     end_month: int
     year: int
     value_index: int
+    # The geography the column's headings put it under, where a table is split
+    # by geography above the period row. None where the headings name none.
+    scope: str | None = None
 
     @property
     def period_type(self) -> str:
@@ -288,6 +353,17 @@ def detect_currency(rows: list[list[str]], context: str = "") -> tuple[str, bool
 def _named_periods(text: str) -> list[tuple[int, int]]:
     """(months, end month) for each period this text names without a date."""
     found: list[tuple[int, int]] = []
+    # Quarter notation and year-to-date headings, in the order they appear.
+    positioned: list[tuple[int, tuple[int, int]]] = []
+    for match in _QUARTER_HEADING_RE.finditer(text):
+        quarter = int(match.group(1) or match.group(2) or match.group(5))
+        positioned.append((match.start(), (3, quarter * 3)))
+    for match in _YTD_HEADING_RE.finditer(text):
+        month = MONTHS.get(match.group(1).lower())
+        if month:
+            positioned.append((match.start(), (month, month)))
+    if positioned:
+        return [period for _start, period in sorted(positioned)]
     for match in _NAMED_PERIOD_RE.finditer(text):
         ordinal, counted = match.group(1), match.group(2)
         if ordinal:
@@ -346,9 +422,15 @@ def _period_phrases(rows: list[list[str]], limit: int = 8) -> list[tuple[int, in
 
 
 def _year_row(rows: list[list[str]], limit: int = 10) -> list[int]:
-    """Years in column order, from the first row listing at least two."""
+    """Years in column order, from the first row listing at least two.
+
+    A year is a four-digit one, or the year a quarter-notation heading
+    carries: "1Q'26 | 1Q'25" names two years without printing four digits.
+    """
     for row in rows[:limit]:
         years = [int(year) for cell in row for year in _YEAR_RE.findall(cell or "")]
+        if len(years) < 2:
+            years = [year for cell in row for _quarter, year in _quarter_headings(cell or "")]
         if len(years) >= 2:
             return years
     return []
@@ -405,15 +487,46 @@ def stated_periods(grid: list[list[str | None]]) -> tuple[int, dict[int, tuple[i
             for row in range(header_depth)
             if column < len(grid[row]) and (text := _covering(grid, row, column))
         )
-        year_hit = _YEAR_RE.search(stacked)
-        if not year_hit:
+        year = _heading_year(stacked)
+        if year is None:
             continue
         named = _periods_named_in(stacked) or fallback
         if not named:
             continue
         months, month = named[0]
-        periods[column] = (months, month, int(year_hit.group(0)))
+        periods[column] = (months, month, year)
     return header_depth, periods
+
+
+def column_scopes(grid: list[list[str | None]]) -> dict[int, str]:
+    """The geography a column's headings put it under, where they do.
+
+    A product table can be split by geography above the period row - "Global |
+    U.S. | International" over "2Q 2024 | 2Q 2023" three times - so the same
+    period covers three columns and each is a different scope. Read from the
+    covering headings, the way the period is; a column no heading scopes is
+    absent here.
+    """
+    if not grid:
+        return {}
+    header_depth = 0
+    for row in grid:
+        if any(_is_figure(cell) for cell in row):
+            break
+        header_depth += 1
+    scopes: dict[int, str] = {}
+    width = max(len(row) for row in grid)
+    for column in range(width):
+        stacked = " ".join(
+            text
+            for row in range(header_depth)
+            if column < len(grid[row]) and (text := _covering(grid, row, column))
+        )
+        for label, pattern in _SCOPE_RES:
+            if pattern.search(stacked):
+                scopes[column] = label
+                break
+    return scopes
 
 
 def column_periods(grid: list[list[str | None]]) -> dict[int, tuple[int, int, int]]:
@@ -479,7 +592,7 @@ def build_fingerprint(
     rows: list[list[str]],
     context: str = "",
     grid: list[list[str | None]] | None = None,
-    period_context: "PeriodContext | None" = None,
+    period_context: PeriodContext | None = None,
 ) -> TableFingerprint:
     """Fingerprint one table: unit, currency, and period-to-column mapping.
 
@@ -511,8 +624,10 @@ def build_fingerprint(
     if grid:
         by_column = column_periods(grid)
         if by_column:
+            scopes = column_scopes(grid)
             blocks = tuple(
-                PeriodBlock(months=months, end_month=end_month, year=year, value_index=column)
+                PeriodBlock(months=months, end_month=end_month, year=year, value_index=column,
+                            scope=scopes.get(column))
                 for column, (months, end_month, year) in sorted(by_column.items())
             )
             if not unit_declared:
