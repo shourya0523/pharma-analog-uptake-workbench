@@ -653,13 +653,12 @@ PRODUCT_METADATA = {
             "when INVOKANA / INVOKAMET first gets a line of its own. The "
             "series starts where the issuer first reports it separately."
         ),
-        "series_end_quarter": "2018Q4",
-        "series_end_basis": "sourcing_boundary",
+        "series_end_quarter": "2022Q4",
+        "series_end_basis": "issuer_stopped_reporting",
         "series_end_reason": (
-            "J&J still reports Invokana after this. The 2019Q1 schedule is "
-            "published only inside the full press release, whose layout this "
-            "sourcing pass does not read, so the series stops rather than "
-            "carry a hole."
+            "J&J stops printing the line after this quarter. The first-quarter 2023 "
+            "schedule footnotes the change: 'Other is inclusive of INVOKANA, which "
+            "was previously disclosed separately'."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -682,11 +681,12 @@ PRODUCT_METADATA = {
             "this series is the long decline of a mature biologic under "
             "biosimilar and label pressure - no launch ramp in it at all."
         ),
-        "series_end_quarter": "2018Q4",
-        "series_end_basis": "sourcing_boundary",
+        "series_end_quarter": "2021Q4",
+        "series_end_basis": "issuer_stopped_reporting",
         "series_end_reason": (
-            "The 2019Q1 schedule is published only inside the full press "
-            "release, whose layout this sourcing pass does not read."
+            "J&J stops printing the line after this quarter. The first-quarter 2022 "
+            "schedule footnotes the change: 'Other is inclusive of PROCRIT / EPREX, "
+            "which was previously disclosed separately'."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -707,12 +707,6 @@ PRODUCT_METADATA = {
             "as CONCERTA / METHYLPHENIDATE - the brand and its own authorised "
             "generic on one line, the same brand-plus-generic shape as ZYTIGA "
             "/ abiraterone acetate."
-        ),
-        "series_end_quarter": "2018Q4",
-        "series_end_basis": "sourcing_boundary",
-        "series_end_reason": (
-            "The 2019Q1 schedule is published only inside the full press "
-            "release, whose layout this sourcing pass does not read."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -735,13 +729,6 @@ PRODUCT_METADATA = {
             "a long shallow climb that is neither a launch ramp nor a "
             "plateau."
         ),
-        "series_end_quarter": "2023Q4",
-        "series_end_basis": "sourcing_boundary",
-        "series_end_reason": (
-            "J&J still reports Stelara separately after this; biosimilar entry "
-            "in 2025 makes the following years the interesting ones. The series "
-            "stops where sourcing stopped."
-        ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
@@ -761,12 +748,6 @@ PRODUCT_METADATA = {
             "schedules are not - so a contiguous run starts there. Remicade "
             "launched in 1998 and had already peaked by then, so the series "
             "is the decline - 1,782 a quarter down through biosimilar entry."
-        ),
-        "series_end_quarter": "2023Q4",
-        "series_end_basis": "sourcing_boundary",
-        "series_end_reason": (
-            "J&J still reports Remicade separately after this. The series stops "
-            "where sourcing stopped."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -788,12 +769,6 @@ PRODUCT_METADATA = {
             "publishes this as SIMPONI / SIMPONI ARIA, one line covering the "
             "subcutaneous and intravenous presentations together."
         ),
-        "series_end_quarter": "2023Q4",
-        "series_end_basis": "sourcing_boundary",
-        "series_end_reason": (
-            "J&J still reports the Simponi line separately after this. The "
-            "series stops where sourcing stopped."
-        ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
@@ -811,12 +786,6 @@ PRODUCT_METADATA = {
             "Tremfya launched in 2017Q3 but J&J folded it into Other "
             "Immunology until the fourth quarter of 2018, when it first gets "
             "a line of its own."
-        ),
-        "series_end_quarter": "2023Q4",
-        "series_end_basis": "sourcing_boundary",
-        "series_end_reason": (
-            "J&J still reports Tremfya separately after this, and it keeps "
-            "growing. The series stops where sourcing stopped."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -838,12 +807,6 @@ PRODUCT_METADATA = {
             "reported quarter, which makes this the closest thing here to a "
             "true launch ramp for a J&J product."
         ),
-        "series_end_quarter": "2023Q4",
-        "series_end_basis": "sourcing_boundary",
-        "series_end_reason": (
-            "J&J still reports Darzalex separately after this and it is still "
-            "growing. The series stops where sourcing stopped."
-        ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
@@ -864,12 +827,6 @@ PRODUCT_METADATA = {
             "with no quarterly split. 2019Q1 is the first quarter stated on its "
             "own, so the series starts one year after launch."
         ),
-        "series_end_quarter": "2023Q4",
-        "series_end_basis": "sourcing_boundary",
-        "series_end_reason": (
-            "J&J still reports Erleada separately after this. The series stops "
-            "where sourcing stopped."
-        ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
@@ -888,12 +845,6 @@ PRODUCT_METADATA = {
             "Oncology until the first quarter of 2015, when it first gets a "
             "line of its own. The series starts where the issuer first "
             "reports it separately."
-        ),
-        "series_end_quarter": "2023Q4",
-        "series_end_basis": "sourcing_boundary",
-        "series_end_reason": (
-            "J&J still reports Imbruvica separately after this. The series stops "
-            "where sourcing stopped, four years into a decline."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -916,11 +867,13 @@ PRODUCT_METADATA = {
             "beside them; that quarter is refused rather than realigned by "
             "position."
         ),
-        "series_end_quarter": "2023Q4",
-        "series_end_basis": "sourcing_boundary",
+        "series_end_quarter": "2025Q4",
+        "series_end_basis": "issuer_stopped_reporting",
         "series_end_reason": (
-            "J&J still reports the Zytiga line separately after this. The series "
-            "stops where sourcing stopped."
+            "J&J folds the line into another product from the first quarter of "
+            "2026, where the schedule footnotes it: 'Includes the sales of ZYTIGA "
+            "which were previously disclosed separately'. The brand is no longer a "
+            "line of its own."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -972,12 +925,6 @@ PRODUCT_METADATA = {
             "international column is a dash and the worldwide line is a US "
             "figure."
         ),
-        "series_end_quarter": "2023Q4",
-        "series_end_basis": "sourcing_boundary",
-        "series_end_reason": (
-            "J&J still reports Xarelto separately after this. The series stops "
-            "where sourcing stopped."
-        ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
@@ -996,12 +943,6 @@ PRODUCT_METADATA = {
             "INVEGA TRINZA and TREVICTA - which are the one-month and three-month "
             "long-acting injectables under their US and ex-US names. No split is "
             "published. 2018Q1 is the earliest quarter sourced."
-        ),
-        "series_end_quarter": "2023Q4",
-        "series_end_basis": "sourcing_boundary",
-        "series_end_reason": (
-            "J&J still reports the Invega Sustenna line separately after this. "
-            "The series stops where sourcing stopped."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -1320,11 +1261,18 @@ PRODUCT_METADATA = {
             "span is a window on the product's life and not a launch-to-date curve."
         ),
         "series_end_quarter": "2025Q3",
-        "series_end_basis": "sourcing_boundary",
+        "series_end_basis": "issuer_stopped_reporting",
         "series_end_reason": (
-            "Lilly still prints this line: it is in the Selected Products table of "
-            "the first-quarter 2026 release. The series stops where sourcing "
-            "stopped."
+            "The break is one quarter wide and the issuer's, not this dataset's. "
+            "Lilly's fourth-quarter 2025 release narrows Selected Products to "
+            "Mounjaro, Zepbound and Verzenio, and the 2025 Form 10-K states this "
+            "product only as full-year U.S. and outside-U.S. columns with no "
+            "worldwide total, so no worldwide 2025Q4 figure is published at all. "
+            "The line returns in the first quarter of 2026, where Lilly prints "
+            "U.S., outside-U.S. and Total by therapeutic area. The series cannot "
+            "cross the missing quarter without inventing it: the only route would "
+            "sum two regional columns into a full year Lilly never printed as a "
+            "total, then subtract nine months from that."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -1345,11 +1293,18 @@ PRODUCT_METADATA = {
             "span is a window on the product's life and not a launch-to-date curve."
         ),
         "series_end_quarter": "2025Q3",
-        "series_end_basis": "sourcing_boundary",
+        "series_end_basis": "issuer_stopped_reporting",
         "series_end_reason": (
-            "Lilly still prints this line: it is in the Selected Products table of "
-            "the first-quarter 2026 release. The series stops where sourcing "
-            "stopped."
+            "The break is one quarter wide and the issuer's, not this dataset's. "
+            "Lilly's fourth-quarter 2025 release narrows Selected Products to "
+            "Mounjaro, Zepbound and Verzenio, and the 2025 Form 10-K states this "
+            "product only as full-year U.S. and outside-U.S. columns with no "
+            "worldwide total, so no worldwide 2025Q4 figure is published at all. "
+            "The line returns in the first quarter of 2026, where Lilly prints "
+            "U.S., outside-U.S. and Total by therapeutic area. The series cannot "
+            "cross the missing quarter without inventing it: the only route would "
+            "sum two regional columns into a full year Lilly never printed as a "
+            "total, then subtract nine months from that."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
