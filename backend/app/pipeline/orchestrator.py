@@ -2336,13 +2336,25 @@ class PipelineOrchestrator:
         losers: set[str] = set()
         if conflict_payload:
             result = await self.llm.reconcile(product=job.drug_name, candidates=conflict_payload)
-            for item in listed(result, "resolved"):
+            # An id the model returns is a claim about this job's rows, so it is
+            # checked against them. Left unchecked it named a row that does not
+            # exist - a value where an id was asked for, or an id a character
+            # short - and the group's real rows were demoted behind a winner
+            # that could never be published, before the lookup below raised and
+            # took the whole job down at the last step.
+            known = {row.id for row in rows}
+
+            def named(item: dict[str, Any]) -> str | None:
                 wid = item.get("winner_id")
+                return wid if wid in known else None
+
+            for item in listed(result, "resolved"):
+                wid = named(item)
                 if wid:
                     winners.add(wid)
             for item in listed(result, "conflicts"):
-                ids = item.get("candidate_ids") or []
-                wid = item.get("winner_id")
+                ids = [cid for cid in (item.get("candidate_ids") or []) if cid in known]
+                wid = named(item)
                 if not wid:
                     # The model saw the disagreement and declined to settle it.
                     # That is a question for the ranking below, not a verdict
