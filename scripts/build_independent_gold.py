@@ -650,15 +650,14 @@ PRODUCT_METADATA = {
         "manufacturer": "Johnson & Johnson",
         "benchmark_identity": "jnj_procrit_worldwide_reported",
         "therapeutic_area": "Anemia",
-        "commercial_start_quarter": "2014Q3",
+        "commercial_start_quarter": "2005Q1",
         "launch_quarter": "1989Q2",
         "series_start_reason": (
-            "Procrit has been sold since 1989. J&J's Sales of Key "
-            "Products/Franchises schedule is reachable at its investor site "
-            "back to 2014Q3; the 2013Q3 and 2014Q2 schedules are not, so a "
-            "contiguous run starts there. A quarter of a century past launch, "
-            "this series is the long decline of a mature biologic under "
-            "biosimilar and label pressure - no launch ramp in it at all."
+            "J&J's Major Pharmaceutical Product Revenues table first appears in the "
+            "first-quarter 2005 Form 10-Q; the 10-Qs before it name products only "
+            "in prose and state no product-level figures at all. The series "
+            "therefore starts at the issuer's first product-level quarterly "
+            "disclosure, not at launch."
         ),
         "series_end_quarter": "2021Q4",
         "series_end_basis": "issuer_stopped_reporting",
@@ -678,14 +677,14 @@ PRODUCT_METADATA = {
         "manufacturer": "Johnson & Johnson",
         "benchmark_identity": "jnj_concerta_worldwide_reported",
         "therapeutic_area": "ADHD",
-        "commercial_start_quarter": "2014Q3",
+        "commercial_start_quarter": "2007Q1",
         "launch_quarter": "2000Q3",
         "series_start_reason": (
-            "Concerta was approved in August 2000. The schedule is reachable "
-            "back to 2014Q3, so the series starts there. J&J publishes this "
-            "as CONCERTA / METHYLPHENIDATE - the brand and its own authorised "
-            "generic on one line, the same brand-plus-generic shape as ZYTIGA "
-            "/ abiraterone acetate."
+            "J&J prints this product on its own line of the Major Pharmaceutical "
+            "Product Revenues table only from the first quarter of 2007Q1; the "
+            "earlier table carries a shorter list of products and folds this one "
+            "into Other. The series starts where the issuer first states it "
+            "separately, not at launch."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -698,15 +697,14 @@ PRODUCT_METADATA = {
         "manufacturer": "Johnson & Johnson",
         "benchmark_identity": "jnj_stelara_worldwide_reported",
         "therapeutic_area": "Immunology",
-        "commercial_start_quarter": "2014Q3",
+        "commercial_start_quarter": "2012Q1",
         "launch_quarter": "2009Q4",
         "series_start_reason": (
-            "J&J's Sales of Key Products/Franchises schedule is reachable at "
-            "its investor site back to 2014Q3 - the 2013Q3 and 2014Q2 "
-            "schedules are not - so a contiguous run starts there. Five years "
-            "after launch and still compounding, from 543 a quarter to 2,753: "
-            "a long shallow climb that is neither a launch ramp nor a "
-            "plateau."
+            "J&J prints this product on its own line of the Major Pharmaceutical "
+            "Product Revenues table only from the first quarter of 2012Q1; the "
+            "earlier table carries a shorter list of products and folds this one "
+            "into Other. The series starts where the issuer first states it "
+            "separately, not at launch."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -719,14 +717,14 @@ PRODUCT_METADATA = {
         "manufacturer": "Johnson & Johnson",
         "benchmark_identity": "jnj_remicade_worldwide_reported",
         "therapeutic_area": "Immunology",
-        "commercial_start_quarter": "2014Q3",
+        "commercial_start_quarter": "2005Q1",
         "launch_quarter": "1998Q3",
         "series_start_reason": (
-            "J&J's Sales of Key Products/Franchises schedule is reachable at "
-            "its investor site back to 2014Q3 - the 2013Q3 and 2014Q2 "
-            "schedules are not - so a contiguous run starts there. Remicade "
-            "launched in 1998 and had already peaked by then, so the series "
-            "is the decline - 1,782 a quarter down through biosimilar entry."
+            "J&J's Major Pharmaceutical Product Revenues table first appears in the "
+            "first-quarter 2005 Form 10-Q; the 10-Qs before it name products only "
+            "in prose and state no product-level figures at all. The series "
+            "therefore starts at the issuer's first product-level quarterly "
+            "disclosure, not at launch."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -739,14 +737,14 @@ PRODUCT_METADATA = {
         "manufacturer": "Johnson & Johnson",
         "benchmark_identity": "jnj_simponi_worldwide_reported",
         "therapeutic_area": "Immunology",
-        "commercial_start_quarter": "2014Q3",
+        "commercial_start_quarter": "2012Q1",
         "launch_quarter": "2009Q2",
         "series_start_reason": (
-            "J&J's Sales of Key Products/Franchises schedule is reachable at "
-            "its investor site back to 2014Q3 - the 2013Q3 and 2014Q2 "
-            "schedules are not - so a contiguous run starts there. J&J "
-            "publishes this as SIMPONI / SIMPONI ARIA, one line covering the "
-            "subcutaneous and intravenous presentations together."
+            "J&J prints this product on its own line of the Major Pharmaceutical "
+            "Product Revenues table only from the first quarter of 2012Q1; the "
+            "earlier table carries a shorter list of products and folds this one "
+            "into Other. The series starts where the issuer first states it "
+            "separately, not at launch."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -836,15 +834,14 @@ PRODUCT_METADATA = {
         "manufacturer": "Johnson & Johnson",
         "benchmark_identity": "jnj_zytiga_worldwide_reported",
         "therapeutic_area": "Oncology",
-        "commercial_start_quarter": "2017Q1",
+        "commercial_start_quarter": "2012Q1",
         "launch_quarter": "2011Q2",
         "series_start_reason": (
-            "J&J publishes this line as ZYTIGA / abiraterone acetate, brand "
-            "and its own authorised generic together. The backfill stops at "
-            "2017Q1 because the 2016Q4 schedule prints ZYTIGA's figures on a "
-            "line of their own, below the US/Intl/WW labels rather than "
-            "beside them; that quarter is refused rather than realigned by "
-            "position."
+            "J&J prints this product on its own line of the Major Pharmaceutical "
+            "Product Revenues table only from the first quarter of 2012Q1; the "
+            "earlier table carries a shorter list of products and folds this one "
+            "into Other. The series starts where the issuer first states it "
+            "separately, not at launch."
         ),
         "series_end_quarter": "2025Q4",
         "series_end_basis": "issuer_stopped_reporting",
@@ -865,14 +862,14 @@ PRODUCT_METADATA = {
         "manufacturer": "Johnson & Johnson",
         "benchmark_identity": "jnj_velcade_worldwide_reported",
         "therapeutic_area": "Oncology",
-        "commercial_start_quarter": "2014Q3",
+        "commercial_start_quarter": "2011Q1",
         "launch_quarter": "2003Q2",
         "series_start_reason": (
-            "J&J's Sales of Key Products/Franchises schedule is reachable at "
-            "its investor site back to 2014Q3 - the 2013Q3 and 2014Q2 "
-            "schedules are not - so a contiguous run starts there. J&J holds "
-            "ex-US rights to bortezomib, so its US column is a dash in every "
-            "quarter and the worldwide line is an international-only figure."
+            "J&J prints this product on its own line of the Major Pharmaceutical "
+            "Product Revenues table only from the first quarter of 2011Q1; the "
+            "earlier table carries a shorter list of products and folds this one "
+            "into Other. The series starts where the issuer first states it "
+            "separately, not at launch."
         ),
         "series_end_quarter": "2020Q4",
         "series_end_basis": "issuer_stopped_reporting",
@@ -894,15 +891,14 @@ PRODUCT_METADATA = {
         "manufacturer": "Johnson & Johnson",
         "benchmark_identity": "jnj_xarelto_worldwide_reported",
         "therapeutic_area": "Cardiovascular",
-        "commercial_start_quarter": "2014Q3",
+        "commercial_start_quarter": "2013Q1",
         "launch_quarter": "2011Q3",
         "series_start_reason": (
-            "J&J's Sales of Key Products/Franchises schedule is reachable at "
-            "its investor site back to 2014Q3 - the 2013Q3 and 2014Q2 "
-            "schedules are not - so a contiguous run starts there. Bayer "
-            "holds rivaroxaban outside the United States, so J&J's "
-            "international column is a dash and the worldwide line is a US "
-            "figure."
+            "J&J prints this product on its own line of the Major Pharmaceutical "
+            "Product Revenues table only from the first quarter of 2013Q1; the "
+            "earlier table carries a shorter list of products and folds this one "
+            "into Other. The series starts where the issuer first states it "
+            "separately, not at launch."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -915,13 +911,14 @@ PRODUCT_METADATA = {
         "manufacturer": "Johnson & Johnson",
         "benchmark_identity": "jnj_invega_sustenna_worldwide_reported",
         "therapeutic_area": "Neuroscience",
-        "commercial_start_quarter": "2018Q1",
+        "commercial_start_quarter": "2012Q1",
         "launch_quarter": "2009Q3",
         "series_start_reason": (
-            "J&J publishes one line for four brands - INVEGA SUSTENNA, XEPLION, "
-            "INVEGA TRINZA and TREVICTA - which are the one-month and three-month "
-            "long-acting injectables under their US and ex-US names. No split is "
-            "published. 2018Q1 is the earliest quarter sourced."
+            "J&J prints this product on its own line of the Major Pharmaceutical "
+            "Product Revenues table only from the first quarter of 2012Q1; the "
+            "earlier table carries a shorter list of products and folds this one "
+            "into Other. The series starts where the issuer first states it "
+            "separately, not at launch."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -2276,7 +2273,14 @@ JNJ_COMPARATORS = {
 
 
 def build_jnj_comparators() -> list[dict[str, Any]]:
-    """J&J products outside pulmonary hypertension, 2018-2023."""
+    """J&J products outside pulmonary hypertension.
+
+    Two documents feed these series and they are not the same kind of source:
+    the quarterly Sales of Key Products/Franchises schedule on the investor
+    site, and the Major Pharmaceutical Product Revenues table filed in the
+    10-Q, which reaches back further. The manifest says which, so the row does
+    not claim to come from a press release when it came from a filing.
+    """
     rows: list[dict[str, Any]] = []
     for drug_name, manifest in JNJ_COMPARATORS.items():
         rows.extend(
@@ -2286,8 +2290,9 @@ def build_jnj_comparators() -> list[dict[str, Any]]:
                 value=float(source["value_reported"]),
                 source_url=source["source_url"],
                 source_quote=source["source_quote"],
-                source_type="company_ir",
+                source_type=source.get("source_type") or "company_ir",
                 derivation=source["derivation"],
+                precision=source.get("precision") or "as_reported",
                 notes=source["context"],
             )
             for source in read_csv(SOURCE_DIR / manifest)
