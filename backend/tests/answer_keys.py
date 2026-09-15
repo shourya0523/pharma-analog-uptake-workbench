@@ -77,3 +77,37 @@ def identifying(issuer: str) -> set[str]:
 
 def scored_words(*, excluding: Path) -> set[str]:
     return {w for issuer in spent_issuers(excluding=excluding) for w in identifying(issuer)}
+
+
+def products_in(path: Path) -> set[str]:
+    """The products one answer key names.
+
+    A gold row names a ``drug_name``; an eval case names the drug a person
+    would type; a member case names the member, whose own spelling carries the
+    brands it runs together. All of them are answers.
+    """
+    text = path.read_text()
+    found: set[str] = set()
+    if path.suffix == ".jsonl":
+        for line in text.splitlines():
+            if line.strip():
+                found.add(json.loads(line).get("drug_name", ""))
+        return {name for name in found if name}
+    payload = json.loads(text)
+    cases = payload.get("cases") if isinstance(payload, dict) else payload
+    for case in cases or ():
+        if not isinstance(case, dict):
+            continue
+        found.add(case.get("drug_name") or "")
+        member = case.get("member") or ""
+        found.add(member.split(":")[-1].removesuffix("Member"))
+        found.add(case.get("expected") or case.get("expected_product") or "")
+    return {name for name in found if name}
+
+
+def scored_products() -> set[str]:
+    """Every product any answer key holds an answer for."""
+    names: set[str] = set()
+    for path in answer_key_paths():
+        names |= products_in(path)
+    return names

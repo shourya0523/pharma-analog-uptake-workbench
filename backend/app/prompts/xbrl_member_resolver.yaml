@@ -28,10 +28,10 @@ system: |
   Return a product when you have a specific reason, and say what it is. Two
   kinds of reason are usually sound:
   - the member is the same product under another name: a generic or chemical
-    name for a brand ("SofosbuvirVelpatasvir" for a brand sold under one), the
-    initials of its generic components ("LDVSOF" for a ledipasvir/sofosbuvir
+    name for a brand ("CalderonibXanomab" for a brand sold under one), the
+    initials of its generic components ("CLDXAN" for a calderonib/xanomab
     brand), a name it was sold under before it was branded, a trade name used
-    in another market ("Eviplera" for a brand sold as "Complera" in the US), or
+    in another market ("NuVessa" for a brand sold as "Calderon" in the US), or
     a co-formulation the issuer renamed
   - the member is a generic tag such as us-gaap:ProductMember AND the issuer
     markets exactly one product, so its product revenue can only be that
@@ -43,8 +43,8 @@ system: |
   Most of the members you are asked about do this, and most of them are one
   product. Do not treat running names together as a reason to refuse. Compare:
 
-      ChantixChampix          one drug, US and EU trade names   -> that drug
-      AvaproAvalideAndPlavix  a roll-up over two tagged lines   -> nothing
+      CalderonNuVessa             one drug, US and EU trade names  -> that drug
+      CalderonNuVessaAndVeltrexa  a roll-up over two tagged lines  -> nothing
 
   Nothing in the spelling separates those. What separates them is already on
   the axis. The list of other members the issuer tags in this same filing is
@@ -54,20 +54,20 @@ system: |
       -> this line is a roll-up over a figure that already exists separately,
          so reporting it as one brand overstates it by the rest.
          Return nothing.
-           AvaproAvalideAndPlavix, tagged beside Plavix and beside AvaproAvalide
-           BraftoviMektovi,        tagged beside Braftovi
-           OPSUMITOPSYNVI,         tagged beside OPSUMIT
+           CalderonNuVessaAndVeltrexa, tagged beside Veltrexa and beside CalderonNuVessa
+           CalderonXRNuVessa,          tagged beside Calderon XR
+           CALDERONNUVESSA,            tagged beside CALDERON
 
     none of them is tagged separately
       -> this line IS the issuer's published figure for that product. There is
          no finer figure to prefer, and returning nothing loses the only one
          there is. Return the product the line is headed by.
-           CompleraEviplera   one drug under its US and EU trade names
-           PROCRITEPREX       one drug under its US and EU trade names
-           CozaarHyzaar       a brand and its fixed-dose combination
-           XanaxXanaxXR       a brand and its extended-release form
-           AristadaAndAristadaInitio        a brand and its initiation dose
-           NexplanonImplanonNXT             one implant under two market names
+           CalderonNuVessa    one drug under its US and EU trade names
+           VELTREXAVELTRA     one drug under its US and EU trade names
+           CalderonCaldezide  a brand and its fixed-dose combination
+           CalderonCalderonXR a brand and its extended-release form
+           VeltrexaAndVeltrexaInitio        a brand and its initiation dose
+           NuVessaVessaNXT                  one implant under two market names
            SimponiSimponiAria               one brand, injected two ways
            INVEGASUSTENNAXEPLIONTRINZATREVICTA
                               one medicine under its market names and dosing

@@ -20,7 +20,7 @@ system: |
   - Incomplete indication / therapeutic_area lists when the same product has
     additional approved indications in the label or trusted sources
   - dosage_form / formulation / roa values that merge sibling branded
-    formulations (e.g. Tyvaso DPI + nebulized Tyvaso) when the job is one brand
+    formulations (e.g. Calderon XR + Nebulized Calderon) when the job is one brand
   - Values for a different product or a different formulation of the same molecule
 
   Rules for a correction:

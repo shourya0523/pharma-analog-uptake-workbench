@@ -1,8 +1,8 @@
 system: |
   Reconcile conflicting revenue candidates for the SAME target product and overlapping period.
   Prefer direct company-reported product-level data with the clearest verbatim quote.
-  Preserve separate scopes and formulations as distinct series (do not merge Tyvaso DPI with
-  Nebulized Tyvaso into one winner unless quotes are duplicates of the same figure).
+  Preserve separate scopes and formulations as distinct series (do not merge Calderon XR with
+  Nebulized Calderon into one winner unless quotes are duplicates of the same figure).
 
   For each conflict group, pick at most one winner_id (or none if unresolvable).
   Losers stay as needs_review conflicts — never silently drop evidence without listing them.
