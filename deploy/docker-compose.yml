@@ -1,0 +1,65 @@
+# One e2-micro runs both services. The API is not published to the host: the
+# only way in is through the proxy, which is what puts the UI and the API on
+# one origin and so removes the CORS list entirely.
+name: pharma-workbench
+
+x-logging: &logging
+  # The box has 30 GB and is meant to run for months. Unbounded json-file logs
+  # are the usual way that disk disappears.
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+services:
+  api:
+    build:
+      context: ../backend
+    restart: unless-stopped
+    logging: *logging
+    env_file: .env
+    environment:
+      # Container-internal paths, set here rather than in .env so that editing
+      # the env file cannot move the database out from under the volume.
+      DATABASE_URL: sqlite+aiosqlite:////app/storage/workbench.db
+      LOCAL_STORAGE_ROOT: /app/storage
+      STORAGE_BACKEND: local
+      JOB_BACKEND: inprocess
+      ENVIRONMENT: gcp
+      # Same origin, so no browser request to this service is ever cross-origin.
+      CORS_ORIGINS: ""
+    volumes:
+      - ${STORAGE_ROOT:-./storage}:/app/storage
+    expose:
+      - "8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health').read()"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      # Migrations run at startup, and the first boot of an empty database
+      # walks every revision.
+      start_period: 90s
+
+  web:
+    build:
+      context: ../frontend
+    restart: unless-stopped
+    logging: *logging
+    depends_on:
+      - api
+    environment:
+      SITE_ADDRESS: ${SITE_ADDRESS:?set SITE_ADDRESS in deploy/.env}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      # The certificate and its account key. Losing these means re-issuing on
+      # every restart, which is how a rate limit gets reached.
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  caddy_data:
+  caddy_config:

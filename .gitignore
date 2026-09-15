@@ -2,6 +2,8 @@
 .env
 backend/.env
 backend/storage/
+deploy/.env
+deploy/storage/
 **/__pycache__/
 **/.venv/
 **/node_modules/
