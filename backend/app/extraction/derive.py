@@ -26,9 +26,8 @@ from __future__ import annotations
 
 import re
 from collections import defaultdict
-from dataclasses import replace
-
 from collections.abc import Iterable
+from dataclasses import replace
 from typing import Any
 
 from app.extraction.process import Datapoint
@@ -46,6 +45,20 @@ DERIVED_CONFIDENCE = 0.7
 # Derived quarters inherit rounding from their inputs, so a residual this small
 # is arithmetic noise rather than a real amount.
 _NEGLIGIBLE = 0.05
+
+# The spans a filer states beside its quarters, by the quarter each ends in,
+# and the span each is the continuation of. A quarter is the difference of
+# the two spans that meet at it: the year less the nine months is the fourth
+# quarter, the nine months less the six is the third. Q1 is the six months
+# less Q2, which the total-minus-quarters rule below already derives.
+_SPAN_ENDS = {"six_month": 2, "nine_month": 3, "annual": 4}
+_SPAN_WITHIN = {"annual": "nine_month", "nine_month": "six_month"}
+
+# A derived figure is published with the bound its inputs' rounding gives it.
+# Where that bound exceeds a tenth of the figure, the figure is not known to
+# its first digit, and it is held for a person rather than published.
+BOUND_FRACTION_HELD = 0.1
+HELD_FOR_BOUND = "derived_bound_exceeds_tenth"
 
 
 def _combined_uncertainty(points: Iterable[Datapoint]) -> float | None:
@@ -117,6 +130,27 @@ def complete_quarters_from_totals(
             totals[(year, point.period_type)] = point
 
     derived: list[Datapoint] = []
+    # A quarter as the difference of two stated spans, before the rule that
+    # needs every other quarter: a filer that states only the six-, nine- and
+    # twelve-month figures still determines the third and fourth quarters.
+    for (year, outer_type), outer in sorted(totals.items()):
+        inner_type = _SPAN_WITHIN.get(outer_type)
+        inner = totals.get((year, inner_type)) if inner_type else None
+        target = _SPAN_ENDS.get(outer_type)
+        if inner is None or target is None or target in quarters.get(year, {}):
+            continue
+        residual = outer.value_normalized_usd_millions - inner.value_normalized_usd_millions
+        if residual < -_NEGLIGIBLE:
+            continue
+        uncertainty = _combined_uncertainty([outer, inner])
+        point = _derived_point(
+            outer, year, target, residual, uncertainty,
+            f"{outer.period} {outer_type} total {outer.value_normalized_usd_millions:g} "
+            f"less {inner.period} {inner_type} total {inner.value_normalized_usd_millions:g}",
+        )
+        derived.append(point)
+        quarters[year][target] = point
+
     for (year, period_type), total in sorted(totals.items()):
         members = _QUARTERS_IN[period_type]
         if start is not None:
@@ -145,27 +179,47 @@ def complete_quarters_from_totals(
         uncertainty = _combined_uncertainty(
             [total, *(have[q] for q in members if q != target)]
         )
-        # Said in the quote as well as carried in the field, because the quote
-        # is what a reader sees beside the number and the whole point is that a
-        # derived quarter is not as precise as a tagged one.
-        bound = f", +/- {uncertainty:g} from input rounding" if uncertainty else ""
-        point = replace(
-            total,
-            period=f"{year}Q{target}",
-            period_type="quarterly",
-            value_normalized_usd_millions=round(max(residual, 0.0), 6),
-            value_as_reported=round(max(residual, 0.0), 6),
-            source_quote=(
-                f"{total.period} {period_type} total "
-                f"{total.value_normalized_usd_millions:g} less reported {inputs} "
-                f"yields {year}Q{target} {max(residual, 0.0):g}{bound}"
-            ),
-            normalization_status="derived_from_period_total",
-            rounding_uncertainty_usd_millions=uncertainty,
+        point = _derived_point(
+            total, year, target, residual, uncertainty,
+            f"{total.period} {period_type} total {total.value_normalized_usd_millions:g} "
+            f"less reported {inputs}",
         )
         derived.append(point)
         quarters[year][target] = point
     return derived
+
+
+def _derived_point(
+    source: Datapoint, year: int, target: int, residual: float,
+    uncertainty: float | None, arithmetic: str,
+) -> Datapoint:
+    """One derived quarter, saying in its quote what it is and what it is worth.
+
+    The quote names the product, because a quote that does not is vetoed as
+    not being about it - which held every derived quarter, correct or not.
+    The bound is said in the quote as well as carried in the field, because
+    the quote is what a reader sees beside the number and the whole point is
+    that a derived quarter is not as precise as a tagged one.
+    """
+    value = round(max(residual, 0.0), 6)
+    bound = f", +/- {uncertainty:g} from input rounding" if uncertainty else ""
+    return replace(
+        source,
+        period=f"{year}Q{target}",
+        period_type="quarterly",
+        value_normalized_usd_millions=value,
+        value_as_reported=value,
+        source_quote=f"{source.product_label}: {arithmetic} yields {year}Q{target} {value:g}{bound}",
+        normalization_status="derived_from_period_total",
+        rounding_uncertainty_usd_millions=uncertainty,
+    )
+
+
+def held_for_bound(point: Datapoint) -> bool:
+    """Whether a derived figure's bound leaves it unknown to its first digit."""
+    bound = point.rounding_uncertainty_usd_millions
+    value = point.value_normalized_usd_millions
+    return bool(bound and value and bound > BOUND_FRACTION_HELD * abs(value))
 
 
 def propagate_sole_formulation(
@@ -282,7 +336,8 @@ def _as_date(value: str):
 
 
 def _next_day(date: str) -> str:
-    from datetime import date as _date, timedelta
+    from datetime import date as _date
+    from datetime import timedelta
 
     year, month, day = (int(part) for part in date.split("-"))
     return (_date(year, month, day) + timedelta(days=1)).isoformat()
@@ -386,6 +441,7 @@ def complete_series(
             "extraction_method": point.normalization_status,
             "rounding_uncertainty_usd_millions": point.rounding_uncertainty_usd_millions,
             "_derived": True,
+            "label_flags": [HELD_FOR_BOUND] if held_for_bound(point) else [],
         }
         for point in derived
         # A quarter that derives to nothing is not a quarter the issuer left

@@ -58,7 +58,7 @@ from app.extraction.bulk_tagged import candidates_from_notes
 from app.extraction.candidates import extract_revenue_candidates
 from app.extraction.check import _ROUNDING_ABSOLUTE as ROUNDING_ABSOLUTE
 from app.extraction.check import _ROUNDING_TOLERANCE as ROUNDING_TOLERANCE
-from app.extraction.derive import complete_series
+from app.extraction.derive import HELD_FOR_BOUND, complete_series
 from app.extraction.elements import Verdict
 from app.extraction.fingerprint import UNIT_SCALE_TO_MILLIONS
 from app.extraction.members import Resolution, load_products, resolve
@@ -262,7 +262,7 @@ def persist_profile_field(
 # the LLM branch and the deterministic branch share this code path, so trusting
 # the key outright would let model output name its own provenance.
 # The label flags that keep a figure from being published without a person.
-LABEL_FLAGS = frozenset({FLAG_NOT_UNDERSTOOD, FLAG_PARTIAL, FLAG_COMBINED})
+LABEL_FLAGS = frozenset({FLAG_NOT_UNDERSTOOD, FLAG_PARTIAL, FLAG_COMBINED, HELD_FOR_BOUND})
 
 _DETERMINISTIC_METHODS = {"table_fingerprint": "table", "prose_sentence": "prose"}
 
@@ -1088,7 +1088,10 @@ class PipelineOrchestrator:
                 "interpreted": False,
                 "period_reported": period,
             },
-            issue_flags=["derived_from_reported_series"] if derived else ["extracted_from_xbrl"],
+            issue_flags=(
+                (["derived_from_reported_series"] if derived else ["extracted_from_xbrl"])
+                + list(candidate.get("label_flags") or [])
+            ),
         )
         self.db.add(row)
         return row
