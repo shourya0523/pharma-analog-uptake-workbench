@@ -12,6 +12,7 @@ import httpx
 import yaml
 
 from app.config import get_settings
+from app.domain.claims import stated_text
 from app.llm.grounding import (
     apply_structured_field_gates,
     enforce_verbatim_on_candidates,
@@ -777,7 +778,7 @@ def apply_judge_hard_vetoes(
     """Force misclassified/needs_review for known bad patterns even if model is soft."""
     issues = list(judgment.get("issues") or [])
     q = quote or ""
-    period_type = (candidate.get("period_type") or "").lower()
+    period_type = stated_text(candidate.get("period_type")).lower()
     mentions = quote_mentions_product(q, product, generic, extra_aliases=extra_aliases)
     other = quote_mentions_other_brand(
         q, product, generic, extra_aliases=extra_aliases, peer_names=peer_names

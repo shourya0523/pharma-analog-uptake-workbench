@@ -5,6 +5,7 @@ from collections.abc import Iterable
 from difflib import SequenceMatcher
 from typing import Any
 
+from app.domain.claims import stated_text
 from app.domain.models import RevenueScope
 from app.extraction.members import split_camel
 from app.parsing.evidence import SCOPE_PATTERNS, TOTAL_REVENUE_RE, product_aliases
@@ -288,8 +289,8 @@ def filter_revenue_candidates(
     dropped: list[dict[str, Any]] = []
 
     for cand in candidates:
-        quote = (cand.get("source_quote") or "").strip()
-        scope = (cand.get("revenue_scope") or "Unknown").strip()
+        quote = stated_text(cand.get("source_quote"))
+        scope = stated_text(cand.get("revenue_scope"), "Unknown")
         value = cand.get("value_reported")
 
         if not quote:
