@@ -16,6 +16,13 @@ concurrency:
 jobs:
   backend:
     runs-on: ubuntu-latest
+    env:
+      # Deliberately fake, and enough. The client raises rather than returns
+      # when the key is absent (app/llm/client.py, _headers), so the test that
+      # covers an unreachable model needs a key to be *set* to reach the
+      # connection it is about. Nothing here calls OpenRouter: the whole suite
+      # passes with this exact value, which is what says the calls are stubbed.
+      OPENROUTER_API_KEY: ci-not-a-real-key
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
