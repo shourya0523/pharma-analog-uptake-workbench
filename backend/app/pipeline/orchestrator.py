@@ -2144,10 +2144,16 @@ class PipelineOrchestrator:
             by_key.setdefault(key, []).append(row)
         # When each source was filed, for telling the filing that reports a
         # period from a later filing's comparative of it.
-        source_dates = {
-            src.id: src.source_date
-            for src in self.db.query(SourceDocumentORM).filter_by(job_id=job.id).all()
-        }
+        job_sources = self.db.query(SourceDocumentORM).filter_by(job_id=job.id).all()
+        source_dates = {src.id: src.source_date for src in job_sources}
+        accessions = {src.id: src.accession_number for src in job_sources}
+
+        def accession_of(row: DatapointORM) -> str | None:
+            """The filing a claim came from, by the source row it cites."""
+            return accessions.get(str(row.source_id or "")) or (
+                (row.citation_json or {}).get("accession_number")
+                or (row.citation_json or {}).get("accession")
+            )
 
         def reports_own_period(row: DatapointORM) -> int:
             """0 for the filing that reports the period, 2 for a later one, 1 unknown.
@@ -2269,6 +2275,27 @@ class PipelineOrchestrator:
         winners -= contested
         losers |= contested
 
+        # A filing that contradicts itself publishes nothing for the period.
+        # A fact the filer tagged and a figure the same filing prints, for
+        # one period, disagreeing beyond what the two declared: neither is
+        # the answer, whatever tier each sits on, since the filing is the
+        # only witness and it has said two things. Both are held, and the
+        # flag names the filing rather than the stronger claim.
+        self_contradicting: set[str] = set()
+        for group in by_key.values():
+            by_accession: dict[str, list[DatapointORM]] = {}
+            for r in group:
+                accession = accession_of(r)
+                if accession and r.value_normalized_usd_millions is not None:
+                    by_accession.setdefault(accession, []).append(r)
+            for claims in by_accession.values():
+                for index, first in enumerate(claims):
+                    for second in claims[index + 1 :]:
+                        if not _agrees_within_declared_precision(first, second):
+                            self_contradicting.update({first.id, second.id})
+        winners -= self_contradicting
+        losers |= self_contradicting
+
         # One figure, one publication. A claim that lost only on tier and
         # agrees with the winner within the coarser of the two declared
         # precisions is the same figure read twice - a tagged fact in
@@ -2282,7 +2309,7 @@ class PipelineOrchestrator:
             if winner is None or winner.value_normalized_usd_millions is None:
                 continue
             for other in group:
-                if other.id == winner.id or other.id in contested:
+                if other.id == winner.id or other.id in contested or other.id in self_contradicting:
                     continue
                 if other.value_normalized_usd_millions is None:
                     continue
@@ -2305,7 +2332,9 @@ class PipelineOrchestrator:
                     row.citation_json = {**row.citation_json, "validation_status": row.validation_status}
             elif row.id in losers:
                 row.validation_status = ValidationStatus.NEEDS_REVIEW.value
-                if row.id in contested:
+                if row.id in self_contradicting:
+                    flag = "filing_contradicts_itself"
+                elif row.id in contested:
                     flag = "equal_strength_claims_disagree"
                 elif reports_own_period(row) == 2 and any(
                     reports_own_period(by_id[w]) == 0 for w in winners

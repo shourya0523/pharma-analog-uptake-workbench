@@ -167,3 +167,44 @@ def test_the_gate_does_not_republish_a_row_an_earlier_stage_decided():
         "every status but pending is a decision an earlier stage made"
     )
     assert gated(ValidationStatus.PENDING.value) == ValidationStatus.AUTO_PASS.value
+
+
+def test_a_filing_that_contradicts_itself_publishes_nothing_for_the_period(monkeypatch):
+    """A fact the filer tagged and a figure the same filing prints, disagreeing.
+
+    The tagged fact won on tier and the printed figure was held as a conflict
+    it had not lost. One filing is one witness; it has said two things, so
+    neither is the answer, and both are held under a flag naming the filing.
+    """
+    db, job = _job()
+    filing = SourceDocumentORM(id=new_id(), job_id=job.id, source_type="quarterly_report",
+                               source_url="https://example.invalid/10q", source_date="2019-05-01",
+                               retrieval_status="success", accession_number="0001-19-000001")
+    db.add(filing); db.commit()
+    rows = [
+        _point(job, 52.2, method="xbrl_fact", source_id=filing.id, period="2018Q1", precision=0.05),
+        _point(job, 97.6, method="table", source_id=filing.id, period="2018Q1", precision=0.05),
+    ]
+    by_method = _reconcile(monkeypatch, db, job, rows)
+    assert {r.validation_status for r in by_method.values()} == {ValidationStatus.NEEDS_REVIEW.value}
+    assert all("filing_contradicts_itself" in r.issue_flags for r in by_method.values())
+
+
+def test_two_filings_that_disagree_are_still_settled_by_tier(monkeypatch):
+    """The contradiction is within one filing. Across two, the stronger
+    claim still wins and the other is the ordinary kind of loser."""
+    db, job = _job()
+    first = SourceDocumentORM(id=new_id(), job_id=job.id, source_type="quarterly_report",
+                              source_url="https://example.invalid/10q", source_date="2019-05-01",
+                              retrieval_status="success", accession_number="0001-19-000001")
+    second = SourceDocumentORM(id=new_id(), job_id=job.id, source_type="quarterly_report",
+                               source_url="https://example.invalid/8k", source_date="2019-05-01",
+                               retrieval_status="success", accession_number="0001-19-000002")
+    db.add_all([first, second]); db.commit()
+    rows = [
+        _point(job, 52.2, method="xbrl_fact", source_id=first.id, period="2018Q1", precision=0.05),
+        _point(job, 97.6, method="table", source_id=second.id, period="2018Q1", precision=0.05),
+    ]
+    by_method = _reconcile(monkeypatch, db, job, rows)
+    assert by_method["xbrl_fact"].validation_status == ValidationStatus.AUTO_PASS.value
+    assert "filing_contradicts_itself" not in by_method["table"].issue_flags
