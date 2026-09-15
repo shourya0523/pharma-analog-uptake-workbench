@@ -97,7 +97,8 @@ def _year_of(period: str) -> int | None:
 
 
 def complete_quarters_from_totals(
-    points: list[Datapoint], *, commercial_start: str | None = None
+    points: list[Datapoint], *, commercial_start: str | None = None,
+    product: str | None = None,
 ) -> list[Datapoint]:
     """Derive the one quarter an issuer left implicit against a stated total.
 
@@ -147,6 +148,7 @@ def complete_quarters_from_totals(
             outer, year, target, residual, uncertainty,
             f"{outer.period} {outer_type} total {outer.value_normalized_usd_millions:g} "
             f"less {inner.period} {inner_type} total {inner.value_normalized_usd_millions:g}",
+            product=product,
         )
         derived.append(point)
         quarters[year][target] = point
@@ -183,20 +185,30 @@ def complete_quarters_from_totals(
             total, year, target, residual, uncertainty,
             f"{total.period} {period_type} total {total.value_normalized_usd_millions:g} "
             f"less reported {inputs}",
+            product=product,
         )
         derived.append(point)
         quarters[year][target] = point
     return derived
 
 
+def _named(source: Datapoint, product: str | None) -> str:
+    """What to call the product in a derived quote."""
+    return source.product_label or (product or "").strip() or "the product"
+
+
 def _derived_point(
     source: Datapoint, year: int, target: int, residual: float,
-    uncertainty: float | None, arithmetic: str,
+    uncertainty: float | None, arithmetic: str, product: str | None = None,
 ) -> Datapoint:
     """One derived quarter, saying in its quote what it is and what it is worth.
 
     The quote names the product, because a quote that does not is vetoed as
-    not being about it - which held every derived quarter, correct or not.
+    not being about it - which held every derived quarter, correct or not. The
+    name is the product the series was derived for, not the label the source
+    row happened to carry: a figure the filer tagged carries no row label at
+    all, so every quarter derived from a tagged annual total opened its quote
+    with a bare colon and was vetoed on the spot.
     The bound is said in the quote as well as carried in the field, because
     the quote is what a reader sees beside the number and the whole point is
     that a derived quarter is not as precise as a tagged one.
@@ -209,7 +221,7 @@ def _derived_point(
         period_type="quarterly",
         value_normalized_usd_millions=value,
         value_as_reported=value,
-        source_quote=f"{source.product_label}: {arithmetic} yields {year}Q{target} {value:g}{bound}",
+        source_quote=f"{_named(source, product)}: {arithmetic} yields {year}Q{target} {value:g}{bound}",
         normalization_status="derived_from_period_total",
         rounding_uncertainty_usd_millions=uncertainty,
     )
@@ -394,7 +406,9 @@ def complete_series(
     year missing two quarters, stays the gap it is.
     """
     own = [point for c in reported.get(product, []) if (point := _as_datapoint(c))]
-    derived = list(complete_quarters_from_totals(own, commercial_start=commercial_start))
+    derived = list(
+        complete_quarters_from_totals(own, commercial_start=commercial_start, product=product)
+    )
 
     if family and family != product:
         split_periods = {

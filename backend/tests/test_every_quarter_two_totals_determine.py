@@ -23,6 +23,7 @@ from app.extraction.derive import (
     held_for_bound,
 )
 from app.extraction.process import Datapoint
+from app.quality.candidate_filters import quote_mentions_product
 
 
 def _point(period, period_type, value, precision=0.5):
@@ -87,3 +88,38 @@ def test_a_figure_not_known_to_its_first_digit_is_held():
     ]}
     candidates = complete_series(rows, product="Calderon")
     assert [c["label_flags"] for c in candidates if c["period"] == "2023Q4"] == [[HELD_FOR_BOUND]]
+
+
+def test_a_quarter_derived_from_a_tagged_total_still_names_the_product():
+    """A figure the filer tagged carries no row label of its own.
+
+    The derived quote took its name from the source row, so every quarter
+    derived from a tagged annual total opened with a bare colon, and the
+    judge's veto for a quote that does not name the product held all of
+    them - correct or not.
+    """
+    tagged = [
+        Datapoint(product_label="", period="2024", period_type="annual",
+                  value_normalized_usd_millions=100.0, value_as_reported=100.0,
+                  source_unit="millions", source_currency="USD", fx_rate_to_usd=None,
+                  source_quote="us-gaap:RevenueFromContractWithCustomer 100000000",
+                  fingerprint_signature="tagged",
+                  normalization_status="ok", rounding_uncertainty_usd_millions=None),
+    ] + [
+        Datapoint(product_label="", period=f"2024Q{q}", period_type="quarterly",
+                  value_normalized_usd_millions=value, value_as_reported=value,
+                  source_unit="millions", source_currency="USD", fx_rate_to_usd=None,
+                  source_quote="tagged", fingerprint_signature="tagged",
+                  normalization_status="ok", rounding_uncertainty_usd_millions=None)
+        for q, value in ((1, 20.0), (2, 25.0), (3, 30.0))
+    ]
+
+    derived = complete_quarters_from_totals(tagged, product="Calderon")
+
+    assert [point.period for point in derived] == ["2024Q4"]
+    assert derived[0].source_quote.startswith("Calderon: ")
+    assert quote_mentions_product(derived[0].source_quote, "Calderon", None)
+
+    # With no name to hand it says so, rather than opening with a colon.
+    unnamed = complete_quarters_from_totals(tagged)
+    assert unnamed[0].source_quote.startswith("the product: ")
