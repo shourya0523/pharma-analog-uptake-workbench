@@ -38,18 +38,21 @@ SCRIPT_ONLY = {
     "read_peak_sales_csv",
     # Remediation, run against a job that has already finished.
     "backfill_job",
-    # The analytics layer, which the API does not yet expose. Wiring or
-    # deleting it is open work, not an accident to be silently tolerated.
-    "rank_analogs", "calculate_revenue_uptake", "time_to_ninety_percent_peak",
+    # The uptake and peak-sales half of the analytics layer, which no route
+    # exposes yet. Wiring or deleting it is open work, not an accident to be
+    # silently tolerated.
+    "calculate_revenue_uptake", "time_to_ninety_percent_peak",
     "select_peak_estimate", "aggregate_comparable_sales",
-    "calculate_competitive_snapshot", "build_launch_peers", "categorize_snapshots",
-    "assess_intensity", "peers_at_launch", "compare_to_rule",
+    # The competitive-intensity assessor, which puts a model's judgement beside
+    # the rule the pipeline runs. The rule is wired; asking the model on every
+    # product is a call per product that nothing yet asks for.
+    "build_launch_peers", "assess_intensity", "peers_at_launch", "compare_to_rule",
     # Adjudication verdicts. The arithmetic they wrap is used; the verdicts
     # are not, because nothing yet asks them. See the plan.
     "adjudicate_split_ownership_quarter", "adjudicate_total_against_parts",
     "adjudicate_reported_value", "adjudicate_positional_solutions",
     # Readers kept for the evals that compare against them.
-    "html_tables", "extract_revenue_rows", "read_positional_block", "reading_rank",
+    "html_tables", "extract_revenue_rows", "read_positional_block",
     # Domain types, constructed in tests and by callers outside this package.
     "CompetitiveIntensity", "PeakEstimateType", "PharmaAssertion", "RevenueCandidate",
     "is_aggregate_formulation", "has_label_section_header", "select_assertion",
@@ -105,3 +108,29 @@ def test_no_capability_is_reachable_only_from_an_eval():
         + "\n\nWire it into the pipeline, delete it, or add it to SCRIPT_ONLY "
         "with the reason it is correctly one-directional."
     )
+
+
+def test_the_exception_list_has_nothing_wired_on_it():
+    """A name on SCRIPT_ONLY that app/ does call excuses nothing, and hides.
+
+    The list is what the check above skips. An entry that was true when it was
+    written and has since been wired keeps that name unwatched: the capability
+    could be unwired again and no test would say so. `reading_rank` sat here
+    while the orchestrator called it.
+    """
+    in_app = _references(APP)
+    defined = _definitions()
+    stale = sorted(
+        name for name in SCRIPT_ONLY if name in defined and in_app.get(name)
+    )
+    assert not stale, (
+        "these are on SCRIPT_ONLY and are called by app/:\n  " + "\n  ".join(stale)
+        + "\nRemove them from the list so the check above watches them again."
+    )
+
+
+def test_every_exception_names_something_that_exists():
+    """A name that no longer exists cannot be the reason for an exception."""
+    defined = _definitions()
+    missing = sorted(name for name in SCRIPT_ONLY if name not in defined)
+    assert not missing, f"SCRIPT_ONLY names things that are not defined: {missing}"

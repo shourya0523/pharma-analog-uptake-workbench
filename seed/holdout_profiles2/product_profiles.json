@@ -1,0 +1,252 @@
+{
+ "purpose": "Scores the analog derivation after the defects seed/holdout_profiles found were fixed. That set is spent: it is what showed the classifier spelling one group two ways and the openFDA selector taking a sibling formulation's application, so re-running it would be marking the fix against the set that asked for it.",
+ "built": "2026-09-15",
+ "absent_from": [
+  "seed/gold",
+  "seed/holdout",
+  "seed/holdout2",
+  "seed/holdout_labels",
+  "seed/holdout_members",
+  "seed/holdout_profiles",
+  "seed/cases"
+ ],
+ "answer_key": "Read off each product's own openFDA records, as in seed/holdout_profiles: the approval year from the earliest ORIG submission with AP status in drugsFDA, the route from the label endpoint's openfda block, the therapy area from the first indication the label lists. The application number on each row is what to fetch to check it.",
+ "independence": "Route, approval year, era and the peer count are facts of the cited records. moa_class and indication_area are groupings a reader assigned from the same labels the pipeline reads - an independent reading of a shared source, not an independent source - and are scored on which products they group, never on wording.",
+ "peer_counts_are_within_this_set": "marketed_peers_at_launch counts the products in this file approved earlier in the same indication_area, so it holds only for a run whose catalogue is this set. Three products share one area across three approval years, so a derivation that always answers zero fails here.",
+ "not_scored": {
+  "competitive_intensity_at_launch": "the repo's own cohort rule applied to the peer count, so an expectation for it would be a prediction of the rule rather than a fact about the product.",
+  "moa": "free prose, reported rather than compared."
+ },
+ "cases": [
+  {
+   "drug_name": "Gilotrif",
+   "manufacturer": "Boehringer Ingelheim",
+   "options": {
+    "product_metadata": true,
+    "openfda": true,
+    "quarterly_revenue": false,
+    "sec_filings": false,
+    "earnings_releases": false,
+    "company_ir": false
+   },
+   "source": "openFDA NDA201292",
+   "expect": {
+    "route_of_administration": "Oral",
+    "first_approval_year": 2013,
+    "approval_era": "2010-2014",
+    "moa_class": "egfr_kinase_inhibition",
+    "indication_area": "Non-small cell lung cancer",
+    "marketed_peers_at_launch": 0,
+    "peer_universe_role": "distinct_product"
+   },
+   "why": "first in this area here, so it faced no roster we hold"
+  },
+  {
+   "drug_name": "Alunbrig",
+   "manufacturer": "Takeda",
+   "options": {
+    "product_metadata": true,
+    "openfda": true,
+    "quarterly_revenue": false,
+    "sec_filings": false,
+    "earnings_releases": false,
+    "company_ir": false
+   },
+   "source": "openFDA NDA208772",
+   "expect": {
+    "route_of_administration": "Oral",
+    "first_approval_year": 2017,
+    "approval_era": "2015-2019",
+    "moa_class": "alk_kinase_inhibition",
+    "indication_area": "Non-small cell lung cancer",
+    "marketed_peers_at_launch": 1,
+    "peer_universe_role": "distinct_product"
+   },
+   "why": "same area as Gilotrif, a different kinase, approved later"
+  },
+  {
+   "drug_name": "Imfinzi",
+   "manufacturer": "AstraZeneca",
+   "options": {
+    "product_metadata": true,
+    "openfda": true,
+    "quarterly_revenue": false,
+    "sec_filings": false,
+    "earnings_releases": false,
+    "company_ir": false
+   },
+   "source": "openFDA BLA761069",
+   "expect": {
+    "route_of_administration": "Intravenous",
+    "first_approval_year": 2017,
+    "approval_era": "2015-2019",
+    "moa_class": "checkpoint_inhibition",
+    "indication_area": "Non-small cell lung cancer",
+    "marketed_peers_at_launch": 1,
+    "peer_universe_role": "distinct_product"
+   },
+   "why": "same area as Gilotrif and Alunbrig, a different mechanism"
+  },
+  {
+   "drug_name": "Loqtorzi",
+   "manufacturer": "Coherus BioSciences",
+   "options": {
+    "product_metadata": true,
+    "openfda": true,
+    "quarterly_revenue": false,
+    "sec_filings": false,
+    "earnings_releases": false,
+    "company_ir": false
+   },
+   "source": "openFDA BLA761240",
+   "expect": {
+    "route_of_administration": "Intravenous",
+    "first_approval_year": 2023,
+    "approval_era": "2020-2024",
+    "moa_class": "checkpoint_inhibition",
+    "indication_area": "Nasopharyngeal carcinoma",
+    "marketed_peers_at_launch": 0,
+    "peer_universe_role": "distinct_product"
+   },
+   "why": "same mechanism as Imfinzi in a different area"
+  },
+  {
+   "drug_name": "Calquence",
+   "manufacturer": "AstraZeneca",
+   "options": {
+    "product_metadata": true,
+    "openfda": true,
+    "quarterly_revenue": false,
+    "sec_filings": false,
+    "earnings_releases": false,
+    "company_ir": false
+   },
+   "source": "openFDA NDA210259",
+   "expect": {
+    "route_of_administration": "Oral",
+    "first_approval_year": 2017,
+    "approval_era": "2015-2019",
+    "moa_class": "btk_kinase_inhibition",
+    "indication_area": "Chronic lymphocytic leukemia",
+    "marketed_peers_at_launch": 0,
+    "peer_universe_role": "distinct_product"
+   },
+   "why": "a kinase inhibitor whose pathway is not either lung one"
+  },
+  {
+   "drug_name": "Lynparza",
+   "manufacturer": "AstraZeneca",
+   "options": {
+    "product_metadata": true,
+    "openfda": true,
+    "quarterly_revenue": false,
+    "sec_filings": false,
+    "earnings_releases": false,
+    "company_ir": false
+   },
+   "source": "openFDA NDA208558",
+   "expect": {
+    "route_of_administration": "Oral",
+    "first_approval_year": 2017,
+    "approval_era": "2015-2019",
+    "moa_class": "parp_inhibition",
+    "indication_area": "Ovarian cancer",
+    "marketed_peers_at_launch": 0,
+    "peer_universe_role": "distinct_product"
+   },
+   "why": "earliest ORIG approval with AP status on the tablet application"
+  },
+  {
+   "drug_name": "Takhzyro",
+   "manufacturer": "Takeda",
+   "options": {
+    "product_metadata": true,
+    "openfda": true,
+    "quarterly_revenue": false,
+    "sec_filings": false,
+    "earnings_releases": false,
+    "company_ir": false
+   },
+   "source": "openFDA BLA761090",
+   "expect": {
+    "route_of_administration": "Subcutaneous",
+    "first_approval_year": 2018,
+    "approval_era": "2015-2019",
+    "moa_class": "plasma_kallikrein_inhibition",
+    "indication_area": "Hereditary angioedema",
+    "marketed_peers_at_launch": 0,
+    "peer_universe_role": "distinct_product"
+   },
+   "why": "only product here in its area"
+  },
+  {
+   "drug_name": "Vyepti",
+   "manufacturer": "Lundbeck",
+   "options": {
+    "product_metadata": true,
+    "openfda": true,
+    "quarterly_revenue": false,
+    "sec_filings": false,
+    "earnings_releases": false,
+    "company_ir": false
+   },
+   "source": "openFDA BLA761119",
+   "expect": {
+    "route_of_administration": "Intravenous",
+    "first_approval_year": 2020,
+    "approval_era": "2020-2024",
+    "moa_class": "cgrp_antagonism",
+    "indication_area": "Migraine",
+    "marketed_peers_at_launch": 0,
+    "peer_universe_role": "distinct_product"
+   },
+   "why": "only product here in its area"
+  },
+  {
+   "drug_name": "Nuzyra",
+   "manufacturer": "Paratek Pharmaceuticals",
+   "options": {
+    "product_metadata": true,
+    "openfda": true,
+    "quarterly_revenue": false,
+    "sec_filings": false,
+    "earnings_releases": false,
+    "company_ir": false
+   },
+   "source": "openFDA NDA209816",
+   "expect": {
+    "route_of_administration": null,
+    "first_approval_year": 2018,
+    "approval_era": "2015-2019",
+    "moa_class": "tetracycline_antibacterial",
+    "indication_area": "Community-acquired bacterial pneumonia",
+    "marketed_peers_at_launch": 0,
+    "peer_universe_role": "distinct_product"
+   },
+   "why": "approved as an injection and as tablets, so the label states two routes and no one route"
+  },
+  {
+   "drug_name": "Akynzeo",
+   "manufacturer": "Helsinn",
+   "options": {
+    "product_metadata": true,
+    "openfda": true,
+    "quarterly_revenue": false,
+    "sec_filings": false,
+    "earnings_releases": false,
+    "company_ir": false
+   },
+   "source": "openFDA NDA205718",
+   "expect": {
+    "route_of_administration": null,
+    "first_approval_year": 2014,
+    "approval_era": "2010-2014",
+    "moa_class": "antiemetic_receptor_antagonism",
+    "indication_area": "Chemotherapy-induced nausea and vomiting",
+    "marketed_peers_at_launch": 0,
+    "peer_universe_role": "distinct_product"
+   },
+   "why": "approved as capsules and for injection, so the label states two routes and no one route"
+  }
+ ]
+}

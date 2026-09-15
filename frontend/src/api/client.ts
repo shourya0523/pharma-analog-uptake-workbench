@@ -119,6 +119,7 @@ export const api = {
     return req<{ products: ProductRow[]; total: number }>(`/products${suffix}`)
   },
   getProduct: (productId: string) => req<any>(`/products/${productId}`),
+  getAnalogs: (productId: string) => req<any>(`/products/${productId}/analogs`),
   setCadence: (productId: string, cadence: string) =>
     req<any>(`/products/${productId}`, json('PATCH', { cadence })),
   setCadenceBulk: (productIds: string[], cadence: string) =>

@@ -24,6 +24,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Protocol
 
+from app.analytics.profile_attributes import peers_marketed_at_launch
 from app.llm.client import load_prompt
 
 PROMPT_NAME = "competitive_intensity_assessor"
@@ -173,10 +174,12 @@ def compare_to_rule(
 
 
 def peers_at_launch(profiles: list[dict[str, Any]], target: dict[str, Any]) -> list[Peer]:
-    """The roster a product actually faced: same indication, approved earlier.
+    """The roster a product actually faced, as peers the prompt can be shown.
 
-    Formulation splits are excluded for the same reason the benchmark rule
-    excludes them - Nebulized Calderon is Calderon's own approval recorded
+    Which rows are on the roster is `peers_marketed_at_launch`, so the model and
+    the rule are shown the same market; this adds only the fields the prompt
+    prints. Formulation splits are excluded there for the reason they are
+    excluded everywhere - Nebulized Calderon is Calderon's own approval recorded
     twice, so showing the model both would misstate the market.
     """
     return [
@@ -186,8 +189,5 @@ def peers_at_launch(profiles: list[dict[str, Any]], target: dict[str, Any]) -> l
             row["route_of_administration"],
             row["first_approval_year"],
         )
-        for row in profiles
-        if row["indication_area"] == target["indication_area"]
-        and row["first_approval_year"] < target["first_approval_year"]
-        and row.get("peer_universe_role", "distinct_product") == "distinct_product"
+        for row in peers_marketed_at_launch(target, profiles)
     ]

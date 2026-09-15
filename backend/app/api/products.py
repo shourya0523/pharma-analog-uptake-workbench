@@ -16,6 +16,8 @@ from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
+from app.analytics.analog_matching import ProductProfile, rank_analogs
+from app.analytics.profile_attributes import AnalogProfile, derive_analog_profile
 from app.db.models import (
     CanonicalProductORM,
     DatapointORM,
@@ -173,6 +175,71 @@ def _moa_text(db: Session, product_id: str) -> str | None:
     return moa.moa_term if moa else None
 
 
+def _route_terms(db: Session, product_id: str | None) -> list[str]:
+    """The routes the label listed for a product, still separate.
+
+    A formulation row stores them joined, which is a single string by the time
+    a caller reads it - and a product approved by one route and a product
+    approved by three are then indistinguishable.
+    """
+    if not product_id:
+        return []
+    rows = (
+        db.query(ProductFormulationORM)
+        .filter(ProductFormulationORM.product_id == product_id)
+        .all()
+    )
+    terms: list[str] = []
+    for row in rows:
+        terms.extend(
+            part.strip() for part in str(row.route_source_term or "").split(";") if part.strip()
+        )
+    return terms
+
+
+def _analog_catalog(db: Session) -> dict[str, AnalogProfile]:
+    """Every product the pipeline holds, with the analog attributes it supports.
+
+    Built in two passes because an attribute of one product depends on the
+    others: the roster a launch faced is the rest of this catalog, so each
+    product is first derived without one and then re-derived against the whole.
+    """
+    identities = _Identities(db)
+    grouped = _jobs_by_product(db, identities)
+
+    stored: dict[str, tuple[str, dict[str, object], list[str]]] = {}
+    for key, jobs in grouped.items():
+        if not jobs:
+            continue
+        latest = jobs[0]
+        fields = {
+            row.field: row.value
+            for row in db.query(DrugProfileFieldORM)
+            .filter(DrugProfileFieldORM.job_id == latest.id)
+            .all()
+        }
+        product = identities.canonical(key)
+        if product and product.initial_approval_date:
+            fields.setdefault("fda_approval_date", product.initial_approval_date.isoformat())
+        stored[key] = (
+            identities.name(key, latest),
+            fields,
+            _route_terms(db, product.id if product else None),
+        )
+
+    first_pass = {
+        key: derive_analog_profile(drug_name=name, fields=fields, route_terms=routes)
+        for key, (name, fields, routes) in stored.items()
+    }
+    rows = [profile.as_row() for profile in first_pass.values()]
+    return {
+        key: derive_analog_profile(
+            drug_name=name, fields=fields, route_terms=routes, catalogue=rows
+        )
+        for key, (name, fields, routes) in stored.items()
+    }
+
+
 def _formulation(db: Session, product_id: str) -> ProductFormulationORM | None:
     return (
         db.query(ProductFormulationORM)
@@ -316,6 +383,9 @@ def get_product(product_id: str) -> dict[str, Any]:
             else []
         )
 
+        catalog = _analog_catalog(db)
+        analog = catalog.get(product_id)
+
         return {
             "id": product_id,
             "name": product.canonical_name if product else latest.drug_name,
@@ -349,6 +419,14 @@ def get_product(product_id: str) -> dict[str, Any]:
             "route": formulation.route_category if formulation else None,
             "completeness_pct": latest.completeness_pct if latest else 0.0,
             "latest_job_id": latest.id if latest else None,
+            # The attributes an analog comparison runs on, derived from the
+            # fields above rather than stored beside them, and carrying the
+            # names of the ones the evidence did not support.
+            "analog_profile": (
+                {**analog.as_row(), "unresolved": list(analog.unresolved)}
+                if analog
+                else None
+            ),
             "profile": [
                 {
                     "id": field.id,
@@ -700,6 +778,59 @@ class ProfileFieldPatch(BaseModel):
     value: str
     source_url: str
     reviewer_notes: str | None = None
+
+
+@router.get("/products/{product_id}/analogs")
+def get_analogs(product_id: str, limit: int = Query(default=10)) -> dict[str, Any]:
+    """Products whose launch is evidence about this one's, best first.
+
+    An analog is only useful if the two are alike in the ways that drive uptake,
+    so the ranking travels with how many attributes it could actually compare
+    and which ones the evidence did not support. A caller that shows the order
+    without those is showing a confident ranking over what may be one shared
+    attribute.
+    """
+    db = SessionLocal()
+    try:
+        catalog = _analog_catalog(db)
+        target = catalog.get(product_id)
+        if target is None:
+            raise HTTPException(404, "product not found")
+
+        def comparable(profile: AnalogProfile) -> ProductProfile:
+            return ProductProfile(
+                profile.drug_name,
+                profile.moa_class,
+                profile.route_of_administration,
+                profile.approval_era,
+                profile.competitive_intensity_at_launch,
+            )
+
+        ranked = rank_analogs(
+            comparable(target),
+            [comparable(profile) for key, profile in catalog.items() if key != product_id],
+        )
+        by_name = {profile.drug_name: key for key, profile in catalog.items()}
+        return {
+            "product_id": product_id,
+            "drug_name": target.drug_name,
+            "unresolved": list(target.unresolved),
+            "catalog_size": len(catalog),
+            "analogs": [
+                {
+                    "product_id": by_name.get(match.candidate),
+                    "drug_name": match.candidate,
+                    "score": match.score,
+                    "attributes_compared": match.attributes_compared,
+                    "attributes_unknown": match.attributes_unknown,
+                    "matched": match.matched,
+                    "formula_version": match.formula_version,
+                }
+                for match in ranked[:limit]
+            ],
+        }
+    finally:
+        db.close()
 
 
 @router.patch("/profile-fields/{field_id}")

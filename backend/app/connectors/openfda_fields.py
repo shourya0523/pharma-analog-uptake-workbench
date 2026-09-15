@@ -46,20 +46,73 @@ def select_openfda_result(
     if not candidates:
         return None, None
 
-    fallback: tuple[dict[str, Any], str] | None = None
-    for result in results:
+    # How good a match is, best first. The product's own name outranks an
+    # alias: an alias list holds sibling formulations, and a brand that is one
+    # of them exactly - Nebulized Calderon for a job asking about Calderon -
+    # would otherwise be returned ahead of the application actually named,
+    # taking its approval date, its route and its label sections with it.
+    OWN_NAME, ALIAS, PARTIAL = 0, 1, 2
+
+    ranked: list[tuple[int, int, dict[str, Any], str]] = []
+    for order, result in enumerate(results):
         for brand in openfda_brand_names(result):
             brand_norm = _normalize(brand)
             if brand_norm == generic_norm:
                 continue  # an ANDA marketed under the molecule name
-            for candidate in candidates:
+            for index, candidate in enumerate(candidates):
                 if brand_norm == candidate:
-                    return result, brand
-                if fallback is None and (brand_norm in candidate or candidate in brand_norm):
-                    fallback = (result, brand)
-    if fallback:
-        return fallback
-    return None, None
+                    rank = OWN_NAME if index == 0 else ALIAS
+                elif brand_norm in candidate or candidate in brand_norm:
+                    rank = PARTIAL
+                else:
+                    continue
+                ranked.append((rank, order, result, brand))
+                break
+    if not ranked:
+        return None, None
+    ranked.sort(key=lambda item: (item[0], item[1]))
+    return ranked[0][2], ranked[0][3]
+
+
+def select_openfda_applications(
+    results: list[dict[str, Any]],
+    *,
+    product: str,
+    generic: str | None = None,
+    aliases: Iterable[str] | None = None,
+) -> list[dict[str, Any]]:
+    """Every application that is this same product, best match first.
+
+    One product routinely holds more than one application - a capsule and a
+    tablet of Calderon are two, filed years apart under the one brand - and the
+    product's first approval is the earliest of them. Selecting a single
+    application and reading the approval date off it returns whichever of them
+    the search happened to put first, which for a product reformulated later is
+    the reformulation's date.
+
+    So this returns the applications matching as well as the best one does, and
+    no worse ones: the sibling formulations of the product asked about, and not
+    the different product that merely shares its molecule.
+    """
+    best, _ = select_openfda_result(
+        results, product=product, generic=generic, aliases=aliases
+    )
+    if best is None:
+        return []
+    chosen = [
+        result
+        for result in results
+        if select_openfda_result(
+            [result], product=product, generic=generic, aliases=aliases
+        )[0]
+        is not None
+    ]
+    best_brands = {_normalize(name) for name in openfda_brand_names(best)}
+    return [
+        result
+        for result in chosen
+        if best_brands & {_normalize(name) for name in openfda_brand_names(result)}
+    ] or [best]
 
 
 def parse_openfda_date(raw: str | None) -> str | None:

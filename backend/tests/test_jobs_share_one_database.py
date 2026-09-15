@@ -98,6 +98,10 @@ class AnotherJobWrites:
         self._write()
         return {}
 
+    async def classify_profile(self, **_):
+        self._write()
+        return {}
+
 
 @pytest.mark.asyncio
 async def test_a_model_call_does_not_hold_the_write_lock(tmp_path):

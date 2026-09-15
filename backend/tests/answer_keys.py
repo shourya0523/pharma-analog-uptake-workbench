@@ -105,9 +105,17 @@ def products_in(path: Path) -> set[str]:
     return {name for name in found if name}
 
 
-def scored_products() -> set[str]:
-    """Every product any answer key holds an answer for."""
+def scored_products(*, excluding: Path | None = None) -> set[str]:
+    """Every product any answer key holds an answer for.
+
+    ``excluding`` skips one key, which is what a set checking its own products
+    are held out needs: without it the set finds itself and every case looks
+    already scored. The default spends nothing, so a caller asking what the
+    prompts must not name still sees all of them.
+    """
     names: set[str] = set()
     for path in answer_key_paths():
+        if excluding is not None and path.exists() and excluding.exists() and path.samefile(excluding):
+            continue
         names |= products_in(path)
     return names

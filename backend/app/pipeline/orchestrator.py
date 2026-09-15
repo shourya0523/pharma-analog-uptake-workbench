@@ -13,12 +13,14 @@ from sqlalchemy.orm import Session
 
 logger = logging.getLogger(__name__)
 
+from app.analytics.profile_attributes import read_classification
 from app.config import get_settings
 from app.connectors.llm_search import LLMSearchConnector
 from app.connectors.openfda import OpenFDAConnector
 from app.connectors.openfda_fields import (
     earliest_approval_date,
     openfda_brand_names,
+    select_openfda_applications,
     select_openfda_result,
 )
 from app.connectors.sources import (
@@ -234,6 +236,10 @@ def reading_rank(source_type: Any) -> int:
         if known.value == value:
             return rank
     return len(DOCUMENT_FITNESS)
+
+
+# The classifier answers in words; a stored citation carries a number.
+_CLASSIFIER_CONFIDENCE = {"high": 0.8, "medium": 0.6, "low": 0.4}
 
 
 def persist_profile_field(
@@ -749,9 +755,20 @@ class PipelineOrchestrator:
                 "indication": indication_value,
                 "therapeutic_area": indication_value,
             }
-            # Scope the approval date to this application; the earliest date across
-            # all results belongs to whichever product was approved first.
-            approval, approval_field = earliest_approval_date([selected])
+            # Scope the approval date to this product's own applications. Across
+            # all results the earliest date belongs to whichever product was
+            # approved first, which is often a different one sharing the
+            # molecule; from the selected application alone it is whichever of
+            # this product's applications the search returned first, which for a
+            # product reformulated later is the reformulation's date.
+            approval, approval_field = earliest_approval_date(
+                select_openfda_applications(
+                    results,
+                    product=job.drug_name,
+                    generic=job.generic_name,
+                    aliases=self._job_aliases,
+                )
+            )
             if approval:
                 mapping["fda_approval_date"] = approval
             for field, value in mapping.items():
@@ -998,6 +1015,88 @@ class PipelineOrchestrator:
             job.drug_name,
             sorted(written),
             sorted(conflicts),
+        )
+
+        await self._classify_analog_attributes(job)
+
+    def _grouping_keys(self, field: str) -> list[str]:
+        """The keys other products were already grouped under for this field.
+
+        A grouping key earns its keep only when two products that belong
+        together get the same one, and a call that cannot see the vocabulary
+        cannot spell it the same way twice. Read from the rows the pipeline has
+        written rather than from a list kept beside them, so the vocabulary is
+        whatever it has actually used.
+        """
+        return sorted(
+            {
+                str(row.value).strip()
+                for row in self.db.query(DrugProfileFieldORM).filter_by(field=field).all()
+                if row.value and str(row.value).strip()
+            }
+        )
+
+    async def _classify_analog_attributes(self, job: DrugJobORM) -> None:
+        """Store the two analog attributes that are a judgement, not a reading.
+
+        Route, era and the peer count are arithmetic over fields already stored,
+        so `derive_analog_profile` computes them whenever they are asked for.
+        Mechanism class and therapy area are groupings - the pathway two
+        different targets share, the area two different diseases belong to - and
+        are decided once here rather than per request, because each is a model
+        call.
+        """
+        stored = {
+            row.field: row.value
+            for row in self.db.query(DrugProfileFieldORM).filter_by(job_id=job.id).all()
+        }
+        if any(stored.get(name) for name in ("moa_class", "indication_area")):
+            return
+        response = await self.llm.classify_profile(
+            product=job.drug_name,
+            moa=stored.get("moa"),
+            epc=stored.get("pharmacologic_class"),
+            indications=stored.get("indication"),
+            known_moa_classes=self._grouping_keys("moa_class"),
+            known_indication_areas=self._grouping_keys("indication_area"),
+        )
+        if not response:
+            return
+        moa_class, indication_area = read_classification(
+            response, product=job.drug_name, epc=stored.get("pharmacologic_class")
+        )
+        for name, value in (("moa_class", moa_class), ("indication_area", indication_area)):
+            if not value:
+                continue
+            persist_profile_field(
+                self.db,
+                job_id=job.id,
+                field=name,
+                value=value,
+                citation={
+                    "source_type": SourceType.LLM_SEARCH.value,
+                    "source_quote": str(response.get("reasoning") or "")[:2000],
+                    "retrieval_date": datetime.utcnow().isoformat(),
+                    "confidence": _CLASSIFIER_CONFIDENCE.get(
+                        str(response.get("confidence") or "").strip().lower(), 0.5
+                    ),
+                    "validation_status": ValidationStatus.NEEDS_REVIEW.value,
+                    "interpreted": True,
+                    "grouped_from": sorted(
+                        name
+                        for name in ("moa", "pharmacologic_class", "indication")
+                        if stored.get(name)
+                    ),
+                },
+                method="derived_grouping",
+            )
+        self.db.commit()
+        logger.info(
+            "analog_attributes_classified job_id=%s drug=%s moa_class=%s area=%s",
+            job.id,
+            job.drug_name,
+            moa_class,
+            indication_area,
         )
 
     async def _judge_profile(self, job: DrugJobORM) -> None:

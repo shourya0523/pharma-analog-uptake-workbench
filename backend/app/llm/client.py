@@ -524,6 +524,49 @@ class LLMModules:
                 "confidence": float(result.get("confidence") or 0.0),
                 "reason": str(result.get("reason") or "")}
 
+    async def classify_profile(
+        self,
+        *,
+        product: str,
+        moa: str | None,
+        epc: str | None,
+        indications: str | None,
+        known_moa_classes: list[str] | None = None,
+        known_indication_areas: list[str] | None = None,
+    ) -> dict[str, Any]:
+        """Group a product by pathway and therapy area, from its own label evidence.
+
+        The keys already in use are passed in because a grouping key is only
+        worth anything if two products that belong together receive the same
+        one, and a call that cannot see the vocabulary cannot spell it the same
+        way twice.
+
+        Returns {} when there is no key to call with, so a caller keeps the
+        attributes unresolved rather than reading silence as a refusal the
+        model made.
+        """
+        if not self.settings.openrouter_api_key:
+            return {}
+        if not (moa or epc):
+            return {}
+        prompt = load_prompt("profile_classifier")
+        user = prompt["user_template"].format(
+            product=product,
+            moa=(moa or "(none stated)")[:8000],
+            epc=(epc or "(none stated)")[:2000],
+            indications=(indications or "(none stated)")[:8000],
+            known_moa_classes="\n".join(f"- {key}" for key in sorted(known_moa_classes or []))
+            or "(none yet - this is the first product classified)",
+            known_indication_areas="\n".join(
+                f"- {key}" for key in sorted(known_indication_areas or [])
+            ) or "(none yet - this is the first product classified)",
+        )
+        return await self.client.chat_json(
+            model=self.settings.openrouter_model_extract,
+            system=prompt["system"],
+            user=user,
+        )
+
     async def reconcile(self, *, product: str, candidates: list[dict]) -> dict[str, Any]:
         prompt = load_prompt("conflict_reconciler")
         user = prompt["user_template"].format(

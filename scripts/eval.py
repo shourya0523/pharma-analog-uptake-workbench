@@ -13,6 +13,18 @@ wrong about the product.
 
     python scripts/eval.py --cases seed/cases/gold_sample.json
     python scripts/eval.py --members seed/holdout_members/combined_name_members.json
+    python scripts/eval.py --profiles seed/holdout_profiles2/product_profiles.json \
+                           --labels   seed/holdout_profiles2/product_profiles.json
+
+`--profiles` scores the analog attributes a run derives - mechanism class,
+route, approval era, therapy area, the roster the product launched into -
+instead of its revenue, against the answer key named by `--labels`. How each
+attribute is compared is declared in `scripts/profile_contract.py` rather than
+decided here: a route arrives from a label in the FDA's spelling and from a
+curated file in a person's, and a grouping key's wording is arbitrary on both
+sides while what it groups is the whole point. Peer counts are relative to the
+catalogue the server holds, so a set whose answer key counts peers within
+itself needs a server holding that set and nothing else.
 
 `--base` points at a running server. `--members` scores the member resolver
 instead of the revenue pipeline: each case is a filer's XBRL member with the
@@ -31,9 +43,32 @@ import pathlib
 import sys
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+
+from profile_contract import (
+    COMPARISON,
+    PARTITION,
+    PROSE,
+    partition_agreement,
+    values_agree,
+)
+
 REPO = pathlib.Path(__file__).resolve().parents[1]
+
+# What a person types to identify a product, plus the window options. Shared
+# with the revenue mode's own list by being the same question: which keys of a
+# case describe the drug rather than the answer.
+PROFILE_DRUG_FIELDS = {"drug_name", "generic_name", "manufacturer", "ticker", "cik",
+                       "indication", "known_source_url"}
+
+# The attributes compared one product at a time, in the order they are printed.
+# Taken from the contract so an attribute added there is scored here.
+SCORED_ATTRIBUTES = tuple(
+    name for name, how in COMPARISON.items() if how not in (PROSE, PARTITION)
+)
 
 # What the API reports for a job that has stopped. Strings, because a caller
 # sees JSON: nothing here may depend on the enum behind it.
@@ -248,12 +283,160 @@ def score_members(base: str, path: pathlib.Path, out: pathlib.Path) -> int:
     return 0 if good == len(rows) else 1
 
 
+def load_cases(path: pathlib.Path) -> list[dict]:
+    """The cases in a file that is either a bare list or a set with a preamble."""
+    payload = json.loads(path.read_text())
+    return payload["cases"] if isinstance(payload, dict) else payload
+
+
+def load_labels(path: pathlib.Path) -> dict[str, dict]:
+    """The expected attributes for each product, keyed by the product's name.
+
+    An answer key is either a row per product - which is the shape gold's
+    profiles are in - or a set of cases each carrying an `expect`. Both are read
+    here so a set built as one does not have to be rewritten as the other, and
+    the `expect` is flattened so a caller compares attributes either way.
+    """
+    if path.suffix == ".jsonl":
+        rows = [json.loads(line) for line in path.read_text().splitlines() if line.strip()]
+    else:
+        payload = json.loads(path.read_text())
+        rows = payload.get("profiles") or payload.get("cases") or payload
+    return {
+        str(row["drug_name"]): {**row, **(row.get("expect") or {})} for row in rows
+    }
+
+
+def score_profiles(base: str, cases: list[dict], labels: dict[str, dict],
+                   out: pathlib.Path, *, timeout_s: int, quiet: bool) -> int:
+    """Run the profile stage for every case and compare what it derived.
+
+    The pipeline is asked the way a person asks - a run, then the product page -
+    so what is scored is what a reader would see, not what a reader could have
+    got by calling the derivation directly with fields chosen by the test.
+    """
+    batches: dict[str, list[dict]] = {}
+    for case in cases:
+        options = {**case.get("options", {}), "product_metadata": True}
+        batches.setdefault(json.dumps(options, sort_keys=True), []).append(case)
+
+    started = []
+    for index, (options_key, batch) in enumerate(batches.items(), 1):
+        print(f"  [{index}/{len(batches)}] {len(batch)} drug(s), options {options_key[:70]}",
+              flush=True)
+        run_id = post(base, "/runs", {
+            "drugs": [{k: v for k, v in case.items() if k in PROFILE_DRUG_FIELDS}
+                      for case in batch],
+            "options": json.loads(options_key),
+        })["run_id"]
+        started.append((run_id, batch))
+
+    deadline = time.time() + timeout_s
+    status: dict[str, str] = {}
+    for run_id, _ in started:
+        run = wait(base, run_id, timeout_s=max(1, int(deadline - time.time())), quiet=quiet)
+        for job in run.get("jobs", []):
+            status[job["drug_name"].casefold()] = job["status"]
+
+    # A product is named by the label it was found under, which is the brand as
+    # the FDA spells it and not as the case was typed. Matching exactly reported
+    # every derived attribute as missing while the pipeline had produced it.
+    catalog = {row["name"].casefold(): row["id"] for row in get(base, "/products")["products"]}
+    rows = []
+    for case in cases:
+        name = case["drug_name"]
+        want = labels.get(name) or {}
+        product_id = catalog.get(name.casefold())
+        observed = {}
+        if product_id:
+            observed = get(base, f"/products/{urllib.parse.quote(product_id, safe='')}").get(
+                "analog_profile"
+            ) or {}
+        rows.append({"drug_name": name, "product_id": product_id,
+                     "job_status": status.get(name.casefold(), "no job"),
+                     "expected": want, "observed": observed})
+
+    # A job that died fetching is not a derivation that refused, and scoring the
+    # two together reports an outage as a capability the pipeline lacks.
+    ran = [row for row in rows if row["job_status"] in FINISHED]
+    broken = [row for row in rows if row not in ran]
+    if broken:
+        print(f"\n  {len(broken)} case(s) whose job did not finish, excluded from the score:")
+        for row in broken:
+            print(f"    {row['drug_name']:24} {row['job_status']}")
+    rows = ran
+    if not rows:
+        print("\n  no case finished; nothing to score")
+        return 2
+
+    # Attributes compared one product at a time.
+    tally: dict[str, dict[str, int]] = {}
+    for row in rows:
+        for attribute, how in COMPARISON.items():
+            if how in (PROSE, PARTITION):
+                continue
+            want = row["expected"].get(attribute)
+            got = row["observed"].get(attribute)
+            if attribute not in row["expected"]:
+                state = "no expectation"
+            elif values_agree(attribute, want, got):
+                # Two absences agree: the key expected a refusal and got one.
+                state = "correctly silent" if want in (None, "") else "agreed"
+            elif want in (None, ""):
+                state = "ANSWERED ANYWAY"
+            elif got in (None, ""):
+                state = "not derived"
+            else:
+                state = "DISAGREED"
+            tally.setdefault(attribute, {})[state] = tally.setdefault(attribute, {}).get(state, 0) + 1
+            row.setdefault("verdicts", {})[attribute] = state
+
+    print(f"\n  {'drug':24} " + " ".join(f"{a[:14]:>14}" for a in SCORED_ATTRIBUTES))
+    for row in rows:
+        print(f"  {row['drug_name'][:24]:24} "
+              + " ".join(f"{row.get('verdicts', {}).get(a, '-')[:14]:>14}"
+                         for a in SCORED_ATTRIBUTES))
+
+    print("\n  per attribute:")
+    for attribute in SCORED_ATTRIBUTES:
+        counts = tally.get(attribute, {})
+        print(f"    {attribute:34} " + "  ".join(f"{k}={v}" for k, v in sorted(counts.items())))
+
+    print("\n  grouping keys, scored on which products they put together:")
+    partitions = {}
+    for attribute, how in COMPARISON.items():
+        if how != PARTITION:
+            continue
+        result = partition_agreement(
+            {row["drug_name"]: row["expected"].get(attribute) for row in rows},
+            {row["drug_name"]: row["observed"].get(attribute) for row in rows},
+        )
+        partitions[attribute] = result
+        print(f"    {attribute:20} products={result['products_compared']:3} "
+              f"pairs={result['pairs']:4} agreed={result['agreed']:4} "
+              f"split={result['split']:4} merged={result['merged']:4} "
+              f"agreement={result['agreement']}")
+
+    out.write_text(json.dumps({"rows": rows, "attributes": tally,
+                               "partitions": partitions}, indent=1, default=str))
+    print(f"\n  detail written to {out}")
+    wrong = sum(
+        counts.get("DISAGREED", 0) + counts.get("ANSWERED ANYWAY", 0)
+        for counts in tally.values()
+    )
+    return 0 if wrong == 0 else 1
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--cases", help="a JSON case file under seed/cases")
     ap.add_argument("--members", help="a member holdout under seed/holdout_members, "
                                       "scored through /members/resolve instead of a run")
+    ap.add_argument("--profiles", help="a JSON case file whose products are scored on the "
+                                       "analog attributes the run derives, not on revenue")
+    ap.add_argument("--labels", help="the answer key --profiles is scored against: a jsonl "
+                                     "of profile rows, or a json file with a `profiles` list")
     ap.add_argument("--base", default="http://127.0.0.1:8000")
     ap.add_argument("--case", action="append", default=[],
                     help="DRUG, repeatable; default is every case in the file")
@@ -267,8 +450,12 @@ def main() -> int:
                     help="score runs already on the server for these cases' windows "
                          "instead of starting them again")
     args = ap.parse_args()
-    if bool(args.cases) == bool(args.members):
-        ap.error("give exactly one of --cases or --members")
+    chosen = [name for name in ("cases", "members", "profiles") if getattr(args, name)]
+    if len(chosen) != 1:
+        ap.error("give exactly one of --cases, --members or --profiles")
+    if args.profiles and not args.labels:
+        ap.error("--profiles needs --labels: the attributes it derives are scored "
+                 "against an answer key, and which one must be said out loud")
 
     if args.members:
         path = pathlib.Path(args.members)
@@ -279,6 +466,27 @@ def main() -> int:
             return 2
         return score_members(args.base, path if path.is_absolute() else REPO / path,
                              pathlib.Path(args.out))
+
+    def resolved(value: str) -> pathlib.Path:
+        given = pathlib.Path(value)
+        return given if given.is_absolute() else REPO / given
+
+    if args.profiles:
+        cases = load_cases(resolved(args.profiles))
+        if args.case:
+            wanted = {c.strip().casefold() for c in args.case}
+            cases = [c for c in cases if c["drug_name"].casefold() in wanted]
+        if not cases:
+            print("nothing selected")
+            return 1
+        try:
+            get(args.base, "/health", timeout=10)
+        except (urllib.error.URLError, OSError) as exc:
+            print(f"no API at {args.base} ({exc})")
+            return 2
+        return score_profiles(args.base, cases, load_labels(resolved(args.labels)),
+                              pathlib.Path(args.out), timeout_s=args.timeout,
+                              quiet=args.quiet)
 
     path = pathlib.Path(args.cases)
     cases = json.loads((path if path.is_absolute() else REPO / path).read_text())

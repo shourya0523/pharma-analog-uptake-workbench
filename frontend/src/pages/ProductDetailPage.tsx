@@ -87,6 +87,111 @@ export default function ProductDetailPage() {
   )
 }
 
+// The attributes an analog comparison runs on. They are derived from the
+// extracted fields rather than stored beside them, so an attribute the evidence
+// did not support is shown as unresolved rather than blank - a blank reads as
+// "nothing here", and the two lead to different next actions.
+function AnalogAttributes({ product }: { product: any }) {
+  const analog = product.analog_profile
+  const analogs = useQuery({
+    queryKey: ['analogs', product.id],
+    queryFn: () => api.getAnalogs(product.id),
+    enabled: Boolean(analog),
+  })
+
+  if (!analog) return null
+
+  const unresolved: string[] = analog.unresolved || []
+  const rows: [string, any][] = [
+    ['Mechanism class', analog.moa_class],
+    ['Route', analog.route_of_administration],
+    ['First approval year', analog.first_approval_year],
+    ['Approval era', analog.approval_era],
+    ['Indication area', analog.indication_area],
+    ['Competitive intensity at launch', analog.competitive_intensity_at_launch],
+    ['Peers marketed at launch', analog.marketed_peers_at_launch],
+    ['Peer universe role', analog.peer_universe_role],
+  ]
+
+  return (
+    <div className="card-block">
+      <h2>Analog attributes</h2>
+      <p className="muted small">
+        Derived from the extracted fields, never read from curated reference data —
+        a product this pipeline has never seen gets these the same way. An attribute the
+        evidence does not support stays unresolved and is excluded from the comparison
+        rather than scored as a match.
+      </p>
+      <table className="grid">
+        <tbody>
+          {rows.map(([label, value]) => (
+            <tr key={label}>
+              <th style={{ width: 260 }}>{label}</th>
+              <td>
+                {value === null || value === undefined || value === '' ? (
+                  <span className="muted">unresolved</span>
+                ) : (
+                  String(value)
+                )}
+              </td>
+            </tr>
+          ))}
+          <tr>
+            <th>Provenance</th>
+            <td>
+              {analog.attribute_provenance}
+              {analog.competitive_intensity_basis ? ` · ${analog.competitive_intensity_basis}` : ''}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      {unresolved.length > 0 && (
+        <p className="muted small">
+          Unresolved: {unresolved.join(', ')}. An analog ranking over the rest is scored on
+          fewer attributes and says so.
+        </p>
+      )}
+
+      <h2 style={{ marginTop: 20 }}>Closest analogs</h2>
+      {analogs.isLoading && <p className="muted small">Ranking…</p>}
+      {analogs.data && analogs.data.analogs.length === 0 && (
+        <p className="muted small">
+          No product in the catalogue shares enough resolved attributes to be ranked
+          against this one.
+        </p>
+      )}
+      {analogs.data && analogs.data.analogs.length > 0 && (
+        <table className="grid">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Score</th>
+              <th>Compared on</th>
+              <th>Matched</th>
+            </tr>
+          </thead>
+          <tbody>
+            {analogs.data.analogs.map((match: any) => (
+              <tr key={match.drug_name}>
+                <td>
+                  {match.product_id ? (
+                    <Link to={`/products/${match.product_id}`}>{match.drug_name}</Link>
+                  ) : (
+                    match.drug_name
+                  )}
+                </td>
+                <td>{match.score}</td>
+                <td>{match.attributes_compared} of 4</td>
+                <td className="muted small">{(match.matched || []).join(', ') || '—'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </div>
+  )
+}
+
 function ProfileTab({ product }: { product: any }) {
   // Values the pipeline derives onto the product itself rather than per quarter.
   const derived = [
@@ -126,6 +231,8 @@ function ProfileTab({ product }: { product: any }) {
           </tbody>
         </table>
       </div>
+
+      <AnalogAttributes product={product} />
 
       <div className="card-block">
         <h2>Extracted profile fields</h2>

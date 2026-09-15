@@ -69,7 +69,15 @@ def test_the_eval_goes_in_and_out_through_the_api():
 
 
 def test_every_case_file_says_where_its_answers_came_from():
-    """A case carries its own provenance, so the number can be re-checked."""
+    """A case carries its own provenance, so the number can be re-checked.
+
+    A case says what it expects, or it says where its expectation lives. The
+    revenue cases carry a figure per quarter; a case scored on a product's
+    attributes is scored against a whole answer key, passed to the eval as
+    `--labels`, and copying that key's rows into the case file would be the
+    same answer stored twice and free to drift. What both shapes must do is
+    cite something a reader can go and check.
+    """
     import json
 
     cases_dir = REPO / "seed" / "cases"
@@ -78,7 +86,14 @@ def test_every_case_file_says_where_its_answers_came_from():
     for path in files:
         for case in json.loads(path.read_text()):
             assert case.get("source"), f"{path.name}: {case['drug_name']} cites nothing"
-            assert case.get("expect"), f"{path.name}: {case['drug_name']} expects nothing"
+            if case.get("expect"):
+                continue
+            # No inline expectation: the source has to be the answer key
+            # itself, named well enough to fetch.
+            assert ".jsonl" in case["source"] or ".json" in case["source"], (
+                f"{path.name}: {case['drug_name']} expects nothing and does not "
+                f"name the answer key it is scored against"
+            )
 
 
 def test_every_run_is_started_before_any_is_waited_for():

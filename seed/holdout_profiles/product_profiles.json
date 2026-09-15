@@ -1,0 +1,274 @@
+{
+ "purpose": "Does the pipeline derive a product's analog attributes - mechanism class, route, approval era, therapy area, the roster it launched into - on issuers and products no other answer key scores? seed/gold's profiles are seed/product_attributes.csv copied, so they measure a derivation only for products someone already curated. These were curated for this set.",
+ "built": "2026-09-15",
+ "absent_from": [
+  "seed/gold",
+  "seed/holdout",
+  "seed/holdout2",
+  "seed/holdout_labels",
+  "seed/holdout_members",
+  "seed/cases"
+ ],
+ "answer_key": "Each label was read off the product's own openFDA records: the approval year from the earliest ORIG submission with AP status in drugsFDA, the route and the Established Pharmacologic Class from the label endpoint's openfda block, the therapy area from the first indication the label lists. The application number on each row is what to fetch to check it.",
+ "independence": "Route, approval year, era and the peer count are facts of the cited records and are independent of the pipeline. moa_class and indication_area are groupings a reader assigned from the same labels the pipeline reads, so they are an independent reading of a shared source rather than an independent source - and they are scored on which products they group, never on wording, because the wording is arbitrary on both sides.",
+ "peer_counts_are_within_this_set": "marketed_peers_at_launch counts the products in this file approved earlier in the same indication_area. It is the roster rule applied to this catalogue, so it holds only for a run whose catalogue is this set.",
+ "not_scored": {
+  "competitive_intensity_at_launch": "the label is the repo's own cohort rule applied to the peer count, so a hand-written expectation for it would be a prediction of the rule rather than a fact about the product. The count it runs on is scored instead.",
+  "moa": "free prose, reported rather than compared."
+ },
+ "cases": [
+  {
+   "drug_name": "Rystiggo",
+   "manufacturer": "UCB",
+   "options": {
+    "product_metadata": true,
+    "openfda": true,
+    "quarterly_revenue": false,
+    "sec_filings": false,
+    "earnings_releases": false,
+    "company_ir": false
+   },
+   "source": "openFDA BLA761286",
+   "expect": {
+    "route_of_administration": "Subcutaneous",
+    "first_approval_year": 2023,
+    "approval_era": "2020-2024",
+    "moa_class": "fcrn_blockade",
+    "indication_area": "Generalized myasthenia gravis",
+    "marketed_peers_at_launch": 0,
+    "peer_universe_role": "distinct_product"
+   },
+   "why": "label leads with gMG; EPC is Neonatal Fc Receptor Blocker"
+  },
+  {
+   "drug_name": "Zilbrysq",
+   "manufacturer": "UCB",
+   "options": {
+    "product_metadata": true,
+    "openfda": true,
+    "quarterly_revenue": false,
+    "sec_filings": false,
+    "earnings_releases": false,
+    "company_ir": false
+   },
+   "source": "openFDA NDA216834",
+   "expect": {
+    "route_of_administration": "Subcutaneous",
+    "first_approval_year": 2023,
+    "approval_era": "2020-2024",
+    "moa_class": "complement_inhibition",
+    "indication_area": "Generalized myasthenia gravis",
+    "marketed_peers_at_launch": 0,
+    "peer_universe_role": "distinct_product"
+   },
+   "why": "same indication as Rystiggo, different mechanism; EPC is Complement Inhibitor"
+  },
+  {
+   "drug_name": "Soliris",
+   "manufacturer": "Alexion",
+   "options": {
+    "product_metadata": true,
+    "openfda": true,
+    "quarterly_revenue": false,
+    "sec_filings": false,
+    "earnings_releases": false,
+    "company_ir": false
+   },
+   "source": "openFDA BLA125166",
+   "expect": {
+    "route_of_administration": "Intravenous",
+    "first_approval_year": 2007,
+    "approval_era": "2005-2009",
+    "moa_class": "complement_inhibition",
+    "indication_area": "Paroxysmal nocturnal hemoglobinuria",
+    "marketed_peers_at_launch": 0,
+    "peer_universe_role": "distinct_product"
+   },
+   "why": "label leads with PNH, not the later gMG indication"
+  },
+  {
+   "drug_name": "Ultomiris",
+   "manufacturer": "Alexion",
+   "options": {
+    "product_metadata": true,
+    "openfda": true,
+    "quarterly_revenue": false,
+    "sec_filings": false,
+    "earnings_releases": false,
+    "company_ir": false
+   },
+   "source": "openFDA BLA761108",
+   "expect": {
+    "route_of_administration": "Intravenous",
+    "first_approval_year": 2018,
+    "approval_era": "2015-2019",
+    "moa_class": "complement_inhibition",
+    "indication_area": "Paroxysmal nocturnal hemoglobinuria",
+    "marketed_peers_at_launch": 1,
+    "peer_universe_role": "distinct_product"
+   },
+   "why": "same mechanism and area as Soliris, approved later"
+  },
+  {
+   "drug_name": "Ocrevus",
+   "manufacturer": "Genentech",
+   "options": {
+    "product_metadata": true,
+    "openfda": true,
+    "quarterly_revenue": false,
+    "sec_filings": false,
+    "earnings_releases": false,
+    "company_ir": false
+   },
+   "source": "openFDA BLA761053",
+   "expect": {
+    "route_of_administration": "Intravenous",
+    "first_approval_year": 2017,
+    "approval_era": "2015-2019",
+    "moa_class": "cd20_directed",
+    "indication_area": "Multiple sclerosis",
+    "marketed_peers_at_launch": 0,
+    "peer_universe_role": "distinct_product"
+   },
+   "why": "EPC is CD20-directed Cytolytic Antibody"
+  },
+  {
+   "drug_name": "Briumvi",
+   "manufacturer": "TG Therapeutics",
+   "options": {
+    "product_metadata": true,
+    "openfda": true,
+    "quarterly_revenue": false,
+    "sec_filings": false,
+    "earnings_releases": false,
+    "company_ir": false
+   },
+   "source": "openFDA BLA761238",
+   "expect": {
+    "route_of_administration": "Intravenous",
+    "first_approval_year": 2022,
+    "approval_era": "2020-2024",
+    "moa_class": "cd20_directed",
+    "indication_area": "Multiple sclerosis",
+    "marketed_peers_at_launch": 1,
+    "peer_universe_role": "distinct_product"
+   },
+   "why": "same mechanism and area as Ocrevus, approved later"
+  },
+  {
+   "drug_name": "Rexulti",
+   "manufacturer": "Otsuka",
+   "options": {
+    "product_metadata": true,
+    "openfda": true,
+    "quarterly_revenue": false,
+    "sec_filings": false,
+    "earnings_releases": false,
+    "company_ir": false
+   },
+   "source": "openFDA NDA205422",
+   "expect": {
+    "route_of_administration": "Oral",
+    "first_approval_year": 2015,
+    "approval_era": "2015-2019",
+    "moa_class": "dopamine_serotonin_antipsychotic",
+    "indication_area": "Major depressive disorder",
+    "marketed_peers_at_launch": 0,
+    "peer_universe_role": "distinct_product"
+   },
+   "why": "label leads with adjunctive MDD, and schizophrenia follows it"
+  },
+  {
+   "drug_name": "Latuda",
+   "manufacturer": "Sumitomo Pharma",
+   "options": {
+    "product_metadata": true,
+    "openfda": true,
+    "quarterly_revenue": false,
+    "sec_filings": false,
+    "earnings_releases": false,
+    "company_ir": false
+   },
+   "source": "openFDA NDA200603",
+   "expect": {
+    "route_of_administration": "Oral",
+    "first_approval_year": 2010,
+    "approval_era": "2010-2014",
+    "moa_class": "dopamine_serotonin_antipsychotic",
+    "indication_area": "Schizophrenia",
+    "marketed_peers_at_launch": 0,
+    "peer_universe_role": "distinct_product"
+   },
+   "why": "no EPC on the label; the mechanism section is the only evidence for the class"
+  },
+  {
+   "drug_name": "Caplyta",
+   "manufacturer": "Intra-Cellular Therapies",
+   "options": {
+    "product_metadata": true,
+    "openfda": true,
+    "quarterly_revenue": false,
+    "sec_filings": false,
+    "earnings_releases": false,
+    "company_ir": false
+   },
+   "source": "openFDA NDA209500",
+   "expect": {
+    "route_of_administration": "Oral",
+    "first_approval_year": 2019,
+    "approval_era": "2015-2019",
+    "moa_class": "dopamine_serotonin_antipsychotic",
+    "indication_area": "Schizophrenia",
+    "marketed_peers_at_launch": 1,
+    "peer_universe_role": "distinct_product"
+   },
+   "why": "same area as Latuda, approved later"
+  },
+  {
+   "drug_name": "Cresemba",
+   "manufacturer": "Astellas",
+   "options": {
+    "product_metadata": true,
+    "openfda": true,
+    "quarterly_revenue": false,
+    "sec_filings": false,
+    "earnings_releases": false,
+    "company_ir": false
+   },
+   "source": "openFDA NDA207500",
+   "expect": {
+    "route_of_administration": null,
+    "first_approval_year": 2015,
+    "approval_era": "2015-2019",
+    "moa_class": "azole_antifungal",
+    "indication_area": "Invasive fungal infection",
+    "marketed_peers_at_launch": 0,
+    "peer_universe_role": "distinct_product"
+   },
+   "why": "approved as an injection and as capsules, so the label states two routes and no one route"
+  },
+  {
+   "drug_name": "Baxdela",
+   "manufacturer": "Melinta Therapeutics",
+   "options": {
+    "product_metadata": true,
+    "openfda": true,
+    "quarterly_revenue": false,
+    "sec_filings": false,
+    "earnings_releases": false,
+    "company_ir": false
+   },
+   "source": "openFDA NDA208610",
+   "expect": {
+    "route_of_administration": null,
+    "first_approval_year": 2017,
+    "approval_era": "2015-2019",
+    "moa_class": "fluoroquinolone_antibacterial",
+    "indication_area": "Acute bacterial skin infection",
+    "marketed_peers_at_launch": 0,
+    "peer_universe_role": "distinct_product"
+   },
+   "why": "approved as an injection and as tablets, so the label states two routes and no one route"
+  }
+ ]
+}
