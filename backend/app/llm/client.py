@@ -42,6 +42,12 @@ class OpenRouterClient:
     # How many times a connection to the model is tried before the question
     # is treated as unanswered.
     TRANSPORT_ATTEMPTS = 3
+    # Statuses that say "not now" rather than "not ever": the gateway is busy
+    # or the upstream timed out. They are the same event as a dropped
+    # connection, arriving with a status line instead of without one, so they
+    # are retried and then treated as an unanswered question - not raised,
+    # which ended the whole job.
+    RETRYABLE_STATUSES = frozenset({408, 409, 425, 429, 500, 502, 503, 504, 520, 522, 524})
 
     def __init__(self) -> None:
         self.settings = get_settings()
@@ -110,6 +116,16 @@ class OpenRouterClient:
                 logger.warning("openrouter_unreachable attempt=%d/%d model=%s error=%s: %s",
                                attempt + 1, self.TRANSPORT_ATTEMPTS, model,
                                type(exc).__name__, exc)
+                if attempt == self.TRANSPORT_ATTEMPTS - 1:
+                    return None
+                await asyncio.sleep(delay)
+                delay *= 2
+            except httpx.HTTPStatusError as exc:
+                if exc.response.status_code not in self.RETRYABLE_STATUSES:
+                    raise
+                logger.warning("openrouter_busy attempt=%d/%d model=%s status=%s",
+                               attempt + 1, self.TRANSPORT_ATTEMPTS, model,
+                               exc.response.status_code)
                 if attempt == self.TRANSPORT_ATTEMPTS - 1:
                     return None
                 await asyncio.sleep(delay)
