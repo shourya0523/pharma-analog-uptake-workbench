@@ -212,3 +212,23 @@ def test_a_product_the_catalogue_cannot_place_is_left_out_of_the_batch():
     batch = intensity_by_product([placed, no_area, no_year])
     assert "Calderon" in batch
     assert "NuVessa" not in batch and "Othermol" not in batch
+
+
+def test_a_grouping_key_that_is_not_text_is_refused():
+    """A reply is free to put a list, a number or an object where a name was
+    asked for, and only a string can be a name.
+
+    Coerced instead of refused, `['Vessel disease']` becomes an area of its own
+    - a group of one that no other product joins - and the product then counts
+    no peer at launch either, because the roster is the products sharing its
+    area. Refusing loses one attribute; coercing quietly corrupts three.
+    """
+    for wrong in ([{"a": 1}], ["Vessel disease"], 42, {"nested": "x"}, True):
+        assert read_classification(
+            {"moa_class": wrong, "indication_area": wrong}, product="Calderon"
+        ) == (None, None), wrong
+
+    assert read_classification(
+        {"moa_class": "vessel_peptide_pathway", "indication_area": "Vessel disease"},
+        product="Calderon",
+    ) == ("vessel_peptide_pathway", "Vessel disease")

@@ -387,6 +387,19 @@ INCONCLUSIVE = "inconclusive"
 _SNAKE_CASE = re.compile(r"^[a-z0-9]+(?:_[a-z0-9]+)*$")
 
 
+def _stated(response: dict[str, object], key: str) -> str:
+    """The text a reply gave for a key, or "" where it gave something else.
+
+    A grouping key is a name, so only a string can be one. Coercing whatever
+    arrived would turn a list into the key `['Calderon pathway']` and a number
+    into `42` - names no other product will ever be given, which is worse than
+    refusing: the attribute would look answered, put the product in a group of
+    one, and take its peer count down with it.
+    """
+    value = response.get(key)
+    return value.strip() if isinstance(value, str) else ""
+
+
 def read_classification(
     response: dict[str, object], *, product: str, epc: str | None = None
 ) -> tuple[str | None, str | None]:
@@ -402,8 +415,8 @@ def read_classification(
     - it must not be the Established Pharmacologic Class term relabelled, which
       is the substitution the prompt exists to prevent.
     """
-    moa_class = str(response.get("moa_class") or "").strip()
-    area = str(response.get("indication_area") or "").strip()
+    moa_class = _stated(response, "moa_class")
+    area = _stated(response, "indication_area")
 
     refused = (
         moa_class.casefold() in ("", INCONCLUSIVE)
