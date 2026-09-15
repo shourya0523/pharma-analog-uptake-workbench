@@ -28,6 +28,7 @@ from __future__ import annotations
 # ruff: noqa: BLE001, RUF012
 import asyncio
 import logging
+import mimetypes
 import re
 from datetime import date, timedelta
 from typing import Any
@@ -101,6 +102,11 @@ async def _sec_throttle() -> None:
         if wait > 0:
             await asyncio.sleep(wait)
         _last_sec_request = asyncio.get_event_loop().time()
+
+
+def _content_type(doc: str) -> str:
+    """What a stored document is, from its own name."""
+    return mimetypes.guess_type(doc)[0] or "application/octet-stream"
 
 
 def parse_filing_date(value: object) -> date | None:
@@ -395,19 +401,29 @@ class SECConnector:
         job_id: str,
         source_id: str,
     ) -> tuple[bytes, bool, str]:
-        """Return (bytes, from_cache, per-job storage key) for one filing document."""
+        """Return (bytes, from_cache, storage key) for one filing document.
+
+        One document, one stored object. It used to be written twice - once
+        under the accession it belongs to, and once more per job under the
+        source's own id - with identical bytes both times, so a sweep stored
+        every filing as many times as there were products citing it. The
+        accession and the document name are what identify a filing, and two
+        jobs reading the same filing are reading the same bytes.
+
+        The key keeps the document's own name, so what is stored says what it
+        is: the per-job copy was always written as ``.html``, and an exhibit
+        filed as a PDF was then parsed as though it were markup.
+        """
         cache_key = self._cache_key(accession, doc)
         cached = await self._read_cache(cache_key)
         from_cache = cached is not None
         if cached is None:
             resp = await self._get_with_retry(client, url)
             raw = resp.content
-            await self.file_store.put(cache_key, raw, "text/html")
+            await self.file_store.put(cache_key, raw, _content_type(doc))
         else:
             raw = cached
-        job_key = f"sources/{run_id}/{job_id}/{source_id}.html"
-        await self.file_store.put(job_key, raw, "text/html")
-        return raw, from_cache, job_key
+        return raw, from_cache, cache_key
 
     async def _filings_covering(
         self,
@@ -534,7 +550,7 @@ class SECConnector:
                 sid = new_id()
                 url = f"{self.ARCHIVES}/{cik_int}/{acc_nodash}/{doc}"
                 try:
-                    _raw, from_cache, job_key = await self._fetch_document(
+                    _raw, from_cache, stored_key = await self._fetch_document(
                         client,
                         url=url,
                         accession=accession,
@@ -552,7 +568,7 @@ class SECConnector:
                             source_date=date.fromisoformat(fdate) if fdate else None,
                             filing_type="8-K",
                             accession_number=accession,
-                            storage_key=job_key,
+                            storage_key=stored_key,
                             retrieval_status=RetrievalStatus.SUCCESS,
                             metadata={
                                 "cik": cik,
@@ -661,7 +677,7 @@ class SECConnector:
             sid = new_id()
             url = f"{self.ARCHIVES}/{cik_int}/{acc_nodash}/{instance}"
             try:
-                raw, from_cache, job_key = await self._fetch_document(
+                raw, from_cache, stored_key = await self._fetch_document(
                     client, url=url, accession=accession, doc=instance,
                     run_id=run_id, job_id=job_id, source_id=sid,
                 )
@@ -695,7 +711,7 @@ class SECConnector:
                     source_date=filed_on,
                     filing_type=form,
                     accession_number=accession,
-                    storage_key=job_key,
+                    storage_key=stored_key,
                     retrieval_status=RetrievalStatus.SUCCESS,
                     metadata={"cik": cik, "from_cache": from_cache, "xbrl_instance": True,
                               "calculation_key": calculation_key},
@@ -816,7 +832,7 @@ class SECConnector:
 
                 try:
                     # Per-job copy for audit trail (cheap local copy; S3 would be multipart later)
-                    _raw, from_cache, job_key = await self._fetch_document(
+                    _raw, from_cache, stored_key = await self._fetch_document(
                         client,
                         url=url,
                         accession=accession,
@@ -835,7 +851,7 @@ class SECConnector:
                             filing_type=form,
                             accession_number=accession,
                             raw_text=None,
-                            storage_key=job_key,
+                            storage_key=stored_key,
                             retrieval_status=RetrievalStatus.SUCCESS,
                             metadata={"cik": resolved, "from_cache": from_cache, "cache_key": cache_key},
                             notes="sec_cache_hit" if from_cache else None,
