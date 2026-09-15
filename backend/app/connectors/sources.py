@@ -123,23 +123,46 @@ def _calculation_linkbase(documents: list[str]) -> str | None:
     return next((name for name in documents if name and name.endswith("_cal.xml")), None)
 
 
-# A filing whose form is one of these reports a period, and its instance
-# carries the financial statements. A snapshot of EDGAR's form families: a
-# new periodic form would need adding here, and until then is inspected at
-# the cost of a directory listing rather than skipped. Every other form with
-# inline XBRL - an 8-K, a proxy, a registration statement, an 11-K - carries a
-# cover page and nothing else, which is why a budget filled newest-first by
-# `isXBRL` alone held cover pages and no 10-Q.
-_PERIODIC_FORM_PREFIXES = ("10-K", "10-Q", "20-F", "40-F", "6-K")
+# A form family, from the form a filing was filed under: the family is the
+# form without its amendment or transition suffix, so 10-K/A and 10-KT are
+# both the 10-K family. Read that way, an amendment travels with the form it
+# amends, which is how the 8-K/A carrying a whole company's financials came
+# to be excluded by a list that named only 8-K and 10-Q.
+def form_family(form: str | None) -> str:
+    return re.split(r"[/\s]", str(form or "").upper(), maxsplit=1)[0].rstrip("T")
+
+
+# Which forms report a period. The annual half is the vocabulary this module
+# already carries, read as families so a new spelling of one of them needs no
+# edit here; the interim half is the quarterly and foreign-issuer forms that
+# state a period of their own. A family absent from both is inspected at the
+# cost of a directory listing rather than skipped.
+INTERIM_FORMS = frozenset({"10-Q", "6-K"})
+PERIODIC_FORM_FAMILIES = frozenset(
+    {form_family(form) for form in ANNUAL_FORMS} | {form_family(f) for f in INTERIM_FORMS}
+)
+
+
+def reports_a_period(form: str | None) -> bool:
+    """Whether a filing under this form states a period of its own.
+
+    Every other form with inline XBRL - an 8-K, a proxy, a registration
+    statement - carries a cover page and nothing else, which is why a budget
+    filled newest-first by EDGAR's `isXBRL` flag alone held cover pages and
+    no quarterly report.
+    """
+    return bool(form) and form_family(form) in PERIODIC_FORM_FAMILIES
+
+
+def is_annual(form: str | None) -> bool:
+    """Whether a form reports a year. `10-K/A` is its amendment, so it does."""
+    return bool(form) and form_family(form) in {form_family(f) for f in ANNUAL_FORMS}
+
 
 # A tagged number under any namespace but the cover page's own. Matched on
 # the raw instance rather than parsed, because the question is only whether
 # there is anything to parse.
 _FINANCIAL_FACT_RE = re.compile(rb"<(?!dei:)[\w.-]+:[\w.-]+\s[^>]*contextRef=")
-
-
-def _reports_a_period(form: str | None) -> bool:
-    return bool(form) and str(form).upper().startswith(_PERIODIC_FORM_PREFIXES)
 
 
 def _holds_financial_facts(raw: bytes) -> bool:
@@ -562,7 +585,7 @@ class SECConnector:
                 continue
             else:
                 unclassified_budget -= 1
-            if not _reports_a_period(form):
+            if not reports_a_period(form):
                 continue
             filed_on = parse_filing_date(filing_dates[index] if index < len(filing_dates) else None)
             if (since and (filed_on is None or filed_on < since)) or (
@@ -606,7 +629,7 @@ class SECConnector:
             sources.append(
                 RetrievedSource(
                     source_id=sid,
-                    source_type=(SourceType.ANNUAL_REPORT if form in ANNUAL_FORMS
+                    source_type=(SourceType.ANNUAL_REPORT if is_annual(form)
                                  else SourceType.QUARTERLY_REPORT),
                     url=url,
                     title=f"{form} XBRL instance {filing_dates[index] if index < len(filing_dates) else ''}".strip(),

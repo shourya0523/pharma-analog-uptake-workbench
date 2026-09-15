@@ -48,6 +48,7 @@ from app.domain.models import (
     JobStatus,
     JobStep,
     PeriodType,
+    RevenueScope,
     RetrievalStatus,
     RetrievedSource,
     SourceType,
@@ -75,7 +76,7 @@ from app.parsing.evidence import (
 )
 from app.parsing.fda_label import format_moa_profile_value, parse_label_record
 from app.parsing.indications import parse_indications
-from app.parsing.labels import FLAG_COMBINED, FLAG_NOT_UNDERSTOOD, FLAG_PARTIAL
+from app.parsing.labels import QUESTION_FLAGS
 from app.parsing.periods import (
     detect_period_context,
     normalize_period,
@@ -151,7 +152,9 @@ CLAIM_STRENGTH = {
 
 # The two spellings of "the whole product": a sentence says Worldwide, a
 # schedule's family line says Product family. One group for reconciliation.
-_WHOLE_PRODUCT_SCOPES = frozenset({"Product family", "Worldwide"})
+_WHOLE_PRODUCT_SCOPES = frozenset(
+    {RevenueScope.PRODUCT_FAMILY.value, RevenueScope.WORLDWIDE.value}
+)
 
 # How long after a period ends its own report is filed: a 10-Q within about
 # 45 days, a 10-K within about 90. A filing later than this reports the
@@ -160,7 +163,8 @@ _REPORTING_LAG_DAYS = 120
 
 
 def _scope_key(scope: str | None) -> str:
-    return "Product family" if (scope or "") in _WHOLE_PRODUCT_SCOPES else (scope or "")
+    whole = RevenueScope.PRODUCT_FAMILY.value
+    return whole if (scope or "") in _WHOLE_PRODUCT_SCOPES else (scope or "")
 
 
 def period_end(period: str | None) -> date | None:
@@ -267,7 +271,11 @@ def persist_profile_field(
 # the LLM branch and the deterministic branch share this code path, so trusting
 # the key outright would let model output name its own provenance.
 # The label flags that keep a figure from being published without a person.
-LABEL_FLAGS = frozenset({FLAG_NOT_UNDERSTOOD, FLAG_PARTIAL, FLAG_COMBINED, HELD_FOR_BOUND})
+# What the judge is told about a row's label: every flag that makes the row a
+# question, plus the bound a derivation held rather than published. Built from
+# the reader's vocabulary rather than restated, so a flag the reader starts
+# raising cannot be one the judge never hears about.
+LABEL_FLAGS = QUESTION_FLAGS | {HELD_FOR_BOUND}
 
 _DETERMINISTIC_METHODS = {"table_fingerprint": "table", "prose_sentence": "prose"}
 

@@ -31,6 +31,7 @@ from app.parsing.labels import (
     FLAG_NO_SALES,
     FLAG_NOT_UNDERSTOOD,
     FLAG_PARTIAL,
+    QUESTION_FLAGS,
     LabelReading,
     NoteReading,
     footnotes_by_mark,
@@ -342,10 +343,6 @@ def _adds_up(candidate: dict[int, float], parts: dict[int, float], count: int) -
 
 
 FLAG_REGIONS_NO_TOTAL = "region_rows_no_total"
-# A row carrying any of these is a question about the product, not an answer:
-# published so a person can settle it, never auto-passed, and never the row
-# that silences the others for its periods.
-QUESTION_FLAGS = frozenset({FLAG_NOT_UNDERSTOOD, FLAG_PARTIAL, FLAG_COMBINED})
 
 Match = tuple[int, str, dict[int, float], LabelReading, tuple[str, ...]]
 Published = tuple[int, str, str, dict[int, float], LabelReading, tuple[str, ...]]

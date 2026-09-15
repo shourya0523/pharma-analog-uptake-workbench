@@ -58,6 +58,15 @@ class ValidationStatus(str, Enum):
     CORROBORATES = "corroborates"
 
 
+# The statuses that mean the pipeline stands behind a figure: it passed the
+# gate on its own, or a person confirmed it. Every reader of a datapoint that
+# asks "may this be shown as an answer" asks this, and asking it in each
+# module's own words let the Library and the dashboard drift apart on which
+# rows were coverage and which were questions.
+PUBLISHED_STATUSES = frozenset({ValidationStatus.AUTO_PASS, ValidationStatus.CONFIRMED})
+PUBLISHED_STATUS_VALUES = frozenset(status.value for status in PUBLISHED_STATUSES)
+
+
 class JobStatus(str, Enum):
     QUEUED = "queued"
     RUNNING = "running"

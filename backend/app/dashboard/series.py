@@ -13,14 +13,8 @@ from app.db.models import (
     ProductIndicationORM,
     UptakeMetricORM,
 )
-from app.domain.models import ValidationStatus
+from app.domain.models import PUBLISHED_STATUS_VALUES
 from app.observability import dedupe_jobs_by_analog, normalize_analog_key
-
-# The figures a chart may draw without being asked: the pipeline passed them
-# or a person confirmed them. Everything else is a question in the queue -
-# a company total the judge held, a sentence about a payment an issuer may
-# receive - and drawn only when the viewer asks to see it.
-STANDS_BEHIND = frozenset({ValidationStatus.AUTO_PASS.value, ValidationStatus.CONFIRMED.value})
 
 
 def _unique_sorted(values: list[Any]) -> list[str]:
@@ -224,7 +218,7 @@ def build_dashboard_preview(
                 )
         products.append(product)
         for datapoint in job.datapoints:
-            if not include_held and datapoint.validation_status not in STANDS_BEHIND:
+            if not include_held and datapoint.validation_status not in PUBLISHED_STATUS_VALUES:
                 continue
             series.append(
                 {

@@ -101,6 +101,13 @@ FLAG_COMBINED = "combined_line"
 FLAG_PARTIAL = "partial_period"
 FLAG_FAMILY_INCLUDES = "family_line_includes_product"
 
+# The flags that make a row a question about the product rather than an answer
+# for it: the reader published something, but what it published is not the
+# product's own figure for that period without a person looking. Owned here,
+# beside the flags themselves, so a flag added to this vocabulary is not a
+# question by accident in one module and an answer in another.
+QUESTION_FLAGS = frozenset({FLAG_NOT_UNDERSTOOD, FLAG_PARTIAL, FLAG_COMBINED})
+
 
 def _words(text: str) -> list[str]:
     return [w.strip(".'-&") for w in _WORD_RE.findall(text.lower()) if w.strip(".'-&")]

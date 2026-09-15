@@ -20,7 +20,9 @@ from datetime import date
 from app.connectors.sources import (
     SECConnector,
     _holds_financial_facts,
-    _reports_a_period,
+    ANNUAL_FORMS,
+    is_annual,
+    reports_a_period,
 )
 from app.storage.filestore import LocalFileStore
 
@@ -44,9 +46,32 @@ def test_an_instance_is_taken_for_what_it_states():
     assert _holds_financial_facts(b'<acme:CalderonSales contextRef="c">5</acme:CalderonSales>')
 
 
-def test_the_forms_that_report_a_period():
-    assert all(_reports_a_period(f) for f in ("10-Q", "10-K", "10-K/A", "10-QT", "20-F", "40-F", "6-K"))
-    assert not any(_reports_a_period(f) for f in ("8-K", "8-K/A", "DEF 14A", "S-8", "11-K", "4", None))
+def test_every_form_this_module_calls_annual_reports_a_period():
+    """The two vocabularies cannot disagree, because one is built from the other.
+
+    Written out separately they did: the annual set named `10-K405` and
+    `10-KT`, the periodic list did not, and a filer's transition-period
+    annual report was skipped as though it reported nothing.
+    """
+    assert all(reports_a_period(form) for form in ANNUAL_FORMS)
+    assert all(is_annual(form) for form in ANNUAL_FORMS)
+
+
+def test_a_form_is_read_as_its_family_so_an_amendment_travels_with_it():
+    """`8-K/A` is the shape that started this rule: a list naming `8-K` and
+    `10-Q` excluded the amendment carrying a company's financials."""
+    assert reports_a_period("10-K/A") and is_annual("10-K/A")
+    assert reports_a_period("10-QT") and not is_annual("10-QT")
+    assert reports_a_period("10-Q/A") and not is_annual("10-Q/A")
+
+
+def test_a_form_that_states_no_period_of_its_own_is_not_periodic():
+    assert not any(reports_a_period(f) for f in ("8-K", "8-K/A", "DEF 14A", "S-8", "4", None))
+    # `11-K` is a benefit plan's own annual report, and it rides with the
+    # annual vocabulary rather than being written out of it here. It costs a
+    # listing and is then dropped by what its instance states, which is the
+    # same test every other filing passes.
+    assert reports_a_period("11-K")
 
 
 async def test_cover_pages_do_not_fill_the_instance_budget(monkeypatch):
@@ -65,7 +90,7 @@ async def test_cover_pages_do_not_fill_the_instance_budget(monkeypatch):
 
     # Newest first, as EDGAR lists them: seven cover-page filings before the
     # first 10-Q, every one of them flagged as carrying XBRL.
-    forms = ["8-K", "DEF 14A", "8-K", "S-8", "8-K", "11-K", "8-K", "10-Q", "10-Q", "10-K", "10-Q"]
+    forms = ["8-K", "DEF 14A", "8-K", "S-8", "8-K", "S-1", "8-K", "10-Q", "10-Q", "10-K", "10-Q"]
     recent = {
         "form": forms,
         "accessionNumber": [f"0001-24-cover{n}" if f not in ("10-Q", "10-K") else f"0001-24-report{n}"

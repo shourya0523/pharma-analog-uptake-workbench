@@ -4,7 +4,18 @@ from dataclasses import dataclass, field
 from datetime import date
 from statistics import median
 
-ALLOWED_PRODUCT_SCOPES = {"Product family", "Formulation-specific", "U.S.", "Worldwide"}
+from app.domain.models import RevenueScope
+
+# The scopes a peak-sales estimate may be built from: a figure for the whole
+# product, for one of its formulations, or for a geography that is the whole
+# market a peak is claimed in. Named from the vocabulary rather than spelled
+# out, so a renamed scope fails here instead of silently matching nothing.
+ALLOWED_PRODUCT_SCOPES = frozenset({
+    RevenueScope.PRODUCT_FAMILY.value,
+    RevenueScope.FORMULATION_SPECIFIC.value,
+    RevenueScope.US.value,
+    RevenueScope.WORLDWIDE.value,
+})
 
 
 @dataclass(frozen=True)

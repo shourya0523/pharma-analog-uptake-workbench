@@ -31,6 +31,7 @@ from app.db.models import (
 )
 from app.domain.models import (
     NO_FILER_OF_RECORD,
+    PUBLISHED_STATUS_VALUES,
     Cadence,
     UnresolvedResolution,
     ValidationStatus,
@@ -78,8 +79,6 @@ def _missing_reason(period: str | None, reason_unresolved: str | None = None) ->
 # product. The prefix marks a key that is a name, not a row id.
 NAME_KEY_PREFIX = "name:"
 
-# Figures the pipeline stands behind; the rest are questions, not coverage.
-PUBLISHED_STATUSES = {ValidationStatus.AUTO_PASS.value, ValidationStatus.CONFIRMED.value}
 
 
 class _Identities:
@@ -132,7 +131,7 @@ def _published_quarters(db: Session, job_id: str) -> int:
         db.query(DatapointORM.period)
         .filter(
             DatapointORM.job_id == job_id,
-            DatapointORM.validation_status.in_(PUBLISHED_STATUSES),
+            DatapointORM.validation_status.in_(PUBLISHED_STATUS_VALUES),
         )
         .distinct()
         .count()

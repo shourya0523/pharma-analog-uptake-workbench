@@ -5,6 +5,7 @@ from collections.abc import Iterable
 from difflib import SequenceMatcher
 from typing import Any
 
+from app.domain.models import RevenueScope
 from app.extraction.members import split_camel
 from app.parsing.evidence import SCOPE_PATTERNS, TOTAL_REVENUE_RE, product_aliases
 
@@ -58,6 +59,14 @@ _AGGREGATE_WORDS = frozenset(
 
 _SCOPE_RE = re.compile(
     "|".join(pattern for _label, pattern in SCOPE_PATTERNS), re.IGNORECASE
+)
+
+
+# Every scope but the company's own total describes a product: nine of the
+# ten were written out here, which is the enum minus one kept by hand, and a
+# scope added to the vocabulary would have quietly stopped being a product's.
+PRODUCT_SCOPES = frozenset(
+    scope.value for scope in RevenueScope if scope is not RevenueScope.COMPANY_TOTAL
 )
 
 
@@ -324,18 +333,7 @@ def filter_revenue_candidates(
             dropped.append({**cand, "_drop_reason": "company_total_not_product"})
             continue
 
-        product_scopes = {
-            "Product family",
-            "Formulation-specific",
-            "Franchise",
-            "U.S.",
-            "ex-U.S.",
-            "Worldwide",
-            "International",
-            "Regional",
-            "Unknown",
-        }
-        if scope in product_scopes and not mentions_product:
+        if scope in PRODUCT_SCOPES and not mentions_product:
             dropped.append({**cand, "_drop_reason": "product_scope_without_product_in_quote"})
             continue
 
