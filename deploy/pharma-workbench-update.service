@@ -1,0 +1,12 @@
+# One update pass. Driven by pharma-workbench-update.timer, not enabled itself.
+[Unit]
+Description=Pull newly published workbench images and restart what changed
+Requires=docker.service
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/opt/pharma-analog-uptake-workbench/deploy/update.sh
+# A pull on a shared-core instance over a slow link should not be killed.
+TimeoutStartSec=0

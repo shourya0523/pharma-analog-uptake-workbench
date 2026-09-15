@@ -8,7 +8,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
     app_name: str = "Pharmaceutical Analog Uptake Workbench"
-    environment: str = "local"  # local | aws
+    environment: str = "local"  # local | aws | gcp
     database_url: str = "sqlite+aiosqlite:///./storage/workbench.db"
     db_host: str | None = None
     db_name: str | None = None
