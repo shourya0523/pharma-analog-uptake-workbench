@@ -1,4 +1,5 @@
 import json
+import re
 from pathlib import Path
 
 from app.connectors.sources import SECConnector, is_earnings_exhibit
@@ -23,12 +24,41 @@ def _gold_source_filenames() -> set[str]:
     return {row["source_url"].rsplit("/", 1)[-1] for row in rows}
 
 
+def _exhibit_number(filename: str) -> str | None:
+    """The exhibit number a filing document's name states, if it states one.
+
+    Read independently of `is_earnings_exhibit`, so the test partitions gold's
+    citations by what they are rather than by what that function says they are.
+    """
+    squashed = re.sub(r"[^a-z0-9]", "", filename.lower())
+    match = re.search(r"ex+(?:h(?:ibit)?)?v?(\d{2})", squashed)
+    return match.group(1) if match else None
+
+
 def test_earnings_exhibit_matches_every_gold_exhibit_filename():
-    """Gold rows cite exhibit 99.x documents under several issuer naming conventions."""
-    exhibits = {name for name in _gold_source_filenames() if "ex" in name.lower()}
-    assert exhibits, "expected gold rows to cite exhibit documents"
-    assert all(is_earnings_exhibit(name) for name in exhibits), sorted(
-        name for name in exhibits if not is_earnings_exhibit(name)
+    """Gold cites two exhibit families and only one of them is an earnings release.
+
+    Exhibit 99.x is the earnings release carrying the product revenue tables,
+    under several issuer naming conventions. Exhibit 13 is the annual report
+    filed with a 10-K, which also carries product revenue but is not an
+    earnings exhibit and must not be matched as one - selecting on the letters
+    "ex" alone cannot tell them apart.
+    """
+    named = {
+        name: _exhibit_number(name)
+        for name in _gold_source_filenames()
+        if _exhibit_number(name)
+    }
+    earnings = {name for name, number in named.items() if number == "99"}
+    annual_report = {name for name, number in named.items() if number == "13"}
+    assert earnings, "expected gold rows to cite earnings exhibits"
+    assert annual_report, "expected gold rows to cite 10-K annual report exhibits"
+
+    assert all(is_earnings_exhibit(name) for name in earnings), sorted(
+        name for name in earnings if not is_earnings_exhibit(name)
+    )
+    assert not any(is_earnings_exhibit(name) for name in annual_report), sorted(
+        name for name in annual_report if is_earnings_exhibit(name)
     )
 
 

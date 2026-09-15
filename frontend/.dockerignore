@@ -1,0 +1,6 @@
+# The build installs from package-lock.json and writes its own dist. Sending
+# either into the context costs minutes on a shared-core instance.
+node_modules
+dist
+.env
+.env.*

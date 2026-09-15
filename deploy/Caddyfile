@@ -1,0 +1,26 @@
+# SITE_ADDRESS decides the scheme. A hostname makes Caddy obtain a certificate
+# for it and redirect port 80; a bare ":80" serves plain HTTP and obtains
+# nothing. It is set in deploy/.env, because the address is a property of the
+# box rather than of the repository.
+{$SITE_ADDRESS} {
+	# Outbound traffic on the free tier is 1 GB a month, and the two things
+	# that travel most are the JS bundle and the JSON.
+	encode zstd gzip
+
+	# The client prefixes every call with /api (VITE_API_URL, baked in at build
+	# time). handle_path strips that prefix, so the backend keeps serving the
+	# routes it actually declares - /health, /runs, /jobs/{id} - and nothing in
+	# the application needs to know it sits behind a proxy.
+	handle_path /api/* {
+		reverse_proxy api:8000
+	}
+
+	handle {
+		root * /srv
+		# /review/{jobId} and /dashboard/{runId} are routes the router resolves
+		# in the browser; there is no such file to serve, and a reload or a
+		# pasted link arrives here as a GET for that path.
+		try_files {path} /index.html
+		file_server
+	}
+}

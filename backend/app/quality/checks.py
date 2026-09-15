@@ -4,6 +4,7 @@ import re
 from dataclasses import dataclass
 from typing import Any
 
+from app.domain.claims import stated_number
 from app.domain.models import ValidationStatus
 
 
@@ -31,7 +32,9 @@ def moa_epc_contamination_issue(moa: str | None, epc_terms: list[str]) -> Qualit
     return None
 
 
-def _normalize_number_str(value: float | None) -> list[str]:
+def _normalize_number_str(value: Any) -> list[str]:
+    """The spellings a figure may take in a quote, or none where it is not one."""
+    value = stated_number(value)
     if value is None:
         return []
     forms = {
@@ -44,10 +47,17 @@ def _normalize_number_str(value: float | None) -> list[str]:
     return list(forms)
 
 
-def quote_contains_value(quote: str, value: float | None) -> bool:
+def quote_contains_value(quote: str, value: Any) -> bool:
+    """True if the quote spells the figure, in any of the ways a filing spells it.
+
+    The figure is read once here: a candidate may quote it as text, and the
+    arithmetic below - a format spec, `is_integer` - is what a field holding
+    anything else reaches.
+    """
+    value = stated_number(value)
     if value is None:
         return False
-    q = quote.replace(",", "").lower()
+    q = (quote or "").replace(",", "").lower()
     for form in _normalize_number_str(value):
         if form.replace(",", "").lower() in q:
             return True

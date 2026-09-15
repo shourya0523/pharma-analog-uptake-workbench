@@ -3,6 +3,8 @@ from __future__ import annotations
 import re
 from typing import Any
 
+from app.domain.claims import stated_text
+
 
 def normalize_for_match(text: str) -> str:
     """Collapse whitespace for forgiving verbatim checks across HTML→text extraction."""
@@ -48,9 +50,9 @@ def enforce_verbatim_on_candidates(
     span_by_id = {s.get("span_id"): s for s in spans if s.get("span_id")}
 
     for cand in candidates:
-        quote = (cand.get("source_quote") or "").strip()
+        quote = stated_text(cand.get("source_quote"))
         span = None
-        sid = cand.get("span_id")
+        sid = stated_text(cand.get("span_id"))
         if sid and sid in span_by_id:
             span = span_by_id[sid]
         if span is None:
@@ -78,7 +80,7 @@ def apply_structured_field_gates(
             dropped.append({**cand, "_drop_reason": "model_marked_company_total"})
             continue
         if cand.get("product_mentioned_in_quote") is False:
-            scope = (cand.get("revenue_scope") or "").strip()
+            scope = stated_text(cand.get("revenue_scope"))
             if scope != "Company total":
                 dropped.append({**cand, "_drop_reason": "model_product_not_in_quote"})
                 continue

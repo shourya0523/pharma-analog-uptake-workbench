@@ -1,0 +1,97 @@
+# Tests on every pull request; on main, the same tests gate publishing the
+# images the deployed box pulls. Nothing here deploys: the VM pulls, so this
+# workflow needs no credentials for it and no inbound path to it.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  # A second push to the same branch makes the first one's result irrelevant.
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    env:
+      # Deliberately fake, and enough. The client raises rather than returns
+      # when the key is absent (app/llm/client.py, _headers), so the test that
+      # covers an unreachable model needs a key to be *set* to reach the
+      # connection it is about. Nothing here calls OpenRouter: the whole suite
+      # passes with this exact value, which is what says the calls are stubbed.
+      OPENROUTER_API_KEY: ci-not-a-real-key
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - name: Install
+        working-directory: backend
+        run: uv sync --frozen
+      # Tests reach no network service and need no key: the LLM client is
+      # stubbed and the fixtures are checked in.
+      - name: Tests
+        working-directory: backend
+        run: uv run pytest -q
+      - name: The two rules the tests enforce
+        working-directory: backend
+        run: uv run pytest tests/test_gold_is_not_an_input.py -q
+
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install
+        working-directory: frontend
+        run: npm ci
+      - name: Lint
+        working-directory: frontend
+        run: npm run lint
+      - name: Types
+        working-directory: frontend
+        run: npx tsc -b
+      - name: Tests
+        working-directory: frontend
+        run: npx vitest run
+
+  publish:
+    # Only a green main builds. A tag per commit lets a bad deploy be pinned
+    # back to a known digest; the moving `main` tag is what the box follows.
+    needs: [backend, frontend]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      matrix:
+        include:
+          - name: api
+            context: backend
+          - name: web
+            context: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}-${{ matrix.name }}:main
+            ghcr.io/${{ github.repository }}-${{ matrix.name }}:${{ github.sha }}
+          cache-from: type=gha,scope=${{ matrix.name }}
+          cache-to: type=gha,scope=${{ matrix.name }},mode=max
