@@ -2592,6 +2592,24 @@ class PipelineOrchestrator:
             "need_filing": ("Likely disclosed in a filing not yet retrieved", 0.35),
             "gap": ("Missing quarter — analyst follow-up required", 0.4),
         }
+        def stated(value: Any, default: str) -> str:
+            """A field the reply put in text, or the default it stands in for.
+
+            Three of the fields below are read as text - one as a key into
+            `reason_map`, two as prose the row stores - and the reply is free
+            to put a number, an array or an object in any of them. None of
+            those is a code or a sentence, so each is no answer, which is what
+            the field being absent already means.
+
+            Without it the code reaches `.lower()` on the first and hands the
+            second to a text column, which refuses it at the next flush - by
+            then inside whatever query triggered that flush, which is where
+            such a failure appears to come from.
+            """
+            if not isinstance(value, str):
+                return default
+            return value.strip() or default
+
         for miss in listed(result, "missing_periods"):
             # A missing period arrives either as the label on its own or as an
             # object saying why it is missing. Only the second carries the
@@ -2603,10 +2621,13 @@ class PipelineOrchestrator:
                 period, code, reason, nxt = miss, "gap", "Missing period", "Review SEC filings"
             else:
                 period = miss.get("period")
-                code = (miss.get("reason_code") or "gap").lower()
+                code = stated(miss.get("reason_code"), "gap").lower()
                 default_reason, conf = reason_map.get(code, reason_map["gap"])
-                reason = miss.get("reason") or default_reason
-                nxt = miss.get("recommended_next_step") or "Review SEC 10-Q / earnings for product net sales"
+                reason = stated(miss.get("reason"), default_reason)
+                nxt = stated(
+                    miss.get("recommended_next_step"),
+                    "Review SEC 10-Q / earnings for product net sales",
+                )
             period = str(period).strip() if period is not None else ""
             if not period or period in existing or period in existing_unresolved:
                 continue
