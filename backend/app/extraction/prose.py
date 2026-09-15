@@ -23,6 +23,11 @@ still taken from what the sentence says rather than from word order alone.
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:  # a type only; periods.py must not import this module back
+    from app.parsing.periods import PeriodContext
+
 import re
 from collections.abc import Iterable
 from dataclasses import dataclass
@@ -280,6 +285,30 @@ def _named_products(sentence: str, catalog: Iterable[str]) -> set[str]:
     }
 
 
+def _after_the_document(period: str, context: PeriodContext | None) -> bool:
+    """Whether a period ends after the document's own reporting period.
+
+    A filing reports its period and the ones before it. A later period in
+    its text is a forecast - a payment the issuer "may receive in 2027" - and
+    is never a quarter's revenue, however the sentence is shaped.
+    """
+    if context is None:
+        return False
+    match = re.fullmatch(r"(\d{4})(?:Q([1-4])|H([12])|M9)?", period or "")
+    if not match:
+        return False
+    year = int(match.group(1))
+    if match.group(2):
+        end_month = int(match.group(2)) * 3
+    elif match.group(3):
+        end_month = int(match.group(3)) * 6
+    elif period.endswith("M9"):
+        end_month = 9
+    else:
+        end_month = 12
+    return (year, end_month) > (context.year, context.month)
+
+
 def read_prose(
     text: str,
     *,
@@ -287,6 +316,7 @@ def read_prose(
     generic: str | None = None,
     extra_aliases: Iterable[str] | None = None,
     catalog: Iterable[str] | None = None,
+    period_context: PeriodContext | None = None,
 ) -> list[ExtractedValue]:
     """Revenue figures stated in sentences that name this product.
 
@@ -354,6 +384,8 @@ def read_prose(
         else:
             continue
         for index, (period, (amount, unit, currency)) in enumerate(pairs):
+            if _after_the_document(period.period, period_context):
+                continue
             values.append(
                 ExtractedValue(
                     product_label=product,

@@ -26,6 +26,11 @@ from app.quality.candidate_filters import (
     quote_mentions_other_brand,
     quote_mentions_product,
 )
+from app.quality.sentences import (
+    sentence_carrying,
+    sentences,
+    states_a_change_not_a_level,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -762,6 +767,23 @@ def apply_judge_hard_vetoes(
     )
     veto = False
 
+    # A quote is a sentence. Where the quote runs to several, the one that
+    # carries the value has to carry the product too, and the vetoes below
+    # read that sentence rather than the block around it.
+    value = candidate.get("value_reported")
+    carrying = sentence_carrying(q, value)
+    if (
+        carrying is not None
+        and len(sentences(q)) > 1
+        and not quote_mentions_product(carrying, product, generic, extra_aliases=extra_aliases)
+    ):
+        issues.append("hard_veto:value_and_product_in_different_sentences")
+        veto = True
+    if carrying is not None and states_a_change_not_a_level(carrying, value):
+        issues.append("hard_veto:change_not_level")
+        veto = True
+    read = carrying if carrying is not None else q
+
     if TOTAL_REVENUE_RE.search(q) and not mentions:
         issues.append("hard_veto:company_total_without_product")
         veto = True
@@ -773,7 +795,7 @@ def apply_judge_hard_vetoes(
         veto = True
     # A milestone earned on the product's sales is stated in the same sentence
     # as the product, so naming the product does not clear it.
-    if NON_PRODUCT_REVENUE_RE.search(q) and (candidate.get("revenue_scope") or "") not in {"Company total", ""}:
+    if NON_PRODUCT_REVENUE_RE.search(read) and (candidate.get("revenue_scope") or "") not in {"Company total", ""}:
         issues.append("hard_veto:milestone_or_license_revenue")
         veto = True
     if not mentions and (candidate.get("revenue_scope") or "") not in {"Company total", ""}:
