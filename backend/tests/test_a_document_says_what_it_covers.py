@@ -211,3 +211,100 @@ def test_carrying_nothing_is_the_thing_being_counted():
     nothing = coverage(_document([SCHEDULE]), aliases=["Calderon"], periods=["2019Q1"])
     assert not carried.carries_nothing
     assert nothing.carries_nothing and nothing.verdict == NAMES_ONLY
+
+
+def test_a_line_that_names_two_products_carries_for_neither():
+    """A figure on a line naming this product and another is the pair's.
+
+    Nothing here can split it, and the product is named - so the document is
+    `names_only`, which is the answer that says a reader is still needed. A
+    predicate that took the pair's figure would publish one product's revenue
+    as another's, twice.
+    """
+    combined = [
+        [None, "Three Months Ended March 31,", "Three Months Ended March 31,"],
+        [None, "2025", "2024"],
+        ["Calderon and NuVessa", "64,882", "28,434"],
+    ]
+    result = coverage(
+        _document([combined]),
+        aliases=["Calderon"],
+        periods=["2025Q1"],
+        products=["NuVessa"],
+    )
+    assert result.verdict == NAMES_ONLY
+    assert result.names_product and not result.figures
+
+
+def test_the_currency_mark_in_a_cell_of_its_own_does_not_hide_the_figure():
+    """A filer that puts `$` in a column of its own puts the figure two cells
+    right of the label rather than one.
+
+    The figure is read from the column its period resolves to, so where the
+    label sits and how many marks stand between them costs nothing.
+    """
+    dollars = [
+        [None, None, "Three Months Ended March 31,", None, "Three Months Ended March 31,"],
+        [None, None, "2025", None, "2024"],
+        ["Calderon", "$", "55,881", "$", "19,834"],
+    ]
+    result = coverage(
+        _document([dollars]), aliases=["Calderon"], periods=["2025Q1", "2024Q1"]
+    )
+    assert result.verdict == ANSWERS
+    assert result.figures == {"2025Q1": 55881.0, "2024Q1": 19834.0}
+
+
+def test_a_window_of_years_is_asked_and_answered_like_any_other():
+    """`periods` are whatever keys the run's window produced, and a year is
+    one of them - so an annual report answers a year the way an exhibit
+    answers a quarter, and the year it predates is refuted the same way."""
+    annual = [
+        [None, "Year Ended December 31,", "Year Ended December 31,"],
+        [None, "2024", "2023"],
+        ["Calderon", "220,140", "180,220"],
+    ]
+    result = coverage(
+        _document([annual], "For the year ended December 31, 2024"),
+        aliases=["Calderon"],
+        periods=["2024", "2023", "2025"],
+    )
+    assert result.per_period == {"2024": CARRIES, "2023": CARRIES, "2025": REFUTES}
+    assert result.figures == {"2024": 220140.0, "2023": 180220.0}
+    assert result.verdict == PARTIAL
+
+
+def test_a_document_that_dates_itself_nowhere_refutes_nothing():
+    """The refutation is "this document was written before that period ended".
+
+    A document whose own reporting period cannot be read supports no such
+    reasoning, so every period it does not print is silent rather than
+    refuted - a period still worth asking another document for.
+    """
+    result = coverage(
+        _document([SCHEDULE], "Calderon is described in Note 12."),
+        aliases=["Calderon"],
+        periods=["2025Q1", "2031Q4"],
+    )
+    assert result.per_period == {"2025Q1": CARRIES, "2031Q4": SILENT}
+
+
+def test_a_row_of_figures_under_no_name_is_nobody_s_figure():
+    """A filer prints spacer and continuation rows whose first cell is a
+    number or nothing at all.
+
+    Such a row states no subject, so the figures on it belong to no product -
+    and the figure taken for the product is the one on the row that names it,
+    not whichever row happens to be nearest.
+    """
+    with_spacers = [
+        [None, "Three Months Ended March 31,", "Three Months Ended March 31,"],
+        [None, "2025", "2024"],
+        ["", "", ""],
+        ["Calderon", "55,881", "19,834"],
+        ["", "1,234", "5,678"],
+    ]
+    result = coverage(
+        _document([with_spacers]), aliases=["Calderon"], periods=["2025Q1"]
+    )
+    assert result.figures == {"2025Q1": 55881.0}
