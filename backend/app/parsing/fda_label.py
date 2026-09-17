@@ -257,3 +257,117 @@ def parse_label_record(record: dict[str, Any]) -> ParsedFDALabel:
         route_readings=readings["route"],
         paths=paths,
     )
+@dataclass(frozen=True)
+class SourcedValue:
+    """One profile field, the path it was read from, and any rival reading.
+
+    ``quote`` is the document's own words where the value came from prose, and
+    ``path`` is always a key the record carries - the two together are what a
+    citation needs for someone to open the record and find the value.
+    """
+
+    value: str | None
+    path: str
+    quote: str | None = None
+    rival: dict[str, Any] | None = None
+
+
+def _joined(values: list[str]) -> str | None:
+    return "; ".join(values) or None
+
+
+def _manufacturer(record: dict[str, Any], block: dict[str, list[str]]) -> tuple[str | None, str]:
+    """The filer, from whichever of the two keys the record states, with that key.
+
+    The label dataset names it in the ``openfda`` block; a drugsFDA application
+    names it at the top level. A record stating neither gets no path, so it
+    cannot cite a key it does not have.
+    """
+    listed = block.get("manufacturer_name") or []
+    if listed:
+        return listed[0], "openfda.manufacturer_name"
+    sponsor = str(record.get("sponsor_name") or "").strip()
+    if sponsor:
+        return sponsor, "sponsor_name"
+    return None, ""
+
+
+def profile_fields(
+    record: dict[str, Any],
+    label: ParsedFDALabel,
+    *,
+    indications: Any = (),
+    indication_value: str | None = None,
+    therapeutic_area_value: str | None = None,
+    moa_value: str | None = None,
+    approval: str | None = None,
+    approval_path: str | None = None,
+) -> dict[str, SourcedValue]:
+    """The profile fields one openFDA record supports, each with its own path.
+
+    Every entry names the key it was read from, so the field set and the
+    citations come from one place and cannot drift apart. A field the record
+    does not state is still a key here, with a ``None`` value and an empty
+    path; the caller drops those, which keeps the key set a property of this
+    function and lets `PROFILE_FIELDS` be read off it.
+    """
+    block = openfda_block(record)
+    indication_quote = (
+        " | ".join(
+            quote
+            for quote in (getattr(ind, "source_quote", None) for ind in indications or ())
+            if quote
+        )
+        or None
+    )
+    indications_path = label.path("indications") or ""
+
+    rival_route = None
+    if label.route_conflict:
+        chosen_path = label.path("route")
+        rival_route = {
+            path: values for path, values in label.route_readings.items() if path != chosen_path
+        }
+
+    fields = {
+        "brand_name": SourcedValue(
+            next(iter(label.brand_names), None), label.path("brand_name") or ""
+        ),
+        "generic_name": SourcedValue(
+            next(iter(label.generic_names), None), label.path("generic_name") or ""
+        ),
+        "manufacturer": SourcedValue(*_manufacturer(record, block)),
+        "roa": SourcedValue(
+            _joined(label.routes),
+            label.path("route") or "",
+            rival={"readings": rival_route} if rival_route else None,
+        ),
+        "dosage_form": SourcedValue(
+            _joined(label.dosage_forms), label.path("dosage_form") or ""
+        ),
+        "pharmacologic_class": SourcedValue(
+            _joined(label.epc_terms), label.path("pharm_class_epc") or ""
+        ),
+        "moa": SourcedValue(
+            moa_value,
+            label.path("moa_summary") or label.path("pharm_class_moa") or "",
+            quote=label.moa_summary if label.moa_summary else None,
+        ),
+        "active_ingredients": SourcedValue(
+            _joined(label.active_ingredients), label.path("active_ingredients") or ""
+        ),
+        "indication": SourcedValue(
+            indication_value, indications_path, quote=indication_quote
+        ),
+        "therapeutic_area": SourcedValue(
+            therapeutic_area_value, indications_path, quote=indication_quote
+        ),
+        "fda_approval_date": SourcedValue(approval, approval_path or ""),
+    }
+    return fields
+
+
+# What the openFDA path can put in a product profile, read off its producer
+# rather than restated: judging order and the drift test that guards it take
+# the set from here.
+PROFILE_FIELDS: tuple[str, ...] = tuple(profile_fields({}, ParsedFDALabel()))

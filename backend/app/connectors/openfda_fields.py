@@ -148,27 +148,6 @@ def brand_matched_results(
     return exact or extending
 
 
-def select_openfda_result(
-    results: list[dict[str, Any]],
-    *,
-    product: str,
-    generic: str | None = None,
-    aliases: Iterable[str] | None = None,
-) -> tuple[dict[str, Any] | None, str | None]:
-    """The one application to read this product's fields from.
-
-    The first of `brand_matched_results`. A brand with more than one
-    application has more than one match, and which one openFDA returns first
-    is not documented - so the approval date is taken across the whole list
-    rather than from this one.
-
-    Returns (result, matched_brand_name), or (None, None) when no application
-    matches this product's brand.
-    """
-    matches = brand_matched_results(results, product=product, generic=generic, aliases=aliases)
-    return matches[0] if matches else (None, None)
-
-
 def parse_openfda_date(raw: str | None) -> str | None:
     if not raw:
         return None

@@ -2,8 +2,10 @@ from app.parsing.fda_label import (
     clean_moa_summary,
     format_moa_profile_value,
     openfda_block,
+    PROFILE_FIELDS,
     parse_label_record,
     product_columns,
+    profile_fields,
     read_path,
     route_readings_agree,
 )
@@ -148,3 +150,29 @@ def test_format_moa_falls_back_to_structured_terms():
         format_moa_profile_value(["Endothelin Receptor Antagonists [MoA]"], None)
         == "Endothelin Receptor Antagonists [MoA]"
     )
+
+
+def test_every_profile_field_names_the_path_it_was_read_from():
+    record = dict(DRUGSFDA, sponsor_name="ACME THERAPEUTICS")
+    fields = profile_fields(record, parse_label_record(record))
+    assert fields["roa"].path == "products[].route"
+    assert fields["dosage_form"].path == "products[].dosage_form"
+    assert fields["brand_name"].path == "openfda.brand_name"
+    assert fields["manufacturer"].path == "sponsor_name"
+    for name, sourced in fields.items():
+        if sourced.value is None:
+            continue
+        assert read_path(record, sourced.path), f"{name} cites {sourced.path}"
+
+
+def test_a_field_the_record_does_not_state_keeps_its_key_and_loses_its_path():
+    fields = profile_fields({}, parse_label_record({}))
+    assert set(fields) == set(PROFILE_FIELDS)
+    assert all(sourced.value is None and sourced.path == "" for sourced in fields.values())
+
+
+def test_the_rival_route_reading_travels_with_the_field():
+    fields = profile_fields(DRUGSFDA, parse_label_record(DRUGSFDA))
+    assert fields["roa"].rival == {"readings": {"openfda.route": ["ORAL"]}}
+    agreeing = {"openfda": {"route": ["INHALATION"]}, "products": [{"route": "INHALATION"}]}
+    assert profile_fields(agreeing, parse_label_record(agreeing))["roa"].rival is None

@@ -14,7 +14,6 @@ from app.connectors.openfda_fields import (
     names_the_molecule,
     openfda_brand_names,
     parse_openfda_date,
-    select_openfda_result,
 )
 from app.quality.profile import is_missing_value
 
@@ -67,28 +66,27 @@ LIVE_RESULTS = [REMODULIN, TYVASO, GENERIC_ANDA, ORENITRAM]
 
 
 def test_selects_the_requested_brand_not_the_first_result():
-    result, brand = select_openfda_result(LIVE_RESULTS, product="Tyvaso", generic="treprostinil")
-    assert result["application_number"] == "NDA022387"
-    assert brand == "TYVASO"
+    matches = brand_matched_results(LIVE_RESULTS, product="Tyvaso", generic="treprostinil")
+    assert [(r["application_number"], b) for r, b in matches] == [("NDA022387", "TYVASO")]
 
 
 def test_generic_name_never_selects_a_competitor_or_anda():
     # The molecule is shared, so it must not drive selection
-    result, _ = select_openfda_result(LIVE_RESULTS, product="Orenitram", generic="treprostinil")
-    assert result["application_number"] == "NDA203496"
+    matches = brand_matched_results(LIVE_RESULTS, product="Orenitram", generic="treprostinil")
+    assert [r["application_number"] for r, _ in matches] == ["NDA203496"]
 
-    result, brand = select_openfda_result(
-        [REMODULIN, GENERIC_ANDA], product="Tyvaso", generic="treprostinil"
+    assert (
+        brand_matched_results([REMODULIN, GENERIC_ANDA], product="Tyvaso", generic="treprostinil")
+        == []
     )
-    assert result is None and brand is None
 
 
 def test_a_more_specific_product_does_not_take_the_general_one_s_application():
     """`Nebulized Calderon` is its own product; `Calderon` is not its brand."""
-    result, brand = select_openfda_result(
-        LIVE_RESULTS, product="Nebulized Tyvaso", generic="treprostinil"
+    assert (
+        brand_matched_results(LIVE_RESULTS, product="Nebulized Tyvaso", generic="treprostinil")
+        == []
     )
-    assert (result, brand) == (None, None)
     # ... and not even when the alias expander offers the parent brand.
     assert (
         brand_matched_results(
@@ -144,20 +142,41 @@ def test_a_molecule_variant_spelling_cannot_select_an_application():
 
 
 def test_no_match_is_reported_rather_than_guessed():
-    result, brand = select_openfda_result(LIVE_RESULTS, product="Winrevair", generic="sotatercept")
-    assert result is None and brand is None
-    assert select_openfda_result([], product="Tyvaso") == (None, None)
+    assert brand_matched_results(LIVE_RESULTS, product="Winrevair", generic="sotatercept") == []
+    assert brand_matched_results([], product="Tyvaso") == []
 
 
-def test_approval_date_is_scoped_to_the_selected_application():
-    selected, _ = select_openfda_result(LIVE_RESULTS, product="Tyvaso", generic="treprostinil")
-    scoped, field = earliest_approval_date([selected])
+def test_approval_date_is_scoped_to_the_applications_that_matched():
+    matched = brand_matched_results(LIVE_RESULTS, product="Tyvaso", generic="treprostinil")
+    scoped, field = earliest_approval_date([r for r, _ in matched])
     assert scoped == "2009-07-30"
     assert "submissions" in field
-    # Across every result the earliest date is Remodulin's, which is the old bug
+    # Across every result the earliest date belongs to a sibling's application.
     unscoped, _ = earliest_approval_date(LIVE_RESULTS)
     assert unscoped == "2002-05-21"
     assert scoped != unscoped
+
+
+def test_a_brand_with_two_applications_is_dated_from_the_earlier_one():
+    """The later one is a line extension, not the product's approval."""
+    line_extension = {
+        "application_number": "NDA000006",
+        "openfda": {"brand_name": ["CALDERON"], "generic_name": ["calderinol"], "route": ["INTRAVENOUS"]},
+        "submissions": [
+            {"submission_type": "ORIG", "submission_status": "AP", "submission_status_date": "20210729"}
+        ],
+    }
+    original = {
+        "application_number": "NDA000007",
+        "openfda": {"brand_name": ["CALDERON"], "generic_name": ["calderinol"], "route": ["ORAL"]},
+        "submissions": [
+            {"submission_type": "ORIG", "submission_status": "AP", "submission_status_date": "20151221"}
+        ],
+    }
+    for order in ([line_extension, original], [original, line_extension]):
+        matched = brand_matched_results(order, product="Calderon", generic="calderinol")
+        assert len(matched) == 2
+        assert earliest_approval_date([r for r, _ in matched])[0] == "2015-12-21"
 
 
 def test_brand_names_are_listed_for_diagnostics():
