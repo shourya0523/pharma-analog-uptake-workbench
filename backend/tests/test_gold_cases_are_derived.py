@@ -130,7 +130,12 @@ def test_the_check_says_so_in_its_exit_status(monkeypatch):
     module = _builder()
     monkeypatch.setattr(sys, "argv", ["build_gold_cases.py", "--check"])
     assert module.main() == 0, "the committed files do not match what gold produces"
-    monkeypatch.setattr(sys, "argv", ["build_gold_cases.py", "--check", "--openfda"])
+    # The flag that asks for the other configuration is whichever one negates
+    # a layer-two option's current default, so this does not have to be edited
+    # when a default flips.
+    name, default = next(iter(module.LAYER_TWO_DEFAULTS.items()))
+    other = ("--no-" if default else "--") + name.replace("_", "-")
+    monkeypatch.setattr(sys, "argv", ["build_gold_cases.py", "--check", other])
     assert module.main() == 1, "a case file built for another configuration read as current"
 
 

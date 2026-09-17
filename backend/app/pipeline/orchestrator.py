@@ -17,9 +17,10 @@ from app.config import get_settings
 from app.connectors.llm_search import LLMSearchConnector
 from app.connectors.openfda import OpenFDAConnector
 from app.connectors.openfda_fields import (
+    brand_matched_results,
     earliest_approval_date,
+    earliest_approved_match,
     openfda_brand_names,
-    select_openfda_result,
 )
 from app.connectors.sources import (
     ManualURLConnector,
@@ -69,7 +70,7 @@ from app.extraction.elements import Verdict
 from app.extraction.fingerprint import UNIT_SCALE_TO_MILLIONS
 from app.extraction.members import Resolution, load_products, resolve
 from app.extraction.tagged import candidates_from_instance
-from app.identity.resolver import resolve_product_identity
+from app.identity.resolver import ResolvedProductIdentity, resolve_product_identity
 from app.llm.aliases import merge_aliases
 from app.llm.client import LLMModules, listed, mappings
 from app.parsing.documents import DocumentParser
@@ -78,8 +79,12 @@ from app.parsing.evidence import (
     prioritize_sources_for_revenue,
     select_product_evidence_text,
 )
-from app.parsing.fda_label import format_moa_profile_value, parse_label_record
-from app.parsing.indications import parse_indications
+from app.parsing.fda_label import (
+    format_moa_profile_value,
+    parse_label_record,
+    profile_fields,
+)
+from app.parsing.indications import parse_indications, therapeutic_areas
 from app.parsing.labels import QUESTION_FLAGS, footnotes_in
 from app.parsing.periods import (
     detect_period_context,
@@ -864,6 +869,16 @@ class PipelineOrchestrator:
         written: dict[str, str] = {}
         conflicts: dict[str, dict[str, Any]] = {}
 
+        # The approval date and the indications come from two different openFDA
+        # records: the drugsFDA application carries `submissions` and no
+        # indication prose, the SPL label carries the prose and no submissions.
+        # So the date is held across the source loop and written onto the
+        # indication rows afterwards, whichever order the two records arrive in.
+        openfda_approval: str | None = None
+        openfda_identity: ResolvedProductIdentity | None = None
+        anchored_indications: list[ProductIndicationORM] = []
+        openfda_products: list[CanonicalProductORM] = []
+
         # Deterministic OpenFDA enrichment
         for src in sources:
             if src.source_type != SourceType.OPENFDA or src.retrieval_status != RetrievalStatus.SUCCESS:
@@ -876,12 +891,13 @@ class PipelineOrchestrator:
                     results = []
             if not results:
                 continue
-            selected, matched_brand = select_openfda_result(
+            matches = brand_matched_results(
                 results,
                 product=job.drug_name,
                 generic=job.generic_name,
                 aliases=self._job_aliases,
             )
+            selected, matched_brand = earliest_approved_match(matches)
             if selected is None:
                 # Every result belongs to another product sharing the molecule
                 job.quality_flags = list(
@@ -918,38 +934,62 @@ class PipelineOrchestrator:
                 "; ".join(dict.fromkeys(ind.disease for ind in parsed_indications if ind.disease))
                 or None
             )
-            mapping = {
-                "brand_name": (openfda.get("brand_name") or [None])[0],
-                "generic_name": (openfda.get("generic_name") or [None])[0],
-                "manufacturer": (openfda.get("manufacturer_name") or [None])[0],
-                "roa": "; ".join(first_label.routes) or None,
-                "dosage_form": "; ".join(first_label.dosage_forms) or None,
-                "pharmacologic_class": "; ".join(epc_terms) or None,
-                "moa": moa_value,
-                "active_ingredients": "; ".join(first_label.active_ingredients) or None,
-                "indication": indication_value,
-                "therapeutic_area": indication_value,
-            }
-            # Scope the approval date to this application; the earliest date across
-            # all results belongs to whichever product was approved first.
-            approval, approval_field = earliest_approval_date([selected])
-            if approval:
-                mapping["fda_approval_date"] = approval
-            for field, value in mapping.items():
-                if is_missing_value(value) or field in written:
+            # A brand with more than one application has more than one
+            # approval, and the earliest ORIG is the one the product launched
+            # on; openFDA documents no order, so the first result is not it.
+            approval, approval_field = earliest_approval_date([r for r, _ in matches])
+            openfda_approval = openfda_approval or approval
+            application_numbers = [
+                str(r.get("application_number")) for r, _ in matches if r.get("application_number")
+            ]
+            mapping = profile_fields(
+                selected,
+                first_label,
+                indications=parsed_indications,
+                indication_value=indication_value,
+                therapeutic_area_value="; ".join(therapeutic_areas(parsed_indications))
+                or None,
+                moa_value=moa_value,
+                approval=approval,
+                approval_path=approval_field,
+            )
+            for field, sourced in mapping.items():
+                value = sourced.value
+                if is_missing_value(value) or not sourced.path:
+                    continue
+                if field in written:
+                    # Two openFDA records disagreeing is the judge's question,
+                    # not something to settle by which source arrived first.
+                    if values_conflict(written[field], value):
+                        conflicts[field] = {
+                            "value": str(value),
+                            "source_type": SourceType.OPENFDA.value,
+                            "source_url": src.url,
+                            "source_quote": sourced.quote or sourced.path,
+                            "source_field": sourced.path,
+                        }
+                    continue
+                if field in SIBLING_SENSITIVE_FIELDS and blends_sibling_brand(
+                    value,
+                    product=job.drug_name,
+                    aliases=self._job_aliases,
+                    source_quote=sourced.quote,
+                ):
+                    job.quality_flags = list(
+                        set((job.quality_flags or []) + [f"sibling_blend_skipped:{field}"])
+                    )
                     continue
                 written[field] = str(value)
-                quote = (
-                    approval_field
-                    if field == "fda_approval_date" and approval_field
-                    else f"openfda.{field}"
-                )
                 citation = {
                     "source_id": src.source_id,
                     "source_type": SourceType.OPENFDA.value,
                     "source_url": src.url,
                     "source_title": src.title,
-                    "source_quote": quote,
+                    # The key the value was read from, and the document's own
+                    # words where it came from prose. `openfda.<field>` was
+                    # neither: for most of these there is no such key.
+                    "source_field": sourced.path,
+                    "source_quote": sourced.quote or sourced.path,
                     "retrieval_date": datetime.utcnow().isoformat(),
                     "confidence": 0.9 if field == "fda_approval_date" else 0.85,
                     "validation_status": ValidationStatus.NEEDS_REVIEW.value,
@@ -957,6 +997,23 @@ class PipelineOrchestrator:
                     "openfda_application_number": selected.get("application_number"),
                     "openfda_matched_brand": matched_brand,
                 }
+                if len(matches) > 1:
+                    citation["openfda_matched_applications"] = application_numbers
+                if sourced.rival:
+                    citation["conflicting_source"] = {
+                        "value": "; ".join(
+                            value
+                            for values in sourced.rival["readings"].values()
+                            for value in values
+                        ),
+                        "source_type": SourceType.OPENFDA.value,
+                        "source_url": src.url,
+                        "source_field": "; ".join(sourced.rival["readings"]),
+                        "source_quote": "; ".join(sourced.rival["readings"]),
+                    }
+                    job.quality_flags = list(
+                        set((job.quality_flags or []) + [f"openfda_conflicting_reading:{field}"])
+                    )
                 persist_profile_field(
                     self.db,
                     job_id=job.id,
@@ -971,12 +1028,19 @@ class PipelineOrchestrator:
                     job.manufacturer = str(value)
 
             if first_label.brand_names:
-                identity = resolve_product_identity(
+                # One job is one product, so its identity is resolved from the
+                # first openFDA record that names a brand and reused after
+                # that. The two records answering for a product do not describe
+                # it equally: the SPL label states no formulation at all, so a
+                # second resolution from it keys the same product on a poorer
+                # reading and files it as a second canonical row.
+                identity = openfda_identity or resolve_product_identity(
                     brand_name=first_label.brand_names[0],
                     active_ingredients=first_label.active_ingredients,
                     dosage_form=first_label.dosage_forms[0] if first_label.dosage_forms else None,
                     route_terms=first_label.routes,
                 )
+                openfda_identity = identity
                 product = (
                     self.db.query(CanonicalProductORM)
                     .filter_by(identity_key=identity.identity_key)
@@ -998,6 +1062,11 @@ class PipelineOrchestrator:
                     )
                     self.db.add(product)
                     self.db.flush()
+                # The launch anchor every curve is drawn from. The dashboard
+                # reads this column in preference to the profile field, so a
+                # canonical row with the column unset costs the approval date
+                # exactly where resolution succeeded.
+                openfda_products.append(product)
                 job.product_id = product.id
                 family = (
                     self.db.query(AnalogFamilyORM)
@@ -1047,46 +1116,52 @@ class PipelineOrchestrator:
                         .first()
                     )
                     if existing_indication:
+                        anchored_indications.append(existing_indication)
                         continue
-                    self.db.add(
-                        ProductIndicationORM(
-                            id=new_id(),
-                            product_id=product.id,
-                            disease=indication.disease,
-                            setting=indication.setting,
-                            population=indication.population,
-                            biomarker=indication.biomarker,
-                            approval_date=(
-                                datetime.fromisoformat(approval).date()
-                                if approval
-                                else None
-                            ),
-                            launch_anchor_type=(
-                                "indication_approval_date" if approval else None
-                            ),
-                            approved_lot=indication.approved_lot.value.value,
-                            approved_lot_quote=indication.source_quote,
-                        )
+                    row = ProductIndicationORM(
+                        id=new_id(),
+                        product_id=product.id,
+                        disease=indication.disease,
+                        setting=indication.setting,
+                        population=indication.population,
+                        biomarker=indication.biomarker,
+                        approved_lot=indication.approved_lot.value.value,
+                        approved_lot_quote=indication.source_quote,
                     )
-                for field, value in mapping.items():
-                    if value:
+                    self.db.add(row)
+                    anchored_indications.append(row)
+                for field, sourced in mapping.items():
+                    if sourced.value and sourced.path:
                         self.db.add(
                             EvidenceAssertionORM(
                                 id=new_id(),
                                 entity_type="product",
                                 entity_id=product.id,
                                 field_name=field,
-                                value_json={"value": value},
+                                value_json={"value": sourced.value},
                                 source_id=src.source_id,
                                 source_url=src.url,
-                                source_section=f"openfda.{field}",
-                                source_quote=f"openfda.{field}",
+                                source_section=sourced.path,
+                                source_quote=sourced.quote or sourced.path,
                                 confidence=0.9,
                                 validation_status=ValidationStatus.NEEDS_REVIEW.value,
                                 extraction_method="structured_fda",
                                 selected=True,
                             )
                         )
+
+        # The approval belongs to the application record and the indications to
+        # the label record, so the anchor is written after both have been read
+        # rather than from whichever record was in hand when a row was built.
+        if openfda_approval:
+            anchor = datetime.fromisoformat(openfda_approval).date()
+            for product in openfda_products:
+                if not product.initial_approval_date:
+                    product.initial_approval_date = anchor
+            for row in anchored_indications:
+                if not row.approval_date:
+                    row.approval_date = anchor
+                    row.launch_anchor_type = "indication_approval_date"
 
         # The product and family rows above are complete, so they are committed
         # here rather than at the end of the step: a flushed row is a write

@@ -1,4 +1,8 @@
-from app.parsing.indications import parse_indications
+from app.parsing.indications import (
+    parse_indications,
+    therapeutic_area,
+    therapeutic_areas,
+)
 
 
 def test_multiple_indications_remain_separate_with_distinct_lot():
@@ -57,3 +61,32 @@ def test_winrevair_style_single_indication_is_clean():
     assert "pulmonary arterial hypertension" in records[0].disease.casefold()
     assert "1 indications" not in records[0].disease.casefold()
     assert records[0].population == "adults"
+
+
+def test_one_disease_written_several_ways_is_one_area():
+    spellings = [
+        "Calderon's disease (CD) (WHO Group 1)",
+        "Calderon's disease (CD; WHO Group 1)",
+        "Calderon's disease (CD, WHO Group I)",
+        "Calderon's disease (CD) (World Health Organization [WHO] Group I)",
+        "Calderon's disease",
+        "Calderon's disease - WHO Group 1",
+    ]
+    assert {therapeutic_area(spelling) for spelling in spellings} == {"calderon's disease"}
+
+
+def test_a_qualifier_that_changes_the_market_keeps_its_own_area():
+    assert therapeutic_area("Calderon's disease associated with nebulisation (WHO Group 3)") != (
+        therapeutic_area("Calderon's disease (WHO Group 1)")
+    )
+    assert therapeutic_area("NuVessa syndrome") == "nuvessa syndrome"
+
+
+def test_areas_are_listed_once_each_in_label_order():
+    parsed = parse_indications(
+        "Indicated for the treatment of Calderon's disease (CD) (WHO Group 1).\n\n"
+        "Indicated for the treatment of Calderon's disease (CD; WHO Group 1).\n\n"
+        "Indicated for the treatment of NuVessa syndrome."
+    )
+    assert therapeutic_areas(parsed) == ["calderon's disease", "nuvessa syndrome"]
+    assert therapeutic_areas([]) == []

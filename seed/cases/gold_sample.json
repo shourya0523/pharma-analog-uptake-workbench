@@ -7,8 +7,8 @@
   "options": {
    "earnings_since": "2026-04-05",
    "earnings_until": "2027-05-05",
-   "openfda": false,
-   "product_metadata": false
+   "openfda": true,
+   "product_metadata": true
   },
   "source": "seed/gold/quarterly_revenue.jsonl",
   "expect": [
@@ -32,8 +32,8 @@
   "options": {
    "earnings_since": "2025-04-05",
    "earnings_until": "2026-05-05",
-   "openfda": false,
-   "product_metadata": false
+   "openfda": true,
+   "product_metadata": true
   },
   "source": "seed/gold/quarterly_revenue.jsonl",
   "expect": [
@@ -67,8 +67,8 @@
   "options": {
    "earnings_since": "2026-04-05",
    "earnings_until": "2027-05-05",
-   "openfda": false,
-   "product_metadata": false
+   "openfda": true,
+   "product_metadata": true
   },
   "source": "seed/gold/quarterly_revenue.jsonl",
   "expect": [
@@ -92,8 +92,8 @@
   "options": {
    "earnings_since": "2026-04-05",
    "earnings_until": "2027-05-05",
-   "openfda": false,
-   "product_metadata": false
+   "openfda": true,
+   "product_metadata": true
   },
   "source": "seed/gold/quarterly_revenue.jsonl",
   "expect": [
@@ -117,8 +117,8 @@
   "options": {
    "earnings_since": "2026-04-05",
    "earnings_until": "2027-05-05",
-   "openfda": false,
-   "product_metadata": false
+   "openfda": true,
+   "product_metadata": true
   },
   "source": "seed/gold/quarterly_revenue.jsonl",
   "expect": [
@@ -142,8 +142,8 @@
   "options": {
    "earnings_since": "2026-04-05",
    "earnings_until": "2027-05-05",
-   "openfda": false,
-   "product_metadata": false
+   "openfda": true,
+   "product_metadata": true
   },
   "source": "seed/gold/quarterly_revenue.jsonl",
   "expect": [
@@ -167,8 +167,8 @@
   "options": {
    "earnings_since": "2026-04-05",
    "earnings_until": "2027-05-05",
-   "openfda": false,
-   "product_metadata": false
+   "openfda": true,
+   "product_metadata": true
   },
   "source": "seed/gold/quarterly_revenue.jsonl",
   "expect": [
@@ -192,8 +192,8 @@
   "options": {
    "earnings_since": "2026-04-05",
    "earnings_until": "2027-05-05",
-   "openfda": false,
-   "product_metadata": false
+   "openfda": true,
+   "product_metadata": true
   },
   "source": "seed/gold/quarterly_revenue.jsonl",
   "expect": [
@@ -217,8 +217,8 @@
   "options": {
    "earnings_since": "2025-04-05",
    "earnings_until": "2026-05-05",
-   "openfda": false,
-   "product_metadata": false
+   "openfda": true,
+   "product_metadata": true
   },
   "source": "seed/gold/excluded_products.jsonl",
   "expect": [

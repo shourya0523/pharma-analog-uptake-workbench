@@ -11,15 +11,29 @@ from app.storage.filestore import FileStore
 logger = logging.getLogger(__name__)
 
 
+# Where drugsFDA states a brand name. Both are brand-scoped: an application
+# carries its brands in the `openfda` block that is built from its marketed
+# NDC listings, and again in its own `products[]` array. An application with no
+# marketed listing - an older or a discontinued one - has no `openfda` block at
+# all and only the second path answers, so a brand query that names one path is
+# a brand query that cannot see those products.
+BRAND_SEARCH_PATHS = ("openfda.brand_name", "products.brand_name")
+
+# The molecule, for context only, and on a path of its own so a caller can tell
+# a molecule-wide answer from the product's own.
+GENERIC_SEARCH_PATH = "openfda.generic_name"
+
+
 def search_queries(brand: str, generic: str | None = None) -> list[tuple[str, str]]:
     """drugsFDA searches to try, in order, as (match_scope, search expression).
 
-    Brand name is queried on its own first, because it is the only query whose
-    every result is the requested product. A brand-OR-generic query returns
-    every application for the molecule - the generic filers' and the
-    competitors' brands that share it - and openFDA documents no result order,
-    so there is no position at which the requested product can be relied on to
-    appear. It may not be in the returned window at all.
+    Brand name is queried on its own first, on every path that states one,
+    because those are the only queries whose every result is the requested
+    product. A brand-OR-generic query returns every application for the
+    molecule - the generic filers' and the competitors' brands that share it -
+    and openFDA documents no result order, so there is no position at which the
+    requested product can be relied on to appear. It may not be in the returned
+    window at all.
 
     The generic query is therefore a fallback for molecule context only, and
     carries its own ``match_scope`` so a caller cannot mistake a molecule-wide
@@ -27,9 +41,9 @@ def search_queries(brand: str, generic: str | None = None) -> list[tuple[str, st
     """
     queries = []
     if brand and brand.strip():
-        queries.append(("brand", f'openfda.brand_name:"{brand.strip()}"'))
+        queries += [(f"brand:{path}", f'{path}:"{brand.strip()}"') for path in BRAND_SEARCH_PATHS]
     if generic and generic.strip():
-        queries.append(("generic", f'openfda.generic_name:"{generic.strip()}"'))
+        queries.append(("generic", f'{GENERIC_SEARCH_PATH}:"{generic.strip()}"'))
     return queries
 
 
@@ -40,6 +54,18 @@ class OpenFDAConnector:
 
     def __init__(self, file_store: FileStore) -> None:
         self.file_store = file_store
+
+    async def _search(self, client, scope: str, search: str, *, brand: str) -> list[dict]:
+        """One drugsFDA search, or an empty list when it matched nothing."""
+        resp = await client.get(f"{self.BASE}?search={search}&limit={self.LIMIT}")
+        if resp.status_code == 404:
+            logger.info("openfda_no_match scope=%s brand=%s", scope, brand)
+            return []
+        resp.raise_for_status()
+        results = resp.json().get("results") or []
+        if results:
+            logger.info("openfda_retrieved scope=%s brand=%s results=%s", scope, brand, len(results))
+        return results
 
     async def retrieve(
         self, *, run_id: str, job_id: str, brand: str, generic: str | None = None
@@ -53,27 +79,41 @@ class OpenFDAConnector:
             data: dict | None = None
             match_scope: str | None = None
             matched_search: str | None = None
+            # Every brand path is asked and their answers are unioned: a brand
+            # query returns only that brand, and the paths do not return the
+            # same applications - one path can hold an application the other
+            # does not, so stopping at the first path that answers is a brand
+            # query that cannot see the rest. The molecule query stays a
+            # fallback for when no brand path answered at all, never an
+            # addition, because its results are the whole molecule's.
+            merged: dict[str, dict] = {}
+            scopes: list[str] = []
+            searches: list[str] = []
+
+            async def collect(client, scope: str, search: str) -> int:
+                results = await self._search(client, scope, search, brand=brand)
+                for index, result in enumerate(results):
+                    key = str(result.get("application_number") or f"{scope}:{index}")
+                    merged.setdefault(key, result)
+                if results:
+                    scopes.append(scope)
+                    searches.append(search)
+                return len(results)
+
+            brand_queries = [pair for pair in queries if pair[0].startswith("brand")]
+            molecule_queries = [pair for pair in queries if not pair[0].startswith("brand")]
             async with httpx.AsyncClient(timeout=30) as client:
-                for scope, search in queries:
-                    url = f"{self.BASE}?search={search}&limit={self.LIMIT}"
-                    resp = await client.get(url)
-                    if resp.status_code == 404:
-                        logger.info("openfda_no_match scope=%s brand=%s", scope, brand)
-                        continue
-                    resp.raise_for_status()
-                    data = resp.json()
-                    results = data.get("results") or []
-                    if not results:
-                        continue
-                    logger.info(
-                        "openfda_retrieved scope=%s brand=%s results=%s",
-                        scope,
-                        brand,
-                        len(results),
-                    )
-                    match_scope = scope
-                    matched_search = search
-                    break
+                for scope, search in brand_queries:
+                    await collect(client, scope, search)
+                if not merged:
+                    for scope, search in molecule_queries:
+                        if await collect(client, scope, search):
+                            break
+                if merged:
+                    url = f"{self.BASE}?search={searches[0]}&limit={self.LIMIT}"
+                    data = {"results": list(merged.values())}
+                    match_scope = " ".join(scopes)
+                    matched_search = " ".join(searches)
 
                 if data is None or match_scope is None:
                     return [
@@ -105,7 +145,9 @@ class OpenFDAConnector:
                         "search": matched_search,
                     },
                     notes=(
-                        None if match_scope == "brand" else "openfda_generic_fallback"
+                        None
+                        if match_scope.startswith("brand")
+                        else "openfda_generic_fallback"
                     ),
                 )
             ]
