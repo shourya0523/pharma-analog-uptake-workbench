@@ -1,0 +1,2314 @@
+{
+  "note": "Held-out set drawn 2026-09-17 for the judging changes the verifier's report on items J-1 to J-4 proposes: the reader's metric gate (an expense schedule naming a product is not revenue), the reconciled evidence_judge prompt, and any change to the auto-pass gate in try_deterministic_judgment. It may score those and nothing else. It may not be used to find defects and then score the fix for them: gold, seed/holdout, seed/holdout2, seed/holdout_labels, seed/holdout_members, seed/holdout_foreign_xbrl, seed/cases/shapes_holdout.json, seed/cases/unseen.json and seed/cases/holdout_2026_09.json are the oracles those changes were found on, and none of them may score what it found. Every issuer here is absent from all of them, derived through tests/answer_keys.spent_issuers rather than checked against a list. What spends it: the first scored change measured on it - the first eval run of any of those three changes. After that it is an oracle like the rest, and the next scored change needs a new set from issuers this file does not name. Which requirement each issuer satisfies: Vanda, Heron, Xeris and Ardelyx are two-year comparative product tables, which is the population the auto-pass gate and the prompt's two-span paragraph disagree about; Vanda and Heron also print the same brands in a direct-project-cost and a `<brand>-related costs` research and development schedule, which is the metric gate's own class; Xeris and Ardelyx add `Change $` / `Change %` columns, the layout a money-figure count must not read as two periods; Agios is the opposite answer, an issuer whose revenue rows never name the brand while its expense rows do - the verifier's report proposed it as a product-revenue refusal, and reading its earnings releases while drawing this set showed they do state PYRUKYND's revenue one quarter at a time, so the Agios refusals here are AQVESME's quarters before approval rather than PYRUKYND's; Harmony is the single-figure prose sentence that must keep auto-passing, and the full-year guidance range in the same release that must not become a quarter; Tarsus is the cost-of-sales sentence; Aurinia is prose carrying two and three money figures at once, and one quarter whose figures and whose brand name are in different sentences. The refusals are Vanda NEREUS - an em dash in a quarter its table names, and no row at all before that - and Agios AQVESME, approved inside one quarter and sold in the next, whose series turns from refusal into a figure under the pair's name. Both of those products carry both answers, so refusing everything and publishing everything fail the same set. No case states a CIK on purpose: seed/example_drugs.csv has no such column, a person uploading a product types a ticker, and a case that stated one would hand the pipeline the issuer resolution this set is drawn to score. The `traps` on a case are rows and sentences the filings print that must never be published as that product's revenue for any quarter; they are not expectations and the eval does not post them.",
+  "cases": [
+    {
+      "drug_name": "Fanapt",
+      "generic_name": "iloperidone",
+      "manufacturer": "Vanda Pharmaceuticals Inc",
+      "ticker": "VNDA",
+      "options": {
+        "earnings_since": "2024-10-01",
+        "earnings_until": "2026-08-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "comparative table, current-quarter column",
+        "two-span heading over one row",
+        "Net Change and Percent columns beside the figures",
+        "fourth quarter from annual less nine months",
+        "expense schedule naming the product"
+      ],
+      "source": "The 10-Q prints the brand's own row in a two-year comparative product table under a three-month and a six- or nine-month heading, and again in a Net Change / Percent table; the fourth quarter is the 10-K's year less the third-quarter 10-Q's nine months. The same 10-Q prints the same brands in a direct project costs schedule and in an intangible-asset table.",
+      "traps": [
+        {
+          "accession": "0001628280-26-053855",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026053855/vnda-20260630.htm",
+          "source_quote": "Three Months Ended ; (in thousands) | June 30, 2026 | June 30, 2025 :: Fanapt ® | $ | 5,900 | $ | 3,485",
+          "why": "a research and development direct project costs schedule; the row names the brand beside two money figures and the table totals to research and development expense, not revenue"
+        }
+      ],
+      "expect": [
+        {
+          "period": "2024Q3",
+          "value_normalized_usd_millions": 23.919,
+          "accession": "0001628280-25-047317",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828025047317/vnda-20250930.htm",
+          "source_quote": "Three Months Ended | Nine Months Ended ; (in thousands) | September 30, 2025 | September 30, 2024 | September 30, 2025 | September 30, 2024 :: Fanapt ® net product sales | $ | 31,245 | $ | 23,919 | $ | 84,084 | $ | 67,648",
+          "sources": [
+            {
+              "accession": "0001628280-25-047317",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828025047317/vnda-20250930.htm",
+              "source_quote": "Three Months Ended | Nine Months Ended ; (in thousands) | September 30, 2025 | September 30, 2024 | September 30, 2025 | September 30, 2024 :: Fanapt ® net product sales | $ | 31,245 | $ | 23,919 | $ | 84,084 | $ | 67,648"
+            }
+          ]
+        },
+        {
+          "period": "2024Q4",
+          "value_normalized_usd_millions": 26.649,
+          "accession": "0001628280-26-007460",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026007460/vnda-20251231.htm",
+          "source_quote": "Year Ended December 31, ; ( in thousands ) | 2025 | 2024 | 2023 :: Fanapt ® net product sales | $ | 117,302 | $ | 94,297 | $ | 90,873",
+          "sources": [
+            {
+              "accession": "0001628280-26-007460",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026007460/vnda-20251231.htm",
+              "source_quote": "Year Ended December 31, ; ( in thousands ) | 2025 | 2024 | 2023 :: Fanapt ® net product sales | $ | 117,302 | $ | 94,297 | $ | 90,873"
+            },
+            {
+              "accession": "0001628280-25-047317",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828025047317/vnda-20250930.htm",
+              "source_quote": "Three Months Ended | Nine Months Ended ; (in thousands) | September 30, 2025 | September 30, 2024 | September 30, 2025 | September 30, 2024 :: Fanapt ® net product sales | $ | 31,245 | $ | 23,919 | $ | 84,084 | $ | 67,648"
+            }
+          ],
+          "derivation": "94,297 less 67,648 = 26,649"
+        },
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": 23.545,
+          "accession": "0001628280-26-031667",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026031667/vnda-20260331.htm",
+          "source_quote": "Three Months Ended ; (in thousands) | March 31, 2026 | March 31, 2025 :: Fanapt ® net product sales | $ | 29,560 | $ | 23,545",
+          "sources": [
+            {
+              "accession": "0001628280-26-031667",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026031667/vnda-20260331.htm",
+              "source_quote": "Three Months Ended ; (in thousands) | March 31, 2026 | March 31, 2025 :: Fanapt ® net product sales | $ | 29,560 | $ | 23,545"
+            }
+          ]
+        },
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": 29.294,
+          "accession": "0001628280-26-053855",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026053855/vnda-20260630.htm",
+          "source_quote": "Three Months Ended | Six Months Ended ; (in thousands) | June 30, 2026 | June 30, 2025 | June 30, 2026 | June 30, 2025 :: Fanapt ® net product sales | $ | 35,989 | $ | 29,294 | $ | 65,549 | $ | 52,839",
+          "sources": [
+            {
+              "accession": "0001628280-26-053855",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026053855/vnda-20260630.htm",
+              "source_quote": "Three Months Ended | Six Months Ended ; (in thousands) | June 30, 2026 | June 30, 2025 | June 30, 2026 | June 30, 2025 :: Fanapt ® net product sales | $ | 35,989 | $ | 29,294 | $ | 65,549 | $ | 52,839"
+            }
+          ]
+        },
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": 31.245,
+          "accession": "0001628280-25-047317",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828025047317/vnda-20250930.htm",
+          "source_quote": "Three Months Ended | Nine Months Ended ; (in thousands) | September 30, 2025 | September 30, 2024 | September 30, 2025 | September 30, 2024 :: Fanapt ® net product sales | $ | 31,245 | $ | 23,919 | $ | 84,084 | $ | 67,648",
+          "sources": [
+            {
+              "accession": "0001628280-25-047317",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828025047317/vnda-20250930.htm",
+              "source_quote": "Three Months Ended | Nine Months Ended ; (in thousands) | September 30, 2025 | September 30, 2024 | September 30, 2025 | September 30, 2024 :: Fanapt ® net product sales | $ | 31,245 | $ | 23,919 | $ | 84,084 | $ | 67,648"
+            }
+          ]
+        },
+        {
+          "period": "2025Q4",
+          "value_normalized_usd_millions": 33.218,
+          "accession": "0001628280-26-007460",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026007460/vnda-20251231.htm",
+          "source_quote": "Year Ended December 31, ; ( in thousands ) | 2025 | 2024 | 2023 :: Fanapt ® net product sales | $ | 117,302 | $ | 94,297 | $ | 90,873",
+          "sources": [
+            {
+              "accession": "0001628280-26-007460",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026007460/vnda-20251231.htm",
+              "source_quote": "Year Ended December 31, ; ( in thousands ) | 2025 | 2024 | 2023 :: Fanapt ® net product sales | $ | 117,302 | $ | 94,297 | $ | 90,873"
+            },
+            {
+              "accession": "0001628280-25-047317",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828025047317/vnda-20250930.htm",
+              "source_quote": "Three Months Ended | Nine Months Ended ; (in thousands) | September 30, 2025 | September 30, 2024 | September 30, 2025 | September 30, 2024 :: Fanapt ® net product sales | $ | 31,245 | $ | 23,919 | $ | 84,084 | $ | 67,648"
+            }
+          ],
+          "derivation": "117,302 less 84,084 = 33,218"
+        },
+        {
+          "period": "2026Q1",
+          "value_normalized_usd_millions": 29.56,
+          "accession": "0001628280-26-031667",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026031667/vnda-20260331.htm",
+          "source_quote": "Three Months Ended ; (in thousands) | March 31, 2026 | March 31, 2025 :: Fanapt ® net product sales | $ | 29,560 | $ | 23,545",
+          "sources": [
+            {
+              "accession": "0001628280-26-031667",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026031667/vnda-20260331.htm",
+              "source_quote": "Three Months Ended ; (in thousands) | March 31, 2026 | March 31, 2025 :: Fanapt ® net product sales | $ | 29,560 | $ | 23,545"
+            }
+          ]
+        },
+        {
+          "period": "2026Q2",
+          "value_normalized_usd_millions": 35.989,
+          "accession": "0001628280-26-053855",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026053855/vnda-20260630.htm",
+          "source_quote": "Three Months Ended | Six Months Ended ; (in thousands) | June 30, 2026 | June 30, 2025 | June 30, 2026 | June 30, 2025 :: Fanapt ® net product sales | $ | 35,989 | $ | 29,294 | $ | 65,549 | $ | 52,839",
+          "sources": [
+            {
+              "accession": "0001628280-26-053855",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026053855/vnda-20260630.htm",
+              "source_quote": "Three Months Ended | Six Months Ended ; (in thousands) | June 30, 2026 | June 30, 2025 | June 30, 2026 | June 30, 2025 :: Fanapt ® net product sales | $ | 35,989 | $ | 29,294 | $ | 65,549 | $ | 52,839"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "drug_name": "HETLIOZ",
+      "generic_name": "tasimelteon",
+      "manufacturer": "Vanda Pharmaceuticals Inc",
+      "ticker": "VNDA",
+      "options": {
+        "earnings_since": "2024-10-01",
+        "earnings_until": "2026-08-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "comparative table, current-quarter column",
+        "two-span heading over one row",
+        "a declining series, so the larger comparative figure is the wrong answer",
+        "fourth quarter from annual less nine months",
+        "expense schedule naming the product",
+        "intangible-asset table naming the product"
+      ],
+      "source": "The 10-Q prints the brand's own row in a two-year comparative product table under a three-month and a six- or nine-month heading, and again in a Net Change / Percent table; the fourth quarter is the 10-K's year less the third-quarter 10-Q's nine months. The same 10-Q prints the same brands in a direct project costs schedule and in an intangible-asset table.",
+      "traps": [
+        {
+          "accession": "0001628280-26-053855",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026053855/vnda-20260630.htm",
+          "source_quote": "Three Months Ended ; (in thousands) | June 30, 2026 | June 30, 2025 :: HETLIOZ ® | 5,288 | 3,774",
+          "why": "a research and development direct project costs schedule; the row names the brand beside two money figures and the table totals to research and development expense, not revenue"
+        },
+        {
+          "accession": "0001628280-26-053855",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026053855/vnda-20260630.htm",
+          "source_quote": "June 30, 2026 ; (in thousands) | Estimated Useful Life | Gross Carrying Amount | Accumulated Amortization | Net Carrying Amount :: HETLIOZ ® | 2035 | $ | 33,000 | $ | 19,593 | $ | 13,407",
+          "why": "an intangible-asset table: gross carrying amount, accumulated amortization and net carrying amount, none of which is a period's revenue"
+        }
+      ],
+      "expect": [
+        {
+          "period": "2024Q3",
+          "value_normalized_usd_millions": 17.87,
+          "accession": "0001628280-25-047317",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828025047317/vnda-20250930.htm",
+          "source_quote": "Three Months Ended | Nine Months Ended ; (in thousands) | September 30, 2025 | September 30, 2024 | September 30, 2025 | September 30, 2024 :: HETLIOZ ® net product sales | 17,978 | 17,870 | 55,042 | 56,631",
+          "sources": [
+            {
+              "accession": "0001628280-25-047317",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828025047317/vnda-20250930.htm",
+              "source_quote": "Three Months Ended | Nine Months Ended ; (in thousands) | September 30, 2025 | September 30, 2024 | September 30, 2025 | September 30, 2024 :: HETLIOZ ® net product sales | 17,978 | 17,870 | 55,042 | 56,631"
+            }
+          ]
+        },
+        {
+          "period": "2024Q4",
+          "value_normalized_usd_millions": 20.044,
+          "accession": "0001628280-26-007460",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026007460/vnda-20251231.htm",
+          "source_quote": "Year Ended December 31, ; ( in thousands ) | 2025 | 2024 | 2023 :: HETLIOZ ® net product sales | 71,431 | 76,675 | 100,167",
+          "sources": [
+            {
+              "accession": "0001628280-26-007460",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026007460/vnda-20251231.htm",
+              "source_quote": "Year Ended December 31, ; ( in thousands ) | 2025 | 2024 | 2023 :: HETLIOZ ® net product sales | 71,431 | 76,675 | 100,167"
+            },
+            {
+              "accession": "0001628280-25-047317",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828025047317/vnda-20250930.htm",
+              "source_quote": "Three Months Ended | Nine Months Ended ; (in thousands) | September 30, 2025 | September 30, 2024 | September 30, 2025 | September 30, 2024 :: HETLIOZ ® net product sales | 17,978 | 17,870 | 55,042 | 56,631"
+            }
+          ],
+          "derivation": "76,675 less 56,631 = 20,044"
+        },
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": 20.872,
+          "accession": "0001628280-26-031667",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026031667/vnda-20260331.htm",
+          "source_quote": "Three Months Ended ; (in thousands) | March 31, 2026 | March 31, 2025 :: HETLIOZ ® net product sales | 15,947 | 20,872",
+          "sources": [
+            {
+              "accession": "0001628280-26-031667",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026031667/vnda-20260331.htm",
+              "source_quote": "Three Months Ended ; (in thousands) | March 31, 2026 | March 31, 2025 :: HETLIOZ ® net product sales | 15,947 | 20,872"
+            }
+          ]
+        },
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": 16.192,
+          "accession": "0001628280-26-053855",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026053855/vnda-20260630.htm",
+          "source_quote": "Three Months Ended | Six Months Ended ; (in thousands) | June 30, 2026 | June 30, 2025 | June 30, 2026 | June 30, 2025 :: HETLIOZ ® net product sales | 5,576 | 16,192 | 21,523 | 37,064",
+          "sources": [
+            {
+              "accession": "0001628280-26-053855",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026053855/vnda-20260630.htm",
+              "source_quote": "Three Months Ended | Six Months Ended ; (in thousands) | June 30, 2026 | June 30, 2025 | June 30, 2026 | June 30, 2025 :: HETLIOZ ® net product sales | 5,576 | 16,192 | 21,523 | 37,064"
+            }
+          ]
+        },
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": 17.978,
+          "accession": "0001628280-25-047317",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828025047317/vnda-20250930.htm",
+          "source_quote": "Three Months Ended | Nine Months Ended ; (in thousands) | September 30, 2025 | September 30, 2024 | September 30, 2025 | September 30, 2024 :: HETLIOZ ® net product sales | 17,978 | 17,870 | 55,042 | 56,631",
+          "sources": [
+            {
+              "accession": "0001628280-25-047317",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828025047317/vnda-20250930.htm",
+              "source_quote": "Three Months Ended | Nine Months Ended ; (in thousands) | September 30, 2025 | September 30, 2024 | September 30, 2025 | September 30, 2024 :: HETLIOZ ® net product sales | 17,978 | 17,870 | 55,042 | 56,631"
+            }
+          ]
+        },
+        {
+          "period": "2025Q4",
+          "value_normalized_usd_millions": 16.389,
+          "accession": "0001628280-26-007460",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026007460/vnda-20251231.htm",
+          "source_quote": "Year Ended December 31, ; ( in thousands ) | 2025 | 2024 | 2023 :: HETLIOZ ® net product sales | 71,431 | 76,675 | 100,167",
+          "sources": [
+            {
+              "accession": "0001628280-26-007460",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026007460/vnda-20251231.htm",
+              "source_quote": "Year Ended December 31, ; ( in thousands ) | 2025 | 2024 | 2023 :: HETLIOZ ® net product sales | 71,431 | 76,675 | 100,167"
+            },
+            {
+              "accession": "0001628280-25-047317",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828025047317/vnda-20250930.htm",
+              "source_quote": "Three Months Ended | Nine Months Ended ; (in thousands) | September 30, 2025 | September 30, 2024 | September 30, 2025 | September 30, 2024 :: HETLIOZ ® net product sales | 17,978 | 17,870 | 55,042 | 56,631"
+            }
+          ],
+          "derivation": "71,431 less 55,042 = 16,389"
+        },
+        {
+          "period": "2026Q1",
+          "value_normalized_usd_millions": 15.947,
+          "accession": "0001628280-26-031667",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026031667/vnda-20260331.htm",
+          "source_quote": "Three Months Ended ; (in thousands) | March 31, 2026 | March 31, 2025 :: HETLIOZ ® net product sales | 15,947 | 20,872",
+          "sources": [
+            {
+              "accession": "0001628280-26-031667",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026031667/vnda-20260331.htm",
+              "source_quote": "Three Months Ended ; (in thousands) | March 31, 2026 | March 31, 2025 :: HETLIOZ ® net product sales | 15,947 | 20,872"
+            }
+          ]
+        },
+        {
+          "period": "2026Q2",
+          "value_normalized_usd_millions": 5.576,
+          "accession": "0001628280-26-053855",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026053855/vnda-20260630.htm",
+          "source_quote": "Three Months Ended | Six Months Ended ; (in thousands) | June 30, 2026 | June 30, 2025 | June 30, 2026 | June 30, 2025 :: HETLIOZ ® net product sales | 5,576 | 16,192 | 21,523 | 37,064",
+          "sources": [
+            {
+              "accession": "0001628280-26-053855",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026053855/vnda-20260630.htm",
+              "source_quote": "Three Months Ended | Six Months Ended ; (in thousands) | June 30, 2026 | June 30, 2025 | June 30, 2026 | June 30, 2025 :: HETLIOZ ® net product sales | 5,576 | 16,192 | 21,523 | 37,064"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "drug_name": "NEREUS",
+      "generic_name": "milsaperidone",
+      "manufacturer": "Vanda Pharmaceuticals Inc",
+      "ticker": "VNDA",
+      "options": {
+        "earnings_since": "2024-10-01",
+        "earnings_until": "2026-08-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "a quarter the filer prints as an em dash",
+        "pre-launch quarters must come back empty",
+        "must come back empty",
+        "comparative table, current-quarter column",
+        "single figure in its row, so it must still auto-pass",
+        "intangible-asset table naming the product"
+      ],
+      "source": "The brand's first row appears in the June 2026 10-Q's comparative product table, where the prior-year column is an em dash; earlier quarters have no row at all, while the intangible-asset table in the same filing carries the brand and a figure.",
+      "traps": [
+        {
+          "accession": "0001628280-26-053855",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026053855/vnda-20260630.htm",
+          "source_quote": "June 30, 2026 ; (in thousands) | Estimated Useful Life | Gross Carrying Amount | Accumulated Amortization | Net Carrying Amount :: NEREUS TM | 2036 | 10,000 | 472 | 9,528",
+          "why": "an intangible-asset table, in the filing that first reports the brand's sales: the 10,000 is a gross carrying amount, and it is larger than every quarter of revenue the brand has"
+        },
+        {
+          "accession": "0001628280-26-053855",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026053855/vnda-20260630.htm",
+          "source_quote": "Three Months Ended ; (in thousands) | June 30, 2026 | June 30, 2025 :: NEREUS TM | 6,994 | 3,918",
+          "why": "a research and development direct project costs schedule, not revenue"
+        }
+      ],
+      "expect": [
+        {
+          "period": "2024Q3",
+          "value_normalized_usd_millions": null,
+          "accession": "0001628280-25-047317",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828025047317/vnda-20250930.htm",
+          "source_quote": "Three Months Ended | Nine Months Ended ; (in thousands) | September 30, 2025 | September 30, 2024 | September 30, 2025 | September 30, 2024 :: Fanapt ® net product sales | $ | 31,245 | $ | 23,919 | $ | 84,084 | $ | 67,648 ; Total net product sales | $ | 56,258 | $ | 47,651 | $ | 158,889 | $ | 145,587",
+          "sources": [
+            {
+              "accession": "0001628280-25-047317",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828025047317/vnda-20250930.htm",
+              "source_quote": "Three Months Ended | Nine Months Ended ; (in thousands) | September 30, 2025 | September 30, 2024 | September 30, 2025 | September 30, 2024 :: Fanapt ® net product sales | $ | 31,245 | $ | 23,919 | $ | 84,084 | $ | 67,648 ; Total net product sales | $ | 56,258 | $ | 47,651 | $ | 158,889 | $ | 145,587"
+            }
+          ],
+          "why": "the product-revenue table for this quarter lists the brands with sales and does not name NEREUS; its first reported sales are the quarter ended June 30, 2026"
+        },
+        {
+          "period": "2024Q4",
+          "value_normalized_usd_millions": null,
+          "accession": "0001628280-26-007460",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026007460/vnda-20251231.htm",
+          "source_quote": "Year Ended December 31, ; ( in thousands ) | 2025 | 2024 | 2023 :: Fanapt ® net product sales | $ | 117,302 | $ | 94,297 | $ | 90,873 ; Total net product sales | $ | 216,105 | $ | 198,772 | $ | 192,640",
+          "sources": [
+            {
+              "accession": "0001628280-26-007460",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026007460/vnda-20251231.htm",
+              "source_quote": "Year Ended December 31, ; ( in thousands ) | 2025 | 2024 | 2023 :: Fanapt ® net product sales | $ | 117,302 | $ | 94,297 | $ | 90,873 ; Total net product sales | $ | 216,105 | $ | 198,772 | $ | 192,640"
+            }
+          ],
+          "why": "the product-revenue table for this quarter lists the brands with sales and does not name NEREUS; its first reported sales are the quarter ended June 30, 2026"
+        },
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": null,
+          "accession": "0001628280-26-031667",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026031667/vnda-20260331.htm",
+          "source_quote": "Three Months Ended ; (in thousands) | March 31, 2026 | March 31, 2025 :: Fanapt ® net product sales | $ | 29,560 | $ | 23,545 ; Total net product sales | $ | 51,718 | $ | 50,041",
+          "sources": [
+            {
+              "accession": "0001628280-26-031667",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026031667/vnda-20260331.htm",
+              "source_quote": "Three Months Ended ; (in thousands) | March 31, 2026 | March 31, 2025 :: Fanapt ® net product sales | $ | 29,560 | $ | 23,545 ; Total net product sales | $ | 51,718 | $ | 50,041"
+            }
+          ],
+          "why": "the product-revenue table for this quarter lists the brands with sales and does not name NEREUS; its first reported sales are the quarter ended June 30, 2026"
+        },
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": null,
+          "accession": "0001628280-26-053855",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026053855/vnda-20260630.htm",
+          "source_quote": "Three Months Ended | Six Months Ended ; (in thousands) | June 30, 2026 | June 30, 2025 | June 30, 2026 | June 30, 2025 :: NEREUS TM net product sales | 1,029 | — | 1,029 | —",
+          "sources": [
+            {
+              "accession": "0001628280-26-053855",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026053855/vnda-20260630.htm",
+              "source_quote": "Three Months Ended | Six Months Ended ; (in thousands) | June 30, 2026 | June 30, 2025 | June 30, 2026 | June 30, 2025 :: NEREUS TM net product sales | 1,029 | — | 1,029 | —"
+            }
+          ],
+          "why": "the row exists in this table and the prior-year column is an em dash: the filer says the brand had no sales in the quarter, which is not the same as the filing not covering it"
+        },
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": null,
+          "accession": "0001628280-25-047317",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828025047317/vnda-20250930.htm",
+          "source_quote": "Three Months Ended | Nine Months Ended ; (in thousands) | September 30, 2025 | September 30, 2024 | September 30, 2025 | September 30, 2024 :: Fanapt ® net product sales | $ | 31,245 | $ | 23,919 | $ | 84,084 | $ | 67,648 ; Total net product sales | $ | 56,258 | $ | 47,651 | $ | 158,889 | $ | 145,587",
+          "sources": [
+            {
+              "accession": "0001628280-25-047317",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828025047317/vnda-20250930.htm",
+              "source_quote": "Three Months Ended | Nine Months Ended ; (in thousands) | September 30, 2025 | September 30, 2024 | September 30, 2025 | September 30, 2024 :: Fanapt ® net product sales | $ | 31,245 | $ | 23,919 | $ | 84,084 | $ | 67,648 ; Total net product sales | $ | 56,258 | $ | 47,651 | $ | 158,889 | $ | 145,587"
+            }
+          ],
+          "why": "the product-revenue table for this quarter lists the brands with sales and does not name NEREUS; its first reported sales are the quarter ended June 30, 2026"
+        },
+        {
+          "period": "2025Q4",
+          "value_normalized_usd_millions": null,
+          "accession": "0001628280-26-007460",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026007460/vnda-20251231.htm",
+          "source_quote": "Year Ended December 31, ; ( in thousands ) | 2025 | 2024 | 2023 :: Fanapt ® net product sales | $ | 117,302 | $ | 94,297 | $ | 90,873 ; Total net product sales | $ | 216,105 | $ | 198,772 | $ | 192,640",
+          "sources": [
+            {
+              "accession": "0001628280-26-007460",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026007460/vnda-20251231.htm",
+              "source_quote": "Year Ended December 31, ; ( in thousands ) | 2025 | 2024 | 2023 :: Fanapt ® net product sales | $ | 117,302 | $ | 94,297 | $ | 90,873 ; Total net product sales | $ | 216,105 | $ | 198,772 | $ | 192,640"
+            }
+          ],
+          "why": "the product-revenue table for this quarter lists the brands with sales and does not name NEREUS; its first reported sales are the quarter ended June 30, 2026"
+        },
+        {
+          "period": "2026Q1",
+          "value_normalized_usd_millions": null,
+          "accession": "0001628280-26-031667",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026031667/vnda-20260331.htm",
+          "source_quote": "Three Months Ended ; (in thousands) | March 31, 2026 | March 31, 2025 :: Fanapt ® net product sales | $ | 29,560 | $ | 23,545 ; Total net product sales | $ | 51,718 | $ | 50,041",
+          "sources": [
+            {
+              "accession": "0001628280-26-031667",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026031667/vnda-20260331.htm",
+              "source_quote": "Three Months Ended ; (in thousands) | March 31, 2026 | March 31, 2025 :: Fanapt ® net product sales | $ | 29,560 | $ | 23,545 ; Total net product sales | $ | 51,718 | $ | 50,041"
+            }
+          ],
+          "why": "the product-revenue table for this quarter lists the brands with sales and does not name NEREUS; its first reported sales are the quarter ended June 30, 2026"
+        },
+        {
+          "period": "2026Q2",
+          "value_normalized_usd_millions": 1.029,
+          "accession": "0001628280-26-053855",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026053855/vnda-20260630.htm",
+          "source_quote": "Three Months Ended | Six Months Ended ; (in thousands) | June 30, 2026 | June 30, 2025 | June 30, 2026 | June 30, 2025 :: NEREUS TM net product sales | 1,029 | — | 1,029 | —",
+          "sources": [
+            {
+              "accession": "0001628280-26-053855",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1347178/000162828026053855/vnda-20260630.htm",
+              "source_quote": "Three Months Ended | Six Months Ended ; (in thousands) | June 30, 2026 | June 30, 2025 | June 30, 2026 | June 30, 2025 :: NEREUS TM net product sales | 1,029 | — | 1,029 | —"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "drug_name": "ZYNRELEF",
+      "generic_name": "bupivacaine and meloxicam",
+      "manufacturer": "Heron Therapeutics Inc",
+      "ticker": "HRTX",
+      "options": {
+        "earnings_since": "2024-10-01",
+        "earnings_until": "2026-08-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "comparative table, current-quarter column",
+        "two-span heading over one row",
+        "expense schedule naming the product",
+        "inventory table naming the product",
+        "fourth quarter from annual less nine months"
+      ],
+      "source": "The 10-Q prints four brands on their own rows in a two-year comparative product table, and prints the same four again as `<brand>-related costs` in the research and development expense table of the same document; the fourth quarter is the 10-K's year less the third-quarter 10-Q's nine months.",
+      "traps": [
+        {
+          "accession": "0001193125-26-341301",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312526341301/hrtx-20260630.htm",
+          "source_quote": "Three Months Ended June 30, | Six Months Ended June 30, ; 2026 | 2025 | 2026 | 2025 :: ZYNRELEF-related costs | $ | 1,191 | $ | 1,099 | $ | 2,157 | $ | 1,917",
+          "why": "a research and development expense table whose total row says so; the label names the brand, the figures are costs, and for this brand they are nowhere near the quarter's revenue"
+        },
+        {
+          "accession": "0001193125-26-341301",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312526341301/hrtx-20260630.htm",
+          "source_quote": "June 30, 2026 | December 31, 2025 :: ZYNRELEF | 61,156 | 60,436",
+          "why": "an inventory table: a balance at a date, not a period's revenue"
+        }
+      ],
+      "expect": [
+        {
+          "period": "2024Q3",
+          "value_normalized_usd_millions": 6.245,
+          "accession": "0001193125-25-263618",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312525263618/hrtx-20250930.htm",
+          "source_quote": "Three Months Ended September 30, | Nine Months Ended September 30, ; 2025 | 2024 | 2025 | 2024 :: ZYNRELEF net product sales | 9,313 | 6,245 | 25,542 | 17,089",
+          "sources": [
+            {
+              "accession": "0001193125-25-263618",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312525263618/hrtx-20250930.htm",
+              "source_quote": "Three Months Ended September 30, | Nine Months Ended September 30, ; 2025 | 2024 | 2025 | 2024 :: ZYNRELEF net product sales | 9,313 | 6,245 | 25,542 | 17,089"
+            }
+          ]
+        },
+        {
+          "period": "2024Q4",
+          "value_normalized_usd_millions": 8.457,
+          "accession": "0001193125-26-073515",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312526073515/hrtx-20251231.htm",
+          "source_quote": "For the Years Ended December 31, ; 2025 | 2024 | 2023 :: ZYNRELEF net product sales | 38,072 | 25,546 | 17,727",
+          "sources": [
+            {
+              "accession": "0001193125-26-073515",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312526073515/hrtx-20251231.htm",
+              "source_quote": "For the Years Ended December 31, ; 2025 | 2024 | 2023 :: ZYNRELEF net product sales | 38,072 | 25,546 | 17,727"
+            },
+            {
+              "accession": "0001193125-25-263618",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312525263618/hrtx-20250930.htm",
+              "source_quote": "Three Months Ended September 30, | Nine Months Ended September 30, ; 2025 | 2024 | 2025 | 2024 :: ZYNRELEF net product sales | 9,313 | 6,245 | 25,542 | 17,089"
+            }
+          ],
+          "derivation": "25,546 less 17,089 = 8,457"
+        },
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": 8.042,
+          "accession": "0001193125-26-215755",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312526215755/hrtx-20260331.htm",
+          "source_quote": "Three Months Ended March 31, ; 2026 | 2025 :: ZYNRELEF net product sales | 10,235 | 8,042",
+          "sources": [
+            {
+              "accession": "0001193125-26-215755",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312526215755/hrtx-20260331.htm",
+              "source_quote": "Three Months Ended March 31, ; 2026 | 2025 :: ZYNRELEF net product sales | 10,235 | 8,042"
+            }
+          ]
+        },
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": 8.189,
+          "accession": "0001193125-26-341301",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312526341301/hrtx-20260630.htm",
+          "source_quote": "Three Months Ended June 30, | Six Months Ended June 30, ; 2026 | 2025 | 2026 | 2025 :: ZYNRELEF net product sales | 11,056 | 8,189 | 21,291 | 16,230",
+          "sources": [
+            {
+              "accession": "0001193125-26-341301",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312526341301/hrtx-20260630.htm",
+              "source_quote": "Three Months Ended June 30, | Six Months Ended June 30, ; 2026 | 2025 | 2026 | 2025 :: ZYNRELEF net product sales | 11,056 | 8,189 | 21,291 | 16,230"
+            }
+          ]
+        },
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": 9.313,
+          "accession": "0001193125-25-263618",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312525263618/hrtx-20250930.htm",
+          "source_quote": "Three Months Ended September 30, | Nine Months Ended September 30, ; 2025 | 2024 | 2025 | 2024 :: ZYNRELEF net product sales | 9,313 | 6,245 | 25,542 | 17,089",
+          "sources": [
+            {
+              "accession": "0001193125-25-263618",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312525263618/hrtx-20250930.htm",
+              "source_quote": "Three Months Ended September 30, | Nine Months Ended September 30, ; 2025 | 2024 | 2025 | 2024 :: ZYNRELEF net product sales | 9,313 | 6,245 | 25,542 | 17,089"
+            }
+          ]
+        },
+        {
+          "period": "2025Q4",
+          "value_normalized_usd_millions": 12.53,
+          "accession": "0001193125-26-073515",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312526073515/hrtx-20251231.htm",
+          "source_quote": "For the Years Ended December 31, ; 2025 | 2024 | 2023 :: ZYNRELEF net product sales | 38,072 | 25,546 | 17,727",
+          "sources": [
+            {
+              "accession": "0001193125-26-073515",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312526073515/hrtx-20251231.htm",
+              "source_quote": "For the Years Ended December 31, ; 2025 | 2024 | 2023 :: ZYNRELEF net product sales | 38,072 | 25,546 | 17,727"
+            },
+            {
+              "accession": "0001193125-25-263618",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312525263618/hrtx-20250930.htm",
+              "source_quote": "Three Months Ended September 30, | Nine Months Ended September 30, ; 2025 | 2024 | 2025 | 2024 :: ZYNRELEF net product sales | 9,313 | 6,245 | 25,542 | 17,089"
+            }
+          ],
+          "derivation": "38,072 less 25,542 = 12,530"
+        },
+        {
+          "period": "2026Q1",
+          "value_normalized_usd_millions": 10.235,
+          "accession": "0001193125-26-215755",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312526215755/hrtx-20260331.htm",
+          "source_quote": "Three Months Ended March 31, ; 2026 | 2025 :: ZYNRELEF net product sales | 10,235 | 8,042",
+          "sources": [
+            {
+              "accession": "0001193125-26-215755",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312526215755/hrtx-20260331.htm",
+              "source_quote": "Three Months Ended March 31, ; 2026 | 2025 :: ZYNRELEF net product sales | 10,235 | 8,042"
+            }
+          ]
+        },
+        {
+          "period": "2026Q2",
+          "value_normalized_usd_millions": 11.056,
+          "accession": "0001193125-26-341301",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312526341301/hrtx-20260630.htm",
+          "source_quote": "Three Months Ended June 30, | Six Months Ended June 30, ; 2026 | 2025 | 2026 | 2025 :: ZYNRELEF net product sales | 11,056 | 8,189 | 21,291 | 16,230",
+          "sources": [
+            {
+              "accession": "0001193125-26-341301",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312526341301/hrtx-20260630.htm",
+              "source_quote": "Three Months Ended June 30, | Six Months Ended June 30, ; 2026 | 2025 | 2026 | 2025 :: ZYNRELEF net product sales | 11,056 | 8,189 | 21,291 | 16,230"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "drug_name": "SUSTOL",
+      "generic_name": "granisetron",
+      "manufacturer": "Heron Therapeutics Inc",
+      "ticker": "HRTX",
+      "options": {
+        "earnings_since": "2024-10-01",
+        "earnings_until": "2026-08-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "comparative table, current-quarter column",
+        "expense schedule naming the product",
+        "the expense row for this brand is an em dash in the quarter it has revenue",
+        "fourth quarter from annual less nine months"
+      ],
+      "source": "The 10-Q prints four brands on their own rows in a two-year comparative product table, and prints the same four again as `<brand>-related costs` in the research and development expense table of the same document; the fourth quarter is the 10-K's year less the third-quarter 10-Q's nine months.",
+      "traps": [
+        {
+          "accession": "0001193125-26-341301",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312526341301/hrtx-20260630.htm",
+          "source_quote": "Three Months Ended June 30, | Six Months Ended June 30, ; 2026 | 2025 | 2026 | 2025 :: SUSTOL-related costs | — | 75 | — | 75",
+          "why": "a research and development expense table whose total row says so; the label names the brand, the figures are costs, and for this brand they are nowhere near the quarter's revenue"
+        },
+        {
+          "accession": "0001193125-26-341301",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312526341301/hrtx-20260630.htm",
+          "source_quote": "June 30, 2026 | December 31, 2025 :: SUSTOL | 426 | 1,307",
+          "why": "an inventory table: a balance at a date, not a period's revenue"
+        }
+      ],
+      "expect": [
+        {
+          "period": "2024Q3",
+          "value_normalized_usd_millions": 2.763,
+          "accession": "0001193125-25-263618",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312525263618/hrtx-20250930.htm",
+          "source_quote": "Three Months Ended September 30, | Nine Months Ended September 30, ; 2025 | 2024 | 2025 | 2024 :: SUSTOL net product sales | 1,911 | 2,763 | 7,175 | 10,623",
+          "sources": [
+            {
+              "accession": "0001193125-25-263618",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312525263618/hrtx-20250930.htm",
+              "source_quote": "Three Months Ended September 30, | Nine Months Ended September 30, ; 2025 | 2024 | 2025 | 2024 :: SUSTOL net product sales | 1,911 | 2,763 | 7,175 | 10,623"
+            }
+          ]
+        },
+        {
+          "period": "2024Q4",
+          "value_normalized_usd_millions": 3.519,
+          "accession": "0001193125-26-073515",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312526073515/hrtx-20251231.htm",
+          "source_quote": "For the Years Ended December 31, ; 2025 | 2024 | 2023 :: SUSTOL net product sales | 8,503 | 14,142 | 13,057",
+          "sources": [
+            {
+              "accession": "0001193125-26-073515",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312526073515/hrtx-20251231.htm",
+              "source_quote": "For the Years Ended December 31, ; 2025 | 2024 | 2023 :: SUSTOL net product sales | 8,503 | 14,142 | 13,057"
+            },
+            {
+              "accession": "0001193125-25-263618",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312525263618/hrtx-20250930.htm",
+              "source_quote": "Three Months Ended September 30, | Nine Months Ended September 30, ; 2025 | 2024 | 2025 | 2024 :: SUSTOL net product sales | 1,911 | 2,763 | 7,175 | 10,623"
+            }
+          ],
+          "derivation": "14,142 less 10,623 = 3,519"
+        },
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": 2.859,
+          "accession": "0001193125-26-215755",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312526215755/hrtx-20260331.htm",
+          "source_quote": "Three Months Ended March 31, ; 2026 | 2025 :: SUSTOL net product sales | 547 | 2,859",
+          "sources": [
+            {
+              "accession": "0001193125-26-215755",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312526215755/hrtx-20260331.htm",
+              "source_quote": "Three Months Ended March 31, ; 2026 | 2025 :: SUSTOL net product sales | 547 | 2,859"
+            }
+          ]
+        },
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": 2.404,
+          "accession": "0001193125-26-341301",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312526341301/hrtx-20260630.htm",
+          "source_quote": "Three Months Ended June 30, | Six Months Ended June 30, ; 2026 | 2025 | 2026 | 2025 :: SUSTOL net product sales | 540 | 2,404 | 1,088 | 5,263",
+          "sources": [
+            {
+              "accession": "0001193125-26-341301",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312526341301/hrtx-20260630.htm",
+              "source_quote": "Three Months Ended June 30, | Six Months Ended June 30, ; 2026 | 2025 | 2026 | 2025 :: SUSTOL net product sales | 540 | 2,404 | 1,088 | 5,263"
+            }
+          ]
+        },
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": 1.911,
+          "accession": "0001193125-25-263618",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312525263618/hrtx-20250930.htm",
+          "source_quote": "Three Months Ended September 30, | Nine Months Ended September 30, ; 2025 | 2024 | 2025 | 2024 :: SUSTOL net product sales | 1,911 | 2,763 | 7,175 | 10,623",
+          "sources": [
+            {
+              "accession": "0001193125-25-263618",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312525263618/hrtx-20250930.htm",
+              "source_quote": "Three Months Ended September 30, | Nine Months Ended September 30, ; 2025 | 2024 | 2025 | 2024 :: SUSTOL net product sales | 1,911 | 2,763 | 7,175 | 10,623"
+            }
+          ]
+        },
+        {
+          "period": "2025Q4",
+          "value_normalized_usd_millions": 1.328,
+          "accession": "0001193125-26-073515",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312526073515/hrtx-20251231.htm",
+          "source_quote": "For the Years Ended December 31, ; 2025 | 2024 | 2023 :: SUSTOL net product sales | 8,503 | 14,142 | 13,057",
+          "sources": [
+            {
+              "accession": "0001193125-26-073515",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312526073515/hrtx-20251231.htm",
+              "source_quote": "For the Years Ended December 31, ; 2025 | 2024 | 2023 :: SUSTOL net product sales | 8,503 | 14,142 | 13,057"
+            },
+            {
+              "accession": "0001193125-25-263618",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312525263618/hrtx-20250930.htm",
+              "source_quote": "Three Months Ended September 30, | Nine Months Ended September 30, ; 2025 | 2024 | 2025 | 2024 :: SUSTOL net product sales | 1,911 | 2,763 | 7,175 | 10,623"
+            }
+          ],
+          "derivation": "8,503 less 7,175 = 1,328"
+        },
+        {
+          "period": "2026Q1",
+          "value_normalized_usd_millions": 0.547,
+          "accession": "0001193125-26-215755",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312526215755/hrtx-20260331.htm",
+          "source_quote": "Three Months Ended March 31, ; 2026 | 2025 :: SUSTOL net product sales | 547 | 2,859",
+          "sources": [
+            {
+              "accession": "0001193125-26-215755",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312526215755/hrtx-20260331.htm",
+              "source_quote": "Three Months Ended March 31, ; 2026 | 2025 :: SUSTOL net product sales | 547 | 2,859"
+            }
+          ]
+        },
+        {
+          "period": "2026Q2",
+          "value_normalized_usd_millions": 0.54,
+          "accession": "0001193125-26-341301",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312526341301/hrtx-20260630.htm",
+          "source_quote": "Three Months Ended June 30, | Six Months Ended June 30, ; 2026 | 2025 | 2026 | 2025 :: SUSTOL net product sales | 540 | 2,404 | 1,088 | 5,263",
+          "sources": [
+            {
+              "accession": "0001193125-26-341301",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/818033/000119312526341301/hrtx-20260630.htm",
+              "source_quote": "Three Months Ended June 30, | Six Months Ended June 30, ; 2026 | 2025 | 2026 | 2025 :: SUSTOL net product sales | 540 | 2,404 | 1,088 | 5,263"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "drug_name": "Recorlev",
+      "generic_name": "levoketoconazole",
+      "manufacturer": "Xeris Biopharma Holdings Inc",
+      "ticker": "XERS",
+      "options": {
+        "earnings_since": "2024-10-01",
+        "earnings_until": "2026-08-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "comparative table, current-quarter column",
+        "Change $ and Change % columns beside the figures",
+        "a steep launch curve, so a comparative-column read is badly wrong",
+        "sibling row prints a nil the reader must not carry across",
+        "fourth quarter from annual less nine months",
+        "intangible-asset table naming the product"
+      ],
+      "source": "The 10-Q prints the brand under `Product revenue:` in a two-year comparative table and again in a results-of-operations table that puts `Change $` and `Change %` columns between the two years; the fourth quarter is the 10-K's year less the third-quarter 10-Q's nine months.",
+      "traps": [
+        {
+          "accession": "0001867096-26-000065",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1867096/000186709626000065/xers-20260630.htm",
+          "source_quote": "Three Months Ended June 30, | Change | Six Months Ended June 30, | Change ; 2026 | 2025 | $ | % | 2026 | 2025 | $ | % :: Recorlev | $ | 56,780 | $ | 31,444 | $ | 25,336 | 80.6 | 106,548 | $ | 56,974 | 49,574 | 87.0",
+          "why": "the same figure again, this time between a `Change $` and a `Change %` column: the third and fourth money figures on the row are a difference and a percentage, and neither is a quarter"
+        },
+        {
+          "accession": "0001867096-26-000065",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1867096/000186709626000065/xers-20260630.htm",
+          "source_quote": "June 30, 2026 | December 31, 2025 ; Life (Years) | Gross assets | Accumulated amortization | Net | Gross assets | Accumulated amortization | Net :: Definite-lived intangible asset - Recorlev | 14 | 121,000 | ( 38,893 ) | 82,107 | 121,000 | ( 34,572 ) | 86,428",
+          "why": "an intangible-asset table: a gross carrying amount, an accumulated amortization and a net, at two dates, none of them a quarter"
+        },
+        {
+          "accession": "0001867096-26-000065",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1867096/000186709626000065/xers-20260630.htm",
+          "source_quote": "Three Months Ended June 30, | Six Months Ended June 30, ; 2026 | 2025 | 2026 | 2025 :: Other product revenue | — | 1,312 | — | 1,312",
+          "why": "the row two lines under this brand's: an em dash in the current quarter and a figure in the comparative one, which is the layout a column-blind reader turns into a current-quarter figure, and `Other product revenue` is no brand's anyway"
+        }
+      ],
+      "expect": [
+        {
+          "period": "2024Q3",
+          "value_normalized_usd_millions": 17.726,
+          "accession": "0001867096-25-000159",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1867096/000186709625000159/xers-20250930.htm",
+          "source_quote": "Three Months Ended September 30, | Nine Months Ended September 30, ; 2025 | 2024 | 2025 | 2024 :: Recorlev | $ | 36,975 | $ | 17,726 | $ | 93,949 | $ | 41,663",
+          "sources": [
+            {
+              "accession": "0001867096-25-000159",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1867096/000186709625000159/xers-20250930.htm",
+              "source_quote": "Three Months Ended September 30, | Nine Months Ended September 30, ; 2025 | 2024 | 2025 | 2024 :: Recorlev | $ | 36,975 | $ | 17,726 | $ | 93,949 | $ | 41,663"
+            }
+          ]
+        },
+        {
+          "period": "2024Q4",
+          "value_normalized_usd_millions": 22.614,
+          "accession": "0001867096-26-000016",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1867096/000186709626000016/xers-20251231.htm",
+          "source_quote": "Years Ended December 31, ; 2025 | 2024 | 2023 :: Recorlev | $ | 139,283 | $ | 64,277 | $ | 29,547",
+          "sources": [
+            {
+              "accession": "0001867096-26-000016",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1867096/000186709626000016/xers-20251231.htm",
+              "source_quote": "Years Ended December 31, ; 2025 | 2024 | 2023 :: Recorlev | $ | 139,283 | $ | 64,277 | $ | 29,547"
+            },
+            {
+              "accession": "0001867096-25-000159",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1867096/000186709625000159/xers-20250930.htm",
+              "source_quote": "Three Months Ended September 30, | Nine Months Ended September 30, ; 2025 | 2024 | 2025 | 2024 :: Recorlev | $ | 36,975 | $ | 17,726 | $ | 93,949 | $ | 41,663"
+            }
+          ],
+          "derivation": "64,277 less 41,663 = 22,614"
+        },
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": 25.53,
+          "accession": "0001867096-26-000030",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1867096/000186709626000030/xers-20260331.htm",
+          "source_quote": "Three Months Ended March 31, ; 2026 | 2025 :: Recorlev | $ | 49,768 | $ | 25,530",
+          "sources": [
+            {
+              "accession": "0001867096-26-000030",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1867096/000186709626000030/xers-20260331.htm",
+              "source_quote": "Three Months Ended March 31, ; 2026 | 2025 :: Recorlev | $ | 49,768 | $ | 25,530"
+            }
+          ]
+        },
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": 31.444,
+          "accession": "0001867096-26-000065",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1867096/000186709626000065/xers-20260630.htm",
+          "source_quote": "Three Months Ended June 30, | Six Months Ended June 30, ; 2026 | 2025 | 2026 | 2025 :: Recorlev | $ | 56,780 | $ | 31,444 | $ | 106,548 | $ | 56,974",
+          "sources": [
+            {
+              "accession": "0001867096-26-000065",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1867096/000186709626000065/xers-20260630.htm",
+              "source_quote": "Three Months Ended June 30, | Six Months Ended June 30, ; 2026 | 2025 | 2026 | 2025 :: Recorlev | $ | 56,780 | $ | 31,444 | $ | 106,548 | $ | 56,974"
+            }
+          ]
+        },
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": 36.975,
+          "accession": "0001867096-25-000159",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1867096/000186709625000159/xers-20250930.htm",
+          "source_quote": "Three Months Ended September 30, | Nine Months Ended September 30, ; 2025 | 2024 | 2025 | 2024 :: Recorlev | $ | 36,975 | $ | 17,726 | $ | 93,949 | $ | 41,663",
+          "sources": [
+            {
+              "accession": "0001867096-25-000159",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1867096/000186709625000159/xers-20250930.htm",
+              "source_quote": "Three Months Ended September 30, | Nine Months Ended September 30, ; 2025 | 2024 | 2025 | 2024 :: Recorlev | $ | 36,975 | $ | 17,726 | $ | 93,949 | $ | 41,663"
+            }
+          ]
+        },
+        {
+          "period": "2025Q4",
+          "value_normalized_usd_millions": 45.334,
+          "accession": "0001867096-26-000016",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1867096/000186709626000016/xers-20251231.htm",
+          "source_quote": "Years Ended December 31, ; 2025 | 2024 | 2023 :: Recorlev | $ | 139,283 | $ | 64,277 | $ | 29,547",
+          "sources": [
+            {
+              "accession": "0001867096-26-000016",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1867096/000186709626000016/xers-20251231.htm",
+              "source_quote": "Years Ended December 31, ; 2025 | 2024 | 2023 :: Recorlev | $ | 139,283 | $ | 64,277 | $ | 29,547"
+            },
+            {
+              "accession": "0001867096-25-000159",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1867096/000186709625000159/xers-20250930.htm",
+              "source_quote": "Three Months Ended September 30, | Nine Months Ended September 30, ; 2025 | 2024 | 2025 | 2024 :: Recorlev | $ | 36,975 | $ | 17,726 | $ | 93,949 | $ | 41,663"
+            }
+          ],
+          "derivation": "139,283 less 93,949 = 45,334"
+        },
+        {
+          "period": "2026Q1",
+          "value_normalized_usd_millions": 49.768,
+          "accession": "0001867096-26-000030",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1867096/000186709626000030/xers-20260331.htm",
+          "source_quote": "Three Months Ended March 31, ; 2026 | 2025 :: Recorlev | $ | 49,768 | $ | 25,530",
+          "sources": [
+            {
+              "accession": "0001867096-26-000030",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1867096/000186709626000030/xers-20260331.htm",
+              "source_quote": "Three Months Ended March 31, ; 2026 | 2025 :: Recorlev | $ | 49,768 | $ | 25,530"
+            }
+          ]
+        },
+        {
+          "period": "2026Q2",
+          "value_normalized_usd_millions": 56.78,
+          "accession": "0001867096-26-000065",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1867096/000186709626000065/xers-20260630.htm",
+          "source_quote": "Three Months Ended June 30, | Six Months Ended June 30, ; 2026 | 2025 | 2026 | 2025 :: Recorlev | $ | 56,780 | $ | 31,444 | $ | 106,548 | $ | 56,974",
+          "sources": [
+            {
+              "accession": "0001867096-26-000065",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1867096/000186709626000065/xers-20260630.htm",
+              "source_quote": "Three Months Ended June 30, | Six Months Ended June 30, ; 2026 | 2025 | 2026 | 2025 :: Recorlev | $ | 56,780 | $ | 31,444 | $ | 106,548 | $ | 56,974"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "drug_name": "IBSRELA",
+      "generic_name": "tenapanor",
+      "manufacturer": "Ardelyx Inc",
+      "ticker": "ARDX",
+      "options": {
+        "earnings_since": "2024-10-01",
+        "earnings_until": "2026-08-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "comparative table, current-quarter column",
+        "Change $ and Change % columns beside the figures",
+        "two readings of one figure that must reconcile",
+        "fourth quarter from annual less nine months"
+      ],
+      "source": "The 10-Q prints both brands under `Product sales, net` in a two-year comparative table and again in a table headed `Change 2026 vs. 2025` with $ and % columns; the fourth quarter is the 10-K's year less the third-quarter 10-Q's nine months.",
+      "traps": [
+        {
+          "accession": "0001437402-26-000044",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740226000044/ardx-20260630.htm",
+          "source_quote": "Three Months Ended June 30, | Change 2026 vs. 2025 | Six Months Ended June 30, | Change 2026 vs. 2025 ; ($ in thousands) | 2026 | 2025 | $ | % | 2026 | 2025 | $ | % :: IBSRELA | $ | 86,243 | $ | 65,045 | $ | 21,198 | 33 | % | $ | 156,317 | $ | 109,448 | $ | 46,869 | 43 | %",
+          "why": "the `Change 2026 vs. 2025` reading of the same row: the two figures after the years are a difference and a percentage, and the row must reconcile with the comparative table rather than contradict it"
+        },
+        {
+          "accession": "0001437402-26-000044",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740226000044/ardx-20260630.htm",
+          "source_quote": "Three Months Ended June 30, | Six Months Ended June 30, ; 2026 | 2025 | 2026 | 2025 :: Product supply revenue | 1,976 | 6,185 | 2,330 | 6,439 ; Licensing revenue | 96 | 20 | 147 | 5,040",
+          "why": "two other revenue lines of the same issuer, in the same table as `Product sales, net` and under the same heading; they are revenue and they are not either brand's"
+        }
+      ],
+      "expect": [
+        {
+          "period": "2024Q3",
+          "value_normalized_usd_millions": 40.638,
+          "accession": "0001437402-25-000018",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740225000018/ardx-20250930.htm",
+          "source_quote": "Three Months Ended September 30, | Nine Months Ended September 30, ; (in thousands) | 2025 | 2024 | 2025 | 2024 :: IBSRELA | $ | 78,158 | $ | 40,638 | $ | 187,606 | $ | 104,444",
+          "sources": [
+            {
+              "accession": "0001437402-25-000018",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740225000018/ardx-20250930.htm",
+              "source_quote": "Three Months Ended September 30, | Nine Months Ended September 30, ; (in thousands) | 2025 | 2024 | 2025 | 2024 :: IBSRELA | $ | 78,158 | $ | 40,638 | $ | 187,606 | $ | 104,444"
+            }
+          ]
+        },
+        {
+          "period": "2024Q4",
+          "value_normalized_usd_millions": 53.842,
+          "accession": "0001437402-26-000013",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740226000013/ardx-20251231.htm",
+          "source_quote": "Year Ended December 31, ; (in thousands) | 2025 | 2024 | 2023 :: IBSRELA | $ | 274,207 | $ | 158,286 | $ | 80,062",
+          "sources": [
+            {
+              "accession": "0001437402-26-000013",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740226000013/ardx-20251231.htm",
+              "source_quote": "Year Ended December 31, ; (in thousands) | 2025 | 2024 | 2023 :: IBSRELA | $ | 274,207 | $ | 158,286 | $ | 80,062"
+            },
+            {
+              "accession": "0001437402-25-000018",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740225000018/ardx-20250930.htm",
+              "source_quote": "Three Months Ended September 30, | Nine Months Ended September 30, ; (in thousands) | 2025 | 2024 | 2025 | 2024 :: IBSRELA | $ | 78,158 | $ | 40,638 | $ | 187,606 | $ | 104,444"
+            }
+          ],
+          "derivation": "158,286 less 104,444 = 53,842"
+        },
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": 44.403,
+          "accession": "0001437402-26-000022",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740226000022/ardx-20260331.htm",
+          "source_quote": "Three Months Ended March 31, ; (in thousands) | 2026 | 2025 :: IBSRELA | $ | 70,074 | $ | 44,403",
+          "sources": [
+            {
+              "accession": "0001437402-26-000022",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740226000022/ardx-20260331.htm",
+              "source_quote": "Three Months Ended March 31, ; (in thousands) | 2026 | 2025 :: IBSRELA | $ | 70,074 | $ | 44,403"
+            }
+          ]
+        },
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": 65.045,
+          "accession": "0001437402-26-000044",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740226000044/ardx-20260630.htm",
+          "source_quote": "Three Months Ended June 30, | Six Months Ended June 30, ; (in thousands) | 2026 | 2025 | 2026 | 2025 :: IBSRELA | $ | 86,243 | $ | 65,045 | $ | 156,317 | $ | 109,448",
+          "sources": [
+            {
+              "accession": "0001437402-26-000044",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740226000044/ardx-20260630.htm",
+              "source_quote": "Three Months Ended June 30, | Six Months Ended June 30, ; (in thousands) | 2026 | 2025 | 2026 | 2025 :: IBSRELA | $ | 86,243 | $ | 65,045 | $ | 156,317 | $ | 109,448"
+            }
+          ]
+        },
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": 78.158,
+          "accession": "0001437402-25-000018",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740225000018/ardx-20250930.htm",
+          "source_quote": "Three Months Ended September 30, | Nine Months Ended September 30, ; (in thousands) | 2025 | 2024 | 2025 | 2024 :: IBSRELA | $ | 78,158 | $ | 40,638 | $ | 187,606 | $ | 104,444",
+          "sources": [
+            {
+              "accession": "0001437402-25-000018",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740225000018/ardx-20250930.htm",
+              "source_quote": "Three Months Ended September 30, | Nine Months Ended September 30, ; (in thousands) | 2025 | 2024 | 2025 | 2024 :: IBSRELA | $ | 78,158 | $ | 40,638 | $ | 187,606 | $ | 104,444"
+            }
+          ]
+        },
+        {
+          "period": "2025Q4",
+          "value_normalized_usd_millions": 86.601,
+          "accession": "0001437402-26-000013",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740226000013/ardx-20251231.htm",
+          "source_quote": "Year Ended December 31, ; (in thousands) | 2025 | 2024 | 2023 :: IBSRELA | $ | 274,207 | $ | 158,286 | $ | 80,062",
+          "sources": [
+            {
+              "accession": "0001437402-26-000013",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740226000013/ardx-20251231.htm",
+              "source_quote": "Year Ended December 31, ; (in thousands) | 2025 | 2024 | 2023 :: IBSRELA | $ | 274,207 | $ | 158,286 | $ | 80,062"
+            },
+            {
+              "accession": "0001437402-25-000018",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740225000018/ardx-20250930.htm",
+              "source_quote": "Three Months Ended September 30, | Nine Months Ended September 30, ; (in thousands) | 2025 | 2024 | 2025 | 2024 :: IBSRELA | $ | 78,158 | $ | 40,638 | $ | 187,606 | $ | 104,444"
+            }
+          ],
+          "derivation": "274,207 less 187,606 = 86,601"
+        },
+        {
+          "period": "2026Q1",
+          "value_normalized_usd_millions": 70.074,
+          "accession": "0001437402-26-000022",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740226000022/ardx-20260331.htm",
+          "source_quote": "Three Months Ended March 31, ; (in thousands) | 2026 | 2025 :: IBSRELA | $ | 70,074 | $ | 44,403",
+          "sources": [
+            {
+              "accession": "0001437402-26-000022",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740226000022/ardx-20260331.htm",
+              "source_quote": "Three Months Ended March 31, ; (in thousands) | 2026 | 2025 :: IBSRELA | $ | 70,074 | $ | 44,403"
+            }
+          ]
+        },
+        {
+          "period": "2026Q2",
+          "value_normalized_usd_millions": 86.243,
+          "accession": "0001437402-26-000044",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740226000044/ardx-20260630.htm",
+          "source_quote": "Three Months Ended June 30, | Six Months Ended June 30, ; (in thousands) | 2026 | 2025 | 2026 | 2025 :: IBSRELA | $ | 86,243 | $ | 65,045 | $ | 156,317 | $ | 109,448",
+          "sources": [
+            {
+              "accession": "0001437402-26-000044",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740226000044/ardx-20260630.htm",
+              "source_quote": "Three Months Ended June 30, | Six Months Ended June 30, ; (in thousands) | 2026 | 2025 | 2026 | 2025 :: IBSRELA | $ | 86,243 | $ | 65,045 | $ | 156,317 | $ | 109,448"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "drug_name": "XPHOZAH",
+      "generic_name": "tenapanor",
+      "manufacturer": "Ardelyx Inc",
+      "ticker": "ARDX",
+      "options": {
+        "earnings_since": "2024-10-01",
+        "earnings_until": "2026-08-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "comparative table, current-quarter column",
+        "Change $ and Change % columns beside the figures",
+        "the series halves between the two years, so the comparative column is the wrong answer by a factor",
+        "two brands sharing one generic name",
+        "fourth quarter from annual less nine months"
+      ],
+      "source": "The 10-Q prints both brands under `Product sales, net` in a two-year comparative table and again in a table headed `Change 2026 vs. 2025` with $ and % columns; the fourth quarter is the 10-K's year less the third-quarter 10-Q's nine months.",
+      "traps": [
+        {
+          "accession": "0001437402-26-000044",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740226000044/ardx-20260630.htm",
+          "source_quote": "Three Months Ended June 30, | Change 2026 vs. 2025 | Six Months Ended June 30, | Change 2026 vs. 2025 ; ($ in thousands) | 2026 | 2025 | $ | % | 2026 | 2025 | $ | % :: XPHOZAH | 31,886 | 25,032 | 6,854 | 27 | % | 55,185 | 48,443 | 6,742 | 14 | %",
+          "why": "the `Change 2026 vs. 2025` reading of the same row: the two figures after the years are a difference and a percentage, and the row must reconcile with the comparative table rather than contradict it"
+        },
+        {
+          "accession": "0001437402-26-000044",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740226000044/ardx-20260630.htm",
+          "source_quote": "Three Months Ended June 30, | Six Months Ended June 30, ; 2026 | 2025 | 2026 | 2025 :: Product supply revenue | 1,976 | 6,185 | 2,330 | 6,439 ; Licensing revenue | 96 | 20 | 147 | 5,040",
+          "why": "two other revenue lines of the same issuer, in the same table as `Product sales, net` and under the same heading; they are revenue and they are not either brand's"
+        }
+      ],
+      "expect": [
+        {
+          "period": "2024Q3",
+          "value_normalized_usd_millions": 51.452,
+          "accession": "0001437402-25-000018",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740225000018/ardx-20250930.htm",
+          "source_quote": "Three Months Ended September 30, | Nine Months Ended September 30, ; (in thousands) | 2025 | 2024 | 2025 | 2024 :: XPHOZAH | 27,357 | 51,452 | 75,800 | 103,749",
+          "sources": [
+            {
+              "accession": "0001437402-25-000018",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740225000018/ardx-20250930.htm",
+              "source_quote": "Three Months Ended September 30, | Nine Months Ended September 30, ; (in thousands) | 2025 | 2024 | 2025 | 2024 :: XPHOZAH | 27,357 | 51,452 | 75,800 | 103,749"
+            }
+          ]
+        },
+        {
+          "period": "2024Q4",
+          "value_normalized_usd_millions": 57.161,
+          "accession": "0001437402-26-000013",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740226000013/ardx-20251231.htm",
+          "source_quote": "Year Ended December 31, ; (in thousands) | 2025 | 2024 | 2023 :: XPHOZAH | 103,601 | 160,910 | 2,464",
+          "sources": [
+            {
+              "accession": "0001437402-26-000013",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740226000013/ardx-20251231.htm",
+              "source_quote": "Year Ended December 31, ; (in thousands) | 2025 | 2024 | 2023 :: XPHOZAH | 103,601 | 160,910 | 2,464"
+            },
+            {
+              "accession": "0001437402-25-000018",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740225000018/ardx-20250930.htm",
+              "source_quote": "Three Months Ended September 30, | Nine Months Ended September 30, ; (in thousands) | 2025 | 2024 | 2025 | 2024 :: XPHOZAH | 27,357 | 51,452 | 75,800 | 103,749"
+            }
+          ],
+          "derivation": "160,910 less 103,749 = 57,161"
+        },
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": 23.411,
+          "accession": "0001437402-26-000022",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740226000022/ardx-20260331.htm",
+          "source_quote": "Three Months Ended March 31, ; (in thousands) | 2026 | 2025 :: XPHOZAH | 23,299 | 23,411",
+          "sources": [
+            {
+              "accession": "0001437402-26-000022",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740226000022/ardx-20260331.htm",
+              "source_quote": "Three Months Ended March 31, ; (in thousands) | 2026 | 2025 :: XPHOZAH | 23,299 | 23,411"
+            }
+          ]
+        },
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": 25.032,
+          "accession": "0001437402-26-000044",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740226000044/ardx-20260630.htm",
+          "source_quote": "Three Months Ended June 30, | Six Months Ended June 30, ; (in thousands) | 2026 | 2025 | 2026 | 2025 :: XPHOZAH | 31,886 | 25,032 | 55,185 | 48,443",
+          "sources": [
+            {
+              "accession": "0001437402-26-000044",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740226000044/ardx-20260630.htm",
+              "source_quote": "Three Months Ended June 30, | Six Months Ended June 30, ; (in thousands) | 2026 | 2025 | 2026 | 2025 :: XPHOZAH | 31,886 | 25,032 | 55,185 | 48,443"
+            }
+          ]
+        },
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": 27.357,
+          "accession": "0001437402-25-000018",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740225000018/ardx-20250930.htm",
+          "source_quote": "Three Months Ended September 30, | Nine Months Ended September 30, ; (in thousands) | 2025 | 2024 | 2025 | 2024 :: XPHOZAH | 27,357 | 51,452 | 75,800 | 103,749",
+          "sources": [
+            {
+              "accession": "0001437402-25-000018",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740225000018/ardx-20250930.htm",
+              "source_quote": "Three Months Ended September 30, | Nine Months Ended September 30, ; (in thousands) | 2025 | 2024 | 2025 | 2024 :: XPHOZAH | 27,357 | 51,452 | 75,800 | 103,749"
+            }
+          ]
+        },
+        {
+          "period": "2025Q4",
+          "value_normalized_usd_millions": 27.801,
+          "accession": "0001437402-26-000013",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740226000013/ardx-20251231.htm",
+          "source_quote": "Year Ended December 31, ; (in thousands) | 2025 | 2024 | 2023 :: XPHOZAH | 103,601 | 160,910 | 2,464",
+          "sources": [
+            {
+              "accession": "0001437402-26-000013",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740226000013/ardx-20251231.htm",
+              "source_quote": "Year Ended December 31, ; (in thousands) | 2025 | 2024 | 2023 :: XPHOZAH | 103,601 | 160,910 | 2,464"
+            },
+            {
+              "accession": "0001437402-25-000018",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740225000018/ardx-20250930.htm",
+              "source_quote": "Three Months Ended September 30, | Nine Months Ended September 30, ; (in thousands) | 2025 | 2024 | 2025 | 2024 :: XPHOZAH | 27,357 | 51,452 | 75,800 | 103,749"
+            }
+          ],
+          "derivation": "103,601 less 75,800 = 27,801"
+        },
+        {
+          "period": "2026Q1",
+          "value_normalized_usd_millions": 23.299,
+          "accession": "0001437402-26-000022",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740226000022/ardx-20260331.htm",
+          "source_quote": "Three Months Ended March 31, ; (in thousands) | 2026 | 2025 :: XPHOZAH | 23,299 | 23,411",
+          "sources": [
+            {
+              "accession": "0001437402-26-000022",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740226000022/ardx-20260331.htm",
+              "source_quote": "Three Months Ended March 31, ; (in thousands) | 2026 | 2025 :: XPHOZAH | 23,299 | 23,411"
+            }
+          ]
+        },
+        {
+          "period": "2026Q2",
+          "value_normalized_usd_millions": 31.886,
+          "accession": "0001437402-26-000044",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740226000044/ardx-20260630.htm",
+          "source_quote": "Three Months Ended June 30, | Six Months Ended June 30, ; (in thousands) | 2026 | 2025 | 2026 | 2025 :: XPHOZAH | 31,886 | 25,032 | 55,185 | 48,443",
+          "sources": [
+            {
+              "accession": "0001437402-26-000044",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1437402/000143740226000044/ardx-20260630.htm",
+              "source_quote": "Three Months Ended June 30, | Six Months Ended June 30, ; (in thousands) | 2026 | 2025 | 2026 | 2025 :: XPHOZAH | 31,886 | 25,032 | 55,185 | 48,443"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "drug_name": "PYRUKYND",
+      "generic_name": "mitapivat",
+      "manufacturer": "Agios Pharmaceuticals Inc",
+      "ticker": "AGIO",
+      "options": {
+        "earnings_since": "2024-10-01",
+        "earnings_until": "2026-08-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "the revenue rows never name the product",
+        "the only row naming the product is an expense row",
+        "expense schedule naming the product",
+        "prose-only figure",
+        "single figure in its sentence, so it must still auto-pass",
+        "two figures in one sentence",
+        "must come back under the pair's name",
+        "product detail only in an 8-K EX-99"
+      ],
+      "source": "The 10-Q's revenue rows are `Product revenue, net - U.S.` and `- Rest of world` and never name the brand, while the segment table and the research and development table in the same filing print `PK activator (PYRUKYND/AQVESME)` beside money figures. Every figure the brand has is stated in the quarterly earnings release instead, and from the first quarter of 2026 the issuer reports the two brands together.",
+      "traps": [
+        {
+          "accession": "0001439222-26-000118",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1439222/000143922226000118/agio-20260630.htm",
+          "source_quote": "Three Months Ended June 30, | Six Months Ended June 30, ; (In thousands) | 2026 | 2025 | 2026 | 2025 :: PK activator (PYRUKYND®/AQVESME™) | $ | 25,849 | $ | 29,809 | $ | 49,754 | $ | 51,130",
+          "why": "a research and development expense table; the row names the brand and carries four money figures, and 25,849 is roughly half the quarter's revenue, so publishing it looks plausible and is wrong"
+        },
+        {
+          "accession": "0001439222-26-000118",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1439222/000143922226000118/agio-20260630.htm",
+          "source_quote": "Three Months Ended June 30, | Six Months Ended June 30, ; (In thousands) | 2026 | 2025 | 2026 | 2025 :: Product revenue, net - U.S. | $ | 40,917 | $ | 12,151 | $ | 59,768 | $ | 20,877",
+          "why": "the segment table, where a revenue row and an expense row for the same brand sit three lines apart and the expenses are printed in parentheses; the revenue rows here do not name the brand at all"
+        }
+      ],
+      "expect": [
+        {
+          "period": "2024Q3",
+          "value_normalized_usd_millions": 9.0,
+          "accession": "0001439222-24-000136",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1439222/000143922224000136/agio-103124xex991earningsr.htm",
+          "source_quote": "Third Quarter 2024 Financial Results Revenue: Net product revenue from sales of PYRUKYND® for the third quarter of 2024 was $9.0 million, compared to $7.4 million for the third quarter of 2023.",
+          "sources": [
+            {
+              "accession": "0001439222-24-000136",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1439222/000143922224000136/agio-103124xex991earningsr.htm",
+              "source_quote": "Third Quarter 2024 Financial Results Revenue: Net product revenue from sales of PYRUKYND® for the third quarter of 2024 was $9.0 million, compared to $7.4 million for the third quarter of 2023."
+            }
+          ]
+        },
+        {
+          "period": "2024Q4",
+          "value_normalized_usd_millions": 10.7,
+          "accession": "0001439222-25-000007",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1439222/000143922225000007/agio-021325xfyxex991earnin.htm",
+          "source_quote": "Fourth Quarter 2024 Financial Results Revenue: Net product revenue from sales of PYRUKYND for the fourth quarter of 2024 was $10.7 million, compared to $7.1 million for the fourth quarter of 2023, and $36.5 million for the year ended December 31, 2024, compared to $26.8 million for the year ended December 31, 2023.",
+          "sources": [
+            {
+              "accession": "0001439222-25-000007",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1439222/000143922225000007/agio-021325xfyxex991earnin.htm",
+              "source_quote": "Fourth Quarter 2024 Financial Results Revenue: Net product revenue from sales of PYRUKYND for the fourth quarter of 2024 was $10.7 million, compared to $7.1 million for the fourth quarter of 2023, and $36.5 million for the year ended December 31, 2024, compared to $26.8 million for the year ended December 31, 2023."
+            }
+          ]
+        },
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": 8.7,
+          "accession": "0001439222-25-000034",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1439222/000143922225000034/agio-050125xfyxex991earnin.htm",
+          "source_quote": "First Quarter 2025 Financial Results Revenue: Net product revenue from sales of PYRUKYND for the first quarter of 2025 was $8.7 million, compared to $8.2 million for the first quarter of 2024.",
+          "sources": [
+            {
+              "accession": "0001439222-25-000034",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1439222/000143922225000034/agio-050125xfyxex991earnin.htm",
+              "source_quote": "First Quarter 2025 Financial Results Revenue: Net product revenue from sales of PYRUKYND for the first quarter of 2025 was $8.7 million, compared to $8.2 million for the first quarter of 2024."
+            }
+          ]
+        },
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": 12.5,
+          "accession": "0001439222-25-000087",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1439222/000143922225000087/agio-073125xfyxex991earnin.htm",
+          "source_quote": "• Net product revenue from sales of PYRUKYND for the second quarter of 2025 was $12.5 million, compared to $8.6 million for the second quarter of 2024.",
+          "sources": [
+            {
+              "accession": "0001439222-25-000087",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1439222/000143922225000087/agio-073125xfyxex991earnin.htm",
+              "source_quote": "• Net product revenue from sales of PYRUKYND for the second quarter of 2025 was $12.5 million, compared to $8.6 million for the second quarter of 2024."
+            }
+          ]
+        },
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": 12.9,
+          "accession": "0001439222-25-000114",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1439222/000143922225000114/agio-103125xfyxex991earnin.htm",
+          "source_quote": "Generated $12.9 million in net revenue for the third quarter of 2025, representing an increase of 44 percent from $9.0 million in the third quarter of 2024 and a 3 percent increase from $12.5 million in the second quarter of 2025.",
+          "sources": [
+            {
+              "accession": "0001439222-25-000114",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1439222/000143922225000114/agio-103125xfyxex991earnin.htm",
+              "source_quote": "Generated $12.9 million in net revenue for the third quarter of 2025, representing an increase of 44 percent from $9.0 million in the third quarter of 2024 and a 3 percent increase from $12.5 million in the second quarter of 2025."
+            }
+          ]
+        },
+        {
+          "period": "2025Q4",
+          "value_normalized_usd_millions": 20.0,
+          "accession": "0001439222-26-000023",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1439222/000143922226000023/agio-21226xfyxex991earning.htm",
+          "source_quote": "PYRUKYND® (mitapivat) worldwide net revenues of $20.0 million in fourth quarter and $54.0 million for full year",
+          "sources": [
+            {
+              "accession": "0001439222-26-000023",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1439222/000143922226000023/agio-21226xfyxex991earning.htm",
+              "source_quote": "PYRUKYND® (mitapivat) worldwide net revenues of $20.0 million in fourth quarter and $54.0 million for full year"
+            }
+          ]
+        },
+        {
+          "period": "2026Q1",
+          "value_normalized_usd_millions": 20.7,
+          "accession": "0001439222-26-000071",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1439222/000143922226000071/agio-42926xfyxex991earning.htm",
+          "source_quote": "Mitapivat (PYRUKYND® and AQVESME™) generated worldwide net revenues of $20.7 million in the first quarter of 2026, compared to $8.7 million in the first quarter of 2025",
+          "sources": [
+            {
+              "accession": "0001439222-26-000071",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1439222/000143922226000071/agio-42926xfyxex991earning.htm",
+              "source_quote": "Mitapivat (PYRUKYND® and AQVESME™) generated worldwide net revenues of $20.7 million in the first quarter of 2026, compared to $8.7 million in the first quarter of 2025"
+            }
+          ],
+          "reported_as": "Mitapivat (PYRUKYND and AQVESME)",
+          "note": "from this quarter the issuer reports the two brands as one line, so the figure is the pair's and not PYRUKYND's own"
+        },
+        {
+          "period": "2026Q2",
+          "value_normalized_usd_millions": 44.7,
+          "accession": "0001439222-26-000115",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1439222/000143922226000115/agio-73026xfyxex991earning.htm",
+          "source_quote": "Mitapivat (PYRUKYND® and AQVESME™) delivered worldwide net revenues of $44.7 million in the second quarter of 2026, compared to $12.5 million in the second quarter of 2025",
+          "sources": [
+            {
+              "accession": "0001439222-26-000115",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1439222/000143922226000115/agio-73026xfyxex991earning.htm",
+              "source_quote": "Mitapivat (PYRUKYND® and AQVESME™) delivered worldwide net revenues of $44.7 million in the second quarter of 2026, compared to $12.5 million in the second quarter of 2025"
+            }
+          ],
+          "reported_as": "Mitapivat (PYRUKYND and AQVESME)",
+          "note": "the 10-Q for the same quarter prints 44,745 with no brand on the row"
+        }
+      ]
+    },
+    {
+      "drug_name": "AQVESME",
+      "generic_name": "mitapivat",
+      "manufacturer": "Agios Pharmaceuticals Inc",
+      "ticker": "AGIO",
+      "options": {
+        "earnings_since": "2024-10-01",
+        "earnings_until": "2026-08-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "pre-launch quarters must come back empty",
+        "must come back empty",
+        "approved in one quarter and launched in the next",
+        "must come back under the pair's name",
+        "the revenue rows never name the product",
+        "the only row naming the product is an expense row",
+        "expense schedule naming the product",
+        "product detail only in an 8-K EX-99"
+      ],
+      "source": "The brand was approved in December 2025 and launched in the United States in late January 2026, and from the first quarter of 2026 the issuer reports it and its sibling brand as one mitapivat line. No filing states a figure for this brand on its own; the only row that names it is a research and development expense row.",
+      "traps": [
+        {
+          "accession": "0001439222-26-000118",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1439222/000143922226000118/agio-20260630.htm",
+          "source_quote": "Three Months Ended June 30, | Six Months Ended June 30, ; (In thousands) | 2026 | 2025 | 2026 | 2025 :: PK activator (PYRUKYND®/AQVESME™) | $ | 25,849 | $ | 29,809 | $ | 49,754 | $ | 51,130",
+          "why": "a research and development expense table; the row names both brands and carries four money figures, none of them revenue"
+        },
+        {
+          "accession": "0001439222-26-000023",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1439222/000143922226000023/agio-21226xfyxex991earning.htm",
+          "source_quote": "$16.0 million in U.S. net revenue in the fourth quarter of 2025, driven by continued commercial focus in pyruvate kinase (PK) deficiency ahead of the U.S. commercial launch of AQVESME™ (mitapivat) in thalassemia, an additional ordering week in the fourth quarter, and favorable gross-to-net adjustments.",
+          "why": "the sentence names the brand beside $16.0 million, and says in the same breath that the figure is from the quarter before this brand was launched"
+        }
+      ],
+      "expect": [
+        {
+          "period": "2024Q3",
+          "value_normalized_usd_millions": null,
+          "accession": "0001439222-24-000136",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1439222/000143922224000136/agio-103124xex991earningsr.htm",
+          "source_quote": "Third Quarter 2024 Financial Results Revenue: Net product revenue from sales of PYRUKYND® for the third quarter of 2024 was $9.0 million, compared to $7.4 million for the third quarter of 2023.",
+          "sources": [
+            {
+              "accession": "0001439222-24-000136",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1439222/000143922224000136/agio-103124xex991earningsr.htm",
+              "source_quote": "Third Quarter 2024 Financial Results Revenue: Net product revenue from sales of PYRUKYND® for the third quarter of 2024 was $9.0 million, compared to $7.4 million for the third quarter of 2023."
+            }
+          ],
+          "why": "the earnings release for this quarter states the issuer's product revenue as PYRUKYND's alone; AQVESME was approved in December 2025 and was not a product in this quarter"
+        },
+        {
+          "period": "2024Q4",
+          "value_normalized_usd_millions": null,
+          "accession": "0001439222-25-000007",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1439222/000143922225000007/agio-021325xfyxex991earnin.htm",
+          "source_quote": "Fourth Quarter 2024 Financial Results Revenue: Net product revenue from sales of PYRUKYND for the fourth quarter of 2024 was $10.7 million, compared to $7.1 million for the fourth quarter of 2023, and $36.5 million for the year ended December 31, 2024, compared to $26.8 million for the year ended December 31, 2023.",
+          "sources": [
+            {
+              "accession": "0001439222-25-000007",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1439222/000143922225000007/agio-021325xfyxex991earnin.htm",
+              "source_quote": "Fourth Quarter 2024 Financial Results Revenue: Net product revenue from sales of PYRUKYND for the fourth quarter of 2024 was $10.7 million, compared to $7.1 million for the fourth quarter of 2023, and $36.5 million for the year ended December 31, 2024, compared to $26.8 million for the year ended December 31, 2023."
+            }
+          ],
+          "why": "the earnings release for this quarter states the issuer's product revenue as PYRUKYND's alone; AQVESME was approved in December 2025 and was not a product in this quarter"
+        },
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": null,
+          "accession": "0001439222-25-000034",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1439222/000143922225000034/agio-050125xfyxex991earnin.htm",
+          "source_quote": "First Quarter 2025 Financial Results Revenue: Net product revenue from sales of PYRUKYND for the first quarter of 2025 was $8.7 million, compared to $8.2 million for the first quarter of 2024.",
+          "sources": [
+            {
+              "accession": "0001439222-25-000034",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1439222/000143922225000034/agio-050125xfyxex991earnin.htm",
+              "source_quote": "First Quarter 2025 Financial Results Revenue: Net product revenue from sales of PYRUKYND for the first quarter of 2025 was $8.7 million, compared to $8.2 million for the first quarter of 2024."
+            }
+          ],
+          "why": "the earnings release for this quarter states the issuer's product revenue as PYRUKYND's alone; AQVESME was approved in December 2025 and was not a product in this quarter"
+        },
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": null,
+          "accession": "0001439222-25-000087",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1439222/000143922225000087/agio-073125xfyxex991earnin.htm",
+          "source_quote": "• Net product revenue from sales of PYRUKYND for the second quarter of 2025 was $12.5 million, compared to $8.6 million for the second quarter of 2024.",
+          "sources": [
+            {
+              "accession": "0001439222-25-000087",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1439222/000143922225000087/agio-073125xfyxex991earnin.htm",
+              "source_quote": "• Net product revenue from sales of PYRUKYND for the second quarter of 2025 was $12.5 million, compared to $8.6 million for the second quarter of 2024."
+            }
+          ],
+          "why": "the earnings release for this quarter states the issuer's product revenue as PYRUKYND's alone; AQVESME was approved in December 2025 and was not a product in this quarter"
+        },
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": null,
+          "accession": "0001439222-25-000114",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1439222/000143922225000114/agio-103125xfyxex991earnin.htm",
+          "source_quote": "Generated $12.9 million in net revenue for the third quarter of 2025, representing an increase of 44 percent from $9.0 million in the third quarter of 2024 and a 3 percent increase from $12.5 million in the second quarter of 2025.",
+          "sources": [
+            {
+              "accession": "0001439222-25-000114",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1439222/000143922225000114/agio-103125xfyxex991earnin.htm",
+              "source_quote": "Generated $12.9 million in net revenue for the third quarter of 2025, representing an increase of 44 percent from $9.0 million in the third quarter of 2024 and a 3 percent increase from $12.5 million in the second quarter of 2025."
+            }
+          ],
+          "why": "the earnings release for this quarter states the issuer's product revenue as PYRUKYND's alone; AQVESME was approved in December 2025 and was not a product in this quarter"
+        },
+        {
+          "period": "2025Q4",
+          "value_normalized_usd_millions": null,
+          "accession": "0001439222-26-000023",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1439222/000143922226000023/agio-21226xfyxex991earning.htm",
+          "source_quote": "$16.0 million in U.S. net revenue in the fourth quarter of 2025, driven by continued commercial focus in pyruvate kinase (PK) deficiency ahead of the U.S. commercial launch of AQVESME™ (mitapivat) in thalassemia, an additional ordering week in the fourth quarter, and favorable gross-to-net adjustments.",
+          "sources": [
+            {
+              "accession": "0001439222-26-000023",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1439222/000143922226000023/agio-21226xfyxex991earning.htm",
+              "source_quote": "$16.0 million in U.S. net revenue in the fourth quarter of 2025, driven by continued commercial focus in pyruvate kinase (PK) deficiency ahead of the U.S. commercial launch of AQVESME™ (mitapivat) in thalassemia, an additional ordering week in the fourth quarter, and favorable gross-to-net adjustments."
+            }
+          ],
+          "why": "the release says the quarter's U.S. revenue came from pyruvate kinase deficiency ahead of the U.S. commercial launch of this brand, which began in late January 2026: approved inside the quarter, sold in the next one"
+        },
+        {
+          "period": "2026Q1",
+          "value_normalized_usd_millions": 20.7,
+          "accession": "0001439222-26-000071",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1439222/000143922226000071/agio-42926xfyxex991earning.htm",
+          "source_quote": "Mitapivat (PYRUKYND® and AQVESME™) generated worldwide net revenues of $20.7 million in the first quarter of 2026, compared to $8.7 million in the first quarter of 2025",
+          "sources": [
+            {
+              "accession": "0001439222-26-000071",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1439222/000143922226000071/agio-42926xfyxex991earning.htm",
+              "source_quote": "Mitapivat (PYRUKYND® and AQVESME™) generated worldwide net revenues of $20.7 million in the first quarter of 2026, compared to $8.7 million in the first quarter of 2025"
+            }
+          ],
+          "reported_as": "Mitapivat (PYRUKYND and AQVESME)",
+          "note": "the first quarter this brand has sales, and the issuer reports the two brands as one line, so the figure is the pair's"
+        },
+        {
+          "period": "2026Q2",
+          "value_normalized_usd_millions": 44.7,
+          "accession": "0001439222-26-000115",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1439222/000143922226000115/agio-73026xfyxex991earning.htm",
+          "source_quote": "Mitapivat (PYRUKYND® and AQVESME™) delivered worldwide net revenues of $44.7 million in the second quarter of 2026, compared to $12.5 million in the second quarter of 2025",
+          "sources": [
+            {
+              "accession": "0001439222-26-000115",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1439222/000143922226000115/agio-73026xfyxex991earning.htm",
+              "source_quote": "Mitapivat (PYRUKYND® and AQVESME™) delivered worldwide net revenues of $44.7 million in the second quarter of 2026, compared to $12.5 million in the second quarter of 2025"
+            }
+          ],
+          "reported_as": "Mitapivat (PYRUKYND and AQVESME)"
+        }
+      ]
+    },
+    {
+      "drug_name": "WAKIX",
+      "generic_name": "pitolisant",
+      "manufacturer": "Harmony Biosciences Holdings Inc",
+      "ticker": "HRMY",
+      "options": {
+        "earnings_since": "2024-10-01",
+        "earnings_until": "2026-08-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "single figure in its sentence, so it must still auto-pass",
+        "prose-only figure",
+        "the revenue rows never name the product",
+        "the value and the product name in different sentences",
+        "guidance figure that must not become a quarter",
+        "product detail only in an 8-K EX-99"
+      ],
+      "source": "The 10-Q's income statement row is `Net product revenue` and never names the brand; every quarter the brand has is a sentence in the quarterly earnings release, most of them carrying one money figure. The same releases state full-year net revenue guidance.",
+      "traps": [
+        {
+          "accession": "0001104659-26-090086",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1802665/000110465926090086/hrmy-20260804xex99d1.htm",
+          "source_quote": "Based on our results for the first half of 2026, WAKIX remains on track to achieve full-year net revenue of $1.0 billion to $1.04 billion .",
+          "why": "a full-year guidance range, in the release that reports the quarter; it names the brand and two money figures and belongs to no period that has happened"
+        },
+        {
+          "accession": "0001558370-25-001439",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1802665/000155837025001439/hrmy-20250225xex99d1.htm",
+          "source_quote": "The company has guided 2025 WAKIX® net revenues to $820 - $860 million, targeting a $1B+ opportunity with WAKIX in narcolepsy alone. “2025 is set up to be a transformational year for Harmony, as our robust, late-stage pipeline comes into focus and we advance our long-term growth strategy,” said Jeffrey M.",
+          "why": "guidance for a year that had not started when the release was filed"
+        }
+      ],
+      "expect": [
+        {
+          "period": "2024Q3",
+          "value_normalized_usd_millions": 186.0,
+          "accession": "0001558370-24-013802",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1802665/000155837024013802/hrmy-20241029xex99d1.htm",
+          "source_quote": "HARMONY BIOSCIENCES REPORTS STRONG THIRD QUARTER 2024 FINANCIAL RESULTS AND HIGHLIGHTS CATALYST-RICH, LATE-STAGE PIPELINE POISED TO DELIVER ONE OR MORE NEW LAUNCHES EVERY YEAR OVER NEXT FIVE YEARS WAKIX (pitolisant) Net Revenue of $186.0 Million for Third Quarter 2024;",
+          "sources": [
+            {
+              "accession": "0001558370-24-013802",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1802665/000155837024013802/hrmy-20241029xex99d1.htm",
+              "source_quote": "HARMONY BIOSCIENCES REPORTS STRONG THIRD QUARTER 2024 FINANCIAL RESULTS AND HIGHLIGHTS CATALYST-RICH, LATE-STAGE PIPELINE POISED TO DELIVER ONE OR MORE NEW LAUNCHES EVERY YEAR OVER NEXT FIVE YEARS WAKIX (pitolisant) Net Revenue of $186.0 Million for Third Quarter 2024;"
+            }
+          ]
+        },
+        {
+          "period": "2024Q4",
+          "value_normalized_usd_millions": 201.3,
+          "accession": "0001558370-25-001439",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1802665/000155837025001439/hrmy-20250225xex99d1.htm",
+          "source_quote": "HIGHLIGHTS 2025 CATALYSTS IN SLEEP/WAKE AND FRAGILE X SYNDROME DEVELOPMENT PROGRAMS WAKIX® (pitolisant) Net Revenue of $201.3 Million for Fourth Quarter and $714.7 Million for Full Year 2024;",
+          "sources": [
+            {
+              "accession": "0001558370-25-001439",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1802665/000155837025001439/hrmy-20250225xex99d1.htm",
+              "source_quote": "HIGHLIGHTS 2025 CATALYSTS IN SLEEP/WAKE AND FRAGILE X SYNDROME DEVELOPMENT PROGRAMS WAKIX® (pitolisant) Net Revenue of $201.3 Million for Fourth Quarter and $714.7 Million for Full Year 2024;"
+            }
+          ]
+        },
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": 184.7,
+          "accession": "0001558370-25-006393",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1802665/000155837025006393/hrmy-20250506xex99d1.htm",
+          "source_quote": "HARMONY BIOSCIENCES REPORTS STRONG Q1 2025 FINANCIAL RESULTS, HIGHLIGHTS ADVANCEMENT OF ITS PIPELINE AND UPCOMING CATALYSTS, AND REAFFIRMS 2025 REVENUE GUIDANCE WAKIX® (pitolisant) Net Revenue of $184.7 Million for First Quarter 2025;",
+          "sources": [
+            {
+              "accession": "0001558370-25-006393",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1802665/000155837025006393/hrmy-20250506xex99d1.htm",
+              "source_quote": "HARMONY BIOSCIENCES REPORTS STRONG Q1 2025 FINANCIAL RESULTS, HIGHLIGHTS ADVANCEMENT OF ITS PIPELINE AND UPCOMING CATALYSTS, AND REAFFIRMS 2025 REVENUE GUIDANCE WAKIX® (pitolisant) Net Revenue of $184.7 Million for First Quarter 2025;"
+            }
+          ]
+        },
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": 200.5,
+          "accession": "0001558370-25-010182",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1802665/000155837025010182/hrmy-20250805xex99d1.htm",
+          "source_quote": "Sleep/Wake Franchise WAKIX in Narcolepsy ● Net Revenue was $200.5 million for Q2 2025.",
+          "sources": [
+            {
+              "accession": "0001558370-25-010182",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1802665/000155837025010182/hrmy-20250805xex99d1.htm",
+              "source_quote": "Sleep/Wake Franchise WAKIX in Narcolepsy ● Net Revenue was $200.5 million for Q2 2025."
+            }
+          ]
+        },
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": 239.5,
+          "accession": "0001104659-25-105942",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1802665/000110465925105942/hrmy-20251104xex99d1.htm",
+          "source_quote": "Net Revenue was $239.5 million for Q3 2025",
+          "sources": [
+            {
+              "accession": "0001104659-25-105942",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1802665/000110465925105942/hrmy-20251104xex99d1.htm",
+              "source_quote": "Net Revenue was $239.5 million for Q3 2025"
+            }
+          ]
+        },
+        {
+          "period": "2025Q4",
+          "value_normalized_usd_millions": 243.8,
+          "accession": "0001104659-26-018858",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1802665/000110465926018858/hrmy-20260224xex99d1.htm",
+          "source_quote": "Net product revenue for the quarter ended December 31, 2025, was $243.8 million, compared to $201.3 million for the same period in 2024",
+          "sources": [
+            {
+              "accession": "0001104659-26-018858",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1802665/000110465926018858/hrmy-20260224xex99d1.htm",
+              "source_quote": "Net product revenue for the quarter ended December 31, 2025, was $243.8 million, compared to $201.3 million for the same period in 2024"
+            }
+          ]
+        },
+        {
+          "period": "2026Q1",
+          "value_normalized_usd_millions": 215.4,
+          "accession": "0001104659-26-056786",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1802665/000110465926056786/hrmy-20260507xex99d1.htm",
+          "source_quote": "REINFORCES 2026 STRATEGIC PRIORITIES WAKIX® Net Revenue Grew 17% to $215.4 Million for First Quarter 2026;",
+          "sources": [
+            {
+              "accession": "0001104659-26-056786",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1802665/000110465926056786/hrmy-20260507xex99d1.htm",
+              "source_quote": "REINFORCES 2026 STRATEGIC PRIORITIES WAKIX® Net Revenue Grew 17% to $215.4 Million for First Quarter 2026;"
+            }
+          ]
+        },
+        {
+          "period": "2026Q2",
+          "value_normalized_usd_millions": 261.3,
+          "accession": "0001104659-26-090086",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1802665/000110465926090086/hrmy-20260804xex99d1.htm",
+          "source_quote": "ET PLYMOUTH MEETING, Pa., August 4, 2026 /Business Wire/ -- Harmony Biosciences Holdings, Inc. (Nasdaq: HRMY) today reported Q2 2026 net revenue for WAKIX® (pitolisant) of $261.3 million, delivering 30% year-over-year growth in its seventh year on the market.",
+          "sources": [
+            {
+              "accession": "0001104659-26-090086",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1802665/000110465926090086/hrmy-20260804xex99d1.htm",
+              "source_quote": "ET PLYMOUTH MEETING, Pa., August 4, 2026 /Business Wire/ -- Harmony Biosciences Holdings, Inc. (Nasdaq: HRMY) today reported Q2 2026 net revenue for WAKIX® (pitolisant) of $261.3 million, delivering 30% year-over-year growth in its seventh year on the market."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "drug_name": "XDEMVY",
+      "generic_name": "lotilaner",
+      "manufacturer": "Tarsus Pharmaceuticals Inc",
+      "ticker": "TARS",
+      "options": {
+        "earnings_since": "2024-10-01",
+        "earnings_until": "2026-08-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "cost of sales sentence naming the product",
+        "single figure in its sentence, so it must still auto-pass",
+        "the revenue rows never name the product",
+        "licence revenue beside product revenue",
+        "fourth quarter from annual less nine months",
+        "prose-only figure"
+      ],
+      "source": "The income statement carries `Product sales, net` with no brand on the row, and the business highlights name the brand beside the same figure; the same filing's Cost of Sales paragraph names the brand beside two money figures that are costs. The fourth quarter is the 10-K's year less the third-quarter 10-Q's nine months.",
+      "traps": [
+        {
+          "accession": "0001819790-26-000064",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1819790/000181979026000064/tars-20260630.htm",
+          "source_quote": "Cost of Sales For the three months ended June 30, 2026 and 2025, we recognized $12.1 million and $6.2 million, respectively, in cost of sales for XDEMVY, and gross margins remained consistent at 93% and 94% for the respective periods.",
+          "why": "a cost of sales sentence: the brand and two money figures in one sentence, for the quarter the case asks about, and neither figure is revenue"
+        },
+        {
+          "accession": "0001819790-26-000038",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1819790/000181979026000038/tars-20260331.htm",
+          "source_quote": "Three Months Ended March 31, ; 2026 | 2025 :: License fees and collaboration revenue | 16,667 | —",
+          "why": "16,667 of licence revenue sits directly under `Product sales, net` in the quarter the case asks about; it is revenue, and it is not the product's"
+        }
+      ],
+      "expect": [
+        {
+          "period": "2024Q3",
+          "value_normalized_usd_millions": 48.118,
+          "accession": "0001819790-25-000121",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1819790/000181979025000121/tars-20250930.htm",
+          "source_quote": "Three Months Ended September 30, | Nine Months Ended September 30, ; 2025 | 2024 | 2025 | 2024 :: Product sales, net | $ | 118,697 | $ | 48,118 | $ | 299,692 | $ | 113,651 ; License fees and collaboration revenue | — | — | — | 2,894",
+          "sources": [
+            {
+              "accession": "0001819790-25-000121",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1819790/000181979025000121/tars-20250930.htm",
+              "source_quote": "Three Months Ended September 30, | Nine Months Ended September 30, ; 2025 | 2024 | 2025 | 2024 :: Product sales, net | $ | 118,697 | $ | 48,118 | $ | 299,692 | $ | 113,651 ; License fees and collaboration revenue | — | — | — | 2,894"
+            }
+          ]
+        },
+        {
+          "period": "2024Q4",
+          "value_normalized_usd_millions": 66.408,
+          "accession": "0001819790-26-000019",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1819790/000181979026000019/tars-20251231.htm",
+          "source_quote": "Year Ended December 31, ; 2025 | 2024 | 2023 :: Product sales, net | $ | 451,360 | $ | 180,059 | $ | 14,729 ; License fees and collaboration revenue | — | 2,894 | 2,718",
+          "sources": [
+            {
+              "accession": "0001819790-26-000019",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1819790/000181979026000019/tars-20251231.htm",
+              "source_quote": "Year Ended December 31, ; 2025 | 2024 | 2023 :: Product sales, net | $ | 451,360 | $ | 180,059 | $ | 14,729 ; License fees and collaboration revenue | — | 2,894 | 2,718"
+            },
+            {
+              "accession": "0001819790-25-000121",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1819790/000181979025000121/tars-20250930.htm",
+              "source_quote": "Three Months Ended September 30, | Nine Months Ended September 30, ; 2025 | 2024 | 2025 | 2024 :: Product sales, net | $ | 118,697 | $ | 48,118 | $ | 299,692 | $ | 113,651 ; License fees and collaboration revenue | — | — | — | 2,894"
+            }
+          ],
+          "derivation": "180,059 less 113,651 = 66,408"
+        },
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": 78.335,
+          "accession": "0001819790-26-000038",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1819790/000181979026000038/tars-20260331.htm",
+          "source_quote": "Three Months Ended March 31, ; 2026 | 2025 :: Product sales, net | $ | 145,387 | $ | 78,335 ; License fees and collaboration revenue | 16,667 | —",
+          "sources": [
+            {
+              "accession": "0001819790-26-000038",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1819790/000181979026000038/tars-20260331.htm",
+              "source_quote": "Three Months Ended March 31, ; 2026 | 2025 :: Product sales, net | $ | 145,387 | $ | 78,335 ; License fees and collaboration revenue | 16,667 | —"
+            }
+          ]
+        },
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": 102.66,
+          "accession": "0001819790-26-000064",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1819790/000181979026000064/tars-20260630.htm",
+          "source_quote": "Three Months Ended June 30, | Six Months Ended June 30, ; 2026 | 2025 | 2026 | 2025 :: Product sales, net | $ | 173,912 | $ | 102,660 | $ | 319,299 | $ | 180,995 ; License fees and collaboration revenue | — | — | 16,667 | —",
+          "sources": [
+            {
+              "accession": "0001819790-26-000064",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1819790/000181979026000064/tars-20260630.htm",
+              "source_quote": "Three Months Ended June 30, | Six Months Ended June 30, ; 2026 | 2025 | 2026 | 2025 :: Product sales, net | $ | 173,912 | $ | 102,660 | $ | 319,299 | $ | 180,995 ; License fees and collaboration revenue | — | — | 16,667 | —"
+            }
+          ]
+        },
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": 118.697,
+          "accession": "0001819790-25-000121",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1819790/000181979025000121/tars-20250930.htm",
+          "source_quote": "Three Months Ended September 30, | Nine Months Ended September 30, ; 2025 | 2024 | 2025 | 2024 :: Product sales, net | $ | 118,697 | $ | 48,118 | $ | 299,692 | $ | 113,651 ; License fees and collaboration revenue | — | — | — | 2,894",
+          "sources": [
+            {
+              "accession": "0001819790-25-000121",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1819790/000181979025000121/tars-20250930.htm",
+              "source_quote": "Three Months Ended September 30, | Nine Months Ended September 30, ; 2025 | 2024 | 2025 | 2024 :: Product sales, net | $ | 118,697 | $ | 48,118 | $ | 299,692 | $ | 113,651 ; License fees and collaboration revenue | — | — | — | 2,894"
+            }
+          ]
+        },
+        {
+          "period": "2025Q4",
+          "value_normalized_usd_millions": 151.668,
+          "accession": "0001819790-26-000019",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1819790/000181979026000019/tars-20251231.htm",
+          "source_quote": "Year Ended December 31, ; 2025 | 2024 | 2023 :: Product sales, net | $ | 451,360 | $ | 180,059 | $ | 14,729 ; License fees and collaboration revenue | — | 2,894 | 2,718",
+          "sources": [
+            {
+              "accession": "0001819790-26-000019",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1819790/000181979026000019/tars-20251231.htm",
+              "source_quote": "Year Ended December 31, ; 2025 | 2024 | 2023 :: Product sales, net | $ | 451,360 | $ | 180,059 | $ | 14,729 ; License fees and collaboration revenue | — | 2,894 | 2,718"
+            },
+            {
+              "accession": "0001819790-25-000121",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1819790/000181979025000121/tars-20250930.htm",
+              "source_quote": "Three Months Ended September 30, | Nine Months Ended September 30, ; 2025 | 2024 | 2025 | 2024 :: Product sales, net | $ | 118,697 | $ | 48,118 | $ | 299,692 | $ | 113,651 ; License fees and collaboration revenue | — | — | — | 2,894"
+            }
+          ],
+          "derivation": "451,360 less 299,692 = 151,668"
+        },
+        {
+          "period": "2026Q1",
+          "value_normalized_usd_millions": 145.387,
+          "accession": "0001819790-26-000038",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1819790/000181979026000038/tars-20260331.htm",
+          "source_quote": "Three Months Ended March 31, ; 2026 | 2025 :: Product sales, net | $ | 145,387 | $ | 78,335 ; License fees and collaboration revenue | 16,667 | —",
+          "sources": [
+            {
+              "accession": "0001819790-26-000038",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1819790/000181979026000038/tars-20260331.htm",
+              "source_quote": "Three Months Ended March 31, ; 2026 | 2025 :: Product sales, net | $ | 145,387 | $ | 78,335 ; License fees and collaboration revenue | 16,667 | —"
+            }
+          ]
+        },
+        {
+          "period": "2026Q2",
+          "value_normalized_usd_millions": 173.912,
+          "accession": "0001819790-26-000064",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1819790/000181979026000064/tars-20260630.htm",
+          "source_quote": "Recent Business and Corporate Highlights XDEMVY : • Generated $173.9 million of net product sales in the second quarter of 2026, a year-over-year increase of more than 69%. ◦ The number of eye care professionals (ECPs) prescribing XDEMVY five or more times per week has doubled year-over-year, demonstrating depth of adoption.",
+          "sources": [
+            {
+              "accession": "0001819790-26-000064",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1819790/000181979026000064/tars-20260630.htm",
+              "source_quote": "Recent Business and Corporate Highlights XDEMVY : • Generated $173.9 million of net product sales in the second quarter of 2026, a year-over-year increase of more than 69%. ◦ The number of eye care professionals (ECPs) prescribing XDEMVY five or more times per week has doubled year-over-year, demonstrating depth of adoption."
+            }
+          ],
+          "note": "the income statement prints 173,912 on a row that does not name the brand"
+        }
+      ]
+    },
+    {
+      "drug_name": "LUPKYNIS",
+      "generic_name": "voclosporin",
+      "manufacturer": "Aurinia Pharmaceuticals Inc",
+      "ticker": "AUPH",
+      "options": {
+        "earnings_since": "2024-10-01",
+        "earnings_until": "2026-08-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "two figures in one sentence",
+        "the value and the product name in different sentences",
+        "prose-only figure",
+        "the revenue rows never name the product",
+        "fourth quarter from annual less nine months",
+        "a three-month and a six- or nine-month figure in one sentence"
+      ],
+      "source": "The brand's quarters are prose: one sentence carries the three-month figure, the prior-year figure and often the year-to-date figure as well. In the third-quarter filing the sentence with the figures does not name the brand and the sentence that names it carries no figure. The fourth quarter is the 10-K's year less those nine months.",
+      "traps": [
+        {
+          "accession": "0001600620-26-000049",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1600620/000160062026000049/auph-20260331.htm",
+          "source_quote": "Net Product Sales For the three months ended March 31, 2026, net product sales of LUPKYNIS were $73.6 million, up 23%, from $60.0 million, in the same period of 2025.",
+          "why": "one sentence, three numbers: `23%` is a growth rate and `$60.0 million` is the same quarter a year earlier. Only the first is the quarter the sentence is about, and the other two must not be published as it"
+        }
+      ],
+      "expect": [
+        {
+          "period": "2024Q3",
+          "value_normalized_usd_millions": 55.5,
+          "accession": "0001600620-25-000106",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1600620/000160062025000106/auph-20250930.htm",
+          "source_quote": "For the three and nine months ended September 30, 2025, net product sales were $70.6 million and $197.2 million, respectively, compared to $55.5 million and $158.6 million, respectively, for the same periods in 2024. The increase for both periods is primarily due to an increase in the number of LUPKYNIS cartons sold to specialty pharmacies, driven by further LN market penetration.",
+          "sources": [
+            {
+              "accession": "0001600620-25-000106",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1600620/000160062025000106/auph-20250930.htm",
+              "source_quote": "For the three and nine months ended September 30, 2025, net product sales were $70.6 million and $197.2 million, respectively, compared to $55.5 million and $158.6 million, respectively, for the same periods in 2024. The increase for both periods is primarily due to an increase in the number of LUPKYNIS cartons sold to specialty pharmacies, driven by further LN market penetration."
+            }
+          ],
+          "note": "the prior-year column of the sentence, which names no brand"
+        },
+        {
+          "period": "2024Q4",
+          "value_normalized_usd_millions": 57.6,
+          "accession": "0001600620-26-000017",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1600620/000160062026000017/auph-20251231.htm",
+          "source_quote": "The two specialty pharmacies, specialty distributor and Otsuka are considered our customers for accounting purposes. 32 For the year ended December 31, 2025, net product sales were $271.3 million, up 25% compared to $216.2 million in 2024. The increase is primarily due to an increase in the number of LUPKYNIS cartons sold to specialty pharmacies, driven by further LN market penetration.",
+          "sources": [
+            {
+              "accession": "0001600620-26-000017",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1600620/000160062026000017/auph-20251231.htm",
+              "source_quote": "The two specialty pharmacies, specialty distributor and Otsuka are considered our customers for accounting purposes. 32 For the year ended December 31, 2025, net product sales were $271.3 million, up 25% compared to $216.2 million in 2024. The increase is primarily due to an increase in the number of LUPKYNIS cartons sold to specialty pharmacies, driven by further LN market penetration."
+            },
+            {
+              "accession": "0001600620-25-000106",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1600620/000160062025000106/auph-20250930.htm",
+              "source_quote": "For the three and nine months ended September 30, 2025, net product sales were $70.6 million and $197.2 million, respectively, compared to $55.5 million and $158.6 million, respectively, for the same periods in 2024. The increase for both periods is primarily due to an increase in the number of LUPKYNIS cartons sold to specialty pharmacies, driven by further LN market penetration."
+            }
+          ],
+          "derivation": "216.2 less 158.6 = 57.6"
+        },
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": 60.0,
+          "accession": "0001600620-26-000049",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1600620/000160062026000049/auph-20260331.htm",
+          "source_quote": "Net Product Sales For the three months ended March 31, 2026, net product sales of LUPKYNIS were $73.6 million, up 23%, from $60.0 million, in the same period of 2025.",
+          "sources": [
+            {
+              "accession": "0001600620-26-000049",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1600620/000160062026000049/auph-20260331.htm",
+              "source_quote": "Net Product Sales For the three months ended March 31, 2026, net product sales of LUPKYNIS were $73.6 million, up 23%, from $60.0 million, in the same period of 2025."
+            }
+          ]
+        },
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": 66.6,
+          "accession": "0001600620-26-000062",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1600620/000160062026000062/auph-20260630.htm",
+          "source_quote": "Aurinia has now initiated clinical development of aritinercept in four potential indications. 16 Net Product Sales For the three and six months ended June 30, 2026, net product sales of LUPKYNIS were $79.4 million and $153.0 million, up 19% and 21%, respectively, from $66.6 million and $126.5 million, respectively, in the same periods of 2025.",
+          "sources": [
+            {
+              "accession": "0001600620-26-000062",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1600620/000160062026000062/auph-20260630.htm",
+              "source_quote": "Aurinia has now initiated clinical development of aritinercept in four potential indications. 16 Net Product Sales For the three and six months ended June 30, 2026, net product sales of LUPKYNIS were $79.4 million and $153.0 million, up 19% and 21%, respectively, from $66.6 million and $126.5 million, respectively, in the same periods of 2025."
+            }
+          ]
+        },
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": 70.6,
+          "accession": "0001600620-25-000106",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1600620/000160062025000106/auph-20250930.htm",
+          "source_quote": "For the three and nine months ended September 30, 2025, net product sales were $70.6 million and $197.2 million, respectively, compared to $55.5 million and $158.6 million, respectively, for the same periods in 2024. The increase for both periods is primarily due to an increase in the number of LUPKYNIS cartons sold to specialty pharmacies, driven by further LN market penetration.",
+          "sources": [
+            {
+              "accession": "0001600620-25-000106",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1600620/000160062025000106/auph-20250930.htm",
+              "source_quote": "For the three and nine months ended September 30, 2025, net product sales were $70.6 million and $197.2 million, respectively, compared to $55.5 million and $158.6 million, respectively, for the same periods in 2024. The increase for both periods is primarily due to an increase in the number of LUPKYNIS cartons sold to specialty pharmacies, driven by further LN market penetration."
+            }
+          ]
+        },
+        {
+          "period": "2025Q4",
+          "value_normalized_usd_millions": 74.1,
+          "accession": "0001600620-26-000017",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1600620/000160062026000017/auph-20251231.htm",
+          "source_quote": "The two specialty pharmacies, specialty distributor and Otsuka are considered our customers for accounting purposes. 32 For the year ended December 31, 2025, net product sales were $271.3 million, up 25% compared to $216.2 million in 2024. The increase is primarily due to an increase in the number of LUPKYNIS cartons sold to specialty pharmacies, driven by further LN market penetration.",
+          "sources": [
+            {
+              "accession": "0001600620-26-000017",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1600620/000160062026000017/auph-20251231.htm",
+              "source_quote": "The two specialty pharmacies, specialty distributor and Otsuka are considered our customers for accounting purposes. 32 For the year ended December 31, 2025, net product sales were $271.3 million, up 25% compared to $216.2 million in 2024. The increase is primarily due to an increase in the number of LUPKYNIS cartons sold to specialty pharmacies, driven by further LN market penetration."
+            },
+            {
+              "accession": "0001600620-25-000106",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1600620/000160062025000106/auph-20250930.htm",
+              "source_quote": "For the three and nine months ended September 30, 2025, net product sales were $70.6 million and $197.2 million, respectively, compared to $55.5 million and $158.6 million, respectively, for the same periods in 2024. The increase for both periods is primarily due to an increase in the number of LUPKYNIS cartons sold to specialty pharmacies, driven by further LN market penetration."
+            }
+          ],
+          "derivation": "271.3 less 197.2 = 74.1"
+        },
+        {
+          "period": "2026Q1",
+          "value_normalized_usd_millions": 73.6,
+          "accession": "0001600620-26-000049",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1600620/000160062026000049/auph-20260331.htm",
+          "source_quote": "Net Product Sales For the three months ended March 31, 2026, net product sales of LUPKYNIS were $73.6 million, up 23%, from $60.0 million, in the same period of 2025.",
+          "sources": [
+            {
+              "accession": "0001600620-26-000049",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1600620/000160062026000049/auph-20260331.htm",
+              "source_quote": "Net Product Sales For the three months ended March 31, 2026, net product sales of LUPKYNIS were $73.6 million, up 23%, from $60.0 million, in the same period of 2025."
+            }
+          ]
+        },
+        {
+          "period": "2026Q2",
+          "value_normalized_usd_millions": 79.4,
+          "accession": "0001600620-26-000062",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1600620/000160062026000062/auph-20260630.htm",
+          "source_quote": "Aurinia has now initiated clinical development of aritinercept in four potential indications. 16 Net Product Sales For the three and six months ended June 30, 2026, net product sales of LUPKYNIS were $79.4 million and $153.0 million, up 19% and 21%, respectively, from $66.6 million and $126.5 million, respectively, in the same periods of 2025.",
+          "sources": [
+            {
+              "accession": "0001600620-26-000062",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1600620/000160062026000062/auph-20260630.htm",
+              "source_quote": "Aurinia has now initiated clinical development of aritinercept in four potential indications. 16 Net Product Sales For the three and six months ended June 30, 2026, net product sales of LUPKYNIS were $79.4 million and $153.0 million, up 19% and 21%, respectively, from $66.6 million and $126.5 million, respectively, in the same periods of 2025."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
