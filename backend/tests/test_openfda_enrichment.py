@@ -8,7 +8,10 @@ The fixtures below are trimmed from that live response.
 
 from app.connectors.openfda import BRAND_SEARCH_PATHS, search_queries
 from app.connectors.openfda_fields import (
+    brand_matched_results,
     earliest_approval_date,
+    molecule_names,
+    names_the_molecule,
     openfda_brand_names,
     parse_openfda_date,
     select_openfda_result,
@@ -80,12 +83,64 @@ def test_generic_name_never_selects_a_competitor_or_anda():
     assert result is None and brand is None
 
 
-def test_formulation_variant_matches_its_parent_brand():
+def test_a_more_specific_product_does_not_take_the_general_one_s_application():
+    """`Nebulized Calderon` is its own product; `Calderon` is not its brand."""
     result, brand = select_openfda_result(
         LIVE_RESULTS, product="Nebulized Tyvaso", generic="treprostinil"
     )
-    assert result["application_number"] == "NDA022387"
-    assert brand == "TYVASO"
+    assert (result, brand) == (None, None)
+    # ... and not even when the alias expander offers the parent brand.
+    assert (
+        brand_matched_results(
+            LIVE_RESULTS,
+            product="Nebulized Tyvaso",
+            generic="treprostinil",
+            aliases=["Tyvaso"],
+        )
+        == []
+    )
+
+
+def test_a_fuller_sku_name_is_still_the_same_product():
+    """`Calderon` against a registry brand `Calderon Extended-Release`."""
+    sku = {
+        "application_number": "NDA000003",
+        "openfda": {"brand_name": ["CALDERON EXTENDED-RELEASE"], "generic_name": ["calderinol"]},
+    }
+    assert brand_matched_results([sku], product="Calderon", generic="calderinol") == [
+        (sku, "CALDERON EXTENDED-RELEASE")
+    ]
+    # Unless a stored alias says that fuller name is a sibling brand.
+    assert (
+        brand_matched_results(
+            [sku], product="Calderon", generic="calderinol", aliases=["Calderon Extended-Release"]
+        )[0][1]
+        == "CALDERON EXTENDED-RELEASE"
+    )
+
+
+def test_a_molecule_variant_spelling_cannot_select_an_application():
+    """The exclusion compares against the molecule the record declares.
+
+    A candidate equal to the upload's spelling was the only one refused, so
+    `calderinol phosphate` against a record declaring `calderinol` survived and
+    selected whichever sibling was marketed under the molecule name.
+    """
+    sibling = {
+        "application_number": "NDA000004",
+        "openfda": {
+            "brand_name": ["CALDERINOL", "NUVESSA"],
+            "generic_name": ["CALDERINOL"],
+            "substance_name": ["CALDERINOL PHOSPHATE"],
+        },
+    }
+    assert names_the_molecule("calderinol phosphate", molecule_names(sibling, "calderinol"))
+    assert (
+        brand_matched_results(
+            [sibling], product="Calderon", generic="calderinol", aliases=["calderinol phosphate"]
+        )
+        == []
+    )
 
 
 def test_no_match_is_reported_rather_than_guessed():

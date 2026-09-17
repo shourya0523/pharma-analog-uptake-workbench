@@ -5,13 +5,21 @@ from collections.abc import Iterable
 from datetime import datetime
 from typing import Any
 
-from app.parsing.fda_label import read_path
+from app.parsing.fda_label import openfda_block, read_path
+from app.quality.profile import blends_sibling_brand
 
 MIN_ALIAS_LENGTH = 4
 
 
 def _normalize(value: str) -> str:
     return re.sub(r"\s+", " ", (value or "")).strip().casefold()
+
+
+def _contains_word(haystack: str, needle: str) -> bool:
+    """True when one normalised name appears inside another on word boundaries."""
+    if not haystack or not needle:
+        return False
+    return re.search(rf"(?<!\w){re.escape(needle)}(?!\w)", haystack) is not None
 
 
 def openfda_brand_names(result: dict[str, Any]) -> list[str]:
@@ -29,6 +37,117 @@ def openfda_brand_names(result: dict[str, Any]) -> list[str]:
     return names
 
 
+def molecule_names(result: dict[str, Any], generic: str | None = None) -> set[str]:
+    """The molecule spellings this record itself declares, plus the job's own.
+
+    A record's ``openfda`` block names its molecule twice, as ``generic_name``
+    and as ``substance_name``, and either may be spelled differently from the
+    name the job was uploaded with. A record with no ``openfda`` block declares
+    neither, which is why the job's own generic is still in the set.
+    """
+    block = openfda_block(result)
+    names = [*block.get("generic_name", []), *block.get("substance_name", [])]
+    if generic:
+        names.append(generic)
+    return {norm for norm in (_normalize(name) for name in names) if norm}
+
+
+def names_the_molecule(name: str, molecules: set[str]) -> bool:
+    """True when a name is the molecule wearing a variant spelling, not a brand.
+
+    Given a record declaring molecule ``acme``: ``acme``, ``Acme phosphate``
+    and ``acme extended-release`` all name the molecule; ``Calderon`` does not.
+    Containment runs both ways because the variant can be on either side.
+    """
+    norm = _normalize(name)
+    if not norm:
+        return False
+    return any(_contains_word(norm, mol) or _contains_word(mol, norm) for mol in molecules)
+
+
+def _candidates(product: str, aliases: Iterable[str] | None) -> list[str]:
+    """The names that may select an application, the product's own included.
+
+    An alias the product name *extends* is dropped: for a job named `Nebulized
+    Calderon`, the alias `Calderon` can only ever select the more general
+    product's application, which is the whole of the harm this match is
+    guarding against. An alias that extends the product name is kept, because
+    that is the same product under a fuller SKU name.
+    """
+    product_norm = _normalize(product)
+    candidates: list[str] = []
+    for name in [product, *(aliases or [])]:
+        norm = _normalize(name)
+        if not norm or len(norm) < MIN_ALIAS_LENGTH:
+            continue
+        if norm != product_norm and _contains_word(product_norm, norm):
+            continue
+        if norm not in candidates:
+            candidates.append(norm)
+    return candidates
+
+
+def brand_matched_results(
+    results: list[dict[str, Any]],
+    *,
+    product: str,
+    generic: str | None = None,
+    aliases: Iterable[str] | None = None,
+) -> list[tuple[dict[str, Any], str]]:
+    """Every drugsFDA application that is this product, in the order returned.
+
+    A search on brand OR generic name returns every application sharing the
+    molecule, so a result is accepted only on a brand match. A name that is the
+    molecule under any spelling the record declares is refused on both sides -
+    it is shared with competitor and ANDA products, and one molecule variant
+    surviving into the candidate list is how a sibling's application gets
+    selected.
+
+    Exact brand matches win outright. Where none matches exactly, a record
+    whose brand *extends* the requested one is accepted - `Calderon` against a
+    registry brand `Calderon Extended-Release` is the same product under its
+    full SKU name - but never one that *truncates* it: `Nebulized Calderon`
+    against `Calderon` is a different, more general product with its own
+    application. An extension that a stored alias says is a sibling brand is
+    refused too.
+
+    Returns the exact matches if there are any, otherwise the extensions -
+    never a mixture, so a caller taking the earliest approval across the list
+    is looking at one kind of match.
+    """
+    candidates = _candidates(product, aliases)
+    if not candidates:
+        return []
+    alias_list = list(aliases or [])
+
+    exact: list[tuple[dict[str, Any], str]] = []
+    extending: list[tuple[dict[str, Any], str]] = []
+    for result in results:
+        molecules = molecule_names(result, generic)
+        hit_exact: tuple[dict[str, Any], str] | None = None
+        hit_extending: tuple[dict[str, Any], str] | None = None
+        for brand in openfda_brand_names(result):
+            if names_the_molecule(brand, molecules):
+                continue  # an ANDA or a listing marketed under the molecule name
+            brand_norm = _normalize(brand)
+            for candidate in candidates:
+                if names_the_molecule(candidate, molecules):
+                    continue
+                if brand_norm == candidate:
+                    hit_exact = hit_exact or (result, brand)
+                elif (
+                    hit_extending is None
+                    and _contains_word(brand_norm, candidate)
+                    and not blends_sibling_brand(brand, product=product, aliases=alias_list)
+                ):
+                    hit_extending = (result, brand)
+        if hit_exact:
+            exact.append(hit_exact)
+        elif hit_extending:
+            extending.append(hit_extending)
+    return exact or extending
+
+
 def select_openfda_result(
     results: list[dict[str, Any]],
     *,
@@ -36,43 +155,18 @@ def select_openfda_result(
     generic: str | None = None,
     aliases: Iterable[str] | None = None,
 ) -> tuple[dict[str, Any] | None, str | None]:
-    """Pick the drugsFDA application that is actually this product.
+    """The one application to read this product's fields from.
 
-    A search on brand OR generic name returns every application sharing the
-    molecule, so the first result is frequently a different product from the same
-    molecule - a query for one brand returns a competitor's brand ahead of it.
-    Only a brand-name match is
-    accepted; the generic name is deliberately excluded from matching because it
-    is shared with competitor and ANDA products.
+    The first of `brand_matched_results`. A brand with more than one
+    application has more than one match, and which one openFDA returns first
+    is not documented - so the approval date is taken across the whole list
+    rather than from this one.
 
     Returns (result, matched_brand_name), or (None, None) when no application
     matches this product's brand.
     """
-    generic_norm = _normalize(generic or "")
-    candidates: list[str] = []
-    for name in [product, *(aliases or [])]:
-        norm = _normalize(name)
-        if not norm or len(norm) < MIN_ALIAS_LENGTH or norm == generic_norm:
-            continue
-        if norm not in candidates:
-            candidates.append(norm)
-    if not candidates:
-        return None, None
-
-    fallback: tuple[dict[str, Any], str] | None = None
-    for result in results:
-        for brand in openfda_brand_names(result):
-            brand_norm = _normalize(brand)
-            if brand_norm == generic_norm:
-                continue  # an ANDA marketed under the molecule name
-            for candidate in candidates:
-                if brand_norm == candidate:
-                    return result, brand
-                if fallback is None and (brand_norm in candidate or candidate in brand_norm):
-                    fallback = (result, brand)
-    if fallback:
-        return fallback
-    return None, None
+    matches = brand_matched_results(results, product=product, generic=generic, aliases=aliases)
+    return matches[0] if matches else (None, None)
 
 
 def parse_openfda_date(raw: str | None) -> str | None:
