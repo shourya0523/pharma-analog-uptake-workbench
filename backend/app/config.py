@@ -43,9 +43,11 @@ class Settings(BaseSettings):
     cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
     llm_skip_judge_when_deterministic: bool = True
     llm_max_extract_sources: int = 6
-    # Independent-search judging of product profile fields. Source registries carry
-    # errors (openFDA gives an inhaled product's route as ORAL), so cited fields are
-    # challenged rather than passed through.
+    # Independent-search judging of product profile fields. A source registry
+    # can be wrong about a product and can be silent about it - openFDA's
+    # `openfda.route` states ORAL for an inhaled product, and for some
+    # applications states no route at all - so cited fields are challenged
+    # rather than passed through.
     enable_profile_judge: bool = True
     # 0 = judge every content field (no cap). Positive values keep an optional budget.
     profile_judge_max_fields: int = 0

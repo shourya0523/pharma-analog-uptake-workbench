@@ -9,7 +9,16 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 from dataclasses import field as dataclass_field
+from pathlib import Path
 from typing import Any
+
+from app.parsing.fda_label import PROFILE_FIELDS
+
+# The metadata prompt states its own field vocabulary, so it is read rather
+# than copied. `prompt_metadata_fields` returns nothing if the file or the
+# skeleton moves, and the drift test over `_PRIORITY_ORDER` is what says so.
+_METADATA_PROMPT = Path(__file__).resolve().parent.parent / "prompts" / "metadata_extractor.yaml"
+_PROMPT_FIELD_ENUM = re.compile(r'"field"\s*:\s*"([^"]+)"')
 
 MISSING_VALUES = {
     "",
@@ -111,8 +120,35 @@ def blends_sibling_brand(
     return False
 
 
-# Judged first when present; every other content field is still judged after these.
-PRIORITY_JUDGE_FIELDS = (
+def prompt_metadata_fields() -> frozenset[str]:
+    """The field names the metadata prompt lets the model return.
+
+    Read from the prompt's own JSON skeleton - the alternation beside
+    ``"field"`` - rather than restated here, so a name added to the prompt is
+    a name this module knows about.
+    """
+    text = _METADATA_PROMPT.read_text() if _METADATA_PROMPT.exists() else ""
+    match = _PROMPT_FIELD_ENUM.search(text)
+    if not match:
+        return frozenset()
+    return frozenset(name.strip() for name in match.group(1).split("|") if name.strip())
+
+
+def judgable_fields() -> frozenset[str]:
+    """Every field name the pipeline can put in a profile.
+
+    Its two producers: the openFDA mapping and the metadata prompt. A field
+    from neither is a field nothing writes, so ordering it is ordering nothing.
+    """
+    return frozenset(PROFILE_FIELDS) | prompt_metadata_fields()
+
+
+# Which fields cost most to get wrong, and so are judged first when present.
+# The order is a judgement and is written down; the membership is not. A name
+# no producer produces is dropped, so ordering a field nothing writes orders
+# nothing, and a producer's new field sorts silently to last until it is
+# ranked here - which is what `test_profile_judge.py`'s drift test says.
+_PRIORITY_ORDER = (
     "roa",
     "dosage_form",
     "fda_approval_date",
@@ -122,6 +158,7 @@ PRIORITY_JUDGE_FIELDS = (
     "indication",
     "therapeutic_area",
 )
+PRIORITY_JUDGE_FIELDS = tuple(name for name in _PRIORITY_ORDER if name in judgable_fields())
 
 # Internal / non-clinical payload fields — not product claims to challenge.
 SKIP_JUDGE_FIELDS = frozenset({"llm_aliases"})
