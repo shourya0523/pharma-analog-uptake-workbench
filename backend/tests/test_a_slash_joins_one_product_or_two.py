@@ -12,13 +12,13 @@ Nothing here consults a list of brands. Whether a slash joined one product or
 two is decided by whether both sides spell the product that was asked about,
 and which other product a line names is decided by the filer's own mark.
 
-Invented names: Calderon, Calderon XR, NuVessa, calderinol.
+Invented names: Calderon, Calderon XR, NuVessa, Acme, calderinol, acme-1.
 """
 
 from __future__ import annotations
 
 from app.llm.aliases import merge_aliases
-from app.parsing.evidence import product_aliases
+from app.parsing.evidence import _spells, product_aliases
 from app.parsing.labels import read_label
 
 MARK = "®"
@@ -35,6 +35,28 @@ def test_a_pair_keeps_the_joined_form_and_does_not_yield_the_other_name():
     aliases = product_aliases("Calderon", None, extra=["Calderon/NuVessa"])
     assert "Calderon/NuVessa" in aliases
     assert "NuVessa" not in aliases
+
+
+def test_the_generic_name_does_not_join_the_pair_either():
+    """The same split, reached through the generic instead of the brand.
+
+    A part spells a held name only by beginning with it: `Acme` does not spell
+    the generic `acme-1`, so the slash stays whole and the partner's name is
+    not manufactured into our own set.
+    """
+    aliases = product_aliases("NuVessa", "acme-1", extra=["NuVessa/Acme"])
+    assert "NuVessa/Acme" in aliases
+    assert "Acme" not in aliases
+
+
+def test_a_held_name_is_spelled_by_a_prefix_at_a_word_boundary_only():
+    """Both answers on one held name: the extension spells it, the partner
+    whose name merely contains it does not."""
+    assert _spells("Calderon XR", ["Calderon"])
+    assert _spells("Calderon", ["Calderon"])
+    assert not _spells("Acme", ["acme-1"])
+    assert not _spells("Cal", ["Calderon"])
+    assert not _spells("CalderonXR", ["Calderon"])
 
 
 def test_the_plus_form_was_never_the_problem():
