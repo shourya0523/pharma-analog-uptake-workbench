@@ -347,6 +347,20 @@ export default function DashboardPage() {
               <strong>Reported as:</strong> {drill.reported_as}
             </p>
           )}
+          {/* A figure covering part of a quarter is plotted where the quarter
+              is, and a reader comparing it with the quarters around it has to
+              be told that is what it is. */}
+          {drill.partial_period && (
+            <p>
+              <strong>Covers part of the quarter:</strong> not a full quarter of
+              sales, so it is not comparable with the quarters beside it.
+            </p>
+          )}
+          {drill.series_identity && (
+            <p>
+              <strong>Series:</strong> {drill.series_identity}
+            </p>
+          )}
           <p>
             <strong>Validation:</strong> {drill.validation_status}
           </p>

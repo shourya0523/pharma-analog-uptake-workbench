@@ -23,7 +23,7 @@ import re
 from dataclasses import dataclass
 from datetime import date
 
-from app.domain.models import RevenueScope, SeriesSelection
+from app.domain.models import SERIES_END_REASON_CODES, RevenueScope, SeriesSelection
 from app.parsing.periods import quarter_of_month
 
 # The two spellings of "the whole product": a sentence says Worldwide, a
@@ -307,6 +307,40 @@ def quarter_containing(when: date | None) -> str | None:
     if when is None:
         return None
     return f"{when.year}Q{quarter_of_month(when.month)}"
+
+
+def recorded_reason_code(reason: str | None) -> str | None:
+    """The coded reason an unresolved quarter carries, where it names an event.
+
+    The pipeline writes such a reason as `[code] prose`, so the code is read
+    back from the front of it rather than matched against the prose, which is
+    free text and changes.
+    """
+    for code in SERIES_END_REASON_CODES:
+        if (reason or "").startswith(f"[{code}]"):
+            return code
+    return None
+
+
+def series_end_reason(
+    *, last_quarter: str | None, unresolved: list[tuple[str, str | None]]
+) -> str | None:
+    """Why a series stops where it does, where the run recorded a reason.
+
+    Only the quarters after the last one the series holds are asked, and only
+    one reason across all of them answers. A series whose remaining quarters
+    are unresolved for different reasons has no single ending; one whose
+    quarters are unresolved because nothing could be read has no ending at all
+    - that is a gap, and an issuer still reporting the product is not an
+    issuer that stopped.
+    """
+    if not last_quarter:
+        return None
+    after = [reason for period, reason in unresolved if period > last_quarter]
+    if not after:
+        return None
+    codes = {recorded_reason_code(reason) for reason in after}
+    return codes.pop() if len(codes) == 1 and None not in codes else None
 
 
 def commercial_start_quarter(

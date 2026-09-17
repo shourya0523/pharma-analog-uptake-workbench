@@ -30,11 +30,21 @@ from app.db.models import (
     DatapointORM,
     DrugJobORM,
     ExtractionRunORM,
+    UnresolvedQuarterORM,
 )
-from app.domain.models import PeriodType, SeriesSelection, ValidationStatus
+from app.domain.models import (
+    REPORTED_WITH_ANOTHER_PRODUCT,
+    PeriodType,
+    SeriesSelection,
+    ValidationStatus,
+)
 from app.export.builder import PRODUCT_HEADERS, ExportBuilder, product_export_rows
 from app.parsing.labels import FLAG_PARTIAL
-from app.pipeline.series_identity import commercial_start_quarter, series_identity
+from app.pipeline.series_identity import (
+    commercial_start_quarter,
+    series_end_reason,
+    series_identity,
+)
 from app.storage.filestore import LocalFileStore
 
 _IDENTITY = series_identity(
@@ -60,7 +70,7 @@ QUARTERS = [
 ]
 
 
-def _database(*, approval: date | None):
+def _database(*, approval: date | None, unresolved: list[tuple[str, str]] = ()):
     engine = create_engine("sqlite://")
     upgrade_database(engine)
     db = Session(engine)
@@ -90,6 +100,15 @@ def _database(*, approval: date | None):
                 validation_status=ValidationStatus.AUTO_PASS.value,
                 series_identity=_IDENTITY, series_selection=selection,
                 issue_flags=list(flags),
+            )
+        )
+    for period, reason in unresolved:
+        db.add(
+            UnresolvedQuarterORM(
+                id=f"gap-{period}", job_id="job", period=period,
+                reason_unresolved=reason,
+                recommended_next_step="Check the filer's own schedule",
+                confidence_that_unavailable=0.6,
             )
         )
     db.commit()
@@ -169,3 +188,40 @@ async def test_the_quarterly_file_holds_the_figure_the_series_holds(tmp_path):
         SeriesSelection.DUPLICATE.value,
         *[SeriesSelection.SELECTED.value] * 4,
     ]
+
+
+# What the pipeline writes when the issuer reports the product only together
+# with another one: the pair's figure is published under the pair, and the
+# product's own is not a number anybody discloses.
+_PAIRED = f"[{REPORTED_WITH_ANOTHER_PRODUCT}] Calderon is reported only as Calderon + NuVessa"
+_UNREAD = "No reliable product-level quarterly value extracted"
+
+
+def test_a_series_that_ends_at_an_event_says_which_event():
+    db = _database(
+        approval=date(2024, 3, 13),
+        unresolved=[("2024Q4", _PAIRED), ("2025Q1", _PAIRED)],
+    )
+    product = build_dashboard_preview(db, run_id="run")["products"][0]
+    assert product["series_end_quarter"] == "2024Q3"
+    assert product["series_end_reason"] == REPORTED_WITH_ANOTHER_PRODUCT
+
+    headers, rows = product_export_rows(db, "run")
+    values = dict(zip(headers, rows[0], strict=True))
+    assert values["series_end_reason"] == REPORTED_WITH_ANOTHER_PRODUCT
+
+
+def test_a_quarter_nobody_could_read_is_a_gap_and_not_an_ending():
+    """The other answer, and the one that matters: a hole is not an event."""
+    db = _database(approval=date(2024, 3, 13), unresolved=[("2024Q4", _UNREAD)])
+    product = build_dashboard_preview(db, run_id="run")["products"][0]
+    assert product["series_end_quarter"] == "2024Q3"
+    assert product["series_end_reason"] is None
+
+    # Nor is a run of quarters that stopped for two different reasons.
+    assert series_end_reason(
+        last_quarter="2024Q3",
+        unresolved=[("2024Q4", _PAIRED), ("2025Q1", _UNREAD)],
+    ) is None
+    # Nor a series still running, with nothing unresolved after it.
+    assert series_end_reason(last_quarter="2024Q3", unresolved=[]) is None

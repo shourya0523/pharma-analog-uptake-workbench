@@ -39,6 +39,7 @@ from app.domain.models import (
     new_id,
 )
 from app.observability import normalize_analog_key
+from app.pipeline.series_identity import recorded_reason_code
 from app.quality.completeness import (
     names_a_quarter,
     quarter_labels,
@@ -78,9 +79,9 @@ REASON_HELP: dict[str, str] = {**FLAGGED_REASON_HELP, **MISSING_REASON_HELP}
 
 
 def _missing_reason(period: str | None, reason_unresolved: str | None = None) -> str:
-    for code in (NO_FILER_OF_RECORD, REPORTED_WITH_ANOTHER_PRODUCT):
-        if (reason_unresolved or "").startswith(f"[{code}]"):
-            return code
+    code = recorded_reason_code(reason_unresolved)
+    if code:
+        return code
     return "not_disclosed" if period == WHOLE_PRODUCT_PERIOD else "interior_gap"
 
 

@@ -105,6 +105,8 @@ def product_sheet_row(product: dict) -> dict:
         "fda_approval_date": product.get("fda_approval_date"),
         "launch_quarter": product.get("launch_quarter"),
         "commercial_start_quarter": product.get("commercial_start_quarter"),
+        "series_end_quarter": product.get("series_end_quarter"),
+        "series_end_reason": product.get("series_end_reason"),
         "approved_indications": product.get("approved_indications"),
         "indications_json": json.dumps(product.get("indications") or []),
         "moa": product.get("moa"),

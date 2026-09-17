@@ -26,6 +26,7 @@ from app.pipeline.series_identity import (
     _scope_key,
     commercial_start_quarter,
     quarter_containing,
+    series_end_reason,
 )
 
 # Where each scope sits in the order the model declares them. Read from the
@@ -205,15 +206,24 @@ def build_dashboard_preview(
         launch_quarter = quarter_containing(
             canonical.initial_approval_date if canonical else None
         )
+        quarters_held = [
+            (row.period, FLAG_PARTIAL not in set(row.issue_flags or []))
+            for row in job.datapoints
+            if row.period_type == PeriodType.QUARTERLY.value
+            and row.validation_status in PUBLISHED_STATUS_VALUES
+            and holds_the_series_figure(row.series_selection)
+        ]
         commercial_start = commercial_start_quarter(
-            [
-                (row.period, FLAG_PARTIAL not in set(row.issue_flags or []))
-                for row in job.datapoints
-                if row.period_type == PeriodType.QUARTERLY.value
-                and row.validation_status in PUBLISHED_STATUS_VALUES
-                and holds_the_series_figure(row.series_selection)
+            quarters_held, launch_quarter=launch_quarter
+        )
+        series_end = max((period for period, _ in quarters_held), default=None)
+        ended_because = series_end_reason(
+            last_quarter=series_end,
+            unresolved=[
+                (row.period, row.reason_unresolved)
+                for row in job.unresolved_quarters
+                if row.resolution is None
             ],
-            launch_quarter=launch_quarter,
         )
         product = {
             "job_id": job.id,
@@ -240,6 +250,12 @@ def build_dashboard_preview(
             # it did not.
             "launch_quarter": launch_quarter,
             "commercial_start_quarter": commercial_start,
+            # Where the series stops, and why where the run recorded a
+            # reason. A reader who takes a series that ended at an event for
+            # one that is still running reads a decline that is a disclosure
+            # change.
+            "series_end_quarter": series_end,
+            "series_end_reason": ended_because,
             "approved_indications": "; ".join(item.disease for item in indications)
             or fields.get("indication")
             or job.indication,

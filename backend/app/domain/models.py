@@ -222,6 +222,20 @@ NO_FILER_OF_RECORD = "no_filer_of_record"
 # says so rather than leaving the quarter looking like a gap to fill.
 REPORTED_WITH_ANOTHER_PRODUCT = "reported_with_another_product"
 
+# The reasons an unresolved quarter names an event rather than a failure to
+# read one. Both are recorded against evidence the run holds - a filing index
+# with no filer of record, a line the issuer prints for two products - so a
+# series whose remaining quarters all carry one of them stopped for a reason
+# that can be stated and cited. The other reasons a quarter carries are the
+# model's or the deterministic gap filler's, and "nothing was extracted here"
+# is a gap rather than an ending: named as one, it would close a series the
+# issuer is still reporting.
+#
+# A snapshot of the coded reasons the pipeline writes. Stale when a stage
+# records another code that names an event, and the symptom is a series that
+# ends for a reason nobody is shown.
+SERIES_END_REASON_CODES = (NO_FILER_OF_RECORD, REPORTED_WITH_ANOTHER_PRODUCT)
+
 
 class UnresolvedResolution(str, Enum):
     """What a reviewer decided about a quarter the pipeline could not fill."""
