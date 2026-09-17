@@ -146,6 +146,24 @@ def test_the_reporting_year_wins_over_a_more_repeated_comparative():
     assert (context.months, context.year, context.quarter) == (3, 2005, 4)
 
 
+def test_a_period_named_once_does_not_date_the_document():
+    """A maturity date is a period the filing mentions, not the one it reports.
+
+    An annual report states its own year on every statement and names a
+    far-future span once, in a debt or milestone note. Taking the latest span
+    outright dates the filing to that mention; taking the latest among the
+    spans named throughout keeps the year the statements are headed with.
+    """
+    text = (
+        "Year ended December 31, 2022\n2022\n2021\n"
+        + "Revenue for the year ended December 31, 2022 was reported. " * 8
+        + "The notes mature over the twelve months ended December 31, 2040."
+    )
+    context = detect_period_context(text)
+    assert context is not None
+    assert (context.months, context.month, context.year) == (12, 12, 2022)
+
+
 def test_a_filing_covering_two_spans_is_dated_by_its_quarter():
     """"three and six months ended" names two spans, and the quarter is the one.
 

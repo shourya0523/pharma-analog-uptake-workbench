@@ -321,14 +321,16 @@ def detect_period_context(text: str) -> PeriodContext | None:
     for (months, _month, _year), n in counts.items():
         by_span[months] += n
     framing = 3 if by_span[3] * 2 >= max(by_span.values()) else max(by_span, key=by_span.get)
-    # Then the latest year - never the most frequently repeated one. A
-    # comparative year is always earlier than the year being reported, and it
-    # is often named more often than the reporting year: a Q4 2005 release
-    # mentions "three months ended December 31, 2004" five times in its
-    # footnotes against four for 2005, which is how the document came to be
-    # dated a year early.
-    best = max((key for key in counts if key[0] == framing), key=lambda key: key[2])
-    months, month, year = best
+    # Then the latest period among those named *throughout* the document, on the
+    # same reasoning as `_quarter_notation`: the comparative is printed beside
+    # every figure and so is named about as often as the reporting period, while
+    # a debt maturity or a milestone forecast - "the twelve months ended
+    # December 31, 2040" in a filing that says 2022 on every statement - is
+    # named once, and is not the period the document reports.
+    at_framing = {key: n for key, n in counts.items() if key[0] == framing}
+    most = max(at_framing.values())
+    throughout = [key for key, n in at_framing.items() if n * 2 >= most]
+    months, month, year = max(throughout, key=lambda key: (key[2], key[1]))
     return PeriodContext(months=months, month=month, year=year)
 
 
