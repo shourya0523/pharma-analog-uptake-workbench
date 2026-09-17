@@ -66,6 +66,11 @@ SCRIPT_ONLY = {
     # An importer for a file an analyst prepares by hand - with no caller and
     # no route, so there is nothing to hand the file to.
     "read_peak_sales_csv": NOT_WIRED,
+    # Writes a document's coverage verdict onto the retrieved source it
+    # belongs to. The only place a source and its parsed document are both in
+    # hand is the orchestrator, which this does not reach into; until it is
+    # called there, nothing records the verdict on a real run.
+    "record_coverage": NOT_WIRED,
     # Domain types and predicates constructed only by tests. The pipeline
     # builds its equivalents inline, so these are a second spelling of a
     # capability rather than the one that ships.

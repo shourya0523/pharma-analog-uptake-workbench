@@ -2,7 +2,12 @@ import json
 import re
 from pathlib import Path
 
-from app.connectors.sources import SECConnector, is_earnings_exhibit
+from app.connectors.sources import (
+    SECConnector,
+    form_family,
+    is_earnings_exhibit,
+    states_item,
+)
 from app.domain.models import (
     ParsedDocument,
     ParsingStatus,
@@ -73,7 +78,20 @@ def test_earnings_exhibit_rejects_filing_boilerplate():
 
 
 def test_earnings_item_is_results_of_operations():
+    """The constant is the SEC's own code for "Results of Operations and
+    Financial Condition", and the gate is what it is for.
+
+    Pinning the string says nothing about which filings are read: the gate
+    also has to find the code in a filing's item list and accept the filing
+    it sits on. `2.02` is furnished on the 8-K family, an amendment included,
+    and it is a whole entry in a comma-separated list rather than a substring
+    of one - `12.02` is not this item.
+    """
     assert SECConnector.EARNINGS_ITEM == "2.02"
+    assert SECConnector.EARNINGS_FORM == "8-K"
+    assert states_item("2.02,9.01", SECConnector.EARNINGS_ITEM)
+    assert not states_item("12.02", SECConnector.EARNINGS_ITEM)
+    assert form_family("8-K/A") == form_family(SECConnector.EARNINGS_FORM)
 
 
 def _source(source_id: str, source_type: SourceType, **kwargs) -> RetrievedSource:
@@ -299,14 +317,34 @@ def test_every_edgar_read_survives_a_dropped_connection_or_a_refusal(monkeypatch
         asyncio.run(connector._get_with_retry(client, "https://data.sec.gov/x", budget_s=0))
     assert client.calls == 1
 
-    # And the three reads that used to call the client directly now go
-    # through it: the ticker map, the submissions index, and its archive shards.
+
+def test_every_read_of_a_page_in_the_module_goes_through_the_backoff():
+    """Derived from the module, not from a list of the reads we remember.
+
+    A list of method names looked up in `vars(SECConnector)` cannot see a
+    function that is not a method, and `fetch_page` is not a method - so an
+    unthrottled read living there is invisible to a guard written that way,
+    however carefully the list is kept. Both sides of the assertion here are
+    read out of the module's own syntax tree, so a read added anywhere in the
+    file - method, module-level function or nested - has to be the throttled
+    one or this fails.
+    """
+    import ast
     import inspect
 
-    for name in ("resolve_cik", "_filings_covering", "_retrieve_xbrl_instances", "retrieve"):
-        fn = getattr(SECConnector, name, None)
-        if fn is not None:
-            assert "client.get(" not in inspect.getsource(fn), name
+    from app.connectors import sources as module
+
+    text = inspect.getsource(module)
+    tree = ast.parse(text)
+    functions = {
+        node.name: ast.get_source_segment(text, node)
+        for node in ast.walk(tree)
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+    }
+    reads = {name for name, body in functions.items() if "client.get(" in body}
+    paced = {name for name, body in functions.items() if "await _sec_throttle(" in body}
+    assert reads, "no function in the module reads a page; the check would pass vacuously"
+    assert reads == paced, (sorted(reads), sorted(paced))
 
 
 async def test_the_window_reaches_one_reporting_lag_back_and_no_further(monkeypatch):
