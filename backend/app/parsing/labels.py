@@ -93,6 +93,19 @@ _PARTIAL_RE = re.compile(
 # that negates it may stand between the claim and the name.
 _INCLUDES_CLAIM = r"includes?|including|consists?\s+of|comprises?|comprised\s+of"
 _NEGATES = r"\b(?:not|never|excludes?|excluding|exclusive\s+of|other\s+than|without)\b"
+# How far either side of the claim word a negator is still the claim's own.
+# One number, so the two sides cannot drift apart.
+_CLAIM_WINDOW = 60
+# A negator before the claim reaches it only while the claim is still part of
+# the same statement: a full stop or a semicolon ends one, and so does a
+# coordinator - in "amounts exclude sales of NuVessa but include sales of
+# Calderon XR" the `but` begins a second claim the first claim's negator does
+# not reach. Coordinators are a closed class of the language, like
+# `_CLAUSE_BREAK_RE`'s subordinators below, so nothing in a filing makes this
+# stale.
+_CLAIM_RESET_RE = re.compile(
+    r"[.;]|\b(?:but|however|whereas|yet|nevertheless)\b", re.IGNORECASE
+)
 
 # The note says the line is not this product's at all: "there were no sales
 # of NuVessa in the quarter" under "Calderon and NuVessa (1)".
@@ -412,25 +425,41 @@ def _note_scope(note: str, claim_at: int | None) -> tuple[int | None, frozenset[
     return months, periods
 
 
+def _negated_before(note: str, claim_at: int) -> bool:
+    """Whether a negator standing before the claim is one the claim carries.
+
+    The window behind the claim is the one in front of it, read the other way:
+    it reaches back as far, and it stops where the statement the claim belongs
+    to began.
+    """
+    head = note[max(0, claim_at - _CLAIM_WINDOW):claim_at]
+    reset = max((match.end() for match in _CLAIM_RESET_RE.finditer(head)), default=0)
+    return re.search(_NEGATES, head[reset:], re.IGNORECASE) is not None
+
+
 def _includes(note: str, names: Iterable[str]) -> tuple[tuple[str, ...], int | None]:
     """The products the note says the line includes, and where it first says so.
 
     ``includes Nebulized Calderon`` names Nebulized Calderon; ``does not
-    include sales of Nebulized Calderon`` names nobody.
+    include sales of Nebulized Calderon`` names nobody, and neither does
+    ``does not currently include`` - a negator reaches the claim word across
+    the words between them, the same way the claim reaches the name.
     """
     found: list[str] = []
     at: int | None = None
     for name in names:
         if not name:
             continue
-        match = re.search(
-            rf"(?<!not\s)(?<!never\s)\b(?:{_INCLUDES_CLAIM})\b"
-            rf"(?:(?!{_NEGATES})[^.;]){{0,60}}?\b{re.escape(name)}\b",
+        for match in re.finditer(
+            rf"\b(?:{_INCLUDES_CLAIM})\b"
+            rf"(?:(?!{_NEGATES})[^.;]){{0,{_CLAIM_WINDOW}}}?\b{re.escape(name)}\b",
             note, re.IGNORECASE,
-        )
-        if match:
+        ):
+            if _negated_before(note, match.start()):
+                continue
             found.append(name)
             at = match.start() if at is None else min(at, match.start())
+            break
     return tuple(found), at
 
 

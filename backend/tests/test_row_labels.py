@@ -106,6 +106,28 @@ def test_a_footnote_saying_the_line_does_not_include_a_sibling_names_nobody():
                          products=PRODUCTS).names == ("NuVessa",)
 
 
+def test_a_negator_reaches_the_claim_across_the_words_between_them():
+    """Both answers on the same distance: the negator reaches, the coordinator stops it.
+
+    A negator sitting next to the claim word was the only one the reading
+    refused, so one adverb between them - "does not currently include" - read
+    as a line combining the two. It reaches as far behind the claim as the
+    claim reaches ahead to the name, and stops where the claim's own statement
+    began.
+    """
+    for note in (
+        "Guidance does not currently include sales of NuVessa.",
+        "Net revenue does not, for the periods presented, include sales of NuVessa.",
+    ):
+        assert read_footnote(note, ["Calderon"], products=PRODUCTS).names == (), note
+    # A second claim after a coordinator is not the first claim's negation.
+    combined = read_footnote(
+        "Amounts exclude sales of NuVessa but include sales of Nebulized Calderon.",
+        ["Calderon"], products=PRODUCTS,
+    )
+    assert combined.names == ("Nebulized Calderon",)
+
+
 def test_an_acquisition_footnote_is_a_partial_period_and_a_launch_is_not():
     note = read_footnote(
         "net product revenue is for the period between January 24, 2023 "
