@@ -31,9 +31,20 @@ from app.storage.filestore import LocalFileStore
 QUOTE = "Calderon and NuVessa | 19.843 | 17.2"
 
 
-def _job(tmp_path, flags):
-    engine = create_engine("sqlite:///:memory:")
-    Base.metadata.create_all(engine)
+@pytest.fixture(scope="module")
+def engine():
+    """One engine and one schema for the whole module.
+
+    Building the schema is most of what a case here costs, and the cases do
+    not share anything else: every run, job and row is created with a new id,
+    and `_judge` is given the rows it is to decide.
+    """
+    made = create_engine("sqlite:///:memory:")
+    Base.metadata.create_all(made)
+    return made
+
+
+def _job(engine, tmp_path, flags):
     db = sessionmaker(bind=engine, autoflush=False, autocommit=False)()
     run = ExtractionRunORM(id=new_id(), status="running", options_json={})
     job = DrugJobORM(id=new_id(), run_id=run.id, drug_name="Calderon",
@@ -55,8 +66,8 @@ def _job(tmp_path, flags):
 
 
 @pytest.mark.asyncio
-async def test_a_combined_line_is_not_published_by_its_quote(tmp_path):
-    db, orch, job, row = _job(tmp_path, [FLAG_COMBINED])
+async def test_a_combined_line_is_not_published_by_its_quote(engine, tmp_path):
+    _db, orch, job, row = _job(engine, tmp_path, [FLAG_COMBINED])
 
     await orch._judge(job, [row], [], {}, {})
 
@@ -66,9 +77,9 @@ async def test_a_combined_line_is_not_published_by_its_quote(tmp_path):
 
 
 @pytest.mark.asyncio
-async def test_the_same_row_without_the_flag_still_publishes(tmp_path):
+async def test_the_same_row_without_the_flag_still_publishes(engine, tmp_path):
     """The gate is the flag, not the quote or the scope."""
-    db, orch, job, row = _job(tmp_path, [])
+    _db, orch, job, row = _job(engine, tmp_path, [])
 
     await orch._judge(job, [row], [], {}, {})
 
@@ -76,7 +87,7 @@ async def test_the_same_row_without_the_flag_still_publishes(tmp_path):
 
 
 @pytest.mark.asyncio
-async def test_every_label_flag_holds_the_row(tmp_path):
+async def test_every_label_flag_holds_the_row(engine, tmp_path):
     """Whatever the vocabulary grows to, each member of it holds a row.
 
     Asked over `LABEL_FLAGS` itself rather than over a list written here, so a
@@ -86,11 +97,18 @@ async def test_every_label_flag_holds_the_row(tmp_path):
         return {"support_classification": "supported",
                 "validation_status": ValidationStatus.AUTO_PASS.value, "issues": []}
 
+    async def asked_nobody(**_):
+        return {}
+
     for flag in sorted(LABEL_FLAGS):
-        db, orch, job, row = _job(tmp_path, [flag])
+        _db, orch, job, row = _job(engine, tmp_path, [flag])
         # The most favourable answer a judge can give, so nothing but the flag
         # can be what holds the row. A flag the deterministic judgment does
-        # not know falls through to this instead of to the network.
+        # not know falls through to this instead of to the network - and the
+        # search validator answers the way the client itself does where no key
+        # is configured, so a shell that has one does not send this row to a
+        # model and wait for it.
         orch.llm.judge = supported
+        orch.llm.judge_with_search = asked_nobody
         await orch._judge(job, [row], [], {}, {})
         assert row.validation_status != ValidationStatus.AUTO_PASS.value, flag

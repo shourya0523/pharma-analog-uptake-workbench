@@ -40,5 +40,12 @@ package = false
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
+# `datetime.utcnow()` is deprecated and the code still calls it; until it does
+# not, every call prints a warning and a run buries whatever else it had to say
+# under them. Narrow on purpose: the message, and that one class, so a new
+# warning is still seen.
+filterwarnings = [
+  "ignore:datetime.datetime.utcnow\\(\\) is deprecated:DeprecationWarning",
+]
 pythonpath = ["."]
 testpaths = ["tests"]
