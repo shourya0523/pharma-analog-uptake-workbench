@@ -75,22 +75,25 @@ Use the `ApiUrl` stack output (ALB). After AWS verifies CloudFront, deploy with 
 - [`docs/pipeline.md`](docs/pipeline.md) — the stages a run walks, how a filing
   becomes a rectangle whether it is HTML or PDF, and the rules that make the
   pipeline refuse rather than guess.
-- [`docs/evaluation.md`](docs/evaluation.md) — the five evals, what each one
-  measures, and which single number is the pipeline's score.
+- [`docs/evaluation.md`](docs/evaluation.md) — the one eval, what it measures,
+  and how to read what it prints.
 
-The short version of the second: an end-to-end run
-makes the readers find their own filings, which is the honest way to measure
-finding. It is not the whole pipeline - it runs none of the twelve stages in
-`run_job`, so the LLM extractor, the evidence judge and conflict reconciliation
-are all absent from it. Treat it as the deterministic floor. The same script
-without the flag hands it the document and measures only reading; that is a
-diagnostic and it prints so before it prints a number.
+There is one eval, and it speaks to the pipeline the way a person does: it
+POSTs a run, waits for the jobs, reads the datapoints back, and scores what the
+pipeline published. It imports nothing from `app`, so what it scores is what a
+caller gets — the whole pipeline, sourcing its own filings.
 
-Currently **1,070 of gold's 1,415 quarters (75.6%) are read correctly with the
-pipeline sourcing for itself**, against 3 wrong values. 305 of those answers
-come from facts the filer tagged in its own XBRL instance rather than from a
-table read positionally. Coverage by issuer and what the remainder consists of
-are in `docs/evaluation.md`.
+```bash
+cd backend && ./.venv/bin/uvicorn app.main:app --port 8000   # in one shell
+python scripts/eval.py --cases seed/cases/gold_all.json      # in another
+```
+
+The score is not written down here, because it is not a number on its own. It
+is a number as of a date, against an answer key of a given size, from a server
+running a given configuration, and all three move — `seed/cases/` is
+regenerated from `seed/gold/`, and the settings arrive from the environment the
+server was started in. The run prints all three above the number it prints, so
+read it there.
 
 ## Pharmaceutical data semantics
 
@@ -134,7 +137,9 @@ The XBRL member register — which product a filer's private axis member names �
 uv run --project backend python scripts/export_member_register.py
 ```
 
-For a connector-free metadata smoke check:
+For a smoke test of the same pipeline against a handful of gold's own
+product-years — a running server, and the network, since the run sources
+its own filings:
 
 ```bash
 uv run --project backend python scripts/eval.py --cases seed/cases/gold_sample.json

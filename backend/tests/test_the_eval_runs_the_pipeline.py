@@ -81,6 +81,38 @@ def test_every_case_file_says_where_its_answers_came_from():
             assert case.get("expect"), f"{path.name}: {case['drug_name']} expects nothing"
 
 
+def test_every_case_file_represents_both_answers():
+    """A set that only publishes is passed by a system that publishes anything.
+
+    Rule 4 states it for refusals; the mirror matters just as much here,
+    because a case file that never expects silence cannot see a run inventing
+    a figure for a quarter the issuer never reported. `docs/evaluation.md`
+    claims this of every file in `seed/cases/`, and the files are found by
+    globbing that directory rather than named here, so a file added later is
+    held to the claim the document already makes about it.
+    """
+    import json
+
+    files = sorted((REPO / "seed" / "cases").glob("*.json"))
+    assert files, "no case files"
+    for path in files:
+        expectations = [e for case in json.loads(path.read_text()) for e in case["expect"]]
+        empty = [e for e in expectations if e["value_normalized_usd_millions"] is None]
+        assert empty, (
+            f"{path.name} expects a figure everywhere, so a run that publishes "
+            f"something for every quarter scores full marks on it"
+        )
+        assert len(empty) < len(expectations), (
+            f"{path.name} expects nothing anywhere, so a run that refuses "
+            f"everything scores full marks on it"
+        )
+        for expectation in empty:
+            assert expectation.get("why"), (
+                f"{path.name}: an empty expectation that does not say why cannot "
+                f"be told from a quarter nobody got round to filling in"
+            )
+
+
 def test_every_run_is_started_before_any_is_waited_for():
     """The windows are independent; the server decides its own concurrency.
 

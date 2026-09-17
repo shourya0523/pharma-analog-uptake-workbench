@@ -333,7 +333,12 @@ def configuration(base: str, cases: pathlib.Path, started: list[tuple[str, str, 
     instead, and nothing a run stores says which it had.
     """
     print("\n  configuration")
+    # The answer key grows, so a score is a claim about the key on a date: both
+    # the day and the size of what was asked have to be beside the number, or a
+    # later run reads as an improvement on an earlier one that asked less.
+    print(f"    as of                 {time.strftime('%Y-%m-%d %H:%M:%S%z')}")
     print(f"    cases                 {cases} ({sum(len(b) for _, _, b in started)} case(s), "
+          f"{sum(len(c['expect']) for _, _, b in started for c in b)} expectation(s), "
           f"{len(started)} run(s))")
     print(f"    server                {base}")
     resolved: dict[str, list[str]] = {}
