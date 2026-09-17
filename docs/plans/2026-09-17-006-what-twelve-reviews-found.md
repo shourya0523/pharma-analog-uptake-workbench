@@ -1285,27 +1285,126 @@ so 40 is a ceiling, not a forecast - but it is the single largest hole in the
 early ramp, and the holes are in product-revenue tables, where the first four
 to eight quarters of a launch live.
 
-### 6b. `quote_states_a_different_period` reads only the first period
+### 6b. `quote_states_a_different_period` cannot match a non-quarterly key, and reads only one period  `[V]`, cause changed
 
-`periods_named_in` returns one period, so every prior-year comparative column is
-rejected: "$84.6 million and $75.9 million for the three months ended March 31,
-2025 and 2024" yields `{2025Q1}` and the 2024 figure is vetoed. 142 rows, 27
-alone. A regression introduced in the session that wrote the first pass.
+142 rows, 27 alone - exact on re-run (predicate: `hard_veto:` prefixes in
+`issue_flags`; "alone" = one distinct prefix). Zero in run8/10/12; the veto at
+`client.py:838-841` arrived in `afec007` (2026-09-15). Re-running
+`periods_named_in` (`extraction/prose.py:115`) over all 142 stored quotes:
 
-### 6c. `ytd_language_as_quarterly` reads the whole quote
+    51  A  quote names the SAME year, key is a bare year; candidate has a Q/H/M suffix
+    57  B  quote key is a bare year, candidate is the comparative year
+    32  C  quote names a proper quarter key, candidate is another year   <- the stated case
+     2  D  other
+
+An earlier draft gave C as the cause. It is 32 of 142. Classes A and B (108)
+are a **period-key namespace mismatch**: `_periods_with_positions` emits the
+bare year `'2023'` for six-month, nine-month and annual periods, while the
+candidate's key is `2023H1` / `2023M9` (`periods.py:339,341`), so the `in`
+test at `:839` can never match for any non-quarterly period. Printed:
+
+    quote: 'For the Three Months Ended September 30, / For the Nine Months
+            Ended September 30, / 2023 2022 2023 2022 / FIRDAPSE $ 66,224'
+    _periods_with_positions -> [(49, _Period(period='2023', period_type='nine_month'))]
+    candidate '2023Q3' not in {'2023'}  -> veto
+
+Class A is the worst: the quote names the right year and the right framing
+and the row is still held - while the prior-year comparative from the same
+table sometimes survives on another row, so the cell can be answered by the
+weaker reading. `prose.py:116`'s docstring promises `"2025H1"` keys; the code
+returns bare years. That wrong description is the root cause, and it is a
+different fix from "return every period the sentence names" - both are needed.
+
+Class C reproduces: `'$84.6 million and $75.9 million for the three months
+ended March 31, 2025 and 2024'` -> `['2025Q1']`; run13 datapoint `a663235f`
+(FYCOMPA 2023Q1, 57.5) is exactly this shape.
+
+The comment at `client.py:836-837` - "a quote naming no period, a table row
+whose period is in the header, is left alone" - is false in practice: the
+model quotes the header with the row, and 141 of the 142 flagged rows are
+`llm`. `test_prose_grounding.py:164-166` locks the intent on an invented bare
+row with no header, a shape that does not occur in run13.
+
+**Cost**, restricted to quarterly against 90 published quarterly cells: 11
+rows alone over 11 cells, 4 with nothing else published; unrestricted, 26
+cells, 19 unpublished - most H1/M9 rows the derivation path needs. This veto
+never reads document context, so where 7a assigns a wrong year it holds a
+correct quote rather than publishing a wrong number - the safe direction.
+
+### 6c. `ytd_language_as_quarterly` reads the whole quote - and cannot be fixed before 6a  `[V]`, cost changed
 
 `client.py:828` calls `re_ytd_language(q)` although `read` - the sentence
-carrying the value - is computed at `client.py:820` for exactly this. Same for
-`TOTAL_REVENUE_RE` and the period check. 52 rows, 2 alone.
+carrying the value - is computed at `:820`; `:822` `TOTAL_REVENUE_RE` and
+`:838` `periods_named_in` also read `q`; only `:844` uses `read`. 52 rows, 2
+alone - exact. Lines exact.
 
-### 6d. `filing_contradicts_itself` is tier-blind
+But the implied remedy recovers nothing and is unsafe while 6a stands.
+Re-running the regexes over the stored quotes: 48 of 52 would clear under
+`read` - **because `sentence_carrying` returns a bare number on table quotes
+(6a)**, e.g. `read` is `'77,372'` for the 2024Q2 row. Of the 2 rows whose only
+veto is YTD, 0 clear. And the period check would go from firing on 243 rows'
+evidence to 92. So 6a's veto (`:810-816`, tests `carrying`) and these three
+are inconsistent - the product test is narrowed to the value sentence, the
+others are not - and making them consistent by switching to `read` would
+make the YTD and period checks near-dead on exactly the table quotes that
+dominate run13. **6c is downstream of 6a.** `TOTAL_REVENUE_RE` costs nothing
+either way: `hard_veto:company_total_without_product` is 0 rows in all four
+runs.
 
-Its premise is that the filing said two things; when the second is a reader's
-misreading of the same sentence the premise is false, and a tier-4 prose row
-vetoes a tier-0 tagged fact. A tier-aware version measured **+3 correct, 0 new
-wrong**; a period-type-aware version is +3 and **+1 wrong** - so tier, not
-period type. `test_one_figure_one_publication.py:172` locks the current
-behaviour and needs rewriting to "two claims of equal strength".
+**Rule 1:** `re_ytd_language` (`client.py:863`) is a six-phrase word bank
+deciding "is this YTD", while `_periods_with_positions` two calls later
+already types the same text into quarterly / six_month / nine_month / annual.
+On the FIRDAPSE quote above the word bank says `True` (veto) and the typed
+parser says `nine_month` - neither sees the three-month column the value came
+from, but only one is a derivable producer.
+
+**Cost:** about one quarter-cell in run13.
+
+### 6d. `filing_contradicts_itself` holds the right figure beside a wrong one - but the tier axis is not what separates them  `[V]` on code and test; `[U]` on the scores
+
+The flag is set at `orchestrator.py:2498` (computed `:2440-2484`). Its
+premise is that the filing said two things. An earlier draft said "a tier-4
+prose row vetoes a tier-0 tagged fact". Composition of flagged rows:
+
+    run8   18: llm 12, xbrl_fact 4, table 2
+    run10  28: llm 18, xbrl_fact 5, table 5
+    run12  28: llm 17, xbrl_fact 7, table 4
+    run13  36: llm 28, xbrl_fact 7, table 1
+
+**Zero `prose` rows carry the flag in any run.** `CLAIM_STRENGTH` puts `prose`
+at 4 and `llm` at 3; the poisoner is tier 3. And on run13, 13 of 18 flagged
+(job, period, period_type) groups contain only tier-3 `llm` rows, which
+tier-awareness cannot separate. In the mixed groups the poisoner is itself
+**tier 0** - printed pairs inside one accession:
+
+    2023Q1 / Product family   xbrl_fact 27.778  us-gaap:RevenueFromContractWithCustomer...
+                              xbrl_fact  5.870  us-gaap:AssetAcquisitionConsiderationTransferredTransactionCost
+    2024Q3 / Product family   xbrl_fact  7.961  us-gaap:RevenueFromContractWithCustomer...
+                              xbrl_fact  6.285  us-gaap:AmortizationOfIntangibleAssets
+    2025   / Regional         llm 38.658  'European ORLADEYO business 38,658'
+                              llm 14.402  'ORLADEYO: ... Rest of world 14,402'
+
+So the two real causes on run13 are (i) **a non-revenue XBRL concept stored
+as a revenue datapoint** for the same key, holding the correct tier-0
+revenue fact and the correct tier-3 readings beside it, and (ii) `Regional`
+scope pooling two geographies into one reconciliation key (2b). Neither is a
+tier problem. `_agrees_within_declared_precision` (`:182-197`) is not the
+culprit for the rounded-vs-exact pairs checked (36.393 vs 36.4 agree).
+
+The tier-aware **+3/0** and period-type-aware **+3/+1** are measurements from
+an earlier session against a baseline section 0 now says is unreproducible;
+they stay `[U]`. `test_one_figure_one_publication.py:172` does lock the
+current behaviour (re-run green) - on an `xbrl_fact` vs `table` pair, not the
+prose pair the earlier draft described.
+
+**Rule 1:** `CLAIM_STRENGTH` (`orchestrator.py:143-152`) is a hand-written
+list of eight `extraction_method` strings; unknown producers fall silently to
+rank 8, no `ExtractionMethod` enum exists anywhere in `app/`, and nothing says
+what the list is a snapshot of. All methods in run8-13 are in it today.
+
+**Cost** is concentrated in the Regional cases: the analyst loses both
+geographies and gains a flag that names the filing, which is not where the
+fault is.
 
 ### 6e. A corroborator is never promoted when the winner is held
 
@@ -1428,12 +1527,46 @@ are the cells at risk, the tail and the start of the ramp.
 constant in prose ("scored above the table reader's 0.75"); true today
 (`candidates.py:35`), which is exactly how it goes stale silently.
 
-### 7d. The judge is blind to what the pipeline knows
+### 7d. The judge is blind to what the pipeline knows  `[V]`, ranked too low
 
-Unit, currency, geography, extraction method, filing form, sibling rows, the
-filing's own tagged value for the period, the footnote. `peer_names` is
-accepted by two functions and supplied by none, so `hard_veto:other_brand`
-cannot fire. Footnotes reach the quote on 2 of 549 rows. See doc 005.
+The judge's candidate dict (`orchestrator.py:2078-2086`) holds exactly seven
+keys - `period, value_reported, period_type, revenue_scope, formulation,
+label_flags, label_residue` - and `evidence_judge.yaml` interpolates it as
+`json.dumps(candidate)`. Absent and confirmed absent: `unit`, `currency`,
+`geography`, `extraction_method`, source type or filing form, any sibling
+row, the filing's own tagged value for the period. Every one is a column on
+the row.
+
+`peer_names`: five production call sites of `filter_revenue_candidates`
+(`orchestrator.py:1739,1844`) and `apply_judge_hard_vetoes` (`client.py:460,
+753`, `fast_judge.py:28`); none supplies it; the only supplier in the repo is
+`test_quality.py:98`. `hard_veto:other_brand` is 0 rows in all four runs.
+`candidate_filters.py:226-234` says the intended supplier is "the product rows
+around the sentence" - `names_a_competing_product` (`:98`) is that producer
+and is wired only into `parsing/tables.py:84`, never into judging. (Rule 3:
+any fix must use it, not a catalogue - `KNOWN_PEER_BRANDS` is in CLAUDE.md's
+table.) Adjacent: `fast_judge.py:28` passes no `generic` and no
+`extra_aliases`, so every hard veto on the deterministic path runs against
+the brand string alone.
+
+Footnotes reach the quote as a ` [(mark) note]` suffix (`extract.py:743`) on
+2 of 549 run13 rows (0 / 2 / 2 / 2 across run8/10/12/13), both `table`, both
+the same note. **And that note is the item's cost.** AGAMREE 2024Q1: the
+published figure is `$1.174M`, `auto_pass`, `xbrl_fact`, quote without the
+note. The only row carrying the note - "net product revenue for the three
+months ended March 31, 2024 is for the period between March 13, 2024 (date
+of commercial launch) and March 31, 2024", **eighteen days** - is the `table`
+row, demoted to `corroborates`, which the analyst does not see. And
+`read_footnote(note, ["agamree"], ...)` returns `flags=()` with
+`applies_to(3,'2024Q1') == True`: the note reaches the quote, applies to the
+figure, and sets nothing; no run13 row carries `partial_period`;
+`fast_judge.py:39-47`'s partial-period branch never fires. An eighteen-day
+stub published as the first quarter of a launch is the single most damaging
+point in an uptake curve - layer 3 reads time-to-peak off the ramp, and the
+ramp's first point is this. Ranked under "signal discarded"; it is a wrong
+published number at a series start (section 1's class).
+
+Rule 5 is clean across `llm/`, `quality/` and `prompts/`. See doc 005.
 
 ### 7e. Smaller
 
