@@ -46,6 +46,7 @@ from app.db.models import (
 from app.domain.claims import stated_labels, stated_number, stated_text
 from app.domain.models import (
     NO_FILER_OF_RECORD,
+    PUBLISHED_STATUS_VALUES,
     REPORTED_WITH_ANOTHER_PRODUCT,
     JobStatus,
     JobStep,
@@ -215,6 +216,69 @@ def _agrees_within_declared_precision(winner: DatapointORM, other: DatapointORM)
     else:
         slack = ROUNDING_TOLERANCE * max(abs(a), abs(b))
     return abs(a - b) <= max(slack, ROUNDING_ABSOLUTE)
+
+
+# How the judge spells a veto in a row's issues (`apply_judge_hard_vetoes`,
+# `llm/client.py`). A snapshot of one prefix, not of the vetoes themselves -
+# the list of those grows, and nothing here has to know it. What would make
+# this stale is the judge renaming the prefix, and the symptom would be a
+# vetoed row treated as clean.
+_VETO_PREFIX = "hard_veto:"
+
+
+def _publishes(row: DatapointORM) -> bool:
+    """Whether the status this row carries is one the pipeline stands behind."""
+    return row.validation_status in PUBLISHED_STATUS_VALUES
+
+
+def _unquestioned(row: DatapointORM) -> bool:
+    """Whether anything on the row makes it a question rather than an answer.
+
+    A veto the judge recorded, or a label flag the reader raised. Both are
+    reasons a person has to look; a row carrying either cannot stand in for a
+    reading that was held.
+    """
+    flags = set(row.issue_flags or [])
+    return not (
+        any(flag.startswith(_VETO_PREFIX) for flag in flags) or flags & LABEL_FLAGS
+    )
+
+
+def _carry_to_winner(winner: DatapointORM, other: DatapointORM) -> None:
+    """Move what a corroborating row knows and the published row does not.
+
+    The two rows are one figure read twice, so anything either of them says
+    about the figure is true of the published one: the pair a combined line is
+    reported as, the note the filer attached to it, and the flags that note
+    raised. Discarding them publishes the figure as something it is not - a
+    stub covering part of a quarter published as the quarter, an
+    `acme:CalderonMember` line published as Calderon's own when the row it
+    corroborates was read from "Calderon + NuVessa".
+
+    A flag that makes a row a question is not information a published row may
+    absorb quietly, so carrying one holds the figure.
+    """
+    if other.reported_as and not winner.reported_as:
+        winner.reported_as = other.reported_as
+    citation = dict(winner.citation_json or {})
+    changed = False
+    if other.reported_as and not citation.get("combined_with"):
+        combined = (other.citation_json or {}).get("combined_with")
+        if combined:
+            citation["combined_with"] = list(combined)
+            changed = True
+    notes = footnotes_in(other.source_quote or "")
+    if notes and not footnotes_in(winner.source_quote or ""):
+        citation["corroborator_footnote"] = " ".join(notes)
+        changed = True
+    carried = sorted((set(other.issue_flags or []) & LABEL_FLAGS) - set(winner.issue_flags or []))
+    if carried:
+        winner.issue_flags = sorted(set((winner.issue_flags or []) + carried))
+        winner.validation_status = ValidationStatus.NEEDS_REVIEW.value
+        citation["validation_status"] = winner.validation_status
+        changed = True
+    if changed:
+        winner.citation_json = citation
 
 
 def claim_rank(extraction_method: str | None) -> int:
@@ -2551,27 +2615,69 @@ class PipelineOrchestrator:
         # thousands beside a printed one in millions with one decimal. It is
         # cited beside the published figure, not published as a second one and
         # not held as a conflict it never was.
+        #
+        # The group is looked at again here rather than read off the winner,
+        # because the winner is not always the row that publishes. Which side
+        # of a pair carries the figure is settled above; whether that row is
+        # publishable was settled by the judge before this ran, and a row held
+        # by a veto takes the whole cell down with it when the only other
+        # reading of the quarter is turned into its citation.
         corroborating: set[str] = set()
         by_id = {row.id: row for row in rows}
         for group in by_key.values():
             winner = next((r for r in group if r.id in winners), None)
             if winner is None or winner.value_normalized_usd_millions is None:
                 continue
-            for other in group:
-                if other.id == winner.id or other.id in contested or other.id in self_contradicting:
-                    continue
-                if other.value_normalized_usd_millions is None:
-                    continue
-                if _agrees_within_declared_precision(winner, other):
-                    corroborating.add(other.id)
-                    cited = list((winner.citation_json or {}).get("corroborated_by") or [])
-                    cited.append({
-                        "datapoint_id": other.id,
-                        "source_url": other.source_url,
-                        "value_normalized_usd_millions": other.value_normalized_usd_millions,
-                        "extraction_method": other.extraction_method,
-                    })
-                    winner.citation_json = {**(winner.citation_json or {}), "corroborated_by": cited}
+            agreeing = [
+                other
+                for other in group
+                if other.id != winner.id
+                and other.id not in contested
+                and other.id not in self_contradicting
+                and other.value_normalized_usd_millions is not None
+                and _agrees_within_declared_precision(winner, other)
+            ]
+            if not _publishes(winner):
+                # The winner is held. A reading of the same figure that is
+                # publishable and carries no question of its own is the
+                # quarter's answer, and citing it under a row nobody will
+                # publish loses the quarter. It takes the winner's place; the
+                # held row keeps the verdict it was given, and is not recorded
+                # as corroborating a figure it lost to.
+                #
+                # Which of them takes the place is the same question the group
+                # was ranked on, so it is asked with the same key rather than
+                # by whichever the group happens to list first.
+                instead = next(
+                    (
+                        o
+                        for o in sorted(agreeing, key=claim_tier)
+                        if _publishes(o) and _unquestioned(o)
+                    ),
+                    None,
+                )
+                if instead is not None:
+                    winners.discard(winner.id)
+                    losers.discard(instead.id)
+                    winners.add(instead.id)
+                    logger.info(
+                        "corroborator_published job_id=%s drug=%s period=%s held=%s published=%s",
+                        job.id, job.drug_name, winner.period,
+                        winner.extraction_method, instead.extraction_method,
+                    )
+                    agreeing = [o for o in agreeing if o.id != instead.id]
+                    winner = instead
+            for other in agreeing:
+                corroborating.add(other.id)
+                cited = list((winner.citation_json or {}).get("corroborated_by") or [])
+                cited.append({
+                    "datapoint_id": other.id,
+                    "source_url": other.source_url,
+                    "value_normalized_usd_millions": other.value_normalized_usd_millions,
+                    "extraction_method": other.extraction_method,
+                })
+                winner.citation_json = {**(winner.citation_json or {}), "corroborated_by": cited}
+                _carry_to_winner(winner, other)
 
         for row in rows:
             if row.id in corroborating:
