@@ -370,16 +370,23 @@ published `period` of **any** `period_type`, so an annual `2025` or a
 Library products (AYVAKIT 3/2, ILUVIEN 1/0, NUPLAZID 10/9, Ocaliva 5/2,
 ORLADEYO 10/8).
 
-### 1c. A two-product line is published as one product's revenue, because the alias step disarms the guard
+### 1c. A two-product line is published as one product's revenue, because the alias step disarms the guard  `[V]`, site found
 
 `parsing/labels.py:210 read_label` detects combined lines correctly.
 `orchestrator.py:535` feeds it the LLM's merged alias list, which contains the
 *other* product. Decisive:
 
-    read_label("Total Pombiliti (R) + Opfolda (R) sales", <run13's merged alias list>)
-      -> matched: Pombiliti  combined: ()           flags: ()
-    read_label(same, [a for a in aliases if "opfolda" not in a.lower()])
-      -> matched: Pombiliti  combined: ('Opfolda',) flags: ('combined_line',)
+    'Total Pombiliti(R) + Opfolda(R) sales'  as stored        -> combined=()           flags=()
+    'Total Pombiliti(R) + Opfolda(R) sales'  opfolda removed  -> combined=('Opfolda',) flags=('combined_line',)
+    'Total Pombiliti + Opfolda sales'        opfolda removed  -> combined=()           flags=('label_not_understood',)
+
+The decisive test reproduces on the (R) form only, which is the form the
+filing prints. `Opfolda` is in neither `load_products()` nor run13's job
+names, so `products=self._candidate_products(job)` (`orchestrator.py:1698`)
+cannot supply it; the only producer that catches this line is the filer's
+own mark, via `_TRADEMARKED_NAME_RE` (`labels.py:196`) - and `read_label`
+drops a marked name that is in `own_keys`, which is exactly what the alias
+list makes Opfolda.
 
 So `combined_with` is empty, `reported_as_for` (`orchestrator.py:241`) returns
 `None`, and `_record_quarters_only_reported_with_another_product`
@@ -391,9 +398,20 @@ ILUVIEN works **only because** YUTIQ happens not to be in its alias list. So
 `reported_as_for` and the unresolved-quarter recording are correct code that
 does not fire for the case they were built for.
 
-Fix: the alias list a label reader is given must not contain another product's
-name. Whether that belongs in `merge_aliases` (`llm/aliases.py:8`), in the
-prompt, or in `read_label` is open - the miss is established, the site is not.
+**The site is found, and it is not the model or `merge_aliases`.** The model
+returned `"Pombiliti/Opfolda"` and `"Pombiliti + Opfolda"` as aliases;
+`parsing/evidence.py:77` splits on `[/|,;]+` - the franchise splitter meant
+for one product's two spellings - and manufactures the bare `Opfolda`:
+
+    product_aliases('Pombiliti', None, extra=['Pombiliti/Opfolda'])   -> [..., 'Opfolda']
+    product_aliases('Pombiliti', None, extra=['Pombiliti + Opfolda']) -> ['Pombiliti', 'Pombiliti + Opfolda']
+
+`merge_aliases` (`llm/aliases.py:8`, called at `orchestrator.py:535`) is a
+pass-through to `product_aliases`. The "+" form is harmless; the slash form
+alone causes it. **Rule 1:** the fix must not reach for a brand list - the
+producer that says "another product's name" is the (R) mark, and `Opfolda` is
+in no list the pipeline holds. run13 counts exact: 39 datapoints, 39 from a
+line naming Opfolda, 2 `auto_pass`, `reported_as = None` on all 39.
 
 ### 1d. The deliverable named `quarterly_revenue.csv` is not quarterly  `[V]`
 
@@ -1313,14 +1331,26 @@ of them use. `seed/gold/product_profiles.jsonl` cannot be the scorer for 4a or
 From the first pass, kept. These break "never publish a figure that is not this
 product's own" and "publish it with a quote a person can check".
 
-### 5a. Derived rows cite a document that does not contain their input
+### 5a. Derived rows cite a document that does not contain their input  `[V]`, harder than stated
 
-`orchestrator.py:2025` takes `selected_sources[0]` for every derived candidate,
-whatever it actually subtracted.
+`orchestrator.py:2024` takes `selected_sources[0]` for every derived candidate,
+whatever it actually subtracted. The figure test - open the cited cached
+document and search for each derivation *input* at three or more significant
+digits (`46.041` / `46,041` / `46041` / `46,041,000`; integer-rounded forms
+rejected as unfalsifiable):
 
-    derived rows: 16
-      cited document contains the derivation input:  3
-      cited document does NOT contain it          : 13   (12 of them auto_pass)
+    derived rows in run13                                   16   (15 auto_pass, 1 corroborates)
+    cited document prints EVERY input figure                 0
+    cited document prints the period total it subtracted     7
+    cited document prints none of the inputs                 4
+    every input READ FROM the cited document                 0 of 16
+
+An earlier draft said 3 of 16 contain the input; the figure test gives 0.
+Absences cross-checked by raw grep (`820,791`, `213,295`, `37,973` and five
+more return 0 hits in their cited files). **And the correct document is
+reachable**: each of those figures is in another cached document of the same
+job's own `source_documents` - a capability the run had and did not use, not
+a retrieval gap.
 
 `DerivationLineageORM` (`db/models.py:468`) exists and has never been written.
 Fix: record the inputs a derivation used, cite them, write the lineage row.
@@ -1402,14 +1432,19 @@ products when it is one - the identity error the brief calls "an analog set you
 cannot trust". run13 has 12 `combined_line` rows, 4 `auto_pass`; 5f says the
 demotion the flag should trigger is overwritten anyway.
 
-### 5d. Derivation launders provenance at four sites
+### 5d. Derivation launders provenance at four sites  `[V]`
 
-`derive.py:358`, `derive.py:443`, `orchestrator.py:1279 _candidate_of`, and
+`derive.py:358`, `derive.py:445`, `orchestrator.py:1279 _candidate_of`, and
 `orchestrator.py:1291 _datapoint_from_candidate`, which never writes
 `reported_as`, `geography` or `route_of_administration` and defaults scope to
 "Product family". `_derived_point` then writes a fresh quote opening with the
-bare product name, so the row asserts the identity it just lost. One field
-added to `_candidate_of` also revives `HELD_FOR_BOUND` (7b).
+bare product name, so the row asserts the identity it just lost. `_candidate_of`
+returns eight keys - `period, period_type, value_reported,
+value_normalized_usd_millions, currency, unit, source_quote` and nothing
+else. Visible in output: for all 16 derived and all 62 `xbrl_fact` rows in
+run13, `reported_as`, `geography` and `route_of_administration` are None and
+`revenue_scope` is "Product family". One field added to `_candidate_of` also
+revives `HELD_FOR_BOUND` (7b).
 
 ### 5e. `deterministic:product_quote_value_ok` publishes expenses and guidance
 
@@ -1424,14 +1459,25 @@ against the product's approval or launch date, though `fda_approval_date` and
 the `early_launch` validation reason exist - and section 3f/3g say why that
 date is not there to compare against.
 
-### 5f. The combined-line demotion is overwritten
+### 5f. The combined-line demotion is overwritten  `[V]`, provably
 
 `orchestrator.py:2125` demotes a `combined_line` row to `needs_review` and
-`orchestrator.py:2248` then sets `AUTO_PASS` on any supported quarterly/annual
-row without consulting `label_flags`. Seven of seven published YUTIQ quarters
-are ILUVIEN+YUTIQ. Fix: consult `label_flags` in the auto-pass condition. Note
-this closes the hole only where the flag was set at all - 1c is why it often is
-not.
+`orchestrator.py:2259` then sets `AUTO_PASS` on any supported quarterly/annual
+row without consulting `label_flags`. The data proves the sequence: `:2125`
+appends `label:combined_line` to the row, so an `auto_pass` row carrying that
+string was demoted and re-promoted - run13 has 12 `combined_line` rows, 4
+`auto_pass`, 4 of 4 carrying the string, 4 of 4 `supported`, 4 of 4 YUTIQ
+(run12 identical; run8-11 have no combined rows).
+
+Seven of seven published YUTIQ quarters are ILUVIEN+YUTIQ - four directly
+(`reported_as='ILUVIEN + YUTIQ'`) and **three derived from the same combined
+lines with `reported_as=None`**, because `_candidate_of` dropped the field
+(5d): 2024Q4 27.643, 2025Q4 19.843, 2026Q1 19.255. Against the holdout,
+ILUVIEN's expected 2026Q1 is 19.255 and 2026Q2 is 18.718 - published under
+YUTIQ while ILUVIEN publishes nothing for either. **The two series are swapped
+at the switch-over.** Fix: consult `label_flags` in the auto-pass condition.
+This closes the hole only where the flag was set at all - 1c is why it often
+is not - and 5f + 1c are one wrong series, not two items.
 
 ---
 
@@ -1586,43 +1632,118 @@ what the list is a snapshot of. All methods in run8-13 are in it today.
 geographies and gains a flag that names the filing, which is not where the
 fault is.
 
-### 6e. A corroborator is never promoted when the winner is held
+### 6e. A corroborator is never promoted when the winner is held  `[V]`, two shapes
 
 `orchestrator.py:2461` computes corroborators from winners and never
-re-examines the group. 37 quarters across six runs have a `corroborates` row
-and nothing published; 14 of those corroborators were themselves clean.
-Measured at **+1 correct, 0 regressions**; with 6d, **+4 and zero new wrong**.
+re-examines the group. Over the six databases run8-13 (predicate: quarterly,
+cell = (job, period), nothing `auto_pass`/`confirmed`): **32** cells with a
+`corroborates` row and nothing published, **15** of those corroborators clean
+(3/42, 2/34, 3/93, 6/36, 8/144, 10/157). An earlier draft said 37/14; run13's
+10 of 157 is exact. The earlier **+1/0** and **+4/0 with 6d** are scores
+against a baseline section 0 calls unreproducible and stay `[U]`.
 
-The second pass found what this costs the series rather than the score: 10 of
-157 quarter-cells in run13, and 5 of the lost corroborators are XBRL, table or
-derived - including DAYBUE 2023Q2 and NUPLAZID 2023Q1, which are **series
-starts**. See 2d.
+run13's 5 cells whose stranded corroborator is `xbrl_fact` or `table` -
+DAYBUE 2023Q2, FILSPARI 2025Q2, FIRDAPSE 2023Q2, NUPLAZID 2023Q1, YUTIQ
+2025Q2 - are the 5 clean ones. **Series starts confirmed:** DAYBUE's earliest
+quarter anywhere in run13 is 2023Q2 and its earliest published is 2023Q3;
+NUPLAZID's are 2023Q1 and 2023Q2. Both begin one quarter late with the
+missing first point sitting in the database as a clean tagged fact. See 2d.
 
-### 6f. `conflicting_values` rejects both sides, by period
+**A second shape, from 7d:** AGAMREE 2024Q1 has a published winner
+(`xbrl_fact 1.174`, no footnote) and a `corroborates` `table` row carrying the
+eighteen-day-stub note. The rule "compute corroborators from winners, never
+look again" produces two losses: the winner is held and the corroborator is
+stranded (10 cells), or the winner publishes and the corroborator's extra
+information is discarded (1 cell, at a series start, in run10, run12 and
+run13 alike - rare only because footnotes reach quotes on 2 rows).
 
-`check.py:231` groups by `(period, period_type, scope)` and `candidates.py:183`
-drops every reading of a period with an error finding. **20 gold-correct
-readings discarded**, including Pombiliti 2025Q1 = 21.005 carrying
-`reported_as: "Pombiliti + Opfolda"` - the identity the replacement row lacked.
-A reading flagged `label_not_understood` vetoes a reading whose label was fully
-accounted for, and the reconciler built to choose between claims never gets the
-chance.
+### 6f. `conflicting_values` rejects both sides, by period  `[V]`, one detail false, magnitude larger
 
-### 6g. SOURCE_PRIORITY ranks tagged facts below a model reading the same filing
+`check.py:231` groups by `(period, period_type, scope)` (`:238`) but every
+`Finding` carries `periods=(period,)` only, and `candidates.py:183` rejects
+**by period alone** - so a conflict inside one `(period_type, scope)` cell
+kills every other cell sharing the period label. `check.py:102 _usable`
+filters on nothing but "has a normalized value", so a label the reader could
+not account for is a full voter: in `fold-20250331.htm` the correct row
+`Total Pombiliti(R) + Opfolda(R) sales $ 21,005` (`flags=()`) is dropped
+because `Interest income 812`, `Income tax expense (3,641)` and `Loss before
+income tax (18,045)` - all `label_not_understood` - put 2025Q1 into a
+`conflicting_values` error. Four checks produce `severity="error"`
+(`check.py:146,180,203,270`).
+
+**An earlier draft said the discarded Pombiliti reading carried
+`reported_as: "Pombiliti + Opfolda"`. It did not** - re-read from the document
+with run13's aliases it carries `reported_as = None`, exactly like the row
+that replaced it, because of 1c. Fixing 6f restores the figure and no
+identity. Struck.
+
+Re-measured with the predicate stated - the deterministic table+prose path
+over every cached `.htm` of each run13 job, oracle `seed/cases/shapes_holdout.json`
+(gold holds none of run13's 22 products; "gold-correct" in the earlier draft
+can only have meant this file), match within 0.002:
+
+    expectations carrying a value                                    70
+    (product, quarter) cells whose exactly-correct reading is dropped  37  (88 readings)
+      nothing published in run13                                      14
+      published at coarser precision only                              4
+      published correct from elsewhere anyway                         19
+
+37 cells against "20 readings": the direction holds, the magnitude is larger.
+The 14 are holes in continuous series - FILSPARI 2025Q2, FIRDAPSE 2023Q2,
+FYCOMPA 2023Q2/Q3, Thiola 2025Q1-Q4, Pombiliti 2025Q2-Q4 - caused by an
+income-statement row's label in the same document, which makes them
+undiagnosable from the review queue.
+
+### 6g. SOURCE_PRIORITY ranks tagged facts below a model reading the same filing  `[V]`, and the non-revenue leak is located
 
 An XBRL instance retrieved inside a 10-Q is typed `QUARTERLY_REPORT` (priority
 4); the human-readable document from the same accession is `SEC_FILING`
 (priority 0). Both the fallback ranking and the `contested` tier read
 `priority_index` before `claim_rank`. 100% of tagged facts sit in the lower
-band; 32 were demoted to citations while a model's reading of the same filing
-published. Fix: `claim_rank` before `priority_index`, or type the instance by
-its accession's form. This is what makes 6d and 6e hold rather than move.
+band (every tagged fact in run8-13 cites `quarterly_report`; the typing site
+is `sources.py:725-727`); **32** `xbrl_fact` rows across the six runs are
+`corroborates` - exact - and a published winner from the *same accession*
+exists for 16 of them (15 winners `llm`); 9 have no published winner at all,
+which is 6e. `priority_index` is read before `claim_rank` at
+`orchestrator.py:2395-2398` and `:2418-2421`. `reading_rank` and
+`DOCUMENT_FITNESS` take no part in reconciliation - their only call site is
+`:1582`, choosing which sources the model is asked about - so 6g's locus is
+`priority_index` alone.
 
-### 6h. Reconciliation groups by period label and ignores `period_type`
+The 32 are all correct revenue facts (31 `RevenueFromContractWithCustomer
+ExcludingAssessedTax`, 1 `Including`). **The two non-revenue concepts 6d found
+are separate, and the leak is at `parsing/xbrl.py:377-385`
+`Calculation.settles`**: it returns `self.sign[element] > 0` over the whole
+linkbase regardless of which statement the parent belongs to. Replayed
+against the filings' own `_cal.xml`: `AmortizationOfIntangibleAssets` settles
+`True` because it is added back under `NetCashProvidedByUsedInOperatingActivities`;
+`AssetAcquisitionConsiderationTransferredTransactionCost` settles `True` as an
+addend of a purchase-price roll-up. `revenue_elements` (`:467`) then admits
+both and `product_facts` (`:529`) emits them as revenue. The docstring at
+`:366-371` describes the guard that is missing and does not constrain the
+root.
 
-65 groups across six runs mix period types, so a six-month figure competes with
-the quarter it shares a label with. Add `period_type` to the key at
-`orchestrator.py:2293`.
+Fix: `claim_rank` before `priority_index`, or derive both documents' type
+from the accession's form (`is_annual(form)` at `sources.py:726` already
+does this for one of them). This is what makes 6d and 6e hold rather than
+move. And constrain `settles` to a revenue root.
+
+**Rule 5:** `orchestrator.py:2014` ("a sentence reading 1.0 did not lose to a
+family total that derives exactly to 94.645 ... ranking alone moved nothing"),
+`:1906-1909` ("a candidate arrived reported as 87.4 with 87,400 beside it and
+was published") and `:2162` ("caps confidence at 0.55", another module's
+constant in prose) all belong in commit messages.
+
+### 6h. Reconciliation groups by period label and ignores `period_type`  `[V]`
+
+65 groups across six runs (7, 7, 6, 7, 18, 20) mix period types under one
+label. Composition: 19 annual+ytd, 11 nine_month+quarterly, 9 six_month+ytd,
+7 quarterly+six_month, 7 quarterly+ytd, and 12 across five other shapes. The
+11 nine_month+quarterly are the damaging ones - FYCOMPA 2023Q3 pools
+`xbrl_fact 36.393 quarterly` with `llm 98.8 nine_month`; Pombiliti 2025Q3
+pools `30.714` with `77.535` - and they are the same cells 6d and 6f touch.
+Cheapest of the section and upstream of 6d's group composition, so first
+among these. Add `period_type` to the key at `orchestrator.py:2293`.
 
 ---
 
@@ -1670,9 +1791,10 @@ be dated a year early" - counts, an unnamed document, and a defect history,
 read as the argument *for* `max(key=year)`. The next reader inherits a claim
 they cannot check and the guard at `:281` looks like a different concern.
 
-### 7b. `_declared_slack` and `HELD_FOR_BOUND` are dead because one key is dropped
+### 7b. `_declared_slack` and `HELD_FOR_BOUND` are dead because one key is dropped  `[V]`
 
-42 of 42 derived rows across three runs are unbounded. The tagged reader emits
+42 of 42 derived rows across run10/12/13 are unbounded (48 of 48 with run8);
+0 carry `HELD_FOR_BOUND`, 0 quotes carry `+/-`. The tagged reader emits
 `rounding_uncertainty_usd_millions` and `_as_datapoint` reads it, but the
 quarter inputs arrive through `_candidate_of`, which drops it (5d). One missing
 key kills the bound guard, the "+/- n from input rounding" clause in every
@@ -2472,9 +2594,14 @@ Everything above is diagnostic. The numbers come from `shapes_holdout`, which
 `run13` was built against, and from gold, which found several of these - so
 neither may score a fix.
 
-Gold's 55 drugs and the shapes holdout's 22 are disjoint, and so are their
-issuers, so **gold remains available as an oracle for finding further defects
-of this kind** - it is spent only as a scorer for what it found. Step 1 makes
+**run13's 22 job names are identical to the 22 products in
+`seed/cases/shapes_holdout.json`. run13 is a run of that holdout.** Every
+number in sections 1, 2, 5, 6 and 7 measured on run13 - and the 6f
+re-measurement that used `shapes_holdout` as its oracle - is on a set that is
+already spent. Gold's 55 drugs and the shapes holdout's 22 are disjoint, and
+so are their issuers, so **gold remains available as an oracle for finding
+further defects of this kind** - it is spent only as a scorer for what it
+found. Step 1 makes
 gold's case file cover gold, which widens the oracle; it does not make it a
 scorer.
 
