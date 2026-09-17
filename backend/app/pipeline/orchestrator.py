@@ -180,12 +180,14 @@ def period_end(period: str | None) -> date | None:
 def stamp_series_identity(job: DrugJobORM, row: DatapointORM) -> DatapointORM:
     """Say which series a reading belongs to, from what the reading declares.
 
-    Written when the row is, and again once the labels are final, because
-    enrichment and reconciliation both change what a row says it is a figure
-    for - a region the enricher reads off the quote, the pair a corroborator
-    was reported as - and the series a row belongs to is whatever it ends up
-    declaring, not what it declared first. A row a reviewer types is stamped
-    the same way, or it would belong to no series at all.
+    Written once the labels are final, because enrichment and reconciliation
+    both change what a row says it is a figure for - a region the enricher
+    reads off the quote, the pair a corroborator was reported as - and the
+    series a row belongs to is whatever it ends up declaring, not what it
+    declared first. Nothing reads the column before then; an empty one is a
+    row nothing has decided about, which is what the column already means. A
+    row a reviewer types is stamped where it is written, because it is
+    selected immediately and nothing runs in between.
     """
     row.geography_normalized = normalize_geography(row.geography)
     row.series_identity = series_identity(
@@ -1799,7 +1801,6 @@ class PipelineOrchestrator:
                 + stated_labels(candidate.get("label_flags"))
             ),
         )
-        stamp_series_identity(job, row)
         self.db.add(row)
         return row
 
@@ -2452,7 +2453,6 @@ class PipelineOrchestrator:
                     citation_json=citation,
                     issue_flags=issue_flags or None,
                 )
-                stamp_series_identity(job, row)
                 self.db.add(row)
                 rows.append(row)
                 if src_row:

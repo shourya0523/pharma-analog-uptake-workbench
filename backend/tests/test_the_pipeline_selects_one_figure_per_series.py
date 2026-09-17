@@ -29,6 +29,7 @@ from app.db.models import (
 from app.domain.models import (
     QualityCheckStatus,
     SeriesSelection,
+    SourceType,
     ValidationStatus,
     new_id,
 )
@@ -173,3 +174,54 @@ async def test_a_known_place_raises_nothing(tmp_path):
     await orch._quality_and_validation(job)
     assert db.get(DatapointORM, rows[0].id).geography_normalized == "ex-united-states"
     assert _checks(db, UNRECOGNISED_GEOGRAPHY) == []
+
+
+@pytest.mark.asyncio
+async def test_the_identity_is_stamped_where_the_labels_are_final(tmp_path):
+    """One stamp, at the stage that has the last word on what a row says.
+
+    A row's series is whatever it ends up declaring: the enricher fills a
+    geography off the quote and reconciliation carries a corroborator's line
+    onto the row it corroborates, both after the row is written. Stamping at
+    creation wrote an answer to a question the row had not finished answering,
+    and then wrote it again here.
+
+    Both answers: a row the extractor has just written carries no identity, and
+    the quality stage gives every row one.
+    """
+    db, orch, job, rows = _pipeline(
+        tmp_path,
+        lambda job: [_row(job, value=34.9, geography="U.S.")],
+    )
+    candidate = {
+        "period": "2024Q3", "period_type": "quarterly", "value_reported": 12.0,
+        "value_normalized_usd_millions": 12.0, "currency": "USD", "unit": "millions",
+        "revenue_scope": "Product family", "geography": "US",
+        "source_quote": _quote(12.0), "confidence": 0.9,
+    }
+    source = _Source("s1", "https://example.invalid/10q.htm")
+    written = orch._datapoint_from_candidate(job, source, candidate)
+    db.commit()
+    assert written.series_identity is None
+    assert written.geography_normalized is None
+
+    await orch._quality_and_validation(job)
+
+    stored = db.query(DatapointORM).all()
+    assert len(stored) == len(rows) + 1
+    assert all(row.series_identity for row in stored)
+    assert all(row.geography_normalized for row in stored)
+
+
+class _Source:
+    """The few attributes `_datapoint_from_candidate` reads off a source."""
+
+    def __init__(self, source_id: str, url: str) -> None:
+        self.source_id = source_id
+        self.url = url
+        self.title = None
+        self.filing_type = None
+        self.accession_number = None
+        self.source_date = None
+        self.source_type = SourceType.SEC_FILING
+        self.storage_key = None
