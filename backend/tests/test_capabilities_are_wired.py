@@ -45,6 +45,7 @@ SCRIPT_ONLY = {
     "aggregate_comparable_sales": NOT_WIRED,
     "calculate_competitive_snapshot": NOT_WIRED,
     "build_launch_peers": NOT_WIRED,
+    "count_universe_entries": NOT_WIRED,
     "categorize_snapshots": NOT_WIRED,
     "assess_intensity": NOT_WIRED,
     "peers_at_launch": NOT_WIRED,
