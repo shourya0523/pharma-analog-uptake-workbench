@@ -228,7 +228,7 @@ def test_every_brand_query_precedes_the_molecule():
 
 def test_a_brand_is_asked_for_on_every_path_that_states_one():
     """A discontinued application carries its brand only in `products[]`."""
-    queries = dict((scope, query) for scope, query in search_queries("Calderon"))
+    queries = {scope: query for scope, query in search_queries("Calderon")}
     assert queries == {
         f"brand:{path}": f'{path}:"Calderon"' for path in BRAND_SEARCH_PATHS
     }

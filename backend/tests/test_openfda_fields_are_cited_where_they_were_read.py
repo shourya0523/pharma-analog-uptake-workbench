@@ -51,8 +51,10 @@ ORIGINAL = {
 LABEL_RECORD = {
     "openfda": {"brand_name": ["CALDERON"], "generic_name": ["CALDERINOL"]},
     "indications_and_usage": [
-        "1 INDICATIONS AND USAGE CALDERON is indicated for the treatment of "
-        "Calderon's disease (CD) (WHO Group 1) to improve exercise ability."
+        (
+            "1 INDICATIONS AND USAGE CALDERON is indicated for the treatment of "
+            "Calderon's disease (CD) (WHO Group 1) to improve exercise ability."
+        )
     ],
     "mechanism_of_action": ["12.1 Mechanism of Action Calderinol is a vasodilator."],
 }

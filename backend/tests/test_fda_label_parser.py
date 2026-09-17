@@ -1,8 +1,8 @@
 from app.parsing.fda_label import (
+    PROFILE_FIELDS,
     clean_moa_summary,
     format_moa_profile_value,
     openfda_block,
-    PROFILE_FIELDS,
     parse_label_record,
     product_columns,
     profile_fields,

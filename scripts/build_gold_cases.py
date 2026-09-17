@@ -76,7 +76,7 @@ from datetime import date, timedelta
 REPO = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "backend"))
 
-from app.domain.models import ExtractionOptions  # noqa: E402
+from app.domain.models import ExtractionOptions
 
 GOLD = REPO / "seed" / "gold"
 CASES = REPO / "seed" / "cases"

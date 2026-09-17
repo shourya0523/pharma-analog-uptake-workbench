@@ -11,9 +11,9 @@ from app.llm.client import load_prompt
 from app.parsing.fda_label import PROFILE_FIELDS
 from app.pipeline.orchestrator import PipelineOrchestrator
 from app.quality.profile import (
+    _PRIORITY_ORDER,
     PRIORITY_JUDGE_FIELDS,
     SKIP_JUDGE_FIELDS,
-    _PRIORITY_ORDER,
     apply_profile_judgment,
     blends_sibling_brand,
     has_label_section_header,
