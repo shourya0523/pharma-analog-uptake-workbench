@@ -1,27 +1,37 @@
 """The product-identity gate, run as part of the suite.
 
 The end-to-end eval scores the same question through the API and prints the
-detail. This keeps it from becoming a script nobody runs, the way three readers
-here were once written, tested, measured and never called.
+detail. This keeps it from becoming a script nobody runs.
 
-Gold is deliberately not opened: the labels come from Biogen, Jazz and Alkermes,
-which appear in no dataset in this repository.
+Gold is deliberately not opened. That the labels come from issuers no other
+answer key spends is a claim about data, so it is checked here rather than
+stated: `test_no_case_comes_from_a_scored_issuer` derives the spent issuers
+from every other key under seed/ and fails if this set touches one.
 """
 
 from __future__ import annotations
 
 import json
-from pathlib import Path
 
 from app.parsing.evidence import product_aliases
 from app.quality.candidate_filters import names_a_competing_product
+from tests.answer_keys import SEED, identifying, issuers_in, scored_words
 
-FIXTURE = (
-    Path(__file__).resolve().parents[2]
-    / "seed"
-    / "holdout_labels"
-    / "product_labels.json"
-)
+FIXTURE = SEED / "holdout_labels" / "product_labels.json"
+
+
+def test_no_case_comes_from_a_scored_issuer():
+    """Rule 4, checked for this set the way the member holdout checks its own.
+
+    The docstring above used to assert the property in prose. A held-out set
+    whose issuers another key already scored measures nothing, and prose does
+    not notice when a new key is added that spends one of them.
+    """
+    scored = scored_words(excluding=FIXTURE)
+    assert scored, "no answer keys found; this test would pass vacuously"
+    for issuer in sorted(issuers_in(FIXTURE)):
+        overlap = scored & identifying(issuer)
+        assert not overlap, f"{issuer} is already scored: {overlap}"
 
 
 def _verdicts() -> list[tuple[dict, str]]:
@@ -49,11 +59,11 @@ def test_a_products_own_line_is_never_refused_on_an_unseen_issuer():
 
 
 def test_a_line_covering_several_products_is_refused_on_an_unseen_issuer():
-    """Biogen prints one line for RITUXAN, GAZYVA and LUNSUMIO.
+    """A line reading `Calderon, NuVessa and Calderon XR` is no one product's.
 
-    The catalogue this replaced held none of those three, so it published that
-    line as a single product's revenue - with a citation, which is the failure
-    this project rates worse than a gap.
+    Publishing it as one product's revenue - with a citation - is the failure
+    this project rates worse than a gap, and it is what a catalogue of known
+    brands does whenever the line names brands the catalogue does not hold.
     """
     missed = [
         c["label"] for c, got in _verdicts() if c["expect"] == "shared" and got != "shared"
@@ -62,7 +72,7 @@ def test_a_line_covering_several_products_is_refused_on_an_unseen_issuer():
 
 
 def test_two_trade_names_for_one_product_are_not_two_products():
-    """Jazz prints "Epidiolex/Epidyolex" because it is one product, not two."""
+    """`Calderon/Calderonex` is one product under two trade names, not two."""
     verdicts = {c["label"]: got for c, got in _verdicts()}
     assert verdicts["Epidiolex/Epidyolex"] == "own"
     assert verdicts["Rylaze/Enrylaze"] == "own"

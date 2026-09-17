@@ -5,11 +5,10 @@ This speaks HTTP and nothing else - it imports no orchestrator, no ORM and no
 reader, so there is no second implementation of the pipeline that can drift
 from the pipeline.
 
-That drift is why this exists. Nineteen eval scripts called the readers
-directly and two called `run_job`; between them they reported the tagged reader
-working for the whole of a branch in which the pipeline published nothing it
-produced. Every one of those scripts was right about the function it called and
-wrong about the product.
+An eval that calls a reader is right about the function it called and says
+nothing about the product: the reader can work perfectly while the pipeline
+publishes none of what it produces. Going in through the route a user goes in
+through is what makes the score a statement about the product.
 
     python scripts/eval.py --cases seed/cases/gold_sample.json
     python scripts/eval.py --members seed/holdout_members/combined_name_members.json

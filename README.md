@@ -104,15 +104,15 @@ read it there.
 - Launch uptake is labeled `revenue_proxy_r4q`: rolling-four-quarter product sales divided by selected annual peak. The first three quarters are `insufficient_history`.
 - Competitive intensity uses `competitive_intensity_v1` and stored peer classifications. Cohorts under six launches use provisional thresholds and expose `low_coverage=true`.
 
-Public label, regulatory, SEC, company IR, and ClinicalTrials.gov sources are supported. Licensed consensus, claims, prescription, and patient-volume data use cited manual imports until credentials and redistribution rights are available. The application does not scrape paid vendors.
+Public label, regulatory, SEC, company IR, and ClinicalTrials.gov sources are supported. Licensed consensus, claims, prescription, and patient-volume data would use cited manual imports until credentials and redistribution rights are available. The application does not scrape paid vendors.
 
-Consensus/manual peak CSV columns are:
-
-```text
-product,estimate_type,value,currency,geography,revenue_scope,as_of_date,source_url
-```
-
-All columns are required. Cross-currency values remain unresolved unless a cited, period-compatible FX observation is stored.
+**Not wired.** A reader for a consensus/manual peak CSV exists
+(`app/imports/peak_sales.py`, columns
+`product,estimate_type,value,currency,geography,revenue_scope,as_of_date,source_url`,
+all required), but nothing calls it: there is no route and no script, so an
+analyst who prepares that file has nowhere to send it. It is listed in
+`backend/tests/test_capabilities_are_wired.py` as not wired, and that test
+fails if the claim stops being true in either direction.
 
 ## Migrations and backfill
 

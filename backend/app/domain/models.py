@@ -324,7 +324,4 @@ class ExtractionOptions(BaseModel):
     earnings_since: date | None = None
     earnings_until: date | None = None
     transcripts: bool = False
-    pdfs: bool = True
     llm_evidence_judge: bool = True
-    random_validation_sampling: bool = True
-    use_uploaded_template: bool = False

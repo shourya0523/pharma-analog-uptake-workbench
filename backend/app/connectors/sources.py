@@ -7,10 +7,13 @@ and a quarter tests the pipeline.
 
 The walk is: resolve the issuer to a CIK, list its 8-K filings that carry item
 2.02 (results of operations) in the window around the quarter, and take the
-EX-99 exhibits attached to them. The primary 8-K document is a cover page and
-holds no figures.
+EX-99 exhibits attached to them rather than the 8-K itself. That choice is what
+`sec_include_8k` defaults to off for: the figures an earnings 8-K reports are
+in its exhibits, and the filing's own document is assumed to be the cover that
+points at them. It is an assumption about a form, not a measurement of one -
+turning the flag on is how to find out where it does not hold.
 
-Two rules here were bought with wrong answers:
+Two rules that look like details and are not:
 
 * An issuer is resolved by ticker first, then by an exact match on its
   normalised name, and an ambiguous name resolves to nothing. Matching on a
@@ -819,11 +822,11 @@ class SECConnector:
             # open 120 days after a quarter ends, and that quarter's 10-Q is
             # filed about 45 days after it.
             #
-            # The same lag both ways. It was 400 days backward, which reached
-            # filings that can only report periods a year before anything
-            # asked for: across two shapes-holdout runs those fetches produced
-            # four figures, three of them already read from a filing inside the
-            # window and the fourth for a period outside the window entirely.
+            # The same lag both ways, because it is the same lag: a filing
+            # reports a period that ended one lag before it, whichever end of
+            # the window that period sits at. A longer reach backward buys
+            # filings that can only report periods older than anything asked
+            # for.
             since_bound = earnings_since - REPORTING_LAG if earnings_since else None
             until_bound = earnings_until + REPORTING_LAG if earnings_until else None
 
