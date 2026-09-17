@@ -12,7 +12,7 @@ Monorepo with two runnable services: a FastAPI backend (`backend/`, Python 3.12,
 | Frontend SPA | `frontend/` | `npm run dev` | 5173 |
 
 - Lint: backend `uv run ruff check .`; frontend `npm run lint` (oxlint).
-- Test: backend `uv run pytest` (23 tests, no network needed). Frontend has no test suite; `npm run build` (`tsc -b && vite build`) is the build check.
+- Test: backend `uv run pytest` (no network needed); frontend `npm run test` (`vitest run`). `npm run build` (`tsc -b && vite build`) is the build check. Neither count is written here - `pytest -q` prints the backend's.
 
 ### Non-obvious caveats
 
