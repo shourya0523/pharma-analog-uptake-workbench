@@ -5,6 +5,8 @@ from collections.abc import Iterable
 from datetime import datetime
 from typing import Any
 
+from app.parsing.fda_label import read_path
+
 MIN_ALIAS_LENGTH = 4
 
 
@@ -13,7 +15,18 @@ def _normalize(value: str) -> str:
 
 
 def openfda_brand_names(result: dict[str, Any]) -> list[str]:
-    return [str(name) for name in (result.get("openfda", {}).get("brand_name") or []) if name]
+    """Every brand this application is marketed under, wherever it states them.
+
+    An older or discontinued application comes back with no ``openfda`` block
+    at all and its brands only in ``products[].brand_name``, so both paths are
+    read and the union returned rather than one path being assumed.
+    """
+    names: list[str] = []
+    for path in ("openfda.brand_name", "products[].brand_name"):
+        for name in read_path(result, path):
+            if name and name not in names:
+                names.append(name)
+    return names
 
 
 def select_openfda_result(

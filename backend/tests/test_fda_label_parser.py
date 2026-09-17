@@ -1,8 +1,95 @@
 from app.parsing.fda_label import (
     clean_moa_summary,
     format_moa_profile_value,
+    openfda_block,
     parse_label_record,
+    product_columns,
+    read_path,
+    route_readings_agree,
 )
+
+# The shape of a drugsFDA application: an `openfda` block built from the
+# marketed NDC listings, and the application's own `products[]` array. The two
+# state the route independently and can disagree.
+DRUGSFDA = {
+    "application_number": "NDA000001",
+    "openfda": {"brand_name": ["CALDERON"], "generic_name": ["calderinol"], "route": ["ORAL"]},
+    "products": [
+        {
+            "brand_name": "CALDERON",
+            "route": "INHALATION",
+            "dosage_form": "SOLUTION",
+            "active_ingredients": [{"name": "CALDERINOL", "strength": "0.6MG/ML"}],
+        }
+    ],
+}
+# The shape of an SPL label record: prose sections, an `openfda` block, and no
+# `products` array at all.
+LABEL = {
+    "openfda": {"brand_name": ["CALDERON"], "route": ["RESPIRATORY (INHALATION)"]},
+    "indications_and_usage": ["CALDERON is indicated for Calderon's disease."],
+    "mechanism_of_action": ["12.1 Mechanism of Action Calderinol is a vasodilator."],
+}
+
+
+def test_route_is_read_from_the_application_not_the_listing():
+    parsed = parse_label_record(DRUGSFDA)
+    assert parsed.routes == ["INHALATION"]
+    assert parsed.path("route") == "products[].route"
+
+
+def test_a_route_stated_twice_and_differently_is_a_conflict_not_a_preference():
+    parsed = parse_label_record(DRUGSFDA)
+    assert parsed.route_readings == {
+        "products[].route": ["INHALATION"],
+        "openfda.route": ["ORAL"],
+    }
+    assert parsed.route_conflict
+
+
+def test_two_grains_of_one_route_are_not_a_conflict():
+    assert route_readings_agree(
+        {"products[].route": ["INHALATION"], "openfda.route": ["RESPIRATORY (INHALATION)"]}
+    )
+    assert route_readings_agree(
+        {"products[].route": ["INTRAVENOUS, SUBCUTANEOUS"], "openfda.route": ["INTRAVENOUS", "SUBCUTANEOUS"]}
+    )
+    assert not route_readings_agree({"products[].route": ["ORAL"], "openfda.route": ["INHALATION"]})
+
+
+def test_dosage_form_comes_from_the_products_array_and_a_label_record_has_none():
+    assert parse_label_record(DRUGSFDA).dosage_forms == ["SOLUTION"]
+    assert parse_label_record(DRUGSFDA).path("dosage_form") == "products[].dosage_form"
+    assert parse_label_record(LABEL).dosage_forms == []
+    assert parse_label_record(LABEL).path("dosage_form") is None
+
+
+def test_a_record_with_no_openfda_block_still_answers_from_its_products():
+    discontinued = {"application_number": "NDA000002", "products": [{"brand_name": "NUVESSA", "route": "INJECTION"}]}
+    parsed = parse_label_record(discontinued)
+    assert parsed.brand_names == ["NUVESSA"]
+    assert parsed.routes == ["INJECTION"]
+    assert parsed.application_numbers == ["NDA000002"]
+
+
+def test_keys_are_enumerated_off_the_record():
+    assert openfda_block(DRUGSFDA)["route"] == ["ORAL"]
+    assert openfda_block({"openfda": None}) == {}
+    assert product_columns(DRUGSFDA)["dosage_form"] == ["SOLUTION"]
+    # A column drugsFDA adds is readable without this module naming it.
+    assert product_columns({"products": [{"marketing_status": "Prescription"}]}) == {
+        "marketing_status": ["Prescription"]
+    }
+    assert read_path(DRUGSFDA, "products[].active_ingredients[].name") == ["CALDERINOL"]
+    assert read_path(DRUGSFDA, "products[].nothing_here") == []
+
+
+def test_every_path_a_parse_cites_is_a_key_the_record_states():
+    for record in (DRUGSFDA, LABEL):
+        parsed = parse_label_record(record)
+        for fact, path in parsed.paths.items():
+            assert read_path(record, path), f"{fact} cites {path}, which the record does not state"
+
 
 
 def test_combination_label_retains_all_ingredients_and_mechanisms():

@@ -11,15 +11,29 @@ from app.storage.filestore import FileStore
 logger = logging.getLogger(__name__)
 
 
+# Where drugsFDA states a brand name. Both are brand-scoped: an application
+# carries its brands in the `openfda` block that is built from its marketed
+# NDC listings, and again in its own `products[]` array. An application with no
+# marketed listing - an older or a discontinued one - has no `openfda` block at
+# all and only the second path answers, so a brand query that names one path is
+# a brand query that cannot see those products.
+BRAND_SEARCH_PATHS = ("openfda.brand_name", "products.brand_name")
+
+# The molecule, for context only, and on a path of its own so a caller can tell
+# a molecule-wide answer from the product's own.
+GENERIC_SEARCH_PATH = "openfda.generic_name"
+
+
 def search_queries(brand: str, generic: str | None = None) -> list[tuple[str, str]]:
     """drugsFDA searches to try, in order, as (match_scope, search expression).
 
-    Brand name is queried on its own first, because it is the only query whose
-    every result is the requested product. A brand-OR-generic query returns
-    every application for the molecule - the generic filers' and the
-    competitors' brands that share it - and openFDA documents no result order,
-    so there is no position at which the requested product can be relied on to
-    appear. It may not be in the returned window at all.
+    Brand name is queried on its own first, on every path that states one,
+    because those are the only queries whose every result is the requested
+    product. A brand-OR-generic query returns every application for the
+    molecule - the generic filers' and the competitors' brands that share it -
+    and openFDA documents no result order, so there is no position at which the
+    requested product can be relied on to appear. It may not be in the returned
+    window at all.
 
     The generic query is therefore a fallback for molecule context only, and
     carries its own ``match_scope`` so a caller cannot mistake a molecule-wide
@@ -27,9 +41,9 @@ def search_queries(brand: str, generic: str | None = None) -> list[tuple[str, st
     """
     queries = []
     if brand and brand.strip():
-        queries.append(("brand", f'openfda.brand_name:"{brand.strip()}"'))
+        queries += [(f"brand:{path}", f'{path}:"{brand.strip()}"') for path in BRAND_SEARCH_PATHS]
     if generic and generic.strip():
-        queries.append(("generic", f'openfda.generic_name:"{generic.strip()}"'))
+        queries.append(("generic", f'{GENERIC_SEARCH_PATH}:"{generic.strip()}"'))
     return queries
 
 
@@ -105,7 +119,9 @@ class OpenFDAConnector:
                         "search": matched_search,
                     },
                     notes=(
-                        None if match_scope == "brand" else "openfda_generic_fallback"
+                        None
+                        if match_scope.startswith("brand")
+                        else "openfda_generic_fallback"
                     ),
                 )
             ]

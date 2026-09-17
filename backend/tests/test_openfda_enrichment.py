@@ -6,7 +6,7 @@ a Tyvaso record REMODULIN's brand name, intravenous route and 2002 approval date
 The fixtures below are trimmed from that live response.
 """
 
-from app.connectors.openfda import search_queries
+from app.connectors.openfda import BRAND_SEARCH_PATHS, search_queries
 from app.connectors.openfda_fields import (
     earliest_approval_date,
     openfda_brand_names,
@@ -106,7 +106,6 @@ def test_approval_date_is_scoped_to_the_selected_application():
 
 
 def test_brand_names_are_listed_for_diagnostics():
-    assert openfda_brand_names(TYVASO) == ["TYVASO"]
     assert openfda_brand_names({}) == []
 
 
@@ -117,20 +116,38 @@ def test_parse_openfda_date_handles_compact_and_iso():
     assert parse_openfda_date("garbage") is None
 
 
-def test_brand_is_queried_before_the_molecule():
+def test_every_brand_query_precedes_the_molecule():
     """A combined brand-OR-generic search can exclude the product entirely."""
     scopes = [scope for scope, _ in search_queries("Opsumit", "macitentan")]
-    assert scopes == ["brand", "generic"]
+    assert [scope.split(":")[0] for scope in scopes] == ["brand"] * len(BRAND_SEARCH_PATHS) + [
+        "generic"
+    ]
+    for scope, query in search_queries("Opsumit", "macitentan"):
+        if not scope.startswith("brand"):
+            continue
+        assert "generic_name" not in query, "the molecule must not widen a brand query"
 
-    brand_query = search_queries("Opsumit", "macitentan")[0][1]
-    assert brand_query == 'openfda.brand_name:"Opsumit"'
-    assert "generic_name" not in brand_query, "the molecule must not widen the brand query"
+
+def test_a_brand_is_asked_for_on_every_path_that_states_one():
+    """A discontinued application carries its brand only in `products[]`."""
+    queries = dict((scope, query) for scope, query in search_queries("Calderon"))
+    assert queries == {
+        f"brand:{path}": f'{path}:"Calderon"' for path in BRAND_SEARCH_PATHS
+    }
+    assert "products.brand_name" in BRAND_SEARCH_PATHS
 
 
 def test_search_queries_tolerate_missing_inputs():
-    assert search_queries("Tyvaso") == [("brand", 'openfda.brand_name:"Tyvaso"')]
     assert search_queries("", "treprostinil") == [("generic", 'openfda.generic_name:"treprostinil"')]
     assert search_queries("", None) == []
+
+
+def test_brands_are_read_from_both_paths_a_record_may_state_them_on():
+    assert openfda_brand_names(TYVASO) == ["TYVASO"]
+    discontinued = {"application_number": "NDA000002", "products": [{"brand_name": "NUVESSA"}]}
+    assert openfda_brand_names(discontinued) == ["NUVESSA"]
+    both = {"openfda": {"brand_name": ["CALDERON"]}, "products": [{"brand_name": "CALDERON XR"}]}
+    assert openfda_brand_names(both) == ["CALDERON", "CALDERON XR"]
 
 
 def test_missing_value_placeholders_are_recognised():
