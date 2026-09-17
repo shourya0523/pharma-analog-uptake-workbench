@@ -65,19 +65,59 @@ FILING_PRIORITY = {
 }
 
 
+def _bare(name: str) -> str:
+    """A name with its parenthetical and surrounding space taken off."""
+    return re.sub(r"\(.*?\)", "", name or "").strip()
+
+
+def _spells(part: str, held: list[str]) -> bool:
+    """Whether this part is a spelling of one of the names already held."""
+    candidate = _bare(part).lower()
+    if not candidate:
+        return False
+    return any(
+        candidate in name or name in candidate
+        for name in (_bare(h).lower() for h in held)
+        if name
+    )
+
+
+def _franchise_parts(cleaned: str, held: list[str]) -> list[str]:
+    """The slash-separated parts, where a slash joined spellings of one product.
+
+    A franchise name writes two spellings of one product with a slash:
+    `Calderon (calderinol)/Calderon XR`. A co-packaged pair writes two
+    different products exactly the same way, and split blindly the other
+    product's name lands in this product's alias set - where it stops being
+    another product's name at all, because the label reader drops a marked
+    name it already holds as our own. `Total Calderon(R) + NuVessa(R) sales`
+    then reads as Calderon's own line, with nothing recording that it is not.
+
+    So the slash is read as a franchise only when every part spells the
+    product we were asked about: `Calderon XR` resolves to Calderon and is
+    taken; `NuVessa` does not, so the joined form stays whole and it is the
+    filer's own (R) marks that say the line names two products.
+    """
+    parts = [part for part in cleaned.split("/") if part.strip()]
+    if len(parts) < 2 or not all(_spells(part, held) for part in parts):
+        return [cleaned]
+    return parts
+
+
 def product_aliases(product: str, generic: str | None = None, extra: Iterable[str] | None = None) -> list[str]:
     names: list[str] = []
+    held = [name for name in (product, generic) if name and name.strip()]
     for raw in [product, generic, *(extra or [])]:
         if not raw:
             continue
         cleaned = raw.strip()
         if cleaned and cleaned not in names:
             names.append(cleaned)
-        # Split franchise-style names: "CALDERON (calderinol)/CALDERON XR"
-        for part in re.split(r"[/|,;]+", cleaned):
-            part = re.sub(r"\(.*?\)", "", part).strip()
-            if part and part not in names:
-                names.append(part)
+        for listed in re.split(r"[|,;]+", cleaned):
+            for part in _franchise_parts(listed.strip(), held):
+                part = _bare(part)
+                if part and part not in names:
+                    names.append(part)
     # Deduplicate case-insensitively while preserving order
     seen: set[str] = set()
     out: list[str] = []
