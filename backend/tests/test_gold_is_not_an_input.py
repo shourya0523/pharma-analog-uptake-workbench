@@ -17,6 +17,7 @@ pipeline input whose text carries gold's own URLs or quotes.
 from __future__ import annotations
 
 import ast
+import functools
 import pathlib
 import re
 
@@ -229,15 +230,96 @@ def test_no_pipeline_input_carries_gold_evidence():
     )
 
 
+@functools.cache
+def _module_paths() -> dict[str, list[tuple[pathlib.Path, ast.expr]]]:
+    """Every module-level `NAME = <expression>` in `app/`, with its own module.
+
+    The module is carried alongside the expression because `__file__` inside it
+    means that module's file, wherever the name is read.
+    """
+    assigned: dict[str, list[tuple[pathlib.Path, ast.expr]]] = {}
+    for path in sorted(APP.rglob("*.py")):
+        try:
+            tree = ast.parse(path.read_text())
+        except SyntaxError:
+            continue
+        for node in tree.body:
+            targets = node.targets if isinstance(node, ast.Assign) else []
+            if isinstance(node, ast.AnnAssign) and node.value is not None:
+                targets = [node.target]
+            for target in targets:
+                if isinstance(target, ast.Name):
+                    assigned.setdefault(target.id, []).append((path, node.value))
+    return assigned
+
+
+def _path_named_by(node: ast.expr, module: pathlib.Path, depth: int = 0) -> pathlib.Path | None:
+    """The path an expression names, followed through the joins that build it.
+
+    `Path(__file__).resolve().parents[3] / "reference" / "products.csv"` and a
+    `REFERENCE = ... / "reference"` hoisted to the top of the module and then
+    joined with `"products.csv"` name the same file, and a rule that reads the
+    literal segment sees only the first. Anything this cannot follow - a name
+    from outside `app/`, a path built at run time - returns None, which is the
+    detector going blind and is why the caller asserts it found something.
+    """
+    if depth > 8:
+        return None
+    if isinstance(node, ast.Constant) and isinstance(node.value, str):
+        return pathlib.Path(node.value)
+    if isinstance(node, ast.Name):
+        if node.id == "__file__":
+            return module
+        for defined_in, value in _module_paths().get(node.id, []):
+            found = _path_named_by(value, defined_in, depth + 1)
+            if found is not None:
+                return found
+        return None
+    if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Div):
+        left = _path_named_by(node.left, module, depth + 1)
+        right = _path_named_by(node.right, module, depth + 1)
+        return None if left is None or right is None else left / right
+    if isinstance(node, ast.Attribute) and node.attr in ("parent", "resolve", "absolute"):
+        return _path_named_by(node.value, module, depth + 1)
+    if isinstance(node, ast.Subscript):
+        holder = node.value
+        index = node.slice
+        if (
+            isinstance(holder, ast.Attribute)
+            and holder.attr == "parents"
+            and isinstance(index, ast.Constant)
+            and isinstance(index.value, int)
+        ):
+            base = _path_named_by(holder.value, module, depth + 1)
+            return None if base is None else base.parents[index.value]
+        return None
+    if isinstance(node, ast.Call):
+        function = node.func
+        name = function.attr if isinstance(function, ast.Attribute) else getattr(function, "id", "")
+        if name in ("resolve", "absolute", "expanduser"):
+            return _path_named_by(function.value, module, depth + 1)
+        if name in ("Path", "PurePath", "PosixPath") and len(node.args) == 1:
+            return _path_named_by(node.args[0], module, depth + 1)
+    return None
+
+
 def _seed_files_the_app_reads() -> set[str]:
     """Every file under seed/ that application code resolves a path to."""
     found: set[str] = set()
-    pattern = re.compile(r'"seed"\s*/\s*"([^"]+)"|seed/([A-Za-z0-9_.-]+\.(?:csv|jsonl|json))')
-    for path in APP.rglob("*.py"):
-        for match in pattern.finditer(path.read_text()):
-            name = match.group(1) or match.group(2)
-            if name and "." in name:
-                found.add(name)
+    for path in sorted(APP.rglob("*.py")):
+        try:
+            tree = ast.parse(path.read_text())
+        except SyntaxError:
+            continue
+        for node in ast.walk(tree):
+            if not isinstance(node, (ast.BinOp, ast.Constant, ast.Name)):
+                continue
+            named = _path_named_by(node, path)
+            if named is None:
+                continue
+            named = named if named.is_absolute() else REPO / named
+            if named.is_relative_to(SEED) and named.suffix:
+                found.add(str(named.relative_to(SEED)))
     return found
 
 
@@ -257,7 +339,12 @@ def test_a_new_file_the_pipeline_reads_has_to_be_declared():
     time is a cache; cost in capability is the answer key wearing a different
     hat.
     """
-    undeclared = sorted(_seed_files_the_app_reads() - set(PIPELINE_INPUTS))
+    reads = _seed_files_the_app_reads()
+    assert reads, (
+        "no seed file was found to be read by app/ at all; the detector has "
+        "gone blind and this test would pass whatever was added"
+    )
+    undeclared = sorted(reads - set(PIPELINE_INPUTS))
     assert not undeclared, (
         "the pipeline reads these seed files and they are not in PIPELINE_INPUTS:\n  "
         + "\n  ".join(undeclared)
