@@ -4,8 +4,9 @@ sits does not.
 An XBRL instance retrieved inside a 10-Q is stored as a quarterly report and
 the human-readable document of the same accession as a filing, so ranking the
 document before the claim put the figure the filer tagged below a model's
-sentence about the page beside it. Every tagged fact in the run databases sits
-in the lower band, so this is not an edge: it is the ordinary case.
+sentence about the page beside it. A tagged fact arrives that way whenever its
+instance came out of a periodic report, which is the ordinary case rather than
+an edge.
 
 The ranking is also checked for being total over `SourceType`. Two members
 state no revenue at all and were in neither list, reaching the ranking as an

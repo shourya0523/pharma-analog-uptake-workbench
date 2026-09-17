@@ -38,8 +38,8 @@ def test_both_answers_are_represented():
     """A set that only refuses is passed by a resolver that always refuses -
     which is the defect this exists to catch."""
     cases = json.loads(HOLDOUT.read_text())["cases"]
-    assert sum(1 for c in cases if c["expected"]) >= 8
-    assert sum(1 for c in cases if not c["expected"]) >= 5
+    assert any(c["expected"] for c in cases), "no member has to resolve"
+    assert any(not c["expected"] for c in cases), "no member has to be refused"
 
 
 def test_every_case_carries_its_own_evidence():

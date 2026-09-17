@@ -4,9 +4,10 @@ Two defects in one line of code. `export_powerbi_csvs` wrote every datapoint
 a run held into a file named for quarterly revenue, with no `period_type`
 column - so a cumulative figure filed under a quarter's label was
 indistinguishable from the quarter, and anyone charting by `period` built a
-curve partly out of year-to-date figures. The eight columns it wrote were a
-literal, as was the workbook's own header list beside it, and between them
-they dropped `period_type`, `reported_as` and ten more.
+curve partly out of year-to-date figures. The columns it wrote were a literal,
+as was the workbook's own header list beside it, and between them they dropped
+`period_type`, `reported_as` and every other column added to the model after
+the lists were typed.
 
 Both now come from `DatapointORM.__table__.columns`, so a column added to the
 model reaches both sheets without either list being edited. The filtered file

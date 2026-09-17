@@ -1,9 +1,9 @@
 """What a fetched document turns out to hold, asked of the document.
 
 Retrieval picks filings by form code and item code and nothing downstream ever
-asks what the document it got covers, so a run that fetched 28 documents and
-one that fetched 28 useful documents look the same. `coverage` is that
-question. It changes nothing about what is fetched.
+asks what the document it got covers, so a run that fetched documents and one
+that fetched useful documents look the same. `coverage` is that question. It
+changes nothing about what is fetched.
 
 The one thing it must not be is a name test. A product is named in a risk
 factor, in a collaboration note, in a table of contents, beside no number at
