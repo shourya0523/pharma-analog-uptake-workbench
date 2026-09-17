@@ -152,14 +152,26 @@ _REGISTRANT_SUFFIXES = {
     "limited", "plc", "llc", "lp", "sa", "nv", "ag", "holdings", "group",
 }
 
+# The two spellings of a conjunction, which is one word however it is written:
+# a registrant joins its name to its suffix with "&" in the SEC title and a
+# caller writes "and", or the other way round. Dropped like a suffix rather
+# than kept, because the word it joins to is itself usually a suffix: "Acme
+# Sciences & Co" and "Acme Sciences and Company" are the same registrant and
+# "Acme Sciences" is the name either one carries.
+_REGISTRANT_CONNECTIVES = {"&", "and"}
+
 
 def normalize_registrant(name: str) -> str:
-    """A company name reduced to what identifies it, for exact comparison."""
+    """A company name reduced to what identifies it, for exact comparison.
+
+    Calderon Respiratory & Co, Calderon Respiratory and Company and Calderon
+    Respiratory, Inc. all reduce to ``calderon respiratory``.
+    """
     cleaned = re.sub(r"[^a-z0-9&\s]", " ", (name or "").lower())
     words = [
         word
         for word in cleaned.split()
-        if word not in _REGISTRANT_SUFFIXES and word != "&"
+        if word not in _REGISTRANT_SUFFIXES and word not in _REGISTRANT_CONNECTIVES
     ]
     return " ".join(words)
 
@@ -362,18 +374,28 @@ class SECConnector:
             "Accept-Encoding": "gzip, deflate",
         }
 
-    async def resolve_cik(self, ticker: str | None, company_name: str | None) -> str | None:
+    async def resolve_cik(
+        self, ticker: str | None = None, company_name: str | None = None
+    ) -> str | None:
         """The registrant's CIK, or None rather than a guess.
 
-        A ticker is exact and is tried first. A company name is not: the SEC
-        title carries punctuation and a corporate suffix that a caller rarely
-        reproduces, so both sides are normalized before comparing. What this
-        must never do is return the nearest match - an unanchored substring
-        search resolves a one-word query to whichever registrant happens to
-        contain it, and every figure taken from that company's filings would
-        then be attributed to the company that was asked for, with nothing
-        downstream able to notice. Several matches means the question was
-        ambiguous, and the honest answer to an ambiguous question is no answer.
+        Either argument on its own is a question this can answer, so a caller
+        holding only a name asks with only a name.
+
+        A ticker is exact and is tried first. A ticker that names no
+        registrant in the index is not an answer, though - it is a symbol we
+        were handed that the SEC does not list - so the name is tried after
+        it rather than instead of it.
+
+        A company name is not exact: the SEC title carries punctuation and a
+        corporate suffix that a caller rarely reproduces, so both sides are
+        normalized before comparing. What this must never do is return the
+        nearest match - an unanchored substring search resolves a one-word
+        query to whichever registrant happens to contain it, and every figure
+        taken from that company's filings would then be attributed to the
+        company that was asked for, with nothing downstream able to notice.
+        Several matches means the question was ambiguous, and the honest
+        answer to an ambiguous question is no answer.
         """
         if not ticker and not company_name:
             return None
@@ -386,7 +408,6 @@ class SECConnector:
             for row in data.values():
                 if str(row.get("ticker", "")).upper() == needle_t:
                     return str(row["cik_str"]).zfill(10)
-            return None
 
         needle_n = normalize_registrant(company_name or "")
         if not needle_n:

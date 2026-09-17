@@ -51,6 +51,16 @@ class Settings(BaseSettings):
     profile_judge_max_fields: int = 0
     profile_judge_min_confidence: float = 0.6
     enable_llm_search: bool = True
+    # How sure the model has to be that a company reports a product's revenue
+    # before that company's CIK is taken. Below it the answer is refused and
+    # the job says so, because a CIK binds every filing fetched afterwards to
+    # one issuer and nothing downstream can tell that the binding was a guess.
+    # The number is a snapshot of the floor the profile judge already uses for
+    # a cited field (`profile_judge_min_confidence`) rather than one measured
+    # here; what would make it stale is a measurement of what the model's
+    # confidence is worth on issuer identity, which needs a held-out set of
+    # products whose filer is known and which no existing answer key uses.
+    llm_cik_min_confidence: float = 0.6
     llm_search_max_queries: int = 4
     llm_search_max_urls: int = 5
     # OpenRouter openrouter:web_search engine: auto | native | exa | parallel | perplexity
