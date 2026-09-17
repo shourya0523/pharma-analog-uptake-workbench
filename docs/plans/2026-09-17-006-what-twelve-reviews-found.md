@@ -429,10 +429,64 @@ Unmarked life events in run13:
   eval input, not a user's - but nothing guards the path from a name in a CSV
   to a published product revenue series.
 
-Gold's contrast is worth copying: `series_end_reason` on 26 of 55 records names
-the event and the evidence, and `series_coverage.jsonl` declares both
-boundaries "rather than silently applied, because a reader who mistakes either
-one gets a wrong answer from a right-looking series."
+Gold's contrast is worth copying, and it is two fields rather than a policy.
+`series_coverage.jsonl` carries **`launch_quarter`** (30 of 55 records) and
+**`commercial_start_quarter`** (55 of 55) as separate things, and they differ
+for 24 of the 30 that have both:
+
+    Adempas    launch 2013Q4  series starts 2024Q1
+    Tracleer   launch 2001Q4  series starts 2016Q1
+    Procrit    launch 1989Q2  series starts 2005Q1
+    Letairis   launch 2007Q2  series starts 2008Q1
+
+So gold never starts a series at the launch quarter by default and never
+publishes a stub: the launch date anchors the x-axis, and a separate, declared
+quarter says where usable data begins. The pipeline has neither field - and per
+3g it does not have the launch date either.
+
+`series_end_reason` on 26 of 55 records names the event and the evidence, and
+the README states the principle: both boundaries are declared "rather than
+silently applied, because a reader who mistakes either one gets a wrong answer
+from a right-looking series."
+
+Gold also carries a per-row **`precision`** (`as_reported` 2,128, `exact` 70,
+`approximate` 5) and a **`derivation`** on every row (`direct_reported` 2,038,
+`full_year_less_other_reported_quarters` 44,
+`annual_less_reported_first_nine_months` 12, `acquisition_bridge_sum` 3, and
+five more). The pipeline has `extraction_method`, which says which reader ran,
+not what the number is.
+
+And gold's six exclusions name the failure class rather than leaving a thin
+series: `individual_reporting_discontinued`, `incomplete_pre_peak_history`,
+`no_standalone_product_sales`, `private_issuer_no_public_sales`. One of them
+anticipates AGAMREE exactly - Tadliq's reason reads "Approval, availability,
+price, and pharmacy listings are not product revenue."
+
+### 2f. Retrieval is EDGAR-only, and 41% of gold's evidence is not on EDGAR
+
+Gold is 2,203 hand-researched quarters over 8 issuers - the closest thing to a
+worked example of the series this product is trying to build. Its sources:
+
+    hosts (distinct URLs)          rows citing that source
+    www.sec.gov          266       SEC host      : 1,296 of 2,203
+    s203.q4cdn.com        49       non-SEC host  :   907 of 2,203  (41%)
+    www.gilead.com        36       a PDF         :   643 of 2,203  (29%)
+    www.merck.com          3
+    www.investor.jnj.com   1
+    ir.unither.com         1
+
+The pipeline retrieves EDGAR and openFDA. It has no path to an investor-
+relations site, and 0 PDFs in 2,153 recorded sources.
+
+The clearest case is the one CLAUDE.md rule 1 cites. Gold's pre-acquisition
+Actelion quarters - Opsumit, Uptravi and Tracleer from 2016Q1 - come from
+`Actelion_Historical_Sales_Schedule.pdf` on J&J's IR CDN, with
+`derivation: direct_jnj_retrospective_table`, not from any SEC filing. So the
+form-filter fix in 9c is a real rule-1 violation and is **not** what would
+unlock that case; nothing in retrieval can reach that document at all.
+
+This is a capability gap, not a defect - but it bounds what fixing sections 5
+and 6 can deliver, and it is the reason `positional.py` looks dead.
 
 ---
 
@@ -445,6 +499,16 @@ of the 20 seed products.
 
 These are live-path defects: the defaults are on, and they were measured by
 running layer 2's own functions against the live API, not by reading a run.
+
+**There is no reference procedure to compare against.**
+`scripts/build_independent_gold.py` never calls openFDA, drugsFDA or DailyMed -
+`grep -in "openfda|dailymed|drugsfda|api.fda.gov"` over it returns nothing. Its
+`read_product_attributes()` (`:2620`) reads `first_approval_year`, `moa_class`,
+`route_of_administration` and `indication_area` straight out of the
+hand-curated `seed/product_attributes.csv`. So gold never faced 3d's sibling
+match or 3e's application ambiguity, because gold never resolved an application
+at all. The pipeline's openFDA path is the only automated attempt in this
+repository at a job gold did by hand, and nothing scores it.
 
 ### 3a. Route is read from a field that contradicts the same document
 
@@ -1100,6 +1164,15 @@ No test covers either. Whether any of those amendments carries a
 product-revenue table is not established; what is measured is that they are
 never listed.
 
+What *is* established is that the one careful hand-build of comparable data
+never needed one. Gold's 2,203 quarters cite 284 accessions across 8 issuers:
+
+    8-K 173   10-Q 75   10-K 34   6-K 1   20-F 1   amendments: 0
+
+So fix these because rule 1 says a filter is part of the claim, not because a
+measured series depends on them. The Actelion case that the rule-1 table cites
+was solved a different way - see 2f.
+
 ### 9d. Four `SCRIPT_ONLY` reasons do not survive a grep
 
 `tests/test_capabilities_are_wired.py` keeps a hand-maintained exception list,
@@ -1218,8 +1291,6 @@ Measured, with no production caller or no effect:
   `_quarters_no_filing_covers`, `_record_unfiled_quarters`, the
   `NO_FILER_OF_RECORD` code and the dead `SourceType.LLM_SEARCH` branch. **Not**
   `judge_with_search`, which touches 368 rows.
-- `positional.py` (116 lines): 0 PDFs in 2,153 recorded sources and 0 in the
-  553-file cache.
 - 10 of the 22 hold mechanisms never fire; 4 are unreachable because
   `filter_revenue_candidates` applies the same predicate upstream.
 - `ValidationTaskORM.issues / judge_status / deterministic_results`: 0 of 1,850
@@ -1232,6 +1303,12 @@ Measured, with no production caller or no effect:
 
 Decide rather than leave:
 
+- `positional.py` (116 lines) was on this list for "0 PDFs in 2,153 recorded
+  sources and 0 in the 553-file cache". That is a fact about retrieval, not
+  about the reader - see 2f. **643 of gold's 2,203 quarterly rows cite a PDF.**
+  The reader has no input because nothing fetches its input. Deleting it would
+  remove the only thing able to read 29% of the evidence a careful hand-build
+  used.
 - `adjudicate.py` (256 lines) has no production caller, but
   `seed/gold/adjudication_cases.jsonl` holds the cases it was written for. A
   wiring decision, not obviously a deletion - and its docstring's false test
@@ -1330,6 +1407,7 @@ Each step is a commit. Nothing is scored until step 1 is done.
     9c's `8-K/A` and `10-K/A` filters are a retrieval change and carry a
     measurement, so they go with step 4 rather than here.
 14. **Section 10** - the deletions, once nothing above depends on them.
+    `positional.py` is not among them: 2f is why it looks dead.
 15. **Section 11** - the job deadline, recovery, and unfinished jobs not
     publishing.
 16. **Doc 005** - the judging change, last, because it is measured against a
