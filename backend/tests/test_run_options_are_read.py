@@ -21,11 +21,38 @@ APP = pathlib.Path(__file__).resolve().parents[1] / "app"
 DECLARATION = APP / "domain" / "models.py"
 
 
-def _names_used_in_app() -> set[str]:
-    """Every attribute and string literal `app/` mentions, bar the declaration.
+def _key_of(node: ast.AST) -> str | None:
+    """The option name an expression reads, where it reads one by key.
 
-    Attributes catch `options.transcripts`; string constants catch a field
-    reached by name through `getattr` or a dict. The module that declares the
+    A string is a reader only where it is the key: the argument of `.get`,
+    `.pop` or `.setdefault`, the second of `getattr`, or a subscript. The same
+    string in a prompt, a log line or a docstring reads nothing, and counting
+    it made an option look wired by the mention of its own name.
+    """
+    if isinstance(node, ast.Attribute):
+        return node.attr
+    if isinstance(node, ast.Subscript):
+        key = node.slice
+        return key.value if isinstance(key, ast.Constant) and isinstance(key.value, str) else None
+    if isinstance(node, ast.Call):
+        function = node.func
+        at = None
+        if isinstance(function, ast.Attribute) and function.attr in ("get", "pop", "setdefault"):
+            at = 0
+        elif isinstance(function, ast.Name) and function.id == "getattr":
+            at = 1
+        if at is not None and len(node.args) > at:
+            argument = node.args[at]
+            if isinstance(argument, ast.Constant) and isinstance(argument.value, str):
+                return argument.value
+    return None
+
+
+def _names_used_in_app() -> set[str]:
+    """Every name `app/` reads as an option, bar the declaration.
+
+    Attribute access catches `options.transcripts`; a key catches an option
+    reached through the dict the run stores. The module that declares the
     model is excluded, or every field would find itself.
     """
     used: set[str] = set()
@@ -37,10 +64,9 @@ def _names_used_in_app() -> set[str]:
         except SyntaxError:
             continue
         for node in ast.walk(tree):
-            if isinstance(node, ast.Attribute):
-                used.add(node.attr)
-            elif isinstance(node, ast.Constant) and isinstance(node.value, str):
-                used.add(node.value)
+            key = _key_of(node)
+            if key is not None:
+                used.add(key)
     return used
 
 

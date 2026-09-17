@@ -54,18 +54,43 @@ def test_no_eval_imports_the_thing_it_is_scoring():
         )
 
 
-def test_the_eval_goes_in_and_out_through_the_api():
-    """In through POST /runs, out through GET, scored on what was published."""
-    for path in EVALS:
-        source = path.read_text()
-        assert "/runs" in source, f"{path.name} never starts a run"
-        assert "/jobs/" in source or "datapoints" in source, (
-            f"{path.name} never reads the answers back"
-        )
-        assert "auto_pass" in source, (
-            f"{path.name} does not say what published means, so it credits the "
-            f"pipeline for figures it declined to stand behind"
-        )
+def test_the_eval_goes_in_and_out_through_the_api(tmp_path, monkeypatch):
+    """In through POST /runs, out through GET, scored on what was published.
+
+    Asked of the eval by answering it rather than by reading it: a server that
+    records what it was asked, holding one figure the pipeline stands behind
+    and one it does not.
+    """
+    from tests.eval_harness import Server, load_eval, score_cases
+
+    module = load_eval()
+    case = {
+        "drug_name": "Calderon",
+        "manufacturer": "Acme Pharma",
+        "options": {"earnings_since": "2024-01-01", "earnings_until": "2025-03-31"},
+        "expect": [{"period": "2024Q4", "value_normalized_usd_millions": 144.1},
+                   {"period": "2024Q3", "value_normalized_usd_millions": 130.0}],
+        "source": "an invented filing",
+    }
+    job = {"id": "job-1", "drug_name": "Calderon", "status": "completed"}
+    answered = [
+        {"period": "2024Q4", "value_normalized_usd_millions": 144.1,
+         "validation_status": "auto_pass", "revenue_scope": "Worldwide"},
+        {"period": "2024Q3", "value_normalized_usd_millions": 130.0,
+         "validation_status": "needs_review", "revenue_scope": "Worldwide"},
+    ]
+    server = Server([job], {"job-1": answered})
+    _code, detail = score_cases(module, server, [case], tmp_path, monkeypatch)
+
+    assert ("POST", "/runs") in server.calls, "the eval never starts a run"
+    assert server.posted["drugs"][0]["drug_name"] == "Calderon"
+    assert ("GET", "/jobs/job-1") in server.calls, "the eval never reads the answers back"
+
+    states = {row["period"]: row["state"] for row in detail[0]["rows"]}
+    assert states["2024Q4"] == "published, correct", detail
+    assert states["2024Q3"] == "held for review", (
+        "a figure the pipeline declined to stand behind was credited to it"
+    )
 
 
 def test_every_case_file_says_where_its_answers_came_from():

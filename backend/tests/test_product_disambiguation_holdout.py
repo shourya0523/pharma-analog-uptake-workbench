@@ -71,9 +71,33 @@ def test_a_line_covering_several_products_is_refused_on_an_unseen_issuer():
     assert not missed, f"shared lines attributed to one product: {missed}"
 
 
+def _names_printed(label: str) -> list[str]:
+    """The names a row label prints, where it prints more than one.
+
+    `Calderon/Calderon XR` prints two; `Nebulized Calderon` prints one. The
+    separator is the only thing read here - what the names are is the
+    fixture's business, not this test's.
+    """
+    return [part.strip() for part in label.split("/") if part.strip()]
+
+
 def test_two_trade_names_for_one_product_are_not_two_products():
-    """`Calderon/Calderonex` is one product under two trade names, not two."""
-    verdicts = {c["label"]: got for c, got in _verdicts()}
-    assert verdicts["Epidiolex/Epidyolex"] == "own"
-    assert verdicts["Rylaze/Enrylaze"] == "own"
-    assert verdicts["Defitelio/defibrotide"] == "own"
+    """`Calderon/Calderonex` is one product under two trade names, not two.
+
+    Taken as a property over the fixture - every label that prints more than
+    one name and is still one product's line - rather than by naming the
+    labels. Naming them is what `test_a_refusal_case_offers_something_wrong_to
+    _return` records as having broken the moment its own set was rebuilt, and
+    it teaches the next reader which brands the key holds. The set must hold
+    such a label at all, or the rule is asserted over nothing.
+    """
+    several = [
+        (case, got) for case, got in _verdicts()
+        if len(_names_printed(case["label"])) > 1 and case["expect"] == "own"
+    ]
+    assert several, (
+        "no label in this set prints more than one name for one product, so "
+        "nothing here exercises the rule"
+    )
+    refused = [case["label"] for case, got in several if got != "own"]
+    assert not refused, f"one product under more than one name, refused: {refused}"

@@ -16,18 +16,7 @@ one covering all of it.
 
 from __future__ import annotations
 
-import importlib.util
-import pathlib
-
-REPO = pathlib.Path(__file__).resolve().parents[2]
-
-
-def _load_eval():
-    spec = importlib.util.spec_from_file_location("eval_script", REPO / "scripts" / "eval.py")
-    module = importlib.util.module_from_spec(spec)
-    assert spec.loader is not None
-    spec.loader.exec_module(module)
-    return module
+from tests.eval_harness import Server, load_eval, score_cases
 
 
 def _published(period: str, value: float, scope: str) -> dict:
@@ -41,7 +30,7 @@ CASE = {"drug_name": "Calderon",
 
 
 def test_one_quarter_broken_out_by_region_is_not_a_conflict():
-    ev = _load_eval()
+    ev = load_eval()
     rows = ev.score(CASE, [
         _published("2024Q4", 144.1, "Worldwide"),
         _published("2024Q4", 124.1, "U.S."),
@@ -55,7 +44,7 @@ def test_the_two_spellings_of_the_whole_product_are_one_scope():
     """A sentence says Worldwide; a schedule's family line says Product
     family. Two different figures under those two labels are one question
     answered twice."""
-    ev = _load_eval()
+    ev = load_eval()
     assert ev.scope_key("Worldwide") == ev.scope_key("Product family")
     rows = ev.score(CASE, [
         _published("2024Q4", 144.1, "Worldwide"),
@@ -65,7 +54,7 @@ def test_the_two_spellings_of_the_whole_product_are_one_scope():
 
 
 def test_two_figures_under_one_scope_still_conflict():
-    ev = _load_eval()
+    ev = load_eval()
     rows = ev.score(CASE, [
         _published("2024Q4", 144.1, "U.S."),
         _published("2024Q4", 138.5, "U.S."),
@@ -75,7 +64,7 @@ def test_two_figures_under_one_scope_still_conflict():
 
 
 def test_a_period_no_expectation_names_is_counted_rather_than_ignored():
-    ev = _load_eval()
+    ev = load_eval()
     seen = ev.unexamined(CASE, [
         _published("2024Q4", 144.1, "Worldwide"),
         _published("2024Q3", 130.0, "Worldwide"),
@@ -89,12 +78,30 @@ def test_a_period_no_expectation_names_is_counted_rather_than_ignored():
     )
 
 
-def test_a_job_that_did_not_finish_is_not_scored():
+def test_a_job_that_did_not_finish_is_not_scored(tmp_path, monkeypatch, capsys):
     """A mid-reconcile job holds every candidate for a quarter at once, which
     scores as the pipeline contradicting itself over a figure it had not
-    finished choosing."""
-    source = (REPO / "scripts" / "eval.py").read_text()
-    assert '"scored": finished' in source, "the detail file records what was scored"
-    assert "not scored and absent" in source, (
+    finished choosing.
+
+    Driven against a server whose job is still running, with the answer it
+    would have been scored on sitting there to be taken.
+    """
+    ev = load_eval()
+    case = {**CASE, "options": {"earnings_since": "2024-01-01",
+                                "earnings_until": "2025-03-31"},
+            "source": "an invented filing"}
+    running = {"id": "job-1", "drug_name": "Calderon", "status": "running",
+               "current_step": "reconcile"}
+    server = Server([running], {"job-1": [_published("2024Q4", 144.1, "Worldwide")]})
+    code, detail = score_cases(ev, server, [case], tmp_path, monkeypatch)
+
+    assert detail[0]["scored"] is False, detail
+    assert detail[0]["rows"] == [], "an unfinished job was scored on what it had reached"
+    assert not any(path.startswith("/jobs/") for _verb, path in server.calls), (
+        "the datapoints of an unfinished job were read back to be scored"
+    )
+    printed = capsys.readouterr().out
+    assert "not scored and absent" in printed, (
         "an unscored case has to be named, or the denominator quietly shrinks"
     )
+    assert "Calderon" in printed and code != 0
