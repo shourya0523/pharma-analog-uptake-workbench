@@ -438,14 +438,41 @@ retrieved is not yet established (inferred: the exhibit filter; verify before
 touching). The two OLPRUVA Q4s and INCRELEX 2023Q4 are the FY-minus-nine-months
 class with the FY document outside the four.
 
-**Wrong identity (6) is one product, one label, and an alias set short by one
-name.** All six Upstaza figures are exact. The filer prints the row as
-`Upstaza/Kebilidi` - one product under its EU and US brand names - and
-`Kebilidi` was not in the job's alias set, so 1c's rule ("a slash between two
-different names is a pair") read it as a combined line and stamped
-`reported_as`. The rule is right; the alias set was incomplete. The openFDA
-record the same job fetched carries the US brand name, and nothing feeds a
-record's brand names into the aliases. A mechanism, not a tuning.
+**Wrong identity (6): the key asks for a pair label on one product, and this
+document's first account of it was wrong.** An earlier draft here said the
+pipeline stamped `reported_as='Upstaza/Kebilidi'` because `Kebilidi` was
+missing from the alias set, and proposed feeding the openFDA record's brand
+names into the aliases. Verified against the smoke database, every premise
+fails: `select distinct reported_as from datapoints` -> `[None]` on all 596
+rows; the job's stored `llm_aliases` has `Kebilidi` third of thirteen; the
+job's only openFDA source is `OpenFDA no match`, and drugsFDA returns 404 for
+both names today (a CBER gene therapy). The draft was written from the eval's
+state name, not from the rows - rule 2's failure, in the document that cites
+rule 2. The six figures are exact and published under the product's own name.
+What scores them wrong is `seed/cases/holdout_2026_09.json`, which expects
+`reported_as="Upstaza/Kebilidi"` on every valued period; `read_label` returns
+the same one-product reading with or without `Kebilidi`, because an unmarked
+slash-joined name is tolerated beside a name it knows (`labels.py:339-344`),
+and even a stamped pair would score wrong, since the code's vocabulary is
+`A + B` and the key wants the filer's `A/B`.
+
+The filer says it is one product: "This gene therapy is approved and marketed
+with the brand name Kebilidi in the United States" (10-K, accession
+0001104659-26-017575), one worldwide line, singular verb. A pair stamp would
+put every quarter of the one complete launch curve of a rare-disease gene
+therapy into the review queue as "reported only with another product". So
+the pipeline's answer is the analyst's answer and the key's expectation is
+the defect; correcting it is a property ("a regional brand pair is one
+product"), not a fit, and is a decision for a person because the set is
+scored. Not an alias feed: measured over the 20 seed products' matched
+records, brand names that are not the product are 2 (a titration pack and a
+diluent), and the generic fallback's window for one product carries its four
+nearest competitors - an alias feed from retrieved rather than matched
+records would read every competitor's row as the product's own.
+
+The real defect on this product is 2026Q2, scored "no answer": the 10-Q row
+`Upstaza/Kebilidi 11,163 11,889` had its current-quarter value filed as
+2025Q2 and superseded by the tagged fact. The two-number row again.
 
 **Answered anyway (2) is the auto-pass gate the judging review named.** The
 Sephience 2025Q2 figure 26.741 is a `table` row from the **2026Q2** 10-Q
@@ -473,6 +500,6 @@ test reads a row-grouped table.
 
 What moves the number, in order, and what each costs: the four-filing cap is
 a configuration decision (a user gets 4; the measured product ran with 25);
-the alias set is one feed from a record the job already holds; the two-number
+the Upstaza six are the key's expectation, a decision for a person; the two-number
 row is the auto-pass gate and needs a new held-out set; Translarna needs a
 person to open the 10-K. None of these is in the M10 tracks now running.
