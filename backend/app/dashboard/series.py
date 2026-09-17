@@ -13,8 +13,35 @@ from app.db.models import (
     ProductIndicationORM,
     UptakeMetricORM,
 )
-from app.domain.models import PUBLISHED_STATUS_VALUES
+from app.domain.models import (
+    FINISHED_JOB_STATUS_VALUES,
+    PUBLISHED_STATUS_VALUES,
+    RevenueScope,
+)
 from app.observability import dedupe_jobs_by_analog, normalize_analog_key
+from app.pipeline.orchestrator import _scope_key
+
+# Where each scope sits in the order the model declares them. Read from the
+# enum so that adding a scope does not need a second list edited here.
+_SCOPE_ORDER = {scope.value: index for index, scope in enumerate(RevenueScope)}
+
+
+def scope_rank(revenue_scope: str | None) -> int:
+    """Where a scope sits in the order a chart should prefer, widest first.
+
+    The whole product comes first, and what counts as the whole product is
+    `_scope_key`'s answer rather than a second one: a sentence saying
+    Worldwide and a schedule's family line are one scope, and reconciliation
+    already groups them as one. Everything narrower follows in the order
+    `RevenueScope` declares. That order is not a claim about width - it is a
+    stable one, so that two readings of a quarter at different scopes always
+    resolve the same way rather than by whichever row was read last. A scope
+    the enum does not know sorts behind every scope it does.
+    """
+    key = _scope_key(revenue_scope)
+    if key == RevenueScope.PRODUCT_FAMILY.value:
+        return 0
+    return 1 + _SCOPE_ORDER.get(key, len(_SCOPE_ORDER))
 
 
 def _unique_sorted(values: list[Any]) -> list[str]:
@@ -217,6 +244,13 @@ def build_dashboard_preview(
                     }
                 )
         products.append(product)
+        if job.status not in FINISHED_JOB_STATUS_VALUES:
+            # A job that has not reached review holds rows reconciliation has
+            # not seen - the same quarter twice, at the same scope, both
+            # marked as passed - and a failed one stopped somewhere it did
+            # not choose. Neither is a series; the product still appears,
+            # with its status saying so.
+            continue
         for datapoint in job.datapoints:
             if not include_held and datapoint.validation_status not in PUBLISHED_STATUS_VALUES:
                 continue
@@ -227,6 +261,15 @@ def build_dashboard_preview(
                     "period_type": datapoint.period_type,
                     "value": datapoint.value_normalized_usd_millions,
                     "validation_status": datapoint.validation_status,
+                    # What the figure is a figure for. Without these the
+                    # chart had no way to tell one quarter's worldwide
+                    # figure from the same quarter's ex-U.S. one, and drew
+                    # whichever row it read last.
+                    "revenue_scope": datapoint.revenue_scope,
+                    "scope_rank": scope_rank(datapoint.revenue_scope),
+                    "geography": datapoint.geography,
+                    "formulation": datapoint.formulation,
+                    "reported_as": datapoint.reported_as,
                     "source_url": datapoint.source_url,
                     "source_quote": datapoint.source_quote,
                     "citation": datapoint.citation_json,
@@ -262,7 +305,14 @@ def build_dashboard_preview(
             "products_tracked": len(products),
             "companies_represented": len({product["company"] for product in products if product["company"]}),
             "aggregate_selected_peak": {
-                "value": sum(product["selected_peak"]["value"] for product in peak_products),
+                # None, not 0, where nothing has a selected peak. A sum over
+                # no products is arithmetically zero and reads as a measured
+                # zero, which is the one thing it is not.
+                "value": (
+                    sum(product["selected_peak"]["value"] for product in peak_products)
+                    if peak_products
+                    else None
+                ),
                 "currency": "USD",
                 "covered_products": len(peak_products),
                 "total_products": len(products),

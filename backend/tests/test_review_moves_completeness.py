@@ -64,7 +64,7 @@ def _database():
                     value_normalized_usd_millions=10.0 + index,
                     source_url="https://sec.gov/a-filing",
                     source_quote="Calderon 10.0",
-                    validation_status=ValidationStatus.NEEDS_REVIEW.value,
+                    validation_status=ValidationStatus.AUTO_PASS.value,
                 )
             )
         db.add(
@@ -194,18 +194,18 @@ def test_rejecting_a_figure_takes_its_quarter_away(client):
     assert job.completeness_pct == pytest.approx(33.3, abs=0.05)
 
 
-def test_the_model_s_own_figure_is_not_offered_to_a_recount(client):
-    """A reviewer's action postdates what the model said about the run.
+def test_the_model_s_own_figure_is_never_the_coverage_number(client):
+    """Coverage is the ratio whatever the model offered.
 
-    refresh_completeness takes the model's percentage only where a caller
-    passes one, which only the run does; everything after it counts.
+    The percentage names a count of quarters. While a model's figure could
+    replace it, the same number on the same card was sometimes that count and
+    sometimes an opinion about it, with nothing on screen to say which.
     """
     _, factory = client
     with factory() as db:
         job = db.get(DrugJobORM, "job-1")
         with_model = refresh_completeness(db, job, llm_pct=96.0)
         without = refresh_completeness(db, job)
-    assert with_model.pct == 96.0
-    assert without.pct == 50.0
+    assert with_model.pct == without.pct == 50.0
     assert without.quarters == 2
     assert without.gaps == 2

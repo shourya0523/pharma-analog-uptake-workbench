@@ -2,7 +2,7 @@ from app.quality.candidate_filters import (
     filter_revenue_candidates,
     is_placeholder_period,
 )
-from app.quality.completeness import resolve_completeness_pct
+from app.quality.completeness import coverage_pct, quarter_labels
 
 
 def test_placeholder_period_detects_prompt_skeleton_echo():
@@ -35,18 +35,24 @@ def test_filter_drops_placeholder_period_candidate():
     assert [d["_drop_reason"] for d in dropped] == ["placeholder_period"]
 
 
-def test_completeness_falls_back_when_model_echoes_zero():
-    # The prompt skeleton ships "completeness_pct": 0, so a literal 0 is not an answer.
-    assert resolve_completeness_pct(0, quarterly_count=6, unresolved_quarter_count=0) == 100.0
-    assert resolve_completeness_pct(None, quarterly_count=3, unresolved_quarter_count=1) == 75.0
-    assert resolve_completeness_pct("nonsense", quarterly_count=1, unresolved_quarter_count=1) == 50.0
+def test_quarter_labels_collapse_spellings_of_one_quarter():
+    # Two readings of one quarter are one quarter, however each was labelled.
+    assert quarter_labels(["2024Q2", "FY2024 Q2", "Q2 2024"]) == {"2024Q2"}
+    # A span longer than a quarter is not a quarter.
+    assert quarter_labels(["2024", "2024Q1"]) == {"2024Q1"}
+    assert quarter_labels([]) == set()
+    assert quarter_labels(None) == set()
 
 
-def test_completeness_keeps_model_value_and_clamps_range():
-    assert resolve_completeness_pct(62.5, quarterly_count=6, unresolved_quarter_count=0) == 62.5
-    assert resolve_completeness_pct(140, quarterly_count=6, unresolved_quarter_count=0) == 100.0
-    assert resolve_completeness_pct(-5, quarterly_count=0, unresolved_quarter_count=2) == 0.0
+def test_coverage_is_the_share_of_expected_quarters_that_hold_a_figure():
+    expected = {"2024Q1", "2024Q2", "2024Q3", "2024Q4"}
+    assert coverage_pct(held={"2024Q1", "2024Q2", "2024Q3"}, expected=expected) == 75.0
+    assert coverage_pct(held={"2024Q1"}, expected=expected) == 25.0
+    assert coverage_pct(held=expected, expected=expected) == 100.0
 
 
-def test_completeness_zero_when_nothing_extracted():
-    assert resolve_completeness_pct(0, quarterly_count=0, unresolved_quarter_count=4) == 0.0
+def test_coverage_is_zero_when_nothing_is_published():
+    # The reading this replaces: a series with nothing in it read 100%,
+    # because the denominator was the gaps the pipeline had itself noticed.
+    assert coverage_pct(held=set(), expected={"2024Q1", "2024Q2"}) == 0.0
+    assert coverage_pct(held=set(), expected=set()) == 0.0

@@ -75,6 +75,31 @@ class JobStatus(str, Enum):
     FAILED = "failed"
     CANCELLED = "cancelled"
 
+    @property
+    def ran_to_the_end(self) -> bool:
+        """Whether the pipeline finished this job's work.
+
+        Two of these mean it did: the job reached review, or a person closed
+        it. The rest are a job that has not got there yet or stopped
+        somewhere it did not choose, and what such a job holds is a snapshot
+        of a pipeline mid-stride - rows reconciliation has not seen, and the
+        duplicates it would have settled.
+
+        Listed rather than excluded so a status added later counts as
+        unfinished until someone says otherwise: withholding a figure is the
+        safe direction to be wrong in.
+        """
+        return self in {JobStatus.READY_FOR_REVIEW, JobStatus.COMPLETED}
+
+
+# The job statuses whose rows may be shown as answers, from the enum itself.
+# Every reader that publishes a job's figures asks this, for the same reason
+# PUBLISHED_STATUSES exists a few lines up: asked in each module's own words,
+# the dashboard and the export disagreed about which rows were results.
+FINISHED_JOB_STATUS_VALUES = frozenset(
+    status.value for status in JobStatus if status.ran_to_the_end
+)
+
 
 class JobStep(str, Enum):
     QUEUED = "queued"

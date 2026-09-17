@@ -131,6 +131,36 @@ describe('DashboardPage', () => {
     expect(screen.queryByText('Source drill-through')).not.toBeInTheDocument()
   })
 
+  it('says the aggregate peak is not computed rather than showing $0M', async () => {
+    // A sum over no selected peaks is arithmetically zero and reads as a
+    // measured zero. Nothing in the payload has one.
+    vi.mocked(api.dashboard).mockResolvedValue({
+      ...payload,
+      products: products.map(({ selected_peak: _peak, ...rest }) => rest),
+    })
+    renderDashboard()
+    await screen.findByRole('cell', { name: 'Alpha' })
+    const kpis = screen.getByLabelText('Filtered cohort KPIs')
+    expect(within(kpis).getByText('Not computed')).toBeInTheDocument()
+    expect(within(kpis).queryByText('$0M')).not.toBeInTheDocument()
+    expect(within(kpis).getByText('Coverage 0/2')).toBeInTheDocument()
+  })
+
+  it('says a tab has no series instead of drawing an empty chart with a full legend', async () => {
+    // The guard read the product list, which the filters fill, so a tab whose
+    // own series was empty rendered a legend of every product and no lines.
+    const user = userEvent.setup()
+    vi.mocked(api.dashboard).mockResolvedValue({ ...payload, launch_series: [] })
+    renderDashboard()
+    await screen.findByRole('cell', { name: 'Alpha' })
+
+    await user.click(screen.getByRole('button', { name: 'Launch-relative' }))
+    expect(screen.getByText('No series points for this view.')).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Quarterly Uptake' }))
+    expect(screen.queryByText('No series points for this view.')).not.toBeInTheDocument()
+  })
+
   it('asks for held values only when the viewer says so', async () => {
     const user = userEvent.setup()
     renderDashboard()
