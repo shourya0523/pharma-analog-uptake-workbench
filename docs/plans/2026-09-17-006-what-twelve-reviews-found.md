@@ -1056,6 +1056,14 @@ only to the LLM branch (`orchestrator.py:971-977`); the openFDA mapping loop
 correct answers today; the exposure is latent, plus one realised case. "Could
 be wrong tomorrow", not "is wrong today".
 
+*Narrowed at implementation (M7):* ILUVIEN and YUTIQ could not cross before
+the fix either - neither drugsFDA record states the molecule as one of its
+brand names, so forcing both records into one result window (both orders)
+selects each product's own application before and after. What the fix
+changed is that the exclusion meant to prevent the cross now fires:
+`names_the_molecule(...)` is true where the old string equality was false.
+Latent, not realised; Nebulized Tyvaso remains the one realised case.
+
 ### 3e. Among a brand's own applications, the first returned wins  `[V]`, order-dependent, 5 brands not 1
 
     UPTRAVI NDA214275 route=['INTRAVENOUS'] ORIG AP 20210729   <- selected
@@ -1376,7 +1384,10 @@ disease a product treats - the first thing any analyst filters on.
 Smaller: `rank_analogs:142` silently drops candidates below
 `minimum_attributes`, so the analyst never learns one was considered;
 `_era_start("Pre-2000")` returns 2000, so an unbounded pre-1999 bucket earns
-the same half-credit against `2000-2004` whether the approval was 1998 or 1982;
+the same half-credit against `2000-2004` whether the approval was 1998 or 1982
+(*left as is at implementation (M8)* - `_era_start` still reads the head of
+the label; the era attribute is now one of five and `initial_approval_date`
+carries the year, so the bucket's half-credit is bounded by weight, not fixed);
 and `_similarity` compares with `==` case-sensitively, so `ORAL != Oral` scores
 a confident **0.0**, not an unknown - fixing route correctness without
 normalisation buys nothing.
@@ -2091,10 +2102,19 @@ The Lilly miss, printed: `normalize_registrant("Eli Lilly and Company")` is
 literal with no note of what it is a snapshot of (rule 1). 2,327 index rows
 (1,966 distinct titles, 1,973 CIKs) have a single-word normalised title.
 
-**Against `seed/example_drugs.csv`'s own manufacturer column, 8 of 14
-distinct names fail**: `Actelion/J&J`, `Janssen/J&J`, `Bayer/Merck`, `Gilead`,
+**Against `seed/example_drugs.csv`'s own manufacturer column, most distinct
+names fail**: `Actelion/J&J`, `Janssen/J&J`, `Bayer/Merck`, `Gilead`,
 `Teva`, `CMP Pharma` -> None; `Merck` -> Merck & Co by luck. The exact user
 the brief describes falls into the model path on their own upload.
+
+*Corrected at implementation (M6):* the column holds **11** distinct names,
+not 14 (`sorted({r["manufacturer"] for r in csv.DictReader(open(
+"seed/example_drugs.csv"))})`). By name alone 5 of 11 resolve before the
+registrant fix and the same 5 after (GSK, Liquidia, Merck, Pfizer, United
+Therapeutics); the 6 misses are the slash-joined pairs, two index titles that
+carry words the query does not (Gilead, Teva), and CMP Pharma, which the
+index does not hold under that name. The "8 of 14" was a hand count; the
+number was wrong, the shape held.
 
 The aspirin repro re-run live with the model boundary stubbed to return a
 CIK at confidence 0.2: `AFTER _identity: cik='0001070494'
