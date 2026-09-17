@@ -277,18 +277,32 @@ def _joined(values: list[str]) -> str | None:
 
 
 def _manufacturer(record: dict[str, Any], block: dict[str, list[str]]) -> tuple[str | None, str]:
-    """The filer, from whichever of the two keys the record states, with that key.
+    """Who sells it, from whichever of the two keys the record states.
 
-    The label dataset names it in the ``openfda`` block; a drugsFDA application
-    names it at the top level. A record stating neither gets no path, so it
-    cannot cite a key it does not have.
+    The two keys are two different companies, not two datasets spelling one.
+    ``openfda.manufacturer_name`` is the labeler - whoever puts their name on
+    the carton, which is who books the revenue - and ``sponsor_name`` is the
+    applicant who holds the approval. This value is asked because a filer has
+    to be found for the product's sales, so the labeler is preferred where the
+    record names one.
+
+    It has to name *one*. An application relabelled part-way through its life
+    lists every labeler it has had, in an order the record does not explain,
+    and the first of that list is a guess wearing the shape of an answer. Where
+    the labelers are several the applicant answers instead: it is one company
+    and the record says which.
+
+    A record stating neither gets no path, so it cannot cite a key it does not
+    have.
     """
-    listed = block.get("manufacturer_name") or []
-    if listed:
-        return listed[0], "openfda.manufacturer_name"
+    listed = [name for name in (block.get("manufacturer_name") or []) if str(name).strip()]
     sponsor = str(record.get("sponsor_name") or "").strip()
+    if len(listed) == 1:
+        return listed[0], "openfda.manufacturer_name"
     if sponsor:
         return sponsor, "sponsor_name"
+    if listed:
+        return listed[0], "openfda.manufacturer_name"
     return None, ""
 
 
