@@ -2385,6 +2385,14 @@ class PipelineOrchestrator:
                     PeriodType.ANNUAL.value,
                 }
                 and "field_enrichment_applied" not in (row.issue_flags or [])
+                # The same flags that held this row above. "Supported" is an
+                # answer about the quote: the figure is in the text cited for
+                # it. A label flag is a question about what the figure is a
+                # figure for - which product's line it was read from, what
+                # part of the quarter it covers - and a quote cannot settle
+                # that, so a row demoted for one was promoted straight back
+                # here and published as this product's own quarter.
+                and not label_flags
             ):
                 status = ValidationStatus.AUTO_PASS.value
             elif support == "partial":
