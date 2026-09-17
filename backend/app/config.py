@@ -63,7 +63,6 @@ class Settings(BaseSettings):
     # confidence is worth on issuer identity, which needs a held-out set of
     # products whose filer is known and which no existing answer key uses.
     llm_cik_min_confidence: float = 0.6
-    llm_search_max_queries: int = 4
     llm_search_max_urls: int = 5
     # OpenRouter openrouter:web_search engine: auto | native | exa | parallel | perplexity
     llm_search_engine: str = "auto"

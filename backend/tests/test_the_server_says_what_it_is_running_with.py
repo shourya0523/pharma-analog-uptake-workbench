@@ -107,3 +107,37 @@ def test_two_different_credentials_are_reported_alike():
             == main._reportable("database_url", dsn.format("acme-two")))
     assert (main._reportable("openrouter_api_key", "acme-one")
             == main._reportable("openrouter_api_key", "acme-two"))
+
+
+def test_every_declared_setting_is_read_by_something():
+    """A knob an operator can turn has to reach the code that would honour it.
+
+    `/config` reports every field the model declares, so a field nothing reads
+    is printed to an operator as though turning it did something. One did:
+    a cap on how many search queries a job may make, documented beside a cap on
+    URLs that works, and read by nothing - an operator capping search volume got
+    no cap and no error.
+
+    Derived rather than listed: a field is read when some line of `app/` other
+    than its own declaration names it, which covers the ones only `Settings`
+    itself reads.
+    """
+    import pathlib
+    import re
+
+    root = pathlib.Path(__file__).resolve().parents[1] / "app"
+    lines = [
+        (path, line)
+        for path in root.rglob("*.py")
+        for line in path.read_text().splitlines()
+    ]
+    unread = [
+        name
+        for name in Settings.model_fields
+        if not any(
+            re.search(rf"\b{name}\b", line)
+            for _path, line in lines
+            if not re.match(rf"\s*{name}\s*:", line)
+        )
+    ]
+    assert unread == [], f"declared and read by nothing: {unread}"
