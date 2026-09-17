@@ -54,8 +54,11 @@ from app.parsing.labels import read_label
 from app.parsing.periods import (
     detect_period_context,
     period_label,
+    period_months,
+    period_span,
     quarter_of_month,
 )
+from app.parsing.tables import NIL_CELLS, cell_figure
 
 logger = logging.getLogger(__name__)
 
@@ -71,16 +74,6 @@ NAMES_ONLY = "names_only"
 ABSENT = "absent"
 UNREADABLE = "unreadable"
 
-# A cell that is a reported number. A bare four-digit year is a column heading
-# wherever it appears, never a figure, which is the one shape a plain numeric
-# parse reads wrongly.
-_FIGURE_RE = re.compile(r"^\(?-?[\d,]*\d(?:\.\d+)?\)?$")
-_YEAR_RE = re.compile(r"^(?:19|20)\d{2}$")
-# The dashes a filer prints for "nothing here". An em dash and an en dash are
-# the same statement as a zero, and a bare hyphen is too.
-_NIL_CELLS = {"-", "–", "—", "−"}
-# The last month of each period a `period_label` key can name.
-_SPAN_END_MONTH = {"H1": 6, "M9": 9}
 
 
 @dataclass(frozen=True)
@@ -105,11 +98,6 @@ class DocumentCoverage:
     @property
     def refuted(self) -> list[str]:
         return sorted(q for q, v in self.per_period.items() if v == REFUTES)
-
-    @property
-    def carries_nothing(self) -> bool:
-        """Whether the document answered none of the periods it was asked about."""
-        return not self.carried
 
     def as_metadata(self) -> dict:
         """The verdict as it is stored on a retrieved source."""
@@ -177,7 +165,7 @@ def coverage(
             for column, key in keys.items():
                 if key not in per_period or column >= len(row):
                     continue
-                value = _cell_figure(row[column])
+                value = cell_figure(row[column])
                 if value is None:
                     continue
                 if value:
@@ -239,9 +227,9 @@ def _row_label(row: list[str | None]) -> str:
     currency or percent mark standing on its own."""
     for cell in row:
         text = (cell or "").strip()
-        if not text or text in {"$", "%"} or text in _NIL_CELLS:
+        if not text or text in {"$", "%"} or text in NIL_CELLS:
             continue
-        if _cell_figure(text) is not None:
+        if cell_figure(text) is not None:
             return ""
         return text
     return ""
@@ -251,25 +239,6 @@ def _row_labels(grid: list[list[str | None]]) -> list[str]:
     """Every row label this table prints - the filer's own list of what it
     reports, which is what tells a sibling product from this one."""
     return [label for row in grid if (label := _row_label(row))]
-
-
-def _cell_figure(cell: str | None) -> float | None:
-    """The number a cell reports, or None where it reports none.
-
-    A dash is a reported nothing and reads as 0.0; a year is a heading and
-    reads as nothing at all.
-    """
-    text = (cell or "").strip().replace("$", "").strip()
-    if text in _NIL_CELLS:
-        return 0.0
-    if not text or not _FIGURE_RE.match(text) or _YEAR_RE.match(text):
-        return None
-    negative = text.startswith("(") and text.endswith(")")
-    try:
-        value = float(text.strip("()").replace(",", ""))
-    except ValueError:
-        return None
-    return -value if negative else value
 
 
 def _names_the_product(document: ParsedDocument, aliases: list[str]) -> bool:
@@ -310,12 +279,9 @@ def _refute_what_the_document_predates(
 def _period_end(key: str) -> tuple[int, int] | None:
     """(year, last month) of a canonical period key, or None if it is not one.
 
-    Reads the spellings `period_label` produces: 2024Q2, 2024H1, 2024M9, 2024.
+    The key states its own span, so the namespace answers both halves: the
+    span it names and the days that span covers.
     """
-    match = re.fullmatch(r"(\d{4})(?:Q([1-4])|(H1|M9))?", key or "")
-    if not match:
-        return None
-    year = int(match.group(1))
-    if match.group(2):
-        return year, int(match.group(2)) * 3
-    return year, _SPAN_END_MONTH.get(match.group(3) or "", 12)
+    months = period_months(key)
+    span = period_span(key, months) if months else None
+    return (span[1].year, span[1].month) if span else None

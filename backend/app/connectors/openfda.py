@@ -6,6 +6,7 @@ import logging
 import httpx
 
 from app.domain.models import RetrievalStatus, RetrievedSource, SourceType, new_id
+from app.parsing.fda_label import brand_name_paths
 from app.storage.filestore import FileStore
 
 logger = logging.getLogger(__name__)
@@ -17,7 +18,11 @@ logger = logging.getLogger(__name__)
 # marketed listing - an older or a discontinued one - has no `openfda` block at
 # all and only the second path answers, so a brand query that names one path is
 # a brand query that cannot see those products.
-BRAND_SEARCH_PATHS = ("openfda.brand_name", "products.brand_name")
+#
+# The same paths the record reader reads, in query syntax: the search grammar
+# names an array member without the `[]` the read syntax uses. Derived, so a
+# path added to the reader is a path this asks on.
+BRAND_SEARCH_PATHS = tuple(path.replace("[]", "") for path in brand_name_paths())
 
 # The molecule, for context only, and on a path of its own so a caller can tell
 # a molecule-wide answer from the product's own.

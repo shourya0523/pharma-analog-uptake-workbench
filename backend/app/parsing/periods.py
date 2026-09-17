@@ -391,6 +391,28 @@ def period_label(year: int, months: int, quarter: int) -> str:
     return str(year)
 
 
+# Which span each suffix `period_label` writes stands for, read off the
+# producer rather than restated: a span the label learns to spell is spelled
+# here by the same call. The year is a placeholder - only the suffix is kept.
+_SUFFIX_MONTHS: dict[str, int] = {
+    period_label(0, months, quarter)[1:]: months
+    for months in MONTHS_TO_PERIOD_TYPE
+    for quarter in range(1, 5)
+}
+
+
+def period_months(key: str) -> int | None:
+    """The span in months a canonical period key names, or None if it is not one.
+
+    `period_label` writes the span into the key, so the key answers this on its
+    own: `2024Q2` is three months, `2024H1` six, `2024` twelve. It is what
+    `period_span` has to be told, which is why a reader holding only a key can
+    now reach a span without parsing the key a second way.
+    """
+    match = re.fullmatch(r"\d{4}(.*)", key or "")
+    return _SUFFIX_MONTHS.get(match.group(1)) if match else None
+
+
 @dataclass(frozen=True)
 class NamedPeriod:
     """A period a piece of text names.

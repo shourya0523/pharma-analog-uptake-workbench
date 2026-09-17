@@ -34,6 +34,37 @@ def clean_label(cell: str) -> str:
     return re.sub(r"\s+", " ", text).strip(" :")
 
 
+# A cell that is a reported number. A bare four-digit year is a column heading
+# wherever it appears, never a figure, which is the one shape a plain numeric
+# parse reads wrongly.
+_FIGURE_CELL_RE = re.compile(r"^\(?-?[\d,]*\d(?:\.\d+)?\)?$")
+_YEAR_CELL_RE = re.compile(r"^(?:19|20)\d{2}$")
+# The dashes a filer prints for "nothing here". An em dash and an en dash are
+# the same statement as a zero, and a bare hyphen is too.
+NIL_CELLS = frozenset({"-", "–", "—", "−"})
+
+
+def cell_figure(cell: str | None) -> float | None:
+    """The number a cell reports, or None where it reports none.
+
+    A dash is a reported nothing and reads as 0.0; a year is a heading and
+    reads as nothing at all. Value-returning rather than a predicate, because
+    every caller that wants to know whether a cell is a figure also wants the
+    figure, and a predicate makes them parse it again.
+    """
+    text = (cell or "").strip().replace("$", "").strip()
+    if text in NIL_CELLS:
+        return 0.0
+    if not text or not _FIGURE_CELL_RE.match(text) or _YEAR_CELL_RE.match(text):
+        return None
+    negative = text.startswith("(") and text.endswith(")")
+    try:
+        value = float(text.strip("()").replace(",", ""))
+    except ValueError:
+        return None
+    return -value if negative else value
+
+
 def _period_header(rows: list[list[str]]) -> tuple[int, int] | None:
     """(period length in months, period-end month) declared by a table header."""
     for row in rows[:6]:

@@ -206,11 +206,13 @@ def test_the_verdict_is_recorded_on_the_source_and_logged(caplog):
 
 def test_carrying_nothing_is_the_thing_being_counted():
     """12d's measurement is "how many of the documents we fetched carried
-    nothing", so that has to be one question of the verdict."""
+    nothing", so that has to be one question of the verdict. It is the carried
+    list being empty - the same list the verdict itself is computed from, so
+    the count and the verdict cannot disagree."""
     carried = coverage(_document([SCHEDULE]), aliases=["Calderon"], periods=["2025Q1"])
     nothing = coverage(_document([SCHEDULE]), aliases=["Calderon"], periods=["2019Q1"])
-    assert not carried.carries_nothing
-    assert nothing.carries_nothing and nothing.verdict == NAMES_ONLY
+    assert carried.carried == ["2025Q1"]
+    assert not nothing.carried and nothing.verdict == NAMES_ONLY
 
 
 def test_a_line_that_names_two_products_carries_for_neither():

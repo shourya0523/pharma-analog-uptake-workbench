@@ -12,6 +12,9 @@ from app.parsing.periods import (
     PeriodContext,
     detect_period_context,
     normalize_period,
+    period_label,
+    period_months,
+    period_span,
     quarter_of_month,
 )
 
@@ -52,6 +55,22 @@ def test_a_period_type_names_the_span_the_span_names():
         for name in PERIOD_TYPE_TO_MONTHS
     )
     assert "weekly" not in PERIOD_TYPE_TO_MONTHS
+
+
+def test_a_key_states_the_span_that_wrote_it():
+    """Both answers: every key `period_label` writes, and one it never writes.
+
+    Asserted against the producer rather than against a list of spellings, so
+    a span the label learns to write is covered without being written here.
+    """
+    for months in MONTHS_TO_PERIOD_TYPE:
+        for quarter in range(1, 5):
+            key = period_label(2024, months, quarter)
+            assert period_months(key) == months, key
+            span = period_span(key, period_months(key))
+            assert span is not None and span[1].year == 2024
+    assert period_months("2024W3") is None
+    assert period_months("") is None
 
 
 def test_quarter_of_month_maps_calendar_quarters():

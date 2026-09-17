@@ -8,7 +8,7 @@ seed/gold/quarterly_revenue.jsonl.
 import json
 from pathlib import Path
 
-from app.parsing.tables import clean_label, extract_revenue_rows
+from app.parsing.tables import cell_figure, clean_label, extract_revenue_rows
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
@@ -102,3 +102,14 @@ def test_annual_table_labels_years_without_a_quarter():
     rows = extract_revenue_rows([annual], product="Tyvaso")
     assert _by_period(rows, "Product family") == {"2024": 1620.4, "2023": 1233.7}
     assert {r["period_type"] for r in rows} == {"annual"}
+
+
+def test_a_cell_reports_a_number_a_nothing_or_neither():
+    """Both answers, and the third: a dash is a reported nothing, a year is a
+    heading, and a figure comes back as its value rather than as a yes."""
+    assert cell_figure("1,234") == 1234.0
+    assert cell_figure("$ (2.5)") == -2.5
+    assert cell_figure("\u2014") == 0.0
+    assert cell_figure("2024") is None
+    assert cell_figure("Calderon") is None
+    assert cell_figure(None) is None

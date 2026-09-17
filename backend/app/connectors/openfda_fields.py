@@ -5,7 +5,7 @@ from collections.abc import Iterable
 from datetime import datetime
 from typing import Any
 
-from app.parsing.fda_label import openfda_block, read_path
+from app.parsing.fda_label import brand_name_paths, openfda_block, read_path
 from app.quality.profile import blends_sibling_brand
 
 # An alias shorter than this is a fragment - an abbreviation of a row label, a
@@ -32,10 +32,11 @@ def openfda_brand_names(result: dict[str, Any]) -> list[str]:
 
     An older or discontinued application comes back with no ``openfda`` block
     at all and its brands only in ``products[].brand_name``, so both paths are
-    read and the union returned rather than one path being assumed.
+    read and the union returned rather than one path being assumed. Which
+    paths those are is the record reader's answer, not a second copy of it.
     """
     names: list[str] = []
-    for path in ("openfda.brand_name", "products[].brand_name"):
+    for path in brand_name_paths():
         for name in read_path(result, path):
             if name and name not in names:
                 names.append(name)

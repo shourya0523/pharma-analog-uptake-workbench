@@ -65,9 +65,13 @@ def _strings(value: Any) -> list[str]:
     return [str(item).strip() for item in values if item is not None and str(item).strip()]
 
 
-def _first_section(record: dict[str, Any], key: str) -> str | None:
-    values = _strings(record.get(key))
-    return "\n".join(values) if values else None
+def brand_name_paths() -> tuple[str, ...]:
+    """The keys a record can state a brand name on, in reading order.
+
+    One answer for both readers of it: whatever reads a brand off a record,
+    and whatever asks openFDA for one.
+    """
+    return _PATHS["brand_name"]
 
 
 def openfda_block(record: dict[str, Any]) -> dict[str, list[str]]:
@@ -223,6 +227,12 @@ def parse_label_record(record: dict[str, Any]) -> ParsedFDALabel:
     EPC and MoA stay separate. Route keeps every path that stated one, because
     the two datasets disagree about it and the disagreement is the finding,
     not something to resolve here.
+
+    ``chosen`` takes the first reading of a fact, which is the preferred one
+    because `_readings` walks `_PATHS[fact]` in order and a dict keeps the
+    order it was built in. `_PATHS` is therefore a preference order, not just a
+    set of keys, and reordering an entry there changes which key a value is
+    read from.
     """
 
     readings = {fact: _readings(record, fact) for fact in _PATHS}
@@ -241,7 +251,7 @@ def parse_label_record(record: dict[str, Any]) -> ParsedFDALabel:
             paths[fact] = path
 
     moa_summary = clean_moa_summary("\n".join(values["moa_summary"]) or None)
-    indications_text = _first_section(record, "indications_and_usage")
+    indications_text = "\n".join(values["indications"]) or None
     if not moa_summary:
         paths.pop("moa_summary", None)
 
