@@ -48,6 +48,21 @@ records of *absence* become expectations too:
 
 An empty expectation is `value_normalized_usd_millions: null` with a `why`,
 which is how `shapes_holdout.json` and `unseen.json` already spell it.
+
+What a case asks for
+--------------------
+
+Beyond its window a case carries the layer-two options - the openFDA lookup
+and the product-metadata pass - and each is a flag:
+
+    python scripts/build_gold_cases.py --openfda --product-metadata
+
+Their defaults are a snapshot of the configuration this repository can be
+measured under rather than a statement about the product, and they are stale
+as soon as layer two is worth scoring: the change that makes it worth scoring
+passes the flags and commits what they produce. Every case records what it
+was built with, so a case file always says which configuration its figures
+are an answer for.
 """
 
 from __future__ import annotations
@@ -73,9 +88,13 @@ EXCLUDED = GOLD / "excluded_products.jsonl"
 REPORTABLE_AFTER_DAYS = 5
 REPORTED_WITHIN_DAYS = 125
 
-# The eval posts what a person types. Layer 2 stays off here: turning it on is
-# a configuration change with its own measurement, not a property of the cases.
-CASE_OPTIONS = {"openfda": False, "product_metadata": False}
+# Layer 2 - the openFDA lookup and the product-metadata pass - is a
+# configuration, not a property of the cases, so it is a flag here and the
+# case file records what it was built with. The defaults are a snapshot of the
+# configuration this repository can currently be measured under; they go stale
+# the moment layer 2 is worth scoring, and the change that makes it worth
+# scoring flips them and regenerates.
+LAYER_TWO_DEFAULTS = {"openfda": False, "product_metadata": False}
 
 # Gold names its issuers but records no ticker, and the pipeline resolves an
 # issuer by ticker first. This is a snapshot of the symbol the SEC's
@@ -149,7 +168,8 @@ def _silent_quarters(coverage: dict, year: int) -> list[str]:
     return [f"{year}Q{q}" for q in range(int(end[-1]) + 1, 5)]
 
 
-def reported_cases(quarterly: list[dict], coverage: dict[str, dict]) -> list[dict]:
+def reported_cases(quarterly: list[dict], coverage: dict[str, dict],
+                   options: dict) -> list[dict]:
     """One case per product-year gold holds quarters for."""
     grouped: dict[tuple[str, int], list[dict]] = {}
     for row in quarterly:
@@ -177,14 +197,14 @@ def reported_cases(quarterly: list[dict], coverage: dict[str, dict]) -> list[dic
             "manufacturer": first["manufacturer"],
             "ticker": _ticker(first["manufacturer"]),
             "generic_name": first["generic_name"],
-            "options": {**window(year), **CASE_OPTIONS},
+            "options": {**window(year), **options},
             "source": str(QUARTERLY.relative_to(REPO)),
             "expect": sorted(expect, key=lambda e: e["period"]),
         })
     return cases
 
 
-def excluded_cases(excluded: list[dict], year: int) -> list[dict]:
+def excluded_cases(excluded: list[dict], year: int, options: dict) -> list[dict]:
     """One case per product gold refused to build a series for.
 
     Gold records no issuer for these, so neither does the case: an excluded
@@ -199,7 +219,7 @@ def excluded_cases(excluded: list[dict], year: int) -> list[dict]:
             "manufacturer": None,
             "ticker": None,
             "generic_name": None,
-            "options": {**window(year), **CASE_OPTIONS},
+            "options": {**window(year), **options},
             "source": str(EXCLUDED.relative_to(REPO)),
             "expect": [{"period": f"{year}Q{q}",
                         "value_normalized_usd_millions": None,
@@ -215,14 +235,19 @@ def _order(case: dict) -> tuple:
             case["drug_name"], case["expect"][0]["period"])
 
 
-def build() -> list[dict]:
-    """Every case gold licenses, in a stable order."""
+def build(options: dict | None = None) -> list[dict]:
+    """Every case gold licenses, in a stable order.
+
+    ``options`` is what each case asks the pipeline for beyond its window;
+    leaving it out builds the file as it is committed.
+    """
+    options = LAYER_TWO_DEFAULTS if options is None else options
     quarterly = _rows(QUARTERLY)
     coverage = {row["benchmark_identity"]: row for row in _rows(COVERAGE)}
     excluded = _rows(EXCLUDED)
     as_of = max(row["as_of_quarter"] for row in coverage.values())
-    cases = reported_cases(quarterly, coverage)
-    cases += excluded_cases(excluded, latest_complete_year(as_of))
+    cases = reported_cases(quarterly, coverage, options)
+    cases += excluded_cases(excluded, latest_complete_year(as_of), options)
     return sorted(cases, key=_order)
 
 
@@ -289,20 +314,34 @@ def main() -> int:
     ap.add_argument("--check", action="store_true",
                     help="say whether the committed files match what gold produces "
                          "today, and write nothing")
+    # One pair of flags per layer-two option, from the defaults themselves, so
+    # an option added there is a flag here without this being touched.
+    for name, default in LAYER_TWO_DEFAULTS.items():
+        flag = name.replace("_", "-")
+        ap.add_argument(f"--{flag}", dest=name, action="store_true", default=default,
+                        help=f"ask each case for {name} (default {default})")
+        ap.add_argument(f"--no-{flag}", dest=name, action="store_false")
     args = ap.parse_args()
 
-    cases = build()
+    options = {name: getattr(args, name) for name in LAYER_TWO_DEFAULTS}
+    cases = build(options)
     small = sample(cases)
+    stale = 0
     for path, built in ((CASES / "gold_all.json", cases), (CASES / "gold_sample.json", small)):
         if args.check:
             committed = json.loads(path.read_text()) if path.exists() else None
+            matches = committed == built
+            stale += not matches
             print(f"  {path.relative_to(REPO)}: "
-                  + ("matches gold" if committed == built else "DIFFERS from gold"))
+                  + ("matches gold" if matches else "DIFFERS from gold"))
             continue
         _write(path, built)
         print(f"  {path.relative_to(REPO)}  "
-              + "  ".join(f"{k} {v}" for k, v in counts(built).items()))
-    return 0
+              + "  ".join(f"{k} {v}" for k, v in counts(built).items())
+              + "  options " + json.dumps(options, sort_keys=True))
+    # A check that always succeeds is a report for a reader, not an answer for
+    # a caller: the exit status is how anything but a person finds out.
+    return 1 if stale else 0
 
 
 if __name__ == "__main__":

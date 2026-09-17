@@ -128,8 +128,18 @@ def test_every_shape_the_plan_asked_for_is_carried_by_a_case():
 
 def test_cases_are_what_a_person_would_type():
     """The eval posts the drug, who makes it and the window; nothing here may
-    hand the pipeline a document or a figure."""
+    hand the pipeline a document or a figure.
+
+    An option a case sets has to be one the API declares. One that is not is
+    dropped on the way in without a word, so the case measures a
+    configuration nobody chose and the run reports a number for it. The
+    declared set is read off the model rather than written down here, so an
+    option added there needs no edit and an option removed there fails this.
+    """
+    from app.domain.models import ExtractionOptions
+
+    declared = set(ExtractionOptions.model_fields)
     for case in _cases():
         assert "known_source_url" not in case, case["drug_name"]
-        assert case["options"]["openfda"] is False
-        assert case["options"]["product_metadata"] is False
+        unknown = set(case["options"]) - declared
+        assert not unknown, (case["drug_name"], sorted(unknown))

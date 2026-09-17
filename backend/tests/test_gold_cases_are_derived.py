@@ -19,6 +19,7 @@ from __future__ import annotations
 import importlib.util
 import json
 import pathlib
+import sys
 from datetime import date, timedelta
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
@@ -104,6 +105,33 @@ def test_both_answers_are_represented():
             and any(e["value_normalized_usd_millions"] is not None for e in case["expect"])
             for case in _committed(name)
         ), f"{name}: no case mixes a stated quarter with an empty one"
+
+
+def test_every_option_a_case_sets_is_one_the_api_declares():
+    """An option the API does not declare is dropped on the way in without a
+    word, so the case measures a configuration nobody chose. The declared set
+    is read off the model rather than written down here."""
+    from app.domain.models import ExtractionOptions
+
+    declared = set(ExtractionOptions.model_fields)
+    for name in ("gold_all.json", "gold_sample.json"):
+        for case in _committed(name):
+            unknown = set(case["options"]) - declared
+            assert not unknown, (name, case["drug_name"], sorted(unknown))
+
+
+def test_the_check_says_so_in_its_exit_status(monkeypatch):
+    """A check that cannot fail reports to a reader and answers no caller.
+
+    Asking for an option the committed files were not built with is the
+    cheapest way to make them disagree with the builder, so it doubles as the
+    check that the flag reaches every case rather than only the banner.
+    """
+    module = _builder()
+    monkeypatch.setattr(sys, "argv", ["build_gold_cases.py", "--check"])
+    assert module.main() == 0, "the committed files do not match what gold produces"
+    monkeypatch.setattr(sys, "argv", ["build_gold_cases.py", "--check", "--openfda"])
+    assert module.main() == 1, "a case file built for another configuration read as current"
 
 
 def test_windows_reach_every_expected_quarter():
