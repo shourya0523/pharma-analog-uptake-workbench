@@ -2,7 +2,7 @@
 title: "plan: verify, then fix - the module order and the evidence rule"
 date: 2026-09-17
 type: plan
-status: not-started
+status: complete
 ---
 
 # Verify, then fix
@@ -147,3 +147,10 @@ next wave starts. That fold is the step that would have caught 2f.
   touch, and both answers must be represented in it.
 - `006` remains the register. This document is the procedure over it, and
   carries no findings of its own.
+
+## Where the agents went
+
+The pass is complete. The eleven one-shot `verify-m*` definitions it ran are in
+`docs/plans/verify-agents/` beside this document, as the record of it; the
+reusable method (`.claude/agents/_verification-protocol.md`) and the reviewer
+definitions stay where an agent can be invoked from them.

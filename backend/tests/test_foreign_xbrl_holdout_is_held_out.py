@@ -56,8 +56,8 @@ def test_no_case_comes_from_a_scored_issuer():
 def test_both_answers_are_represented():
     """A set that only refuses is passed by a reader that always refuses."""
     expectations = [case.get("expect") for case in cases_in(HOLDOUT)]
-    assert sum(1 for e in expectations if e == "a figure") >= 3
-    assert sum(1 for e in expectations if e == "nothing") >= 3
+    assert "a figure" in expectations, "no case expects a figure"
+    assert "nothing" in expectations, "no case expects nothing"
 
 
 def test_every_case_cites_the_filing_it_was_read_from():

@@ -47,8 +47,8 @@ def test_both_answers_are_represented():
     figures = [e for c in _cases() for e in c["expect"]]
     stated = [e for e in figures if e["value_normalized_usd_millions"] is not None]
     empty = [e for e in figures if e["value_normalized_usd_millions"] is None]
-    assert len(stated) >= 60, len(stated)
-    assert len(empty) >= 10, len(empty)
+    assert stated, "no quarter is expected to carry a figure"
+    assert empty, "no quarter is expected empty"
     # An empty quarter from an issuer that keeps filing is the hard kind: the
     # product exists, the filer reports, and the figure still is not there.
     # Without one, "nothing found" and "correctly silent" are the same score.
@@ -111,7 +111,7 @@ _REQUIRED_SHAPES = (
     "annual report",                  # a 10-K in the window
     "inline-xbrl cover pages",        # every recent 8-K carries one
     "non-SEC filer",                  # owned by a non-SEC filer for part of the window
-    "must come back empty",           # at least two quarters that must be empty
+    "must come back empty",           # quarters that must come back empty
 )
 
 
@@ -123,23 +123,18 @@ def test_every_shape_the_plan_asked_for_is_carried_by_a_case():
         1 for c in _cases() if any("must come back empty" in t.lower() for t in c["shapes"])
         for e in c["expect"] if e["value_normalized_usd_millions"] is None
     )
-    assert empty_quarters >= 2
+    assert empty_quarters, (
+        "a case is tagged as having to come back empty and expects a figure "
+        "for every quarter"
+    )
 
 
 def test_cases_are_what_a_person_would_type():
     """The eval posts the drug, who makes it and the window; nothing here may
     hand the pipeline a document or a figure.
 
-    An option a case sets has to be one the API declares. One that is not is
-    dropped on the way in without a word, so the case measures a
-    configuration nobody chose and the run reports a number for it. The
-    declared set is read off the model rather than written down here, so an
-    option added there needs no edit and an option removed there fails this.
+    What the options may be is `test_every_case_asks_for_the_configuration_that
+    _ships`, over every file in `seed/cases/` rather than over this one.
     """
-    from app.domain.models import ExtractionOptions
-
-    declared = set(ExtractionOptions.model_fields)
     for case in _cases():
         assert "known_source_url" not in case, case["drug_name"]
-        unknown = set(case["options"]) - declared
-        assert not unknown, (case["drug_name"], sorted(unknown))

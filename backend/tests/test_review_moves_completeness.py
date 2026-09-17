@@ -92,8 +92,11 @@ def client(monkeypatch):
     _engine, factory = _database()
     monkeypatch.setattr(main, "SessionLocal", factory)
     monkeypatch.setattr(products_api, "SessionLocal", factory)
-    with TestClient(main.app) as test_client:
-        yield test_client, factory
+    # Bare, not `with`: entering the client runs the app's lifespan, which
+    # migrates whatever `DATABASE_URL` names. These tests read the in-memory
+    # engine above, so there is nothing for startup to do and a machine the
+    # suite runs on has no business being stamped by it.
+    yield TestClient(main.app), factory
 
 
 def _job(factory) -> DrugJobORM:
