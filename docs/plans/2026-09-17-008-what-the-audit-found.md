@@ -21,8 +21,11 @@ re-ran load-bearing measurements from the commit messages and they reproduce.
 **The complexity that is not paying for itself has a shape**, and it is the
 shape parallel work produces: the same idea built twice by two modules, a
 parameter threaded for one caller, a record written that nothing reads, a fix
-that landed beside the code it should have replaced. And **four defects were
-introduced by the fixes themselves**, one of them serious.
+that landed beside the code it should have replaced. And **the fixes introduced
+defects of their own** - seven in section 2 and seven more in section 5, three
+of them serious: a metadata branch that can no longer run, a peer list read
+from the wrong document, and a held-out set that skips the step it was drawn
+to score.
 
 Nothing below scores anything. The smoke run (section 6) is the score.
 
