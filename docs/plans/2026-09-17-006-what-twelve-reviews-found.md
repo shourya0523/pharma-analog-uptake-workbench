@@ -110,6 +110,13 @@ rate.
 (`shapes_holdout.json` 14/92 null, `foreign_xbrl.json` 4/7, `unseen.json` 2/15
 are fine and properly guarded.)
 
+The structural cause is rule 1: a file built by slicing gold's rows cannot
+contain a quarter gold lacks, and gold's own records of absence -
+`series_coverage.jsonl`'s `issuer_stopped_reporting`, `excluded_products.jsonl`
+- were wired to no eval. **Rank:** understated. The analyst's exposure is
+over-publication, this document's own #1 class, and this is the measurement
+gap that let section 1 exist unseen.
+
 ### 0c. The eval and the pipeline disagree by construction about what a conflict is  `[V]`
 
 `scripts/eval.py:193` takes `spread` over every published value for a period
@@ -141,6 +148,16 @@ Three further blindnesses, each verified by execution:
   row: `score()` returns "published, correct", and returns the identical result
   after the row's `revenue_scope` is replaced with `acme:NotAScopeAtAll` and its
   geography with `Nowhere`.
+- `eval.py:193`'s `spread` is rule 1 in substance: the eval already receives
+  each datapoint's `revenue_scope` and uses a written-down assumption ("one
+  value per period") instead. And `eval.py:40,42,112` hand-copy `JobStatus`
+  and `PUBLISHED_STATUSES` from `domain/models.py:66,70-76` with no staleness
+  note and no test comparing them. Its docstring at `:8-13` carries a count of
+  past scripts (rule 5).
+- **Rank:** an earlier draft filed this as baseline hygiene. It gates section
+  2's scope work: the score punishes the pipeline for the one thing it does
+  right - keeping U.S., ex-U.S. and Worldwide apart - so whoever tunes against
+  it is pushed to collapse scopes, which is defect 1a.
 - `score()` runs regardless of job status. `eval.py:40` `TERMINAL` and `:112`
   `FINISHED` exist; at `:368` a job not in `FINISHED` only triggers a search for
   a later run, and falls through to the unconditional `score()` at `:393`. The
@@ -185,21 +202,53 @@ And `backend/tests/test_shapes_holdout_is_held_out.py:134-135`:
         assert case["options"]["product_metadata"] is False
 
 A passing test pinning the eval to the opposite of the shipped default, and
-naming that configuration "what a person would type".
+naming that configuration "what a person would type". Its docstring at
+`:130-131` says "nothing here may hand the pipeline a document or a figure" -
+a property the body does not enforce (rule 5) - and the assertion makes the
+tuned configuration a suite invariant: switching the eval to the shipped
+defaults fails `pytest` (rule 4).
 
-### 0e. Two env overrides, both the wrong way - and they live in a shell, not a file  `[V]`
+**Rank:** layers 2 and 3 are the product. The only number the project reports
+measures layer 1 with layer 2 off, so `therapeutic_area`, `moa`,
+`competitive_intensity` and `peak_*` - the export columns an analyst acts on -
+have never been scored in any run the project cites. This is why sections 3
+and 4 were found late, not a baseline nuisance.
 
-    SEC_INCLUDE_8K=true            -> sec_include_8k       (config.py:31, default False)
-    ENABLE_PROFILE_JUDGE=false     -> enable_profile_judge (config.py:49, default True)
+A latent rule-3 hole in the same path: `known_source_url` is in `eval.py:317
+DRUG_FIELDS`, and the only test forbidding it
+(`test_shapes_holdout_is_held_out.py:133`) reads `shapes_holdout.json` alone.
+A case file carrying it would hand the pipeline gold's document URL - the
+"table of document URLs" failure CLAUDE.md names, arriving through the eval.
 
-Both are set in the **process environment of the session that ran the evals**,
-and in no file: there is no `.env` at `backend/`, `deploy/` or the root, and
-the two example files (`backend/.env.example`, `deploy/env.example`) carry the
-declared defaults. So this is not a deployment misconfiguration - it is a
-session artefact, and any re-run from a fresh shell silently flips both
-switches back. Every number in this document was produced with the 8-K cover
-pages on and the profile judge off, and neither setting is recorded in a case
-file or a run.
+### 0e. Four env overrides, all session-only - and nothing measured is reproducible  `[V]`
+
+Filter stated: every `Settings` field in `config.py` compared against
+`get_settings()` in the shell that ran the evals. An earlier draft named two;
+the count had no stated predicate, and the two it missed are the larger ones.
+
+    SEC_INCLUDE_8K=true               sec_include_8k            False -> True    config.py:31
+    ENABLE_PROFILE_JUDGE=false        enable_profile_judge      True  -> False   config.py:49
+    SEC_MAX_FILINGS=25                sec_max_filings           4     -> 25      config.py:30
+    OPENROUTER_MODEL_EXTRACT=...      openrouter_model_extract  gpt-4o-mini -> gemini-3.8-flash  config.py:25
+
+All four live in the **process environment of the session**, and in no file:
+no `.env` exists at `backend/`, `deploy/` or the root, and the two example
+files carry the declared defaults. `sec_max_filings` is read at
+`sources.py:764`; `openrouter_model_extract` at every extraction call in
+`llm/client.py`. No table in any run database has a column naming the model
+(checked all 22 in run13), and `options_json` stores `ExtractionOptions` only.
+
+So a re-run from a clean shell fetches 4 filings per job instead of 25 and
+extracts with a different model. **Every number in this document, and the
+README's 75.6%, belongs to a configuration that exists in no file and in no run
+record.** This is the single strongest reason nothing below can be measured -
+stronger than 0a - and an earlier draft filed it as a sequencing footnote.
+
+Also load-bearing and unmeasured: `sources.py:10-11` asserts in prose that the
+primary 8-K document "is a cover page and holds no figures" - a claim about
+document contents with no command, used to justify the `sec_include_8k`
+default (rule 2/5), and `:13` "Two rules here were bought with wrong answers"
+is history in a docstring (rule 5).
 
 The "14 of 28 documents" figure was a single live repro and is `[I]`. Its ratio
 corroborates in run13: of 627 `source_documents`, 340 (54%) are `filing_type
@@ -1322,9 +1371,13 @@ read `product` too.
 Same function, same shape, not previously listed: `identifying()` emits
 single-letter and punctuation-bearing tokens - `GENMAB A/S` yields `{genmab, a,
 s}`, `Indivior Pharmaceuticals, Inc.` yields `pharmaceuticals,` with the comma
-kept so it escapes `COMPANY_WORDS`. The Genmab overlap above matched on `a`
-and `s` as well as `genmab`; any issuer whose name contains a bare `a` or `s`
-reads as already spent.
+kept so it escapes `COMPANY_WORDS`. `as` *is* in `COMPANY_WORDS` (`:66`) -
+the `a` and `s` exist only because `identifying()` splits `A/S` on the slash.
+So the one "covered" foreign issuer is covered by two junk tokens.
+
+**Rank:** understated. This document's closing section owes a new held-out set
+before any fix is reported as an improvement; a guard that cannot see seven
+issuers is on that critical path, not a section-9 tidy-up.
 
 ### 9c. Rule 1's own table has a false entry, and its first row is still live in the code
 
@@ -1381,7 +1434,12 @@ verified with the test's own `_definitions()` / `_references()`:
   as a supported path.
 
 Checked across all 30, not only these four: **only 2 entries have any caller
-in `scripts/` at all** - `save_register` and `backfill_job`. The list is named
+in `scripts/` at all** - `save_register` and `backfill_job`. The test computes
+the refuting evidence and discards it: `outside_scripts` is built at `:94` and
+`name in SCRIPT_ONLY` at `:98` short-circuits before it is consulted (rule 1,
+with the derivation already in hand). And the functions on the list are layer
+3 - `rank_analogs`, `calculate_revenue_uptake`, `select_peak_estimate` - so
+the list is what stops the suite saying the product's third layer is unwired. The list is named
 `SCRIPT_ONLY`; for 28 of 30 entries nothing scripted calls them. The group
 comment "Domain types, constructed in tests and by callers outside this
 package" (`:53`) covers four *functions* with no caller outside the package.
@@ -1399,7 +1457,16 @@ A reason nobody re-checks is how a to-do becomes permanent.
 | `AGENTS.md:15` | "backend `uv run pytest` (23 tests). Frontend has no test suite" | 711 tests; `frontend/package.json:10` has `vitest run` plus two page tests. |
 | `docs/sourcing/excluded-products.md:1-7` | "the eight excluded products ... more than half of its own addressable surface" | `excluded_products.jsonl` holds 6, and 7 of the 20 seed products have no gold quarterly row (the 6 plus Revatio) - "eight" is wrong under either reading. The catalog is 2,203 quarters, so 434:2203 is ~20%. The document's prioritisation conclusion no longer follows from its own arithmetic, and it carries no as-of date. |
 | `docs/plan-after-the-full-sweep.md:14` vs `README.md:89` | 1,162/1,415 vs 1,070/1,415 | Two live docs, same denominator, different current score; the newer has the higher number and labels it "before any of the fixes below". |
-| `CLAUDE.md:195` | `scripts/eval_*.py` | Only `scripts/eval.py` exists. |
+| `CLAUDE.md:195` | `scripts/eval_*.py` | Only `scripts/eval.py` exists - a name pattern written down for files that do not exist, in the file that warns against it. |
+| `README.md:106-110` | the manual peak-sales CSV and its columns, as a supported path | `read_peak_sales_csv` has no caller in `app/` or `scripts/` and no route (9d). An analyst who prepares that file has nothing to feed it to. |
+| `docs/evaluation.md:44-46` | both answers are represented in every case file | The two headline files carry zero null expectations (0b). |
+
+**Rank within the table:** `README.md:83-87` is not a stale row. It tells the
+reader the headline **excludes** the LLM extractor, the judge and
+reconciliation and is therefore a floor; it includes all three. An analyst
+reads a pessimistic number as conservative when it is the whole system's
+actual score - a false claim about the meaning of the only number the product
+publishes.
 
 `docs/pipeline.md` has 10 rows; `JobStep` has 13 members and `run_job`
 (`orchestrator.py:403-477`) makes 14 distinct calls besides `_set_step`.
@@ -1441,18 +1508,26 @@ The four analytics test modules are a different failure again, not this one:
 `test_peak_sales.py`, `test_uptake_metrics.py`, `test_competitive_intensity.py`
 and `test_analog_matching.py` construct no ORM and assert no SELECT. They test
 pure functions that `app/` never calls. `test_competitive_intensity.py:63-64`
-is where the forced distribution of 4a is asserted.
+asserts `count("low") == 2` and `count("high") == 2` over six synthetic
+snapshots - the test pins the forced distribution 4a calls the defect. A test
+that asserts the defect is the spec is rule 4's failure in test form, and it
+is the reason 4a will be argued about when someone fixes it.
 
 ### 9g. Holdout sets: which are spent, which are orphaned  `[V]`
 
-    holdout/               referenced by nothing in the repository
-    holdout2/              referenced by nothing in the repository
+    holdout/               reached by answer_key_paths() glob; no code names it
+    holdout2/              reached by answer_key_paths() glob; no code names it
     holdout_labels         tests/test_product_disambiguation_holdout.py, CLAUDE.md
     holdout_members        scripts/eval.py, tests, CLAUDE.md  -- live, guarded
     holdout_foreign_xbrl   scripts/sourcing/build_foreign_xbrl_holdout.py only
 
-`seed/holdout/` and `seed/holdout2/` are 348 KB of spent, orphaned cases -
-CLAUDE.md names them, no code does. `seed/holdout_labels/product_labels.json`
+`seed/holdout/` and `seed/holdout2/` are 348 KB of spent cases that no code
+names - an earlier draft said "referenced by nothing", produced by a name grep
+that a glob-based reader escapes (rule 2). `answer_key_paths()` reaches both,
+and they are the **sole** source of eight issuers in `spent_issuers()`:
+AbbVie, Alnylam, Amgen, Insmed, Novartis, Novo Nordisk, Sanofi, Vertex.
+Deleting them (section 10) would silently free all eight to be drawn into a
+"new" held-out set - 9b's failure arriving through a tidy-up. **They stay.** `seed/holdout_labels/product_labels.json`
 **has become a test fixture**: `test_product_disambiguation_holdout.py:19-24`
 loads it into the suite, so it is re-scored on every `pytest` run and is a
 permanent tuning target. Rule 4 says stop tuning before the set is exhausted; a
@@ -1474,7 +1549,12 @@ filenames" - and the same test's `GOLD_MARKERS` (`:35-36`) is a hand-written
 tuple of four gold filenames, so app code naming `annual_revenue.jsonl`,
 `adjudication_cases.jsonl`, `excluded_products.jsonl` or
 `unresolved_quarters.jsonl` by bare filename is caught only by the broader
-`"seed/gold"` marker.
+`"seed/gold"` marker. The same file shows the right shape twenty lines away:
+`PIPELINE_INPUTS` (`:28`) is drift-guarded by `_seed_files_the_app_reads()`
+(`:192-201`), which forces the literal to be a superset. `GOLD_MARKERS` should
+copy it. A cousin: `seed/holdout_members/combined_name_members.json` carries
+`issuers_deliberately_excluded`, a hand-written list of ~25 issuers duplicating
+what `spent_issuers()` derives, already stale.
 
 An earlier draft said "four of gold's answer keys are scored by nothing at
 all" and listed five. One of the five is scored: `adjudication_cases.jsonl` is
@@ -1499,6 +1579,12 @@ the SEC user agent - `getenv`/`os.environ` appear nowhere in the file.
 Period attribution is the defect class `docs/research/sec-table-period-context.md`
 exists for, and the by-hand checker is blind to it.
 
+**Rank:** understated. This is the product's only by-hand audit path - the
+last line of defence for "citations are mandatory on every source-derived
+field" - and what it certifies is "a number near the name". An analyst
+spot-checking a suspicious figure gets a green light from a check that cannot
+see a wrong quarter.
+
 ### 9i. Three run options the API accepts and nothing reads  `[V]`
 
 `pdfs`, `random_validation_sampling`, `use_uploaded_template`
@@ -1507,8 +1593,41 @@ only the definition. Sampling is unconditional at `validation/sampling.py:67`
 (`validation_sample_rate`, `config.py:28`, 0.10). They are persisted into every
 run's `options_json` (`main.py:152`) - verified across all 24 runs in
 run8/10/12/13, each carrying `{'pdfs': True, 'random_validation_sampling':
-True, 'use_uploaded_template': False}` - so a caller reading a run back believes PDF parsing or sampling
-was toggled when it was not.
+True, 'use_uploaded_template': False}` - so a caller reading a run back believes
+PDF parsing or sampling was toggled when it was not. The mechanism: PDF parsing
+is decided by file extension at `parsing/documents.py:685`, never by the
+option, and sampling is unconditional at `validation/sampling.py:67-69`. An
+analyst who unticks PDFs still gets them; one who unticks sampling still gets
+10% of auto-pass rows in their queue.
+
+### 9j. The account is also false in the docstrings, where rule 5 forbids it  `[V]`
+
+Section 9's thesis is that the project's account of itself is false in its
+docs. The same account is in its docstrings - counts, defect histories and
+coverage claims that cannot be checked from the file they sit in - in the very
+modules this section audits. Each is rule 5 in its pure form; only 9a flagged
+one of them:
+
+    test_capabilities_are_wired.py:3-7      "Six times in this project a reader... was
+                                            written, given tests, measured, and never called"
+    scripts/eval.py:8-13                    "Nineteen eval scripts called the readers
+                                            directly and two called run_job"
+    tests/answer_keys.py:5-7                "a set was built reusing three issuers another
+                                            key scored"
+    test_product_disambiguation_holdout.py:3-8
+                                            "the way three readers here were once written,
+                                            tested, measured and never called"; and "Biogen,
+                                            Jazz and Alkermes appear in no dataset" - a
+                                            data claim nothing checks (true today)
+    test_gold_is_not_an_input.py:5-8        "broken within a day of the gap existing"
+    connectors/sources.py:13                "Two rules here were bought with wrong answers"
+    extraction/adjudicate.py:29-32          9a
+    test_extraction_stack.py:1350-1353      "any year with all four quarters" - a filter the
+                                            code at :1392 does not apply
+
+`test_gold_is_not_an_input.py:39-49` deliberately exempts docstrings, which is
+why `adjudicate.py:29` can name `seed/gold` in app code and pass. Each of these
+belongs in a commit message.
 
 ---
 
@@ -1529,7 +1648,9 @@ Measured, with no production caller or no effect:
   `FileStore.public_uri`; `ExtractionOptions.pdfs`,
   `random_validation_sampling`, `use_uploaded_template` (9i).
 - `tables.py`'s `extract_revenue_rows` half and its duplicate `_scope_for`.
-- `seed/holdout/` and `seed/holdout2/` (9g).
+- ~~`seed/holdout/` and `seed/holdout2/`~~ - **no.** They are the sole source
+  of eight issuers in `spent_issuers()` (9g). Deleting them frees those
+  issuers for a "new" held-out set.
 
 Decide rather than leave:
 
@@ -1794,7 +1915,10 @@ intensity - an answer key for section 3 that exists and is wired to nothing.
 Use it as a **diagnostic oracle** for finding layer-2 defects, exactly as gold's
 quarterly rows were used for layer 1. Then, per rule 4, a fix it found is
 scored on a new held-out set of products none of gold's 62 contains - and the
-pipeline still must not read `seed/product_attributes.csv`, which is what
-builds the oracle.
+pipeline still must not read the *attribute columns* of
+`seed/product_attributes.csv` (`moa_class`, `route_of_administration`,
+`first_approval_year`, `indication_area`), which are what build the oracle.
+It reads `drug_name` from that file today (`extraction/members.py:259-283
+load_products()`), CLAUDE.md names the file an input, and that is fine.
 
 Section 4 has nothing at all and needs a new set outright.
