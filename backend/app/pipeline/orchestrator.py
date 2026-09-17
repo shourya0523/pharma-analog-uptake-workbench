@@ -711,14 +711,6 @@ class PipelineOrchestrator:
             datapoint_rows = await self._extract_revenue(
                 job, sources, parsed, options, skip_unresolved=get_settings().enable_llm_search
             )
-            if not datapoint_rows and get_settings().enable_llm_search:
-                extra_sources, extra_parsed = await self._search_revenue_fallback(job, options)
-                if extra_sources:
-                    sources = list(sources) + extra_sources
-                    parsed = {**parsed, **extra_parsed}
-                    datapoint_rows = await self._extract_revenue(
-                        job, sources, parsed, options, only_source_ids={s.source_id for s in extra_sources}
-                    )
             unfiled = self._quarters_no_filing_covers(job, sources, options, datapoint_rows)
             searched: list = []
             if unfiled and get_settings().enable_llm_search:
@@ -1566,28 +1558,6 @@ class PipelineOrchestrator:
             len(to_judge),
             corrected,
         )
-
-    async def _search_revenue_fallback(
-        self, job: DrugJobORM, options: dict[str, Any]
-    ) -> tuple[list, dict[str, Any]]:
-        search_sources = await self.search.fallback_retrieve(
-            run_id=job.run_id,
-            job_id=job.id,
-            goal="revenue",
-            product=job.drug_name,
-            aliases=self._job_aliases,
-            manufacturer=job.manufacturer,
-            ticker=job.ticker,
-            context="Product-level quarterly or annual net sales from earnings release or IR.",
-        )
-        if not search_sources:
-            return [], {}
-        self._persist_sources(job, search_sources)
-        job.sources_found = (job.sources_found or 0) + len(search_sources)
-        job.quality_flags = list(set((job.quality_flags or []) + ["llm_search_revenue_fallback"]))
-        self.db.commit()
-        parsed = await self._parse(job, search_sources)
-        return search_sources, parsed
 
     def _quarters_no_filing_covers(
         self, job: DrugJobORM, sources: list, options: dict[str, Any], rows: list[DatapointORM]

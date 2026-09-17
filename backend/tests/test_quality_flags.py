@@ -1,7 +1,7 @@
 """Provenance flags raised during retrieval must survive the quality-check step.
 
 The pipeline flags how a value was obtained - openfda_no_brand_match,
-cik_from_llm_search, llm_search_revenue_fallback, no_product_revenue_candidates -
+cik_from_llm_search, llm_search_quarters_fallback, no_product_revenue_candidates -
 but the quality step replaced the whole list, so none of them ever reached the API.
 """
 
