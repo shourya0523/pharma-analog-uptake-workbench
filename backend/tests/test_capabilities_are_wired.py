@@ -61,7 +61,6 @@ SCRIPT_ONLY = {
     # `test_the_eval_runs_the_pipeline` fails any `scripts/eval*.py` that
     # imports `app`, so "kept for the evals" was never a thing they could be.
     "html_tables": NOT_WIRED,
-    "extract_revenue_rows": NOT_WIRED,
     "read_positional_block": NOT_WIRED,
     # An importer for a file an analyst prepares by hand - with no caller and
     # no route, so there is nothing to hand the file to.

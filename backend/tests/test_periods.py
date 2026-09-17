@@ -269,17 +269,9 @@ def test_a_filing_that_names_a_year_throughout_is_dated_as_a_year():
     assert (context.months, context.month, context.year) == (3, 12, 2017)
 
 
-def test_a_table_headed_by_a_fiscal_quarter_end_is_read_into_that_quarter():
+def test_a_heading_ending_in_the_first_days_of_a_month_names_the_month_before():
     from app.extraction.fingerprint import _periods_named_in
-    from app.parsing.tables import extract_revenue_rows
 
-    rows = [
-        ["", "Fiscal First Quarter Ended"],
-        ["", "Three Months Ended April 1, 2018", "Three Months Ended April 2, 2017"],
-        ["", "2018", "2017"],
-        ["Calderon", "1,389", "1,672"],
-    ]
-    found = extract_revenue_rows([rows], product="Calderon")
-    assert {(c["period"], c["value_reported"]) for c in found} == {("2018Q1", 1389.0), ("2017Q1", 1672.0)}
     assert _periods_named_in("Three Months Ended April 1,") == [(3, 3)]
     assert _periods_named_in("Year Ended January 3,") == [(12, 12)]
+    assert _periods_named_in("Three Months Ended April 30,") == [(3, 4)]
