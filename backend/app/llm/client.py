@@ -21,7 +21,6 @@ from app.llm.grounding import (
 )
 from app.parsing.evidence import (
     NON_PRODUCT_REVENUE_RE,
-    TOTAL_REVENUE_RE,
     product_aliases,
 )
 from app.parsing.periods import MONTHS_TO_PERIOD_TYPE, period_key
@@ -854,9 +853,6 @@ def apply_judge_hard_vetoes(
         veto = True
     read = carrying if carrying is not None else q
 
-    if TOTAL_REVENUE_RE.search(q) and not mentions:
-        issues.append("hard_veto:company_total_without_product")
-        veto = True
     if other and not mentions:
         issues.append(f"hard_veto:other_brand:{other}")
         veto = True

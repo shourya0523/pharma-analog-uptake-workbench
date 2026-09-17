@@ -358,3 +358,37 @@ def test_prioritize_sources_handles_llm_search_without_unbound_text_len():
     # Only LLM search sources should still sort without raising
     only_search = prioritize_sources_for_revenue([search], parsed, max_sources=3)
     assert [s.source_id for s in only_search] == ["llm1"]
+
+
+def test_a_quote_that_never_names_the_product_is_refused_once():
+    """Two vetoes said "the product is not in the quote" and one says it now.
+
+    The narrower one asked for the phrase "total revenues" as well and fired on
+    a scope the other excluded - `Company total`, which `fast_judge` refuses
+    before any veto is asked, in the same words.
+
+    Both answers: a product-scope quote naming another company's total is still
+    refused, and a `Company total` row is refused by the gate that has always
+    refused it rather than by a veto that adds nothing.
+    """
+    from app.quality.fast_judge import try_deterministic_judgment
+
+    quote = "Total revenues were $412.0 million for the quarter"
+    product_scope = apply_judge_hard_vetoes(
+        product="Calderon",
+        candidate={"period": "2026Q2", "period_type": "quarterly",
+                   "revenue_scope": "Product family", "value_reported": 412.0},
+        quote=quote,
+        judgment={"support_classification": "supported",
+                  "validation_status": "auto_pass", "issues": []},
+    )
+    assert product_scope["support_classification"] == "misclassified"
+    assert "hard_veto:product_missing_from_quote" in product_scope["issues"]
+
+    company_total = try_deterministic_judgment(
+        product="Calderon", generic=None, quote=quote,
+        candidate={"period": "2026Q2", "period_type": "quarterly",
+                   "revenue_scope": "Company total", "value_reported": 412.0},
+    )
+    assert company_total["validation_status"] == "needs_review"
+    assert company_total["issues"] == ["deterministic:company_total_scope"]
