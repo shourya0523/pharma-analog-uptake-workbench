@@ -21,6 +21,7 @@ from app.analytics.peak_sales import (
     one_observation_per_period,
 )
 from app.domain.models import PeakEstimateType
+from app.pipeline.series_identity import normalize_geography
 
 # Why a period has no value. Ordered here as they are tested: a mismatch
 # between numerator and denominator is checked before anything about the shape
@@ -85,12 +86,18 @@ def _matches_peak_scope(row: SalesObservation, peak: SelectedPeak) -> bool:
     ``ALLOWED_PRODUCT_SCOPES`` is applied here as well as in peak selection,
     because a cited estimate carries whatever revenue scope its source stated -
     a company total is not a denominator for a product.
+
+    Geography is compared in the controlled vocabulary, not as written: a
+    product whose U.S. track a filing spells `U.S.` in one quarter and `US` in
+    the next is one track, and compared as written the second quarter is
+    refused for a difference in punctuation. A place the vocabulary does not
+    know keeps its own spelling, so two unknown places are still two places.
     """
     return (
         row.revenue_scope in ALLOWED_PRODUCT_SCOPES
         and peak.revenue_scope in ALLOWED_PRODUCT_SCOPES
         and row.currency == peak.currency
-        and row.geography == peak.geography
+        and normalize_geography(row.geography) == normalize_geography(peak.geography)
         and row.revenue_scope == peak.revenue_scope
         and row.formulation_scope == peak.formulation_scope
     )

@@ -4,6 +4,7 @@ import json
 import logging
 import os
 import re
+from collections.abc import Callable
 from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any
@@ -53,9 +54,10 @@ from app.domain.models import (
     JobStatus,
     JobStep,
     PeriodType,
+    QualityCheckStatus,
     RetrievalStatus,
     RetrievedSource,
-    RevenueScope,
+    SeriesSelection,
     SourceType,
     ValidationStatus,
     new_id,
@@ -85,7 +87,7 @@ from app.parsing.fda_label import (
     profile_fields,
 )
 from app.parsing.indications import parse_indications, therapeutic_areas
-from app.parsing.labels import QUESTION_FLAGS, footnotes_in
+from app.parsing.labels import FLAG_COMBINED, QUESTION_FLAGS, footnotes_in
 from app.parsing.periods import (
     detect_period_context,
     normalize_period,
@@ -93,12 +95,23 @@ from app.parsing.periods import (
 )
 from app.parsing.tables import sibling_row_labels
 from app.parsing.xbrl import parse_calculation, parse_facts, unsettled_elements
+from app.pipeline.series_identity import (
+    CLAIM_STRENGTH,
+    SeriesReading,
+    _scope_key,
+    claim_rank,
+    normalize_geography,
+    select_series_figures,
+    series_identity,
+)
 from app.quality.candidate_filters import (
     filter_revenue_candidates,
     peer_product_names,
     quote_mentions_product,
 )
 from app.quality.checks import (
+    DUPLICATE_SERIES_READING,
+    QualityIssue,
     apply_auto_pass_gate,
     moa_epc_contamination_issue,
     quote_contains_value,
@@ -146,54 +159,10 @@ SOURCE_PRIORITY = [
 ]
 
 
-# How strong a claim each producer makes, strongest first. This is a different
-# axis from SOURCE_PRIORITY, which ranks the document a figure came from: a
-# product-sales schedule and a sentence of narrative can sit in the same 8-K
-# exhibit, so the source type does not separate them and the schedule is
-# plainly the better claim. Ordered by how much has to be inferred - a tagged
-# fact states its own period, unit and product; a schedule declares its unit
-# and its columns; a derivation is exact arithmetic over figures the issuer
-# published; a sentence and a model's reading are recovered from running text.
-# Two spellings reach this, and both are listed rather than normalised in one
-# of them: a candidate carries the reader's own label ("table_fingerprint",
-# "prose_sentence") and a stored datapoint carries the shorter one the export
-# uses. One ranking, both vocabularies.
-#
-# A snapshot of the producers that can put a revenue figure on a datapoint:
-# the tagged readers' `xbrl_fact`, the fingerprinted table and prose readers'
-# own labels and the shorter spellings `_DETERMINISTIC_METHODS` maps them to,
-# the model's `llm`, and the two `normalization_status` values `derive.py`
-# stamps on a derivation. A producer added anywhere in `extraction/` without
-# a line here is not refused - it ranks last, behind the model - so what makes
-# this stale is a new reader, and the symptom is a strong claim losing to a
-# sentence.
-CLAIM_STRENGTH = {
-    "xbrl_fact": 0,
-    "table": 1,
-    "table_fingerprint": 1,
-    "derived_from_period_total": 2,
-    "derived_sole_formulation": 2,
-    "llm": 3,
-    "prose": 4,
-    "prose_sentence": 4,
-}
-
-
-# The two spellings of "the whole product": a sentence says Worldwide, a
-# schedule's family line says Product family. One group for reconciliation.
-_WHOLE_PRODUCT_SCOPES = frozenset(
-    {RevenueScope.PRODUCT_FAMILY.value, RevenueScope.WORLDWIDE.value}
-)
-
 # How long after a period ends its own report is filed: a 10-Q within about
 # 45 days, a 10-K within about 90. A filing later than this reports the
 # period as a comparative.
 _REPORTING_LAG_DAYS = 120
-
-
-def _scope_key(scope: str | None) -> str:
-    whole = RevenueScope.PRODUCT_FAMILY.value
-    return whole if (scope or "") in _WHOLE_PRODUCT_SCOPES else (scope or "")
 
 
 def period_end(period: str | None) -> date | None:
@@ -285,11 +254,6 @@ def _carry_to_winner(winner: DatapointORM, other: DatapointORM) -> None:
         changed = True
     if changed:
         winner.citation_json = citation
-
-
-def claim_rank(extraction_method: str | None) -> int:
-    """Where a producer sits in CLAIM_STRENGTH; unknown producers rank last."""
-    return CLAIM_STRENGTH.get(str(extraction_method or ""), len(CLAIM_STRENGTH))
 
 
 # Which document to read first for a product's quarterly sales, best first.
@@ -1501,6 +1465,29 @@ class PipelineOrchestrator:
         if quarters:
             self.db.commit()
 
+    def _stamp_series_identity(self, job: DrugJobORM, row: DatapointORM) -> DatapointORM:
+        """Say which series this reading belongs to, from what it declares.
+
+        Written when the row is, and again once the labels are final, because
+        enrichment and reconciliation both change what a row says it is a
+        figure for - a region the enricher reads off the quote, the pair a
+        corroborator was reported as - and the series a row belongs to is
+        whatever it ends up declaring, not what it declared first.
+        """
+        row.geography_normalized = normalize_geography(row.geography)
+        row.series_identity = series_identity(
+            issuer=job.cik or job.manufacturer,
+            product=job.drug_name,
+            revenue_scope=row.revenue_scope,
+            geography=row.geography,
+            formulation=row.formulation,
+            reported_as=row.reported_as,
+            currency=row.currency,
+            period_type=row.period_type,
+            combined_line=FLAG_COMBINED in set(row.issue_flags or []),
+        )
+        return row
+
     @staticmethod
     def _candidate_of(row: DatapointORM) -> dict:
         """A stored datapoint read back as the candidate it came from.
@@ -1617,6 +1604,7 @@ class PipelineOrchestrator:
                 + stated_labels(candidate.get("label_flags"))
             ),
         )
+        self._stamp_series_identity(job, row)
         self.db.add(row)
         return row
 
@@ -2334,6 +2322,7 @@ class PipelineOrchestrator:
                     citation_json=citation,
                     issue_flags=issue_flags or None,
                 )
+                self._stamp_series_identity(job, row)
                 self.db.add(row)
                 rows.append(row)
                 if src_row:
@@ -2672,32 +2661,15 @@ class PipelineOrchestrator:
         self.db.commit()
         await self._reconcile_with_llm(job, rows)
 
-    async def _reconcile_with_llm(self, job: DrugJobORM, rows: list[DatapointORM]) -> None:
-        self._set_step(job, JobStep.RECONCILE_CONFLICTS)
-        if len(rows) < 2:
-            self.db.commit()
-            return
+    def _claim_ranking(self, job: DrugJobORM) -> tuple[Callable, Callable, Callable]:
+        """How the claims about one period of one job rank, strongest first.
 
-        # Deterministic grouping first. "Worldwide" and "Product family" are
-        # both the whole product - a sentence says the first, a schedule the
-        # second - and grouped apart they were published twice for one quarter.
-        #
-        # The period label alone is not the period. A nine-month figure and the
-        # quarter that ends it carry the same label, and they are two different
-        # claims about two different spans: pooled under one key the longer one
-        # contests the shorter, the reconciliation calls the disagreement a
-        # conflict, and the figure that is right for the quarter is held. The
-        # span is part of what a group is a group of.
+        Returned as functions over rows rather than computed in place, because
+        reconciliation and the series selection have to rank the same readings
+        the same way: a selection that ordered them differently would publish
+        one figure and select another.
+        """
         priority_index = {t.value: i for i, t in enumerate(SOURCE_PRIORITY)}
-        by_key: dict[tuple, list[DatapointORM]] = {}
-        for row in rows:
-            key = (
-                row.period,
-                row.period_type or "",
-                _scope_key(row.revenue_scope),
-                row.formulation or "",
-            )
-            by_key.setdefault(key, []).append(row)
         # When each source was filed, for telling the filing that reports a
         # period from a later filing's comparative of it.
         job_sources = self.db.query(SourceDocumentORM).filter_by(job_id=job.id).all()
@@ -2744,6 +2716,35 @@ class PipelineOrchestrator:
                 claim_rank(row.extraction_method),
                 priority_index.get((row.citation_json or {}).get("source_type", ""), 99),
             )
+
+        return claim_tier, reports_own_period, accession_of
+
+    async def _reconcile_with_llm(self, job: DrugJobORM, rows: list[DatapointORM]) -> None:
+        self._set_step(job, JobStep.RECONCILE_CONFLICTS)
+        if len(rows) < 2:
+            self.db.commit()
+            return
+
+        # Deterministic grouping first. "Worldwide" and "Product family" are
+        # both the whole product - a sentence says the first, a schedule the
+        # second - and grouped apart they were published twice for one quarter.
+        #
+        # The period label alone is not the period. A nine-month figure and the
+        # quarter that ends it carry the same label, and they are two different
+        # claims about two different spans: pooled under one key the longer one
+        # contests the shorter, the reconciliation calls the disagreement a
+        # conflict, and the figure that is right for the quarter is held. The
+        # span is part of what a group is a group of.
+        by_key: dict[tuple, list[DatapointORM]] = {}
+        for row in rows:
+            key = (
+                row.period,
+                row.period_type or "",
+                _scope_key(row.revenue_scope),
+                row.formulation or "",
+            )
+            by_key.setdefault(key, []).append(row)
+        claim_tier, reports_own_period, accession_of = self._claim_ranking(job)
 
         conflict_payload: list[dict[str, Any]] = []
         for group in by_key.values():
@@ -2972,6 +2973,12 @@ class PipelineOrchestrator:
         dps = self.db.query(DatapointORM).filter_by(job_id=job.id).all()
         profile_fields = self.db.query(DrugProfileFieldORM).filter_by(job_id=job.id).all()
         profile = {f.field: f.value for f in profile_fields}
+        # The labels are final by now - the enricher has read what it could
+        # off the quotes, and reconciliation has carried a corroborator's line
+        # onto the row it corroborates - so this is where a row's series is
+        # settled, and the duplicate check keys on it.
+        for d in dps:
+            self._stamp_series_identity(job, d)
         dp_dicts = [
             {
                 "id": d.id,
@@ -2983,6 +2990,8 @@ class PipelineOrchestrator:
                 "revenue_scope": d.revenue_scope,
                 "formulation": d.formulation,
                 "geography": d.geography,
+                "geography_normalized": d.geography_normalized,
+                "series_identity": d.series_identity,
                 "currency": d.currency,
                 "unit": d.unit,
                 "confidence_score": d.confidence_score,
@@ -2991,18 +3000,20 @@ class PipelineOrchestrator:
             for d in dps
         ]
         issues = run_quality_checks(dp_dicts, profile)
+        checks: list[tuple[QualityIssue, QualityCheckORM]] = []
         for issue in issues:
-            self.db.add(
-                QualityCheckORM(
-                    id=new_id(),
-                    job_id=job.id,
-                    issue_type=issue.issue_type,
-                    severity=issue.severity,
-                    affected_datapoint=issue.affected_datapoint,
-                    explanation=issue.explanation,
-                    recommended_action=issue.recommended_action,
-                )
+            check = QualityCheckORM(
+                id=new_id(),
+                job_id=job.id,
+                issue_type=issue.issue_type,
+                severity=issue.severity,
+                affected_datapoint=issue.affected_datapoint,
+                explanation=issue.explanation,
+                recommended_action=issue.recommended_action,
+                status=issue.status,
             )
+            checks.append((issue, check))
+            self.db.add(check)
         for d in dps:
             related = [i for i in issues if i.affected_datapoint == d.id]
             d.validation_status = apply_auto_pass_gate(
@@ -3019,6 +3030,8 @@ class PipelineOrchestrator:
             )
             if d.citation_json:
                 d.citation_json = {**d.citation_json, "validation_status": d.validation_status}
+
+        self._select_series_figures(job, dps, checks)
 
         job.auto_pass_count = sum(1 for d in dps if d.validation_status == ValidationStatus.AUTO_PASS.value)
         job.needs_review_count = sum(1 for d in dps if d.validation_status == ValidationStatus.NEEDS_REVIEW.value)
@@ -3053,6 +3066,62 @@ class PipelineOrchestrator:
                 )
             )
         self.db.commit()
+
+    def _select_series_figures(
+        self,
+        job: DrugJobORM,
+        rows: list[DatapointORM],
+        checks: list[tuple[QualityIssue, QualityCheckORM]],
+    ) -> None:
+        """Say which reading each of the job's series holds for each quarter.
+
+        Every surface downstream - the chart, the export, Product Detail -
+        used to answer this for itself, from the rows in whatever order they
+        arrived, which is how a quarter reported worldwide and again for one
+        region plotted the region. It is answered once here, against the same
+        ranking reconciliation used, and written on the row.
+
+        A duplicate the selection settles is not left open: the check that
+        recorded it says which reading the series holds instead, so a reader
+        of the quality sheet sees a question answered rather than a hundred
+        that never close.
+        """
+        claim_tier, _reports_own_period, _accession_of = self._claim_ranking(job)
+        standings = select_series_figures(
+            [
+                SeriesReading(
+                    id=row.id,
+                    cell=(row.period, row.period_type or ""),
+                    identity=row.series_identity or "",
+                    value=row.value_normalized_usd_millions,
+                    publishes=_publishes(row),
+                    strength=(*claim_tier(row), -float(row.confidence_score or 0)),
+                )
+                for row in rows
+            ]
+        )
+        for row in rows:
+            row.series_selection = standings[row.id].selection
+        for issue, check in checks:
+            standing = standings.get(str(issue.affected_datapoint or ""))
+            if issue.issue_type != DUPLICATE_SERIES_READING or standing is None:
+                continue
+            if standing.selection in {SeriesSelection.DUPLICATE.value,
+                                      SeriesSelection.SUPERSEDED.value}:
+                check.status = QualityCheckStatus.RESOLVED.value
+                check.explanation = (
+                    f"{issue.explanation} The series holds {standing.held_by} "
+                    f"for this quarter; this reading is {standing.selection}."
+                )
+        logger.info(
+            "series_selection job_id=%s drug=%s selected=%s duplicate=%s superseded=%s undecided=%s",
+            job.id,
+            job.drug_name,
+            sum(1 for s in standings.values() if s.selection == SeriesSelection.SELECTED.value),
+            sum(1 for s in standings.values() if s.selection == SeriesSelection.DUPLICATE.value),
+            sum(1 for s in standings.values() if s.selection == SeriesSelection.SUPERSEDED.value),
+            sum(1 for s in standings.values() if s.selection is None),
+        )
 
     async def _completeness(self, job: DrugJobORM) -> None:
         self._set_step(job, JobStep.COMPLETENESS)

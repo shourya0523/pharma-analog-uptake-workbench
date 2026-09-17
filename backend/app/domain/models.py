@@ -67,6 +67,52 @@ PUBLISHED_STATUSES = frozenset({ValidationStatus.AUTO_PASS, ValidationStatus.CON
 PUBLISHED_STATUS_VALUES = frozenset(status.value for status in PUBLISHED_STATUSES)
 
 
+class SeriesSelection(str, Enum):
+    """What a series does with one reading of one of its quarters."""
+
+    SELECTED = "selected"
+    DUPLICATE = "duplicate"
+    SUPERSEDED = "superseded"
+
+    @property
+    def holds_the_series_figure(self) -> bool:
+        """Whether a row with this selection is the figure its series plots.
+
+        Listed rather than excluded, in the shape `ran_to_the_end` uses, so
+        that a standing added later keeps a row out of the curve until
+        someone says it belongs in it.
+        """
+        return self in {SeriesSelection.SELECTED}
+
+
+# The selections that put a row in its series' curve, from the enum itself.
+SERIES_FIGURE_SELECTION_VALUES = frozenset(
+    selection.value for selection in SeriesSelection if selection.holds_the_series_figure
+)
+
+
+def holds_the_series_figure(selection: str | None) -> bool:
+    """Whether a row may be drawn as its series' figure for its quarter.
+
+    An empty selection is not a decision against the row: it is a row written
+    before anything decided, or one whose quarter nothing was published for.
+    Only a recorded decision - it duplicates the figure the series holds, or a
+    stronger reading of the same series superseded it - keeps it out.
+    """
+    return selection is None or selection in SERIES_FIGURE_SELECTION_VALUES
+
+
+class QualityCheckStatus(str, Enum):
+    """Whether a recorded quality issue is still a question.
+
+    A check that the pipeline itself settled says so, and says what settled
+    it, rather than sitting open beside the ones nobody has answered.
+    """
+
+    OPEN = "open"
+    RESOLVED = "resolved"
+
+
 class JobStatus(str, Enum):
     QUEUED = "queued"
     RUNNING = "running"

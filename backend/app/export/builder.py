@@ -13,7 +13,12 @@ from app.db.models import (
     DrugJobORM,
     ExportORM,
 )
-from app.domain.models import PUBLISHED_STATUS_VALUES, PeriodType, new_id
+from app.domain.models import (
+    PUBLISHED_STATUS_VALUES,
+    PeriodType,
+    holds_the_series_figure,
+    new_id,
+)
 from app.storage.filestore import FileStore
 
 # The one column of the datapoint the sheets do not carry: the citation
@@ -66,85 +71,74 @@ def datapoint_row(drug_name: str, datapoint: DatapointORM) -> list:
 def is_published_quarter(datapoint: DatapointORM) -> bool:
     """Whether this row belongs in a file named for quarterly revenue.
 
-    A quarter, and a figure the pipeline stands behind. A cumulative figure
-    under a quarter's label and a figure still held for review are both real
-    and both belong in the unfiltered sheet beside it, not in a curve.
+    A quarter, a figure the pipeline stands behind, and the figure its series
+    holds for that quarter. A cumulative figure under a quarter's label, a
+    figure still held for review and a second reading of a figure already in
+    the file are all real and all belong in the unfiltered sheet beside it -
+    but a period axis built from this file is charted as a curve, and a
+    quarter appearing twice in it is not one.
     """
     return (
         datapoint.period_type == PeriodType.QUARTERLY.value
         and datapoint.validation_status in PUBLISHED_STATUS_VALUES
+        and holds_the_series_figure(datapoint.series_selection)
     )
 
 
-PRODUCT_HEADERS = [
-    "job_id",
-    "canonical_product_id",
-    "product_name",
-    "company",
-    "therapeutic_area",
-    "fda_approval_date",
-    "approved_indications",
-    "indications_json",
-    "moa",
-    "pharmacologic_class",
-    "roa",
-    "approved_lot",
-    "competitive_intensity",
-    "competitive_raw_score",
-    "competitive_formula_version",
-    "competitive_cohort_size",
-    "competitive_low_coverage",
-    "peak_value",
-    "peak_type",
-    "peak_method",
-    "peak_as_of_date",
-    "peak_geography",
-    "peak_revenue_scope",
-    "peak_input_ids",
-    "uptake_methodology",
-    "source_url",
-    "completeness_pct",
-    "validation_status",
-]
+def product_sheet_row(product: dict) -> dict:
+    """One product as the product sheet writes it, field by field.
+
+    The sheet's columns are this mapping's keys, so a field added here reaches
+    the file with nothing else edited. The two quarters are carried apart on
+    purpose: `launch_quarter` is when the product was approved and
+    `commercial_start_quarter` is the first quarter of selling the series can
+    plot, and they are rarely the same quarter.
+    """
+    peak = product.get("selected_peak") or {}
+    competition = product.get("competitive_snapshot") or {}
+    return {
+        "job_id": product.get("job_id"),
+        "canonical_product_id": product.get("canonical_product_id"),
+        "product_name": product.get("product_name"),
+        "company": product.get("company"),
+        "therapeutic_area": product.get("therapeutic_area"),
+        "fda_approval_date": product.get("fda_approval_date"),
+        "launch_quarter": product.get("launch_quarter"),
+        "commercial_start_quarter": product.get("commercial_start_quarter"),
+        "approved_indications": product.get("approved_indications"),
+        "indications_json": json.dumps(product.get("indications") or []),
+        "moa": product.get("moa"),
+        "pharmacologic_class": product.get("pharmacologic_class"),
+        "roa": product.get("roa"),
+        "approved_lot": product.get("approved_lot"),
+        "competitive_intensity": product.get("competitive_intensity"),
+        "competitive_raw_score": competition.get("raw_score"),
+        "competitive_formula_version": competition.get("formula_version"),
+        "competitive_cohort_size": competition.get("cohort_size"),
+        "competitive_low_coverage": competition.get("low_coverage"),
+        "peak_value": peak.get("value"),
+        "peak_type": peak.get("type"),
+        "peak_method": peak.get("selection_reason"),
+        "peak_as_of_date": peak.get("as_of_date"),
+        "peak_geography": peak.get("geography"),
+        "peak_revenue_scope": peak.get("revenue_scope"),
+        "peak_input_ids": json.dumps(peak.get("input_ids") or []),
+        "uptake_methodology": "revenue_proxy_r4q" if product.get("uptake_ready") else None,
+        "source_url": product.get("source_link"),
+        "completeness_pct": product.get("completeness_score"),
+        "validation_status": product.get("validation_status"),
+    }
+
+
+PRODUCT_HEADERS = list(product_sheet_row({}))
 
 
 def product_export_rows(db: Session, run_id: str) -> tuple[list[str], list[list]]:
     payload = build_dashboard_preview(db, run_id=run_id)
-    rows: list[list] = []
-    for product in payload["products"]:
-        peak = product.get("selected_peak") or {}
-        competition = product.get("competitive_snapshot") or {}
-        values = {
-            "job_id": product.get("job_id"),
-            "canonical_product_id": product.get("canonical_product_id"),
-            "product_name": product.get("product_name"),
-            "company": product.get("company"),
-            "therapeutic_area": product.get("therapeutic_area"),
-            "fda_approval_date": product.get("fda_approval_date"),
-            "approved_indications": product.get("approved_indications"),
-            "indications_json": json.dumps(product.get("indications") or []),
-            "moa": product.get("moa"),
-            "pharmacologic_class": product.get("pharmacologic_class"),
-            "roa": product.get("roa"),
-            "approved_lot": product.get("approved_lot"),
-            "competitive_intensity": product.get("competitive_intensity"),
-            "competitive_raw_score": competition.get("raw_score"),
-            "competitive_formula_version": competition.get("formula_version"),
-            "competitive_cohort_size": competition.get("cohort_size"),
-            "competitive_low_coverage": competition.get("low_coverage"),
-            "peak_value": peak.get("value"),
-            "peak_type": peak.get("type"),
-            "peak_method": peak.get("selection_reason"),
-            "peak_as_of_date": peak.get("as_of_date"),
-            "peak_geography": peak.get("geography"),
-            "peak_revenue_scope": peak.get("revenue_scope"),
-            "peak_input_ids": json.dumps(peak.get("input_ids") or []),
-            "uptake_methodology": "revenue_proxy_r4q" if product.get("uptake_ready") else None,
-            "source_url": product.get("source_link"),
-            "completeness_pct": product.get("completeness_score"),
-            "validation_status": product.get("validation_status"),
-        }
-        rows.append([values[header] for header in PRODUCT_HEADERS])
+    rows = [
+        [values[header] for header in PRODUCT_HEADERS]
+        for values in (product_sheet_row(product) for product in payload["products"])
+    ]
     return PRODUCT_HEADERS, rows
 
 

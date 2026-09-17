@@ -247,6 +247,14 @@ function ProfileFieldRow({ field, productId }: { field: any; productId: string }
   )
 }
 
+/** What a quarter's row is to its series, in words rather than a column name. */
+function seriesStanding(quarter: any): string {
+  if (quarter.series_selection === 'selected') return 'plotted'
+  if (quarter.series_selection === 'duplicate') return 'same figure, read again'
+  if (quarter.series_selection === 'superseded') return 'a stronger reading was taken'
+  return 'not decided'
+}
+
 function QuartersTab({ product }: { product: any }) {
   return (
     <>
@@ -258,6 +266,7 @@ function QuartersTab({ product }: { product: any }) {
               <th>Period</th>
               <th>Value</th>
               <th>Scope</th>
+              <th>In the series</th>
               <th>Source and quote</th>
               <th>Status</th>
             </tr>
@@ -276,7 +285,16 @@ function QuartersTab({ product }: { product: any }) {
                     <div className="quote">for {q.reported_as}, not this product alone</div>
                   )}
                 </td>
-                <td>{q.revenue_scope}</td>
+                <td>
+                  {q.revenue_scope}
+                  {q.geography && <div className="quote">{q.geography}</div>}
+                  {q.period_type && q.period_type !== 'quarterly' && (
+                    <div className="quote">{q.period_type}</div>
+                  )}
+                </td>
+                {/* Which figure the curve is drawn from. Two readings of one
+                    quarter are one point, and this says which of them it is. */}
+                <td>{seriesStanding(q)}</td>
                 <td>
                   <a href={q.source_url} target="_blank" rel="noreferrer">
                     {q.extraction_method}

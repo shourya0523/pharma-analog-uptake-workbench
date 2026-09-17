@@ -5,7 +5,15 @@ from dataclasses import dataclass
 from typing import Any
 
 from app.domain.claims import stated_number
-from app.domain.models import ValidationStatus
+from app.domain.models import QualityCheckStatus, ValidationStatus
+from app.pipeline.series_identity import is_unrecognised_geography
+
+# The issue a second reading of a figure a series already holds is recorded
+# as. Named here because the stage that settles such a reading asks for the
+# checks it settled by this name, and a string spelled twice is a check that
+# quietly stops being resolved when one of the two is renamed.
+DUPLICATE_SERIES_READING = "duplicate_period_scope_formulation"
+UNRECOGNISED_GEOGRAPHY = "unrecognised_geography"
 
 
 @dataclass
@@ -15,7 +23,7 @@ class QualityIssue:
     affected_datapoint: str | None
     explanation: str
     recommended_action: str
-    status: str = "open"
+    status: str = QualityCheckStatus.OPEN.value
 
 
 def moa_epc_contamination_issue(moa: str | None, epc_terms: list[str]) -> QualityIssue | None:
@@ -186,14 +194,33 @@ def run_quality_checks(datapoints: list[dict[str, Any]], profile: dict[str, Any]
                 )
             )
 
-        key = (dp.get("period"), dp.get("revenue_scope"), dp.get("formulation"), dp.get("geography"))
+        if is_unrecognised_geography(dp.get("geography_normalized")):
+            issues.append(
+                QualityIssue(
+                    UNRECOGNISED_GEOGRAPHY,
+                    "medium",
+                    dp_id,
+                    f"Geography {dp.get('geography')!r} is not a place this "
+                    "vocabulary knows, so this reading cannot be compared with "
+                    "another quarter's by scope.",
+                    "Add the spelling to the geography vocabulary, or correct the label.",
+                )
+            )
+
+        # Two readings of one quarter of one series. The key is the series a
+        # reading declares itself to be part of - which is scope, place,
+        # formulation, the line it was reported as, currency and period basis
+        # normalised - rather than the labels as written, because labels that
+        # differ without meaning differently are how a duplicate goes unseen.
+        key = (dp.get("series_identity"), dp.get("period"))
         if key in seen_keys:
             issues.append(
                 QualityIssue(
-                    "duplicate_period_scope_formulation",
+                    DUPLICATE_SERIES_READING,
                     "medium",
                     dp_id,
-                    f"Duplicate period/scope/formulation key {key}.",
+                    f"A second reading of {dp.get('period')} for series "
+                    f"{dp.get('series_identity')}.",
                     "Reconcile duplicates; preserve separate scopes if truly different.",
                 )
             )

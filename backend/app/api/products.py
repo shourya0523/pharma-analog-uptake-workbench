@@ -381,10 +381,20 @@ def get_product(product_id: str) -> dict[str, Any]:
                 {
                     "id": dp.id,
                     "period": dp.period,
+                    "period_type": dp.period_type,
                     "value_normalized_usd_millions": dp.value_normalized_usd_millions,
                     "currency": dp.currency,
                     "revenue_scope": dp.revenue_scope,
+                    "geography": dp.geography,
+                    "formulation": dp.formulation,
                     "reported_as": dp.reported_as,
+                    # Which series this quarter's figure belongs to, and
+                    # whether it is the one that series holds. A reader
+                    # looking at two figures for one quarter needs to see
+                    # which of them the curve is drawn from.
+                    "series_identity": dp.series_identity,
+                    "series_selection": dp.series_selection,
+                    "issue_flags": dp.issue_flags,
                     "source_url": dp.source_url,
                     "source_quote": dp.source_quote,
                     "extraction_method": dp.extraction_method,
@@ -535,8 +545,12 @@ def review_queue(
                         "reason": task.reason,
                         "confidence": task.confidence_score,
                         "value_normalized_usd_millions": dp.value_normalized_usd_millions,
+                        "period_type": dp.period_type,
                         "revenue_scope": dp.revenue_scope,
+                        "geography": dp.geography,
                         "reported_as": dp.reported_as,
+                        "series_identity": dp.series_identity,
+                        "series_selection": dp.series_selection,
                         "source_url": dp.source_url,
                         "source_quote": dp.source_quote,
                         "extraction_method": dp.extraction_method,

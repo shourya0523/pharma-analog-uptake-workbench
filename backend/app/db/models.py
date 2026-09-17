@@ -158,6 +158,11 @@ class DatapointORM(Base):
     period_type: Mapped[str] = mapped_column(String(32), default="unknown")
     revenue_scope: Mapped[str] = mapped_column(String(64), default="Unknown")
     geography: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    # The place the figure is for, in the controlled vocabulary, beside the
+    # filer's own words for it. A label nobody recognises lands in an
+    # unrecognised bucket that keeps its spelling, so it is visible here
+    # rather than mapped to the nearest known place.
+    geography_normalized: Mapped[str | None] = mapped_column(String(128), nullable=True)
     formulation: Mapped[str | None] = mapped_column(String(512), nullable=True)
     # What this figure is a figure for, where that is not the job's product:
     # the line a filer prints for two products it sells together, in the
@@ -165,6 +170,14 @@ class DatapointORM(Base):
     # publishes the split of such a line, so the honest unit is the pair.
     reported_as: Mapped[str | None] = mapped_column(String(512), nullable=True)
     route_of_administration: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    # Which series this figure belongs to, and what the series does with it.
+    # Two readings of one product are one curve only when they are figures for
+    # the same thing; `series_identity` is that thing, said in one key, and
+    # `series_selection` says whether this row is the figure the series holds
+    # for its quarter, another reading of that same figure, or a reading a
+    # stronger one superseded. Empty means nothing has decided.
+    series_identity: Mapped[str | None] = mapped_column(String(512), nullable=True)
+    series_selection: Mapped[str | None] = mapped_column(String(32), nullable=True)
     source_url: Mapped[str] = mapped_column(Text)
     source_quote: Mapped[str] = mapped_column(Text)
     source_support: Mapped[str | None] = mapped_column(String(64), nullable=True)
