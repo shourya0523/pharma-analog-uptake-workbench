@@ -269,3 +269,44 @@ def test_a_row_is_compared_against_the_period_its_own_type_says_it_means():
             "2023 (date of acquisition) and September 30, 2023.")
     held = _judged_for(stub, 98.8, period="2023Q3", period_type="nine_month")
     assert "hard_veto:quote_states_a_different_period" in held["issues"]
+
+
+# A schedule long enough that its column years are further below the heading
+# than the period grammar looks ahead for a date. Twenty product rows is an
+# ordinary length for a filer with a portfolio.
+_LONG_SCHEDULE = (
+    "For the Six Months Ended June 30,\n"
+    + "".join(f"Calderon {n} 1,0{n:02d} 9{n:02d}\n" for n in range(20))
+    + "2024\n2023"
+)
+
+
+def test_a_heading_states_a_span_whether_or_not_it_states_a_date():
+    """What a period is called and how long it is are different questions.
+
+    The judge asks the second on its own - a six-month figure claimed as a
+    quarter is one a person has to see - and a heading printed above its
+    column years answers it without answering the first. Both answers: the
+    span is named, and no period key is, because none was stated.
+    """
+    from app.extraction.prose import periods_named_in, spans_named_in
+
+    assert spans_named_in("For the Six Months Ended June 30,") == {6}
+    assert periods_named_in("For the Six Months Ended June 30,") == set()
+    # A heading that does state a date still names the period it states.
+    assert spans_named_in("For the Six Months Ended June 30, 2024") == {6}
+    assert periods_named_in("For the Six Months Ended June 30, 2024") == {"2024H1"}
+
+
+def test_a_year_to_date_schedule_blocks_auto_pass_however_long_it_is():
+    """The span is read from the heading, not from how close its years are.
+
+    Both answers: a six-month schedule blocks the model being skipped whatever
+    its length, and a three-month one of the same length does not.
+    """
+    from app.llm.client import names_a_year_to_date_span
+
+    assert names_a_year_to_date_span(_LONG_SCHEDULE)
+    assert not names_a_year_to_date_span(
+        _LONG_SCHEDULE.replace("Six Months", "Three Months")
+    )

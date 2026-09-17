@@ -155,8 +155,9 @@ def periods_named_in(text: str) -> set[str]:
     years = {int(year) for year in _YEAR_TOKEN_RE.findall(body)}
     named: set[str] = set()
     for key, months in _spans_named_in(body):
-        named.add(key)
-        match = _QUARTER_OF_KEY_RE.search(key)
+        if key:
+            named.add(key)
+        match = _QUARTER_OF_KEY_RE.search(key or "")
         quarter = int(match.group(1)) if match else 0
         for year in years:
             named.add(period_label(year, months, quarter))
@@ -172,19 +173,45 @@ def spans_named_in(text: str) -> set[int]:
     return {months for _key, months in _spans_named_in(text or "")}
 
 
-def _spans_named_in(text: str) -> list[tuple[str, int]]:
+def _spans_named_in(text: str) -> list[tuple[str | None, int]]:
     """(period key, span in months) for every period the text names.
 
-    Two grammars read it, and neither contains the other: `periods.periods_named`
-    reads the heading a statement carries and the compact notation a release
-    uses, and the patterns in this module read the narrative forms a sentence
-    uses - "full-year 2002", "the second quarter and first six months of 2025".
+    Two grammars read it, and neither contains the other. `periods.periods_named`
+    reads the heading a statement carries and the compact notation a note or a
+    release uses; the two patterns `_prose_only_periods` asks are the forms only
+    running prose writes - "full-year 2002", "the second quarter and first six
+    months of 2025". This module's other period patterns are spellings the
+    parsing grammar already reads, so they are not asked twice here.
+
+    A phrase can state a span without stating a date - a heading whose years are
+    printed in the columns below it - and such a period's key is None. It is
+    kept: what a period is called and how long it is are different questions,
+    and the caller that wants keys drops the ones that have none.
     """
-    spans = [(period.key, period.months) for period in periods_named(text) if period.key]
-    spans += [
-        (period.period, period.months) for _position, period in _periods_with_positions(text)
+    spans: list[tuple[str | None, int]] = [
+        (period.key, period.months) for period in periods_named(text)
     ]
+    spans += _prose_only_periods(text)
     return spans
+
+
+def _prose_only_periods(text: str) -> list[tuple[str, int]]:
+    """The periods named in forms the parsing grammar does not read.
+
+    "the second quarter and first six months of 2025" states two periods
+    sharing one trailing year, and neither half states a year of its own;
+    "full-year 2002" states a span in a word the statement headings never use.
+    """
+    found: list[tuple[str, int]] = []
+    for match in _QUARTER_AND_YTD_RE.finditer(text):
+        year = int(match.group("year"))
+        quarter = _ORDINAL_TO_QUARTER[match.group("ordinal").lower()]
+        months = MONTH_WORDS[match.group("length").lower()]
+        found.append((period_label(year, 3, quarter), 3))
+        found.append((period_label(year, months, quarter), months))
+    for match in _ANNUAL_WORD_RE.finditer(text):
+        found.append((period_label(int(match.group("year")), 12, 0), 12))
+    return found
 
 
 def _periods_with_positions(sentence: str) -> list[tuple[int, _Period]]:
