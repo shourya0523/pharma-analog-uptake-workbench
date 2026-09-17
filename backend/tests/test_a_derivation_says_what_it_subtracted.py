@@ -179,3 +179,33 @@ def test_a_label_nobody_accounted_for_is_not_subtracted():
     db.add_all([*quarters, total]); db.commit()
     own = [PipelineOrchestrator._candidate_of(r) for r in [*quarters, total]]
     assert complete_series({"Calderon": own}, product="Calderon") == []
+
+
+def test_every_column_a_stored_row_reads_back_reaches_the_quarter_derived_from_it():
+    """The list of what a derivation carries is bound to what produces it.
+
+    `_candidate_of` reads a stored row back as the candidate the arithmetic
+    subtracts, and `carried()` copies what that candidate says the figure is a
+    figure for onto the derived quarter. Both are written out by hand, and a
+    column added to the first and not the second is a column the derivation
+    silently drops - which is the defect the widened `_candidate_of` exists to
+    fix, arriving again through the other half.
+
+    Both answers, and neither is a list this test writes down: every key the
+    stored candidate states reaches the derived one, and the single exception
+    is the input row's own id, which a derived row cannot inherit and which is
+    named inside `_inputs` instead, where it says which row was subtracted.
+    """
+    db, job = _db()
+    (candidate,) = _derived(
+        db, job, reported_as="Calderon and NuVessa", geography="United States",
+        route_of_administration="intravitreal", formulation="implant", bound=0.5,
+    )
+    stored = PipelineOrchestrator._candidate_of(
+        db.query(DatapointORM).filter_by(period="2024").one()
+    )
+
+    assert set(stored) - set(candidate) == {"_datapoint_id"}
+    assert {term["datapoint_id"] for term in candidate["_inputs"]} == {
+        row.id for row in db.query(DatapointORM).all()
+    }

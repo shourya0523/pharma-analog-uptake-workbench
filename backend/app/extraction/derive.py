@@ -112,6 +112,27 @@ def _year_of(period: str) -> int | None:
     return int(match.group(1)) if match else None
 
 
+# What a derived quarter inherits from the figure it was principally computed
+# from, rather than states for itself. Every one of these is a column saying
+# what the figure is a figure for; the period, the value, the quote and the
+# precision are the derivation's own.
+#
+# `tests/test_a_derivation_says_what_it_subtracted.py` holds this against the
+# reader that produces those inputs, so a column added there and not here is a
+# column the derivation drops.
+CARRIED_IDENTITY_KEYS = (
+    "revenue_scope",
+    "geography",
+    "formulation",
+    "route_of_administration",
+    "reported_as",
+    "combined_with",
+    "source_id",
+    "source_url",
+    "product_label",
+)
+
+
 def complete_quarters_from_totals(
     points: list[Datapoint], *, commercial_start: str | None = None,
     product: str | None = None,
@@ -524,22 +545,15 @@ def complete_series(
         the family's, a combined line published as one product's own - and
         cites whichever document happened to be first.
         """
-        record = from_point.get(id(point))
-        if record is None:
-            return {"_inputs": []}
+        # Every point here came out of a record in `records`, which is what
+        # `from_point` is keyed on, so there is no point without one.
+        record = from_point[id(point)]
         principal = next(
             (source for role, source in record.inputs if role != "quarter"),
             record.inputs[0][1] if record.inputs else None,
         )
         head = origin.get(id(principal)) if principal is not None else None
-        carried_fields = {
-            key: (head or {}).get(key)
-            for key in (
-                "revenue_scope", "geography", "formulation",
-                "route_of_administration", "reported_as", "combined_with",
-                "source_id", "source_url", "product_label",
-            )
-        }
+        carried_fields = {key: (head or {}).get(key) for key in CARRIED_IDENTITY_KEYS}
         carried_fields["_inputs"] = [
             {
                 "role": role,
