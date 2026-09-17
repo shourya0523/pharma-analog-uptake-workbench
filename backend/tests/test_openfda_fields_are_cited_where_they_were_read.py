@@ -151,8 +151,12 @@ async def test_the_approval_is_the_earliest_across_every_matching_application(tm
         db, orch, job, sources = _orchestrator(directory, order)
         await orch._extract_metadata(job, sources, {}, {"product_metadata": True})
 
-        approval = _fields(db, job)["fda_approval_date"]
+        rows = _fields(db, job)
+        approval = rows["fda_approval_date"]
         assert approval.value == "2015-12-21"
+        # The route comes from that same application, whichever came back first.
+        assert rows["roa"].value == "ORAL"
+        assert approval.citation_json["openfda_application_number"] == "NDA000007"
         assert "submissions" in approval.citation_json["source_field"]
         assert sorted(approval.citation_json["openfda_matched_applications"]) == [
             "NDA000006",

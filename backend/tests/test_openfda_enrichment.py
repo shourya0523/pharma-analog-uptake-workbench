@@ -6,10 +6,22 @@ a Tyvaso record REMODULIN's brand name, intravenous route and 2002 approval date
 The fixtures below are trimmed from that live response.
 """
 
-from app.connectors.openfda import BRAND_SEARCH_PATHS, search_queries
+from types import SimpleNamespace
+from unittest.mock import patch
+
+import pytest
+
+from app.connectors import openfda as openfda_module
+from app.connectors.openfda import BRAND_SEARCH_PATHS, OpenFDAConnector, search_queries
+
+
+async def _noop(*_args, **_kwargs):
+    return None
+
 from app.connectors.openfda_fields import (
     brand_matched_results,
     earliest_approval_date,
+    earliest_approved_match,
     molecule_names,
     names_the_molecule,
     openfda_brand_names,
@@ -177,6 +189,18 @@ def test_a_brand_with_two_applications_is_dated_from_the_earlier_one():
         matched = brand_matched_results(order, product="Calderon", generic="calderinol")
         assert len(matched) == 2
         assert earliest_approval_date([r for r, _ in matched])[0] == "2015-12-21"
+        # ... and the fields are read from that same application, not from
+        # whichever one the registry happened to return first.
+        selected, brand = earliest_approved_match(matched)
+        assert selected["application_number"] == "NDA000007"
+        assert selected["openfda"]["route"] == ["ORAL"]
+        assert brand == "CALDERON"
+
+
+def test_an_undated_application_still_answers():
+    undated = {"application_number": "NDA000008", "openfda": {"brand_name": ["NUVESSA"]}}
+    assert earliest_approved_match([(undated, "NUVESSA")])[0] is undated
+    assert earliest_approved_match([]) == (None, None)
 
 
 def test_brand_names_are_listed_for_diagnostics():
@@ -230,3 +254,49 @@ def test_missing_value_placeholders_are_recognised():
     assert is_missing_value(None)
     for real in ("Inhalation", "2009-07-30", "Prostacyclin Vasodilator [EPC]", "0"):
         assert not is_missing_value(real), real
+
+
+@pytest.mark.asyncio
+async def test_a_brand_is_asked_on_every_path_and_the_answers_are_unioned(tmp_path):
+    """One path can hold an application the other does not.
+
+    The molecule query stays a fallback: its results are the whole molecule's,
+    so adding them to a brand answer would widen it.
+    """
+    pages = {
+        'openfda.brand_name:"Calderon"': [{"application_number": "NDA000009"}],
+        'products.brand_name:"Calderon"': [
+            {"application_number": "NDA000009"},
+            {"application_number": "NDA000010"},
+        ],
+        'openfda.generic_name:"calderinol"': [{"application_number": "ANDA000011"}],
+    }
+    asked = []
+
+    class Client:
+        async def __aenter__(self):
+            return self
+
+        async def __aexit__(self, *_):
+            return False
+
+        async def get(self, url):
+            search = url.split("search=", 1)[1].split("&", 1)[0]
+            asked.append(search)
+            results = pages.get(search, [])
+            return SimpleNamespace(
+                status_code=200 if results else 404,
+                json=lambda: {"results": results},
+                raise_for_status=lambda: None,
+            )
+
+    connector = OpenFDAConnector(file_store=SimpleNamespace(put=_noop))
+    with patch.object(openfda_module.httpx, "AsyncClient", lambda **_: Client()):
+        sources = await connector.retrieve(
+            run_id="r", job_id="j", brand="Calderon", generic="calderinol"
+        )
+
+    numbers = [r["application_number"] for r in sources[0].metadata["results"]]
+    assert numbers == ["NDA000009", "NDA000010"]
+    assert 'openfda.generic_name:"calderinol"' not in asked, "the molecule widened a brand answer"
+    assert sources[0].notes is None

@@ -19,6 +19,7 @@ from app.connectors.openfda import OpenFDAConnector
 from app.connectors.openfda_fields import (
     brand_matched_results,
     earliest_approval_date,
+    earliest_approved_match,
     openfda_brand_names,
 )
 from app.connectors.sources import (
@@ -751,7 +752,7 @@ class PipelineOrchestrator:
                 generic=job.generic_name,
                 aliases=self._job_aliases,
             )
-            selected, matched_brand = matches[0] if matches else (None, None)
+            selected, matched_brand = earliest_approved_match(matches)
             if selected is None:
                 # Every result belongs to another product sharing the molecule
                 job.quality_flags = list(

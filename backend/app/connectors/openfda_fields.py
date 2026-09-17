@@ -185,3 +185,32 @@ def earliest_approval_date(results: list[dict[str, Any]]) -> tuple[str | None, s
         return None, None
     pool.sort(key=lambda x: x[0])
     return pool[0]
+
+
+def earliest_approved_match(
+    matches: list[tuple[dict[str, Any], str]],
+) -> tuple[dict[str, Any] | None, str | None]:
+    """The matching application the product launched on, and the brand it matched.
+
+    Not the first returned: openFDA documents no result order, so reading a
+    product's route and dosage form from the first match reads them from an
+    arbitrary application - and for a brand whose later application is a line
+    extension by another route, from the wrong one. The earliest approved
+    application is the product as it launched, and it is the one the approval
+    date already comes from, so the fields and the date describe one
+    application rather than two.
+
+    Falls back to the first match when no match states an approval date, and
+    returns (None, None) for an empty list.
+    """
+    if not matches:
+        return None, None
+    dated = [
+        (approval, result, brand)
+        for result, brand in matches
+        if (approval := earliest_approval_date([result])[0])
+    ]
+    if not dated:
+        return matches[0]
+    approval, result, brand = min(dated, key=lambda item: item[0])
+    return result, brand
