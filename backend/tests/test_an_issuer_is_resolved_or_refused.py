@@ -208,15 +208,3 @@ async def test_a_search_that_was_never_asked_is_not_a_resolution(monkeypatch):
         read_searched_identity(reply, floor=0.6).flags
         for reply in ({"cik": "1070494", "confidence": 0.95}, {"cik": None}, {"cik": "1070494"})
     )
-
-
-async def test_the_cik_alone_is_still_answerable_for_a_caller_that_asks_for_one(monkeypatch):
-    """The compatibility shim: the accepted CIK, and nothing for a refusal."""
-    taken = _searcher(monkeypatch, {"cik": "1070494", "confidence": 0.95})
-    assert await taken.resolve_cik_from_search(
-        product="Calderon", manufacturer=None, ticker=None, aliases=[], quality_flags=[],
-    ) == "0001070494"
-    refused = _searcher(monkeypatch, {"cik": "1070494", "confidence": 0.2})
-    assert await refused.resolve_cik_from_search(
-        product="Calderon", manufacturer=None, ticker=None, aliases=[],
-    ) is None

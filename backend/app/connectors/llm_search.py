@@ -179,27 +179,6 @@ class LLMSearchConnector:
         )
         return resolution
 
-    async def resolve_cik_from_search(
-        self,
-        *,
-        product: str,
-        manufacturer: str | None,
-        ticker: str | None,
-        aliases: list[str],
-        quality_flags: list[str] | None = None,
-    ) -> str | None:
-        """The accepted CIK alone, for a caller that still asks for one.
-
-        A caller that takes the resolution records the refusal too; one that
-        takes the CIK cannot, and ``quality_flags`` is accepted and ignored so
-        that it does not look as though it can. This goes when the last such
-        caller moves to `resolve_identity_from_search`.
-        """
-        resolution = await self.resolve_identity_from_search(
-            product=product, manufacturer=manufacturer, ticker=ticker, aliases=aliases
-        )
-        return resolution.cik if resolution and resolution.accepted else None
-
     async def fallback_retrieve(
         self,
         *,

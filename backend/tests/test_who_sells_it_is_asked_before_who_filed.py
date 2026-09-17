@@ -30,6 +30,7 @@ import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+from app.connectors.llm_search import SearchedIdentity
 from app.db.models import Base, DrugJobORM, ExtractionRunORM
 from app.domain.models import (
     NO_FILER_OF_RECORD,
@@ -249,3 +250,45 @@ async def test_the_label_pass_does_not_trip_the_filing_search(tmp_path, monkeypa
 
     assert asked == []
     assert NO_FILER_OF_RECORD not in (job.quality_flags or [])
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "resolution, cik, flag",
+    [
+        (SearchedIdentity(cik="0000000007", confidence=0.95, refused=None),
+         "0000000007", "cik_from_llm_search"),
+        (SearchedIdentity(cik=None, refused="cik_search_returned_no_cik"),
+         None, "cik_search_returned_no_cik"),
+    ],
+)
+async def test_what_the_search_decided_reaches_the_job_either_way(
+    tmp_path, monkeypatch, resolution, cik, flag
+):
+    """A refusal is an answer, and the job records it.
+
+    The step took the CIK alone, so the three named refusals were computed and
+    thrown away: a job whose issuer the model declined to name looked exactly
+    like one where the search was never made.
+
+    Both answers: an accepted resolution puts the CIK on the job, and a refused
+    one leaves the CIK unset and says why.
+    """
+    settings = pipeline.get_settings().model_copy(update={"enable_llm_search": True})
+    monkeypatch.setattr(pipeline, "get_settings", lambda: settings)
+    db, job = _job(manufacturer=None)
+    orch = PipelineOrchestrator(db, file_store=LocalFileStore(str(tmp_path)))
+
+    async def _aliases(self, _job):
+        self._job_aliases = ["calderon"]
+
+    async def _searched(**_kw):
+        return resolution
+
+    monkeypatch.setattr(PipelineOrchestrator, "_expand_aliases", _aliases)
+    monkeypatch.setattr(orch.search, "resolve_identity_from_search", _searched)
+
+    await orch._identity(job)
+
+    assert job.cik == cik
+    assert job.quality_flags == [flag]

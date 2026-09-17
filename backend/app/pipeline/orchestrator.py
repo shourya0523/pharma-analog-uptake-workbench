@@ -868,17 +868,25 @@ class PipelineOrchestrator:
                 self.db.commit()
                 logger.info("cik_resolved job_id=%s drug=%s cik=%s via=sec", job.id, job.drug_name, cik)
         if not job.cik and get_settings().enable_llm_search:
-            cik = await self.search.resolve_cik_from_search(
+            # The resolution says what it decided and why, so a refusal reaches
+            # the job as well as an acceptance: "the model named no CIK" and
+            # "the model was never asked" are different things for a reader,
+            # and only the second leaves nothing behind.
+            resolution = await self.search.resolve_identity_from_search(
                 product=job.drug_name,
                 manufacturer=job.manufacturer,
                 ticker=job.ticker,
                 aliases=self._job_aliases,
             )
-            if cik:
-                job.cik = cik
-                job.quality_flags = list(set((job.quality_flags or []) + ["cik_from_llm_search"]))
+            if resolution:
+                job.quality_flags = sorted(set((job.quality_flags or []) + resolution.flags))
+            if resolution and resolution.accepted:
+                job.cik = resolution.cik
                 self.db.commit()
-                logger.info("cik_resolved job_id=%s drug=%s cik=%s via=llm_search", job.id, job.drug_name, cik)
+                logger.info(
+                    "cik_resolved job_id=%s drug=%s cik=%s via=llm_search",
+                    job.id, job.drug_name, resolution.cik,
+                )
 
     async def _retrieve(self, job: DrugJobORM, options: dict[str, Any]) -> list:
         self._set_step(job, JobStep.SOURCE_RETRIEVE)
