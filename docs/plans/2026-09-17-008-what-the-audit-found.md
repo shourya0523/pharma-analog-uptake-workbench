@@ -359,6 +359,20 @@ one gate deciding 93% of rows is under-specified.
 11. Sanitise `issue_flags` to codes; the model's prose goes to
     `reviewer_notes`.
 
+**Verified after the smoke run (judging verifier):** all eight vetoes were
+still at HEAD when checked, and the four that fire zero times on run13 fire
+zero times on the smoke run too - the deletion is now confirmed on a second
+dataset. Of the 36 rows run13 sends to the model, 34 are two-span heading
+quotes, the exact population the prompt's line 11 and lines 30-34 disagree
+about, and all 34 carry the run13-era veto that 6b since deleted; nobody has
+observed what the model says about them under either prompt. A reconciled
+prompt is drafted in the verifier's report; it is a change on 94% of the
+model's workload and is scored only on the judging set. And
+`backend/tests/answer_keys.py::COMPANY_WORDS` is a hand list that holds
+"pharmaceuticals" and not "pharmaceutical", so the rule-4 guard falsely
+rejects any unspent issuer named "X Pharmaceutical Inc." - rule 1 in the
+module that cites rule 4.
+
 **Not a simplification, but the largest finding for the analyst.** The
 auto-pass gate `product_quote_value_ok` asks only whether the number and the
 name appear anywhere in the quote. On a two-year comparative row it passes
@@ -478,15 +492,115 @@ The real defect on this product is 2026Q2, scored "no answer": the 10-Q row
 `Upstaza/Kebilidi 11,163 11,889` had its current-quarter value filed as
 2025Q2 and superseded by the tagged fact. The two-number row again.
 
-**Answered anyway (2) is the auto-pass gate the judging review named.** The
-Sephience 2025Q2 figure 26.741 is a `table` row from the **2026Q2** 10-Q
-(`tmb-20260630x10q.htm`), quote `Sephience $ 22,078 $ 26,741`: two numbers on
-one row, the figure assigned to the comparative column, auto-passed with
-`deterministic:product_quote_value_ok` - which asks only that the number and
-the name appear in the quote. 2025Q1 is then derived from that figure. This
-is section 5's "210 of 293 auto-passes sit in a unit holding more than two
-numeric tokens", arriving as a wrong publish on a fresh set. Rule 4 item;
-build its held-out set before changing the gate.
+**Answered anyway (2): an expense table read as revenue - verified, and the
+first account here was wrong about the mechanism.** The Sephience 2025Q2
+figure 26.741 comes from the 2026Q2 10-Q's *research and development expense
+by programme* schedule (caption: "The following table provides research and
+development expense for our most advanced principal product development
+programs"; total row `Total research and development $ 99,150 $ 112,990`).
+The columns are 2026Q2 and 2025Q2 and the period assignment is correct; the
+row is not revenue. `_read_table` emits `metric='revenue'` for any row whose
+label names the product beside figures, and consults neither the caption it
+is handed nor the table's own total row. The same filing's product-revenue
+table prints Sephience's 2025Q2 as an em dash, which is what gold expects.
+2025Q1 = 24.141 was then derived from the six-month R&D figure. Two
+fabricated points at the base of a launch curve, `auto_pass`, with a citation
+that reads correctly - the worst thing in this document. The class recurs on
+fresh issuers (an R&D table naming four brands beside a genuine revenue table;
+a programme line; "cost of sales for X" in prose). The proposed "no other
+money figure in the unit" gate would have caught this row by accident (the
+unit holds exactly two figures) at the cost of auto-pass on nearly every
+table row and about 19 extra model calls per job; a metric gate on the reader
+- caption or total row says expense, cost, asset or allowance - is the exact
+instrument. Rule 4: scored on the judging set (below).
+
+The comparative-column shape is real too, on the same document: the Upstaza
+2026Q2 row's current-quarter value was filed as 2025Q2 and auto-passed. One
+of 42 locatable auto-passed rows sits in a column of the wrong period.
+
+**Published, WRONG (1): the key is wrong; the pipeline published the issuer's
+own figure.** Read from the filings: FY2024 Translarna was first reported as
+339.9 (10-K instance, `ptct:TranslarnaMember`), then recast to 321.1 when the
+issuer moved a France sales-allowance adjustment to its own line
+(`Translarna France`, 18.8 for 2024; the Feb 2026 release's footnote says the
+2024 amounts relate to historical France sales). Nine-month 2024 is 246.2.
+As-reported Q4 2024 = 339.9 - 246.2 = 93.7, the bullet the pipeline
+auto-passed; restated Q4 2024 = 89.1, which the pipeline also captured and
+held as `restated_in_later_filing`. Gold's 74.854 subtracts a nine-month
+figure that includes France from a full-year figure that excludes it - a
+mixed-basis derivation no filing states or implies, and inconsistent with
+gold's own 2024Q1-Q3, which include France. `filing_contradicts_itself` is
+scoped to one accession and was right not to fire across two. A wrong key
+does not produce a wrong figure; it produces a fix aimed at a figure that was
+already right. Correction to the key (reference data -> answer key, the
+permitted direction), a decision for a person: 93.7 as reported, with the
+basis change at 2025Q4 noted on the case.
+
+**The coverage verdict** is `names_only` on every 10-K page and every XBRL
+instance, and `partial` on 40 of 244 - not on all documents, as an earlier
+draft here said. The causes are in 12e; none is the row-grouped case.
+
+**Wrong identity (6): the key asks for a pair label on one product, and this
+document's first account of it was wrong.** An earlier draft here said the
+pipeline stamped `reported_as='Upstaza/Kebilidi'` because `Kebilidi` was
+missing from the alias set, and proposed feeding the openFDA record's brand
+names into the aliases. Verified against the smoke database, every premise
+fails: `select distinct reported_as from datapoints` -> `[None]` on all 596
+rows; the job's stored `llm_aliases` has `Kebilidi` third of thirteen; the
+job's only openFDA source is `OpenFDA no match`, and drugsFDA returns 404 for
+both names today (a CBER gene therapy). The draft was written from the eval's
+state name, not from the rows - rule 2's failure, in the document that cites
+rule 2. The six figures are exact and published under the product's own name.
+What scores them wrong is `seed/cases/holdout_2026_09.json`, which expects
+`reported_as="Upstaza/Kebilidi"` on every valued period; `read_label` returns
+the same one-product reading with or without `Kebilidi`, because an unmarked
+slash-joined name is tolerated beside a name it knows (`labels.py:339-344`),
+and even a stamped pair would score wrong, since the code's vocabulary is
+`A + B` and the key wants the filer's `A/B`.
+
+The filer says it is one product: "This gene therapy is approved and marketed
+with the brand name Kebilidi in the United States" (10-K, accession
+0001104659-26-017575), one worldwide line, singular verb. A pair stamp would
+put every quarter of the one complete launch curve of a rare-disease gene
+therapy into the review queue as "reported only with another product". So
+the pipeline's answer is the analyst's answer and the key's expectation is
+the defect; correcting it is a property ("a regional brand pair is one
+product"), not a fit, and is a decision for a person because the set is
+scored. Not an alias feed: measured over the 20 seed products' matched
+records, brand names that are not the product are 2 (a titration pack and a
+diluent), and the generic fallback's window for one product carries its four
+nearest competitors - an alias feed from retrieved rather than matched
+records would read every competitor's row as the product's own.
+
+The real defect on this product is 2026Q2, scored "no answer": the 10-Q row
+`Upstaza/Kebilidi 11,163 11,889` had its current-quarter value filed as
+2025Q2 and superseded by the tagged fact. The two-number row again.
+
+**Answered anyway (2): an expense table read as revenue - verified, and the
+first account here was wrong about the mechanism.** The Sephience 2025Q2
+figure 26.741 comes from the 2026Q2 10-Q's *research and development expense
+by programme* schedule (caption: "The following table provides research and
+development expense for our most advanced principal product development
+programs"; total row `Total research and development $ 99,150 $ 112,990`).
+The columns are 2026Q2 and 2025Q2 and the period assignment is correct; the
+row is not revenue. `_read_table` emits `metric='revenue'` for any row whose
+label names the product beside figures, and consults neither the caption it
+is handed nor the table's own total row. The same filing's product-revenue
+table prints Sephience's 2025Q2 as an em dash, which is what gold expects.
+2025Q1 = 24.141 was then derived from the six-month R&D figure. Two
+fabricated points at the base of a launch curve, `auto_pass`, with a citation
+that reads correctly - the worst thing in this document. The class recurs on
+fresh issuers (an R&D table naming four brands beside a genuine revenue table;
+a programme line; "cost of sales for X" in prose). The proposed "no other
+money figure in the unit" gate would have caught this row by accident (the
+unit holds exactly two figures) at the cost of auto-pass on nearly every
+table row and about 19 extra model calls per job; a metric gate on the reader
+- caption or total row says expense, cost, asset or allowance - is the exact
+instrument. Rule 4: scored on the judging set (below).
+
+The comparative-column shape is real too, on the same document: the Upstaza
+2026Q2 row's current-quarter value was filed as 2025Q2 and auto-passed. One
+of 42 locatable auto-passed rows sits in a column of the wrong period.
 
 **Published, WRONG (1) is the issuer disagreeing with itself.** Translarna
 2024Q4: the run holds three readings - 93.7 (Feb 2025 release, "for the
@@ -498,6 +612,6 @@ about that filing, not about the code; opened as such, not asserted.
 
 What moves the number, in order, and what each costs: the four-filing cap is
 a configuration decision and 12e's set cover replaces it;
-the Upstaza six are the key's expectation, a decision for a person; the two-number
+the Upstaza six and Translarna 2024Q4 are the key's expectations, decisions for a person; the Sephience pair is the reader's metric gate; the two-number
 row is the auto-pass gate and needs a new held-out set; Translarna needs a
 person to open the 10-K. None of these is in the M10 tracks now running.
