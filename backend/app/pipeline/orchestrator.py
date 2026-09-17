@@ -116,6 +116,13 @@ from app.quality.profile import (
 from app.storage.filestore import FileStore, get_file_store
 from app.validation.sampling import select_validation_tasks
 
+# How much authority a document carries for a revenue figure, best first.
+# Every member of `SourceType` is ranked, including the two that state no
+# revenue at all: a label document ranks last rather than falling through to
+# the unknown rank, so the ranking says what it thinks of them instead of
+# leaving it to a default. `test_every_source_type_is_ranked` holds the list
+# exhaustive, so a source type added to the enum fails here rather than
+# silently arriving at the bottom.
 SOURCE_PRIORITY = [
     SourceType.SEC_FILING,
     SourceType.EARNINGS_RELEASE,
@@ -127,6 +134,8 @@ SOURCE_PRIORITY = [
     SourceType.LLM_SEARCH,
     SourceType.USER_URL,
     SourceType.OTHER,
+    SourceType.OPENFDA,
+    SourceType.DAILYMED,
 ]
 
 
@@ -142,6 +151,15 @@ SOURCE_PRIORITY = [
 # of them: a candidate carries the reader's own label ("table_fingerprint",
 # "prose_sentence") and a stored datapoint carries the shorter one the export
 # uses. One ranking, both vocabularies.
+#
+# A snapshot of the producers that can put a revenue figure on a datapoint:
+# the tagged readers' `xbrl_fact`, the fingerprinted table and prose readers'
+# own labels and the shorter spellings `_DETERMINISTIC_METHODS` maps them to,
+# the model's `llm`, and the two `normalization_status` values `derive.py`
+# stamps on a derivation. A producer added anywhere in `extraction/` without
+# a line here is not refused - it ranks last, behind the model - so what makes
+# this stale is a new reader, and the symptom is a strong claim losing to a
+# sentence.
 CLAIM_STRENGTH = {
     "xbrl_fact": 0,
     "table": 1,
@@ -217,6 +235,9 @@ def claim_rank(extraction_method: str | None) -> int:
 # Getting this backwards costs rows rather than correctness: ordering by
 # authority lets a primary filing's incidental table answer a quarter before
 # the schedule built to state it, and the schedule is then never read.
+# Exhaustive over `SourceType` for the same reason SOURCE_PRIORITY is: a
+# product label is a document this pipeline retrieves, and where it sits in a
+# search for quarterly sales is a decision, not a fall-through.
 DOCUMENT_FITNESS = [
     SourceType.EARNINGS_RELEASE,
     SourceType.SEC_FILING,
@@ -228,6 +249,8 @@ DOCUMENT_FITNESS = [
     SourceType.LLM_SEARCH,
     SourceType.USER_URL,
     SourceType.OTHER,
+    SourceType.OPENFDA,
+    SourceType.DAILYMED,
 ]
 
 
@@ -1922,11 +1945,11 @@ class PipelineOrchestrator:
                 if normalized is None and value is not None:
                     normalized = scale_to_millions(value, unit)
                 # A candidate may supply its own normalization, and it was
-                # taken verbatim. A candidate arrived reported as 87.4 with
-                # 87,400 beside it and was published, because every check
-                # downstream reads `value_reported` - the judge confirms 87.4
-                # against a quote saying 87.4 - while a consumer reads the
-                # normalized figure that nothing had looked at.
+                # taken verbatim. Nothing downstream looks at it: every check
+                # reads `value_reported`, the judge included, so a candidate
+                # whose own normalized figure is a thousand times its reported
+                # one is confirmed against its quote and published, and the
+                # consumer reads the figure nobody checked.
                 #
                 # Recomputed from the figure and unit the candidate declares
                 # itself. Only an order-of-magnitude disagreement is acted on,
@@ -2015,10 +2038,9 @@ class PipelineOrchestrator:
         # Only figures at least as strong as a derivation count as reported
         # when deciding which quarter is missing. `complete_series` treats any
         # candidate for a period as that period being answered, so a sentence
-        # reading 1.0 made the quarter non-missing and the derivation was never
-        # computed at all - which is upstream of the ranking below, and is why
-        # ranking alone moved nothing. The weak reading is not discarded; it is
-        # simply not evidence about what still needs deriving.
+        # is enough to make a quarter non-missing and stop the derivation being
+        # computed at all. The weak reading is not discarded; it is simply not
+        # evidence about what still needs deriving.
         derived_rank = claim_rank("derived_from_period_total")
         derivable = [
             self._candidate_of(row)
@@ -2029,10 +2051,10 @@ class PipelineOrchestrator:
             {job.drug_name: derivable + derivation_pool}, product=job.drug_name
         )
         # Only a stronger claim pre-empts a derivation. Skipping every period
-        # anything had been found for meant a sentence reading 1.0 did not lose
-        # to a family total that derives exactly to 94.645 - it stopped that
-        # total ever being computed. Where a weaker reader answered, both now
-        # stand and reconciliation ranks them.
+        # anything had been found for did not make the weak reading win the
+        # ranking; it stopped the derivation existing to be ranked against.
+        # Where a weaker reader answered, both now stand and reconciliation
+        # ranks them.
         strongest: dict[str, int] = {}
         for row in rows:
             rank = claim_rank(row.extraction_method)
@@ -2202,7 +2224,8 @@ class PipelineOrchestrator:
             # anything, so it goes on the row directly.
             #
             # It used to go through apply_field_enrichment, whose contract is
-            # that any fill forces needs_review and caps confidence at 0.55.
+            # that any fill forces needs_review and caps confidence at
+            # `ENRICHMENT_CONFIDENCE_CAP` (`quality/enrichment.py`).
             # That contract is right for a model's suggestion about a blank
             # field and wrong for a tautology. The flag disqualifies a row from
             # auto_pass twice over - directly, and by holding confidence under
@@ -2374,6 +2397,26 @@ class PipelineOrchestrator:
                 return 1
             return 0 if filed <= ends + timedelta(days=_REPORTING_LAG_DAYS) else 2
 
+        def claim_tier(row: DatapointORM) -> tuple[int, int, int]:
+            """Where a row stands among the claims about one period.
+
+            The filing that reports the period comes first, because a later
+            filing's comparative is a different claim about it. Then how
+            strong a claim the producer makes, and only then the document it
+            sits in - in that order, because the two do not measure the same
+            thing and the document was measuring the wrong one: an instance
+            retrieved inside a 10-Q is typed a quarterly report while the
+            human-readable document of the same accession is typed a filing,
+            so a fact the filer tagged lost to a model's sentence about the
+            page beside it. Which document a figure is in cannot separate two
+            readings of one document; what produced the reading can.
+            """
+            return (
+                reports_own_period(row),
+                claim_rank(row.extraction_method),
+                priority_index.get((row.citation_json or {}).get("source_type", ""), 99),
+            )
+
         conflict_payload: list[dict[str, Any]] = []
         for group in by_key.values():
             if len(group) < 2:
@@ -2443,16 +2486,10 @@ class PipelineOrchestrator:
                 continue
             if any(r.id in losers for r in group):
                 continue
-            # The document first, then how strong a claim the producer makes,
-            # then confidence. Source type alone leaves a sentence and a
-            # schedule from one exhibit tied, and the tie was broken by
-            # whichever happened to be extracted first.
-            group.sort(key=lambda r: (
-                reports_own_period(r),
-                priority_index.get((r.citation_json or {}).get("source_type", ""), 99),
-                claim_rank(r.extraction_method),
-                -float(r.confidence_score or 0),
-            ))
+            # The claim, then the document, then confidence. Source type alone
+            # leaves a sentence and a schedule from one exhibit tied, and the
+            # tie was broken by whichever happened to be extracted first.
+            group.sort(key=lambda r: (*claim_tier(r), -float(r.confidence_score or 0)))
             winners.add(group[0].id)
             for loser in group[1:]:
                 losers.add(loser.id)
@@ -2470,13 +2507,8 @@ class PipelineOrchestrator:
         for group in by_key.values():
             if len(group) < 2:
                 continue
-            tier = lambda r: (
-                reports_own_period(r),
-                priority_index.get((r.citation_json or {}).get("source_type", ""), 99),
-                claim_rank(r.extraction_method),
-            )
-            top = min(tier(r) for r in group)
-            strongest = [r for r in group if tier(r) == top
+            top = min(claim_tier(r) for r in group)
+            strongest = [r for r in group if claim_tier(r) == top
                          and r.value_normalized_usd_millions is not None]
             if len(strongest) < 2:
                 continue
