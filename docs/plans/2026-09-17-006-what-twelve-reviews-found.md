@@ -511,12 +511,26 @@ re-measured at fix time, not quoted.
 Individually correct figures, unfit to fit a curve to. This section is why
 fixing section 5 alone would not deliver the product.
 
-### 2a. There is no selected figure per quarter
+**Every count in this section is on a spent set.** run13's 22 job names are
+the 22 products of `seed/cases/shapes_holdout.json`, the file drawn to score
+the previous sweep's fixes. None of these numbers may score a fix (rule 4),
+and `shapes_holdout` is missing from 9g's inventory of spent sets - that gap
+is this section's doing.
+
+### 2a. There is no selected figure per quarter  `[V]`
 
 run13: **377 quarterly rows over 157 distinct (product, period) cells** - 2.4
-readings per cell, up to 6. `quality_checks` records this 115 times as
-`duplicate_period_scope_formulation`, and all 135 checks are `status='open'`,
-across 17 of 20 products. Detected, never resolved. `export/builder.py:131`
+readings per cell, up to 8 rows (ORLADEYO 2025Q2) and up to 5 distinct
+values. `quality_checks` records this 115 times as
+`duplicate_period_scope_formulation`, all 135 checks are `status='open'`
+(41/74/123/115 across run8/10/12/13, and no code anywhere writes another
+status), across 17 of the 20 products with quarterly rows (24 job rows, 22
+names, 20 with rows). Detected, never resolved. **And the check misses half
+the duplication**: `quality/checks.py:189-199` keys on `(period, scope,
+formulation, geography)`; of run13's 220 excess quarterly readings only 111
+are excess under that key - the other 109 carry a *different* label for the
+same quarter. 2a and 2b are one defect: labels that differ without meaning
+differently are how the duplicate detector is evaded. `export/builder.py:131`
 emits `for d in job.datapoints:` with no selection column and no ordering; the
 chart is last-row-wins (1a).
 
@@ -538,20 +552,39 @@ handed in free:
 
     after dedup + a normalized vocabulary:  >=1 point: 10, >=4 points: 6
 
-Deduplication alone is worth more here than any extraction improvement.
+Deduplication alone is worth more here than any extraction improvement - and
+that is now measured, not asserted: dedup alone gives 10 / 6, normalisation
+alone gives 9 / 5 (moves nothing), both together 10 / 6. Nutrition goes 34
+rows / 0 points to 10 rows / **7** points on dedup alone. (Peak and launch
+date handed in as 4 x the largest published quarter and the first day of the
+earliest published quarter; `period_basis` hardcoded, because `datapoints`
+has no such column and **no production code constructs a `SalesObservation`**
+- `calculate_revenue_uptake` has no caller outside tests, and
+`uptake_metrics` is 0 rows in all four runs. The 10 / 6 is a number about the
+function, not about anything the user sees today; dedup is necessary and not
+sufficient.)
 
-### 2b. The scope label is noise, not a scope
+### 2b. The scope label is noise, not a scope  `[V]`, cost lower than ranked
 
-18 distinct `geography` strings for about five concepts, 63% null:
+18 distinct `geography` strings for about five concepts, 62.6% null (filter:
+`period_type='quarterly'`, 377 rows; over all 549 rows it is 19 values and
+58.7% null, with `'Americas'` 10):
 
     None 236, 'United States' 61, 'Worldwide' 26, 'U.S.' 18, 'Rest of world' 8,
     'US' 5, 'Outside of U.S.' 4, 'North America' 4, 'ex-US' 3, 'Rest of World' 2,
     'Ex-US' 2, 'Ex-U.S.' 2, 'global' 1, 'U.S.; Rest of world' 1,
     'U.S. and Europe' 1, 'Japan' 1, 'Global' 1, 'Europe' 1
 
-`_has_compatible_scope` (`uptake.py:38`) compares by exact string equality, so
-a product whose U.S. track is spelled `'U.S.'` in one quarter and `'US'` in the
-next is rejected as scope-incompatible **on spelling alone**.
+`_has_compatible_scope` (`uptake.py:40`) compares the five-tuple by exact
+equality, so a product whose U.S. track is spelled `'U.S.'` in one quarter
+and `'US'` in the next would be rejected on spelling alone. **On run13 that
+never fires**: only 3 of 20 products carry more than one scope tuple across
+their *published* rows (Livmarli, AYVAKIT, Ocaliva), none a spelling collision
+of one concept, and normalising the vocabulary moves the layer-3 table by
+zero. The mechanism is real and the observed cost is 2a's - contradictory
+labels on one value defeat the duplicate detector - plus an export sheet
+where `'ex-US'` sits beside `'Ex-U.S.'`. A component of 2a, not an item
+beside it.
 
 Worse, the same number carries contradictory labels within one quarter:
 ELEVIDYS 2024Q2, value 121.721, appears as `(Product family, None)`,
@@ -564,24 +597,39 @@ Gold's whole corpus uses three geography values, and 0 of its 55
 `benchmark_identity` groups contain more than one
 (scope, geography, formulation, currency, period_basis) tuple.
 
-### 2c. Nothing checks comparability across products
+### 2c. Two series swapped at a switch-over, and nothing that could notice  `[V]`, corrected, ranked first in this section
 
 `analytics/analog_matching.py` scores on `moa_class`,
 `route_of_administration`, `approval_era`, `competitive_intensity_at_launch`.
 `ProductProfile` (`:38-44`) has **no revenue-basis field at all**. Nothing asks
 whether the target's curve is worldwide and the analog's is U.S.-only.
 
-Live consequence: **YUTIQ and ILUVIEN ship identical curves**, quarter for
-quarter, because every YUTIQ figure is read from an `ILUVIEN and YUTIQ` row.
-Two library entries, one quantity, each eligible to be the other's top-ranked
-analog. Same shape for Pombiliti (1c).
+**An earlier draft said YUTIQ and ILUVIEN ship identical curves. They do
+not - the curves are swapped, and one of them is empty.** Every row of both
+in run13:
+
+    YUTIQ    7 published quarters, every one from an 'ILUVIEN and YUTIQ' line
+             (4 direct with reported_as, 3 derived with reported_as=None)
+    ILUVIEN  0 published quarterly rows; all 17 needs_review or corroborates;
+             its only published row is a 2025 annual, 75.0
+
+`shapes_holdout.json` states the switch-over: ILUVIEN expects 2025Q4 19.843,
+2026Q1 19.255, 2026Q2 18.718; YUTIQ expects `None` for all three ("There
+were no sales of YUTIQ in Q1 2026"). run13 publishes 19.843, 19.255 and
+18.718 under **YUTIQ**, `auto_pass`, and nothing under ILUVIEN. An analyst
+pulling ILUVIEN as an analog gets an empty series and no explanation; pulling
+YUTIQ gets a three-quarter tail the issuer's own footnote says does not
+exist - at the switch-over, the part of a curve an analyst reads hardest, and
+the shape they would choose this pair as an analog *for*. A wrong number
+acted on, above everything else in this section. Same mechanism as 5f and
+1c; same shape for Pombiliti.
 
 Gold's answer is `benchmark_identity` - `uthr_tyvaso_nebulized_reported`,
 `merck_adempas_merck_territories_reported` - issuer, brand, geography and basis
 in one machine-checkable key, one per series, riding on every quarterly row and
 on `series_coverage.jsonl`. The shape of the fix already exists in the repo.
 
-### 2d. The holes land in the ramp, not the tail
+### 2d. The holes land in the ramp, not the tail  `[V]`, first class smaller at the surface
 
 Distinct (product, quarter) cells in run13 by quarter-of-year:
 
@@ -598,14 +646,24 @@ consecutive uptake points, so it is not a tail hole.
 The second class is worse: **the launch quarter**. DAYBUE launched April 2023;
 its exact 2023Q2 XBRL fact (23.217) is present in run10, run12 and run13, and
 in run13 is demoted to `corroborates` - a status `PUBLISHED_STATUSES`
-(`domain/models.py:65`) excludes - because it corroborates an LLM reading that
-then failed review. 10 of 157 quarter-cells are unpublished while holding a
+(`domain/models.py:66`) excludes - because it corroborates an LLM reading that
+then failed review (the demotion happened in run12, where the cell still
+published at the coarser 23.2; what run13 lost is the cell). 10 of 157 quarter-cells are unpublished while holding a
 `corroborates` row; 5 of those corroborators are XBRL, table or derived
 (NUPLAZID 2023Q1, FIRDAPSE 2023Q2, DAYBUE 2023Q2, FILSPARI 2025Q2, YUTIQ
 2025Q2). See 6e - this is the same defect as 3e in the first pass, and it costs
 series starts.
 
-### 2e. Life events are detected and then dropped
+**The first class is a fifth of its stated size at the surface.** The
+Q1/Q2/Q3/Q4 figures above are *cells* and the by-method split beside them is
+*rows* (filter now stated). Among *published* cells the split is nearly flat -
+Q1 26, Q2 22, Q3 21, Q4 21 of 90 - because 21 of the 24 Q4 cells that get any
+reading publish; `derive.py` closes most of the raw gap. The launch-quarter
+class is the one that costs: DAYBUE and NUPLAZID both start one quarter late
+with a clean tagged fact sitting in the database. Rank the second class above
+the first.
+
+### 2e. Life events are detected and then dropped  `[V]`, two attributions corrected
 
 `reported_as` is written on 12 of 549 rows (2%), covering 5 of YUTIQ's 8
 quarters and none of ILUVIEN's. It is then discarded on the way out:
@@ -613,26 +671,48 @@ quarters and none of ILUVIEN's. It is then discarded on the way out:
 the dashboard series payload (`dashboard/series.py:223`) carries no
 `revenue_scope`, no `geography`, no `formulation` and no `reported_as`. Only
 Product Detail surfaces it (`api/products.py:378`,
-`ProductDetailPage.tsx:275`), where it renders well - one tab of one page.
+`ProductDetailPage.tsx:275`), where it renders well - one tab of one page. (The
+review-queue payload at `api/products.py:530` also emits it; no component
+renders it there.) **Rule 1:** `QUARTERLY_HEADERS` is a hand-written list of
+23 where `DatapointORM.__table__.columns` has 28 - it silently drops
+`period_type`, `reported_as` and `citation_json`; the 8-column literal at
+`builder.py:283` drops ten more. This literal is the mechanism of the item,
+and `analytics/peak_sales.py:13-19` shows the right shape twenty files away.
+`dashboard/series.py:238-249 filter_keys` is the same shape.
 
 Unmarked life events in run13:
 
 - **A pre-launch expense published as revenue.** AGAMREE opens 2023Q3 = 81.5
-  (`auto_pass`, quote: "the $81.5 million IPR&D purchase consideration for the
-  acquisition of the license") and 2023Q4 = 36.0 ("we paid a regulatory
-  milestone"), then 2024Q1 = 1.174. The curve reads as a collapse then a ramp.
-- **A stub launch quarter.** That 2024Q1 quote says "net sales were
-  approximately $1.2 million for the period between March 13, 2024 (date of
-  commercial launch) and March 31" - a 19-day quarter plotted as a full one.
+  (`auto_pass`, `prose`, quote: "the $81.5 million IPR&D purchase consideration
+  for the acquisition of the license"). An earlier draft added 2023Q4 = 36.0
+  to the curve; it is `needs_review`, not published - the milestone payment
+  was caught, the IPR&D expense was not. The published curve is 81.5 -> 1.174
+  -> 8.746 -> (Q3 hole) -> 21.075 -> (Q1 hole) -> 27.363: an $81.5m
+  acquisition expense at the head of a curve that peaks at 27.4, inverting
+  the whole shape of a pre-launch ramp, with no `reported_as` and no
+  `period_type` column on the export sheet to say so.
+- **A stub launch quarter.** The published 2024Q1 is `xbrl_fact 1.174`, and
+  its quote is the tagged fact itself. The eighteen-day note - "for the
+  period between March 13, 2024 (date of commercial launch) and March 31" -
+  sits on a `corroborates` `table` row, and the prose "approximately $1.2
+  million for the period..." on a `needs_review` `llm` row. 1.174 *is* the
+  stub and *is* plotted as a full quarter; the evidence is 6e's second shape,
+  not a property of the published row - grep the published quote and you
+  will not find it.
 - **A restatement.** Nutrition 2023Q1 is published as both 138.5 and 139.9;
-  2023Q2 as 164.8 and 168.1. Perrigo's own quote gives FY2023 = 563.2 =
-  139.9+164.8+130.7+127.8. Take the other published Q1 and the year totals
-  561.8, which the issuer never printed.
+  2023Q2 as 164.8 and 168.1. The mechanism is in the quotes: 139.9/164.8 are
+  the as-filed columns of the 2023 10-Qs; 138.5/168.1 are the prior-year
+  comparative columns of the 2024 10-Qs - Perrigo's own restated figures.
+  139.9+164.8+130.7+127.8 = 563.2, the issuer's printed FY2023;
+  138.5+164.8+130.7+127.8 = 561.8, never printed.
 - **A segment posing as a product.** `Nutrition [PRGO]` is Perrigo's
-  infant-formula reporting segment, carried through the whole pipeline as a
-  drug and the highest-yield "product" in run13 by datapoints (34). It is an
-  eval input, not a user's - but nothing guards the path from a name in a CSV
-  to a published product revenue series.
+  infant-formula reporting segment (`manufacturer='Perrigo Company plc'`,
+  `generic_name=None`), carried through the whole pipeline as a drug and the
+  highest-yield "product" in run13 by *published* datapoints (34; third by all
+  rows). `shapes_holdout.json:546` says so outright - "its CSCA category line
+  'Nutrition' stands in for the product; the shape under test is the dating"
+  - so it is an eval input, not a user's; but nothing guards the path from a
+  name in a CSV to a published product revenue series.
 
 Gold's contrast is worth copying, and it is two fields rather than a policy.
 `series_coverage.jsonl` carries **`launch_quarter`** (30 of 55 records) and
@@ -746,13 +826,22 @@ header and puts the figures on rows labelled by geography:
       Intl     159   148    7.4
       WW       458   392   17.0
 
-    read_label("OPSUMIT", ["Opsumit","macitentan"])   -> Opsumit
-    read_label("US" | "Intl" | "WW", ...)             -> None
+    read_label("OPSUMIT", ["Opsumit","macitentan"])   -> matched='Opsumit'
+    read_label("US" | "Intl" | "WW", ...)             -> matched=None,
+                                                         scope='United States' | 'International' | 'Worldwide'
     parsing.tables.extract_revenue_rows(tables, product="Opsumit", ...) -> 0 rows
+    (also 0 for Uptravi and Tracleer; re-fetched live, 22 tables, table 13 rows 15-22)
 
-`fingerprint._covering` walks *left* for column headings; nothing in
-`parsing/` or `extraction/` walks *up* for a row-group heading
-(`grep row_group|group_header|section_label`: no hits). So the `carries`
+An earlier draft wrote `-> None` for the geography rows. `read_label` reads
+their *scope* correctly; only the product is missing - so the row-group
+heading is the sole missing piece and the scope it would need is already in
+hand.
+
+`extraction/fingerprint.py:450 _covering` walks *left* for column headings
+(`column -= 1`); nothing anywhere in `app/` walks *up* for a row-group heading
+(`grep row_group|group_header|section_label|row_header|heading_row|group_label`:
+no hits). `parsing/tables.py:73 _row_labels` collects sibling first cells only
+to feed `names_a_competing_product`. So the `carries`
 branch of 12b's predicate - "a figure whose row label resolves to P" - holds
 for row-labelled tables and does not hold for row-grouped ones. The gap is in
 `parsing/`, not in the cascade.
