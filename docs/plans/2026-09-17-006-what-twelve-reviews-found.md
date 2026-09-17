@@ -2,7 +2,7 @@
 title: "plan: what twelve reviews found, and the order to fix it in"
 date: 2026-09-17
 type: plan
-status: not-started
+status: in-progress
 ---
 
 # What twelve reviews found, and the order to fix it in
@@ -43,6 +43,26 @@ will act on.
 There is no baseline; three numbers on screen are wrong rather than absent; the
 artifact layer 1 produces is not a series; and the two layers that are the
 product would, if wired today, publish confident errors.
+
+## How to read this now
+
+An item reading
+
+    Shipped -> `<sha>`, <what that commit did>
+
+has been fixed, and the commit is where its evidence now lives: what was
+measured, before and after, and the probe. The body that was here said what was
+wrong at the time it was written, which the commit message says better and
+keeps current. An item that still carries its body is open, or shipped under a
+commit that does not name it - `git log -S` on the symbol is the way to tell,
+and this index is not evidence that anything is unfinished.
+
+The items indexed are the ones a commit subject names:
+
+    git log --format=%s 744864d..HEAD | grep -oE '^[0-9]+[a-z]' | sort -u
+
+plus section 8, which shipped under its own name (`2a1cf0d`). Sections 4, 9,
+10, 11 and 12, and "What rule 4 requires", are whole.
 
 ---
 
@@ -168,119 +188,11 @@ Three further blindnesses, each verified by execution:
 
 ### 0d. Every eval case runs a configuration no user gets, and a test asserts it is what a user types  `[V]`
 
-    foreign_xbrl.json    7  x {"openfda": false, "product_metadata": false}
-    gold_all.json      372  x {same}
-    gold_sample.json     8  x {same}
-    shapes_holdout.json 24  x {same}
-    unseen.json         15  x {same}
-
-    domain/models.py:317  product_metadata: bool = True
-    domain/models.py:320  openfda: bool = True
-
-The UI sends `options: {}` and gets the defaults. With `product_metadata=False`
-`_extract_metadata` returns at `orchestrator.py:709` and `_judge_profile` is
-skipped. Across the 19 `workbench.db` databases in the scratchpad (366 jobs),
-the only profile field ever written is `llm_aliases` (280 rows).
-
-**An earlier draft said "layer 2 has never produced a field in any measured
-run". That was the filter's absence, not the data's.** Widening the glob from
-`*/workbench.db` to every `*.db` finds `jr/meta.db`, written by a reviewer's
-probe that called `run_job` directly with both options on: two jobs, Tyvaso and
-Opsumit, each holding 12 profile fields - `roa`, `moa`, `fda_approval_date`,
-`therapeutic_area`, `indication`, `pharmacologic_class`, `manufacturer`,
-`generic_name`, `brand_name`, `active_ingredients`, `cik`, `llm_aliases` - all
-`needs_review`. The capability works. The true sentence is narrower: **no run
-scored by the eval has ever written a profile field**, because no case file
-turns layer 2 on. `llm_aliases` is an internal search-term payload, skipped from
-judgment at `quality/profile.py:127`, so the ten empty tables are empty in
-measurement rather than in production.
-
-And `backend/tests/test_shapes_holdout_is_held_out.py:134-135`:
-
-    def test_cases_are_what_a_person_would_type():
-        assert case["options"]["openfda"] is False
-        assert case["options"]["product_metadata"] is False
-
-A passing test pinning the eval to the opposite of the shipped default, and
-naming that configuration "what a person would type". Its docstring at
-`:130-131` says "nothing here may hand the pipeline a document or a figure" -
-a property the body does not enforce (rule 5) - and the assertion makes the
-tuned configuration a suite invariant: switching the eval to the shipped
-defaults fails `pytest` (rule 4).
-
-**Rank:** layers 2 and 3 are the product. The only number the project reports
-measures layer 1 with layer 2 off, so `therapeutic_area`, `moa`,
-`competitive_intensity` and `peak_*` - the export columns an analyst acts on -
-have never been scored in any run the project cites. This is why sections 3
-and 4 were found late, not a baseline nuisance.
-
-A latent rule-3 hole in the same path: `known_source_url` is in `eval.py:317
-DRUG_FIELDS`, and the only test forbidding it
-(`test_shapes_holdout_is_held_out.py:133`) reads `shapes_holdout.json` alone.
-A case file carrying it would hand the pipeline gold's document URL - the
-"table of document URLs" failure CLAUDE.md names, arriving through the eval.
+Shipped -> `87c9d47`, the eval cases ask for the configuration the product ships
 
 ### 0e. Ten env overrides, all session-only - and nothing measured is reproducible  `[V]`, fixed in M0
 
-Filter: every declared `Settings` field (37), live value against
-`model_fields[n].get_default()`, in the shell that ran the evals. An earlier
-draft named two, then four - each time the predicate was sound and the list
-under it was hand-written, so each count was rule 1 producing an absence. Ten
-differ:
-
-    sec_include_8k            False -> True                       config.py:31
-    enable_profile_judge      True  -> False                      config.py:49
-    sec_max_filings           4     -> 25                         config.py:30
-    openrouter_model_extract  gpt-4o-mini -> gemini-3.8-flash     config.py:25
-    database_url              sqlite default -> a path OUTSIDE the repo
-    local_storage_root        repo default   -> a path OUTSIDE the repo
-    max_concurrent_jobs, sec_user_agent, aws_profile, openrouter_api_key
-
-`database_url` and `local_storage_root` decide which database a run writes to
-and reads from - so they decide which run any past number was read from, and
-they point at a directory under a personal home path that exists in no file.
-
-**Fixed in M0** (`287bc26`, and the commits after it): `/config` now reports
-every `Settings` field with an `overridden` flag derived from `model_fields`,
-never a hand-named list, with credentials stripped by name *and* by structure
-(a DSN's password is removed whatever the field is called - the first draft
-of the route leaked it); `eval.py` prints the diff in its output header with
-the as-of date and gold size. A printed score now carries its configuration.
-
-All four live in the **process environment of the session**, and in no file:
-no `.env` exists at `backend/`, `deploy/` or the root, and the two example
-files carry the declared defaults. `sec_max_filings` is read at
-`sources.py:764`; `openrouter_model_extract` at every extraction call in
-`llm/client.py`. No table in any run database has a column naming the model
-(checked all 22 in run13), and `options_json` stores `ExtractionOptions` only.
-
-So a re-run from a clean shell fetches 4 filings per job instead of 25,
-extracts with a different model, and writes to a different database. **Every
-number in this document, and the README's former 75.6%, belongs to a
-configuration that existed in no file and in no run record.** This is the single strongest reason nothing below can be measured -
-stronger than 0a - and an earlier draft filed it as a sequencing footnote.
-
-Also load-bearing and unmeasured: `sources.py:10-11` asserts in prose that the
-primary 8-K document "is a cover page and holds no figures" - a claim about
-document contents with no command, used to justify the `sec_include_8k`
-default (rule 2/5), and `:13` "Two rules here were bought with wrong answers"
-is history in a docstring (rule 5).
-
-The "14 of 28 documents" figure was a single live repro and is `[I]`. Its ratio
-corroborates in run13: of 627 `source_documents`, 340 (54%) are `filing_type
-8-K` whose URL is not an EX-99 exhibit - the cover pages `sources.py:5-11` says
-in prose hold no figures - running 17-23 of 32-47 per job.
-
-**Sequencing for 0d and 0e, because two switches have been treated as one.**
-`openfda` and `product_metadata` cost one API call and write up to eleven
-fields (`orchestrator.py:770`) - turn them on with the fixes in section 3, and
-unset `sec_include_8k` in the same re-run. The profile judge is separate:
-`_judge_profile` (`orchestrator.py:1033`) makes one web-search-backed LLM call
-per profile field per job, uncapped (`profile_judge_max_fields: 0`, documented
-as "no cap" at `quality/profile.py:137`). With layer 2 off it has nothing to
-judge, which is why turning it on today does nothing at all. Turn it on
-**after**, and measure it as its own configuration against its own correction
-rate.
+Shipped -> `8943dbc`, ten overrides, not four, and M0 has landed
 
 ### 0f. The product's own example file has never been run  `[V]`
 
@@ -372,46 +284,7 @@ ORLADEYO 10/8).
 
 ### 1c. A two-product line is published as one product's revenue, because the alias step disarms the guard  `[V]`, site found
 
-`parsing/labels.py:210 read_label` detects combined lines correctly.
-`orchestrator.py:535` feeds it the LLM's merged alias list, which contains the
-*other* product. Decisive:
-
-    'Total Pombiliti(R) + Opfolda(R) sales'  as stored        -> combined=()           flags=()
-    'Total Pombiliti(R) + Opfolda(R) sales'  opfolda removed  -> combined=('Opfolda',) flags=('combined_line',)
-    'Total Pombiliti + Opfolda sales'        opfolda removed  -> combined=()           flags=('label_not_understood',)
-
-The decisive test reproduces on the (R) form only, which is the form the
-filing prints. `Opfolda` is in neither `load_products()` nor run13's job
-names, so `products=self._candidate_products(job)` (`orchestrator.py:1698`)
-cannot supply it; the only producer that catches this line is the filer's
-own mark, via `_TRADEMARKED_NAME_RE` (`labels.py:196`) - and `read_label`
-drops a marked name that is in `own_keys`, which is exactly what the alias
-list makes Opfolda.
-
-So `combined_with` is empty, `reported_as_for` (`orchestrator.py:241`) returns
-`None`, and `_record_quarters_only_reported_with_another_product`
-(`orchestrator.py:1193`) never fires. All 39 Pombiliti datapoints in run13 come
-from `Pombiliti + Opfolda` lines; two are `auto_pass` and shipped with
-`reported_as = None`.
-
-ILUVIEN works **only because** YUTIQ happens not to be in its alias list. So
-`reported_as_for` and the unresolved-quarter recording are correct code that
-does not fire for the case they were built for.
-
-**The site is found, and it is not the model or `merge_aliases`.** The model
-returned `"Pombiliti/Opfolda"` and `"Pombiliti + Opfolda"` as aliases;
-`parsing/evidence.py:77` splits on `[/|,;]+` - the franchise splitter meant
-for one product's two spellings - and manufactures the bare `Opfolda`:
-
-    product_aliases('Pombiliti', None, extra=['Pombiliti/Opfolda'])   -> [..., 'Opfolda']
-    product_aliases('Pombiliti', None, extra=['Pombiliti + Opfolda']) -> ['Pombiliti', 'Pombiliti + Opfolda']
-
-`merge_aliases` (`llm/aliases.py:8`, called at `orchestrator.py:535`) is a
-pass-through to `product_aliases`. The "+" form is harmless; the slash form
-alone causes it. **Rule 1:** the fix must not reach for a brand list - the
-producer that says "another product's name" is the (R) mark, and `Opfolda` is
-in no list the pipeline holds. run13 counts exact: 39 datapoints, 39 from a
-line naming Opfolda, 2 `auto_pass`, `reported_as = None` on all 39.
+Shipped -> `33d3b01`, a slash between two different names is a pair, not two spellings
 
 ### 1d. The deliverable named `quarterly_revenue.csv` is not quarterly  `[V]`
 
@@ -519,233 +392,25 @@ is this section's doing.
 
 ### 2a. There is no selected figure per quarter  `[V]`
 
-run13: **377 quarterly rows over 157 distinct (product, period) cells** - 2.4
-readings per cell, up to 8 rows (ORLADEYO 2025Q2) and up to 5 distinct
-values. `quality_checks` records this 115 times as
-`duplicate_period_scope_formulation`, all 135 checks are `status='open'`
-(41/74/123/115 across run8/10/12/13, and no code anywhere writes another
-status), across 17 of the 20 products with quarterly rows (24 job rows, 22
-names, 20 with rows). Detected, never resolved. **And the check misses half
-the duplication**: `quality/checks.py:189-199` keys on `(period, scope,
-formulation, geography)`; of run13's 220 excess quarterly readings only 111
-are excess under that key - the other 109 carry a *different* label for the
-same quarter. 2a and 2b are one defect: labels that differ without meaning
-differently are how the duplicate detector is evaded. `export/builder.py:131`
-emits `for d in job.datapoints:` with no selection column and no ordering; the
-chart is last-row-wins (1a).
-
-The cost is not cosmetic. `calculate_revenue_uptake` slices
-`rows[index-3:index+1]` - four **rows**, not four **quarters**. Nutrition has a
-perfect unbroken 10-quarter single-scope published series and produces **0
-uptake points**, because 34 rows over 10 quarters never give a window of four
-consecutive distinct quarters.
-
-Re-running layer 3's real functions over run13 with a peak and launch date
-handed in free:
-
-    | products in run13                     | 24 jobs |
-    | with any published quarterly row      | 14      |
-    | with >=4 consecutive published qtrs   | 10      |
-    | yielding >=1 uptake point             |  9      |
-    | yielding >=4 uptake points            |  5      |
-    | with a peak select_peak_estimate picks|  0      |
-
-    after dedup + a normalized vocabulary:  >=1 point: 10, >=4 points: 6
-
-Deduplication alone is worth more here than any extraction improvement - and
-that is now measured, not asserted: dedup alone gives 10 / 6, normalisation
-alone gives 9 / 5 (moves nothing), both together 10 / 6. Nutrition goes 34
-rows / 0 points to 10 rows / **7** points on dedup alone. (Peak and launch
-date handed in as 4 x the largest published quarter and the first day of the
-earliest published quarter; `period_basis` hardcoded, because `datapoints`
-has no such column and **no production code constructs a `SalesObservation`**
-- `calculate_revenue_uptake` has no caller outside tests, and
-`uptake_metrics` is 0 rows in all four runs. The 10 / 6 is a number about the
-function, not about anything the user sees today; dedup is necessary and not
-sufficient.)
+Shipped -> `21d20a0`, a quarter of a series has one figure, and the series says which
 
 ### 2b. The scope label is noise, not a scope  `[V]`, cost lower than ranked
 
-18 distinct `geography` strings for about five concepts, 62.6% null (filter:
-`period_type='quarterly'`, 377 rows; over all 549 rows it is 19 values and
-58.7% null, with `'Americas'` 10):
-
-    None 236, 'United States' 61, 'Worldwide' 26, 'U.S.' 18, 'Rest of world' 8,
-    'US' 5, 'Outside of U.S.' 4, 'North America' 4, 'ex-US' 3, 'Rest of World' 2,
-    'Ex-US' 2, 'Ex-U.S.' 2, 'global' 1, 'U.S.; Rest of world' 1,
-    'U.S. and Europe' 1, 'Japan' 1, 'Global' 1, 'Europe' 1
-
-`_has_compatible_scope` (`uptake.py:40`) compares the five-tuple by exact
-equality, so a product whose U.S. track is spelled `'U.S.'` in one quarter
-and `'US'` in the next would be rejected on spelling alone. **On run13 that
-never fires**: only 3 of 20 products carry more than one scope tuple across
-their *published* rows (Livmarli, AYVAKIT, Ocaliva), none a spelling collision
-of one concept, and normalising the vocabulary moves the layer-3 table by
-zero. The mechanism is real and the observed cost is 2a's - contradictory
-labels on one value defeat the duplicate detector - plus an export sheet
-where `'ex-US'` sits beside `'Ex-U.S.'`. A component of 2a, not an item
-beside it.
-
-Worse, the same number carries contradictory labels within one quarter:
-ELEVIDYS 2024Q2, value 121.721, appears as `(Product family, None)`,
-`(Worldwide, United States)`, `(Worldwide, Worldwide)` and `(U.S., United
-States)`. ORLADEYO's 30 quarterly rows carry 11 distinct
-(scope, geography, formulation) tuples - the decomposition and the total,
-unmarked, in one list.
-
-Gold's whole corpus uses three geography values, and 0 of its 55
-`benchmark_identity` groups contain more than one
-(scope, geography, formulation, currency, period_basis) tuple.
+Shipped -> `21d20a0`, a quarter of a series has one figure, and the series says which
+Shipped -> `e19f2e5`, the uptake scope test compares places, not punctuation
 
 ### 2c. Two series swapped at a switch-over, and nothing that could notice  `[V]`, corrected, ranked first in this section
 
-`analytics/analog_matching.py` scores on `moa_class`,
-`route_of_administration`, `approval_era`, `competitive_intensity_at_launch`.
-`ProductProfile` (`:38-44`) has **no revenue-basis field at all**. Nothing asks
-whether the target's curve is worldwide and the analog's is U.S.-only.
-
-**An earlier draft said YUTIQ and ILUVIEN ship identical curves. They do
-not - the curves are swapped, and one of them is empty.** Every row of both
-in run13:
-
-    YUTIQ    7 published quarters, every one from an 'ILUVIEN and YUTIQ' line
-             (4 direct with reported_as, 3 derived with reported_as=None)
-    ILUVIEN  0 published quarterly rows; all 17 needs_review or corroborates;
-             its only published row is a 2025 annual, 75.0
-
-`shapes_holdout.json` states the switch-over: ILUVIEN expects 2025Q4 19.843,
-2026Q1 19.255, 2026Q2 18.718; YUTIQ expects `None` for all three ("There
-were no sales of YUTIQ in Q1 2026"). run13 publishes 19.843, 19.255 and
-18.718 under **YUTIQ**, `auto_pass`, and nothing under ILUVIEN. An analyst
-pulling ILUVIEN as an analog gets an empty series and no explanation; pulling
-YUTIQ gets a three-quarter tail the issuer's own footnote says does not
-exist - at the switch-over, the part of a curve an analyst reads hardest, and
-the shape they would choose this pair as an analog *for*. A wrong number
-acted on, above everything else in this section. Same mechanism as 5f and
-1c; same shape for Pombiliti.
-
-Gold's answer is `benchmark_identity` - `uthr_tyvaso_nebulized_reported`,
-`merck_adempas_merck_territories_reported` - issuer, brand, geography and basis
-in one machine-checkable key, one per series, riding on every quarterly row and
-on `series_coverage.jsonl`. The shape of the fix already exists in the repo.
+Shipped -> `21d20a0`, a quarter of a series has one figure, and the series says which
 
 ### 2d. The holes land in the ramp, not the tail  `[V]`, first class smaller at the surface
 
-Distinct (product, quarter) cells in run13 by quarter-of-year:
-
-    Q1: 48   Q2: 47   Q3: 38   Q4: 24
-    Q1 by method: llm 82, xbrl_fact 21, table 18, prose 6, derived 1
-    Q4 by method: derived_from_period_total 15, prose 11, llm 6, table 4, xbrl_fact 0
-
-Q4 has zero XBRL because no issuer files a Q4 10-Q - it exists only as FY minus
-nine months. The pipeline knows this (`extraction/derive.py:225`) and reaches
-it for about half the Q4s it needs; 16 of 35 `unresolved_quarters` rows are
-Q4s. For a rolling-four-quarter metric an interior Q4 hole destroys four
-consecutive uptake points, so it is not a tail hole.
-
-The second class is worse: **the launch quarter**. DAYBUE launched April 2023;
-its exact 2023Q2 XBRL fact (23.217) is present in run10, run12 and run13, and
-in run13 is demoted to `corroborates` - a status `PUBLISHED_STATUSES`
-(`domain/models.py:66`) excludes - because it corroborates an LLM reading that
-then failed review (the demotion happened in run12, where the cell still
-published at the coarser 23.2; what run13 lost is the cell). 10 of 157 quarter-cells are unpublished while holding a
-`corroborates` row; 5 of those corroborators are XBRL, table or derived
-(NUPLAZID 2023Q1, FIRDAPSE 2023Q2, DAYBUE 2023Q2, FILSPARI 2025Q2, YUTIQ
-2025Q2). See 6e - this is the same defect as 3e in the first pass, and it costs
-series starts.
-
-**The first class is a fifth of its stated size at the surface.** The
-Q1/Q2/Q3/Q4 figures above are *cells* and the by-method split beside them is
-*rows* (filter now stated). Among *published* cells the split is nearly flat -
-Q1 26, Q2 22, Q3 21, Q4 21 of 90 - because 21 of the 24 Q4 cells that get any
-reading publish; `derive.py` closes most of the raw gap. The launch-quarter
-class is the one that costs: DAYBUE and NUPLAZID both start one quarter late
-with a clean tagged fact sitting in the database. Rank the second class above
-the first.
+Shipped -> `2e7ae9a`, a series says where it ends, and what a partial quarter is
 
 ### 2e. Life events are detected and then dropped  `[V]`, two attributions corrected
 
-`reported_as` is written on 12 of 549 rows (2%), covering 5 of YUTIQ's 8
-quarters and none of ILUVIEN's. It is then discarded on the way out:
-`QUARTERLY_HEADERS` (`export/builder.py:18`) has no `reported_as` column, and
-the dashboard series payload (`dashboard/series.py:223`) carries no
-`revenue_scope`, no `geography`, no `formulation` and no `reported_as`. Only
-Product Detail surfaces it (`api/products.py:378`,
-`ProductDetailPage.tsx:275`), where it renders well - one tab of one page. (The
-review-queue payload at `api/products.py:530` also emits it; no component
-renders it there.) **Rule 1:** `QUARTERLY_HEADERS` is a hand-written list of
-23 where `DatapointORM.__table__.columns` has 28 - it silently drops
-`period_type`, `reported_as` and `citation_json`; the 8-column literal at
-`builder.py:283` drops ten more. This literal is the mechanism of the item,
-and `analytics/peak_sales.py:13-19` shows the right shape twenty files away.
-`dashboard/series.py:238-249 filter_keys` is the same shape.
-
-Unmarked life events in run13:
-
-- **A pre-launch expense published as revenue.** AGAMREE opens 2023Q3 = 81.5
-  (`auto_pass`, `prose`, quote: "the $81.5 million IPR&D purchase consideration
-  for the acquisition of the license"). An earlier draft added 2023Q4 = 36.0
-  to the curve; it is `needs_review`, not published - the milestone payment
-  was caught, the IPR&D expense was not. The published curve is 81.5 -> 1.174
-  -> 8.746 -> (Q3 hole) -> 21.075 -> (Q1 hole) -> 27.363: an $81.5m
-  acquisition expense at the head of a curve that peaks at 27.4, inverting
-  the whole shape of a pre-launch ramp, with no `reported_as` and no
-  `period_type` column on the export sheet to say so.
-- **A stub launch quarter.** The published 2024Q1 is `xbrl_fact 1.174`, and
-  its quote is the tagged fact itself. The eighteen-day note - "for the
-  period between March 13, 2024 (date of commercial launch) and March 31" -
-  sits on a `corroborates` `table` row, and the prose "approximately $1.2
-  million for the period..." on a `needs_review` `llm` row. 1.174 *is* the
-  stub and *is* plotted as a full quarter; the evidence is 6e's second shape,
-  not a property of the published row - grep the published quote and you
-  will not find it.
-- **A restatement.** Nutrition 2023Q1 is published as both 138.5 and 139.9;
-  2023Q2 as 164.8 and 168.1. The mechanism is in the quotes: 139.9/164.8 are
-  the as-filed columns of the 2023 10-Qs; 138.5/168.1 are the prior-year
-  comparative columns of the 2024 10-Qs - Perrigo's own restated figures.
-  139.9+164.8+130.7+127.8 = 563.2, the issuer's printed FY2023;
-  138.5+164.8+130.7+127.8 = 561.8, never printed.
-- **A segment posing as a product.** `Nutrition [PRGO]` is Perrigo's
-  infant-formula reporting segment (`manufacturer='Perrigo Company plc'`,
-  `generic_name=None`), carried through the whole pipeline as a drug and the
-  highest-yield "product" in run13 by *published* datapoints (34; third by all
-  rows). `shapes_holdout.json:546` says so outright - "its CSCA category line
-  'Nutrition' stands in for the product; the shape under test is the dating"
-  - so it is an eval input, not a user's; but nothing guards the path from a
-  name in a CSV to a published product revenue series.
-
-Gold's contrast is worth copying, and it is two fields rather than a policy.
-`series_coverage.jsonl` carries **`launch_quarter`** (30 of 55 records) and
-**`commercial_start_quarter`** (55 of 55) as separate things, and they differ
-for 24 of the 30 that have both:
-
-    Adempas    launch 2013Q4  series starts 2024Q1
-    Tracleer   launch 2001Q4  series starts 2016Q1
-    Procrit    launch 1989Q2  series starts 2005Q1
-    Letairis   launch 2007Q2  series starts 2008Q1
-
-So gold never starts a series at the launch quarter by default and never
-publishes a stub: the launch date anchors the x-axis, and a separate, declared
-quarter says where usable data begins. The pipeline has neither field - and per
-3g it does not have the launch date either.
-
-`series_end_reason` on 26 of 55 records names the event and the evidence, and
-the README states the principle: both boundaries are declared "rather than
-silently applied, because a reader who mistakes either one gets a wrong answer
-from a right-looking series."
-
-Gold also carries a per-row **`precision`** (`as_reported` 2,128, `exact` 70,
-`approximate` 5) and a **`derivation`** on every row (`direct_reported` 2,038,
-`full_year_less_other_reported_quarters` 44,
-`annual_less_reported_first_nine_months` 12, `acquisition_bridge_sum` 3, and
-five more). The pipeline has `extraction_method`, which says which reader ran,
-not what the number is.
-
-And gold's six exclusions name the failure class rather than leaving a thin
-series: `individual_reporting_discontinued`, `incomplete_pre_peak_history`,
-`no_standalone_product_sales`, `private_issuer_no_public_sales`. One of them
-anticipates AGAMREE exactly - Tadliq's reason reads "Approval, availability,
-price, and pharmacy listings are not product revenue."
+Shipped -> `21d20a0`, a quarter of a series has one figure, and the series says which
+Shipped -> `2e7ae9a`, a series says where it ends, and what a partial quarter is
 
 ### 2f. The IR sources gold cites are on EDGAR; one class of filing is not
 
@@ -908,341 +573,45 @@ A first score already exists and is in 3a: over the 20 seed products,
 
 ### 3a. Route is read from a field that contradicts the same document  `[V]`
 
-`parsing/fda_label.py:68` reads `openfda.route`. The same drugsFDA record
-carries `products[].route`, and they disagree. Verified live:
-
-    NDA022387  openfda.route=['ORAL']  products[].route=['INHALATION']  TYVASO
-    NDA214324  openfda.route=['ORAL']  products[].route=['INHALATION']  TYVASO DPI
-
-Across the 20 seed products `openfda.route` disagrees with `products[].route`
-for 6 (4 clinically wrong - the three Tyvaso forms and Winrevair, whose
-`openfda.route` is absent - and 2 near-synonyms, Veletri `INTRAVENOUS` vs
-`INJECTION`, Yutrepia `RESPIRATORY (INHALATION)` vs `INHALATION`). Against
-`seed/product_attributes.csv`, with a synonym set stated: **5 wrong plus 3
-with no application at all** (Ventavis, Flolan, Liqrev - 3c). An earlier draft
-presented that as "8 disagreements". And one of the 5, Uptravi, is not this
-defect - its `openfda.route` agrees with its own `products[].route`; it is
-3e's wrong application. **Reading `products[].route` instead fixes 4 of the 5**;
-the residue is Uptravi (3e) and Winrevair `INJECTION` vs curated `Subcutaneous`
-(granularity). `config.py:46`
-already knows - "openFDA gives an inhaled product's route as ORAL" - which is
-why `enable_profile_judge` exists, and the judge left the value unchanged.
-
-Measured cost, feeding layer 2's real output into `rank_analogs`:
-
-    target Tyvaso  (an earlier construction; M7's re-run under a different
-                    mapping gives Orenitram/Revatio/Tracleer above Tyvaso DPI,
-                    and under the literal attribute names layer 2 supplies 1
-                    of 4 and the set is empty - see 3i and 4c)
-      from pipeline attributes : Adcirca 1.0 (2 attrs), Letairis 1.0 (2), ...
-      from curated attributes  : Nebulized Tyvaso 1.0 (4), Tyvaso DPI 0.83 (4), ...
-
-The first inhaled prostacyclin gets two oral small molecules as its top
-analogs, **at score 1.0**. `analog_matching.py:132`'s `minimum_attributes=2`
-defends against exactly this, and 2 is precisely what layer 2 can supply, so
-the guard never fires.
+Shipped -> `5b173f6`, read an openFDA record by the keys the record carries
+Shipped -> `168c4c0`, read a product's fields from the application it launched on
 
 ### 3b. `openfda.dosage_form` does not exist  `[V]`, one sub-claim false
 
-Verified: the key is absent from the `openfda` block on both datasets
-(`openfda` keys are `application_number, brand_name, generic_name,
-manufacturer_name, nui, package_ndc, pharm_class_epc, pharm_class_moa,
-product_ndc, product_type, route, rxcui, spl_id, spl_set_id, substance_name,
-unii`). `parsing/fda_label.py:69` reads it anyway, so `df=None` for all 20 seed
-probes including exact matches. It lives at `products[].dosage_form`.
-
-The key lists an earlier draft gave were one list for two datasets, and
-incomplete. Re-derived: drugsFDA `openfda` also carries `pharm_class_cs` and
-`pharm_class_pe`; label `openfda` also carries `is_original_packager` and lacks
-`pharm_class_moa` for Tyvaso's application; `route` is on 16 of 17 selected
-records (Winrevair's BLA has none), so `openfda.route` is sometimes absent as
-well as wrong. And "it lives at `products[].dosage_form`" is true **only on
-drugsFDA** - the label record has no `products` key at all; its nearest are
-`dosage_forms_and_strengths` and `spl_product_data_elements`.
-
-Downstream, confirmed on `jr/meta.db`: `product_formulations.dosage_form =
-'unresolved'` on both rows (`orchestrator.py:870`); `identity/resolver.py:36`
-hashes the empty component into `identity_key`, so two formulations of one
-molecule can collide on identity (M5's territory). **An earlier draft said
-`dosage_form`'s place at #2 in `PRIORITY_JUDGE_FIELDS` spends a web search on
-a value that is never there. It does not**: `orchestrator.py:1045` queries the
-rows that exist, `dosage_form` has no row, and the judge never sees it. That
-position costs nothing.
+Shipped -> `5b173f6`, read an openFDA record by the keys the record carries
 
 ### 3c. A whole class of products is invisible, including the oldest analogs  `[V]`, run13 count corrected
 
-`connectors/openfda.py:27` searches `openfda.brand_name:` only, and
-`openfda_fields.py:16` reads only `result["openfda"]["brand_name"]`. For older
-and discontinued products drugsFDA returns the application with an **empty
-`openfda` block** and the brand in `products[].brand_name`. Verified live:
-
-    openfda.brand_name:"Flolan"    -> HTTP 404
-    products.brand_name:"FLOLAN"   -> NDA020444, route INJECTION, dosage INJECTABLE
-    products.brand_name:"VENTAVIS" -> NDA021779, route INHALATION
-
-`connectors/openfda.py:58` logs `openfda_no_match` on the 404 and moves on. The
-data is in the same endpoint, one field path over. This costs 3 of 20 seed
-products - Flolan, Ventavis and **Liqrev**, which an earlier draft omitted
-and which is recoverable the same way (`products.brand_name:"LIQREV"` ->
-NDA214952, `openfda` block empty) - and **1 of 24 run13 jobs** (Ocaliva,
-NDA207999). An earlier draft said 4 of 21: run13 has 24 jobs, all 24 have zero
-characterisation attributes because openFDA never ran, and of the 4 job names
-that get no drugsFDA match live, only Ocaliva is this mechanism; Elevidys and
-Vyjuvek are absent under any field and `Nutrition` is not a drug. Among the
-seed three is **Flolan (1995), the first PAH
-product and the only one in the catalog with a complete 30-year ramp**, which
-is the single most valuable analog an uptake workbench could hold. (Elevidys
-and Vyjuvek are CBER gene therapies and are not in drugsFDA under any field;
-for those there is no structured path at all.)
-
-This is CLAUDE.md rule 1's shape: a field path written down rather than derived
-from the document - `parsing/fda_label.py:62-73` writes down ten `openfda`
-paths, `connectors/openfda.py:27,29` two search paths, `openfda_fields.py:16`
-one, and the record enumerates its own keys at run time.
-
-**Compounding with section 8:** Flolan/GSK and Liqrev/CMP Pharma are also in
-`resolve_cik`'s 8-of-14 manufacturer failures. For those two both halves of
-identity fail - no CIK from the manufacturer, no application from the brand -
-so the product is absent from the analog set rather than wrong in it. Cheaper
-per the brief's ranking; it leaves the set at 17 of 20.
+Shipped -> `5b173f6`, read an openFDA record by the keys the record carries
 
 ### 3d. The substring fallback attaches a sibling's application and its approval date  `[V]` mechanism, `[I]` examples
 
-`connectors/openfda_fields.py:58`: after exact brand match fails,
-`brand_norm in candidate or candidate in brand_norm`. This is the match
-`extraction/members.py:10-14` explicitly refuses to make for revenue.
-
-    Thiola      apps ['NDA019569','NDA211843'] -> selected NDA019569 'THIOLA'  EXACT  1988-08-11
-    Nucynta ER  apps ['NDA200533']             -> selected NDA200533 'TAPENTADOL' EXACT 2011-08-25
-
-**Neither of an earlier draft's two examples reproduces, and neither is
-`:58`.** Re-run with run13's actual stored `llm_aliases["merged"]`, passed as
-`orchestrator.py:732` passes it: Thiola picks the correct 1988 original today
-(6 of 6 repeats), because both applications carry an exact-matching alias and
-`select_openfda_result` returns on the first result that exact-matches - so
-the earlier "31 years late" is whichever application openFDA lists first. And
-Nucynta ER's answer is *correct*: NDA200533 is Nucynta ER; its
-`openfda.brand_name` is `['TAPENTADOL','NUCYNTA ER']` and the loop at
-`openfda_fields.py:51` tries them in stored order, matching `TAPENTADOL`
-**exactly** at `:57`, not through `:58`.
-
-The root cause is nonetheless right, and now measured properly. **The `:42`
-exclusion is dead in 14 of the 17 run13 jobs that got results**: a
-molecule-name variant survives into the candidate list because it is not
-string-equal to the upload's spelling - `tapentadol` vs `tapentadol
-extended-release`, `amifampridine phosphate` vs `amifampridine`. Nucynta ER's
-selection is *made by* the surviving molecule candidate. ILUVIEN and YUTIQ are
-the dangerous pair: two products whose surviving candidate is the identical
-string `fluocinolone acetonide intravitreal implant`; today each query returns
-one application so nothing crosses, but the exclusion meant to prevent the
-cross is not running.
-
-**The `:58` fallback fires on 3 of 20 seed probes**: `Jornay PM` ->
-`JORNAY PM EXTENDED-RELEASE` and `Pombiliti` -> `POMBILITI ATGA` (harmless,
-same product), and **`Nebulized Tyvaso` -> `TYVASO` / NDA022387** - a distinct
-seed product takes Tyvaso's application and its 2009 approval date. That one
-is the realised harm.
-
-Two compounding mechanisms. The docstring at `openfda_fields.py:31` says "the
-generic name is deliberately excluded from matching"; the exclusion at `:42`
-drops only an alias string-**equal** to `job.generic_name`, and every stored
-`llm_aliases` set spells the molecule differently ("tapentadol" vs "tapentadol
-extended-release"), so the molecule name survives and the exclusion is dead.
-And `quality/profile.py:79 blends_sibling_brand` exists for this and is applied
-only to the LLM branch (`orchestrator.py:971-977`); the openFDA mapping loop
-(`orchestrator.py:787-820`) has no sibling check.
-
-**Cost:** lower than an earlier draft said. The two headline examples give
-correct answers today; the exposure is latent, plus one realised case. "Could
-be wrong tomorrow", not "is wrong today".
-
-*Narrowed at implementation (M7):* ILUVIEN and YUTIQ could not cross before
-the fix either - neither drugsFDA record states the molecule as one of its
-brand names, so forcing both records into one result window (both orders)
-selects each product's own application before and after. What the fix
-changed is that the exclusion meant to prevent the cross now fires:
-`names_the_molecule(...)` is true where the old string equality was false.
-Latent, not realised; Nebulized Tyvaso remains the one realised case.
+Shipped -> `4cb5fe4`, the molecule exclusion compares against the molecule the record declares
 
 ### 3e. Among a brand's own applications, the first returned wins  `[V]`, order-dependent, 5 brands not 1
 
-    UPTRAVI NDA214275 route=['INTRAVENOUS'] ORIG AP 20210729   <- selected
-    UPTRAVI NDA207947 route=['ORAL']        ORIG AP 20151221   <- the product
-
-`earliest_approval_date([selected])` (`orchestrator.py:784`) is scoped to the
-one selected application, and its docstring defends that scoping - the effect
-is that a later line extension becomes the product's approval. Uptravi lands in
-the 2020-2024 era bucket, intravenous: wrong on both scored attributes.
-Uptravi reproduces exactly (6 of 6 repeats this session). It is not alone:
-across both probes 10 brands returned more than one application, and for
-**5** the selected application's ORIG date is later than the earliest across
-all results - Uptravi 2021 vs 2015, Revatio 2012 vs 2005, NUPLAZID 2018 vs
-2016, Livmarli 2025 vs 2021, ORLADEYO 2025 vs 2020. (Nebulized Tyvaso 2009 vs
-2002 is arguably right for the nebulized form.)
-
-Approval date across the 20 seed products vs the curated column: 3 absent
-(Ventavis, Flolan, Liqrev), 4 differ - **but Veletri is the oracle being
-wrong**: NDA022260 has one ORIG/AP submission, `2008-06-27`, the pipeline reads
-it, the curated column says 2010. So 3 real errors (Uptravi, Revatio, Alyq),
-not 4.
-
-`connectors/openfda.py:15-24`'s docstring asserts results come back "ordered
-by application number". Measured: of six multi-result brands, four descending,
-two ascending; openFDA sorts by relevance and documents no order. A measured
-claim about an API, in a docstring, and wrong (rule 5).
-
-openFDA result order is not guaranteed, so this one is order-dependent and may
-present differently on another day; the field-path findings above are not.
+Shipped -> `1fc8e6d`, date the product from every application it matched, and cite the key read
+Shipped -> `168c4c0`, read a product's fields from the application it launched on
 
 ### 3f. `fda_approval_date` is always empty, exactly when resolution succeeds  `[V]`, ranked too low
 
-`dashboard/series.py:134`:
-`approval_date = canonical.initial_approval_date if canonical else fields.get("fda_approval_date")`.
-
-`initial_approval_date` is read at `dashboard/series.py:134` and
-`api/products.py:343` and is **never assigned anywhere in `app/`**. So having a
-canonical product row *skips* the working fallback. A live run holds
-`Tyvaso fda_approval_date = 2009-07-30` and `Opsumit = 2013-10-18` in
-`drug_profile_fields`, both cited to
-`submissions[type=ORIG].submission_status_date`, and exports `None` for both -
-along with `approval_period`, one of the Dashboard's own analog filters
-(`dashboardModel.ts:5`), so that dropdown is permanently empty.
-
-Confirmed end to end on `jr/meta.db`: `drug_profile_fields` holds Tyvaso
-`2009-07-30` and Opsumit `2013-10-18`, each cited to
-`submissions[type=ORIG].submission_status_date`; `canonical_products.initial_approval_date`
-is `None` for both; `build_dashboard_preview` on a copy returns
-`"fda_approval_date": null, "approval_period": null` for both and
-`filter_options.approval_period: []`. `grep -rn "initial_approval_date\s*="
-backend/app/` returns nothing; the only assignment in the repository is
-`tests/test_dashboard_preview.py:42`.
-
-**Rank:** written as "the fallback is skipped", which reads as a tidy-up. It
-nulls the approval date and the `approval_period` filter precisely for the
-products that resolved successfully - the ones the pipeline did best on - with
-the correct date sitting two tables over.
+Shipped -> `cf5fbb2`, write the launch anchor, from the record that carries it
 
 ### 3g. There is no launch anchor in the database at all  `[V]`
 
-`orchestrator.py:784` computes `approval` per source; `:908-914` writes
-`ProductIndicationORM.approval_date` and `launch_anchor_type` from that local.
-Two openFDA sources are retrieved per job, and they are not the same record:
-
-    drugsfda.json?...brand_name:"Tyvaso"  -> approval 2009-07-30, indications_text False
-    label.json?...application_number:...  -> approval None,       indications_text True
-
-`parsed_indications` is non-empty only for the `label.json` record, where
-`approval` is `None` (it has no `submissions`). So every indication row is
-written with `approval_date=NULL, launch_anchor_type=NULL` - confirmed on all
-three `product_indications` rows in `jr/meta.db`, which also carry
-`therapeutic_area=None` while their `approved_lot_quote` prose is full. There
-is no launch anchor in any database in this repository.
-
-`months_since_launch` is the x-axis of "Launch-relative" and "First 24 months"
-and the input to `time_to_ninety_percent_peak`. Even with layer 3 wired
-tomorrow there is nothing to anchor a curve on.
+Shipped -> `cf5fbb2`, write the launch anchor, from the record that carries it
 
 ### 3h. `therapeutic_area` is a verbatim copy of `indication`, so nothing groups  `[V]`
 
-`orchestrator.py:779`: `"indication": indication_value, "therapeutic_area":
-indication_value`. Running the real parser on real labels:
-
-    NDA021290 : 'pulmonary arterial hypertension (PAH) (WHO Group 1)'
-    NDA204410 : 'pulmonary arterial hypertension (PAH, WHO Group I)'
-    NDA207947 : 'pulmonary arterial hypertension'
-    NDA022387 : 'pulmonary arterial hypertension (PAH; WHO Group 1); pulmonary
-                 hypertension associated with interstitial lung disease (...)'
-
-Five spellings of one indication universe across seven labels (Letairis and
-Adcirca match Tracleer's; Adempas adds a fifth with CTEPH first). Both grouping
-functions use exact equality - `competitive_intensity_llm.py:190` bare,
-`competitive_intensity.py:77` after `casefold()`, which none of the five
-survives - so on pipeline output every product is its own universe of one,
-i.e. "the first approval in the indication", i.e. intensity `low` for
-everyone. On `jr/meta.db`'s two-product run,
-`filter_options.therapeutic_area` holds two strings for two PAH drugs and
-`competitive_snapshots` holds 0 rows. Gold's README names this failure: "a number with the shape
-of a measurement and none of the meaning."
+Shipped -> `6621e13`, group an indication under the disease it names
 
 ### 3i. `moa_class`, `approval_era` and `competitive_intensity_at_launch` have no producer  `[V]`
 
-`grep -rn "moa_class" backend/app/` finds nothing outside `analytics/` and one
-prompt template slot; `approval_era` appears only in `analog_matching.py`. The
-LLM metadata prompt's vocabulary
-(`app/prompts/metadata_extractor.yaml`) is `generic_name|manufacturer|
-fda_approval_date|therapeutic_area|indication|moa|pharmacologic_class|roa|
-dosage_form|formulation|ticker|cik` - no class, no era, no intensity.
-
-So of the four weighted attributes at most two are ever comparable, and `moa`
-(weight 1.0, the heaviest) is free text inconsistent in **kind**: where
-drugsFDA carries `pharm_class_moa` it is a class term; where it does not, the
-label's prose is used - `pharm_class_moa` is on only 7 of 17 drugsFDA records.
-On `jr/meta.db`: Opsumit `moa = 'Endothelin Receptor Antagonists [MoA]'`,
-Tyvaso `moa = 'Treprostinil is a prostacyclin analogue. The major
-pharmacologic actions...'` - one class term and one paragraph in the same
-dropdown. (The Library showing `moa=None` for Tyvaso is `[I]`:
-`moa_components` has no Tyvaso row and `dashboard/series.py:132` falls back to
-the profile prose, but `api/products.py`'s `_moa_text` was not exercised.)
-
-With the literal attribute names layer 2 supplies **1 of 4** (route), so
-`minimum_attributes=2` drops every candidate and the analyst gets an empty
-analog set rather than a wrong one; with the most generous mapping (`roa` ->
-route, EPC/MoA term -> class, era from the approval date) it supplies 3 of 4
-and `rank_analogs` puts Orenitram, Revatio and Tracleer above Tyvaso DPI -
-the same molecule by the same route - for target Tyvaso.
-The Library also shows `moa=None` for Tyvaso although the profile holds the
-prose value, because `_moa_text` reads `MoAComponentORM`, which openFDA's
-`moa_terms` left empty - another handoff where having the canonical row yields
-*less* than not having it.
-
-`dashboard/series.py:29 _approval_period` buckets to `f"{start}-{start+4}"`,
-the same shape as gold's `approval_era`, and is computed for display only.
+Shipped -> `b69741e`, the judging order is a judgement; its membership is derived
 
 ### 3j. Six of seven openFDA citations point at field paths that do not exist  `[V]`
 
-`orchestrator.py:791-795` builds every openFDA citation's `source_quote` as
-`f"openfda.{field}"`. On `jr/meta.db`'s real rows that produced
-`openfda.roa`, `openfda.indication`, `openfda.therapeutic_area`, `openfda.moa`,
-`openfda.active_ingredients`, `openfda.pharmacologic_class` - and **none of
-those is a key in either dataset's `openfda` block** (3b's measured key list).
-Only `fda_approval_date` carries a real path,
-`submissions[type=ORIG].submission_status_date`. Against "citations are
-mandatory on every source-derived field", six of seven layer-2 fields ship a
-citation the analyst cannot follow - which is worse than none, because it
-reads as verified. Ranks alongside 3a.
-
-**Rule 1, three more literals in this module.** `PRIORITY_JUDGE_FIELDS`
-(`quality/profile.py:115-124`) is eight field names whose producer is the
-`mapping` dict plus the prompt vocabulary; it is already stale in one
-direction (`dosage_form`, never produced) and can go stale in the other (a new
-mapping key sorts silently to 99). **Rule 5:** `orchestrator.py:488-493`'s
-docstring carries "every job in a sweep bought its own copy from the model...
-in one run that was the longest stage of the job while retrieval took two
-seconds" - a run and a measurement, in application code. `config.py:46-48`'s
-"openFDA gives an inhaled product's route as ORAL" is the permitted kind (it
-justifies a setting) and is now also incomplete: for Winrevair openFDA gives
-no route at all.
-
-**Rule 3 for whoever implements 3i's oracle:** `seed/gold/product_profiles.jsonl`
-is built from `seed/product_attributes.csv` (identical 62 `drug_name` sets),
-so a scorer that imports it must live under `scripts/` or `tests/`, never
-under `app/`, and must never be what
-`competitive_intensity_llm.peers_at_launch`'s `profiles` argument receives at
-run time. **Rule 4:** the oracle is a defect-finder; a fix found with it is
-scored on products none of gold or the holdouts use, with both answers
-represented - for 3a, products where the two route fields *agree* as well as
-disagree, or a fix that always prefers `products[].route` scores full marks on
-a set that only holds disagreements.
-
-**Note for rule 3.** `seed/product_attributes.csv` holds `moa_class`,
-`route_of_administration`, `first_approval_year`, `indication_area` and
-`peer_universe_role`, and `extraction/members.py:273 load_products()` already
-opens that file and takes `drug_name` only. But
-`scripts/build_independent_gold.py:2620` builds `seed/gold/product_profiles.jsonl`
-from those same columns - so if the pipeline read them, gold would stop being
-able to score characterisation at all. What layer 2 needs is a **procedure**
-that derives a class and an era; the CSV could at most be a cache in front of
-it, and would have to pass the delete test.
+Shipped -> `1fc8e6d`, date the product from every application it matched, and cite the key read
 
 ---
 
@@ -1514,118 +883,19 @@ product's own" and "publish it with a quote a person can check".
 
 ### 5a. Derived rows cite a document that does not contain their input  `[V]`, harder than stated
 
-`orchestrator.py:2024` takes `selected_sources[0]` for every derived candidate,
-whatever it actually subtracted. The figure test - open the cited cached
-document and search for each derivation *input* at three or more significant
-digits (`46.041` / `46,041` / `46041` / `46,041,000`; integer-rounded forms
-rejected as unfalsifiable):
-
-    derived rows in run13                                   16   (15 auto_pass, 1 corroborates)
-    cited document prints EVERY input figure                 0
-    cited document prints the period total it subtracted     7
-    cited document prints none of the inputs                 4
-    every input READ FROM the cited document                 0 of 16
-
-An earlier draft said 3 of 16 contain the input; the figure test gives 0.
-Absences cross-checked by raw grep (`820,791`, `213,295`, `37,973` and five
-more return 0 hits in their cited files). **And the correct document is
-reachable**: each of those figures is in another cached document of the same
-job's own `source_documents` - a capability the run had and did not use, not
-a retrieval gap.
-
-`DerivationLineageORM` (`db/models.py:468`) exists and has never been written.
-Fix: record the inputs a derivation used, cite them, write the lineage row.
+Shipped -> `1aba1c2`, a derivation says what it subtracted, and is cited where it was read
 
 ### 5b. A footnote's scope is taken by first regex match anywhere in the note  `[V]`
 
-`labels.py:362 _note_scope` takes the first `_NOTE_PERIOD_RE` hit. Run on the
-real ANI note as `table_footnotes` extracts it from `anip-20260630.htm`
-(accession 0001023024-26-000069):
-
-    note: "(1) There were no sales of YUTIQ during the quarters ended March 31,
-           2026 and June 30, 2026, ... as of the second quarter of 2025."
-    _NOTE_SPAN_RE first hit   : None                 <- does not know "quarters ended"
-    _NOTE_PERIOD_RE first hit : 'second quarter of 2025'
-    _note_scope(note)         -> (None, '2025Q2')
-    applies_to(3,'2026Q1') False   applies_to(3,'2026Q2') False   applies_to(3,'2025Q2') True
-
-The real reader on that document, asked for YUTIQ, skips 2025Q2 as
-`footnote_says_no_sales` and keeps `2026Q2 18,718 (combined_line)`. So the
-suppression fires on the quarter that had sales and not on the two the filing
-says were zero. **run13 publishes YUTIQ 2026Q2 = $18.718m `auto_pass` from that
-document, against a footnote on the same table saying there were no sales.**
-2026Q1 = $19.255m is derived from the same line, also `auto_pass`. And the
-skip is emitted as a string `extract.py:729-733` never persists - 0 occurrences
-of `footnote_says_no_sales` in any column of any run database - so the review
-queue never sees it.
-
-Two structural faults: a note naming several periods can return only one (33
-corpus notes do), and "parsed nothing" is returned as "applies to the whole
-row" - 566 of 679 corpus footnotes, over `table_footnotes` on every selected
-table in the 433 `.htm` files of the run7 cache. Only 10 of those 566 name a
-span phrase the regexes cannot see (`period ended`, `twelve-month period`);
-the other 556 genuinely state no period. So the misparse subset is small and
-the larger fault is that `applies_to()` cannot say "no scope".
-
-Widening `_NOTE_SPAN_RE` is still justified, but an earlier draft's "145 corpus
-files" counted `quarters? ended`; the plural `"quarters ended"` is in 13 files,
-and at footnote level `quarters?\s+ended` matches 5 notes in 3 files.
-
-**Rule 1:** the period grammar is written down twice. `labels.py:104
-_SPAN_MONTHS` and `:105 _QUARTER_WORDS` are literal copies of `periods.py:50
-MONTH_WORDS` and `:225 _QUARTER_WORDS`, and `labels.py:94 _NOTE_SPAN_RE` is a
-strictly narrower rewrite of `periods.py:152 _PERIOD_PHRASE_RE`, which already
-handles "three and six months ended" and "fiscal years ended". A producer
-exists and the note reader does not use it - which is why widening one leaves
-the other stale.
-
-**Cost:** a YUTIQ/ILUVIEN switch-over is exactly the shape an analyst uses as
-an analog for a transition ramp, and the series is inverted at the point of
-the switch, silently. Fix: bind the period from the clause carrying the claim,
-return a set, distinguish "no scope" from "whole row", and use `periods.py`'s
-grammar rather than a copy.
+Shipped -> `b257270`, bind a footnote's scope to the clause that makes the claim, and to every period it names
 
 ### 5c. `_INCLUDES_RE` fires on "does not include"  `[V]`
 
-`labels.py:85 _INCLUDES_RE` and the block at `:414-420` match claim and product
-name separately. On the real ANI guidance note (`anip-20260508xexx991.htm`,
-accession 0001023024-26-000049):
-
-    note: "(2) Full year 2026 guidance does not include sales of YUTIQ, ..."
-    _INCLUDES_RE fires: True
-    read_footnote(asked ILUVIEN) -> names=('YUTIQ',)  period='2025Q2'
-    read_footnote(asked YUTIQ)   -> names=('ILUVIEN',) period='2025Q2'
-
-and `extract.py:662,677` turns a non-empty `names` into `FLAG_COMBINED` on the
-row. The same note also shows 5b - the period binds to "second quarter of
-2025" from a subordinate clause - so the two compound on one note. Over the
-corpus, `_INCLUDES_RE` fires on 152 of 679 footnotes; 29 carry a
-negated/exclusion claim; 3 of those also trip `_INCLUDES_RE`, and only the ANI
-one names products. Narrow but real.
-
-`_no_sales_of` (`labels.py:378`) got 4 of 4 real ANI "no sales" notes right
-with 0 false positives over all 31 ANI footnotes in the cache, including this
-one, where it correctly returns `()`. Fix: one pattern carrying claim and
-subject, as it does.
-
-**Cost:** a row wrongly labelled combined is a row the analyst is told is two
-products when it is one - the identity error the brief calls "an analog set you
-cannot trust". run13 has 12 `combined_line` rows, 4 `auto_pass`; 5f says the
-demotion the flag should trigger is overwritten anyway.
+Shipped -> `26b96ca`, one pattern carries the "includes" claim and its subject
 
 ### 5d. Derivation launders provenance at four sites  `[V]`
 
-`derive.py:358`, `derive.py:445`, `orchestrator.py:1279 _candidate_of`, and
-`orchestrator.py:1291 _datapoint_from_candidate`, which never writes
-`reported_as`, `geography` or `route_of_administration` and defaults scope to
-"Product family". `_derived_point` then writes a fresh quote opening with the
-bare product name, so the row asserts the identity it just lost. `_candidate_of`
-returns eight keys - `period, period_type, value_reported,
-value_normalized_usd_millions, currency, unit, source_quote` and nothing
-else. Visible in output: for all 16 derived and all 62 `xbrl_fact` rows in
-run13, `reported_as`, `geography` and `route_of_administration` are None and
-`revenue_scope` is "Product family". One field added to `_candidate_of` also
-revives `HELD_FOR_BOUND` (7b).
+Shipped -> `1aba1c2`, a derivation says what it subtracted, and is cited where it was read
 
 ### 5e. `deterministic:product_quote_value_ok` publishes expenses and guidance
 
@@ -1642,23 +912,7 @@ date is not there to compare against.
 
 ### 5f. The combined-line demotion is overwritten  `[V]`, provably
 
-`orchestrator.py:2125` demotes a `combined_line` row to `needs_review` and
-`orchestrator.py:2259` then sets `AUTO_PASS` on any supported quarterly/annual
-row without consulting `label_flags`. The data proves the sequence: `:2125`
-appends `label:combined_line` to the row, so an `auto_pass` row carrying that
-string was demoted and re-promoted - run13 has 12 `combined_line` rows, 4
-`auto_pass`, 4 of 4 carrying the string, 4 of 4 `supported`, 4 of 4 YUTIQ
-(run12 identical; run8-11 have no combined rows).
-
-Seven of seven published YUTIQ quarters are ILUVIEN+YUTIQ - four directly
-(`reported_as='ILUVIEN + YUTIQ'`) and **three derived from the same combined
-lines with `reported_as=None`**, because `_candidate_of` dropped the field
-(5d): 2024Q4 27.643, 2025Q4 19.843, 2026Q1 19.255. Against the holdout,
-ILUVIEN's expected 2026Q1 is 19.255 and 2026Q2 is 18.718 - published under
-YUTIQ while ILUVIEN publishes nothing for either. **The two series are swapped
-at the switch-over.** Fix: consult `label_flags` in the auto-pass condition.
-This closes the hole only where the flag was set at all - 1c is why it often
-is not - and 5f + 1c are one wrong series, not two items.
+Shipped -> `aece086`, a row held for what its label said is not published by what its quote says
 
 ---
 
@@ -1669,262 +923,35 @@ a bug rather than caution.
 
 ### 6a. The sentence splitter breaks table rows into "sentences"  `[V]`
 
-`quality/sentences.py:25` (the file is under `quality/`, not `parsing/`) splits
-on `\s*\n+\s*`, and HTML-to-text puts each cell on its own line. On the real
-cached `srpt-20230630.htm` (accession 0000950170-23-037125):
-
-    excerpt  : 'EXONDYS 51\n$\n134,688'
-    sentences(excerpt) -> ['EXONDYS 51', '$', '134,688']
-    sentence_carrying(excerpt, 134688) -> '134,688'   names EXONDYS 51? False
-
-The veto is raised at `llm/client.py:810-816`. run13: **326** datapoints carry
-`hard_veto:value_and_product_in_different_sentences`; **212** carry no other
-`hard_veto:` flag (168 if "objection" also counts the reconciliation flags).
-Both exact on re-run; drift 67 -> 132 -> 224 -> 326 across run8/10/12/13. 322
-of the 326 are `extraction_method='llm'` with a newline in the quote - a model
-quoting a table block - and the row's own `extracted_from_table` and
-`extraction_method` are available to the veto and unused.
-
-**A count is not a capability:** those 212 rows cover 73 distinct (job,
-quarter) cells, **40 of which have no published figure from any other row**,
-against 99 published cells in run13. They would still have to pass the judge,
-so 40 is a ceiling, not a forecast - but it is the single largest hole in the
-early ramp, and the holes are in product-revenue tables, where the first four
-to eight quarters of a launch live.
+Shipped -> `cbc7ed6`, a table row printed cell-per-line is one unit, not one per cell
 
 ### 6b. `quote_states_a_different_period` cannot match a non-quarterly key, and reads only one period  `[V]`, cause changed
 
-142 rows, 27 alone - exact on re-run (predicate: `hard_veto:` prefixes in
-`issue_flags`; "alone" = one distinct prefix). Zero in run8/10/12; the veto at
-`client.py:838-841` arrived in `afec007` (2026-09-15). Re-running
-`periods_named_in` (`extraction/prose.py:115`) over all 142 stored quotes:
-
-    51  A  quote names the SAME year, key is a bare year; candidate has a Q/H/M suffix
-    57  B  quote key is a bare year, candidate is the comparative year
-    32  C  quote names a proper quarter key, candidate is another year   <- the stated case
-     2  D  other
-
-An earlier draft gave C as the cause. It is 32 of 142. Classes A and B (108)
-are a **period-key namespace mismatch**: `_periods_with_positions` emits the
-bare year `'2023'` for six-month, nine-month and annual periods, while the
-candidate's key is `2023H1` / `2023M9` (`periods.py:339,341`), so the `in`
-test at `:839` can never match for any non-quarterly period. Printed:
-
-    quote: 'For the Three Months Ended September 30, / For the Nine Months
-            Ended September 30, / 2023 2022 2023 2022 / FIRDAPSE $ 66,224'
-    _periods_with_positions -> [(49, _Period(period='2023', period_type='nine_month'))]
-    candidate '2023Q3' not in {'2023'}  -> veto
-
-Class A is the worst: the quote names the right year and the right framing
-and the row is still held - while the prior-year comparative from the same
-table sometimes survives on another row, so the cell can be answered by the
-weaker reading. `prose.py:116`'s docstring promises `"2025H1"` keys; the code
-returns bare years. That wrong description is the root cause, and it is a
-different fix from "return every period the sentence names" - both are needed.
-
-Class C reproduces: `'$84.6 million and $75.9 million for the three months
-ended March 31, 2025 and 2024'` -> `['2025Q1']`; run13 datapoint `a663235f`
-(FYCOMPA 2023Q1, 57.5) is exactly this shape.
-
-The comment at `client.py:836-837` - "a quote naming no period, a table row
-whose period is in the header, is left alone" - is false in practice: the
-model quotes the header with the row, and 141 of the 142 flagged rows are
-`llm`. `test_prose_grounding.py:164-166` locks the intent on an invented bare
-row with no header, a shape that does not occur in run13.
-
-**Cost**, restricted to quarterly against 90 published quarterly cells: 11
-rows alone over 11 cells, 4 with nothing else published; unrestricted, 26
-cells, 19 unpublished - most H1/M9 rows the derivation path needs. This veto
-never reads document context, so where 7a assigns a wrong year it holds a
-correct quote rather than publishing a wrong number - the safe direction.
+Shipped -> `ff97066`, one period namespace on both sides of the judge's period checks
 
 ### 6c. `ytd_language_as_quarterly` reads the whole quote - and cannot be fixed before 6a  `[V]`, cost changed
 
-`client.py:828` calls `re_ytd_language(q)` although `read` - the sentence
-carrying the value - is computed at `:820`; `:822` `TOTAL_REVENUE_RE` and
-`:838` `periods_named_in` also read `q`; only `:844` uses `read`. 52 rows, 2
-alone - exact. Lines exact.
-
-But the implied remedy recovers nothing and is unsafe while 6a stands.
-Re-running the regexes over the stored quotes: 48 of 52 would clear under
-`read` - **because `sentence_carrying` returns a bare number on table quotes
-(6a)**, e.g. `read` is `'77,372'` for the 2024Q2 row. Of the 2 rows whose only
-veto is YTD, 0 clear. And the period check would go from firing on 243 rows'
-evidence to 92. So 6a's veto (`:810-816`, tests `carrying`) and these three
-are inconsistent - the product test is narrowed to the value sentence, the
-others are not - and making them consistent by switching to `read` would
-make the YTD and period checks near-dead on exactly the table quotes that
-dominate run13. **6c is downstream of 6a.** `TOTAL_REVENUE_RE` costs nothing
-either way: `hard_veto:company_total_without_product` is 0 rows in all four
-runs.
-
-**Rule 1:** `re_ytd_language` (`client.py:863`) is a six-phrase word bank
-deciding "is this YTD", while `_periods_with_positions` two calls later
-already types the same text into quarterly / six_month / nine_month / annual.
-On the FIRDAPSE quote above the word bank says `True` (veto) and the typed
-parser says `nine_month` - neither sees the three-month column the value came
-from, but only one is a derivable producer.
-
-**Cost:** about one quarter-cell in run13.
+Shipped -> `ff97066`, one period namespace on both sides of the judge's period checks
 
 ### 6d. `filing_contradicts_itself` holds the right figure beside a wrong one - but the tier axis is not what separates them  `[V]` on code and test; `[U]` on the scores
 
-The flag is set at `orchestrator.py:2498` (computed `:2440-2484`). Its
-premise is that the filing said two things. An earlier draft said "a tier-4
-prose row vetoes a tier-0 tagged fact". Composition of flagged rows:
-
-    run8   18: llm 12, xbrl_fact 4, table 2
-    run10  28: llm 18, xbrl_fact 5, table 5
-    run12  28: llm 17, xbrl_fact 7, table 4
-    run13  36: llm 28, xbrl_fact 7, table 1
-
-**Zero `prose` rows carry the flag in any run.** `CLAIM_STRENGTH` puts `prose`
-at 4 and `llm` at 3; the poisoner is tier 3. And on run13, 13 of 18 flagged
-(job, period, period_type) groups contain only tier-3 `llm` rows, which
-tier-awareness cannot separate. In the mixed groups the poisoner is itself
-**tier 0** - printed pairs inside one accession:
-
-    2023Q1 / Product family   xbrl_fact 27.778  us-gaap:RevenueFromContractWithCustomer...
-                              xbrl_fact  5.870  us-gaap:AssetAcquisitionConsiderationTransferredTransactionCost
-    2024Q3 / Product family   xbrl_fact  7.961  us-gaap:RevenueFromContractWithCustomer...
-                              xbrl_fact  6.285  us-gaap:AmortizationOfIntangibleAssets
-    2025   / Regional         llm 38.658  'European ORLADEYO business 38,658'
-                              llm 14.402  'ORLADEYO: ... Rest of world 14,402'
-
-So the two real causes on run13 are (i) **a non-revenue XBRL concept stored
-as a revenue datapoint** for the same key, holding the correct tier-0
-revenue fact and the correct tier-3 readings beside it, and (ii) `Regional`
-scope pooling two geographies into one reconciliation key (2b). Neither is a
-tier problem. `_agrees_within_declared_precision` (`:182-197`) is not the
-culprit for the rounded-vs-exact pairs checked (36.393 vs 36.4 agree).
-
-The tier-aware **+3/0** and period-type-aware **+3/+1** are measurements from
-an earlier session against a baseline section 0 now says is unreproducible;
-they stay `[U]`. `test_one_figure_one_publication.py:172` does lock the
-current behaviour (re-run green) - on an `xbrl_fact` vs `table` pair, not the
-prose pair the earlier draft described.
-
-**Rule 1:** `CLAIM_STRENGTH` (`orchestrator.py:143-152`) is a hand-written
-list of eight `extraction_method` strings; unknown producers fall silently to
-rank 8, no `ExtractionMethod` enum exists anywhere in `app/`, and nothing says
-what the list is a snapshot of. All methods in run8-13 are in it today.
-
-**Cost** is concentrated in the Regional cases: the analyst loses both
-geographies and gains a flag that names the filing, which is not where the
-fault is.
+Shipped -> `11253f9`, a sign is read under the total it belongs to
 
 ### 6e. A corroborator is never promoted when the winner is held  `[V]`, two shapes
 
-`orchestrator.py:2461` computes corroborators from winners and never
-re-examines the group. Over the six databases run8-13 (predicate: quarterly,
-cell = (job, period), nothing `auto_pass`/`confirmed`): **32** cells with a
-`corroborates` row and nothing published, **15** of those corroborators clean
-(3/42, 2/34, 3/93, 6/36, 8/144, 10/157). An earlier draft said 37/14; run13's
-10 of 157 is exact. The earlier **+1/0** and **+4/0 with 6d** are scores
-against a baseline section 0 calls unreproducible and stay `[U]`.
-
-run13's 5 cells whose stranded corroborator is `xbrl_fact` or `table` -
-DAYBUE 2023Q2, FILSPARI 2025Q2, FIRDAPSE 2023Q2, NUPLAZID 2023Q1, YUTIQ
-2025Q2 - are the 5 clean ones. **Series starts confirmed:** DAYBUE's earliest
-quarter anywhere in run13 is 2023Q2 and its earliest published is 2023Q3;
-NUPLAZID's are 2023Q1 and 2023Q2. Both begin one quarter late with the
-missing first point sitting in the database as a clean tagged fact. See 2d.
-
-**A second shape, from 7d:** AGAMREE 2024Q1 has a published winner
-(`xbrl_fact 1.174`, no footnote) and a `corroborates` `table` row carrying the
-eighteen-day-stub note. The rule "compute corroborators from winners, never
-look again" produces two losses: the winner is held and the corroborator is
-stranded (10 cells), or the winner publishes and the corroborator's extra
-information is discarded (1 cell, at a series start, in run10, run12 and
-run13 alike - rare only because footnotes reach quotes on 2 rows).
+Shipped -> `2fc055b`, the group is looked at again, in both directions
 
 ### 6f. `conflicting_values` rejects both sides, by period  `[V]`, one detail false, magnitude larger
 
-`check.py:231` groups by `(period, period_type, scope)` (`:238`) but every
-`Finding` carries `periods=(period,)` only, and `candidates.py:183` rejects
-**by period alone** - so a conflict inside one `(period_type, scope)` cell
-kills every other cell sharing the period label. `check.py:102 _usable`
-filters on nothing but "has a normalized value", so a label the reader could
-not account for is a full voter: in `fold-20250331.htm` the correct row
-`Total Pombiliti(R) + Opfolda(R) sales $ 21,005` (`flags=()`) is dropped
-because `Interest income 812`, `Income tax expense (3,641)` and `Loss before
-income tax (18,045)` - all `label_not_understood` - put 2025Q1 into a
-`conflicting_values` error. Four checks produce `severity="error"`
-(`check.py:146,180,203,270`).
-
-**An earlier draft said the discarded Pombiliti reading carried
-`reported_as: "Pombiliti + Opfolda"`. It did not** - re-read from the document
-with run13's aliases it carries `reported_as = None`, exactly like the row
-that replaced it, because of 1c. Fixing 6f restores the figure and no
-identity. Struck.
-
-Re-measured with the predicate stated - the deterministic table+prose path
-over every cached `.htm` of each run13 job, oracle `seed/cases/shapes_holdout.json`
-(gold holds none of run13's 22 products; "gold-correct" in the earlier draft
-can only have meant this file), match within 0.002:
-
-    expectations carrying a value                                    70
-    (product, quarter) cells whose exactly-correct reading is dropped  37  (88 readings)
-      nothing published in run13                                      14
-      published at coarser precision only                              4
-      published correct from elsewhere anyway                         19
-
-37 cells against "20 readings": the direction holds, the magnitude is larger.
-The 14 are holes in continuous series - FILSPARI 2025Q2, FIRDAPSE 2023Q2,
-FYCOMPA 2023Q2/Q3, Thiola 2025Q1-Q4, Pombiliti 2025Q2-Q4 - caused by an
-income-statement row's label in the same document, which makes them
-undiagnosable from the review queue.
+Shipped -> `ca4c79b`, a check rejects the cell it was about, and only rows that made a claim
 
 ### 6g. SOURCE_PRIORITY ranks tagged facts below a model reading the same filing  `[V]`, and the non-revenue leak is located
 
-An XBRL instance retrieved inside a 10-Q is typed `QUARTERLY_REPORT` (priority
-4); the human-readable document from the same accession is `SEC_FILING`
-(priority 0). Both the fallback ranking and the `contested` tier read
-`priority_index` before `claim_rank`. 100% of tagged facts sit in the lower
-band (every tagged fact in run8-13 cites `quarterly_report`; the typing site
-is `sources.py:725-727`); **32** `xbrl_fact` rows across the six runs are
-`corroborates` - exact - and a published winner from the *same accession*
-exists for 16 of them (15 winners `llm`); 9 have no published winner at all,
-which is 6e. `priority_index` is read before `claim_rank` at
-`orchestrator.py:2395-2398` and `:2418-2421`. `reading_rank` and
-`DOCUMENT_FITNESS` take no part in reconciliation - their only call site is
-`:1582`, choosing which sources the model is asked about - so 6g's locus is
-`priority_index` alone.
-
-The 32 are all correct revenue facts (31 `RevenueFromContractWithCustomer
-ExcludingAssessedTax`, 1 `Including`). **The two non-revenue concepts 6d found
-are separate, and the leak is at `parsing/xbrl.py:377-385`
-`Calculation.settles`**: it returns `self.sign[element] > 0` over the whole
-linkbase regardless of which statement the parent belongs to. Replayed
-against the filings' own `_cal.xml`: `AmortizationOfIntangibleAssets` settles
-`True` because it is added back under `NetCashProvidedByUsedInOperatingActivities`;
-`AssetAcquisitionConsiderationTransferredTransactionCost` settles `True` as an
-addend of a purchase-price roll-up. `revenue_elements` (`:467`) then admits
-both and `product_facts` (`:529`) emits them as revenue. The docstring at
-`:366-371` describes the guard that is missing and does not constrain the
-root.
-
-Fix: `claim_rank` before `priority_index`, or derive both documents' type
-from the accession's form (`is_annual(form)` at `sources.py:726` already
-does this for one of them). This is what makes 6d and 6e hold rather than
-move. And constrain `settles` to a revenue root.
-
-**Rule 5:** `orchestrator.py:2014` ("a sentence reading 1.0 did not lose to a
-family total that derives exactly to 94.645 ... ranking alone moved nothing"),
-`:1906-1909` ("a candidate arrived reported as 87.4 with 87,400 beside it and
-was published") and `:2162` ("caps confidence at 0.55", another module's
-constant in prose) all belong in commit messages.
+Shipped -> `b68671c`, what produced a reading ranks before where the reading sits
 
 ### 6h. Reconciliation groups by period label and ignores `period_type`  `[V]`
 
-65 groups across six runs (7, 7, 6, 7, 18, 20) mix period types under one
-label. Composition: 19 annual+ytd, 11 nine_month+quarterly, 9 six_month+ytd,
-7 quarterly+six_month, 7 quarterly+ytd, and 12 across five other shapes. The
-11 nine_month+quarterly are the damaging ones - FYCOMPA 2023Q3 pools
-`xbrl_fact 36.393 quarterly` with `llm 98.8 nine_month`; Pombiliti 2025Q3
-pools `30.714` with `77.535` - and they are the same cells 6d and 6f touch.
-Cheapest of the section and upstream of 6d's group composition, so first
-among these. Add `period_type` to the key at `orchestrator.py:2293`.
+Shipped -> `ae403fd`, the span a figure covers is part of what a group is a group of
 
 ---
 
@@ -1932,124 +959,19 @@ among these. Add `period_type` to the key at `orchestrator.py:2293`.
 
 ### 7a. `detect_period_context` dates a filing by a year mentioned once  `[V]`, re-measured
 
-`periods.py:330` takes the latest year outright:
-`best = max((key for key in counts if key[0] == framing), key=lambda key: key[2])`.
-The correct guard already exists 49 lines above at `:281`:
-`throughout = [key for key, n in counts.items() if n * 2 >= most]` - run over
-the same counter it returns the right year.
-
-**An earlier draft measured this on text the pipeline never sees.**
-`orchestrator.py:1663` calls `detect_period_context(doc.full_text)`, and
-`full_text` is capped at 400,000 characters (`documents.py:731-745`). On the
-433 `.htm` files of the run7 cache:
-
-    untruncated            235 datable   15 misdate   12 named once   max most-named 180
-    as the pipeline runs   235 datable   10 misdate    6 named once   max most-named  66
-
-Perrigo holds exactly: `prgo-20221231.htm` (the document run13's Nutrition job
-used) -> `PeriodContext(months=12, month=12, year=2040)` from `(12,12,2040)`
-named once against 2022 named 66 times. **ANI FY2025 -> 2027 does not hold on
-the pipeline's input** - it returns 2025, correctly, on the truncated text -
-and is struck; the ANI document that still misdates is `ani-20260401.htm`
-(picks 2026 named once over 2025 named 3 times). The ten: `prgo-20221231`,
-`prgo-20231231`, `coll-20231231x10k`, `coll-20241231x10k`, `tvtx-20250331`,
-`tvtx-20250630`, `tvtx-20260630`, `fold-20240630`, `fold-20250630`,
-`ani-20260401`.
-
-**Cost is larger than "signal discarded".** With `context.year = 2040`,
-`prose.py:353 _after_the_document` returns `False` for `2023Q1`, `2030` and
-`2040Q4` alike - not a weakened guard, a disabled one. And the object is
-stringified into the model prompt at `orchestrator.py:1831` as
-`reporting_period: "twelve months ended December 2040"` with `period_columns:
-["2040","2039"]`, so the model is told the filing's comparative is 2039. A
-debt maturity or a milestone forecast entering the series as revenue is the
-failure the workbench exists to prevent. Its output is section 5's.
-
-**Rule 5, load-bearing:** `periods.py:324-329` justifies the defective line
-with "a Q4 2005 release mentions 'three months ended December 31, 2004' five
-times in its footnotes against four for 2005, which is how the document came to
-be dated a year early" - counts, an unnamed document, and a defect history,
-read as the argument *for* `max(key=year)`. The next reader inherits a claim
-they cannot check and the guard at `:281` looks like a different concern.
+Shipped -> `1221ac0`, date a document by the period it names throughout, not the latest one
 
 ### 7b. `_declared_slack` and `HELD_FOR_BOUND` are dead because one key is dropped  `[V]`
 
-42 of 42 derived rows across run10/12/13 are unbounded (48 of 48 with run8);
-0 carry `HELD_FOR_BOUND`, 0 quotes carry `+/-`. The tagged reader emits
-`rounding_uncertainty_usd_millions` and `_as_datapoint` reads it, but the
-quarter inputs arrive through `_candidate_of`, which drops it (5d). One missing
-key kills the bound guard, the "+/- n from input rounding" clause in every
-derived quote, and the citation field.
+Shipped -> `1aba1c2`, a derivation says what it subtracted, and is cited where it was read
 
 ### 7c. 75 six- and nine-month tagged facts are discarded  `[V]`, re-measured
 
-`xbrl.py:139-156` returns `None` for any span but 3 or 12 months. Over the 61
-distinct `.xml` source documents run13 recorded (all in the run7 cache), with
-members resolved against run13's job names and `load_products()`:
-
-    predicate an earlier draft used (amount, months, product member):
-        {1: 38, 3: 181, 6: 95, 9: 95, 12: 124}   six+nine = 190
-    predicate product_facts applies (xbrl.py:566-573, also element in
-    revenue_elements and not hypothetical):
-        {3: 114, 6: 37, 9: 38, 12: 66}           six+nine = 75
-
-190 is money-unit facts on a resolvable product axis; **75** is what would
-otherwise have become tagged revenue readings. The headline overstated the
-recoverable facts by 2.5x.
-
-An earlier draft said the span-difference rule is therefore fed "only by
-tables". Not in these runs: across run8/10/12/13 **every** `six_month` and
-`nine_month` datapoint is `extraction_method='llm'` (run13: 41 nine-month, 12
-six-month), zero from `table`, zero from `xbrl_fact`. So `derive.py:49-56` is
-fed by the model alone - the producer the pipeline ranks lowest - while the
-filer's own audited spans are discarded. This is also why Q4 has zero XBRL
-readings (2d): Q4 and Q1 for a filer that tags but prints no quarterly table
-are the cells at risk, the tail and the start of the ramp.
-
-**Rule 5, minor:** `extraction/tagged.py:41-42` hard-codes another module's
-constant in prose ("scored above the table reader's 0.75"); true today
-(`candidates.py:35`), which is exactly how it goes stale silently.
+Shipped -> `36dbe13`, a six- or nine-month tagged fact is a period, not a None
 
 ### 7d. The judge is blind to what the pipeline knows  `[V]`, ranked too low
 
-The judge's candidate dict (`orchestrator.py:2078-2086`) holds exactly seven
-keys - `period, value_reported, period_type, revenue_scope, formulation,
-label_flags, label_residue` - and `evidence_judge.yaml` interpolates it as
-`json.dumps(candidate)`. Absent and confirmed absent: `unit`, `currency`,
-`geography`, `extraction_method`, source type or filing form, any sibling
-row, the filing's own tagged value for the period. Every one is a column on
-the row.
-
-`peer_names`: five production call sites of `filter_revenue_candidates`
-(`orchestrator.py:1739,1844`) and `apply_judge_hard_vetoes` (`client.py:460,
-753`, `fast_judge.py:28`); none supplies it; the only supplier in the repo is
-`test_quality.py:98`. `hard_veto:other_brand` is 0 rows in all four runs.
-`candidate_filters.py:226-234` says the intended supplier is "the product rows
-around the sentence" - `names_a_competing_product` (`:98`) is that producer
-and is wired only into `parsing/tables.py:84`, never into judging. (Rule 3:
-any fix must use it, not a catalogue - `KNOWN_PEER_BRANDS` is in CLAUDE.md's
-table.) Adjacent: `fast_judge.py:28` passes no `generic` and no
-`extra_aliases`, so every hard veto on the deterministic path runs against
-the brand string alone.
-
-Footnotes reach the quote as a ` [(mark) note]` suffix (`extract.py:743`) on
-2 of 549 run13 rows (0 / 2 / 2 / 2 across run8/10/12/13), both `table`, both
-the same note. **And that note is the item's cost.** AGAMREE 2024Q1: the
-published figure is `$1.174M`, `auto_pass`, `xbrl_fact`, quote without the
-note. The only row carrying the note - "net product revenue for the three
-months ended March 31, 2024 is for the period between March 13, 2024 (date
-of commercial launch) and March 31, 2024", **eighteen days** - is the `table`
-row, demoted to `corroborates`, which the analyst does not see. And
-`read_footnote(note, ["agamree"], ...)` returns `flags=()` with
-`applies_to(3,'2024Q1') == True`: the note reaches the quote, applies to the
-figure, and sets nothing; no run13 row carries `partial_period`;
-`fast_judge.py:39-47`'s partial-period branch never fires. An eighteen-day
-stub published as the first quarter of a launch is the single most damaging
-point in an uptake curve - layer 3 reads time-to-peak off the ramp, and the
-ramp's first point is this. Ranked under "signal discarded"; it is a wrong
-published number at a series start (section 1's class).
-
-Rule 5 is clean across `llm/`, `quality/` and `prompts/`. See doc 005.
+Shipped -> `05498fc`, the judge is shown the row, the filing's own product list, and the footnote
 
 ### 7e. Smaller
 
@@ -2066,81 +988,7 @@ Rule 5 is clean across `llm/`, `quality/` and `prompts/`. See doc 005.
 
 ## 8. A product bound to a company that does not sell it
 
-The reported "aspirin returns another company's filing" needs no bug - it is
-what the code does on that input.
-
-- `_identity` (`orchestrator.py:593`) only calls `resolve_cik` when a ticker or
-  manufacturer was supplied. A drug name alone skips the SEC name index and
-  goes straight to the model.
-- `resolve_cik_from_search` keeps the `cik` digits and discards `company_name`,
-  `confidence`, `source_url` and `notes`, all of which the prompt asks for. A
-  confidence of 0.05 is accepted like 0.95.
-- `SECConnector.retrieve` has no `product` parameter. Nothing can check that
-  the issuer sells the product.
-- A live repro stored **28 ACADIA filings, 22.1 MB, against a job for aspirin**,
-  with `job.manufacturer` still None - which also leaves `issuer=""` on the
-  member register, where two filers' `acme:ProductMember` collide in one slot.
-- When no CIK resolves, `sec_found` is empty and `orchestrator.py:668` enters
-  the search fallback - an earlier draft said the search is *skipped*, which is
-  inverted; with `enable_llm_search` it runs, which is worse. The flag
-  `sec_retrieval_failed` (`:657-667`) is set only when SEC sources were listed
-  and none fetched, so the user is told we could not reach the SEC when we do
-  not know who sells this.
-
-And `resolve_cik` is unreliable when it is called. Against the live
-10,422-row `company_tickers.json`, re-run:
-
-    resolve_cik(name='Vertex')                  -> 0001806837  Vertex, Inc. (tax software)
-    resolve_cik(name='Vertex Pharmaceuticals')  -> None
-    resolve_cik(name='Eli Lilly and Company')   -> None
-    resolve_cik(name='Eli Lilly')               -> 0000059478  ELI LILLY & Co
-    resolve_cik(ticker='FOLDX', name='Amicus Therapeutics') -> None
-
-The Lilly miss, printed: `normalize_registrant("Eli Lilly and Company")` is
-`'eli lilly and'` against `'eli lilly'` - `_REGISTRANT_SUFFIXES`
-(`sources.py:146`) strips `company` and drops `&` but keeps `and`. It is a
-literal with no note of what it is a snapshot of (rule 1). 2,327 index rows
-(1,966 distinct titles, 1,973 CIKs) have a single-word normalised title.
-
-**Against `seed/example_drugs.csv`'s own manufacturer column, most distinct
-names fail**: `Actelion/J&J`, `Janssen/J&J`, `Bayer/Merck`, `Gilead`,
-`Teva`, `CMP Pharma` -> None; `Merck` -> Merck & Co by luck. The exact user
-the brief describes falls into the model path on their own upload.
-
-*Corrected at implementation (M6):* the column holds **11** distinct names,
-not 14 (`sorted({r["manufacturer"] for r in csv.DictReader(open(
-"seed/example_drugs.csv"))})`). By name alone 5 of 11 resolve before the
-registrant fix and the same 5 after (GSK, Liquidia, Merck, Pfizer, United
-Therapeutics); the 6 misses are the slash-joined pairs, two index titles that
-carry words the query does not (Gilead, Teva), and CMP Pharma, which the
-index does not hold under that name. The "8 of 14" was a hand count; the
-number was wrong, the shape held.
-
-The aspirin repro re-run live with the model boundary stubbed to return a
-CIK at confidence 0.2: `AFTER _identity: cik='0001070494'
-quality_flags=['cik_from_llm_search']`, 28 sources retrieved and persisted,
-22,065,138 bytes across 28 files, `job.manufacturer` still None. Confidence
-0.2 accepted without inspection.
-
-**Fix, in order:**
-1. Move `_extract_metadata` before `_identity`. openFDA already knows a drug's
-   sponsor and is asked at `orchestrator.py:419`, after the CIK has been
-   guessed and the filings downloaded. This depends on 0d - and on 3c and 3d,
-   or it will resolve the wrong sponsor.
-2. Try the name index whenever a name exists, and try the name when a ticker
-   misses.
-3. Keep the model's `company_name` and `confidence`, and refuse below a floor.
-4. Pass the product to retrieval, or check the resolved issuer against the
-   sponsor openFDA named, and say `no_filer_of_record` rather than
-   `sec_retrieval_failed` when identity is what failed.
-
-No held-out set can see this class: across all 18 run databases, 342 jobs, 0
-without manufacturer, 0 without ticker, 0 without CIK. And there is no
-*behavioural* test of `resolve_cik` - `test_earnings_sources.py:306` names it
-in a source-text assertion about retry plumbing and never calls it. (`backend/
-app/identity/` is product identity keys, 65 lines; issuer identity lives
-entirely in `connectors/sources.py`, `connectors/llm_search.py` and the
-orchestrator.)
+Shipped -> `2a1cf0d`, read the label before asking EDGAR whose filings to download
 
 ---
 
