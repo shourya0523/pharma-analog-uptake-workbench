@@ -2488,72 +2488,194 @@ belongs in a commit message.
 
 ---
 
-## 10. Delete or decide
+## 10. Delete or decide  `[V]`, and half the list came off it
 
-Measured, with no production caller or no effect:
+Every candidate re-checked against the tree after M0, M2 and M9 landed, with
+callers reported three ways - `app/`, `scripts/`, `backend/tests/` - and any
+route. Three counts an earlier draft gave carried predicates it did not state
+and do not reproduce: "0 PDFs in 2,153 sources" (1 of 4,956 over 18
+databases, a Deciphera press-release PDF that parsed and found nothing), "9
+of 10 `llm_search` sources are sec.gov across five runs" (50 of 91 over 10
+runs; the 9/10 is run12+run13 only), "10 of 22 hold mechanisms never fire"
+(9 of 22, and the 22 was never named - it is the 12 `QualityIssue` types, the
+8 `hard_veto:*` labels and the 2 gate clauses).
 
-- `_search_revenue_fallback` (ran twice, produced 0 datapoints) and
-  `_search_quarters_fallback` (never ran in six runs), plus
-  `_quarters_no_filing_covers`, `_record_unfiled_quarters`, the
-  `NO_FILER_OF_RECORD` code and the dead `SourceType.LLM_SEARCH` branch. **Not**
-  `judge_with_search`, which touches 368 rows.
-- 10 of the 22 hold mechanisms never fire; 4 are unreachable because
-  `filter_revenue_candidates` applies the same predicate upstream.
-- `ValidationTaskORM.issues / judge_status / deterministic_results`: 0 of 1,850
-  rows across 18 databases.
-- `lot_extractor.yaml`; `Settings.llm_search_max_queries`;
-  `FileStore.public_uri`; `ExtractionOptions.pdfs`,
-  `random_validation_sampling`, `use_uploaded_template` (9i).
-- `tables.py`'s `extract_revenue_rows` half and its duplicate `_scope_for`.
-- ~~`seed/holdout/` and `seed/holdout2/`~~ - **no.** They are the sole source
-  of eight issuers in `spent_issuers()` (9g). Deleting them frees those
-  issuers for a "new" held-out set.
+**Delete - no caller in `app/`, `scripts/` or a route, and no effect:**
 
-Decide rather than leave:
+- `_search_revenue_fallback` (`orchestrator.py:1112`): ran on **20 jobs**
+  across 9 databases, not twice, and produced 0 datapoints in all 18.
+- `ValidationTaskORM.issues / judge_status / deterministic_results`: 0 of
+  1,914 rows over 18 databases; the sole constructor (`orchestrator.py:2593`)
+  omits all three and nothing reads them. `db/migrations.py:93-94` lists them
+  in `BASELINE_001_COLUMNS`, so a drop needs a migration. The review queue's
+  374 rows carry a `reason` string and nothing else - the three columns built
+  to say *why* a row is held are the ones never filled (9h's absence, in the
+  schema).
+- Two orphan prompts, not one: `lot_extractor.yaml` (referenced nowhere) and
+  `competitive_intensity_assessor.yaml` (referenced only by the unwired
+  `analytics/competitive_intensity_llm.py:29`) - 14 `load_prompt` names in
+  `app/`, 16 files.
+- `Settings.llm_search_max_queries` (`config.py:54`): never read - and
+  documented as an operator knob in `deploy/env.example:61` and
+  `backend/.env.example:31` beside `LLM_SEARCH_MAX_URLS`, which works. An
+  operator capping search volume gets no cap and no error.
+- `FileStore.public_uri`: only its three definitions. Its docstring is
+  "Logical URI for audit" - the affordance the citation promise would use.
+- `tables.py`'s `extract_revenue_rows` half: `app/` imports only
+  `clean_label`; eight functions reachable only from `test_tables.py` and
+  `test_periods.py`. Its `_scope_for` duplicates `candidates.py:38` minus a
+  `.strip()`.
+- ~~`ExtractionOptions.pdfs`, `random_validation_sampling`,
+  `use_uploaded_template`~~ - **gone**, M9 removed them; confirmed.
 
-- `positional.py` (116 lines): 0 PDFs in 2,153 recorded sources and 0 in the
-  553-file cache. Gold cites a PDF on 643 rows, which looks like a reason to
-  keep it - but 2f shows those PDFs are the readable copy of EX-99 documents
-  that are on EDGAR in HTML, so the count describes gold's citation choice
-  rather than a format the pipeline must read. Delete unless a source that is
-  only ever a PDF turns up.
-- `adjudicate.py` (256 lines) has no production caller, but
-  `seed/gold/adjudication_cases.jsonl` holds the cases it was written for. A
-  wiring decision, not obviously a deletion - and its docstring's false test
-  citation (9a) goes either way.
-- `analytics/` is 846 lines whose three tables are empty in all 19 databases.
-  Section 4 is the argument for **fixing the method before wiring**, and
-  section 3 is the argument that wiring it now would feed it wrong attributes.
-  Neither is an argument for deleting it.
+**Struck - the earlier draft was wrong:**
+
+- ~~`_search_quarters_fallback`, `_quarters_no_filing_covers`,
+  `_record_unfiled_quarters`, `NO_FILER_OF_RECORD`, the `LLM_SEARCH` branch~~
+  - **no.** "Never ran in six runs" is false and contradicts 12c's own
+  correction. Over 18 databases the search path yielded 5 datapoints, all in
+  run3, all via `_search_quarters_fallback` (flag
+  `llm_search_quarters_fallback`), for **FYCOMPA - an acquired product,
+  Eisai to Catalyst**: 2024Q4 38.2 and 2023Q4 39.3 `auto_pass` from press
+  releases, plus 5 `[no_filer_of_record]` unresolved rows telling the
+  reviewer in words that the gap is an ownership change. run13 has the same
+  product, window and issuer, 0 published for those quarters, and does not
+  contain 2023Q4 or 2024Q4 at all - the path is dormant there only because
+  retrieval now finds 30 in-window sources instead of 4, so
+  `_quarters_no_filing_covers` returns `[]`. And `NO_FILER_OF_RECORD` has a
+  **live consumer**: `api/products.py:69` maps it to the queue prose an
+  analyst reads. This is one mechanism, it is the acquired-product bridge the
+  brief's analyst needs most, and it has a demonstrated yield. The
+  `SourceType.LLM_SEARCH` branch at `:2157` fired on 2 of the 5 search-sourced
+  rows; the other 3 never reached the judge and auto-passed - a search-found
+  figure can publish without that branch seeing it, which is a defect in the
+  branch's reach, not a reason to delete it.
+- ~~`seed/holdout/` and `seed/holdout2/`~~ - **no** (9g). Re-verified: exactly
+  8 issuers sole-sourced there. Residual: their `products.csv` files are not
+  reached by the `.json{,l}` glob; a future `.csv`-only key would be invisible
+  to `spent_issuers()` - 9b's shape.
+- **`judge_with_search`** was never a candidate: 368 `llm_search_validated`
+  rows in run13 (exact), 1,484 over 18 databases.
+
+**The hold mechanisms, named.** Never fired in 18 databases - 9:
+`missing_source_url` (`checks.py:88`), `missing_source_quote` (`:98`),
+`annual_classified_as_quarterly` (`:129`), `company_total_as_product`
+(`:139`), `negative_revenue` (`:150`), `unclear_currency` (`:160`),
+`hard_veto:change_not_level` (`client.py:818`),
+`hard_veto:company_total_without_product` (`:823`),
+`hard_veto:other_brand` (`:826`). Fired once, in one database:
+`unclear_unit` (run6), `missing_formulation` (run2b). **In run13 alone only 6
+of 22 fire.** The 4 unreachable, each with the upstream site that makes it so
+(`filter_revenue_candidates`, `candidate_filters.py:267`, runs before the
+judge on both paths): `missing_source_quote` <- `:296-297`;
+`hard_veto:company_total_without_product` <- `:333-334`, the
+character-identical expression; `hard_veto:other_brand` <- `:329-330`, same
+`quote_mentions_other_brand`; `company_total_as_product` <- `:313/334/342`
+and `apply_auto_pass_gate:225`. Four checks that look like defence in depth
+are one check written twice; a change to the upstream predicate silently
+removes the "second" one. No wrong figure reaches the analyst through them.
+
+**Decide rather than leave:**
+
+- **`positional.py` (116 lines) - the delete reason was wrong, and it
+  inverted.** The premise holds: no PDF arrives (1 of 4,956; 0 in the SEC
+  cache). But 2f + 2g established that J&J's product schedule is on EDGAR and
+  the table path cannot attach its figures because the product is a row-group
+  header over geography rows. `read_positional_block` is the only code in the
+  repository that reads that shape - run on 2f's own printed figures it
+  returns `PositionalRow(scope='United States', values=(299, 244, 22.8))`,
+  `International`, `Worldwide`. It is dead *as wired* - its input is
+  flattened PDF text - and what it knows is not. The item is "the reader is
+  attached to the wrong input", and J&J is 770 of gold's 2,203 rows. Deleting
+  it also falsifies `parsing/evidence.py:35-36`. **Rule 5:** its docstring at
+  `:14-16` asserts "issuer product-sales exhibits are mostly PDFs" - a data
+  claim, in a docstring, that 2f says is wrong.
+- **`adjudicate.py` (256 lines)** has no caller anywhere (`orchestrator.py:1687`
+  is prose). `seed/gold/adjudication_cases.jsonl` (13 lines) is replayed at
+  `test_extraction_stack.py:705`, and `real_rows_that_trip()` (`:1348`) runs
+  all of gold through `adjudicate_total_against_parts` as its false-positive
+  guard - so **both sides of its only score come from the answer key**. Legal
+  for a test (rule 3), but it means the thresholds are tuned on gold and have
+  no held-out number. It is a **rule-4 dependency**, not a wiring toss-up:
+  wire it only with a new set. (`test_extraction_stack.py:1377-1380` carries
+  "it caught it here first" - rule 5.)
+- **`analytics/` (846 lines, 5 modules) - do not delete, and it is
+  mis-filed.** Four tables, not three, are 0 rows in all 19 databases:
+  `competitive_snapshots`, `peak_sales_estimates`, `uptake_metrics`,
+  `analog_families`. No `app/` importer, no script, no route; 7 test files;
+  `test_capabilities_are_wired` now marks all 11 entry points `NOT_WIRED`.
+  `export/builder.py:57-107` already writes seven product-sheet columns out of
+  those tables. The brief says layers 2 and 3 *are* the product; this is all
+  of layer 3, and it is the one unbuilt thing on this list whose absence the
+  analyst can name - they open Export and find the columns blank. Section 4
+  fixes the method first; section 3 fixes what feeds it; neither is an
+  argument for deletion.
 
 ---
 
-## 11. Infrastructure
+## 11. Infrastructure  `[V]`
 
-- **No per-job deadline.** `handle_job` awaits `run_job` bare; no `wait_for`
-  anywhere in `pipeline/`, `jobs/` or `main.py`. A 240s search call can occupy
-  726s through retries, and httpx's timeout is per-read, not wall clock. A hung
-  job holds its semaphore permit forever.
-- **Startup recovery throws away finished work.** FIRDAPSE had completed 12 of
-  13 stages - every figure extracted, judged and gated - and was marked
-  `failed`. A job at or past `quality_checks` has nothing left that appends
-  datapoints.
-- **Unfinished jobs publish.** `build_dashboard_preview` and `eval.py` both
-  read them without distinction (1f, 0c). 32% of run13's published datapoints
-  come from jobs that never completed.
-- **Write amplification.** One datapoint is written and committed four times,
-  on SQLite, whose driver blocks the shared event loop on the write lock.
-- `fetch_page` reaches sec.gov with no throttle and no retry, and 9 of 10
-  `llm_search` sources across five runs are sec.gov URLs. The guard test that
-  should catch this iterates a hand-written list of four names and silently
-  skips module-level functions.
-- **Review is one click per row.** `POST /validation-tasks/{id}/actions`
-  (`main.py:476`) takes a single task; no bulk endpoint, no bulk UI. run13 has
-  374 open tasks across 20 products. Confirming rows also does not de-duplicate
-  - confirming both the Worldwide and ex-U.S. AYVAKIT rows publishes both.
-- **The Export page needs a UUID typed by hand** (`ExportPage.tsx:41`) and finds
-  the run via `localStorage.getItem('lastRunId')`, so a previous run's export is
-  unreachable from a fresh browser.
+- **No per-job deadline.** `grep -rn "wait_for|asyncio.timeout|TimeoutError|
+  timeout" app/pipeline app/jobs app/main.py` returns zero hits.
+  `jobs/handler.py:22` awaits `run_job` bare, and `jobs/queue.py:48-51` holds
+  the semaphore permit for the whole handler, so a hung job holds it forever.
+  726s is exact: `TRANSPORT_ATTEMPTS = 3` (`llm/client.py:46`) x `timeout=240`
+  (`:692`) + sleeps 2 + 4; httpx's timeout is per operation, not wall clock.
+- **Startup recovery throws away finished work.** `main.py:106-137
+  recover_stranded_jobs`, `:129` sets `FAILED` with "server restarted while
+  this job was running". run13's FIRDAPSE: `current_step='completeness'` -
+  the **12th of 13** stages by execution order (the `JobStep` enum declares
+  `COMPLETENESS` before `VALIDATION_TASKS`, which is not the order they run),
+  with only the status flip left; 28 candidates, 7 `auto_pass`, 14
+  `needs_review`, 16 open tasks, 8 quality checks, and a clean 2022Q1-2023Q4
+  series - marked `failed`, `completeness_pct 0.0`. `_completeness`
+  (`orchestrator.py:2604-2700`) adds only `UnresolvedQuarterORM`, never a
+  datapoint, so re-running it cannot double-publish. The other three failed
+  jobs died at `identity_resolve` or `source_retrieve` with 0 candidates.
+  **Cost:** the Library says the product failed while its seven figures are on
+  the Dashboard (1f), and the one missing quarter of that series, 2023Q2, sits
+  in the same database as a clean `xbrl_fact` corroborator at 64.898 with two
+  readings agreeing - the hole in the ramp is in the database, twice.
+- **Unfinished jobs publish.** run13 published rows by `job.status`:
+  `ready_for_review` 86, `running` 34, `failed` 7 = 127; 41/127 = 32.3%. The 7
+  `failed` rows are FIRDAPSE's entire series.
+- **Write amplification** - `[V]` on the call sites, `[I]` on the physical
+  count. One row is inserted at `orchestrator.py:1357` (or `:1990`) and
+  committed at `:2060`; updated and committed again at `:2282` (`_judge`),
+  `:2515` (`_reconcile_with_llm`) and `:2602` (`_quality_and_validation`).
+  Four commits per row on a sync `create_engine` (`db/models.py:548`) called
+  from `async def` with no `run_in_executor` anywhere in `app/`, so every
+  commit blocks the shared loop; WAL (`:594`) softens readers, not the
+  single-writer lock. What would verify the count: a `before_cursor_execute`
+  hook over one real job.
+- **`fetch_page` skips a throttle that exists ten lines away.**
+  `sources.py:982-1005`: no `_sec_throttle`, no retry, and it branches on
+  `"sec.gov" in url.lower()` at `:995` to set a header - it knows where it is
+  going. `SECConnector._get_with_retry` awaits `_sec_throttle()` at `:373`
+  with the adaptive pace. Two fetchers against one host, one polite.
+  `fetch_page`'s callers: `llm_search.py:138` and `ManualURLConnector`
+  (`:1018`). run13's 5 `llm_search` sources are 5/5 `sec.gov/Archives` URLs,
+  all through `fetch_page`. The guard test, `test_earnings_sources.py:306`:
+  a hand-written tuple of four names (rule 1), `getattr(..., None)` so a
+  rename passes silently, and only `vars(SECConnector)` so module-level
+  functions are invisible; its prose says "the three reads" over four names.
+  The derived version - every function in `sources.py` whose source contains
+  `client.get(` - returns `_get_with_retry` (the throttled wrapper) and
+  `fetch_page` (the one the list cannot see).
+- **Review is one click per row.** Six write routes in the whole API;
+  `POST /validation-tasks/{task_id}/actions` is now `main.py:541`, takes one
+  id, closes one task. `ReviewPage.tsx:158-160` has three buttons per row and
+  no selection state. run13: 374 `validation_tasks`, all `open`, across 19
+  products. `validation_action` sets one datapoint's status and never looks at
+  sibling rows in the same `(job, period, scope)` group, so confirming both
+  the Worldwide and ex-U.S. AYVAKIT rows publishes both.
+- **The Export page needs a UUID typed by hand.** `ExportPage.tsx:5` reads
+  `localStorage.getItem('lastRunId') || ''`; `:39` is a free-text "Job ID"
+  input, button `disabled={!jobId}`; no picker. A fresh browser renders
+  `Run: none` and a disabled button.
+
+**Rule 5, this section:** `parsing/evidence.py:40-41` "as the four issuers
+whose schedules were read spell them" - a past run in a comment.
 
 ---
 
