@@ -229,3 +229,42 @@ def test_a_note_dating_the_figure_inside_the_period_is_a_partial_period():
                    "label_flags": list(reading.flags)},
     )
     assert judged and judged["issues"] == ["deterministic:partial_period"]
+
+
+@pytest.mark.asyncio
+async def test_a_flag_is_a_code_and_the_model_s_reasoning_is_a_note(tmp_path, monkeypatch):
+    """`issue_flags` is matched against by name, so it holds names.
+
+    The model answering the judge writes its reasoning into the same list the
+    vetoes write their codes into, and a reader downstream tested that list for
+    a word. A sentence that happened to contain the word marked the row.
+
+    Both answers: the code the judge raised is on the row's flags, and the
+    sentence the model wrote is in the notes a person reads and nowhere else.
+    """
+    monkeypatch.setattr(orchestrator_module, "try_deterministic_judgment", lambda **_: None)
+    _db, orch, job, row, parsed = _orchestrator(
+        tmp_path, quote="Calderon XR 34,974 22,209")
+
+    reasoning = (
+        "The quote reports the figure in a column whose heading is in conflict "
+        "with the period claimed."
+    )
+
+    async def judge(**_kwargs):
+        return {
+            "support_classification": "supported",
+            "validation_status": "needs_review",
+            "issues": ["hard_veto:quote_states_a_different_period", reasoning],
+        }
+
+    async def no_search(**_kwargs):
+        return None
+
+    monkeypatch.setattr(orch.llm, "judge", judge)
+    monkeypatch.setattr(orch.llm, "judge_with_search", no_search)
+
+    await orch._judge(job, [row], [], parsed, {})
+
+    assert row.issue_flags == ["hard_veto:quote_states_a_different_period"]
+    assert row.reviewer_notes == reasoning

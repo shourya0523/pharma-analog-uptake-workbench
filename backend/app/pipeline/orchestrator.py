@@ -230,6 +230,24 @@ def _agrees_within_declared_precision(winner: DatapointORM, other: DatapointORM)
 # vetoed row treated as clean.
 _VETO_PREFIX = "hard_veto:"
 
+# The flag reconciliation raises when a lower-priority source disagrees with a
+# higher one, named once so the pass that raises it and the pass that counts it
+# cannot drift apart.
+FLAG_CONFLICT_WITH_HIGHER_PRIORITY = "conflict_with_higher_priority_source"
+
+
+def _is_a_code(issue: str) -> bool:
+    """Whether an issue is a code, rather than a sentence about the row.
+
+    `issue_flags` is a column readers match against by name, and the model
+    answering the judge writes its reasoning into the same list the vetoes
+    write their codes into. The two are told apart by shape rather than by a
+    register of the codes, which grows: a code is one token and a sentence is
+    not. `hard_veto:quote_states_a_different_period` is a code; "The primary
+    quote states a different figure" is not.
+    """
+    return bool(issue) and not any(character.isspace() for character in issue)
+
 
 def _publishes(row: DatapointORM) -> bool:
     """Whether the status this row carries is one the pipeline stands behind."""
@@ -2826,10 +2844,18 @@ class PipelineOrchestrator:
                 # normalized figure, which is the one published.
                 status = ValidationStatus.NEEDS_REVIEW.value
             row.validation_status = status
+            # The judge answers with both: codes its own vetoes raised, and the
+            # model's sentences about the row. Only the codes belong in the
+            # column readers match against; the sentences are what a person
+            # reads, and that is `reviewer_notes`.
             issues = list(judgment.get("issues") or [])
+            codes = [issue for issue in issues if _is_a_code(issue)]
+            said = [issue for issue in issues if not _is_a_code(issue)]
             if row.issue_flags:
-                issues = list(set(list(row.issue_flags) + issues))
-            row.issue_flags = issues
+                codes = list(set(list(row.issue_flags) + codes))
+            row.issue_flags = codes
+            if said:
+                row.reviewer_notes = "\n".join([*filter(None, [row.reviewer_notes]), *said])
             if row.citation_json:
                 row.citation_json = {**row.citation_json, "validation_status": status}
         self.db.commit()
@@ -3087,7 +3113,7 @@ class PipelineOrchestrator:
                 ):
                     flag = "restated_in_later_filing"
                 else:
-                    flag = "conflict_with_higher_priority_source"
+                    flag = FLAG_CONFLICT_WITH_HIGHER_PRIORITY
                 row.issue_flags = list(set((row.issue_flags or []) + [flag]))
                 if row.citation_json:
                     row.citation_json = {**row.citation_json, "validation_status": row.validation_status}
@@ -3166,7 +3192,11 @@ class PipelineOrchestrator:
         )
 
         self._set_step(job, JobStep.VALIDATION_TASKS)
-        conflict_ids = {d.id for d in dps if "conflict" in " ".join(d.issue_flags or [])}
+        conflict_ids = {
+            d.id
+            for d in dps
+            if FLAG_CONFLICT_WITH_HIGHER_PRIORITY in (d.issue_flags or [])
+        }
         tasks = select_validation_tasks(
             [
                 {
