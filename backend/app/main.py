@@ -34,6 +34,7 @@ from app.domain.models import (
     DrugInput,
     ExtractionOptions,
     JobStatus,
+    JobStep,
     ValidationStatus,
     new_id,
 )
@@ -109,25 +110,48 @@ async def startup() -> None:
     await job_queue.start(_handle_job)
     db = SessionLocal()
     try:
-        requeued, abandoned = recover_stranded_jobs(db, job_queue)
+        requeued, abandoned, recovered = recover_stranded_jobs(db, job_queue)
     finally:
         db.close()
-    if requeued or abandoned:
-        logger.warning("startup_recovery requeued=%d abandoned=%d", requeued, abandoned)
+    if requeued or abandoned or recovered:
+        logger.warning(
+            "startup_recovery requeued=%d abandoned=%d recovered=%d",
+            requeued, abandoned, recovered,
+        )
+
+
+# What a job carries when a restart interrupted it after the last figure was
+# settled: its work is kept and the steps it never reached were settled from
+# its own rows, not from a document or a model.
+FINISHED_AFTER_A_RESTART = "finished_after_a_restart"
 
 
 def recover_stranded_jobs(db: Session, queue) -> tuple[int, int]:
     """What a restart owes the jobs it interrupted.
 
     The in-process queue lives in memory, so a restart forgets every job that
-    was waiting and every job that was half-way through. Left alone they sit
-    in the database as `queued` or `running` for ever, and a caller polling
-    the run never hears back. A job that had not started loses nothing by
-    being enqueued again. A job that was mid-flight is marked failed with the
-    reason, rather than restarted: `run_job` appends its datapoints, so
-    running it twice would publish each figure twice.
+    was waiting and every job that was half-way through. Left alone they sit in
+    the database as `queued` or `running` for ever, and a caller polling the run
+    never hears back. A job that had not started loses nothing by being
+    enqueued again. A job that was mid-flight cannot simply be run again:
+    `run_job` appends its datapoints, so running it twice would publish each
+    figure twice.
+
+    So the question for a running job is whether anything it had left to do
+    could still have added a figure, and its own rows answer that. A reading is
+    `pending` from the moment it is written until the judge decides it, and
+    nothing after the judge writes another one. A job with no readings died
+    before it found any; a job with a pending reading was still being judged;
+    and a job whose readings are all decided has every figure it was ever going
+    to have. That last one is finished work, and marking it failed is what put a
+    product's series on the dashboard while the library said it had failed.
+
+    What the stages it never reached would have settled is settled here instead,
+    from the rows alone: which reading each series holds, and the recount of
+    quarters held against quarters asked for. Neither reads a document or a
+    model, and neither can add a figure.
     """
-    requeued = abandoned = 0
+    requeued = abandoned = recovered = 0
     stranded = (
         db.query(DrugJobORM)
         .filter(DrugJobORM.status.in_([JobStatus.QUEUED.value, JobStatus.RUNNING.value]))
@@ -138,6 +162,32 @@ def recover_stranded_jobs(db: Session, queue) -> tuple[int, int]:
         if job.status == JobStatus.QUEUED.value:
             loop.create_task(queue.enqueue("drug_job", {"job_id": job.id, "run_id": job.run_id}))
             requeued += 1
+            continue
+        decided = (
+            db.query(DatapointORM)
+            .filter(
+                DatapointORM.job_id == job.id,
+                DatapointORM.validation_status != ValidationStatus.PENDING.value,
+            )
+            .count()
+        )
+        undecided = (
+            db.query(DatapointORM)
+            .filter(
+                DatapointORM.job_id == job.id,
+                DatapointORM.validation_status == ValidationStatus.PENDING.value,
+            )
+            .count()
+        )
+        if decided and not undecided:
+            resettle_series(db, job)
+            refresh_completeness(db, job)
+            job.status = JobStatus.READY_FOR_REVIEW.value
+            job.current_step = JobStep.READY_FOR_REVIEW.value
+            job.quality_flags = sorted(
+                set((job.quality_flags or []) + [FINISHED_AFTER_A_RESTART])
+            )
+            recovered += 1
         else:
             job.status = JobStatus.FAILED.value
             job.error = "server restarted while this job was running"
@@ -146,9 +196,13 @@ def recover_stranded_jobs(db: Session, queue) -> tuple[int, int]:
     # A run whose last unfinished job was just abandoned is over, and nothing
     # else will say so: the handler that settles a run's status only runs
     # when a job it owned finishes.
-    for run_id in {job.run_id for job in stranded if job.status == JobStatus.FAILED.value}:
+    for run_id in {
+        job.run_id
+        for job in stranded
+        if job.status in {JobStatus.FAILED.value, JobStatus.READY_FOR_REVIEW.value}
+    }:
         refresh_run_status(db, run_id)
-    return requeued, abandoned
+    return requeued, abandoned, recovered
 
 
 @app.get("/health")
