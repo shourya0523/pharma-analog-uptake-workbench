@@ -321,13 +321,13 @@ def test_every_edgar_read_survives_a_dropped_connection_or_a_refusal(monkeypatch
 def test_every_read_of_a_page_in_the_module_goes_through_the_backoff():
     """Derived from the module, not from a list of the reads we remember.
 
-    A hand-written tuple of method names cannot see a function that is not a
-    method, and `fetch_page` is one: it asked sec.gov with no pace and no
-    retry while the throttled fetcher sat a few lines above it, and a
-    four-name list of `vars(SECConnector)` entries could not name it. Both
-    sides of the assertion are read out of the module's own syntax tree, so a
-    read added anywhere in the file - method, module-level function or
-    nested - has to be the throttled one or this fails.
+    A list of method names looked up in `vars(SECConnector)` cannot see a
+    function that is not a method, and `fetch_page` is not a method - so an
+    unthrottled read living there is invisible to a guard written that way,
+    however carefully the list is kept. Both sides of the assertion here are
+    read out of the module's own syntax tree, so a read added anywhere in the
+    file - method, module-level function or nested - has to be the throttled
+    one or this fails.
     """
     import ast
     import inspect

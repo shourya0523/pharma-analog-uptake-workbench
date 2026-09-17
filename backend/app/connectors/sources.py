@@ -53,16 +53,17 @@ logger = logging.getLogger(__name__)
 ANNUAL_FORMS = frozenset({"10-K", "10-K405", "10-KT", "20-F", "40-F", "11-K"})
 
 
-# Shared across connector instances so concurrent jobs don't stampede EDGAR.
-# The floor is SEC's published guidance; the pace above it is not guessed but
-# observed, because what the endpoint will accept depends on who else is
-# asking from the same address. A refusal slows every caller, and a spell
-# without one speeds them back up.
 # How long after a period ends its report is filed: a 10-Q is due about 45
 # days after its quarter and a 10-K about 90 after its year, so a window of
 # filing dates reaches this far past the periods it means to cover.
 REPORTING_LAG = timedelta(days=120)
 
+
+# Shared across connector instances so concurrent jobs don't stampede EDGAR.
+# The floor is SEC's published guidance; the pace above it is not guessed but
+# observed, because what the endpoint will accept depends on who else is
+# asking from the same address. A refusal slows every caller, and a spell
+# without one speeds them back up.
 _SEC_LOCK = asyncio.Lock()
 _SEC_FLOOR_S = 0.12  # ~8 req/s, under SEC's 10/s guidance
 _SEC_CEILING_S = 4.0
@@ -226,7 +227,10 @@ def parse_filing_date(value: object) -> date | None:
 
 # Corporate suffixes carry no identity: "Acme Sciences, Inc." and "Acme
 # Sciences Inc" are the same registrant, and the SEC title uses whichever the
-# filer registered with.
+# filer registered with. A snapshot of the forms of name the index's own
+# titles are written with; it goes stale when a registrant carries a form this
+# does not name, and that shows up as a company resolving under one spelling
+# of its name and not under another.
 _REGISTRANT_SUFFIXES = {
     "inc", "incorporated", "corp", "corporation", "co", "company", "ltd",
     "limited", "plc", "llc", "lp", "sa", "nv", "ag", "holdings", "group",
