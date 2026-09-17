@@ -212,3 +212,50 @@ async def test_the_area_groups_where_the_indication_does_not(tmp_path):
     assert rows["indication"].value.startswith("Calderon's disease (CD)")
     assert rows["therapeutic_area"].value == "calderon's disease"
     assert rows["therapeutic_area"].citation_json["source_field"] == "indications_and_usage"
+
+
+# One label, three indication subsections: two spellings of one disease and a
+# third disease that is genuinely different. The area is what groups the first
+# two; the disease strings do not.
+THREE_INDICATION_LABEL = {
+    "openfda": {"brand_name": ["CALDERON"], "generic_name": ["CALDERINOL"]},
+    "indications_and_usage": [
+        (
+            "1 INDICATIONS AND USAGE "
+            "1.1 Calderon's disease CALDERON is indicated for the treatment of "
+            "Calderon's disease (CD) (WHO Group 1) to improve exercise ability. "
+            "1.2 Calderon's disease, paediatric CALDERON is indicated for the "
+            "treatment of Calderon's disease (CD, WHO Group I) in pediatric patients. "
+            "1.3 Vasculopathy CALDERON is indicated for the treatment of "
+            "nebulisation-associated vasculopathy."
+        )
+    ],
+    "mechanism_of_action": ["12.1 Mechanism of Action Calderinol is a vasodilator."],
+}
+
+
+@pytest.mark.asyncio
+async def test_each_indication_row_carries_the_area_it_groups_under(tmp_path):
+    """The column the readers prefer is written where the row is written.
+
+    Both answers: two indications the label spells differently for one disease
+    share an area, and an indication naming a different disease does not join
+    them.
+    """
+    db, orch, job, sources = _orchestrator(
+        tmp_path, [ORIGINAL], label_results=[THREE_INDICATION_LABEL]
+    )
+    await orch._label_metadata(job, sources, {}, {"product_metadata": True})
+
+    rows = {
+        row.disease: row.therapeutic_area
+        for row in db.query(ProductIndicationORM).filter_by(product_id=job.product_id)
+    }
+    assert len(rows) == 3, rows
+    assert all(area for area in rows.values()), rows
+    assert (
+        rows["Calderon's disease (CD) (WHO Group 1)"]
+        == rows["Calderon's disease (CD, WHO Group I)"]
+        == "calderon's disease"
+    )
+    assert rows["nebulisation-associated vasculopathy"] == "nebulisation-associated vasculopathy"

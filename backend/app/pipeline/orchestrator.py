@@ -87,7 +87,11 @@ from app.parsing.fda_label import (
     parse_label_record,
     profile_fields,
 )
-from app.parsing.indications import parse_indications, therapeutic_areas
+from app.parsing.indications import (
+    parse_indications,
+    therapeutic_area,
+    therapeutic_areas,
+)
 from app.parsing.labels import FLAG_COMBINED, QUESTION_FLAGS, footnotes_in
 from app.parsing.periods import (
     detect_period_context,
@@ -1251,6 +1255,7 @@ class PipelineOrchestrator:
                         id=new_id(),
                         product_id=product.id,
                         disease=indication.disease,
+                        therapeutic_area=therapeutic_area(indication.disease),
                         setting=indication.setting,
                         population=indication.population,
                         biomarker=indication.biomarker,
