@@ -740,8 +740,15 @@ names, produces a substitute for one that is wrong for the products where route
 is the whole story, and produces an approval date that is absent or wrong for 7
 of the 20 seed products.
 
-These are live-path defects: the defaults are on, and they were measured by
-running layer 2's own functions against the live API, not by reading a run.
+These are live-path defects: the defaults are on. **All 18 run databases have
+zero openFDA sources and have written exactly one profile field ever,
+`llm_aliases`** - not just no PAH product (0f), no characterisation run at
+all. Every claim below is measured from exactly two sources: layer 2's own
+functions called against the live API, and `jr/meta.db`, a reviewer's live run
+of Tyvaso and Opsumit with both options on - the only run in this repository
+that has ever exercised layer 2. openFDA result order is not guaranteed, so
+which *application* is selected (3d's sibling, 3e) can differ between
+sessions; which *field path* is read (3a, 3b, 3c) cannot.
 
 **openFDA is the right source; every defect below is in how it is read.**
 Each one is a wrong field path, a wrong match or a dropped value - not a reason
@@ -756,19 +763,27 @@ Gold did this job by hand rather than automating it:
 application ambiguity - it never resolved an application.
 
 That is an opportunity, not a caution. **`seed/gold/product_profiles.jsonl` is
-a ready-made oracle for exactly what layer 2 should produce** - 62 products,
-each carrying `route_of_administration`, `first_approval_year`, `moa_class`,
-`indication_area`, `approval_era` and `competitive_intensity_at_launch`, and
-declaring `attribute_provenance: curated_reference`. It is currently scored by
-nothing. Scoring the openFDA path against it is the right direction under rule
+a ready-made oracle for most of what layer 2 should produce** - 62 products
+carrying `route_of_administration`, `first_approval_year`, `moa_class`,
+`indication_area` and `approval_era`, declaring `attribute_provenance:
+curated_reference`, and `competitive_intensity_at_launch` for the 20 in the
+PAH catalog only (null on the other 42, by design - see the gold README). An
+earlier draft said "each carrying six"; it is 62 x 5 + 20 x 1, and a scorer
+that treats the 42 nulls as failures is wrong. Two more things about the
+oracle: `moa_class` carries both `sglt2_inhibition` and `sglt2_inhibitor`, two
+spellings of one class inside the curated file; and `first_approval_year` is
+not always the FDA year - Veletri is curated `2010`, drugsFDA `NDA022260` has
+exactly one ORIG/AP submission, `2008-06-27`, and the pipeline reads it
+correctly. Where they disagree the oracle can be the one that is wrong. It is
+currently scored by nothing. Scoring the openFDA path against it is the right direction under rule
 3 - reference data flows into gold, and gold scores the pipeline - and it makes
 3a-3h measurable rather than anecdotal. What the pipeline must not do is *read*
 `seed/product_attributes.csv`, because that file is what builds this oracle.
 
 A first score already exists and is in 3a: over the 20 seed products,
-`openfda.route` differs from the curated value for 8.
+`openfda.route` is wrong against the curated value for 5 and absent for 3.
 
-### 3a. Route is read from a field that contradicts the same document
+### 3a. Route is read from a field that contradicts the same document  `[V]`
 
 `parsing/fda_label.py:68` reads `openfda.route`. The same drugsFDA record
 carries `products[].route`, and they disagree. Verified live:
@@ -777,7 +792,16 @@ carries `products[].route`, and they disagree. Verified live:
     NDA214324  openfda.route=['ORAL']  products[].route=['INHALATION']  TYVASO DPI
 
 Across the 20 seed products `openfda.route` disagrees with `products[].route`
-for 6 and differs from `seed/product_attributes.csv` for 8. `config.py:46`
+for 6 (4 clinically wrong - the three Tyvaso forms and Winrevair, whose
+`openfda.route` is absent - and 2 near-synonyms, Veletri `INTRAVENOUS` vs
+`INJECTION`, Yutrepia `RESPIRATORY (INHALATION)` vs `INHALATION`). Against
+`seed/product_attributes.csv`, with a synonym set stated: **5 wrong plus 3
+with no application at all** (Ventavis, Flolan, Liqrev - 3c). An earlier draft
+presented that as "8 disagreements". And one of the 5, Uptravi, is not this
+defect - its `openfda.route` agrees with its own `products[].route`; it is
+3e's wrong application. **Reading `products[].route` instead fixes 4 of the 5**;
+the residue is Uptravi (3e) and Winrevair `INJECTION` vs curated `Subcutaneous`
+(granularity). `config.py:46`
 already knows - "openFDA gives an inhaled product's route as ORAL" - which is
 why `enable_profile_judge` exists, and the judge left the value unchanged.
 
@@ -792,7 +816,7 @@ analogs, **at score 1.0**. `analog_matching.py:132`'s `minimum_attributes=2`
 defends against exactly this, and 2 is precisely what layer 2 can supply, so
 the guard never fires.
 
-### 3b. `openfda.dosage_form` does not exist
+### 3b. `openfda.dosage_form` does not exist  `[V]`, one sub-claim false
 
 Verified: the key is absent from the `openfda` block on both datasets
 (`openfda` keys are `application_number, brand_name, generic_name,
@@ -801,13 +825,25 @@ product_ndc, product_type, route, rxcui, spl_id, spl_set_id, substance_name,
 unii`). `parsing/fda_label.py:69` reads it anyway, so `df=None` for all 20 seed
 probes including exact matches. It lives at `products[].dosage_form`.
 
-Downstream: `identity/resolver.py:35` hashes `dosage_form` into `identity_key`,
-so it is always the empty component; `orchestrator.py:866` writes
-`dosage_form="unresolved"` on every `ProductFormulationORM`; and `dosage_form`
-is #2 in `PRIORITY_JUDGE_FIELDS` (`quality/profile.py:117`), spending a web
-search on a value that is never there.
+The key lists an earlier draft gave were one list for two datasets, and
+incomplete. Re-derived: drugsFDA `openfda` also carries `pharm_class_cs` and
+`pharm_class_pe`; label `openfda` also carries `is_original_packager` and lacks
+`pharm_class_moa` for Tyvaso's application; `route` is on 16 of 17 selected
+records (Winrevair's BLA has none), so `openfda.route` is sometimes absent as
+well as wrong. And "it lives at `products[].dosage_form`" is true **only on
+drugsFDA** - the label record has no `products` key at all; its nearest are
+`dosage_forms_and_strengths` and `spl_product_data_elements`.
 
-### 3c. A whole class of products is invisible, including the oldest analogs
+Downstream, confirmed on `jr/meta.db`: `product_formulations.dosage_form =
+'unresolved'` on both rows (`orchestrator.py:870`); `identity/resolver.py:36`
+hashes the empty component into `identity_key`, so two formulations of one
+molecule can collide on identity (M5's territory). **An earlier draft said
+`dosage_form`'s place at #2 in `PRIORITY_JUDGE_FIELDS` spends a web search on
+a value that is never there. It does not**: `orchestrator.py:1045` queries the
+rows that exist, `dosage_form` has no row, and the judge never sees it. That
+position costs nothing.
+
+### 3c. A whole class of products is invisible, including the oldest analogs  `[V]`, run13 count corrected
 
 `connectors/openfda.py:27` searches `openfda.brand_name:` only, and
 `openfda_fields.py:16` reads only `result["openfda"]["brand_name"]`. For older
@@ -820,26 +856,66 @@ and discontinued products drugsFDA returns the application with an **empty
 
 `connectors/openfda.py:58` logs `openfda_no_match` on the 404 and moves on. The
 data is in the same endpoint, one field path over. This costs 3 of 20 seed
-products and 4 of 21 run13 jobs - among them **Flolan (1995), the first PAH
+products - Flolan, Ventavis and **Liqrev**, which an earlier draft omitted
+and which is recoverable the same way (`products.brand_name:"LIQREV"` ->
+NDA214952, `openfda` block empty) - and **1 of 24 run13 jobs** (Ocaliva,
+NDA207999). An earlier draft said 4 of 21: run13 has 24 jobs, all 24 have zero
+characterisation attributes because openFDA never ran, and of the 4 job names
+that get no drugsFDA match live, only Ocaliva is this mechanism; Elevidys and
+Vyjuvek are absent under any field and `Nutrition` is not a drug. Among the
+seed three is **Flolan (1995), the first PAH
 product and the only one in the catalog with a complete 30-year ramp**, which
 is the single most valuable analog an uptake workbench could hold. (Elevidys
 and Vyjuvek are CBER gene therapies and are not in drugsFDA under any field;
 for those there is no structured path at all.)
 
 This is CLAUDE.md rule 1's shape: a field path written down rather than derived
-from the document.
+from the document - `parsing/fda_label.py:62-73` writes down ten `openfda`
+paths, `connectors/openfda.py:27,29` two search paths, `openfda_fields.py:16`
+one, and the record enumerates its own keys at run time.
 
-### 3d. The substring fallback attaches a sibling's application and its approval date
+**Compounding with section 8:** Flolan/GSK and Liqrev/CMP Pharma are also in
+`resolve_cik`'s 8-of-14 manufacturer failures. For those two both halves of
+identity fail - no CIK from the manufacturer, no application from the brand -
+so the product is absent from the analog set rather than wrong in it. Cheaper
+per the brief's ranking; it leaves the set at 17 of 20.
+
+### 3d. The substring fallback attaches a sibling's application and its approval date  `[V]` mechanism, `[I]` examples
 
 `connectors/openfda_fields.py:58`: after exact brand match fails,
 `brand_norm in candidate or candidate in brand_norm`. This is the match
 `extraction/members.py:10-14` explicitly refuses to make for revenue.
 
-    Thiola      aliases ['THIOLA','THIOLA EC','TIOPRONIN'] -> THIOLA EC  NDA211843  2019-06-28
-    Nucynta ER  aliases ['NUCYNTA ER','TAPENTADOL']        -> TAPENTADOL NDA200533  2011-08-25
+    Thiola      apps ['NDA019569','NDA211843'] -> selected NDA019569 'THIOLA'  EXACT  1988-08-11
+    Nucynta ER  apps ['NDA200533']             -> selected NDA200533 'TAPENTADOL' EXACT 2011-08-25
 
-Thiola is NDA019569 (1988): the job is characterised from a delayed-release
-line extension with an approval date **31 years late**.
+**Neither of an earlier draft's two examples reproduces, and neither is
+`:58`.** Re-run with run13's actual stored `llm_aliases["merged"]`, passed as
+`orchestrator.py:732` passes it: Thiola picks the correct 1988 original today
+(6 of 6 repeats), because both applications carry an exact-matching alias and
+`select_openfda_result` returns on the first result that exact-matches - so
+the earlier "31 years late" is whichever application openFDA lists first. And
+Nucynta ER's answer is *correct*: NDA200533 is Nucynta ER; its
+`openfda.brand_name` is `['TAPENTADOL','NUCYNTA ER']` and the loop at
+`openfda_fields.py:51` tries them in stored order, matching `TAPENTADOL`
+**exactly** at `:57`, not through `:58`.
+
+The root cause is nonetheless right, and now measured properly. **The `:42`
+exclusion is dead in 14 of the 17 run13 jobs that got results**: a
+molecule-name variant survives into the candidate list because it is not
+string-equal to the upload's spelling - `tapentadol` vs `tapentadol
+extended-release`, `amifampridine phosphate` vs `amifampridine`. Nucynta ER's
+selection is *made by* the surviving molecule candidate. ILUVIEN and YUTIQ are
+the dangerous pair: two products whose surviving candidate is the identical
+string `fluocinolone acetonide intravitreal implant`; today each query returns
+one application so nothing crosses, but the exclusion meant to prevent the
+cross is not running.
+
+**The `:58` fallback fires on 3 of 20 seed probes**: `Jornay PM` ->
+`JORNAY PM EXTENDED-RELEASE` and `Pombiliti` -> `POMBILITI ATGA` (harmless,
+same product), and **`Nebulized Tyvaso` -> `TYVASO` / NDA022387** - a distinct
+seed product takes Tyvaso's application and its 2009 approval date. That one
+is the realised harm.
 
 Two compounding mechanisms. The docstring at `openfda_fields.py:31` says "the
 generic name is deliberately excluded from matching"; the exclusion at `:42`
@@ -847,10 +923,14 @@ drops only an alias string-**equal** to `job.generic_name`, and every stored
 `llm_aliases` set spells the molecule differently ("tapentadol" vs "tapentadol
 extended-release"), so the molecule name survives and the exclusion is dead.
 And `quality/profile.py:79 blends_sibling_brand` exists for this and is applied
-only to the LLM branch (`orchestrator.py:985`); the openFDA mapping loop
-(`orchestrator.py:786-815`) has no sibling check.
+only to the LLM branch (`orchestrator.py:971-977`); the openFDA mapping loop
+(`orchestrator.py:787-820`) has no sibling check.
 
-### 3e. Among a brand's own applications, the first returned wins
+**Cost:** lower than an earlier draft said. The two headline examples give
+correct answers today; the exposure is latent, plus one realised case. "Could
+be wrong tomorrow", not "is wrong today".
+
+### 3e. Among a brand's own applications, the first returned wins  `[V]`, order-dependent, 5 brands not 1
 
     UPTRAVI NDA214275 route=['INTRAVENOUS'] ORIG AP 20210729   <- selected
     UPTRAVI NDA207947 route=['ORAL']        ORIG AP 20151221   <- the product
@@ -859,14 +939,28 @@ only to the LLM branch (`orchestrator.py:985`); the openFDA mapping loop
 one selected application, and its docstring defends that scoping - the effect
 is that a later line extension becomes the product's approval. Uptravi lands in
 the 2020-2024 era bucket, intravenous: wrong on both scored attributes.
-Approval date across the 20 seed products vs the curated reference: 3 absent, 4
-differ (Uptravi 2021 vs 2015, Veletri 2008 vs 2010, Revatio 2012 vs 2005, Alyq
-2022 vs 2018).
+Uptravi reproduces exactly (6 of 6 repeats this session). It is not alone:
+across both probes 10 brands returned more than one application, and for
+**5** the selected application's ORIG date is later than the earliest across
+all results - Uptravi 2021 vs 2015, Revatio 2012 vs 2005, NUPLAZID 2018 vs
+2016, Livmarli 2025 vs 2021, ORLADEYO 2025 vs 2020. (Nebulized Tyvaso 2009 vs
+2002 is arguably right for the nebulized form.)
+
+Approval date across the 20 seed products vs the curated column: 3 absent
+(Ventavis, Flolan, Liqrev), 4 differ - **but Veletri is the oracle being
+wrong**: NDA022260 has one ORIG/AP submission, `2008-06-27`, the pipeline reads
+it, the curated column says 2010. So 3 real errors (Uptravi, Revatio, Alyq),
+not 4.
+
+`connectors/openfda.py:15-24`'s docstring asserts results come back "ordered
+by application number". Measured: of six multi-result brands, four descending,
+two ascending; openFDA sorts by relevance and documents no order. A measured
+claim about an API, in a docstring, and wrong (rule 5).
 
 openFDA result order is not guaranteed, so this one is order-dependent and may
 present differently on another day; the field-path findings above are not.
 
-### 3f. `fda_approval_date` is always empty, exactly when resolution succeeds
+### 3f. `fda_approval_date` is always empty, exactly when resolution succeeds  `[V]`, ranked too low
 
 `dashboard/series.py:134`:
 `approval_date = canonical.initial_approval_date if canonical else fields.get("fda_approval_date")`.
@@ -878,9 +972,23 @@ canonical product row *skips* the working fallback. A live run holds
 `drug_profile_fields`, both cited to
 `submissions[type=ORIG].submission_status_date`, and exports `None` for both -
 along with `approval_period`, one of the Dashboard's own analog filters
-(`dashboardModel.ts:6`), so that dropdown is permanently empty.
+(`dashboardModel.ts:5`), so that dropdown is permanently empty.
 
-### 3g. There is no launch anchor in the database at all
+Confirmed end to end on `jr/meta.db`: `drug_profile_fields` holds Tyvaso
+`2009-07-30` and Opsumit `2013-10-18`, each cited to
+`submissions[type=ORIG].submission_status_date`; `canonical_products.initial_approval_date`
+is `None` for both; `build_dashboard_preview` on a copy returns
+`"fda_approval_date": null, "approval_period": null` for both and
+`filter_options.approval_period: []`. `grep -rn "initial_approval_date\s*="
+backend/app/` returns nothing; the only assignment in the repository is
+`tests/test_dashboard_preview.py:42`.
+
+**Rank:** written as "the fallback is skipped", which reads as a tidy-up. It
+nulls the approval date and the `approval_period` filter precisely for the
+products that resolved successfully - the ones the pipeline did best on - with
+the correct date sitting two tables over.
+
+### 3g. There is no launch anchor in the database at all  `[V]`
 
 `orchestrator.py:784` computes `approval` per source; `:908-914` writes
 `ProductIndicationORM.approval_date` and `launch_anchor_type` from that local.
@@ -890,14 +998,17 @@ Two openFDA sources are retrieved per job, and they are not the same record:
     label.json?...application_number:...  -> approval None,       indications_text True
 
 `parsed_indications` is non-empty only for the `label.json` record, where
-`approval` is `None`. So every indication row is written with
-`approval_date=NULL, launch_anchor_type=NULL`.
+`approval` is `None` (it has no `submissions`). So every indication row is
+written with `approval_date=NULL, launch_anchor_type=NULL` - confirmed on all
+three `product_indications` rows in `jr/meta.db`, which also carry
+`therapeutic_area=None` while their `approved_lot_quote` prose is full. There
+is no launch anchor in any database in this repository.
 
 `months_since_launch` is the x-axis of "Launch-relative" and "First 24 months"
 and the input to `time_to_ninety_percent_peak`. Even with layer 3 wired
 tomorrow there is nothing to anchor a curve on.
 
-### 3h. `therapeutic_area` is a verbatim copy of `indication`, so nothing groups
+### 3h. `therapeutic_area` is a verbatim copy of `indication`, so nothing groups  `[V]`
 
 `orchestrator.py:779`: `"indication": indication_value, "therapeutic_area":
 indication_value`. Running the real parser on real labels:
@@ -908,14 +1019,18 @@ indication_value`. Running the real parser on real labels:
     NDA022387 : 'pulmonary arterial hypertension (PAH; WHO Group 1); pulmonary
                  hypertension associated with interstitial lung disease (...)'
 
-Four spellings of one indication universe. Both grouping functions use exact
-equality - `competitive_intensity_llm.py:190` and
-`competitive_intensity.py:77` - so on pipeline output every product is its own
-universe of one, i.e. "the first approval in the indication", i.e. intensity
-`low` for everyone. Gold's README names this failure: "a number with the shape
+Five spellings of one indication universe across seven labels (Letairis and
+Adcirca match Tracleer's; Adempas adds a fifth with CTEPH first). Both grouping
+functions use exact equality - `competitive_intensity_llm.py:190` bare,
+`competitive_intensity.py:77` after `casefold()`, which none of the five
+survives - so on pipeline output every product is its own universe of one,
+i.e. "the first approval in the indication", i.e. intensity `low` for
+everyone. On `jr/meta.db`'s two-product run,
+`filter_options.therapeutic_area` holds two strings for two PAH drugs and
+`competitive_snapshots` holds 0 rows. Gold's README names this failure: "a number with the shape
 of a measurement and none of the meaning."
 
-### 3i. `moa_class`, `approval_era` and `competitive_intensity_at_launch` have no producer
+### 3i. `moa_class`, `approval_era` and `competitive_intensity_at_launch` have no producer  `[V]`
 
 `grep -rn "moa_class" backend/app/` finds nothing outside `analytics/` and one
 prompt template slot; `approval_era` appears only in `analog_matching.py`. The
@@ -927,7 +1042,20 @@ dosage_form|formulation|ticker|cik` - no class, no era, no intensity.
 So of the four weighted attributes at most two are ever comparable, and `moa`
 (weight 1.0, the heaviest) is free text inconsistent in **kind**: where
 drugsFDA carries `pharm_class_moa` it is a class term; where it does not, the
-label's prose is used. In the 20-product probe `moa` came back `None` for 10.
+label's prose is used - `pharm_class_moa` is on only 7 of 17 drugsFDA records.
+On `jr/meta.db`: Opsumit `moa = 'Endothelin Receptor Antagonists [MoA]'`,
+Tyvaso `moa = 'Treprostinil is a prostacyclin analogue. The major
+pharmacologic actions...'` - one class term and one paragraph in the same
+dropdown. (The Library showing `moa=None` for Tyvaso is `[I]`:
+`moa_components` has no Tyvaso row and `dashboard/series.py:132` falls back to
+the profile prose, but `api/products.py`'s `_moa_text` was not exercised.)
+
+With the literal attribute names layer 2 supplies **1 of 4** (route), so
+`minimum_attributes=2` drops every candidate and the analyst gets an empty
+analog set rather than a wrong one; with the most generous mapping (`roa` ->
+route, EPC/MoA term -> class, era from the approval date) it supplies 3 of 4
+and `rank_analogs` puts Orenitram, Revatio and Tracleer above Tyvaso DPI -
+the same molecule by the same route - for target Tyvaso.
 The Library also shows `moa=None` for Tyvaso although the profile holds the
 prose value, because `_moa_text` reads `MoAComponentORM`, which openFDA's
 `moa_terms` left empty - another handoff where having the canonical row yields
@@ -935,6 +1063,42 @@ prose value, because `_moa_text` reads `MoAComponentORM`, which openFDA's
 
 `dashboard/series.py:29 _approval_period` buckets to `f"{start}-{start+4}"`,
 the same shape as gold's `approval_era`, and is computed for display only.
+
+### 3j. Six of seven openFDA citations point at field paths that do not exist  `[V]`
+
+`orchestrator.py:791-795` builds every openFDA citation's `source_quote` as
+`f"openfda.{field}"`. On `jr/meta.db`'s real rows that produced
+`openfda.roa`, `openfda.indication`, `openfda.therapeutic_area`, `openfda.moa`,
+`openfda.active_ingredients`, `openfda.pharmacologic_class` - and **none of
+those is a key in either dataset's `openfda` block** (3b's measured key list).
+Only `fda_approval_date` carries a real path,
+`submissions[type=ORIG].submission_status_date`. Against "citations are
+mandatory on every source-derived field", six of seven layer-2 fields ship a
+citation the analyst cannot follow - which is worse than none, because it
+reads as verified. Ranks alongside 3a.
+
+**Rule 1, three more literals in this module.** `PRIORITY_JUDGE_FIELDS`
+(`quality/profile.py:115-124`) is eight field names whose producer is the
+`mapping` dict plus the prompt vocabulary; it is already stale in one
+direction (`dosage_form`, never produced) and can go stale in the other (a new
+mapping key sorts silently to 99). **Rule 5:** `orchestrator.py:488-493`'s
+docstring carries "every job in a sweep bought its own copy from the model...
+in one run that was the longest stage of the job while retrieval took two
+seconds" - a run and a measurement, in application code. `config.py:46-48`'s
+"openFDA gives an inhaled product's route as ORAL" is the permitted kind (it
+justifies a setting) and is now also incomplete: for Winrevair openFDA gives
+no route at all.
+
+**Rule 3 for whoever implements 3i's oracle:** `seed/gold/product_profiles.jsonl`
+is built from `seed/product_attributes.csv` (identical 62 `drug_name` sets),
+so a scorer that imports it must live under `scripts/` or `tests/`, never
+under `app/`, and must never be what
+`competitive_intensity_llm.peers_at_launch`'s `profiles` argument receives at
+run time. **Rule 4:** the oracle is a defect-finder; a fix found with it is
+scored on products none of gold or the holdouts use, with both answers
+represented - for 3a, products where the two route fields *agree* as well as
+disagree, or a fix that always prefers `products[].route` scores full marks on
+a set that only holds disagreements.
 
 **Note for rule 3.** `seed/product_attributes.csv` holds `moa_class`,
 `route_of_administration`, `first_approval_year`, `indication_area` and
