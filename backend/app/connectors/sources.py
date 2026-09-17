@@ -31,6 +31,7 @@ from __future__ import annotations
 
 # ruff: noqa: BLE001
 import asyncio
+import html
 import logging
 import mimetypes
 import re
@@ -260,22 +261,17 @@ def normalize_registrant(name: str) -> str:
     return " ".join(words)
 
 
-def is_earnings_exhibit(filename: str) -> bool:
-    """True for exhibit 99.x documents, which carry the product revenue tables.
+def exhibit_number(declared_type: str | None) -> str | None:
+    """The exhibit a filing's declared document type names, or None.
 
-    Issuers name these inconsistently - a ticker and a period
-    (``acmeq12024-ex991.htm``), the word spelled out in full
-    (``exhibit991acme12312024.htm``), or a filing agent's own identifier with no
-    company name in it at all (``tm1234567d1_ex99-1.htm``) - so match on the
-    alphanumeric-only form of the name rather than on a fixed pattern.
+    The type is EDGAR's own, taken from the filing's header: ``EX-99.1`` and
+    ``EX-99.01`` and ``EX-99`` all name exhibit 99, ``EX-13`` names exhibit 13
+    and ``EX-101.INS`` names exhibit 101. The number before the first dot is
+    the family; everything after it is the filer's own numbering within it, so
+    the family is read and the spelling of the rest is not.
     """
-    name = (filename or "").rsplit("/", 1)[-1].lower()
-    if not name.endswith((".htm", ".html", ".txt")):
-        return False
-    squashed = re.sub(r"[^a-z0-9]", "", name)
-    # Written "ex991", "exx991" (a doubled x survives some filers' names),
-    # "exh991" where the word is abbreviated, or "exhibit991" in full.
-    return bool(re.search(r"ex+(?:h(?:ibit)?)?9{2}", squashed))
+    match = re.match(r"EX-(\d+)", (declared_type or "").strip().upper())
+    return match.group(1) if match else None
 
 
 def _calculation_linkbase(documents: list[str]) -> str | None:
@@ -448,6 +444,13 @@ class SECConnector:
     # compared to it by family and it needs no second call to say so; the
     # guard test is what keeps that true.
     EARNINGS_FORM = "8-K"
+    # The exhibit family a press release and the schedules beside it are filed
+    # under - Regulation S-K item 601's "additional exhibits". The SEC assigns
+    # the number; it is a snapshot of that exhibit table and would go stale
+    # only if the table were renumbered. It is the family, not a spelling: the
+    # filing's declared type is read through `exhibit_number`, so EX-99,
+    # EX-99.1 and EX-99.01 are one thing here and EX-13 is not it.
+    EARNINGS_EXHIBIT = "99"
     # Older filings live in dated shards beside filings.recent. A bound keeps a
     # wide window from walking a filer's whole history.
     MAX_SUBMISSION_SHARDS = 4
@@ -530,6 +533,40 @@ class SECConnector:
             logger.warning("sec_index_failed accession=%s error=%s", acc_nodash, exc)
             return []
         return [item.get("name", "") for item in items if item.get("name")]
+
+    async def _declared_documents(
+        self, client: httpx.AsyncClient, cik_int: str, accession: str
+    ) -> list[tuple[str, str]]:
+        """(declared type, filename) for every document one filing contains.
+
+        The filing states what each of its documents is - the type the filer
+        submitted it under, beside the name the filer's agent happened to give
+        it. The directory listing does not: ``index.json`` carries a display
+        icon where a type would be, so a reader of the listing alone can only
+        guess an exhibit from its filename, and filing agents name exhibits
+        however they like.
+
+        Read from the filing's own header page, which costs the same single
+        request the directory listing costs. The page serves the submission's
+        SGML with its angle brackets escaped, one ``<DOCUMENT>`` block per
+        document; the block is the unit, so a document missing a description
+        or a sequence still yields its type and its name.
+        """
+        acc_nodash = accession.replace("-", "")
+        url = f"{self.ARCHIVES}/{cik_int}/{acc_nodash}/{accession}-index-headers.html"
+        try:
+            resp = await self._get_with_retry(client, url)
+            page = html.unescape(resp.text)
+        except Exception as exc:
+            logger.warning("sec_header_failed accession=%s error=%s", accession, exc)
+            return []
+        declared: list[tuple[str, str]] = []
+        for block in page.split("<DOCUMENT>")[1:]:
+            kind = re.search(r"<TYPE>([^\n<]*)", block)
+            name = re.search(r"<FILENAME>([^\n<]*)", block)
+            if kind and name and name.group(1).strip():
+                declared.append((kind.group(1).strip(), name.group(1).strip()))
+        return declared
 
     async def _fetch_document(
         self,
@@ -678,8 +715,17 @@ class SECConnector:
             ):
                 continue
             acc_nodash = accession.replace("-", "")
-            documents = await self._list_filing_documents(client, cik_int, acc_nodash)
-            exhibits = [name for name in documents if is_earnings_exhibit(name)]
+            # What the filing says its documents are, not what they are called.
+            # A filing agent names the release `ex_100200.htm` or
+            # `q4-2025xearningsrelease.htm` or `acme-20260211xex991.htm`, and
+            # only the third of those states the exhibit in its name. All three
+            # are declared EX-99.1 by the filing that carries them.
+            declared = await self._declared_documents(client, cik_int, accession)
+            exhibits = [
+                name
+                for kind, name in declared
+                if exhibit_number(kind) == self.EARNINGS_EXHIBIT
+            ]
             if not exhibits:
                 logger.info("sec_no_earnings_exhibit accession=%s date=%s", accession, fdate)
                 continue
@@ -1055,8 +1101,15 @@ class SECConnector:
                         cik=resolved,
                         recent=recent,
                         max_exhibits=settings.sec_max_earnings_exhibits,
-                        since=earnings_since,
-                        until=earnings_until,
+                        # The same widened bounds the primary pass uses, and
+                        # for the same reason: an earnings release reports a
+                        # quarter that ended before it, so the release that
+                        # states the window's last quarter is filed after the
+                        # window closes. Handed the raw window, the two passes
+                        # disagreed about which filings report a period the
+                        # run asked for, and nothing said which was right.
+                        since=since_bound,
+                        until=until_bound,
                     )
                 )
 

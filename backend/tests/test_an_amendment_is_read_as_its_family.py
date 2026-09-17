@@ -170,13 +170,13 @@ async def test_an_item_2_02_amendment_is_an_earnings_filing(monkeypatch):
     results is fetched, and the source says which form it came from."""
     connector = _connector(monkeypatch, sec_include_8k=False)
 
-    async def _documents(self, client, cik_int, acc_nodash):
-        return [f"{acc_nodash}ex991.htm"]
+    async def _declared(self, client, cik_int, accession):
+        return [("EX-99.1", f"{accession}-release.htm")]
 
     async def _fetch(self, client, *, url, accession, doc, run_id, job_id, source_id):
         return b"<html></html>", False, f"key/{doc}"
 
-    monkeypatch.setattr(SECConnector, "_list_filing_documents", _documents)
+    monkeypatch.setattr(SECConnector, "_declared_documents", _declared)
     monkeypatch.setattr(SECConnector, "_fetch_document", _fetch)
 
     forms = ["8-K", "8-K/A", "8-K", "10-Q"]
