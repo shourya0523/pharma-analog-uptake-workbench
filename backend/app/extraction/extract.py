@@ -732,8 +732,6 @@ def _read_table(
             # that disappears leaves a gap nobody can account for, and the
             # flag is what puts this one in front of a person.
             says_no_sales = any(FLAG_NO_SALES in r.flags for _, _, r in about)
-            if says_no_sales:
-                skipped.append(f"{label}:{block.period}:{FLAG_NO_SALES}")
             # "No sales of NuVessa" under "Calderon and NuVessa": for the
             # period the note names, the line is Calderon's alone.
             no_sales = {n for _, _, r in about for n in r.no_sales_of}

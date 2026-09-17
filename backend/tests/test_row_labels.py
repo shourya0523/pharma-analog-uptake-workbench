@@ -196,8 +196,19 @@ def test_a_note_saying_the_product_had_no_sales_makes_the_line_someone_elses():
     # can never be published without one.
     for_nuvessa = _read(rows, product="NuVessa", footnotes=notes)
     assert [v.flags for v in for_nuvessa.values] == [("combined_line", "footnote_says_no_sales")] * 2
-    assert "footnote_says_no_sales" in (for_nuvessa.skipped_reason or "")
     assert QUESTION_FLAGS & {"footnote_says_no_sales"}
+    # And it is not also reported as skipped: that channel says what was left
+    # out of the readout, and this row is in it. The other answer, on a row the
+    # readout really does leave out - the family line, asked for the sibling it
+    # includes - is that the channel names it and no value is carried out.
+    assert "footnote_says_no_sales" not in (for_nuvessa.skipped_reason or "")
+    left_out = _read(
+        [["Calderon (1)", "100.0", "90.0"]],
+        product="Nebulized Calderon", extra_aliases=["Calderon"],
+        footnotes=["(1) includes Nebulized Calderon"],
+    )
+    assert left_out.values == []
+    assert "family_line_includes_product" in (left_out.skipped_reason or "")
     for_calderon = _read(rows, footnotes=notes)
     assert for_calderon.values and all(v.combined_with == () for v in for_calderon.values), (
         "the line is Calderon's alone once the note says the other sold nothing"
