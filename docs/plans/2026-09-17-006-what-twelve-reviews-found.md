@@ -266,7 +266,20 @@ judge, which is why turning it on today does nothing at all. Turn it on
 **after**, and measure it as its own configuration against its own correction
 rate.
 
-**Nothing below is scored until 0a-0d are done.**
+### 0f. The product's own example file has never been run  `[V]`
+
+Across all 18 run databases in the scratchpad, every job is drawn from the
+same 24-product rare-disease set (FILSPARI, ORLADEYO, NUPLAZID, ELEVIDYS,
+Galafold, ...). `select ... where lower(drug_name) in ('opsumit','uptravi',
+'tracleer','veletri','ventavis')` returns nothing in any of them. **No run
+has ever processed a product in `seed/example_drugs.csv`** - the PAH catalog
+that `_product-brief.md` says is the analyst's, and that gold's competitive
+intensity is computed for. Every claim in this document about what the
+pipeline does to the analyst's own products is inferred from a different
+issuer set. 2g is the first consequence found.
+
+**Nothing below is scored until 0a-0d are done, and nothing about the PAH
+catalog is known until it has been run.**
 
 ---
 
@@ -637,11 +650,17 @@ Gilead's are quarterly earnings press-release pages.
 as EX-99 on the earnings 8-K, and `is_earnings_exhibit` (`sources.py:163`)
 already matches the naming. Verified against the live API:
 
-    J&J 1Q2020   8-K 0000200406-20-000026  items 2.02,9.01
-                 a2020q1exhibit992.htm     -> OPSUMIT, UPTRAVI, TRACLEER,
-                                              STELARA, DARZALEX, XARELTO
-    Gilead 2Q18  8-K 0000882095-18-000019  items 2.02,9.01
-                 exhibit991earningspressrel.htm -> HARVONI, EPCLUSA, BIKTARVY
+    J&J 3Q2021   8-K 0000200406-21-000067  items 2.02,7.01,9.01
+                 a2021q3exhibit992.htm  prints  OPSUMIT  US 299  Intl 159  WW 458
+                                        under THIRD QUARTER 2021 / 2020, $ millions
+    Gilead 3Q22  8-K 0000882095-22-000022  items 2.02,9.01
+                 exhibit991earningspressrel.htm prints  Biktarvy - U.S. $ 2,286 $ 1,875
+                                        under Three Months Ended September 30, 2022 2021
+
+(An earlier draft's evidence for this was a list of brand names found in each
+exhibit - the name test the protocol forbids. The figures above are printed
+beside the label, which is the test that answers the claim. 1Q2020 and 2Q18
+were also checked; the quarters above are the second ones.)
 
 So gold cited the IR copy because it is the readable one, not because EDGAR
 lacked it, and **no investor-relations fallback is needed for the bulk of it**.
@@ -652,11 +671,16 @@ CLAUDE.md rule 1's table names is real and reachable, but it is not the source
 of the quarters:
 
     8-K/A 0000200406-17-000046  filed 2017-08-29  items 2.01,9.01
-      exhibit991actelionfinancia.htm  (1.2 MB, matched by is_earnings_exhibit)
-      -> names OPSUMIT, UPTRAVI, TRACLEER, VELETRI, VENTAVIS in narrative only
-      -> "IN CHF THOUSANDS": PRODUCT SALES 2,412,198 as a single total line
-      -> no per-product figures, no quarterly columns (0 "six months",
-         0 "June 30"), 137 mentions of CHF, 0 of a USD product table
+      exhibit991actelionfinancia.htm  (1.2 MB, 51 tables through html_tables)
+      -> 0 table rows, raw or parsed, name any Actelion product; all 13
+         product-name windows containing a digit are narrative (milestones,
+         royalty rates, licence dates, inventory)
+      -> "Consolidated Income Statement - Twelve months ended December 31, (in
+         CHF thousands)": Net revenue / Product sales 23 / 2,412,198 - one line
+      -> 137 mentions of CHF, 0 "six months", 0 "June 30", 0 "$"
+      exhibit992actelionproformas.htm (466 KB, not opened by an earlier draft)
+      -> the only product-labelled numeric row is a VALCHLOR & Ponesimod
+         contingent-consideration liability in USD millions; not revenue
 
 So the rule-1 table is right that the 8-K/A holds "the Actelion financials" -
 it holds the *company's* statements. Product-level quarterly revenue is not in
@@ -675,6 +699,37 @@ the claim, and `EARNINGS_ITEM = "2.02"` written as a literal is rule 1's shape.
 But neither is now known to unlock a quarter, and this document should not
 claim one until a filing that carries product-level periods has been opened and
 shown to.
+
+### 2g. The EDGAR copy 2f relies on is not readable by the table path  `[V]`, end-to-end `[I]`
+
+2f retired the investor-relations question on the grounds that J&J's product
+schedule is on EDGAR. It is, with figures. **The pipeline's table reader
+cannot attach them to the product.** J&J prints the product as a row-group
+header and puts the figures on rows labelled by geography:
+
+    OPSUMIT
+      US       299   244   22.8
+      Intl     159   148    7.4
+      WW       458   392   17.0
+
+    read_label("OPSUMIT", ["Opsumit","macitentan"])   -> Opsumit
+    read_label("US" | "Intl" | "WW", ...)             -> None
+    parsing.tables.extract_revenue_rows(tables, product="Opsumit", ...) -> 0 rows
+
+`fingerprint._covering` walks *left* for column headings; nothing in
+`parsing/` or `extraction/` walks *up* for a row-group heading
+(`grep row_group|group_header|section_label`: no hits). So the `carries`
+branch of 12b's predicate - "a figure whose row label resolves to P" - holds
+for row-labelled tables and does not hold for row-grouped ones. The gap is in
+`parsing/`, not in the cascade.
+
+Whether the prose or model path recovers Opsumit from this exhibit is
+**unmeasured and unmeasurable from existing output**, because of 0f. Opsumit,
+Uptravi and Tracleer are 4 of the 20 rows in `seed/example_drugs.csv` and the
+centre of the PAH analog set; their quarterly figures are on EDGAR, free,
+under item 2.02, already fetched by the existing path - and the table reader
+returns nothing for them. Existence is not extraction. This outranks 9c and
+outranks 2f as previously written.
 
 ---
 
@@ -1409,15 +1464,38 @@ what the code does on that input.
 - A live repro stored **28 ACADIA filings, 22.1 MB, against a job for aspirin**,
   with `job.manufacturer` still None - which also leaves `issuer=""` on the
   member register, where two filers' `acme:ProductMember` collide in one slot.
-- When no CIK resolves the job is flagged `sec_retrieval_failed`, whose meaning
-  is "EDGAR refused, do not fall back", and the search is skipped. The user is
-  told we could not reach the SEC when we do not know who sells this.
+- When no CIK resolves, `sec_found` is empty and `orchestrator.py:668` enters
+  the search fallback - an earlier draft said the search is *skipped*, which is
+  inverted; with `enable_llm_search` it runs, which is worse. The flag
+  `sec_retrieval_failed` (`:657-667`) is set only when SEC sources were listed
+  and none fetched, so the user is told we could not reach the SEC when we do
+  not know who sells this.
 
-And `resolve_cik` is unreliable when it is called. Against the real
-10,422-registrant index: `Vertex` -> Vertex, Inc. (tax software);
-`Vertex Pharmaceuticals` -> None; `Eli Lilly and Company` -> None; a wrong
-ticker suppresses a good name. 1,966 registrants have a single-word normalised
-title.
+And `resolve_cik` is unreliable when it is called. Against the live
+10,422-row `company_tickers.json`, re-run:
+
+    resolve_cik(name='Vertex')                  -> 0001806837  Vertex, Inc. (tax software)
+    resolve_cik(name='Vertex Pharmaceuticals')  -> None
+    resolve_cik(name='Eli Lilly and Company')   -> None
+    resolve_cik(name='Eli Lilly')               -> 0000059478  ELI LILLY & Co
+    resolve_cik(ticker='FOLDX', name='Amicus Therapeutics') -> None
+
+The Lilly miss, printed: `normalize_registrant("Eli Lilly and Company")` is
+`'eli lilly and'` against `'eli lilly'` - `_REGISTRANT_SUFFIXES`
+(`sources.py:146`) strips `company` and drops `&` but keeps `and`. It is a
+literal with no note of what it is a snapshot of (rule 1). 2,327 index rows
+(1,966 distinct titles, 1,973 CIKs) have a single-word normalised title.
+
+**Against `seed/example_drugs.csv`'s own manufacturer column, 8 of 14
+distinct names fail**: `Actelion/J&J`, `Janssen/J&J`, `Bayer/Merck`, `Gilead`,
+`Teva`, `CMP Pharma` -> None; `Merck` -> Merck & Co by luck. The exact user
+the brief describes falls into the model path on their own upload.
+
+The aspirin repro re-run live with the model boundary stubbed to return a
+CIK at confidence 0.2: `AFTER _identity: cik='0001070494'
+quality_flags=['cik_from_llm_search']`, 28 sources retrieved and persisted,
+22,065,138 bytes across 28 files, `job.manufacturer` still None. Confidence
+0.2 accepted without inspection.
 
 **Fix, in order:**
 1. Move `_extract_metadata` before `_identity`. openFDA already knows a drug's
@@ -1431,8 +1509,13 @@ title.
    sponsor openFDA named, and say `no_filer_of_record` rather than
    `sec_retrieval_failed` when identity is what failed.
 
-No held-out set can see this class: every job in every run supplies
-manufacturer, ticker and CIK, and there is no test of `resolve_cik` at all.
+No held-out set can see this class: across all 18 run databases, 342 jobs, 0
+without manufacturer, 0 without ticker, 0 without CIK. And there is no
+*behavioural* test of `resolve_cik` - `test_earnings_sources.py:306` names it
+in a source-text assertion about retry plumbing and never calls it. (`backend/
+app/identity/` is product identity keys, 65 lines; issuer identity lives
+entirely in `connectors/sources.py`, `connectors/llm_search.py` and the
+orchestrator.)
 
 ---
 
@@ -1521,21 +1604,63 @@ is still live in two places:
 - `connectors/sources.py:541` is `if form != "8-K": continue`, inside
   `_fetch_earnings_exhibits`. **108 filings carry item 2.02 on form `8-K/A`**
   in the cached corpus and every one is skipped. `form_family()` exists at
-  `sources.py:198`, built for exactly this, and is not used here.
+  `sources.py:197`, built for exactly this, and is not used here.
 - `sources.py:289,832`: `PRIMARY = {"10-K","10-Q","20-F","40-F"}` /
   `SECONDARY = {"6-K","8-K"}`, applied as `if form not in allowed`. **1,308
   filings** in the cache are forms the module's own `reports_a_period()`
   accepts and this set drops - including 317 `10-K/A` and 188 `10-Q/A`, the
   amendments that carry restated financials.
 
-No test covers either. Whether any of those amendments carries a
-product-revenue table is not established; what is measured is that they are
-never listed.
+Both counts re-run over the 280 cached submissions indices (269 CIKs,
+241,226 filing rows, `filings.recent` only - so lower bounds): 108 and 1,308,
+exact. But **762 of the 1,308 are the 11-K family** (753 `11-K`, 8 `11-K/A`,
+1 `11-KT`) - employee-benefit-plan reports, in the count only because
+`ANNUAL_FORMS` (`sources.py:49`) admits them. The pharma-relevant remainder is
+546.
 
-Gold's own 2,203 quarters cite 284 accessions across 8 issuers, and none is an
-amendment:
+`test_retrieval_is_bounded_by_the_window.py:61-65` asserts
+`reports_a_period("10-Q/A")` and `("10-K/A")` are True - "`8-K/A` is the shape
+that started this rule" - while `sources.py:832` drops both. The derived
+helper and the live literal contradict each other and no test exercises
+`:832`. `test_earnings_sources.py:76` asserts `EARNINGS_ITEM == "2.02"`, which
+pins the literal rather than covering the filter. A fourth literal sits at
+`sources.py:833`: `pri = {"10-K":0,"20-F":0,"40-F":0,"10-Q":1,"6-K":2,"8-K":3}
+.get(form, 5)`, keyed on the raw form so every amendment sorts last.
 
-    8-K 173   10-Q 75   10-K 34   6-K 1   20-F 1   amendments: 0
+**The open question is answered, and it narrows the fix.** 34 filings were
+opened - every filing either filter drops, for every issuer in
+`seed/example_drugs.csv` or in a run database, excluding the 11-K family.
+Four carry a product-level revenue figure for a period, printed beside the
+label:
+
+    Travere 8-K/A 0001438533-25-000030  2.02,9.01   FILSPARI $ 55,881 / $ 19,834
+                                                     Three Months Ended March 31, 2025 / 2024
+    Amicus  8-K/A 0001104659-22-057365  2.02        "Global revenue for Galafold in the first
+                                                     quarter of 2022 was $78.7 million"
+    Travere 10-Q/A 0001438533-18-000022             Thiola 19,924 / 17,884, 3m to 2018-03-31
+    Travere 10-K/A 0001438533-18-000020             Thiola $82,311 / $71,199 / $54,923
+
+**In all four, a filing the filters keep carries the same figure.** The
+Travere 10-Q filed the same day carries `FILSPARI $ 55,881 $ 19,834`; the two
+2018 amendments say in their own note they were filed "solely to correct a
+clerical error in Exhibits 32.1 and 32.2" and their revenue tables are
+identical to the original's; Amicus filed an original item-2.02 8-K the same
+day. Over the corpus, all 108 `8-K/A` item-2.02 filings have an `8-K`
+item-2.02 by the same filer within 120 days (97 within 30). **Zero of 34
+carried a figure no kept filing carries.** The filters cost a corroborating
+second reading, not a quarter - and 6e/2d show corroborators are discarded
+anyway.
+
+(One shape worth recording, out of scope: Indivior `6-K/A`
+`0001625297-25-000009` prints `SUBLOCADE 194 176 756 630` for Q4/FY 2024/2023
+- a foreign issuer files no Q4 10-Q, so a 6-K/A is the natural home for its
+quarterly split. It too has a same-day original 6-K.)
+
+Gold's own rows cite no amendment. Predicate matters: accessions parsed from
+`source_url` in `quarterly_revenue.jsonl` alone give 267 across 6 issuers;
+with `annual_revenue.jsonl` too, 285 across 9. Either way:
+
+    8-K 173   10-Q 76   10-K 34   6-K 1   20-F 1   amendments: 0
 
 Fix these because rule 1 says a filter is part of the claim. Do **not** fix
 them expecting quarters: the 8-K/A the rule-1 table cites carries company-level
@@ -1854,6 +1979,11 @@ Eli Lilly and United Therapeutics put product revenue in the periodic reports
 EX-99.2 schedule, and an acquired product's pre-acquisition history may be in
 neither.
 
+`sources.py:822-826` justifies the window with a count from a named eval -
+"across two shapes-holdout runs those fetches produced four figures, three of
+them already read..." - in a comment, naming a holdout set in application
+code (rule 5).
+
 The failure is symmetric and both halves are live: the filter fetches
 documents that carry nothing (`sec_include_8k` pulled cover pages into 14 of 28
 documents in a live repro) and skips documents that carry something, and in
@@ -1917,8 +2047,11 @@ Three things this ordering is **not** allowed to be:
   is a corroborator, and 2d is a quarter lost because a corroborator was
   discarded. Tier 0 and 1 are always read in full.
 - **Not a licence to add tier 5 or 6 first.** Tier 6 exists today as
-  `_search_revenue_fallback` and produced 0 datapoints in two runs (section
-  10). Tier 5 is justified by 58 rows of gold, all Actelion/J&J. Both are the
+  `_search_revenue_fallback` (`orchestrator.py:1108`, flag
+  `llm_search_revenue_fallback`) and has produced **0 datapoints in all 18
+  run databases** - 91 `llm_search` source rows, 5 datapoints from them, all
+  5 on the separate unfiled-quarters path (`:434`) in run3. An earlier draft
+  said "two runs". Tier 5 is justified by 58 rows of gold, all Actelion/J&J. Both are the
   narrow tail; neither is the reason to build this.
 
 ### 12d. What it is worth, and what would show it
@@ -1928,8 +2061,16 @@ Unknown, and that is the point of stating it as a design. What can be said:
 - The predicate is worth something on its own, before any cascade, because it
   turns "we fetched 28 documents" into "14 of them carried nothing", which is
   measurable and currently is not.
-- Tier 4 has no demonstrated quarter behind it (2f). Tier 5 has 58 rows of
-  gold behind it. Tiers 2 and 3 are already reached today.
+- Tier 4 has no quarter behind it: 34 dropped filings opened, 0 carry a
+  figure no kept filing carries (9c). Tier 5 has 58 rows of gold behind it.
+  Tiers 2 and 3 are already reached today.
+- **The predicate's premises are verified on a live filing** - `read_label`
+  on `FILSPARI`, `fingerprint.column_periods` returning three-month periods
+  ending March 2025/2024, `quarters_reported_in(window)` producing `Q` - with
+  one gap: the `carries` branch does not hold for row-grouped tables (2g). The
+  predicate should be built and measured on a row-grouped document before the
+  cascade is ordered around it. And `Q` must come from the run window, never
+  from gold's `unresolved_quarters.jsonl` (rule 3).
 - So the honest expectation is that this section improves the *tail* - thin
   issuers, acquired products, foreign filers - and does nothing for the median
   case, where sections 5 and 6 show the pipeline already holds figures it
