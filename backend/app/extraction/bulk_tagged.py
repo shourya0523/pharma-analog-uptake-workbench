@@ -26,8 +26,9 @@ than "we never taught it these names".
 from __future__ import annotations
 
 from collections import defaultdict
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
 from app.extraction import elements
 from app.extraction.members import Resolution, load_register, match
@@ -66,8 +67,7 @@ def _resolve(
             continue
         stem = register_member.split(":")[-1]
         for suffix in ("Member", "Domain"):
-            if stem.endswith(suffix):
-                stem = stem[: -len(suffix)]
+            stem = stem.removesuffix(suffix)
         if stem.casefold().endswith(member.casefold()):
             return resolution
     return None

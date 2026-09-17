@@ -6,6 +6,8 @@ figures belong to which period. Reading rows as the cells they happen to contain
 throws that away, and the period then has to be guessed from prose.
 """
 
+from bs4 import BeautifulSoup
+
 from app.extraction.fingerprint import column_periods, stated_periods
 from app.parsing.documents import (
     HTML_TABLE_LIMIT,
@@ -14,7 +16,6 @@ from app.parsing.documents import (
     html_table_grids,
     html_tables,
 )
-from bs4 import BeautifulSoup
 
 # A shape filers use: the heading spans every value column, each year spans its
 # own three, and the figures themselves are spanned too.

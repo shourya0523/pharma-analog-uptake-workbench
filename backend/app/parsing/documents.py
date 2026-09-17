@@ -756,8 +756,6 @@ class DocumentParser:
 
     async def _parse_pdf(self, source: RetrievedSource, raw: bytes) -> ParsedDocument:
         try:
-            import pdfplumber
-
             blocks, grids = pdf_table_grids(raw)
             tables = [rows for grid in grids if (rows := flatten_grid(grid))]
             if not blocks:

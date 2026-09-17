@@ -20,7 +20,12 @@ Invented names: Calderon, NuVessa.
 from __future__ import annotations
 
 from app.extraction.candidates import extract_revenue_candidates
-from app.extraction.check import Finding, conflicting_values, run_checks, scale_continuity
+from app.extraction.check import (
+    Finding,
+    conflicting_values,
+    run_checks,
+    scale_continuity,
+)
 from app.extraction.process import Datapoint
 
 

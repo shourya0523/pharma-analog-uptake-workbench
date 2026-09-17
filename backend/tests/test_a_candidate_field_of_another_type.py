@@ -26,7 +26,10 @@ import pytest
 
 from app.domain.claims import stated_labels, stated_number, stated_text
 from app.llm.client import apply_judge_hard_vetoes
-from app.llm.grounding import apply_structured_field_gates, enforce_verbatim_on_candidates
+from app.llm.grounding import (
+    apply_structured_field_gates,
+    enforce_verbatim_on_candidates,
+)
 from app.quality.candidate_filters import filter_revenue_candidates
 from app.quality.checks import quote_contains_value
 from app.quality.fast_judge import try_deterministic_judgment

@@ -75,7 +75,7 @@ NOT_A_PRODUCT = "-"
 # every call would be the same work repeated. Keyed on the register's identity
 # and length, and holding one entry, so a register that is rebuilt or added to
 # is re-indexed rather than answered from a stale index.
-_IDENTITY_CACHE: dict[int, tuple[int, dict[tuple[str, str], "Resolution"]]] = {}
+_IDENTITY_CACHE: dict[int, tuple[int, dict[tuple[str, str], Resolution]]] = {}
 
 
 def fingerprint(products: list[str]) -> str:

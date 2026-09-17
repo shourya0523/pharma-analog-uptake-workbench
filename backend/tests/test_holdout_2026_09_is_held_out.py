@@ -118,7 +118,7 @@ def test_a_figure_that_is_not_printed_says_how_it_was_computed():
             # accident inside any larger number in the row, so only the
             # distinctive spellings count.
             printed = {form for form in ("%.1f" % value, "%.3f" % value,
-                                         "{:,}".format(round(value * 1000)))
+                                         f"{round(value * 1000):,}")
                        if len(form) >= 3}
             quotes = [source["source_quote"] for source in figure["sources"]]
             if any(form in quote for quote in quotes for form in printed):

@@ -7,8 +7,6 @@ where the words were put.
 
 from __future__ import annotations
 
-import io
-
 import pymupdf
 import pytest
 

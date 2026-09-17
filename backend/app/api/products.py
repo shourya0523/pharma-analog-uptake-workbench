@@ -8,7 +8,6 @@ most recent job, and its history is every job that ever named it.
 
 from __future__ import annotations
 
-# ruff: noqa: B008, BLE001
 from datetime import datetime
 from typing import Any
 
@@ -40,7 +39,11 @@ from app.domain.models import (
     new_id,
 )
 from app.observability import normalize_analog_key
-from app.quality.completeness import names_a_quarter, quarter_labels, refresh_completeness
+from app.quality.completeness import (
+    names_a_quarter,
+    quarter_labels,
+    refresh_completeness,
+)
 from app.validation.sampling import REASON_HELP as FLAGGED_REASON_HELP
 
 router = APIRouter(tags=["products"])

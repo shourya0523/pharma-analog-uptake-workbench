@@ -27,10 +27,8 @@ from app.extraction.fingerprint import PeriodBlock, TableFingerprint, build_fing
 from app.parsing.evidence import product_aliases
 from app.parsing.labels import (
     FLAG_COMBINED,
-    FLAG_NO_SALES,
     FLAG_FAMILY_INCLUDES,
     FLAG_NO_SALES,
-    FLAG_NOT_UNDERSTOOD,
     FLAG_PARTIAL,
     QUESTION_FLAGS,
     LabelReading,

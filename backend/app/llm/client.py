@@ -19,12 +19,12 @@ from app.llm.grounding import (
     enforce_verbatim_on_candidates,
     quote_is_verbatim,
 )
-from app.parsing.periods import MONTHS_TO_PERIOD_TYPE, period_key
 from app.parsing.evidence import (
     NON_PRODUCT_REVENUE_RE,
     TOTAL_REVENUE_RE,
     product_aliases,
 )
+from app.parsing.periods import MONTHS_TO_PERIOD_TYPE, period_key
 from app.quality.candidate_filters import (
     quote_mentions_other_brand,
     quote_mentions_product,

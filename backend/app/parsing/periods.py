@@ -17,9 +17,9 @@ date wrongly - so for tables it is the fallback, behind the column geometry in
 from __future__ import annotations
 
 import re
-from datetime import date, timedelta
 from collections import Counter
 from dataclasses import dataclass
+from datetime import date, timedelta
 
 MONTHS = {
     "january": 1,

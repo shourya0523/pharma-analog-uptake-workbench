@@ -16,8 +16,6 @@ from __future__ import annotations
 
 import asyncio
 
-import pytest
-
 from app.connectors.llm_search import LLMSearchConnector, excerpt_is_on_the_page
 from app.connectors.sources import _is_fetchable
 from app.domain.models import RetrievalStatus

@@ -18,9 +18,9 @@ from __future__ import annotations
 from datetime import date
 
 from app.connectors.sources import (
+    ANNUAL_FORMS,
     SECConnector,
     _holds_financial_facts,
-    ANNUAL_FORMS,
     is_annual,
     reports_a_period,
 )

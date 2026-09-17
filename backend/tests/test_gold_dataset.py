@@ -3,9 +3,9 @@ import csv
 import importlib.util
 import json
 import re
+from pathlib import Path
 
 import pytest
-from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 GOLD = REPO_ROOT / "seed" / "gold"
@@ -528,7 +528,7 @@ def test_adempas_is_a_scoped_series_that_never_earns_a_peak():
     # A start later than launch has to be declared and explained.
     assert series["launch_quarter"] == "2013Q4"
     assert series["commercial_start_quarter"] == "2024Q1"
-    assert "series_start_reason" in series and series["series_start_reason"]
+    assert series.get("series_start_reason")
 
     assert {r["revenue_scope"] for r in rows} == {"Merck marketing territories"}
     assert {r["geography"] for r in rows} == {"International"}

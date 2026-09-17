@@ -17,7 +17,13 @@ import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from app.db.models import Base, DatapointORM, DrugJobORM, ExtractionRunORM, UnresolvedQuarterORM
+from app.db.models import (
+    Base,
+    DatapointORM,
+    DrugJobORM,
+    ExtractionRunORM,
+    UnresolvedQuarterORM,
+)
 from app.domain.models import RetrievalStatus, RetrievedSource, SourceType, new_id
 from app.parsing.periods import quarter_end, quarters_reported_in
 from app.pipeline.orchestrator import NO_FILER_OF_RECORD, PipelineOrchestrator
