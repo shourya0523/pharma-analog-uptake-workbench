@@ -273,8 +273,100 @@ definition where there were several, it earned its lines.**
 
 ## 5. Judging layer
 
-*(pending - the judging reviewer's report had not arrived when this draft was
-written; its section is appended below when it does.)*
+The one review that started from a measurement the register never made:
+**does the judge ever overrule a deterministic reader?** Replaying the current
+vetoes over all 549 run13 rows, 513 (93%) never reach a model; of the 12
+deterministic rows that did not publish, the judge held exactly one. The rest
+were held by the filing contradicting itself, by label flags, or by the search
+validator. That is not an argument for deleting the judge. It is an argument
+that vetoes that never fire are carrying complexity for nothing, and that the
+one gate deciding 93% of rows is under-specified.
+
+**Defects (verified; the first re-checked on the snapshot by the coordinator).**
+
+- **The peer list leaks across documents.** (*) `peers` is computed per
+  document in the prepare loop (`orchestrator.py:2197`) and read in the second
+  loop (`:2318`) without reassignment, so every source's LLM candidates are
+  filtered by whichever document was prepared last. Any job with two or more
+  parseable sources can drop a correct candidate whose quote names a brand
+  printed in a different filing. Introduced by 7d. Fix: store `peers` in
+  `prepared[src.source_id]` like every other per-document value.
+- **`_spans_named_in` discards the key-less period its own docstring exists
+  for.** `spans_named_in("For the Six Months Ended June 30,")` is empty; with
+  the column years more than 120 characters below the heading, a six-month
+  figure auto-passes as quarterly with no model asked. One line; simulated
+  zero change on the 549 quotes, documented behaviour restored.
+- **The judge is told the opposite twice.** `evidence_judge.yaml:11` still
+  orders a "misclassified" verdict on a six-month heading, which is the rule
+  6b removed and lines 30-34 of the same prompt now contradict. Four of its
+  rules are applied deterministically after the model answers, so the model's
+  opinion on them is discarded either way. And the commit that says the judge
+  is shown the filing's product list does not show it: `peer_names` reaches
+  only the veto, never the prompt.
+- **The coverage denominator throws away a third of the work.** `expected`
+  intersects on both sides, so 40 published quarters across run13's 24 jobs
+  count for nothing, and the card prints "9 qtrs" beside "80%" from two
+  different universes. One word: `| held | missing`.
+- **An unquoted model number can become a figure.** `DATAPOINT_ENRICH_FIELDS`
+  includes `value_reported` and `period`; nothing grounds a suggestion. The
+  cap and forced review are real, and run13 never exercised it (it filled
+  geography 109 times, a value 0 times). Drop the two value fields.
+- **Free prose in a codes column.** The model's `issues` sentences are written
+  to `issue_flags`, and reconciliation later tests `"conflict" in
+  " ".join(flags)` - a sentence containing the word marks the row a conflict.
+- **A model call per job that produces nothing.** `llm.completeness()` runs
+  at the last stage; its `completeness_pct` is unread since M0/M4, its
+  `limitations` and `recommended_next_steps` were always unread, and across
+  all four run databases it wrote 0 of 64 unresolved-quarter rows.
+
+**Simplifications, in the reviewer's order.**
+
+1. Store `peers` per document (the fix above). One dict key.
+2. Delete the `ytd_language_as_quarterly` veto branch and `_QUARTER_SPAN`:
+   after 6a made a table row one unit, the row never carries the heading, so
+   the veto cannot fire alone on any production candidate (its test passes
+   only because its fixture has no `period`). Keep `names_a_year_to_date_span`
+   for `fast_judge.py:85`, which blocks auto-pass on 121 two-span quotes.
+3. Delete `company_total_without_product`: wholly inside
+   `product_missing_from_quote` on every real row; `TOTAL_REVENUE_RE` matches
+   0 of 549 quotes.
+4. `_spans_named_in` calls `periods.periods_named` plus the two prose-only
+   patterns ("full-year 2002", "the second quarter and first six months");
+   three of prose's five period regexes are strict subsets of the parsing
+   grammar. Confine this to the judge's path: rewiring the extractor's
+   ambiguity test at `prose.py:496` is a behaviour change that needs its own
+   held-out set.
+5. The coverage denominator fix, and inline `coverage_pct` (one caller).
+6. Delete `prompts/lot_extractor.yaml` (loaded by nothing) and the four
+   response fields nothing reads.
+7. Reconcile the prompt with the code (rule 4: a prompt change is scored on a
+   fresh held-out set before its number is claimed); drop the duplicated
+   `label_residue` from `{context}`; explain `label_flags`/`label_residue`,
+   the two candidate keys the model has no other way to interpret.
+8. Export the `period_type -> months` inverse from `parsing/periods.py`; it
+   is built byte-for-byte twice, in `client.py` and `check.py`, in one pass.
+9. Un-gate the footnote text: the note travels on the quote whenever the mark
+   is cited; only the `partial_period` flag stays behind `applies_to`. Today a
+   mis-parse blinds the judge at the moment it could have caught the error.
+10. Decide what `llm.completeness()` is for, or delete the stage.
+11. Sanitise `issue_flags` to codes; the model's prose goes to
+    `reviewer_notes`.
+
+**Not a simplification, but the largest finding for the analyst.** The
+auto-pass gate `product_quote_value_ok` asks only whether the number and the
+name appear anywhere in the quote. On a two-year comparative row it passes
+the prior-year column claimed as the current quarter, and 210 of the 293
+auto-passes on run13 sit in a unit holding more than two numeric tokens. The
+year-cross that saved 76 correct rows from a spurious veto is also what stops
+the period veto from catching this. Smallest closure: the value must sit in
+the same unit as the product and that unit must hold no other money figure,
+else fall through to the model. This is a rule-4 change: build the held-out
+set first.
+
+**Leave as is:** the year-cross in `periods_named_in`; `_period_claimed_by`;
+`fast_judge.py:85` reading the whole quote; the coverage guard asserting both
+endpoints; enrichment's cap and forced review; `llm/aliases.py` and
+`llm/grounding.py`.
 
 ---
 
