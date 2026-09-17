@@ -1090,28 +1090,82 @@ whatever it actually subtracted.
 `DerivationLineageORM` (`db/models.py:468`) exists and has never been written.
 Fix: record the inputs a derivation used, cite them, write the lineage row.
 
-### 5b. A footnote's scope is taken by first regex match anywhere in the note
+### 5b. A footnote's scope is taken by first regex match anywhere in the note  `[V]`
 
-`labels.py:363 _note_scope` takes the first `_NOTE_PERIOD_RE` hit. On ANI's
-10-Q the note reads "no sales of YUTIQ during the quarters ended March 31, 2026
-and June 30, 2026 ... as of the second quarter of 2025" - `_NOTE_SPAN_RE` does
-not know "quarters ended", so the scanner runs past the claim and binds it to
-2025Q2 from a subordinate clause about another product's label. The suppression
-fires on the one quarter that was fine and not on the two that should be empty.
+`labels.py:362 _note_scope` takes the first `_NOTE_PERIOD_RE` hit. Run on the
+real ANI note as `table_footnotes` extracts it from `anip-20260630.htm`
+(accession 0001023024-26-000069):
 
-Two structural faults: a note naming several periods can return only one, and
-"parsed nothing" is returned as "applies to the whole row" (567 of 680 corpus
-notes). Fix: bind the period from the clause carrying the claim, return a set,
-distinguish "no scope" from "whole row", and widen `_NOTE_SPAN_RE` to
-`quarters?/years?/period ended` and hyphenated `N-month period` forms -
-"quarters ended" appears in 145 corpus files.
+    note: "(1) There were no sales of YUTIQ during the quarters ended March 31,
+           2026 and June 30, 2026, ... as of the second quarter of 2025."
+    _NOTE_SPAN_RE first hit   : None                 <- does not know "quarters ended"
+    _NOTE_PERIOD_RE first hit : 'second quarter of 2025'
+    _note_scope(note)         -> (None, '2025Q2')
+    applies_to(3,'2026Q1') False   applies_to(3,'2026Q2') False   applies_to(3,'2025Q2') True
 
-### 5c. `_INCLUDES_RE` fires on "does not include"
+The real reader on that document, asked for YUTIQ, skips 2025Q2 as
+`footnote_says_no_sales` and keeps `2026Q2 18,718 (combined_line)`. So the
+suppression fires on the quarter that had sales and not on the two the filing
+says were zero. **run13 publishes YUTIQ 2026Q2 = $18.718m `auto_pass` from that
+document, against a footnote on the same table saying there were no sales.**
+2026Q1 = $19.255m is derived from the same line, also `auto_pass`. And the
+skip is emitted as a string `extract.py:729-733` never persists - 0 occurrences
+of `footnote_says_no_sales` in any column of any run database - so the review
+queue never sees it.
 
-`labels.py:414-420` matches claim and product name separately, so "Full year
-2026 guidance does not include sales of YUTIQ" returns `names=('YUTIQ',)` and
-flags the row combined. Fix: one pattern carrying claim and subject, as
-`_no_sales_of` (`labels.py:378`) already does.
+Two structural faults: a note naming several periods can return only one (33
+corpus notes do), and "parsed nothing" is returned as "applies to the whole
+row" - 566 of 679 corpus footnotes, over `table_footnotes` on every selected
+table in the 433 `.htm` files of the run7 cache. Only 10 of those 566 name a
+span phrase the regexes cannot see (`period ended`, `twelve-month period`);
+the other 556 genuinely state no period. So the misparse subset is small and
+the larger fault is that `applies_to()` cannot say "no scope".
+
+Widening `_NOTE_SPAN_RE` is still justified, but an earlier draft's "145 corpus
+files" counted `quarters? ended`; the plural `"quarters ended"` is in 13 files,
+and at footnote level `quarters?\s+ended` matches 5 notes in 3 files.
+
+**Rule 1:** the period grammar is written down twice. `labels.py:104
+_SPAN_MONTHS` and `:105 _QUARTER_WORDS` are literal copies of `periods.py:50
+MONTH_WORDS` and `:225 _QUARTER_WORDS`, and `labels.py:94 _NOTE_SPAN_RE` is a
+strictly narrower rewrite of `periods.py:152 _PERIOD_PHRASE_RE`, which already
+handles "three and six months ended" and "fiscal years ended". A producer
+exists and the note reader does not use it - which is why widening one leaves
+the other stale.
+
+**Cost:** a YUTIQ/ILUVIEN switch-over is exactly the shape an analyst uses as
+an analog for a transition ramp, and the series is inverted at the point of
+the switch, silently. Fix: bind the period from the clause carrying the claim,
+return a set, distinguish "no scope" from "whole row", and use `periods.py`'s
+grammar rather than a copy.
+
+### 5c. `_INCLUDES_RE` fires on "does not include"  `[V]`
+
+`labels.py:85 _INCLUDES_RE` and the block at `:414-420` match claim and product
+name separately. On the real ANI guidance note (`anip-20260508xexx991.htm`,
+accession 0001023024-26-000049):
+
+    note: "(2) Full year 2026 guidance does not include sales of YUTIQ, ..."
+    _INCLUDES_RE fires: True
+    read_footnote(asked ILUVIEN) -> names=('YUTIQ',)  period='2025Q2'
+    read_footnote(asked YUTIQ)   -> names=('ILUVIEN',) period='2025Q2'
+
+and `extract.py:662,677` turns a non-empty `names` into `FLAG_COMBINED` on the
+row. The same note also shows 5b - the period binds to "second quarter of
+2025" from a subordinate clause - so the two compound on one note. Over the
+corpus, `_INCLUDES_RE` fires on 152 of 679 footnotes; 29 carry a
+negated/exclusion claim; 3 of those also trip `_INCLUDES_RE`, and only the ANI
+one names products. Narrow but real.
+
+`_no_sales_of` (`labels.py:378`) got 4 of 4 real ANI "no sales" notes right
+with 0 false positives over all 31 ANI footnotes in the cache, including this
+one, where it correctly returns `()`. Fix: one pattern carrying claim and
+subject, as it does.
+
+**Cost:** a row wrongly labelled combined is a row the analyst is told is two
+products when it is one - the identity error the brief calls "an analog set you
+cannot trust". run13 has 12 `combined_line` rows, 4 `auto_pass`; 5f says the
+demotion the flag should trigger is overwritten anyway.
 
 ### 5d. Derivation launders provenance at four sites
 
@@ -1151,12 +1205,30 @@ not.
 20 of 75 expected figures were found, correct, and not published. Each cause is
 a bug rather than caution.
 
-### 6a. The sentence splitter breaks table rows into "sentences"
+### 6a. The sentence splitter breaks table rows into "sentences"  `[V]`
 
-`sentences.py:25` splits on `\s*\n+\s*`, and HTML-to-text puts each cell on its
-own line, so `"EXONDYS 51\n$\n134,688"` is three sentences and
-`value_and_product_in_different_sentences` fires. 326 rows, **212 with no other
-objection** - the single largest contributor to the held rate.
+`quality/sentences.py:25` (the file is under `quality/`, not `parsing/`) splits
+on `\s*\n+\s*`, and HTML-to-text puts each cell on its own line. On the real
+cached `srpt-20230630.htm` (accession 0000950170-23-037125):
+
+    excerpt  : 'EXONDYS 51\n$\n134,688'
+    sentences(excerpt) -> ['EXONDYS 51', '$', '134,688']
+    sentence_carrying(excerpt, 134688) -> '134,688'   names EXONDYS 51? False
+
+The veto is raised at `llm/client.py:810-816`. run13: **326** datapoints carry
+`hard_veto:value_and_product_in_different_sentences`; **212** carry no other
+`hard_veto:` flag (168 if "objection" also counts the reconciliation flags).
+Both exact on re-run; drift 67 -> 132 -> 224 -> 326 across run8/10/12/13. 322
+of the 326 are `extraction_method='llm'` with a newline in the quote - a model
+quoting a table block - and the row's own `extracted_from_table` and
+`extraction_method` are available to the veto and unused.
+
+**A count is not a capability:** those 212 rows cover 73 distinct (job,
+quarter) cells, **40 of which have no published figure from any other row**,
+against 99 published cells in run13. They would still have to pass the judge,
+so 40 is a ceiling, not a forecast - but it is the single largest hole in the
+early ramp, and the holes are in product-revenue tables, where the first four
+to eight quarters of a launch live.
 
 ### 6b. `quote_states_a_different_period` reads only the first period
 
@@ -1222,15 +1294,47 @@ the quarter it shares a label with. Add `period_type` to the key at
 
 ## 7. Signal computed and discarded
 
-### 7a. `detect_period_context` dates a filing by a year mentioned once
+### 7a. `detect_period_context` dates a filing by a year mentioned once  `[V]`, re-measured
 
-`periods.py:330` takes the latest year outright. Perrigo's FY2022 10-K is dated
-**December 2040** from a single debt-maturity date; ANI's FY2025 as 2027. 15 of
-235 datable documents pick a year named once over one named up to 180 times.
-That string goes into the LLM extraction prompt and disables `prose.py`'s
-forecast guard entirely for those documents. **The correct guard already exists
-49 lines above at `periods.py:281`.** One line, highest blast radius in either
-pass.
+`periods.py:330` takes the latest year outright:
+`best = max((key for key in counts if key[0] == framing), key=lambda key: key[2])`.
+The correct guard already exists 49 lines above at `:281`:
+`throughout = [key for key, n in counts.items() if n * 2 >= most]` - run over
+the same counter it returns the right year.
+
+**An earlier draft measured this on text the pipeline never sees.**
+`orchestrator.py:1663` calls `detect_period_context(doc.full_text)`, and
+`full_text` is capped at 400,000 characters (`documents.py:731-745`). On the
+433 `.htm` files of the run7 cache:
+
+    untruncated            235 datable   15 misdate   12 named once   max most-named 180
+    as the pipeline runs   235 datable   10 misdate    6 named once   max most-named  66
+
+Perrigo holds exactly: `prgo-20221231.htm` (the document run13's Nutrition job
+used) -> `PeriodContext(months=12, month=12, year=2040)` from `(12,12,2040)`
+named once against 2022 named 66 times. **ANI FY2025 -> 2027 does not hold on
+the pipeline's input** - it returns 2025, correctly, on the truncated text -
+and is struck; the ANI document that still misdates is `ani-20260401.htm`
+(picks 2026 named once over 2025 named 3 times). The ten: `prgo-20221231`,
+`prgo-20231231`, `coll-20231231x10k`, `coll-20241231x10k`, `tvtx-20250331`,
+`tvtx-20250630`, `tvtx-20260630`, `fold-20240630`, `fold-20250630`,
+`ani-20260401`.
+
+**Cost is larger than "signal discarded".** With `context.year = 2040`,
+`prose.py:353 _after_the_document` returns `False` for `2023Q1`, `2030` and
+`2040Q4` alike - not a weakened guard, a disabled one. And the object is
+stringified into the model prompt at `orchestrator.py:1831` as
+`reporting_period: "twelve months ended December 2040"` with `period_columns:
+["2040","2039"]`, so the model is told the filing's comparative is 2039. A
+debt maturity or a milestone forecast entering the series as revenue is the
+failure the workbench exists to prevent. Its output is section 5's.
+
+**Rule 5, load-bearing:** `periods.py:324-329` justifies the defective line
+with "a Q4 2005 release mentions 'three months ended December 31, 2004' five
+times in its footnotes against four for 2005, which is how the document came to
+be dated a year early" - counts, an unnamed document, and a defect history,
+read as the argument *for* `max(key=year)`. The next reader inherits a claim
+they cannot check and the guard at `:281` looks like a different concern.
 
 ### 7b. `_declared_slack` and `HELD_FOR_BOUND` are dead because one key is dropped
 
@@ -1240,11 +1344,34 @@ quarter inputs arrive through `_candidate_of`, which drops it (5d). One missing
 key kills the bound guard, the "+/- n from input rounding" clause in every
 derived quote, and the citation field.
 
-### 7c. 190 six- and nine-month tagged facts are discarded
+### 7c. 75 six- and nine-month tagged facts are discarded  `[V]`, re-measured
 
-`xbrl.py:139` returns `None` for any span but 3 or 12 months, so the
-span-difference rule can never be fed by tagged facts - only by tables. This is
-also why Q4 has zero XBRL readings (2d).
+`xbrl.py:139-156` returns `None` for any span but 3 or 12 months. Over the 61
+distinct `.xml` source documents run13 recorded (all in the run7 cache), with
+members resolved against run13's job names and `load_products()`:
+
+    predicate an earlier draft used (amount, months, product member):
+        {1: 38, 3: 181, 6: 95, 9: 95, 12: 124}   six+nine = 190
+    predicate product_facts applies (xbrl.py:566-573, also element in
+    revenue_elements and not hypothetical):
+        {3: 114, 6: 37, 9: 38, 12: 66}           six+nine = 75
+
+190 is money-unit facts on a resolvable product axis; **75** is what would
+otherwise have become tagged revenue readings. The headline overstated the
+recoverable facts by 2.5x.
+
+An earlier draft said the span-difference rule is therefore fed "only by
+tables". Not in these runs: across run8/10/12/13 **every** `six_month` and
+`nine_month` datapoint is `extraction_method='llm'` (run13: 41 nine-month, 12
+six-month), zero from `table`, zero from `xbrl_fact`. So `derive.py:49-56` is
+fed by the model alone - the producer the pipeline ranks lowest - while the
+filer's own audited spans are discarded. This is also why Q4 has zero XBRL
+readings (2d): Q4 and Q1 for a filer that tags but prints no quarterly table
+are the cells at risk, the tail and the start of the ramp.
+
+**Rule 5, minor:** `extraction/tagged.py:41-42` hard-codes another module's
+constant in prose ("scored above the table reader's 0.75"); true today
+(`candidates.py:35`), which is exactly how it goes stale silently.
 
 ### 7d. The judge is blind to what the pipeline knows
 
