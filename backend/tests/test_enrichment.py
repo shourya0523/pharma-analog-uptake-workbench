@@ -89,3 +89,37 @@ def test_apply_enrichment_does_not_overwrite_existing():
     assert applied == []
     assert enriched["formulation"] == "tablet"
     assert enriched["validation_status"] == "auto_pass"
+
+
+def test_a_suggestion_describes_a_figure_and_does_not_invent_one():
+    """Nothing checks an enrichment suggestion against the document.
+
+    Both answers: a suggestion about how a figure already read should be
+    labelled fills the blank it is offered for, and a suggestion that would
+    supply the figure itself - which number, and which quarter it is a number
+    for - fills nothing.
+    """
+    dp = {
+        "period": None,
+        "value_reported": None,
+        "value_normalized_usd_millions": None,
+        "geography": None,
+        "confidence_score": 0.9,
+        "validation_status": "auto_pass",
+        "issue_flags": [],
+        "citation_json": {},
+    }
+    enriched, applied = apply_field_enrichment(
+        dp,
+        {
+            "suggested_period": "2024Q1",
+            "suggested_value": 34.9,
+            "suggested_value_normalized_usd_millions": 34.9,
+            "suggested_geography": "Worldwide",
+        },
+    )
+    assert applied == ["geography"]
+    assert enriched["geography"] == "Worldwide"
+    assert enriched["period"] is None
+    assert enriched["value_reported"] is None
+    assert enriched["value_normalized_usd_millions"] is None

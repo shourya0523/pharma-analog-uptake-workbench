@@ -2738,11 +2738,8 @@ class PipelineOrchestrator:
             )
             if enrichment:
                 snapshot = {
-                    "period": row.period,
                     "period_type": row.period_type,
                     "revenue_scope": row.revenue_scope,
-                    "value_reported": row.value_reported,
-                    "value_normalized_usd_millions": row.value_normalized_usd_millions,
                     "currency": row.currency,
                     "unit": row.unit,
                     "geography": row.geography,
@@ -2759,13 +2756,8 @@ class PipelineOrchestrator:
                 }
                 enriched, applied = apply_field_enrichment(snapshot, enrichment)
                 if applied:
-                    row.period = enriched.get("period") or row.period
                     row.period_type = enriched.get("period_type") or row.period_type
                     row.revenue_scope = enriched.get("revenue_scope") or row.revenue_scope
-                    if "value_reported" in applied:
-                        row.value_reported = enriched.get("value_reported")
-                    if "value_normalized_usd_millions" in applied:
-                        row.value_normalized_usd_millions = enriched.get("value_normalized_usd_millions")
                     if "currency" in applied:
                         row.currency = enriched.get("currency")
                     if "unit" in applied:
