@@ -226,7 +226,11 @@ rate.
 Ranked first because the analyst has no way to know to distrust them. A blank
 costs less than a confident error.
 
-### 1a. The quarterly chart plots the wrong number when a quarter has more than one scope
+A population note for every count in this section: `run13/workbench.db` holds
+**six `run_id`s, 24 jobs, 549 datapoints** - it is a database, not a run.
+"run13" totals below are DB-wide unless a run is named.
+
+### 1a. The quarterly chart plots the wrong number when a quarter has more than one scope  `[V]`
 
 `frontend/src/pages/dashboardModel.ts:83` is
 `byPeriod[period][point.product] = point.value` - last row wins, arbitrarily.
@@ -242,31 +246,51 @@ Reconciliation is right to keep the three apart (`orchestrator.py:2293` groups
 on `(period, _scope_key(revenue_scope), formulation)`); nothing downstream ever
 picks one.
 
-4 of 99 published (product, period) groups in run13 carry more than one value.
+4 of 99 published (product, period) groups in run13 carry more than one value
+- exact on re-run - and they are two different defects: AYVAKIT's two are a
+legitimate scope split (this item); Nutrition's two are same-scope duplicates
+from the `running` job (1f). Do not fix them as one thing.
 
-### 1b. Coverage is a row count, and reads 100% on a series with nothing in it
+An aggravation not previously recorded: the row the chart drills to carries
+the quote *"AYVAKIT achieved $144.1 million, including $124.1 million in the US
+and $20.0 million ex-US"* - so the citation panel the analyst opens to check
+the $20.0M point leads with $144.1M. The evidence on screen contradicts the
+plot on screen.
 
-`quality/completeness.py:89`: `quarters = sum(1 for row in quarters_held ...)`
+### 1b. Coverage is a row count, and reads 100% on a series with nothing in it  `[V]`
+
+`quality/completeness.py:90`: `quarters = sum(1 for row in quarters_held ...)`
 counts **rows**, not distinct periods, and excludes only `rejected` - so
 `needs_review` and `corroborates` rows count as coverage. And `gaps` counts
 only `unresolved_quarters` rows, which are written only when the issuer filed
-nothing at all in the window (`orchestrator.py:1146`: `if covered: return []`).
+nothing at all in the window (`orchestrator.py:1155`: `if covered: return []`).
 An issuer that filed but whose quarters the extractor failed to read produces
 zero gaps. So "100%" means "of the quarters we noticed were missing, none are
 missing."
 
-    AGAMREE    completeness=100.0   published_quarters=5
-    ILUVIEN    completeness=100.0   published_quarters=0
-    ORLADEYO   completeness= 47.6   published_quarters=8   <- longest clean run in the DB
+    product     completeness_pct   Library card "qtrs"   published quarterly
+    AGAMREE          100.0                 5                    5
+    ILUVIEN          100.0                 1                    0
+    ORLADEYO          47.6                10                    8   <- longest clean run in the DB
+
+(An earlier draft printed only the last column and labelled it as the card;
+the card shows the middle one, because of the second defect below.)
+
+ILUVIEN is the whole item in one product: 100% coverage from 14 quarterly rows
+that are every one `needs_review` or `corroborates`, and the "1 published qtr"
+on its card is an **annual 2025** figure. Row-versus-distinct-period inflation
+affects 19 of 24 jobs (NUPLAZID 33 rows over 10 periods; Pombiliti 22 over 6).
 
 The number is anti-correlated with the thing it names. It is on the Library
 card (`LibraryPage.tsx:258`), the API (`main.py:271,323`) and the product
-export sheet. The page headline averages it to "Coverage 65%" for run13.
+export sheet. The page headline averages it to "Coverage 65%" for run13 -
+reproduced exactly as `Math.round` over 22 Library rows.
 
-Compounding: `_published_quarters` (`api/products.py:135`) counts distinct
+Compounding: `_published_quarters` (`api/products.py:136`) counts distinct
 published `period` of **any** `period_type`, so an annual `2025` or a
-`2025Q4`-labelled annual counts as a quarter. It over-reports for 6 of 16
-products.
+`2025Q4`-labelled annual counts as a quarter. It over-reports for 5 of 22
+Library products (AYVAKIT 3/2, ILUVIEN 1/0, NUPLAZID 10/9, Ocaliva 5/2,
+ORLADEYO 10/8).
 
 ### 1c. A two-product line is published as one product's revenue, because the alias step disarms the guard
 
@@ -293,7 +317,7 @@ Fix: the alias list a label reader is given must not contain another product's
 name. Whether that belongs in `merge_aliases` (`llm/aliases.py:8`), in the
 prompt, or in `read_label` is open - the miss is established, the site is not.
 
-### 1d. The deliverable named `quarterly_revenue.csv` is not quarterly
+### 1d. The deliverable named `quarterly_revenue.csv` is not quarterly  `[V]`
 
 `export/builder.py:267-295` emits `for d in j.datapoints` - every datapoint, no
 status filter, no period-type filter - into eight columns with **no
@@ -302,13 +326,26 @@ status filter, no period-type filter - into eight columns with **no
     drug_name, period, value_normalized_usd_millions, source_url,
     source_quote, confidence_score, validation_status, revenue_scope
 
-For run13 that is 549 rows of which 31% are not quarterly (74 ytd, 44 annual,
-41 nine_month, 12 six_month, 1 unknown), and 20+ (drug, period) keys carry a
-quarterly *and* a cumulative figure under the same period string:
+Built the real files with `ExportBuilder.export_powerbi_csvs` for each of
+run13's six runs: 49 / 109 / 35 / 163 / 21 / 172 rows. Their union is the 549
+datapoints in the database - **no exported file has 549 rows**; the largest
+real deliverable has 172. Over the union, 31.3% are not quarterly (74 ytd, 44
+annual, 41 nine_month, 12 six_month, 1 unknown), every figure exact on re-run.
 
-    FYCOMPA   2023Q3 -> quarterly 36.393 AND nine_month 98.8
-    ILUVIEN   2025Q4 -> quarterly 19.8   AND annual     74.9
-    Pombiliti 2024Q3 -> quarterly 21.136 AND nine_month 48.032
+**Five** (drug, period) keys carry a quarterly *and* a cumulative figure under
+one period string - an earlier draft said "20+", which was the 21 keys carrying
+more than one `period_type`; 16 of those are cumulative-vs-cumulative under an
+annual string (`AGAMREE 2024 -> annual 46.0 / nine_month 24.966 / ytd 9.92`),
+which does not corrupt a quarterly curve the same way. The five that do:
+
+    FYCOMPA   2023Q2 -> quarterly [34.579, 34.6]           six_month  [62.4]
+    FYCOMPA   2023Q3 -> quarterly [36.393, 36.4]           nine_month [98.8]
+    ILUVIEN   2025Q4 -> quarterly [19.8, 19.843]           annual     [74.9]
+    Pombiliti 2024Q3 -> quarterly [8.859, 12.277, 21.136]  nine_month [48.032]
+    Pombiliti 2025Q3 -> quarterly [13.07, ..., 30.714]     nine_month [77.535]
+
+and one worse than any of them: `AGAMREE 2024Q3 -> quarterly [15.0, 15.046]
+AND unknown [25.0]`.
 
 Anyone who loads this into Power BI and charts by `period` builds a curve
 partly from cumulative figures. Also unfiltered by status: 355 `needs_review`
@@ -318,7 +355,7 @@ and 67 `corroborates` rows sit beside the 127 `auto_pass` ones.
 `builder.py:121-240`, five sheets including a `Drug Profile` with a
 `source_url` per field. The Power BI CSVs are the problem.)
 
-### 1e. The product sheet cites a revenue filing beside characterisation fields
+### 1e. The product sheet cites a revenue filing beside characterisation fields  `[I]` - zero instances on run data
 
 `export/builder.py:44-71` gives the product sheet one `source_url`, filled at
 `:108` from `product.get("source_link")`, which `dashboard/series.py:193`
@@ -330,26 +367,46 @@ So the README's "citations are mandatory on every source-derived field" holds
 for layer 1 and not for layer 2, and the citation the analyst *does* see points
 at a document that does not contain the field. Upstream the stored
 `source_quote` is the literal string `f"openfda.{field}"` - a JSON path, not a
-quote (`orchestrator.py:790`).
+quote - at `orchestrator.py:794`, and again at `:931-932` where both
+`source_section` and `source_quote` get it.
 
-### 1f. Dashboard tiles and the Methodology tab assert machinery that never runs
+**The code sites are real and the defect has never happened.** Over run8, 10,
+12 and 13, every profile field is `llm_aliases` with an `llm_search` citation,
+`CanonicalProductORM` has 0 rows, and all 24 `products.csv` rows carry five
+blank characterisation columns beside a revenue-filing `source_url` (6 of 7 on
+run13's largest run, each equal to the first revenue datapoint's URL). That is
+still wrong - a different wrong - and 1e cannot be scored on run data until
+layer 2 writes something. It follows M7.
+
+### 1f. Dashboard tiles and the Methodology tab assert machinery that never runs  `[V]`
 
 - `dashboard/series.py:264` sums over `peak_products`, always empty, and
   returns `value: 0`; `DashboardPage.tsx:155` renders **"Aggregate selected
   peak $0M, Coverage 0/22"**. A confident zero where "not computed" is true.
-- `DashboardPage.tsx:170` states "Launch uptake is a rolling-four-quarter
+- `DashboardPage.tsx:166-167` state "Launch uptake is a rolling-four-quarter
   revenue proxy divided by the typed selected annual peak" and "Competitive
   intensity uses the stored competitive_intensity_v1 peer cohort". Both
   describe code with no caller. It reads as "your data is thin" rather than
   "this was never built".
 - The Launch-relative tab renders an empty chart with a 22-product legend:
-  `buildChartData(payload, products, 'launch')` returns 0 rows but
-  `names.length` is 22, so the "No analogs match the current filters" branch is
-  skipped.
-- 32% of published datapoints in run13 come from jobs that never finished -
-  `build_dashboard_preview` (`dashboard/series.py:67`) queries every job
-  regardless of status, and the mid-reconcile job is exactly where the
-  contradictory duplicates are.
+  `buildChartData(payload, products, 'launch')` returns 0 rows but `names` is
+  derived from `products` (`DashboardPage.tsx:58`), never from `chartData`, so
+  the `names.length === 0` guard cannot fire. Structural, not data-dependent;
+  `launch` and `launch24` both return 0 rows on run13.
+- **32.3%** of published datapoints in run13 come from jobs that never finished
+  - filter: the 127 `auto_pass`/`confirmed` rows by `job.status`: 86
+  `ready_for_review`, 34 `running`, 7 `failed`. Narrowed to `running` alone it
+  is 26.8%; the other 7 are from four **failed** jobs, which is the more
+  surprising half. `build_dashboard_preview` (`dashboard/series.py:67`) queries
+  every job regardless of status. The `running` job (Nutrition, mid
+  `reconcile_conflicts`) holds the only true duplicates in the database -
+  same product, period and scope, two values, all `auto_pass`.
+
+All four tiles read the same in run8, run10 and run12 (`peakcov=0/N`,
+`peak=$0M`, `launch_series=0`) - not a run13 accident. The other counts in
+this section grow with corpus size (multi-value groups 0 -> 0 -> 2 -> 4;
+published-from-unfinished 0% -> 0% -> 19% -> 32%), so they are floors to be
+re-measured at fix time, not quoted.
 
 ---
 
