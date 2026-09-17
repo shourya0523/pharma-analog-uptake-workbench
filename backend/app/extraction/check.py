@@ -25,6 +25,7 @@ from collections import defaultdict
 from dataclasses import dataclass
 
 from app.extraction.process import Datapoint
+from app.parsing.labels import FLAG_NOT_UNDERSTOOD
 from app.parsing.periods import MONTHS_TO_PERIOD_TYPE
 
 # A quarter that differs from a neighbouring quarter by at least this factor is
@@ -76,6 +77,20 @@ def _declared_slack(*points: Datapoint) -> float | None:
 _MONTHS_BY_PERIOD_TYPE = {name: months for months, name in MONTHS_TO_PERIOD_TYPE.items()}
 
 
+# What a figure is a figure for: the label, the span it covers and the part of
+# the business it covers. `conflicting_values` already groups on all three,
+# because a nine-month total and a region's row are not rival claims about one
+# quarter's worldwide figure. A finding that named only the label undid that
+# grouping on the way out, and the rejection it fed took down every other cell
+# sharing a period label.
+Cell = tuple[str, str, str]
+
+
+def cell_of(point: Datapoint) -> Cell:
+    """The cell a datapoint is a reading of."""
+    return (point.period, point.period_type or "", point.scope or "")
+
+
 @dataclass(frozen=True)
 class Finding:
     """One failed expectation, tied to the datapoints that produced it."""
@@ -83,7 +98,12 @@ class Finding:
     code: str
     severity: str
     message: str
-    periods: tuple[str, ...] = ()
+    cells: tuple[Cell, ...] = ()
+
+    @property
+    def periods(self) -> tuple[str, ...]:
+        """The period labels of the cells, in order, for a person reading this."""
+        return tuple(dict.fromkeys(cell[0] for cell in self.cells))
 
     def __str__(self) -> str:
         scope = f" [{', '.join(self.periods)}]" if self.periods else ""
@@ -100,8 +120,26 @@ def _year_of(period: str) -> int | None:
     return int(match.group(1)) if match else None
 
 
-def _usable(points: list[Datapoint]) -> list[Datapoint]:
-    return [p for p in points if p.value_normalized_usd_millions is not None]
+def _states_a_figure(points: list[Datapoint]) -> list[Datapoint]:
+    """The readings that claim to be this product's figure for their cell.
+
+    Every check below is a property of one product's own series: quarters that
+    add to its year, a unit that does not change between its quarters, two
+    readings of its figure that agree. A row whose label the reader could not
+    account for carries a number and no claim about whose number it is - an
+    income-statement line sitting in the same table as the product's row - so
+    it is not evidence for or against any of those properties, and reading it
+    as one takes the correct reading down beside it.
+
+    The row is still published, as a question for a person. What it may not do
+    is contradict a reading that was understood.
+    """
+    return [p for p in points if FLAG_NOT_UNDERSTOOD not in (p.flags or ())]
+
+
+def _states_a_value(points: list[Datapoint]) -> list[Datapoint]:
+    """Those of them that reached a comparable figure."""
+    return [p for p in _states_a_figure(points) if p.value_normalized_usd_millions is not None]
 
 
 def quarters_sum_to_period_total(points: list[Datapoint]) -> list[Finding]:
@@ -110,7 +148,7 @@ def quarters_sum_to_period_total(points: list[Datapoint]) -> list[Finding]:
     quarters: dict[tuple[int, str], dict[int, Datapoint]] = defaultdict(dict)
     totals: dict[tuple[int, str, str], Datapoint] = {}
 
-    for point in _usable(points):
+    for point in _states_a_value(points):
         year = _year_of(point.period)
         if year is None:
             continue
@@ -152,10 +190,10 @@ def quarters_sum_to_period_total(points: list[Datapoint]) -> list[Finding]:
                         f"allowed; a period is misattributed, duplicated, or "
                         f"missing"
                     ),
-                    periods=tuple(
-                        available[index].period for index in range(1, needed + 1)
+                    cells=tuple(
+                        cell_of(available[index]) for index in range(1, needed + 1)
                     )
-                    + (total.period,),
+                    + (cell_of(total),),
                 )
             )
     return findings
@@ -165,7 +203,7 @@ def scale_continuity(points: list[Datapoint]) -> list[Finding]:
     """Consecutive quarters must not jump by orders of magnitude."""
     findings: list[Finding] = []
     quarterly = sorted(
-        (p for p in _usable(points) if p.period_type == "quarterly"),
+        (p for p in _states_a_value(points) if p.period_type == "quarterly"),
         key=lambda p: p.period,
     )
     for previous, current in zip(quarterly, quarterly[1:], strict=False):
@@ -184,7 +222,7 @@ def scale_continuity(points: list[Datapoint]) -> list[Finding]:
                         f"{after:,.4f} is a {ratio:,.0f}x jump; the unit was "
                         f"read as {previous.source_unit} then {current.source_unit}"
                     ),
-                    periods=(previous.period, current.period),
+                    cells=(cell_of(previous), cell_of(current)),
                 )
             )
     return findings
@@ -193,7 +231,7 @@ def scale_continuity(points: list[Datapoint]) -> list[Finding]:
 def value_supported_by_quote(points: list[Datapoint]) -> list[Finding]:
     """The as-reported number must appear in the text cited for it."""
     findings: list[Finding] = []
-    for point in points:
+    for point in _states_a_figure(points):
         quote = (point.source_quote or "").replace(",", "")
         value = point.value_as_reported
         forms = {f"{value:g}", f"{value:.1f}", f"{value:.3f}", str(abs(value))}
@@ -206,7 +244,7 @@ def value_supported_by_quote(points: list[Datapoint]) -> list[Finding]:
                         f"{value:g} does not appear in its own cited text, so it "
                         "was not read from the source"
                     ),
-                    periods=(point.period,),
+                    cells=(cell_of(point),),
                 )
             )
     return findings
@@ -222,7 +260,7 @@ def normalization_succeeded(points: list[Datapoint]) -> list[Finding]:
                 f"{point.period} stayed unnormalized ({point.normalization_status}); "
                 "it cannot be compared to other products"
             ),
-            periods=(point.period,),
+            cells=(cell_of(point),),
         )
         for point in points
         if point.value_normalized_usd_millions is None
@@ -234,11 +272,12 @@ def conflicting_values(points: list[Datapoint]) -> list[Finding]:
     findings: list[Finding] = []
     # Keyed on scope as well as period: a region row and the worldwide row
     # state different figures for one quarter and neither is wrong.
-    by_period: dict[tuple[str, str, str], list[Datapoint]] = defaultdict(list)
-    for point in _usable(points):
-        by_period[(point.period, point.period_type, point.scope or "")].append(point)
+    by_period: dict[Cell, list[Datapoint]] = defaultdict(list)
+    for point in _states_a_value(points):
+        by_period[cell_of(point)].append(point)
 
-    for (period, _, _scope), group in sorted(by_period.items()):
+    for cell, group in sorted(by_period.items()):
+        period = cell[0]
         values = sorted(p.value_normalized_usd_millions for p in group)
         if not values:
             continue
@@ -275,7 +314,7 @@ def conflicting_values(points: list[Datapoint]) -> list[Finding]:
                         f"layouts; they differ by {high - low:,.3f} against "
                         f"{allowed:,.3f} that rounding could explain"
                     ),
-                    periods=(period,),
+                    cells=(cell,),
                 )
             )
     return findings
