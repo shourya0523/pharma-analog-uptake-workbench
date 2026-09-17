@@ -518,10 +518,28 @@ class PipelineOrchestrator:
             run = self.db.get(ExtractionRunORM, job.run_id)
             options = (run.options_json if run else {}) or {}
             self._job_aliases = []
-            await self._identity(job)
-            sources = await self._retrieve(job, options)
+            # The product's own documents first, then who files for it, then
+            # the filings. A drug label names its sponsor; EDGAR's name index
+            # answers a company name. Asked in the old order, `_identity` had
+            # only what the caller typed - a drug name on its own reaches no
+            # index, so it went to the model, which returned a CIK and a
+            # confidence nobody read, and the filings of whoever that was were
+            # downloaded against this job.
+            #
+            # The aliases are expanded before any of it, because the label
+            # documents are matched to the product by name and the brand the
+            # caller typed is one of the names it goes by.
+            await self._expand_aliases(job)
+            characterisation = {**options, "sec_filings": False,
+                                "earnings_releases": False, "company_ir": False,
+                                "transcripts": False}
+            sources = await self._retrieve(job, characterisation)
             parsed = await self._parse(job, sources)
             await self._extract_metadata(job, sources, parsed, options)
+            await self._identity(job)
+            filings = await self._retrieve(job, {**options, "openfda": False})
+            sources = list(sources) + list(filings)
+            parsed = {**parsed, **await self._parse(job, filings)}
             if options.get("product_metadata", True):
                 await self._judge_profile(job)
             datapoint_rows = await self._extract_revenue(
@@ -697,8 +715,17 @@ class PipelineOrchestrator:
             )
 
     async def _identity(self, job: DrugJobORM) -> None:
+        """Who files for this product, from the index before the model.
+
+        The name index answers a ticker or a company name, either on its own,
+        so the question is put to it whenever the job holds one of them. What
+        the job holds depends on what ran first: a drug name alone reaches no
+        index at all, which is why the label is read before this step and the
+        sponsor it names is on the job by the time this asks.
+        """
         self._set_step(job, JobStep.IDENTITY_RESOLVE)
-        await self._expand_aliases(job)
+        if not self._job_aliases:
+            await self._expand_aliases(job)
         if not job.cik and (job.ticker or job.manufacturer):
             cik = await self.sec.resolve_cik(job.ticker, job.manufacturer)
             if cik:
@@ -768,13 +795,28 @@ class PipelineOrchestrator:
             if s.source_type in {SourceType.SEC_FILING, SourceType.EARNINGS_RELEASE}
         ]
         sec_ok = any(s.retrieval_status == RetrievalStatus.SUCCESS for s in sec_found)
+        # A third question, before the two above: were filings asked for at
+        # all. The pass that reads the product's own label asks for none, and
+        # "nothing was listed" is not a finding about an issuer there.
+        asked_for_filings = want_primary or want_earnings
         if sec_found and not sec_ok:
             job.quality_flags = list(set((job.quality_flags or []) + ["sec_retrieval_failed"]))
             logger.warning(
                 "sec_retrieval_failed job_id=%s drug=%s listed=%d fetched=0",
                 job.id, job.drug_name, len(sec_found),
             )
-        if get_settings().enable_llm_search and not sec_ok and not sec_found:
+        elif asked_for_filings and not sec_found and not job.cik:
+            # Nothing was listed because nothing said who files for this
+            # product. "We could not reach the SEC" is a different sentence
+            # from "we do not know whose filings to ask for", and the first
+            # was being shown for the second: a reader takes it as a transient
+            # failure of ours and retries, when what is missing is the issuer.
+            job.quality_flags = list(set((job.quality_flags or []) + [NO_FILER_OF_RECORD]))
+            logger.warning(
+                "no_filer_of_record job_id=%s drug=%s ticker=%s manufacturer=%s",
+                job.id, job.drug_name, job.ticker, job.manufacturer,
+            )
+        if asked_for_filings and get_settings().enable_llm_search and not sec_ok and not sec_found:
             search_sources = await self.search.fallback_retrieve(
                 run_id=job.run_id,
                 job_id=job.id,
@@ -3056,13 +3098,12 @@ class PipelineOrchestrator:
             )
             existing_unresolved.add(str(period))
 
-        counted = refresh_completeness(self.db, job, llm_pct=result.get("completeness_pct"))
+        counted = refresh_completeness(self.db, job)
         self.db.commit()
         logger.info(
-            "completeness job_id=%s drug=%s llm_pct=%s resolved_pct=%s quarterly=%s unresolved=%s",
+            "completeness job_id=%s drug=%s resolved_pct=%s quarterly=%s unresolved=%s",
             job.id,
             job.drug_name,
-            result.get("completeness_pct"),
             job.completeness_pct,
             counted.quarters,
             job.unresolved_count,

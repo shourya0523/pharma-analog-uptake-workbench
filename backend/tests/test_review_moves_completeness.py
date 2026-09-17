@@ -194,18 +194,20 @@ def test_rejecting_a_figure_takes_its_quarter_away(client):
     assert job.completeness_pct == pytest.approx(33.3, abs=0.05)
 
 
-def test_the_model_s_own_figure_is_never_the_coverage_number(client):
-    """Coverage is the ratio whatever the model offered.
+def test_coverage_is_counted_and_takes_nothing_from_a_model(client):
+    """The percentage names a count of quarters, and only that.
 
-    The percentage names a count of quarters. While a model's figure could
-    replace it, the same number on the same card was sometimes that count and
-    sometimes an opinion about it, with nothing on screen to say which.
+    A model's own figure was passed in beside the count and had to be argued
+    into being ignored; the parameter that carried it is gone, so there is
+    nothing left for the same number on the same card to mean twice.
     """
+    import inspect
+
     _, factory = client
     with factory() as db:
         job = db.get(DrugJobORM, "job-1")
-        with_model = refresh_completeness(db, job, llm_pct=96.0)
-        without = refresh_completeness(db, job)
-    assert with_model.pct == without.pct == 50.0
-    assert without.quarters == 2
-    assert without.gaps == 2
+        counted = refresh_completeness(db, job)
+    assert counted.pct == 50.0
+    assert counted.quarters == 2
+    assert counted.gaps == 2
+    assert list(inspect.signature(refresh_completeness).parameters) == ["db", "job"]

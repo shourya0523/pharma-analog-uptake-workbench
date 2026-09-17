@@ -80,7 +80,7 @@ class Completeness(NamedTuple):
     gaps: int
 
 
-def refresh_completeness(db: Session, job: DrugJobORM, *, llm_pct: object = None) -> Completeness:
+def refresh_completeness(db: Session, job: DrugJobORM) -> Completeness:
     """Recount what a job holds, and set the two fields derived from it.
 
     Coverage is the distinct quarters of the run's window carrying a figure
@@ -100,10 +100,6 @@ def refresh_completeness(db: Session, job: DrugJobORM, *, llm_pct: object = None
     figure takes a quarter away. Computed once at the end of the run, they
     described the run rather than the job, and a reviewer could resolve every
     gap without either moving.
-
-    ``llm_pct`` is accepted and not read. A model's percentage is not a count
-    of quarters; while it stood in for one, the number on the card was
-    sometimes the count and sometimes an opinion with nothing to say which.
 
     Flushes first because the session does not autoflush: a caller that has
     added rows and not committed is asking about those rows too.
