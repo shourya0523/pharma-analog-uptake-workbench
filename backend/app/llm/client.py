@@ -796,9 +796,6 @@ _YEAR_TO_DATE_SPANS = frozenset(
     for months, period_type in MONTHS_TO_PERIOD_TYPE.items()
     if period_type not in {"quarterly", "annual"}
 )
-_QUARTER_SPAN = next(
-    months for months, period_type in MONTHS_TO_PERIOD_TYPE.items() if period_type == "quarterly"
-)
 _SPAN_OF_PERIOD_TYPE = {
     period_type: months for months, period_type in MONTHS_TO_PERIOD_TYPE.items()
 }
@@ -834,7 +831,6 @@ def apply_judge_hard_vetoes(
     """Force misclassified/needs_review for known bad patterns even if model is soft."""
     issues = list(judgment.get("issues") or [])
     q = quote or ""
-    period_type = stated_text(candidate.get("period_type")).lower()
     mentions = quote_mentions_product(q, product, generic, extra_aliases=extra_aliases)
     other = quote_mentions_other_brand(
         q, product, generic, extra_aliases=extra_aliases, peer_names=peer_names
@@ -863,19 +859,6 @@ def apply_judge_hard_vetoes(
         veto = True
     if other and not mentions:
         issues.append(f"hard_veto:other_brand:{other}")
-        veto = True
-    # A figure the sentence states for a six- or nine-month span is not the
-    # quarter the row calls it, and the sentence carrying the value is what has
-    # to say so. A heading that prints the quarter column beside the
-    # year-to-date one names both spans and settles neither, so it is not this
-    # veto's business - which period the figure is for is the check below.
-    carried = spans_named_in(read)
-    if (
-        period_type == "quarterly"
-        and carried & _YEAR_TO_DATE_SPANS
-        and _QUARTER_SPAN not in carried
-    ):
-        issues.append("hard_veto:ytd_language_as_quarterly")
         veto = True
     # A quote that names periods has said which one its figure is for, and a
     # row that claims a different one is not supported by it. An extractor

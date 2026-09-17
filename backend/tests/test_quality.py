@@ -224,14 +224,22 @@ def test_a_milestone_earned_on_the_product_is_not_the_product_s_sales():
     assert out["validation_status"] == "auto_pass"
 
 
-def test_judge_hard_veto_ytd_as_quarterly():
-    """A sentence stating a year-to-date span does not state the quarter.
+def test_a_year_to_date_span_is_caught_by_the_period_it_states():
+    """The span a quote states is read, and one veto asks what follows from it.
 
-    The span is read by the period grammar rather than matched against the
-    phrases a filer uses to write it, so a heading printing the quarter column
-    beside the year-to-date one states both and settles neither: which of the
-    two the figure came from is `quote_states_a_different_period`'s question,
-    not this one.
+    There were two. The second - "the sentence says six months and the row says
+    quarterly" - could not fire on its own once a table row became one unit:
+    the sentence carrying the value never carries the heading, and where it does
+    state the span, it states the period too, so the period veto asks the same
+    question and answers it with the quarter the row claims.
+
+    `names_a_year_to_date_span` stays: it is what blocks a two-span table quote
+    from skipping the model, which is a different question from vetoing a row.
+
+    Both answers: a six- and a nine-month span are year-to-date, a quarter is
+    not; and the sentence stating one holds a row that claims a quarter, while
+    the heading above a row that carries both figures settles neither and holds
+    nothing.
     """
     assert names_a_year_to_date_span("for the six months ended June 30, 2026")
     assert names_a_year_to_date_span("for the nine months ended September 30, 2026")
@@ -239,12 +247,13 @@ def test_judge_hard_veto_ytd_as_quarterly():
 
     out = apply_judge_hard_vetoes(
         product="Calderon",
-        candidate={"period_type": "quarterly", "revenue_scope": "U.S.", "value_reported": 9.6},
+        candidate={"period_type": "quarterly", "revenue_scope": "U.S.",
+                   "value_reported": 9.6, "period": "2026Q2"},
         quote="Calderon net product sales for the six months ended June 30, 2026 were $9.6 million",
         judgment={"support_classification": "supported", "validation_status": "auto_pass", "issues": []},
     )
     assert out["support_classification"] == "misclassified"
-    assert "hard_veto:ytd_language_as_quarterly" in out["issues"]
+    assert "hard_veto:quote_states_a_different_period" in out["issues"]
 
     # The sentence carrying the value is what has to state the span. A heading
     # naming both columns above a row that carries both figures does not.
@@ -259,7 +268,7 @@ def test_judge_hard_veto_ytd_as_quarterly():
         quote=both,
         judgment={"support_classification": "supported", "validation_status": "auto_pass", "issues": []},
     )
-    assert "hard_veto:ytd_language_as_quarterly" not in kept["issues"]
+    assert [i for i in kept["issues"] if i.startswith("hard_veto:")] == []
 
 
 def test_ytd_period_type_blocks_auto_pass():
