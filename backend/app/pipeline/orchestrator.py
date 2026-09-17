@@ -15,6 +15,7 @@ from sqlalchemy.orm import Session
 logger = logging.getLogger(__name__)
 
 from app.config import get_settings
+from app.connectors.coverage import record_coverage
 from app.connectors.llm_search import LLMSearchConnector
 from app.connectors.openfda import OpenFDAConnector
 from app.connectors.openfda_fields import (
@@ -118,7 +119,7 @@ from app.quality.checks import (
     run_quality_checks,
 )
 from app.quality.comparative import derive_comparative_candidates
-from app.quality.completeness import refresh_completeness
+from app.quality.completeness import quarters_the_run_asked_for, refresh_completeness
 from app.quality.enrichment import (
     apply_field_enrichment,
     deterministic_formulation_fill,
@@ -813,13 +814,26 @@ class PipelineOrchestrator:
     async def _parse(self, job: DrugJobORM, sources: list) -> dict[str, Any]:
         self._set_step(job, JobStep.PARSE_SOURCES)
         parsed_map: dict[str, Any] = {}
+        # What each document turned out to hold for this product, asked once
+        # here because this is the only place a retrieved source and its
+        # parsed document are both in hand. It decides nothing about what was
+        # fetched; it records what the fetching got, which is the measurement
+        # any argument about retrieval order has to start from.
+        periods = sorted(quarters_the_run_asked_for(job))
+        aliases = self._job_aliases or [job.drug_name]
+        products = self._candidate_products(job)
         for src in sources:
             doc = await self.parser.parse(src)
             parsed_map[src.source_id] = doc
+            verdict = record_coverage(
+                src, doc, aliases=aliases, periods=periods, products=products
+            )
             row = self.db.get(SourceDocumentORM, src.source_id)
             if row:
                 row.parsing_status = doc.parsing_status.value
                 row.page_or_section = doc.page_or_section
+                row.metadata_json = {**(row.metadata_json or {}),
+                                     "coverage": verdict.as_metadata()}
                 if doc.notes:
                     row.notes = (row.notes or "") + f" | parse: {doc.notes}"
         self.db.commit()
