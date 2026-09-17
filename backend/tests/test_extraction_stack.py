@@ -1346,12 +1346,19 @@ def run_case(case: dict) -> tuple[str, str]:
 
 
 def real_rows_that_trip() -> list[str]:
-    """Every complete year in gold, put through the same checks.
+    """Every gold year that has a published total, put through the same checks.
 
-    This is the false-positive guard. Each series is grouped into calendar
-    years, and any year with all four quarters is checked against the total
-    those quarters imply - the same call the pipeline makes when deriving. None
-    of them may come back as anything other than resolved.
+    This is the false-positive guard. Quarters are grouped into calendar years
+    and each year that ``annual_revenue.jsonl`` also states a total for is
+    checked against the sum of the quarters gold carries for it - the same call
+    the pipeline makes when deriving. Every bridged quarter goes through the
+    split-ownership check as well. None may come back as anything other than
+    resolved.
+
+    ``expected_parts`` is the number of quarters gold holds for the year, not
+    four. A product launched mid-year has a shorter first year, and its stated
+    annual total covers only the quarters it was on sale for; demanding four
+    would skip exactly the launch year the series is read for.
     """
     quarterly = [
         json.loads(line)

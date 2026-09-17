@@ -26,9 +26,9 @@ routinely differ by 1. That is not a contradiction and must not be reported as
 one. Anything this module flags should be something
 a careful analyst reading the same pages would also stop at.
 
-``test_no_real_gold_row_needs_review`` runs every quarter in ``seed/gold``
-through here and requires all of them to resolve. If a change to this file
-starts flagging real data, that test fails, and it is this file that is wrong.
+Nothing here reads a document or a database. Every function takes the figures
+a caller already holds and returns a ``Verdict``: a status, a code naming the
+shape of the disagreement, and a value when one is defensible.
 """
 
 from __future__ import annotations
