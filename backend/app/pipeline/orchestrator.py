@@ -1690,6 +1690,9 @@ class PipelineOrchestrator:
                 context=doc.full_text[:4000],
                 grids=doc.table_grids, captions=doc.table_captions,
                 footnotes=doc.table_footnotes,
+                # What each table's own tagged figures declare their scale to
+                # be, for a schedule whose caption states no unit in words.
+                units=doc.table_units,
                 # The other products this run knows, so a label naming two of
                 # them reads as a combined line rather than as unknown words.
                 products=self._candidate_products(job),

@@ -261,6 +261,9 @@ class ParsedDocument(BaseModel):
     # The notes printed under each table, in the same order: a label's "(1)"
     # is explained there, and the explanation can change what the row is.
     table_footnotes: list[list[str]] = Field(default_factory=list)
+    # The unit each table's own tagged figures declare, in the same order.
+    # None where the table tags nothing, or where its figures disagree.
+    table_units: list[str | None] = Field(default_factory=list)
     page_or_section: str | None = None
     parsing_status: ParsingStatus
     notes: str | None = None

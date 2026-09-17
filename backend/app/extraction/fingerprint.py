@@ -324,11 +324,20 @@ def _header_text(rows: list[list[str]], limit: int = 8) -> str:
     return " ".join(" ".join(cell for cell in row if cell) for row in rows[:limit])
 
 
-def detect_unit(rows: list[list[str]], context: str = "") -> tuple[str, bool]:
+def detect_unit(
+    rows: list[list[str]], context: str = "", declared: str | None = None
+) -> tuple[str, bool]:
     """(unit label, whether the document actually declared it).
 
     Header cells win over surrounding prose, since a table that states its own
     unit is authoritative even inside a document that mentions another.
+
+    ``declared`` is the unit the filer tagged on the figures themselves, and it
+    answers last rather than first: the words are what this reader has always
+    read, and a filing whose caption and whose tags disagree is not one to
+    settle here. It is read when the words say nothing at all, which is the
+    case a caption of zero-width spaces leaves behind - the table was refused
+    for an undeclared unit while every figure in it carried the scale.
     """
     for scope in (_header_text(rows), context):
         if not scope:
@@ -336,6 +345,8 @@ def detect_unit(rows: list[list[str]], context: str = "") -> tuple[str, bool]:
         for label, pattern in _UNIT_PATTERNS:
             if _declares(scope, pattern):
                 return label, True
+    if declared in UNIT_SCALE_TO_MILLIONS:
+        return declared, True
     return "millions", False
 
 
@@ -593,6 +604,7 @@ def build_fingerprint(
     context: str = "",
     grid: list[list[str | None]] | None = None,
     period_context: PeriodContext | None = None,
+    declared_unit: str | None = None,
 ) -> TableFingerprint:
     """Fingerprint one table: unit, currency, and period-to-column mapping.
 
@@ -615,7 +627,7 @@ def build_fingerprint(
     under the same quarter. That is the failure this whole module exists to
     prevent, so an ambiguous table stays unread and says why.
     """
-    unit_label, unit_declared = detect_unit(rows, context)
+    unit_label, unit_declared = detect_unit(rows, context, declared_unit)
     currency, currency_declared = detect_currency(rows, context)
     header = _header_text(rows)
     has_change = bool(_PERCENT_RE.search(header))

@@ -115,6 +115,7 @@ def extract_revenue_candidates(
     period_context: PeriodContext | None = None,
     footnotes: Iterable[Iterable[str]] | None = None,
     products: Iterable[str] | None = None,
+    units: Iterable[str | None] | None = None,
 ) -> tuple[list[dict[str, Any]], list[Finding], list[str]]:
     """Deterministic revenue candidates plus what the checks found.
 
@@ -145,6 +146,7 @@ def extract_revenue_candidates(
         period_context=period_context,
         footnotes=footnotes,
         products=products,
+        units=units,
     )
     values = [value for readout in readouts for value in readout.values]
     skipped = [readout.skipped_reason for readout in readouts if readout.skipped_reason]

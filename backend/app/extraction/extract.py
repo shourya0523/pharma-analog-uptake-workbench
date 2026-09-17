@@ -500,6 +500,7 @@ def read_table(
     period_context: PeriodContext | None = None,
     footnotes: Iterable[str] | None = None,
     products: Iterable[str] | None = None,
+    declared_unit: str | None = None,
 ) -> TableReadout:
     """Read one table, by its geometry where that describes it and not otherwise.
 
@@ -526,6 +527,7 @@ def read_table(
         period_context=period_context,
         footnotes=footnotes,
         products=products,
+        declared_unit=declared_unit,
     )
     if (
         grid
@@ -542,6 +544,7 @@ def read_table(
             period_context=period_context,
             footnotes=footnotes,
             products=products,
+            declared_unit=declared_unit,
         )
     return readout
 
@@ -557,6 +560,7 @@ def _read_table(
     period_context: PeriodContext | None = None,
     footnotes: Iterable[str] | None = None,
     products: Iterable[str] | None = None,
+    declared_unit: str | None = None,
 ) -> TableReadout:
     """One reading of one table, either by column or from the ragged rows.
 
@@ -565,7 +569,9 @@ def _read_table(
     what lets a label be read as a combined line over named products rather
     than as words nobody can account for.
     """
-    fingerprint = build_fingerprint(rows, context, grid=grid, period_context=period_context)
+    fingerprint = build_fingerprint(
+        rows, context, grid=grid, period_context=period_context, declared_unit=declared_unit
+    )
     if not fingerprint.usable:
         reason = ";".join(fingerprint.notes) or "unusable_fingerprint"
         return TableReadout(fingerprint=fingerprint, values=[], skipped_reason=reason)
@@ -773,6 +779,7 @@ def read_tables(
     period_context: PeriodContext | None = None,
     footnotes: Iterable[Iterable[str]] | None = None,
     products: Iterable[str] | None = None,
+    units: Iterable[str | None] | None = None,
 ) -> list[TableReadout]:
     """Read every table. ``grids`` holds the same tables as rectangles, in order.
 
@@ -789,6 +796,7 @@ def read_tables(
     introductions = list(captions or [])
     notes = [list(n or ()) for n in (footnotes or [])]
     known = list(products or ())
+    declared = list(units or ())
     return [
         read_table(
             rows,
@@ -804,6 +812,7 @@ def read_tables(
             period_context=period_context,
             footnotes=notes[index] if index < len(notes) else None,
             products=known,
+            declared_unit=declared[index] if index < len(declared) else None,
         )
         for index, rows in enumerate(tables or [])
     ]

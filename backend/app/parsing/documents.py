@@ -210,6 +210,38 @@ def table_relevance(grid: list[list[str | None]]) -> int:
     )
 
 
+# What an inline-XBRL scale means as a unit label: the displayed number is
+# multiplied by ten to this power, so a schedule printing "159,721" under
+# scale="3" states thousands. Keyed by the exponent the filer writes.
+_SCALE_TO_UNIT = {"0": "units", "3": "thousands", "6": "millions", "9": "billions"}
+# The tags a filer wraps a number in when it tags the number itself. Namespaces
+# vary by preparer ("ix:nonFraction", "nonFraction"), so the local name decides.
+_NONFRACTION_RE = re.compile(r"(?:^|:)nonfraction$", re.IGNORECASE)
+
+
+def table_declared_unit(table: Tag) -> str | None:
+    """The unit this table's own tagged numbers declare, or None.
+
+    A filer that tags its figures inline states the scale on each figure, which
+    is the same declaration a caption makes in words and is attached to the
+    number rather than to the prose near it. It is read because a caption can
+    be absent - a schedule introduced by zero-width spaces declares nothing a
+    reader of text can find - while the tagged cells still say what they are.
+
+    None where nothing is tagged, and where the tagged figures disagree: a
+    table mixing scales has not declared one unit, and guessing between them is
+    the error this whole module exists to avoid.
+    """
+    scales = {
+        tag.get("scale")
+        for tag in table.find_all(lambda t: bool(_NONFRACTION_RE.search(t.name or "")))
+        if tag.get("scale") is not None
+    }
+    if len(scales) != 1:
+        return None
+    return _SCALE_TO_UNIT.get(next(iter(scales)))
+
+
 def table_caption(table: Tag) -> str:
     """The text a table is introduced by, read backwards from its own start.
 
@@ -708,6 +740,7 @@ class DocumentParser:
         grids = [grid for _element, grid in selected]
         captions = [table_caption(element) for element, _grid in selected]
         footnotes = [table_footnotes(element) for element, _grid in selected]
+        units = [table_declared_unit(element) for element, _grid in selected]
         tables = [rows for grid in grids if (rows := flatten_grid(grid))]
         return ParsedDocument(
             source_id=source.source_id,
@@ -716,6 +749,7 @@ class DocumentParser:
             table_grids=grids,
             table_captions=captions,
             table_footnotes=footnotes,
+            table_units=units,
             page_or_section="html body",
             parsing_status=ParsingStatus.SUCCESS,
         )
