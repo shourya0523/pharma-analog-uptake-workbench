@@ -56,20 +56,18 @@ class SearchedIdentity:
     notes: str = ""
     refused: str | None = "cik_search_returned_no_cik"
 
-    @classmethod
-    def nothing(cls) -> SearchedIdentity:
-        """The resolution of a search that was never made."""
-        return cls(refused="cik_search_not_asked")
-
     @property
     def accepted(self) -> bool:
         return self.cik is not None and self.refused is None
 
     @property
     def flags(self) -> list[str]:
-        """What this resolution puts on the job's quality flags."""
-        if self.refused == "cik_search_not_asked":
-            return []
+        """What this resolution puts on the job's quality flags.
+
+        A refusal is its own flag and an acceptance says the CIK came from the
+        model, so every resolution has something to say. A search that was
+        never made has no resolution at all and so says nothing.
+        """
         return [self.refused] if self.refused else ["cik_from_llm_search"]
 
 
@@ -111,10 +109,6 @@ class LLMSearchConnector:
         self.file_store = file_store
         self.llm = llm or LLMModules()
         self.settings = get_settings()
-        # The last reply `resolve_cik_from_search` read, kept whether it was
-        # taken or refused, so a caller holding the connector can record what
-        # happened without the method having to reach the job.
-        self.last_resolution = SearchedIdentity.nothing()
 
     async def search_snippets(
         self,
@@ -139,32 +133,34 @@ class LLMSearchConnector:
         results = _normalize_results(payload)
         return results[: self.settings.llm_search_max_urls]
 
-    async def resolve_cik_from_search(
+    async def resolve_identity_from_search(
         self,
         *,
         product: str,
         manufacturer: str | None,
         ticker: str | None,
         aliases: list[str],
-        quality_flags: list[str] | None = None,
-    ) -> str | None:
-        """The CIK the model says reports this product's revenue, or None.
+    ) -> SearchedIdentity | None:
+        """Who the model says reports this product's revenue, or None if unasked.
 
-        The prompt asks for five fields and this took one of them. A CIK on
-        its own cannot be disagreed with: a reply at confidence 0.05 binds the
+        The prompt asks for five fields, and a caller given only the CIK has
+        no way to disagree with it: a reply at confidence 0.05 binds the
         product to a company exactly as one at 0.95 does, every filing fetched
         afterwards is that company's, and nothing downstream can tell the two
-        apart. So the whole reply is kept on ``last_resolution`` - the name to
-        compare against whoever the label says makes the drug, the URL to
-        check it against, the model's own note - a CIK the model is not sure
-        of is refused, and the refusal is named.
+        apart. So the whole reply is returned - the name to compare against
+        whoever the label says makes the drug, the URL to check it against,
+        the model's own note - with a CIK the model is not sure of already
+        refused and the refusal named.
 
-        ``quality_flags`` is the job's own list when a caller passes it: a job
-        that found no issuer and a job that refused a bad answer are different
-        states, and they read the same on the surface unless one of them says
-        so.
+        The caller is the only one that can record the refusal against the
+        job, which is why the resolution goes back to it rather than onto the
+        connector: a job that found no issuer and a job that refused a bad
+        answer are different states, and they read the same on the surface
+        unless one of them says so.
+
+        ``None`` is a search that was not made, which is not a refusal and
+        flags nothing.
         """
-        self.last_resolution = SearchedIdentity.nothing()
         if not self.settings.enable_llm_search:
             return None
         result = await self.llm.resolve_cik_via_search(
@@ -176,17 +172,33 @@ class LLMSearchConnector:
         resolution = read_searched_identity(
             result, floor=self.settings.llm_cik_min_confidence
         )
-        self.last_resolution = resolution
-        if quality_flags is not None:
-            for flag in resolution.flags:
-                if flag not in quality_flags:
-                    quality_flags.append(flag)
         logger.info(
             "cik_search product=%s cik=%s confidence=%s refused=%s company=%r url=%s notes=%r",
             product, resolution.cik, resolution.confidence, resolution.refused,
             resolution.company_name, resolution.source_url, resolution.notes[:200],
         )
-        return resolution.cik if resolution.accepted else None
+        return resolution
+
+    async def resolve_cik_from_search(
+        self,
+        *,
+        product: str,
+        manufacturer: str | None,
+        ticker: str | None,
+        aliases: list[str],
+        quality_flags: list[str] | None = None,
+    ) -> str | None:
+        """The accepted CIK alone, for a caller that still asks for one.
+
+        A caller that takes the resolution records the refusal too; one that
+        takes the CIK cannot, and ``quality_flags`` is accepted and ignored so
+        that it does not look as though it can. This goes when the last such
+        caller moves to `resolve_identity_from_search`.
+        """
+        resolution = await self.resolve_identity_from_search(
+            product=product, manufacturer=manufacturer, ticker=ticker, aliases=aliases
+        )
+        return resolution.cik if resolution and resolution.accepted else None
 
     async def fallback_retrieve(
         self,
