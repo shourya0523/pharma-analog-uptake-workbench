@@ -70,7 +70,6 @@ SCRIPT_ONLY = {
     # builds its equivalents inline, so these are a second spelling of a
     # capability rather than the one that ships.
     "CompetitiveIntensity": NOT_WIRED,
-    "PeakEstimateType": NOT_WIRED,
     "PharmaAssertion": NOT_WIRED,
     "RevenueCandidate": NOT_WIRED,
     "is_aggregate_formulation": NOT_WIRED,

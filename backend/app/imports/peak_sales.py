@@ -1,9 +1,25 @@
+"""Read an analyst's hand-prepared file of cited peak-sales estimates.
+
+Only the estimate types the selector actually reads are accepted. An
+`observed` peak is derived from the product's own annual series, so a row
+claiming one would be imported, stored and never consulted - accepting it
+would be this file quietly disagreeing with what the selector does.
+"""
+
 from __future__ import annotations
 
 import csv
 from dataclasses import dataclass
 from datetime import date
 from typing import TextIO
+
+from app.domain.models import PeakEstimateType
+
+# The estimate types a citation can carry. Derived from the vocabulary minus
+# the one the selector derives for itself, so a new estimate type is importable
+# by default and has to be excluded deliberately.
+DERIVED_ESTIMATE_TYPES = frozenset({PeakEstimateType.OBSERVED.value})
+CITED_ESTIMATE_TYPES = frozenset(item.value for item in PeakEstimateType) - DERIVED_ESTIMATE_TYPES
 
 
 class PeakImportError(ValueError):
@@ -41,8 +57,12 @@ def read_peak_sales_csv(stream: TextIO) -> list[PeakImportRow]:
         if missing:
             raise PeakImportError(f"Row {line_number} missing required fields: {', '.join(missing)}")
         estimate_type = raw["estimate_type"].strip().lower()
-        if estimate_type not in {"consensus", "modeled", "observed"}:
-            raise PeakImportError(f"Row {line_number} has invalid estimate_type")
+        if estimate_type not in CITED_ESTIMATE_TYPES:
+            raise PeakImportError(
+                f"Row {line_number} has an estimate_type no peak selection reads: "
+                f"{estimate_type!r}. Citable types are "
+                f"{', '.join(sorted(CITED_ESTIMATE_TYPES))}."
+            )
         source_url = raw["source_url"].strip()
         if not source_url.startswith(("https://", "http://")):
             raise PeakImportError(f"Row {line_number} source_url must be an HTTP(S) citation")
