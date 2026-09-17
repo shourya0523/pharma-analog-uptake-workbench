@@ -69,8 +69,38 @@ def _document(grids, text="For the three months ended March 31, 2025") -> Parsed
 def test_a_figure_under_a_period_column_is_what_carries():
     result = coverage(_document([SCHEDULE]), aliases=["Calderon"], periods=["2025Q1"])
     assert result.verdict == ANSWERS
-    assert result.per_period == {"2025Q1": CARRIES}
+    assert result.per_period["2025Q1"] == CARRIES
     assert result.figures == {"2025Q1": 55881.0}
+
+
+def test_the_year_a_quarter_falls_in_is_asked_about_too():
+    """A caller asks in quarters; a 10-K reports in fiscal years.
+
+    The year each asked quarter ends in is asked about as a period of its own,
+    so a document that states the year is a document the predicate can read.
+    It is not one of the quarters, though, so it cannot make the verdict
+    `answers` and it cannot keep the verdict from being `answers` either.
+    """
+    annual = [
+        [None, "Year Ended December 31,", "Year Ended December 31,"],
+        [None, "2025", "2024"],
+        ["Calderon", "220,140", "180,220"],
+    ]
+    result = coverage(
+        _document([annual], "For the year ended December 31, 2025"),
+        aliases=["Calderon"],
+        periods=["2025Q1", "2025Q2"],
+    )
+    assert set(result.per_period) == {"2025Q1", "2025Q2", "2025"}
+    assert result.carried == ["2025"]
+    assert result.verdict == PARTIAL, "a year is not a quarter that was asked for"
+
+    quarterly = coverage(
+        _document([SCHEDULE]), aliases=["Calderon"], periods=["2025Q1", "2024Q1"]
+    )
+    assert quarterly.verdict == ANSWERS, (
+        "both quarters carried is answered, whatever the years do"
+    )
 
 
 def test_the_comparative_column_is_a_period_too():
@@ -110,14 +140,13 @@ def test_a_sibling_product_is_not_this_product():
     assert absent.verdict == ABSENT and not absent.names_product
 
 
-def test_a_product_named_with_no_reachable_figure_is_names_only():
-    """The row-grouped schedule: the product is a group heading and the
-    figures sit on rows labelled by geography, which `read_label` reads the
-    scope of and finds no product on.
+def test_a_row_grouped_schedule_is_read_through_its_heading():
+    """The product is a group heading and the figures sit on rows labelled by
+    geography, which `read_label` reads the scope of and finds no product on.
 
-    Saying `names_only` here is the point. The document does hold the figure;
-    the reader cannot reach it; a predicate that said `carries` would hide
-    exactly the gap it exists to show.
+    A label with no figures beside it heads the rows below rather than stating
+    anything itself, so the rows under it are read as the heading's - the same
+    reading `extraction/extract.py` gives them.
     """
     grouped = [
         [None, "Three Months Ended March 31,", "Three Months Ended March 31,"],
@@ -128,19 +157,46 @@ def test_a_product_named_with_no_reachable_figure_is_names_only():
         ["Worldwide", "458", "392"],
     ]
     result = coverage(_document([grouped]), aliases=["Calderon"], periods=["2025Q1"])
+    assert result.per_period["2025Q1"] == CARRIES
+    assert result.names_product
+
+
+def test_a_product_named_with_no_reachable_figure_is_names_only():
+    """A table that names the product beside no figure anyone can reach.
+
+    Saying `names_only` here is the point. A predicate that said `carries` from
+    the name alone would hide exactly the gap it exists to show.
+    """
+    note = [
+        ["Collaboration", "Territory"],
+        ["Calderon", "United States"],
+    ]
+    document = _document(
+        [note],
+        "Calderon is licensed to the collaboration described in Note 12. "
+        "For the three months ended March 31, 2025",
+    )
+    result = coverage(document, aliases=["Calderon"], periods=["2025Q1"])
     assert result.verdict == NAMES_ONLY
     assert result.names_product and not result.figures
-    assert result.per_period == {"2025Q1": SILENT}
+    assert result.per_period["2025Q1"] == SILENT
 
 
-def test_a_name_in_prose_and_no_table_is_names_only_not_carries():
+def test_a_document_with_no_table_is_unreadable_not_names_only():
+    """An XBRL instance, a JSON payload, a release written entirely in prose:
+    the figure test never ran on any of them.
+
+    Reporting `names_only` would say a document nobody read was read and held
+    nothing, which is the one claim the predicate exists to stop being made.
+    """
     prose = _document(
         [],
         "Calderon was approved in the quarter and is described in Note 12. "
         "See the discussion of the three months ended March 31, 2025.",
     )
     result = coverage(prose, aliases=["Calderon"], periods=["2025Q1"])
-    assert result.verdict == NAMES_ONLY and not result.figures
+    assert result.verdict == UNREADABLE and not result.figures
+    assert result.per_period["2025Q1"] == SILENT
 
 
 def test_a_stated_nothing_refutes_the_period():
@@ -152,7 +208,8 @@ def test_a_stated_nothing_refutes_the_period():
     result = coverage(
         _document([nil]), aliases=["Calderon"], periods=["2025Q1", "2024Q1"]
     )
-    assert result.per_period == {"2025Q1": CARRIES, "2024Q1": REFUTES}
+    assert result.per_period["2025Q1"] == CARRIES
+    assert result.per_period["2024Q1"] == REFUTES
     assert result.verdict == PARTIAL
 
 
@@ -198,7 +255,9 @@ def test_the_verdict_is_recorded_on_the_source_and_logged(caplog):
         "verdict": ANSWERS,
         "names_product": True,
         "carries": ["2025Q1"],
-        "refutes": [],
+        # The document is written in the first quarter, so the year it belongs
+        # to is a period it cannot yet state.
+        "refutes": ["2025"],
         "figures": {"2025Q1": 55881.0},
     }
     assert "document_coverage" in caplog.text and "verdict=answers" in caplog.text
@@ -288,7 +347,56 @@ def test_a_document_that_dates_itself_nowhere_refutes_nothing():
         aliases=["Calderon"],
         periods=["2025Q1", "2031Q4"],
     )
-    assert result.per_period == {"2025Q1": CARRIES, "2031Q4": SILENT}
+    assert result.per_period["2025Q1"] == CARRIES
+    assert result.per_period["2031Q4"] == SILENT
+    assert set(result.refuted) == set()
+
+
+def test_a_row_is_not_its_own_sibling():
+    """A label that carries a noun phrase reads as a combined line over itself
+    if its own label is among the siblings it is compared against.
+
+    The filer prints "Calderon net product sales" and "NuVessa net product
+    sales"; each row's siblings are the other rows, so each reads as its own
+    product. `extraction/extract.py` reads a row the same way and says the same
+    thing; this is the second implementation of one idea, and it had the guard
+    missing.
+    """
+    spelled_out = [
+        [None, "Three Months Ended March 31,", "Three Months Ended March 31,"],
+        [None, "2025", "2024"],
+        ["Calderon net product sales", "55,881", "19,834"],
+        ["NuVessa net product sales", "9,001", "8,600"],
+    ]
+    result = coverage(
+        _document([spelled_out]), aliases=["Calderon"], periods=["2025Q1"]
+    )
+    assert result.figures == {"2025Q1": 55881.0}
+    assert result.verdict == ANSWERS
+
+
+def test_a_form_of_registration_is_not_a_name():
+    """A sponsor's name split at its comma leaves `Inc.` behind as an alias.
+
+    Every registrant of that form carries one, so a document about anybody
+    prints it, and a name test given it says every document names the product.
+    Both answers: the document about somebody else is `absent`, and the same
+    alias list still finds the product where the product is named.
+    """
+    somebody_else = _document(
+        [[["Product", "Territory"], ["NuVessa", "United States"]]],
+        "NuVessa is sold by Beta Pharma, Inc. For the three months ended "
+        "March 31, 2025",
+    )
+    aliases = ["Calderon", "Acme Therapeutics, Inc.", "Inc.", "S.A."]
+    assert coverage(somebody_else, aliases=aliases, periods=["2025Q1"]).verdict == ABSENT
+
+    ours = _document(
+        [[["Product", "Territory"], ["Calderon", "United States"]]],
+        "Calderon is sold by Acme Therapeutics, Inc. For the three months "
+        "ended March 31, 2025",
+    )
+    assert coverage(ours, aliases=aliases, periods=["2025Q1"]).verdict == NAMES_ONLY
 
 
 def test_a_row_of_figures_under_no_name_is_nobody_s_figure():
