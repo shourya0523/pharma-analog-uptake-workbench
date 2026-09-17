@@ -27,6 +27,13 @@ a table a sentence and would fire on the shape below; refusing to guess is the
 safer of the two wrong answers, and the only one that does not claim a figure
 it cannot point at.
 
+The verdict is written per document and is what a reader of "which quarters
+does no filing cover" would replace `_quarters_no_filing_covers` with: that
+one answers from filing *dates* - no successful filing of this issuer dated
+inside the window - and so calls a quarter uncovered when a filing covering it
+was fetched and read, and covered when one was fetched that holds nothing for
+this product. This answers the same question from the figures, per document.
+
 A row-grouped schedule is the other. A filer that prints
 
     CALDERON
