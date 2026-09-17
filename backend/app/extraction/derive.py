@@ -27,10 +27,11 @@ from __future__ import annotations
 import re
 from collections import defaultdict
 from collections.abc import Iterable
-from dataclasses import replace
+from dataclasses import dataclass, replace
 from typing import Any
 
 from app.extraction.process import Datapoint
+from app.parsing.labels import FLAG_NOT_UNDERSTOOD
 
 _QUARTER_RE = re.compile(r"(\d{4})Q([1-4])")
 
@@ -84,6 +85,21 @@ def _combined_uncertainty(points: Iterable[Datapoint]) -> float | None:
     return total
 
 
+@dataclass(frozen=True)
+class DerivedFrom:
+    """One derived quarter beside the figures it was computed from.
+
+    The roles say what each input was in the arithmetic, so a reader of the
+    lineage can reconstruct the subtraction without parsing the quote back.
+    Kept out of ``Datapoint`` because it is a fact about a derivation rather
+    than about an observation, and a derivation's inputs can themselves be
+    derived.
+    """
+
+    output: Datapoint
+    inputs: tuple[tuple[str, Datapoint], ...]
+
+
 def _split(period: str) -> tuple[int, int] | None:
     match = _QUARTER_RE.fullmatch(period or "")
     if not match:
@@ -98,7 +114,7 @@ def _year_of(period: str) -> int | None:
 
 def complete_quarters_from_totals(
     points: list[Datapoint], *, commercial_start: str | None = None,
-    product: str | None = None,
+    product: str | None = None, lineage: list[DerivedFrom] | None = None,
 ) -> list[Datapoint]:
     """Derive the one quarter an issuer left implicit against a stated total.
 
@@ -113,9 +129,25 @@ def complete_quarters_from_totals(
     why a launch year's Q4 stays a gap even though its full-year total is
     cited. Pass it only when the start is actually known; the default keeps the
     stricter all-four-quarters rule.
+
+    ``lineage`` is an out-parameter: pass a list and it is filled with one
+    ``DerivedFrom`` per derived quarter, naming the figures it subtracted. The
+    caller is the only place that knows which document each of those figures
+    was read from, so the arithmetic reports what it used and the caller says
+    where it came from.
     """
     start = _split(commercial_start or "")
-    usable = [p for p in points if p.value_normalized_usd_millions is not None]
+    # A figure whose label the reader could not account for is a number with
+    # no claim attached about whose number it is. Subtracting it publishes an
+    # amount nobody said was this product's, as this product's, with the
+    # arithmetic standing in for the evidence - so it is not an input here,
+    # for the same reason `check.py` does not let it contest a cell.
+    usable = [
+        p
+        for p in points
+        if p.value_normalized_usd_millions is not None
+        and FLAG_NOT_UNDERSTOOD not in (p.flags or ())
+    ]
     quarters: dict[int, dict[int, Datapoint]] = defaultdict(dict)
     totals: dict[tuple[int, str], Datapoint] = {}
 
@@ -152,6 +184,10 @@ def complete_quarters_from_totals(
         )
         derived.append(point)
         quarters[year][target] = point
+        if lineage is not None:
+            lineage.append(
+                DerivedFrom(point, (("outer_span", outer), ("inner_span", inner)))
+            )
 
     for (year, period_type), total in sorted(totals.items()):
         members = _QUARTERS_IN[period_type]
@@ -189,6 +225,14 @@ def complete_quarters_from_totals(
         )
         derived.append(point)
         quarters[year][target] = point
+        if lineage is not None:
+            lineage.append(
+                DerivedFrom(
+                    point,
+                    (("period_total", total),)
+                    + tuple(("quarter", have[q]) for q in members if q != target),
+                )
+            )
     return derived
 
 
@@ -239,6 +283,7 @@ def propagate_sole_formulation(
     *,
     formulation_periods: set[str],
     formulation_label: str,
+    lineage: list[DerivedFrom] | None = None,
 ) -> list[Datapoint]:
     """Attribute family totals to the one formulation that existed at the time.
 
@@ -246,12 +291,18 @@ def propagate_sole_formulation(
     line are the same product, so the family's reported figure is the
     formulation's figure. Periods on or after the split are excluded: once two
     formulations share the line, the split is not recoverable from the total.
+
+    ``lineage`` is the same out-parameter ``complete_quarters_from_totals``
+    takes: the family figure this reattributes is the one input.
     """
     if not formulation_periods:
         return []
     split_at = min(formulation_periods)
-    return [
-        replace(
+    attributed: list[Datapoint] = []
+    for point in family:
+        if point.period >= split_at or point.value_normalized_usd_millions is None:
+            continue
+        moved = replace(
             point,
             product_label=formulation_label,
             source_quote=(
@@ -260,9 +311,10 @@ def propagate_sole_formulation(
             ),
             normalization_status="derived_sole_formulation",
         )
-        for point in family
-        if point.period < split_at and point.value_normalized_usd_millions is not None
-    ]
+        attributed.append(moved)
+        if lineage is not None:
+            lineage.append(DerivedFrom(moved, (("family_total", point),)))
+    return attributed
 
 
 # A quarter split by an ownership change is covered by two issuers' partial
@@ -373,6 +425,14 @@ def _as_datapoint(candidate: dict[str, Any]) -> Datapoint | None:
         fingerprint_signature=candidate.get("fingerprint_signature") or "",
         normalization_status="reported",
         rounding_uncertainty_usd_millions=candidate.get("rounding_uncertainty_usd_millions"),
+        # What the label said about the figure. A derivation subtracts the
+        # figures, not the questions about them: a total nobody could account
+        # for, or one that named two products, still names two products after
+        # the subtraction, and `_derived_point` carries these across with the
+        # rest of the row.
+        scope=candidate.get("geography"),
+        combined_with=tuple(candidate.get("combined_with") or ()),
+        flags=tuple(candidate.get("label_flags") or ()),
     )
 
 
@@ -404,10 +464,32 @@ def complete_series(
 
     Nothing under-determined is derived. A period on or after the split, or a
     year missing two quarters, stays the gap it is.
+
+    Each returned candidate says what it was computed from and what the figures
+    it was computed from were about. A derivation is a claim about the same
+    product, geography and formulation as the total it subtracted, and it is
+    read from the documents those figures were read from - so both travel with
+    it rather than being defaulted by whoever stores it.
     """
-    own = [point for c in reported.get(product, []) if (point := _as_datapoint(c))]
+    origin: dict[int, dict[str, Any]] = {}
+
+    def observed(candidates: Iterable[dict[str, Any]]) -> list[Datapoint]:
+        """The candidates as observations, each remembered by the dict it came from."""
+        points: list[Datapoint] = []
+        for candidate in candidates:
+            point = _as_datapoint(candidate)
+            if point is None:
+                continue
+            origin[id(point)] = candidate
+            points.append(point)
+        return points
+
+    lineage: list[DerivedFrom] = []
+    own = observed(reported.get(product, []))
     derived = list(
-        complete_quarters_from_totals(own, commercial_start=commercial_start, product=product)
+        complete_quarters_from_totals(
+            own, commercial_start=commercial_start, product=product, lineage=lineage
+        )
     )
 
     if family and family != product:
@@ -427,9 +509,8 @@ def complete_series(
         if split_periods:
             family_points = [
                 point
-                for candidate in reported.get(family, [])
-                if (point := _as_datapoint(candidate))
-                and point.period_type == "quarterly"
+                for point in observed(reported.get(family, []))
+                if point.period_type == "quarterly"
             ]
             already = {point.period for point in own} | {p.period for p in derived}
             derived += [
@@ -438,9 +519,53 @@ def complete_series(
                     family_points,
                     formulation_periods=split_periods,
                     formulation_label=product,
+                    lineage=lineage,
                 )
                 if point.period not in already
             ]
+
+    from_point = {id(record.output): record for record in lineage}
+
+    def carried(point: Datapoint) -> dict[str, Any]:
+        """The identity and the provenance a derived quarter inherits.
+
+        A derivation is a claim about whatever its left-hand side was a claim
+        about: the same product, the same geography, the same formulation, read
+        from the same document. Stored without them, the row asserts the
+        identity the arithmetic just dropped - a region's total published as
+        the family's, a combined line published as one product's own - and
+        cites whichever document happened to be first.
+        """
+        record = from_point.get(id(point))
+        if record is None:
+            return {"_inputs": []}
+        principal = next(
+            (source for role, source in record.inputs if role != "quarter"),
+            record.inputs[0][1] if record.inputs else None,
+        )
+        head = origin.get(id(principal)) if principal is not None else None
+        carried_fields = {
+            key: (head or {}).get(key)
+            for key in (
+                "revenue_scope", "geography", "formulation",
+                "route_of_administration", "reported_as", "combined_with",
+                "source_id", "source_url", "product_label",
+            )
+        }
+        carried_fields["_inputs"] = [
+            {
+                "role": role,
+                "period": source.period,
+                "period_type": source.period_type,
+                "value_normalized_usd_millions": source.value_normalized_usd_millions,
+                "extraction_method": (origin.get(id(source)) or {}).get("extraction_method"),
+                "datapoint_id": (origin.get(id(source)) or {}).get("_datapoint_id"),
+                "source_id": (origin.get(id(source)) or {}).get("source_id"),
+                "source_url": (origin.get(id(source)) or {}).get("source_url"),
+            }
+            for role, source in record.inputs
+        ]
+        return carried_fields
 
     return [
         {
@@ -455,7 +580,11 @@ def complete_series(
             "extraction_method": point.normalization_status,
             "rounding_uncertainty_usd_millions": point.rounding_uncertainty_usd_millions,
             "_derived": True,
-            "label_flags": [HELD_FOR_BOUND] if held_for_bound(point) else [],
+            "label_flags": (
+                ([HELD_FOR_BOUND] if held_for_bound(point) else [])
+                + [flag for flag in point.flags if flag != HELD_FOR_BOUND]
+            ),
+            **carried(point),
         }
         for point in derived
         # A quarter that derives to nothing is not a quarter the issuer left

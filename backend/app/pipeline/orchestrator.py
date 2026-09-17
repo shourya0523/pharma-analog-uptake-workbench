@@ -31,6 +31,7 @@ from app.db.models import (
     AnalogFamilyORM,
     CanonicalProductORM,
     DatapointORM,
+    DerivationLineageORM,
     DrugJobORM,
     DrugProfileFieldORM,
     EvidenceAssertionORM,
@@ -396,6 +397,21 @@ def persist_profile_field(
 LABEL_FLAGS = QUESTION_FLAGS | {HELD_FOR_BOUND}
 
 _DETERMINISTIC_METHODS = {"table_fingerprint": "table", "prose_sentence": "prose"}
+
+
+def _read_from(candidate: dict[str, Any], src: Any) -> dict[str, Any]:
+    """The candidate with the document it was read from stamped on it.
+
+    A period total is kept aside rather than stored, so it never becomes a row
+    whose source anything can look up. A derivation that subtracts it has to
+    say which filing the figure came out of, and this is the only point where
+    that is known.
+    """
+    return {
+        **candidate,
+        "source_id": candidate.get("source_id") or getattr(src, "source_id", None),
+        "source_url": candidate.get("source_url") or getattr(src, "url", None),
+    }
 
 
 def _deterministic_method(candidate: dict[str, Any]) -> str:
@@ -1370,7 +1386,17 @@ class PipelineOrchestrator:
 
     @staticmethod
     def _candidate_of(row: DatapointORM) -> dict:
-        """A stored datapoint read back as the candidate it came from."""
+        """A stored datapoint read back as the candidate it came from.
+
+        Every column that says what the figure is a figure for, and where it
+        was read. A derivation subtracts these rows, and what it does not
+        receive it cannot pass on: the eight keys this used to return dropped
+        the pair a combined line was reported as, the region it covered, the
+        route, the precision its source declared, and the document it came
+        out of - so the derived quarter asserted the family's identity, cited
+        whichever document happened to be first, and was published as exact.
+        """
+        citation = row.citation_json or {}
         return {
             "period": row.period,
             "period_type": row.period_type,
@@ -1379,6 +1405,20 @@ class PipelineOrchestrator:
             "currency": row.currency,
             "unit": row.unit,
             "source_quote": row.source_quote,
+            "revenue_scope": row.revenue_scope,
+            "geography": row.geography,
+            "formulation": row.formulation,
+            "route_of_administration": row.route_of_administration,
+            "reported_as": row.reported_as,
+            "combined_with": list(citation.get("combined_with") or []),
+            "label_flags": [f for f in (row.issue_flags or []) if f in LABEL_FLAGS],
+            "extraction_method": row.extraction_method,
+            "rounding_uncertainty_usd_millions": citation.get(
+                "rounding_uncertainty_usd_millions"
+            ),
+            "source_id": row.source_id,
+            "source_url": row.source_url,
+            "_datapoint_id": row.id,
         }
 
     def _datapoint_from_candidate(self, job: DrugJobORM, src, candidate: dict) -> DatapointORM:
@@ -1410,6 +1450,17 @@ class PipelineOrchestrator:
             period_type=candidate.get("period_type") or "quarterly",
             revenue_scope=candidate.get("revenue_scope") or "Product family",
             formulation=candidate.get("formulation"),
+            # What the figures it was computed from were figures for. A
+            # derivation is a claim about the same product, the same region and
+            # the same line of the schedule as the total it subtracted, and
+            # defaulting these published a region's arithmetic as the family's
+            # and a two-product line as one product's own.
+            reported_as=(
+                candidate.get("reported_as")
+                or reported_as_for(job.drug_name, candidate)
+            ),
+            geography=candidate.get("geography"),
+            route_of_administration=candidate.get("route_of_administration"),
             source_url=src.url,
             source_quote=candidate.get("source_quote") or "",
             extraction_method=str(candidate.get("extraction_method") or "xbrl_fact"),
@@ -1434,6 +1485,12 @@ class PipelineOrchestrator:
                 "rounding_uncertainty_usd_millions": candidate.get(
                     "rounding_uncertainty_usd_millions"
                 ),
+                # Every figure this was computed from, with the document each
+                # was read from. The quote states the arithmetic; this states
+                # where a person goes to check each term of it, which is not
+                # the one document the row cites.
+                "derived_from": candidate.get("_inputs") or None,
+                "combined_with": list(candidate.get("combined_with") or []) or None,
                 "validation_status": ValidationStatus.PENDING.value,
                 "interpreted": False,
                 "period_reported": period,
@@ -1445,6 +1502,74 @@ class PipelineOrchestrator:
         )
         self.db.add(row)
         return row
+
+    def _record_derivation_lineage(
+        self, job: DrugJobORM, row: DatapointORM, candidate: dict[str, Any]
+    ) -> None:
+        """Write what this derived row was computed from, as rows not as prose.
+
+        The quote says the arithmetic in a sentence and the citation repeats it
+        as fields; neither can be joined against. `DerivationLineageORM` is the
+        join, and it is written over `EvidenceAssertionORM`, which is the table
+        it points at: one assertion per figure, the derived one and each input,
+        so an input that several derivations used is one row that all of them
+        name.
+
+        An input that never became a stored datapoint - a period total, kept
+        aside because it is not an answer to a quarterly question - still gets
+        an assertion, keyed on the source it was read from and the value it
+        carried. What it cannot get is an entity that outlives this run, which
+        is why the entity id falls back to the row's own.
+        """
+        inputs = candidate.get("_inputs") or []
+        if not inputs:
+            return
+
+        def assertion(
+            entity_id: str, value: Any, url: str | None, source_id: str | None,
+            method: str, quote: str | None, section: str,
+        ) -> EvidenceAssertionORM:
+            record = EvidenceAssertionORM(
+                id=new_id(),
+                entity_type="datapoint",
+                entity_id=entity_id,
+                field_name="value_normalized_usd_millions",
+                value_json={"value": value},
+                source_id=source_id,
+                source_url=url or "",
+                source_section=section,
+                source_quote=quote,
+                confidence=float(candidate.get("confidence") or 0.0),
+                validation_status=ValidationStatus.PENDING.value,
+                extraction_method=method,
+                selected=True,
+            )
+            self.db.add(record)
+            return record
+
+        output = assertion(
+            row.id, row.value_normalized_usd_millions, row.source_url, row.source_id,
+            str(row.extraction_method or ""), row.source_quote, f"{job.drug_name} {row.period}",
+        )
+        for term in inputs:
+            source = assertion(
+                str(term.get("datapoint_id") or row.id),
+                term.get("value_normalized_usd_millions"),
+                term.get("source_url"),
+                term.get("source_id"),
+                str(term.get("extraction_method") or ""),
+                None,
+                f"{job.drug_name} {term.get('period')} {term.get('period_type')}",
+            )
+            self.db.add(
+                DerivationLineageORM(
+                    id=new_id(),
+                    output_assertion_id=output.id,
+                    input_assertion_id=source.id,
+                    role=str(term.get("role") or "input"),
+                    formula_version=str(row.extraction_method or ""),
+                )
+            )
 
     def _bulk_tagged_revenue(
         self, job: DrugJobORM
@@ -1511,7 +1636,7 @@ class PipelineOrchestrator:
                 )
                 self._persist_sources(job, [src])
                 if candidate.get("period_type") != PeriodType.QUARTERLY.value:
-                    totals.append(candidate)
+                    totals.append(_read_from(candidate, src))
                     continue
                 rows.append(self._datapoint_from_candidate(job, src, candidate))
         if rows or totals:
@@ -1619,9 +1744,12 @@ class PipelineOrchestrator:
             for candidate in found:
                 # A twelve-month fact is not an answer to a quarter, so it is
                 # not stored as a datapoint; it is what the fourth quarter is
-                # derived against.
+                # derived against. It is stamped with the document it was read
+                # from on the way out: it never becomes a row of its own, so
+                # nothing downstream can look its source up, and a derivation
+                # that subtracts it has to say where it came from.
                 if candidate.get("period_type") != PeriodType.QUARTERLY.value:
-                    totals.append(candidate)
+                    totals.append(_read_from(candidate, src))
                     continue
                 rows.append(self._datapoint_from_candidate(job, src, candidate))
         if learned:
@@ -1803,7 +1931,7 @@ class PipelineOrchestrator:
             # difference between a total it did state and the quarters it did,
             # so the totals are routed, not discarded.
             period_totals = [
-                candidate
+                _read_from(candidate, src)
                 for candidate in fingerprinted
                 if candidate.get("period_type") != PeriodType.QUARTERLY.value
             ]
@@ -2124,13 +2252,24 @@ class PipelineOrchestrator:
             rank = claim_rank(row.extraction_method)
             if rank < strongest.get(row.period, len(CLAIM_STRENGTH) + 1):
                 strongest[row.period] = rank
+        # The document each figure was actually read from. A derivation cites
+        # the filing its principal input came out of, so a reader opening the
+        # citation finds the total that was subtracted; the other inputs are
+        # named in the citation with their own documents. Citing whichever
+        # source sorted first meant none of the figures in a derived quote
+        # appeared in the document cited for it.
+        by_source_id = {s.source_id: s for s in sources}
         for candidate in derived:
             if strongest.get(str(candidate["period"]), len(CLAIM_STRENGTH) + 1) <= derived_rank:
                 continue
-            source = next((s for s in selected_sources), None)
+            source = by_source_id.get(candidate.get("source_id")) or next(
+                (s for s in selected_sources), None
+            )
             if source is None:
                 break
-            rows.append(self._datapoint_from_candidate(job, source, candidate))
+            row = self._datapoint_from_candidate(job, source, candidate)
+            self._record_derivation_lineage(job, row, candidate)
+            rows.append(row)
         if derived:
             logger.info(
                 "derived_quarters job_id=%s drug=%s derived=%d", job.id, job.drug_name, len(derived)
