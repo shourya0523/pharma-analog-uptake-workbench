@@ -204,7 +204,7 @@ async def test_no_filer_of_record_when_nothing_says_who_files(tmp_path, monkeypa
 
     monkeypatch.setattr(orch.sec, "retrieve", _none)
     monkeypatch.setattr(orch.search, "fallback_retrieve", _none)
-    await orch._retrieve(job, {"sec_filings": True, "openfda": False})
+    await orch._retrieve_filings(job, {"sec_filings": True})
 
     assert NO_FILER_OF_RECORD in (job.quality_flags or [])
     assert "sec_retrieval_failed" not in (job.quality_flags or [])
@@ -222,15 +222,21 @@ async def test_a_resolved_filer_with_nothing_in_the_window_is_not_that(tmp_path,
 
     monkeypatch.setattr(orch.sec, "retrieve", _none)
     monkeypatch.setattr(orch.search, "fallback_retrieve", _none)
-    await orch._retrieve(job, {"sec_filings": True, "openfda": False})
+    await orch._retrieve_filings(job, {"sec_filings": True})
 
     assert NO_FILER_OF_RECORD not in (job.quality_flags or [])
 
 
 @pytest.mark.asyncio
-async def test_the_label_pass_does_not_trip_the_filing_search(tmp_path, monkeypatch):
-    """The pass that asks openFDA asks for no filings, so "no filings found"
-    is not a thing it can conclude."""
+async def test_the_product_documents_pass_asks_for_no_filings(tmp_path, monkeypatch):
+    """Which pass fetches what is the pass, not an inverted copy of the options.
+
+    The first pass used to be the run's own options with every filing source
+    forced off - a written-down list of every option that is not openFDA, stale
+    the day a sixth source lands. It is now its own step, so the run's options
+    reach it unchanged and it still asks EDGAR for nothing: "no filings found"
+    is not a finding it can make about an issuer it has not identified yet.
+    """
     db, job = _job()
     orch = PipelineOrchestrator(db, file_store=LocalFileStore(str(tmp_path)))
     asked: list[str] = []
@@ -239,16 +245,23 @@ async def test_the_label_pass_does_not_trip_the_filing_search(tmp_path, monkeypa
         asked.append(kw.get("goal"))
         return []
 
+    async def _sec(**_kw):
+        asked.append("filings")
+        return []
+
     async def _fda(**_kw):
         return [_label()]
 
     monkeypatch.setattr(orch.search, "fallback_retrieve", _fallback)
+    monkeypatch.setattr(orch.sec, "retrieve", _sec)
     monkeypatch.setattr(orch.fda, "retrieve", _fda)
-    await orch._retrieve(
-        job, {"sec_filings": False, "earnings_releases": False, "openfda": True}
+    # The run asked for filings. This pass is not where they are fetched.
+    sources = await orch._retrieve_product_documents(
+        job, {"openfda": True, "sec_filings": True, "earnings_releases": True}
     )
 
     assert asked == []
+    assert [s.source_type for s in sources] == [SourceType.OPENFDA]
     assert NO_FILER_OF_RECORD not in (job.quality_flags or [])
 
 
@@ -279,13 +292,9 @@ async def test_what_the_search_decided_reaches_the_job_either_way(
     db, job = _job(manufacturer=None)
     orch = PipelineOrchestrator(db, file_store=LocalFileStore(str(tmp_path)))
 
-    async def _aliases(self, _job):
-        self._job_aliases = ["calderon"]
-
     async def _searched(**_kw):
         return resolution
 
-    monkeypatch.setattr(PipelineOrchestrator, "_expand_aliases", _aliases)
     monkeypatch.setattr(orch.search, "resolve_identity_from_search", _searched)
 
     await orch._identity(job)

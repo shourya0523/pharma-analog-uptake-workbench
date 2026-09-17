@@ -164,7 +164,7 @@ def test_the_search_runs_for_an_issuer_with_nothing_filed_and_not_for_one_we_cou
     monkeypatch.setattr(orch.search, "fallback_retrieve", _search)
     monkeypatch.setattr(orch.fda, "retrieve", lambda **kw: _sec())
 
-    asyncio.run(orch._retrieve(job, {"sec_filings": True, "openfda": False}))
+    asyncio.run(orch._retrieve_filings(job, {"sec_filings": True}))
 
     assert bool(asked) is searched
     assert ("sec_retrieval_failed" in (job.quality_flags or [])) is flagged

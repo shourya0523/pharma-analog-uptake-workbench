@@ -679,14 +679,11 @@ class PipelineOrchestrator:
             # documents are matched to the product by name and the brand the
             # caller typed is one of the names it goes by.
             await self._expand_aliases(job)
-            characterisation = {**options, "sec_filings": False,
-                                "earnings_releases": False, "company_ir": False,
-                                "transcripts": False}
-            sources = await self._retrieve(job, characterisation)
+            sources = await self._retrieve_product_documents(job, options)
             parsed = await self._parse(job, sources)
             await self._label_metadata(job, sources, parsed, options)
             await self._identity(job)
-            filings = await self._retrieve(job, {**options, "openfda": False})
+            filings = await self._retrieve_filings(job, options)
             filings_parsed = await self._parse(job, filings)
             # The label pass reads openFDA and the narrative pass reads a
             # filing, so the second half of the metadata step waits for the
@@ -878,8 +875,6 @@ class PipelineOrchestrator:
         sponsor it names is on the job by the time this asks.
         """
         self._set_step(job, JobStep.IDENTITY_RESOLVE)
-        if not self._job_aliases:
-            await self._expand_aliases(job)
         if not job.cik and (job.ticker or job.manufacturer):
             cik = await self.sec.resolve_cik(job.ticker, job.manufacturer)
             if cik:
@@ -907,9 +902,45 @@ class PipelineOrchestrator:
                     job.id, job.drug_name, resolution.cik,
                 )
 
-    async def _retrieve(self, job: DrugJobORM, options: dict[str, Any]) -> list:
+    def _record_sources(self, job: DrugJobORM, collected: list) -> list:
+        """File what a retrieval pass found, and say what it was."""
+        self._persist_sources(job, collected)
+        job.sources_found = len(collected)
+        self.db.commit()
+        logger.info(
+            "sources_retrieved job_id=%s drug=%s count=%s types=%s",
+            job.id,
+            job.drug_name,
+            len(collected),
+            sorted({getattr(s.source_type, "value", str(s.source_type)) for s in collected}),
+        )
+        return collected
+
+    async def _retrieve_product_documents(self, job: DrugJobORM, options: dict[str, Any]) -> list:
+        """The product's own records, before anything is known about the issuer.
+
+        openFDA answers a brand name, which is all this job is guaranteed to
+        have. It runs first so that the sponsor its records name is what the
+        filing index is then asked for, and it asks for no filings at all -
+        so "nothing was listed" is not a finding about an issuer here.
+        """
         self._set_step(job, JobStep.SOURCE_RETRIEVE)
-        collected = []
+        collected: list = []
+        if options.get("openfda", True):
+            collected.extend(
+                await self.fda.retrieve(
+                    run_id=job.run_id,
+                    job_id=job.id,
+                    brand=job.drug_name,
+                    generic=job.generic_name,
+                )
+            )
+        return self._record_sources(job, collected)
+
+    async def _retrieve_filings(self, job: DrugJobORM, options: dict[str, Any]) -> list:
+        """What the issuer filed, once the job knows who the issuer is."""
+        self._set_step(job, JobStep.SOURCE_RETRIEVE)
+        collected: list = []
         want_primary = bool(options.get("sec_filings", True))
         want_earnings = bool(options.get("earnings_releases", True))
         if want_primary or want_earnings:
@@ -931,15 +962,6 @@ class PipelineOrchestrator:
                     earnings_until=parse_filing_date(options.get("earnings_until")),
                 )
             )
-        if options.get("openfda", True):
-            collected.extend(
-                await self.fda.retrieve(
-                    run_id=job.run_id,
-                    job_id=job.id,
-                    brand=job.drug_name,
-                    generic=job.generic_name,
-                )
-            )
         if job.known_source_url and options.get("company_ir", True):
             collected.extend(
                 await self.manual.retrieve(run_id=job.run_id, job_id=job.id, url=job.known_source_url)
@@ -947,61 +969,54 @@ class PipelineOrchestrator:
         if options.get("transcripts", False):
             collected.extend(await self.transcripts.retrieve())
 
-        # What the search fallback is for is an issuer with nothing filed, not
-        # an issuer whose filings could not be fetched. EDGAR refuses under
-        # load, and a run that was refused looked exactly like a run that found
-        # nothing: the fallback then published investor-relations pages for a
-        # filer whose own quarterly reports were sitting behind a rate limit.
-        sec_found = [
-            s for s in collected
-            if s.source_type in {SourceType.SEC_FILING, SourceType.EARNINGS_RELEASE}
-        ]
-        sec_ok = any(s.retrieval_status == RetrievalStatus.SUCCESS for s in sec_found)
-        # A third question, before the two above: were filings asked for at
-        # all. The pass that reads the product's own label asks for none, and
-        # "nothing was listed" is not a finding about an issuer there.
-        asked_for_filings = want_primary or want_earnings
-        if sec_found and not sec_ok:
-            job.quality_flags = list(set((job.quality_flags or []) + ["sec_retrieval_failed"]))
-            logger.warning(
-                "sec_retrieval_failed job_id=%s drug=%s listed=%d fetched=0",
-                job.id, job.drug_name, len(sec_found),
-            )
-        elif asked_for_filings and not sec_found and not job.cik:
-            # Nothing was listed because nothing said who files for this
-            # product. "We could not reach the SEC" is a different sentence
-            # from "we do not know whose filings to ask for", and the first
-            # was being shown for the second: a reader takes it as a transient
-            # failure of ours and retries, when what is missing is the issuer.
-            job.quality_flags = list(set((job.quality_flags or []) + [NO_FILER_OF_RECORD]))
-            logger.warning(
-                "no_filer_of_record job_id=%s drug=%s ticker=%s manufacturer=%s",
-                job.id, job.drug_name, job.ticker, job.manufacturer,
-            )
-        if asked_for_filings and get_settings().enable_llm_search and not sec_ok and not sec_found:
-            search_sources = await self.search.fallback_retrieve(
-                run_id=job.run_id,
-                job_id=job.id,
-                goal="filing",
-                product=job.drug_name,
-                aliases=self._job_aliases,
-                manufacturer=job.manufacturer,
-                ticker=job.ticker,
-                context="SEC/IR filings with product net sales when CIK retrieval failed or no SEC filings.",
-            )
-            collected.extend(search_sources)
+        if want_primary or want_earnings:
+            # What the search fallback is for is an issuer with nothing filed,
+            # not an issuer whose filings could not be fetched. EDGAR refuses
+            # under load, and a run that was refused looked exactly like a run
+            # that found nothing: the fallback then published investor-relations
+            # pages for a filer whose own quarterly reports were sitting behind
+            # a rate limit.
+            sec_found = [
+                s for s in collected
+                if s.source_type in {SourceType.SEC_FILING, SourceType.EARNINGS_RELEASE}
+            ]
+            sec_ok = any(s.retrieval_status == RetrievalStatus.SUCCESS for s in sec_found)
+            if sec_found and not sec_ok:
+                job.quality_flags = list(set((job.quality_flags or []) + ["sec_retrieval_failed"]))
+                logger.warning(
+                    "sec_retrieval_failed job_id=%s drug=%s listed=%d fetched=0",
+                    job.id, job.drug_name, len(sec_found),
+                )
+            elif not sec_found and not job.cik:
+                # Nothing was listed because nothing said who files for this
+                # product. "We could not reach the SEC" is a different sentence
+                # from "we do not know whose filings to ask for", and the first
+                # was being shown for the second: a reader takes it as a
+                # transient failure of ours and retries, when what is missing is
+                # the issuer.
+                job.quality_flags = list(set((job.quality_flags or []) + [NO_FILER_OF_RECORD]))
+                logger.warning(
+                    "no_filer_of_record job_id=%s drug=%s ticker=%s manufacturer=%s",
+                    job.id, job.drug_name, job.ticker, job.manufacturer,
+                )
+            if get_settings().enable_llm_search and not sec_ok and not sec_found:
+                collected.extend(
+                    await self.search.fallback_retrieve(
+                        run_id=job.run_id,
+                        job_id=job.id,
+                        goal="filing",
+                        product=job.drug_name,
+                        aliases=self._job_aliases,
+                        manufacturer=job.manufacturer,
+                        ticker=job.ticker,
+                        context=(
+                            "SEC/IR filings with product net sales when CIK retrieval "
+                            "failed or no SEC filings."
+                        ),
+                    )
+                )
 
-        self._persist_sources(job, collected)
-        job.sources_found = len(collected)
-        self.db.commit()
-        logger.info(
-            "sources_retrieved job_id=%s drug=%s count=%s types=%s",
-            job.id,
-            job.drug_name,
-            len(collected),
-            sorted({getattr(s.source_type, "value", str(s.source_type)) for s in collected}),
-        )
-        return collected
+        return self._record_sources(job, collected)
 
     async def _parse(self, job: DrugJobORM, sources: list) -> dict[str, Any]:
         self._set_step(job, JobStep.PARSE_SOURCES)
