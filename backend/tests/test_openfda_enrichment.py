@@ -19,6 +19,8 @@ async def _noop(*_args, **_kwargs):
     return None
 
 from app.connectors.openfda_fields import (
+    MIN_ALIAS_LENGTH,
+    _candidates,
     brand_matched_results,
     earliest_approval_date,
     earliest_approved_match,
@@ -109,6 +111,29 @@ def test_a_more_specific_product_does_not_take_the_general_one_s_application():
         )
         == []
     )
+
+
+def test_a_short_brand_is_still_its_own_candidate():
+    """The alias floor is for aliases; the product's own name is the question.
+
+    Held against the product's own name it drops a short brand and leaves the
+    sibling line extension as the only candidate - which selects the sibling's
+    application, the harm this match exists to prevent, inverted.
+    """
+    short = "Duo"
+    assert len(short) < MIN_ALIAS_LENGTH
+    assert _candidates(short, ["Duo XR"]) == ["duo", "duo xr"]
+
+    record = {
+        "application_number": "NDA000009",
+        "openfda": {"brand_name": ["DUO"], "generic_name": ["calderinol"]},
+        "products": [{"brand_name": "DUO"}],
+    }
+    assert brand_matched_results([record], product=short, generic="calderinol") == [
+        (record, "DUO")
+    ]
+    # The other answer: a fragment offered as an alias is still refused.
+    assert _candidates("Calderon", ["XR"]) == ["calderon"]
 
 
 def test_a_fuller_sku_name_is_still_the_same_product():

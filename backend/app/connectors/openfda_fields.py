@@ -8,6 +8,11 @@ from typing import Any
 from app.parsing.fda_label import openfda_block, read_path
 from app.quality.profile import blends_sibling_brand
 
+# An alias shorter than this is a fragment - an abbreviation of a row label, a
+# two-letter formulation code - and matched against a registry brand it selects
+# whatever happens to contain it. The product's own name is never held to this
+# floor: it is the name we were asked about, and a short one is still the
+# question.
 MIN_ALIAS_LENGTH = 4
 
 
@@ -66,7 +71,13 @@ def names_the_molecule(name: str, molecules: set[str]) -> bool:
 
 
 def _candidates(product: str, aliases: Iterable[str] | None) -> list[str]:
-    """The names that may select an application, the product's own included.
+    """The names that may select an application, the product's own first.
+
+    The product's own name is always a candidate. `MIN_ALIAS_LENGTH` applies to
+    the aliases only: held against the product's own name it drops a short
+    brand and leaves its sibling line extension as the only way to select an
+    application - a job for `Duo` keeping only `Duo XR`, which is the harm this
+    match exists to prevent, inverted.
 
     An alias the product name *extends* is dropped: for a job named `Nebulized
     Calderon`, the alias `Calderon` can only ever select the more general
@@ -75,8 +86,8 @@ def _candidates(product: str, aliases: Iterable[str] | None) -> list[str]:
     that is the same product under a fuller SKU name.
     """
     product_norm = _normalize(product)
-    candidates: list[str] = []
-    for name in [product, *(aliases or [])]:
+    candidates: list[str] = [product_norm] if product_norm else []
+    for name in aliases or []:
         norm = _normalize(name)
         if not norm or len(norm) < MIN_ALIAS_LENGTH:
             continue
