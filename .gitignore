@@ -17,3 +17,4 @@ infra/cdk.out/
 
 # Eval caches: filings fetched from EDGAR, reproducible from the accession
 .cache/
+.claude/worktrees/
