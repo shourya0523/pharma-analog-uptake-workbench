@@ -398,3 +398,81 @@ M10 was "delete and infra". It now takes, in this order:
 The smoke run against `dde7fb0` is the baseline every one of these is held
 against: the same case files, the same configuration header, and a number
 that must not move for a change that claims to change nothing.
+
+---
+
+## 7. Smoke run 1: the held-out set, as a user would run it, on `dde7fb0`
+
+Server started with every shell override unset except the API key, the SEC
+contact string and the two model names (extract `google/gemini-3.8-flash`,
+judge `openai/gpt-4o-mini`); `/config` reported those four of 38 and nothing
+else. Every layer-two option on. Case file `seed/cases/holdout_2026_09.json`
+as it stood, i.e. **with the CIK handed in** (2.3); the run without CIKs
+follows. One job (MIPLYFFA) was mid-extraction when the container restarted
+and startup recovery marked it failed rather than re-queuing it (section 11's
+"recovery throws away work", observed live); it is unscored.
+
+    88 expected figures across 11 scored cases        correct 64 / 88
+      correctly silent           33
+      published, correct         31   (xbrl_fact 13, table 7, llm 5, prose 4, derived 2)
+      no answer                  15
+      published, wrong identity   6
+      answered anyway             2
+      published, WRONG            1
+    37 published (product, period) pairs no expectation examined
+
+Diagnosis, not building. Each loss class traced in the run's own database
+(`.../scratchpad/wt-audit2/backend/storage/workbench.db`) and the eval detail.
+
+**No answer (15) is retrieval, not extraction, and it is the shipped
+default.** Every one of the 14 jobs holds exactly 4 `sec_filing` documents -
+`sec_max_filings = 4` as the code declares it (the session that produced every
+earlier number ran with 25). The 10-Q *pages* for 2024-2025 were never
+fetched; the 10-Q *XBRL instances* were (8 per job) and yielded nothing for
+Neurocrine, whose instances do not mention INGREZZA once (`grep -ci ingrezza
+nbix-2024*_htm.xml` -> 0, 0, 0: the issuer does not tag product revenue).
+Neurocrine and Eton also got **0 earnings exhibits** where every other issuer
+got 7-12, so INGREZZA's seven missing quarters and CRENESSITY's four had no
+document to be read from. Why those two issuers' 8-K exhibits were not
+retrieved is not yet established (inferred: the exhibit filter; verify before
+touching). The two OLPRUVA Q4s and INCRELEX 2023Q4 are the FY-minus-nine-months
+class with the FY document outside the four.
+
+**Wrong identity (6) is one product, one label, and an alias set short by one
+name.** All six Upstaza figures are exact. The filer prints the row as
+`Upstaza/Kebilidi` - one product under its EU and US brand names - and
+`Kebilidi` was not in the job's alias set, so 1c's rule ("a slash between two
+different names is a pair") read it as a combined line and stamped
+`reported_as`. The rule is right; the alias set was incomplete. The openFDA
+record the same job fetched carries the US brand name, and nothing feeds a
+record's brand names into the aliases. A mechanism, not a tuning.
+
+**Answered anyway (2) is the auto-pass gate the judging review named.** The
+Sephience 2025Q2 figure 26.741 is a `table` row from the **2026Q2** 10-Q
+(`tmb-20260630x10q.htm`), quote `Sephience $ 22,078 $ 26,741`: two numbers on
+one row, the figure assigned to the comparative column, auto-passed with
+`deterministic:product_quote_value_ok` - which asks only that the number and
+the name appear in the quote. 2025Q1 is then derived from that figure. This
+is section 5's "210 of 293 auto-passes sit in a unit holding more than two
+numeric tokens", arriving as a wrong publish on a fresh set. Rule 4 item;
+build its held-out set before changing the gate.
+
+**Published, WRONG (1) is the issuer disagreeing with itself.** Translarna
+2024Q4: the run holds three readings - 93.7 (Feb 2025 release, "for the
+fourth quarter of 2024"), 89.1 (Feb 2026 release, same quarter as the
+comparative), and a `Translarna France (98,629)` adjustment row - and gold
+says 74.854 from the 10-K. The pipeline auto-passed the issuer's own headline
+figure. Whether gold or the release is the analyst's answer is a question
+about that filing, not about the code; opened as such, not asserted.
+
+**The coverage verdict is not yet informative.** Every document in these 14
+jobs carries `names_only`, including the 10-K pages that yielded 3, 7 and 9
+figures. Row-grouped schedules were the stated limitation; on real documents
+it is the whole population. M6's recorder measures nothing until its figure
+test reads a row-grouped table.
+
+What moves the number, in order, and what each costs: the four-filing cap is
+a configuration decision (a user gets 4; the measured product ran with 25);
+the alias set is one feed from a record the job already holds; the two-number
+row is the auto-pass gate and needs a new held-out set; Translarna needs a
+person to open the 10-K. None of these is in the M10 tracks now running.
