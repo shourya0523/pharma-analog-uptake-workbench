@@ -930,7 +930,10 @@ why `enable_profile_judge` exists, and the judge left the value unchanged.
 
 Measured cost, feeding layer 2's real output into `rank_analogs`:
 
-    target Tyvaso
+    target Tyvaso  (an earlier construction; M7's re-run under a different
+                    mapping gives Orenitram/Revatio/Tracleer above Tyvaso DPI,
+                    and under the literal attribute names layer 2 supplies 1
+                    of 4 and the set is empty - see 3i and 4c)
       from pipeline attributes : Adcirca 1.0 (2 attrs), Letairis 1.0 (2), ...
       from curated attributes  : Nebulized Tyvaso 1.0 (4), Tyvaso DPI 0.83 (4), ...
 
@@ -1246,7 +1249,7 @@ rather than a refusal.
 **So: do not wire this layer to fix the blank columns.** A blank column costs
 the analyst less than a confident wrong one.
 
-### 4a. Competitive intensity is a rank within the batch, not a property of the market
+### 4a. Competitive intensity is a rank within the batch, not a property of the market  `[V]`
 
 `analytics/competitive_intensity.py:133-152`. For a cohort of >=6,
 `categorize_snapshots` sorts by `raw_score` and assigns low/medium/high by
@@ -1266,8 +1269,17 @@ two `high`; six each facing eight direct rivals return two `low`.
 
 Gold bands an absolute count (0-1 low, 2-4 medium, 5+ high) and gets 15 high /
 3 medium / 2 low, monotone in launch year - the true story of PAH becoming
-crowded over thirty years. A percentile method is structurally forced to
-~1/3 each and can never produce that distribution.
+crowded over thirty years (peer count 0,1,2,3,4,5,6,6,6,8,9,9,9,12,13,14,14,
+16,17,18 for 1995..2025; gold's rule reproduces gold's label on all 20 with
+zero mismatches). The percentile method produces **7 low / 6 medium / 7 high**
+on the same 20 - state it as that rather than "~1/3", so a fix can be scored
+against a number. Filter for the 9/20: the 20 gold rows with a non-null
+intensity label, which are exactly the PAH catalog (null on the other 42 by
+design); two reconstructions - a registry from gold's rows, and gold's own
+peer counts injected as `raw_score` - both give 9/20, and the 11
+disagreements are a contiguous block from Remodulin (2002) to Orenitram
+(2013): the method agrees only where rank coincides with the extremes.
+Veletri's curated year (3e) does not move it.
 
 Three aggravations: `low_coverage` is set on the **wrong branch** - `True` for
 cohorts < 6, the absolutely-banded and defensible path, and `False` at `:150`
@@ -1284,7 +1296,7 @@ And `tests/test_competitive_intensity.py:49` **asserts** the forced
 distribution and calls it "stable percentile categories" - a test that passes
 precisely when the label is meaningless.
 
-### 4b. The observed peak can be confidently wrong in three shapes and silently absent in a fourth
+### 4b. The observed peak can be confidently wrong in three shapes and silently absent in a fourth  `[V]`
 
 `analytics/peak_sales.py:130-147`.
 
@@ -1299,8 +1311,10 @@ precisely when the label is meaningless.
 - **A year counted twice confirms its own peak.** `aggregate_comparable_sales`
   emits an `AnnualSales` for an annual observation (`:87`) *and* one for the
   four quarterly observations of the same year (`:115`), with no dedup -
-  issuers routinely publish both. A product with one year after its maximum
-  returns `observed` where gold's rule
+  issuers routinely publish both. Run: `[2020=300, 2021=400, 2021=400,
+  2022=200]` returns `observed 400`; the same series with the duplicate
+  removed returns `None`. The duplicate row *is* the confirming later year -
+  `later = [2021-dup, 2022]` and `later[1] <= later[0]` passes. Gold's rule
   (`independent_max_with_two_later_lower_years`) gives `not_yet_observed`.
 - **More data produces no answer.** `_mature_observed_peak:133` requires a
   single `(currency, geography, revenue_scope, period_basis, formulation_scope)`
@@ -1315,7 +1329,7 @@ recency window and the `modeled` branch enforces none. And
 `imports/peak_sales.py:44` accepts `estimate_type == "observed"` from a CSV
 which `select_peak_estimate` never reads.
 
-### 4c. Similarity's stated defence against unknown attributes is inverted
+### 4c. Similarity's stated defence against unknown attributes is inverted  `[V]`, two wordings corrected
 
 `analytics/analog_matching.py:8-15` says scoring `None` as similar "would
 quietly promote products we know least about", so unknowns are dropped from the
@@ -1326,18 +1340,33 @@ declared. Over the 62 gold profiles:
     TARGET Revatio    Cialis   0.8889 n=3 unknown=[intensity]  <- #1
                       Adcirca  0.8750 n=4 unknown=[]  (moa, route AND era match)
     TARGET Winrevair  Mounjaro 0.5556 n=3 unknown=[intensity]  <- #1
-                      Liqrev   0.4167 n=4 unknown=[]
+                      Zepbound 0.5556 n=3 unknown=[intensity]  <- #2 (tie)
+                      Emgality, Taltz 0.4444 n=3
+                      Liqrev   0.4167 n=4 unknown=[]           <- 5th
 
-Revatio's best analog is an erectile-dysfunction drug; Winrevair's is a
-mass-market GLP-1. Both win by not knowing something. With the profiles the app
-can actually produce (section 3), a candidate known only by route and era, both
-matching, scores **1.0** and outranks the genuine four-attribute match.
+Revatio's best analog is an erectile-dysfunction drug; Winrevair's are two
+mass-market GLP-1s. Both win by not knowing something (both blocks reproduce
+to four decimals over the 62 gold profiles, verbatim fields). A candidate
+known only by route and era, both matching, scores **1.0** on two attributes
+and outranks every four-attribute match **that is not itself exactly 1.0** -
+on an exact tie the sort key's depth term does break it in the four-attribute
+candidate's favour. An earlier draft said "outranks the genuine
+four-attribute match" absolutely and "depth never rescues it"; a fix's
+acceptance test written to that wording would be wrong. And this shape is
+**not reachable from layer 2's real output today**: with the literal
+attribute names layer 2 supplies 1 of 4, `score_analog` gives 1.0 on one
+attribute, and `rank_analogs(minimum_attributes=2)` returns `[]` - silently,
+no `AnalogMatch`, no reason. The analyst gets an empty set, not a wrong one.
+It is reachable from curated profiles or from 3a's generous mapping.
 
 `minimum_attributes: int = 2` is documented as "what stops a single coincidental
 agreement from ranking above a genuine four-attribute match" - two coincidental
-agreements out of two known is still coincidental, and the sort key is
-`(-score, -attributes_compared, ...)` with score primary, so depth never
-rescues it.
+agreements out of two known is still coincidental, and the sort key at `:147`
+is `(-score, -attributes_compared, candidate)` with score primary, so depth
+rescues only an exact tie. `_similarity("route_of_administration", "ORAL",
+"Oral")` is `0.0` - on an otherwise-identical pair the case difference gives
+`score=0.75, attributes_compared=4, attributes_unknown=[]`, a confident zero
+counted in the denominator.
 
 **`indication_area` is in the data and is not scored.** Both
 `seed/product_attributes.csv` and `seed/gold/product_profiles.jsonl` carry it;
@@ -1352,10 +1381,12 @@ and `_similarity` compares with `==` case-sensitively, so `ORAL != Oral` scores
 a confident **0.0**, not an unknown - fixing route correctness without
 normalisation buys nothing.
 
-### 4d. Uptake divides by a number whose scope it never checks
+### 4d. Uptake divides by a number whose scope it never checks  `[V]`
 
-`analytics/uptake.py:61,110` take `selected_peak: float` - currency, geography
-and revenue scope discarded at the call boundary. U.S. quarters over a
+`analytics/uptake.py:61` takes `selected_annual_peak: float | None` and `:110`
+`selected_peak: float` - currency, geography and revenue scope discarded at
+the call boundary; `_has_compatible_scope` checks the four rows against *each
+other* and nothing checks them against the denominator. U.S. quarters over a
 worldwide peak of 1000 return a clean `[('2020Q4', 0.24), ('2021Q1', 0.24),
 ...]`. "24% of peak" reads as early ramp; it is a scope mismatch.
 `_has_compatible_scope` polices the numerator window rigorously and nothing
@@ -1367,6 +1398,11 @@ polices numerator against denominator.
 line every quarter produces an all-null curve labelled `nonconsecutive_quarters`
 when the quarters are perfectly consecutive - sending the analyst to look for
 filings that already exist.
+
+(Distinct from 2a: that is `rows[index-3:index+1]` over a duplicated series;
+everything here was run on one-row-per-quarter fixtures. The two compose
+badly - 2a's duplicates are what makes `nonconsecutive_quarters` fire on
+consecutive quarters - but they are separate defects in separate lines.)
 
 `time_to_ninety_percent_peak` (`:107-141`) applies **no scope filter at all** -
 not `ALLOWED_PRODUCT_SCOPES`, not currency, not geography; a `Franchise`-scope
@@ -1383,35 +1419,80 @@ Structurally, the trailing-four-quarter metric means the first three quarters
 of every series are always `insufficient_history` - the launch ramp, the part
 that carries the forecast, never has a value.
 
-### 4e. Three competitive-intensity methods, none reconciled
+### 4e. Three competitive-intensity methods, none reconciled  `[V]`; the LLM module's refusals `[I]`
 
 `competitive_intensity_v1` (rank-banded, 4a), gold's
 `marketed_peer_count_at_launch_v1` (absolute, gated, the sound one), and
 `llm_competitive_intensity_v1`. They agree 9/20 where two can be compared, and
 nothing computes that disagreement - `compare_to_rule`
-(`competitive_intensity_llm.py:158`) takes `rule_label` as an argument and has
-no caller in `app/`.
+(`competitive_intensity_llm.py:159`) takes `rule_label` as an argument and has
+no caller in `app/`. Stronger: `grep -rn "app\.analytics" backend/app/`
+outside `app/analytics/` returns nothing - no `app/` module imports the
+analytics package at all, so nothing in 4a-4e has a production caller.
 
 The LLM module is the most disciplined code in the layer: it refuses on
 `inconclusive`, on an out-of-vocabulary label or confidence, and - the good one
 - when the model cites a peer that is not on the roster it was given
-(`:135-146`). It is the only one of the three that returns a reason instead of
+(`:134-146`). It is the only one of the three that returns a reason instead of
 a value when it cannot answer, and it is the one with no path to the product.
+(Its refusal *behaviour* is `[I]` - read from the source and its unit tests,
+not run, since it needs a model.)
 
-Note for rule 3: `peers_at_launch` (`:174`) takes profile dicts keyed exactly
-to gold's schema. It does not read `seed/gold/` and no caller does, so the rule
-holds today - but the shape invites a future caller to hand it gold rows.
-`seed/product_attributes.csv` is the correct source.
+**Rule 3, corrected.** An earlier draft ended "`seed/product_attributes.csv`
+is the correct source" for `peers_at_launch` (`:175`). It is not: that
+file's attribute columns are what `scripts/build_independent_gold.py:2653-2664`
+uses to build every field of `product_profiles.jsonl`, and `peers_at_launch`'s
+dict keys are exactly that column set. Reading them from `app/` would make
+the oracle a pipeline input - 3i and 3j say so. The correct source is a
+*procedure* that derives class, era and indication area; no file in the
+repository may be it.
 
-### 4f. There is no eval for any of this
+### 4f. There is no eval for any of this  `[V]`
 
 `find . -name "eval_*.py"` returns nothing; `scripts/eval.py` is layer 1 only.
 Every held-out set is about revenue extraction, printed row labels or XBRL
 members. So there is no number, held-out or otherwise, for similarity, peak
 selection, uptake or intensity. Under rule 4 that is not a shortfall to fill
 with an existing set - those are spent - but a new set drawn from issuers none
-of them use. `seed/gold/product_profiles.jsonl` cannot be the scorer for 4a or
-4c: it is the oracle those rules would be fitted to.
+of them use, with both a crowded and an empty market represented.
+`seed/gold/product_profiles.jsonl` cannot be the scorer for 4a or 4c: it is
+the oracle those rules would be fitted to, and it is built from
+`seed/product_attributes.csv`, so neither file can serve.
+
+**Rule 4 - three tests assert a section-4 defect as the spec.**
+`test_competitive_intensity.py:49` asserts `count("low") == 2`, `count("high")
+== 2` and `not any(item.low_coverage)` - 4a's forced distribution and its
+inverted flag, written down as the expected result; a fix fails it by
+construction. `test_analog_matching.py:55-71` asserts `score == 1.0` with
+`attributes_unknown == ['competitive_intensity_at_launch']` under a docstring
+saying the opposite is what an analog search should avoid - the Revatio ->
+Cialis profile, scoring 1.0-on-three and winning. `test_analog_matching.py:84-92`
+("one coincidental agreement must not outrank a real four-way match") uses a
+*one*-attribute thin candidate and so tests the `>= 2` arithmetic, not the
+property claimed; the two-attribute case is uncovered. And `:95,108` are the
+only real-data analytics tests and they load gold - `:108`'s `assert ranked`
+for every profile passes only because gold carries 3-4 attributes; layer 2's
+real output would fail it.
+
+**Rule 1.** `analog_matching.py:28-33 WEIGHTS` and `:35 _INTENSITY_ORDER` are
+four names and four weights hardcoded with `ProductProfile`'s field list as
+the producer three lines below - `score_analog` iterates `WEIGHTS`, so adding
+`indication_area` to the profile silently leaves it unscored, which is 4c's
+last paragraph as a rule-1 failure. `competitive_intensity.py:7-12 WEIGHTS`
+and the cut-points `2`/`5` (`:122-125`) and `33`/`67` (`:144-146`) are bare
+literals with no snapshot note, unconnected to gold's `0-1/2-4/5+`.
+`peak_sales.py:13-18 ALLOWED_PRODUCT_SCOPES` is the good shape - enum members
+with a reason - and is the one `time_to_ninety_percent_peak` forgets to use.
+
+**One shape, three costumes.** 4a, 4c and 4d are the same failure: **an
+absence is silently converted into a value.** Zero registry entries becomes
+`low`; an unknown attribute becomes a smaller denominator and a higher score;
+a missing scope becomes a clean ratio. Gold gates all three
+(`not_assessed_outside_catalog_universe`, `peak_eligible: false`,
+`benchmark_identity`). The code has no gate of any kind: `CompetitiveSnapshot`
+has no refusal field, `AnalogMatch.reason` is set only for `same_product` and
+`no_comparable_attributes`, and `UptakePoint.missing_reason` - the layer's one
+refusal channel - has its precedence wrong.
 
 ---
 
