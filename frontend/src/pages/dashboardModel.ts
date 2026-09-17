@@ -78,6 +78,22 @@ export type ChartSelection = {
 
 const LAUNCH_TABS = new Set(['launch', 'launch24'])
 
+/**
+ * Whether a point covers the span a tab draws.
+ *
+ * The row's own `period_type` answers it wherever the row has one, including
+ * when what it says is `unknown`: a figure the pipeline could not place is
+ * not a quarter it may draw as one. Only a payload carrying no period type at
+ * all falls back to the label, which is what the whole test used to be - and
+ * is why a nine-month figure filed under a quarter's label was drawn as that
+ * quarter.
+ */
+function covers(point: any, span: string, labelLooksRight: (period: string) => boolean): boolean {
+  const declared = String(point?.period_type ?? '').toLowerCase()
+  if (declared) return declared === span
+  return labelLooksRight(String(point?.period ?? ''))
+}
+
 /** The rank the server gave a point, or the front of the order if it gave none. */
 function rankOf(point: any): number {
   return Number.isFinite(Number(point?.scope_rank)) ? Number(point.scope_rank) : 0
@@ -178,15 +194,12 @@ export function selectChartSeries(payload: any, products: any[], tab: string): C
   )
 
   if (tab === 'quarterly') {
-    series = series.filter(
-      (point: any) =>
-        (point.period_type || '').toLowerCase() === 'quarterly' || /Q[1-4]/i.test(String(point.period)),
+    series = series.filter((point: any) =>
+      covers(point, 'quarterly', (period) => /Q[1-4]/i.test(period)),
     )
   } else if (tab === 'annual') {
-    series = series.filter(
-      (point: any) =>
-        (point.period_type || '').toLowerCase() === 'annual' ||
-        (/^\d{4}$/.test(String(point.period)) && !/Q/i.test(String(point.period))),
+    series = series.filter((point: any) =>
+      covers(point, 'annual', (period) => /^\d{4}$/.test(period) && !/Q/i.test(period)),
     )
   } else if (tab === 'launch24') {
     series = series.filter((point: any) => point.months_since_launch != null && point.months_since_launch <= 24)

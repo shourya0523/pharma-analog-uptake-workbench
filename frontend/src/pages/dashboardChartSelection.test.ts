@@ -142,6 +142,37 @@ describe('one figure per product and period', () => {
   })
 })
 
+describe('what counts as a quarter', () => {
+  it('believes the row over its label', () => {
+    // A nine-month figure and an undated one, both filed under a quarter's
+    // label. Read off the label they join the quarterly curve as quarters,
+    // and disagreeing with the quarter's own figure they take it down too.
+    const payload = {
+      series: [
+        point({ value: 15.0 }),
+        point({ period_type: 'nine_month', value: 48.0 }),
+        point({ period_type: 'unknown', value: 25.0 }),
+      ],
+    }
+    const selection = selectChartSeries(payload, products, 'quarterly')
+    expect(selection.rows[0][CALDERON]).toBe(15.0)
+    expect(selection.contested).toEqual([])
+  })
+
+  it('falls back to the label only where a row has no period type at all', () => {
+    const payload = { series: [{ product: CALDERON, period: '2024Q4', value: 15.0 }] }
+    expect(buildChartData(payload, products, 'quarterly')[0][CALDERON]).toBe(15.0)
+  })
+
+  it('keeps the annual tab to annual rows', () => {
+    const payload = {
+      series: [point({ period: '2024', period_type: 'annual', value: 46.0 }), point({ value: 15.0 })],
+    }
+    const rows = buildChartData(payload, products, 'annual')
+    expect(rows.map((item: any) => item.period)).toEqual(['2024'])
+  })
+})
+
 describe('what the chart can draw', () => {
   it('names only the products with a plotted line', () => {
     const payload = { series: [point({ product: NUVESSA, value: 7 })] }
