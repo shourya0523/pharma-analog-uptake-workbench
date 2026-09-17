@@ -22,7 +22,7 @@ class Settings(BaseSettings):
     job_backend: str = "inprocess"  # inprocess | sqs
     local_storage_root: str = "./storage"
     openrouter_api_key: str | None = None
-    openrouter_model_extract: str = "openai/gpt-4o-mini"
+    openrouter_model_extract: str = "google/gemini-3.8-flash"
     openrouter_model_judge: str = "openai/gpt-4o-mini"
     openrouter_base_url: str = "https://openrouter.ai/api/v1"
     validation_sample_rate: float = 0.10

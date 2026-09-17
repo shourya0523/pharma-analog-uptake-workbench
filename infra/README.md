@@ -105,7 +105,7 @@ Then set the OpenRouter secret (see above) and restart ECS services if they were
 
 Default models (override via ECS env in `stack.py` if needed):
 
-- **Extract / search:** `openai/gpt-4o-mini`
+- **Extract / search:** `google/gemini-3.8-flash`
 - **Judge:** `openai/gpt-4o-mini`
 
 **Account activation:** new accounts must finish AWS signup (payment method / service activation) before `cdk bootstrap` / `cdk deploy`. Until then EC2, S3, ECS, RDS, and CloudFormation may return `OptInRequired` / `NotSignedUp`.
