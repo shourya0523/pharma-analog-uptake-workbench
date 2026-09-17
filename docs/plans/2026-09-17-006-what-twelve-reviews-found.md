@@ -220,16 +220,32 @@ DRUG_FIELDS`, and the only test forbidding it
 A case file carrying it would hand the pipeline gold's document URL - the
 "table of document URLs" failure CLAUDE.md names, arriving through the eval.
 
-### 0e. Four env overrides, all session-only - and nothing measured is reproducible  `[V]`
+### 0e. Ten env overrides, all session-only - and nothing measured is reproducible  `[V]`, fixed in M0
 
-Filter stated: every `Settings` field in `config.py` compared against
-`get_settings()` in the shell that ran the evals. An earlier draft named two;
-the count had no stated predicate, and the two it missed are the larger ones.
+Filter: every declared `Settings` field (37), live value against
+`model_fields[n].get_default()`, in the shell that ran the evals. An earlier
+draft named two, then four - each time the predicate was sound and the list
+under it was hand-written, so each count was rule 1 producing an absence. Ten
+differ:
 
-    SEC_INCLUDE_8K=true               sec_include_8k            False -> True    config.py:31
-    ENABLE_PROFILE_JUDGE=false        enable_profile_judge      True  -> False   config.py:49
-    SEC_MAX_FILINGS=25                sec_max_filings           4     -> 25      config.py:30
-    OPENROUTER_MODEL_EXTRACT=...      openrouter_model_extract  gpt-4o-mini -> gemini-3.8-flash  config.py:25
+    sec_include_8k            False -> True                       config.py:31
+    enable_profile_judge      True  -> False                      config.py:49
+    sec_max_filings           4     -> 25                         config.py:30
+    openrouter_model_extract  gpt-4o-mini -> gemini-3.8-flash     config.py:25
+    database_url              sqlite default -> a path OUTSIDE the repo
+    local_storage_root        repo default   -> a path OUTSIDE the repo
+    max_concurrent_jobs, sec_user_agent, aws_profile, openrouter_api_key
+
+`database_url` and `local_storage_root` decide which database a run writes to
+and reads from - so they decide which run any past number was read from, and
+they point at a directory under a personal home path that exists in no file.
+
+**Fixed in M0** (`287bc26`, and the commits after it): `/config` now reports
+every `Settings` field with an `overridden` flag derived from `model_fields`,
+never a hand-named list, with credentials stripped by name *and* by structure
+(a DSN's password is removed whatever the field is called - the first draft
+of the route leaked it); `eval.py` prints the diff in its output header with
+the as-of date and gold size. A printed score now carries its configuration.
 
 All four live in the **process environment of the session**, and in no file:
 no `.env` exists at `backend/`, `deploy/` or the root, and the two example
@@ -238,10 +254,10 @@ files carry the declared defaults. `sec_max_filings` is read at
 `llm/client.py`. No table in any run database has a column naming the model
 (checked all 22 in run13), and `options_json` stores `ExtractionOptions` only.
 
-So a re-run from a clean shell fetches 4 filings per job instead of 25 and
-extracts with a different model. **Every number in this document, and the
-README's 75.6%, belongs to a configuration that exists in no file and in no run
-record.** This is the single strongest reason nothing below can be measured -
+So a re-run from a clean shell fetches 4 filings per job instead of 25,
+extracts with a different model, and writes to a different database. **Every
+number in this document, and the README's former 75.6%, belongs to a
+configuration that existed in no file and in no run record.** This is the single strongest reason nothing below can be measured -
 stronger than 0a - and an earlier draft filed it as a sequencing footnote.
 
 Also load-bearing and unmeasured: `sources.py:10-11` asserts in prose that the
