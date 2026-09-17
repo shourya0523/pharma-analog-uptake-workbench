@@ -90,8 +90,8 @@ BASELINE_001_COLUMNS: dict[str, tuple[str, ...]] = {
         "recommended_next_step", "reviewer_notes", "sources_checked",
     ),
     "validation_tasks": (
-        "confidence_score", "datapoint_id", "deterministic_results", "id", "issues",
-        "job_id", "judge_status", "reason", "reviewer_notes", "status",
+        "confidence_score", "datapoint_id", "id",
+        "job_id", "reason", "reviewer_notes", "status",
     ),
 }
 

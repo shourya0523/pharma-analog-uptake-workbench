@@ -209,10 +209,7 @@ class ValidationTaskORM(Base):
     job_id: Mapped[str] = mapped_column(ForeignKey("drug_jobs.id"), index=True)
     datapoint_id: Mapped[str] = mapped_column(String(36), index=True)
     reason: Mapped[str] = mapped_column(String(256))
-    judge_status: Mapped[str | None] = mapped_column(String(64), nullable=True)
-    deterministic_results: Mapped[list[Any]] = mapped_column(JSON, default=list)
     confidence_score: Mapped[float] = mapped_column(Float, default=0.0)
-    issues: Mapped[list[Any]] = mapped_column(JSON, default=list)
     status: Mapped[str] = mapped_column(String(32), default="open")
     reviewer_notes: Mapped[str | None] = mapped_column(Text, nullable=True)
 
