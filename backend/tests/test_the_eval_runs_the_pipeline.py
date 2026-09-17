@@ -121,6 +121,45 @@ def test_every_case_file_represents_both_answers():
             )
 
 
+def test_every_case_asks_for_the_configuration_that_ships():
+    """A case that quietly turns an option off scores a product nobody runs.
+
+    Which options a case has to state is read off the model, not written down:
+    a field the model gives no default is one the caller must supply - the
+    window the case is drawn around - and every other option a case restates
+    has to restate what ships. Anything else is a set whose number belongs to a
+    configuration the API would not give a person who asked for nothing.
+
+    The files are globbed, so a case file added later is held to this the day
+    it lands rather than when someone remembers to copy a guard into it.
+    """
+    from app.domain.models import ExtractionOptions
+    from tests.answer_keys import cases_in
+
+    shipped = ExtractionOptions()
+    declared = ExtractionOptions.model_fields
+    caller_states = {n for n, f in declared.items() if f.get_default() is None}
+
+    files = sorted((REPO / "seed" / "cases").glob("*.json"))
+    assert files, "no case files"
+    assert caller_states, "no option is left to the caller; the window is derived from that"
+    for path in files:
+        for case in cases_in(path):
+            options = case["options"]
+            where = (path.name, case["drug_name"])
+            unknown = set(options) - set(declared)
+            assert not unknown, (where, sorted(unknown))
+            for name in set(options) - caller_states:
+                assert options[name] == getattr(shipped, name), (
+                    f"{path.name}: {case['drug_name']} asks for {name}="
+                    f"{options[name]!r} where the API ships "
+                    f"{getattr(shipped, name)!r}, so its score is not the "
+                    f"product's"
+                )
+            for name in caller_states & set(options):
+                assert options[name] is not None, (where, name)
+
+
 def test_every_run_is_started_before_any_is_waited_for():
     """The windows are independent; the server decides its own concurrency.
 

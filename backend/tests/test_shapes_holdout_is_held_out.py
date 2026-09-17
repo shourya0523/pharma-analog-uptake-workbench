@@ -130,16 +130,8 @@ def test_cases_are_what_a_person_would_type():
     """The eval posts the drug, who makes it and the window; nothing here may
     hand the pipeline a document or a figure.
 
-    An option a case sets has to be one the API declares. One that is not is
-    dropped on the way in without a word, so the case measures a
-    configuration nobody chose and the run reports a number for it. The
-    declared set is read off the model rather than written down here, so an
-    option added there needs no edit and an option removed there fails this.
+    What the options may be is `test_every_case_asks_for_the_configuration_that
+    _ships`, over every file in `seed/cases/` rather than over this one.
     """
-    from app.domain.models import ExtractionOptions
-
-    declared = set(ExtractionOptions.model_fields)
     for case in _cases():
         assert "known_source_url" not in case, case["drug_name"]
-        unknown = set(case["options"]) - declared
-        assert not unknown, (case["drug_name"], sorted(unknown))

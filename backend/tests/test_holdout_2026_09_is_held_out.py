@@ -117,7 +117,7 @@ def test_a_figure_that_is_not_printed_says_how_it_was_computed():
             # A one- or two-character rendering of the value matches by
             # accident inside any larger number in the row, so only the
             # distinctive spellings count.
-            printed = {form for form in ("%.1f" % value, "%.3f" % value,
+            printed = {form for form in (f"{value:.1f}", f"{value:.3f}",
                                          f"{round(value * 1000):,}")
                        if len(form) >= 3}
             quotes = [source["source_quote"] for source in figure["sources"]]
@@ -168,25 +168,6 @@ def test_windows_reach_every_expected_quarter():
             where = (case["drug_name"], figure["period"])
             assert until >= quarter_end + timedelta(days=1), where
             assert since <= quarter_end + timedelta(days=120), where
-
-
-def test_the_options_are_the_ones_a_person_gets():
-    """Characterisation is on by default, so a set that scores it must run with
-    the defaults rather than with a configuration nobody chooses.
-
-    The defaults are read off the model rather than written down here: change
-    what ships and this fails, which is the point.
-    """
-    from app.domain.models import ExtractionOptions
-
-    shipped = ExtractionOptions()
-    declared = set(ExtractionOptions.model_fields)
-    for case in _cases():
-        options = case["options"]
-        unknown = set(options) - declared
-        assert not unknown, (case["drug_name"], sorted(unknown))
-        for name in ("openfda", "product_metadata"):
-            assert options[name] == getattr(shipped, name), (case["drug_name"], name)
 
 
 def test_nothing_hands_the_pipeline_a_document_or_a_figure():
