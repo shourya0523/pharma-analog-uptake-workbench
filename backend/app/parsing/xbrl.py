@@ -363,6 +363,37 @@ def _product_member(fact: Fact, names_a_product) -> str | None:
     return found[0] if len(found) == 1 else None
 
 
+# What a total of the period's income is called. The calculation linkbase
+# places an element in a tree but never says which tree is the income
+# statement: the `xlink:role` that would is a URI the filer invents
+# (`.../role/StatementCondensedConsolidatedStatementsOfOperations` in one
+# filing, `.../role/ConsolidatedStatementsOfOperationsAndComprehensiveIncome`
+# in another), so the tops of that tree are named instead.
+#
+# This is a snapshot of how a published taxonomy names a bottom line, not of
+# what any filer calls one - the names are matched as prefixes, so the
+# variants a taxonomy hangs off each of them are covered. It goes stale when
+# an issuer runs its income statement up to a total that is not one of these;
+# the failure is then that the filing's product-axis elements read as
+# unplaced and are answered by the model that answers unplaced elements,
+# which is the direction that loses nothing silently.
+_INCOME_TOTALS = (
+    "ComprehensiveIncome",
+    "GrossProfit",
+    "IncomeLoss",
+    "NetIncomeLoss",
+    "OperatingIncomeLoss",
+    "ProfitLoss",
+    "Revenue",
+)
+
+
+def _is_income_total(element: str) -> bool:
+    """Whether this element names an income the filer computed for the period."""
+    _prefix, _, local = element.partition(":")
+    return local.startswith(_INCOME_TOTALS)
+
+
 @dataclass(frozen=True)
 class Calculation:
     """What a filing's calculation linkbase says about its elements.
@@ -378,20 +409,40 @@ class Calculation:
     research expense that is added into "costs and expenses" and then taken
     from operating income reads as a cost. ``nets`` are elements that have
     something subtracted from them - gross profit, operating income - which
-    are results rather than base figures.
+    are results rather than base figures. ``roots`` names, per element, the
+    totals its arcs run up to.
+
+    A sign on its own does not say what an element is, because the linkbase
+    holds every statement the filing makes and not only its income statement.
+    An amortisation charge added back under operating cash flow, and a
+    transaction cost added into a purchase price in an acquisition note, are
+    both carried with weight +1 and nothing is taken from either. So the
+    question is asked of a total: which total does this element run up to, and
+    is that total an income the filer computed for the period.
     """
 
     sign: dict[str, int]
     nets: frozenset[str]
+    roots: dict[str, frozenset[str]] = field(default_factory=dict)
 
     def settles(self, element: str) -> bool | None:
-        """True for a base figure nothing is taken from and that is not itself
-        taken away; False for a cost or a net; None where the linkbase never
-        mentions the element."""
+        """Whether the filing states this element as revenue.
+
+        True for a base figure that runs up into a total of the period's income
+        and has nothing taken from it; False for a cost or a net; None where the
+        linkbase does not place it under such a total at all - either because it
+        never mentions the element, or because the only totals it runs up to are
+        a cash reconciliation or a note's own sub-total. None is what
+        ``revenue_elements`` sends to the model that answers unplaced elements,
+        so a filer who tags product revenue only inside a disaggregation note is
+        asked about rather than refused.
+        """
         if element in self.nets:
             return False
-        if element in self.sign:
-            return self.sign[element] > 0
+        if self.sign.get(element, 1) < 0:
+            return False
+        if any(_is_income_total(root) for root in self.roots.get(element, ())):
+            return True
         return None
 
 
@@ -443,7 +494,26 @@ def parse_calculation(raw: bytes) -> Calculation:
         resolve(element, frozenset())
     for element in nets:
         sign.setdefault(element, 1)
-    return Calculation(sign=sign, nets=frozenset(nets))
+
+    roots: dict[str, frozenset[str]] = {}
+
+    def tops(element: str, seen: frozenset[str]) -> frozenset[str]:
+        if element in roots:
+            return roots[element]
+        if element in seen:
+            return frozenset()
+        above = parents.get(element, ())
+        if not above:
+            return frozenset({element})
+        found: set[str] = set()
+        for parent, _weight in above:
+            found |= tops(parent, seen | {element})
+        roots[element] = frozenset(found)
+        return roots[element]
+
+    for element in list(parents):
+        tops(element, frozenset())
+    return Calculation(sign=sign, nets=frozenset(nets), roots=roots)
 
 
 def _candidate_elements(facts: list[Fact], names_a_product) -> frozenset[str]:

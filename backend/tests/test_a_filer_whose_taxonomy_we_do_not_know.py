@@ -278,6 +278,78 @@ def test_the_linkbase_says_which_element_is_the_sale_and_which_the_cost_of_it():
     ]
 
 
+TWO_STATEMENTS = b"""<?xml version="1.0" encoding="UTF-8"?>
+<link:linkbase xmlns:link="http://www.xbrl.org/2003/linkbase"
+               xmlns:xlink="http://www.w3.org/1999/xlink">
+  <link:calculationLink xlink:type="extended" xlink:role="http://acme.example/role/StatementOfOperations">
+    <link:loc xlink:type="locator" xlink:href="us-gaap-2024.xsd#us-gaap_NetIncomeLoss" xlink:label="ni"/>
+    <link:loc xlink:type="locator" xlink:href="us-gaap-2024.xsd#us-gaap_GrossProfit" xlink:label="gp"/>
+    <link:loc xlink:type="locator" xlink:href="us-gaap-2024.xsd#us-gaap_RevenueFromContractWithCustomerExcludingAssessedTax" xlink:label="rev"/>
+    <link:loc xlink:type="locator" xlink:href="us-gaap-2024.xsd#us-gaap_CostOfGoodsAndServicesSold" xlink:label="cogs"/>
+    <link:loc xlink:type="locator" xlink:href="us-gaap-2024.xsd#us-gaap_IncomeTaxExpenseBenefit" xlink:label="tax"/>
+    <link:calculationArc xlink:type="arc" xlink:from="ni" xlink:to="gp" weight="1" order="1"/>
+    <link:calculationArc xlink:type="arc" xlink:from="ni" xlink:to="tax" weight="-1" order="2"/>
+    <link:calculationArc xlink:type="arc" xlink:from="gp" xlink:to="rev" weight="1" order="1"/>
+    <link:calculationArc xlink:type="arc" xlink:from="gp" xlink:to="cogs" weight="-1" order="2"/>
+  </link:calculationLink>
+  <link:calculationLink xlink:type="extended" xlink:role="http://acme.example/role/StatementOfCashFlows">
+    <link:loc xlink:type="locator" xlink:href="us-gaap-2024.xsd#us-gaap_CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalentsPeriodIncreaseDecreaseExcludingExchangeRateEffect" xlink:label="cash"/>
+    <link:loc xlink:type="locator" xlink:href="us-gaap-2024.xsd#us-gaap_NetCashProvidedByUsedInOperatingActivities" xlink:label="op"/>
+    <link:loc xlink:type="locator" xlink:href="us-gaap-2024.xsd#us-gaap_AmortizationOfIntangibleAssets" xlink:label="amort"/>
+    <link:loc xlink:type="locator" xlink:href="us-gaap-2024.xsd#us-gaap_IncreaseDecreaseInAccountsReceivable" xlink:label="ar"/>
+    <link:calculationArc xlink:type="arc" xlink:from="cash" xlink:to="op" weight="1" order="1"/>
+    <link:calculationArc xlink:type="arc" xlink:from="op" xlink:to="amort" weight="1" order="1"/>
+    <link:calculationArc xlink:type="arc" xlink:from="op" xlink:to="ar" weight="-1" order="2"/>
+  </link:calculationLink>
+</link:linkbase>
+"""
+
+
+def test_a_sign_is_read_under_the_total_it_belongs_to_and_not_across_the_filing():
+    """+1 does not mean revenue; +1 under an income total does.
+
+    The linkbase holds every statement the filing makes. An amortisation
+    charge added back under operating cash flow carries weight +1 and has
+    nothing taken from it, exactly like a sale added into gross profit, and
+    the sign read across the whole linkbase could not tell them apart - so
+    the filer's own amortisation was stored as the product's revenue for the
+    quarter, beside the revenue fact it contradicts.
+
+    An element the filing places somewhere that is not an income is not
+    refused either: it is left open, which is what the model that answers
+    open elements is for.
+    """
+    from app.parsing.xbrl import parse_calculation, unsettled_elements
+
+    calculation = parse_calculation(TWO_STATEMENTS)
+    assert calculation.settles("us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax") is True
+    assert calculation.settles("us-gaap:AmortizationOfIntangibleAssets") is None
+    assert calculation.settles("us-gaap:IncreaseDecreaseInAccountsReceivable") is False
+    assert calculation.settles("us-gaap:CostOfGoodsAndServicesSold") is False
+
+    both = _names("Calderon")
+    facts = [
+        _fact("acme:CalderonMember", 225_300_000.0,
+              element="us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax"),
+        _fact("acme:CalderonMember", 6_285_000.0,
+              element="us-gaap:AmortizationOfIntangibleAssets"),
+    ]
+    assert revenue_elements(facts, names_a_product=both, calculation=calculation) == {
+        "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax"
+    }
+    assert unsettled_elements(facts, names_a_product=both, calculation=calculation) == {
+        "us-gaap:AmortizationOfIntangibleAssets"
+    }
+    # And the model still has the last word on what the filing left open.
+    assert revenue_elements(
+        facts, names_a_product=both, calculation=calculation,
+        verdicts={"us-gaap:AmortizationOfIntangibleAssets": True},
+    ) == {
+        "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax",
+        "us-gaap:AmortizationOfIntangibleAssets",
+    }
+
+
 def test_an_element_the_linkbase_leaves_open_is_asked_about_and_otherwise_left_out():
     """A royalty line tagged by product never enters the statements' arithmetic."""
     from app.parsing.xbrl import parse_calculation, unsettled_elements
