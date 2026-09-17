@@ -2253,6 +2253,7 @@ class PipelineOrchestrator:
                 "evidence_meta": evidence_meta,
                 "no_product_evidence": no_product_evidence,
                 "deterministic_answered": deterministic_answered,
+                "peers": peers,
             }
 
         llm_source_ids = self._model_budget(job, selected_sources, prepared)
@@ -2267,6 +2268,8 @@ class PipelineOrchestrator:
             llm_text, evidence_meta = state["llm_text"], state["evidence_meta"]
             no_product_evidence = state["no_product_evidence"]
             deterministic_answered = state["deterministic_answered"]
+            # This document's own sibling rows, not the last document prepared.
+            peers = state["peers"]
             use_llm = src.source_id in llm_source_ids
             if not use_llm:
                 src_row = self.db.get(SourceDocumentORM, src.source_id)
