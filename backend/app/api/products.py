@@ -39,6 +39,7 @@ from app.domain.models import (
     new_id,
 )
 from app.observability import normalize_analog_key
+from app.pipeline.orchestrator import select_job_series, stamp_series_identity
 from app.pipeline.series_identity import recorded_reason_code
 from app.quality.completeness import (
     names_a_quarter,
@@ -674,6 +675,7 @@ def resolve_unresolved_quarter(
         if not row:
             raise HTTPException(404, "unresolved quarter not found")
 
+        job = db.get(DrugJobORM, row.job_id)
         created_datapoint_id: str | None = None
         if body.action == "enter_value":
             if body.value_normalized_usd_millions is None:
@@ -712,6 +714,7 @@ def resolve_unresolved_quarter(
                     "entered_at": datetime.utcnow().isoformat(),
                 },
             )
+            stamp_series_identity(job, datapoint)
             db.add(datapoint)
             created_datapoint_id = datapoint.id
         row.resolution = RESOLUTION_BY_ACTION[body.action]
@@ -730,7 +733,14 @@ def resolve_unresolved_quarter(
                 notes=body.reviewer_notes,
             )
         )
-        counted = refresh_completeness(db, db.get(DrugJobORM, row.job_id))
+        if created_datapoint_id:
+            # The entered figure is an answer for a quarter that may already
+            # hold one, so the series is asked again which reading it holds.
+            db.flush()
+            select_job_series(
+                db, job, db.query(DatapointORM).filter_by(job_id=job.id).all()
+            )
+        counted = refresh_completeness(db, job)
         db.commit()
         return {
             "id": row.id,

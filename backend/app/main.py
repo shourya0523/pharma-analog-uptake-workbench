@@ -48,6 +48,7 @@ from app.observability import (
 from app.observability import (
     overview as observability_overview,
 )
+from app.pipeline.orchestrator import select_job_series, stamp_series_identity
 from app.quality.completeness import refresh_completeness
 from app.storage.filestore import get_file_store
 
@@ -520,9 +521,13 @@ def patch_datapoint(datapoint_id: str, body: DatapointPatch) -> dict[str, Any]:
                 notes=body.reviewer_notes,
             )
         )
-        # Rejecting a figure removes the only answer its quarter had, so the
-        # counts derived from the answers are stale until they are retaken.
-        counted = refresh_completeness(db, db.get(DrugJobORM, dp.job_id))
+        # Rejecting a figure removes the only answer its quarter had, and
+        # confirming one adds an answer to a quarter that may already have
+        # had one, so both the series selection and the counts derived from
+        # it are stale until they are retaken.
+        job = db.get(DrugJobORM, dp.job_id)
+        _resettle_series(db, job)
+        counted = refresh_completeness(db, job)
         db.commit()
         return {
             "id": dp.id,
@@ -531,6 +536,23 @@ def patch_datapoint(datapoint_id: str, body: DatapointPatch) -> dict[str, Any]:
         }
     finally:
         db.close()
+
+
+def _resettle_series(db, job: DrugJobORM | None) -> None:
+    """Ask again which reading each of the job's series holds.
+
+    A reviewer's decision is an answer about one row and a change to the
+    series it belongs to: a figure confirmed where the quarter already had one
+    is a second reading of that quarter, and a figure rejected may leave the
+    quarter to a reading that was standing behind it. Left unasked, the
+    surfaces would draw both.
+    """
+    if job is None:
+        return
+    rows = db.query(DatapointORM).filter_by(job_id=job.id).all()
+    for row in rows:
+        stamp_series_identity(job, row)
+    select_job_series(db, job, rows)
 
 
 class ValidationAction(BaseModel):
@@ -572,7 +594,9 @@ def validation_action(task_id: str, body: ValidationAction) -> dict[str, Any]:
                 notes=body.notes,
             )
         )
-        counted = refresh_completeness(db, db.get(DrugJobORM, task.job_id))
+        job = db.get(DrugJobORM, task.job_id)
+        _resettle_series(db, job)
+        counted = refresh_completeness(db, job)
         db.commit()
         return {
             "task_id": task.id,
