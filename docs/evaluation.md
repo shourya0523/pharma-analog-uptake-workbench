@@ -35,15 +35,30 @@ from. They live in `seed/cases/`:
 
 | file | cases | oracle |
 |---|---|---|
-| `gold_sample.json` | 8 runs, 32 quarters | `seed/gold/quarterly_revenue.jsonl` |
-| `gold_all.json` | every product-year in gold, one run per window | `seed/gold/quarterly_revenue.jsonl` |
+| `gold_sample.json` | the smoke test: one product-year per issuer, plus one case of each way a case can expect nothing | `seed/gold/` |
+| `gold_all.json` | every product-year gold holds, one run per window | `seed/gold/` |
 | `foreign_xbrl.json` | 7 runs, 7 quarters | the figure printed in the filing each case cites |
 | `unseen.json` | issuers no answer key uses, one quarter each | the figure printed in the 10-Q each case cites |
 | `shapes_holdout.json` | issuers no answer key uses, drawn by the shape of what the filing prints (item 0 of `docs/plan-after-the-full-sweep.md`); both answers represented | the filing each figure cites by accession; an empty quarter says why |
 
 `value_normalized_usd_millions: null` means the run must come back with
-nothing for that quarter. A set that only refuses is passed by a system that
-always refuses, so both answers are represented.
+nothing for that quarter, and says `why`. A set that only refuses is passed by
+a system that always refuses and a set that only publishes is passed by one
+that publishes anything, so both answers are represented in every file here.
+
+The two gold files are not maintained by hand - they are gold restated in the
+shape a caller types, and a hand-maintained copy of an answer key goes stale
+without saying so:
+
+    python scripts/build_gold_cases.py          # rebuild both from seed/gold/
+    python scripts/build_gold_cases.py --check  # say whether they still match
+
+The figures come from `quarterly_revenue.jsonl`. The empty expectations come
+from gold's own records of absence: `series_coverage.jsonl`, where a series
+ends because the issuer stopped printing the line, and `excluded_products.jsonl`,
+the products gold refused to build a series for at all.
+`backend/tests/test_gold_cases_are_derived.py` fails when the committed files
+and gold disagree.
 
 Adding a held-out set is a new file, not a new script.
 
