@@ -125,6 +125,46 @@ def _split_indication_blocks(text: str) -> list[str]:
     return blocks or ([cleaned] if cleaned else [])
 
 
+# A qualifier the label adds after the disease it has already named: a
+# parenthetical abbreviation or classification, or a trailing classification
+# phrase introduced by a punctuation mark. Everything before it is the disease
+# the label is grouping under.
+_AREA_QUALIFIER = re.compile(r"\s*[(\[].*$")
+_AREA_TRAILING_CLASS = re.compile(
+    r"\s*[-–—,;:]\s*(?:who|nyha|ajcc|fab)\s+(?:group|class|stage)\b.*$", re.IGNORECASE
+)
+
+
+def therapeutic_area(disease: str) -> str:
+    """The disease a disease string names, without the label's own qualifiers.
+
+    Grouping downstream is exact equality, so one disease has to come back as
+    one string however the label spelled it. The smallest honest step is the
+    phrase the label states before it qualifies that phrase: an abbreviation or
+    a classification in brackets, or a trailing classification clause.
+    ``Calderon's disease (CD) (WHO Group 1)``, ``Calderon's disease (CD, WHO
+    Group I)`` and ``Calderon's disease`` are one area.
+
+    A qualifier that changes which patients are treated is not one of these and
+    is left in, because it is a different market: ``Calderon's disease
+    associated with nebulisation`` stays its own area.
+    """
+    text = _normalize_block(disease)
+    text = _AREA_TRAILING_CLASS.sub("", text)
+    text = _AREA_QUALIFIER.sub("", text)
+    return text.strip(" .;:/-").casefold()
+
+
+def therapeutic_areas(indications: list[ParsedIndication]) -> list[str]:
+    """The distinct areas a product's indications group under, in label order."""
+    areas: list[str] = []
+    for indication in indications:
+        area = therapeutic_area(indication.disease)
+        if area and area not in areas:
+            areas.append(area)
+    return areas
+
+
 def parse_indications(text: str) -> list[ParsedIndication]:
     """Split explicit label indication paragraphs and classify only stated LoT evidence."""
 

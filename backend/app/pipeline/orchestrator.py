@@ -81,7 +81,7 @@ from app.parsing.fda_label import (
     parse_label_record,
     profile_fields,
 )
-from app.parsing.indications import parse_indications
+from app.parsing.indications import parse_indications, therapeutic_areas
 from app.parsing.labels import QUESTION_FLAGS, footnotes_in
 from app.parsing.periods import (
     detect_period_context,
@@ -801,7 +801,8 @@ class PipelineOrchestrator:
                 first_label,
                 indications=parsed_indications,
                 indication_value=indication_value,
-                therapeutic_area_value=indication_value,
+                therapeutic_area_value="; ".join(therapeutic_areas(parsed_indications))
+                or None,
                 moa_value=moa_value,
                 approval=approval,
                 approval_path=approval_field,

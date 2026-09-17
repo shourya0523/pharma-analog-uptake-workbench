@@ -195,3 +195,14 @@ async def test_one_job_files_one_canonical_product(tmp_path):
 
     products = db.query(CanonicalProductORM).all()
     assert [p.id for p in products] == [job.product_id]
+
+
+@pytest.mark.asyncio
+async def test_the_area_groups_where_the_indication_does_not(tmp_path):
+    db, orch, job, sources = _orchestrator(tmp_path, [ORIGINAL])
+    await orch._extract_metadata(job, sources, {}, {"product_metadata": True})
+
+    rows = _fields(db, job)
+    assert rows["indication"].value.startswith("Calderon's disease (CD)")
+    assert rows["therapeutic_area"].value == "calderon's disease"
+    assert rows["therapeutic_area"].citation_json["source_field"] == "indications_and_usage"
