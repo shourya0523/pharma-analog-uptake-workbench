@@ -44,6 +44,26 @@ valuable than ten confirmations.
 3. **A count is not a capability.** "N rows cite X" is a fact about the rows.
    "We cannot reach X" is a fact about our code and needs its own command.
 
+## Two more checks, on every item
+
+Verifying that a claim is literally true is the floor, not the job.
+
+4. **Check it against CLAUDE.md's five rules.** For each item ask: is the code
+   it describes a written-down list where a derivation exists (rule 1)? Is the
+   register's own evidence a filter whose predicate was not stated (rule 2)?
+   Does anything here let gold or `seed/product_attributes.csv` reach the
+   pipeline (rule 3)? Is a number being scored on the set it was tuned on
+   (rule 4)? Does a comment or docstring carry a measurement (rule 5)? Report a
+   rule violation you find as its own line, whether or not the register's
+   claim holds.
+5. **Check it at the product level.** The product is an analog forecasting
+   workbench for a specialty-pharma analyst - read
+   `.claude/agents/_product-brief.md`. For each item ask what it costs that
+   analyst, in their terms: a wrong number they will act on, a missing series
+   they needed, an analog set they cannot trust. An item that is literally true
+   and costs nothing should say so; an item whose cost is larger than the
+   register ranks it should say that too. Rank is part of the claim.
+
 ## What you may conclude
 
 - That an item holds, with the output.
