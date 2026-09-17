@@ -462,31 +462,58 @@ series: `individual_reporting_discontinued`, `incomplete_pre_peak_history`,
 anticipates AGAMREE exactly - Tadliq's reason reads "Approval, availability,
 price, and pharmacy listings are not product revenue."
 
-### 2f. Retrieval is EDGAR-only, and 41% of gold's evidence is not on EDGAR
+### 2f. The IR sources gold cites are on EDGAR; one class of filing is not
 
-Gold is 2,203 hand-researched quarters over 8 issuers - the closest thing to a
-worked example of the series this product is trying to build. Its sources:
+Gold cites 907 non-SEC rows (41%) and 643 PDF rows (29%). They are investor-
+relations material, and they concentrate in two issuers:
 
-    hosts (distinct URLs)          rows citing that source
-    www.sec.gov          266       SEC host      : 1,296 of 2,203
-    s203.q4cdn.com        49       non-SEC host  :   907 of 2,203  (41%)
-    www.gilead.com        36       a PDF         :   643 of 2,203  (29%)
-    www.merck.com          3
-    www.investor.jnj.com   1
-    ir.unither.com         1
+    Johnson & Johnson  770 rows   579 from s203.q4cdn.com (J&J's IR CDN)
+    Gilead             609 rows   263 from www.gilead.com (press releases)
+    Eli Lilly          374 rows   374 SEC
+    United Therapeutics 368 rows  365 SEC
 
-The pipeline retrieves EDGAR and openFDA. It has no path to an investor-
-relations site, and 0 PDFs in 2,153 recorded sources.
+J&J's are the quarterly `Sales-of-Key-Products-Franchises-<Q><YYYY>.pdf`;
+Gilead's are quarterly earnings press-release pages.
 
-The clearest case is the one CLAUDE.md rule 1 cites. Gold's pre-acquisition
-Actelion quarters - Opsumit, Uptravi and Tracleer from 2016Q1 - come from
-`Actelion_Historical_Sales_Schedule.pdf` on J&J's IR CDN, with
-`derivation: direct_jnj_retrospective_table`, not from any SEC filing. So the
-form-filter fix in 9c is a real rule-1 violation and is **not** what would
-unlock that case; nothing in retrieval can reach that document at all.
+**That count does not measure a retrieval gap.** The same content is on EDGAR,
+as EX-99 on the earnings 8-K, and `is_earnings_exhibit` (`sources.py:163`)
+already matches the naming. Verified against the live API:
 
-This is a capability gap, not a defect - but it bounds what fixing sections 5
-and 6 can deliver, and it is the reason `positional.py` looks dead.
+    J&J 1Q2020   8-K 0000200406-20-000026  items 2.02,9.01
+                 a2020q1exhibit992.htm     -> OPSUMIT, UPTRAVI, TRACLEER,
+                                              STELARA, DARZALEX, XARELTO
+    Gilead 2Q18  8-K 0000882095-18-000019  items 2.02,9.01
+                 exhibit991earningspressrel.htm -> HARVONI, EPCLUSA, BIKTARVY
+
+So gold cited the IR copy because it is the readable one, not because EDGAR
+lacked it, and **no investor-relations fallback is needed for the bulk of it**.
+The existing SEC path reaches both issuers today.
+
+**The one class that is genuinely unreachable is acquired-business financials,
+and it needs two gates changed rather than a new source.** The Actelion
+statements that CLAUDE.md rule 1's table names are real and are on EDGAR:
+
+    8-K/A 0000200406-17-000046  filed 2017-08-29  items 2.01,9.01
+      exhibit991actelionfinancia.htm
+      -> OPSUMIT, UPTRAVI, TRACLEER, VELETRI, VENTAVIS
+
+`is_earnings_exhibit` matches that document. Two filters upstream drop the
+filing before it is ever listed:
+
+    sources.py:541  if form != "8-K": continue          -> 8-K/A excluded
+    sources.py:544  if EARNINGS_ITEM not in items       -> items are 2.01,9.01,
+                                                           there is no 2.02
+
+Widening the form filter with `form_family()` (9c) is therefore **necessary and
+not sufficient**: an acquired business's financials arrive under item 9.01 on
+an amendment to an item-2.01 acquisition filing, never under the earnings item.
+The fix is to admit that pair - form family `8-K` with item 9.01 alongside item
+2.01 - as a second kind of filing worth listing, distinct from an earnings
+release.
+
+This is the one retrieval change in this document that unlocks quarters no
+other fix reaches: gold's Opsumit, Uptravi and Tracleer series all begin at the
+acquisition boundary for exactly this reason.
 
 ---
 
@@ -1179,14 +1206,17 @@ No test covers either. Whether any of those amendments carries a
 product-revenue table is not established; what is measured is that they are
 never listed.
 
-What *is* established is that the one careful hand-build of comparable data
-never needed one. Gold's 2,203 quarters cite 284 accessions across 8 issuers:
+Gold's own 2,203 quarters cite 284 accessions across 8 issuers, and none is an
+amendment:
 
     8-K 173   10-Q 75   10-K 34   6-K 1   20-F 1   amendments: 0
 
-So fix these because rule 1 says a filter is part of the claim, not because a
-measured series depends on them. The Actelion case that the rule-1 table cites
-was solved a different way - see 2f.
+But gold reached the one case that needs an amendment by citing J&J's IR copy
+instead, so that is not evidence the amendment is unnecessary - it is evidence
+of how gold worked around it. The 8-K/A carrying Actelion's statements is real,
+is on EDGAR, and is blocked by this filter **and** by the item filter beside
+it. See 2f, which is where the fix is specified; widening `form_family()` here
+alone does not reach it.
 
 ### 9d. Four `SCRIPT_ONLY` reasons do not survive a grep
 
@@ -1318,12 +1348,12 @@ Measured, with no production caller or no effect:
 
 Decide rather than leave:
 
-- `positional.py` (116 lines) was on this list for "0 PDFs in 2,153 recorded
-  sources and 0 in the 553-file cache". That is a fact about retrieval, not
-  about the reader - see 2f. **643 of gold's 2,203 quarterly rows cite a PDF.**
-  The reader has no input because nothing fetches its input. Deleting it would
-  remove the only thing able to read 29% of the evidence a careful hand-build
-  used.
+- `positional.py` (116 lines): 0 PDFs in 2,153 recorded sources and 0 in the
+  553-file cache. Gold cites a PDF on 643 rows, which looks like a reason to
+  keep it - but 2f shows those PDFs are the readable copy of EX-99 documents
+  that are on EDGAR in HTML, so the count describes gold's citation choice
+  rather than a format the pipeline must read. Delete unless a source that is
+  only ever a PDF turns up.
 - `adjudicate.py` (256 lines) has no production caller, but
   `seed/gold/adjudication_cases.jsonl` holds the cases it was written for. A
   wiring decision, not obviously a deletion - and its docstring's false test
@@ -1421,8 +1451,9 @@ Each step is a commit. Nothing is scored until step 1 is done.
     only then wire it.
 13. **Section 9** - the false docstring (9a), the glob (9b), the four
     `SCRIPT_ONLY` reasons (9d), the stale docs (9e), `check_by_hand` (9h).
-    9c's `8-K/A` and `10-K/A` filters are a retrieval change and carry a
-    measurement, so they go with step 4 rather than here.
+    9c's `8-K/A` and `10-K/A` filters are a retrieval change, so they go with
+    step 4 - **together with 2f's item filter**, since the form filter alone
+    does not reach the acquisition case.
 14. **Section 10** - the deletions, once nothing above depends on them.
     `positional.py` is not among them: 2f is why it looks dead.
 15. **Section 11** - the job deadline, recovery, and unfinished jobs not
