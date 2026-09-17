@@ -110,6 +110,36 @@ def test_quarters_in_one_scope_over_a_peak_in_another_are_refused():
     assert all(point.value is None for point in points)
 
 
+def test_one_place_spelled_two_ways_is_one_series():
+    """A U.S. track is a U.S. track whether the filing writes `U.S.` or `US`.
+
+    Compared as written, a quarter was refused for the punctuation of its
+    label - so a track the issuer reported every quarter looked like one with
+    a hole in it, in a scope the peak was not in.
+    """
+    observations = [
+        _quarter(index, 40, row_id=f"q{index}", geography="US" if index % 2 else "U.S.")
+        for index in range(1, 9)
+    ]
+    points = calculate_revenue_uptake(
+        observations=observations,
+        selected_peak=_peak(1000, geography="U.S."),
+        launch_date=date(2024, 1, 1),
+    )
+    assert points[3].value == 0.16
+    assert [point.missing_reason for point in points[3:]] == [None] * 5
+    # The other answer: a different place is still a different place.
+    elsewhere = calculate_revenue_uptake(
+        observations=[
+            _quarter(index, 40, row_id=f"q{index}", geography="Japan")
+            for index in range(1, 9)
+        ],
+        selected_peak=_peak(1000, geography="U.S."),
+        launch_date=date(2024, 1, 1),
+    )
+    assert {point.missing_reason for point in elsewhere} == {"incompatible_sales_scope"}
+
+
 def test_a_scope_mismatch_outranks_a_gap_in_the_quarters():
     """Precedence: the wrong series is not a series with a hole in it.
 
