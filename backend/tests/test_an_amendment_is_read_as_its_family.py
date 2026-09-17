@@ -63,6 +63,17 @@ def test_the_allowed_families_are_derived_from_what_a_form_reports():
         assert form_family(family) == family
 
 
+def test_the_earnings_form_is_spelled_as_its_own_family():
+    """Both answers: the constant is already a family, an amendment is not.
+
+    The earnings gate compares a form's family against `EARNINGS_FORM`
+    directly, which is only right while the constant is spelled as a family.
+    """
+    assert form_family(SECConnector.EARNINGS_FORM) == SECConnector.EARNINGS_FORM
+    assert form_family(f"{SECConnector.EARNINGS_FORM}/A") == SECConnector.EARNINGS_FORM
+    assert f"{SECConnector.EARNINGS_FORM}/A" != SECConnector.EARNINGS_FORM
+
+
 def test_an_amendment_sorts_with_the_form_it_amends():
     """The read order is what the form reports, not how it is spelled.
 

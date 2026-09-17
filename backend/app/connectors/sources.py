@@ -443,8 +443,10 @@ class SECConnector:
     # release is furnished under. The SEC assigns the number; it is a snapshot
     # of the 8-K item schedule and would go stale only if that were renumbered.
     EARNINGS_ITEM = "2.02"
-    # The form that item schedule belongs to. It travels with EARNINGS_ITEM
-    # and goes stale with it; it is read as a family, never compared raw.
+    # The form that item schedule belongs to. It travels with EARNINGS_ITEM and
+    # goes stale with it. It is spelled as its own family, so a form is
+    # compared to it by family and it needs no second call to say so; the
+    # guard test is what keeps that true.
     EARNINGS_FORM = "8-K"
     # Older filings live in dated shards beside filings.recent. A bound keeps a
     # wide window from walking a filer's whole history.
@@ -663,7 +665,7 @@ class SECConnector:
             # results the original did. Whether that second reading agrees
             # with the first is a question for the reader, and it cannot be
             # asked of a document retrieval never fetched.
-            if form_family(form) != form_family(self.EARNINGS_FORM):
+            if form_family(form) != self.EARNINGS_FORM:
                 continue
             filing_items = items[i] if i < len(items) else ""
             if not states_item(filing_items, self.EARNINGS_ITEM):
