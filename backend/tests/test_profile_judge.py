@@ -205,12 +205,13 @@ def test_label_section_header_detection():
 
 
 def test_conflicting_sources_are_recorded_and_judged_first():
-    extract = inspect.getsource(PipelineOrchestrator._extract_metadata)
+    label = inspect.getsource(PipelineOrchestrator._label_metadata)
+    narrative = inspect.getsource(PipelineOrchestrator._narrative_metadata)
     # Disagreements are kept for adjudication rather than one source silently winning
-    assert "values_conflict(written[name], field[\"value\"])" in extract
-    assert "conflicting_source" in extract
-    assert "blends_sibling_brand" in extract
-    assert "format_moa_profile_value" in extract
+    assert "values_conflict(written[name], field[\"value\"])" in narrative
+    assert "conflicting_source" in label and "conflicting_source" in narrative
+    assert "blends_sibling_brand" in label and "blends_sibling_brand" in narrative
+    assert "format_moa_profile_value" in label
 
     judge = inspect.getsource(PipelineOrchestrator._judge_profile)
     assert "select_profile_fields_for_judgment" in judge

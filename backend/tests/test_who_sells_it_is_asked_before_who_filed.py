@@ -9,6 +9,12 @@ sponsor was sitting in the drug label the same run went on to fetch.
 So the product's own documents are retrieved and read first, the sponsor they
 name is on the job, and the CIK is then looked up from a company name.
 
+The metadata step is two passes for that reason: the label pass reads the
+product's own records before the issuer is known, and the narrative pass reads
+a filing, which only exists once the issuer is known. This file runs both
+rather than replacing them, because an order the test itself supplies proves
+nothing about the order the pipeline keeps.
+
 And when no name resolves, the run says so in those words: "we could not reach
 the SEC" is a different sentence from "we do not know whose filings to ask
 for", and a reader takes the first as a transient failure of ours.
@@ -55,19 +61,48 @@ def _job(**fields):
     return db, job
 
 
-def _label(status=RetrievalStatus.SUCCESS):
+# One drugsFDA application, which is where the sponsor's name is written.
+APPLICATION = {
+    "application_number": "NDA000007",
+    "sponsor_name": "ACME PHARMA",
+    "openfda": {"brand_name": ["CALDERON"], "generic_name": ["CALDERINOL"]},
+    "products": [{"brand_name": "CALDERON", "route": "ORAL", "dosage_form": "TABLET"}],
+    "submissions": [
+        {"submission_type": "ORIG", "submission_status": "AP",
+         "submission_status_date": "20151221"},
+    ],
+}
+
+
+def _label(status=RetrievalStatus.SUCCESS, results=(APPLICATION,)):
     return RetrievedSource(
         source_id=new_id(), source_type=SourceType.OPENFDA,
         url="https://example.invalid/openfda", retrieval_status=status,
+        metadata={"results": list(results)},
     )
+
+
+class _Narrator:
+    """Records every narrative document the metadata step reads."""
+
+    def __init__(self) -> None:
+        self.read: list[str] = []
+
+    async def extract_metadata(self, *, product, text, source_meta):
+        self.read.append(source_meta["url"])
+        return {"fields": []}
+
+    async def judge_profile_field(self, **_):
+        return {}
 
 
 def test_the_sponsor_is_known_before_the_cik_is_looked_up(monkeypatch, tmp_path):
     """The order is the claim: what `resolve_cik` is handed is what the label
-    step put on the job, not what the caller typed."""
+    pass read off the label, not what the caller typed."""
     _offline(monkeypatch)
     db, job = _job()
     orch = PipelineOrchestrator(db, file_store=LocalFileStore(str(tmp_path)))
+    orch.llm = _Narrator()
     order: list[str] = []
     asked: list[tuple] = []
 
@@ -79,13 +114,6 @@ def test_the_sponsor_is_known_before_the_cik_is_looked_up(monkeypatch, tmp_path)
         order.append("filings")
         return []
 
-    async def _metadata(self, job_, sources, parsed, options):
-        order.append("metadata")
-        # What `_extract_metadata` does with the label: the sponsor it names
-        # becomes the job's manufacturer.
-        job_.manufacturer = "Acme Pharma"
-        self.db.commit()
-
     async def _resolve_cik(ticker=None, company_name=None):
         order.append("identity")
         asked.append((ticker, company_name))
@@ -94,7 +122,6 @@ def test_the_sponsor_is_known_before_the_cik_is_looked_up(monkeypatch, tmp_path)
     monkeypatch.setattr(orch.fda, "retrieve", _fda)
     monkeypatch.setattr(orch.sec, "retrieve", _sec)
     monkeypatch.setattr(orch.sec, "resolve_cik", _resolve_cik)
-    monkeypatch.setattr(PipelineOrchestrator, "_extract_metadata", _metadata)
     for step in ("_judge_profile", "_quality_and_validation", "_completeness"):
         async def _skip(*_a, _step=step, **_kw):
             return None
@@ -108,11 +135,62 @@ def test_the_sponsor_is_known_before_the_cik_is_looked_up(monkeypatch, tmp_path)
 
     asyncio.run(orch.run_job(job.id))
 
-    assert order.index("label") < order.index("metadata") < order.index("identity")
-    assert order.index("identity") < order.index("filings")
-    assert asked == [(None, "Acme Pharma")]
+    assert order.index("label") < order.index("identity") < order.index("filings")
+    # The sponsor was never typed by the caller; it came off the label.
+    assert job.manufacturer == "ACME PHARMA"
+    assert asked == [(None, "ACME PHARMA")]
     assert job.cik == "0000000001"
     assert job.current_step == JobStep.READY_FOR_REVIEW.value
+
+
+def test_the_narrative_pass_reads_the_filings_and_not_the_label(monkeypatch, tmp_path):
+    """The second half of the metadata step runs after the filings arrive.
+
+    Both answers: the openFDA records the label pass reads are not handed to
+    the narrative model, and the filing that only exists after the issuer is
+    resolved is.
+    """
+    _offline(monkeypatch)
+    db, job = _job()
+    orch = PipelineOrchestrator(db, file_store=LocalFileStore(str(tmp_path)))
+    narrator = _Narrator()
+    orch.llm = narrator
+    filing = RetrievedSource(
+        source_id=new_id(), source_type=SourceType.SEC_FILING,
+        url="https://example.invalid/10q.htm", filing_type="10-Q",
+        retrieval_status=RetrievalStatus.SUCCESS,
+        raw_text="Calderon is supplied as an oral tablet.",
+    )
+
+    async def _fda(**_kw):
+        return [_label()]
+
+    async def _sec(**_kw):
+        return [filing]
+
+    async def _resolve_cik(ticker=None, company_name=None):
+        return "0000000001" if company_name else None
+
+    monkeypatch.setattr(orch.fda, "retrieve", _fda)
+    monkeypatch.setattr(orch.sec, "retrieve", _sec)
+    monkeypatch.setattr(orch.sec, "resolve_cik", _resolve_cik)
+    for step in ("_judge_profile", "_quality_and_validation", "_completeness"):
+        async def _skip(*_a, _step=step, **_kw):
+            return None
+        monkeypatch.setattr(PipelineOrchestrator, step, _skip)
+
+    async def _no_rows(*_a, **_kw):
+        return []
+    monkeypatch.setattr(PipelineOrchestrator, "_extract_revenue", _no_rows)
+    monkeypatch.setattr(PipelineOrchestrator, "_judge", _no_rows)
+    monkeypatch.setattr(orch, "_expand_aliases", lambda _job: _no_rows())
+
+    asyncio.run(orch.run_job(job.id))
+
+    assert narrator.read == [filing.url], (
+        "the narrative half of the metadata step is reachable only if it runs "
+        "after the filings are fetched"
+    )
 
 
 @pytest.mark.asyncio

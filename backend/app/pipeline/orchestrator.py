@@ -644,11 +644,16 @@ class PipelineOrchestrator:
                                 "transcripts": False}
             sources = await self._retrieve(job, characterisation)
             parsed = await self._parse(job, sources)
-            await self._extract_metadata(job, sources, parsed, options)
+            await self._label_metadata(job, sources, parsed, options)
             await self._identity(job)
             filings = await self._retrieve(job, {**options, "openfda": False})
+            filings_parsed = await self._parse(job, filings)
+            # The label pass reads openFDA and the narrative pass reads a
+            # filing, so the second half of the metadata step waits for the
+            # filings the first half runs in order to find.
+            await self._narrative_metadata(job, filings, filings_parsed, options)
             sources = list(sources) + list(filings)
-            parsed = {**parsed, **await self._parse(job, filings)}
+            parsed = {**parsed, **filings_parsed}
             if options.get("product_metadata", True):
                 await self._judge_profile(job)
             datapoint_rows = await self._extract_revenue(
@@ -978,7 +983,14 @@ class PipelineOrchestrator:
         self.db.commit()
         return parsed_map
 
-    async def _extract_metadata(self, job: DrugJobORM, sources: list, parsed: dict, options: dict) -> None:
+    async def _label_metadata(self, job: DrugJobORM, sources: list, parsed: dict, options: dict) -> None:
+        """What the product's own label and application records say about it.
+
+        Runs before the issuer is resolved, because a label names its sponsor
+        and the sponsor is what the filing index is asked for. It reads only
+        openFDA records; the filings this job has not fetched yet are read by
+        `_narrative_metadata`.
+        """
         if not options.get("product_metadata", True):
             return
         self._set_step(job, JobStep.EXTRACT_METADATA)
@@ -1280,11 +1292,43 @@ class PipelineOrchestrator:
                     row.approval_date = anchor
                     row.launch_anchor_type = "indication_approval_date"
 
-        # The product and family rows above are complete, so they are committed
-        # here rather than at the end of the step: a flushed row is a write
-        # transaction, SQLite admits one writer, and the model calls below take
-        # long enough that every other job's commit would time out against it.
+        if conflicts:
+            for name, rival in conflicts.items():
+                row = (
+                    self.db.query(DrugProfileFieldORM)
+                    .filter_by(job_id=job.id, field=name)
+                    .first()
+                )
+                if row and row.citation_json:
+                    row.citation_json = {**row.citation_json, "conflicting_source": rival}
         self.db.commit()
+        logger.info(
+            "label_metadata_extracted job_id=%s drug=%s fields=%s conflicts=%s",
+            job.id,
+            job.drug_name,
+            sorted(written),
+            sorted(conflicts),
+        )
+
+    async def _narrative_metadata(self, job: DrugJobORM, sources: list, parsed: dict, options: dict) -> None:
+        """What the first readable filing says about the product.
+
+        Runs after the filings are fetched, because that is when there is a
+        narrative source to read at all. What the label pass already wrote is
+        read back from the job's own profile rows rather than carried between
+        the two, so a field either pass filled is one this pass disagrees with
+        rather than overwrites.
+        """
+        if not options.get("product_metadata", True):
+            return
+        self._set_step(job, JobStep.EXTRACT_METADATA)
+
+        written: dict[str, str] = {
+            row.field: row.value
+            for row in self.db.query(DrugProfileFieldORM).filter_by(job_id=job.id).all()
+            if row.field and row.value
+        }
+        conflicts: dict[str, dict[str, Any]] = {}
 
         # LLM metadata from first successful narrative source
         for src in sources:
@@ -1366,7 +1410,7 @@ class PipelineOrchestrator:
                     row.citation_json = {**row.citation_json, "conflicting_source": rival}
         self.db.commit()
         logger.info(
-            "metadata_extracted job_id=%s drug=%s fields=%s conflicts=%s",
+            "narrative_metadata_extracted job_id=%s drug=%s fields=%s conflicts=%s",
             job.id,
             job.drug_name,
             sorted(written),

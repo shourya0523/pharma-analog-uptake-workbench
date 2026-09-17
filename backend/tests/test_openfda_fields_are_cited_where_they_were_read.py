@@ -115,7 +115,7 @@ def _fields(db, job):
 @pytest.mark.asyncio
 async def test_every_openfda_citation_names_a_key_the_record_states(tmp_path):
     db, orch, job, sources = _orchestrator(tmp_path, [ORIGINAL])
-    await orch._extract_metadata(job, sources, {}, {"product_metadata": True})
+    await orch._label_metadata(job, sources, {}, {"product_metadata": True})
 
     records = {"drugsfda": ORIGINAL, "label": LABEL_RECORD}
     rows = _fields(db, job)
@@ -135,7 +135,7 @@ async def test_every_openfda_citation_names_a_key_the_record_states(tmp_path):
 @pytest.mark.asyncio
 async def test_the_route_read_is_the_applications_own_and_the_other_is_kept(tmp_path):
     db, orch, job, sources = _orchestrator(tmp_path, [LINE_EXTENSION])
-    await orch._extract_metadata(job, sources, {}, {"product_metadata": True})
+    await orch._label_metadata(job, sources, {}, {"product_metadata": True})
 
     roa = _fields(db, job)["roa"]
     assert roa.value == "INTRAVENOUS"
@@ -151,7 +151,7 @@ async def test_the_approval_is_the_earliest_across_every_matching_application(tm
         directory = tmp_path / str(n)
         directory.mkdir()
         db, orch, job, sources = _orchestrator(directory, order)
-        await orch._extract_metadata(job, sources, {}, {"product_metadata": True})
+        await orch._label_metadata(job, sources, {}, {"product_metadata": True})
 
         rows = _fields(db, job)
         approval = rows["fda_approval_date"]
@@ -170,7 +170,7 @@ async def test_the_approval_is_the_earliest_across_every_matching_application(tm
 async def test_the_canonical_row_and_every_indication_carry_the_launch_anchor(tmp_path):
     """The date is on one record and the indications on the other."""
     db, orch, job, sources = _orchestrator(tmp_path, [ORIGINAL])
-    await orch._extract_metadata(job, sources, {}, {"product_metadata": True})
+    await orch._label_metadata(job, sources, {}, {"product_metadata": True})
 
     product = db.query(CanonicalProductORM).filter_by(id=job.product_id).one()
     assert product.initial_approval_date == date(2015, 12, 21)
@@ -185,7 +185,7 @@ async def test_the_canonical_row_and_every_indication_carry_the_launch_anchor(tm
 async def test_an_application_with_no_approval_leaves_the_anchor_unset(tmp_path):
     undated = {**ORIGINAL, "submissions": []}
     db, orch, job, sources = _orchestrator(tmp_path, [undated])
-    await orch._extract_metadata(job, sources, {}, {"product_metadata": True})
+    await orch._label_metadata(job, sources, {}, {"product_metadata": True})
 
     product = db.query(CanonicalProductORM).filter_by(id=job.product_id).one()
     assert product.initial_approval_date is None
@@ -197,7 +197,7 @@ async def test_an_application_with_no_approval_leaves_the_anchor_unset(tmp_path)
 async def test_one_job_files_one_canonical_product(tmp_path):
     """The label record states no formulation, so it cannot key the product."""
     db, orch, job, sources = _orchestrator(tmp_path, [ORIGINAL])
-    await orch._extract_metadata(job, sources, {}, {"product_metadata": True})
+    await orch._label_metadata(job, sources, {}, {"product_metadata": True})
 
     products = db.query(CanonicalProductORM).all()
     assert [p.id for p in products] == [job.product_id]
@@ -206,7 +206,7 @@ async def test_one_job_files_one_canonical_product(tmp_path):
 @pytest.mark.asyncio
 async def test_the_area_groups_where_the_indication_does_not(tmp_path):
     db, orch, job, sources = _orchestrator(tmp_path, [ORIGINAL])
-    await orch._extract_metadata(job, sources, {}, {"product_metadata": True})
+    await orch._label_metadata(job, sources, {}, {"product_metadata": True})
 
     rows = _fields(db, job)
     assert rows["indication"].value.startswith("Calderon's disease (CD)")
