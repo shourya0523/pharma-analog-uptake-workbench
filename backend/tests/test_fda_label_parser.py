@@ -191,9 +191,8 @@ def test_one_labeler_answers_who_sells_it_and_several_do_not():
 def test_the_indication_readings_come_from_the_label_in_hand():
     """Both answers: a label that states an indication, and one that does not.
 
-    The readings used to be computed by the caller and threaded back in. A
-    caller that still passes them gets the same mapping, because they can only
-    have come from the same label.
+    The readings used to be computed by the caller and threaded back in, which
+    is a value the caller could only arrive at from the same label.
     """
     record = dict(
         DRUGSFDA,
@@ -210,15 +209,11 @@ def test_the_indication_readings_come_from_the_label_in_hand():
     assert fields["therapeutic_area"].value == "calderon's disease"
     assert fields["indication"].path == label.path("indications")
 
-    # The names this function used to be given them under are accepted and
-    # ignored, so a caller that has not stopped passing them reads the same.
-    assert profile_fields(
-        record,
-        label,
-        indications=(),
-        indication_value="something else",
-        therapeutic_area_value="something else",
-    ) == fields
+    # And a label that states none says so, rather than saying nothing.
+    silent = {key: value for key, value in DRUGSFDA.items() if key != "indications_and_usage"}
+    quiet = profile_fields(silent, parse_label_record(silent))
+    assert quiet["indication"].value is None
+    assert quiet["therapeutic_area"].value is None
 
     silent = parse_label_record(DRUGSFDA)
     quiet = profile_fields(DRUGSFDA, silent)

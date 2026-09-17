@@ -88,11 +88,7 @@ from app.parsing.fda_label import (
     parse_label_record,
     profile_fields,
 )
-from app.parsing.indications import (
-    parse_indications,
-    therapeutic_area,
-    therapeutic_areas,
-)
+from app.parsing.indications import parse_indications, therapeutic_area
 from app.parsing.labels import FLAG_COMBINED, QUESTION_FLAGS, footnotes_in
 from app.parsing.periods import (
     detect_period_context,
@@ -1088,10 +1084,6 @@ class PipelineOrchestrator:
                 if first_label.indications_text
                 else []
             )
-            indication_value = (
-                "; ".join(dict.fromkeys(ind.disease for ind in parsed_indications if ind.disease))
-                or None
-            )
             # A brand with more than one application has more than one
             # approval, and the earliest ORIG is the one the product launched
             # on; openFDA documents no order, so the first result is not it.
@@ -1100,13 +1092,13 @@ class PipelineOrchestrator:
             application_numbers = [
                 str(r.get("application_number")) for r, _ in matches if r.get("application_number")
             ]
+            # The indication readings are the label's, and `profile_fields`
+            # has the label: a value computed from it here can only be the
+            # same value. `parsed_indications` stays because the indication
+            # rows below are written from it.
             mapping = profile_fields(
                 selected,
                 first_label,
-                indications=parsed_indications,
-                indication_value=indication_value,
-                therapeutic_area_value="; ".join(therapeutic_areas(parsed_indications))
-                or None,
                 moa_value=moa_value,
                 approval=approval,
                 approval_path=approval_field,

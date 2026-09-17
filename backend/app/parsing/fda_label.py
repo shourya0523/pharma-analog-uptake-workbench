@@ -325,7 +325,6 @@ def profile_fields(
     moa_value: str | None = None,
     approval: str | None = None,
     approval_path: str | None = None,
-    **_read_here: Any,
 ) -> dict[str, SourcedValue]:
     """The profile fields one openFDA record supports, each with its own path.
 
@@ -342,10 +341,6 @@ def profile_fields(
     contamination check that lives in `quality/`. ``approval`` comes from the
     caller too: the earliest approval is a fact about every application the
     brand matched, and only one record of them is here.
-
-    ``_read_here`` accepts and ignores the names this function used to be
-    given the indication readings under, so a caller that has not stopped
-    passing them gets the same values rather than an error.
     """
     block = openfda_block(record)
     indications = parse_indications(label.indications_text) if label.indications_text else []
