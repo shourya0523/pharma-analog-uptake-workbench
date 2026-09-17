@@ -157,7 +157,8 @@ def names_a_competing_product(
 
 
 def peer_product_names(
-    labels: Iterable[str],
+    tables: Iterable[list[list[str]]] | None,
+    *,
     product: str,
     generic: str | None = None,
     extra_aliases: list[str] | None = None,
@@ -169,8 +170,22 @@ def peer_product_names(
     Nothing here knows what any product is called, which is the point: a rule
     keyed to the brands we happen to hold refuses a quote naming one of those
     and waves the identical quote through for every product we have not seen.
+
+    Takes the document's tables rather than its row labels, because reading
+    the labels off a document and deciding which of them are other products
+    are two halves of one question, and asking them separately meant every
+    caller wrote both halves.
     """
+    # Imported here rather than at the top: `parsing/tables.py` reads
+    # `names_a_competing_product` from this module, so the dependency between
+    # the two already runs the other way and a module-level import closes it
+    # into a cycle.
+    from app.parsing.tables import sibling_row_labels
+
     own = {alias.lower() for alias in product_aliases(product, generic, extra=extra_aliases)}
+    labels = sibling_row_labels(
+        tables, product=product, generic=generic, extra_aliases=extra_aliases
+    )
     return sorted(_own_rows(labels, own))
 
 

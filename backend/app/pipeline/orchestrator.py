@@ -94,7 +94,6 @@ from app.parsing.periods import (
     normalize_period,
     quarters_reported_in,
 )
-from app.parsing.tables import sibling_row_labels
 from app.parsing.xbrl import parse_calculation, parse_facts, unsettled_elements
 from app.pipeline.series_identity import (
     CLAIM_STRENGTH,
@@ -2230,11 +2229,8 @@ class PipelineOrchestrator:
             # confused with ours is read off the document rather than held in
             # a catalogue of brands here.
             peers = peer_product_names(
-                sibling_row_labels(
-                    doc.tables, product=job.drug_name,
-                    generic=job.generic_name, extra_aliases=extra,
-                ),
-                job.drug_name, job.generic_name, extra,
+                doc.tables, product=job.drug_name,
+                generic=job.generic_name, extra_aliases=extra,
             )
             table_rows, table_dropped = filter_revenue_candidates(
                 fingerprinted,
@@ -2587,6 +2583,7 @@ class PipelineOrchestrator:
             return
         settings = get_settings()
         aliases = self._job_aliases or merge_aliases(job.drug_name, job.generic_name)
+        peers_by_source: dict[str | None, list[str]] = {}
         for row in rows:
             label_flags = [f for f in (row.issue_flags or []) if f in LABEL_FLAGS]
             residue = (row.citation_json or {}).get("label_residue") or ""
@@ -2614,13 +2611,14 @@ class PipelineOrchestrator:
                 # reader carried out on the end of the quote.
                 candidate["footnote"] = " ".join(notes)
             doc = parsed.get(row.source_id or "")
-            peers = peer_product_names(
-                sibling_row_labels(
+            # Every row of one document has the same product list, and a job
+            # reads several rows out of each document it judges.
+            if row.source_id not in peers_by_source:
+                peers_by_source[row.source_id] = peer_product_names(
                     getattr(doc, "tables", None), product=job.drug_name,
                     generic=job.generic_name, extra_aliases=aliases,
-                ),
-                job.drug_name, job.generic_name, aliases,
-            )
+                )
+            peers = peers_by_source[row.source_id]
             context = row.source_quote or ""
             if residue:
                 # The judge is shown what the label said that the reader could

@@ -276,3 +276,82 @@ async def test_a_flag_is_a_code_and_the_model_s_reasoning_is_a_note(tmp_path, mo
 
     assert row.issue_flags == ["hard_veto:quote_states_a_different_period"]
     assert row.reviewer_notes == reasoning
+
+
+@pytest.mark.asyncio
+async def test_the_product_list_is_read_once_per_document(tmp_path, monkeypatch):
+    """Every row of one document has the same product list.
+
+    A job reads several figures out of each filing it judges, and the list was
+    computed again for each of them - the same tables scanned, the same aliases
+    expanded.
+
+    Both answers: three rows of one document ask once, and a row of a second
+    document asks again, because that filing's list is its own.
+    """
+    _db, orch, job, row, parsed = _orchestrator(
+        tmp_path, quote="Calderon XR 34,974 22,209")
+    asked: list[object] = []
+    real = orchestrator_module.peer_product_names
+
+    def counting(tables, **kwargs):
+        asked.append(tables)
+        return real(tables, **kwargs)
+
+    monkeypatch.setattr(orchestrator_module, "peer_product_names", counting)
+
+    async def asked_nobody(**_kwargs):
+        # What the client answers where no key is configured; this test is
+        # about how often the product list is read, not about the judge.
+        return {}
+
+    orch.llm.judge_with_search = asked_nobody
+
+    async def supported(**_kwargs):
+        return {"support_classification": "supported",
+                "validation_status": "auto_pass", "issues": []}
+
+    orch.llm.judge = supported
+
+    async def settles_nothing(**_kwargs):
+        # The stage reconciles what it judged, and with more than one row that
+        # asks a model too. The ranking decides without it.
+        return {"resolved": [], "conflicts": []}
+
+    orch.llm.reconcile = settles_nothing
+
+    same = [row, _like(row, "dp-2"), _like(row, "dp-3")]
+    await orch._judge(job, same, [], parsed, {})
+    assert len(asked) == 1
+
+    other = _like(row, "dp-4", source_id="s2")
+    parsed["s2"] = ParsedDocument(
+        source_id="s2", text_blocks=[row.source_quote], tables=[SCHEDULE],
+        parsing_status=ParsingStatus.SUCCESS,
+    )
+    await orch._judge(job, [*same, other], [], parsed, {})
+    assert len(asked) == 3, "one per document, each time the stage runs"
+
+
+def _like(row, new_id: str, *, source_id: str | None = None):
+    """Another reading of the same figure, from the same document by default."""
+    return DatapointORM(
+        id=new_id,
+        job_id=row.job_id,
+        source_id=source_id or row.source_id,
+        period=row.period,
+        period_type=row.period_type,
+        value_reported=row.value_reported,
+        value_normalized_usd_millions=row.value_normalized_usd_millions,
+        currency=row.currency,
+        unit=row.unit,
+        revenue_scope=row.revenue_scope,
+        geography=row.geography,
+        extraction_method=row.extraction_method,
+        confidence_score=row.confidence_score,
+        source_url=row.source_url,
+        source_quote=row.source_quote,
+        validation_status=ValidationStatus.PENDING.value,
+        citation_json=dict(row.citation_json or {}),
+        issue_flags=[],
+    )
