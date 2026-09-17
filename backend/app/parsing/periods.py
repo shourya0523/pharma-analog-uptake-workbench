@@ -153,12 +153,10 @@ _SPAN_PHRASE = (
     r"(?:three|six|nine|twelve)(?:\s+and\s+(?:three|six|nine|twelve))*"
     r"\s+months?|(?:fiscal\s+)?years?"
 )
-_PERIOD_PHRASE_RE = re.compile(rf"\b({_SPAN_PHRASE})\s+ended\b", re.IGNORECASE)
-# The same phrase as a footnote writes it. A note says "the quarters ended
-# March 31, 2026 and June 30, 2026" where the statements above it say "the
-# three months ended": the span word is the only difference, and one heading
-# can carry several end dates. Reading the document's own period does not use
-# this form - a filing states its period in the statements, not in a note.
+# A footnote writes the same phrase with one more span word: a note says "the
+# quarters ended March 31, 2026 and June 30, 2026" where the statements above
+# it say "the three months ended". One pattern reads both, so the grammar this
+# module knows is one thing rather than two spellings of it.
 _NAMED_PHRASE_RE = re.compile(rf"\b({_SPAN_PHRASE}|quarters?)\s+ended\b", re.IGNORECASE)
 _SPAN_WORD_RE = re.compile(r"three|six|nine|twelve", re.IGNORECASE)
 _MONTH_DAY_RE = re.compile(
@@ -311,7 +309,7 @@ def detect_period_context(text: str) -> PeriodContext | None:
     """Infer the document's own reporting period from the way it names one."""
     text = text or ""
     counts: Counter[tuple[int, int, int]] = Counter()
-    for match in _PERIOD_PHRASE_RE.finditer(text):
+    for match in _NAMED_PHRASE_RE.finditer(text):
         spans = [
             MONTH_WORDS[word.lower()]
             for word in _SPAN_WORD_RE.findall(match.group(1))
