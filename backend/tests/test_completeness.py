@@ -2,7 +2,7 @@ from app.quality.candidate_filters import (
     filter_revenue_candidates,
     is_placeholder_period,
 )
-from app.quality.completeness import coverage_pct, quarter_labels
+from app.quality.completeness import quarter_labels
 
 
 def test_placeholder_period_detects_prompt_skeleton_echo():
@@ -42,17 +42,3 @@ def test_quarter_labels_collapse_spellings_of_one_quarter():
     assert quarter_labels(["2024", "2024Q1"]) == {"2024Q1"}
     assert quarter_labels([]) == set()
     assert quarter_labels(None) == set()
-
-
-def test_coverage_is_the_share_of_expected_quarters_that_hold_a_figure():
-    expected = {"2024Q1", "2024Q2", "2024Q3", "2024Q4"}
-    assert coverage_pct(held={"2024Q1", "2024Q2", "2024Q3"}, expected=expected) == 75.0
-    assert coverage_pct(held={"2024Q1"}, expected=expected) == 25.0
-    assert coverage_pct(held=expected, expected=expected) == 100.0
-
-
-def test_coverage_is_zero_when_nothing_is_published():
-    # The reading this replaces: a series with nothing in it read 100%,
-    # because the denominator was the gaps the pipeline had itself noticed.
-    assert coverage_pct(held=set(), expected={"2024Q1", "2024Q2"}) == 0.0
-    assert coverage_pct(held=set(), expected=set()) == 0.0

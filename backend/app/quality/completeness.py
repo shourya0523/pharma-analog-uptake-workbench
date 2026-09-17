@@ -60,18 +60,6 @@ def quarters_the_run_asked_for(job: DrugJobORM) -> set[str]:
     return set(quarters_reported_in(since, until))
 
 
-def coverage_pct(*, held: set[str], expected: set[str]) -> float:
-    """The share of the expected quarters that hold a published figure.
-
-    Only the quarters in ``expected`` are counted on either side, so a
-    quarter answered outside the window raises nothing and the ratio cannot
-    exceed 1 without a clamp standing in for that.
-    """
-    if not expected:
-        return 0.0
-    return round(100 * len(held & expected) / len(expected), 1)
-
-
 class Completeness(NamedTuple):
     """What the recount found, so a caller can report it without recounting."""
 
@@ -90,10 +78,14 @@ def refresh_completeness(db: Session, job: DrugJobORM) -> Completeness:
     pipeline had itself recorded let a product whose gaps it never noticed
     read as complete, which is the reading a blank series got.
 
-    It is a fraction of the question the run asked, so it compares across
-    products a run covers and not across runs that declared different
-    windows. A run that declared no window asked nothing in particular, and
-    the denominator is then what the job turned out to hold and to miss.
+    The denominator is every quarter the run asked about, every quarter it
+    answered and every gap it recorded. A quarter is in it for any of those
+    three reasons, so a figure the run found outside its own window is not
+    thrown away, and a gap the pipeline noticed is a quarter it knows it did
+    not answer wherever that quarter sits. The two numbers a reader sees side
+    by side - the quarters held and the percentage - then come from one set.
+    A run that declared no window asked nothing in particular, and what it
+    holds and misses is the whole question.
 
     Both numbers are functions of rows that review changes: entering a value
     for a gap adds a quarter and closes the gap it came from, and rejecting a
@@ -121,9 +113,9 @@ def refresh_completeness(db: Session, job: DrugJobORM) -> Completeness:
     ]
     held = quarter_labels(period for (period,) in published)
     missing = quarter_labels(row.period for row in open_gaps)
-    expected = quarters_the_run_asked_for(job) or (held | missing)
+    expected = quarters_the_run_asked_for(job) | held | missing
     job.unresolved_count = len(open_gaps)
-    job.completeness_pct = coverage_pct(held=held, expected=expected)
+    job.completeness_pct = round(100 * len(held) / len(expected), 1) if expected else 0.0
     return Completeness(job.completeness_pct, len(held), len(missing))
 
 

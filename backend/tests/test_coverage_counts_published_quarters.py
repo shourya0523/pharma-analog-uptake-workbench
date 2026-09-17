@@ -149,13 +149,14 @@ def test_a_longer_span_is_not_a_quarter(factory):
     assert counted.pct == 0.0
 
 
-def test_a_gap_outside_the_window_does_not_lower_the_window_s_coverage(factory):
-    """Coverage is a fraction of the window, and counts nothing else.
+def test_a_gap_the_pipeline_recorded_is_a_quarter_it_did_not_answer(factory):
+    """A recorded gap is in the denominator wherever the quarter sits.
 
-    The gaps the pipeline records reach back before the window whenever the
-    issuer filed nothing at all, and counted into the denominator they made
-    the longest unbroken series in a run read lower than a two-quarter one.
-    They are still reported, as gaps.
+    The gaps the pipeline records reach outside the window whenever the
+    issuer filed nothing at all. They are quarters it looked for and has no
+    figure for, which is what the denominator counts, so a run that answered
+    every quarter it asked for and recorded one gap beyond them does not read
+    as having answered everything.
     """
     with factory() as db:
         job = _job(db, "job-gap")
@@ -174,11 +175,16 @@ def test_a_gap_outside_the_window_does_not_lower_the_window_s_coverage(factory):
         )
         counted = refresh_completeness(db, job)
     assert counted.gaps == 1
-    assert counted.pct == 100.0
+    # Five quarters answered, one gap: six quarters known about.
+    assert counted.pct == round(100 * 5 / 6, 1)
 
 
-def test_a_quarter_answered_outside_the_window_is_held_but_not_coverage(factory):
-    """It is reported as a quarter held; it cannot raise coverage past full."""
+def test_a_quarter_answered_outside_the_window_counts_on_both_sides(factory):
+    """A quarter the run answered is one it knows about, window or not.
+
+    It is reported as a quarter held and it is in the denominator too, so the
+    ratio cannot exceed 1 without a clamp standing in for that.
+    """
     with factory() as db:
         job = _job(db, "job-outside")
         for index, period in enumerate((*WINDOW_QUARTERS, OUTSIDE)):
@@ -211,3 +217,36 @@ def test_a_run_that_declared_no_window_counts_what_it_holds_and_misses(factory):
         counted = refresh_completeness(db, job)
     assert quarters_the_run_asked_for(job) == set()
     assert counted.pct == 50.0
+
+
+def test_the_denominator_is_every_quarter_the_run_knows_about(factory):
+    """The two numbers on the card come from one set of quarters.
+
+    The quarters held were counted over everything the job answered and the
+    percentage over the window alone, so a run that reached back past its own
+    window reported a count and a percentage from two different universes.
+
+    Both answers: a job whose answers all sit inside the window reads exactly
+    its share of the window, and a job that answered quarters beyond it has
+    those quarters on both sides of the ratio rather than on neither.
+    """
+    inside = WINDOW_QUARTERS[:3]
+    beyond = ("2025Q3", "2025Q4")
+    with factory() as db:
+        job = _job(db, "job-inside")
+        for index, period in enumerate(inside):
+            _row(db, "job-inside", f"in-{index}", period, ValidationStatus.AUTO_PASS.value)
+        within = refresh_completeness(db, job)
+
+        reaching = _job(db, "job-beyond")
+        for index, period in enumerate((*inside, *beyond)):
+            _row(db, "job-beyond", f"be-{index}", period, ValidationStatus.AUTO_PASS.value)
+        outside = refresh_completeness(db, reaching)
+
+    assert within.quarters == len(inside)
+    assert within.pct == round(100 * len(inside) / len(WINDOW_QUARTERS), 1)
+
+    assert outside.quarters == len(inside) + len(beyond)
+    known = len(WINDOW_QUARTERS) + len(beyond)
+    assert outside.pct == round(100 * outside.quarters / known, 1)
+    assert outside.pct > within.pct, "quarters the run answered may not count for nothing"
