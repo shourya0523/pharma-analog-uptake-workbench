@@ -14,13 +14,16 @@ logger = logging.getLogger(__name__)
 def search_queries(brand: str, generic: str | None = None) -> list[tuple[str, str]]:
     """drugsFDA searches to try, in order, as (match_scope, search expression).
 
-    Brand name is queried on its own first. Searching brand OR generic together
-    returns every application for the molecule ordered by application number, which
-    can push the requested product out of the result window entirely - a search for
-    a brand comes back as the molecule's generic applications with the brand itself
-    nowhere in them, or as competitors' brands that share the molecule. The generic
-    query is only a fallback for molecule context, and is reported as such so its
-    fields are not mistaken for the product's.
+    Brand name is queried on its own first, because it is the only query whose
+    every result is the requested product. A brand-OR-generic query returns
+    every application for the molecule - the generic filers' and the
+    competitors' brands that share it - and openFDA documents no result order,
+    so there is no position at which the requested product can be relied on to
+    appear. It may not be in the returned window at all.
+
+    The generic query is therefore a fallback for molecule context only, and
+    carries its own ``match_scope`` so a caller cannot mistake a molecule-wide
+    field for the product's own.
     """
     queries = []
     if brand and brand.strip():

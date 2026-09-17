@@ -485,12 +485,16 @@ class PipelineOrchestrator:
     def _aliases_already_expanded(self, job: DrugJobORM) -> list[str] | None:
         """The answer a job that asked this same question already recorded.
 
-        Aliases are a property of the product, not of the run: every job in a
-        sweep bought its own copy from the model before it could read a single
-        filing, and in one run that was the longest stage of the job while
-        retrieval took two seconds. This is a cache in front of a procedure
-        that still works without it - delete every stored answer and the next
-        job asks the model again, at one call.
+        Aliases are a property of the product, not of the run, so a second
+        job for the same product asking the same question has already been
+        answered. This is a cache in front of a procedure that still works
+        without it: delete every stored answer and the next job asks the model
+        again, at one call.
+
+        The question is `ALIAS_QUESTION`, not the product name alone. A stored
+        answer may only be reused for a job that asked the same thing - a
+        negative recorded against one manufacturer is not an answer for
+        another's.
         """
         query = self.db.query(DrugProfileFieldORM).join(
             DrugJobORM, DrugJobORM.id == DrugProfileFieldORM.job_id

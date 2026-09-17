@@ -37,9 +37,9 @@ from app.parsing.xbrl import (
     product_facts,
 )
 
-# A tagged fact is the filer's own assertion, checked by the filer's auditors
-# and machine-readable. It is a better claim than a number read off a page, and
-# is scored above the table reader's 0.75 for that reason.
+# A tagged fact is the filer's own assertion: machine-readable, dimensioned to
+# the product by the filer, and audited. It is a stronger claim than a number
+# read off a rendered page, and ranks above the table reader for that reason.
 TAGGED_CONFIDENCE = 0.9
 
 
