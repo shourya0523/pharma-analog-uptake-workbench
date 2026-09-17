@@ -29,30 +29,69 @@ runs.
 
 ---
 
-## 0. Before anything is fixed: measure the configuration people actually use
+## 0. Before anything is fixed: turn layer 2 on, and price its judge separately
+
+Two switches have been treated as one. They are not: one restores a whole
+layer of the product at no model cost, the other adds a per-field search call
+on top of it. Sequence them, and measure between.
+
+### 0a. `openfda` and `product_metadata` should never have been off
 
 `ExtractionOptions` defaults `openfda: True` and `product_metadata: True`. The
 UI sends `{}` and gets them. **Every case file turns them off** - all 372 gold
 cases, all 24 shapes cases, all 15 unseen, all 8 sample, all 7 foreign. So
-every number this project has produced describes a pipeline nobody runs, and
-the ten empty tables (indications, peak sales, uptake, competitive snapshots,
-lineage) are empty in measurement rather than in production.
+every number this project has produced describes a pipeline nobody runs.
 
-Two config flags are also overridden in the deployed environment, both the
-wrong way:
+The effect is not subtle. Across every run database this session produced -
+19 of them, 279 jobs - the only profile field ever written is `llm_aliases`:
+
+    ./.venv/bin/python -c "import sqlite3,glob,os;[print(os.path.basename(os.path.dirname(p)),sqlite3.connect(p).execute('select field,count(*) from drug_profile_fields group by field').fetchall()) for p in sorted(glob.glob('<scratchpad>/*/workbench.db'))]"
+    # every run: [('llm_aliases', N)]
+
+`llm_aliases` is an internal search-term payload, not a product claim -
+`quality/profile.py:127` skips it from judgment for that reason. So layer 2,
+the characterisation the analog work compares products on, has never produced
+a single field in any measured run. The ten empty tables (indications, peak
+sales, uptake, competitive snapshots, lineage) are empty in measurement rather
+than in production.
+
+`openfda` costs one API call per job and writes up to eleven fields from the
+label alone (`orchestrator.py:770`, the `mapping` dict, plus
+`fda_approval_date`). There is no cost argument for leaving it off.
+
+**Do first:** turn both options on in the case files, re-run, and report it as
+a second configuration rather than as a regression or an improvement. Until
+that exists there is no baseline for anything below, and no measurement of
+layers 2 and 3 at all.
+
+### 0b. The profile judge is a separate decision with a real price
+
+    enable_profile_judge  default True  ->  false in the deployed env
+                                            (leaves quality/profile.py,
+                                            233 lines, entirely unreached)
+
+`_judge_profile` (`orchestrator.py:1033`) makes **one web-search-backed LLM
+call per profile field per job**, uncapped: `profile_judge_max_fields: 0` and
+`select_profile_fields_for_judgment` documents `<= 0 or None means no cap`
+(`quality/profile.py:137`). With 0a off there is nothing to judge but
+`llm_aliases`, which is skipped - which is why turning the judge on today does
+nothing at all. With 0a on it becomes eleven-plus search calls per job on top
+of everything else.
+
+So: turn it on **after** 0a and measure it as its own configuration. The
+question it has to answer is whether it corrects fields that were wrong, at a
+rate that justifies the calls - and that question cannot even be asked until
+0a has written some fields for it to judge. If the rate is low, the cap exists
+(`profile_judge_max_fields`) and `PRIORITY_JUDGE_FIELDS` already orders the
+fields worth spending on.
+
+### 0c. One more env override, the other way
 
     sec_include_8k        default False  ->  true   (fetches cover pages
                                                      sources.py:10 calls worthless;
                                                      14 of 28 documents in a live repro)
-    enable_profile_judge  default True   ->  false  (leaves quality/profile.py,
-                                                     233 lines, entirely unreached)
 
-**Do first:** turn the options on in the case files, unset the two env
-overrides, re-run, and report the result as a second configuration rather than
-as a regression or an improvement. Until that exists there is no baseline for
-anything below.
-
----
+Unset it with 0a, in the same re-run.
 
 ## 1. Wrong figures published
 
@@ -354,9 +393,11 @@ it.
 ## Order of work
 
 Each step is a commit, and each is measured against the configuration from
-item 0 rather than against the numbers above.
+item 0a rather than against the numbers above.
 
-1. **Item 0** - the honest baseline. Nothing below means anything without it.
+1. **0a and 0c** - the honest baseline, with layer 2 producing fields for the
+   first time. Nothing below means anything without it. **0b** follows as its
+   own measurement, once there are fields to judge.
 2. **4a** - `periods.py:330`. One line, the guard already exists in the file.
 3. **3a, 3b, 3c** - the three vetoes. 212 + 27 + 2 sole-blocked rows. 3b is a
    regression I introduced this session.
