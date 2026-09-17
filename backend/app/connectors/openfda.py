@@ -6,6 +6,7 @@ import logging
 import httpx
 
 from app.domain.models import RetrievalStatus, RetrievedSource, SourceType, new_id
+from app.parsing.fda_label import brand_name_paths
 from app.storage.filestore import FileStore
 
 logger = logging.getLogger(__name__)
@@ -17,18 +18,34 @@ logger = logging.getLogger(__name__)
 # marketed listing - an older or a discontinued one - has no `openfda` block at
 # all and only the second path answers, so a brand query that names one path is
 # a brand query that cannot see those products.
-BRAND_SEARCH_PATHS = ("openfda.brand_name", "products.brand_name")
+#
+# The same paths the record reader reads, in query syntax: the search grammar
+# names an array member without the `[]` the read syntax uses. Derived, so a
+# path added to the reader is a path this asks on.
+BRAND_SEARCH_PATHS = tuple(path.replace("[]", "") for path in brand_name_paths())
 
 # The molecule, for context only, and on a path of its own so a caller can tell
 # a molecule-wide answer from the product's own.
 GENERIC_SEARCH_PATH = "openfda.generic_name"
 
+# What a search matched on. The brand answer is the product's own; the molecule
+# answer is the whole molecule's, and a caller that cannot tell them apart
+# reads a competitor's application as this product's.
+BRAND_SCOPE = "brand"
+GENERIC_SCOPE = "generic"
+
 
 def search_queries(brand: str, generic: str | None = None) -> list[tuple[str, str]]:
     """drugsFDA searches to try, in order, as (match_scope, search expression).
 
-    Brand name is queried on its own first, on every path that states one,
-    because those are the only queries whose every result is the requested
+    One brand query names every path that states a brand, joined by openFDA's
+    own ``OR``: an application carries its brands in the ``openfda`` block and
+    again in its own ``products[]`` array, and one path can hold an application
+    the other does not, so a brand query naming one path is a brand query that
+    cannot see the rest. The server unions them, which is what asking each path
+    in turn was doing by hand.
+
+    Brand comes first because a brand query's every result is the requested
     product. A brand-OR-generic query returns every application for the
     molecule - the generic filers' and the competitors' brands that share it -
     and openFDA documents no result order, so there is no position at which the
@@ -41,16 +58,23 @@ def search_queries(brand: str, generic: str | None = None) -> list[tuple[str, st
     """
     queries = []
     if brand and brand.strip():
-        queries += [(f"brand:{path}", f'{path}:"{brand.strip()}"') for path in BRAND_SEARCH_PATHS]
+        term = brand.strip()
+        queries.append(
+            (BRAND_SCOPE, "+OR+".join(f'{path}:"{term}"' for path in BRAND_SEARCH_PATHS))
+        )
     if generic and generic.strip():
-        queries.append(("generic", f'{GENERIC_SEARCH_PATH}:"{generic.strip()}"'))
+        queries.append((GENERIC_SCOPE, f'{GENERIC_SEARCH_PATH}:"{generic.strip()}"'))
     return queries
 
 
 class OpenFDAConnector:
     BASE = "https://api.fda.gov/drug/drugsfda.json"
     LABEL_BASE = "https://api.fda.gov/drug/label.json"
-    LIMIT = 10
+    # The result window one search returns. It bounds the brand answer as a
+    # whole, because the paths are unioned by the server rather than asked one
+    # at a time - so it has to be wide enough for every application a brand has
+    # on either path, not for one path's share of them.
+    LIMIT = 20
 
     def __init__(self, file_store: FileStore) -> None:
         self.file_store = file_store
@@ -79,41 +103,20 @@ class OpenFDAConnector:
             data: dict | None = None
             match_scope: str | None = None
             matched_search: str | None = None
-            # Every brand path is asked and their answers are unioned: a brand
-            # query returns only that brand, and the paths do not return the
-            # same applications - one path can hold an application the other
-            # does not, so stopping at the first path that answers is a brand
-            # query that cannot see the rest. The molecule query stays a
-            # fallback for when no brand path answered at all, never an
-            # addition, because its results are the whole molecule's.
-            merged: dict[str, dict] = {}
-            scopes: list[str] = []
-            searches: list[str] = []
-
-            async def collect(client, scope: str, search: str) -> int:
-                results = await self._search(client, scope, search, brand=brand)
-                for index, result in enumerate(results):
-                    key = str(result.get("application_number") or f"{scope}:{index}")
-                    merged.setdefault(key, result)
-                if results:
-                    scopes.append(scope)
-                    searches.append(search)
-                return len(results)
-
-            brand_queries = [pair for pair in queries if pair[0].startswith("brand")]
-            molecule_queries = [pair for pair in queries if not pair[0].startswith("brand")]
+            # The queries are tried in order and the first that answers is the
+            # answer. The molecule query is the last of them, so it is reached
+            # only when the brand query found nothing at all - its results are
+            # the whole molecule's, and added to a brand answer they would
+            # widen it.
             async with httpx.AsyncClient(timeout=30) as client:
-                for scope, search in brand_queries:
-                    await collect(client, scope, search)
-                if not merged:
-                    for scope, search in molecule_queries:
-                        if await collect(client, scope, search):
-                            break
-                if merged:
-                    url = f"{self.BASE}?search={searches[0]}&limit={self.LIMIT}"
-                    data = {"results": list(merged.values())}
-                    match_scope = " ".join(scopes)
-                    matched_search = " ".join(searches)
+                for scope, search in queries:
+                    results = await self._search(client, scope, search, brand=brand)
+                    if results:
+                        url = f"{self.BASE}?search={search}&limit={self.LIMIT}"
+                        data = {"results": results}
+                        match_scope = scope
+                        matched_search = search
+                        break
 
                 if data is None or match_scope is None:
                     return [
@@ -144,11 +147,7 @@ class OpenFDAConnector:
                         "match_scope": match_scope,
                         "search": matched_search,
                     },
-                    notes=(
-                        None
-                        if match_scope.startswith("brand")
-                        else "openfda_generic_fallback"
-                    ),
+                    notes=None if match_scope == BRAND_SCOPE else "openfda_generic_fallback",
                 )
             ]
             application_numbers = sorted(

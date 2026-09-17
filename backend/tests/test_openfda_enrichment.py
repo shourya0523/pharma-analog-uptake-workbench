@@ -12,13 +12,21 @@ from unittest.mock import patch
 import pytest
 
 from app.connectors import openfda as openfda_module
-from app.connectors.openfda import BRAND_SEARCH_PATHS, OpenFDAConnector, search_queries
+from app.connectors.openfda import (
+    BRAND_SCOPE,
+    BRAND_SEARCH_PATHS,
+    GENERIC_SCOPE,
+    OpenFDAConnector,
+    search_queries,
+)
 
 
 async def _noop(*_args, **_kwargs):
     return None
 
 from app.connectors.openfda_fields import (
+    MIN_ALIAS_LENGTH,
+    _candidates,
     brand_matched_results,
     earliest_approval_date,
     earliest_approved_match,
@@ -109,6 +117,29 @@ def test_a_more_specific_product_does_not_take_the_general_one_s_application():
         )
         == []
     )
+
+
+def test_a_short_brand_is_still_its_own_candidate():
+    """The alias floor is for aliases; the product's own name is the question.
+
+    Held against the product's own name it drops a short brand and leaves the
+    sibling line extension as the only candidate - which selects the sibling's
+    application, the harm this match exists to prevent, inverted.
+    """
+    short = "Duo"
+    assert len(short) < MIN_ALIAS_LENGTH
+    assert _candidates(short, ["Duo XR"]) == ["duo", "duo xr"]
+
+    record = {
+        "application_number": "NDA000009",
+        "openfda": {"brand_name": ["DUO"], "generic_name": ["calderinol"]},
+        "products": [{"brand_name": "DUO"}],
+    }
+    assert brand_matched_results([record], product=short, generic="calderinol") == [
+        (record, "DUO")
+    ]
+    # The other answer: a fragment offered as an alias is still refused.
+    assert _candidates("Calderon", ["XR"]) == ["calderon"]
 
 
 def test_a_fuller_sku_name_is_still_the_same_product():
@@ -214,29 +245,34 @@ def test_parse_openfda_date_handles_compact_and_iso():
     assert parse_openfda_date("garbage") is None
 
 
-def test_every_brand_query_precedes_the_molecule():
+def test_the_brand_query_precedes_the_molecule():
     """A combined brand-OR-generic search can exclude the product entirely."""
-    scopes = [scope for scope, _ in search_queries("Opsumit", "macitentan")]
-    assert [scope.split(":")[0] for scope in scopes] == ["brand"] * len(BRAND_SEARCH_PATHS) + [
-        "generic"
+    assert [scope for scope, _ in search_queries("Calderon", "calderinol")] == [
+        BRAND_SCOPE,
+        GENERIC_SCOPE,
     ]
-    for scope, query in search_queries("Opsumit", "macitentan"):
-        if not scope.startswith("brand"):
-            continue
-        assert "generic_name" not in query, "the molecule must not widen a brand query"
+    brand_query = dict(search_queries("Calderon", "calderinol"))[BRAND_SCOPE]
+    assert "generic_name" not in brand_query, "the molecule must not widen a brand query"
 
 
-def test_a_brand_is_asked_for_on_every_path_that_states_one():
-    """A discontinued application carries its brand only in `products[]`."""
-    queries = {scope: query for scope, query in search_queries("Calderon")}
-    assert queries == {
-        f"brand:{path}": f'{path}:"Calderon"' for path in BRAND_SEARCH_PATHS
-    }
+def test_one_brand_query_names_every_path_that_states_a_brand():
+    """A discontinued application carries its brand only in `products[]`.
+
+    Both paths are named in one query and openFDA unions them, so no path is
+    left out and no second call is made to reach it.
+    """
+    queries = dict(search_queries("Calderon"))
+    assert set(queries) == {BRAND_SCOPE}
+    assert queries[BRAND_SCOPE] == "+OR+".join(
+        f'{path}:"Calderon"' for path in BRAND_SEARCH_PATHS
+    )
     assert "products.brand_name" in BRAND_SEARCH_PATHS
 
 
 def test_search_queries_tolerate_missing_inputs():
-    assert search_queries("", "treprostinil") == [("generic", 'openfda.generic_name:"treprostinil"')]
+    assert search_queries("", "treprostinil") == [
+        (GENERIC_SCOPE, 'openfda.generic_name:"treprostinil"')
+    ]
     assert search_queries("", None) == []
 
 
@@ -257,15 +293,15 @@ def test_missing_value_placeholders_are_recognised():
 
 
 @pytest.mark.asyncio
-async def test_a_brand_is_asked_on_every_path_and_the_answers_are_unioned(tmp_path):
-    """One path can hold an application the other does not.
+async def test_the_brand_answer_is_one_query_and_the_molecule_is_not_added(tmp_path):
+    """One path can hold an application the other does not, so both are named.
 
     The molecule query stays a fallback: its results are the whole molecule's,
     so adding them to a brand answer would widen it.
     """
+    brand_query = "+OR+".join(f'{path}:"Calderon"' for path in BRAND_SEARCH_PATHS)
     pages = {
-        'openfda.brand_name:"Calderon"': [{"application_number": "NDA000009"}],
-        'products.brand_name:"Calderon"': [
+        brand_query: [
             {"application_number": "NDA000009"},
             {"application_number": "NDA000010"},
         ],
@@ -298,5 +334,9 @@ async def test_a_brand_is_asked_on_every_path_and_the_answers_are_unioned(tmp_pa
 
     numbers = [r["application_number"] for r in sources[0].metadata["results"]]
     assert numbers == ["NDA000009", "NDA000010"]
+    assert asked[0] == brand_query, "the brand answer is one query"
+    assert not [
+        query for query in asked if query in {f'{path}:"Calderon"' for path in BRAND_SEARCH_PATHS}
+    ], "a path was asked for on its own as well"
     assert 'openfda.generic_name:"calderinol"' not in asked, "the molecule widened a brand answer"
     assert sources[0].notes is None

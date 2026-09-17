@@ -40,9 +40,20 @@ def test_missing_citation_blocks_auto_pass():
 
 
 def test_product_aliases_split_franchise():
-    aliases = product_aliases("OPSUMIT (macitentan)/OPSYNVI", "macitentan")
-    assert "OPSUMIT" in aliases or any(a.upper() == "OPSUMIT" for a in aliases)
-    assert any("macitentan" in a.lower() for a in aliases)
+    """A slash splits when both sides spell the product that was asked about.
+
+    Spelling it means beginning with a held name at a word boundary, so the
+    franchise form in an alias splits and a joined product name does not: there
+    is nothing in `Calderon (calderinol)/NuVessa` that says which of the two
+    the question was about.
+    """
+    aliases = product_aliases("Calderon", "calderinol",
+                              extra=["Calderon (calderinol)/Calderon XR"])
+    assert "Calderon XR" in aliases
+    assert any("calderinol" in a.lower() for a in aliases)
+
+    joined = product_aliases("Calderon (calderinol)/NuVessa", "calderinol")
+    assert "NuVessa" not in joined
 
 
 def test_select_product_evidence_prefers_money_windows():

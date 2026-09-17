@@ -153,12 +153,10 @@ _SPAN_PHRASE = (
     r"(?:three|six|nine|twelve)(?:\s+and\s+(?:three|six|nine|twelve))*"
     r"\s+months?|(?:fiscal\s+)?years?"
 )
-_PERIOD_PHRASE_RE = re.compile(rf"\b({_SPAN_PHRASE})\s+ended\b", re.IGNORECASE)
-# The same phrase as a footnote writes it. A note says "the quarters ended
-# March 31, 2026 and June 30, 2026" where the statements above it say "the
-# three months ended": the span word is the only difference, and one heading
-# can carry several end dates. Reading the document's own period does not use
-# this form - a filing states its period in the statements, not in a note.
+# A footnote writes the same phrase with one more span word: a note says "the
+# quarters ended March 31, 2026 and June 30, 2026" where the statements above
+# it say "the three months ended". One pattern reads both, so the grammar this
+# module knows is one thing rather than two spellings of it.
 _NAMED_PHRASE_RE = re.compile(rf"\b({_SPAN_PHRASE}|quarters?)\s+ended\b", re.IGNORECASE)
 _SPAN_WORD_RE = re.compile(r"three|six|nine|twelve", re.IGNORECASE)
 _MONTH_DAY_RE = re.compile(
@@ -311,7 +309,7 @@ def detect_period_context(text: str) -> PeriodContext | None:
     """Infer the document's own reporting period from the way it names one."""
     text = text or ""
     counts: Counter[tuple[int, int, int]] = Counter()
-    for match in _PERIOD_PHRASE_RE.finditer(text):
+    for match in _NAMED_PHRASE_RE.finditer(text):
         spans = [
             MONTH_WORDS[word.lower()]
             for word in _SPAN_WORD_RE.findall(match.group(1))
@@ -368,6 +366,13 @@ MONTHS_TO_PERIOD_TYPE: dict[int, str] = {
     12: "annual",
 }
 
+# The same map read the other way, for a reader that holds a period type and
+# wants the span. Derived, so a span the grammar learns to read is covered
+# here without being written down twice.
+PERIOD_TYPE_TO_MONTHS: dict[str, int] = {
+    period_type: months for months, period_type in MONTHS_TO_PERIOD_TYPE.items()
+}
+
 
 def period_label(year: int, months: int, quarter: int) -> str:
     """The canonical key for a period of ``months`` ending in ``quarter``.
@@ -382,6 +387,28 @@ def period_label(year: int, months: int, quarter: int) -> str:
     if months == 9:
         return f"{year}M9"
     return str(year)
+
+
+# Which span each suffix `period_label` writes stands for, read off the
+# producer rather than restated: a span the label learns to spell is spelled
+# here by the same call. The year is a placeholder - only the suffix is kept.
+_SUFFIX_MONTHS: dict[str, int] = {
+    period_label(0, months, quarter)[1:]: months
+    for months in MONTHS_TO_PERIOD_TYPE
+    for quarter in range(1, 5)
+}
+
+
+def period_months(key: str) -> int | None:
+    """The span in months a canonical period key names, or None if it is not one.
+
+    `period_label` writes the span into the key, so the key answers this on its
+    own: `2024Q2` is three months, `2024H1` six, `2024` twelve. It is what
+    `period_span` has to be told, which is why a reader holding only a key can
+    now reach a span without parsing the key a second way.
+    """
+    match = re.fullmatch(r"\d{4}(.*)", key or "")
+    return _SUFFIX_MONTHS.get(match.group(1)) if match else None
 
 
 @dataclass(frozen=True)

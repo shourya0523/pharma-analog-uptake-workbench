@@ -9,11 +9,12 @@ written with the two spellings of one conjunction, and read as different words
 they are two. And a ticker nobody lists is not an answer - it is a symbol we
 were handed - so the name is tried after it rather than instead of it.
 
-`resolve_cik_from_search` asks a model. The model is asked for five things,
-and the four that are not the CIK are what say whether the CIK is worth
-having: without a confidence, a reply that is a guess binds every filing the
-job goes on to fetch, and the surface cannot tell that apart from an issuer
-that files nothing.
+`resolve_identity_from_search` asks a model. The model is asked for five
+things, and the four that are not the CIK are what say whether the CIK is
+worth having: without a confidence, a reply that is a guess binds every filing
+the job goes on to fetch, and the surface cannot tell that apart from an issuer
+that files nothing. The whole reply goes back to the caller, because only the
+caller can record the refusal against the job.
 
 Both answers are represented here: a name that resolves and a name that must
 not, a reply that is taken and replies that are refused for each of the three
@@ -26,7 +27,6 @@ import pytest
 
 from app.connectors.llm_search import (
     LLMSearchConnector,
-    SearchedIdentity,
     read_searched_identity,
 )
 from app.connectors.sources import SECConnector, normalize_registrant
@@ -170,16 +170,15 @@ async def test_a_guess_is_not_bound_to_the_product_and_the_job_is_told(monkeypat
         monkeypatch,
         {"cik": "1070494", "company_name": "Beta Holdings Group", "confidence": 0.2},
     )
-    flags: list[str] = []
-    cik = await connector.resolve_cik_from_search(
-        product="Calderon", manufacturer=None, ticker=None, aliases=[], quality_flags=flags,
+    resolution = await connector.resolve_identity_from_search(
+        product="Calderon", manufacturer=None, ticker=None, aliases=[],
     )
-    assert cik is None
-    assert flags == ["cik_search_refused_low_confidence"]
-    # And what was refused is still in hand, which is what makes the refusal
+    assert not resolution.accepted
+    assert resolution.flags == ["cik_search_refused_low_confidence"]
+    # And what was refused comes back with it, which is what makes the refusal
     # checkable rather than a silence.
-    assert connector.last_resolution.company_name == "Beta Holdings Group"
-    assert connector.last_resolution.cik == "0001070494"
+    assert resolution.company_name == "Beta Holdings Group"
+    assert resolution.cik == "0001070494"
 
 
 async def test_a_confident_reply_is_taken_and_flagged_as_the_model_s(monkeypatch):
@@ -187,20 +186,37 @@ async def test_a_confident_reply_is_taken_and_flagged_as_the_model_s(monkeypatch
         monkeypatch,
         {"cik": "1070494", "company_name": "Beta Holdings Group", "confidence": 0.95},
     )
-    flags: list[str] = []
-    cik = await connector.resolve_cik_from_search(
-        product="Calderon", manufacturer=None, ticker=None, aliases=[], quality_flags=flags,
+    resolution = await connector.resolve_identity_from_search(
+        product="Calderon", manufacturer=None, ticker=None, aliases=[],
     )
-    assert cik == "0001070494"
-    assert flags == ["cik_from_llm_search"]
+    assert resolution.accepted and resolution.cik == "0001070494"
+    assert resolution.flags == ["cik_from_llm_search"]
 
 
-async def test_a_search_that_was_never_asked_flags_nothing(monkeypatch):
+async def test_a_search_that_was_never_asked_is_not_a_resolution(monkeypatch):
+    """Both answers to "what does this put on the job": a word, or nothing.
+
+    A search that was made says something whichever way it went; one that was
+    never made has no resolution to say it with.
+    """
     connector = _searcher(monkeypatch, {"cik": "1070494", "confidence": 0.95})
     connector.settings = connector.settings.model_copy(update={"enable_llm_search": False})
-    flags: list[str] = []
-    assert await connector.resolve_cik_from_search(
-        product="Calderon", manufacturer=None, ticker=None, aliases=[], quality_flags=flags,
+    assert await connector.resolve_identity_from_search(
+        product="Calderon", manufacturer=None, ticker=None, aliases=[],
     ) is None
-    assert flags == []
-    assert connector.last_resolution == SearchedIdentity.nothing()
+    assert all(
+        read_searched_identity(reply, floor=0.6).flags
+        for reply in ({"cik": "1070494", "confidence": 0.95}, {"cik": None}, {"cik": "1070494"})
+    )
+
+
+async def test_the_cik_alone_is_still_answerable_for_a_caller_that_asks_for_one(monkeypatch):
+    """The compatibility shim: the accepted CIK, and nothing for a refusal."""
+    taken = _searcher(monkeypatch, {"cik": "1070494", "confidence": 0.95})
+    assert await taken.resolve_cik_from_search(
+        product="Calderon", manufacturer=None, ticker=None, aliases=[], quality_flags=[],
+    ) == "0001070494"
+    refused = _searcher(monkeypatch, {"cik": "1070494", "confidence": 0.2})
+    assert await refused.resolve_cik_from_search(
+        product="Calderon", manufacturer=None, ticker=None, aliases=[],
+    ) is None

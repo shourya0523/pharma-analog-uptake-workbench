@@ -100,7 +100,6 @@ SCRIPT_ONLY = {
     # stands or falls together.
     "html_tables": NOT_WIRED,
     "html_table_grids": NOT_WIRED,
-    "extract_revenue_rows": NOT_WIRED,
     "read_positional_block": NOT_WIRED,
     "PositionalRow": NOT_WIRED,
     # An importer for a file an analyst prepares by hand - with no caller and

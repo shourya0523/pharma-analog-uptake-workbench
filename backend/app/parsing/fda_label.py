@@ -18,6 +18,8 @@ import re
 from dataclasses import dataclass, field
 from typing import Any
 
+from app.parsing.indications import parse_indications, therapeutic_areas
+
 # FDA label sections often arrive as "12.1 Mechanism of Action <prose>".
 _MOA_SECTION_HEADER = re.compile(
     r"^\s*\d+(?:\.\d+)*\s+(?:Mechanism of Action|CLINICAL PHARMACOLOGY)\b[:\s]*",
@@ -63,9 +65,13 @@ def _strings(value: Any) -> list[str]:
     return [str(item).strip() for item in values if item is not None and str(item).strip()]
 
 
-def _first_section(record: dict[str, Any], key: str) -> str | None:
-    values = _strings(record.get(key))
-    return "\n".join(values) if values else None
+def brand_name_paths() -> tuple[str, ...]:
+    """The keys a record can state a brand name on, in reading order.
+
+    One answer for both readers of it: whatever reads a brand off a record,
+    and whatever asks openFDA for one.
+    """
+    return _PATHS["brand_name"]
 
 
 def openfda_block(record: dict[str, Any]) -> dict[str, list[str]]:
@@ -221,6 +227,12 @@ def parse_label_record(record: dict[str, Any]) -> ParsedFDALabel:
     EPC and MoA stay separate. Route keeps every path that stated one, because
     the two datasets disagree about it and the disagreement is the finding,
     not something to resolve here.
+
+    ``chosen`` takes the first reading of a fact, which is the preferred one
+    because `_readings` walks `_PATHS[fact]` in order and a dict keeps the
+    order it was built in. `_PATHS` is therefore a preference order, not just a
+    set of keys, and reordering an entry there changes which key a value is
+    read from.
     """
 
     readings = {fact: _readings(record, fact) for fact in _PATHS}
@@ -239,7 +251,7 @@ def parse_label_record(record: dict[str, Any]) -> ParsedFDALabel:
             paths[fact] = path
 
     moa_summary = clean_moa_summary("\n".join(values["moa_summary"]) or None)
-    indications_text = _first_section(record, "indications_and_usage")
+    indications_text = "\n".join(values["indications"]) or None
     if not moa_summary:
         paths.pop("moa_summary", None)
 
@@ -277,18 +289,32 @@ def _joined(values: list[str]) -> str | None:
 
 
 def _manufacturer(record: dict[str, Any], block: dict[str, list[str]]) -> tuple[str | None, str]:
-    """The filer, from whichever of the two keys the record states, with that key.
+    """Who sells it, from whichever of the two keys the record states.
 
-    The label dataset names it in the ``openfda`` block; a drugsFDA application
-    names it at the top level. A record stating neither gets no path, so it
-    cannot cite a key it does not have.
+    The two keys are two different companies, not two datasets spelling one.
+    ``openfda.manufacturer_name`` is the labeler - whoever puts their name on
+    the carton, which is who books the revenue - and ``sponsor_name`` is the
+    applicant who holds the approval. This value is asked because a filer has
+    to be found for the product's sales, so the labeler is preferred where the
+    record names one.
+
+    It has to name *one*. An application relabelled part-way through its life
+    lists every labeler it has had, in an order the record does not explain,
+    and the first of that list is a guess wearing the shape of an answer. Where
+    the labelers are several the applicant answers instead: it is one company
+    and the record says which.
+
+    A record stating neither gets no path, so it cannot cite a key it does not
+    have.
     """
-    listed = block.get("manufacturer_name") or []
-    if listed:
-        return listed[0], "openfda.manufacturer_name"
+    listed = [name for name in (block.get("manufacturer_name") or []) if str(name).strip()]
     sponsor = str(record.get("sponsor_name") or "").strip()
+    if len(listed) == 1:
+        return listed[0], "openfda.manufacturer_name"
     if sponsor:
         return sponsor, "sponsor_name"
+    if listed:
+        return listed[0], "openfda.manufacturer_name"
     return None, ""
 
 
@@ -296,12 +322,10 @@ def profile_fields(
     record: dict[str, Any],
     label: ParsedFDALabel,
     *,
-    indications: Any = (),
-    indication_value: str | None = None,
-    therapeutic_area_value: str | None = None,
     moa_value: str | None = None,
     approval: str | None = None,
     approval_path: str | None = None,
+    **_read_here: Any,
 ) -> dict[str, SourcedValue]:
     """The profile fields one openFDA record supports, each with its own path.
 
@@ -310,14 +334,27 @@ def profile_fields(
     does not state is still a key here, with a ``None`` value and an empty
     path; the caller drops those, which keeps the key set a property of this
     function and lets `PROFILE_FIELDS` be read off it.
+
+    The indication readings are taken from the label here rather than passed
+    in, because the label is already in hand and a caller that computes them
+    from the same label can only arrive at the same answer. ``moa_value`` is
+    the one value a caller still decides, because what makes it unusable is a
+    contamination check that lives in `quality/`. ``approval`` comes from the
+    caller too: the earliest approval is a fact about every application the
+    brand matched, and only one record of them is here.
+
+    ``_read_here`` accepts and ignores the names this function used to be
+    given the indication readings under, so a caller that has not stopped
+    passing them gets the same values rather than an error.
     """
     block = openfda_block(record)
+    indications = parse_indications(label.indications_text) if label.indications_text else []
+    indication_value = (
+        "; ".join(dict.fromkeys(ind.disease for ind in indications if ind.disease)) or None
+    )
+    therapeutic_area_value = "; ".join(therapeutic_areas(indications)) or None
     indication_quote = (
-        " | ".join(
-            quote
-            for quote in (getattr(ind, "source_quote", None) for ind in indications or ())
-            if quote
-        )
+        " | ".join(quote for quote in (ind.source_quote for ind in indications) if quote)
         or None
     )
     indications_path = label.path("indications") or ""

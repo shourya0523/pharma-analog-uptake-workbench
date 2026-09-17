@@ -71,12 +71,21 @@ def _bare(name: str) -> str:
 
 
 def _spells(part: str, held: list[str]) -> bool:
-    """Whether this part is a spelling of one of the names already held."""
+    """Whether this part is a spelling of one of the names already held.
+
+    A part spells a held name when it begins with that name and the name ends
+    at a word boundary: `Calderon XR` spells `Calderon`, `NuVessa` does not.
+    Containment in the other direction would let the generic name do the
+    joining - a co-packaged partner called `Acme` sits inside a generic spelled
+    `acme-1` - and manufacture the partner's own name as one of ours, which is
+    the combined line coming back through the generic.
+    """
     candidate = _bare(part).lower()
     if not candidate:
         return False
     return any(
-        candidate in name or name in candidate
+        candidate == name
+        or (candidate.startswith(name) and not candidate[len(name)].isalnum())
         for name in (_bare(h).lower() for h in held)
         if name
     )

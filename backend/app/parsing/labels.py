@@ -93,6 +93,19 @@ _PARTIAL_RE = re.compile(
 # that negates it may stand between the claim and the name.
 _INCLUDES_CLAIM = r"includes?|including|consists?\s+of|comprises?|comprised\s+of"
 _NEGATES = r"\b(?:not|never|excludes?|excluding|exclusive\s+of|other\s+than|without)\b"
+# How far either side of the claim word a negator is still the claim's own.
+# One number, so the two sides cannot drift apart.
+_CLAIM_WINDOW = 60
+# A negator before the claim reaches it only while the claim is still part of
+# the same statement: a full stop or a semicolon ends one, and so does a
+# coordinator - in "amounts exclude sales of NuVessa but include sales of
+# Calderon XR" the `but` begins a second claim the first claim's negator does
+# not reach. Coordinators are a closed class of the language, like
+# `_CLAUSE_BREAK_RE`'s subordinators below, so nothing in a filing makes this
+# stale.
+_CLAIM_RESET_RE = re.compile(
+    r"[.;]|\b(?:but|however|whereas|yet|nevertheless)\b", re.IGNORECASE
+)
 
 # The note says the line is not this product's at all: "there were no sales
 # of NuVessa in the quarter" under "Calderon and NuVessa (1)".
@@ -355,35 +368,27 @@ class NoteReading:
 
     names: tuple[str, ...]      # other products the note says the line includes
     flags: tuple[str, ...]
-    months: int | None = None   # the span the note qualifies, where it names one
-    # The periods the note qualifies, where it names any - a note naming
-    # several ("the quarters ended March 31, 2026 and June 30, 2026") is about
-    # all of them.
-    periods: frozenset[str] = frozenset()
+    # Which of the row's figures the note is about, as the (span, period) pairs
+    # it names - a note naming several ("the quarters ended March 31, 2026 and
+    # June 30, 2026") is about all of them. The period is None where the note
+    # states a span and no date, and the pair is what keeps a span with the
+    # date it was stated beside: a note naming a quarter and a year names two
+    # spans, and each period belongs to one of them.
+    scope: frozenset[tuple[int, str | None]] = frozenset()
     no_sales_of: tuple[str, ...] = ()  # products the note says had no sales
-
-    @property
-    def states_a_scope(self) -> bool:
-        """Whether the note says which of the row's figures it is about.
-
-        A note that does not is read as being about the whole row, which is
-        the right answer for "includes Nebulized Calderon" and a guess for
-        anything that qualifies one column. A caller that drops a figure on
-        what a note says can ask for the difference; one that only attaches
-        the note's prose to a quote does not need to.
-        """
-        return bool(self.periods) or self.months is not None
 
     def applies_to(self, months: int, period: str) -> bool:
         """Whether a figure of this span and period is what the note is about.
 
         A note stating no scope at all is about the whole row.
         """
-        if self.periods:
-            return period_key(period, months) in self.periods
-        if self.months is not None:
-            return months == self.months
-        return True
+        if not self.scope:
+            return True
+        key = period_key(period, months)
+        return any(
+            months == span and (named is None or named == key)
+            for span, named in self.scope
+        )
 
 
 def _claim_clause(note: str, claim_at: int) -> str:
@@ -397,40 +402,56 @@ def _claim_clause(note: str, claim_at: int) -> str:
     return note[start:end]
 
 
-def _note_scope(note: str, claim_at: int | None) -> tuple[int | None, frozenset[str]]:
-    """The span and the periods the note says its claim is about.
+def _note_scope(note: str, claim_at: int | None) -> frozenset[tuple[int, str | None]]:
+    """The (span, period) pairs the note says its claim is about.
 
     Where the note carries a claim, only the claim's own clause is read: the
     reason a filer gives for a claim names periods of its own, and those are
     about the reason. A claim whose clause names no period is about the whole
     row, and is not rescued by a period elsewhere in the note.
+
+    Each period keeps the span it was named with, because a clause can name
+    two of them and a period read over the wrong span is a different window.
     """
     text = _claim_clause(note, claim_at) if claim_at is not None else note
-    named = periods_named(text)
-    periods = frozenset(period.key for period in named if period.key)
-    months = next((period.months for period in named), None)
-    return months, periods
+    return frozenset((period.months, period.key) for period in periods_named(text))
+
+
+def _negated_before(note: str, claim_at: int) -> bool:
+    """Whether a negator standing before the claim is one the claim carries.
+
+    The window behind the claim is the one in front of it, read the other way:
+    it reaches back as far, and it stops where the statement the claim belongs
+    to began.
+    """
+    head = note[max(0, claim_at - _CLAIM_WINDOW):claim_at]
+    reset = max((match.end() for match in _CLAIM_RESET_RE.finditer(head)), default=0)
+    return re.search(_NEGATES, head[reset:], re.IGNORECASE) is not None
 
 
 def _includes(note: str, names: Iterable[str]) -> tuple[tuple[str, ...], int | None]:
     """The products the note says the line includes, and where it first says so.
 
     ``includes Nebulized Calderon`` names Nebulized Calderon; ``does not
-    include sales of Nebulized Calderon`` names nobody.
+    include sales of Nebulized Calderon`` names nobody, and neither does
+    ``does not currently include`` - a negator reaches the claim word across
+    the words between them, the same way the claim reaches the name.
     """
     found: list[str] = []
     at: int | None = None
     for name in names:
         if not name:
             continue
-        match = re.search(
-            rf"(?<!not\s)(?<!never\s)\b(?:{_INCLUDES_CLAIM})\b"
-            rf"(?:(?!{_NEGATES})[^.;]){{0,60}}?\b{re.escape(name)}\b",
+        for match in re.finditer(
+            rf"\b(?:{_INCLUDES_CLAIM})\b"
+            rf"(?:(?!{_NEGATES})[^.;]){{0,{_CLAIM_WINDOW}}}?\b{re.escape(name)}\b",
             note, re.IGNORECASE,
-        )
-        if match:
+        ):
+            if _negated_before(note, match.start()):
+                continue
             found.append(name)
             at = match.start() if at is None else min(at, match.start())
+            break
     return tuple(found), at
 
 
@@ -454,7 +475,7 @@ def _no_sales_of(note: str, names: Iterable[str]) -> tuple[tuple[str, ...], int 
 
 
 def _dates_part_of_the_period(
-    note: str, months: int | None, periods: Iterable[str]
+    note: str, scope: Iterable[tuple[int, str | None]]
 ) -> bool:
     """Whether the note's own dates put the figure inside the period it is about.
 
@@ -464,13 +485,16 @@ def _dates_part_of_the_period(
     note is about says the figure covers less of it than the heading does.
     A date that is the period's own end names the heading, not a boundary
     inside it.
+
+    Each period is read over the span it was named with, so a clause naming
+    two of them tests each against its own window.
     """
-    if months is None:
-        return False
     named = dates_named(note)
     if not named:
         return False
-    for key in periods:
+    for months, key in scope:
+        if key is None:
+            continue
         span = period_span(key, months)
         if span is None:
             continue
@@ -514,14 +538,14 @@ def read_footnote(
         at for at in (sold_at, includes_at, partial.start() if partial else None)
         if at is not None
     ]
-    months, periods = _note_scope(note, min(claims) if claims else None)
+    scope = _note_scope(note, min(claims) if claims else None)
     flags: list[str] = []
     undated = partial and not re.search(r"\blaunch", note, re.IGNORECASE)
-    if undated or _dates_part_of_the_period(note, months, periods):
+    if undated or _dates_part_of_the_period(note, scope):
         flags.append(FLAG_PARTIAL)
     if any(_joined(n) in own_keys for n in none_sold):
         flags.append(FLAG_NO_SALES)
-    return NoteReading(names, tuple(flags), months, periods, none_sold)
+    return NoteReading(names, tuple(flags), scope, none_sold)
 
 
 # How a note travels with the figure it is about. The table reader writes the

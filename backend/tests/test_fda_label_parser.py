@@ -165,6 +165,66 @@ def test_every_profile_field_names_the_path_it_was_read_from():
         assert read_path(record, sourced.path), f"{name} cites {sourced.path}"
 
 
+def test_one_labeler_answers_who_sells_it_and_several_do_not():
+    """Both answers: a single labeler is taken over the applicant, a list is not.
+
+    The labeler is who books the revenue, so it is preferred where the record
+    names one. Where an application has been relabelled the record lists every
+    labeler it has had, in an order it does not explain, and the applicant -
+    one company, named as one - answers instead of the first of that list.
+    """
+    one = dict(DRUGSFDA, sponsor_name="ACME THERAPEUTICS")
+    one["openfda"] = dict(one["openfda"], manufacturer_name=["Calderon Pharma LLC"])
+    fields = profile_fields(one, parse_label_record(one))
+    assert fields["manufacturer"].value == "Calderon Pharma LLC"
+    assert fields["manufacturer"].path == "openfda.manufacturer_name"
+
+    several = dict(one)
+    several["openfda"] = dict(
+        one["openfda"], manufacturer_name=["Calderon Pharma LLC", "NuVessa Specialty Inc"]
+    )
+    fields = profile_fields(several, parse_label_record(several))
+    assert fields["manufacturer"].value == "ACME THERAPEUTICS"
+    assert fields["manufacturer"].path == "sponsor_name"
+
+
+def test_the_indication_readings_come_from_the_label_in_hand():
+    """Both answers: a label that states an indication, and one that does not.
+
+    The readings used to be computed by the caller and threaded back in. A
+    caller that still passes them gets the same mapping, because they can only
+    have come from the same label.
+    """
+    record = dict(
+        DRUGSFDA,
+        indications_and_usage=[
+            (
+                "1 INDICATIONS AND USAGE CALDERON is indicated for the treatment of "
+                "Calderon's disease (CD) (WHO Group 1)."
+            )
+        ],
+    )
+    label = parse_label_record(record)
+    fields = profile_fields(record, label)
+    assert fields["indication"].value == "Calderon's disease (CD) (WHO Group 1)"
+    assert fields["therapeutic_area"].value == "calderon's disease"
+    assert fields["indication"].path == label.path("indications")
+
+    # The names this function used to be given them under are accepted and
+    # ignored, so a caller that has not stopped passing them reads the same.
+    assert profile_fields(
+        record,
+        label,
+        indications=(),
+        indication_value="something else",
+        therapeutic_area_value="something else",
+    ) == fields
+
+    silent = parse_label_record(DRUGSFDA)
+    quiet = profile_fields(DRUGSFDA, silent)
+    assert quiet["indication"].value is None and quiet["therapeutic_area"].value is None
+
+
 def test_a_field_the_record_does_not_state_keeps_its_key_and_loses_its_path():
     fields = profile_fields({}, parse_label_record({}))
     assert set(fields) == set(PROFILE_FIELDS)
