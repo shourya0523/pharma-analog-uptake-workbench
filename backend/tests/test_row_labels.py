@@ -149,7 +149,8 @@ def test_a_footnote_about_one_column_says_nothing_about_the_others():
         "net product revenue for the six months ended June 30, 2023 is for the "
         "period between January 24, 2023 (date of acquisition) and June 30, 2023",
         ["Calderon"])
-    assert note.months == 6 and note.applies_to(6, "2023") and not note.applies_to(3, "2023Q2")
+    assert note.scope == frozenset({(6, "2023H1")})
+    assert note.applies_to(6, "2023") and not note.applies_to(3, "2023Q2")
     rows = [
         ["", "Three Months Ended June 30,", "", "Six Months Ended June 30,", ""],
         ["", "2023", "2022", "2023", "2022"],
@@ -169,7 +170,7 @@ def test_a_footnote_about_one_column_says_nothing_about_the_others():
 def test_a_footnote_naming_a_period_qualifies_that_period_only():
     note = read_footnote("For Q1 2023, represents product revenue, net from the date "
                          "of acquisition of the product rights.", ["Calderon"])
-    assert note.periods == frozenset({"2023Q1"}) and note.states_a_scope
+    assert note.scope == frozenset({(3, "2023Q1")})
     assert note.applies_to(3, "2023Q1") and not note.applies_to(3, "2024Q1")
 
 
@@ -182,7 +183,7 @@ def test_a_footnote_naming_several_periods_is_about_all_of_them():
     note = read_footnote(
         "There were no sales of Calderon during the quarters ended March 31, 2026 "
         "and June 30, 2026", ["Calderon"])
-    assert note.periods == frozenset({"2026Q1", "2026Q2"})
+    assert note.scope == frozenset({(3, "2026Q1"), (3, "2026Q2")})
     assert note.applies_to(3, "2026Q1") and note.applies_to(3, "2026Q2")
     assert not note.applies_to(3, "2025Q2")
 
@@ -198,15 +199,31 @@ def test_a_footnotes_scope_is_its_claims_clause_not_its_reasons():
         "There were no sales of Calderon in Q1 2026 as the issuer moved promotional "
         "effort to NuVessa, which has a combined label as of the second quarter of 2025.",
         ["Calderon"])
-    assert note.periods == frozenset({"2026Q1"})
+    assert note.scope == frozenset({(3, "2026Q1")})
     assert note.applies_to(3, "2026Q1") and not note.applies_to(3, "2025Q2")
 
 
 def test_a_footnote_stating_no_scope_is_about_the_whole_row_and_says_so():
     note = read_footnote("includes Nebulized Calderon", ["Calderon"], products=PRODUCTS)
-    assert note.periods == frozenset() and note.months is None
-    assert not note.states_a_scope
+    assert note.scope == frozenset()
     assert note.applies_to(3, "2024Q1") and note.applies_to(12, "2024")
+
+
+def test_a_period_is_read_over_the_span_it_was_named_with():
+    """Both answers on one note that names two spans.
+
+    "the three months ended March 31, 2026 and the year ended December 31,
+    2025" states a quarter and a year. Each period belongs to the span beside
+    it, so the note is about the quarter as a quarter and the year as a year -
+    and about neither read over the other's span.
+    """
+    note = read_footnote(
+        "There were no sales of Calderon in the three months ended March 31, 2026 "
+        "and the year ended December 31, 2025",
+        ["Calderon"])
+    assert note.scope == frozenset({(3, "2026Q1"), (12, "2025")})
+    assert note.applies_to(3, "2026Q1") and note.applies_to(12, "2025")
+    assert not note.applies_to(12, "2026") and not note.applies_to(3, "2025Q1")
 
 
 def test_a_note_saying_the_product_had_no_sales_makes_the_line_someone_elses():
