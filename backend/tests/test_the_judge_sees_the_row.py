@@ -131,6 +131,14 @@ async def test_a_quote_that_is_only_the_sibling_row_is_vetoed(tmp_path, monkeypa
     db, orch, job, row, parsed = _orchestrator(
         tmp_path, quote="NuVessa 34,974 22,209")
 
+    async def asked_nobody(**_kwargs):
+        # What the client itself answers where no key is configured. A veto is
+        # decided before the search validator runs, so this test has nothing to
+        # ask a model - and a shell that does have a key would otherwise send
+        # the row to one and wait for it.
+        return {}
+
+    orch.llm.judge_with_search = asked_nobody
     await orch._judge(job, [row], [], parsed, {})
 
     assert row.source_support == "misclassified"
