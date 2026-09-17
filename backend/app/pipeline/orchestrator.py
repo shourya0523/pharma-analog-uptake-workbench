@@ -5,6 +5,7 @@ import logging
 import os
 import re
 from collections.abc import Callable, Sequence
+from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any
@@ -489,8 +490,23 @@ def scale_to_millions(value: float, unit: str | None) -> float:
     return value * scale
 
 
-def claim_ranking(db: Session, job: DrugJobORM) -> tuple[Callable, Callable, Callable]:
+@dataclass(frozen=True)
+class ClaimRanking:
     """How the claims about one period of one job rank, strongest first.
+
+    Three questions about a row, answered against the job's own sources.
+    Named rather than returned as a tuple of closures, because the two callers
+    ask different subsets of them and a caller that unpacks three names to use
+    one says nothing about which one.
+    """
+
+    tier: Callable[[DatapointORM], tuple[int, int, int]]
+    reports_own_period: Callable[[DatapointORM], int]
+    accession_of: Callable[[DatapointORM], str | None]
+
+
+def claim_ranking(db: Session, job: DrugJobORM) -> ClaimRanking:
+    """The ranking for one job, over the sources that job retrieved.
 
     Returned as functions over rows rather than computed in place, because
     reconciliation and the series selection have to rank the same readings
@@ -545,7 +561,7 @@ def claim_ranking(db: Session, job: DrugJobORM) -> tuple[Callable, Callable, Cal
             priority_index.get((row.citation_json or {}).get("source_type", ""), 99),
         )
 
-    return claim_tier, reports_own_period, accession_of
+    return ClaimRanking(claim_tier, reports_own_period, accession_of)
 
 def resettle_series(db: Session, job: DrugJobORM | None) -> None:
     """Ask again which reading each of the job's series holds.
@@ -588,7 +604,7 @@ def select_job_series(
     of the quality sheet sees a question answered rather than a hundred
     that never close.
     """
-    claim_tier, _reports_own_period, _accession_of = claim_ranking(db, job)
+    claim_tier = claim_ranking(db, job).tier
     standings = select_series_figures(
         [
             SeriesReading(
@@ -2850,7 +2866,10 @@ class PipelineOrchestrator:
                 row.formulation or "",
             )
             by_key.setdefault(key, []).append(row)
-        claim_tier, reports_own_period, accession_of = claim_ranking(self.db, job)
+        ranking = claim_ranking(self.db, job)
+        claim_tier = ranking.tier
+        reports_own_period = ranking.reports_own_period
+        accession_of = ranking.accession_of
 
         conflict_payload: list[dict[str, Any]] = []
         for group in by_key.values():
