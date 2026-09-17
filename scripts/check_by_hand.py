@@ -364,7 +364,11 @@ def main() -> int:
                     failures["value"] += 1
                     print(f"      NOT FOUND beside {drug!r} in the cited document")
 
-    print(f"\n  {checked} published figures checked")
+    # The filter is part of the number: --period-type shrinks the denominator,
+    # and a smaller, better-looking count with nothing on the page saying what
+    # was left out is the same figure as an unfiltered one to any reader.
+    only = f" ({'/'.join(args.period_type)} only)" if args.period_type else ""
+    print(f"\n  {checked} published figures checked{only}")
     for what, count in failures.items():
         print(f"      {count} failed the {what} check")
     return 0 if not any(failures.values()) else 1

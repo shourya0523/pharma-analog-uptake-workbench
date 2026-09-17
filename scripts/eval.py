@@ -155,6 +155,23 @@ def later_finished_job(
 OPTION_KEYS = ("earnings_since", "earnings_until")
 
 
+def option_differences(resolved: dict, asked: dict) -> list[str]:
+    """Where a run's resolved options disagree with what these cases ask for.
+
+    Only the keys a case states: the server fills the rest in from its own
+    defaults, and a case that says nothing about an option is not asking for
+    one. Matching on the window alone is what makes this necessary - two runs
+    over the same dates can have been started with different characterisation,
+    and attaching to the wrong one scores a configuration the cases did not
+    ask for while the header prints the one that ran.
+    """
+    return [
+        f"{name}: the run has {resolved.get(name)!r}, the cases ask {value!r}"
+        for name, value in sorted(asked.items())
+        if resolved.get(name) != value
+    ]
+
+
 def wait(base: str, run_id: str, *, timeout_s: int, quiet: bool) -> dict:
     deadline = time.time() + timeout_s
     seen = None
@@ -267,6 +284,7 @@ def score_members(base: str, path: pathlib.Path, out: pathlib.Path) -> int:
     """
     payload = json.loads(path.read_text())
     cases = payload["cases"] if isinstance(payload, dict) else payload
+    configuration(base, path, f"{len(cases)} member(s)")
     rows = []
     for case in cases:
         try:
@@ -321,8 +339,13 @@ def _try_get(base: str, path: str) -> dict | None:
         return None
 
 
-def configuration(base: str, cases: pathlib.Path, started: list[tuple[str, str, list[dict]]]) -> None:
-    """Print what this run is before it prints what it scored.
+def configuration(
+    base: str,
+    cases: pathlib.Path,
+    asked: str,
+    started: list[tuple[str, str, list[dict]]] = (),
+) -> None:
+    """Print what this score is before it prints what it scored.
 
     Two things decide what a run answers and neither is in the case file. The
     options are the server's, resolved: a case states the few a person types
@@ -330,15 +353,19 @@ def configuration(base: str, cases: pathlib.Path, started: list[tuple[str, str, 
     settings are the shell's - they reach the server from the environment it
     was started in, a re-run from a fresh shell gets the declared defaults
     instead, and nothing a run stores says which it had.
+
+    `asked` is the caller's one line for the size of what it asked, because
+    what a case is differs by path. A path that starts no run - the member
+    resolver answers in the request - passes none, and the options block is
+    simply absent rather than being invented; the models still reach that
+    score through the settings below, which is why it prints them too.
     """
     print("\n  configuration")
     # The answer key grows, so a score is a claim about the key on a date: both
     # the day and the size of what was asked have to be beside the number, or a
     # later run reads as an improvement on an earlier one that asked less.
     print(f"    as of                 {time.strftime('%Y-%m-%d %H:%M:%S%z')}")
-    print(f"    cases                 {cases} ({sum(len(b) for _, _, b in started)} case(s), "
-          f"{sum(len(c['expect']) for _, _, b in started for c in b)} expectation(s), "
-          f"{len(started)} run(s))")
+    print(f"    cases                 {cases} ({asked})")
     print(f"    server                {base}")
     resolved: dict[str, list[str]] = {}
     for run_id, _, _ in started:
@@ -429,6 +456,25 @@ def main() -> int:
     already = existing_runs(args.base) if args.attach else {}
     rescored = 0
 
+    # Every attachable window is checked before any run is started, so a
+    # refusal leaves nothing half-submitted.
+    mismatched = []
+    for options_key in batches:
+        options = json.loads(options_key)
+        run_id = already.get(window_key(options))
+        if not run_id:
+            continue
+        resolved = get(args.base, f"/runs/{run_id}").get("options") or {}
+        for difference in option_differences(resolved, options):
+            mismatched.append(f"  run {run_id[:8]}  {difference}")
+    if mismatched:
+        print("\n  --attach found runs for these windows that were started with "
+              "other options:\n" + "\n".join(mismatched)
+              + "\n  Scoring them would report a number for a configuration these "
+                "cases did not ask for. Start the sweep without --attach, or "
+                "score the run that matches.")
+        return 2
+
     # Every run is started before any is waited for. The windows are
     # independent and the server decides its own concurrency, so waiting for
     # one batch before submitting the next left the pool running one or two
@@ -452,7 +498,14 @@ def main() -> int:
             })["run_id"]
         started.append((run_id, match_key, batch))
 
-    configuration(args.base, path, started)
+    configuration(
+        args.base,
+        path,
+        f"{sum(len(b) for _, _, b in started)} case(s), "
+        f"{sum(len(c['expect']) for _, _, b in started for c in b)} expectation(s), "
+        f"{len(started)} run(s)",
+        started,
+    )
 
     deadline = time.time() + args.timeout
     for run_id, match_key, batch in started:
