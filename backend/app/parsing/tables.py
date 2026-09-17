@@ -75,6 +75,32 @@ def _row_labels(rows: list[list[str]]) -> list[str]:
     return [clean_label(row[0]) for row in rows if row and clean_label(row[0])]
 
 
+def sibling_row_labels(
+    tables: Iterable[list[list[str]]] | None,
+    *,
+    product: str,
+    generic: str | None = None,
+    extra_aliases: Iterable[str] | None = None,
+) -> list[str]:
+    """The row labels of every schedule in a document that reports this product.
+
+    A table with a period heading and year columns is a schedule of figures by
+    period, and the one our product has a row in is the filer's own list of
+    what it reports beside it. Every other table in a filing - the cover page,
+    the table of contents, a maturity schedule - is a list of something else,
+    and its rows say nothing about which products this issuer sells.
+    """
+    aliases = product_aliases(product, generic, extra=extra_aliases)
+    found: list[str] = []
+    for rows in tables or ():
+        if not _period_header(rows) or not _year_columns(rows):
+            continue
+        labels = _row_labels(rows)
+        if any(_matches_product(label, aliases, product, labels) for label in labels):
+            found.extend(labels)
+    return found
+
+
 def _matches_product(
     label: str, aliases: list[str], product: str, siblings: list[str] | None = None
 ) -> bool:

@@ -437,6 +437,7 @@ class LLMModules:
         context: str,
         generic: str | None = None,
         extra_aliases: list[str] | None = None,
+        peer_names: Iterable[str] | None = None,
     ) -> dict[str, Any]:
         prompt = load_prompt("evidence_judge")
         user = prompt["user_template"].format(
@@ -465,6 +466,7 @@ class LLMModules:
             judgment=result,
             generic=generic,
             extra_aliases=extra_aliases,
+            peer_names=peer_names,
         )
 
     async def judge_profile_field(
@@ -726,6 +728,7 @@ class LLMModules:
         quote: str,
         context: str,
         search_snippets: list[dict[str, str]] | None = None,
+        peer_names: Iterable[str] | None = None,
     ) -> dict[str, Any]:
         """Judge with OpenRouter web_search; optional prefetched snippets as extra context."""
         prompt = load_prompt("judge_search_validator")
@@ -758,6 +761,7 @@ class LLMModules:
             judgment=result,
             generic=None,
             extra_aliases=aliases,
+            peer_names=peer_names,
         )
 
     # Back-compat aliases used by older connector code paths

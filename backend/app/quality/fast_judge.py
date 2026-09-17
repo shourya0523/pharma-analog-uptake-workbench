@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import Iterable
 from typing import Any
 
 from app.domain.claims import stated_labels, stated_text
@@ -15,6 +16,7 @@ def try_deterministic_judgment(
     candidate: dict[str, Any],
     quote: str,
     extra_aliases: list[str] | None = None,
+    peer_names: Iterable[str] | None = None,
 ) -> dict[str, Any] | None:
     """Return a judgment without calling the LLM when evidence is clearly good or clearly bad.
 
@@ -25,11 +27,19 @@ def try_deterministic_judgment(
     value = candidate.get("value_reported")
 
     # Clear vetoes — no need for LLM
+    # The same aliases and the same sibling rows the model judge is given. Run
+    # against the brand string alone, every veto here asked a narrower question
+    # than the one it was written to ask: a quote naming the product by its
+    # generic did not name it, and a quote naming the brand on the next row
+    # named nothing at all.
     vetoed = apply_judge_hard_vetoes(
         product=product,
         candidate=candidate,
         quote=quote,
         judgment={"support_classification": "supported", "validation_status": "auto_pass", "issues": []},
+        generic=generic,
+        extra_aliases=extra_aliases,
+        peer_names=peer_names,
     )
     if vetoed.get("support_classification") == "misclassified":
         return vetoed

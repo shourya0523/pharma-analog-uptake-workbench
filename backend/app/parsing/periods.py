@@ -476,6 +476,52 @@ def periods_named(text: str) -> list[NamedPeriod]:
     return sorted(named, key=lambda period: period.position)
 
 
+# The year that completes a date, printed right after the day.
+_DATE_YEAR_RE = re.compile(r"[\s,]*((?:19|20)\d{2})\b")
+
+
+def dates_named(text: str) -> list[date]:
+    """Every full calendar date the text writes out, in reading order.
+
+    A date is a month, a day and a year written together - "March 13, 2024".
+    A month and a year with nothing between them names a month rather than a
+    day in it, and is not one of these.
+    """
+    found: list[date] = []
+    for match in _MONTH_DAY_RE.finditer(text or ""):
+        month = MONTHS.get(match.group(1).lower())
+        day = match.group(2)
+        if not month or not day:
+            continue
+        year = _DATE_YEAR_RE.match(text, match.end())
+        if not year:
+            continue
+        try:
+            found.append(date(int(year.group(1)), month, int(day)))
+        except ValueError:
+            continue
+    return found
+
+
+def period_span(key: str, months: int) -> tuple[date, date] | None:
+    """The first and last day the period ``key`` covers over ``months``.
+
+    The key names the year and, for a quarter, which quarter of it; a key for
+    a longer period carries no month at all, so the span is what says where in
+    the year it ends - which is the same pairing `period_key` reads and
+    `period_label` writes. None where the key is not one of those.
+    """
+    match = re.fullmatch(r"(\d{4})(?:Q([1-4])|H1|M9)?", key or "")
+    if not match or months not in MONTHS_TO_PERIOD_TYPE:
+        return None
+    year = int(match.group(1))
+    end_month = int(match.group(2)) * 3 if match.group(2) else months
+    if end_month < months:
+        return None
+    end = quarter_end(year, quarter_of_month(end_month))
+    return date(year, end_month - months + 1, 1), end
+
+
 def period_key(label: str, months: int) -> str | None:
     """The canonical key for a figure of ``months`` span in a column labelled
     ``label``, or None where the label states no year.

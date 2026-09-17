@@ -35,6 +35,7 @@ from app.parsing.labels import (
     QUESTION_FLAGS,
     LabelReading,
     NoteReading,
+    cite_footnote,
     footnotes_by_mark,
     names_product,
     read_footnote,
@@ -745,7 +746,7 @@ def _read_table(
             ) + tuple(
                 FLAG_PARTIAL for _ in [1] if any(FLAG_PARTIAL in r.flags for _, _, r in about)
             ) + ((FLAG_NO_SALES,) if says_no_sales else ())
-            suffix = "".join(f" [({mark}) {note}]" for mark, note, _ in about)
+            suffix = "".join(cite_footnote(mark, note) for mark, note, _ in about)
             values.append(
                 ExtractedValue(
                     product_label=label,

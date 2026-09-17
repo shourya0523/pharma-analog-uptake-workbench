@@ -78,15 +78,17 @@ from app.parsing.evidence import (
 )
 from app.parsing.fda_label import format_moa_profile_value, parse_label_record
 from app.parsing.indications import parse_indications
-from app.parsing.labels import QUESTION_FLAGS
+from app.parsing.labels import QUESTION_FLAGS, footnotes_in
 from app.parsing.periods import (
     detect_period_context,
     normalize_period,
     quarters_reported_in,
 )
+from app.parsing.tables import sibling_row_labels
 from app.parsing.xbrl import parse_calculation, parse_facts, unsettled_elements
 from app.quality.candidate_filters import (
     filter_revenue_candidates,
+    peer_product_names,
     quote_mentions_product,
 )
 from app.quality.checks import (
@@ -1738,11 +1740,23 @@ class PipelineOrchestrator:
                     src.source_id,
                     table_skips,
                 )
+            # The other brands this document gives a row of their own. The
+            # filer's schedule is its own product list, so what could be
+            # confused with ours is read off the document rather than held in
+            # a catalogue of brands here.
+            peers = peer_product_names(
+                sibling_row_labels(
+                    doc.tables, product=job.drug_name,
+                    generic=job.generic_name, extra_aliases=extra,
+                ),
+                job.drug_name, job.generic_name, extra,
+            )
             table_rows, table_dropped = filter_revenue_candidates(
                 fingerprinted,
                 product=job.drug_name,
                 generic=job.generic_name,
                 extra_aliases=extra,
+                peer_names=peers,
             )
             dropped_total += len(table_dropped)
             kept = list(table_rows)
@@ -1851,6 +1865,7 @@ class PipelineOrchestrator:
                 generic=job.generic_name,
                 extra_aliases=extra,
                 source_text=span_corpus,
+                peer_names=peers,
             )
             dropped = list(llm_dropped) + list(dropped)
             dropped_total += len(dropped)
@@ -2078,15 +2093,37 @@ class PipelineOrchestrator:
         for row in rows:
             label_flags = [f for f in (row.issue_flags or []) if f in LABEL_FLAGS]
             residue = (row.citation_json or {}).get("label_residue") or ""
+            notes = footnotes_in(row.source_quote or "")
+            # What the row already says about itself. Every one of these is a
+            # column the pipeline filled and the judge was not shown, so it was
+            # asked whether a quote supports a figure without being told what
+            # the figure is denominated in, where it was sold, or what read it.
             candidate = {
                 "period": row.period,
                 "value_reported": row.value_reported,
+                "unit": row.unit,
+                "currency": row.currency,
                 "period_type": row.period_type,
                 "revenue_scope": row.revenue_scope,
+                "geography": row.geography,
                 "formulation": row.formulation,
+                "extraction_method": row.extraction_method,
+                "source_type": (row.citation_json or {}).get("source_type"),
                 "label_flags": label_flags,
                 "label_residue": residue,
             }
+            if notes:
+                # The filer's own footnote about this figure, which the table
+                # reader carried out on the end of the quote.
+                candidate["footnote"] = " ".join(notes)
+            doc = parsed.get(row.source_id or "")
+            peers = peer_product_names(
+                sibling_row_labels(
+                    getattr(doc, "tables", None), product=job.drug_name,
+                    generic=job.generic_name, extra_aliases=aliases,
+                ),
+                job.drug_name, job.generic_name, aliases,
+            )
             context = row.source_quote or ""
             if residue:
                 # The judge is shown what the label said that the reader could
@@ -2100,9 +2137,9 @@ class PipelineOrchestrator:
                     candidate=candidate,
                     quote=row.source_quote or "",
                     extra_aliases=aliases,
+                    peer_names=peers,
                 )
             if judgment is None:
-                doc = parsed.get(row.source_id or "")
                 if doc and doc.full_text:
                     context, _meta = select_product_evidence_text(
                         doc.full_text,
@@ -2122,6 +2159,7 @@ class PipelineOrchestrator:
                     context=context,
                     generic=job.generic_name,
                     extra_aliases=aliases,
+                    peer_names=peers,
                 )
 
             support = judgment.get("support_classification")
@@ -2145,6 +2183,7 @@ class PipelineOrchestrator:
                     candidate=candidate,
                     quote=row.source_quote or "",
                     context=context,
+                    peer_names=peers,
                 )
                 if search_judgment:
                     judgment = {**judgment, **{k: v for k, v in search_judgment.items() if v is not None}}

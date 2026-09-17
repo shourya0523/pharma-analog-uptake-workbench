@@ -33,7 +33,7 @@ from collections.abc import Iterable
 from dataclasses import dataclass, field
 
 from app.parsing.evidence import SCOPE_PATTERNS
-from app.parsing.periods import period_key, periods_named
+from app.parsing.periods import dates_named, period_key, period_span, periods_named
 from app.quality.candidate_filters import (
     _AGGREGATE_WORDS,
     _QUALIFIER_WORDS,
@@ -73,10 +73,12 @@ _SCOPE_RES: tuple[tuple[str, re.Pattern[str]], ...] = tuple(
     (label, re.compile(pattern, re.IGNORECASE)) for label, pattern in SCOPE_PATTERNS
 )
 
-# The footnote says the figure covers less than the period: an acquisition
-# closed inside it. A launch inside the period is different - the product's
-# whole revenue for the period is what it sold since launch - so "launch" is
-# not in this pattern and a note naming one is not partial.
+# The footnote says the figure covers less than the period without dating it:
+# "the two months that we owned the product". A note that does date it is read
+# from its dates instead, by `_dates_part_of_the_period` - which is why
+# "launch" is excluded here and not there. An undated note naming a launch is
+# a note about a product that has been on sale all period; a dated one puts
+# the first day of selling inside the period and says so outright.
 _PARTIAL_RE = re.compile(
     r"\b(?:acqui(?:red|sition)|period between|from the date of|"
     r"following the (?:closing|completion)|since (?:the )?(?:closing|completion)|"
@@ -451,6 +453,33 @@ def _no_sales_of(note: str, names: Iterable[str]) -> tuple[tuple[str, ...], int 
     return tuple(found), at
 
 
+def _dates_part_of_the_period(
+    note: str, months: int | None, periods: Iterable[str]
+) -> bool:
+    """Whether the note's own dates put the figure inside the period it is about.
+
+    A note that dates a figure from an event names the day the figure starts
+    at - a closing, a launch - and a row's period starts at its own first day.
+    So a date the note writes out that falls strictly inside the period the
+    note is about says the figure covers less of it than the heading does.
+    A date that is the period's own end names the heading, not a boundary
+    inside it.
+    """
+    if months is None:
+        return False
+    named = dates_named(note)
+    if not named:
+        return False
+    for key in periods:
+        span = period_span(key, months)
+        if span is None:
+            continue
+        start, end = span
+        if any(start < day < end for day in named):
+            return True
+    return False
+
+
 def read_footnote(
     note: str,
     aliases: Iterable[str],
@@ -477,13 +506,8 @@ def read_footnote(
         if key and key not in own_keys and name not in others:
             others.append(name)
     names, includes_at = _includes(note, others)
-    flags: list[str] = []
     partial = _PARTIAL_RE.search(note)
-    if partial and not re.search(r"\blaunch", note, re.IGNORECASE):
-        flags.append(FLAG_PARTIAL)
     none_sold, sold_at = _no_sales_of(note, [*own, *products, *siblings])
-    if any(_joined(n) in own_keys for n in none_sold):
-        flags.append(FLAG_NO_SALES)
     # Where the note makes a claim, its scope is the claim's; where it makes
     # two, the first one's clause is where the note starts saying something.
     claims = [
@@ -491,7 +515,31 @@ def read_footnote(
         if at is not None
     ]
     months, periods = _note_scope(note, min(claims) if claims else None)
+    flags: list[str] = []
+    undated = partial and not re.search(r"\blaunch", note, re.IGNORECASE)
+    if undated or _dates_part_of_the_period(note, months, periods):
+        flags.append(FLAG_PARTIAL)
+    if any(_joined(n) in own_keys for n in none_sold):
+        flags.append(FLAG_NO_SALES)
     return NoteReading(names, tuple(flags), months, periods, none_sold)
+
+
+# How a note travels with the figure it is about. The table reader writes the
+# marker and the note after the row it carried them out of, so whoever reads
+# the quote reads what the filer footnoted; read back out, the note is a field
+# of its own rather than trailing text a reader has to notice. One producer
+# and one reader, so the two can never be written differently.
+_CITED_NOTE_RE = re.compile(r" \[\(([^)]{1,8})\) ([^\]]+)\]")
+
+
+def cite_footnote(mark: str, note: str) -> str:
+    """The note, written so it travels on the end of the quote it is about."""
+    return f" [({mark}) {note}]"
+
+
+def footnotes_in(quote: str) -> list[str]:
+    """The notes a quote carries, in the order they were attached to it."""
+    return [note for _mark, note in _CITED_NOTE_RE.findall(quote or "")]
 
 
 def names_product(note: str, aliases: Iterable[str]) -> bool:

@@ -156,6 +156,24 @@ def names_a_competing_product(
     return None
 
 
+def peer_product_names(
+    labels: Iterable[str],
+    product: str,
+    generic: str | None = None,
+    extra_aliases: list[str] | None = None,
+) -> list[str]:
+    """The other products a document gives a row of their own.
+
+    A product-sales schedule is the filer's own list of what it sells, so the
+    rows around ours answer "which other brand could this quote be about".
+    Nothing here knows what any product is called, which is the point: a rule
+    keyed to the brands we happen to hold refuses a quote naming one of those
+    and waves the identical quote through for every product we have not seen.
+    """
+    own = {alias.lower() for alias in product_aliases(product, generic, extra=extra_aliases)}
+    return sorted(_own_rows(labels, own))
+
+
 def _own_rows(siblings: Iterable[str] | None, own: set[str]) -> set[str]:
     """The names this table gives a row of their own, ours excluded."""
     rows: set[str] = set()
