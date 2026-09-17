@@ -28,6 +28,7 @@ from typing import Any
 
 from app.extraction import elements
 from app.extraction.members import Resolution, load_register, resolve, stored
+from app.parsing.periods import MONTHS_TO_PERIOD_TYPE
 from app.parsing.xbrl import (
     Calculation,
     Fact,
@@ -158,7 +159,10 @@ def candidates_from_instance(
         seen.add(signature)
         found.append({
             "period": fact.period,
-            "period_type": "quarterly" if fact.months == 3 else "annual",
+            # The span the filer tagged, named as every other reader names it.
+            # Read as "a quarter or else a year", a six- or nine-month fact is
+            # published as an annual figure for the same key.
+            "period_type": MONTHS_TO_PERIOD_TYPE.get(fact.months, "unknown"),
             "value_reported": fact.value,
             "value_normalized_usd_millions": value,
             "currency": "USD",
