@@ -2,9 +2,9 @@
 
 The filing's header page states the type the filer submitted each document
 under. A filing agent's naming convention states nothing: the same EX-99.1 is
-`ex_100200.htm` from one agent, `q4xearningsrelease.htm` from another and
-`acme-20260211xex991.htm` from a third, and only the last of those says what it
-is in its name.
+`ex_100200.htm` from one agent, `q4-earnings-release.htm` from another
+and `acme-20260211xex991.htm` from a third, and only the last of those says
+what it is in its name.
 
 Both answers are exercised here: a filing whose EX-99 is named without the
 digits is found, a filing that declares no EX-99 yields nothing, and an EX-99
@@ -89,7 +89,7 @@ ACME_OTHER_ITEM = "0000000001-26-000003"
     "filename",
     # The two conventions the filename rule could not read, and the one it
     # could. What the filing declares is the same EX-99.1 in all three.
-    ["ex_100200.htm", "q4-2025xearningsrelease.htm", "acme-20260211xex991.htm"],
+    ["ex_100200.htm", "q4-earnings-release.htm", "acme-20260211xex991.htm"],
 )
 async def test_an_exhibit_named_without_its_number_is_still_found(monkeypatch, filename):
     connector = _connector(

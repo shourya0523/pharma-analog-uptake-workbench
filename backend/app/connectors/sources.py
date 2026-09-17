@@ -717,8 +717,8 @@ class SECConnector:
             acc_nodash = accession.replace("-", "")
             # What the filing says its documents are, not what they are called.
             # A filing agent names the release `ex_100200.htm` or
-            # `q4-2025xearningsrelease.htm` or `acme-20260211xex991.htm`, and
-            # only the third of those states the exhibit in its name. All three
+            # `q4-earnings-release.htm` or `acme-20260211xex991.htm`, and only
+            # the third of those states the exhibit in its name. All three
             # are declared EX-99.1 by the filing that carries them.
             declared = await self._declared_documents(client, cik_int, accession)
             exhibits = [
