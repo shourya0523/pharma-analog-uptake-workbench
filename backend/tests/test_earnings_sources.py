@@ -2,7 +2,12 @@ import json
 import re
 from pathlib import Path
 
-from app.connectors.sources import SECConnector, is_earnings_exhibit
+from app.connectors.sources import (
+    SECConnector,
+    form_family,
+    is_earnings_exhibit,
+    states_item,
+)
 from app.domain.models import (
     ParsedDocument,
     ParsingStatus,
@@ -73,7 +78,20 @@ def test_earnings_exhibit_rejects_filing_boilerplate():
 
 
 def test_earnings_item_is_results_of_operations():
+    """The constant is the SEC's own code for "Results of Operations and
+    Financial Condition", and the gate is what it is for.
+
+    Pinning the string says nothing about which filings are read: the gate
+    also has to find the code in a filing's item list and accept the filing
+    it sits on. `2.02` is furnished on the 8-K family, an amendment included,
+    and it is a whole entry in a comma-separated list rather than a substring
+    of one - `12.02` is not this item.
+    """
     assert SECConnector.EARNINGS_ITEM == "2.02"
+    assert SECConnector.EARNINGS_FORM == "8-K"
+    assert states_item("2.02,9.01", SECConnector.EARNINGS_ITEM)
+    assert not states_item("12.02", SECConnector.EARNINGS_ITEM)
+    assert form_family("8-K/A") == form_family(SECConnector.EARNINGS_FORM)
 
 
 def _source(source_id: str, source_type: SourceType, **kwargs) -> RetrievedSource:

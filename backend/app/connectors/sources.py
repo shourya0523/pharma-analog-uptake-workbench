@@ -5,9 +5,10 @@ to leave out of a measurement. Handing the pipeline a URL and asking whether it
 can read the document tests the reader; only walking EDGAR from an issuer name
 and a quarter tests the pipeline.
 
-The walk is: resolve the issuer to a CIK, list its 8-K filings that carry item
-2.02 (results of operations) in the window around the quarter, and take the
-EX-99 exhibits attached to them rather than the 8-K itself. That choice is what
+The walk is: resolve the issuer to a CIK, list the filings of its 8-K family
+that carry item 2.02 (results of operations) in the window around the quarter
+- an amendment furnishing that item is one of them - and take the EX-99
+exhibits attached to them rather than the 8-K itself. That choice is what
 `sec_include_8k` defaults to off for: the figures an earnings 8-K reports are
 in its exhibits, and the filing's own document is assumed to be the cover that
 points at them. It is an assumption about a form, not a measurement of one -
@@ -28,7 +29,7 @@ Two rules that look like details and are not:
 
 from __future__ import annotations
 
-# ruff: noqa: BLE001, RUF012
+# ruff: noqa: BLE001
 import asyncio
 import logging
 import mimetypes
@@ -228,6 +229,34 @@ def is_annual(form: str | None) -> bool:
     return bool(form) and form_family(form) in {form_family(f) for f in ANNUAL_FORMS}
 
 
+def states_item(items: str | None, item: str) -> bool:
+    """Whether a filing's item list names this item.
+
+    EDGAR writes the list as the codes separated by commas - ``2.02,9.01`` -
+    so the item is a whole entry in it, not a substring of one. Read as a
+    substring, a code is also found inside a longer one that happens to end
+    the same way, and the filing is then read for a disclosure it never made.
+    """
+    return item in {entry.strip() for entry in str(items or "").split(",")}
+
+
+def reading_order(form: str | None) -> int:
+    """Which filings the primary pass reads first when a budget truncates it.
+
+    An annual report states the most periods per document and a report that
+    states a period of its own states at least one, so those come before a
+    form whose own document is a cover page pointing at its exhibits. Derived
+    from `is_annual` and `reports_a_period` rather than keyed on the form
+    string: keyed on the string, every amendment falls past every form it
+    amends and is read last or not at all.
+    """
+    if is_annual(form):
+        return 0
+    if reports_a_period(form):
+        return 1
+    return 2
+
+
 # A tagged number under any namespace but the cover page's own. Matched on
 # the raw instance rather than parsed, because the question is only whether
 # there is anything to parse.
@@ -288,11 +317,39 @@ class SECConnector:
     TICKER_MAP = "https://www.sec.gov/files/company_tickers.json"
     ARCHIVES = "https://www.sec.gov/Archives/edgar/data"
 
-    # Revenue MD&A density: skip 8-K by default (noise + volume)
-    PRIMARY = {"10-K", "10-Q", "20-F", "40-F"}
-    SECONDARY = {"6-K", "8-K"}
-    # "Results of Operations and Financial Condition" — the earnings-release 8-K item
+    # The families whose primary document this pass reads by default, and the
+    # two it reads only when asked. All four sets below are form *families*,
+    # so an amendment is read wherever the form it amends is: a 10-K/A carries
+    # the statements its 10-K carried, restated.
+    #
+    # SECONDARY is a snapshot of a judgement about volume, not about what the
+    # forms report: an 8-K's own document is a cover page and the figures are
+    # in the exhibits `_retrieve_earnings_exhibits` takes, and a foreign issuer
+    # furnishes many 6-Ks per quarter. A family leaves this set when the pass
+    # is measured to be reading its documents for less than they carry.
+    SECONDARY = frozenset({"6-K", "8-K"})
+    # `11-K` is an employee-benefit plan's own annual report. It states a
+    # period, so `reports_a_period` accepts it and the instance pass spends a
+    # directory listing finding out what it tags - but the period is the
+    # plan's and the document names no product, so the primary pass does not
+    # read it. A snapshot of what `11-K` is; stale if the SEC gave the form to
+    # something else.
+    NOT_THE_REGISTRANT = frozenset({"11-K"})
+    # Derived from the module's own answer to "does this form state a period",
+    # so a form it already calls periodic cannot be dropped here by a list
+    # that was written before the form existed.
+    PRIMARY = frozenset(
+        PERIODIC_FORM_FAMILIES
+        - {form_family(f) for f in SECONDARY}
+        - {form_family(f) for f in NOT_THE_REGISTRANT}
+    )
+    # "Results of Operations and Financial Condition" - the item an earnings
+    # release is furnished under. The SEC assigns the number; it is a snapshot
+    # of the 8-K item schedule and would go stale only if that were renumbered.
     EARNINGS_ITEM = "2.02"
+    # The form that item schedule belongs to. It travels with EARNINGS_ITEM
+    # and goes stale with it; it is read as a family, never compared raw.
+    EARNINGS_FORM = "8-K"
     # Older filings live in dated shards beside filings.recent. A bound keeps a
     # wide window from walking a filer's whole history.
     MAX_SUBMISSION_SHARDS = 4
@@ -541,10 +598,15 @@ class SECConnector:
         for i, form in enumerate(forms):
             if not bounded and filings_read >= max_exhibits:
                 break
-            if form != "8-K":
+            # The 8-K family, not the string "8-K": item 2.02 belongs to the
+            # family, and an amendment furnishing it is furnishing the same
+            # results the original did. Whether that second reading agrees
+            # with the first is a question for the reader, and it cannot be
+            # asked of a document retrieval never fetched.
+            if form_family(form) != form_family(self.EARNINGS_FORM):
                 continue
             filing_items = items[i] if i < len(items) else ""
-            if self.EARNINGS_ITEM not in (filing_items or ""):
+            if not states_item(filing_items, self.EARNINGS_ITEM):
                 continue
             accession = accessions[i]
             fdate = filing_dates[i] if i < len(filing_dates) else None
@@ -586,9 +648,9 @@ class SECConnector:
                             source_id=sid,
                             source_type=SourceType.EARNINGS_RELEASE,
                             url=url,
-                            title=f"8-K EX-99 earnings release {fdate or ''}".strip(),
+                            title=f"{form} EX-99 earnings release {fdate or ''}".strip(),
                             source_date=date.fromisoformat(fdate) if fdate else None,
-                            filing_type="8-K",
+                            filing_type=form,
                             accession_number=accession,
                             storage_key=stored_key,
                             retrieval_status=RetrievalStatus.SUCCESS,
@@ -607,8 +669,8 @@ class SECConnector:
                             source_id=sid,
                             source_type=SourceType.EARNINGS_RELEASE,
                             url=url,
-                            title=f"8-K EX-99 earnings release {fdate or ''}".strip(),
-                            filing_type="8-K",
+                            title=f"{form} EX-99 earnings release {fdate or ''}".strip(),
+                            filing_type=form,
                             accession_number=accession,
                             retrieval_status=RetrievalStatus.FAILED,
                             notes=str(exc),
@@ -817,10 +879,8 @@ class SECConnector:
             # that report a window's periods are not the filings inside it:
             # the window is widened by one reporting lag at each end. Forward,
             # because a period ending just inside the window is reported after
-            # it closes; backward, because the window may open after a period's
-            # own report was filed - the holdout's own rule allows a window to
-            # open 120 days after a quarter ends, and that quarter's 10-Q is
-            # filed about 45 days after it.
+            # it closes; backward, because a window may open after the report
+            # of a period it asks for was already filed.
             #
             # The same lag both ways, because it is the same lag: a filing
             # reports a period that ended one lag before it, whichever end of
@@ -830,12 +890,16 @@ class SECConnector:
             since_bound = earnings_since - REPORTING_LAG if earnings_since else None
             until_bound = earnings_until + REPORTING_LAG if earnings_until else None
 
+            # Both the gate and the order read the form as its family, so an
+            # amendment is read where the form it amends is read and in the
+            # same place in the queue. Compared raw, `10-K/A` is in neither
+            # the allowed set nor the order, so a restatement would be dropped
+            # by the first test and would sort behind everything by the second.
             indexed: list[tuple[int, int, str]] = []
             for i, form in enumerate(forms):
-                if form not in allowed:
+                if form_family(form) not in allowed:
                     continue
-                pri = {"10-K": 0, "20-F": 0, "40-F": 0, "10-Q": 1, "6-K": 2, "8-K": 3}.get(form, 5)
-                indexed.append((pri, i, form))
+                indexed.append((reading_order(form), i, form))
             indexed.sort(key=lambda t: (t[0], t[1]))
 
             picked = 0
