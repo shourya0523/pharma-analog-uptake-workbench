@@ -6,6 +6,7 @@ import csv
 import io
 import logging
 from typing import Any
+from urllib.parse import urlsplit
 
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
@@ -140,6 +141,70 @@ def recover_stranded_jobs(db: Session, queue) -> tuple[int, int]:
 @app.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok", "environment": settings.environment}
+
+
+# A field whose name carries one of these holds a credential, and this route
+# reports only whether it is set. It is a snapshot of how credentials are
+# spelled in Settings and goes stale the moment one is added whose name
+# carries none of them - so a new credential is named with one of these words,
+# or added here in the same change. The name is not the only test: a value
+# whose structure carries a password is stripped whatever its field is called.
+SECRET_MARKERS = ("key", "password", "secret", "token")
+
+
+def _reportable(name: str, value: Any) -> Any:
+    """The value as this route may report it.
+
+    Two rules, because a credential arrives under two shapes. A field named
+    like one is reported as ``set`` or ``unset`` and never by value. Any other
+    value is reported as it stands, except that a connection string carrying a
+    password has it removed - a DSN holds a credential regardless of what its
+    field is named, so that one is decided by the value's structure rather
+    than by the field's spelling.
+
+    ``beta://svc:opensesame@host:5432/db`` is reported as
+    ``beta://svc:***@host:5432/db``.
+    """
+    if any(marker in name for marker in SECRET_MARKERS):
+        return "set" if value else "unset"
+    if not isinstance(value, str):
+        return value
+    try:
+        password = urlsplit(value).password
+    except ValueError:
+        return value
+    return value.replace(f":{password}@", ":***@", 1) if password else value
+
+
+@app.get("/config")
+def config() -> dict[str, Any]:
+    """What this server is running with, beside what the code declares.
+
+    Every answer a run gives is conditional on the settings the run read, and
+    those arrive from the environment of whichever shell started the server:
+    nothing a run stores says what they were, so a number reported without
+    them cannot be reproduced. The fields are read off the settings model
+    rather than named here, so a setting added later is reported without this
+    route being touched.
+
+    ``overridden`` is decided on the values themselves and reported alongside,
+    because a credential's reported form is lossy: two different passwords
+    read alike, and a server configured away from the code would otherwise
+    report that it had been left alone.
+    """
+    fields = []
+    for name, declared in sorted(type(settings).model_fields.items()):
+        live = getattr(settings, name)
+        default = declared.get_default()
+        fields.append({"field": name,
+                       "value": _reportable(name, live),
+                       "default": _reportable(name, default),
+                       "overridden": live != default})
+    return {
+        "environment": settings.environment,
+        "settings": fields,
+        "overridden": [f["field"] for f in fields if f["overridden"]],
+    }
 
 
 class PasteRunRequest(BaseModel):

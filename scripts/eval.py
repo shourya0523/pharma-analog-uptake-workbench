@@ -27,7 +27,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import pathlib
 import sys
 import time
@@ -305,31 +304,38 @@ def score_members(base: str, path: pathlib.Path, out: pathlib.Path) -> int:
     return 0 if good == len(rows) else 1
 
 
-# Settings that change what a run retrieves and judges, and that no run
-# records: they are read from the environment of whatever shell started the
-# server, so a re-run from a fresh shell silently gets the declared default
-# instead. A score reported without them cannot be reproduced. This is a
-# snapshot of which ones are worth saying out loud and goes stale when another
-# setting starts being overridden that way; only these two are read, because
-# printing the environment would print the API key in it.
-SESSION_SWITCHES = ("SEC_INCLUDE_8K", "ENABLE_PROFILE_JUDGE")
+# A setting whose name carries this is part of what was asked even when it is
+# the value the code declares - the same document read by a different model is
+# a different question - so it is printed whether or not it was overridden.
+# Everything else is printed when the server says it differs from its default,
+# which is a rule over the fields the server reports rather than a list of
+# settings kept here.
+ALWAYS_REPORTED = "model"
+
+
+def _try_get(base: str, path: str) -> dict | None:
+    """One attempt, no retry: a server that lacks a route is not a busy one."""
+    try:
+        with urllib.request.urlopen(f"{base}{path}", timeout=30) as response:
+            return json.loads(response.read().decode())
+    except (urllib.error.URLError, OSError, ValueError):
+        return None
 
 
 def configuration(base: str, cases: pathlib.Path, started: list[tuple[str, str, list[dict]]]) -> None:
     """Print what this run is before it prints what it scored.
 
-    The options are read back from the server rather than from the case file:
-    a case states the few a person types and the server fills in the rest, so
-    the resolved set is the only statement of what actually ran.
+    Two things decide what a run answers and neither is in the case file. The
+    options are the server's, resolved: a case states the few a person types
+    and the server fills the rest in, so only the server can say what ran. The
+    settings are the shell's - they reach the server from the environment it
+    was started in, a re-run from a fresh shell gets the declared defaults
+    instead, and nothing a run stores says which it had.
     """
     print("\n  configuration")
     print(f"    cases                 {cases} ({sum(len(b) for _, _, b in started)} case(s), "
           f"{len(started)} run(s))")
     print(f"    server                {base}")
-    for name in SESSION_SWITCHES:
-        value = os.environ.get(name)
-        print(f"    {name:21} {value if value is not None else 'unset (server default)'}"
-              f"   [this shell; the server's only if it was started from it]")
     resolved: dict[str, list[str]] = {}
     for run_id, _, _ in started:
         options = get(base, f"/runs/{run_id}").get("options") or {}
@@ -338,6 +344,19 @@ def configuration(base: str, cases: pathlib.Path, started: list[tuple[str, str, 
     for key, run_ids in resolved.items():
         print(f"    resolved options      {key}")
         print(f"                          over {len(run_ids)} run(s), one window each")
+
+    reported = _try_get(base, "/config")
+    fields = (reported or {}).get("settings") or []
+    if not fields:
+        print("    settings              this server does not report them; the settings "
+              "behind this number are not recorded anywhere")
+        return
+    shown = [f for f in fields if f["overridden"] or ALWAYS_REPORTED in f["field"]]
+    print(f"    settings              {len(shown)} of {len(fields)} reported: every one this "
+          f"server does not take from the code, and the models")
+    for field in shown:
+        default = "" if not field["overridden"] else f"   (code declares {field['default']!r})"
+        print(f"      {field['field']:28} {field['value']!r}{default}")
 
 
 def main() -> int:
