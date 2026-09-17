@@ -93,6 +93,19 @@ def test_a_footnote_naming_a_sibling_makes_the_line_combined():
     assert note.names == ("Nebulized Calderon",) and note.flags == ()
 
 
+def test_a_footnote_saying_the_line_does_not_include_a_sibling_names_nobody():
+    """"does not include sales of NuVessa" is the opposite claim, on the same
+    two words. Tested apart - a claim word anywhere, the name anywhere - it
+    reads as a line combining the two, and the row is labelled combined.
+    """
+    note = "Full year 2026 guidance does not include sales of NuVessa, as promotion moved."
+    assert read_footnote(note, ["Calderon"], products=PRODUCTS).names == ()
+    assert read_footnote(note, ["NuVessa"], products=PRODUCTS).names == ()
+    # The claim it is the opposite of still reads.
+    assert read_footnote("includes sales of NuVessa", ["Calderon"],
+                         products=PRODUCTS).names == ("NuVessa",)
+
+
 def test_an_acquisition_footnote_is_a_partial_period_and_a_launch_is_not():
     note = read_footnote(
         "net product revenue is for the period between January 24, 2023 "

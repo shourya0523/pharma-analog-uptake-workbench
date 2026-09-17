@@ -83,7 +83,14 @@ _PARTIAL_RE = re.compile(
     r"months? that we owned|weeks? that we owned)\b",
     re.IGNORECASE,
 )
-_INCLUDES_RE = re.compile(r"\b(?:includes?|including|consists? of|comprises?|comprised of)\b", re.IGNORECASE)
+# The claim a note makes about what a line contains. Tested on its own, and
+# the product's name tested on its own, "does not include sales of NuVessa"
+# reads as a note saying the line contains NuVessa - the opposite of what it
+# says. So the claim and its subject are carried by one pattern, as
+# `_no_sales_of` carries them: the claim word may not be negated, and nothing
+# that negates it may stand between the claim and the name.
+_INCLUDES_CLAIM = r"includes?|including|consists?\s+of|comprises?|comprised\s+of"
+_NEGATES = r"\b(?:not|never|excludes?|excluding|exclusive\s+of|other\s+than|without)\b"
 
 # The note says the line is not this product's at all: "there were no sales
 # of NuVessa in the quarter" under "Calderon and NuVessa (1)".
@@ -403,6 +410,28 @@ def _note_scope(note: str, claim_at: int | None) -> tuple[int | None, frozenset[
     return months, periods
 
 
+def _includes(note: str, names: Iterable[str]) -> tuple[tuple[str, ...], int | None]:
+    """The products the note says the line includes, and where it first says so.
+
+    ``includes Nebulized Calderon`` names Nebulized Calderon; ``does not
+    include sales of Nebulized Calderon`` names nobody.
+    """
+    found: list[str] = []
+    at: int | None = None
+    for name in names:
+        if not name:
+            continue
+        match = re.search(
+            rf"(?<!not\s)(?<!never\s)\b(?:{_INCLUDES_CLAIM})\b"
+            rf"(?:(?!{_NEGATES})[^.;]){{0,60}}?\b{re.escape(name)}\b",
+            note, re.IGNORECASE,
+        )
+        if match:
+            found.append(name)
+            at = match.start() if at is None else min(at, match.start())
+    return tuple(found), at
+
+
 def _no_sales_of(note: str, names: Iterable[str]) -> tuple[tuple[str, ...], int | None]:
     """The products the note says had no sales, and where it first says so."""
     found: list[str] = []
@@ -442,14 +471,12 @@ def read_footnote(
     note = note or ""
     own = [a for a in aliases if a]
     own_keys = {_joined(a) for a in own if _joined(a)}
-    names: list[str] = []
-    if _INCLUDES_RE.search(note):
-        for name in [*products, *siblings]:
-            key = _joined(name)
-            if not key or key in own_keys:
-                continue
-            if re.search(rf"\b{re.escape(name)}\b", note, re.IGNORECASE) and name not in names:
-                names.append(name)
+    others: list[str] = []
+    for name in [*products, *siblings]:
+        key = _joined(name)
+        if key and key not in own_keys and name not in others:
+            others.append(name)
+    names, includes_at = _includes(note, others)
     flags: list[str] = []
     partial = _PARTIAL_RE.search(note)
     if partial and not re.search(r"\blaunch", note, re.IGNORECASE):
@@ -459,9 +486,12 @@ def read_footnote(
         flags.append(FLAG_NO_SALES)
     # Where the note makes a claim, its scope is the claim's; where it makes
     # two, the first one's clause is where the note starts saying something.
-    claims = [at for at in (sold_at, partial.start() if partial else None) if at is not None]
+    claims = [
+        at for at in (sold_at, includes_at, partial.start() if partial else None)
+        if at is not None
+    ]
     months, periods = _note_scope(note, min(claims) if claims else None)
-    return NoteReading(tuple(names), tuple(flags), months, periods, none_sold)
+    return NoteReading(names, tuple(flags), months, periods, none_sold)
 
 
 def names_product(note: str, aliases: Iterable[str]) -> bool:
