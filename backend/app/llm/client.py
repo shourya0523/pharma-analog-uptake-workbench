@@ -593,15 +593,7 @@ class LLMModules:
             unresolved=json.dumps(unresolved),
         )
         if not self.settings.openrouter_api_key:
-            n = len(datapoints)
-            u = len(unresolved)
-            pct = round(100 * n / max(n + u, 1), 1)
-            return {
-                "completeness_pct": pct,
-                "missing_periods": [x.get("period") for x in unresolved],
-                "limitations": [],
-                "recommended_next_steps": [],
-            }
+            return {"missing_periods": [x.get("period") for x in unresolved]}
         return await self.client.chat_json(
             model=self.settings.openrouter_model_extract,
             system=prompt["system"],
