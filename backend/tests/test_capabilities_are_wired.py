@@ -45,6 +45,7 @@ SCRIPT_ONLY = {
     "aggregate_comparable_sales": NOT_WIRED,
     "calculate_competitive_snapshot": NOT_WIRED,
     "build_launch_peers": NOT_WIRED,
+    "count_universe_entries": NOT_WIRED,
     "categorize_snapshots": NOT_WIRED,
     "assess_intensity": NOT_WIRED,
     "peers_at_launch": NOT_WIRED,
@@ -69,7 +70,6 @@ SCRIPT_ONLY = {
     # builds its equivalents inline, so these are a second spelling of a
     # capability rather than the one that ships.
     "CompetitiveIntensity": NOT_WIRED,
-    "PeakEstimateType": NOT_WIRED,
     "PharmaAssertion": NOT_WIRED,
     "RevenueCandidate": NOT_WIRED,
     "is_aggregate_formulation": NOT_WIRED,
