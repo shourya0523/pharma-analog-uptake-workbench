@@ -456,6 +456,11 @@ def test_prose_pairs_quarter_and_year_to_date_when_the_sentence_says_respectivel
     it as multi-period leaves a whole product unreadable even though the
     sentence states the correspondence outright. Neither half matches the single-period
     patterns either: the quarter's year only appears after the second phrase.
+
+    Both halves are keyed the way `periods.period_label` keys them, so the
+    year-to-date half is `2025H1` and not the bare year: a bare year is what an
+    annual figure is called, and a reader holding one cannot tell the six
+    months from the twelve.
     """
     from app.extraction.prose import read_prose
 
@@ -467,7 +472,7 @@ def test_prose_pairs_quarter_and_year_to_date_when_the_sentence_says_respectivel
     )
     assert [(v.period, v.period_type, v.value_as_reported) for v in values] == [
         ("2025Q2", "quarterly", 336.0),
-        ("2025", "six_month", 615.0),
+        ("2025H1", "six_month", 615.0),
     ]
 
 

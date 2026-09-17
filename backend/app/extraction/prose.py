@@ -36,7 +36,15 @@ from functools import lru_cache
 from app.extraction.extract import ExtractedValue
 from app.extraction.members import load_products, words
 from app.parsing.evidence import product_aliases
-from app.parsing.periods import MONTHS, fiscal_period_end, quarter_of_month
+from app.parsing.periods import (
+    MONTH_WORDS,
+    MONTHS,
+    MONTHS_TO_PERIOD_TYPE,
+    fiscal_period_end,
+    period_label,
+    periods_named,
+    quarter_of_month,
+)
 from app.quality.candidate_filters import _AGGREGATE_WORDS
 
 _MAGNITUDE_TO_UNIT = {"billion": "billions", "million": "millions", "thousand": "thousands"}
@@ -108,17 +116,75 @@ _SENTENCE_SPLIT_RE = re.compile(r"(?<=[.;])[\"'\u201d\u2019)\]]*\s+")
 
 @dataclass(frozen=True)
 class _Period:
+    """A period a sentence names: its canonical key and the span it covers."""
+
     period: str
-    period_type: str
+    months: int
+
+    @property
+    def period_type(self) -> str:
+        return MONTHS_TO_PERIOD_TYPE[self.months]
+
+
+# A four-digit year standing on its own. A table prints the span once in its
+# heading and the years under it, one per column, so the years are read apart
+# from the phrase that says what they are years of.
+_YEAR_TOKEN_RE = re.compile(r"\b(?:19|20)\d{2}\b")
+# The quarter `period_label` wrote into a key, read back out of it so the same
+# span can be renamed for another year.
+_QUARTER_OF_KEY_RE = re.compile(r"\d{4}Q([1-4])\Z")
 
 
 def periods_named_in(text: str) -> set[str]:
-    """Every period this text names, as period keys ("2025Q1", "2025H1").
+    """Every period this text names, as period keys ("2025Q1", "2025H1", "2025M9").
 
-    Empty where the text names none, which is the ordinary case for a table
-    row: the row carries figures and the header carries the period.
+    A period is named by a span and a year, and a table prints the two apart:
+
+        For the Three Months Ended June 30, / For the Six Months Ended June 30,
+        2024 / 2023 / 2024 / 2023
+        Calderon XR $ 34,974 $ 22,209 $ 61,183 $ 40,776
+
+    states four periods and no phrase in it states more than one. So the
+    periods a block names are the spans it states, each ending in each of the
+    years it states.
+
+    Empty where the text states no span at all - a table row lifted away from
+    its heading - which says nothing about which period its figures are for.
     """
-    return {period.period for _position, period in _periods_with_positions(text or "")}
+    body = text or ""
+    years = {int(year) for year in _YEAR_TOKEN_RE.findall(body)}
+    named: set[str] = set()
+    for key, months in _spans_named_in(body):
+        named.add(key)
+        match = _QUARTER_OF_KEY_RE.search(key)
+        quarter = int(match.group(1)) if match else 0
+        for year in years:
+            named.add(period_label(year, months, quarter))
+    return named
+
+
+def spans_named_in(text: str) -> set[int]:
+    """The span in months of each period this text names.
+
+    What a period is called and how long it is are different questions, and a
+    heading can answer the second without answering the first.
+    """
+    return {months for _key, months in _spans_named_in(text or "")}
+
+
+def _spans_named_in(text: str) -> list[tuple[str, int]]:
+    """(period key, span in months) for every period the text names.
+
+    Two grammars read it, and neither contains the other: `periods.periods_named`
+    reads the heading a statement carries and the compact notation a release
+    uses, and the patterns in this module read the narrative forms a sentence
+    uses - "full-year 2002", "the second quarter and first six months of 2025".
+    """
+    spans = [(period.key, period.months) for period in periods_named(text) if period.key]
+    spans += [
+        (period.period, period.months) for _position, period in _periods_with_positions(text)
+    ]
+    return spans
 
 
 def _periods_with_positions(sentence: str) -> list[tuple[int, _Period]]:
@@ -136,9 +202,9 @@ def _periods_with_positions(sentence: str) -> list[tuple[int, _Period]]:
     for match in _QUARTER_AND_YTD_RE.finditer(sentence):
         year = int(match.group("year"))
         quarter = _ORDINAL_TO_QUARTER[match.group("ordinal").lower()]
-        length = {"six": "six_month", "nine": "nine_month"}[match.group("length").lower()]
-        found.append((match.start(), _Period(f"{year}Q{quarter}", "quarterly")))
-        found.append((match.start("length"), _Period(str(year), length)))
+        months = MONTH_WORDS[match.group("length").lower()]
+        found.append((match.start(), _Period(period_label(year, 3, quarter), 3)))
+        found.append((match.start("length"), _Period(period_label(year, months, quarter), months)))
         consumed.append(match.span())
 
     def claimed(position: int) -> bool:
@@ -153,29 +219,29 @@ def _periods_with_positions(sentence: str) -> list[tuple[int, _Period]]:
             continue
         month, year = fiscal_period_end(month, int(match.group("day")), year)
         if match.group("annual") or (match.group("length") or "").lower() == "twelve":
-            found.append((match.start(), _Period(str(year), "annual")))
+            months = 12
         elif match.group("quarter_word") or (match.group("length") or "").lower() == "three":
-            found.append(
-                (match.start(), _Period(f"{year}Q{quarter_of_month(month)}", "quarterly"))
-            )
+            months = 3
         else:
-            months = {"six": "six_month", "nine": "nine_month"}[(match.group("length")).lower()]
-            found.append((match.start(), _Period(str(year), months)))
+            months = MONTH_WORDS[(match.group("length")).lower()]
+        quarter = quarter_of_month(month)
+        found.append((match.start(), _Period(period_label(year, months, quarter), months)))
     for match in _ORDINAL_QUARTER_RE.finditer(sentence):
         if claimed(match.start()):
             continue
         quarter = _ORDINAL_TO_QUARTER[match.group("ordinal").lower()]
-        found.append((match.start(), _Period(f"{int(match.group('year'))}Q{quarter}", "quarterly")))
+        year = int(match.group("year"))
+        found.append((match.start(), _Period(period_label(year, 3, quarter), 3)))
     for match in _COMPACT_QUARTER_RE.finditer(sentence):
         if claimed(match.start()):
             continue
         quarter = match.group("q") or match.group("q2") or match.group("q3")
         year = match.group("year") or match.group("year2") or match.group("year3")
-        found.append((match.start(), _Period(f"{int(year)}Q{int(quarter)}", "quarterly")))
+        found.append((match.start(), _Period(period_label(int(year), 3, int(quarter)), 3)))
     for match in _ANNUAL_WORD_RE.finditer(sentence):
         if claimed(match.start()):
             continue
-        found.append((match.start(), _Period(str(int(match.group("year"))), "annual")))
+        found.append((match.start(), _Period(period_label(int(match.group("year")), 12, 0), 12)))
     # One period named twice ("fourth quarter 2003" then "Q4 2003") is still one
     # period; only genuinely different periods make a sentence ambiguous.
     unique: list[_Period] = []

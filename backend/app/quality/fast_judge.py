@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Any
 
 from app.domain.claims import stated_labels, stated_text
-from app.llm.client import apply_judge_hard_vetoes, re_ytd_language
+from app.llm.client import apply_judge_hard_vetoes, names_a_year_to_date_span
 from app.quality.candidate_filters import quote_mentions_product
 from app.quality.checks import quote_contains_value
 
@@ -72,7 +72,7 @@ def try_deterministic_judgment(
         mentions
         and has_value
         and period_type in {"quarterly", "annual"}
-        and not re_ytd_language(quote)
+        and not names_a_year_to_date_span(quote)
         and scope not in {"", "Unknown", "Company total"}
     ):
         return {

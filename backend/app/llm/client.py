@@ -13,12 +13,13 @@ import yaml
 
 from app.config import get_settings
 from app.domain.claims import stated_text
-from app.extraction.prose import periods_named_in
+from app.extraction.prose import periods_named_in, spans_named_in
 from app.llm.grounding import (
     apply_structured_field_gates,
     enforce_verbatim_on_candidates,
     quote_is_verbatim,
 )
+from app.parsing.periods import MONTHS_TO_PERIOD_TYPE, period_key
 from app.parsing.evidence import (
     NON_PRODUCT_REVENUE_RE,
     TOTAL_REVENUE_RE,
@@ -782,6 +783,40 @@ class LLMModules:
         return {"snippets": snippets}
 
 
+# A period that is part of a year without being a quarter of it is what
+# "year to date" names. Both halves come from the period grammar's own map of
+# spans to period types, so a span the grammar learns to read is covered here
+# without being written down twice.
+_YEAR_TO_DATE_SPANS = frozenset(
+    months
+    for months, period_type in MONTHS_TO_PERIOD_TYPE.items()
+    if period_type not in {"quarterly", "annual"}
+)
+_QUARTER_SPAN = next(
+    months for months, period_type in MONTHS_TO_PERIOD_TYPE.items() if period_type == "quarterly"
+)
+_SPAN_OF_PERIOD_TYPE = {
+    period_type: months for months, period_type in MONTHS_TO_PERIOD_TYPE.items()
+}
+
+
+def _period_claimed_by(candidate: dict) -> str | None:
+    """The period a candidate claims, as a key in the grammar's namespace.
+
+    A row states its period twice - as a label and as a period type - and the
+    two can be written in different namespaces: a nine-month figure carries the
+    label `2024`, which is how an annual one is written, and comparing that
+    against what a quote names asks a question the row never answered. The
+    label is re-keyed for the span the row declares, and a row declaring a span
+    the grammar has no name for has not claimed a period at all.
+    """
+    label = str(candidate.get("period") or "")
+    months = _SPAN_OF_PERIOD_TYPE.get(stated_text(candidate.get("period_type")).lower())
+    if not label or months is None:
+        return None
+    return period_key(label, months)
+
+
 def apply_judge_hard_vetoes(
     *,
     product: str,
@@ -825,7 +860,17 @@ def apply_judge_hard_vetoes(
     if other and not mentions:
         issues.append(f"hard_veto:other_brand:{other}")
         veto = True
-    if period_type == "quarterly" and re_ytd_language(q):
+    # A figure the sentence states for a six- or nine-month span is not the
+    # quarter the row calls it, and the sentence carrying the value is what has
+    # to say so. A heading that prints the quarter column beside the
+    # year-to-date one names both spans and settles neither, so it is not this
+    # veto's business - which period the figure is for is the check below.
+    carried = spans_named_in(read)
+    if (
+        period_type == "quarterly"
+        and carried & _YEAR_TO_DATE_SPANS
+        and _QUARTER_SPAN not in carried
+    ):
         issues.append("hard_veto:ytd_language_as_quarterly")
         veto = True
     # A quote that names periods has said which one its figure is for, and a
@@ -833,10 +878,15 @@ def apply_judge_hard_vetoes(
     # reading a Q1 release answered a question about Q4 with "1Q 2025 Calderon
     # + NuVessa reported revenue of $21.0M", and every check downstream saw a
     # quote naming the product and carrying the value, so it published.
-    # A quote naming no period - a table row, whose period is in the header -
-    # says nothing either way and is left alone.
+    #
+    # This reads the whole quote rather than the row carrying the value,
+    # because a table row states no period at all: the model quotes the
+    # heading with the row, and the heading is where the filer wrote the
+    # period. A quote carrying no heading still names nothing and is left
+    # alone.
     named = periods_named_in(q)
-    if named and (candidate.get("period") or "") and candidate["period"] not in named:
+    claimed = _period_claimed_by(candidate)
+    if named and claimed and claimed not in named:
         issues.append("hard_veto:quote_states_a_different_period")
         veto = True
     # A milestone earned on the product's sales is stated in the same sentence
@@ -860,11 +910,13 @@ def apply_judge_hard_vetoes(
     return judgment
 
 
-def re_ytd_language(quote: str) -> bool:
-    return bool(
-        re.search(
-            r"\b(six\s+months?\s+ended|nine\s+months?\s+ended|year[\s-]to[\s-]date|\bYTD\b|year\s+ended)\b",
-            quote or "",
-            re.IGNORECASE,
-        )
-    )
+def names_a_year_to_date_span(text: str) -> bool:
+    """Whether this text states a period that is part of a year but not a quarter.
+
+    The spans that mean year-to-date are the ones the period grammar has a name
+    for that is neither a quarter nor a year, so this asks the same parser that
+    types the period rather than matching the phrases a filer might use to write
+    it - "first six months of 2025" is one of those phrases and is not a
+    "six months ended".
+    """
+    return bool(spans_named_in(text) & _YEAR_TO_DATE_SPANS)

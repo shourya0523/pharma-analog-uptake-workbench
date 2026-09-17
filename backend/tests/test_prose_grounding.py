@@ -198,12 +198,74 @@ def test_a_quote_that_names_a_period_must_name_the_rows_own():
     assert "hard_veto:quote_states_a_different_period" not in row["issues"]
 
 
-def _judged_for(quote: str, value: float, *, period: str) -> dict:
+def _judged_for(quote: str, value: float, *, period: str,
+                period_type: str = "quarterly") -> dict:
     return apply_judge_hard_vetoes(
         product="Calderon",
-        candidate={"period": period, "period_type": "quarterly",
+        candidate={"period": period, "period_type": period_type,
                    "value_reported": value, "revenue_scope": "Product family"},
         quote=quote,
         judgment={"support_classification": "supported",
                   "validation_status": "auto_pass", "issues": []},
     )
+
+
+# The heading a filer prints above a product-revenue table, with the comparative
+# columns it always carries. Four periods, and no phrase in it names more than
+# one: the spans stand on two lines and the years on four more.
+_TWO_COLUMN_TABLE = (
+    "For the Three Months Ended June 30,\nFor the Six Months Ended June 30,\n"
+    "2024\n2023\n2024\n2023\nCalderon XR\n$\n77,372\n$\n64,898\n$\n144,214\n$\n122,424"
+)
+
+
+def test_a_heading_names_every_period_its_columns_state():
+    """The veto held the figure the heading was written to state.
+
+    A quote lifted from a table arrives as the heading plus the row, and the
+    heading states the spans in one place and the years in another. Read for
+    the first phrase that carried both, it named one period - the wrong one -
+    so the row's own quarter, its comparative quarter and both year-to-date
+    columns were all "a different period" from what the quote said.
+    """
+    from app.extraction.prose import periods_named_in
+
+    assert periods_named_in(_TWO_COLUMN_TABLE) == {"2024Q2", "2023Q2", "2024H1", "2023H1"}
+
+    for period, value in (("2024Q2", 77372.0), ("2023Q2", 64898.0)):
+        kept = _judged_for(_TWO_COLUMN_TABLE, value, period=period)
+        assert "hard_veto:quote_states_a_different_period" not in kept["issues"], period
+    for period, value in (("2024H1", 144214.0), ("2023H1", 122424.0)):
+        kept = _judged_for(_TWO_COLUMN_TABLE, value, period=period, period_type="six_month")
+        assert "hard_veto:quote_states_a_different_period" not in kept["issues"], period
+
+    # A quarter no column of this table covers is still not supported by it.
+    wrong = _judged_for(_TWO_COLUMN_TABLE, 77372.0, period="2022Q2")
+    assert "hard_veto:quote_states_a_different_period" in wrong["issues"]
+
+
+def test_a_row_is_compared_against_the_period_its_own_type_says_it_means():
+    """A row states its period twice, and the two can be written differently.
+
+    A nine-month figure is labelled `2024` - the way an annual one is labelled -
+    while the heading it was read from names `2024M9`. Comparing the label as
+    written held the figure for naming a period the quote does not state, when
+    what the row means is the one period the quote does state.
+    """
+    heading = ("For the Three Months Ended September 30,\nFor the Nine Months Ended "
+               "September 30,\n2024\n2023\nCalderon XR\n$\n77,372\n$\n144,214")
+    kept = _judged_for(heading, 144214.0, period="2024", period_type="nine_month")
+    assert "hard_veto:quote_states_a_different_period" not in kept["issues"]
+
+    # A span the grammar has no name for is not a claim about a period, so
+    # there is nothing for the check to compare.
+    unstated = _judged_for(heading, 144214.0, period="2024", period_type="ytd")
+    assert "hard_veto:quote_states_a_different_period" not in unstated["issues"]
+
+    # And a sentence that states a stub - a part-period the filer dates from an
+    # event - names no nine months, so a nine-month row is not supported by it.
+    stub = ("Calderon XR net sales were approximately $36.4 million for the three months "
+            "ended September 30, 2023 and $98.8 million for the period between January 24, "
+            "2023 (date of acquisition) and September 30, 2023.")
+    held = _judged_for(stub, 98.8, period="2023Q3", period_type="nine_month")
+    assert "hard_veto:quote_states_a_different_period" in held["issues"]
