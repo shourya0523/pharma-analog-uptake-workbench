@@ -141,30 +141,32 @@ def test_the_bound_survives_the_round_trip_and_reaches_the_quote():
     )
 
 
-def test_the_row_stored_from_it_cites_the_same_document_and_records_its_lineage():
+def test_the_row_stored_from_it_cites_the_same_document_and_says_what_it_subtracted():
+    """The lineage the row carries is the one a reader can reach.
+
+    It was written twice: once into the citation, which the dashboard shows,
+    and once as assertion and lineage rows, which nothing joins. Both answers:
+    every term is named on the row, and the run writes no rows besides the row
+    itself.
+    """
     db, job = _db()
     (candidate,) = _derived(db, job, reported_as="Calderon and NuVessa",
                             geography="United States")
     orch = PipelineOrchestrator(db, file_store=None)
     row = orch._datapoint_from_candidate(job, _source("k", ANNUAL), candidate)
-    orch._record_derivation_lineage(job, row, candidate)
     db.commit()
 
     assert row.source_url == ANNUAL
     assert row.reported_as == "Calderon and NuVessa"
     assert row.geography == "United States"
-    assert [term["role"] for term in row.citation_json["derived_from"]].count("quarter") == 3
+    terms = row.citation_json["derived_from"]
+    assert len(terms) == len(candidate["_inputs"])
+    assert [term["role"] for term in terms].count("quarter") == 3
+    assert {term["role"] for term in terms} == {"period_total", "quarter"}
+    assert {term["source_url"] for term in terms} == {ANNUAL, QUARTERLY}
 
-    lineage = db.query(DerivationLineageORM).all()
-    assert len(lineage) == len(candidate["_inputs"])
-    assert {link.role for link in lineage} == {"period_total", "quarter"}
-    outputs = {link.output_assertion_id for link in lineage}
-    assert len(outputs) == 1
-    assertions = {a.id: a for a in db.query(EvidenceAssertionORM).all()}
-    assert assertions[outputs.pop()].entity_id == row.id
-    assert {
-        assertions[link.input_assertion_id].source_url for link in lineage
-    } == {ANNUAL, QUARTERLY}
+    assert db.query(DerivationLineageORM).all() == []
+    assert db.query(EvidenceAssertionORM).all() == []
 
 
 def test_a_label_nobody_accounted_for_is_not_subtracted():

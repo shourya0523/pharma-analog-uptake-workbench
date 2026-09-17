@@ -34,7 +34,6 @@ from app.db.models import (
     AnalogFamilyORM,
     CanonicalProductORM,
     DatapointORM,
-    DerivationLineageORM,
     DrugJobORM,
     DrugProfileFieldORM,
     EvidenceAssertionORM,
@@ -1804,74 +1803,6 @@ class PipelineOrchestrator:
         self.db.add(row)
         return row
 
-    def _record_derivation_lineage(
-        self, job: DrugJobORM, row: DatapointORM, candidate: dict[str, Any]
-    ) -> None:
-        """Write what this derived row was computed from, as rows not as prose.
-
-        The quote says the arithmetic in a sentence and the citation repeats it
-        as fields; neither can be joined against. `DerivationLineageORM` is the
-        join, and it is written over `EvidenceAssertionORM`, which is the table
-        it points at: one assertion per figure, the derived one and each input,
-        so an input that several derivations used is one row that all of them
-        name.
-
-        An input that never became a stored datapoint - a period total, kept
-        aside because it is not an answer to a quarterly question - still gets
-        an assertion, keyed on the source it was read from and the value it
-        carried. What it cannot get is an entity that outlives this run, which
-        is why the entity id falls back to the row's own.
-        """
-        inputs = candidate.get("_inputs") or []
-        if not inputs:
-            return
-
-        def assertion(
-            entity_id: str, value: Any, url: str | None, source_id: str | None,
-            method: str, quote: str | None, section: str,
-        ) -> EvidenceAssertionORM:
-            record = EvidenceAssertionORM(
-                id=new_id(),
-                entity_type="datapoint",
-                entity_id=entity_id,
-                field_name="value_normalized_usd_millions",
-                value_json={"value": value},
-                source_id=source_id,
-                source_url=url or "",
-                source_section=section,
-                source_quote=quote,
-                confidence=float(candidate.get("confidence") or 0.0),
-                validation_status=ValidationStatus.PENDING.value,
-                extraction_method=method,
-                selected=True,
-            )
-            self.db.add(record)
-            return record
-
-        output = assertion(
-            row.id, row.value_normalized_usd_millions, row.source_url, row.source_id,
-            str(row.extraction_method or ""), row.source_quote, f"{job.drug_name} {row.period}",
-        )
-        for term in inputs:
-            source = assertion(
-                str(term.get("datapoint_id") or row.id),
-                term.get("value_normalized_usd_millions"),
-                term.get("source_url"),
-                term.get("source_id"),
-                str(term.get("extraction_method") or ""),
-                None,
-                f"{job.drug_name} {term.get('period')} {term.get('period_type')}",
-            )
-            self.db.add(
-                DerivationLineageORM(
-                    id=new_id(),
-                    output_assertion_id=output.id,
-                    input_assertion_id=source.id,
-                    role=str(term.get("role") or "input"),
-                    formula_version=str(row.extraction_method or ""),
-                )
-            )
-
     def _bulk_tagged_revenue(
         self, job: DrugJobORM
     ) -> tuple[list[DatapointORM], list[dict[str, Any]]]:
@@ -2573,7 +2504,6 @@ class PipelineOrchestrator:
             if source is None:
                 break
             row = self._datapoint_from_candidate(job, source, candidate)
-            self._record_derivation_lineage(job, row, candidate)
             rows.append(row)
         if derived:
             logger.info(
