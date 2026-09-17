@@ -1,11 +1,6 @@
 {
- "what": "Combined-name XBRL members from issuers no answer key under seed/ uses. Rebuilt after an audit: the first version reused holdout_labels' three issuers, and used Pfizer, which seed/gold/annual_revenue.jsonl scores - gold is a directory and only its quarterly file had been checked.",
- "issuers_deliberately_excluded": [
-  "gold (every file, not only quarterly_revenue.jsonl): United Therapeutics, Gilead, Johnson & Johnson, Actelion/J&J, Merck, Liquidia, Pfizer, GSK, Actelion, Eli Lilly",
-  "holdout: Novo Nordisk, Sanofi, Novartis, Vertex, AbbVie, Amgen, Insmed, Alnylam",
-  "holdout_labels: Alkermes, Biogen, Jazz Pharmaceuticals",
-  "cases: Exelixis, Regeneron, Supernus"
- ],
+ "what": "Combined-name XBRL members from issuers no answer key under seed/ uses. Which issuers those are is derived, not recorded here: see issuers_deliberately_excluded.",
+ "issuers_deliberately_excluded": "Not listed here. backend/tests/answer_keys.py spent_issuers() derives the issuers every other answer key under seed/ spends, and test_combined_name_holdout_is_held_out.py test_no_case_comes_from_a_scored_issuer fails if any case in this file names one of them. A list written down here would be a second answer to the same question, and would go stale the day another set is added.",
  "siblings_are": "the other product members in the SAME instance the member appears in",
  "cases": [
   {

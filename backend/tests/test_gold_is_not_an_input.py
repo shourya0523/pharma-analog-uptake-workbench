@@ -2,14 +2,16 @@
 
 There is already a test that the gold builder imports nothing from the
 application, so the dataset cannot be quietly produced by the thing it judges.
-This is the same rule in the other direction, which was missing and was broken
-within a day of the gap existing: a register mapping XBRL member names to
-products was built by reading gold's product list, which made a file the
-pipeline reads at run time a function of the answer key.
+This is the same rule in the other direction: a file the pipeline reads at run
+time may not be a function of the answer key.
 
 The failure is not that a wrong number gets published. It is that the score
 stops meaning anything - a pipeline holding gold's decisions is being asked
 whether it agrees with itself.
+
+Three shapes, because each escapes the others: application code that names a
+gold file, a script that reads gold and writes a pipeline input, and a
+pipeline input whose text carries gold's own URLs or quotes.
 """
 
 from __future__ import annotations
@@ -32,8 +34,30 @@ PIPELINE_INPUTS = ("product_attributes.csv", "xbrl_members.csv", "xbrl_elements.
 # about contact: reference data may flow into the answer key, never back.
 BUILDS_GOLD = {"build_independent_gold.py"}
 
-GOLD_MARKERS = ("seed/gold", 'seed" / "gold', "quarterly_revenue.jsonl",
-                "product_profiles.jsonl", "series_coverage.jsonl", "peak_sales.jsonl")
+GOLD = SEED / "gold"
+
+# How the directory is spelled in code: as a path fragment, and as the two
+# halves pathlib joins. Everything else is derived - naming gold's files by
+# hand is how four of them came to be watched and the other five not.
+GOLD_DIR_MARKERS = ("seed/gold", 'seed" / "gold')
+
+
+def gold_files() -> list[pathlib.Path]:
+    """Every answer-key file gold ships, whatever its series.
+
+    Derived from the directory so that a file added to gold is watched the day
+    it lands, rather than when someone remembers to extend a tuple. Gold's
+    prose - its README - is not a key and is not distinctive enough to name in
+    code by accident, so only the data files count.
+    """
+    if not GOLD.is_dir():
+        return []
+    return sorted(GOLD.glob("*.jsonl")) + sorted(GOLD.glob("*.json"))
+
+
+def gold_markers() -> tuple[str, ...]:
+    """Every string that, appearing in code, means that code is reaching for gold."""
+    return GOLD_DIR_MARKERS + tuple(sorted(path.name for path in gold_files()))
 
 
 def _docstring_nodes(tree: ast.AST) -> set[int]:
@@ -57,7 +81,7 @@ def _code_mentions_gold(source: str) -> bool:
         if isinstance(node, ast.Constant) and isinstance(node.value, str):
             if id(node) in docstrings:
                 continue
-            if any(marker in node.value for marker in GOLD_MARKERS):
+            if any(marker in node.value for marker in gold_markers()):
                 return True
     return False
 
@@ -119,42 +143,58 @@ def test_the_member_register_names_only_products_we_track_independently():
 
 
 # ---------------------------------------------------------------------------
-# The two checks above are about code: a module that opens gold, a script that
-# reads gold and writes a pipeline input. Both were enough until the failure
-# arrived in a shape neither watches - a seed file written by hand, whose rows
-# were copied from gold's own columns. No script reads gold, no module names
-# it, and the file still carries the answer key's evidence into the thing being
-# scored.
-#
-# What was proposed was a table of investor-relations document URLs, "seeded
-# by pattern where the pattern is regular, hand-added for one-offs". Its rows
-# would have been gold's `source_url` column. Measuring against gold would then
-# have confirmed that a URL copied from gold fetches the document gold cited.
+# The two checks above are about code. The third shape is a seed file written
+# by hand whose rows were copied out of gold's own columns: no script reads
+# gold, no module names it, and the file still carries the answer key's
+# evidence into the thing being scored. Only a value-level check sees it.
 # ---------------------------------------------------------------------------
 
-GOLD_ROWS = SEED / "gold" / "quarterly_revenue.jsonl"
-# The columns that are evidence rather than reference data. Product names are
-# deliberately excluded: gold is built from product_attributes.csv, so those
-# overlap by design and in the permitted direction.
-EVIDENCE_FIELDS = ("source_url", "source_quote", "gold_id")
+# Which of gold's columns are evidence rather than reference data, stated as a
+# rule over the column name rather than as a list of columns, so it holds for
+# gold files this test has never been read against. A `gold_id` identifies the
+# key's own row; a `*_url` is the document it cited; a `*_quote` is the span it
+# read. Product names are deliberately not evidence: gold is built from
+# product_attributes.csv, so that overlap is the dependency running in the
+# direction that is allowed.
+EVIDENCE_KEY = re.compile(r"url|quote|gold_id", re.IGNORECASE)
 # Short strings collide by accident; a quote or a URL this long does not.
 DISTINCTIVE = 24
 
 
+def _evidence_under(value: object, *, is_evidence: bool) -> set[str]:
+    """Every distinctive string sitting under an evidence-named key.
+
+    Recursive, because gold nests: a quarterly row's `sources` and
+    `bridge_components` are lists of objects with their own `source_url`, and a
+    reader that only looked at top-level columns did not see them.
+    """
+    found: set[str] = set()
+    if isinstance(value, dict):
+        for key, child in value.items():
+            found |= _evidence_under(
+                child, is_evidence=is_evidence or bool(EVIDENCE_KEY.search(str(key)))
+            )
+    elif isinstance(value, list):
+        for child in value:
+            found |= _evidence_under(child, is_evidence=is_evidence)
+    elif is_evidence and isinstance(value, str) and len(value.strip()) >= DISTINCTIVE:
+        found.add(value.strip())
+    return found
+
+
 def _gold_evidence() -> set[str]:
+    """The URLs, quotes and row ids of every gold file, not only one of them."""
     import json
 
-    if not GOLD_ROWS.exists():
-        return set()
     values: set[str] = set()
-    for line in GOLD_ROWS.read_text().splitlines():
-        if not line.strip():
-            continue
-        row = json.loads(line)
-        for field in EVIDENCE_FIELDS:
-            value = str(row.get(field) or "").strip()
-            if len(value) >= DISTINCTIVE:
-                values.add(value)
+    for path in gold_files():
+        text = path.read_text()
+        if path.suffix == ".jsonl":
+            rows = [json.loads(line) for line in text.splitlines() if line.strip()]
+        else:
+            rows = [json.loads(text)]
+        for row in rows:
+            values |= _evidence_under(row, is_evidence=False)
     return values
 
 
