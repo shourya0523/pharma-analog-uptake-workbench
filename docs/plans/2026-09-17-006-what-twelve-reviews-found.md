@@ -1671,6 +1671,68 @@ Unknown, and that is the point of stating it as a design. What can be said:
   case, where sections 5 and 6 show the pipeline already holds figures it
   refuses to publish.
 
+### 12e. M11: choose filings by the quarters asked, not by recency and count
+
+**Status: DESIGN, premises verified.** Written after the first smoke run
+(`docs/plans/2026-09-17-008-what-the-audit-found.md` section 7) showed where
+the fifteen no-answers on the held-out set came from.
+
+**What the picker does today.** Inside the widened window, `sources.py`
+sorts the index rows annual-first, then newest-first, and takes the first
+`sec_max_filings` (`reading_order` at `:339`, the cap at `:967`). It never
+asks which quarters remain unanswered. With the shipped default of 4, every
+held-out job fetched three 10-Ks and the newest 10-Q (`select drug_name,
+sum(source_type='sec_filing') from drug_jobs join source_documents ... group
+by 1` on the smoke database: 4 for all 14 jobs). The 10-Q pages for 2024 and
+2025 were never fetched; their XBRL instances were, and for an issuer that
+does not tag product revenue they carry nothing (`grep -ci ingrezza
+nbix-2024*_htm.xml` -> 0, 0, 0). Raising the cap to 25 - which every measured
+run did - works only because it sweeps in the 10-Q that answers each quarter.
+
+**What the index already knows and the code does not read.** EDGAR's
+submissions feed carries a period of report on every row; `grep -n reportDate
+app/connectors/sources.py` returns nothing. Live, for one issuer:
+
+    ('10-Q', reportDate 2026-06-30, filed 2026-07-31)
+    ('10-Q', reportDate 2026-03-31, filed 2026-05-05)
+    ('10-K', reportDate 2025-12-31, filed 2026-02-11)
+    ('8-K',  reportDate 2026-05-05, filed 2026-05-05)   # earnings 8-K, same day as the 10-Q
+
+**The mechanism.** Ask per quarter, not per job.
+
+1. *Each form has an answer set that needs no document opened.* A 10-Q for
+   period P states P and the prior-year P as its comparative; a 10-K for FY
+   states FY and the prior FY, and Q4 by subtraction; an 8-K item 2.02 exhibit
+   filed within a reporting lag of a 10-Q or 10-K states that same period.
+   The set is a rule over `form_family` and `reportDate`, derived, not a
+   literal per form.
+2. *Pick the smallest set of index rows whose answer sets cover the asked
+   quarters.* A twelve-quarter window is four 10-Qs and two 10-Ks, chosen,
+   instead of four documents, unchosen. The count cap becomes a coverage
+   target; `sec_max_filings` survives only as a ceiling per quarter.
+3. *Verify, then cascade per quarter.* After parsing, the coverage predicate
+   (12b, wired at `_parse`) says per quarter whether the document carried
+   the figure. For any quarter still uncovered, fetch the next candidate for
+   that quarter only, in 12c's tier order: the earnings exhibit, the following
+   year's 10-Q comparative column, the IR page. Stop when every asked quarter
+   is carried or every candidate is spent, and record which.
+
+**What has to be true first, both observed on the smoke database.**
+- The coverage verdict read `names_only` on every document of all 14 jobs,
+  including 10-K pages that yielded 3, 7 and 9 figures. 12d's "row-grouped
+  tables" limitation is, on real documents, the whole population; step 3 has
+  no signal until the figure test reads a row-grouped table.
+- Two issuers (Neurocrine, Eton) got 0 earnings exhibits where every other
+  issuer got 7-12. Step 3's second candidate is missing for them for a reason
+  not yet established. Verify before touching the exhibit filter.
+
+**How to measure it.** 12d's two numbers, per issuer per run: quarters
+answered per document fetched (must rise) and documents fetched per quarter
+answered (must fall), both from `RetrievedSource` plus the datapoints. A
+change that lowers the second without lowering the first is working. Rule 4:
+scored on a set drawn from issuers none of the keys use; the 2026-09 held-out
+set has been read against this diagnosis and is not that set.
+
 **To measure it:** count, per issuer in a run, the periods answered per tier
 entered and the documents fetched per period answered. A cascade that lowers
 the second number without lowering the first is working. Both numbers are
