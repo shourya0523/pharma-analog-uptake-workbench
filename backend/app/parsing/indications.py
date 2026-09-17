@@ -127,9 +127,28 @@ def _split_indication_blocks(text: str) -> list[str]:
 
 # A qualifier the label adds after the disease it has already named: a
 # parenthetical abbreviation or classification, or a trailing classification
-# phrase introduced by a punctuation mark. Everything before it is the disease
-# the label is grouping under.
-_AREA_QUALIFIER = re.compile(r"\s*[(\[].*$")
+# phrase introduced by a punctuation mark. What is left is the disease the
+# label is grouping under.
+#
+# The bracketed span is cut out and the tail kept, because a label may qualify
+# the disease and then go on saying which patients: in `Calderon's disease
+# (CD) in adults`, `in adults` is the market and belongs in the area. A span
+# the label opened and never closed is not cut - it is not a qualifier the
+# label finished writing. Innermost first, so a span holding a span
+# (`(World Health Organisation [WHO] Group 1)`) is closed on a later pass.
+_AREA_QUALIFIER = re.compile(r"\s*[(\[][^()\[\]]*[)\]]")
+# What the drug does to the disease, stated after the label has qualified it:
+# `Calderon's disease (CD) to delay progression`. It is not a different market
+# and it is not part of the phrase, so it goes with the qualifier that
+# introduced it. Only a tail the qualifier cut exposed is read this way - on
+# its own, `to` is a word a disease may be named with.
+_AREA_PURPOSE = re.compile(r"\s+to\s+\w+\b.*$", re.IGNORECASE)
+# Snapshot: the classification systems a label names in a trailing clause,
+# where the abbreviation is the only thing that says the clause is a
+# classification rather than a population. It goes stale when a label groups
+# by a system not on it - the clause is then kept, and the area splits from
+# the same disease spelled without it. The producer would be the label's own
+# section reference, which the disease string does not carry.
 _AREA_TRAILING_CLASS = re.compile(
     r"\s*[-–—,;:]\s*(?:who|nyha|ajcc|fab)\s+(?:group|class|stage)\b.*$", re.IGNORECASE
 )
@@ -140,19 +159,30 @@ def therapeutic_area(disease: str) -> str:
 
     Grouping downstream is exact equality, so one disease has to come back as
     one string however the label spelled it. The smallest honest step is the
-    phrase the label states before it qualifies that phrase: an abbreviation or
-    a classification in brackets, or a trailing classification clause.
-    ``Calderon's disease (CD) (WHO Group 1)``, ``Calderon's disease (CD, WHO
-    Group I)`` and ``Calderon's disease`` are one area.
+    phrase the label states, with its own qualifiers cut out of it: an
+    abbreviation or a classification in brackets, or a trailing classification
+    clause. ``Calderon's disease (CD) (WHO Group 1)``, ``Calderon's disease
+    (CD, WHO Group I)`` and ``Calderon's disease`` are one area.
 
     A qualifier that changes which patients are treated is not one of these and
     is left in, because it is a different market: ``Calderon's disease
-    associated with nebulisation`` stays its own area.
+    associated with nebulisation`` stays its own area, and so does the tail of
+    ``Calderon's disease (CD) associated with nebulisation``. What the drug
+    does to the disease is not a market and does not survive the cut:
+    ``Calderon's disease (CD) to delay progression`` is one area with the
+    other two.
     """
     text = _normalize_block(disease)
-    text = _AREA_TRAILING_CLASS.sub("", text)
-    text = _AREA_QUALIFIER.sub("", text)
-    return text.strip(" .;:/-").casefold()
+    unqualified = text
+    while True:
+        cut = _AREA_QUALIFIER.sub("", unqualified)
+        if cut == unqualified:
+            break
+        unqualified = cut
+    if unqualified != text:
+        unqualified = _AREA_PURPOSE.sub("", unqualified)
+    text = _AREA_TRAILING_CLASS.sub("", unqualified)
+    return " ".join(text.split()).strip(" .,;:/-").casefold()
 
 
 def therapeutic_areas(indications: list[ParsedIndication]) -> list[str]:

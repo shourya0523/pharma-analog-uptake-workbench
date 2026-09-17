@@ -82,6 +82,37 @@ def test_a_qualifier_that_changes_the_market_keeps_its_own_area():
     assert therapeutic_area("NuVessa syndrome") == "nuvessa syndrome"
 
 
+def test_a_bracketed_qualifier_is_cut_out_and_what_follows_it_survives():
+    """Both answers on the same string: the bracket goes, the market stays.
+
+    A label may qualify the disease and go on saying which patients, so the
+    qualifier is cut out of the phrase rather than ending it - otherwise the
+    two areas below collapse into one.
+    """
+    assert (
+        therapeutic_area("Calderon's disease (CD) associated with nebulisation")
+        == "calderon's disease associated with nebulisation"
+    )
+    assert therapeutic_area("Calderon's disease (CD) in adults") == "calderon's disease in adults"
+    assert therapeutic_area("Calderon's disease (CD)") == "calderon's disease"
+    assert (
+        therapeutic_area("Calderon's disease (CD) associated with nebulisation")
+        != therapeutic_area("Calderon's disease (CD)")
+    )
+
+
+def test_what_the_drug_does_is_not_a_market_but_only_after_a_qualifier():
+    """The tail the cut exposes is read for purpose; a bare name is not.
+
+    `to` is a word a disease may be named with, so only a tail a bracketed
+    qualifier introduced is cut as purpose.
+    """
+    assert (
+        therapeutic_area("Calderon's disease (CD) to delay progression") == "calderon's disease"
+    )
+    assert therapeutic_area("failure to thrive") == "failure to thrive"
+
+
 def test_areas_are_listed_once_each_in_label_order():
     parsed = parse_indications(
         "Indicated for the treatment of Calderon's disease (CD) (WHO Group 1).\n\n"
