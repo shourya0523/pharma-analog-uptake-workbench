@@ -1395,6 +1395,124 @@ Decide rather than leave:
 
 ---
 
+## 12. Retrieval: cascade by coverage, not by assumption
+
+**Status: UNMEASURED.** Everything in this section is a design, not a finding.
+No tier order below has been scored, and the section exists partly because
+three claims about document contents were asserted in this document's own
+history without opening the document. It should not be implemented ahead of
+sections 0-2, and its ordering must be measured before it is trusted.
+
+### 12a. What is wrong with the present design
+
+Retrieval decides what to fetch from *properties of the filing index* - the
+form string and the item codes - and never from the document. Three literals
+carry that decision:
+
+    sources.py:289,832  PRIMARY = {"10-K","10-Q","20-F","40-F"}
+                        SECONDARY = {"6-K","8-K"}
+    sources.py:541      if form != "8-K": continue
+    sources.py:544      if EARNINGS_ITEM not in items      ("2.02")
+
+Each is rule 1's shape: a written-down list standing in for "which filings
+carry a product-level revenue table". The list cannot be right, because whether
+a filing carries such a table is a property of the filing, and issuers differ -
+Eli Lilly and United Therapeutics put product revenue in the periodic reports
+(374 of 374 and 365 of 368 of gold's rows are SEC), J&J puts it in an 8-K
+EX-99.2 schedule, and an acquired product's pre-acquisition history may be in
+neither.
+
+The failure is symmetric and both halves are live: the filter fetches
+documents that carry nothing (`sec_include_8k` pulled cover pages into 14 of 28
+documents in a live repro) and skips documents that carry something, and in
+neither case does anything downstream notice.
+
+### 12b. The coverage predicate
+
+The one question retrieval never asks is the only one that matters: **does this
+document answer a period I still need, for this product?**
+
+Define it over a parsed document `D`, a product `P` with its alias set, and the
+set `Q` of periods still unanswered for `P`:
+
+    for each q in Q, coverage(D, P, q) is one of
+      carries   D holds a figure whose row label resolves to P (labels.read_label)
+                under a column or context whose period resolves to q (periods.py)
+      refutes   D states P had no sales in q, or D's own reporting context
+                (periods.detect_period_context) excludes q entirely
+      silent    neither
+
+    and the document verdict is
+      answers        carries every q in Q
+      partial        carries some q in Q
+      names_only     P resolves somewhere in D, no q in Q is carried
+      absent         P resolves nowhere in D
+      unreadable     the parse failed
+
+Every branch is computed from the document by machinery that already exists -
+`read_label` for the subject, `periods.py` for the period, `fingerprint.py` for
+the table shape. Nothing in it reads a form code or a filename.
+
+**The predicate must be a figure test, not a name test.** `"OPSUMIT" in text`
+is `names_only` at best: a product is named in narrative, in a risk factor, in
+a collaboration note, beside no number at all. This distinction is the whole
+point of the section - it is exactly the error that put a wrong claim about the
+Actelion 8-K/A into this document twice (2f), and a cascade that routes on a
+name test would encode that error in code.
+
+### 12c. The cascade
+
+Escalate a source class only while `Q` is non-empty, and record at each step
+which class answered which period:
+
+    tier  class                                          entered when
+    0     tagged facts in filings already held           always
+    1     10-K / 10-Q and their families                 always
+    2     8-K EX-99 earnings exhibits (item 2.02)        Q non-empty after 1
+    3     6-K / 20-F / 40-F and families                 issuer files them
+    4     8-K/A item 9.01 acquired-business financials   Q spans an acquisition
+    5     the issuer's investor-relations site           Q non-empty after 4
+    6     model web search                               Q non-empty after 5
+
+Three things this ordering is **not** allowed to be:
+
+- **Not a written-down list.** The tier of a filing is derived from
+  `form_family()` and its item codes, not matched against a literal set. The
+  order of the tiers is a snapshot of measured yield and must say so, with the
+  measurement that produced it and what would make it stale.
+- **Not a reason to stop early.** "Stop" means stop escalating to a new tier,
+  never stop reading within one. A second reading of a period already answered
+  is a corroborator, and 2d is a quarter lost because a corroborator was
+  discarded. Tier 0 and 1 are always read in full.
+- **Not a licence to add tier 5 or 6 first.** Tier 6 exists today as
+  `_search_revenue_fallback` and produced 0 datapoints in two runs (section
+  10). Tier 5 is justified by 58 rows of gold, all Actelion/J&J. Both are the
+  narrow tail; neither is the reason to build this.
+
+### 12d. What it is worth, and what would show it
+
+Unknown, and that is the point of stating it as a design. What can be said:
+
+- The predicate is worth something on its own, before any cascade, because it
+  turns "we fetched 28 documents" into "14 of them carried nothing", which is
+  measurable and currently is not.
+- Tier 4 has no demonstrated quarter behind it (2f). Tier 5 has 58 rows of
+  gold behind it. Tiers 2 and 3 are already reached today.
+- So the honest expectation is that this section improves the *tail* - thin
+  issuers, acquired products, foreign filers - and does nothing for the median
+  case, where sections 5 and 6 show the pipeline already holds figures it
+  refuses to publish.
+
+**To measure it:** count, per issuer in a run, the periods answered per tier
+entered and the documents fetched per period answered. A cascade that lowers
+the second number without lowering the first is working. Both numbers are
+available from `RetrievedSource` and the datapoints today; neither is recorded.
+Score on a set drawn from issuers none of the existing keys use, containing at
+least one acquired product and one issuer whose product detail is not in its
+periodic reports.
+
+---
+
 ## Order of work
 
 Each step is a commit. Nothing is scored until step 1 is done.
