@@ -500,15 +500,30 @@ of the 20 seed products.
 These are live-path defects: the defaults are on, and they were measured by
 running layer 2's own functions against the live API, not by reading a run.
 
-**There is no reference procedure to compare against.**
-`scripts/build_independent_gold.py` never calls openFDA, drugsFDA or DailyMed -
-`grep -in "openfda|dailymed|drugsfda|api.fda.gov"` over it returns nothing. Its
-`read_product_attributes()` (`:2620`) reads `first_approval_year`, `moa_class`,
-`route_of_administration` and `indication_area` straight out of the
-hand-curated `seed/product_attributes.csv`. So gold never faced 3d's sibling
-match or 3e's application ambiguity, because gold never resolved an application
-at all. The pipeline's openFDA path is the only automated attempt in this
-repository at a job gold did by hand, and nothing scores it.
+**openFDA is the right source; every defect below is in how it is read.**
+Each one is a wrong field path, a wrong match or a dropped value - not a reason
+to distrust the registry. Fixing them is cheap and the data is already there.
+
+Gold did this job by hand rather than automating it:
+`scripts/build_independent_gold.py` never calls openFDA, drugsFDA or DailyMed
+(`grep -in "openfda|dailymed|drugsfda|api.fda.gov"` returns nothing), and
+`read_product_attributes()` (`:2620`) takes `first_approval_year`, `moa_class`,
+`route_of_administration` and `indication_area` from the curated
+`seed/product_attributes.csv`. So gold never met 3d's sibling match or 3e's
+application ambiguity - it never resolved an application.
+
+That is an opportunity, not a caution. **`seed/gold/product_profiles.jsonl` is
+a ready-made oracle for exactly what layer 2 should produce** - 62 products,
+each carrying `route_of_administration`, `first_approval_year`, `moa_class`,
+`indication_area`, `approval_era` and `competitive_intensity_at_launch`, and
+declaring `attribute_provenance: curated_reference`. It is currently scored by
+nothing. Scoring the openFDA path against it is the right direction under rule
+3 - reference data flows into gold, and gold scores the pipeline - and it makes
+3a-3h measurable rather than anecdotal. What the pipeline must not do is *read*
+`seed/product_attributes.csv`, because that file is what builds this oracle.
+
+A first score already exists and is in 3a: over the 20 seed products,
+`openfda.route` differs from the curated value for 8.
 
 ### 3a. Route is read from a field that contradicts the same document
 
@@ -1390,9 +1405,11 @@ Each step is a commit. Nothing is scored until step 1 is done.
     `initial_approval_date` or drop the field so the fallback runs (3f); write
     the approval date onto the indication rows from the record that has it
     (3g); give `therapeutic_area` a producer distinct from `indication` (3h).
-    Then turn `openfda` and `product_metadata` on and re-measure. **0b's profile
-    judge is measured separately, after this**, because only now does it have
-    fields to judge.
+    Then turn `openfda` and `product_metadata` on and re-measure **against
+    `seed/gold/product_profiles.jsonl`**, which already holds the curated
+    answer for 62 products and is wired to nothing. **0b's profile judge is
+    measured separately, after this**, because only now does it have fields to
+    judge - and its correction rate is measurable against the same oracle.
 11. **Section 8** - identity, starting with the stage reorder, which depends on
     step 10 landing first or it resolves the wrong sponsor.
 12. **Section 4** - layer 3's method, before any wiring: absolute intensity
@@ -1435,10 +1452,15 @@ publish rate, and a set of things to publish cannot catch a fix that publishes
 too much - which is 0b restated, and 0b is why the existing gold files cannot
 serve.
 
-**Layers 2 and 3 need their own sets, and have none.** No existing key scores a
+**Layer 2 has an oracle nobody uses; layer 3 has none.** No eval scores a
 route, an approval date, a therapeutic area, a similarity ranking, a peak or an
-uptake curve. Section 3's fixes can be scored against the curated columns in
-`seed/product_attributes.csv` only if those columns stop being what
-`build_independent_gold.py` reads to build `product_profiles.jsonl` - otherwise
-it is the answer key wearing a different hat. Section 4's need a new set
-outright.
+uptake curve today. But `seed/gold/product_profiles.jsonl` holds 62 products
+with the curated route, approval year, MoA class, indication area, era and
+intensity - an answer key for section 3 that exists and is wired to nothing.
+Use it as a **diagnostic oracle** for finding layer-2 defects, exactly as gold's
+quarterly rows were used for layer 1. Then, per rule 4, a fix it found is
+scored on a new held-out set of products none of gold's 62 contains - and the
+pipeline still must not read `seed/product_attributes.csv`, which is what
+builds the oracle.
+
+Section 4 has nothing at all and needs a new set outright.
