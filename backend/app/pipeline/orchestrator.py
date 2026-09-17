@@ -104,6 +104,7 @@ from app.pipeline.series_identity import (
     CLAIM_STRENGTH,
     SeriesReading,
     _scope_key,
+    agrees_within_declared_precision,
     claim_rank,
     normalize_geography,
     select_series_figures,
@@ -205,22 +206,18 @@ def stamp_series_identity(job: DrugJobORM, row: DatapointORM) -> DatapointORM:
     return row
 
 
-def _agrees_within_declared_precision(winner: DatapointORM, other: DatapointORM) -> bool:
-    """Whether two figures for one period are one figure at two precisions.
+def _declared_uncertainty(row: DatapointORM) -> float | None:
+    """The rounding bound this row's source declared, if it declared one."""
+    return (row.citation_json or {}).get("rounding_uncertainty_usd_millions")
 
-    The coarser of the two declared precisions bounds how far they may sit
-    apart and still be the same number; where either source declared none,
-    the fraction stands in, with the same floor the conflict check uses.
-    """
-    a = float(winner.value_normalized_usd_millions)
-    b = float(other.value_normalized_usd_millions)
-    declared = [(r.citation_json or {}).get("rounding_uncertainty_usd_millions")
-                for r in (winner, other)]
-    if all(d is not None for d in declared):
-        slack = max(float(d) for d in declared) * 2
-    else:
-        slack = ROUNDING_TOLERANCE * max(abs(a), abs(b))
-    return abs(a - b) <= max(slack, ROUNDING_ABSOLUTE)
+
+def _agrees_within_declared_precision(winner: DatapointORM, other: DatapointORM) -> bool:
+    """Whether two stored rows for one period are one figure at two precisions."""
+    return agrees_within_declared_precision(
+        float(winner.value_normalized_usd_millions),
+        float(other.value_normalized_usd_millions),
+        declared=(_declared_uncertainty(winner), _declared_uncertainty(other)),
+    )
 
 
 # How the judge spells a veto in a row's issues (`apply_judge_hard_vetoes`,
@@ -582,6 +579,7 @@ def select_job_series(
                 value=row.value_normalized_usd_millions,
                 publishes=_publishes(row),
                 strength=(*claim_tier(row), -float(row.confidence_score or 0)),
+                rounding_uncertainty=_declared_uncertainty(row),
             )
             for row in rows
         ]

@@ -24,7 +24,28 @@ from dataclasses import dataclass
 from datetime import date
 
 from app.domain.models import SERIES_END_REASON_CODES, RevenueScope, SeriesSelection
+from app.extraction.check import _ROUNDING_ABSOLUTE as ROUNDING_ABSOLUTE
+from app.extraction.check import _ROUNDING_TOLERANCE as ROUNDING_TOLERANCE
 from app.parsing.periods import quarter_of_month
+
+
+def agrees_within_declared_precision(
+    left: float, right: float, *, declared: tuple[float | None, float | None]
+) -> bool:
+    """Whether two figures for one period are one figure at two precisions.
+
+    The coarser of the two declared precisions bounds how far they may sit
+    apart and still be the same number; where either source declared none, the
+    fraction stands in, with the same floor the conflict check uses.
+
+    A filer that prints 159.186 in one place and 159.2 in another has printed
+    one figure twice; 159.186 against 161.0 is two figures.
+    """
+    if all(bound is not None for bound in declared):
+        slack = max(float(bound) for bound in declared if bound is not None) * 2
+    else:
+        slack = ROUNDING_TOLERANCE * max(abs(left), abs(right))
+    return abs(left - right) <= max(slack, ROUNDING_ABSOLUTE)
 
 # The two spellings of "the whole product": a sentence says Worldwide, a
 # schedule's family line says Product family. One group for reconciliation.
@@ -215,6 +236,7 @@ class SeriesReading:
     value: float | None
     publishes: bool
     strength: tuple
+    rounding_uncertainty: float | None = None
 
 
 @dataclass(frozen=True)
@@ -229,6 +251,23 @@ class SeriesStanding:
 
     selection: str | None
     held_by: str | None
+
+
+def _is_one_figure(left: SeriesReading, right: SeriesReading) -> bool:
+    """Whether two readings of one quarter carry the same figure.
+
+    Asked of what the sources declared rather than of the digits, so that the
+    selection and reconciliation mean the same thing by it: reconciliation puts
+    a figure printed to two precisions in one group, and the selection used to
+    let both through as two points on one quarter.
+    """
+    if left.value is None or right.value is None:
+        return False
+    return agrees_within_declared_precision(
+        float(left.value),
+        float(right.value),
+        declared=(left.rounding_uncertainty, right.rounding_uncertainty),
+    )
 
 
 def select_series_figures(readings: list[SeriesReading]) -> dict[str, SeriesStanding]:
@@ -267,15 +306,15 @@ def select_series_figures(readings: list[SeriesReading]) -> dict[str, SeriesStan
         by_cell.setdefault(winner.cell, []).append(winner)
 
     for cell, winners in list(by_cell.items()):
-        by_value: dict[float, list[SeriesReading]] = {}
-        for winner in winners:
-            by_value.setdefault(float(winner.value), []).append(winner)
-        for same_figure in by_value.values():
-            if len(same_figure) < 2:
+        for keeps in sorted(winners, key=lambda r: order[r.id]):
+            if standing[keeps.id].selection != SeriesSelection.SELECTED.value:
                 continue
-            keeps = min(same_figure, key=lambda r: order[r.id])
-            for other in same_figure:
-                if other.id != keeps.id:
+            for other in winners:
+                if other.id == keeps.id:
+                    continue
+                if standing[other.id].selection != SeriesSelection.SELECTED.value:
+                    continue
+                if _is_one_figure(keeps, other):
                     standing[other.id] = SeriesStanding(SeriesSelection.DUPLICATE.value, keeps.id)
         by_cell[cell] = [
             w for w in winners if standing[w.id].selection == SeriesSelection.SELECTED.value
@@ -285,11 +324,7 @@ def select_series_figures(readings: list[SeriesReading]) -> dict[str, SeriesStan
         if standing[reading.id].selection is not None:
             continue
         winners = by_cell.get(reading.cell, [])
-        same_figure = [
-            winner
-            for winner in winners
-            if reading.value is not None and float(winner.value) == float(reading.value)
-        ]
+        same_figure = [winner for winner in winners if _is_one_figure(winner, reading)]
         same_series = [winner for winner in winners if winner.identity == reading.identity]
         if same_figure:
             standing[reading.id] = SeriesStanding(

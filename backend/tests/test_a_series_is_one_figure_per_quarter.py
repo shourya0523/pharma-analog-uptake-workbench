@@ -166,3 +166,56 @@ def test_a_quarter_and_a_year_of_the_same_size_are_not_one_reading():
     standing = select_series_figures([year, quarter])
     assert standing["year"].selection == SeriesSelection.SELECTED.value
     assert standing["quarter"].selection == SeriesSelection.SELECTED.value
+
+
+def test_one_figure_printed_to_two_precisions_is_one_figure():
+    """The selection means by "same figure" what reconciliation means.
+
+    Reconciliation calls two readings one figure when they agree within what
+    their sources declared; the selection compared the digits, so a filer that
+    printed one number to two places under two identities put two points on
+    one quarter.
+
+    Both answers, with neither source declaring a bound so the fraction stands
+    in: the rounded reading is the same figure and the different one is not.
+    """
+    rounded = [
+        _reading(_identity(), 159.186, id="tagged", strength=(0,)),
+        _reading(_identity(geography="US"), 159.2, id="printed", strength=(1,)),
+    ]
+    standing = select_series_figures(rounded)
+    assert standing["tagged"].selection == SeriesSelection.SELECTED.value
+    assert standing["printed"].selection == SeriesSelection.DUPLICATE.value
+    assert standing["printed"].held_by == "tagged"
+
+    apart = [
+        _reading(_identity(), 159.186, id="tagged", strength=(0,)),
+        _reading(_identity(geography="US"), 161.0, id="printed", strength=(1,)),
+    ]
+    standing = select_series_figures(apart)
+    assert standing["tagged"].selection == SeriesSelection.SELECTED.value
+    assert standing["printed"].selection == SeriesSelection.SELECTED.value
+
+
+def test_what_the_sources_declared_bounds_how_far_one_figure_may_sit_apart():
+    """A source that declared itself exact is not rounded to the next million.
+
+    Both answers on one pair of values: read as two exact figures they are two,
+    and read as two figures rounded to the nearest million they are one.
+    """
+    def pair(uncertainty):
+        return [
+            SeriesReading(id="a", cell=("2024Q2", "quarterly"), identity=_identity(),
+                          value=159.0, publishes=True, strength=(0,),
+                          rounding_uncertainty=uncertainty),
+            SeriesReading(id="b", cell=("2024Q2", "quarterly"),
+                          identity=_identity(geography="US"),
+                          value=160.0, publishes=True, strength=(1,),
+                          rounding_uncertainty=uncertainty),
+        ]
+
+    exact = select_series_figures(pair(0.0))
+    assert exact["b"].selection == SeriesSelection.SELECTED.value
+
+    rounded = select_series_figures(pair(0.5))
+    assert rounded["b"].selection == SeriesSelection.DUPLICATE.value
