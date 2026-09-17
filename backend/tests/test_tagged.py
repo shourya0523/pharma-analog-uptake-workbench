@@ -22,8 +22,9 @@ REGISTER = {
 def test_a_tagged_fact_becomes_a_candidate_with_its_period_and_unit():
     found, notes = candidates_from_instance(
         INSTANCE, product="Nebulized Tyvaso", issuer=ISSUER, register=REGISTER)
-    assert len(found) == 1
-    candidate = found[0]
+    by_period = {c["period"]: c for c in found}
+    assert set(by_period) == {"2024Q3", "2024M9"}
+    candidate = by_period["2024Q3"]
     assert candidate["period"] == "2024Q3"
     assert candidate["value_normalized_usd_millions"] == 159.2
     assert candidate["currency"] == "USD"
@@ -71,12 +72,20 @@ def test_an_untagged_filing_says_so_rather_than_looking_like_a_failure():
     assert any("no product-level facts tagged" in note for note in notes)
 
 
-def test_the_year_to_date_column_is_not_a_quarter():
-    """The instance holds a nine-month figure for the same product."""
+def test_the_year_to_date_column_is_kept_and_is_not_a_quarter():
+    """The instance holds a nine-month figure for the same product.
+
+    It is the filer's own audited span, and a quarter the filer never tagged
+    is the difference between a span like this and the quarters beside it. It
+    is kept, and it is typed by its span, so nothing downstream can mistake it
+    for three months.
+    """
     found, _ = candidates_from_instance(
         INSTANCE, product="Nebulized Tyvaso", issuer=ISSUER, register=REGISTER)
-    assert all(c["period_type"] == "quarterly" for c in found)
-    assert 450.0 not in [c["value_normalized_usd_millions"] for c in found]
+    by_period = {c["period"]: c for c in found}
+    assert by_period["2024Q3"]["period_type"] == "quarterly"
+    assert by_period["2024M9"]["period_type"] == "nine_month"
+    assert by_period["2024M9"]["value_normalized_usd_millions"] == 450.0
 
 
 def test_the_same_figure_tagged_twice_is_one_candidate():
@@ -87,7 +96,7 @@ def test_the_same_figure_tagged_twice_is_one_candidate():
         b'<us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="q3-neb" unitRef="usd" decimals="-5">159200000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>',
     )
     found, _ = candidates_from_instance(twice, product="Nebulized Tyvaso", issuer=ISSUER, register=REGISTER)
-    assert len(found) == 1
+    assert [c["period"] for c in found] == ["2024Q3", "2024M9"], "the quarter once, not twice"
 
 
 def test_the_same_member_means_different_things_to_different_filers():
@@ -106,7 +115,7 @@ def test_the_same_member_means_different_things_to_different_filers():
     }
     for_liquidia, _ = candidates_from_instance(
         generic, product="Yutrepia", issuer="Liquidia", register=register)
-    assert [c["value_normalized_usd_millions"] for c in for_liquidia] == [159.2]
+    assert [c["value_normalized_usd_millions"] for c in for_liquidia] == [159.2, 450.0]
 
     for_gilead, _ = candidates_from_instance(
         generic, product="Yutrepia", issuer="Acme Pharma", register=register)

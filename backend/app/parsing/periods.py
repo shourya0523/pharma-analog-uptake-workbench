@@ -358,7 +358,23 @@ def detect_period_context(text: str) -> PeriodContext | None:
     return PeriodContext(months=months, month=month, year=year)
 
 
-def _label(year: int, months: int, quarter: int) -> str:
+# The spans a reporting period is stated in, and what each one is called. A
+# filer also tags facts over spans that are not a reporting period - a month,
+# a week, the days between two events - and those name no quarter of anything.
+MONTHS_TO_PERIOD_TYPE: dict[int, str] = {
+    3: "quarterly",
+    6: "six_month",
+    9: "nine_month",
+    12: "annual",
+}
+
+
+def period_label(year: int, months: int, quarter: int) -> str:
+    """The canonical key for a period of ``months`` ending in ``quarter``.
+
+    One producer for every reader that has to name a period, so a figure and a
+    note about it are compared in one namespace: 2024Q2, 2024H1, 2024M9, 2024.
+    """
     if months == 3:
         return f"{year}Q{quarter}"
     if months == 6:
@@ -450,12 +466,12 @@ def periods_named(text: str) -> list[NamedPeriod]:
             for month, year in dates:
                 named.append(
                     NamedPeriod(
-                        match.start(), months, _label(year, months, quarter_of_month(month))
+                        match.start(), months, period_label(year, months, quarter_of_month(month))
                     )
                 )
     for start, _end, (months, month, year) in _quarter_form_hits(text or ""):
         named.append(
-            NamedPeriod(start, months, _label(year, months, quarter_of_month(month)))
+            NamedPeriod(start, months, period_label(year, months, quarter_of_month(month)))
         )
     return sorted(named, key=lambda period: period.position)
 
@@ -473,10 +489,10 @@ def period_key(label: str, months: int) -> str | None:
         return None
     match = _YEAR_QUARTER_RE.match(canonical)
     if match:
-        return _label(int(match.group(1)), months, int(match.group(2)))
+        return period_label(int(match.group(1)), months, int(match.group(2)))
     match = _YEAR_PART_RE.match(canonical) or _YEAR_ONLY_RE.match(canonical)
     if match:
-        return _label(int(match.group(1)), months, 0)
+        return period_label(int(match.group(1)), months, 0)
     return None
 
 
@@ -524,7 +540,7 @@ def normalize_period(
                 quarter = quarter_of_month(month)
             else:
                 return None
-            return _label(year, months, quarter)
+            return period_label(year, months, quarter)
 
     match = _YEAR_ONLY_RE.match(compact)
     if match:
@@ -539,7 +555,7 @@ def normalize_period(
         if (period_type or "").lower() in QUARTERLY_TYPES and context:
             return f"{year}Q{context.quarter}"
         if context:
-            return _label(year, context.months, context.quarter)
+            return period_label(year, context.months, context.quarter)
         return str(year)
     return None
 

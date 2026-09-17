@@ -53,7 +53,13 @@ import re
 from dataclasses import dataclass, field
 
 from app.parsing.evidence import SCOPE_PATTERNS
-from app.parsing.periods import MONTH_WORDS, MONTHS, fiscal_period_end, quarter_of_month
+from app.parsing.periods import (
+    MONTH_WORDS,
+    MONTHS,
+    MONTHS_TO_PERIOD_TYPE,
+    fiscal_period_end,
+    quarter_of_month,
+)
 
 # A filing names a column's period in one of two ways. Either it anchors the
 # period to a date - "Three months ended June 30," - or it names the period
@@ -240,14 +246,6 @@ _CURRENCY_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
 _SCOPE_RES: tuple[tuple[str, re.Pattern[str]], ...] = tuple(
     (label, re.compile(pattern, re.IGNORECASE)) for label, pattern in SCOPE_PATTERNS
 )
-
-MONTHS_TO_PERIOD_TYPE: dict[int, str] = {
-    3: "quarterly",
-    6: "six_month",
-    9: "nine_month",
-    12: "annual",
-}
-
 
 @dataclass(frozen=True)
 class PeriodBlock:

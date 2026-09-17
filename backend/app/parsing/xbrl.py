@@ -37,6 +37,12 @@ import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field
 from datetime import date
 
+from app.parsing.periods import (
+    MONTHS_TO_PERIOD_TYPE,
+    period_label,
+    quarter_of_month,
+)
+
 # The product axis under the spellings this module can name without being told.
 # It lived in the us-gaap namespace until the 2018 taxonomy moved the reporting
 # axes into srt, so a filing from before that says "us-gaap:ProductOrServiceAxis".
@@ -137,23 +143,27 @@ class Fact:
 
     @property
     def period(self) -> str | None:
-        """Canonical label: 2024Q3 for a quarter, 2024 for a year.
+        """Canonical label: 2024Q3, 2024H1, 2024M9, 2024 - or None.
 
         Labelled from the middle of the period rather than its end, because
         filers on a 52/53-week fiscal calendar end a year in early January of
         the next one. A fiscal 2022 can run to 1 January 2023; reading the end
         date alone files it as 2023, on top of the real 2023, and both then
         carry a citation saying so.
+
+        The span has to be one a reporting period is stated in. A filer tags
+        facts over spans that are not - a month, a week, the days between two
+        events - and those are not a quarter of anything. The four that are
+        come from `periods.py`, which is where every other reader gets the
+        label it compares against.
         """
         if not (self.start and self.end):
             return None
-        middle = self.start + (self.end - self.start) / 2
         months = self.months
-        if months == 3:
-            return f"{middle.year}Q{(middle.month - 1) // 3 + 1}"
-        if months == 12:
-            return str(middle.year)
-        return None
+        if months not in MONTHS_TO_PERIOD_TYPE:
+            return None
+        middle = self.start + (self.end - self.start) / 2
+        return period_label(middle.year, months, quarter_of_month(middle.month))
 
     @property
     def rounding_unit(self) -> float | None:

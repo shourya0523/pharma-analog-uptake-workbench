@@ -38,6 +38,7 @@ from app.parsing.notes_datasets import (
     load_dimensions,
     load_submissions,
 )
+from app.parsing.periods import MONTHS_TO_PERIOD_TYPE
 from app.parsing.xbrl import Fact, _product_member, product_facts
 
 # Forms whose XBRL exhibits carry the notes. An 8-K earnings exhibit is not
@@ -154,7 +155,9 @@ def candidates_from_notes(
                 continue
             seen[signature] = {
                 "period": fact.period,
-                "period_type": "quarterly" if fact.months == 3 else "annual",
+                # The span the filer tagged, named as every other reader names
+                # it - a six- or nine-month fact is not an annual one.
+                "period_type": MONTHS_TO_PERIOD_TYPE.get(fact.months, "unknown"),
                 "value_reported": fact.value,
                 "value_normalized_usd_millions": fact.value / 1_000_000.0,
                 "currency": "USD",

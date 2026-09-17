@@ -25,6 +25,7 @@ from collections import defaultdict
 from dataclasses import dataclass
 
 from app.extraction.process import Datapoint
+from app.parsing.periods import MONTHS_TO_PERIOD_TYPE
 
 # A quarter that differs from a neighbouring quarter by at least this factor is
 # not plausible as real revenue movement; it is a unit-scale error.
@@ -72,7 +73,7 @@ def _declared_slack(*points: Datapoint) -> float | None:
         total += share
     return total
 
-_MONTHS_BY_PERIOD_TYPE = {"quarterly": 3, "six_month": 6, "nine_month": 9, "annual": 12}
+_MONTHS_BY_PERIOD_TYPE = {name: months for months, name in MONTHS_TO_PERIOD_TYPE.items()}
 
 
 @dataclass(frozen=True)
