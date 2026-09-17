@@ -2330,10 +2330,22 @@ class PipelineOrchestrator:
         # Deterministic grouping first. "Worldwide" and "Product family" are
         # both the whole product - a sentence says the first, a schedule the
         # second - and grouped apart they were published twice for one quarter.
+        #
+        # The period label alone is not the period. A nine-month figure and the
+        # quarter that ends it carry the same label, and they are two different
+        # claims about two different spans: pooled under one key the longer one
+        # contests the shorter, the reconciliation calls the disagreement a
+        # conflict, and the figure that is right for the quarter is held. The
+        # span is part of what a group is a group of.
         priority_index = {t.value: i for i, t in enumerate(SOURCE_PRIORITY)}
         by_key: dict[tuple, list[DatapointORM]] = {}
         for row in rows:
-            key = (row.period, _scope_key(row.revenue_scope), row.formulation or "")
+            key = (
+                row.period,
+                row.period_type or "",
+                _scope_key(row.revenue_scope),
+                row.formulation or "",
+            )
             by_key.setdefault(key, []).append(row)
         # When each source was filed, for telling the filing that reports a
         # period from a later filing's comparative of it.
