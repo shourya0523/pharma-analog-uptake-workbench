@@ -1,0 +1,1674 @@
+{
+  "note": "Held-out set drawn 2026-09-17 for the retrieval changes of section 12e (M11) of docs/plans/2026-09-17-006-what-twelve-reviews-found.md: the exhibit type read from the filing rather than from the filename, the coverage predicate, and filing selection by the quarters asked. It exists because the diagnosis that produced those changes was made on seed/cases/holdout_2026_09.json and on the runs behind it, and under rule 4 neither may score the fix for what it found. Every issuer here is absent from every other answer key under seed/, derived through tests/answer_keys.spent_issuers rather than checked against a list, and from the set drawn in parallel for the judging changes. What spends it: the first change measured on it. After that it is an oracle like the rest, and the next scored change needs a new set from issuers this file does not name. What each issuer is here for. Amphastar: an acquired product whose only pre-acquisition quarter is exhibit 99.2 of an 8-K/A under item 9.01, and a fourth quarter that is the annual row less the nine-month row. Pacira: a filing agent that names earnings exhibits pcrx-12312025x991.htm, with no ex99 in the name, so the shipped filename rule finds no earnings exhibit for the issuer and every fourth quarter is lost. Puma: the other naming convention, ex_973970.htm, and an issuer whose XBRL instance carries no quarterly product revenue under a product member at all, so the instance answers nothing and the exhibit is the only document that names the product beside a figure. Rigel: product detail that is in no periodic report - one total product sales line in the 10-Q, no quarterly product-sales fact under any product member in the instance, and every per-product figure a sentence in the 8-K EX-99.1. Both answers are here: quarters that carry a figure, a quarter whose acquisition closed on its last day, a quarter before the issuer took a product over, and a product licensed in after every quarter asked for. No case states a CIK on purpose: seed/example_drugs.csv has no such column, a person uploading a product types a ticker, and a case that stated one would hand the pipeline the issuer resolution this set is drawn to score.",
+  "cases": [
+    {
+      "drug_name": "BAQSIMI",
+      "generic_name": "glucagon",
+      "manufacturer": "Amphastar Pharmaceuticals, Inc.",
+      "ticker": "AMPH",
+      "options": {
+        "earnings_since": "2023-04-01",
+        "earnings_until": "2026-03-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "acquired product",
+        "pre-acquisition quarter only in the acquirer's 8-K/A item 9.01",
+        "abbreviated financial statements of an acquired product line",
+        "annual less nine months",
+        "the quarter the acquisition closed in must come back empty"
+      ],
+      "source": "The acquirer bought the product from a filer that reports it inside a much larger portfolio, and the only statement of the product's own pre-acquisition sales is exhibit 99.2 of the acquirer's 8-K/A - unaudited abbreviated statements of revenues and direct expenses for the product line. After the acquisition the product is a row in the acquirer's segment table, and the fourth quarter of the year of acquisition is printed nowhere: the annual row less the nine-month row is the only statement of it. 2024 is left out on purpose - through that year the seller still sold part of the volume under a transition agreement and the acquirer split the product between a product-revenue row and a separate net-economic-benefit row, so there are two defensible answers and this set does not score an ambiguity it cannot state.",
+      "expect": [
+        {
+          "period": "2023Q1",
+          "value_normalized_usd_millions": 31.4,
+          "accession": "0001297184-23-000070",
+          "form": "8-K/A EX-99.2",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1297184/000129718423000070/amph-20230630xex99d2.htm",
+          "source_quote": "Revenue | $ | 31,400.0 | $ | 29,211.5",
+          "sources": [
+            {
+              "accession": "0001297184-23-000070",
+              "form": "8-K/A EX-99.2",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1297184/000129718423000070/amph-20230630xex99d2.htm",
+              "source_quote": "Revenue | $ | 31,400.0 | $ | 29,211.5"
+            }
+          ],
+          "note": "the seller's abbreviated statements of revenues and direct expenses for the product line, three months ended March 31, 2023 and 2022, in thousands"
+        },
+        {
+          "period": "2023Q2",
+          "value_normalized_usd_millions": null,
+          "accession": "0001297184-23-000082",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1297184/000129718423000082/amph-20230930x10q.htm",
+          "source_quote": "BAQSIMI | 28,701 | 28,701",
+          "sources": [
+            {
+              "accession": "0001297184-23-000082",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1297184/000129718423000082/amph-20230930x10q.htm",
+              "source_quote": "BAQSIMI | 28,701 | 28,701"
+            }
+          ],
+          "why": "the acquisition closed on the last day of the quarter, so the acquirer's first product row - whose three-month and nine-month columns are the same figure - starts at the third quarter, and the seller's abbreviated statements stop at the three months ended March 31, 2023"
+        },
+        {
+          "period": "2023Q3",
+          "value_normalized_usd_millions": 28.701,
+          "accession": "0001297184-23-000082",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1297184/000129718423000082/amph-20230930x10q.htm",
+          "source_quote": "BAQSIMI | 28,701 | 28,701",
+          "sources": [
+            {
+              "accession": "0001297184-23-000082",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1297184/000129718423000082/amph-20230930x10q.htm",
+              "source_quote": "BAQSIMI | 28,701 | 28,701"
+            }
+          ]
+        },
+        {
+          "period": "2023Q4",
+          "value_normalized_usd_millions": 22.456,
+          "accession": "0001297184-24-000009",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1297184/000129718424000009/amph-20231231x10k.htm",
+          "source_quote": "BAQSIMI | 51,157",
+          "sources": [
+            {
+              "accession": "0001297184-24-000009",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1297184/000129718424000009/amph-20231231x10k.htm",
+              "source_quote": "BAQSIMI | 51,157"
+            },
+            {
+              "accession": "0001297184-23-000082",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1297184/000129718423000082/amph-20230930x10q.htm",
+              "source_quote": "BAQSIMI | 28,701 | 28,701"
+            }
+          ],
+          "derivation": "the annual row states 51,157 and the third-quarter row states 28,701 for the nine months then ended; 51,157 less 28,701 = 22,456"
+        },
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": 38.355,
+          "accession": "0001297184-25-000029",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1297184/000129718425000029/amph-20250331x10q.htm",
+          "source_quote": "BAQSIMI | $ | 38,355 | $ | 13,843",
+          "sources": [
+            {
+              "accession": "0001297184-25-000029",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1297184/000129718425000029/amph-20250331x10q.htm",
+              "source_quote": "BAQSIMI | $ | 38,355 | $ | 13,843"
+            }
+          ]
+        },
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": 46.687,
+          "accession": "0001297184-25-000050",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1297184/000129718425000050/amph-20250630x10q.htm",
+          "source_quote": "BAQSIMI | $ | 46,687 | $ | 30,854 | $ | 85,042 | $ | 44,697",
+          "sources": [
+            {
+              "accession": "0001297184-25-000050",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1297184/000129718425000050/amph-20250630x10q.htm",
+              "source_quote": "BAQSIMI | $ | 46,687 | $ | 30,854 | $ | 85,042 | $ | 44,697"
+            }
+          ]
+        },
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": 53.608,
+          "accession": "0001297184-25-000064",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1297184/000129718425000064/amph-20250930x10q.htm",
+          "source_quote": "BAQSIMI | $ | 53,608 | $ | 40,409 | $ | 138,650 | $ | 85,106",
+          "sources": [
+            {
+              "accession": "0001297184-25-000064",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1297184/000129718425000064/amph-20250930x10q.htm",
+              "source_quote": "BAQSIMI | $ | 53,608 | $ | 40,409 | $ | 138,650 | $ | 85,106"
+            }
+          ]
+        },
+        {
+          "period": "2025Q4",
+          "value_normalized_usd_millions": 46.708,
+          "accession": "0001297184-26-000007",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1297184/000129718426000007/amph-20260226xex99d1.htm",
+          "source_quote": "BAQSIMI | $ | 46,708 | $ | 41,792",
+          "sources": [
+            {
+              "accession": "0001297184-26-000007",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1297184/000129718426000007/amph-20260226xex99d1.htm",
+              "source_quote": "BAQSIMI | $ | 46,708 | $ | 41,792"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "drug_name": "Primatene MIST",
+      "generic_name": "epinephrine",
+      "manufacturer": "Amphastar Pharmaceuticals, Inc.",
+      "ticker": "AMPH",
+      "options": {
+        "earnings_since": "2023-04-01",
+        "earnings_until": "2026-03-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "plain product row",
+        "segment disaggregation in the 10-Q",
+        "fourth quarter only in the 8-K EX-99 earnings exhibit"
+      ],
+      "source": "A plain row in the issuer's finished-pharmaceutical-products table, printed in every 10-Q and 10-K; the fourth quarter of each year appears only in the February earnings exhibit, because no periodic report states a three-month column ending December 31.",
+      "expect": [
+        {
+          "period": "2023Q3",
+          "value_normalized_usd_millions": 24.834,
+          "accession": "0001297184-23-000082",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1297184/000129718423000082/amph-20230930x10q.htm",
+          "source_quote": "Primatene MIST | 24,834 | 18,359 | 64,837 | 62,030",
+          "sources": [
+            {
+              "accession": "0001297184-23-000082",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1297184/000129718423000082/amph-20230930x10q.htm",
+              "source_quote": "Primatene MIST | 24,834 | 18,359 | 64,837 | 62,030"
+            }
+          ]
+        },
+        {
+          "period": "2023Q4",
+          "value_normalized_usd_millions": 24.484,
+          "accession": "0001297184-24-000004",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1297184/000129718424000004/amph-20240228xex99d1.htm",
+          "source_quote": "Primatene MIST | 24,484 | 22,279",
+          "sources": [
+            {
+              "accession": "0001297184-24-000004",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1297184/000129718424000004/amph-20240228xex99d1.htm",
+              "source_quote": "Primatene MIST | 24,484 | 22,279"
+            }
+          ]
+        },
+        {
+          "period": "2024Q1",
+          "value_normalized_usd_millions": 24.166,
+          "accession": "0001297184-24-000037",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1297184/000129718424000037/amph-20240331x10q.htm",
+          "source_quote": "Primatene MIST | 24,166 | 23,483",
+          "sources": [
+            {
+              "accession": "0001297184-24-000037",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1297184/000129718424000037/amph-20240331x10q.htm",
+              "source_quote": "Primatene MIST | 24,166 | 23,483"
+            }
+          ]
+        },
+        {
+          "period": "2024Q2",
+          "value_normalized_usd_millions": 22.856,
+          "accession": "0001297184-24-000048",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1297184/000129718424000048/amph-20240630x10q.htm",
+          "source_quote": "Primatene MIST | 22,856 | 16,520 | 47,022 | 40,003",
+          "sources": [
+            {
+              "accession": "0001297184-24-000048",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1297184/000129718424000048/amph-20240630x10q.htm",
+              "source_quote": "Primatene MIST | 22,856 | 16,520 | 47,022 | 40,003"
+            }
+          ]
+        },
+        {
+          "period": "2024Q3",
+          "value_normalized_usd_millions": 26.055,
+          "accession": "0001297184-24-000058",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1297184/000129718424000058/amph-20240930x10q.htm",
+          "source_quote": "Primatene MIST | 26,055 | 24,834 | 73,077 | 64,837",
+          "sources": [
+            {
+              "accession": "0001297184-24-000058",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1297184/000129718424000058/amph-20240930x10q.htm",
+              "source_quote": "Primatene MIST | 26,055 | 24,834 | 73,077 | 64,837"
+            }
+          ]
+        },
+        {
+          "period": "2024Q4",
+          "value_normalized_usd_millions": 28.935,
+          "accession": "0001297184-25-000003",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1297184/000129718425000003/amph-20250227xex99d1.htm",
+          "source_quote": "Primatene MIST | 28,935 | 24,484",
+          "sources": [
+            {
+              "accession": "0001297184-25-000003",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1297184/000129718425000003/amph-20250227xex99d1.htm",
+              "source_quote": "Primatene MIST | 28,935 | 24,484"
+            }
+          ]
+        },
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": 29.051,
+          "accession": "0001297184-25-000029",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1297184/000129718425000029/amph-20250331x10q.htm",
+          "source_quote": "Primatene MIST | 29,051 | 24,166",
+          "sources": [
+            {
+              "accession": "0001297184-25-000029",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1297184/000129718425000029/amph-20250331x10q.htm",
+              "source_quote": "Primatene MIST | 29,051 | 24,166"
+            }
+          ]
+        },
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": 22.88,
+          "accession": "0001297184-25-000050",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1297184/000129718425000050/amph-20250630x10q.htm",
+          "source_quote": "Primatene MIST | 22,880 | 22,856 | 51,931 | 47,022",
+          "sources": [
+            {
+              "accession": "0001297184-25-000050",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1297184/000129718425000050/amph-20250630x10q.htm",
+              "source_quote": "Primatene MIST | 22,880 | 22,856 | 51,931 | 47,022"
+            }
+          ]
+        },
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": 28.808,
+          "accession": "0001297184-25-000064",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1297184/000129718425000064/amph-20250930x10q.htm",
+          "source_quote": "Primatene MIST | 28,808 | 26,055 | 80,739 | 73,077",
+          "sources": [
+            {
+              "accession": "0001297184-25-000064",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1297184/000129718425000064/amph-20250930x10q.htm",
+              "source_quote": "Primatene MIST | 28,808 | 26,055 | 80,739 | 73,077"
+            }
+          ]
+        },
+        {
+          "period": "2025Q4",
+          "value_normalized_usd_millions": 27.93,
+          "accession": "0001297184-26-000007",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1297184/000129718426000007/amph-20260226xex99d1.htm",
+          "source_quote": "Primatene MIST | 27,930 | 28,935",
+          "sources": [
+            {
+              "accession": "0001297184-26-000007",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1297184/000129718426000007/amph-20260226xex99d1.htm",
+              "source_quote": "Primatene MIST | 27,930 | 28,935"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "drug_name": "EXPAREL",
+      "generic_name": "bupivacaine liposome injectable suspension",
+      "manufacturer": "Pacira BioSciences, Inc.",
+      "ticker": "PCRX",
+      "options": {
+        "earnings_since": "2024-04-01",
+        "earnings_until": "2026-03-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "plain product row",
+        "earnings exhibit the ex99 filename rule misses",
+        "fourth quarter only in the 8-K EX-99 earnings exhibit"
+      ],
+      "source": "The issuer's net-product-sales table names the product on its own row in every 10-Q. Its filing agent names the earnings exhibit for the period, not for the exhibit number - pcrx-12312025x991.htm - so a rule that looks for ex99 in the filename finds no earnings exhibit for this issuer at all, and the fourth quarter is only in that exhibit.",
+      "expect": [
+        {
+          "period": "2024Q1",
+          "value_normalized_usd_millions": 132.43,
+          "accession": "0001396814-24-000045",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000139681424000045/pcrx-20240331.htm",
+          "source_quote": "EXPAREL | $ | 132,430 | $ | 130,408",
+          "sources": [
+            {
+              "accession": "0001396814-24-000045",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000139681424000045/pcrx-20240331.htm",
+              "source_quote": "EXPAREL | $ | 132,430 | $ | 130,408"
+            }
+          ]
+        },
+        {
+          "period": "2024Q2",
+          "value_normalized_usd_millions": 136.852,
+          "accession": "0001396814-24-000098",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000139681424000098/pcrx-20240630.htm",
+          "source_quote": "EXPAREL | $ | 136,852 | $ | 135,127 | $ | 269,282 | $ | 265,535",
+          "sources": [
+            {
+              "accession": "0001396814-24-000098",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000139681424000098/pcrx-20240630.htm",
+              "source_quote": "EXPAREL | $ | 136,852 | $ | 135,127 | $ | 269,282 | $ | 265,535"
+            }
+          ]
+        },
+        {
+          "period": "2024Q3",
+          "value_normalized_usd_millions": 132.004,
+          "accession": "0001396814-24-000141",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000139681424000141/pcrx-20240930.htm",
+          "source_quote": "EXPAREL | $ | 132,004 | $ | 128,667 | $ | 401,286 | $ | 394,202",
+          "sources": [
+            {
+              "accession": "0001396814-24-000141",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000139681424000141/pcrx-20240930.htm",
+              "source_quote": "EXPAREL | $ | 132,004 | $ | 128,667 | $ | 401,286 | $ | 394,202"
+            }
+          ]
+        },
+        {
+          "period": "2024Q4",
+          "value_normalized_usd_millions": 147.676,
+          "accession": "0001396814-25-000039",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000139681425000039/pcrx-12312024x991.htm",
+          "source_quote": "EXPAREL | $ | 147,676 | $ | 143,918 | $ | 548,962 | $ | 538,120",
+          "sources": [
+            {
+              "accession": "0001396814-25-000039",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000139681425000039/pcrx-12312024x991.htm",
+              "source_quote": "EXPAREL | $ | 147,676 | $ | 143,918 | $ | 548,962 | $ | 538,120"
+            }
+          ]
+        },
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": 136.529,
+          "accession": "0001396814-25-000061",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000139681425000061/pcrx-20250331.htm",
+          "source_quote": "EXPAREL | $ | 136,529 | $ | 132,430",
+          "sources": [
+            {
+              "accession": "0001396814-25-000061",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000139681425000061/pcrx-20250331.htm",
+              "source_quote": "EXPAREL | $ | 136,529 | $ | 132,430"
+            }
+          ]
+        },
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": 142.917,
+          "accession": "0001396814-25-000102",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000139681425000102/pcrx-20250630.htm",
+          "source_quote": "EXPAREL | $ | 142,917 | $ | 136,852 | $ | 279,446 | $ | 269,282",
+          "sources": [
+            {
+              "accession": "0001396814-25-000102",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000139681425000102/pcrx-20250630.htm",
+              "source_quote": "EXPAREL | $ | 142,917 | $ | 136,852 | $ | 279,446 | $ | 269,282"
+            }
+          ]
+        },
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": 139.902,
+          "accession": "0001628280-25-050176",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000162828025050176/pcrx-20250930.htm",
+          "source_quote": "EXPAREL | $ | 139,902 | $ | 132,004 | $ | 419,348 | $ | 401,286",
+          "sources": [
+            {
+              "accession": "0001628280-25-050176",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000162828025050176/pcrx-20250930.htm",
+              "source_quote": "EXPAREL | $ | 139,902 | $ | 132,004 | $ | 419,348 | $ | 401,286"
+            }
+          ]
+        },
+        {
+          "period": "2025Q4",
+          "value_normalized_usd_millions": 155.782,
+          "accession": "0001628280-26-012238",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000162828026012238/pcrx-12312025x991.htm",
+          "source_quote": "EXPAREL | $ | 155,782 | $ | 147,676 | $ | 575,130 | $ | 548,962",
+          "sources": [
+            {
+              "accession": "0001628280-26-012238",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000162828026012238/pcrx-12312025x991.htm",
+              "source_quote": "EXPAREL | $ | 155,782 | $ | 147,676 | $ | 575,130 | $ | 548,962"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "drug_name": "ZILRETTA",
+      "generic_name": "triamcinolone acetonide extended-release injectable suspension",
+      "manufacturer": "Pacira BioSciences, Inc.",
+      "ticker": "PCRX",
+      "options": {
+        "earnings_since": "2024-04-01",
+        "earnings_until": "2026-03-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "plain product row",
+        "earnings exhibit the ex99 filename rule misses",
+        "fourth quarter only in the 8-K EX-99 earnings exhibit"
+      ],
+      "source": "The second row of the same table; the same exhibit-naming convention carries its fourth quarters.",
+      "expect": [
+        {
+          "period": "2024Q1",
+          "value_normalized_usd_millions": 25.839,
+          "accession": "0001396814-24-000045",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000139681424000045/pcrx-20240331.htm",
+          "source_quote": "ZILRETTA | 25,839 | 24,334",
+          "sources": [
+            {
+              "accession": "0001396814-24-000045",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000139681424000045/pcrx-20240331.htm",
+              "source_quote": "ZILRETTA | 25,839 | 24,334"
+            }
+          ]
+        },
+        {
+          "period": "2024Q2",
+          "value_normalized_usd_millions": 30.707,
+          "accession": "0001396814-24-000098",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000139681424000098/pcrx-20240630.htm",
+          "source_quote": "ZILRETTA | 30,707 | 29,261 | 56,546 | 53,595",
+          "sources": [
+            {
+              "accession": "0001396814-24-000098",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000139681424000098/pcrx-20240630.htm",
+              "source_quote": "ZILRETTA | 30,707 | 29,261 | 56,546 | 53,595"
+            }
+          ]
+        },
+        {
+          "period": "2024Q3",
+          "value_normalized_usd_millions": 28.42,
+          "accession": "0001396814-24-000141",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000139681424000141/pcrx-20240930.htm",
+          "source_quote": "ZILRETTA | 28,420 | 28,798 | 84,966 | 82,393",
+          "sources": [
+            {
+              "accession": "0001396814-24-000141",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000139681424000141/pcrx-20240930.htm",
+              "source_quote": "ZILRETTA | 28,420 | 28,798 | 84,966 | 82,393"
+            }
+          ]
+        },
+        {
+          "period": "2024Q4",
+          "value_normalized_usd_millions": 33.123,
+          "accession": "0001396814-25-000039",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000139681425000039/pcrx-12312024x991.htm",
+          "source_quote": "ZILRETTA | 33,123 | 28,705 | 118,089 | 111,098",
+          "sources": [
+            {
+              "accession": "0001396814-25-000039",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000139681425000039/pcrx-12312024x991.htm",
+              "source_quote": "ZILRETTA | 33,123 | 28,705 | 118,089 | 111,098"
+            }
+          ]
+        },
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": 23.338,
+          "accession": "0001396814-25-000061",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000139681425000061/pcrx-20250331.htm",
+          "source_quote": "ZILRETTA | 23,338 | 25,839",
+          "sources": [
+            {
+              "accession": "0001396814-25-000061",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000139681425000061/pcrx-20250331.htm",
+              "source_quote": "ZILRETTA | 23,338 | 25,839"
+            }
+          ]
+        },
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": 31.334,
+          "accession": "0001396814-25-000102",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000139681425000102/pcrx-20250630.htm",
+          "source_quote": "ZILRETTA | 31,334 | 30,707 | 54,672 | 56,546",
+          "sources": [
+            {
+              "accession": "0001396814-25-000102",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000139681425000102/pcrx-20250630.htm",
+              "source_quote": "ZILRETTA | 31,334 | 30,707 | 54,672 | 56,546"
+            }
+          ]
+        },
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": 28.982,
+          "accession": "0001628280-25-050176",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000162828025050176/pcrx-20250930.htm",
+          "source_quote": "ZILRETTA | 28,982 | 28,420 | 83,654 | 84,966",
+          "sources": [
+            {
+              "accession": "0001628280-25-050176",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000162828025050176/pcrx-20250930.htm",
+              "source_quote": "ZILRETTA | 28,982 | 28,420 | 83,654 | 84,966"
+            }
+          ]
+        },
+        {
+          "period": "2025Q4",
+          "value_normalized_usd_millions": 32.979,
+          "accession": "0001628280-26-012238",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000162828026012238/pcrx-12312025x991.htm",
+          "source_quote": "ZILRETTA | 32,979 | 33,123 | 116,633 | 118,089",
+          "sources": [
+            {
+              "accession": "0001628280-26-012238",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000162828026012238/pcrx-12312025x991.htm",
+              "source_quote": "ZILRETTA | 32,979 | 33,123 | 116,633 | 118,089"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "drug_name": "iovera",
+      "manufacturer": "Pacira BioSciences, Inc.",
+      "ticker": "PCRX",
+      "options": {
+        "earnings_since": "2024-04-01",
+        "earnings_until": "2026-03-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "plain product row",
+        "earnings exhibit the ex99 filename rule misses",
+        "the row label carries a degree sign the filer drops in some tables",
+        "no drugsFDA application behind the product"
+      ],
+      "source": "The third row of the same table, an order of magnitude smaller than the first, and a handheld device rather than a drug - there is no application number behind it, and the filer writes the name both with and without its degree sign.",
+      "expect": [
+        {
+          "period": "2024Q1",
+          "value_normalized_usd_millions": 5.03,
+          "accession": "0001396814-24-000045",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000139681424000045/pcrx-20240331.htm",
+          "source_quote": "iovera | 5,030 | 4,001",
+          "sources": [
+            {
+              "accession": "0001396814-24-000045",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000139681424000045/pcrx-20240331.htm",
+              "source_quote": "iovera | 5,030 | 4,001"
+            }
+          ]
+        },
+        {
+          "period": "2024Q2",
+          "value_normalized_usd_millions": 5.674,
+          "accession": "0001396814-24-000098",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000139681424000098/pcrx-20240630.htm",
+          "source_quote": "iovera | 5,674 | 4,384 | 10,704 | 8,385",
+          "sources": [
+            {
+              "accession": "0001396814-24-000098",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000139681424000098/pcrx-20240630.htm",
+              "source_quote": "iovera | 5,674 | 4,384 | 10,704 | 8,385"
+            }
+          ]
+        },
+        {
+          "period": "2024Q3",
+          "value_normalized_usd_millions": 5.655,
+          "accession": "0001396814-24-000141",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000139681424000141/pcrx-20240930.htm",
+          "source_quote": "iovera | 5,655 | 5,260 | 16,359 | 13,645",
+          "sources": [
+            {
+              "accession": "0001396814-24-000141",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000139681424000141/pcrx-20240930.htm",
+              "source_quote": "iovera | 5,655 | 5,260 | 16,359 | 13,645"
+            }
+          ]
+        },
+        {
+          "period": "2024Q4",
+          "value_normalized_usd_millions": 6.454,
+          "accession": "0001396814-25-000039",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000139681425000039/pcrx-12312024x991.htm",
+          "source_quote": "iovera | 6,454 | 6,040 | 22,813 | 19,685",
+          "sources": [
+            {
+              "accession": "0001396814-25-000039",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000139681425000039/pcrx-12312024x991.htm",
+              "source_quote": "iovera | 6,454 | 6,040 | 22,813 | 19,685"
+            }
+          ]
+        },
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": 5.123,
+          "accession": "0001396814-25-000061",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000139681425000061/pcrx-20250331.htm",
+          "source_quote": "iovera | 5,123 | 5,030",
+          "sources": [
+            {
+              "accession": "0001396814-25-000061",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000139681425000061/pcrx-20250331.htm",
+              "source_quote": "iovera | 5,123 | 5,030"
+            }
+          ]
+        },
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": 5.588,
+          "accession": "0001396814-25-000102",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000139681425000102/pcrx-20250630.htm",
+          "source_quote": "iovera | 5,588 | 5,674 | 10,711 | 10,704",
+          "sources": [
+            {
+              "accession": "0001396814-25-000102",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000139681425000102/pcrx-20250630.htm",
+              "source_quote": "iovera | 5,588 | 5,674 | 10,711 | 10,704"
+            }
+          ]
+        },
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": 6.465,
+          "accession": "0001628280-25-050176",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000162828025050176/pcrx-20250930.htm",
+          "source_quote": "iovera | 6,465 | 5,655 | 17,176 | 16,359",
+          "sources": [
+            {
+              "accession": "0001628280-25-050176",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000162828025050176/pcrx-20250930.htm",
+              "source_quote": "iovera | 6,465 | 5,655 | 17,176 | 16,359"
+            }
+          ]
+        },
+        {
+          "period": "2025Q4",
+          "value_normalized_usd_millions": 7.002,
+          "accession": "0001628280-26-012238",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000162828026012238/pcrx-12312025x991.htm",
+          "source_quote": "iovera | 7,002 | 6,454 | 24,178 | 22,813",
+          "sources": [
+            {
+              "accession": "0001628280-26-012238",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1396814/000162828026012238/pcrx-12312025x991.htm",
+              "source_quote": "iovera | 7,002 | 6,454 | 24,178 | 22,813"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "drug_name": "TAVALISSE",
+      "generic_name": "fostamatinib disodium hexahydrate",
+      "manufacturer": "Rigel Pharmaceuticals, Inc.",
+      "ticker": "RIGL",
+      "options": {
+        "earnings_since": "2024-04-01",
+        "earnings_until": "2026-08-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "product detail only in the earnings exhibit",
+        "no quarterly product revenue tagged in XBRL",
+        "the figure is in prose, not in a table"
+      ],
+      "source": "The 10-Q and 10-K state one line, total product sales net, for the whole portfolio; no periodic report breaks it out by product. The XBRL instance carries no quarterly product-sales fact under any product member either - the product members it does carry sit on acquisition and collaboration facts - and this product has no member at all, only prose. Every quarterly figure for it is a sentence in the 8-K EX-99.1 earnings exhibit.",
+      "expect": [
+        {
+          "period": "2024Q1",
+          "value_normalized_usd_millions": 21.1,
+          "accession": "0001104659-24-058017",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465924058017/tm2413689d1_ex99-1.htm",
+          "source_quote": "$21.1 million in TAVALISSE net product sales",
+          "sources": [
+            {
+              "accession": "0001104659-24-058017",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465924058017/tm2413689d1_ex99-1.htm",
+              "source_quote": "$21.1 million in TAVALISSE net product sales"
+            }
+          ]
+        },
+        {
+          "period": "2024Q2",
+          "value_normalized_usd_millions": 26.4,
+          "accession": "0001104659-24-086271",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465924086271/tm2420634d4_ex99-1.htm",
+          "source_quote": "$26.4 million in TAVALISSE net product sales",
+          "sources": [
+            {
+              "accession": "0001104659-24-086271",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465924086271/tm2420634d4_ex99-1.htm",
+              "source_quote": "$26.4 million in TAVALISSE net product sales"
+            }
+          ]
+        },
+        {
+          "period": "2024Q3",
+          "value_normalized_usd_millions": 26.3,
+          "accession": "0001104659-24-115334",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465924115334/tm2427717d1_ex99-1.htm",
+          "source_quote": "$26.3 million in TAVALISSE net product sales",
+          "sources": [
+            {
+              "accession": "0001104659-24-115334",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465924115334/tm2427717d1_ex99-1.htm",
+              "source_quote": "$26.3 million in TAVALISSE net product sales"
+            }
+          ]
+        },
+        {
+          "period": "2024Q4",
+          "value_normalized_usd_millions": 31.0,
+          "accession": "0001104659-25-020313",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465925020313/tm258144d1_ex99-1.htm",
+          "source_quote": "$31.0 million in TAVALISSE net product sales",
+          "sources": [
+            {
+              "accession": "0001104659-25-020313",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465925020313/tm258144d1_ex99-1.htm",
+              "source_quote": "$31.0 million in TAVALISSE net product sales"
+            }
+          ]
+        },
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": 28.5,
+          "accession": "0001104659-25-045067",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465925045067/tm2514128d1_ex99-1.htm",
+          "source_quote": "TAVALISSE net product sales were $28.5 million",
+          "sources": [
+            {
+              "accession": "0001104659-25-045067",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465925045067/tm2514128d1_ex99-1.htm",
+              "source_quote": "TAVALISSE net product sales were $28.5 million"
+            }
+          ]
+        },
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": 40.1,
+          "accession": "0001104659-25-074163",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465925074163/tm2522417d2_ex99-1.htm",
+          "source_quote": "TAVALISSE net product sales were $40.1 million",
+          "sources": [
+            {
+              "accession": "0001104659-25-074163",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465925074163/tm2522417d2_ex99-1.htm",
+              "source_quote": "TAVALISSE net product sales were $40.1 million"
+            }
+          ]
+        },
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": 44.7,
+          "accession": "0001104659-25-106282",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465925106282/tm2530133d1_ex99-1.htm",
+          "source_quote": "TAVALISSE net product sales were $44.7 million",
+          "sources": [
+            {
+              "accession": "0001104659-25-106282",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465925106282/tm2530133d1_ex99-1.htm",
+              "source_quote": "TAVALISSE net product sales were $44.7 million"
+            }
+          ]
+        },
+        {
+          "period": "2025Q4",
+          "value_normalized_usd_millions": 45.6,
+          "accession": "0001034842-26-000016",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000103484226000016/rigl-20260303xex991q42025r.htm",
+          "source_quote": "TAVALISSE net product sales were $45.6 million",
+          "sources": [
+            {
+              "accession": "0001034842-26-000016",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000103484226000016/rigl-20260303xex991q42025r.htm",
+              "source_quote": "TAVALISSE net product sales were $45.6 million"
+            }
+          ]
+        },
+        {
+          "period": "2026Q1",
+          "value_normalized_usd_millions": 37.3,
+          "accession": "0001034842-26-000033",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000103484226000033/rigl-20260505xex991q12026r.htm",
+          "source_quote": "TAVALISSE net product sales were $37.3 million",
+          "sources": [
+            {
+              "accession": "0001034842-26-000033",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000103484226000033/rigl-20260505xex991q12026r.htm",
+              "source_quote": "TAVALISSE net product sales were $37.3 million"
+            }
+          ]
+        },
+        {
+          "period": "2026Q2",
+          "value_normalized_usd_millions": 47.4,
+          "accession": "0001034842-26-000053",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000103484226000053/rigl-20260804xex991q22026r.htm",
+          "source_quote": "TAVALISSE net product sales were $47.4 million",
+          "sources": [
+            {
+              "accession": "0001034842-26-000053",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000103484226000053/rigl-20260804xex991q22026r.htm",
+              "source_quote": "TAVALISSE net product sales were $47.4 million"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "drug_name": "GAVRETO",
+      "generic_name": "pralsetinib",
+      "manufacturer": "Rigel Pharmaceuticals, Inc.",
+      "ticker": "RIGL",
+      "options": {
+        "earnings_since": "2024-04-01",
+        "earnings_until": "2026-08-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "acquired product",
+        "product detail only in the earnings exhibit",
+        "no quarterly product revenue tagged in XBRL",
+        "the quarter before the issuer took the product over must come back empty"
+      ],
+      "source": "Rights bought from another issuer part-way through the window: the quarter of the announcement names the product, says when sales will start and prints no figure, and the figures begin in the quarter the transition completed. The pre-acquisition quarters belong to the seller, not to this issuer, and must come back empty for it.",
+      "expect": [
+        {
+          "period": "2024Q1",
+          "value_normalized_usd_millions": null,
+          "accession": "0001104659-24-058017",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465924058017/tm2413689d1_ex99-1.htm",
+          "source_quote": "Rigel expects to complete the transition of the asset and start recognizing product sales in July 2024.",
+          "sources": [
+            {
+              "accession": "0001104659-24-058017",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465924058017/tm2413689d1_ex99-1.htm",
+              "source_quote": "Rigel expects to complete the transition of the asset and start recognizing product sales in July 2024."
+            },
+            {
+              "accession": "0001104659-24-086271",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465924086271/tm2420634d4_ex99-1.htm",
+              "source_quote": "GAVRETO became commercially available from Rigel on June 27, 2024."
+            }
+          ],
+          "why": "the issuer bought the U.S. rights part-way through this quarter and said sales would start after it; the product first became commercially available from this issuer in the last days of the following quarter, and this quarter's own release names the product and prints no figure for it"
+        },
+        {
+          "period": "2024Q2",
+          "value_normalized_usd_millions": 1.9,
+          "accession": "0001104659-24-086271",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465924086271/tm2420634d4_ex99-1.htm",
+          "source_quote": "$1.9 million in GAVRETO net product sales",
+          "sources": [
+            {
+              "accession": "0001104659-24-086271",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465924086271/tm2420634d4_ex99-1.htm",
+              "source_quote": "$1.9 million in GAVRETO net product sales"
+            }
+          ]
+        },
+        {
+          "period": "2024Q3",
+          "value_normalized_usd_millions": 7.1,
+          "accession": "0001104659-24-115334",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465924115334/tm2427717d1_ex99-1.htm",
+          "source_quote": "$7.1 million in GAVRETO net product sales",
+          "sources": [
+            {
+              "accession": "0001104659-24-115334",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465924115334/tm2427717d1_ex99-1.htm",
+              "source_quote": "$7.1 million in GAVRETO net product sales"
+            }
+          ]
+        },
+        {
+          "period": "2024Q4",
+          "value_normalized_usd_millions": 8.1,
+          "accession": "0001104659-25-020313",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465925020313/tm258144d1_ex99-1.htm",
+          "source_quote": "$8.1 million in GAVRETO net product sales",
+          "sources": [
+            {
+              "accession": "0001104659-25-020313",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465925020313/tm258144d1_ex99-1.htm",
+              "source_quote": "$8.1 million in GAVRETO net product sales"
+            }
+          ]
+        },
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": 9.0,
+          "accession": "0001104659-25-045067",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465925045067/tm2514128d1_ex99-1.htm",
+          "source_quote": "GAVRETO net product sales were $9.0 million",
+          "sources": [
+            {
+              "accession": "0001104659-25-045067",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465925045067/tm2514128d1_ex99-1.htm",
+              "source_quote": "GAVRETO net product sales were $9.0 million"
+            }
+          ]
+        },
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": 11.8,
+          "accession": "0001104659-25-074163",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465925074163/tm2522417d2_ex99-1.htm",
+          "source_quote": "GAVRETO net product sales were $11.8 million",
+          "sources": [
+            {
+              "accession": "0001104659-25-074163",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465925074163/tm2522417d2_ex99-1.htm",
+              "source_quote": "GAVRETO net product sales were $11.8 million"
+            }
+          ]
+        },
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": 11.1,
+          "accession": "0001104659-25-106282",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465925106282/tm2530133d1_ex99-1.htm",
+          "source_quote": "GAVRETO net product sales were $11.1 million",
+          "sources": [
+            {
+              "accession": "0001104659-25-106282",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465925106282/tm2530133d1_ex99-1.htm",
+              "source_quote": "GAVRETO net product sales were $11.1 million"
+            }
+          ]
+        },
+        {
+          "period": "2025Q4",
+          "value_normalized_usd_millions": 10.2,
+          "accession": "0001034842-26-000016",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000103484226000016/rigl-20260303xex991q42025r.htm",
+          "source_quote": "GAVRETO net product sales were $10.2 million",
+          "sources": [
+            {
+              "accession": "0001034842-26-000016",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000103484226000016/rigl-20260303xex991q42025r.htm",
+              "source_quote": "GAVRETO net product sales were $10.2 million"
+            }
+          ]
+        },
+        {
+          "period": "2026Q1",
+          "value_normalized_usd_millions": 9.6,
+          "accession": "0001034842-26-000033",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000103484226000033/rigl-20260505xex991q12026r.htm",
+          "source_quote": "GAVRETO net product sales were $9.6 million",
+          "sources": [
+            {
+              "accession": "0001034842-26-000033",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000103484226000033/rigl-20260505xex991q12026r.htm",
+              "source_quote": "GAVRETO net product sales were $9.6 million"
+            }
+          ]
+        },
+        {
+          "period": "2026Q2",
+          "value_normalized_usd_millions": 10.7,
+          "accession": "0001034842-26-000053",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000103484226000053/rigl-20260804xex991q22026r.htm",
+          "source_quote": "GAVRETO net product sales were $10.7 million",
+          "sources": [
+            {
+              "accession": "0001034842-26-000053",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000103484226000053/rigl-20260804xex991q22026r.htm",
+              "source_quote": "GAVRETO net product sales were $10.7 million"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "drug_name": "REZLIDHIA",
+      "generic_name": "olutasidenib",
+      "manufacturer": "Rigel Pharmaceuticals, Inc.",
+      "ticker": "RIGL",
+      "options": {
+        "earnings_since": "2024-04-01",
+        "earnings_until": "2026-08-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "product detail only in the earnings exhibit",
+        "no quarterly product revenue tagged in XBRL",
+        "the smallest of the issuer's three products"
+      ],
+      "source": "The same sentence in the same exhibit as the issuer's other two products, and nowhere else.",
+      "expect": [
+        {
+          "period": "2024Q1",
+          "value_normalized_usd_millions": 4.9,
+          "accession": "0001104659-24-058017",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465924058017/tm2413689d1_ex99-1.htm",
+          "source_quote": "REZLIDHIA net product sales were $4.9 million",
+          "sources": [
+            {
+              "accession": "0001104659-24-058017",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465924058017/tm2413689d1_ex99-1.htm",
+              "source_quote": "REZLIDHIA net product sales were $4.9 million"
+            }
+          ]
+        },
+        {
+          "period": "2024Q2",
+          "value_normalized_usd_millions": 5.2,
+          "accession": "0001104659-24-086271",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465924086271/tm2420634d4_ex99-1.htm",
+          "source_quote": "$5.2 million in REZLIDHIA net product sales",
+          "sources": [
+            {
+              "accession": "0001104659-24-086271",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465924086271/tm2420634d4_ex99-1.htm",
+              "source_quote": "$5.2 million in REZLIDHIA net product sales"
+            }
+          ]
+        },
+        {
+          "period": "2024Q3",
+          "value_normalized_usd_millions": 5.5,
+          "accession": "0001104659-24-115334",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465924115334/tm2427717d1_ex99-1.htm",
+          "source_quote": "$5.5 million in REZLIDHIA net product sales",
+          "sources": [
+            {
+              "accession": "0001104659-24-115334",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465924115334/tm2427717d1_ex99-1.htm",
+              "source_quote": "$5.5 million in REZLIDHIA net product sales"
+            }
+          ]
+        },
+        {
+          "period": "2024Q4",
+          "value_normalized_usd_millions": 7.4,
+          "accession": "0001104659-25-020313",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465925020313/tm258144d1_ex99-1.htm",
+          "source_quote": "$7.4 million in REZLIDHIA net product sales",
+          "sources": [
+            {
+              "accession": "0001104659-25-020313",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465925020313/tm258144d1_ex99-1.htm",
+              "source_quote": "$7.4 million in REZLIDHIA net product sales"
+            }
+          ]
+        },
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": 6.1,
+          "accession": "0001104659-25-045067",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465925045067/tm2514128d1_ex99-1.htm",
+          "source_quote": "REZLIDHIA net product sales were $6.1 million",
+          "sources": [
+            {
+              "accession": "0001104659-25-045067",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465925045067/tm2514128d1_ex99-1.htm",
+              "source_quote": "REZLIDHIA net product sales were $6.1 million"
+            }
+          ]
+        },
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": 7.0,
+          "accession": "0001104659-25-074163",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465925074163/tm2522417d2_ex99-1.htm",
+          "source_quote": "REZLIDHIA net product sales were $7.0 million",
+          "sources": [
+            {
+              "accession": "0001104659-25-074163",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465925074163/tm2522417d2_ex99-1.htm",
+              "source_quote": "REZLIDHIA net product sales were $7.0 million"
+            }
+          ]
+        },
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": 8.3,
+          "accession": "0001104659-25-106282",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465925106282/tm2530133d1_ex99-1.htm",
+          "source_quote": "REZLIDHIA net product sales were $8.3 million",
+          "sources": [
+            {
+              "accession": "0001104659-25-106282",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465925106282/tm2530133d1_ex99-1.htm",
+              "source_quote": "REZLIDHIA net product sales were $8.3 million"
+            }
+          ]
+        },
+        {
+          "period": "2025Q4",
+          "value_normalized_usd_millions": 9.6,
+          "accession": "0001034842-26-000016",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000103484226000016/rigl-20260303xex991q42025r.htm",
+          "source_quote": "REZLIDHIA net product sales were $9.6 million",
+          "sources": [
+            {
+              "accession": "0001034842-26-000016",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000103484226000016/rigl-20260303xex991q42025r.htm",
+              "source_quote": "REZLIDHIA net product sales were $9.6 million"
+            }
+          ]
+        },
+        {
+          "period": "2026Q1",
+          "value_normalized_usd_millions": 8.0,
+          "accession": "0001034842-26-000033",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000103484226000033/rigl-20260505xex991q12026r.htm",
+          "source_quote": "REZLIDHIA net product sales were $8.0 million",
+          "sources": [
+            {
+              "accession": "0001034842-26-000033",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000103484226000033/rigl-20260505xex991q12026r.htm",
+              "source_quote": "REZLIDHIA net product sales were $8.0 million"
+            }
+          ]
+        },
+        {
+          "period": "2026Q2",
+          "value_normalized_usd_millions": 8.9,
+          "accession": "0001034842-26-000053",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000103484226000053/rigl-20260804xex991q22026r.htm",
+          "source_quote": "REZLIDHIA net product sales were $8.9 million",
+          "sources": [
+            {
+              "accession": "0001034842-26-000053",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000103484226000053/rigl-20260804xex991q22026r.htm",
+              "source_quote": "REZLIDHIA net product sales were $8.9 million"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "drug_name": "VEPPANU",
+      "generic_name": "vepdegestrant",
+      "manufacturer": "Rigel Pharmaceuticals, Inc.",
+      "ticker": "RIGL",
+      "options": {
+        "earnings_since": "2024-04-01",
+        "earnings_until": "2026-08-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "named in the filing, no figure anywhere",
+        "every quarter must come back empty",
+        "in-licensed after every quarter asked for"
+      ],
+      "source": "An approved product the issuer licensed in at the end of the window, with commercial availability still ahead of the last filing. It is named, described and excluded from guidance in that filing, and no quarter in the window carries a sale by this issuer. A name in a document is not a figure in a document.",
+      "expect": [
+        {
+          "period": "2024Q3",
+          "value_normalized_usd_millions": null,
+          "accession": "0001034842-26-000053",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000103484226000053/rigl-20260804xex991q22026r.htm",
+          "source_quote": "The agreement became effective on June 11, 2026, and Rigel paid the upfront payment of $70.0 million to Arvinas and Pfizer in the second quarter.",
+          "sources": [
+            {
+              "accession": "0001034842-26-000053",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000103484226000053/rigl-20260804xex991q22026r.htm",
+              "source_quote": "The agreement became effective on June 11, 2026, and Rigel paid the upfront payment of $70.0 million to Arvinas and Pfizer in the second quarter."
+            }
+          ],
+          "why": "the licence that gave this issuer the product became effective in the second quarter of 2026 and commercial availability was still ahead of the filing, so no quarter in the window carries a sale by this issuer; the issuer's own revenue guidance is stated excluding it"
+        },
+        {
+          "period": "2024Q4",
+          "value_normalized_usd_millions": null,
+          "accession": "0001034842-26-000053",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000103484226000053/rigl-20260804xex991q22026r.htm",
+          "source_quote": "The agreement became effective on June 11, 2026, and Rigel paid the upfront payment of $70.0 million to Arvinas and Pfizer in the second quarter.",
+          "sources": [
+            {
+              "accession": "0001034842-26-000053",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000103484226000053/rigl-20260804xex991q22026r.htm",
+              "source_quote": "The agreement became effective on June 11, 2026, and Rigel paid the upfront payment of $70.0 million to Arvinas and Pfizer in the second quarter."
+            }
+          ],
+          "why": "the licence that gave this issuer the product became effective in the second quarter of 2026 and commercial availability was still ahead of the filing, so no quarter in the window carries a sale by this issuer; the issuer's own revenue guidance is stated excluding it"
+        },
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": null,
+          "accession": "0001034842-26-000053",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000103484226000053/rigl-20260804xex991q22026r.htm",
+          "source_quote": "The agreement became effective on June 11, 2026, and Rigel paid the upfront payment of $70.0 million to Arvinas and Pfizer in the second quarter.",
+          "sources": [
+            {
+              "accession": "0001034842-26-000053",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000103484226000053/rigl-20260804xex991q22026r.htm",
+              "source_quote": "The agreement became effective on June 11, 2026, and Rigel paid the upfront payment of $70.0 million to Arvinas and Pfizer in the second quarter."
+            }
+          ],
+          "why": "the licence that gave this issuer the product became effective in the second quarter of 2026 and commercial availability was still ahead of the filing, so no quarter in the window carries a sale by this issuer; the issuer's own revenue guidance is stated excluding it"
+        },
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": null,
+          "accession": "0001034842-26-000053",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000103484226000053/rigl-20260804xex991q22026r.htm",
+          "source_quote": "The agreement became effective on June 11, 2026, and Rigel paid the upfront payment of $70.0 million to Arvinas and Pfizer in the second quarter.",
+          "sources": [
+            {
+              "accession": "0001034842-26-000053",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000103484226000053/rigl-20260804xex991q22026r.htm",
+              "source_quote": "The agreement became effective on June 11, 2026, and Rigel paid the upfront payment of $70.0 million to Arvinas and Pfizer in the second quarter."
+            }
+          ],
+          "why": "the licence that gave this issuer the product became effective in the second quarter of 2026 and commercial availability was still ahead of the filing, so no quarter in the window carries a sale by this issuer; the issuer's own revenue guidance is stated excluding it"
+        },
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": null,
+          "accession": "0001034842-26-000053",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000103484226000053/rigl-20260804xex991q22026r.htm",
+          "source_quote": "The agreement became effective on June 11, 2026, and Rigel paid the upfront payment of $70.0 million to Arvinas and Pfizer in the second quarter.",
+          "sources": [
+            {
+              "accession": "0001034842-26-000053",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000103484226000053/rigl-20260804xex991q22026r.htm",
+              "source_quote": "The agreement became effective on June 11, 2026, and Rigel paid the upfront payment of $70.0 million to Arvinas and Pfizer in the second quarter."
+            }
+          ],
+          "why": "the licence that gave this issuer the product became effective in the second quarter of 2026 and commercial availability was still ahead of the filing, so no quarter in the window carries a sale by this issuer; the issuer's own revenue guidance is stated excluding it"
+        },
+        {
+          "period": "2025Q4",
+          "value_normalized_usd_millions": null,
+          "accession": "0001034842-26-000053",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000103484226000053/rigl-20260804xex991q22026r.htm",
+          "source_quote": "The agreement became effective on June 11, 2026, and Rigel paid the upfront payment of $70.0 million to Arvinas and Pfizer in the second quarter.",
+          "sources": [
+            {
+              "accession": "0001034842-26-000053",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000103484226000053/rigl-20260804xex991q22026r.htm",
+              "source_quote": "The agreement became effective on June 11, 2026, and Rigel paid the upfront payment of $70.0 million to Arvinas and Pfizer in the second quarter."
+            }
+          ],
+          "why": "the licence that gave this issuer the product became effective in the second quarter of 2026 and commercial availability was still ahead of the filing, so no quarter in the window carries a sale by this issuer; the issuer's own revenue guidance is stated excluding it"
+        },
+        {
+          "period": "2026Q1",
+          "value_normalized_usd_millions": null,
+          "accession": "0001034842-26-000053",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000103484226000053/rigl-20260804xex991q22026r.htm",
+          "source_quote": "The agreement became effective on June 11, 2026, and Rigel paid the upfront payment of $70.0 million to Arvinas and Pfizer in the second quarter.",
+          "sources": [
+            {
+              "accession": "0001034842-26-000053",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000103484226000053/rigl-20260804xex991q22026r.htm",
+              "source_quote": "The agreement became effective on June 11, 2026, and Rigel paid the upfront payment of $70.0 million to Arvinas and Pfizer in the second quarter."
+            }
+          ],
+          "why": "the licence that gave this issuer the product became effective in the second quarter of 2026 and commercial availability was still ahead of the filing, so no quarter in the window carries a sale by this issuer; the issuer's own revenue guidance is stated excluding it"
+        },
+        {
+          "period": "2026Q2",
+          "value_normalized_usd_millions": null,
+          "accession": "0001034842-26-000053",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000103484226000053/rigl-20260804xex991q22026r.htm",
+          "source_quote": "The agreement became effective on June 11, 2026, and Rigel paid the upfront payment of $70.0 million to Arvinas and Pfizer in the second quarter.",
+          "sources": [
+            {
+              "accession": "0001034842-26-000053",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1034842/000103484226000053/rigl-20260804xex991q22026r.htm",
+              "source_quote": "The agreement became effective on June 11, 2026, and Rigel paid the upfront payment of $70.0 million to Arvinas and Pfizer in the second quarter."
+            }
+          ],
+          "why": "the licence that gave this issuer the product became effective in the second quarter of 2026 and commercial availability was still ahead of the filing, so no quarter in the window carries a sale by this issuer; the issuer's own revenue guidance is stated excluding it"
+        }
+      ]
+    },
+    {
+      "drug_name": "NERLYNX",
+      "generic_name": "neratinib",
+      "manufacturer": "Puma Biotechnology, Inc.",
+      "ticker": "PBYI",
+      "options": {
+        "earnings_since": "2024-04-01",
+        "earnings_until": "2026-08-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "earnings exhibit named ex_NNNNNN.htm",
+        "earnings exhibit the ex99 filename rule misses",
+        "product detail only in the earnings exhibit",
+        "no quarterly product revenue tagged in XBRL",
+        "one product, so the product revenue line is the product"
+      ],
+      "source": "The issuer sells one product. Its periodic reports carry a product revenue, net line and name the product only in prose; the XBRL instance carries that total under no product member, and the one product member in the annual instance sits on a licence milestone threshold rather than on a quarter's sales. The earnings exhibit is the document that ties the two together - \"Product revenue, net consists entirely of revenue from sales of NERLYNX\" - and this filing agent names it ex_973970.htm, which is the naming convention a rule matching ex99 in the filename cannot see.",
+      "expect": [
+        {
+          "period": "2024Q1",
+          "value_normalized_usd_millions": 40.3,
+          "accession": "0001437749-24-014382",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1401667/000143774924014382/ex_665434.htm",
+          "source_quote": "Product revenue, net in the first quarter of 2024 was $40.3 million",
+          "sources": [
+            {
+              "accession": "0001437749-24-014382",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1401667/000143774924014382/ex_665434.htm",
+              "source_quote": "Product revenue, net in the first quarter of 2024 was $40.3 million"
+            }
+          ]
+        },
+        {
+          "period": "2024Q2",
+          "value_normalized_usd_millions": 44.4,
+          "accession": "0001437749-24-024297",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1401667/000143774924024297/ex_706315.htm",
+          "source_quote": "Product revenue, net in the second quarter of 2024 was $44.4 million",
+          "sources": [
+            {
+              "accession": "0001437749-24-024297",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1401667/000143774924024297/ex_706315.htm",
+              "source_quote": "Product revenue, net in the second quarter of 2024 was $44.4 million"
+            }
+          ]
+        },
+        {
+          "period": "2024Q3",
+          "value_normalized_usd_millions": 56.1,
+          "accession": "0001437749-24-033929",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1401667/000143774924033929/ex_744159.htm",
+          "source_quote": "Product revenue, net in the third quarter of 2024 was $56.1 million",
+          "sources": [
+            {
+              "accession": "0001437749-24-033929",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1401667/000143774924033929/ex_744159.htm",
+              "source_quote": "Product revenue, net in the third quarter of 2024 was $56.1 million"
+            }
+          ]
+        },
+        {
+          "period": "2024Q4",
+          "value_normalized_usd_millions": 54.4,
+          "accession": "0001437749-25-005477",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1401667/000143774925005477/ex_783116.htm",
+          "source_quote": "Product revenue, net for the fourth quarter of 2024 was $54.4 million",
+          "sources": [
+            {
+              "accession": "0001437749-25-005477",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1401667/000143774925005477/ex_783116.htm",
+              "source_quote": "Product revenue, net for the fourth quarter of 2024 was $54.4 million"
+            }
+          ]
+        },
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": 43.1,
+          "accession": "0001437749-25-015514",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1401667/000143774925015514/ex_785138.htm",
+          "source_quote": "Product revenue, net in the first quarter of 2025 was $43.1 million",
+          "sources": [
+            {
+              "accession": "0001437749-25-015514",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1401667/000143774925015514/ex_785138.htm",
+              "source_quote": "Product revenue, net in the first quarter of 2025 was $43.1 million"
+            }
+          ]
+        },
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": 49.2,
+          "accession": "0001437749-25-025463",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1401667/000143774925025463/ex_842991.htm",
+          "source_quote": "Product revenue, net in the second quarter of 2025 was $49.2 million",
+          "sources": [
+            {
+              "accession": "0001437749-25-025463",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1401667/000143774925025463/ex_842991.htm",
+              "source_quote": "Product revenue, net in the second quarter of 2025 was $49.2 million"
+            }
+          ]
+        },
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": 51.9,
+          "accession": "0001437749-25-033604",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1401667/000143774925033604/ex_858472.htm",
+          "source_quote": "Product revenue, net in the third quarter of 2025 was $51.9 million",
+          "sources": [
+            {
+              "accession": "0001437749-25-033604",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1401667/000143774925033604/ex_858472.htm",
+              "source_quote": "Product revenue, net in the third quarter of 2025 was $51.9 million"
+            }
+          ]
+        },
+        {
+          "period": "2025Q4",
+          "value_normalized_usd_millions": 59.9,
+          "accession": "0001437749-26-005869",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1401667/000143774926005869/ex_916496.htm",
+          "source_quote": "Product revenue, net in the fourth quarter of 2025 was $59.9 million",
+          "sources": [
+            {
+              "accession": "0001437749-26-005869",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1401667/000143774926005869/ex_916496.htm",
+              "source_quote": "Product revenue, net in the fourth quarter of 2025 was $59.9 million"
+            }
+          ]
+        },
+        {
+          "period": "2026Q1",
+          "value_normalized_usd_millions": 42.0,
+          "accession": "0001437749-26-015621",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1401667/000143774926015621/ex_938051.htm",
+          "source_quote": "Product revenue, net in the first quarter of 2026 was $42.0 million",
+          "sources": [
+            {
+              "accession": "0001437749-26-015621",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1401667/000143774926015621/ex_938051.htm",
+              "source_quote": "Product revenue, net in the first quarter of 2026 was $42.0 million"
+            }
+          ]
+        },
+        {
+          "period": "2026Q2",
+          "value_normalized_usd_millions": 53.6,
+          "accession": "0001437749-26-026282",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1401667/000143774926026282/ex_973970.htm",
+          "source_quote": "Product revenue, net in the second quarter of 2026 was $53.6 million",
+          "sources": [
+            {
+              "accession": "0001437749-26-026282",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1401667/000143774926026282/ex_973970.htm",
+              "source_quote": "Product revenue, net in the second quarter of 2026 was $53.6 million"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
