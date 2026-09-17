@@ -9,7 +9,7 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
-# ruff: noqa: BLE001, DTZ003
+# ruff: noqa: BLE001
 from sqlalchemy.orm import Session
 
 logger = logging.getLogger(__name__)
@@ -46,6 +46,7 @@ from app.db.models import (
     SourceDocumentORM,
     UnresolvedQuarterORM,
     ValidationTaskORM,
+    utc_now,
 )
 from app.domain.claims import stated_labels, stated_number, stated_text
 from app.domain.models import (
@@ -624,7 +625,7 @@ class PipelineOrchestrator:
         job.current_step = step.value
         if status:
             job.status = status.value
-        job.updated_at = datetime.utcnow()
+        job.updated_at = utc_now()
         self.db.commit()
         logger.info(
             "job_step job_id=%s drug=%s step=%s status=%s",
@@ -817,7 +818,7 @@ class PipelineOrchestrator:
                 citation_json={
                     "source_type": SourceType.LLM_SEARCH.value,
                     "source_quote": "llm_alias_expansion",
-                    "retrieval_date": datetime.utcnow().isoformat(),
+                    "retrieval_date": utc_now().isoformat(),
                     "confidence": 0.7,
                     "validation_status": ValidationStatus.NEEDS_REVIEW.value,
                     "interpreted": True,
@@ -1139,7 +1140,7 @@ class PipelineOrchestrator:
                     # neither: for most of these there is no such key.
                     "source_field": sourced.path,
                     "source_quote": sourced.quote or sourced.path,
-                    "retrieval_date": datetime.utcnow().isoformat(),
+                    "retrieval_date": utc_now().isoformat(),
                     "confidence": 0.9 if field == "fda_approval_date" else 0.85,
                     "validation_status": ValidationStatus.NEEDS_REVIEW.value,
                     "interpreted": False,
@@ -1405,7 +1406,7 @@ class PipelineOrchestrator:
                     "source_url": src.url,
                     "source_title": src.title,
                     "source_quote": field.get("source_quote") or "",
-                    "retrieval_date": datetime.utcnow().isoformat(),
+                    "retrieval_date": utc_now().isoformat(),
                     "confidence": float(field.get("confidence") or 0.5),
                     "validation_status": ValidationStatus.NEEDS_REVIEW.value,
                     "interpreted": bool(field.get("interpreted", True)),
@@ -2459,7 +2460,7 @@ class PipelineOrchestrator:
                     "source_url": url,
                     "source_title": src.title,
                     "source_quote": quote,
-                    "retrieval_date": datetime.utcnow().isoformat(),
+                    "retrieval_date": utc_now().isoformat(),
                     "filing_type": src.filing_type,
                     "accession_number": src.accession_number,
                     "confidence": stated_number(cand.get("confidence")) or 0.5,

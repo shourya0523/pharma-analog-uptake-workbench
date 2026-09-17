@@ -8,7 +8,6 @@ most recent job, and its history is every job that ever named it.
 
 from __future__ import annotations
 
-from datetime import datetime
 from typing import Any
 
 from fastapi import APIRouter, HTTPException, Query
@@ -27,6 +26,7 @@ from app.db.models import (
     SessionLocal,
     UnresolvedQuarterORM,
     ValidationTaskORM,
+    utc_now,
 )
 from app.domain.models import (
     NO_FILER_OF_RECORD,
@@ -711,7 +711,7 @@ def resolve_unresolved_quarter(
                 citation_json={
                     "source_url": body.source_url.strip(),
                     "source_quote": body.source_quote,
-                    "entered_at": datetime.utcnow().isoformat(),
+                    "entered_at": utc_now().isoformat(),
                 },
             )
             stamp_series_identity(job, datapoint)
@@ -779,7 +779,7 @@ def patch_profile_field(field_id: str, body: ProfileFieldPatch) -> dict[str, Any
             "source_url": body.source_url.strip(),
             "source_quote": body.reviewer_notes,
             "extraction_method": "reviewer",
-            "edited_at": datetime.utcnow().isoformat(),
+            "edited_at": utc_now().isoformat(),
         }
         db.add(
             ReviewEventORM(

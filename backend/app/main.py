@@ -5,6 +5,8 @@ import asyncio
 import csv
 import io
 import logging
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
 from typing import Any
 from urllib.parse import urlsplit
 
@@ -55,7 +57,18 @@ from app.storage.filestore import get_file_store
 configure_logging()
 logger = logging.getLogger(__name__)
 settings = get_settings()
-app = FastAPI(title=settings.app_name)
+@asynccontextmanager
+async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
+    """What the process does before it serves and after it stops serving.
+
+    `startup` is defined below, beside the queue and the file store it starts;
+    it is named here because the handler has to exist when the app is built.
+    """
+    await startup()
+    yield
+
+
+app = FastAPI(title=settings.app_name, lifespan=lifespan)
 _cors_origins = [o.strip() for o in settings.cors_origins.split(",") if o.strip()]
 _cors_star = _cors_origins == ["*"]
 app.add_middleware(
@@ -82,7 +95,6 @@ async def _handle_job(payload: dict[str, Any]) -> None:
         logger.error("job_handler_failed job_id=%s run_id=%s error=%s", job_id, run_id, exc)
 
 
-@app.on_event("startup")
 async def startup() -> None:
     configure_logging()
     init_db()

@@ -4,7 +4,7 @@ import hashlib
 import json
 import logging
 import traceback
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any
 
 from sqlalchemy import (
@@ -33,6 +33,19 @@ from app.config import get_settings
 from app.domain.models import Cadence
 
 
+def utc_now() -> datetime:
+    """Now, in UTC, without a tzinfo.
+
+    Every `DateTime` column here is naive and every stored value is UTC, so an
+    aware value would be written with an offset the rest of them do not carry
+    and would not compare with them. The clock is read as aware - the naive
+    reading of it is deprecated - and the offset is dropped once it has been
+    applied.
+    """
+    return datetime.now(UTC).replace(tzinfo=None)
+
+
+
 class Base(DeclarativeBase):
     pass
 
@@ -43,9 +56,9 @@ class ExtractionRunORM(Base):
     id: Mapped[str] = mapped_column(String(36), primary_key=True)
     status: Mapped[str] = mapped_column(String(32), default="queued")
     options_json: Mapped[dict[str, Any]] = mapped_column(JSON, default=dict)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utc_now)
     updated_at: Mapped[datetime] = mapped_column(
-        DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
+        DateTime, default=utc_now, onupdate=utc_now
     )
     error: Mapped[str | None] = mapped_column(Text, nullable=True)
 
@@ -82,9 +95,9 @@ class DrugJobORM(Base):
     unresolved_count: Mapped[int] = mapped_column(Integer, default=0)
     quality_flags: Mapped[list[Any]] = mapped_column(JSON, default=list)
     error: Mapped[str | None] = mapped_column(Text, nullable=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utc_now)
     updated_at: Mapped[datetime] = mapped_column(
-        DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
+        DateTime, default=utc_now, onupdate=utc_now
     )
 
     run: Mapped[ExtractionRunORM] = relationship(back_populates="jobs")
@@ -244,7 +257,7 @@ class ReviewEventORM(Base):
     before_json: Mapped[dict[str, Any] | None] = mapped_column(JSON, nullable=True)
     after_json: Mapped[dict[str, Any] | None] = mapped_column(JSON, nullable=True)
     notes: Mapped[str | None] = mapped_column(Text, nullable=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utc_now)
 
 
 class ExportORM(Base):
@@ -256,7 +269,7 @@ class ExportORM(Base):
     format: Mapped[str] = mapped_column(String(64))
     storage_key: Mapped[str] = mapped_column(Text)
     status: Mapped[str] = mapped_column(String(32), default="ready")
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utc_now)
 
 
 class AnalogFamilyORM(Base):
@@ -295,9 +308,9 @@ class CanonicalProductORM(Base):
         server_default=Cadence.ONE_OFF.value,
     )
     initial_approval_date: Mapped[Any | None] = mapped_column(Date, nullable=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utc_now)
     updated_at: Mapped[datetime] = mapped_column(
-        DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
+        DateTime, default=utc_now, onupdate=utc_now
     )
 
 
@@ -455,7 +468,7 @@ class EvidenceAssertionORM(Base):
     source_url: Mapped[str] = mapped_column(Text)
     source_section: Mapped[str | None] = mapped_column(String(256), nullable=True)
     source_quote: Mapped[str | None] = mapped_column(Text, nullable=True)
-    retrieved_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    retrieved_at: Mapped[datetime] = mapped_column(DateTime, default=utc_now)
     as_of_date: Mapped[Any | None] = mapped_column(Date, nullable=True)
     confidence: Mapped[float] = mapped_column(Float, default=0.0)
     validation_status: Mapped[str] = mapped_column(String(32), default="pending")
@@ -529,9 +542,9 @@ class XbrlMemberResolutionORM(Base):
     # A person who settles a member outranks anything automated, the same rule
     # the metadata backfill follows.
     validation_status: Mapped[str] = mapped_column(String(32), default="pending")
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utc_now)
     updated_at: Mapped[datetime] = mapped_column(
-        DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
+        DateTime, default=utc_now, onupdate=utc_now
     )
 
 
