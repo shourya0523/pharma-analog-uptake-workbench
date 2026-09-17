@@ -7,6 +7,8 @@ candidate's own column.
 """
 
 from app.parsing.periods import (
+    MONTHS_TO_PERIOD_TYPE,
+    PERIOD_TYPE_TO_MONTHS,
     PeriodContext,
     detect_period_context,
     normalize_period,
@@ -39,6 +41,17 @@ Research and development expense for the three months ended June 30, 2024 and 20
 $77.2 million. Revenues for the three months ended June 30, 2024 increased as compared to
 the three months ended June 30, 2023 primarily due to a lower average selling price.
 """
+
+
+def test_a_period_type_names_the_span_the_span_names():
+    assert PERIOD_TYPE_TO_MONTHS == {
+        period_type: months for months, period_type in MONTHS_TO_PERIOD_TYPE.items()
+    }
+    assert all(
+        MONTHS_TO_PERIOD_TYPE[PERIOD_TYPE_TO_MONTHS[name]] == name
+        for name in PERIOD_TYPE_TO_MONTHS
+    )
+    assert "weekly" not in PERIOD_TYPE_TO_MONTHS
 
 
 def test_quarter_of_month_maps_calendar_quarters():

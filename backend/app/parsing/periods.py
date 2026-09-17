@@ -368,6 +368,13 @@ MONTHS_TO_PERIOD_TYPE: dict[int, str] = {
     12: "annual",
 }
 
+# The same map read the other way, for a reader that holds a period type and
+# wants the span. Derived, so a span the grammar learns to read is covered
+# here without being written down twice.
+PERIOD_TYPE_TO_MONTHS: dict[str, int] = {
+    period_type: months for months, period_type in MONTHS_TO_PERIOD_TYPE.items()
+}
+
 
 def period_label(year: int, months: int, quarter: int) -> str:
     """The canonical key for a period of ``months`` ending in ``quarter``.
