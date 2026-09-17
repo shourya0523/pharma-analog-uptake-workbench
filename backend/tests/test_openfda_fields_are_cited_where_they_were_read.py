@@ -8,15 +8,19 @@ pair, with invented names.
 
 from __future__ import annotations
 
+from datetime import date
+
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from app.db.models import (
     Base,
+    CanonicalProductORM,
     DrugJobORM,
     DrugProfileFieldORM,
     ExtractionRunORM,
+    ProductIndicationORM,
     sqlite_connect_args,
 )
 from app.domain.models import RetrievalStatus, RetrievedSource, SourceType, new_id
@@ -154,3 +158,40 @@ async def test_the_approval_is_the_earliest_across_every_matching_application(tm
             "NDA000006",
             "NDA000007",
         ]
+
+
+@pytest.mark.asyncio
+async def test_the_canonical_row_and_every_indication_carry_the_launch_anchor(tmp_path):
+    """The date is on one record and the indications on the other."""
+    db, orch, job, sources = _orchestrator(tmp_path, [ORIGINAL])
+    await orch._extract_metadata(job, sources, {}, {"product_metadata": True})
+
+    product = db.query(CanonicalProductORM).filter_by(id=job.product_id).one()
+    assert product.initial_approval_date == date(2015, 12, 21)
+
+    rows = db.query(ProductIndicationORM).filter_by(product_id=product.id).all()
+    assert rows, "no indication was parsed, so the anchor was not tested"
+    assert all(row.approval_date == date(2015, 12, 21) for row in rows)
+    assert all(row.launch_anchor_type == "indication_approval_date" for row in rows)
+
+
+@pytest.mark.asyncio
+async def test_an_application_with_no_approval_leaves_the_anchor_unset(tmp_path):
+    undated = {**ORIGINAL, "submissions": []}
+    db, orch, job, sources = _orchestrator(tmp_path, [undated])
+    await orch._extract_metadata(job, sources, {}, {"product_metadata": True})
+
+    product = db.query(CanonicalProductORM).filter_by(id=job.product_id).one()
+    assert product.initial_approval_date is None
+    rows = db.query(ProductIndicationORM).filter_by(product_id=product.id).all()
+    assert rows and all(row.approval_date is None for row in rows)
+
+
+@pytest.mark.asyncio
+async def test_one_job_files_one_canonical_product(tmp_path):
+    """The label record states no formulation, so it cannot key the product."""
+    db, orch, job, sources = _orchestrator(tmp_path, [ORIGINAL])
+    await orch._extract_metadata(job, sources, {}, {"product_metadata": True})
+
+    products = db.query(CanonicalProductORM).all()
+    assert [p.id for p in products] == [job.product_id]

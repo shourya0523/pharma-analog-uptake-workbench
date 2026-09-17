@@ -67,7 +67,7 @@ from app.extraction.elements import Verdict
 from app.extraction.fingerprint import UNIT_SCALE_TO_MILLIONS
 from app.extraction.members import Resolution, load_products, resolve
 from app.extraction.tagged import candidates_from_instance
-from app.identity.resolver import resolve_product_identity
+from app.identity.resolver import ResolvedProductIdentity, resolve_product_identity
 from app.llm.aliases import merge_aliases
 from app.llm.client import LLMModules, listed, mappings
 from app.parsing.documents import DocumentParser
@@ -723,6 +723,16 @@ class PipelineOrchestrator:
         written: dict[str, str] = {}
         conflicts: dict[str, dict[str, Any]] = {}
 
+        # The approval date and the indications come from two different openFDA
+        # records: the drugsFDA application carries `submissions` and no
+        # indication prose, the SPL label carries the prose and no submissions.
+        # So the date is held across the source loop and written onto the
+        # indication rows afterwards, whichever order the two records arrive in.
+        openfda_approval: str | None = None
+        openfda_identity: ResolvedProductIdentity | None = None
+        anchored_indications: list[ProductIndicationORM] = []
+        openfda_products: list[CanonicalProductORM] = []
+
         # Deterministic OpenFDA enrichment
         for src in sources:
             if src.source_type != SourceType.OPENFDA or src.retrieval_status != RetrievalStatus.SUCCESS:
@@ -782,6 +792,7 @@ class PipelineOrchestrator:
             # approval, and the earliest ORIG is the one the product launched
             # on; openFDA documents no order, so the first result is not it.
             approval, approval_field = earliest_approval_date([r for r, _ in matches])
+            openfda_approval = openfda_approval or approval
             application_numbers = [
                 str(r.get("application_number")) for r, _ in matches if r.get("application_number")
             ]
@@ -870,12 +881,19 @@ class PipelineOrchestrator:
                     job.manufacturer = str(value)
 
             if first_label.brand_names:
-                identity = resolve_product_identity(
+                # One job is one product, so its identity is resolved from the
+                # first openFDA record that names a brand and reused after
+                # that. The two records answering for a product do not describe
+                # it equally: the SPL label states no formulation at all, so a
+                # second resolution from it keys the same product on a poorer
+                # reading and files it as a second canonical row.
+                identity = openfda_identity or resolve_product_identity(
                     brand_name=first_label.brand_names[0],
                     active_ingredients=first_label.active_ingredients,
                     dosage_form=first_label.dosage_forms[0] if first_label.dosage_forms else None,
                     route_terms=first_label.routes,
                 )
+                openfda_identity = identity
                 product = (
                     self.db.query(CanonicalProductORM)
                     .filter_by(identity_key=identity.identity_key)
@@ -897,6 +915,11 @@ class PipelineOrchestrator:
                     )
                     self.db.add(product)
                     self.db.flush()
+                # The launch anchor every curve is drawn from. The dashboard
+                # reads this column in preference to the profile field, so a
+                # canonical row with the column unset costs the approval date
+                # exactly where resolution succeeded.
+                openfda_products.append(product)
                 job.product_id = product.id
                 family = (
                     self.db.query(AnalogFamilyORM)
@@ -946,25 +969,20 @@ class PipelineOrchestrator:
                         .first()
                     )
                     if existing_indication:
+                        anchored_indications.append(existing_indication)
                         continue
-                    self.db.add(
-                        ProductIndicationORM(
-                            id=new_id(),
-                            product_id=product.id,
-                            disease=indication.disease,
-                            setting=indication.setting,
-                            population=indication.population,
-                            biomarker=indication.biomarker,
-                            approval_date=(
-                                datetime.fromisoformat(approval).date() if approval else None
-                            ),
-                            launch_anchor_type=(
-                                "indication_approval_date" if approval else None
-                            ),
-                            approved_lot=indication.approved_lot.value.value,
-                            approved_lot_quote=indication.source_quote,
-                        )
+                    row = ProductIndicationORM(
+                        id=new_id(),
+                        product_id=product.id,
+                        disease=indication.disease,
+                        setting=indication.setting,
+                        population=indication.population,
+                        biomarker=indication.biomarker,
+                        approved_lot=indication.approved_lot.value.value,
+                        approved_lot_quote=indication.source_quote,
                     )
+                    self.db.add(row)
+                    anchored_indications.append(row)
                 for field, sourced in mapping.items():
                     if sourced.value and sourced.path:
                         self.db.add(
@@ -984,6 +1002,19 @@ class PipelineOrchestrator:
                                 selected=True,
                             )
                         )
+
+        # The approval belongs to the application record and the indications to
+        # the label record, so the anchor is written after both have been read
+        # rather than from whichever record was in hand when a row was built.
+        if openfda_approval:
+            anchor = datetime.fromisoformat(openfda_approval).date()
+            for product in openfda_products:
+                if not product.initial_approval_date:
+                    product.initial_approval_date = anchor
+            for row in anchored_indications:
+                if not row.approval_date:
+                    row.approval_date = anchor
+                    row.launch_anchor_type = "indication_approval_date"
 
         # The product and family rows above are complete, so they are committed
         # here rather than at the end of the step: a flushed row is a write
