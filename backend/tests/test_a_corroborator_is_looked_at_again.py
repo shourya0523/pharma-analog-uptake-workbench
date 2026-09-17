@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import asyncio
 
+import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -210,3 +211,52 @@ def test_the_pair_a_combined_line_names_travels_to_the_published_row(monkeypatch
     winner = got["xbrl_fact"]
     assert winner.reported_as == "Calderon and NuVessa"
     assert (winner.citation_json or {}).get("combined_with") == ["NuVessa"]
+
+
+@pytest.mark.parametrize("winner_is_held", [True, False])
+def test_a_reading_that_cannot_publish_does_not_withdraw_a_promoted_figure(
+    monkeypatch, winner_is_held
+):
+    """Who may hand a flag to the published row depends on how it got there.
+
+    The same three readings twice. When the sentence the model settled on is
+    vetoed, the tagged fact takes its place because it publishes and carries no
+    question - and the stub-covering table row, which the pipeline refuses to
+    publish, may not turn it back into a question: that would leave the quarter
+    with no answer at all, which is what the promotion exists to prevent.
+
+    When the sentence publishes on its own, nothing was replaced and the note
+    the table row carries is true of the figure, so it holds it.
+    """
+    db, job = _job()
+    instance = _source(db, job, "quarterly_report", "https://example.invalid/acme-20240331.xml")
+    readable = _source(db, job, "sec_filing", "https://example.invalid/acme-10q.htm")
+    press = _source(db, job, "earnings_release", "https://example.invalid/acme-8k.htm")
+    settled = _point(
+        job, 23.2, method="llm", source=readable,
+        status=(ValidationStatus.NEEDS_REVIEW if winner_is_held
+                else ValidationStatus.AUTO_PASS).value,
+        flags=["hard_veto:quote_states_a_different_period"] if winner_is_held else [],
+        source_type="sec_filing",
+    )
+    rows = [
+        settled,
+        _point(job, 23.217, method="xbrl_fact", source=instance,
+               status=ValidationStatus.AUTO_PASS.value),
+        _point(job, 23.2, method="table", source=press,
+               status=ValidationStatus.NEEDS_REVIEW.value, flags=[FLAG_PARTIAL],
+               source_type="earnings_release"),
+    ]
+    got = _reconcile(monkeypatch, db, job, rows, settled_on=settled)
+    published = {
+        method for method, row in got.items()
+        if row.validation_status in {ValidationStatus.AUTO_PASS.value,
+                                     ValidationStatus.CONFIRMED.value}
+    }
+    if winner_is_held:
+        assert published == {"xbrl_fact"}, got
+        assert FLAG_PARTIAL not in (got["xbrl_fact"].issue_flags or [])
+    else:
+        assert published == set(), got
+        assert FLAG_PARTIAL in (got["llm"].issue_flags or [])
+    assert got["table"].validation_status == ValidationStatus.CORROBORATES.value

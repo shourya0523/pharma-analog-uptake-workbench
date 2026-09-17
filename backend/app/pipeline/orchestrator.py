@@ -3026,6 +3026,7 @@ class PipelineOrchestrator:
                 and other.value_normalized_usd_millions is not None
                 and _agrees_within_declared_precision(winner, other)
             ]
+            replaced = False
             if not _publishes(winner):
                 # The winner is held. A reading of the same figure that is
                 # publishable and carries no question of its own is the
@@ -3046,6 +3047,7 @@ class PipelineOrchestrator:
                     None,
                 )
                 if instead is not None:
+                    replaced = True
                     winners.discard(winner.id)
                     losers.discard(instead.id)
                     winners.add(instead.id)
@@ -3066,7 +3068,14 @@ class PipelineOrchestrator:
                     "extraction_method": other.extraction_method,
                 })
                 winner.citation_json = {**(winner.citation_json or {}), "corroborated_by": cited}
-                _carry_to_winner(winner, other)
+                if not replaced:
+                    # The row that took a held winner's place was chosen
+                    # because it publishes and carries no question of its own.
+                    # A reading the pipeline refuses to publish may not turn it
+                    # back into one: that withdraws the only answer the quarter
+                    # has, and leaves the cell as empty as the promotion was
+                    # there to stop it being.
+                    _carry_to_winner(winner, other)
 
         for row in rows:
             if row.id in corroborating:
