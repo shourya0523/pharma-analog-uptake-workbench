@@ -70,9 +70,14 @@ from __future__ import annotations
 import argparse
 import json
 import pathlib
+import sys
 from datetime import date, timedelta
 
 REPO = pathlib.Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(REPO / "backend"))
+
+from app.domain.models import ExtractionOptions  # noqa: E402
+
 GOLD = REPO / "seed" / "gold"
 CASES = REPO / "seed" / "cases"
 
@@ -89,12 +94,16 @@ REPORTABLE_AFTER_DAYS = 5
 REPORTED_WITHIN_DAYS = 125
 
 # Layer 2 - the openFDA lookup and the product-metadata pass - is a
-# configuration, not a property of the cases, so it is a flag here and the
-# case file records what it was built with. The defaults are a snapshot of the
-# configuration this repository can currently be measured under; they go stale
-# the moment layer 2 is worth scoring, and the change that makes it worth
-# scoring flips them and regenerates.
-LAYER_TWO_DEFAULTS = {"openfda": False, "product_metadata": False}
+# configuration, not a property of the cases, so it is a flag here and the case
+# file records what it was built with. Which two options are layer two is the
+# snapshot; what they default to is not, and is taken from `ExtractionOptions`,
+# the same defaults the UI gets when it sends `options: {}` - so a case cannot
+# quietly measure a configuration no user runs. Passing a flag still overrides
+# either one for a run that wants the other configuration.
+LAYER_TWO_OPTIONS = ("openfda", "product_metadata")
+LAYER_TWO_DEFAULTS = {
+    name: ExtractionOptions.model_fields[name].get_default() for name in LAYER_TWO_OPTIONS
+}
 
 # Gold names its issuers but records no ticker, and the pipeline resolves an
 # issuer by ticker first. This is a snapshot of the symbol the SEC's
