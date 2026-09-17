@@ -127,6 +127,86 @@ async def _sec_throttle() -> None:
         _last_sec_request = asyncio.get_event_loop().time()
 
 
+def is_sec_host(url: str) -> bool:
+    """Whether a URL addresses the SEC, read from its host.
+
+    ``"sec.gov" in url`` is also true of ``https://sec.gov.example.com/`` and
+    of any URL whose query string mentions the host, and what the pace and the
+    request headers follow is who is being asked rather than what the text of
+    the URL says.
+    """
+    host = (urlparse(url).hostname or "").lower()
+    return host == "sec.gov" or host.endswith(".sec.gov")
+
+
+# How long one document is worth waiting out a refusal for. A count of
+# attempts is the wrong bound: four attempts with a doubling delay give up
+# after seven seconds, which is nothing to a rate limit, and the document is
+# then recorded as one that does not exist.
+RETRY_BUDGET_S = 90.0
+
+
+async def get_with_backoff(
+    client: httpx.AsyncClient, url: str, *, budget_s: float = RETRY_BUDGET_S
+) -> httpx.Response:
+    """Fetch one URL, waiting out the refusals a host gives when asked too fast.
+
+    Every read of a page in this module goes through here, because a host's
+    rate limit belongs to the host and not to the caller: two fetchers against
+    one endpoint, one of them polite, is one impolite fetcher.
+
+    SEC returns 503 or 429 under load rather than a permanent error, and a
+    single one costs a whole filing. It is worth waiting out: a document
+    missing because of a rate limit reads downstream as an issuer that
+    discloses nothing, so without this the same code answers differently from
+    one run to the next.
+
+    The pace is kept only for the SEC, whose limit this module knows and
+    shares across every caller in the process. A request to any other host is
+    still retried on the same budget - a refusal is a refusal - but it neither
+    waits for nor moves that pace, so a slow investor-relations site cannot
+    slow down EDGAR and a busy EDGAR cannot slow down the site.
+    """
+    sec = is_sec_host(url)
+    deadline = asyncio.get_event_loop().time() + budget_s
+    delay = 1.0
+    attempt = 0
+    while True:
+        attempt += 1
+        if sec:
+            await _sec_throttle()
+        last: Exception | None = None
+        try:
+            response = await client.get(url)
+        except httpx.TransportError as exc:
+            # A connection that drops is the same refusal without a status
+            # line; it reads downstream exactly as a 503 would.
+            if sec:
+                sec_saw_refusal()
+            last = exc
+            logger.info("fetch_backoff error=%s attempt=%s url=%s", type(exc).__name__, attempt, url)
+        else:
+            if response.status_code not in (429, 503):
+                if sec:
+                    sec_saw_success()
+                response.raise_for_status()
+                return response
+            if sec:
+                sec_saw_refusal(_retry_after_seconds(response))
+            logger.info(
+                "fetch_backoff status=%s attempt=%s pace=%.2f url=%s",
+                response.status_code, attempt, sec_pace(), url,
+            )
+        remaining = deadline - asyncio.get_event_loop().time()
+        if remaining <= 0:
+            if last is not None:
+                raise last
+            response.raise_for_status()
+            return response
+        await asyncio.sleep(min(delay, remaining))
+        delay = min(delay * 2, 30.0)
+
+
 def _content_type(doc: str) -> str:
     """What a stored document is, from its own name."""
     return mimetypes.guess_type(doc)[0] or "application/octet-stream"
@@ -423,59 +503,14 @@ class SECConnector:
         safe_doc = doc.replace("/", "_")
         return f"cache/sec/{accession.replace('-', '')}/{safe_doc}"
 
-    # How long one document is worth waiting out a refusal for. A count of
-    # attempts was the wrong bound: four attempts with a doubling delay gave
-    # up after seven seconds, which is nothing to a rate limit, and the
-    # filing was then recorded as one the issuer had not made.
-    RETRY_BUDGET_S = 90.0
-
     async def _get_with_retry(
         self, client: httpx.AsyncClient, url: str, *, budget_s: float | None = None
     ) -> httpx.Response:
-        """Fetch, waiting out the refusals EDGAR gives when asked too quickly.
-
-        SEC returns 503 or 429 under load rather than a permanent error, and a
-        single one costs a whole filing. It is worth waiting out: a document
-        missing because of a rate limit reads downstream as an issuer that
-        discloses nothing, so without this the same code answers differently
-        from one run to the next. Each refusal also slows every other caller,
-        because the limit belongs to the endpoint and not to this request.
-        """
-        deadline = asyncio.get_event_loop().time() + (
-            self.RETRY_BUDGET_S if budget_s is None else budget_s
+        """One EDGAR read. The waiting and the pace are `get_with_backoff`'s,
+        which every other read of a page in this module also goes through."""
+        return await get_with_backoff(
+            client, url, budget_s=RETRY_BUDGET_S if budget_s is None else budget_s
         )
-        delay = 1.0
-        attempt = 0
-        while True:
-            attempt += 1
-            await _sec_throttle()
-            last: Exception | None = None
-            try:
-                response = await client.get(url)
-            except httpx.TransportError as exc:
-                # A connection that drops is the same refusal without a status
-                # line; it reads downstream exactly as a 503 would.
-                sec_saw_refusal()
-                last = exc
-                logger.info("sec_backoff error=%s attempt=%s url=%s", type(exc).__name__, attempt, url)
-            else:
-                if response.status_code not in (429, 503):
-                    sec_saw_success()
-                    response.raise_for_status()
-                    return response
-                sec_saw_refusal(_retry_after_seconds(response))
-                logger.info(
-                    "sec_backoff status=%s attempt=%s pace=%.2f url=%s",
-                    response.status_code, attempt, sec_pace(), url,
-                )
-            remaining = deadline - asyncio.get_event_loop().time()
-            if remaining <= 0:
-                if last is not None:
-                    raise last
-                response.raise_for_status()
-                return response
-            await asyncio.sleep(min(delay, remaining))
-            delay = min(delay * 2, 30.0)
 
     async def _list_filing_documents(
         self, client: httpx.AsyncClient, cik_int: str, acc_nodash: str
@@ -1073,15 +1108,20 @@ async def fetch_page(
     Raises on anything that leaves us without the document, because a source
     we could not fetch is not a source: its quote would be checkable only
     against whatever handed us the link.
+
+    The read goes through `get_with_backoff`, the same fetcher EDGAR's own
+    walk uses, so a page that happens to be on sec.gov is asked for at the
+    pace this process is keeping with the SEC. A link handed to us by a person
+    or a model is as often an EDGAR archive URL as anything else, and a second
+    fetcher against one host at its own pace is what a rate limit counts.
     """
     if not _is_fetchable(url):
         raise ValueError(f"refusing to fetch {url!r}")
     headers: dict[str, str] = {"User-Agent": user_agent}
-    if "sec.gov" in url.lower():
+    if is_sec_host(url):
         headers["Accept-Encoding"] = "gzip, deflate"
     async with httpx.AsyncClient(timeout=60, follow_redirects=True, headers=headers) as client:
-        resp = await client.get(url)
-        resp.raise_for_status()
+        resp = await get_with_backoff(client, url)
         content_type = resp.headers.get("content-type", "text/html")
         content = resp.content[:PAGE_BYTES_LIMIT]
     ext = "pdf" if "pdf" in content_type or url.lower().endswith(".pdf") else "html"

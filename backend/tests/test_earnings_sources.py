@@ -317,14 +317,34 @@ def test_every_edgar_read_survives_a_dropped_connection_or_a_refusal(monkeypatch
         asyncio.run(connector._get_with_retry(client, "https://data.sec.gov/x", budget_s=0))
     assert client.calls == 1
 
-    # And the three reads that used to call the client directly now go
-    # through it: the ticker map, the submissions index, and its archive shards.
+
+def test_every_read_of_a_page_in_the_module_goes_through_the_backoff():
+    """Derived from the module, not from a list of the reads we remember.
+
+    A hand-written tuple of method names cannot see a function that is not a
+    method, and `fetch_page` is one: it asked sec.gov with no pace and no
+    retry while the throttled fetcher sat a few lines above it, and a
+    four-name list of `vars(SECConnector)` entries could not name it. Both
+    sides of the assertion are read out of the module's own syntax tree, so a
+    read added anywhere in the file - method, module-level function or
+    nested - has to be the throttled one or this fails.
+    """
+    import ast
     import inspect
 
-    for name in ("resolve_cik", "_filings_covering", "_retrieve_xbrl_instances", "retrieve"):
-        fn = getattr(SECConnector, name, None)
-        if fn is not None:
-            assert "client.get(" not in inspect.getsource(fn), name
+    from app.connectors import sources as module
+
+    text = inspect.getsource(module)
+    tree = ast.parse(text)
+    functions = {
+        node.name: ast.get_source_segment(text, node)
+        for node in ast.walk(tree)
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+    }
+    reads = {name for name, body in functions.items() if "client.get(" in body}
+    paced = {name for name, body in functions.items() if "await _sec_throttle(" in body}
+    assert reads, "no function in the module reads a page; the check would pass vacuously"
+    assert reads == paced, (sorted(reads), sorted(paced))
 
 
 async def test_the_window_reaches_one_reporting_lag_back_and_no_further(monkeypatch):
