@@ -1,7 +1,7 @@
 ---
 title: What the audit found - reduce complexity, keep the value
 date: 2026-09-17
-status: in-progress
+status: complete
 ---
 
 # What the audit found
@@ -32,10 +32,10 @@ Nothing below scores anything. The smoke run (section 6) is the score.
 
 | shape | instances found | cost |
 |---|---|---|
-| **written and never read** | derivation lineage table; coverage verdict; issuer-refusal flags; `therapeutic_area` column (no writer); `series_selection` on the dashboard point; five review-queue fields; `states_a_scope`; `carries_nothing` | ~200 lines, N row writes per figure, and one value (therapeutic area) that scores half credit because the column meant to carry it is empty |
+| **written and never read** | derivation lineage table; coverage verdict; issuer-refusal flags; `therapeutic_area` column (no writer); `series_selection` on the dashboard point; five review-queue fields; `states_a_scope`; `carries_nothing`; `lot_extractor.yaml` (loaded by nothing); four prompt response fields; the completeness model call (0 rows in four runs) | ~200 lines, N row writes per figure, and one value (therapeutic area) that scores half credit because the column meant to carry it is empty |
 | **one idea, two implementations** | re-settle after review (2); peer-name reading (2 modules, composed verbatim twice); "same figure" (precision-aware in reconciliation, byte-equal in selection); "one group" (scope key vs series identity); geography normalisation (uptake yes, peak selection no); period grammar (two compiled spellings); figure/period/row-label parsers in coverage vs fingerprint/periods/tables; brand-path tuple (3 spellings); `_job()` fixture (7 byte-identical copies); holdout guard properties (5 files) | the two copies can disagree, and in two cases already can (finding 4.3, 2.6) |
 | **threaded for one caller** | `lineage` out-parameter through two derivation functions; `profile_fields`' seven kwargs from one call site; `claim_ranking` returning three closures where one caller uses one; the `characterisation` option-inversion literal | signatures wider than their use |
-| **a fix beside the code it replaced** | the stage reorder left the narrative-metadata branch unreachable (95 lines that read as live); the chart still arbitrates with the old corroboration marker beside the new selection field; `record_coverage` kept as a wrapper of the kind the same branch deleted elsewhere | dead code that reads as live is the expensive kind |
+| **a fix beside the code it replaced** | the stage reorder left the narrative-metadata branch unreachable (95 lines that read as live); the chart still arbitrates with the old corroboration marker beside the new selection field; `record_coverage` kept as a wrapper of the kind the same branch deleted elsewhere; two hard vetoes that 6a's sentence unit made unreachable or redundant; a prompt rule the code removed and the prompt still gives | dead code that reads as live is the expensive kind |
 | **a number where a shape belongs** | six size ceilings in the holdout guards (the set cannot grow); measured counts in three test docstrings; two plans marked `not-started` after 30 items shipped | rule 5 in test and doc form |
 
 ---
@@ -96,7 +96,11 @@ not blind):** make the selection's "same figure" call
 needs its own held-out set (rule 4). Deleting the cross-identity collapse
 (3.3 below) removes half the exposure for free.
 
-**2.7 Smaller, verified, one line each.**
+**2.7 The peer list leaks across documents** (*) - section 5. Any job with two
+or more parseable sources filters every source's LLM candidates by the last
+document's peers. One dict key.
+
+**2.8 Smaller, verified, one line each.**
 - `MIN_ALIAS_LENGTH` is applied to the product's own name: a 3-letter brand
   keeps only its sibling extension as a candidate (`openfda_fields.py:79-84`).
 - `_AREA_QUALIFIER` strips from the first bracket to end of string, deleting
@@ -374,18 +378,19 @@ endpoints; enrichment's cap and forced review; `llm/aliases.py` and
 
 M10 was "delete and infra". It now takes, in this order:
 
-1. Section 2, all of it - the introduced defects, one commit each, each with
-   the reviewer's probe turned into the guard test.
-2. Section 3 items 1-17 and 21-26 - the simplifications with no behaviour
-   change or a measured zero, each verified by re-running the reviewer's
-   command before and after.
+1. Section 2, all of it, and section 5's defects - the introduced defects,
+   one commit each, each with the reviewer's probe turned into the guard test.
+2. Section 3 items 1-17 and 21-26, and section 5's simplifications 1-6 and
+   8-11 - the changes with no behaviour change or a measured zero, each
+   verified by re-running the reviewer's command before and after.
 3. Its own original list (`_search_revenue_fallback`, the three dead
    `ValidationTaskORM` columns, the two orphan prompts, `llm_search_max_queries`,
    `FileStore.public_uri`, the `tables.py` half; the per-job deadline; startup
    recovery).
-4. Not 18 or 20, and not 2.6's grouping unification: those are behaviour
-   changes on the chart and on 137 rows, and each needs its own held-out set
-   before it is scored (rule 4).
+4. Not 18 or 20, not 2.6's grouping unification, not section 5's prompt
+   reconciliation (7) or the auto-pass gate: those are behaviour changes on
+   the chart, on 137 rows, on the judge's prompt and on 293 auto-passes, and
+   each needs its own held-out set before it is scored (rule 4).
 
 The smoke run against `dde7fb0` is the baseline every one of these is held
 against: the same case files, the same configuration header, and a number
