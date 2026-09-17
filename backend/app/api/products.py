@@ -39,7 +39,7 @@ from app.domain.models import (
     new_id,
 )
 from app.observability import normalize_analog_key
-from app.pipeline.orchestrator import select_job_series, stamp_series_identity
+from app.pipeline.orchestrator import resettle_series
 from app.pipeline.series_identity import recorded_reason_code
 from app.quality.completeness import (
     names_a_quarter,
@@ -714,7 +714,6 @@ def resolve_unresolved_quarter(
                     "entered_at": utc_now().isoformat(),
                 },
             )
-            stamp_series_identity(job, datapoint)
             db.add(datapoint)
             created_datapoint_id = datapoint.id
         row.resolution = RESOLUTION_BY_ACTION[body.action]
@@ -737,9 +736,7 @@ def resolve_unresolved_quarter(
             # The entered figure is an answer for a quarter that may already
             # hold one, so the series is asked again which reading it holds.
             db.flush()
-            select_job_series(
-                db, job, db.query(DatapointORM).filter_by(job_id=job.id).all()
-            )
+            resettle_series(db, job)
         counted = refresh_completeness(db, job)
         db.commit()
         return {

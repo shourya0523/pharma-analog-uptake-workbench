@@ -168,3 +168,59 @@ def test_a_figure_a_reviewer_types_belongs_to_a_series(client):
         assert row.series_identity
         assert row.series_selection == SeriesSelection.SELECTED.value
         assert row.geography_normalized == "unspecified"
+
+
+def test_the_gap_path_re_stamps_the_rows_it_did_not_write(client):
+    """One answer for three paths, so an old row is healed by each of them.
+
+    The gap path stamped only the row it created and then asked the selection
+    over every row of the job. A row written before the identity column existed
+    carries none, and an empty identity is its own group - so two such rows for
+    one quarter, which are two series and two legitimate points, were read as
+    one series and one of them was dropped from the curve.
+
+    Both answers: the two legacy readings are two series and both keep their
+    figures, and the entered row belongs to a series of its own.
+    """
+    with factory_rows(client) as db:
+        for row_id, scope, geography, value in (
+            ("dp-old-whole", "Product family", None, 20.0),
+            ("dp-old-region", "U.S.", "United States", 20.0),
+        ):
+            db.add(
+                DatapointORM(
+                    id=row_id, job_id="job-1", period="2025Q2",
+                    period_type=PeriodType.QUARTERLY.value,
+                    value_normalized_usd_millions=value, revenue_scope=scope,
+                    formulation="aggregate", currency="USD", geography=geography,
+                    source_url="https://sec.gov/an-older-filing",
+                    source_quote=f"Calderon {value}",
+                    extraction_method="table",
+                    validation_status=ValidationStatus.AUTO_PASS.value,
+                )
+            )
+        db.commit()
+
+    test_client, factory = client
+    response = test_client.post(
+        "/unresolved-quarters/uq-0/actions",
+        json={
+            "action": "enter_value",
+            "value_normalized_usd_millions": 12.5,
+            "source_url": "https://sec.gov/another-filing",
+            "source_quote": "Calderon net sales were $12.5 million",
+        },
+    )
+    assert response.status_code == 200
+    entered = response.json()["datapoint_id"]
+
+    selections = _selections(factory)
+    assert selections["dp-old-whole"] == SeriesSelection.SELECTED.value
+    assert selections["dp-old-region"] == SeriesSelection.SELECTED.value
+    assert selections[entered] == SeriesSelection.SELECTED.value
+
+
+def factory_rows(client):
+    """A session on the test client's database, for rows a fixture cannot add."""
+    _test_client, factory = client
+    return factory()

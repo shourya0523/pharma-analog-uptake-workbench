@@ -548,6 +548,28 @@ def claim_ranking(db: Session, job: DrugJobORM) -> tuple[Callable, Callable, Cal
 
     return claim_tier, reports_own_period, accession_of
 
+def resettle_series(db: Session, job: DrugJobORM | None) -> None:
+    """Ask again which reading each of the job's series holds.
+
+    A reviewer's decision is an answer about one row and a change to the series
+    it belongs to: a figure confirmed where the quarter already had one is a
+    second reading of that quarter, and a figure rejected may leave the quarter
+    to a reading that was standing behind it. Left unasked, the surfaces would
+    draw both.
+
+    Every row is stamped before the question is put, not only the one the
+    reviewer touched. A row written before the identity existed carries none,
+    and an empty identity is its own group - so one un-stamped row makes every
+    other un-stamped row of the same quarter its duplicate.
+    """
+    if job is None:
+        return
+    rows = db.query(DatapointORM).filter_by(job_id=job.id).all()
+    for row in rows:
+        stamp_series_identity(job, row)
+    select_job_series(db, job, rows)
+
+
 def select_job_series(
     db: Session,
     job: DrugJobORM,
