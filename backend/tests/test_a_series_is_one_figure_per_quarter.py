@@ -168,20 +168,22 @@ def test_a_quarter_and_a_year_of_the_same_size_are_not_one_reading():
     assert standing["quarter"].selection == SeriesSelection.SELECTED.value
 
 
-def test_one_figure_printed_to_two_precisions_is_one_figure():
+def test_one_figure_printed_to_two_precisions_is_one_reading_of_it():
     """The selection means by "same figure" what reconciliation means.
 
     Reconciliation calls two readings one figure when they agree within what
-    their sources declared; the selection compared the digits, so a filer that
-    printed one number to two places under two identities put two points on
-    one quarter.
+    their sources declared; the selection compared the digits, so a reading of
+    the figure a series holds, printed one place coarser, was not recognised as
+    a reading of it at all.
 
     Both answers, with neither source declaring a bound so the fraction stands
-    in: the rounded reading is the same figure and the different one is not.
+    in: the rounded reading is a reading of the figure the cell holds, and a
+    reading a million away is not.
     """
     rounded = [
         _reading(_identity(), 159.186, id="tagged", strength=(0,)),
-        _reading(_identity(geography="US"), 159.2, id="printed", strength=(1,)),
+        _reading(_identity(geography="US"), 159.2, id="printed",
+                 publishes=False, strength=(1,)),
     ]
     standing = select_series_figures(rounded)
     assert standing["tagged"].selection == SeriesSelection.SELECTED.value
@@ -190,11 +192,12 @@ def test_one_figure_printed_to_two_precisions_is_one_figure():
 
     apart = [
         _reading(_identity(), 159.186, id="tagged", strength=(0,)),
-        _reading(_identity(geography="US"), 161.0, id="printed", strength=(1,)),
+        _reading(_identity(geography="US"), 161.0, id="printed",
+                 publishes=False, strength=(1,)),
     ]
     standing = select_series_figures(apart)
     assert standing["tagged"].selection == SeriesSelection.SELECTED.value
-    assert standing["printed"].selection == SeriesSelection.SELECTED.value
+    assert standing["printed"].selection is None
 
 
 def test_what_the_sources_declared_bounds_how_far_one_figure_may_sit_apart():
@@ -210,12 +213,40 @@ def test_what_the_sources_declared_bounds_how_far_one_figure_may_sit_apart():
                           rounding_uncertainty=uncertainty),
             SeriesReading(id="b", cell=("2024Q2", "quarterly"),
                           identity=_identity(geography="US"),
-                          value=160.0, publishes=True, strength=(1,),
+                          value=160.0, publishes=False, strength=(1,),
                           rounding_uncertainty=uncertainty),
         ]
 
     exact = select_series_figures(pair(0.0))
-    assert exact["b"].selection == SeriesSelection.SELECTED.value
+    assert exact["b"].selection is None
 
     rounded = select_series_figures(pair(0.5))
     assert rounded["b"].selection == SeriesSelection.DUPLICATE.value
+
+
+def test_two_series_that_hold_one_number_are_still_two_series():
+    """A figure is not a series, so two of them are not one reading twice.
+
+    A product sold only in one place reports its worldwide line and its one
+    region as the same number, quarter after quarter. Collapsing them dropped
+    the region from the curve.
+
+    Both answers: two identities each holding the figure both keep it, and two
+    readings of one identity do not.
+    """
+    two_series = [
+        _reading(_identity(), 124.1, id="whole", strength=(0,)),
+        _reading(_identity(revenue_scope="U.S.", geography="US"), 124.1,
+                 id="region", strength=(1,)),
+    ]
+    standing = select_series_figures(two_series)
+    assert standing["whole"].selection == SeriesSelection.SELECTED.value
+    assert standing["region"].selection == SeriesSelection.SELECTED.value
+
+    one_series = [
+        _reading(_identity(), 124.1, id="tagged", strength=(0,)),
+        _reading(_identity(), 124.1, id="printed", strength=(1,)),
+    ]
+    standing = select_series_figures(one_series)
+    assert standing["tagged"].selection == SeriesSelection.SELECTED.value
+    assert standing["printed"].selection == SeriesSelection.DUPLICATE.value

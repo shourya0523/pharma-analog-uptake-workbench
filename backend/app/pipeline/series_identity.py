@@ -257,9 +257,9 @@ def _is_one_figure(left: SeriesReading, right: SeriesReading) -> bool:
     """Whether two readings of one quarter carry the same figure.
 
     Asked of what the sources declared rather than of the digits, so that the
-    selection and reconciliation mean the same thing by it: reconciliation puts
-    a figure printed to two precisions in one group, and the selection used to
-    let both through as two points on one quarter.
+    selection and reconciliation mean the same thing by it: a filer printing
+    159.186 in one place and 159.2 in another has printed one figure twice, and
+    reconciliation puts those two in one group.
     """
     if left.value is None or right.value is None:
         return False
@@ -274,14 +274,14 @@ def select_series_figures(readings: list[SeriesReading]) -> dict[str, SeriesStan
     """Which reading each series holds for each quarter, and what the rest are.
 
     Exactly one `selected` reading per (identity, cell), chosen by strength
-    among the readings the pipeline stands behind. Then, in each cell, a
-    figure selected twice under two identities is one figure labelled two
-    ways: the strongest reader's identity keeps it and the others become
-    duplicates, because a quarter's revenue read once cannot be two points of
-    two series. Every remaining reading is a `duplicate` of the figure its
-    cell holds where it states the same figure, `superseded` where it states a
-    different one for a series that has a figure, and undecided where its cell
-    has none - which is not a judgement, and says so by staying empty.
+    among the readings the pipeline stands behind. Two identities that both
+    hold a figure for one quarter both keep it: they are two series, and a
+    product whose worldwide line and whose only region carry one number is
+    still reporting two things. Every remaining reading is a `duplicate` of the
+    figure its cell holds where it states the same figure, `superseded` where
+    it states a different one for a series that has a figure, and undecided
+    where its cell has none - which is not a judgement, and says so by staying
+    empty.
     """
     standing: dict[str, SeriesStanding] = {
         reading.id: SeriesStanding(None, None) for reading in readings
@@ -304,21 +304,6 @@ def select_series_figures(readings: list[SeriesReading]) -> dict[str, SeriesStan
     by_cell: dict[tuple, list[SeriesReading]] = {}
     for winner in selected:
         by_cell.setdefault(winner.cell, []).append(winner)
-
-    for cell, winners in list(by_cell.items()):
-        for keeps in sorted(winners, key=lambda r: order[r.id]):
-            if standing[keeps.id].selection != SeriesSelection.SELECTED.value:
-                continue
-            for other in winners:
-                if other.id == keeps.id:
-                    continue
-                if standing[other.id].selection != SeriesSelection.SELECTED.value:
-                    continue
-                if _is_one_figure(keeps, other):
-                    standing[other.id] = SeriesStanding(SeriesSelection.DUPLICATE.value, keeps.id)
-        by_cell[cell] = [
-            w for w in winners if standing[w.id].selection == SeriesSelection.SELECTED.value
-        ]
 
     for reading in readings:
         if standing[reading.id].selection is not None:
