@@ -425,18 +425,22 @@ Diagnosis, not building. Each loss class traced in the run's own database
 (`.../scratchpad/wt-audit2/backend/storage/workbench.db`) and the eval detail.
 
 **No answer (15) is retrieval, not extraction, and it is the shipped
-default.** Every one of the 14 jobs holds exactly 4 `sec_filing` documents -
-`sec_max_filings = 4` as the code declares it (the session that produced every
-earlier number ran with 25). The 10-Q *pages* for 2024-2025 were never
-fetched; the 10-Q *XBRL instances* were (8 per job) and yielded nothing for
-Neurocrine, whose instances do not mention INGREZZA once (`grep -ci ingrezza
-nbix-2024*_htm.xml` -> 0, 0, 0: the issuer does not tag product revenue).
-Neurocrine and Eton also got **0 earnings exhibits** where every other issuer
-got 7-12, so INGREZZA's seven missing quarters and CRENESSITY's four had no
-document to be read from. Why those two issuers' 8-K exhibits were not
-retrieved is not yet established (inferred: the exhibit filter; verify before
-touching). The two OLPRUVA Q4s and INCRELEX 2023Q4 are the FY-minus-nine-months
-class with the FY document outside the four.
+default - with the causes now verified.** Every one of the 12 jobs holds
+exactly 4 `sec_filing` documents - `sec_max_filings = 4` as the code declares
+it (every earlier number ran with 25), spent annual-first so no quarter is
+reached. Traced per quarter against the document gold cites: 7 are 10-Q pages
+never fetched whose accession the job already fetched as an XBRL instance
+that found nothing (Neurocrine does not tag product revenue: `grep -ci
+ingrezza nbix-2024*_htm.xml` -> 0, 0, 0); 5 are earnings exhibits rejected by
+`is_earnings_exhibit`'s filename pattern, which Neurocrine's, Eton's and
+Zevra's filing agents do not follow - the item 2.02 gate passes for all of
+them; 1 is an acquired-business 8-K/A; 2 are not retrieval. One, not three,
+is the FY-minus-nine-months class. Register 12e carries the design and the
+corrections.
+
+**The coverage verdict** is `names_only` on every 10-K page and every XBRL
+instance, and `partial` on 40 of 244 - not on all documents, as an earlier
+draft here said. The causes are in 12e; none is the row-grouped case.
 
 **Wrong identity (6): the key asks for a pair label on one product, and this
 document's first account of it was wrong.** An earlier draft here said the
@@ -492,14 +496,8 @@ says 74.854 from the 10-K. The pipeline auto-passed the issuer's own headline
 figure. Whether gold or the release is the analyst's answer is a question
 about that filing, not about the code; opened as such, not asserted.
 
-**The coverage verdict is not yet informative.** Every document in these 14
-jobs carries `names_only`, including the 10-K pages that yielded 3, 7 and 9
-figures. Row-grouped schedules were the stated limitation; on real documents
-it is the whole population. M6's recorder measures nothing until its figure
-test reads a row-grouped table.
-
 What moves the number, in order, and what each costs: the four-filing cap is
-a configuration decision (a user gets 4; the measured product ran with 25);
+a configuration decision and 12e's set cover replaces it;
 the Upstaza six are the key's expectation, a decision for a person; the two-number
 row is the auto-pass gate and needs a new held-out set; Translarna needs a
 person to open the 10-K. None of these is in the M10 tracks now running.

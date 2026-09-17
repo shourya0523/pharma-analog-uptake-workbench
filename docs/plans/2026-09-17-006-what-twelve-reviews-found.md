@@ -1673,7 +1673,7 @@ Unknown, and that is the point of stating it as a design. What can be said:
 
 ### 12e. M11: choose filings by the quarters asked, not by recency and count
 
-**Status: DESIGN, premises verified.** Written after the first smoke run
+**Status: DESIGN, premises verified, two corrected.** Written after the first smoke run
 (`docs/plans/2026-09-17-008-what-the-audit-found.md` section 7) showed where
 the fifteen no-answers on the held-out set came from.
 
@@ -1698,6 +1698,16 @@ app/connectors/sources.py` returns nothing. Live, for one issuer:
     ('10-K', reportDate 2025-12-31, filed 2026-02-11)
     ('8-K',  reportDate 2026-05-05, filed 2026-05-05)   # earnings 8-K, same day as the 10-Q
 
+Verified over the full index for two issuers: every 10-K, 10-Q and 8-K row
+carries a `reportDate`, and `_filings_covering` already has it in `recent`.
+**Corrected:** an item 2.02 8-K's `reportDate` is the event date, equal to
+the filing date on all 16 rows sampled - never the period reported. The 8-K
+answer set cannot come from `reportDate`; it comes from pairing the 8-K with
+the periodic filing beside it in time, which is the prose above and not what
+"an answer set from the period of report" implies. And a 10-K's product table
+states three fiscal years, not two; Q4 by subtraction needs the Q3 10-Q's
+nine-month column as a second document.
+
 **The mechanism.** Ask per quarter, not per job.
 
 1. *Each form has an answer set that needs no document opened.* A 10-Q for
@@ -1717,19 +1727,41 @@ app/connectors/sources.py` returns nothing. Live, for one issuer:
    year's 10-Q comparative column, the IR page. Stop when every asked quarter
    is carried or every candidate is spent, and record which.
 
-**What has to be true first, both observed on the smoke database.**
-- The coverage verdict read `names_only` on every document of all 14 jobs,
-  including 10-K pages that yielded 3, 7 and 9 figures. 12d's "row-grouped
-  tables" limitation is, on real documents, the whole population; step 3 has
-  no signal until the figure test reads a row-grouped table.
-- Two issuers (Neurocrine, Eton) got 0 earnings exhibits where every other
-  issuer got 7-12. Step 3's second candidate is missing for them for a reason
-  not yet established. Verify before touching the exhibit filter.
+**What has to be true first, both verified on the smoke database (12
+jobs, not 14 as an earlier draft said).**
+- The coverage verdict is `names_only` on every 10-K page and every XBRL
+  instance, structurally, and `partial` on 40 of 244 documents - not on all,
+  as an earlier draft said. Three causes, none of them the row-grouped case
+  12d named: the asked set holds only quarters, so a 10-K's annual columns
+  can never be members; `coverage.py` passes a row as its own sibling into
+  `read_label`, so a labelled row reads as a combined line over itself (the
+  guard `extract.py:620-625` has and says why); and 97 of 244 documents are
+  XBRL instances that parse to zero grids. Measured: giving the predicate the
+  extractor's two guards and the annual keys moves `partial` 40 -> 51 -> 71.
+  `absent` occurs 0 times in 330 documents because the alias list carries a
+  bare corporate suffix. Nothing reads the verdict today.
+- Neurocrine, Eton and, on its older releases, Zevra got 0 earnings exhibits
+  because `is_earnings_exhibit` (`sources.py:263`) matches a filename pattern
+  (`ex99`) that their filing agents do not use (`q4-2025xearningsrelease.htm`,
+  `ex_889836.htm`). The item 2.02 gate passes for all of them. The filing's
+  own header page declares each document's type (`EX-99.1`), at the same
+  request cost as the index call the pass already makes. The exhibit pass is
+  also handed the un-widened window while the primary pass widens by the
+  reporting lag.
 
-**How to measure it.** 12d's two numbers, per issuer per run: quarters
-answered per document fetched (must rise) and documents fetched per quarter
-answered (must fall), both from `RetrievedSource` plus the datapoints. A
-change that lowers the second without lowering the first is working. Rule 4:
+**What the design changes, on the fifteen.** Traced per no-answer against
+the document gold cites: 7 are 10-Q pages never fetched whose accession the
+job already fetched as an instance with nothing found - the set cover fixes
+them at no extra request, and the smallest safe first step is "fetch the
+page of an accession you are already fetching"; 5 are exhibits the filename
+rule rejected; 1 is an acquired-business 8-K/A (tier 4); 2 are not retrieval.
+Only one of the fifteen is the FY-minus-nine-months class.
+
+**How to measure it.** 12d's two numbers, reported as totals, never as a
+mean of per-job ratios (four jobs answer zero quarters). Baseline on the
+held-out run: 0.16 quarters answered per document fetched, 6.10 documents
+per quarter answered. A change that lowers the second without lowering the
+first is working. Rule 4:
 scored on a set drawn from issuers none of the keys use; the 2026-09 held-out
 set has been read against this diagnosis and is not that set.
 
