@@ -1,11 +1,7 @@
-import json
-import re
-from pathlib import Path
-
 from app.connectors.sources import (
     SECConnector,
+    exhibit_number,
     form_family,
-    is_earnings_exhibit,
     states_item,
 )
 from app.domain.models import (
@@ -17,64 +13,27 @@ from app.domain.models import (
 )
 from app.parsing.evidence import prioritize_sources_for_revenue
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
 
+def test_an_exhibit_is_the_family_its_declared_type_names():
+    """One exhibit family, three spellings, and a neighbour that is not it.
 
-def _gold_source_filenames() -> set[str]:
-    rows = [
-        json.loads(line)
-        for line in (REPO_ROOT / "seed" / "gold" / "quarterly_revenue.jsonl").read_text().splitlines()
-        if line.strip()
-    ]
-    return {row["source_url"].rsplit("/", 1)[-1] for row in rows}
-
-
-def _exhibit_number(filename: str) -> str | None:
-    """The exhibit number a filing document's name states, if it states one.
-
-    Read independently of `is_earnings_exhibit`, so the test partitions gold's
-    citations by what they are rather than by what that function says they are.
+    A filer writes the type ``EX-99``, ``EX-99.1`` or ``EX-99.01`` for the
+    same exhibit, so the family is what is read and the numbering after it is
+    the filer's own. Exhibit 13 is the annual report filed with a 10-K, which
+    also carries product revenue and is not an earnings release; exhibit 101
+    is the XBRL taxonomy. Neither is in the 99 family.
     """
-    squashed = re.sub(r"[^a-z0-9]", "", filename.lower())
-    match = re.search(r"ex+(?:h(?:ibit)?)?v?(\d{2})", squashed)
-    return match.group(1) if match else None
-
-
-def test_earnings_exhibit_matches_every_gold_exhibit_filename():
-    """Gold cites two exhibit families and only one of them is an earnings release.
-
-    Exhibit 99.x is the earnings release carrying the product revenue tables,
-    under several issuer naming conventions. Exhibit 13 is the annual report
-    filed with a 10-K, which also carries product revenue but is not an
-    earnings exhibit and must not be matched as one - selecting on the letters
-    "ex" alone cannot tell them apart.
-    """
-    named = {
-        name: _exhibit_number(name)
-        for name in _gold_source_filenames()
-        if _exhibit_number(name)
+    assert {exhibit_number(t) for t in ("EX-99", "EX-99.1", "EX-99.01", "ex-99.2")} == {
+        SECConnector.EARNINGS_EXHIBIT
     }
-    earnings = {name for name, number in named.items() if number == "99"}
-    annual_report = {name for name, number in named.items() if number == "13"}
-    assert earnings, "expected gold rows to cite earnings exhibits"
-    assert annual_report, "expected gold rows to cite 10-K annual report exhibits"
-
-    assert all(is_earnings_exhibit(name) for name in earnings), sorted(
-        name for name in earnings if not is_earnings_exhibit(name)
+    assert exhibit_number("EX-13") == "13"
+    assert exhibit_number("EX-101.INS") == "101"
+    # The filing's own primary document, its graphics and its viewer pages are
+    # declared under no exhibit at all.
+    assert all(
+        exhibit_number(kind) is None
+        for kind in ("8-K", "10-Q", "GRAPHIC", "XML", "JSON", "ZIP", "", None)
     )
-    assert not any(is_earnings_exhibit(name) for name in annual_report), sorted(
-        name for name in annual_report if is_earnings_exhibit(name)
-    )
-
-
-def test_earnings_exhibit_rejects_filing_boilerplate():
-    # Primary 8-K document, XBRL viewer pages, and filing metadata are not earnings exhibits
-    assert not is_earnings_exhibit("uthr-20240501.htm")
-    assert not is_earnings_exhibit("R39.htm")
-    assert not is_earnings_exhibit("FilingSummary.xml")
-    assert not is_earnings_exhibit("0001082554-24-000027-index.html")
-    assert not is_earnings_exhibit("ut_lungiconxredxlogo.jpg")
-    assert not is_earnings_exhibit("")
 
 
 def test_earnings_item_is_results_of_operations():
@@ -182,13 +141,17 @@ async def test_the_budget_counts_filings_so_a_filing_is_never_split(monkeypatch)
 
     connector = SECConnector(LocalFileStore("/tmp"))
 
-    async def _documents(self, client, cik_int, acc_nodash):
-        return [f"{acc_nodash}exhibit991.htm", f"{acc_nodash}exhibit992.htm"]
+    async def _declared(self, client, cik_int, accession):
+        return [
+            ("8-K", f"{accession}.htm"),
+            ("EX-99.1", f"{accession}-release.htm"),
+            ("EX-99.2", f"{accession}-schedules.htm"),
+        ]
 
     async def _fetch(self, client, *, url, accession, doc, run_id, job_id, source_id):
         return b"<html></html>", False, f"key/{doc}"
 
-    monkeypatch.setattr(SECConnector, "_list_filing_documents", _documents)
+    monkeypatch.setattr(SECConnector, "_declared_documents", _declared)
     monkeypatch.setattr(SECConnector, "_fetch_document", _fetch)
 
     quarters = ["2019-10-15", "2019-07-16", "2019-04-16", "2019-01-22"]

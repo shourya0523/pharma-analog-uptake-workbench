@@ -111,10 +111,16 @@ async def test_a_schedule_that_prints_the_quarter_is_recorded_as_answering_it(tm
 
 @pytest.mark.asyncio
 async def test_a_note_that_only_names_the_product_says_so(tmp_path):
-    """A name in a document is not a figure in a document, and the row says which."""
+    """A name in a document is not a figure in a document, and the row says which.
+
+    The table here is a collaboration note: it names the product and states no
+    period and no figure, so there is a table for the figure test to run on and
+    the figure test finds nothing.
+    """
     source = _source()
     document = _document(
-        source.source_id, grids=[],
+        source.source_id,
+        grids=[[["Collaboration", "Territory"], ["Calderon", "United States"]]],
         text="Calderon remains subject to the collaboration described above. "
              "For the three months ended March 31, 2025",
     )
