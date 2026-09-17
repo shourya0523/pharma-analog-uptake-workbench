@@ -114,8 +114,8 @@ def _year_of(period: str) -> int | None:
 
 def complete_quarters_from_totals(
     points: list[Datapoint], *, commercial_start: str | None = None,
-    product: str | None = None, lineage: list[DerivedFrom] | None = None,
-) -> list[Datapoint]:
+    product: str | None = None,
+) -> list[DerivedFrom]:
     """Derive the one quarter an issuer left implicit against a stated total.
 
     Applied only when every other quarter of that total is present, so the
@@ -130,8 +130,7 @@ def complete_quarters_from_totals(
     cited. Pass it only when the start is actually known; the default keeps the
     stricter all-four-quarters rule.
 
-    ``lineage`` is an out-parameter: pass a list and it is filled with one
-    ``DerivedFrom`` per derived quarter, naming the figures it subtracted. The
+    Each derived quarter comes back beside the figures it subtracted. The
     caller is the only place that knows which document each of those figures
     was read from, so the arithmetic reports what it used and the caller says
     where it came from.
@@ -162,7 +161,7 @@ def complete_quarters_from_totals(
         elif point.period_type in _QUARTERS_IN:
             totals[(year, point.period_type)] = point
 
-    derived: list[Datapoint] = []
+    derived: list[DerivedFrom] = []
     # A quarter as the difference of two stated spans, before the rule that
     # needs every other quarter: a filer that states only the six-, nine- and
     # twelve-month figures still determines the third and fourth quarters.
@@ -182,12 +181,8 @@ def complete_quarters_from_totals(
             f"less {inner.period} {inner_type} total {inner.value_normalized_usd_millions:g}",
             product=product,
         )
-        derived.append(point)
+        derived.append(DerivedFrom(point, (("outer_span", outer), ("inner_span", inner))))
         quarters[year][target] = point
-        if lineage is not None:
-            lineage.append(
-                DerivedFrom(point, (("outer_span", outer), ("inner_span", inner)))
-            )
 
     for (year, period_type), total in sorted(totals.items()):
         members = _QUARTERS_IN[period_type]
@@ -223,16 +218,14 @@ def complete_quarters_from_totals(
             f"less reported {inputs}",
             product=product,
         )
-        derived.append(point)
-        quarters[year][target] = point
-        if lineage is not None:
-            lineage.append(
-                DerivedFrom(
-                    point,
-                    (("period_total", total),)
-                    + tuple(("quarter", have[q]) for q in members if q != target),
-                )
+        derived.append(
+            DerivedFrom(
+                point,
+                (("period_total", total),)
+                + tuple(("quarter", have[q]) for q in members if q != target),
             )
+        )
+        quarters[year][target] = point
     return derived
 
 
@@ -283,8 +276,7 @@ def propagate_sole_formulation(
     *,
     formulation_periods: set[str],
     formulation_label: str,
-    lineage: list[DerivedFrom] | None = None,
-) -> list[Datapoint]:
+) -> list[DerivedFrom]:
     """Attribute family totals to the one formulation that existed at the time.
 
     Before a second formulation launches, the family line and the formulation
@@ -292,13 +284,14 @@ def propagate_sole_formulation(
     formulation's figure. Periods on or after the split are excluded: once two
     formulations share the line, the split is not recoverable from the total.
 
-    ``lineage`` is the same out-parameter ``complete_quarters_from_totals``
-    takes: the family figure this reattributes is the one input.
+    Each reattributed figure comes back beside its one input, the family
+    figure it was read from, in the same shape
+    ``complete_quarters_from_totals`` answers in.
     """
     if not formulation_periods:
         return []
     split_at = min(formulation_periods)
-    attributed: list[Datapoint] = []
+    attributed: list[DerivedFrom] = []
     for point in family:
         if point.period >= split_at or point.value_normalized_usd_millions is None:
             continue
@@ -311,9 +304,7 @@ def propagate_sole_formulation(
             ),
             normalization_status="derived_sole_formulation",
         )
-        attributed.append(moved)
-        if lineage is not None:
-            lineage.append(DerivedFrom(moved, (("family_total", point),)))
+        attributed.append(DerivedFrom(moved, (("family_total", point),)))
     return attributed
 
 
@@ -484,12 +475,9 @@ def complete_series(
             points.append(point)
         return points
 
-    lineage: list[DerivedFrom] = []
     own = observed(reported.get(product, []))
-    derived = list(
-        complete_quarters_from_totals(
-            own, commercial_start=commercial_start, product=product, lineage=lineage
-        )
+    records = list(
+        complete_quarters_from_totals(own, commercial_start=commercial_start, product=product)
     )
 
     if family and family != product:
@@ -512,19 +500,19 @@ def complete_series(
                 for point in observed(reported.get(family, []))
                 if point.period_type == "quarterly"
             ]
-            already = {point.period for point in own} | {p.period for p in derived}
-            derived += [
-                point
-                for point in propagate_sole_formulation(
+            already = {point.period for point in own} | {r.output.period for r in records}
+            records += [
+                record
+                for record in propagate_sole_formulation(
                     family_points,
                     formulation_periods=split_periods,
                     formulation_label=product,
-                    lineage=lineage,
                 )
-                if point.period not in already
+                if record.output.period not in already
             ]
 
-    from_point = {id(record.output): record for record in lineage}
+    from_point = {id(record.output): record for record in records}
+    derived = [record.output for record in records]
 
     def carried(point: Datapoint) -> dict[str, Any]:
         """The identity and the provenance a derived quarter inherits.

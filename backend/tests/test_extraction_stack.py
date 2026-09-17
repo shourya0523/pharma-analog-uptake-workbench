@@ -375,6 +375,11 @@ def test_flattened_pdf_block_keeps_its_geographies_apart():
 # --- completing a series from the issuer's own arithmetic ---------------------
 
 
+def _outputs(records):
+    """The derived figures alone, for a test that is not about the lineage."""
+    return [record.output for record in records]
+
+
 def test_unstated_fourth_quarter_is_derived_from_the_annual_total():
     """Issuers often report three quarters and a year; Q4 is the difference."""
     from app.extraction.derive import complete_quarters_from_totals
@@ -385,7 +390,7 @@ def test_unstated_fourth_quarter_is_derived_from_the_annual_total():
         _point("2003Q3", 12.852),
         _point("2003", 45.121, period_type="annual"),
     ]
-    derived = complete_quarters_from_totals(points)
+    derived = _outputs(complete_quarters_from_totals(points))
     assert len(derived) == 1
     assert derived[0].period == "2003Q4"
     assert abs(derived[0].value_normalized_usd_millions - 11.994) < 1e-6
@@ -423,9 +428,9 @@ def test_family_total_resolves_the_sole_formulation_before_a_split():
     from app.extraction.derive import propagate_sole_formulation
 
     family = [_point("2021Q4", 119.7), _point("2022Q1", 172.0), _point("2022Q2", 198.0)]
-    derived = propagate_sole_formulation(
+    derived = _outputs(propagate_sole_formulation(
         family, formulation_periods={"2022Q2", "2022Q3"}, formulation_label="Nebulized Tyvaso"
-    )
+    ))
     periods = {p.period for p in derived}
 
     # Pre-split quarters carry over; once both formulations sell, the family
@@ -521,7 +526,7 @@ def test_launch_year_total_covers_only_quarters_since_launch():
     ]
     assert complete_quarters_from_totals(points) == []
 
-    derived = complete_quarters_from_totals(points, commercial_start="2002Q2")
+    derived = _outputs(complete_quarters_from_totals(points, commercial_start="2002Q2"))
     assert [(p.period, round(p.value_normalized_usd_millions, 3)) for p in derived] == [
         ("2002Q4", 9.874)
     ]
