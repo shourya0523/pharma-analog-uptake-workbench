@@ -397,6 +397,11 @@ def main() -> int:
 
     path = pathlib.Path(args.cases)
     cases = json.loads((path if path.is_absolute() else REPO / path).read_text())
+    # A case file is a list of cases, or an object carrying them under `cases`
+    # beside a note saying what the set is for and what would spend it. Both
+    # shapes are in use under seed/; the note has nowhere to live in the first.
+    if isinstance(cases, dict):
+        cases = cases["cases"]
     if args.case:
         wanted = {c.strip().casefold() for c in args.case}
         cases = [c for c in cases if c["drug_name"].casefold() in wanted]
