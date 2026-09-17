@@ -489,31 +489,34 @@ So gold cited the IR copy because it is the readable one, not because EDGAR
 lacked it, and **no investor-relations fallback is needed for the bulk of it**.
 The existing SEC path reaches both issuers today.
 
-**The one class that is genuinely unreachable is acquired-business financials,
-and it needs two gates changed rather than a new source.** The Actelion
-statements that CLAUDE.md rule 1's table names are real and are on EDGAR:
+**The Actelion bridge is genuinely IR-only, and it is small.** The 8-K/A that
+CLAUDE.md rule 1's table names is real and reachable, but it is not the source
+of the quarters:
 
     8-K/A 0000200406-17-000046  filed 2017-08-29  items 2.01,9.01
-      exhibit991actelionfinancia.htm
-      -> OPSUMIT, UPTRAVI, TRACLEER, VELETRI, VENTAVIS
+      exhibit991actelionfinancia.htm  (1.2 MB, matched by is_earnings_exhibit)
+      -> names OPSUMIT, UPTRAVI, TRACLEER, VELETRI, VENTAVIS in narrative only
+      -> "IN CHF THOUSANDS": PRODUCT SALES 2,412,198 as a single total line
+      -> no per-product figures, no quarterly columns (0 "six months",
+         0 "June 30"), 137 mentions of CHF, 0 of a USD product table
 
-`is_earnings_exhibit` matches that document. Two filters upstream drop the
-filing before it is ever listed:
+So the rule-1 table is right that the 8-K/A holds "the Actelion financials" -
+it holds the *company's* statements. Product-level quarterly revenue is not in
+them. Gold's Opsumit, Uptravi and Tracleer quarters come from
+`Actelion_Historical_Sales_Schedule.pdf` on J&J's IR CDN, which has no EDGAR
+equivalent, and gold still declares 2013Q4-2015Q4 unavailable because even that
+schedule reaches back only to 2016Q1.
 
-    sources.py:541  if form != "8-K": continue          -> 8-K/A excluded
-    sources.py:544  if EARNINGS_ITEM not in items       -> items are 2.01,9.01,
-                                                           there is no 2.02
+That is 58 rows of gold (every `Actelion/J&J` row), not 907. A narrow
+investor-relations fallback is justified for the acquired-product bridge; it is
+not justified by the 41% figure, which is J&J and Gilead choosing the readable
+copy of documents that are on EDGAR.
 
-Widening the form filter with `form_family()` (9c) is therefore **necessary and
-not sufficient**: an acquired business's financials arrive under item 9.01 on
-an amendment to an item-2.01 acquisition filing, never under the earnings item.
-The fix is to admit that pair - form family `8-K` with item 9.01 alongside item
-2.01 - as a second kind of filing worth listing, distinct from an earnings
-release.
-
-This is the one retrieval change in this document that unlocks quarters no
-other fix reaches: gold's Opsumit, Uptravi and Tracleer series all begin at the
-acquisition boundary for exactly this reason.
+**The form and item filters are still worth fixing** (9c) - a filter is part of
+the claim, and `EARNINGS_ITEM = "2.02"` written as a literal is rule 1's shape.
+But neither is now known to unlock a quarter, and this document should not
+claim one until a filing that carries product-level periods has been opened and
+shown to.
 
 ---
 
@@ -1211,12 +1214,10 @@ amendment:
 
     8-K 173   10-Q 75   10-K 34   6-K 1   20-F 1   amendments: 0
 
-But gold reached the one case that needs an amendment by citing J&J's IR copy
-instead, so that is not evidence the amendment is unnecessary - it is evidence
-of how gold worked around it. The 8-K/A carrying Actelion's statements is real,
-is on EDGAR, and is blocked by this filter **and** by the item filter beside
-it. See 2f, which is where the fix is specified; widening `form_family()` here
-alone does not reach it.
+Fix these because rule 1 says a filter is part of the claim. Do **not** fix
+them expecting quarters: the 8-K/A the rule-1 table cites carries company-level
+CHF statements with no per-product figures (2f), and no filing has yet been
+opened and shown to carry product periods this filter drops.
 
 ### 9d. Four `SCRIPT_ONLY` reasons do not survive a grep
 
@@ -1452,8 +1453,8 @@ Each step is a commit. Nothing is scored until step 1 is done.
 13. **Section 9** - the false docstring (9a), the glob (9b), the four
     `SCRIPT_ONLY` reasons (9d), the stale docs (9e), `check_by_hand` (9h).
     9c's `8-K/A` and `10-K/A` filters are a retrieval change, so they go with
-    step 4 - **together with 2f's item filter**, since the form filter alone
-    does not reach the acquisition case.
+    step 4 - as a rule-1 correction with no quarter attached to it, until one
+    is measured.
 14. **Section 10** - the deletions, once nothing above depends on them.
     `positional.py` is not among them: 2f is why it looks dead.
 15. **Section 11** - the job deadline, recovery, and unfinished jobs not
