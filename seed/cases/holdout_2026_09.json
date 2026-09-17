@@ -1,12 +1,11 @@
 {
-  "note": "Held-out set drawn 2026-09-17 for the fixes in docs/plans/2026-09-17-006-what-twelve-reviews-found.md. It may score sections 1, 2, 3, 5, 6 and 7 of that register, and section 12's retrieval cascade. It may not be used to find defects and then score the fix for them: gold, seed/holdout, seed/holdout2, seed/holdout_labels, seed/holdout_members, seed/holdout_foreign_xbrl and seed/cases/shapes_holdout.json are the oracles for finding, and none of them may score what it found. Every issuer here is absent from all of those, derived through tests/answer_keys.spent_issuers rather than checked against a list. What spends it: the first change measured on it. After that it is an oracle like the rest, and the next scored change needs a new set from issuers this file does not name.",
+  "note": "Held-out set drawn 2026-09-17 for the fixes in docs/plans/2026-09-17-006-what-twelve-reviews-found.md. It may score sections 1, 2, 3, 5, 6 and 7 of that register, and section 12's retrieval cascade. It may not be used to find defects and then score the fix for them: gold, seed/holdout, seed/holdout2, seed/holdout_labels, seed/holdout_members, seed/holdout_foreign_xbrl and seed/cases/shapes_holdout.json are the oracles for finding, and none of them may score what it found. Every issuer here is absent from all of those, derived through tests/answer_keys.spent_issuers rather than checked against a list. What spends it: the first change measured on it. After that it is an oracle like the rest, and the next scored change needs a new set from issuers this file does not name. No case states a CIK on purpose: seed/example_drugs.csv has no such column, a person uploading a product types a ticker, and a case that stated one would hand the pipeline the issuer resolution this set is drawn to score.",
   "cases": [
     {
       "drug_name": "INGREZZA",
       "generic_name": "valbenazine",
       "manufacturer": "Neurocrine Biosciences Inc",
       "ticker": "NBIX",
-      "cik": "0000914475",
       "options": {
         "earnings_since": "2024-04-01",
         "earnings_until": "2026-03-31",
@@ -171,7 +170,6 @@
       "generic_name": "crinecerfont",
       "manufacturer": "Neurocrine Biosciences Inc",
       "ticker": "NBIX",
-      "cik": "0000914475",
       "options": {
         "earnings_since": "2024-04-01",
         "earnings_until": "2026-03-31",
@@ -341,7 +339,6 @@
       "generic_name": "opicapone",
       "manufacturer": "Neurocrine Biosciences Inc",
       "ticker": "NBIX",
-      "cik": "0000914475",
       "options": {
         "earnings_since": "2024-04-01",
         "earnings_until": "2026-03-31",
@@ -511,7 +508,6 @@
       "generic_name": "ataluren",
       "manufacturer": "PTC Therapeutics Inc",
       "ticker": "PTCT",
-      "cik": "0001070081",
       "options": {
         "earnings_since": "2024-10-01",
         "earnings_until": "2026-08-31",
@@ -694,7 +690,6 @@
       "generic_name": "deflazacort",
       "manufacturer": "PTC Therapeutics Inc",
       "ticker": "PTCT",
-      "cik": "0001070081",
       "options": {
         "earnings_since": "2024-10-01",
         "earnings_until": "2026-08-31",
@@ -871,7 +866,6 @@
       "generic_name": "eladocagene exuparvovec",
       "manufacturer": "PTC Therapeutics Inc",
       "ticker": "PTCT",
-      "cik": "0001070081",
       "options": {
         "earnings_since": "2024-10-01",
         "earnings_until": "2026-08-31",
@@ -1062,7 +1056,6 @@
       "generic_name": "sepiapterin",
       "manufacturer": "PTC Therapeutics Inc",
       "ticker": "PTCT",
-      "cik": "0001070081",
       "options": {
         "earnings_since": "2024-10-01",
         "earnings_until": "2026-08-31",
@@ -1236,7 +1229,6 @@
       "generic_name": "naloxone hydrochloride",
       "manufacturer": "Emergent BioSolutions Inc",
       "ticker": "EBS",
-      "cik": "0001367644",
       "options": {
         "earnings_since": "2024-04-01",
         "earnings_until": "2026-03-31",
@@ -1411,7 +1403,6 @@
       "generic_name": "anthrax vaccine adsorbed",
       "manufacturer": "Emergent BioSolutions Inc",
       "ticker": "EBS",
-      "cik": "0001367644",
       "options": {
         "earnings_since": "2024-04-01",
         "earnings_until": "2026-03-31",
@@ -1587,7 +1578,6 @@
       "generic_name": "arimoclomol",
       "manufacturer": "Zevra Therapeutics Inc",
       "ticker": "ZVRA",
-      "cik": "0001434647",
       "options": {
         "earnings_since": "2024-10-01",
         "earnings_until": "2026-08-31",
@@ -1751,7 +1741,6 @@
       "generic_name": "sodium phenylbutyrate",
       "manufacturer": "Zevra Therapeutics Inc",
       "ticker": "ZVRA",
-      "cik": "0001434647",
       "options": {
         "earnings_since": "2024-10-01",
         "earnings_until": "2026-08-31",
@@ -1920,7 +1909,6 @@
       "generic_name": "mecasermin",
       "manufacturer": "Eton Pharmaceuticals Inc",
       "ticker": "ETON",
-      "cik": "0001710340",
       "options": {
         "earnings_since": "2024-01-01",
         "earnings_until": "2026-03-31",

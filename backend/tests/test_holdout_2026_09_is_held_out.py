@@ -209,6 +209,9 @@ def test_nothing_hands_the_pipeline_a_document_or_a_figure():
 
     for case in _cases():
         assert "known_source_url" not in case, case["drug_name"]
+        # A person uploading a product types a ticker, not a CIK, and a case
+        # that carries one skips the identity step this set is drawn to score.
+        assert "cik" not in case, case["drug_name"]
         for field in posted & set(case):
             value = str(case[field])
             assert "sec.gov" not in value, (case["drug_name"], field)
