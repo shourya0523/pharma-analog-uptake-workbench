@@ -44,6 +44,38 @@ def test_bullets_are_sentences():
     assert sentence_carrying(block, 100.0).startswith("Entered")
 
 
+def test_a_table_row_printed_cell_per_line_is_one_sentence():
+    """A table states rows, and HTML-to-text prints each cell on its own line.
+
+    Split on the line breaks, the row's label is one "sentence" and its figures
+    are others, so the sentence carrying the value never carries the product
+    and every table quote is vetoed. The row is the unit; the row above and the
+    row below are still units of their own, so a figure taken from a sibling
+    row is still not grounded by this row's label.
+    """
+    block = "Calderon\n$\n34,974\n$\n22,209\nNuVessa\n12,088\n9,401"
+    assert sentences(block) == ["Calderon $ 34,974 $ 22,209", "NuVessa 12,088 9,401"]
+    assert sentence_carrying(block, 34974.0) == "Calderon $ 34,974 $ 22,209"
+
+    grounded = _judged(block, 34974.0)
+    assert grounded["validation_status"] == "auto_pass", grounded["issues"]
+    sibling = _judged(block, 12088.0)
+    assert "hard_veto:value_and_product_in_different_sentences" in sibling["issues"]
+
+
+def test_a_figure_quoted_without_its_row_label_is_still_ungrounded():
+    """A quote that begins inside a row's figures names no product at all.
+
+    Joining wordless cells onto the line above them cannot invent a label
+    where the quote carries none, so this is refused - by the check for a
+    product missing from the quote rather than by the one about sentences,
+    since there is now only one unit to be in.
+    """
+    verdict = _judged("$\n34,974\n$\n22,209", 34974.0)
+    assert verdict["validation_status"] == "needs_review"
+    assert "hard_veto:product_missing_from_quote" in verdict["issues"]
+
+
 def test_the_value_and_the_product_must_share_a_sentence():
     block = ("• Calderon net product revenue grew 40% in the quarter\n"
              "• Entered into a $100 million financing facility")

@@ -11,6 +11,14 @@ The same sentence can say two things about an amount. "Revenue increased by
 $12.3 million" states how much revenue moved; "increased by $12.3 million to
 $61.2 million" states the level as well. Only the level is the quarter's
 revenue.
+
+A table is not prose, and HTML-to-text prints each of its cells on its own
+line. The unit a table states is the row - the label and the figures beside it
+- so a line that states no word at all continues the row whose label opened it,
+and only a line that says something starts a new unit:
+
+    Calderon XR / $ / 34,974 / $ / 22,209   is one unit, not five
+    NuVessa / 12,088 / 9,401                is the next
 """
 
 from __future__ import annotations
@@ -19,10 +27,15 @@ import re
 
 from app.quality.checks import quote_contains_value
 
-# Where one sentence ends and the next begins: a full stop, a question or
-# exclamation mark, a semicolon, or a line break - a release's bullets are
-# lines, not sentences, and carry no full stop at all.
-_SENTENCE_END_RE = re.compile(r"(?<=[.!?;])[\"'”’)\]]*\s+|\s*\n+\s*|\s*[•▪◦·]\s*")
+# A line break or a bullet mark ends a line - a release's bullets are lines,
+# not sentences, and carry no full stop at all.
+_LINE_BREAK_RE = re.compile(r"\s*\n+\s*|\s*[•▪◦·]\s*")
+# Within a line, a full stop, a question or exclamation mark, or a semicolon
+# ends a sentence.
+_SENTENCE_END_RE = re.compile(r"(?<=[.!?;])[\"'”’)\]]*\s+")
+# A line that states a word. A table's figure cells - "$", "34,974", "7", "%",
+# "(1)", "2024" - state none, and belong to the row the last such line opened.
+_STATES_A_WORD_RE = re.compile(r"[^\W\d_]")
 
 # An amount governed by "increased ... by" / "decreased ... by" / "grew by" is
 # the size of a move. The level, where the sentence states one, follows "to".
@@ -35,9 +48,37 @@ _CHANGE_BY_RE = re.compile(
 _TO_LEVEL_RE = re.compile(r"\bto\s+(?:approximately\s+|about\s+)?(?:US)?\$\s*[\d,]+", re.IGNORECASE)
 
 
+def _lines(quote: str) -> list[str]:
+    """The quote's lines, with each wordless line joined onto the one it follows.
+
+    A quote lifted out of a table arrives one cell per line, and its figures
+    are not statements of their own; joined back onto the label above them they
+    are the row the filer printed. A quote lifted out of prose has a word on
+    every line and is unchanged.
+    """
+    lines: list[str] = []
+    for raw in _LINE_BREAK_RE.split(quote or ""):
+        line = raw.strip()
+        if not line:
+            continue
+        if lines and not _STATES_A_WORD_RE.search(line):
+            lines[-1] = f"{lines[-1]} {line}"
+        else:
+            lines.append(line)
+    return lines
+
+
 def sentences(quote: str) -> list[str]:
-    """The sentences a quote is made of, in order, empty ones dropped."""
-    return [part.strip() for part in _SENTENCE_END_RE.split(quote or "") if part and part.strip()]
+    """The sentences a quote is made of, in order, empty ones dropped.
+
+    A table row is one of them, however many lines its cells were printed on.
+    """
+    return [
+        part.strip()
+        for line in _lines(quote)
+        for part in _SENTENCE_END_RE.split(line)
+        if part and part.strip()
+    ]
 
 
 def sentence_carrying(quote: str, value: float | None) -> str | None:
