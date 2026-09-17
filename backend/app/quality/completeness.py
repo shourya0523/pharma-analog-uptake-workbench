@@ -5,9 +5,14 @@ from typing import NamedTuple
 
 from sqlalchemy.orm import Session
 
+from app.connectors.sources import parse_filing_date
 from app.db.models import DatapointORM, DrugJobORM, UnresolvedQuarterORM
-from app.domain.models import PeriodType, UnresolvedResolution, ValidationStatus
-from app.parsing.periods import normalize_period
+from app.domain.models import (
+    PUBLISHED_STATUS_VALUES,
+    PeriodType,
+    UnresolvedResolution,
+)
+from app.parsing.periods import normalize_period, quarters_reported_in
 
 # The canonical shape normalize_period returns for a single quarter, as its
 # docstring states it: 2024Q2. Asking the project's own parser, rather than
@@ -26,25 +31,45 @@ def names_a_quarter(period: object) -> bool:
     return bool(label and _CANONICAL_QUARTER.match(label))
 
 
-def resolve_completeness_pct(
-    llm_pct: object,
-    *,
-    quarterly_count: int,
-    unresolved_quarter_count: int,
-) -> float:
-    """Pick a trustworthy completeness percentage for a drug job.
+def quarter_labels(periods: object) -> set[str]:
+    """The canonical single-quarter labels among the given period strings.
 
-    The completeness prompt ships a JSON skeleton containing ``"completeness_pct": 0``,
-    and models frequently echo that placeholder back. Treat a missing, non-numeric, or
-    zero response as "no answer" and fall back to the deterministic coverage ratio.
+    A set, because two rows naming one quarter are two readings of one
+    quarter and not two quarters, and the ratio counts quarters.
     """
-    try:
-        pct = float(llm_pct)  # type: ignore[arg-type]
-    except (TypeError, ValueError):
-        pct = 0.0
-    if not pct:
-        pct = 100 * quarterly_count / max(quarterly_count + unresolved_quarter_count, 1)
-    return round(min(max(pct, 0.0), 100.0), 1)
+    return {
+        label
+        for period in periods or ()
+        if names_a_quarter(period) and (label := normalize_period(period))
+    }
+
+
+def quarters_the_run_asked_for(job: DrugJobORM) -> set[str]:
+    """The quarters the job's own run set out to cover.
+
+    A window bounds retrieval by filing date, and the quarters inside it are
+    the ones the project's own parser derives from that window. That is the
+    denominator coverage is a fraction of. A run that declared no window
+    asked for nothing in particular, and the denominator then comes from
+    what the job turned out to hold.
+    """
+    run = getattr(job, "run", None)
+    options = (getattr(run, "options_json", None) or {}) if run is not None else {}
+    since = parse_filing_date(options.get("earnings_since"))
+    until = parse_filing_date(options.get("earnings_until"))
+    return set(quarters_reported_in(since, until))
+
+
+def coverage_pct(*, held: set[str], expected: set[str]) -> float:
+    """The share of the expected quarters that hold a published figure.
+
+    Only the quarters in ``expected`` are counted on either side, so a
+    quarter answered outside the window raises nothing and the ratio cannot
+    exceed 1 without a clamp standing in for that.
+    """
+    if not expected:
+        return 0.0
+    return round(100 * len(held & expected) / len(expected), 1)
 
 
 class Completeness(NamedTuple):
@@ -58,27 +83,38 @@ class Completeness(NamedTuple):
 def refresh_completeness(db: Session, job: DrugJobORM, *, llm_pct: object = None) -> Completeness:
     """Recount what a job holds, and set the two fields derived from it.
 
+    Coverage is the distinct quarters of the run's window carrying a figure
+    the pipeline stands behind, over that window. Each half of that sentence
+    corrects a count that read the other way. Counting rows rather than
+    quarters let one quarter read as fourteen; counting only the gaps the
+    pipeline had itself recorded let a product whose gaps it never noticed
+    read as complete, which is the reading a blank series got.
+
+    It is a fraction of the question the run asked, so it compares across
+    products a run covers and not across runs that declared different
+    windows. A run that declared no window asked nothing in particular, and
+    the denominator is then what the job turned out to hold and to miss.
+
     Both numbers are functions of rows that review changes: entering a value
     for a gap adds a quarter and closes the gap it came from, and rejecting a
     figure takes a quarter away. Computed once at the end of the run, they
     described the run rather than the job, and a reviewer could resolve every
     gap without either moving.
 
-    ``llm_pct`` is the model's own figure, which only the run has to offer.
-    A reviewer acting on the job postdates it, so from then on the count is
-    the only honest answer and the default of None asks for it.
+    ``llm_pct`` is accepted and not read. A model's percentage is not a count
+    of quarters; while it stood in for one, the number on the card was
+    sometimes the count and sometimes an opinion with nothing to say which.
 
     Flushes first because the session does not autoflush: a caller that has
     added rows and not committed is asking about those rows too.
     """
     db.flush()
-    quarters_held = (
-        db.query(DatapointORM)
+    published = (
+        db.query(DatapointORM.period)
         .filter(
             DatapointORM.job_id == job.id,
             DatapointORM.period_type == PeriodType.QUARTERLY.value,
-            # A figure the reviewer rejected is not an answer to its quarter.
-            DatapointORM.validation_status != ValidationStatus.REJECTED.value,
+            DatapointORM.validation_status.in_(PUBLISHED_STATUS_VALUES),
         )
         .all()
     )
@@ -87,13 +123,12 @@ def refresh_completeness(db: Session, job: DrugJobORM, *, llm_pct: object = None
         for row in db.query(UnresolvedQuarterORM).filter_by(job_id=job.id).all()
         if not _is_answered(row.resolution)
     ]
-    quarters = sum(1 for row in quarters_held if names_a_quarter(row.period))
-    gaps = sum(1 for row in open_gaps if names_a_quarter(row.period))
+    held = quarter_labels(period for (period,) in published)
+    missing = quarter_labels(row.period for row in open_gaps)
+    expected = quarters_the_run_asked_for(job) or (held | missing)
     job.unresolved_count = len(open_gaps)
-    job.completeness_pct = resolve_completeness_pct(
-        llm_pct, quarterly_count=quarters, unresolved_quarter_count=gaps
-    )
-    return Completeness(job.completeness_pct, quarters, gaps)
+    job.completeness_pct = coverage_pct(held=held, expected=expected)
+    return Completeness(job.completeness_pct, len(held), len(missing))
 
 
 def _is_answered(resolution: str | None) -> bool:

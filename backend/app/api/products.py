@@ -40,7 +40,7 @@ from app.domain.models import (
     new_id,
 )
 from app.observability import normalize_analog_key
-from app.quality.completeness import names_a_quarter, refresh_completeness
+from app.quality.completeness import names_a_quarter, quarter_labels, refresh_completeness
 from app.validation.sampling import REASON_HELP as FLAGGED_REASON_HELP
 
 router = APIRouter(tags=["products"])
@@ -134,17 +134,23 @@ def _jobs_for(db: Session, product_key: str) -> list[DrugJobORM]:
 
 
 def _published_quarters(db: Session, job_id: str) -> int:
-    """Distinct periods with a figure the pipeline stands behind."""
+    """Distinct quarters with a figure the pipeline stands behind.
 
-    return (
+    Counted over quarterly rows only. Counting every period type under a
+    heading that says "qtrs" let an annual figure, and an annual figure
+    labelled with a quarter, each be read as a quarter of coverage.
+    """
+
+    periods = (
         db.query(DatapointORM.period)
         .filter(
             DatapointORM.job_id == job_id,
+            DatapointORM.period_type == PeriodType.QUARTERLY.value,
             DatapointORM.validation_status.in_(PUBLISHED_STATUS_VALUES),
         )
-        .distinct()
-        .count()
+        .all()
     )
+    return len(quarter_labels(period for (period,) in periods))
 
 
 def _open_queue_counts(db: Session, job_id: str) -> tuple[int, int]:

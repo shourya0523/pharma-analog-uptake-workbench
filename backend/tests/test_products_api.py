@@ -22,6 +22,7 @@ from app.db.models import (
     UnresolvedQuarterORM,
     ValidationTaskORM,
 )
+from app.domain.models import PeriodType
 
 
 @pytest.fixture()
@@ -137,6 +138,7 @@ def client(monkeypatch):
         db.add(
             DatapointORM(
                 id="dp-cal", job_id="job-cal", period="2026Q1",
+                period_type=PeriodType.QUARTERLY.value,
                 value_normalized_usd_millions=12.5, revenue_scope="Product family",
                 source_url="https://sec.gov/acme-10q", source_quote="Calderon 12.5",
                 extraction_method="table", confidence_score=0.95,
