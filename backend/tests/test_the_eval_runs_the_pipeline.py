@@ -69,14 +69,22 @@ def test_the_eval_goes_in_and_out_through_the_api():
 
 
 def test_every_case_file_says_where_its_answers_came_from():
-    """A case carries its own provenance, so the number can be re-checked."""
-    import json
+    """A case carries its own provenance, so the number can be re-checked.
+
+    The rows are read through `answer_keys.cases_in`, which knows the wrappers
+    a case file uses - a bare list, or an object carrying the rows under
+    ``cases`` beside a note about what the set is for. Unwrapping here by hand
+    made the note impossible to write without the file becoming invisible.
+    """
+    from tests.answer_keys import cases_in
 
     cases_dir = REPO / "seed" / "cases"
     files = sorted(cases_dir.glob("*.json"))
     assert files, "no case files"
     for path in files:
-        for case in json.loads(path.read_text()):
+        rows = cases_in(path)
+        assert rows, f"{path.name}: no cases"
+        for case in rows:
             assert case.get("source"), f"{path.name}: {case['drug_name']} cites nothing"
             assert case.get("expect"), f"{path.name}: {case['drug_name']} expects nothing"
 
@@ -91,12 +99,12 @@ def test_every_case_file_represents_both_answers():
     globbing that directory rather than named here, so a file added later is
     held to the claim the document already makes about it.
     """
-    import json
+    from tests.answer_keys import cases_in
 
     files = sorted((REPO / "seed" / "cases").glob("*.json"))
     assert files, "no case files"
     for path in files:
-        expectations = [e for case in json.loads(path.read_text()) for e in case["expect"]]
+        expectations = [e for case in cases_in(path) for e in case["expect"]]
         empty = [e for e in expectations if e["value_normalized_usd_millions"] is None]
         assert empty, (
             f"{path.name} expects a figure everywhere, so a run that publishes "
