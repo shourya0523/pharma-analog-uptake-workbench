@@ -149,11 +149,17 @@ _NEXT_YEAR_RE = re.compile(r"\b((?:19|20)\d{2})\b")
 # A filing that reports a year names it as "fiscal year ended" or "year
 # ended", and rarely as twelve months; without that form a 10-K names no
 # period at all and is dated from whichever quarter its text mentions most.
-_PERIOD_PHRASE_RE = re.compile(
-    r"\b((?:three|six|nine|twelve)(?:\s+and\s+(?:three|six|nine|twelve))*"
-    r"\s+months?|(?:fiscal\s+)?years?)\s+ended\b",
-    re.IGNORECASE,
+_SPAN_PHRASE = (
+    r"(?:three|six|nine|twelve)(?:\s+and\s+(?:three|six|nine|twelve))*"
+    r"\s+months?|(?:fiscal\s+)?years?"
 )
+_PERIOD_PHRASE_RE = re.compile(rf"\b({_SPAN_PHRASE})\s+ended\b", re.IGNORECASE)
+# The same phrase as a footnote writes it. A note says "the quarters ended
+# March 31, 2026 and June 30, 2026" where the statements above it say "the
+# three months ended": the span word is the only difference, and one heading
+# can carry several end dates. Reading the document's own period does not use
+# this form - a filing states its period in the statements, not in a note.
+_NAMED_PHRASE_RE = re.compile(rf"\b({_SPAN_PHRASE}|quarters?)\s+ended\b", re.IGNORECASE)
 _SPAN_WORD_RE = re.compile(r"three|six|nine|twelve", re.IGNORECASE)
 _MONTH_DAY_RE = re.compile(
     r"\b(january|february|march|april|may|june|july|august|september|october"
@@ -163,11 +169,9 @@ _MONTH_DAY_RE = re.compile(
 )
 
 
-def _month_near(text: str, end: int) -> tuple[int, int, bool] | None:
-    """The month a period heading's end date falls in, where the date ends,
+def _month_of(match: re.Match[str] | None, offset: int) -> tuple[int, int, bool] | None:
+    """The month a matched end date falls in, where the date ends in the text,
     and whether the date sat in the first week of the month after."""
-    window = text[end : end + _MONTH_LOOKAHEAD]
-    match = _MONTH_DAY_RE.search(window)
     if not match:
         return None
     month = MONTHS.get(match.group(1).lower())
@@ -176,7 +180,19 @@ def _month_near(text: str, end: int) -> tuple[int, int, bool] | None:
     day = int(match.group(2)) if match.group(2) else None
     stated = month
     month, _ = fiscal_period_end(month, day)
-    return month, end + match.end(), month != stated
+    return month, offset + match.end(), month != stated
+
+
+def _month_near(text: str, end: int) -> tuple[int, int, bool] | None:
+    """The end date a period heading states, looked for just after the heading."""
+    window = text[end : end + _MONTH_LOOKAHEAD]
+    return _month_of(_MONTH_DAY_RE.search(window), end)
+
+
+def _month_at(text: str, position: int) -> tuple[int, int, bool] | None:
+    """The end date beginning exactly at ``position``, for a second date the
+    same heading states: "the quarters ended March 31 and June 30, 2026"."""
+    return _month_of(_MONTH_DAY_RE.match(text, position), 0)
 
 
 def _year_near(text: str, end: int) -> int | None:
@@ -225,6 +241,28 @@ _SPAN_FORMS = (
 _QUARTER_WORDS = {"first": 1, "second": 2, "third": 3, "fourth": 4}
 
 
+def _quarter_form_hits(text: str) -> list[tuple[int, int, tuple[int, int, int]]]:
+    """Every "Q2 2024" notation in the text, as (start, end, (3, month, year)).
+
+    Collected by position, because the forms overlap: in "Q2 2024 Q2 2024" the
+    year-first pattern also matches the "2024 Q2" that spans the two, and
+    counting both inflates whichever period a text happens to repeat
+    adjacently. One mention is one mention wherever it is read from.
+    """
+    seen: list[tuple[int, int, tuple[int, int, int]]] = []
+    for pattern in _QUARTER_FORMS:
+        for match in pattern.finditer(text):
+            first, second = match.group(1), match.group(2)
+            if first.lower() in _QUARTER_WORDS:
+                quarter, year = _QUARTER_WORDS[first.lower()], int(second)
+            elif first.isdigit() and len(first) == 4:
+                year, quarter = int(first), int(second)
+            else:
+                quarter, year = int(first), _year_of_form(second)
+            seen.append((match.start(), match.end(), (3, quarter * 3, year)))
+    return seen
+
+
 def _quarter_notation(text: str) -> PeriodContext | None:
     """The document's period from "Q2 2024" notation, when no phrase states one.
 
@@ -242,21 +280,7 @@ def _quarter_notation(text: str) -> PeriodContext | None:
     What this accepts is a filing naming its comparative more often than its
     own period; that is the case to look at first if a document dates wrongly.
     """
-    # Collected by position first, because the forms overlap: in "Q2 2024 Q2
-    # 2024" the year-first pattern also matches the "2024 Q2" that spans the
-    # two, and counting both inflates whichever period a document happens to
-    # repeat adjacently. One mention is one mention wherever it is read from.
-    seen: list[tuple[int, int, tuple[int, int, int]]] = []
-    for pattern in _QUARTER_FORMS:
-        for match in pattern.finditer(text):
-            first, second = match.group(1), match.group(2)
-            if first.lower() in _QUARTER_WORDS:
-                quarter, year = _QUARTER_WORDS[first.lower()], int(second)
-            elif first.isdigit() and len(first) == 4:
-                year, quarter = int(first), int(second)
-            else:
-                quarter, year = int(first), _year_of_form(second)
-            seen.append((match.start(), match.end(), (3, quarter * 3, year)))
+    seen = _quarter_form_hits(text)
 
     counts: Counter[tuple[int, int, int]] = Counter()
     taken_to = -1
@@ -342,6 +366,118 @@ def _label(year: int, months: int, quarter: int) -> str:
     if months == 9:
         return f"{year}M9"
     return str(year)
+
+
+@dataclass(frozen=True)
+class NamedPeriod:
+    """A period a piece of text names.
+
+    ``position`` is where in the text it is named, ``months`` the span the
+    phrase states, and ``key`` the canonical label where the phrase states a
+    date as well. A phrase can state a span and no date - "for the six months
+    ended" with the year in a column heading - and then ``key`` is None.
+    """
+
+    position: int
+    months: int
+    key: str | None
+
+
+# What may stand between two end dates the same heading covers: a comma, the
+# first date's own year, and the word that joins them.
+_DATE_JOIN_RE = re.compile(
+    r"[\s,]*(?:(?:19|20)\d{2})?[\s,]*\b(?:and|through|to)\b[\s,]*", re.IGNORECASE
+)
+
+
+def _spans_of(phrase: str) -> list[int]:
+    """The span in months each word of a period heading names."""
+    spans = [
+        MONTH_WORDS[word.lower()]
+        for word in _SPAN_WORD_RE.findall(phrase)
+        if word.lower() in MONTH_WORDS
+    ]
+    if spans:
+        return spans
+    lowered = phrase.lower()
+    if "quarter" in lowered:
+        return [3]
+    if "year" in lowered:
+        return [12]
+    return []
+
+
+def _dates_after(text: str, end: int) -> list[tuple[int, int]]:
+    """(month, year) for each end date one period heading states.
+
+    A heading covers several dates when the text joins them - "the quarters
+    ended March 31, 2026 and June 30, 2026" states two periods, and reading
+    only the first loses the second.
+    """
+    dates: list[tuple[int, int]] = []
+    found = _month_near(text, end)
+    while found is not None:
+        month, after_day, rolled_back = found
+        year = _year_near(text, after_day)
+        if year is None:
+            break
+        if rolled_back and month == 12:
+            year -= 1
+        dates.append((month, year))
+        join = _DATE_JOIN_RE.match(text, after_day)
+        found = _month_at(text, join.end()) if join else None
+    return dates
+
+
+def periods_named(text: str) -> list[NamedPeriod]:
+    """Every period a piece of text names, in reading order.
+
+    Both the ways a filer names one: the heading a statement carries ("the
+    six months ended June 30, 2023", "the quarters ended March 31, 2026 and
+    June 30, 2026") and the notation a note or a release uses ("Q1 2026",
+    "the second quarter of 2025").
+    """
+    named: list[NamedPeriod] = []
+    for match in _NAMED_PHRASE_RE.finditer(text or ""):
+        spans = _spans_of(match.group(1))
+        if not spans:
+            continue
+        dates = _dates_after(text, match.end())
+        for months in spans:
+            if not dates:
+                named.append(NamedPeriod(match.start(), months, None))
+                continue
+            for month, year in dates:
+                named.append(
+                    NamedPeriod(
+                        match.start(), months, _label(year, months, quarter_of_month(month))
+                    )
+                )
+    for start, _end, (months, month, year) in _quarter_form_hits(text or ""):
+        named.append(
+            NamedPeriod(start, months, _label(year, months, quarter_of_month(month)))
+        )
+    return sorted(named, key=lambda period: period.position)
+
+
+def period_key(label: str, months: int) -> str | None:
+    """The canonical key for a figure of ``months`` span in a column labelled
+    ``label``, or None where the label states no year.
+
+    A quarterly column names its quarter; a longer column is labelled by its
+    year alone, and the span is what says which part of the year it covers, so
+    both are needed to name the period a figure is for.
+    """
+    canonical = normalize_period(label)
+    if not canonical:
+        return None
+    match = _YEAR_QUARTER_RE.match(canonical)
+    if match:
+        return _label(int(match.group(1)), months, int(match.group(2)))
+    match = _YEAR_PART_RE.match(canonical) or _YEAR_ONLY_RE.match(canonical)
+    if match:
+        return _label(int(match.group(1)), months, 0)
+    return None
 
 
 def normalize_period(

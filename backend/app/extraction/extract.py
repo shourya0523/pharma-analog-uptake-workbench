@@ -27,6 +27,7 @@ from app.extraction.fingerprint import PeriodBlock, TableFingerprint, build_fing
 from app.parsing.evidence import product_aliases
 from app.parsing.labels import (
     FLAG_COMBINED,
+    FLAG_NO_SALES,
     FLAG_FAMILY_INCLUDES,
     FLAG_NO_SALES,
     FLAG_NOT_UNDERSTOOD,
@@ -726,11 +727,14 @@ def _read_table(
             # another column of the row is not attached to this one.
             about = [(mark, note, reading_) for mark, note, reading_ in cited
                      if reading_.applies_to(block.months, block.period)]
-            if any(FLAG_NO_SALES in r.flags for _, _, r in about):
-                # The note says this product sold nothing in this period:
-                # whatever the line states here is someone else's.
+            # The note says this product sold nothing in this period, so
+            # whatever the line states here is someone else's. The figure is
+            # carried out with the note's flag rather than dropped: a figure
+            # that disappears leaves a gap nobody can account for, and the
+            # flag is what puts this one in front of a person.
+            says_no_sales = any(FLAG_NO_SALES in r.flags for _, _, r in about)
+            if says_no_sales:
                 skipped.append(f"{label}:{block.period}:{FLAG_NO_SALES}")
-                continue
             # "No sales of NuVessa" under "Calderon and NuVessa": for the
             # period the note names, the line is Calderon's alone.
             no_sales = {n for _, _, r in about for n in r.no_sales_of}
@@ -740,7 +744,7 @@ def _read_table(
                 if f != FLAG_PARTIAL and (f != FLAG_COMBINED or combined_with)
             ) + tuple(
                 FLAG_PARTIAL for _ in [1] if any(FLAG_PARTIAL in r.flags for _, _, r in about)
-            )
+            ) + ((FLAG_NO_SALES,) if says_no_sales else ())
             suffix = "".join(f" [({mark}) {note}]" for mark, note, _ in about)
             values.append(
                 ExtractedValue(
