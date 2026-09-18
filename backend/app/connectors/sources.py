@@ -37,13 +37,14 @@ import mimetypes
 import re
 import time
 from datetime import date, timedelta
-from typing import Any
+from typing import Any, NamedTuple
 from urllib.parse import urlparse
 
 import httpx
 
 from app.config import get_settings
 from app.domain.models import RetrievalStatus, RetrievedSource, SourceType, new_id
+from app.parsing.periods import quarters_reported_in
 from app.storage.filestore import FileStore
 
 logger = logging.getLogger(__name__)
@@ -347,6 +348,171 @@ def reading_order(form: str | None) -> int:
     if reports_a_period(form):
         return 1
     return 2
+
+
+# How many periods one filing's own statements state. A periodic report prints
+# the period it covers beside the comparatives the disclosure rules require, so
+# an interim report states its quarter and the same quarter a year earlier, and
+# an annual report states its fiscal year and the two before it.
+#
+# A snapshot of what those statements state, verified by reading the product
+# tables of cached filings rather than by reading the rule. What makes it
+# stale: a change to the comparative periods a filer must present, and an
+# issuer who presents fewer than it must - both show up as a quarter this
+# module says a filing answers and the reader then cannot find in it, which is
+# what `coverage` records per document.
+ANNUAL_YEARS_STATED = 3
+INTERIM_YEARS_STATED = 2
+
+
+def quarter_index(day: date) -> int:
+    """A quarter as one integer, so arithmetic on quarters is arithmetic.
+
+    The calendar quarter the day falls in. A filer's own fiscal quarter is not
+    needed and is not knowable from one row: what has to line up is the period
+    a filing reports and the period a run asked for, and both are named by the
+    calendar.
+    """
+    return day.year * 4 + (day.month - 1) // 3
+
+
+def quarter_label(index: int) -> str:
+    """The canonical spelling of a quarter index: ``2024Q2``."""
+    return f"{index // 4}Q{index % 4 + 1}"
+
+
+def quarter_index_of_label(label: str) -> int | None:
+    match = re.fullmatch(r"(\d{4})Q([1-4])", str(label or "").strip())
+    return int(match.group(1)) * 4 + int(match.group(2)) - 1 if match else None
+
+
+class IndexedFiling(NamedTuple):
+    """One row of the submissions index, read for what it can answer.
+
+    ``row`` is the row's position in the index arrays, which is what the caller
+    fetches by; ``quarter`` is the quarter of the row's own period of report.
+    """
+
+    row: int
+    form: str
+    annual: bool
+    quarter: int
+
+
+def _states(filing: IndexedFiling) -> set[int]:
+    """The quarters an interim report states as columns of its own.
+
+    Its period, and the same quarter of the year before it as the comparative.
+    An annual report states no quarter: its product table is annual columns,
+    and its fourth quarter is a subtraction rather than a column.
+    """
+    if filing.annual:
+        return set()
+    return {filing.quarter - 4 * back for back in range(INTERIM_YEARS_STATED)}
+
+
+def _states_year_ending(filing: IndexedFiling) -> set[int]:
+    """The fiscal years an annual report states, named by the quarter each ends in."""
+    if not filing.annual:
+        return set()
+    return {filing.quarter - 4 * back for back in range(ANNUAL_YEARS_STATED)}
+
+
+def _states_nine_months_ending(filing: IndexedFiling) -> set[int]:
+    """The quarters an interim report's year-to-date columns end at.
+
+    A third-quarter report carries nine months of its own year and nine months
+    of the year before it. Whether a report is a third-quarter one is not asked
+    here: the caller only looks for the nine months ending the quarter before a
+    fiscal year end, and a report whose period is three months before a year
+    end is that filer's third quarter whatever month the year ends in.
+    """
+    return _states(filing)
+
+
+def choose_filings(
+    filings: list[IndexedFiling], asked: list[str], *, ceiling: int
+) -> dict[int, list[str]]:
+    """The smallest set of index rows whose answer sets cover the asked quarters.
+
+    Returns the chosen rows, each with the quarters it was chosen for, so a
+    fetched document can say what question it was fetched to answer.
+
+    Two ways a quarter is answered, both derived from the row's form family and
+    its period of report and neither needing a document opened:
+
+    * an interim report states it, as its own period or as its comparative;
+    * a fourth quarter is the fiscal year less the nine months before it, so it
+      needs an annual report stating that year *and* the interim report whose
+      year-to-date column ends the quarter before the year end. Neither alone
+      answers it, so neither alone is chosen for it.
+
+    A filing whose form states no period of its own - an earnings 8-K, whose
+    period of report is the date of the event and not the quarter it discusses -
+    has no answer set and is never chosen here. The exhibit pass finds those by
+    the item they furnish.
+
+    ``ceiling`` bounds how many filings any one quarter may cause to be
+    fetched; the cover is the smallest one, so it binds only where a quarter
+    needs more documents than a caller is willing to spend on it.
+    """
+    ceiling = max(1, ceiling)
+    wanted = {index for label in asked if (index := quarter_index_of_label(label)) is not None}
+    chosen: dict[int, set[int]] = {}
+    covered: set[int] = set()
+    spent: dict[int, int] = {}
+
+    def rank(filing: IndexedFiling) -> tuple[int, int, int, int]:
+        # Most quarters first; then a filing already being fetched, which
+        # answers one more quarter for no further request; then annual before
+        # interim, which is `reading_order`'s own answer; then the index's
+        # order, newest first.
+        return (
+            -len(_states(filing) & wanted - covered),
+            0 if filing.row in chosen else 1,
+            reading_order(filing.form),
+            filing.row,
+        )
+
+    # Every quarter some single filing states, taken from as few filings as
+    # possible: each step takes the filing that answers the most that are still
+    # open.
+    while True:
+        open_now = [f for f in filings if f.row not in chosen and (_states(f) & wanted - covered)]
+        if not open_now:
+            break
+        best = min(open_now, key=rank)
+        newly = (_states(best) & wanted) - covered
+        newly = {q for q in newly if spent.get(q, 0) < ceiling}
+        if not newly:
+            break
+        chosen[best.row] = newly
+        covered |= newly
+        for quarter in newly:
+            spent[quarter] = spent.get(quarter, 0) + 1
+
+    # What is left is a fourth quarter, or a quarter no filing in this index
+    # reports. A fourth quarter costs the pair or it is not answered.
+    for quarter in sorted(wanted - covered):
+        annual = min(
+            (f for f in filings if quarter in _states_year_ending(f)), key=rank, default=None
+        )
+        nine_months = min(
+            (f for f in filings if quarter - 1 in _states_nine_months_ending(f)),
+            key=rank,
+            default=None,
+        )
+        if annual is None or nine_months is None:
+            continue
+        pair = [f for f in (annual, nine_months) if f.row not in chosen]
+        if spent.get(quarter, 0) + len(pair) > ceiling:
+            continue
+        for filing in (annual, nine_months):
+            chosen.setdefault(filing.row, set()).add(quarter)
+        covered.add(quarter)
+        spent[quarter] = spent.get(quarter, 0) + len(pair)
+
+    return {row: sorted(quarter_label(q) for q in quarters) for row, quarters in chosen.items()}
 
 
 # A tagged number under any namespace but the cover page's own. Matched on
@@ -871,6 +1037,7 @@ class SECConnector:
         until: date | None,
         also_fetch_pages: bool = False,
         pages_fetched: set[str] | None = None,
+        chosen: dict[int, list[str]] | None = None,
     ) -> list[RetrievedSource]:
         """The tagged instance from each filing in this window that carries one.
 
@@ -900,6 +1067,13 @@ class SECConnector:
         not two filings: an issuer that tags no product member has an instance
         that answers nothing while the schedule sits in the page beside it, and
         deciding to spend a request on the accession is deciding about both.
+
+        ``chosen`` is the caller's cover over the quarters the run asked for,
+        as row index to the quarters that row was picked to answer. Given one,
+        the same rows are read here as are read for their pages, because one
+        filing is one decision: a row the cover did not need is not a filing
+        whose instance is worth a request either. Given none - a caller that
+        declared no window - the window is the bound, as before.
         """
         cik_int = str(int(cik))
         forms = recent.get("form", [])
@@ -908,6 +1082,7 @@ class SECConnector:
         primary = recent.get("primaryDocument", []) or []
         tagged = recent.get("isXBRL", []) or []
         have_page = set(pages_fetched or ())
+        covering = chosen
         sources: list[RetrievedSource] = []
         # Directory listings for filings the index does not classify. A bound on
         # requests, not a claim about which filings are worth reading.
@@ -921,6 +1096,8 @@ class SECConnector:
         for index, form in enumerate(forms):
             if not bounded and len(sources) >= max_filings:
                 break
+            if covering is not None and index not in covering:
+                continue
             if index < len(tagged):
                 if not tagged[index]:
                     continue
@@ -942,6 +1119,7 @@ class SECConnector:
             if not instance:
                 logger.info("sec_no_xbrl_instance accession=%s form=%s", accession, form)
                 continue
+            answers = (covering or {}).get(index)
             page = primary[index] if index < len(primary) else None
             if also_fetch_pages and page and accession not in have_page:
                 have_page.add(accession)
@@ -950,6 +1128,7 @@ class SECConnector:
                         client, cik=cik, accession=accession, doc=page,
                         form=form, filed=filing_dates[index] if index < len(filing_dates) else None,
                         run_id=run_id, job_id=job_id,
+                        metadata={"chosen_for": answers} if answers else None,
                     )
                 )
             sid = new_id()
@@ -992,7 +1171,8 @@ class SECConnector:
                     storage_key=stored_key,
                     retrieval_status=RetrievalStatus.SUCCESS,
                     metadata={"cik": cik, "from_cache": from_cache, "xbrl_instance": True,
-                              "calculation_key": calculation_key},
+                              "calculation_key": calculation_key,
+                              **({"chosen_for": answers} if answers else {})},
                 )
             )
         logger.info("sec_xbrl_instances cik=%s retrieved=%s", cik, len(sources))
@@ -1068,6 +1248,8 @@ class SECConnector:
             accessions = recent.get("accessionNumber", [])
             primary = recent.get("primaryDocument", [])
             filing_dates = recent.get("filingDate", [])
+            # The period of report EDGAR states on every row that has one.
+            report_dates = recent.get("reportDate", [])
 
             # A filing reports a period that ended before it, so the filings
             # that report a window's periods are not the filings inside it:
@@ -1084,44 +1266,85 @@ class SECConnector:
             since_bound = earnings_since - REPORTING_LAG if earnings_since else None
             until_bound = earnings_until + REPORTING_LAG if earnings_until else None
 
+            # The window applies to which rows may be read. `_filings_covering`
+            # goes to the trouble of merging the archive shards so a 2005
+            # quarter can be reached at all, and a picker that then took the
+            # newest filings on the list regardless handed a job for 2005 the
+            # 2026 annual report, which says nothing about 2005.
+            #
             # Both the gate and the order read the form as its family, so an
-            # amendment is read where the form it amends is read and in the
-            # same place in the queue. Compared raw, `10-K/A` is in neither
-            # the allowed set nor the order, so a restatement would be dropped
-            # by the first test and would sort behind everything by the second.
+            # amendment is read where the form it amends is read. Compared raw,
+            # `10-K/A` is in neither the allowed set nor the order, so a
+            # restatement would be dropped by the first test and would sort
+            # behind everything by the second.
             indexed: list[tuple[int, int, str]] = []
             for i, form in enumerate(forms):
                 if form_family(form) not in allowed:
                     continue
-                indexed.append((reading_order(form), i, form))
-            indexed.sort(key=lambda t: (t[0], t[1]))
-
-            picked = 0
-            pages_fetched: set[str] = set()
-            for _pri, i, form in indexed if include_primary else []:
-                if picked >= max_filings:
-                    break
-                accession = accessions[i]
-                doc = primary[i]
-                fdate = filing_dates[i] if i < len(filing_dates) else None
-                # The window applies here too. `_filings_covering` goes to the
-                # trouble of merging the archive shards so a 2005 quarter can
-                # be reached at all, and then this loop took the newest 10-K
-                # and 10-Q on the list regardless: a job for 2005 was handed
-                # the 2026 annual report, which says nothing about 2005. Every
-                # pre-2010 quarter was being asked of the wrong documents, and
-                # the era looked unreachable when it was unqueried.
-                filed_on = parse_filing_date(fdate)
+                filed_on = parse_filing_date(filing_dates[i] if i < len(filing_dates) else None)
                 if since_bound and (filed_on is None or filed_on < since_bound):
                     continue
                 if until_bound and (filed_on is None or filed_on > until_bound):
                     continue
+                indexed.append((reading_order(form), i, form))
+            indexed.sort(key=lambda t: (t[0], t[1]))
+
+            # Which quarters this run set out to cover, and which rows answer
+            # them. Asked per quarter rather than per job: the count cap it
+            # replaces spent itself on whatever the index listed first, which
+            # for an issuer with three annual reports in the window is three
+            # annual reports and one quarter.
+            #
+            # Two things put the cover out of reach, and both are read from
+            # what is in hand rather than assumed: a run that declared no
+            # window asked for no quarter in particular, and an index that
+            # states no period of report on its periodic rows says nothing
+            # about which quarters they answer. Either way the reading order -
+            # the most periods per document first - and the cap are what is
+            # left, which is what this did for every run before the cover.
+            asked = quarters_reported_in(earnings_since, earnings_until)
+            candidates = []
+            for _order, i, form in indexed:
+                period = parse_filing_date(report_dates[i] if i < len(report_dates) else None)
+                if period is None or not reports_a_period(form):
+                    continue
+                candidates.append(
+                    IndexedFiling(
+                        row=i, form=form, annual=is_annual(form),
+                        quarter=quarter_index(period),
+                    )
+                )
+            covering = bool(asked and candidates)
+            chosen: dict[int, list[str]] = (
+                choose_filings(candidates, asked, ceiling=max_filings) if covering else {}
+            )
+            if covering:
+                logger.info(
+                    "sec_cover cik=%s asked=%d rows=%d covered=%d",
+                    resolved, len(asked), len(chosen),
+                    len({q for qs in chosen.values() for q in qs}),
+                )
+
+            picked = 0
+            pages_fetched: set[str] = set()
+            order = (
+                sorted(chosen, key=lambda i: (reading_order(forms[i]), i))
+                if covering
+                else [i for _order, i, _form in indexed]
+            )
+            for i in order if include_primary else []:
+                if not covering and picked >= max_filings:
+                    break
+                accession = accessions[i]
+                doc = primary[i] if i < len(primary) else None
+                fdate = filing_dates[i] if i < len(filing_dates) else None
                 if not doc:
                     continue
                 sources.append(
                     await self._page_source(
                         client, cik=resolved, accession=accession, doc=doc,
-                        form=form, filed=fdate, run_id=run_id, job_id=job_id,
+                        form=forms[i], filed=fdate, run_id=run_id, job_id=job_id,
+                        metadata={"chosen_for": chosen[i]} if i in chosen else None,
                     )
                 )
                 pages_fetched.add(accession)
@@ -1146,6 +1369,7 @@ class SECConnector:
                         # so that a filing both passes reach is fetched once.
                         also_fetch_pages=include_primary,
                         pages_fetched=pages_fetched,
+                        chosen=chosen if covering else None,
                     )
                 )
 

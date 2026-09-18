@@ -27,6 +27,14 @@ class Settings(BaseSettings):
     openrouter_base_url: str = "https://openrouter.ai/api/v1"
     validation_sample_rate: float = 0.10
     max_concurrent_jobs: int = 1
+    # A ceiling on the filings any one quarter may cause to be fetched, not a
+    # count of filings per job. Retrieval covers the quarters a run asked for:
+    # a quarter an interim report states costs that one filing, and a fourth
+    # quarter costs the annual report and the interim report whose
+    # year-to-date column it is taken from, so a quarter that needs more
+    # documents than this is left uncovered rather than fetched around. With
+    # no window declared there is no quarter to cover and this bounds "the
+    # recent filings" instead.
     sec_max_filings: int = 4
     sec_include_8k: bool = False
     # Quarterly product revenue lives in 8-K item 2.02 exhibit 99.x earnings releases,
