@@ -1,0 +1,197 @@
+  [1/3] 5 drug(s): attached to run 3f25070a
+  [2/3] 6 drug(s): attached to run c61b3799
+  [3/3] 1 drug(s): attached to run 440c853b
+
+  configuration
+    as of                 2026-09-17 19:08:44+0000
+    cases                 seed/cases/holdout_2026_09.json (12 case(s), 96 expectation(s), 3 run(s))
+    server                http://127.0.0.1:8011
+    resolved options      {"company_ir": true, "earnings_releases": true, "llm_evidence_judge": true, "openfda": true, "product_metadata": true, "quarterly_revenue": true, "sec_filings": true, "transcripts": false}
+                          over 3 run(s), one window each
+    settings              4 of 38 reported: every one this server does not take from the code, and the models
+      openrouter_api_key           'set'   (code declares 'unset')
+      openrouter_model_extract     'google/gemini-3.8-flash'
+      openrouter_model_judge       'openai/gpt-4o-mini'
+      sec_user_agent               'PharmaAnalogUptakeWorkbench <sec-contact-email>'   (code declares 'PharmaAnalogUptakeWorkbench research@example.com')
+    19:08:44 5/5 done
+      INGREZZA: ready_for_review ready_for_review
+      CRENESSITY: ready_for_review ready_for_review
+      ONGENTYS: ready_for_review ready_for_review
+      NARCAN Nasal Spray: ready_for_review ready_for_review
+      BioThrax: ready_for_review ready_for_review
+    19:08:45 5/6 done
+      Translarna: ready_for_review ready_for_review
+      Emflaza: ready_for_review ready_for_review
+      Upstaza: ready_for_review ready_for_review
+      Sephience: ready_for_review ready_for_review
+      MIPLYFFA: failed extract_revenue
+      OLPRUVA: running queued
+    19:08:50 5/6 done
+      Translarna: ready_for_review ready_for_review
+      Emflaza: ready_for_review ready_for_review
+      Upstaza: ready_for_review ready_for_review
+      Sephience: ready_for_review ready_for_review
+      MIPLYFFA: failed extract_revenue
+      OLPRUVA: running source_retrieve
+    19:08:59 5/6 done
+      Translarna: ready_for_review ready_for_review
+      Emflaza: ready_for_review ready_for_review
+      Upstaza: ready_for_review ready_for_review
+      Sephience: ready_for_review ready_for_review
+      MIPLYFFA: failed extract_revenue
+      OLPRUVA: running judge_metadata
+    19:09:37 5/6 done
+      Translarna: ready_for_review ready_for_review
+      Emflaza: ready_for_review ready_for_review
+      Upstaza: ready_for_review ready_for_review
+      Sephience: ready_for_review ready_for_review
+      MIPLYFFA: failed extract_revenue
+      OLPRUVA: running extract_revenue
+    19:10:57 5/6 done
+      Translarna: ready_for_review ready_for_review
+      Emflaza: ready_for_review ready_for_review
+      Upstaza: ready_for_review ready_for_review
+      Sephience: ready_for_review ready_for_review
+      MIPLYFFA: failed extract_revenue
+      OLPRUVA: running evidence_judge
+    19:11:47 5/6 done
+      Translarna: ready_for_review ready_for_review
+      Emflaza: ready_for_review ready_for_review
+      Upstaza: ready_for_review ready_for_review
+      Sephience: ready_for_review ready_for_review
+      MIPLYFFA: failed extract_revenue
+      OLPRUVA: running reconcile_conflicts
+    19:11:52 5/6 done
+      Translarna: ready_for_review ready_for_review
+      Emflaza: ready_for_review ready_for_review
+      Upstaza: ready_for_review ready_for_review
+      Sephience: ready_for_review ready_for_review
+      MIPLYFFA: failed extract_revenue
+      OLPRUVA: running completeness
+    19:12:07 6/6 done
+      Translarna: ready_for_review ready_for_review
+      Emflaza: ready_for_review ready_for_review
+      Upstaza: ready_for_review ready_for_review
+      Sephience: ready_for_review ready_for_review
+      MIPLYFFA: failed extract_revenue
+      OLPRUVA: ready_for_review ready_for_review
+    19:12:07 0/1 done
+      INCRELEX: running queued
+    19:12:12 0/1 done
+      INCRELEX: running source_retrieve
+    19:12:37 0/1 done
+      INCRELEX: running judge_metadata
+    19:13:33 0/1 done
+      INCRELEX: running extract_revenue
+    19:14:33 0/1 done
+      INCRELEX: running evidence_judge
+    19:14:53 0/1 done
+      INCRELEX: running completeness
+    19:15:13 1/1 done
+      INCRELEX: ready_for_review ready_for_review
+
+  drug                   period         want       read  state
+  INGREZZA               2024Q1        506.0             no answer
+  INGREZZA               2024Q2        579.5             no answer
+  INGREZZA               2024Q3        612.9             no answer
+  INGREZZA               2024Q4        615.2             no answer
+  INGREZZA               2025Q1        545.2      545.2  published, correct (table)
+  INGREZZA               2025Q2        624.4             no answer
+  INGREZZA               2025Q3        686.6             no answer
+  INGREZZA               2025Q4        657.5             no answer
+  CRENESSITY             2024Q1                          correctly silent
+  CRENESSITY             2024Q2                          correctly silent
+  CRENESSITY             2024Q3                          correctly silent
+  CRENESSITY             2024Q4          1.7             no answer
+  CRENESSITY             2025Q1         14.5       14.5  published, correct (table)
+  CRENESSITY             2025Q2         53.2             no answer
+  CRENESSITY             2025Q3         98.1             no answer
+  CRENESSITY             2025Q4        135.3             no answer
+  ONGENTYS               2024Q1                          correctly silent
+  ONGENTYS               2024Q2                          correctly silent
+  ONGENTYS               2024Q3                          correctly silent
+  ONGENTYS               2024Q4                          correctly silent
+  ONGENTYS               2025Q1                          correctly silent
+  ONGENTYS               2025Q2                          correctly silent
+  ONGENTYS               2025Q3                          correctly silent
+  ONGENTYS               2025Q4                          correctly silent
+  NARCAN Nasal Spray     2024Q1        118.5      118.5  published, correct (table)
+  NARCAN Nasal Spray     2024Q2        120.0      120.0  published, correct (table)
+  NARCAN Nasal Spray     2024Q3         95.3       95.3  published, correct (table)
+  NARCAN Nasal Spray     2024Q4         65.1       65.1  published, correct (table)
+  NARCAN Nasal Spray     2025Q1         45.3       45.3  published, correct (table)
+  NARCAN Nasal Spray     2025Q2                          correctly silent
+  NARCAN Nasal Spray     2025Q3                          correctly silent
+  NARCAN Nasal Spray     2025Q4                          correctly silent
+  BioThrax               2024Q1                          correctly silent
+  BioThrax               2024Q2                          correctly silent
+  BioThrax               2024Q3                          correctly silent
+  BioThrax               2024Q4                          correctly silent
+  BioThrax               2025Q1                          correctly silent
+  BioThrax               2025Q2                          correctly silent
+  BioThrax               2025Q3                          correctly silent
+  BioThrax               2025Q4                          correctly silent
+  Translarna             2024Q3         72.3       72.3  published, correct (xbrl_fact)
+  Translarna             2024Q4         74.9       93.7  published, WRONG (prose)
+  Translarna             2025Q1         86.2       86.2  published, correct (xbrl_fact)
+  Translarna             2025Q2         59.5       59.5  published, correct (prose)
+  Translarna             2025Q3         50.7       50.7  published, correct (xbrl_fact)
+  Translarna             2025Q4         39.0       39.0  published, correct (prose)
+  Translarna             2026Q1         59.0       59.0  published, correct (xbrl_fact)
+  Translarna             2026Q2         42.2       42.2  published, correct (prose)
+  Emflaza                2024Q3         51.9       51.9  published, correct (xbrl_fact)
+  Emflaza                2024Q4         50.5       50.5  published, correct (prose)
+  Emflaza                2025Q1         47.8       47.8  published, correct (xbrl_fact)
+  Emflaza                2025Q2         36.4       36.4  published, correct (xbrl_fact)
+  Emflaza                2025Q3         35.2       35.2  published, correct (xbrl_fact)
+  Emflaza                2025Q4         27.1       27.1  published, correct (derived_from_period_total)
+  Emflaza                2026Q1         21.5       21.5  published, correct (xbrl_fact)
+  Emflaza                2026Q2         24.6       24.6  published, correct (xbrl_fact)
+  Upstaza                2024Q3                          correctly silent
+  Upstaza                2024Q4          7.3        7.3  published, wrong identity (derived_from_period_total)
+  Upstaza                2025Q1          8.7        8.7  published, wrong identity (table)
+  Upstaza                2025Q2         11.9       11.9  published, wrong identity (xbrl_fact)
+  Upstaza                2025Q3         15.7       15.7  published, wrong identity (xbrl_fact)
+  Upstaza                2025Q4         20.3       20.3  published, wrong identity (derived_from_period_total)
+  Upstaza                2026Q1          9.6        9.6  published, wrong identity (table)
+  Upstaza                2026Q2         11.2             no answer
+  Sephience              2024Q3                          correctly silent
+  Sephience              2024Q4                          correctly silent
+  Sephience              2025Q1                    24.1  answered anyway (derived_from_period_total)
+  Sephience              2025Q2                    26.7  answered anyway (table)
+  Sephience              2025Q3         19.6       19.6  published, correct (xbrl_fact)
+  Sephience              2025Q4         91.6       91.6  published, correct (derived_from_period_total)
+  Sephience              2026Q1        124.6      124.6  published, correct (llm)
+  Sephience              2026Q2        151.3      151.3  published, correct (llm)
+  OLPRUVA                2024Q3                          correctly silent
+  OLPRUVA                2024Q4          0.1             no answer
+  OLPRUVA                2025Q1          0.1        0.1  published, correct (xbrl_fact)
+  OLPRUVA                2025Q2          0.3        0.3  published, correct (llm)
+  OLPRUVA                2025Q3          0.1        0.1  published, correct (xbrl_fact)
+  OLPRUVA                2025Q4          0.4             no answer
+  OLPRUVA                2026Q1          0.3        0.3  published, correct (llm)
+  OLPRUVA                2026Q2          0.2        0.2  published, correct (llm)
+  INCRELEX               2023Q4          4.9             no answer
+  INCRELEX               2024Q1                          correctly silent
+  INCRELEX               2024Q2                          correctly silent
+  INCRELEX               2024Q3                          correctly silent
+  INCRELEX               2024Q4                          correctly silent
+  INCRELEX               2025Q1                          correctly silent
+  INCRELEX               2025Q2                          correctly silent
+  INCRELEX               2025Q3                          correctly silent
+
+  88 expected figures across 11 scored case(s)
+  1 case(s) with no finished job, not scored and absent from every count below:
+    MIPLYFFA               failed             extract_revenue
+    correctly silent         33   37.5%
+    published, correct       31   35.2%
+    no answer                15   17.0%
+    published, wrong identity    6    6.8%
+    answered anyway           2    2.3%
+    published, WRONG          1    1.1%
+  correct: 64/88
+  37 published (product, period) pair(s) no expectation examined:
+    run c61b3799    21
+    run 3f25070a    16
+  published-correct by method: xbrl_fact 13, table 7, llm 5, prose 4, derived_from_period_total 2
+  detail written to /tmp/claude-0/-home-user-pharma-analog-uptake-workbench/2246df3a-f6aa-5795-b4af-896b904953c0/scratchpad/smoke/holdout_2026_09.eval.json

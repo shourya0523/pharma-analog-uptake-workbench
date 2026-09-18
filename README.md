@@ -2,6 +2,12 @@
 
 Source-first extraction and validation for pharmaceutical analog uptake data. Citations are mandatory on every source-derived field.
 
+## Where things stand
+
+Working on this repository starts with `CLAUDE.md` (the five rules) and
+`docs/plans/2026-09-18-009-where-things-stand.md`: what is on the branch,
+what is scored, which decisions are open, and how to run a smoke test.
+
 ## Stack
 
 - Backend: FastAPI (Python 3.12), SQLAlchemy, OpenRouter (extract, judge, web search)
