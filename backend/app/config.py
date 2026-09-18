@@ -64,6 +64,16 @@ class Settings(BaseSettings):
     # products whose filer is known and which no existing answer key uses.
     llm_cik_min_confidence: float = 0.6
     llm_search_max_urls: int = 5
+    # How long one job may run before it is stopped. A job holds a
+    # concurrency permit for as long as its handler is awaited, and every
+    # timeout in the stack below is per HTTP operation rather than wall clock,
+    # so without this one hung job holds a permit for the life of the process.
+    #
+    # A snapshot, with headroom, of the longest wall time a job took across the
+    # stored run databases. What would make it stale is jobs getting slower - a
+    # wider window, more sources per job - and the symptom would be a healthy
+    # job recorded as having passed its deadline.
+    job_deadline_seconds: int = 14400
     # OpenRouter openrouter:web_search engine: auto | native | exa | parallel | perplexity
     llm_search_engine: str = "auto"
     # Empty = no domain filter (prompt steers to SEC/IR). Comma-separated if set.
