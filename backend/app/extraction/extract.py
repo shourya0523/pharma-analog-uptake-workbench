@@ -837,7 +837,14 @@ def _read_table(
             ) + tuple(
                 FLAG_PARTIAL for _ in [1] if any(FLAG_PARTIAL in r.flags for _, _, r in about)
             ) + ((FLAG_NO_SALES,) if says_no_sales else ())
-            suffix = "".join(cite_footnote(mark, note) for mark, note, _ in about)
+            # Every note the label's marks cite, not only those a reading of
+            # the note placed in this figure's period: the note is the filer's
+            # own words about the row, and a note that turns out to be about
+            # the column next door is a question for whoever reads the quote.
+            # Where the note is not placed here, only its flag stays behind -
+            # a flag is the pipeline claiming something, and it may claim only
+            # what it placed.
+            suffix = "".join(cite_footnote(mark, note) for mark, note, _ in cited)
             values.append(
                 ExtractedValue(
                     product_label=label,
