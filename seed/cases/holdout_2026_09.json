@@ -1,0 +1,2080 @@
+{
+  "note": "Held-out set drawn 2026-09-17 for the fixes in docs/plans/2026-09-17-006-what-twelve-reviews-found.md. It may score sections 1, 2, 3, 5, 6 and 7 of that register, and section 12's retrieval cascade. It may not be used to find defects and then score the fix for them: gold, seed/holdout, seed/holdout2, seed/holdout_labels, seed/holdout_members, seed/holdout_foreign_xbrl and seed/cases/shapes_holdout.json are the oracles for finding, and none of them may score what it found. Every issuer here is absent from all of those, derived through tests/answer_keys.spent_issuers rather than checked against a list. What spends it: the first change measured on it. After that it is an oracle like the rest, and the next scored change needs a new set from issuers this file does not name. No case states a CIK on purpose: seed/example_drugs.csv has no such column, a person uploading a product types a ticker, and a case that stated one would hand the pipeline the issuer resolution this set is drawn to score.",
+  "cases": [
+    {
+      "drug_name": "INGREZZA",
+      "generic_name": "valbenazine",
+      "manufacturer": "Neurocrine Biosciences Inc",
+      "ticker": "NBIX",
+      "options": {
+        "earnings_since": "2024-04-01",
+        "earnings_until": "2026-03-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "plain product row",
+        "10-Q disaggregation",
+        "fourth quarter from an 8-K EX-99",
+        "two applications for one brand"
+      ],
+      "source": "10-Q 'Disaggregation of revenue' and 'Revenues:' tables name the product on its own row; the fourth quarter is printed only in the February earnings release's three-months-ended-December table.",
+      "profile": {
+        "application_number": "NDA209241",
+        "application_source_url": "https://api.fda.gov/drug/drugsfda.json?search=products.brand_name:%22INGREZZA%22&limit=10",
+        "products_route": "ORAL",
+        "openfda_route": "ORAL",
+        "route_fields_agree": true,
+        "route_of_administration": "oral",
+        "first_approval_year": 2017,
+        "first_approval_source_quote": "NDA209241 submissions: submission_type \"ORIG\", submission_status \"AP\", submission_status_date \"20170411\"",
+        "indication_area": "neurology",
+        "indication_source_url": "https://api.fda.gov/drug/label.json?search=openfda.application_number:%22NDA209241%22&limit=1",
+        "indication_source_quote": "INGREZZA and INGREZZA SPRINKLE are indicated for the treatment of adults with: - tardive dyskinesia ... - chorea associated with Huntington's disease.",
+        "note": "the brand holds a second application, NDA218390 (INGREZZA SPRINKLE, ORIG/AP 20240430); the earliest ORIG/AP across the brand's own applications is the first approval, so an implementation that keeps whichever application the registry returns first can land on 2024"
+      },
+      "expect": [
+        {
+          "period": "2024Q1",
+          "value_normalized_usd_millions": 506.0,
+          "accession": "0000914475-24-000117",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447524000117/nbix-20240331.htm",
+          "source_quote": "INGREZZA | $ | 506.0 | $ | 410.4",
+          "sources": [
+            {
+              "accession": "0000914475-24-000117",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447524000117/nbix-20240331.htm",
+              "source_quote": "INGREZZA | $ | 506.0 | $ | 410.4"
+            }
+          ]
+        },
+        {
+          "period": "2024Q2",
+          "value_normalized_usd_millions": 579.5,
+          "accession": "0000914475-24-000181",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447524000181/nbix-20240630.htm",
+          "source_quote": "INGREZZA | $ | 579.5 | $ | 439.7 | $ | 1,085.5 | $ | 850.1",
+          "sources": [
+            {
+              "accession": "0000914475-24-000181",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447524000181/nbix-20240630.htm",
+              "source_quote": "INGREZZA | $ | 579.5 | $ | 439.7 | $ | 1,085.5 | $ | 850.1"
+            }
+          ]
+        },
+        {
+          "period": "2024Q3",
+          "value_normalized_usd_millions": 612.9,
+          "accession": "0000914475-24-000211",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447524000211/nbix-20240930.htm",
+          "source_quote": "INGREZZA | $ | 612.9 | $ | 485.7 | $ | 1,698.4 | $ | 1,335.8",
+          "sources": [
+            {
+              "accession": "0000914475-24-000211",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447524000211/nbix-20240930.htm",
+              "source_quote": "INGREZZA | $ | 612.9 | $ | 485.7 | $ | 1,698.4 | $ | 1,335.8"
+            }
+          ]
+        },
+        {
+          "period": "2024Q4",
+          "value_normalized_usd_millions": 615.2,
+          "accession": "0000914475-26-000006",
+          "form": "8-K EX-99",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447526000006/q4-2025xearningsrelease.htm",
+          "source_quote": "INGREZZA Net Product Sales | $ | 657.5 | $ | 615.2 | $ | 2,513.7 | $ | 2,313.5",
+          "sources": [
+            {
+              "accession": "0000914475-26-000006",
+              "form": "8-K EX-99",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447526000006/q4-2025xearningsrelease.htm",
+              "source_quote": "INGREZZA Net Product Sales | $ | 657.5 | $ | 615.2 | $ | 2,513.7 | $ | 2,313.5"
+            }
+          ],
+          "note": "read from the prior-year column of the three months ended December 31 table"
+        },
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": 545.2,
+          "accession": "0000914475-25-000100",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447525000100/nbix-20250331.htm",
+          "source_quote": "INGREZZA net product sales | $ | 545.2 | $ | 506.0",
+          "sources": [
+            {
+              "accession": "0000914475-25-000100",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447525000100/nbix-20250331.htm",
+              "source_quote": "INGREZZA net product sales | $ | 545.2 | $ | 506.0"
+            }
+          ]
+        },
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": 624.4,
+          "accession": "0000914475-25-000158",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447525000158/nbix-20250630.htm",
+          "source_quote": "INGREZZA net product sales | $ | 624.4 | $ | 579.5 | $ | 1,169.6 | $ | 1,085.5",
+          "sources": [
+            {
+              "accession": "0000914475-25-000158",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447525000158/nbix-20250630.htm",
+              "source_quote": "INGREZZA net product sales | $ | 624.4 | $ | 579.5 | $ | 1,169.6 | $ | 1,085.5"
+            }
+          ]
+        },
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": 686.6,
+          "accession": "0000914475-25-000181",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447525000181/nbix-20250930.htm",
+          "source_quote": "INGREZZA net product sales | $ | 686.6 | $ | 612.9 | $ | 1,856.2 | $ | 1,698.4",
+          "sources": [
+            {
+              "accession": "0000914475-25-000181",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447525000181/nbix-20250930.htm",
+              "source_quote": "INGREZZA net product sales | $ | 686.6 | $ | 612.9 | $ | 1,856.2 | $ | 1,698.4"
+            }
+          ]
+        },
+        {
+          "period": "2025Q4",
+          "value_normalized_usd_millions": 657.5,
+          "accession": "0000914475-26-000006",
+          "form": "8-K EX-99",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447526000006/q4-2025xearningsrelease.htm",
+          "source_quote": "INGREZZA Net Product Sales | $ | 657.5 | $ | 615.2 | $ | 2,513.7 | $ | 2,313.5",
+          "sources": [
+            {
+              "accession": "0000914475-26-000006",
+              "form": "8-K EX-99",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447526000006/q4-2025xearningsrelease.htm",
+              "source_quote": "INGREZZA Net Product Sales | $ | 657.5 | $ | 615.2 | $ | 2,513.7 | $ | 2,313.5"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "drug_name": "CRENESSITY",
+      "generic_name": "crinecerfont",
+      "manufacturer": "Neurocrine Biosciences Inc",
+      "ticker": "NBIX",
+      "options": {
+        "earnings_since": "2024-04-01",
+        "earnings_until": "2026-03-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "pre-launch quarters must come back empty",
+        "em dash is the filer's nil",
+        "openfda block absent, products[] has the route"
+      ],
+      "source": "The product's row appears in the 2025 10-Qs with an em dash in every 2024 comparative column; the first quarter with a figure is the fourth of 2024, which only the February 2026 release prints.",
+      "profile": {
+        "application_number": "NDA218808",
+        "application_source_url": "https://api.fda.gov/drug/drugsfda.json?search=products.brand_name:%22CRENESSITY%22&limit=10",
+        "products_route": "ORAL",
+        "openfda_route": null,
+        "route_fields_agree": false,
+        "route_of_administration": "oral",
+        "first_approval_year": 2024,
+        "first_approval_source_quote": "NDA218808 submissions: submission_type \"ORIG\", submission_status \"AP\", submission_status_date \"20241213\"",
+        "indication_area": null,
+        "indication_source_url": null,
+        "indication_source_quote": null,
+        "why": {
+          "indication_area": "no label record exists for this application or brand: openfda.application_number:\"NDA218808\", openfda.brand_name:\"CRENESSITY\" and openfda.generic_name:\"crinecerfont\" each return HTTP 404 on api.fda.gov/drug/label.json. drugsFDA carries no indication field - its products[] keys are active_ingredients, brand_name, dosage_form, marketing_status, product_number, reference_drug, reference_standard, route"
+        },
+        "note": "openfda.brand_name:\"CRENESSITY\" returns HTTP 404 on drugsFDA and the record reached through products.brand_name has no openfda block at all, so openfda.route is absent while products[].route says ORAL"
+      },
+      "expect": [
+        {
+          "period": "2024Q1",
+          "value_normalized_usd_millions": null,
+          "accession": "0000914475-25-000100",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447525000100/nbix-20250331.htm",
+          "source_quote": "CRENESSITY net product sales | 14.5 | —",
+          "sources": [
+            {
+              "accession": "0000914475-25-000100",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447525000100/nbix-20250331.htm",
+              "source_quote": "CRENESSITY net product sales | 14.5 | —"
+            }
+          ],
+          "why": "the filer prints an em dash for the quarter: CRENESSITY was approved 2024-12-13 and the row carries no figure before the fourth quarter"
+        },
+        {
+          "period": "2024Q2",
+          "value_normalized_usd_millions": null,
+          "accession": "0000914475-25-000158",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447525000158/nbix-20250630.htm",
+          "source_quote": "CRENESSITY net product sales | 53.2 | — | 67.7 | —",
+          "sources": [
+            {
+              "accession": "0000914475-25-000158",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447525000158/nbix-20250630.htm",
+              "source_quote": "CRENESSITY net product sales | 53.2 | — | 67.7 | —"
+            }
+          ],
+          "why": "the filer prints an em dash for the quarter: CRENESSITY was approved 2024-12-13 and the row carries no figure before the fourth quarter"
+        },
+        {
+          "period": "2024Q3",
+          "value_normalized_usd_millions": null,
+          "accession": "0000914475-25-000181",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447525000181/nbix-20250930.htm",
+          "source_quote": "CRENESSITY net product sales | 98.1 | — | 165.8 | —",
+          "sources": [
+            {
+              "accession": "0000914475-25-000181",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447525000181/nbix-20250930.htm",
+              "source_quote": "CRENESSITY net product sales | 98.1 | — | 165.8 | —"
+            }
+          ],
+          "why": "the filer prints an em dash for the quarter: CRENESSITY was approved 2024-12-13 and the row carries no figure before the fourth quarter"
+        },
+        {
+          "period": "2024Q4",
+          "value_normalized_usd_millions": 1.7,
+          "accession": "0000914475-26-000006",
+          "form": "8-K EX-99",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447526000006/q4-2025xearningsrelease.htm",
+          "source_quote": "CRENESSITY Net Product Sales | 135.3 | 1.7 | 301.2 | 1.7",
+          "sources": [
+            {
+              "accession": "0000914475-26-000006",
+              "form": "8-K EX-99",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447526000006/q4-2025xearningsrelease.htm",
+              "source_quote": "CRENESSITY Net Product Sales | 135.3 | 1.7 | 301.2 | 1.7"
+            }
+          ],
+          "note": "read from the prior-year column of the three months ended December 31 table"
+        },
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": 14.5,
+          "accession": "0000914475-25-000100",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447525000100/nbix-20250331.htm",
+          "source_quote": "CRENESSITY net product sales | 14.5 | —",
+          "sources": [
+            {
+              "accession": "0000914475-25-000100",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447525000100/nbix-20250331.htm",
+              "source_quote": "CRENESSITY net product sales | 14.5 | —"
+            }
+          ]
+        },
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": 53.2,
+          "accession": "0000914475-25-000158",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447525000158/nbix-20250630.htm",
+          "source_quote": "CRENESSITY net product sales | 53.2 | — | 67.7 | —",
+          "sources": [
+            {
+              "accession": "0000914475-25-000158",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447525000158/nbix-20250630.htm",
+              "source_quote": "CRENESSITY net product sales | 53.2 | — | 67.7 | —"
+            }
+          ]
+        },
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": 98.1,
+          "accession": "0000914475-25-000181",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447525000181/nbix-20250930.htm",
+          "source_quote": "CRENESSITY net product sales | 98.1 | — | 165.8 | —",
+          "sources": [
+            {
+              "accession": "0000914475-25-000181",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447525000181/nbix-20250930.htm",
+              "source_quote": "CRENESSITY net product sales | 98.1 | — | 165.8 | —"
+            }
+          ]
+        },
+        {
+          "period": "2025Q4",
+          "value_normalized_usd_millions": 135.3,
+          "accession": "0000914475-26-000006",
+          "form": "8-K EX-99",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447526000006/q4-2025xearningsrelease.htm",
+          "source_quote": "CRENESSITY Net Product Sales | 135.3 | 1.7 | 301.2 | 1.7",
+          "sources": [
+            {
+              "accession": "0000914475-26-000006",
+              "form": "8-K EX-99",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447526000006/q4-2025xearningsrelease.htm",
+              "source_quote": "CRENESSITY Net Product Sales | 135.3 | 1.7 | 301.2 | 1.7"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "drug_name": "ONGENTYS",
+      "generic_name": "opicapone",
+      "manufacturer": "Neurocrine Biosciences Inc",
+      "ticker": "NBIX",
+      "options": {
+        "earnings_since": "2024-04-01",
+        "earnings_until": "2026-03-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "named in the filing, no figure anywhere",
+        "must come back empty",
+        "cost-of-revenues sentence naming the product"
+      ],
+      "source": "The issuer's revenue disaggregation carries INGREZZA, CRENESSITY and Other. The product is named only in a cost-of-revenues sentence, beside a licence termination - a name in a document, not a figure in a document.",
+      "profile": {
+        "application_number": "NDA212489",
+        "application_source_url": "https://api.fda.gov/drug/drugsfda.json?search=products.brand_name:%22ONGENTYS%22&limit=10",
+        "products_route": "ORAL",
+        "openfda_route": "ORAL",
+        "route_fields_agree": true,
+        "route_of_administration": "oral",
+        "first_approval_year": 2020,
+        "first_approval_source_quote": "NDA212489 submissions: submission_type \"ORIG\", submission_status \"AP\", submission_status_date \"20200424\"",
+        "indication_area": "neurology",
+        "indication_source_url": "https://api.fda.gov/drug/label.json?search=openfda.application_number:%22NDA212489%22&limit=1",
+        "indication_source_quote": "ONGENTYS is indicated as adjunctive treatment to levodopa/carbidopa in patients with Parkinson's disease (PD) experiencing “off” episodes."
+      },
+      "expect": [
+        {
+          "period": "2024Q1",
+          "value_normalized_usd_millions": null,
+          "accession": "0000914475-26-000007",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447526000007/nbix-20251231.htm",
+          "source_quote": "For 2024 compared to 2023, the decrease primarily reflected decreased net product sales of ONGENTYS® (opicapone) and decreased ONGENTYS inventory reserves in connection with the termination of our license agreement with BIAL, which became effective in December 2023, partially offset by increased net product sales of INGREZZA.",
+          "sources": [
+            {
+              "accession": "0000914475-26-000007",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447526000007/nbix-20251231.htm",
+              "source_quote": "For 2024 compared to 2023, the decrease primarily reflected decreased net product sales of ONGENTYS® (opicapone) and decreased ONGENTYS inventory reserves in connection with the termination of our license agreement with BIAL, which became effective in December 2023, partially offset by increased net product sales of INGREZZA."
+            }
+          ],
+          "why": "the issuer names the product and states no figure for it: the revenue disaggregation carries only INGREZZA, CRENESSITY and Other, and the 10-K says the BIAL licence terminated in December 2023. A name in a document is not a figure in a document."
+        },
+        {
+          "period": "2024Q2",
+          "value_normalized_usd_millions": null,
+          "accession": "0000914475-26-000007",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447526000007/nbix-20251231.htm",
+          "source_quote": "For 2024 compared to 2023, the decrease primarily reflected decreased net product sales of ONGENTYS® (opicapone) and decreased ONGENTYS inventory reserves in connection with the termination of our license agreement with BIAL, which became effective in December 2023, partially offset by increased net product sales of INGREZZA.",
+          "sources": [
+            {
+              "accession": "0000914475-26-000007",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447526000007/nbix-20251231.htm",
+              "source_quote": "For 2024 compared to 2023, the decrease primarily reflected decreased net product sales of ONGENTYS® (opicapone) and decreased ONGENTYS inventory reserves in connection with the termination of our license agreement with BIAL, which became effective in December 2023, partially offset by increased net product sales of INGREZZA."
+            }
+          ],
+          "why": "the issuer names the product and states no figure for it: the revenue disaggregation carries only INGREZZA, CRENESSITY and Other, and the 10-K says the BIAL licence terminated in December 2023. A name in a document is not a figure in a document."
+        },
+        {
+          "period": "2024Q3",
+          "value_normalized_usd_millions": null,
+          "accession": "0000914475-26-000007",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447526000007/nbix-20251231.htm",
+          "source_quote": "For 2024 compared to 2023, the decrease primarily reflected decreased net product sales of ONGENTYS® (opicapone) and decreased ONGENTYS inventory reserves in connection with the termination of our license agreement with BIAL, which became effective in December 2023, partially offset by increased net product sales of INGREZZA.",
+          "sources": [
+            {
+              "accession": "0000914475-26-000007",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447526000007/nbix-20251231.htm",
+              "source_quote": "For 2024 compared to 2023, the decrease primarily reflected decreased net product sales of ONGENTYS® (opicapone) and decreased ONGENTYS inventory reserves in connection with the termination of our license agreement with BIAL, which became effective in December 2023, partially offset by increased net product sales of INGREZZA."
+            }
+          ],
+          "why": "the issuer names the product and states no figure for it: the revenue disaggregation carries only INGREZZA, CRENESSITY and Other, and the 10-K says the BIAL licence terminated in December 2023. A name in a document is not a figure in a document."
+        },
+        {
+          "period": "2024Q4",
+          "value_normalized_usd_millions": null,
+          "accession": "0000914475-26-000007",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447526000007/nbix-20251231.htm",
+          "source_quote": "For 2024 compared to 2023, the decrease primarily reflected decreased net product sales of ONGENTYS® (opicapone) and decreased ONGENTYS inventory reserves in connection with the termination of our license agreement with BIAL, which became effective in December 2023, partially offset by increased net product sales of INGREZZA.",
+          "sources": [
+            {
+              "accession": "0000914475-26-000007",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447526000007/nbix-20251231.htm",
+              "source_quote": "For 2024 compared to 2023, the decrease primarily reflected decreased net product sales of ONGENTYS® (opicapone) and decreased ONGENTYS inventory reserves in connection with the termination of our license agreement with BIAL, which became effective in December 2023, partially offset by increased net product sales of INGREZZA."
+            }
+          ],
+          "why": "the issuer names the product and states no figure for it: the revenue disaggregation carries only INGREZZA, CRENESSITY and Other, and the 10-K says the BIAL licence terminated in December 2023. A name in a document is not a figure in a document."
+        },
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": null,
+          "accession": "0000914475-26-000007",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447526000007/nbix-20251231.htm",
+          "source_quote": "For 2024 compared to 2023, the decrease primarily reflected decreased net product sales of ONGENTYS® (opicapone) and decreased ONGENTYS inventory reserves in connection with the termination of our license agreement with BIAL, which became effective in December 2023, partially offset by increased net product sales of INGREZZA.",
+          "sources": [
+            {
+              "accession": "0000914475-26-000007",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447526000007/nbix-20251231.htm",
+              "source_quote": "For 2024 compared to 2023, the decrease primarily reflected decreased net product sales of ONGENTYS® (opicapone) and decreased ONGENTYS inventory reserves in connection with the termination of our license agreement with BIAL, which became effective in December 2023, partially offset by increased net product sales of INGREZZA."
+            }
+          ],
+          "why": "the issuer names the product and states no figure for it: the revenue disaggregation carries only INGREZZA, CRENESSITY and Other, and the 10-K says the BIAL licence terminated in December 2023. A name in a document is not a figure in a document."
+        },
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": null,
+          "accession": "0000914475-26-000007",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447526000007/nbix-20251231.htm",
+          "source_quote": "For 2024 compared to 2023, the decrease primarily reflected decreased net product sales of ONGENTYS® (opicapone) and decreased ONGENTYS inventory reserves in connection with the termination of our license agreement with BIAL, which became effective in December 2023, partially offset by increased net product sales of INGREZZA.",
+          "sources": [
+            {
+              "accession": "0000914475-26-000007",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447526000007/nbix-20251231.htm",
+              "source_quote": "For 2024 compared to 2023, the decrease primarily reflected decreased net product sales of ONGENTYS® (opicapone) and decreased ONGENTYS inventory reserves in connection with the termination of our license agreement with BIAL, which became effective in December 2023, partially offset by increased net product sales of INGREZZA."
+            }
+          ],
+          "why": "the issuer names the product and states no figure for it: the revenue disaggregation carries only INGREZZA, CRENESSITY and Other, and the 10-K says the BIAL licence terminated in December 2023. A name in a document is not a figure in a document."
+        },
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": null,
+          "accession": "0000914475-26-000007",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447526000007/nbix-20251231.htm",
+          "source_quote": "For 2024 compared to 2023, the decrease primarily reflected decreased net product sales of ONGENTYS® (opicapone) and decreased ONGENTYS inventory reserves in connection with the termination of our license agreement with BIAL, which became effective in December 2023, partially offset by increased net product sales of INGREZZA.",
+          "sources": [
+            {
+              "accession": "0000914475-26-000007",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447526000007/nbix-20251231.htm",
+              "source_quote": "For 2024 compared to 2023, the decrease primarily reflected decreased net product sales of ONGENTYS® (opicapone) and decreased ONGENTYS inventory reserves in connection with the termination of our license agreement with BIAL, which became effective in December 2023, partially offset by increased net product sales of INGREZZA."
+            }
+          ],
+          "why": "the issuer names the product and states no figure for it: the revenue disaggregation carries only INGREZZA, CRENESSITY and Other, and the 10-K says the BIAL licence terminated in December 2023. A name in a document is not a figure in a document."
+        },
+        {
+          "period": "2025Q4",
+          "value_normalized_usd_millions": null,
+          "accession": "0000914475-26-000007",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447526000007/nbix-20251231.htm",
+          "source_quote": "For 2024 compared to 2023, the decrease primarily reflected decreased net product sales of ONGENTYS® (opicapone) and decreased ONGENTYS inventory reserves in connection with the termination of our license agreement with BIAL, which became effective in December 2023, partially offset by increased net product sales of INGREZZA.",
+          "sources": [
+            {
+              "accession": "0000914475-26-000007",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/914475/000091447526000007/nbix-20251231.htm",
+              "source_quote": "For 2024 compared to 2023, the decrease primarily reflected decreased net product sales of ONGENTYS® (opicapone) and decreased ONGENTYS inventory reserves in connection with the termination of our license agreement with BIAL, which became effective in December 2023, partially offset by increased net product sales of INGREZZA."
+            }
+          ],
+          "why": "the issuer names the product and states no figure for it: the revenue disaggregation carries only INGREZZA, CRENESSITY and Other, and the 10-K says the BIAL licence terminated in December 2023. A name in a document is not a figure in a document."
+        }
+      ]
+    },
+    {
+      "drug_name": "Translarna",
+      "generic_name": "ataluren",
+      "manufacturer": "PTC Therapeutics Inc",
+      "ticker": "PTCT",
+      "options": {
+        "earnings_since": "2024-10-01",
+        "earnings_until": "2026-08-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "Product - Region rows with a labelled Total row",
+        "no United States sales",
+        "quarter only in a later filing's comparative column",
+        "fourth quarter from annual less nine months",
+        "no FDA application"
+      ],
+      "source": "The product-by-region table appears first in the 2025 10-Qs; the 2024 10-Q and 10-K disaggregate nothing below 'Net product revenue', so every 2024 quarter is reachable only through a 2025 filing's comparative column.",
+      "profile": {
+        "application_number": null,
+        "application_source_url": "https://api.fda.gov/drug/drugsfda.json?search=products.brand_name:%22TRANSLARNA%22&limit=10",
+        "products_route": null,
+        "openfda_route": null,
+        "route_fields_agree": null,
+        "route_of_administration": null,
+        "first_approval_year": null,
+        "first_approval_source_quote": null,
+        "indication_area": null,
+        "indication_source_url": null,
+        "indication_source_quote": null,
+        "why": {
+          "route_of_administration": "drugsFDA returns HTTP 404 for both openfda.brand_name:\"TRANSLARNA\" and products.brand_name:\"TRANSLARNA\": the product has no FDA application, so no route may be published for it",
+          "first_approval_year": "there is no FDA approval to date; the product is authorised outside the United States and drugsFDA holds no application for it",
+          "indication_area": "no FDA label exists to read an indication from"
+        }
+      },
+      "expect": [
+        {
+          "period": "2024Q3",
+          "value_normalized_usd_millions": 72.283,
+          "accession": "0001070081-25-000028",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008125000028/tmb-20250930x10q.htm",
+          "source_quote": "Translarna | $ | — | $ | 50,665 | $ | 50,665 | $ | — | $ | 72,283 | $ | 72,283 ; Emflaza | 35,160 | — | 35,160 | 51,941 | — | 51,941 ; Sephience | 14,365 | 5,198 | 19,563 | — | — | — ; Upstaza/Kebilidi | 6,898 | 8,837 | 15,735 | — | — | —",
+          "sources": [
+            {
+              "accession": "0001070081-25-000028",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008125000028/tmb-20250930x10q.htm",
+              "source_quote": "Translarna | $ | — | $ | 50,665 | $ | 50,665 | $ | — | $ | 72,283 | $ | 72,283 ; Emflaza | 35,160 | — | 35,160 | 51,941 | — | 51,941 ; Sephience | 14,365 | 5,198 | 19,563 | — | — | — ; Upstaza/Kebilidi | 6,898 | 8,837 | 15,735 | — | — | —"
+            }
+          ]
+        },
+        {
+          "period": "2024Q4",
+          "value_normalized_usd_millions": 74.854,
+          "accession": "0001104659-26-017575",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000110465926017575/tmb-20251231x10k.htm",
+          "source_quote": "Translarna | $ | — | 235,299 | 235,299 | $ | — | 321,071 | 321,071 ; Emflaza | 146,361 | — | 146,361 | 207,215 | — | 207,215 ; Sephience | 95,045 | 16,108 | 111,153 | — | — | — ; Upstaza/Kebilidi | 10,779 | 45,847 | 56,626 | — | 16,913 | 16,913",
+          "sources": [
+            {
+              "accession": "0001104659-26-017575",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000110465926017575/tmb-20251231x10k.htm",
+              "source_quote": "Translarna | $ | — | 235,299 | 235,299 | $ | — | 321,071 | 321,071 ; Emflaza | 146,361 | — | 146,361 | 207,215 | — | 207,215 ; Sephience | 95,045 | 16,108 | 111,153 | — | — | — ; Upstaza/Kebilidi | 10,779 | 45,847 | 56,626 | — | 16,913 | 16,913"
+            },
+            {
+              "accession": "0001070081-25-000028",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008125000028/tmb-20250930x10q.htm",
+              "source_quote": "Translarna | $ | — | $ | 196,289 | $ | 196,289 | $ | — | $ | 246,217 | $ | 246,217 ; Emflaza | 119,303 | — | 119,303 | 156,718 | — | 156,718 ; Sephience | 14,365 | 5,198 | 19,563 | — | — | — ; Upstaza/Kebilidi | 6,898 | 29,385 | 36,283 | — | 9,648 | 9,648"
+            }
+          ],
+          "derivation": "321,071 less 246,217 = 74,854; the 10-K's year column less the nine months the third-quarter 10-Q prints on the same restated basis"
+        },
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": 86.154,
+          "accession": "0001070081-26-000012",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008126000012/tmb-20260331x10q.htm",
+          "source_quote": "Sephience | $ | 112,040 | 12,511 | 124,551 | $ | — | — | — ; Translarna | — | 58,976 | 58,976 | — | 86,154 | 86,154 ; Emflaza | 21,478 | — | 21,478 | 47,789 | — | 47,789 ; Upstaza/Kebilidi | 2,998 | 6,596 | 9,594 | — | 8,659 | 8,659",
+          "sources": [
+            {
+              "accession": "0001070081-26-000012",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008126000012/tmb-20260331x10q.htm",
+              "source_quote": "Sephience | $ | 112,040 | 12,511 | 124,551 | $ | — | — | — ; Translarna | — | 58,976 | 58,976 | — | 86,154 | 86,154 ; Emflaza | 21,478 | — | 21,478 | 47,789 | — | 47,789 ; Upstaza/Kebilidi | 2,998 | 6,596 | 9,594 | — | 8,659 | 8,659"
+            }
+          ]
+        },
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": 59.47,
+          "accession": "0001558370-25-010796",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000155837025010796/tmb-20250630x10q.htm",
+          "source_quote": "Translarna | $ | — | $ | 59,470 | $ | 59,470 | $ | — | $ | 70,350 | $ | 70,350 ; Emflaza | 36,353 | — | 36,353 | 47,296 | — | 47,296 ; Upstaza/Kebilidi | — | 11,889 | 11,889 | — | 1,589 | 1,589",
+          "sources": [
+            {
+              "accession": "0001558370-25-010796",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000155837025010796/tmb-20250630x10q.htm",
+              "source_quote": "Translarna | $ | — | $ | 59,470 | $ | 59,470 | $ | — | $ | 70,350 | $ | 70,350 ; Emflaza | 36,353 | — | 36,353 | 47,296 | — | 47,296 ; Upstaza/Kebilidi | — | 11,889 | 11,889 | — | 1,589 | 1,589"
+            }
+          ]
+        },
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": 50.665,
+          "accession": "0001070081-25-000028",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008125000028/tmb-20250930x10q.htm",
+          "source_quote": "Translarna | $ | — | $ | 50,665 | $ | 50,665 | $ | — | $ | 72,283 | $ | 72,283 ; Emflaza | 35,160 | — | 35,160 | 51,941 | — | 51,941 ; Sephience | 14,365 | 5,198 | 19,563 | — | — | — ; Upstaza/Kebilidi | 6,898 | 8,837 | 15,735 | — | — | —",
+          "sources": [
+            {
+              "accession": "0001070081-25-000028",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008125000028/tmb-20250930x10q.htm",
+              "source_quote": "Translarna | $ | — | $ | 50,665 | $ | 50,665 | $ | — | $ | 72,283 | $ | 72,283 ; Emflaza | 35,160 | — | 35,160 | 51,941 | — | 51,941 ; Sephience | 14,365 | 5,198 | 19,563 | — | — | — ; Upstaza/Kebilidi | 6,898 | 8,837 | 15,735 | — | — | —"
+            }
+          ]
+        },
+        {
+          "period": "2025Q4",
+          "value_normalized_usd_millions": 39.01,
+          "accession": "0001104659-26-017575",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000110465926017575/tmb-20251231x10k.htm",
+          "source_quote": "Translarna | $ | — | 235,299 | 235,299 | $ | — | 321,071 | 321,071 ; Emflaza | 146,361 | — | 146,361 | 207,215 | — | 207,215 ; Sephience | 95,045 | 16,108 | 111,153 | — | — | — ; Upstaza/Kebilidi | 10,779 | 45,847 | 56,626 | — | 16,913 | 16,913",
+          "sources": [
+            {
+              "accession": "0001104659-26-017575",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000110465926017575/tmb-20251231x10k.htm",
+              "source_quote": "Translarna | $ | — | 235,299 | 235,299 | $ | — | 321,071 | 321,071 ; Emflaza | 146,361 | — | 146,361 | 207,215 | — | 207,215 ; Sephience | 95,045 | 16,108 | 111,153 | — | — | — ; Upstaza/Kebilidi | 10,779 | 45,847 | 56,626 | — | 16,913 | 16,913"
+            },
+            {
+              "accession": "0001070081-25-000028",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008125000028/tmb-20250930x10q.htm",
+              "source_quote": "Translarna | $ | — | $ | 196,289 | $ | 196,289 | $ | — | $ | 246,217 | $ | 246,217 ; Emflaza | 119,303 | — | 119,303 | 156,718 | — | 156,718 ; Sephience | 14,365 | 5,198 | 19,563 | — | — | — ; Upstaza/Kebilidi | 6,898 | 29,385 | 36,283 | — | 9,648 | 9,648"
+            }
+          ],
+          "derivation": "235,299 less 196,289 = 39,010; the 10-K's year column less the nine months the third-quarter 10-Q prints on the same restated basis"
+        },
+        {
+          "period": "2026Q1",
+          "value_normalized_usd_millions": 58.976,
+          "accession": "0001070081-26-000012",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008126000012/tmb-20260331x10q.htm",
+          "source_quote": "Sephience | $ | 112,040 | 12,511 | 124,551 | $ | — | — | — ; Translarna | — | 58,976 | 58,976 | — | 86,154 | 86,154 ; Emflaza | 21,478 | — | 21,478 | 47,789 | — | 47,789 ; Upstaza/Kebilidi | 2,998 | 6,596 | 9,594 | — | 8,659 | 8,659",
+          "sources": [
+            {
+              "accession": "0001070081-26-000012",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008126000012/tmb-20260331x10q.htm",
+              "source_quote": "Sephience | $ | 112,040 | 12,511 | 124,551 | $ | — | — | — ; Translarna | — | 58,976 | 58,976 | — | 86,154 | 86,154 ; Emflaza | 21,478 | — | 21,478 | 47,789 | — | 47,789 ; Upstaza/Kebilidi | 2,998 | 6,596 | 9,594 | — | 8,659 | 8,659"
+            }
+          ]
+        },
+        {
+          "period": "2026Q2",
+          "value_normalized_usd_millions": 42.217,
+          "accession": "0001070081-26-000017",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008126000017/tmb-20260630x10q.htm",
+          "source_quote": "Sephience | $ | 127,550 | $ | 23,760 | $ | 151,310 | $ | — | $ | — | $ | — ; Translarna | — | 42,217 | 42,217 | — | 59,470 | 59,470 ; Emflaza | 24,634 | — | 24,634 | 36,353 | — | 36,353 ; Upstaza/Kebilidi | — | 11,163 | 11,163 | — | 11,889 | 11,889",
+          "sources": [
+            {
+              "accession": "0001070081-26-000017",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008126000017/tmb-20260630x10q.htm",
+              "source_quote": "Sephience | $ | 127,550 | $ | 23,760 | $ | 151,310 | $ | — | $ | — | $ | — ; Translarna | — | 42,217 | 42,217 | — | 59,470 | 59,470 ; Emflaza | 24,634 | — | 24,634 | 36,353 | — | 36,353 ; Upstaza/Kebilidi | — | 11,163 | 11,163 | — | 11,889 | 11,889"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "drug_name": "Emflaza",
+      "generic_name": "deflazacort",
+      "manufacturer": "PTC Therapeutics Inc",
+      "ticker": "PTCT",
+      "options": {
+        "earnings_since": "2024-10-01",
+        "earnings_until": "2026-08-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "Product - Region rows with a labelled Total row",
+        "no international sales",
+        "fourth quarter from annual less nine months",
+        "acquired from a private seller"
+      ],
+      "source": "United States column only; the International column is an em dash in every period. Fourth quarters are the 10-K's year less the third-quarter 10-Q's nine months on the same restated basis.",
+      "profile": {
+        "application_number": "NDA208684",
+        "application_source_url": "https://api.fda.gov/drug/drugsfda.json?search=products.brand_name:%22EMFLAZA%22&limit=10",
+        "products_route": "ORAL",
+        "openfda_route": "ORAL",
+        "route_fields_agree": true,
+        "route_of_administration": "oral",
+        "first_approval_year": 2017,
+        "first_approval_source_quote": "NDA208684 submissions: submission_type \"ORIG\", submission_status \"AP\", submission_status_date \"20170209\"",
+        "indication_area": "neuromuscular",
+        "indication_source_url": "https://api.fda.gov/drug/label.json?search=openfda.application_number:%22NDA208684%22&limit=1",
+        "indication_source_quote": "EMFLAZA is indicated for the treatment of Duchenne muscular dystrophy (DMD) in patients 2 years of age and older."
+      },
+      "expect": [
+        {
+          "period": "2024Q3",
+          "value_normalized_usd_millions": 51.941,
+          "accession": "0001070081-25-000028",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008125000028/tmb-20250930x10q.htm",
+          "source_quote": "Translarna | $ | — | $ | 50,665 | $ | 50,665 | $ | — | $ | 72,283 | $ | 72,283 ; Emflaza | 35,160 | — | 35,160 | 51,941 | — | 51,941 ; Sephience | 14,365 | 5,198 | 19,563 | — | — | — ; Upstaza/Kebilidi | 6,898 | 8,837 | 15,735 | — | — | —",
+          "sources": [
+            {
+              "accession": "0001070081-25-000028",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008125000028/tmb-20250930x10q.htm",
+              "source_quote": "Translarna | $ | — | $ | 50,665 | $ | 50,665 | $ | — | $ | 72,283 | $ | 72,283 ; Emflaza | 35,160 | — | 35,160 | 51,941 | — | 51,941 ; Sephience | 14,365 | 5,198 | 19,563 | — | — | — ; Upstaza/Kebilidi | 6,898 | 8,837 | 15,735 | — | — | —"
+            }
+          ]
+        },
+        {
+          "period": "2024Q4",
+          "value_normalized_usd_millions": 50.497,
+          "accession": "0001104659-26-017575",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000110465926017575/tmb-20251231x10k.htm",
+          "source_quote": "Translarna | $ | — | 235,299 | 235,299 | $ | — | 321,071 | 321,071 ; Emflaza | 146,361 | — | 146,361 | 207,215 | — | 207,215 ; Sephience | 95,045 | 16,108 | 111,153 | — | — | — ; Upstaza/Kebilidi | 10,779 | 45,847 | 56,626 | — | 16,913 | 16,913",
+          "sources": [
+            {
+              "accession": "0001104659-26-017575",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000110465926017575/tmb-20251231x10k.htm",
+              "source_quote": "Translarna | $ | — | 235,299 | 235,299 | $ | — | 321,071 | 321,071 ; Emflaza | 146,361 | — | 146,361 | 207,215 | — | 207,215 ; Sephience | 95,045 | 16,108 | 111,153 | — | — | — ; Upstaza/Kebilidi | 10,779 | 45,847 | 56,626 | — | 16,913 | 16,913"
+            },
+            {
+              "accession": "0001070081-25-000028",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008125000028/tmb-20250930x10q.htm",
+              "source_quote": "Translarna | $ | — | $ | 196,289 | $ | 196,289 | $ | — | $ | 246,217 | $ | 246,217 ; Emflaza | 119,303 | — | 119,303 | 156,718 | — | 156,718 ; Sephience | 14,365 | 5,198 | 19,563 | — | — | — ; Upstaza/Kebilidi | 6,898 | 29,385 | 36,283 | — | 9,648 | 9,648"
+            }
+          ],
+          "derivation": "207,215 less 156,718 = 50,497; the 10-K's year column less the nine months the third-quarter 10-Q prints on the same restated basis"
+        },
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": 47.789,
+          "accession": "0001070081-26-000012",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008126000012/tmb-20260331x10q.htm",
+          "source_quote": "Sephience | $ | 112,040 | 12,511 | 124,551 | $ | — | — | — ; Translarna | — | 58,976 | 58,976 | — | 86,154 | 86,154 ; Emflaza | 21,478 | — | 21,478 | 47,789 | — | 47,789 ; Upstaza/Kebilidi | 2,998 | 6,596 | 9,594 | — | 8,659 | 8,659",
+          "sources": [
+            {
+              "accession": "0001070081-26-000012",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008126000012/tmb-20260331x10q.htm",
+              "source_quote": "Sephience | $ | 112,040 | 12,511 | 124,551 | $ | — | — | — ; Translarna | — | 58,976 | 58,976 | — | 86,154 | 86,154 ; Emflaza | 21,478 | — | 21,478 | 47,789 | — | 47,789 ; Upstaza/Kebilidi | 2,998 | 6,596 | 9,594 | — | 8,659 | 8,659"
+            }
+          ]
+        },
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": 36.353,
+          "accession": "0001558370-25-010796",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000155837025010796/tmb-20250630x10q.htm",
+          "source_quote": "Translarna | $ | — | $ | 59,470 | $ | 59,470 | $ | — | $ | 70,350 | $ | 70,350 ; Emflaza | 36,353 | — | 36,353 | 47,296 | — | 47,296 ; Upstaza/Kebilidi | — | 11,889 | 11,889 | — | 1,589 | 1,589",
+          "sources": [
+            {
+              "accession": "0001558370-25-010796",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000155837025010796/tmb-20250630x10q.htm",
+              "source_quote": "Translarna | $ | — | $ | 59,470 | $ | 59,470 | $ | — | $ | 70,350 | $ | 70,350 ; Emflaza | 36,353 | — | 36,353 | 47,296 | — | 47,296 ; Upstaza/Kebilidi | — | 11,889 | 11,889 | — | 1,589 | 1,589"
+            }
+          ]
+        },
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": 35.16,
+          "accession": "0001070081-25-000028",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008125000028/tmb-20250930x10q.htm",
+          "source_quote": "Translarna | $ | — | $ | 50,665 | $ | 50,665 | $ | — | $ | 72,283 | $ | 72,283 ; Emflaza | 35,160 | — | 35,160 | 51,941 | — | 51,941 ; Sephience | 14,365 | 5,198 | 19,563 | — | — | — ; Upstaza/Kebilidi | 6,898 | 8,837 | 15,735 | — | — | —",
+          "sources": [
+            {
+              "accession": "0001070081-25-000028",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008125000028/tmb-20250930x10q.htm",
+              "source_quote": "Translarna | $ | — | $ | 50,665 | $ | 50,665 | $ | — | $ | 72,283 | $ | 72,283 ; Emflaza | 35,160 | — | 35,160 | 51,941 | — | 51,941 ; Sephience | 14,365 | 5,198 | 19,563 | — | — | — ; Upstaza/Kebilidi | 6,898 | 8,837 | 15,735 | — | — | —"
+            }
+          ]
+        },
+        {
+          "period": "2025Q4",
+          "value_normalized_usd_millions": 27.058,
+          "accession": "0001104659-26-017575",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000110465926017575/tmb-20251231x10k.htm",
+          "source_quote": "Translarna | $ | — | 235,299 | 235,299 | $ | — | 321,071 | 321,071 ; Emflaza | 146,361 | — | 146,361 | 207,215 | — | 207,215 ; Sephience | 95,045 | 16,108 | 111,153 | — | — | — ; Upstaza/Kebilidi | 10,779 | 45,847 | 56,626 | — | 16,913 | 16,913",
+          "sources": [
+            {
+              "accession": "0001104659-26-017575",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000110465926017575/tmb-20251231x10k.htm",
+              "source_quote": "Translarna | $ | — | 235,299 | 235,299 | $ | — | 321,071 | 321,071 ; Emflaza | 146,361 | — | 146,361 | 207,215 | — | 207,215 ; Sephience | 95,045 | 16,108 | 111,153 | — | — | — ; Upstaza/Kebilidi | 10,779 | 45,847 | 56,626 | — | 16,913 | 16,913"
+            },
+            {
+              "accession": "0001070081-25-000028",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008125000028/tmb-20250930x10q.htm",
+              "source_quote": "Translarna | $ | — | $ | 196,289 | $ | 196,289 | $ | — | $ | 246,217 | $ | 246,217 ; Emflaza | 119,303 | — | 119,303 | 156,718 | — | 156,718 ; Sephience | 14,365 | 5,198 | 19,563 | — | — | — ; Upstaza/Kebilidi | 6,898 | 29,385 | 36,283 | — | 9,648 | 9,648"
+            }
+          ],
+          "derivation": "146,361 less 119,303 = 27,058; the 10-K's year column less the nine months the third-quarter 10-Q prints on the same restated basis"
+        },
+        {
+          "period": "2026Q1",
+          "value_normalized_usd_millions": 21.478,
+          "accession": "0001070081-26-000012",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008126000012/tmb-20260331x10q.htm",
+          "source_quote": "Sephience | $ | 112,040 | 12,511 | 124,551 | $ | — | — | — ; Translarna | — | 58,976 | 58,976 | — | 86,154 | 86,154 ; Emflaza | 21,478 | — | 21,478 | 47,789 | — | 47,789 ; Upstaza/Kebilidi | 2,998 | 6,596 | 9,594 | — | 8,659 | 8,659",
+          "sources": [
+            {
+              "accession": "0001070081-26-000012",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008126000012/tmb-20260331x10q.htm",
+              "source_quote": "Sephience | $ | 112,040 | 12,511 | 124,551 | $ | — | — | — ; Translarna | — | 58,976 | 58,976 | — | 86,154 | 86,154 ; Emflaza | 21,478 | — | 21,478 | 47,789 | — | 47,789 ; Upstaza/Kebilidi | 2,998 | 6,596 | 9,594 | — | 8,659 | 8,659"
+            }
+          ]
+        },
+        {
+          "period": "2026Q2",
+          "value_normalized_usd_millions": 24.634,
+          "accession": "0001070081-26-000017",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008126000017/tmb-20260630x10q.htm",
+          "source_quote": "Sephience | $ | 127,550 | $ | 23,760 | $ | 151,310 | $ | — | $ | — | $ | — ; Translarna | — | 42,217 | 42,217 | — | 59,470 | 59,470 ; Emflaza | 24,634 | — | 24,634 | 36,353 | — | 36,353 ; Upstaza/Kebilidi | — | 11,163 | 11,163 | — | 11,889 | 11,889",
+          "sources": [
+            {
+              "accession": "0001070081-26-000017",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008126000017/tmb-20260630x10q.htm",
+              "source_quote": "Sephience | $ | 127,550 | $ | 23,760 | $ | 151,310 | $ | — | $ | — | $ | — ; Translarna | — | 42,217 | 42,217 | — | 59,470 | 59,470 ; Emflaza | 24,634 | — | 24,634 | 36,353 | — | 36,353 ; Upstaza/Kebilidi | — | 11,163 | 11,163 | — | 11,889 | 11,889"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "drug_name": "Upstaza",
+      "generic_name": "eladocagene exuparvovec",
+      "manufacturer": "PTC Therapeutics Inc",
+      "ticker": "PTCT",
+      "options": {
+        "earnings_since": "2024-10-01",
+        "earnings_until": "2026-08-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "row label naming two brands joined by '/'",
+        "must come back under the pair's name",
+        "a quarter the filer prints as nil",
+        "must come back empty",
+        "no drugsFDA record under either name"
+      ],
+      "source": "The issuer prints one row, 'Upstaza/Kebilidi', for the two names the same therapy carries inside and outside the United States, and discloses no split. The figure is the pair's and is expected back under the pair's name; the product's own quarterly revenue is stated by nobody.",
+      "profile": {
+        "application_number": null,
+        "application_source_url": "https://api.fda.gov/drug/drugsfda.json?search=products.brand_name:%22UPSTAZA%22&limit=10",
+        "products_route": null,
+        "openfda_route": null,
+        "route_fields_agree": null,
+        "route_of_administration": null,
+        "first_approval_year": null,
+        "first_approval_source_quote": null,
+        "indication_area": null,
+        "indication_source_url": null,
+        "indication_source_quote": null,
+        "why": {
+          "route_of_administration": "drugsFDA returns HTTP 404 for openfda.brand_name and products.brand_name on both \"UPSTAZA\" and \"KEBILIDI\": the United States name is a CBER gene therapy and drugsFDA holds neither",
+          "first_approval_year": "no drugsFDA application exists under either name, so no ORIG/AP date can be read",
+          "indication_area": "no drug label record exists under either name"
+        }
+      },
+      "expect": [
+        {
+          "period": "2024Q3",
+          "value_normalized_usd_millions": null,
+          "accession": "0001070081-25-000028",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008125000028/tmb-20250930x10q.htm",
+          "source_quote": "Translarna | $ | — | $ | 50,665 | $ | 50,665 | $ | — | $ | 72,283 | $ | 72,283 ; Emflaza | 35,160 | — | 35,160 | 51,941 | — | 51,941 ; Sephience | 14,365 | 5,198 | 19,563 | — | — | — ; Upstaza/Kebilidi | 6,898 | 8,837 | 15,735 | — | — | — ; Translarna | $ | — | $ | 196,289 | $ | 196,289 | $ | — | $ | 246,217 | $ | 246,217 ; Emflaza | 119,303 | — | 119,303 | 156,718 | — | 156,718 ; Sephience | 14,365 | 5,198 | 19,563 | — | — | — ; Upstaza/Kebilidi | 6,898 | 29,385 | 36,283 | — | 9,648 | 9,648",
+          "sources": [
+            {
+              "accession": "0001070081-25-000028",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008125000028/tmb-20250930x10q.htm",
+              "source_quote": "Translarna | $ | — | $ | 50,665 | $ | 50,665 | $ | — | $ | 72,283 | $ | 72,283 ; Emflaza | 35,160 | — | 35,160 | 51,941 | — | 51,941 ; Sephience | 14,365 | 5,198 | 19,563 | — | — | — ; Upstaza/Kebilidi | 6,898 | 8,837 | 15,735 | — | — | — ; Translarna | $ | — | $ | 196,289 | $ | 196,289 | $ | — | $ | 246,217 | $ | 246,217 ; Emflaza | 119,303 | — | 119,303 | 156,718 | — | 156,718 ; Sephience | 14,365 | 5,198 | 19,563 | — | — | — ; Upstaza/Kebilidi | 6,898 | 29,385 | 36,283 | — | 9,648 | 9,648"
+            }
+          ],
+          "why": "the pair's row prints an em dash in both the United States and the International column for the three months ended September 30, 2024 while the nine-month column of the same table carries 9,648: the issuer states the quarter had no sales"
+        },
+        {
+          "period": "2024Q4",
+          "value_normalized_usd_millions": 7.265,
+          "accession": "0001104659-26-017575",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000110465926017575/tmb-20251231x10k.htm",
+          "source_quote": "Translarna | $ | — | 235,299 | 235,299 | $ | — | 321,071 | 321,071 ; Emflaza | 146,361 | — | 146,361 | 207,215 | — | 207,215 ; Sephience | 95,045 | 16,108 | 111,153 | — | — | — ; Upstaza/Kebilidi | 10,779 | 45,847 | 56,626 | — | 16,913 | 16,913",
+          "sources": [
+            {
+              "accession": "0001104659-26-017575",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000110465926017575/tmb-20251231x10k.htm",
+              "source_quote": "Translarna | $ | — | 235,299 | 235,299 | $ | — | 321,071 | 321,071 ; Emflaza | 146,361 | — | 146,361 | 207,215 | — | 207,215 ; Sephience | 95,045 | 16,108 | 111,153 | — | — | — ; Upstaza/Kebilidi | 10,779 | 45,847 | 56,626 | — | 16,913 | 16,913"
+            },
+            {
+              "accession": "0001070081-25-000028",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008125000028/tmb-20250930x10q.htm",
+              "source_quote": "Translarna | $ | — | $ | 196,289 | $ | 196,289 | $ | — | $ | 246,217 | $ | 246,217 ; Emflaza | 119,303 | — | 119,303 | 156,718 | — | 156,718 ; Sephience | 14,365 | 5,198 | 19,563 | — | — | — ; Upstaza/Kebilidi | 6,898 | 29,385 | 36,283 | — | 9,648 | 9,648"
+            }
+          ],
+          "derivation": "16,913 less 9,648 = 7,265; the 10-K's year column less the nine months the third-quarter 10-Q prints on the same restated basis",
+          "reported_as": "Upstaza/Kebilidi"
+        },
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": 8.659,
+          "accession": "0001070081-26-000012",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008126000012/tmb-20260331x10q.htm",
+          "source_quote": "Sephience | $ | 112,040 | 12,511 | 124,551 | $ | — | — | — ; Translarna | — | 58,976 | 58,976 | — | 86,154 | 86,154 ; Emflaza | 21,478 | — | 21,478 | 47,789 | — | 47,789 ; Upstaza/Kebilidi | 2,998 | 6,596 | 9,594 | — | 8,659 | 8,659",
+          "sources": [
+            {
+              "accession": "0001070081-26-000012",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008126000012/tmb-20260331x10q.htm",
+              "source_quote": "Sephience | $ | 112,040 | 12,511 | 124,551 | $ | — | — | — ; Translarna | — | 58,976 | 58,976 | — | 86,154 | 86,154 ; Emflaza | 21,478 | — | 21,478 | 47,789 | — | 47,789 ; Upstaza/Kebilidi | 2,998 | 6,596 | 9,594 | — | 8,659 | 8,659"
+            }
+          ],
+          "reported_as": "Upstaza/Kebilidi"
+        },
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": 11.889,
+          "accession": "0001558370-25-010796",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000155837025010796/tmb-20250630x10q.htm",
+          "source_quote": "Translarna | $ | — | $ | 59,470 | $ | 59,470 | $ | — | $ | 70,350 | $ | 70,350 ; Emflaza | 36,353 | — | 36,353 | 47,296 | — | 47,296 ; Upstaza/Kebilidi | — | 11,889 | 11,889 | — | 1,589 | 1,589",
+          "sources": [
+            {
+              "accession": "0001558370-25-010796",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000155837025010796/tmb-20250630x10q.htm",
+              "source_quote": "Translarna | $ | — | $ | 59,470 | $ | 59,470 | $ | — | $ | 70,350 | $ | 70,350 ; Emflaza | 36,353 | — | 36,353 | 47,296 | — | 47,296 ; Upstaza/Kebilidi | — | 11,889 | 11,889 | — | 1,589 | 1,589"
+            }
+          ],
+          "reported_as": "Upstaza/Kebilidi"
+        },
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": 15.735,
+          "accession": "0001070081-25-000028",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008125000028/tmb-20250930x10q.htm",
+          "source_quote": "Translarna | $ | — | $ | 50,665 | $ | 50,665 | $ | — | $ | 72,283 | $ | 72,283 ; Emflaza | 35,160 | — | 35,160 | 51,941 | — | 51,941 ; Sephience | 14,365 | 5,198 | 19,563 | — | — | — ; Upstaza/Kebilidi | 6,898 | 8,837 | 15,735 | — | — | —",
+          "sources": [
+            {
+              "accession": "0001070081-25-000028",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008125000028/tmb-20250930x10q.htm",
+              "source_quote": "Translarna | $ | — | $ | 50,665 | $ | 50,665 | $ | — | $ | 72,283 | $ | 72,283 ; Emflaza | 35,160 | — | 35,160 | 51,941 | — | 51,941 ; Sephience | 14,365 | 5,198 | 19,563 | — | — | — ; Upstaza/Kebilidi | 6,898 | 8,837 | 15,735 | — | — | —"
+            }
+          ],
+          "reported_as": "Upstaza/Kebilidi"
+        },
+        {
+          "period": "2025Q4",
+          "value_normalized_usd_millions": 20.343,
+          "accession": "0001104659-26-017575",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000110465926017575/tmb-20251231x10k.htm",
+          "source_quote": "Translarna | $ | — | 235,299 | 235,299 | $ | — | 321,071 | 321,071 ; Emflaza | 146,361 | — | 146,361 | 207,215 | — | 207,215 ; Sephience | 95,045 | 16,108 | 111,153 | — | — | — ; Upstaza/Kebilidi | 10,779 | 45,847 | 56,626 | — | 16,913 | 16,913",
+          "sources": [
+            {
+              "accession": "0001104659-26-017575",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000110465926017575/tmb-20251231x10k.htm",
+              "source_quote": "Translarna | $ | — | 235,299 | 235,299 | $ | — | 321,071 | 321,071 ; Emflaza | 146,361 | — | 146,361 | 207,215 | — | 207,215 ; Sephience | 95,045 | 16,108 | 111,153 | — | — | — ; Upstaza/Kebilidi | 10,779 | 45,847 | 56,626 | — | 16,913 | 16,913"
+            },
+            {
+              "accession": "0001070081-25-000028",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008125000028/tmb-20250930x10q.htm",
+              "source_quote": "Translarna | $ | — | $ | 196,289 | $ | 196,289 | $ | — | $ | 246,217 | $ | 246,217 ; Emflaza | 119,303 | — | 119,303 | 156,718 | — | 156,718 ; Sephience | 14,365 | 5,198 | 19,563 | — | — | — ; Upstaza/Kebilidi | 6,898 | 29,385 | 36,283 | — | 9,648 | 9,648"
+            }
+          ],
+          "derivation": "56,626 less 36,283 = 20,343; the 10-K's year column less the nine months the third-quarter 10-Q prints on the same restated basis",
+          "reported_as": "Upstaza/Kebilidi"
+        },
+        {
+          "period": "2026Q1",
+          "value_normalized_usd_millions": 9.594,
+          "accession": "0001070081-26-000012",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008126000012/tmb-20260331x10q.htm",
+          "source_quote": "Sephience | $ | 112,040 | 12,511 | 124,551 | $ | — | — | — ; Translarna | — | 58,976 | 58,976 | — | 86,154 | 86,154 ; Emflaza | 21,478 | — | 21,478 | 47,789 | — | 47,789 ; Upstaza/Kebilidi | 2,998 | 6,596 | 9,594 | — | 8,659 | 8,659",
+          "sources": [
+            {
+              "accession": "0001070081-26-000012",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008126000012/tmb-20260331x10q.htm",
+              "source_quote": "Sephience | $ | 112,040 | 12,511 | 124,551 | $ | — | — | — ; Translarna | — | 58,976 | 58,976 | — | 86,154 | 86,154 ; Emflaza | 21,478 | — | 21,478 | 47,789 | — | 47,789 ; Upstaza/Kebilidi | 2,998 | 6,596 | 9,594 | — | 8,659 | 8,659"
+            }
+          ],
+          "reported_as": "Upstaza/Kebilidi"
+        },
+        {
+          "period": "2026Q2",
+          "value_normalized_usd_millions": 11.163,
+          "accession": "0001070081-26-000017",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008126000017/tmb-20260630x10q.htm",
+          "source_quote": "Sephience | $ | 127,550 | $ | 23,760 | $ | 151,310 | $ | — | $ | — | $ | — ; Translarna | — | 42,217 | 42,217 | — | 59,470 | 59,470 ; Emflaza | 24,634 | — | 24,634 | 36,353 | — | 36,353 ; Upstaza/Kebilidi | — | 11,163 | 11,163 | — | 11,889 | 11,889",
+          "sources": [
+            {
+              "accession": "0001070081-26-000017",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008126000017/tmb-20260630x10q.htm",
+              "source_quote": "Sephience | $ | 127,550 | $ | 23,760 | $ | 151,310 | $ | — | $ | — | $ | — ; Translarna | — | 42,217 | 42,217 | — | 59,470 | 59,470 ; Emflaza | 24,634 | — | 24,634 | 36,353 | — | 36,353 ; Upstaza/Kebilidi | — | 11,163 | 11,163 | — | 11,889 | 11,889"
+            }
+          ],
+          "reported_as": "Upstaza/Kebilidi"
+        }
+      ]
+    },
+    {
+      "drug_name": "Sephience",
+      "generic_name": "sepiapterin",
+      "manufacturer": "PTC Therapeutics Inc",
+      "ticker": "PTCT",
+      "options": {
+        "earnings_since": "2024-10-01",
+        "earnings_until": "2026-08-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "pre-launch quarters must come back empty",
+        "em dash is the filer's nil",
+        "Product - Region rows with a labelled Total row",
+        "fourth quarter from annual less nine months"
+      ],
+      "source": "The row prints an em dash in both scope columns until the quarter of approval, then carries United States and International figures.",
+      "profile": {
+        "application_number": "NDA219666",
+        "application_source_url": "https://api.fda.gov/drug/drugsfda.json?search=products.brand_name:%22SEPHIENCE%22&limit=10",
+        "products_route": "ORAL",
+        "openfda_route": "ORAL",
+        "route_fields_agree": true,
+        "route_of_administration": "oral",
+        "first_approval_year": 2025,
+        "first_approval_source_quote": "NDA219666 submissions: submission_type \"ORIG\", submission_status \"AP\", submission_status_date \"20250728\"",
+        "indication_area": "metabolic",
+        "indication_source_url": "https://api.fda.gov/drug/label.json?search=openfda.application_number:%22NDA219666%22&limit=1",
+        "indication_source_quote": "SEPHIENCE is indicated for the treatment of hyperphenylalaninemia (HPA) in adult and pediatric patients 1 month of age and older with sepiapterin-responsive phenylketonuria (PKU)."
+      },
+      "expect": [
+        {
+          "period": "2024Q3",
+          "value_normalized_usd_millions": null,
+          "accession": "0001070081-25-000028",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008125000028/tmb-20250930x10q.htm",
+          "source_quote": "Translarna | $ | — | $ | 50,665 | $ | 50,665 | $ | — | $ | 72,283 | $ | 72,283 ; Emflaza | 35,160 | — | 35,160 | 51,941 | — | 51,941 ; Sephience | 14,365 | 5,198 | 19,563 | — | — | — ; Upstaza/Kebilidi | 6,898 | 8,837 | 15,735 | — | — | —",
+          "sources": [
+            {
+              "accession": "0001070081-25-000028",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008125000028/tmb-20250930x10q.htm",
+              "source_quote": "Translarna | $ | — | $ | 50,665 | $ | 50,665 | $ | — | $ | 72,283 | $ | 72,283 ; Emflaza | 35,160 | — | 35,160 | 51,941 | — | 51,941 ; Sephience | 14,365 | 5,198 | 19,563 | — | — | — ; Upstaza/Kebilidi | 6,898 | 8,837 | 15,735 | — | — | —"
+            }
+          ],
+          "why": "the row prints an em dash in both scope columns: the product was not approved in the United States until 2025-07-28 and the issuer reports no sales for the quarter"
+        },
+        {
+          "period": "2024Q4",
+          "value_normalized_usd_millions": null,
+          "accession": "0001104659-26-017575",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000110465926017575/tmb-20251231x10k.htm",
+          "source_quote": "Translarna | $ | — | 235,299 | 235,299 | $ | — | 321,071 | 321,071 ; Emflaza | 146,361 | — | 146,361 | 207,215 | — | 207,215 ; Sephience | 95,045 | 16,108 | 111,153 | — | — | — ; Upstaza/Kebilidi | 10,779 | 45,847 | 56,626 | — | 16,913 | 16,913",
+          "sources": [
+            {
+              "accession": "0001104659-26-017575",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000110465926017575/tmb-20251231x10k.htm",
+              "source_quote": "Translarna | $ | — | 235,299 | 235,299 | $ | — | 321,071 | 321,071 ; Emflaza | 146,361 | — | 146,361 | 207,215 | — | 207,215 ; Sephience | 95,045 | 16,108 | 111,153 | — | — | — ; Upstaza/Kebilidi | 10,779 | 45,847 | 56,626 | — | 16,913 | 16,913"
+            }
+          ],
+          "why": "the row prints an em dash in both scope columns: the product was not approved in the United States until 2025-07-28 and the issuer reports no sales for the quarter"
+        },
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": null,
+          "accession": "0001070081-26-000012",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008126000012/tmb-20260331x10q.htm",
+          "source_quote": "Sephience | $ | 112,040 | 12,511 | 124,551 | $ | — | — | — ; Translarna | — | 58,976 | 58,976 | — | 86,154 | 86,154 ; Emflaza | 21,478 | — | 21,478 | 47,789 | — | 47,789 ; Upstaza/Kebilidi | 2,998 | 6,596 | 9,594 | — | 8,659 | 8,659",
+          "sources": [
+            {
+              "accession": "0001070081-26-000012",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008126000012/tmb-20260331x10q.htm",
+              "source_quote": "Sephience | $ | 112,040 | 12,511 | 124,551 | $ | — | — | — ; Translarna | — | 58,976 | 58,976 | — | 86,154 | 86,154 ; Emflaza | 21,478 | — | 21,478 | 47,789 | — | 47,789 ; Upstaza/Kebilidi | 2,998 | 6,596 | 9,594 | — | 8,659 | 8,659"
+            }
+          ],
+          "why": "the row prints an em dash in both scope columns: the product was not approved in the United States until 2025-07-28 and the issuer reports no sales for the quarter"
+        },
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": null,
+          "accession": "0001070081-26-000017",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008126000017/tmb-20260630x10q.htm",
+          "source_quote": "Sephience | $ | 127,550 | $ | 23,760 | $ | 151,310 | $ | — | $ | — | $ | — ; Translarna | — | 42,217 | 42,217 | — | 59,470 | 59,470 ; Emflaza | 24,634 | — | 24,634 | 36,353 | — | 36,353 ; Upstaza/Kebilidi | — | 11,163 | 11,163 | — | 11,889 | 11,889",
+          "sources": [
+            {
+              "accession": "0001070081-26-000017",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008126000017/tmb-20260630x10q.htm",
+              "source_quote": "Sephience | $ | 127,550 | $ | 23,760 | $ | 151,310 | $ | — | $ | — | $ | — ; Translarna | — | 42,217 | 42,217 | — | 59,470 | 59,470 ; Emflaza | 24,634 | — | 24,634 | 36,353 | — | 36,353 ; Upstaza/Kebilidi | — | 11,163 | 11,163 | — | 11,889 | 11,889"
+            }
+          ],
+          "why": "the row prints an em dash in both scope columns: the product was not approved in the United States until 2025-07-28 and the issuer reports no sales for the quarter"
+        },
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": 19.563,
+          "accession": "0001070081-25-000028",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008125000028/tmb-20250930x10q.htm",
+          "source_quote": "Translarna | $ | — | $ | 50,665 | $ | 50,665 | $ | — | $ | 72,283 | $ | 72,283 ; Emflaza | 35,160 | — | 35,160 | 51,941 | — | 51,941 ; Sephience | 14,365 | 5,198 | 19,563 | — | — | — ; Upstaza/Kebilidi | 6,898 | 8,837 | 15,735 | — | — | —",
+          "sources": [
+            {
+              "accession": "0001070081-25-000028",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008125000028/tmb-20250930x10q.htm",
+              "source_quote": "Translarna | $ | — | $ | 50,665 | $ | 50,665 | $ | — | $ | 72,283 | $ | 72,283 ; Emflaza | 35,160 | — | 35,160 | 51,941 | — | 51,941 ; Sephience | 14,365 | 5,198 | 19,563 | — | — | — ; Upstaza/Kebilidi | 6,898 | 8,837 | 15,735 | — | — | —"
+            }
+          ]
+        },
+        {
+          "period": "2025Q4",
+          "value_normalized_usd_millions": 91.59,
+          "accession": "0001104659-26-017575",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000110465926017575/tmb-20251231x10k.htm",
+          "source_quote": "Translarna | $ | — | 235,299 | 235,299 | $ | — | 321,071 | 321,071 ; Emflaza | 146,361 | — | 146,361 | 207,215 | — | 207,215 ; Sephience | 95,045 | 16,108 | 111,153 | — | — | — ; Upstaza/Kebilidi | 10,779 | 45,847 | 56,626 | — | 16,913 | 16,913",
+          "sources": [
+            {
+              "accession": "0001104659-26-017575",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000110465926017575/tmb-20251231x10k.htm",
+              "source_quote": "Translarna | $ | — | 235,299 | 235,299 | $ | — | 321,071 | 321,071 ; Emflaza | 146,361 | — | 146,361 | 207,215 | — | 207,215 ; Sephience | 95,045 | 16,108 | 111,153 | — | — | — ; Upstaza/Kebilidi | 10,779 | 45,847 | 56,626 | — | 16,913 | 16,913"
+            },
+            {
+              "accession": "0001070081-25-000028",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008125000028/tmb-20250930x10q.htm",
+              "source_quote": "Translarna | $ | — | $ | 196,289 | $ | 196,289 | $ | — | $ | 246,217 | $ | 246,217 ; Emflaza | 119,303 | — | 119,303 | 156,718 | — | 156,718 ; Sephience | 14,365 | 5,198 | 19,563 | — | — | — ; Upstaza/Kebilidi | 6,898 | 29,385 | 36,283 | — | 9,648 | 9,648"
+            }
+          ],
+          "derivation": "111,153 less 19,563 = 91,590; the 10-K's year column less the nine months the third-quarter 10-Q prints on the same restated basis"
+        },
+        {
+          "period": "2026Q1",
+          "value_normalized_usd_millions": 124.551,
+          "accession": "0001070081-26-000012",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008126000012/tmb-20260331x10q.htm",
+          "source_quote": "Sephience | $ | 112,040 | 12,511 | 124,551 | $ | — | — | — ; Translarna | — | 58,976 | 58,976 | — | 86,154 | 86,154 ; Emflaza | 21,478 | — | 21,478 | 47,789 | — | 47,789 ; Upstaza/Kebilidi | 2,998 | 6,596 | 9,594 | — | 8,659 | 8,659",
+          "sources": [
+            {
+              "accession": "0001070081-26-000012",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008126000012/tmb-20260331x10q.htm",
+              "source_quote": "Sephience | $ | 112,040 | 12,511 | 124,551 | $ | — | — | — ; Translarna | — | 58,976 | 58,976 | — | 86,154 | 86,154 ; Emflaza | 21,478 | — | 21,478 | 47,789 | — | 47,789 ; Upstaza/Kebilidi | 2,998 | 6,596 | 9,594 | — | 8,659 | 8,659"
+            }
+          ]
+        },
+        {
+          "period": "2026Q2",
+          "value_normalized_usd_millions": 151.31,
+          "accession": "0001070081-26-000017",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008126000017/tmb-20260630x10q.htm",
+          "source_quote": "Sephience | $ | 127,550 | $ | 23,760 | $ | 151,310 | $ | — | $ | — | $ | — ; Translarna | — | 42,217 | 42,217 | — | 59,470 | 59,470 ; Emflaza | 24,634 | — | 24,634 | 36,353 | — | 36,353 ; Upstaza/Kebilidi | — | 11,163 | 11,163 | — | 11,889 | 11,889",
+          "sources": [
+            {
+              "accession": "0001070081-26-000017",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1070081/000107008126000017/tmb-20260630x10q.htm",
+              "source_quote": "Sephience | $ | 127,550 | $ | 23,760 | $ | 151,310 | $ | — | $ | — | $ | — ; Translarna | — | 42,217 | 42,217 | — | 59,470 | 59,470 ; Emflaza | 24,634 | — | 24,634 | 36,353 | — | 36,353 ; Upstaza/Kebilidi | — | 11,163 | 11,163 | — | 11,889 | 11,889"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "drug_name": "NARCAN Nasal Spray",
+      "generic_name": "naloxone hydrochloride",
+      "manufacturer": "Emergent BioSolutions Inc",
+      "ticker": "EBS",
+      "options": {
+        "earnings_since": "2024-04-01",
+        "earnings_until": "2026-03-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "the issuer stopped reporting the product separately",
+        "line renamed to a category covering two brands",
+        "must come back empty",
+        "fourth quarter from annual less nine months",
+        "several applications under one brand name"
+      ],
+      "source": "The commercial line is headed NARCAN through the first quarter of 2025 and Naloxone from the second, which the 10-K says carries NARCAN and KLOXXADO together. The figures before the rename are the product's; the ones after are not.",
+      "profile": {
+        "application_number": "NDA208411",
+        "application_source_url": "https://api.fda.gov/drug/drugsfda.json?search=products.brand_name:%22NARCAN%22&limit=10",
+        "products_route": "NASAL",
+        "openfda_route": "NASAL",
+        "route_fields_agree": true,
+        "route_of_administration": "nasal",
+        "first_approval_year": 2015,
+        "first_approval_source_quote": "NDA208411 submissions: submission_type \"ORIG\", submission_status \"AP\", submission_status_date \"20151118\"",
+        "indication_area": "emergency medicine",
+        "indication_source_url": "https://api.fda.gov/drug/label.json?search=openfda.application_number:%22NDA208411%22&limit=1",
+        "indication_source_quote": "USES to “revive” someone during an overdose from many prescription pain medications or street drugs such as heroin this medicine can save a life",
+        "note": "products.brand_name:\"NARCAN\" returns five applications - NDA016636 (ORIG/AP 19710413, route INJECTION) and three 1988 ANDAs beside the nasal spray's NDA208411. Taking the first record the registry returns gives INJECTION and 1971 for a nasal spray approved in 2015"
+      },
+      "expect": [
+        {
+          "period": "2024Q1",
+          "value_normalized_usd_millions": 118.5,
+          "accession": "0001367644-24-000063",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1367644/000136764424000063/ebs-20240331.htm",
+          "source_quote": "NARCAN® | $ | 118.5 | $ | 100.4 | $ | 18.1 | 18 | %",
+          "sources": [
+            {
+              "accession": "0001367644-24-000063",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1367644/000136764424000063/ebs-20240331.htm",
+              "source_quote": "NARCAN® | $ | 118.5 | $ | 100.4 | $ | 18.1 | 18 | %"
+            }
+          ]
+        },
+        {
+          "period": "2024Q2",
+          "value_normalized_usd_millions": 120.0,
+          "accession": "0001367644-24-000147",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1367644/000136764424000147/ebs-20240630.htm",
+          "source_quote": "NARCAN® | $ | 120.0 | $ | 133.9 | $ | (13.9) | (10) | % | $ | 238.5 | $ | 234.3 | $ | 4.2 | 2 | %",
+          "sources": [
+            {
+              "accession": "0001367644-24-000147",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1367644/000136764424000147/ebs-20240630.htm",
+              "source_quote": "NARCAN® | $ | 120.0 | $ | 133.9 | $ | (13.9) | (10) | % | $ | 238.5 | $ | 234.3 | $ | 4.2 | 2 | %"
+            }
+          ]
+        },
+        {
+          "period": "2024Q3",
+          "value_normalized_usd_millions": 95.3,
+          "accession": "0001367644-24-000178",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1367644/000136764424000178/ebs-20240930.htm",
+          "source_quote": "NARCAN® | $ | 95.3 | $ | 142.1 | $ | (46.8) | (33) | % | $ | 333.8 | $ | 376.4 | $ | (42.6) | (11) | %",
+          "sources": [
+            {
+              "accession": "0001367644-24-000178",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1367644/000136764424000178/ebs-20240930.htm",
+              "source_quote": "NARCAN® | $ | 95.3 | $ | 142.1 | $ | (46.8) | (33) | % | $ | 333.8 | $ | 376.4 | $ | (42.6) | (11) | %"
+            }
+          ]
+        },
+        {
+          "period": "2024Q4",
+          "value_normalized_usd_millions": 65.1,
+          "accession": "0001367644-25-000021",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1367644/000136764425000021/ebs-20241231.htm",
+          "source_quote": "NARCAN® | $ | 398.9 | $ | 487.5 | $ | (88.6) | (18) | %",
+          "sources": [
+            {
+              "accession": "0001367644-25-000021",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1367644/000136764425000021/ebs-20241231.htm",
+              "source_quote": "NARCAN® | $ | 398.9 | $ | 487.5 | $ | (88.6) | (18) | %"
+            },
+            {
+              "accession": "0001367644-24-000178",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1367644/000136764424000178/ebs-20240930.htm",
+              "source_quote": "NARCAN® | $ | 95.3 | $ | 142.1 | $ | (46.8) | (33) | % | $ | 333.8 | $ | 376.4 | $ | (42.6) | (11) | %"
+            }
+          ],
+          "derivation": "398.9 less 333.8 = 65.1"
+        },
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": 45.3,
+          "accession": "0001367644-25-000124",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1367644/000136764425000124/ebs-20250331.htm",
+          "source_quote": "NARCAN® | $ | 45.3 | $ | 118.5 | $ | (73.2) | (62) | %",
+          "sources": [
+            {
+              "accession": "0001367644-25-000124",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1367644/000136764425000124/ebs-20250331.htm",
+              "source_quote": "NARCAN® | $ | 45.3 | $ | 118.5 | $ | (73.2) | (62) | %"
+            }
+          ]
+        },
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": null,
+          "accession": "0001367644-25-000181",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1367644/000136764425000181/ebs-20250630.htm",
+          "source_quote": "Naloxone | $ | 67.5 | $ | 120.0 | $ | (52.5) | (44) | % | $ | 112.8 | $ | 238.5 | $ | (125.7) | (53) | %",
+          "sources": [
+            {
+              "accession": "0001367644-25-000181",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1367644/000136764425000181/ebs-20250630.htm",
+              "source_quote": "Naloxone | $ | 67.5 | $ | 120.0 | $ | (52.5) | (44) | % | $ | 112.8 | $ | 238.5 | $ | (125.7) | (53) | %"
+            }
+          ],
+          "why": "from the second quarter of 2025 the issuer renames the line Naloxone, and the 10-K says it carries NARCAN and KLOXXADO together - 'partially offset by an increase in KLOXXADO® sales'. The product's own figure is no longer reported, and the line's figure is not the product's."
+        },
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": null,
+          "accession": "0001367644-25-000202",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1367644/000136764425000202/ebs-20250930.htm",
+          "source_quote": "Naloxone | $ | 74.9 | $ | 95.3 | $ | (20.4) | (21) | % | $ | 187.7 | $ | 333.8 | $ | (146.1) | (44) | %",
+          "sources": [
+            {
+              "accession": "0001367644-25-000202",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1367644/000136764425000202/ebs-20250930.htm",
+              "source_quote": "Naloxone | $ | 74.9 | $ | 95.3 | $ | (20.4) | (21) | % | $ | 187.7 | $ | 333.8 | $ | (146.1) | (44) | %"
+            }
+          ],
+          "why": "from the second quarter of 2025 the issuer renames the line Naloxone, and the 10-K says it carries NARCAN and KLOXXADO together - 'partially offset by an increase in KLOXXADO® sales'. The product's own figure is no longer reported, and the line's figure is not the product's."
+        },
+        {
+          "period": "2025Q4",
+          "value_normalized_usd_millions": null,
+          "accession": "0001367644-26-000015",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1367644/000136764426000015/ebs-20251231.htm",
+          "source_quote": "Naloxone | $ | 226.1 | $ | 398.9 | $ | (172.8) | (43) | %",
+          "sources": [
+            {
+              "accession": "0001367644-26-000015",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1367644/000136764426000015/ebs-20251231.htm",
+              "source_quote": "Naloxone | $ | 226.1 | $ | 398.9 | $ | (172.8) | (43) | %"
+            }
+          ],
+          "why": "from the second quarter of 2025 the issuer renames the line Naloxone, and the 10-K says it carries NARCAN and KLOXXADO together - 'partially offset by an increase in KLOXXADO® sales'. The product's own figure is no longer reported, and the line's figure is not the product's."
+        }
+      ]
+    },
+    {
+      "drug_name": "BioThrax",
+      "generic_name": "anthrax vaccine adsorbed",
+      "manufacturer": "Emergent BioSolutions Inc",
+      "ticker": "EBS",
+      "options": {
+        "earnings_since": "2024-04-01",
+        "earnings_until": "2026-03-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "named in the filing, no figure anywhere",
+        "category line covering three products",
+        "must come back empty",
+        "no drugsFDA record"
+      ],
+      "source": "Every anthrax figure the issuer prints is the Anthrax MCM line, which its own narrative says moves with CYFENDUS, ANTHRASIL and BioThrax together.",
+      "profile": {
+        "application_number": null,
+        "application_source_url": "https://api.fda.gov/drug/drugsfda.json?search=products.brand_name:%22BIOTHRAX%22&limit=10",
+        "products_route": null,
+        "openfda_route": null,
+        "route_fields_agree": null,
+        "route_of_administration": null,
+        "first_approval_year": null,
+        "first_approval_source_quote": null,
+        "indication_area": null,
+        "indication_source_url": null,
+        "indication_source_quote": null,
+        "why": {
+          "route_of_administration": "drugsFDA returns HTTP 404 for openfda.brand_name:\"BIOTHRAX\", products.brand_name:\"BIOTHRAX\" and openfda.generic_name:\"anthrax vaccine adsorbed\": the product is a CBER biologic and drugsFDA holds no record of it",
+          "first_approval_year": "no drugsFDA record exists, so there is no ORIG/AP submission to read",
+          "indication_area": "the drug label endpoint returns HTTP 404 for the same three searches"
+        }
+      },
+      "expect": [
+        {
+          "period": "2024Q1",
+          "value_normalized_usd_millions": null,
+          "accession": "0001367644-26-000015",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1367644/000136764426000015/ebs-20251231.htm",
+          "source_quote": "Anthrax MCM sales decreased $24.2 million, or 17%, to $114.3 million in 2025. The decrease was due to lower volumes of CYFENDUS® sales to the USG and international customers, primarily due to the impact of timing, partially offset by increases in ANTHRASIL® sales to the Canadian government and BioThrax® sales to foreign governments.",
+          "sources": [
+            {
+              "accession": "0001367644-26-000015",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1367644/000136764426000015/ebs-20251231.htm",
+              "source_quote": "Anthrax MCM sales decreased $24.2 million, or 17%, to $114.3 million in 2025. The decrease was due to lower volumes of CYFENDUS® sales to the USG and international customers, primarily due to the impact of timing, partially offset by increases in ANTHRASIL® sales to the Canadian government and BioThrax® sales to foreign governments."
+            }
+          ],
+          "why": "every anthrax figure the issuer prints is the Anthrax MCM line, which its own narrative says carries CYFENDUS, ANTHRASIL and BioThrax. The product is named in the filing and no figure in it is the product's."
+        },
+        {
+          "period": "2024Q2",
+          "value_normalized_usd_millions": null,
+          "accession": "0001367644-26-000015",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1367644/000136764426000015/ebs-20251231.htm",
+          "source_quote": "Anthrax MCM sales decreased $24.2 million, or 17%, to $114.3 million in 2025. The decrease was due to lower volumes of CYFENDUS® sales to the USG and international customers, primarily due to the impact of timing, partially offset by increases in ANTHRASIL® sales to the Canadian government and BioThrax® sales to foreign governments.",
+          "sources": [
+            {
+              "accession": "0001367644-26-000015",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1367644/000136764426000015/ebs-20251231.htm",
+              "source_quote": "Anthrax MCM sales decreased $24.2 million, or 17%, to $114.3 million in 2025. The decrease was due to lower volumes of CYFENDUS® sales to the USG and international customers, primarily due to the impact of timing, partially offset by increases in ANTHRASIL® sales to the Canadian government and BioThrax® sales to foreign governments."
+            }
+          ],
+          "why": "every anthrax figure the issuer prints is the Anthrax MCM line, which its own narrative says carries CYFENDUS, ANTHRASIL and BioThrax. The product is named in the filing and no figure in it is the product's."
+        },
+        {
+          "period": "2024Q3",
+          "value_normalized_usd_millions": null,
+          "accession": "0001367644-26-000015",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1367644/000136764426000015/ebs-20251231.htm",
+          "source_quote": "Anthrax MCM sales decreased $24.2 million, or 17%, to $114.3 million in 2025. The decrease was due to lower volumes of CYFENDUS® sales to the USG and international customers, primarily due to the impact of timing, partially offset by increases in ANTHRASIL® sales to the Canadian government and BioThrax® sales to foreign governments.",
+          "sources": [
+            {
+              "accession": "0001367644-26-000015",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1367644/000136764426000015/ebs-20251231.htm",
+              "source_quote": "Anthrax MCM sales decreased $24.2 million, or 17%, to $114.3 million in 2025. The decrease was due to lower volumes of CYFENDUS® sales to the USG and international customers, primarily due to the impact of timing, partially offset by increases in ANTHRASIL® sales to the Canadian government and BioThrax® sales to foreign governments."
+            }
+          ],
+          "why": "every anthrax figure the issuer prints is the Anthrax MCM line, which its own narrative says carries CYFENDUS, ANTHRASIL and BioThrax. The product is named in the filing and no figure in it is the product's."
+        },
+        {
+          "period": "2024Q4",
+          "value_normalized_usd_millions": null,
+          "accession": "0001367644-26-000015",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1367644/000136764426000015/ebs-20251231.htm",
+          "source_quote": "Anthrax MCM sales decreased $24.2 million, or 17%, to $114.3 million in 2025. The decrease was due to lower volumes of CYFENDUS® sales to the USG and international customers, primarily due to the impact of timing, partially offset by increases in ANTHRASIL® sales to the Canadian government and BioThrax® sales to foreign governments.",
+          "sources": [
+            {
+              "accession": "0001367644-26-000015",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1367644/000136764426000015/ebs-20251231.htm",
+              "source_quote": "Anthrax MCM sales decreased $24.2 million, or 17%, to $114.3 million in 2025. The decrease was due to lower volumes of CYFENDUS® sales to the USG and international customers, primarily due to the impact of timing, partially offset by increases in ANTHRASIL® sales to the Canadian government and BioThrax® sales to foreign governments."
+            }
+          ],
+          "why": "every anthrax figure the issuer prints is the Anthrax MCM line, which its own narrative says carries CYFENDUS, ANTHRASIL and BioThrax. The product is named in the filing and no figure in it is the product's."
+        },
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": null,
+          "accession": "0001367644-26-000015",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1367644/000136764426000015/ebs-20251231.htm",
+          "source_quote": "Anthrax MCM sales decreased $24.2 million, or 17%, to $114.3 million in 2025. The decrease was due to lower volumes of CYFENDUS® sales to the USG and international customers, primarily due to the impact of timing, partially offset by increases in ANTHRASIL® sales to the Canadian government and BioThrax® sales to foreign governments.",
+          "sources": [
+            {
+              "accession": "0001367644-26-000015",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1367644/000136764426000015/ebs-20251231.htm",
+              "source_quote": "Anthrax MCM sales decreased $24.2 million, or 17%, to $114.3 million in 2025. The decrease was due to lower volumes of CYFENDUS® sales to the USG and international customers, primarily due to the impact of timing, partially offset by increases in ANTHRASIL® sales to the Canadian government and BioThrax® sales to foreign governments."
+            }
+          ],
+          "why": "every anthrax figure the issuer prints is the Anthrax MCM line, which its own narrative says carries CYFENDUS, ANTHRASIL and BioThrax. The product is named in the filing and no figure in it is the product's."
+        },
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": null,
+          "accession": "0001367644-26-000015",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1367644/000136764426000015/ebs-20251231.htm",
+          "source_quote": "Anthrax MCM sales decreased $24.2 million, or 17%, to $114.3 million in 2025. The decrease was due to lower volumes of CYFENDUS® sales to the USG and international customers, primarily due to the impact of timing, partially offset by increases in ANTHRASIL® sales to the Canadian government and BioThrax® sales to foreign governments.",
+          "sources": [
+            {
+              "accession": "0001367644-26-000015",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1367644/000136764426000015/ebs-20251231.htm",
+              "source_quote": "Anthrax MCM sales decreased $24.2 million, or 17%, to $114.3 million in 2025. The decrease was due to lower volumes of CYFENDUS® sales to the USG and international customers, primarily due to the impact of timing, partially offset by increases in ANTHRASIL® sales to the Canadian government and BioThrax® sales to foreign governments."
+            }
+          ],
+          "why": "every anthrax figure the issuer prints is the Anthrax MCM line, which its own narrative says carries CYFENDUS, ANTHRASIL and BioThrax. The product is named in the filing and no figure in it is the product's."
+        },
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": null,
+          "accession": "0001367644-26-000015",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1367644/000136764426000015/ebs-20251231.htm",
+          "source_quote": "Anthrax MCM sales decreased $24.2 million, or 17%, to $114.3 million in 2025. The decrease was due to lower volumes of CYFENDUS® sales to the USG and international customers, primarily due to the impact of timing, partially offset by increases in ANTHRASIL® sales to the Canadian government and BioThrax® sales to foreign governments.",
+          "sources": [
+            {
+              "accession": "0001367644-26-000015",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1367644/000136764426000015/ebs-20251231.htm",
+              "source_quote": "Anthrax MCM sales decreased $24.2 million, or 17%, to $114.3 million in 2025. The decrease was due to lower volumes of CYFENDUS® sales to the USG and international customers, primarily due to the impact of timing, partially offset by increases in ANTHRASIL® sales to the Canadian government and BioThrax® sales to foreign governments."
+            }
+          ],
+          "why": "every anthrax figure the issuer prints is the Anthrax MCM line, which its own narrative says carries CYFENDUS, ANTHRASIL and BioThrax. The product is named in the filing and no figure in it is the product's."
+        },
+        {
+          "period": "2025Q4",
+          "value_normalized_usd_millions": null,
+          "accession": "0001367644-26-000015",
+          "form": "10-K",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1367644/000136764426000015/ebs-20251231.htm",
+          "source_quote": "Anthrax MCM sales decreased $24.2 million, or 17%, to $114.3 million in 2025. The decrease was due to lower volumes of CYFENDUS® sales to the USG and international customers, primarily due to the impact of timing, partially offset by increases in ANTHRASIL® sales to the Canadian government and BioThrax® sales to foreign governments.",
+          "sources": [
+            {
+              "accession": "0001367644-26-000015",
+              "form": "10-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1367644/000136764426000015/ebs-20251231.htm",
+              "source_quote": "Anthrax MCM sales decreased $24.2 million, or 17%, to $114.3 million in 2025. The decrease was due to lower volumes of CYFENDUS® sales to the USG and international customers, primarily due to the impact of timing, partially offset by increases in ANTHRASIL® sales to the Canadian government and BioThrax® sales to foreign governments."
+            }
+          ],
+          "why": "every anthrax figure the issuer prints is the Anthrax MCM line, which its own narrative says carries CYFENDUS, ANTHRASIL and BioThrax. The product is named in the filing and no figure in it is the product's."
+        }
+      ]
+    },
+    {
+      "drug_name": "MIPLYFFA",
+      "generic_name": "arimoclomol",
+      "manufacturer": "Zevra Therapeutics Inc",
+      "ticker": "ZVRA",
+      "options": {
+        "earnings_since": "2024-10-01",
+        "earnings_until": "2026-08-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "product-level detail only in an 8-K EX-99 release",
+        "10-Q discloses one total and no product",
+        "prose-only figure",
+        "pre-launch quarters must come back empty"
+      ],
+      "source": "The 10-Q carries a single 'Revenue, net' line and names no product. Every product-level figure in the window is a sentence in the quarter's 8-K exhibit 99.1, which breaks the total into its named components.",
+      "profile": {
+        "application_number": "NDA214927",
+        "application_source_url": "https://api.fda.gov/drug/drugsfda.json?search=products.brand_name:%22MIPLYFFA%22&limit=10",
+        "products_route": "ORAL",
+        "openfda_route": "ORAL",
+        "route_fields_agree": true,
+        "route_of_administration": "oral",
+        "first_approval_year": 2024,
+        "first_approval_source_quote": "NDA214927 submissions: submission_type \"ORIG\", submission_status \"AP\", submission_status_date \"20240920\"",
+        "indication_area": "metabolic",
+        "indication_source_url": "https://api.fda.gov/drug/label.json?search=openfda.application_number:%22NDA214927%22&limit=1",
+        "indication_source_quote": "MIPLYFFA is indicated for use in combination with miglustat for the treatment of neurological manifestations of Niemann-Pick disease type C (NPC) in adult and pediatric patients 2 years of age and older."
+      },
+      "expect": [
+        {
+          "period": "2024Q3",
+          "value_normalized_usd_millions": null,
+          "accession": "0001437749-24-034565",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1434647/000143774924034565/ex_716268.htm",
+          "source_quote": "Revenue, Net: $3.7 million, comprised of $2.6 million in net reimbursements from the French expanded access program (EAP) for arimoclomol, $1.1 million of royalties and other reimbursements under the AZSTARYS® license agreement, and de minimis OLPRUVA revenue.",
+          "sources": [
+            {
+              "accession": "0001437749-24-034565",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1434647/000143774924034565/ex_716268.htm",
+              "source_quote": "Revenue, Net: $3.7 million, comprised of $2.6 million in net reimbursements from the French expanded access program (EAP) for arimoclomol, $1.1 million of royalties and other reimbursements under the AZSTARYS® license agreement, and de minimis OLPRUVA revenue."
+            }
+          ],
+          "why": "the release breaks the quarter's $3.7 million into the French EAP, the AZSTARYS royalty and de minimis OLPRUVA, and names no MIPLYFFA component: the product was approved 2024-09-20 and had not launched"
+        },
+        {
+          "period": "2024Q4",
+          "value_normalized_usd_millions": 10.1,
+          "accession": "0001437749-25-007032",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1434647/000143774925007032/ex_725374.htm",
+          "source_quote": "Revenue, Net: $12.0 million for Q4 2024, which includes $10.1 million of MIPLYFFA net revenue, $0.1 million of OLPRUVA net revenue, $1.1 million in net reimbursements from the French EAP for arimoclomol ...",
+          "sources": [
+            {
+              "accession": "0001437749-25-007032",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1434647/000143774925007032/ex_725374.htm",
+              "source_quote": "Revenue, Net: $12.0 million for Q4 2024, which includes $10.1 million of MIPLYFFA net revenue, $0.1 million of OLPRUVA net revenue, $1.1 million in net reimbursements from the French EAP for arimoclomol ..."
+            }
+          ]
+        },
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": 17.1,
+          "accession": "0001437749-25-016452",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1434647/000143774925016452/ex_762500.htm",
+          "source_quote": "Revenue, Net: $20.4 million for Q1 2025, which includes $17.1 million of MIPLYFFA net revenue, $0.1 million of OLPRUVA net revenue, $2.3 million in net reimbursements from the French EAP for arimoclomol, and $0.9 million in royalties ...",
+          "sources": [
+            {
+              "accession": "0001437749-25-016452",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1434647/000143774925016452/ex_762500.htm",
+              "source_quote": "Revenue, Net: $20.4 million for Q1 2025, which includes $17.1 million of MIPLYFFA net revenue, $0.1 million of OLPRUVA net revenue, $2.3 million in net reimbursements from the French EAP for arimoclomol, and $0.9 million in royalties ..."
+            }
+          ]
+        },
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": 21.5,
+          "accession": "0001628280-25-039883",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1434647/000162828025039883/zvra-20250812xex991.htm",
+          "source_quote": "Revenue, Net: $25.9 million for Q2 2025, which includes $21.5 million of MIPLYFFA net revenue, $0.3 million of OLPRUVA net revenue, $2.6 million in net reimbursements from the French EAP for arimoclomol ...",
+          "sources": [
+            {
+              "accession": "0001628280-25-039883",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1434647/000162828025039883/zvra-20250812xex991.htm",
+              "source_quote": "Revenue, Net: $25.9 million for Q2 2025, which includes $21.5 million of MIPLYFFA net revenue, $0.3 million of OLPRUVA net revenue, $2.6 million in net reimbursements from the French EAP for arimoclomol ..."
+            }
+          ]
+        },
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": 22.4,
+          "accession": "0001434647-25-000009",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1434647/000143464725000009/zvra-20251105xex991.htm",
+          "source_quote": "Revenue, Net: $26.1 million for Q3 2025, which includes $22.4 million of MIPLYFFA net revenue, $0.1 million of OLPRUVA net revenue, $2.4 million in net reimbursements from the French EAP for arimoclomol ...",
+          "sources": [
+            {
+              "accession": "0001434647-25-000009",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1434647/000143464725000009/zvra-20251105xex991.htm",
+              "source_quote": "Revenue, Net: $26.1 million for Q3 2025, which includes $22.4 million of MIPLYFFA net revenue, $0.1 million of OLPRUVA net revenue, $2.4 million in net reimbursements from the French EAP for arimoclomol ..."
+            }
+          ]
+        },
+        {
+          "period": "2025Q4",
+          "value_normalized_usd_millions": 26.4,
+          "accession": "0001434647-26-000009",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1434647/000143464726000009/zvra-20260309xex991earnings.htm",
+          "source_quote": "Revenue, Net: $34.1 million for Q4 2025, which includes $26.4 million of MIPLYFFA net revenue, $0.4 million of OLPRUVA net revenue, $5.6 million in net reimbursements from the EAP ...",
+          "sources": [
+            {
+              "accession": "0001434647-26-000009",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1434647/000143464726000009/zvra-20260309xex991earnings.htm",
+              "source_quote": "Revenue, Net: $34.1 million for Q4 2025, which includes $26.4 million of MIPLYFFA net revenue, $0.4 million of OLPRUVA net revenue, $5.6 million in net reimbursements from the EAP ..."
+            }
+          ]
+        },
+        {
+          "period": "2026Q1",
+          "value_normalized_usd_millions": 24.6,
+          "accession": "0001434647-26-000029",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1434647/000143464726000029/zvra-20260506xex991earnings.htm",
+          "source_quote": "Revenue, Net: $36.2 million for Q1 2026, which includes $24.6 million of MIPLYFFA net revenue, $0.3 million of OLPRUVA net revenue, $10.2 million in net reimbursements from our EAP ...",
+          "sources": [
+            {
+              "accession": "0001434647-26-000029",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1434647/000143464726000029/zvra-20260506xex991earnings.htm",
+              "source_quote": "Revenue, Net: $36.2 million for Q1 2026, which includes $24.6 million of MIPLYFFA net revenue, $0.3 million of OLPRUVA net revenue, $10.2 million in net reimbursements from our EAP ..."
+            }
+          ]
+        },
+        {
+          "period": "2026Q2",
+          "value_normalized_usd_millions": 30.2,
+          "accession": "0001434647-26-000067",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1434647/000143464726000067/zvra-20260805xex991earnings.htm",
+          "source_quote": "Revenue, Net: $39.7 million for Q2 2026, which includes $30.2 million of MIPLYFFA net revenue, $0.2 million of OLPRUVA net revenue, $9.0 million in net reimbursements from our global EAP ...",
+          "sources": [
+            {
+              "accession": "0001434647-26-000067",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1434647/000143464726000067/zvra-20260805xex991earnings.htm",
+              "source_quote": "Revenue, Net: $39.7 million for Q2 2026, which includes $30.2 million of MIPLYFFA net revenue, $0.2 million of OLPRUVA net revenue, $9.0 million in net reimbursements from our global EAP ..."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "drug_name": "OLPRUVA",
+      "generic_name": "sodium phenylbutyrate",
+      "manufacturer": "Zevra Therapeutics Inc",
+      "ticker": "ZVRA",
+      "options": {
+        "earnings_since": "2024-10-01",
+        "earnings_until": "2026-08-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "product-level detail only in an 8-K EX-99 release",
+        "prose-only figure",
+        "a quarter the issuer calls de minimis and does not state",
+        "must come back empty",
+        "openfda block absent, products[] has the route"
+      ],
+      "source": "Same releases as the issuer's other product: the figure is a clause inside one sentence, and in one quarter the clause says 'de minimis' instead of a number.",
+      "profile": {
+        "application_number": "NDA214860",
+        "application_source_url": "https://api.fda.gov/drug/drugsfda.json?search=products.brand_name:%22OLPRUVA%22&limit=10",
+        "products_route": "ORAL",
+        "openfda_route": null,
+        "route_fields_agree": false,
+        "route_of_administration": "oral",
+        "first_approval_year": 2022,
+        "first_approval_source_quote": "NDA214860 submissions: submission_type \"ORIG\", submission_status \"AP\", submission_status_date \"20221222\"",
+        "indication_area": null,
+        "indication_source_url": null,
+        "indication_source_quote": null,
+        "why": {
+          "indication_area": "no label record exists for this application or brand: openfda.application_number:\"NDA214860\" and openfda.brand_name:\"OLPRUVA\" both return HTTP 404. The only label reachable from the ingredient is a different application - openfda.generic_name:\"sodium phenylbutyrate\" returns ANDA216462 - and a sibling's label is not this product's"
+        },
+        "note": "openfda.brand_name:\"OLPRUVA\" returns HTTP 404 on drugsFDA; the record reached through products.brand_name has no openfda block, so openfda.route is absent while products[].route says ORAL"
+      },
+      "expect": [
+        {
+          "period": "2024Q3",
+          "value_normalized_usd_millions": null,
+          "accession": "0001437749-24-034565",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1434647/000143774924034565/ex_716268.htm",
+          "source_quote": "Revenue, Net: $3.7 million, comprised of $2.6 million in net reimbursements from the French expanded access program (EAP) for arimoclomol, $1.1 million of royalties and other reimbursements under the AZSTARYS® license agreement, and de minimis OLPRUVA revenue.",
+          "sources": [
+            {
+              "accession": "0001437749-24-034565",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1434647/000143774924034565/ex_716268.htm",
+              "source_quote": "Revenue, Net: $3.7 million, comprised of $2.6 million in net reimbursements from the French expanded access program (EAP) for arimoclomol, $1.1 million of royalties and other reimbursements under the AZSTARYS® license agreement, and de minimis OLPRUVA revenue."
+            }
+          ],
+          "why": "the issuer calls the quarter's OLPRUVA revenue 'de minimis' and states no figure for it; the $3.7 million on the line is the company's total"
+        },
+        {
+          "period": "2024Q4",
+          "value_normalized_usd_millions": 0.1,
+          "accession": "0001437749-25-007032",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1434647/000143774925007032/ex_725374.htm",
+          "source_quote": "Revenue, Net: $12.0 million for Q4 2024, which includes $10.1 million of MIPLYFFA net revenue, $0.1 million of OLPRUVA net revenue, $1.1 million in net reimbursements from the French EAP for arimoclomol ...",
+          "sources": [
+            {
+              "accession": "0001437749-25-007032",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1434647/000143774925007032/ex_725374.htm",
+              "source_quote": "Revenue, Net: $12.0 million for Q4 2024, which includes $10.1 million of MIPLYFFA net revenue, $0.1 million of OLPRUVA net revenue, $1.1 million in net reimbursements from the French EAP for arimoclomol ..."
+            }
+          ]
+        },
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": 0.1,
+          "accession": "0001437749-25-016452",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1434647/000143774925016452/ex_762500.htm",
+          "source_quote": "Revenue, Net: $20.4 million for Q1 2025, which includes $17.1 million of MIPLYFFA net revenue, $0.1 million of OLPRUVA net revenue, $2.3 million in net reimbursements from the French EAP for arimoclomol, and $0.9 million in royalties ...",
+          "sources": [
+            {
+              "accession": "0001437749-25-016452",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1434647/000143774925016452/ex_762500.htm",
+              "source_quote": "Revenue, Net: $20.4 million for Q1 2025, which includes $17.1 million of MIPLYFFA net revenue, $0.1 million of OLPRUVA net revenue, $2.3 million in net reimbursements from the French EAP for arimoclomol, and $0.9 million in royalties ..."
+            }
+          ]
+        },
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": 0.3,
+          "accession": "0001628280-25-039883",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1434647/000162828025039883/zvra-20250812xex991.htm",
+          "source_quote": "Revenue, Net: $25.9 million for Q2 2025, which includes $21.5 million of MIPLYFFA net revenue, $0.3 million of OLPRUVA net revenue, $2.6 million in net reimbursements from the French EAP for arimoclomol ...",
+          "sources": [
+            {
+              "accession": "0001628280-25-039883",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1434647/000162828025039883/zvra-20250812xex991.htm",
+              "source_quote": "Revenue, Net: $25.9 million for Q2 2025, which includes $21.5 million of MIPLYFFA net revenue, $0.3 million of OLPRUVA net revenue, $2.6 million in net reimbursements from the French EAP for arimoclomol ..."
+            }
+          ]
+        },
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": 0.1,
+          "accession": "0001434647-25-000009",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1434647/000143464725000009/zvra-20251105xex991.htm",
+          "source_quote": "Revenue, Net: $26.1 million for Q3 2025, which includes $22.4 million of MIPLYFFA net revenue, $0.1 million of OLPRUVA net revenue, $2.4 million in net reimbursements from the French EAP for arimoclomol ...",
+          "sources": [
+            {
+              "accession": "0001434647-25-000009",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1434647/000143464725000009/zvra-20251105xex991.htm",
+              "source_quote": "Revenue, Net: $26.1 million for Q3 2025, which includes $22.4 million of MIPLYFFA net revenue, $0.1 million of OLPRUVA net revenue, $2.4 million in net reimbursements from the French EAP for arimoclomol ..."
+            }
+          ]
+        },
+        {
+          "period": "2025Q4",
+          "value_normalized_usd_millions": 0.4,
+          "accession": "0001434647-26-000009",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1434647/000143464726000009/zvra-20260309xex991earnings.htm",
+          "source_quote": "Revenue, Net: $34.1 million for Q4 2025, which includes $26.4 million of MIPLYFFA net revenue, $0.4 million of OLPRUVA net revenue, $5.6 million in net reimbursements from the EAP ...",
+          "sources": [
+            {
+              "accession": "0001434647-26-000009",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1434647/000143464726000009/zvra-20260309xex991earnings.htm",
+              "source_quote": "Revenue, Net: $34.1 million for Q4 2025, which includes $26.4 million of MIPLYFFA net revenue, $0.4 million of OLPRUVA net revenue, $5.6 million in net reimbursements from the EAP ..."
+            }
+          ]
+        },
+        {
+          "period": "2026Q1",
+          "value_normalized_usd_millions": 0.3,
+          "accession": "0001434647-26-000029",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1434647/000143464726000029/zvra-20260506xex991earnings.htm",
+          "source_quote": "Revenue, Net: $36.2 million for Q1 2026, which includes $24.6 million of MIPLYFFA net revenue, $0.3 million of OLPRUVA net revenue, $10.2 million in net reimbursements from our EAP ...",
+          "sources": [
+            {
+              "accession": "0001434647-26-000029",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1434647/000143464726000029/zvra-20260506xex991earnings.htm",
+              "source_quote": "Revenue, Net: $36.2 million for Q1 2026, which includes $24.6 million of MIPLYFFA net revenue, $0.3 million of OLPRUVA net revenue, $10.2 million in net reimbursements from our EAP ..."
+            }
+          ]
+        },
+        {
+          "period": "2026Q2",
+          "value_normalized_usd_millions": 0.2,
+          "accession": "0001434647-26-000067",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1434647/000143464726000067/zvra-20260805xex991earnings.htm",
+          "source_quote": "Revenue, Net: $39.7 million for Q2 2026, which includes $30.2 million of MIPLYFFA net revenue, $0.2 million of OLPRUVA net revenue, $9.0 million in net reimbursements from our global EAP ...",
+          "sources": [
+            {
+              "accession": "0001434647-26-000067",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1434647/000143464726000067/zvra-20260805xex991earnings.htm",
+              "source_quote": "Revenue, Net: $39.7 million for Q2 2026, which includes $30.2 million of MIPLYFFA net revenue, $0.2 million of OLPRUVA net revenue, $9.0 million in net reimbursements from our global EAP ..."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "drug_name": "INCRELEX",
+      "generic_name": "mecasermin",
+      "manufacturer": "Eton Pharmaceuticals Inc",
+      "ticker": "ETON",
+      "options": {
+        "earnings_since": "2024-01-01",
+        "earnings_until": "2026-03-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "acquired product",
+        "pre-acquisition quarter only in the acquirer's 8-K/A",
+        "abbreviated financial statements of an acquired product line",
+        "annual less nine months",
+        "named in the filing, no figure anywhere",
+        "must come back empty"
+      ],
+      "source": "The seller, Ipsen S.A., files nothing with the SEC. The only statement of the product's sales is exhibit 99.1 of the acquirer's 8-K/A - audited abbreviated statements of revenues and direct expenses for the product line - and after the acquisition the acquirer reports one portfolio line and names the product only in prose.",
+      "profile": {
+        "application_number": "BLA021839",
+        "application_source_url": "https://api.fda.gov/drug/drugsfda.json?search=products.brand_name:%22INCRELEX%22&limit=10",
+        "products_route": "SUBCUTANEOUS",
+        "openfda_route": "SUBCUTANEOUS",
+        "route_fields_agree": true,
+        "route_of_administration": "subcutaneous",
+        "first_approval_year": 2005,
+        "first_approval_source_quote": "BLA021839 submissions: submission_type \"ORIG\", submission_status \"AP\", submission_status_date \"20050830\"",
+        "indication_area": "endocrinology",
+        "indication_source_url": "https://api.fda.gov/drug/label.json?search=openfda.application_number:%22BLA021839%22&limit=1",
+        "indication_source_quote": "INCRELEX (mecasermin) injection is indicated for the treatment of growth failure in pediatric patients 2 years of age and older with severe primary IGF-1 deficiency or with growth hormone (GH) gene deletion who have developed neutralizing antibodies to GH."
+      },
+      "expect": [
+        {
+          "period": "2023Q4",
+          "value_normalized_usd_millions": 4.879,
+          "accession": "0001437749-25-035597",
+          "form": "8-K/A EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1710340/000143774925035597/ex_790801.htm",
+          "source_quote": "Statements of Revenues and Direct Expenses - For the years ended December 31, 2023 | December 31, 2022 ; Nine months ended September 30, 2024 | September 30, 2023 :: Net sales | $ | 18,739 | $ | 15,130 | $ | 13,027 | $ | 13,860",
+          "sources": [
+            {
+              "accession": "0001437749-25-035597",
+              "form": "8-K/A EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1710340/000143774925035597/ex_790801.htm",
+              "source_quote": "Statements of Revenues and Direct Expenses - For the years ended December 31, 2023 | December 31, 2022 ; Nine months ended September 30, 2024 | September 30, 2023 :: Net sales | $ | 18,739 | $ | 15,130 | $ | 13,027 | $ | 13,860"
+            }
+          ],
+          "derivation": "year ended December 31, 2023 18,739 less nine months ended September 30, 2023 13,860 = 4,879 (thousands)"
+        },
+        {
+          "period": "2024Q1",
+          "value_normalized_usd_millions": null,
+          "accession": "0001437749-25-035597",
+          "form": "8-K/A EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1710340/000143774925035597/ex_790801.htm",
+          "source_quote": "Statements of Revenues and Direct Expenses - For the years ended December 31, 2023 | December 31, 2022 ; Nine months ended September 30, 2024 | September 30, 2023 :: Net sales | $ | 18,739 | $ | 15,130 | $ | 13,027 | $ | 13,860",
+          "sources": [
+            {
+              "accession": "0001437749-25-035597",
+              "form": "8-K/A EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1710340/000143774925035597/ex_790801.htm",
+              "source_quote": "Statements of Revenues and Direct Expenses - For the years ended December 31, 2023 | December 31, 2022 ; Nine months ended September 30, 2024 | September 30, 2023 :: Net sales | $ | 18,739 | $ | 15,130 | $ | 13,027 | $ | 13,860"
+            }
+          ],
+          "why": "the only statement of the product's pre-acquisition sales is the acquirer's 8-K/A, which reports nine months ended September 30, 2024 as one figure (13,027) and no quarter within it; the seller, Ipsen S.A., files nothing with the SEC"
+        },
+        {
+          "period": "2024Q2",
+          "value_normalized_usd_millions": null,
+          "accession": "0001437749-25-035597",
+          "form": "8-K/A EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1710340/000143774925035597/ex_790801.htm",
+          "source_quote": "Statements of Revenues and Direct Expenses - For the years ended December 31, 2023 | December 31, 2022 ; Nine months ended September 30, 2024 | September 30, 2023 :: Net sales | $ | 18,739 | $ | 15,130 | $ | 13,027 | $ | 13,860",
+          "sources": [
+            {
+              "accession": "0001437749-25-035597",
+              "form": "8-K/A EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1710340/000143774925035597/ex_790801.htm",
+              "source_quote": "Statements of Revenues and Direct Expenses - For the years ended December 31, 2023 | December 31, 2022 ; Nine months ended September 30, 2024 | September 30, 2023 :: Net sales | $ | 18,739 | $ | 15,130 | $ | 13,027 | $ | 13,860"
+            }
+          ],
+          "why": "the only statement of the product's pre-acquisition sales is the acquirer's 8-K/A, which reports nine months ended September 30, 2024 as one figure (13,027) and no quarter within it; the seller, Ipsen S.A., files nothing with the SEC"
+        },
+        {
+          "period": "2024Q3",
+          "value_normalized_usd_millions": null,
+          "accession": "0001437749-25-035597",
+          "form": "8-K/A EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1710340/000143774925035597/ex_790801.htm",
+          "source_quote": "Statements of Revenues and Direct Expenses - For the years ended December 31, 2023 | December 31, 2022 ; Nine months ended September 30, 2024 | September 30, 2023 :: Net sales | $ | 18,739 | $ | 15,130 | $ | 13,027 | $ | 13,860",
+          "sources": [
+            {
+              "accession": "0001437749-25-035597",
+              "form": "8-K/A EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1710340/000143774925035597/ex_790801.htm",
+              "source_quote": "Statements of Revenues and Direct Expenses - For the years ended December 31, 2023 | December 31, 2022 ; Nine months ended September 30, 2024 | September 30, 2023 :: Net sales | $ | 18,739 | $ | 15,130 | $ | 13,027 | $ | 13,860"
+            }
+          ],
+          "why": "the only statement of the product's pre-acquisition sales is the acquirer's 8-K/A, which reports nine months ended September 30, 2024 as one figure (13,027) and no quarter within it; the seller, Ipsen S.A., files nothing with the SEC"
+        },
+        {
+          "period": "2024Q4",
+          "value_normalized_usd_millions": null,
+          "accession": "0001437749-25-033619",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1710340/000143774925033619/eton20250930_10q.htm",
+          "source_quote": "Licensing revenue | $ | — | $ | 500 | $ | 3,286 | $ | 500 ; Product sales and royalties, net | 22,459 | 9,824 | 55,383 | 26,864 ; Total net revenues | 22,459 | 10,324 | 58,669 | 27,364",
+          "sources": [
+            {
+              "accession": "0001437749-25-033619",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1710340/000143774925033619/eton20250930_10q.htm",
+              "source_quote": "Licensing revenue | $ | — | $ | 500 | $ | 3,286 | $ | 500 ; Product sales and royalties, net | 22,459 | 9,824 | 55,383 | 26,864 ; Total net revenues | 22,459 | 10,324 | 58,669 | 27,364"
+            }
+          ],
+          "why": "the acquisition closed 2024-12-19 and the acquirer folds the eleven days into one portfolio line; no filing states the product's quarter"
+        },
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": null,
+          "accession": "0001437749-25-033619",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1710340/000143774925033619/eton20250930_10q.htm",
+          "source_quote": "Licensing revenue | $ | — | $ | 500 | $ | 3,286 | $ | 500 ; Product sales and royalties, net | 22,459 | 9,824 | 55,383 | 26,864 ; Total net revenues | 22,459 | 10,324 | 58,669 | 27,364",
+          "sources": [
+            {
+              "accession": "0001437749-25-033619",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1710340/000143774925033619/eton20250930_10q.htm",
+              "source_quote": "Licensing revenue | $ | — | $ | 500 | $ | 3,286 | $ | 500 ; Product sales and royalties, net | 22,459 | 9,824 | 55,383 | 26,864 ; Total net revenues | 22,459 | 10,324 | 58,669 | 27,364"
+            }
+          ],
+          "why": "the acquirer discloses one line, 'Product sales and royalties, net', for the whole portfolio; its release names INCRELEX among the growth drivers and gives no figure for it. A name in a document is not a figure in a document."
+        },
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": null,
+          "accession": "0001437749-25-033619",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1710340/000143774925033619/eton20250930_10q.htm",
+          "source_quote": "Licensing revenue | $ | — | $ | 500 | $ | 3,286 | $ | 500 ; Product sales and royalties, net | 22,459 | 9,824 | 55,383 | 26,864 ; Total net revenues | 22,459 | 10,324 | 58,669 | 27,364",
+          "sources": [
+            {
+              "accession": "0001437749-25-033619",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1710340/000143774925033619/eton20250930_10q.htm",
+              "source_quote": "Licensing revenue | $ | — | $ | 500 | $ | 3,286 | $ | 500 ; Product sales and royalties, net | 22,459 | 9,824 | 55,383 | 26,864 ; Total net revenues | 22,459 | 10,324 | 58,669 | 27,364"
+            }
+          ],
+          "why": "the acquirer discloses one line, 'Product sales and royalties, net', for the whole portfolio; its release names INCRELEX among the growth drivers and gives no figure for it. A name in a document is not a figure in a document."
+        },
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": null,
+          "accession": "0001437749-25-033616",
+          "form": "8-K EX-99.1",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1710340/000143774925033616/ex_854696.htm",
+          "source_quote": "Net product revenues for the third quarter of 2025 were $22.5 million compared with $9.8 million in the prior year period, an increase of 129%. The growth was driven primarily by increased sales of ALKINDI SPRINKLE and Carglumic Acid and the addition of sales from INCRELEX and GALZIN.",
+          "sources": [
+            {
+              "accession": "0001437749-25-033616",
+              "form": "8-K EX-99.1",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1710340/000143774925033616/ex_854696.htm",
+              "source_quote": "Net product revenues for the third quarter of 2025 were $22.5 million compared with $9.8 million in the prior year period, an increase of 129%. The growth was driven primarily by increased sales of ALKINDI SPRINKLE and Carglumic Acid and the addition of sales from INCRELEX and GALZIN."
+            }
+          ],
+          "why": "the acquirer discloses one line, 'Product sales and royalties, net', for the whole portfolio; its release names INCRELEX among the growth drivers and gives no figure for it. A name in a document is not a figure in a document."
+        }
+      ]
+    }
+  ]
+}

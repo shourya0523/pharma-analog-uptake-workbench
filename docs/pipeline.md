@@ -12,16 +12,39 @@ failure names the step it happened in:
 
 | stage | what it does |
 |---|---|
-| `_identity` | resolve the product: brand, generic, aliases |
-| `_retrieve` | **find the filings** — the step every later score depends on |
+| `_expand_aliases` | the names the product goes by, before anything is matched by one |
+| `_retrieve` | the product's own documents: the label, and what openFDA holds |
 | `_parse` | each document becomes text blocks and tables, twice over (below) |
-| `_extract_metadata` | label and profile facts, mechanism, indications |
-| `_judge_profile` | a model checks the profile against its own sources |
+| `_label_metadata` | profile facts the label states: formulation, mechanism, indications |
+| `_identity` | who files for it — the label names the sponsor, and EDGAR's index answers a company name |
+| `_retrieve` | **the filings** — the step every later score depends on |
+| `_parse` | the filings, the same way |
+| `_narrative_metadata` | the profile facts a filing's prose carries, and any conflict with the label's |
+| `_judge_profile` | a model checks the profile against its own sources. Gated on the `product_metadata` option |
 | `_extract_revenue` | the deterministic table reader, then a model pass |
-| `_judge` | every candidate is checked against the document it cites |
-| `_reconcile_with_llm` | conflicting candidates for one quarter are resolved |
+| `_search_revenue_fallback` | nothing was extracted at all: search the open web for documents, then extract from those. Gated on `enable_llm_search`, which is on by default (`config.py:55`) |
+| `_quarters_no_filing_covers` | which asked-for quarters no retrieved filing even reports |
+| `_search_quarters_fallback` | search for a document covering each of those, and extract from it. Same gate |
+| `_record_unfiled_quarters` | record the quarters still uncovered, and that search was tried |
+| `_judge` | every candidate is checked against the document it cites. `_reconcile_with_llm` — conflicting candidates for one quarter — runs inside this stage, not beside it |
 | `_quality_and_validation` | checks that can fail a datapoint, and review tasks |
+| `_record_quarters_only_reported_with_another_product` | quarters whose only figure is a line covering this product and another |
 | `_completeness` | which quarters are still missing, and where to look |
+
+Retrieval and metadata each happen twice, and the order is the point: a drug
+name on its own reaches no company index, so the label is read first and the
+sponsor it names is what `_identity` asks EDGAR about. The metadata step is
+split around that, because the label pass has to run before the issuer is known
+and the narrative pass cannot run until the filings are in.
+
+This table is `run_job` as it stands, read off the tree rather than
+remembered — an AST walk over the calls in
+`backend/app/pipeline/orchestrator.py` at `45707a3`, in line order. It goes
+stale the day a stage moves; the walk that produced it is three lines and is
+what to re-run rather than to trust.
+
+`JobStep` has thirteen members, which are the steps a failure can name; the
+table above is what `run_job` calls, and the two do not correspond one to one.
 
 ## Retrieval is part of the job
 
@@ -139,7 +162,7 @@ Sets carry every filer's tagged facts and the axis members they were tagged on,
 so `app/parsing/notes_datasets.py` and `app/extraction/bulk_tagged.py` read a
 quarter out of an extract directory rather than out of a document that had to
 be found first. Off unless an extract is downloaded and configured in
-`notes_dataset_dirs`. Member identity is resolved through the same register:
+`notes_dataset_dirs`, which is empty by default. Member identity is resolved through the same register:
 the extracts spell a member stripped of its prefix and suffix, which is why the
 register is keyed on identity as well as on the member as written.
 
@@ -160,11 +183,14 @@ figures, applied only when uniquely determined, and marked as derived with the
 inputs that produced them. A quarter that derives to zero or below is refused,
 because a total that does not cover the year cannot be subtracted from.
 
-Nothing here is enabled by a flag or read only by an eval: `app/` calls all
-four, and `backend/tests/test_capabilities_are_wired.py` fails the suite if any
-of them becomes reachable only from a script. That test exists because three of
-them had been written, tested, measured in an eval and never called by the
-pipeline, so the coverage figure described something the product could not do.
+`app/` calls all five, and `backend/tests/test_capabilities_are_wired.py`
+fails the suite if any of them becomes reachable only from a script — a reader
+nothing calls reports a number the product cannot produce.
+
+One of the five is off in the shipped configuration: the bulk-tagged reader
+needs an extract directory in `notes_dataset_dirs`, which defaults to empty
+(`config.py:42`). It contributes nothing to a run, or to a measured number,
+unless that is set.
 
 ## Which of two answers wins
 

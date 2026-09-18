@@ -31,10 +31,10 @@ from __future__ import annotations
 
 import csv
 import sys
+from collections.abc import Iterator
 from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
-from typing import Iterator
 
 from app.parsing.xbrl import Fact
 

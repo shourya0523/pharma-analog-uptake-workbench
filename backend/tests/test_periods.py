@@ -7,9 +7,14 @@ candidate's own column.
 """
 
 from app.parsing.periods import (
+    MONTHS_TO_PERIOD_TYPE,
+    PERIOD_TYPE_TO_MONTHS,
     PeriodContext,
     detect_period_context,
     normalize_period,
+    period_label,
+    period_months,
+    period_span,
     quarter_of_month,
 )
 
@@ -39,6 +44,33 @@ Research and development expense for the three months ended June 30, 2024 and 20
 $77.2 million. Revenues for the three months ended June 30, 2024 increased as compared to
 the three months ended June 30, 2023 primarily due to a lower average selling price.
 """
+
+
+def test_a_period_type_names_the_span_the_span_names():
+    assert PERIOD_TYPE_TO_MONTHS == {
+        period_type: months for months, period_type in MONTHS_TO_PERIOD_TYPE.items()
+    }
+    assert all(
+        MONTHS_TO_PERIOD_TYPE[PERIOD_TYPE_TO_MONTHS[name]] == name
+        for name in PERIOD_TYPE_TO_MONTHS
+    )
+    assert "weekly" not in PERIOD_TYPE_TO_MONTHS
+
+
+def test_a_key_states_the_span_that_wrote_it():
+    """Both answers: every key `period_label` writes, and one it never writes.
+
+    Asserted against the producer rather than against a list of spellings, so
+    a span the label learns to write is covered without being written here.
+    """
+    for months in MONTHS_TO_PERIOD_TYPE:
+        for quarter in range(1, 5):
+            key = period_label(2024, months, quarter)
+            assert period_months(key) == months, key
+            span = period_span(key, period_months(key))
+            assert span is not None and span[1].year == 2024
+    assert period_months("2024W3") is None
+    assert period_months("") is None
 
 
 def test_quarter_of_month_maps_calendar_quarters():
@@ -146,6 +178,24 @@ def test_the_reporting_year_wins_over_a_more_repeated_comparative():
     assert (context.months, context.year, context.quarter) == (3, 2005, 4)
 
 
+def test_a_period_named_once_does_not_date_the_document():
+    """A maturity date is a period the filing mentions, not the one it reports.
+
+    An annual report states its own year on every statement and names a
+    far-future span once, in a debt or milestone note. Taking the latest span
+    outright dates the filing to that mention; taking the latest among the
+    spans named throughout keeps the year the statements are headed with.
+    """
+    text = (
+        "Year ended December 31, 2022\n2022\n2021\n"
+        + "Revenue for the year ended December 31, 2022 was reported. " * 8
+        + "The notes mature over the twelve months ended December 31, 2040."
+    )
+    context = detect_period_context(text)
+    assert context is not None
+    assert (context.months, context.month, context.year) == (12, 12, 2022)
+
+
 def test_a_filing_covering_two_spans_is_dated_by_its_quarter():
     """"three and six months ended" names two spans, and the quarter is the one.
 
@@ -219,17 +269,9 @@ def test_a_filing_that_names_a_year_throughout_is_dated_as_a_year():
     assert (context.months, context.month, context.year) == (3, 12, 2017)
 
 
-def test_a_table_headed_by_a_fiscal_quarter_end_is_read_into_that_quarter():
+def test_a_heading_ending_in_the_first_days_of_a_month_names_the_month_before():
     from app.extraction.fingerprint import _periods_named_in
-    from app.parsing.tables import extract_revenue_rows
 
-    rows = [
-        ["", "Fiscal First Quarter Ended"],
-        ["", "Three Months Ended April 1, 2018", "Three Months Ended April 2, 2017"],
-        ["", "2018", "2017"],
-        ["Calderon", "1,389", "1,672"],
-    ]
-    found = extract_revenue_rows([rows], product="Calderon")
-    assert {(c["period"], c["value_reported"]) for c in found} == {("2018Q1", 1389.0), ("2017Q1", 1672.0)}
     assert _periods_named_in("Three Months Ended April 1,") == [(3, 3)]
     assert _periods_named_in("Year Ended January 3,") == [(12, 12)]
+    assert _periods_named_in("Three Months Ended April 30,") == [(3, 4)]

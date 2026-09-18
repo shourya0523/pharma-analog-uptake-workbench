@@ -96,7 +96,11 @@ def test_the_period_comes_from_the_context_not_from_a_heading():
     assert facts["q3-neb"].period == "2024Q3"
     assert facts["q3-neb"].months == 3
     assert facts["ytd-neb"].months == 9
-    assert facts["ytd-neb"].period is None, "nine months is not a quarter or a year"
+    # A nine-month span is a period the filer reports, and is labelled as one -
+    # in the same key format the readers of prose and of tables produce. Read
+    # as "a quarter or else nothing" it was discarded, and the derivation path
+    # that subtracts a quarter from a span had only the model to work from.
+    assert facts["ytd-neb"].period == "2024M9"
 
 
 def test_worldwide_is_the_absence_of_a_geography():
@@ -105,17 +109,18 @@ def test_worldwide_is_the_absence_of_a_geography():
     assert not facts["q3-neb-us"].is_worldwide
 
 
-def test_product_facts_are_the_quarters_on_the_product_axis():
+def test_product_facts_are_the_reported_spans_on_the_product_axis():
     facts = product_facts(parse_facts(INSTANCE), verdicts=REVENUE)
     assert {(f.product_member.split(":")[-1], f.period, f.value) for f in facts} == {
         ("NebulizedTyvasoMember", "2024Q3", 159_200_000.0),
+        ("NebulizedTyvasoMember", "2024M9", 450_000_000.0),
         ("TyvasoDPIMember", "2024Q3", 274_600_000.0),
     }
 
 
 def test_a_regional_line_is_excluded_unless_it_is_asked_for():
     everywhere = product_facts(parse_facts(INSTANCE), worldwide_only=False, verdicts=REVENUE)
-    assert len(everywhere) == 3
+    assert len(everywhere) == 4
 
 
 def test_cash_is_not_revenue_and_carries_no_product():

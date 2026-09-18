@@ -17,6 +17,7 @@ import pytest
 from app.extraction.candidates import extract_revenue_candidates
 from app.parsing.periods import PeriodContext
 
+
 def test_a_table_stating_no_period_is_dated_by_its_document():
     """Lilly's product schedule is headed "First-Quarter", never "months ended".
 

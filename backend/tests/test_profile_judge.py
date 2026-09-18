@@ -8,14 +8,18 @@ it, but only with an equally cited replacement.
 import inspect
 
 from app.llm.client import load_prompt
+from app.parsing.fda_label import PROFILE_FIELDS
 from app.pipeline.orchestrator import PipelineOrchestrator
 from app.quality.profile import (
+    _PRIORITY_ORDER,
     PRIORITY_JUDGE_FIELDS,
     SKIP_JUDGE_FIELDS,
     apply_profile_judgment,
     blends_sibling_brand,
     has_label_section_header,
+    judgable_fields,
     normalize_value,
+    prompt_metadata_fields,
     select_profile_fields_for_judgment,
     values_conflict,
 )
@@ -112,6 +116,31 @@ def test_regulatory_fields_are_prioritised_for_judging():
     assert "moa" in PRIORITY_JUDGE_FIELDS
 
 
+def test_the_priority_list_holds_only_fields_a_producer_produces():
+    """An order over a name nothing writes is an order over nothing."""
+    producible = judgable_fields()
+    assert producible, "neither producer was readable, so nothing was tested"
+    assert set(PRIORITY_JUDGE_FIELDS) <= producible
+    assert set(PRIORITY_JUDGE_FIELDS) == set(_PRIORITY_ORDER) & producible
+
+
+def test_both_producers_are_readable_and_are_where_the_names_come_from():
+    """The prompt's own JSON skeleton, and the openFDA mapping's own keys."""
+    assert "therapeutic_area" in prompt_metadata_fields()
+    assert "cik" in prompt_metadata_fields()
+    assert set(PROFILE_FIELDS) <= judgable_fields()
+    # A producer's new field is judgable at once, and sorts last until it is
+    # ranked: membership is derived, the order is the written-down part.
+    assert judgable_fields() >= set(PROFILE_FIELDS) | prompt_metadata_fields()
+
+
+def test_a_ranked_name_no_producer_produces_is_dropped():
+    assert "moa_class" not in judgable_fields()
+    assert "approval_era" not in judgable_fields()
+    assert "moa_class" not in PRIORITY_JUDGE_FIELDS
+    assert "approval_era" not in PRIORITY_JUDGE_FIELDS
+
+
 def test_select_profile_fields_judges_every_content_field():
     class Row:
         def __init__(self, field, value, conflict=False):
@@ -176,12 +205,13 @@ def test_label_section_header_detection():
 
 
 def test_conflicting_sources_are_recorded_and_judged_first():
-    extract = inspect.getsource(PipelineOrchestrator._extract_metadata)
+    label = inspect.getsource(PipelineOrchestrator._label_metadata)
+    narrative = inspect.getsource(PipelineOrchestrator._narrative_metadata)
     # Disagreements are kept for adjudication rather than one source silently winning
-    assert "values_conflict(written[name], field[\"value\"])" in extract
-    assert "conflicting_source" in extract
-    assert "blends_sibling_brand" in extract
-    assert "format_moa_profile_value" in extract
+    assert "values_conflict(written[name], field[\"value\"])" in narrative
+    assert "conflicting_source" in label and "conflicting_source" in narrative
+    assert "blends_sibling_brand" in label and "blends_sibling_brand" in narrative
+    assert "format_moa_profile_value" in label
 
     judge = inspect.getsource(PipelineOrchestrator._judge_profile)
     assert "select_profile_fields_for_judgment" in judge

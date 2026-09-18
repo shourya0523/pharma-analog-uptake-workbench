@@ -13,11 +13,12 @@ import {
 } from 'recharts'
 import { api } from '../api/client'
 import {
-  buildChartData,
   calculateFilteredKpis,
   filterProducts,
   FILTER_KEYS,
   type FilterKey,
+  plottedNames,
+  selectChartSeries,
   uniqueOptions,
 } from './dashboardModel'
 
@@ -52,13 +53,15 @@ export default function DashboardPage() {
   const allProducts = useMemo(() => q.data?.products || [], [q.data?.products])
 
   const products = useMemo(() => filterProducts(allProducts, filters), [allProducts, filters])
-  const chartData = useMemo(() => buildChartData(q.data, products, tab), [q.data, products, tab])
+  const selection = useMemo(() => selectChartSeries(q.data, products, tab), [q.data, products, tab])
+  const chartData = selection.rows
   const kpis = useMemo(() => calculateFilteredKpis(products), [products])
 
-  const names = useMemo(
-    () => Array.from(new Set(products.map((p: any) => String(p.product_name)))) as string[],
-    [products],
-  )
+  // The products the chart can draw a line for, not the products in the
+  // table. Taken from the rows, a tab with no series renders no legend
+  // rather than a legend of every filtered product beside an empty chart.
+  const names = useMemo(() => plottedNames(chartData), [chartData])
+  const narrowed = selection.scopes.filter((line) => line.suppressed > 0)
 
   const activeFilterCount = FILTER_KEYS.filter((k) => filters[k]).length
 
@@ -152,7 +155,11 @@ export default function DashboardPage() {
           <article><span>Companies represented</span><strong>{kpis.companiesRepresented}</strong></article>
           <article>
             <span>Aggregate selected peak</span>
-            <strong>${kpis.aggregatePeak.toLocaleString()}M</strong>
+            {kpis.aggregatePeak == null ? (
+              <strong className="muted">Not computed</strong>
+            ) : (
+              <strong>${kpis.aggregatePeak.toLocaleString()}M</strong>
+            )}
             <small>Coverage {kpis.peakCoverage}</small>
           </article>
           <article><span>Uptake-ready products</span><strong>{kpis.uptakeReady}</strong></article>
@@ -163,12 +170,42 @@ export default function DashboardPage() {
             <div className="methodology">
               <p>Canonical products shown: {products.length} (formulations remain commercially distinct)</p>
               <p>Source-backed series points in view: {chartData.length} periods</p>
-              <p>Launch uptake is a rolling-four-quarter revenue proxy divided by the typed selected annual peak.</p>
-              <p>Competitive intensity uses the stored competitive_intensity_v1 peer cohort and score components.</p>
+              <p>
+                The chart draws figures the pipeline stands behind, from jobs that reached review
+                or were completed. A job still running or failed contributes no points; its
+                product is still listed below, with its status in the Validation column.
+              </p>
+              <p>
+                Each line draws one revenue scope - the widest its product reports in view - so a
+                worldwide quarter and a U.S. quarter are never joined into one curve.
+                {narrowed.length
+                  ? ` Narrower-scope points left out: ${narrowed
+                      .map((line) => `${line.product} (${line.suppressed})`)
+                      .join(', ')}.`
+                  : ' No product in view reports more than one scope.'}
+              </p>
+              <p>
+                Where two published figures for one product, period and scope disagree, the one
+                reconciliation chose is drawn. Where it chose neither, the period is left
+                unplotted and named as contested below the chart, because the average of two
+                figures is a third that no document contains.
+                {selection.contested.length
+                  ? ` Contested in view: ${selection.contested.length}.`
+                  : ''}
+              </p>
+              <p>
+                {kpis.aggregatePeak == null
+                  ? 'No selected peak is stored for any product in view, so peak, time-to-peak, uptake and competitive intensity read Unresolved rather than zero.'
+                  : `Selected peaks are stored for ${kpis.peakCoverage} products in view.`}
+              </p>
               <p>Click any chart point or Source cell for citation drill-through.</p>
             </div>
-          ) : names.length === 0 ? (
-            <p className="muted">No analogs match the current filters.</p>
+          ) : chartData.length === 0 ? (
+            <p className="muted">
+              {products.length === 0
+                ? 'No analogs match the current filters.'
+                : 'No series points for this view.'}
+            </p>
           ) : (
             <ResponsiveContainer width="100%" height={320}>
               <LineChart data={chartData}>
@@ -193,6 +230,25 @@ export default function DashboardPage() {
                 ))}
               </LineChart>
             </ResponsiveContainer>
+          )}
+          {tab !== 'methodology' && selection.contested.length > 0 && (
+            <p className="muted small" aria-label="Contested periods">
+              Contested, not plotted:{' '}
+              {selection.contested
+                .map(
+                  (point) =>
+                    `${point.product} ${point.period} (${point.values.join(' vs ')})`,
+                )
+                .join('; ')}
+            </p>
+          )}
+          {tab !== 'methodology' && narrowed.length > 0 && (
+            <p className="muted small" aria-label="Scope of each line">
+              One scope per line:{' '}
+              {narrowed
+                .map((line) => `${line.product} draws ${line.scope}, ${line.suppressed} narrower point(s) left out`)
+                .join('; ')}
+            </p>
           )}
         </div>
 
@@ -278,6 +334,33 @@ export default function DashboardPage() {
           <p>
             <strong>Quote:</strong> {drill.source_quote}
           </p>
+          {drill.period && (
+            <p>
+              <strong>Figure:</strong> {drill.period} · {drill.value ?? '—'} ·{' '}
+              {drill.revenue_scope || 'scope unstated'}
+              {drill.geography ? ` · ${drill.geography}` : ''}
+              {drill.formulation ? ` · ${drill.formulation}` : ''}
+            </p>
+          )}
+          {drill.reported_as && (
+            <p>
+              <strong>Reported as:</strong> {drill.reported_as}
+            </p>
+          )}
+          {/* A figure covering part of a quarter is plotted where the quarter
+              is, and a reader comparing it with the quarters around it has to
+              be told that is what it is. */}
+          {drill.partial_period && (
+            <p>
+              <strong>Covers part of the quarter:</strong> not a full quarter of
+              sales, so it is not comparable with the quarters beside it.
+            </p>
+          )}
+          {drill.series_identity && (
+            <p>
+              <strong>Series:</strong> {drill.series_identity}
+            </p>
+          )}
           <p>
             <strong>Validation:</strong> {drill.validation_status}
           </p>

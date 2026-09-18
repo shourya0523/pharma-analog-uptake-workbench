@@ -1,3 +1,10 @@
+> **Superseded.** This brief framed the product as layer 1 only - "name a drug,
+> get its quarterly revenue with a citation" - and seeded each reviewer with
+> known defects to bound. Both biased the pass: reviewers confirmed claims
+> rather than reading the logic, and nobody examined the analog work the
+> product exists for. Kept for the record. New reviewers use
+> `_product-brief.md`.
+
 # Shared brief for the pipeline review agents
 
 Not an agent. The common instructions each reviewer inlines.

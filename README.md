@@ -2,6 +2,12 @@
 
 Source-first extraction and validation for pharmaceutical analog uptake data. Citations are mandatory on every source-derived field.
 
+## Where things stand
+
+Working on this repository starts with `CLAUDE.md` (the five rules) and
+`docs/plans/2026-09-18-009-where-things-stand.md`: what is on the branch,
+what is scored, which decisions are open, and how to run a smoke test.
+
 ## Stack
 
 - Backend: FastAPI (Python 3.12), SQLAlchemy, OpenRouter (extract, judge, web search)
@@ -75,22 +81,25 @@ Use the `ApiUrl` stack output (ALB). After AWS verifies CloudFront, deploy with 
 - [`docs/pipeline.md`](docs/pipeline.md) — the stages a run walks, how a filing
   becomes a rectangle whether it is HTML or PDF, and the rules that make the
   pipeline refuse rather than guess.
-- [`docs/evaluation.md`](docs/evaluation.md) — the five evals, what each one
-  measures, and which single number is the pipeline's score.
+- [`docs/evaluation.md`](docs/evaluation.md) — the one eval, what it measures,
+  and how to read what it prints.
 
-The short version of the second: an end-to-end run
-makes the readers find their own filings, which is the honest way to measure
-finding. It is not the whole pipeline - it runs none of the twelve stages in
-`run_job`, so the LLM extractor, the evidence judge and conflict reconciliation
-are all absent from it. Treat it as the deterministic floor. The same script
-without the flag hands it the document and measures only reading; that is a
-diagnostic and it prints so before it prints a number.
+There is one eval, and it speaks to the pipeline the way a person does: it
+POSTs a run, waits for the jobs, reads the datapoints back, and scores what the
+pipeline published. It imports nothing from `app`, so what it scores is what a
+caller gets — the whole pipeline, sourcing its own filings.
 
-Currently **1,070 of gold's 1,415 quarters (75.6%) are read correctly with the
-pipeline sourcing for itself**, against 3 wrong values. 305 of those answers
-come from facts the filer tagged in its own XBRL instance rather than from a
-table read positionally. Coverage by issuer and what the remainder consists of
-are in `docs/evaluation.md`.
+```bash
+cd backend && ./.venv/bin/uvicorn app.main:app --port 8000   # in one shell
+python scripts/eval.py --cases seed/cases/gold_all.json      # in another
+```
+
+The score is not written down here, because it is not a number on its own. It
+is a number as of a date, against an answer key of a given size, from a server
+running a given configuration, and all three move — `seed/cases/` is
+regenerated from `seed/gold/`, and the settings arrive from the environment the
+server was started in. The run prints all three above the number it prints, so
+read it there.
 
 ## Pharmaceutical data semantics
 
@@ -101,15 +110,15 @@ are in `docs/evaluation.md`.
 - Launch uptake is labeled `revenue_proxy_r4q`: rolling-four-quarter product sales divided by selected annual peak. The first three quarters are `insufficient_history`.
 - Competitive intensity uses `competitive_intensity_v1` and stored peer classifications. Cohorts under six launches use provisional thresholds and expose `low_coverage=true`.
 
-Public label, regulatory, SEC, company IR, and ClinicalTrials.gov sources are supported. Licensed consensus, claims, prescription, and patient-volume data use cited manual imports until credentials and redistribution rights are available. The application does not scrape paid vendors.
+Public label, regulatory, SEC, company IR, and ClinicalTrials.gov sources are supported. Licensed consensus, claims, prescription, and patient-volume data would use cited manual imports until credentials and redistribution rights are available. The application does not scrape paid vendors.
 
-Consensus/manual peak CSV columns are:
-
-```text
-product,estimate_type,value,currency,geography,revenue_scope,as_of_date,source_url
-```
-
-All columns are required. Cross-currency values remain unresolved unless a cited, period-compatible FX observation is stored.
+**Not wired.** A reader for a consensus/manual peak CSV exists
+(`app/imports/peak_sales.py`, columns
+`product,estimate_type,value,currency,geography,revenue_scope,as_of_date,source_url`,
+all required), but nothing calls it: there is no route and no script, so an
+analyst who prepares that file has nowhere to send it. It is listed in
+`backend/tests/test_capabilities_are_wired.py` as not wired, and that test
+fails if the claim stops being true in either direction.
 
 ## Migrations and backfill
 
@@ -134,7 +143,9 @@ The XBRL member register — which product a filer's private axis member names �
 uv run --project backend python scripts/export_member_register.py
 ```
 
-For a connector-free metadata smoke check:
+For a smoke test of the same pipeline against a handful of gold's own
+product-years — a running server, and the network, since the run sources
+its own filings:
 
 ```bash
 uv run --project backend python scripts/eval.py --cases seed/cases/gold_sample.json

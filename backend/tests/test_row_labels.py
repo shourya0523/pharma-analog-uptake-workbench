@@ -20,7 +20,7 @@ from bs4 import BeautifulSoup
 from app.extraction.candidates import extract_revenue_candidates
 from app.extraction.extract import read_table
 from app.parsing.documents import html_table_grid, table_footnotes
-from app.parsing.labels import read_footnote, read_label
+from app.parsing.labels import QUESTION_FLAGS, read_footnote, read_label
 from app.pipeline.orchestrator import reported_as_for
 from app.quality.fast_judge import try_deterministic_judgment
 
@@ -93,6 +93,41 @@ def test_a_footnote_naming_a_sibling_makes_the_line_combined():
     assert note.names == ("Nebulized Calderon",) and note.flags == ()
 
 
+def test_a_footnote_saying_the_line_does_not_include_a_sibling_names_nobody():
+    """"does not include sales of NuVessa" is the opposite claim, on the same
+    two words. Tested apart - a claim word anywhere, the name anywhere - it
+    reads as a line combining the two, and the row is labelled combined.
+    """
+    note = "Full year 2026 guidance does not include sales of NuVessa, as promotion moved."
+    assert read_footnote(note, ["Calderon"], products=PRODUCTS).names == ()
+    assert read_footnote(note, ["NuVessa"], products=PRODUCTS).names == ()
+    # The claim it is the opposite of still reads.
+    assert read_footnote("includes sales of NuVessa", ["Calderon"],
+                         products=PRODUCTS).names == ("NuVessa",)
+
+
+def test_a_negator_reaches_the_claim_across_the_words_between_them():
+    """Both answers on the same distance: the negator reaches, the coordinator stops it.
+
+    A negator sitting next to the claim word was the only one the reading
+    refused, so one adverb between them - "does not currently include" - read
+    as a line combining the two. It reaches as far behind the claim as the
+    claim reaches ahead to the name, and stops where the claim's own statement
+    began.
+    """
+    for note in (
+        "Guidance does not currently include sales of NuVessa.",
+        "Net revenue does not, for the periods presented, include sales of NuVessa.",
+    ):
+        assert read_footnote(note, ["Calderon"], products=PRODUCTS).names == (), note
+    # A second claim after a coordinator is not the first claim's negation.
+    combined = read_footnote(
+        "Amounts exclude sales of NuVessa but include sales of Nebulized Calderon.",
+        ["Calderon"], products=PRODUCTS,
+    )
+    assert combined.names == ("Nebulized Calderon",)
+
+
 def test_an_acquisition_footnote_is_a_partial_period_and_a_launch_is_not():
     note = read_footnote(
         "net product revenue is for the period between January 24, 2023 "
@@ -104,17 +139,22 @@ def test_an_acquisition_footnote_is_a_partial_period_and_a_launch_is_not():
     assert note.flags == ()
 
 
-def test_a_footnote_about_one_column_says_nothing_about_the_others():
+def test_a_footnote_flags_one_column_and_travels_on_every_one():
     """"+ ... for the six months ended June 30, 2023 is for the period between
     the acquisition date and June 30" qualifies the six-month figure. The
-    quarter beside it is the quarter's own, is not flagged, and does not
-    carry the note's "six months ended" into its quote, where the
-    year-to-date veto would read it."""
+    quarter beside it is the quarter's own and is not flagged.
+
+    The note itself travels on both quotes: the row's label cited the mark, and
+    where the note lands is a reading the pipeline may be wrong about. A flag
+    is the pipeline claiming something and may only be claimed where the note
+    was placed; the note is the filer's words and belongs with the figure
+    whatever the placement turned out to be."""
     note = read_footnote(
         "net product revenue for the six months ended June 30, 2023 is for the "
         "period between January 24, 2023 (date of acquisition) and June 30, 2023",
         ["Calderon"])
-    assert note.months == 6 and note.applies_to(6, "2023") and not note.applies_to(3, "2023Q2")
+    assert note.scope == frozenset({(6, "2023H1")})
+    assert note.applies_to(6, "2023") and not note.applies_to(3, "2023Q2")
     rows = [
         ["", "Three Months Ended June 30,", "", "Six Months Ended June 30,", ""],
         ["", "2023", "2022", "2023", "2022"],
@@ -126,7 +166,7 @@ def test_a_footnote_about_one_column_says_nothing_about_the_others():
                                     "(date of acquisition) and June 30, 2023"])
     by_period = {v.period: v for v in readout.values if v.value_as_reported}
     assert "partial_period" not in by_period["2023Q2"].flags
-    assert "six months" not in by_period["2023Q2"].source_quote
+    assert "six months" in by_period["2023Q2"].source_quote
     assert "partial_period" in by_period["2023"].flags
     assert "six months" in by_period["2023"].source_quote
 
@@ -134,16 +174,84 @@ def test_a_footnote_about_one_column_says_nothing_about_the_others():
 def test_a_footnote_naming_a_period_qualifies_that_period_only():
     note = read_footnote("For Q1 2023, represents product revenue, net from the date "
                          "of acquisition of the product rights.", ["Calderon"])
-    assert note.period == "2023Q1"
+    assert note.scope == frozenset({(3, "2023Q1")})
     assert note.applies_to(3, "2023Q1") and not note.applies_to(3, "2024Q1")
+
+
+def test_a_footnote_naming_several_periods_is_about_all_of_them():
+    """"the quarters ended March 31, 2026 and June 30, 2026" names two.
+
+    Reading one period per note made a note about two quarters apply to one of
+    them, and the figures the note was about were published unqualified.
+    """
+    note = read_footnote(
+        "There were no sales of Calderon during the quarters ended March 31, 2026 "
+        "and June 30, 2026", ["Calderon"])
+    assert note.scope == frozenset({(3, "2026Q1"), (3, "2026Q2")})
+    assert note.applies_to(3, "2026Q1") and note.applies_to(3, "2026Q2")
+    assert not note.applies_to(3, "2025Q2")
+
+
+def test_a_footnotes_scope_is_its_claims_clause_not_its_reasons():
+    """The reason a note gives for a claim names periods of its own.
+
+    "no sales of Calderon in Q1 2026 as promotion moved to NuVessa during the
+    second quarter of 2025" is about 2026Q1. The 2025 quarter is when the
+    promotion moved, and the claim says nothing about it.
+    """
+    note = read_footnote(
+        "There were no sales of Calderon in Q1 2026 as the issuer moved promotional "
+        "effort to NuVessa, which has a combined label as of the second quarter of 2025.",
+        ["Calderon"])
+    assert note.scope == frozenset({(3, "2026Q1")})
+    assert note.applies_to(3, "2026Q1") and not note.applies_to(3, "2025Q2")
+
+
+def test_a_footnote_stating_no_scope_is_about_the_whole_row_and_says_so():
+    note = read_footnote("includes Nebulized Calderon", ["Calderon"], products=PRODUCTS)
+    assert note.scope == frozenset()
+    assert note.applies_to(3, "2024Q1") and note.applies_to(12, "2024")
+
+
+def test_a_period_is_read_over_the_span_it_was_named_with():
+    """Both answers on one note that names two spans.
+
+    "the three months ended March 31, 2026 and the year ended December 31,
+    2025" states a quarter and a year. Each period belongs to the span beside
+    it, so the note is about the quarter as a quarter and the year as a year -
+    and about neither read over the other's span.
+    """
+    note = read_footnote(
+        "There were no sales of Calderon in the three months ended March 31, 2026 "
+        "and the year ended December 31, 2025",
+        ["Calderon"])
+    assert note.scope == frozenset({(3, "2026Q1"), (12, "2025")})
+    assert note.applies_to(3, "2026Q1") and note.applies_to(12, "2025")
+    assert not note.applies_to(12, "2026") and not note.applies_to(3, "2025Q1")
 
 
 def test_a_note_saying_the_product_had_no_sales_makes_the_line_someone_elses():
     rows = [["Calderon and NuVessa (1)", "19.3", "16.1"]]
     notes = ["(1) There were no sales of NuVessa in the quarter, as promotion moved to Calderon"]
+    # The figure is carried out flagged, not dropped. Dropped, the quarter is
+    # a gap with no account of itself anywhere a reader looks; flagged, it is
+    # a question in front of a person, and the flag is a question flag, so it
+    # can never be published without one.
     for_nuvessa = _read(rows, product="NuVessa", footnotes=notes)
-    assert for_nuvessa.values == []
-    assert "footnote_says_no_sales" in (for_nuvessa.skipped_reason or "")
+    assert [v.flags for v in for_nuvessa.values] == [("combined_line", "footnote_says_no_sales")] * 2
+    assert QUESTION_FLAGS & {"footnote_says_no_sales"}
+    # And it is not also reported as skipped: that channel says what was left
+    # out of the readout, and this row is in it. The other answer, on a row the
+    # readout really does leave out - the family line, asked for the sibling it
+    # includes - is that the channel names it and no value is carried out.
+    assert "footnote_says_no_sales" not in (for_nuvessa.skipped_reason or "")
+    left_out = _read(
+        [["Calderon (1)", "100.0", "90.0"]],
+        product="Nebulized Calderon", extra_aliases=["Calderon"],
+        footnotes=["(1) includes Nebulized Calderon"],
+    )
+    assert left_out.values == []
+    assert "family_line_includes_product" in (left_out.skipped_reason or "")
     for_calderon = _read(rows, footnotes=notes)
     assert for_calderon.values and all(v.combined_with == () for v in for_calderon.values), (
         "the line is Calderon's alone once the note says the other sold nothing"
@@ -247,10 +355,12 @@ def test_a_no_sales_note_naming_a_period_gives_that_column_alone_away():
     for_calderon = {v.period: v for v in _read(rows, footnotes=notes).values}
     assert for_calderon["2024Q2"].combined_with == () and "combined_line" not in for_calderon["2024Q2"].flags
     assert for_calderon["2023Q2"].combined_with == ("NuVessa",) and "combined_line" in for_calderon["2023Q2"].flags
-    for_nuvessa = _read(rows, product="NuVessa", footnotes=notes)
-    assert [v.period for v in for_nuvessa.values] == ["2023Q2"], "nothing for the quarter it sold nothing in"
-    assert "combined_line" in for_nuvessa.values[0].flags
-    assert "footnote_says_no_sales" in (for_nuvessa.skipped_reason or "")
+    for_nuvessa = {v.period: v for v in _read(rows, product="NuVessa", footnotes=notes).values}
+    assert "footnote_says_no_sales" in for_nuvessa["2024Q2"].flags, (
+        "the quarter it sold nothing in is a question, not a figure"
+    )
+    assert "footnote_says_no_sales" not in for_nuvessa["2023Q2"].flags
+    assert "combined_line" in for_nuvessa["2023Q2"].flags
 
 
 def test_a_family_line_whose_footnote_includes_the_sibling_is_not_the_siblings():

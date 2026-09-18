@@ -8,8 +8,6 @@ most recent job, and its history is every job that ever named it.
 
 from __future__ import annotations
 
-# ruff: noqa: B008, BLE001
-from datetime import datetime
 from typing import Any
 
 from fastapi import APIRouter, HTTPException, Query
@@ -28,6 +26,7 @@ from app.db.models import (
     SessionLocal,
     UnresolvedQuarterORM,
     ValidationTaskORM,
+    utc_now,
 )
 from app.domain.models import (
     NO_FILER_OF_RECORD,
@@ -40,7 +39,13 @@ from app.domain.models import (
     new_id,
 )
 from app.observability import normalize_analog_key
-from app.quality.completeness import names_a_quarter, refresh_completeness
+from app.pipeline.orchestrator import resettle_series
+from app.pipeline.series_identity import recorded_reason_code
+from app.quality.completeness import (
+    names_a_quarter,
+    quarter_labels,
+    refresh_completeness,
+)
 from app.validation.sampling import REASON_HELP as FLAGGED_REASON_HELP
 
 router = APIRouter(tags=["products"])
@@ -75,9 +80,9 @@ REASON_HELP: dict[str, str] = {**FLAGGED_REASON_HELP, **MISSING_REASON_HELP}
 
 
 def _missing_reason(period: str | None, reason_unresolved: str | None = None) -> str:
-    for code in (NO_FILER_OF_RECORD, REPORTED_WITH_ANOTHER_PRODUCT):
-        if (reason_unresolved or "").startswith(f"[{code}]"):
-            return code
+    code = recorded_reason_code(reason_unresolved)
+    if code:
+        return code
     return "not_disclosed" if period == WHOLE_PRODUCT_PERIOD else "interior_gap"
 
 
@@ -134,17 +139,23 @@ def _jobs_for(db: Session, product_key: str) -> list[DrugJobORM]:
 
 
 def _published_quarters(db: Session, job_id: str) -> int:
-    """Distinct periods with a figure the pipeline stands behind."""
+    """Distinct quarters with a figure the pipeline stands behind.
 
-    return (
+    Counted over quarterly rows only. Counting every period type under a
+    heading that says "qtrs" let an annual figure, and an annual figure
+    labelled with a quarter, each be read as a quarter of coverage.
+    """
+
+    periods = (
         db.query(DatapointORM.period)
         .filter(
             DatapointORM.job_id == job_id,
+            DatapointORM.period_type == PeriodType.QUARTERLY.value,
             DatapointORM.validation_status.in_(PUBLISHED_STATUS_VALUES),
         )
-        .distinct()
-        .count()
+        .all()
     )
+    return len(quarter_labels(period for (period,) in periods))
 
 
 def _open_queue_counts(db: Session, job_id: str) -> tuple[int, int]:
@@ -372,10 +383,20 @@ def get_product(product_id: str) -> dict[str, Any]:
                 {
                     "id": dp.id,
                     "period": dp.period,
+                    "period_type": dp.period_type,
                     "value_normalized_usd_millions": dp.value_normalized_usd_millions,
                     "currency": dp.currency,
                     "revenue_scope": dp.revenue_scope,
+                    "geography": dp.geography,
+                    "formulation": dp.formulation,
                     "reported_as": dp.reported_as,
+                    # Which series this quarter's figure belongs to, and
+                    # whether it is the one that series holds. A reader
+                    # looking at two figures for one quarter needs to see
+                    # which of them the curve is drawn from.
+                    "series_identity": dp.series_identity,
+                    "series_selection": dp.series_selection,
+                    "issue_flags": dp.issue_flags,
                     "source_url": dp.source_url,
                     "source_quote": dp.source_quote,
                     "extraction_method": dp.extraction_method,
@@ -526,8 +547,12 @@ def review_queue(
                         "reason": task.reason,
                         "confidence": task.confidence_score,
                         "value_normalized_usd_millions": dp.value_normalized_usd_millions,
+                        "period_type": dp.period_type,
                         "revenue_scope": dp.revenue_scope,
+                        "geography": dp.geography,
                         "reported_as": dp.reported_as,
+                        "series_identity": dp.series_identity,
+                        "series_selection": dp.series_selection,
                         "source_url": dp.source_url,
                         "source_quote": dp.source_quote,
                         "extraction_method": dp.extraction_method,
@@ -650,6 +675,7 @@ def resolve_unresolved_quarter(
         if not row:
             raise HTTPException(404, "unresolved quarter not found")
 
+        job = db.get(DrugJobORM, row.job_id)
         created_datapoint_id: str | None = None
         if body.action == "enter_value":
             if body.value_normalized_usd_millions is None:
@@ -685,7 +711,7 @@ def resolve_unresolved_quarter(
                 citation_json={
                     "source_url": body.source_url.strip(),
                     "source_quote": body.source_quote,
-                    "entered_at": datetime.utcnow().isoformat(),
+                    "entered_at": utc_now().isoformat(),
                 },
             )
             db.add(datapoint)
@@ -706,7 +732,12 @@ def resolve_unresolved_quarter(
                 notes=body.reviewer_notes,
             )
         )
-        counted = refresh_completeness(db, db.get(DrugJobORM, row.job_id))
+        if created_datapoint_id:
+            # The entered figure is an answer for a quarter that may already
+            # hold one, so the series is asked again which reading it holds.
+            db.flush()
+            resettle_series(db, job)
+        counted = refresh_completeness(db, job)
         db.commit()
         return {
             "id": row.id,
@@ -745,7 +776,7 @@ def patch_profile_field(field_id: str, body: ProfileFieldPatch) -> dict[str, Any
             "source_url": body.source_url.strip(),
             "source_quote": body.reviewer_notes,
             "extraction_method": "reviewer",
-            "edited_at": datetime.utcnow().isoformat(),
+            "edited_at": utc_now().isoformat(),
         }
         db.add(
             ReviewEventORM(

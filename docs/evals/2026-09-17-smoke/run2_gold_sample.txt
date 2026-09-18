@@ -1,0 +1,95 @@
+  [1/2] 7 drug(s): attached to run c8f3ec3b
+  [2/2] 2 drug(s): attached to run 497c3a5a
+
+  configuration
+    as of                 2026-09-18 01:38:30+0000
+    cases                 seed/cases/gold_sample.json (9 case(s), 22 expectation(s), 2 run(s))
+    server                http://127.0.0.1:8011
+    resolved options      {"company_ir": true, "earnings_releases": true, "llm_evidence_judge": true, "openfda": true, "product_metadata": true, "quarterly_revenue": true, "sec_filings": true, "transcripts": false}
+                          over 2 run(s), one window each
+    settings              4 of 38 reported: every one this server does not take from the code, and the models
+      openrouter_api_key           'set'   (code declares 'unset')
+      openrouter_model_extract     'google/gemini-3.8-flash'
+      openrouter_model_judge       'openai/gpt-4o-mini'
+      sec_user_agent               'PharmaAnalogUptakeWorkbench <sec-contact-email>'   (code declares 'PharmaAnalogUptakeWorkbench research@example.com')
+    01:38:30 7/7 done
+      Uptravi: ready_for_review ready_for_review
+      Zepbound: ready_for_review ready_for_review
+      Odefsey: ready_for_review ready_for_review
+      Xarelto: ready_for_review ready_for_review
+      Yutrepia: ready_for_review ready_for_review
+      Winrevair: ready_for_review ready_for_review
+      Tyvaso DPI: failed judge_metadata
+    01:38:30 0/2 done
+      Taltz: running queued
+      Alyq: queued queued
+    01:38:35 0/2 done
+      Taltz: running source_retrieve
+      Alyq: queued queued
+    01:38:46 0/2 done
+      Taltz: running judge_metadata
+      Alyq: queued queued
+    01:39:46 0/2 done
+      Taltz: running extract_revenue
+      Alyq: queued queued
+    01:40:36 0/2 done
+      Taltz: running reconcile_conflicts
+      Alyq: queued queued
+    01:40:46 0/2 done
+      Taltz: running completeness
+      Alyq: queued queued
+    01:41:21 1/2 done
+      Taltz: ready_for_review ready_for_review
+      Alyq: running queued
+    01:41:31 1/2 done
+      Taltz: ready_for_review ready_for_review
+      Alyq: running source_retrieve
+    01:41:36 1/2 done
+      Taltz: ready_for_review ready_for_review
+      Alyq: running identity_resolve
+    01:42:11 1/2 done
+      Taltz: ready_for_review ready_for_review
+      Alyq: running judge_metadata
+    01:42:56 1/2 done
+      Taltz: ready_for_review ready_for_review
+      Alyq: running extract_revenue
+    01:46:01 1/2 done
+      Taltz: ready_for_review ready_for_review
+      Alyq: running completeness
+    01:46:16 2/2 done
+      Taltz: ready_for_review ready_for_review
+      Alyq: ready_for_review ready_for_review
+
+  drug                   period         want       read  state
+  Uptravi                2026Q1        483.0      483.0  published, correct (xbrl_fact)
+  Uptravi                2026Q2        494.0      494.0  published, correct (xbrl_fact)
+  Zepbound               2026Q1      4,160.0    4,160.0  published, correct (xbrl_fact)
+  Zepbound               2026Q2      4,928.0    4,928.0  published, correct (llm)
+  Odefsey                2026Q1        221.0      221.0  published, correct (xbrl_fact)
+  Odefsey                2026Q2        239.0      239.0  published, correct (xbrl_fact)
+  Xarelto                2026Q1        642.0      642.0  published, correct (xbrl_fact)
+  Xarelto                2026Q2        664.0      664.0  published, correct (xbrl_fact)
+  Yutrepia               2026Q1        129.9      130.0  published, correct (llm)
+  Yutrepia               2026Q2        170.4      170.4  published, correct (llm)
+  Winrevair              2026Q1        525.0      525.0  published, correct (xbrl_fact)
+  Winrevair              2026Q2        588.0      588.0  published, correct (xbrl_fact)
+  Taltz                  2025Q1        761.9      762.0  published, correct (xbrl_fact)
+  Taltz                  2025Q2        847.6      847.6  published, correct (xbrl_fact)
+  Taltz                  2025Q3        901.5      901.5  published, correct (xbrl_fact)
+  Taltz                  2025Q4                          correctly silent
+  Alyq                   2025Q1                          correctly silent
+  Alyq                   2025Q2                          correctly silent
+  Alyq                   2025Q3                          correctly silent
+  Alyq                   2025Q4                          correctly silent
+
+  20 expected figures across 8 scored case(s)
+  1 case(s) with no finished job, not scored and absent from every count below:
+    Tyvaso DPI             failed             judge_metadata
+    published, correct       15   75.0%
+    correctly silent          5   25.0%
+  correct: 20/20
+  31 published (product, period) pair(s) no expectation examined:
+    run c8f3ec3b    23
+    run 497c3a5a     8
+  published-correct by method: xbrl_fact 12, llm 3
+  detail written to /tmp/claude-0/-home-user-pharma-analog-uptake-workbench/2246df3a-f6aa-5795-b4af-896b904953c0/scratchpad/smoke/gold_sample.eval.json

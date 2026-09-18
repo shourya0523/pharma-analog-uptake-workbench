@@ -26,9 +26,16 @@ routinely differ by 1. That is not a contradiction and must not be reported as
 one. Anything this module flags should be something
 a careful analyst reading the same pages would also stop at.
 
-``test_no_real_gold_row_needs_review`` runs every quarter in ``seed/gold``
-through here and requires all of them to resolve. If a change to this file
-starts flagging real data, that test fails, and it is this file that is wrong.
+Nothing here reads a document or a database. Every function takes the figures
+a caller already holds and returns a ``Verdict``: a status, a code naming the
+shape of the disagreement, and a value when one is defensible.
+
+Nothing in ``app/`` calls any of it, and that is a decision rather than an
+oversight. A verdict wired into the pipeline changes what the pipeline
+publishes, and the only score these functions have comes from the answer key on
+both sides: the fixtures they are replayed through, and the real rows they are
+required not to trip. A scored change is measured on a set it was not built
+from, so they stay unwired until there is one.
 """
 
 from __future__ import annotations

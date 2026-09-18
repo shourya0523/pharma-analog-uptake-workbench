@@ -160,3 +160,51 @@ def test_evidence_assertion_uses_scalar_hash_for_postgresql_uniqueness(tmp_path:
         db.add(assertion)
         db.commit()
         assert len(assertion.value_hash) == 64
+
+
+def test_the_unwritten_validation_task_columns_are_dropped_and_their_rows_kept(
+    tmp_path: Path,
+):
+    """A column with no writer goes, and the rows beside it stay.
+
+    `validation_tasks` carried three columns meant to say why a row is held -
+    a judge verdict, the deterministic results, and a list of issues. Nothing
+    ever wrote any of them, so a reviewer got the `reason` string alone.
+
+    Both answers: a database on disk that has the three loses them and keeps
+    its rows, and a database built from the current models never had them, so
+    the same upgrade is a no-op there.
+    """
+    old = create_engine(_url(tmp_path / "with-them.db"))
+    with old.begin() as conn:
+        for table in sorted(BASELINE_TABLES):
+            recorded = BASELINE_001_COLUMNS[table]
+            if table == "validation_tasks":
+                recorded = (*recorded, "judge_status", "deterministic_results", "issues")
+            columns = ", ".join(
+                f"{name} TEXT PRIMARY KEY" if name == "id" else f"{name} TEXT"
+                for name in recorded
+            )
+            conn.execute(text(f"CREATE TABLE {table} ({columns})"))
+        conn.execute(
+            text(
+                "INSERT INTO validation_tasks (id, job_id, datapoint_id, reason, status)"
+                " VALUES ('vt-1', 'job-1', 'dp-1', 'conflicting_values', 'open')"
+            )
+        )
+
+    upgrade_database(old)
+
+    columns = {column["name"] for column in inspect(old).get_columns("validation_tasks")}
+    assert not columns & {"judge_status", "deterministic_results", "issues"}
+    with old.connect() as conn:
+        assert (
+            conn.execute(text("SELECT reason FROM validation_tasks WHERE id='vt-1'")).scalar_one()
+            == "conflicting_values"
+        )
+
+    fresh = create_engine(_url(tmp_path / "without-them.db"))
+    upgrade_database(fresh)
+    assert not {
+        column["name"] for column in inspect(fresh).get_columns("validation_tasks")
+    } & {"judge_status", "deterministic_results", "issues"}

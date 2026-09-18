@@ -67,6 +67,52 @@ PUBLISHED_STATUSES = frozenset({ValidationStatus.AUTO_PASS, ValidationStatus.CON
 PUBLISHED_STATUS_VALUES = frozenset(status.value for status in PUBLISHED_STATUSES)
 
 
+class SeriesSelection(str, Enum):
+    """What a series does with one reading of one of its quarters."""
+
+    SELECTED = "selected"
+    DUPLICATE = "duplicate"
+    SUPERSEDED = "superseded"
+
+    @property
+    def holds_the_series_figure(self) -> bool:
+        """Whether a row with this selection is the figure its series plots.
+
+        Listed rather than excluded, in the shape `ran_to_the_end` uses, so
+        that a standing added later keeps a row out of the curve until
+        someone says it belongs in it.
+        """
+        return self in {SeriesSelection.SELECTED}
+
+
+# The selections that put a row in its series' curve, from the enum itself.
+SERIES_FIGURE_SELECTION_VALUES = frozenset(
+    selection.value for selection in SeriesSelection if selection.holds_the_series_figure
+)
+
+
+def holds_the_series_figure(selection: str | None) -> bool:
+    """Whether a row may be drawn as its series' figure for its quarter.
+
+    An empty selection is not a decision against the row: it is a row written
+    before anything decided, or one whose quarter nothing was published for.
+    Only a recorded decision - it duplicates the figure the series holds, or a
+    stronger reading of the same series superseded it - keeps it out.
+    """
+    return selection is None or selection in SERIES_FIGURE_SELECTION_VALUES
+
+
+class QualityCheckStatus(str, Enum):
+    """Whether a recorded quality issue is still a question.
+
+    A check that the pipeline itself settled says so, and says what settled
+    it, rather than sitting open beside the ones nobody has answered.
+    """
+
+    OPEN = "open"
+    RESOLVED = "resolved"
+
+
 class JobStatus(str, Enum):
     QUEUED = "queued"
     RUNNING = "running"
@@ -74,6 +120,31 @@ class JobStatus(str, Enum):
     COMPLETED = "completed"
     FAILED = "failed"
     CANCELLED = "cancelled"
+
+    @property
+    def ran_to_the_end(self) -> bool:
+        """Whether the pipeline finished this job's work.
+
+        Two of these mean it did: the job reached review, or a person closed
+        it. The rest are a job that has not got there yet or stopped
+        somewhere it did not choose, and what such a job holds is a snapshot
+        of a pipeline mid-stride - rows reconciliation has not seen, and the
+        duplicates it would have settled.
+
+        Listed rather than excluded so a status added later counts as
+        unfinished until someone says otherwise: withholding a figure is the
+        safe direction to be wrong in.
+        """
+        return self in {JobStatus.READY_FOR_REVIEW, JobStatus.COMPLETED}
+
+
+# The job statuses whose rows may be shown as answers, from the enum itself.
+# Every reader that publishes a job's figures asks this, for the same reason
+# PUBLISHED_STATUSES exists a few lines up: asked in each module's own words,
+# the dashboard and the export disagreed about which rows were results.
+FINISHED_JOB_STATUS_VALUES = frozenset(
+    status.value for status in JobStatus if status.ran_to_the_end
+)
 
 
 class JobStep(str, Enum):
@@ -150,6 +221,20 @@ NO_FILER_OF_RECORD = "no_filer_of_record"
 # pair's name; the product's own is not a number anybody discloses, and this
 # says so rather than leaving the quarter looking like a gap to fill.
 REPORTED_WITH_ANOTHER_PRODUCT = "reported_with_another_product"
+
+# The reasons an unresolved quarter names an event rather than a failure to
+# read one. Both are recorded against evidence the run holds - a filing index
+# with no filer of record, a line the issuer prints for two products - so a
+# series whose remaining quarters all carry one of them stopped for a reason
+# that can be stated and cited. The other reasons a quarter carries are the
+# model's or the deterministic gap filler's, and "nothing was extracted here"
+# is a gap rather than an ending: named as one, it would close a series the
+# issuer is still reporting.
+#
+# A snapshot of the coded reasons the pipeline writes. Stale when a stage
+# records another code that names an event, and the symptom is a series that
+# ends for a reason nobody is shown.
+SERIES_END_REASON_CODES = (NO_FILER_OF_RECORD, REPORTED_WITH_ANOTHER_PRODUCT)
 
 
 class UnresolvedResolution(str, Enum):
@@ -324,7 +409,4 @@ class ExtractionOptions(BaseModel):
     earnings_since: date | None = None
     earnings_until: date | None = None
     transcripts: bool = False
-    pdfs: bool = True
     llm_evidence_judge: bool = True
-    random_validation_sampling: bool = True
-    use_uploaded_template: bool = False

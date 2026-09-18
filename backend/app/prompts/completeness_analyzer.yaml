@@ -8,9 +8,7 @@ system: |
   - need_filing: likely disclosed in a 10-Q/10-K/earnings release not yet retrieved
   - gap: unknown — needs analyst follow-up
 
-  Do not invent datapoints. Only propose unresolved entries and a completeness_pct in 0–100.
-  completeness_pct must be your own computed coverage figure, never the placeholder from the
-  response skeleton.
+  Do not invent datapoints. Only propose unresolved entries.
   Return JSON only.
 
 user_template: |
@@ -22,7 +20,6 @@ user_template: |
 
   Return JSON:
   {{
-    "completeness_pct": 0,
     "missing_periods": [
       {{
         "period": "<missing calendar quarter>",
@@ -30,7 +27,5 @@ user_template: |
         "reason": "human-readable",
         "recommended_next_step": "..."
       }}
-    ],
-    "limitations": [],
-    "recommended_next_steps": []
+    ]
   }}

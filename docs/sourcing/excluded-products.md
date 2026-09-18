@@ -1,10 +1,27 @@
-# Sourcing map: the eight excluded products
+# Sourcing map: the excluded products
 
-Eight of the twenty seed products carry no revenue data at all. Sized by each
-product's commercial span through 2026Q2 they account for roughly **434
-quarters — slightly more than the 423 quarters in the entire current catalog**.
-So the dataset is missing more than half of its own addressable surface, and
-that gap is worth more than any further accuracy work on the half it has.
+**As of 2026-09-17.** Every count below is derivable; run the commands rather
+than trusting the prose, because this document has outlived two of its own
+figures already.
+
+    $ wc -l < seed/gold/excluded_products.jsonl                     # 6
+    $ wc -l < seed/gold/quarterly_revenue.jsonl                     # 2203
+    # seed products with no gold quarterly row:                       7
+    # (the 6 excluded, plus Revatio) - the seed catalog is 20 products
+
+`seed/gold/excluded_products.jsonl` carries **six** products: Alyq, Flolan,
+Liqrev, Tadliq, Veletri, Ventavis. Opsumit and Adempas were excluded when this
+document was written and are not now - the sections below record how each was
+resolved, and the verdict table still lists them under their old status.
+
+The header this replaces said "eight excluded products" accounting for "434
+quarters — slightly more than the 423 quarters in the entire current catalog",
+and concluded that the dataset was missing more than half its addressable
+surface. The catalog is 2,203 quarters, so that conclusion no longer follows
+from its own arithmetic whichever reading of "eight" is taken. The 434 is not
+recomputed here: it was a hand-sized commercial span per product, and
+`excluded_products.jsonl` carries no span to derive it from. Whoever wants the
+ratio should compute it from the products' commercial starts and say so.
 
 This document records where the missing data actually lives, so the exclusions
 can be revisited on evidence. It is a map, **not data**: see the verification
@@ -340,6 +357,9 @@ surge moved the peak from 2010 to 2011.
 ---
 
 ## Verdict summary
+
+Two rows below - Opsumit and Adempas - record the verdict reached at the time
+and are no longer exclusions; `excluded_products.jsonl` is the live list.
 
 | Product | Recorded reason | Verdict | What exists |
 |---|---|---|---|

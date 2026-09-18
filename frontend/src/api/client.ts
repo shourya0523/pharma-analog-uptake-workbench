@@ -91,8 +91,13 @@ export type ReviewItem = {
   confidence: number
   datapoint_id?: string
   value_normalized_usd_millions?: number | null
+  period_type?: string
   revenue_scope?: string
+  geography?: string | null
   reported_as?: string | null
+  /** Which series the figure belongs to, and what that series does with it. */
+  series_identity?: string | null
+  series_selection?: string | null
   source_url?: string
   source_quote?: string
   extraction_method?: string

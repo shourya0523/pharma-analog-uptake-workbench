@@ -44,6 +44,38 @@ def test_bullets_are_sentences():
     assert sentence_carrying(block, 100.0).startswith("Entered")
 
 
+def test_a_table_row_printed_cell_per_line_is_one_sentence():
+    """A table states rows, and HTML-to-text prints each cell on its own line.
+
+    Split on the line breaks, the row's label is one "sentence" and its figures
+    are others, so the sentence carrying the value never carries the product
+    and every table quote is vetoed. The row is the unit; the row above and the
+    row below are still units of their own, so a figure taken from a sibling
+    row is still not grounded by this row's label.
+    """
+    block = "Calderon\n$\n34,974\n$\n22,209\nNuVessa\n12,088\n9,401"
+    assert sentences(block) == ["Calderon $ 34,974 $ 22,209", "NuVessa 12,088 9,401"]
+    assert sentence_carrying(block, 34974.0) == "Calderon $ 34,974 $ 22,209"
+
+    grounded = _judged(block, 34974.0)
+    assert grounded["validation_status"] == "auto_pass", grounded["issues"]
+    sibling = _judged(block, 12088.0)
+    assert "hard_veto:value_and_product_in_different_sentences" in sibling["issues"]
+
+
+def test_a_figure_quoted_without_its_row_label_is_still_ungrounded():
+    """A quote that begins inside a row's figures names no product at all.
+
+    Joining wordless cells onto the line above them cannot invent a label
+    where the quote carries none, so this is refused - by the check for a
+    product missing from the quote rather than by the one about sentences,
+    since there is now only one unit to be in.
+    """
+    verdict = _judged("$\n34,974\n$\n22,209", 34974.0)
+    assert verdict["validation_status"] == "needs_review"
+    assert "hard_veto:product_missing_from_quote" in verdict["issues"]
+
+
 def test_the_value_and_the_product_must_share_a_sentence():
     block = ("• Calderon net product revenue grew 40% in the quarter\n"
              "• Entered into a $100 million financing facility")
@@ -166,12 +198,115 @@ def test_a_quote_that_names_a_period_must_name_the_rows_own():
     assert "hard_veto:quote_states_a_different_period" not in row["issues"]
 
 
-def _judged_for(quote: str, value: float, *, period: str) -> dict:
+def _judged_for(quote: str, value: float, *, period: str,
+                period_type: str = "quarterly") -> dict:
     return apply_judge_hard_vetoes(
         product="Calderon",
-        candidate={"period": period, "period_type": "quarterly",
+        candidate={"period": period, "period_type": period_type,
                    "value_reported": value, "revenue_scope": "Product family"},
         quote=quote,
         judgment={"support_classification": "supported",
                   "validation_status": "auto_pass", "issues": []},
+    )
+
+
+# The heading a filer prints above a product-revenue table, with the comparative
+# columns it always carries. Four periods, and no phrase in it names more than
+# one: the spans stand on two lines and the years on four more.
+_TWO_COLUMN_TABLE = (
+    "For the Three Months Ended June 30,\nFor the Six Months Ended June 30,\n"
+    "2024\n2023\n2024\n2023\nCalderon XR\n$\n77,372\n$\n64,898\n$\n144,214\n$\n122,424"
+)
+
+
+def test_a_heading_names_every_period_its_columns_state():
+    """The veto held the figure the heading was written to state.
+
+    A quote lifted from a table arrives as the heading plus the row, and the
+    heading states the spans in one place and the years in another. Read for
+    the first phrase that carried both, it named one period - the wrong one -
+    so the row's own quarter, its comparative quarter and both year-to-date
+    columns were all "a different period" from what the quote said.
+    """
+    from app.extraction.prose import periods_named_in
+
+    assert periods_named_in(_TWO_COLUMN_TABLE) == {"2024Q2", "2023Q2", "2024H1", "2023H1"}
+
+    for period, value in (("2024Q2", 77372.0), ("2023Q2", 64898.0)):
+        kept = _judged_for(_TWO_COLUMN_TABLE, value, period=period)
+        assert "hard_veto:quote_states_a_different_period" not in kept["issues"], period
+    for period, value in (("2024H1", 144214.0), ("2023H1", 122424.0)):
+        kept = _judged_for(_TWO_COLUMN_TABLE, value, period=period, period_type="six_month")
+        assert "hard_veto:quote_states_a_different_period" not in kept["issues"], period
+
+    # A quarter no column of this table covers is still not supported by it.
+    wrong = _judged_for(_TWO_COLUMN_TABLE, 77372.0, period="2022Q2")
+    assert "hard_veto:quote_states_a_different_period" in wrong["issues"]
+
+
+def test_a_row_is_compared_against_the_period_its_own_type_says_it_means():
+    """A row states its period twice, and the two can be written differently.
+
+    A nine-month figure is labelled `2024` - the way an annual one is labelled -
+    while the heading it was read from names `2024M9`. Comparing the label as
+    written held the figure for naming a period the quote does not state, when
+    what the row means is the one period the quote does state.
+    """
+    heading = ("For the Three Months Ended September 30,\nFor the Nine Months Ended "
+               "September 30,\n2024\n2023\nCalderon XR\n$\n77,372\n$\n144,214")
+    kept = _judged_for(heading, 144214.0, period="2024", period_type="nine_month")
+    assert "hard_veto:quote_states_a_different_period" not in kept["issues"]
+
+    # A span the grammar has no name for is not a claim about a period, so
+    # there is nothing for the check to compare.
+    unstated = _judged_for(heading, 144214.0, period="2024", period_type="ytd")
+    assert "hard_veto:quote_states_a_different_period" not in unstated["issues"]
+
+    # And a sentence that states a stub - a part-period the filer dates from an
+    # event - names no nine months, so a nine-month row is not supported by it.
+    stub = ("Calderon XR net sales were approximately $36.4 million for the three months "
+            "ended September 30, 2023 and $98.8 million for the period between January 24, "
+            "2023 (date of acquisition) and September 30, 2023.")
+    held = _judged_for(stub, 98.8, period="2023Q3", period_type="nine_month")
+    assert "hard_veto:quote_states_a_different_period" in held["issues"]
+
+
+# A schedule long enough that its column years are further below the heading
+# than the period grammar looks ahead for a date. Twenty product rows is an
+# ordinary length for a filer with a portfolio.
+_LONG_SCHEDULE = (
+    "For the Six Months Ended June 30,\n"
+    + "".join(f"Calderon {n} 1,0{n:02d} 9{n:02d}\n" for n in range(20))
+    + "2024\n2023"
+)
+
+
+def test_a_heading_states_a_span_whether_or_not_it_states_a_date():
+    """What a period is called and how long it is are different questions.
+
+    The judge asks the second on its own - a six-month figure claimed as a
+    quarter is one a person has to see - and a heading printed above its
+    column years answers it without answering the first. Both answers: the
+    span is named, and no period key is, because none was stated.
+    """
+    from app.extraction.prose import periods_named_in, spans_named_in
+
+    assert spans_named_in("For the Six Months Ended June 30,") == {6}
+    assert periods_named_in("For the Six Months Ended June 30,") == set()
+    # A heading that does state a date still names the period it states.
+    assert spans_named_in("For the Six Months Ended June 30, 2024") == {6}
+    assert periods_named_in("For the Six Months Ended June 30, 2024") == {"2024H1"}
+
+
+def test_a_year_to_date_schedule_blocks_auto_pass_however_long_it_is():
+    """The span is read from the heading, not from how close its years are.
+
+    Both answers: a six-month schedule blocks the model being skipped whatever
+    its length, and a three-month one of the same length does not.
+    """
+    from app.llm.client import names_a_year_to_date_span
+
+    assert names_a_year_to_date_span(_LONG_SCHEDULE)
+    assert not names_a_year_to_date_span(
+        _LONG_SCHEDULE.replace("Six Months", "Three Months")
     )

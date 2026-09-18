@@ -5,12 +5,16 @@ to leave out of a measurement. Handing the pipeline a URL and asking whether it
 can read the document tests the reader; only walking EDGAR from an issuer name
 and a quarter tests the pipeline.
 
-The walk is: resolve the issuer to a CIK, list its 8-K filings that carry item
-2.02 (results of operations) in the window around the quarter, and take the
-EX-99 exhibits attached to them. The primary 8-K document is a cover page and
-holds no figures.
+The walk is: resolve the issuer to a CIK, list the filings of its 8-K family
+that carry item 2.02 (results of operations) in the window around the quarter
+- an amendment furnishing that item is one of them - and take the EX-99
+exhibits attached to them rather than the 8-K itself. That choice is what
+`sec_include_8k` defaults to off for: the figures an earnings 8-K reports are
+in its exhibits, and the filing's own document is assumed to be the cover that
+points at them. It is an assumption about a form, not a measurement of one -
+turning the flag on is how to find out where it does not hold.
 
-Two rules here were bought with wrong answers:
+Two rules that look like details and are not:
 
 * An issuer is resolved by ticker first, then by an exact match on its
   normalised name, and an ambiguous name resolves to nothing. Matching on a
@@ -25,20 +29,22 @@ Two rules here were bought with wrong answers:
 
 from __future__ import annotations
 
-# ruff: noqa: BLE001, RUF012
+# ruff: noqa: BLE001
 import asyncio
+import html
 import logging
 import mimetypes
 import re
 import time
 from datetime import date, timedelta
-from typing import Any
+from typing import Any, NamedTuple
 from urllib.parse import urlparse
 
 import httpx
 
 from app.config import get_settings
 from app.domain.models import RetrievalStatus, RetrievedSource, SourceType, new_id
+from app.parsing.periods import quarters_reported_in
 from app.storage.filestore import FileStore
 
 logger = logging.getLogger(__name__)
@@ -49,16 +55,17 @@ logger = logging.getLogger(__name__)
 ANNUAL_FORMS = frozenset({"10-K", "10-K405", "10-KT", "20-F", "40-F", "11-K"})
 
 
-# Shared across connector instances so concurrent jobs don't stampede EDGAR.
-# The floor is SEC's published guidance; the pace above it is not guessed but
-# observed, because what the endpoint will accept depends on who else is
-# asking from the same address. A refusal slows every caller, and a spell
-# without one speeds them back up.
 # How long after a period ends its report is filed: a 10-Q is due about 45
 # days after its quarter and a 10-K about 90 after its year, so a window of
 # filing dates reaches this far past the periods it means to cover.
 REPORTING_LAG = timedelta(days=120)
 
+
+# Shared across connector instances so concurrent jobs don't stampede EDGAR.
+# The floor is SEC's published guidance; the pace above it is not guessed but
+# observed, because what the endpoint will accept depends on who else is
+# asking from the same address. A refusal slows every caller, and a spell
+# without one speeds them back up.
 _SEC_LOCK = asyncio.Lock()
 _SEC_FLOOR_S = 0.12  # ~8 req/s, under SEC's 10/s guidance
 _SEC_CEILING_S = 4.0
@@ -123,6 +130,86 @@ async def _sec_throttle() -> None:
         _last_sec_request = asyncio.get_event_loop().time()
 
 
+def is_sec_host(url: str) -> bool:
+    """Whether a URL addresses the SEC, read from its host.
+
+    ``"sec.gov" in url`` is also true of ``https://sec.gov.example.com/`` and
+    of any URL whose query string mentions the host, and what the pace and the
+    request headers follow is who is being asked rather than what the text of
+    the URL says.
+    """
+    host = (urlparse(url).hostname or "").lower()
+    return host == "sec.gov" or host.endswith(".sec.gov")
+
+
+# How long one document is worth waiting out a refusal for. A count of
+# attempts is the wrong bound: four attempts with a doubling delay give up
+# after seven seconds, which is nothing to a rate limit, and the document is
+# then recorded as one that does not exist.
+RETRY_BUDGET_S = 90.0
+
+
+async def get_with_backoff(
+    client: httpx.AsyncClient, url: str, *, budget_s: float = RETRY_BUDGET_S
+) -> httpx.Response:
+    """Fetch one URL, waiting out the refusals a host gives when asked too fast.
+
+    Every read of a page in this module goes through here, because a host's
+    rate limit belongs to the host and not to the caller: two fetchers against
+    one endpoint, one of them polite, is one impolite fetcher.
+
+    SEC returns 503 or 429 under load rather than a permanent error, and a
+    single one costs a whole filing. It is worth waiting out: a document
+    missing because of a rate limit reads downstream as an issuer that
+    discloses nothing, so without this the same code answers differently from
+    one run to the next.
+
+    The pace is kept only for the SEC, whose limit this module knows and
+    shares across every caller in the process. A request to any other host is
+    still retried on the same budget - a refusal is a refusal - but it neither
+    waits for nor moves that pace, so a slow investor-relations site cannot
+    slow down EDGAR and a busy EDGAR cannot slow down the site.
+    """
+    sec = is_sec_host(url)
+    deadline = asyncio.get_event_loop().time() + budget_s
+    delay = 1.0
+    attempt = 0
+    while True:
+        attempt += 1
+        if sec:
+            await _sec_throttle()
+        last: Exception | None = None
+        try:
+            response = await client.get(url)
+        except httpx.TransportError as exc:
+            # A connection that drops is the same refusal without a status
+            # line; it reads downstream exactly as a 503 would.
+            if sec:
+                sec_saw_refusal()
+            last = exc
+            logger.info("fetch_backoff error=%s attempt=%s url=%s", type(exc).__name__, attempt, url)
+        else:
+            if response.status_code not in (429, 503):
+                if sec:
+                    sec_saw_success()
+                response.raise_for_status()
+                return response
+            if sec:
+                sec_saw_refusal(_retry_after_seconds(response))
+            logger.info(
+                "fetch_backoff status=%s attempt=%s pace=%.2f url=%s",
+                response.status_code, attempt, sec_pace(), url,
+            )
+        remaining = deadline - asyncio.get_event_loop().time()
+        if remaining <= 0:
+            if last is not None:
+                raise last
+            response.raise_for_status()
+            return response
+        await asyncio.sleep(min(delay, remaining))
+        delay = min(delay * 2, 30.0)
+
+
 def _content_type(doc: str) -> str:
     """What a stored document is, from its own name."""
     return mimetypes.guess_type(doc)[0] or "application/octet-stream"
@@ -142,40 +229,50 @@ def parse_filing_date(value: object) -> date | None:
 
 # Corporate suffixes carry no identity: "Acme Sciences, Inc." and "Acme
 # Sciences Inc" are the same registrant, and the SEC title uses whichever the
-# filer registered with.
+# filer registered with. A snapshot of the forms of name the index's own
+# titles are written with; it goes stale when a registrant carries a form this
+# does not name, and that shows up as a company resolving under one spelling
+# of its name and not under another.
 _REGISTRANT_SUFFIXES = {
     "inc", "incorporated", "corp", "corporation", "co", "company", "ltd",
     "limited", "plc", "llc", "lp", "sa", "nv", "ag", "holdings", "group",
 }
 
+# The two spellings of a conjunction, which is one word however it is written:
+# a registrant joins its name to its suffix with "&" in the SEC title and a
+# caller writes "and", or the other way round. Dropped like a suffix rather
+# than kept, because the word it joins to is itself usually a suffix: "Acme
+# Sciences & Co" and "Acme Sciences and Company" are the same registrant and
+# "Acme Sciences" is the name either one carries.
+_REGISTRANT_CONNECTIVES = {"&", "and"}
+
 
 def normalize_registrant(name: str) -> str:
-    """A company name reduced to what identifies it, for exact comparison."""
+    """A company name reduced to what identifies it, for exact comparison.
+
+    Calderon Respiratory & Co, Calderon Respiratory and Company and Calderon
+    Respiratory, Inc. all reduce to ``calderon respiratory``.
+    """
     cleaned = re.sub(r"[^a-z0-9&\s]", " ", (name or "").lower())
     words = [
         word
         for word in cleaned.split()
-        if word not in _REGISTRANT_SUFFIXES and word != "&"
+        if word not in _REGISTRANT_SUFFIXES and word not in _REGISTRANT_CONNECTIVES
     ]
     return " ".join(words)
 
 
-def is_earnings_exhibit(filename: str) -> bool:
-    """True for exhibit 99.x documents, which carry the product revenue tables.
+def exhibit_number(declared_type: str | None) -> str | None:
+    """The exhibit a filing's declared document type names, or None.
 
-    Issuers name these inconsistently - a ticker and a period
-    (``acmeq12024-ex991.htm``), the word spelled out in full
-    (``exhibit991acme12312024.htm``), or a filing agent's own identifier with no
-    company name in it at all (``tm1234567d1_ex99-1.htm``) - so match on the
-    alphanumeric-only form of the name rather than on a fixed pattern.
+    The type is EDGAR's own, taken from the filing's header: ``EX-99.1`` and
+    ``EX-99.01`` and ``EX-99`` all name exhibit 99, ``EX-13`` names exhibit 13
+    and ``EX-101.INS`` names exhibit 101. The number before the first dot is
+    the family; everything after it is the filer's own numbering within it, so
+    the family is read and the spelling of the rest is not.
     """
-    name = (filename or "").rsplit("/", 1)[-1].lower()
-    if not name.endswith((".htm", ".html", ".txt")):
-        return False
-    squashed = re.sub(r"[^a-z0-9]", "", name)
-    # Written "ex991", "exx991" (a doubled x survives some filers' names),
-    # "exh991" where the word is abbreviated, or "exhibit991" in full.
-    return bool(re.search(r"ex+(?:h(?:ibit)?)?9{2}", squashed))
+    match = re.match(r"EX-(\d+)", (declared_type or "").strip().upper())
+    return match.group(1) if match else None
 
 
 def _calculation_linkbase(documents: list[str]) -> str | None:
@@ -223,6 +320,199 @@ def reports_a_period(form: str | None) -> bool:
 def is_annual(form: str | None) -> bool:
     """Whether a form reports a year. `10-K/A` is its amendment, so it does."""
     return bool(form) and form_family(form) in {form_family(f) for f in ANNUAL_FORMS}
+
+
+def states_item(items: str | None, item: str) -> bool:
+    """Whether a filing's item list names this item.
+
+    EDGAR writes the list as the codes separated by commas - ``2.02,9.01`` -
+    so the item is a whole entry in it, not a substring of one. Read as a
+    substring, a code is also found inside a longer one that happens to end
+    the same way, and the filing is then read for a disclosure it never made.
+    """
+    return item in {entry.strip() for entry in str(items or "").split(",")}
+
+
+def reading_order(form: str | None) -> int:
+    """Which filings the primary pass reads first when a budget truncates it.
+
+    An annual report states the most periods per document and a report that
+    states a period of its own states at least one, so those come before a
+    form whose own document is a cover page pointing at its exhibits. Derived
+    from `is_annual` and `reports_a_period` rather than keyed on the form
+    string: keyed on the string, every amendment falls past every form it
+    amends and is read last or not at all.
+    """
+    if is_annual(form):
+        return 0
+    if reports_a_period(form):
+        return 1
+    return 2
+
+
+# How many periods one filing's own statements state. A periodic report prints
+# the period it covers beside the comparatives the disclosure rules require, so
+# an interim report states its quarter and the same quarter a year earlier, and
+# an annual report states its fiscal year and the two before it.
+#
+# A snapshot of what those statements state, verified by reading the product
+# tables of cached filings rather than by reading the rule. What makes it
+# stale: a change to the comparative periods a filer must present, and an
+# issuer who presents fewer than it must - both show up as a quarter this
+# module says a filing answers and the reader then cannot find in it, which is
+# what `coverage` records per document.
+ANNUAL_YEARS_STATED = 3
+INTERIM_YEARS_STATED = 2
+
+
+def quarter_index(day: date) -> int:
+    """A quarter as one integer, so arithmetic on quarters is arithmetic.
+
+    The calendar quarter the day falls in. A filer's own fiscal quarter is not
+    needed and is not knowable from one row: what has to line up is the period
+    a filing reports and the period a run asked for, and both are named by the
+    calendar.
+    """
+    return day.year * 4 + (day.month - 1) // 3
+
+
+def quarter_label(index: int) -> str:
+    """The canonical spelling of a quarter index: ``2024Q2``."""
+    return f"{index // 4}Q{index % 4 + 1}"
+
+
+def quarter_index_of_label(label: str) -> int | None:
+    match = re.fullmatch(r"(\d{4})Q([1-4])", str(label or "").strip())
+    return int(match.group(1)) * 4 + int(match.group(2)) - 1 if match else None
+
+
+class IndexedFiling(NamedTuple):
+    """One row of the submissions index, read for what it can answer.
+
+    ``row`` is the row's position in the index arrays, which is what the caller
+    fetches by; ``quarter`` is the quarter of the row's own period of report.
+    """
+
+    row: int
+    form: str
+    annual: bool
+    quarter: int
+
+
+def _states(filing: IndexedFiling) -> set[int]:
+    """The quarters an interim report states as columns of its own.
+
+    Its period, and the same quarter of the year before it as the comparative.
+    An annual report states no quarter: its product table is annual columns,
+    and its fourth quarter is a subtraction rather than a column.
+    """
+    if filing.annual:
+        return set()
+    return {filing.quarter - 4 * back for back in range(INTERIM_YEARS_STATED)}
+
+
+def _states_year_ending(filing: IndexedFiling) -> set[int]:
+    """The fiscal years an annual report states, named by the quarter each ends in."""
+    if not filing.annual:
+        return set()
+    return {filing.quarter - 4 * back for back in range(ANNUAL_YEARS_STATED)}
+
+
+def _states_nine_months_ending(filing: IndexedFiling) -> set[int]:
+    """The quarters an interim report's year-to-date columns end at.
+
+    A third-quarter report carries nine months of its own year and nine months
+    of the year before it. Whether a report is a third-quarter one is not asked
+    here: the caller only looks for the nine months ending the quarter before a
+    fiscal year end, and a report whose period is three months before a year
+    end is that filer's third quarter whatever month the year ends in.
+    """
+    return _states(filing)
+
+
+def choose_filings(
+    filings: list[IndexedFiling], asked: list[str], *, ceiling: int
+) -> dict[int, list[str]]:
+    """The smallest set of index rows whose answer sets cover the asked quarters.
+
+    Returns the chosen rows, each with the quarters it was chosen for, so a
+    fetched document can say what question it was fetched to answer.
+
+    Two ways a quarter is answered, both derived from the row's form family and
+    its period of report and neither needing a document opened:
+
+    * an interim report states it, as its own period or as its comparative;
+    * a fourth quarter is the fiscal year less the nine months before it, so it
+      needs an annual report stating that year *and* the interim report whose
+      year-to-date column ends the quarter before the year end. Neither alone
+      answers it, so neither alone is chosen for it.
+
+    A filing whose form states no period of its own - an earnings 8-K, whose
+    period of report is the date of the event and not the quarter it discusses -
+    has no answer set and is never chosen here. The exhibit pass finds those by
+    the item they furnish.
+
+    ``ceiling`` bounds how many filings any one quarter may cause to be
+    fetched; the cover is the smallest one, so it binds only where a quarter
+    needs more documents than a caller is willing to spend on it.
+    """
+    ceiling = max(1, ceiling)
+    wanted = {index for label in asked if (index := quarter_index_of_label(label)) is not None}
+    chosen: dict[int, set[int]] = {}
+    covered: set[int] = set()
+    spent: dict[int, int] = {}
+
+    def rank(filing: IndexedFiling) -> tuple[int, int, int, int]:
+        # Most quarters first; then a filing already being fetched, which
+        # answers one more quarter for no further request; then annual before
+        # interim, which is `reading_order`'s own answer; then the index's
+        # order, newest first.
+        return (
+            -len(_states(filing) & wanted - covered),
+            0 if filing.row in chosen else 1,
+            reading_order(filing.form),
+            filing.row,
+        )
+
+    # Every quarter some single filing states, taken from as few filings as
+    # possible: each step takes the filing that answers the most that are still
+    # open.
+    while True:
+        open_now = [f for f in filings if f.row not in chosen and (_states(f) & wanted - covered)]
+        if not open_now:
+            break
+        best = min(open_now, key=rank)
+        newly = (_states(best) & wanted) - covered
+        newly = {q for q in newly if spent.get(q, 0) < ceiling}
+        if not newly:
+            break
+        chosen[best.row] = newly
+        covered |= newly
+        for quarter in newly:
+            spent[quarter] = spent.get(quarter, 0) + 1
+
+    # What is left is a fourth quarter, or a quarter no filing in this index
+    # reports. A fourth quarter costs the pair or it is not answered.
+    for quarter in sorted(wanted - covered):
+        annual = min(
+            (f for f in filings if quarter in _states_year_ending(f)), key=rank, default=None
+        )
+        nine_months = min(
+            (f for f in filings if quarter - 1 in _states_nine_months_ending(f)),
+            key=rank,
+            default=None,
+        )
+        if annual is None or nine_months is None:
+            continue
+        pair = [f for f in (annual, nine_months) if f.row not in chosen]
+        if spent.get(quarter, 0) + len(pair) > ceiling:
+            continue
+        for filing in (annual, nine_months):
+            chosen.setdefault(filing.row, set()).add(quarter)
+        covered.add(quarter)
+        spent[quarter] = spent.get(quarter, 0) + len(pair)
+
+    return {row: sorted(quarter_label(q) for q in quarters) for row, quarters in chosen.items()}
 
 
 # A tagged number under any namespace but the cover page's own. Matched on
@@ -285,11 +575,48 @@ class SECConnector:
     TICKER_MAP = "https://www.sec.gov/files/company_tickers.json"
     ARCHIVES = "https://www.sec.gov/Archives/edgar/data"
 
-    # Revenue MD&A density: skip 8-K by default (noise + volume)
-    PRIMARY = {"10-K", "10-Q", "20-F", "40-F"}
-    SECONDARY = {"6-K", "8-K"}
-    # "Results of Operations and Financial Condition" — the earnings-release 8-K item
+    # The families whose primary document this pass reads by default, and the
+    # two it reads only when asked. All four sets below are form *families*,
+    # so an amendment is read wherever the form it amends is: a 10-K/A carries
+    # the statements its 10-K carried, restated.
+    #
+    # SECONDARY is a snapshot of a judgement about volume, not about what the
+    # forms report: an 8-K's own document is a cover page and the figures are
+    # in the exhibits `_retrieve_earnings_exhibits` takes, and a foreign issuer
+    # furnishes many 6-Ks per quarter. A family leaves this set when the pass
+    # is measured to be reading its documents for less than they carry.
+    SECONDARY = frozenset({"6-K", "8-K"})
+    # `11-K` is an employee-benefit plan's own annual report. It states a
+    # period, so `reports_a_period` accepts it and the instance pass spends a
+    # directory listing finding out what it tags - but the period is the
+    # plan's and the document names no product, so the primary pass does not
+    # read it. A snapshot of what `11-K` is; stale if the SEC gave the form to
+    # something else.
+    NOT_THE_REGISTRANT = frozenset({"11-K"})
+    # Derived from the module's own answer to "does this form state a period",
+    # so a form it already calls periodic cannot be dropped here by a list
+    # that was written before the form existed.
+    PRIMARY = frozenset(
+        PERIODIC_FORM_FAMILIES
+        - {form_family(f) for f in SECONDARY}
+        - {form_family(f) for f in NOT_THE_REGISTRANT}
+    )
+    # "Results of Operations and Financial Condition" - the item an earnings
+    # release is furnished under. The SEC assigns the number; it is a snapshot
+    # of the 8-K item schedule and would go stale only if that were renumbered.
     EARNINGS_ITEM = "2.02"
+    # The form that item schedule belongs to. It travels with EARNINGS_ITEM and
+    # goes stale with it. It is spelled as its own family, so a form is
+    # compared to it by family and it needs no second call to say so; the
+    # guard test is what keeps that true.
+    EARNINGS_FORM = "8-K"
+    # The exhibit family a press release and the schedules beside it are filed
+    # under - Regulation S-K item 601's "additional exhibits". The SEC assigns
+    # the number; it is a snapshot of that exhibit table and would go stale
+    # only if the table were renumbered. It is the family, not a spelling: the
+    # filing's declared type is read through `exhibit_number`, so EX-99,
+    # EX-99.1 and EX-99.01 are one thing here and EX-13 is not it.
+    EARNINGS_EXHIBIT = "99"
     # Older filings live in dated shards beside filings.recent. A bound keeps a
     # wide window from walking a filer's whole history.
     MAX_SUBMISSION_SHARDS = 4
@@ -302,18 +629,28 @@ class SECConnector:
             "Accept-Encoding": "gzip, deflate",
         }
 
-    async def resolve_cik(self, ticker: str | None, company_name: str | None) -> str | None:
+    async def resolve_cik(
+        self, ticker: str | None = None, company_name: str | None = None
+    ) -> str | None:
         """The registrant's CIK, or None rather than a guess.
 
-        A ticker is exact and is tried first. A company name is not: the SEC
-        title carries punctuation and a corporate suffix that a caller rarely
-        reproduces, so both sides are normalized before comparing. What this
-        must never do is return the nearest match - an unanchored substring
-        search resolves a one-word query to whichever registrant happens to
-        contain it, and every figure taken from that company's filings would
-        then be attributed to the company that was asked for, with nothing
-        downstream able to notice. Several matches means the question was
-        ambiguous, and the honest answer to an ambiguous question is no answer.
+        Either argument on its own is a question this can answer, so a caller
+        holding only a name asks with only a name.
+
+        A ticker is exact and is tried first. A ticker that names no
+        registrant in the index is not an answer, though - it is a symbol we
+        were handed that the SEC does not list - so the name is tried after
+        it rather than instead of it.
+
+        A company name is not exact: the SEC title carries punctuation and a
+        corporate suffix that a caller rarely reproduces, so both sides are
+        normalized before comparing. What this must never do is return the
+        nearest match - an unanchored substring search resolves a one-word
+        query to whichever registrant happens to contain it, and every figure
+        taken from that company's filings would then be attributed to the
+        company that was asked for, with nothing downstream able to notice.
+        Several matches means the question was ambiguous, and the honest
+        answer to an ambiguous question is no answer.
         """
         if not ticker and not company_name:
             return None
@@ -326,7 +663,6 @@ class SECConnector:
             for row in data.values():
                 if str(row.get("ticker", "")).upper() == needle_t:
                     return str(row["cik_str"]).zfill(10)
-            return None
 
         needle_n = normalize_registrant(company_name or "")
         if not needle_n:
@@ -342,59 +678,14 @@ class SECConnector:
         safe_doc = doc.replace("/", "_")
         return f"cache/sec/{accession.replace('-', '')}/{safe_doc}"
 
-    # How long one document is worth waiting out a refusal for. A count of
-    # attempts was the wrong bound: four attempts with a doubling delay gave
-    # up after seven seconds, which is nothing to a rate limit, and the
-    # filing was then recorded as one the issuer had not made.
-    RETRY_BUDGET_S = 90.0
-
     async def _get_with_retry(
         self, client: httpx.AsyncClient, url: str, *, budget_s: float | None = None
     ) -> httpx.Response:
-        """Fetch, waiting out the refusals EDGAR gives when asked too quickly.
-
-        SEC returns 503 or 429 under load rather than a permanent error, and a
-        single one costs a whole filing. It is worth waiting out: a document
-        missing because of a rate limit reads downstream as an issuer that
-        discloses nothing, so without this the same code answers differently
-        from one run to the next. Each refusal also slows every other caller,
-        because the limit belongs to the endpoint and not to this request.
-        """
-        deadline = asyncio.get_event_loop().time() + (
-            self.RETRY_BUDGET_S if budget_s is None else budget_s
+        """One EDGAR read. The waiting and the pace are `get_with_backoff`'s,
+        which every other read of a page in this module also goes through."""
+        return await get_with_backoff(
+            client, url, budget_s=RETRY_BUDGET_S if budget_s is None else budget_s
         )
-        delay = 1.0
-        attempt = 0
-        while True:
-            attempt += 1
-            await _sec_throttle()
-            last: Exception | None = None
-            try:
-                response = await client.get(url)
-            except httpx.TransportError as exc:
-                # A connection that drops is the same refusal without a status
-                # line; it reads downstream exactly as a 503 would.
-                sec_saw_refusal()
-                last = exc
-                logger.info("sec_backoff error=%s attempt=%s url=%s", type(exc).__name__, attempt, url)
-            else:
-                if response.status_code not in (429, 503):
-                    sec_saw_success()
-                    response.raise_for_status()
-                    return response
-                sec_saw_refusal(_retry_after_seconds(response))
-                logger.info(
-                    "sec_backoff status=%s attempt=%s pace=%.2f url=%s",
-                    response.status_code, attempt, sec_pace(), url,
-                )
-            remaining = deadline - asyncio.get_event_loop().time()
-            if remaining <= 0:
-                if last is not None:
-                    raise last
-                response.raise_for_status()
-                return response
-            await asyncio.sleep(min(delay, remaining))
-            delay = min(delay * 2, 30.0)
 
     async def _list_filing_documents(
         self, client: httpx.AsyncClient, cik_int: str, acc_nodash: str
@@ -408,6 +699,40 @@ class SECConnector:
             logger.warning("sec_index_failed accession=%s error=%s", acc_nodash, exc)
             return []
         return [item.get("name", "") for item in items if item.get("name")]
+
+    async def _declared_documents(
+        self, client: httpx.AsyncClient, cik_int: str, accession: str
+    ) -> list[tuple[str, str]]:
+        """(declared type, filename) for every document one filing contains.
+
+        The filing states what each of its documents is - the type the filer
+        submitted it under, beside the name the filer's agent happened to give
+        it. The directory listing does not: ``index.json`` carries a display
+        icon where a type would be, so a reader of the listing alone can only
+        guess an exhibit from its filename, and filing agents name exhibits
+        however they like.
+
+        Read from the filing's own header page, which costs the same single
+        request the directory listing costs. The page serves the submission's
+        SGML with its angle brackets escaped, one ``<DOCUMENT>`` block per
+        document; the block is the unit, so a document missing a description
+        or a sequence still yields its type and its name.
+        """
+        acc_nodash = accession.replace("-", "")
+        url = f"{self.ARCHIVES}/{cik_int}/{acc_nodash}/{accession}-index-headers.html"
+        try:
+            resp = await self._get_with_retry(client, url)
+            page = html.unescape(resp.text)
+        except Exception as exc:
+            logger.warning("sec_header_failed accession=%s error=%s", accession, exc)
+            return []
+        declared: list[tuple[str, str]] = []
+        for block in page.split("<DOCUMENT>")[1:]:
+            kind = re.search(r"<TYPE>([^\n<]*)", block)
+            name = re.search(r"<FILENAME>([^\n<]*)", block)
+            if kind and name and name.group(1).strip():
+                declared.append((kind.group(1).strip(), name.group(1).strip()))
+        return declared
 
     async def _fetch_document(
         self,
@@ -443,6 +768,71 @@ class SECConnector:
         else:
             raw = cached
         return raw, from_cache, cache_key
+
+    async def _page_source(
+        self,
+        client: httpx.AsyncClient,
+        *,
+        cik: str,
+        accession: str,
+        doc: str,
+        form: str | None,
+        filed: str | None,
+        run_id: str,
+        job_id: str,
+        metadata: dict[str, Any] | None = None,
+    ) -> RetrievedSource:
+        """One filing's own primary document, recorded whether or not it arrives.
+
+        The page is what a reader reads: the product-by-product schedule an
+        issuer prints lives in the filing's markup, and whether the same filing
+        also tags those figures in XBRL is a separate question about the same
+        accession. Both passes that want a page go through here, so a page is
+        the same row wherever it was decided on, and a failure to fetch one is
+        a row too rather than a silence.
+        """
+        acc_nodash = accession.replace("-", "")
+        cik_int = str(int(cik))
+        url = f"{self.ARCHIVES}/{cik_int}/{acc_nodash}/{doc}"
+        sid = new_id()
+        title = f"{form} {filed or ''}".strip()
+        try:
+            # Per-job copy for audit trail (cheap local copy; S3 would be multipart later)
+            _raw, from_cache, stored_key = await self._fetch_document(
+                client, url=url, accession=accession, doc=doc,
+                run_id=run_id, job_id=job_id, source_id=sid,
+            )
+        except Exception as exc:
+            return RetrievedSource(
+                source_id=sid,
+                source_type=SourceType.SEC_FILING,
+                url=url,
+                title=title,
+                filing_type=form,
+                accession_number=accession,
+                retrieval_status=RetrievalStatus.FAILED,
+                notes=str(exc),
+                metadata={"cik": cik, **(metadata or {})},
+            )
+        return RetrievedSource(
+            source_id=sid,
+            source_type=SourceType.SEC_FILING,
+            url=url,
+            title=title,
+            source_date=parse_filing_date(filed),
+            filing_type=form,
+            accession_number=accession,
+            raw_text=None,
+            storage_key=stored_key,
+            retrieval_status=RetrievalStatus.SUCCESS,
+            metadata={
+                "cik": cik,
+                "from_cache": from_cache,
+                "cache_key": self._cache_key(accession, doc),
+                **(metadata or {}),
+            },
+            notes="sec_cache_hit" if from_cache else None,
+        )
 
     async def _filings_covering(
         self,
@@ -538,10 +928,15 @@ class SECConnector:
         for i, form in enumerate(forms):
             if not bounded and filings_read >= max_exhibits:
                 break
-            if form != "8-K":
+            # The 8-K family, not the string "8-K": item 2.02 belongs to the
+            # family, and an amendment furnishing it is furnishing the same
+            # results the original did. Whether that second reading agrees
+            # with the first is a question for the reader, and it cannot be
+            # asked of a document retrieval never fetched.
+            if form_family(form) != self.EARNINGS_FORM:
                 continue
             filing_items = items[i] if i < len(items) else ""
-            if self.EARNINGS_ITEM not in (filing_items or ""):
+            if not states_item(filing_items, self.EARNINGS_ITEM):
                 continue
             accession = accessions[i]
             fdate = filing_dates[i] if i < len(filing_dates) else None
@@ -551,8 +946,17 @@ class SECConnector:
             ):
                 continue
             acc_nodash = accession.replace("-", "")
-            documents = await self._list_filing_documents(client, cik_int, acc_nodash)
-            exhibits = [name for name in documents if is_earnings_exhibit(name)]
+            # What the filing says its documents are, not what they are called.
+            # A filing agent names the release `ex_100200.htm` or
+            # `q4-earnings-release.htm` or `acme-20260211xex991.htm`, and only
+            # the third of those states the exhibit in its name. All three
+            # are declared EX-99.1 by the filing that carries them.
+            declared = await self._declared_documents(client, cik_int, accession)
+            exhibits = [
+                name
+                for kind, name in declared
+                if exhibit_number(kind) == self.EARNINGS_EXHIBIT
+            ]
             if not exhibits:
                 logger.info("sec_no_earnings_exhibit accession=%s date=%s", accession, fdate)
                 continue
@@ -583,9 +987,9 @@ class SECConnector:
                             source_id=sid,
                             source_type=SourceType.EARNINGS_RELEASE,
                             url=url,
-                            title=f"8-K EX-99 earnings release {fdate or ''}".strip(),
+                            title=f"{form} EX-99 earnings release {fdate or ''}".strip(),
                             source_date=date.fromisoformat(fdate) if fdate else None,
-                            filing_type="8-K",
+                            filing_type=form,
                             accession_number=accession,
                             storage_key=stored_key,
                             retrieval_status=RetrievalStatus.SUCCESS,
@@ -604,8 +1008,8 @@ class SECConnector:
                             source_id=sid,
                             source_type=SourceType.EARNINGS_RELEASE,
                             url=url,
-                            title=f"8-K EX-99 earnings release {fdate or ''}".strip(),
-                            filing_type="8-K",
+                            title=f"{form} EX-99 earnings release {fdate or ''}".strip(),
+                            filing_type=form,
                             accession_number=accession,
                             retrieval_status=RetrievalStatus.FAILED,
                             notes=str(exc),
@@ -631,6 +1035,9 @@ class SECConnector:
         max_filings: int,
         since: date | None,
         until: date | None,
+        also_fetch_pages: bool = False,
+        pages_fetched: set[str] | None = None,
+        chosen: dict[int, list[str]] | None = None,
     ) -> list[RetrievedSource]:
         """The tagged instance from each filing in this window that carries one.
 
@@ -653,12 +1060,29 @@ class SECConnector:
         is a per-filer fact rather than a date. Nothing here needs to know when
         each filer started - the reader simply finds nothing, which is the
         correct answer for a filing that has nothing.
+
+        With ``also_fetch_pages``, the filing's own primary document is taken
+        beside its instance unless ``pages_fetched`` says another pass already
+        has it. An instance and a page are two statements of one filing and
+        not two filings: an issuer that tags no product member has an instance
+        that answers nothing while the schedule sits in the page beside it, and
+        deciding to spend a request on the accession is deciding about both.
+
+        ``chosen`` is the caller's cover over the quarters the run asked for,
+        as row index to the quarters that row was picked to answer. Given one,
+        the same rows are read here as are read for their pages, because one
+        filing is one decision: a row the cover did not need is not a filing
+        whose instance is worth a request either. Given none - a caller that
+        declared no window - the window is the bound, as before.
         """
         cik_int = str(int(cik))
         forms = recent.get("form", [])
         accessions = recent.get("accessionNumber", [])
         filing_dates = recent.get("filingDate", [])
+        primary = recent.get("primaryDocument", []) or []
         tagged = recent.get("isXBRL", []) or []
+        have_page = set(pages_fetched or ())
+        covering = chosen
         sources: list[RetrievedSource] = []
         # Directory listings for filings the index does not classify. A bound on
         # requests, not a claim about which filings are worth reading.
@@ -672,6 +1096,8 @@ class SECConnector:
         for index, form in enumerate(forms):
             if not bounded and len(sources) >= max_filings:
                 break
+            if covering is not None and index not in covering:
+                continue
             if index < len(tagged):
                 if not tagged[index]:
                     continue
@@ -693,6 +1119,18 @@ class SECConnector:
             if not instance:
                 logger.info("sec_no_xbrl_instance accession=%s form=%s", accession, form)
                 continue
+            answers = (covering or {}).get(index)
+            page = primary[index] if index < len(primary) else None
+            if also_fetch_pages and page and accession not in have_page:
+                have_page.add(accession)
+                sources.append(
+                    await self._page_source(
+                        client, cik=cik, accession=accession, doc=page,
+                        form=form, filed=filing_dates[index] if index < len(filing_dates) else None,
+                        run_id=run_id, job_id=job_id,
+                        metadata={"chosen_for": answers} if answers else None,
+                    )
+                )
             sid = new_id()
             url = f"{self.ARCHIVES}/{cik_int}/{acc_nodash}/{instance}"
             try:
@@ -733,7 +1171,8 @@ class SECConnector:
                     storage_key=stored_key,
                     retrieval_status=RetrievalStatus.SUCCESS,
                     metadata={"cik": cik, "from_cache": from_cache, "xbrl_instance": True,
-                              "calculation_key": calculation_key},
+                              "calculation_key": calculation_key,
+                              **({"chosen_for": answers} if answers else {})},
                 )
             )
         logger.info("sec_xbrl_instances cik=%s retrieved=%s", cik, len(sources))
@@ -809,98 +1248,106 @@ class SECConnector:
             accessions = recent.get("accessionNumber", [])
             primary = recent.get("primaryDocument", [])
             filing_dates = recent.get("filingDate", [])
+            # The period of report EDGAR states on every row that has one.
+            report_dates = recent.get("reportDate", [])
 
             # A filing reports a period that ended before it, so the filings
             # that report a window's periods are not the filings inside it:
             # the window is widened by one reporting lag at each end. Forward,
             # because a period ending just inside the window is reported after
-            # it closes; backward, because the window may open after a period's
-            # own report was filed - the holdout's own rule allows a window to
-            # open 120 days after a quarter ends, and that quarter's 10-Q is
-            # filed about 45 days after it.
+            # it closes; backward, because a window may open after the report
+            # of a period it asks for was already filed.
             #
-            # The same lag both ways. It was 400 days backward, which reached
-            # filings that can only report periods a year before anything
-            # asked for: across two shapes-holdout runs those fetches produced
-            # four figures, three of them already read from a filing inside the
-            # window and the fourth for a period outside the window entirely.
+            # The same lag both ways, because it is the same lag: a filing
+            # reports a period that ended one lag before it, whichever end of
+            # the window that period sits at. A longer reach backward buys
+            # filings that can only report periods older than anything asked
+            # for.
             since_bound = earnings_since - REPORTING_LAG if earnings_since else None
             until_bound = earnings_until + REPORTING_LAG if earnings_until else None
 
+            # The window applies to which rows may be read. `_filings_covering`
+            # goes to the trouble of merging the archive shards so a 2005
+            # quarter can be reached at all, and a picker that then took the
+            # newest filings on the list regardless handed a job for 2005 the
+            # 2026 annual report, which says nothing about 2005.
+            #
+            # Both the gate and the order read the form as its family, so an
+            # amendment is read where the form it amends is read. Compared raw,
+            # `10-K/A` is in neither the allowed set nor the order, so a
+            # restatement would be dropped by the first test and would sort
+            # behind everything by the second.
             indexed: list[tuple[int, int, str]] = []
             for i, form in enumerate(forms):
-                if form not in allowed:
+                if form_family(form) not in allowed:
                     continue
-                pri = {"10-K": 0, "20-F": 0, "40-F": 0, "10-Q": 1, "6-K": 2, "8-K": 3}.get(form, 5)
-                indexed.append((pri, i, form))
-            indexed.sort(key=lambda t: (t[0], t[1]))
-
-            picked = 0
-            for _pri, i, form in indexed if include_primary else []:
-                if picked >= max_filings:
-                    break
-                accession = accessions[i]
-                doc = primary[i]
-                fdate = filing_dates[i] if i < len(filing_dates) else None
-                # The window applies here too. `_filings_covering` goes to the
-                # trouble of merging the archive shards so a 2005 quarter can
-                # be reached at all, and then this loop took the newest 10-K
-                # and 10-Q on the list regardless: a job for 2005 was handed
-                # the 2026 annual report, which says nothing about 2005. Every
-                # pre-2010 quarter was being asked of the wrong documents, and
-                # the era looked unreachable when it was unqueried.
-                filed_on = parse_filing_date(fdate)
+                filed_on = parse_filing_date(filing_dates[i] if i < len(filing_dates) else None)
                 if since_bound and (filed_on is None or filed_on < since_bound):
                     continue
                 if until_bound and (filed_on is None or filed_on > until_bound):
                     continue
-                acc_nodash = accession.replace("-", "")
-                cik_int = str(int(resolved))
-                url = f"{self.ARCHIVES}/{cik_int}/{acc_nodash}/{doc}"
-                sid = new_id()
-                cache_key = self._cache_key(accession, doc)
+                indexed.append((reading_order(form), i, form))
+            indexed.sort(key=lambda t: (t[0], t[1]))
 
-                try:
-                    # Per-job copy for audit trail (cheap local copy; S3 would be multipart later)
-                    _raw, from_cache, stored_key = await self._fetch_document(
-                        client,
-                        url=url,
-                        accession=accession,
-                        doc=doc,
-                        run_id=run_id,
-                        job_id=job_id,
-                        source_id=sid,
+            # Which quarters this run set out to cover, and which rows answer
+            # them. Asked per quarter rather than per job: the count cap it
+            # replaces spent itself on whatever the index listed first, which
+            # for an issuer with three annual reports in the window is three
+            # annual reports and one quarter.
+            #
+            # Two things put the cover out of reach, and both are read from
+            # what is in hand rather than assumed: a run that declared no
+            # window asked for no quarter in particular, and an index that
+            # states no period of report on its periodic rows says nothing
+            # about which quarters they answer. Either way the reading order -
+            # the most periods per document first - and the cap are what is
+            # left, which is what this did for every run before the cover.
+            asked = quarters_reported_in(earnings_since, earnings_until)
+            candidates = []
+            for _order, i, form in indexed:
+                period = parse_filing_date(report_dates[i] if i < len(report_dates) else None)
+                if period is None or not reports_a_period(form):
+                    continue
+                candidates.append(
+                    IndexedFiling(
+                        row=i, form=form, annual=is_annual(form),
+                        quarter=quarter_index(period),
                     )
-                    sources.append(
-                        RetrievedSource(
-                            source_id=sid,
-                            source_type=SourceType.SEC_FILING,
-                            url=url,
-                            title=f"{form} {fdate or ''}".strip(),
-                            source_date=date.fromisoformat(fdate) if fdate else None,
-                            filing_type=form,
-                            accession_number=accession,
-                            raw_text=None,
-                            storage_key=stored_key,
-                            retrieval_status=RetrievalStatus.SUCCESS,
-                            metadata={"cik": resolved, "from_cache": from_cache, "cache_key": cache_key},
-                            notes="sec_cache_hit" if from_cache else None,
-                        )
+                )
+            covering = bool(asked and candidates)
+            chosen: dict[int, list[str]] = (
+                choose_filings(candidates, asked, ceiling=max_filings) if covering else {}
+            )
+            if covering:
+                logger.info(
+                    "sec_cover cik=%s asked=%d rows=%d covered=%d",
+                    resolved, len(asked), len(chosen),
+                    len({q for qs in chosen.values() for q in qs}),
+                )
+
+            picked = 0
+            pages_fetched: set[str] = set()
+            order = (
+                sorted(chosen, key=lambda i: (reading_order(forms[i]), i))
+                if covering
+                else [i for _order, i, _form in indexed]
+            )
+            for i in order if include_primary else []:
+                if not covering and picked >= max_filings:
+                    break
+                accession = accessions[i]
+                doc = primary[i] if i < len(primary) else None
+                fdate = filing_dates[i] if i < len(filing_dates) else None
+                if not doc:
+                    continue
+                sources.append(
+                    await self._page_source(
+                        client, cik=resolved, accession=accession, doc=doc,
+                        form=forms[i], filed=fdate, run_id=run_id, job_id=job_id,
+                        metadata={"chosen_for": chosen[i]} if i in chosen else None,
                     )
-                except Exception as exc:
-                    sources.append(
-                        RetrievedSource(
-                            source_id=sid,
-                            source_type=SourceType.SEC_FILING,
-                            url=url,
-                            title=f"{form} {fdate or ''}".strip(),
-                            filing_type=form,
-                            accession_number=accession,
-                            retrieval_status=RetrievalStatus.FAILED,
-                            notes=str(exc),
-                            metadata={"cik": resolved},
-                        )
-                    )
+                )
+                pages_fetched.add(accession)
                 picked += 1
 
             if include_xbrl:
@@ -914,6 +1361,15 @@ class SECConnector:
                         max_filings=settings.sec_max_earnings_exhibits,
                         since=earnings_since,
                         until=earnings_until,
+                        # A filing whose instance is worth a request is a
+                        # filing whose page is worth one: the page holds the
+                        # schedule an issuer prints per product, and the
+                        # instance holds it only if the issuer tagged it. The
+                        # pass is told which accessions already have their page
+                        # so that a filing both passes reach is fetched once.
+                        also_fetch_pages=include_primary,
+                        pages_fetched=pages_fetched,
+                        chosen=chosen if covering else None,
                     )
                 )
 
@@ -926,8 +1382,15 @@ class SECConnector:
                         cik=resolved,
                         recent=recent,
                         max_exhibits=settings.sec_max_earnings_exhibits,
-                        since=earnings_since,
-                        until=earnings_until,
+                        # The same widened bounds the primary pass uses, and
+                        # for the same reason: an earnings release reports a
+                        # quarter that ended before it, so the release that
+                        # states the window's last quarter is filed after the
+                        # window closes. Handed the raw window, the two passes
+                        # disagreed about which filings report a period the
+                        # run asked for, and nothing said which was right.
+                        since=since_bound,
+                        until=until_bound,
                     )
                 )
 
@@ -985,15 +1448,20 @@ async def fetch_page(
     Raises on anything that leaves us without the document, because a source
     we could not fetch is not a source: its quote would be checkable only
     against whatever handed us the link.
+
+    The read goes through `get_with_backoff`, the same fetcher EDGAR's own
+    walk uses, so a page that happens to be on sec.gov is asked for at the
+    pace this process is keeping with the SEC. A link handed to us by a person
+    or a model is as often an EDGAR archive URL as anything else, and a second
+    fetcher against one host at its own pace is what a rate limit counts.
     """
     if not _is_fetchable(url):
         raise ValueError(f"refusing to fetch {url!r}")
     headers: dict[str, str] = {"User-Agent": user_agent}
-    if "sec.gov" in url.lower():
+    if is_sec_host(url):
         headers["Accept-Encoding"] = "gzip, deflate"
     async with httpx.AsyncClient(timeout=60, follow_redirects=True, headers=headers) as client:
-        resp = await client.get(url)
-        resp.raise_for_status()
+        resp = await get_with_backoff(client, url)
         content_type = resp.headers.get("content-type", "text/html")
         content = resp.content[:PAGE_BYTES_LIMIT]
     ext = "pdf" if "pdf" in content_type or url.lower().endswith(".pdf") else "html"

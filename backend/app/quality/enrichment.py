@@ -8,12 +8,16 @@ from app.domain.formulations import AGGREGATE_FORMULATION, coerce_formulation_va
 from app.domain.models import ValidationStatus
 
 # Datapoint ORM / dict columns enrichment may fill when blank.
+#
+# Which quarter the figure is for and what the figure is are not among them. A
+# suggestion here is not checked against the document - the cap and the forced
+# review are what stands in for that - so it may describe a figure the document
+# states, and it may not invent one. Filling a blank `period` or a blank value
+# writes a number for a quarter that nothing was read from, and a reviewer
+# confirming the row publishes it.
 DATAPOINT_ENRICH_FIELDS = (
-    "period",
     "period_type",
     "revenue_scope",
-    "value_reported",
-    "value_normalized_usd_millions",
     "currency",
     "unit",
     "geography",
@@ -38,9 +42,7 @@ ENRICHMENT_CONFIDENCE_CAP = 0.55
 # Prompt-friendly aliases → datapoint / citation field names.
 ENRICHMENT_ALIASES = {
     "suggested_scope": "suggested_revenue_scope",
-    "suggested_value": "suggested_value_reported",
     "scope": "revenue_scope",
-    "value": "value_reported",
 }
 
 

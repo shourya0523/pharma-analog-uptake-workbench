@@ -26,8 +26,9 @@ than "we never taught it these names".
 from __future__ import annotations
 
 from collections import defaultdict
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
 from app.extraction import elements
 from app.extraction.members import Resolution, load_register, match
@@ -38,6 +39,7 @@ from app.parsing.notes_datasets import (
     load_dimensions,
     load_submissions,
 )
+from app.parsing.periods import MONTHS_TO_PERIOD_TYPE
 from app.parsing.xbrl import Fact, _product_member, product_facts
 
 # Forms whose XBRL exhibits carry the notes. An 8-K earnings exhibit is not
@@ -65,8 +67,7 @@ def _resolve(
             continue
         stem = register_member.split(":")[-1]
         for suffix in ("Member", "Domain"):
-            if stem.endswith(suffix):
-                stem = stem[: -len(suffix)]
+            stem = stem.removesuffix(suffix)
         if stem.casefold().endswith(member.casefold()):
             return resolution
     return None
@@ -154,7 +155,9 @@ def candidates_from_notes(
                 continue
             seen[signature] = {
                 "period": fact.period,
-                "period_type": "quarterly" if fact.months == 3 else "annual",
+                # The span the filer tagged, named as every other reader names
+                # it - a six- or nine-month fact is not an annual one.
+                "period_type": MONTHS_TO_PERIOD_TYPE.get(fact.months, "unknown"),
                 "value_reported": fact.value,
                 "value_normalized_usd_millions": fact.value / 1_000_000.0,
                 "currency": "USD",

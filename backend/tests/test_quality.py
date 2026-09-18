@@ -1,5 +1,5 @@
 from app.connectors.openfda_fields import earliest_approval_date, parse_openfda_date
-from app.llm.client import apply_judge_hard_vetoes, re_ytd_language
+from app.llm.client import apply_judge_hard_vetoes, names_a_year_to_date_span
 from app.llm.grounding import enforce_verbatim_on_candidates, quote_is_verbatim
 from app.parsing.evidence import (
     build_revenue_llm_text,
@@ -40,9 +40,20 @@ def test_missing_citation_blocks_auto_pass():
 
 
 def test_product_aliases_split_franchise():
-    aliases = product_aliases("OPSUMIT (macitentan)/OPSYNVI", "macitentan")
-    assert "OPSUMIT" in aliases or any(a.upper() == "OPSUMIT" for a in aliases)
-    assert any("macitentan" in a.lower() for a in aliases)
+    """A slash splits when both sides spell the product that was asked about.
+
+    Spelling it means beginning with a held name at a word boundary, so the
+    franchise form in an alias splits and a joined product name does not: there
+    is nothing in `Calderon (calderinol)/NuVessa` that says which of the two
+    the question was about.
+    """
+    aliases = product_aliases("Calderon", "calderinol",
+                              extra=["Calderon (calderinol)/Calderon XR"])
+    assert "Calderon XR" in aliases
+    assert any("calderinol" in a.lower() for a in aliases)
+
+    joined = product_aliases("Calderon (calderinol)/NuVessa", "calderinol")
+    assert "NuVessa" not in joined
 
 
 def test_select_product_evidence_prefers_money_windows():
@@ -213,15 +224,51 @@ def test_a_milestone_earned_on_the_product_is_not_the_product_s_sales():
     assert out["validation_status"] == "auto_pass"
 
 
-def test_judge_hard_veto_ytd_as_quarterly():
-    assert re_ytd_language("for the six months ended June 30, 2026")
+def test_a_year_to_date_span_is_caught_by_the_period_it_states():
+    """The span a quote states is read, and one veto asks what follows from it.
+
+    There were two. The second - "the sentence says six months and the row says
+    quarterly" - could not fire on its own once a table row became one unit:
+    the sentence carrying the value never carries the heading, and where it does
+    state the span, it states the period too, so the period veto asks the same
+    question and answers it with the quarter the row claims.
+
+    `names_a_year_to_date_span` stays: it is what blocks a two-span table quote
+    from skipping the model, which is a different question from vetoing a row.
+
+    Both answers: a six- and a nine-month span are year-to-date, a quarter is
+    not; and the sentence stating one holds a row that claims a quarter, while
+    the heading above a row that carries both figures settles neither and holds
+    nothing.
+    """
+    assert names_a_year_to_date_span("for the six months ended June 30, 2026")
+    assert names_a_year_to_date_span("for the nine months ended September 30, 2026")
+    assert not names_a_year_to_date_span("for the three months ended June 30, 2026")
+
     out = apply_judge_hard_vetoes(
-        product="Adcirca",
-        candidate={"period_type": "quarterly", "revenue_scope": "U.S."},
-        quote="Adcirca net product sales for the six months ended June 30, 2026 were $9.6 million",
+        product="Calderon",
+        candidate={"period_type": "quarterly", "revenue_scope": "U.S.",
+                   "value_reported": 9.6, "period": "2026Q2"},
+        quote="Calderon net product sales for the six months ended June 30, 2026 were $9.6 million",
         judgment={"support_classification": "supported", "validation_status": "auto_pass", "issues": []},
     )
     assert out["support_classification"] == "misclassified"
+    assert "hard_veto:quote_states_a_different_period" in out["issues"]
+
+    # The sentence carrying the value is what has to state the span. A heading
+    # naming both columns above a row that carries both figures does not.
+    both = (
+        "For the Three Months Ended June 30,\nFor the Six Months Ended June 30,\n"
+        "2026\n2025\n2026\n2025\nCalderon XR\n$\n9,600\n$\n7,100\n$\n18,400\n$\n13,900"
+    )
+    kept = apply_judge_hard_vetoes(
+        product="Calderon XR",
+        candidate={"period_type": "quarterly", "revenue_scope": "U.S.",
+                   "value_reported": 9600.0, "period": "2026Q2"},
+        quote=both,
+        judgment={"support_classification": "supported", "validation_status": "auto_pass", "issues": []},
+    )
+    assert [i for i in kept["issues"] if i.startswith("hard_veto:")] == []
 
 
 def test_ytd_period_type_blocks_auto_pass():
@@ -311,3 +358,37 @@ def test_prioritize_sources_handles_llm_search_without_unbound_text_len():
     # Only LLM search sources should still sort without raising
     only_search = prioritize_sources_for_revenue([search], parsed, max_sources=3)
     assert [s.source_id for s in only_search] == ["llm1"]
+
+
+def test_a_quote_that_never_names_the_product_is_refused_once():
+    """Two vetoes said "the product is not in the quote" and one says it now.
+
+    The narrower one asked for the phrase "total revenues" as well and fired on
+    a scope the other excluded - `Company total`, which `fast_judge` refuses
+    before any veto is asked, in the same words.
+
+    Both answers: a product-scope quote naming another company's total is still
+    refused, and a `Company total` row is refused by the gate that has always
+    refused it rather than by a veto that adds nothing.
+    """
+    from app.quality.fast_judge import try_deterministic_judgment
+
+    quote = "Total revenues were $412.0 million for the quarter"
+    product_scope = apply_judge_hard_vetoes(
+        product="Calderon",
+        candidate={"period": "2026Q2", "period_type": "quarterly",
+                   "revenue_scope": "Product family", "value_reported": 412.0},
+        quote=quote,
+        judgment={"support_classification": "supported",
+                  "validation_status": "auto_pass", "issues": []},
+    )
+    assert product_scope["support_classification"] == "misclassified"
+    assert "hard_veto:product_missing_from_quote" in product_scope["issues"]
+
+    company_total = try_deterministic_judgment(
+        product="Calderon", generic=None, quote=quote,
+        candidate={"period": "2026Q2", "period_type": "quarterly",
+                   "revenue_scope": "Company total", "value_reported": 412.0},
+    )
+    assert company_total["validation_status"] == "needs_review"
+    assert company_total["issues"] == ["deterministic:company_total_scope"]

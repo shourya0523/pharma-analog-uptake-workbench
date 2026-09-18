@@ -4,7 +4,7 @@ import hashlib
 import json
 import logging
 import traceback
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any
 
 from sqlalchemy import (
@@ -33,6 +33,19 @@ from app.config import get_settings
 from app.domain.models import Cadence
 
 
+def utc_now() -> datetime:
+    """Now, in UTC, without a tzinfo.
+
+    Every `DateTime` column here is naive and every stored value is UTC, so an
+    aware value would be written with an offset the rest of them do not carry
+    and would not compare with them. The clock is read as aware - the naive
+    reading of it is deprecated - and the offset is dropped once it has been
+    applied.
+    """
+    return datetime.now(UTC).replace(tzinfo=None)
+
+
+
 class Base(DeclarativeBase):
     pass
 
@@ -43,9 +56,9 @@ class ExtractionRunORM(Base):
     id: Mapped[str] = mapped_column(String(36), primary_key=True)
     status: Mapped[str] = mapped_column(String(32), default="queued")
     options_json: Mapped[dict[str, Any]] = mapped_column(JSON, default=dict)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utc_now)
     updated_at: Mapped[datetime] = mapped_column(
-        DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
+        DateTime, default=utc_now, onupdate=utc_now
     )
     error: Mapped[str | None] = mapped_column(Text, nullable=True)
 
@@ -82,9 +95,9 @@ class DrugJobORM(Base):
     unresolved_count: Mapped[int] = mapped_column(Integer, default=0)
     quality_flags: Mapped[list[Any]] = mapped_column(JSON, default=list)
     error: Mapped[str | None] = mapped_column(Text, nullable=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utc_now)
     updated_at: Mapped[datetime] = mapped_column(
-        DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
+        DateTime, default=utc_now, onupdate=utc_now
     )
 
     run: Mapped[ExtractionRunORM] = relationship(back_populates="jobs")
@@ -158,6 +171,11 @@ class DatapointORM(Base):
     period_type: Mapped[str] = mapped_column(String(32), default="unknown")
     revenue_scope: Mapped[str] = mapped_column(String(64), default="Unknown")
     geography: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    # The place the figure is for, in the controlled vocabulary, beside the
+    # filer's own words for it. A label nobody recognises lands in an
+    # unrecognised bucket that keeps its spelling, so it is visible here
+    # rather than mapped to the nearest known place.
+    geography_normalized: Mapped[str | None] = mapped_column(String(128), nullable=True)
     formulation: Mapped[str | None] = mapped_column(String(512), nullable=True)
     # What this figure is a figure for, where that is not the job's product:
     # the line a filer prints for two products it sells together, in the
@@ -165,6 +183,14 @@ class DatapointORM(Base):
     # publishes the split of such a line, so the honest unit is the pair.
     reported_as: Mapped[str | None] = mapped_column(String(512), nullable=True)
     route_of_administration: Mapped[str | None] = mapped_column(String(128), nullable=True)
+    # Which series this figure belongs to, and what the series does with it.
+    # Two readings of one product are one curve only when they are figures for
+    # the same thing; `series_identity` is that thing, said in one key, and
+    # `series_selection` says whether this row is the figure the series holds
+    # for its quarter, another reading of that same figure, or a reading a
+    # stronger one superseded. Empty means nothing has decided.
+    series_identity: Mapped[str | None] = mapped_column(String(512), nullable=True)
+    series_selection: Mapped[str | None] = mapped_column(String(32), nullable=True)
     source_url: Mapped[str] = mapped_column(Text)
     source_quote: Mapped[str] = mapped_column(Text)
     source_support: Mapped[str | None] = mapped_column(String(64), nullable=True)
@@ -183,10 +209,7 @@ class ValidationTaskORM(Base):
     job_id: Mapped[str] = mapped_column(ForeignKey("drug_jobs.id"), index=True)
     datapoint_id: Mapped[str] = mapped_column(String(36), index=True)
     reason: Mapped[str] = mapped_column(String(256))
-    judge_status: Mapped[str | None] = mapped_column(String(64), nullable=True)
-    deterministic_results: Mapped[list[Any]] = mapped_column(JSON, default=list)
     confidence_score: Mapped[float] = mapped_column(Float, default=0.0)
-    issues: Mapped[list[Any]] = mapped_column(JSON, default=list)
     status: Mapped[str] = mapped_column(String(32), default="open")
     reviewer_notes: Mapped[str | None] = mapped_column(Text, nullable=True)
 
@@ -231,7 +254,7 @@ class ReviewEventORM(Base):
     before_json: Mapped[dict[str, Any] | None] = mapped_column(JSON, nullable=True)
     after_json: Mapped[dict[str, Any] | None] = mapped_column(JSON, nullable=True)
     notes: Mapped[str | None] = mapped_column(Text, nullable=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utc_now)
 
 
 class ExportORM(Base):
@@ -243,7 +266,7 @@ class ExportORM(Base):
     format: Mapped[str] = mapped_column(String(64))
     storage_key: Mapped[str] = mapped_column(Text)
     status: Mapped[str] = mapped_column(String(32), default="ready")
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utc_now)
 
 
 class AnalogFamilyORM(Base):
@@ -282,9 +305,9 @@ class CanonicalProductORM(Base):
         server_default=Cadence.ONE_OFF.value,
     )
     initial_approval_date: Mapped[Any | None] = mapped_column(Date, nullable=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utc_now)
     updated_at: Mapped[datetime] = mapped_column(
-        DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
+        DateTime, default=utc_now, onupdate=utc_now
     )
 
 
@@ -442,7 +465,7 @@ class EvidenceAssertionORM(Base):
     source_url: Mapped[str] = mapped_column(Text)
     source_section: Mapped[str | None] = mapped_column(String(256), nullable=True)
     source_quote: Mapped[str | None] = mapped_column(Text, nullable=True)
-    retrieved_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    retrieved_at: Mapped[datetime] = mapped_column(DateTime, default=utc_now)
     as_of_date: Mapped[Any | None] = mapped_column(Date, nullable=True)
     confidence: Mapped[float] = mapped_column(Float, default=0.0)
     validation_status: Mapped[str] = mapped_column(String(32), default="pending")
@@ -516,9 +539,9 @@ class XbrlMemberResolutionORM(Base):
     # A person who settles a member outranks anything automated, the same rule
     # the metadata backfill follows.
     validation_status: Mapped[str] = mapped_column(String(32), default="pending")
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utc_now)
     updated_at: Mapped[datetime] = mapped_column(
-        DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
+        DateTime, default=utc_now, onupdate=utc_now
     )
 
 

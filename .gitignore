@@ -6,6 +6,9 @@ deploy/.env
 deploy/storage/
 **/__pycache__/
 **/.venv/
+# ...and the same name as a symlink, which the pattern above does not match:
+# an agent worktree reaches the interpreter through one.
+**/.venv
 **/node_modules/
 frontend/dist/
 .DS_Store
@@ -17,3 +20,4 @@ infra/cdk.out/
 
 # Eval caches: filings fetched from EDGAR, reproducible from the accession
 .cache/
+.claude/worktrees/

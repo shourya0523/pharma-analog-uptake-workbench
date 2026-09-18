@@ -13,8 +13,43 @@ from app.db.models import (
     ProductIndicationORM,
     UptakeMetricORM,
 )
-from app.domain.models import PUBLISHED_STATUS_VALUES
+from app.domain.models import (
+    FINISHED_JOB_STATUS_VALUES,
+    PUBLISHED_STATUS_VALUES,
+    PeriodType,
+    RevenueScope,
+    holds_the_series_figure,
+)
 from app.observability import dedupe_jobs_by_analog, normalize_analog_key
+from app.parsing.labels import FLAG_PARTIAL
+from app.pipeline.series_identity import (
+    _scope_key,
+    commercial_start_quarter,
+    quarter_containing,
+    series_end_reason,
+)
+
+# Where each scope sits in the order the model declares them. Read from the
+# enum so that adding a scope does not need a second list edited here.
+_SCOPE_ORDER = {scope.value: index for index, scope in enumerate(RevenueScope)}
+
+
+def scope_rank(revenue_scope: str | None) -> int:
+    """Where a scope sits in the order a chart should prefer, widest first.
+
+    The whole product comes first, and what counts as the whole product is
+    `_scope_key`'s answer rather than a second one: a sentence saying
+    Worldwide and a schedule's family line are one scope, and reconciliation
+    already groups them as one. Everything narrower follows in the order
+    `RevenueScope` declares. That order is not a claim about width - it is a
+    stable one, so that two readings of a quarter at different scopes always
+    resolve the same way rather than by whichever row was read last. A scope
+    the enum does not know sorts behind every scope it does.
+    """
+    key = _scope_key(revenue_scope)
+    if key == RevenueScope.PRODUCT_FAMILY.value:
+        return 0
+    return 1 + _SCOPE_ORDER.get(key, len(_SCOPE_ORDER))
 
 
 def _unique_sorted(values: list[Any]) -> list[str]:
@@ -54,6 +89,42 @@ def _selected_profile(job: DrugJobORM) -> dict[str, str | None]:
     for row in ordered:
         values.setdefault(row.field, row.value)
     return values
+
+
+# Which of a product's fields a reader narrows the library by. Not derivable:
+# every field here is a string on the product record, and so are the source
+# URL, the approval date and the free-text indication list, which are not
+# things anyone filters by. It is a snapshot of the categorical fields the
+# product record carries, and what makes it stale is a field added to that
+# record that a reader would want to narrow by - or one renamed, which
+# `_filter_keys` turns into an error rather than an empty menu.
+_FILTER_KEYS = (
+    "product_name",
+    "therapeutic_area",
+    "company",
+    "approval_period",
+    "competitive_intensity",
+    "roa",
+    "moa",
+    "peak_sales_bucket",
+    "indication_count",
+    "validation_status",
+)
+
+
+def _filter_keys(products: list[dict[str, Any]]) -> tuple[str, ...]:
+    """The filter names, checked against the records they are meant to read.
+
+    A name no product record carries would serve an empty menu that looks
+    like a field nothing has a value for, so it is refused here instead.
+    """
+    if not products:
+        return _FILTER_KEYS
+    named = set().union(*(set(product) for product in products))
+    unknown = sorted(set(_FILTER_KEYS) - named)
+    if unknown:
+        raise KeyError(f"filter keys name no field of the product record: {unknown}")
+    return _FILTER_KEYS
 
 
 def build_dashboard_preview(
@@ -132,6 +203,28 @@ def build_dashboard_preview(
         moa = "; ".join(sorted({item.moa_term for item in mechanisms})) or fields.get("moa")
         approved_lots = sorted({item.approved_lot for item in indications})
         approval_date = canonical.initial_approval_date if canonical else fields.get("fda_approval_date")
+        launch_quarter = quarter_containing(
+            canonical.initial_approval_date if canonical else None
+        )
+        quarters_held = [
+            (row.period, FLAG_PARTIAL not in set(row.issue_flags or []))
+            for row in job.datapoints
+            if row.period_type == PeriodType.QUARTERLY.value
+            and row.validation_status in PUBLISHED_STATUS_VALUES
+            and holds_the_series_figure(row.series_selection)
+        ]
+        commercial_start = commercial_start_quarter(
+            quarters_held, launch_quarter=launch_quarter
+        )
+        series_end = max((period for period, _ in quarters_held), default=None)
+        ended_because = series_end_reason(
+            last_quarter=series_end,
+            unresolved=[
+                (row.period, row.reason_unresolved)
+                for row in job.unresolved_quarters
+                if row.resolution is None
+            ],
+        )
         product = {
             "job_id": job.id,
             "canonical_product_id": canonical.id if canonical else None,
@@ -150,6 +243,19 @@ def build_dashboard_preview(
                 approval_date.isoformat() if hasattr(approval_date, "isoformat") else approval_date
             ),
             "approval_period": _approval_period(approval_date),
+            # Two quarters, not one. The launch quarter anchors the x-axis and
+            # says nothing about what is citable; the commercial start says
+            # where the series has a quarter of selling to plot. A reader who
+            # mistakes either for the other reads a ramp that began somewhere
+            # it did not.
+            "launch_quarter": launch_quarter,
+            "commercial_start_quarter": commercial_start,
+            # Where the series stops, and why where the run recorded a
+            # reason. A reader who takes a series that ended at an event for
+            # one that is still running reads a decline that is a disclosure
+            # change.
+            "series_end_quarter": series_end,
+            "series_end_reason": ended_because,
             "approved_indications": "; ".join(item.disease for item in indications)
             or fields.get("indication")
             or job.indication,
@@ -217,8 +323,18 @@ def build_dashboard_preview(
                     }
                 )
         products.append(product)
+        if job.status not in FINISHED_JOB_STATUS_VALUES:
+            # A job that has not reached review holds rows reconciliation has
+            # not seen - the same quarter twice, at the same scope, both
+            # marked as passed - and a failed one stopped somewhere it did
+            # not choose. Neither is a series; the product still appears,
+            # with its status saying so.
+            continue
         for datapoint in job.datapoints:
-            if not include_held and datapoint.validation_status not in PUBLISHED_STATUS_VALUES:
+            if not include_held and (
+                datapoint.validation_status not in PUBLISHED_STATUS_VALUES
+                or not holds_the_series_figure(datapoint.series_selection)
+            ):
                 continue
             series.append(
                 {
@@ -227,6 +343,23 @@ def build_dashboard_preview(
                     "period_type": datapoint.period_type,
                     "value": datapoint.value_normalized_usd_millions,
                     "validation_status": datapoint.validation_status,
+                    # What the figure is a figure for. Without these the
+                    # chart had no way to tell one quarter's worldwide
+                    # figure from the same quarter's ex-U.S. one, and drew
+                    # whichever row it read last.
+                    "revenue_scope": datapoint.revenue_scope,
+                    "scope_rank": scope_rank(datapoint.revenue_scope),
+                    "geography": datapoint.geography,
+                    "geography_normalized": datapoint.geography_normalized,
+                    "formulation": datapoint.formulation,
+                    "reported_as": datapoint.reported_as,
+                    # Which series this point belongs to, and whether it is
+                    # the figure that series holds for the quarter. Two
+                    # points of one product can be figures for different
+                    # things, and a line drawn through both is not a curve.
+                    "series_identity": datapoint.series_identity,
+                    "series_selection": datapoint.series_selection,
+                    "partial_period": FLAG_PARTIAL in set(datapoint.issue_flags or []),
                     "source_url": datapoint.source_url,
                     "source_quote": datapoint.source_quote,
                     "citation": datapoint.citation_json,
@@ -235,21 +368,9 @@ def build_dashboard_preview(
                 }
             )
 
-    filter_keys = [
-        "product_name",
-        "therapeutic_area",
-        "company",
-        "approval_period",
-        "competitive_intensity",
-        "roa",
-        "moa",
-        "peak_sales_bucket",
-        "indication_count",
-        "validation_status",
-    ]
     filter_options = {
         key: _unique_sorted([product.get(key) for product in products])
-        for key in filter_keys
+        for key in _filter_keys(products)
     }
     peak_products = [product for product in products if product["selected_peak"]]
     return {
@@ -262,7 +383,14 @@ def build_dashboard_preview(
             "products_tracked": len(products),
             "companies_represented": len({product["company"] for product in products if product["company"]}),
             "aggregate_selected_peak": {
-                "value": sum(product["selected_peak"]["value"] for product in peak_products),
+                # None, not 0, where nothing has a selected peak. A sum over
+                # no products is arithmetically zero and reads as a measured
+                # zero, which is the one thing it is not.
+                "value": (
+                    sum(product["selected_peak"]["value"] for product in peak_products)
+                    if peak_products
+                    else None
+                ),
                 "currency": "USD",
                 "covered_products": len(peak_products),
                 "total_products": len(products),

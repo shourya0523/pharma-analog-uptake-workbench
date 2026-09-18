@@ -130,7 +130,11 @@ async def test_a_model_call_does_not_hold_the_write_lock(tmp_path):
         )
     }
 
-    await orch._extract_metadata(job, sources, parsed, {"product_metadata": True})
+    # The label pass writes the openFDA rows; the narrative pass is the one
+    # that calls the model, and it must not be holding the write lock when it
+    # does.
+    await orch._label_metadata(job, sources, parsed, {"product_metadata": True})
+    await orch._narrative_metadata(job, sources, parsed, {"product_metadata": True})
 
     assert orch.llm.calls > 0, "the step never reached the model, so nothing was tested"
 

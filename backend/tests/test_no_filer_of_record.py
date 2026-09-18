@@ -17,7 +17,13 @@ import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from app.db.models import Base, DatapointORM, DrugJobORM, ExtractionRunORM, UnresolvedQuarterORM
+from app.db.models import (
+    Base,
+    DatapointORM,
+    DrugJobORM,
+    ExtractionRunORM,
+    UnresolvedQuarterORM,
+)
 from app.domain.models import RetrievalStatus, RetrievedSource, SourceType, new_id
 from app.parsing.periods import quarter_end, quarters_reported_in
 from app.pipeline.orchestrator import NO_FILER_OF_RECORD, PipelineOrchestrator
@@ -140,3 +146,52 @@ async def test_a_gap_is_recorded_once_whoever_names_it(tmp_path):
 
     recorded = [u.period for u in db.query(UnresolvedQuarterORM).filter_by(job_id=job.id).all()]
     assert recorded == ["2024Q2"]
+
+
+@pytest.mark.asyncio
+async def test_the_search_stands_in_for_a_filer_and_not_for_an_extraction(tmp_path, monkeypatch):
+    """There was a second search fallback, and it stood in for nothing.
+
+    When the readers came back with no figures, the run asked the search for
+    "product-level quarterly or annual net sales" pages and read those. It is a
+    different question from the one the quarters fallback asks: that one knows
+    the named issuer filed nothing for a quarter and goes looking for whoever
+    did, which is the acquired-product bridge.
+
+    Both answers, over one run: with a filing in the window and nothing
+    extracted from it, no search is made at all; with no filing in the window,
+    the searches that remain are the two that stand in for a filer - the
+    retrieval pass, and the quarters by name.
+    """
+    for filed_in_window, goals in ((True, []), (False, ["filing", "quarters"])):
+        orch, job, _db = _orchestrator(tmp_path / str(filed_in_window), options=WINDOW)
+        job.cik = "0000000001"
+        asked: list[str] = []
+
+        async def fallback_retrieve(_asked=asked, **kwargs):
+            _asked.append(kwargs["goal"])
+            return []
+
+        async def no_rows(*_a, **_kw):
+            return []
+
+        async def nothing_parsed(*_a, **_kw):
+            return {}
+
+        async def documents(*_a, _filed=filed_in_window, **_kw):
+            return [_filing(date(2016, 8, 1))] if _filed else []
+
+        orch.search.fallback_retrieve = fallback_retrieve
+        orch.fda.retrieve = no_rows
+        orch.sec.retrieve = documents
+        orch.sec.resolve_cik = no_rows
+        for step in ("_label_metadata", "_narrative_metadata", "_judge_profile",
+                     "_extract_revenue", "_judge", "_quality_and_validation", "_completeness",
+                     "_expand_aliases"):
+            monkeypatch.setattr(PipelineOrchestrator, step, no_rows)
+        monkeypatch.setattr(PipelineOrchestrator, "_parse", nothing_parsed)
+
+        await orch.run_job(job.id)
+
+        assert asked == goals, filed_in_window
+        assert "revenue" not in asked

@@ -30,7 +30,7 @@ def test_sec_retrieve_accepts_independent_primary_and_earnings_switches():
 
 
 def test_orchestrator_maps_both_options_into_retrieval():
-    source = inspect.getsource(PipelineOrchestrator._retrieve)
+    source = inspect.getsource(PipelineOrchestrator._retrieve_filings)
     assert 'options.get("sec_filings", True)' in source
     assert 'options.get("earnings_releases", True)' in source
     assert "include_primary=want_primary" in source
@@ -56,7 +56,7 @@ def test_earnings_window_is_optional_and_plumbed_end_to_end():
     assert params["earnings_since"].default is None
     assert params["earnings_until"].default is None
 
-    source = inspect.getsource(PipelineOrchestrator._retrieve)
+    source = inspect.getsource(PipelineOrchestrator._retrieve_filings)
     assert 'earnings_since=parse_filing_date(options.get("earnings_since"))' in source
     assert 'earnings_until=parse_filing_date(options.get("earnings_until"))' in source
 
@@ -127,7 +127,7 @@ def test_earnings_release_satisfies_the_filing_check_for_search_fallback():
     refusal is not an absence, so only the first decides whether the search
     stands in for the issuer at all.
     """
-    source = inspect.getsource(PipelineOrchestrator._retrieve)
+    source = inspect.getsource(PipelineOrchestrator._retrieve_filings)
     listed = source.split("sec_found = [", 1)[1].split("]", 1)[0]
     assert "EARNINGS_RELEASE" in listed
     assert "SEC_FILING" in listed

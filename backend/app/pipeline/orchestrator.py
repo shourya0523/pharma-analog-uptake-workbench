@@ -4,22 +4,26 @@ import json
 import logging
 import os
 import re
+from collections.abc import Callable, Sequence
+from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
-# ruff: noqa: BLE001, DTZ003
+# ruff: noqa: BLE001
 from sqlalchemy.orm import Session
 
 logger = logging.getLogger(__name__)
 
 from app.config import get_settings
+from app.connectors.coverage import record_coverage
 from app.connectors.llm_search import LLMSearchConnector
 from app.connectors.openfda import OpenFDAConnector
 from app.connectors.openfda_fields import (
+    brand_matched_results,
     earliest_approval_date,
+    earliest_approved_match,
     openfda_brand_names,
-    select_openfda_result,
 )
 from app.connectors.sources import (
     ManualURLConnector,
@@ -42,17 +46,20 @@ from app.db.models import (
     SourceDocumentORM,
     UnresolvedQuarterORM,
     ValidationTaskORM,
+    utc_now,
 )
 from app.domain.claims import stated_labels, stated_number, stated_text
 from app.domain.models import (
     NO_FILER_OF_RECORD,
+    PUBLISHED_STATUS_VALUES,
     REPORTED_WITH_ANOTHER_PRODUCT,
     JobStatus,
     JobStep,
     PeriodType,
+    QualityCheckStatus,
     RetrievalStatus,
     RetrievedSource,
-    RevenueScope,
+    SeriesSelection,
     SourceType,
     ValidationStatus,
     new_id,
@@ -67,7 +74,7 @@ from app.extraction.elements import Verdict
 from app.extraction.fingerprint import UNIT_SCALE_TO_MILLIONS
 from app.extraction.members import Resolution, load_products, resolve
 from app.extraction.tagged import candidates_from_instance
-from app.identity.resolver import resolve_product_identity
+from app.identity.resolver import ResolvedProductIdentity, resolve_product_identity
 from app.llm.aliases import merge_aliases
 from app.llm.client import LLMModules, listed, mappings
 from app.parsing.documents import DocumentParser
@@ -76,27 +83,44 @@ from app.parsing.evidence import (
     prioritize_sources_for_revenue,
     select_product_evidence_text,
 )
-from app.parsing.fda_label import format_moa_profile_value, parse_label_record
-from app.parsing.indications import parse_indications
-from app.parsing.labels import QUESTION_FLAGS
+from app.parsing.fda_label import (
+    format_moa_profile_value,
+    parse_label_record,
+    profile_fields,
+)
+from app.parsing.indications import parse_indications, therapeutic_area
+from app.parsing.labels import FLAG_COMBINED, QUESTION_FLAGS, footnotes_in
 from app.parsing.periods import (
     detect_period_context,
     normalize_period,
     quarters_reported_in,
 )
 from app.parsing.xbrl import parse_calculation, parse_facts, unsettled_elements
+from app.pipeline.series_identity import (
+    CLAIM_STRENGTH,
+    SeriesReading,
+    _scope_key,
+    agrees_within_declared_precision,
+    claim_rank,
+    normalize_geography,
+    select_series_figures,
+    series_identity,
+)
 from app.quality.candidate_filters import (
     filter_revenue_candidates,
+    peer_product_names,
     quote_mentions_product,
 )
 from app.quality.checks import (
+    DUPLICATE_SERIES_READING,
+    QualityIssue,
     apply_auto_pass_gate,
     moa_epc_contamination_issue,
     quote_contains_value,
     run_quality_checks,
 )
 from app.quality.comparative import derive_comparative_candidates
-from app.quality.completeness import refresh_completeness
+from app.quality.completeness import quarters_the_run_asked_for, refresh_completeness
 from app.quality.enrichment import (
     apply_field_enrichment,
     deterministic_formulation_fill,
@@ -114,6 +138,13 @@ from app.quality.profile import (
 from app.storage.filestore import FileStore, get_file_store
 from app.validation.sampling import select_validation_tasks
 
+# How much authority a document carries for a revenue figure, best first.
+# Every member of `SourceType` is ranked, including the two that state no
+# revenue at all: a label document ranks last rather than falling through to
+# the unknown rank, so the ranking says what it thinks of them instead of
+# leaving it to a default. `test_every_source_type_is_ranked` holds the list
+# exhaustive, so a source type added to the enum fails here rather than
+# silently arriving at the bottom.
 SOURCE_PRIORITY = [
     SourceType.SEC_FILING,
     SourceType.EARNINGS_RELEASE,
@@ -125,48 +156,15 @@ SOURCE_PRIORITY = [
     SourceType.LLM_SEARCH,
     SourceType.USER_URL,
     SourceType.OTHER,
+    SourceType.OPENFDA,
+    SourceType.DAILYMED,
 ]
 
-
-# How strong a claim each producer makes, strongest first. This is a different
-# axis from SOURCE_PRIORITY, which ranks the document a figure came from: a
-# product-sales schedule and a sentence of narrative can sit in the same 8-K
-# exhibit, so the source type does not separate them and the schedule is
-# plainly the better claim. Ordered by how much has to be inferred - a tagged
-# fact states its own period, unit and product; a schedule declares its unit
-# and its columns; a derivation is exact arithmetic over figures the issuer
-# published; a sentence and a model's reading are recovered from running text.
-# Two spellings reach this, and both are listed rather than normalised in one
-# of them: a candidate carries the reader's own label ("table_fingerprint",
-# "prose_sentence") and a stored datapoint carries the shorter one the export
-# uses. One ranking, both vocabularies.
-CLAIM_STRENGTH = {
-    "xbrl_fact": 0,
-    "table": 1,
-    "table_fingerprint": 1,
-    "derived_from_period_total": 2,
-    "derived_sole_formulation": 2,
-    "llm": 3,
-    "prose": 4,
-    "prose_sentence": 4,
-}
-
-
-# The two spellings of "the whole product": a sentence says Worldwide, a
-# schedule's family line says Product family. One group for reconciliation.
-_WHOLE_PRODUCT_SCOPES = frozenset(
-    {RevenueScope.PRODUCT_FAMILY.value, RevenueScope.WORLDWIDE.value}
-)
 
 # How long after a period ends its own report is filed: a 10-Q within about
 # 45 days, a 10-K within about 90. A filing later than this reports the
 # period as a comparative.
 _REPORTING_LAG_DAYS = 120
-
-
-def _scope_key(scope: str | None) -> str:
-    whole = RevenueScope.PRODUCT_FAMILY.value
-    return whole if (scope or "") in _WHOLE_PRODUCT_SCOPES else (scope or "")
 
 
 def period_end(period: str | None) -> date | None:
@@ -179,27 +177,126 @@ def period_end(period: str | None) -> date | None:
     return date(year + (month == 12), (month % 12) + 1, 1) - timedelta(days=1)
 
 
-def _agrees_within_declared_precision(winner: DatapointORM, other: DatapointORM) -> bool:
-    """Whether two figures for one period are one figure at two precisions.
+def stamp_series_identity(job: DrugJobORM, row: DatapointORM) -> DatapointORM:
+    """Say which series a reading belongs to, from what the reading declares.
 
-    The coarser of the two declared precisions bounds how far they may sit
-    apart and still be the same number; where either source declared none,
-    the fraction stands in, with the same floor the conflict check uses.
+    Written once the labels are final, because enrichment and reconciliation
+    both change what a row says it is a figure for - a region the enricher
+    reads off the quote, the pair a corroborator was reported as - and the
+    series a row belongs to is whatever it ends up declaring, not what it
+    declared first. Nothing reads the column before then; an empty one is a
+    row nothing has decided about, which is what the column already means. A
+    row a reviewer types is stamped where it is written, because it is
+    selected immediately and nothing runs in between.
     """
-    a = float(winner.value_normalized_usd_millions)
-    b = float(other.value_normalized_usd_millions)
-    declared = [(r.citation_json or {}).get("rounding_uncertainty_usd_millions")
-                for r in (winner, other)]
-    if all(d is not None for d in declared):
-        slack = max(float(d) for d in declared) * 2
-    else:
-        slack = ROUNDING_TOLERANCE * max(abs(a), abs(b))
-    return abs(a - b) <= max(slack, ROUNDING_ABSOLUTE)
+    row.geography_normalized = normalize_geography(row.geography)
+    row.series_identity = series_identity(
+        issuer=job.cik or job.manufacturer,
+        product=job.drug_name,
+        revenue_scope=row.revenue_scope,
+        geography=row.geography,
+        formulation=row.formulation,
+        reported_as=row.reported_as,
+        currency=row.currency,
+        period_type=row.period_type,
+        combined_line=FLAG_COMBINED in set(row.issue_flags or []),
+    )
+    return row
 
 
-def claim_rank(extraction_method: str | None) -> int:
-    """Where a producer sits in CLAIM_STRENGTH; unknown producers rank last."""
-    return CLAIM_STRENGTH.get(str(extraction_method or ""), len(CLAIM_STRENGTH))
+def _declared_uncertainty(row: DatapointORM) -> float | None:
+    """The rounding bound this row's source declared, if it declared one."""
+    return (row.citation_json or {}).get("rounding_uncertainty_usd_millions")
+
+
+def _agrees_within_declared_precision(winner: DatapointORM, other: DatapointORM) -> bool:
+    """Whether two stored rows for one period are one figure at two precisions."""
+    return agrees_within_declared_precision(
+        float(winner.value_normalized_usd_millions),
+        float(other.value_normalized_usd_millions),
+        declared=(_declared_uncertainty(winner), _declared_uncertainty(other)),
+    )
+
+
+# How the judge spells a veto in a row's issues (`apply_judge_hard_vetoes`,
+# `llm/client.py`). A snapshot of one prefix, not of the vetoes themselves -
+# the list of those grows, and nothing here has to know it. What would make
+# this stale is the judge renaming the prefix, and the symptom would be a
+# vetoed row treated as clean.
+_VETO_PREFIX = "hard_veto:"
+
+# The flag reconciliation raises when a lower-priority source disagrees with a
+# higher one, named once so the pass that raises it and the pass that counts it
+# cannot drift apart.
+FLAG_CONFLICT_WITH_HIGHER_PRIORITY = "conflict_with_higher_priority_source"
+
+
+def _is_a_code(issue: str) -> bool:
+    """Whether an issue is a code, rather than a sentence about the row.
+
+    `issue_flags` is a column readers match against by name, and the model
+    answering the judge writes its reasoning into the same list the vetoes
+    write their codes into. The two are told apart by shape rather than by a
+    register of the codes, which grows: a code is one token and a sentence is
+    not. `hard_veto:quote_states_a_different_period` is a code; "The primary
+    quote states a different figure" is not.
+    """
+    return bool(issue) and not any(character.isspace() for character in issue)
+
+
+def _publishes(row: DatapointORM) -> bool:
+    """Whether the status this row carries is one the pipeline stands behind."""
+    return row.validation_status in PUBLISHED_STATUS_VALUES
+
+
+def _unquestioned(row: DatapointORM) -> bool:
+    """Whether anything on the row makes it a question rather than an answer.
+
+    A veto the judge recorded, or a label flag the reader raised. Both are
+    reasons a person has to look; a row carrying either cannot stand in for a
+    reading that was held.
+    """
+    flags = set(row.issue_flags or [])
+    return not (
+        any(flag.startswith(_VETO_PREFIX) for flag in flags) or flags & LABEL_FLAGS
+    )
+
+
+def _carry_to_winner(winner: DatapointORM, other: DatapointORM) -> None:
+    """Move what a corroborating row knows and the published row does not.
+
+    The two rows are one figure read twice, so anything either of them says
+    about the figure is true of the published one: the pair a combined line is
+    reported as, the note the filer attached to it, and the flags that note
+    raised. Discarding them publishes the figure as something it is not - a
+    stub covering part of a quarter published as the quarter, an
+    `acme:CalderonMember` line published as Calderon's own when the row it
+    corroborates was read from "Calderon + NuVessa".
+
+    A flag that makes a row a question is not information a published row may
+    absorb quietly, so carrying one holds the figure.
+    """
+    if other.reported_as and not winner.reported_as:
+        winner.reported_as = other.reported_as
+    citation = dict(winner.citation_json or {})
+    changed = False
+    if other.reported_as and not citation.get("combined_with"):
+        combined = (other.citation_json or {}).get("combined_with")
+        if combined:
+            citation["combined_with"] = list(combined)
+            changed = True
+    notes = footnotes_in(other.source_quote or "")
+    if notes and not footnotes_in(winner.source_quote or ""):
+        citation["corroborator_footnote"] = " ".join(notes)
+        changed = True
+    carried = sorted((set(other.issue_flags or []) & LABEL_FLAGS) - set(winner.issue_flags or []))
+    if carried:
+        winner.issue_flags = sorted(set((winner.issue_flags or []) + carried))
+        winner.validation_status = ValidationStatus.NEEDS_REVIEW.value
+        citation["validation_status"] = winner.validation_status
+        changed = True
+    if changed:
+        winner.citation_json = citation
 
 
 # Which document to read first for a product's quarterly sales, best first.
@@ -215,6 +312,9 @@ def claim_rank(extraction_method: str | None) -> int:
 # Getting this backwards costs rows rather than correctness: ordering by
 # authority lets a primary filing's incidental table answer a quarter before
 # the schedule built to state it, and the schedule is then never read.
+# Exhaustive over `SourceType` for the same reason SOURCE_PRIORITY is: a
+# product label is a document this pipeline retrieves, and where it sits in a
+# search for quarterly sales is a decision, not a fall-through.
 DOCUMENT_FITNESS = [
     SourceType.EARNINGS_RELEASE,
     SourceType.SEC_FILING,
@@ -226,6 +326,8 @@ DOCUMENT_FITNESS = [
     SourceType.LLM_SEARCH,
     SourceType.USER_URL,
     SourceType.OTHER,
+    SourceType.OPENFDA,
+    SourceType.DAILYMED,
 ]
 
 
@@ -309,6 +411,21 @@ LABEL_FLAGS = QUESTION_FLAGS | {HELD_FOR_BOUND}
 _DETERMINISTIC_METHODS = {"table_fingerprint": "table", "prose_sentence": "prose"}
 
 
+def _read_from(candidate: dict[str, Any], src: Any) -> dict[str, Any]:
+    """The candidate with the document it was read from stamped on it.
+
+    A period total is kept aside rather than stored, so it never becomes a row
+    whose source anything can look up. A derivation that subtracts it has to
+    say which filing the figure came out of, and this is the only point where
+    that is known.
+    """
+    return {
+        **candidate,
+        "source_id": candidate.get("source_id") or getattr(src, "source_id", None),
+        "source_url": candidate.get("source_url") or getattr(src, "url", None),
+    }
+
+
 def _deterministic_method(candidate: dict[str, Any]) -> str:
     """``table``, ``prose`` or ``llm`` for a candidate about to be stored.
 
@@ -373,6 +490,158 @@ def scale_to_millions(value: float, unit: str | None) -> float:
     return value * scale
 
 
+@dataclass(frozen=True)
+class ClaimRanking:
+    """How the claims about one period of one job rank, strongest first.
+
+    Three questions about a row, answered against the job's own sources.
+    Named rather than returned as a tuple of closures, because the two callers
+    ask different subsets of them and a caller that unpacks three names to use
+    one says nothing about which one.
+    """
+
+    tier: Callable[[DatapointORM], tuple[int, int, int]]
+    reports_own_period: Callable[[DatapointORM], int]
+    accession_of: Callable[[DatapointORM], str | None]
+
+
+def claim_ranking(db: Session, job: DrugJobORM) -> ClaimRanking:
+    """The ranking for one job, over the sources that job retrieved.
+
+    Returned as functions over rows rather than computed in place, because
+    reconciliation and the series selection have to rank the same readings
+    the same way: a selection that ordered them differently would publish
+    one figure and select another.
+    """
+    priority_index = {t.value: i for i, t in enumerate(SOURCE_PRIORITY)}
+    # When each source was filed, for telling the filing that reports a
+    # period from a later filing's comparative of it.
+    job_sources = db.query(SourceDocumentORM).filter_by(job_id=job.id).all()
+    source_dates = {src.id: src.source_date for src in job_sources}
+    accessions = {src.id: src.accession_number for src in job_sources}
+
+    def accession_of(row: DatapointORM) -> str | None:
+        """The filing a claim came from, by the source row it cites."""
+        return accessions.get(str(row.source_id or "")) or (
+            (row.citation_json or {}).get("accession_number")
+            or (row.citation_json or {}).get("accession")
+        )
+
+    def reports_own_period(row: DatapointORM) -> int:
+        """0 for the filing that reports the period, 2 for a later one, 1 unknown.
+
+        The filing that reports a quarter states it; a filing a year later
+        prints it as a comparative, restated if the issuer recast anything
+        since. The first is the figure for the period; the second is what
+        the issuer later said about it, which is a different claim.
+        """
+        filed = parse_filing_date(source_dates.get(str(row.source_id or "")))
+        ends = period_end(row.period)
+        if filed is None or ends is None:
+            return 1
+        return 0 if filed <= ends + timedelta(days=_REPORTING_LAG_DAYS) else 2
+
+    def claim_tier(row: DatapointORM) -> tuple[int, int, int]:
+        """Where a row stands among the claims about one period.
+
+        The filing that reports the period comes first, because a later
+        filing's comparative is a different claim about it. Then how
+        strong a claim the producer makes, and only then the document it
+        sits in - in that order, because the two do not measure the same
+        thing and the document was measuring the wrong one: an instance
+        retrieved inside a 10-Q is typed a quarterly report while the
+        human-readable document of the same accession is typed a filing,
+        so a fact the filer tagged lost to a model's sentence about the
+        page beside it. Which document a figure is in cannot separate two
+        readings of one document; what produced the reading can.
+        """
+        return (
+            reports_own_period(row),
+            claim_rank(row.extraction_method),
+            priority_index.get((row.citation_json or {}).get("source_type", ""), 99),
+        )
+
+    return ClaimRanking(claim_tier, reports_own_period, accession_of)
+
+def resettle_series(db: Session, job: DrugJobORM | None) -> None:
+    """Ask again which reading each of the job's series holds.
+
+    A reviewer's decision is an answer about one row and a change to the series
+    it belongs to: a figure confirmed where the quarter already had one is a
+    second reading of that quarter, and a figure rejected may leave the quarter
+    to a reading that was standing behind it. Left unasked, the surfaces would
+    draw both.
+
+    Every row is stamped before the question is put, not only the one the
+    reviewer touched. A row written before the identity existed carries none,
+    and an empty identity is its own group - so one un-stamped row makes every
+    other un-stamped row of the same quarter its duplicate.
+    """
+    if job is None:
+        return
+    rows = db.query(DatapointORM).filter_by(job_id=job.id).all()
+    for row in rows:
+        stamp_series_identity(job, row)
+    select_job_series(db, job, rows)
+
+
+def select_job_series(
+    db: Session,
+    job: DrugJobORM,
+    rows: list[DatapointORM],
+    checks: Sequence[tuple[QualityIssue, QualityCheckORM]] = (),
+) -> None:
+    """Say which reading each of the job's series holds for each quarter.
+
+    Every surface downstream - the chart, the export, Product Detail -
+    used to answer this for itself, from the rows in whatever order they
+    arrived, which is how a quarter reported worldwide and again for one
+    region plotted the region. It is answered once here, against the same
+    ranking reconciliation used, and written on the row.
+
+    A duplicate the selection settles is not left open: the check that
+    recorded it says which reading the series holds instead, so a reader
+    of the quality sheet sees a question answered rather than a hundred
+    that never close.
+    """
+    claim_tier = claim_ranking(db, job).tier
+    standings = select_series_figures(
+        [
+            SeriesReading(
+                id=row.id,
+                cell=(row.period, row.period_type or ""),
+                identity=row.series_identity or "",
+                value=row.value_normalized_usd_millions,
+                publishes=_publishes(row),
+                strength=(*claim_tier(row), -float(row.confidence_score or 0)),
+                rounding_uncertainty=_declared_uncertainty(row),
+            )
+            for row in rows
+        ]
+    )
+    for row in rows:
+        row.series_selection = standings[row.id].selection
+    for issue, check in checks:
+        standing = standings.get(str(issue.affected_datapoint or ""))
+        if issue.issue_type != DUPLICATE_SERIES_READING or standing is None:
+            continue
+        if standing.selection in {SeriesSelection.DUPLICATE.value,
+                                  SeriesSelection.SUPERSEDED.value}:
+            check.status = QualityCheckStatus.RESOLVED.value
+            check.explanation = (
+                f"{issue.explanation} The series holds {standing.held_by} "
+                f"for this quarter; this reading is {standing.selection}."
+            )
+    logger.info(
+        "series_selection job_id=%s drug=%s selected=%s duplicate=%s superseded=%s undecided=%s",
+        job.id,
+        job.drug_name,
+        sum(1 for s in standings.values() if s.selection == SeriesSelection.SELECTED.value),
+        sum(1 for s in standings.values() if s.selection == SeriesSelection.DUPLICATE.value),
+        sum(1 for s in standings.values() if s.selection == SeriesSelection.SUPERSEDED.value),
+        sum(1 for s in standings.values() if s.selection is None),
+    )
+
 class PipelineOrchestrator:
     def __init__(self, db: Session, file_store: FileStore | None = None, llm: LLMModules | None = None) -> None:
         self.db = db
@@ -390,7 +659,7 @@ class PipelineOrchestrator:
         job.current_step = step.value
         if status:
             job.status = status.value
-        job.updated_at = datetime.utcnow()
+        job.updated_at = utc_now()
         self.db.commit()
         logger.info(
             "job_step job_id=%s drug=%s step=%s status=%s",
@@ -413,23 +682,35 @@ class PipelineOrchestrator:
             run = self.db.get(ExtractionRunORM, job.run_id)
             options = (run.options_json if run else {}) or {}
             self._job_aliases = []
-            await self._identity(job)
-            sources = await self._retrieve(job, options)
+            # The product's own documents first, then who files for it, then
+            # the filings. A drug label names its sponsor; EDGAR's name index
+            # answers a company name. Asked in the old order, `_identity` had
+            # only what the caller typed - a drug name on its own reaches no
+            # index, so it went to the model, which returned a CIK and a
+            # confidence nobody read, and the filings of whoever that was were
+            # downloaded against this job.
+            #
+            # The aliases are expanded before any of it, because the label
+            # documents are matched to the product by name and the brand the
+            # caller typed is one of the names it goes by.
+            await self._expand_aliases(job)
+            sources = await self._retrieve_product_documents(job, options)
             parsed = await self._parse(job, sources)
-            await self._extract_metadata(job, sources, parsed, options)
+            await self._label_metadata(job, sources, parsed, options)
+            await self._identity(job)
+            filings = await self._retrieve_filings(job, options)
+            filings_parsed = await self._parse(job, filings)
+            # The label pass reads openFDA and the narrative pass reads a
+            # filing, so the second half of the metadata step waits for the
+            # filings the first half runs in order to find.
+            await self._narrative_metadata(job, filings, filings_parsed, options)
+            sources = list(sources) + list(filings)
+            parsed = {**parsed, **filings_parsed}
             if options.get("product_metadata", True):
                 await self._judge_profile(job)
             datapoint_rows = await self._extract_revenue(
                 job, sources, parsed, options, skip_unresolved=get_settings().enable_llm_search
             )
-            if not datapoint_rows and get_settings().enable_llm_search:
-                extra_sources, extra_parsed = await self._search_revenue_fallback(job, options)
-                if extra_sources:
-                    sources = list(sources) + extra_sources
-                    parsed = {**parsed, **extra_parsed}
-                    datapoint_rows = await self._extract_revenue(
-                        job, sources, parsed, options, only_source_ids={s.source_id for s in extra_sources}
-                    )
             unfiled = self._quarters_no_filing_covers(job, sources, options, datapoint_rows)
             searched: list = []
             if unfiled and get_settings().enable_llm_search:
@@ -485,12 +766,16 @@ class PipelineOrchestrator:
     def _aliases_already_expanded(self, job: DrugJobORM) -> list[str] | None:
         """The answer a job that asked this same question already recorded.
 
-        Aliases are a property of the product, not of the run: every job in a
-        sweep bought its own copy from the model before it could read a single
-        filing, and in one run that was the longest stage of the job while
-        retrieval took two seconds. This is a cache in front of a procedure
-        that still works without it - delete every stored answer and the next
-        job asks the model again, at one call.
+        Aliases are a property of the product, not of the run, so a second
+        job for the same product asking the same question has already been
+        answered. This is a cache in front of a procedure that still works
+        without it: delete every stored answer and the next job asks the model
+        again, at one call.
+
+        The question is `ALIAS_QUESTION`, not the product name alone. A stored
+        answer may only be reused for a job that asked the same thing - a
+        negative recorded against one manufacturer is not an answer for
+        another's.
         """
         query = self.db.query(DrugProfileFieldORM).join(
             DrugJobORM, DrugJobORM.id == DrugProfileFieldORM.job_id
@@ -556,7 +841,7 @@ class PipelineOrchestrator:
                 citation_json={
                     "source_type": SourceType.LLM_SEARCH.value,
                     "source_quote": "llm_alias_expansion",
-                    "retrieval_date": datetime.utcnow().isoformat(),
+                    "retrieval_date": utc_now().isoformat(),
                     "confidence": 0.7,
                     "validation_status": ValidationStatus.NEEDS_REVIEW.value,
                     "interpreted": True,
@@ -588,8 +873,15 @@ class PipelineOrchestrator:
             )
 
     async def _identity(self, job: DrugJobORM) -> None:
+        """Who files for this product, from the index before the model.
+
+        The name index answers a ticker or a company name, either on its own,
+        so the question is put to it whenever the job holds one of them. What
+        the job holds depends on what ran first: a drug name alone reaches no
+        index at all, which is why the label is read before this step and the
+        sponsor it names is on the job by the time this asks.
+        """
         self._set_step(job, JobStep.IDENTITY_RESOLVE)
-        await self._expand_aliases(job)
         if not job.cik and (job.ticker or job.manufacturer):
             cik = await self.sec.resolve_cik(job.ticker, job.manufacturer)
             if cik:
@@ -597,21 +889,65 @@ class PipelineOrchestrator:
                 self.db.commit()
                 logger.info("cik_resolved job_id=%s drug=%s cik=%s via=sec", job.id, job.drug_name, cik)
         if not job.cik and get_settings().enable_llm_search:
-            cik = await self.search.resolve_cik_from_search(
+            # The resolution says what it decided and why, so a refusal reaches
+            # the job as well as an acceptance: "the model named no CIK" and
+            # "the model was never asked" are different things for a reader,
+            # and only the second leaves nothing behind.
+            resolution = await self.search.resolve_identity_from_search(
                 product=job.drug_name,
                 manufacturer=job.manufacturer,
                 ticker=job.ticker,
                 aliases=self._job_aliases,
             )
-            if cik:
-                job.cik = cik
-                job.quality_flags = list(set((job.quality_flags or []) + ["cik_from_llm_search"]))
+            if resolution:
+                job.quality_flags = sorted(set((job.quality_flags or []) + resolution.flags))
+            if resolution and resolution.accepted:
+                job.cik = resolution.cik
                 self.db.commit()
-                logger.info("cik_resolved job_id=%s drug=%s cik=%s via=llm_search", job.id, job.drug_name, cik)
+                logger.info(
+                    "cik_resolved job_id=%s drug=%s cik=%s via=llm_search",
+                    job.id, job.drug_name, resolution.cik,
+                )
 
-    async def _retrieve(self, job: DrugJobORM, options: dict[str, Any]) -> list:
+    def _record_sources(self, job: DrugJobORM, collected: list) -> list:
+        """File what a retrieval pass found, and say what it was."""
+        self._persist_sources(job, collected)
+        job.sources_found = len(collected)
+        self.db.commit()
+        logger.info(
+            "sources_retrieved job_id=%s drug=%s count=%s types=%s",
+            job.id,
+            job.drug_name,
+            len(collected),
+            sorted({getattr(s.source_type, "value", str(s.source_type)) for s in collected}),
+        )
+        return collected
+
+    async def _retrieve_product_documents(self, job: DrugJobORM, options: dict[str, Any]) -> list:
+        """The product's own records, before anything is known about the issuer.
+
+        openFDA answers a brand name, which is all this job is guaranteed to
+        have. It runs first so that the sponsor its records name is what the
+        filing index is then asked for, and it asks for no filings at all -
+        so "nothing was listed" is not a finding about an issuer here.
+        """
         self._set_step(job, JobStep.SOURCE_RETRIEVE)
-        collected = []
+        collected: list = []
+        if options.get("openfda", True):
+            collected.extend(
+                await self.fda.retrieve(
+                    run_id=job.run_id,
+                    job_id=job.id,
+                    brand=job.drug_name,
+                    generic=job.generic_name,
+                )
+            )
+        return self._record_sources(job, collected)
+
+    async def _retrieve_filings(self, job: DrugJobORM, options: dict[str, Any]) -> list:
+        """What the issuer filed, once the job knows who the issuer is."""
+        self._set_step(job, JobStep.SOURCE_RETRIEVE)
+        collected: list = []
         want_primary = bool(options.get("sec_filings", True))
         want_earnings = bool(options.get("earnings_releases", True))
         if want_primary or want_earnings:
@@ -633,15 +969,6 @@ class PipelineOrchestrator:
                     earnings_until=parse_filing_date(options.get("earnings_until")),
                 )
             )
-        if options.get("openfda", True):
-            collected.extend(
-                await self.fda.retrieve(
-                    run_id=job.run_id,
-                    job_id=job.id,
-                    brand=job.drug_name,
-                    generic=job.generic_name,
-                )
-            )
         if job.known_source_url and options.get("company_ir", True):
             collected.extend(
                 await self.manual.retrieve(run_id=job.run_id, job_id=job.id, url=job.known_source_url)
@@ -649,69 +976,107 @@ class PipelineOrchestrator:
         if options.get("transcripts", False):
             collected.extend(await self.transcripts.retrieve())
 
-        # What the search fallback is for is an issuer with nothing filed, not
-        # an issuer whose filings could not be fetched. EDGAR refuses under
-        # load, and a run that was refused looked exactly like a run that found
-        # nothing: the fallback then published investor-relations pages for a
-        # filer whose own quarterly reports were sitting behind a rate limit.
-        sec_found = [
-            s for s in collected
-            if s.source_type in {SourceType.SEC_FILING, SourceType.EARNINGS_RELEASE}
-        ]
-        sec_ok = any(s.retrieval_status == RetrievalStatus.SUCCESS for s in sec_found)
-        if sec_found and not sec_ok:
-            job.quality_flags = list(set((job.quality_flags or []) + ["sec_retrieval_failed"]))
-            logger.warning(
-                "sec_retrieval_failed job_id=%s drug=%s listed=%d fetched=0",
-                job.id, job.drug_name, len(sec_found),
-            )
-        if get_settings().enable_llm_search and not sec_ok and not sec_found:
-            search_sources = await self.search.fallback_retrieve(
-                run_id=job.run_id,
-                job_id=job.id,
-                goal="filing",
-                product=job.drug_name,
-                aliases=self._job_aliases,
-                manufacturer=job.manufacturer,
-                ticker=job.ticker,
-                context="SEC/IR filings with product net sales when CIK retrieval failed or no SEC filings.",
-            )
-            collected.extend(search_sources)
+        if want_primary or want_earnings:
+            # What the search fallback is for is an issuer with nothing filed,
+            # not an issuer whose filings could not be fetched. EDGAR refuses
+            # under load, and a run that was refused looked exactly like a run
+            # that found nothing: the fallback then published investor-relations
+            # pages for a filer whose own quarterly reports were sitting behind
+            # a rate limit.
+            sec_found = [
+                s for s in collected
+                if s.source_type in {SourceType.SEC_FILING, SourceType.EARNINGS_RELEASE}
+            ]
+            sec_ok = any(s.retrieval_status == RetrievalStatus.SUCCESS for s in sec_found)
+            if sec_found and not sec_ok:
+                job.quality_flags = list(set((job.quality_flags or []) + ["sec_retrieval_failed"]))
+                logger.warning(
+                    "sec_retrieval_failed job_id=%s drug=%s listed=%d fetched=0",
+                    job.id, job.drug_name, len(sec_found),
+                )
+            elif not sec_found and not job.cik:
+                # Nothing was listed because nothing said who files for this
+                # product. "We could not reach the SEC" is a different sentence
+                # from "we do not know whose filings to ask for", and the first
+                # was being shown for the second: a reader takes it as a
+                # transient failure of ours and retries, when what is missing is
+                # the issuer.
+                job.quality_flags = list(set((job.quality_flags or []) + [NO_FILER_OF_RECORD]))
+                logger.warning(
+                    "no_filer_of_record job_id=%s drug=%s ticker=%s manufacturer=%s",
+                    job.id, job.drug_name, job.ticker, job.manufacturer,
+                )
+            if get_settings().enable_llm_search and not sec_ok and not sec_found:
+                collected.extend(
+                    await self.search.fallback_retrieve(
+                        run_id=job.run_id,
+                        job_id=job.id,
+                        goal="filing",
+                        product=job.drug_name,
+                        aliases=self._job_aliases,
+                        manufacturer=job.manufacturer,
+                        ticker=job.ticker,
+                        context=(
+                            "SEC/IR filings with product net sales when CIK retrieval "
+                            "failed or no SEC filings."
+                        ),
+                    )
+                )
 
-        self._persist_sources(job, collected)
-        job.sources_found = len(collected)
-        self.db.commit()
-        logger.info(
-            "sources_retrieved job_id=%s drug=%s count=%s types=%s",
-            job.id,
-            job.drug_name,
-            len(collected),
-            sorted({getattr(s.source_type, "value", str(s.source_type)) for s in collected}),
-        )
-        return collected
+        return self._record_sources(job, collected)
 
     async def _parse(self, job: DrugJobORM, sources: list) -> dict[str, Any]:
         self._set_step(job, JobStep.PARSE_SOURCES)
         parsed_map: dict[str, Any] = {}
+        # What each document turned out to hold for this product, asked once
+        # here because this is the only place a retrieved source and its
+        # parsed document are both in hand. It decides nothing about what was
+        # fetched; it records what the fetching got, which is the measurement
+        # any argument about retrieval order has to start from.
+        periods = sorted(quarters_the_run_asked_for(job))
+        aliases = self._job_aliases or [job.drug_name]
+        products = self._candidate_products(job)
         for src in sources:
             doc = await self.parser.parse(src)
             parsed_map[src.source_id] = doc
+            verdict = record_coverage(
+                src, doc, aliases=aliases, periods=periods, products=products
+            )
             row = self.db.get(SourceDocumentORM, src.source_id)
             if row:
                 row.parsing_status = doc.parsing_status.value
                 row.page_or_section = doc.page_or_section
+                row.metadata_json = {**(row.metadata_json or {}),
+                                     "coverage": verdict.as_metadata()}
                 if doc.notes:
                     row.notes = (row.notes or "") + f" | parse: {doc.notes}"
         self.db.commit()
         return parsed_map
 
-    async def _extract_metadata(self, job: DrugJobORM, sources: list, parsed: dict, options: dict) -> None:
+    async def _label_metadata(self, job: DrugJobORM, sources: list, parsed: dict, options: dict) -> None:
+        """What the product's own label and application records say about it.
+
+        Runs before the issuer is resolved, because a label names its sponsor
+        and the sponsor is what the filing index is asked for. It reads only
+        openFDA records; the filings this job has not fetched yet are read by
+        `_narrative_metadata`.
+        """
         if not options.get("product_metadata", True):
             return
         self._set_step(job, JobStep.EXTRACT_METADATA)
 
         written: dict[str, str] = {}
         conflicts: dict[str, dict[str, Any]] = {}
+
+        # The approval date and the indications come from two different openFDA
+        # records: the drugsFDA application carries `submissions` and no
+        # indication prose, the SPL label carries the prose and no submissions.
+        # So the date is held across the source loop and written onto the
+        # indication rows afterwards, whichever order the two records arrive in.
+        openfda_approval: str | None = None
+        openfda_identity: ResolvedProductIdentity | None = None
+        anchored_indications: list[ProductIndicationORM] = []
+        openfda_products: list[CanonicalProductORM] = []
 
         # Deterministic OpenFDA enrichment
         for src in sources:
@@ -725,12 +1090,13 @@ class PipelineOrchestrator:
                     results = []
             if not results:
                 continue
-            selected, matched_brand = select_openfda_result(
+            matches = brand_matched_results(
                 results,
                 product=job.drug_name,
                 generic=job.generic_name,
                 aliases=self._job_aliases,
             )
+            selected, matched_brand = earliest_approved_match(matches)
             if selected is None:
                 # Every result belongs to another product sharing the molecule
                 job.quality_flags = list(
@@ -763,49 +1129,86 @@ class PipelineOrchestrator:
                 if first_label.indications_text
                 else []
             )
-            indication_value = (
-                "; ".join(dict.fromkeys(ind.disease for ind in parsed_indications if ind.disease))
-                or None
+            # A brand with more than one application has more than one
+            # approval, and the earliest ORIG is the one the product launched
+            # on; openFDA documents no order, so the first result is not it.
+            approval, approval_field = earliest_approval_date([r for r, _ in matches])
+            openfda_approval = openfda_approval or approval
+            application_numbers = [
+                str(r.get("application_number")) for r, _ in matches if r.get("application_number")
+            ]
+            # The indication readings are the label's, and `profile_fields`
+            # has the label: a value computed from it here can only be the
+            # same value. `parsed_indications` stays because the indication
+            # rows below are written from it.
+            mapping = profile_fields(
+                selected,
+                first_label,
+                moa_value=moa_value,
+                approval=approval,
+                approval_path=approval_field,
             )
-            mapping = {
-                "brand_name": (openfda.get("brand_name") or [None])[0],
-                "generic_name": (openfda.get("generic_name") or [None])[0],
-                "manufacturer": (openfda.get("manufacturer_name") or [None])[0],
-                "roa": "; ".join(first_label.routes) or None,
-                "dosage_form": "; ".join(first_label.dosage_forms) or None,
-                "pharmacologic_class": "; ".join(epc_terms) or None,
-                "moa": moa_value,
-                "active_ingredients": "; ".join(first_label.active_ingredients) or None,
-                "indication": indication_value,
-                "therapeutic_area": indication_value,
-            }
-            # Scope the approval date to this application; the earliest date across
-            # all results belongs to whichever product was approved first.
-            approval, approval_field = earliest_approval_date([selected])
-            if approval:
-                mapping["fda_approval_date"] = approval
-            for field, value in mapping.items():
-                if is_missing_value(value) or field in written:
+            for field, sourced in mapping.items():
+                value = sourced.value
+                if is_missing_value(value) or not sourced.path:
+                    continue
+                if field in written:
+                    # Two openFDA records disagreeing is the judge's question,
+                    # not something to settle by which source arrived first.
+                    if values_conflict(written[field], value):
+                        conflicts[field] = {
+                            "value": str(value),
+                            "source_type": SourceType.OPENFDA.value,
+                            "source_url": src.url,
+                            "source_quote": sourced.quote or sourced.path,
+                            "source_field": sourced.path,
+                        }
+                    continue
+                if field in SIBLING_SENSITIVE_FIELDS and blends_sibling_brand(
+                    value,
+                    product=job.drug_name,
+                    aliases=self._job_aliases,
+                    source_quote=sourced.quote,
+                ):
+                    job.quality_flags = list(
+                        set((job.quality_flags or []) + [f"sibling_blend_skipped:{field}"])
+                    )
                     continue
                 written[field] = str(value)
-                quote = (
-                    approval_field
-                    if field == "fda_approval_date" and approval_field
-                    else f"openfda.{field}"
-                )
                 citation = {
                     "source_id": src.source_id,
                     "source_type": SourceType.OPENFDA.value,
                     "source_url": src.url,
                     "source_title": src.title,
-                    "source_quote": quote,
-                    "retrieval_date": datetime.utcnow().isoformat(),
+                    # The key the value was read from, and the document's own
+                    # words where it came from prose. `openfda.<field>` was
+                    # neither: for most of these there is no such key.
+                    "source_field": sourced.path,
+                    "source_quote": sourced.quote or sourced.path,
+                    "retrieval_date": utc_now().isoformat(),
                     "confidence": 0.9 if field == "fda_approval_date" else 0.85,
                     "validation_status": ValidationStatus.NEEDS_REVIEW.value,
                     "interpreted": False,
                     "openfda_application_number": selected.get("application_number"),
                     "openfda_matched_brand": matched_brand,
                 }
+                if len(matches) > 1:
+                    citation["openfda_matched_applications"] = application_numbers
+                if sourced.rival:
+                    citation["conflicting_source"] = {
+                        "value": "; ".join(
+                            value
+                            for values in sourced.rival["readings"].values()
+                            for value in values
+                        ),
+                        "source_type": SourceType.OPENFDA.value,
+                        "source_url": src.url,
+                        "source_field": "; ".join(sourced.rival["readings"]),
+                        "source_quote": "; ".join(sourced.rival["readings"]),
+                    }
+                    job.quality_flags = list(
+                        set((job.quality_flags or []) + [f"openfda_conflicting_reading:{field}"])
+                    )
                 persist_profile_field(
                     self.db,
                     job_id=job.id,
@@ -820,12 +1223,19 @@ class PipelineOrchestrator:
                     job.manufacturer = str(value)
 
             if first_label.brand_names:
-                identity = resolve_product_identity(
+                # One job is one product, so its identity is resolved from the
+                # first openFDA record that names a brand and reused after
+                # that. The two records answering for a product do not describe
+                # it equally: the SPL label states no formulation at all, so a
+                # second resolution from it keys the same product on a poorer
+                # reading and files it as a second canonical row.
+                identity = openfda_identity or resolve_product_identity(
                     brand_name=first_label.brand_names[0],
                     active_ingredients=first_label.active_ingredients,
                     dosage_form=first_label.dosage_forms[0] if first_label.dosage_forms else None,
                     route_terms=first_label.routes,
                 )
+                openfda_identity = identity
                 product = (
                     self.db.query(CanonicalProductORM)
                     .filter_by(identity_key=identity.identity_key)
@@ -847,6 +1257,11 @@ class PipelineOrchestrator:
                     )
                     self.db.add(product)
                     self.db.flush()
+                # The launch anchor every curve is drawn from. The dashboard
+                # reads this column in preference to the profile field, so a
+                # canonical row with the column unset costs the approval date
+                # exactly where resolution succeeded.
+                openfda_products.append(product)
                 job.product_id = product.id
                 family = (
                     self.db.query(AnalogFamilyORM)
@@ -896,40 +1311,34 @@ class PipelineOrchestrator:
                         .first()
                     )
                     if existing_indication:
+                        anchored_indications.append(existing_indication)
                         continue
-                    self.db.add(
-                        ProductIndicationORM(
-                            id=new_id(),
-                            product_id=product.id,
-                            disease=indication.disease,
-                            setting=indication.setting,
-                            population=indication.population,
-                            biomarker=indication.biomarker,
-                            approval_date=(
-                                datetime.fromisoformat(approval).date()
-                                if approval
-                                else None
-                            ),
-                            launch_anchor_type=(
-                                "indication_approval_date" if approval else None
-                            ),
-                            approved_lot=indication.approved_lot.value.value,
-                            approved_lot_quote=indication.source_quote,
-                        )
+                    row = ProductIndicationORM(
+                        id=new_id(),
+                        product_id=product.id,
+                        disease=indication.disease,
+                        therapeutic_area=therapeutic_area(indication.disease),
+                        setting=indication.setting,
+                        population=indication.population,
+                        biomarker=indication.biomarker,
+                        approved_lot=indication.approved_lot.value.value,
+                        approved_lot_quote=indication.source_quote,
                     )
-                for field, value in mapping.items():
-                    if value:
+                    self.db.add(row)
+                    anchored_indications.append(row)
+                for field, sourced in mapping.items():
+                    if sourced.value and sourced.path:
                         self.db.add(
                             EvidenceAssertionORM(
                                 id=new_id(),
                                 entity_type="product",
                                 entity_id=product.id,
                                 field_name=field,
-                                value_json={"value": value},
+                                value_json={"value": sourced.value},
                                 source_id=src.source_id,
                                 source_url=src.url,
-                                source_section=f"openfda.{field}",
-                                source_quote=f"openfda.{field}",
+                                source_section=sourced.path,
+                                source_quote=sourced.quote or sourced.path,
                                 confidence=0.9,
                                 validation_status=ValidationStatus.NEEDS_REVIEW.value,
                                 extraction_method="structured_fda",
@@ -937,11 +1346,56 @@ class PipelineOrchestrator:
                             )
                         )
 
-        # The product and family rows above are complete, so they are committed
-        # here rather than at the end of the step: a flushed row is a write
-        # transaction, SQLite admits one writer, and the model calls below take
-        # long enough that every other job's commit would time out against it.
+        # The approval belongs to the application record and the indications to
+        # the label record, so the anchor is written after both have been read
+        # rather than from whichever record was in hand when a row was built.
+        if openfda_approval:
+            anchor = datetime.fromisoformat(openfda_approval).date()
+            for product in openfda_products:
+                if not product.initial_approval_date:
+                    product.initial_approval_date = anchor
+            for row in anchored_indications:
+                if not row.approval_date:
+                    row.approval_date = anchor
+                    row.launch_anchor_type = "indication_approval_date"
+
+        if conflicts:
+            for name, rival in conflicts.items():
+                row = (
+                    self.db.query(DrugProfileFieldORM)
+                    .filter_by(job_id=job.id, field=name)
+                    .first()
+                )
+                if row and row.citation_json:
+                    row.citation_json = {**row.citation_json, "conflicting_source": rival}
         self.db.commit()
+        logger.info(
+            "label_metadata_extracted job_id=%s drug=%s fields=%s conflicts=%s",
+            job.id,
+            job.drug_name,
+            sorted(written),
+            sorted(conflicts),
+        )
+
+    async def _narrative_metadata(self, job: DrugJobORM, sources: list, parsed: dict, options: dict) -> None:
+        """What the first readable filing says about the product.
+
+        Runs after the filings are fetched, because that is when there is a
+        narrative source to read at all. What the label pass already wrote is
+        read back from the job's own profile rows rather than carried between
+        the two, so a field either pass filled is one this pass disagrees with
+        rather than overwrites.
+        """
+        if not options.get("product_metadata", True):
+            return
+        self._set_step(job, JobStep.EXTRACT_METADATA)
+
+        written: dict[str, str] = {
+            row.field: row.value
+            for row in self.db.query(DrugProfileFieldORM).filter_by(job_id=job.id).all()
+            if row.field and row.value
+        }
+        conflicts: dict[str, dict[str, Any]] = {}
 
         # LLM metadata from first successful narrative source
         for src in sources:
@@ -997,7 +1451,7 @@ class PipelineOrchestrator:
                     "source_url": src.url,
                     "source_title": src.title,
                     "source_quote": field.get("source_quote") or "",
-                    "retrieval_date": datetime.utcnow().isoformat(),
+                    "retrieval_date": utc_now().isoformat(),
                     "confidence": float(field.get("confidence") or 0.5),
                     "validation_status": ValidationStatus.NEEDS_REVIEW.value,
                     "interpreted": bool(field.get("interpreted", True)),
@@ -1023,7 +1477,7 @@ class PipelineOrchestrator:
                     row.citation_json = {**row.citation_json, "conflicting_source": rival}
         self.db.commit()
         logger.info(
-            "metadata_extracted job_id=%s drug=%s fields=%s conflicts=%s",
+            "narrative_metadata_extracted job_id=%s drug=%s fields=%s conflicts=%s",
             job.id,
             job.drug_name,
             sorted(written),
@@ -1104,28 +1558,6 @@ class PipelineOrchestrator:
             len(to_judge),
             corrected,
         )
-
-    async def _search_revenue_fallback(
-        self, job: DrugJobORM, options: dict[str, Any]
-    ) -> tuple[list, dict[str, Any]]:
-        search_sources = await self.search.fallback_retrieve(
-            run_id=job.run_id,
-            job_id=job.id,
-            goal="revenue",
-            product=job.drug_name,
-            aliases=self._job_aliases,
-            manufacturer=job.manufacturer,
-            ticker=job.ticker,
-            context="Product-level quarterly or annual net sales from earnings release or IR.",
-        )
-        if not search_sources:
-            return [], {}
-        self._persist_sources(job, search_sources)
-        job.sources_found = (job.sources_found or 0) + len(search_sources)
-        job.quality_flags = list(set((job.quality_flags or []) + ["llm_search_revenue_fallback"]))
-        self.db.commit()
-        parsed = await self._parse(job, search_sources)
-        return search_sources, parsed
 
     def _quarters_no_filing_covers(
         self, job: DrugJobORM, sources: list, options: dict[str, Any], rows: list[DatapointORM]
@@ -1277,7 +1709,17 @@ class PipelineOrchestrator:
 
     @staticmethod
     def _candidate_of(row: DatapointORM) -> dict:
-        """A stored datapoint read back as the candidate it came from."""
+        """A stored datapoint read back as the candidate it came from.
+
+        Every column that says what the figure is a figure for, and where it
+        was read. A derivation subtracts these rows, and what it does not
+        receive it cannot pass on: the eight keys this used to return dropped
+        the pair a combined line was reported as, the region it covered, the
+        route, the precision its source declared, and the document it came
+        out of - so the derived quarter asserted the family's identity, cited
+        whichever document happened to be first, and was published as exact.
+        """
+        citation = row.citation_json or {}
         return {
             "period": row.period,
             "period_type": row.period_type,
@@ -1286,6 +1728,20 @@ class PipelineOrchestrator:
             "currency": row.currency,
             "unit": row.unit,
             "source_quote": row.source_quote,
+            "revenue_scope": row.revenue_scope,
+            "geography": row.geography,
+            "formulation": row.formulation,
+            "route_of_administration": row.route_of_administration,
+            "reported_as": row.reported_as,
+            "combined_with": list(citation.get("combined_with") or []),
+            "label_flags": [f for f in (row.issue_flags or []) if f in LABEL_FLAGS],
+            "extraction_method": row.extraction_method,
+            "rounding_uncertainty_usd_millions": citation.get(
+                "rounding_uncertainty_usd_millions"
+            ),
+            "source_id": row.source_id,
+            "source_url": row.source_url,
+            "_datapoint_id": row.id,
         }
 
     def _datapoint_from_candidate(self, job: DrugJobORM, src, candidate: dict) -> DatapointORM:
@@ -1317,6 +1773,17 @@ class PipelineOrchestrator:
             period_type=candidate.get("period_type") or "quarterly",
             revenue_scope=candidate.get("revenue_scope") or "Product family",
             formulation=candidate.get("formulation"),
+            # What the figures it was computed from were figures for. A
+            # derivation is a claim about the same product, the same region and
+            # the same line of the schedule as the total it subtracted, and
+            # defaulting these published a region's arithmetic as the family's
+            # and a two-product line as one product's own.
+            reported_as=(
+                candidate.get("reported_as")
+                or reported_as_for(job.drug_name, candidate)
+            ),
+            geography=candidate.get("geography"),
+            route_of_administration=candidate.get("route_of_administration"),
             source_url=src.url,
             source_quote=candidate.get("source_quote") or "",
             extraction_method=str(candidate.get("extraction_method") or "xbrl_fact"),
@@ -1341,6 +1808,12 @@ class PipelineOrchestrator:
                 "rounding_uncertainty_usd_millions": candidate.get(
                     "rounding_uncertainty_usd_millions"
                 ),
+                # Every figure this was computed from, with the document each
+                # was read from. The quote states the arithmetic; this states
+                # where a person goes to check each term of it, which is not
+                # the one document the row cites.
+                "derived_from": candidate.get("_inputs") or None,
+                "combined_with": list(candidate.get("combined_with") or []) or None,
                 "validation_status": ValidationStatus.PENDING.value,
                 "interpreted": False,
                 "period_reported": period,
@@ -1418,7 +1891,7 @@ class PipelineOrchestrator:
                 )
                 self._persist_sources(job, [src])
                 if candidate.get("period_type") != PeriodType.QUARTERLY.value:
-                    totals.append(candidate)
+                    totals.append(_read_from(candidate, src))
                     continue
                 rows.append(self._datapoint_from_candidate(job, src, candidate))
         if rows or totals:
@@ -1526,9 +1999,12 @@ class PipelineOrchestrator:
             for candidate in found:
                 # A twelve-month fact is not an answer to a quarter, so it is
                 # not stored as a datapoint; it is what the fourth quarter is
-                # derived against.
+                # derived against. It is stamped with the document it was read
+                # from on the way out: it never becomes a row of its own, so
+                # nothing downstream can look its source up, and a derivation
+                # that subtracts it has to say where it came from.
                 if candidate.get("period_type") != PeriodType.QUARTERLY.value:
-                    totals.append(candidate)
+                    totals.append(_read_from(candidate, src))
                     continue
                 rows.append(self._datapoint_from_candidate(job, src, candidate))
         if learned:
@@ -1710,7 +2186,7 @@ class PipelineOrchestrator:
             # difference between a total it did state and the quarters it did,
             # so the totals are routed, not discarded.
             period_totals = [
-                candidate
+                _read_from(candidate, src)
                 for candidate in fingerprinted
                 if candidate.get("period_type") != PeriodType.QUARTERLY.value
             ]
@@ -1734,11 +2210,20 @@ class PipelineOrchestrator:
                     src.source_id,
                     table_skips,
                 )
+            # The other brands this document gives a row of their own. The
+            # filer's schedule is its own product list, so what could be
+            # confused with ours is read off the document rather than held in
+            # a catalogue of brands here.
+            peers = peer_product_names(
+                doc.tables, product=job.drug_name,
+                generic=job.generic_name, extra_aliases=extra,
+            )
             table_rows, table_dropped = filter_revenue_candidates(
                 fingerprinted,
                 product=job.drug_name,
                 generic=job.generic_name,
                 extra_aliases=extra,
+                peer_names=peers,
             )
             dropped_total += len(table_dropped)
             kept = list(table_rows)
@@ -1785,6 +2270,7 @@ class PipelineOrchestrator:
                 "evidence_meta": evidence_meta,
                 "no_product_evidence": no_product_evidence,
                 "deterministic_answered": deterministic_answered,
+                "peers": peers,
             }
 
         llm_source_ids = self._model_budget(job, selected_sources, prepared)
@@ -1799,6 +2285,8 @@ class PipelineOrchestrator:
             llm_text, evidence_meta = state["llm_text"], state["evidence_meta"]
             no_product_evidence = state["no_product_evidence"]
             deterministic_answered = state["deterministic_answered"]
+            # This document's own sibling rows, not the last document prepared.
+            peers = state["peers"]
             use_llm = src.source_id in llm_source_ids
             if not use_llm:
                 src_row = self.db.get(SourceDocumentORM, src.source_id)
@@ -1847,6 +2335,7 @@ class PipelineOrchestrator:
                 generic=job.generic_name,
                 extra_aliases=extra,
                 source_text=span_corpus,
+                peer_names=peers,
             )
             dropped = list(llm_dropped) + list(dropped)
             dropped_total += len(dropped)
@@ -1903,11 +2392,11 @@ class PipelineOrchestrator:
                 if normalized is None and value is not None:
                     normalized = scale_to_millions(value, unit)
                 # A candidate may supply its own normalization, and it was
-                # taken verbatim. A candidate arrived reported as 87.4 with
-                # 87,400 beside it and was published, because every check
-                # downstream reads `value_reported` - the judge confirms 87.4
-                # against a quote saying 87.4 - while a consumer reads the
-                # normalized figure that nothing had looked at.
+                # taken verbatim. Nothing downstream looks at it: every check
+                # reads `value_reported`, the judge included, so a candidate
+                # whose own normalized figure is a thousand times its reported
+                # one is confirmed against its quote and published, and the
+                # consumer reads the figure nobody checked.
                 #
                 # Recomputed from the figure and unit the candidate declares
                 # itself. Only an order-of-magnitude disagreement is acted on,
@@ -1922,7 +2411,7 @@ class PipelineOrchestrator:
                     "source_url": url,
                     "source_title": src.title,
                     "source_quote": quote,
-                    "retrieval_date": datetime.utcnow().isoformat(),
+                    "retrieval_date": utc_now().isoformat(),
                     "filing_type": src.filing_type,
                     "accession_number": src.accession_number,
                     "confidence": stated_number(cand.get("confidence")) or 0.5,
@@ -1996,10 +2485,9 @@ class PipelineOrchestrator:
         # Only figures at least as strong as a derivation count as reported
         # when deciding which quarter is missing. `complete_series` treats any
         # candidate for a period as that period being answered, so a sentence
-        # reading 1.0 made the quarter non-missing and the derivation was never
-        # computed at all - which is upstream of the ranking below, and is why
-        # ranking alone moved nothing. The weak reading is not discarded; it is
-        # simply not evidence about what still needs deriving.
+        # is enough to make a quarter non-missing and stop the derivation being
+        # computed at all. The weak reading is not discarded; it is simply not
+        # evidence about what still needs deriving.
         derived_rank = claim_rank("derived_from_period_total")
         derivable = [
             self._candidate_of(row)
@@ -2010,22 +2498,32 @@ class PipelineOrchestrator:
             {job.drug_name: derivable + derivation_pool}, product=job.drug_name
         )
         # Only a stronger claim pre-empts a derivation. Skipping every period
-        # anything had been found for meant a sentence reading 1.0 did not lose
-        # to a family total that derives exactly to 94.645 - it stopped that
-        # total ever being computed. Where a weaker reader answered, both now
-        # stand and reconciliation ranks them.
+        # anything had been found for did not make the weak reading win the
+        # ranking; it stopped the derivation existing to be ranked against.
+        # Where a weaker reader answered, both now stand and reconciliation
+        # ranks them.
         strongest: dict[str, int] = {}
         for row in rows:
             rank = claim_rank(row.extraction_method)
             if rank < strongest.get(row.period, len(CLAIM_STRENGTH) + 1):
                 strongest[row.period] = rank
+        # The document each figure was actually read from. A derivation cites
+        # the filing its principal input came out of, so a reader opening the
+        # citation finds the total that was subtracted; the other inputs are
+        # named in the citation with their own documents. Citing whichever
+        # source sorted first meant none of the figures in a derived quote
+        # appeared in the document cited for it.
+        by_source_id = {s.source_id: s for s in sources}
         for candidate in derived:
             if strongest.get(str(candidate["period"]), len(CLAIM_STRENGTH) + 1) <= derived_rank:
                 continue
-            source = next((s for s in selected_sources), None)
+            source = by_source_id.get(candidate.get("source_id")) or next(
+                (s for s in selected_sources), None
+            )
             if source is None:
                 break
-            rows.append(self._datapoint_from_candidate(job, source, candidate))
+            row = self._datapoint_from_candidate(job, source, candidate)
+            rows.append(row)
         if derived:
             logger.info(
                 "derived_quarters job_id=%s drug=%s derived=%d", job.id, job.drug_name, len(derived)
@@ -2071,23 +2569,47 @@ class PipelineOrchestrator:
             return
         settings = get_settings()
         aliases = self._job_aliases or merge_aliases(job.drug_name, job.generic_name)
+        peers_by_source: dict[str | None, list[str]] = {}
         for row in rows:
             label_flags = [f for f in (row.issue_flags or []) if f in LABEL_FLAGS]
             residue = (row.citation_json or {}).get("label_residue") or ""
+            notes = footnotes_in(row.source_quote or "")
+            # What the row already says about itself. Every one of these is a
+            # column the pipeline filled and the judge was not shown, so it was
+            # asked whether a quote supports a figure without being told what
+            # the figure is denominated in, where it was sold, or what read it.
             candidate = {
                 "period": row.period,
                 "value_reported": row.value_reported,
+                "metric": row.metric,
+                "unit": row.unit,
+                "currency": row.currency,
                 "period_type": row.period_type,
                 "revenue_scope": row.revenue_scope,
+                "geography": row.geography,
                 "formulation": row.formulation,
+                "extraction_method": row.extraction_method,
+                "source_type": (row.citation_json or {}).get("source_type"),
                 "label_flags": label_flags,
                 "label_residue": residue,
             }
+            if notes:
+                # The filer's own footnote about this figure, which the table
+                # reader carried out on the end of the quote.
+                candidate["footnote"] = " ".join(notes)
+            doc = parsed.get(row.source_id or "")
+            # Every row of one document has the same product list, and a job
+            # reads several rows out of each document it judges.
+            if row.source_id not in peers_by_source:
+                peers_by_source[row.source_id] = peer_product_names(
+                    getattr(doc, "tables", None), product=job.drug_name,
+                    generic=job.generic_name, extra_aliases=aliases,
+                )
+            peers = peers_by_source[row.source_id]
+            # The residue reaches the model once, as a key of the candidate the
+            # prompt explains. Prepending it to the context as well put the
+            # same words in front of the model twice, described two ways.
             context = row.source_quote or ""
-            if residue:
-                # The judge is shown what the label said that the reader could
-                # not account for, which is the question it is being asked.
-                context = f"Row label words not accounted for: {residue}\n\n{context}"
             judgment = None
             if settings.llm_skip_judge_when_deterministic:
                 judgment = try_deterministic_judgment(
@@ -2096,9 +2618,9 @@ class PipelineOrchestrator:
                     candidate=candidate,
                     quote=row.source_quote or "",
                     extra_aliases=aliases,
+                    peer_names=peers,
                 )
             if judgment is None:
-                doc = parsed.get(row.source_id or "")
                 if doc and doc.full_text:
                     context, _meta = select_product_evidence_text(
                         doc.full_text,
@@ -2118,6 +2640,7 @@ class PipelineOrchestrator:
                     context=context,
                     generic=job.generic_name,
                     extra_aliases=aliases,
+                    peer_names=peers,
                 )
 
             support = judgment.get("support_classification")
@@ -2141,6 +2664,7 @@ class PipelineOrchestrator:
                     candidate=candidate,
                     quote=row.source_quote or "",
                     context=context,
+                    peer_names=peers,
                 )
                 if search_judgment:
                     judgment = {**judgment, **{k: v for k, v in search_judgment.items() if v is not None}}
@@ -2159,7 +2683,8 @@ class PipelineOrchestrator:
             # anything, so it goes on the row directly.
             #
             # It used to go through apply_field_enrichment, whose contract is
-            # that any fill forces needs_review and caps confidence at 0.55.
+            # that any fill forces needs_review and caps confidence at
+            # `ENRICHMENT_CONFIDENCE_CAP` (`quality/enrichment.py`).
             # That contract is right for a model's suggestion about a blank
             # field and wrong for a tautology. The flag disqualifies a row from
             # auto_pass twice over - directly, and by holding confidence under
@@ -2181,11 +2706,8 @@ class PipelineOrchestrator:
             )
             if enrichment:
                 snapshot = {
-                    "period": row.period,
                     "period_type": row.period_type,
                     "revenue_scope": row.revenue_scope,
-                    "value_reported": row.value_reported,
-                    "value_normalized_usd_millions": row.value_normalized_usd_millions,
                     "currency": row.currency,
                     "unit": row.unit,
                     "geography": row.geography,
@@ -2202,13 +2724,8 @@ class PipelineOrchestrator:
                 }
                 enriched, applied = apply_field_enrichment(snapshot, enrichment)
                 if applied:
-                    row.period = enriched.get("period") or row.period
                     row.period_type = enriched.get("period_type") or row.period_type
                     row.revenue_scope = enriched.get("revenue_scope") or row.revenue_scope
-                    if "value_reported" in applied:
-                        row.value_reported = enriched.get("value_reported")
-                    if "value_normalized_usd_millions" in applied:
-                        row.value_normalized_usd_millions = enriched.get("value_normalized_usd_millions")
                     if "currency" in applied:
                         row.currency = enriched.get("currency")
                     if "unit" in applied:
@@ -2255,6 +2772,14 @@ class PipelineOrchestrator:
                     PeriodType.ANNUAL.value,
                 }
                 and "field_enrichment_applied" not in (row.issue_flags or [])
+                # The same flags that held this row above. "Supported" is an
+                # answer about the quote: the figure is in the text cited for
+                # it. A label flag is a question about what the figure is a
+                # figure for - which product's line it was read from, what
+                # part of the quarter it covers - and a quote cannot settle
+                # that, so a row demoted for one was promoted straight back
+                # here and published as this product's own quarter.
+                and not label_flags
             ):
                 status = ValidationStatus.AUTO_PASS.value
             elif support == "partial":
@@ -2269,10 +2794,18 @@ class PipelineOrchestrator:
                 # normalized figure, which is the one published.
                 status = ValidationStatus.NEEDS_REVIEW.value
             row.validation_status = status
+            # The judge answers with both: codes its own vetoes raised, and the
+            # model's sentences about the row. Only the codes belong in the
+            # column readers match against; the sentences are what a person
+            # reads, and that is `reviewer_notes`.
             issues = list(judgment.get("issues") or [])
+            codes = [issue for issue in issues if _is_a_code(issue)]
+            said = [issue for issue in issues if not _is_a_code(issue)]
             if row.issue_flags:
-                issues = list(set(list(row.issue_flags) + issues))
-            row.issue_flags = issues
+                codes = list(set(list(row.issue_flags) + codes))
+            row.issue_flags = codes
+            if said:
+                row.reviewer_notes = "\n".join([*filter(None, [row.reviewer_notes]), *said])
             if row.citation_json:
                 row.citation_json = {**row.citation_json, "validation_status": status}
         self.db.commit()
@@ -2287,37 +2820,26 @@ class PipelineOrchestrator:
         # Deterministic grouping first. "Worldwide" and "Product family" are
         # both the whole product - a sentence says the first, a schedule the
         # second - and grouped apart they were published twice for one quarter.
-        priority_index = {t.value: i for i, t in enumerate(SOURCE_PRIORITY)}
+        #
+        # The period label alone is not the period. A nine-month figure and the
+        # quarter that ends it carry the same label, and they are two different
+        # claims about two different spans: pooled under one key the longer one
+        # contests the shorter, the reconciliation calls the disagreement a
+        # conflict, and the figure that is right for the quarter is held. The
+        # span is part of what a group is a group of.
         by_key: dict[tuple, list[DatapointORM]] = {}
         for row in rows:
-            key = (row.period, _scope_key(row.revenue_scope), row.formulation or "")
-            by_key.setdefault(key, []).append(row)
-        # When each source was filed, for telling the filing that reports a
-        # period from a later filing's comparative of it.
-        job_sources = self.db.query(SourceDocumentORM).filter_by(job_id=job.id).all()
-        source_dates = {src.id: src.source_date for src in job_sources}
-        accessions = {src.id: src.accession_number for src in job_sources}
-
-        def accession_of(row: DatapointORM) -> str | None:
-            """The filing a claim came from, by the source row it cites."""
-            return accessions.get(str(row.source_id or "")) or (
-                (row.citation_json or {}).get("accession_number")
-                or (row.citation_json or {}).get("accession")
+            key = (
+                row.period,
+                row.period_type or "",
+                _scope_key(row.revenue_scope),
+                row.formulation or "",
             )
-
-        def reports_own_period(row: DatapointORM) -> int:
-            """0 for the filing that reports the period, 2 for a later one, 1 unknown.
-
-            The filing that reports a quarter states it; a filing a year later
-            prints it as a comparative, restated if the issuer recast anything
-            since. The first is the figure for the period; the second is what
-            the issuer later said about it, which is a different claim.
-            """
-            filed = parse_filing_date(source_dates.get(str(row.source_id or "")))
-            ends = period_end(row.period)
-            if filed is None or ends is None:
-                return 1
-            return 0 if filed <= ends + timedelta(days=_REPORTING_LAG_DAYS) else 2
+            by_key.setdefault(key, []).append(row)
+        ranking = claim_ranking(self.db, job)
+        claim_tier = ranking.tier
+        reports_own_period = ranking.reports_own_period
+        accession_of = ranking.accession_of
 
         conflict_payload: list[dict[str, Any]] = []
         for group in by_key.values():
@@ -2388,16 +2910,10 @@ class PipelineOrchestrator:
                 continue
             if any(r.id in losers for r in group):
                 continue
-            # The document first, then how strong a claim the producer makes,
-            # then confidence. Source type alone leaves a sentence and a
-            # schedule from one exhibit tied, and the tie was broken by
-            # whichever happened to be extracted first.
-            group.sort(key=lambda r: (
-                reports_own_period(r),
-                priority_index.get((r.citation_json or {}).get("source_type", ""), 99),
-                claim_rank(r.extraction_method),
-                -float(r.confidence_score or 0),
-            ))
+            # The claim, then the document, then confidence. Source type alone
+            # leaves a sentence and a schedule from one exhibit tied, and the
+            # tie was broken by whichever happened to be extracted first.
+            group.sort(key=lambda r: (*claim_tier(r), -float(r.confidence_score or 0)))
             winners.add(group[0].id)
             for loser in group[1:]:
                 losers.add(loser.id)
@@ -2415,13 +2931,8 @@ class PipelineOrchestrator:
         for group in by_key.values():
             if len(group) < 2:
                 continue
-            tier = lambda r: (
-                reports_own_period(r),
-                priority_index.get((r.citation_json or {}).get("source_type", ""), 99),
-                claim_rank(r.extraction_method),
-            )
-            top = min(tier(r) for r in group)
-            strongest = [r for r in group if tier(r) == top
+            top = min(claim_tier(r) for r in group)
+            strongest = [r for r in group if claim_tier(r) == top
                          and r.value_normalized_usd_millions is not None]
             if len(strongest) < 2:
                 continue
@@ -2464,27 +2975,78 @@ class PipelineOrchestrator:
         # thousands beside a printed one in millions with one decimal. It is
         # cited beside the published figure, not published as a second one and
         # not held as a conflict it never was.
+        #
+        # The group is looked at again here rather than read off the winner,
+        # because the winner is not always the row that publishes. Which side
+        # of a pair carries the figure is settled above; whether that row is
+        # publishable was settled by the judge before this ran, and a row held
+        # by a veto takes the whole cell down with it when the only other
+        # reading of the quarter is turned into its citation.
         corroborating: set[str] = set()
         by_id = {row.id: row for row in rows}
         for group in by_key.values():
             winner = next((r for r in group if r.id in winners), None)
             if winner is None or winner.value_normalized_usd_millions is None:
                 continue
-            for other in group:
-                if other.id == winner.id or other.id in contested or other.id in self_contradicting:
-                    continue
-                if other.value_normalized_usd_millions is None:
-                    continue
-                if _agrees_within_declared_precision(winner, other):
-                    corroborating.add(other.id)
-                    cited = list((winner.citation_json or {}).get("corroborated_by") or [])
-                    cited.append({
-                        "datapoint_id": other.id,
-                        "source_url": other.source_url,
-                        "value_normalized_usd_millions": other.value_normalized_usd_millions,
-                        "extraction_method": other.extraction_method,
-                    })
-                    winner.citation_json = {**(winner.citation_json or {}), "corroborated_by": cited}
+            agreeing = [
+                other
+                for other in group
+                if other.id != winner.id
+                and other.id not in contested
+                and other.id not in self_contradicting
+                and other.value_normalized_usd_millions is not None
+                and _agrees_within_declared_precision(winner, other)
+            ]
+            replaced = False
+            if not _publishes(winner):
+                # The winner is held. A reading of the same figure that is
+                # publishable and carries no question of its own is the
+                # quarter's answer, and citing it under a row nobody will
+                # publish loses the quarter. It takes the winner's place; the
+                # held row keeps the verdict it was given, and is not recorded
+                # as corroborating a figure it lost to.
+                #
+                # Which of them takes the place is the same question the group
+                # was ranked on, so it is asked with the same key rather than
+                # by whichever the group happens to list first.
+                instead = next(
+                    (
+                        o
+                        for o in sorted(agreeing, key=claim_tier)
+                        if _publishes(o) and _unquestioned(o)
+                    ),
+                    None,
+                )
+                if instead is not None:
+                    replaced = True
+                    winners.discard(winner.id)
+                    losers.discard(instead.id)
+                    winners.add(instead.id)
+                    logger.info(
+                        "corroborator_published job_id=%s drug=%s period=%s held=%s published=%s",
+                        job.id, job.drug_name, winner.period,
+                        winner.extraction_method, instead.extraction_method,
+                    )
+                    agreeing = [o for o in agreeing if o.id != instead.id]
+                    winner = instead
+            for other in agreeing:
+                corroborating.add(other.id)
+                cited = list((winner.citation_json or {}).get("corroborated_by") or [])
+                cited.append({
+                    "datapoint_id": other.id,
+                    "source_url": other.source_url,
+                    "value_normalized_usd_millions": other.value_normalized_usd_millions,
+                    "extraction_method": other.extraction_method,
+                })
+                winner.citation_json = {**(winner.citation_json or {}), "corroborated_by": cited}
+                if not replaced:
+                    # The row that took a held winner's place was chosen
+                    # because it publishes and carries no question of its own.
+                    # A reading the pipeline refuses to publish may not turn it
+                    # back into one: that withdraws the only answer the quarter
+                    # has, and leaves the cell as empty as the promotion was
+                    # there to stop it being.
+                    _carry_to_winner(winner, other)
 
         for row in rows:
             if row.id in corroborating:
@@ -2504,7 +3066,7 @@ class PipelineOrchestrator:
                 ):
                     flag = "restated_in_later_filing"
                 else:
-                    flag = "conflict_with_higher_priority_source"
+                    flag = FLAG_CONFLICT_WITH_HIGHER_PRIORITY
                 row.issue_flags = list(set((row.issue_flags or []) + [flag]))
                 if row.citation_json:
                     row.citation_json = {**row.citation_json, "validation_status": row.validation_status}
@@ -2515,6 +3077,12 @@ class PipelineOrchestrator:
         dps = self.db.query(DatapointORM).filter_by(job_id=job.id).all()
         profile_fields = self.db.query(DrugProfileFieldORM).filter_by(job_id=job.id).all()
         profile = {f.field: f.value for f in profile_fields}
+        # The labels are final by now - the enricher has read what it could
+        # off the quotes, and reconciliation has carried a corroborator's line
+        # onto the row it corroborates - so this is where a row's series is
+        # settled, and the duplicate check keys on it.
+        for d in dps:
+            stamp_series_identity(job, d)
         dp_dicts = [
             {
                 "id": d.id,
@@ -2526,6 +3094,8 @@ class PipelineOrchestrator:
                 "revenue_scope": d.revenue_scope,
                 "formulation": d.formulation,
                 "geography": d.geography,
+                "geography_normalized": d.geography_normalized,
+                "series_identity": d.series_identity,
                 "currency": d.currency,
                 "unit": d.unit,
                 "confidence_score": d.confidence_score,
@@ -2534,18 +3104,20 @@ class PipelineOrchestrator:
             for d in dps
         ]
         issues = run_quality_checks(dp_dicts, profile)
+        checks: list[tuple[QualityIssue, QualityCheckORM]] = []
         for issue in issues:
-            self.db.add(
-                QualityCheckORM(
-                    id=new_id(),
-                    job_id=job.id,
-                    issue_type=issue.issue_type,
-                    severity=issue.severity,
-                    affected_datapoint=issue.affected_datapoint,
-                    explanation=issue.explanation,
-                    recommended_action=issue.recommended_action,
-                )
+            check = QualityCheckORM(
+                id=new_id(),
+                job_id=job.id,
+                issue_type=issue.issue_type,
+                severity=issue.severity,
+                affected_datapoint=issue.affected_datapoint,
+                explanation=issue.explanation,
+                recommended_action=issue.recommended_action,
+                status=issue.status,
             )
+            checks.append((issue, check))
+            self.db.add(check)
         for d in dps:
             related = [i for i in issues if i.affected_datapoint == d.id]
             d.validation_status = apply_auto_pass_gate(
@@ -2563,6 +3135,8 @@ class PipelineOrchestrator:
             if d.citation_json:
                 d.citation_json = {**d.citation_json, "validation_status": d.validation_status}
 
+        select_job_series(self.db, job, dps, checks)
+
         job.auto_pass_count = sum(1 for d in dps if d.validation_status == ValidationStatus.AUTO_PASS.value)
         job.needs_review_count = sum(1 for d in dps if d.validation_status == ValidationStatus.NEEDS_REVIEW.value)
         # Merge, so provenance flags raised earlier in the pipeline survive
@@ -2571,7 +3145,11 @@ class PipelineOrchestrator:
         )
 
         self._set_step(job, JobStep.VALIDATION_TASKS)
-        conflict_ids = {d.id for d in dps if "conflict" in " ".join(d.issue_flags or [])}
+        conflict_ids = {
+            d.id
+            for d in dps
+            if FLAG_CONFLICT_WITH_HIGHER_PRIORITY in (d.issue_flags or [])
+        }
         tasks = select_validation_tasks(
             [
                 {
@@ -2716,13 +3294,12 @@ class PipelineOrchestrator:
             )
             existing_unresolved.add(str(period))
 
-        counted = refresh_completeness(self.db, job, llm_pct=result.get("completeness_pct"))
+        counted = refresh_completeness(self.db, job)
         self.db.commit()
         logger.info(
-            "completeness job_id=%s drug=%s llm_pct=%s resolved_pct=%s quarterly=%s unresolved=%s",
+            "completeness job_id=%s drug=%s resolved_pct=%s quarterly=%s unresolved=%s",
             job.id,
             job.drug_name,
-            result.get("completeness_pct"),
             job.completeness_pct,
             counted.quarters,
             job.unresolved_count,

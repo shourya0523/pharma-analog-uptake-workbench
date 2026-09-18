@@ -27,7 +27,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 BACKEND_DIR = REPO_ROOT / "backend"
 FRONTEND_DIR = REPO_ROOT / "frontend"
 
-OPENROUTER_MODEL_EXTRACT = "openai/gpt-4o-mini"
+OPENROUTER_MODEL_EXTRACT = "google/gemini-3.8-flash"
 OPENROUTER_MODEL_JUDGE = "openai/gpt-4o-mini"
 OPENROUTER_SECRET_NAME = "pharma-workbench/openrouter-api-key"
 

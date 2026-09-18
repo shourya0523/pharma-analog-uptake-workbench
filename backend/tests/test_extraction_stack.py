@@ -375,6 +375,11 @@ def test_flattened_pdf_block_keeps_its_geographies_apart():
 # --- completing a series from the issuer's own arithmetic ---------------------
 
 
+def _outputs(records):
+    """The derived figures alone, for a test that is not about the lineage."""
+    return [record.output for record in records]
+
+
 def test_unstated_fourth_quarter_is_derived_from_the_annual_total():
     """Issuers often report three quarters and a year; Q4 is the difference."""
     from app.extraction.derive import complete_quarters_from_totals
@@ -385,7 +390,7 @@ def test_unstated_fourth_quarter_is_derived_from_the_annual_total():
         _point("2003Q3", 12.852),
         _point("2003", 45.121, period_type="annual"),
     ]
-    derived = complete_quarters_from_totals(points)
+    derived = _outputs(complete_quarters_from_totals(points))
     assert len(derived) == 1
     assert derived[0].period == "2003Q4"
     assert abs(derived[0].value_normalized_usd_millions - 11.994) < 1e-6
@@ -423,9 +428,9 @@ def test_family_total_resolves_the_sole_formulation_before_a_split():
     from app.extraction.derive import propagate_sole_formulation
 
     family = [_point("2021Q4", 119.7), _point("2022Q1", 172.0), _point("2022Q2", 198.0)]
-    derived = propagate_sole_formulation(
+    derived = _outputs(propagate_sole_formulation(
         family, formulation_periods={"2022Q2", "2022Q3"}, formulation_label="Nebulized Tyvaso"
-    )
+    ))
     periods = {p.period for p in derived}
 
     # Pre-split quarters carry over; once both formulations sell, the family
@@ -456,6 +461,11 @@ def test_prose_pairs_quarter_and_year_to_date_when_the_sentence_says_respectivel
     it as multi-period leaves a whole product unreadable even though the
     sentence states the correspondence outright. Neither half matches the single-period
     patterns either: the quarter's year only appears after the second phrase.
+
+    Both halves are keyed the way `periods.period_label` keys them, so the
+    year-to-date half is `2025H1` and not the bare year: a bare year is what an
+    annual figure is called, and a reader holding one cannot tell the six
+    months from the twelve.
     """
     from app.extraction.prose import read_prose
 
@@ -467,7 +477,7 @@ def test_prose_pairs_quarter_and_year_to_date_when_the_sentence_says_respectivel
     )
     assert [(v.period, v.period_type, v.value_as_reported) for v in values] == [
         ("2025Q2", "quarterly", 336.0),
-        ("2025", "six_month", 615.0),
+        ("2025H1", "six_month", 615.0),
     ]
 
 
@@ -516,7 +526,7 @@ def test_launch_year_total_covers_only_quarters_since_launch():
     ]
     assert complete_quarters_from_totals(points) == []
 
-    derived = complete_quarters_from_totals(points, commercial_start="2002Q2")
+    derived = _outputs(complete_quarters_from_totals(points, commercial_start="2002Q2"))
     assert [(p.period, round(p.value_normalized_usd_millions, 3)) for p in derived] == [
         ("2002Q4", 9.874)
     ]
@@ -1346,12 +1356,19 @@ def run_case(case: dict) -> tuple[str, str]:
 
 
 def real_rows_that_trip() -> list[str]:
-    """Every complete year in gold, put through the same checks.
+    """Every gold year that has a published total, put through the same checks.
 
-    This is the false-positive guard. Each series is grouped into calendar
-    years, and any year with all four quarters is checked against the total
-    those quarters imply - the same call the pipeline makes when deriving. None
-    of them may come back as anything other than resolved.
+    This is the false-positive guard. Quarters are grouped into calendar years
+    and each year that ``annual_revenue.jsonl`` also states a total for is
+    checked against the sum of the quarters gold carries for it - the same call
+    the pipeline makes when deriving. Every bridged quarter goes through the
+    split-ownership check as well. None may come back as anything other than
+    resolved.
+
+    ``expected_parts`` is the number of quarters gold holds for the year, not
+    four. A product launched mid-year has a shorter first year, and its stated
+    annual total covers only the quarters it was on sale for; demanding four
+    would skip exactly the launch year the series is read for.
     """
     quarterly = [
         json.loads(line)
@@ -1363,11 +1380,11 @@ def real_rows_that_trip() -> list[str]:
         for line in (GOLD / "annual_revenue.jsonl").read_text().splitlines()
         if line.strip()
     ]
-    # Normalised USD on both sides, never as-reported. Tracleer's annual series
-    # is Actelion's CHF and its quarterly series is J&J's own dollar conversion
-    # of the same history: comparing 1,020 francs against 1,035 dollars reports
-    # a contradiction that is only a currency. This is the category error the
-    # adjudicator is meant to catch, and it caught it here first.
+    # Normalised USD on both sides, never as-reported. Where a product's annual
+    # series is its first owner's francs and its quarterly series is the
+    # acquirer's own dollar conversion of the same history, comparing the two
+    # as reported reports a contradiction that is only a currency - the
+    # category error these checks exist to catch, arriving in the units.
     totals = {
         (row["drug_name"], str(row["period"])): row["value_normalized_usd_millions"]
         for row in annual
@@ -1402,3 +1419,91 @@ def real_rows_that_trip() -> list[str]:
             if not verdict.resolved:
                 tripped.append(f"{row['drug_name']} {row['period']}: {verdict.code}")
     return tripped
+
+
+def _schedule(total_label: str) -> tuple[list[list[str]], list[list[str | None]]]:
+    """A two-year comparative table of one product, under the total row given."""
+    grid: list[list[str | None]] = [
+        ["", "Three Months Ended June 30,", None, "Three Months Ended June 30,", None],
+        ["", "2026", None, "2025", None],
+        ["", "(in thousands)", None, None, None],
+        ["Calderon", "$", "22,078", "$", "26,741"],
+        ["NuVessa", "5,571", None, "9,186", None],
+        [total_label, "$", "27,649", "$", "35,927"],
+    ]
+    return [[cell or "" for cell in row] for row in grid], grid
+
+
+def test_the_schedule_a_row_sits_in_decides_whether_it_is_revenue():
+    """The row is the same either way: a product's name beside two figures.
+
+    What separates them is the schedule's own total row - the filer saying
+    what the table sums - so the total row is what is read. A schedule summing
+    to revenue publishes; one summing to research and development does not,
+    and says so rather than going quiet.
+    """
+    rows, grid = _schedule("Total net product revenues")
+    published = read_table(rows, product="Calderon", grid=grid, context="(in thousands)")
+    assert {v.period: v.value_as_reported for v in published.values} == {
+        "2026Q2": 22078.0, "2025Q2": 26741.0,
+    }
+
+    rows, grid = _schedule("Total research and development")
+    refused = read_table(rows, product="Calderon", grid=grid, context="(in thousands)")
+    assert refused.values == []
+    assert refused.skipped_reason == "not_revenue:research_and_development"
+
+
+def test_a_caption_answers_for_a_schedule_that_prints_no_total():
+    """With no total row to ask, the caption the table was introduced by is
+    the heading, and it is read the same way."""
+    grid: list[list[str | None]] = [
+        ["", "Three Months Ended June 30,", None, "Three Months Ended June 30,", None],
+        ["", "2026", None, "2025", None],
+        ["", "(in thousands)", None, None, None],
+        ["Calderon", "$", "22,078", "$", "26,741"],
+    ]
+    rows = [[cell or "" for cell in row] for row in grid]
+    caption = ("The following table provides research and development expense for our "
+               "most advanced principal product development programs.")
+    refused = read_table(rows, product="Calderon", grid=grid,
+                         context=f"{caption}\n(in thousands)", caption=caption)
+    assert refused.values == []
+    assert refused.skipped_reason == "not_revenue:research_and_development"
+
+    caption = "The following table summarizes net product revenues by product."
+    published = read_table(rows, product="Calderon", grid=grid,
+                           context=f"{caption}\n(in thousands)", caption=caption)
+    assert [v.period for v in published.values] == ["2026Q2", "2025Q2"]
+
+
+def test_a_sentence_is_its_own_heading():
+    """A sentence has no schedule around it to ask, so it answers for itself:
+    a cost of sales stated for the product is not the product's revenue, and a
+    net product sales sentence is."""
+    cost = ("For the three months ended March 31, 2026, we recognized $12.1 million "
+            "in cost of sales for Calderon.")
+    sales = ("For the three months ended March 31, 2026, net product sales of Calderon "
+             "were $75.9 million.")
+    assert extract_revenue_candidates([], product="Calderon", prose=cost)[0] == []
+    published, _findings, _skipped = extract_revenue_candidates(
+        [], product="Calderon", prose=sales)
+    assert [(c["period"], c["value_reported"]) for c in published] == [("2026Q1", 75.9)]
+
+
+def test_a_change_column_is_not_a_period():
+    """A results-of-operations layout prints the two periods and then the
+    change between them. The change columns state no period, so no figure in
+    them is published as one."""
+    grid: list[list[str | None]] = [
+        ["", "Three Months Ended June 30,", None, "Change", None],
+        ["", "2026", "2025", "$", "%"],
+        ["", "(in thousands)", None, None, None],
+        ["Calderon", "22,078", "26,741", "(4,663)", "(17)%"],
+        ["Total revenues", "27,649", "35,927", "(8,278)", "(23)%"],
+    ]
+    rows = [[cell or "" for cell in row] for row in grid]
+    readout = read_table(rows, product="Calderon", grid=grid, context="(in thousands)")
+    assert {v.period: v.value_as_reported for v in readout.values} == {
+        "2026Q2": 22078.0, "2025Q2": 26741.0,
+    }

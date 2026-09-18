@@ -1,9 +1,10 @@
 from __future__ import annotations
 
+from collections.abc import Iterable
 from typing import Any
 
 from app.domain.claims import stated_labels, stated_text
-from app.llm.client import apply_judge_hard_vetoes, re_ytd_language
+from app.llm.client import apply_judge_hard_vetoes, names_a_year_to_date_span
 from app.quality.candidate_filters import quote_mentions_product
 from app.quality.checks import quote_contains_value
 
@@ -15,6 +16,7 @@ def try_deterministic_judgment(
     candidate: dict[str, Any],
     quote: str,
     extra_aliases: list[str] | None = None,
+    peer_names: Iterable[str] | None = None,
 ) -> dict[str, Any] | None:
     """Return a judgment without calling the LLM when evidence is clearly good or clearly bad.
 
@@ -25,11 +27,19 @@ def try_deterministic_judgment(
     value = candidate.get("value_reported")
 
     # Clear vetoes — no need for LLM
+    # The same aliases and the same sibling rows the model judge is given. Run
+    # against the brand string alone, every veto here asked a narrower question
+    # than the one it was written to ask: a quote naming the product by its
+    # generic did not name it, and a quote naming the brand on the next row
+    # named nothing at all.
     vetoed = apply_judge_hard_vetoes(
         product=product,
         candidate=candidate,
         quote=quote,
         judgment={"support_classification": "supported", "validation_status": "auto_pass", "issues": []},
+        generic=generic,
+        extra_aliases=extra_aliases,
+        peer_names=peer_names,
     )
     if vetoed.get("support_classification") == "misclassified":
         return vetoed
@@ -72,7 +82,7 @@ def try_deterministic_judgment(
         mentions
         and has_value
         and period_type in {"quarterly", "annual"}
-        and not re_ytd_language(quote)
+        and not names_a_year_to_date_span(quote)
         and scope not in {"", "Unknown", "Company total"}
     ):
         return {

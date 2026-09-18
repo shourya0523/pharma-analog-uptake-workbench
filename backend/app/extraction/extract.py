@@ -29,11 +29,11 @@ from app.parsing.labels import (
     FLAG_COMBINED,
     FLAG_FAMILY_INCLUDES,
     FLAG_NO_SALES,
-    FLAG_NOT_UNDERSTOOD,
     FLAG_PARTIAL,
     QUESTION_FLAGS,
     LabelReading,
     NoteReading,
+    cite_footnote,
     footnotes_by_mark,
     names_product,
     read_footnote,
@@ -53,6 +53,77 @@ _NUMBER_CELL_RE = re.compile(r"^[\s$(]*(-?[\d,]+(?:\.\d+)?)[\s)%]*$")
 _ANNOTATED_NUMBER_RE = re.compile(r"^[\s$]*(-?[\d,]+(?:\.\d+)?)\s*\(.*$")
 # A percentage is a change column, never a reported amount.
 _PERCENT_RE = re.compile(r"%")
+
+# What a heading says the figures beneath it are, when it says they are not
+# revenue. A filer prints a product's name beside a money figure in a schedule
+# of research and development by programme, of cost of sales, of inventory, of
+# intangible assets or of an allowance exactly as it does in a revenue
+# schedule, and the row itself cannot be told apart from a revenue row. The
+# heading is what distinguishes them, so the heading is what is read.
+#
+# Each pattern swallows the whole phrase, including the revenue noun the phrase
+# governs ("cost of sales"), so that what is left over can be searched for a
+# revenue noun of its own. That is what lets "Calderon revenue, offset by cost
+# of goods sold" read as revenue and "cost of sales for Calderon" not.
+#
+# This is a snapshot of the words filers print over such schedules, not a
+# derivation - there is no index of them to reach. It goes stale by a heading
+# nobody here has met yet, never by one of these changing meaning, so what
+# keeps it current is adding the heading a schedule that slipped through
+# printed. Where the filer's own heading can be reached, it is preferred to
+# this list: a table's total row says what the table sums, in the filer's
+# words, and is read before the caption for that reason.
+_NON_REVENUE_HEADINGS: tuple[tuple[re.Pattern[str], str], ...] = (
+    (re.compile(r"research\s+and\s+development(?:\s+expenses?)?", re.IGNORECASE),
+     "research_and_development"),
+    (re.compile(r"costs?\s+of\s+(?:sales|goods\s+sold|(?:product\s+)?revenues?)",
+                re.IGNORECASE), "cost_of_sales"),
+    (re.compile(r"\bexpenses?\b", re.IGNORECASE), "expense"),
+    (re.compile(r"\bcosts?\b", re.IGNORECASE), "cost"),
+    (re.compile(r"\binventor(?:y|ies)\b", re.IGNORECASE), "inventory"),
+    (re.compile(r"\ballowances?\b", re.IGNORECASE), "allowance"),
+    (re.compile(r"\bassets?\b", re.IGNORECASE), "asset"),
+)
+# The nouns a revenue heading uses. Read only from what the patterns above
+# have not already claimed.
+_REVENUE_HEADING_RE = re.compile(r"\b(?:revenues?|sales)\b", re.IGNORECASE)
+
+_REVENUE = "revenue"
+
+
+def heading_metric(text: str) -> str | None:
+    """What kind of figure a heading says stands under it.
+
+    Returns ``"revenue"``, the name of the other kind of figure the heading
+    names, or ``None`` where the heading says neither. The non-revenue phrases
+    are taken out of the text first, so a revenue noun inside one of them -
+    the "sales" in "cost of sales" - is not read as the heading's own.
+
+        "Total net product revenues"      -> "revenue"
+        "Total research and development"  -> "research_and_development"
+        "Total cost of sales"             -> "cost_of_sales"
+        "Comparison of the two periods"   -> None
+    """
+    named: str | None = None
+    remainder = text or ""
+    for pattern, metric in _NON_REVENUE_HEADINGS:
+        remainder, hits = pattern.subn(" ", remainder)
+        if hits and named is None:
+            named = metric
+    if _REVENUE_HEADING_RE.search(remainder):
+        return _REVENUE
+    return named
+
+
+def names_a_non_revenue_metric(text: str) -> str | None:
+    """The other kind of figure this text names, or ``None`` for revenue.
+
+    The test a sentence is put to, where there is no table around it to ask:
+    "net product sales of Calderon were $75.9 million" is revenue and
+    "we recognized $12.1 million in cost of sales for Calderon" is not.
+    """
+    metric = heading_metric(text)
+    return None if metric in (None, _REVENUE) else metric
 
 
 def tokenize_row(cells: list[str]) -> list[float | None]:
@@ -496,6 +567,7 @@ def read_table(
     generic: str | None = None,
     extra_aliases: Iterable[str] | None = None,
     context: str = "",
+    caption: str = "",
     grid: list[list[str | None]] | None = None,
     period_context: PeriodContext | None = None,
     footnotes: Iterable[str] | None = None,
@@ -523,6 +595,7 @@ def read_table(
         generic=generic,
         extra_aliases=extra_aliases,
         context=context,
+        caption=caption,
         grid=grid,
         period_context=period_context,
         footnotes=footnotes,
@@ -556,6 +629,7 @@ def _read_table(
     generic: str | None = None,
     extra_aliases: Iterable[str] | None = None,
     context: str = "",
+    caption: str = "",
     grid: list[list[str | None]] | None = None,
     period_context: PeriodContext | None = None,
     footnotes: Iterable[str] | None = None,
@@ -616,6 +690,27 @@ def _read_table(
         for cells in (_origins(row) for row in source_rows)
         if cells and clean_label(cells[0][1])
     ]
+
+    # What kind of schedule this is, asked of the table before any row of it is
+    # read. The filer's own total row answers it where the table prints one -
+    # it is the filer naming what the table sums - and the caption answers it
+    # where the table prints none. A table that sums to revenue is a revenue
+    # schedule whatever else it mentions, so one total row naming revenue
+    # settles it for the whole table.
+    kinds = [k for k in (heading_metric(label) for label in sibling_labels
+                         if read_label(label, aliases).is_total) if k]
+    if not kinds:
+        kinds = [k for k in (heading_metric(caption),) if k]
+    if kinds and _REVENUE not in kinds:
+        # Dropped, not carried out under another metric: nothing between here
+        # and the datapoint carries a metric of its own - the column is written
+        # from the ORM's default - so a value emitted here would arrive as
+        # revenue however it was labelled on the way. The reason is recorded,
+        # which is what tells a source that was read and rejected from one that
+        # was never read.
+        return TableReadout(
+            fingerprint=fingerprint, values=[], skipped_reason=f"not_revenue:{kinds[0]}"
+        )
 
     def read(label: str) -> LabelReading:
         # The other rows: a row is not its own sibling, or every label would
@@ -726,11 +821,12 @@ def _read_table(
             # another column of the row is not attached to this one.
             about = [(mark, note, reading_) for mark, note, reading_ in cited
                      if reading_.applies_to(block.months, block.period)]
-            if any(FLAG_NO_SALES in r.flags for _, _, r in about):
-                # The note says this product sold nothing in this period:
-                # whatever the line states here is someone else's.
-                skipped.append(f"{label}:{block.period}:{FLAG_NO_SALES}")
-                continue
+            # The note says this product sold nothing in this period, so
+            # whatever the line states here is someone else's. The figure is
+            # carried out with the note's flag rather than dropped: a figure
+            # that disappears leaves a gap nobody can account for, and the
+            # flag is what puts this one in front of a person.
+            says_no_sales = any(FLAG_NO_SALES in r.flags for _, _, r in about)
             # "No sales of NuVessa" under "Calderon and NuVessa": for the
             # period the note names, the line is Calderon's alone.
             no_sales = {n for _, _, r in about for n in r.no_sales_of}
@@ -740,8 +836,15 @@ def _read_table(
                 if f != FLAG_PARTIAL and (f != FLAG_COMBINED or combined_with)
             ) + tuple(
                 FLAG_PARTIAL for _ in [1] if any(FLAG_PARTIAL in r.flags for _, _, r in about)
-            )
-            suffix = "".join(f" [({mark}) {note}]" for mark, note, _ in about)
+            ) + ((FLAG_NO_SALES,) if says_no_sales else ())
+            # Every note the label's marks cite, not only those a reading of
+            # the note placed in this figure's period: the note is the filer's
+            # own words about the row, and a note that turns out to be about
+            # the column next door is a question for whoever reads the quote.
+            # Where the note is not placed here, only its flag stays behind -
+            # a flag is the pipeline claiming something, and it may claim only
+            # what it placed.
+            suffix = "".join(cite_footnote(mark, note) for mark, note, _ in cited)
             values.append(
                 ExtractedValue(
                     product_label=label,
@@ -808,6 +911,7 @@ def read_tables(
                 if index < len(introductions) and introductions[index]
                 else context
             ),
+            caption=introductions[index] if index < len(introductions) else "",
             grid=rectangles[index] if index < len(rectangles) else None,
             period_context=period_context,
             footnotes=notes[index] if index < len(notes) else None,

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 import re
+from dataclasses import dataclass
 from typing import Any
 
 from bs4 import BeautifulSoup
@@ -39,6 +40,68 @@ def _normalize_results(payload: dict[str, Any]) -> list[dict[str, str]]:
     return out
 
 
+@dataclass(frozen=True)
+class SearchedIdentity:
+    """What the model answered when asked which company reports a product.
+
+    Every field the prompt asks for, and the verdict on it. ``refused`` is the
+    reason the CIK was not taken, or None when it was; it doubles as the
+    quality flag, so a job records the same word a reader sees in the log.
+    """
+
+    cik: str | None = None
+    company_name: str = ""
+    confidence: float | None = None
+    source_url: str = ""
+    notes: str = ""
+    refused: str | None = "cik_search_returned_no_cik"
+
+    @property
+    def accepted(self) -> bool:
+        return self.cik is not None and self.refused is None
+
+    @property
+    def flags(self) -> list[str]:
+        """What this resolution puts on the job's quality flags.
+
+        A refusal is its own flag and an acceptance says the CIK came from the
+        model, so every resolution has something to say. A search that was
+        never made has no resolution at all and so says nothing.
+        """
+        return [self.refused] if self.refused else ["cik_from_llm_search"]
+
+
+def read_searched_identity(payload: dict[str, Any], *, floor: float) -> SearchedIdentity:
+    """Read the model's reply about an issuer, and say whether to take it.
+
+    Three ways a reply gives nothing to act on, each named separately because
+    they call for different things: no usable CIK is a search that failed, a
+    missing confidence is a model that did not answer the question it was
+    asked, and a confidence under the floor is a model that answered and said
+    not to trust it.
+    """
+    raw_cik = str(payload.get("cik") or "").strip()
+    cik = raw_cik.zfill(10) if re.fullmatch(r"\d{1,10}", raw_cik) else None
+    try:
+        confidence = float(payload.get("confidence"))  # type: ignore[arg-type]
+    except (TypeError, ValueError):
+        confidence = None
+    fields = {
+        "cik": cik,
+        "company_name": str(payload.get("company_name") or "").strip(),
+        "confidence": confidence,
+        "source_url": str(payload.get("source_url") or "").strip(),
+        "notes": str(payload.get("notes") or "").strip(),
+    }
+    if cik is None:
+        return SearchedIdentity(**fields, refused="cik_search_returned_no_cik")
+    if confidence is None:
+        return SearchedIdentity(**fields, refused="cik_search_refused_no_confidence")
+    if confidence < floor:
+        return SearchedIdentity(**fields, refused="cik_search_refused_low_confidence")
+    return SearchedIdentity(**fields, refused=None)
+
+
 class LLMSearchConnector:
     """OpenRouter web_search / web_fetch fallback evidence."""
 
@@ -70,14 +133,34 @@ class LLMSearchConnector:
         results = _normalize_results(payload)
         return results[: self.settings.llm_search_max_urls]
 
-    async def resolve_cik_from_search(
+    async def resolve_identity_from_search(
         self,
         *,
         product: str,
         manufacturer: str | None,
         ticker: str | None,
         aliases: list[str],
-    ) -> str | None:
+    ) -> SearchedIdentity | None:
+        """Who the model says reports this product's revenue, or None if unasked.
+
+        The prompt asks for five fields, and a caller given only the CIK has
+        no way to disagree with it: a reply at confidence 0.05 binds the
+        product to a company exactly as one at 0.95 does, every filing fetched
+        afterwards is that company's, and nothing downstream can tell the two
+        apart. So the whole reply is returned - the name to compare against
+        whoever the label says makes the drug, the URL to check it against,
+        the model's own note - with a CIK the model is not sure of already
+        refused and the refusal named.
+
+        The caller is the only one that can record the refusal against the
+        job, which is why the resolution goes back to it rather than onto the
+        connector: a job that found no issuer and a job that refused a bad
+        answer are different states, and they read the same on the surface
+        unless one of them says so.
+
+        ``None`` is a search that was not made, which is not a refusal and
+        flags nothing.
+        """
         if not self.settings.enable_llm_search:
             return None
         result = await self.llm.resolve_cik_via_search(
@@ -86,10 +169,15 @@ class LLMSearchConnector:
             manufacturer=manufacturer,
             ticker=ticker,
         )
-        cik = (result.get("cik") or "").strip()
-        if cik and re.fullmatch(r"\d{1,10}", cik):
-            return cik.zfill(10)
-        return None
+        resolution = read_searched_identity(
+            result, floor=self.settings.llm_cik_min_confidence
+        )
+        logger.info(
+            "cik_search product=%s cik=%s confidence=%s refused=%s company=%r url=%s notes=%r",
+            product, resolution.cik, resolution.confidence, resolution.refused,
+            resolution.company_name, resolution.source_url, resolution.notes[:200],
+        )
+        return resolution
 
     async def fallback_retrieve(
         self,

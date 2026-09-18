@@ -2,19 +2,22 @@
 
 There is already a test that the gold builder imports nothing from the
 application, so the dataset cannot be quietly produced by the thing it judges.
-This is the same rule in the other direction, which was missing and was broken
-within a day of the gap existing: a register mapping XBRL member names to
-products was built by reading gold's product list, which made a file the
-pipeline reads at run time a function of the answer key.
+This is the same rule in the other direction: a file the pipeline reads at run
+time may not be a function of the answer key.
 
 The failure is not that a wrong number gets published. It is that the score
 stops meaning anything - a pipeline holding gold's decisions is being asked
 whether it agrees with itself.
+
+Three shapes, because each escapes the others: application code that names a
+gold file, a script that reads gold and writes a pipeline input, and a
+pipeline input whose text carries gold's own URLs or quotes.
 """
 
 from __future__ import annotations
 
 import ast
+import functools
 import pathlib
 import re
 
@@ -32,8 +35,30 @@ PIPELINE_INPUTS = ("product_attributes.csv", "xbrl_members.csv", "xbrl_elements.
 # about contact: reference data may flow into the answer key, never back.
 BUILDS_GOLD = {"build_independent_gold.py"}
 
-GOLD_MARKERS = ("seed/gold", 'seed" / "gold', "quarterly_revenue.jsonl",
-                "product_profiles.jsonl", "series_coverage.jsonl", "peak_sales.jsonl")
+GOLD = SEED / "gold"
+
+# How the directory is spelled in code: as a path fragment, and as the two
+# halves pathlib joins. Everything else is derived - naming gold's files by
+# hand is how four of them came to be watched and the other five not.
+GOLD_DIR_MARKERS = ("seed/gold", 'seed" / "gold')
+
+
+def gold_files() -> list[pathlib.Path]:
+    """Every answer-key file gold ships, whatever its series.
+
+    Derived from the directory so that a file added to gold is watched the day
+    it lands, rather than when someone remembers to extend a tuple. Gold's
+    prose - its README - is not a key and is not distinctive enough to name in
+    code by accident, so only the data files count.
+    """
+    if not GOLD.is_dir():
+        return []
+    return sorted(GOLD.glob("*.jsonl")) + sorted(GOLD.glob("*.json"))
+
+
+def gold_markers() -> tuple[str, ...]:
+    """Every string that, appearing in code, means that code is reaching for gold."""
+    return GOLD_DIR_MARKERS + tuple(sorted(path.name for path in gold_files()))
 
 
 def _docstring_nodes(tree: ast.AST) -> set[int]:
@@ -57,7 +82,7 @@ def _code_mentions_gold(source: str) -> bool:
         if isinstance(node, ast.Constant) and isinstance(node.value, str):
             if id(node) in docstrings:
                 continue
-            if any(marker in node.value for marker in GOLD_MARKERS):
+            if any(marker in node.value for marker in gold_markers()):
                 return True
     return False
 
@@ -119,42 +144,58 @@ def test_the_member_register_names_only_products_we_track_independently():
 
 
 # ---------------------------------------------------------------------------
-# The two checks above are about code: a module that opens gold, a script that
-# reads gold and writes a pipeline input. Both were enough until the failure
-# arrived in a shape neither watches - a seed file written by hand, whose rows
-# were copied from gold's own columns. No script reads gold, no module names
-# it, and the file still carries the answer key's evidence into the thing being
-# scored.
-#
-# What was proposed was a table of investor-relations document URLs, "seeded
-# by pattern where the pattern is regular, hand-added for one-offs". Its rows
-# would have been gold's `source_url` column. Measuring against gold would then
-# have confirmed that a URL copied from gold fetches the document gold cited.
+# The two checks above are about code. The third shape is a seed file written
+# by hand whose rows were copied out of gold's own columns: no script reads
+# gold, no module names it, and the file still carries the answer key's
+# evidence into the thing being scored. Only a value-level check sees it.
 # ---------------------------------------------------------------------------
 
-GOLD_ROWS = SEED / "gold" / "quarterly_revenue.jsonl"
-# The columns that are evidence rather than reference data. Product names are
-# deliberately excluded: gold is built from product_attributes.csv, so those
-# overlap by design and in the permitted direction.
-EVIDENCE_FIELDS = ("source_url", "source_quote", "gold_id")
+# Which of gold's columns are evidence rather than reference data, stated as a
+# rule over the column name rather than as a list of columns, so it holds for
+# gold files this test has never been read against. A `gold_id` identifies the
+# key's own row; a `*_url` is the document it cited; a `*_quote` is the span it
+# read. Product names are deliberately not evidence: gold is built from
+# product_attributes.csv, so that overlap is the dependency running in the
+# direction that is allowed.
+EVIDENCE_KEY = re.compile(r"url|quote|gold_id", re.IGNORECASE)
 # Short strings collide by accident; a quote or a URL this long does not.
 DISTINCTIVE = 24
 
 
+def _evidence_under(value: object, *, is_evidence: bool) -> set[str]:
+    """Every distinctive string sitting under an evidence-named key.
+
+    Recursive, because gold nests: a quarterly row's `sources` and
+    `bridge_components` are lists of objects with their own `source_url`, and a
+    reader that only looked at top-level columns did not see them.
+    """
+    found: set[str] = set()
+    if isinstance(value, dict):
+        for key, child in value.items():
+            found |= _evidence_under(
+                child, is_evidence=is_evidence or bool(EVIDENCE_KEY.search(str(key)))
+            )
+    elif isinstance(value, list):
+        for child in value:
+            found |= _evidence_under(child, is_evidence=is_evidence)
+    elif is_evidence and isinstance(value, str) and len(value.strip()) >= DISTINCTIVE:
+        found.add(value.strip())
+    return found
+
+
 def _gold_evidence() -> set[str]:
+    """The URLs, quotes and row ids of every gold file, not only one of them."""
     import json
 
-    if not GOLD_ROWS.exists():
-        return set()
     values: set[str] = set()
-    for line in GOLD_ROWS.read_text().splitlines():
-        if not line.strip():
-            continue
-        row = json.loads(line)
-        for field in EVIDENCE_FIELDS:
-            value = str(row.get(field) or "").strip()
-            if len(value) >= DISTINCTIVE:
-                values.add(value)
+    for path in gold_files():
+        text = path.read_text()
+        if path.suffix == ".jsonl":
+            rows = [json.loads(line) for line in text.splitlines() if line.strip()]
+        else:
+            rows = [json.loads(text)]
+        for row in rows:
+            values |= _evidence_under(row, is_evidence=False)
     return values
 
 
@@ -189,15 +230,96 @@ def test_no_pipeline_input_carries_gold_evidence():
     )
 
 
+@functools.cache
+def _module_paths() -> dict[str, list[tuple[pathlib.Path, ast.expr]]]:
+    """Every module-level `NAME = <expression>` in `app/`, with its own module.
+
+    The module is carried alongside the expression because `__file__` inside it
+    means that module's file, wherever the name is read.
+    """
+    assigned: dict[str, list[tuple[pathlib.Path, ast.expr]]] = {}
+    for path in sorted(APP.rglob("*.py")):
+        try:
+            tree = ast.parse(path.read_text())
+        except SyntaxError:
+            continue
+        for node in tree.body:
+            targets = node.targets if isinstance(node, ast.Assign) else []
+            if isinstance(node, ast.AnnAssign) and node.value is not None:
+                targets = [node.target]
+            for target in targets:
+                if isinstance(target, ast.Name):
+                    assigned.setdefault(target.id, []).append((path, node.value))
+    return assigned
+
+
+def _path_named_by(node: ast.expr, module: pathlib.Path, depth: int = 0) -> pathlib.Path | None:
+    """The path an expression names, followed through the joins that build it.
+
+    `Path(__file__).resolve().parents[3] / "reference" / "products.csv"` and a
+    `REFERENCE = ... / "reference"` hoisted to the top of the module and then
+    joined with `"products.csv"` name the same file, and a rule that reads the
+    literal segment sees only the first. Anything this cannot follow - a name
+    from outside `app/`, a path built at run time - returns None, which is the
+    detector going blind and is why the caller asserts it found something.
+    """
+    if depth > 8:
+        return None
+    if isinstance(node, ast.Constant) and isinstance(node.value, str):
+        return pathlib.Path(node.value)
+    if isinstance(node, ast.Name):
+        if node.id == "__file__":
+            return module
+        for defined_in, value in _module_paths().get(node.id, []):
+            found = _path_named_by(value, defined_in, depth + 1)
+            if found is not None:
+                return found
+        return None
+    if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Div):
+        left = _path_named_by(node.left, module, depth + 1)
+        right = _path_named_by(node.right, module, depth + 1)
+        return None if left is None or right is None else left / right
+    if isinstance(node, ast.Attribute) and node.attr in ("parent", "resolve", "absolute"):
+        return _path_named_by(node.value, module, depth + 1)
+    if isinstance(node, ast.Subscript):
+        holder = node.value
+        index = node.slice
+        if (
+            isinstance(holder, ast.Attribute)
+            and holder.attr == "parents"
+            and isinstance(index, ast.Constant)
+            and isinstance(index.value, int)
+        ):
+            base = _path_named_by(holder.value, module, depth + 1)
+            return None if base is None else base.parents[index.value]
+        return None
+    if isinstance(node, ast.Call):
+        function = node.func
+        name = function.attr if isinstance(function, ast.Attribute) else getattr(function, "id", "")
+        if name in ("resolve", "absolute", "expanduser"):
+            return _path_named_by(function.value, module, depth + 1)
+        if name in ("Path", "PurePath", "PosixPath") and len(node.args) == 1:
+            return _path_named_by(node.args[0], module, depth + 1)
+    return None
+
+
 def _seed_files_the_app_reads() -> set[str]:
     """Every file under seed/ that application code resolves a path to."""
     found: set[str] = set()
-    pattern = re.compile(r'"seed"\s*/\s*"([^"]+)"|seed/([A-Za-z0-9_.-]+\.(?:csv|jsonl|json))')
-    for path in APP.rglob("*.py"):
-        for match in pattern.finditer(path.read_text()):
-            name = match.group(1) or match.group(2)
-            if name and "." in name:
-                found.add(name)
+    for path in sorted(APP.rglob("*.py")):
+        try:
+            tree = ast.parse(path.read_text())
+        except SyntaxError:
+            continue
+        for node in ast.walk(tree):
+            if not isinstance(node, (ast.BinOp, ast.Constant, ast.Name)):
+                continue
+            named = _path_named_by(node, path)
+            if named is None:
+                continue
+            named = named if named.is_absolute() else REPO / named
+            if named.is_relative_to(SEED) and named.suffix:
+                found.add(str(named.relative_to(SEED)))
     return found
 
 
@@ -217,7 +339,12 @@ def test_a_new_file_the_pipeline_reads_has_to_be_declared():
     time is a cache; cost in capability is the answer key wearing a different
     hat.
     """
-    undeclared = sorted(_seed_files_the_app_reads() - set(PIPELINE_INPUTS))
+    reads = _seed_files_the_app_reads()
+    assert reads, (
+        "no seed file was found to be read by app/ at all; the detector has "
+        "gone blind and this test would pass whatever was added"
+    )
+    undeclared = sorted(reads - set(PIPELINE_INPUTS))
     assert not undeclared, (
         "the pipeline reads these seed files and they are not in PIPELINE_INPUTS:\n  "
         + "\n  ".join(undeclared)

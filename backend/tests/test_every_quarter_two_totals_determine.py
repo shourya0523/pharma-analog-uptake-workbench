@@ -36,33 +36,38 @@ def _point(period, period_type, value, precision=0.5):
     )
 
 
+def _outputs(records):
+    """The derived figures alone, for a test that is not about the lineage."""
+    return [record.output for record in records]
+
+
 def test_the_fourth_quarter_is_the_year_less_the_nine_months():
-    derived = complete_quarters_from_totals([
+    derived = _outputs(complete_quarters_from_totals([
         _point("2023", "annual", 540.6), _point("2023M9", "nine_month", 409.6),
-    ])
+    ]))
     assert [(p.period, p.value_normalized_usd_millions) for p in derived] == [("2023Q4", 131.0)]
     assert derived[0].rounding_uncertainty_usd_millions == 1.0
 
 
 def test_the_third_quarter_is_the_nine_months_less_the_six():
-    derived = complete_quarters_from_totals([
+    derived = _outputs(complete_quarters_from_totals([
         _point("2023M9", "nine_month", 409.6), _point("2023H1", "six_month", 267.3),
-    ])
+    ]))
     assert [(p.period, round(p.value_normalized_usd_millions, 3)) for p in derived] == [("2023Q3", 142.3)]
 
 
 def test_a_stated_quarter_is_never_re_derived():
-    derived = complete_quarters_from_totals([
+    derived = _outputs(complete_quarters_from_totals([
         _point("2023", "annual", 540.6), _point("2023M9", "nine_month", 409.6),
         _point("2023Q4", "quarterly", 131.0),
-    ])
+    ]))
     assert derived == []
 
 
 def test_the_derived_quote_names_the_product():
-    derived = complete_quarters_from_totals([
+    derived = _outputs(complete_quarters_from_totals([
         _point("2023", "annual", 540.6), _point("2023M9", "nine_month", 409.6),
-    ])
+    ]))
     assert derived[0].source_quote.startswith("Calderon: ")
     assert "+/- 1 from input rounding" in derived[0].source_quote
 
@@ -70,13 +75,13 @@ def test_the_derived_quote_names_the_product():
 def test_a_figure_not_known_to_its_first_digit_is_held():
     """Two inputs rounded to the nearest million bound the difference by two
     million; a three-million quarter is then not known to its first digit."""
-    coarse = complete_quarters_from_totals([
+    coarse = _outputs(complete_quarters_from_totals([
         _point("2023", "annual", 12.0, precision=1.0), _point("2023M9", "nine_month", 9.0, precision=1.0),
-    ])
+    ]))
     assert held_for_bound(coarse[0])
-    fine = complete_quarters_from_totals([
+    fine = _outputs(complete_quarters_from_totals([
         _point("2023", "annual", 540.6), _point("2023M9", "nine_month", 409.6),
-    ])
+    ]))
     assert not held_for_bound(fine[0])
     rows = {"Calderon": [
         {"period": "2023", "period_type": "annual", "value_reported": 12.0,
@@ -114,12 +119,12 @@ def test_a_quarter_derived_from_a_tagged_total_still_names_the_product():
         for q, value in ((1, 20.0), (2, 25.0), (3, 30.0))
     ]
 
-    derived = complete_quarters_from_totals(tagged, product="Calderon")
+    derived = _outputs(complete_quarters_from_totals(tagged, product="Calderon"))
 
     assert [point.period for point in derived] == ["2024Q4"]
     assert derived[0].source_quote.startswith("Calderon: ")
     assert quote_mentions_product(derived[0].source_quote, "Calderon", None)
 
     # With no name to hand it says so, rather than opening with a colon.
-    unnamed = complete_quarters_from_totals(tagged)
+    unnamed = _outputs(complete_quarters_from_totals(tagged))
     assert unnamed[0].source_quote.startswith("the product: ")

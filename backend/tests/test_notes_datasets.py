@@ -127,8 +127,12 @@ def test_a_forecast_is_not_a_report(tmp_path: Path):
     assert found == []
 
 
-def test_a_half_year_is_not_a_quarter(tmp_path: Path):
-    """qtrs=2 is the year-to-date block printed beside the quarter."""
+def test_a_half_year_is_kept_and_is_not_a_quarter(tmp_path: Path):
+    """qtrs=2 is the year-to-date block printed beside the quarter.
+
+    It is a figure the filer tagged, not a quarter: kept, labelled in the
+    span's own key, and typed so that nothing reads it as three months.
+    """
     root = _write(
         tmp_path,
         subs=[f"{ACC}\t9999\tCALDERA THERAPEUTICS\t10-Q\t20250630\t20250801\n"],
@@ -138,7 +142,7 @@ def test_a_half_year_is_not_a_quarter(tmp_path: Path):
     found, _ = candidates_from_notes(
         root, product="Fenwick", issuer="Caldera", cik=9999, register={}
     )
-    assert found == []
+    assert [(c["period"], c["period_type"]) for c in found] == [("2025H1", "six_month")]
 
 
 def test_the_same_figure_tagged_twice_is_one_answer(tmp_path: Path):

@@ -13,7 +13,7 @@ import yaml
 
 from app.config import get_settings
 from app.domain.claims import stated_text
-from app.extraction.prose import periods_named_in
+from app.extraction.prose import periods_named_in, spans_named_in
 from app.llm.grounding import (
     apply_structured_field_gates,
     enforce_verbatim_on_candidates,
@@ -21,9 +21,9 @@ from app.llm.grounding import (
 )
 from app.parsing.evidence import (
     NON_PRODUCT_REVENUE_RE,
-    TOTAL_REVENUE_RE,
     product_aliases,
 )
+from app.parsing.periods import MONTHS_TO_PERIOD_TYPE, period_key
 from app.quality.candidate_filters import (
     quote_mentions_other_brand,
     quote_mentions_product,
@@ -436,6 +436,7 @@ class LLMModules:
         context: str,
         generic: str | None = None,
         extra_aliases: list[str] | None = None,
+        peer_names: Iterable[str] | None = None,
     ) -> dict[str, Any]:
         prompt = load_prompt("evidence_judge")
         user = prompt["user_template"].format(
@@ -464,6 +465,7 @@ class LLMModules:
             judgment=result,
             generic=generic,
             extra_aliases=extra_aliases,
+            peer_names=peer_names,
         )
 
     async def judge_profile_field(
@@ -591,15 +593,7 @@ class LLMModules:
             unresolved=json.dumps(unresolved),
         )
         if not self.settings.openrouter_api_key:
-            n = len(datapoints)
-            u = len(unresolved)
-            pct = round(100 * n / max(n + u, 1), 1)
-            return {
-                "completeness_pct": pct,
-                "missing_periods": [x.get("period") for x in unresolved],
-                "limitations": [],
-                "recommended_next_steps": [],
-            }
+            return {"missing_periods": [x.get("period") for x in unresolved]}
         return await self.client.chat_json(
             model=self.settings.openrouter_model_extract,
             system=prompt["system"],
@@ -725,6 +719,7 @@ class LLMModules:
         quote: str,
         context: str,
         search_snippets: list[dict[str, str]] | None = None,
+        peer_names: Iterable[str] | None = None,
     ) -> dict[str, Any]:
         """Judge with OpenRouter web_search; optional prefetched snippets as extra context."""
         prompt = load_prompt("judge_search_validator")
@@ -757,6 +752,7 @@ class LLMModules:
             judgment=result,
             generic=None,
             extra_aliases=aliases,
+            peer_names=peer_names,
         )
 
     # Back-compat aliases used by older connector code paths
@@ -782,6 +778,37 @@ class LLMModules:
         return {"snippets": snippets}
 
 
+# A period that is part of a year without being a quarter of it is what
+# "year to date" names. Both halves come from the period grammar's own map of
+# spans to period types, so a span the grammar learns to read is covered here
+# without being written down twice.
+_YEAR_TO_DATE_SPANS = frozenset(
+    months
+    for months, period_type in MONTHS_TO_PERIOD_TYPE.items()
+    if period_type not in {"quarterly", "annual"}
+)
+_SPAN_OF_PERIOD_TYPE = {
+    period_type: months for months, period_type in MONTHS_TO_PERIOD_TYPE.items()
+}
+
+
+def _period_claimed_by(candidate: dict) -> str | None:
+    """The period a candidate claims, as a key in the grammar's namespace.
+
+    A row states its period twice - as a label and as a period type - and the
+    two can be written in different namespaces: a nine-month figure carries the
+    label `2024`, which is how an annual one is written, and comparing that
+    against what a quote names asks a question the row never answered. The
+    label is re-keyed for the span the row declares, and a row declaring a span
+    the grammar has no name for has not claimed a period at all.
+    """
+    label = str(candidate.get("period") or "")
+    months = _SPAN_OF_PERIOD_TYPE.get(stated_text(candidate.get("period_type")).lower())
+    if not label or months is None:
+        return None
+    return period_key(label, months)
+
+
 def apply_judge_hard_vetoes(
     *,
     product: str,
@@ -795,7 +822,6 @@ def apply_judge_hard_vetoes(
     """Force misclassified/needs_review for known bad patterns even if model is soft."""
     issues = list(judgment.get("issues") or [])
     q = quote or ""
-    period_type = stated_text(candidate.get("period_type")).lower()
     mentions = quote_mentions_product(q, product, generic, extra_aliases=extra_aliases)
     other = quote_mentions_other_brand(
         q, product, generic, extra_aliases=extra_aliases, peer_names=peer_names
@@ -819,24 +845,23 @@ def apply_judge_hard_vetoes(
         veto = True
     read = carrying if carrying is not None else q
 
-    if TOTAL_REVENUE_RE.search(q) and not mentions:
-        issues.append("hard_veto:company_total_without_product")
-        veto = True
     if other and not mentions:
         issues.append(f"hard_veto:other_brand:{other}")
-        veto = True
-    if period_type == "quarterly" and re_ytd_language(q):
-        issues.append("hard_veto:ytd_language_as_quarterly")
         veto = True
     # A quote that names periods has said which one its figure is for, and a
     # row that claims a different one is not supported by it. An extractor
     # reading a Q1 release answered a question about Q4 with "1Q 2025 Calderon
     # + NuVessa reported revenue of $21.0M", and every check downstream saw a
     # quote naming the product and carrying the value, so it published.
-    # A quote naming no period - a table row, whose period is in the header -
-    # says nothing either way and is left alone.
+    #
+    # This reads the whole quote rather than the row carrying the value,
+    # because a table row states no period at all: the model quotes the
+    # heading with the row, and the heading is where the filer wrote the
+    # period. A quote carrying no heading still names nothing and is left
+    # alone.
     named = periods_named_in(q)
-    if named and (candidate.get("period") or "") and candidate["period"] not in named:
+    claimed = _period_claimed_by(candidate)
+    if named and claimed and claimed not in named:
         issues.append("hard_veto:quote_states_a_different_period")
         veto = True
     # A milestone earned on the product's sales is stated in the same sentence
@@ -860,11 +885,13 @@ def apply_judge_hard_vetoes(
     return judgment
 
 
-def re_ytd_language(quote: str) -> bool:
-    return bool(
-        re.search(
-            r"\b(six\s+months?\s+ended|nine\s+months?\s+ended|year[\s-]to[\s-]date|\bYTD\b|year\s+ended)\b",
-            quote or "",
-            re.IGNORECASE,
-        )
-    )
+def names_a_year_to_date_span(text: str) -> bool:
+    """Whether this text states a period that is part of a year but not a quarter.
+
+    The spans that mean year-to-date are the ones the period grammar has a name
+    for that is neither a quarter nor a year, so this asks the same parser that
+    types the period rather than matching the phrases a filer might use to write
+    it - "first six months of 2025" is one of those phrases and is not a
+    "six months ended".
+    """
+    return bool(spans_named_in(text) & _YEAR_TO_DATE_SPANS)

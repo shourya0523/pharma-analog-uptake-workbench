@@ -5,11 +5,10 @@ This speaks HTTP and nothing else - it imports no orchestrator, no ORM and no
 reader, so there is no second implementation of the pipeline that can drift
 from the pipeline.
 
-That drift is why this exists. Nineteen eval scripts called the readers
-directly and two called `run_job`; between them they reported the tagged reader
-working for the whole of a branch in which the pipeline published nothing it
-produced. Every one of those scripts was right about the function it called and
-wrong about the product.
+An eval that calls a reader is right about the function it called and says
+nothing about the product: the reader can work perfectly while the pipeline
+publishes none of what it produces. Going in through the route a user goes in
+through is what makes the score a statement about the product.
 
     python scripts/eval.py --cases seed/cases/gold_sample.json
     python scripts/eval.py --members seed/holdout_members/combined_name_members.json
@@ -111,6 +110,21 @@ def existing_runs(base: str) -> dict[str, str]:
 # A job in one of these states ran to the end and has an answer to score.
 FINISHED = {"ready_for_review", "completed"}
 
+# The two spellings of "the whole product": a sentence says Worldwide, a
+# schedule's family line says Product family. The pipeline groups a period's
+# figures on the scope and merges only these two, so a U.S. figure and a
+# worldwide figure for one quarter are two answers to two questions rather
+# than a disagreement about one. This is a snapshot of that rule, and goes
+# stale if the pipeline changes which scopes it merges; it is reproduced
+# rather than imported because an eval that imports the pipeline measures a
+# composition it chose itself.
+WHOLE_PRODUCT_SCOPES = ("Product family", "Worldwide")
+
+
+def scope_key(scope: str | None) -> str:
+    """What a figure is a figure for, as the pipeline groups it."""
+    return WHOLE_PRODUCT_SCOPES[0] if (scope or "") in WHOLE_PRODUCT_SCOPES else (scope or "")
+
 
 def later_finished_job(
     base: str, *, drug: str, key: str, scored_run: str, runs: dict[str, list[dict]]
@@ -139,6 +153,23 @@ def later_finished_job(
 # every option with its default filled in, so matching on the full set never
 # matched anything and a re-attach started every run again.
 OPTION_KEYS = ("earnings_since", "earnings_until")
+
+
+def option_differences(resolved: dict, asked: dict) -> list[str]:
+    """Where a run's resolved options disagree with what these cases ask for.
+
+    Only the keys a case states: the server fills the rest in from its own
+    defaults, and a case that says nothing about an option is not asking for
+    one. Matching on the window alone is what makes this necessary - two runs
+    over the same dates can have been started with different characterisation,
+    and attaching to the wrong one scores a configuration the cases did not
+    ask for while the header prints the one that ran.
+    """
+    return [
+        f"{name}: the run has {resolved.get(name)!r}, the cases ask {value!r}"
+        for name, value in sorted(asked.items())
+        if resolved.get(name) != value
+    ]
 
 
 def wait(base: str, run_id: str, *, timeout_s: int, quiet: bool) -> dict:
@@ -190,8 +221,17 @@ def score(case: dict, datapoints: list[dict]) -> list[dict]:
         # this must never do is pick between them: taking the first would score
         # a quarter correct whenever the right answer was among the answers,
         # and a caller given two contradictory figures has been given neither.
-        spread = {round(d["value_normalized_usd_millions"], 3) for d in published}
-        if len(spread) > 1:
+        #
+        # They disagree only if they answer the same question. A quarter
+        # reported as Worldwide, U.S. and ex-U.S. is three figures and no
+        # conflict; scored without the scope it reads as a defect, and the
+        # defect belongs to the scorer.
+        by_scope: dict[str, set[float]] = {}
+        for datapoint in published:
+            by_scope.setdefault(scope_key(datapoint.get("revenue_scope")), set()).add(
+                round(datapoint["value_normalized_usd_millions"], 3))
+        spread = {value for values in by_scope.values() if len(values) > 1 for value in values}
+        if spread:
             state = "published, conflicting"
             read = max(spread)
         elif target is None:
@@ -213,8 +253,26 @@ def score(case: dict, datapoints: list[dict]) -> list[dict]:
         rows.append({"period": want["period"], "want": target, "read": read,
                      "state": state, "reported_as": want.get("reported_as"),
                      "method": (published or here or [{}])[0].get("extraction_method"),
-                     "candidates": len(here)})
+                     "scopes": sorted(by_scope), "candidates": len(here)})
     return rows
+
+
+def unexamined(case: dict, datapoints: list[dict]) -> list[str]:
+    """The periods the run published that the case says nothing about.
+
+    `score` walks the case's expectations, so a figure published for a period
+    no expectation names is neither right nor wrong - it is invisible. A case
+    file covering part of what a run answers reports a score for the part it
+    covers and says nothing about the rest, which reads the same as a clean
+    sweep. This is the size of that silence.
+    """
+    asked = {want["period"] for want in case["expect"]}
+    return sorted({
+        str(d.get("period")) for d in datapoints
+        if d.get("period") and d.get("period") not in asked
+        and d.get("validation_status") in PUBLISHED
+        and d.get("value_normalized_usd_millions") is not None
+    })
 
 
 def score_members(base: str, path: pathlib.Path, out: pathlib.Path) -> int:
@@ -226,6 +284,7 @@ def score_members(base: str, path: pathlib.Path, out: pathlib.Path) -> int:
     """
     payload = json.loads(path.read_text())
     cases = payload["cases"] if isinstance(payload, dict) else payload
+    configuration(base, path, f"{len(cases)} member(s)")
     rows = []
     for case in cases:
         try:
@@ -262,6 +321,75 @@ def score_members(base: str, path: pathlib.Path, out: pathlib.Path) -> int:
     return 0 if good == len(rows) else 1
 
 
+# A setting whose name carries this is part of what was asked even when it is
+# the value the code declares - the same document read by a different model is
+# a different question - so it is printed whether or not it was overridden.
+# Everything else is printed when the server says it differs from its default,
+# which is a rule over the fields the server reports rather than a list of
+# settings kept here.
+ALWAYS_REPORTED = "model"
+
+
+def _try_get(base: str, path: str) -> dict | None:
+    """One attempt, no retry: a server that lacks a route is not a busy one."""
+    try:
+        with urllib.request.urlopen(f"{base}{path}", timeout=30) as response:
+            return json.loads(response.read().decode())
+    except (urllib.error.URLError, OSError, ValueError):
+        return None
+
+
+def configuration(
+    base: str,
+    cases: pathlib.Path,
+    asked: str,
+    started: list[tuple[str, str, list[dict]]] = (),
+) -> None:
+    """Print what this score is before it prints what it scored.
+
+    Two things decide what a run answers and neither is in the case file. The
+    options are the server's, resolved: a case states the few a person types
+    and the server fills the rest in, so only the server can say what ran. The
+    settings are the shell's - they reach the server from the environment it
+    was started in, a re-run from a fresh shell gets the declared defaults
+    instead, and nothing a run stores says which it had.
+
+    `asked` is the caller's one line for the size of what it asked, because
+    what a case is differs by path. A path that starts no run - the member
+    resolver answers in the request - passes none, and the options block is
+    simply absent rather than being invented; the models still reach that
+    score through the settings below, which is why it prints them too.
+    """
+    print("\n  configuration")
+    # The answer key grows, so a score is a claim about the key on a date: both
+    # the day and the size of what was asked have to be beside the number, or a
+    # later run reads as an improvement on an earlier one that asked less.
+    print(f"    as of                 {time.strftime('%Y-%m-%d %H:%M:%S%z')}")
+    print(f"    cases                 {cases} ({asked})")
+    print(f"    server                {base}")
+    resolved: dict[str, list[str]] = {}
+    for run_id, _, _ in started:
+        options = get(base, f"/runs/{run_id}").get("options") or {}
+        key = json.dumps({k: v for k, v in sorted(options.items()) if k not in OPTION_KEYS})
+        resolved.setdefault(key, []).append(run_id)
+    for key, run_ids in resolved.items():
+        print(f"    resolved options      {key}")
+        print(f"                          over {len(run_ids)} run(s), one window each")
+
+    reported = _try_get(base, "/config")
+    fields = (reported or {}).get("settings") or []
+    if not fields:
+        print("    settings              this server does not report them; the settings "
+              "behind this number are not recorded anywhere")
+        return
+    shown = [f for f in fields if f["overridden"] or ALWAYS_REPORTED in f["field"]]
+    print(f"    settings              {len(shown)} of {len(fields)} reported: every one this "
+          f"server does not take from the code, and the models")
+    for field in shown:
+        default = "" if not field["overridden"] else f"   (code declares {field['default']!r})"
+        print(f"      {field['field']:28} {field['value']!r}{default}")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -296,6 +424,11 @@ def main() -> int:
 
     path = pathlib.Path(args.cases)
     cases = json.loads((path if path.is_absolute() else REPO / path).read_text())
+    # A case file is a list of cases, or an object carrying them under `cases`
+    # beside a note saying what the set is for and what would spend it. Both
+    # shapes are in use under seed/; the note has nowhere to live in the first.
+    if isinstance(cases, dict):
+        cases = cases["cases"]
     if args.case:
         wanted = {c.strip().casefold() for c in args.case}
         cases = [c for c in cases if c["drug_name"].casefold() in wanted]
@@ -323,6 +456,25 @@ def main() -> int:
     already = existing_runs(args.base) if args.attach else {}
     rescored = 0
 
+    # Every attachable window is checked before any run is started, so a
+    # refusal leaves nothing half-submitted.
+    mismatched = []
+    for options_key in batches:
+        options = json.loads(options_key)
+        run_id = already.get(window_key(options))
+        if not run_id:
+            continue
+        resolved = get(args.base, f"/runs/{run_id}").get("options") or {}
+        for difference in option_differences(resolved, options):
+            mismatched.append(f"  run {run_id[:8]}  {difference}")
+    if mismatched:
+        print("\n  --attach found runs for these windows that were started with "
+              "other options:\n" + "\n".join(mismatched)
+              + "\n  Scoring them would report a number for a configuration these "
+                "cases did not ask for. Start the sweep without --attach, or "
+                "score the run that matches.")
+        return 2
+
     # Every run is started before any is waited for. The windows are
     # independent and the server decides its own concurrency, so waiting for
     # one batch before submitting the next left the pool running one or two
@@ -346,6 +498,15 @@ def main() -> int:
             })["run_id"]
         started.append((run_id, match_key, batch))
 
+    configuration(
+        args.base,
+        path,
+        f"{sum(len(b) for _, _, b in started)} case(s), "
+        f"{sum(len(c['expect']) for _, _, b in started for c in b)} expectation(s), "
+        f"{len(started)} run(s)",
+        started,
+    )
+
     deadline = time.time() + args.timeout
     for run_id, match_key, batch in started:
         created = {"run_id": run_id}
@@ -360,9 +521,11 @@ def main() -> int:
             if job is None:
                 results.append({"run_id": created["run_id"], "job_id": None,
                                 "drug_name": case["drug_name"], "manufacturer": case.get("manufacturer"),
-                                "job_status": "missing", "error": "no job for this drug",
+                                "job_status": "missing", "current_step": None,
+                                "error": "no job for this drug",
                                 "sources_found": None, "datapoints": 0,
-                                "rows": score(case, []), "source": case.get("source")})
+                                "scored": False, "rows": [], "unexamined": [],
+                                "source": case.get("source")})
                 continue
             scored_from = None
             if job["status"] not in FINISHED:
@@ -380,17 +543,27 @@ def main() -> int:
                                                   "error": job.get("error")}}
                     job = found[1]
                     rescored += 1
-            detail = get(args.base, f"/jobs/{job['id']}")
-            datapoints = detail.get("datapoints") or []
+            # A job that has not finished has not answered. Scoring it counts
+            # the stages it had reached by the time it was read as the
+            # pipeline's answer, and a mid-reconcile job holds every candidate
+            # for a quarter at once - which scores as the pipeline
+            # contradicting itself over a figure it had not finished choosing.
+            finished = job["status"] in FINISHED
+            datapoints = []
+            if finished:
+                datapoints = get(args.base, f"/jobs/{job['id']}").get("datapoints") or []
             results.append({
                 "run_id": scored_from["run_id"] if scored_from else created["run_id"],
                 "job_id": job["id"],
                 "drug_name": case["drug_name"], "manufacturer": case.get("manufacturer"),
-                "job_status": job["status"], "error": job.get("error"),
+                "job_status": job["status"], "current_step": job.get("current_step"),
+                "error": job.get("error"),
                 "scored_from_later_run": scored_from,
                 "sources_found": job.get("sources_found"),
                 "datapoints": len(datapoints),
-                "rows": score(case, datapoints),
+                "scored": finished,
+                "rows": score(case, datapoints) if finished else [],
+                "unexamined": unexamined(case, datapoints) if finished else [],
                 "source": case.get("source"),
             })
 
@@ -405,18 +578,34 @@ def main() -> int:
                   f"  {row['state']}"
                   + (f" ({row['method']})" if row["method"] else ""))
     total = sum(tally.values())
-    print(f"\n  {total} expected figures across {len(results)} runs")
+    print(f"\n  {total} expected figures across {sum(1 for r in results if r['scored'])} "
+          f"scored case(s)")
     if rescored:
         print(f"  {rescored} case(s) whose job did not finish were scored from a later run "
               f"of the same drug and window")
-    unfinished = [r["drug_name"] for r in results if r["job_status"] not in FINISHED]
+    unfinished = [r for r in results if not r["scored"]]
     if unfinished:
-        print(f"  {len(unfinished)} case(s) with no finished job, scored as empty: "
-              + ", ".join(unfinished))
+        print(f"  {len(unfinished)} case(s) with no finished job, not scored and absent "
+              f"from every count below:")
+        for result in unfinished:
+            print(f"    {result['drug_name'][:22]:22} {result['job_status']:18} "
+                  f"{result.get('current_step') or ''}")
     for state, n in sorted(tally.items(), key=lambda kv: -kv[1]):
         print(f"    {state:22} {n:>4}  {100 * n / total:5.1f}%")
     good = tally.get("published, correct", 0) + tally.get("correctly silent", 0)
     print(f"  correct: {good}/{total}")
+    # What the case file did not ask about. The score is a fraction of the
+    # expectations, so a figure published for a period no case names is
+    # neither right nor wrong, and a case file covering half of what a run
+    # answers reads exactly like one covering all of it.
+    blind: dict[str, int] = {}
+    for result in results:
+        if result["unexamined"]:
+            blind[result["run_id"]] = blind.get(result["run_id"], 0) + len(result["unexamined"])
+    print(f"  {sum(blind.values())} published (product, period) pair(s) no expectation "
+          f"examined" + (":" if blind else ""))
+    for run_id, n in sorted(blind.items(), key=lambda kv: -kv[1]):
+        print(f"    run {run_id[:8]}  {n:>4}")
     methods: dict[str, int] = {}
     for result in results:
         for row in result["rows"]:
@@ -427,7 +616,7 @@ def main() -> int:
               + ", ".join(f"{m} {n}" for m, n in sorted(methods.items(), key=lambda kv: -kv[1])))
     pathlib.Path(args.out).write_text(json.dumps(results, indent=1, default=str))
     print(f"  detail written to {args.out}")
-    return 0 if good == total else 1
+    return 0 if total and good == total else 1
 
 
 if __name__ == "__main__":

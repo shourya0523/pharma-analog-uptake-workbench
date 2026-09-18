@@ -35,9 +35,6 @@ user_template: |
     "support_classification": "supported|partial|unsupported|misclassified|inconclusive",
     "search_corroborated": true,
     "issues": ["..."],
-    "search_results": [
-      {{"url": "...", "title": "...", "snippet": "..."}}
-    ],
     "enrichment": {{
       "suggested_period": null,
       "suggested_period_type": null,

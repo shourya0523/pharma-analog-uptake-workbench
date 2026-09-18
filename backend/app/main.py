@@ -5,7 +5,10 @@ import asyncio
 import csv
 import io
 import logging
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
 from typing import Any
+from urllib.parse import urlsplit
 
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
@@ -31,6 +34,7 @@ from app.domain.models import (
     DrugInput,
     ExtractionOptions,
     JobStatus,
+    JobStep,
     ValidationStatus,
     new_id,
 )
@@ -47,13 +51,25 @@ from app.observability import (
 from app.observability import (
     overview as observability_overview,
 )
+from app.pipeline.orchestrator import resettle_series
 from app.quality.completeness import refresh_completeness
 from app.storage.filestore import get_file_store
 
 configure_logging()
 logger = logging.getLogger(__name__)
 settings = get_settings()
-app = FastAPI(title=settings.app_name)
+@asynccontextmanager
+async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
+    """What the process does before it serves and after it stops serving.
+
+    `startup` is defined below, beside the queue and the file store it starts;
+    it is named here because the handler has to exist when the app is built.
+    """
+    await startup()
+    yield
+
+
+app = FastAPI(title=settings.app_name, lifespan=lifespan)
 _cors_origins = [o.strip() for o in settings.cors_origins.split(",") if o.strip()]
 _cors_star = _cors_origins == ["*"]
 app.add_middleware(
@@ -80,7 +96,6 @@ async def _handle_job(payload: dict[str, Any]) -> None:
         logger.error("job_handler_failed job_id=%s run_id=%s error=%s", job_id, run_id, exc)
 
 
-@app.on_event("startup")
 async def startup() -> None:
     configure_logging()
     init_db()
@@ -95,25 +110,48 @@ async def startup() -> None:
     await job_queue.start(_handle_job)
     db = SessionLocal()
     try:
-        requeued, abandoned = recover_stranded_jobs(db, job_queue)
+        requeued, abandoned, recovered = recover_stranded_jobs(db, job_queue)
     finally:
         db.close()
-    if requeued or abandoned:
-        logger.warning("startup_recovery requeued=%d abandoned=%d", requeued, abandoned)
+    if requeued or abandoned or recovered:
+        logger.warning(
+            "startup_recovery requeued=%d abandoned=%d recovered=%d",
+            requeued, abandoned, recovered,
+        )
+
+
+# What a job carries when a restart interrupted it after the last figure was
+# settled: its work is kept and the steps it never reached were settled from
+# its own rows, not from a document or a model.
+FINISHED_AFTER_A_RESTART = "finished_after_a_restart"
 
 
 def recover_stranded_jobs(db: Session, queue) -> tuple[int, int]:
     """What a restart owes the jobs it interrupted.
 
     The in-process queue lives in memory, so a restart forgets every job that
-    was waiting and every job that was half-way through. Left alone they sit
-    in the database as `queued` or `running` for ever, and a caller polling
-    the run never hears back. A job that had not started loses nothing by
-    being enqueued again. A job that was mid-flight is marked failed with the
-    reason, rather than restarted: `run_job` appends its datapoints, so
-    running it twice would publish each figure twice.
+    was waiting and every job that was half-way through. Left alone they sit in
+    the database as `queued` or `running` for ever, and a caller polling the run
+    never hears back. A job that had not started loses nothing by being
+    enqueued again. A job that was mid-flight cannot simply be run again:
+    `run_job` appends its datapoints, so running it twice would publish each
+    figure twice.
+
+    So the question for a running job is whether anything it had left to do
+    could still have added a figure, and its own rows answer that. A reading is
+    `pending` from the moment it is written until the judge decides it, and
+    nothing after the judge writes another one. A job with no readings died
+    before it found any; a job with a pending reading was still being judged;
+    and a job whose readings are all decided has every figure it was ever going
+    to have. That last one is finished work, and marking it failed is what put a
+    product's series on the dashboard while the library said it had failed.
+
+    What the stages it never reached would have settled is settled here instead,
+    from the rows alone: which reading each series holds, and the recount of
+    quarters held against quarters asked for. Neither reads a document or a
+    model, and neither can add a figure.
     """
-    requeued = abandoned = 0
+    requeued = abandoned = recovered = 0
     stranded = (
         db.query(DrugJobORM)
         .filter(DrugJobORM.status.in_([JobStatus.QUEUED.value, JobStatus.RUNNING.value]))
@@ -124,6 +162,32 @@ def recover_stranded_jobs(db: Session, queue) -> tuple[int, int]:
         if job.status == JobStatus.QUEUED.value:
             loop.create_task(queue.enqueue("drug_job", {"job_id": job.id, "run_id": job.run_id}))
             requeued += 1
+            continue
+        decided = (
+            db.query(DatapointORM)
+            .filter(
+                DatapointORM.job_id == job.id,
+                DatapointORM.validation_status != ValidationStatus.PENDING.value,
+            )
+            .count()
+        )
+        undecided = (
+            db.query(DatapointORM)
+            .filter(
+                DatapointORM.job_id == job.id,
+                DatapointORM.validation_status == ValidationStatus.PENDING.value,
+            )
+            .count()
+        )
+        if decided and not undecided:
+            resettle_series(db, job)
+            refresh_completeness(db, job)
+            job.status = JobStatus.READY_FOR_REVIEW.value
+            job.current_step = JobStep.READY_FOR_REVIEW.value
+            job.quality_flags = sorted(
+                set((job.quality_flags or []) + [FINISHED_AFTER_A_RESTART])
+            )
+            recovered += 1
         else:
             job.status = JobStatus.FAILED.value
             job.error = "server restarted while this job was running"
@@ -132,14 +196,82 @@ def recover_stranded_jobs(db: Session, queue) -> tuple[int, int]:
     # A run whose last unfinished job was just abandoned is over, and nothing
     # else will say so: the handler that settles a run's status only runs
     # when a job it owned finishes.
-    for run_id in {job.run_id for job in stranded if job.status == JobStatus.FAILED.value}:
+    for run_id in {
+        job.run_id
+        for job in stranded
+        if job.status in {JobStatus.FAILED.value, JobStatus.READY_FOR_REVIEW.value}
+    }:
         refresh_run_status(db, run_id)
-    return requeued, abandoned
+    return requeued, abandoned, recovered
 
 
 @app.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok", "environment": settings.environment}
+
+
+# A field whose name carries one of these holds a credential, and this route
+# reports only whether it is set. It is a snapshot of how credentials are
+# spelled in Settings and goes stale the moment one is added whose name
+# carries none of them - so a new credential is named with one of these words,
+# or added here in the same change. The name is not the only test: a value
+# whose structure carries a password is stripped whatever its field is called.
+SECRET_MARKERS = ("key", "password", "secret", "token")
+
+
+def _reportable(name: str, value: Any) -> Any:
+    """The value as this route may report it.
+
+    Two rules, because a credential arrives under two shapes. A field named
+    like one is reported as ``set`` or ``unset`` and never by value. Any other
+    value is reported as it stands, except that a connection string carrying a
+    password has it removed - a DSN holds a credential regardless of what its
+    field is named, so that one is decided by the value's structure rather
+    than by the field's spelling.
+
+    ``beta://svc:opensesame@host:5432/db`` is reported as
+    ``beta://svc:***@host:5432/db``.
+    """
+    if any(marker in name for marker in SECRET_MARKERS):
+        return "set" if value else "unset"
+    if not isinstance(value, str):
+        return value
+    try:
+        password = urlsplit(value).password
+    except ValueError:
+        return value
+    return value.replace(f":{password}@", ":***@", 1) if password else value
+
+
+@app.get("/config")
+def config() -> dict[str, Any]:
+    """What this server is running with, beside what the code declares.
+
+    Every answer a run gives is conditional on the settings the run read, and
+    those arrive from the environment of whichever shell started the server:
+    nothing a run stores says what they were, so a number reported without
+    them cannot be reproduced. The fields are read off the settings model
+    rather than named here, so a setting added later is reported without this
+    route being touched.
+
+    ``overridden`` is decided on the values themselves and reported alongside,
+    because a credential's reported form is lossy: two different passwords
+    read alike, and a server configured away from the code would otherwise
+    report that it had been left alone.
+    """
+    fields = []
+    for name, declared in sorted(type(settings).model_fields.items()):
+        live = getattr(settings, name)
+        default = declared.get_default()
+        fields.append({"field": name,
+                       "value": _reportable(name, live),
+                       "default": _reportable(name, default),
+                       "overridden": live != default})
+    return {
+        "environment": settings.environment,
+        "settings": fields,
+        "overridden": [f["field"] for f in fields if f["overridden"]],
+    }
 
 
 class PasteRunRequest(BaseModel):
@@ -455,9 +587,13 @@ def patch_datapoint(datapoint_id: str, body: DatapointPatch) -> dict[str, Any]:
                 notes=body.reviewer_notes,
             )
         )
-        # Rejecting a figure removes the only answer its quarter had, so the
-        # counts derived from the answers are stale until they are retaken.
-        counted = refresh_completeness(db, db.get(DrugJobORM, dp.job_id))
+        # Rejecting a figure removes the only answer its quarter had, and
+        # confirming one adds an answer to a quarter that may already have
+        # had one, so both the series selection and the counts derived from
+        # it are stale until they are retaken.
+        job = db.get(DrugJobORM, dp.job_id)
+        resettle_series(db, job)
+        counted = refresh_completeness(db, job)
         db.commit()
         return {
             "id": dp.id,
@@ -507,7 +643,9 @@ def validation_action(task_id: str, body: ValidationAction) -> dict[str, Any]:
                 notes=body.notes,
             )
         )
-        counted = refresh_completeness(db, db.get(DrugJobORM, task.job_id))
+        job = db.get(DrugJobORM, task.job_id)
+        resettle_series(db, job)
+        counted = refresh_completeness(db, job)
         db.commit()
         return {
             "task_id": task.id,

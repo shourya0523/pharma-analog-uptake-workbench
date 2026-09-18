@@ -64,7 +64,7 @@ def _database():
                     value_normalized_usd_millions=10.0 + index,
                     source_url="https://sec.gov/a-filing",
                     source_quote="Calderon 10.0",
-                    validation_status=ValidationStatus.NEEDS_REVIEW.value,
+                    validation_status=ValidationStatus.AUTO_PASS.value,
                 )
             )
         db.add(
@@ -92,8 +92,11 @@ def client(monkeypatch):
     _engine, factory = _database()
     monkeypatch.setattr(main, "SessionLocal", factory)
     monkeypatch.setattr(products_api, "SessionLocal", factory)
-    with TestClient(main.app) as test_client:
-        yield test_client, factory
+    # Bare, not `with`: entering the client runs the app's lifespan, which
+    # migrates whatever `DATABASE_URL` names. These tests read the in-memory
+    # engine above, so there is nothing for startup to do and a machine the
+    # suite runs on has no business being stamped by it.
+    yield TestClient(main.app), factory
 
 
 def _job(factory) -> DrugJobORM:
@@ -194,18 +197,20 @@ def test_rejecting_a_figure_takes_its_quarter_away(client):
     assert job.completeness_pct == pytest.approx(33.3, abs=0.05)
 
 
-def test_the_model_s_own_figure_is_not_offered_to_a_recount(client):
-    """A reviewer's action postdates what the model said about the run.
+def test_coverage_is_counted_and_takes_nothing_from_a_model(client):
+    """The percentage names a count of quarters, and only that.
 
-    refresh_completeness takes the model's percentage only where a caller
-    passes one, which only the run does; everything after it counts.
+    A model's own figure was passed in beside the count and had to be argued
+    into being ignored; the parameter that carried it is gone, so there is
+    nothing left for the same number on the same card to mean twice.
     """
+    import inspect
+
     _, factory = client
     with factory() as db:
         job = db.get(DrugJobORM, "job-1")
-        with_model = refresh_completeness(db, job, llm_pct=96.0)
-        without = refresh_completeness(db, job)
-    assert with_model.pct == 96.0
-    assert without.pct == 50.0
-    assert without.quarters == 2
-    assert without.gaps == 2
+        counted = refresh_completeness(db, job)
+    assert counted.pct == 50.0
+    assert counted.quarters == 2
+    assert counted.gaps == 2
+    assert list(inspect.signature(refresh_completeness).parameters) == ["db", "job"]

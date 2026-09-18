@@ -22,11 +22,19 @@ class Settings(BaseSettings):
     job_backend: str = "inprocess"  # inprocess | sqs
     local_storage_root: str = "./storage"
     openrouter_api_key: str | None = None
-    openrouter_model_extract: str = "openai/gpt-4o-mini"
+    openrouter_model_extract: str = "google/gemini-3.8-flash"
     openrouter_model_judge: str = "openai/gpt-4o-mini"
     openrouter_base_url: str = "https://openrouter.ai/api/v1"
     validation_sample_rate: float = 0.10
     max_concurrent_jobs: int = 1
+    # A ceiling on the filings any one quarter may cause to be fetched, not a
+    # count of filings per job. Retrieval covers the quarters a run asked for:
+    # a quarter an interim report states costs that one filing, and a fourth
+    # quarter costs the annual report and the interim report whose
+    # year-to-date column it is taken from, so a quarter that needs more
+    # documents than this is left uncovered rather than fetched around. With
+    # no window declared there is no quarter to cover and this bounds "the
+    # recent filings" instead.
     sec_max_filings: int = 4
     sec_include_8k: bool = False
     # Quarterly product revenue lives in 8-K item 2.02 exhibit 99.x earnings releases,
@@ -43,16 +51,37 @@ class Settings(BaseSettings):
     cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
     llm_skip_judge_when_deterministic: bool = True
     llm_max_extract_sources: int = 6
-    # Independent-search judging of product profile fields. Source registries carry
-    # errors (openFDA gives an inhaled product's route as ORAL), so cited fields are
-    # challenged rather than passed through.
+    # Independent-search judging of product profile fields. A source registry
+    # can be wrong about a product and can be silent about it - openFDA's
+    # `openfda.route` states ORAL for an inhaled product, and for some
+    # applications states no route at all - so cited fields are challenged
+    # rather than passed through.
     enable_profile_judge: bool = True
     # 0 = judge every content field (no cap). Positive values keep an optional budget.
     profile_judge_max_fields: int = 0
     profile_judge_min_confidence: float = 0.6
     enable_llm_search: bool = True
-    llm_search_max_queries: int = 4
+    # How sure the model has to be that a company reports a product's revenue
+    # before that company's CIK is taken. Below it the answer is refused and
+    # the job says so, because a CIK binds every filing fetched afterwards to
+    # one issuer and nothing downstream can tell that the binding was a guess.
+    # The number is a snapshot of the floor the profile judge already uses for
+    # a cited field (`profile_judge_min_confidence`) rather than one measured
+    # here; what would make it stale is a measurement of what the model's
+    # confidence is worth on issuer identity, which needs a held-out set of
+    # products whose filer is known and which no existing answer key uses.
+    llm_cik_min_confidence: float = 0.6
     llm_search_max_urls: int = 5
+    # How long one job may run before it is stopped. A job holds a
+    # concurrency permit for as long as its handler is awaited, and every
+    # timeout in the stack below is per HTTP operation rather than wall clock,
+    # so without this one hung job holds a permit for the life of the process.
+    #
+    # A snapshot, with headroom, of the longest wall time a job took across the
+    # stored run databases. What would make it stale is jobs getting slower - a
+    # wider window, more sources per job - and the symptom would be a healthy
+    # job recorded as having passed its deadline.
+    job_deadline_seconds: int = 14400
     # OpenRouter openrouter:web_search engine: auto | native | exa | parallel | perplexity
     llm_search_engine: str = "auto"
     # Empty = no domain filter (prompt steers to SEC/IR). Comma-separated if set.

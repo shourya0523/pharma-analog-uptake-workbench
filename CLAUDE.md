@@ -192,7 +192,7 @@ prose around it about the shape.
     cd backend && ./.venv/bin/pytest -q                     # everything
     ./.venv/bin/pytest tests/test_gold_is_not_an_input.py    # rules 3 and 4
 
-Evals under `scripts/eval_*.py` score against held-out sets and need
-`OPENROUTER_API_KEY`. They are not part of the test run, and a change to a
-prompt is not finished until the relevant one has been re-run and its number
-reported.
+`scripts/eval.py` scores against a case file or a held-out set, needs a
+running server and `OPENROUTER_API_KEY`, and is not part of the test run. A
+change to a prompt is not finished until it has been re-run and its number
+reported, with the configuration the run printed above it.

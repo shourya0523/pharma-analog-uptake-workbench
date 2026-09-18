@@ -25,8 +25,12 @@ if TYPE_CHECKING:  # a type only; periods.py must not import this module back
 from collections.abc import Iterable
 from typing import Any
 
-from app.extraction.check import Finding, run_checks
-from app.extraction.extract import QUESTION_FLAGS, read_tables
+from app.extraction.check import Finding, cell_of, run_checks
+from app.extraction.extract import (
+    QUESTION_FLAGS,
+    names_a_non_revenue_metric,
+    read_tables,
+)
 from app.extraction.process import Datapoint, normalize_all
 from app.extraction.prose import read_prose
 
@@ -173,18 +177,32 @@ def extract_revenue_candidates(
                 period_context=period_context, products=products,
             )
             if value.period not in stated
+            # The sentence is its own heading. A table row is judged by the
+            # schedule it sits in; a sentence has only itself to say what kind
+            # of figure it states, and "cost of sales for Calderon" states a
+            # cost as squarely as a cost schedule does.
+            and not names_a_non_revenue_metric(value.source_quote)
         ]
 
     points = normalize_all(values)
     findings = run_checks(points)
 
     # Datapoints failing a check are held back rather than published; the
-    # finding says which period and why, so the run can be diagnosed.
-    rejected = {period for finding in findings if finding.severity == "error" for period in finding.periods}
+    # finding says which cell and why, so the run can be diagnosed.
+    #
+    # The cell, not the period label. The checks group by the span a figure
+    # covers and the part of the business it covers, because a nine-month
+    # total and a region's row are not rival claims about one quarter's
+    # worldwide figure; rejecting by label alone put that back together, so a
+    # conflict inside one cell took down every other cell printed under the
+    # same label.
+    rejected = {
+        cell for finding in findings if finding.severity == "error" for cell in finding.cells
+    }
     kept = [
         point
         for point in points
-        if point.period not in rejected
+        if cell_of(point) not in rejected
         and point.value_normalized_usd_millions is not None
     ]
     return [_as_candidate(point, product) for point in kept], findings, skipped

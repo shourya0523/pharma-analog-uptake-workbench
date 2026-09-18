@@ -8,8 +8,8 @@
     "options": {
       "earnings_since": "2023-01-15",
       "earnings_until": "2024-05-05",
-      "openfda": false,
-      "product_metadata": false
+      "openfda": true,
+      "product_metadata": true
     },
     "shapes": [
       "plain product row",
@@ -54,8 +54,8 @@
     "options": {
       "earnings_since": "2023-01-15",
       "earnings_until": "2024-05-05",
-      "openfda": false,
-      "product_metadata": false
+      "openfda": true,
+      "product_metadata": true
     },
     "shapes": [
       "owned by a non-SEC filer for part of the window",
@@ -101,8 +101,8 @@
     "options": {
       "earnings_since": "2024-04-05",
       "earnings_until": "2025-05-05",
-      "openfda": false,
-      "product_metadata": false
+      "openfda": true,
+      "product_metadata": true
     },
     "shapes": [
       "footnote: launch quarter, not an acquisition",
@@ -142,8 +142,8 @@
     "options": {
       "earnings_since": "2025-04-05",
       "earnings_until": "2026-05-05",
-      "openfda": false,
-      "product_metadata": false
+      "openfda": true,
+      "product_metadata": true
     },
     "shapes": [
       "Product - Region rows with a labelled Total row",
@@ -183,8 +183,8 @@
     "options": {
       "earnings_since": "2025-04-05",
       "earnings_until": "2026-05-05",
-      "openfda": false,
-      "product_metadata": false
+      "openfda": true,
+      "product_metadata": true
     },
     "shapes": [
       "row label naming two brands joined by '+' (co-administered therapy)",
@@ -227,8 +227,8 @@
     "options": {
       "earnings_since": "2025-04-05",
       "earnings_until": "2026-05-05",
-      "openfda": false,
-      "product_metadata": false
+      "openfda": true,
+      "product_metadata": true
     },
     "shapes": [
       "product name on its own row above U.S. / Outside of U.S. / Total rows",
@@ -268,8 +268,8 @@
     "options": {
       "earnings_since": "2023-04-05",
       "earnings_until": "2024-05-05",
-      "openfda": false,
-      "product_metadata": false
+      "openfda": true,
+      "product_metadata": true
     },
     "shapes": [
       "no earnings 8-K: quarters only in 10-Qs, fourth quarter only as the 10-K annual",
@@ -309,8 +309,8 @@
     "options": {
       "earnings_since": "2024-04-05",
       "earnings_until": "2025-05-05",
-      "openfda": false,
-      "product_metadata": false
+      "openfda": true,
+      "product_metadata": true
     },
     "shapes": [
       "product name on its own row above United States / Total rows",
@@ -350,8 +350,8 @@
     "options": {
       "earnings_since": "2026-01-15",
       "earnings_until": "2026-09-15",
-      "openfda": false,
-      "product_metadata": false
+      "openfda": true,
+      "product_metadata": true
     },
     "shapes": [
       "product folded into a group line ('PMO Products') - must come back empty",
@@ -385,8 +385,8 @@
     "options": {
       "earnings_since": "2026-01-15",
       "earnings_until": "2026-09-15",
-      "openfda": false,
-      "product_metadata": false
+      "openfda": true,
+      "product_metadata": true
     },
     "shapes": [
       "row label naming two brands joined by 'and', with a footnote saying the second had no sales",
@@ -420,8 +420,8 @@
     "options": {
       "earnings_since": "2026-01-15",
       "earnings_until": "2026-09-15",
-      "openfda": false,
-      "product_metadata": false
+      "openfda": true,
+      "product_metadata": true
     },
     "shapes": [
       "a combined line whose footnote says this product had no sales - must come back empty",
@@ -455,8 +455,8 @@
     "options": {
       "earnings_since": "2024-04-05",
       "earnings_until": "2025-05-05",
-      "openfda": false,
-      "product_metadata": false
+      "openfda": true,
+      "product_metadata": true
     },
     "shapes": [
       "issuer tags the figure in thousands (decimals=-3) and the release prints one decimal in millions",
@@ -495,8 +495,8 @@
     "options": {
       "earnings_since": "2024-04-05",
       "earnings_until": "2025-05-05",
-      "openfda": false,
-      "product_metadata": false
+      "openfda": true,
+      "product_metadata": true
     },
     "shapes": [
       "issuer tags thousands and prints one decimal",
@@ -535,8 +535,8 @@
     "options": {
       "earnings_since": "2023-04-05",
       "earnings_until": "2024-05-05",
-      "openfda": false,
-      "product_metadata": false
+      "openfda": true,
+      "product_metadata": true
     },
     "shapes": [
       "52/53-week filer: quarters ended April 1, 2023 and July 1, 2023",
@@ -576,8 +576,8 @@
     "options": {
       "earnings_since": "2024-04-05",
       "earnings_until": "2025-05-05",
-      "openfda": false,
-      "product_metadata": false
+      "openfda": true,
+      "product_metadata": true
     },
     "shapes": [
       "owned by a non-SEC filer (Ironshore, private) until 2024-09-03",
@@ -613,8 +613,8 @@
     "options": {
       "earnings_since": "2024-04-05",
       "earnings_until": "2025-05-05",
-      "openfda": false,
-      "product_metadata": false
+      "openfda": true,
+      "product_metadata": true
     },
     "shapes": [
       "formulation row beside its sibling ('Nucynta IR')",
@@ -654,8 +654,8 @@
     "options": {
       "earnings_since": "2023-04-05",
       "earnings_until": "2024-05-05",
-      "openfda": false,
-      "product_metadata": false
+      "openfda": true,
+      "product_metadata": true
     },
     "shapes": [
       "region rows (U.S. / Rest of world) under a generic 'Total product revenues, net' - the product named only in the caption",
@@ -695,8 +695,8 @@
     "options": {
       "earnings_since": "2024-04-05",
       "earnings_until": "2025-05-05",
-      "openfda": false,
-      "product_metadata": false
+      "openfda": true,
+      "product_metadata": true
     },
     "shapes": [
       "issuer acquired by a non-SEC filer (Ono Pharmaceutical) mid-window - later quarters must come back empty",
@@ -730,8 +730,8 @@
     "options": {
       "earnings_since": "2023-04-05",
       "earnings_until": "2024-05-05",
-      "openfda": false,
-      "product_metadata": false
+      "openfda": true,
+      "product_metadata": true
     },
     "shapes": [
       "single-product issuer: the 10-Q prints 'Product revenue, net' with the brand only in prose",
@@ -771,8 +771,8 @@
     "options": {
       "earnings_since": "2025-01-15",
       "earnings_until": "2025-12-31",
-      "openfda": false,
-      "product_metadata": false
+      "openfda": true,
+      "product_metadata": true
     },
     "shapes": [
       "region rows (United States / Rest of World / Total product revenue) with the product named only in the caption ('AYVAKIT/AYVAKYT')",
@@ -807,8 +807,8 @@
     "options": {
       "earnings_since": "2025-04-05",
       "earnings_until": "2026-05-05",
-      "openfda": false,
-      "product_metadata": false
+      "openfda": true,
+      "product_metadata": true
     },
     "shapes": [
       "plain product row",
@@ -847,8 +847,8 @@
     "options": {
       "earnings_since": "2025-04-05",
       "earnings_until": "2026-05-05",
-      "openfda": false,
-      "product_metadata": false
+      "openfda": true,
+      "product_metadata": true
     },
     "shapes": [
       "row printed under the generic name ('Tiopronin products') covering the brand and its EC formulation",
@@ -887,8 +887,8 @@
     "options": {
       "earnings_since": "2025-04-05",
       "earnings_until": "2026-05-05",
-      "openfda": false,
-      "product_metadata": false
+      "openfda": true,
+      "product_metadata": true
     },
     "shapes": [
       "an intangible-asset row 'Commercial milestones' in the same filing",
@@ -928,8 +928,8 @@
     "options": {
       "earnings_since": "2025-04-05",
       "earnings_until": "2026-05-05",
-      "openfda": false,
-      "product_metadata": false
+      "openfda": true,
+      "product_metadata": true
     },
     "shapes": [
       "prose-only: no product row anywhere; the 10-Q states the quarter in a sentence and the release in a headline",

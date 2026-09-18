@@ -18,9 +18,9 @@ from __future__ import annotations
 from datetime import date
 
 from app.connectors.sources import (
+    ANNUAL_FORMS,
     SECConnector,
     _holds_financial_facts,
-    ANNUAL_FORMS,
     is_annual,
     reports_a_period,
 )
@@ -134,13 +134,13 @@ async def test_every_earnings_filing_in_the_window_is_read(monkeypatch):
     2.02 filings in between must not push the oldest quarter out."""
     connector = SECConnector(LocalFileStore("/tmp"))
 
-    async def _documents(self, client, cik_int, acc_nodash):
-        return [f"{acc_nodash}ex991.htm"]
+    async def _declared(self, client, cik_int, accession):
+        return [("EX-99.1", f"{accession}-release.htm")]
 
     async def _fetch(self, client, *, url, accession, doc, run_id, job_id, source_id):
         return b"<html></html>", False, f"key/{doc}"
 
-    monkeypatch.setattr(SECConnector, "_list_filing_documents", _documents)
+    monkeypatch.setattr(SECConnector, "_declared_documents", _declared)
     monkeypatch.setattr(SECConnector, "_fetch_document", _fetch)
     dates = ["2016-04-19", "2016-01-26", "2016-01-12", "2015-10-13", "2015-09-30",
              "2015-07-14", "2015-06-15", "2015-04-14"]
