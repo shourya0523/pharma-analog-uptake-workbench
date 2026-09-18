@@ -615,3 +615,38 @@ a configuration decision and 12e's set cover replaces it;
 the Upstaza six and Translarna 2024Q4 are the key's expectations, decisions for a person; the Sephience pair is the reader's metric gate; the two-number
 row is the auto-pass gate and needs a new held-out set; Translarna needs a
 person to open the 10-K. None of these is in the M10 tracks now running.
+
+## 8. Smoke run 2: the gold sample, and the held-out set without CIKs
+
+Same frozen head (`dde7fb0`), same server configuration (four of 38 settings
+taken from the shell: the key, the SEC contact string, the two models), read
+by attaching to the runs after the server died once more behind an OpenRouter
+connection error.
+
+**Gold sample** (`seed/cases/gold_sample.json`, 9 cases): 20 of 20 expected
+figures across the 8 cases whose job finished (published correct 15,
+correctly silent 5); one job was interrupted by the restart and is unscored.
+The full gold file is 593 windows, one job each, which at the shipped
+one-job-at-a-time default is two days and not a smoke test; sixteen of its
+windows ran before it was stopped and their database is kept.
+
+**Held-out set without CIKs** (the 12 cases with `cik` removed, `ticker`
+kept, as a user uploads them): **72 of 96**, every job scored.
+
+    published, correct         38
+    correctly silent           34
+    no answer                  15
+    published, wrong identity   6
+    answered anyway             2
+    published, WRONG            1
+
+Every one of the twelve jobs resolved its issuer from the label and the name
+alone and fetched 12-24 documents, so section 8's identity path holds on this
+set, and MIPLYFFA - unscored in run 1 - scores 7 of 8. The loss classes are
+the same fifteen no-answers, the same six Upstaza rows, the same Sephience
+pair and the same Translarna quarter as run 1, with the same causes (section
+7): the four-filing cap and the exhibit filename rule, the key's pair-label
+expectation, the R&D schedule read as revenue, and the key's mixed-basis
+derivation. Under the two key corrections that are a person's decision the
+set would read 79 of 96 with no code change; the reader's metric gate and
+M11 are scored on their own sets, not this one.
