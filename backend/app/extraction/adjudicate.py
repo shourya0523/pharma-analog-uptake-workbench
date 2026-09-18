@@ -29,6 +29,13 @@ a careful analyst reading the same pages would also stop at.
 Nothing here reads a document or a database. Every function takes the figures
 a caller already holds and returns a ``Verdict``: a status, a code naming the
 shape of the disagreement, and a value when one is defensible.
+
+Nothing in ``app/`` calls any of it, and that is a decision rather than an
+oversight. A verdict wired into the pipeline changes what the pipeline
+publishes, and the only score these functions have comes from the answer key on
+both sides: the fixtures they are replayed through, and the real rows they are
+required not to trip. A scored change is measured on a set it was not built
+from, so they stay unwired until there is one.
 """
 
 from __future__ import annotations

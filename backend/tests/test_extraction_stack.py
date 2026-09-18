@@ -1380,11 +1380,11 @@ def real_rows_that_trip() -> list[str]:
         for line in (GOLD / "annual_revenue.jsonl").read_text().splitlines()
         if line.strip()
     ]
-    # Normalised USD on both sides, never as-reported. Tracleer's annual series
-    # is Actelion's CHF and its quarterly series is J&J's own dollar conversion
-    # of the same history: comparing 1,020 francs against 1,035 dollars reports
-    # a contradiction that is only a currency. This is the category error the
-    # adjudicator is meant to catch, and it caught it here first.
+    # Normalised USD on both sides, never as-reported. Where a product's annual
+    # series is its first owner's francs and its quarterly series is the
+    # acquirer's own dollar conversion of the same history, comparing the two
+    # as reported reports a contradiction that is only a currency - the
+    # category error these checks exist to catch, arriving in the units.
     totals = {
         (row["drug_name"], str(row["period"])): row["value_normalized_usd_millions"]
         for row in annual

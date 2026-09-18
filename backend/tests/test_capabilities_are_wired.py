@@ -80,9 +80,11 @@ SCRIPT_ONLY = {
     "IntensityAssessment": NOT_WIRED,
     "IntensityComparison": NOT_WIRED,
     "Peer": NOT_WIRED,
-    # Adjudication verdicts. The arithmetic they wrap is used; the verdicts
-    # are not, because nothing yet asks them. `rounding_tolerance` is the slack
-    # those verdicts allow, and only they ask for it. See the plan.
+    # Adjudication verdicts. Nothing asks for one, and the module says why it
+    # stays that way: the only score they have comes from the answer key on
+    # both sides, so wiring one is a scored change waiting on a set of its own.
+    # `rounding_tolerance` is the slack those verdicts allow, and only they ask
+    # for it.
     "adjudicate_split_ownership_quarter": NOT_WIRED,
     "adjudicate_total_against_parts": NOT_WIRED,
     "adjudicate_reported_value": NOT_WIRED,
