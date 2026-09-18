@@ -139,12 +139,16 @@ def test_an_acquisition_footnote_is_a_partial_period_and_a_launch_is_not():
     assert note.flags == ()
 
 
-def test_a_footnote_about_one_column_says_nothing_about_the_others():
+def test_a_footnote_flags_one_column_and_travels_on_every_one():
     """"+ ... for the six months ended June 30, 2023 is for the period between
     the acquisition date and June 30" qualifies the six-month figure. The
-    quarter beside it is the quarter's own, is not flagged, and does not
-    carry the note's "six months ended" into its quote, where the
-    year-to-date veto would read it."""
+    quarter beside it is the quarter's own and is not flagged.
+
+    The note itself travels on both quotes: the row's label cited the mark, and
+    where the note lands is a reading the pipeline may be wrong about. A flag
+    is the pipeline claiming something and may only be claimed where the note
+    was placed; the note is the filer's words and belongs with the figure
+    whatever the placement turned out to be."""
     note = read_footnote(
         "net product revenue for the six months ended June 30, 2023 is for the "
         "period between January 24, 2023 (date of acquisition) and June 30, 2023",
@@ -162,7 +166,7 @@ def test_a_footnote_about_one_column_says_nothing_about_the_others():
                                     "(date of acquisition) and June 30, 2023"])
     by_period = {v.period: v for v in readout.values if v.value_as_reported}
     assert "partial_period" not in by_period["2023Q2"].flags
-    assert "six months" not in by_period["2023Q2"].source_quote
+    assert "six months" in by_period["2023Q2"].source_quote
     assert "partial_period" in by_period["2023"].flags
     assert "six months" in by_period["2023"].source_quote
 

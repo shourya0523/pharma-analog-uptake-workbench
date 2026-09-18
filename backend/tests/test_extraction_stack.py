@@ -1419,3 +1419,91 @@ def real_rows_that_trip() -> list[str]:
             if not verdict.resolved:
                 tripped.append(f"{row['drug_name']} {row['period']}: {verdict.code}")
     return tripped
+
+
+def _schedule(total_label: str) -> tuple[list[list[str]], list[list[str | None]]]:
+    """A two-year comparative table of one product, under the total row given."""
+    grid: list[list[str | None]] = [
+        ["", "Three Months Ended June 30,", None, "Three Months Ended June 30,", None],
+        ["", "2026", None, "2025", None],
+        ["", "(in thousands)", None, None, None],
+        ["Calderon", "$", "22,078", "$", "26,741"],
+        ["NuVessa", "5,571", None, "9,186", None],
+        [total_label, "$", "27,649", "$", "35,927"],
+    ]
+    return [[cell or "" for cell in row] for row in grid], grid
+
+
+def test_the_schedule_a_row_sits_in_decides_whether_it_is_revenue():
+    """The row is the same either way: a product's name beside two figures.
+
+    What separates them is the schedule's own total row - the filer saying
+    what the table sums - so the total row is what is read. A schedule summing
+    to revenue publishes; one summing to research and development does not,
+    and says so rather than going quiet.
+    """
+    rows, grid = _schedule("Total net product revenues")
+    published = read_table(rows, product="Calderon", grid=grid, context="(in thousands)")
+    assert {v.period: v.value_as_reported for v in published.values} == {
+        "2026Q2": 22078.0, "2025Q2": 26741.0,
+    }
+
+    rows, grid = _schedule("Total research and development")
+    refused = read_table(rows, product="Calderon", grid=grid, context="(in thousands)")
+    assert refused.values == []
+    assert refused.skipped_reason == "not_revenue:research_and_development"
+
+
+def test_a_caption_answers_for_a_schedule_that_prints_no_total():
+    """With no total row to ask, the caption the table was introduced by is
+    the heading, and it is read the same way."""
+    grid: list[list[str | None]] = [
+        ["", "Three Months Ended June 30,", None, "Three Months Ended June 30,", None],
+        ["", "2026", None, "2025", None],
+        ["", "(in thousands)", None, None, None],
+        ["Calderon", "$", "22,078", "$", "26,741"],
+    ]
+    rows = [[cell or "" for cell in row] for row in grid]
+    caption = ("The following table provides research and development expense for our "
+               "most advanced principal product development programs.")
+    refused = read_table(rows, product="Calderon", grid=grid,
+                         context=f"{caption}\n(in thousands)", caption=caption)
+    assert refused.values == []
+    assert refused.skipped_reason == "not_revenue:research_and_development"
+
+    caption = "The following table summarizes net product revenues by product."
+    published = read_table(rows, product="Calderon", grid=grid,
+                           context=f"{caption}\n(in thousands)", caption=caption)
+    assert [v.period for v in published.values] == ["2026Q2", "2025Q2"]
+
+
+def test_a_sentence_is_its_own_heading():
+    """A sentence has no schedule around it to ask, so it answers for itself:
+    a cost of sales stated for the product is not the product's revenue, and a
+    net product sales sentence is."""
+    cost = ("For the three months ended March 31, 2026, we recognized $12.1 million "
+            "in cost of sales for Calderon.")
+    sales = ("For the three months ended March 31, 2026, net product sales of Calderon "
+             "were $75.9 million.")
+    assert extract_revenue_candidates([], product="Calderon", prose=cost)[0] == []
+    published, _findings, _skipped = extract_revenue_candidates(
+        [], product="Calderon", prose=sales)
+    assert [(c["period"], c["value_reported"]) for c in published] == [("2026Q1", 75.9)]
+
+
+def test_a_change_column_is_not_a_period():
+    """A results-of-operations layout prints the two periods and then the
+    change between them. The change columns state no period, so no figure in
+    them is published as one."""
+    grid: list[list[str | None]] = [
+        ["", "Three Months Ended June 30,", None, "Change", None],
+        ["", "2026", "2025", "$", "%"],
+        ["", "(in thousands)", None, None, None],
+        ["Calderon", "22,078", "26,741", "(4,663)", "(17)%"],
+        ["Total revenues", "27,649", "35,927", "(8,278)", "(23)%"],
+    ]
+    rows = [[cell or "" for cell in row] for row in grid]
+    readout = read_table(rows, product="Calderon", grid=grid, context="(in thousands)")
+    assert {v.period: v.value_as_reported for v in readout.values} == {
+        "2026Q2": 22078.0, "2025Q2": 26741.0,
+    }

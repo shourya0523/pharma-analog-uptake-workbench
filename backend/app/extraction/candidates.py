@@ -26,7 +26,11 @@ from collections.abc import Iterable
 from typing import Any
 
 from app.extraction.check import Finding, cell_of, run_checks
-from app.extraction.extract import QUESTION_FLAGS, read_tables
+from app.extraction.extract import (
+    QUESTION_FLAGS,
+    names_a_non_revenue_metric,
+    read_tables,
+)
 from app.extraction.process import Datapoint, normalize_all
 from app.extraction.prose import read_prose
 
@@ -173,6 +177,11 @@ def extract_revenue_candidates(
                 period_context=period_context, products=products,
             )
             if value.period not in stated
+            # The sentence is its own heading. A table row is judged by the
+            # schedule it sits in; a sentence has only itself to say what kind
+            # of figure it states, and "cost of sales for Calderon" states a
+            # cost as squarely as a cost schedule does.
+            and not names_a_non_revenue_metric(value.source_quote)
         ]
 
     points = normalize_all(values)

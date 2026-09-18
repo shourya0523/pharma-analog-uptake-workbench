@@ -2581,6 +2581,7 @@ class PipelineOrchestrator:
             candidate = {
                 "period": row.period,
                 "value_reported": row.value_reported,
+                "metric": row.metric,
                 "unit": row.unit,
                 "currency": row.currency,
                 "period_type": row.period_type,
@@ -2605,11 +2606,10 @@ class PipelineOrchestrator:
                     generic=job.generic_name, extra_aliases=aliases,
                 )
             peers = peers_by_source[row.source_id]
+            # The residue reaches the model once, as a key of the candidate the
+            # prompt explains. Prepending it to the context as well put the
+            # same words in front of the model twice, described two ways.
             context = row.source_quote or ""
-            if residue:
-                # The judge is shown what the label said that the reader could
-                # not account for, which is the question it is being asked.
-                context = f"Row label words not accounted for: {residue}\n\n{context}"
             judgment = None
             if settings.llm_skip_judge_when_deterministic:
                 judgment = try_deterministic_judgment(
