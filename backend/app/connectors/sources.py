@@ -603,6 +603,71 @@ class SECConnector:
             raw = cached
         return raw, from_cache, cache_key
 
+    async def _page_source(
+        self,
+        client: httpx.AsyncClient,
+        *,
+        cik: str,
+        accession: str,
+        doc: str,
+        form: str | None,
+        filed: str | None,
+        run_id: str,
+        job_id: str,
+        metadata: dict[str, Any] | None = None,
+    ) -> RetrievedSource:
+        """One filing's own primary document, recorded whether or not it arrives.
+
+        The page is what a reader reads: the product-by-product schedule an
+        issuer prints lives in the filing's markup, and whether the same filing
+        also tags those figures in XBRL is a separate question about the same
+        accession. Both passes that want a page go through here, so a page is
+        the same row wherever it was decided on, and a failure to fetch one is
+        a row too rather than a silence.
+        """
+        acc_nodash = accession.replace("-", "")
+        cik_int = str(int(cik))
+        url = f"{self.ARCHIVES}/{cik_int}/{acc_nodash}/{doc}"
+        sid = new_id()
+        title = f"{form} {filed or ''}".strip()
+        try:
+            # Per-job copy for audit trail (cheap local copy; S3 would be multipart later)
+            _raw, from_cache, stored_key = await self._fetch_document(
+                client, url=url, accession=accession, doc=doc,
+                run_id=run_id, job_id=job_id, source_id=sid,
+            )
+        except Exception as exc:
+            return RetrievedSource(
+                source_id=sid,
+                source_type=SourceType.SEC_FILING,
+                url=url,
+                title=title,
+                filing_type=form,
+                accession_number=accession,
+                retrieval_status=RetrievalStatus.FAILED,
+                notes=str(exc),
+                metadata={"cik": cik, **(metadata or {})},
+            )
+        return RetrievedSource(
+            source_id=sid,
+            source_type=SourceType.SEC_FILING,
+            url=url,
+            title=title,
+            source_date=parse_filing_date(filed),
+            filing_type=form,
+            accession_number=accession,
+            raw_text=None,
+            storage_key=stored_key,
+            retrieval_status=RetrievalStatus.SUCCESS,
+            metadata={
+                "cik": cik,
+                "from_cache": from_cache,
+                "cache_key": self._cache_key(accession, doc),
+                **(metadata or {}),
+            },
+            notes="sec_cache_hit" if from_cache else None,
+        )
+
     async def _filings_covering(
         self,
         client: httpx.AsyncClient,
@@ -804,6 +869,8 @@ class SECConnector:
         max_filings: int,
         since: date | None,
         until: date | None,
+        also_fetch_pages: bool = False,
+        pages_fetched: set[str] | None = None,
     ) -> list[RetrievedSource]:
         """The tagged instance from each filing in this window that carries one.
 
@@ -826,12 +893,21 @@ class SECConnector:
         is a per-filer fact rather than a date. Nothing here needs to know when
         each filer started - the reader simply finds nothing, which is the
         correct answer for a filing that has nothing.
+
+        With ``also_fetch_pages``, the filing's own primary document is taken
+        beside its instance unless ``pages_fetched`` says another pass already
+        has it. An instance and a page are two statements of one filing and
+        not two filings: an issuer that tags no product member has an instance
+        that answers nothing while the schedule sits in the page beside it, and
+        deciding to spend a request on the accession is deciding about both.
         """
         cik_int = str(int(cik))
         forms = recent.get("form", [])
         accessions = recent.get("accessionNumber", [])
         filing_dates = recent.get("filingDate", [])
+        primary = recent.get("primaryDocument", []) or []
         tagged = recent.get("isXBRL", []) or []
+        have_page = set(pages_fetched or ())
         sources: list[RetrievedSource] = []
         # Directory listings for filings the index does not classify. A bound on
         # requests, not a claim about which filings are worth reading.
@@ -866,6 +942,16 @@ class SECConnector:
             if not instance:
                 logger.info("sec_no_xbrl_instance accession=%s form=%s", accession, form)
                 continue
+            page = primary[index] if index < len(primary) else None
+            if also_fetch_pages and page and accession not in have_page:
+                have_page.add(accession)
+                sources.append(
+                    await self._page_source(
+                        client, cik=cik, accession=accession, doc=page,
+                        form=form, filed=filing_dates[index] if index < len(filing_dates) else None,
+                        run_id=run_id, job_id=job_id,
+                    )
+                )
             sid = new_id()
             url = f"{self.ARCHIVES}/{cik_int}/{acc_nodash}/{instance}"
             try:
@@ -1011,6 +1097,7 @@ class SECConnector:
             indexed.sort(key=lambda t: (t[0], t[1]))
 
             picked = 0
+            pages_fetched: set[str] = set()
             for _pri, i, form in indexed if include_primary else []:
                 if picked >= max_filings:
                     break
@@ -1029,53 +1116,15 @@ class SECConnector:
                     continue
                 if until_bound and (filed_on is None or filed_on > until_bound):
                     continue
-                acc_nodash = accession.replace("-", "")
-                cik_int = str(int(resolved))
-                url = f"{self.ARCHIVES}/{cik_int}/{acc_nodash}/{doc}"
-                sid = new_id()
-                cache_key = self._cache_key(accession, doc)
-
-                try:
-                    # Per-job copy for audit trail (cheap local copy; S3 would be multipart later)
-                    _raw, from_cache, stored_key = await self._fetch_document(
-                        client,
-                        url=url,
-                        accession=accession,
-                        doc=doc,
-                        run_id=run_id,
-                        job_id=job_id,
-                        source_id=sid,
+                if not doc:
+                    continue
+                sources.append(
+                    await self._page_source(
+                        client, cik=resolved, accession=accession, doc=doc,
+                        form=form, filed=fdate, run_id=run_id, job_id=job_id,
                     )
-                    sources.append(
-                        RetrievedSource(
-                            source_id=sid,
-                            source_type=SourceType.SEC_FILING,
-                            url=url,
-                            title=f"{form} {fdate or ''}".strip(),
-                            source_date=date.fromisoformat(fdate) if fdate else None,
-                            filing_type=form,
-                            accession_number=accession,
-                            raw_text=None,
-                            storage_key=stored_key,
-                            retrieval_status=RetrievalStatus.SUCCESS,
-                            metadata={"cik": resolved, "from_cache": from_cache, "cache_key": cache_key},
-                            notes="sec_cache_hit" if from_cache else None,
-                        )
-                    )
-                except Exception as exc:
-                    sources.append(
-                        RetrievedSource(
-                            source_id=sid,
-                            source_type=SourceType.SEC_FILING,
-                            url=url,
-                            title=f"{form} {fdate or ''}".strip(),
-                            filing_type=form,
-                            accession_number=accession,
-                            retrieval_status=RetrievalStatus.FAILED,
-                            notes=str(exc),
-                            metadata={"cik": resolved},
-                        )
-                    )
+                )
+                pages_fetched.add(accession)
                 picked += 1
 
             if include_xbrl:
@@ -1089,6 +1138,14 @@ class SECConnector:
                         max_filings=settings.sec_max_earnings_exhibits,
                         since=earnings_since,
                         until=earnings_until,
+                        # A filing whose instance is worth a request is a
+                        # filing whose page is worth one: the page holds the
+                        # schedule an issuer prints per product, and the
+                        # instance holds it only if the issuer tagged it. The
+                        # pass is told which accessions already have their page
+                        # so that a filing both passes reach is fetched once.
+                        also_fetch_pages=include_primary,
+                        pages_fetched=pages_fetched,
                     )
                 )
 
