@@ -142,6 +142,103 @@ async def test_resolve_member_invented_product_dropped():
 
 
 @pytest.mark.asyncio
+async def test_resolve_several_lines_jev_sums_trade_names():
+    mods = _modules()
+    mods.client.system_one = AsyncMock(
+        return_value={
+            "answers": {
+                "verdict": {
+                    "type": "choice",
+                    "choice": "sum_trade_names",
+                    "confidence": 0.91,
+                    "probabilities": {"sum_trade_names": 0.91, "refuse": 0.09},
+                }
+            }
+        }
+    )
+    mods.client.chat_json = AsyncMock(side_effect=AssertionError("chat must not run"))
+    result = await mods.resolve_several_lines(
+        product="Calderon",
+        lines=[
+            {"label": "Calderon", "by_period": {"2020Q1": 23055.0}},
+            {"label": "Calderonex", "by_period": {"2020Q1": 2582.0}},
+        ],
+    )
+    assert result["verdict"] == "sum_trade_names"
+    assert result["confidence"] >= 0.8
+    mods.client.chat_json.assert_not_called()
+
+
+@pytest.mark.asyncio
+async def test_resolve_several_lines_jev_refuses_rivals():
+    mods = _modules()
+    mods.client.system_one = AsyncMock(
+        return_value={
+            "answers": {
+                "verdict": {
+                    "type": "choice",
+                    "choice": "refuse",
+                    "confidence": 0.93,
+                    "probabilities": {"sum_trade_names": 0.07, "refuse": 0.93},
+                }
+            }
+        }
+    )
+    mods.client.chat_json = AsyncMock(side_effect=AssertionError("chat must not run"))
+    result = await mods.resolve_several_lines(
+        product="Calderon",
+        lines=[
+            {"label": "Calderon", "by_period": {"2020Q1": 23055.0}},
+            {"label": "Calderon", "by_period": {"2020Q1": 2582.0}},
+        ],
+    )
+    assert result["verdict"] == "refuse"
+    mods.client.chat_json.assert_not_called()
+
+
+@pytest.mark.asyncio
+async def test_resolve_several_lines_low_confidence_falls_back_to_chat():
+    mods = _modules()
+    mods.client.system_one = AsyncMock(
+        return_value={
+            "answers": {
+                "verdict": {
+                    "type": "choice",
+                    "choice": "sum_trade_names",
+                    "confidence": 0.4,
+                    "probabilities": {"sum_trade_names": 0.4, "refuse": 0.6},
+                }
+            }
+        }
+    )
+    mods.client.chat_json = AsyncMock(
+        return_value={"verdict": "refuse", "reason": "chat", "confidence": 0.85}
+    )
+    result = await mods.resolve_several_lines(
+        product="Calderon",
+        lines=[
+            {"label": "Calderon", "by_period": {"2020Q1": 1.0}},
+            {"label": "Calderonex", "by_period": {"2020Q1": 2.0}},
+        ],
+    )
+    assert result["verdict"] == "refuse"
+    mods.client.chat_json.assert_awaited()
+
+
+@pytest.mark.asyncio
+async def test_resolve_several_lines_without_key_refuses():
+    mods = _modules(key="")
+    result = await mods.resolve_several_lines(
+        product="Calderon",
+        lines=[
+            {"label": "Calderon", "by_period": {"2020Q1": 1.0}},
+            {"label": "Calderonex", "by_period": {"2020Q1": 2.0}},
+        ],
+    )
+    assert result["verdict"] == "refuse"
+
+
+@pytest.mark.asyncio
 async def test_judge_element_noul_bands():
     mods = _modules()
     mods.client.system_one = AsyncMock(

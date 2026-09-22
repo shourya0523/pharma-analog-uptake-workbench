@@ -105,7 +105,7 @@ def test_an_amount_in_the_prose_is_not_the_table_s_unit_declaration():
     fingerprint = build_fingerprint(rows, context)
     assert fingerprint.unit_label == "thousands"
 
-    candidates, _findings, _skipped = extract_revenue_candidates(
+    candidates, _findings, _skipped, _pending = extract_revenue_candidates(
         [rows], product="Remodulin", context=context
     )
     quarter = [c for c in candidates if c["period"] == "2012Q3"]
@@ -208,7 +208,7 @@ def test_year_to_date_column_is_never_emitted_as_a_quarter():
     assert by_period[("2024", "six_month")] == 70.0
     assert not any(v.period_type == "quarterly" and v.period == "2024" for v in readout.values)
 
-    candidates, _, _ = extract_revenue_candidates(
+    candidates, _, _, _pending = extract_revenue_candidates(
         [QUARTER_AND_YTD], product="Winrevair"
     )
     # The six-month figure comes through - a fourth quarter is derived by
@@ -1011,6 +1011,68 @@ def test_a_line_that_did_not_parse_still_counts_as_a_line():
     assert "Harvoni – Europe" in readout.skipped_reason
 
 
+def test_two_trade_names_leave_a_several_lines_pending():
+    """US brand + EU brand; schedule total includes a third product.
+
+    Geometry refuses several_lines_no_total and hands the wholes to an
+    adjudicator. Invented: Calderon + Calderonex + NuVessa.
+    """
+    from app.extraction.candidates import candidates_from_several_lines_sum
+    from app.extraction.extract import summed_several_lines
+
+    rows = [
+        ["", "Three Months Ended March 31,"],
+        ["", "2020", "2019"],
+        ["", "(in thousands)"],
+        ["Calderon", "23,055", "20,285"],
+        ["Calderonex", "2,582", "—"],
+        ["NuVessa", "—", "77"],
+        ["Total product revenue, net", "25,637", "20,362"],
+    ]
+    readout = read_table(
+        rows,
+        product="Calderon",
+        extra_aliases=["Calderon", "Calderonex"],
+        context="(in thousands)",
+    )
+    assert "several_lines_no_total" in (readout.skipped_reason or "")
+    assert readout.values == []
+    pending = readout.several_lines
+    assert pending is not None
+    assert {line.label for line in pending.lines} == {"Calderon", "Calderonex"}
+    by_period = {v.period: v.value_as_reported for v in summed_several_lines(pending)}
+    assert by_period["2020Q1"] == 25637.0
+    assert by_period["2019Q1"] == 20285.0
+    cands = candidates_from_several_lines_sum(pending, product="Calderon")
+    assert {c["period"]: c["value_normalized_usd_millions"] for c in cands} == {
+        "2020Q1": 25.637,
+        "2019Q1": 20.285,
+    }
+    assert all("several_lines_summed" in (c.get("label_flags") or []) for c in cands)
+
+
+def test_two_lines_of_the_same_trade_name_still_refuse():
+    """Rival figures under one name are not summed into a made-up total.
+
+    The schedule total does not equal either line or their sum, so nothing
+    identifies which figure is the product's. Pending still carries the lines
+    for an adjudicator that should refuse.
+    """
+    rows = [
+        ["", "Three Months Ended March 31,"],
+        ["", "2020", "2019"],
+        ["", "(in thousands)"],
+        ["Calderon", "23,055", "20,000"],
+        ["Calderon", "2,582", "1,000"],
+        ["Total product revenue, net", "40,000", "30,000"],
+    ]
+    readout = read_table(rows, product="Calderon", context="(in thousands)")
+    assert "several_lines_no_total" in (readout.skipped_reason or "")
+    assert readout.values == []
+    assert readout.several_lines is not None
+    assert {line.label for line in readout.several_lines.lines} == {"Calderon"}
+
+
 def test_a_nil_dash_is_the_zero_it_means():
     """A line that sold nothing everywhere is a line, not a heading.
 
@@ -1134,11 +1196,16 @@ def test_model_output_cannot_name_its_own_provenance():
     code, so the reader's label is honoured only from a reader.
     """
     from app.pipeline.orchestrator import _deterministic_method
+    from app.pipeline.series_identity import claim_rank
 
     assert _deterministic_method({"_from_table": True, "extraction_method": "prose_sentence"}) == "prose"
     assert _deterministic_method({"_from_table": True, "extraction_method": "table_fingerprint"}) == "table"
     assert _deterministic_method({"extraction_method": "table_fingerprint"}) == "llm"
     assert _deterministic_method({"_from_table": True, "extraction_method": "hand_audited"}) == "table"
+    assert _deterministic_method({"extraction_method": "jev_locus"}) == "jev"
+    assert _deterministic_method({"extraction_method": "jev"}) == "jev"
+    assert claim_rank("jev") == claim_rank("llm")
+    assert claim_rank("jev_locus") == claim_rank("llm")
 
 
 def test_a_sentence_does_not_pre_empt_a_derivation():
@@ -1510,7 +1577,7 @@ def test_a_sentence_is_its_own_heading():
     sales = ("For the three months ended March 31, 2026, net product sales of Calderon "
              "were $75.9 million.")
     assert extract_revenue_candidates([], product="Calderon", prose=cost)[0] == []
-    published, _findings, _skipped = extract_revenue_candidates(
+    published, _findings, _skipped, _pending = extract_revenue_candidates(
         [], product="Calderon", prose=sales)
     assert [(c["period"], c["value_reported"]) for c in published] == [("2026Q1", 75.9)]
 

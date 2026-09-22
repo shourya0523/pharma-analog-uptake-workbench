@@ -67,7 +67,7 @@ def test_partner_cash_dropped_before_store():
         "For the three months ended June 30, 2024, we received $235.0 million "
         "in aggregate from Bayer related to Calderon collaboration."
     )
-    cands, _findings, _skipped = extract_revenue_candidates(
+    cands, _findings, _skipped, _pending = extract_revenue_candidates(
         [], product="Calderon", prose=prose, context="(in millions)"
     )
     assert not any(abs(float(c["value_reported"]) - 235.0) < 0.01 for c in cands), cands
@@ -78,7 +78,7 @@ def test_ordinary_product_revenue_prose_kept():
         "For the three months ended June 30, 2024, Calderon product revenue "
         "was $54.0 million."
     )
-    cands, _findings, _skipped = extract_revenue_candidates(
+    cands, _findings, _skipped, _pending = extract_revenue_candidates(
         [], product="Calderon", prose=prose, context="(in millions)"
     )
     assert any(abs(float(c["value_reported"]) - 54.0) < 0.01 for c in cands), cands
@@ -155,6 +155,33 @@ def test_bare_net_product_dropped_when_peer_on_same_schedule():
     )
     assert not kept
     assert dropped[0]["_drop_reason"] == "product_scope_without_product_in_quote"
+
+
+def test_bare_product_sales_net_kept_when_schedule_has_no_brand_peers():
+    """Sole-product P&L: Product sales, net with only expense peers on the page."""
+    schedule = _period_schedule(
+        [
+            ["Product sales, net", "50.672", "26.421"],
+            ["Cost of product sales", "5.0", "3.0"],
+            ["Research and development", "40.0", "30.0"],
+        ]
+    )
+    cand = {
+        "period": "2026Q2",
+        "period_type": "quarterly",
+        "value_reported": 50.672,
+        "revenue_scope": "Product family",
+        "source_quote": "Product sales, net | 50.672 | 26.421",
+    }
+    # Document-wide peer scan may still see a brand named only in R&D prose;
+    # schedule-local peers govern the bare line.
+    kept, dropped = filter_revenue_candidates(
+        [cand],
+        product="Calderon",
+        peer_names=["nuvessa"],
+        tables=[schedule],
+    )
+    assert len(kept) == 1, dropped
 
 
 def test_harvest_skips_collaboration_paragraph_outside_product_schedule():
@@ -239,7 +266,7 @@ def test_product_sales_and_total_revenue_do_not_conflict():
         ["", "2024", "2023"],
         ["Total Calderon revenue", "156", "140"],
     ]
-    cands, findings, _ = extract_revenue_candidates(
+    cands, findings, _, _pending = extract_revenue_candidates(
         [product_sales, total_rev], product="Calderon", context="(in millions)",
     )
     assert not any(f.code == "conflicting_values" for f in findings), findings

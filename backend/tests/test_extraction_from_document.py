@@ -102,7 +102,7 @@ async def test_correct_document_yields_the_quarters_it_states(tmp_path, caplog):
 
     assert doc.parsing_status == ParsingStatus.SUCCESS
     assert doc.tables, "the schedule must survive parse"
-    candidates, _findings, skips = extract_revenue_candidates(
+    candidates, _findings, skips, _pending = extract_revenue_candidates(
         doc.tables,
         product="Calderon",
         context="\n".join(doc.text_blocks),

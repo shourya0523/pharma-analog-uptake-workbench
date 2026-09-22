@@ -31,7 +31,12 @@ from app.parsing.evidence import (
     NON_PRODUCT_REVENUE_RE,
     product_aliases,
 )
-from app.parsing.periods import MONTHS_TO_PERIOD_TYPE, period_key
+from app.parsing.periods import (
+    MONTHS_TO_PERIOD_TYPE,
+    period_key,
+    period_months,
+    period_type_from_label,
+)
 from app.quality.candidate_filters import (
     is_generic_product_revenue_label,
     quote_mentions_other_brand,
@@ -47,6 +52,12 @@ logger = logging.getLogger(__name__)
 
 
 PROMPTS_DIR = Path(__file__).resolve().parent.parent / "prompts"
+
+
+# Page text one web_fetch may hand the model. A profile field or a page
+# standing in for a missing filing, not a second copy of a filing the SEC
+# reader already stores. Native fetch ignores this cap.
+FETCH_MAX_CONTENT_TOKENS = 8000
 
 
 class OpenRouterClient:
@@ -214,20 +225,25 @@ class OpenRouterClient:
             for d in (self.settings.llm_search_allowed_domains or "").split(",")
             if d.strip()
         ]
+        # Same ceiling as how many URLs a caller will keep. The server-tool
+        # default is 30 searches in one request.
+        uses = min(max(self.settings.llm_search_max_urls, 1), 8)
         search_params: dict[str, Any] = {
-            "engine": self.settings.llm_search_engine or "auto",
+            "engine": self.settings.llm_search_engine or "exa",
             "max_results": min(max(self.settings.llm_search_max_urls, 1), 10),
             "max_total_results": min(max(self.settings.llm_search_max_urls * 2, 5), 20),
-            "search_context_size": "medium",
+            "max_uses": uses,
         }
         if domains:
             search_params["allowed_domains"] = domains
         tools: list[dict[str, Any]] = [{"type": "openrouter:web_search", "parameters": search_params}]
         if fetch:
+            # openrouter truncates and does not pass a provider fetch fee
+            # through. Native fetch ignores max_content_tokens.
             fetch_params: dict[str, Any] = {
-                "engine": "auto",
-                "max_uses": min(max(self.settings.llm_search_max_urls, 1), 8),
-                "max_content_tokens": 40000,
+                "engine": "openrouter",
+                "max_uses": uses,
+                "max_content_tokens": FETCH_MAX_CONTENT_TOKENS,
             }
             if domains:
                 fetch_params["allowed_domains"] = domains
@@ -613,14 +629,15 @@ class LLMModules:
                 }
             )
             value = _parse_reported_amount(loc["amount"])
+            period_label = period or "unknown"
             candidates.append(
                 {
                     "span_id": span_id,
-                    "period": period or "unknown",
+                    "period": period_label,
                     "value_reported": value,
                     "currency": "USD",
                     "unit": _guess_unit(loc["amount"], quote),
-                    "period_type": "quarterly",
+                    "period_type": period_type_from_label(period_label),
                     "revenue_scope": "Product family",
                     "geography": None,
                     "formulation": None,
@@ -925,6 +942,83 @@ class LLMModules:
             return {"product": None, "reason": f"model returned {choice!r}, not a candidate",
                     "confidence": 0.0}
         return {"product": choice, "reason": "", "confidence": picked["confidence"]}
+
+    async def resolve_several_lines(
+        self,
+        *,
+        product: str,
+        lines: list[dict[str, Any]],
+    ) -> dict[str, Any]:
+        """Sum trade-name wholes vs refuse, after the table reader cannot publish.
+
+        ``lines`` are the printed labels and period→amount maps the fingerprint
+        already read. Empty / no key → refuse (do not invent a sum).
+        """
+        if not self.settings.openrouter_api_key or len(lines) < 2:
+            return {"verdict": "refuse", "reason": "no_key_or_insufficient_lines", "confidence": 0.0}
+        prompt = load_prompt("several_lines_resolver")
+        rendered = "\n".join(
+            f"  - {line.get('label')}: "
+            + ", ".join(
+                f"{period}={amount}"
+                for period, amount in sorted((line.get("by_period") or {}).items())
+            )
+            for line in lines
+        ) or "  (none)"
+        if self._uses_jev():
+            jev_result = await self._resolve_several_lines_jev(
+                product=product, lines_text=rendered, prompt=prompt
+            )
+            if jev_result is not None:
+                return jev_result
+        user = prompt["user_template"].format(product=product, lines=rendered)
+        result = await self.client.chat_json(
+            model=self.settings.openrouter_model_judge,
+            system=prompt["system"],
+            user=user,
+        )
+        verdict = result.get("verdict")
+        if verdict not in {"sum_trade_names", "refuse"}:
+            return {"verdict": "refuse", "reason": f"model returned {verdict!r}", "confidence": 0.0}
+        return {
+            "verdict": verdict,
+            "reason": str(result.get("reason") or ""),
+            "confidence": float(result.get("confidence") or 0.0),
+        }
+
+    async def _resolve_several_lines_jev(
+        self,
+        *,
+        product: str,
+        lines_text: str,
+        prompt: dict[str, Any],
+    ) -> dict[str, Any] | None:
+        """Closed choice: sum trade names of one product, or refuse."""
+        criteria = {
+            "sum_trade_names": (
+                "Same medicine under different trade/market names or spellings; "
+                "figures partition one product"
+            ),
+            "refuse": (
+                "Rival claims, different medicines, franchise/mixed lines, or unsure"
+            ),
+        }
+        payload = await self.client.system_one(
+            state={"product": product, "lines": lines_text},
+            questions={
+                "verdict": jev_api.choice(
+                    instructions=prompt["system"],
+                    criteria=criteria,
+                )
+            },
+        )
+        picked = jev_api.choice_answer(payload.get("answers") or {}, "verdict")
+        if not picked:
+            return None  # abstain → chat
+        choice = picked["choice"]
+        if choice not in {"sum_trade_names", "refuse"}:
+            return {"verdict": "refuse", "reason": f"model returned {choice!r}", "confidence": 0.0}
+        return {"verdict": choice, "reason": "", "confidence": picked["confidence"]}
 
     async def judge_element(self, *, element: str, examples: list[str]) -> dict[str, Any]:
         """Whether an element the filing's linkbase left unplaced measures revenue.
@@ -1401,6 +1495,18 @@ def apply_judge_hard_vetoes(
     named = periods_named_in(q)
     claimed = _period_claimed_by(candidate)
     if named and claimed and claimed not in named:
+        issues.append("hard_veto:quote_states_a_different_period")
+        veto = True
+    # A quote that only states H1 / YTD / FY (or names those spans without
+    # the claimed quarter) must not supply that dollar to a quarterly row.
+    # Table headings that name both the quarter and the half keep working:
+    # the claimed quarter is then in `named`.
+    if (
+        claimed
+        and period_months(claimed) == 3
+        and (spans_named_in(q) & ({6, 9, 12}))
+        and claimed not in named
+    ):
         issues.append("hard_veto:quote_states_a_different_period")
         veto = True
     # A milestone earned on the product's sales is stated in the same sentence

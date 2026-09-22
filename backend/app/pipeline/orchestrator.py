@@ -5,7 +5,7 @@ import logging
 import os
 import re
 import time
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Iterable, Sequence
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 from pathlib import Path
@@ -17,6 +17,7 @@ from sqlalchemy.orm import Session
 logger = logging.getLogger(__name__)
 
 from app.config import get_settings
+from app.connectors.company_ir import CompanyIRConnector
 from app.connectors.coverage import record_coverage
 from app.connectors.llm_search import LLMSearchConnector
 from app.connectors.openfda import OpenFDAConnector
@@ -68,10 +69,13 @@ from app.domain.models import (
 )
 from app.extraction import elements, member_store
 from app.extraction.bulk_tagged import candidates_from_notes
-from app.extraction.candidates import extract_revenue_candidates
+from app.extraction.candidates import (
+    candidates_from_several_lines_sum,
+    extract_revenue_candidates,
+)
 from app.extraction.check import _ROUNDING_ABSOLUTE as ROUNDING_ABSOLUTE
 from app.extraction.check import _ROUNDING_TOLERANCE as ROUNDING_TOLERANCE
-from app.extraction.derive import HELD_FOR_BOUND, complete_series
+from app.extraction.derive import HELD_FOR_BOUND, assemble_split_ownership_quarter, complete_series
 from app.extraction.elements import Verdict
 from app.extraction.fingerprint import UNIT_SCALE_TO_MILLIONS
 from app.extraction.members import Resolution, load_products, resolve
@@ -91,7 +95,7 @@ from app.parsing.fda_label import (
     profile_fields,
 )
 from app.parsing.indications import parse_indications, therapeutic_area
-from app.parsing.labels import FLAG_COMBINED, QUESTION_FLAGS, footnotes_in
+from app.parsing.labels import FLAG_COMBINED, FLAG_PARTIAL, QUESTION_FLAGS, footnotes_in
 from app.parsing.periods import (
     detect_period_context,
     normalize_period,
@@ -294,8 +298,11 @@ def _carry_to_winner(winner: DatapointORM, other: DatapointORM) -> None:
     carried = sorted((set(other.issue_flags or []) & LABEL_FLAGS) - set(winner.issue_flags or []))
     if carried:
         winner.issue_flags = sorted(set((winner.issue_flags or []) + carried))
-        winner.validation_status = ValidationStatus.NEEDS_REVIEW.value
-        citation["validation_status"] = winner.validation_status
+        # reported_as may have been filled from `other` just above; re-ask
+        # whether the carried flags still hold the published unit.
+        if label_flags_that_hold(winner, carried):
+            winner.validation_status = ValidationStatus.NEEDS_REVIEW.value
+            citation["validation_status"] = winner.validation_status
         changed = True
     if changed:
         winner.citation_json = citation
@@ -410,7 +417,28 @@ def persist_profile_field(
 # raising cannot be one the judge never hears about.
 LABEL_FLAGS = QUESTION_FLAGS | {HELD_FOR_BOUND}
 
-_DETERMINISTIC_METHODS = {"table_fingerprint": "table", "prose_sentence": "prose"}
+
+def label_flags_that_hold(row: DatapointORM, flags: Iterable[str]) -> list[str]:
+    """Label flags that still force review after the published-unit exception.
+
+    A Product-family row that already names who it covers under ``reported_as``
+    is the published unit: ``FLAG_COMBINED`` alone is provenance, not a hold.
+    Other question flags (partial period, residue, bound) still hold.
+    """
+    reported = (row.reported_as or "").strip()
+    family = (row.revenue_scope or "") == "Product family"
+    return [
+        flag for flag in flags
+        if not (flag == FLAG_COMBINED and reported and family)
+    ]
+
+
+_DETERMINISTIC_METHODS = {
+    "table_fingerprint": "table",
+    "prose_sentence": "prose",
+    "jev_locus": "jev",
+    "jev": "jev",
+}
 
 
 def _read_from(candidate: dict[str, Any], src: Any) -> dict[str, Any]:
@@ -429,17 +457,23 @@ def _read_from(candidate: dict[str, Any], src: Any) -> dict[str, Any]:
 
 
 def _deterministic_method(candidate: dict[str, Any]) -> str:
-    """``table``, ``prose`` or ``llm`` for a candidate about to be stored.
+    """``table``, ``prose``, ``jev`` or ``llm`` for a candidate about to be stored.
 
     A sentence read by ``extraction/prose.py`` used to be stored as ``table``,
     because both readers reach this point through the same call and the label
     was decided by which branch it was on rather than by what produced it. That
     is the mistake this project keeps making: a field stamped on a whole branch,
     then read back as though it described the row.
+
+    JEV harvest stamps ``jev_locus`` without ``_from_table``; that label is the
+    producer and must survive, not be rewritten to ``llm``.
     """
+    method = str(candidate.get("extraction_method") or "")
+    if method in {"jev_locus", "jev"}:
+        return _DETERMINISTIC_METHODS[method]
     if not candidate.get("_from_table"):
         return "llm"
-    return _DETERMINISTIC_METHODS.get(str(candidate.get("extraction_method") or ""), "table")
+    return _DETERMINISTIC_METHODS.get(method, "table")
 
 
 # How far apart a declared figure and its normalization must be before the
@@ -565,6 +599,9 @@ def claim_ranking(db: Session, job: DrugJobORM) -> ClaimRanking:
 
     return ClaimRanking(claim_tier, reports_own_period, accession_of)
 
+FINISHED_JUDGE_AFTER_RESTART = "finished_judge_after_restart"
+
+
 def resettle_series(db: Session, job: DrugJobORM | None) -> None:
     """Ask again which reading each of the job's series holds.
 
@@ -652,12 +689,65 @@ class PipelineOrchestrator:
         self.sec = SECConnector(self.file_store)
         self.fda = OpenFDAConnector(self.file_store)
         self.manual = ManualURLConnector(self.file_store)
+        self.company_ir = CompanyIRConnector(self.file_store, self.llm)
         self.transcripts = TranscriptConnectorStub()
         self.search = LLMSearchConnector(self.file_store, self.llm)
         self.parser = DocumentParser(self.file_store)
         self._job_aliases: list[str] = []
         self._step_started_at: float | None = None
         self._step_name: str | None = None
+        self._ir_by_issuer: dict[str, list] = {}
+
+    async def finish_after_restart_during_judge(self, job_id: str) -> None:
+        """Finish a job interrupted mid-judge without re-running extract.
+
+        Loads every datapoint the job already holds, rebuilds enough parse
+        context from the quotes for peer/deterministic judgment, runs `_judge`
+        over the full row list so reconcile sees peers, then settles series and
+        completeness the same way the all-decided restart path does.
+        """
+        from app.domain.models import ParsedDocument, ParsingStatus
+        from app.jobs.run_status import refresh_run_status
+        from app.llm.aliases import merge_aliases
+
+        job = self.db.get(DrugJobORM, job_id)
+        if job is None:
+            return
+        run = self.db.get(ExtractionRunORM, job.run_id)
+        options = dict((run.options_json if run else {}) or {})
+        rows = (
+            self.db.query(DatapointORM)
+            .filter_by(job_id=job.id)
+            .all()
+        )
+        parsed: dict[str, ParsedDocument] = {}
+        for row in rows:
+            sid = row.source_id or ""
+            if not sid or sid in parsed:
+                continue
+            parsed[sid] = ParsedDocument(
+                source_id=sid,
+                text_blocks=[row.source_quote or ""],
+                parsing_status=ParsingStatus.SUCCESS,
+            )
+        self._job_aliases = merge_aliases(job.drug_name, job.generic_name)
+        await self._judge(job, rows, [], parsed, options)
+        for row in rows:
+            if row.validation_status == ValidationStatus.PENDING.value:
+                row.validation_status = ValidationStatus.NEEDS_REVIEW.value
+                row.issue_flags = list(
+                    set((row.issue_flags or []) + ["decided_after_restart"])
+                )
+        resettle_series(self.db, job)
+        refresh_completeness(self.db, job)
+        job.status = JobStatus.READY_FOR_REVIEW.value
+        job.current_step = JobStep.READY_FOR_REVIEW.value
+        job.error = None
+        job.quality_flags = sorted(
+            set((job.quality_flags or []) + [FINISHED_JUDGE_AFTER_RESTART])
+        )
+        self.db.commit()
+        refresh_run_status(self.db, job.run_id)
 
     def _set_step(self, job: DrugJobORM, step: JobStep, status: JobStatus | None = None) -> None:
         now = time.monotonic()
@@ -1085,10 +1175,26 @@ class PipelineOrchestrator:
                     earnings_until=parse_filing_date(options.get("earnings_until")),
                 )
             )
-        if job.known_source_url and options.get("company_ir", True):
-            collected.extend(
-                await self.manual.retrieve(run_id=job.run_id, job_id=job.id, url=job.known_source_url)
-            )
+        if options.get("company_ir", True) and (job.ticker or job.manufacturer or job.known_source_url):
+            # IR product-sales schedules even when SEC already returned filings:
+            # a post-deal filer can have rich 10-Qs and still owe the pre-deal
+            # grid to an IR historical PDF.
+            issuer_key = (job.cik or job.ticker or job.manufacturer or "").strip().lower()
+            if issuer_key and issuer_key in self._ir_by_issuer:
+                collected.extend(self._ir_by_issuer[issuer_key])
+            else:
+                ir_sources = await self.company_ir.retrieve_for_issuer(
+                    run_id=job.run_id,
+                    job_id=job.id,
+                    company_name=job.manufacturer,
+                    ticker=job.ticker,
+                    product=job.drug_name,
+                    aliases=self._job_aliases or merge_aliases(job.drug_name, job.generic_name),
+                    extra_urls=[job.known_source_url] if job.known_source_url else None,
+                )
+                if issuer_key:
+                    self._ir_by_issuer[issuer_key] = ir_sources
+                collected.extend(ir_sources)
         if options.get("transcripts", False):
             collected.extend(await self.transcripts.retrieve())
 
@@ -1740,31 +1846,27 @@ class PipelineOrchestrator:
     def _quarters_no_filing_covers(
         self, job: DrugJobORM, sources: list, options: dict[str, Any], rows: list[DatapointORM]
     ) -> list[str]:
-        """The window's quarters, when the given issuer filed nothing in it.
+        """Window quarters no retrieved document has answered for this product.
 
-        A product that changed hands - a filer with no SEC filings, then an
-        acquirer whose first release covers a stub - has quarters no filing
-        of the named issuer reports. The retrieval stage cannot say so: it
-        finds nothing and moves on. When no successful SEC filing or release
-        of this issuer is dated inside the window, every quarter the window
-        would have reported, and nothing answered, is such a quarter.
+        A filing dated inside the window is not an answer: an acquirer's 10-Q
+        can land in 2017 and still carry nothing for 2016Q1. Coverage is a
+        figure test - ``document_coverage.carries`` on each source, plus any
+        product figure already extracted - so a quarter the documents left
+        empty stays unfiled even when the issuer filed something else.
         """
         since = parse_filing_date(options.get("earnings_since"))
         until = parse_filing_date(options.get("earnings_until"))
         window = quarters_reported_in(since, until)
         if not window:
             return []
-        covered = any(
-            s.source_type in {SourceType.SEC_FILING, SourceType.EARNINGS_RELEASE}
-            and s.retrieval_status == RetrievalStatus.SUCCESS
-            and s.source_date is not None
-            and (since is None or s.source_date >= since)
-            and (until is None or s.source_date <= until)
-            for s in sources
-        )
-        if covered:
-            return []
-        answered = {row.period for row in rows}
+        answered: set[str] = set()
+        for row in rows:
+            if row.period and row.value_normalized_usd_millions is not None:
+                answered.add(row.period)
+        for source in sources:
+            meta = getattr(source, "metadata", None) or {}
+            carries = (meta.get("coverage") or {}).get("carries") or []
+            answered.update(str(period) for period in carries if period)
         return [quarter for quarter in window if quarter not in answered]
 
     async def _search_quarters_fallback(
@@ -1772,9 +1874,9 @@ class PipelineOrchestrator:
     ) -> tuple[list, dict[str, Any]]:
         """Ask the search who reported these quarters for this product.
 
-        The issuer named on the job filed nothing for them, so the query
-        names the quarters and the product and lets the filer be found: an
-        acquirer's historical schedule, a predecessor's own release.
+        Retrieved filings left these quarters without a product figure, so the
+        query names the quarters and the product and lets the filer be found:
+        an acquirer's historical schedule, a predecessor's own release.
         """
         search_sources = await self.search.fallback_retrieve(
             run_id=job.run_id,
@@ -1786,8 +1888,8 @@ class PipelineOrchestrator:
             ticker=job.ticker,
             context=(
                 f"Product-level net sales for {', '.join(quarters)}. "
-                f"{job.manufacturer or 'The named issuer'} filed nothing with the SEC "
-                f"in this window, so find who reported the product then: a predecessor "
+                f"No retrieved document carried a figure for {job.drug_name} in "
+                f"those quarters; find who reported the product then: a predecessor "
                 f"or acquirer's earnings release, historical sales schedule, or IR document."
             ),
         )
@@ -1863,14 +1965,18 @@ class PipelineOrchestrator:
     def _record_unfiled_quarters(
         self, job: DrugJobORM, quarters: list[str], rows: list[DatapointORM], searched: list
     ) -> None:
-        """Say plainly which quarters have no filer of record.
+        """Say plainly which quarters still have no product figure.
 
         Left to the completeness stage these would read as gaps to fill from
-        a filing not yet retrieved. There is no such filing: the reason is
+        a filing not yet retrieved. Search already looked; the reason is
         recorded as its own kind, so a reviewer is asked who the filer was,
         not to look again.
         """
-        answered = {row.period for row in rows}
+        answered = {
+            row.period
+            for row in rows
+            if row.period and row.value_normalized_usd_millions is not None
+        }
         for quarter in quarters:
             if quarter in answered:
                 continue
@@ -1880,8 +1986,9 @@ class PipelineOrchestrator:
                     job_id=job.id,
                     period=quarter,
                     reason_unresolved=(
-                        f"[{NO_FILER_OF_RECORD}] No SEC filer of record for {job.drug_name} in this "
-                        f"window: {job.manufacturer or 'the named issuer'} filed nothing in it, and "
+                        f"[{NO_FILER_OF_RECORD}] No product figure for {job.drug_name} in "
+                        f"{quarter}: retrieved filings of "
+                        f"{job.manufacturer or 'the named issuer'} did not carry it, and "
                         f"{len(searched)} document(s) found by search stated no figure"
                     ),
                     sources_checked=[s.url for s in searched],
@@ -1931,6 +2038,90 @@ class PipelineOrchestrator:
             "source_url": row.source_url,
             "_datapoint_id": row.id,
         }
+
+    def _assemble_split_ownership_quarters(
+        self,
+        job: DrugJobORM,
+        rows: list[DatapointORM],
+        by_source_id: dict[str, Any],
+        selected_sources: list,
+    ) -> list[DatapointORM]:
+        """Sum dated partial-period figures that tile one quarter.
+
+        A lone stub carrying ``partial_period`` stays held - it is not the
+        quarter. Two or more parts with contiguous ``covers`` become one
+        derived figure for the full period.
+        """
+        from collections import defaultdict
+
+        groups: dict[tuple[str, str, str | None], list[DatapointORM]] = defaultdict(list)
+        for row in rows:
+            flags = set(row.issue_flags or [])
+            if FLAG_PARTIAL not in flags:
+                continue
+            covers = (row.citation_json or {}).get("covers")
+            if not covers or row.value_normalized_usd_millions is None:
+                continue
+            if (row.period_type or "quarterly") != "quarterly":
+                continue
+            key = (row.period or "", row.revenue_scope or "", row.geography)
+            groups[key].append(row)
+
+        added: list[DatapointORM] = []
+        for (period, scope, geography), parts in groups.items():
+            if len(parts) < 2:
+                continue
+            components = [
+                {
+                    "covers": (part.citation_json or {}).get("covers"),
+                    "value": part.value_normalized_usd_millions,
+                }
+                for part in parts
+            ]
+            total = assemble_split_ownership_quarter(period, components)
+            if total is None:
+                continue
+            source = by_source_id.get(str(parts[0].source_id or "")) or next(
+                (s for s in selected_sources), None
+            )
+            if source is None:
+                continue
+            quotes = " + ".join(
+                f"{part.value_normalized_usd_millions} ({(part.citation_json or {}).get('covers')})"
+                for part in parts
+            )
+            candidate = {
+                "period": period,
+                "period_type": "quarterly",
+                "value_reported": total,
+                "value_normalized_usd_millions": total,
+                "currency": parts[0].currency or "USD",
+                "unit": parts[0].unit or "millions",
+                "revenue_scope": scope or "Product family",
+                "geography": geography,
+                "source_quote": f"{job.drug_name} {period} assembled from partial periods: {quotes}",
+                "extraction_method": "derived_from_period_total",
+                "confidence": 0.7,
+                "_derived": True,
+                "_inputs": [
+                    {
+                        "period": part.period,
+                        "value": part.value_normalized_usd_millions,
+                        "covers": (part.citation_json or {}).get("covers"),
+                        "source_id": part.source_id,
+                        "source_url": part.source_url,
+                    }
+                    for part in parts
+                ],
+            }
+            row = self._datapoint_from_candidate(job, source, candidate)
+            added.append(row)
+        if added:
+            logger.info(
+                "assembled_split_ownership job_id=%s drug=%s assembled=%d",
+                job.id, job.drug_name, len(added),
+            )
+        return added
 
     def _datapoint_from_candidate(self, job: DrugJobORM, src, candidate: dict) -> DatapointORM:
         """A tagged fact, or a derived quarter, stored as a datapoint.
@@ -2384,7 +2575,7 @@ class PipelineOrchestrator:
             # - or disagree and manufacture a `needs_review` row for a human to
             # adjudicate, having already lost. Asking it only where nothing
             # else could answer keeps every row it can actually contribute.
-            fingerprinted, table_findings, table_skips = extract_revenue_candidates(
+            fingerprinted, table_findings, table_skips, pending = extract_revenue_candidates(
                 doc.tables,
                 product=job.drug_name,
                 generic=job.generic_name,
@@ -2405,6 +2596,38 @@ class PipelineOrchestrator:
                 # tables for want of exactly this.
                 period_context=period_context,
             )
+            # Wholes the fingerprint read but could not publish alone: ask
+            # whether they are trade names of one product (sum) or rivals
+            # (refuse). Periods and units stay what the table already declared.
+            for item in pending:
+                decision = await self.llm.resolve_several_lines(
+                    product=job.drug_name,
+                    lines=[
+                        {
+                            "label": line.label,
+                            "by_period": dict(line.by_period),
+                        }
+                        for line in item.lines
+                    ],
+                )
+                if decision.get("verdict") != "sum_trade_names":
+                    logger.info(
+                        "several_lines_refused job_id=%s source_id=%s labels=%s reason=%s",
+                        job.id,
+                        src.source_id,
+                        [line.label for line in item.lines],
+                        decision.get("reason"),
+                    )
+                    continue
+                summed = candidates_from_several_lines_sum(item, product=job.drug_name)
+                fingerprinted.extend(summed)
+                logger.info(
+                    "several_lines_summed job_id=%s source_id=%s labels=%s periods=%s",
+                    job.id,
+                    src.source_id,
+                    [line.label for line in item.lines],
+                    [c.get("period") for c in summed],
+                )
             # A producer says everything it can about the source; which of
             # those answers is a datapoint and which is something to subtract
             # from is decided here, because only here are both destinations
@@ -2613,8 +2836,22 @@ class PipelineOrchestrator:
                 url = src.url
                 period_type = stated_text(cand.get("period_type"), "unknown").lower()
                 raw_period = str(cand.get("period") or "unknown")
+                # A table / JEV locus with no period of its own must not inherit
+                # the filing's PeriodContext: every column then collapses to the
+                # same quarter and reconcile holds them all as self-contradiction.
+                # Prose that is genuinely quarter-silent still uses context.
+                table_or_jev = bool(
+                    cand.get("_from_table")
+                    or _deterministic_method(cand) in {"table", "jev"}
+                    or str(cand.get("extraction_method") or "") in {
+                        "jev_locus", "jev", "table_fingerprint",
+                    }
+                )
+                fill_context = None if (
+                    table_or_jev and (not raw_period or raw_period.lower() == "unknown")
+                ) else period_context
                 period = normalize_period(
-                    raw_period, period_type=period_type, context=period_context
+                    raw_period, period_type=period_type, context=fill_context
                 )
                 dp_id = new_id()
                 # The figure and the figure the candidate normalized itself,
@@ -2674,6 +2911,8 @@ class PipelineOrchestrator:
                     citation["label_residue"] = cand["label_residue"]
                 if cand.get("combined_with"):
                     citation["combined_with"] = list(cand["combined_with"])
+                if cand.get("covers"):
+                    citation["covers"] = cand["covers"]
                 if mis_scaled:
                     issue_flags.append("normalization_disagrees_with_unit")
                 if period is None:
@@ -2763,6 +3002,9 @@ class PipelineOrchestrator:
             logger.info(
                 "derived_quarters job_id=%s drug=%s derived=%d", job.id, job.drug_name, len(derived)
             )
+
+        assembled = self._assemble_split_ownership_quarters(job, rows, by_source_id, selected_sources)
+        rows.extend(assembled)
 
         if not rows and not skip_unresolved:
             reason = (
@@ -2893,14 +3135,23 @@ class PipelineOrchestrator:
 
             support = judgment.get("support_classification")
             status = judgment.get("validation_status") or "needs_review"
+            if "period_unparsed" in (row.issue_flags or []) and status == ValidationStatus.AUTO_PASS.value:
+                status = ValidationStatus.NEEDS_REVIEW.value
+                judgment = {
+                    **judgment,
+                    "validation_status": status,
+                    "issues": [*(judgment.get("issues") or []), "period_unparsed"],
+                }
             if label_flags and status == ValidationStatus.AUTO_PASS.value:
                 # A label the reader could not account for, or a footnote that
                 # made the figure a partial period, is a question for a person.
                 # The judge's reading is kept; the decision is not automated.
-                status = ValidationStatus.NEEDS_REVIEW.value
-                judgment = {**judgment, "validation_status": status,
-                            "issues": [*(judgment.get("issues") or []),
-                                       f"label:{','.join(label_flags)}"]}
+                holding = label_flags_that_hold(row, label_flags)
+                if holding:
+                    status = ValidationStatus.NEEDS_REVIEW.value
+                    judgment = {**judgment, "validation_status": status,
+                                "issues": [*(judgment.get("issues") or []),
+                                           f"label:{','.join(holding)}"]}
             enrichment: dict[str, Any] = {}
             if (
                 settings.enable_llm_search
@@ -3049,7 +3300,8 @@ class PipelineOrchestrator:
                 # part of the quarter it covers - and a quote cannot settle
                 # that, so a row demoted for one was promoted straight back
                 # here and published as this product's own quarter.
-                and not label_flags
+                # Combined + reported_as is not a hold (see label_flags_that_hold).
+                and not label_flags_that_hold(row, label_flags)
             ):
                 status = ValidationStatus.AUTO_PASS.value
             elif support == "partial":
@@ -3590,10 +3842,12 @@ class PipelineOrchestrator:
                     q = 1
                     y += 1
 
-        # Flushed first: the gaps just added are unresolved quarters too, and
-        # the model's list of missing periods must not record them a second
-        # time.
-        self.db.flush()
+        # Commit before the model call. A flush here used to leave the session
+        # a writer for the whole LLM round-trip; every other job's commit then
+        # waited on the event loop (SQLite admits one writer), health checks
+        # timed out, and the run wedged. The gaps must be durable so the model
+        # sees them and so a concurrent job does not re-insert them.
+        self.db.commit()
         unresolved = self.db.query(UnresolvedQuarterORM).filter_by(job_id=job.id).all()
         existing_unresolved = {u.period for u in unresolved}
         result = await self.llm.completeness(

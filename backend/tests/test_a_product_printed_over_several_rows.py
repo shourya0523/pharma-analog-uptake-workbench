@@ -62,7 +62,7 @@ def _schedule():
 
 
 def _read(product, tables=None):
-    cands, _findings, skipped = extract_revenue_candidates(
+    cands, _findings, skipped, _pending = extract_revenue_candidates(
         tables or [_schedule()], product=product, context="Johnson & Johnson"
     )
     return {str(c["period"]): c["value_normalized_usd_millions"] for c in cands}, skipped
