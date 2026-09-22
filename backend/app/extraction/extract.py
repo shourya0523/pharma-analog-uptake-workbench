@@ -30,6 +30,7 @@ from app.parsing.labels import (
     FLAG_FAMILY_INCLUDES,
     FLAG_NO_SALES,
     FLAG_PARTIAL,
+    FLAG_TOTAL,
     QUESTION_FLAGS,
     LabelReading,
     NoteReading,
@@ -40,6 +41,12 @@ from app.parsing.labels import (
     read_label,
 )
 from app.parsing.tables import clean_label
+
+
+def _formulation_of(reading: LabelReading) -> str | None:
+    """Dosage-form stamp on a label reading, if any."""
+    return reading.formulation or None
+
 
 # A change column is within this many percentage points of the computed change.
 _PERCENT_TOLERANCE = 0.6
@@ -172,6 +179,7 @@ class ExtractedValue:
     combined_with: tuple[str, ...] = ()
     residue: str = ""
     flags: tuple[str, ...] = ()
+    formulation: str | None = None
 
     def as_dict(self) -> dict[str, Any]:
         return {
@@ -188,6 +196,7 @@ class ExtractedValue:
             "combined_with": list(self.combined_with),
             "residue": self.residue,
             "flags": list(self.flags),
+            "formulation": self.formulation,
         }
 
 
@@ -475,17 +484,34 @@ def _resolve_matches(
     if len(wholes) == 1:
         published.append(publish(wholes[0]))
     elif wholes:
-        # The whole product printed more than once: one of them is the total
-        # the others add to, or the table has said the same thing twice.
-        total = _total_among(wholes, grouped)
-        if total is not None:
+        # Prefer a nontotal whole over a Total rollup when both name the
+        # product cleanly: product sales beside a product+royalty Total.
+        # Formulation slices lose to a brand total (see _formulation_of).
+        nontotals = [m for m in wholes if not m[3].is_total]
+        brand_wholes = [m for m in wholes if not _formulation_of(m[3])]
+        formulation_wholes = [m for m in wholes if _formulation_of(m[3])]
+        if len(nontotals) == 1 and not _formulation_of(nontotals[0][3]):
+            published.append(publish(nontotals[0]))
+        elif formulation_wholes and len(brand_wholes) == 1:
+            published.append(publish(brand_wholes[0]))
+        elif formulation_wholes and brand_wholes:
+            total = _total_among(brand_wholes, grouped) or next(
+                (m for m in brand_wholes if m[3].is_total), brand_wholes[0]
+            )
             published.append(publish(total, min(quote_from.get(m[0], m[0]) for m in wholes)))
         else:
-            values = [tuple(sorted(grouped(m[2]).items())) for m in wholes]
-            if all(v == values[0] for v in values):
-                published.append(publish(wholes[0]))
+            # The whole product printed more than once: one of them is the
+            # total the others add to, or the table has said the same thing
+            # twice.
+            total = _total_among(wholes, grouped)
+            if total is not None:
+                published.append(publish(total, min(quote_from.get(m[0], m[0]) for m in wholes)))
             else:
-                refusal = ", ".join(m[1] for m in wholes) + ":several_lines_no_total"
+                values = [tuple(sorted(grouped(m[2]).items())) for m in wholes]
+                if all(v == values[0] for v in values):
+                    published.append(publish(wholes[0]))
+                else:
+                    refusal = ", ".join(m[1] for m in wholes) + ":several_lines_no_total"
     elif regions:
         total = _total_among(regions, grouped)
         if total is not None:
@@ -738,9 +764,24 @@ def _read_table(
             section = (position, label)
             continue
         reading, start = read(label), position
+        # A section heading that names a non-revenue metric owns the rows
+        # beneath it. A bare product name under "Program expenses" is that
+        # program's cost line, not product revenue - even when the same P&L
+        # also prints a Total revenue row that makes the table look like a
+        # revenue schedule overall.
+        if section and (section_metric := names_a_non_revenue_metric(section[1])):
+            skipped.append(f"{clean_label(label)}:not_revenue_section:{section_metric}")
+            continue
         if not reading.names_product and section:
             reading, start = read(f"{section[1]} {label}"), section[0]
         if not reading.names_product:
+            continue
+        # Merged label can still name a cost/expense even when the section
+        # alone did not (e.g. "Calderon: cost of sales").
+        if names_a_non_revenue_metric(reading.label):
+            skipped.append(
+                f"{reading.label}:not_revenue:{names_a_non_revenue_metric(reading.label)}"
+            )
             continue
         flags: list[str] = list(reading.flags)
         combined = list(reading.combined_with)
@@ -776,6 +817,7 @@ def _read_table(
                 label=reading.label, matched=reading.matched, scope=reading.scope,
                 is_total=reading.is_total, combined_with=tuple(combined),
                 residue=reading.residue, marks=reading.marks, flags=reading.flags,
+                formulation=reading.formulation,
             )
         assigned, reason = read_row(row, cells)
         if assigned is None:
@@ -796,6 +838,7 @@ def _read_table(
                     scope=None if column_scope == "Worldwide" else column_scope,
                     is_total=reading.is_total, combined_with=reading.combined_with,
                     residue=reading.residue, marks=reading.marks, flags=reading.flags,
+                    formulation=reading.formulation,
                 )
             matches.append((position, reading.label, part, scoped_reading, tuple(flags)))
 
@@ -836,7 +879,9 @@ def _read_table(
                 if f != FLAG_PARTIAL and (f != FLAG_COMBINED or combined_with)
             ) + tuple(
                 FLAG_PARTIAL for _ in [1] if any(FLAG_PARTIAL in r.flags for _, _, r in about)
-            ) + ((FLAG_NO_SALES,) if says_no_sales else ())
+            ) + ((FLAG_NO_SALES,) if says_no_sales else ()) + (
+                (FLAG_TOTAL,) if reading.is_total else ()
+            )
             # Every note the label's marks cite, not only those a reading of
             # the note placed in this figure's period: the note is the filer's
             # own words about the row, and a note that turns out to be about
@@ -860,6 +905,7 @@ def _read_table(
                     combined_with=combined_with,
                     residue=reading.residue,
                     flags=value_flags,
+                    formulation=reading.formulation,
                 )
             )
 

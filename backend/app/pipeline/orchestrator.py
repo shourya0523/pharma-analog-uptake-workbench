@@ -841,6 +841,14 @@ class PipelineOrchestrator:
             stored = json.loads(row.value or "{}")
         except json.JSONDecodeError:
             return None
+        # Match aliases are brand/generic/llm spellings only. Older payloads
+        # folded parents and formulations into ``merged``; rebuild from the
+        # product list so a reused expansion does not reintroduce them.
+        aliases = stored.get("aliases")
+        if isinstance(aliases, list) and aliases:
+            return merge_aliases(
+                job.drug_name, job.generic_name, llm_aliases=aliases,
+            )
         merged = stored.get("merged")
         if not isinstance(merged, list) or not merged:
             return None
@@ -2442,6 +2450,7 @@ class PipelineOrchestrator:
                 generic=job.generic_name,
                 extra_aliases=extra,
                 peer_names=peers,
+                tables=doc.tables,
             )
             dropped_total += len(table_dropped)
             kept = list(table_rows)
@@ -2449,12 +2458,17 @@ class PipelineOrchestrator:
             # Which quarters of this filing already have a deterministic
             # answer. A period in here is not put to the model, and a model row
             # for one is not merged: it is the losing side of a conflict that
-            # has already been decided.
+            # has already been decided. Negative table rows (net loss lines
+            # that matched a parent-company alias) do not count: treating them
+            # as answers skipped the LLM on the filing that held the real
+            # product revenue.
             answered = set(tagged_periods.get(str(src.source_id), set()))
             answered.update(
                 str(row.get("period"))
                 for row in table_rows
                 if row.get("value_reported") is not None
+                and float(row["value_reported"]) > 0
+                and "label_not_understood" not in (row.get("label_flags") or [])
             )
 
             llm_text, evidence_meta = build_revenue_llm_text(
@@ -2556,6 +2570,7 @@ class PipelineOrchestrator:
                 extra_aliases=extra,
                 source_text=span_corpus,
                 peer_names=peers,
+                tables=getattr(doc, "tables", None) if doc else None,
             )
             dropped = list(llm_dropped) + list(dropped)
             dropped_total += len(dropped)
@@ -2816,6 +2831,13 @@ class PipelineOrchestrator:
                 "formulation": row.formulation,
                 "extraction_method": row.extraction_method,
                 "source_type": (row.citation_json or {}).get("source_type"),
+                # Tagged facts carry the member here, not in the citation
+                # string. Without it the hard veto treats the axis name as a
+                # missing brand and holds every ProductMember read.
+                "xbrl_member": (row.citation_json or {}).get("xbrl_member"),
+                "product_mentioned_in_quote": (
+                    True if "extracted_from_xbrl" in (row.issue_flags or []) else None
+                ),
                 "label_flags": label_flags,
                 "label_residue": residue,
             }
@@ -2898,7 +2920,11 @@ class PipelineOrchestrator:
                     status = judgment.get("validation_status") or status
                     enrichment = merge_enrichment_dicts(search_judgment.get("enrichment") or {})
                     row.issue_flags = list(set((row.issue_flags or []) + ["llm_search_validated"]))
-                    if search_judgment.get("search_corroborated"):
+                    hard_vetoed = any(
+                        str(i).startswith("hard_veto:")
+                        for i in (search_judgment.get("issues") or [])
+                    )
+                    if search_judgment.get("search_corroborated") and not hard_vetoed:
                         row.issue_flags = list(set((row.issue_flags or []) + ["search_corroborated"]))
                     if (row.citation_json or {}).get("source_type") == SourceType.LLM_SEARCH.value:
                         status = ValidationStatus.NEEDS_REVIEW.value
@@ -2930,7 +2956,25 @@ class PipelineOrchestrator:
                 enrichment,
                 judgment.get("enrichment") if isinstance(judgment.get("enrichment"), dict) else None,
             )
-            if enrichment:
+            # A tagged fact that already carries a deterministic quote check
+            # must not have its confidence capped by geography/route guesses:
+            # enrichment then held rows the judge had already supported.
+            # Same for table-fingerprint / deterministic product-quote passes.
+            deterministic_supported = (
+                (
+                    row.extraction_method == "xbrl_fact"
+                    and (
+                        "deterministic:product_quote_value_ok" in (row.issue_flags or [])
+                        or "extracted_from_xbrl" in (row.issue_flags or [])
+                    )
+                )
+                or (
+                    "deterministic:product_quote_value_ok" in (row.issue_flags or [])
+                    and row.extraction_method
+                    in {"table_fingerprint", "prose_sentence", "xbrl_fact"}
+                )
+            )
+            if enrichment and not deterministic_supported:
                 snapshot = {
                     "period_type": row.period_type,
                     "revenue_scope": row.revenue_scope,
@@ -3075,6 +3119,10 @@ class PipelineOrchestrator:
                 row.period_type or "",
                 _scope_key(row.revenue_scope),
                 row.formulation or "",
+                # US beside worldwide is two series, not one conflict. Geography
+                # was stamped later for series selection and never asked here,
+                # so a regional column fought the product total and both were held.
+                normalize_geography(row.geography) or "",
             )
             by_key.setdefault(key, []).append(row)
         ranking = claim_ranking(self.db, job)
@@ -3095,6 +3143,7 @@ class PipelineOrchestrator:
                         "value_reported": r.value_reported,
                         "revenue_scope": r.revenue_scope,
                         "formulation": r.formulation,
+                        "geography": r.geography,
                         "confidence_score": r.confidence_score,
                         "source_quote": (r.source_quote or "")[:240],
                         "source_type": (r.citation_json or {}).get("source_type"),
@@ -3138,6 +3187,40 @@ class PipelineOrchestrator:
                 for cid in ids:
                     if cid != wid:
                         losers.add(cid)
+
+        # The model may not publish a weaker claim over a stronger one that
+        # disagrees with it. A reply that names prose ($16) over a tagged fact
+        # ($330) is cleared so ranking settles. When the readings agree, leave
+        # the settlement alone so the corroborator path can promote or carry
+        # notes without wiping the model's pick.
+        for group in by_key.values():
+            if len(group) < 2:
+                continue
+            best = min(claim_tier(r) for r in group)
+            promoted = [
+                r for r in group
+                if r.id in winners and claim_tier(r) > best and _publishes(r)
+            ]
+            if not promoted:
+                continue
+            stronger = [r for r in group if claim_tier(r) == best]
+            # Restatements of one quarter (470 vs 483) stay with the model's
+            # pick. A nonsense figure named over a tagged fact (16 vs 330) is
+            # cleared so ranking settles.
+            fights = any(
+                p.value_normalized_usd_millions is not None
+                and s.value_normalized_usd_millions is not None
+                and abs(float(p.value_normalized_usd_millions)
+                        - float(s.value_normalized_usd_millions))
+                / max(abs(float(s.value_normalized_usd_millions)), 1.0) > 0.5
+                for p in promoted
+                for s in stronger
+            )
+            if not fights:
+                continue
+            for r in group:
+                winners.discard(r.id)
+                losers.discard(r.id)
 
         # Fallback: source-priority within groups when LLM left them unmarked
         for group in by_key.values():
@@ -3189,12 +3272,11 @@ class PipelineOrchestrator:
         winners -= contested
         losers |= contested
 
-        # A filing that contradicts itself publishes nothing for the period.
-        # A fact the filer tagged and a figure the same filing prints, for
-        # one period, disagreeing beyond what the two declared: neither is
-        # the answer, whatever tier each sits on, since the filing is the
-        # only witness and it has said two things. Both are held, and the
-        # flag names the filing rather than the stronger claim.
+        # A filing that prints two disagreeing figures for one period: hold the
+        # weaker claim, keep the stronger. Equal-tier disagreement still holds
+        # both (the filing is then an equal-strength contradiction). Holding
+        # the tagged fact whenever a bad table row disagreed left the quarter
+        # empty even when the instance was unambiguous.
         self_contradicting: set[str] = set()
         for group in by_key.values():
             by_accession: dict[str, list[DatapointORM]] = {}
@@ -3205,7 +3287,14 @@ class PipelineOrchestrator:
             for claims in by_accession.values():
                 for index, first in enumerate(claims):
                     for second in claims[index + 1 :]:
-                        if not _agrees_within_declared_precision(first, second):
+                        if _agrees_within_declared_precision(first, second):
+                            continue
+                        tier_first, tier_second = claim_tier(first), claim_tier(second)
+                        if tier_first < tier_second:
+                            self_contradicting.add(second.id)
+                        elif tier_second < tier_first:
+                            self_contradicting.add(first.id)
+                        else:
                             self_contradicting.update({first.id, second.id})
         winners -= self_contradicting
         losers |= self_contradicting
@@ -3271,6 +3360,14 @@ class PipelineOrchestrator:
                     agreeing = [o for o in agreeing if o.id != instead.id]
                     winner = instead
             for other in agreeing:
+                # A hard-vetoed reading lost the group; it is not corroboration
+                # of the figure that published. Partial-period notes still
+                # corroborate (and carry their note onto the winner).
+                if any(
+                    str(flag).startswith("hard_veto:")
+                    for flag in (other.issue_flags or [])
+                ):
+                    continue
                 corroborating.add(other.id)
                 cited = list((winner.citation_json or {}).get("corroborated_by") or [])
                 cited.append({

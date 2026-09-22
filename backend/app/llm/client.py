@@ -12,7 +12,7 @@ import httpx
 import yaml
 
 from app.config import get_settings
-from app.domain.claims import stated_text
+from app.domain.claims import stated_labels, stated_text
 from app.extraction.prose import periods_named_in, spans_named_in
 from app.llm.grounding import (
     apply_structured_field_gates,
@@ -33,6 +33,7 @@ from app.parsing.evidence import (
 )
 from app.parsing.periods import MONTHS_TO_PERIOD_TYPE, period_key
 from app.quality.candidate_filters import (
+    is_generic_product_revenue_label,
     quote_mentions_other_brand,
     quote_mentions_product,
 )
@@ -517,7 +518,7 @@ class LLMModules:
         """Pick among harvested money loci. None when harvest is empty (caller chats)."""
         loci = merge_loci(
             harvest_table_loci(tables or [], product=product),
-            harvest_amount_loci(text, product=product),
+            harvest_amount_loci(text, product=product, tables=tables or []),
         )
         if not loci:
             return None
@@ -1349,10 +1350,32 @@ def apply_judge_hard_vetoes(
     # read that sentence rather than the block around it.
     value = candidate.get("value_reported")
     carrying = sentence_carrying(q, value)
+    method = stated_text(candidate.get("extraction_method"))
+    member = stated_text(candidate.get("xbrl_member"))
+    tagged_ok = method == "xbrl_fact" and (
+        bool(member) or candidate.get("product_mentioned_in_quote") is True
+    )
+    peers = list(peer_names) if peer_names is not None else None
+    local = candidate.get("_schedule_local_peers")
+    sole_peers = list(local) if local is not None else peers
+    sole_generic = (
+        sole_peers is not None
+        and len(sole_peers) == 0
+        and is_generic_product_revenue_label(q)
+    )
+    from_table = (
+        candidate.get("_from_table")
+        or method in {"table_fingerprint", "prose_sentence"}
+        or "extracted_from_table" in stated_labels(candidate.get("issue_flags") or [])
+        or candidate.get("extraction_method") == "table_fingerprint"
+    )
     if (
         carrying is not None
         and len(sentences(q)) > 1
         and not quote_mentions_product(carrying, product, generic, extra_aliases=extra_aliases)
+        and not tagged_ok
+        and not sole_generic
+        and not from_table
     ):
         issues.append("hard_veto:value_and_product_in_different_sentences")
         veto = True
@@ -1386,10 +1409,15 @@ def apply_judge_hard_vetoes(
         issues.append("hard_veto:milestone_or_license_revenue")
         veto = True
     if not mentions and (candidate.get("revenue_scope") or "") not in {"Company total", ""}:
-        aliases = product_aliases(product, generic, extra=extra_aliases)
-        if aliases:
-            issues.append("hard_veto:product_missing_from_quote")
-            veto = True
+        # A tagged fact whose member already resolved to the product does not
+        # need the brand spelled in the citation string. A sole-product filer's
+        # bare "Product revenue, net" line is the same: the document named no
+        # sibling brand, so the line is ours.
+        if not tagged_ok and not sole_generic:
+            aliases = product_aliases(product, generic, extra=extra_aliases)
+            if aliases:
+                issues.append("hard_veto:product_missing_from_quote")
+                veto = True
 
     if veto:
         judgment = {
@@ -1397,6 +1425,10 @@ def apply_judge_hard_vetoes(
             "support_classification": "misclassified",
             "validation_status": "needs_review",
             "issues": issues,
+            # A vetoed quote is not corroboration. Clearing the flag stops
+            # milestone / net-loss / non-revenue rows from carrying a
+            # search_corroborated badge the hard veto already rejected.
+            "search_corroborated": False,
         }
     return judgment
 

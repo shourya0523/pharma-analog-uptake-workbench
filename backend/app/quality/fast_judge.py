@@ -5,7 +5,7 @@ from typing import Any
 
 from app.domain.claims import stated_labels, stated_text
 from app.llm.client import apply_judge_hard_vetoes, names_a_year_to_date_span
-from app.quality.candidate_filters import quote_mentions_product
+from app.quality.candidate_filters import is_generic_product_revenue_label, quote_mentions_product
 from app.quality.checks import quote_contains_value
 
 
@@ -78,8 +78,21 @@ def try_deterministic_judgment(
 
     mentions = quote_mentions_product(quote, product, generic, extra_aliases=extra_aliases)
     has_value = quote_contains_value(quote, value if value is not None else None)
+    method = stated_text(candidate.get("extraction_method"))
+    tagged_ok = method == "xbrl_fact" and (
+        bool(stated_text(candidate.get("xbrl_member")))
+        or candidate.get("product_mentioned_in_quote") is True
+    )
+    peers = list(peer_names) if peer_names is not None else None
+    local = candidate.get("_schedule_local_peers")
+    sole_peers = list(local) if local is not None else peers
+    sole_generic = (
+        sole_peers is not None
+        and len(sole_peers) == 0
+        and is_generic_product_revenue_label(quote)
+    )
     if (
-        mentions
+        (mentions or tagged_ok or sole_generic)
         and has_value
         and period_type in {"quarterly", "annual"}
         and not names_a_year_to_date_span(quote)

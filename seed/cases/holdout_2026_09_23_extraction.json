@@ -1,0 +1,178 @@
+{
+  "note": "Held-out set drawn 2026-09-23 for scoring the extraction/judging fixes (period labeling, sole-product keep, mixed P&L skip, geography+tier reconcile). It may score that change and nothing else. Issuers here are absent from gold, seed/holdout*, seed/cases/holdout_2026_09*.json, and holdout_members — derived through tests/answer_keys.spent_issuers rather than checked against a list. What spends it: the first scored eval of those extraction/judging changes. After that it is an oracle like the rest. Shapes covered: sole-product Product revenue net; multi-geography US vs worldwide; mixed P&L (product revenue beside cost of sales); press-release Second-Quarter heading. Both answers are represented: published product quarters and a pre-commercial refusal.",
+  "cases": [
+    {
+      "drug_name": "Ojemda",
+      "generic_name": "tovorafenib",
+      "manufacturer": "Day One Biopharmaceuticals Inc",
+      "ticker": "DAWN",
+      "options": {
+        "earnings_since": "2025-01-01",
+        "earnings_until": "2025-05-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "single-product filer Product revenue, net",
+        "license revenue beside product revenue"
+      ],
+      "source": "The 10-Q for the three months ended March 31, 2025 prints Product revenue, net for OJEMDA and a separate License revenue line.",
+      "traps": [
+        {
+          "accession": "0000950170-25-064436",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1845337/000095017025064436/dawn-20250331.htm",
+          "source_quote": "License revenue | $ | 258 | $ | —",
+          "why": "license revenue is not OJEMDA product sales"
+        }
+      ],
+      "expect": [
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": 30.503,
+          "accession": "0000950170-25-064436",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1845337/000095017025064436/dawn-20250331.htm",
+          "source_quote": "Product revenue, net | $ | 30,503 | $ | —",
+          "sources": [
+            {
+              "accession": "0000950170-25-064436",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1845337/000095017025064436/dawn-20250331.htm",
+              "source_quote": "Product revenue, net | $ | 30,503 | $ | —"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "drug_name": "Kimmtrak",
+      "generic_name": "tebentafusp-tebn",
+      "manufacturer": "Immunocore Holdings plc",
+      "ticker": "IMCR",
+      "options": {
+        "earnings_since": "2025-04-01",
+        "earnings_until": "2025-08-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "product revenue by geography United States Europe International",
+        "worldwide total beside regional columns"
+      ],
+      "source": "The 10-Q breaks KIMMTRAK revenue from sale of therapies into United States, Europe and International for the three months ended June 30, 2025.",
+      "traps": [
+        {
+          "accession": "0001671927-25-000014",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1671927/000167192725000014/imcr-20250630.htm",
+          "source_quote": "United States | $ | 64,087 | $ | 55,606",
+          "why": "the United States column is not the worldwide product total; publishing 64.087 as the product's quarter understates Europe and International"
+        }
+      ],
+      "expect": [
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": 97.964,
+          "accession": "0001671927-25-000014",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1671927/000167192725000014/imcr-20250630.htm",
+          "source_quote": "Revenue from sale of therapies, net | $ | 97,964 | $ | 75,347",
+          "sources": [
+            {
+              "accession": "0001671927-25-000014",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1671927/000167192725000014/imcr-20250630.htm",
+              "source_quote": "Revenue from sale of therapies, net | $ | 97,964 | $ | 75,347"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "drug_name": "Zoryve",
+      "generic_name": "roflumilast",
+      "manufacturer": "Arcutis Biotherapeutics Inc",
+      "ticker": "ARQT",
+      "options": {
+        "earnings_since": "2025-04-01",
+        "earnings_until": "2025-08-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "press-release Second-Quarter heading beside annual footer",
+        "mixed P&L Product revenue, net beside Cost of sales",
+        "formulation breakout cream and foam under one brand total"
+      ],
+      "source": "The Q2 2025 earnings release and 10-Q print Product revenue, net for ZORYVE and Cost of sales on the same statement; the release heads Second-Quarter results.",
+      "traps": [
+        {
+          "accession": "0001787306-25-000124",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1787306/000178730625000124/arqt-20250630.htm",
+          "source_quote": "Cost of sales | 7,492 | 3,464 | 16,322 | 6,720",
+          "why": "cost of sales is not product revenue"
+        },
+        {
+          "accession": "0001787306-25-000124",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1787306/000178730625000124/arqt-20250630.htm",
+          "source_quote": "Product revenue, net | $ | 145,350 | $ | 52,427",
+          "why": "the six-month column is not a quarter; publishing 145.350 as 2025Q2 would double-count"
+        }
+      ],
+      "expect": [
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": 81.504,
+          "accession": "0001787306-25-000124",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1787306/000178730625000124/arqt-20250630.htm",
+          "source_quote": "Product revenue, net | $ | 81,504 | $ | 30,858 | $ | 145,350 | $ | 52,427",
+          "sources": [
+            {
+              "accession": "0001787306-25-000124",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1787306/000178730625000124/arqt-20250630.htm",
+              "source_quote": "Product revenue, net | $ | 81,504 | $ | 30,858 | $ | 145,350 | $ | 52,427"
+            },
+            {
+              "accession": "0001787306-25-000122",
+              "form": "8-K",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1787306/000178730625000122/pressreleaseex991q22025.htm",
+              "source_quote": "Q2 2025 net product revenue for ZORYVE® (roflumilast) was $81.5 million"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "drug_name": "Aficamten",
+      "generic_name": "aficamten",
+      "manufacturer": "Cytokinetics Inc",
+      "ticker": "CYTK",
+      "options": {
+        "earnings_since": "2025-07-01",
+        "earnings_until": "2025-11-15",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "pre-commercial collaboration revenue only",
+        "refusal before product sales"
+      ],
+      "source": "Through Q3 2025 Cytokinetics reports collaboration and license revenue only; aficamten had not yet begun commercial sales.",
+      "traps": [
+        {
+          "accession": "0001193125-25-267059",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1061983/000119312525267059/d906978d10q.htm",
+          "source_quote": "Collaboration revenues | $ | 1,936 | $ | 463",
+          "why": "collaboration revenue is not aficamten product sales"
+        }
+      ],
+      "expect": []
+    }
+  ]
+}

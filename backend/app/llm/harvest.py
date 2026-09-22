@@ -9,7 +9,8 @@ from __future__ import annotations
 import re
 from typing import Any
 
-from app.parsing.evidence import MONEY_RE, REVENUE_HINT_RE, product_aliases
+from app.parsing.evidence import MONEY_RE, NON_PRODUCT_REVENUE_RE, REVENUE_HINT_RE, product_aliases
+from app.parsing.tables import product_revenue_schedules
 
 # Max Choice options Jev accepts; leave room for the none hatch.
 MAX_LOCI = 254
@@ -33,6 +34,52 @@ _PERIOD_HINT_RE = re.compile(
 )
 
 
+def _prose_windows_from_schedules(
+    text: str,
+    schedules: list[list[list[str]]],
+) -> str:
+    """Prose windows anchored to product-revenue schedule vocabulary.
+
+    When schedule labels appear in the document text, keep the sentence that
+    carries each hit (not a wide character window that pulls in the next
+    collaboration paragraph). Falls back to revenue-hint sentences when no
+    schedule label appears in the prose.
+    """
+    if not text.strip():
+        return ""
+    sentences = [s.strip() for s in re.split(r"(?<=[.!?])\s+", text) if s.strip()]
+    labels: list[str] = []
+    for table in schedules:
+        for row in table:
+            label = (row[0] if row else "") or ""
+            if label.strip() and len(label.strip()) >= 4:
+                labels.append(label.strip())
+    kept: list[str] = []
+    seen: set[str] = set()
+    for sentence in sentences:
+        if NON_PRODUCT_REVENUE_RE.search(sentence):
+            continue
+        hit = any(re.search(re.escape(label), sentence, re.IGNORECASE) for label in labels)
+        if not hit and labels:
+            continue
+        if not hit and not REVENUE_HINT_RE.search(sentence):
+            continue
+        if sentence in seen:
+            continue
+        seen.add(sentence)
+        kept.append(sentence)
+    if kept:
+        return "\n\n".join(kept)
+    # Labels never appeared in prose: revenue-hint sentences only.
+    for sentence in sentences:
+        if NON_PRODUCT_REVENUE_RE.search(sentence):
+            continue
+        if REVENUE_HINT_RE.search(sentence) and sentence not in seen:
+            seen.add(sentence)
+            kept.append(sentence)
+    return "\n\n".join(kept)
+
+
 def harvest_amount_loci(
     text: str,
     *,
@@ -40,12 +87,19 @@ def harvest_amount_loci(
     generic: str | None = None,
     extra_aliases: list[str] | None = None,
     max_loci: int = MAX_LOCI,
+    tables: list[list[list[str]]] | None = None,
+    captions: list[str] | None = None,
 ) -> list[dict[str, Any]]:
     """Money spans near a product alias, each a closed option for Jev Choice.
 
     A locus carries the verbatim quote the amount sat in. Downstream copies
-    that quote; nothing retypes the digits.
+    that quote; nothing retypes the digits. When tables are supplied, prose is
+    narrowed to product-revenue schedule windows so collaboration / R&D cash
+    far from those schedules is not offered to Jev.
     """
+    if tables is not None:
+        schedules = product_revenue_schedules(tables, captions=captions)
+        text = _prose_windows_from_schedules(text, schedules) if schedules else text
     if not text.strip():
         return []
     aliases = product_aliases(product, generic, extra=extra_aliases)
@@ -73,6 +127,8 @@ def harvest_amount_loci(
             # Jev can refuse. Skip pure noise far from either signal.
             if not REVENUE_HINT_RE.search(window):
                 continue
+        if NON_PRODUCT_REVENUE_RE.search(window):
+            continue
         period_hints = [m.group(0).strip() for m in _PERIOD_HINT_RE.finditer(window)]
         loci.append(
             {
@@ -96,21 +152,32 @@ def harvest_table_loci(
     generic: str | None = None,
     extra_aliases: list[str] | None = None,
     max_loci: int = MAX_LOCI,
+    captions: list[str] | None = None,
 ) -> list[dict[str, Any]]:
-    """Amount cells from parsed tables that mention the product or revenue."""
+    """Amount cells from product-revenue schedules only."""
+    schedules = product_revenue_schedules(tables, captions=captions)
+    if not schedules:
+        # No derived product-revenue schedule: keep prior behaviour so a filing
+        # whose captions omit revenue words is not silently emptied.
+        schedules = list(tables or [])
     aliases = [a.lower() for a in product_aliases(product, generic, extra=extra_aliases)]
     loci: list[dict[str, Any]] = []
     seen: set[str] = set()
-    for ti, table in enumerate(tables or []):
+    for ti, table in enumerate(schedules):
         flat = " | ".join(" ".join(cell for cell in row) for row in table)
         if aliases and not any(a in flat.lower() for a in aliases) and not MONEY_RE.search(flat):
             continue
         headers = _header_row(table)
         for ri, row in enumerate(table[:60]):
             row_label = (row[0] if row else "") or ""
+            if NON_PRODUCT_REVENUE_RE.search(row_label):
+                continue
             if aliases and not any(a in row_label.lower() for a in aliases):
-                # Still allow money cells when the table itself names the product.
-                if not any(a in flat.lower() for a in aliases):
+                # Still allow money cells when the table itself names the product
+                # or is a bare product-revenue schedule (brand may be absent).
+                if not any(a in flat.lower() for a in aliases) and not REVENUE_HINT_RE.search(
+                    flat
+                ):
                     continue
             for ci, cell in enumerate(row[1:] if len(row) > 1 else row, start=1):
                 amounts = MONEY_RE.findall(cell or "")

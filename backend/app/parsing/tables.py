@@ -16,9 +16,12 @@ from __future__ import annotations
 import re
 from collections.abc import Iterable
 
-from app.parsing.evidence import product_aliases
+from app.parsing.evidence import REVENUE_HINT_RE, product_aliases
 from app.parsing.periods import MONTH_WORDS, MONTHS, fiscal_period_end
-from app.quality.candidate_filters import names_a_competing_product
+from app.quality.candidate_filters import (
+    is_generic_product_revenue_label,
+    names_a_competing_product,
+)
 
 _PERIOD_HEADER_RE = re.compile(
     r"\b(three|six|nine|twelve)\s+months?\s+ended\s+([A-Za-z]{3,9})\.?\s*(\d{1,2})?", re.IGNORECASE
@@ -123,6 +126,67 @@ def sibling_row_labels(
         if any(_matches_product(label, aliases, product, labels) for label in labels):
             found.extend(labels)
     return found
+
+
+def is_product_revenue_schedule(
+    rows: list[list[str]],
+    *,
+    caption: str = "",
+) -> bool:
+    """Whether a period schedule's labels/caption name product revenue.
+
+    Derived from the table's own vocabulary (REVENUE_HINT_RE and bare product-
+    revenue lines), not from a hand list of Item 8 / MD&A titles.
+    """
+    if not _period_header(rows) or not _year_columns(rows):
+        return False
+    blob = " ".join([caption, *(_row_labels(rows))])
+    if REVENUE_HINT_RE.search(blob):
+        return True
+    return any(is_generic_product_revenue_label(label) for label in _row_labels(rows))
+
+
+def product_revenue_schedules(
+    tables: Iterable[list[list[str]]] | None,
+    *,
+    captions: Iterable[str] | None = None,
+) -> list[list[list[str]]]:
+    """Period schedules whose labels or caption declare product revenue."""
+    caps = list(captions or ())
+    out: list[list[list[str]]] = []
+    for index, rows in enumerate(tables or ()):
+        caption = caps[index] if index < len(caps) else ""
+        if is_product_revenue_schedule(rows, caption=caption):
+            out.append(rows)
+    return out
+
+
+def schedules_for_quote(
+    tables: Iterable[list[list[str]]] | None,
+    *,
+    quote: str,
+    product: str,
+    generic: str | None = None,
+    extra_aliases: Iterable[str] | None = None,
+) -> list[list[list[str]]]:
+    """Schedules that contain the quote's row or a bare product-revenue line.
+
+    Used for sole-generic peer scans so a brand on a different schedule does
+    not block a bare net-product line on the product-sales table.
+    """
+    del product, generic, extra_aliases  # signature kept stable for callers
+    quote_l = (quote or "").lower()
+    out: list[list[list[str]]] = []
+    for rows in tables or ():
+        if not _period_header(rows) or not _year_columns(rows):
+            continue
+        labels = _row_labels(rows)
+        if any(is_generic_product_revenue_label(label) for label in labels):
+            out.append(rows)
+            continue
+        if any(label and len(label) >= 3 and label.lower() in quote_l for label in labels):
+            out.append(rows)
+    return out
 
 
 def _matches_product(

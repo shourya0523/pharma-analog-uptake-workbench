@@ -14,6 +14,24 @@ def test_merge_aliases_includes_llm_names():
     )
     assert any("OPSYNVI" in a for a in merged)
     assert any("macitentan" in a.lower() for a in merged)
+    # Parents and formulations are not match aliases.
+    assert not any("Johnson" in a for a in merged)
+    assert not any("DPI" in a for a in merged)
+
+
+def test_merge_aliases_excludes_parent_and_formulation():
+    """A parent in the match list turns every corporate loss line into product revenue."""
+    merged = merge_aliases(
+        "Calderon",
+        "calderinol",
+        llm_aliases=["Calderon XR"],
+        formulations=["Calderon foam", "Calderon cream"],
+        parent_companies=["Acme Pharma, Inc.", "Acme"],
+    )
+    assert "Calderon XR" in merged
+    assert "Acme" not in merged
+    assert "Inc." not in merged
+    assert not any("foam" in a.lower() for a in merged)
 
 
 def test_filter_uses_extra_aliases():

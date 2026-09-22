@@ -1477,6 +1477,30 @@ def test_a_caption_answers_for_a_schedule_that_prints_no_total():
     assert [v.period for v in published.values] == ["2026Q2", "2025Q2"]
 
 
+def test_a_product_under_program_expenses_is_not_revenue():
+    """A mixed P&L prints Total revenue and then Program expenses / Calderon.
+    The bare product name under the expense section is that program's cost,
+    not product sales - even though a revenue total made the table look like
+    a revenue schedule."""
+    from app.extraction.extract import read_table
+
+    grid: list[list[str | None]] = [
+        ["", "Three Months Ended June 30,", None, "Three Months Ended June 30,", None],
+        ["", "2026", None, "2025", None],
+        ["Product sales, net", "$", "170,382", "$", "6,517"],
+        ["Total revenue", "$", "171,679", "$", "8,837"],
+        ["Program expenses", None, None, None, None],
+        ["Calderon", "$", "19,327", "$", "14,661"],
+        ["NuVessa", "$", "10,777", "$", "8,000"],
+    ]
+    rows = [[cell or "" for cell in row] for row in grid]
+    published = read_table(
+        rows, product="Calderon", grid=grid, context="(in thousands)",
+        products=["Calderon", "NuVessa"],
+    )
+    assert all(v.value_as_reported != 19327.0 for v in published.values)
+    assert "not_revenue_section:expense" in (published.skipped_reason or "")
+
 def test_a_sentence_is_its_own_heading():
     """A sentence has no schedule around it to ask, so it answers for itself:
     a cost of sales stated for the product is not the product's revenue, and a

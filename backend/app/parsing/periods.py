@@ -250,7 +250,9 @@ def _year_near(text: str, end: int) -> int | None:
 _QUARTER_FORMS = (
     re.compile(r"\bQ([1-4])\s*[-/ ]?\s*((?:19|20)\d{2})\b", re.IGNORECASE),
     re.compile(r"\b((?:19|20)\d{2})\s*[-/ ]?\s*Q([1-4])\b", re.IGNORECASE),
-    re.compile(r"\b(first|second|third|fourth)\s+quarter\s+(?:of\s+)?"
+    # Releases hyphenate the heading ("Second-Quarter 2025") as often as they
+    # space it; both are one form.
+    re.compile(r"\b(first|second|third|fourth)[-\s]+quarter\s+(?:of\s+)?"
                r"((?:19|20)\d{2})\b", re.IGNORECASE),
     # The quarter number first: "2Q 2024", "2Q24", "1Q'26". A two-digit year
     # is this century's; no filing read this way predates it.
@@ -358,11 +360,12 @@ def detect_period_context(text: str) -> PeriodContext | None:
         # the document's own period is decided below, not here.
         for months in spans:
             counts[(months, month, year)] += 1
+    notation = _quarter_notation(text)
     if not counts:
         # No filing states its period both ways, so this is a different
         # convention rather than a second opinion, and it only ever runs where
         # there was no answer at all.
-        return _quarter_notation(text)
+        return notation
     # The span the document reports is the one it names throughout. A
     # quarterly release names its quarter and its year-to-date span about
     # equally, and is read as the quarter; an annual report names the year on
@@ -383,7 +386,21 @@ def detect_period_context(text: str) -> PeriodContext | None:
     most = max(at_framing.values())
     throughout = [key for key, n in at_framing.items() if n * 2 >= most]
     months, month, year = max(throughout, key=lambda key: (key[2], key[1]))
-    return PeriodContext(months=months, month=month, year=year)
+    phrase = PeriodContext(months=months, month=month, year=year)
+    # A quarterly earnings release often names "Second-Quarter 2025" in the
+    # title and only cites "year ended December 31" in a risk-factor footer.
+    # That single annual phrase used to date the whole document as a year and
+    # pull every bare end-date into Q4. Prefer the quarter notation when the
+    # annual framing is sparse boilerplate; a real 10-K names the year
+    # throughout, so leave those alone.
+    if (
+        phrase.months == 12
+        and notation is not None
+        and notation.months == 3
+        and by_span[12] <= 2
+    ):
+        return notation
+    return phrase
 
 
 # The spans a reporting period is stated in, and what each one is called. A
@@ -651,6 +668,17 @@ def normalize_period(
         if (period_type or "").lower() in QUARTERLY_TYPES and context:
             return f"{year}Q{context.quarter}"
         return str(year)
+
+    # A bare end date ("June 30, 2025") states which quarter it closes. Prefer
+    # that month over the document context: context can be annual boilerplate
+    # from a footer while the figure is for the quarter the date names.
+    if (period_type or "").lower() in QUARTERLY_TYPES:
+        dated = dates_named(label)
+        if dated:
+            stated = dated[0]
+            month, year = fiscal_period_end(stated.month, stated.day, stated.year)
+            year = year if year is not None else stated.year
+            return period_label(year, 3, quarter_of_month(month))
 
     year_match = _ANY_YEAR_RE.search(label)
     if year_match:

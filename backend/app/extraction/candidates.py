@@ -25,7 +25,7 @@ if TYPE_CHECKING:  # a type only; periods.py must not import this module back
 from collections.abc import Iterable
 from typing import Any
 
-from app.extraction.check import Finding, cell_of, run_checks
+from app.extraction.check import Finding, cell_of, prefer_nontotal_readings, run_checks
 from app.extraction.extract import (
     QUESTION_FLAGS,
     names_a_non_revenue_metric,
@@ -33,6 +33,8 @@ from app.extraction.extract import (
 )
 from app.extraction.process import Datapoint, normalize_all
 from app.extraction.prose import read_prose
+from app.parsing.evidence import NON_PRODUCT_REVENUE_RE
+from app.quality.sentences import states_a_change_not_a_level
 
 # Read straight off a declared table, so it carries the confidence the previous
 # table reader used for the same provenance.
@@ -65,12 +67,16 @@ def _scope_of_point(point: Datapoint, product: str) -> tuple[str, str | None, st
     named; a sentence's label is the product itself. A label the reader could
     not account for is published as Unknown, which no deterministic pass
     accepts, so the judge sees it with the residue and a person settles it.
+    A dosage-form residue peeled as formulation is Formulation-specific, not
+    Unknown and not the product-family aggregate.
     """
     if point.fingerprint_signature == "prose":
         scope = _scope_for(point.product_label, product)
         return scope, None, None if scope == "Product family" else point.product_label
     if "label_not_understood" in point.flags:
         return "Unknown", None, None
+    if point.formulation:
+        return "Formulation-specific", None, point.formulation
     if point.scope in _SCOPE_BY_GEOGRAPHY:
         return _SCOPE_BY_GEOGRAPHY[point.scope], None, None
     return "Regional", point.scope, None
@@ -182,9 +188,17 @@ def extract_revenue_candidates(
             # of figure it states, and "cost of sales for Calderon" states a
             # cost as squarely as a cost schedule does.
             and not names_a_non_revenue_metric(value.source_quote)
+            # "increased by $16 million" is how much the figure moved, not the
+            # figure. Drop it here so it never fights a level in reconcile.
+            and not states_a_change_not_a_level(
+                value.source_quote, value.value_as_reported
+            )
+            # Partner / license / royalty cash stated beside the brand is not
+            # product sales. Drop before store so it never reaches the judge.
+            and not NON_PRODUCT_REVENUE_RE.search(value.source_quote)
         ]
 
-    points = normalize_all(values)
+    points = prefer_nontotal_readings(normalize_all(values))
     findings = run_checks(points)
 
     # Datapoints failing a check are held back rather than published; the

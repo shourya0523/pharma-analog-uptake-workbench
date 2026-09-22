@@ -61,6 +61,7 @@ class Datapoint:
     combined_with: tuple[str, ...] = ()
     residue: str = ""
     flags: tuple[str, ...] = ()
+    formulation: str | None = None
 
     def as_dict(self) -> dict[str, Any]:
         return {
@@ -168,6 +169,7 @@ def _label_fields(value: ExtractedValue) -> dict[str, Any]:
         "combined_with": value.combined_with,
         "residue": value.residue,
         "flags": value.flags,
+        "formulation": value.formulation,
     }
 
 

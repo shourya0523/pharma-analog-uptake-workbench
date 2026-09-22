@@ -24,12 +24,20 @@ Two rules keep the answers honest:
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from typing import Any
 
 from app.extraction import elements
-from app.extraction.members import Resolution, load_register, resolve, stored
+from app.extraction.members import (
+    Resolution,
+    is_generic_product_member,
+    load_register,
+    resolve,
+    stored,
+)
 from app.parsing.periods import MONTHS_TO_PERIOD_TYPE
 from app.parsing.xbrl import (
+    PRODUCT_AXES,
     Calculation,
     Fact,
     _product_member,
@@ -65,6 +73,30 @@ def rounding_uncertainty(fact: Fact) -> float | None:
     return unit / 2.0 / 1_000_000.0
 
 
+def _product_axis_members(facts: list[Fact]) -> set[str]:
+    """Every member sitting on a product-or-service axis in this instance."""
+    found: set[str] = set()
+    for fact in facts:
+        for axis, member in fact.members.items():
+            if axis in PRODUCT_AXES or axis.endswith("ProductOrServiceAxis"):
+                found.add(member)
+    return found
+
+
+def _sole_product_axis(facts: list[Fact], peer_names: Iterable[str] | None) -> bool:
+    """Whether this instance's product axis is only the generic ProductMember.
+
+    A document that already lists sibling brands on its tables is not sole
+    even when the instance tags only ProductMember: the printed schedule is
+    the filer's product list. `peer_names is None` means the tables were not
+    scanned, and the axis alone decides.
+    """
+    if peer_names is not None and any(peer_names):
+        return False
+    members = _product_axis_members(facts)
+    return bool(members) and all(is_generic_product_member(m) for m in members)
+
+
 def candidates_from_instance(
     raw: bytes,
     *,
@@ -75,6 +107,7 @@ def candidates_from_instance(
     calculation: Calculation | None = None,
     verdicts: dict[str, bool] | None = None,
     learned: dict[tuple[str, str], Resolution] | None = None,
+    peer_names: Iterable[str] | None = None,
 ) -> tuple[list[dict[str, Any]], list[str]]:
     """(candidates, notes) for one product, from one XBRL instance.
 
@@ -97,6 +130,9 @@ def candidates_from_instance(
     if verdicts is None:
         verdicts = elements.verdicts(elements.load_register())
 
+    all_facts = parse_facts(raw)
+    sole = _sole_product_axis(all_facts, peer_names)
+
     # How the product axis is found. A filer states products on whatever axis
     # its taxonomy gives it, so the axis is not named here - each member is put
     # to the same resolver that decides which product a member means, and the
@@ -106,10 +142,18 @@ def candidates_from_instance(
 
     def names_a_product(member: str) -> bool:
         if member not in placed:
-            placed[member] = resolve(member, known, register, issuer=issuer).resolved
+            if resolve(member, known, register, issuer=issuer).resolved:
+                placed[member] = True
+            elif sole and is_generic_product_member(member):
+                # us-gaap:ProductMember is one issuer's sole product and a
+                # meaningless total for everyone else. With no competing member
+                # on the axis (and no sibling brands on the page), it is ours.
+                placed[member] = True
+            else:
+                placed[member] = False
         return placed[member]
 
-    facts = product_facts(parse_facts(raw), names_a_product=names_a_product,
+    facts = product_facts(all_facts, names_a_product=names_a_product,
                           calculation=calculation, verdicts=verdicts)
     if not facts:
         category = filer_category(raw) or "unknown filer category"
@@ -130,6 +174,18 @@ def candidates_from_instance(
         # spelling, because the bulk extracts write "CalderonXR" where an
         # instance writes "acme:CalderonXRMember".
         resolution = resolve(member, known, register, issuer=issuer)
+        if (
+            not resolution.resolved
+            and sole
+            and is_generic_product_member(member)
+        ):
+            resolution = Resolution(
+                member,
+                product,
+                "sole_product",
+                0.85,
+                "only product-axis member is the generic ProductMember",
+            )
         # Anything the register did not hand back is new: a member it has never
         # seen, or one whose recorded "nothing matched" was about a different
         # product list and has just been superseded by the rules. Worth writing
@@ -137,7 +193,8 @@ def candidates_from_instance(
         # free - but because a decision nobody can see is a decision nobody can
         # correct. This is the row a reviewer overrides.
         if (resolution.resolved and learned is not None
-                and stored(register, issuer, member) is not resolution):
+                and stored(register, issuer, member) is not resolution
+                and resolution.method != "sole_product"):
             learned[(issuer, member)] = resolution
         if not resolution.resolved or resolution.product != product:
             continue

@@ -137,6 +137,20 @@ def test_unusable_labels_return_none():
     assert normalize_period(None) is None
 
 
+def test_a_bare_end_date_names_its_own_quarter_over_annual_context():
+    """The model often reports the column end date alone. Annual boilerplate
+    in the same release must not pull that date into Q4."""
+    annual = PeriodContext(months=12, month=12, year=2024)
+    assert (
+        normalize_period("June 30, 2025", period_type="quarterly", context=annual)
+        == "2025Q2"
+    )
+    assert (
+        normalize_period("June\xa030, 2025", period_type="quarterly", context=annual)
+        == "2025Q2"
+    )
+
+
 # Two headings taken verbatim from earnings exhibits, flattened the way the
 # document parser flattens them. Both used to date the document wrongly.
 SPLIT_HEADING = (

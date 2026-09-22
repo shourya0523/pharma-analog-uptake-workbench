@@ -34,6 +34,7 @@ from dataclasses import dataclass, field
 
 from app.parsing.evidence import SCOPE_PATTERNS
 from app.parsing.periods import dates_named, period_key, period_span, periods_named
+from app.domain.formulations import FORMULATION_SEP, formulation_tokens
 from app.quality.candidate_filters import (
     _AGGREGATE_WORDS,
     _QUALIFIER_WORDS,
@@ -131,6 +132,10 @@ FLAG_NOT_UNDERSTOOD = "label_not_understood"
 FLAG_COMBINED = "combined_line"
 FLAG_PARTIAL = "partial_period"
 FLAG_FAMILY_INCLUDES = "family_line_includes_product"
+# A "Total <product>" rollup line. Carried so a product-sales reading and a
+# total-revenue reading of the same period do not take each other down as
+# conflicting_values: they are different claims, and the nontotal wins.
+FLAG_TOTAL = "is_total"
 
 # The flags that make a row a question about the product rather than an answer
 # for it: the reader published something, but what it published is not the
@@ -162,6 +167,10 @@ class LabelReading:
     residue: str
     marks: tuple[str, ...]
     flags: tuple[str, ...] = field(default_factory=tuple)
+    # Dosage-form token(s) peeled from residue when every leftover word is a
+    # known formulation qualifier. Empty residue + formulation means a
+    # formulation-specific whole, not an unaccounted label.
+    formulation: str | None = None
 
     @property
     def names_product(self) -> bool:
@@ -345,8 +354,14 @@ def read_label(
             residue.extend(bare)
 
     flags: list[str] = []
+    formulation: str | None = None
     if matched is not None and residue:
-        flags.append(FLAG_NOT_UNDERSTOOD)
+        peeled = formulation_tokens(residue)
+        if peeled is not None:
+            formulation = FORMULATION_SEP.join(peeled)
+            residue = []
+        else:
+            flags.append(FLAG_NOT_UNDERSTOOD)
     if matched is not None and combined:
         flags.append(FLAG_COMBINED)
     return LabelReading(
@@ -358,6 +373,7 @@ def read_label(
         residue=" ".join(residue),
         marks=marks,
         flags=tuple(flags),
+        formulation=formulation,
     )
 
 

@@ -27,8 +27,17 @@ TOTAL_REVENUE_RE = re.compile(r"\btotal\s+revenues?\b", re.IGNORECASE)
 # triggered it. This is the vocabulary seen so far, not a closed list; a
 # filer describing the same thing in other words is not caught by it.
 NON_PRODUCT_REVENUE_RE = re.compile(
-    r"\b(milestone|licen[cs]e\s+revenues?|licensing\s+revenues?|upfront\s+payment"
-    r"|cost\s+of\s+(?:product\s+)?(?:sales|goods(?:\s+sold)?|revenues?))\b",
+    r"\b("
+    r"milestone(?:\s+(?:revenues?|payments?))?"
+    r"|licen[cs]e\s+(?:revenues?|fees?)"
+    r"|licensing\s+revenues?"
+    r"|upfront\s+(?:revenues?|payments?|fees?)"
+    r"|collaboration\s+(?:revenues?|income|payments?)"
+    r"|royalt(?:y|ies)"
+    r"|received\s+.{0,40}million\s+in\s+aggregate\s+from"
+    r"|cost\s+of\s+(?:product\s+)?(?:sales|goods(?:\s+sold)?|revenues?)"
+    r"|cogs"
+    r")\b",
     re.IGNORECASE,
 )
 
