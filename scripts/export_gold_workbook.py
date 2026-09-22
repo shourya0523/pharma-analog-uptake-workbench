@@ -562,8 +562,8 @@ la.freeze_panes = la.cell(3, len(A_LEAD) + 1)
 #               Four consecutive, not four calendar quarters of one year: a
 #               product peaking mid-year has its peak split across two
 #               calendar years by a January-to-December window.
-#   consensus - the median of the external peak-sales estimates published for
-#               that product, where any exist.
+#   consensus - the median of the published peak-sales estimates that are
+#               comparable to the series, where any are.
 #
 # Consensus wins only when it is the larger. An estimate below what the
 # product has already sold has been overtaken by the world and says nothing;
@@ -572,10 +572,27 @@ la.freeze_panes = la.cell(3, len(A_LEAD) + 1)
 # wrong - it calls every product mature and reads a growing product as though
 # it were already at its peak.
 #
+# Comparable means two things, and an estimate failing either is set aside on
+# the row rather than dropped quietly:
+#
+#   the same geography - a worldwide estimate over a series reporting one
+#     country makes the denominator wider than the numerator can reach, and
+#     every quarter of that curve reads low for a reason that is not the
+#     product's. The series' geography is the one its own rows state, not a
+#     reading of its scope label: a line can be formulation-specific and
+#     worldwide at once.
+#   a peak - a market-size projection for a horizon year is a different
+#     quantity, and a curve normalized by one is not measuring uptake.
+#
 # A quarter can print above 100%: the benchmark is an average quarter at the
 # peak year, and the strongest quarter of that year is above its own average.
 
 ESTIMATES = REPO / "seed" / "consensus_peak_estimates.csv"
+
+# The one estimate_kind that can serve as a peak. Another kind may be worth
+# recording - the file keeps what was checked, including what was rejected -
+# but it cannot be the denominator of an uptake curve.
+PEAK_ESTIMATE = "peak_annual_sales"
 
 
 def load_consensus_estimates():
@@ -583,11 +600,12 @@ def load_consensus_estimates():
 
     A written snapshot of what has been published elsewhere - news, market
     research, analyst notes, litigation filings - transcribed one row per
-    estimate with the URL it came from. Nothing in this repository produces
-    it and nothing at run time can, which is why it is a file rather than a
-    derivation; it goes stale when an estimate is published or revised, or
-    when a product enters the dataset that has none. Values are read as
-    written: this reads the file, never the source behind it.
+    estimate with the URL it came from and what checking it against that URL
+    showed. Nothing in this repository produces it and nothing at run time
+    can, which is why it is a file rather than a derivation; it goes stale
+    when an estimate is published or revised, or when a product enters the
+    dataset that has none. Values are read as written: this reads the file,
+    never the source behind it.
     """
     with ESTIMATES.open(newline="") as handle:
         rows = list(csv.DictReader(handle))
@@ -596,9 +614,12 @@ def load_consensus_estimates():
         grouped[row["product"].strip()].append({
             "value": float(row["estimate_usd_millions"]),
             "as_stated": row["estimate_as_stated"].strip(),
-            "scope": row["estimate_scope"].strip(),
+            "kind": row["estimate_kind"].strip(),
+            "geography": row["estimate_geography"].strip(),
+            "attribution": row["attribution"].strip(),
             "publisher": row["source_publisher"].strip(),
             "url": row["source_url"].strip(),
+            "published_on": row["published_on"].strip(),
         })
     return grouped
 
@@ -629,61 +650,74 @@ def rolling_four_quarter_peak(values_by_period):
     return best
 
 
+def set_aside_reason(estimate, geography):
+    """Why an estimate on file is not usable for a series, or None if it is."""
+    if estimate["kind"] != PEAK_ESTIMATE:
+        return f"not a peak estimate - {estimate['kind'].replace('_', ' ')}"
+    if estimate["geography"] != geography:
+        return f"estimate is {estimate['geography']}, the series reports {geography}"
+    return None
+
+
 CONSENSUS = "consensus median - above what the series has reported"
-OBSERVED = "observed rolling four-quarter high"
-NO_ESTIMATE = "observed rolling four-quarter high - no external estimate"
+OBSERVED = "observed rolling four-quarter high - above the consensus median"
+NO_ESTIMATE = "observed rolling four-quarter high - no comparable estimate on file"
 
 estimates = load_consensus_estimates()
 values_by_series = defaultdict(dict)
+series_geography = defaultdict(set)
 for row in quarterly:
     values_by_series[row["benchmark_identity"]][row["period"]] = row["value_normalized_usd_millions"]
+    series_geography[row["benchmark_identity"]].add(row["geography"])
 
 normalized = []
 for row in aligned:
-    drug, identity, scope = row["drug_name"], row["benchmark_identity"], row["revenue_scope"]
+    drug, identity = row["drug_name"], row["benchmark_identity"]
+    geography = " | ".join(sorted(series_geography[identity]))
     observed = rolling_four_quarter_peak(values_by_series[identity])
-    published = estimates.get(drug, [])
-    consensus = median(item["value"] for item in published) if published else None
+
+    on_file = estimates.get(drug, [])
+    reasons = {id(item): set_aside_reason(item, geography) for item in on_file}
+    usable = [item for item in on_file if reasons[id(item)] is None]
+    consensus = median(item["value"] for item in usable) if usable else None
 
     if consensus is not None and observed is not None and consensus > observed[0]:
         selected, basis = consensus, CONSENSUS
     elif observed is not None:
-        selected, basis = observed[0], OBSERVED if published else NO_ESTIMATE
+        selected, basis = observed[0], OBSERVED if usable else NO_ESTIMATE
     else:
         selected, basis = consensus, CONSENSUS if consensus is not None else None
-
-    # A worldwide estimate over a series that is not worldwide makes the
-    # denominator wider than the numerator can ever be, so every quarter of
-    # that curve reads low. The estimate is still applied - withholding it
-    # would silently swap the rule for a different one - and the mismatch is
-    # stated on the row instead.
-    caveat = ""
-    if basis == CONSENSUS and scope != "Worldwide":
-        caveat = f"series scope is {scope}; the estimates are worldwide"
 
     normalized.append({
         "drug_name": drug,
         "benchmark_identity": identity,
-        "revenue_scope": scope,
+        "revenue_scope": row["revenue_scope"],
+        "series_geography": geography,
         "launch_anchor_quarter": row["launch_anchor_quarter"],
         "alignment_basis": row["alignment_basis"],
         "observed_peak_4q_usd_mm": round(observed[0], 1) if observed else None,
         "observed_peak_window": f"{observed[1]}-{observed[2]}" if observed else None,
         "consensus_peak_usd_mm": consensus,
-        "consensus_estimate_count": len(published),
-        "consensus_estimates_as_stated": " | ".join(item["as_stated"] for item in published),
+        "consensus_estimate_count": len(usable),
+        "consensus_estimates_as_stated": " | ".join(item["as_stated"] for item in usable),
         "consensus_sources": " | ".join(
-            f"{item['publisher']}: {item['url']}" for item in published),
+            f"{item['as_stated']}, {item['publisher']}"
+            f"{', ' + item['published_on'] if item['published_on'] else ''}"
+            f" ({item['attribution']}): {item['url']}"
+            for item in usable),
+        "estimates_set_aside": " | ".join(
+            f"{item['as_stated']} {item['publisher']} - {reasons[id(item)]}"
+            for item in on_file if reasons[id(item)] is not None),
         "selected_peak_usd_mm": round(selected, 1) if selected is not None else None,
         "peak_basis": basis,
         "quarterly_benchmark_usd_mm": round(selected / 4, 1) if selected is not None else None,
-        "scope_caveat": caveat,
     })
 
 N_LEAD = list(normalized[0].keys())
-matched = {row["drug_name"] for row in normalized if row["consensus_estimate_count"]}
-unmatched = sorted(set(estimates) - matched)
+usable_for = {row["drug_name"] for row in normalized if row["consensus_estimate_count"]}
+unused = sorted(set(estimates) - usable_for)
 on_consensus = [row for row in normalized if row["peak_basis"] == CONSENSUS]
+overtaken = [row for row in normalized if row["peak_basis"] == OBSERVED]
 
 un = wb.create_sheet("Peak-Normalized Uptake")
 un.cell(1, 1, f"The Launch-Aligned Matrix as a percentage of each product's own quarterly peak "
@@ -692,13 +726,16 @@ un.cell(1, 1, f"The Launch-Aligned Matrix as a percentage of each product's own 
               f"median of the published estimates in seed/consensus_peak_estimates.csv where "
               f"that median is above the highest four-consecutive-quarter total the series "
               f"reports, and that observed total otherwise - so a product that has already "
-              f"outsold what was forecast for it is measured against itself. peak_basis says "
-              f"which of the two each row used; {len(on_consensus)} of {len(normalized)} series "
-              f"use a consensus estimate, the rest have none or have overtaken it. Blanks are "
-              f"quarters outside the reported window, never zeros, and a quarter above 100% is "
-              f"a quarter stronger than the average quarter of the peak year. Estimates naming "
-              f"a product with no series here are carried in the file and used nowhere: "
-              f"{', '.join(unmatched) if unmatched else 'none'}.").font = NOTE
+              f"outsold what was forecast for it is measured against itself. An estimate counts "
+              f"only where it is a peak figure and states the same geography the series reports; "
+              f"anything else on file for the product is named in estimates_set_aside rather "
+              f"than used. Of {len(normalized)} series, {len(on_consensus)} sit on a consensus "
+              f"estimate and {len(overtaken)} have overtaken the estimate written for them; the "
+              f"rest have none on file. "
+              f"Blanks are quarters outside the reported window, never zeros, and a quarter "
+              f"above 100% is a quarter stronger than the average quarter of the peak year. "
+              f"Estimates on file that no series can use: "
+              f"{', '.join(unused) if unused else 'none'}.").font = NOTE
 
 headers = N_LEAD + [launch_label(offset) for offset in range(span)]
 for index, name in enumerate(headers, start=1):
@@ -719,7 +756,7 @@ for offset, row in enumerate(normalized):
             cell.number_format = MONEY
         if column == "consensus_estimate_count":
             cell.number_format = "0"
-        if column in ("consensus_sources", "scope_caveat"):
+        if column in ("consensus_sources", "estimates_set_aside"):
             cell.alignment = Alignment(vertical="top", wrap_text=True)
         else:
             cell.alignment = Alignment(vertical="top")
@@ -737,7 +774,8 @@ for offset, row in enumerate(normalized):
         for index in range(len(N_LEAD) + 1, len(headers) + 1):
             un.cell(row_index, index).fill = BAND_FILL
 
-for index, width in enumerate((20, 34, 24, 15, 30, 15, 18, 15, 12, 20, 46, 15, 34, 15, 34), start=1):
+for index, width in enumerate((20, 34, 24, 16, 15, 30, 15, 18, 15, 12, 20, 52, 40, 15, 34, 15),
+                              start=1):
     un.column_dimensions[get_column_letter(index)].width = width
 for index in range(len(N_LEAD) + 1, len(headers) + 1):
     un.column_dimensions[get_column_letter(index)].width = 11
