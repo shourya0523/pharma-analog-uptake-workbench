@@ -232,16 +232,29 @@ def test_a_period_ending_in_the_first_days_of_a_month_belongs_to_the_month_befor
     """A filer on a 52/53-week calendar states its first quarter as ending on
     April 1 or 2 and its year on January 3; read by the month alone, the first
     quarter becomes the second and the year the next one."""
+    from datetime import date
+
     from app.parsing.periods import (
         detect_period_context,
         fiscal_period_end,
+        is_period_of_report,
         normalize_period,
+        period_of_report_quarter,
+        quarter_end,
     )
 
     assert fiscal_period_end(4, 1) == (3, None)
     assert fiscal_period_end(1, 3, 2021) == (12, 2020)
     assert fiscal_period_end(4, 30, 2018) == (4, 2018)
     assert fiscal_period_end(3, None, 2018) == (3, 2018)
+
+    # Same snap the retrieval cover uses on EDGAR reportDate.
+    assert period_of_report_quarter(date(2018, 4, 1)) == 2018 * 4 + 0  # Q1
+    assert period_of_report_quarter(date(2018, 7, 1)) == 2018 * 4 + 1  # Q2
+    assert period_of_report_quarter(date(2018, 3, 31)) == 2018 * 4 + 0
+    assert is_period_of_report(date(2018, 6, 30), quarter_end(2018, 2))
+    assert is_period_of_report(date(2018, 7, 1), quarter_end(2018, 2))
+    assert not is_period_of_report(date(2018, 9, 21), quarter_end(2018, 3))
 
     first_quarter = ("Fiscal first quarter ended April 1, 2018. Sales for the three months "
                      "ended April 1, 2018 rose against the three months ended April 2, 2017.")

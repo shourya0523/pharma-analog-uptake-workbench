@@ -175,6 +175,7 @@ def test_a_gap_the_pipeline_recorded_is_a_quarter_it_did_not_answer(factory):
         )
         counted = refresh_completeness(db, job)
     assert counted.gaps == 1
+    assert job.unresolved_count == 1
     # Five quarters answered, one gap: six quarters known about.
     assert counted.pct == round(100 * 5 / 6, 1)
 
@@ -217,6 +218,37 @@ def test_a_run_that_declared_no_window_counts_what_it_holds_and_misses(factory):
         counted = refresh_completeness(db, job)
     assert quarters_the_run_asked_for(job) == set()
     assert counted.pct == 50.0
+    assert job.unresolved_count == 1
+    assert counted.gaps == job.unresolved_count
+
+
+def test_pending_gaps_are_counted_when_autoflush_is_off(factory):
+    """Gaps added in the same transaction still move the job's counters.
+
+    The app session turns autoflush off. Without an explicit flush, a recount
+    that only queried would write unresolved_count=0 and then commit the
+    pending gap rows beside that zero.
+    """
+    with factory() as db:
+        db.autoflush = False
+        job = _job(db, "job-pending")
+        db.flush()
+        db.add(
+            UnresolvedQuarterORM(
+                id="uq-pending",
+                job_id="job-pending",
+                period="2024Q2",
+                reason_unresolved="No product-level quarterly value extracted",
+                sources_checked=["https://sec.gov/a-filing"],
+                recommended_next_step="Check the earnings release",
+                confidence_that_unavailable=0.3,
+            )
+        )
+        # Deliberately not flushed by the caller — refresh must do it.
+        counted = refresh_completeness(db, job)
+    assert counted.gaps == 1
+    assert job.unresolved_count == 1
+    assert job.completeness_pct == 0.0
 
 
 def test_the_denominator_is_every_quarter_the_run_knows_about(factory):

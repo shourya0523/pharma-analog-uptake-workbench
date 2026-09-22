@@ -4,6 +4,7 @@ import json
 import logging
 import os
 import re
+import time
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta
@@ -31,6 +32,7 @@ from app.connectors.sources import (
     TranscriptConnectorStub,
     parse_filing_date,
 )
+from app.connectors.filing_window import resolve_filing_window
 from app.db.models import (
     AnalogFamilyORM,
     CanonicalProductORM,
@@ -654,19 +656,46 @@ class PipelineOrchestrator:
         self.search = LLMSearchConnector(self.file_store, self.llm)
         self.parser = DocumentParser(self.file_store)
         self._job_aliases: list[str] = []
+        self._step_started_at: float | None = None
+        self._step_name: str | None = None
 
     def _set_step(self, job: DrugJobORM, step: JobStep, status: JobStatus | None = None) -> None:
+        now = time.monotonic()
+        if self._step_started_at is not None and self._step_name is not None:
+            logger.info(
+                "job_step_done job_id=%s drug=%s step=%s duration_s=%.2f",
+                job.id,
+                job.drug_name,
+                self._step_name,
+                now - self._step_started_at,
+            )
         job.current_step = step.value
         if status:
             job.status = status.value
         job.updated_at = utc_now()
         self.db.commit()
+        self._step_started_at = now
+        self._step_name = step.value
         logger.info(
             "job_step job_id=%s drug=%s step=%s status=%s",
             job.id,
             job.drug_name,
             job.current_step,
             job.status,
+        )
+
+    def _flag(self, job: DrugJobORM, *flags: str) -> None:
+        """Append quality flags and log anything newly raised."""
+        before = set(job.quality_flags or [])
+        added = [f for f in flags if f not in before]
+        if not added:
+            return
+        job.quality_flags = sorted(before | set(flags))
+        logger.info(
+            "quality_flag job_id=%s drug=%s added=%s",
+            job.id,
+            job.drug_name,
+            added,
         )
 
     async def run_job(self, job_id: str) -> None:
@@ -697,6 +726,7 @@ class PipelineOrchestrator:
             sources = await self._retrieve_product_documents(job, options)
             parsed = await self._parse(job, sources)
             await self._label_metadata(job, sources, parsed, options)
+            options = self._ensure_filing_window(job, run, options)
             await self._identity(job)
             filings = await self._retrieve_filings(job, options)
             filings_parsed = await self._parse(job, filings)
@@ -727,8 +757,14 @@ class PipelineOrchestrator:
             self._record_quarters_only_reported_with_another_product(job, datapoint_rows)
             await self._completeness(job)
             self._set_step(job, JobStep.READY_FOR_REVIEW, JobStatus.READY_FOR_REVIEW)
+            # Recount after the READY commit: earlier stages can leave pending gap
+            # rows that only land on commit, and the badge must match the table.
+            refresh_completeness(self.db, job)
+            self.db.commit()
+            self._step_started_at = None
+            self._step_name = None
             logger.info(
-                "pipeline_done job_id=%s drug=%s sources=%s candidates=%s auto_pass=%s needs_review=%s unresolved=%s completeness=%s",
+                "pipeline_done job_id=%s drug=%s sources=%s candidates=%s auto_pass=%s needs_review=%s unresolved=%s completeness=%s flags=%s",
                 job.id,
                 job.drug_name,
                 job.sources_found,
@@ -737,6 +773,7 @@ class PipelineOrchestrator:
                 job.needs_review_count,
                 job.unresolved_count,
                 job.completeness_pct,
+                job.quality_flags or [],
             )
         except Exception as exc:
             # If the exception came out of a flush the session refuses every
@@ -745,6 +782,16 @@ class PipelineOrchestrator:
             # job looks as though it were still running.
             self.db.rollback()
             step = job.current_step if job else None
+            if self._step_started_at is not None and self._step_name is not None:
+                logger.info(
+                    "job_step_done job_id=%s drug=%s step=%s duration_s=%.2f outcome=failed",
+                    job_id,
+                    getattr(job, "drug_name", None),
+                    self._step_name,
+                    time.monotonic() - self._step_started_at,
+                )
+            self._step_started_at = None
+            self._step_name = None
             job.status = JobStatus.FAILED.value
             job.error = f"{type(exc).__name__}: {exc}"
             self.db.commit()
@@ -900,7 +947,7 @@ class PipelineOrchestrator:
                 aliases=self._job_aliases,
             )
             if resolution:
-                job.quality_flags = sorted(set((job.quality_flags or []) + resolution.flags))
+                self._flag(job, *resolution.flags)
             if resolution and resolution.accepted:
                 job.cik = resolution.cik
                 self.db.commit()
@@ -908,6 +955,14 @@ class PipelineOrchestrator:
                     "cik_resolved job_id=%s drug=%s cik=%s via=llm_search",
                     job.id, job.drug_name, resolution.cik,
                 )
+        logger.info(
+            "identity_done job_id=%s drug=%s cik=%s ticker=%s manufacturer=%s",
+            job.id,
+            job.drug_name,
+            job.cik,
+            job.ticker,
+            job.manufacturer,
+        )
 
     def _record_sources(self, job: DrugJobORM, collected: list) -> list:
         """File what a retrieval pass found, and say what it was."""
@@ -943,6 +998,59 @@ class PipelineOrchestrator:
                 )
             )
         return self._record_sources(job, collected)
+
+    def _approval_date(self, job: DrugJobORM) -> date | None:
+        """The FDA approval date the label pass wrote, if any."""
+        row = (
+            self.db.query(DrugProfileFieldORM)
+            .filter_by(job_id=job.id, field="fda_approval_date")
+            .first()
+        )
+        if row is None:
+            return None
+        return parse_filing_date(row.value)
+
+    def _ensure_filing_window(
+        self, job: DrugJobORM, run: ExtractionRunORM | None, options: dict[str, Any]
+    ) -> dict[str, Any]:
+        """Make sure retrieval and completeness share one concrete window.
+
+        A caller-supplied bound is kept. Otherwise the window is approval→today
+        when openFDA wrote an approval date, else a fixed lookback ending today.
+        The derived bounds are written onto the run's options so completeness
+        scores the same question retrieval answered.
+        """
+        settings = get_settings()
+        caller_since = parse_filing_date(options.get("earnings_since"))
+        caller_until = parse_filing_date(options.get("earnings_until"))
+        window = resolve_filing_window(
+            since=caller_since,
+            until=caller_until,
+            approval=self._approval_date(job),
+            lookback_years=settings.filing_window_lookback_years,
+        )
+        since_s = window.since.isoformat()
+        until_s = window.until.isoformat()
+        filled = caller_since is None or caller_until is None
+        updated = {
+            **options,
+            "earnings_since": since_s,
+            "earnings_until": until_s,
+        }
+        if run is not None and run.options_json != updated:
+            run.options_json = updated
+        if filled:
+            self._flag(job, f"filing_window:{window.source}")
+            logger.info(
+                "filing_window job_id=%s drug=%s since=%s until=%s source=%s",
+                job.id,
+                job.drug_name,
+                since_s,
+                until_s,
+                window.source,
+            )
+        self.db.commit()
+        return updated
 
     async def _retrieve_filings(self, job: DrugJobORM, options: dict[str, Any]) -> list:
         """What the issuer filed, once the job knows who the issuer is."""
@@ -989,7 +1097,7 @@ class PipelineOrchestrator:
             ]
             sec_ok = any(s.retrieval_status == RetrievalStatus.SUCCESS for s in sec_found)
             if sec_found and not sec_ok:
-                job.quality_flags = list(set((job.quality_flags or []) + ["sec_retrieval_failed"]))
+                self._flag(job, "sec_retrieval_failed")
                 logger.warning(
                     "sec_retrieval_failed job_id=%s drug=%s listed=%d fetched=0",
                     job.id, job.drug_name, len(sec_found),
@@ -1001,7 +1109,7 @@ class PipelineOrchestrator:
                 # was being shown for the second: a reader takes it as a
                 # transient failure of ours and retries, when what is missing is
                 # the issuer.
-                job.quality_flags = list(set((job.quality_flags or []) + [NO_FILER_OF_RECORD]))
+                self._flag(job, NO_FILER_OF_RECORD)
                 logger.warning(
                     "no_filer_of_record job_id=%s drug=%s ticker=%s manufacturer=%s",
                     job.id, job.drug_name, job.ticker, job.manufacturer,
@@ -1051,6 +1159,16 @@ class PipelineOrchestrator:
                 if doc.notes:
                     row.notes = (row.notes or "") + f" | parse: {doc.notes}"
         self.db.commit()
+        ok = sum(1 for d in parsed_map.values() if getattr(d.parsing_status, "value", d.parsing_status) == "success")
+        failed = len(parsed_map) - ok
+        logger.info(
+            "parse_done job_id=%s drug=%s sources=%s ok=%s failed=%s",
+            job.id,
+            job.drug_name,
+            len(parsed_map),
+            ok,
+            failed,
+        )
         return parsed_map
 
     async def _label_metadata(self, job: DrugJobORM, sources: list, parsed: dict, options: dict) -> None:
@@ -1087,6 +1205,12 @@ class PipelineOrchestrator:
                 try:
                     results = json.loads(src.raw_text or "{}").get("results", [])
                 except Exception:
+                    logger.warning(
+                        "openfda_body_unreadable job_id=%s source_id=%s",
+                        job.id,
+                        src.source_id,
+                        exc_info=True,
+                    )
                     results = []
             if not results:
                 continue
@@ -1099,9 +1223,7 @@ class PipelineOrchestrator:
             selected, matched_brand = earliest_approved_match(matches)
             if selected is None:
                 # Every result belongs to another product sharing the molecule
-                job.quality_flags = list(
-                    set((job.quality_flags or []) + ["openfda_no_brand_match"])
-                )
+                self._flag(job, "openfda_no_brand_match")
                 self.db.commit()
                 logger.info(
                     "openfda_no_brand_match job_id=%s drug=%s brands=%s",
@@ -1170,9 +1292,7 @@ class PipelineOrchestrator:
                     aliases=self._job_aliases,
                     source_quote=sourced.quote,
                 ):
-                    job.quality_flags = list(
-                        set((job.quality_flags or []) + [f"sibling_blend_skipped:{field}"])
-                    )
+                    self._flag(job, f"sibling_blend_skipped:{field}")
                     continue
                 written[field] = str(value)
                 citation = {
@@ -1206,9 +1326,7 @@ class PipelineOrchestrator:
                         "source_field": "; ".join(sourced.rival["readings"]),
                         "source_quote": "; ".join(sourced.rival["readings"]),
                     }
-                    job.quality_flags = list(
-                        set((job.quality_flags or []) + [f"openfda_conflicting_reading:{field}"])
-                    )
+                    self._flag(job, f"openfda_conflicting_reading:{field}")
                 persist_profile_field(
                     self.db,
                     job_id=job.id,
@@ -1429,9 +1547,7 @@ class PipelineOrchestrator:
                     aliases=self._job_aliases,
                     source_quote=field.get("source_quote"),
                 ):
-                    job.quality_flags = list(
-                        set((job.quality_flags or []) + [f"sibling_blend_skipped:{name}"])
-                    )
+                    self._flag(job, f"sibling_blend_skipped:{name}")
                     continue
                 if name in written:
                     # Record the disagreement for the judge instead of silently
@@ -1490,11 +1606,15 @@ class PipelineOrchestrator:
         Source registries carry errors, so a cited value is not assumed correct.
         Conflicts and high-cost regulatory fields are judged first; remaining
         content fields follow. Internal payloads like llm_aliases are skipped.
+
+        When the decision backend is Jev, fields that already carry a source
+        quote are judged locally in one System One call first. Web search still
+        challenges fields with no local quote, or local inconclusives.
         """
         settings = get_settings()
         if not settings.enable_profile_judge:
             return
-        if not settings.openrouter_api_key or not settings.enable_llm_search:
+        if not settings.openrouter_api_key:
             return
         rows = self.db.query(DrugProfileFieldORM).filter_by(job_id=job.id).all()
         if not rows:
@@ -1505,58 +1625,108 @@ class PipelineOrchestrator:
             rows, max_fields=settings.profile_judge_max_fields
         )
 
-        corrected = 0
-        for row in to_judge:
-            citation = row.citation_json or {}
-            judgment = await self.llm.judge_profile_field(
+        local_done: set[str] = set()
+        if (settings.openrouter_decision_backend or "chat").lower() == "jev":
+            local_fields = []
+            for row in to_judge:
+                citation = row.citation_json or {}
+                quote = citation.get("source_quote") or ""
+                if quote:
+                    local_fields.append(
+                        {
+                            "field": row.field,
+                            "value": row.value or "",
+                            "source_quote": quote,
+                        }
+                    )
+            local_answers = await self.llm.judge_profile_fields_local(
                 product=job.drug_name,
-                generic=job.generic_name,
-                aliases=self._job_aliases,
-                field=row.field,
-                value=row.value or "",
-                source={
-                    "source_type": citation.get("source_type"),
-                    "source_url": citation.get("source_url"),
-                    "source_quote": citation.get("source_quote"),
-                    "openfda_application_number": citation.get("openfda_application_number"),
-                    "conflicting_source": citation.get("conflicting_source"),
-                },
+                fields=local_fields,
             )
-            outcome = apply_profile_judgment(
-                row.field,
-                row.value or "",
-                judgment,
-                min_confidence=settings.profile_judge_min_confidence,
-            )
-            row.citation_json = {
-                **citation,
-                "judge_verdict": outcome.verdict,
-                "judge_flags": outcome.flags,
-                **({"correction": outcome.correction} if outcome.correction else {}),
-            }
-            if outcome.corrected:
-                row.value = outcome.value
-                corrected += 1
-                # A search-sourced correction always goes to a human
-                row.validation_status = ValidationStatus.NEEDS_REVIEW.value
-                job.quality_flags = list(
-                    set((job.quality_flags or []) + [f"profile_corrected:{row.field}"])
+            for row in to_judge:
+                judgment = local_answers.get(row.field)
+                if not judgment:
+                    continue
+                verdict = judgment.get("verdict")
+                if verdict == "inconclusive":
+                    continue
+                citation = row.citation_json or {}
+                outcome = apply_profile_judgment(
+                    row.field,
+                    row.value or "",
+                    judgment,
+                    min_confidence=settings.profile_judge_min_confidence,
                 )
-            logger.info(
-                "profile_field_judged job_id=%s field=%s verdict=%s corrected=%s flags=%s",
-                job.id,
-                row.field,
-                outcome.verdict,
-                outcome.corrected,
-                outcome.flags,
-            )
+                row.citation_json = {
+                    **citation,
+                    "judge_verdict": outcome.verdict,
+                    "judge_flags": outcome.flags,
+                    "judge_backend": "jev_local",
+                }
+                local_done.add(row.field)
+                logger.info(
+                    "profile_field_judged job_id=%s field=%s verdict=%s corrected=%s flags=%s",
+                    job.id,
+                    row.field,
+                    outcome.verdict,
+                    outcome.corrected,
+                    outcome.flags,
+                )
+
+        corrected = 0
+        if settings.enable_llm_search:
+            for row in to_judge:
+                if row.field in local_done:
+                    continue
+                citation = row.citation_json or {}
+                judgment = await self.llm.judge_profile_field(
+                    product=job.drug_name,
+                    generic=job.generic_name,
+                    aliases=self._job_aliases,
+                    field=row.field,
+                    value=row.value or "",
+                    source={
+                        "source_type": citation.get("source_type"),
+                        "source_url": citation.get("source_url"),
+                        "source_quote": citation.get("source_quote"),
+                        "openfda_application_number": citation.get("openfda_application_number"),
+                        "conflicting_source": citation.get("conflicting_source"),
+                    },
+                )
+                outcome = apply_profile_judgment(
+                    row.field,
+                    row.value or "",
+                    judgment,
+                    min_confidence=settings.profile_judge_min_confidence,
+                )
+                row.citation_json = {
+                    **citation,
+                    "judge_verdict": outcome.verdict,
+                    "judge_flags": outcome.flags,
+                    **({"correction": outcome.correction} if outcome.correction else {}),
+                }
+                if outcome.corrected:
+                    row.value = outcome.value
+                    corrected += 1
+                    # A search-sourced correction always goes to a human
+                    row.validation_status = ValidationStatus.NEEDS_REVIEW.value
+                    self._flag(job, f"profile_corrected:{row.field}")
+                logger.info(
+                    "profile_field_judged job_id=%s field=%s verdict=%s corrected=%s flags=%s",
+                    job.id,
+                    row.field,
+                    outcome.verdict,
+                    outcome.corrected,
+                    outcome.flags,
+                )
         self.db.commit()
         logger.info(
-            "profile_judged job_id=%s drug=%s judged=%s corrected=%s",
+            "profile_judged job_id=%s drug=%s judged=%s corrected=%s local=%s",
             job.id,
             job.drug_name,
             len(to_judge),
             corrected,
+            len(local_done),
         )
 
     def _quarters_no_filing_covers(
@@ -1617,8 +1787,15 @@ class PipelineOrchestrator:
             return [], {}
         self._persist_sources(job, search_sources)
         job.sources_found = (job.sources_found or 0) + len(search_sources)
-        job.quality_flags = list(set((job.quality_flags or []) + ["llm_search_quarters_fallback"]))
+        self._flag(job, "llm_search_quarters_fallback")
         self.db.commit()
+        logger.info(
+            "llm_search_fallback job_id=%s drug=%s quarters=%s sources=%s",
+            job.id,
+            job.drug_name,
+            quarters,
+            len(search_sources),
+        )
         parsed = await self._parse(job, search_sources)
         return search_sources, parsed
 
@@ -1637,6 +1814,9 @@ class PipelineOrchestrator:
         for row in rows:
             if row.period and row.period_type == PeriodType.QUARTERLY.value:
                 by_period.setdefault(row.period, []).append(row)
+        # Session autoflush is off: pending unresolved rows from earlier stages
+        # are invisible to this query until flushed, and would be recorded twice.
+        self.db.flush()
         recorded = {
             u.period
             for u in self.db.query(UnresolvedQuarterORM).filter_by(job_id=job.id).all()
@@ -1940,8 +2120,21 @@ class PipelineOrchestrator:
             try:
                 raw = await self.file_store.get(src.storage_key)
             except Exception:
+                logger.warning(
+                    "xbrl_instance_unreadable job_id=%s source_id=%s storage_key=%s",
+                    job.id,
+                    src.source_id,
+                    src.storage_key,
+                    exc_info=True,
+                )
                 continue
             if not raw:
+                logger.info(
+                    "xbrl_instance_empty job_id=%s source_id=%s storage_key=%s",
+                    job.id,
+                    src.source_id,
+                    src.storage_key,
+                )
                 continue
             # The filing's own arithmetic says which elements are sales and
             # which are costs of them. What it leaves unplaced is asked of the
@@ -1953,10 +2146,23 @@ class PipelineOrchestrator:
                 try:
                     calculation = parse_calculation(await self.file_store.get(calculation_key))
                 except Exception:
+                    logger.warning(
+                        "xbrl_calculation_unreadable job_id=%s source_id=%s key=%s",
+                        job.id,
+                        src.source_id,
+                        calculation_key,
+                        exc_info=True,
+                    )
                     calculation = None
             try:
                 facts = parse_facts(raw)
             except Exception:
+                logger.warning(
+                    "xbrl_facts_unparseable job_id=%s source_id=%s",
+                    job.id,
+                    src.source_id,
+                    exc_info=True,
+                )
                 continue
             def names_a_product(member: str, issuer: str = job.manufacturer or "") -> bool:
                 return resolve(member, products, register, issuer=issuer).resolved
@@ -1993,6 +2199,12 @@ class PipelineOrchestrator:
                     verdicts=element_verdicts,
                 )
             except Exception:
+                logger.warning(
+                    "xbrl_candidates_failed job_id=%s source_id=%s",
+                    job.id,
+                    src.source_id,
+                    exc_info=True,
+                )
                 continue
             for note in notes:
                 logger.info("xbrl_note job_id=%s source_id=%s %s", job.id, src.source_id, note)
@@ -2016,11 +2228,17 @@ class PipelineOrchestrator:
             # here, where it was opened.
             self.db.commit()
             logger.info("xbrl_members_learned job_id=%s members=%d", job.id, written)
-        if rows or totals:
-            logger.info(
-                "xbrl_facts job_id=%s drug=%s quarters=%d totals=%d",
-                job.id, job.drug_name, len(rows), len(totals),
-            )
+        instances = sum(
+            1 for s in sources if (s.metadata or {}).get("xbrl_instance") and s.storage_key
+        )
+        logger.info(
+            "xbrl_tagged_done job_id=%s drug=%s instances=%s quarters=%d totals=%d",
+            job.id,
+            job.drug_name,
+            instances,
+            len(rows),
+            len(totals),
+        )
         return rows, totals
 
     def _model_budget(
@@ -2288,6 +2506,7 @@ class PipelineOrchestrator:
             # This document's own sibling rows, not the last document prepared.
             peers = state["peers"]
             use_llm = src.source_id in llm_source_ids
+            doc = parsed.get(src.source_id)
             if not use_llm:
                 src_row = self.db.get(SourceDocumentORM, src.source_id)
                 if src_row:
@@ -2324,6 +2543,7 @@ class PipelineOrchestrator:
                         ),
                     },
                     text=llm_text,
+                    tables=getattr(doc, "tables", None) if doc else None,
                 )
             span_corpus = "\n\n".join(
                 (s.get("span_text") or "") for s in listed(result, "spans")
@@ -2546,8 +2766,14 @@ class PipelineOrchestrator:
                     confidence_that_unavailable=0.7 if not any_product_money else 0.4,
                 )
             )
-            job.quality_flags = list(
-                set((job.quality_flags or []) + ["no_product_revenue_candidates", f"dropped_candidates:{dropped_total}"])
+            self._flag(job, "no_product_revenue_candidates", f"dropped_candidates:{dropped_total}")
+            logger.warning(
+                "no_product_revenue job_id=%s drug=%s reason=%s dropped=%s sources=%s",
+                job.id,
+                job.drug_name,
+                reason,
+                dropped_total,
+                len(selected_sources),
             )
 
         job.candidates_extracted = len(rows)
@@ -2809,6 +3035,21 @@ class PipelineOrchestrator:
             if row.citation_json:
                 row.citation_json = {**row.citation_json, "validation_status": status}
         self.db.commit()
+        by_support: dict[str, int] = {}
+        by_status: dict[str, int] = {}
+        for row in rows:
+            key = row.source_support or "none"
+            by_support[key] = by_support.get(key, 0) + 1
+            st = row.validation_status or "none"
+            by_status[st] = by_status.get(st, 0) + 1
+        logger.info(
+            "evidence_judge_done job_id=%s drug=%s rows=%s support=%s status=%s",
+            job.id,
+            job.drug_name,
+            len(rows),
+            by_support,
+            by_status,
+        )
         await self._reconcile_with_llm(job, rows)
 
     async def _reconcile_with_llm(self, job: DrugJobORM, rows: list[DatapointORM]) -> None:
@@ -3071,6 +3312,15 @@ class PipelineOrchestrator:
                 if row.citation_json:
                     row.citation_json = {**row.citation_json, "validation_status": row.validation_status}
         self.db.commit()
+        logger.info(
+            "reconcile_done job_id=%s drug=%s rows=%s winners=%s losers=%s corroborating=%s",
+            job.id,
+            job.drug_name,
+            len(rows),
+            len(winners),
+            len(losers),
+            len(corroborating),
+        )
 
     async def _quality_and_validation(self, job: DrugJobORM) -> None:
         self._set_step(job, JobStep.QUALITY_CHECKS)
@@ -3140,8 +3390,17 @@ class PipelineOrchestrator:
         job.auto_pass_count = sum(1 for d in dps if d.validation_status == ValidationStatus.AUTO_PASS.value)
         job.needs_review_count = sum(1 for d in dps if d.validation_status == ValidationStatus.NEEDS_REVIEW.value)
         # Merge, so provenance flags raised earlier in the pipeline survive
-        job.quality_flags = sorted(
-            set(job.quality_flags or []) | {i.issue_type for i in issues if i.severity == "high"}
+        high = {i.issue_type for i in issues if i.severity == "high"}
+        if high:
+            self._flag(job, *sorted(high))
+
+        logger.info(
+            "quality_checks_done job_id=%s drug=%s checks=%s auto_pass=%s needs_review=%s",
+            job.id,
+            job.drug_name,
+            len(issues),
+            job.auto_pass_count,
+            job.needs_review_count,
         )
 
         self._set_step(job, JobStep.VALIDATION_TASKS)
@@ -3174,6 +3433,12 @@ class PipelineOrchestrator:
                 )
             )
         self.db.commit()
+        logger.info(
+            "validation_tasks_done job_id=%s drug=%s tasks=%s",
+            job.id,
+            job.drug_name,
+            len(tasks),
+        )
 
     async def _completeness(self, job: DrugJobORM) -> None:
         self._set_step(job, JobStep.COMPLETENESS)
@@ -3187,6 +3452,8 @@ class PipelineOrchestrator:
             or ("Q" in (d.period or "") and d.period_type not in {"ytd", "annual", "six_month", "nine_month"})
         ]
         periods = sorted({d.period for d in quarterly if d.period and d.period != "unknown"})
+        # autoflush is off: see gap rows added earlier in this transaction.
+        self.db.flush()
         existing = set(periods)
         # A quarter already recorded as unresolved - by the search stage, or a
         # previous pass - is not recorded again as a gap.

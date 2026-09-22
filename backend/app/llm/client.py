@@ -19,6 +19,14 @@ from app.llm.grounding import (
     enforce_verbatim_on_candidates,
     quote_is_verbatim,
 )
+from app.llm import jev as jev_api
+from app.llm.harvest import (
+    LOCI_PER_CALL,
+    MAX_LOCI_FOR_JEV,
+    harvest_amount_loci,
+    harvest_table_loci,
+    merge_loci,
+)
 from app.parsing.evidence import (
     NON_PRODUCT_REVENUE_RE,
     product_aliases,
@@ -49,7 +57,7 @@ class OpenRouterClient:
     # connection, arriving with a status line instead of without one, so they
     # are retried and then treated as an unanswered question - not raised,
     # which ended the whole job.
-    RETRYABLE_STATUSES = frozenset({408, 409, 425, 429, 500, 502, 503, 504, 520, 522, 524})
+    RETRYABLE_STATUSES = frozenset({408, 409, 425, 429, 500, 502, 503, 504, 520, 522, 524, 529})
 
     def __init__(self) -> None:
         self.settings = get_settings()
@@ -92,9 +100,15 @@ class OpenRouterClient:
         return _parse_json_content(content)
 
     async def _post(
-        self, payload: dict[str, Any], *, model: str, timeout: float, web: bool = False
+        self,
+        payload: dict[str, Any],
+        *,
+        model: str,
+        timeout: float,
+        web: bool = False,
+        path: str = "/chat/completions",
     ) -> dict[str, Any] | None:
-        """One completion request; None when the model could not be reached.
+        """One request; None when the model could not be reached.
 
         The model sits behind a network, and a connection that fails or times
         out is that one question going unanswered - the same outcome as the
@@ -108,7 +122,7 @@ class OpenRouterClient:
             try:
                 async with httpx.AsyncClient(timeout=timeout) as client:
                     resp = await client.post(
-                        f"{self.settings.openrouter_base_url}/chat/completions",
+                        f"{self.settings.openrouter_base_url}{path}",
                         headers=self._headers(),
                         json=payload,
                     )
@@ -119,20 +133,79 @@ class OpenRouterClient:
                                attempt + 1, self.TRANSPORT_ATTEMPTS, model,
                                type(exc).__name__, exc)
                 if attempt == self.TRANSPORT_ATTEMPTS - 1:
+                    logger.error(
+                        "openrouter_gave_up reason=transport model=%s attempts=%s error=%s",
+                        model,
+                        self.TRANSPORT_ATTEMPTS,
+                        type(exc).__name__,
+                    )
                     return None
                 await asyncio.sleep(delay)
                 delay *= 2
             except httpx.HTTPStatusError as exc:
                 if exc.response.status_code not in self.RETRYABLE_STATUSES:
+                    # System One rejects oversized state/questions with 400
+                    # max_tokens_exceeded. That is "this question unanswered",
+                    # same as a transport blip — not a reason to fail the job.
+                    if path.rstrip("/").endswith("systemone"):
+                        logger.error(
+                            "openrouter_systemone_client_error status=%s model=%s body=%s",
+                            exc.response.status_code,
+                            model,
+                            (exc.response.text or "")[:300],
+                        )
+                        return None
                     raise
                 logger.warning("openrouter_busy attempt=%d/%d model=%s status=%s",
                                attempt + 1, self.TRANSPORT_ATTEMPTS, model,
                                exc.response.status_code)
                 if attempt == self.TRANSPORT_ATTEMPTS - 1:
+                    logger.error(
+                        "openrouter_gave_up reason=http_status model=%s attempts=%s status=%s",
+                        model,
+                        self.TRANSPORT_ATTEMPTS,
+                        exc.response.status_code,
+                    )
                     return None
                 await asyncio.sleep(delay)
                 delay *= 2
+        logger.error(
+            "openrouter_gave_up reason=exhausted model=%s attempts=%s",
+            model,
+            self.TRANSPORT_ATTEMPTS,
+        )
         return None
+
+    async def system_one(
+        self,
+        *,
+        state: str | dict[str, Any] | list[Any],
+        questions: dict[str, Any],
+        model: str | None = None,
+        timeout: float = 60,
+    ) -> dict[str, Any]:
+        """TypeSafe System One (Jev) via OpenRouter. Empty when unreachable."""
+        if not self.settings.openrouter_api_key:
+            return {}
+        model_id = model or self.settings.openrouter_model_decision
+        payload = {
+            "model": model_id,
+            "state": jev_api.clip_state(state),
+            "questions": questions,
+        }
+        data = await self._post(
+            payload, model=model_id, timeout=timeout, path="/systemone"
+        )
+        if not data:
+            return {}
+        answers = data.get("answers")
+        if not isinstance(answers, dict):
+            return {}
+        return {
+            "model": data.get("model") or model_id,
+            "answers": answers,
+            "usage": data.get("usage") or {},
+        }
 
     def _web_tools(self, *, fetch: bool = False) -> list[dict[str, Any]]:
         domains = [
@@ -316,6 +389,9 @@ class LLMModules:
         self.client = client or OpenRouterClient()
         self.settings = get_settings()
 
+    def _uses_jev(self) -> bool:
+        return (self.settings.openrouter_decision_backend or "chat").lower() == "jev"
+
     async def find_revenue_spans(
         self,
         *,
@@ -394,8 +470,19 @@ class LLMModules:
         company: str | None,
         source_meta: dict,
         text: str,
+        tables: list[list[list[str]]] | None = None,
     ) -> dict[str, Any]:
-        """Two-pass extract: find verbatim spans, then fill candidates from spans only."""
+        """Find product-revenue candidates. Jev picks among harvested amounts when enabled."""
+        if self._uses_jev() and self.settings.openrouter_api_key:
+            harvested = await self._extract_revenue_jev(
+                product=product,
+                company=company,
+                source_meta=source_meta,
+                text=text,
+                tables=tables,
+            )
+            if harvested is not None:
+                return harvested
         spans = await self.find_revenue_spans(
             product=product,
             company=company,
@@ -411,6 +498,150 @@ class LLMModules:
             spans=spans,
         )
         return filled
+
+    # Shared once in state — not copied into every keep_* question.
+    _JEV_KEEP_RULE = (
+        "Keep only this product's own net product sales for a single period. "
+        "Refuse expenses, milestones, peer brands, company totals, and change columns."
+    )
+
+    async def _extract_revenue_jev(
+        self,
+        *,
+        product: str,
+        company: str | None,
+        source_meta: dict,
+        text: str,
+        tables: list[list[list[str]]] | None,
+    ) -> dict[str, Any] | None:
+        """Pick among harvested money loci. None when harvest is empty (caller chats)."""
+        loci = merge_loci(
+            harvest_table_loci(tables or [], product=product),
+            harvest_amount_loci(text, product=product),
+        )
+        if not loci:
+            return None
+        product_l = product.lower()
+        loci.sort(
+            key=lambda loc: (
+                0 if product_l in (loc.get("quote") or "").lower() else 1,
+                0 if (loc.get("row_label") or "") else 1,
+            )
+        )
+        loci = loci[:MAX_LOCI_FOR_JEV]
+
+        answers: dict[str, Any] = {}
+        for start in range(0, len(loci), LOCI_PER_CALL):
+            chunk = loci[start : start + LOCI_PER_CALL]
+            state = {
+                "product": product,
+                "company": company or "",
+                "source": {
+                    k: source_meta[k]
+                    for k in ("url", "type", "title", "filing_type", "accession")
+                    if source_meta.get(k)
+                },
+                "rule": self._JEV_KEEP_RULE,
+                "loci": [
+                    {
+                        "locus_id": loc["locus_id"],
+                        "amount": loc["amount"],
+                        "period_hints": loc.get("period_hints") or [],
+                        "row_label": loc.get("row_label") or "",
+                        "quote": (loc.get("quote") or "")[:400],
+                    }
+                    for loc in chunk
+                ],
+            }
+            questions: dict[str, Any] = {}
+            for loc in chunk:
+                lid = loc["locus_id"]
+                questions[f"keep_{lid}"] = jev_api.noul(
+                    instructions=(
+                        f"Locus {lid}, amount {loc['amount']}: is this "
+                        f"{product}'s own net product sales?"
+                    ),
+                )
+                period_opts = {
+                    h: None for h in (loc.get("period_hints") or [])[:8] if h
+                }
+                if period_opts:
+                    period_opts = jev_api.with_none(
+                        period_opts,
+                        none_rubric="Period is not among these declared headers",
+                    )
+                    questions[f"period_{lid}"] = jev_api.choice(
+                        instructions=(
+                            f"Which declared period does locus {lid} "
+                            f"(amount {loc['amount']}) belong to?"
+                        ),
+                        criteria=period_opts,
+                    )
+            result = await self.client.system_one(state=state, questions=questions)
+            chunk_answers = result.get("answers") or {}
+            if not chunk_answers:
+                # Oversized or unreachable chunk — skip it; other chunks may still land.
+                continue
+            answers.update(chunk_answers)
+
+        if not answers:
+            return None  # abstain → chat
+
+        candidates: list[dict[str, Any]] = []
+        spans: list[dict[str, Any]] = []
+        for loc in loci:
+            kept = jev_api.noul_answer(answers, f"keep_{loc['locus_id']}")
+            if kept is None:
+                continue
+            if not kept["is_yes"]:
+                continue
+            quote = loc.get("quote") or loc["amount"]
+            period = ""
+            period_pick = jev_api.choice_answer(answers, f"period_{loc['locus_id']}")
+            if period_pick and period_pick["choice"] != jev_api.NONE:
+                period = period_pick["choice"]
+            elif loc.get("period_hints"):
+                period = loc["period_hints"][0]
+            span_id = loc["locus_id"]
+            spans.append(
+                {
+                    "span_id": span_id,
+                    "span_text": quote,
+                    "why_relevant": "harvested amount locus",
+                    "looks_like_table": span_id.startswith("t"),
+                }
+            )
+            value = _parse_reported_amount(loc["amount"])
+            candidates.append(
+                {
+                    "span_id": span_id,
+                    "period": period or "unknown",
+                    "value_reported": value,
+                    "currency": "USD",
+                    "unit": _guess_unit(loc["amount"], quote),
+                    "period_type": "quarterly",
+                    "revenue_scope": "Product family",
+                    "geography": None,
+                    "formulation": None,
+                    "route_of_administration": None,
+                    "source_quote": quote,
+                    "product_mentioned_in_quote": True,
+                    "is_company_total": False,
+                    "confidence": float(kept.get("confidence") or 0.0),
+                    "extraction_method": "jev_locus",
+                }
+            )
+        corpus = "\n\n".join(s.get("span_text") or "" for s in spans)
+        kept_v, drop_v = enforce_verbatim_on_candidates(
+            candidates, source_text=corpus or text, spans=spans
+        )
+        kept_s, drop_s = apply_structured_field_gates(kept_v)
+        return {
+            "candidates": kept_s,
+            "spans": spans,
+            "dropped": drop_v + drop_s,
+            "note": "jev_harvest",
+        }
 
     async def extract_metadata(self, *, product: str, text: str, source_meta: dict) -> dict[str, Any]:
         prompt = load_prompt("metadata_extractor")
@@ -439,12 +670,6 @@ class LLMModules:
         peer_names: Iterable[str] | None = None,
     ) -> dict[str, Any]:
         prompt = load_prompt("evidence_judge")
-        user = prompt["user_template"].format(
-            product=product,
-            candidate=json.dumps(candidate),
-            quote=quote,
-            context=context[:8000],
-        )
         if not self.settings.openrouter_api_key:
             return {
                 "validation_status": "needs_review",
@@ -452,12 +677,23 @@ class LLMModules:
                 "issues": ["LLM judge unavailable"],
                 "explanation": "OPENROUTER_API_KEY missing",
             }
-        result = await self.client.chat_json(
-            model=self.settings.openrouter_model_judge,
-            system=prompt["system"],
-            user=user,
-        )
-        # Deterministic hard vetoes after judge
+        result: dict[str, Any] = {}
+        if self._uses_jev():
+            result = await self._judge_jev(
+                product=product, candidate=candidate, quote=quote, context=context, prompt=prompt
+            )
+        if not result:
+            user = prompt["user_template"].format(
+                product=product,
+                candidate=json.dumps(candidate),
+                quote=quote,
+                context=context[:8000],
+            )
+            result = await self.client.chat_json(
+                model=self.settings.openrouter_model_judge,
+                system=prompt["system"],
+                user=user,
+            )
         return apply_judge_hard_vetoes(
             product=product,
             candidate=candidate,
@@ -467,6 +703,51 @@ class LLMModules:
             extra_aliases=extra_aliases,
             peer_names=peer_names,
         )
+
+    async def _judge_jev(
+        self,
+        *,
+        product: str,
+        candidate: dict,
+        quote: str,
+        context: str,
+        prompt: dict[str, Any],
+    ) -> dict[str, Any]:
+        state = {
+            "product": product,
+            "candidate": candidate,
+            "quote": quote,
+            "context": context[:8000],
+        }
+        criteria = {
+            "supported": "Quote names this product, contains the value, scope and period match",
+            "partial": "Value and product present but ambiguity remains",
+            "unsupported": "Value missing from quote or quote does not support the claim",
+            "misclassified": "Quote is about something other than this product's revenue for this period",
+        }
+        questions = {
+            "support": jev_api.choice(
+                instructions=prompt["system"],
+                criteria=criteria,
+            )
+        }
+        payload = await self.client.system_one(state=state, questions=questions)
+        picked = jev_api.choice_answer(payload.get("answers") or {}, "support")
+        if not picked:
+            return {}
+        support = picked["choice"]
+        period_type = stated_text(candidate.get("period_type")).lower()
+        if support == "supported" and period_type in {"quarterly", "annual"}:
+            status = "auto_pass"
+        else:
+            status = "needs_review"
+        return {
+            "validation_status": status,
+            "support_classification": support,
+            "issues": [],
+            "explanation": "",
+            "confidence": picked["confidence"],
+        }
 
     async def judge_profile_field(
         self,
@@ -501,6 +782,60 @@ class LLMModules:
             fetch=True,
         )
 
+    async def judge_profile_fields_local(
+        self,
+        *,
+        product: str,
+        fields: list[dict[str, Any]],
+    ) -> dict[str, dict[str, Any]]:
+        """Jev Choice over cited local quotes. No corrected_value.
+
+        ``fields`` items: ``{field, value, source_quote}``. Returns field →
+        ``{verdict, confidence}`` for clear answers; omits abstentions.
+        """
+        if not self._uses_jev() or not self.settings.openrouter_api_key or not fields:
+            return {}
+        questions: dict[str, Any] = {}
+        state_fields: list[dict[str, Any]] = []
+        for item in fields:
+            name = str(item.get("field") or "")
+            quote = str(item.get("source_quote") or "").strip()
+            if not name or not quote:
+                continue
+            state_fields.append(
+                {"field": name, "value": item.get("value") or "", "source_quote": quote[:2000]}
+            )
+            questions[name] = jev_api.choice(
+                instructions=(
+                    f"Does the source quote support the stated {name} value for {product} "
+                    f"and only this brand (not a sibling SKU blend or label section junk)?"
+                ),
+                criteria={
+                    "supported": "Quote clearly supports the stated value for this brand",
+                    "contradicted": "Quote clearly disagrees with the stated value",
+                    "inconclusive": "Quote is silent, ambiguous, or mixed",
+                },
+            )
+        if not questions:
+            return {}
+        payload = await self.client.system_one(
+            state={"product": product, "fields": state_fields},
+            questions=questions,
+        )
+        answers = payload.get("answers") or {}
+        out: dict[str, dict[str, Any]] = {}
+        for name in questions:
+            picked = jev_api.choice_answer(answers, name)
+            if not picked:
+                continue
+            # Profile floor may be lower than Choice floor; Choice already gated.
+            out[name] = {
+                "verdict": picked["choice"],
+                "confidence": picked["confidence"],
+                "explanation": "",
+            }
+        return out
+
     async def resolve_xbrl_member(
         self,
         *,
@@ -517,6 +852,16 @@ class LLMModules:
         if not self.settings.openrouter_api_key or not candidates:
             return {}
         prompt = load_prompt("xbrl_member_resolver")
+        if self._uses_jev():
+            jev_result = await self._resolve_xbrl_member_jev(
+                issuer=issuer,
+                member=member,
+                siblings=siblings,
+                candidates=candidates,
+                prompt=prompt,
+            )
+            if jev_result is not None:
+                return jev_result
         user = prompt["user_template"].format(
             issuer=issuer,
             member=member,
@@ -536,6 +881,50 @@ class LLMModules:
                     "confidence": 0.0}
         return result
 
+    async def _resolve_xbrl_member_jev(
+        self,
+        *,
+        issuer: str,
+        member: str,
+        siblings: list[str],
+        candidates: list[str],
+        prompt: dict[str, Any],
+    ) -> dict[str, Any] | None:
+        """Choice over candidates + none. Confident none is a refuse, not abstain."""
+        criteria = {c: None for c in candidates[:254]}
+        criteria = jev_api.with_none(
+            criteria,
+            none_rubric=(
+                "None of the candidates: category/total/roll-up, unknown product, "
+                "or unsure"
+            ),
+        )
+        state = {
+            "issuer": issuer,
+            "member": member,
+            "siblings": sorted(siblings)[:40],
+            "candidates": sorted(candidates),
+        }
+        payload = await self.client.system_one(
+            state=state,
+            questions={
+                "product": jev_api.choice(
+                    instructions=prompt["system"],
+                    criteria=criteria,
+                )
+            },
+        )
+        picked = jev_api.choice_answer(payload.get("answers") or {}, "product")
+        if not picked:
+            return None  # abstain → chat
+        choice = picked["choice"]
+        if choice == jev_api.NONE:
+            return {"product": None, "reason": "", "confidence": picked["confidence"]}
+        if choice not in candidates:
+            return {"product": None, "reason": f"model returned {choice!r}, not a candidate",
+                    "confidence": 0.0}
+        return {"product": choice, "reason": "", "confidence": picked["confidence"]}
+
     async def judge_element(self, *, element: str, examples: list[str]) -> dict[str, Any]:
         """Whether an element the filing's linkbase left unplaced measures revenue.
 
@@ -546,6 +935,12 @@ class LLMModules:
             return {}
         prompt = load_prompt("xbrl_element_judge")
         prefix = element.split(":")[0] if ":" in element else ""
+        if self._uses_jev():
+            jev_result = await self._judge_element_jev(
+                element=element, prefix=prefix, examples=examples, prompt=prompt
+            )
+            if jev_result is not None:
+                return jev_result
         user = prompt["user_template"].format(
             element=element, prefix=prefix,
             examples="\n".join(f"  - {e}" for e in examples[:12]) or "  (none)",
@@ -561,19 +956,117 @@ class LLMModules:
                 "confidence": float(result.get("confidence") or 0.0),
                 "reason": str(result.get("reason") or "")}
 
+    async def _judge_element_jev(
+        self,
+        *,
+        element: str,
+        prefix: str,
+        examples: list[str],
+        prompt: dict[str, Any],
+    ) -> dict[str, Any] | None:
+        state = {
+            "element": element,
+            "prefix": prefix,
+            "examples": examples[:12],
+        }
+        payload = await self.client.system_one(
+            state=state,
+            questions={
+                "is_revenue": jev_api.noul(
+                    instructions=prompt["system"],
+                    criteria={
+                        "true": "Element measures revenue, net sales, or turnover",
+                        "false": "Element is a cost, expense, profit, balance, count, or rate",
+                    },
+                )
+            },
+        )
+        answered = jev_api.noul_answer(payload.get("answers") or {}, "is_revenue")
+        if not answered:
+            return None
+        return {
+            "is_revenue": answered["is_yes"],
+            "confidence": float(answered["confidence"]),
+            "reason": "",
+        }
+
     async def reconcile(self, *, product: str, candidates: list[dict]) -> dict[str, Any]:
         prompt = load_prompt("conflict_reconciler")
+        if not self.settings.openrouter_api_key:
+            return {"resolved": [], "conflicts": []}
+        if self._uses_jev():
+            jev_result = await self._reconcile_jev(
+                product=product, candidates=candidates, prompt=prompt
+            )
+            if jev_result is not None:
+                return jev_result
         user = prompt["user_template"].format(
             product=product,
             candidates=json.dumps(candidates)[:40000],
         )
-        if not self.settings.openrouter_api_key:
-            return {"resolved": [], "conflicts": []}
         return await self.client.chat_json(
             model=self.settings.openrouter_model_judge,
             system=prompt["system"],
             user=user,
         )
+
+    async def _reconcile_jev(
+        self,
+        *,
+        product: str,
+        candidates: list[dict],
+        prompt: dict[str, Any],
+    ) -> dict[str, Any] | None:
+        ids = [
+            str(c.get("id") or c.get("datapoint_id") or "")
+            for c in candidates
+            if (c.get("id") or c.get("datapoint_id"))
+        ]
+        ids = [i for i in ids if i][:254]
+        if not ids:
+            return {"resolved": [], "conflicts": []}
+        criteria = {i: None for i in ids}
+        criteria = jev_api.with_none(
+            criteria,
+            none_rubric="Leave unresolved; no single winner",
+        )
+        payload = await self.client.system_one(
+            state={"product": product, "candidates": candidates[:40]},
+            questions={
+                "winner": jev_api.choice(
+                    instructions=prompt["system"],
+                    criteria=criteria,
+                )
+            },
+        )
+        picked = jev_api.choice_answer(payload.get("answers") or {}, "winner")
+        if not picked:
+            return None
+        winner = picked["choice"]
+        if winner == jev_api.NONE:
+            return {
+                "resolved": [],
+                "conflicts": [
+                    {
+                        "candidate_ids": ids,
+                        "winner_id": None,
+                        "reason": "",
+                        "needs_review": True,
+                    }
+                ],
+            }
+        return {
+            "resolved": [
+                {
+                    "winner_id": winner,
+                    "period": "",
+                    "scope": "",
+                    "formulation": None,
+                    "reason": "",
+                }
+            ],
+            "conflicts": [],
+        }
 
     async def completeness(
         self,
@@ -776,6 +1269,29 @@ class LLMModules:
                 ticker=ticker,
             )
         return {"snippets": snippets}
+
+
+def _parse_reported_amount(amount: str) -> float | None:
+    """Digits from a money span, without inventing scale."""
+    cleaned = re.sub(r"[^\d.]", "", amount.replace(",", ""))
+    if not cleaned:
+        return None
+    try:
+        return float(cleaned)
+    except ValueError:
+        return None
+
+
+def _guess_unit(amount: str, quote: str) -> str:
+    hay = f"{amount} {quote}".lower()
+    if "billion" in hay:
+        return "billions"
+    if "million" in hay or "in millions" in hay:
+        return "millions"
+    if "thousand" in hay or "in thousands" in hay:
+        return "thousands"
+    return "ones"
+
 
 
 # A period that is part of a year without being a quarter of it is what

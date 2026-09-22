@@ -48,11 +48,20 @@ class _Index:
         return INDEX
 
 
+class _EmptyLookup:
+    text = ""
+
+    def json(self) -> dict:
+        return INDEX
+
+
 def _connector(monkeypatch) -> SECConnector:
     calls: list[str] = []
 
     async def _get(self, client, url, *, budget_s=None):
         calls.append(url)
+        if "cik-lookup-data" in url:
+            return _EmptyLookup()
         return _Index()
 
     monkeypatch.setattr(SECConnector, "_get_with_retry", _get)
@@ -110,6 +119,61 @@ async def test_neither_a_ticker_nor_a_name_costs_no_request(monkeypatch):
     connector = _connector(monkeypatch)
     assert await connector.resolve_cik() is None
     assert connector.index_fetches == []  # type: ignore[attr-defined]
+
+
+async def test_a_name_absent_from_the_ticker_map_resolves_via_the_lookup_file(monkeypatch):
+    """company_tickers.json is the listed-ticker index; filers with no ticker
+    row still appear in cik-lookup-data.txt. Exact normalised match, one hit."""
+    import app.connectors.sources as sources
+
+    sources._CIK_LOOKUP = None
+    calls: list[str] = []
+
+    class _Lookup:
+        text = (
+            "CALDERON RESPIRATORY ONLY INC:0000999999:\n"
+            "OTHER FILER LTD:0000888888:\n"
+        )
+
+        def json(self) -> dict:
+            return INDEX
+
+    async def _get(self, client, url, *, budget_s=None):
+        calls.append(url)
+        if "cik-lookup-data" in url:
+            return _Lookup()
+        return _Index()
+
+    monkeypatch.setattr(SECConnector, "_get_with_retry", _get)
+    connector = SECConnector(LocalFileStore("/tmp"))
+    assert await connector.resolve_cik(
+        "NOSUCH", "Calderon Respiratory Only Inc"
+    ) == "0000999999"
+    assert any("cik-lookup-data" in u for u in calls)
+
+
+async def test_an_ambiguous_lookup_name_resolves_to_nothing(monkeypatch):
+    import app.connectors.sources as sources
+
+    sources._CIK_LOOKUP = None
+
+    class _DupLookup:
+        text = (
+            "CALDERON SOLO, INC.:0000111111:\n"
+            "Calderon Solo Inc:0000222222:\n"
+        )
+
+        def json(self) -> dict:
+            return INDEX
+
+    async def _get_dup(self, client, url, *, budget_s=None):
+        if "cik-lookup-data" in url:
+            return _DupLookup()
+        return _Index()
+
+    monkeypatch.setattr(SECConnector, "_get_with_retry", _get_dup)
+    connector = SECConnector(LocalFileStore("/tmp"))
+    assert await connector.resolve_cik(company_name="Calderon Solo Inc") is None
 
 
 @pytest.mark.parametrize(

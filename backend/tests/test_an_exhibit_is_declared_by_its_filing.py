@@ -40,20 +40,44 @@ def _header_page(accession: str, documents: list[tuple[str, str]]) -> str:
     )
 
 
+def _complete_submission(accession: str, documents: list[tuple[str, str]]) -> str:
+    """A complete-submission .txt as EDGAR serves one: raw SGML DOCUMENT blocks."""
+    blocks = "".join(
+        f"<DOCUMENT>\n<TYPE>{kind}\n<SEQUENCE>{n}\n<FILENAME>{name}\n"
+        f"<DESCRIPTION>{kind}\n<TEXT>\nbody\n</TEXT>\n</DOCUMENT>\n"
+        for n, (kind, name) in enumerate(documents, start=1)
+    )
+    return f"<SEC-DOCUMENT>{accession}.txt\n{blocks}</SEC-DOCUMENT>\n"
+
+
 class _Page:
     def __init__(self, text: str) -> None:
         self.text = text
 
 
-def _connector(monkeypatch, filings: dict[str, list[tuple[str, str]]]) -> SECConnector:
+def _connector(
+    monkeypatch,
+    filings: dict[str, list[tuple[str, str]]],
+    *,
+    headers_missing: frozenset[str] | None = None,
+) -> SECConnector:
     """A connector whose only reachable pages are the header pages of
-    ``filings``, keyed by accession, and whose documents fetch to nothing."""
+    ``filings``, keyed by accession, and whose documents fetch to nothing.
+
+    ``headers_missing`` accessions 404 the header page so the complete
+    submission ``.txt`` is what declaration falls back to.
+    """
     connector = SECConnector(LocalFileStore("/tmp"))
+    missing = headers_missing or frozenset()
 
     async def _get(self, client, url, *, budget_s=None):
         for accession, documents in filings.items():
             if url.endswith(f"{accession}-index-headers.html"):
+                if accession in missing:
+                    raise RuntimeError("404 Not Found")
                 return _Page(_header_page(accession, documents))
+            if url.endswith(f"{accession}.txt"):
+                return _Page(_complete_submission(accession, documents))
         raise AssertionError(f"unexpected request: {url}")
 
     async def _fetch(self, client, *, url, accession, doc, run_id, job_id, source_id):
@@ -218,3 +242,423 @@ async def test_the_exhibit_pass_reads_the_same_widened_window_the_primary_pass_d
     )
     assert [s.metadata.get("exhibit_document") for s in sources] == ["acme-release.htm"]
     assert await _exhibits(connector, recent, since=since, until=until) == []
+
+
+async def test_a_missing_header_page_falls_back_to_the_complete_submission(monkeypatch):
+    """Older filings 404 the index-headers page; the complete submission .txt
+    still carries TYPE and FILENAME, so declaration does not need a year gate."""
+    connector = _connector(
+        monkeypatch,
+        {ACME_RELEASE: [("8-K", "acme.htm"), ("EX-99.1", "ex_100200.htm")]},
+        headers_missing=frozenset({ACME_RELEASE}),
+    )
+    sources = await _exhibits(
+        connector,
+        _index(("8-K", ACME_RELEASE, "2026-02-11", "2.02,9.01")),
+        since=date(2026, 1, 1),
+        until=date(2026, 3, 31),
+    )
+    assert [s.metadata["exhibit_document"] for s in sources] == ["ex_100200.htm"]
+
+
+async def test_a_six_k_after_quarter_end_is_taken_with_its_primary_and_exhibits(
+    monkeypatch,
+):
+    """Foreign issuers furnish results on Form 6-K with no item 2.02. The
+    release is the primary document and/or EX-99; selection is by the
+    filing's reportDate matching an asked quarter end."""
+    accession = "0000000001-26-000010"
+    connector = _connector(
+        monkeypatch,
+        {
+            accession: [
+                ("6-K", "acme-results.htm"),
+                ("EX-99.1", "acme-schedules.htm"),
+            ]
+        },
+    )
+    # Q1 2026 ends 2026-03-31; reportDate is that period, filed after it.
+    filed = date(2026, 5, 1)
+    recent = {
+        "form": ["6-K"],
+        "accessionNumber": [accession],
+        "filingDate": [filed.isoformat()],
+        "reportDate": ["2026-03-31"],
+        "items": [""],
+        "primaryDocument": ["acme-results.htm"],
+    }
+    sources = await connector._retrieve_earnings_exhibits(
+        None, run_id="r", job_id="j", cik="0000000001", recent=recent,
+        max_exhibits=6, since=date(2026, 1, 1), until=date(2026, 8, 1),
+        asked=["2026Q1"],
+    )
+    docs = sorted(
+        s.metadata.get("exhibit_document") or s.metadata.get("primary_document")
+        for s in sources
+    )
+    assert docs == ["acme-results.htm", "acme-schedules.htm"]
+
+
+async def test_a_six_k_report_date_the_day_after_quarter_end_is_still_taken(
+    monkeypatch,
+):
+    """A 52/53-week close stated as April 1 is still Q1's results filing."""
+    accession = "0000000001-26-000015"
+    connector = _connector(
+        monkeypatch,
+        {
+            accession: [
+                ("6-K", "acme-results.htm"),
+                ("EX-99.1", "acme-schedules.htm"),
+            ]
+        },
+    )
+    recent = {
+        "form": ["6-K"],
+        "accessionNumber": [accession],
+        "filingDate": ["2026-05-01"],
+        "reportDate": ["2026-04-01"],
+        "items": [""],
+        "primaryDocument": ["acme-results.htm"],
+    }
+    sources = await connector._retrieve_earnings_exhibits(
+        None, run_id="r", job_id="j", cik="0000000001", recent=recent,
+        max_exhibits=6, since=date(2026, 1, 1), until=date(2026, 8, 1),
+        asked=["2026Q1"],
+    )
+    docs = sorted(
+        s.metadata.get("exhibit_document") or s.metadata.get("primary_document")
+        for s in sources
+    )
+    assert docs == ["acme-results.htm", "acme-schedules.htm"]
+
+
+async def test_a_six_k_far_from_any_asked_quarter_is_skipped(monkeypatch):
+    accession = "0000000001-26-000011"
+    connector = _connector(
+        monkeypatch,
+        {accession: [("6-K", "acme-other.htm"), ("EX-99.1", "acme-news.htm")]},
+    )
+    recent = {
+        "form": ["6-K"],
+        "accessionNumber": [accession],
+        "filingDate": ["2026-09-21"],
+        # Mid-quarter event date: not a period of report for Q3.
+        "reportDate": ["2026-09-21"],
+        "items": [""],
+        "primaryDocument": ["acme-other.htm"],
+    }
+    sources = await connector._retrieve_earnings_exhibits(
+        None, run_id="r", job_id="j", cik="0000000001", recent=recent,
+        max_exhibits=6, since=date(2026, 1, 1), until=date(2026, 12, 31),
+        asked=["2026Q3"],
+    )
+    assert sources == []
+
+
+async def test_a_declared_annual_report_exhibit_is_fetched(monkeypatch):
+    """Reg S-K 601(b)(13): when an annual declares exhibit family 13, that
+    document is fetched with the primary - not every 10-K has one."""
+    accession = "0000000001-26-000012"
+    connector = _connector(
+        monkeypatch,
+        {
+            accession: [
+                ("10-K", "acme-10k.htm"),
+                ("EX-13", "acme-annual-report.htm"),
+            ]
+        },
+    )
+    sources = await connector._annual_report_exhibits(
+        None,
+        cik="0000000001",
+        accession=accession,
+        form="10-K",
+        filed="2026-02-20",
+        run_id="r",
+        job_id="j",
+    )
+    assert [s.metadata["exhibit_document"] for s in sources] == [
+        "acme-annual-report.htm"
+    ]
+    assert all(s.metadata["exhibit_family"] == "13" for s in sources)
+
+
+async def test_an_annual_without_exhibit_13_yields_no_annual_report_exhibit(
+    monkeypatch,
+):
+    accession = "0000000001-26-000013"
+    connector = _connector(
+        monkeypatch,
+        {accession: [("10-K", "acme-10k.htm"), ("EX-101.INS", "acme_htm.xml")]},
+    )
+    sources = await connector._annual_report_exhibits(
+        None,
+        cik="0000000001",
+        accession=accession,
+        form="10-K",
+        filed="2026-02-20",
+        run_id="r",
+        job_id="j",
+    )
+    assert sources == []
+
+
+async def test_exhibit_99_on_an_annual_is_not_an_annual_report_exhibit(monkeypatch):
+    """EX-99 on a 10-K is a different disclosure class; family 13 is the gate."""
+    accession = "0000000001-26-000014"
+    connector = _connector(
+        monkeypatch,
+        {
+            accession: [
+                ("10-K", "acme-10k.htm"),
+                ("EX-99.1", "acme-other.htm"),
+            ]
+        },
+    )
+    sources = await connector._annual_report_exhibits(
+        None,
+        cik="0000000001",
+        accession=accession,
+        form="10-K",
+        filed="2026-02-20",
+        run_id="r",
+        job_id="j",
+    )
+    assert sources == []
+
+
+async def test_six_k_budget_follows_asked_quarters_not_the_floor(monkeypatch):
+    """Seven asked quarters keep the seventh period even when max_exhibits is 6."""
+    filings = {
+        f"0000000001-26-0000{n:02d}": [
+            ("6-K", f"acme-q{n}.htm"),
+            ("EX-99.1", f"acme-q{n}-ex.htm"),
+        ]
+        for n in range(1, 8)
+    }
+    connector = _connector(monkeypatch, filings)
+    ends = [
+        "2024-06-30", "2024-09-30", "2024-12-31",
+        "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31",
+    ]
+    asked = [
+        "2024Q2", "2024Q3", "2024Q4", "2025Q1", "2025Q2", "2025Q3", "2025Q4",
+    ]
+    recent = {
+        "form": ["6-K"] * 7,
+        "accessionNumber": list(filings),
+        "filingDate": [
+            "2024-08-01", "2024-11-01", "2025-02-01",
+            "2025-05-01", "2025-08-01", "2025-11-01", "2026-02-01",
+        ],
+        "reportDate": ends,
+        "items": [""] * 7,
+        "primaryDocument": [f"acme-q{n}.htm" for n in range(1, 8)],
+    }
+    sources = await connector._retrieve_earnings_exhibits(
+        None, run_id="r", job_id="j", cik="0000000001", recent=recent,
+        max_exhibits=6, since=date(2024, 1, 1), until=date(2026, 6, 1),
+        asked=asked,
+    )
+    primaries = {
+        s.metadata.get("primary_document")
+        for s in sources
+        if s.metadata.get("primary_document")
+    }
+    assert "acme-q7.htm" in primaries
+    assert len(primaries) == 7
+
+
+async def test_six_k_html_exhibit_twin_is_kept_beside_pdf(monkeypatch):
+    """Same exact reportDate: HTML EX-99 and PDF-only twin both kept."""
+    html_acc = "0000000001-26-000020"
+    pdf_acc = "0000000001-26-000021"
+    connector = _connector(
+        monkeypatch,
+        {
+            html_acc: [("6-K", "acme.htm"), ("EX-99.1", "acme-99.htm")],
+            pdf_acc: [("6-K", "acme.pdf"), ("EX-99.1", "acme-99.pdf")],
+        },
+    )
+    recent = {
+        "form": ["6-K", "6-K"],
+        "accessionNumber": [pdf_acc, html_acc],
+        "filingDate": ["2026-02-10", "2026-02-11"],
+        "reportDate": ["2025-12-31", "2025-12-31"],
+        "items": ["", ""],
+        "primaryDocument": ["acme.pdf", "acme.htm"],
+    }
+    sources = await connector._retrieve_earnings_exhibits(
+        None, run_id="r", job_id="j", cik="0000000001", recent=recent,
+        max_exhibits=6, since=date(2025, 1, 1), until=date(2026, 6, 1),
+        asked=["2025Q4"],
+    )
+    exhibits = {s.metadata.get("exhibit_document") for s in sources}
+    assert "acme-99.htm" in exhibits
+    assert "acme-99.pdf" in exhibits
+
+
+async def test_six_k_exact_report_date_beats_a_snap_match(monkeypatch):
+    """An event date that snaps to the quarter end loses to the exact end."""
+    exact = "0000000001-26-000030"
+    snap = "0000000001-26-000031"
+    connector = _connector(
+        monkeypatch,
+        {
+            exact: [("6-K", "acme-exact.htm"), ("EX-99.1", "exact-ex.htm")],
+            snap: [("6-K", "acme-snap.htm"), ("EX-99.1", "snap-ex.htm")],
+        },
+    )
+    recent = {
+        "form": ["6-K", "6-K"],
+        "accessionNumber": [snap, exact],
+        "filingDate": ["2026-05-05", "2026-05-10"],
+        "reportDate": ["2026-04-01", "2026-03-31"],
+        "items": ["", ""],
+        "primaryDocument": ["acme-snap.htm", "acme-exact.htm"],
+    }
+    sources = await connector._retrieve_earnings_exhibits(
+        None, run_id="r", job_id="j", cik="0000000001", recent=recent,
+        max_exhibits=6, since=date(2026, 1, 1), until=date(2026, 8, 1),
+        asked=["2026Q1"],
+    )
+    primaries = {
+        s.metadata.get("primary_document")
+        for s in sources
+        if s.metadata.get("primary_document")
+    }
+    assert primaries == {"acme-exact.htm"}
+
+
+async def test_six_k_keeps_earliest_exact_html_releases(monkeypatch):
+    """Several exact HTML EX-99 filings share a quarter: keep the earliest few."""
+    early = "0000000001-26-000060"
+    mid = "0000000001-26-000061"
+    late = "0000000001-26-000062"
+    connector = _connector(
+        monkeypatch,
+        {
+            early: [("6-K", "acme-early.htm"), ("EX-99.1", "early-ex.htm")],
+            mid: [("6-K", "acme-mid.htm"), ("EX-99.1", "mid-ex.htm")],
+            late: [("6-K", "acme-late.htm"), ("EX-99.1", "late-ex.htm")],
+        },
+    )
+    recent = {
+        "form": ["6-K", "6-K", "6-K"],
+        "accessionNumber": [late, mid, early],
+        "filingDate": ["2026-10-27", "2026-07-31", "2026-07-30"],
+        "reportDate": ["2026-06-30", "2026-06-30", "2026-06-30"],
+        "items": ["", "", ""],
+        "primaryDocument": ["acme-late.htm", "acme-mid.htm", "acme-early.htm"],
+    }
+    sources = await connector._retrieve_earnings_exhibits(
+        None, run_id="r", job_id="j", cik="0000000001", recent=recent,
+        max_exhibits=6, since=date(2026, 1, 1), until=date(2026, 12, 31),
+        asked=["2026Q2"],
+    )
+    exhibits = {
+        s.metadata.get("exhibit_document")
+        for s in sources
+        if s.metadata.get("exhibit_document")
+    }
+    assert exhibits == {"early-ex.htm", "mid-ex.htm", "late-ex.htm"}
+
+
+async def test_six_k_without_exhibit_99_keeps_earliest_exact_primaries(monkeypatch):
+    """FPI results often live on the primary with no EX-99; keep earliest exact."""
+    first = "0000000001-26-000070"
+    second = "0000000001-26-000071"
+    connector = _connector(
+        monkeypatch,
+        {
+            first: [("6-K", "acme-results.htm")],
+            second: [("6-K", "acme-other.htm")],
+        },
+    )
+    recent = {
+        "form": ["6-K", "6-K"],
+        "accessionNumber": [second, first],
+        "filingDate": ["2026-02-04", "2026-02-03"],
+        "reportDate": ["2025-12-31", "2025-12-31"],
+        "items": ["", ""],
+        "primaryDocument": ["acme-other.htm", "acme-results.htm"],
+    }
+    sources = await connector._retrieve_earnings_exhibits(
+        None, run_id="r", job_id="j", cik="0000000001", recent=recent,
+        max_exhibits=6, since=date(2025, 1, 1), until=date(2026, 6, 1),
+        asked=["2025Q4"],
+    )
+    primaries = {
+        s.metadata.get("primary_document")
+        for s in sources
+        if s.metadata.get("primary_document")
+    }
+    assert "acme-results.htm" in primaries
+    assert "acme-other.htm" in primaries
+
+
+async def test_an_amended_nine_oh_one_with_exhibit_99_is_fetched(monkeypatch):
+    """8-K/A item 9.01 that declares EX-99 is an earnings disclosure."""
+    accession = "0000000001-26-000040"
+    connector = _connector(
+        monkeypatch,
+        {accession: [("8-K/A", "acme.htm"), ("EX-99.2", "acme-fin.htm")]},
+    )
+    sources = await _exhibits(
+        connector,
+        _index(("8-K/A", accession, "2026-02-11", "9.01")),
+        since=date(2026, 1, 1),
+        until=date(2026, 3, 31),
+    )
+    assert [s.metadata["exhibit_document"] for s in sources] == ["acme-fin.htm"]
+
+
+async def test_a_plain_nine_oh_one_without_amendment_is_skipped(monkeypatch):
+    """Non-amendment item 9.01 alone is not opened."""
+    accession = "0000000001-26-000041"
+    connector = _connector(
+        monkeypatch,
+        {accession: [("8-K", "acme.htm"), ("EX-99.1", "acme-other.htm")]},
+    )
+    sources = await _exhibits(
+        connector,
+        _index(("8-K", accession, "2026-02-11", "9.01")),
+        since=date(2026, 1, 1),
+        until=date(2026, 3, 31),
+    )
+    assert sources == []
+
+
+async def test_yoy_comparative_earnings_release_is_in_reach(monkeypatch):
+    """Asked Q1 2024 also admits the Q1 2025 2.02 release (prior-year column)."""
+    accession = "0000000001-26-000050"
+    connector = _connector(
+        monkeypatch,
+        {accession: [("8-K", "acme.htm"), ("EX-99.1", "acme-2025q1.htm")]},
+    )
+    # Filed after 2025-03-31 within REPORTING_LAG; outside a 2024-only window.
+    sources = await _exhibits(
+        connector,
+        _index(("8-K", accession, "2025-05-01", "2.02")),
+        since=date(2024, 1, 1),
+        until=date(2024, 6, 30),
+        asked=["2024Q1"],
+    )
+    assert [s.metadata["exhibit_document"] for s in sources] == ["acme-2025q1.htm"]
+
+
+def test_yoy_earnings_bounds_follow_the_asked_quarter():
+    from app.connectors.sources import REPORTING_LAG, yoy_earnings_filing_bounds
+
+    bounds = yoy_earnings_filing_bounds(["2024Q1"])
+    assert bounds == [(date(2025, 3, 31), date(2025, 3, 31) + REPORTING_LAG)]
+
+
+def test_stated_quarters_of_an_annual_reach_back_three_years():
+    from app.connectors.sources import _stated_quarter_indices, quarter_index
+
+    stated = _stated_quarter_indices("10-K", date(2025, 12, 31))
+    assert quarter_index(date(2025, 12, 31)) in stated
+    assert quarter_index(date(2023, 12, 31)) in stated
+    assert quarter_index(date(2022, 12, 31)) not in stated

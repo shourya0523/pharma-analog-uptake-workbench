@@ -87,6 +87,36 @@ def fiscal_period_end(month: int, day: int | None, year: int | None = None) -> t
     return month, year
 
 
+def period_of_report_quarter(day: date) -> int:
+    """The quarter an EDGAR ``reportDate`` names, after the first-week snap.
+
+    Same integer encoding the retrieval cover uses elsewhere
+    (``year * 4 + (month - 1) // 3``). April 1 is the first quarter, not the
+    second; July 1 is the second, not the third. A calendar month-end is
+    unchanged.
+    """
+    month, year = fiscal_period_end(day.month, day.day, day.year)
+    year = year if year is not None else day.year
+    return year * 4 + (month - 1) // 3
+
+
+def is_period_of_report(reported: date, period_end: date) -> bool:
+    """Whether ``reported`` is the period end ``period_end``, allowing the snap.
+
+    Exact equality holds for filers that put the calendar quarter end on the
+    index. When the first-week snap moves the month, the snapped quarter's
+    calendar end must be ``period_end`` - so July 1 aligns to June 30, while
+    a mid-quarter event date does not become that quarter's end.
+    """
+    if reported == period_end:
+        return True
+    month, year = fiscal_period_end(reported.month, reported.day, reported.year)
+    year = year if year is not None else reported.year
+    if (month, year) == (reported.month, reported.year):
+        return False
+    return quarter_end(year, quarter_of_month(month)) == period_end
+
+
 MONTH_NAMES = {
     1: "January",
     2: "February",
