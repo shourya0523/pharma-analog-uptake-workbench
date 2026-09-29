@@ -33,10 +33,13 @@ from __future__ import annotations
 
 # ruff: noqa: BLE001
 import json
+import logging
 import re
 from collections.abc import Iterator
 
 from bs4 import BeautifulSoup, Tag
+
+logger = logging.getLogger(__name__)
 
 from app.domain.models import ParsedDocument, ParsingStatus, RetrievedSource, SourceType
 from app.storage.filestore import FileStore
@@ -662,6 +665,11 @@ class DocumentParser:
 
     async def parse(self, source: RetrievedSource) -> ParsedDocument:
         if source.retrieval_status.value not in {"success", "partial"}:
+            logger.info(
+                "parse_skip source_id=%s reason=retrieval_failed status=%s",
+                source.source_id,
+                source.retrieval_status.value,
+            )
             return ParsedDocument(
                 source_id=source.source_id,
                 parsing_status=ParsingStatus.FAILED,
@@ -673,6 +681,11 @@ class DocumentParser:
             try:
                 raw = await self.file_store.get(source.storage_key)
             except Exception as exc:
+                logger.warning(
+                    "parse_failed source_id=%s reason=storage_unreadable error=%s",
+                    source.source_id,
+                    exc,
+                )
                 return ParsedDocument(
                     source_id=source.source_id,
                     parsing_status=ParsingStatus.FAILED,
@@ -692,6 +705,11 @@ class DocumentParser:
         elif source.raw_text:
             text = source.raw_text
         if not text:
+            logger.warning(
+                "parse_failed source_id=%s reason=no_text type=%s",
+                source.source_id,
+                getattr(source.source_type, "value", source.source_type),
+            )
             return ParsedDocument(
                 source_id=source.source_id,
                 parsing_status=ParsingStatus.FAILED,
@@ -710,6 +728,11 @@ class DocumentParser:
                 parsing_status=ParsingStatus.SUCCESS,
             )
         except Exception as exc:
+            logger.warning(
+                "parse_failed source_id=%s reason=openfda_json error=%s",
+                source.source_id,
+                exc,
+            )
             return ParsedDocument(
                 source_id=source.source_id,
                 parsing_status=ParsingStatus.FAILED,
@@ -774,6 +797,11 @@ class DocumentParser:
                 parsing_status=ParsingStatus.SUCCESS,
             )
         except Exception as exc:
+            logger.warning(
+                "parse_failed source_id=%s reason=pdf error=%s",
+                source.source_id,
+                exc,
+            )
             return ParsedDocument(
                 source_id=source.source_id,
                 parsing_status=ParsingStatus.FAILED,

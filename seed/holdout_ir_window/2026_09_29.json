@@ -1,0 +1,23 @@
+{
+  "note": "Held-out set for COMPANY_IR / LLM_SEARCH admission on asked quarters, not on coverage's annual keys. A locator that names 2020Q4 is not an answer to 2020Q1/Q2; a document whose coverage only carries 2020 does not answer those quarters either. It may score that admission change and nothing else. Issuers here are absent from gold and every spent holdout under seed/ — derived through tests/answer_keys.spent_issuers. What spends it: the first scored eval of IR/search window admission. After that it is an oracle. Both answers: a locator that names an asked quarter (keep) and a locator that names another quarter (drop). No case states a CIK.",
+  "cases": [
+    {
+      "drug_name": "Afrezza",
+      "manufacturer": "MannKind Corporation",
+      "ticker": "MNKD",
+      "locator": "https://ir.acme.example/earningsreleaseq12020.htm",
+      "asked_quarters": ["2020Q1", "2020Q2"],
+      "binds": true,
+      "why": "the filename names 2020Q1, which the window asked for"
+    },
+    {
+      "drug_name": "Hylenex",
+      "manufacturer": "Halozyme Therapeutics Inc",
+      "ticker": "HALO",
+      "locator": "https://ir.acme.example/earningsreleaseq42020.htm",
+      "asked_quarters": ["2020Q1", "2020Q2"],
+      "binds": false,
+      "why": "the filename names 2020Q4, which the window did not ask for; an annual 2020 key would not admit it either"
+    }
+  ]
+}

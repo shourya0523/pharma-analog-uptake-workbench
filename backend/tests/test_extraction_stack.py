@@ -105,7 +105,7 @@ def test_an_amount_in_the_prose_is_not_the_table_s_unit_declaration():
     fingerprint = build_fingerprint(rows, context)
     assert fingerprint.unit_label == "thousands"
 
-    candidates, _findings, _skipped = extract_revenue_candidates(
+    candidates, _findings, _skipped, _pending = extract_revenue_candidates(
         [rows], product="Remodulin", context=context
     )
     quarter = [c for c in candidates if c["period"] == "2012Q3"]
@@ -208,7 +208,7 @@ def test_year_to_date_column_is_never_emitted_as_a_quarter():
     assert by_period[("2024", "six_month")] == 70.0
     assert not any(v.period_type == "quarterly" and v.period == "2024" for v in readout.values)
 
-    candidates, _, _ = extract_revenue_candidates(
+    candidates, _, _, _pending = extract_revenue_candidates(
         [QUARTER_AND_YTD], product="Winrevair"
     )
     # The six-month figure comes through - a fourth quarter is derived by
@@ -1011,6 +1011,65 @@ def test_a_line_that_did_not_parse_still_counts_as_a_line():
     assert "Harvoni – Europe" in readout.skipped_reason
 
 
+def test_two_trade_names_of_one_product_sum_when_the_total_includes_another():
+    """Matcher already placed both trade-name lines; sum there.
+
+    The schedule total includes another brand, so it does not identify the
+    product. The two matched wholes are different printed names, so they
+    add by period. JEV is not asked to refuse a product the matcher placed.
+    Invented: Calderon + Calderonex + NuVessa.
+    """
+    from app.extraction.check import value_supported_by_quote
+    from app.extraction.process import normalize_all
+
+    rows = [
+        ["", "Three Months Ended March 31,"],
+        ["", "2020", "2019"],
+        ["", "(in thousands)"],
+        ["Calderon", "23,055", "20,285"],
+        ["Calderonex", "2,582", "—"],
+        ["NuVessa", "—", "77"],
+        ["Total product revenue, net", "25,637", "20,362"],
+    ]
+    readout = read_table(
+        rows,
+        product="Calderon",
+        extra_aliases=["Calderon", "Calderonex"],
+        context="(in thousands)",
+    )
+    assert readout.several_lines is None
+    assert "several_lines_no_total" not in (readout.skipped_reason or "")
+    by_period = {v.period: v.value_as_reported for v in readout.values}
+    assert by_period["2020Q1"] == 25637.0
+    assert by_period["2019Q1"] == 20285.0
+    assert all("several_lines_summed" in v.flags for v in readout.values)
+    assert not any(v.flags for v in readout.values if "pending" in str(v.flags))
+    points = normalize_all(readout.values)
+    assert value_supported_by_quote(points) == []
+
+
+def test_two_lines_of_the_same_trade_name_still_refuse():
+    """Rival figures under one name are not summed into a made-up total.
+
+    The schedule total does not equal either line or their sum, so nothing
+    identifies which figure is the product's. Pending still carries the lines
+    for an adjudicator that should refuse.
+    """
+    rows = [
+        ["", "Three Months Ended March 31,"],
+        ["", "2020", "2019"],
+        ["", "(in thousands)"],
+        ["Calderon", "23,055", "20,000"],
+        ["Calderon", "2,582", "1,000"],
+        ["Total product revenue, net", "40,000", "30,000"],
+    ]
+    readout = read_table(rows, product="Calderon", context="(in thousands)")
+    assert "several_lines_no_total" in (readout.skipped_reason or "")
+    assert readout.values == []
+    assert readout.several_lines is not None
+    assert {line.label for line in readout.several_lines.lines} == {"Calderon"}
+
+
 def test_a_nil_dash_is_the_zero_it_means():
     """A line that sold nothing everywhere is a line, not a heading.
 
@@ -1134,11 +1193,16 @@ def test_model_output_cannot_name_its_own_provenance():
     code, so the reader's label is honoured only from a reader.
     """
     from app.pipeline.orchestrator import _deterministic_method
+    from app.pipeline.series_identity import claim_rank
 
     assert _deterministic_method({"_from_table": True, "extraction_method": "prose_sentence"}) == "prose"
     assert _deterministic_method({"_from_table": True, "extraction_method": "table_fingerprint"}) == "table"
     assert _deterministic_method({"extraction_method": "table_fingerprint"}) == "llm"
     assert _deterministic_method({"_from_table": True, "extraction_method": "hand_audited"}) == "table"
+    assert _deterministic_method({"extraction_method": "jev_locus"}) == "jev"
+    assert _deterministic_method({"extraction_method": "jev"}) == "jev"
+    assert claim_rank("jev") == claim_rank("llm")
+    assert claim_rank("jev_locus") == claim_rank("llm")
 
 
 def test_a_sentence_does_not_pre_empt_a_derivation():
@@ -1477,6 +1541,30 @@ def test_a_caption_answers_for_a_schedule_that_prints_no_total():
     assert [v.period for v in published.values] == ["2026Q2", "2025Q2"]
 
 
+def test_a_product_under_program_expenses_is_not_revenue():
+    """A mixed P&L prints Total revenue and then Program expenses / Calderon.
+    The bare product name under the expense section is that program's cost,
+    not product sales - even though a revenue total made the table look like
+    a revenue schedule."""
+    from app.extraction.extract import read_table
+
+    grid: list[list[str | None]] = [
+        ["", "Three Months Ended June 30,", None, "Three Months Ended June 30,", None],
+        ["", "2026", None, "2025", None],
+        ["Product sales, net", "$", "170,382", "$", "6,517"],
+        ["Total revenue", "$", "171,679", "$", "8,837"],
+        ["Program expenses", None, None, None, None],
+        ["Calderon", "$", "19,327", "$", "14,661"],
+        ["NuVessa", "$", "10,777", "$", "8,000"],
+    ]
+    rows = [[cell or "" for cell in row] for row in grid]
+    published = read_table(
+        rows, product="Calderon", grid=grid, context="(in thousands)",
+        products=["Calderon", "NuVessa"],
+    )
+    assert all(v.value_as_reported != 19327.0 for v in published.values)
+    assert "not_revenue_section:expense" in (published.skipped_reason or "")
+
 def test_a_sentence_is_its_own_heading():
     """A sentence has no schedule around it to ask, so it answers for itself:
     a cost of sales stated for the product is not the product's revenue, and a
@@ -1486,7 +1574,7 @@ def test_a_sentence_is_its_own_heading():
     sales = ("For the three months ended March 31, 2026, net product sales of Calderon "
              "were $75.9 million.")
     assert extract_revenue_candidates([], product="Calderon", prose=cost)[0] == []
-    published, _findings, _skipped = extract_revenue_candidates(
+    published, _findings, _skipped, _pending = extract_revenue_candidates(
         [], product="Calderon", prose=sales)
     assert [(c["period"], c["value_reported"]) for c in published] == [("2026Q1", 75.9)]
 

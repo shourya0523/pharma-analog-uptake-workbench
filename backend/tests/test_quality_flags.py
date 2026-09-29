@@ -57,5 +57,12 @@ async def test_quality_step_still_adds_high_severity_issues(tmp_path):
 
 
 def test_flags_are_merged_not_replaced():
+    """The quality step must add into the list, never overwrite it.
+
+    `_flag` is the merge: it unions new codes onto what the job already holds.
+    Replacing the list would drop provenance raised earlier in the run.
+    """
     source = inspect.getsource(PipelineOrchestrator._quality_and_validation)
-    assert "set(job.quality_flags or [])" in source
+    assert "self._flag(" in source
+    merge = inspect.getsource(PipelineOrchestrator._flag)
+    assert "before |" in merge or "| set(flags)" in merge

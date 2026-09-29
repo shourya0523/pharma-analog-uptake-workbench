@@ -87,6 +87,8 @@ CLAIM_STRENGTH = {
     "derived_from_period_total": 2,
     "derived_sole_formulation": 2,
     "llm": 3,
+    "jev": 3,
+    "jev_locus": 3,
     "prose": 4,
     "prose_sentence": 4,
 }

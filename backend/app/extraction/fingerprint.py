@@ -81,7 +81,7 @@ _ORDINAL_QUARTERS = {"first": 3, "second": 6, "third": 9, "fourth": 12}
 # "months" not followed by "ended", so a heading broken before its date still
 # carries forward to the row holding the date instead of being read here.
 _NAMED_PERIOD_RE = re.compile(
-    r"\b(first|second|third|fourth)\s+quarter\b"
+    r"\b(first|second|third|fourth)[-\s]+quarter\b"
     r"|\b(three|six|nine|twelve)\s+months\b(?!\s*ended)"
     r"|\b(?:full|fiscal)\s+year\b",
     re.IGNORECASE,

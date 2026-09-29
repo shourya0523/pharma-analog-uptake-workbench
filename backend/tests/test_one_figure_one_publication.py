@@ -172,9 +172,9 @@ def test_the_gate_does_not_republish_a_row_an_earlier_stage_decided():
 def test_a_filing_that_contradicts_itself_publishes_nothing_for_the_period(monkeypatch):
     """A fact the filer tagged and a figure the same filing prints, disagreeing.
 
-    The tagged fact won on tier and the printed figure was held as a conflict
-    it had not lost. One filing is one witness; it has said two things, so
-    neither is the answer, and both are held under a flag naming the filing.
+    The weaker claim is held under a flag naming the filing; the stronger
+    tagged fact still publishes. Equal-tier disagreement within one filing
+    still holds both.
     """
     db, job = _job()
     filing = SourceDocumentORM(id=new_id(), job_id=job.id, source_type="quarterly_report",
@@ -186,8 +186,37 @@ def test_a_filing_that_contradicts_itself_publishes_nothing_for_the_period(monke
         _point(job, 97.6, method="table", source_id=filing.id, period="2018Q1", precision=0.05),
     ]
     by_method = _reconcile(monkeypatch, db, job, rows)
-    assert {r.validation_status for r in by_method.values()} == {ValidationStatus.NEEDS_REVIEW.value}
-    assert all("filing_contradicts_itself" in r.issue_flags for r in by_method.values())
+    assert by_method["xbrl_fact"].validation_status == ValidationStatus.AUTO_PASS.value
+    assert by_method["table"].validation_status == ValidationStatus.NEEDS_REVIEW.value
+    assert "filing_contradicts_itself" in by_method["table"].issue_flags
+
+
+def test_us_and_worldwide_figures_do_not_conflict(monkeypatch):
+    """A regional column beside the product total is two series, not one fight."""
+    db, job = _job()
+    rows = [
+        _point(job, 588.0, method="xbrl_fact", period="2026Q2", precision=0.05),
+        _point(job, 522.0, method="llm", period="2026Q2", precision=0.05),
+    ]
+    rows[0].geography = None
+    rows[1].geography = "United States"
+    got = _reconcile(monkeypatch, db, job, rows)
+    assert got["xbrl_fact"].validation_status == ValidationStatus.AUTO_PASS.value
+    assert got["llm"].validation_status == ValidationStatus.AUTO_PASS.value
+
+
+def test_the_model_cannot_promote_prose_over_a_tagged_fact(monkeypatch):
+    db, job = _job()
+    rows = [
+        _point(job, 330.3, method="xbrl_fact", precision=0.05),
+        _point(job, 16.0, method="prose", precision=0.05),
+    ]
+    got = _reconcile_with(monkeypatch, db, job, rows, {
+        "resolved": [],
+        "conflicts": [{"candidate_ids": [r.id for r in rows], "winner_id": rows[1].id}],
+    })
+    assert got["xbrl_fact"].validation_status == ValidationStatus.AUTO_PASS.value
+    assert got["prose"].validation_status == ValidationStatus.NEEDS_REVIEW.value
 
 
 def test_two_filings_that_disagree_are_still_settled_by_tier(monkeypatch):
@@ -277,7 +306,11 @@ def test_a_value_where_an_id_was_asked_for_is_not_a_winner(monkeypatch):
 
 
 def test_a_winner_the_model_names_that_is_a_row_still_wins(monkeypatch):
-    """The check must not reject the ids the model gets right."""
+    """The check must not reject the ids the model gets right.
+
+    Naming the stronger claim is admitted; naming a weaker one is cleared
+    by the tier floor elsewhere.
+    """
     db, job = _job()
     rows = [
         _point(job, 427.623, method="xbrl_fact", precision=0.0005),
@@ -285,7 +318,7 @@ def test_a_winner_the_model_names_that_is_a_row_still_wins(monkeypatch):
     ]
     got = _reconcile_with(monkeypatch, db, job, rows, {
         "resolved": [],
-        "conflicts": [{"candidate_ids": [r.id for r in rows], "winner_id": rows[1].id}],
+        "conflicts": [{"candidate_ids": [r.id for r in rows], "winner_id": rows[0].id}],
     })
-    assert got["table"].validation_status == "auto_pass"
-    assert got["xbrl_fact"].validation_status == "needs_review"
+    assert got["xbrl_fact"].validation_status == "auto_pass"
+    assert got["table"].validation_status == "needs_review"

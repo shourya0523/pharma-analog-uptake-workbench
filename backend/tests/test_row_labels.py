@@ -260,7 +260,7 @@ def test_a_note_saying_the_product_had_no_sales_makes_the_line_someone_elses():
 
 def test_a_question_does_not_silence_the_sentence_that_answers():
     prose = "Calderon net product sales were $25.8 million for the three months ended June 30, 2024."
-    candidates, _f, _s = extract_revenue_candidates(
+    candidates, _f, _s, _pending = extract_revenue_candidates(
         [HEADER + [["Calderon and Veltrexa", "25.8", "15.9"]]], product="Calderon",
         products=PRODUCTS, prose=prose)
     by_method = {c["extraction_method"]: c for c in candidates if c["period"] == "2024Q2"}
@@ -291,7 +291,7 @@ def test_an_inventory_line_is_held_with_its_residue_not_published_as_a_formulati
     readout = _read([["Calderon: Raw materials", "12.0", "9.0"]])
     assert [v.flags for v in readout.values] == [("label_not_understood",)] * 2
     assert readout.values[0].residue == "raw materials"
-    candidates, _findings, _skipped = extract_revenue_candidates(
+    candidates, _findings, _skipped, _pending = extract_revenue_candidates(
         [HEADER + [["Calderon: Raw materials", "12.0", "9.0"]]], product="Calderon", products=PRODUCTS)
     assert all(c["revenue_scope"] == "Unknown" for c in candidates)
     assert all("label_not_understood" in c["label_flags"] for c in candidates)
@@ -318,7 +318,7 @@ def test_a_combined_line_is_published_as_the_pair_it_is():
         v.combined_with == ("Calderon XR", "NuVessa") and "combined_line" in v.flags
         for v in readout.values
     )
-    candidates, _f, _s = extract_revenue_candidates(
+    candidates, _f, _s, _pending = extract_revenue_candidates(
         [HEADER + [["Calderon / Calderon XR / NuVessa", "100.0", "90.0"]]],
         product="Calderon", products=PRODUCTS)
     assert candidates[0]["revenue_scope"] == "Product family"
@@ -381,7 +381,7 @@ def test_a_partial_period_footnote_holds_the_figure():
     readout = _read(rows, footnotes=notes)
     assert readout.values and all("partial_period" in v.flags for v in readout.values)
     assert "we owned" in readout.values[0].source_quote
-    candidates, _f, _s = extract_revenue_candidates(
+    candidates, _f, _s, _pending = extract_revenue_candidates(
         [HEADER + rows], product="Calderon", products=PRODUCTS, footnotes=[notes])
     verdict = try_deterministic_judgment(
         product="Calderon", generic=None, candidate=candidates[0],
@@ -391,7 +391,7 @@ def test_a_partial_period_footnote_holds_the_figure():
 
 
 def test_a_global_line_is_the_family_and_reconciles_with_a_tagged_twin():
-    candidates, _f, _s = extract_revenue_candidates(
+    candidates, _f, _s, _pending = extract_revenue_candidates(
         [HEADER + [["Calderon - Global", "100.0", "90.0"]]], product="Calderon", products=PRODUCTS)
     assert candidates[0]["revenue_scope"] == "Product family"
     assert candidates[0]["formulation"] is None
@@ -410,7 +410,7 @@ def test_region_rows_take_their_region_and_the_labelled_total_is_the_product():
 
 
 def test_region_rows_without_a_total_publish_in_their_own_scope():
-    candidates, _f, _s = extract_revenue_candidates(
+    candidates, _f, _s, _pending = extract_revenue_candidates(
         [HEADER + [["Calderon - U.S.", "60.0", "50.0"], ["Calderon - Europe", "40.0", "40.0"]]],
         product="Calderon", products=PRODUCTS)
     assert {(c["revenue_scope"], c["geography"]) for c in candidates} == {

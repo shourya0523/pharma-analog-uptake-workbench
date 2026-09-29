@@ -6,8 +6,9 @@ import logging
 from app.db.models import init_db
 from app.jobs.handler import handle_job
 from app.jobs.queue import SqsJobQueue
+from app.logging_setup import configure_logging
 
-logging.basicConfig(level=logging.INFO)
+configure_logging()
 logger = logging.getLogger(__name__)
 
 

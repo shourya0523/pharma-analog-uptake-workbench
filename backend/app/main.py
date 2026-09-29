@@ -93,7 +93,7 @@ async def _handle_job(payload: dict[str, Any]) -> None:
     try:
         await handle_job(payload, file_store=file_store)
     except Exception as exc:
-        logger.error("job_handler_failed job_id=%s run_id=%s error=%s", job_id, run_id, exc)
+        logger.exception("job_handler_failed job_id=%s run_id=%s error=%s", job_id, run_id, exc)
 
 
 async def startup() -> None:

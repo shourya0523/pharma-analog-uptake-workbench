@@ -25,14 +25,18 @@ if TYPE_CHECKING:  # a type only; periods.py must not import this module back
 from collections.abc import Iterable
 from typing import Any
 
-from app.extraction.check import Finding, cell_of, run_checks
+from app.extraction.check import Finding, cell_of, prefer_nontotal_readings, run_checks
 from app.extraction.extract import (
     QUESTION_FLAGS,
+    SeveralLinesPending,
     names_a_non_revenue_metric,
     read_tables,
+    summed_several_lines,
 )
 from app.extraction.process import Datapoint, normalize_all
 from app.extraction.prose import read_prose
+from app.parsing.evidence import NON_PRODUCT_REVENUE_RE
+from app.quality.sentences import states_a_change_not_a_level
 
 # Read straight off a declared table, so it carries the confidence the previous
 # table reader used for the same provenance.
@@ -65,12 +69,16 @@ def _scope_of_point(point: Datapoint, product: str) -> tuple[str, str | None, st
     named; a sentence's label is the product itself. A label the reader could
     not account for is published as Unknown, which no deterministic pass
     accepts, so the judge sees it with the residue and a person settles it.
+    A dosage-form residue peeled as formulation is Formulation-specific, not
+    Unknown and not the product-family aggregate.
     """
     if point.fingerprint_signature == "prose":
         scope = _scope_for(point.product_label, product)
         return scope, None, None if scope == "Product family" else point.product_label
     if "label_not_understood" in point.flags:
         return "Unknown", None, None
+    if point.formulation:
+        return "Formulation-specific", None, point.formulation
     if point.scope in _SCOPE_BY_GEOGRAPHY:
         return _SCOPE_BY_GEOGRAPHY[point.scope], None, None
     return "Regional", point.scope, None
@@ -96,6 +104,7 @@ def _as_candidate(point: Datapoint, product: str) -> dict[str, Any]:
         "label_flags": list(point.flags),
         "label_residue": point.residue,
         "combined_with": list(point.combined_with),
+        "covers": point.covers,
         "source_quote": point.source_quote,
         "product_mentioned_in_quote": True,
         "is_company_total": False,
@@ -120,12 +129,14 @@ def extract_revenue_candidates(
     footnotes: Iterable[Iterable[str]] | None = None,
     products: Iterable[str] | None = None,
     units: Iterable[str | None] | None = None,
-) -> tuple[list[dict[str, Any]], list[Finding], list[str]]:
+) -> tuple[list[dict[str, Any]], list[Finding], list[str], list[SeveralLinesPending]]:
     """Deterministic revenue candidates plus what the checks found.
 
-    Returns (candidates, findings, skipped reasons). Skipped reasons name the
-    tables that were passed over and why, so a source that produced nothing is
-    distinguishable from a source that was never read.
+    Returns (candidates, findings, skipped reasons, several-lines pendings).
+    Skipped reasons name the tables that were passed over and why, so a source
+    that produced nothing is distinguishable from a source that was never read.
+    Pendings are wholes the geometry read but could not publish; an adjudicator
+    may sum them as trade names of one product.
 
     ``prose`` is the document's running text. Issuers disclosed product sales
     in sentences long before the product-sales exhibit existed, and a reader
@@ -154,6 +165,7 @@ def extract_revenue_candidates(
     )
     values = [value for readout in readouts for value in readout.values]
     skipped = [readout.skipped_reason for readout in readouts if readout.skipped_reason]
+    pending = [readout.several_lines for readout in readouts if readout.several_lines]
 
     # Sentences are read after tables and add only the periods the tables did
     # not state, so a figure printed in a schedule is never displaced by the
@@ -182,9 +194,17 @@ def extract_revenue_candidates(
             # of figure it states, and "cost of sales for Calderon" states a
             # cost as squarely as a cost schedule does.
             and not names_a_non_revenue_metric(value.source_quote)
+            # "increased by $16 million" is how much the figure moved, not the
+            # figure. Drop it here so it never fights a level in reconcile.
+            and not states_a_change_not_a_level(
+                value.source_quote, value.value_as_reported
+            )
+            # Partner / license / royalty cash stated beside the brand is not
+            # product sales. Drop before store so it never reaches the judge.
+            and not NON_PRODUCT_REVENUE_RE.search(value.source_quote)
         ]
 
-    points = normalize_all(values)
+    points = prefer_nontotal_readings(normalize_all(values))
     findings = run_checks(points)
 
     # Datapoints failing a check are held back rather than published; the
@@ -205,4 +225,21 @@ def extract_revenue_candidates(
         if cell_of(point) not in rejected
         and point.value_normalized_usd_millions is not None
     ]
-    return [_as_candidate(point, product) for point in kept], findings, skipped
+    return (
+        [_as_candidate(point, product) for point in kept],
+        findings,
+        skipped,
+        pending,
+    )
+
+
+def candidates_from_several_lines_sum(
+    pending: SeveralLinesPending, *, product: str
+) -> list[dict[str, Any]]:
+    """Candidates after an adjudicator chose to sum trade-name lines."""
+    points = prefer_nontotal_readings(normalize_all(summed_several_lines(pending)))
+    return [
+        _as_candidate(point, product)
+        for point in points
+        if point.value_normalized_usd_millions is not None
+    ]

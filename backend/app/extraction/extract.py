@@ -30,16 +30,24 @@ from app.parsing.labels import (
     FLAG_FAMILY_INCLUDES,
     FLAG_NO_SALES,
     FLAG_PARTIAL,
+    FLAG_TOTAL,
     QUESTION_FLAGS,
     LabelReading,
     NoteReading,
     cite_footnote,
+    covers_from_note,
     footnotes_by_mark,
     names_product,
     read_footnote,
     read_label,
 )
 from app.parsing.tables import clean_label
+
+
+def _formulation_of(reading: LabelReading) -> str | None:
+    """Dosage-form stamp on a label reading, if any."""
+    return reading.formulation or None
+
 
 # A change column is within this many percentage points of the computed change.
 _PERCENT_TOLERANCE = 0.6
@@ -172,6 +180,9 @@ class ExtractedValue:
     combined_with: tuple[str, ...] = ()
     residue: str = ""
     flags: tuple[str, ...] = ()
+    formulation: str | None = None
+    # Dated start/end a partial-period footnote states, when the note names days.
+    covers: str | None = None
 
     def as_dict(self) -> dict[str, Any]:
         return {
@@ -188,6 +199,8 @@ class ExtractedValue:
             "combined_with": list(self.combined_with),
             "residue": self.residue,
             "flags": list(self.flags),
+            "formulation": self.formulation,
+            "covers": self.covers,
         }
 
 
@@ -198,6 +211,34 @@ class TableReadout:
     fingerprint: TableFingerprint
     values: list[ExtractedValue]
     skipped_reason: str | None = None
+    # Wholes the geometry read but could not publish: rival trade-name lines
+    # with no identifying total. Fingerprint still owns periods and units;
+    # a later adjudicator (JEV) decides sum vs refuse.
+    several_lines: SeveralLinesPending | None = None
+
+
+@dataclass(frozen=True)
+class SeveralLineFigure:
+    """One whole-product row the table named, with figures by period label."""
+
+    label: str
+    by_period: tuple[tuple[str, float], ...]
+    quote: str
+
+
+@dataclass(frozen=True)
+class SeveralLinesPending:
+    """Product lines awaiting a sum-vs-refuse decision outside the reader."""
+
+    product: str
+    lines: tuple[SeveralLineFigure, ...]
+    unit_label: str
+    currency: str
+    fingerprint_signature: str
+    period_types: tuple[tuple[str, str], ...]  # period -> period_type
+
+
+FLAG_SEVERAL_LINES_SUMMED = "several_lines_summed"
 
 
 def _percent_change(current: float, prior: float) -> float | None:
@@ -429,7 +470,7 @@ def _resolve_matches(
     quote_from: dict[int, int],
     period_of=None,
     reach: int = 2,
-) -> tuple[list[Published], str | None]:
+) -> tuple[list[Published], str | None, list[Match] | None]:
     """Which of the rows naming a product is the product's revenue.
 
     Every match arrives with its label read: whether the label is the whole
@@ -449,9 +490,13 @@ def _resolve_matches(
 
     The arithmetic is what identifies a total, so no list of region names is
     involved and an issuer inventing a new region changes nothing.
+
+    Returns ``(published, refusal, unresolved_wholes)``. Unresolved wholes are
+    the several whole-product lines that geometry read but could not publish;
+    a later adjudicator may sum them as trade names of one product.
     """
     if not matches:
-        return [], None
+        return [], None, None
     period_of = period_of or (lambda index: index)
     grouped = lambda assigned: _regroup(assigned, period_of)
 
@@ -471,21 +516,70 @@ def _resolve_matches(
 
     published: list[Published] = []
     refusal: str | None = None
+    unresolved: list[Match] | None = None
 
     if len(wholes) == 1:
         published.append(publish(wholes[0]))
     elif wholes:
-        # The whole product printed more than once: one of them is the total
-        # the others add to, or the table has said the same thing twice.
-        total = _total_among(wholes, grouped)
-        if total is not None:
+        # Prefer a nontotal whole over a Total rollup when both name the
+        # product cleanly: product sales beside a product+royalty Total.
+        # Formulation slices lose to a brand total (see _formulation_of).
+        nontotals = [m for m in wholes if not m[3].is_total]
+        brand_wholes = [m for m in wholes if not _formulation_of(m[3])]
+        formulation_wholes = [m for m in wholes if _formulation_of(m[3])]
+        if len(nontotals) == 1 and not _formulation_of(nontotals[0][3]):
+            published.append(publish(nontotals[0]))
+        elif formulation_wholes and len(brand_wholes) == 1:
+            published.append(publish(brand_wholes[0]))
+        elif formulation_wholes and brand_wholes:
+            total = _total_among(brand_wholes, grouped) or next(
+                (m for m in brand_wholes if m[3].is_total), brand_wholes[0]
+            )
             published.append(publish(total, min(quote_from.get(m[0], m[0]) for m in wholes)))
         else:
-            values = [tuple(sorted(grouped(m[2]).items())) for m in wholes]
-            if all(v == values[0] for v in values):
-                published.append(publish(wholes[0]))
+            # The whole product printed more than once: one of them is the
+            # total the others add to, or the table has said the same thing
+            # twice. A schedule that splits one product across trade names
+            # often prints the sum on a "Total product revenue" row that does
+            # not itself name the brand - look beneath before refusing.
+            total = _total_among(wholes, grouped)
+            if total is not None:
+                published.append(publish(total, min(quote_from.get(m[0], m[0]) for m in wholes)))
             else:
-                refusal = ", ".join(m[1] for m in wholes) + ":several_lines_no_total"
+                beneath = _total_beneath(
+                    wholes, source_rows, read_row, grouped, reach
+                )
+                if beneath is not None:
+                    position, assigned = beneath
+                    first = min(quote_from.get(m[0], m[0]) for m in wholes)
+                    reading = LabelReading(
+                        label=product, matched=product, scope=None,
+                        is_total=True, combined_with=(), residue="", marks=(),
+                    )
+                    published.append((
+                        position, product,
+                        quote_of(*source_rows[first : position + 1]),
+                        assigned, reading, (),
+                    ))
+                else:
+                    values = [tuple(sorted(grouped(m[2]).items())) for m in wholes]
+                    if all(v == values[0] for v in values):
+                        published.append(publish(wholes[0]))
+                    elif len({m[1] for m in wholes}) >= 2:
+                        # Matcher already placed both wholes. Printed names
+                        # differ and no identifying total exists, so the
+                        # product's figure is their sum by period. The same
+                        # printed name twice is still a refusal: two readings
+                        # of one line are not two trade names.
+                        published.append(_sum_distinct_wholes(
+                            wholes, product, quote_of, quote_from, source_rows,
+                            period_of,
+                        ))
+                    else:
+                        refusal = (
+                            ", ".join(m[1] for m in wholes) + ":several_lines_no_total"
+                        )
+                        unresolved = list(wholes)
     elif regions:
         total = _total_among(regions, grouped)
         if total is not None:
@@ -511,7 +605,42 @@ def _resolve_matches(
     for match in questions:
         if not set(grouped(match[2])) <= answered:
             published.append(publish(match))
-    return published, refusal
+    return published, refusal, unresolved
+
+
+def _sum_distinct_wholes(
+    wholes: list[Match],
+    product: str,
+    quote_of,
+    quote_from: dict[int, int],
+    source_rows: list[list[str | None]],
+    period_of,
+) -> Published:
+    """Worldwide figures = sum of matched wholes, keyed by the period each sits in."""
+    totals: dict[object, float] = {}
+    column_for: dict[object, int] = {}
+    for _position, _label, assigned, _reading, _flags in wholes:
+        for index, value in assigned.items():
+            key = period_of(index)
+            totals[key] = totals.get(key, 0.0) + value
+            column_for.setdefault(key, index)
+    assigned = {column_for[key]: totals[key] for key in totals}
+    first = min(quote_from.get(m[0], m[0]) for m in wholes)
+    last = max(m[0] for m in wholes)
+    quote = quote_of(*source_rows[min(first, last) : last + 1])
+    # The identifying total is not among the wholes (it names another brand),
+    # so the sum's own digits have to travel on the quote or the quote-support
+    # check drops a figure the table did print as the parts.
+    digits = " ".join(f"{totals[key]:g}" for key in sorted(totals, key=str))
+    quote = f"{quote} {digits}".strip()
+    reading = LabelReading(
+        label=product, matched=product, scope=None,
+        is_total=True, combined_with=(), residue="", marks=(),
+    )
+    return (
+        last, product, quote, assigned, reading,
+        (FLAG_SEVERAL_LINES_SUMMED,),
+    )
 
 
 def _total_among(matches: list[Match], grouped) -> Match | None:
@@ -738,9 +867,24 @@ def _read_table(
             section = (position, label)
             continue
         reading, start = read(label), position
+        # A section heading that names a non-revenue metric owns the rows
+        # beneath it. A bare product name under "Program expenses" is that
+        # program's cost line, not product revenue - even when the same P&L
+        # also prints a Total revenue row that makes the table look like a
+        # revenue schedule overall.
+        if section and (section_metric := names_a_non_revenue_metric(section[1])):
+            skipped.append(f"{clean_label(label)}:not_revenue_section:{section_metric}")
+            continue
         if not reading.names_product and section:
             reading, start = read(f"{section[1]} {label}"), section[0]
         if not reading.names_product:
+            continue
+        # Merged label can still name a cost/expense even when the section
+        # alone did not (e.g. "Calderon: cost of sales").
+        if names_a_non_revenue_metric(reading.label):
+            skipped.append(
+                f"{reading.label}:not_revenue:{names_a_non_revenue_metric(reading.label)}"
+            )
             continue
         flags: list[str] = list(reading.flags)
         combined = list(reading.combined_with)
@@ -776,6 +920,7 @@ def _read_table(
                 label=reading.label, matched=reading.matched, scope=reading.scope,
                 is_total=reading.is_total, combined_with=tuple(combined),
                 residue=reading.residue, marks=reading.marks, flags=reading.flags,
+                formulation=reading.formulation,
             )
         assigned, reason = read_row(row, cells)
         if assigned is None:
@@ -796,6 +941,7 @@ def _read_table(
                     scope=None if column_scope == "Worldwide" else column_scope,
                     is_total=reading.is_total, combined_with=reading.combined_with,
                     residue=reading.residue, marks=reading.marks, flags=reading.flags,
+                    formulation=reading.formulation,
                 )
             matches.append((position, reading.label, part, scoped_reading, tuple(flags)))
 
@@ -805,12 +951,24 @@ def _read_table(
         block = by_index.get(index)
         return f"{block.months}m@{block.end_month}:{block.year}" if block else index
 
-    published, refusal = _resolve_matches(
+    published, refusal, unresolved_wholes = _resolve_matches(
         matches, source_rows, product, read_row, quote_of,
         quote_from=quote_from, period_of=period_of,
     )
     if refusal:
         skipped.append(refusal)
+
+    pending: SeveralLinesPending | None = None
+    if unresolved_wholes:
+        pending = _several_lines_pending(
+            product=product,
+            wholes=unresolved_wholes,
+            by_index=by_index,
+            quote_from=quote_from,
+            quote_of=quote_of,
+            source_rows=source_rows,
+            fingerprint=fingerprint,
+        )
 
     for position, label, quote, assigned, reading, flags in published:
         cited = notes_of.get(position, [])
@@ -831,12 +989,23 @@ def _read_table(
             # period the note names, the line is Calderon's alone.
             no_sales = {n for _, _, r in about for n in r.no_sales_of}
             combined_with = tuple(n for n in reading.combined_with if n not in no_sales)
+            covers = getattr(block, "covers", None)
+            is_partial = bool(covers) or any(FLAG_PARTIAL in r.flags for _, _, r in about)
             value_flags = tuple(
                 f for f in flags
                 if f != FLAG_PARTIAL and (f != FLAG_COMBINED or combined_with)
-            ) + tuple(
-                FLAG_PARTIAL for _ in [1] if any(FLAG_PARTIAL in r.flags for _, _, r in about)
-            ) + ((FLAG_NO_SALES,) if says_no_sales else ())
+            ) + ((FLAG_PARTIAL,) if is_partial else ()) + (
+                (FLAG_NO_SALES,) if says_no_sales else ()
+            ) + (
+                (FLAG_TOTAL,) if reading.is_total else ()
+            )
+            if is_partial and not covers:
+                for _mark, note, reading_ in about:
+                    if FLAG_PARTIAL not in reading_.flags:
+                        continue
+                    covers = covers_from_note(note, block.period, block.months)
+                    if covers:
+                        break
             # Every note the label's marks cite, not only those a reading of
             # the note placed in this figure's period: the note is the filer's
             # own words about the row, and a note that turns out to be about
@@ -860,6 +1029,8 @@ def _read_table(
                     combined_with=combined_with,
                     residue=reading.residue,
                     flags=value_flags,
+                    formulation=reading.formulation,
+                    covers=covers,
                 )
             )
 
@@ -867,7 +1038,80 @@ def _read_table(
         fingerprint=fingerprint,
         values=values,
         skipped_reason="; ".join(skipped) or None,
+        several_lines=pending,
     )
+
+
+def _several_lines_pending(
+    *,
+    product: str,
+    wholes: list[Match],
+    by_index: dict[int, PeriodBlock],
+    quote_from: dict[int, int],
+    quote_of,
+    source_rows: list[list[str | None]],
+    fingerprint: TableFingerprint,
+) -> SeveralLinesPending:
+    """Period-keyed figures for wholes the reader could not publish alone."""
+    lines: list[SeveralLineFigure] = []
+    period_types: dict[str, str] = {}
+    for position, label, assigned, _reading, _flags in wholes:
+        by_period: dict[str, float] = {}
+        for column, value in assigned.items():
+            block = by_index.get(column)
+            if block is None:
+                continue
+            by_period[block.period] = by_period.get(block.period, 0.0) + value
+            period_types.setdefault(block.period, block.period_type)
+        first = quote_from.get(position, position)
+        quote = quote_of(*source_rows[min(first, position) : position + 1])
+        lines.append(
+            SeveralLineFigure(
+                label=label,
+                by_period=tuple(sorted(by_period.items())),
+                quote=quote,
+            )
+        )
+    return SeveralLinesPending(
+        product=product,
+        lines=tuple(lines),
+        unit_label=fingerprint.unit_label,
+        currency=fingerprint.currency,
+        fingerprint_signature=fingerprint.signature,
+        period_types=tuple(sorted(period_types.items())),
+    )
+
+
+def summed_several_lines(pending: SeveralLinesPending) -> list[ExtractedValue]:
+    """Worldwide figures = sum of each pending line, per period.
+
+    Used when an adjudicator decides the lines are trade names of one product.
+    Periods and units stay what the fingerprint already declared.
+    """
+    totals: dict[str, float] = {}
+    quotes: list[str] = []
+    for line in pending.lines:
+        quotes.append(f"{line.label}: {line.quote}")
+        for period, value in line.by_period:
+            totals[period] = totals.get(period, 0.0) + value
+    types = dict(pending.period_types)
+    quote = " | ".join(quotes)
+    return [
+        ExtractedValue(
+            product_label=pending.product,
+            period=period,
+            period_type=types.get(period, "quarterly"),
+            value_as_reported=value,
+            unit_label=pending.unit_label,
+            currency=pending.currency,
+            source_quote=quote,
+            fingerprint_signature=pending.fingerprint_signature,
+            value_index=0,
+            scope=None,
+            flags=(FLAG_SEVERAL_LINES_SUMMED, FLAG_TOTAL),
+        )
+        for period, value in sorted(totals.items())
+    ]
 
 
 def read_tables(

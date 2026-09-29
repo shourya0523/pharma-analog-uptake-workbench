@@ -121,7 +121,7 @@ def test_the_product_row_survives_the_income_statement_around_it():
         ["Income tax expense", "(3,641)", "(72)"],
         ["Loss before income tax", "(18,045)", "(13,975)"],
     ]
-    candidates, findings, _skipped = extract_revenue_candidates(
+    candidates, findings, _skipped, _pending = extract_revenue_candidates(
         [table], product="Calderon", units=["thousands"],
     )
     values = [c["value_normalized_usd_millions"] for c in candidates]

@@ -8,6 +8,57 @@ from typing import Any
 FORMULATION_SEP = "; "
 AGGREGATE_FORMULATION = "aggregate"
 
+# Dosage-form tokens a filer prints beside a brand on a product-sales schedule.
+# Snapshot of openFDA `products[].dosage_form` tokens and the form words that
+# already appear in prompts / member splits (DPI, nebulized, tablet). A new
+# openFDA spelling that is not here leaves residue and holds the row for review.
+FORMULATION_WORDS = frozenset(
+    {
+        "foam",
+        "cream",
+        "gel",
+        "ointment",
+        "lotion",
+        "tablet",
+        "tablets",
+        "capsule",
+        "capsules",
+        "injection",
+        "injections",
+        "solution",
+        "suspension",
+        "powder",
+        "inhaler",
+        "nebulized",
+        "nebulised",
+        "neb",
+        "dpi",
+        "aerosol",
+        "spray",
+        "patch",
+        "film",
+        "kit",
+        "syringe",
+        "pen",
+        "autoinjector",
+        "implant",
+        "topical",
+        "oral",
+        "iv",
+        "sc",
+        "subcutaneous",
+        "intravenous",
+    }
+)
+
+
+def formulation_tokens(words: list[str]) -> tuple[str, ...] | None:
+    """The formulation stamp when every leftover word is a dosage-form token."""
+    cleaned = [w for w in words if w]
+    if not cleaned or not all(w in FORMULATION_WORDS for w in cleaned):
+        return None
+    return tuple(cleaned)
+
 
 def parse_formulations(raw: Any) -> list[str]:
     """Split a formulation field into ordered unique parts.

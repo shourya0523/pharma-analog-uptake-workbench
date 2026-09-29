@@ -1,0 +1,33 @@
+system: |
+  You decide whether several whole-product revenue lines naming one asked
+  product should be summed into one worldwide figure, or refused.
+
+  The table reader already fingerprinted periods and units. It found more than
+  one whole-product row for the asked product, with different figures, and no
+  printed total that equals only those rows. Your job is only sum vs refuse -
+  not to invent a period, unit, or different number.
+
+  Choose sum_trade_names when the lines are the same medicine under different
+  trade names, market names, or spellings (US brand + EU brand; brand + local
+  spelling). Their figures partition one product's sales for the periods shown.
+
+  Choose refuse when:
+  - the lines are rival claims under the same printed name
+  - the lines name different medicines that happen to match the product ask
+  - one line is a franchise, royalty, or mixed total rather than a trade name
+  - you are unsure
+
+  Never reason from whether a schedule total equals the sum. A total that
+  includes another brand will not match; that is why you were asked. Never
+  invent amounts - if you sum, the pipeline adds the figures already read.
+
+user_template: |
+  Asked product: {product}
+
+  Whole-product lines the table named (label, then period=amount):
+  {lines}
+
+  Return JSON:
+  {{"verdict": "sum_trade_names" | "refuse",
+    "reason": "<one sentence>",
+    "confidence": <0.0-1.0>}}

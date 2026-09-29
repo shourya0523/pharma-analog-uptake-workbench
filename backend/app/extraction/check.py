@@ -25,7 +25,7 @@ from collections import defaultdict
 from dataclasses import dataclass
 
 from app.extraction.process import Datapoint
-from app.parsing.labels import FLAG_NOT_UNDERSTOOD
+from app.parsing.labels import FLAG_NOT_UNDERSTOOD, FLAG_TOTAL
 from app.parsing.periods import MONTHS_TO_PERIOD_TYPE
 
 # A quarter that differs from a neighbouring quarter by at least this factor is
@@ -267,13 +267,32 @@ def normalization_succeeded(points: list[Datapoint]) -> list[Finding]:
     ]
 
 
+def prefer_nontotal_readings(points: list[Datapoint]) -> list[Datapoint]:
+    """When a cell has both a product-line reading and a Total rollup, keep the line.
+
+    Two tables in one filing often print the same quarter twice: once as the
+    product-sales row and once as ``Total <product> revenue``. Those are not
+    rival claims about one number - the line is the figure - and treating them
+    as ``conflicting_values`` discarded both.
+    """
+    by_cell: dict[Cell, list[Datapoint]] = defaultdict(list)
+    for point in points:
+        by_cell[cell_of(point)].append(point)
+    kept: list[Datapoint] = []
+    for group in by_cell.values():
+        lines = [p for p in group if FLAG_TOTAL not in (p.flags or ())]
+        kept.extend(lines if lines else group)
+    return kept
+
+
 def conflicting_values(points: list[Datapoint]) -> list[Finding]:
     """One period must not carry two materially different values."""
     findings: list[Finding] = []
     # Keyed on scope as well as period: a region row and the worldwide row
     # state different figures for one quarter and neither is wrong.
+    # Totals already dropped when a line reading shares the cell.
     by_period: dict[Cell, list[Datapoint]] = defaultdict(list)
-    for point in _states_a_value(points):
+    for point in prefer_nontotal_readings(_states_a_value(points)):
         by_period[cell_of(point)].append(point)
 
     for cell, group in sorted(by_period.items()):

@@ -87,6 +87,36 @@ def fiscal_period_end(month: int, day: int | None, year: int | None = None) -> t
     return month, year
 
 
+def period_of_report_quarter(day: date) -> int:
+    """The quarter an EDGAR ``reportDate`` names, after the first-week snap.
+
+    Same integer encoding the retrieval cover uses elsewhere
+    (``year * 4 + (month - 1) // 3``). April 1 is the first quarter, not the
+    second; July 1 is the second, not the third. A calendar month-end is
+    unchanged.
+    """
+    month, year = fiscal_period_end(day.month, day.day, day.year)
+    year = year if year is not None else day.year
+    return year * 4 + (month - 1) // 3
+
+
+def is_period_of_report(reported: date, period_end: date) -> bool:
+    """Whether ``reported`` is the period end ``period_end``, allowing the snap.
+
+    Exact equality holds for filers that put the calendar quarter end on the
+    index. When the first-week snap moves the month, the snapped quarter's
+    calendar end must be ``period_end`` - so July 1 aligns to June 30, while
+    a mid-quarter event date does not become that quarter's end.
+    """
+    if reported == period_end:
+        return True
+    month, year = fiscal_period_end(reported.month, reported.day, reported.year)
+    year = year if year is not None else reported.year
+    if (month, year) == (reported.month, reported.year):
+        return False
+    return quarter_end(year, quarter_of_month(month)) == period_end
+
+
 MONTH_NAMES = {
     1: "January",
     2: "February",
@@ -220,7 +250,9 @@ def _year_near(text: str, end: int) -> int | None:
 _QUARTER_FORMS = (
     re.compile(r"\bQ([1-4])\s*[-/ ]?\s*((?:19|20)\d{2})\b", re.IGNORECASE),
     re.compile(r"\b((?:19|20)\d{2})\s*[-/ ]?\s*Q([1-4])\b", re.IGNORECASE),
-    re.compile(r"\b(first|second|third|fourth)\s+quarter\s+(?:of\s+)?"
+    # Releases hyphenate the heading ("Second-Quarter 2025") as often as they
+    # space it; both are one form.
+    re.compile(r"\b(first|second|third|fourth)[-\s]+quarter\s+(?:of\s+)?"
                r"((?:19|20)\d{2})\b", re.IGNORECASE),
     # The quarter number first: "2Q 2024", "2Q24", "1Q'26". A two-digit year
     # is this century's; no filing read this way predates it.
@@ -328,11 +360,12 @@ def detect_period_context(text: str) -> PeriodContext | None:
         # the document's own period is decided below, not here.
         for months in spans:
             counts[(months, month, year)] += 1
+    notation = _quarter_notation(text)
     if not counts:
         # No filing states its period both ways, so this is a different
         # convention rather than a second opinion, and it only ever runs where
         # there was no answer at all.
-        return _quarter_notation(text)
+        return notation
     # The span the document reports is the one it names throughout. A
     # quarterly release names its quarter and its year-to-date span about
     # equally, and is read as the quarter; an annual report names the year on
@@ -353,7 +386,21 @@ def detect_period_context(text: str) -> PeriodContext | None:
     most = max(at_framing.values())
     throughout = [key for key, n in at_framing.items() if n * 2 >= most]
     months, month, year = max(throughout, key=lambda key: (key[2], key[1]))
-    return PeriodContext(months=months, month=month, year=year)
+    phrase = PeriodContext(months=months, month=month, year=year)
+    # A quarterly earnings release often names "Second-Quarter 2025" in the
+    # title and only cites "year ended December 31" in a risk-factor footer.
+    # That single annual phrase used to date the whole document as a year and
+    # pull every bare end-date into Q4. Prefer the quarter notation when the
+    # annual framing is sparse boilerplate; a real 10-K names the year
+    # throughout, so leave those alone.
+    if (
+        phrase.months == 12
+        and notation is not None
+        and notation.months == 3
+        and by_span[12] <= 2
+    ):
+        return notation
+    return phrase
 
 
 # The spans a reporting period is stated in, and what each one is called. A
@@ -372,6 +419,27 @@ MONTHS_TO_PERIOD_TYPE: dict[int, str] = {
 PERIOD_TYPE_TO_MONTHS: dict[str, int] = {
     period_type: months for months, period_type in MONTHS_TO_PERIOD_TYPE.items()
 }
+
+
+def period_type_from_label(label: str) -> str:
+    """The reporting span a period label names.
+
+    A missing or unreadable period is not a quarter. ``unknown`` is its own
+    type, not a default quarterly, because a figure with no period is not a
+    quarter that auto-passes.
+    """
+    text = (label or "").strip()
+    if not text or text.lower() == "unknown":
+        return "unknown"
+    months = period_months(text)
+    if months is not None:
+        return MONTHS_TO_PERIOD_TYPE[months]
+    key = normalize_period(text)
+    if key:
+        months = period_months(key)
+        if months is not None:
+            return MONTHS_TO_PERIOD_TYPE[months]
+    return "unknown"
 
 
 def period_label(year: int, months: int, quarter: int) -> str:
@@ -503,6 +571,25 @@ def periods_named(text: str) -> list[NamedPeriod]:
     return sorted(named, key=lambda period: period.position)
 
 
+_COMPACT_QUARTER = re.compile(r"(?i)q([1-4])((?:19|20)\d{2})")
+
+
+def quarters_in_locator(title: str = "", url: str = "") -> list[str]:
+    """Quarter keys a title or URL names, via the same grammar documents use.
+
+    Filenames glue the tokens (``earningsreleaseq42020.htm``). Expanding those
+    compact forms lets the quarter-form grammar read them. A year sitting
+    alone in a path is not returned: an annual key is not a quarter asked
+    about.
+    """
+    hay = _COMPACT_QUARTER.sub(r" Q\1 \2 ", f"{title or ''} {url or ''}")
+    keys: list[str] = []
+    for named in periods_named(hay):
+        if named.key and named.months == 3:
+            keys.append(named.key)
+    return list(dict.fromkeys(keys))
+
+
 # The year that completes a date, printed right after the day.
 _DATE_YEAR_RE = re.compile(r"[\s,]*((?:19|20)\d{2})\b")
 
@@ -621,6 +708,17 @@ def normalize_period(
         if (period_type or "").lower() in QUARTERLY_TYPES and context:
             return f"{year}Q{context.quarter}"
         return str(year)
+
+    # A bare end date ("June 30, 2025") states which quarter it closes. Prefer
+    # that month over the document context: context can be annual boilerplate
+    # from a footer while the figure is for the quarter the date names.
+    if (period_type or "").lower() in QUARTERLY_TYPES:
+        dated = dates_named(label)
+        if dated:
+            stated = dated[0]
+            month, year = fiscal_period_end(stated.month, stated.day, stated.year)
+            year = year if year is not None else stated.year
+            return period_label(year, 3, quarter_of_month(month))
 
     year_match = _ANY_YEAR_RE.search(label)
     if year_match:
