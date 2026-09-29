@@ -179,6 +179,25 @@ class LLMSearchConnector:
         )
         return resolution
 
+    async def resolve_ticker_from_search(self, *, ticker: str) -> SearchedIdentity | None:
+        """CIK for this ticker, or None if search was not made.
+
+        The listed map and browse-edgar both miss a delisted symbol. This asks
+        which registrant used the ticker, not which company reports a product.
+        """
+        if not self.settings.enable_llm_search:
+            return None
+        result = await self.llm.resolve_ticker_cik_via_search(ticker=ticker)
+        resolution = read_searched_identity(
+            result, floor=self.settings.llm_cik_min_confidence
+        )
+        logger.info(
+            "cik_search ticker=%s cik=%s confidence=%s refused=%s company=%r url=%s notes=%r",
+            ticker, resolution.cik, resolution.confidence, resolution.refused,
+            resolution.company_name, resolution.source_url, resolution.notes[:200],
+        )
+        return resolution
+
     async def fallback_retrieve(
         self,
         *,

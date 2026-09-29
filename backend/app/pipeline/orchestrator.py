@@ -1031,11 +1031,13 @@ class PipelineOrchestrator:
         """Who files for this product: the ticker names the issuer.
 
         A ticker is resolved on the SEC map, then on browse-edgar, never by
-        asking a model which company reports the product. The product LLM is
-        only asked when the job has no ticker. After any CIK, a job that
-        stated a ticker is refused when that CIK's own SEC ticker set does
-        not contain it - unless the CIK itself came from that ticker, which
-        counts as membership.
+        asking a model which company reports the product. A delisted symbol
+        is still a ticker: when the map and browse-edgar miss, search is
+        asked what CIK that ticker is, not who sells the product. The
+        product LLM is only asked when the job has no ticker. After a CIK
+        from the name index, a job ticker is refused only when that CIK's
+        own SEC ticker set is non-empty and does not contain it. An empty
+        set is a delisted registrant, not a mismatch.
         """
         self._set_step(job, JobStep.IDENTITY_RESOLVE)
         self._identity_via_ticker = False
@@ -1061,6 +1063,21 @@ class PipelineOrchestrator:
                 logger.info(
                     "cik_resolved job_id=%s drug=%s cik=%s via=sec",
                     job.id, job.drug_name, cik,
+                )
+        if not job.cik and job.ticker and get_settings().enable_llm_search:
+            resolution = await self.search.resolve_ticker_from_search(
+                ticker=job.ticker,
+            )
+            if resolution:
+                self._flag(job, *resolution.flags)
+            if resolution and resolution.accepted:
+                job.cik = resolution.cik
+                self._identity_via_ticker = True
+                via = "ticker_search"
+                self.db.commit()
+                logger.info(
+                    "cik_resolved job_id=%s drug=%s cik=%s via=ticker_search",
+                    job.id, job.drug_name, resolution.cik,
                 )
         # A ticker already named the issuer. Asking who reports the product
         # would bind a different company's filings to this job.
@@ -1088,14 +1105,14 @@ class PipelineOrchestrator:
         if job.cik and job.ticker:
             asked = job.ticker.upper().strip()
             if self._identity_via_ticker:
-                # browse-edgar / map success is membership, even when
-                # submissions later list an acquirer's ticker.
+                # Map, browse-edgar, or ticker search is membership, even
+                # when submissions later list no ticker (a delisted filer).
                 self._issuer_tickers = {asked}
             else:
                 tickers, name = await self.sec.issuer_record(job.cik)
                 self._issuer_tickers = tickers
                 self._issuer_name = name or None
-                if asked not in tickers:
+                if tickers and asked not in tickers:
                     self._flag(job, "cik_ticker_mismatch")
                     logger.warning(
                         "cik_ticker_mismatch job_id=%s drug=%s cik=%s ticker=%s tickers=%s",
@@ -1106,6 +1123,11 @@ class PipelineOrchestrator:
                     self._issuer_tickers = set()
                     self._issuer_name = None
                     self.db.commit()
+                elif not tickers:
+                    logger.info(
+                        "cik_tickers_unknown job_id=%s drug=%s cik=%s ticker=%s",
+                        job.id, job.drug_name, job.cik, job.ticker,
+                    )
         logger.info(
             "identity_done job_id=%s drug=%s cik=%s ticker=%s manufacturer=%s via=%s",
             job.id,

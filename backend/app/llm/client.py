@@ -1307,6 +1307,19 @@ class LLMModules:
             fetch=False,
         )
 
+    async def resolve_ticker_cik_via_search(self, *, ticker: str) -> dict[str, Any]:
+        """CIK for a ticker symbol, including one the listed map has dropped."""
+        prompt = load_prompt("search_ticker")
+        if not self.settings.openrouter_api_key or not self.settings.enable_llm_search:
+            return {}
+        user = prompt["user_template"].format(ticker=ticker)
+        return await self.client.chat_json_with_web(
+            model=self.settings.openrouter_model_extract,
+            system=prompt["system"],
+            user=user,
+            fetch=False,
+        )
+
     async def judge_with_search(
         self,
         *,
