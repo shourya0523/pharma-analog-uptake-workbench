@@ -577,6 +577,33 @@ def cite_footnote(mark: str, note: str) -> str:
     return f" [({mark}) {note}]"
 
 
+def covers_from_note(note: str, period: str, months: int) -> str | None:
+    """The start/end the note dates this figure over, when it names days.
+
+    Written ``YYYY-MM-DD/YYYY-MM-DD``. A note that flags a partial period
+    without dating it has no covers: the flag is the claim, not a span.
+    """
+    named = dates_named(note)
+    if not named:
+        return None
+    span = period_span(period, months)
+    if span is not None:
+        start, end = span
+        named = [day for day in named if start <= day <= end] or named
+    if len(named) >= 2:
+        return f"{min(named).isoformat()}/{max(named).isoformat()}"
+    if span is None:
+        return None
+    day = named[0]
+    start, end = span
+    if day == start or day == end:
+        return None
+    # An interior date is the boundary the figure starts at; it runs to
+    # the period's own end. A filer writes the closing or the launch.
+    return f"{day.isoformat()}/{end.isoformat()}"
+
+
+
 def footnotes_in(quote: str) -> list[str]:
     """The notes a quote carries, in the order they were attached to it."""
     return [note for _mark, note in _CITED_NOTE_RE.findall(quote or "")]

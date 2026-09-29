@@ -421,6 +421,27 @@ PERIOD_TYPE_TO_MONTHS: dict[str, int] = {
 }
 
 
+def period_type_from_label(label: str) -> str:
+    """The reporting span a period label names.
+
+    A missing or unreadable period is not a quarter. ``unknown`` is its own
+    type, not a default quarterly, because a figure with no period is not a
+    quarter that auto-passes.
+    """
+    text = (label or "").strip()
+    if not text or text.lower() == "unknown":
+        return "unknown"
+    months = period_months(text)
+    if months is not None:
+        return MONTHS_TO_PERIOD_TYPE[months]
+    key = normalize_period(text)
+    if key:
+        months = period_months(key)
+        if months is not None:
+            return MONTHS_TO_PERIOD_TYPE[months]
+    return "unknown"
+
+
 def period_label(year: int, months: int, quarter: int) -> str:
     """The canonical key for a period of ``months`` ending in ``quarter``.
 
