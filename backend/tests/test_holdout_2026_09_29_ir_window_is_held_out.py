@@ -14,7 +14,7 @@ from app.connectors.coverage import admits_asked_quarters
 from tests.answer_keys import identifying, products_in, scored_words
 
 REPO = Path(__file__).resolve().parents[2]
-HOLDOUT = REPO / "seed" / "cases" / "holdout_2026_09_29_ir_window.json"
+HOLDOUT = REPO / "seed" / "holdout_ir_window" / "2026_09_29.json"
 
 _THREAD = ("Actelion", "Alexion", "Amphastar")
 
@@ -40,8 +40,8 @@ def test_no_case_comes_from_a_scored_issuer():
 
 def test_both_answers_are_represented():
     cases = _cases()
-    assert any(c["expected"] for c in cases), "no locator has to be kept"
-    assert any(not c["expected"] for c in cases), "no locator has to be dropped"
+    assert any(c["binds"] for c in cases), "no locator has to be kept"
+    assert any(not c["binds"] for c in cases), "no locator has to be dropped"
 
 
 def test_the_thread_that_found_the_defect_is_not_here():
@@ -79,4 +79,4 @@ def test_admission_agrees_with_the_locators_the_cases_name():
             title="",
             url=case["locator"],
         )
-        assert kept is case["expected"], case["drug_name"]
+        assert kept is case["binds"], case["drug_name"]

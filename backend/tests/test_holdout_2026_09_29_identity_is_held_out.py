@@ -15,7 +15,7 @@ from pathlib import Path
 from tests.answer_keys import identifying, products_in, scored_words
 
 REPO = Path(__file__).resolve().parents[2]
-HOLDOUT = REPO / "seed" / "cases" / "holdout_2026_09_29_identity.json"
+HOLDOUT = REPO / "seed" / "holdout_identity" / "2026_09_29.json"
 
 # Names the spent split-ownership thread used. A holdout that reused them
 # would be scoring the change on the eval that found it.
@@ -45,8 +45,8 @@ def test_no_case_comes_from_a_scored_issuer():
 def test_both_answers_are_represented():
     """A set that only refuses is passed by a resolver that always refuses."""
     cases = _cases()
-    assert any(c["expected"] for c in cases), "no ticker has to bind"
-    assert any(not c["expected"] for c in cases), "no ticker has to be refused"
+    assert any(c["binds"] for c in cases), "no ticker has to bind"
+    assert any(not c["binds"] for c in cases), "no ticker has to be refused"
 
 
 def test_the_thread_that_found_the_defect_is_not_here():

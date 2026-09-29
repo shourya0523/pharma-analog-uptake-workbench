@@ -6,7 +6,7 @@
       "generic_name": "dextromethorphan and bupropion",
       "manufacturer": "Axsome Therapeutics Inc",
       "ticker": "AXSM",
-      "expected": true,
+      "binds": true,
       "why": "the job ticker names the issuer; the listed map binds it and IR must use that issuer"
     },
     {
@@ -14,7 +14,7 @@
       "generic_name": "imetelstat",
       "manufacturer": "Geron Corporation",
       "ticker": "AXSM",
-      "expected": false,
+      "binds": false,
       "why": "the job ticker names a different issuer than the one that files for this product; identity must not bind the product's filer by asking who reports the product"
     }
   ]

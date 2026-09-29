@@ -6,7 +6,7 @@
       "manufacturer": "Moderna Inc",
       "ticker": "MRNA",
       "quote": "Spikevax net sales were $12.3 million in Q1 2025.",
-      "expected": true,
+      "binds": true,
       "why": "a booked quarter with a period hint is a candidate"
     },
     {
@@ -14,7 +14,7 @@
       "manufacturer": "Amarin Corporation plc",
       "ticker": "AMRN",
       "quote": "The company expects Vascepa net sales of $24 million in the fourth quarter.",
-      "expected": false,
+      "binds": false,
       "why": "forward-looking; period_type is guidance, never a booked quarter"
     }
   ]

@@ -14,7 +14,7 @@ from app.llm.harvest import harvest_amount_loci
 from tests.answer_keys import identifying, products_in, scored_words
 
 REPO = Path(__file__).resolve().parents[2]
-HOLDOUT = REPO / "seed" / "cases" / "holdout_2026_09_29_harvest.json"
+HOLDOUT = REPO / "seed" / "holdout_harvest" / "2026_09_29.json"
 SPENT_JUDGING = REPO / "seed" / "cases" / "holdout_2026_09_judging.json"
 
 _THREAD = ("Actelion", "Alexion", "Amphastar", "Portola")
@@ -41,8 +41,8 @@ def test_no_case_comes_from_a_scored_issuer():
 
 def test_both_answers_are_represented():
     cases = _cases()
-    assert any(c["expected"] for c in cases), "no booked quarter to keep"
-    assert any(not c["expected"] for c in cases), "no guidance sentence to refuse"
+    assert any(c["binds"] for c in cases), "no booked quarter to keep"
+    assert any(not c["binds"] for c in cases), "no guidance sentence to refuse"
 
 
 def test_the_thread_that_found_the_defect_is_not_here():
@@ -81,7 +81,7 @@ def test_the_judging_holdout_is_not_this_set():
 def test_harvest_agrees_with_the_quotes_the_cases_name():
     for case in _cases():
         loci = harvest_amount_loci(case["quote"], product=case["drug_name"])
-        if case["expected"]:
+        if case["binds"]:
             assert loci, case["drug_name"]
             assert all(
                 loc.get("period_type") != PeriodType.GUIDANCE.value for loc in loci

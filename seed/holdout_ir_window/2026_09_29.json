@@ -7,7 +7,7 @@
       "ticker": "MNKD",
       "locator": "https://ir.acme.example/earningsreleaseq12020.htm",
       "asked_quarters": ["2020Q1", "2020Q2"],
-      "expected": true,
+      "binds": true,
       "why": "the filename names 2020Q1, which the window asked for"
     },
     {
@@ -16,7 +16,7 @@
       "ticker": "HALO",
       "locator": "https://ir.acme.example/earningsreleaseq42020.htm",
       "asked_quarters": ["2020Q1", "2020Q2"],
-      "expected": false,
+      "binds": false,
       "why": "the filename names 2020Q4, which the window did not ask for; an annual 2020 key would not admit it either"
     }
   ]
