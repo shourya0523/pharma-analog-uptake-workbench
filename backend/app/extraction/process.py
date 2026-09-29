@@ -62,6 +62,7 @@ class Datapoint:
     residue: str = ""
     flags: tuple[str, ...] = ()
     formulation: str | None = None
+    covers: str | None = None
 
     def as_dict(self) -> dict[str, Any]:
         return {
@@ -170,6 +171,7 @@ def _label_fields(value: ExtractedValue) -> dict[str, Any]:
         "residue": value.residue,
         "flags": value.flags,
         "formulation": value.formulation,
+        "covers": value.covers,
     }
 
 
