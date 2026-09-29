@@ -9,7 +9,14 @@ from __future__ import annotations
 import re
 from typing import Any
 
-from app.parsing.evidence import MONEY_RE, NON_PRODUCT_REVENUE_RE, REVENUE_HINT_RE, product_aliases
+from app.parsing.evidence import (
+    GUIDANCE_RE,
+    MONEY_RE,
+    NON_PRODUCT_REVENUE_RE,
+    REVENUE_HINT_RE,
+    product_aliases,
+)
+from app.domain.models import PeriodType
 from app.parsing.tables import product_revenue_schedules
 
 # Max Choice options Jev accepts; leave room for the none hatch.
@@ -130,6 +137,9 @@ def harvest_amount_loci(
         if NON_PRODUCT_REVENUE_RE.search(window):
             continue
         period_hints = [m.group(0).strip() for m in _PERIOD_HINT_RE.finditer(window)]
+        period_type = _period_type_of(quote)
+        if not period_hints and not period_type:
+            continue
         loci.append(
             {
                 "locus_id": f"l{len(loci) + 1}",
@@ -138,6 +148,7 @@ def harvest_amount_loci(
                 "row_label": _row_label(window, amount),
                 "quote": quote[:800],
                 "source_id": None,
+                "period_type": period_type,
             }
         )
         if len(loci) >= max_loci:
@@ -192,6 +203,9 @@ def harvest_table_loci(
                     key = f"{ti}:{ri}:{ci}:{amount}"
                     if key in seen:
                         continue
+                    period_type = _period_type_of(quote)
+                    if not period_hint and not period_type:
+                        continue
                     seen.add(key)
                     loci.append(
                         {
@@ -201,6 +215,7 @@ def harvest_table_loci(
                             "row_label": row_label[:200],
                             "quote": quote[:800],
                             "source_id": None,
+                            "period_type": period_type,
                         }
                     )
                     if len(loci) >= max_loci:
@@ -233,6 +248,13 @@ def _header_row(table: list[list[str]]) -> list[str]:
         if _PERIOD_HINT_RE.search(joined) or re.search(r"20\d{2}", joined):
             return list(row)
     return list(table[0]) if table else []
+
+
+def _period_type_of(quote: str) -> str | None:
+    """Guidance when the quote is forward-looking; otherwise unset."""
+    if GUIDANCE_RE.search(quote or ""):
+        return PeriodType.GUIDANCE.value
+    return None
 
 
 def _row_label(window: str, amount: str) -> str:

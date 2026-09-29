@@ -1,0 +1,21 @@
+{
+  "note": "Held-out set for JEV harvest typing: a forward-looking quote is period_type=guidance and must not auto-pass as a quarter; a locus with no period is not a candidate; period_type_from_label(unknown) is not quarterly. It may score that harvest change and nothing else. Do not score on spent holdout_2026_09_judging.json, which already carries a guidance figure that must not become a quarter. Issuers here are absent from gold and every spent holdout under seed/ — derived through tests/answer_keys.spent_issuers. What spends it: the first scored eval of harvest guidance typing. After that it is an oracle. Both answers: a booked quarter that harvest may keep, and a guidance sentence that must not become a quarter. No case states a CIK.",
+  "cases": [
+    {
+      "drug_name": "Spikevax",
+      "manufacturer": "Moderna Inc",
+      "ticker": "MRNA",
+      "quote": "Spikevax net sales were $12.3 million in Q1 2025.",
+      "expected": true,
+      "why": "a booked quarter with a period hint is a candidate"
+    },
+    {
+      "drug_name": "Vascepa",
+      "manufacturer": "Amarin Corporation plc",
+      "ticker": "AMRN",
+      "quote": "The company expects Vascepa net sales of $24 million in the fourth quarter.",
+      "expected": false,
+      "why": "forward-looking; period_type is guidance, never a booked quarter"
+    }
+  ]
+}

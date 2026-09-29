@@ -619,6 +619,15 @@ class LLMModules:
                 period = period_pick["choice"]
             elif loc.get("period_hints"):
                 period = loc["period_hints"][0]
+            period_type = loc.get("period_type") or period_type_from_label(
+                period or "unknown"
+            )
+            # A locus with no period is not a candidate. Guidance may still
+            # carry an unknown period; it must not become a quarter.
+            if period_type != "guidance" and (
+                not period or str(period).lower() == "unknown"
+            ):
+                continue
             span_id = loc["locus_id"]
             spans.append(
                 {
@@ -637,7 +646,7 @@ class LLMModules:
                     "value_reported": value,
                     "currency": "USD",
                     "unit": _guess_unit(loc["amount"], quote),
-                    "period_type": period_type_from_label(period_label),
+                    "period_type": period_type,
                     "revenue_scope": "Product family",
                     "geography": None,
                     "formulation": None,

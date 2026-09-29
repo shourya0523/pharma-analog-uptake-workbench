@@ -349,7 +349,7 @@ async def test_extract_jev_chunks_loci_across_calls():
 
     # Many distinct product+money lines so harvest exceeds one chunk.
     lines = [
-        f"Calderon net product sales in period {i} were ${10 + i}.0 million."
+        f"Calderon net product sales in Q1 202{5 + (i % 4)} were ${10 + i}.0 million."
         for i in range(LOCI_PER_CALL + 3)
     ]
     text = "\n".join(lines)

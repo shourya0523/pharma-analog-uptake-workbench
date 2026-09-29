@@ -40,6 +40,22 @@ NON_PRODUCT_REVENUE_RE = re.compile(
     r")\b",
     re.IGNORECASE,
 )
+# Words a filer uses when the figure is what it expects, not what it booked.
+# Snapshot of the forward-looking vocabulary; a sentence that uses other
+# words is not typed guidance by this. Invented in tests: Calderon.
+GUIDANCE_RE = re.compile(
+    r"\b("
+    r"expects?"
+    r"|expected"
+    r"|outlook"
+    r"|guidance"
+    r"|forecast"
+    r"|projects?"
+    r"|projected"
+    r"|anticipates?"
+    r")\b",
+    re.IGNORECASE,
+)
 
 # Geography and scope labels that split a product block into rows. Ordered so
 # the longer spellings match before their abbreviations. Read by the positional

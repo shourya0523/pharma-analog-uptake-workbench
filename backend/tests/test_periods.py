@@ -138,6 +138,15 @@ def test_unusable_labels_return_none():
     assert normalize_period(None) is None
 
 
+def test_unknown_is_not_a_quarterly_period_type():
+    from app.parsing.periods import period_type_from_label
+
+    assert period_type_from_label("unknown") == "unknown"
+    assert period_type_from_label("unknown") != "quarterly"
+    assert period_type_from_label("") == "unknown"
+    assert period_type_from_label("2020Q1") == "quarterly"
+
+
 def test_a_glued_filename_still_names_its_quarter():
     """The grammar documents use, applied to a title and URL.
 
