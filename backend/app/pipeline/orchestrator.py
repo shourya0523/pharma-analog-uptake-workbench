@@ -697,6 +697,9 @@ class PipelineOrchestrator:
         self._step_started_at: float | None = None
         self._step_name: str | None = None
         self._ir_by_issuer: dict[str, list] = {}
+        self._identity_via_ticker = False
+        self._issuer_tickers: set[str] = set()
+        self._issuer_name: str | None = None
 
     async def finish_after_restart_during_judge(self, job_id: str) -> None:
         """Finish a job interrupted mid-judge without re-running extract.
@@ -1018,22 +1021,43 @@ class PipelineOrchestrator:
             )
 
     async def _identity(self, job: DrugJobORM) -> None:
-        """Who files for this product, from the index before the model.
+        """Who files for this product: the ticker names the issuer.
 
-        The name index answers a ticker or a company name, either on its own,
-        so the question is put to it whenever the job holds one of them. What
-        the job holds depends on what ran first: a drug name alone reaches no
-        index at all, which is why the label is read before this step and the
-        sponsor it names is on the job by the time this asks.
+        A ticker is resolved on the SEC map, then on browse-edgar, never by
+        asking a model which company reports the product. The product LLM is
+        only asked when the job has no ticker. After any CIK, a job that
+        stated a ticker is refused when that CIK's own SEC ticker set does
+        not contain it - unless the CIK itself came from that ticker, which
+        counts as membership.
         """
         self._set_step(job, JobStep.IDENTITY_RESOLVE)
-        if not job.cik and (job.ticker or job.manufacturer):
-            cik = await self.sec.resolve_cik(job.ticker, job.manufacturer)
+        self._identity_via_ticker = False
+        self._issuer_tickers = set()
+        self._issuer_name = None
+        via = "sec"
+        if not job.cik and job.ticker:
+            cik = await self.sec.resolve_cik(ticker=job.ticker)
+            if cik:
+                job.cik = cik
+                self._identity_via_ticker = True
+                via = "ticker"
+                self.db.commit()
+                logger.info(
+                    "cik_resolved job_id=%s drug=%s cik=%s via=ticker",
+                    job.id, job.drug_name, cik,
+                )
+        if not job.cik and job.manufacturer:
+            cik = await self.sec.resolve_cik(company_name=job.manufacturer)
             if cik:
                 job.cik = cik
                 self.db.commit()
-                logger.info("cik_resolved job_id=%s drug=%s cik=%s via=sec", job.id, job.drug_name, cik)
-        if not job.cik and get_settings().enable_llm_search:
+                logger.info(
+                    "cik_resolved job_id=%s drug=%s cik=%s via=sec",
+                    job.id, job.drug_name, cik,
+                )
+        # A ticker already named the issuer. Asking who reports the product
+        # would bind a different company's filings to this job.
+        if not job.cik and not job.ticker and get_settings().enable_llm_search:
             # The resolution says what it decided and why, so a refusal reaches
             # the job as well as an acceptance: "the model named no CIK" and
             # "the model was never asked" are different things for a reader,
@@ -1048,19 +1072,54 @@ class PipelineOrchestrator:
                 self._flag(job, *resolution.flags)
             if resolution and resolution.accepted:
                 job.cik = resolution.cik
+                via = "llm_search"
                 self.db.commit()
                 logger.info(
                     "cik_resolved job_id=%s drug=%s cik=%s via=llm_search",
                     job.id, job.drug_name, resolution.cik,
                 )
+        if job.cik and job.ticker:
+            asked = job.ticker.upper().strip()
+            if self._identity_via_ticker:
+                # browse-edgar / map success is membership, even when
+                # submissions later list an acquirer's ticker.
+                self._issuer_tickers = {asked}
+            else:
+                tickers, name = await self.sec.issuer_record(job.cik)
+                self._issuer_tickers = tickers
+                self._issuer_name = name or None
+                if asked not in tickers:
+                    self._flag(job, "cik_ticker_mismatch")
+                    logger.warning(
+                        "cik_ticker_mismatch job_id=%s drug=%s cik=%s ticker=%s tickers=%s",
+                        job.id, job.drug_name, job.cik, job.ticker, sorted(tickers),
+                    )
+                    job.cik = None
+                    self._identity_via_ticker = False
+                    self._issuer_tickers = set()
+                    self._issuer_name = None
+                    self.db.commit()
         logger.info(
-            "identity_done job_id=%s drug=%s cik=%s ticker=%s manufacturer=%s",
+            "identity_done job_id=%s drug=%s cik=%s ticker=%s manufacturer=%s via=%s",
             job.id,
             job.drug_name,
             job.cik,
             job.ticker,
             job.manufacturer,
+            via if job.cik else "none",
         )
+
+    def _issuer_for_ir(self, job: DrugJobORM) -> tuple[str | None, str | None]:
+        """Ticker and name of the resolved issuer, not an independent job ticker."""
+        if not job.cik:
+            return None, None
+        if self._identity_via_ticker and job.ticker:
+            return job.ticker, self._issuer_name or job.manufacturer
+        asked = (job.ticker or "").upper().strip()
+        if asked and asked in self._issuer_tickers:
+            return job.ticker, self._issuer_name or job.manufacturer
+        ir_ticker = next(iter(sorted(self._issuer_tickers)), None)
+        return ir_ticker, self._issuer_name or job.manufacturer
 
     def _record_sources(self, job: DrugJobORM, collected: list) -> list:
         """File what a retrieval pass found, and say what it was."""
@@ -1175,22 +1234,25 @@ class PipelineOrchestrator:
                     earnings_until=parse_filing_date(options.get("earnings_until")),
                 )
             )
-        if options.get("company_ir", True) and (job.ticker or job.manufacturer or job.known_source_url):
-            # IR product-sales schedules even when SEC already returned filings:
-            # a post-deal filer can have rich 10-Qs and still owe the pre-deal
-            # grid to an IR historical PDF.
-            issuer_key = (job.cik or job.ticker or job.manufacturer or "").strip().lower()
+        if options.get("company_ir", True) and (
+            job.cik or job.known_source_url
+        ):
+            # IR is keyed by the resolved issuer (CIK + that CIK's ticker),
+            # never by an independent job.ticker when they diverge.
+            extra_urls = [job.known_source_url] if job.known_source_url else None
+            issuer_key = (job.cik or "").strip().lower()
             if issuer_key and issuer_key in self._ir_by_issuer:
                 collected.extend(self._ir_by_issuer[issuer_key])
             else:
+                ir_ticker, ir_name = self._issuer_for_ir(job)
                 ir_sources = await self.company_ir.retrieve_for_issuer(
                     run_id=job.run_id,
                     job_id=job.id,
-                    company_name=job.manufacturer,
-                    ticker=job.ticker,
+                    company_name=ir_name,
+                    ticker=ir_ticker,
                     product=job.drug_name,
                     aliases=self._job_aliases or merge_aliases(job.drug_name, job.generic_name),
-                    extra_urls=[job.known_source_url] if job.known_source_url else None,
+                    extra_urls=extra_urls,
                 )
                 if issuer_key:
                     self._ir_by_issuer[issuer_key] = ir_sources

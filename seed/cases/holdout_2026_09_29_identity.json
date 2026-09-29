@@ -1,0 +1,21 @@
+{
+  "note": "Held-out set for ticker-first CIK resolution: listed map, then browse-edgar?CIK=TICKER, never the product LLM when a ticker is set, and cik_ticker_mismatch when a CIK's own SEC ticker set does not contain the job ticker. IR is keyed by the resolved issuer. It may score that identity change and nothing else. Issuers here are absent from gold and every spent holdout under seed/ — derived through tests/answer_keys.spent_issuers rather than checked against a list. What spends it: the first scored eval of ticker-first identity. After that it is an oracle like the rest. Both answers are represented: a ticker that binds its issuer, and a ticker that must not bind a different issuer via the product. No case states a CIK on purpose.",
+  "cases": [
+    {
+      "drug_name": "Auvelity",
+      "generic_name": "dextromethorphan and bupropion",
+      "manufacturer": "Axsome Therapeutics Inc",
+      "ticker": "AXSM",
+      "expected": true,
+      "why": "the job ticker names the issuer; the listed map binds it and IR must use that issuer"
+    },
+    {
+      "drug_name": "Rytelo",
+      "generic_name": "imetelstat",
+      "manufacturer": "Geron Corporation",
+      "ticker": "AXSM",
+      "expected": false,
+      "why": "the job ticker names a different issuer than the one that files for this product; identity must not bind the product's filer by asking who reports the product"
+    }
+  ]
+}

@@ -272,3 +272,64 @@ async def test_a_search_that_was_never_asked_is_not_a_resolution(monkeypatch):
         read_searched_identity(reply, floor=0.6).flags
         for reply in ({"cik": "1070494", "confidence": 0.95}, {"cik": None}, {"cik": "1070494"})
     )
+
+
+def test_browse_edgar_names_the_cik_a_person_would_read():
+    from app.connectors.sources import cik_from_browse_page
+
+    atom = (
+        "<feed><company-info><cik>0000999001</cik>"
+        "<conformed-name>ACME PHARMA INC</conformed-name></company-info></feed>"
+    )
+    assert cik_from_browse_page(atom) == "0000999001"
+    html = 'CIK#: 0000999001 (see all company filings)'
+    # The header spelling uses CIK#; the parser requires that mark so a JSON
+    # ticker map dumped into the same function is not a CIK.
+    assert cik_from_browse_page(html) == "0000999001"
+    assert cik_from_browse_page(
+        "", "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0000999001"
+    ) == "0000999001"
+    assert cik_from_browse_page("No matching Ticker Symbol.") is None
+    assert cik_from_browse_page("") is None
+
+
+async def test_a_ticker_absent_from_the_listed_map_resolves_via_browse_edgar(monkeypatch):
+    """A delisted symbol is still a ticker; browse-edgar is the lookup."""
+    calls: list[str] = []
+
+    class _Browse:
+        text = (
+            "<feed><company-info><cik>0000999001</cik>"
+            "<conformed-name>ACME PHARMA INC</conformed-name></company-info></feed>"
+        )
+        url = (
+            "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany"
+            "&CIK=0000999001&owner=exclude&count=1&output=atom"
+        )
+
+        def json(self) -> dict:
+            return {}
+
+    class _Miss:
+        text = "No matching Ticker Symbol."
+        url = "https://www.sec.gov/cgi-bin/browse-edgar?CIK=NOSUCH"
+
+        def json(self) -> dict:
+            return {}
+
+    async def _get(self, client, url, *, budget_s=None):
+        calls.append(url)
+        if "browse-edgar" in url:
+            return _Browse() if "CIK=ACMX" in url else _Miss()
+        if "cik-lookup-data" in url:
+            return _EmptyLookup()
+        return _Index()
+
+    monkeypatch.setattr(SECConnector, "_get_with_retry", _get)
+    connector = SECConnector(LocalFileStore("/tmp"))
+    assert await connector.resolve_cik("ACMX") == "0000999001"
+    assert any("browse-edgar" in u and "CIK=ACMX" in u for u in calls)
+    # A listed ticker never needs that lookup.
+    calls.clear()
+    assert await connector.resolve_cik("CLDN") == "0000059478"
+    assert not any("browse-edgar" in u for u in calls)

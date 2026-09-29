@@ -59,6 +59,53 @@ logger = logging.getLogger(__name__)
 # empty. Shared across connector instances so a run does not re-download it.
 _CIK_LOOKUP: dict[str, list[str]] | None = None
 
+# browse-edgar names the registrant a ticker still points at after the listed
+# map drops it. Atom, the redirected URL, and the company header all carry the
+# CIK; a page that says nothing matched is not an answer.
+_BROWSE_ATOM_CIK = re.compile(r"<cik>\s*(\d{1,10})\s*</cik>", re.IGNORECASE)
+_BROWSE_URL_CIK = re.compile(r"[?&]CIK=(\d{1,10})\b", re.IGNORECASE)
+_BROWSE_LABEL_CIK = re.compile(
+    r"CIK(?:#|</a>)\s*[:#]?\s*(\d{1,10})",
+    re.IGNORECASE,
+)
+_BROWSE_NO_MATCH = re.compile(
+    r"no matching\s+(?:ticker|cik|company)|company not found",
+    re.IGNORECASE,
+)
+
+
+def cik_from_browse_page(text: str, url: str = "") -> str | None:
+    """The CIK browse-edgar named for a ticker query, or None."""
+    body = text or ""
+    if _BROWSE_NO_MATCH.search(body):
+        return None
+    ordered: list[str] = []
+    for pattern, hay in (
+        (_BROWSE_ATOM_CIK, body),
+        (_BROWSE_LABEL_CIK, body),
+        (_BROWSE_URL_CIK, url or ""),
+        (_BROWSE_URL_CIK, body),
+    ):
+        for match in pattern.finditer(hay):
+            ordered.append(match.group(1).zfill(10))
+    unique = list(dict.fromkeys(ordered))
+    if not unique:
+        return None
+    if len(set(unique)) == 1:
+        return unique[0]
+    atom = _BROWSE_ATOM_CIK.search(body)
+    return atom.group(1).zfill(10) if atom else None
+
+
+def tickers_in_map(data: dict, cik: str) -> set[str]:
+    """Every ticker the listed map assigns to this CIK."""
+    needle = cik.zfill(10)
+    return {
+        str(row.get("ticker") or "").upper()
+        for row in data.values()
+        if str(row.get("cik_str") or "").zfill(10) == needle and row.get("ticker")
+    }
+
 # Which forms report a year rather than a quarter. This picks the label a
 # retrieved source carries; it decides nothing about what is read, and a form
 # not named here is labelled quarterly.
@@ -683,6 +730,9 @@ class SECConnector:
 
     SUBMISSIONS = "https://data.sec.gov/submissions/CIK{cik}.json"
     TICKER_MAP = "https://www.sec.gov/files/company_tickers.json"
+    # The lookup a person uses when the listed-ticker map has no row: a
+    # delisted symbol still names the registrant here.
+    BROWSE_EDGAR = "https://www.sec.gov/cgi-bin/browse-edgar"
     ARCHIVES = "https://www.sec.gov/Archives/edgar/data"
 
     # The families whose primary document this pass reads by default, and the
@@ -755,10 +805,11 @@ class SECConnector:
         Either argument on its own is a question this can answer, so a caller
         holding only a name asks with only a name.
 
-        A ticker is exact and is tried first. A ticker that names no
-        registrant in the index is not an answer, though - it is a symbol we
-        were handed that the SEC does not list - so the name is tried after
-        it rather than instead of it.
+        A ticker is exact and is tried first: the listed map, then the SEC's
+        own ticker lookup (browse-edgar?CIK=TICKER), which is the same
+        producer a person uses when the map has dropped a delisted symbol.
+        A ticker that names no registrant there is not an answer, so the
+        name is tried after it rather than instead of it.
 
         A company name is not exact: the SEC title carries punctuation and a
         corporate suffix that a caller rarely reproduces, so both sides are
@@ -776,15 +827,20 @@ class SECConnector:
         """
         if not ticker and not company_name:
             return None
-        async with httpx.AsyncClient(headers=self.headers, timeout=30) as client:
+        async with httpx.AsyncClient(
+            headers=self.headers, timeout=30, follow_redirects=True
+        ) as client:
             resp = await self._get_with_retry(client, self.TICKER_MAP)
             data = resp.json()
 
             needle_t = (ticker or "").upper().strip()
             if needle_t:
-                for row in data.values():
-                    if str(row.get("ticker", "")).upper() == needle_t:
-                        return str(row["cik_str"]).zfill(10)
+                cik = self._cik_in_ticker_map(data, needle_t)
+                if cik:
+                    return cik
+                cik = await self._cik_from_browse_edgar(client, needle_t)
+                if cik:
+                    return cik
 
             needle_n = normalize_registrant(company_name or "")
             if not needle_n:
@@ -799,6 +855,56 @@ class SECConnector:
             if len(matches) > 1:
                 return None
             return await self._cik_from_lookup(client, needle_n)
+
+    def _cik_in_ticker_map(self, data: dict, ticker: str) -> str | None:
+        needle = ticker.upper().strip()
+        for row in data.values():
+            if str(row.get("ticker") or "").upper() == needle:
+                return str(row["cik_str"]).zfill(10)
+        return None
+
+    async def _cik_from_browse_edgar(
+        self, client: httpx.AsyncClient, ticker: str
+    ) -> str | None:
+        """CIK via browse-edgar?CIK=TICKER, the lookup a person uses."""
+        url = (
+            f"{self.BROWSE_EDGAR}?action=getcompany&CIK={ticker}"
+            "&owner=exclude&count=1&output=atom"
+        )
+        try:
+            resp = await self._get_with_retry(client, url)
+        except Exception as exc:
+            logger.warning("sec_browse_edgar_failed ticker=%s error=%s", ticker, exc)
+            return None
+        page_url = str(getattr(resp, "url", "") or url)
+        return cik_from_browse_page(getattr(resp, "text", "") or "", page_url)
+
+    async def issuer_record(self, cik: str) -> tuple[set[str], str]:
+        """This CIK's own ticker set (map ∪ submissions) and its SEC name."""
+        resolved = cik.zfill(10)
+        tickers: set[str] = set()
+        name = ""
+        async with httpx.AsyncClient(
+            headers=self.headers, timeout=30, follow_redirects=True
+        ) as client:
+            try:
+                data = (await self._get_with_retry(client, self.TICKER_MAP)).json()
+                tickers |= tickers_in_map(data, resolved)
+            except Exception as exc:
+                logger.warning("sec_ticker_map_failed cik=%s error=%s", resolved, exc)
+            try:
+                sub = (
+                    await self._get_with_retry(
+                        client, self.SUBMISSIONS.format(cik=resolved)
+                    )
+                ).json()
+                tickers |= {
+                    str(t).upper() for t in (sub.get("tickers") or []) if t
+                }
+                name = str(sub.get("name") or "").strip()
+            except Exception as exc:
+                logger.warning("sec_submissions_tickers_failed cik=%s error=%s", resolved, exc)
+        return tickers, name
 
     async def _cik_from_lookup(
         self, client: httpx.AsyncClient, needle_n: str
