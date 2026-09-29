@@ -1011,14 +1011,16 @@ def test_a_line_that_did_not_parse_still_counts_as_a_line():
     assert "Harvoni – Europe" in readout.skipped_reason
 
 
-def test_two_trade_names_leave_a_several_lines_pending():
-    """US brand + EU brand; schedule total includes a third product.
+def test_two_trade_names_of_one_product_sum_when_the_total_includes_another():
+    """Matcher already placed both trade-name lines; sum there.
 
-    Geometry refuses several_lines_no_total and hands the wholes to an
-    adjudicator. Invented: Calderon + Calderonex + NuVessa.
+    The schedule total includes another brand, so it does not identify the
+    product. The two matched wholes are different printed names, so they
+    add by period. JEV is not asked to refuse a product the matcher placed.
+    Invented: Calderon + Calderonex + NuVessa.
     """
-    from app.extraction.candidates import candidates_from_several_lines_sum
-    from app.extraction.extract import summed_several_lines
+    from app.extraction.check import value_supported_by_quote
+    from app.extraction.process import normalize_all
 
     rows = [
         ["", "Three Months Ended March 31,"],
@@ -1035,20 +1037,15 @@ def test_two_trade_names_leave_a_several_lines_pending():
         extra_aliases=["Calderon", "Calderonex"],
         context="(in thousands)",
     )
-    assert "several_lines_no_total" in (readout.skipped_reason or "")
-    assert readout.values == []
-    pending = readout.several_lines
-    assert pending is not None
-    assert {line.label for line in pending.lines} == {"Calderon", "Calderonex"}
-    by_period = {v.period: v.value_as_reported for v in summed_several_lines(pending)}
+    assert readout.several_lines is None
+    assert "several_lines_no_total" not in (readout.skipped_reason or "")
+    by_period = {v.period: v.value_as_reported for v in readout.values}
     assert by_period["2020Q1"] == 25637.0
     assert by_period["2019Q1"] == 20285.0
-    cands = candidates_from_several_lines_sum(pending, product="Calderon")
-    assert {c["period"]: c["value_normalized_usd_millions"] for c in cands} == {
-        "2020Q1": 25.637,
-        "2019Q1": 20.285,
-    }
-    assert all("several_lines_summed" in (c.get("label_flags") or []) for c in cands)
+    assert all("several_lines_summed" in v.flags for v in readout.values)
+    assert not any(v.flags for v in readout.values if "pending" in str(v.flags))
+    points = normalize_all(readout.values)
+    assert value_supported_by_quote(points) == []
 
 
 def test_two_lines_of_the_same_trade_name_still_refuse():

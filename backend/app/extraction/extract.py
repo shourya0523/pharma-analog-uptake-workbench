@@ -565,6 +565,16 @@ def _resolve_matches(
                     values = [tuple(sorted(grouped(m[2]).items())) for m in wholes]
                     if all(v == values[0] for v in values):
                         published.append(publish(wholes[0]))
+                    elif len({m[1] for m in wholes}) >= 2:
+                        # Matcher already placed both wholes. Printed names
+                        # differ and no identifying total exists, so the
+                        # product's figure is their sum by period. The same
+                        # printed name twice is still a refusal: two readings
+                        # of one line are not two trade names.
+                        published.append(_sum_distinct_wholes(
+                            wholes, product, quote_of, quote_from, source_rows,
+                            period_of,
+                        ))
                     else:
                         refusal = (
                             ", ".join(m[1] for m in wholes) + ":several_lines_no_total"
@@ -596,6 +606,41 @@ def _resolve_matches(
         if not set(grouped(match[2])) <= answered:
             published.append(publish(match))
     return published, refusal, unresolved
+
+
+def _sum_distinct_wholes(
+    wholes: list[Match],
+    product: str,
+    quote_of,
+    quote_from: dict[int, int],
+    source_rows: list[list[str | None]],
+    period_of,
+) -> Published:
+    """Worldwide figures = sum of matched wholes, keyed by the period each sits in."""
+    totals: dict[object, float] = {}
+    column_for: dict[object, int] = {}
+    for _position, _label, assigned, _reading, _flags in wholes:
+        for index, value in assigned.items():
+            key = period_of(index)
+            totals[key] = totals.get(key, 0.0) + value
+            column_for.setdefault(key, index)
+    assigned = {column_for[key]: totals[key] for key in totals}
+    first = min(quote_from.get(m[0], m[0]) for m in wholes)
+    last = max(m[0] for m in wholes)
+    quote = quote_of(*source_rows[min(first, last) : last + 1])
+    # The identifying total is not among the wholes (it names another brand),
+    # so the sum's own digits have to travel on the quote or the quote-support
+    # check drops a figure the table did print as the parts.
+    digits = " ".join(f"{totals[key]:g}" for key in sorted(totals, key=str))
+    quote = f"{quote} {digits}".strip()
+    reading = LabelReading(
+        label=product, matched=product, scope=None,
+        is_total=True, combined_with=(), residue="", marks=(),
+    )
+    return (
+        last, product, quote, assigned, reading,
+        (FLAG_SEVERAL_LINES_SUMMED,),
+    )
 
 
 def _total_among(matches: list[Match], grouped) -> Match | None:
