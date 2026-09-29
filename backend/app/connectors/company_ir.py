@@ -17,6 +17,7 @@ from app.connectors.llm_search import _normalize_results
 from app.connectors.sources import fetch_page
 from app.domain.models import RetrievalStatus, RetrievedSource, SourceType, new_id
 from app.llm.client import LLMModules
+from app.parsing.periods import quarters_in_locator
 from app.storage.filestore import FileStore
 
 logger = logging.getLogger(__name__)
@@ -57,6 +58,14 @@ def looks_like_issuer_ir(url: str, title: str = "") -> bool:
     return False
 
 
+def _locator_answers(url: str, title: str, asked: set[str]) -> bool:
+    """Keep a hit that names an asked quarter, or that names no quarter yet."""
+    named = set(quarters_in_locator(title, url))
+    if not named:
+        return True
+    return bool(named & asked)
+
+
 class CompanyIRConnector:
     """Search, filter by fitness, fetch. No table of document URLs."""
 
@@ -75,8 +84,10 @@ class CompanyIRConnector:
         product: str,
         aliases: list[str] | None = None,
         extra_urls: Iterable[str] | None = None,
+        asked_quarters: Iterable[str] | None = None,
     ) -> list[RetrievedSource]:
         """IR pages for this issuer, searched then filtered, plus any extra URLs."""
+        asked = {str(q) for q in (asked_quarters or ()) if q}
         hits = await self._discover(
             product=product,
             aliases=list(aliases or []),
@@ -91,6 +102,12 @@ class CompanyIRConnector:
                 continue
             if not looks_like_issuer_ir(url, hit.get("title") or ""):
                 logger.info("ir_hit_unfit url=%s title=%s", url, (hit.get("title") or "")[:80])
+                continue
+            if asked and not _locator_answers(url, hit.get("title") or "", asked):
+                logger.info(
+                    "ir_hit_outside_window url=%s title=%s asked=%s",
+                    url, (hit.get("title") or "")[:80], sorted(asked),
+                )
                 continue
             seen.add(url)
             kept.append(hit)

@@ -571,6 +571,25 @@ def periods_named(text: str) -> list[NamedPeriod]:
     return sorted(named, key=lambda period: period.position)
 
 
+_COMPACT_QUARTER = re.compile(r"(?i)q([1-4])((?:19|20)\d{2})")
+
+
+def quarters_in_locator(title: str = "", url: str = "") -> list[str]:
+    """Quarter keys a title or URL names, via the same grammar documents use.
+
+    Filenames glue the tokens (``earningsreleaseq42020.htm``). Expanding those
+    compact forms lets the quarter-form grammar read them. A year sitting
+    alone in a path is not returned: an annual key is not a quarter asked
+    about.
+    """
+    hay = _COMPACT_QUARTER.sub(r" Q\1 \2 ", f"{title or ''} {url or ''}")
+    keys: list[str] = []
+    for named in periods_named(hay):
+        if named.key and named.months == 3:
+            keys.append(named.key)
+    return list(dict.fromkeys(keys))
+
+
 # The year that completes a date, printed right after the day.
 _DATE_YEAR_RE = re.compile(r"[\s,]*((?:19|20)\d{2})\b")
 

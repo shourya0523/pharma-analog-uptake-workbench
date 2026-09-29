@@ -101,6 +101,31 @@ async def test_extra_urls_are_fetched_even_when_search_is_empty(monkeypatch):
     assert [s.url for s in sources] == [extra]
 
 
+@pytest.mark.asyncio
+async def test_a_locator_naming_other_quarters_is_dropped(monkeypatch):
+    """Q4 in the filename is not an answer to Q1/Q2, even on an IR host."""
+    q4 = "https://ir.acme.example/earningsreleaseq42020.htm"
+    q1 = "https://ir.acme.example/earningsreleaseq12020.htm"
+    connector, _search, taken = _connector(
+        monkeypatch,
+        [
+            {"url": q4, "title": "Acme Q4 2020 earnings"},
+            {"url": q1, "title": "Acme Q1 2020 earnings"},
+        ],
+    )
+    sources = await connector.retrieve_for_issuer(
+        run_id="run",
+        job_id="job",
+        company_name="Acme Pharma",
+        ticker="ACME",
+        product="Calderon",
+        aliases=["Calderon"],
+        asked_quarters=["2020Q1", "2020Q2"],
+    )
+    assert taken == [q1]
+    assert [s.url for s in sources] == [q1]
+
+
 def test_the_module_is_a_procedure_not_a_url_table():
     """A table of document URLs would still 'work' if search were deleted.
 
@@ -111,6 +136,7 @@ def test_the_module_is_a_procedure_not_a_url_table():
     source = inspect.getsource(CompanyIRConnector.retrieve_for_issuer)
     assert "_discover" in source
     assert "looks_like_issuer_ir" in source
+    assert "_locator_answers" in source or "asked_quarters" in source
     module = inspect.getsource(inspect.getmodule(CompanyIRConnector))
     assert "sec.gov/Archives" not in module
     assert "http://" not in module.split("def looks_like_issuer_ir")[0]

@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 from app.config import get_settings
 from app.connectors.company_ir import CompanyIRConnector
-from app.connectors.coverage import record_coverage
+from app.connectors.coverage import admits_asked_quarters, record_coverage
 from app.connectors.llm_search import LLMSearchConnector
 from app.connectors.openfda import OpenFDAConnector
 from app.connectors.openfda_fields import (
@@ -823,6 +823,9 @@ class PipelineOrchestrator:
             await self._identity(job)
             filings = await self._retrieve_filings(job, options)
             filings_parsed = await self._parse(job, filings)
+            filings, filings_parsed = self._admit_search_sources(
+                job, filings, filings_parsed, options
+            )
             # The label pass reads openFDA and the narrative pass reads a
             # filing, so the second half of the metadata step waits for the
             # filings the first half runs in order to find.
@@ -838,6 +841,10 @@ class PipelineOrchestrator:
             searched: list = []
             if unfiled and get_settings().enable_llm_search:
                 searched, extra_parsed = await self._search_quarters_fallback(job, unfiled)
+                if searched:
+                    searched, extra_parsed = self._admit_search_sources(
+                        job, searched, extra_parsed, options
+                    )
                 if searched:
                     sources = list(sources) + searched
                     parsed = {**parsed, **extra_parsed}
@@ -1245,6 +1252,10 @@ class PipelineOrchestrator:
                 collected.extend(self._ir_by_issuer[issuer_key])
             else:
                 ir_ticker, ir_name = self._issuer_for_ir(job)
+                asked_quarters = quarters_reported_in(
+                    parse_filing_date(options.get("earnings_since")),
+                    parse_filing_date(options.get("earnings_until")),
+                )
                 ir_sources = await self.company_ir.retrieve_for_issuer(
                     run_id=job.run_id,
                     job_id=job.id,
@@ -1253,6 +1264,7 @@ class PipelineOrchestrator:
                     product=job.drug_name,
                     aliases=self._job_aliases or merge_aliases(job.drug_name, job.generic_name),
                     extra_urls=extra_urls,
+                    asked_quarters=asked_quarters,
                 )
                 if issuer_key:
                     self._ir_by_issuer[issuer_key] = ir_sources
@@ -1346,6 +1358,62 @@ class PipelineOrchestrator:
             failed,
         )
         return parsed_map
+
+    def _admit_search_sources(
+        self,
+        job: DrugJobORM,
+        sources: list,
+        parsed: dict[str, Any],
+        options: dict[str, Any],
+    ) -> tuple[list, dict[str, Any]]:
+        """Drop IR/search documents that do not answer the asked quarters.
+
+        Coverage may carry an annual key for a 10-K description; that key
+        does not admit a Q4 earnings page as answering Q1. Extra URLs a
+        person handed in are not this gate.
+        """
+        asked = quarters_reported_in(
+            parse_filing_date(options.get("earnings_since")),
+            parse_filing_date(options.get("earnings_until")),
+        )
+        since = parse_filing_date(options.get("earnings_since"))
+        until = parse_filing_date(options.get("earnings_until"))
+        kept: list = []
+        for src in sources:
+            if self._search_source_admits(src, asked, since, until):
+                kept.append(src)
+                continue
+            logger.info(
+                "search_source_not_admitted job_id=%s source_id=%s type=%s url=%s",
+                job.id, src.source_id,
+                getattr(src.source_type, "value", src.source_type),
+                src.url,
+            )
+        kept_ids = {src.source_id for src in kept}
+        return kept, {sid: doc for sid, doc in parsed.items() if sid in kept_ids}
+
+    def _search_source_admits(
+        self,
+        src,
+        asked: list[str],
+        since,
+        until,
+    ) -> bool:
+        kind = getattr(src.source_type, "value", str(src.source_type))
+        if kind not in {SourceType.COMPANY_IR.value, SourceType.LLM_SEARCH.value}:
+            return True
+        if (src.metadata or {}).get("search_query") == "extra_url":
+            return True
+        carried = ((src.metadata or {}).get("coverage") or {}).get("carries") or []
+        return admits_asked_quarters(
+            asked=asked,
+            carried=carried,
+            title=getattr(src, "title", None) or getattr(src, "source_title", None) or "",
+            url=src.url or "",
+            source_date=src.source_date,
+            since=since,
+            until=until,
+        )
 
     async def _label_metadata(self, job: DrugJobORM, sources: list, parsed: dict, options: dict) -> None:
         """What the product's own label and application records say about it.

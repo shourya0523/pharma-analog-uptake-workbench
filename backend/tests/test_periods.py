@@ -16,6 +16,7 @@ from app.parsing.periods import (
     period_months,
     period_span,
     quarter_of_month,
+    quarters_in_locator,
 )
 
 # Verbatim from the stored exhibit uthrq22024-ex991.htm revenue table
@@ -135,6 +136,20 @@ def test_unusable_labels_return_none():
     assert normalize_period("unknown") is None
     assert normalize_period("") is None
     assert normalize_period(None) is None
+
+
+def test_a_glued_filename_still_names_its_quarter():
+    """The grammar documents use, applied to a title and URL.
+
+    Compact `q42020` in a filename is Q4 2020; a bare year in a path is not
+    a quarter.
+    """
+    assert quarters_in_locator(
+        "Acme earnings",
+        "https://ir.acme.example/earningsreleaseq42020.htm",
+    ) == ["2020Q4"]
+    assert quarters_in_locator("", "https://ir.acme.example/q1-2020.htm") == ["2020Q1"]
+    assert "2020" not in quarters_in_locator("", "https://ir.acme.example/annual-2020.pdf")
 
 
 def test_a_bare_end_date_names_its_own_quarter_over_annual_context():
