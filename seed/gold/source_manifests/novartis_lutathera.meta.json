@@ -1,0 +1,34 @@
+{
+  "manufacturer": "Novartis",
+  "currency": "USD",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "series_start_reason": "Pre-acquisition: Advanced Accelerator Applications (CIK 0001611787) never printed a Lutathera sales line; its Q3 2017 release (0000950103-17-011304, dp82822_ex9901.htm) prints only 'Therapeutic sales for the third quarter were EUR 5.4 million' (a category, EUR) and AAA, acquired January 2018, issued no Q4 2017 results. Novartis first prints Lutathera in Q1 2018 (via prior-year column).",
+  "drug_name": "Lutathera",
+  "generic_name": "lutetium Lu 177 dotatate",
+  "benchmark_identity": "novartis_lutathera_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (neuroendocrine tumors)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection (radioligand)",
+  "route_of_administration": "intravenous",
+  "moa": "Somatostatin receptor-targeted radioligand therapy delivering lutetium-177",
+  "moa_class": "radioligand_therapy",
+  "first_approval_year": 2018,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2018/208700Orig1s000ltr.pdf",
+    "quote": "NDA 208700 NDA APPROVAL ... Lutathera (lutetium Lu 177 dotatate), injection for intravenous use"
+  },
+  "launch_quarter": "2017Q4",
+  "commercial_start_quarter": "2018Q1",
+  "notes": "launch_quarter 2017Q4: AAA Q3 2017 release (Nov 17, 2017): 'We are progressing with the commercial launch of lutetium Lu 177 dotatate (Lutathera) in Europe' after EU approval Sept 29, 2017; Novartis Q1 2018 report: 'launched in the US during Q1'. US approval Jan 2018 (AAA 6-K 0000950103-18-000895). 2018Q1 covers only post-acquisition days.",
+  "search_log": [
+    "listed NVS (CIK 0001114448) filings via data.sec.gov submissions incl. 6-K, 6-K/A, 20-F, 20-F/A (all forms, not filtered to one type)",
+    "indexed every 6-K 2005-2026 filed in the late Jan-Feb, Apr-May, Jul-Aug, Oct-Nov windows plus every 6-K 2017-07 onward; downloaded each quarterly interim financial report exhibit (EX-99.2 / nvs-*-99_2.htm, or the 6-K body for 2006-2011)",
+    "extracted product rows by script (scripts/build.py, extract.py): first cell equals the brand (optionally plus footnote digit), header row above names the quarter first with no year-to-date column",
+    "cross-checked every quarter's own figure against the prior-year column of the following year's report: no differences (no restatement of these product lines found)",
+    "downloaded all AAA 6-K/20-F 2015-2018 (CIK 0001611787) and grepped: results releases give total sales and category sales (PET/Therapeutic/SPECT), no Lutathera product line"
+  ]
+}

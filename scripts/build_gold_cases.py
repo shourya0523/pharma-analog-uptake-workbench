@@ -118,9 +118,12 @@ ISSUER_TICKERS: dict[str, str | None] = {
     # issuer name instead.
     "Allergan": None,
     "Amgen": "AMGN",
+    "AstraZeneca": "AZN",
     "BeiGene": "ONC",
     "Biogen": "BIIB",
     "Bristol-Myers Squibb": "BMY",
+    # Not SEC registrants (no listing of their own on EDGAR): resolved by name.
+    "Daiichi Sankyo": None,
     "Eli Lilly": "LLY",
     "Exelixis": "EXEL",
     "GSK plc": "GSK",
@@ -136,6 +139,7 @@ ISSUER_TICKERS: dict[str, str | None] = {
     "Novo Nordisk": "NVO",
     "Pfizer": "PFE",
     "Regeneron Pharmaceuticals": "REGN",
+    "Roche": None,
     "Sarepta Therapeutics": "SRPT",
     "Seagen": None,
     "Teva": "TEVA",

@@ -1,0 +1,35 @@
+{
+  "drug_name": "Imfinzi",
+  "generic_name": "durvalumab",
+  "manufacturer": "AstraZeneca",
+  "benchmark_identity": "az_imfinzi_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (solid)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection (50 mg/mL concentrate, single-dose vial)",
+  "route_of_administration": "intravenous",
+  "moa": "PD-L1 inhibitor (human monoclonal antibody)",
+  "moa_class": "pdl1_inhibitor",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2017/761069Orig1s000ltr.pdf",
+    "quote": "BLA 761069 ... for Imfinzi (durvalumab) Injection, 50 mg/mL ... The effective approval date will remain May 1, 2017, the date of the original approval letter. [signed RICHARD PAZDUR 05/01/2017]"
+  },
+  "launch_quarter": "2017Q2",
+  "commercial_start_quarter": "2017Q2",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "launch_quarter = first quarter with a printed Imfinzi product-sales row: Q2 2017 $1m (H1 2017 results 6-K 0001654954-17-006697 prints World 1 for both H1 and Q2, and the same document's pipeline table shows Imfinzi bladder cancer 'Approved, Launched'); the Q1 2017 results (0001654954-17-003685) print no Imfinzi row. Q3 2017 is printed as a nil dash in the Q3 table (9M row = 1), so 2017Q3 is value 0 as printed. FDA approval 2017-05-01 (Drugs@FDA letter).",
+  "search_log": [
+    "Listed every AstraZeneca PLC (CIK 0000901832) filing, all form types, via data.sec.gov/submissions/CIK0000901832.json plus the older page CIK0000901832-submissions-001.json (2,050 filings, 1995-2026; scripts/list_filings.py). Quarterly/half-year/full-year results announcements are furnished on Form 6-K; most H1 results 6-Ks (2018, 2019 and 2021-2026, accession prefix 0001104659) carry only a generic EDGAR description ('6-K' / 'FORM 6-K' / 'FORM 6K') and were identified by opening them, not by description. 69 results documents 2010-02-05 to 2026-07-27 were selected (scripts/catalog.py); the H1 2021 6-K/A (0001104659-21-097940) was not used.",
+    "Every document was fetched from sec.gov and flattened to table rows (scripts/rows.py, extract.py). In each results document the product-sales analysis by region prints a year-to-date table (H1/9M/FY) followed by the single-quarter table with a World column; the quarter value is the World column of the single-quarter table (first wide table for Q1 documents, second wide table otherwise), found with a row-label match that tolerates 'Brilinta / Brilique' style labels and a leading dash (scripts/series.py).",
+    "Checked every quarter against the same document's year-to-date row (YTD minus previous YTD equals the quarter, tolerance 2) and, for each year with four quarters, the sum of the four quarters against the full-year row of the Q4 document; all agree to within 1 (printed-rounding); no larger difference exists. Checked that the table is the Product Sales table: its total row is 'TOTAL PRODUCT SALES' / 'Total Product Sales' / 'Total Medicines', not Total Revenue.",
+    "Q1 2017 results document searched for an Imfinzi product-sales row: none (no row, in any table). First printed row is Q2 2017. Q3 2017 table prints '-' for all columns of the Imfinzi row; written as value 0 with the nil shown as '\u2014' in the quote."
+  ],
+  "reviewed_anomalies": {
+    "2017Q3": "Printed as a nil (dash) in AstraZeneca's third-quarter 2017 product sales table, after 1 in 2017Q2. Read at source."
+  }
+}

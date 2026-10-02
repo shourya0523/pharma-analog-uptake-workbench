@@ -1,0 +1,33 @@
+{
+  "manufacturer": "Novartis",
+  "currency": "USD",
+  "series_end_quarter": "2023Q3",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Q3 2023 report (0001370368-23-000068): 'In September 2023, Novartis completed the divestment of Xiidra to Bausch + Lomb.' Bausch + Lomb's later Xiidra sales are handled by another agent.",
+  "series_start_reason": "Xiidra launched in 2016 under Shire (launch results in Shire's Q3 2016 8-K, 0000936402-16-000009), but Shire's 8-K earnings releases, 10-Qs and 10-Ks (all searched, Q3 2016-Q3 2018) print no Xiidra net sales figure, Shire was acquired by Takeda in January 2019, and Takeda is not on EDGAR with quarterly releases for those periods (not pursued). Novartis 'began recording sales as of July 1, 2019' (Q4 2019 report) and first prints Xiidra for Q3 2019.",
+  "drug_name": "Xiidra",
+  "generic_name": "lifitegrast",
+  "benchmark_identity": "novartis_xiidra_reported",
+  "therapeutic_area": "Ophthalmology",
+  "indication_area": "Ophthalmology (dry eye disease)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "ophthalmic solution",
+  "route_of_administration": "topical ophthalmic",
+  "moa": "LFA-1 antagonist",
+  "moa_class": "lfa1_antagonist",
+  "first_approval_year": 2016,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/nda/2016/208073Orig1s000TOC.cfm",
+    "quote": "Trade Name: Xiidra Ophthalmic Solution, 5%. Generic or Proper lifitegrast Name: Sponsor: Shire Development, LLC Approval Date: July 11, 2016"
+  },
+  "launch_quarter": "2016Q3",
+  "commercial_start_quarter": "2019Q3",
+  "search_log": [
+    "listed NVS (CIK 0001114448) filings via data.sec.gov submissions incl. 6-K, 6-K/A, 20-F, 20-F/A (all forms, not filtered to one type)",
+    "indexed every 6-K 2005-2026 filed in the late Jan-Feb, Apr-May, Jul-Aug, Oct-Nov windows plus every 6-K 2017-07 onward; downloaded each quarterly interim financial report exhibit (EX-99.2 / nvs-*-99_2.htm, or the 6-K body for 2006-2011)",
+    "extracted product rows by script (scripts/build.py, extract.py): first cell equals the brand (optionally plus footnote digit), header row above names the quarter first with no year-to-date column",
+    "cross-checked every quarter's own figure against the prior-year column of the following year's report: no differences (no restatement of these product lines found)",
+    "downloaded Shire 8-K earnings exhibits Q3 2016-Q3 2018, 10-Qs and 10-Ks and grepped Xiidra: only narrative (launch share, scripts), no sales amounts"
+  ]
+}

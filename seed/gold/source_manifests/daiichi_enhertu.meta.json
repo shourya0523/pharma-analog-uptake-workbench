@@ -1,0 +1,32 @@
+{
+  "drug_name": "Enhertu",
+  "generic_name": "trastuzumab deruxtecan",
+  "manufacturer": "Daiichi Sankyo",
+  "benchmark_identity": "daiichi_enhertu_company_booked_product_sales_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (solid)",
+  "revenue_scope": "Company-booked territories",
+  "geography": "Japan, US, EU and ASCA (Asia, South and Central America) as booked by Daiichi Sankyo; excludes territories where AstraZeneca books the sales",
+  "formulation": "injection (lyophilised powder for solution)",
+  "route_of_administration": "intravenous",
+  "moa": "HER2-directed antibody-drug conjugate (topoisomerase I inhibitor payload)",
+  "moa_class": "her2_adc",
+  "first_approval_year": 2019,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2019/761139Orig1s000ltr.pdf",
+    "quote": "BLA 761139 BLA ACCELERATED APPROVAL ... for ENHERTU (fam-trastuzumab deruxtecan- nxki), 100mg for injection ... [signed MARC R THEORET 12/20/2019]"
+  },
+  "launch_quarter": "2020Q1",
+  "commercial_start_quarter": "2020Q1",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "launch_quarter from Daiichi Sankyo's FY2019 results (https://www.daiichisankyo.com/files/investors/library/quarterly_result/2019/pdf/FY2019%20Financial%20Results.pdf): 'in January 2020, Daiichi Sankyo, Inc. launched ENHERTU'. The FY2019 Q3 (Oct-Dec 2019 = calendar 2019Q4) Reference Data prints Product sales 0.0 (rounded to nil, ahead of the January 2020 launch) and earlier cells '-'; that 0.0 row is not included, the series starts at the documented launch quarter. Currency JPY (not converted); fiscal quarters align with calendar quarters. The 'Product sales' line is Daiichi Sankyo's total of its regional Enhertu product-sales lines and carries the note 'Incl. Gross profit share in AstraZeneca territory' in the issuer's own table; the set of regional sub-lines grows over time (an EU line first prints in FY2020 Q4 at 0.0 with sales from FY2021 Q1; the ASCA line first shows sales in FY2021 Q4) as the product launches in new territories.",
+  "search_log": [
+    "Read the Daiichi Sankyo investor-relations quarterly-results index (daiichisankyo.com/investors/library/quarterly_result/ and the yearly pages 2018-2026) and downloaded the Reference Data PDF of every fiscal quarter from FY2019 Q3 to FY2026 Q1 (scripts/ds_fetch.py). Fiscal year runs April to March, so fiscal Q1 = April-June = calendar Q2, Q2 = Jul-Sep = Q3, Q3 = Oct-Dec = Q4, Q4 = Jan-Mar = Q1 of the next calendar year.",
+    "Each Reference Data PDF has a Quarterly Data table 'Revenue of Global Products' with columns for the prior fiscal year's four quarters and year and the current year's quarters; the 'Product sales' row directly under 'Trastuzumab deruxtecan' was read by matching the character position of the 'FYyyyy Qn' header to the numeric cell (scripts/ds_parse.py, ds_series.py), so blank (not yet reported) cells cannot shift a value. Each quarter is read from its own fiscal quarter's Reference Data (current-quarter column), not from later prior-year columns.",
+    "Checks: for each fiscal year the four quarterly values sum to the printed fiscal-year column (FY2022 207.5, FY2023 395.9, FY2024 552.8, FY2025 698.4 JPY bn; sums agree within 0.1); FY2019-FY2021 sums agree within 0.1 as well. Earlier alternatives considered and rejected: the line above it ('Trastuzumab deruxtecan' total) includes upfront and regulatory-milestone payments; the regional sub-lines (JPN, US, EU, ASCA) would need summing by us.",
+    "Booking decision: AstraZeneca's Product Sales table prints Enhertu with a nil US column and books alliance revenue separately; Daiichi Sankyo books Japan, US, EU and ASCA product sales, the widest territory, so the plain-stem series is Daiichi Sankyo's. AstraZeneca's printed Enhertu product-sales line is delivered as az_enhertu_alt."
+  ]
+}

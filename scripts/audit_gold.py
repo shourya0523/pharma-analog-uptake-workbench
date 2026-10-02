@@ -62,6 +62,9 @@ _YEAR_PATTERNS = (
 )
 
 
+_FISCAL_Q4 = re.compile(r"(?i)fy((?:19|20)\d{2})(?![_-]?q[1-3])(?!\d)")
+
+
 def years_named_by(url: str) -> set[int]:
     """Years the URL actually names, not digit runs that happen to look like one.
 
@@ -74,6 +77,11 @@ def years_named_by(url: str) -> set[int]:
     found: set[int] = set()
     for pattern in _YEAR_PATTERNS:
         found.update(int(match) for match in pattern.findall(url))
+    # A fiscal year that starts in April is named for the year it began, so
+    # its fourth quarter and its full-year document ("FY2020_Q4", "FY2019
+    # Reference Data") reach into January to March of the following year.
+    for match in _FISCAL_Q4.findall(url):
+        found.add(int(match) + 1)
     return {year for year in found if 1990 <= year <= 2035}
 
 

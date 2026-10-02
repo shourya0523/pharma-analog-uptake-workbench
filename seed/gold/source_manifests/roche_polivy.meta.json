@@ -1,0 +1,34 @@
+{
+  "drug_name": "Polivy",
+  "generic_name": "polatuzumab vedotin",
+  "manufacturer": "Roche",
+  "benchmark_identity": "roche_polivy_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (hematologic)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection (lyophilised powder for infusion)",
+  "route_of_administration": "intravenous",
+  "moa": "CD79b-targeted antibody-drug conjugate",
+  "moa_class": "cd79b_antibody_drug_conjugate",
+  "first_approval_year": 2019,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761121",
+    "quote": "06/10/2019 ORIG-1 Approval (Drugs@FDA, Original Approvals or Tentative Approvals)"
+  },
+  "launch_quarter": "2019Q2",
+  "commercial_start_quarter": "2019Q2",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Launch quarter inferred from FDA approval 10 June 2019 and the HY 2019 investor update printing Polivy HY sales of CHF 2 million with no line in the Q1 2019 release; 2019Q2 is therefore the half-year figure (approximate, flagged in the row).",
+  "search_log": [
+    "listed Roche investor event pages (roche.com/investors/events/{q1,hy,q3,annual-results}-YYYY, 2016-2026) and downloaded every Investor update PDF",
+    "probed legacy roche.com/investors/updates/inv-update-YYYY-MM-DD.htm (2016-2017 hits) and assets.cwp.roche.com/imported/en/med-cor-YYYY-MM-DD-e.pdf for 2009-2015 weekday dates in Jan-Feb, Apr-early May, Jul-early Aug, Oct-early Nov; results releases found for 2011-2015, none found for 2009-2010",
+    "parsed the worldwide \"Top 20 Pharmaceuticals Division quarterly product sales\" table (5 quarterly columns) of every release plus the year-to-date product tables; quarters taken from the own release column when listed, else Q1 three-month table, else the earliest later release column, else year-to-date differences",
+    "cross-checked every chosen quarter against all other printed values for the same quarter (see report)",
+    "presentations (irp*.pdf) and half-year/annual reports not used for rows",
+    "rows: 29 from 2019Q2 to 2026Q2"
+  ]
+}

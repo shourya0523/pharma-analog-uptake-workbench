@@ -143,7 +143,7 @@ def test_quarterly_rows_are_unique_and_preserve_reported_units():
             assert row["value_normalized_usd_millions"] == round(
                 row["value_reported"] * row["fx_rate_to_usd"], 6
             ), row["gold_id"]
-        assert row["source_unit"] in {"units", "thousands", "millions"}
+        assert row["source_unit"] in {"units", "thousands", "millions", "billions"}
         assert row["sources"]
         # test_gold_rows_have_independent_provenance_and_citations only checks
         # that source_quote contains source_value_reported (the pre-conversion
@@ -156,7 +156,7 @@ def test_quarterly_rows_are_unique_and_preserve_reported_units():
         # scale a filing uses for an amount too small to print in millions:
         # Remodulin's first quarter on sale was "$205,000". It needs its own
         # divisor here or it would be read as 205,000 million.
-        scale = {"units": 1_000_000, "thousands": 1000, "millions": 1}
+        scale = {"units": 1_000_000, "thousands": 1000, "millions": 1, "billions": 0.001}
         expected = row["source_value_reported"] / scale[row["source_unit"]]
         assert row["value_reported"] == round(expected, 6), row["gold_id"]
 

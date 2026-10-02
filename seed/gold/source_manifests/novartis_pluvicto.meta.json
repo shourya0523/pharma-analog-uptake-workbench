@@ -1,0 +1,34 @@
+{
+  "manufacturer": "Novartis",
+  "currency": "USD",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "series_start_reason": null,
+  "drug_name": "Pluvicto",
+  "generic_name": "lutetium Lu 177 vipivotide tetraxetan",
+  "benchmark_identity": "novartis_pluvicto_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (solid, prostate)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection (radioligand)",
+  "route_of_administration": "intravenous",
+  "moa": "PSMA-targeted radioligand therapy delivering lutetium-177",
+  "moa_class": "radioligand_therapy",
+  "first_approval_year": 2022,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2022/215833Orig1s000ltr.pdf",
+    "quote": "NDA 215833 NDA APPROVAL ... for Pluvicto [lutetium (177Lu) vipivotide tetraxetan] injection"
+  },
+  "launch_quarter": "2022Q1",
+  "commercial_start_quarter": "2022Q1",
+  "notes": "2022Q1 (USD 2 million) is the prior-year column of the Q1 2023 report; the Q2 2022 report prints Q2 10 and H1 12, consistent (12-10=2). Q2 2022 report text: 'Pluvicto (USD 10 million) received US FDA approval in late March 2022'. launch_quarter 2022Q1 is inferred from those printed figures (sales exist in Q1), not stated as a launch date.",
+  "search_log": [
+    "listed NVS (CIK 0001114448) filings via data.sec.gov submissions incl. 6-K, 6-K/A, 20-F, 20-F/A (all forms, not filtered to one type)",
+    "indexed every 6-K 2005-2026 filed in the late Jan-Feb, Apr-May, Jul-Aug, Oct-Nov windows plus every 6-K 2017-07 onward; downloaded each quarterly interim financial report exhibit (EX-99.2 / nvs-*-99_2.htm, or the 6-K body for 2006-2011)",
+    "extracted product rows by script (scripts/build.py, extract.py): first cell equals the brand (optionally plus footnote digit), header row above names the quarter first with no year-to-date column",
+    "cross-checked every quarter's own figure against the prior-year column of the following year's report: no differences (no restatement of these product lines found)",
+    "Q1 2022 own report (0001370368-22-000038) has no Pluvicto sales row; checked"
+  ]
+}

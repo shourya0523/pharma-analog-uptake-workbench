@@ -76,6 +76,7 @@ def write_with_stated_results(rows: list[dict[str, str]], path: Path) -> None:
 
 # Issuer names a sourcing note decorates ("Gilead Sciences (Kite)") are cut to
 # the name gold already uses for that issuer, so one issuer is one name.
+BRANDS: set[str] = set()
 ISSUER_ALIASES = {"Gilead Sciences": "Gilead", "Allergan, Inc.": "Allergan"}
 
 
@@ -127,6 +128,8 @@ def main() -> int:
     args = parser.parse_args()
 
     attributes = {row["drug_name"] for row in read_rows(ATTRIBUTES)}
+    global BRANDS
+    BRANDS = {row["brand_name"] for row in read_rows(TARGETS)}
     excluded = {row["drug_name"] for row in read_rows(EXCLUSIONS)}
     new_attributes: list[dict[str, str]] = []
     new_exclusions: list[dict[str, str]] = []
@@ -143,6 +146,11 @@ def main() -> int:
         exclusion = args.staging / f"{stem}.exclusion.json"
         meta = json.loads(meta_path.read_text()) if meta_path.is_file() else None
 
+        if meta and meta["drug_name"] not in BRANDS:
+            raise SystemExit(
+                f"{stem}: drug_name {meta['drug_name']!r} is not a brand in "
+                f"{TARGETS.name}; name it as the requested list does"
+            )
         if quarterly.is_file() and meta:
             if (MANIFESTS / quarterly.name).exists():
                 raise SystemExit(f"{quarterly.name} is already in gold; refusing to overwrite")

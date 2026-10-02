@@ -1,0 +1,34 @@
+{
+  "drug_name": "Ocrevus",
+  "generic_name": "ocrelizumab",
+  "manufacturer": "Roche",
+  "benchmark_identity": "roche_ocrevus_worldwide_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Neurology (multiple sclerosis)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection (intravenous infusion; subcutaneous Zunovo added later within the same printed line, as inferred from no separate line in the releases read)",
+  "route_of_administration": "intravenous",
+  "moa": "anti-CD20 monoclonal antibody",
+  "moa_class": "cd20_antibody",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761053",
+    "quote": "03/28/2017 ORIG-1 Approval (Drugs@FDA, Original Approvals or Tentative Approvals)"
+  },
+  "launch_quarter": "2017Q2",
+  "commercial_start_quarter": "2017Q2",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Launch: HY 2017 investor update (https://assets.roche.com/f/176343/d4d4c896ec/inv-update-2017-07-27-e.pdf) states Ocrevus (CHF 192 million) \"launched in the US in April 2017\". Q1 2017 is printed as nil (-). No separate Ocrevus Zunovo line appears in any release read; one Ocrevus line is printed throughout.",
+  "search_log": [
+    "listed Roche investor event pages (roche.com/investors/events/{q1,hy,q3,annual-results}-YYYY, 2016-2026) and downloaded every Investor update PDF",
+    "probed legacy roche.com/investors/updates/inv-update-YYYY-MM-DD.htm (2016-2017 hits) and assets.cwp.roche.com/imported/en/med-cor-YYYY-MM-DD-e.pdf for 2009-2015 weekday dates in Jan-Feb, Apr-early May, Jul-early Aug, Oct-early Nov; results releases found for 2011-2015, none found for 2009-2010",
+    "parsed the worldwide \"Top 20 Pharmaceuticals Division quarterly product sales\" table (5 quarterly columns) of every release plus the year-to-date product tables; quarters taken from the own release column when listed, else Q1 three-month table, else the earliest later release column, else year-to-date differences",
+    "cross-checked every chosen quarter against all other printed values for the same quarter (see report)",
+    "presentations (irp*.pdf) and half-year/annual reports not used for rows",
+    "rows: 37 from 2017Q2 to 2026Q2"
+  ]
+}

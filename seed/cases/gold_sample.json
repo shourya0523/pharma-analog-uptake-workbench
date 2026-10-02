@@ -110,6 +110,31 @@
   ]
  },
  {
+  "drug_name": "Tagrisso",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "osimertinib",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 1833.0,
+    "gold_id": "az-tagrisso-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 1941.0,
+    "gold_id": "az-tagrisso-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Brukinsa",
   "manufacturer": "BeiGene",
   "ticker": "ONC",
@@ -181,6 +206,31 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 769.0,
     "gold_id": "bms-yervoy-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Enhertu",
+  "manufacturer": "Daiichi Sankyo",
+  "ticker": null,
+  "generic_name": "trastuzumab deruxtecan",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 1221.848528,
+    "gold_id": "daiichi-enhertu-company-booked-product-sales-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 1375.615904,
+    "gold_id": "daiichi-enhertu-company-booked-product-sales-reported-2026q2"
    }
   ]
  },
@@ -470,10 +520,10 @@
   ]
  },
  {
-  "drug_name": "Leqvio",
+  "drug_name": "Xolair",
   "manufacturer": "Novartis",
   "ticker": "NVS",
-  "generic_name": "inclisiran",
+  "generic_name": "omalizumab",
   "options": {
    "earnings_since": "2026-04-05",
    "earnings_until": "2027-05-05",
@@ -484,13 +534,13 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 452.0,
-    "gold_id": "novartis-leqvio-worldwide-reported-2026q1"
+    "value_normalized_usd_millions": 388.0,
+    "gold_id": "novartis-xolair-exus-reported-2026q1"
    },
    {
     "period": "2026Q2",
-    "value_normalized_usd_millions": 480.0,
-    "gold_id": "novartis-leqvio-worldwide-reported-2026q2"
+    "value_normalized_usd_millions": 342.0,
+    "gold_id": "novartis-xolair-exus-reported-2026q2"
    }
   ]
  },
@@ -576,6 +626,31 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 342.6,
     "gold_id": "regeneron-libtayo-us-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Vabysmo",
+  "manufacturer": "Roche",
+  "ticker": null,
+  "generic_name": "faricimab",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 1307.456584,
+    "gold_id": "roche-vabysmo-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 1309.96076,
+    "gold_id": "roche-vabysmo-worldwide-reported-2026q2"
    }
   ]
  },

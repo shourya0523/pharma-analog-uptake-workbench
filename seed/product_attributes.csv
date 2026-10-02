@@ -159,3 +159,28 @@ Breo Ellipta,Inhaled corticosteroid + long-acting beta2-agonist (combination),ic
 Nucala,Anti-interleukin-5 (IL-5) monoclonal antibody,il5_antagonist_mab,Subcutaneous,2015,Respiratory / Immunology (severe eosinophilic asthma and other eosinophilic diseases),curated_reference,distinct_product
 Shingrix,Recombinant glycoprotein E subunit vaccine with AS01B adjuvant system,adjuvanted_recombinant_subunit_vaccine,Intramuscular,2017,Infectious disease (herpes zoster prevention),curated_reference,distinct_product
 Trelegy Ellipta,Inhaled corticosteroid + long-acting muscarinic antagonist + long-acting beta2-agonist (triple combination),ics_lama_laba_triple_combination,Inhaled,2017,"Respiratory (COPD, asthma)",curated_reference,distinct_product
+Beovu,VEGF-A inhibitor (single-chain antibody fragment),vegf_inhibitor,Intravitreal,2019,"Ophthalmology (retina, neovascular AMD)",curated_reference,distinct_product
+Kymriah,CD19-directed genetically modified autologous T cell immunotherapy,car_t_cell_therapy,Intravenous,2017,Oncology (hematologic),curated_reference,distinct_product
+Lucentis,VEGF-A inhibitor (antibody fragment),vegf_inhibitor,Intravitreal,2006,"Ophthalmology (retina, neovascular AMD/DME/RVO)",curated_reference,distinct_product
+Lutathera,Somatostatin receptor-targeted radioligand therapy delivering lutetium-177,radioligand_therapy,Intravenous,2018,Oncology (neuroendocrine tumors),curated_reference,distinct_product
+Pluvicto,PSMA-targeted radioligand therapy delivering lutetium-177,radioligand_therapy,Intravenous,2022,"Oncology (solid, prostate)",curated_reference,distinct_product
+Xiidra,LFA-1 antagonist,lfa1_antagonist,Topical ophthalmic,2016,Ophthalmology (dry eye disease),curated_reference,distinct_product
+Xolair,Anti-IgE monoclonal antibody,anti_ige_antibody,Subcutaneous,2003,"Respiratory and allergy (severe allergic asthma, CSU, nasal polyps, food allergy)",curated_reference,distinct_product
+Zolgensma,AAV9 vector-based SMN1 gene replacement therapy,gene_therapy_aav,Intravenous,2019,Neuromuscular (spinal muscular atrophy),curated_reference,distinct_product
+Actemra,interleukin-6 receptor antagonist,il6_receptor_antagonist,Intravenous,2010,Immunology (rheumatoid arthritis),curated_reference,distinct_product
+Alecensa,ALK tyrosine kinase inhibitor,alk_inhibitor,Oral,2015,Oncology (solid),curated_reference,distinct_product
+Enspryng,interleukin-6 receptor antagonist,il6_receptor_antagonist,Subcutaneous,2020,Neurology (neuromyelitis optica spectrum disorder),curated_reference,distinct_product
+Evrysdi,SMN2 splicing modifier,smn2_splicing_modifier,Oral,2020,Neurology (spinal muscular atrophy),curated_reference,distinct_product
+Hemlibra,bispecific factor IXa/X-directed antibody,bispecific_factor_viii_mimetic,Subcutaneous,2017,Hematology (haemophilia A),curated_reference,distinct_product
+Kadcyla,HER2-targeted antibody-drug conjugate,her2_antibody_drug_conjugate,Intravenous,2013,Oncology (solid),curated_reference,distinct_product
+Ocrevus,anti-CD20 monoclonal antibody,cd20_antibody,Intravenous,2017,Neurology (multiple sclerosis),curated_reference,distinct_product
+Polivy,CD79b-targeted antibody-drug conjugate,cd79b_antibody_drug_conjugate,Intravenous,2019,Oncology (hematologic),curated_reference,distinct_product
+Tecentriq,PD-L1 inhibitor,pdl1_inhibitor,Intravenous,2016,Oncology (solid),curated_reference,distinct_product
+Vabysmo,bispecific angiopoietin-2/VEGF-A inhibitor,ang2_vegfa_bispecific_antibody,Intravitreal,2022,Ophthalmology (retinal),curated_reference,distinct_product
+Brilinta,P2Y12 receptor antagonist,p2y12_antagonist,Oral,2011,"Cardiovascular (antithrombotic, acute coronary syndrome)",curated_reference,distinct_product
+Calquence,BTK inhibitor,btk_inhibitor,Oral,2017,Oncology (hematologic),curated_reference,distinct_product
+Farxiga,SGLT2 inhibitor,sglt2_inhibitor,Oral,2014,Metabolic (type 2 diabetes; also heart failure and chronic kidney disease),curated_reference,distinct_product
+Imfinzi,PD-L1 inhibitor (human monoclonal antibody),pdl1_inhibitor,Intravenous,2017,Oncology (solid),curated_reference,distinct_product
+Lynparza,PARP inhibitor,parp_inhibitor,Oral,2014,Oncology (solid),curated_reference,distinct_product
+Tagrisso,EGFR tyrosine kinase inhibitor,egfr_tki,Oral,2015,Oncology (solid),curated_reference,distinct_product
+Enhertu,HER2-directed antibody-drug conjugate (topoisomerase I inhibitor payload),her2_adc,Intravenous,2019,Oncology (solid),curated_reference,distinct_product

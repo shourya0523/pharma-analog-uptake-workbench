@@ -1,0 +1,34 @@
+{
+  "manufacturer": "Novartis",
+  "currency": "USD",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "series_start_reason": "Q3 2017 and Q4 2017 sales are not printed as a figure in any Novartis document found: the Q3 2017 and Q4 2017 interim reports (accessions 0001370368-17-000070, 0001370368-18-000004) describe the US launch in words only and have no Kymriah row; the FY2017 20-F (0001047469-18-000380) prints no Kymriah sales figure. First printed figure is Q1 2018 (USD 12 million, in text).",
+  "drug_name": "Kymriah",
+  "generic_name": "tisagenlecleucel",
+  "benchmark_identity": "novartis_kymriah_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (hematologic)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "suspension for infusion (autologous CAR-T cells)",
+  "route_of_administration": "intravenous",
+  "moa": "CD19-directed genetically modified autologous T cell immunotherapy",
+  "moa_class": "car_t_cell_therapy",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/vaccines-blood-biologics/cellular-gene-therapy-products/kymriah-tisagenlecleucel",
+    "quote": "STN: 125646 ... KYMRIAH August 30, 2017 Approval Letter"
+  },
+  "launch_quarter": "2017Q3",
+  "commercial_start_quarter": "2018Q1",
+  "notes": "launch_quarter: Q3 2017 interim report (0001370368-17-000070): 'Kymriah launched in the US for pediatric ALL'.",
+  "search_log": [
+    "listed NVS (CIK 0001114448) filings via data.sec.gov submissions incl. 6-K, 6-K/A, 20-F, 20-F/A (all forms, not filtered to one type)",
+    "indexed every 6-K 2005-2026 filed in the late Jan-Feb, Apr-May, Jul-Aug, Oct-Nov windows plus every 6-K 2017-07 onward; downloaded each quarterly interim financial report exhibit (EX-99.2 / nvs-*-99_2.htm, or the 6-K body for 2006-2011)",
+    "extracted product rows by script (scripts/build.py, extract.py): first cell equals the brand (optionally plus footnote digit), header row above names the quarter first with no year-to-date column",
+    "cross-checked every quarter's own figure against the prior-year column of the following year's report: no differences (no restatement of these product lines found)",
+    "grepped Q3 2017 and Q4 2017 interim reports and FY2017 20-F text for Kymriah with a USD figure: none"
+  ]
+}

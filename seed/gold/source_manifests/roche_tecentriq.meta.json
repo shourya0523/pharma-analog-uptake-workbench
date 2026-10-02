@@ -1,0 +1,34 @@
+{
+  "drug_name": "Tecentriq",
+  "generic_name": "atezolizumab",
+  "manufacturer": "Roche",
+  "benchmark_identity": "roche_tecentriq_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (solid)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection (intravenous infusion; later also subcutaneous)",
+  "route_of_administration": "intravenous",
+  "moa": "PD-L1 inhibitor",
+  "moa_class": "pdl1_inhibitor",
+  "first_approval_year": 2016,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761034",
+    "quote": "05/18/2016 ORIG-1 Approval (Drugs@FDA, Original Approvals or Tentative Approvals)"
+  },
+  "launch_quarter": "2016Q2",
+  "commercial_start_quarter": "2016Q2",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Launch: FY2016 investor update (https://assets.cwp.roche.com/imported/en/inv-update-2017-02-01-e.pdf) states \"A major highlight was the US launch of Roche's cancer immunotherapy medicine Tecentriq in May\" 2016. Q1 2016 printed as nil (-).",
+  "search_log": [
+    "listed Roche investor event pages (roche.com/investors/events/{q1,hy,q3,annual-results}-YYYY, 2016-2026) and downloaded every Investor update PDF",
+    "probed legacy roche.com/investors/updates/inv-update-YYYY-MM-DD.htm (2016-2017 hits) and assets.cwp.roche.com/imported/en/med-cor-YYYY-MM-DD-e.pdf for 2009-2015 weekday dates in Jan-Feb, Apr-early May, Jul-early Aug, Oct-early Nov; results releases found for 2011-2015, none found for 2009-2010",
+    "parsed the worldwide \"Top 20 Pharmaceuticals Division quarterly product sales\" table (5 quarterly columns) of every release plus the year-to-date product tables; quarters taken from the own release column when listed, else Q1 three-month table, else the earliest later release column, else year-to-date differences",
+    "cross-checked every chosen quarter against all other printed values for the same quarter (see report)",
+    "presentations (irp*.pdf) and half-year/annual reports not used for rows",
+    "rows: 41 from 2016Q2 to 2026Q2"
+  ]
+}
