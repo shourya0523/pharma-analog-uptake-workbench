@@ -185,6 +185,31 @@
   ]
  },
  {
+  "drug_name": "Libtayo",
+  "manufacturer": "Regeneron Pharmaceuticals",
+  "ticker": "REGN",
+  "generic_name": "cemiplimab",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 286.1,
+    "gold_id": "regeneron-libtayo-us-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 342.6,
+    "gold_id": "regeneron-libtayo-us-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Tyvaso DPI",
   "manufacturer": "United Therapeutics",
   "ticker": "UTHR",

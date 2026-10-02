@@ -134,18 +134,24 @@ def contains_in_order(haystack: list[float], needles: list[float]) -> bool:
     return True
 
 
+REGION_LABEL = re.compile(
+    r"^\s*(?:ww|worldwide|total|u\.s\.|us|intl|international|rest of world|row|ex-u\.s\.)\b\s*\|?",
+)
+
+
 def row_matches(lines: list[str], index: int, label: str, figures: list[float]) -> bool:
     """The labelled line carries the figures, or an unlabelled total line under it does.
 
-    Some issuers print a product as a heading over regional lines and close the
-    block with a total line that has no label of its own. Only a line with no
-    letters at all may stand in for the labelled one, so a neighbouring
-    product's row can never satisfy the match.
+    Some issuers print a product as a heading over regional lines: closed by a
+    total line with no label of its own, or by lines labelled only with a
+    region ("US", "Intl", "WW"). Only such a line may stand in for the
+    labelled one, so a neighbouring product's row can never satisfy the match.
     """
     if contains_in_order(numbers_in(lines[index].split(label, 1)[1]), figures):
         return True
     for line in lines[index + 1:index + 6]:
-        if not re.search(r"[a-z]", line) and contains_in_order(numbers_in(line), figures):
+        rest = REGION_LABEL.sub("", line, count=1)
+        if not re.search(r"[a-z]", rest) and contains_in_order(numbers_in(rest), figures):
             return True
     return False
 
@@ -200,7 +206,9 @@ def check_series(rows: list[dict]) -> list[str]:
         figures = quoted_figures(row["source_quote"])
         if len(figures) < 4 or "twelve months" not in row["source_quote"].lower() and "full year" not in row["source_quote"].lower():
             continue
-        stated = figures[2]
+        # The quote ends "quarter | prior quarter | year | prior year"; any
+        # header figures (column years) come before those four.
+        stated = figures[-2]
         year = row["period"][:4]
         quarters = [by_period.get(f"{year}Q{q}") for q in range(1, 5)]
         if None in quarters:

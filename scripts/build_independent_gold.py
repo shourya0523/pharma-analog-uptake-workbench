@@ -1578,6 +1578,10 @@ def quote_contains_number(quote: str, value: float) -> bool:
         f"{value:.1f}",
         f"{value:.3f}",
     }
+    # :g writes a large whole figure in exponent form (1.02178e+06), so a
+    # figure printed in thousands needs its plain integer spelling too.
+    if float(value).is_integer():
+        forms.add(f"{value:.0f}")
     return any(re.search(rf"(?<!\d){re.escape(form)}(?!\d)", normalized) for form in forms)
 
 

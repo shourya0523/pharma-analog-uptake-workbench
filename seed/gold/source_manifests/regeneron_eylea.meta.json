@@ -1,0 +1,33 @@
+{
+  "drug_name": "Eylea",
+  "generic_name": "aflibercept (2 mg)",
+  "manufacturer": "Regeneron Pharmaceuticals",
+  "benchmark_identity": "regeneron_eylea_us_reported",
+  "therapeutic_area": "Ophthalmology",
+  "indication_area": "Ophthalmology (retina)",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "injection",
+  "route_of_administration": "intravitreal",
+  "moa": "VEGF trap (VEGF-A / PlGF inhibitor)",
+  "moa_class": "vegf_inhibitor",
+  "first_approval_year": 2011,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2011/125387s000ltr.pdf",
+    "quote": "We have approved your BLA for aflibercept effective this date. [November 18, 2011] ... Aflibercept is indicated for treatment of neovascular (wet) age-related macular degeneration."
+  },
+  "launch_quarter": "2011Q4",
+  "commercial_start_quarter": "2011Q4",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Regeneron books U.S. net product sales; Bayer HealthCare books ex-U.S. (the releases also print an EYLEA global/Total column, not used). From 2023Q3 Regeneron prints EYLEA HD on its own line; the series is the EYLEA (2 mg) line only, and EYLEA HD did not exist before 2023Q3, so the line keeps the same definition throughout. For 2024Q1-2024Q4 the detail table in each release prints a combined 'EYLEA HD and EYLEA' row, so those four quarters use the summary line 'EYLEA - U.S.' (whole millions) from the quarter's own release; the 2025 releases' prior-year columns give EYLEA alone with decimals and agree within rounding. Quarters 2011Q4-2013Q3 are press-release sentences (whole millions, 24.8 for 2011Q4) because those releases print no EYLEA-only table row.",
+  "search_log": [
+    "Pulled data.sec.gov/submissions/CIK0000872589.json plus CIK0000872589-submissions-001.json (older pages) and listed every 8-K, 8-K/A, 10-Q, 10-K from 2011-06 on (script scripts/list.py); the listing kept all 8-K and 8-K/A with Item 2.02 and did not filter by form beyond that. No 8-K/A with Item 2.02 appears in the listing.",
+    "Fetched each Item 2.02 8-K's filing index.json (scripts/idx.py) and downloaded every EX-99.x exhibit (scripts/fetch.py); one earnings release per quarter was used; January JPM-conference decks and the 2023-2026 Apr/Jul/Oct preannouncement 8-Ks carry no product table and were not used.",
+    "Rows were extracted from the cached exhibits by scripts/build.py (table cells, percentage-change columns dropped) and checked with scripts/sourcing/verify_staged_manifests.py (0 failures at write time).",
+    "Cross-checks run: prior-year columns of the following year's release vs this series' own values; sum of four quarters vs the full-year figure the releases print.",
+    "Full-text/approval: FDA approval letter BLA 125387 dated 2011-11-18 fetched from accessdata.fda.gov and read."
+  ]
+}

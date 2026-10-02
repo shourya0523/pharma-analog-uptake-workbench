@@ -61,3 +61,5 @@ Olumiant,JAK1/JAK2 inhibitor,kinase_inhibitor,Oral,2017,Immune-mediated inflamma
 Emgality,Anti-CGRP monoclonal antibody,monoclonal_antibody,Subcutaneous,2018,Migraine,curated_reference,distinct_product
 Forteo,Parathyroid hormone analogue (anabolic),bone_anabolic,Subcutaneous,2002,Osteoporosis,curated_reference,distinct_product
 Cialis,PDE5 inhibitor,nitric_oxide_pathway,Oral,2002,Erectile dysfunction and BPH,curated_reference,distinct_product
+Eylea,VEGF trap (VEGF-A / PlGF inhibitor),vegf_inhibitor,Intravitreal,2011,Ophthalmology (retina),curated_reference,distinct_product
+Libtayo,PD-1 inhibitor,immune_checkpoint_inhibitor,Intravenous,2018,Oncology (solid),curated_reference,distinct_product

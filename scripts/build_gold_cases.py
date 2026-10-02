@@ -117,6 +117,7 @@ ISSUER_TICKERS = {
     "Johnson & Johnson": "JNJ",
     "Liquidia": "LQDA",
     "Merck": "MRK",
+    "Regeneron Pharmaceuticals": "REGN",
     "United Therapeutics": "UTHR",
 }
 
