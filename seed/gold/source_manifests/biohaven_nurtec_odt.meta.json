@@ -1,0 +1,32 @@
+{
+  "drug_name": "Nurtec ODT",
+  "generic_name": "rimegepant",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Neurology (migraine)",
+  "formulation": "orally disintegrating tablet",
+  "route_of_administration": "oral",
+  "moa": "Calcitonin gene-related peptide (CGRP) receptor antagonist",
+  "moa_class": "cgrp_receptor_antagonist",
+  "manufacturer": "Biohaven",
+  "benchmark_identity": "biohaven_nurtec_odt_us_reported",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "first_approval_year": 2020,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2020/212728Orig1s000ltr.pdf",
+    "quote": "NDA 212728 NDA APPROVAL ... for rimegepant orally disintegrating tablets. This NDA provides for the use of Nurtec ODT (rimegepant) tablets for the acute treatment of migraine with or without aura in adults (electronically signed 02/27/2020)"
+  },
+  "launch_quarter": "2020Q1",
+  "commercial_start_quarter": "2020Q1",
+  "series_start_reason": null,
+  "series_end_quarter": "2022Q2",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Pfizer completed the acquisition of Biohaven on Oct 3, 2022; Biohaven filed its last 10-Q for the quarter ended Jun 30, 2022 and no report for 2022Q3 (Form 15 filed Oct 14, 2022). No Biohaven, Pfizer or other issuer document found with Biohaven's standalone 2022Q3 net product revenue; Pfizer's line begins 2022Q4 under a different (worldwide) scope.",
+  "companion_series": "pfizer_nurtec_odt",
+  "search_log": [
+    "listed Biohaven (CIK 0001689813) filings via data.sec.gov submissions, all forms: last 8-K Item 2.02 is 2022-08-05, last 10-Q is for 2022-06-30, 8-K 2022-10-03 (closing), 15-12G 2022-10-14",
+    "Biohaven also filed net-sales pre-announcement 8-Ks; the earnings releases (which carry the income statement) are cited instead",
+    "Pfizer filings 2022-09 to 2023-03 listed: no 8-K/A or other document with Biohaven pre-closing quarterly revenue",
+    "Annual check: quarters sum to the twelve-month figures printed in the Q4 releases (2020: 63,627; 2021: 462,509 thousand)"
+  ]
+}

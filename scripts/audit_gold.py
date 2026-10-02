@@ -304,6 +304,7 @@ def audit_citation_period(rows: list[dict]) -> list[str]:
 
 
 _NUMBER = re.compile(r"\d[\d,]*(?:\.\d+)?")
+_BRACKETED = re.compile(r"\((\d[\d,]*(?:\.\d+)?)\)")
 
 
 def audit_value_appears_in_its_quote(rows: list[dict]) -> list[str]:
@@ -327,6 +328,10 @@ def audit_value_appears_in_its_quote(rows: list[dict]) -> list[str]:
             continue
         found = [
             float(token.replace(",", "")) for token in _NUMBER.findall(quote)
+        ]
+        # Accounts print a negative figure in parentheses: "(322)" is -322.
+        found += [
+            -float(token.replace(",", "")) for token in _BRACKETED.findall(quote)
         ]
         if not any(abs(value - float(expected)) < 1e-6 for value in found):
             finding(
@@ -430,7 +435,12 @@ def audit_manifest_round_trip(quarterly: list[dict]) -> list[str]:
         # gold still "matched" Opsumit and the loss went unreported. A mutation
         # test caught that; the filename was the answer all along.
         stem = path.stem.lower()
-        owners = [drug for drug in gold_periods if drug.lower().replace(" ", "_") in stem]
+        # A product name's punctuation cannot appear in a filename, so
+        # "Calderon / Calderon XR" is looked for as calderon_calderon_xr.
+        owners = [
+            drug for drug in gold_periods
+            if re.sub(r"[^a-z0-9]+", "_", drug.lower()).strip("_") in stem
+        ]
         if not owners:
             finding(out, f"{path.name}: no product in gold matches this manifest's name")
             continue
@@ -462,15 +472,24 @@ def audit_sources(quarterly: list[dict], annual: list[dict]) -> list[str]:
 
 
 def audit_values(quarterly: list[dict]) -> list[str]:
-    """Values that are not plausible revenue for a quarter."""
+    """Values that are not plausible revenue for a quarter.
+
+    A row that was checked at source and found to be what the issuer printed -
+    a nil printed as a dash, a negative provision quarter, a one-off reversal -
+    carries ``reviewed_anomaly`` with the reason, and is not flagged again. The
+    reason travels with the row, so a reader sees why it stands.
+    """
     out: list[str] = []
     for row in quarterly:
+        if row.get("reviewed_anomaly"):
+            continue
         value = row["value_reported"]
         if value < 0:
             finding(out, f"{row['gold_id']}: negative value {value}")
         if value == 0:
             finding(out, f"{row['gold_id']}: zero value - absent or genuinely nil?")
     by_drug: dict[str, list[tuple[str, float]]] = defaultdict(list)
+    reviewed = {(row["drug_name"], row["period"]) for row in quarterly if row.get("reviewed_anomaly")}
     for row in quarterly:
         by_drug[row["drug_name"]].append((row["period"], row["value_reported"]))
     for drug, series in sorted(by_drug.items()):
@@ -480,6 +499,8 @@ def audit_values(quarterly: list[dict]) -> list[str]:
         # from $205k to $8.7m across its FDA approval, and Tyvaso DPI from 3 to
         # 63 in its first two quarters on sale.
         for (prev_period, prev), (period, current) in zip(series[4:], series[5:]):
+            if {(drug, prev_period), (drug, period)} & reviewed:
+                continue
             if prev > 0 and (current / prev > 10 or current / prev < 0.1):
                 finding(
                     out,

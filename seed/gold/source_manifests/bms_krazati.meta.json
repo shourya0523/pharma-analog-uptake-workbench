@@ -1,0 +1,35 @@
+{
+  "drug_name": "Krazati",
+  "generic_name": "adagrasib",
+  "manufacturer": "Bristol-Myers Squibb",
+  "benchmark_identity": "bms_krazati_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (solid)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (U.S. only through 2023Q3 in Mirati's filings)",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "KRAS G12C inhibitor",
+  "moa_class": "kras_g12c_inhibitor",
+  "first_approval_year": 2022,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=216340",
+    "quote": "12/12/2022 ORIG-1 Approval Type 1 - New Molecular Entity STANDARD; Orphan"
+  },
+  "launch_quarter": "2022Q4",
+  "commercial_start_quarter": "2024Q1",
+  "launch_evidence": "https://www.sec.gov/Archives/edgar/data/1576263/000162828023005543/exhibit991-q42022.htm : 'launched commercially in the U.S. in December 2022'",
+  "series_start_reason": "Starts 2024Q1, BMS's first quarter owning Krazati (Mirati acquired 23 Jan 2024; 2024Q1 is therefore post-close only). Mirati's own 2022Q4-2023Q3 product revenue is citable but Mirati never reported 2023Q4 and BMS prints no pre-acquisition figure, so the two cannot form one contiguous series.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "GAP: 2023Q4 has no citable document. Mirati filed no fourth-quarter 2023 release, 10-K or 10-Q (its last 8-K with Item 2.02 is 2023-11-06; Form 15-12G filed 2024-02-02 after the Jan 23 2024 closing), and BMS's releases/10-K/10-Q print no Krazati figure for periods before its first-quarter 2024 (prior-year columns print a dash or n/a). 2024Q1 (BMS, 21) covers only the post-closing part of the quarter by inference from the Jan 23 2024 acquisition date; no document gives Krazati sales for Jan 1-22 2024. Mirati rows (2022Q4-2023Q3) are the 'Product revenue, net' line, in thousands.",
+  "search_log": [
+    "listed CIK 14272 (BMS), 816284 (Celgene) and 1576263 (Mirati) filings via data.sec.gov/submissions (recent + older pages), all form types incl. 8-K/A; selected every filing with Item 2.02 (earnings results) and fetched its EX-99 exhibits via the filing index",
+    "Celgene 8-K/8-K/A with Item 2.02 span 2004-10 to 2019-10-31; no Celgene earnings release or 10-K exists for 2019Q4 (last Celgene filing in the submissions index is dated 2020-07-13)",
+    "BMS Item 2.02 8-Ks from 2019-10-31 to 2026-07-30 (2026Q2 release) fetched; Ex 99.1 holds the product table, Ex 99.2 (through the 2022 releases) the quarterly trend tables",
+    "Mirati Item 2.02 8-Ks listed 2013-2023; Q4 2022, Q1-Q3 2023 releases used; filing index after 2023-11-06 listed in full (no 10-K, no further 8-K with results; 15-12G on 2024-02-02)",
+    "BMS Q4 2023 release (2024-02-02), FY2023 10-K (2024-02-13) and Q1 2024 10-Q searched for Krazati/Mirati revenue: no pre-acquisition Krazati revenue figure found (10-K text search for 'Mirati' near revenue/sales terms returned nothing)",
+    "BMS Q1 2024 Form 10-Q states 'On January 23, 2024, BMS acquired Mirati'"
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "drug_name": "Abrysvo",
+  "generic_name": "respiratory syncytial virus vaccine (RSVpreF)",
+  "therapeutic_area": "Infectious Disease / Vaccines",
+  "indication_area": "Infectious disease (RSV vaccine)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection (powder for suspension)",
+  "route_of_administration": "intramuscular",
+  "moa": "bivalent RSV prefusion F protein subunit vaccine",
+  "moa_class": "recombinant_protein_vaccine",
+  "first_approval_year": 2023,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/files/vaccines%2C%20blood%20%26%20biologics/published/May-31-2023-Approval-Letter-ABRYSVO.pdf",
+    "quote": "We have approved your BLA for Respiratory Syncytial Virus Vaccine effective this date. You are hereby authorized to introduce or deliver for introduction into interstate commerce, Respiratory Syncytial Virus Vaccine under your existing Department of Health and Human Services U.S. License No. 2001."
+  },
+  "launch_quarter": "2023Q3",
+  "series_start_reason": "Abrysvo first appears as its own line in the third-quarter 2023 release (375 in the quarter, dash a year earlier); the second-quarter 2024 release prints the 2023Q2 prior-year column as a dash, so 2023Q3 is the first quarter with sales.",
+  "search_log": [
+    "listed PFE (CIK 0000078003) 8-K, 8-K/A, 10-Q, 10-K via data.sec.gov submissions (recent + older pages): 6671 filings; selected 8-Ks with Item 2.02 filed 2015-01 to 2026-08 (53, of which 48 carry an EX-99.1 earnings release; 2022-04-20, 2023-10-13 and 2023-12-14 filings are not quarterly earnings releases; the 2016-02-16 8-K/A carries no usable product table and the original 2016-02-02 release was used)",
+    "parsed every release's product tables with scripts/extract.py; quarter row = first occurrence of the product row, year-to-date row = third occurrence (or second where sub-region tables are absent); checked by summing quarters to the printed twelve-month figure",
+    "scanned 10-Q/10-K 2018-2021 for product rows (scripts/scan_periodic.py)",
+    "FDA letter dated 2023-05-31 (accessdata/fda.gov); 2023Q2 release has no Abrysvo line"
+  ],
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "commercial_start_quarter": "2023Q3",
+  "manufacturer": "Pfizer",
+  "benchmark_identity": "pfizer_abrysvo_reported"
+}

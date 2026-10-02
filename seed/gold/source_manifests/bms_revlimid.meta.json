@@ -1,0 +1,35 @@
+{
+  "drug_name": "Revlimid",
+  "generic_name": "lenalidomide",
+  "manufacturer": "Bristol-Myers Squibb",
+  "benchmark_identity": "bms_revlimid_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (hematologic)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "capsule",
+  "route_of_administration": "oral",
+  "moa": "Immunomodulatory agent (cereblon E3 ligase modulator)",
+  "moa_class": "cereblon_e3_ligase_modulator",
+  "first_approval_year": 2005,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=021880",
+    "quote": "12/27/2005 ORIG-1 Approval Type 1 - New Molecular Entity PRIORITY; Orphan"
+  },
+  "launch_quarter": "2006Q1",
+  "commercial_start_quarter": "2006Q1",
+  "launch_evidence": "https://www.sec.gov/Archives/edgar/data/816284/000093041306003214/c42299_ex99-1.txt : 'Strong REVLIMID(R) Launch Achieved $32.4 Million in Net Product Sales' (first quarter 2006); the fourth-quarter 2005 release (c40708_ex99-1.txt) prints no REVLIMID sales line",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "2019Q4 is a BMS pro forma figure (see row context): BMS GAAP-reported post-close stub is 1,299 (Nov 20-Dec 31 2019); Celgene pre-close Oct 1-Nov 19 is 1,486 (1,015 U.S. + 471 int'l). Pro forma 2019Q1-Q3 in the same exhibit differ slightly from Celgene's own printed figures. Celgene 2006-2011 figures come from release narrative sentences; 2012Q1-2019Q3 likewise (the releases' product tables are laid out one cell per line and cannot be matched as a row by label). BMS rows from 2020Q1 are table rows.",
+  "search_log": [
+    "listed CIK 14272 (BMS), 816284 (Celgene) and 1576263 (Mirati) filings via data.sec.gov/submissions (recent + older pages), all form types incl. 8-K/A; selected every filing with Item 2.02 (earnings results) and fetched its EX-99 exhibits via the filing index",
+    "Celgene 8-K/8-K/A with Item 2.02 span 2004-10 to 2019-10-31; no Celgene earnings release or 10-K exists for 2019Q4 (last Celgene filing in the submissions index is dated 2020-07-13)",
+    "BMS Item 2.02 8-Ks from 2019-10-31 to 2026-07-30 (2026Q2 release) fetched; Ex 99.1 holds the product table, Ex 99.2 (through the 2022 releases) the quarterly trend tables",
+    "Celgene quarterly Revlimid figures read from the quarter's own earnings release narrative sentence (2006Q1-2019Q3); BMS Ex 99.1 product table rows 2020Q1-2026Q2; 2019Q4 from BMS Ex 99.2 pro forma table + footnotes",
+    "arithmetic cross-checks measured on the staged rows: calendar-year sums equal the full-year figures printed in the Q4 releases for 2016 (6,974), 2017 (8,187), 2018 (9,685) and BMS 2021 (12,821)",
+    "Drugs@FDA overview page for NDA 021880 fetched for approval date"
+  ]
+}

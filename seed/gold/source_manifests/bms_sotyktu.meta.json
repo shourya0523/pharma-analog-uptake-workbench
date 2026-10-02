@@ -1,0 +1,32 @@
+{
+  "drug_name": "Sotyktu",
+  "generic_name": "deucravacitinib",
+  "manufacturer": "Bristol-Myers Squibb",
+  "benchmark_identity": "bms_sotyktu_worldwide_reported",
+  "therapeutic_area": "Immunology / Inflammation",
+  "indication_area": "Dermatology (plaque psoriasis)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "selective allosteric TYK2 inhibitor",
+  "moa_class": "tyk2_inhibitor",
+  "first_approval_year": 2022,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2022/214958Orig1s000ltr.pdf",
+    "quote": "NDA 214958 NDA APPROVAL ... for Sotyktu (deucravacitinib) tablets, for oral use. This NDA provides for the use of Sotyktu (deucravacitinib) tablets for the treatment of adults with moderate-to-severe plaque psoriasis"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2022Q3",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "Listed BMY (CIK 0000014272) 8-K, 8-K/A, 10-Q, 10-K, 10-K/A, 10-Q/A filings from data.sec.gov submissions (recent + older pages): 3534 filings of all forms, 1994-2026",
+    "Selected 8-K/8-K/A with item 2.02 filed 2006-2026 (96 filings); cross-checked against 10-Q/10-K filing dates: every quarter's 10-Q/10-K has a 2.02 earnings 8-K within 10 days except the Q1 2014 release (8-K 0000014272-14-000172, item 9.01 only), which was added by hand; 10-K filings sit weeks after the Q4 releases so those matched the January/February releases",
+    "Fetched each filing's index.json and downloaded all EX-99.x exhibits; extraction script scripts/extract.py reads the first labelled product row of each EX-99.1 and scripts/audit2.py cross-checks it",
+    "8-K/A filings of 2006-2008 (restated EX-99.2 schedules) were not used as sources; each quarter is cited from its own original EX-99.1",
+    "Audit: 244 prior-year-column comparisons across the five products (each release's prior-year figure vs the value taken from that quarter's own release) had 0 mismatches; 61 fourth-quarter FY-sum checks (four quarters vs the FY figure in the Q4 release) had 0 mismatches"
+  ]
+}

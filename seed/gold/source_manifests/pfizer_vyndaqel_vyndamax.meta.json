@@ -1,0 +1,32 @@
+{
+  "drug_name": "Vyndaqel / Vyndamax",
+  "generic_name": "tafamidis meglumine / tafamidis",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Cardiology (transthyretin amyloid cardiomyopathy)",
+  "revenue_scope": "Product family",
+  "geography": "Worldwide",
+  "formulation": "capsule",
+  "route_of_administration": "oral",
+  "moa": "transthyretin (TTR) stabilizer",
+  "moa_class": "ttr_stabilizer",
+  "first_approval_year": 2019,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2019/211996s000,212161s000lbl.pdf",
+    "quote": "VYNDAQEL and VYNDAMAX are transthyretin stabilizers indicated for the treatment of the cardiomyopathy of wild type or hereditary transthyretin-mediated amyloidosis in adults to reduce cardiovascular mortality and cardiovascular-related hospitalization"
+  },
+  "launch_quarter": null,
+  "series_start_reason": "Vyndaqel was launched in the EU in 2011 and Japan in 2013, but Pfizer's releases and periodic reports did not print it as its own line before the second-quarter 2019 release. That release's prior-year columns give 2018Q2 and six months 2018, so 2018Q1 is derived (72-38); 2018Q3, 2018Q4, 2019Q1 come from later releases' prior-year columns. 2018Q1 is the earliest quarter that can be cited. First U.S. approval 2019 is for the ATTR-CM indication (Vyndaqel/Vyndamax); the earlier ATTR-PN approval was EU 2011 (not evidenced here).",
+  "search_log": [
+    "listed PFE (CIK 0000078003) 8-K, 8-K/A, 10-Q, 10-K via data.sec.gov submissions (recent + older pages): 6671 filings; selected 8-Ks with Item 2.02 filed 2015-01 to 2026-08 (53, of which 48 carry an EX-99.1 earnings release; 2022-04-20, 2023-10-13 and 2023-12-14 filings are not quarterly earnings releases; the 2016-02-16 8-K/A carries no usable product table and the original 2016-02-02 release was used)",
+    "parsed every release's product tables with scripts/extract.py; quarter row = first occurrence of the product row, year-to-date row = third occurrence (or second where sub-region tables are absent); checked by summing quarters to the printed twelve-month figure",
+    "scanned 10-Q/10-K 2018-2021 for product rows (scripts/scan_periodic.py)",
+    "checked every release and 10-Q/10-K 2018-2021: no earlier Vyndaqel figures",
+    "label history Vyndaqel -> Vyndaqel/Vyndamax -> Vyndaqel family treated as one product-family series; footnote from 2022Q4: family includes global Vyndaqel plus Vyndamax in the U.S. and Vynmac in Japan"
+  ],
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "commercial_start_quarter": "2018Q1",
+  "manufacturer": "Pfizer",
+  "benchmark_identity": "pfizer_vyndaqel_vyndamax_reported"
+}

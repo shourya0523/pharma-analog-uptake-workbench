@@ -1346,6 +1346,7 @@ RESEARCHED_SERIES_FIELDS = (
     "series_end_basis",
     "series_end_reason",
     "peak_eligible",
+    "reviewed_anomalies",
 )
 
 
@@ -2467,6 +2468,11 @@ def build_researched_products() -> list[dict[str, Any]]:
                     currency=source.get("currency") or "USD",
                 )
             )
+            # A value checked at source and kept although it looks wrong (a
+            # printed nil, a negative quarter, a one-off reversal) says why.
+            reason = meta.get("reviewed_anomalies", {}).get(source["period"])
+            if reason:
+                rows[-1]["reviewed_anomaly"] = reason
     return rows
 
 
@@ -2926,21 +2932,24 @@ def catalog_coverage(
     at all. Reporting the excluded products alongside keeps that visible.
     """
     quarterly_products = sorted(row["drug_name"] for row in coverage)
-    excluded = sorted(row["drug_name"] for row in exclusions)
+    # An exclusion outside the seed catalog is a comparator that has no
+    # citable series. It is reported beside the catalog, never in it.
+    seed = seed_catalog()
+    all_excluded = {row["drug_name"] for row in exclusions}
+    excluded = sorted(all_excluded & seed)
     # An excluded product may still appear in ANNUAL_METADATA to supply context
     # rows - Flolan does - so it is not an annual-only benchmark. Counting it as
     # both would overstate the catalog.
     annual_only = sorted(
-        ANNUAL_METADATA.keys() - {row["drug_name"] for row in coverage} - set(excluded)
+        ANNUAL_METADATA.keys() - {row["drug_name"] for row in coverage} - all_excluded
     )
     # Comparators from other therapy areas are in the dataset but not in the
     # catalog, and mixing them in would flatter the coverage percentage: three
     # products added from outside would read as three more of the twenty
     # covered. The catalog is the seed file, and the percentage is measured
     # against it.
-    seed = seed_catalog()
     comparators = sorted(
-        (set(quarterly_products) | set(annual_only)) - set(excluded) - seed
+        (set(quarterly_products) | set(annual_only) | all_excluded) - seed
     )
     in_catalog = [drug for drug in quarterly_products if drug in seed]
     total = len(seed)
@@ -2950,6 +2959,7 @@ def catalog_coverage(
         "comparator_products": comparators,
         "annual_only_products": annual_only,
         "excluded_products": excluded,
+        "excluded_comparator_products": sorted(all_excluded - seed),
         "quarterly_series_pct": round(100 * len(in_catalog) / total, 1),
         "quarterly_observations": sum(row["observed_quarters"] for row in coverage),
         "bounded_series": sorted(
@@ -3035,7 +3045,7 @@ def gold_completeness(
     # is what exposed that - a tautology only shows itself when something
     # arrives that it should have excluded.
     seed_products = seed_catalog()
-    comparators = sorted((quarterly | annual_only) - seed_products)
+    comparators = sorted((quarterly | annual_only | excluded) - seed_products)
     unaccounted = sorted(seed_products - accounted)
     incomplete = sorted(row["drug_name"] for row in coverage if row["missing_quarters"])
     return {

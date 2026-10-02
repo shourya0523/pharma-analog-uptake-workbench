@@ -1,0 +1,31 @@
+{
+  "drug_name": "Padcev",
+  "generic_name": "enfortumab vedotin",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (solid)",
+  "formulation": "lyophilized powder for injection",
+  "route_of_administration": "intravenous",
+  "moa": "Nectin-4-directed antibody-drug conjugate",
+  "moa_class": "nectin4_directed_adc",
+  "manufacturer": "Seagen",
+  "benchmark_identity": "seagen_padcev_us_net_product_sales",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "first_approval_year": 2019,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2019/761137Orig1s000ltr.pdf",
+    "quote": "BLA 761137 ... DATING PERIOD The dating period for PADCEV shall be 24 months from the date of manufacture when stored at 2-8 C (page 2 of the approval letter; electronically signed 12/18/2019; page 1 of the PDF is an image with no text layer)"
+  },
+  "launch_quarter": "2019Q4",
+  "commercial_start_quarter": "2019Q4",
+  "series_start_reason": null,
+  "series_end_quarter": "2023Q3",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Pfizer completed the acquisition of Seagen on Dec 14, 2023; Seagen filed no report for 2023Q4. Pfizer's later Padcev line (companion series pfizer_padcev, from 2024Q1) is worldwide, a different scope, and its 2023Q4 line is a Dec 14-31 stub, so the series is not spliced.",
+  "companion_series": "pfizer_padcev",
+  "search_log": [
+    "listed Seagen (CIK 0001060736) filings via data.sec.gov submissions, all forms; 8-K Item 2.02 releases and 10-Q/10-K 2019-2023 parsed for the PADCEV row",
+    "2019Q4 read from the prior-year column of the 2020Q4 release (the quarter's own release prints no PADCEV row); the fiscal 2019 10-K prints 244 (thousand) for 2019",
+    "Quarter sums agree with the full-year PADCEV figures (2020: 222.4, 2021: 339.9, 2022: 451.4)"
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "drug_name": "Januvia",
+  "generic_name": "sitagliptin",
+  "manufacturer": "Merck",
+  "benchmark_identity": "merck_januvia_worldwide_reported",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Type 2 diabetes",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "DPP-4 inhibitor",
+  "moa_class": "dpp4_inhibitor",
+  "first_approval_year": 2006,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2020/021995s047lbl.pdf",
+    "quote": "Initial U.S. Approval: 2006 (Januvia (sitagliptin) tablets, NDA 021995; Drugs@FDA/openFDA lists the original approval dated 2006-10-16)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2006Q3",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "2006Q3 (0.6) is the prior-year column of the third-quarter 2007 10-Q; the October 2006 release says Januvia 'has already launched in Mexico' ahead of the 16 Oct 2006 U.S. approval; Merck's own 2006 documents print no Januvia sales line for that quarter",
+    "2006Q4, 2007Q4 and 2008Q4 are stated in the text of the quarter's earnings release (the sales summary tables of those releases have no Januvia line); 2007Q1-Q3, 2008Q1-Q3 and 2009Q1-Q3 are read from the legacy Merck 10-Qs (CIK 64978), which print Januvia to a tenth of a million",
+    "2009Q4 and 2010 quarters are read from the earnings release tables printed after the Merck/Schering-Plough merger (GAAP column; the adjustment column is blank for Januvia)",
+    "2014Q3: the quarter's own release prints only a combined 'Januvia / Janumet' line (1,439), so the Januvia-only figure is read from the fourth-quarter 2014 release's 2014 quarterly columns",
+    "from 2011 the earnings summary table headlines 'JANUVIA/JANUMET' combined; the series uses the separate 'Januvia' line of the detailed sales table, never the combined headline",
+    "sum of the four quarters equals the printed full year for 2011-2020, 2022 and 2024, and differs by 1 (rounding) in 2021, 2023 and 2025; 2010 quarters sum to 2,386 against a printed 2,385; 2009 quarters sum to 1,922.2 against 1,922",
+    "listed Merck & Co. (CIK 310158) filings via data.sec.gov submissions (recent plus every filings.files page), all forms, then kept 8-K and 8-K/A with item 2.02 and 10-Q/10-K. No 8-K/A lists item 2.02 (8-K/As 2006-2026 list only items 9.01, 7.01, 5.07 or 5.02); the 2019-02-01 8-K/A, filed the day of the Q4 2018 results, contains only an exhibit 99.2",
+    "legacy Merck registrant (CIK 64978, which before the November 2009 merger with Schering-Plough was a separate filer; CIK 310158 was Schering-Plough until then) listed the same way for 2006-2009 earnings releases and 10-Qs",
+    "downloaded the EX-99.1 of every item 2.02 8-K from 2006 to 2026-08-04 (85 releases); two item 2.02 filings (2013-02-19, 2022-04-21) are not quarterly results releases and carry no product line",
+    "read the product rows with scripts/build.py (HTML table rows, same row reading as the verifier) and cross-checked each quarter against the prior-year column of the following year's release"
+  ]
+}

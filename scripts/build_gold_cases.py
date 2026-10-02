@@ -110,14 +110,22 @@ LAYER_TWO_DEFAULTS = {
 # company_tickers.json lists for each issuer gold names; it goes stale when
 # gold names an issuer that is not here, and `_ticker` stops rather than
 # writing a case whose issuer cannot be resolved.
-ISSUER_TICKERS = {
+ISSUER_TICKERS: dict[str, str | None] = {
     "Actelion/J&J": "JNJ",
+    # No ticker for an issuer that was acquired and delisted: Seagen's went
+    # with it, and the old Biohaven's symbol now belongs to a different company,
+    # so a case naming either is resolved by issuer name instead.
+    "Biohaven": None,
+    "Bristol-Myers Squibb": "BMY",
     "Eli Lilly": "LLY",
     "Gilead": "GILD",
     "Johnson & Johnson": "JNJ",
     "Liquidia": "LQDA",
     "Merck": "MRK",
+    "Novo Nordisk": "NVO",
+    "Pfizer": "PFE",
     "Regeneron Pharmaceuticals": "REGN",
+    "Seagen": None,
     "United Therapeutics": "UTHR",
 }
 
@@ -149,7 +157,7 @@ def window(year: int) -> dict[str, str]:
     }
 
 
-def _ticker(manufacturer: str) -> str:
+def _ticker(manufacturer: str) -> str | None:
     if manufacturer not in ISSUER_TICKERS:
         raise SystemExit(
             f"gold names an issuer this builder has no ticker for: {manufacturer!r}. "

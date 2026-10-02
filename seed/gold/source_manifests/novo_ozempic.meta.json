@@ -1,0 +1,34 @@
+{
+  "manufacturer": "Novo Nordisk",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "series_start_reason": null,
+  "drug_name": "Ozempic",
+  "generic_name": "semaglutide",
+  "benchmark_identity": "novo_ozempic_worldwide_reported",
+  "indication_area": "Type 2 diabetes",
+  "formulation": "injection (pen)",
+  "route_of_administration": "subcutaneous",
+  "moa": "GLP-1 receptor agonist",
+  "moa_class": "glp1_receptor_agonist",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=209637",
+    "quote": "12/05/2017 ORIG-1 Approval Type 1 - New Molecular Entity STANDARD"
+  },
+  "launch_quarter": "2018Q1",
+  "commercial_start_quarter": "2018Q1",
+  "search_log": [
+    "listed all CIK 0000353278 filings via data.sec.gov/submissions (recent + CIK0000353278-submissions-001.json): 2,045 filings, of which 1,788 are 6-K and 25 are 20-F and 4 are 20-F/A; zero 8-K, 8-K/A or 10-Q forms (foreign private issuer)",
+    "6-K quarterly financial reports (company announcements): 2019Q1-2026Q2 are exhibits named caq{q}{yyyy}.htm; 2009-2018 identified by size filter on the submissions index (reports are the 6-Ks >200 kB filed in each reporting window), then confirmed by opening each",
+    "the EDGAR copies of the Q1 2018 and Q2 2018 reports (0001628280-18-005610, 0001628280-18-010747) render all tables as JPEG page images (about 30 page images each, no text tables); the same reports as published on novonordisk.com (PDF) were used for those two quarters",
+    "every figure was read programmatically from a cached copy of the cited document; full-year totals printed in each Q4 report were compared with the sum of the four quarters in this series (see report)",
+    "Q1 2018 report (PDF): 'In February 2018, Novo Nordisk launched Ozempic in the USA'; Q1 2018 sales 69, Q1 2017 nil",
+    "Q2 2018: no quarter figure is printed (regional appendix has no Ozempic line; it is inside 'Other diabetes care'), so Q2 = H1 2018 (264) less Q1 2018 (69) = 195, both from the PDFs",
+    "2026 reports: Q1 2026 has a 340B provision reversal; reported sales (40,480) recorded, adjusted sales (27,825) noted in context; Q2 2026 reported = adjusted (31,375)"
+  ]
+}

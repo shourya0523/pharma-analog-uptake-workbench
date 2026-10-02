@@ -1,0 +1,33 @@
+{
+  "manufacturer": "Novo Nordisk",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "series_end_quarter": "2025Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "From the Q1 2026 report Tresiba is no longer a separate line; it sits within 'Long-acting insulin' (footnote: 'Comprises Tresiba, Xultophy, Levemir and Awiqli').",
+  "series_start_reason": "Launched March 2013 (stated in the 2015-2016 reports) but, apart from the first quarters of 2013 and 2014, the 2013-2015 reports print Tresiba only inside the combined 'new-generation insulin' line (Tresiba, Ryzodeg, Xultophy). Tresiba-only year-to-date figures for 2015 exist only in running text whose label and figures the checker cannot tie together, so the series starts where Tresiba is a table line: Q1 2016.",
+  "drug_name": "Tresiba",
+  "generic_name": "insulin degludec",
+  "benchmark_identity": "novo_tresiba_worldwide_reported",
+  "indication_area": "Diabetes (insulin)",
+  "formulation": "injection (pen)",
+  "route_of_administration": "subcutaneous",
+  "moa": "Ultra-long-acting basal insulin analogue",
+  "moa_class": "basal_insulin_analogue",
+  "first_approval_year": 2015,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=203314",
+    "quote": "09/25/2015 ORIG-1 Approval N/A"
+  },
+  "launch_quarter": "2013Q1",
+  "commercial_start_quarter": "2016Q1",
+  "search_log": [
+    "listed all CIK 0000353278 filings via data.sec.gov/submissions (recent + CIK0000353278-submissions-001.json): 2,045 filings, of which 1,788 are 6-K and 25 are 20-F and 4 are 20-F/A; zero 8-K, 8-K/A or 10-Q forms (foreign private issuer)",
+    "6-K quarterly financial reports (company announcements): 2019Q1-2026Q2 are exhibits named caq{q}{yyyy}.htm; 2009-2018 identified by size filter on the submissions index (reports are the 6-Ks >200 kB filed in each reporting window), then confirmed by opening each",
+    "the EDGAR copies of the Q1 2018 and Q2 2018 reports (0001628280-18-005610, 0001628280-18-010747) render all tables as JPEG page images (about 30 page images each, no text tables); the same reports as published on novonordisk.com (PDF) were used for those two quarters",
+    "every figure was read programmatically from a cached copy of the cited document; full-year totals printed in each Q4 report were compared with the sum of the four quarters in this series (see report)",
+    "Tresiba-only figures printed in running text but NOT used (not verifiable line-by-line): Q1 2015 = 256 (Q1 2016 report), H1 2015 = 554 (Q2 2016 report), 9M 2015 = 882 (Q3 2016 report), FY 2015 = 1,270 (FY2016 report); Q1 2013 = 9 and Q1 2014 = 80 (Q1 2014 report)",
+    "2016Q2-Q4 are derived from year-to-date table rows: H1 1,448; 9M 2,506; FY 4,056 (each report's 'Sales split per therapy' table)"
+  ]
+}

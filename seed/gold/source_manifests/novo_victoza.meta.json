@@ -1,0 +1,39 @@
+{
+  "manufacturer": "Novo Nordisk",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "series_start_reason": null,
+  "drug_name": "Victoza",
+  "generic_name": "liraglutide",
+  "benchmark_identity": "novo_victoza_worldwide_reported",
+  "indication_area": "Type 2 diabetes",
+  "formulation": "injection (pen)",
+  "route_of_administration": "subcutaneous",
+  "moa": "GLP-1 receptor agonist",
+  "moa_class": "glp1_receptor_agonist",
+  "first_approval_year": 2010,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=022341",
+    "quote": "01/25/2010 ORIG-1 Approval Type 1 - New Molecular Entity STANDARD"
+  },
+  "launch_quarter": "2009Q3",
+  "commercial_start_quarter": "2009Q3",
+  "search_log": [
+    "listed all CIK 0000353278 filings via data.sec.gov/submissions (recent + CIK0000353278-submissions-001.json): 2,045 filings, of which 1,788 are 6-K and 25 are 20-F and 4 are 20-F/A; zero 8-K, 8-K/A or 10-Q forms (foreign private issuer)",
+    "6-K quarterly financial reports (company announcements): 2019Q1-2026Q2 are exhibits named caq{q}{yyyy}.htm; 2009-2018 identified by size filter on the submissions index (reports are the 6-Ks >200 kB filed in each reporting window), then confirmed by opening each",
+    "the EDGAR copies of the Q1 2018 and Q2 2018 reports (0001628280-18-005610, 0001628280-18-010747) render all tables as JPEG page images (about 30 page images each, no text tables); the same reports as published on novonordisk.com (PDF) were used for those two quarters",
+    "every figure was read programmatically from a cached copy of the cited document; full-year totals printed in each Q4 report were compared with the sum of the four quarters in this series (see report)",
+    "Q3 2009 report (2009-10-30): Victoza launched in Germany, the UK and Denmark; it prints no Victoza sales line. The quarterly-numbers tables of the 2010 reports show Q3 2009 = 28 and Q4 2009 = 59 (Q2 and Q1 2009 nil), so the series starts 2009Q3",
+    "2010Q1-2017Q4: quarterly-numbers table in each quarter's own report (current quarter is the first column); 2018Q1-Q2 PDF regional appendix; 2018Q3-2025Q4 quarter regional/area table",
+    "2024Q3 total is printed negative, (322)",
+    "2026 reports: Q1 2026 reported sales 3,080 (includes a 2,746 340B provision reversal; adjusted 334); Q2 2026 181 (reported = adjusted)"
+  ],
+  "reviewed_anomalies": {
+    "2024Q3": "Printed negative, (322), in Novo Nordisk's Q3 2024 sales table: US sales adjustments exceeded gross sales in the quarter. Read at source.",
+    "2026Q1": "Reported sales include a one-off US 340B provision reversal; Novo's adjusted figure for the quarter is 334. Read at source."
+  }
+}

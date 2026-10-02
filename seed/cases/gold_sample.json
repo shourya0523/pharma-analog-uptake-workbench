@@ -25,37 +25,62 @@
   ]
  },
  {
-  "drug_name": "Taltz",
-  "manufacturer": "Eli Lilly",
-  "ticker": "LLY",
-  "generic_name": "ixekizumab",
+  "drug_name": "Nurtec ODT",
+  "manufacturer": "Biohaven",
+  "ticker": null,
+  "generic_name": "rimegepant",
   "options": {
-   "earnings_since": "2025-04-05",
-   "earnings_until": "2026-05-05",
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
    "openfda": true,
    "product_metadata": true
   },
   "source": "seed/gold/quarterly_revenue.jsonl",
   "expect": [
    {
-    "period": "2025Q1",
-    "value_normalized_usd_millions": 761.9,
-    "gold_id": "lilly-taltz-worldwide-reported-2025q1"
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 123.59,
+    "gold_id": "biohaven-nurtec-odt-us-reported-2022q1"
    },
    {
-    "period": "2025Q2",
-    "value_normalized_usd_millions": 847.6,
-    "gold_id": "lilly-taltz-worldwide-reported-2025q2"
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 193.954,
+    "gold_id": "biohaven-nurtec-odt-us-reported-2022q2"
    },
    {
-    "period": "2025Q3",
-    "value_normalized_usd_millions": 901.5,
-    "gold_id": "lilly-taltz-worldwide-reported-2025q3"
-   },
-   {
-    "period": "2025Q4",
+    "period": "2022Q3",
     "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2025Q3. The break is one quarter wide and the issuer's, not this dataset's. Lilly's fourth-quarter 2025 release narrows Selected Products to Mounjaro, Zepbound and Verzenio, and the 2025 Form 10-K states this product only as full-year U.S. and outside-U.S. columns with no worldwide total, so no worldwide 2025Q4 figure is published at all. The line returns in the first quarter of 2026, where Lilly prints U.S., outside-U.S. and Total by therapeutic area. The series cannot cross the missing quarter without inventing it: the only route would sum two regional columns into a full year Lilly never printed as a total, then subtract nine months from that."
+    "why": "The issuer reports no line for this product after 2022Q2. Pfizer completed the acquisition of Biohaven on Oct 3, 2022; Biohaven filed its last 10-Q for the quarter ended Jun 30, 2022 and no report for 2022Q3 (Form 15 filed Oct 14, 2022). No Biohaven, Pfizer or other issuer document found with Biohaven's standalone 2022Q3 net product revenue; Pfizer's line begins 2022Q4 under a different (worldwide) scope."
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2022Q2. Pfizer completed the acquisition of Biohaven on Oct 3, 2022; Biohaven filed its last 10-Q for the quarter ended Jun 30, 2022 and no report for 2022Q3 (Form 15 filed Oct 14, 2022). No Biohaven, Pfizer or other issuer document found with Biohaven's standalone 2022Q3 net product revenue; Pfizer's line begins 2022Q4 under a different (worldwide) scope."
+   }
+  ]
+ },
+ {
+  "drug_name": "Yervoy",
+  "manufacturer": "Bristol-Myers Squibb",
+  "ticker": "BMY",
+  "generic_name": "ipilimumab",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 651.0,
+    "gold_id": "bms-yervoy-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 769.0,
+    "gold_id": "bms-yervoy-worldwide-reported-2026q2"
    }
   ]
  },
@@ -185,6 +210,66 @@
   ]
  },
  {
+  "drug_name": "Rybelsus",
+  "manufacturer": "Novo Nordisk",
+  "ticker": "NVO",
+  "generic_name": "semaglutide (oral)",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 801.548274,
+    "gold_id": "novo-rybelsus-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2026Q1. The Q2 2026 report relabels the line 'Ozempic pill / Rybelsus'; that quarter is staged separately as novo_ozempic_pill_rybelsus rather than spliced."
+   },
+   {
+    "period": "2026Q3",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2026Q1. The Q2 2026 report relabels the line 'Ozempic pill / Rybelsus'; that quarter is staged separately as novo_ozempic_pill_rybelsus rather than spliced."
+   },
+   {
+    "period": "2026Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2026Q1. The Q2 2026 report relabels the line 'Ozempic pill / Rybelsus'; that quarter is staged separately as novo_ozempic_pill_rybelsus rather than spliced."
+   }
+  ]
+ },
+ {
+  "drug_name": "Xeljanz",
+  "manufacturer": "Pfizer",
+  "ticker": "PFE",
+  "generic_name": "tofacitinib",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 180.0,
+    "gold_id": "pfizer-xeljanz-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 251.0,
+    "gold_id": "pfizer-xeljanz-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Libtayo",
   "manufacturer": "Regeneron Pharmaceuticals",
   "ticker": "REGN",
@@ -206,6 +291,41 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 342.6,
     "gold_id": "regeneron-libtayo-us-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Padcev",
+  "manufacturer": "Seagen",
+  "ticker": null,
+  "generic_name": "enfortumab vedotin",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 118.706,
+    "gold_id": "seagen-padcev-us-net-product-sales-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 161.23,
+    "gold_id": "seagen-padcev-us-net-product-sales-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 199.516,
+    "gold_id": "seagen-padcev-us-net-product-sales-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2023Q3. Pfizer completed the acquisition of Seagen on Dec 14, 2023; Seagen filed no report for 2023Q4. Pfizer's later Padcev line (companion series pfizer_padcev, from 2024Q1) is worldwide, a different scope, and its 2023Q4 line is a Dec 14-31 stub, so the series is not spliced."
    }
   ]
  },

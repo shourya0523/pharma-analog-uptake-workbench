@@ -63,3 +63,36 @@ Forteo,Parathyroid hormone analogue (anabolic),bone_anabolic,Subcutaneous,2002,O
 Cialis,PDE5 inhibitor,nitric_oxide_pathway,Oral,2002,Erectile dysfunction and BPH,curated_reference,distinct_product
 Eylea,VEGF trap (VEGF-A / PlGF inhibitor),vegf_inhibitor,Intravitreal,2011,Ophthalmology (retina),curated_reference,distinct_product
 Libtayo,PD-1 inhibitor,immune_checkpoint_inhibitor,Intravenous,2018,Oncology (solid),curated_reference,distinct_product
+Gardasil 9,"HPV L1 virus-like-particle vaccine (types 6, 11, 16, 18, 31, 33, 45, 52, 58)",hpv_vaccine,Intramuscular,2014,HPV-related cancers and disease (vaccine),curated_reference,distinct_product
+Januvia,DPP-4 inhibitor,dpp4_inhibitor,Oral,2006,Type 2 diabetes,curated_reference,distinct_product
+Keytruda,PD-1 inhibitor,immune_checkpoint_inhibitor,Intravenous,2014,Oncology (solid),curated_reference,distinct_product
+Vaxneuvance,15-valent pneumococcal polysaccharide-CRM197 conjugate vaccine,pneumococcal_conjugate_vaccine,Intramuscular,2021,Pneumococcal disease (vaccine),curated_reference,distinct_product
+Abrysvo,bivalent RSV prefusion F protein subunit vaccine,recombinant_protein_vaccine,Intramuscular,2023,Infectious disease (RSV vaccine),curated_reference,distinct_product
+Comirnaty,nucleoside-modified mRNA vaccine encoding SARS-CoV-2 spike protein,mrna_vaccine,Intramuscular,2021,Infectious disease (COVID-19 vaccine),curated_reference,distinct_product
+Ibrance,CDK4/6 inhibitor,cdk4_6_inhibitor,Oral,2015,Oncology (breast cancer),curated_reference,distinct_product
+Lorbrena,third-generation ALK/ROS1 tyrosine kinase inhibitor,alk_inhibitor,Oral,2018,"Oncology (lung cancer, ALK-positive NSCLC)",curated_reference,distinct_product
+Prevnar 20,20-valent pneumococcal polysaccharide-CRM197 conjugate vaccine,pneumococcal_conjugate_vaccine,Intramuscular,2021,Infectious disease (pneumococcal vaccine),curated_reference,distinct_product
+Vyndaqel / Vyndamax,transthyretin (TTR) stabilizer,ttr_stabilizer,Oral,2019,Cardiology (transthyretin amyloid cardiomyopathy),curated_reference,distinct_product
+Eliquis,direct factor Xa inhibitor,factor_xa_inhibitor,Oral,2012,"Anticoagulation (stroke prevention in atrial fibrillation, VTE)",curated_reference,distinct_product
+Opdivo,PD-1 inhibitor,pd1_inhibitor,Intravenous,2014,Oncology (solid and hematologic),curated_reference,distinct_product
+Orencia,selective T-cell costimulation modulator (CTLA-4 Ig fusion protein),t_cell_costimulation_modulator,Intravenous,2005,Rheumatology (rheumatoid arthritis),curated_reference,distinct_product
+Sotyktu,selective allosteric TYK2 inhibitor,tyk2_inhibitor,Oral,2022,Dermatology (plaque psoriasis),curated_reference,distinct_product
+Yervoy,CTLA-4 inhibitor,ctla4_inhibitor,Intravenous,2011,Oncology (solid),curated_reference,distinct_product
+Abecma,BCMA-directed genetically modified autologous T cell immunotherapy,bcma_car_t,Intravenous,2021,Oncology (hematologic),curated_reference,distinct_product
+Breyanzi,CD19-directed genetically modified autologous T cell immunotherapy,cd19_car_t,Intravenous,2021,Oncology (hematologic),curated_reference,distinct_product
+Krazati,KRAS G12C inhibitor,kras_g12c_inhibitor,Oral,2022,Oncology (solid),curated_reference,distinct_product
+Pomalyst,Immunomodulatory agent (cereblon E3 ligase modulator),cereblon_e3_ligase_modulator,Oral,2013,Oncology (hematologic),curated_reference,distinct_product
+Revlimid,Immunomodulatory agent (cereblon E3 ligase modulator),cereblon_e3_ligase_modulator,Oral,2005,Oncology (hematologic),curated_reference,distinct_product
+Nurtec ODT,Calcitonin gene-related peptide (CGRP) receptor antagonist,cgrp_receptor_antagonist,Oral,2020,Neurology (migraine),curated_reference,distinct_product
+Cibinqo,Janus kinase 1 (JAK1) inhibitor,jak_inhibitor,Oral,2022,Inflammation & immunology (atopic dermatitis),curated_reference,distinct_product
+Velsipity,Sphingosine 1-phosphate (S1P) receptor modulator,s1p_receptor_modulator,Oral,2023,Inflammation & immunology (ulcerative colitis),curated_reference,distinct_product
+Xeljanz,Janus kinase (JAK) inhibitor,jak_inhibitor,Oral,2012,Inflammation & immunology (rheumatoid arthritis),curated_reference,distinct_product
+Adcetris,CD30-directed antibody-drug conjugate,cd30_directed_adc,Intravenous,2011,Oncology (hematologic),curated_reference,distinct_product
+Padcev,Nectin-4-directed antibody-drug conjugate,nectin4_directed_adc,Intravenous,2019,Oncology (solid),curated_reference,distinct_product
+Ozempic,GLP-1 receptor agonist,glp1_receptor_agonist,Subcutaneous,2017,Type 2 diabetes,curated_reference,distinct_product
+Rybelsus,GLP-1 receptor agonist,glp1_receptor_agonist,Oral,2019,Type 2 diabetes,curated_reference,distinct_product
+Saxenda,GLP-1 receptor agonist,glp1_receptor_agonist,Subcutaneous,2014,Obesity / chronic weight management,curated_reference,distinct_product
+Tresiba,Ultra-long-acting basal insulin analogue,basal_insulin_analogue,Subcutaneous,2015,Diabetes (insulin),curated_reference,distinct_product
+Victoza,GLP-1 receptor agonist,glp1_receptor_agonist,Subcutaneous,2010,Type 2 diabetes,curated_reference,distinct_product
+Wegovy,GLP-1 receptor agonist,glp1_receptor_agonist,Subcutaneous,2021,Obesity / chronic weight management,curated_reference,distinct_product
+Esperoct,"Recombinant factor VIII, glycoPEGylated",factor_viii_replacement,Intravenous,2019,Hemophilia A,curated_reference,distinct_product

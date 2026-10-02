@@ -1,0 +1,31 @@
+{
+  "drug_name": "Lorbrena",
+  "generic_name": "lorlatinib",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (lung cancer, ALK-positive NSCLC)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "third-generation ALK/ROS1 tyrosine kinase inhibitor",
+  "moa_class": "alk_inhibitor",
+  "first_approval_year": 2018,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/drugs/fda-approves-lorlatinib-second-or-third-line-treatment-alk-positive-metastatic-nsclc",
+    "quote": "On November 2, 2018, the Food and Drug Administration granted accelerated approval to lorlatinib (LORBRENA, Pfizer, Inc.) for patients with anaplastic lymphoma kinase (ALK)-positive metastatic non-small cell lung cancer (NSCLC)"
+  },
+  "launch_quarter": null,
+  "series_start_reason": "Pfizer did not print Lorbrena as its own line in any release or 10-Q/10-K before the third-quarter 2020 release (checked every release 2018Q4-2020Q2 and the 10-Qs/10-Ks 2018-2021). The third-quarter 2020 release prints 2019Q3 (32) and nine months 2019 (77) in its prior-year columns, later releases give 2019Q4, 2020Q1, 2020Q2 the same way. 2019Q1 and 2019Q2 cannot be separated (the two together are 77-32 = 45 per the same release), so the contiguous citable series starts 2019Q3 although the product launched after the November 2018 approval.",
+  "search_log": [
+    "listed PFE (CIK 0000078003) 8-K, 8-K/A, 10-Q, 10-K via data.sec.gov submissions (recent + older pages): 6671 filings; selected 8-Ks with Item 2.02 filed 2015-01 to 2026-08 (53, of which 48 carry an EX-99.1 earnings release; 2022-04-20, 2023-10-13 and 2023-12-14 filings are not quarterly earnings releases; the 2016-02-16 8-K/A carries no usable product table and the original 2016-02-02 release was used)",
+    "parsed every release's product tables with scripts/extract.py; quarter row = first occurrence of the product row, year-to-date row = third occurrence (or second where sub-region tables are absent); checked by summing quarters to the printed twelve-month figure",
+    "scanned 10-Q/10-K 2018-2021 for product rows (scripts/scan_periodic.py)",
+    "2019Q1/2019Q2 individually not printed anywhere found"
+  ],
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "commercial_start_quarter": "2019Q3",
+  "manufacturer": "Pfizer",
+  "benchmark_identity": "pfizer_lorbrena_reported"
+}

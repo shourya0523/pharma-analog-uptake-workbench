@@ -1,0 +1,33 @@
+{
+  "manufacturer": "Novo Nordisk",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "series_end_quarter": "2025Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "From the Q1 2026 report the line 'Wegovy' is split into 'Wegovy injectable' and 'Wegovy pill' and no combined Wegovy line is printed; the injectable line is staged separately as novo_wegovy_injectable (2026Q1-2026Q2) rather than spliced.",
+  "series_start_reason": null,
+  "drug_name": "Wegovy",
+  "generic_name": "semaglutide",
+  "benchmark_identity": "novo_wegovy_worldwide_reported",
+  "indication_area": "Obesity / chronic weight management",
+  "formulation": "injection (pen)",
+  "route_of_administration": "subcutaneous",
+  "moa": "GLP-1 receptor agonist",
+  "moa_class": "glp1_receptor_agonist",
+  "first_approval_year": 2021,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=215256",
+    "quote": "06/04/2021 ORIG-1 Approval PRIORITY"
+  },
+  "launch_quarter": "2021Q2",
+  "commercial_start_quarter": "2021Q2",
+  "search_log": [
+    "listed all CIK 0000353278 filings via data.sec.gov/submissions (recent + CIK0000353278-submissions-001.json): 2,045 filings, of which 1,788 are 6-K and 25 are 20-F and 4 are 20-F/A; zero 8-K, 8-K/A or 10-Q forms (foreign private issuer)",
+    "6-K quarterly financial reports (company announcements): 2019Q1-2026Q2 are exhibits named caq{q}{yyyy}.htm; 2009-2018 identified by size filter on the submissions index (reports are the 6-Ks >200 kB filed in each reporting window), then confirmed by opening each",
+    "the EDGAR copies of the Q1 2018 and Q2 2018 reports (0001628280-18-005610, 0001628280-18-010747) render all tables as JPEG page images (about 30 page images each, no text tables); the same reports as published on novonordisk.com (PDF) were used for those two quarters",
+    "every figure was read programmatically from a cached copy of the cited document; full-year totals printed in each Q4 report were compared with the sum of the four quarters in this series (see report)",
+    "Q2 2021 report: 'Wegovy was launched in the US in June 2021'; the 2021 reports print Saxenda and Wegovy on one combined line, so 2021Q2-Q4 are read from the 2022 reports' quarterly-numbers tables (same-quarter prior-year column); Q1 2021 column is nil",
+    "Wegovy 2021 quarters (85+519+782=1,386) plus Saxenda 2021 (7,014) equal the combined 'Saxenda and Wegovy' 2021 total printed in the FY2021 report (8,400)"
+  ]
+}

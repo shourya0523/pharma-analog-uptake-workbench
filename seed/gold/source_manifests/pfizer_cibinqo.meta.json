@@ -1,0 +1,30 @@
+{
+  "drug_name": "Cibinqo",
+  "generic_name": "abrocitinib",
+  "therapeutic_area": "Immunology / Inflammation",
+  "indication_area": "Inflammation & immunology (atopic dermatitis)",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Janus kinase 1 (JAK1) inhibitor",
+  "moa_class": "jak_inhibitor",
+  "manufacturer": "Pfizer",
+  "benchmark_identity": "pfizer_cibinqo_worldwide_reported",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "first_approval_year": 2022,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2022/213871Orig1s000ltr.pdf",
+    "quote": "NDA 213871 NDA APPROVAL ... for Cibinqo (abrocitinib) tablets ... for the treatment of adults with refractory, moderate-to-severe atopic dermatitis (electronically signed 01/14/2022)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2022Q1",
+  "series_start_reason": "Approved Jan 2022. Pfizer first prints Cibinqo on its own line in the second-quarter 2023 release and 10-Q. 2022Q2-Q4 and 2023Q1 are read from prior-year columns of the 2023Q2, 2023Q3, 2023Q4 and 2024Q1 releases; 2022Q1 is derived (six months 2022 less second quarter 2022, both in one row of the Q2 2023 10-Q, approximate because inputs are whole millions).",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "listed filings of the issuer via data.sec.gov submissions (recent + older pages), all forms incl. 8-K and 8-K/A (CIK 0000078003); all 2022-2026 earnings releases and 10-Q/10-K tables searched for rows labelled Cibinqo",
+    "Releases and 10-Qs for 2022Q1-2023Q1 print no Cibinqo row; first row is the Q2 2023 release ('Cibinqo | 38 | 1 | ... | 54 | 6')",
+    "Annual check: quarters sum to the twelve-month figures printed in the Q4 2023 release (2023: 128, 2022: 27)"
+  ]
+}

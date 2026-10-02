@@ -28,6 +28,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[2]
 MANIFESTS = REPO_ROOT / "seed" / "gold" / "source_manifests"
 ATTRIBUTES = REPO_ROOT / "seed" / "product_attributes.csv"
+TARGETS = REPO_ROOT / "docs" / "sourcing" / "target_products.csv"
 EXCLUSIONS = MANIFESTS / "excluded_products.csv"
 MANIFEST_COLUMNS = [
     "period", "value_reported", "source_url", "source_quote", "derivation",
@@ -39,6 +40,20 @@ MANIFEST_COLUMNS = [
 def route_label(route: str) -> str:
     """The attributes file capitalises routes ("Oral", "Intravenous")."""
     return route.strip().capitalize()
+
+
+def target_areas() -> dict[str, str]:
+    """Therapeutic area by brand, from the requested product list.
+
+    A brand cell can name a family ("Calderon / Calderon XR"); each name in it
+    maps to the row's area as well as the whole cell.
+    """
+    out: dict[str, str] = {}
+    for row in read_rows(TARGETS):
+        out[row["brand_name"]] = row["therapeutic_area"]
+        for part in row["brand_name"].split("/"):
+            out.setdefault(part.strip(), row["therapeutic_area"])
+    return out
 
 
 def read_rows(path: Path) -> list[dict[str, str]]:
@@ -85,7 +100,10 @@ def main() -> int:
             if missing:
                 raise SystemExit(f"{quarterly.name} lacks columns {missing}")
             shutil.copy(quarterly, MANIFESTS / quarterly.name)
-            shutil.copy(meta_path, MANIFESTS / meta_path.name)
+            area = target_areas().get(meta["drug_name"])
+            if area:
+                meta["therapeutic_area"] = area
+            (MANIFESTS / meta_path.name).write_text(json.dumps(meta, indent=2) + "\n")
             print(f"promoted {stem}: {len(rows)} quarters")
         elif exclusion.is_file():
             record = json.loads(exclusion.read_text())
