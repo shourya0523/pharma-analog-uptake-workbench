@@ -1,0 +1,31 @@
+{
+  "manufacturer": "Sanofi",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "drug_name": "Toujeo",
+  "generic_name": "insulin glargine 300 U/mL",
+  "benchmark_identity": "sanofi_toujeo_worldwide_reported",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Diabetes (type 1 and type 2)",
+  "formulation": "injection (insulin glargine 300 U/mL)",
+  "route_of_administration": "subcutaneous",
+  "moa": "Long-acting basal insulin analog (concentrated 300 U/mL)",
+  "moa_class": "basal_insulin_analog",
+  "first_approval_year": 2015,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=206538",
+    "quote": "Original Approvals or Tentative Approvals: 02/25/2015 ORIG-1 Approval (Toujeo, NDA 206538, Drugs@FDA overview)"
+  },
+  "launch_quarter": "2015Q1",
+  "commercial_start_quarter": "2015Q1",
+  "notes": "Launch: Q1 2015 release (https://www.sec.gov/Archives/edgar/data/1121404/000110465915032081/a15-10423_1ex99d1.htm): 'Toujeo ... was granted approval by the FDA in late February. Full launch activities in the U.S. market commenced at the end of March'; the Q1 2015 release prints Toujeo sales of EUR 7 million. The first printed quarter is 2015Q1, one quarter earlier than the 2015Q2 given in the brief. Toujeo is printed as its own line, separate from Lantus.",
+  "search_log": [
+    "listed Sanofi (CIK 1121404) 6-K/6-K/A/20-F/20-F/A filings via data.sec.gov submissions; fetched every exhibit",
+    "each quarter taken from that quarter's own results release (first table naming Toujeo with figures)",
+    "checked the Q4 2014 release for a Toujeo row (none)"
+  ]
+}

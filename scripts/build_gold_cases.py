@@ -113,13 +113,20 @@ LAYER_TWO_DEFAULTS = {
 ISSUER_TICKERS: dict[str, str | None] = {
     "AbbVie": "ABBV",
     "Actelion/J&J": "JNJ",
-    # No ticker for an issuer that was acquired and delisted (Allergan, Inc.,
-    # Seagen): its symbol went with it, so a case naming one is resolved by
-    # issuer name instead.
+    # No ticker for an issuer that was acquired and delisted (Allergan,
+    # Alexion, Seagen and the like): its symbol went with it, so a case naming
+    # one is resolved by issuer name instead.
+    "Alexion Pharmaceuticals": None,
     "Allergan": None,
+    "Allergan plc": None,
+    "Amicus Therapeutics": None,
+    "Apellis Pharmaceuticals": None,
     "Amgen": "AMGN",
     "AstraZeneca": "AZN",
+    "Bausch + Lomb": "BLCO",
+    "Bausch Health": "BHC",
     "BeiGene": "ONC",
+    "BioMarin": "BMRN",
     "Biogen": "BIIB",
     "Bristol-Myers Squibb": "BMY",
     # Not SEC registrants (no listing of their own on EDGAR): resolved by name.
@@ -131,17 +138,22 @@ ISSUER_TICKERS: dict[str, str | None] = {
     "Incyte": "INCY",
     "Johnson & Johnson": "JNJ",
     "Liquidia": "LQDA",
+    "Intercept Pharmaceuticals": None,
     "Madrigal Pharmaceuticals": "MDGL",
     "Merck": "MRK",
     "Moderna": "MRNA",
     "Neurocrine Biosciences": "NBIX",
     "Novartis": "NVS",
+    "Oyster Point Pharma": None,
     "Novo Nordisk": "NVO",
     "Pfizer": "PFE",
     "Regeneron Pharmaceuticals": "REGN",
     "Roche": None,
+    "Salix Pharmaceuticals": None,
+    "Sanofi": "SNY",
     "Sarepta Therapeutics": "SRPT",
     "Seagen": None,
+    "Spark Therapeutics": None,
     "Teva": "TEVA",
     "United Therapeutics": "UTHR",
 }

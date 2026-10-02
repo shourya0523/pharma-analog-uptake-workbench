@@ -1,0 +1,32 @@
+{
+  "drug_name": "Soliris",
+  "generic_name": "eculizumab",
+  "manufacturer": "Alexion Pharmaceuticals",
+  "benchmark_identity": "alexion_soliris_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Rare disease (PNH, aHUS, gMG, NMOSD)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection (concentrate for infusion)",
+  "route_of_administration": "intravenous",
+  "moa": "Terminal complement C5 inhibitor monoclonal antibody",
+  "moa_class": "c5_complement_inhibitor",
+  "first_approval_year": 2007,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=125166",
+    "quote": "Original Approvals or Tentative Approvals ... 03/16/2007 ORIG-1 Approval N/A; Orphan (BLA 125166, Company: ALEXION PHARM)"
+  },
+  "launch_quarter": "2007Q2",
+  "commercial_start_quarter": "2007Q2",
+  "series_start_reason": null,
+  "series_end_quarter": "2021Q2",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Alexion was acquired by AstraZeneca on 21 July 2021 and stopped reporting; the AstraZeneca continuation is delivered as astrazeneca_soliris_alt (from 2021Q4; the 2021Q3 stub from 21 July is not a full quarter).",
+  "notes": "Launch: Q1 2007 release states Soliris was approved by FDA on 16 March 2007 and 'the Company began commercial sale of Soliris in the U.S. during April 2007' (Ex.99.1 of 8-K 0001193125-07-098784). Through 2015Q2 the table row 'Net product sales' is Soliris only (Alexion's sole marketed product); from 2015Q3 the 'Soliris' / 'Total Soliris' row is used because other products were added. 2014Q1 includes $87.8m for reimbursement of prior-year shipments as printed.",
+  "search_log": [
+    "listed Alexion (CIK 0000899866) filings via data.sec.gov submissions incl. filings.files older pages: 8-K, 8-K/A, 10-Q, 10-K, 10-K/A, 10-Q/A all counted; Alexion changed from a July to a December fiscal year in 2005, so calendar quarters are used from 2007",
+    "for every 8-K with Item 2.02 from 2007-04 to 2021-07 fetched the EX-99.1 earnings release via the filing index.json and read the quarter column of the net-product-sales table",
+    "2007Q1: no table row (named-patient sales $1.0m in text only); commercial launch April 2007 per the Q1 2007 release, so the series starts 2007Q2",
+    "2021Q2: Alexion's 8-K of 2021-07-20 (Item 2.02, one day before the AstraZeneca acquisition closed) prints preliminary Q2 2021 SOLIRIS/ULTOMIRIS revenue; no later Alexion earnings release or 10-Q exists (Form 15-12G filed 2021-08-02)"
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "series_start_reason": "Same as Eloctate: Sanofi consolidated Bioverativ from March 9, 2018, so its Q1 2018 Alprolix figure (EUR 21 million) is a part-quarter and is excluded; no Bioverativ Q1 2018 10-Q exists. 2014Q2-2017Q4 Biogen/Bioverativ history (USD) is in sanofi_alprolix_alt.",
+  "drug_name": "Alprolix",
+  "generic_name": "eftrenonacog alfa (coagulation factor IX recombinant, Fc fusion protein)",
+  "manufacturer": "Sanofi",
+  "benchmark_identity": "sanofi_alprolix_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Hematology (hemophilia B)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "lyophilized powder for injection",
+  "route_of_administration": "intravenous",
+  "moa": "Recombinant factor IX Fc fusion protein (extended half-life factor IX replacement)",
+  "moa_class": "factor_ix_replacement",
+  "first_approval_year": 2014,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/files/vaccines,%20blood%20&%20biologics/published/October-19--2017-Summary-Basis-for-Regulatory-Action---ALPROLIX.pdf",
+    "quote": "ALPROLIX brand Coagulation Factor IX (Recombinant), Fx Fusion Protein (rFIX-Fc) was approved in the United States on 28 March 2014 and was commercially available starting on 05 May 2014."
+  },
+  "launch_quarter": "2014Q2",
+  "commercial_start_quarter": "2018Q2",
+  "notes": "launch_quarter 2014Q2: FDA Summary Basis for Regulatory Action states US approval 28 March 2014 and commercial availability from 05 May 2014; Biogen's Q2 2014 release prints the first ALPROLIX revenue (USD 10,397 thousand). For Q1/Q2 2026 Sanofi's summary table prints Alprolix with the quarter then H1 columns as for earlier years.",
+  "search_log": [
+    "listed Sanofi (CIK 0001121404) 6-K, 6-K/A, 20-F and 20-F/A filings from data.sec.gov submissions (recent plus older page); fetched each filing index from 2011 onward",
+    "scanned every .htm exhibit filed in the late-Jan/Feb, late-Apr/May, late-Jul/early-Aug, late-Oct/early-Nov windows for 'Fabrazyme', 'Alprolix', 'Eloctate', 'Sarclisa', 'Beyfortus' to identify each quarterly results release (60 releases 2011Q2-2026Q2, one per quarter)",
+    "extracted the product's row from the first 'Net sales' table of each release (worldwide column); checked that quarters sum to the printed full-year figure for every full year"
+  ]
+}

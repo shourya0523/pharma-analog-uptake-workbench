@@ -1,0 +1,32 @@
+{
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "series_start_reason": "Sanofi completed the Bioverativ acquisition and consolidated it from March 9, 2018; its Q1 2018 release prints Eloctate EUR 43 million, a part-quarter (March 9-31) figure, so 2018Q1 is not a full quarter and is excluded. Bioverativ filed no Q1 2018 10-Q (acquired March 2018), so the January 1-March 8 2018 sales are not published. The 2014Q3-2017Q4 Biogen/Bioverativ history (USD) is delivered under sanofi_eloctate_alt.",
+  "drug_name": "Eloctate",
+  "generic_name": "efmoroctocog alfa (antihemophilic factor recombinant, Fc fusion protein)",
+  "manufacturer": "Sanofi",
+  "benchmark_identity": "sanofi_eloctate_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Hematology (hemophilia A)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "lyophilized powder for injection",
+  "route_of_administration": "intravenous",
+  "moa": "Recombinant factor VIII Fc fusion protein (extended half-life factor VIII replacement)",
+  "moa_class": "factor_viii_replacement",
+  "first_approval_year": 2014,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/opdlisting/oopd/detailedIndex.cfm?cfgridkey=321610",
+    "quote": "Trade Name: Eloctate ... Marketing Approval Date: 06/06/2014"
+  },
+  "launch_quarter": "2014Q3",
+  "commercial_start_quarter": "2018Q2",
+  "notes": "launch_quarter 2014Q3: Biogen's Q3 2014 release is the first with an ELOCTATE revenue row (the Q2 2014 release has none; FDA approval June 6, 2014, US commercial availability planned July 2014 per Biogen press release of June 6, 2014). Sanofi prints the worldwide line in the franchise summary table through Q4 2025 and, for Q1/Q2 2026, the summary table has no Eloctate row so the regional appendix table's Total sales column is cited (Total sales, then United States, Europe, Rest of World).",
+  "search_log": [
+    "listed Sanofi (CIK 0001121404) 6-K, 6-K/A, 20-F and 20-F/A filings from data.sec.gov submissions (recent plus older page); fetched each filing index from 2011 onward",
+    "scanned every .htm exhibit filed in the late-Jan/Feb, late-Apr/May, late-Jul/early-Aug, late-Oct/early-Nov windows for 'Fabrazyme', 'Alprolix', 'Eloctate', 'Sarclisa', 'Beyfortus' to identify each quarterly results release (60 releases 2011Q2-2026Q2, one per quarter)",
+    "extracted the product's row from the first 'Net sales' table of each release (worldwide column); checked that quarters sum to the printed full-year figure for every full year",
+    "Bioverativ CIK is 0001681689 (the CIK in the brief, 0001681570, is another entity); listed its filings: 10-Q for 2017Q1-Q3, 10-K 2017, 8-K earnings exhibits; no 10-Q for 2018Q1"
+  ]
+}

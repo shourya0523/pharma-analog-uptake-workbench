@@ -1,0 +1,34 @@
+{
+  "drug_name": "Symbicort",
+  "generic_name": "budesonide/formoterol",
+  "manufacturer": "AstraZeneca",
+  "benchmark_identity": "astrazeneca_symbicort_worldwide_reported",
+  "therapeutic_area": "Respiratory / Allergy",
+  "indication_area": "Respiratory (asthma/COPD)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "inhalation aerosol / dry powder inhaler",
+  "route_of_administration": "inhaled",
+  "moa": "Inhaled corticosteroid plus long-acting beta2-agonist fixed-dose combination",
+  "moa_class": "ics_laba_combination",
+  "first_approval_year": 2006,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=021929",
+    "quote": "Original Approvals or Tentative Approvals ... 07/21/2006 ORIG-1 Approval Type 4 - New Combination STANDARD (NDA 021929, Company: ASTRAZENECA)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2001Q3",
+  "series_start_reason": "Symbicort was launched ex-U.S. in 2000-2001 (U.S. 2007). The earliest quarter that can be cited contiguously is 2001Q3: AstraZeneca's own 2001 and Q1/Q2 2002 results announcements are not on EDGAR (2002 6-Ks to Oct 2002 are paper filings) and the Q3 2002 release prints the nine-month 2001 figure (34) but only Q3 2001 (20) individually, so Q1/Q2 2001 are not separable. 2001Q3, 2001Q4, 2002Q1 and 2002Q2 are read from the prior-year columns of the Q3 2002, Q4 2002, Q1 2003 and Q2 2003 releases (derivation direct_prior_year_column); 2002Q3 onward from each quarter's own release.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Worldwide Symbicort product sales as totalled by AstraZeneca (U.S. included from its 2007 launch). FDA approval 21 Jul 2006. Launch quarter not stated by quarter in any cited issuer document.",
+  "search_log": [
+    "listed AstraZeneca (CIK 0000901832) filings via data.sec.gov submissions incl. filings.files older page: 1,614 6-K, 6 6-K/A, 24 20-F (all form types counted, 6-K/A included)",
+    "fetched the main document of every 6-K/20-F filed 2003-2026 (monthly 6-Ks of 2003-2011 embed the full results press releases; 2012+ one 6-K per results announcement); 2002 6-Ks before Nov 2002 are 'AUTO-GENERATED PAPER DOCUMENT' (not on EDGAR)",
+    "located each quarterly results release by the product-sales table containing Symbicort; extracted the product row from the table anchored on the Symbicort row of the same release (table index + row stored in scripts/az_onepass.py output)",
+    "cross-checked Symbicort chain: era-A releases print the prior-year quarter, which equals the earlier release's current quarter for every year 2003-2014",
+    "searched 2002-2003 6-Ks (.txt) for Symbicort sales: Q3 2002 release 72/20 (9M 194/34), Q4 2002 105/49 (FY 299/83)",
+    "Q1 2002 and Q2 2002 own releases: only paper 6-K entries on EDGAR (2002-05-09, 2002-08-05); used 2003 prior-year columns 54 and 68 (sum 122 equals the printed H1 2002 figure)"
+  ]
+}

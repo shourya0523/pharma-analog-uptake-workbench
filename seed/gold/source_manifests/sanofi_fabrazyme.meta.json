@@ -1,0 +1,32 @@
+{
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "series_start_reason": "Sanofi consolidates Genzyme from April 2011; its Q2 2011 release is the first to print a Fabrazyme line (EUR 30 million, 'Net sales since April 1st 2011' table). Genzyme-era quarters 2002Q3-2010Q4 (USD, Genzyme's own filings) are delivered under sanofi_fabrazyme_alt; Genzyme published no 2011Q1 financials (acquired April 2011), so the two cannot be joined contiguously and are in different currencies. Launch quarter not established: Genzyme's 10-K states Fabrazyme was marketed in Europe since 2001 and the US approval was April 2003.",
+  "drug_name": "Fabrazyme",
+  "generic_name": "agalsidase beta",
+  "manufacturer": "Sanofi",
+  "benchmark_identity": "sanofi_fabrazyme_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Rare diseases (Fabry disease, enzyme replacement)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "lyophilized powder for injection",
+  "route_of_administration": "intravenous",
+  "moa": "Recombinant human alpha-galactosidase A enzyme replacement therapy",
+  "moa_class": "enzyme_replacement_therapy",
+  "first_approval_year": 2003,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2021/103979s5309lbl.pdf",
+    "quote": "FABRAZYME (agalsidase beta) for injection, for intravenous use Initial U.S. Approval: 2003"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2011Q2",
+  "notes": "2011Q2-2011Q4: Genzyme franchise table, growth on constant structure basis. The Q2 2012 release prints the column header 'Q2 2011 net sales' over Q2 2012 figures (Q1 2012 47 + Q2 2012 74 = H1 2012 121).",
+  "search_log": [
+    "listed Sanofi (CIK 0001121404) 6-K, 6-K/A, 20-F and 20-F/A filings from data.sec.gov submissions (recent plus older page); fetched each filing index from 2011 onward",
+    "scanned every .htm exhibit filed in the late-Jan/Feb, late-Apr/May, late-Jul/early-Aug, late-Oct/early-Nov windows for 'Fabrazyme', 'Alprolix', 'Eloctate', 'Sarclisa', 'Beyfortus' to identify each quarterly results release (60 releases 2011Q2-2026Q2, one per quarter)",
+    "extracted the product's row from the first 'Net sales' table of each release (worldwide column); checked that quarters sum to the printed full-year figure for every full year",
+    "Genzyme CIK 0000732485: listed 10-K, 10-Q and 8-K (all items) 2001-2011; no 2011Q1 10-Q or earnings 8-K exists"
+  ]
+}

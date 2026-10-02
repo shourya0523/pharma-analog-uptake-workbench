@@ -184,3 +184,35 @@ Imfinzi,PD-L1 inhibitor (human monoclonal antibody),pdl1_inhibitor,Intravenous,2
 Lynparza,PARP inhibitor,parp_inhibitor,Oral,2014,Oncology (solid),curated_reference,distinct_product
 Tagrisso,EGFR tyrosine kinase inhibitor,egfr_tki,Oral,2015,Oncology (solid),curated_reference,distinct_product
 Enhertu,HER2-directed antibody-drug conjugate (topoisomerase I inhibitor payload),her2_adc,Intravenous,2019,Oncology (solid),curated_reference,distinct_product
+Soliris,Terminal complement C5 inhibitor monoclonal antibody,c5_complement_inhibitor,Intravenous,2007,"Rare disease (PNH, aHUS, gMG, NMOSD)",curated_reference,distinct_product
+Airsupra,Short-acting beta2-agonist plus inhaled corticosteroid as-needed rescue combination,saba_ics_combination,Inhaled,2023,Respiratory (asthma),curated_reference,distinct_product
+Breztri Aerosphere,Inhaled corticosteroid / long-acting muscarinic antagonist / long-acting beta2-agonist triple combination,ics_lama_laba_triple,Inhaled,2020,Respiratory (COPD),curated_reference,distinct_product
+Daliresp,Phosphodiesterase-4 (PDE4) inhibitor,pde4_inhibitor,Oral,2011,Respiratory (COPD),curated_reference,distinct_product
+Fasenra,Interleukin-5 receptor alpha antagonist monoclonal antibody (eosinophil depletion),il5r_antagonist,Subcutaneous,2017,Respiratory (severe eosinophilic asthma),curated_reference,distinct_product
+Symbicort,Inhaled corticosteroid plus long-acting beta2-agonist fixed-dose combination,ics_laba_combination,Inhaled,2006,Respiratory (asthma/COPD),curated_reference,distinct_product
+Tezspire,Anti-thymic stromal lymphopoietin (TSLP) monoclonal antibody,tslp_antagonist,Subcutaneous,2021,Respiratory (severe asthma),curated_reference,distinct_product
+Ultomiris,Long-acting terminal complement C5 inhibitor monoclonal antibody,c5_complement_inhibitor,Intravenous,2018,"Rare disease (PNH, aHUS, gMG)",curated_reference,distinct_product
+Alprolix,Recombinant factor IX Fc fusion protein (extended half-life factor IX replacement),factor_ix_replacement,Intravenous,2014,Hematology (hemophilia B),curated_reference,distinct_product
+Beyfortus,RSV F protein-directed fusion inhibitor monoclonal antibody,rsv_monoclonal_antibody,Intramuscular,2023,Infectious disease (RSV prevention in infants),curated_reference,distinct_product
+Eloctate,Recombinant factor VIII Fc fusion protein (extended half-life factor VIII replacement),factor_viii_replacement,Intravenous,2014,Hematology (hemophilia A),curated_reference,distinct_product
+Fabrazyme,Recombinant human alpha-galactosidase A enzyme replacement therapy,enzyme_replacement_therapy,Intravenous,2003,"Rare diseases (Fabry disease, enzyme replacement)",curated_reference,distinct_product
+Sarclisa,CD38-directed cytolytic monoclonal antibody,cd38_antibody,Intravenous,2020,"Oncology (hematologic, multiple myeloma)",curated_reference,distinct_product
+Aubagio,Dihydroorotate dehydrogenase (DHODH) inhibitor; pyrimidine synthesis inhibitor,dhodh_inhibitor,Oral,2012,Relapsing multiple sclerosis,curated_reference,distinct_product
+Dupixent,Interleukin-4 receptor alpha antagonist (blocks IL-4 and IL-13 signalling),il4r_alpha_antagonist,Subcutaneous,2017,"Type 2 inflammatory diseases (atopic dermatitis first; asthma, CRSwNP, others)",curated_reference,distinct_product
+Kevzara,Interleukin-6 receptor antagonist,il6_receptor_antagonist,Subcutaneous,2017,Rheumatoid arthritis; polymyalgia rheumatica; polyarticular juvenile idiopathic arthritis,curated_reference,distinct_product
+Lantus,Long-acting basal insulin analog,basal_insulin_analog,Subcutaneous,2000,Diabetes (type 1 and type 2),curated_reference,distinct_product
+Praluent,PCSK9 (proprotein convertase subtilisin/kexin type 9) inhibitor monoclonal antibody,pcsk9_inhibitor,Subcutaneous,2015,Hypercholesterolemia / LDL-C lowering; cardiovascular risk reduction,curated_reference,distinct_product
+Toujeo,Long-acting basal insulin analog (concentrated 300 U/mL),basal_insulin_analog,Subcutaneous,2015,Diabetes (type 1 and type 2),curated_reference,distinct_product
+Viberzi,Mu-opioid receptor agonist / delta-opioid receptor antagonist,opioid_receptor_modulator,Oral,2015,Irritable bowel syndrome with diarrhea,curated_reference,distinct_product
+Aimovig,CGRP receptor antagonist monoclonal antibody,cgrp_receptor_antibody,Subcutaneous,2018,Preventive treatment of migraine,curated_reference,distinct_product
+Galafold,Pharmacological chaperone of alpha-galactosidase A,pharmacological_chaperone,Oral,2018,Fabry disease (amenable GLA variants),curated_reference,distinct_product
+Syfovre,Complement C3 inhibitor,complement_c3_inhibitor,Intravitreal,2023,Geographic atrophy secondary to age-related macular degeneration,curated_reference,distinct_product
+Miebo,"Semifluorinated alkane (evaporation inhibitor, tear-film lipid layer)",semifluorinated_alkane,Topical ophthalmic,2023,Dry eye disease (meibomian gland dysfunction),curated_reference,distinct_product
+Trulance,Guanylate cyclase-C agonist,guanylate_cyclase_c_agonist,Oral,2017,Chronic idiopathic constipation; IBS with constipation,curated_reference,distinct_product
+Roctavian,AAV5 vector-based gene therapy delivering factor VIII,aav_gene_therapy,Intravenous,2023,Severe hemophilia A,curated_reference,distinct_product
+Vimizim,Enzyme replacement therapy (recombinant N-acetylgalactosamine-6-sulfatase),enzyme_replacement_therapy,Intravenous,2014,Mucopolysaccharidosis IVA (Morquio A syndrome),curated_reference,distinct_product
+Voxzogo,C-type natriuretic peptide (CNP) analog,cnp_analog,Subcutaneous,2021,Achondroplasia,curated_reference,distinct_product
+Ocaliva,Farnesoid X receptor (FXR) agonist,fxr_agonist,Oral,2016,Primary biliary cholangitis,curated_reference,distinct_product
+Xifaxan,"Rifamycin antibacterial (RNA polymerase inhibitor), minimally absorbed",rifamycin_antibiotic,Oral,2004,Travelers' diarrhea; hepatic encephalopathy; IBS-D,curated_reference,distinct_product
+Luxturna,AAV2 vector-based gene therapy delivering RPE65,aav_gene_therapy,Intravitreal,2017,RPE65 mutation-associated inherited retinal dystrophy,curated_reference,distinct_product
+Tyrvaya,Nicotinic acetylcholine receptor agonist (trigeminal parasympathetic pathway activation),nicotinic_acetylcholine_receptor_agonist,Intranasal,2021,Dry eye disease,curated_reference,distinct_product

@@ -1,0 +1,30 @@
+{
+  "drug_name": "Vimizim",
+  "generic_name": "elosulfase alfa",
+  "manufacturer": "BioMarin",
+  "benchmark_identity": "biomarin_vimizim_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Mucopolysaccharidosis IVA (Morquio A syndrome)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection",
+  "route_of_administration": "intravenous",
+  "moa": "Enzyme replacement therapy (recombinant N-acetylgalactosamine-6-sulfatase)",
+  "moa_class": "enzyme_replacement_therapy",
+  "first_approval_year": 2014,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=125460",
+    "quote": "VIMIZIM ELOSULFASE ALFA 5MG/5ML INJECTABLE;INJECTION ... 02/14/2014 ORIG-1 Approval"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2013Q4",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "Listed every BioMarin filing (all forms incl. 8-K, 8-K/A) for CIK 0001048477 via data.sec.gov/submissions incl. older 'files' pages (scripts/common.py); earnings 8-Ks selected by item 2.02; exhibits resolved from each filing's index.json (scripts/lib.py).",
+    "Product rows pulled by table-row parsing of each earnings Exhibit 99.1; quarter taken from the document's own 'three months ended' header and cross-checked against the next year's prior-year column (scripts/bm.py).",
+    "Q4 2013 release (filed 2014-02-27) already prints 0.1 for Vimizim before the FDA approval of 2014-02-14 was announced as launch; 'U.S. Commercial Launch of VIMIZIM Underway' headline; series starts at first printed sales 2013Q4."
+  ]
+}

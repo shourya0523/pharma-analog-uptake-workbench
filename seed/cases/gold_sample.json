@@ -50,6 +50,41 @@
   ]
  },
  {
+  "drug_name": "Soliris",
+  "manufacturer": "Alexion Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "eculizumab",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 1027.6,
+    "gold_id": "alexion-soliris-worldwide-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 1071.0,
+    "gold_id": "alexion-soliris-worldwide-reported-2021q2"
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2021Q2. Alexion was acquired by AstraZeneca on 21 July 2021 and stopped reporting; the AstraZeneca continuation is delivered as astrazeneca_soliris_alt (from 2021Q4; the 2021Q3 stub from 21 July is not a full quarter)."
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2021Q2. Alexion was acquired by AstraZeneca on 21 July 2021 and stopped reporting; the AstraZeneca continuation is delivered as astrazeneca_soliris_alt (from 2021Q4; the 2021Q3 stub from 21 July is not a full quarter)."
+   }
+  ]
+ },
+ {
   "drug_name": "Restasis",
   "manufacturer": "Allergan",
   "ticker": null,
@@ -85,6 +120,41 @@
   ]
  },
  {
+  "drug_name": "Viberzi",
+  "manufacturer": "Allergan plc",
+  "ticker": null,
+  "generic_name": "eluxadoline",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 37.7,
+    "gold_id": "allergan-viberzi-worldwide-reported-2020q1"
+   },
+   {
+    "period": "2020Q2",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2020Q1. Allergan plc was acquired by AbbVie on 2020-05-08 and filed its last 10-Q for 2020Q1; AbbVie does not print a Viberzi line."
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2020Q1. Allergan plc was acquired by AbbVie on 2020-05-08 and filed its last 10-Q for 2020Q1; AbbVie does not print a Viberzi line."
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2020Q1. Allergan plc was acquired by AbbVie on 2020-05-08 and filed its last 10-Q for 2020Q1; AbbVie does not print a Viberzi line."
+   }
+  ]
+ },
+ {
   "drug_name": "Uplizna",
   "manufacturer": "Amgen",
   "ticker": "AMGN",
@@ -110,10 +180,45 @@
   ]
  },
  {
-  "drug_name": "Tagrisso",
-  "manufacturer": "AstraZeneca",
-  "ticker": "AZN",
-  "generic_name": "osimertinib",
+  "drug_name": "Galafold",
+  "manufacturer": "Amicus Therapeutics",
+  "ticker": null,
+  "generic_name": "migalastat",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 104.244,
+    "gold_id": "amicus-galafold-worldwide-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 128.872,
+    "gold_id": "amicus-galafold-worldwide-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 138.347,
+    "gold_id": "amicus-galafold-worldwide-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 150.239,
+    "gold_id": "amicus-galafold-worldwide-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Syfovre",
+  "manufacturer": "Apellis Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "pegcetacoplan (intravitreal)",
   "options": {
    "earnings_since": "2026-04-05",
    "earnings_until": "2027-05-05",
@@ -124,13 +229,108 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 1833.0,
-    "gold_id": "az-tagrisso-worldwide-reported-2026q1"
+    "value_normalized_usd_millions": 150.719,
+    "gold_id": "apellis-syfovre-us-reported-2026q1"
    },
    {
     "period": "2026Q2",
-    "value_normalized_usd_millions": 1941.0,
-    "gold_id": "az-tagrisso-worldwide-reported-2026q2"
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2026Q1. Apellis was acquired by Biogen on 2026-05-14 and deregistered (Form 15-12G, 2026-05-26); no 10-Q or earnings release exists for 2026Q2 and Biogen's post-closing period is a partial quarter."
+   },
+   {
+    "period": "2026Q3",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2026Q1. Apellis was acquired by Biogen on 2026-05-14 and deregistered (Form 15-12G, 2026-05-26); no 10-Q or earnings release exists for 2026Q2 and Biogen's post-closing period is a partial quarter."
+   },
+   {
+    "period": "2026Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2026Q1. Apellis was acquired by Biogen on 2026-05-14 and deregistered (Form 15-12G, 2026-05-26); no 10-Q or earnings release exists for 2026Q2 and Biogen's post-closing period is a partial quarter."
+   }
+  ]
+ },
+ {
+  "drug_name": "Ultomiris",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "ravulizumab",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 1270.0,
+    "gold_id": "astrazeneca-ultomiris-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 1314.0,
+    "gold_id": "astrazeneca-ultomiris-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Miebo",
+  "manufacturer": "Bausch + Lomb",
+  "ticker": "BLCO",
+  "generic_name": "perfluorohexyloctane",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 76.0,
+    "gold_id": "bausch-lomb-miebo-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 91.0,
+    "gold_id": "bausch-lomb-miebo-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Trulance",
+  "manufacturer": "Bausch Health",
+  "ticker": "BHC",
+  "generic_name": "plecanatide",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 21.0,
+    "gold_id": "bausch-trulance-us-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 28.0,
+    "gold_id": "bausch-trulance-us-reported-2021q2"
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": 25.0,
+    "gold_id": "bausch-trulance-us-reported-2021q3"
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": 29.0,
+    "gold_id": "bausch-trulance-us-reported-2021q4"
    }
   ]
  },
@@ -156,6 +356,31 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 1247.64,
     "gold_id": "beigene-brukinsa-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Voxzogo",
+  "manufacturer": "BioMarin",
+  "ticker": "BMRN",
+  "generic_name": "vosoritide",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 220.0,
+    "gold_id": "biomarin-voxzogo-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 253.0,
+    "gold_id": "biomarin-voxzogo-worldwide-reported-2026q2"
    }
   ]
  },
@@ -356,6 +581,41 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 816.659,
     "gold_id": "incyte-jakafi-us-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Ocaliva",
+  "manufacturer": "Intercept Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "obeticholic acid",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 88.582,
+    "gold_id": "intercept-ocaliva-worldwide-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2022Q1. From the Q2 2022 release Intercept recasts product revenue, net to U.S. only after selling its international business on 2022-07-01 (prior periods recast); the worldwide definition ends with 2022Q1. The U.S.-only recast series is intercept_ocaliva_alt."
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2022Q1. From the Q2 2022 release Intercept recasts product revenue, net to U.S. only after selling its international business on 2022-07-01 (prior periods recast); the worldwide definition ends with 2022Q1. The U.S.-only recast series is intercept_ocaliva_alt."
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2022Q1. From the Q2 2022 release Intercept recasts product revenue, net to U.S. only after selling its international business on 2022-07-01 (prior periods recast); the worldwide definition ends with 2022Q1. The U.S.-only recast series is intercept_ocaliva_alt."
    }
   ]
  },
@@ -580,6 +840,41 @@
   ]
  },
  {
+  "drug_name": "Tyrvaya",
+  "manufacturer": "Oyster Point Pharma",
+  "ticker": null,
+  "generic_name": "varenicline nasal spray",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 2.704,
+    "gold_id": "oyster-point-tyrvaya-us-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 4.693,
+    "gold_id": "oyster-point-tyrvaya-us-reported-2022q2"
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": 5.591,
+    "gold_id": "oyster-point-tyrvaya-us-reported-2022q3"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2022Q3. Oyster Point was acquired by Viatris (closed 2023-01-03, Form 15-12G 2023-01-13) and filed no report for 2022Q4; Viatris prints Tyrvaya net sales only in prose for 2023 (see viatris_tyrvaya_alt), so the two pieces are separated by an uncovered 2022Q4."
+   }
+  ]
+ },
+ {
   "drug_name": "Xeljanz",
   "manufacturer": "Pfizer",
   "ticker": "PFE",
@@ -655,6 +950,66 @@
   ]
  },
  {
+  "drug_name": "Xifaxan",
+  "manufacturer": "Salix Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "rifaximin",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q1",
+    "value_normalized_usd_millions": 123.335,
+    "gold_id": "salix-xifaxan-us-reported-2014q1"
+   },
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": 133.59,
+    "gold_id": "salix-xifaxan-us-reported-2014q2"
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 155.815,
+    "gold_id": "salix-xifaxan-us-reported-2014q3"
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2014Q3. Salix restated 2013-2014 and was acquired by Valeant on 1 April 2015 without filing a 2015 report; the only fourth-quarter 2014 figure is the 10-K full year less restated nine months, which gives a negative quarter (-7.3) from mixed bases rather than a real one, so the series ends at the last quarter Salix printed directly. Bausch Health prints no quarterly Xifaxan in its filings."
+   }
+  ]
+ },
+ {
+  "drug_name": "Toujeo",
+  "manufacturer": "Sanofi",
+  "ticker": "SNY",
+  "generic_name": "insulin glargine 300 U/mL",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 439.05,
+    "gold_id": "sanofi-toujeo-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 411.7374,
+    "gold_id": "sanofi-toujeo-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Elevidys",
   "manufacturer": "Sarepta Therapeutics",
   "ticker": "SRPT",
@@ -711,6 +1066,41 @@
     "period": "2023Q4",
     "value_normalized_usd_millions": null,
     "why": "The issuer reports no line for this product after 2023Q3. Pfizer completed the acquisition of Seagen on Dec 14, 2023; Seagen filed no report for 2023Q4. Pfizer's later Padcev line (companion series pfizer_padcev, from 2024Q1) is worldwide, a different scope, and its 2023Q4 line is a Dec 14-31 stub, so the series is not spliced."
+   }
+  ]
+ },
+ {
+  "drug_name": "Luxturna",
+  "manufacturer": "Spark Therapeutics",
+  "ticker": null,
+  "generic_name": "voretigene neparvovec",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q1",
+    "value_normalized_usd_millions": 9.782,
+    "gold_id": "spark-luxturna-us-reported-2019q1"
+   },
+   {
+    "period": "2019Q2",
+    "value_normalized_usd_millions": 11.46,
+    "gold_id": "spark-luxturna-us-reported-2019q2"
+   },
+   {
+    "period": "2019Q3",
+    "value_normalized_usd_millions": 6.918,
+    "gold_id": "spark-luxturna-us-reported-2019q3"
+   },
+   {
+    "period": "2019Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2019Q3. Spark was acquired by Roche on 2019-12-17 and deregistered; no 10-K for 2019 exists. Roche prints no quarterly Luxturna sales (half-year level only, in CHF)."
    }
   ]
  },

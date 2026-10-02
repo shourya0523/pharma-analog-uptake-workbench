@@ -1,0 +1,30 @@
+{
+  "drug_name": "Aimovig",
+  "generic_name": "erenumab",
+  "manufacturer": "Amgen",
+  "benchmark_identity": "amgen_aimovig_us_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Preventive treatment of migraine",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "injection (autoinjector / prefilled syringe)",
+  "route_of_administration": "subcutaneous",
+  "moa": "CGRP receptor antagonist monoclonal antibody",
+  "moa_class": "cgrp_receptor_antibody",
+  "first_approval_year": 2018,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761077",
+    "quote": "AIMOVIG ERENUMAB-AOOE 70MG/ML INJECTABLE;INJECTION ... 05/17/2018 ORIG-1 Approval"
+  },
+  "launch_quarter": "2018Q2",
+  "commercial_start_quarter": "2018Q2",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "Listed every Amgen filing (CIK 0000318154, all forms) via data.sec.gov/submissions; 'Aimovig \u2014 U.S.' rows read from each 10-Q/10-K (quarter's own document) and from Exhibit 99.1 for Q4 where the release prints an Aimovig line (2018, 2019, 2020, 2021, 2023); Q4 2022, 2024 and 2025 derived as 10-K full year less nine months (scripts/amgn.py).",
+    "Amgen's Q2 2018 release and 10-Q print no Aimovig line (launched May 2018); the 2Q18 value of 2 is the prior-year column of the 2Q19 10-Q (direct_prior_year_column).",
+    "From 2021Q3 Amgen also prints 'Aimovig \u2014 ROW' (2 to 7 per quarter) and the releases a Total column, but the 10-Q/10-K print no Total Aimovig row and releases of 2022 and 2024-2026 print no Aimovig row, so a worldwide series is not citable without summing U.S. and ROW ourselves; the U.S. line (consistent definition for all quarters) is the series."
+  ]
+}

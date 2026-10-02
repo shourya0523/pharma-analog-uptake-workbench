@@ -1,0 +1,35 @@
+{
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "series_start_reason": null,
+  "drug_name": "Beyfortus",
+  "generic_name": "nirsevimab",
+  "manufacturer": "Sanofi",
+  "benchmark_identity": "sanofi_beyfortus_worldwide_reported",
+  "therapeutic_area": "Infectious Disease / Vaccines",
+  "indication_area": "Infectious disease (RSV prevention in infants)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection",
+  "route_of_administration": "intramuscular",
+  "moa": "RSV F protein-directed fusion inhibitor monoclonal antibody",
+  "moa_class": "rsv_monoclonal_antibody",
+  "first_approval_year": 2023,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2023/761328s000lbl.pdf",
+    "quote": "BEYFORTUS (nirsevimab-alip) injection, for intramuscular use Initial U.S. Approval: 2023"
+  },
+  "launch_quarter": "2023Q3",
+  "commercial_start_quarter": "2023Q3",
+  "notes": "First quarter in which Sanofi prints a Beyfortus net sales row is Q3 2023 (Q3 2023 release headline: 'strong launch uptake of Beyfortus'); the Q4 2022, Q1 2023 and Q2 2023 releases print no Beyfortus sales row (they mention only EC approval, Sanofi taking full U.S. commercial control in April 2023, and the July 2023 FDA approval). The row label is 'Beyfortus' in 2023Q3-2023Q4 and 2025Q3 onward and 'RSV (Beyfortus)' for 2024Q1-2025Q2; same line. First approval year is the FDA one (EC approval was earlier, Q4 2022).",
+  "search_log": [
+    "listed Sanofi (CIK 0001121404) 6-K, 6-K/A, 20-F and 20-F/A filings from data.sec.gov submissions (recent plus older page); fetched each filing index from 2011 onward",
+    "scanned every .htm exhibit filed in the late-Jan/Feb, late-Apr/May, late-Jul/early-Aug, late-Oct/early-Nov windows for 'Fabrazyme', 'Alprolix', 'Eloctate', 'Sarclisa', 'Beyfortus' to identify each quarterly results release (60 releases 2011Q2-2026Q2, one per quarter)",
+    "extracted the product's row from the first 'Net sales' table of each release (worldwide column); checked that quarters sum to the printed full-year figure for every full year",
+    "read Q4 2022, Q1 2023, Q2 2023 releases' Beyfortus text to check for earlier sales rows (none)"
+  ],
+  "reviewed_anomalies": {
+    "2025Q3": "Seasonal RSV immunisation: 739 in 2025Q3 after 72 in 2025Q2; both read at source in Sanofi's own releases (Q3 2025 prints 739, nine months 1,095)."
+  }
+}

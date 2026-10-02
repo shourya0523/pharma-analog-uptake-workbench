@@ -1,0 +1,31 @@
+{
+  "drug_name": "Roctavian",
+  "generic_name": "valoctocogene roxaparvovec",
+  "manufacturer": "BioMarin",
+  "benchmark_identity": "biomarin_roctavian_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Severe hemophilia A",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection (single-dose infusion)",
+  "route_of_administration": "intravenous",
+  "moa": "AAV5 vector-based gene therapy delivering factor VIII",
+  "moa_class": "aav_gene_therapy",
+  "first_approval_year": 2023,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/news-events/press-announcements/fda-approves-first-gene-therapy-adults-severe-hemophilia",
+    "quote": "For Immediate Release: June 29, 2023 ... Today, the U.S. Food and Drug Administration approved Roctavian, an adeno-associated virus vector-based gene therapy for the treatment of adults with severe hemophilia A"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2023Q3",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "Listed every BioMarin filing (all forms incl. 8-K, 8-K/A) for CIK 0001048477 via data.sec.gov/submissions incl. older 'files' pages (scripts/common.py); earnings 8-Ks selected by item 2.02; exhibits resolved from each filing's index.json (scripts/lib.py).",
+    "Product rows pulled by table-row parsing of each earnings Exhibit 99.1; quarter taken from the document's own 'three months ended' header and cross-checked against the next year's prior-year column (scripts/bm.py).",
+    "Roctavian is printed as its own line 'ROCTAVIAN Net Product Revenues' from the Q3 2023 release (filed 2023-11-01); earlier releases only give guidance ('ROCTAVIAN Revenues' $100-200M).",
+    "Footnote (1) in the 2026Q2 release states that in 2026 the company announced it will no longer market ROCTAVIAN; the line is still printed through 2026Q2 so the series runs to 2026Q2."
+  ]
+}

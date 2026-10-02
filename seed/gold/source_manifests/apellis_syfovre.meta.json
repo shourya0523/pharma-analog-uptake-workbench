@@ -1,0 +1,30 @@
+{
+  "drug_name": "Syfovre",
+  "generic_name": "pegcetacoplan (intravitreal)",
+  "manufacturer": "Apellis Pharmaceuticals",
+  "benchmark_identity": "apellis_syfovre_us_reported",
+  "therapeutic_area": "Ophthalmology",
+  "indication_area": "Geographic atrophy secondary to age-related macular degeneration",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "solution for injection",
+  "route_of_administration": "intravitreal",
+  "moa": "Complement C3 inhibitor",
+  "moa_class": "complement_c3_inhibitor",
+  "first_approval_year": 2023,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=217171",
+    "quote": "SYFOVRE PEGCETACOPLAN 15MG/0.1ML (15MG/0.1ML) SOLUTION;INTRAVITREAL ... 02/17/2023 ORIG-1 Approval"
+  },
+  "launch_quarter": "2023Q1",
+  "commercial_start_quarter": "2023Q1",
+  "series_start_reason": null,
+  "series_end_quarter": "2026Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Apellis was acquired by Biogen on 2026-05-14 and deregistered (Form 15-12G, 2026-05-26); no 10-Q or earnings release exists for 2026Q2 and Biogen's post-closing period is a partial quarter.",
+  "search_log": [
+    "Listed every Apellis filing (all forms) for CIK 0001492422 via data.sec.gov/submissions; the 8-K earnings exhibits (2023-07-31, 2024-02-27) print only total 'Product revenue, net' with no SYFOVRE line, and Apellis filed no earnings 8-K for most quarters, so the SYFOVRE line is read from each 10-Q's net product revenue table and from the 10-K for full-year figures (scripts/apls.py).",
+    "Q4 of 2023, 2024 and 2025 derived as full year (10-K) less nine months (Q3 10-Q); no document prints a SYFOVRE fourth-quarter figure.",
+    "Apellis was acquired by Biogen (tender offer completed 2026-05-14; 8-K accession 0001193125-26-222923; Form 15-12G filed 2026-05-26): no 10-Q for 2026Q2 exists. Biogen's post-closing period would cover only 2026-05-14 to 2026-06-30, so it is not a full quarter and not spliced."
+  ]
+}

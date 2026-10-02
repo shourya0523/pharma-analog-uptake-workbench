@@ -1,0 +1,31 @@
+{
+  "manufacturer": "Sanofi",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "series_start_reason": null,
+  "series_end_quarter": "2025Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The Q4 2025 release (https://www.sec.gov/Archives/edgar/data/1121404/000112140426000001/pressreleaseq42025english.htm) states: 'Individual sales reporting for Aubagio is anticipated to discontinue in 2026 with any remaining sales to be included in Others'. The Q1 2026 and Q2 2026 releases contain no Aubagio row (measured: no occurrence of 'Aubagio' in either document).",
+  "drug_name": "Aubagio",
+  "generic_name": "teriflunomide",
+  "benchmark_identity": "sanofi_aubagio_worldwide_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Relapsing multiple sclerosis",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Dihydroorotate dehydrogenase (DHODH) inhibitor; pyrimidine synthesis inhibitor",
+  "moa_class": "dhodh_inhibitor",
+  "first_approval_year": 2012,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=202992",
+    "quote": "Original Approvals or Tentative Approvals: 09/12/2012 ORIG-1 Approval (Aubagio, NDA 202992, Drugs@FDA overview)"
+  },
+  "launch_quarter": "2012Q4",
+  "commercial_start_quarter": "2012Q4",
+  "notes": "Launch: Q4 2012 release (https://www.sec.gov/Archives/edgar/data/1121404/000119312513042850/d481869dex991.htm): 'Aubagio was successfully launched in the U.S. in October 2012 ... Sales of the product reached EUR 7 million in the fourth quarter'. U.S. loss of exclusivity in 2023 is described in the Q4 2025 release.",
+  "search_log": [
+    "listed Sanofi (CIK 1121404) 6-K/6-K/A/20-F/20-F/A filings via data.sec.gov submissions; fetched every exhibit",
+    "each quarter taken from that quarter's own results release (first table naming Aubagio with figures)",
+    "searched the 2026Q1 and 2026Q2 releases for 'Aubagio' (none) and read the Q4 2025 statement on discontinuing individual reporting"
+  ]
+}

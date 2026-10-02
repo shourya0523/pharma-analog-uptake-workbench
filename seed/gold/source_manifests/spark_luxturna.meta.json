@@ -1,0 +1,30 @@
+{
+  "drug_name": "Luxturna",
+  "generic_name": "voretigene neparvovec",
+  "manufacturer": "Spark Therapeutics",
+  "benchmark_identity": "spark_luxturna_us_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "RPE65 mutation-associated inherited retinal dystrophy",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "suspension for subretinal injection (gene therapy)",
+  "route_of_administration": "intravitreal",
+  "moa": "AAV2 vector-based gene therapy delivering RPE65",
+  "moa_class": "aav_gene_therapy",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/vaccines-blood-biologics/cellular-gene-therapy-products/luxturna",
+    "quote": "STN: 125610 Proper Name: voretigene neparvovec-rzyl Trade Name: LUXTURNA Manufacturer: Spark Therapeutics, Inc. ... December 19, 2017 Approval Letter - LUXTURNA"
+  },
+  "launch_quarter": "2018Q1",
+  "commercial_start_quarter": "2018Q1",
+  "series_start_reason": null,
+  "series_end_quarter": "2019Q3",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Spark was acquired by Roche on 2019-12-17 and deregistered; no 10-K for 2019 exists. Roche prints no quarterly Luxturna sales (half-year level only, in CHF).",
+  "search_log": [
+    "Listed every Spark filing (CIK 0001609351, all forms) via data.sec.gov/submissions; 'Product sales, net' read from the 10-Q statements of operations 2018Q1-2019Q3 (scripts/spark.py); Spark's 2019 earnings releases were not issued after the Roche merger agreement (last release 2019-02-19 for FY2018), so 2019 quarters are cited to the 10-Qs. Luxturna first sales 2018Q1 (2,419 thousand vs nil).",
+    "Q4 2018 derived as the 10-K full year less nine months (neither release nor 10-K prints a Q4 column).",
+    "Spark was acquired by Roche on 2019-12-17 (8-K items 2.01/5.01, Form 15-12B 2019-12-27); no 10-K for 2019 exists, so 2019Q4 is not reported. Roche (not an SEC filer for these documents; roche.com) does not print quarterly Luxturna sales: its Half-Year Report 2023 states only 'Interim sales of Luxturna for 2022 were CHF 12 million' (half-year level, CHF), so no later series is cited and nothing is interpolated."
+  ]
+}

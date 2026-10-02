@@ -1,0 +1,32 @@
+{
+  "drug_name": "Lantus",
+  "generic_name": "insulin glargine",
+  "manufacturer": "Sanofi",
+  "benchmark_identity": "sanofi_lantus_worldwide_reported",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Diabetes (type 1 and type 2)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection (insulin glargine 100 U/mL)",
+  "route_of_administration": "subcutaneous",
+  "moa": "Long-acting basal insulin analog",
+  "moa_class": "basal_insulin_analog",
+  "first_approval_year": 2000,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=021081",
+    "quote": "Original Approvals or Tentative Approvals: 04/20/2000 ORIG-1 Approval (Lantus, NDA 021081, Drugs@FDA overview)"
+  },
+  "launch_quarter": "2000Q2",
+  "commercial_start_quarter": "2001Q1",
+  "series_start_reason": "Series starts 2001Q1. Aventis's quarterly releases for 2001 and 2002Q1 are paper filings absent from EDGAR, so 2001Q2-2002Q1 come from prior-year columns of the 2002Q2-2003Q1 releases and 2001Q1 is derived (full year 2001 less Q2-Q4). The Aventis Form 20-F for 2002 prints Lantus 2000 sales of EUR 10 million for the whole launch year (introduced in Germany in June 2000) with no quarterly split, so 2000Q2-2000Q4 are not citable.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Launch: Aventis Form 20-F for 2002 (https://www.sec.gov/Archives/edgar/data/807198/000104746903008314/a2103938z20-f.htm): 'Lantus sales rose due to the launch ... in the United States in May 2001 and further expansion in Germany, where it was introduced in June 2000'. Series spans two issuers: Aventis's own releases (2001Q1-2004Q2) then Sanofi's (2004Q3-2026Q2) after the August 2004 acquisition; Aventis figures are for 'core businesses' and Sanofi's 2004Q3-2004Q4 figures are pro forma combined, so the join at 2004Q3 is a change of reporter, not a change of product line. Toujeo (insulin glargine 300 U/mL) is a separate line and is not included. Lantus is printed worldwide in every Sanofi release used.",
+  "search_log": [
+    "listed Aventis (CIK 807198) and Sanofi (CIK 1121404) 6-K/6-K/A/20-F/20-F/A filings via data.sec.gov submissions (recent + older file page), fetched every exhibit of every 6-K 2002-2026 and counted 'Lantus' hits to find results releases",
+    "Aventis 6-Ks before 2002-08 are paper filings (primary document '.paper' in the submissions index)",
+    "read Aventis 20-F for 2002 for FY2001 and FY2000 Lantus sales and launch dates",
+    "each Sanofi quarter taken from that quarter's own results release (first table naming Lantus with figures); verified quarters sum to the full-year figures printed in each Q4 release"
+  ]
+}
