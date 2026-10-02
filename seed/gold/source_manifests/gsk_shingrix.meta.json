@@ -1,0 +1,33 @@
+{
+  "drug_name": "Shingrix",
+  "generic_name": "zoster vaccine recombinant, adjuvanted",
+  "therapeutic_area": "Infectious Disease / Vaccines",
+  "indication_area": "Infectious disease (herpes zoster prevention)",
+  "formulation": "suspension for injection (recombinant gE antigen with AS01B adjuvant)",
+  "route_of_administration": "intramuscular",
+  "moa": "Recombinant glycoprotein E subunit vaccine with AS01B adjuvant system",
+  "moa_class": "adjuvanted_recombinant_subunit_vaccine",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/vaccines-blood-biologics/vaccines/shingrix",
+    "quote": "STN: 125614 Proper Name: Zoster Vaccine Recombinant, Adjuvanted Tradename: SHINGRIX Manufacturer: GlaxoSmithKline Biologicals, S.A. ... October 20, 2017 Approval Letter - SHINGRIX"
+  },
+  "manufacturer": "GSK plc",
+  "benchmark_identity": "gsk_shingrix_worldwide_reported",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "launch_quarter": "2017Q4",
+  "commercial_start_quarter": "2017Q4",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "launch_quarter 2017Q4: Q4/FY 2017 release (6-K 2018-02-07) prints Shingrix full year 2017 = 22 and Q4 2017 = 22; the Q3 2017 release has no Shingrix row. FDA approved 2017-10-20. In the regional Vaccines table the heading line is 'Shingles' (category) and the product line 'Shingrix' carries identical figures; the Shingrix line is used.",
+  "search_log": [
+    "fetched data.sec.gov submissions CIK0001131399 (recent + 3 history pages, 2001-2026): 6,124 6-K and 39 6-K/A filings; 20-F 25",
+    "2003-2011: fetched every 6-K filed in the 4 results windows each year and kept those whose text contains 'Seretide' and 'turnover' (40 documents matched, 4 of them excluded below; the 2001-2002 6-Ks are paper placeholders on EDGAR)",
+    "2012-2026: selected 6-Ks whose primaryDocDescription is 1ST/2ND/3RD QUARTER RESULTS, HALF YEARLY/HALF-YEAR REPORT or FINAL RESULTS; 2012-02-07 6-K (Q4 2011) added by hand because its description is generic ('FORM 6-K')",
+    "excluded as duplicates/restatements: 6-K 2004-10-29 and 2005-02-10 (IFRS restatements of 2003-2004), 6-K 2008-05-06 (second filing of the Q1 2008 release), 2008-02-07 text-only copy of Q4 2007",
+    "per release: product row taken from the 'Pharmaceuticals/Vaccines turnover' regional tables (Total column = worldwide); each quarter cross-checked: Q1+Q2 = printed six-month row, +Q3 = printed nine-month row, +Q4 = printed full-year row"
+  ]
+}

@@ -16160,6 +16160,856 @@
   ]
  },
  {
+  "drug_name": "Advair Diskus",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone propionate/salmeterol",
+  "options": {
+   "earnings_since": "2002-04-05",
+   "earnings_until": "2003-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2002Q4",
+    "value_normalized_usd_millions": 722.936,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2002q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Advair Diskus",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone propionate/salmeterol",
+  "options": {
+   "earnings_since": "2003-04-05",
+   "earnings_until": "2004-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2003Q1",
+    "value_normalized_usd_millions": 823.7364,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2003q1"
+   },
+   {
+    "period": "2003Q2",
+    "value_normalized_usd_millions": 859.7421,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2003q2"
+   },
+   {
+    "period": "2003Q3",
+    "value_normalized_usd_millions": 888.996,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2003q3"
+   },
+   {
+    "period": "2003Q4",
+    "value_normalized_usd_millions": 1053.0956,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2003q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Advair Diskus",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone propionate/salmeterol",
+  "options": {
+   "earnings_since": "2004-04-05",
+   "earnings_until": "2005-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2004Q1",
+    "value_normalized_usd_millions": 1068.8076,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2004q1"
+   },
+   {
+    "period": "2004Q2",
+    "value_normalized_usd_millions": 1088.8371,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2004q2"
+   },
+   {
+    "period": "2004Q3",
+    "value_normalized_usd_millions": 1107.9537,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2004q3"
+   },
+   {
+    "period": "2004Q4",
+    "value_normalized_usd_millions": 1246.2876,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2004q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Advair Diskus",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone propionate/salmeterol",
+  "options": {
+   "earnings_since": "2005-04-05",
+   "earnings_until": "2006-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2005Q1",
+    "value_normalized_usd_millions": 1304.376,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2005q1"
+   },
+   {
+    "period": "2005Q2",
+    "value_normalized_usd_millions": 1346.035,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2005q2"
+   },
+   {
+    "period": "2005Q3",
+    "value_normalized_usd_millions": 1314.6606,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2005q3"
+   },
+   {
+    "period": "2005Q4",
+    "value_normalized_usd_millions": 1488.0586,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2005q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Advair Diskus",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone propionate/salmeterol",
+  "options": {
+   "earnings_since": "2006-04-05",
+   "earnings_until": "2007-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2006Q1",
+    "value_normalized_usd_millions": 1430.9376,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2006q1"
+   },
+   {
+    "period": "2006Q2",
+    "value_normalized_usd_millions": 1501.5474,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2006q2"
+   },
+   {
+    "period": "2006Q3",
+    "value_normalized_usd_millions": 1523.6433,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2006q3"
+   },
+   {
+    "period": "2006Q4",
+    "value_normalized_usd_millions": 1652.7126,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2006q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Advair Diskus",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone propionate/salmeterol",
+  "options": {
+   "earnings_since": "2007-04-05",
+   "earnings_until": "2008-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2007Q1",
+    "value_normalized_usd_millions": 1632.425,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2007q1"
+   },
+   {
+    "period": "2007Q2",
+    "value_normalized_usd_millions": 1730.0673,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2007q2"
+   },
+   {
+    "period": "2007Q3",
+    "value_normalized_usd_millions": 1688.036,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2007q3"
+   },
+   {
+    "period": "2007Q4",
+    "value_normalized_usd_millions": 1957.8646,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2007q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Advair Diskus",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone propionate/salmeterol",
+  "options": {
+   "earnings_since": "2008-04-05",
+   "earnings_until": "2009-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2008Q1",
+    "value_normalized_usd_millions": 1887.7752,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2008q1"
+   },
+   {
+    "period": "2008Q2",
+    "value_normalized_usd_millions": 1900.044,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2008q2"
+   },
+   {
+    "period": "2008Q3",
+    "value_normalized_usd_millions": 1856.8638,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2008q3"
+   },
+   {
+    "period": "2008Q4",
+    "value_normalized_usd_millions": 1939.7397,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2008q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Advair Diskus",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone propionate/salmeterol",
+  "options": {
+   "earnings_since": "2009-04-05",
+   "earnings_until": "2010-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2009Q1",
+    "value_normalized_usd_millions": 1742.2114,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2009q1"
+   },
+   {
+    "period": "2009Q2",
+    "value_normalized_usd_millions": 1929.75,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2009q2"
+   },
+   {
+    "period": "2009Q3",
+    "value_normalized_usd_millions": 1890.5472,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2009q3"
+   },
+   {
+    "period": "2009Q4",
+    "value_normalized_usd_millions": 2232.8636,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2009q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Advair Diskus",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone propionate/salmeterol",
+  "options": {
+   "earnings_since": "2010-04-05",
+   "earnings_until": "2011-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2010Q1",
+    "value_normalized_usd_millions": 1973.2304,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2010q1"
+   },
+   {
+    "period": "2010Q2",
+    "value_normalized_usd_millions": 1919.0978,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2010q2"
+   },
+   {
+    "period": "2010Q3",
+    "value_normalized_usd_millions": 1929.0117,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2010q3"
+   },
+   {
+    "period": "2010Q4",
+    "value_normalized_usd_millions": 2127.7568,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2010q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Advair Diskus",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone propionate/salmeterol",
+  "options": {
+   "earnings_since": "2011-04-05",
+   "earnings_until": "2012-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2011Q1",
+    "value_normalized_usd_millions": 1959.4906,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2011q1"
+   },
+   {
+    "period": "2011Q2",
+    "value_normalized_usd_millions": 2071.37,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2011q2"
+   },
+   {
+    "period": "2011Q3",
+    "value_normalized_usd_millions": 1958.7615,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2011q3"
+   },
+   {
+    "period": "2011Q4",
+    "value_normalized_usd_millions": 2123.772,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2011q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Advair Diskus",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone propionate/salmeterol",
+  "options": {
+   "earnings_since": "2012-04-05",
+   "earnings_until": "2013-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2012Q1",
+    "value_normalized_usd_millions": 1967.7684,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2012q1"
+   },
+   {
+    "period": "2012Q2",
+    "value_normalized_usd_millions": 2008.4463,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2012q2"
+   },
+   {
+    "period": "2012Q3",
+    "value_normalized_usd_millions": 1922.9824,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2012q3"
+   },
+   {
+    "period": "2012Q4",
+    "value_normalized_usd_millions": 2102.7776,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2012q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Advair Diskus",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone propionate/salmeterol",
+  "options": {
+   "earnings_since": "2013-04-05",
+   "earnings_until": "2014-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2013Q1",
+    "value_normalized_usd_millions": 2029.7354,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2013q1"
+   },
+   {
+    "period": "2013Q2",
+    "value_normalized_usd_millions": 2086.8386,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2013q2"
+   },
+   {
+    "period": "2013Q3",
+    "value_normalized_usd_millions": 1876.7307,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2013q3"
+   },
+   {
+    "period": "2013Q4",
+    "value_normalized_usd_millions": 2263.9212,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2013q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Advair Diskus",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone propionate/salmeterol",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q1",
+    "value_normalized_usd_millions": 1719.6489,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2014q1"
+   },
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": 1843.2135,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2014q2"
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 1628.456,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2014q3"
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": 1771.377,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2014q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Advair Diskus",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone propionate/salmeterol",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q1",
+    "value_normalized_usd_millions": 1359.8414,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2015q1"
+   },
+   {
+    "period": "2015Q2",
+    "value_normalized_usd_millions": 1471.968,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2015q2"
+   },
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 1230.0648,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2015q3"
+   },
+   {
+    "period": "2015Q4",
+    "value_normalized_usd_millions": 1561.3017,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2015q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Advair Diskus",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone propionate/salmeterol",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 1077.543,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 1291.23,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 1124.8125,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 1210.4625,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2016q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Advair Diskus",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone propionate/salmeterol",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 932.7056,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 1084.8464,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 973.0328,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2017q3"
+   },
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": 1044.6638,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2017q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Advair Diskus",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone propionate/salmeterol",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 787.872,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 803.226,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 806.8665,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2018q3"
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": 831.9773,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2018q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Advair Diskus",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone propionate/salmeterol",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q1",
+    "value_normalized_usd_millions": 633.1608,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2019q1"
+   },
+   {
+    "period": "2019Q2",
+    "value_normalized_usd_millions": 529.5436,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2019q2"
+   },
+   {
+    "period": "2019Q3",
+    "value_normalized_usd_millions": 515.394,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2019q3"
+   },
+   {
+    "period": "2019Q4",
+    "value_normalized_usd_millions": 533.3562,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2019q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Advair Diskus",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone propionate/salmeterol",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 505.5605,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2020q1"
+   },
+   {
+    "period": "2020Q2",
+    "value_normalized_usd_millions": 522.6715,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2020q2"
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": 475.824,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2020q3"
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": 463.4604,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2020q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Advair Diskus",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone propionate/salmeterol",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 484.029,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 485.2795,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2021q2"
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": 446.4396,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2021q3"
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": 451.8815,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2021q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Advair Diskus",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone propionate/salmeterol",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 405.3142,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 329.1768,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2022q2"
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": 311.7195,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2022q3"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 387.618,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Advair Diskus",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone propionate/salmeterol",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 411.9867,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 403.1118,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 255.732,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 342.8748,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Advair Diskus",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone propionate/salmeterol",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 357.6042,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 376.1654,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 283.6398,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 331.7531,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Advair Diskus",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone propionate/salmeterol",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 272.2248,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 267.2,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 268.3316,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 323.0442,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Advair Diskus",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone propionate/salmeterol",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 253.518,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 261.885,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Apretude",
   "manufacturer": "GSK plc",
   "ticker": "GSK",
@@ -16321,6 +17171,591 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 188.02,
     "gold_id": "gsk-apretude-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Arexvy",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "respiratory syncytial virus vaccine, adjuvanted",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 897.594,
+    "gold_id": "gsk-arexvy-worldwide-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 657.1767,
+    "gold_id": "gsk-arexvy-worldwide-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Arexvy",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "respiratory syncytial virus vaccine, adjuvanted",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 230.7942,
+    "gold_id": "gsk-arexvy-worldwide-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 78.2626,
+    "gold_id": "gsk-arexvy-worldwide-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 244.6068,
+    "gold_id": "gsk-arexvy-worldwide-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 202.3822,
+    "gold_id": "gsk-arexvy-worldwide-reported-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Arexvy",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "respiratory syncytial virus vaccine, adjuvanted",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 98.3034,
+    "gold_id": "gsk-arexvy-worldwide-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 88.176,
+    "gold_id": "gsk-arexvy-worldwide-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 338.4484,
+    "gold_id": "gsk-arexvy-worldwide-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 263.2212,
+    "gold_id": "gsk-arexvy-worldwide-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Arexvy",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "respiratory syncytial virus vaccine, adjuvanted",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 87.6525,
+    "gold_id": "gsk-arexvy-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 257.856,
+    "gold_id": "gsk-arexvy-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Breo Ellipta",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone furoate/vilanterol",
+  "options": {
+   "earnings_since": "2013-04-05",
+   "earnings_until": "2014-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2013Q4",
+    "value_normalized_usd_millions": 12.9552,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2013q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Breo Ellipta",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone furoate/vilanterol",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q1",
+    "value_normalized_usd_millions": 4.9653,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2014q1"
+   },
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": 18.5163,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2014q2"
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 25.0275,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2014q3"
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": 60.154,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2014q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Breo Ellipta",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone furoate/vilanterol",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q1",
+    "value_normalized_usd_millions": 62.0863,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2015q1"
+   },
+   {
+    "period": "2015Q2",
+    "value_normalized_usd_millions": 81.2649,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2015q2"
+   },
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 99.1488,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2015q3"
+   },
+   {
+    "period": "2015Q4",
+    "value_normalized_usd_millions": 150.2127,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2015q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Breo Ellipta",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone furoate/vilanterol",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 158.841,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 209.4662,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 204.75,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 256.9905,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2016q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Breo Ellipta",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone furoate/vilanterol",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 253.0212,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 359.4833,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 294.66,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2017q3"
+   },
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": 392.9104,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2017q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Breo Ellipta",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone furoate/vilanterol",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 304.848,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 379.8306,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 336.303,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2018q3"
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": 428.2047,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2018q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Breo Ellipta",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone furoate/vilanterol",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q1",
+    "value_normalized_usd_millions": 280.102,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2019q1"
+   },
+   {
+    "period": "2019Q2",
+    "value_normalized_usd_millions": 305.9014,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2019q2"
+   },
+   {
+    "period": "2019Q3",
+    "value_normalized_usd_millions": 307.017,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2019q3"
+   },
+   {
+    "period": "2019Q4",
+    "value_normalized_usd_millions": 346.5527,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2019q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Breo Ellipta",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone furoate/vilanterol",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 364.7715,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2020q1"
+   },
+   {
+    "period": "2020Q2",
+    "value_normalized_usd_millions": 300.443,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2020q2"
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": 417.639,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2020q3"
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": 361.7896,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2020q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Breo Ellipta",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone furoate/vilanterol",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 369.572,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 436.332,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2021q2"
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": 359.6319,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2021q3"
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": 377.692,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2021q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Breo Ellipta",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone furoate/vilanterol",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 369.0775,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 388.2276,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2022q2"
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": 367.0056,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2022q3"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 292.4754,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Breo Ellipta",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone furoate/vilanterol",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 332.9922,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 360.5472,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 302.574,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 375.1746,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Breo Ellipta",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone furoate/vilanterol",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 342.387,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 354.7063,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 313.5651,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 352.2475,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Breo Ellipta",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone furoate/vilanterol",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 333.9795,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 356.712,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 345.1904,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 304.4326,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Breo Ellipta",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone furoate/vilanterol",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 310.155,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 310.233,
+    "gold_id": "gsk-breo-relvar-ellipta-worldwide-reported-2026q2"
    }
   ]
  },
@@ -16981,6 +18416,1051 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 333.064,
     "gold_id": "gsk-jemperli-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nucala",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "mepolizumab",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q4",
+    "value_normalized_usd_millions": 1.5173,
+    "gold_id": "gsk-nucala-worldwide-reported-2015q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nucala",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "mepolizumab",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 10.017,
+    "gold_id": "gsk-nucala-worldwide-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 28.694,
+    "gold_id": "gsk-nucala-worldwide-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 40.6875,
+    "gold_id": "gsk-nucala-worldwide-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 54.626,
+    "gold_id": "gsk-nucala-worldwide-reported-2016q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nucala",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "mepolizumab",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 73.1777,
+    "gold_id": "gsk-nucala-worldwide-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 93.3889,
+    "gold_id": "gsk-nucala-worldwide-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 119.1736,
+    "gold_id": "gsk-nucala-worldwide-reported-2017q3"
+   },
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": 160.6154,
+    "gold_id": "gsk-nucala-worldwide-reported-2017q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nucala",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "mepolizumab",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 144.768,
+    "gold_id": "gsk-nucala-worldwide-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 191.9574,
+    "gold_id": "gsk-nucala-worldwide-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 189.0075,
+    "gold_id": "gsk-nucala-worldwide-reported-2018q3"
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": 222.4607,
+    "gold_id": "gsk-nucala-worldwide-reported-2018q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nucala",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "mepolizumab",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q1",
+    "value_normalized_usd_millions": 198.0256,
+    "gold_id": "gsk-nucala-worldwide-reported-2019q1"
+   },
+   {
+    "period": "2019Q2",
+    "value_normalized_usd_millions": 250.6335,
+    "gold_id": "gsk-nucala-worldwide-reported-2019q2"
+   },
+   {
+    "period": "2019Q3",
+    "value_normalized_usd_millions": 250.299,
+    "gold_id": "gsk-nucala-worldwide-reported-2019q3"
+   },
+   {
+    "period": "2019Q4",
+    "value_normalized_usd_millions": 280.8494,
+    "gold_id": "gsk-nucala-worldwide-reported-2019q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nucala",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "mepolizumab",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 268.779,
+    "gold_id": "gsk-nucala-worldwide-reported-2020q1"
+   },
+   {
+    "period": "2020Q2",
+    "value_normalized_usd_millions": 299.2015,
+    "gold_id": "gsk-nucala-worldwide-reported-2020q2"
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": 324.543,
+    "gold_id": "gsk-nucala-worldwide-reported-2020q3"
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": 385.5568,
+    "gold_id": "gsk-nucala-worldwide-reported-2020q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nucala",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "mepolizumab",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 350.266,
+    "gold_id": "gsk-nucala-worldwide-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 408.362,
+    "gold_id": "gsk-nucala-worldwide-reported-2021q2"
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": 392.7015,
+    "gold_id": "gsk-nucala-worldwide-reported-2021q3"
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": 419.5079,
+    "gold_id": "gsk-nucala-worldwide-reported-2021q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nucala",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "mepolizumab",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 395.9195,
+    "gold_id": "gsk-nucala-worldwide-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 461.0988,
+    "gold_id": "gsk-nucala-worldwide-reported-2022q2"
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": 430.5258,
+    "gold_id": "gsk-nucala-worldwide-reported-2022q3"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 463.967,
+    "gold_id": "gsk-nucala-worldwide-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nucala",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "mepolizumab",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 421.7091,
+    "gold_id": "gsk-nucala-worldwide-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 530.8056,
+    "gold_id": "gsk-nucala-worldwide-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 522.858,
+    "gold_id": "gsk-nucala-worldwide-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 585.1233,
+    "gold_id": "gsk-nucala-worldwide-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nucala",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "mepolizumab",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 474.2694,
+    "gold_id": "gsk-nucala-worldwide-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 608.4286,
+    "gold_id": "gsk-nucala-worldwide-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 577.6884,
+    "gold_id": "gsk-nucala-worldwide-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 619.9556,
+    "gold_id": "gsk-nucala-worldwide-reported-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nucala",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "mepolizumab",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 559.5732,
+    "gold_id": "gsk-nucala-worldwide-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 665.328,
+    "gold_id": "gsk-nucala-worldwide-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 672.8516,
+    "gold_id": "gsk-nucala-worldwide-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 753.7698,
+    "gold_id": "gsk-nucala-worldwide-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nucala",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "mepolizumab",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 652.674,
+    "gold_id": "gsk-nucala-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 819.23,
+    "gold_id": "gsk-nucala-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Shingrix",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "zoster vaccine recombinant, adjuvanted",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": 29.2028,
+    "gold_id": "gsk-shingrix-worldwide-reported-2017q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Shingrix",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "zoster vaccine recombinant, adjuvanted",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 153.12,
+    "gold_id": "gsk-shingrix-worldwide-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 227.3538,
+    "gold_id": "gsk-shingrix-worldwide-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 372.801,
+    "gold_id": "gsk-shingrix-worldwide-reported-2018q3"
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": 284.1839,
+    "gold_id": "gsk-shingrix-worldwide-reported-2018q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Shingrix",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "zoster vaccine recombinant, adjuvanted",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q1",
+    "value_normalized_usd_millions": 465.0996,
+    "gold_id": "gsk-shingrix-worldwide-reported-2019q1"
+   },
+   {
+    "period": "2019Q2",
+    "value_normalized_usd_millions": 496.1258,
+    "gold_id": "gsk-shingrix-worldwide-reported-2019q2"
+   },
+   {
+    "period": "2019Q3",
+    "value_normalized_usd_millions": 659.655,
+    "gold_id": "gsk-shingrix-worldwide-reported-2019q3"
+   },
+   {
+    "period": "2019Q4",
+    "value_normalized_usd_millions": 685.3756,
+    "gold_id": "gsk-shingrix-worldwide-reported-2019q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Shingrix",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "zoster vaccine recombinant, adjuvanted",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 828.0953,
+    "gold_id": "gsk-shingrix-worldwide-reported-2020q1"
+   },
+   {
+    "period": "2020Q2",
+    "value_normalized_usd_millions": 401.0045,
+    "gold_id": "gsk-shingrix-worldwide-reported-2020q2"
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": 483.582,
+    "gold_id": "gsk-shingrix-worldwide-reported-2020q3"
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": 851.658,
+    "gold_id": "gsk-shingrix-worldwide-reported-2020q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Shingrix",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "zoster vaccine recombinant, adjuvanted",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 450.933,
+    "gold_id": "gsk-shingrix-worldwide-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 412.5575,
+    "gold_id": "gsk-shingrix-worldwide-reported-2021q2"
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": 691.7058,
+    "gold_id": "gsk-shingrix-worldwide-reported-2021q3"
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": 805.2933,
+    "gold_id": "gsk-shingrix-worldwide-reported-2021q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Shingrix",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "zoster vaccine recombinant, adjuvanted",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 936.7858,
+    "gold_id": "gsk-shingrix-worldwide-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 918.4284,
+    "gold_id": "gsk-shingrix-worldwide-reported-2022q2"
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": 893.988,
+    "gold_id": "gsk-shingrix-worldwide-reported-2022q3"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 903.2674,
+    "gold_id": "gsk-shingrix-worldwide-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Shingrix",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "zoster vaccine recombinant, adjuvanted",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 1012.3449,
+    "gold_id": "gsk-shingrix-worldwide-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 1101.672,
+    "gold_id": "gsk-shingrix-worldwide-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 1044.45,
+    "gold_id": "gsk-shingrix-worldwide-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 1128.0084,
+    "gold_id": "gsk-shingrix-worldwide-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Shingrix",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "zoster vaccine recombinant, adjuvanted",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 1198.3545,
+    "gold_id": "gsk-shingrix-worldwide-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 1050.2336,
+    "gold_id": "gsk-shingrix-worldwide-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 961.5129,
+    "gold_id": "gsk-shingrix-worldwide-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 1086.2032,
+    "gold_id": "gsk-shingrix-worldwide-reported-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Shingrix",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "zoster vaccine recombinant, adjuvanted",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 1092.6801,
+    "gold_id": "gsk-shingrix-worldwide-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 1139.608,
+    "gold_id": "gsk-shingrix-worldwide-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 1119.172,
+    "gold_id": "gsk-shingrix-worldwide-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 1340.0352,
+    "gold_id": "gsk-shingrix-worldwide-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Shingrix",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "zoster vaccine recombinant, adjuvanted",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 1383.561,
+    "gold_id": "gsk-shingrix-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 1192.584,
+    "gold_id": "gsk-shingrix-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Trelegy Ellipta",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone furoate/umeclidinium/vilanterol",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": 2.6548,
+    "gold_id": "gsk-trelegy-ellipta-worldwide-reported-2017q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Trelegy Ellipta",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone furoate/umeclidinium/vilanterol",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 15.312,
+    "gold_id": "gsk-trelegy-ellipta-worldwide-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 35.3964,
+    "gold_id": "gsk-trelegy-ellipta-worldwide-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 54.747,
+    "gold_id": "gsk-trelegy-ellipta-worldwide-reported-2018q3"
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": 99.0143,
+    "gold_id": "gsk-trelegy-ellipta-worldwide-reported-2018q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Trelegy Ellipta",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone furoate/umeclidinium/vilanterol",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q1",
+    "value_normalized_usd_millions": 113.3436,
+    "gold_id": "gsk-trelegy-ellipta-worldwide-reported-2019q1"
+   },
+   {
+    "period": "2019Q2",
+    "value_normalized_usd_millions": 154.236,
+    "gold_id": "gsk-trelegy-ellipta-worldwide-reported-2019q2"
+   },
+   {
+    "period": "2019Q3",
+    "value_normalized_usd_millions": 171.387,
+    "gold_id": "gsk-trelegy-ellipta-worldwide-reported-2019q3"
+   },
+   {
+    "period": "2019Q4",
+    "value_normalized_usd_millions": 221.5876,
+    "gold_id": "gsk-trelegy-ellipta-worldwide-reported-2019q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Trelegy Ellipta",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone furoate/umeclidinium/vilanterol",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 247.0207,
+    "gold_id": "gsk-trelegy-ellipta-worldwide-reported-2020q1"
+   },
+   {
+    "period": "2020Q2",
+    "value_normalized_usd_millions": 240.851,
+    "gold_id": "gsk-trelegy-ellipta-worldwide-reported-2020q2"
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": 250.842,
+    "gold_id": "gsk-trelegy-ellipta-worldwide-reported-2020q3"
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": 314.2552,
+    "gold_id": "gsk-trelegy-ellipta-worldwide-reported-2020q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Trelegy Ellipta",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone furoate/umeclidinium/vilanterol",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 341.992,
+    "gold_id": "gsk-trelegy-ellipta-worldwide-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 406.9635,
+    "gold_id": "gsk-trelegy-ellipta-worldwide-reported-2021q2"
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": 449.1954,
+    "gold_id": "gsk-trelegy-ellipta-worldwide-reported-2021q3"
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": 474.8128,
+    "gold_id": "gsk-trelegy-ellipta-worldwide-reported-2021q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Trelegy Ellipta",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone furoate/umeclidinium/vilanterol",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 456.314,
+    "gold_id": "gsk-trelegy-ellipta-worldwide-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 586.7388,
+    "gold_id": "gsk-trelegy-ellipta-worldwide-reported-2022q2"
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": 546.9795,
+    "gold_id": "gsk-trelegy-ellipta-worldwide-reported-2022q3"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 536.7922,
+    "gold_id": "gsk-trelegy-ellipta-worldwide-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Trelegy Ellipta",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone furoate/umeclidinium/vilanterol",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 565.1145,
+    "gold_id": "gsk-trelegy-ellipta-worldwide-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 764.9109,
+    "gold_id": "gsk-trelegy-ellipta-worldwide-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 679.842,
+    "gold_id": "gsk-trelegy-ellipta-worldwide-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 731.7147,
+    "gold_id": "gsk-trelegy-ellipta-worldwide-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Trelegy Ellipta",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone furoate/umeclidinium/vilanterol",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 749.4471,
+    "gold_id": "gsk-trelegy-ellipta-worldwide-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 1062.8566,
+    "gold_id": "gsk-trelegy-ellipta-worldwide-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 780.66,
+    "gold_id": "gsk-trelegy-ellipta-worldwide-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 856.9221,
+    "gold_id": "gsk-trelegy-ellipta-worldwide-reported-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Trelegy Ellipta",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone furoate/umeclidinium/vilanterol",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 850.7025,
+    "gold_id": "gsk-trelegy-ellipta-worldwide-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 1115.56,
+    "gold_id": "gsk-trelegy-ellipta-worldwide-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 992.4224,
+    "gold_id": "gsk-trelegy-ellipta-worldwide-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 983.756,
+    "gold_id": "gsk-trelegy-ellipta-worldwide-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Trelegy Ellipta",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone furoate/umeclidinium/vilanterol",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 871.131,
+    "gold_id": "gsk-trelegy-ellipta-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 1040.825,
+    "gold_id": "gsk-trelegy-ellipta-worldwide-reported-2026q2"
    }
   ]
  },

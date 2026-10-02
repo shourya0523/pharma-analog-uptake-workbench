@@ -153,3 +153,9 @@ Tradjenta,DPP-4 inhibitor,dpp4_inhibitor,Oral,2011,Type 2 diabetes,curated_refer
 Ajovy,Calcitonin gene-related peptide (CGRP) antagonist monoclonal antibody,cgrp_antagonist_antibody,Subcutaneous,2018,Migraine prevention,curated_reference,distinct_product
 Austedo,Vesicular monoamine transporter 2 (VMAT2) inhibitor,vmat2_inhibitor,Oral,2017,"Movement disorders (Huntington disease chorea, tardive dyskinesia)",curated_reference,distinct_product
 Cinqair,Interleukin-5 (IL-5) antagonist monoclonal antibody,il5_antagonist_antibody,Intravenous,2016,Severe eosinophilic asthma,curated_reference,distinct_product
+Advair Diskus,Inhaled corticosteroid + long-acting beta2-agonist (combination),ics_laba_combination,Inhaled,2000,"Respiratory (asthma, COPD)",curated_reference,distinct_product
+Arexvy,Recombinant prefusion F protein subunit vaccine with AS01E adjuvant system,adjuvanted_recombinant_subunit_vaccine,Intramuscular,2023,Infectious disease (RSV lower respiratory tract disease prevention),curated_reference,distinct_product
+Breo Ellipta,Inhaled corticosteroid + long-acting beta2-agonist (combination),ics_laba_combination,Inhaled,2013,"Respiratory (COPD, asthma)",curated_reference,distinct_product
+Nucala,Anti-interleukin-5 (IL-5) monoclonal antibody,il5_antagonist_mab,Subcutaneous,2015,Respiratory / Immunology (severe eosinophilic asthma and other eosinophilic diseases),curated_reference,distinct_product
+Shingrix,Recombinant glycoprotein E subunit vaccine with AS01B adjuvant system,adjuvanted_recombinant_subunit_vaccine,Intramuscular,2017,Infectious disease (herpes zoster prevention),curated_reference,distinct_product
+Trelegy Ellipta,Inhaled corticosteroid + long-acting muscarinic antagonist + long-acting beta2-agonist (triple combination),ics_lama_laba_triple_combination,Inhaled,2017,"Respiratory (COPD, asthma)",curated_reference,distinct_product

@@ -1,0 +1,33 @@
+{
+  "drug_name": "Breo Ellipta",
+  "generic_name": "fluticasone furoate/vilanterol",
+  "therapeutic_area": "Respiratory / Allergy",
+  "indication_area": "Respiratory (COPD, asthma)",
+  "formulation": "inhalation powder (Ellipta dry powder inhaler)",
+  "route_of_administration": "inhaled",
+  "moa": "Inhaled corticosteroid + long-acting beta2-agonist (combination)",
+  "moa_class": "ics_laba_combination",
+  "first_approval_year": 2013,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=204275",
+    "quote": "Approval Date(s) and History, Letters, Labels, Reviews for NDA 204275 ... 05/10/2013 ORIG-1 Approval Type 1 - New Molecular Entity; BREO ELLIPTA FLUTICASONE FUROATE; VILANTEROL TRIFENATATE POWDER;INHALATION"
+  },
+  "manufacturer": "GSK plc",
+  "benchmark_identity": "gsk_breo_relvar_ellipta_worldwide_reported",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "launch_quarter": "2013Q4",
+  "commercial_start_quarter": "2013Q4",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "launch_quarter 2013Q4: the Q4/FY 2013 release (6-K 2014-02-05) prints Relvar/Breo Ellipta full year 2013 = 8 and Q4 2013 = 8, and the Q3 2013 release (6-K 2013-10-23) prints no Relvar/Breo sales row; the brief suggested 2013Q3/Q4 and the filings show first sales in Q4. FDA approved Breo Ellipta 2013-05-10. GSK labels the line 'Relvar/Breo Ellipta' (2014Q1 release: 'Relvar/Breo').",
+  "search_log": [
+    "fetched data.sec.gov submissions CIK0001131399 (recent + 3 history pages, 2001-2026): 6,124 6-K and 39 6-K/A filings; 20-F 25",
+    "2003-2011: fetched every 6-K filed in the 4 results windows each year and kept those whose text contains 'Seretide' and 'turnover' (40 documents matched, 4 of them excluded below; the 2001-2002 6-Ks are paper placeholders on EDGAR)",
+    "2012-2026: selected 6-Ks whose primaryDocDescription is 1ST/2ND/3RD QUARTER RESULTS, HALF YEARLY/HALF-YEAR REPORT or FINAL RESULTS; 2012-02-07 6-K (Q4 2011) added by hand because its description is generic ('FORM 6-K')",
+    "excluded as duplicates/restatements: 6-K 2004-10-29 and 2005-02-10 (IFRS restatements of 2003-2004), 6-K 2008-05-06 (second filing of the Q1 2008 release), 2008-02-07 text-only copy of Q4 2007",
+    "per release: product row taken from the 'Pharmaceuticals/Vaccines turnover' regional tables (Total column = worldwide); each quarter cross-checked: Q1+Q2 = printed six-month row, +Q3 = printed nine-month row, +Q4 = printed full-year row"
+  ]
+}
