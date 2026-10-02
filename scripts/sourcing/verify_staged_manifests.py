@@ -47,6 +47,7 @@ CACHE = Path(os.environ.get("SOURCING_WORKDIR", "/tmp/gold-sourcing")) / "verify
 USER_AGENT = os.environ.get(
     "SEC_CONTACT", "pharma-analog-uptake-workbench research contact@example.com"
 )
+SCALE = {"thousands": 1000, "millions": 1, "billions": 0.001}
 DIRECT = {"direct_reported", "direct_reported_rounded", "direct_prior_year_column",
           "direct_retrospective_table", "direct_prior_year_schedule"}
 NUMBER = re.compile(r"\(?-?[\d][\d,]*(?:\.\d+)?\)?")
@@ -213,8 +214,11 @@ def check_series(rows: list[dict]) -> list[str]:
         quarters = [by_period.get(f"{year}Q{q}") for q in range(1, 5)]
         if None in quarters:
             continue
-        total = sum(float(q.get("source_value_reported") or q["value_reported"]) for q in quarters)
-        places = max(decimals(str(q.get("source_value_reported") or q["value_reported"])) for q in quarters)
+        # Compared in millions: a year can mix thousands and millions, so the
+        # printed figures are only summable after each row's own scaling.
+        total = sum(float(q["value_reported"]) for q in quarters)
+        stated = stated / SCALE.get(row.get("source_unit") or "millions", 1)
+        places = max(decimals(str(q["value_reported"])) for q in quarters)
         tolerance = 4 * 0.5 * 10 ** -places + 1e-9
         if abs(total - stated) > max(tolerance, abs(stated) * 0.002):
             problems.append(f"{year}: quarters sum to {total:g}, Q4 quote states full year {stated:g}")
