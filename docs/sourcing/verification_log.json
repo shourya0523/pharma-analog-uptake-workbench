@@ -310,6 +310,48 @@
   "notes": "GBP. GSK's Seretide/Advair line (all Advair/Seretide forms). Starts 2002Q4: earlier GSK releases on EDGAR are paper-only. UK GAAP to 2004Q4, IFRS from 2005Q1.",
   "status": "verified_with_notes"
  },
+ "Adynovate": {
+  "automated": {
+   "2019Q1": true,
+   "2019Q2": true,
+   "2019Q3": true,
+   "2019Q4": true,
+   "2020Q1": true,
+   "2020Q2": true,
+   "2020Q3": true,
+   "2020Q4": true,
+   "2021Q1": true,
+   "2021Q2": true,
+   "2021Q3": true,
+   "2021Q4": true,
+   "2022Q1": true,
+   "2022Q2": true,
+   "2022Q3": true,
+   "2022Q4": true,
+   "2023Q1": true,
+   "2023Q2": true,
+   "2023Q3": true,
+   "2023Q4": true,
+   "2024Q1": true,
+   "2024Q2": true,
+   "2024Q3": true,
+   "2024Q4": true,
+   "2025Q1": true,
+   "2025Q2": true,
+   "2025Q3": true,
+   "2025Q4": true,
+   "2026Q1": true,
+   "2026Q2": true
+  },
+  "hand_checked": [
+   "2019Q1",
+   "2026Q2",
+   "2023Q4",
+   "2023Q3"
+  ],
+  "notes": "JPY, Takeda from 2019Q1 (Shire consolidated from 8 Jan 2019).",
+  "status": "verified_with_notes"
+ },
  "Aimovig": {
   "automated": {
    "2018Q2": true,
@@ -762,6 +804,12 @@
   ],
   "notes": "EUR.",
   "status": "verified"
+ },
+ "Bimzelx": {
+  "automated": {},
+  "hand_checked": [],
+  "notes": "UCB half-year reporting only (as Cimzia).",
+  "status": "excluded_verified"
  },
  "Blincyto": {
   "automated": {
@@ -1283,6 +1331,12 @@
   "notes": "Pfizer first prints Cibinqo in 2023; 2022 quarters from prior-year columns, 2022Q1 derived (six months 6 less Q2 1).",
   "status": "verified_with_notes"
  },
+ "Cimzia": {
+  "automated": {},
+  "hand_checked": [],
+  "notes": "UCB reports product sales half-yearly (H1 2025 table read at source); quarterly absence inferred from UCB's reporting calendar.",
+  "status": "excluded_verified"
+ },
  "Cinqair": {
   "automated": {},
   "hand_checked": [],
@@ -1381,6 +1435,46 @@
   ],
   "notes": "",
   "status": "verified"
+ },
+ "Crysvita": {
+  "automated": {
+   "2020Q1": true,
+   "2020Q2": true,
+   "2020Q3": true,
+   "2020Q4": true,
+   "2021Q1": true,
+   "2021Q2": true,
+   "2021Q3": true,
+   "2021Q4": true,
+   "2022Q1": true,
+   "2022Q2": true,
+   "2022Q3": true,
+   "2022Q4": true,
+   "2023Q1": true,
+   "2023Q2": true,
+   "2023Q3": true,
+   "2023Q4": true,
+   "2024Q1": true,
+   "2024Q2": true,
+   "2024Q3": true,
+   "2024Q4": true,
+   "2025Q1": true,
+   "2025Q2": true,
+   "2025Q3": true,
+   "2025Q4": true,
+   "2026Q1": true,
+   "2026Q2": true
+  },
+  "hand_checked": [
+   "2020Q1",
+   "2026Q2",
+   "2020Q2",
+   "2020Q3",
+   "2020Q4",
+   "2022Q3"
+  ],
+  "notes": "JPY, Kyowa Kirin global Crysvita line from 2020Q1 (earlier appendices print Japan and International only). Ultragenyx's line is collaboration revenue.",
+  "status": "verified_with_notes"
  },
  "Daliresp": {
   "automated": {
@@ -1938,6 +2032,73 @@
   "notes": "",
   "status": "verified"
  },
+ "Entyvio": {
+  "automated": {
+   "2014Q2": true,
+   "2014Q3": true,
+   "2014Q4": true,
+   "2015Q1": true,
+   "2015Q2": true,
+   "2015Q3": true,
+   "2015Q4": true,
+   "2016Q1": true,
+   "2016Q2": true,
+   "2016Q3": true,
+   "2016Q4": true,
+   "2017Q1": true,
+   "2017Q2": true,
+   "2017Q3": true,
+   "2017Q4": true,
+   "2018Q1": true,
+   "2018Q2": true,
+   "2018Q3": true,
+   "2018Q4": true,
+   "2019Q1": true,
+   "2019Q2": true,
+   "2019Q3": true,
+   "2019Q4": true,
+   "2020Q1": true,
+   "2020Q2": true,
+   "2020Q3": true,
+   "2020Q4": true,
+   "2021Q1": true,
+   "2021Q2": true,
+   "2021Q3": true,
+   "2021Q4": true,
+   "2022Q1": true,
+   "2022Q2": true,
+   "2022Q3": true,
+   "2022Q4": true,
+   "2023Q1": true,
+   "2023Q2": true,
+   "2023Q3": true,
+   "2023Q4": true,
+   "2024Q1": true,
+   "2024Q2": true,
+   "2024Q3": true,
+   "2024Q4": true,
+   "2025Q1": true,
+   "2025Q2": true,
+   "2025Q3": true,
+   "2025Q4": true,
+   "2026Q1": true,
+   "2026Q2": true
+  },
+  "hand_checked": [
+   "2014Q2",
+   "2026Q2",
+   "2014Q3",
+   "2015Q1",
+   "2015Q3",
+   "2015Q4",
+   "2016Q1",
+   "2017Q1",
+   "2019Q1",
+   "2016Q4"
+  ],
+  "notes": "JPY, Takeda fiscal quarters mapped to calendar. 2014-2016 include derived and later-document quarters.",
+  "status": "verified_with_notes"
+ },
  "Esperoct": {
   "automated": {},
   "hand_checked": [],
@@ -2397,6 +2558,86 @@
   "notes": "Product family: Merck prints only 'Gardasil / Gardasil 9' (quadrivalent + 9-valent). Series starts 2015Q1 when that combined line begins; the earlier 'Gardasil' line is a different definition and was not spliced.",
   "status": "verified_with_notes"
  },
+ "Gattex": {
+  "automated": {
+   "2019Q1": true,
+   "2019Q2": true,
+   "2019Q3": true,
+   "2019Q4": true,
+   "2020Q1": true,
+   "2020Q2": true,
+   "2020Q3": true,
+   "2020Q4": true,
+   "2021Q1": true,
+   "2021Q2": true,
+   "2021Q3": true,
+   "2021Q4": true,
+   "2022Q1": true,
+   "2022Q2": true,
+   "2022Q3": true,
+   "2022Q4": true,
+   "2023Q1": true,
+   "2023Q2": true,
+   "2023Q3": true,
+   "2023Q4": true,
+   "2024Q1": true,
+   "2024Q2": true,
+   "2024Q3": true,
+   "2024Q4": true,
+   "2025Q1": true,
+   "2025Q2": true,
+   "2025Q3": true,
+   "2025Q4": true,
+   "2026Q1": true,
+   "2026Q2": true
+  },
+  "hand_checked": [
+   "2019Q1",
+   "2026Q2",
+   "2023Q3"
+  ],
+  "notes": "JPY, Takeda from 2019Q1 (first quarter is Shire from 8 Jan). NPS/Shire USD history not sourced.",
+  "status": "verified_with_notes"
+ },
+ "Gemtesa": {
+  "automated": {
+   "2021Q2": true,
+   "2021Q3": true,
+   "2021Q4": true,
+   "2022Q1": true,
+   "2022Q2": true,
+   "2022Q3": true,
+   "2022Q4": true,
+   "2023Q1": true,
+   "2023Q2": true,
+   "2023Q3": true,
+   "2023Q4": true,
+   "2024Q1": true,
+   "2024Q2": true,
+   "2024Q3": true,
+   "2024Q4": true,
+   "2025Q1": true,
+   "2025Q2": true,
+   "2025Q3": true,
+   "2025Q4": true,
+   "2026Q1": true,
+   "2026Q2": true
+  },
+  "hand_checked": [
+   "2021Q2",
+   "2026Q2",
+   "2025Q4",
+   "2021Q3",
+   "2021Q4",
+   "2022Q1",
+   "2022Q3",
+   "2022Q4",
+   "2023Q1",
+   "2023Q3"
+  ],
+  "notes": "U.S. sales in USD from Sumitomo Pharma's supplementary data.",
+  "status": "verified_with_notes"
+ },
  "Gilenya": {
   "automated": {
    "2010Q4": true,
@@ -2465,6 +2706,12 @@
   ],
   "notes": "Ends 2024Q4: Novartis stops printing a Gilenya line from 2025Q1. 2010Q4 from report narrative.",
   "status": "verified_with_notes"
+ },
+ "Hemgenix": {
+  "automated": {},
+  "hand_checked": [],
+  "notes": "CSL reports half-yearly (fiscal Jul-Jun); H1 FY2026 presentation read at source.",
+  "status": "excluded_verified"
  },
  "Hemlibra": {
   "automated": {
@@ -2678,6 +2925,12 @@
   "notes": "",
   "status": "verified"
  },
+ "Ilumya": {
+  "automated": {},
+  "hand_checked": [],
+  "notes": "Sun Pharma reports only aggregate Global Innovative Medicines sales (Q1 FY27 release read at source).",
+  "status": "excluded_verified"
+ },
  "Imfinzi": {
   "automated": {
    "2017Q2": true,
@@ -2780,6 +3033,34 @@
   ],
   "notes": "Ingrezza line; total product sales used only while Ingrezza was the sole product (to 2020Q2).",
   "status": "verified_with_notes"
+ },
+ "Izervay": {
+  "automated": {
+   "2023Q3": true,
+   "2023Q4": true,
+   "2024Q1": true,
+   "2024Q2": true,
+   "2024Q3": true,
+   "2024Q4": true,
+   "2025Q1": true,
+   "2025Q2": true,
+   "2025Q3": true,
+   "2025Q4": true,
+   "2026Q1": true,
+   "2026Q2": true
+  },
+  "hand_checked": [
+   "2023Q3",
+   "2026Q2",
+   "2023Q4",
+   "2024Q3",
+   "2024Q4",
+   "2025Q3",
+   "2025Q4",
+   "2025Q2"
+  ],
+  "notes": "JPY.",
+  "status": "verified"
  },
  "Jakafi": {
   "automated": {
@@ -2982,6 +3263,12 @@
   ],
   "notes": "GBP as printed.",
   "status": "verified"
+ },
+ "Jivi": {
+  "automated": {},
+  "hand_checked": [],
+  "notes": "Bayer prints Jivi only combined (Kogenate/Kovaltry/Jivi, then Kovaltry/Jivi); H1 2026 report read at source.",
+  "status": "excluded_verified"
  },
  "Kadcyla": {
   "automated": {
@@ -3502,6 +3789,110 @@
   "notes": "EUR. Aventis to 2004Q2, Sanofi after (2004 is Sanofi's pro forma basis). Starts 2001Q1 (launched 2000; only a 2000 annual figure). 2001Q1 derived.",
   "status": "verified_with_notes"
  },
+ "Lenvima": {
+  "automated": {
+   "2015Q2": true,
+   "2015Q3": true,
+   "2015Q4": true,
+   "2016Q1": true,
+   "2016Q2": true,
+   "2016Q3": true,
+   "2016Q4": true,
+   "2017Q1": true,
+   "2017Q2": true,
+   "2017Q3": true,
+   "2017Q4": true,
+   "2018Q1": true,
+   "2018Q2": true,
+   "2018Q3": true,
+   "2018Q4": true,
+   "2019Q1": true,
+   "2019Q2": true,
+   "2019Q3": true,
+   "2019Q4": true,
+   "2020Q1": true,
+   "2020Q2": true,
+   "2020Q3": true,
+   "2020Q4": true,
+   "2021Q1": true,
+   "2021Q2": true,
+   "2021Q3": true,
+   "2021Q4": true,
+   "2022Q1": true,
+   "2022Q2": true,
+   "2022Q3": true,
+   "2022Q4": true,
+   "2023Q1": true,
+   "2023Q2": true,
+   "2023Q3": true,
+   "2023Q4": true,
+   "2024Q1": true,
+   "2024Q2": true,
+   "2024Q3": true,
+   "2024Q4": true,
+   "2025Q1": true,
+   "2025Q2": true,
+   "2025Q3": true,
+   "2025Q4": true,
+   "2026Q1": true,
+   "2026Q2": true
+  },
+  "hand_checked": [
+   "2015Q2",
+   "2026Q2",
+   "2015Q3",
+   "2015Q4",
+   "2016Q1",
+   "2016Q2",
+   "2016Q3",
+   "2017Q2",
+   "2017Q3",
+   "2018Q2",
+   "2018Q3",
+   "2018Q4",
+   "2019Q2",
+   "2019Q3",
+   "2019Q4",
+   "2020Q2",
+   "2020Q3",
+   "2020Q4",
+   "2021Q2",
+   "2021Q3",
+   "2021Q4",
+   "2022Q2",
+   "2022Q3",
+   "2022Q4",
+   "2023Q2",
+   "2023Q1"
+  ],
+  "notes": "Product family (Lenvima/Kisplyx), JPY; Eisai's TDnet filings via the Japan Exchange Group host (eisai.com/ir unreachable). Many quarters from same-year full-year Reference Data tables.",
+  "status": "verified_with_notes"
+ },
+ "Leqembi": {
+  "automated": {
+   "2024Q1": true,
+   "2024Q2": true,
+   "2024Q3": true,
+   "2024Q4": true,
+   "2025Q1": true,
+   "2025Q2": true,
+   "2025Q3": true,
+   "2025Q4": true,
+   "2026Q1": true,
+   "2026Q2": true
+  },
+  "hand_checked": [
+   "2024Q1",
+   "2026Q2",
+   "2024Q4",
+   "2025Q3",
+   "2025Q4",
+   "2026Q1",
+   "2024Q2"
+  ],
+  "notes": "JPY, Eisai pre-audit revenue releases; from 2024Q1 (earlier Eisai IR documents unreachable from this environment).",
+  "status": "verified_with_notes"
+ },
  "Leqvio": {
   "automated": {
    "2021Q1": true,
@@ -3917,6 +4308,60 @@
   "notes": "AZ's own Lynparza product sales line (Merck shares profits).",
   "status": "verified_with_notes"
  },
+ "Mavenclad": {
+  "automated": {
+   "2018Q1": true,
+   "2018Q2": true,
+   "2018Q3": true,
+   "2018Q4": true,
+   "2019Q1": true,
+   "2019Q2": true,
+   "2019Q3": true,
+   "2019Q4": true,
+   "2020Q1": true,
+   "2020Q2": true,
+   "2020Q3": true,
+   "2020Q4": true,
+   "2021Q1": true,
+   "2021Q2": true,
+   "2021Q3": true,
+   "2021Q4": true,
+   "2022Q1": true,
+   "2022Q2": true,
+   "2022Q3": true,
+   "2022Q4": true,
+   "2023Q1": true,
+   "2023Q2": true,
+   "2023Q3": true,
+   "2023Q4": true,
+   "2024Q1": true,
+   "2024Q2": true,
+   "2024Q3": true,
+   "2024Q4": true,
+   "2025Q1": true,
+   "2025Q2": true,
+   "2025Q3": true,
+   "2025Q4": true,
+   "2026Q1": true,
+   "2026Q2": true
+  },
+  "hand_checked": [
+   "2018Q1",
+   "2026Q2",
+   "2025Q2",
+   "2018Q4",
+   "2019Q4",
+   "2020Q4",
+   "2021Q4",
+   "2022Q4",
+   "2023Q4",
+   "2024Q4",
+   "2025Q4",
+   "2023Q3"
+  ],
+  "notes": "EUR; Q4s derived; starts 2018Q1 (2017 printed only as prior-year/prose). emdgroup.com needs a browser user agent to fetch.",
+  "status": "verified_with_notes"
+ },
  "Mavyret": {
   "automated": {
    "2018Q3": true,
@@ -4016,6 +4461,117 @@
    "2025Q3"
   ],
   "notes": "Bausch + Lomb investor-presentation slide figures; several quarters from later decks' trailing columns.",
+  "status": "verified_with_notes"
+ },
+ "Motegrity": {
+  "automated": {
+   "2019Q1": true,
+   "2019Q2": true,
+   "2019Q3": true,
+   "2019Q4": true,
+   "2020Q1": true,
+   "2020Q2": true,
+   "2020Q3": true,
+   "2020Q4": true,
+   "2021Q1": true,
+   "2021Q2": true,
+   "2021Q3": true,
+   "2021Q4": true,
+   "2022Q1": true,
+   "2022Q2": true,
+   "2022Q3": true,
+   "2022Q4": true,
+   "2023Q1": true,
+   "2023Q2": true,
+   "2023Q3": true,
+   "2023Q4": true,
+   "2024Q1": true,
+   "2024Q2": true,
+   "2024Q3": true,
+   "2024Q4": true,
+   "2025Q1": true,
+   "2025Q2": true,
+   "2025Q3": true,
+   "2025Q4": true,
+   "2026Q1": true
+  },
+  "hand_checked": [
+   "2019Q1",
+   "2026Q1",
+   "2024Q3",
+   "2023Q3"
+  ],
+  "notes": "JPY, Takeda's Resolor/Motegrity line 2019Q1-2026Q1.",
+  "status": "verified_with_notes"
+ },
+ "Myrbetriq": {
+  "automated": {
+   "2017Q2": true,
+   "2017Q3": true,
+   "2017Q4": true,
+   "2018Q1": true,
+   "2018Q2": true,
+   "2018Q3": true,
+   "2018Q4": true,
+   "2019Q1": true,
+   "2019Q2": true,
+   "2019Q3": true,
+   "2019Q4": true,
+   "2020Q1": true,
+   "2020Q2": true,
+   "2020Q3": true,
+   "2020Q4": true,
+   "2021Q1": true,
+   "2021Q2": true,
+   "2021Q3": true,
+   "2021Q4": true,
+   "2022Q1": true,
+   "2022Q2": true,
+   "2022Q3": true,
+   "2022Q4": true,
+   "2023Q1": true,
+   "2023Q2": true,
+   "2023Q3": true,
+   "2023Q4": true,
+   "2024Q1": true,
+   "2024Q2": true,
+   "2024Q3": true,
+   "2024Q4": true,
+   "2025Q1": true,
+   "2025Q2": true,
+   "2025Q3": true,
+   "2025Q4": true,
+   "2026Q1": true,
+   "2026Q2": true
+  },
+  "hand_checked": [
+   "2017Q2",
+   "2026Q2",
+   "2019Q1",
+   "2022Q2",
+   "2023Q4",
+   "2024Q3",
+   "2024Q4",
+   "2025Q3",
+   "2025Q4",
+   "2023Q2"
+  ],
+  "notes": "JPY, Betanis/Myrbetriq/Betmiga global line from 2017Q2.",
+  "status": "verified_with_notes"
+ },
+ "Nubeqa": {
+  "automated": {
+   "2025Q4": true,
+   "2026Q1": true,
+   "2026Q2": true
+  },
+  "hand_checked": [
+   "2022Q1",
+   "2026Q2",
+   "2023Q3",
+   "2022Q3"
+  ],
+  "notes": "EUR; only 2025Q4-2026Q2 verifiable here (reports.bayer.com). Earlier Bayer PDFs refuse this environment; 19 earlier rows held outside gold for manual verification.",
   "status": "verified_with_notes"
  },
  "Nucala": {
@@ -4704,6 +5260,45 @@
   "notes": "2023Q2-Q3 from 2024 prior-year columns (Biogen folded it into Other until 2023Q4).",
   "status": "verified_with_notes"
  },
+ "Radicava ORS": {
+  "automated": {
+   "2020Q2": true,
+   "2020Q3": true,
+   "2020Q4": true,
+   "2021Q1": true,
+   "2021Q2": true,
+   "2021Q3": true,
+   "2021Q4": true,
+   "2022Q1": true,
+   "2022Q2": true,
+   "2022Q3": true,
+   "2022Q4": true,
+   "2023Q1": true,
+   "2023Q2": true,
+   "2023Q3": true,
+   "2023Q4": true,
+   "2024Q1": true,
+   "2024Q2": true,
+   "2024Q3": true,
+   "2024Q4": true,
+   "2025Q1": true
+  },
+  "hand_checked": [
+   "2020Q2",
+   "2025Q1",
+   "2020Q3",
+   "2020Q4",
+   "2021Q1",
+   "2021Q3",
+   "2021Q4",
+   "2022Q1",
+   "2023Q1",
+   "2024Q1",
+   "2022Q3"
+  ],
+  "notes": "Product family (Radicava IV + ORS), JPY, read from parent Mitsubishi Chemical Group's operational summaries; ends 2025Q1 (Tanabe divested).",
+  "status": "verified_with_notes"
+ },
  "Repatha": {
   "automated": {
    "2015Q3": true,
@@ -5061,6 +5656,12 @@
   ],
   "notes": "Product family: 'Rybrevant / Lazcluze' line, which adds Lazcluze from its Aug 2024 approval. Starts 2024Q1.",
   "status": "verified_with_notes"
+ },
+ "Rystiggo": {
+  "automated": {},
+  "hand_checked": [],
+  "notes": "UCB half-year reporting only (as Cimzia).",
+  "status": "excluded_verified"
  },
  "Sarclisa": {
   "automated": {
@@ -5446,6 +6047,12 @@
   ],
   "notes": "",
   "status": "verified"
+ },
+ "Spiriva": {
+  "automated": {},
+  "hand_checked": [],
+  "notes": "Not in gold. Boehringer Ingelheim is private and publishes annual figures only, but every BI page and PDF returns a bot-challenge page to this environment, so no evidence document could be read; no exclusion recorded without one.",
+  "status": "pending"
  },
  "Syfovre": {
   "automated": {
@@ -6406,6 +7013,36 @@
   "notes": "Starts 2018Q3, the first AbbVie release printing a Venclexta line (launched 2016).",
   "status": "verified_with_notes"
  },
+ "Veozah": {
+  "automated": {
+   "2023Q2": true,
+   "2023Q3": true,
+   "2023Q4": true,
+   "2024Q1": true,
+   "2024Q2": true,
+   "2024Q3": true,
+   "2024Q4": true,
+   "2025Q1": true,
+   "2025Q2": true,
+   "2025Q3": true,
+   "2025Q4": true,
+   "2026Q1": true,
+   "2026Q2": true
+  },
+  "hand_checked": [
+   "2023Q2",
+   "2026Q2",
+   "2023Q4",
+   "2024Q3",
+   "2024Q4",
+   "2025Q1",
+   "2025Q3",
+   "2025Q4",
+   "2024Q2"
+  ],
+  "notes": "JPY, includes Veoza ex-U.S.",
+  "status": "verified_with_notes"
+ },
  "Viberzi": {
   "automated": {
    "2015Q4": true,
@@ -6774,6 +7411,36 @@
   "notes": "Ends 2024Q1 (combined PMO line after). 2019Q4 = FY2019 115 thousand with nil nine months inferred from the Dec 2019 approval.",
   "status": "verified_with_notes"
  },
+ "Vyvgart": {
+  "automated": {
+   "2022Q1": true,
+   "2022Q2": true,
+   "2022Q3": true,
+   "2022Q4": true,
+   "2023Q1": true,
+   "2023Q2": true,
+   "2023Q3": true,
+   "2023Q4": true,
+   "2024Q1": true,
+   "2024Q2": true,
+   "2024Q3": true,
+   "2024Q4": true,
+   "2025Q1": true,
+   "2025Q2": true,
+   "2025Q3": true,
+   "2025Q4": true,
+   "2026Q1": true,
+   "2026Q2": true
+  },
+  "hand_checked": [
+   "2022Q1",
+   "2026Q2",
+   "2023Q3",
+   "2022Q3"
+  ],
+  "notes": "Product family: argenx 'Product net sales' (Vyvgart IV + Vyvgart Hytrulo).",
+  "status": "verified_with_notes"
+ },
  "Wegovy": {
   "automated": {
    "2021Q2": true,
@@ -7059,6 +7726,55 @@
    "2022Q1"
   ],
   "notes": "Novartis ex-U.S. sales only (Genentech books U.S.).",
+  "status": "verified_with_notes"
+ },
+ "Xtandi": {
+  "automated": {
+   "2017Q2": true,
+   "2017Q3": true,
+   "2017Q4": true,
+   "2018Q1": true,
+   "2018Q2": true,
+   "2018Q3": true,
+   "2018Q4": true,
+   "2019Q1": true,
+   "2019Q2": true,
+   "2019Q3": true,
+   "2019Q4": true,
+   "2020Q1": true,
+   "2020Q2": true,
+   "2020Q3": true,
+   "2020Q4": true,
+   "2021Q1": true,
+   "2021Q2": true,
+   "2021Q3": true,
+   "2021Q4": true,
+   "2022Q1": true,
+   "2022Q2": true,
+   "2022Q3": true,
+   "2022Q4": true,
+   "2023Q1": true,
+   "2023Q2": true,
+   "2023Q3": true,
+   "2023Q4": true,
+   "2024Q1": true,
+   "2024Q2": true,
+   "2024Q3": true,
+   "2024Q4": true,
+   "2025Q1": true,
+   "2025Q2": true,
+   "2025Q3": true,
+   "2025Q4": true,
+   "2026Q1": true,
+   "2026Q2": true
+  },
+  "hand_checked": [
+   "2017Q2",
+   "2026Q2",
+   "2019Q1",
+   "2018Q4"
+  ],
+  "notes": "JPY, Astellas global product sales from 2017Q2 (its online library starts FY2017). Pfizer's Xtandi line is alliance revenue, not used.",
   "status": "verified_with_notes"
  },
  "Yervoy": {

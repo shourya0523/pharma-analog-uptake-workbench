@@ -1,0 +1,34 @@
+{
+  "drug_name": "Gattex",
+  "generic_name": "teduglutide",
+  "manufacturer": "Takeda",
+  "benchmark_identity": "takeda_gattex_revestive_worldwide_reported",
+  "therapeutic_area": "GI / Liver / Women's Health / Urology",
+  "indication_area": "Short bowel syndrome",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection (lyophilized powder for solution)",
+  "route_of_administration": "subcutaneous",
+  "moa": "glucagon-like peptide-2 (GLP-2) receptor agonist",
+  "moa_class": "glp2_receptor_agonist",
+  "first_approval_year": 2012,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2012/203441Orig1s000ltr.pdf",
+    "quote": "This new drug application provides for the use of GATTEX (teduglutide [rDNA origin]) for injection, for subcutaneous use for the treatment of adult patients with Short Bowel Syndrome (SBS) who are dependent on parenteral support. (FDA approval letter, NDA 203441, signed 12/21/2012)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2019Q1",
+  "series_start_reason": "Takeda prints a Gattex/Revestive product line only from fiscal Q4 FY2018 (January-March 2019), the first quarter after it completed the Shire acquisition; the first quarter contains Shire's product only from the acquisition date (the table header in qr2018_q4_f_en.pdf reads 'Takeda 12 Months @ Actual rate, Shire 3 Months @ Actual rate'). Earlier history (NPS Pharmaceuticals, then Shire; USD, different issuers) was not sourced in this batch and is not spliced into the Takeda JPY series.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Printed label is 'Gattex/Revestive' (U.S. and ex-U.S. brand names of teduglutide on one worldwide line). Takeda fiscal quarters align with calendar quarters (FY Q4 Jan-Mar maps to the next calendar year's Q1). No launch quarter is cited: no Takeda document read for this series states it.",
+  "search_log": [
+    "downloaded takeda.com quarterly-results pages for 2012-2025 and the current page (15 pages) and collected every PDF/XLSX link (cache/takeda_links.json)",
+    "scanned every qr20xx_q?/full PDF on those pages with pdftotext for the product labels, then read the matching pages with pdfplumber (the verifier's extractor) so quoted figures match its text layer",
+    "FY2014 (JGAAP) documents carry no Entyvio table line for Q1/Q2; FY2015 onward are IFRS; the product-table pages were located per fiscal quarter (data books FY2016-FY2019, quarterly financial reports FY2020-FY2026)",
+    "EDGAR (Takeda CIK 0001395064) was indexed through data.sec.gov submissions (6-K, 6-K/A, 20-F, 20-F/A) but the takeda.com copies of the same quarterly documents were cited instead, because the 6-K earnings exhibits were not individually resolved",
+    "cross-check: for every fiscal year the four quarterly values were summed and compared with the full-year product figure printed in the Q4 document (differences at most 0.2 billion JPY from rounding)",
+    "NPS Pharmaceuticals / Shire filings (SEC) for pre-2019 Gattex sales were NOT searched in this batch (different issuer and currency)"
+  ]
+}

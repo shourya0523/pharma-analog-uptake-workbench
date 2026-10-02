@@ -128,6 +128,7 @@ can no longer score a change:
 - `seed/cases/holdout_2026_09.json`
 - `seed/holdout_members/combined_name_members.json`
 - `seed/holdout_labels/product_labels.json`
+- `seed/holdout_foreign_xbrl.json` and its case-file shape `seed/cases/foreign_xbrl.json`
 
 Each file carries a `retired` record saying when and why. Its guard test now
 checks that the retirement is real (at least one of its issuers is scored

@@ -181,6 +181,11 @@ def check_row(row: dict, raw: bytes, lines: list[str]) -> dict:
         result["value_in_quote"] = any(abs(f - reported) < 1e-6 for f in figures)
     else:
         result["value_in_quote"] = len(figures) >= 2
+    # The figure as printed, in its printed unit, has to be the recorded
+    # millions: a derived row that stores an input there instead of its own
+    # result would otherwise pass every other check.
+    scale = SCALE.get(row.get("source_unit") or "millions", 1)
+    result["unit_consistent"] = abs(reported / scale - float(row["value_reported"])) <= 1e-6 * max(1.0, abs(float(row["value_reported"])))
     year = row["period"][:4]
     result["year_named"] = year in raw.decode("utf-8", errors="ignore") or any(year in l for l in lines)
     return result

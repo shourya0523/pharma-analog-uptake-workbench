@@ -1,0 +1,34 @@
+{
+  "drug_name": "Adynovate",
+  "generic_name": "antihemophilic factor (recombinant), PEGylated (rurioctocog alfa pegol)",
+  "manufacturer": "Takeda",
+  "benchmark_identity": "takeda_adynovate_adynovi_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Hemophilia A",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "lyophilized powder for solution for injection",
+  "route_of_administration": "intravenous",
+  "moa": "PEGylated recombinant factor VIII replacement",
+  "moa_class": "pegylated_recombinant_factor_viii",
+  "first_approval_year": 2015,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/media/94470/download?attachment",
+    "quote": "Initial U.S. Approval: 2015 (ADYNOVATE package insert, FDA CBER product page https://www.fda.gov/vaccines-blood-biologics/approved-blood-products/adynovate, BLA 125566)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2019Q1",
+  "series_start_reason": "Takeda prints an Adynovate line only from fiscal Q4 FY2018 (January-March 2019), the first quarter after it completed the Shire acquisition (Baxalta, then Shire, held the product earlier; USD, different issuers). The first quarter contains Shire's product only from the acquisition date (table header in qr2018_q4_f_en.pdf: 'Takeda 12 Months @ Actual rate, Shire 3 Months @ Actual rate'). Pre-2019 Baxalta/Shire history was not sourced in this batch and is not spliced.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Label printed by Takeda: 'Adynovate' in the FY2018-FY2019 data books and 'ADYNOVATE/ADYNOVI' from FY2020 (same product, U.S. and ex-U.S. names), treated as one relabelled line with the same definition. No launch quarter is cited. FDA approval year taken from the FDA package insert's 'Initial U.S. Approval' (CBER-regulated product, no Drugs@FDA letter).",
+  "search_log": [
+    "downloaded takeda.com quarterly-results pages for 2012-2025 and the current page (15 pages) and collected every PDF/XLSX link (cache/takeda_links.json)",
+    "scanned every qr20xx_q?/full PDF on those pages with pdftotext for the product labels, then read the matching pages with pdfplumber (the verifier's extractor) so quoted figures match its text layer",
+    "FY2014 (JGAAP) documents carry no Entyvio table line for Q1/Q2; FY2015 onward are IFRS; the product-table pages were located per fiscal quarter (data books FY2016-FY2019, quarterly financial reports FY2020-FY2026)",
+    "EDGAR (Takeda CIK 0001395064) was indexed through data.sec.gov submissions (6-K, 6-K/A, 20-F, 20-F/A) but the takeda.com copies of the same quarterly documents were cited instead, because the 6-K earnings exhibits were not individually resolved",
+    "cross-check: for every fiscal year the four quarterly values were summed and compared with the full-year product figure printed in the Q4 document (differences at most 0.2 billion JPY from rounding)",
+    "Baxalta / Shire filings (SEC) for pre-2019 Adynovate sales were NOT searched in this batch (different issuer and currency)"
+  ]
+}

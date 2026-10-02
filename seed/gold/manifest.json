@@ -3,7 +3,7 @@
   "generation": "independent_issuer_research",
   "as_of_quarter": "2026Q2",
   "target_product_count": 20,
-  "comparator_product_count": 197,
+  "comparator_product_count": 219,
   "therapeutic_areas": [
     "ADHD",
     "Anemia",
@@ -30,9 +30,9 @@
     "Type 2 diabetes",
     "Urology"
   ],
-  "quarterly_series_count": 207,
+  "quarterly_series_count": 223,
   "annual_only_series_count": 1,
-  "excluded_product_count": 9,
+  "excluded_product_count": 15,
   "quarterly_coverage_pct": 100.0,
   "reported_rows_file": "quarterly_revenue.jsonl",
   "annual_rows_file": "annual_revenue.jsonl",

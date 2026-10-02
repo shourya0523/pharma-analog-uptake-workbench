@@ -1,0 +1,34 @@
+{
+  "drug_name": "Motegrity",
+  "generic_name": "prucalopride",
+  "manufacturer": "Takeda",
+  "benchmark_identity": "takeda_resolor_motegrity_worldwide_reported",
+  "therapeutic_area": "GI / Liver / Women's Health / Urology",
+  "indication_area": "Chronic idiopathic constipation",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "oral tablet",
+  "route_of_administration": "oral",
+  "moa": "selective serotonin 5-HT4 receptor agonist",
+  "moa_class": "serotonin_5ht4_receptor_agonist",
+  "first_approval_year": 2018,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2018/210166Orig1s000ltr.pdf",
+    "quote": "This new drug application provides for the use of Motegrity (prucalopride) oral tablets for chronic idiopathic constipation. (FDA approval letter, NDA 210166, signed 12/14/2018)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2019Q1",
+  "series_start_reason": "Takeda prints a Resolor/Motegrity product line only from fiscal Q4 FY2018 (January-March 2019), the first quarter after it completed the Shire acquisition; earlier history (Shire, USD, different issuer) was not sourced in this batch and is not spliced.",
+  "series_end_quarter": "2026Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Takeda's quarterly financial report for FY2026 Q1 (April-June 2026; qr2026_q1_qfr_en.pdf) contains no RESOLOR/MOTEGRITY line (zero text lines mention Resolor or Motegrity), whereas the FY2025 Q4 report prints it (RESOLOR/MOTEGRITY FY2025 7.3 billion JPY). The GI table of the FY2026 Q1 report lists 'Others' rows instead.",
+  "notes": "Printed label is 'Resolor/Motegrity' (FY2019) / 'RESOLOR/MOTEGRITY' (later): ex-U.S. and U.S. brand names of prucalopride on one worldwide line. No launch quarter is cited.",
+  "search_log": [
+    "downloaded takeda.com quarterly-results pages for 2012-2025 and the current page (15 pages) and collected every PDF/XLSX link (cache/takeda_links.json)",
+    "scanned every qr20xx_q?/full PDF on those pages with pdftotext for the product labels, then read the matching pages with pdfplumber (the verifier's extractor) so quoted figures match its text layer",
+    "FY2014 (JGAAP) documents carry no Entyvio table line for Q1/Q2; FY2015 onward are IFRS; the product-table pages were located per fiscal quarter (data books FY2016-FY2019, quarterly financial reports FY2020-FY2026)",
+    "EDGAR (Takeda CIK 0001395064) was indexed through data.sec.gov submissions (6-K, 6-K/A, 20-F, 20-F/A) but the takeda.com copies of the same quarterly documents were cited instead, because the 6-K earnings exhibits were not individually resolved",
+    "cross-check: for every fiscal year the four quarterly values were summed and compared with the full-year product figure printed in the Q4 document (differences at most 0.2 billion JPY from rounding)",
+    "checked qr2026_q1_qfr_en.pdf for any line mentioning Resolor or Motegrity: none"
+  ]
+}

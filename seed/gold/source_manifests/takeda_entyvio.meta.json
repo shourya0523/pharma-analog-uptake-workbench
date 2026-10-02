@@ -1,0 +1,33 @@
+{
+  "drug_name": "Entyvio",
+  "generic_name": "vedolizumab",
+  "manufacturer": "Takeda",
+  "benchmark_identity": "takeda_entyvio_worldwide_reported",
+  "therapeutic_area": "Immunology / Inflammation",
+  "indication_area": "Inflammatory bowel disease (ulcerative colitis, Crohn's disease)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "lyophilized powder for injection (intravenous); subcutaneous pen added later",
+  "route_of_administration": "intravenous",
+  "moa": "integrin receptor antagonist (alpha4beta7 integrin)",
+  "moa_class": "integrin_receptor_antagonist",
+  "first_approval_year": 2014,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2014/125476Orig1s000ltr.pdf",
+    "quote": "Under this license, you are authorized to manufacture the product Entyvio (vedolizumab). (FDA approval letter, BLA 125476, signed 05/20/2014)"
+  },
+  "launch_quarter": "2014Q2",
+  "commercial_start_quarter": "2014Q2",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Launch quarter: Takeda's Q1 FY2014 financial statements text (https://assets-dam.takeda.com/raw/upload/v1662727509/legacy-dotcom/siteassets/system/investors/quarterly-announcements/fy2014/qr2014_q1_f_en.pdf) states 'In the U.S., in June 2014, Takeda launched ENTYVIO'. Takeda fiscal quarters (April-March year) align with calendar quarters; FY Q1 = Apr-Jun maps to calendar Q2. Takeda reports JPY billions to one decimal. Basis changes: FY2014 quarters come from JGAAP-era and IFRS-comparative documents (derived rows 2014Q3 and 2015Q1 are approximate, 0.1 billion JPY); FY2015 onward IFRS. The printed line is worldwide product revenue (Takeda's footnote in the FY2017 data book and FY2024 report says sales amount includes royalty income and service income).",
+  "search_log": [
+    "downloaded takeda.com quarterly-results pages for 2012-2025 and the current page (15 pages) and collected every PDF/XLSX link (cache/takeda_links.json)",
+    "scanned every qr20xx_q?/full PDF on those pages with pdftotext for the product labels, then read the matching pages with pdfplumber (the verifier's extractor) so quoted figures match its text layer",
+    "FY2014 (JGAAP) documents carry no Entyvio table line for Q1/Q2; FY2015 onward are IFRS; the product-table pages were located per fiscal quarter (data books FY2016-FY2019, quarterly financial reports FY2020-FY2026)",
+    "EDGAR (Takeda CIK 0001395064) was indexed through data.sec.gov submissions (6-K, 6-K/A, 20-F, 20-F/A) but the takeda.com copies of the same quarterly documents were cited instead, because the 6-K earnings exhibits were not individually resolved",
+    "cross-check: for every fiscal year the four quarterly values were summed and compared with the full-year product figure printed in the Q4 document (differences at most 0.2 billion JPY from rounding)"
+  ]
+}

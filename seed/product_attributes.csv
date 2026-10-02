@@ -216,3 +216,25 @@ Ocaliva,Farnesoid X receptor (FXR) agonist,fxr_agonist,Oral,2016,Primary biliary
 Xifaxan,"Rifamycin antibacterial (RNA polymerase inhibitor), minimally absorbed",rifamycin_antibiotic,Oral,2004,Travelers' diarrhea; hepatic encephalopathy; IBS-D,curated_reference,distinct_product
 Luxturna,AAV2 vector-based gene therapy delivering RPE65,aav_gene_therapy,Intravitreal,2017,RPE65 mutation-associated inherited retinal dystrophy,curated_reference,distinct_product
 Tyrvaya,Nicotinic acetylcholine receptor agonist (trigeminal parasympathetic pathway activation),nicotinic_acetylcholine_receptor_agonist,Intranasal,2021,Dry eye disease,curated_reference,distinct_product
+Izervay,complement C5 inhibitor (RNA aptamer),complement_c5_inhibitor,Intravitreal,2023,Geographic atrophy secondary to age-related macular degeneration,curated_reference,distinct_product
+Myrbetriq,beta-3 adrenergic receptor agonist,beta3_adrenergic_receptor_agonist,Oral,2012,Overactive bladder,curated_reference,distinct_product
+Veozah,neurokinin 3 (NK3) receptor antagonist,nk3_receptor_antagonist,Oral,2023,Vasomotor symptoms associated with menopause,curated_reference,distinct_product
+Xtandi,androgen receptor signalling inhibitor,androgen_receptor_inhibitor,Oral,2012,Oncology (prostate cancer),curated_reference,distinct_product
+Adynovate,PEGylated recombinant factor VIII replacement,pegylated_recombinant_factor_viii,Intravenous,2015,Hemophilia A,curated_reference,distinct_product
+Entyvio,integrin receptor antagonist (alpha4beta7 integrin),integrin_receptor_antagonist,Intravenous,2014,"Inflammatory bowel disease (ulcerative colitis, Crohn's disease)",curated_reference,distinct_product
+Gattex,glucagon-like peptide-2 (GLP-2) receptor agonist,glp2_receptor_agonist,Subcutaneous,2012,Short bowel syndrome,curated_reference,distinct_product
+Motegrity,selective serotonin 5-HT4 receptor agonist,serotonin_5ht4_receptor_agonist,Oral,2018,Chronic idiopathic constipation,curated_reference,distinct_product
+Vyvgart,neonatal Fc receptor (FcRn) blocker,fcrn_antagonist,Intravenous,2021,"Neurology (generalized myasthenia gravis, CIDP)",curated_reference,distinct_product
+Hemgenix,AAV5 vector gene therapy delivering Factor IX Padua variant,aav_gene_therapy,Intravenous,2022,Hematology (hemophilia B),curated_reference,distinct_product
+Leqembi,anti-amyloid-beta protofibril monoclonal antibody,anti_amyloid_beta_antibody,Intravenous,2023,Neurology (Alzheimer's disease),curated_reference,distinct_product
+Mavenclad,purine antimetabolite; selective lymphocyte depletion,purine_analog_immunomodulator,Oral,2019,Neurology (multiple sclerosis),curated_reference,distinct_product
+Radicava ORS,free radical scavenger,free_radical_scavenger,Oral,2022,Neurology (amyotrophic lateral sclerosis),curated_reference,distinct_product
+Gemtesa,beta-3 adrenergic receptor agonist,beta3_adrenergic_agonist,Oral,2020,Urology (overactive bladder),curated_reference,distinct_product
+Ilumya,IL-23 p19 inhibitor,il23_p19_inhibitor,Subcutaneous,2018,Immunology (plaque psoriasis),curated_reference,distinct_product
+Bimzelx,humanized monoclonal antibody inhibiting IL-17A and IL-17F,il17a_f_inhibitor,Subcutaneous,2023,"Immunology (psoriasis, psoriatic arthritis, axial spondyloarthritis, hidradenitis suppurativa)",curated_reference,distinct_product
+Cimzia,PEGylated anti-TNF Fab' fragment,tnf_inhibitor,Subcutaneous,2008,"Immunology (rheumatology, Crohn's disease, psoriasis)",curated_reference,distinct_product
+Rystiggo,neonatal Fc receptor blocker,fcrn_antagonist,Subcutaneous,2023,Neurology (generalized myasthenia gravis),curated_reference,distinct_product
+Jivi,PEGylated recombinant factor VIII replacement,factor_viii_replacement,Intravenous,2018,Hemophilia A,curated_reference,distinct_product
+Nubeqa,Androgen receptor inhibitor,androgen_receptor_inhibitor,Oral,2019,Oncology (solid),curated_reference,distinct_product
+Lenvima,"Multi-kinase inhibitor (VEGFR, FGFR, PDGFR-alpha, RET, KIT)",multikinase_inhibitor,Oral,2015,Oncology (solid),curated_reference,distinct_product
+Crysvita,Anti-FGF23 monoclonal antibody,fgf23_blocking_antibody,Subcutaneous,2018,X-linked hypophosphatemia (rare metabolic bone disease),curated_reference,distinct_product

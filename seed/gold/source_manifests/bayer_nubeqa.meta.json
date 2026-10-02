@@ -1,0 +1,32 @@
+{
+  "drug_name": "Nubeqa",
+  "generic_name": "darolutamide",
+  "manufacturer": "Bayer",
+  "benchmark_identity": "bayer_nubeqa_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (solid)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Androgen receptor inhibitor",
+  "moa_class": "androgen_receptor_inhibitor",
+  "first_approval_year": 2019,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2019/212099Orig1s000ltr.pdf",
+    "quote": "NDA 212099 NDA APPROVAL Bayer HealthCare Pharmaceuticals Inc. ... for Nubeqa (darolutamide) ... for the treatment of patients with non-metastatic castration resistant prostate cancer (nmCRPC). It is approved, effective on the date of this letter (signature date 07/30/2019)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2025Q4",
+  "series_start_reason": "Starts 2025Q4: Bayer's quarterly statements and annual reports before then are PDFs on www.bayer.com, which refuses requests from the environment this dataset was verified in (HTTP 403 bot protection), so earlier quarters could not be checked at source. Only reports.bayer.com (Annual Report 2025, Q1 2026, H1 2026) was reachable. Earlier quarters (from 2021Q1) were read by a sourcing agent via a third-party fetcher and are held outside gold pending manual verification.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Quarterly figures sum to the printed full-year figures: 2021 219, 2022 466, 2023 869, 2024 1,523, 2025 2,385 (EUR million). Q1 and Q2 of 2024 and 2025 prior-year columns in the 2025 documents are restated (e.g. Q1 2024 285 vs 283 in its own statement); the own-quarter figure is used for each row.",
+  "search_log": [
+    "bayer.com (www and bare) answers HTTP 403 with a 'bot rated harmful' page to curl with default and browser User-Agents for /en/investors/* and /sites/default/files/*.pdf; bayer.com/media/en-us/ answers 200 but carries no financial tables; investor.bayer.com and pharma.bayer.com refuse the connection or redirect to the blocked paths",
+    "reports.bayer.com (Bayer's own digital report host) answers 200: only the latest reports are online there (Annual Report 2025, Q1 2026, Half-Year 2026); older slugs return 404",
+    "document URLs for 2019-2025 quarterly statements/half-year reports/annual reports taken from Bayer's report archive page https://www.bayer.com/en/investors/quarterly-reports and https://www.bayer.com/en/investors/integrated-annual-reports (read through the web_fetch tool of the Parallel Search MCP server, because direct fetches are blocked)",
+    "text of the older PDFs on www.bayer.com was read through the same web_fetch tool (excerpts of the documents, not search results); these URLs cannot be fetched from this environment, so the verifier reports them as fetch failures here. No spoofed crawler User-Agent was used"
+  ]
+}

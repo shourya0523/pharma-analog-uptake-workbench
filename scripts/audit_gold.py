@@ -115,8 +115,13 @@ def audit_derivation_labels(quarterly: list[dict]) -> list[str]:
         if not years_in_url:
             continue
         # A quarter is cited by its own filing, or by the release that reports
-        # it, which for a fourth quarter is published the following year.
-        if not years_in_url & {year, year + 1}:
+        # it, which for a fourth quarter is published the following year. An
+        # issuer whose fiscal year starts in April reports January to March as
+        # the fourth quarter of the year before, and its row says so.
+        allowed = {year, year + 1}
+        if row["calendar_quarter"] == 1 and "fiscal" in (row.get("gold_notes") or "").lower():
+            allowed.add(year - 1)
+        if not years_in_url & allowed:
             finding(
                 out,
                 f"{row['gold_id']}: labelled {row['derivation']} but cites a "

@@ -1,0 +1,34 @@
+{
+  "drug_name": "Lenvima",
+  "generic_name": "lenvatinib",
+  "manufacturer": "Eisai",
+  "benchmark_identity": "eisai_lenvima_kisplyx_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (solid)",
+  "revenue_scope": "Product family",
+  "geography": "Worldwide",
+  "formulation": "capsule",
+  "route_of_administration": "oral",
+  "moa": "Multi-kinase inhibitor (VEGFR, FGFR, PDGFR-alpha, RET, KIT)",
+  "moa_class": "multikinase_inhibitor",
+  "first_approval_year": 2015,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2015/206947s000lbl.pdf",
+    "quote": "LENVIMA is a kinase inhibitor indicated for the treatment of patients with locally recurrent or metastatic, progressive, radioactive iodine-refractory differentiated thyroid cancer | Revised: 02/2015"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2015Q2",
+  "series_start_reason": "First quarter delivered is Eisai FY2015 Q1 (Apr-Jun 2015, calendar 2015Q2), the earliest quarter printed in any Eisai Reference Data that could be fetched. FDA approved Lenvima in Feb 2015 and the FY2014 Q4 (Jan-Mar 2015) quarterly table is in a document Eisai filed in May 2015 that is not on the JPX copy (JPX host returned no document for TDnet IDs of 2015-2016 filings) and eisai.com/ir/ redirects to the home page from this environment, so calendar 2015Q1 could not be cited. No document fetched states the launch quarter, so launch_quarter is null.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Eisai prints one worldwide line 'Lenvima / Kisplyx (Anticancer agent)' (Lenvima and Kisplyx are the US/RoW and EU brand names of lenvatinib); the FY2016 Q3 Reference Data labels the same line 'Lenvima (Anticancer agent)' with identical figures for FY2015, so the definition is treated as unchanged. Merck's alliance revenue is not used. Values are Eisai's consolidated product revenue (fiscal April-March quarters mapped to calendar quarters, e.g. FY Q1 Apr-Jun = calendar Q2).",
+  "search_log": [
+    "eisai.com/ir/*, eisai.co.jp/ir/* answer HTTP 302 to /index.html?redirect_ir=... for every path and UA tried (browser UA, Accept-Language ja, Referer): IR library unreachable",
+    "eisai.com/news/* is reachable but carries no quarterly product table",
+    "Eisai files Reference Data on TDnet; Japan Exchange Group hosts the PDFs at https://www2.jpx.co.jp/disc/45230/<TDnet id>.pdf (HTTP 200); TDnet ids for Eisai documents were found via listings on finance.yahoo.co.jp (4523 disclosures, back to Nov 2023), kabutan and irbank (used only to discover TDnet ids), then every cited PDF was fetched from jpx.co.jp and read with pdftotext",
+    "scanned jpx.co.jp/disc/45230/ for neighbouring TDnet ids on each filing date to locate the English 'Reference Data' PDF next to the Japanese one",
+    "English Reference Data located and parsed for FY2016 Q3, FY2016-FY2025 full year, FY2017 Q3, FY2023 Q2-FY2026 Q1; no JPX copy found for Eisai filings before 2017-01 nor for Q1/Q2 documents of FY2016-FY2022 (no seed id), those quarters are cited from the next same-quarter document or the same-year full-year document",
+    "consistency: every quarter value is identical in every document that prints it (no restatement)"
+  ]
+}

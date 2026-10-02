@@ -1,0 +1,31 @@
+{
+  "series_start_reason": "Mavenclad was approved in the EU in August 2017 (Merck KGaA 2018 Q4 press release: 'approved in Europe in August 2017'; sales EUR 5 million in 2017). The 2017 Q3 and Q4 quarterly reports print no Mavenclad sales figure; 2017 figures appear only as prior-year values (EUR 3 million for Q3 2017 in the Q3 2018 table) and as a full-year prose figure, so no quarter-own table row exists before Q1 2018.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "launch_quarter": "2017Q3",
+  "commercial_start_quarter": "2018Q1",
+  "notes": "Merck KGaA (emdgroup.com / merckgroup.com) quarterly reports; Mavenclad net sales in the 'thereof' line under Neurology & Immunology. Fetching emdgroup.com requires a browser User-Agent: the project User-Agent gets the connection dropped (verifier run needs SEC_CONTACT set to a browser UA).",
+  "drug_name": "Mavenclad",
+  "generic_name": "cladribine",
+  "manufacturer": "Merck KGaA",
+  "benchmark_identity": "merck_kgaa_mavenclad_worldwide_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Neurology (multiple sclerosis)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "purine antimetabolite; selective lymphocyte depletion",
+  "moa_class": "purine_analog_immunomodulator",
+  "first_approval_year": 2019,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2019/022561Orig1s000ltr.pdf",
+    "quote": "It is approved, effective on the date of this letter, for use as recommended in the enclosed agreed-upon labeling text. (NDA 022561, EMD Serono; letter signed 03/29/2019)"
+  },
+  "search_log": [
+    "emdgroup.com reports-and-financials page lists all quarterly Reports 2014-2026; Reports 2017Q3-2026Q2 downloaded (36)",
+    "'thereof: Mavenclad' row found in Q1-Q3 and FY tables from 2018Q1",
+    "Q4 quarterly not printed: derived from FY less nine months/other quarters"
+  ]
+}

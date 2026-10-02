@@ -250,6 +250,31 @@
   ]
  },
  {
+  "drug_name": "Xtandi",
+  "manufacturer": "Astellas",
+  "ticker": null,
+  "generic_name": "enzalutamide",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 1457.16278,
+    "gold_id": "astellas-xtandi-global-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 1735.836492,
+    "gold_id": "astellas-xtandi-global-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Ultomiris",
   "manufacturer": "AstraZeneca",
   "ticker": "AZN",
@@ -331,6 +356,31 @@
     "period": "2021Q4",
     "value_normalized_usd_millions": 29.0,
     "gold_id": "bausch-trulance-us-reported-2021q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nubeqa",
+  "manufacturer": "Bayer",
+  "ticker": null,
+  "generic_name": "darolutamide",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 876.9292,
+    "gold_id": "bayer-nubeqa-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 1023.528,
+    "gold_id": "bayer-nubeqa-worldwide-reported-2026q2"
    }
   ]
  },
@@ -456,6 +506,31 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 1375.615904,
     "gold_id": "daiichi-enhertu-company-booked-product-sales-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Leqembi",
+  "manufacturer": "Eisai",
+  "ticker": null,
+  "generic_name": "lecanemab",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 167.079496,
+    "gold_id": "eisai-leqembi-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 183.875666,
+    "gold_id": "eisai-leqembi-worldwide-reported-2026q2"
    }
   ]
  },
@@ -645,6 +720,31 @@
   ]
  },
  {
+  "drug_name": "Crysvita",
+  "manufacturer": "Kyowa Kirin",
+  "ticker": null,
+  "generic_name": "burosumab",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 291.432556,
+    "gold_id": "kyowa-kirin-crysvita-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 458.747822,
+    "gold_id": "kyowa-kirin-crysvita-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Yutrepia",
   "manufacturer": "Liquidia",
   "ticker": "LQDA",
@@ -716,6 +816,66 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 588.0,
     "gold_id": "merck-winrevair-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Mavenclad",
+  "manufacturer": "Merck KGaA",
+  "ticker": null,
+  "generic_name": "cladribine",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 298.554,
+    "gold_id": "merck-kgaa-mavenclad-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 319.8525,
+    "gold_id": "merck-kgaa-mavenclad-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Radicava ORS",
+  "manufacturer": "Mitsubishi Tanabe Pharma",
+  "ticker": null,
+  "generic_name": "edaravone",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 178.51224,
+    "gold_id": "mitsubishi-tanabe-radicava-family-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2025Q1. Mitsubishi Chemical Group's FY2025 summaries (after the Tanabe divestiture) print no Radicava row; the last quarter derivable is Jan-Mar 2025 from the FY2024 summary."
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2025Q1. Mitsubishi Chemical Group's FY2025 summaries (after the Tanabe divestiture) print no Radicava row; the last quarter derivable is Jan-Mar 2025 from the FY2024 summary."
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2025Q1. Mitsubishi Chemical Group's FY2025 summaries (after the Tanabe divestiture) print no Radicava row; the last quarter derivable is Jan-Mar 2025 from the FY2024 summary."
    }
   ]
  },
@@ -1105,6 +1265,66 @@
   ]
  },
  {
+  "drug_name": "Gemtesa",
+  "manufacturer": "Sumitomo Pharma",
+  "ticker": null,
+  "generic_name": "vibegron",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 151.0,
+    "gold_id": "sumitomo-pharma-gemtesa-us-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 189.0,
+    "gold_id": "sumitomo-pharma-gemtesa-us-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Motegrity",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "prucalopride",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 9.56562,
+    "gold_id": "takeda-resolor-motegrity-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2026Q1. Takeda's quarterly financial report for FY2026 Q1 (April-June 2026; qr2026_q1_qfr_en.pdf) contains no RESOLOR/MOTEGRITY line (zero text lines mention Resolor or Motegrity), whereas the FY2025 Q4 report prints it (RESOLOR/MOTEGRITY FY2025 7.3 billion JPY). The GI table of the FY2026 Q1 report lists 'Others' rows instead."
+   },
+   {
+    "period": "2026Q3",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2026Q1. Takeda's quarterly financial report for FY2026 Q1 (April-June 2026; qr2026_q1_qfr_en.pdf) contains no RESOLOR/MOTEGRITY line (zero text lines mention Resolor or Motegrity), whereas the FY2025 Q4 report prints it (RESOLOR/MOTEGRITY FY2025 7.3 billion JPY). The GI table of the FY2026 Q1 report lists 'Others' rows instead."
+   },
+   {
+    "period": "2026Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2026Q1. Takeda's quarterly financial report for FY2026 Q1 (April-June 2026; qr2026_q1_qfr_en.pdf) contains no RESOLOR/MOTEGRITY line (zero text lines mention Resolor or Motegrity), whereas the FY2025 Q4 report prints it (RESOLOR/MOTEGRITY FY2025 7.3 billion JPY). The GI table of the FY2026 Q1 report lists 'Others' rows instead."
+   }
+  ]
+ },
+ {
   "drug_name": "Austedo",
   "manufacturer": "Teva",
   "ticker": "TEVA",
@@ -1151,6 +1371,31 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 326.6,
     "gold_id": "uthr-tyvaso-dpi-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Vyvgart",
+  "manufacturer": "argenx",
+  "ticker": "ARGX",
+  "generic_name": "efgartigimod alfa",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 1298.0,
+    "gold_id": "argenx-vyvgart-family-global-product-net-sales-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 1516.0,
+    "gold_id": "argenx-vyvgart-family-global-product-net-sales-reported-2026q2"
    }
   ]
  },
