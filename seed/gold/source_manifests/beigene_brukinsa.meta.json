@@ -1,0 +1,30 @@
+{
+  "drug_name": "Brukinsa",
+  "generic_name": "zanubrutinib",
+  "manufacturer": "BeiGene",
+  "benchmark_identity": "beigene_brukinsa_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (hematologic)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "capsule",
+  "route_of_administration": "oral",
+  "moa": "Bruton's tyrosine kinase (BTK) inhibitor",
+  "moa_class": "btk_inhibitor",
+  "first_approval_year": 2019,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2019/213217Orig1s000ltr.pdf",
+    "quote": "NDA 213217 ... Brukinsa (zanubrutinib) capsules ... for the treatment of adult patients with mantle cell lymphoma (MCL) who have received at least one prior therapy ... accelerated approval (electronic signature dated 11/14/2019)"
+  },
+  "launch_quarter": "2019Q4",
+  "commercial_start_quarter": "2019Q4",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "BeiGene's earnings releases print only total net product revenue; the BRUKINSA row is in the Form 10-Q (quarterly) and 10-K (annual) product revenue tables, so Q4 is derived (10-K less nine months)",
+    "FY2019 10-K and Q4 2019 release state only that U.S. product revenue was 'not significant'; 2019Q4 (1,039 thousand) derived from the fiscal 2020 10-K prior-year column with nine months 2019 nil from the Q3 2020 10-Q prior-year column",
+    "FY2024 and FY2023 10-K/A filings (2025-01-08, 2025-02-28) listed and not used"
+  ]
+}

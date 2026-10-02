@@ -1,0 +1,30 @@
+{
+  "drug_name": "Cabometyx",
+  "generic_name": "cabozantinib",
+  "manufacturer": "Exelixis",
+  "benchmark_identity": "exelixis_cabometyx_us_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (solid)",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "multi-targeted receptor tyrosine kinase inhibitor (VEGFR, MET, AXL, RET)",
+  "moa_class": "multikinase_tki",
+  "first_approval_year": 2016,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2016/208692Orig1s000ltr.pdf",
+    "quote": "NDA 208692 ... CABOMETYX (cabozantinib) Tablets, 20 mg, 40 mg, and 60 mg ... our approval letter dated April 25, 2016 (corrected letter; electronic signature dated 04/25/2016). Cabozantinib capsules (Cometriq, a separate NDA) were first approved in 2012."
+  },
+  "launch_quarter": "2016Q2",
+  "commercial_start_quarter": "2016Q2",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "Exelixis releases print only combined 'Net product revenues' (Cabometyx + Cometriq) in tables; the Cabometyx line is printed separately in the Form 10-Q and 10-K revenue tables, so quarters Q1-Q3 are read from 10-Qs and Q4 is derived as fiscal-year (10-K) minus nine months (Q3 10-Q)",
+    "fiscal quarters end within a few days of calendar quarter end (52/53-week year ending the Friday closest to 31 December; fiscal 2019 and 2024 had 53 weeks); each is mapped to the calendar quarter it ends in",
+    "Q2 2016 release states launch of Cabometyx in late April 2016; Q1 2016 10-Q has no Cabometyx line"
+  ]
+}

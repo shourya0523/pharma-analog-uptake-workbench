@@ -1,0 +1,34 @@
+{
+  "drug_name": "Enbrel",
+  "generic_name": "etanercept",
+  "manufacturer": "Amgen",
+  "benchmark_identity": "amgen_enbrel_us_canada_reported",
+  "therapeutic_area": "Immunology / Inflammation",
+  "indication_area": "Immunology/inflammation (rheumatoid arthritis, psoriatic arthritis, plaque psoriasis)",
+  "revenue_scope": "U.S. and Canada",
+  "geography": "U.S. and Canada",
+  "formulation": "injection",
+  "route_of_administration": "subcutaneous",
+  "moa": "TNF-alpha blocker (soluble TNF receptor fusion protein)",
+  "moa_class": "tnf_inhibitor",
+  "first_approval_year": 1998,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2012/103795s5503lbl.pdf",
+    "quote": "Initial U.S. Approval: 1998"
+  },
+  "launch_quarter": "1998Q4",
+  "commercial_start_quarter": "2003Q1",
+  "series_start_reason": "Amgen acquired Immunex on July 15, 2002. Amgen's fiscal 2002 shows Enbrel only from that date, and no quarterly Enbrel total was found for 2002Q3-2002Q4 (the 2003 10-Q prior-year columns show only U.S. and International lines, for a part-quarter in Q3), so Amgen's series starts at 2003Q1 (derived: six months 2003 less second quarter 2003, both in one row of the June 2004 10-Q; the 2003 10-Qs print only U.S. and International lines). Enbrel before the acquisition is in the separate immunex_enbrel file (1998Q4-2002Q1; Immunex filed no second-quarter 2002 Form 10-Q).",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "listed Amgen (CIK 0000318154) filings via data.sec.gov/submissions (recent + older pages), keeping every form starting '8-K' (8-K and 8-K/A) or '10-' (10-Q, 10-K, amendments): 323 8-K, 2 8-K/A, 98 10-Q, 31 10-K; the two 8-K/As are dated 1995 and 2020 and are not earnings releases",
+    "took every 8-K carrying Item 2.02 from 2012-01-26 to 2026-08-04, fetched each filing's index.json, and kept the exhibit that contains both 'Enbrel' and 'Repatha' or 'Prolia': 59 earnings-release exhibits covering the fourth quarter of 2011 through the second quarter of 2026, no quarter missing",
+    "parsed each release's HTML table rows; the product table ('$Millions, except percentages' with U.S., ROW and TOTAL columns) was checked for every quarter, and for each fiscal year the four quarters were summed and compared with the full-year table in the fourth-quarter release (all matched exactly for the rows used)",
+    "pre-2012: Amgen's earnings releases (2004-2012-01) print only 'Enbrel - U.S.' and 'Enbrel - International/Canada' lines with no total; Amgen's Forms 10-Q and 10-K print a 'Total ENBREL' row (scanned every 10-Q/10-K from 2002-06 to 2013-06 for rows 'Total ENBREL'/'ENBREL'): totals printed from the June 2004 10-Q (with prior-year column), so 2003Q2, 2003Q3, 2004Q1 are prior-year columns and 2003Q1 is six months less second quarter",
+    "fourth quarters 2003-2010 are derived (annual_less_reported_first_nine_months) from the Form 10-K total and the September Form 10-Q nine-month total; the fourth-quarter earnings release prints no total. 2011Q4 is the prior-year column of the Q4 2012 release (also equals 3,701 - 2,756). Each derived row's two inputs sit in different documents, so the verifier's one-line check cannot pass them",
+    "2012Q1 from the March 2012 Form 10-Q (the Q1 2012 release prints only U.S. and Canada lines); 2012Q2 onward from each quarter's own release ('Enbrel' row with U.S., ROW (Canada) and TOTAL); full-year sums for 2012-2025 matched the full-year tables",
+    "Amgen's 10-K for 2024 states 'We market ENBREL ... in the United States and Canada' and prints 'ENBREL - U.S.', 'ENBREL - Canada', 'Total ENBREL'"
+  ]
+}

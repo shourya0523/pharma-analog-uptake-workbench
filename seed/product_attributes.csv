@@ -96,3 +96,29 @@ Tresiba,Ultra-long-acting basal insulin analogue,basal_insulin_analogue,Subcutan
 Victoza,GLP-1 receptor agonist,glp1_receptor_agonist,Subcutaneous,2010,Type 2 diabetes,curated_reference,distinct_product
 Wegovy,GLP-1 receptor agonist,glp1_receptor_agonist,Subcutaneous,2021,Obesity / chronic weight management,curated_reference,distinct_product
 Esperoct,"Recombinant factor VIII, glycoPEGylated",factor_viii_replacement,Intravenous,2019,Hemophilia A,curated_reference,distinct_product
+Elahere,Folate receptor alpha (FRalpha)-directed antibody-drug conjugate,fra_directed_adc,Intravenous,2022,Oncology (solid; ovarian cancer),curated_reference,distinct_product
+Humira,TNF-alpha inhibitor,tnf_inhibitor,Subcutaneous,2002,Immunology (rheumatology / inflammatory disease),curated_reference,distinct_product
+Linzess,Guanylate cyclase-C agonist,guanylate_cyclase_c_agonist,Oral,2012,Gastroenterology (IBS-C / chronic idiopathic constipation),curated_reference,distinct_product
+Mavyret,HCV NS3/4A protease inhibitor (glecaprevir) plus NS5A inhibitor (pibrentasvir),hcv_ns3_4a_ns5a_combination,Oral,2017,Infectious disease (hepatitis C),curated_reference,distinct_product
+Rinvoq,Janus kinase 1 (JAK1) inhibitor,jak_inhibitor,Oral,2019,Immunology (rheumatology / dermatology / gastroenterology),curated_reference,distinct_product
+Skyrizi,Interleukin-23 (p19) inhibitor,il23_inhibitor,Subcutaneous,2019,Immunology (dermatology / gastroenterology),curated_reference,distinct_product
+Ubrelvy,Calcitonin gene-related peptide (CGRP) receptor antagonist,cgrp_receptor_antagonist,Oral,2019,Neuroscience (migraine),curated_reference,distinct_product
+Venclexta,BCL-2 inhibitor,bcl2_inhibitor,Oral,2016,Oncology (hematologic),curated_reference,distinct_product
+Vraylar,Dopamine D3/D2 receptor partial agonist (atypical antipsychotic),dopamine_d3_d2_partial_agonist,Oral,2015,Neuroscience (psychiatry),curated_reference,distinct_product
+Restasis,Calcineurin inhibitor immunomodulator (cyclosporine),calcineurin_inhibitor,Topical ophthalmic,2002,Ophthalmology (dry eye disease),curated_reference,distinct_product
+Blincyto,"CD19-directed CD3 T-cell engager (bispecific, BiTE)",bispecific_t_cell_engager,Intravenous,2014,Oncology (hematologic: acute lymphoblastic leukemia),curated_reference,distinct_product
+Enbrel,TNF-alpha blocker (soluble TNF receptor fusion protein),tnf_inhibitor,Subcutaneous,1998,"Immunology/inflammation (rheumatoid arthritis, psoriatic arthritis, plaque psoriasis)",curated_reference,distinct_product
+Kyprolis,Proteasome inhibitor,proteasome_inhibitor,Intravenous,2012,Oncology (hematologic: multiple myeloma),curated_reference,distinct_product
+Lumakras,KRAS G12C inhibitor,kras_g12c_inhibitor,Oral,2021,Oncology (solid: KRAS G12C-mutated non-small cell lung cancer),curated_reference,distinct_product
+Otezla,Phosphodiesterase 4 (PDE4) inhibitor,pde4_inhibitor,Oral,2014,"Immunology/inflammation (psoriatic arthritis, plaque psoriasis, Behcet's disease)",curated_reference,distinct_product
+Repatha,PCSK9 inhibitor (monoclonal antibody),pcsk9_inhibitor,Subcutaneous,2015,Cardiovascular (hyperlipidemia / LDL-C lowering),curated_reference,distinct_product
+Uplizna,CD19-directed cytolytic antibody (B-cell depleting),cd19_directed_antibody,Intravenous,2020,Neuroimmunology (neuromyelitis optica spectrum disorder; also IgG4-related disease),curated_reference,distinct_product
+Brukinsa,Bruton's tyrosine kinase (BTK) inhibitor,btk_inhibitor,Oral,2019,Oncology (hematologic),curated_reference,distinct_product
+Cabometyx,"multi-targeted receptor tyrosine kinase inhibitor (VEGFR, MET, AXL, RET)",multikinase_tki,Oral,2016,Oncology (solid),curated_reference,distinct_product
+Livdelzi,peroxisome proliferator-activated receptor delta (PPAR-delta) agonist,ppar_delta_agonist,Oral,2024,Hepatology (primary biliary cholangitis),curated_reference,distinct_product
+Trodelvy,"Trop-2-directed antibody-drug conjugate (SN-38, topoisomerase I inhibitor payload)",trop2_antibody_drug_conjugate,Intravenous,2020,Oncology (solid),curated_reference,distinct_product
+Yescarta,CD19-directed genetically modified autologous T cell immunotherapy (CAR T),cd19_car_t,Intravenous,2017,Oncology (hematologic),curated_reference,distinct_product
+Jakafi,JAK1/JAK2 inhibitor,jak1_jak2_inhibitor,Oral,2011,Oncology (hematologic),curated_reference,distinct_product
+Rezdiffra,thyroid hormone receptor beta (THR-beta) selective agonist,thr_beta_agonist,Oral,2024,Hepatology (MASH/NASH),curated_reference,distinct_product
+Spikevax,lipid nanoparticle-encapsulated mRNA vaccine encoding the SARS-CoV-2 spike glycoprotein,mrna_vaccine,Intramuscular,2022,"Infectious disease (vaccine, COVID-19)",curated_reference,distinct_product
+Ingrezza,vesicular monoamine transporter 2 (VMAT2) inhibitor,vmat2_inhibitor,Oral,2017,Neurology (movement disorders),curated_reference,distinct_product

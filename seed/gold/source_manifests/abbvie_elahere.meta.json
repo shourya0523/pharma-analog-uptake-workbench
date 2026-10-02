@@ -1,0 +1,31 @@
+{
+  "drug_name": "Elahere",
+  "generic_name": "mirvetuximab soravtansine",
+  "manufacturer": "AbbVie",
+  "benchmark_identity": "abbvie_elahere_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (solid; ovarian cancer)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (U.S. plus Int'l.)",
+  "formulation": "lyophilized powder / single-dose vial for infusion",
+  "route_of_administration": "intravenous",
+  "moa": "Folate receptor alpha (FRalpha)-directed antibody-drug conjugate",
+  "moa_class": "fra_directed_adc",
+  "first_approval_year": 2022,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761310",
+    "quote": "11/14/2022 ORIG-1 Approval (BLA 761310, ELAHERE MIRVETUXIMAB SORAVTANSINE-GYNX)"
+  },
+  "launch_quarter": "2022Q4",
+  "commercial_start_quarter": "2024Q2",
+  "series_start_reason": "AbbVie-reported series starts 2024Q2. AbbVie closed the ImmunoGen acquisition on February 12, 2024; its 2024Q1 release prints Elahere $64 million with the statement 'Global Elahere net revenues were $64 million, reflecting a partial quarter of sales based on the February 12, 2024 close date of the ImmunoGen acquisition' (https://www.sec.gov/Archives/edgar/data/1551152/000155115224000016/abbv-20240331xexhibit991.htm), so 2024Q1 is excluded. ImmunoGen's own 2022Q4-2023Q3 series is staged as immunogen_elahere; ImmunoGen published no 2023Q4 results (acquired before its FY2023 results) so 2023Q4 and 2024Q1 are not covered by any full-quarter document.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "Listed every filing (all forms, incl. 8-K, 8-K/A, 10-Q, 10-K) for CIK 0001551152 (AbbVie), 0000001800 (Abbott), 0001578845 (Allergan plc / Actavis plc), 0000855654 (ImmunoGen) and 0000850693 (Allergan, Inc.) via data.sec.gov/submissions incl. the older 'files' pages (scripts/list_filings.py); earnings 8-Ks selected by item 2.02 (also item 12 / 7,9 for 2003-2004 Abbott and Allergan, Inc. filings), exhibits resolved from each filing's index.json (scripts/earnings.py, exhibits.py).",
+    "Product rows pulled by table-row parsing of each earnings exhibit (scripts/abbvie_extract.py, abbott_extract.py, allergan_extract.py, allerganinc_extract.py); the quarter of an AbbVie block is read from the document's own '% Change vs. nQyy' header row; every series was checked for gaps and, where the Q4 release prints a full-year figure, quarters were summed against it (scripts/build_all.py).",
+    "Listed ImmunoGen filings through 2024-02-12: last results exhibit is the 2023-11-02 release (2023Q3); no 10-K or 2023Q4 release was filed before the Feb 12, 2024 close.",
+    "2024 and 2025 quarters: four quarters of 2025 sum to the printed full-year 690; 2024 has Q2-Q4 here (the printed full-year 479 includes the 64 stub)."
+  ]
+}

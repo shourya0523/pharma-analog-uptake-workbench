@@ -1,0 +1,31 @@
+{
+  "drug_name": "Vraylar",
+  "generic_name": "cariprazine",
+  "manufacturer": "AbbVie",
+  "benchmark_identity": "abbvie_vraylar_worldwide_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Neuroscience (psychiatry)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (U.S. in practice; Int'l. column nil to very small)",
+  "formulation": "capsule",
+  "route_of_administration": "oral",
+  "moa": "Dopamine D3/D2 receptor partial agonist (atypical antipsychotic)",
+  "moa_class": "dopamine_d3_d2_partial_agonist",
+  "first_approval_year": 2015,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=204370",
+    "quote": "09/17/2015 ORIG-2 Approval (NDA 204370, VRAYLAR CARIPRAZINE HYDROCHLORIDE)"
+  },
+  "launch_quarter": "2016Q1",
+  "commercial_start_quarter": "2020Q3",
+  "series_start_reason": "AbbVie-reported series starts 2020Q3. AbbVie closed the Allergan acquisition on May 8, 2020 and its 2020Q2 release prints Vraylar $192 million that, by its own footnote, covers only 'Allergan product revenues from the date of the acquisition, May 8, 2020, through June 30, 2020' (https://www.sec.gov/Archives/edgar/data/1551152/000155115220000019/abbv-20200630xexhibit991.htm), a part-quarter that is not comparable with a full quarter; it is therefore not included. Allergan plc's own full-quarter series 2016Q1-2020Q1 is staged as allergan_vraylar; no issuer printed a full 2020Q2 Vraylar quarter.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "Listed every filing (all forms, incl. 8-K, 8-K/A, 10-Q, 10-K) for CIK 0001551152 (AbbVie), 0000001800 (Abbott), 0001578845 (Allergan plc / Actavis plc), 0000855654 (ImmunoGen) and 0000850693 (Allergan, Inc.) via data.sec.gov/submissions incl. the older 'files' pages (scripts/list_filings.py); earnings 8-Ks selected by item 2.02 (also item 12 / 7,9 for 2003-2004 Abbott and Allergan, Inc. filings), exhibits resolved from each filing's index.json (scripts/earnings.py, exhibits.py).",
+    "Product rows pulled by table-row parsing of each earnings exhibit (scripts/abbvie_extract.py, abbott_extract.py, allergan_extract.py, allerganinc_extract.py); the quarter of an AbbVie block is read from the document's own '% Change vs. nQyy' header row; every series was checked for gaps and, where the Q4 release prints a full-year figure, quarters were summed against it (scripts/build_all.py).",
+    "Compared the AbbVie 2020-07-29 8-K (https://www.sec.gov/Archives/edgar/data/1551152/000110465920087827/tm2025879d1_ex99-1.htm): it prints AbbVie's as-reported 1Q19-1Q20 quarterly trend (Vraylar nil, pre-acquisition) and a pro forma 'comparable historical' block; no pro forma 2020Q2 is published, so 2020Q2 is a gap between allergan_vraylar and this series.",
+    "Four quarters of 2021-2025 sum to the printed full-year figures."
+  ]
+}

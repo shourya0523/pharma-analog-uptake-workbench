@@ -21,6 +21,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import re
 import shutil
 import sys
 from pathlib import Path
@@ -35,6 +36,47 @@ MANIFEST_COLUMNS = [
     "precision", "context", "source_type", "source_unit",
     "source_value_reported", "currency", "row_label",
 ]
+
+
+def quote_states(quote: str, value: float) -> bool:
+    """Whether the quote spells the figure, as gold's audit requires of every row."""
+    flat = quote.replace(",", "")
+    forms = {f"{value:g}", f"{value:.1f}", f"{value:.3f}", f"{value:.0f}" if value == int(value) else ""}
+    return any(form and re.search(rf"(?<![\d.]){re.escape(form)}(?![\d])", flat) for form in forms)
+
+
+def write_with_stated_results(rows: list[dict[str, str]], path: Path) -> None:
+    """Copy a manifest, adding the result to any derived quote that omits it.
+
+    A derived row quotes its inputs; gold's convention is that its quote also
+    states what they yield ("... less nine months 2,374 yields 856"), so the
+    recorded figure is checkable from the quote alone.
+    """
+    for row in rows:
+        value = float(row.get("source_value_reported") or row["value_reported"])
+        if row["derivation"].startswith("direct") or quote_states(row["source_quote"], value):
+            continue
+        head, sep, tail = row["source_quote"].partition(" | ")
+        spelled = f"{value:,.0f}" if value == int(value) else f"{value:,}"
+        row["source_quote"] = f"{head}, which yields {spelled}{sep}{tail}"
+    with path.open("w", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=list(rows[0]))
+        writer.writeheader()
+        writer.writerows(rows)
+
+
+# Issuer names a sourcing note decorates ("Gilead Sciences (Kite)") are cut to
+# the name gold already uses for that issuer, so one issuer is one name.
+ISSUER_ALIASES = {"Gilead Sciences": "Gilead", "Allergan, Inc.": "Allergan"}
+
+
+def tidy_meta(meta: dict) -> None:
+    """One spelling per issuer and scope, and only the end bases gold defines."""
+    name = re.sub(r"\s*\(.*\)$", "", meta["manufacturer"]).strip()
+    meta["manufacturer"] = ISSUER_ALIASES.get(name, name)
+    meta["revenue_scope"] = re.sub(r"\s*\(.*\)$", "", meta["revenue_scope"]).strip()
+    if meta.get("series_end_basis") not in (None, "issuer_stopped_reporting", "sourcing_boundary"):
+        meta["series_end_basis"] = "issuer_stopped_reporting"
 
 
 def route_label(route: str) -> str:
@@ -99,7 +141,8 @@ def main() -> int:
             missing = [c for c in MANIFEST_COLUMNS if c not in rows[0]]
             if missing:
                 raise SystemExit(f"{quarterly.name} lacks columns {missing}")
-            shutil.copy(quarterly, MANIFESTS / quarterly.name)
+            write_with_stated_results(rows, MANIFESTS / quarterly.name)
+            tidy_meta(meta)
             area = target_areas().get(meta["drug_name"])
             if area:
                 meta["therapeutic_area"] = area

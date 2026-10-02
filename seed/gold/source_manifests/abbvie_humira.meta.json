@@ -1,0 +1,32 @@
+{
+  "drug_name": "Humira",
+  "generic_name": "adalimumab",
+  "manufacturer": "AbbVie",
+  "benchmark_identity": "abbvie_humira_worldwide_reported",
+  "therapeutic_area": "Immunology / Inflammation",
+  "indication_area": "Immunology (rheumatology / inflammatory disease)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection (prefilled syringe / pen)",
+  "route_of_administration": "subcutaneous",
+  "moa": "TNF-alpha inhibitor",
+  "moa_class": "tnf_inhibitor",
+  "first_approval_year": 2002,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=125057",
+    "quote": "12/31/2002 ORIG-1 Approval (BLA 125057, HUMIRA ADALIMUMAB)"
+  },
+  "launch_quarter": "2003Q1",
+  "commercial_start_quarter": "2004Q1",
+  "series_start_reason": "Series starts 2004Q1, the first quarter whose own document prints a worldwide (Global/Total) Humira figure. Humira launched in 2003Q1: the Abbott 10-Q filed 2003-05-15 states 'U.S. sales of Humira in the first quarter 2003 were $24 million and international sales of Humira from sales through patient named basis programs were $2 million' (https://www.sec.gov/Archives/edgar/data/1800/000104746903018718/a2109726z10-q.htm). Abbott's 2003 earnings releases (8-Ks filed 2003-04-09, 2003-07-10, 2003-10-09, 2004-01-16; e.g. https://www.sec.gov/Archives/edgar/data/1800/000104746904001030/a2126608zex-99_1.htm) print only a 'U.S.' and a 'Rest of World' column for HUMIRA, never a worldwide column, and the 2003 10-Qs and the FY2003 10-K likewise print U.S. and international Humira sales separately ('U.S. sales of Humira ... were $246 million in 2003, and international sales of Humira were $34 million in 2003'). A worldwide quarter first appears in the 2004Q1 release (U.S. 102, International 47, Global 149). The staged series does not sum the two regional figures for 2003 because the contract forbids summing regions where no total is printed.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "Listed every filing (all forms, incl. 8-K, 8-K/A, 10-Q, 10-K) for CIK 0001551152 (AbbVie), 0000001800 (Abbott), 0001578845 (Allergan plc / Actavis plc), 0000855654 (ImmunoGen) and 0000850693 (Allergan, Inc.) via data.sec.gov/submissions incl. the older 'files' pages (scripts/list_filings.py); earnings 8-Ks selected by item 2.02 (also item 12 / 7,9 for 2003-2004 Abbott and Allergan, Inc. filings), exhibits resolved from each filing's index.json (scripts/earnings.py, exhibits.py).",
+    "Product rows pulled by table-row parsing of each earnings exhibit (scripts/abbvie_extract.py, abbott_extract.py, allergan_extract.py, allerganinc_extract.py); the quarter of an AbbVie block is read from the document's own '% Change vs. nQyy' header row; every series was checked for gaps and, where the Q4 release prints a full-year figure, quarters were summed against it (scripts/build_all.py).",
+    "Abbott 2003Q1-2003Q4: searched the 2003-2004 Abbott 8-Ks (items 7,9 and 12), 10-Qs and the FY2003 10-K; only U.S./Rest-of-World Humira figures found, no quarterly worldwide total; FY2003 worldwide $280 million is printed only in the FY2004 10-K (https://www.sec.gov/Archives/edgar/data/1800/000104746905005185/a2149332z10-k.htm: 'Worldwide sales of HUMIRA totaled $852 million in 2004 and $280 million in 2003').",
+    "Abbott 2004Q1-2012Q4 rows taken from Abbott's quarterly earnings release exhibits (three layouts: US/ROW/Global on one row to 2009Q1, separate 'Global Sales' table 2009Q2-2010Q4, US/Int'l/Total from 2011Q1); for 2004-2010 and 2011-2012 the four quarters were summed against the full-year figure in each Q4 release (2007 and 2008 differ by 1 from rounding, 2012 by 1).",
+    "AbbVie 2013Q1-2026Q2 rows taken from AbbVie's earnings release Key Product Revenues schedule; four quarters of each of 2013-2025 sum to the printed full-year Humira figure exactly."
+  ]
+}

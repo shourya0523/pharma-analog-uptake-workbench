@@ -1,0 +1,29 @@
+{
+  "drug_name": "Rezdiffra",
+  "generic_name": "resmetirom",
+  "manufacturer": "Madrigal Pharmaceuticals",
+  "benchmark_identity": "madrigal_rezdiffra_worldwide_reported",
+  "therapeutic_area": "GI / Liver / Women's Health / Urology",
+  "indication_area": "Hepatology (MASH/NASH)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (United States from April 2024; Germany added September 2025)",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "thyroid hormone receptor beta (THR-beta) selective agonist",
+  "moa_class": "thr_beta_agonist",
+  "first_approval_year": 2024,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2024/217785Orig1s000ltr.pdf",
+    "quote": "NDA 217785 ... Rezdiffra (resmetirom) tablets, in conjunction with diet and exercise, for the treatment of adults with noncirrhotic nonalcoholic steatohepatitis (NASH) with moderate to advanced liver fibrosis ... accelerated approval (electronic signature dated 03/14/2024)"
+  },
+  "launch_quarter": "2024Q2",
+  "commercial_start_quarter": "2024Q2",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "Madrigal's 2025-2026 earnings releases (exhibit 99.1) contain no tables (prose only), so Q1-Q3 are read from 10-Qs; Q4 2024 from the Q4 2024 release table; Q4 2025 derived from the FY2025 10-K minus nine months",
+    "Q1 2024 10-Q prints nil revenue; the Q2 2024 10-Q and the Q4 2024 release state Rezdiffra became commercially available in the United States in April 2024"
+  ]
+}

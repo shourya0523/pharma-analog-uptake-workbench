@@ -1,0 +1,32 @@
+{
+  "drug_name": "Kyprolis",
+  "generic_name": "carfilzomib",
+  "manufacturer": "Amgen",
+  "benchmark_identity": "amgen_kyprolis_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (hematologic: multiple myeloma)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection (lyophilized powder)",
+  "route_of_administration": "intravenous",
+  "moa": "Proteasome inhibitor",
+  "moa_class": "proteasome_inhibitor",
+  "first_approval_year": 2012,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2012/202714lbl.pdf",
+    "quote": "Initial U.S. Approval: 2012"
+  },
+  "launch_quarter": "2012Q3",
+  "commercial_start_quarter": "2013Q4",
+  "series_start_reason": "Amgen acquired Onyx, Kyprolis's seller, on Oct. 1, 2013 and first reports Kyprolis (73) for the fourth quarter of 2013; the earlier quarters 2012Q3-2013Q2 are in the separate onyx_kyprolis file (Onyx's own earnings releases, USD thousands); 2013Q3 is in no published document because Onyx released no third-quarter 2013 results (acquired Oct. 1) and Amgen reports Kyprolis only from Oct. 1",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "listed Amgen (CIK 0000318154) filings via data.sec.gov/submissions (recent + older pages), keeping every form starting '8-K' (8-K and 8-K/A) or '10-' (10-Q, 10-K, amendments): 323 8-K, 2 8-K/A, 98 10-Q, 31 10-K; the two 8-K/As are dated 1995 and 2020 and are not earnings releases",
+    "took every 8-K carrying Item 2.02 from 2012-01-26 to 2026-08-04, fetched each filing's index.json, and kept the exhibit that contains both 'Enbrel' and 'Repatha' or 'Prolia': 59 earnings-release exhibits covering the fourth quarter of 2011 through the second quarter of 2026, no quarter missing",
+    "parsed each release's HTML table rows; the product table ('$Millions, except percentages' with U.S., ROW and TOTAL columns) was checked for every quarter, and for each fiscal year the four quarters were summed and compared with the full-year table in the fourth-quarter release (all matched exactly for the rows used)",
+    "Onyx (CIK 0001012140; note the CIK in the task brief, 0001104506, is Insmed) filings listed via data.sec.gov submissions: last 10-Q filed 2013-08-09, no 10-Q or earnings release for Q3 2013, final 8-K 2013-10-01 (acquisition closing)",
+    "Kyprolis row checked in every Amgen release from the Q4 2013 release (2014-01-28) to Q2 2026; FY sums matched the full-year tables for 2014-2025; the Q4 2013 prior-year column prints 0 because Amgen consolidates Onyx only from Oct. 1, 2013"
+  ]
+}

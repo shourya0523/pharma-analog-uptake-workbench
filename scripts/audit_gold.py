@@ -167,7 +167,9 @@ def audit_precision(quarterly: list[dict]) -> list[str]:
             # the series is denominated in millions. The decimals are a unit
             # conversion, not a precision claim.
             continue
-        value = float(row["value_reported"])
+        # Compared in the unit the quote is written in: a quarter printed in
+        # thousands is exact to three decimals once it is in millions.
+        value = float(row.get("source_value_reported", row["value_reported"]))
         quote = row.get("source_quote") or ""
         quoted = [
             float(n.replace(",", ""))

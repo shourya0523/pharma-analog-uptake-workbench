@@ -1,0 +1,31 @@
+{
+  "drug_name": "Trodelvy",
+  "generic_name": "sacituzumab govitecan",
+  "manufacturer": "Gilead",
+  "benchmark_identity": "gilead_trodelvy_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (solid)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "lyophilized powder for injection",
+  "route_of_administration": "intravenous",
+  "moa": "Trop-2-directed antibody-drug conjugate (SN-38, topoisomerase I inhibitor payload)",
+  "moa_class": "trop2_antibody_drug_conjugate",
+  "first_approval_year": 2020,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2020/761115Orig1s000ltr.pdf",
+    "quote": "We have approved your BLA for Trodelvy (sacituzumab govitecan-hziy) effective this date. (BLA 761115, accelerated approval; electronic signature dated 04/22/2020)"
+  },
+  "launch_quarter": "2020Q2",
+  "commercial_start_quarter": "2020Q2",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "listed Gilead 8-K/8-K/A Item 2.02 earnings exhibits 2018-2026 via data.sec.gov submissions; Trodelvy rows read from the 2021Q1-2026Q2 releases (labelled total line 2021-2022; regional lines plus unlabelled total line from 2023)",
+    "listed Immunomedics (CIK 722830) filings 2020: 10-Q for Q2 2020 (filed 2020-08-05) prints net product revenue 20,074 thousand USD; no 10-Q or 8-K for Q3 2020 exists (15-12G filed 2020-11-02 after the 2020-10-23 acquisition)",
+    "Gilead's Q4 2020 release table row 'Trodelvy (1) | 49' covers only post-acquisition days; footnote 7 gives the full-quarter $64 million and full-year $137 million, used for 2020Q4 and, with the Immunomedics 10-Q, to derive 2020Q3 (approximate: 137 - 64 - 20.074 - 0)",
+    "Immunomedics Q1 2020 10-Q prints Revenues nil; the Q2 10-Q states no product sales before April 2020"
+  ]
+}

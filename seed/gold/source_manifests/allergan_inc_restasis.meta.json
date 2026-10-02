@@ -1,0 +1,32 @@
+{
+  "drug_name": "Restasis",
+  "generic_name": "cyclosporine ophthalmic emulsion 0.05%",
+  "manufacturer": "Allergan",
+  "benchmark_identity": "allergan_inc_restasis_worldwide_reported",
+  "therapeutic_area": "Ophthalmology",
+  "indication_area": "Ophthalmology (dry eye disease)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (product net sales as printed)",
+  "formulation": "ophthalmic emulsion",
+  "route_of_administration": "topical ophthalmic",
+  "moa": "Calcineurin inhibitor immunomodulator (cyclosporine)",
+  "moa_class": "calcineurin_inhibitor",
+  "first_approval_year": 2002,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=050790",
+    "quote": "12/23/2002 ORIG-1 Approval (NDA 050790, RESTASIS CYCLOSPORINE 0.05% EMULSION;OPHTHALMIC)"
+  },
+  "launch_quarter": "2003Q2",
+  "commercial_start_quarter": "2003Q2",
+  "series_start_reason": null,
+  "series_end_quarter": "2014Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Allergan, Inc. was acquired by Actavis plc on March 17, 2015 (Allergan plc 10-Q for 2016Q1) and filed no 2015Q1 earnings release; the last quarter it reported is 2014Q4 (release filed 2015-02-04). The acquirer's series is allergan_restasis (2015Q2 on).",
+  "search_log": [
+    "Listed every filing (all forms, incl. 8-K, 8-K/A, 10-Q, 10-K) for CIK 0001551152 (AbbVie), 0000001800 (Abbott), 0001578845 (Allergan plc / Actavis plc), 0000855654 (ImmunoGen) and 0000850693 (Allergan, Inc.) via data.sec.gov/submissions incl. the older 'files' pages (scripts/list_filings.py); earnings 8-Ks selected by item 2.02 (also item 12 / 7,9 for 2003-2004 Abbott and Allergan, Inc. filings), exhibits resolved from each filing's index.json (scripts/earnings.py, exhibits.py).",
+    "Product rows pulled by table-row parsing of each earnings exhibit (scripts/abbvie_extract.py, abbott_extract.py, allergan_extract.py, allerganinc_extract.py); the quarter of an AbbVie block is read from the document's own '% Change vs. nQyy' header row; every series was checked for gaps and, where the Q4 release prints a full-year figure, quarters were summed against it (scripts/build_all.py).",
+    "Launch evidence: Allergan, Inc. release filed 2003-04-28 (https://www.sec.gov/Archives/edgar/data/850693/000089256903001079/a89547exv99w1.htm): 'Allergan launched Restasis in the United States in April of 2003'; release filed 2003-07-23 states the quarter ended June 27, 2003 Restasis sales were $11.8 million, 'the initial launch quarter'.",
+    "Four quarters of each of 2004-2014 sum to the full-year Restasis figure printed in the Q4 release (2005 differs by 0.1 from rounding); 2003 (Q2-Q4 = 38.4) vs printed 38.3 differs by 0.1 from rounding.",
+    "Allergan, Inc.'s releases for 2003 through 2007 print fiscal quarter ends on the last Friday of the quarter (e.g. September 26, 2003), a few days before the calendar quarter end in some quarters; these are mapped to the calendar quarter and each row states the printed date."
+  ]
+}

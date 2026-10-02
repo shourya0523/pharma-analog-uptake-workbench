@@ -1,0 +1,33 @@
+{
+  "drug_name": "Blincyto",
+  "generic_name": "blinatumomab",
+  "manufacturer": "Amgen",
+  "benchmark_identity": "amgen_blincyto_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (hematologic: acute lymphoblastic leukemia)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection (lyophilized powder for infusion)",
+  "route_of_administration": "intravenous",
+  "moa": "CD19-directed CD3 T-cell engager (bispecific, BiTE)",
+  "moa_class": "bispecific_t_cell_engager",
+  "first_approval_year": 2014,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2014/125557lbl.pdf",
+    "quote": "Initial U.S. Approval: 2014"
+  },
+  "launch_quarter": "2014Q4",
+  "commercial_start_quarter": "2014Q4",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "listed Amgen (CIK 0000318154) filings via data.sec.gov/submissions (recent + older pages), keeping every form starting '8-K' (8-K and 8-K/A) or '10-' (10-Q, 10-K, amendments): 323 8-K, 2 8-K/A, 98 10-Q, 31 10-K; the two 8-K/As are dated 1995 and 2020 and are not earnings releases",
+    "took every 8-K carrying Item 2.02 from 2012-01-26 to 2026-08-04, fetched each filing's index.json, and kept the exhibit that contains both 'Enbrel' and 'Repatha' or 'Prolia': 59 earnings-release exhibits covering the fourth quarter of 2011 through the second quarter of 2026, no quarter missing",
+    "parsed each release's HTML table rows; the product table ('$Millions, except percentages' with U.S., ROW and TOTAL columns) was checked for every quarter, and for each fiscal year the four quarters were summed and compared with the full-year table in the fourth-quarter release (all matched exactly for the rows used)",
+    "2014Q4: the fourth-quarter 2014 release has no Blincyto line; the Form 10-K for 2014 prints Blincyto 3 for 2014 and dashes for 2013 and 2012; approval letter for BLA 125557 (https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2014/125557Orig1s000ltr.pdf) lists amendments through Dec. 2, 2014; 2014Q4 = 3 is recorded as full_year_less_other_reported_quarters with the zero for Q1-Q3 2014 inferred (flagged approximate)",
+    "2015Q1 is read from the first-quarter 2015 release; 2015Q2-Q4 appear only inside 'Other' in their own releases and are read from the prior-year columns of the 2016Q2-Q4 releases; 2016Q1 onward from each quarter's own release",
+    "the verifier's fourth-quarter rule: full-year Blincyto 2015 = 77 = 15+17+23+22 and 2016 = 115 matched the 2017-02 release"
+  ]
+}

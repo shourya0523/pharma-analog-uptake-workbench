@@ -1,0 +1,31 @@
+{
+  "drug_name": "Yescarta",
+  "generic_name": "axicabtagene ciloleucel",
+  "manufacturer": "Gilead",
+  "benchmark_identity": "gilead_yescarta_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (hematologic)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "suspension for intravenous infusion (autologous CAR T cell therapy)",
+  "route_of_administration": "intravenous",
+  "moa": "CD19-directed genetically modified autologous T cell immunotherapy (CAR T)",
+  "moa_class": "cd19_car_t",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/vaccines-blood-biologics/cellular-gene-therapy-products/yescarta",
+    "quote": "STN: BL 125643 ... Trade Name: YESCARTA ... Manufacturer: Kite Pharma Inc. ... Supporting Documents: 'October 18, 2017 Approval Letter - YESCARTA' (earliest listed approval letter)"
+  },
+  "launch_quarter": "2017Q4",
+  "commercial_start_quarter": "2017Q4",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "listed Gilead 8-K/8-K/A Item 2.02 earnings exhibits; Yescarta printed from the Q1 2018 release on ('Yescarta' row in Q1 2018; 'Yescarta - U.S.' only in Q2 and Q3 2018; regional lines plus an unlabelled total line from Q4 2018)",
+    "Q4 2017 release (8-K filed 2018-02-06) and FY2017 10-K print no Yescarta sales (folded into 'Other' in the release); 2017Q4 taken from the prior-year column of the Q4 2018 release (total 7)",
+    "Gilead's 2018-07-25 release states Yescarta 'was launched in the United States in October 2017'",
+    "2018Q2 and 2018Q3: the only Yescarta line printed is 'Yescarta - U.S.' (no ex-U.S. line, no total); Europe first appears in the Q4 2018 release"
+  ]
+}

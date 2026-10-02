@@ -111,17 +111,25 @@ LAYER_TWO_DEFAULTS = {
 # gold names an issuer that is not here, and `_ticker` stops rather than
 # writing a case whose issuer cannot be resolved.
 ISSUER_TICKERS: dict[str, str | None] = {
+    "AbbVie": "ABBV",
     "Actelion/J&J": "JNJ",
-    # No ticker for an issuer that was acquired and delisted: Seagen's went
-    # with it, and the old Biohaven's symbol now belongs to a different company,
-    # so a case naming either is resolved by issuer name instead.
-    "Biohaven": None,
+    # No ticker for an issuer that was acquired and delisted (Allergan, Inc.,
+    # Seagen): its symbol went with it, so a case naming one is resolved by
+    # issuer name instead.
+    "Allergan": None,
+    "Amgen": "AMGN",
+    "BeiGene": "ONC",
     "Bristol-Myers Squibb": "BMY",
     "Eli Lilly": "LLY",
+    "Exelixis": "EXEL",
     "Gilead": "GILD",
+    "Incyte": "INCY",
     "Johnson & Johnson": "JNJ",
     "Liquidia": "LQDA",
+    "Madrigal Pharmaceuticals": "MDGL",
     "Merck": "MRK",
+    "Moderna": "MRNA",
+    "Neurocrine Biosciences": "NBIX",
     "Novo Nordisk": "NVO",
     "Pfizer": "PFE",
     "Regeneron Pharmaceuticals": "REGN",

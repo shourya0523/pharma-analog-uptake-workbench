@@ -1,0 +1,30 @@
+{
+  "drug_name": "Venclexta",
+  "generic_name": "venetoclax",
+  "manufacturer": "AbbVie",
+  "benchmark_identity": "abbvie_venclexta_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (hematologic)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "BCL-2 inhibitor",
+  "moa_class": "bcl2_inhibitor",
+  "first_approval_year": 2016,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=208573",
+    "quote": "04/11/2016 ORIG-1 Approval (NDA 208573, VENCLEXTA VENETOCLAX)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2018Q3",
+  "series_start_reason": "Series starts 2018Q3, the first quarter AbbVie prints a Venclexta revenue line. Venclexta was approved 2016-04-11 but no AbbVie document before the 2018-11-02 release prints Venclexta net revenues: the 2016Q1-2018Q2 earnings-release schedules have no Venclexta row (Humira only through 2018Q2 in the Key Product schedule), and the FY2016 10-K, FY2017 10-K and the 2016-2018 10-Qs mention VENCLEXTA only in pipeline/regulatory text (searched the full text of each: 0 revenue figures). The 2018Q3 release prints 3-month 96 and 9-month 220, so only the 2018H1 sum (124) is derivable and not the individual 2018Q1/Q2 quarters (not interpolated). Collaboration/scope: AbbVie 'manufactures and distributes Venclexta globally and is the principal in the end-customer product sales. Sales of Venclexta are included in AbbVie's net revenues' (FY2020 10-K, https://www.sec.gov/Archives/edgar/data/1551152/000155115221000008/abbv-20201231.htm); Genentech's share of U.S. profit is booked in AbbVie's cost of products sold, so the series is AbbVie's gross printed sales line.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "Listed every filing (all forms, incl. 8-K, 8-K/A, 10-Q, 10-K) for CIK 0001551152 (AbbVie), 0000001800 (Abbott), 0001578845 (Allergan plc / Actavis plc), 0000855654 (ImmunoGen) and 0000850693 (Allergan, Inc.) via data.sec.gov/submissions incl. the older 'files' pages (scripts/list_filings.py); earnings 8-Ks selected by item 2.02 (also item 12 / 7,9 for 2003-2004 Abbott and Allergan, Inc. filings), exhibits resolved from each filing's index.json (scripts/earnings.py, exhibits.py).",
+    "Product rows pulled by table-row parsing of each earnings exhibit (scripts/abbvie_extract.py, abbott_extract.py, allergan_extract.py, allerganinc_extract.py); the quarter of an AbbVie block is read from the document's own '% Change vs. nQyy' header row; every series was checked for gaps and, where the Q4 release prints a full-year figure, quarters were summed against it (scripts/build_all.py).",
+    "Searched AbbVie FY2016/FY2017 10-K and 10-Qs 2016-2018 full text for 'Venclexta'/'VENCLEXTA': only regulatory/pipeline mentions, no net revenue figure; first revenue row 2018Q3 (U.S. 69, Int'l. 27, Total 96). 2018 has only Q3-Q4 so no full-year comparison; 2019-2025 quarters sum to the printed full-year figures."
+  ]
+}

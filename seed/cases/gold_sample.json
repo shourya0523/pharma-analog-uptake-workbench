@@ -1,5 +1,30 @@
 [
  {
+  "drug_name": "Vraylar",
+  "manufacturer": "AbbVie",
+  "ticker": "ABBV",
+  "generic_name": "cariprazine",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 905.0,
+    "gold_id": "abbvie-vraylar-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 1071.0,
+    "gold_id": "abbvie-vraylar-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Uptravi",
   "manufacturer": "Actelion/J&J",
   "ticker": "JNJ",
@@ -25,37 +50,87 @@
   ]
  },
  {
-  "drug_name": "Nurtec ODT",
-  "manufacturer": "Biohaven",
+  "drug_name": "Restasis",
+  "manufacturer": "Allergan",
   "ticker": null,
-  "generic_name": "rimegepant",
+  "generic_name": "cyclosporine ophthalmic emulsion 0.05%",
   "options": {
-   "earnings_since": "2022-04-05",
-   "earnings_until": "2023-05-05",
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
    "openfda": true,
    "product_metadata": true
   },
   "source": "seed/gold/quarterly_revenue.jsonl",
   "expect": [
    {
-    "period": "2022Q1",
-    "value_normalized_usd_millions": 123.59,
-    "gold_id": "biohaven-nurtec-odt-us-reported-2022q1"
+    "period": "2014Q1",
+    "value_normalized_usd_millions": 231.7,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2014q1"
    },
    {
-    "period": "2022Q2",
-    "value_normalized_usd_millions": 193.954,
-    "gold_id": "biohaven-nurtec-odt-us-reported-2022q2"
+    "period": "2014Q2",
+    "value_normalized_usd_millions": 269.3,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2014q2"
    },
    {
-    "period": "2022Q3",
-    "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2022Q2. Pfizer completed the acquisition of Biohaven on Oct 3, 2022; Biohaven filed its last 10-Q for the quarter ended Jun 30, 2022 and no report for 2022Q3 (Form 15 filed Oct 14, 2022). No Biohaven, Pfizer or other issuer document found with Biohaven's standalone 2022Q3 net product revenue; Pfizer's line begins 2022Q4 under a different (worldwide) scope."
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 273.3,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2014q3"
    },
    {
-    "period": "2022Q4",
-    "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2022Q2. Pfizer completed the acquisition of Biohaven on Oct 3, 2022; Biohaven filed its last 10-Q for the quarter ended Jun 30, 2022 and no report for 2022Q3 (Form 15 filed Oct 14, 2022). No Biohaven, Pfizer or other issuer document found with Biohaven's standalone 2022Q3 net product revenue; Pfizer's line begins 2022Q4 under a different (worldwide) scope."
+    "period": "2014Q4",
+    "value_normalized_usd_millions": 309.4,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2014q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Uplizna",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "inebilizumab",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 262.0,
+    "gold_id": "amgen-uplizna-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 335.0,
+    "gold_id": "amgen-uplizna-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Brukinsa",
+  "manufacturer": "BeiGene",
+  "ticker": "ONC",
+  "generic_name": "zanubrutinib",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 1094.843,
+    "gold_id": "beigene-brukinsa-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 1247.64,
+    "gold_id": "beigene-brukinsa-worldwide-reported-2026q2"
    }
   ]
  },
@@ -110,10 +185,10 @@
   ]
  },
  {
-  "drug_name": "Odefsey",
-  "manufacturer": "Gilead",
-  "ticker": "GILD",
-  "generic_name": "emtricitabine/rilpivirine/tenofovir alafenamide",
+  "drug_name": "Cabometyx",
+  "manufacturer": "Exelixis",
+  "ticker": "EXEL",
+  "generic_name": "cabozantinib",
   "options": {
    "earnings_since": "2026-04-05",
    "earnings_until": "2027-05-05",
@@ -124,13 +199,63 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 221.0,
-    "gold_id": "gilead-odefsey-worldwide-reported-2026q1"
+    "value_normalized_usd_millions": 552.773,
+    "gold_id": "exelixis-cabometyx-us-reported-2026q1"
    },
    {
     "period": "2026Q2",
-    "value_normalized_usd_millions": 239.0,
-    "gold_id": "gilead-odefsey-worldwide-reported-2026q2"
+    "value_normalized_usd_millions": 570.648,
+    "gold_id": "exelixis-cabometyx-us-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Yescarta",
+  "manufacturer": "Gilead",
+  "ticker": "GILD",
+  "generic_name": "axicabtagene ciloleucel",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 332.0,
+    "gold_id": "gilead-yescarta-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 346.0,
+    "gold_id": "gilead-yescarta-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Jakafi",
+  "manufacturer": "Incyte",
+  "ticker": "INCY",
+  "generic_name": "ruxolitinib",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 757.755,
+    "gold_id": "incyte-jakafi-us-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 816.659,
+    "gold_id": "incyte-jakafi-us-reported-2026q2"
    }
   ]
  },
@@ -185,6 +310,31 @@
   ]
  },
  {
+  "drug_name": "Rezdiffra",
+  "manufacturer": "Madrigal Pharmaceuticals",
+  "ticker": "MDGL",
+  "generic_name": "resmetirom",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 311.337,
+    "gold_id": "madrigal-rezdiffra-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 364.252,
+    "gold_id": "madrigal-rezdiffra-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Winrevair",
   "manufacturer": "Merck",
   "ticker": "MRK",
@@ -206,6 +356,66 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 588.0,
     "gold_id": "merck-winrevair-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Spikevax",
+  "manufacturer": "Moderna",
+  "ticker": "MRNA",
+  "generic_name": "COVID-19 vaccine, mRNA (mRNA-1273, elasomeran)",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 84.0,
+    "gold_id": "moderna-spikevax-worldwide-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 114.0,
+    "gold_id": "moderna-spikevax-worldwide-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2025Q2. From the third quarter of 2025 Moderna's 'COVID' product-sales row carries the footnote 'Includes sales of Spikevax and mNEXSPIKE', so the line is no longer Spikevax alone; the series ends at the last quarter of the earlier definition. The combined COVID rows for 2025Q3 onward are not spliced in."
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2025Q2. From the third quarter of 2025 Moderna's 'COVID' product-sales row carries the footnote 'Includes sales of Spikevax and mNEXSPIKE', so the line is no longer Spikevax alone; the series ends at the last quarter of the earlier definition. The combined COVID rows for 2025Q3 onward are not spliced in."
+   }
+  ]
+ },
+ {
+  "drug_name": "Ingrezza",
+  "manufacturer": "Neurocrine Biosciences",
+  "ticker": "NBIX",
+  "generic_name": "valbenazine",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 656.9,
+    "gold_id": "neurocrine-ingrezza-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 716.5,
+    "gold_id": "neurocrine-ingrezza-worldwide-reported-2026q2"
    }
   ]
  },
