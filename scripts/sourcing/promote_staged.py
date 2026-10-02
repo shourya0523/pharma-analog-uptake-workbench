@@ -54,9 +54,18 @@ def write_with_stated_results(rows: list[dict[str, str]], path: Path) -> None:
     """
     for row in rows:
         value = float(row.get("source_value_reported") or row["value_reported"])
-        if row["derivation"].startswith("direct") or quote_states(row["source_quote"], value):
+        if quote_states(row["source_quote"], value):
             continue
         head, sep, tail = row["source_quote"].partition(" | ")
+        if row["derivation"].startswith("direct"):
+            # A figure printed with a space between thousands ("1 109") is the
+            # figure the row records; the quote keeps the print and says so.
+            if quote_states(re.sub(r"(?<=\d) (?=\d{3}(?!\d))", "", tail), value):
+                row["source_quote"] = (
+                    f"{head} (thousands separated by a space as printed; "
+                    f"{value:,.0f} recorded){sep}{tail}"
+                )
+            continue
         spelled = f"{value:,.0f}" if value == int(value) else f"{value:,}"
         row["source_quote"] = f"{head}, which yields {spelled}{sep}{tail}"
     with path.open("w", newline="") as handle:

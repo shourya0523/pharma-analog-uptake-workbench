@@ -157,10 +157,20 @@ def row_matches(lines: list[str], index: int, label: str, figures: list[float]) 
     return False
 
 
+SPACE_GROUPED = re.compile(r"(?<=\d)[ \u202f\u2009](?=\d{3}(?!\d))")
+
+
 def check_row(row: dict, raw: bytes, lines: list[str]) -> dict:
     result = {"fetched": True}
     label = normalize(row.get("row_label") or "")
-    figures = quoted_figures(row["source_quote"])
+    quote = row["source_quote"]
+    # Some issuers group thousands with a space ("1 109"). Only when the quote
+    # itself is written that way are the document's lines read the same way,
+    # so two adjacent single-figure cells elsewhere are never run together.
+    if SPACE_GROUPED.search(quote.split("|", 1)[-1]):
+        quote = quote.split("|", 1)[0] + "|" + SPACE_GROUPED.sub("", quote.split("|", 1)[1])
+        lines = [SPACE_GROUPED.sub("", line) for line in lines]
+    figures = quoted_figures(quote)
     result["row_match"] = bool(label and figures) and any(
         row_matches(lines, index, label, figures)
         for index, line in enumerate(lines)
@@ -204,7 +214,7 @@ def check_series(rows: list[dict]) -> list[str]:
     for row in rows:
         if row["period"][-2:] != "Q4" or row["derivation"] not in DIRECT:
             continue
-        figures = quoted_figures(row["source_quote"])
+        figures = quoted_figures(SPACE_GROUPED.sub("", row["source_quote"]))
         if len(figures) < 4 or "twelve months" not in row["source_quote"].lower() and "full year" not in row["source_quote"].lower():
             continue
         # The quote ends "quarter | prior quarter | year | prior year"; any
