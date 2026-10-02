@@ -135,6 +135,31 @@
   ]
  },
  {
+  "drug_name": "Vumerity",
+  "manufacturer": "Biogen",
+  "ticker": "BIIB",
+  "generic_name": "diroximel fumarate",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 179.0,
+    "gold_id": "biogen-vumerity-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 196.5,
+    "gold_id": "biogen-vumerity-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Yervoy",
   "manufacturer": "Bristol-Myers Squibb",
   "ticker": "BMY",
@@ -206,6 +231,31 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 570.648,
     "gold_id": "exelixis-cabometyx-us-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Zejula",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "niraparib",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 153.729,
+    "gold_id": "gsk-zejula-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 135.643,
+    "gold_id": "gsk-zejula-worldwide-reported-2026q2"
    }
   ]
  },
@@ -420,6 +470,31 @@
   ]
  },
  {
+  "drug_name": "Leqvio",
+  "manufacturer": "Novartis",
+  "ticker": "NVS",
+  "generic_name": "inclisiran",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 452.0,
+    "gold_id": "novartis-leqvio-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 480.0,
+    "gold_id": "novartis-leqvio-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Rybelsus",
   "manufacturer": "Novo Nordisk",
   "ticker": "NVO",
@@ -505,6 +580,31 @@
   ]
  },
  {
+  "drug_name": "Elevidys",
+  "manufacturer": "Sarepta Therapeutics",
+  "ticker": "SRPT",
+  "generic_name": "delandistrogene moxeparvovec",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 101.965,
+    "gold_id": "sarepta-elevidys-us-net-product-revenue-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 98.125,
+    "gold_id": "sarepta-elevidys-us-net-product-revenue-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Padcev",
   "manufacturer": "Seagen",
   "ticker": null,
@@ -536,6 +636,31 @@
     "period": "2023Q4",
     "value_normalized_usd_millions": null,
     "why": "The issuer reports no line for this product after 2023Q3. Pfizer completed the acquisition of Seagen on Dec 14, 2023; Seagen filed no report for 2023Q4. Pfizer's later Padcev line (companion series pfizer_padcev, from 2024Q1) is worldwide, a different scope, and its 2023Q4 line is a Dec 14-31 stub, so the series is not spliced."
+   }
+  ]
+ },
+ {
+  "drug_name": "Austedo",
+  "manufacturer": "Teva",
+  "ticker": "TEVA",
+  "generic_name": "deutetrabenazine",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 559.0,
+    "gold_id": "teva-austedo-us-segment-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 676.0,
+    "gold_id": "teva-austedo-us-segment-reported-2026q2"
    }
   ]
  },

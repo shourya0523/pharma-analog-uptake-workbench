@@ -1,0 +1,30 @@
+{
+  "series_start_reason": "J&J prints no Talvey line in any 2023 or 2024 schedule (absent, measured; probably inside Other Oncology - inferred). The 2025Q1 schedule's Supplemental Sales Information table gives 2023 only as a full year (63; US 56, Intl 7) and 2024 quarterly (58, 69, 75, 85). No 2023Q3 or 2023Q4 split is printed anywhere, so the series starts at 2024Q1.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "launch_quarter": null,
+  "drug_name": "Talvey",
+  "generic_name": "talquetamab-tgvs",
+  "manufacturer": "Johnson & Johnson",
+  "benchmark_identity": "jnj_talvey_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (hematologic)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection",
+  "route_of_administration": "subcutaneous",
+  "moa": "GPRC5D x CD3 bispecific T-cell engager",
+  "moa_class": "gprc5d_cd3_bispecific_antibody",
+  "first_approval_year": 2023,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-talquetamab-tgvs-relapsed-or-refractory-multiple-myeloma",
+    "quote": "On August 9, 2023, the Food and Drug Administration granted accelerated approval to talquetamab-tgvs (Talvey, Janssen Biotech, Inc.)"
+  },
+  "search_log": [
+    "Downloaded J&J's quarterly sales schedule PDFs 2021Q1-2026Q2 from the URLs of the existing J&J manifest (investor-site q4cdn); parsed every page with pdfplumber and searched case-insensitively for CARVYKTI, TECVAYLI, TALVEY, RYBREVANT, and the generic names (cache/jnj_rows.json).",
+    "Listed J&J 10-Q and 10-K filings 2021-2026 via data.sec.gov submissions (form 10-Q and 10-K only, no 8-K scan) and searched the primary documents for the four brand names: they appear only in prose or litigation text, only in narrative sentences (the only lines with a brand name and a number were prose).",
+    "Supplemental Sales Information schedules (Schedule 2 / 'Supplemental Sales Information' page) in the 2024Q1 and 2025Q1 schedules restate product lines quarterly; the 2024Q1 one carries Tecvayli, the 2025Q1 one carries Rybrevant/Lazcluze and Talvey."
+  ],
+  "commercial_start_quarter": "2024Q1"
+}

@@ -1,0 +1,31 @@
+{
+  "series_start_reason": "Lilly prints Trajenta (its spelling) quarterly only from the 2015 filings. Lilly's own 8-Ks and 10-Qs for 2011-2014 carry no Trajenta row (measured: every table row whose first cell is Trajenta, over every Lilly 8-K, 10-Q and 10-K 2011-2026); the 2014 10-K gives full years only (2012 88.6, 2013 249.2, 2014 328.8). 2014Q1-Q3 are read from the prior-year columns of the 2015 10-Qs and 2014Q4 is the 2014 full year less those nine months; nothing earlier is citable quarterly.",
+  "series_end_quarter": "2024Q3",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The Form 10-K for 2024 and every Form 10-Q and 10-K from 2025 on contain no mention of Trajenta or linagliptin (counted 0 occurrences in each of the FY2024 10-K, the 2025Q1-Q3 and 2026Q1-Q2 10-Qs, the FY2025 10-K and the Q4 2024 earnings release; the 2025-2026 earnings releases were not individually counted), so no 2024Q4 figure exists and the quarter cannot be derived.",
+  "launch_quarter": null,
+  "drug_name": "Tradjenta",
+  "generic_name": "linagliptin",
+  "manufacturer": "Eli Lilly",
+  "benchmark_identity": "lilly_tradjenta_collaboration_revenue_reported",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Type 2 diabetes",
+  "revenue_scope": "Collaboration revenue",
+  "geography": "Worldwide",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "DPP-4 inhibitor",
+  "moa_class": "dpp4_inhibitor",
+  "first_approval_year": 2011,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=201280",
+    "quote": "TRADJENTA LINAGLIPTIN 5MG TABLET;ORAL ... 05/02/2011 ORIG-1 Approval Type 1 - New Molecular Entity"
+  },
+  "search_log": [
+    "Listed every Lilly filing via data.sec.gov submissions (all forms) and took 8-K item 2.02 filings with every exhibit, plus 10-Q and 10-K, 2011-2026.",
+    "Extracted every HTML table row whose first cell starts with Trajenta/Tradjenta (scripts/lilly_rows.py). The line is in 10-Q revenue tables through 2020Q3 (and the 2015 and 2018 release product tables) and in the 10-Q BI collaboration note from 2021Q1 through 2024Q3.",
+    "Q4 rows are 10-K full year (collaboration-note row) less the Q3 10-Q nine months, except 2018Q4 (printed in the Q4 2018 release) and 2017Q4 (prior-year column of that release).",
+    "Lilly's release footnote: 'Trajenta includes Jentadueto'. Boehringer Ingelheim (private) is not a source: contract allows only issuer-published documents and BI publishes annual figures only (not retrieved or checked)."
+  ],
+  "commercial_start_quarter": "2014Q1"
+}

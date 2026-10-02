@@ -2406,7 +2406,8 @@ def build_jnj_comparators() -> list[dict[str, Any]]:
 LILLY_COMPARATORS = {
     drug_name: f"{meta['benchmark_identity'].removesuffix('_worldwide_reported')}_quarterly.csv"
     for drug_name, meta in PRODUCT_METADATA.items()
-    if meta["manufacturer"] == "Eli Lilly"
+    # A researched Lilly product names its own manifest in its meta file.
+    if meta["manufacturer"] == "Eli Lilly" and drug_name not in RESEARCHED_METADATA
 }
 
 

@@ -1,4 +1,8 @@
 {
+  "retired": {
+    "on": "2026-10-02",
+    "why": "Retired 2026-10-02: the gold expansion to the 200-product target list (docs/sourcing/target_products.csv) put this set's issuers into seed/gold, so under CLAUDE.md rule 4 it can no longer score a change. Kept for its history and as an oracle for finding defects; a new held-out set must be drawn from issuers outside every answer key."
+  },
   "note": "Held-out set drawn 2026-09-17 for the fixes in docs/plans/2026-09-17-006-what-twelve-reviews-found.md. It may score sections 1, 2, 3, 5, 6 and 7 of that register, and section 12's retrieval cascade. It may not be used to find defects and then score the fix for them: gold, seed/holdout, seed/holdout2, seed/holdout_labels, seed/holdout_members, seed/holdout_foreign_xbrl and seed/cases/shapes_holdout.json are the oracles for finding, and none of them may score what it found. Every issuer here is absent from all of those, derived through tests/answer_keys.spent_issuers rather than checked against a list. What spends it: the first change measured on it. After that it is an oracle like the rest, and the next scored change needs a new set from issuers this file does not name. No case states a CIK on purpose: seed/example_drugs.csv has no such column, a person uploading a product types a ticker, and a case that stated one would hand the pipeline the issuer resolution this set is drawn to score.",
   "cases": [
     {

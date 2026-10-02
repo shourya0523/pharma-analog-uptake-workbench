@@ -1,4 +1,8 @@
 {
+ "retired": {
+  "on": "2026-10-02",
+  "why": "Retired 2026-10-02: the gold expansion to the 200-product target list (docs/sourcing/target_products.csv) put this set's issuers into seed/gold, so under CLAUDE.md rule 4 it can no longer score a change. Kept for its history and as an oracle for finding defects; a new held-out set must be drawn from issuers outside every answer key."
+ },
  "purpose": "Does the reader tell a product's own revenue line from a line covering more than that product, on issuers it was never built against? Labels are printed row labels harvested from the product-revenue schedule of each issuer's own 8-K earnings exhibit.",
  "built": "2026-09-08",
  "absent_from": [

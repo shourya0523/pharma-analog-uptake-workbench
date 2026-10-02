@@ -1,0 +1,32 @@
+{
+  "drug_name": "Kesimpta",
+  "generic_name": "ofatumumab",
+  "manufacturer": "Novartis",
+  "benchmark_identity": "novartis_kesimpta_worldwide_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Multiple sclerosis",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection",
+  "route_of_administration": "subcutaneous",
+  "moa": "Anti-CD20 monoclonal antibody",
+  "moa_class": "anti_cd20_antibody",
+  "first_approval_year": 2020,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2020/125326s070lbl.pdf",
+    "quote": "KESIMPTA (ofatumumab) injection, for subcutaneous use ... Revised: 8/2020 ... Approved: 08/2020 (Initial U.S. Approval: 2009 refers to ofatumumab as Arzerra for CLL; Kesimpta MS approval is August 2020)"
+  },
+  "launch_quarter": "2020Q3",
+  "commercial_start_quarter": "2020Q3",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Q3 2020 report: \"Kesimpta ... was launched in the US following FDA approval in August\" (https://www.sec.gov/Archives/edgar/data/1114448/000137036820000086/a201027-99_2.htm). 2020Q3 value 1 is the prior-year column of the Q3 2021 report; 2020Q4 = 14 own report; full year 2020 = 15.",
+  "search_log": [
+    "Listed all 6-K/6-K/A/20-F/20-F/A filings for CIK 1114448 (data.sec.gov submissions incl. older page, 2010-10 to 2026-09; 454 filings), fetched index.json of every 6-K from 2012 on and identified the results exhibit (EX-99.2 interim financial report) for each quarter 2010Q3-2026Q2 (64 documents)",
+    "Parsed every table row of each of the 64 results documents and extracted the row labelled with the brand; compared each quarter's own value against the next year's prior-year column: no restatement difference found for any of these brands",
+    "No Sandoz/Alcon spin-off restatement affected these lines as printed: own-quarter values equal the later prior-year columns",
+    "Q3 2020 report prints no Kesimpta sales figure"
+  ]
+}

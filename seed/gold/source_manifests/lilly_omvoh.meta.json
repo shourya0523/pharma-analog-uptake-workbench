@@ -1,0 +1,31 @@
+{
+  "series_start_reason": "Lilly's earnings releases print an Omvoh row only from the first-quarter 2026 release; 2023Q4 (launch) through 2025Q4 are not printed as quarters (the 2025Q1 and 2025Q2 values 37 and 75 appear only as prior-year columns in the 2026 releases, and 2025Q3 and 2025Q4 are not printed in any document). The CSV therefore holds only the contiguous 2026Q1-2026Q2 block.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "launch_quarter": null,
+  "drug_name": "Omvoh",
+  "generic_name": "mirikizumab-mrkz",
+  "manufacturer": "Eli Lilly",
+  "benchmark_identity": "lilly_omvoh_worldwide_reported",
+  "therapeutic_area": "Immunology / Inflammation",
+  "indication_area": "Inflammatory bowel disease",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection",
+  "route_of_administration": "subcutaneous",
+  "moa": "IL-23 p19 antagonist",
+  "moa_class": "il23_p19_antagonist",
+  "first_approval_year": 2023,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2023/761279s000lbl.pdf",
+    "quote": "OMVOH (mirikizumab-mrkz) injection, for intravenous or subcutaneous use ... Initial U.S. Approval: 2023"
+  },
+  "search_log": [
+    "Listed every Lilly filing via data.sec.gov submissions (all forms); took 8-K item 2.02 filings with every exhibit, plus 10-Q and 10-K, 2011-2026.",
+    "Extracted every HTML table row whose first cell starts with Omvoh or mirikizumab (scripts/lilly_rows.py): the only rows carrying revenue are in the Selected Revenue Highlights tables of the Q1 2026 and Q2 2026 releases (80 vs 37; 102 vs 75, six months 182 vs 112). All other rows are pipeline/approval-status tables or patent tables.",
+    "Read the Selected Revenue Highlights tables of the Q4 2023, Q1 2025, Q2 2025, Q3 2025 and Q4 2025 releases: none lists Omvoh (Q4 2023 lists 14 product lines and Total Revenue; the 2025 tables list Mounjaro, Zepbound, Verzenio and Total Revenue only). 2024 releases were covered by the row search only (no Omvoh row).",
+    "Form 10-K FY2023, FY2024, FY2025 and the 10-Qs: Omvoh appears in product-description, patent and pipeline text; no revenue figure (row search above; the FY2025 10-K text mentions were read)."
+  ],
+  "commercial_start_quarter": "2026Q1"
+}

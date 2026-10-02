@@ -1,0 +1,34 @@
+{
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "launch_quarter": "2017Q2",
+  "drug_name": "Austedo",
+  "generic_name": "deutetrabenazine",
+  "manufacturer": "Teva",
+  "benchmark_identity": "teva_austedo_us_segment_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Movement disorders (Huntington disease chorea, tardive dyskinesia)",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "tablet (immediate release; extended release AUSTEDO XR from 2023, included in the line)",
+  "route_of_administration": "oral",
+  "moa": "Vesicular monoamine transporter 2 (VMAT2) inhibitor",
+  "moa_class": "vmat2_inhibitor",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2017/208082s000lbl.pdf",
+    "quote": "AUSTEDO\u2122 (deutetrabenazine) tablets, for oral use Initial U.S. Approval: 2017"
+  },
+  "search_log": [
+    "Listed every Teva filing via data.sec.gov submissions (all forms): 6-K, 6-K/A, 8-K, 8-K/A, 10-Q, 10-K, 20-F from 2016-04 through 2026-09 (293 filings; 6-K to 2017, 8-K and 10-Q/10-K from 2018).",
+    "Fetched every htm document of those filings and counted hits for the brand and generic names (cache/teva_scan.json); then extracted every table row whose first cell names the product (scripts/teva_rows.py).",
+    "Revenue rows for AUSTEDO and AJOVY first appear in the first-quarter 2018 10-Q / release (AUSTEDO) and the first-quarter 2019 10-Q (AJOVY); Teva's 2017 6-K quarterly reports carry no product revenue row for either.",
+    "Read the segment table of each 10-Q (Q1-Q3) and of the earnings release filed after year-end (Q4); cross-checked year-to-date columns, next-year prior-year columns and the release full-year row (scripts/teva_build.py).",
+    "Launch: Teva's second-quarter 2017 6-K (https://www.sec.gov/Archives/edgar/data/818686/000119312517247510/d424149d6k.htm) states 'In April 2017, we launched Austedo in the United States'. That document and the 2017 releases print no AUSTEDO revenue; the 2017 quarters (1, 6, 17; first quarter 2017 is a dash) are prior-year columns in the 2018Q2, 2018Q3 and Q4 2018 documents.",
+    "Scope: AUSTEDO is printed per segment. The North America segment (Teva: 'includes the United States and Canada') is recorded through 2023; from the first-quarter 2024 10-Q the table is headed United States. The 2023 quarters as first printed (170, 308, 339, 408) equal the same quarters restated in the 2024 documents (170, 308, 339, 408), so the relabel does not change the series; it is not split. The International Markets segment prints its own AUSTEDO row in the 2025 documents and the Q4 2024 release (e.g. 17 in the Q3 2025 10-Q), not summed; Teva states 'global revenues' for AUSTEDO only in release highlight text for some quarters (2025Q1-2026Q2) and for years.",
+    "Q4 rows are read from the earnings release (8-K exhibit) of the following January/February; the same release's full-year row was checked against the four quarters (tolerance 2, rounding)."
+  ],
+  "commercial_start_quarter": "2017Q2"
+}

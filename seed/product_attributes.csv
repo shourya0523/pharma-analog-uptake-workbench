@@ -122,3 +122,34 @@ Jakafi,JAK1/JAK2 inhibitor,jak1_jak2_inhibitor,Oral,2011,Oncology (hematologic),
 Rezdiffra,thyroid hormone receptor beta (THR-beta) selective agonist,thr_beta_agonist,Oral,2024,Hepatology (MASH/NASH),curated_reference,distinct_product
 Spikevax,lipid nanoparticle-encapsulated mRNA vaccine encoding the SARS-CoV-2 spike glycoprotein,mrna_vaccine,Intramuscular,2022,"Infectious disease (vaccine, COVID-19)",curated_reference,distinct_product
 Ingrezza,vesicular monoamine transporter 2 (VMAT2) inhibitor,vmat2_inhibitor,Oral,2017,Neurology (movement disorders),curated_reference,distinct_product
+Cosentyx,Interleukin-17A inhibitor,il17a_inhibitor,Subcutaneous,2015,"Immunology and dermatology (psoriasis, PsA, axSpA)",curated_reference,distinct_product
+Entresto,Angiotensin receptor-neprilysin inhibitor,arni,Oral,2015,Heart failure,curated_reference,distinct_product
+Gilenya,Sphingosine 1-phosphate receptor modulator,s1p_receptor_modulator,Oral,2010,Multiple sclerosis,curated_reference,distinct_product
+Kesimpta,Anti-CD20 monoclonal antibody,anti_cd20_antibody,Subcutaneous,2020,Multiple sclerosis,curated_reference,distinct_product
+Kisqali,CDK4/6 inhibitor,cdk4_6_inhibitor,Oral,2017,Oncology (breast cancer),curated_reference,distinct_product
+Leqvio,Small interfering RNA targeting PCSK9 synthesis,sirna_pcsk9,Subcutaneous,2021,Hypercholesterolemia / ASCVD,curated_reference,distinct_product
+Mayzent,Sphingosine 1-phosphate receptor modulator,s1p_receptor_modulator,Oral,2019,Multiple sclerosis,curated_reference,distinct_product
+Qalsody,Antisense oligonucleotide targeting SOD1 mRNA to reduce SOD1 protein synthesis,antisense_oligonucleotide,Intrathecal,2023,Amyotrophic lateral sclerosis (SOD1-ALS),curated_reference,distinct_product
+Skyclarys,Nrf2 activator,nrf2_pathway_activator,Oral,2023,Friedreich's ataxia,curated_reference,distinct_product
+Spinraza,Antisense oligonucleotide that modifies SMN2 pre-mRNA splicing to increase full-length SMN protein,antisense_oligonucleotide,Intrathecal,2016,Spinal muscular atrophy,curated_reference,distinct_product
+Tecfidera,Fumaric acid ester; activates the Nrf2 antioxidant response pathway (mechanism in MS not fully established),nrf2_pathway_activator,Oral,2013,Multiple sclerosis (relapsing forms),curated_reference,distinct_product
+Vumerity,Fumaric acid ester prodrug of monomethyl fumarate; activates the Nrf2 antioxidant response pathway (mechanism in MS not fully established),nrf2_pathway_activator,Oral,2019,Multiple sclerosis (relapsing forms),curated_reference,distinct_product
+Amondys 45,Phosphorodiamidate morpholino oligomer (PMO) antisense that skips exon 45 of the dystrophin gene,antisense_oligonucleotide_exon_skipping,Intravenous,2021,Duchenne muscular dystrophy (exon 45 skipping amenable),curated_reference,distinct_product
+Elevidys,AAV (rh74) vector gene therapy delivering a shortened micro-dystrophin transgene,aav_gene_therapy,Intravenous,2023,Duchenne muscular dystrophy (gene therapy),curated_reference,distinct_product
+Exondys 51,Phosphorodiamidate morpholino oligomer (PMO) antisense that skips exon 51 of the dystrophin gene,antisense_oligonucleotide_exon_skipping,Intravenous,2016,Duchenne muscular dystrophy (exon 51 skipping amenable),curated_reference,distinct_product
+Vyondys 53,Phosphorodiamidate morpholino oligomer (PMO) antisense that skips exon 53 of the dystrophin gene,antisense_oligonucleotide_exon_skipping,Intravenous,2019,Duchenne muscular dystrophy (exon 53 skipping amenable),curated_reference,distinct_product
+Apretude,Long-acting HIV-1 integrase strand transfer inhibitor,insti_long_acting_injectable,Intramuscular,2021,HIV pre-exposure prophylaxis,curated_reference,distinct_product
+Cabenuva,Long-acting HIV-1 integrase strand transfer inhibitor (cabotegravir) plus non-nucleoside reverse transcriptase inhibitor (rilpivirine),insti_nnrti_long_acting_injectable,Intramuscular,2021,HIV,curated_reference,distinct_product
+Dovato,HIV-1 integrase strand transfer inhibitor (dolutegravir) plus nucleoside reverse transcriptase inhibitor (lamivudine),insti_nrti_fixed_dose_combination,Oral,2019,HIV,curated_reference,distinct_product
+Jemperli,PD-1 blocking antibody,pd1_inhibitor,Intravenous,2021,Oncology (solid),curated_reference,distinct_product
+Triumeq,"HIV-1 integrase strand transfer inhibitor (dolutegravir) plus two nucleoside reverse transcriptase inhibitors (abacavir, lamivudine)",insti_nrti_fixed_dose_combination,Oral,2014,HIV,curated_reference,distinct_product
+Zejula,Poly (ADP-ribose) polymerase (PARP) inhibitor,parp_inhibitor,Oral,2017,Oncology (solid),curated_reference,distinct_product
+Carvykti,BCMA-directed genetically modified autologous T cell immunotherapy (CAR-T),bcma_car_t,Intravenous,2022,Oncology (hematologic),curated_reference,distinct_product
+Rybrevant,EGFR x MET bispecific antibody,egfr_met_bispecific_antibody,Intravenous,2021,Oncology (solid),curated_reference,distinct_product
+Talvey,GPRC5D x CD3 bispecific T-cell engager,gprc5d_cd3_bispecific_antibody,Subcutaneous,2023,Oncology (hematologic),curated_reference,distinct_product
+Tecvayli,BCMA x CD3 bispecific T-cell engager,bcma_cd3_bispecific_antibody,Subcutaneous,2022,Oncology (hematologic),curated_reference,distinct_product
+Omvoh,IL-23 p19 antagonist,il23_p19_antagonist,Subcutaneous,2023,Inflammatory bowel disease,curated_reference,distinct_product
+Tradjenta,DPP-4 inhibitor,dpp4_inhibitor,Oral,2011,Type 2 diabetes,curated_reference,distinct_product
+Ajovy,Calcitonin gene-related peptide (CGRP) antagonist monoclonal antibody,cgrp_antagonist_antibody,Subcutaneous,2018,Migraine prevention,curated_reference,distinct_product
+Austedo,Vesicular monoamine transporter 2 (VMAT2) inhibitor,vmat2_inhibitor,Oral,2017,"Movement disorders (Huntington disease chorea, tardive dyskinesia)",curated_reference,distinct_product
+Cinqair,Interleukin-5 (IL-5) antagonist monoclonal antibody,il5_antagonist_antibody,Intravenous,2016,Severe eosinophilic asthma,curated_reference,distinct_product

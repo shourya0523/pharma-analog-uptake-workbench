@@ -1,0 +1,33 @@
+{
+  "drug_name": "Gilenya",
+  "generic_name": "fingolimod",
+  "manufacturer": "Novartis",
+  "benchmark_identity": "novartis_gilenya_worldwide_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Multiple sclerosis",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "capsule",
+  "route_of_administration": "oral",
+  "moa": "Sphingosine 1-phosphate receptor modulator",
+  "moa_class": "s1p_receptor_modulator",
+  "first_approval_year": 2010,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2010/022527s000ltr.pdf",
+    "quote": "NDA 022527 NDA APPROVAL ... GILENYA (fingolimod) 0.5 mg Capsules. ... It is approved, effective on the date of this letter"
+  },
+  "launch_quarter": "2010Q4",
+  "commercial_start_quarter": "2010Q4",
+  "series_start_reason": null,
+  "series_end_quarter": "2024Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "From the 2025Q1 report onward Novartis prints no Gilenya product row (only narrative mention of generic erosion).",
+  "notes": "Launch: Q3 2010 report says \"launched in the United States in early October\" (https://www.sec.gov/Archives/edgar/data/1114448/000137036810000041/a101021-6k.htm); Q4 2010 report: \"sales of USD 13 million since its launch in October 2010\". NOTE for verifier: the Q3 2011 report prints Q3 2010 = 4 (nine months 2010 = 4) as a prior-year comparative, i.e. USD 4m booked before the stated October launch; not included in the series (own Q3 2010 report prints no Gilenya sales).",
+  "search_log": [
+    "Listed all 6-K/6-K/A/20-F/20-F/A filings for CIK 1114448 (data.sec.gov submissions incl. older page, 2010-10 to 2026-09; 454 filings), fetched index.json of every 6-K from 2012 on and identified the results exhibit (EX-99.2 interim financial report) for each quarter 2010Q3-2026Q2 (64 documents)",
+    "Parsed every table row of each of the 64 results documents and extracted the row labelled with the brand; compared each quarter's own value against the next year's prior-year column: no restatement difference found for any of these brands",
+    "No Sandoz/Alcon spin-off restatement affected these lines as printed: own-quarter values equal the later prior-year columns",
+    "2010Q4 value is narrative text (no table row in the Q4 2010 report): 'Gilenya (USD 11 million; FY 2010 USD 15 million)'",
+    "2011Q4 report prints Q4 2010 = 11 and full year 2010 = 15 as comparatives"
+  ]
+}

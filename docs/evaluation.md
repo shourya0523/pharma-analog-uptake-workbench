@@ -41,8 +41,8 @@ from. They live in `seed/cases/`:
 | `gold_all.json` | every product-year gold holds, one run per window | `seed/gold/` |
 | `foreign_xbrl.json` | one foreign filer's 6-K, whose figures are tagged on axes of its own: a product line, an aggregate of the rest, a line covering two products, a six-month-only figure, and a product it does not sell | the figure printed in the filing each case cites |
 | `unseen.json` | issuers no answer key uses, one quarter each | the figure printed in the 10-Q each case cites |
-| `shapes_holdout.json` | issuers no answer key uses, drawn by the shape of what the filing prints (item 0 of `docs/plan-after-the-full-sweep.md`); both answers represented | the filing each figure cites by accession; an empty quarter says why |
-| `holdout_2026_09.json` | issuers no answer key uses, drawn for the fixes in `docs/plans/2026-09-17-006-what-twelve-reviews-found.md`; the file's own `note` says what spends it, and no case states a CIK | the filing each figure cites by accession; an empty quarter says why |
+| `shapes_holdout.json` (**retired 2026-10-02**) | issuers no answer key uses, drawn by the shape of what the filing prints (item 0 of `docs/plan-after-the-full-sweep.md`); both answers represented | the filing each figure cites by accession; an empty quarter says why |
+| `holdout_2026_09.json` (**retired 2026-10-02**) | issuers no answer key uses, drawn for the fixes in `docs/plans/2026-09-17-006-what-twelve-reviews-found.md`; the file's own `note` says what spends it, and no case states a CIK | the filing each figure cites by accession; an empty quarter says why |
 
 `value_normalized_usd_millions: null` means the run must come back with
 nothing for that quarter, and says `why`. A set that only refuses is passed by
@@ -117,3 +117,20 @@ how a dead path hides.
 Gold scores the pipeline and never reaches it;
 `backend/tests/test_gold_is_not_an_input.py` enforces that. A change is
 measured on a set it was not built from - see rule 4 in `CLAUDE.md`.
+
+## Retired held-out sets
+
+Expanding gold to the 200-product list in `docs/sourcing/target_products.csv`
+put the issuers of these sets into `seed/gold`, so under CLAUDE.md rule 4 they
+can no longer score a change:
+
+- `seed/cases/shapes_holdout.json`
+- `seed/cases/holdout_2026_09.json`
+- `seed/holdout_members/combined_name_members.json`
+- `seed/holdout_labels/product_labels.json`
+
+Each file carries a `retired` record saying when and why. Its guard test now
+checks that the retirement is real (at least one of its issuers is scored
+elsewhere) instead of that its issuers are unscored, and `scripts/eval.py`
+refuses to score against it without `--allow-retired`. A change that needs
+scoring needs a new set drawn from issuers outside every answer key.

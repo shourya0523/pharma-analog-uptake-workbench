@@ -1,0 +1,33 @@
+{
+  "drug_name": "Vumerity",
+  "generic_name": "diroximel fumarate",
+  "manufacturer": "Biogen",
+  "benchmark_identity": "biogen_vumerity_worldwide_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Multiple sclerosis (relapsing forms)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "delayed-release capsule",
+  "route_of_administration": "oral",
+  "moa": "Fumaric acid ester prodrug of monomethyl fumarate; activates the Nrf2 antioxidant response pathway (mechanism in MS not fully established)",
+  "moa_class": "nrf2_pathway_activator",
+  "first_approval_year": 2019,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2019/211855Orig1s000ltr.pdf",
+    "quote": "NDA 211855 NDA APPROVAL Alkermes, Inc. ... for Vumerity (diroximel fumarate) delayed-release capsules ... It is approved, effective on the date of this letter (electronic signature page dated 10/29/2019)"
+  },
+  "launch_quarter": "2019Q4",
+  "commercial_start_quarter": "2019Q4",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "Listed Biogen (CIK 0000875045) filings from data.sec.gov/submissions (recent + older files), keeping every 8-K and 8-K/A with item 2.02, or 9.01 exhibits, 2013-04 onward; the 2022-07-20 8-K/A (0000875045-22-000023) carries the same exhibit as the original 8-K with a one-character year fix in unrelated text, original 8-K used.",
+    "Fetched each filing's index.json, took the earnings-release exhibit (EX-99.1; file names q<N><YYYY>pressrelease.htm, ye2013pressrelease.htm, exhibit991-q<N><YYYY>pressrele.htm), parsed every table row, selected the product row.",
+    "Row selection rule: first row in the release whose label equals the product name; for releases that carry both a whole-million summary table and a one-decimal U.S./Rest of World/Total table, the one-decimal table row; value is the Total column for the current quarter (first triple).",
+    "Biogen's 2020Q3 release footnote: 'VUMERITY became commercially available in the U.S. in November 2019'; 2019Q4 release prints the first VUMERITY row (5.5).",
+    "VUMERITY is printed on its own line in every release from 2019Q4 on (not only inside 'Total Fumarate'); for 2020Q1-2020Q3 only the whole-million summary-table row is separate, because the detailed table shows a combined 'Fumarate' line.",
+    "The approval letter is addressed to Alkermes as NDA applicant; the revenue series is the one Biogen prints in its own releases."
+  ]
+}
