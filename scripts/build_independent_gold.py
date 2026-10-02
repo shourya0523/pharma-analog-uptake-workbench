@@ -1326,6 +1326,58 @@ PRODUCT_METADATA = {
     },
 }
 
+# Products researched into seed/gold/source_manifests as a pair of files: a
+# ``<stem>_quarterly.csv`` of cited rows and a ``<stem>.meta.json`` describing
+# the series. The set is whatever pairs are on disk, read at import, so a
+# product is added by adding its files and never by extending a dict here.
+RESEARCHED_SERIES_FIELDS = (
+    "generic_name",
+    "manufacturer",
+    "benchmark_identity",
+    "therapeutic_area",
+    "revenue_scope",
+    "geography",
+    "formulation",
+    "route_of_administration",
+    "launch_quarter",
+    "commercial_start_quarter",
+    "series_start_reason",
+    "series_end_quarter",
+    "series_end_basis",
+    "series_end_reason",
+    "peak_eligible",
+)
+
+
+def researched_metadata() -> dict[str, dict[str, Any]]:
+    """Series metadata for every researched product that has a quarterly manifest.
+
+    A field the research left null is dropped rather than stored as None, so
+    the defaults the rest of the builder applies with ``meta.get`` still hold.
+    A series that starts after its stated launch cannot locate a peak, so it
+    is never peak-eligible whatever the file says.
+    """
+    out: dict[str, dict[str, Any]] = {}
+    for path in sorted(SOURCE_DIR.glob("*.meta.json")):
+        stem = path.name.removesuffix(".meta.json")
+        manifest = SOURCE_DIR / f"{stem}_quarterly.csv"
+        if not manifest.is_file():
+            continue
+        raw = json.loads(path.read_text())
+        name = raw["drug_name"]
+        if name in PRODUCT_METADATA or name in out:
+            raise ValueError(f"{name} is described by more than one series metadata file")
+        meta = {field: raw[field] for field in RESEARCHED_SERIES_FIELDS if raw.get(field) is not None}
+        if raw.get("series_start_reason"):
+            meta["peak_eligible"] = False
+        meta["manifest"] = manifest.name
+        out[name] = meta
+    return out
+
+
+RESEARCHED_METADATA = researched_metadata()
+PRODUCT_METADATA.update(RESEARCHED_METADATA)
+
 ANNUAL_METADATA = {
     "Letairis": {
         "generic_name": "ambrisentan",
@@ -1455,6 +1507,36 @@ def usd_normalized(value: float, currency: str, year: int) -> tuple[float | None
     return None, None
 
 
+# USD per one unit of each currency, by calendar quarter: FRED's quarterly
+# average of the Federal Reserve H.10 noon buying rate, written by
+# scripts/sourcing/fetch_fx_quarterly.py with the FRED URL on every row.
+QUARTERLY_FX_FILE = SOURCE_DIR / "fx_quarterly_usd.csv"
+QUARTERLY_FX_SOURCE = "federal_reserve_h10_quarterly_average_via_fred"
+
+
+def quarterly_fx() -> dict[tuple[str, str], float]:
+    if not QUARTERLY_FX_FILE.is_file():
+        return {}
+    return {
+        (row["currency"], row["quarter"]): float(row["usd_per_unit"])
+        for row in read_csv(QUARTERLY_FX_FILE)
+    }
+
+
+def quarterly_usd(value: float, currency: str, period: str) -> tuple[float, float | None]:
+    """(value_normalized_usd_millions, fx_rate_to_usd) for one quarter's figure.
+
+    A currency or quarter the table does not hold raises, because a row without
+    a rate would otherwise ship an unconverted figure under a USD column.
+    """
+    if currency == "USD":
+        return round(value, 6), None
+    rate = QUARTERLY_FX.get((currency, period))
+    if rate is None:
+        raise ValueError(f"No quarterly {currency} rate for {period} in {QUARTERLY_FX_FILE.name}")
+    return round(value * rate, 6), rate
+
+
 def slug(*parts: object) -> str:
     return re.sub(r"[^a-z0-9]+", "-", "-".join(str(part).lower() for part in parts)).strip("-")
 
@@ -1568,6 +1650,9 @@ def find_direct_rows(html: bytes) -> dict[str, tuple[float, str]]:
     return found
 
 
+QUARTERLY_FX = quarterly_fx()
+
+
 def revenue_row(
     *,
     drug_name: str,
@@ -1583,9 +1668,11 @@ def revenue_row(
     sources: list[dict[str, str]] | None = None,
     bridge_components: list[dict[str, Any]] | None = None,
     notes: str = "",
+    currency: str = "USD",
 ) -> dict[str, Any]:
     meta = PRODUCT_METADATA[drug_name]
     year, quarter = int(period[:4]), int(period[-1])
+    normalized, fx_rate = quarterly_usd(float(value), currency, period)
     return {
         "gold_id": slug(meta["benchmark_identity"], period),
         "drug_name": drug_name,
@@ -1598,8 +1685,14 @@ def revenue_row(
         "calendar_year": year,
         "calendar_quarter": quarter,
         "value_reported": round(float(value), 6),
-        "value_normalized_usd_millions": round(float(value), 6),
-        "currency": "USD",
+        "value_normalized_usd_millions": normalized,
+        "currency": currency,
+        # Only a non-USD row carries a rate; a USD row is already normalized.
+        **(
+            {"fx_rate_to_usd": fx_rate, "fx_rate_source": QUARTERLY_FX_SOURCE}
+            if fx_rate is not None
+            else {}
+        ),
         "unit": "millions",
         "metric": "revenue",
         "period_type": "quarterly",
@@ -2343,6 +2436,36 @@ def build_lilly_comparators() -> list[dict[str, Any]]:
     return rows
 
 
+def build_researched_products() -> list[dict[str, Any]]:
+    """Every product researched into a manifest pair, read as its rows declare.
+
+    Unit, currency and source type come from each row rather than from the
+    issuer, because one series can cross from thousands to millions or from a
+    filing to a release partway through.
+    """
+    rows: list[dict[str, Any]] = []
+    for drug_name, meta in RESEARCHED_METADATA.items():
+        for source in read_csv(SOURCE_DIR / meta["manifest"]):
+            reported = source.get("source_value_reported")
+            rows.append(
+                revenue_row(
+                    drug_name=drug_name,
+                    period=source["period"],
+                    value=float(source["value_reported"]),
+                    source_url=source["source_url"],
+                    source_quote=source["source_quote"],
+                    source_type=source["source_type"],
+                    derivation=source["derivation"],
+                    precision=source.get("precision") or "as_reported",
+                    source_unit=source.get("source_unit") or "millions",
+                    source_value=float(reported) if reported else None,
+                    notes=source["context"],
+                    currency=source.get("currency") or "USD",
+                )
+            )
+    return rows
+
+
 def build_annual_rows() -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     for source in read_csv(SOURCE_DIR / "annual_product_sales.csv"):
@@ -2450,7 +2573,11 @@ def full_annual_totals(rows: list[dict[str, Any]], drug_name: str) -> list[dict[
         totals.append(
             {
                 "period": str(year),
-                "value_reported": round(sum(row["value_reported"] for row in year_rows), 6),
+                # Normalized, so a non-USD series peaks where its USD value does,
+                # as the annual Tracleer benchmark already does.
+                "value_reported": round(
+                    sum(row["value_normalized_usd_millions"] for row in year_rows), 6
+                ),
                 "currency": "USD",
                 "unit": "millions",
                 "input_ids": [row["gold_id"] for row in sorted(year_rows, key=lambda row: row["period"])],
@@ -2971,7 +3098,7 @@ def main() -> int:
         # free - and reusing them instead would silently ignore an edit to
         # those manifests, which is exactly the kind of staleness this flag
         # must not introduce.
-        rebuilt = build_yutrepia() + build_winrevair() + build_adempas() + build_opsumit() + build_tracleer() + build_letairis() + build_gilead_comparators() + build_jnj_comparators() + build_lilly_comparators()
+        rebuilt = build_yutrepia() + build_winrevair() + build_adempas() + build_opsumit() + build_tracleer() + build_letairis() + build_gilead_comparators() + build_jnj_comparators() + build_lilly_comparators() + build_researched_products()
         # Remodulin is only partly manifest-backed, so it is refreshed by
         # period rather than by dropping the whole product.
         early = build_remodulin_early()
@@ -3005,6 +3132,7 @@ def main() -> int:
                 + build_gilead_comparators()
                 + build_jnj_comparators()
                 + build_lilly_comparators()
+                + build_researched_products()
             )
             quarterly = apply_acquisition_bridges(quarterly)
         finally:

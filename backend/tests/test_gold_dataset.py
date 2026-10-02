@@ -131,8 +131,18 @@ def test_quarterly_rows_are_unique_and_preserve_reported_units():
     assert len(keys) == len(rows)
     for row in rows:
         assert row["period_type"] == "quarterly"
-        assert row["currency"] == "USD"
         assert row["unit"] == "millions"
+        # value_reported stays in the issuer's own currency; only the
+        # normalized column is USD, and a converted row names its rate.
+        if row["currency"] == "USD":
+            assert row["value_normalized_usd_millions"] == row["value_reported"], row["gold_id"]
+            assert "fx_rate_to_usd" not in row, row["gold_id"]
+        else:
+            assert row["fx_rate_to_usd"] > 0, row["gold_id"]
+            assert row["fx_rate_source"], row["gold_id"]
+            assert row["value_normalized_usd_millions"] == round(
+                row["value_reported"] * row["fx_rate_to_usd"], 6
+            ), row["gold_id"]
         assert row["source_unit"] in {"units", "thousands", "millions"}
         assert row["sources"]
         # test_gold_rows_have_independent_provenance_and_citations only checks
