@@ -1458,6 +1458,33 @@ ANNUAL_METADATA = {
     },
 }
 
+def researched_annual_metadata() -> dict[str, dict[str, Any]]:
+    """Series metadata for every product researched into an annual manifest.
+
+    An issuer that publishes product sales only for half-years and full years
+    has no quarterly series; its full years are read from ``<stem>_annual.csv``
+    beside ``<stem>.meta.json``.
+    """
+    out: dict[str, dict[str, Any]] = {}
+    for path in sorted(SOURCE_DIR.glob("*.meta.json")):
+        manifest = SOURCE_DIR / f"{path.name.removesuffix('.meta.json')}_annual.csv"
+        if not manifest.is_file():
+            continue
+        raw = json.loads(path.read_text())
+        if raw["drug_name"] in ANNUAL_METADATA:
+            raise ValueError(f"{raw['drug_name']} is described by more than one annual metadata file")
+        out[raw["drug_name"]] = {
+            "generic_name": raw["generic_name"],
+            "manufacturer": raw["manufacturer"],
+            "benchmark_identity": raw["benchmark_identity"],
+            "manifest": manifest.name,
+        }
+    return out
+
+
+ANNUAL_METADATA.update(researched_annual_metadata())
+
+
 # Annual-average exchange rates for the non-USD annual manifests (Tracleer in
 # CHF, Flolan in GBP). Actelion and GSK never disclosed these figures in USD,
 # so no citable USD quote exists to reuse; these rates convert the reported
@@ -1505,6 +1532,12 @@ def usd_normalized(value: float, currency: str, year: int) -> tuple[float | None
         return round(value * rate, 6), rate
     if currency == "GBP" and year in FX_RATE_USD_PER_GBP:
         rate = FX_RATE_USD_PER_GBP[year]
+        return round(value * rate, 6), rate
+    # Any other currency uses the mean of the year's four quarterly H.10
+    # averages, the same rates the quarterly rows convert at.
+    quarters = [QUARTERLY_FX.get((currency, f"{year}Q{q}")) for q in range(1, 5)]
+    if all(quarters):
+        rate = round(sum(quarters) / 4, 6)
         return round(value * rate, 6), rate
     return None, None
 
@@ -2534,7 +2567,11 @@ def build_companion_rows() -> list[dict[str, Any]]:
 
 def build_annual_rows() -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
-    for source in read_csv(SOURCE_DIR / "annual_product_sales.csv"):
+    sources = read_csv(SOURCE_DIR / "annual_product_sales.csv")
+    for meta in ANNUAL_METADATA.values():
+        if "manifest" in meta:
+            sources += read_csv(SOURCE_DIR / meta["manifest"])
+    for source in sources:
         meta = ANNUAL_METADATA[source["drug_name"]]
         value = float(source["value_reported"])
         source_unit = "thousands" if "thousands" in source["source_quote"].lower() else source["unit"]
@@ -2725,7 +2762,14 @@ def build_peaks(quarterly: list[dict[str, Any]], annual: list[dict[str, Any]]) -
             continue
         peaks.append(observed_peak(drug_name, totals, meta["revenue_scope"], meta["geography"]))
 
-    for drug_name in ("Letairis", "Revatio", "Tracleer"):
+    # A product is peaked on its annual figures when those figures are its
+    # benchmark: annual rows marked peak_benchmark, and no quarterly series
+    # that can carry the peak itself.
+    annual_benchmarks = sorted(
+        {row["drug_name"] for row in annual if row["series_role"] == "peak_benchmark"}
+        - {name for name, meta in PRODUCT_METADATA.items() if meta.get("peak_eligible", True)}
+    )
+    for drug_name in annual_benchmarks:
         # Peak selection compares value_normalized_usd_millions, not the raw
         # as-reported currency: Tracleer is CHF-denominated, and a strong-franc
         # year can outrank a nominally larger CHF year once converted (e.g.
@@ -3025,16 +3069,19 @@ def catalog_coverage(
     # An excluded product may still appear in ANNUAL_METADATA to supply context
     # rows - Flolan does - so it is not an annual-only benchmark. Counting it as
     # both would overstate the catalog.
-    annual_only = sorted(
+    # As with exclusions, an annual benchmark outside the seed catalog is a
+    # comparator, reported beside the catalog and never in it.
+    all_annual_only = (
         ANNUAL_METADATA.keys() - {row["drug_name"] for row in coverage} - all_excluded
     )
+    annual_only = sorted(all_annual_only & seed)
     # Comparators from other therapy areas are in the dataset but not in the
     # catalog, and mixing them in would flatter the coverage percentage: three
     # products added from outside would read as three more of the twenty
     # covered. The catalog is the seed file, and the percentage is measured
     # against it.
     comparators = sorted(
-        (set(quarterly_products) | set(annual_only) | all_excluded) - seed
+        (set(quarterly_products) | all_annual_only | all_excluded) - seed
     )
     in_catalog = [drug for drug in quarterly_products if drug in seed]
     total = len(seed)
@@ -3043,6 +3090,7 @@ def catalog_coverage(
         "quarterly_series_products": quarterly_products,
         "comparator_products": comparators,
         "annual_only_products": annual_only,
+        "annual_only_comparator_products": sorted(all_annual_only - seed),
         "excluded_products": excluded,
         "excluded_comparator_products": sorted(all_excluded - seed),
         "quarterly_series_pct": round(100 * len(in_catalog) / total, 1),

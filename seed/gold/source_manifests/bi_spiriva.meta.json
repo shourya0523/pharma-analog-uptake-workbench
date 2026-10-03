@@ -1,0 +1,24 @@
+{
+  "drug_name": "Spiriva",
+  "generic_name": "tiotropium",
+  "manufacturer": "Boehringer Ingelheim",
+  "benchmark_identity": "bi_spiriva_worldwide_annual",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "period_type": "annual",
+  "series_role": "partial_context",
+  "annual_basis": "Boehringer Ingelheim prints Spiriva only in selected years' reports and releases that could be read at source (2009, 2018, 2021-2023), several rounded to EUR 0.1 billion; the years do not run from the 2002 launch, so these are annual context and not a peak benchmark.",
+  "launch_evidence": {
+    "year": 2002,
+    "url": "https://www.boehringer-ingelheim.com/in/about-us/who-we-are/history/1988-2015",
+    "quote": "2002: Launch of Spiriva\u00ae The COPD product Spiriva\u00ae is launched."
+  },
+  "search_log": [
+    "boehringer-ingelheim.com and annualreport.boehringer-ingelheim.com block plain HTTP (Incapsula; annualreport host 301s to www.boehringer-ingelheim.com/annualreport/2025/): curl returned a bot-challenge stub, so all BI text was read via Tavily search/extract.",
+    "Tavily searches restricted to boehringer-ingelheim.com and annualreport.boehringer-ingelheim.com, queries per year (2002-2025) for Spiriva net sales / annual results / summary report / group management report. Documents the index returned that print a Spiriva figure: 2009 press release, 2018 press release, Summary Report 2020, Summary Report 2021, Summary/Group Management Report 2022, Highlights 2023.",
+    "Years 2009 and 2018 are rounded figures as printed (EUR 2.4 billion / 2.4 billion euros); recorded as printed, not refined.",
+    "2024 and 2025: Highlights 2024 PDF (www.boehringer-ingelheim.com/annualreport/2024/files/figures/BOE_Highlights_2024_EN.pdf) and Highlights 2025 PDF (.../annualreport/2025/files/Boehringer-Ingelheim-Annual-Report-Highlights-2025.pdf) exist but Tavily extract returns only the 'Pardon Our Interruption' bot page; the 2024 and 2025 results press releases found (2024-results-research-and-development-investment-rise, boehringer-ingelheim-reports-2025-growth-and-pipeline-progress) print no Spiriva figure in the text returned. Not readable at source, left out.",
+    "2019 Summary/Annual Report and all reports for 2002-2008, 2010-2017 (annual reports, annual press conference releases) did not surface in any search and Tavily extract of guessed URLs failed; left out, not estimated. The US-site press releases for 2011, 2013-2015, 2017 surfaced only as boilerplate net-sales-of-group sentences with no Spiriva figure.",
+    "Other figures seen in the 2023 and 2022 reports as comparatives (2022: 1,560; 2021: 1,548) agree with the own-year reports used."
+  ]
+}

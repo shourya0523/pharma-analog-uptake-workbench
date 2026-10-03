@@ -1,0 +1,25 @@
+{
+  "drug_name": "Rystiggo",
+  "generic_name": "rozanolixizumab",
+  "manufacturer": "UCB",
+  "benchmark_identity": "ucb_rystiggo_worldwide_annual",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "period_type": "annual",
+  "series_role": "peak_benchmark",
+  "annual_basis": "Every calendar year from the 2023 launch through 2025, from UCB's annual reports.",
+  "launch_evidence": {
+    "year": 2023,
+    "url": "https://www.ucb.com/sites/default/files/2024-03/2023_Full-Year_Integrated_Annual_Report-ENG_0.pdf",
+    "quote": "was launched in the U.S. in July 2023. In 2023, net sales"
+  },
+  "search_log": [
+    "Same UCB downloads. FY23 19 (2022: 0), FY24 202, FY25 332, each from that year's own report. Quote for 2023 and 2024 is from the net sales table in the financial statement notes."
+  ],
+  "no_quarterly_series": {
+    "reason_code": "half_year_reporting_only",
+    "source_url": "https://www.ucb.com/sites/default/files/2025-07/ucb_half-year_2025_report-en-final.pdf",
+    "source_quote": "UCB half-year report 2025, table 'For the six months ended June 30, Actual, Variance; EUR million; 2025, 2024, actual rates, CER' | RYSTIGGO\u00ae 146 77 89% 90%",
+    "details": "UCB publishes product net sales in half-year reports (six months ended June 30) and annual reports; no quarterly product table was found on the UCB download center. Quarters are not interpolated per contract."
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "drug_name": "Bimzelx",
+  "generic_name": "bimekizumab",
+  "manufacturer": "UCB",
+  "benchmark_identity": "ucb_bimzelx_worldwide_annual",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "period_type": "annual",
+  "series_role": "peak_benchmark",
+  "annual_basis": "Every calendar year from the 2021 launch through 2025, from UCB's annual reports.",
+  "launch_evidence": {
+    "year": 2021,
+    "url": "https://www.ucb.com/sites/default/files/2023-08/FY21_Integrated-Annual-Report_ENG.pdf",
+    "quote": "UCB launched BIMZELX\u00ae (bimekizumab) for the treatment of"
+  },
+  "search_log": [
+    "Same UCB downloads as Cimzia. FY21 report prints Bimzelx net sales 4 (2020: 0); FY22 35; FY23 148; FY24 607; FY25 2 227, each from that year's own report.",
+    "Launch sentence continues on the next line of the report: 'moderate to severe plaque psoriasis in Germany, followed by the U.K., Sweden and later the Netherlands.'"
+  ],
+  "no_quarterly_series": {
+    "reason_code": "half_year_reporting_only",
+    "source_url": "https://www.ucb.com/sites/default/files/2025-07/ucb_half-year_2025_report-en-final.pdf",
+    "source_quote": "UCB half-year report 2025, table 'For the six months ended June 30, Actual, Variance; EUR million; 2025, 2024, actual rates, CER' | BIMZELX\u00ae 799 215 >100% >100%",
+    "details": "UCB publishes product net sales in half-year reports (six months ended June 30) and annual reports; no quarterly product table was found on the UCB download center. Quarters are not interpolated per contract."
+  }
+}

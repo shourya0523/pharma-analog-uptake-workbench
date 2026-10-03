@@ -2,12 +2,12 @@
   "generation": "independent_issuer_research",
   "as_of_quarter": "2026Q2",
   "quarterly_rows": 8094,
-  "annual_rows": 75,
+  "annual_rows": 107,
   "complete_quarterly_series": 223,
   "quarterly_coverage_pct": 100.0,
-  "observed_peaks": 24,
-  "not_yet_observed_peaks": 99,
-  "excluded_products": 16,
+  "observed_peaks": 25,
+  "not_yet_observed_peaks": 101,
+  "excluded_products": 13,
   "catalog_coverage": {
     "catalog_products": 20,
     "quarterly_series_products": [
@@ -460,6 +460,11 @@
     "annual_only_products": [
       "Revatio"
     ],
+    "annual_only_comparator_products": [
+      "Bimzelx",
+      "Cimzia",
+      "Rystiggo"
+    ],
     "excluded_products": [
       "Alyq",
       "Flolan",
@@ -469,14 +474,11 @@
       "Ventavis"
     ],
     "excluded_comparator_products": [
-      "Bimzelx",
-      "Cimzia",
       "Cinqair",
       "Esperoct",
       "Hemgenix",
       "Ilumya",
       "Jivi",
-      "Rystiggo",
       "Spiriva",
       "Velsipity"
     ],
@@ -548,9 +550,9 @@
     "complete_quarterly_series": 223,
     "quarterly_observations": 8094,
     "series_missing_quarters": [],
-    "annual_benchmark_series": 1,
-    "annual_observations": 75,
-    "evidence_backed_exclusions": 16,
+    "annual_benchmark_series": 4,
+    "annual_observations": 107,
+    "evidence_backed_exclusions": 13,
     "comparator_products": [
       "Abecma",
       "Abrysvo",

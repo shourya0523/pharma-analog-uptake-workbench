@@ -73694,84 +73694,6 @@
   ]
  },
  {
-  "drug_name": "Bimzelx",
-  "manufacturer": null,
-  "ticker": null,
-  "generic_name": null,
-  "options": {
-   "earnings_since": "2025-04-05",
-   "earnings_until": "2026-05-05",
-   "openfda": true,
-   "product_metadata": true
-  },
-  "source": "seed/gold/excluded_products.jsonl",
-  "expect": [
-   {
-    "period": "2025Q1",
-    "value_normalized_usd_millions": null,
-    "gold_id": "bimzelx-excluded",
-    "why": "half_year_reporting_only: UCB publishes product net sales in half-year reports (six months ended June 30) and annual reports; no quarterly product table was found on the UCB download center. Quarters are not interpolated per contract."
-   },
-   {
-    "period": "2025Q2",
-    "value_normalized_usd_millions": null,
-    "gold_id": "bimzelx-excluded",
-    "why": "half_year_reporting_only: UCB publishes product net sales in half-year reports (six months ended June 30) and annual reports; no quarterly product table was found on the UCB download center. Quarters are not interpolated per contract."
-   },
-   {
-    "period": "2025Q3",
-    "value_normalized_usd_millions": null,
-    "gold_id": "bimzelx-excluded",
-    "why": "half_year_reporting_only: UCB publishes product net sales in half-year reports (six months ended June 30) and annual reports; no quarterly product table was found on the UCB download center. Quarters are not interpolated per contract."
-   },
-   {
-    "period": "2025Q4",
-    "value_normalized_usd_millions": null,
-    "gold_id": "bimzelx-excluded",
-    "why": "half_year_reporting_only: UCB publishes product net sales in half-year reports (six months ended June 30) and annual reports; no quarterly product table was found on the UCB download center. Quarters are not interpolated per contract."
-   }
-  ]
- },
- {
-  "drug_name": "Cimzia",
-  "manufacturer": null,
-  "ticker": null,
-  "generic_name": null,
-  "options": {
-   "earnings_since": "2025-04-05",
-   "earnings_until": "2026-05-05",
-   "openfda": true,
-   "product_metadata": true
-  },
-  "source": "seed/gold/excluded_products.jsonl",
-  "expect": [
-   {
-    "period": "2025Q1",
-    "value_normalized_usd_millions": null,
-    "gold_id": "cimzia-excluded",
-    "why": "half_year_reporting_only: UCB publishes product net sales in half-year reports (six months ended June 30) and annual reports; no quarterly product table was found on the UCB download center. Quarters are not interpolated per contract."
-   },
-   {
-    "period": "2025Q2",
-    "value_normalized_usd_millions": null,
-    "gold_id": "cimzia-excluded",
-    "why": "half_year_reporting_only: UCB publishes product net sales in half-year reports (six months ended June 30) and annual reports; no quarterly product table was found on the UCB download center. Quarters are not interpolated per contract."
-   },
-   {
-    "period": "2025Q3",
-    "value_normalized_usd_millions": null,
-    "gold_id": "cimzia-excluded",
-    "why": "half_year_reporting_only: UCB publishes product net sales in half-year reports (six months ended June 30) and annual reports; no quarterly product table was found on the UCB download center. Quarters are not interpolated per contract."
-   },
-   {
-    "period": "2025Q4",
-    "value_normalized_usd_millions": null,
-    "gold_id": "cimzia-excluded",
-    "why": "half_year_reporting_only: UCB publishes product net sales in half-year reports (six months ended June 30) and annual reports; no quarterly product table was found on the UCB download center. Quarters are not interpolated per contract."
-   }
-  ]
- },
- {
   "drug_name": "Cinqair",
   "manufacturer": null,
   "ticker": null,
@@ -74041,45 +73963,6 @@
     "value_normalized_usd_millions": null,
     "gold_id": "liqrev-excluded",
     "why": "private_issuer_no_public_sales: The product was later discontinued; no public product-level sales were found."
-   }
-  ]
- },
- {
-  "drug_name": "Rystiggo",
-  "manufacturer": null,
-  "ticker": null,
-  "generic_name": null,
-  "options": {
-   "earnings_since": "2025-04-05",
-   "earnings_until": "2026-05-05",
-   "openfda": true,
-   "product_metadata": true
-  },
-  "source": "seed/gold/excluded_products.jsonl",
-  "expect": [
-   {
-    "period": "2025Q1",
-    "value_normalized_usd_millions": null,
-    "gold_id": "rystiggo-excluded",
-    "why": "half_year_reporting_only: UCB publishes product net sales in half-year reports (six months ended June 30) and annual reports; no quarterly product table was found on the UCB download center. Quarters are not interpolated per contract."
-   },
-   {
-    "period": "2025Q2",
-    "value_normalized_usd_millions": null,
-    "gold_id": "rystiggo-excluded",
-    "why": "half_year_reporting_only: UCB publishes product net sales in half-year reports (six months ended June 30) and annual reports; no quarterly product table was found on the UCB download center. Quarters are not interpolated per contract."
-   },
-   {
-    "period": "2025Q3",
-    "value_normalized_usd_millions": null,
-    "gold_id": "rystiggo-excluded",
-    "why": "half_year_reporting_only: UCB publishes product net sales in half-year reports (six months ended June 30) and annual reports; no quarterly product table was found on the UCB download center. Quarters are not interpolated per contract."
-   },
-   {
-    "period": "2025Q4",
-    "value_normalized_usd_millions": null,
-    "gold_id": "rystiggo-excluded",
-    "why": "half_year_reporting_only: UCB publishes product net sales in half-year reports (six months ended June 30) and annual reports; no quarterly product table was found on the UCB download center. Quarters are not interpolated per contract."
    }
   ]
  },

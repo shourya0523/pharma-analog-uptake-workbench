@@ -18,6 +18,7 @@ from the reference data those profiles were built out of.
     python scripts/export_gold_workbook.py
 """
 
+import csv
 import json
 from collections import defaultdict
 from pathlib import Path
@@ -445,7 +446,8 @@ LEAD = ["drug_name", "benchmark_identity", "revenue_scope", "first_approval_year
 ws = wb.create_sheet("Quarterly Matrix")
 ws.cell(1, 1, "Reported revenue by series and calendar quarter, USD millions. A pivot of the "
               "Quarterly Revenue sheet - the same figures rearranged, nothing recomputed. A "
-              "blank cell means the quarter is outside that series' reported window, never a "
+              "blank cell means the quarter is outside that series' reported window, or a quarter "
+              "an ownership change left unreported (Series Coverage, unreported_quarters) - never a "
               "reported zero. Launch-Aligned Matrix holds these same values against each "
               "product's own launch instead of the calendar.").font = NOTE
 headers = LEAD + periods
@@ -580,14 +582,25 @@ annual_products = {row["drug_name"] for row in annual}
 excluded_products = {row["drug_name"] for row in excluded}
 for row in profiles:
     name = row["drug_name"]
+    roles = {row["series_role"] for row in annual if row["drug_name"] == name}
     if name in quarterly_products:
         SUMMARY_STATUS[name] = "quarterly series"
-    elif name in annual_products:
-        SUMMARY_STATUS[name] = "annual benchmark only"
+    elif "peak_benchmark" in roles:
+        SUMMARY_STATUS[name] = "annual benchmark (no quarterly figures)"
+    elif roles:
+        SUMMARY_STATUS[name] = "annual context only (no quarterly figures)"
     elif name in excluded_products:
-        SUMMARY_STATUS[name] = "excluded from benchmark"
+        SUMMARY_STATUS[name] = "excluded (no figures published)"
     else:
         SUMMARY_STATUS[name] = "attributes only"
+
+# The products the dataset was asked to cover; every other product is reference
+# material carried over from the original pulmonary-hypertension set and its
+# comparators.
+REQUESTED = {
+    row["brand_name"]
+    for row in csv.DictReader((REPO / "docs" / "sourcing" / "target_products.csv").open(newline=""))
+}
 
 ps = wb.create_sheet("Product Summary")
 ps.cell(1, 1, "One row per product, so a product can be read without crossing four tabs. "
@@ -599,7 +612,8 @@ ps.cell(1, 1, "One row per product, so a product can be read without crossing fo
 S_HEAD = ["drug_name", "role in gold", "indication_area", "moa_class", "route_of_administration",
           "approval_era", "competitive_intensity_at_launch", "marketed_peers_at_launch",
           "quarterly rows", "annual rows", "first calendar year", "last calendar year",
-          "total reported (USD mm)", "peak status", "peak value (USD mm)", "peak year"]
+          "total reported (USD mm)", "peak status", "peak value (USD mm)", "peak year",
+          "in requested list"]
 for index, name in enumerate(S_HEAD, start=1):
     cell = ps.cell(2, index, name)
     cell.font = HEAD
@@ -615,7 +629,7 @@ for offset, row in enumerate(sorted(profiles, key=lambda item: item["drug_name"]
     q_rows = [item for item in quarterly if item["drug_name"] == name]
     a_rows = [item for item in annual if item["drug_name"] == name]
     peak = peak_index.get(name)
-    years = [item["calendar_year"] for item in q_rows]
+    years = [item["calendar_year"] for item in q_rows] or [int(item["period"]) for item in a_rows]
     values = [
         name, SUMMARY_STATUS[name], row.get("indication_area"), row.get("moa_class"),
         row.get("route_of_administration"), row.get("approval_era"),
@@ -627,6 +641,7 @@ for offset, row in enumerate(sorted(profiles, key=lambda item: item["drug_name"]
         peak["peak_status"] if peak else None,
         peak["peak_value"] if peak else None,
         peak["peak_year"] if peak else None,
+        "yes" if name in REQUESTED else "no (reference)",
     ]
     for index, value in enumerate(values, start=1):
         cell = ps.cell(n, index, value)
@@ -640,9 +655,9 @@ for offset, row in enumerate(sorted(profiles, key=lambda item: item["drug_name"]
             cell.number_format = "0"
         cell.alignment = Alignment(vertical="top")
 
-for index, width in enumerate([20, 22, 34, 26, 20, 13, 15, 13, 12, 11, 13, 13, 16, 18, 14, 11], start=1):
+for index, width in enumerate([20, 22, 34, 26, 20, 13, 15, 13, 12, 11, 13, 13, 16, 18, 14, 11, 14], start=1):
     ps.column_dimensions[get_column_letter(index)].width = width
-ps.auto_filter.ref = f"A2:P{2 + len(profiles)}"
+ps.auto_filter.ref = f"A2:Q{2 + len(profiles)}"
 ps.freeze_panes = "C3"
 
 # --------------------------------------------------------------- read me
@@ -670,10 +685,14 @@ def line(row, label, value=None, *, font=BODY, note=None, fmt=None):
 
 
 r = 1
-read.cell(r, 1, "PAH Peak Sales - Gold Dataset").font = TITLE
+read.cell(r, 1, "Pharma Product Revenue - Gold Dataset").font = TITLE
 r += 1
 read.cell(r, 1, f"Independently researched from issuer filings and releases. "
-                f"As of {manifest['as_of_quarter']}.").font = NOTE
+                f"As of {manifest['as_of_quarter']}. "
+                f"{len(REQUESTED & set(SUMMARY_STATUS))} requested products plus "
+                f"{len(set(SUMMARY_STATUS) - REQUESTED)} reference products from the original "
+                f"pulmonary-hypertension set and its comparators (Product Summary, "
+                f"'in requested list').").font = NOTE
 r += 2
 
 read.cell(r, 1, "WHAT THIS IS").font = BOLD

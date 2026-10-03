@@ -1,0 +1,4 @@
+drug_name,period,value_reported,currency,unit,revenue_scope,geography,source_url,source_quote,derivation,series_role
+Rystiggo,2023,19,EUR,millions,Worldwide,Worldwide,https://www.ucb.com/sites/default/files/2024-03/2023_Full-Year_Integrated_Annual_Report-ENG_0.pdf,RYSTIGGO® 19 0,direct_reported,peak_benchmark
+Rystiggo,2024,202,EUR,millions,Worldwide,Worldwide,https://www.ucb.com/sites/default/files/2025-06/ucb_iar_2024_eng_final_0.pdf,RYSTIGGO® 202 19,direct_reported,peak_benchmark
+Rystiggo,2025,332,EUR,millions,Worldwide,Worldwide,https://www.ucb.com/sites/default/files/2026-02/iar_2025-web.pdf,RYSTIGGO® 332 202 65 % 71 %,direct_reported,peak_benchmark

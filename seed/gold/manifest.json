@@ -32,7 +32,7 @@
   ],
   "quarterly_series_count": 223,
   "annual_only_series_count": 1,
-  "excluded_product_count": 16,
+  "excluded_product_count": 13,
   "quarterly_coverage_pct": 100.0,
   "reported_rows_file": "quarterly_revenue.jsonl",
   "annual_rows_file": "annual_revenue.jsonl",
