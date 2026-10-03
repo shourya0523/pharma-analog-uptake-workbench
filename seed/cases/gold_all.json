@@ -72044,6 +72044,45 @@
   ]
  },
  {
+  "drug_name": "Spiriva",
+  "manufacturer": null,
+  "ticker": null,
+  "generic_name": null,
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/excluded_products.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": null,
+    "gold_id": "spiriva-excluded",
+    "why": "half_year_reporting_only: Boehringer Ingelheim is privately held, files nothing with the SEC, and reports only half-year (July) and full-year (March) results; Spiriva appears as an annual figure in its full-year releases, never as a quarter. Its recent releases name only the largest products (H1 2025 and FY2025 releases on boehringer-ingelheim.com print Jardiance and Ofev only). Pfizer, the former co-promoter, prints Spiriva only inside an aggregated Alliance revenues line. Read through the Tavily extract connector, since boehringer-ingelheim.com serves a bot challenge to direct requests from the verification environment. No quarterly figure exists to cite and none is interpolated."
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": null,
+    "gold_id": "spiriva-excluded",
+    "why": "half_year_reporting_only: Boehringer Ingelheim is privately held, files nothing with the SEC, and reports only half-year (July) and full-year (March) results; Spiriva appears as an annual figure in its full-year releases, never as a quarter. Its recent releases name only the largest products (H1 2025 and FY2025 releases on boehringer-ingelheim.com print Jardiance and Ofev only). Pfizer, the former co-promoter, prints Spiriva only inside an aggregated Alliance revenues line. Read through the Tavily extract connector, since boehringer-ingelheim.com serves a bot challenge to direct requests from the verification environment. No quarterly figure exists to cite and none is interpolated."
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": null,
+    "gold_id": "spiriva-excluded",
+    "why": "half_year_reporting_only: Boehringer Ingelheim is privately held, files nothing with the SEC, and reports only half-year (July) and full-year (March) results; Spiriva appears as an annual figure in its full-year releases, never as a quarter. Its recent releases name only the largest products (H1 2025 and FY2025 releases on boehringer-ingelheim.com print Jardiance and Ofev only). Pfizer, the former co-promoter, prints Spiriva only inside an aggregated Alliance revenues line. Read through the Tavily extract connector, since boehringer-ingelheim.com serves a bot challenge to direct requests from the verification environment. No quarterly figure exists to cite and none is interpolated."
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": null,
+    "gold_id": "spiriva-excluded",
+    "why": "half_year_reporting_only: Boehringer Ingelheim is privately held, files nothing with the SEC, and reports only half-year (July) and full-year (March) results; Spiriva appears as an annual figure in its full-year releases, never as a quarter. Its recent releases name only the largest products (H1 2025 and FY2025 releases on boehringer-ingelheim.com print Jardiance and Ofev only). Pfizer, the former co-promoter, prints Spiriva only inside an aggregated Alliance revenues line. Read through the Tavily extract connector, since boehringer-ingelheim.com serves a bot challenge to direct requests from the verification environment. No quarterly figure exists to cite and none is interpolated."
+   }
+  ]
+ },
+ {
   "drug_name": "Tadliq",
   "manufacturer": null,
   "ticker": null,

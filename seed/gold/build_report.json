@@ -7,7 +7,7 @@
   "quarterly_coverage_pct": 100.0,
   "observed_peaks": 23,
   "not_yet_observed_peaks": 89,
-  "excluded_products": 15,
+  "excluded_products": 16,
   "catalog_coverage": {
     "catalog_products": 20,
     "quarterly_series_products": [
@@ -401,6 +401,7 @@
       "Sotyktu",
       "Spikevax",
       "Spinraza",
+      "Spiriva",
       "Stelara",
       "Stribild",
       "Syfovre",
@@ -476,6 +477,7 @@
       "Ilumya",
       "Jivi",
       "Rystiggo",
+      "Spiriva",
       "Velsipity"
     ],
     "quarterly_series_pct": 65.0,
@@ -550,7 +552,7 @@
     "series_missing_quarters": [],
     "annual_benchmark_series": 1,
     "annual_observations": 75,
-    "evidence_backed_exclusions": 15,
+    "evidence_backed_exclusions": 16,
     "comparator_products": [
       "Abecma",
       "Abrysvo",
@@ -717,6 +719,7 @@
       "Sotyktu",
       "Spikevax",
       "Spinraza",
+      "Spiriva",
       "Stelara",
       "Stribild",
       "Syfovre",
@@ -816,8 +819,8 @@
     "balanced": true
   },
   "product_profiles": {
-    "products": 239,
-    "moa_classes": 145,
+    "products": 240,
+    "moa_classes": 146,
     "routes": [
       "Inhaled",
       "Intramuscular",
