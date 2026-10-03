@@ -45,5 +45,10 @@
       "first_quarter": "2021Q4",
       "last_quarter": "2026Q2"
     }
-  ]
+  ],
+  "launch_quarter": "2018Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/899866/000089986619000007/ex99102042019.htm",
+    "quote": "and launching ULTOMIRIS for PNH in the U.S."
+  }
 }

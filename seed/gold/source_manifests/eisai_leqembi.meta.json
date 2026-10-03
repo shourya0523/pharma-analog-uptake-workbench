@@ -3,7 +3,7 @@
   "series_end_quarter": null,
   "series_end_basis": null,
   "series_end_reason": null,
-  "launch_quarter": null,
+  "launch_quarter": "2023Q1",
   "commercial_start_quarter": "2024Q1",
   "notes": "Values are Eisai's pre-audit (preliminary) global Leqembi revenue as stated in eisai.com news releases, JPY billions; Eisai books product sales, Biogen co-commercializes. Fiscal quarters Apr-Mar mapped to calendar quarters.",
   "drug_name": "Leqembi",
@@ -27,5 +27,9 @@
     "eisai.com/news/2023-2026 index pages scanned for titles matching revenue/financial results: 9 'Revenue of LEQEMBI' releases (2024: news202428, 202458, 202479; 2025: 202534, 202555, 202577; 2026: 202607, 202624, 202644)",
     "eisai.com/ir/* blocked (302)",
     "No release found for Oct-Dec 2024 directly: derived from FY2024 less other quarters"
-  ]
+  ],
+  "launch_evidence": {
+    "url": "https://www.eisai.com/news/2023/news202316.html",
+    "quote": "LEQEMBI was approved under accelerated approval in the U.S. and was launched in the U.S. on January 18, 2023."
+  }
 }

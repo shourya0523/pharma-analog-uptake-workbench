@@ -16,7 +16,7 @@
     "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=125276",
     "quote": "01/08/2010 ORIG-1 Approval (Drugs@FDA, Original Approvals or Tentative Approvals)"
   },
-  "launch_quarter": null,
+  "launch_quarter": "2005Q2",
   "commercial_start_quarter": "2010Q3",
   "series_start_reason": "First quarter for which a Roche release read prints a CHF figure is 2010Q3 (column of the Q3 2011 media release of 13 Oct 2011); Roche releases from 2010 and the 2011 results releases print growth rates only for earlier quarters, and the 2010 releases were not found on roche.com asset hosts.",
   "series_end_quarter": null,
@@ -30,5 +30,9 @@
     "cross-checked every chosen quarter against all other printed values for the same quarter (see report)",
     "presentations (irp*.pdf) and half-year/annual reports not used for rows",
     "rows: 64 from 2010Q3 to 2026Q2"
-  ]
+  ],
+  "launch_evidence": {
+    "url": "https://www.chugai-pharm.co.jp/english/news/detail/20230925150000_1006.html",
+    "quote": "First launched in June 2005, the intravenous injection is approved for seven indications in Japan"
+  }
 }

@@ -16,7 +16,7 @@
     "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2012/203415Orig1s000ltr.pdf",
     "quote": "This new drug application provides for the use of Xtandi (enzalutamide) Capsules for the treatment of patients with metastatic castration-resistant prostate cancer who have previously received docetaxel. (FDA approval letter, NDA 203415, signed 08/31/2012)"
   },
-  "launch_quarter": null,
+  "launch_quarter": "2012Q3",
   "commercial_start_quarter": "2017Q2",
   "series_start_reason": "Astellas' financial-results library on astellas.com begins with Q1 FY2017 (April-June 2017). The FY2017 Q1 document also prints the prior-year quarter (64.2 billion JPY, April-June 2016) but the other FY2016 quarters are not printed individually in any document found, so no isolated 2016Q2 row is included. Launch (2012) to 2017Q1 is therefore not citable from Astellas documents located; searched legacy URL patterns returned 404.",
   "series_end_quarter": null,
@@ -29,5 +29,9 @@
     "extracted the 'Global' sales-of-major-products table in each quarter's supplementary document (billions of JPY, one decimal) with pdfplumber, the verifier's extractor",
     "where the quarter's own document text layer splits the digits of the row, the same quarter was read from a later document of the same fiscal year, or derived from year-to-date figures (rows are labelled accordingly)",
     "cross-check: for every complete fiscal year the four quarters were summed and compared with the full-year figure on the same table (differences at most 0.2 billion JPY from rounding)"
-  ]
+  ],
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1011835/000119312512463319/d436510dex991.htm",
+    "quote": "which represents the first 12 business days of sales following availability of XTANDI for shipment on September 13, 2012"
+  }
 }

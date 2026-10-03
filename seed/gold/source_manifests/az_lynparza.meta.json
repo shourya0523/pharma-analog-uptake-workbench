@@ -16,7 +16,7 @@
     "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2014/206162Orig1s000ltr.pdf",
     "quote": "NDA 206162 ACCELERATED APPROVAL ... for Lynparza (olaparib), 50 mg capsules ... It is approved under the provisions of accelerated approval regulations (21 CFR 314.500), effective on the date of this letter [signed RICHARD PAZDUR 12/19/2014]"
   },
-  "launch_quarter": null,
+  "launch_quarter": "2014Q4",
   "commercial_start_quarter": "2015Q1",
   "series_start_reason": "AstraZeneca prints a Lynparza line in its Product Sales tables from Q1 2015 (Q1 2015 results show Q1 2014 as nil). FDA approval was 2014-12-19 and the FY2014 results (6-K 0001191638-15-000137, filed 2015-02-05) list Lynparza as launched in the US, but that document prints no Lynparza product-sales row for Q4 2014 (the line is not in its product table), so any December 2014 sales are not citable.",
   "series_end_quarter": null,
@@ -28,5 +28,9 @@
     "Every document was fetched from sec.gov and flattened to table rows (scripts/rows.py, extract.py). In each results document the product-sales analysis by region prints a year-to-date table (H1/9M/FY) followed by the single-quarter table with a World column; the quarter value is the World column of the single-quarter table (first wide table for Q1 documents, second wide table otherwise), found with a row-label match that tolerates 'Brilinta / Brilique' style labels and a leading dash (scripts/series.py).",
     "Checked every quarter against the same document's year-to-date row (YTD minus previous YTD equals the quarter, tolerance 2) and, for each year with four quarters, the sum of the four quarters against the full-year row of the Q4 document; all agree to within 1 (printed-rounding); no larger difference exists. Checked that the table is the Product Sales table: its total row is 'TOTAL PRODUCT SALES' / 'Total Product Sales' / 'Total Medicines', not Total Revenue.",
     "FY2014 results (azn201502056k.htm) searched for Lynparza rows: only pipeline-table rows (US 'Launched', EU 'Approved'), no product-sales row; Q1 2015 results print Q1 2014 as '-'."
-  ]
+  ],
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/901832/000119163815000551/azn201504246k2.htm",
+    "quote": "Lynparza Product Sales reached $9m following the launch in the US at the end of 2014."
+  }
 }

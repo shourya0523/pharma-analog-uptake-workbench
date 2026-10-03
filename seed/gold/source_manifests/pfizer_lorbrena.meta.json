@@ -20,7 +20,8 @@
     "listed PFE (CIK 0000078003) 8-K, 8-K/A, 10-Q, 10-K via data.sec.gov submissions (recent + older pages): 6671 filings; selected 8-Ks with Item 2.02 filed 2015-01 to 2026-08 (53, of which 48 carry an EX-99.1 earnings release; 2022-04-20, 2023-10-13 and 2023-12-14 filings are not quarterly earnings releases; the 2016-02-16 8-K/A carries no usable product table and the original 2016-02-02 release was used)",
     "parsed every release's product tables with scripts/extract.py; quarter row = first occurrence of the product row, year-to-date row = third occurrence (or second where sub-region tables are absent); checked by summing quarters to the printed twelve-month figure",
     "scanned 10-Q/10-K 2018-2021 for product rows (scripts/scan_periodic.py)",
-    "2019Q1/2019Q2 individually not printed anywhere found"
+    "2019Q1/2019Q2 individually not printed anywhere found",
+    "Launch quarter not established from an issuer document: Pfizer (CIK 78003) 8-K exhibits 2018-10..2019-12 and every 10-Q/10-K 2018-11..2020-12 searched for Lorbrena/lorlatinib: only FDA approval (Nov 2018), EC/CHMP news and, from the Q3 2020 filing, XBRL revenue members. No launch or first-sale statement in any.; The Q3 2020 release prior-year columns give 2019Q3=32 and nine months 2019=77, so H1 2019 sales were nonzero (45), but no document dates the first sale or splits Q4 2018/Q1/Q2 2019. Launch quarter not established."
   ],
   "series_end_quarter": null,
   "series_end_basis": null,

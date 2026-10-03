@@ -16,7 +16,7 @@
     "url": "https://www.fda.gov/media/94470/download?attachment",
     "quote": "Initial U.S. Approval: 2015 (ADYNOVATE package insert, FDA CBER product page https://www.fda.gov/vaccines-blood-biologics/approved-blood-products/adynovate, BLA 125566)"
   },
-  "launch_quarter": null,
+  "launch_quarter": "2015Q4",
   "commercial_start_quarter": "2019Q1",
   "series_start_reason": "Takeda prints an Adynovate line only from fiscal Q4 FY2018 (January-March 2019), the first quarter after it completed the Shire acquisition (Baxalta, then Shire, held the product earlier; USD, different issuers). The first quarter contains Shire's product only from the acquisition date (table header in qr2018_q4_f_en.pdf: 'Takeda 12 Months @ Actual rate, Shire 3 Months @ Actual rate'). Pre-2019 Baxalta/Shire history was not sourced in this batch and is not spliced.",
   "series_end_quarter": null,
@@ -30,5 +30,9 @@
     "EDGAR (Takeda CIK 0001395064) was indexed through data.sec.gov submissions (6-K, 6-K/A, 20-F, 20-F/A) but the takeda.com copies of the same quarterly documents were cited instead, because the 6-K earnings exhibits were not individually resolved",
     "cross-check: for every fiscal year the four quarterly values were summed and compared with the full-year product figure printed in the Q4 document (differences at most 0.2 billion JPY from rounding)",
     "Baxalta / Shire filings (SEC) for pre-2019 Adynovate sales were NOT searched in this batch (different issuer and currency)"
-  ]
+  ],
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1620546/000119312516491806/d102269d10k.htm",
+    "quote": "the company launched ADYNOVATE in the United States in November 2015 following U.S. regulatory approval."
+  }
 }

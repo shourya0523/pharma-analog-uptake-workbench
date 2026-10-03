@@ -21,7 +21,8 @@
     "parsed every release's product tables with scripts/extract.py; quarter row = first occurrence of the product row, year-to-date row = third occurrence (or second where sub-region tables are absent); checked by summing quarters to the printed twelve-month figure",
     "scanned 10-Q/10-K 2018-2021 for product rows (scripts/scan_periodic.py)",
     "checked every release and 10-Q/10-K 2018-2021: no earlier Vyndaqel figures",
-    "label history Vyndaqel -> Vyndaqel/Vyndamax -> Vyndaqel family treated as one product-family series; footnote from 2022Q4: family includes global Vyndaqel plus Vyndamax in the U.S. and Vynmac in Japan"
+    "label history Vyndaqel -> Vyndaqel/Vyndamax -> Vyndaqel family treated as one product-family series; footnote from 2022Q4: family includes global Vyndaqel plus Vyndamax in the U.S. and Vynmac in Japan",
+    "Launch quarter not established from an issuer document: Pfizer 10-Qs/10-Ks 2011-2014 (searched 'launch', 'commercializ', 'first sales' near Vyndaqel/tafamidis): only state EU approval in November 2011 (FY2011 10-K exhibit 13) and U.S. NDA events; no launch or first-sale quarter stated.; Pfizer printed no Vyndaqel sales line before the 2019Q2 release (see series_start_reason), so no first printed nonzero quarter before 2018Q1. launch_quarter null."
   ],
   "series_end_quarter": null,
   "series_end_basis": null,

@@ -29,6 +29,7 @@
     "FY2014 (JGAAP) documents carry no Entyvio table line for Q1/Q2; FY2015 onward are IFRS; the product-table pages were located per fiscal quarter (data books FY2016-FY2019, quarterly financial reports FY2020-FY2026)",
     "EDGAR (Takeda CIK 0001395064) was indexed through data.sec.gov submissions (6-K, 6-K/A, 20-F, 20-F/A) but the takeda.com copies of the same quarterly documents were cited instead, because the 6-K earnings exhibits were not individually resolved",
     "cross-check: for every fiscal year the four quarterly values were summed and compared with the full-year product figure printed in the Q4 document (differences at most 0.2 billion JPY from rounding)",
-    "checked qr2026_q1_qfr_en.pdf for any line mentioning Resolor or Motegrity: none"
+    "checked qr2026_q1_qfr_en.pdf for any line mentioning Resolor or Motegrity: none",
+    "Launch quarter not established from an issuer document: Series is worldwide Resolor/Motegrity. Shire 8-K 2010-08-09 (https://www.sec.gov/Archives/edgar/data/936402/000095010310002350/dp18745_ex9901.htm) says Resolor 'is already launched in Germany and the UK' (acquirer Shire, issuer of Movetis' product before Takeda); Shire FY2010 10-K says 'At December 31, 2010 RESOLOR was available in the UK, Germany and Belgium'.; Neither document gives the launch quarter (only 'by August 2010'); no Shire/Takeda document located dating the first sale; U.S. Motegrity launch not searched because the worldwide first sale is the European one. launch_quarter null."
   ]
 }

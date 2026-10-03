@@ -3,7 +3,7 @@
   "series_end_quarter": "2025Q1",
   "series_end_basis": "issuer_stopped_reporting",
   "series_end_reason": "Mitsubishi Chemical Group's FY2025 summaries (after the Tanabe divestiture) print no Radicava row; the last quarter derivable is Jan-Mar 2025 from the FY2024 summary.",
-  "launch_quarter": null,
+  "launch_quarter": "2017Q3",
   "commercial_start_quarter": "2020Q2",
   "notes": "Parent-company document, not Mitsubishi Tanabe Pharma's own; scope = Radicava IV + ORS (no separate ORS line printed). JPY billions; fiscal Apr-Mar mapped to calendar quarters. Please have the verifier judge whether the parent's disclosure is acceptable.",
   "drug_name": "Radicava ORS",
@@ -27,5 +27,9 @@
     "mt-pharma.co.jp and tanabe-pharma.com IR: 403/no results pages",
     "mcgc.com/english/ir/library/operating_summaries.html: 53 Operational Summary PDFs listed; 36 FY2017-FY2026 downloaded; 'Radicava' table row present in FY2019 FY, FY2020 Q1-Q3, FY2021 Q1-FY2024 FY only",
     "Merck/others not used"
-  ]
+  ],
+  "launch_evidence": {
+    "url": "https://www.mcgc.com/english/ir/pdf/01583/01834.pdf",
+    "quote": "Launched RADICAVA (IV*1 infusion) in the U.S. in August 2017, and"
+  }
 }

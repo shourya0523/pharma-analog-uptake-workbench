@@ -16,9 +16,8 @@
     "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2021/214012Orig1s000ltr.pdf",
     "quote": "NDA 214012 NDA APPROVAL ... Leqvio (inclisiran) injection ... It is approved, effective on the date of this letter"
   },
-  "launch_quarter": null,
+  "launch_quarter": "2021Q1",
   "commercial_start_quarter": "2021Q1",
-  "series_start_reason": null,
   "series_end_quarter": null,
   "series_end_basis": null,
   "series_end_reason": null,
@@ -28,5 +27,9 @@
     "Parsed every table row of each of the 64 results documents and extracted the row labelled with the brand; compared each quarter's own value against the next year's prior-year column: no restatement difference found for any of these brands",
     "No Sandoz/Alcon spin-off restatement affected these lines as printed: own-quarter values equal the later prior-year columns",
     "Q4 2020 report prints no Leqvio sales row; 2021 Q3/Q4 reports show nil prior-year comparatives"
-  ]
+  ],
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1114448/000137036822000038/a220426-99_2.htm",
+    "quote": "Leqvio 14 1 nm nm"
+  }
 }

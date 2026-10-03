@@ -24,7 +24,8 @@
   "search_log": [
     "Downloaded J&J's quarterly sales schedule PDFs 2021Q1-2026Q2 from the URLs of the existing J&J manifest (investor-site q4cdn); parsed every page with pdfplumber and searched case-insensitively for CARVYKTI, TECVAYLI, TALVEY, RYBREVANT, and the generic names (cache/jnj_rows.json).",
     "Listed J&J 10-Q and 10-K filings 2021-2026 via data.sec.gov submissions (form 10-Q and 10-K only, no 8-K scan) and searched the primary documents for the four brand names: they appear only in prose or litigation text, only in narrative sentences (the only lines with a brand name and a number were prose).",
-    "Supplemental Sales Information schedules (Schedule 2 / 'Supplemental Sales Information' page) in the 2024Q1 and 2025Q1 schedules restate product lines quarterly; the 2024Q1 one carries Tecvayli, the 2025Q1 one carries Rybrevant/Lazcluze and Talvey."
+    "Supplemental Sales Information schedules (Schedule 2 / 'Supplemental Sales Information' page) in the 2024Q1 and 2025Q1 schedules restate product lines quarterly; the 2024Q1 one carries Tecvayli, the 2025Q1 one carries Rybrevant/Lazcluze and Talvey.",
+    "Launch quarter not established from an issuer document: Listed J&J (CIK 200406) 10-Q/10-K/8-K 2023-07 to 2024-05.; FY2023 10-K (jnj-20231231.htm): \"sales from the launch of TECVAYLI (teclistamab-cqyv) and TALVEY (talquetamab-tgvs), included in Other Oncology, contributed to the growth\" - establishes sales in 2023 but not the quarter.; Q3 2023 10-Q (jnj-20231001.htm) has no Talvey mention in its text; Q3 2023 release exhibit 99.1 lists only the FDA and EC approval press releases (FDA approval August 2023). Q3 vs Q4 2023 first sale not stated anywhere found."
   ],
   "commercial_start_quarter": "2024Q1"
 }

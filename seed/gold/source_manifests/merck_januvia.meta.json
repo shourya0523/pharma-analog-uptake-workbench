@@ -16,9 +16,8 @@
     "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2020/021995s047lbl.pdf",
     "quote": "Initial U.S. Approval: 2006 (Januvia (sitagliptin) tablets, NDA 021995; Drugs@FDA/openFDA lists the original approval dated 2006-10-16)"
   },
-  "launch_quarter": null,
+  "launch_quarter": "2006Q3",
   "commercial_start_quarter": "2006Q3",
-  "series_start_reason": null,
   "series_end_quarter": null,
   "series_end_basis": null,
   "series_end_reason": null,
@@ -33,5 +32,9 @@
     "legacy Merck registrant (CIK 64978, which before the November 2009 merger with Schering-Plough was a separate filer; CIK 310158 was Schering-Plough until then) listed the same way for 2006-2009 earnings releases and 10-Qs",
     "downloaded the EX-99.1 of every item 2.02 8-K from 2006 to 2026-08-04 (85 releases); two item 2.02 filings (2013-02-19, 2022-04-21) are not quarterly results releases and carry no product line",
     "read the product rows with scripts/build.py (HTML table rows, same row reading as the verifier) and cross-checked each quarter against the prior-year column of the following year's release"
-  ]
+  ],
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/64978/000095012306012773/y26026exv99w1.htm",
+    "quote": "JANUVIA has already launched in Mexico, and other regulatory filings around the world are moving ahead as planned."
+  }
 }

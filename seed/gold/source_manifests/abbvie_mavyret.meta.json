@@ -16,7 +16,7 @@
     "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=209394",
     "quote": "08/03/2017 ORIG-1 Approval (NDA 209394, MAVYRET GLECAPREVIR; PIBRENTASVIR)"
   },
-  "launch_quarter": null,
+  "launch_quarter": "2017Q3",
   "commercial_start_quarter": "2018Q3",
   "series_start_reason": "Series starts 2018Q3, the first quarter AbbVie prints a Mavyret revenue line. Mavyret was approved 2017-08-03 and the FY2017 10-K says AbbVie launched it 'in certain geographies during the second half of 2017', but the 2017Q3-2018Q2 releases print only a combined 'HCV' row in the Key Product schedule (e.g. the 2018-07-27 release: 'HCV | 422 | 551 | 973' for 2018Q2) and the 10-Qs give only commentary ('Global HCV sales increased by more than 100% ... as a result of the launch of MAVYRET'); no Mavyret figure is printed (searched the FY2017 10-K and the 2018Q1 and 2018Q2 10-Qs in full text) The 2018Q3 release prints 3-month 839 and 9-month 2,619, so only the 2018H1 sum (1,780) is derivable, not individual quarters (not interpolated).",
   "series_end_quarter": null,
@@ -26,5 +26,9 @@
     "Listed every filing (all forms, incl. 8-K, 8-K/A, 10-Q, 10-K) for CIK 0001551152 (AbbVie), 0000001800 (Abbott), 0001578845 (Allergan plc / Actavis plc), 0000855654 (ImmunoGen) and 0000850693 (Allergan, Inc.) via data.sec.gov/submissions incl. the older 'files' pages (scripts/list_filings.py); earnings 8-Ks selected by item 2.02 (also item 12 / 7,9 for 2003-2004 Abbott and Allergan, Inc. filings), exhibits resolved from each filing's index.json (scripts/earnings.py, exhibits.py).",
     "Product rows pulled by table-row parsing of each earnings exhibit (scripts/abbvie_extract.py, abbott_extract.py, allergan_extract.py, allerganinc_extract.py); the quarter of an AbbVie block is read from the document's own '% Change vs. nQyy' header row; every series was checked for gaps and, where the Q4 release prints a full-year figure, quarters were summed against it (scripts/build_all.py).",
     "Searched the 2017Q2-2018Q2 10-Qs and FY2017 10-K full text: MAVYRET appears only in narrative text; first revenue row 2018Q3 (U.S. 444, Int'l. 395, Total 839). 2019-2025 quarters sum to the printed full-year figures."
-  ]
+  ],
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1551152/000155115217000035/abbv-20170930x10q.htm",
+    "quote": "These factors were partially offset by the launch of MAVYRET in certain geographies during the third quarter of 2017."
+  }
 }

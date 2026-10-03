@@ -16,7 +16,7 @@
     "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2024/217899Orig1s000ltr.pdf",
     "quote": "NDA 217899 ... for Livdelzi (seladelpar) capsules ... for the treatment of primary biliary cholangitis (PBC) ... It is approved under accelerated approval (electronic signature dated 08/14/2024)"
   },
-  "launch_quarter": null,
+  "launch_quarter": "2024Q3",
   "commercial_start_quarter": "2026Q1",
   "series_start_reason": "Gilead first prints a separate Livdelzi line in its first-quarter 2026 earnings release (8-K filed 2026-05-07) and 10-Q; releases and 10-Qs for 2024Q3 to 2025Q4 fold Livdelzi into 'Other Liver Disease' (footnote 4 lists Livdelzi/Lyvdelzi among its contents). Prior-year columns in the 2026 documents give 2025Q1 (40) and 2025Q2 (78) but 2025Q3 and 2025Q4 are printed nowhere, so the contiguous series with citable quarters begins at 2026Q1.",
   "series_end_quarter": null,
@@ -26,5 +26,9 @@
     "scanned every Gilead 8-K Item 2.02 exhibit from 2024-08-01 and every 10-Q/10-K from 2024-10-01 for 'Livdelzi', 'seladelpar', 'Liver Disease'",
     "2024Q3-2025Q4 releases: 'Other Liver Disease (4)' regional lines only; the only 'Livdelzi' rows with figures in the FY2024 and FY2025 10-Ks are a small table with values (8)/(9) and (9)/(10), not a sales table",
     "first Livdelzi sales table: Q1 2026 release (U.S. 115, Europe 18, Rest of World nil, total 133 | prior year 40) and Q2 2026 release (U.S. 147, Europe 20, total 167 | prior year 78; six months 300 | 118)"
-  ]
+  ],
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/882095/000088209524000025/exhibit991earningspressrel.htm",
+    "quote": "The increases reflect the timing of commercial activities, including the launch of Livdelzi in the United States, and other corporate activities."
+  }
 }

@@ -1,9 +1,9 @@
 {
-  "series_start_reason": "Lilly's earnings releases print an Omvoh row only from the first-quarter 2026 release; 2023Q4 (launch) through 2025Q4 are not printed as quarters (the 2025Q1 and 2025Q2 values 37 and 75 appear only as prior-year columns in the 2026 releases, and 2025Q3 and 2025Q4 are not printed in any document). The CSV therefore holds only the contiguous 2026Q1-2026Q2 block.",
+  "series_start_reason": "Lilly's earnings releases print an Omvoh row only from the first-quarter 2026 release; 2023Q2 (first launch, per the Q2 2023 release adding Omvoh to the products launched since 2022) through 2025Q4 are not printed as quarters (the 2025Q1 and 2025Q2 values 37 and 75 appear only as prior-year columns in the 2026 releases, and 2025Q3 and 2025Q4 are not printed in any document). The CSV therefore holds only the contiguous 2026Q1-2026Q2 block.",
   "series_end_quarter": null,
   "series_end_basis": null,
   "series_end_reason": null,
-  "launch_quarter": null,
+  "launch_quarter": "2023Q2",
   "drug_name": "Omvoh",
   "generic_name": "mirikizumab-mrkz",
   "manufacturer": "Eli Lilly",
@@ -27,5 +27,9 @@
     "Read the Selected Revenue Highlights tables of the Q4 2023, Q1 2025, Q2 2025, Q3 2025 and Q4 2025 releases: none lists Omvoh (Q4 2023 lists 14 product lines and Total Revenue; the 2025 tables list Mounjaro, Zepbound, Verzenio and Total Revenue only). 2024 releases were covered by the row search only (no Omvoh row).",
     "Form 10-K FY2023, FY2024, FY2025 and the 10-Qs: Omvoh appears in product-description, patent and pipeline text; no revenue figure (row search above; the FY2025 10-K text mentions were read)."
   ],
-  "commercial_start_quarter": "2026Q1"
+  "commercial_start_quarter": "2026Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/59478/000005947823000219/q223lillysalesandearningsp.htm",
+    "quote": "Lilly defines New Products as select products launched since 2022, which currently consist of Jaypirca, Mounjaro and Omvoh."
+  }
 }

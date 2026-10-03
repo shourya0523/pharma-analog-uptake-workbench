@@ -16,7 +16,7 @@
     "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2012/202155Orig1s000ltr.pdf",
     "quote": "NDA 202155 NDA APPROVAL ... submitted under section 505(b)(1) of the Federal Food, Drug, and Cosmetic Act for Eliquis (apixaban) 2.5 and 5 mg Tablets"
   },
-  "launch_quarter": null,
+  "launch_quarter": "2011Q3",
   "commercial_start_quarter": "2012Q2",
   "series_start_reason": "First quarter in which BMS prints an Eliquis row in its product sales table is Q2 2012 (worldwide 1, U.S. nil, i.e. ex-U.S. sales after EU approval); the Q1 2012 and earlier tables have no Eliquis row. The U.S. approval letter is from 2012, and U.S. sales appear from Q4 2012 onward in the table, so the requested 2013Q1 start is later than the first printed quarter.",
   "series_end_quarter": null,
@@ -33,5 +33,9 @@
   ],
   "reviewed_anomalies": {
     "2012Q3": "Printed as a dash (nil) in the worldwide column of BMS's third-quarter 2012 release; the nine-month column shows 1, equal to 2012Q2. Read at source."
+  },
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/14272/000119312511200164/d10q.htm",
+    "quote": "ELIQUIS* was approved in the EU for VTE prevention in May 2011 and launched in July 2011."
   }
 }

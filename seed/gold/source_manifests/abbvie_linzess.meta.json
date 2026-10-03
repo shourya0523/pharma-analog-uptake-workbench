@@ -41,5 +41,10 @@
       "first_quarter": "2020Q3",
       "last_quarter": "2026Q2"
     }
-  ]
+  ],
+  "launch_quarter": "2012Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1446847/000110465913031578/a13-8198_110q.htm",
+    "quote": "Although we launched LINZESS in the U.S. in December 2012, we believe that it will take us some time to attain profitability and positive cash flow from operations."
+  }
 }

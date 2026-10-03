@@ -16,7 +16,7 @@
     "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2015/206947s000lbl.pdf",
     "quote": "LENVIMA is a kinase inhibitor indicated for the treatment of patients with locally recurrent or metastatic, progressive, radioactive iodine-refractory differentiated thyroid cancer | Revised: 02/2015"
   },
-  "launch_quarter": null,
+  "launch_quarter": "2015Q1",
   "commercial_start_quarter": "2015Q2",
   "series_start_reason": "First quarter delivered is Eisai FY2015 Q1 (Apr-Jun 2015, calendar 2015Q2), the earliest quarter printed in any Eisai Reference Data that could be fetched. FDA approved Lenvima in Feb 2015 and the FY2014 Q4 (Jan-Mar 2015) quarterly table is in a document Eisai filed in May 2015 that is not on the JPX copy (JPX host returned no document for TDnet IDs of 2015-2016 filings) and eisai.com/ir/ redirects to the home page from this environment, so calendar 2015Q1 could not be cited. No document fetched states the launch quarter, so launch_quarter is null.",
   "series_end_quarter": null,
@@ -30,5 +30,9 @@
     "scanned jpx.co.jp/disc/45230/ for neighbouring TDnet ids on each filing date to locate the English 'Reference Data' PDF next to the Japanese one",
     "English Reference Data located and parsed for FY2016 Q3, FY2016-FY2025 full year, FY2017 Q3, FY2023 Q2-FY2026 Q1; no JPX copy found for Eisai filings before 2017-01 nor for Q1/Q2 documents of FY2016-FY2022 (no seed id), those quarters are cited from the next same-quarter document or the same-year full-year document",
     "consistency: every quarter value is identical in every document that prints it (no restatement)"
-  ]
+  ],
+  "launch_evidence": {
+    "url": "https://www.eisai.com/news/news201518.html",
+    "quote": "LENVIMA was approved on February 13, 2015 and launched on February 26, 2015"
+  }
 }

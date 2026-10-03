@@ -16,7 +16,7 @@
     "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2012/203441Orig1s000ltr.pdf",
     "quote": "This new drug application provides for the use of GATTEX (teduglutide [rDNA origin]) for injection, for subcutaneous use for the treatment of adult patients with Short Bowel Syndrome (SBS) who are dependent on parenteral support. (FDA approval letter, NDA 203441, signed 12/21/2012)"
   },
-  "launch_quarter": null,
+  "launch_quarter": "2013Q1",
   "commercial_start_quarter": "2019Q1",
   "series_start_reason": "Takeda prints a Gattex/Revestive product line only from fiscal Q4 FY2018 (January-March 2019), the first quarter after it completed the Shire acquisition; the first quarter contains Shire's product only from the acquisition date (the table header in qr2018_q4_f_en.pdf reads 'Takeda 12 Months @ Actual rate, Shire 3 Months @ Actual rate'). Earlier history (NPS Pharmaceuticals, then Shire; USD, different issuers) was not sourced in this batch and is not spliced into the Takeda JPY series.",
   "series_end_quarter": null,
@@ -30,5 +30,9 @@
     "EDGAR (Takeda CIK 0001395064) was indexed through data.sec.gov submissions (6-K, 6-K/A, 20-F, 20-F/A) but the takeda.com copies of the same quarterly documents were cited instead, because the 6-K earnings exhibits were not individually resolved",
     "cross-check: for every fiscal year the four quarterly values were summed and compared with the full-year product figure printed in the Q4 document (differences at most 0.2 billion JPY from rounding)",
     "NPS Pharmaceuticals / Shire filings (SEC) for pre-2019 Gattex sales were NOT searched in this batch (different issuer and currency)"
-  ]
+  ],
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/890465/000113626113000211/body10q.htm",
+    "quote": "We received approval from the FDA in December 2012 and subsequently launched Gattex in February 2013."
+  }
 }

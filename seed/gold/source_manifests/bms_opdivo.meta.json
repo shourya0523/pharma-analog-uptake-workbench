@@ -16,9 +16,8 @@
     "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2014/125554Orig1s000ltr.pdf",
     "quote": "BLA 125554 BLA ACCELERATED APPROVAL ... Opdivo (nivolumab) Injection for Intravenous Infusion ... We have approved your BLA for Opdivo effective this date."
   },
-  "launch_quarter": null,
+  "launch_quarter": "2014Q3",
   "commercial_start_quarter": "2014Q3",
-  "series_start_reason": "First quarter in which BMS prints an Opdivo row in its product sales table is Q3 2014 (worldwide 1, U.S. nil); the Q2 2014 and earlier tables have no Opdivo row. The U.S. approval letter is December 2014, so the first sales are ex-U.S.",
   "series_end_quarter": null,
   "series_end_basis": null,
   "series_end_reason": null,
@@ -29,5 +28,9 @@
     "8-K/A filings of 2006-2008 (restated EX-99.2 schedules) were not used as sources; each quarter is cited from its own original EX-99.1",
     "Audit: 244 prior-year-column comparisons across the five products (each release's prior-year figure vs the value taken from that quarter's own release) had 0 mismatches; 61 fourth-quarter FY-sum checks (four quarters vs the FY figure in the Q4 release) had 0 mismatches",
     "Definition check: from the Q1 2025 release BMS prints 'Opdivo Qvantig' on its own row. The Opdivo row continues under the same label and its prior-year columns in 2026 releases equal the figures printed in the 2025 releases (no restatement); no Qvantig revenue is printed for periods before 2025Q1. If the verifier treats the Qvantig split as a redefinition, the series should be cut at 2024Q4."
-  ]
+  ],
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/14272/000001427214000257/bmy-20140930x10q.htm",
+    "quote": "Opdivo was launched in Japan in September 2014."
+  }
 }

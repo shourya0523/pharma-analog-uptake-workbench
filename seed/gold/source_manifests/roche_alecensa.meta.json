@@ -16,7 +16,7 @@
     "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=208434",
     "quote": "12/11/2015 ORIG-1 Approval (Drugs@FDA, Original Approvals or Tentative Approvals)"
   },
-  "launch_quarter": null,
+  "launch_quarter": "2014Q3",
   "commercial_start_quarter": "2016Q1",
   "series_start_reason": "Roche prints no Alecensa line in the Q1, HY or 9M 2015 releases (no match in the product tables of med-cor-2015-04-22, -07-23, -10-22) and the FY2015 investor update prints only a full-year figure (CHF 65 million, of which Japan 64), with no quarter split; Alecensa sold in Japan before the Dec 2015 US approval, so FY2015 cannot be read as one quarter. The first citable quarter is Q1 2016 (three-month table of the Q1 2016 investor update).",
   "series_end_quarter": null,
@@ -30,5 +30,9 @@
     "cross-checked every chosen quarter against all other printed values for the same quarter (see report)",
     "presentations (irp*.pdf) and half-year/annual reports not used for rows",
     "rows: 42 from 2016Q1 to 2026Q2"
-  ]
+  ],
+  "launch_evidence": {
+    "url": "https://www.chugai-pharm.co.jp/english/ir/reports_downloads/annual_reports/files/eAR2019_12_13.pdf",
+    "quote": "Launch in Japan: September 2014"
+  }
 }
