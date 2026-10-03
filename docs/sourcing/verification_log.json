@@ -6088,7 +6088,7 @@
  "Spiriva": {
   "automated": {},
   "hand_checked": [],
-  "notes": "Not in gold. Boehringer Ingelheim is private and publishes annual figures only, but every BI page and PDF returns a bot-challenge page to this environment, so no evidence document could be read; no exclusion recorded without one.",
+  "notes": "Not in gold. Boehringer Ingelheim is private, files nothing with the SEC, and every BI page and PDF returns a bot-challenge page to this environment. Connectors tried: Bigdata.com (filings, transcripts, news, open web) returned only trade-press summaries of BI's annual and half-year results (e.g. Pharma Live, BioSpace) and a third-party mirror of BI's 2006 annual report, not a current BI document; Parallel Search web_fetch was rate-limited before a BI report could be read. SEC full-text search over Pfizer (the former US co-promoter) shows Spiriva only inside an aggregated 'Alliance revenues' line, never as its own figure. No exclusion is recorded without a BI-authored document read at source.",
   "status": "pending"
  },
  "Syfovre": {
