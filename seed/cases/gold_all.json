@@ -13495,6 +13495,146 @@
   "ticker": null,
   "generic_name": "darolutamide",
   "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 53.0552,
+    "gold_id": "bayer-nubeqa-worldwide-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 59.0597,
+    "gold_id": "bayer-nubeqa-worldwide-reported-2021q2"
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": 67.1688,
+    "gold_id": "bayer-nubeqa-worldwide-reported-2021q3"
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": 78.9291,
+    "gold_id": "bayer-nubeqa-worldwide-reported-2021q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nubeqa",
+  "manufacturer": "Bayer",
+  "ticker": null,
+  "generic_name": "darolutamide",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 85.3328,
+    "gold_id": "bayer-nubeqa-worldwide-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 111.783,
+    "gold_id": "bayer-nubeqa-worldwide-reported-2022q2"
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": 127.8255,
+    "gold_id": "bayer-nubeqa-worldwide-reported-2022q3"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 161.3496,
+    "gold_id": "bayer-nubeqa-worldwide-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nubeqa",
+  "manufacturer": "Bayer",
+  "ticker": null,
+  "generic_name": "darolutamide",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 190.994,
+    "gold_id": "bayer-nubeqa-worldwide-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 218.889,
+    "gold_id": "bayer-nubeqa-worldwide-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 252.4856,
+    "gold_id": "bayer-nubeqa-worldwide-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 277.7112,
+    "gold_id": "bayer-nubeqa-worldwide-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nubeqa",
+  "manufacturer": "Bayer",
+  "ticker": null,
+  "generic_name": "darolutamide",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 307.1682,
+    "gold_id": "bayer-nubeqa-worldwide-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 409.108,
+    "gold_id": "bayer-nubeqa-worldwide-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 458.283,
+    "gold_id": "bayer-nubeqa-worldwide-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 472.3709,
+    "gold_id": "bayer-nubeqa-worldwide-reported-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nubeqa",
+  "manufacturer": "Bayer",
+  "ticker": null,
+  "generic_name": "darolutamide",
+  "options": {
    "earnings_since": "2025-04-05",
    "earnings_until": "2026-05-05",
    "openfda": true,
@@ -13502,6 +13642,21 @@
   },
   "source": "seed/gold/quarterly_revenue.jsonl",
   "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 542.1405,
+    "gold_id": "bayer-nubeqa-worldwide-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 619.5462,
+    "gold_id": "bayer-nubeqa-worldwide-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 726.8692,
+    "gold_id": "bayer-nubeqa-worldwide-reported-2025q3"
+   },
    {
     "period": "2025Q4",
     "value_normalized_usd_millions": 816.8472,
