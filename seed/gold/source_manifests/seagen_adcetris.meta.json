@@ -21,7 +21,7 @@
   "series_start_reason": null,
   "series_end_quarter": "2023Q3",
   "series_end_basis": "issuer_stopped_reporting",
-  "series_end_reason": "Pfizer completed the acquisition of Seagen on Dec 14, 2023; Seagen filed no report for 2023Q4 (last 10-Q is for 2023Q3, Form 15 filed Dec 26, 2023). Pfizer's later Adcetris line (companion series pfizer_adcetris, from 2024Q1) is worldwide and includes royalty revenue, a different scope, so the series is not spliced.",
+  "series_end_reason": "Pfizer completed the acquisition of Seagen on Dec 14, 2023; Seagen filed no report for 2023Q4 (last 10-Q is for 2023Q3, Form 15 filed Dec 26, 2023). Pfizer's later Adcetris line (companion series pfizer_adcetris, from 2024Q1) is worldwide and includes royalty revenue, a different scope, so the series is not spliced. (pfizer_adcetris: Companion Series sheet, cited but not scored.)",
   "companion_series": "pfizer_adcetris",
   "search_log": [
     "listed Seagen (CIK 0001060736) filings via data.sec.gov submissions, all forms: 8-K Item 2.02 releases 2011-08 to 2023-11 and 10-Q/10-K 2011-2023 fetched",

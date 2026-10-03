@@ -5,7 +5,7 @@
   "geography": "Worldwide",
   "series_end_quarter": "2026Q1",
   "series_end_basis": "issuer_stopped_reporting",
-  "series_end_reason": "The Q2 2026 report relabels the line 'Ozempic pill / Rybelsus'; that quarter is staged separately as novo_ozempic_pill_rybelsus rather than spliced.",
+  "series_end_reason": "The Q2 2026 report relabels the line 'Ozempic pill / Rybelsus'; that quarter is kept in the Companion Series sheet as novo_ozempic_pill_rybelsus rather than spliced. (novo_ozempic_pill_rybelsus: Companion Series sheet, cited but not scored.)",
   "series_start_reason": null,
   "drug_name": "Rybelsus",
   "generic_name": "semaglutide (oral)",

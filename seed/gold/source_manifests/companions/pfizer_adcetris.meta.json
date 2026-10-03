@@ -1,0 +1,13 @@
+{
+  "drug_name": "Adcetris",
+  "line_label": "Adcetris",
+  "issuer": "Pfizer",
+  "benchmark_identity": "pfizer_adcetris",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "why_separate": "Pfizer prints Adcetris worldwide including royalty revenue; the gold series is Seagen U.S. and Canada product sales.",
+  "search_log": [
+    "listed filings of the issuer via data.sec.gov submissions (recent + older pages), all forms incl. 8-K and 8-K/A (CIK 0000078003); EX-99 earnings releases 2023Q4-2026Q2 parsed for the Adcetris row",
+    "Footnote on the Adcetris line: 'Reflects product revenues and royalty revenues'"
+  ]
+}

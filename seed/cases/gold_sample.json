@@ -800,17 +800,17 @@
    {
     "period": "2022Q2",
     "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2022Q1. From the Q2 2022 release Intercept recasts product revenue, net to U.S. only after selling its international business on 2022-07-01 (prior periods recast); the worldwide definition ends with 2022Q1. The U.S.-only recast series is intercept_ocaliva_alt."
+    "why": "The issuer reports no line for this product after 2022Q1. From the Q2 2022 release Intercept recasts product revenue, net to U.S. only after selling its international business on 2022-07-01 (prior periods recast); the worldwide definition ends with 2022Q1. The U.S.-only recast series is intercept_ocaliva_alt. (intercept_ocaliva_alt: Companion Series sheet, cited but not scored.)"
    },
    {
     "period": "2022Q3",
     "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2022Q1. From the Q2 2022 release Intercept recasts product revenue, net to U.S. only after selling its international business on 2022-07-01 (prior periods recast); the worldwide definition ends with 2022Q1. The U.S.-only recast series is intercept_ocaliva_alt."
+    "why": "The issuer reports no line for this product after 2022Q1. From the Q2 2022 release Intercept recasts product revenue, net to U.S. only after selling its international business on 2022-07-01 (prior periods recast); the worldwide definition ends with 2022Q1. The U.S.-only recast series is intercept_ocaliva_alt. (intercept_ocaliva_alt: Companion Series sheet, cited but not scored.)"
    },
    {
     "period": "2022Q4",
     "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2022Q1. From the Q2 2022 release Intercept recasts product revenue, net to U.S. only after selling its international business on 2022-07-01 (prior periods recast); the worldwide definition ends with 2022Q1. The U.S.-only recast series is intercept_ocaliva_alt."
+    "why": "The issuer reports no line for this product after 2022Q1. From the Q2 2022 release Intercept recasts product revenue, net to U.S. only after selling its international business on 2022-07-01 (prior periods recast); the worldwide definition ends with 2022Q1. The U.S.-only recast series is intercept_ocaliva_alt. (intercept_ocaliva_alt: Companion Series sheet, cited but not scored.)"
    }
   ]
  },
@@ -1105,17 +1105,17 @@
    {
     "period": "2026Q2",
     "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2026Q1. The Q2 2026 report relabels the line 'Ozempic pill / Rybelsus'; that quarter is staged separately as novo_ozempic_pill_rybelsus rather than spliced."
+    "why": "The issuer reports no line for this product after 2026Q1. The Q2 2026 report relabels the line 'Ozempic pill / Rybelsus'; that quarter is kept in the Companion Series sheet as novo_ozempic_pill_rybelsus rather than spliced. (novo_ozempic_pill_rybelsus: Companion Series sheet, cited but not scored.)"
    },
    {
     "period": "2026Q3",
     "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2026Q1. The Q2 2026 report relabels the line 'Ozempic pill / Rybelsus'; that quarter is staged separately as novo_ozempic_pill_rybelsus rather than spliced."
+    "why": "The issuer reports no line for this product after 2026Q1. The Q2 2026 report relabels the line 'Ozempic pill / Rybelsus'; that quarter is kept in the Companion Series sheet as novo_ozempic_pill_rybelsus rather than spliced. (novo_ozempic_pill_rybelsus: Companion Series sheet, cited but not scored.)"
    },
    {
     "period": "2026Q4",
     "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2026Q1. The Q2 2026 report relabels the line 'Ozempic pill / Rybelsus'; that quarter is staged separately as novo_ozempic_pill_rybelsus rather than spliced."
+    "why": "The issuer reports no line for this product after 2026Q1. The Q2 2026 report relabels the line 'Ozempic pill / Rybelsus'; that quarter is kept in the Companion Series sheet as novo_ozempic_pill_rybelsus rather than spliced. (novo_ozempic_pill_rybelsus: Companion Series sheet, cited but not scored.)"
    }
   ]
  },
@@ -1285,7 +1285,7 @@
    {
     "period": "2014Q4",
     "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2014Q3. Salix restated 2013-2014 and was acquired by Valeant on 1 April 2015 without filing a 2015 report; the only fourth-quarter 2014 figure is the 10-K full year less restated nine months, which gives a negative quarter (-7.3) from mixed bases rather than a real one, so the series ends at the last quarter Salix printed directly. Bausch Health prints no quarterly Xifaxan in its filings."
+    "why": "The issuer reports no line for this product after 2014Q3. Salix restated 2013-2014 and was acquired by Valeant on 1 April 2015 without filing a 2015 report; the only fourth-quarter 2014 figure is the 10-K full year less restated nine months, which gives a negative quarter (-7.3) from mixed bases rather than a real one, so the series ends at the last quarter Salix printed directly. Bausch Health prints no quarterly Xifaxan in its SEC filings; its earnings presentations print U.S. Xifaxan only for 2018Q1-2021Q4, thirteen quarters later (bausch_xifaxan_alt: Companion Series sheet, cited but not scored)."
    }
   ]
  },
@@ -1370,7 +1370,7 @@
    {
     "period": "2023Q4",
     "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2023Q3. Pfizer completed the acquisition of Seagen on Dec 14, 2023; Seagen filed no report for 2023Q4. Pfizer's later Padcev line (companion series pfizer_padcev, from 2024Q1) is worldwide, a different scope, and its 2023Q4 line is a Dec 14-31 stub, so the series is not spliced."
+    "why": "The issuer reports no line for this product after 2023Q3. Pfizer completed the acquisition of Seagen on Dec 14, 2023; Seagen filed no report for 2023Q4. Pfizer's later Padcev line (companion series pfizer_padcev, from 2024Q1) is worldwide, a different scope, and its 2023Q4 line is a Dec 14-31 stub, so the series is not spliced. (pfizer_padcev: Companion Series sheet, cited but not scored.)"
    }
   ]
  },

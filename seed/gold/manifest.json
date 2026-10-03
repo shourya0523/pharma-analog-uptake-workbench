@@ -36,6 +36,7 @@
   "quarterly_coverage_pct": 100.0,
   "reported_rows_file": "quarterly_revenue.jsonl",
   "annual_rows_file": "annual_revenue.jsonl",
+  "companion_rows_file": "companion_series.jsonl",
   "coverage_file": "series_coverage.jsonl",
   "peak_sales_file": "peak_sales.jsonl",
   "excluded_products_file": "excluded_products.jsonl",

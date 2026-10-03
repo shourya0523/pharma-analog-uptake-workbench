@@ -18,7 +18,7 @@
   },
   "launch_quarter": "1998Q4",
   "commercial_start_quarter": "2003Q1",
-  "series_start_reason": "Amgen acquired Immunex on July 15, 2002. Amgen's fiscal 2002 shows Enbrel only from that date, and no quarterly Enbrel total was found for 2002Q3-2002Q4 (the 2003 10-Q prior-year columns show only U.S. and International lines, for a part-quarter in Q3), so Amgen's series starts at 2003Q1 (derived: six months 2003 less second quarter 2003, both in one row of the June 2004 10-Q; the 2003 10-Qs print only U.S. and International lines). Enbrel before the acquisition is in the separate immunex_enbrel file (1998Q4-2002Q1; Immunex filed no second-quarter 2002 Form 10-Q).",
+  "series_start_reason": "Amgen acquired Immunex on July 15, 2002. Amgen's fiscal 2002 shows Enbrel only from that date, and no quarterly Enbrel total was found for 2002Q3-2002Q4 (the 2003 10-Q prior-year columns show only U.S. and International lines, for a part-quarter in Q3), so Amgen's series starts at 2003Q1 (derived: six months 2003 less second quarter 2003, both in one row of the June 2004 10-Q; the 2003 10-Qs print only U.S. and International lines). Enbrel before the acquisition is in the separate immunex_enbrel file (1998Q4-2002Q1; Immunex filed no second-quarter 2002 Form 10-Q). (immunex_enbrel: Companion Series sheet, cited but not scored.)",
   "series_end_quarter": null,
   "series_end_basis": null,
   "series_end_reason": null,

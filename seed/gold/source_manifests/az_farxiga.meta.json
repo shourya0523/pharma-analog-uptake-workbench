@@ -18,7 +18,7 @@
   },
   "launch_quarter": "2013Q1",
   "commercial_start_quarter": "2015Q1",
-  "series_start_reason": "AstraZeneca prints no Farxiga/Forxiga line in its product tables for Q1 to Q4 2014 (AstraZeneca completed the acquisition of BMS's share of the diabetes alliance on 1 February 2014), and the Q2-Q4 2015 results print growth percentages only against 2014 (the Q1 2015 results alone print a Q1 2014 value of 13). The longest contiguous run of own-document rows therefore starts 2015Q1. The 2013 quarters (Forxiga as AstraZeneca then printed it) are delivered separately as az_farxiga_alt.",
+  "series_start_reason": "AstraZeneca prints no Farxiga/Forxiga line in its product tables for Q1 to Q4 2014 (AstraZeneca completed the acquisition of BMS's share of the diabetes alliance on 1 February 2014), and the Q2-Q4 2015 results print growth percentages only against 2014 (the Q1 2015 results alone print a Q1 2014 value of 13). The longest contiguous run of own-document rows therefore starts 2015Q1. The 2013 quarters (Forxiga as AstraZeneca then printed it) are delivered separately as az_farxiga_alt. (az_farxiga_alt: Companion Series sheet, cited but not scored.)",
   "series_end_quarter": null,
   "series_end_basis": null,
   "series_end_reason": null,

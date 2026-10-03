@@ -21,7 +21,7 @@
   "series_start_reason": null,
   "series_end_quarter": "2022Q1",
   "series_end_basis": "issuer_stopped_reporting",
-  "series_end_reason": "From the Q2 2022 release Intercept recasts product revenue, net to U.S. only after selling its international business on 2022-07-01 (prior periods recast); the worldwide definition ends with 2022Q1. The U.S.-only recast series is intercept_ocaliva_alt.",
+  "series_end_reason": "From the Q2 2022 release Intercept recasts product revenue, net to U.S. only after selling its international business on 2022-07-01 (prior periods recast); the worldwide definition ends with 2022Q1. The U.S.-only recast series is intercept_ocaliva_alt. (intercept_ocaliva_alt: Companion Series sheet, cited but not scored.)",
   "search_log": [
     "Listed every Intercept filing (CIK 0001270073, all forms) via data.sec.gov/submissions; 'Product revenue, net' (Ocaliva only) read from the Exhibit 99.1 of each earnings 8-K 2016Q2-2023Q2 and from the 2023Q3 10-Q (scripts/icpt.py). Ocaliva first sold 2016Q2 (75 thousand; approved 2016-05-27).",
     "Definition change: the 2022-08-03 release recasts prior periods for the 2022-07-01 sale of the international business (Europe/Canada) to discontinued operations, so 'Product revenue, net' becomes U.S. only (e.g. 2022Q2 release prior-year column 68,178 vs 96,576 originally reported for 2021Q2). Per contract the worldwide series is ended at 2022Q1 (intercept_ocaliva) and the U.S.-only recast series is delivered as intercept_ocaliva_alt (2021Q2-2023Q3; 2021Q1 recast is not printed in any document).",

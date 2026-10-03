@@ -2483,6 +2483,55 @@ def build_researched_products() -> list[dict[str, Any]]:
     return rows
 
 
+COMPANION_DIR = SOURCE_DIR / "companions"
+
+
+def build_companion_rows() -> list[dict[str, Any]]:
+    """Lines a product's issuer printed that are not the product's gold series.
+
+    A different territory, a recast definition, a product family, or a piece
+    too far from the series to join: each is kept, as printed and with its
+    own citations, but under its own identity and never scored. Its meta says
+    why it is not part of the series.
+    """
+    rows: list[dict[str, Any]] = []
+    for path in sorted(COMPANION_DIR.glob("*.meta.json")):
+        meta = json.loads(path.read_text())
+        if meta["drug_name"] not in PRODUCT_METADATA:
+            raise ValueError(f"{path.name}: companion of {meta['drug_name']}, which has no gold series")
+        if not meta.get("why_separate"):
+            raise ValueError(f"{path.name}: a companion line must say why it is not the series")
+        manifest = COMPANION_DIR / f"{path.name.removesuffix('.meta.json')}_quarterly.csv"
+        for source in read_csv(manifest):
+            reported = source.get("source_value_reported")
+            row = revenue_row(
+                drug_name=meta["drug_name"],
+                period=source["period"],
+                value=float(source["value_reported"]),
+                source_url=source["source_url"],
+                source_quote=source["source_quote"],
+                source_type=source["source_type"],
+                derivation=source["derivation"],
+                precision=source.get("precision") or "as_reported",
+                source_unit=source.get("source_unit") or "millions",
+                source_value=float(reported) if reported else None,
+                notes=source["context"],
+                currency=source.get("currency") or "USD",
+                issuer=meta["issuer"],
+            )
+            row.update(
+                gold_id=slug(meta["benchmark_identity"], source["period"]),
+                benchmark_identity=meta["benchmark_identity"],
+                line_label=meta["line_label"],
+                revenue_scope=meta["revenue_scope"],
+                geography=meta["geography"],
+                series_role="companion",
+                why_separate=meta["why_separate"],
+            )
+            rows.append(row)
+    return rows
+
+
 def build_annual_rows() -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     for source in read_csv(SOURCE_DIR / "annual_product_sales.csv"):
@@ -3216,6 +3265,7 @@ def main() -> int:
 
     write_jsonl(out_dir / "quarterly_revenue.jsonl", quarterly)
     write_jsonl(out_dir / "annual_revenue.jsonl", annual)
+    write_jsonl(out_dir / "companion_series.jsonl", build_companion_rows())
     write_jsonl(out_dir / "series_coverage.jsonl", coverage)
     write_jsonl(out_dir / "peak_sales.jsonl", peaks)
     write_jsonl(out_dir / "excluded_products.jsonl", exclusions)
@@ -3263,6 +3313,7 @@ def main() -> int:
         "quarterly_coverage_pct": 100.0,
         "reported_rows_file": "quarterly_revenue.jsonl",
         "annual_rows_file": "annual_revenue.jsonl",
+        "companion_rows_file": "companion_series.jsonl",
         "coverage_file": "series_coverage.jsonl",
         "peak_sales_file": "peak_sales.jsonl",
         "excluded_products_file": "excluded_products.jsonl",

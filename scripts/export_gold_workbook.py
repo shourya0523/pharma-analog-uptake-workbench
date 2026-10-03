@@ -136,6 +136,7 @@ wb.remove(wb.active)
 profiles = load("product_profiles")
 quarterly = load("quarterly_revenue")
 annual = load("annual_revenue")
+companions = load("companion_series")
 coverage = load("series_coverage")
 peaks = load("peak_sales")
 excluded = load("excluded_products")
@@ -195,6 +196,28 @@ write_sheet(
     wrap=("source_quote",),
 )
 
+for row in companions:
+    row["sources"] = None
+CS_COLS = [
+    "drug_name", "line_label", "manufacturer", "period", "benchmark_identity", "revenue_scope",
+    "geography", "why_separate", "value_normalized_usd_millions", "currency", "value_reported",
+    "source_value_reported", "source_unit", "derivation", "source_type", "source_url",
+    "source_quote", "gold_notes", "gold_id",
+]
+write_sheet(
+    wb, "Companion Series", CS_COLS, companions,
+    note="Lines an issuer printed for a product that are not its gold series: another territory, "
+         "a recast definition, a product family, or a piece too far from the series to join. "
+         "Each is cited like any gold row but kept apart and never scored; why_separate says why.",
+    widths={"drug_name": 16, "line_label": 22, "manufacturer": 20, "benchmark_identity": 30,
+            "revenue_scope": 26, "geography": 16, "why_separate": 60,
+            "value_normalized_usd_millions": 14, "derivation": 30, "source_url": 52,
+            "source_quote": 70, "gold_notes": 40, "gold_id": 34},
+    formats={"value_normalized_usd_millions": MONEY, "value_reported": MONEY,
+             "source_value_reported": '#,##0.0##'},
+    wrap=("why_separate", "source_quote", "gold_notes"),
+)
+
 P_COLS = [
     "drug_name", "indication_area", "moa", "moa_class", "route_of_administration",
     "first_approval_year", "approval_era", "competitive_intensity_at_launch",
@@ -218,7 +241,7 @@ C_COLS = [
     "drug_name", "benchmark_identity", "moa", "moa_class", "route_of_administration",
     "approval_era", "competitive_intensity_at_launch", "launch_quarter", "commercial_start_quarter",
     "series_start_reason", "series_end_quarter", "series_end_basis", "series_end_reason",
-    "as_of_quarter", "expected_quarters", "observed_quarters", "coverage_pct", "missing_quarters",
+    "as_of_quarter", "expected_quarters", "observed_quarters", "coverage_pct", "missing_quarters", "unreported_quarters",
     "quarters_beyond_series_end", "benchmark_eligible",
 ]
 latest_quarter = max(row["period"] for row in quarterly)
@@ -687,6 +710,9 @@ CONTENTS = [
      "so uptake curves line up at the start of launch instead of at a shared date."),
     ("Annual Revenue", len(annual),
      "Annual figures: peak benchmarks in their own right, plus annual context for quarterly series."),
+    ("Companion Series", len(companions),
+     "Other lines an issuer printed for a product (another territory, a recast definition, a "
+     "product family), cited but not scored, each saying why it is not the series."),
     ("Product Profiles", len(profiles),
      "Analog-matching attributes: mechanism, route, approval era, competitive intensity."),
     ("Series Coverage", len(coverage),

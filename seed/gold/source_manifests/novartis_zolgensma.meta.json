@@ -3,7 +3,7 @@
   "currency": "USD",
   "series_end_quarter": "2025Q3",
   "series_end_basis": "issuer_stopped_reporting",
-  "series_end_reason": "From Q4 2025 Novartis prints the line as 'Zolgensma Group' (Zolgensma IV plus the intrathecal formulation Itvisma, approved Q4 2025; Q2 2026 report cites Itvisma launch momentum inside the line). The Q4 2025-Q2 2026 'Zolgensma Group' rows are delivered as novartis_zolgensma_group_alt.",
+  "series_end_reason": "From Q4 2025 Novartis prints the line as 'Zolgensma Group' (Zolgensma IV plus the intrathecal formulation Itvisma, approved Q4 2025; Q2 2026 report cites Itvisma launch momentum inside the line). The Q4 2025-Q2 2026 'Zolgensma Group' rows is kept in the Companion Series sheet as novartis_zolgensma_group_alt. (novartis_zolgensma_group_alt: Companion Series sheet, cited but not scored.)",
   "series_start_reason": null,
   "drug_name": "Zolgensma",
   "generic_name": "onasemnogene abeparvovec",

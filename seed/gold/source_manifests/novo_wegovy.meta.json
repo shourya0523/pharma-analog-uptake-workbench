@@ -5,7 +5,7 @@
   "geography": "Worldwide",
   "series_end_quarter": "2025Q4",
   "series_end_basis": "issuer_stopped_reporting",
-  "series_end_reason": "From the Q1 2026 report the line 'Wegovy' is split into 'Wegovy injectable' and 'Wegovy pill' and no combined Wegovy line is printed; the injectable line is staged separately as novo_wegovy_injectable (2026Q1-2026Q2) rather than spliced.",
+  "series_end_reason": "From the Q1 2026 report the line 'Wegovy' is split into 'Wegovy injectable' and 'Wegovy pill' and no combined Wegovy line is printed; the injectable line is kept in the Companion Series sheet as novo_wegovy_injectable (2026Q1-2026Q2) rather than spliced. (novo_wegovy_injectable: Companion Series sheet, cited but not scored.)",
   "series_start_reason": null,
   "drug_name": "Wegovy",
   "generic_name": "semaglutide",

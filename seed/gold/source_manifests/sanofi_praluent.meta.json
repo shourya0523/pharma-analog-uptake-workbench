@@ -5,7 +5,7 @@
   "series_start_reason": null,
   "series_end_quarter": "2020Q1",
   "series_end_basis": "issuer_stopped_reporting",
-  "series_end_reason": "Effective April 1, 2020 Sanofi has sole responsibility for Praluent outside the U.S. and Regeneron for the U.S.; the Q1 2020 release (https://www.sec.gov/Archives/edgar/data/1121404/000119312520121046/d889738dex991.htm) states 'Sanofi will no longer consolidate Praluent sales in the U.S. from April 1'. The worldwide series therefore ends at 2020Q1; Sanofi-booked sales from 2020Q2 are in sanofi_praluent_alt.",
+  "series_end_reason": "Effective April 1, 2020 Sanofi has sole responsibility for Praluent outside the U.S. and Regeneron for the U.S.; the Q1 2020 release (https://www.sec.gov/Archives/edgar/data/1121404/000119312520121046/d889738dex991.htm) states 'Sanofi will no longer consolidate Praluent sales in the U.S. from April 1'. The worldwide series therefore ends at 2020Q1; Sanofi-booked sales from 2020Q2 are in sanofi_praluent_alt. (sanofi_praluent_alt: Companion Series sheet, cited but not scored.)",
   "benchmark_identity": "sanofi_praluent_worldwide_reported",
   "commercial_start_quarter": "2015Q3",
   "notes": "Launch: Q3 2015 release (https://www.sec.gov/Archives/edgar/data/1121404/000110465915073971/a15-21977_1ex99d1.htm): 'Praluent launched in the U.S. in July and first EU launches underway'. Worldwide net sales consolidated by Sanofi, 2015Q3-2020Q1 (U.S. and ex-U.S.). In the 2016Q2-2018Q2 releases the regional table prints a 'Total GBUs' column first and a 'Total Franchises' column last; the last column is the product's worldwide total and is used (it equals the figure printed in the top-products table from 2018Q3 on).",

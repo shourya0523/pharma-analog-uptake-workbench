@@ -1,0 +1,13 @@
+{
+  "drug_name": "Padcev",
+  "line_label": "Padcev",
+  "issuer": "Pfizer",
+  "benchmark_identity": "pfizer_padcev",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "why_separate": "Pfizer prints Padcev worldwide; the gold series is Seagen U.S. product sales.",
+  "search_log": [
+    "listed filings of the issuer via data.sec.gov submissions (recent + older pages), all forms incl. 8-K and 8-K/A (CIK 0000078003); EX-99 earnings releases 2023Q4-2026Q2 parsed for the Padcev row",
+    "Pfizer row prints worldwide, U.S. and international columns; the release does not footnote the Padcev line. The U.S. column was not substituted for the worldwide line."
+  ]
+}

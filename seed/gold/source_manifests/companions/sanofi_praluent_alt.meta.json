@@ -1,0 +1,13 @@
+{
+  "drug_name": "Praluent",
+  "line_label": "Praluent",
+  "issuer": "Sanofi",
+  "benchmark_identity": "sanofi_praluent_alt",
+  "revenue_scope": "Ex-U.S. (Sanofi-booked)",
+  "geography": "Ex-U.S. (Sanofi-consolidated; includes U.S. supply sales to Regeneron through 2021Q1)",
+  "why_separate": "From 2020Q2 Sanofi books Praluent outside the U.S. only (Regeneron books the U.S.); the gold series is Sanofi worldwide and ends 2020Q1, so this ex-U.S. line is a different quantity.",
+  "notes": "ALT: Sanofi-consolidated Praluent from 2020Q2 after the Regeneron restructuring. Definition is not perfectly uniform across the span: 2020Q2-2021Q1 includes U.S. sales of product to Regeneron (per the Q2 2020 release), 2022Q2 includes a U.S. gross-to-net true-up (per the Q2 2022 release), other quarters are ex-U.S.",
+  "search_log": [
+    "see sanofi_praluent search_log; rows 2020Q2 onward taken from each quarter's own release"
+  ]
+}

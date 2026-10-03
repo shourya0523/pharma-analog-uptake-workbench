@@ -18,7 +18,7 @@
   },
   "commercial_start_quarter": "2019Q1",
   "series_start_reason": "FDA approved Ultomiris on 21 Dec 2018; Alexion's Q4 2018 release (8-K 2019-02-04) prints no Ultomiris sales row, and the Q1 2019 release calls Q1 2019 'its first full quarter since FDA approval' ($24.6m; prior-year column nil); the first printed quarter is 2019Q1.",
-  "notes": "Plain series because it is the longest contiguous one; the Alexion piece is alexion_ultomiris_alt.",
+  "notes": "Joined with the Alexion piece (2019Q1-2021Q2); 2021Q3, the acquisition quarter, is declared unreported.",
   "search_log": [
     "listed AstraZeneca (CIK 0000901832) filings via data.sec.gov submissions incl. filings.files older page: 1,614 6-K, 6 6-K/A, 24 20-F (all form types counted, 6-K/A included)",
     "fetched the main document of every 6-K/20-F filed 2003-2026 (monthly 6-Ks of 2003-2011 embed the full results press releases; 2012+ one 6-K per results announcement); 2002 6-Ks before Nov 2002 are 'AUTO-GENERATED PAPER DOCUMENT' (not on EDGAR)",

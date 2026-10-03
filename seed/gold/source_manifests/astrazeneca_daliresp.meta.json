@@ -18,7 +18,7 @@
   },
   "launch_quarter": null,
   "commercial_start_quarter": "2016Q2",
-  "series_start_reason": "Longest contiguous series. Daliresp was printed by AstraZeneca from 2015Q2 as 'Daliresp' (US and Canada); from 2016Q2 the line is 'Daliresp / Daxas' (Daxas, the ex-U.S. name, added after the Takeda respiratory acquisition), a change of definition, so the 2015Q2-2016Q1 piece is delivered separately as astrazeneca_daliresp_alt. Forest/Actavis/Allergan sales before March 2015 are not AstraZeneca documents and Forest's fiscal quarters (March year-end) do not align.",
+  "series_start_reason": "Longest contiguous series. Daliresp was printed by AstraZeneca from 2015Q2 as 'Daliresp' (US and Canada); from 2016Q2 the line is 'Daliresp / Daxas' (Daxas, the ex-U.S. name, added after the Takeda respiratory acquisition), a change of definition, so the 2015Q2-2016Q1 piece is delivered separately as astrazeneca_daliresp_alt. Forest/Actavis/Allergan sales before March 2015 are not AstraZeneca documents and Forest's fiscal quarters (March year-end) do not align. (astrazeneca_daliresp_alt: Companion Series sheet, cited but not scored.)",
   "series_end_quarter": "2023Q4",
   "series_end_basis": "issuer_stopped_reporting",
   "series_end_reason": "AstraZeneca's Q1 2024 and later results releases print no Daliresp row (included in 'Other R&I'); last printed quarter is 2023Q4 ('Daliresp/Daxas' 13).",

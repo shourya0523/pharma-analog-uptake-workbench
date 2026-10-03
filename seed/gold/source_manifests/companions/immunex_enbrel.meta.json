@@ -1,0 +1,15 @@
+{
+  "drug_name": "Enbrel",
+  "line_label": "Enbrel",
+  "issuer": "Immunex",
+  "benchmark_identity": "immunex_enbrel",
+  "revenue_scope": "U.S. (1998Q4-2000Q4), U.S. and Canada (2001Q1-2002Q1); American Home Products had rights and booked sales elsewhere",
+  "geography": "U.S. and Canada",
+  "why_separate": "Immunex booked U.S. (1998-2000) then U.S. and Canada (2001-2002Q1) sales while American Home Products held other territories; three quarters separate it from the Amgen series that starts 2003Q1.",
+  "search_log": [
+    "listed Immunex (CIK 0000719529) filings via data.sec.gov submissions: 10-Q for 1998Q3 to 2002Q1, 10-K for 1998-2001; last filing 2002-05-17",
+    "read the MD&A product sales table in each Form 10-Q and 10-K (row 'Enbrel'); the Q3 1998 10-Q has no Enbrel sales; the 1998 10-K states sales commenced Nov. 4, 1998 and totaled $12.7 million for 1998",
+    "fourth quarters 1999-2001 derived as the 10-K full-year figure less the September 10-Q nine-month figure; full-year sums: 1999 366.9, 2000 652.4, 2001 761.9",
+    "scope: the 2001 10-K states Enbrel was approved in Canada Dec. 2000 and became commercially available in Canada March 2001, and Immunex records all Enbrel product sales in the U.S. and Canada"
+  ]
+}
