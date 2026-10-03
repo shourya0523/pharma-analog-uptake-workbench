@@ -98,19 +98,23 @@ def main() -> int:
         rows = sorted(by_drug.get(drug, []), key=lambda r: r["period"])
         entry = log.get(drug, {})
         automated = entry.get("automated", {})
+        issuers = list(dict.fromkeys(r["manufacturer"] for r in rows))
+        roles = {r["series_role"] for r in annual.get(drug, [])}
         if rows:
-            status = "Quarterly series"
+            status = "Quarterly series" + (f" (joined across {len(issuers)} owners)" if len(issuers) > 1 else "")
+        elif "peak_benchmark" in roles:
+            status = "Annual benchmark (no quarterly figures)"
+        elif roles and drug in excluded:
+            status = f"Annual context only; excluded ({excluded[drug]['reason_code']})"
         elif drug in excluded:
             status = f"Excluded ({excluded[drug]['reason_code']})"
-        elif drug in annual:
-            status = "Annual only"
         else:
             status = "Not yet in gold"
         cov = coverage.get(drug, {})
         sheet.append([
             target["id"], target["therapeutic_area"], target["brand_name"], target["generic_name"],
             status,
-            rows[0]["manufacturer"] if rows else "",
+            " -> ".join(issuers),
             rows[0]["benchmark_identity"] if rows else "",
             rows[0]["revenue_scope"] if rows else "",
             rows[0]["currency"] if rows else "",

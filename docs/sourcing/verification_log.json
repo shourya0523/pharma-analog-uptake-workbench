@@ -546,7 +546,22 @@
    "2025Q3": true,
    "2025Q4": true,
    "2026Q1": true,
-   "2026Q2": true
+   "2026Q2": true,
+   "2014Q2": true,
+   "2014Q3": true,
+   "2014Q4": true,
+   "2015Q1": true,
+   "2015Q2": true,
+   "2015Q3": true,
+   "2015Q4": true,
+   "2016Q1": true,
+   "2016Q2": true,
+   "2016Q3": true,
+   "2016Q4": true,
+   "2017Q1": true,
+   "2017Q2": true,
+   "2017Q3": true,
+   "2017Q4": true
   },
   "hand_checked": [
    "2018Q2",
@@ -554,7 +569,7 @@
    "2024Q4",
    "2023Q1"
   ],
-  "notes": "EUR, Sanofi from 2018Q2; Biogen/Bioverativ USD history verified, shorter, kept out.",
+  "notes": "EUR, Sanofi from 2018Q2; Biogen/Bioverativ USD history verified, shorter, kept out. Joined across an ownership change: 15 quarters from the earlier/later owner, all pass at source; the acquisition quarter is declared unreported.",
   "status": "verified_with_notes"
  },
  "Amondys 45": {
@@ -808,8 +823,8 @@
  "Bimzelx": {
   "automated": {},
   "hand_checked": [],
-  "notes": "UCB half-year reporting only (as Cimzia).",
-  "status": "excluded_verified"
+  "notes": "Annual benchmark: UCB annual reports 2021-2025, re-read in the PDFs; no quarterly figures.",
+  "status": "verified_with_notes"
  },
  "Blincyto": {
   "automated": {
@@ -1334,8 +1349,8 @@
  "Cimzia": {
   "automated": {},
   "hand_checked": [],
-  "notes": "UCB reports product sales half-yearly (H1 2025 table read at source); quarterly absence inferred from UCB's reporting calendar.",
-  "status": "excluded_verified"
+  "notes": "Annual benchmark: UCB annual reports 2007-2025, every figure re-read in the PDF; no quarterly figures (half-year reporting).",
+  "status": "verified_with_notes"
  },
  "Cinqair": {
   "automated": {},
@@ -1618,14 +1633,18 @@
    "2025Q3": true,
    "2025Q4": true,
    "2026Q1": true,
-   "2026Q2": true
+   "2026Q2": true,
+   "2022Q4": true,
+   "2023Q1": true,
+   "2023Q2": true,
+   "2023Q3": true
   },
   "hand_checked": [
    "2024Q2",
    "2026Q2",
    "2025Q2"
   ],
-  "notes": "AbbVie series from 2024Q2; ImmunoGen's 2022Q4-2023Q3 is verified but kept out (2023Q4-2024Q1 uncitable).",
+  "notes": "AbbVie series from 2024Q2; ImmunoGen's 2022Q4-2023Q3 is verified but kept out (2023Q4-2024Q1 uncitable). Joined across an ownership change: 4 quarters from the earlier/later owner, all pass at source; the acquisition quarter is declared unreported.",
   "status": "verified_with_notes"
  },
  "Elevidys": {
@@ -1758,7 +1777,21 @@
    "2025Q3": true,
    "2025Q4": true,
    "2026Q1": true,
-   "2026Q2": true
+   "2026Q2": true,
+   "2014Q3": true,
+   "2014Q4": true,
+   "2015Q1": true,
+   "2015Q2": true,
+   "2015Q3": true,
+   "2015Q4": true,
+   "2016Q1": true,
+   "2016Q2": true,
+   "2016Q3": true,
+   "2016Q4": true,
+   "2017Q1": true,
+   "2017Q2": true,
+   "2017Q3": true,
+   "2017Q4": true
   },
   "hand_checked": [
    "2018Q2",
@@ -1766,7 +1799,7 @@
    "2018Q4",
    "2023Q2"
   ],
-  "notes": "EUR, Sanofi from 2018Q2 (Bioverativ acquired Mar 2018); Biogen/Bioverativ USD history verified, shorter, kept out.",
+  "notes": "EUR, Sanofi from 2018Q2 (Bioverativ acquired Mar 2018); Biogen/Bioverativ USD history verified, shorter, kept out. Joined across an ownership change: 14 quarters from the earlier/later owner, all pass at source; the acquisition quarter is declared unreported.",
   "status": "verified_with_notes"
  },
  "Enbrel": {
@@ -2329,7 +2362,41 @@
    "2025Q3": true,
    "2025Q4": true,
    "2026Q1": true,
-   "2026Q2": true
+   "2026Q2": true,
+   "2002Q3": true,
+   "2002Q4": true,
+   "2003Q1": true,
+   "2003Q2": true,
+   "2003Q3": true,
+   "2003Q4": true,
+   "2004Q1": true,
+   "2004Q2": true,
+   "2004Q3": true,
+   "2004Q4": true,
+   "2005Q1": true,
+   "2005Q2": true,
+   "2005Q3": true,
+   "2005Q4": true,
+   "2006Q1": true,
+   "2006Q2": true,
+   "2006Q3": true,
+   "2006Q4": true,
+   "2007Q1": true,
+   "2007Q2": true,
+   "2007Q3": true,
+   "2007Q4": true,
+   "2008Q1": true,
+   "2008Q2": true,
+   "2008Q3": true,
+   "2008Q4": true,
+   "2009Q1": true,
+   "2009Q2": true,
+   "2009Q3": true,
+   "2009Q4": true,
+   "2010Q1": true,
+   "2010Q2": true,
+   "2010Q3": true,
+   "2010Q4": true
   },
   "hand_checked": [
    "2011Q2",
@@ -2337,7 +2404,7 @@
    "2024Q2",
    "2019Q2"
   ],
-  "notes": "EUR, Sanofi from 2011Q2 (Genzyme consolidated Apr 2011); Genzyme's USD 2002Q3-2010Q4 series verified, shorter, kept out.",
+  "notes": "EUR, Sanofi from 2011Q2 (Genzyme consolidated Apr 2011); Genzyme's USD 2002Q3-2010Q4 series verified, shorter, kept out. Joined across an ownership change: 34 quarters from the earlier/later owner, all pass at source; the acquisition quarter is declared unreported.",
   "status": "verified_with_notes"
  },
  "Farxiga": {
@@ -3660,7 +3727,11 @@
    "2025Q3": true,
    "2025Q4": true,
    "2026Q1": true,
-   "2026Q2": true
+   "2026Q2": true,
+   "2012Q3": true,
+   "2012Q4": true,
+   "2013Q1": true,
+   "2013Q2": true
   },
   "hand_checked": [
    "2013Q4",
@@ -3668,7 +3739,7 @@
    "2024Q3",
    "2026Q2"
   ],
-  "notes": "Amgen from 2013Q4 (Onyx acquired Oct 2013; Onyx's 2012Q3-2013Q2 kept out, 2013Q3 uncitable).",
+  "notes": "Amgen from 2013Q4 (Onyx acquired Oct 2013; Onyx's 2012Q3-2013Q2 kept out, 2013Q3 uncitable). Joined across an ownership change: 4 quarters from the earlier/later owner, all pass at source; the acquisition quarter is declared unreported.",
   "status": "verified_with_notes"
  },
  "Lantus": {
@@ -3997,7 +4068,30 @@
    "2025Q3": true,
    "2025Q4": true,
    "2026Q1": true,
-   "2026Q2": true
+   "2026Q2": true,
+   "2014Q3": true,
+   "2014Q4": true,
+   "2015Q1": true,
+   "2015Q2": true,
+   "2015Q3": true,
+   "2015Q4": true,
+   "2016Q1": true,
+   "2016Q2": true,
+   "2016Q3": true,
+   "2016Q4": true,
+   "2017Q1": true,
+   "2017Q2": true,
+   "2017Q3": true,
+   "2017Q4": true,
+   "2018Q1": true,
+   "2018Q2": true,
+   "2018Q3": true,
+   "2018Q4": true,
+   "2019Q1": true,
+   "2019Q2": true,
+   "2019Q3": true,
+   "2019Q4": true,
+   "2020Q1": true
   },
   "hand_checked": [
    "2020Q3",
@@ -4005,7 +4099,7 @@
    "2025Q3",
    "2023Q4"
   ],
-  "notes": "AbbVie's Linzess/Constella total (U.S. + international) from 2020Q3, the longest contiguous series.",
+  "notes": "AbbVie's Linzess/Constella total (U.S. + international) from 2020Q3, the longest contiguous series. Joined across an ownership change: 23 quarters from the earlier/later owner, all pass at source; the acquisition quarter is declared unreported.",
   "status": "verified_with_notes"
  },
  "Livdelzi": {
@@ -4972,7 +5066,29 @@
    "2025Q3": true,
    "2025Q4": true,
    "2026Q1": true,
-   "2026Q2": true
+   "2026Q2": true,
+   "2014Q2": true,
+   "2014Q3": true,
+   "2014Q4": true,
+   "2015Q1": true,
+   "2015Q2": true,
+   "2015Q3": true,
+   "2015Q4": true,
+   "2016Q1": true,
+   "2016Q2": true,
+   "2016Q3": true,
+   "2016Q4": true,
+   "2017Q1": true,
+   "2017Q2": true,
+   "2017Q3": true,
+   "2017Q4": true,
+   "2018Q1": true,
+   "2018Q2": true,
+   "2018Q3": true,
+   "2018Q4": true,
+   "2019Q1": true,
+   "2019Q2": true,
+   "2019Q3": true
   },
   "hand_checked": [
    "2020Q1",
@@ -4980,7 +5096,7 @@
    "2022Q1",
    "2026Q2"
   ],
-  "notes": "Amgen from 2020Q1 (acquired Nov 2019; 2019Q4 split). Celgene's 2014Q2-2019Q3 launch series is verified but shorter, kept out.",
+  "notes": "Amgen from 2020Q1 (acquired Nov 2019; 2019Q4 split). Celgene's 2014Q2-2019Q3 launch series is verified but shorter, kept out. Joined across an ownership change: 22 quarters from the earlier/later owner, all pass at source; the acquisition quarter is declared unreported.",
   "status": "verified_with_notes"
  },
  "Ozempic": {
@@ -5440,7 +5556,45 @@
    "2014Q1": true,
    "2014Q2": true,
    "2014Q3": true,
-   "2014Q4": true
+   "2014Q4": true,
+   "2020Q3": true,
+   "2020Q4": true,
+   "2021Q1": true,
+   "2021Q2": true,
+   "2021Q3": true,
+   "2021Q4": true,
+   "2022Q1": true,
+   "2022Q2": true,
+   "2022Q3": true,
+   "2022Q4": true,
+   "2023Q1": true,
+   "2023Q2": true,
+   "2023Q3": true,
+   "2023Q4": true,
+   "2024Q1": true,
+   "2024Q2": true,
+   "2024Q3": true,
+   "2024Q4": true,
+   "2015Q2": true,
+   "2015Q3": true,
+   "2015Q4": true,
+   "2016Q1": true,
+   "2016Q2": true,
+   "2016Q3": true,
+   "2016Q4": true,
+   "2017Q1": true,
+   "2017Q2": true,
+   "2017Q3": true,
+   "2017Q4": true,
+   "2018Q1": true,
+   "2018Q2": true,
+   "2018Q3": true,
+   "2018Q4": true,
+   "2019Q1": true,
+   "2019Q2": true,
+   "2019Q3": true,
+   "2019Q4": true,
+   "2020Q1": true
   },
   "hand_checked": [
    "2003Q2",
@@ -5448,7 +5602,7 @@
    "2007Q3",
    "2009Q2"
   ],
-  "notes": "Allergan, Inc. 2003Q2-2014Q4 (longest contiguous). Ends at the Actavis acquisition; Allergan plc and AbbVie later lines verified but kept out (split quarters).",
+  "notes": "Allergan, Inc. 2003Q2-2014Q4 (longest contiguous). Ends at the Actavis acquisition; Allergan plc and AbbVie later lines verified but kept out (split quarters). Joined across two ownership changes: 38 quarters from the earlier/later owner, all pass at source; the two acquisition quarters are declared unreported.",
   "status": "verified_with_notes"
  },
  "Revlimid": {
@@ -5697,8 +5851,8 @@
  "Rystiggo": {
   "automated": {},
   "hand_checked": [],
-  "notes": "UCB half-year reporting only (as Cimzia).",
-  "status": "excluded_verified"
+  "notes": "Annual benchmark: UCB annual reports 2023-2025, re-read in the PDFs; no quarterly figures.",
+  "status": "verified_with_notes"
  },
  "Sarclisa": {
   "automated": {
@@ -5964,14 +6118,33 @@
    "2020Q3": true,
    "2020Q4": true,
    "2021Q1": true,
-   "2021Q2": true
+   "2021Q2": true,
+   "2021Q4": true,
+   "2022Q1": true,
+   "2022Q2": true,
+   "2022Q3": true,
+   "2022Q4": true,
+   "2023Q1": true,
+   "2023Q2": true,
+   "2023Q3": true,
+   "2023Q4": true,
+   "2024Q1": true,
+   "2024Q2": true,
+   "2024Q3": true,
+   "2024Q4": true,
+   "2025Q1": true,
+   "2025Q2": true,
+   "2025Q3": true,
+   "2025Q4": true,
+   "2026Q1": true,
+   "2026Q2": true
   },
   "hand_checked": [
    "2007Q2",
    "2021Q2",
    "2008Q1"
   ],
-  "notes": "Alexion 2007Q2-2021Q2 (longest contiguous); AstraZeneca's line from 2021Q4 kept out (2021Q3 is a post-close stub).",
+  "notes": "Alexion 2007Q2-2021Q2 (longest contiguous); AstraZeneca's line from 2021Q4 kept out (2021Q3 is a post-close stub). Joined across an ownership change: 19 quarters from the earlier/later owner, all pass at source; the acquisition quarter is declared unreported.",
   "status": "verified_with_notes"
  },
  "Sotyktu": {
@@ -6088,8 +6261,8 @@
  "Spiriva": {
   "automated": {},
   "hand_checked": [],
-  "status": "excluded_verified",
-  "notes": "Excluded (half_year_reporting_only). Read at source through Tavily extract: BI's Financial year 2018 release prints SPIRIVA as an annual figure (2.4 billion euros); BI's FY2025 and H1 2025 releases print product figures for Jardiance and Ofev only. BI is private, reports half-year and full-year only, and files nothing with the SEC; Pfizer's filings show Spiriva only inside aggregated Alliance revenues. First approval NDA 021395, 2004-01-30 (openFDA)."
+  "status": "verified_with_notes",
+  "notes": "Annual context only (2009, 2018, 2021-2023), read at source through Tavily; excluded as a benchmark: Boehringer reports half-year and full-year only and the years do not run from launch."
  },
  "Syfovre": {
   "automated": {
@@ -6822,7 +6995,14 @@
    "2021Q1": true,
    "2021Q2": true,
    "2021Q3": true,
-   "2021Q4": true
+   "2021Q4": true,
+   "2017Q1": true,
+   "2017Q2": true,
+   "2017Q3": true,
+   "2017Q4": true,
+   "2018Q1": true,
+   "2018Q2": true,
+   "2018Q3": true
   },
   "hand_checked": [
    "2019Q2",
@@ -6830,7 +7010,7 @@
    "2020Q2",
    "2021Q3"
   ],
-  "notes": "Bausch Health investor-presentation slide figures (U.S.), 2019Q2-2021Q4; read from slide text.",
+  "notes": "Bausch Health investor-presentation slide figures (U.S.), 2019Q2-2021Q4; read from slide text. Joined across an ownership change: 7 quarters from the earlier/later owner, all pass at source; the acquisition quarter is declared unreported.",
   "status": "verified_with_notes"
  },
  "Tyrvaya": {
@@ -6838,14 +7018,18 @@
    "2021Q4": true,
    "2022Q1": true,
    "2022Q2": true,
-   "2022Q3": true
+   "2022Q3": true,
+   "2023Q1": true,
+   "2023Q2": true,
+   "2023Q3": true,
+   "2023Q4": true
   },
   "hand_checked": [
    "2021Q4",
    "2022Q3",
    "2022Q1"
   ],
-  "notes": "Oyster Point 2021Q4-2022Q3 (U.S.); Viatris prints Tyrvaya only in 2023 prose, not spliced.",
+  "notes": "Oyster Point 2021Q4-2022Q3 (U.S.); Viatris prints Tyrvaya only in 2023 prose, not spliced. Joined across an ownership change: 4 quarters from the earlier/later owner, all pass at source; the acquisition quarter is declared unreported.",
   "status": "verified_with_notes"
  },
  "Ubrelvy": {
@@ -6873,14 +7057,15 @@
    "2025Q3": true,
    "2025Q4": true,
    "2026Q1": true,
-   "2026Q2": true
+   "2026Q2": true,
+   "2020Q1": true
   },
   "hand_checked": [
    "2020Q3",
    "2026Q2",
    "2023Q4"
   ],
-  "notes": "AbbVie series from 2020Q3; Allergan printed only 2020Q1 and 2020Q2 is split by the acquisition.",
+  "notes": "AbbVie series from 2020Q3; Allergan printed only 2020Q1 and 2020Q2 is split by the acquisition. Joined across an ownership change: 1 quarters from the earlier/later owner, all pass at source; the acquisition quarter is declared unreported.",
   "status": "verified_with_notes"
  },
  "Ultomiris": {
@@ -6903,14 +7088,24 @@
    "2025Q3": true,
    "2025Q4": true,
    "2026Q1": true,
-   "2026Q2": true
+   "2026Q2": true,
+   "2019Q1": true,
+   "2019Q2": true,
+   "2019Q3": true,
+   "2019Q4": true,
+   "2020Q1": true,
+   "2020Q2": true,
+   "2020Q3": true,
+   "2020Q4": true,
+   "2021Q1": true,
+   "2021Q2": true
   },
   "hand_checked": [
    "2021Q4",
    "2026Q2",
    "2022Q2"
   ],
-  "notes": "AstraZeneca from 2021Q4 (longest contiguous); Alexion's 2019Q1-2021Q2 launch series verified, kept out.",
+  "notes": "AstraZeneca from 2021Q4 (longest contiguous); Alexion's 2019Q1-2021Q2 launch series verified, kept out. Joined across an ownership change: 10 quarters from the earlier/later owner, all pass at source; the acquisition quarter is declared unreported.",
   "status": "verified_with_notes"
  },
  "Uplizna": {
@@ -7313,14 +7508,31 @@
    "2025Q3": true,
    "2025Q4": true,
    "2026Q1": true,
-   "2026Q2": true
+   "2026Q2": true,
+   "2016Q1": true,
+   "2016Q2": true,
+   "2016Q3": true,
+   "2016Q4": true,
+   "2017Q1": true,
+   "2017Q2": true,
+   "2017Q3": true,
+   "2017Q4": true,
+   "2018Q1": true,
+   "2018Q2": true,
+   "2018Q3": true,
+   "2018Q4": true,
+   "2019Q1": true,
+   "2019Q2": true,
+   "2019Q3": true,
+   "2019Q4": true,
+   "2020Q1": true
   },
   "hand_checked": [
    "2020Q3",
    "2026Q2",
    "2023Q4"
   ],
-  "notes": "AbbVie series from 2020Q3 (longest contiguous). Allergan's 2016Q1-2020Q1 launch series is verified but kept out: 2020Q2 is split by the May 2020 acquisition and printed by neither issuer in full.",
+  "notes": "AbbVie series from 2020Q3 (longest contiguous). Allergan's 2016Q1-2020Q1 launch series is verified but kept out: 2020Q2 is split by the May 2020 acquisition and printed by neither issuer in full. Joined across an ownership change: 17 quarters from the earlier/later owner, all pass at source; the acquisition quarter is declared unreported.",
   "status": "verified_with_notes"
  },
  "Vumerity": {
@@ -7658,7 +7870,18 @@
    "2022Q4": true,
    "2023Q1": true,
    "2023Q2": true,
-   "2023Q3": true
+   "2023Q3": true,
+   "2023Q4": true,
+   "2024Q1": true,
+   "2024Q2": true,
+   "2024Q3": true,
+   "2024Q4": true,
+   "2025Q1": true,
+   "2025Q2": true,
+   "2025Q3": true,
+   "2025Q4": true,
+   "2026Q1": true,
+   "2026Q2": true
   },
   "hand_checked": [
    "2019Q3",
@@ -7666,7 +7889,7 @@
    "2022Q4",
    "2021Q4"
   ],
-  "notes": "Novartis 2019Q3-2023Q3 (longest contiguous); Bausch + Lomb's 2023Q4+ line verified, shorter, kept out.",
+  "notes": "Novartis 2019Q3-2023Q3 (longest contiguous); Bausch + Lomb's 2023Q4+ line verified, shorter, kept out. Joined across an ownership change: 11 quarters from the earlier/later owner, all pass at source; the acquisition quarter is declared unreported.",
   "status": "verified_with_notes"
  },
  "Xolair": {
@@ -7967,7 +8190,13 @@
    "2025Q3": true,
    "2025Q4": true,
    "2026Q1": true,
-   "2026Q2": true
+   "2026Q2": true,
+   "2017Q2": true,
+   "2017Q3": true,
+   "2017Q4": true,
+   "2018Q1": true,
+   "2018Q2": true,
+   "2018Q3": true
   },
   "hand_checked": [
    "2019Q1",
@@ -7975,7 +8204,7 @@
    "2024Q2",
    "2023Q3"
   ],
-  "notes": "GBP, GSK from 2019Q1 (Tesaro acquired Jan 2019). Tesaro's 2017Q2-2018Q3 USD series verified, shorter, kept out; 2018Q4 uncitable.",
+  "notes": "GBP, GSK from 2019Q1 (Tesaro acquired Jan 2019). Tesaro's 2017Q2-2018Q3 USD series verified, shorter, kept out; 2018Q4 uncitable. Joined across an ownership change: 6 quarters from the earlier/later owner, all pass at source; the acquisition quarter is declared unreported.",
   "status": "verified_with_notes"
  },
  "Zolgensma": {
@@ -8015,5 +8244,135 @@
   ],
   "notes": "Ends 2025Q3: from 2025Q4 Novartis prints 'Zolgensma Group' (adds intrathecal Itvisma).",
   "status": "verified_with_notes"
+ },
+ "Humalog": {
+  "automated": {
+   "2002Q1": true,
+   "2002Q2": true,
+   "2002Q3": true,
+   "2002Q4": true,
+   "2003Q1": true,
+   "2003Q2": true,
+   "2003Q3": true,
+   "2003Q4": true,
+   "2004Q1": true,
+   "2004Q2": true,
+   "2004Q3": true,
+   "2004Q4": true,
+   "2005Q1": true,
+   "2005Q2": true,
+   "2005Q3": true,
+   "2005Q4": true,
+   "2006Q1": true,
+   "2006Q2": true,
+   "2006Q3": true,
+   "2006Q4": true,
+   "2007Q1": true,
+   "2007Q2": true,
+   "2007Q3": true,
+   "2007Q4": true,
+   "2008Q1": true,
+   "2008Q2": true,
+   "2008Q3": true,
+   "2008Q4": true,
+   "2009Q1": true,
+   "2009Q2": true,
+   "2009Q3": true,
+   "2009Q4": true,
+   "2010Q1": true,
+   "2010Q2": true,
+   "2010Q3": true,
+   "2010Q4": true,
+   "2011Q1": true,
+   "2011Q2": true,
+   "2011Q3": true,
+   "2011Q4": true,
+   "2012Q1": true,
+   "2012Q2": true,
+   "2012Q3": true,
+   "2012Q4": true,
+   "2013Q1": true,
+   "2013Q2": true,
+   "2013Q3": true,
+   "2013Q4": true,
+   "2014Q1": true,
+   "2014Q2": true,
+   "2014Q3": true,
+   "2014Q4": true,
+   "2015Q1": true,
+   "2015Q2": true,
+   "2015Q3": true,
+   "2015Q4": true,
+   "2016Q1": true,
+   "2016Q2": true,
+   "2016Q3": true,
+   "2016Q4": true,
+   "2017Q1": true,
+   "2017Q2": true,
+   "2017Q3": true
+  },
+  "hand_checked": [],
+  "status": "verified_with_notes",
+  "notes": "Back-filled 63 earlier quarters from Lilly releases/10-Qs; all pass at source."
+ },
+ "Jardiance": {
+  "automated": {
+   "2015Q1": true,
+   "2015Q2": true,
+   "2015Q3": true,
+   "2015Q4": true,
+   "2016Q1": true,
+   "2016Q2": true,
+   "2016Q3": true,
+   "2016Q4": true,
+   "2017Q1": true,
+   "2017Q2": true,
+   "2017Q3": true
+  },
+  "hand_checked": [],
+  "status": "verified_with_notes",
+  "notes": "Back-filled 11 earlier quarters from Lilly releases/10-Qs; all pass at source."
+ },
+ "Olumiant": {
+  "automated": {
+   "2017Q1": true,
+   "2017Q2": true,
+   "2017Q3": true
+  },
+  "hand_checked": [],
+  "status": "verified_with_notes",
+  "notes": "Back-filled 3 earlier quarters from Lilly releases/10-Qs; all pass at source."
+ },
+ "Taltz": {
+  "automated": {
+   "2016Q2": true,
+   "2016Q3": true,
+   "2016Q4": true,
+   "2017Q1": true,
+   "2017Q2": true,
+   "2017Q3": true
+  },
+  "hand_checked": [],
+  "status": "verified_with_notes",
+  "notes": "Back-filled 6 earlier quarters from Lilly releases/10-Qs; all pass at source."
+ },
+ "Trulicity": {
+  "automated": {
+   "2014Q4": true,
+   "2015Q1": true,
+   "2015Q2": true,
+   "2015Q3": true,
+   "2015Q4": true,
+   "2016Q1": true,
+   "2016Q2": true,
+   "2016Q3": true,
+   "2016Q4": true,
+   "2017Q1": true,
+   "2017Q2": true,
+   "2017Q3": true
+  },
+  "hand_checked": [],
+  "status": "verified_with_notes",
+  "notes": "Back-filled 12 earlier quarters from Lilly releases/10-Qs; all pass at source."
  }
 }
