@@ -1040,12 +1040,7 @@ PRODUCT_METADATA = {
         "benchmark_identity": "lilly_emgality_worldwide_reported",
         "therapeutic_area": "Neuroscience",
         "commercial_start_quarter": "2018Q4",
-        "series_start_reason": (
-            "The series starts in the first quarter Lilly states this product on a "
-            "Selected Products line of its own. Whether that is the product's "
-            "launch quarter is not established here, so the span is not read as "
-            "launch-to-date."
-        ),
+        "launch_quarter": "2018Q4",
         "series_end_quarter": "2023Q4",
         "series_end_basis": "issuer_stopped_reporting",
         "series_end_reason": (
@@ -1053,7 +1048,6 @@ PRODUCT_METADATA = {
             "2024 release - Mounjaro, Trulicity, Verzenio, Jardiance, Taltz, "
             "Humalog and Zepbound - and this product is not among them."
         ),
-        "peak_eligible": False,
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
         "formulation": "injection",
@@ -1090,13 +1084,9 @@ PRODUCT_METADATA = {
         "manufacturer": "Eli Lilly",
         "benchmark_identity": "lilly_humalog_worldwide_reported",
         "therapeutic_area": "Diabetes",
-        "commercial_start_quarter": "2017Q4",
-        "series_start_reason": (
-            "The fourth quarter of 2017 is the earliest Lilly release sourced here, "
-            "and this series starts there because sourcing does, not because the "
-            "product launched then. No launch quarter is established for it, so the "
-            "span is a window on the product's life and not a launch-to-date curve."
-        ),
+        "commercial_start_quarter": "2002Q1",
+        "series_start_reason": "No issuer document fixes the launch quarter, so the series is not read as launch-to-date. It starts 2002Q1: 2002Q1 is the earliest quarter taken. Lilly's earnings releases were first filed as 8-K exhibits for Q1 2003; the 2002 quarters come from the prior-year columns of the 2003 releases. The 10-Qs for 2001 and 2002 and the 10-K for 2001 give Humalog only as sentences of narrative text (e.g. 'Worldwide Humalog sales of $164.3 million for the quarter'), not as revenue-table rows, and Q4 2001 would have to be derived from a narrative annual figure, so the series stops at 2002Q1 by choice of source type rather than because Lilly stopped reporting the product; the 1996-2001 quarters were not sourced.",
+        "peak_eligible": False,
         "series_end_quarter": "2024Q4",
         "series_end_basis": "issuer_stopped_reporting",
         "series_end_reason": (
@@ -1106,7 +1096,6 @@ PRODUCT_METADATA = {
             "immunology and neuroscience. Humalog sits inside Other cardiometabolic "
             "health from that quarter and is no longer a line of its own."
         ),
-        "peak_eligible": False,
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
         "formulation": "injection",
@@ -1143,13 +1132,9 @@ PRODUCT_METADATA = {
         "manufacturer": "Eli Lilly",
         "benchmark_identity": "lilly_jardiance_worldwide_reported",
         "therapeutic_area": "Diabetes",
-        "commercial_start_quarter": "2017Q4",
-        "series_start_reason": (
-            "The fourth quarter of 2017 is the earliest Lilly release sourced here, "
-            "and this series starts there because sourcing does, not because the "
-            "product launched then. No launch quarter is established for it, so the "
-            "span is a window on the product's life and not a launch-to-date curve."
-        ),
+        "commercial_start_quarter": "2015Q1",
+        "launch_quarter": "2014Q3",
+        "series_start_reason": "Launched 2014Q3 (The product was launched in certain European countries and the U.S. in the third quarter of 2014. - https://www.sec.gov/Archives/edgar/data/59478/000005947815000100/lly-20141231x10k.htm); the series starts 2015Q1. 2015Q1 is the earliest quarter for which any Lilly document prints a Jardiance revenue figure: the Q1 2016 release prints Q1 2016 and the prior-year Q1 2015 (19.3); the Q4 2015 release and every 2014-2015 release, 10-Q and 10-K print no Jardiance revenue row, so 2014Q3 and 2014Q4 (launch quarters) cannot be cited. 2015 quarters are direct_prior_year_column rows.",
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
@@ -1162,13 +1147,7 @@ PRODUCT_METADATA = {
         "benchmark_identity": "lilly_mounjaro_worldwide_reported",
         "therapeutic_area": "Diabetes",
         "commercial_start_quarter": "2022Q2",
-        "series_start_reason": (
-            "The series starts in the first quarter Lilly states this product on a "
-            "Selected Products line of its own. Whether that is the product's "
-            "launch quarter is not established here, so the span is not read as "
-            "launch-to-date."
-        ),
-        "peak_eligible": False,
+        "launch_quarter": "2022Q2",
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
         "formulation": "injection",
@@ -1179,13 +1158,8 @@ PRODUCT_METADATA = {
         "manufacturer": "Eli Lilly",
         "benchmark_identity": "lilly_olumiant_worldwide_reported",
         "therapeutic_area": "Immunology",
-        "commercial_start_quarter": "2017Q4",
-        "series_start_reason": (
-            "The fourth quarter of 2017 is the earliest Lilly release sourced here, "
-            "and this series starts there because sourcing does, not because the "
-            "product launched then. No launch quarter is established for it, so the "
-            "span is a window on the product's life and not a launch-to-date curve."
-        ),
+        "commercial_start_quarter": "2017Q1",
+        "launch_quarter": "2017Q1",
         "series_end_quarter": "2023Q4",
         "series_end_basis": "issuer_stopped_reporting",
         "series_end_reason": (
@@ -1193,7 +1167,6 @@ PRODUCT_METADATA = {
             "2024 release - Mounjaro, Trulicity, Verzenio, Jardiance, Taltz, "
             "Humalog and Zepbound - and this product is not among them."
         ),
-        "peak_eligible": False,
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
         "formulation": "tablet",
@@ -1229,13 +1202,8 @@ PRODUCT_METADATA = {
         "manufacturer": "Eli Lilly",
         "benchmark_identity": "lilly_taltz_worldwide_reported",
         "therapeutic_area": "Immunology",
-        "commercial_start_quarter": "2017Q4",
-        "series_start_reason": (
-            "The fourth quarter of 2017 is the earliest Lilly release sourced here, "
-            "and this series starts there because sourcing does, not because the "
-            "product launched then. No launch quarter is established for it, so the "
-            "span is a window on the product's life and not a launch-to-date curve."
-        ),
+        "commercial_start_quarter": "2016Q2",
+        "launch_quarter": "2016Q2",
         "series_end_quarter": "2025Q3",
         "series_end_basis": "issuer_stopped_reporting",
         "series_end_reason": (
@@ -1250,7 +1218,6 @@ PRODUCT_METADATA = {
             "sum two regional columns into a full year Lilly never printed as a "
             "total, then subtract nine months from that."
         ),
-        "peak_eligible": False,
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
         "formulation": "injection",
@@ -1261,13 +1228,8 @@ PRODUCT_METADATA = {
         "manufacturer": "Eli Lilly",
         "benchmark_identity": "lilly_trulicity_worldwide_reported",
         "therapeutic_area": "Diabetes",
-        "commercial_start_quarter": "2017Q4",
-        "series_start_reason": (
-            "The fourth quarter of 2017 is the earliest Lilly release sourced here, "
-            "and this series starts there because sourcing does, not because the "
-            "product launched then. No launch quarter is established for it, so the "
-            "span is a window on the product's life and not a launch-to-date curve."
-        ),
+        "commercial_start_quarter": "2014Q4",
+        "launch_quarter": "2014Q4",
         "series_end_quarter": "2025Q3",
         "series_end_basis": "issuer_stopped_reporting",
         "series_end_reason": (
@@ -1282,7 +1244,6 @@ PRODUCT_METADATA = {
             "sum two regional columns into a full year Lilly never printed as a "
             "total, then subtract nine months from that."
         ),
-        "peak_eligible": False,
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
         "formulation": "injection",
@@ -1294,13 +1255,7 @@ PRODUCT_METADATA = {
         "benchmark_identity": "lilly_verzenio_worldwide_reported",
         "therapeutic_area": "Oncology",
         "commercial_start_quarter": "2017Q4",
-        "series_start_reason": (
-            "The fourth quarter of 2017 is the earliest Lilly release sourced here, "
-            "and this series starts there because sourcing does, not because the "
-            "product launched then. No launch quarter is established for it, so the "
-            "span is a window on the product's life and not a launch-to-date curve."
-        ),
-        "peak_eligible": False,
+        "launch_quarter": "2017Q4",
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
         "formulation": "tablet",
@@ -1312,13 +1267,7 @@ PRODUCT_METADATA = {
         "benchmark_identity": "lilly_zepbound_worldwide_reported",
         "therapeutic_area": "Obesity",
         "commercial_start_quarter": "2023Q4",
-        "series_start_reason": (
-            "The series starts in the first quarter Lilly states this product on a "
-            "Selected Products line of its own. Whether that is the product's "
-            "launch quarter is not established here, so the span is not read as "
-            "launch-to-date."
-        ),
-        "peak_eligible": False,
+        "launch_quarter": "2023Q4",
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
         "formulation": "injection",

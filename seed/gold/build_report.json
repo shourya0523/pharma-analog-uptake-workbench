@@ -1,12 +1,12 @@
 {
   "generation": "independent_issuer_research",
   "as_of_quarter": "2026Q2",
-  "quarterly_rows": 8094,
+  "quarterly_rows": 8189,
   "annual_rows": 107,
   "complete_quarterly_series": 223,
   "quarterly_coverage_pct": 100.0,
-  "observed_peaks": 25,
-  "not_yet_observed_peaks": 101,
+  "observed_peaks": 27,
+  "not_yet_observed_peaks": 106,
   "excluded_products": 13,
   "catalog_coverage": {
     "catalog_products": 20,
@@ -483,7 +483,7 @@
       "Velsipity"
     ],
     "quarterly_series_pct": 65.0,
-    "quarterly_observations": 8094,
+    "quarterly_observations": 8189,
     "bounded_series": [
       "Abecma",
       "Adcetris",
@@ -548,7 +548,7 @@
     "accounted_for": 20,
     "unaccounted_products": [],
     "complete_quarterly_series": 223,
-    "quarterly_observations": 8094,
+    "quarterly_observations": 8189,
     "series_missing_quarters": [],
     "annual_benchmark_series": 4,
     "annual_observations": 107,
@@ -804,15 +804,15 @@
     "complete": true
   },
   "concentration": {
-    "quarters": 8094,
+    "quarters": 8189,
     "largest_issuer": "Johnson & Johnson",
-    "largest_issuer_share": 10.1,
+    "largest_issuer_share": 10.0,
     "largest_issuer_within_target": true,
     "largest_product": "Lantus",
-    "largest_product_share": 1.3,
+    "largest_product_share": 1.2,
     "largest_product_within_target": true,
     "largest_therapeutic_area": "Oncology",
-    "largest_therapeutic_area_share": 23.4,
+    "largest_therapeutic_area_share": 23.1,
     "largest_therapeutic_area_within_target": true,
     "therapeutic_area_count": 24,
     "therapeutic_areas_within_target": true,
