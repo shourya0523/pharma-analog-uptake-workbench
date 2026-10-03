@@ -23,10 +23,10 @@
   },
   "hand_checked": [
    "2021Q2",
-   "2025Q4",
-   "2023Q1",
    "2021Q4",
-   "2024Q4"
+   "2023Q1",
+   "2024Q4",
+   "2025Q4"
   ],
   "notes": "Ends 2025Q4: from 2026Q1 BMS folds Abecma into Other Growth Products.",
   "status": "verified"
@@ -48,10 +48,11 @@
   },
   "hand_checked": [
    "2023Q3",
-   "2026Q2",
    "2023Q4",
+   "2024Q4",
+   "2025Q1",
    "2025Q4",
-   "2025Q1"
+   "2026Q2"
   ],
   "notes": "",
   "status": "verified"
@@ -125,17 +126,22 @@
   },
   "hand_checked": [
    "2010Q3",
-   "2026Q2",
-   "2021Q3",
    "2010Q4",
    "2011Q2",
    "2011Q4",
+   "2012Q1",
    "2012Q2",
    "2012Q4",
    "2014Q2",
    "2014Q3",
+   "2015Q1",
    "2015Q2",
-   "2020Q2"
+   "2018Q2",
+   "2018Q4",
+   "2020Q2",
+   "2021Q3",
+   "2023Q4",
+   "2026Q2"
   ],
   "notes": "CHF. Starts 2010Q3 (earliest quarterly CHF figure citable).",
   "status": "verified_with_notes"
@@ -194,10 +200,14 @@
   },
   "hand_checked": [
    "2011Q3",
-   "2023Q3",
-   "2023Q2",
+   "2012Q2",
+   "2012Q4",
+   "2016Q2",
+   "2017Q3",
    "2019Q4",
-   "2012Q4"
+   "2021Q2",
+   "2023Q2",
+   "2023Q3"
   ],
   "notes": "Seagen U.S. and Canada net product sales (Takeda sells elsewhere), launch to 2023Q3. Ends at Pfizer's Dec 2023 acquisition; Pfizer's later worldwide line includes royalties and is a different scope, so not spliced.",
   "status": "verified_with_notes"
@@ -302,10 +312,20 @@
   },
   "hand_checked": [
    "2002Q4",
-   "2026Q2",
+   "2003Q2",
+   "2004Q3",
+   "2006Q3",
+   "2006Q4",
    "2013Q4",
+   "2014Q4",
+   "2017Q4",
+   "2019Q1",
+   "2019Q3",
    "2020Q2",
-   "2019Q3"
+   "2022Q3",
+   "2023Q1",
+   "2024Q1",
+   "2026Q2"
   ],
   "notes": "GBP. GSK's Seretide/Advair line (all Advair/Seretide forms). Starts 2002Q4: earlier GSK releases on EDGAR are paper-only. UK GAAP to 2004Q4, IFRS from 2005Q1.",
   "status": "verified_with_notes"
@@ -345,9 +365,13 @@
   },
   "hand_checked": [
    "2019Q1",
-   "2026Q2",
+   "2019Q2",
+   "2020Q4",
+   "2023Q2",
+   "2023Q3",
    "2023Q4",
-   "2023Q3"
+   "2024Q2",
+   "2026Q2"
   ],
   "notes": "JPY, Takeda from 2019Q1 (Shire consolidated from 8 Jan 2019).",
   "status": "verified_with_notes"
@@ -390,11 +414,17 @@
   },
   "hand_checked": [
    "2018Q2",
-   "2026Q2",
+   "2020Q3",
+   "2021Q4",
+   "2022Q1",
+   "2022Q2",
+   "2022Q3",
    "2022Q4",
+   "2023Q2",
    "2024Q4",
    "2025Q4",
-   "2023Q2"
+   "2026Q1",
+   "2026Q2"
   ],
   "notes": "Amgen's 'Aimovig - U.S.' line (Novartis sells ex-U.S.).",
   "status": "verified_with_notes"
@@ -414,9 +444,10 @@
   },
   "hand_checked": [
    "2024Q1",
-   "2026Q2",
+   "2025Q1",
+   "2025Q2",
    "2025Q4",
-   "2025Q2"
+   "2026Q2"
   ],
   "notes": "U.S.",
   "status": "verified_with_notes"
@@ -447,9 +478,10 @@
   },
   "hand_checked": [
    "2018Q4",
-   "2023Q4",
+   "2020Q2",
+   "2021Q2",
    "2022Q4",
-   "2020Q2"
+   "2023Q4"
   ],
   "notes": "Teva's North America Ajovy line 2018Q4-2023Q4; ends when Teva restated to a U.S. basis. No worldwide line is printed.",
   "status": "verified_with_notes"
@@ -501,13 +533,17 @@
   },
   "hand_checked": [
    "2016Q1",
-   "2026Q2",
-   "2024Q2",
    "2016Q2",
    "2016Q3",
    "2016Q4",
    "2017Q2",
-   "2019Q1"
+   "2018Q4",
+   "2019Q1",
+   "2020Q1",
+   "2024Q1",
+   "2024Q2",
+   "2026Q1",
+   "2026Q2"
   ],
   "notes": "CHF. Starts 2016Q1 (2015 printed only as a full year).",
   "status": "verified_with_notes"
@@ -564,10 +600,14 @@
    "2017Q4": true
   },
   "hand_checked": [
+   "2014Q4",
    "2018Q2",
-   "2026Q2",
+   "2019Q3",
+   "2021Q3",
+   "2023Q1",
    "2024Q4",
-   "2023Q1"
+   "2025Q3",
+   "2026Q2"
   ],
   "notes": "EUR, Sanofi from 2018Q2; Biogen/Bioverativ USD history verified, shorter, kept out. Joined across an ownership change: 15 quarters from the earlier/later owner, all pass at source; the acquisition quarter is declared unreported.",
   "status": "verified_with_notes"
@@ -590,11 +630,12 @@
   },
   "hand_checked": [
    "2021Q1",
-   "2024Q1",
    "2021Q4",
+   "2022Q2",
+   "2022Q3",
    "2022Q4",
    "2023Q4",
-   "2022Q3"
+   "2024Q1"
   ],
   "notes": "Ends 2024Q1 (combined PMO line after).",
   "status": "verified_with_notes"
@@ -622,8 +663,9 @@
   },
   "hand_checked": [
    "2022Q1",
-   "2026Q2",
-   "2023Q3"
+   "2022Q2",
+   "2023Q3",
+   "2026Q2"
   ],
   "notes": "GBP as printed.",
   "status": "verified"
@@ -645,9 +687,10 @@
   },
   "hand_checked": [
    "2023Q3",
-   "2026Q2",
+   "2023Q4",
+   "2024Q4",
    "2025Q3",
-   "2024Q4"
+   "2026Q2"
   ],
   "notes": "GBP as printed.",
   "status": "verified"
@@ -710,9 +753,16 @@
   },
   "hand_checked": [
    "2012Q4",
-   "2025Q4",
+   "2017Q4",
    "2020Q1",
-   "2023Q1"
+   "2020Q2",
+   "2020Q3",
+   "2020Q4",
+   "2022Q1",
+   "2023Q1",
+   "2023Q3",
+   "2023Q4",
+   "2025Q4"
   ],
   "notes": "EUR. Ends 2025Q4 (folded into Others from 2026).",
   "status": "verified_with_notes"
@@ -759,11 +809,15 @@
   },
   "hand_checked": [
    "2017Q2",
-   "2026Q2",
-   "2025Q4",
    "2017Q3",
    "2017Q4",
-   "2019Q2"
+   "2019Q2",
+   "2020Q3",
+   "2021Q4",
+   "2022Q1",
+   "2024Q3",
+   "2025Q4",
+   "2026Q2"
   ],
   "notes": "Teva's North America (to 2023) / United States (from 2024, identical restated values) Austedo line; includes Austedo XR.",
   "status": "verified_with_notes"
@@ -789,9 +843,11 @@
   },
   "hand_checked": [
    "2019Q4",
-   "2023Q3",
    "2020Q1",
-   "2021Q3"
+   "2020Q4",
+   "2021Q3",
+   "2021Q4",
+   "2023Q3"
   ],
   "notes": "Ends 2023Q3: Novartis stops printing a Beovu line.",
   "status": "verified_with_notes"
@@ -813,9 +869,9 @@
   },
   "hand_checked": [
    "2023Q3",
-   "2026Q2",
    "2024Q4",
-   "2025Q4"
+   "2025Q4",
+   "2026Q2"
   ],
   "notes": "EUR.",
   "status": "verified"
@@ -881,7 +937,12 @@
    "2015Q2",
    "2015Q3",
    "2015Q4",
+   "2017Q3",
+   "2017Q4",
+   "2018Q3",
+   "2019Q3",
    "2021Q2",
+   "2023Q1",
    "2026Q2"
   ],
   "notes": "2014Q4 = FY2014 (3) with Q1-Q3 nil inferred from the December 2014 approval.",
@@ -943,10 +1004,18 @@
   },
   "hand_checked": [
    "2013Q4",
-   "2026Q2",
-   "2018Q4",
+   "2014Q2",
+   "2015Q3",
    "2017Q4",
-   "2022Q2"
+   "2018Q4",
+   "2021Q1",
+   "2021Q2",
+   "2021Q3",
+   "2021Q4",
+   "2022Q1",
+   "2022Q2",
+   "2022Q3",
+   "2026Q2"
   ],
   "notes": "GBP. GSK's Relvar/Breo Ellipta line.",
   "status": "verified"
@@ -977,9 +1046,11 @@
   },
   "hand_checked": [
    "2021Q2",
-   "2026Q2",
+   "2021Q4",
    "2022Q4",
-   "2024Q4"
+   "2024Q4",
+   "2025Q2",
+   "2026Q2"
   ],
   "notes": "",
   "status": "verified"
@@ -1017,9 +1088,12 @@
   },
   "hand_checked": [
    "2019Q3",
-   "2026Q2",
+   "2020Q3",
+   "2020Q4",
+   "2022Q4",
+   "2025Q2",
    "2026Q1",
-   "2020Q3"
+   "2026Q2"
   ],
   "notes": "Includes Trixeo; first sales in Japan 2019Q3.",
   "status": "verified_with_notes"
@@ -1091,9 +1165,16 @@
   },
   "hand_checked": [
    "2011Q1",
-   "2026Q2",
+   "2011Q2",
+   "2015Q4",
+   "2020Q1",
    "2020Q2",
-   "2020Q3"
+   "2020Q3",
+   "2020Q4",
+   "2022Q1",
+   "2023Q1",
+   "2024Q1",
+   "2026Q2"
   ],
   "notes": "",
   "status": "verified"
@@ -1131,11 +1212,14 @@
   "hand_checked": [
    "2019Q4",
    "2020Q4",
+   "2021Q3",
    "2021Q4",
    "2022Q4",
    "2023Q4",
+   "2024Q1",
    "2024Q4",
    "2025Q1",
+   "2025Q3",
    "2025Q4",
    "2026Q2"
   ],
@@ -1169,8 +1253,10 @@
   },
   "hand_checked": [
    "2021Q1",
-   "2026Q2",
-   "2022Q2"
+   "2021Q3",
+   "2022Q2",
+   "2026Q1",
+   "2026Q2"
   ],
   "notes": "GBP. GSK's 'Cabenuva' line; whether oral Vocabria is inside it is not stated in a footnote.",
   "status": "verified_with_notes"
@@ -1230,6 +1316,8 @@
    "2021Q4",
    "2022Q4",
    "2023Q4",
+   "2024Q1",
+   "2024Q2",
    "2024Q4",
    "2025Q4",
    "2026Q2"
@@ -1277,8 +1365,12 @@
   },
   "hand_checked": [
    "2017Q4",
-   "2026Q2",
-   "2023Q2"
+   "2021Q3",
+   "2023Q1",
+   "2023Q2",
+   "2024Q2",
+   "2026Q1",
+   "2026Q2"
   ],
   "notes": "",
   "status": "verified"
@@ -1305,10 +1397,11 @@
   },
   "hand_checked": [
    "2022Q2",
-   "2026Q2",
    "2022Q3",
    "2022Q4",
-   "2025Q1"
+   "2024Q2",
+   "2025Q1",
+   "2026Q2"
   ],
   "notes": "J&J's Carvykti WW line as printed (Legend collaboration); checked strictly under the product heading.",
   "status": "verified_with_notes"
@@ -1336,12 +1429,13 @@
   },
   "hand_checked": [
    "2022Q1",
-   "2026Q2",
    "2022Q2",
    "2022Q3",
    "2022Q4",
    "2023Q1",
-   "2023Q4"
+   "2023Q2",
+   "2023Q4",
+   "2026Q2"
   ],
   "notes": "Pfizer first prints Cibinqo in 2023; 2022 quarters from prior-year columns, 2022Q1 derived (six months 6 less Q2 1).",
   "status": "verified_with_notes"
@@ -1386,10 +1480,15 @@
   },
   "hand_checked": [
    "2020Q4",
-   "2026Q2",
+   "2021Q1",
+   "2021Q3",
    "2022Q1",
+   "2022Q2",
+   "2022Q3",
+   "2022Q4",
+   "2023Q2",
    "2023Q3",
-   "2021Q3"
+   "2026Q2"
   ],
   "notes": "Pfizer's line is direct sales plus BioNTech alliance revenue, relabelled over time (BNT162b2 -> Comirnaty direct sales and alliance revenues -> Comirnaty); kept as one series.",
   "status": "verified_with_notes"
@@ -1445,8 +1544,13 @@
   },
   "hand_checked": [
    "2015Q1",
-   "2026Q2",
-   "2016Q2"
+   "2016Q2",
+   "2018Q1",
+   "2018Q3",
+   "2021Q3",
+   "2022Q4",
+   "2025Q1",
+   "2026Q2"
   ],
   "notes": "",
   "status": "verified"
@@ -1482,11 +1586,14 @@
   },
   "hand_checked": [
    "2020Q1",
-   "2026Q2",
    "2020Q2",
    "2020Q3",
    "2020Q4",
-   "2022Q3"
+   "2021Q2",
+   "2021Q4",
+   "2022Q3",
+   "2025Q4",
+   "2026Q2"
   ],
   "notes": "JPY, Kyowa Kirin global Crysvita line from 2020Q1 (earlier appendices print Japan and International only). Ultragenyx's line is collaboration revenue.",
   "status": "verified_with_notes"
@@ -1527,9 +1634,12 @@
   },
   "hand_checked": [
    "2016Q2",
-   "2023Q4",
+   "2016Q3",
+   "2019Q4",
+   "2020Q1",
    "2021Q1",
-   "2016Q3"
+   "2023Q1",
+   "2023Q4"
   ],
   "notes": "AZ's Daliresp/Daxas line 2016Q2-2023Q4.",
   "status": "verified_with_notes"
@@ -1568,9 +1678,12 @@
   },
   "hand_checked": [
    "2019Q2",
-   "2026Q2",
+   "2019Q4",
+   "2020Q3",
+   "2023Q4",
+   "2024Q4",
    "2025Q4",
-   "2023Q4"
+   "2026Q2"
   ],
   "notes": "GBP as printed.",
   "status": "verified"
@@ -1617,8 +1730,12 @@
   },
   "hand_checked": [
    "2017Q2",
-   "2026Q2",
-   "2018Q4"
+   "2018Q4",
+   "2020Q2",
+   "2023Q3",
+   "2025Q1",
+   "2025Q3",
+   "2026Q2"
   ],
   "notes": "EUR; Sanofi books worldwide.",
   "status": "verified"
@@ -1640,9 +1757,10 @@
    "2023Q3": true
   },
   "hand_checked": [
+   "2022Q4",
    "2024Q2",
-   "2026Q2",
-   "2025Q2"
+   "2025Q2",
+   "2026Q2"
   ],
   "notes": "AbbVie series from 2024Q2; ImmunoGen's 2022Q4-2023Q3 is verified but kept out (2023Q4-2024Q1 uncitable). Joined across an ownership change: 4 quarters from the earlier/later owner, all pass at source; the acquisition quarter is declared unreported.",
   "status": "verified_with_notes"
@@ -1664,11 +1782,12 @@
   },
   "hand_checked": [
    "2023Q3",
-   "2026Q2",
-   "2024Q4",
    "2023Q4",
+   "2024Q4",
+   "2025Q1",
    "2025Q4",
-   "2025Q1"
+   "2026Q1",
+   "2026Q2"
   ],
   "notes": "U.S. product revenue (Roche sells ex-U.S.). Q4s derived.",
   "status": "verified_with_notes"
@@ -1735,10 +1854,16 @@
   },
   "hand_checked": [
    "2012Q2",
-   "2026Q2",
    "2012Q3",
    "2013Q2",
-   "2018Q3"
+   "2016Q1",
+   "2017Q3",
+   "2017Q4",
+   "2018Q3",
+   "2022Q3",
+   "2022Q4",
+   "2026Q1",
+   "2026Q2"
   ],
   "notes": "BMS's Eliquis row (Pfizer alliance; profits shared). Starts 2012Q2 with first ex-U.S. sales; 2012Q3 is a printed dash (0).",
   "status": "verified_with_notes"
@@ -1794,10 +1919,15 @@
    "2017Q4": true
   },
   "hand_checked": [
+   "2017Q2",
+   "2017Q3",
    "2018Q2",
-   "2026Q2",
+   "2018Q3",
    "2018Q4",
-   "2023Q2"
+   "2019Q2",
+   "2019Q4",
+   "2023Q2",
+   "2026Q2"
   ],
   "notes": "EUR, Sanofi from 2018Q2 (Bioverativ acquired Mar 2018); Biogen/Bioverativ USD history verified, shorter, kept out. Joined across an ownership change: 14 quarters from the earlier/later owner, all pass at source; the acquisition quarter is declared unreported.",
   "status": "verified_with_notes"
@@ -1908,13 +2038,18 @@
    "2004Q4",
    "2005Q4",
    "2006Q4",
+   "2007Q3",
    "2007Q4",
    "2008Q4",
+   "2009Q3",
    "2009Q4",
    "2010Q4",
    "2011Q4",
    "2012Q2",
+   "2013Q4",
    "2016Q4",
+   "2018Q4",
+   "2021Q3",
    "2024Q1",
    "2026Q2"
   ],
@@ -1952,8 +2087,10 @@
   },
   "hand_checked": [
    "2020Q1",
-   "2026Q2",
-   "2026Q1"
+   "2021Q3",
+   "2022Q3",
+   "2026Q1",
+   "2026Q2"
   ],
   "notes": "JPY. Daiichi Sankyo's product sales line (Japan, U.S., EU, ASCA; footnote: includes gross profit share in AZ territories). Checked strictly under the Trastuzumab deruxtecan heading.",
   "status": "verified_with_notes"
@@ -1987,7 +2124,6 @@
   },
   "hand_checked": [
    "2020Q3",
-   "2026Q2",
    "2020Q4",
    "2021Q2",
    "2021Q3",
@@ -1998,13 +2134,15 @@
    "2023Q2",
    "2023Q3",
    "2023Q4",
+   "2024Q1",
    "2024Q2",
    "2024Q3",
    "2024Q4",
    "2025Q2",
    "2025Q3",
    "2025Q4",
-   "2026Q1"
+   "2026Q1",
+   "2026Q2"
   ],
   "notes": "CHF. Many quarters derived from Roche's year-to-date tables (Enspryng is in the quarterly table only from 2026).",
   "status": "verified_with_notes"
@@ -2058,9 +2196,13 @@
   },
   "hand_checked": [
    "2015Q3",
-   "2026Q2",
+   "2016Q2",
+   "2016Q4",
+   "2019Q1",
+   "2022Q2",
    "2025Q2",
-   "2022Q2"
+   "2025Q4",
+   "2026Q2"
   ],
   "notes": "",
   "status": "verified"
@@ -2119,15 +2261,19 @@
   },
   "hand_checked": [
    "2014Q2",
-   "2026Q2",
    "2014Q3",
    "2015Q1",
    "2015Q3",
    "2015Q4",
    "2016Q1",
+   "2016Q4",
    "2017Q1",
+   "2017Q4",
    "2019Q1",
-   "2016Q4"
+   "2022Q3",
+   "2025Q3",
+   "2025Q4",
+   "2026Q2"
   ],
   "notes": "JPY, Takeda fiscal quarters mapped to calendar. 2014-2016 include derived and later-document quarters.",
   "status": "verified_with_notes"
@@ -2167,9 +2313,10 @@
   },
   "hand_checked": [
    "2020Q3",
-   "2026Q2",
    "2020Q4",
-   "2024Q1"
+   "2024Q1",
+   "2026Q1",
+   "2026Q2"
   ],
   "notes": "CHF.",
   "status": "verified"
@@ -2209,16 +2356,17 @@
   },
   "hand_checked": [
    "2016Q4",
-   "2024Q1",
-   "2022Q4",
    "2019Q4",
    "2020Q1",
    "2020Q2",
    "2020Q3",
    "2020Q4",
+   "2021Q1",
    "2021Q4",
+   "2022Q4",
+   "2023Q1",
    "2023Q4",
-   "2023Q1"
+   "2024Q1"
   ],
   "notes": "Ends 2024Q1: from 2024Q2 Sarepta prints only a combined PMO line. Q4s derived from 10-K less nine months.",
   "status": "verified_with_notes"
@@ -2287,15 +2435,21 @@
   },
   "hand_checked": [
    "2011Q4",
-   "2026Q2",
-   "2022Q3",
+   "2013Q2",
+   "2015Q2",
+   "2015Q3",
+   "2018Q1",
    "2018Q3",
+   "2019Q3",
+   "2022Q1",
+   "2022Q2",
+   "2022Q3",
+   "2022Q4",
    "2024Q1",
    "2024Q4",
-   "2015Q3",
-   "2013Q2",
-   "2022Q4",
-   "2019Q3"
+   "2025Q1",
+   "2025Q4",
+   "2026Q2"
   ],
   "notes": "Regeneron U.S. net product sales only (Bayer books ex-U.S.); EYLEA 2 mg line, EYLEA HD excluded. 2011Q4-2013Q3 read from release sentences.",
   "status": "verified"
@@ -2399,10 +2553,21 @@
    "2010Q4": true
   },
   "hand_checked": [
+   "2002Q4",
+   "2006Q1",
+   "2009Q3",
    "2011Q2",
-   "2026Q2",
+   "2014Q3",
+   "2015Q2",
+   "2018Q3",
+   "2019Q2",
+   "2020Q3",
+   "2021Q3",
+   "2022Q4",
    "2024Q2",
-   "2019Q2"
+   "2025Q4",
+   "2026Q1",
+   "2026Q2"
   ],
   "notes": "EUR, Sanofi from 2011Q2 (Genzyme consolidated Apr 2011); Genzyme's USD 2002Q3-2010Q4 series verified, shorter, kept out. Joined across an ownership change: 34 quarters from the earlier/later owner, all pass at source; the acquisition quarter is declared unreported.",
   "status": "verified_with_notes"
@@ -2458,9 +2623,13 @@
   },
   "hand_checked": [
    "2015Q1",
-   "2026Q2",
+   "2016Q2",
+   "2020Q4",
+   "2022Q4",
+   "2025Q1",
+   "2025Q4",
    "2026Q1",
-   "2016Q2"
+   "2026Q2"
   ],
   "notes": "Starts 2015Q1: AZ printed no Farxiga line for 2014; the 2013 BMS-alliance line is kept out.",
   "status": "verified_with_notes"
@@ -2504,8 +2673,11 @@
   },
   "hand_checked": [
    "2018Q1",
-   "2026Q2",
-   "2023Q4"
+   "2020Q3",
+   "2023Q3",
+   "2023Q4",
+   "2025Q3",
+   "2026Q2"
   ],
   "notes": "",
   "status": "verified"
@@ -2553,14 +2725,17 @@
   },
   "hand_checked": [
    "2016Q3",
-   "2025Q4",
    "2016Q4",
+   "2017Q2",
    "2017Q4",
    "2018Q4",
    "2019Q4",
    "2020Q4",
    "2021Q4",
-   "2023Q2"
+   "2022Q2",
+   "2023Q1",
+   "2023Q2",
+   "2025Q4"
   ],
   "notes": "Amicus net product sales (Galafold; trace early-access Pombiliti in 2022Q3-2023Q2), Galafold line from 2023Q3. Ends 2025Q4 (BioMarin acquisition).",
   "status": "verified_with_notes"
@@ -2616,11 +2791,16 @@
   },
   "hand_checked": [
    "2015Q1",
-   "2026Q2",
-   "2023Q3",
+   "2015Q4",
    "2016Q2",
+   "2019Q4",
+   "2021Q1",
    "2021Q3",
-   "2015Q4"
+   "2022Q2",
+   "2023Q2",
+   "2023Q3",
+   "2025Q3",
+   "2026Q2"
   ],
   "notes": "Product family: Merck prints only 'Gardasil / Gardasil 9' (quadrivalent + 9-valent). Series starts 2015Q1 when that combined line begins; the earlier 'Gardasil' line is a different definition and was not spliced.",
   "status": "verified_with_notes"
@@ -2660,8 +2840,12 @@
   },
   "hand_checked": [
    "2019Q1",
-   "2026Q2",
-   "2023Q3"
+   "2020Q2",
+   "2022Q2",
+   "2023Q3",
+   "2024Q4",
+   "2025Q2",
+   "2026Q2"
   ],
   "notes": "JPY, Takeda from 2019Q1 (first quarter is Shire from 8 Jan). NPS/Shire USD history not sourced.",
   "status": "verified_with_notes"
@@ -2692,15 +2876,17 @@
   },
   "hand_checked": [
    "2021Q2",
-   "2026Q2",
-   "2025Q4",
    "2021Q3",
    "2021Q4",
    "2022Q1",
    "2022Q3",
    "2022Q4",
    "2023Q1",
-   "2023Q3"
+   "2023Q3",
+   "2024Q2",
+   "2025Q4",
+   "2026Q1",
+   "2026Q2"
   ],
   "notes": "U.S. sales in USD from Sumitomo Pharma's supplementary data.",
   "status": "verified_with_notes"
@@ -2767,9 +2953,18 @@
   },
   "hand_checked": [
    "2010Q4",
-   "2024Q4",
+   "2011Q3",
+   "2015Q1",
+   "2017Q3",
+   "2017Q4",
+   "2018Q1",
    "2018Q2",
-   "2011Q3"
+   "2018Q3",
+   "2018Q4",
+   "2020Q3",
+   "2021Q3",
+   "2024Q2",
+   "2024Q4"
   ],
   "notes": "Ends 2024Q4: Novartis stops printing a Gilenya line from 2025Q1. 2010Q4 from report narrative.",
   "status": "verified_with_notes"
@@ -2820,11 +3015,13 @@
   },
   "hand_checked": [
    "2017Q4",
-   "2026Q2",
    "2018Q2",
    "2018Q3",
    "2018Q4",
-   "2023Q1"
+   "2021Q1",
+   "2023Q1",
+   "2024Q1",
+   "2026Q2"
   ],
   "notes": "CHF. 2017Q4 = FY2017 (launched Nov 2017).",
   "status": "verified_with_notes"
@@ -2924,11 +3121,20 @@
   },
   "hand_checked": [
    "2004Q1",
-   "2026Q2",
-   "2022Q4",
+   "2007Q3",
+   "2008Q1",
+   "2010Q4",
    "2012Q4",
    "2013Q1",
-   "2010Q4"
+   "2013Q4",
+   "2014Q3",
+   "2019Q3",
+   "2020Q4",
+   "2021Q2",
+   "2021Q4",
+   "2022Q4",
+   "2024Q4",
+   "2026Q2"
   ],
   "notes": "Abbott 2004Q1-2012Q4, AbbVie from 2013Q1 (spin-off). Starts 2004Q1: Abbott's 2003 documents print only U.S. and international Humira, no worldwide line, so no peak claimed from launch.",
   "status": "verified_with_notes"
@@ -2984,10 +3190,18 @@
   },
   "hand_checked": [
    "2015Q1",
-   "2026Q2",
-   "2020Q4",
+   "2016Q1",
    "2016Q2",
-   "2021Q4"
+   "2017Q1",
+   "2018Q2",
+   "2019Q2",
+   "2020Q4",
+   "2021Q1",
+   "2021Q2",
+   "2021Q3",
+   "2021Q4",
+   "2025Q3",
+   "2026Q2"
   ],
   "notes": "",
   "status": "verified"
@@ -3040,8 +3254,12 @@
   },
   "hand_checked": [
    "2017Q2",
-   "2026Q2",
-   "2018Q4"
+   "2018Q4",
+   "2019Q2",
+   "2019Q3",
+   "2020Q4",
+   "2021Q3",
+   "2026Q2"
   ],
   "notes": "2017Q3 is a printed nil.",
   "status": "verified_with_notes"
@@ -3088,14 +3306,17 @@
   },
   "hand_checked": [
    "2017Q2",
+   "2019Q2",
    "2020Q3",
    "2020Q4",
    "2021Q1",
+   "2021Q3",
    "2021Q4",
    "2022Q4",
    "2023Q4",
    "2024Q2",
    "2024Q4",
+   "2025Q1",
    "2026Q2"
   ],
   "notes": "Ingrezza line; total product sales used only while Ingrezza was the sole product (to 2020Q2).",
@@ -3118,13 +3339,13 @@
   },
   "hand_checked": [
    "2023Q3",
-   "2026Q2",
    "2023Q4",
    "2024Q3",
    "2024Q4",
+   "2025Q2",
    "2025Q3",
    "2025Q4",
-   "2025Q2"
+   "2026Q2"
   ],
   "notes": "JPY.",
   "status": "verified"
@@ -3193,7 +3414,12 @@
   },
   "hand_checked": [
    "2011Q4",
+   "2015Q1",
    "2015Q3",
+   "2016Q2",
+   "2021Q2",
+   "2021Q4",
+   "2022Q3",
    "2025Q4",
    "2026Q2"
   ],
@@ -3285,15 +3511,24 @@
   },
   "hand_checked": [
    "2006Q3",
-   "2026Q2",
-   "2012Q4",
-   "2014Q3",
    "2006Q4",
+   "2008Q1",
    "2008Q2",
    "2009Q4",
+   "2011Q4",
+   "2012Q1",
+   "2012Q2",
+   "2012Q3",
+   "2012Q4",
+   "2014Q3",
    "2016Q3",
+   "2016Q4",
+   "2017Q3",
    "2020Q3",
-   "2025Q2"
+   "2025Q2",
+   "2025Q3",
+   "2026Q1",
+   "2026Q2"
   ],
   "notes": "Januvia only (Janumet excluded). 2006-2009Q3 from legacy Merck (CIK 64978) filings.",
   "status": "verified"
@@ -3324,9 +3559,10 @@
   },
   "hand_checked": [
    "2021Q2",
-   "2026Q2",
+   "2022Q4",
+   "2024Q1",
    "2025Q4",
-   "2022Q4"
+   "2026Q2"
   ],
   "notes": "GBP as printed.",
   "status": "verified"
@@ -3396,15 +3632,20 @@
   },
   "hand_checked": [
    "2013Q1",
-   "2026Q2",
-   "2022Q2",
    "2013Q2",
    "2013Q3",
    "2013Q4",
    "2014Q2",
    "2014Q3",
    "2015Q2",
-   "2016Q4"
+   "2016Q4",
+   "2017Q1",
+   "2017Q2",
+   "2018Q1",
+   "2022Q2",
+   "2022Q4",
+   "2025Q2",
+   "2026Q2"
   ],
   "notes": "CHF.",
   "status": "verified_with_notes"
@@ -3438,8 +3679,9 @@
   },
   "hand_checked": [
    "2020Q3",
-   "2026Q2",
-   "2023Q4"
+   "2023Q1",
+   "2023Q4",
+   "2026Q2"
   ],
   "notes": "",
   "status": "verified"
@@ -3486,8 +3728,11 @@
   },
   "hand_checked": [
    "2017Q2",
-   "2026Q2",
-   "2018Q4"
+   "2018Q4",
+   "2019Q1",
+   "2021Q3",
+   "2026Q1",
+   "2026Q2"
   ],
   "notes": "EUR.",
   "status": "verified"
@@ -3545,11 +3790,14 @@
   },
   "hand_checked": [
    "2014Q3",
-   "2026Q2",
-   "2025Q4",
-   "2023Q3",
+   "2015Q1",
+   "2016Q4",
+   "2019Q3",
    "2019Q4",
-   "2016Q4"
+   "2023Q3",
+   "2024Q4",
+   "2025Q4",
+   "2026Q2"
   ],
   "notes": "Keytruda (IV) row only. From 2025Q3 Merck also prints Keytruda Qlex (subcutaneous) separately; Qlex is not in this series, so the line keeps one definition. 2014Q3 from the Q4 2014 release's quarterly columns.",
   "status": "verified"
@@ -3597,8 +3845,12 @@
   },
   "hand_checked": [
    "2017Q1",
-   "2026Q2",
-   "2023Q4"
+   "2017Q3",
+   "2018Q2",
+   "2018Q3",
+   "2023Q3",
+   "2023Q4",
+   "2026Q2"
   ],
   "notes": "",
   "status": "verified"
@@ -3621,10 +3873,11 @@
    "2026Q2": true
   },
   "hand_checked": [
-   "2026Q2",
-   "2025Q4",
    "2024Q1",
-   "2025Q3"
+   "2024Q3",
+   "2025Q3",
+   "2025Q4",
+   "2026Q2"
   ],
   "notes": "BMS series from 2024Q1 (post-close stub). Mirati 2022Q4-2023Q3 rows were verified but dropped: Mirati never reported 2023Q4, so no contiguous launch series exists. No peak claimed.",
   "status": "verified_with_notes"
@@ -3668,9 +3921,12 @@
   },
   "hand_checked": [
    "2018Q1",
-   "2026Q2",
    "2021Q1",
-   "2022Q3"
+   "2021Q2",
+   "2021Q4",
+   "2022Q3",
+   "2025Q3",
+   "2026Q2"
   ],
   "notes": "Starts 2018Q1 (launched 2017Q3 but no 2017 quarter is printed); no peak claimed.",
   "status": "verified_with_notes"
@@ -3735,8 +3991,13 @@
   },
   "hand_checked": [
    "2013Q4",
+   "2014Q3",
+   "2015Q2",
    "2017Q4",
+   "2019Q2",
    "2024Q3",
+   "2025Q1",
+   "2025Q3",
    "2026Q2"
   ],
   "notes": "Amgen from 2013Q4 (Onyx acquired Oct 2013; Onyx's 2012Q3-2013Q2 kept out, 2013Q3 uncitable). Joined across an ownership change: 4 quarters from the earlier/later owner, all pass at source; the acquisition quarter is declared unreported.",
@@ -3849,13 +4110,20 @@
   },
   "hand_checked": [
    "2001Q1",
-   "2026Q2",
-   "2014Q4",
    "2001Q2",
    "2001Q3",
    "2001Q4",
    "2002Q1",
-   "2006Q4"
+   "2003Q1",
+   "2005Q2",
+   "2006Q3",
+   "2006Q4",
+   "2007Q1",
+   "2007Q4",
+   "2014Q4",
+   "2018Q4",
+   "2022Q4",
+   "2026Q2"
   ],
   "notes": "EUR. Aventis to 2004Q2, Sanofi after (2004 is Sanofi's pro forma basis). Starts 2001Q1 (launched 2000; only a 2000 annual figure). 2001Q1 derived.",
   "status": "verified_with_notes"
@@ -3910,12 +4178,12 @@
   },
   "hand_checked": [
    "2015Q2",
-   "2026Q2",
    "2015Q3",
    "2015Q4",
    "2016Q1",
    "2016Q2",
    "2016Q3",
+   "2016Q4",
    "2017Q2",
    "2017Q3",
    "2018Q2",
@@ -3927,14 +4195,18 @@
    "2020Q2",
    "2020Q3",
    "2020Q4",
+   "2021Q1",
    "2021Q2",
    "2021Q3",
    "2021Q4",
    "2022Q2",
    "2022Q3",
    "2022Q4",
+   "2023Q1",
    "2023Q2",
-   "2023Q1"
+   "2024Q1",
+   "2024Q2",
+   "2026Q2"
   ],
   "notes": "Product family (Lenvima/Kisplyx), JPY; Eisai's TDnet filings via the Japan Exchange Group host (eisai.com/ir unreachable). Many quarters from same-year full-year Reference Data tables.",
   "status": "verified_with_notes"
@@ -3954,12 +4226,12 @@
   },
   "hand_checked": [
    "2024Q1",
-   "2026Q2",
+   "2024Q2",
    "2024Q4",
    "2025Q3",
    "2025Q4",
    "2026Q1",
-   "2024Q2"
+   "2026Q2"
   ],
   "notes": "JPY, Eisai pre-audit revenue releases; from 2024Q1 (earlier Eisai IR documents unreachable from this environment).",
   "status": "verified_with_notes"
@@ -3991,9 +4263,11 @@
   },
   "hand_checked": [
    "2021Q1",
-   "2026Q2",
    "2021Q2",
-   "2022Q3"
+   "2022Q3",
+   "2024Q4",
+   "2025Q2",
+   "2026Q2"
   ],
   "notes": "",
   "status": "verified"
@@ -4034,11 +4308,14 @@
   },
   "hand_checked": [
    "2018Q4",
-   "2026Q2",
-   "2022Q3",
    "2019Q1",
+   "2019Q4",
+   "2020Q3",
+   "2022Q3",
    "2023Q1",
-   "2019Q4"
+   "2025Q4",
+   "2026Q1",
+   "2026Q2"
   ],
   "notes": "U.S. series chosen as canonical: the only full-span product-sales series. Regeneron's 'Libtayo - Global' line exists only 2022Q3-2024Q4 and was not used.",
   "status": "verified"
@@ -4094,10 +4371,14 @@
    "2020Q1": true
   },
   "hand_checked": [
+   "2020Q1",
    "2020Q3",
-   "2026Q2",
+   "2022Q1",
+   "2022Q2",
+   "2022Q3",
+   "2023Q4",
    "2025Q3",
-   "2023Q4"
+   "2026Q2"
   ],
   "notes": "AbbVie's Linzess/Constella total (U.S. + international) from 2020Q3, the longest contiguous series. Joined across an ownership change: 23 quarters from the earlier/later owner, all pass at source; the acquisition quarter is declared unreported.",
   "status": "verified_with_notes"
@@ -4147,12 +4428,15 @@
   },
   "hand_checked": [
    "2019Q3",
-   "2026Q2",
    "2019Q4",
    "2020Q1",
    "2020Q2",
+   "2020Q3",
    "2021Q2",
-   "2021Q3"
+   "2021Q3",
+   "2022Q1",
+   "2024Q1",
+   "2026Q2"
   ],
   "notes": "Starts 2019Q3: Pfizer first prints a Lorbrena line in the Q3 2020 release; 2019Q3-2020Q2 from prior-year columns, 2018Q4-2019Q2 not separable. No peak claimed.",
   "status": "verified_with_notes"
@@ -4240,9 +4524,20 @@
   },
   "hand_checked": [
    "2007Q1",
-   "2026Q2",
+   "2010Q2",
    "2012Q4",
-   "2013Q3"
+   "2013Q3",
+   "2014Q1",
+   "2014Q2",
+   "2014Q3",
+   "2014Q4",
+   "2015Q3",
+   "2017Q1",
+   "2019Q4",
+   "2022Q1",
+   "2023Q1",
+   "2023Q4",
+   "2026Q2"
   ],
   "notes": "Novartis ex-U.S. sales only (Genentech/Roche books U.S.).",
   "status": "verified_with_notes"
@@ -4274,6 +4569,8 @@
   "hand_checked": [
    "2021Q2",
    "2022Q4",
+   "2023Q2",
+   "2026Q1",
    "2026Q2"
   ],
   "notes": "",
@@ -4318,8 +4615,11 @@
   },
   "hand_checked": [
    "2018Q1",
-   "2026Q2",
-   "2023Q4"
+   "2019Q1",
+   "2022Q2",
+   "2023Q4",
+   "2024Q1",
+   "2026Q2"
   ],
   "notes": "Novartis from 2018Q1 (AAA consolidated Jan 2018; AAA printed no Lutathera line).",
   "status": "verified_with_notes"
@@ -4336,10 +4636,11 @@
   },
   "hand_checked": [
    "2018Q1",
-   "2019Q3",
-   "2019Q2",
+   "2018Q3",
    "2018Q4",
-   "2018Q3"
+   "2019Q1",
+   "2019Q2",
+   "2019Q3"
   ],
   "notes": "Spark U.S. product sales to 2019Q3 (Roche acquisition); Roche prints only half-year figures.",
   "status": "verified_with_notes"
@@ -4395,9 +4696,14 @@
   },
   "hand_checked": [
    "2015Q1",
-   "2026Q2",
+   "2016Q1",
+   "2016Q2",
+   "2019Q4",
+   "2020Q3",
+   "2025Q1",
+   "2025Q2",
    "2025Q4",
-   "2016Q2"
+   "2026Q2"
   ],
   "notes": "AZ's own Lynparza product sales line (Merck shares profits).",
   "status": "verified_with_notes"
@@ -4441,17 +4747,20 @@
   },
   "hand_checked": [
    "2018Q1",
-   "2026Q2",
-   "2025Q2",
+   "2018Q3",
    "2018Q4",
    "2019Q4",
+   "2020Q2",
    "2020Q4",
    "2021Q4",
    "2022Q4",
+   "2023Q3",
    "2023Q4",
    "2024Q4",
+   "2025Q2",
+   "2025Q3",
    "2025Q4",
-   "2023Q3"
+   "2026Q2"
   ],
   "notes": "EUR; Q4s derived; starts 2018Q1 (2017 printed only as prior-year/prose). emdgroup.com needs a browser user agent to fetch.",
   "status": "verified_with_notes"
@@ -4493,8 +4802,11 @@
   },
   "hand_checked": [
    "2018Q3",
-   "2026Q2",
-   "2019Q2"
+   "2019Q2",
+   "2023Q1",
+   "2024Q3",
+   "2024Q4",
+   "2026Q2"
   ],
   "notes": "Starts 2018Q3; earlier releases print only a combined HCV line.",
   "status": "verified_with_notes"
@@ -4523,8 +4835,9 @@
   },
   "hand_checked": [
    "2019Q2",
-   "2023Q4",
-   "2019Q4"
+   "2019Q4",
+   "2021Q4",
+   "2023Q4"
   ],
   "notes": "Ends 2023Q4: no Mayzent line from 2024Q1.",
   "status": "verified_with_notes"
@@ -4546,13 +4859,13 @@
   },
   "hand_checked": [
    "2023Q3",
-   "2026Q2",
-   "2025Q4",
    "2023Q4",
    "2024Q1",
    "2024Q2",
    "2025Q1",
-   "2025Q3"
+   "2025Q3",
+   "2025Q4",
+   "2026Q2"
   ],
   "notes": "Bausch + Lomb investor-presentation slide figures; several quarters from later decks' trailing columns.",
   "status": "verified_with_notes"
@@ -4591,9 +4904,12 @@
   },
   "hand_checked": [
    "2019Q1",
-   "2026Q1",
+   "2020Q2",
+   "2022Q4",
+   "2023Q3",
+   "2024Q2",
    "2024Q3",
-   "2023Q3"
+   "2026Q1"
   ],
   "notes": "JPY, Takeda's Resolor/Motegrity line 2019Q1-2026Q1.",
   "status": "verified_with_notes"
@@ -4640,15 +4956,17 @@
   },
   "hand_checked": [
    "2017Q2",
-   "2026Q2",
    "2019Q1",
+   "2020Q4",
    "2022Q2",
+   "2023Q2",
+   "2023Q3",
    "2023Q4",
    "2024Q3",
    "2024Q4",
    "2025Q3",
    "2025Q4",
-   "2023Q2"
+   "2026Q2"
   ],
   "notes": "JPY, Betanis/Myrbetriq/Betmiga global line from 2017Q2.",
   "status": "verified_with_notes"
@@ -4753,9 +5071,13 @@
   },
   "hand_checked": [
    "2015Q4",
-   "2026Q2",
    "2016Q3",
-   "2020Q3"
+   "2018Q1",
+   "2020Q3",
+   "2021Q2",
+   "2022Q1",
+   "2026Q1",
+   "2026Q2"
   ],
   "notes": "GBP as printed.",
   "status": "verified"
@@ -4780,7 +5102,9 @@
   },
   "hand_checked": [
    "2022Q4",
+   "2023Q3",
    "2023Q4",
+   "2024Q4",
    "2026Q2"
   ],
   "notes": "Pfizer's Nurtec ODT/Vydura worldwide line from 2022Q4 (longest contiguous). Biohaven's 2020Q1-2022Q2 U.S. launch series verified, kept out; 2022Q3 uncitable.",
@@ -4815,9 +5139,11 @@
   },
   "hand_checked": [
    "2016Q2",
-   "2022Q1",
+   "2016Q4",
+   "2018Q1",
+   "2019Q3",
    "2021Q2",
-   "2019Q3"
+   "2022Q1"
   ],
   "notes": "Worldwide to 2022Q1; Intercept then recast to U.S. only after selling its international business.",
   "status": "verified_with_notes"
@@ -4864,9 +5190,12 @@
   },
   "hand_checked": [
    "2017Q2",
-   "2026Q2",
+   "2017Q3",
+   "2018Q4",
+   "2022Q2",
+   "2023Q2",
    "2025Q4",
-   "2018Q4"
+   "2026Q2"
   ],
   "notes": "CHF.",
   "status": "verified"
@@ -4936,11 +5265,16 @@
   },
   "hand_checked": [
    "2014Q3",
-   "2026Q2",
-   "2025Q4",
-   "2025Q1",
+   "2015Q4",
+   "2019Q1",
+   "2019Q3",
+   "2019Q4",
+   "2020Q3",
+   "2021Q3",
    "2023Q3",
-   "2019Q4"
+   "2025Q1",
+   "2025Q4",
+   "2026Q2"
   ],
   "notes": "Opdivo (IV) row only; from 2025Q1 BMS prints Opdivo Qvantig (subcutaneous) separately and it is not in this series. Starts 2014Q3 with ex-U.S. sales before U.S. approval.",
   "status": "verified_with_notes"
@@ -5032,9 +5366,17 @@
   },
   "hand_checked": [
    "2006Q1",
-   "2026Q2",
+   "2008Q1",
+   "2009Q3",
+   "2010Q1",
    "2010Q4",
-   "2021Q4"
+   "2013Q2",
+   "2015Q2",
+   "2017Q1",
+   "2017Q4",
+   "2020Q2",
+   "2021Q4",
+   "2026Q2"
   ],
   "notes": "",
   "status": "verified"
@@ -5091,9 +5433,16 @@
    "2019Q3": true
   },
   "hand_checked": [
+   "2014Q2",
+   "2016Q2",
+   "2017Q4",
    "2020Q1",
+   "2020Q3",
    "2021Q4",
    "2022Q1",
+   "2022Q2",
+   "2022Q3",
+   "2022Q4",
    "2026Q2"
   ],
   "notes": "Amgen from 2020Q1 (acquired Nov 2019; 2019Q4 split). Celgene's 2014Q2-2019Q3 launch series is verified but shorter, kept out. Joined across an ownership change: 22 quarters from the earlier/later owner, all pass at source; the acquisition quarter is declared unreported.",
@@ -5138,10 +5487,12 @@
   },
   "hand_checked": [
    "2018Q1",
-   "2026Q2",
-   "2026Q1",
    "2018Q2",
-   "2022Q3"
+   "2022Q3",
+   "2023Q1",
+   "2024Q2",
+   "2026Q1",
+   "2026Q2"
   ],
   "notes": "DKK as printed. 2026Q1 is reported sales including a one-off US 340B provision reversal (reported 40,480 vs adjusted 27,825 DKK m), a large outlier. 2018Q2 derived (H1 264 less Q1 69).",
   "status": "verified_with_notes"
@@ -5167,8 +5518,10 @@
   },
   "hand_checked": [
    "2019Q4",
-   "2023Q3",
-   "2021Q2"
+   "2021Q1",
+   "2021Q2",
+   "2023Q2",
+   "2023Q3"
   ],
   "notes": "Seagen U.S. net product sales, launch to 2023Q3. Ends at Pfizer's Dec 2023 acquisition; Pfizer's 2024+ worldwide line is a different scope, not spliced.",
   "status": "verified_with_notes"
@@ -5196,8 +5549,9 @@
   },
   "hand_checked": [
    "2022Q1",
-   "2026Q2",
-   "2023Q3"
+   "2023Q3",
+   "2025Q2",
+   "2026Q2"
   ],
   "notes": "",
   "status": "verified"
@@ -5236,8 +5590,6 @@
   },
   "hand_checked": [
    "2019Q2",
-   "2026Q2",
-   "2026Q1",
    "2019Q3",
    "2019Q4",
    "2020Q2",
@@ -5249,7 +5601,9 @@
    "2022Q2",
    "2022Q3",
    "2022Q4",
-   "2024Q2"
+   "2024Q2",
+   "2026Q1",
+   "2026Q2"
   ],
   "notes": "CHF. 2019-2021 quarters derived from year-to-date tables.",
   "status": "verified_with_notes"
@@ -5313,12 +5667,17 @@
   },
   "hand_checked": [
    "2013Q1",
-   "2026Q2",
-   "2024Q2",
    "2013Q3",
-   "2019Q4",
    "2015Q3",
-   "2020Q4"
+   "2017Q2",
+   "2018Q1",
+   "2018Q2",
+   "2019Q4",
+   "2020Q3",
+   "2020Q4",
+   "2024Q2",
+   "2025Q2",
+   "2026Q2"
   ],
   "notes": "Pomalyst/Imnovid. 2013Q1-Q2 U.S.-weighted launch quarters. 2019Q4 is BMS's printed pro forma quarter, as for Revlimid.",
   "status": "verified_with_notes"
@@ -5347,9 +5706,10 @@
   },
   "hand_checked": [
    "2015Q3",
-   "2020Q1",
+   "2016Q1",
    "2018Q4",
-   "2016Q1"
+   "2019Q2",
+   "2020Q1"
   ],
   "notes": "EUR worldwide to 2020Q1; from 2020Q2 Sanofi books ex-U.S. only (Regeneron U.S.), a different scope, not spliced.",
   "status": "verified_with_notes"
@@ -5379,10 +5739,12 @@
   },
   "hand_checked": [
    "2021Q3",
-   "2026Q2",
-   "2023Q3",
+   "2022Q2",
    "2022Q4",
-   "2024Q1"
+   "2023Q3",
+   "2024Q1",
+   "2025Q2",
+   "2026Q2"
   ],
   "notes": "Product family: Pfizer prints only 'Prevnar family' (Prevnar 20 + Prevnar 13), from 2021Q3. Overstates Prevnar 20 alone, especially early.",
   "status": "verified_with_notes"
@@ -5405,10 +5767,11 @@
   },
   "hand_checked": [
    "2023Q2",
-   "2026Q2",
-   "2026Q1",
    "2023Q3",
-   "2024Q4"
+   "2024Q4",
+   "2025Q2",
+   "2026Q1",
+   "2026Q2"
   ],
   "notes": "2023Q2-Q3 from 2024 prior-year columns (Biogen folded it into Other until 2023Q4).",
   "status": "verified_with_notes"
@@ -5438,16 +5801,17 @@
   },
   "hand_checked": [
    "2020Q2",
-   "2025Q1",
    "2020Q3",
    "2020Q4",
    "2021Q1",
    "2021Q3",
    "2021Q4",
    "2022Q1",
+   "2022Q3",
    "2023Q1",
+   "2023Q3",
    "2024Q1",
-   "2022Q3"
+   "2025Q1"
   ],
   "notes": "Product family (Radicava IV + ORS), JPY, read from parent Mitsubishi Chemical Group's operational summaries; ends 2025Q1 (Tanabe divested).",
   "status": "verified_with_notes"
@@ -5502,6 +5866,10 @@
   "hand_checked": [
    "2015Q3",
    "2015Q4",
+   "2017Q3",
+   "2018Q2",
+   "2019Q4",
+   "2020Q1",
    "2022Q3",
    "2026Q2"
   ],
@@ -5598,9 +5966,18 @@
   },
   "hand_checked": [
    "2003Q2",
-   "2014Q4",
+   "2005Q2",
+   "2006Q1",
+   "2007Q1",
    "2007Q3",
-   "2009Q2"
+   "2009Q2",
+   "2011Q2",
+   "2012Q4",
+   "2013Q2",
+   "2014Q4",
+   "2016Q2",
+   "2017Q4",
+   "2023Q2"
   ],
   "notes": "Allergan, Inc. 2003Q2-2014Q4 (longest contiguous). Ends at the Actavis acquisition; Allergan plc and AbbVie later lines verified but kept out (split quarters). Joined across two ownership changes: 38 quarters from the earlier/later owner, all pass at source; the two acquisition quarters are declared unreported.",
   "status": "verified_with_notes"
@@ -5692,12 +6069,21 @@
   },
   "hand_checked": [
    "2006Q1",
-   "2026Q2",
-   "2021Q3",
-   "2019Q4",
-   "2019Q3",
+   "2008Q1",
    "2010Q4",
-   "2022Q3"
+   "2011Q2",
+   "2013Q1",
+   "2013Q4",
+   "2018Q1",
+   "2019Q3",
+   "2019Q4",
+   "2021Q1",
+   "2021Q2",
+   "2021Q3",
+   "2021Q4",
+   "2022Q3",
+   "2024Q3",
+   "2026Q2"
   ],
   "notes": "Celgene 2006Q1-2019Q3 (release narrative), BMS from 2020Q1. 2019Q4 is BMS's printed pro forma quarter (post-close stub plus Celgene pre-close revenue on BMS's basis), which differs from Celgene's own basis by <1%.",
   "status": "verified_with_notes"
@@ -5716,6 +6102,7 @@
   },
   "hand_checked": [
    "2024Q2",
+   "2024Q3",
    "2025Q2",
    "2025Q4",
    "2026Q2"
@@ -5756,8 +6143,11 @@
   },
   "hand_checked": [
    "2019Q3",
-   "2026Q2",
-   "2020Q3"
+   "2020Q3",
+   "2020Q4",
+   "2021Q4",
+   "2022Q2",
+   "2026Q2"
   ],
   "notes": "",
   "status": "verified"
@@ -5779,9 +6169,10 @@
   },
   "hand_checked": [
    "2023Q3",
-   "2026Q2",
+   "2025Q1",
+   "2025Q3",
    "2025Q4",
-   "2025Q3"
+   "2026Q2"
   ],
   "notes": "",
   "status": "verified"
@@ -5817,9 +6208,11 @@
   },
   "hand_checked": [
    "2019Q4",
-   "2026Q1",
+   "2021Q3",
+   "2023Q4",
    "2024Q4",
-   "2021Q3"
+   "2025Q4",
+   "2026Q1"
   ],
   "notes": "DKK. Ends 2026Q1: relabelled 'Ozempic pill / Rybelsus' from 2026Q2. 2026Q1 includes the 340B reversal.",
   "status": "verified_with_notes"
@@ -5839,11 +6232,11 @@
   },
   "hand_checked": [
    "2024Q1",
-   "2026Q2",
    "2024Q2",
    "2024Q3",
    "2024Q4",
-   "2026Q1"
+   "2026Q1",
+   "2026Q2"
   ],
   "notes": "Product family: 'Rybrevant / Lazcluze' line, which adds Lazcluze from its Aug 2024 approval. Starts 2024Q1.",
   "status": "verified_with_notes"
@@ -5885,8 +6278,11 @@
   },
   "hand_checked": [
    "2020Q1",
-   "2026Q2",
-   "2026Q1"
+   "2021Q2",
+   "2022Q1",
+   "2022Q3",
+   "2026Q1",
+   "2026Q2"
   ],
   "notes": "EUR.",
   "status": "verified"
@@ -5938,14 +6334,18 @@
   },
   "hand_checked": [
    "2016Q1",
-   "2026Q2",
-   "2023Q1",
    "2016Q2",
    "2016Q3",
+   "2018Q3",
+   "2019Q4",
+   "2020Q3",
    "2021Q2",
    "2021Q3",
    "2021Q4",
-   "2018Q3"
+   "2023Q1",
+   "2024Q3",
+   "2025Q3",
+   "2026Q2"
   ],
   "notes": "DKK. Starts 2016Q1 (2015 launch-year sales folded into other obesity care), so no peak claimed. 2026Q1 includes the 340B reversal.",
   "status": "verified_with_notes"
@@ -5990,10 +6390,14 @@
   },
   "hand_checked": [
    "2017Q4",
-   "2026Q2",
-   "2026Q1",
+   "2019Q4",
+   "2020Q1",
+   "2022Q2",
    "2023Q2",
-   "2020Q1"
+   "2024Q3",
+   "2025Q3",
+   "2026Q1",
+   "2026Q2"
   ],
   "notes": "GBP as printed.",
   "status": "verified"
@@ -6014,8 +6418,8 @@
   },
   "hand_checked": [
    "2023Q4",
-   "2026Q2",
-   "2025Q4"
+   "2025Q4",
+   "2026Q2"
   ],
   "notes": "Biogen series from 2023Q4; Reata's 2023Q2 printed but 2023Q3 uncitable. No peak claimed.",
   "status": "verified_with_notes"
@@ -6054,8 +6458,10 @@
   },
   "hand_checked": [
    "2019Q2",
-   "2026Q2",
-   "2023Q4"
+   "2020Q2",
+   "2023Q4",
+   "2025Q1",
+   "2026Q2"
   ],
   "notes": "",
   "status": "verified"
@@ -6141,8 +6547,17 @@
   },
   "hand_checked": [
    "2007Q2",
+   "2008Q1",
+   "2008Q3",
+   "2011Q2",
+   "2013Q3",
+   "2013Q4",
+   "2019Q2",
    "2021Q2",
-   "2008Q1"
+   "2021Q4",
+   "2022Q1",
+   "2022Q2",
+   "2025Q4"
   ],
   "notes": "Alexion 2007Q2-2021Q2 (longest contiguous); AstraZeneca's line from 2021Q4 kept out (2021Q3 is a post-close stub). Joined across an ownership change: 19 quarters from the earlier/later owner, all pass at source; the acquisition quarter is declared unreported.",
   "status": "verified_with_notes"
@@ -6168,9 +6583,10 @@
   },
   "hand_checked": [
    "2022Q3",
-   "2026Q2",
    "2024Q1",
-   "2024Q3"
+   "2024Q3",
+   "2026Q1",
+   "2026Q2"
   ],
   "notes": "",
   "status": "verified"
@@ -6200,7 +6616,12 @@
   "hand_checked": [
    "2020Q4",
    "2021Q4",
+   "2022Q1",
+   "2022Q2",
+   "2022Q3",
+   "2022Q4",
    "2023Q4",
+   "2024Q1",
    "2024Q4",
    "2025Q2"
   ],
@@ -6251,9 +6672,16 @@
   },
   "hand_checked": [
    "2016Q4",
-   "2026Q2",
+   "2017Q2",
+   "2017Q3",
+   "2019Q1",
+   "2019Q2",
+   "2019Q3",
+   "2019Q4",
    "2020Q1",
-   "2020Q3"
+   "2020Q3",
+   "2026Q1",
+   "2026Q2"
   ],
   "notes": "",
   "status": "verified"
@@ -6282,11 +6710,12 @@
   },
   "hand_checked": [
    "2023Q1",
-   "2026Q1",
-   "2024Q4",
    "2023Q4",
+   "2024Q3",
+   "2024Q4",
+   "2025Q1",
    "2025Q4",
-   "2024Q3"
+   "2026Q1"
   ],
   "notes": "U.S.; ends 2026Q1 (Biogen acquired Apellis May 2026).",
   "status": "verified_with_notes"
@@ -6396,12 +6825,22 @@
   },
   "hand_checked": [
    "2001Q3",
-   "2026Q2",
-   "2014Q4",
    "2001Q4",
    "2002Q1",
    "2002Q2",
-   "2007Q1"
+   "2007Q1",
+   "2007Q4",
+   "2009Q2",
+   "2010Q2",
+   "2014Q1",
+   "2014Q4",
+   "2016Q1",
+   "2017Q2",
+   "2018Q3",
+   "2020Q1",
+   "2024Q1",
+   "2026Q1",
+   "2026Q2"
   ],
   "notes": "Starts 2001Q3 (earlier AZ releases are paper filings).",
   "status": "verified_with_notes"
@@ -6454,8 +6893,12 @@
   },
   "hand_checked": [
    "2015Q4",
-   "2026Q2",
-   "2016Q3"
+   "2016Q3",
+   "2019Q3",
+   "2022Q3",
+   "2023Q4",
+   "2025Q4",
+   "2026Q2"
   ],
   "notes": "",
   "status": "verified"
@@ -6475,11 +6918,11 @@
   },
   "hand_checked": [
    "2024Q1",
-   "2026Q2",
    "2024Q2",
    "2024Q3",
    "2024Q4",
-   "2026Q1"
+   "2026Q1",
+   "2026Q2"
   ],
   "notes": "Starts 2024Q1 (2023 printed only as a full year).",
   "status": "verified_with_notes"
@@ -6530,11 +6973,15 @@
   },
   "hand_checked": [
    "2016Q2",
-   "2026Q2",
-   "2022Q4",
    "2016Q3",
    "2016Q4",
-   "2023Q2"
+   "2019Q4",
+   "2021Q2",
+   "2022Q4",
+   "2023Q2",
+   "2025Q2",
+   "2025Q4",
+   "2026Q2"
   ],
   "notes": "CHF.",
   "status": "verified"
@@ -6597,9 +7044,18 @@
   },
   "hand_checked": [
    "2013Q2",
-   "2026Q2",
+   "2015Q3",
+   "2018Q2",
+   "2019Q1",
+   "2019Q2",
+   "2019Q3",
+   "2019Q4",
    "2020Q2",
-   "2023Q3"
+   "2021Q4",
+   "2022Q4",
+   "2023Q3",
+   "2024Q1",
+   "2026Q2"
   ],
   "notes": "2020Q1-Q3 from the summary table (detailed table folds Tecfidera into Fumarate).",
   "status": "verified_with_notes"
@@ -6623,11 +7079,12 @@
   },
   "hand_checked": [
    "2023Q1",
-   "2026Q2",
    "2023Q2",
    "2023Q3",
    "2023Q4",
-   "2024Q2"
+   "2024Q2",
+   "2025Q4",
+   "2026Q2"
   ],
   "notes": "Starts 2023Q1 (2022 printed only as a full year). 2023 quarters from J&J's 2024 supplemental table.",
   "status": "verified_with_notes"
@@ -6652,8 +7109,10 @@
   },
   "hand_checked": [
    "2022Q4",
-   "2026Q2",
-   "2023Q4"
+   "2023Q1",
+   "2023Q4",
+   "2024Q3",
+   "2026Q2"
   ],
   "notes": "AstraZeneca product sales = ex-U.S. only (Amgen books U.S.; AZ's U.S. share is alliance revenue, excluded).",
   "status": "verified_with_notes"
@@ -6709,9 +7168,14 @@
   },
   "hand_checked": [
    "2015Q1",
-   "2026Q2",
+   "2016Q2",
+   "2016Q4",
+   "2020Q2",
+   "2022Q2",
+   "2023Q2",
+   "2024Q2",
    "2026Q1",
-   "2016Q2"
+   "2026Q2"
   ],
   "notes": "EUR.",
   "status": "verified"
@@ -6764,20 +7228,23 @@
   },
   "hand_checked": [
    "2014Q1",
-   "2024Q3",
-   "2018Q4",
    "2014Q2",
    "2014Q3",
    "2014Q4",
+   "2015Q2",
    "2015Q4",
    "2016Q4",
    "2017Q4",
+   "2018Q4",
    "2019Q4",
+   "2020Q1",
    "2020Q4",
    "2021Q4",
    "2022Q4",
+   "2023Q2",
    "2023Q4",
-   "2015Q2"
+   "2024Q2",
+   "2024Q3"
   ],
   "notes": "Lilly's 'Trajenta' line is collaboration revenue from Boehringer Ingelheim (private; books the sales), as gold's Jardiance line is. Ends 2024Q3.",
   "status": "verified_with_notes"
@@ -6822,10 +7289,15 @@
   },
   "hand_checked": [
    "2017Q4",
-   "2026Q2",
-   "2024Q2",
+   "2019Q3",
+   "2020Q1",
+   "2022Q3",
    "2023Q2",
-   "2020Q1"
+   "2023Q4",
+   "2024Q2",
+   "2024Q4",
+   "2025Q2",
+   "2026Q2"
   ],
   "notes": "GBP as printed.",
   "status": "verified"
@@ -6875,12 +7347,15 @@
   },
   "hand_checked": [
    "2016Q1",
-   "2025Q4",
-   "2025Q1",
    "2016Q2",
    "2016Q3",
    "2016Q4",
-   "2024Q2"
+   "2017Q4",
+   "2020Q3",
+   "2021Q2",
+   "2024Q2",
+   "2025Q1",
+   "2025Q4"
   ],
   "notes": "DKK. Starts 2016Q1, the first quarter Tresiba is a table line (earlier figures only in prose). Ends 2025Q4: from 2026 folded into Long-acting insulin.",
   "status": "verified_with_notes"
@@ -6938,9 +7413,16 @@
   },
   "hand_checked": [
    "2014Q3",
-   "2026Q2",
+   "2017Q1",
+   "2018Q1",
+   "2018Q2",
+   "2018Q3",
    "2018Q4",
-   "2023Q4"
+   "2021Q2",
+   "2023Q3",
+   "2023Q4",
+   "2026Q1",
+   "2026Q2"
   ],
   "notes": "GBP as printed.",
   "status": "verified"
@@ -6977,7 +7459,9 @@
    "2020Q2",
    "2020Q3",
    "2020Q4",
+   "2023Q1",
    "2024Q1",
+   "2025Q1",
    "2026Q2"
   ],
   "notes": "2020Q2 Immunomedics; 2020Q3 derived from Gilead's stated FY2020 (137) and full Q4 2020 (64) less Q2 (Q1 nil), approximate; Gilead from 2020Q4.",
@@ -7005,10 +7489,12 @@
    "2018Q3": true
   },
   "hand_checked": [
+   "2017Q4",
    "2019Q2",
-   "2021Q4",
+   "2020Q1",
    "2020Q2",
-   "2021Q3"
+   "2021Q3",
+   "2021Q4"
   ],
   "notes": "Bausch Health investor-presentation slide figures (U.S.), 2019Q2-2021Q4; read from slide text. Joined across an ownership change: 7 quarters from the earlier/later owner, all pass at source; the acquisition quarter is declared unreported.",
   "status": "verified_with_notes"
@@ -7026,8 +7512,9 @@
   },
   "hand_checked": [
    "2021Q4",
+   "2022Q1",
    "2022Q3",
-   "2022Q1"
+   "2023Q4"
   ],
   "notes": "Oyster Point 2021Q4-2022Q3 (U.S.); Viatris prints Tyrvaya only in 2023 prose, not spliced. Joined across an ownership change: 4 quarters from the earlier/later owner, all pass at source; the acquisition quarter is declared unreported.",
   "status": "verified_with_notes"
@@ -7062,8 +7549,10 @@
   },
   "hand_checked": [
    "2020Q3",
-   "2026Q2",
-   "2023Q4"
+   "2021Q4",
+   "2022Q1",
+   "2023Q4",
+   "2026Q2"
   ],
   "notes": "AbbVie series from 2020Q3; Allergan printed only 2020Q1 and 2020Q2 is split by the acquisition. Joined across an ownership change: 1 quarters from the earlier/later owner, all pass at source; the acquisition quarter is declared unreported.",
   "status": "verified_with_notes"
@@ -7101,9 +7590,12 @@
    "2021Q2": true
   },
   "hand_checked": [
+   "2020Q1",
    "2021Q4",
-   "2026Q2",
-   "2022Q2"
+   "2022Q2",
+   "2023Q3",
+   "2026Q1",
+   "2026Q2"
   ],
   "notes": "AstraZeneca from 2021Q4 (longest contiguous); Alexion's 2019Q1-2021Q2 launch series verified, kept out. Joined across an ownership change: 10 quarters from the earlier/later owner, all pass at source; the acquisition quarter is declared unreported.",
   "status": "verified_with_notes"
@@ -7124,6 +7616,7 @@
   },
   "hand_checked": [
    "2023Q4",
+   "2024Q4",
    "2025Q4",
    "2026Q2"
   ],
@@ -7153,11 +7646,13 @@
   },
   "hand_checked": [
    "2022Q1",
-   "2026Q2",
-   "2025Q2",
    "2022Q2",
    "2022Q3",
-   "2023Q2"
+   "2023Q2",
+   "2023Q4",
+   "2024Q3",
+   "2025Q2",
+   "2026Q2"
   ],
   "notes": "CHF.",
   "status": "verified"
@@ -7185,13 +7680,14 @@
   },
   "hand_checked": [
    "2022Q1",
-   "2026Q2",
-   "2024Q3",
    "2022Q2",
    "2022Q3",
-   "2023Q2",
    "2023Q1",
-   "2025Q3"
+   "2023Q2",
+   "2023Q4",
+   "2024Q3",
+   "2025Q3",
+   "2026Q2"
   ],
   "notes": "Starts 2022Q1: 2021 sales (launched H2 2021) appear only as a full-year figure, so no peak claimed. 2022Q1-Q3 from the following year's prior-year columns.",
   "status": "verified_with_notes"
@@ -7239,8 +7735,11 @@
   },
   "hand_checked": [
    "2018Q3",
-   "2026Q2",
-   "2019Q2"
+   "2019Q2",
+   "2021Q1",
+   "2024Q2",
+   "2025Q1",
+   "2026Q2"
   ],
   "notes": "Starts 2018Q3, the first AbbVie release printing a Venclexta line (launched 2016).",
   "status": "verified_with_notes"
@@ -7263,14 +7762,14 @@
   },
   "hand_checked": [
    "2023Q2",
-   "2026Q2",
    "2023Q4",
+   "2024Q2",
    "2024Q3",
    "2024Q4",
    "2025Q1",
    "2025Q3",
    "2025Q4",
-   "2024Q2"
+   "2026Q2"
   ],
   "notes": "JPY, includes Veoza ex-U.S.",
   "status": "verified_with_notes"
@@ -7298,10 +7797,11 @@
   },
   "hand_checked": [
    "2015Q4",
-   "2020Q1",
-   "2019Q2",
    "2016Q1",
-   "2016Q4"
+   "2016Q4",
+   "2017Q1",
+   "2019Q2",
+   "2020Q1"
   ],
   "notes": "Allergan 2015Q4-2020Q1; AbbVie prints no Viberzi line.",
   "status": "verified_with_notes"
@@ -7379,11 +7879,20 @@
   },
   "hand_checked": [
    "2009Q3",
-   "2026Q2",
-   "2018Q4",
    "2009Q4",
+   "2013Q4",
+   "2014Q1",
+   "2014Q2",
+   "2016Q1",
+   "2017Q3",
+   "2018Q1",
+   "2018Q2",
+   "2018Q3",
+   "2018Q4",
+   "2019Q4",
+   "2022Q1",
    "2024Q3",
-   "2022Q1"
+   "2026Q2"
   ],
   "notes": "DKK. 2024Q3 is negative as printed (US provision adjustment). 2026Q1 includes the 340B reversal.",
   "status": "verified_with_notes"
@@ -7444,9 +7953,13 @@
   },
   "hand_checked": [
    "2013Q4",
-   "2026Q2",
+   "2014Q1",
+   "2016Q3",
+   "2016Q4",
+   "2017Q3",
+   "2017Q4",
    "2025Q2",
-   "2017Q4"
+   "2026Q2"
   ],
   "notes": "",
   "status": "verified"
@@ -7476,9 +7989,11 @@
   },
   "hand_checked": [
    "2021Q3",
-   "2026Q2",
+   "2021Q4",
+   "2022Q4",
+   "2024Q2",
    "2025Q4",
-   "2022Q4"
+   "2026Q2"
   ],
   "notes": "",
   "status": "verified"
@@ -7528,9 +8043,13 @@
    "2020Q1": true
   },
   "hand_checked": [
+   "2017Q3",
+   "2019Q2",
+   "2019Q3",
    "2020Q3",
-   "2026Q2",
-   "2023Q4"
+   "2023Q4",
+   "2025Q1",
+   "2026Q2"
   ],
   "notes": "AbbVie series from 2020Q3 (longest contiguous). Allergan's 2016Q1-2020Q1 launch series is verified but kept out: 2020Q2 is split by the May 2020 acquisition and printed by neither issuer in full. Joined across an ownership change: 17 quarters from the earlier/later owner, all pass at source; the acquisition quarter is declared unreported.",
   "status": "verified_with_notes"
@@ -7567,9 +8086,12 @@
   },
   "hand_checked": [
    "2019Q4",
-   "2026Q2",
+   "2021Q1",
+   "2022Q4",
+   "2024Q3",
+   "2025Q1",
    "2025Q3",
-   "2025Q1"
+   "2026Q2"
   ],
   "notes": "",
   "status": "verified"
@@ -7613,13 +8135,15 @@
   },
   "hand_checked": [
    "2018Q1",
-   "2026Q2",
    "2018Q2",
    "2018Q3",
    "2018Q4",
    "2019Q1",
+   "2020Q3",
+   "2022Q1",
+   "2022Q2",
    "2023Q2",
-   "2022Q1"
+   "2026Q2"
   ],
   "notes": "Product family (Vyndaqel/Vyndamax). Starts 2018Q1: Pfizer first prints the line in 2019; 2018Q1 derived as six months 2018 (72) less Q2 2018 (38), both in the Q2 2019 release.",
   "status": "verified_with_notes"
@@ -7647,15 +8171,15 @@
   },
   "hand_checked": [
    "2019Q4",
-   "2024Q1",
    "2020Q1",
    "2020Q2",
    "2020Q3",
    "2020Q4",
+   "2021Q3",
    "2021Q4",
    "2022Q4",
    "2023Q4",
-   "2021Q3"
+   "2024Q1"
   ],
   "notes": "Ends 2024Q1 (combined PMO line after). 2019Q4 = FY2019 115 thousand with nil nine months inferred from the Dec 2019 approval.",
   "status": "verified_with_notes"
@@ -7683,9 +8207,11 @@
   },
   "hand_checked": [
    "2022Q1",
-   "2026Q2",
+   "2022Q3",
+   "2023Q1",
    "2023Q3",
-   "2022Q3"
+   "2025Q4",
+   "2026Q2"
   ],
   "notes": "Product family: argenx 'Product net sales' (Vyvgart IV + Vyvgart Hytrulo).",
   "status": "verified_with_notes"
@@ -7714,10 +8240,11 @@
   },
   "hand_checked": [
    "2021Q2",
-   "2025Q4",
    "2021Q3",
    "2021Q4",
-   "2024Q3"
+   "2024Q3",
+   "2025Q2",
+   "2025Q4"
   ],
   "notes": "DKK. Ends 2025Q4: from 2026 Novo prints Wegovy injectable and Wegovy pill separately with no combined line.",
   "status": "verified_with_notes"
@@ -7782,10 +8309,16 @@
   },
   "hand_checked": [
    "2012Q4",
-   "2026Q2",
-   "2021Q4",
    "2013Q1",
-   "2014Q3"
+   "2013Q2",
+   "2014Q1",
+   "2014Q3",
+   "2016Q2",
+   "2017Q3",
+   "2018Q2",
+   "2021Q4",
+   "2025Q1",
+   "2026Q2"
   ],
   "notes": "",
   "status": "verified"
@@ -7836,18 +8369,21 @@
   },
   "hand_checked": [
    "2004Q3",
-   "2014Q3",
-   "2013Q4",
    "2004Q4",
+   "2005Q2",
    "2005Q4",
    "2006Q4",
    "2007Q4",
+   "2008Q1",
    "2008Q4",
+   "2009Q1",
    "2009Q4",
    "2010Q4",
    "2011Q4",
+   "2012Q2",
    "2012Q4",
-   "2009Q1"
+   "2013Q4",
+   "2014Q3"
   ],
   "notes": "Salix U.S. 2004Q3-2014Q3; ends before the restatement-mixed 2014Q4. Bausch Health prints no quarterly Xifaxan in filings.",
   "status": "verified_with_notes"
@@ -7885,9 +8421,11 @@
   },
   "hand_checked": [
    "2019Q3",
-   "2023Q3",
+   "2021Q4",
+   "2022Q3",
    "2022Q4",
-   "2021Q4"
+   "2023Q3",
+   "2024Q4"
   ],
   "notes": "Novartis 2019Q3-2023Q3 (longest contiguous); Bausch + Lomb's 2023Q4+ line verified, shorter, kept out. Joined across an ownership change: 11 quarters from the earlier/later owner, all pass at source; the acquisition quarter is declared unreported.",
   "status": "verified_with_notes"
@@ -7980,10 +8518,17 @@
   },
   "hand_checked": [
    "2005Q4",
-   "2026Q2",
-   "2025Q1",
    "2006Q1",
-   "2022Q1"
+   "2007Q1",
+   "2008Q2",
+   "2010Q3",
+   "2012Q2",
+   "2016Q2",
+   "2017Q2",
+   "2022Q1",
+   "2024Q1",
+   "2025Q1",
+   "2026Q2"
   ],
   "notes": "Novartis ex-U.S. sales only (Genentech books U.S.).",
   "status": "verified_with_notes"
@@ -8030,9 +8575,13 @@
   },
   "hand_checked": [
    "2017Q2",
-   "2026Q2",
+   "2018Q4",
    "2019Q1",
-   "2018Q4"
+   "2021Q3",
+   "2021Q4",
+   "2022Q4",
+   "2023Q2",
+   "2026Q2"
   ],
   "notes": "JPY, Astellas global product sales from 2017Q2 (its online library starts FY2017). Pfizer's Xtandi line is alliance revenue, not used.",
   "status": "verified_with_notes"
@@ -8103,10 +8652,15 @@
   },
   "hand_checked": [
    "2011Q2",
-   "2026Q2",
-   "2025Q4",
+   "2013Q3",
+   "2014Q2",
+   "2014Q3",
+   "2014Q4",
+   "2015Q3",
    "2019Q2",
-   "2014Q2"
+   "2021Q1",
+   "2025Q4",
+   "2026Q2"
   ],
   "notes": "",
   "status": "verified"
@@ -8152,6 +8706,9 @@
   "hand_checked": [
    "2017Q4",
    "2018Q2",
+   "2020Q1",
+   "2021Q1",
+   "2022Q2",
    "2022Q3",
    "2024Q2",
    "2026Q2"
@@ -8200,9 +8757,13 @@
   },
   "hand_checked": [
    "2019Q1",
-   "2026Q2",
+   "2019Q4",
+   "2021Q2",
+   "2023Q3",
+   "2023Q4",
    "2024Q2",
-   "2023Q3"
+   "2024Q3",
+   "2026Q2"
   ],
   "notes": "GBP, GSK from 2019Q1 (Tesaro acquired Jan 2019). Tesaro's 2017Q2-2018Q3 USD series verified, shorter, kept out; 2018Q4 uncitable. Joined across an ownership change: 6 quarters from the earlier/later owner, all pass at source; the acquisition quarter is declared unreported.",
   "status": "verified_with_notes"
@@ -8238,9 +8799,15 @@
   },
   "hand_checked": [
    "2019Q2",
-   "2025Q3",
+   "2021Q1",
+   "2022Q1",
    "2022Q2",
-   "2021Q1"
+   "2022Q3",
+   "2022Q4",
+   "2023Q1",
+   "2024Q1",
+   "2025Q2",
+   "2025Q3"
   ],
   "notes": "Ends 2025Q3: from 2025Q4 Novartis prints 'Zolgensma Group' (adds intrathecal Itvisma).",
   "status": "verified_with_notes"
@@ -8309,9 +8876,49 @@
    "2016Q4": true,
    "2017Q1": true,
    "2017Q2": true,
-   "2017Q3": true
+   "2017Q3": true,
+   "2017Q4": true,
+   "2018Q1": true,
+   "2018Q2": true,
+   "2018Q3": true,
+   "2018Q4": true,
+   "2019Q1": true,
+   "2019Q2": true,
+   "2019Q3": true,
+   "2019Q4": true,
+   "2020Q1": true,
+   "2020Q2": true,
+   "2020Q3": true,
+   "2020Q4": true,
+   "2021Q1": true,
+   "2021Q2": true,
+   "2021Q3": true,
+   "2021Q4": true,
+   "2022Q1": true,
+   "2022Q2": true,
+   "2022Q3": true,
+   "2022Q4": true,
+   "2023Q1": true,
+   "2023Q2": true,
+   "2023Q3": true,
+   "2023Q4": true,
+   "2024Q1": true,
+   "2024Q2": true,
+   "2024Q3": true,
+   "2024Q4": true
   },
-  "hand_checked": [],
+  "hand_checked": [
+   "2004Q1",
+   "2005Q1",
+   "2005Q3",
+   "2005Q4",
+   "2009Q1",
+   "2012Q3",
+   "2016Q4",
+   "2018Q2",
+   "2021Q2",
+   "2022Q4"
+  ],
   "status": "verified_with_notes",
   "notes": "Back-filled 63 earlier quarters from Lilly releases/10-Qs; all pass at source."
  },
@@ -8327,9 +8934,51 @@
    "2016Q4": true,
    "2017Q1": true,
    "2017Q2": true,
-   "2017Q3": true
+   "2017Q3": true,
+   "2017Q4": true,
+   "2018Q1": true,
+   "2018Q2": true,
+   "2018Q3": true,
+   "2018Q4": true,
+   "2019Q1": true,
+   "2019Q2": true,
+   "2019Q3": true,
+   "2019Q4": true,
+   "2020Q1": true,
+   "2020Q2": true,
+   "2020Q3": true,
+   "2020Q4": true,
+   "2021Q1": true,
+   "2021Q2": true,
+   "2021Q3": true,
+   "2021Q4": true,
+   "2022Q1": true,
+   "2022Q2": true,
+   "2022Q3": true,
+   "2022Q4": true,
+   "2023Q1": true,
+   "2023Q2": true,
+   "2023Q3": true,
+   "2023Q4": true,
+   "2024Q1": true,
+   "2024Q2": true,
+   "2024Q3": true,
+   "2024Q4": true,
+   "2025Q1": true,
+   "2025Q2": true,
+   "2025Q3": true,
+   "2025Q4": false,
+   "2026Q1": true,
+   "2026Q2": true
   },
-  "hand_checked": [],
+  "hand_checked": [
+   "2015Q2",
+   "2018Q1",
+   "2018Q2",
+   "2025Q1",
+   "2025Q4",
+   "2026Q2"
+  ],
   "status": "verified_with_notes",
   "notes": "Back-filled 11 earlier quarters from Lilly releases/10-Qs; all pass at source."
  },
@@ -8337,9 +8986,42 @@
   "automated": {
    "2017Q1": true,
    "2017Q2": true,
-   "2017Q3": true
+   "2017Q3": true,
+   "2017Q4": true,
+   "2018Q1": true,
+   "2018Q2": true,
+   "2018Q3": true,
+   "2018Q4": true,
+   "2019Q1": true,
+   "2019Q2": true,
+   "2019Q3": true,
+   "2019Q4": true,
+   "2020Q1": true,
+   "2020Q2": true,
+   "2020Q3": true,
+   "2020Q4": true,
+   "2021Q1": true,
+   "2021Q2": true,
+   "2021Q3": true,
+   "2021Q4": true,
+   "2022Q1": true,
+   "2022Q2": true,
+   "2022Q3": true,
+   "2022Q4": true,
+   "2023Q1": true,
+   "2023Q2": true,
+   "2023Q3": true,
+   "2023Q4": true
   },
-  "hand_checked": [],
+  "hand_checked": [
+   "2019Q1",
+   "2020Q4",
+   "2021Q1",
+   "2021Q2",
+   "2021Q3",
+   "2021Q4",
+   "2022Q1"
+  ],
   "status": "verified_with_notes",
   "notes": "Back-filled 3 earlier quarters from Lilly releases/10-Qs; all pass at source."
  },
@@ -8350,9 +9032,46 @@
    "2016Q4": true,
    "2017Q1": true,
    "2017Q2": true,
-   "2017Q3": true
+   "2017Q3": true,
+   "2017Q4": true,
+   "2018Q1": true,
+   "2018Q2": true,
+   "2018Q3": true,
+   "2018Q4": true,
+   "2019Q1": true,
+   "2019Q2": true,
+   "2019Q3": true,
+   "2019Q4": true,
+   "2020Q1": true,
+   "2020Q2": true,
+   "2020Q3": true,
+   "2020Q4": true,
+   "2021Q1": true,
+   "2021Q2": true,
+   "2021Q3": true,
+   "2021Q4": true,
+   "2022Q1": true,
+   "2022Q2": true,
+   "2022Q3": true,
+   "2022Q4": true,
+   "2023Q1": true,
+   "2023Q2": true,
+   "2023Q3": true,
+   "2023Q4": true,
+   "2024Q1": true,
+   "2024Q2": true,
+   "2024Q3": true,
+   "2024Q4": true,
+   "2025Q1": true,
+   "2025Q2": true,
+   "2025Q3": true
   },
-  "hand_checked": [],
+  "hand_checked": [
+   "2018Q3",
+   "2021Q4",
+   "2023Q4",
+   "2024Q4"
+  ],
   "status": "verified_with_notes",
   "notes": "Back-filled 6 earlier quarters from Lilly releases/10-Qs; all pass at source."
  },
@@ -8369,10 +9088,918 @@
    "2016Q4": true,
    "2017Q1": true,
    "2017Q2": true,
-   "2017Q3": true
+   "2017Q3": true,
+   "2017Q4": true,
+   "2018Q1": true,
+   "2018Q2": true,
+   "2018Q3": true,
+   "2018Q4": true,
+   "2019Q1": true,
+   "2019Q2": true,
+   "2019Q3": true,
+   "2019Q4": true,
+   "2020Q1": true,
+   "2020Q2": true,
+   "2020Q3": true,
+   "2020Q4": true,
+   "2021Q1": true,
+   "2021Q2": true,
+   "2021Q3": true,
+   "2021Q4": true,
+   "2022Q1": true,
+   "2022Q2": true,
+   "2022Q3": true,
+   "2022Q4": true,
+   "2023Q1": true,
+   "2023Q2": true,
+   "2023Q3": true,
+   "2023Q4": true,
+   "2024Q1": true,
+   "2024Q2": true,
+   "2024Q3": true,
+   "2024Q4": true,
+   "2025Q1": true,
+   "2025Q2": true,
+   "2025Q3": true
   },
-  "hand_checked": [],
+  "hand_checked": [
+   "2019Q2",
+   "2021Q2",
+   "2022Q1",
+   "2022Q2",
+   "2022Q3",
+   "2022Q4",
+   "2025Q1"
+  ],
   "status": "verified_with_notes",
   "notes": "Back-filled 12 earlier quarters from Lilly releases/10-Qs; all pass at source."
+ },
+ "Remicade": {
+  "automated": {
+   "2005Q1": false,
+   "2005Q2": false,
+   "2005Q3": false,
+   "2005Q4": false,
+   "2006Q1": false,
+   "2006Q2": false,
+   "2006Q3": false,
+   "2006Q4": false,
+   "2007Q1": false,
+   "2007Q2": false,
+   "2007Q3": false,
+   "2007Q4": false,
+   "2008Q1": true,
+   "2008Q2": true,
+   "2008Q3": true,
+   "2008Q4": false,
+   "2009Q1": true,
+   "2009Q2": true,
+   "2009Q3": true,
+   "2009Q4": false,
+   "2010Q1": true,
+   "2010Q2": true,
+   "2010Q3": true,
+   "2010Q4": false,
+   "2011Q1": true,
+   "2011Q2": true,
+   "2011Q3": true,
+   "2011Q4": false,
+   "2012Q1": true,
+   "2012Q2": true,
+   "2012Q3": true,
+   "2012Q4": false,
+   "2013Q1": true,
+   "2013Q2": true,
+   "2013Q3": true,
+   "2013Q4": false,
+   "2014Q1": true,
+   "2014Q2": true,
+   "2014Q3": true,
+   "2014Q4": true,
+   "2015Q1": true,
+   "2015Q2": true,
+   "2015Q3": false,
+   "2015Q4": true,
+   "2016Q1": true,
+   "2016Q2": true,
+   "2016Q3": true,
+   "2016Q4": true,
+   "2017Q1": true,
+   "2017Q2": true,
+   "2017Q3": true,
+   "2017Q4": true,
+   "2018Q1": true,
+   "2018Q2": true,
+   "2018Q3": true,
+   "2018Q4": true,
+   "2019Q1": true,
+   "2019Q2": true,
+   "2019Q3": true,
+   "2019Q4": true,
+   "2020Q1": true,
+   "2020Q2": true,
+   "2020Q3": true,
+   "2020Q4": true,
+   "2021Q1": true,
+   "2021Q2": true,
+   "2021Q3": true,
+   "2021Q4": true,
+   "2022Q1": true,
+   "2022Q2": true,
+   "2022Q3": true,
+   "2022Q4": true,
+   "2023Q1": true,
+   "2023Q2": true,
+   "2023Q3": true,
+   "2023Q4": true,
+   "2024Q1": true,
+   "2024Q2": true,
+   "2024Q3": true,
+   "2024Q4": true,
+   "2025Q1": true,
+   "2025Q2": true,
+   "2025Q3": true,
+   "2025Q4": true,
+   "2026Q1": true,
+   "2026Q2": true
+  },
+  "hand_checked": [
+   "2005Q1",
+   "2005Q2",
+   "2005Q3",
+   "2005Q4",
+   "2006Q1",
+   "2006Q2",
+   "2006Q3",
+   "2006Q4",
+   "2007Q1",
+   "2007Q2",
+   "2007Q3",
+   "2007Q4",
+   "2008Q2",
+   "2008Q4",
+   "2009Q4",
+   "2010Q4",
+   "2011Q4",
+   "2012Q1",
+   "2012Q4",
+   "2013Q4",
+   "2014Q2",
+   "2015Q2",
+   "2015Q3",
+   "2015Q4",
+   "2017Q3",
+   "2022Q4",
+   "2024Q1",
+   "2025Q3"
+  ],
+  "status": "verified_with_notes",
+  "notes": "Pre-existing gold series, re-checked in this pass: every row fetched and matched (or the value found on the product line where the quote format differs), with a blind second read of a sample."
+ },
+ "Tremfya": {
+  "automated": {
+   "2018Q4": true,
+   "2019Q1": false,
+   "2019Q2": false,
+   "2019Q3": false,
+   "2019Q4": false,
+   "2020Q1": true,
+   "2020Q2": true,
+   "2020Q3": true,
+   "2020Q4": true,
+   "2021Q1": true,
+   "2021Q2": true,
+   "2021Q3": true,
+   "2021Q4": true,
+   "2022Q1": true,
+   "2022Q2": true,
+   "2022Q3": true,
+   "2022Q4": true,
+   "2023Q1": true,
+   "2023Q2": true,
+   "2023Q3": true,
+   "2023Q4": true,
+   "2024Q1": true,
+   "2024Q2": true,
+   "2024Q3": true,
+   "2024Q4": true,
+   "2025Q1": true,
+   "2025Q2": true,
+   "2025Q3": true,
+   "2025Q4": true,
+   "2026Q1": true,
+   "2026Q2": true
+  },
+  "hand_checked": [
+   "2019Q1",
+   "2019Q2",
+   "2019Q3",
+   "2019Q4",
+   "2021Q2",
+   "2021Q3",
+   "2024Q4",
+   "2026Q2"
+  ],
+  "status": "verified_with_notes",
+  "notes": "Pre-existing gold series, re-checked in this pass: every row fetched and matched (or the value found on the product line where the quote format differs), with a blind second read of a sample."
+ },
+ "Descovy": {
+  "automated": {
+   "2016Q2": true,
+   "2016Q3": true,
+   "2016Q4": true,
+   "2017Q1": true,
+   "2017Q2": true,
+   "2017Q3": true,
+   "2017Q4": true,
+   "2018Q1": true,
+   "2018Q2": true,
+   "2018Q3": true,
+   "2018Q4": true,
+   "2019Q1": true,
+   "2019Q2": true,
+   "2019Q3": true,
+   "2019Q4": true,
+   "2020Q1": true,
+   "2020Q2": false,
+   "2020Q3": false,
+   "2020Q4": true,
+   "2021Q1": true,
+   "2021Q2": true,
+   "2021Q3": true,
+   "2021Q4": true,
+   "2022Q1": true,
+   "2022Q2": true,
+   "2022Q3": true,
+   "2022Q4": true,
+   "2023Q1": false,
+   "2023Q2": true,
+   "2023Q3": true,
+   "2023Q4": true,
+   "2024Q1": true,
+   "2024Q2": true,
+   "2024Q3": true,
+   "2024Q4": true,
+   "2025Q1": true,
+   "2025Q2": true,
+   "2025Q3": true,
+   "2025Q4": true,
+   "2026Q1": true,
+   "2026Q2": true
+  },
+  "hand_checked": [
+   "2017Q2",
+   "2018Q2",
+   "2020Q2",
+   "2020Q3",
+   "2023Q1",
+   "2024Q2",
+   "2024Q4",
+   "2026Q2"
+  ],
+  "status": "verified_with_notes",
+  "notes": "Pre-existing gold series, re-checked in this pass: every row fetched and matched (or the value found on the product line where the quote format differs), with a blind second read of a sample."
+ },
+ "Darzalex": {
+  "automated": {
+   "2016Q4": true,
+   "2017Q1": true,
+   "2017Q2": true,
+   "2017Q3": true,
+   "2017Q4": true,
+   "2018Q1": true,
+   "2018Q2": true,
+   "2018Q3": true,
+   "2018Q4": true,
+   "2019Q1": true,
+   "2019Q2": true,
+   "2019Q3": true,
+   "2019Q4": true,
+   "2020Q1": true,
+   "2020Q2": true,
+   "2020Q3": true,
+   "2020Q4": true,
+   "2021Q1": true,
+   "2021Q2": true,
+   "2021Q3": true,
+   "2021Q4": true,
+   "2022Q1": true,
+   "2022Q2": true,
+   "2022Q3": true,
+   "2022Q4": true,
+   "2023Q1": true,
+   "2023Q2": true,
+   "2023Q3": true,
+   "2023Q4": true,
+   "2024Q1": true,
+   "2024Q2": true,
+   "2024Q3": true,
+   "2024Q4": true,
+   "2025Q1": true,
+   "2025Q2": true,
+   "2025Q3": true,
+   "2025Q4": true,
+   "2026Q1": true,
+   "2026Q2": true
+  },
+  "hand_checked": [
+   "2017Q1",
+   "2018Q2",
+   "2020Q4",
+   "2023Q2",
+   "2026Q2"
+  ],
+  "status": "verified_with_notes",
+  "notes": "Pre-existing gold series, re-checked in this pass: every row fetched and matched (or the value found on the product line where the quote format differs), with a blind second read of a sample."
+ },
+ "Erleada": {
+  "automated": {
+   "2019Q1": true,
+   "2019Q2": true,
+   "2019Q3": true,
+   "2019Q4": false,
+   "2020Q1": true,
+   "2020Q2": true,
+   "2020Q3": true,
+   "2020Q4": true,
+   "2021Q1": true,
+   "2021Q2": true,
+   "2021Q3": true,
+   "2021Q4": true,
+   "2022Q1": true,
+   "2022Q2": true,
+   "2022Q3": true,
+   "2022Q4": true,
+   "2023Q1": true,
+   "2023Q2": true,
+   "2023Q3": true,
+   "2023Q4": true,
+   "2024Q1": true,
+   "2024Q2": true,
+   "2024Q3": true,
+   "2024Q4": true,
+   "2025Q1": true,
+   "2025Q2": true,
+   "2025Q3": true,
+   "2025Q4": true,
+   "2026Q1": true,
+   "2026Q2": true
+  },
+  "hand_checked": [
+   "2019Q4",
+   "2025Q2",
+   "2026Q2"
+  ],
+  "status": "verified_with_notes",
+  "notes": "Pre-existing gold series, re-checked in this pass: every row fetched and matched (or the value found on the product line where the quote format differs), with a blind second read of a sample."
+ },
+ "Xarelto": {
+  "automated": {
+   "2013Q1": true,
+   "2013Q2": true,
+   "2013Q3": true,
+   "2013Q4": false,
+   "2014Q1": true,
+   "2014Q2": true,
+   "2014Q3": true,
+   "2014Q4": true,
+   "2015Q1": true,
+   "2015Q2": true,
+   "2015Q3": false,
+   "2015Q4": true,
+   "2016Q1": true,
+   "2016Q2": true,
+   "2016Q3": true,
+   "2016Q4": true,
+   "2017Q1": true,
+   "2017Q2": true,
+   "2017Q3": true,
+   "2017Q4": true,
+   "2018Q1": true,
+   "2018Q2": true,
+   "2018Q3": true,
+   "2018Q4": true,
+   "2019Q1": true,
+   "2019Q2": true,
+   "2019Q3": true,
+   "2019Q4": true,
+   "2020Q1": true,
+   "2020Q2": true,
+   "2020Q3": true,
+   "2020Q4": true,
+   "2021Q1": true,
+   "2021Q2": true,
+   "2021Q3": true,
+   "2021Q4": true,
+   "2022Q1": true,
+   "2022Q2": true,
+   "2022Q3": true,
+   "2022Q4": true,
+   "2023Q1": true,
+   "2023Q2": true,
+   "2023Q3": true,
+   "2023Q4": true,
+   "2024Q1": true,
+   "2024Q2": true,
+   "2024Q3": true,
+   "2024Q4": true,
+   "2025Q1": true,
+   "2025Q2": true,
+   "2025Q3": true,
+   "2025Q4": true,
+   "2026Q1": true,
+   "2026Q2": true
+  },
+  "hand_checked": [
+   "2013Q4",
+   "2015Q3",
+   "2016Q4",
+   "2017Q3",
+   "2017Q4",
+   "2021Q4",
+   "2022Q2",
+   "2025Q3"
+  ],
+  "status": "verified_with_notes",
+  "notes": "Pre-existing gold series, re-checked in this pass: every row fetched and matched (or the value found on the product line where the quote format differs), with a blind second read of a sample."
+ },
+ "Epclusa": {
+  "automated": {
+   "2016Q3": true,
+   "2016Q4": true,
+   "2017Q1": true,
+   "2017Q2": true,
+   "2017Q3": true,
+   "2017Q4": true,
+   "2018Q1": true,
+   "2018Q2": true,
+   "2018Q3": true,
+   "2018Q4": true
+  },
+  "hand_checked": [
+   "2017Q1",
+   "2017Q2"
+  ],
+  "status": "verified_with_notes",
+  "notes": "Pre-existing gold series, re-checked in this pass: every row fetched and matched (or the value found on the product line where the quote format differs), with a blind second read of a sample."
+ },
+ "Biktarvy": {
+  "automated": {
+   "2018Q2": true,
+   "2018Q3": true,
+   "2018Q4": true,
+   "2019Q1": true,
+   "2019Q2": true,
+   "2019Q3": true,
+   "2019Q4": true,
+   "2020Q1": true,
+   "2020Q2": false,
+   "2020Q3": false,
+   "2020Q4": true,
+   "2021Q1": true,
+   "2021Q2": true,
+   "2021Q3": true,
+   "2021Q4": true,
+   "2022Q1": true,
+   "2022Q2": true,
+   "2022Q3": true,
+   "2022Q4": true,
+   "2023Q1": false,
+   "2023Q2": true,
+   "2023Q3": true,
+   "2023Q4": true,
+   "2024Q1": true,
+   "2024Q2": true,
+   "2024Q3": true,
+   "2024Q4": true,
+   "2025Q1": true,
+   "2025Q2": true,
+   "2025Q3": true,
+   "2025Q4": true,
+   "2026Q1": true,
+   "2026Q2": true
+  },
+  "hand_checked": [
+   "2020Q2",
+   "2020Q3",
+   "2023Q1",
+   "2024Q3",
+   "2025Q4"
+  ],
+  "status": "verified_with_notes",
+  "notes": "Pre-existing gold series, re-checked in this pass: every row fetched and matched (or the value found on the product line where the quote format differs), with a blind second read of a sample."
+ },
+ "Harvoni": {
+  "automated": {
+   "2014Q3": true,
+   "2014Q4": true,
+   "2015Q1": true,
+   "2015Q2": true,
+   "2015Q3": true,
+   "2015Q4": true,
+   "2016Q1": true,
+   "2016Q2": true,
+   "2016Q3": true,
+   "2016Q4": true,
+   "2017Q1": true,
+   "2017Q2": true,
+   "2017Q3": true,
+   "2017Q4": true,
+   "2018Q1": true,
+   "2018Q2": true,
+   "2018Q3": true,
+   "2018Q4": true
+  },
+  "hand_checked": [
+   "2014Q4",
+   "2015Q2"
+  ],
+  "status": "verified_with_notes",
+  "notes": "Pre-existing gold series, re-checked in this pass: every row fetched and matched (or the value found on the product line where the quote format differs), with a blind second read of a sample."
+ },
+ "Stelara": {
+  "automated": {
+   "2012Q1": true,
+   "2012Q2": true,
+   "2012Q3": true,
+   "2012Q4": false,
+   "2013Q1": true,
+   "2013Q2": true,
+   "2013Q3": true,
+   "2013Q4": false,
+   "2014Q1": true,
+   "2014Q2": true,
+   "2014Q3": true,
+   "2014Q4": true,
+   "2015Q1": true,
+   "2015Q2": true,
+   "2015Q3": false,
+   "2015Q4": true,
+   "2016Q1": true,
+   "2016Q2": true,
+   "2016Q3": true,
+   "2016Q4": true,
+   "2017Q1": true,
+   "2017Q2": true,
+   "2017Q3": true,
+   "2017Q4": true,
+   "2018Q1": true,
+   "2018Q2": true,
+   "2018Q3": true,
+   "2018Q4": true,
+   "2019Q1": true,
+   "2019Q2": true,
+   "2019Q3": true,
+   "2019Q4": true,
+   "2020Q1": true,
+   "2020Q2": true,
+   "2020Q3": true,
+   "2020Q4": true,
+   "2021Q1": true,
+   "2021Q2": true,
+   "2021Q3": true,
+   "2021Q4": true,
+   "2022Q1": true,
+   "2022Q2": true,
+   "2022Q3": true,
+   "2022Q4": true,
+   "2023Q1": true,
+   "2023Q2": true,
+   "2023Q3": true,
+   "2023Q4": true,
+   "2024Q1": true,
+   "2024Q2": true,
+   "2024Q3": true,
+   "2024Q4": true,
+   "2025Q1": true,
+   "2025Q2": true,
+   "2025Q3": true,
+   "2025Q4": true,
+   "2026Q1": true,
+   "2026Q2": true
+  },
+  "hand_checked": [
+   "2012Q4",
+   "2013Q4",
+   "2015Q2",
+   "2015Q3",
+   "2016Q3",
+   "2020Q1",
+   "2020Q3",
+   "2021Q1",
+   "2021Q2",
+   "2024Q2"
+  ],
+  "status": "verified_with_notes",
+  "notes": "Pre-existing gold series, re-checked in this pass: every row fetched and matched (or the value found on the product line where the quote format differs), with a blind second read of a sample."
+ },
+ "Invokana": {
+  "automated": {
+   "2015Q1": true,
+   "2015Q2": true,
+   "2015Q3": false,
+   "2015Q4": true,
+   "2016Q1": true,
+   "2016Q2": true,
+   "2016Q3": true,
+   "2016Q4": true,
+   "2017Q1": true,
+   "2017Q2": true,
+   "2017Q3": true,
+   "2017Q4": true,
+   "2018Q1": true,
+   "2018Q2": true,
+   "2018Q3": true,
+   "2018Q4": true,
+   "2019Q1": false,
+   "2019Q2": true,
+   "2019Q3": true,
+   "2019Q4": true,
+   "2020Q1": true,
+   "2020Q2": true,
+   "2020Q3": true,
+   "2020Q4": true,
+   "2021Q1": true,
+   "2021Q2": true,
+   "2021Q3": true,
+   "2021Q4": true,
+   "2022Q1": true,
+   "2022Q2": true,
+   "2022Q3": true,
+   "2022Q4": true
+  },
+  "hand_checked": [
+   "2015Q3",
+   "2016Q2",
+   "2017Q1",
+   "2019Q1",
+   "2022Q3"
+  ],
+  "status": "verified_with_notes",
+  "notes": "Pre-existing gold series, re-checked in this pass: every row fetched and matched (or the value found on the product line where the quote format differs), with a blind second read of a sample."
+ },
+ "Verzenio": {
+  "automated": {
+   "2017Q4": true,
+   "2018Q1": true,
+   "2018Q2": true,
+   "2018Q3": true,
+   "2018Q4": true,
+   "2019Q1": true,
+   "2019Q2": true,
+   "2019Q3": true,
+   "2019Q4": true,
+   "2020Q1": true,
+   "2020Q2": true,
+   "2020Q3": true,
+   "2020Q4": true,
+   "2021Q1": true,
+   "2021Q2": true,
+   "2021Q3": true,
+   "2021Q4": true,
+   "2022Q1": true,
+   "2022Q2": true,
+   "2022Q3": true,
+   "2022Q4": true,
+   "2023Q1": true,
+   "2023Q2": true,
+   "2023Q3": true,
+   "2023Q4": true,
+   "2024Q1": true,
+   "2024Q2": true,
+   "2024Q3": true,
+   "2024Q4": true,
+   "2025Q1": true,
+   "2025Q2": true,
+   "2025Q3": true,
+   "2025Q4": true,
+   "2026Q1": true,
+   "2026Q2": true
+  },
+  "hand_checked": [
+   "2019Q1",
+   "2019Q4",
+   "2023Q3",
+   "2023Q4",
+   "2025Q4"
+  ],
+  "status": "verified_with_notes",
+  "notes": "Pre-existing gold series, re-checked in this pass: every row fetched and matched (or the value found on the product line where the quote format differs), with a blind second read of a sample."
+ },
+ "Mounjaro": {
+  "automated": {
+   "2022Q2": true,
+   "2022Q3": true,
+   "2022Q4": true,
+   "2023Q1": true,
+   "2023Q2": true,
+   "2023Q3": true,
+   "2023Q4": true,
+   "2024Q1": true,
+   "2024Q2": true,
+   "2024Q3": true,
+   "2024Q4": true,
+   "2025Q1": true,
+   "2025Q2": true,
+   "2025Q3": true,
+   "2025Q4": true,
+   "2026Q1": true,
+   "2026Q2": true
+  },
+  "hand_checked": [
+   "2024Q2",
+   "2025Q4",
+   "2026Q2"
+  ],
+  "status": "verified_with_notes",
+  "notes": "Pre-existing gold series, re-checked in this pass: every row fetched and matched (or the value found on the product line where the quote format differs), with a blind second read of a sample."
+ },
+ "Emgality": {
+  "automated": {
+   "2018Q4": true,
+   "2019Q1": true,
+   "2019Q2": true,
+   "2019Q3": true,
+   "2019Q4": true,
+   "2020Q1": true,
+   "2020Q2": true,
+   "2020Q3": true,
+   "2020Q4": true,
+   "2021Q1": true,
+   "2021Q2": true,
+   "2021Q3": true,
+   "2021Q4": true,
+   "2022Q1": true,
+   "2022Q2": true,
+   "2022Q3": true,
+   "2022Q4": true,
+   "2023Q1": true,
+   "2023Q2": true,
+   "2023Q3": true,
+   "2023Q4": true
+  },
+  "hand_checked": [
+   "2019Q4",
+   "2021Q2",
+   "2023Q4"
+  ],
+  "status": "verified_with_notes",
+  "notes": "Pre-existing gold series, re-checked in this pass: every row fetched and matched (or the value found on the product line where the quote format differs), with a blind second read of a sample."
+ },
+ "Imbruvica": {
+  "automated": {
+   "2015Q1": true,
+   "2015Q2": true,
+   "2015Q3": false,
+   "2015Q4": true,
+   "2016Q1": true,
+   "2016Q2": true,
+   "2016Q3": true,
+   "2016Q4": true,
+   "2017Q1": true,
+   "2017Q2": true,
+   "2017Q3": true,
+   "2017Q4": true,
+   "2018Q1": true,
+   "2018Q2": true,
+   "2018Q3": true,
+   "2018Q4": true,
+   "2019Q1": true,
+   "2019Q2": true,
+   "2019Q3": true,
+   "2019Q4": true,
+   "2020Q1": true,
+   "2020Q2": true,
+   "2020Q3": true,
+   "2020Q4": true,
+   "2021Q1": true,
+   "2021Q2": true,
+   "2021Q3": true,
+   "2021Q4": true,
+   "2022Q1": true,
+   "2022Q2": true,
+   "2022Q3": true,
+   "2022Q4": true,
+   "2023Q1": true,
+   "2023Q2": true,
+   "2023Q3": true,
+   "2023Q4": true,
+   "2024Q1": true,
+   "2024Q2": true,
+   "2024Q3": true,
+   "2024Q4": true,
+   "2025Q1": true,
+   "2025Q2": true,
+   "2025Q3": true,
+   "2025Q4": true,
+   "2026Q1": true,
+   "2026Q2": true
+  },
+  "hand_checked": [
+   "2015Q2",
+   "2015Q3",
+   "2015Q4",
+   "2019Q2",
+   "2020Q1",
+   "2021Q1"
+  ],
+  "status": "verified_with_notes",
+  "notes": "Pre-existing gold series, re-checked in this pass: every row fetched and matched (or the value found on the product line where the quote format differs), with a blind second read of a sample."
+ },
+ "Simponi": {
+  "automated": {
+   "2012Q1": true,
+   "2012Q2": true,
+   "2012Q3": true,
+   "2012Q4": false,
+   "2013Q1": true,
+   "2013Q2": true,
+   "2013Q3": true,
+   "2013Q4": false,
+   "2014Q1": true,
+   "2014Q2": true,
+   "2014Q3": true,
+   "2014Q4": true,
+   "2015Q1": true,
+   "2015Q2": true,
+   "2015Q3": false,
+   "2015Q4": true,
+   "2016Q1": true,
+   "2016Q2": true,
+   "2016Q3": true,
+   "2016Q4": true,
+   "2017Q1": true,
+   "2017Q2": true,
+   "2017Q3": true,
+   "2017Q4": true,
+   "2018Q1": true,
+   "2018Q2": true,
+   "2018Q3": true,
+   "2018Q4": true,
+   "2019Q1": true,
+   "2019Q2": true,
+   "2019Q3": true,
+   "2019Q4": true,
+   "2020Q1": true,
+   "2020Q2": true,
+   "2020Q3": true,
+   "2020Q4": true,
+   "2021Q1": true,
+   "2021Q2": true,
+   "2021Q3": true,
+   "2021Q4": true,
+   "2022Q1": true,
+   "2022Q2": true,
+   "2022Q3": true,
+   "2022Q4": true,
+   "2023Q1": true,
+   "2023Q2": true,
+   "2023Q3": true,
+   "2023Q4": true,
+   "2024Q1": true,
+   "2024Q2": true,
+   "2024Q3": true,
+   "2024Q4": true,
+   "2025Q1": true,
+   "2025Q2": true,
+   "2025Q3": true,
+   "2025Q4": true,
+   "2026Q1": true,
+   "2026Q2": true
+  },
+  "hand_checked": [
+   "2012Q2",
+   "2012Q4",
+   "2013Q4",
+   "2015Q3",
+   "2018Q3",
+   "2020Q3",
+   "2021Q3",
+   "2025Q1",
+   "2025Q2",
+   "2025Q4"
+  ],
+  "status": "verified_with_notes",
+  "notes": "Pre-existing gold series, re-checked in this pass: every row fetched and matched (or the value found on the product line where the quote format differs), with a blind second read of a sample."
+ },
+ "Zepbound": {
+  "automated": {
+   "2023Q4": true,
+   "2024Q1": true,
+   "2024Q2": true,
+   "2024Q3": true,
+   "2024Q4": true,
+   "2025Q1": true,
+   "2025Q2": true,
+   "2025Q3": true,
+   "2025Q4": true,
+   "2026Q1": true,
+   "2026Q2": true
+  },
+  "hand_checked": [
+   "2026Q2"
+  ],
+  "status": "verified_with_notes",
+  "notes": "Pre-existing gold series, re-checked in this pass: every row fetched and matched (or the value found on the product line where the quote format differs), with a blind second read of a sample."
  }
 }

@@ -30,5 +30,8 @@
     "Q1 2018 report (PDF): 'In February 2018, Novo Nordisk launched Ozempic in the USA'; Q1 2018 sales 69, Q1 2017 nil",
     "Q2 2018: no quarter figure is printed (regional appendix has no Ozempic line; it is inside 'Other diabetes care'), so Q2 = H1 2018 (264) less Q1 2018 (69) = 195, both from the PDFs",
     "2026 reports: Q1 2026 has a 340B provision reversal; reported sales (40,480) recorded, adjusted sales (27,825) noted in context; Q2 2026 reported = adjusted (31,375)"
-  ]
+  ],
+  "reviewed_anomalies": {
+    "2026Q1": "Reported sales of DKK 40,480 million include a one-off reversal of a U.S. 340B provision of DKK 12,655 million; Novo Nordisk's adjusted sales for the quarter are DKK 27,825 million (same table). The reported figure is kept as printed."
+  }
 }
