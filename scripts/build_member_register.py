@@ -44,6 +44,7 @@ sys.path.insert(0, str(REPO / "backend"))
 
 from app.extraction import elements
 from app.extraction.members import (
+    LLM_CONFIDENCE_FLOOR,
     VERDICT_NO_CANDIDATE_MATCH,
     VERDICT_PRODUCT,
     Resolution,
@@ -195,6 +196,12 @@ async def ask_model(
         product = (reply or {}).get("product")
         reason = (reply or {}).get("reason", "")
         confidence = float((reply or {}).get("confidence") or 0)
+        # A product named below the confidence floor is not a match the
+        # resolver will act on, so it is recorded as the refusal it amounts
+        # to: bound to this candidate list, rather than a product claim that
+        # neither resolves nor binds.
+        if confidence < LLM_CONFIDENCE_FLOOR:
+            product = None
         answers[(issuer, member)] = Resolution(
             member=member,
             product=product or None,
