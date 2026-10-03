@@ -98,11 +98,36 @@ def test_every_quarterly_benchmark_series_has_exact_full_coverage():
                 row["commercial_start_quarter"],
                 row.get("series_end_quarter", row["as_of_quarter"]),
             )
-        )
+        ) - set(row.get("unreported_quarters", []))
         assert by_drug[row["drug_name"]] == expected
         assert row["observed_quarters"] == row["expected_quarters"] == len(expected)
         assert not row["missing_quarters"]
         assert row["coverage_pct"] == manifest["quarterly_coverage_pct"]
+
+
+def test_an_unreported_quarter_is_an_ownership_change_with_a_reason():
+    """A hole is excused only where one owner stopped reporting and another began.
+
+    Every quarter a series declares unreported must have rows on both sides,
+    printed by different issuers, and the metadata must say why in words.
+    """
+    builder = load_builder()
+    manifest = json.loads((GOLD / "manifest.json").read_text())
+    revenue = load_jsonl(manifest["reported_rows_file"])
+    coverage = load_jsonl(manifest["coverage_file"])
+    issuer = {(r["drug_name"], r["period"]): r["manufacturer"] for r in revenue}
+    declared = 0
+    for row in coverage:
+        reasons = builder.PRODUCT_METADATA[row["drug_name"]].get("unreported_quarters") or {}
+        assert sorted(reasons) == row.get("unreported_quarters", [])
+        periods = sorted(p for d, p in issuer if d == row["drug_name"])
+        for hole in row.get("unreported_quarters", []):
+            declared += 1
+            before = max(p for p in periods if p < hole)
+            after = min(p for p in periods if p > hole)
+            assert issuer[(row["drug_name"], before)] != issuer[(row["drug_name"], after)], (row["drug_name"], hole)
+            assert len(reasons[hole]) > 40, (row["drug_name"], hole)
+    assert declared, "no series declares an unreported quarter, so this test checks nothing"
 
 
 def test_gold_rows_have_independent_provenance_and_citations():

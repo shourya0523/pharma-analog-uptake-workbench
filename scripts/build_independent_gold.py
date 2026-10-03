@@ -1347,6 +1347,7 @@ RESEARCHED_SERIES_FIELDS = (
     "series_end_reason",
     "peak_eligible",
     "reviewed_anomalies",
+    "unreported_quarters",
 )
 
 
@@ -1674,6 +1675,7 @@ def revenue_row(
     bridge_components: list[dict[str, Any]] | None = None,
     notes: str = "",
     currency: str = "USD",
+    issuer: str | None = None,
 ) -> dict[str, Any]:
     meta = PRODUCT_METADATA[drug_name]
     year, quarter = int(period[:4]), int(period[-1])
@@ -1682,7 +1684,10 @@ def revenue_row(
         "gold_id": slug(meta["benchmark_identity"], period),
         "drug_name": drug_name,
         "generic_name": meta["generic_name"],
-        "manufacturer": meta["manufacturer"],
+        "manufacturer": issuer or meta["manufacturer"],
+        # Set only on a series joined across an ownership change, where each
+        # row is the issuer that printed it rather than the current owner.
+        **({"issuer": issuer} if issuer else {}),
         "benchmark_identity": meta["benchmark_identity"],
         "period": period,
         "fiscal_year": year,
@@ -2467,6 +2472,7 @@ def build_researched_products() -> list[dict[str, Any]]:
                     source_value=float(reported) if reported else None,
                     notes=source["context"],
                     currency=source.get("currency") or "USD",
+                    issuer=source.get("issuer") or None,
                 )
             )
             # A value checked at source and kept although it looks wrong (a
@@ -2551,6 +2557,8 @@ def refresh_metadata_fields(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
         for field in METADATA_FIELDS:
             if field == "therapeutic_area":
                 row[field] = meta.get(field, "Pulmonary hypertension")
+            elif field == "manufacturer" and row.get("issuer"):
+                row[field] = row["issuer"]
             else:
                 row[field] = meta[field]
     return rows
@@ -2601,6 +2609,13 @@ def observed_peak(drug_name: str, annual: list[dict[str, Any]], scope: str, geog
     maximum = max(annual, key=lambda row: row["value_reported"])
     later = [row for row in annual if row["period"] > maximum["period"]]
     observed = len(later) >= 2 and all(row["value_reported"] < maximum["value_reported"] for row in later)
+    # A year missing from inside the span (an ownership change left one of its
+    # quarters unreported) may itself have been the peak, so a maximum beside
+    # one is only the highest value either side of a hole.
+    years = sorted(int(row["period"]) for row in annual)
+    holes = set(range(years[0], years[-1] + 1)) - set(years)
+    beside_hole = bool(holes & {int(maximum["period"]) - 1, int(maximum["period"]) + 1})
+    observed = observed and not beside_hole
     return {
         "gold_id": slug(drug_name, "peak"),
         "drug_name": drug_name,
@@ -2615,7 +2630,10 @@ def observed_peak(drug_name: str, annual: list[dict[str, Any]], scope: str, geog
         "highest_observed_value": maximum["value_reported"],
         "annual_observations": len(annual),
         "post_peak_years": len(later) if observed else 0,
-        "selection_method": "independent_max_with_two_later_lower_years",
+        "selection_method": (
+            "maximum_beside_an_unreported_year" if beside_hole
+            else "independent_max_with_two_later_lower_years"
+        ),
         "input_ids": maximum["input_ids"],
         "benchmark_eligible": True,
         "numeric_peak_available": observed,
@@ -2860,12 +2878,28 @@ def coverage_rows(quarterly: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """
     rows: list[dict[str, Any]] = []
     by_drug: dict[str, set[str]] = defaultdict(set)
+    issuer_of: dict[tuple[str, str], str] = {}
     for row in quarterly:
         by_drug[row["drug_name"]].add(row["period"])
+        issuer_of[(row["drug_name"], row["period"])] = row.get("manufacturer")
     for drug_name, meta in PRODUCT_METADATA.items():
         end_quarter = series_end_quarter(meta)
         expected = quarter_range(meta["commercial_start_quarter"], end_quarter)
         observed = by_drug[drug_name]
+        # A quarter split by an ownership change, which neither owner reported
+        # in full, is a stated hole rather than a missing one: it is listed,
+        # with the documents' own reason, and does not cost the series its
+        # benchmark status. It has to sit between rows of two different
+        # issuers, so the field cannot be used to excuse an ordinary gap.
+        unreported = meta.get("unreported_quarters") or {}
+        for period, reason in unreported.items():
+            if not reason or period in observed or period not in expected:
+                raise ValueError(f"{drug_name} {period}: an unreported quarter needs a reason and must lie inside the series without a row")
+            prior = [p for p in sorted(observed) if p < period]
+            later = [p for p in sorted(observed) if p > period]
+            if not prior or not later or issuer_of.get((drug_name, prior[-1])) == issuer_of.get((drug_name, later[0])):
+                raise ValueError(f"{drug_name} {period}: an unreported quarter must separate two issuers")
+        expected = [period for period in expected if period not in unreported]
         missing = [period for period in expected if period not in observed]
         # Values after a bounded series ends are not part of its span, and
         # would silently extend a series past the point its basis changed.
@@ -2880,6 +2914,7 @@ def coverage_rows(quarterly: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "observed_quarters": len(observed & set(expected)),
             "coverage_pct": round(100 * len(observed & set(expected)) / len(expected), 1),
             "missing_quarters": missing,
+            "unreported_quarters": sorted(unreported),
             "quarters_beyond_series_end": beyond,
             "benchmark_eligible": not missing and not beyond,
         }

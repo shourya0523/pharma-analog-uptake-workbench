@@ -117,6 +117,14 @@ ISSUER_TICKERS: dict[str, str | None] = {
     # Alexion, Seagen and the like): its symbol went with it, so a case naming
     # one is resolved by issuer name instead.
     "Alexion Pharmaceuticals": None,
+    "Bioverativ": None,
+    "Celgene": None,
+    "Genzyme": None,
+    "ImmunoGen": None,
+    "Onyx Pharmaceuticals": None,
+    "Synergy Pharmaceuticals": None,
+    "Tesaro": None,
+    "Viatris": "VTRS",
     "Allergan": None,
     "Allergan plc": None,
     "Amicus Therapeutics": None,

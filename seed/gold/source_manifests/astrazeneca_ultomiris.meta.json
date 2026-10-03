@@ -16,18 +16,34 @@
     "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761108",
     "quote": "Original Approvals or Tentative Approvals ... 12/21/2018 ORIG-1 Approval N/A; Orphan (BLA 761108, Company: ALEXION PHARM)"
   },
-  "launch_quarter": null,
-  "commercial_start_quarter": "2021Q4",
-  "series_start_reason": "Longest contiguous Ultomiris series (19 quarters). Ultomiris was launched by Alexion (2019); the Alexion piece 2019Q1-2021Q2 (10 quarters) is delivered as alexion_ultomiris_alt. AstraZeneca consolidated Alexion from 21 July 2021, so 2021Q3 is a stub quarter (not delivered, Alexion's 1-20 July part is not citable); the first full AstraZeneca quarter is 2021Q4.",
-  "series_end_quarter": null,
-  "series_end_basis": null,
-  "series_end_reason": null,
+  "commercial_start_quarter": "2019Q1",
+  "series_start_reason": "FDA approved Ultomiris on 21 Dec 2018; Alexion's Q4 2018 release (8-K 2019-02-04) prints no Ultomiris sales row, and the Q1 2019 release calls Q1 2019 'its first full quarter since FDA approval' ($24.6m; prior-year column nil); the first printed quarter is 2019Q1.",
   "notes": "Plain series because it is the longest contiguous one; the Alexion piece is alexion_ultomiris_alt.",
   "search_log": [
     "listed AstraZeneca (CIK 0000901832) filings via data.sec.gov submissions incl. filings.files older page: 1,614 6-K, 6 6-K/A, 24 20-F (all form types counted, 6-K/A included)",
     "fetched the main document of every 6-K/20-F filed 2003-2026 (monthly 6-Ks of 2003-2011 embed the full results press releases; 2012+ one 6-K per results announcement); 2002 6-Ks before Nov 2002 are 'AUTO-GENERATED PAPER DOCUMENT' (not on EDGAR)",
     "located each quarterly results release by the product-sales table containing Symbicort; extracted the product row from the table anchored on the Symbicort row of the same release (table index + row stored in scripts/az_onepass.py output)",
     "cross-checked Symbicort chain: era-A releases print the prior-year quarter, which equals the earlier release's current quarter for every year 2003-2014",
-    "Soliris/Ultomiris AZ lines first appear in the Q3 2021 results release (Alexion consolidated from 21 July 2021); stub quarter 2021Q3 (Soliris 798 / Ultomiris 297 in the release) deliberately excluded from the CSV"
+    "Soliris/Ultomiris AZ lines first appear in the Q3 2021 results release (Alexion consolidated from 21 July 2021); stub quarter 2021Q3 (Soliris 798 / Ultomiris 297 in the release) deliberately excluded from the CSV",
+    "[Alexion Pharmaceuticals piece] listed Alexion (CIK 0000899866) filings via data.sec.gov submissions incl. filings.files older pages: 8-K, 8-K/A, 10-Q, 10-K, 10-K/A, 10-Q/A all counted; Alexion changed from a July to a December fiscal year in 2005, so calendar quarters are used from 2007",
+    "[Alexion Pharmaceuticals piece] for every 8-K with Item 2.02 from 2007-04 to 2021-07 fetched the EX-99.1 earnings release via the filing index.json and read the quarter column of the net-product-sales table",
+    "[Alexion Pharmaceuticals piece] 2007Q1: no table row (named-patient sales $1.0m in text only); commercial launch April 2007 per the Q1 2007 release, so the series starts 2007Q2",
+    "[Alexion Pharmaceuticals piece] 2021Q2: Alexion's 8-K of 2021-07-20 (Item 2.02, one day before the AstraZeneca acquisition closed) prints preliminary Q2 2021 SOLIRIS/ULTOMIRIS revenue; no later Alexion earnings release or 10-Q exists (Form 15-12G filed 2021-08-02)",
+    "[Alexion Pharmaceuticals piece] Q4 2018 release (ex99102042019.htm): searched all lines containing ultomiris with sales/revenue/$: only guidance lines, no sales row"
+  ],
+  "unreported_quarters": {
+    "2021Q3": "Ownership change Alexion Pharmaceuticals to AstraZeneca; no full-quarter figure is published. Alexion was acquired by AstraZeneca on 21 July 2021 and stopped reporting; the longer AstraZeneca continuation (19 quarters from 2021Q4) is delivered as the plain series astrazeneca_ultomiris. Longest contiguous Ultomiris series (19 quarters). Ultomiris was launched by Alexion (2019); the Alexion piece 2019Q1-2021Q2 (10 quarters) is delivered as alexion_ultomiris_alt. AstraZeneca consolidated Alexion from 21 July 2021, so 2021Q3 is a stub quarter (not delivered, Alexion's 1-20 July part is not citable); the first full AstraZeneca quarter is 2021Q4."
+  },
+  "joined_issuers": [
+    {
+      "issuer": "Alexion Pharmaceuticals",
+      "first_quarter": "2019Q1",
+      "last_quarter": "2021Q2"
+    },
+    {
+      "issuer": "AstraZeneca",
+      "first_quarter": "2021Q4",
+      "last_quarter": "2026Q2"
+    }
   ]
 }

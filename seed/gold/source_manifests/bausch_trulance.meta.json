@@ -17,8 +17,7 @@
     "quote": "TRULANCE PLECANATIDE 3MG TABLET;ORAL ... 01/19/2017 ORIG-1 Approval"
   },
   "launch_quarter": "2017Q1",
-  "commercial_start_quarter": "2019Q2",
-  "series_start_reason": "Series starts 2019Q2, the first full quarter under Bausch Health (Trulance acquired from Synergy on 2019-03-07; 1Q19 is a partial quarter). Synergy's own 2017Q1-2018Q3 series is in synergy_trulance_alt; 2018Q4 is not reported by either company.",
+  "commercial_start_quarter": "2017Q1",
   "series_end_quarter": "2021Q4",
   "series_end_basis": "issuer_stopped_reporting",
   "series_end_reason": "Bausch Health's earnings presentations stop printing quarterly Trulance revenue after the 4Q21 deck, and its SEC releases and filings never print a Trulance figure.",
@@ -26,6 +25,25 @@
     "Bausch Health SEC releases/10-Qs print Trulance only inside the Salix segment total; the quarterly product figure is printed in the IR earnings presentations' 'Top 10 Products - Salix' slide on ir.bauschhealth.com, decks 1Q19-4Q21 parsed with pdfplumber (scripts/trul.py, scripts/pdfx.py).",
     "Decks 1Q22 through 2Q26 were scanned for lines carrying Trulance or Xifaxan with a $...M figure (scripts/decks_late.py): none carry a quarterly product figure (only narrative mentions such as inventory drawdown), so the quarterly series ends with the 4Q21 deck.",
     "Bausch acquired Trulance on 2019-03-07 (Synergy asset sale); the 1Q19 deck shows $6M for a partial quarter, excluded. The 2Q20 deck could not be located (guessed URL patterns on the IR media path returned no document), so 2Q20 comes from the 3Q20 deck's trailing columns (direct_retrospective_table).",
-    "Synergy's own series 2017Q1-2018Q3 is delivered as synergy_trulance_alt; 2018Q4 (no Synergy report) and 2019Q1 (partial quarter) are not citable, so the pieces are not spliced."
+    "Synergy's own series 2017Q1-2018Q3 is delivered as synergy_trulance_alt; 2018Q4 (no Synergy report) and 2019Q1 (partial quarter) are not citable, so the pieces are not spliced.",
+    "[Synergy Pharmaceuticals piece] Listed every Synergy filing (CIK 0001347613, all forms) via data.sec.gov/submissions; 'Net sales' read from 10-Q statements of operations (Trulance was Synergy's only product); Q4 2017 derived from the FY2017 10-K less nine months (scripts/syn.py).",
+    "[Synergy Pharmaceuticals piece] Last periodic report is the 10-Q for 2018Q3 (filed 2018-11-09); later filings through 2019-05-02 are bankruptcy/asset-sale 8-Ks.",
+    "[Synergy Pharmaceuticals piece] Alternate (shorter, earlier) series: the longest contiguous series is Bausch Health's 2019Q2-2021Q4 (11 quarters) in bausch_trulance."
+  ],
+  "unreported_quarters": {
+    "2018Q4": "Ownership change Synergy Pharmaceuticals to Bausch Health; no full-quarter figure is published. Synergy filed for Chapter 11 on 2018-12-12 and never filed a Q4 2018 report or FY2018 10-K; its Trulance assets were sold to Bausch Health on 2019-03-07. Series starts 2019Q2, the first full quarter under Bausch Health (Trulance acquired from Synergy on 2019-03-07; 1Q19 is a partial quarter). Synergy's own 2017Q1-2018Q3 series is in synergy_trulance_alt; 2018Q4 is not reported by either company.",
+    "2019Q1": "Ownership change Synergy Pharmaceuticals to Bausch Health; no full-quarter figure is published. Synergy filed for Chapter 11 on 2018-12-12 and never filed a Q4 2018 report or FY2018 10-K; its Trulance assets were sold to Bausch Health on 2019-03-07. Series starts 2019Q2, the first full quarter under Bausch Health (Trulance acquired from Synergy on 2019-03-07; 1Q19 is a partial quarter). Synergy's own 2017Q1-2018Q3 series is in synergy_trulance_alt; 2018Q4 is not reported by either company."
+  },
+  "joined_issuers": [
+    {
+      "issuer": "Synergy Pharmaceuticals",
+      "first_quarter": "2017Q1",
+      "last_quarter": "2018Q3"
+    },
+    {
+      "issuer": "Bausch Health",
+      "first_quarter": "2019Q2",
+      "last_quarter": "2021Q4"
+    }
   ]
 }

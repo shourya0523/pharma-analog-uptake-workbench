@@ -1,12 +1,12 @@
 {
   "generation": "independent_issuer_research",
   "as_of_quarter": "2026Q2",
-  "quarterly_rows": 7865,
+  "quarterly_rows": 8094,
   "annual_rows": 75,
   "complete_quarterly_series": 223,
   "quarterly_coverage_pct": 100.0,
-  "observed_peaks": 23,
-  "not_yet_observed_peaks": 89,
+  "observed_peaks": 24,
+  "not_yet_observed_peaks": 97,
   "excluded_products": 16,
   "catalog_coverage": {
     "catalog_products": 20,
@@ -481,7 +481,7 @@
       "Velsipity"
     ],
     "quarterly_series_pct": 65.0,
-    "quarterly_observations": 7865,
+    "quarterly_observations": 8094,
     "bounded_series": [
       "Abecma",
       "Adcetris",
@@ -521,7 +521,6 @@
       "Restasis",
       "Retevmo",
       "Rybelsus",
-      "Soliris",
       "Spikevax",
       "Stribild",
       "Syfovre",
@@ -538,7 +537,6 @@
       "Vyondys 53",
       "Wegovy",
       "Xifaxan",
-      "Xiidra",
       "Zolgensma",
       "Zytiga"
     ]
@@ -548,7 +546,7 @@
     "accounted_for": 20,
     "unaccounted_products": [],
     "complete_quarterly_series": 223,
-    "quarterly_observations": 7865,
+    "quarterly_observations": 8094,
     "series_missing_quarters": [],
     "annual_benchmark_series": 1,
     "annual_observations": 75,
@@ -804,15 +802,15 @@
     "complete": true
   },
   "concentration": {
-    "quarters": 7865,
+    "quarters": 8094,
     "largest_issuer": "Johnson & Johnson",
-    "largest_issuer_share": 10.4,
+    "largest_issuer_share": 10.1,
     "largest_issuer_within_target": true,
     "largest_product": "Lantus",
     "largest_product_share": 1.3,
     "largest_product_within_target": true,
     "largest_therapeutic_area": "Oncology",
-    "largest_therapeutic_area_share": 23.9,
+    "largest_therapeutic_area_share": 23.4,
     "largest_therapeutic_area_within_target": true,
     "therapeutic_area_count": 24,
     "therapeutic_areas_within_target": true,

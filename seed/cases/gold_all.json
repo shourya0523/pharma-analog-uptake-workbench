@@ -890,31 +890,6 @@
   "ticker": "ABBV",
   "generic_name": "linaclotide",
   "options": {
-   "earnings_since": "2020-04-05",
-   "earnings_until": "2021-05-05",
-   "openfda": true,
-   "product_metadata": true
-  },
-  "source": "seed/gold/quarterly_revenue.jsonl",
-  "expect": [
-   {
-    "period": "2020Q3",
-    "value_normalized_usd_millions": 248.0,
-    "gold_id": "abbvie-linzess-constella-worldwide-reported-2020q3"
-   },
-   {
-    "period": "2020Q4",
-    "value_normalized_usd_millions": 286.0,
-    "gold_id": "abbvie-linzess-constella-worldwide-reported-2020q4"
-   }
-  ]
- },
- {
-  "drug_name": "Linzess",
-  "manufacturer": "AbbVie",
-  "ticker": "ABBV",
-  "generic_name": "linaclotide",
-  "options": {
    "earnings_since": "2021-04-05",
    "earnings_until": "2022-05-05",
    "openfda": true,
@@ -1401,6 +1376,146 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 295.0,
     "gold_id": "abbvie-mavyret-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Restasis",
+  "manufacturer": "AbbVie",
+  "ticker": "ABBV",
+  "generic_name": "cyclosporine ophthalmic emulsion 0.05%",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 280.0,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 327.0,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2021q2"
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": 319.0,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2021q3"
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": 364.0,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2021q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Restasis",
+  "manufacturer": "AbbVie",
+  "ticker": "ABBV",
+  "generic_name": "cyclosporine ophthalmic emulsion 0.05%",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 246.0,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 168.0,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2022q2"
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": 142.0,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2022q3"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 110.0,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Restasis",
+  "manufacturer": "AbbVie",
+  "ticker": "ABBV",
+  "generic_name": "cyclosporine ophthalmic emulsion 0.05%",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 92.0,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 99.0,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 117.0,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 128.0,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Restasis",
+  "manufacturer": "AbbVie",
+  "ticker": "ABBV",
+  "generic_name": "cyclosporine ophthalmic emulsion 0.05%",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 57.0,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 32.0,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 21.0,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 114.0,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2024q4"
    }
   ]
  },
@@ -1935,31 +2050,6 @@
   "ticker": "ABBV",
   "generic_name": "ubrogepant",
   "options": {
-   "earnings_since": "2020-04-05",
-   "earnings_until": "2021-05-05",
-   "openfda": true,
-   "product_metadata": true
-  },
-  "source": "seed/gold/quarterly_revenue.jsonl",
-  "expect": [
-   {
-    "period": "2020Q3",
-    "value_normalized_usd_millions": 38.0,
-    "gold_id": "abbvie-ubrelvy-worldwide-reported-2020q3"
-   },
-   {
-    "period": "2020Q4",
-    "value_normalized_usd_millions": 65.0,
-    "gold_id": "abbvie-ubrelvy-worldwide-reported-2020q4"
-   }
-  ]
- },
- {
-  "drug_name": "Ubrelvy",
-  "manufacturer": "AbbVie",
-  "ticker": "ABBV",
-  "generic_name": "ubrogepant",
-  "options": {
    "earnings_since": "2021-04-05",
    "earnings_until": "2022-05-05",
    "openfda": true,
@@ -2446,31 +2536,6 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 771.0,
     "gold_id": "abbvie-venclexta-worldwide-reported-2026q2"
-   }
-  ]
- },
- {
-  "drug_name": "Vraylar",
-  "manufacturer": "AbbVie",
-  "ticker": "ABBV",
-  "generic_name": "cariprazine",
-  "options": {
-   "earnings_since": "2020-04-05",
-   "earnings_until": "2021-05-05",
-   "openfda": true,
-   "product_metadata": true
-  },
-  "source": "seed/gold/quarterly_revenue.jsonl",
-  "expect": [
-   {
-    "period": "2020Q3",
-    "value_normalized_usd_millions": 358.0,
-    "gold_id": "abbvie-vraylar-worldwide-reported-2020q3"
-   },
-   {
-    "period": "2020Q4",
-    "value_normalized_usd_millions": 401.0,
-    "gold_id": "abbvie-vraylar-worldwide-reported-2020q4"
    }
   ]
  },
@@ -3698,14 +3763,109 @@
     "gold_id": "alexion-soliris-worldwide-reported-2021q2"
    },
    {
-    "period": "2021Q3",
-    "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2021Q2. Alexion was acquired by AstraZeneca on 21 July 2021 and stopped reporting; the AstraZeneca continuation is delivered as astrazeneca_soliris_alt (from 2021Q4; the 2021Q3 stub from 21 July is not a full quarter)."
+    "period": "2021Q4",
+    "value_normalized_usd_millions": 1076.0,
+    "gold_id": "alexion-soliris-worldwide-reported-2021q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Ultomiris",
+  "manufacturer": "Alexion Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "ravulizumab",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q1",
+    "value_normalized_usd_millions": 24.6,
+    "gold_id": "astrazeneca-ultomiris-worldwide-reported-2019q1"
+   },
+   {
+    "period": "2019Q2",
+    "value_normalized_usd_millions": 54.2,
+    "gold_id": "astrazeneca-ultomiris-worldwide-reported-2019q2"
+   },
+   {
+    "period": "2019Q3",
+    "value_normalized_usd_millions": 89.9,
+    "gold_id": "astrazeneca-ultomiris-worldwide-reported-2019q3"
+   },
+   {
+    "period": "2019Q4",
+    "value_normalized_usd_millions": 170.2,
+    "gold_id": "astrazeneca-ultomiris-worldwide-reported-2019q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Ultomiris",
+  "manufacturer": "Alexion Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "ravulizumab",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 222.8,
+    "gold_id": "astrazeneca-ultomiris-worldwide-reported-2020q1"
+   },
+   {
+    "period": "2020Q2",
+    "value_normalized_usd_millions": 251.1,
+    "gold_id": "astrazeneca-ultomiris-worldwide-reported-2020q2"
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": 289.3,
+    "gold_id": "astrazeneca-ultomiris-worldwide-reported-2020q3"
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": 313.5,
+    "gold_id": "astrazeneca-ultomiris-worldwide-reported-2020q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Ultomiris",
+  "manufacturer": "Alexion Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "ravulizumab",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 346.9,
+    "gold_id": "astrazeneca-ultomiris-worldwide-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 354.0,
+    "gold_id": "astrazeneca-ultomiris-worldwide-reported-2021q2"
    },
    {
     "period": "2021Q4",
-    "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2021Q2. Alexion was acquired by AstraZeneca on 21 July 2021 and stopped reporting; the AstraZeneca continuation is delivered as astrazeneca_soliris_alt (from 2021Q4; the 2021Q3 stub from 21 July is not a full quarter)."
+    "value_normalized_usd_millions": 391.0,
+    "gold_id": "astrazeneca-ultomiris-worldwide-reported-2021q4"
    }
   ]
  },
@@ -4125,6 +4285,466 @@
   ]
  },
  {
+  "drug_name": "Linzess",
+  "manufacturer": "Allergan plc",
+  "ticker": null,
+  "generic_name": "linaclotide",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 80.0,
+    "gold_id": "abbvie-linzess-constella-worldwide-reported-2014q3"
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": 94.4,
+    "gold_id": "abbvie-linzess-constella-worldwide-reported-2014q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Linzess",
+  "manufacturer": "Allergan plc",
+  "ticker": null,
+  "generic_name": "linaclotide",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q1",
+    "value_normalized_usd_millions": 96.2,
+    "gold_id": "abbvie-linzess-constella-worldwide-reported-2015q1"
+   },
+   {
+    "period": "2015Q2",
+    "value_normalized_usd_millions": 112.1,
+    "gold_id": "abbvie-linzess-constella-worldwide-reported-2015q2"
+   },
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 117.5,
+    "gold_id": "abbvie-linzess-constella-worldwide-reported-2015q3"
+   },
+   {
+    "period": "2015Q4",
+    "value_normalized_usd_millions": 131.3,
+    "gold_id": "abbvie-linzess-constella-worldwide-reported-2015q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Linzess",
+  "manufacturer": "Allergan plc",
+  "ticker": null,
+  "generic_name": "linaclotide",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 140.9,
+    "gold_id": "abbvie-linzess-constella-worldwide-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 155.1,
+    "gold_id": "abbvie-linzess-constella-worldwide-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 168.7,
+    "gold_id": "abbvie-linzess-constella-worldwide-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 178.2,
+    "gold_id": "abbvie-linzess-constella-worldwide-reported-2016q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Linzess",
+  "manufacturer": "Allergan plc",
+  "ticker": null,
+  "generic_name": "linaclotide",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 152.5,
+    "gold_id": "abbvie-linzess-constella-worldwide-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 173.3,
+    "gold_id": "abbvie-linzess-constella-worldwide-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 196.6,
+    "gold_id": "abbvie-linzess-constella-worldwide-reported-2017q3"
+   },
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": 200.6,
+    "gold_id": "abbvie-linzess-constella-worldwide-reported-2017q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Linzess",
+  "manufacturer": "Allergan plc",
+  "ticker": null,
+  "generic_name": "linaclotide",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 164.9,
+    "gold_id": "abbvie-linzess-constella-worldwide-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 198.2,
+    "gold_id": "abbvie-linzess-constella-worldwide-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 210.5,
+    "gold_id": "abbvie-linzess-constella-worldwide-reported-2018q3"
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": 211.6,
+    "gold_id": "abbvie-linzess-constella-worldwide-reported-2018q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Linzess",
+  "manufacturer": "Allergan plc",
+  "ticker": null,
+  "generic_name": "linaclotide",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q1",
+    "value_normalized_usd_millions": 166.8,
+    "gold_id": "abbvie-linzess-constella-worldwide-reported-2019q1"
+   },
+   {
+    "period": "2019Q2",
+    "value_normalized_usd_millions": 200.8,
+    "gold_id": "abbvie-linzess-constella-worldwide-reported-2019q2"
+   },
+   {
+    "period": "2019Q3",
+    "value_normalized_usd_millions": 221.4,
+    "gold_id": "abbvie-linzess-constella-worldwide-reported-2019q3"
+   },
+   {
+    "period": "2019Q4",
+    "value_normalized_usd_millions": 238.0,
+    "gold_id": "abbvie-linzess-constella-worldwide-reported-2019q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Linzess",
+  "manufacturer": "Allergan plc",
+  "ticker": null,
+  "generic_name": "linaclotide",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 179.3,
+    "gold_id": "abbvie-linzess-constella-worldwide-reported-2020q1"
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": 248.0,
+    "gold_id": "abbvie-linzess-constella-worldwide-reported-2020q3"
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": 286.0,
+    "gold_id": "abbvie-linzess-constella-worldwide-reported-2020q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Restasis",
+  "manufacturer": "Allergan plc",
+  "ticker": null,
+  "generic_name": "cyclosporine ophthalmic emulsion 0.05%",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q2",
+    "value_normalized_usd_millions": 325.0,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2015q2"
+   },
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 328.3,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2015q3"
+   },
+   {
+    "period": "2015Q4",
+    "value_normalized_usd_millions": 364.6,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2015q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Restasis",
+  "manufacturer": "Allergan plc",
+  "ticker": null,
+  "generic_name": "cyclosporine ophthalmic emulsion 0.05%",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 313.7,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 390.6,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 371.8,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 411.4,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2016q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Restasis",
+  "manufacturer": "Allergan plc",
+  "ticker": null,
+  "generic_name": "cyclosporine ophthalmic emulsion 0.05%",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 322.7,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 353.7,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 382.3,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2017q3"
+   },
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": 414.9,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2017q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Restasis",
+  "manufacturer": "Allergan plc",
+  "ticker": null,
+  "generic_name": "cyclosporine ophthalmic emulsion 0.05%",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 274.1,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 334.2,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 311.6,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2018q3"
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": 341.6,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2018q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Restasis",
+  "manufacturer": "Allergan plc",
+  "ticker": null,
+  "generic_name": "cyclosporine ophthalmic emulsion 0.05%",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q1",
+    "value_normalized_usd_millions": 242.1,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2019q1"
+   },
+   {
+    "period": "2019Q2",
+    "value_normalized_usd_millions": 322.8,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2019q2"
+   },
+   {
+    "period": "2019Q3",
+    "value_normalized_usd_millions": 296.0,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2019q3"
+   },
+   {
+    "period": "2019Q4",
+    "value_normalized_usd_millions": 327.7,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2019q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Restasis",
+  "manufacturer": "Allergan plc",
+  "ticker": null,
+  "generic_name": "cyclosporine ophthalmic emulsion 0.05%",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 289.9,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2020q1"
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": 299.0,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2020q3"
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": 344.0,
+    "gold_id": "allergan-inc-restasis-worldwide-reported-2020q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Ubrelvy",
+  "manufacturer": "Allergan plc",
+  "ticker": null,
+  "generic_name": "ubrogepant",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 11.1,
+    "gold_id": "abbvie-ubrelvy-worldwide-reported-2020q1"
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": 38.0,
+    "gold_id": "abbvie-ubrelvy-worldwide-reported-2020q3"
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": 65.0,
+    "gold_id": "abbvie-ubrelvy-worldwide-reported-2020q4"
+   }
+  ]
+ },
+ {
   "drug_name": "Viberzi",
   "manufacturer": "Allergan plc",
   "ticker": null,
@@ -4316,6 +4936,176 @@
     "period": "2020Q4",
     "value_normalized_usd_millions": null,
     "why": "The issuer reports no line for this product after 2020Q1. Allergan plc was acquired by AbbVie on 2020-05-08 and filed its last 10-Q for 2020Q1; AbbVie does not print a Viberzi line."
+   }
+  ]
+ },
+ {
+  "drug_name": "Vraylar",
+  "manufacturer": "Allergan plc",
+  "ticker": null,
+  "generic_name": "cariprazine",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 7.6,
+    "gold_id": "abbvie-vraylar-worldwide-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 11.1,
+    "gold_id": "abbvie-vraylar-worldwide-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 32.4,
+    "gold_id": "abbvie-vraylar-worldwide-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 43.2,
+    "gold_id": "abbvie-vraylar-worldwide-reported-2016q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Vraylar",
+  "manufacturer": "Allergan plc",
+  "ticker": null,
+  "generic_name": "cariprazine",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 53.6,
+    "gold_id": "abbvie-vraylar-worldwide-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 66.3,
+    "gold_id": "abbvie-vraylar-worldwide-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 80.2,
+    "gold_id": "abbvie-vraylar-worldwide-reported-2017q3"
+   },
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": 87.7,
+    "gold_id": "abbvie-vraylar-worldwide-reported-2017q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Vraylar",
+  "manufacturer": "Allergan plc",
+  "ticker": null,
+  "generic_name": "cariprazine",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 84.4,
+    "gold_id": "abbvie-vraylar-worldwide-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 114.2,
+    "gold_id": "abbvie-vraylar-worldwide-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 138.0,
+    "gold_id": "abbvie-vraylar-worldwide-reported-2018q3"
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": 150.5,
+    "gold_id": "abbvie-vraylar-worldwide-reported-2018q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Vraylar",
+  "manufacturer": "Allergan plc",
+  "ticker": null,
+  "generic_name": "cariprazine",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q1",
+    "value_normalized_usd_millions": 143.7,
+    "gold_id": "abbvie-vraylar-worldwide-reported-2019q1"
+   },
+   {
+    "period": "2019Q2",
+    "value_normalized_usd_millions": 196.1,
+    "gold_id": "abbvie-vraylar-worldwide-reported-2019q2"
+   },
+   {
+    "period": "2019Q3",
+    "value_normalized_usd_millions": 234.6,
+    "gold_id": "abbvie-vraylar-worldwide-reported-2019q3"
+   },
+   {
+    "period": "2019Q4",
+    "value_normalized_usd_millions": 283.1,
+    "gold_id": "abbvie-vraylar-worldwide-reported-2019q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Vraylar",
+  "manufacturer": "Allergan plc",
+  "ticker": null,
+  "generic_name": "cariprazine",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 277.3,
+    "gold_id": "abbvie-vraylar-worldwide-reported-2020q1"
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": 358.0,
+    "gold_id": "abbvie-vraylar-worldwide-reported-2020q3"
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": 401.0,
+    "gold_id": "abbvie-vraylar-worldwide-reported-2020q4"
    }
   ]
  },
@@ -5876,26 +6666,6 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 580.0,
     "gold_id": "amgen-enbrel-us-canada-reported-2026q2"
-   }
-  ]
- },
- {
-  "drug_name": "Kyprolis",
-  "manufacturer": "Amgen",
-  "ticker": "AMGN",
-  "generic_name": "carfilzomib",
-  "options": {
-   "earnings_since": "2013-04-05",
-   "earnings_until": "2014-05-05",
-   "openfda": true,
-   "product_metadata": true
-  },
-  "source": "seed/gold/quarterly_revenue.jsonl",
-  "expect": [
-   {
-    "period": "2013Q4",
-    "value_normalized_usd_millions": 73.0,
-    "gold_id": "amgen-kyprolis-worldwide-reported-2013q4"
    }
   ]
  },
@@ -11650,6 +12420,171 @@
   ]
  },
  {
+  "drug_name": "Soliris",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "eculizumab",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 990.0,
+    "gold_id": "alexion-soliris-worldwide-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 1027.0,
+    "gold_id": "alexion-soliris-worldwide-reported-2022q2"
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": 901.0,
+    "gold_id": "alexion-soliris-worldwide-reported-2022q3"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 844.0,
+    "gold_id": "alexion-soliris-worldwide-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Soliris",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "eculizumab",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 834.0,
+    "gold_id": "alexion-soliris-worldwide-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 814.0,
+    "gold_id": "alexion-soliris-worldwide-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 781.0,
+    "gold_id": "alexion-soliris-worldwide-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 715.0,
+    "gold_id": "alexion-soliris-worldwide-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Soliris",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "eculizumab",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 739.0,
+    "gold_id": "alexion-soliris-worldwide-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 700.0,
+    "gold_id": "alexion-soliris-worldwide-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 606.0,
+    "gold_id": "alexion-soliris-worldwide-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 543.0,
+    "gold_id": "alexion-soliris-worldwide-reported-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Soliris",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "eculizumab",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 444.0,
+    "gold_id": "alexion-soliris-worldwide-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 530.0,
+    "gold_id": "alexion-soliris-worldwide-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 462.0,
+    "gold_id": "alexion-soliris-worldwide-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 401.0,
+    "gold_id": "alexion-soliris-worldwide-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Soliris",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "eculizumab",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 389.0,
+    "gold_id": "alexion-soliris-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 389.0,
+    "gold_id": "alexion-soliris-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Symbicort",
   "manufacturer": "AstraZeneca",
   "ticker": "AZN",
@@ -13090,26 +14025,6 @@
   "ticker": "AZN",
   "generic_name": "ravulizumab",
   "options": {
-   "earnings_since": "2021-04-05",
-   "earnings_until": "2022-05-05",
-   "openfda": true,
-   "product_metadata": true
-  },
-  "source": "seed/gold/quarterly_revenue.jsonl",
-  "expect": [
-   {
-    "period": "2021Q4",
-    "value_normalized_usd_millions": 391.0,
-    "gold_id": "astrazeneca-ultomiris-worldwide-reported-2021q4"
-   }
-  ]
- },
- {
-  "drug_name": "Ultomiris",
-  "manufacturer": "AstraZeneca",
-  "ticker": "AZN",
-  "generic_name": "ravulizumab",
-  "options": {
    "earnings_since": "2022-04-05",
    "earnings_until": "2023-05-05",
    "openfda": true,
@@ -13386,6 +14301,101 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 91.0,
     "gold_id": "bausch-lomb-miebo-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Xiidra",
+  "manufacturer": "Bausch + Lomb",
+  "ticker": "BLCO",
+  "generic_name": "lifitegrast",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 79.0,
+    "gold_id": "novartis-xiidra-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 89.0,
+    "gold_id": "novartis-xiidra-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 92.0,
+    "gold_id": "novartis-xiidra-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 104.0,
+    "gold_id": "novartis-xiidra-reported-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Xiidra",
+  "manufacturer": "Bausch + Lomb",
+  "ticker": "BLCO",
+  "generic_name": "lifitegrast",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 67.0,
+    "gold_id": "novartis-xiidra-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 82.0,
+    "gold_id": "novartis-xiidra-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 87.0,
+    "gold_id": "novartis-xiidra-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 95.0,
+    "gold_id": "novartis-xiidra-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Xiidra",
+  "manufacturer": "Bausch + Lomb",
+  "ticker": "BLCO",
+  "generic_name": "lifitegrast",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 87.0,
+    "gold_id": "novartis-xiidra-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 87.0,
+    "gold_id": "novartis-xiidra-reported-2026q2"
    }
   ]
  },
@@ -14720,6 +15730,201 @@
   ]
  },
  {
+  "drug_name": "Alprolix",
+  "manufacturer": "Biogen",
+  "ticker": "BIIB",
+  "generic_name": "eftrenonacog alfa (coagulation factor IX recombinant, Fc fusion protein)",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": 10.397,
+    "gold_id": "sanofi-alprolix-worldwide-reported-2014q2"
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 25.305,
+    "gold_id": "sanofi-alprolix-worldwide-reported-2014q3"
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": 40.3,
+    "gold_id": "sanofi-alprolix-worldwide-reported-2014q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Alprolix",
+  "manufacturer": "Biogen",
+  "ticker": "BIIB",
+  "generic_name": "eftrenonacog alfa (coagulation factor IX recombinant, Fc fusion protein)",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q1",
+    "value_normalized_usd_millions": 43.1,
+    "gold_id": "sanofi-alprolix-worldwide-reported-2015q1"
+   },
+   {
+    "period": "2015Q2",
+    "value_normalized_usd_millions": 54.4,
+    "gold_id": "sanofi-alprolix-worldwide-reported-2015q2"
+   },
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 65.7,
+    "gold_id": "sanofi-alprolix-worldwide-reported-2015q3"
+   },
+   {
+    "period": "2015Q4",
+    "value_normalized_usd_millions": 71.3,
+    "gold_id": "sanofi-alprolix-worldwide-reported-2015q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Alprolix",
+  "manufacturer": "Biogen",
+  "ticker": "BIIB",
+  "generic_name": "eftrenonacog alfa (coagulation factor IX recombinant, Fc fusion protein)",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 75.0,
+    "gold_id": "sanofi-alprolix-worldwide-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 80.3,
+    "gold_id": "sanofi-alprolix-worldwide-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 85.2,
+    "gold_id": "sanofi-alprolix-worldwide-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 93.2,
+    "gold_id": "sanofi-alprolix-worldwide-reported-2016q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Eloctate",
+  "manufacturer": "Biogen",
+  "ticker": "BIIB",
+  "generic_name": "efmoroctocog alfa (antihemophilic factor recombinant, Fc fusion protein)",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 21.56,
+    "gold_id": "sanofi-eloctate-worldwide-reported-2014q3"
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": 36.8,
+    "gold_id": "sanofi-eloctate-worldwide-reported-2014q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Eloctate",
+  "manufacturer": "Biogen",
+  "ticker": "BIIB",
+  "generic_name": "efmoroctocog alfa (antihemophilic factor recombinant, Fc fusion protein)",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q1",
+    "value_normalized_usd_millions": 53.6,
+    "gold_id": "sanofi-eloctate-worldwide-reported-2015q1"
+   },
+   {
+    "period": "2015Q2",
+    "value_normalized_usd_millions": 74.3,
+    "gold_id": "sanofi-eloctate-worldwide-reported-2015q2"
+   },
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 90.6,
+    "gold_id": "sanofi-eloctate-worldwide-reported-2015q3"
+   },
+   {
+    "period": "2015Q4",
+    "value_normalized_usd_millions": 101.2,
+    "gold_id": "sanofi-eloctate-worldwide-reported-2015q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Eloctate",
+  "manufacturer": "Biogen",
+  "ticker": "BIIB",
+  "generic_name": "efmoroctocog alfa (antihemophilic factor recombinant, Fc fusion protein)",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 107.7,
+    "gold_id": "sanofi-eloctate-worldwide-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 124.7,
+    "gold_id": "sanofi-eloctate-worldwide-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 131.8,
+    "gold_id": "sanofi-eloctate-worldwide-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 149.0,
+    "gold_id": "sanofi-eloctate-worldwide-reported-2016q4"
+   }
+  ]
+ },
+ {
   "drug_name": "Qalsody",
   "manufacturer": "Biogen",
   "ticker": "BIIB",
@@ -16046,6 +17251,76 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 196.5,
     "gold_id": "biogen-vumerity-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Alprolix",
+  "manufacturer": "Bioverativ",
+  "ticker": null,
+  "generic_name": "eftrenonacog alfa (coagulation factor IX recombinant, Fc fusion protein)",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 86.0,
+    "gold_id": "sanofi-alprolix-worldwide-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 89.7,
+    "gold_id": "sanofi-alprolix-worldwide-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 88.5,
+    "gold_id": "sanofi-alprolix-worldwide-reported-2017q3"
+   },
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": 100.4,
+    "gold_id": "sanofi-alprolix-worldwide-reported-2017q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Eloctate",
+  "manufacturer": "Bioverativ",
+  "ticker": null,
+  "generic_name": "efmoroctocog alfa (antihemophilic factor recombinant, Fc fusion protein)",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 155.9,
+    "gold_id": "sanofi-eloctate-worldwide-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 174.2,
+    "gold_id": "sanofi-eloctate-worldwide-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 186.3,
+    "gold_id": "sanofi-eloctate-worldwide-reported-2017q3"
+   },
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": 208.0,
+    "gold_id": "sanofi-eloctate-worldwide-reported-2017q4"
    }
   ]
  },
@@ -20081,6 +21356,206 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 769.0,
     "gold_id": "bms-yervoy-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Otezla",
+  "manufacturer": "Celgene",
+  "ticker": null,
+  "generic_name": "apremilast",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": 4.6,
+    "gold_id": "amgen-otezla-worldwide-reported-2014q2"
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 17.6,
+    "gold_id": "amgen-otezla-worldwide-reported-2014q3"
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": 47.6,
+    "gold_id": "amgen-otezla-worldwide-reported-2014q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Otezla",
+  "manufacturer": "Celgene",
+  "ticker": null,
+  "generic_name": "apremilast",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q1",
+    "value_normalized_usd_millions": 60.3,
+    "gold_id": "amgen-otezla-worldwide-reported-2015q1"
+   },
+   {
+    "period": "2015Q2",
+    "value_normalized_usd_millions": 89.7,
+    "gold_id": "amgen-otezla-worldwide-reported-2015q2"
+   },
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 138.7,
+    "gold_id": "amgen-otezla-worldwide-reported-2015q3"
+   },
+   {
+    "period": "2015Q4",
+    "value_normalized_usd_millions": 183.0,
+    "gold_id": "amgen-otezla-worldwide-reported-2015q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Otezla",
+  "manufacturer": "Celgene",
+  "ticker": null,
+  "generic_name": "apremilast",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 195.6,
+    "gold_id": "amgen-otezla-worldwide-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 241.9,
+    "gold_id": "amgen-otezla-worldwide-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 274.6,
+    "gold_id": "amgen-otezla-worldwide-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 305.1,
+    "gold_id": "amgen-otezla-worldwide-reported-2016q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Otezla",
+  "manufacturer": "Celgene",
+  "ticker": null,
+  "generic_name": "apremilast",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 242.0,
+    "gold_id": "amgen-otezla-worldwide-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 358.0,
+    "gold_id": "amgen-otezla-worldwide-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 308.0,
+    "gold_id": "amgen-otezla-worldwide-reported-2017q3"
+   },
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": 371.0,
+    "gold_id": "amgen-otezla-worldwide-reported-2017q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Otezla",
+  "manufacturer": "Celgene",
+  "ticker": null,
+  "generic_name": "apremilast",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 353.0,
+    "gold_id": "amgen-otezla-worldwide-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 375.0,
+    "gold_id": "amgen-otezla-worldwide-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 432.0,
+    "gold_id": "amgen-otezla-worldwide-reported-2018q3"
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": 448.0,
+    "gold_id": "amgen-otezla-worldwide-reported-2018q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Otezla",
+  "manufacturer": "Celgene",
+  "ticker": null,
+  "generic_name": "apremilast",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q1",
+    "value_normalized_usd_millions": 389.0,
+    "gold_id": "amgen-otezla-worldwide-reported-2019q1"
+   },
+   {
+    "period": "2019Q2",
+    "value_normalized_usd_millions": 493.0,
+    "gold_id": "amgen-otezla-worldwide-reported-2019q2"
+   },
+   {
+    "period": "2019Q3",
+    "value_normalized_usd_millions": 547.0,
+    "gold_id": "amgen-otezla-worldwide-reported-2019q3"
    }
   ]
  },
@@ -29095,6 +30570,311 @@
   ]
  },
  {
+  "drug_name": "Fabrazyme",
+  "manufacturer": "Genzyme",
+  "ticker": null,
+  "generic_name": "agalsidase beta",
+  "options": {
+   "earnings_since": "2002-04-05",
+   "earnings_until": "2003-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2002Q3",
+    "value_normalized_usd_millions": 7.252,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2002q3"
+   },
+   {
+    "period": "2002Q4",
+    "value_normalized_usd_millions": 8.887,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2002q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Fabrazyme",
+  "manufacturer": "Genzyme",
+  "ticker": null,
+  "generic_name": "agalsidase beta",
+  "options": {
+   "earnings_since": "2003-04-05",
+   "earnings_until": "2004-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2003Q1",
+    "value_normalized_usd_millions": 11.846,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2003q1"
+   },
+   {
+    "period": "2003Q2",
+    "value_normalized_usd_millions": 15.43,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2003q2"
+   },
+   {
+    "period": "2003Q3",
+    "value_normalized_usd_millions": 21.452,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2003q3"
+   },
+   {
+    "period": "2003Q4",
+    "value_normalized_usd_millions": 31.889,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2003q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Fabrazyme",
+  "manufacturer": "Genzyme",
+  "ticker": null,
+  "generic_name": "agalsidase beta",
+  "options": {
+   "earnings_since": "2004-04-05",
+   "earnings_until": "2005-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2004Q1",
+    "value_normalized_usd_millions": 38.103,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2004q1"
+   },
+   {
+    "period": "2004Q2",
+    "value_normalized_usd_millions": 49.62,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2004q2"
+   },
+   {
+    "period": "2004Q3",
+    "value_normalized_usd_millions": 57.996,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2004q3"
+   },
+   {
+    "period": "2004Q4",
+    "value_normalized_usd_millions": 63.918,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2004q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Fabrazyme",
+  "manufacturer": "Genzyme",
+  "ticker": null,
+  "generic_name": "agalsidase beta",
+  "options": {
+   "earnings_since": "2005-04-05",
+   "earnings_until": "2006-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2005Q1",
+    "value_normalized_usd_millions": 70.026,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2005q1"
+   },
+   {
+    "period": "2005Q2",
+    "value_normalized_usd_millions": 74.424,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2005q2"
+   },
+   {
+    "period": "2005Q3",
+    "value_normalized_usd_millions": 79.076,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2005q3"
+   },
+   {
+    "period": "2005Q4",
+    "value_normalized_usd_millions": 81.538,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2005q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Fabrazyme",
+  "manufacturer": "Genzyme",
+  "ticker": null,
+  "generic_name": "agalsidase beta",
+  "options": {
+   "earnings_since": "2006-04-05",
+   "earnings_until": "2007-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2006Q1",
+    "value_normalized_usd_millions": 80.503,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2006q1"
+   },
+   {
+    "period": "2006Q2",
+    "value_normalized_usd_millions": 89.041,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2006q2"
+   },
+   {
+    "period": "2006Q3",
+    "value_normalized_usd_millions": 93.17,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2006q3"
+   },
+   {
+    "period": "2006Q4",
+    "value_normalized_usd_millions": 96.56,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2006q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Fabrazyme",
+  "manufacturer": "Genzyme",
+  "ticker": null,
+  "generic_name": "agalsidase beta",
+  "options": {
+   "earnings_since": "2007-04-05",
+   "earnings_until": "2008-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2007Q1",
+    "value_normalized_usd_millions": 100.664,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2007q1"
+   },
+   {
+    "period": "2007Q2",
+    "value_normalized_usd_millions": 104.349,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2007q2"
+   },
+   {
+    "period": "2007Q3",
+    "value_normalized_usd_millions": 104.61,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2007q3"
+   },
+   {
+    "period": "2007Q4",
+    "value_normalized_usd_millions": 114.661,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2007q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Fabrazyme",
+  "manufacturer": "Genzyme",
+  "ticker": null,
+  "generic_name": "agalsidase beta",
+  "options": {
+   "earnings_since": "2008-04-05",
+   "earnings_until": "2009-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2008Q1",
+    "value_normalized_usd_millions": 116.475,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2008q1"
+   },
+   {
+    "period": "2008Q2",
+    "value_normalized_usd_millions": 126.608,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2008q2"
+   },
+   {
+    "period": "2008Q3",
+    "value_normalized_usd_millions": 125.619,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2008q3"
+   },
+   {
+    "period": "2008Q4",
+    "value_normalized_usd_millions": 125.558,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2008q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Fabrazyme",
+  "manufacturer": "Genzyme",
+  "ticker": null,
+  "generic_name": "agalsidase beta",
+  "options": {
+   "earnings_since": "2009-04-05",
+   "earnings_until": "2010-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2009Q1",
+    "value_normalized_usd_millions": 122.201,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2009q1"
+   },
+   {
+    "period": "2009Q2",
+    "value_normalized_usd_millions": 134.302,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2009q2"
+   },
+   {
+    "period": "2009Q3",
+    "value_normalized_usd_millions": 115.161,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2009q3"
+   },
+   {
+    "period": "2009Q4",
+    "value_normalized_usd_millions": 58.026,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2009q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Fabrazyme",
+  "manufacturer": "Genzyme",
+  "ticker": null,
+  "generic_name": "agalsidase beta",
+  "options": {
+   "earnings_since": "2010-04-05",
+   "earnings_until": "2011-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2010Q1",
+    "value_normalized_usd_millions": 53.241,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2010q1"
+   },
+   {
+    "period": "2010Q2",
+    "value_normalized_usd_millions": 39.484,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2010q2"
+   },
+   {
+    "period": "2010Q3",
+    "value_normalized_usd_millions": 33.882,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2010q3"
+   },
+   {
+    "period": "2010Q4",
+    "value_normalized_usd_millions": 61.603,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2010q4"
+   }
+  ]
+ },
+ {
   "drug_name": "AmBisome",
   "manufacturer": "Gilead",
   "ticker": "GILD",
@@ -35141,6 +36921,56 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 346.0,
     "gold_id": "gilead-yescarta-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Elahere",
+  "manufacturer": "ImmunoGen",
+  "ticker": null,
+  "generic_name": "mirvetuximab soravtansine",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 2.554,
+    "gold_id": "abbvie-elahere-worldwide-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Elahere",
+  "manufacturer": "ImmunoGen",
+  "ticker": null,
+  "generic_name": "mirvetuximab soravtansine",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 29.544,
+    "gold_id": "abbvie-elahere-worldwide-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 77.371,
+    "gold_id": "abbvie-elahere-worldwide-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 105.164,
+    "gold_id": "abbvie-elahere-worldwide-reported-2023q3"
    }
   ]
  },
@@ -50604,8 +52434,8 @@
    },
    {
     "period": "2023Q4",
-    "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2023Q3. Q3 2023 report (0001370368-23-000068): 'In September 2023, Novartis completed the divestment of Xiidra to Bausch + Lomb.' Bausch + Lomb's later Xiidra sales are handled by another agent."
+    "value_normalized_usd_millions": 106.0,
+    "gold_id": "novartis-xiidra-reported-2023q4"
    }
   ]
  },
@@ -53670,6 +55500,61 @@
   ]
  },
  {
+  "drug_name": "Kyprolis",
+  "manufacturer": "Onyx Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "carfilzomib",
+  "options": {
+   "earnings_since": "2012-04-05",
+   "earnings_until": "2013-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2012Q3",
+    "value_normalized_usd_millions": 18.636,
+    "gold_id": "amgen-kyprolis-worldwide-reported-2012q3"
+   },
+   {
+    "period": "2012Q4",
+    "value_normalized_usd_millions": 45.319,
+    "gold_id": "amgen-kyprolis-worldwide-reported-2012q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Kyprolis",
+  "manufacturer": "Onyx Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "carfilzomib",
+  "options": {
+   "earnings_since": "2013-04-05",
+   "earnings_until": "2014-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2013Q1",
+    "value_normalized_usd_millions": 64.008,
+    "gold_id": "amgen-kyprolis-worldwide-reported-2013q1"
+   },
+   {
+    "period": "2013Q2",
+    "value_normalized_usd_millions": 61.037,
+    "gold_id": "amgen-kyprolis-worldwide-reported-2013q2"
+   },
+   {
+    "period": "2013Q4",
+    "value_normalized_usd_millions": 73.0,
+    "gold_id": "amgen-kyprolis-worldwide-reported-2013q4"
+   }
+  ]
+ },
+ {
   "drug_name": "Tyrvaya",
   "manufacturer": "Oyster Point Pharma",
   "ticker": null,
@@ -53716,11 +55601,6 @@
     "period": "2022Q3",
     "value_normalized_usd_millions": 5.591,
     "gold_id": "oyster-point-tyrvaya-us-reported-2022q3"
-   },
-   {
-    "period": "2022Q4",
-    "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2022Q3. Oyster Point was acquired by Viatris (closed 2023-01-03, Form 15-12G 2023-01-13) and filed no report for 2022Q4; Viatris prints Tyrvaya net sales only in prose for 2023 (see viatris_tyrvaya_alt), so the two pieces are separated by an uncovered 2022Q4."
    }
   ]
  },
@@ -66365,6 +68245,71 @@
   ]
  },
  {
+  "drug_name": "Trulance",
+  "manufacturer": "Synergy Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "plecanatide",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 0.098,
+    "gold_id": "bausch-trulance-us-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 2.314,
+    "gold_id": "bausch-trulance-us-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 5.008,
+    "gold_id": "bausch-trulance-us-reported-2017q3"
+   },
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": 9.4,
+    "gold_id": "bausch-trulance-us-reported-2017q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Trulance",
+  "manufacturer": "Synergy Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "plecanatide",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 8.586,
+    "gold_id": "bausch-trulance-us-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 12.254,
+    "gold_id": "bausch-trulance-us-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 11.105,
+    "gold_id": "bausch-trulance-us-reported-2018q3"
+   }
+  ]
+ },
+ {
   "drug_name": "Adynovate",
   "manufacturer": "Takeda",
   "ticker": "TAK",
@@ -67621,6 +69566,66 @@
     "period": "2026Q4",
     "value_normalized_usd_millions": null,
     "why": "The issuer reports no line for this product after 2026Q1. Takeda's quarterly financial report for FY2026 Q1 (April-June 2026; qr2026_q1_qfr_en.pdf) contains no RESOLOR/MOTEGRITY line (zero text lines mention Resolor or Motegrity), whereas the FY2025 Q4 report prints it (RESOLOR/MOTEGRITY FY2025 7.3 billion JPY). The GI table of the FY2026 Q1 report lists 'Others' rows instead."
+   }
+  ]
+ },
+ {
+  "drug_name": "Zejula",
+  "manufacturer": "Tesaro",
+  "ticker": null,
+  "generic_name": "niraparib",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 25.945,
+    "gold_id": "gsk-zejula-worldwide-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 39.375,
+    "gold_id": "gsk-zejula-worldwide-reported-2017q3"
+   },
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": 43.436,
+    "gold_id": "gsk-zejula-worldwide-reported-2017q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Zejula",
+  "manufacturer": "Tesaro",
+  "ticker": null,
+  "generic_name": "niraparib",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 48.869,
+    "gold_id": "gsk-zejula-worldwide-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 53.894,
+    "gold_id": "gsk-zejula-worldwide-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 63.226,
+    "gold_id": "gsk-zejula-worldwide-reported-2018q3"
    }
   ]
  },
@@ -71446,6 +73451,41 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 326.6,
     "gold_id": "uthr-tyvaso-dpi-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Tyrvaya",
+  "manufacturer": "Viatris",
+  "ticker": "VTRS",
+  "generic_name": "varenicline nasal spray",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 6.3,
+    "gold_id": "oyster-point-tyrvaya-us-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 10.2,
+    "gold_id": "oyster-point-tyrvaya-us-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 10.4,
+    "gold_id": "oyster-point-tyrvaya-us-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 14.8,
+    "gold_id": "oyster-point-tyrvaya-us-reported-2023q4"
    }
   ]
  },

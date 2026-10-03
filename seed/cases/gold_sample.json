@@ -50,10 +50,10 @@
   ]
  },
  {
-  "drug_name": "Soliris",
+  "drug_name": "Ultomiris",
   "manufacturer": "Alexion Pharmaceuticals",
   "ticker": null,
-  "generic_name": "eculizumab",
+  "generic_name": "ravulizumab",
   "options": {
    "earnings_since": "2021-04-05",
    "earnings_until": "2022-05-05",
@@ -64,23 +64,18 @@
   "expect": [
    {
     "period": "2021Q1",
-    "value_normalized_usd_millions": 1027.6,
-    "gold_id": "alexion-soliris-worldwide-reported-2021q1"
+    "value_normalized_usd_millions": 346.9,
+    "gold_id": "astrazeneca-ultomiris-worldwide-reported-2021q1"
    },
    {
     "period": "2021Q2",
-    "value_normalized_usd_millions": 1071.0,
-    "gold_id": "alexion-soliris-worldwide-reported-2021q2"
-   },
-   {
-    "period": "2021Q3",
-    "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2021Q2. Alexion was acquired by AstraZeneca on 21 July 2021 and stopped reporting; the AstraZeneca continuation is delivered as astrazeneca_soliris_alt (from 2021Q4; the 2021Q3 stub from 21 July is not a full quarter)."
+    "value_normalized_usd_millions": 354.0,
+    "gold_id": "astrazeneca-ultomiris-worldwide-reported-2021q2"
    },
    {
     "period": "2021Q4",
-    "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2021Q2. Alexion was acquired by AstraZeneca on 21 July 2021 and stopped reporting; the AstraZeneca continuation is delivered as astrazeneca_soliris_alt (from 2021Q4; the 2021Q3 stub from 21 July is not a full quarter)."
+    "value_normalized_usd_millions": 391.0,
+    "gold_id": "astrazeneca-ultomiris-worldwide-reported-2021q4"
    }
   ]
  },
@@ -120,10 +115,10 @@
   ]
  },
  {
-  "drug_name": "Viberzi",
+  "drug_name": "Vraylar",
   "manufacturer": "Allergan plc",
   "ticker": null,
-  "generic_name": "eluxadoline",
+  "generic_name": "cariprazine",
   "options": {
    "earnings_since": "2020-04-05",
    "earnings_until": "2021-05-05",
@@ -134,23 +129,18 @@
   "expect": [
    {
     "period": "2020Q1",
-    "value_normalized_usd_millions": 37.7,
-    "gold_id": "allergan-viberzi-worldwide-reported-2020q1"
-   },
-   {
-    "period": "2020Q2",
-    "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2020Q1. Allergan plc was acquired by AbbVie on 2020-05-08 and filed its last 10-Q for 2020Q1; AbbVie does not print a Viberzi line."
+    "value_normalized_usd_millions": 277.3,
+    "gold_id": "abbvie-vraylar-worldwide-reported-2020q1"
    },
    {
     "period": "2020Q3",
-    "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2020Q1. Allergan plc was acquired by AbbVie on 2020-05-08 and filed its last 10-Q for 2020Q1; AbbVie does not print a Viberzi line."
+    "value_normalized_usd_millions": 358.0,
+    "gold_id": "abbvie-vraylar-worldwide-reported-2020q3"
    },
    {
     "period": "2020Q4",
-    "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2020Q1. Allergan plc was acquired by AbbVie on 2020-05-08 and filed its last 10-Q for 2020Q1; AbbVie does not print a Viberzi line."
+    "value_normalized_usd_millions": 401.0,
+    "gold_id": "abbvie-vraylar-worldwide-reported-2020q4"
    }
   ]
  },
@@ -300,10 +290,10 @@
   ]
  },
  {
-  "drug_name": "Miebo",
+  "drug_name": "Xiidra",
   "manufacturer": "Bausch + Lomb",
   "ticker": "BLCO",
-  "generic_name": "perfluorohexyloctane",
+  "generic_name": "lifitegrast",
   "options": {
    "earnings_since": "2026-04-05",
    "earnings_until": "2027-05-05",
@@ -314,13 +304,13 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 76.0,
-    "gold_id": "bausch-lomb-miebo-reported-2026q1"
+    "value_normalized_usd_millions": 87.0,
+    "gold_id": "novartis-xiidra-reported-2026q1"
    },
    {
     "period": "2026Q2",
-    "value_normalized_usd_millions": 91.0,
-    "gold_id": "bausch-lomb-miebo-reported-2026q2"
+    "value_normalized_usd_millions": 87.0,
+    "gold_id": "novartis-xiidra-reported-2026q2"
    }
   ]
  },
@@ -460,6 +450,41 @@
   ]
  },
  {
+  "drug_name": "Eloctate",
+  "manufacturer": "Bioverativ",
+  "ticker": null,
+  "generic_name": "efmoroctocog alfa (antihemophilic factor recombinant, Fc fusion protein)",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 155.9,
+    "gold_id": "sanofi-eloctate-worldwide-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 174.2,
+    "gold_id": "sanofi-eloctate-worldwide-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 186.3,
+    "gold_id": "sanofi-eloctate-worldwide-reported-2017q3"
+   },
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": 208.0,
+    "gold_id": "sanofi-eloctate-worldwide-reported-2017q4"
+   }
+  ]
+ },
+ {
   "drug_name": "Yervoy",
   "manufacturer": "Bristol-Myers Squibb",
   "ticker": "BMY",
@@ -481,6 +506,36 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 769.0,
     "gold_id": "bms-yervoy-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Otezla",
+  "manufacturer": "Celgene",
+  "ticker": null,
+  "generic_name": "apremilast",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q1",
+    "value_normalized_usd_millions": 389.0,
+    "gold_id": "amgen-otezla-worldwide-reported-2019q1"
+   },
+   {
+    "period": "2019Q2",
+    "value_normalized_usd_millions": 493.0,
+    "gold_id": "amgen-otezla-worldwide-reported-2019q2"
+   },
+   {
+    "period": "2019Q3",
+    "value_normalized_usd_millions": 547.0,
+    "gold_id": "amgen-otezla-worldwide-reported-2019q3"
    }
   ]
  },
@@ -610,6 +665,41 @@
   ]
  },
  {
+  "drug_name": "Fabrazyme",
+  "manufacturer": "Genzyme",
+  "ticker": null,
+  "generic_name": "agalsidase beta",
+  "options": {
+   "earnings_since": "2010-04-05",
+   "earnings_until": "2011-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2010Q1",
+    "value_normalized_usd_millions": 53.241,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2010q1"
+   },
+   {
+    "period": "2010Q2",
+    "value_normalized_usd_millions": 39.484,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2010q2"
+   },
+   {
+    "period": "2010Q3",
+    "value_normalized_usd_millions": 33.882,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2010q3"
+   },
+   {
+    "period": "2010Q4",
+    "value_normalized_usd_millions": 61.603,
+    "gold_id": "sanofi-fabrazyme-worldwide-reported-2010q4"
+   }
+  ]
+ },
+ {
   "drug_name": "Yescarta",
   "manufacturer": "Gilead",
   "ticker": "GILD",
@@ -631,6 +721,36 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 346.0,
     "gold_id": "gilead-yescarta-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Elahere",
+  "manufacturer": "ImmunoGen",
+  "ticker": null,
+  "generic_name": "mirvetuximab soravtansine",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 29.544,
+    "gold_id": "abbvie-elahere-worldwide-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 77.371,
+    "gold_id": "abbvie-elahere-worldwide-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 105.164,
+    "gold_id": "abbvie-elahere-worldwide-reported-2023q3"
    }
   ]
  },
@@ -1000,6 +1120,36 @@
   ]
  },
  {
+  "drug_name": "Kyprolis",
+  "manufacturer": "Onyx Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "carfilzomib",
+  "options": {
+   "earnings_since": "2013-04-05",
+   "earnings_until": "2014-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2013Q1",
+    "value_normalized_usd_millions": 64.008,
+    "gold_id": "amgen-kyprolis-worldwide-reported-2013q1"
+   },
+   {
+    "period": "2013Q2",
+    "value_normalized_usd_millions": 61.037,
+    "gold_id": "amgen-kyprolis-worldwide-reported-2013q2"
+   },
+   {
+    "period": "2013Q4",
+    "value_normalized_usd_millions": 73.0,
+    "gold_id": "amgen-kyprolis-worldwide-reported-2013q4"
+   }
+  ]
+ },
+ {
   "drug_name": "Tyrvaya",
   "manufacturer": "Oyster Point Pharma",
   "ticker": null,
@@ -1026,11 +1176,6 @@
     "period": "2022Q3",
     "value_normalized_usd_millions": 5.591,
     "gold_id": "oyster-point-tyrvaya-us-reported-2022q3"
-   },
-   {
-    "period": "2022Q4",
-    "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2022Q3. Oyster Point was acquired by Viatris (closed 2023-01-03, Form 15-12G 2023-01-13) and filed no report for 2022Q4; Viatris prints Tyrvaya net sales only in prose for 2023 (see viatris_tyrvaya_alt), so the two pieces are separated by an uncovered 2022Q4."
    }
   ]
  },
@@ -1290,6 +1435,36 @@
   ]
  },
  {
+  "drug_name": "Trulance",
+  "manufacturer": "Synergy Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "plecanatide",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 8.586,
+    "gold_id": "bausch-trulance-us-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 12.254,
+    "gold_id": "bausch-trulance-us-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 11.105,
+    "gold_id": "bausch-trulance-us-reported-2018q3"
+   }
+  ]
+ },
+ {
   "drug_name": "Motegrity",
   "manufacturer": "Takeda",
   "ticker": "TAK",
@@ -1321,6 +1496,36 @@
     "period": "2026Q4",
     "value_normalized_usd_millions": null,
     "why": "The issuer reports no line for this product after 2026Q1. Takeda's quarterly financial report for FY2026 Q1 (April-June 2026; qr2026_q1_qfr_en.pdf) contains no RESOLOR/MOTEGRITY line (zero text lines mention Resolor or Motegrity), whereas the FY2025 Q4 report prints it (RESOLOR/MOTEGRITY FY2025 7.3 billion JPY). The GI table of the FY2026 Q1 report lists 'Others' rows instead."
+   }
+  ]
+ },
+ {
+  "drug_name": "Zejula",
+  "manufacturer": "Tesaro",
+  "ticker": null,
+  "generic_name": "niraparib",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 48.869,
+    "gold_id": "gsk-zejula-worldwide-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 53.894,
+    "gold_id": "gsk-zejula-worldwide-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 63.226,
+    "gold_id": "gsk-zejula-worldwide-reported-2018q3"
    }
   ]
  },
@@ -1371,6 +1576,41 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 326.6,
     "gold_id": "uthr-tyvaso-dpi-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Tyrvaya",
+  "manufacturer": "Viatris",
+  "ticker": "VTRS",
+  "generic_name": "varenicline nasal spray",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 6.3,
+    "gold_id": "oyster-point-tyrvaya-us-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 10.2,
+    "gold_id": "oyster-point-tyrvaya-us-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 10.4,
+    "gold_id": "oyster-point-tyrvaya-us-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 14.8,
+    "gold_id": "oyster-point-tyrvaya-us-reported-2023q4"
    }
   ]
  },

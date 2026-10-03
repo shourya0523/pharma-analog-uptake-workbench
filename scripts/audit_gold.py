@@ -414,10 +414,19 @@ def audit_series_consistency(quarterly: list[dict]) -> list[str]:
     out: list[str] = []
     attributes = defaultdict(lambda: defaultdict(set))
     for row in quarterly:
-        for field in ("benchmark_identity", "revenue_scope", "geography", "currency", "unit"):
+        for field in ("benchmark_identity", "revenue_scope", "geography", "unit"):
             attributes[row["drug_name"]][field].add(row[field])
+        # A series joined across an ownership change reports in each owner's
+        # currency, so currency is held constant per issuer rather than per
+        # series; value_normalized_usd_millions is what makes it one series.
+        attributes[row["drug_name"]]["currency"].add((row.get("issuer"), row["currency"]))
     for drug, fields in sorted(attributes.items()):
         for field, values in fields.items():
+            if field == "currency":
+                by_issuer = defaultdict(set)
+                for issuer, currency in values:
+                    by_issuer[issuer].add(currency)
+                values = {c for cs in by_issuer.values() if len(cs) > 1 for c in cs}
             if len(values) > 1:
                 finding(out, f"{drug}: {field} varies within the series {sorted(values)}")
 

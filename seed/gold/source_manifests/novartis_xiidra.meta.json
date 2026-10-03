@@ -1,9 +1,6 @@
 {
-  "manufacturer": "Novartis",
+  "manufacturer": "Bausch + Lomb",
   "currency": "USD",
-  "series_end_quarter": "2023Q3",
-  "series_end_basis": "issuer_stopped_reporting",
-  "series_end_reason": "Q3 2023 report (0001370368-23-000068): 'In September 2023, Novartis completed the divestment of Xiidra to Bausch + Lomb.' Bausch + Lomb's later Xiidra sales are handled by another agent.",
   "series_start_reason": "Xiidra launched in 2016 under Shire (launch results in Shire's Q3 2016 8-K, 0000936402-16-000009), but Shire's 8-K earnings releases, 10-Qs and 10-Ks (all searched, Q3 2016-Q3 2018) print no Xiidra net sales figure, Shire was acquired by Takeda in January 2019, and Takeda is not on EDGAR with quarterly releases for those periods (not pursued). Novartis 'began recording sales as of July 1, 2019' (Q4 2019 report) and first prints Xiidra for Q3 2019.",
   "drug_name": "Xiidra",
   "generic_name": "lifitegrast",
@@ -28,6 +25,20 @@
     "indexed every 6-K 2005-2026 filed in the late Jan-Feb, Apr-May, Jul-Aug, Oct-Nov windows plus every 6-K 2017-07 onward; downloaded each quarterly interim financial report exhibit (EX-99.2 / nvs-*-99_2.htm, or the 6-K body for 2006-2011)",
     "extracted product rows by script (scripts/build.py, extract.py): first cell equals the brand (optionally plus footnote digit), header row above names the quarter first with no year-to-date column",
     "cross-checked every quarter's own figure against the prior-year column of the following year's report: no differences (no restatement of these product lines found)",
-    "downloaded Shire 8-K earnings exhibits Q3 2016-Q3 2018, 10-Qs and 10-Ks and grepped Xiidra: only narrative (launch share, scripts), no sales amounts"
+    "downloaded Shire 8-K earnings exhibits Q3 2016-Q3 2018, 10-Qs and 10-Ks and grepped Xiidra: only narrative (launch share, scripts), no sales amounts",
+    "[Bausch + Lomb piece] Bausch + Lomb (CIK 0001860742) 8-K earnings Exhibit 99.1 (2023Q1-2026Q2) tables print only segment lines (Vision Care / Surgical / Pharmaceuticals); 10-Q/10-K 2023-2026 and the releases print no Miebo/Xiidra table row (prose mentions only, e.g. 'MIEBO sales of $112 million in the fourth quarter' in the 2026-02-18 release).",
+    "[Bausch + Lomb piece] Quarterly product revenue is printed in the 'Top 10 Revenues' slide of the earnings presentations on ir.bausch.com (listing pages per year via field_event_year_target_id); decks 3Q23-2Q26 parsed with pdfplumber (scripts/bl.py, decks_bl.py). The 4Q23 and 3Q23 decks print no product figure; the 1Q25 and 4Q25 decks could not be located on the IR site (guessed paths returned 404), so quarters without own-deck figures use the trailing columns of a later deck (direct_retrospective_table)."
+  ],
+  "joined_issuers": [
+    {
+      "issuer": "Novartis",
+      "first_quarter": "2019Q3",
+      "last_quarter": "2023Q3"
+    },
+    {
+      "issuer": "Bausch + Lomb",
+      "first_quarter": "2023Q4",
+      "last_quarter": "2026Q2"
+    }
   ]
 }
