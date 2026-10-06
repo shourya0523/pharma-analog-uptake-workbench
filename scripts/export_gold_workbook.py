@@ -8,12 +8,15 @@ carries no cached value and reads back blank to pandas and to previewers until
 something recalculates it. Regenerate the workbook instead of editing it - this
 script is the only thing that should write to exports/.
 
-Reads seed/gold only. It must never import from the gold builder or from
-application code, and must never name a file the pipeline reads: this is a
-presentation of the oracle, not part of it, and a script that touches both
-directions is what backend/tests/test_gold_is_not_an_input.py fails. That is
-why first_approval_year is taken from gold's own product_profiles rather than
-from the reference data those profiles were built out of.
+Reads seed/gold, plus seed/consensus_peak_estimates.csv for the published
+peak-sales estimates the Peak-Normalized Uptake sheet needs - external figures
+that no file in gold holds and no procedure here derives. It must never import
+from the gold builder or from application code, and must never name a file the
+pipeline reads: this is a presentation of the oracle, not part of it, and a
+script that touches both directions is what
+backend/tests/test_gold_is_not_an_input.py fails. That is why
+first_approval_year is taken from gold's own product_profiles rather than from
+the reference data those profiles were built out of.
 
     python scripts/export_gold_workbook.py
 """
@@ -22,6 +25,7 @@ import csv
 import json
 from collections import defaultdict
 from pathlib import Path
+from statistics import median
 
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
@@ -570,6 +574,239 @@ for index in range(len(A_LEAD) + 1, len(headers) + 1):
     la.column_dimensions[get_column_letter(index)].width = 11
 la.freeze_panes = la.cell(3, len(A_LEAD) + 1)
 
+# --------------------------------------------- peak-normalized uptake sheet
+# The launch-aligned values again, this time as a percentage of a per-quarter
+# peak benchmark, so a product still climbing and a product long past its peak
+# can be read on the same axis.
+#
+# The benchmark is an annual peak divided by four, and the annual peak is the
+# larger of two inputs:
+#
+#   observed  - the highest total over four consecutive reported quarters.
+#               Four consecutive, not four calendar quarters of one year: a
+#               product peaking mid-year has its peak split across two
+#               calendar years by a January-to-December window.
+#   consensus - the median of the published peak-sales estimates that are
+#               comparable to the series, where any are.
+#
+# Consensus wins only when it is the larger. An estimate below what the
+# product has already sold has been overtaken by the world and says nothing;
+# an estimate above it is the part of the curve the reported quarters do not
+# yet cover, which is exactly the case a highest-observed benchmark gets
+# wrong - it calls every product mature and reads a growing product as though
+# it were already at its peak.
+#
+# Comparable means two things, and an estimate failing either is set aside on
+# the row rather than dropped quietly:
+#
+#   the same geography - a worldwide estimate over a series reporting one
+#     country makes the denominator wider than the numerator can reach, and
+#     every quarter of that curve reads low for a reason that is not the
+#     product's. The series' geography is the one its own rows state, not a
+#     reading of its scope label: a line can be formulation-specific and
+#     worldwide at once.
+#   a peak - a market-size projection for a horizon year is a different
+#     quantity, and a curve normalized by one is not measuring uptake.
+#
+# A quarter can print above 100%: the benchmark is an average quarter at the
+# peak year, and the strongest quarter of that year is above its own average.
+
+ESTIMATES = REPO / "seed" / "consensus_peak_estimates.csv"
+
+# The one estimate_kind that can serve as a peak. Another kind may be worth
+# recording - the file keeps what was checked, including what was rejected -
+# but it cannot be the denominator of an uptake curve.
+PEAK_ESTIMATE = "peak_annual_sales"
+
+
+def load_consensus_estimates():
+    """Published peak-sales estimates, grouped by the product each one names.
+
+    A written snapshot of what has been published elsewhere - news, market
+    research, analyst notes, litigation filings - transcribed one row per
+    estimate with the URL it came from and what checking it against that URL
+    showed. Nothing in this repository produces it and nothing at run time
+    can, which is why it is a file rather than a derivation; it goes stale
+    when an estimate is published or revised, or when a product enters the
+    dataset that has none. Values are read as written: this reads the file,
+    never the source behind it.
+    """
+    with ESTIMATES.open(newline="") as handle:
+        rows = list(csv.DictReader(handle))
+    grouped = defaultdict(list)
+    for row in rows:
+        grouped[row["product"].strip()].append({
+            "value": float(row["estimate_usd_millions"]),
+            "as_stated": row["estimate_as_stated"].strip(),
+            "kind": row["estimate_kind"].strip(),
+            "geography": row["estimate_geography"].strip(),
+            "attribution": row["attribution"].strip(),
+            "publisher": row["source_publisher"].strip(),
+            "url": row["source_url"].strip(),
+            "published_on": row["published_on"].strip(),
+        })
+    return grouped
+
+
+def period_at(index):
+    """The ``YYYYQn`` label for a quarter index, inverting ``quarter_index``."""
+    return f"{index // 4}Q{index % 4 + 1}"
+
+
+def rolling_four_quarter_peak(values_by_period):
+    """The highest four-consecutive-quarter total, and the window it spans.
+
+    Only a window whose four quarters are all reported counts. Summing across
+    a gap would present a three-quarter total as an annual one, and it would
+    be indistinguishable from a real annual figure once written into a cell.
+    Returns ``(total, first_period, last_period)``, or None where the series
+    holds no complete window.
+    """
+    indexed = {quarter_index(period): value for period, value in values_by_period.items()}
+    best = None
+    for start in sorted(indexed):
+        window = [indexed.get(start + step) for step in range(4)]
+        if any(value is None for value in window):
+            continue
+        total = sum(window)
+        if best is None or total > best[0]:
+            best = (total, period_at(start), period_at(start + 3))
+    return best
+
+
+def set_aside_reason(estimate, geography):
+    """Why an estimate on file is not usable for a series, or None if it is."""
+    if estimate["kind"] != PEAK_ESTIMATE:
+        return f"not a peak estimate - {estimate['kind'].replace('_', ' ')}"
+    if estimate["geography"] != geography:
+        return f"estimate is {estimate['geography']}, the series reports {geography}"
+    return None
+
+
+CONSENSUS = "consensus median - above what the series has reported"
+OBSERVED = "observed rolling four-quarter high - above the consensus median"
+NO_ESTIMATE = "observed rolling four-quarter high - no comparable estimate on file"
+
+estimates = load_consensus_estimates()
+values_by_series = defaultdict(dict)
+series_geography = defaultdict(set)
+for row in quarterly:
+    values_by_series[row["benchmark_identity"]][row["period"]] = row["value_normalized_usd_millions"]
+    series_geography[row["benchmark_identity"]].add(row["geography"])
+
+normalized = []
+for row in aligned:
+    drug, identity = row["drug_name"], row["benchmark_identity"]
+    geography = " | ".join(sorted(series_geography[identity]))
+    observed = rolling_four_quarter_peak(values_by_series[identity])
+
+    on_file = estimates.get(drug, [])
+    reasons = {id(item): set_aside_reason(item, geography) for item in on_file}
+    usable = [item for item in on_file if reasons[id(item)] is None]
+    consensus = median(item["value"] for item in usable) if usable else None
+
+    if consensus is not None and observed is not None and consensus > observed[0]:
+        selected, basis = consensus, CONSENSUS
+    elif observed is not None:
+        selected, basis = observed[0], OBSERVED if usable else NO_ESTIMATE
+    else:
+        selected, basis = consensus, CONSENSUS if consensus is not None else None
+
+    normalized.append({
+        "drug_name": drug,
+        "benchmark_identity": identity,
+        "revenue_scope": row["revenue_scope"],
+        "series_geography": geography,
+        "launch_anchor_quarter": row["launch_anchor_quarter"],
+        "alignment_basis": row["alignment_basis"],
+        "observed_peak_4q_usd_mm": round(observed[0], 1) if observed else None,
+        "observed_peak_window": f"{observed[1]}-{observed[2]}" if observed else None,
+        "consensus_peak_usd_mm": consensus,
+        "consensus_estimate_count": len(usable),
+        "consensus_estimates_as_stated": " | ".join(item["as_stated"] for item in usable),
+        "consensus_sources": " | ".join(
+            f"{item['as_stated']}, {item['publisher']}"
+            f"{', ' + item['published_on'] if item['published_on'] else ''}"
+            f" ({item['attribution']}): {item['url']}"
+            for item in usable),
+        "estimates_set_aside": " | ".join(
+            f"{item['as_stated']} {item['publisher']} - {reasons[id(item)]}"
+            for item in on_file if reasons[id(item)] is not None),
+        "selected_peak_usd_mm": round(selected, 1) if selected is not None else None,
+        "peak_basis": basis,
+        # A quarter of the peak as printed beside it, so a reader dividing the
+        # column by four gets the benchmark the percentages use.
+        "quarterly_benchmark_usd_mm": round(round(selected, 1) / 4, 1) if selected is not None else None,
+    })
+
+N_LEAD = list(normalized[0].keys())
+usable_for = {row["drug_name"] for row in normalized if row["consensus_estimate_count"]}
+unused = sorted(set(estimates) - usable_for)
+on_consensus = [row for row in normalized if row["peak_basis"] == CONSENSUS]
+overtaken = [row for row in normalized if row["peak_basis"] == OBSERVED]
+
+un = wb.create_sheet("Peak-Normalized Uptake")
+un.cell(1, 1, f"The Launch-Aligned Matrix as a percentage of each product's own quarterly peak "
+              f"benchmark, so a product mid-growth and a product past its peak can be compared "
+              f"on one axis. The benchmark is selected_peak_usd_mm / 4. The selected peak is the "
+              f"median of the published estimates in seed/consensus_peak_estimates.csv where "
+              f"that median is above the highest four-consecutive-quarter total the series "
+              f"reports, and that observed total otherwise - so a product that has already "
+              f"outsold what was forecast for it is measured against itself. An estimate counts "
+              f"only where it is a peak figure and states the same geography the series reports; "
+              f"anything else on file for the product is named in estimates_set_aside rather "
+              f"than used. Of {len(normalized)} series, {len(on_consensus)} sit on a consensus "
+              f"estimate and {len(overtaken)} have overtaken the estimate written for them; the "
+              f"rest have none on file. "
+              f"Blanks are quarters outside the reported window, never zeros, and a quarter "
+              f"above 100% is a quarter stronger than the average quarter of the peak year. "
+              f"Estimates on file that no series can use: "
+              f"{', '.join(unused) if unused else 'none'}.").font = NOTE
+
+headers = N_LEAD + [launch_label(offset) for offset in range(span)]
+for index, name in enumerate(headers, start=1):
+    cell = un.cell(2, index, name)
+    cell.font = HEAD
+    cell.fill = HEAD_FILL
+    cell.alignment = Alignment(vertical="center", horizontal="center", wrap_text=True)
+    cell.border = GRID
+un.row_dimensions[2].height = 30
+
+for offset, row in enumerate(normalized):
+    row_index = 3 + offset
+    for index, column in enumerate(N_LEAD, start=1):
+        cell = un.cell(row_index, index, row[column])
+        cell.font = BODY
+        cell.border = GRID
+        if column.endswith("usd_mm"):
+            cell.number_format = MONEY
+        if column == "consensus_estimate_count":
+            cell.number_format = "0"
+        if column in ("consensus_sources", "estimates_set_aside"):
+            cell.alignment = Alignment(vertical="top", wrap_text=True)
+        else:
+            cell.alignment = Alignment(vertical="top")
+        if offset % 2:
+            cell.fill = BAND_FILL
+    benchmark = row["quarterly_benchmark_usd_mm"]
+    for period in sorted(values_by_series[row["benchmark_identity"]]):
+        index = len(N_LEAD) + quarters_between(row["launch_anchor_quarter"], period)
+        value = values_by_series[row["benchmark_identity"]][period]
+        cell = un.cell(row_index, index, round(value / benchmark * 100, 1) if benchmark else None)
+        cell.number_format = PCT
+        cell.font = BODY
+        cell.border = GRID
+    if offset % 2:
+        for index in range(len(N_LEAD) + 1, len(headers) + 1):
+            un.cell(row_index, index).fill = BAND_FILL
+
+for index, width in enumerate((20, 34, 24, 16, 15, 30, 15, 18, 15, 12, 20, 52, 40, 15, 34, 15),
+                              start=1):
+    un.column_dimensions[get_column_letter(index)].width = width
+for index in range(len(N_LEAD) + 1, len(headers) + 1):
+    un.column_dimensions[get_column_letter(index)].width = 11
+un.freeze_panes = un.cell(3, len(N_LEAD) + 1)
+
 # ------------------------------------------------------- product summary
 # One row per product, joining the profile, the revenue sheets and the peak
 # sheet so a single product can be read without crossing four tabs. Every
@@ -727,6 +964,9 @@ CONTENTS = [
     ("Launch-Aligned Matrix", len(aligned),
      "The same values re-indexed to Year 1 Q1 onwards from each product's own launch, "
      "so uptake curves line up at the start of launch instead of at a shared date."),
+    ("Peak-Normalized Uptake", len(normalized),
+     "The launch-aligned values as a percentage of each product's quarterly peak benchmark, "
+     "so a product still growing is not read as though it were already mature."),
     ("Annual Revenue", len(annual),
      "Annual figures: peak benchmarks in their own right, plus annual context for quarterly series."),
     ("Companion Series", len(companions),
@@ -806,6 +1046,9 @@ STATS = [
      "Products whose series has turned down and stayed down."),
     ("Peaks not yet observed", report["not_yet_observed_peaks"],
      "Still at their highest value; no peak claimed."),
+    ("Series on a consensus peak", len(on_consensus),
+     f"Of {len(normalized)} series: their published estimates sit above anything they have "
+     f"reported, so Peak-Normalized Uptake measures them against the estimate."),
     ("Evidenced exclusions", report["excluded_products"], ""),
     ("Distinct sources cited", len(sources), ""),
     ("Products with attributes", report["product_profiles"]["products"], ""),
