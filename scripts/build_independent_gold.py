@@ -1918,9 +1918,23 @@ def build_uptravi(client: ResearchClient) -> list[dict[str, Any]]:
     ]
 
     manifest = read_csv(SOURCE_DIR / "jnj_uptravi_quarterly.csv")
+    # J&J's June 16 - July 2 stub is printed as the 2017 comparative of its
+    # 2Q2018 schedule (second column of the WW line), so that is the part's
+    # citation. The 3Q2017 schedule prints only the third quarter and the nine
+    # months, whose difference must agree with it.
+    stub_url = next(source["source_url"] for source in manifest if source["period"] == "2018Q2")
+    stub_match = re.search(
+        r"UPTRAVI[^\n]*\nUS[^\n]*\nIntl[^\n]*\nWW\s+[\d,]+\s+([\d,]+)[^\n]*",
+        pdf_text(client.fetch(stub_url)),
+        re.IGNORECASE,
+    )
+    if not stub_match:
+        raise ValueError("2018Q2 Uptravi WW row not found")
+    post_close_stub = float(stub_match.group(1).replace(",", ""))
+    stub_quote = re.sub(r"\s+", " ", stub_match.group(0))
     q3_source = manifest[0]
     q3_text = pdf_text(client.fetch(q3_source["source_url"]))
-    q3_value, q3_quote = uptravi_ww(q3_text)
+    q3_value, _ = uptravi_ww(q3_text)
     ytd_match = re.search(
         r"UPTRAVI[^\n]*\nUS[^\n]*\nIntl[^\n]*\nWW\s+[\d,]+\s+-\s+\*\s+\*\s+-\s+([\d,]+)",
         q3_text,
@@ -1928,11 +1942,15 @@ def build_uptravi(client: ResearchClient) -> list[dict[str, Any]]:
     )
     if not ytd_match:
         raise ValueError("2017Q3 Uptravi YTD row not found")
-    post_close_stub = float(ytd_match.group(1).replace(",", "")) - q3_value
+    if abs(float(ytd_match.group(1).replace(",", "")) - q3_value - post_close_stub) > 1e-6:
+        raise ValueError(
+            f"Uptravi stub {post_close_stub:g} (2Q2018 schedule) disagrees with the 3Q2017 "
+            f"nine months less third quarter ({ytd_match.group(1)} - {q3_value:g})"
+        )
     pre_close_q2 = values[0]
     bridge_value = pre_close_q2 + post_close_stub
     bridge_quote = (
-        f"{quote}; {q3_quote}; acquisition bridge: {pre_close_q2:g} pre-close + "
+        f"{quote}; {stub_quote}; acquisition bridge: {pre_close_q2:g} pre-close + "
         f"{post_close_stub:g} post-close = {bridge_value:g} USD million."
     )
     rows.append(
@@ -1946,7 +1964,7 @@ def build_uptravi(client: ResearchClient) -> list[dict[str, Any]]:
             derivation="acquisition_bridge_sum",
             sources=[
                 {"source_url": historical_url, "source_quote": quote},
-                {"source_url": q3_source["source_url"], "source_quote": q3_quote},
+                {"source_url": stub_url, "source_quote": stub_quote},
             ],
             bridge_components=uptravi_bridge_components(pre_close_q2, post_close_stub),
             notes=(
@@ -2132,8 +2150,8 @@ ACQUISITION_BRIDGES = {
                 "value": 9.0,
                 "issuer": "Johnson & Johnson",
                 "source_url": (
-                    "https://s203.q4cdn.com/636242992/files/doc_financials/2017/q3/"
-                    "Sales_of_Key_Products_Franchises_3Q2017.pdf"
+                    "https://s203.q4cdn.com/636242992/files/doc_financials/2018/q2/"
+                    "Sales_of_Key_Products_Franchises_2Q2018.pdf"
                 ),
             },
         ],
