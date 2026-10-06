@@ -1,0 +1,92 @@
+"""After the app has loaded gold, compare what the database holds with gold.
+
+    python check_db.py <psql-args...>
+
+Reads gold independently (any seed/gold/*.jsonl row with a gold_id and a
+source_url) and the database's current rows, and checks they are the same set
+with the same figure, period, product, currency, source and quote. Also checks
+the verdicts the browser run left behind. Exits non-zero on any difference.
+"""
+
+import json
+import subprocess
+import sys
+from decimal import Decimal
+from pathlib import Path
+
+GOLD = Path(__file__).resolve().parents[4] / "seed" / "gold"
+RESULT = Path(sys.argv[1])
+PSQL = ["psql", "-At", *sys.argv[2:]]
+
+
+def query(sql: str):
+    out = subprocess.run([*PSQL, "-c", sql], check=True, capture_output=True, text=True).stdout.strip()
+    return json.loads(out or "null")
+
+
+def gold_claims() -> dict:
+    claims = {}
+    for path in GOLD.glob("*.jsonl"):
+        for line in path.read_text().splitlines():
+            if line.strip():
+                row = json.loads(line)
+                if row.get("gold_id") and row.get("source_url"):
+                    claims[row["gold_id"]] = row
+    return claims
+
+
+def main() -> int:
+    failures = []
+    claims = gold_claims()
+    rows = query("""select json_agg(json_build_object('gold_id', gold_id, 'value', value_reported::text,
+        'period', period, 'drug', drug_name, 'currency', currency, 'url', source_url, 'quote', source_quote,
+        'kind', kind)) from rows where in_current_gold""") or []
+    db = {r["gold_id"]: r for r in rows}
+    missing, extra = set(claims) - set(db), set(db) - set(claims)
+    if missing or extra:
+        failures.append(f"row sets differ: {len(missing)} missing, {len(extra)} extra "
+                        f"(e.g. {sorted(missing)[:3]} {sorted(extra)[:3]})")
+    mismatched = []
+    for gold_id in set(claims) & set(db):
+        g, d = claims[gold_id], db[gold_id]
+        gv = g.get("value_reported")
+        same_value = (gv is None and d["value"] is None) or (
+            gv is not None and d["value"] is not None and Decimal(str(gv)) == Decimal(d["value"]))
+        if not (same_value and d["period"] == (g.get("period") or "") and d["drug"] == g["drug_name"]
+                and d["currency"] == (g.get("currency") or "") and d["url"] == g["source_url"]
+                and d["quote"] == (g.get("source_quote") or "")):
+            mismatched.append(gold_id)
+    if mismatched:
+        failures.append(f"{len(mismatched)} rows differ from gold, e.g. {mismatched[:3]}")
+    kinds = query("select json_object_agg(kind, n) from (select kind, count(*) n from rows where in_current_gold group by kind) k")
+    print(f"database rows {len(db)}, gold claims {len(claims)}, identical {len(set(claims) & set(db)) - len(mismatched)}; by kind {kinds}")
+
+    run = json.loads(RESULT.read_text()) if RESULT.exists() else {}
+    verdicts = query("select json_agg(json_build_object('gold_id', gold_id, 'reviewer', reviewer, 'verdict', verdict, "
+                     "'seen', gold_value_seen::text, 'gold', (select value_reported::text from rows r where r.gold_id = v.gold_id))) from verdicts v") or []
+    by = {(v["gold_id"], v["reviewer"]): v for v in verdicts}
+    expect = [((run.get("confirmed"), "asha@team.test"), "confirmed"), ((run.get("flagged"), "asha@team.test"), "wrong_period")]
+    for key, verdict in expect:
+        v = by.get(key)
+        if not v or v["verdict"] != verdict:
+            failures.append(f"expected {verdict} for {key}, found {v}")
+        elif v["seen"] != v["gold"]:
+            failures.append(f"verdict {key} records gold value {v['seen']}, row has {v['gold']}")
+    if len(verdicts) != 2:
+        failures.append(f"expected 2 verdicts after the undo, found {len(verdicts)}")
+    res = query("select json_agg(json_build_object('gold_id', gold_id, 'outcome', outcome, 'by', resolved_by)) from resolutions") or []
+    if [(r["gold_id"], r["outcome"], r["by"]) for r in res] != [(run.get("flagged"), "gold_correct", "ben@team.test")]:
+        failures.append(f"unexpected resolutions {res}")
+    assigned = query("select json_agg(id) from batches where assignee = 'asha@team.test'") or []
+    if len(assigned) != 1:
+        failures.append(f"expected one batch assigned to asha, found {assigned}")
+
+    for f in failures:
+        print("FAIL ", f)
+    if not failures:
+        print("PASS  database holds exactly gold's sourced rows; verdicts, undo, resolution and assignment as driven")
+    return 1 if failures else 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

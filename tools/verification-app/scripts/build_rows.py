@@ -4,9 +4,10 @@ Reads the published gold dataset and writes one JSON file:
 
     python tools/verification-app/scripts/build_rows.py [--out PATH]
 
-Every figure a person is asked to check is a gold row for a product on the
-requested list (docs/sourcing/target_products.csv): each quarterly row, and
-each annual row of a product that has no quarterly series. A row's tier says
+Every row in gold that cites a source is served: quarterly, annual and
+companion figures, and the evidence behind each exclusion (see gold_rows()).
+Rows for products off the requested list (docs/sourcing/target_products.csv)
+are served too, marked "not on requested list". A row's tier says
 how much rides on it; its note says what in the document makes it easy to
 misread. Both are derived from the row and its series, so a rebuild of gold
 re-derives them.
@@ -35,19 +36,24 @@ DEFAULT_OUT = Path(__file__).resolve().parents[1] / "data" / "rows.json"
 
 BATCH_SIZE = 25
 
-# Why a row is P1: an error in it moves a peak, rests on arithmetic, failed the
-# automated check, was kept despite looking wrong, or sits beside a quarter an
-# ownership change left unreported.
+# Why a row is P1: an error in it moves a peak (or the highest year so far, or
+# an annual benchmark), rests on arithmetic, failed the automated check, was
+# kept despite looking wrong, or sits beside a quarter an ownership change left
+# unreported.
 P1_REASONS = {
     "peak year",
+    "highest observed year",
+    "annual benchmark",
+    "input to a derived quarter",
     "derived quarter",
     "automated check failed",
     "reviewed anomaly",
     "next to an ownership gap",
 }
-# Why a row is P2: it bounds its series, or its source is one the automated
-# check reads least reliably.
-P2_REASONS = {"series start", "series end", "prose figure", "issuer website source"}
+# Why a row is P2: it bounds its series, its source is one the automated check
+# reads least reliably, or it is annual context. Exclusions are P2 and
+# companion series P3 regardless of reason.
+P2_REASONS = {"series start", "series end", "prose figure", "issuer website source", "annual context"}
 
 DERIVATION_TEXT = {
     "annual_less_reported_first_nine_months": "the full year less the first nine months",
@@ -151,6 +157,9 @@ def note_for(row: dict, reasons: list[str], context: dict) -> tuple[str, str]:
         notes.append(f"Kept although it looks wrong: {row['reviewed_anomaly']}")
     if "peak year" in reasons:
         notes.append(f"Part of {row['drug_name']}'s peak year: an error here moves the peak.")
+    if "highest observed year" in reasons:
+        notes.append(f"Part of {row['drug_name']}'s highest year so far: an error here moves "
+                     "the figure the analogs compare against.")
     if "automated check failed" in reasons:
         notes.append(
             "The automated check could not match this row (quote layout, a blocked site, or "
@@ -175,35 +184,123 @@ def note_for(row: dict, reasons: list[str], context: dict) -> tuple[str, str]:
     return " ".join(notes), suggestion
 
 
+def gold_rows() -> list[tuple[str, dict]]:
+    """Every gold row that cites a source, with its kind.
+
+    Found by shape, not by file name: any row in any ``seed/gold/*.jsonl`` that
+    carries a ``gold_id`` and a ``source_url`` is a claim a person can check
+    against a document. Peaks are absent because they are computed from rows
+    that are present.
+    """
+    out = []
+    for path in sorted(GOLD.glob("*.jsonl")):
+        for row in load_jsonl(path):
+            if row.get("gold_id") and row.get("source_url"):
+                out.append((row_kind(row, path.stem), row))
+    return out
+
+
+def row_kind(row: dict, stem: str) -> str:
+    if row.get("series_role") == "companion":
+        return "companion"
+    if row.get("benchmark_status") == "excluded":
+        return "exclusion"
+    if row.get("period_type") == "annual":
+        return "annual"
+    if row.get("period_type") == "quarterly":
+        return "quarterly"
+    return stem
+
+
+def peak_inputs() -> dict[str, str]:
+    """gold_id -> the peak reason it feeds, from each peak row's own input list."""
+    out: dict[str, str] = {}
+    for peak in load_jsonl(GOLD / "peak_sales.jsonl"):
+        reason = "peak year" if peak.get("peak_year") else "highest observed year"
+        for gold_id in peak.get("input_ids") or []:
+            out[gold_id] = reason
+    return out
+
+
+def figure_row(row: dict, kind: str, tier: str, reasons: list[str], note: str, suggestion: str,
+               automated: str = "none", checked: bool = False) -> dict:
+    period = row.get("period") or ""
+    return {
+        "gold_id": row["gold_id"],
+        "kind": kind,
+        "tier": tier,
+        "reasons": reasons,
+        "drug_name": row["drug_name"],
+        "generic_name": row.get("generic_name"),
+        "issuer": row.get("issuer") or row.get("manufacturer") or "Excluded products",
+        "period": period,
+        "period_type": "quarter" if re.fullmatch(r"\d{4}Q[1-4]", period)
+        else "year" if re.fullmatch(r"\d{4}", period) else "none",
+        "value_reported": row.get("value_reported"),
+        "currency": row.get("currency") or "",
+        "source_unit": row.get("source_unit") or ("millions" if row.get("value_reported") is not None else ""),
+        "source_value_reported": row.get("source_value_reported"),
+        "value_usd_millions": row.get("value_normalized_usd_millions"),
+        "derivation": row.get("derivation") or row.get("reason_code") or "",
+        "scope": row.get("revenue_scope"),
+        "line_label": row.get("line_label") or row["drug_name"],
+        "source_url": row["source_url"],
+        "source_quote": row.get("source_quote") or "",
+        "automated_check": automated,
+        "claude_checked": checked,
+        "claude_note": note,
+        "claude_suggestion": suggestion,
+    }
+
+
 def build() -> dict:
     requested = requested_products()
-    quarterly = [r for r in load_jsonl(GOLD / "quarterly_revenue.jsonl") if r["drug_name"] in requested]
-    annual = [r for r in load_jsonl(GOLD / "annual_revenue.jsonl") if r["drug_name"] in requested]
-    peaks = {r["drug_name"]: r for r in load_jsonl(GOLD / "peak_sales.jsonl")}
+    peaks = peak_inputs()
     coverage = {r["drug_name"]: r for r in load_jsonl(GOLD / "series_coverage.jsonl")}
     log = json.loads(LOG.read_text())
     metas = series_meta()
 
-    rows: list[dict] = []
-    by_drug: dict[str, list[dict]] = defaultdict(list)
-    for row in quarterly:
-        by_drug[row["drug_name"]].append(row)
+    by_series: dict[tuple[str, str], list[tuple[str, dict]]] = defaultdict(list)
+    for kind, row in gold_rows():
+        # A quarterly series is the product's, across owners; other kinds are
+        # one series per benchmark identity.
+        key = row["drug_name"] if kind == "quarterly" else row.get("benchmark_identity") or row["gold_id"]
+        by_series[(kind, key)].append((kind, row))
 
-    for drug, series in by_drug.items():
-        series.sort(key=lambda r: r["period"])
-        peak = peaks.get(drug) or {}
-        holes = {quarter_index(p) for p in coverage.get(drug, {}).get("unreported_quarters", [])}
-        entry = log.get(drug, {})
-        failed = {p for p, ok in entry.get("automated", {}).items() if not ok}
-        checked = set(entry.get("hand_checked", []))
-        owner = metas.get(drug, {}).get("manufacturer") or series[-1]["manufacturer"]
-        for index, row in enumerate(series):
+    rows: list[dict] = []
+    for (kind, _), series in by_series.items():
+        series.sort(key=lambda item: item[1].get("period") or "")
+        drug = series[0][1]["drug_name"]
+        for index, (_, row) in enumerate(series):
             reasons: list[str] = []
-            if peak.get("peak_year") == row["calendar_year"]:
-                reasons.append("peak year")
+            if kind == "exclusion":
+                reasons.append("exclusion: " + (row.get("reason_code") or "no figures").replace("_", " "))
+                note = (
+                    "Gold holds no figures for this product and says why: "
+                    f"{row.get('details') or row.get('reason_code')}. The quote is the evidence."
+                )
+                suggestion = ("Open the source and check it supports that. Confirm if it does; "
+                              "if you find a usable standalone figure, flag Wrong value and enter it.")
+                if drug not in requested:
+                    reasons.append("not on requested list")
+                rows.append(figure_row(row, kind, "P2", reasons, note, suggestion))
+                continue
+
+            entry = log.get(drug, {}) if kind == "quarterly" else {}
+            automated = entry.get("automated", {})
+            holes = {quarter_index(p) for p in coverage.get(drug, {}).get("unreported_quarters", [])} \
+                if kind == "quarterly" else set()
+            if row["gold_id"] in peaks:
+                reasons.append(peaks[row["gold_id"]])
+            if kind == "annual" and row.get("series_role") == "peak_benchmark":
+                reasons.append("annual benchmark")
+            if kind == "annual" and row.get("series_role") == "derivation_input":
+                reasons.append("input to a derived quarter")
+            if kind == "annual" and row.get("series_role") == "partial_context":
+                reasons.append("annual context")
             if not row["derivation"].startswith("direct"):
                 reasons.append("derived quarter")
-            if row["period"] in failed:
+            if automated.get(row["period"]) is False:
                 reasons.append("automated check failed")
             if row.get("reviewed_anomaly"):
                 reasons.append("reviewed anomaly")
@@ -217,64 +314,30 @@ def build() -> dict:
                 reasons.append("prose figure")
             if "sec.gov" not in row["source_url"]:
                 reasons.append("issuer website source")
-            tier = "P1" if P1_REASONS & set(reasons) else "P2" if P2_REASONS & set(reasons) else "P3"
-            note, suggestion = note_for(row, reasons, {"current_owner": owner})
-            rows.append({
-                "gold_id": row["gold_id"],
-                "tier": tier,
-                "reasons": reasons,
-                "drug_name": drug,
-                "generic_name": row.get("generic_name"),
-                "issuer": row["manufacturer"],
-                "period": row["period"],
-                "period_type": "quarter",
-                "value_reported": row["value_reported"],
-                "currency": row["currency"],
-                "source_unit": row.get("source_unit") or "millions",
-                "source_value_reported": row.get("source_value_reported"),
-                "value_usd_millions": row.get("value_normalized_usd_millions"),
-                "derivation": row["derivation"],
-                "scope": row.get("revenue_scope"),
-                "source_url": row["source_url"],
-                "source_quote": row["source_quote"],
-                "automated_check": "fail" if row["period"] in failed
-                else "pass" if row["period"] in entry.get("automated", {}) else "none",
-                "claude_checked": row["period"] in checked,
-                "claude_note": note,
-                "claude_suggestion": suggestion,
-            })
 
-    # Annual rows of products with no quarterly series: the figure is the
-    # benchmark itself, so each one is P1.
-    for row in annual:
-        if row["drug_name"] in by_drug:
-            continue
-        note, suggestion = note_for(row | {"period": row["period"] + "Q4", "calendar_year": int(row["period"])},
-                                    ["peak year"] if row.get("series_role") == "peak_benchmark" else [],
-                                    {"current_owner": row["manufacturer"]})
-        rows.append({
-            "gold_id": row["gold_id"],
-            "tier": "P1",
-            "reasons": ["annual figure, no quarterly series"],
-            "drug_name": row["drug_name"],
-            "generic_name": row.get("generic_name"),
-            "issuer": row["manufacturer"],
-            "period": row["period"],
-            "period_type": "year",
-            "value_reported": row["value_reported"],
-            "currency": row["currency"],
-            "source_unit": row.get("source_unit") or "millions",
-            "source_value_reported": row.get("source_value_reported"),
-            "value_usd_millions": row.get("value_normalized_usd_millions"),
-            "derivation": row["derivation"],
-            "scope": row.get("revenue_scope"),
-            "source_url": row["source_url"],
-            "source_quote": row["source_quote"],
-            "automated_check": "none",
-            "claude_checked": False,
-            "claude_note": note.replace(row["period"] + "Q4", row["period"]),
-            "claude_suggestion": suggestion.replace(row["period"] + "Q4", row["period"]),
-        })
+            if kind == "companion":
+                tier = "P3"
+                reasons.insert(0, "companion series (never scored)")
+            else:
+                tier = "P1" if P1_REASONS & set(reasons) else "P2" if P2_REASONS & set(reasons) else "P3"
+            if drug not in requested:
+                reasons.append("not on requested list")
+
+            owner = metas.get(drug, {}).get("manufacturer") or series[-1][1].get("manufacturer")
+            if kind == "annual":
+                as_quarter = row | {"period": row["period"] + "Q4", "calendar_year": int(row["period"])}
+                note, suggestion = note_for(as_quarter, reasons, {"current_owner": owner})
+                note = note.replace(row["period"] + "Q4", row["period"])
+                suggestion = suggestion.replace(row["period"] + "Q4", row["period"])
+            else:
+                note, suggestion = note_for(row, reasons, {"current_owner": owner,
+                                                           "row_label": row.get("line_label")})
+            rows.append(figure_row(
+                row, kind, tier, reasons, note, suggestion,
+                automated="fail" if automated.get(row["period"]) is False
+                else "pass" if row["period"] in automated else "none",
+                checked=row["period"] in set(entry.get("hand_checked", [])),
+            ))
 
     # Batches keep rows that cite the same document together, so a reviewer
     # opens each document once: one issuer and tier per batch, rows ordered by
