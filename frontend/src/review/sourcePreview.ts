@@ -293,7 +293,7 @@ export function fetchSource(apiBase: string, datapointId: string): Promise<Fetch
 // ---------------------------------------------------------------- PDF
 
 type TextItem = { str: string; transform: number[]; width: number; height: number }
-type Line = { items: TextItem[]; text: string }
+type Line = { items: TextItem[]; text: string; heading?: TextItem[] }
 
 let pdfjsPromise: Promise<typeof import('pdfjs-dist')> | null = null
 function pdfjs() {
@@ -325,17 +325,29 @@ async function pageLines(page: PDFPageProxy): Promise<Line[]> {
 }
 
 /** For each line naming the product, every item printed level with it: a table
- * row whose label and numbers sit at slightly different heights. */
-function rowBands(lines: Line[], t: Targets): Line[] {
+ * row whose label and numbers sit at slightly different heights. A name printed
+ * as a heading, with no numbers of its own, is followed by its lines beneath
+ * (US / Intl / WW) down to the next line without numbers, the next heading. */
+export function rowBands(lines: Line[], t: Targets): Line[] {
   const items = lines.flatMap((l) => l.items)
-  const bands: Line[] = []
-  for (const line of lines) {
-    if (!t.hasName(norm(line.text))) continue
+  const bandAt = (line: Line): Line => {
     const y = line.items[0].transform[5]
     const tol = Math.max(3, (line.items[0].height || 8) * 0.6)
     const level = items.filter((i) => Math.abs(i.transform[5] - y) <= tol).sort((a, b) => a.transform[4] - b.transform[4])
-    bands.push({ items: level, text: level.map((i) => i.str).join(' ') })
+    return { items: level, text: level.map((i) => i.str).join(' ') }
   }
+  const ordered = [...lines].sort((a, b) => b.items[0].transform[5] - a.items[0].transform[5])
+  const bands: Line[] = []
+  ordered.forEach((line, n) => {
+    if (!t.hasName(norm(line.text))) return
+    const own = bandAt(line)
+    bands.push(own)
+    if (/\d/.test(own.text)) return
+    for (const below of ordered.slice(n + 1)) {
+      if (!/\d/.test(below.text) || t.hasName(norm(below.text))) break
+      bands.push({ ...bandAt(below), heading: own.items })
+    }
+  })
   return bands
 }
 
@@ -523,6 +535,7 @@ export class SourcePreview {
         if (rx && rx.test(item.str)) first = first || box(item, 'fig')
         else if (t.hasName(norm(item.str))) box(item, 'label')
       }
+      for (const item of line.heading || []) if (t.hasName(norm(item.str))) box(item, 'label')
       const xs = line.items.map((i) => i.transform[4])
       const right = Math.max(...line.items.map((i) => i.transform[4] + i.width))
       const h = Math.max(...line.items.map((i) => i.height || 8))

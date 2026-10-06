@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { figureVariants, locateInHtml, locateQuoteInHtml, reveal, spacedText, targetsFor } from './sourcePreview'
+import { figureVariants, locateInHtml, locateQuoteInHtml, reveal, rowBands, spacedText, targetsFor } from './sourcePreview'
 
 const doc = (body: string) => new DOMParser().parseFromString(`<html><body>${body}</body></html>`, 'text/html')
 const row = (over: Record<string, unknown> = {}) => ({
@@ -75,5 +75,18 @@ describe('reveal', () => {
       expect(n.hasAttribute('hidden')).toBe(false)
     }
     expect(document.querySelector('details')!.open).toBe(true)
+  })
+})
+
+describe('rowBands', () => {
+  const at = (y: number, ...strs: string[]) => {
+    const items = strs.map((str, n) => ({ str, transform: [1, 0, 0, 1, 50 * n, y], width: 40, height: 8 }))
+    return { items, text: strs.join(' ') }
+  }
+  it('reads the lines beneath a product printed as a heading, down to the next heading', () => {
+    const lines = [at(700, 'CALDERON'), at(690, 'US', '81', '84'), at(680, 'WW', '198', '224'), at(670, 'NUVESSA'), at(660, 'WW', '198')]
+    const bands = rowBands(lines, targetsFor(row({ value_reported: 198, source_quote: '' })))
+    expect(bands.map((b) => b.text)).toEqual(['CALDERON', 'US 81 84', 'WW 198 224'])
+    expect(bands[2].heading?.[0].str).toBe('CALDERON')
   })
 })
