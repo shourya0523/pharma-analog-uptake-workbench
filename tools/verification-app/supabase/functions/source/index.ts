@@ -1,12 +1,12 @@
 // Fetches a gold row's source document so the app can show it inline.
 //
-// GET /functions/v1/source?url=<source_url>  (Authorization: the reviewer's session)
+// GET /functions/v1/source?url=<source_url>  (apikey: the app's key)
 //
-// Only URLs that some gold row cites are fetched, and only for team members:
-// the lookup runs as the caller, so the rows table's RLS decides both. That
-// keeps this from being an open proxy. The response is the document's bytes
-// with its content type, plus X-Final-Url (after redirects) so relative links
-// in an HTML page can be resolved.
+// Only URLs that some gold row cites are fetched, which keeps this from being
+// an open proxy. The app has no sign-in, so the function is deployed with
+// verify_jwt off and the lookup runs with the project's anon key. The response
+// is the document's bytes with its content type, plus X-Final-Url (after
+// redirects) so relative links in an HTML page can be resolved.
 import { createClient } from "npm:@supabase/supabase-js@2";
 
 const CORS = {
@@ -28,14 +28,11 @@ Deno.serve(async (req) => {
   if (!target) return reply(400, "missing url");
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-  const asCaller = createClient(supabaseUrl, Deno.env.get("SUPABASE_ANON_KEY")!, {
-    global: { headers: { Authorization: req.headers.get("Authorization") ?? "" } },
-  });
-  const { data: cited, error } = await asCaller
+  const anon = createClient(supabaseUrl, Deno.env.get("SUPABASE_ANON_KEY")!);
+  const { data: cited, error } = await anon
     .from("rows").select("gold_id").eq("source_url", target).limit(1);
-  // 42501: the caller may not even ask (an anonymous key), which is a refusal too.
-  if (error) return reply(error.code === "42501" ? 403 : 500, error.message);
-  if (!cited?.length) return reply(403, "not a gold source, or not a team member");
+  if (error) return reply(500, error.message);
+  if (!cited?.length) return reply(403, "not a source any gold row cites");
 
   // SEC asks automated clients to name a contact; the project sets one in
   // app_config (key sec_contact). Other hosts get the same honest agent.

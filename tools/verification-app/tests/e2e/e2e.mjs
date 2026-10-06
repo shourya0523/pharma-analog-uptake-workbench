@@ -17,12 +17,14 @@ const check = (name, ok, detail = "") => {
 };
 
 const browser = await chromium.launch(exe ? { executablePath: exe } : {});
+const TEAM = { asha: "asha@team.test", ben: "ben@team.test" };
+// A browser for one reviewer: the app's key (no sign-in), then their name
+// picked on the first screen. who = null leaves the picker showing.
 async function as(who, { width = 1440, height = 900 } = {}) {
-  const ctx = await browser.newContext({ viewport: { width, height } });
-  // Each reviewer gets their own config.js carrying their session token.
+  const ctx = await browser.newContext({ viewport: { width, height }, acceptDownloads: true });
   await ctx.route("**/config.js", (route) => route.fulfill({
     contentType: "text/javascript",
-    body: `export default { supabaseUrl: "${base}", supabaseKey: "local-anon-key", accessToken: "${tokens[who]}" };`,
+    body: `export default { supabaseUrl: "${base}", supabaseKey: "${tokens.anon}" };`,
   }));
   // Anything off this machine (CDN scripts, fonts, images in source pages) is
   // fetched with curl, which knows the sandbox's outbound proxy.
@@ -36,6 +38,12 @@ async function as(who, { width = 1440, height = 900 } = {}) {
   });
   const page = await ctx.newPage();
   page.on("pageerror", (e) => console.log(`[${who}] page error: ${e.message}`));
+  await page.goto(`${base}/`);
+  await page.waitForSelector("[data-email]");
+  if (who) {
+    await page.click(`[data-email="${TEAM[who]}"]`);
+    await page.waitForSelector(".topbar");
+  }
   return page;
 }
 
@@ -123,11 +131,26 @@ try {
   await b.waitForFunction(() => /Resolved/.test(document.querySelector("#toast")?.textContent || ""));
   check("resolve a flag", true);
 
-  // 6. Someone not on the team sees nothing.
-  const o = await as("outsider");
-  await o.goto(`${base}/`);
-  await o.waitForSelector("h1");
-  check("outsider is turned away", (await o.textContent("h1")).includes("Not on the team list"));
+  // 6. A new browser asks who you are, listing exactly the team.
+  const o = await as(null);
+  const names = await o.$$eval("[data-email]", (els) => els.map((e) => e.textContent.trim()).sort());
+  check("first visit asks who you are", names.join(",") === "Asha,Ben", names.join(", "));
+
+  // 6b. Claiming an unassigned batch takes one click.
+  await b.goto(`${base}/#/queue`);
+  await b.waitForSelector(".tier .n");
+  await b.click('[data-tier="all"]');
+  await b.click('[data-show="unassigned"]');
+  const claimId = await b.getAttribute("[data-claim]", "data-claim");
+  await b.click(`[data-claim="${claimId}"]`);
+  await b.waitForFunction(() => /Ben/.test(document.querySelector("#toast")?.textContent || ""));
+  check("claim a batch", true, claimId);
+  result.claimed = claimId;
+
+  // 6c. Export Excel downloads the workbook (contents checked by check_db.py).
+  const [download] = await Promise.all([b.waitForEvent("download", { timeout: 120_000 }), b.click("#exportxlsx")]);
+  await download.saveAs(`${out}/export.xlsx`);
+  check("export Excel downloads a workbook", fs.statSync(`${out}/export.xlsx`).size > 0, download.suggestedFilename());
 
   // 7. Progress reflects it all.
   await a.goto(`${base}/#/progress`);
@@ -165,6 +188,7 @@ try {
 
   // Phone width: the review page must not scroll sideways.
   const p = await as("asha", { width: 390, height: 844 });
+  await p.goto(`${base}/#/queue`);
   await p.goto(`${base}/#/batch/${encodeURIComponent(firstP1.id)}/${encodeURIComponent(firstId)}`);
   await p.waitForSelector("#card .drug");
   const sw = await p.evaluate(() => document.documentElement.scrollWidth);

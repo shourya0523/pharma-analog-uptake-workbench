@@ -80,6 +80,32 @@ def main() -> int:
     assigned = query("select json_agg(id) from batches where assignee = 'asha@team.test'") or []
     if len(assigned) != 1:
         failures.append(f"expected one batch assigned to asha, found {assigned}")
+    claimed = query("select json_agg(id) from batches where assignee = 'ben@team.test'") or []
+    if claimed != [run.get("claimed")]:
+        failures.append(f"expected ben to have claimed {run.get('claimed')}, found {claimed}")
+
+    # The workbook the Export Excel button produced.
+    export = RESULT.parent / "export.xlsx"
+    if not export.exists():
+        failures.append("no exported workbook")
+    else:
+        from openpyxl import load_workbook
+        book = load_workbook(export, read_only=True)
+        sheet_rows = list(book["Rows"].iter_rows(values_only=True))
+        head = sheet_rows[0]
+        exported = {r[head.index("Gold ID")]: r for r in sheet_rows[1:]}
+        if set(exported) != set(claims):
+            failures.append(f"export Rows sheet differs from gold: {len(set(claims) - set(exported))} missing, "
+                            f"{len(set(exported) - set(claims))} extra")
+        wrong = [g for g, r in exported.items() if g in claims and not (
+            (claims[g].get("value_reported") is None and r[head.index("Value Reported (millions)")] in (None, ""))
+            or Decimal(str(claims[g].get("value_reported"))) == Decimal(str(r[head.index("Value Reported (millions)")])))]
+        if wrong:
+            failures.append(f"{len(wrong)} exported figures differ from gold, e.g. {wrong[:3]}")
+        listed = list(book["Human Verdicts"].iter_rows(values_only=True))[1:]
+        if len(listed) != len(verdicts):
+            failures.append(f"export lists {len(listed)} verdicts, database has {len(verdicts)}")
+        print(f"export: {len(exported)} rows, {len(listed)} verdicts, sheets {book.sheetnames}")
 
     for f in failures:
         print("FAIL ", f)

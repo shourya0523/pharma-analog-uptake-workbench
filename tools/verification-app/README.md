@@ -12,27 +12,28 @@ It is gold-side tooling. The pipeline never reads it
 | Path | What it is |
 |---|---|
 | `scripts/build_rows.py` | Turns `seed/gold` into `data/rows.json`: every gold row that cites a source (quarterly, annual and companion figures, and the evidence for each exclusion), with a priority tier, reasons, Claude's note and a batch. |
-| `supabase/schema.sql` | Tables, access rules (team members only), triggers that record who gave a verdict and the gold figure they saw, `load_gold()`, and the progress views. |
-| `supabase/functions/source` | Edge Function that fetches a row's source document for the in-app preview. It serves only URLs gold cites, and only to team members. |
-| `web/` | The app: static HTML/JS, no build step. `config.js` names the Supabase project. |
+| `supabase/schema.sql` | Tables, open access rules (no sign-in), a trigger that records the gold figure each reviewer was shown, `load_gold()`, and the progress views. |
+| `supabase/functions/source` | Edge Function that fetches a row's source document for the in-app preview. It serves only URLs some gold row cites. Deploy with JWT verification off. |
+| `web/` | The app: static HTML/JS, no build step. `config.js` names the Supabase project. Hosted from `shourya0523/gold-verification-app` (a copy of this folder) at https://gold-verification-app.vercel.app/. |
 | `tests/` | `test_build_rows.py` (every sourced gold row is served once, unchanged) and `e2e/` (the whole app against a local stand-in for Supabase). |
 
 ## Using it
 
-- **Sign in** with your work email, then type the code from the email (or open its link on the same device). The code is there because company mail scanners often open links first, which uses them up.
-- **Queue**: pick a tier (P1 first), filter to your batches or unassigned ones, set an assignee, and open a batch.
+- **No sign-in.** On first visit, pick your name; the browser remembers it, and **Switch** changes it. Anyone with the address can use the app: it holds nothing sensitive.
+- **Queue**: pick a tier (P1 first), filter to your batches or unassigned ones, **Claim** a batch (or set anyone as its assignee), and open it.
 - **Review**: the row is on the left, the document on the right.
   - `1` confirms. `F` then `2`–`6` flags a reason (wrong value, period or scope; not in the source; can't open it). Type the value you read and press `Enter`.
   - `J`/`K` move between rows. `O` opens the source in a separate tab, `/` searches inside the document, and Undo appears after every save.
 - **Flags**: every row someone flagged, with all verdicts. Settle each as "gold is correct", "gold needs a fix" or "can't decide".
 - **Progress**: counts by tier, kind and reviewer. Also the gold loader, and a CSV of all verdicts.
+- **Export Excel** (top bar): downloads the tracker workbook as it stands: a checklist per product, every gold row with its verdicts, and every verdict.
 
 ## Running it
 
 ### Team members
 
-Add someone by email and display name; they can then sign in. Ask Claude with
-the emails and names, or run this in the Supabase SQL editor:
+Add someone by email and display name; they then appear on the first screen.
+Ask Claude with the emails and names, or run this in the Supabase SQL editor:
 
     insert into team_members (email, display_name) values ('name@company.com', 'Name')
       on conflict (email) do update set display_name = excluded.display_name;
@@ -48,9 +49,6 @@ Then in the app go to **Progress → Gold rows** and choose `tools/verification-
 
 ### One-time settings
 
-- **Sign-in link:** in Supabase, Authentication → URL Configuration → Site URL, enter the app's address. Sign-in links return there.
-- **Sign-in code:** in Supabase, Authentication → Emails → Templates → *Magic Link*, add `{{ .Token }}` to the message so the email carries the code, e.g. `<p>Your sign-in code: <strong>{{ .Token }}</strong></p>`.
-- **Email limits:** Supabase's built-in email sends only a few sign-in emails an hour. Each person signs in once per device; for more, add an SMTP provider under Authentication → Emails.
 - **SEC contact:** optional, and recommended. SEC asks automated clients to name a contact. The preview function reads one from `app_config`:
 
       insert into app_config values ('sec_contact', 'Team name contact@company.com')

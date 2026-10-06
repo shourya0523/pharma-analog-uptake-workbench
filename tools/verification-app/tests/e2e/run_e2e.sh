@@ -3,7 +3,8 @@
 # Postgres with schema.sql, PostgREST, the real `source` Edge Function under
 # Deno, and the app in Chromium. Needs, on PATH or in env:
 #   PGHOST/PGPORT (a superuser connection), POSTGREST, DENO, node with playwright
-#   (NODE_PATH pointing at its node_modules), optional CHROMIUM.
+#   (NODE_PATH pointing at its node_modules), optional CHROMIUM, and PYTHON
+#   with openpyxl (default python3).
 set -euo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"
 APP="$(cd "$HERE/../.." && pwd)"
@@ -54,6 +55,6 @@ done
 
 STATUS=0
 node "$HERE/e2e.mjs" "http://localhost:$GW_PORT" "$OUT/rows.json" "$OUT" "$OUT/tokens.json" "${CHROMIUM:-}" || STATUS=1
-python3 "$HERE/check_db.py" "$OUT/e2e_result.json" -d "$DB" || STATUS=1
+"${PYTHON:-python3}" "$HERE/check_db.py" "$OUT/e2e_result.json" -d "$DB" || STATUS=1
 echo "e2e status $STATUS; screenshots and logs in $OUT"
 exit $STATUS

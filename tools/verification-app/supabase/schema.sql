@@ -1,9 +1,11 @@
 -- Gold verification app: schema, access rules and summary views.
 -- Run once in the Supabase SQL editor (or `psql`) on a fresh project.
--- Rows and batches are written only through load_gold(), which a team member
--- calls from the app's "Load gold rows" button; members otherwise read
--- everything and write only their own verdicts, batch assignees and
--- resolutions.
+-- There is no sign-in: the app is for a small team on non-sensitive data, so
+-- the browser's key reads and writes everything, and each person picks their
+-- name from team_members. Rows and batches are written only through
+-- load_gold() (the app's "Load gold rows" button); verdicts, batch assignees
+-- and resolutions are written directly. A reviewer must be on team_members
+-- (foreign key), which is what keeps names consistent.
 
 create table if not exists team_members (
   email        text primary key,
@@ -96,21 +98,11 @@ create table if not exists app_config (
 alter table app_config enable row level security;
 revoke all on app_config from anon, authenticated;
 
--- The signed-in user's email, and whether it belongs to the team.
-create or replace function current_email() returns text
-  language sql stable set search_path = public as $$ select lower(coalesce(auth.jwt() ->> 'email', '')) $$;
-
-create or replace function is_team_member() returns boolean
-  language sql stable security definer set search_path = public as $$
-  select exists (select 1 from team_members where lower(email) = current_email())
-$$;
-
--- A verdict records who saved it and which gold figure they were shown,
--- whatever the client sent.
+-- A verdict records which gold figure the reviewer was shown, whatever the
+-- client sent, and when it was last changed.
 create or replace function verdict_stamp() returns trigger
   language plpgsql security definer set search_path = public as $$
 begin
-  new.reviewer := current_email();
   new.gold_value_seen := (select value_reported from rows where gold_id = new.gold_id);
   new.updated_at := now();
   return new;
@@ -122,7 +114,6 @@ create trigger verdict_stamp before insert or update on verdicts
 create or replace function resolution_stamp() returns trigger
   language plpgsql security definer set search_path = public as $$
 begin
-  new.resolved_by := current_email();
   new.resolved_at := now();
   return new;
 end $$;
@@ -152,8 +143,6 @@ create trigger batch_assign_only before update on batches
 -- Trigger functions are not API endpoints.
 revoke execute on function verdict_stamp(), resolution_stamp(), batch_assign_only()
   from public, anon, authenticated;
-revoke execute on function is_team_member() from public, anon;
-grant execute on function is_team_member() to authenticated;
 
 -- Load or refresh gold rows from the app. Called in chunks: batches first,
 -- then rows, then once with finish => true, which marks rows absent from this
@@ -171,9 +160,6 @@ create or replace function load_gold(
 declare
   written integer := 0;
 begin
-  if not is_team_member() then
-    raise exception 'only team members can load gold rows';
-  end if;
   perform set_config('app.loading_gold', 'on', true);
 
   insert into batches (id, tier, issuer, title, row_count, document_count)
@@ -222,8 +208,7 @@ begin
   end if;
   return written;
 end $$;
-revoke all on function load_gold(text, jsonb, jsonb, boolean) from public, anon;
-grant execute on function load_gold(text, jsonb, jsonb, boolean) to authenticated;
+grant execute on function load_gold(text, jsonb, jsonb, boolean) to anon, authenticated;
 
 alter table team_members enable row level security;
 alter table batches      enable row level security;
@@ -231,36 +216,34 @@ alter table rows         enable row level security;
 alter table verdicts     enable row level security;
 alter table resolutions  enable row level security;
 
+-- Open to the app's key: anyone with the address can read and write.
 drop policy if exists members_read on team_members;
-create policy members_read on team_members for select using (is_team_member());
+create policy members_read on team_members for select to anon, authenticated using (true);
 
 drop policy if exists batches_read on batches;
-create policy batches_read on batches for select using (is_team_member());
+create policy batches_read on batches for select to anon, authenticated using (true);
 drop policy if exists batches_assign on batches;
-create policy batches_assign on batches for update using (is_team_member()) with check (is_team_member());
+create policy batches_assign on batches for update to anon, authenticated using (true) with check (true);
 
 drop policy if exists rows_read on rows;
-create policy rows_read on rows for select using (is_team_member());
+create policy rows_read on rows for select to anon, authenticated using (true);
 
 drop policy if exists verdicts_read on verdicts;
-create policy verdicts_read on verdicts for select using (is_team_member());
+create policy verdicts_read on verdicts for select to anon, authenticated using (true);
 drop policy if exists verdicts_insert on verdicts;
-create policy verdicts_insert on verdicts for insert with check (is_team_member());
+create policy verdicts_insert on verdicts for insert to anon, authenticated with check (true);
 drop policy if exists verdicts_update on verdicts;
-create policy verdicts_update on verdicts for update
-  using (is_team_member() and reviewer = current_email()) with check (is_team_member());
-
+create policy verdicts_update on verdicts for update to anon, authenticated using (true) with check (true);
 -- Undo of a first verdict removes it.
 drop policy if exists verdicts_delete on verdicts;
-create policy verdicts_delete on verdicts for delete
-  using (is_team_member() and reviewer = current_email());
+create policy verdicts_delete on verdicts for delete to anon, authenticated using (true);
 
 drop policy if exists resolutions_read on resolutions;
-create policy resolutions_read on resolutions for select using (is_team_member());
+create policy resolutions_read on resolutions for select to anon, authenticated using (true);
 drop policy if exists resolutions_write on resolutions;
-create policy resolutions_write on resolutions for insert with check (is_team_member());
+create policy resolutions_write on resolutions for insert to anon, authenticated with check (true);
 drop policy if exists resolutions_update on resolutions;
-create policy resolutions_update on resolutions for update using (is_team_member()) with check (is_team_member());
+create policy resolutions_update on resolutions for update to anon, authenticated using (true) with check (true);
 
 -- Per-row state: how many people looked, whether anyone flagged it, whether
 -- a flag was settled, and whether any verdict predates the current figure.
