@@ -160,6 +160,15 @@ async def test_a_job_that_fails_inside_a_commit_is_recorded_as_failed(tmp_path, 
 
     monkeypatch.setattr(PipelineOrchestrator, "_identity", another_job_holds_the_lock)
 
+    # Alias expansion runs before identity and asks the model. With a key set
+    # (CI sets a fake one) that is a real request, which fails before the lock
+    # this test is about is ever taken; with no key it is skipped. Either way
+    # it is not the step under test.
+    async def no_aliases(self, row):
+        return []
+
+    monkeypatch.setattr(PipelineOrchestrator, "_expand_aliases", no_aliases)
+
     with pytest.raises(Exception, match="database is locked"):
         await handler.handle_job({"job_id": job_id, "run_id": run_id},
                                  file_store=LocalFileStore(str(tmp_path)))
