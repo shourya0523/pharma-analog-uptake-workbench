@@ -19,7 +19,6 @@ from openpyxl import load_workbook
 from tests.test_gold_is_not_an_input import REPO
 
 BUILDER = REPO / "scripts" / "sourcing" / "build_verification_tracker.py"
-PULL = REPO / "scripts" / "sourcing" / "pull_verdicts.py"
 
 
 def _load(path, name):
@@ -121,18 +120,3 @@ def test_every_verdict_is_listed(built):
     assert len(listed) == len(built["verdicts"])
     stale = [r for r in listed if r["Gold ID"] == built["stale_row"]]
     assert stale and stale[0]["Gold Changed Since"] == "yes"
-
-
-def test_the_apps_csv_and_the_database_give_the_same_snapshot(tmp_path):
-    pull = _load(PULL, "pull_verdicts")
-    path = tmp_path / "gold-verdicts.csv"
-    path.write_text(
-        "gold_id,reviewer,verdict,value_seen,gold_value_seen,note,updated_at,resolution,resolution_note,resolved_by\n"
-        'g1,a@team.test,wrong_value,1234.5,1200,"read the U.S., not total",2026-10-05T09:00:00Z,gold_correct,ok,b@team.test\n'
-        "g2,a@team.test,confirmed,,98,,2026-10-05T09:01:00Z,,,\n")
-    data = pull.from_csv(path)
-    assert [v["gold_id"] for v in data["verdicts"]] == ["g1", "g2"]
-    assert data["verdicts"][0]["value_seen"] == 1234.5 and data["verdicts"][1]["value_seen"] is None
-    assert data["verdicts"][0]["note"] == "read the U.S., not total"
-    assert data["resolutions"] == [{"gold_id": "g1", "outcome": "gold_correct", "note": "ok",
-                                    "resolved_by": "b@team.test", "resolved_at": None}]

@@ -15,7 +15,9 @@ verifier's own reading:
 
 The reviewer columns are filled from the verification app's verdicts when a
 snapshot exists (docs/sourcing/human_verdicts.json, written by
-pull_verdicts.py); without one they are left blank for hand entry.
+scripts/pull_verdicts.py in shourya0523/gold-verification-app, the review
+tool, kept out of this repository); without one they are left blank for hand
+entry.
 
     python scripts/sourcing/build_verification_tracker.py [--verdicts PATH] [--out PATH]
 """
@@ -167,7 +169,7 @@ def header(sheet, columns: list[str], review: set[str]) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--verdicts", type=Path, default=VERDICTS,
-                        help="snapshot from pull_verdicts.py (default: %(default)s, if present)")
+                        help="verdict snapshot from the gold review tool (default: %(default)s, if present)")
     parser.add_argument("--out", type=Path, default=OUT)
     args = parser.parse_args()
     reviews = Reviews(json.loads(args.verdicts.read_text()) if args.verdicts.is_file() else None, sourced_rows())
