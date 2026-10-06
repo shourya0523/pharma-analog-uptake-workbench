@@ -19,7 +19,7 @@ It is gold-side tooling. The pipeline never reads it
 
 ## Using it
 
-- **Sign in** with your work email; open the emailed link on the same device.
+- **Sign in** with your work email, then type the code from the email (or open its link on the same device). The code is there because company mail scanners often open links first, which uses them up.
 - **Queue**: pick a tier (P1 first), filter to your batches or unassigned ones, set an assignee, and open a batch.
 - **Review**: the row is on the left, the document on the right.
   - `1` confirms. `F` then `2`–`6` flags a reason (wrong value, period or scope; not in the source; can't open it). Type the value you read and press `Enter`.
@@ -49,6 +49,7 @@ Then in the app go to **Progress → Gold rows** and choose `tools/verification-
 ### One-time settings
 
 - **Sign-in link:** in Supabase, Authentication → URL Configuration → Site URL, enter the app's address. Sign-in links return there.
+- **Sign-in code:** in Supabase, Authentication → Emails → Templates → *Magic Link*, add `{{ .Token }}` to the message so the email carries the code, e.g. `<p>Your sign-in code: <strong>{{ .Token }}</strong></p>`.
 - **Email limits:** Supabase's built-in email sends only a few sign-in emails an hour. Each person signs in once per device; for more, add an SMTP provider under Authentication → Emails.
 - **SEC contact:** optional, and recommended. SEC asks automated clients to name a contact. The preview function reads one from `app_config`:
 
