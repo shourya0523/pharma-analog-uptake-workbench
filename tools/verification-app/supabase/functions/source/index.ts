@@ -5,14 +5,15 @@
 // Only URLs that some gold row cites are fetched, which keeps this from being
 // an open proxy. The app has no sign-in, so the function is deployed with
 // verify_jwt off and the lookup runs with the project's anon key. The response
-// is the document's bytes with its content type, plus X-Final-Url (after
-// redirects) so relative links in an HTML page can be resolved.
+// is the document's bytes, with X-Final-Url (after redirects) so relative
+// links in an HTML page can be resolved, and X-Source-Content-Type because the
+// platform serves text/html from functions as text/plain.
 import { createClient } from "npm:@supabase/supabase-js@2";
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, apikey, content-type, x-client-info",
-  "Access-Control-Expose-Headers": "x-final-url, content-type",
+  "Access-Control-Expose-Headers": "x-final-url, x-source-content-type, content-type",
 };
 
 function reply(status: number, message: string): Response {
@@ -57,6 +58,7 @@ Deno.serve(async (req) => {
       ...CORS,
       "Content-Type": upstream.headers.get("Content-Type") ?? "application/octet-stream",
       "X-Final-Url": upstream.url,
+      "X-Source-Content-Type": upstream.headers.get("Content-Type") ?? "",
       "Cache-Control": "private, max-age=86400",
     },
   });

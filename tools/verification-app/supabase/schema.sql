@@ -204,7 +204,10 @@ begin
   get diagnostics written = row_count;
 
   if finish then
-    update rows set in_current_gold = (gold_build = build);
+    -- Supabase refuses an API-role UPDATE without a WHERE (pg_safeupdate);
+    -- this one also touches only the rows whose flag changes.
+    update rows set in_current_gold = (gold_build = build)
+    where in_current_gold is distinct from (gold_build = build);
   end if;
   return written;
 end $$;
