@@ -147,6 +147,20 @@ try {
   check("claim a batch", true, claimId);
   result.claimed = claimId;
 
+  // 6b'. Bulk: select every unassigned P2 batch and give them all to Asha.
+  await b.click('[data-tier="P2"]');
+  await b.click('[data-show="unassigned"]');
+  await b.waitForSelector("#pickall");
+  const shown = await b.$$eval("[data-pick]", (els) => els.length);
+  const totalUnassignedP2 = Number(/Select all ([\d,]+)/.exec(await b.textContent(".bulk label"))[1].replace(/,/g, ""));
+  await b.check("#pickall");
+  await b.waitForSelector("#bulkto");
+  await b.selectOption("#bulkto", "asha@team.test");
+  await b.waitForFunction(() => /batches → Asha/.test(document.querySelector("#toast")?.textContent || ""));
+  const toastText = await b.textContent("#toast");
+  check("bulk assign every selected batch", toastText.includes(`${totalUnassignedP2} batches`), `${toastText.trim()} (${shown} rows on screen, ${totalUnassignedP2} unassigned P2)`);
+  result.bulk = totalUnassignedP2;
+
   // 6c. Export Excel downloads the workbook (contents checked by check_db.py).
   const [download] = await Promise.all([b.waitForEvent("download", { timeout: 120_000 }), b.click("#exportxlsx")]);
   await download.saveAs(`${out}/export.xlsx`);

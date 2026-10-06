@@ -78,8 +78,11 @@ def main() -> int:
     if [(r["gold_id"], r["outcome"], r["by"]) for r in res] != [(run.get("flagged"), "gold_correct", "ben@team.test")]:
         failures.append(f"unexpected resolutions {res}")
     assigned = query("select json_agg(id) from batches where assignee = 'asha@team.test'") or []
-    if len(assigned) != 1:
-        failures.append(f"expected one batch assigned to asha, found {assigned}")
+    if len(assigned) != 1 + run.get("bulk", 0):
+        failures.append(f"expected {1 + run.get('bulk', 0)} batches assigned to asha (1 by hand, the rest in bulk), found {len(assigned)}")
+    p2_left = query("select count(*) from batches where tier = 'P2' and assignee is null")
+    if run.get("bulk") and p2_left != 0:
+        failures.append(f"bulk assign left {p2_left} P2 batches unassigned")
     claimed = query("select json_agg(id) from batches where assignee = 'ben@team.test'") or []
     if claimed != [run.get("claimed")]:
         failures.append(f"expected ben to have claimed {run.get('claimed')}, found {claimed}")

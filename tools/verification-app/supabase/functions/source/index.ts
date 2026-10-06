@@ -43,12 +43,19 @@ Deno.serve(async (req) => {
   const agent = `GoldVerification/1.0 (document preview for a review team${
     config?.value ? `; ${config.value}` : ""})`;
 
+  const get = () => fetch(target, {
+    headers: { "User-Agent": agent, Accept: "text/html,application/pdf,*/*" },
+    redirect: "follow",
+  });
   let upstream: Response;
   try {
-    upstream = await fetch(target, {
-      headers: { "User-Agent": agent, Accept: "text/html,application/pdf,*/*" },
-      redirect: "follow",
-    });
+    upstream = await get();
+    // Hosts (SEC among them) answer 429 or 5xx briefly under load; one retry.
+    if (upstream.status === 429 || upstream.status >= 500) {
+      await upstream.body?.cancel();
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      upstream = await get();
+    }
   } catch (err) {
     return reply(502, `could not reach the source: ${err}`);
   }

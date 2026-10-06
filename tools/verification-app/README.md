@@ -20,7 +20,7 @@ It is gold-side tooling. The pipeline never reads it
 ## Using it
 
 - **No sign-in.** On first visit, pick your name; the browser remembers it, and **Switch** changes it. Anyone with the address can use the app: it holds nothing sensitive.
-- **Queue**: pick a tier (P1 first), filter to your batches or unassigned ones, **Claim** a batch (or set anyone as its assignee), and open it.
+- **Queue**: pick a tier (P1 first), filter to your batches or unassigned ones, **Claim** a batch (or set anyone as its assignee), and open it. To assign many at once, tick batches (or *Select all shown*) and use **Claim selected** or **Assign selected to…**.
 - **Review**: the row is on the left, the document on the right.
   - `1` confirms. `F` then `2`–`6` flags a reason (wrong value, period or scope; not in the source; can't open it). Type the value you read and press `Enter`.
   - `J`/`K` move between rows. `O` opens the source in a separate tab, `/` searches inside the document, and Undo appears after every save.
