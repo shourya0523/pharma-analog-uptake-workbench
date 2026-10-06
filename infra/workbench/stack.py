@@ -135,7 +135,7 @@ class WorkbenchStack(Stack):
             "AWS_REGION": Stack.of(self).region,
             "DB_HOST": db.db_instance_endpoint_address,
             "DB_NAME": "workbench",
-            "SEC_USER_AGENT": "PharmaAnalogUptakeWorkbench research@example.com",
+            "SEC_USER_AGENT": "PharmaAnalogUptakeWorkbench Michael Allen Company syadav@michaelallencompany.com",
             "OPENROUTER_MODEL_EXTRACT": OPENROUTER_MODEL_EXTRACT,
             "OPENROUTER_MODEL_JUDGE": OPENROUTER_MODEL_JUDGE,
             "ENABLE_LLM_SEARCH": "true",

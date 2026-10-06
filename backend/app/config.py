@@ -41,7 +41,7 @@ class Settings(BaseSettings):
     # not in the 8-K primary document.
     sec_earnings_exhibits: bool = True
     sec_max_earnings_exhibits: int = 6
-    sec_user_agent: str = "PharmaAnalogUptakeWorkbench research@example.com"
+    sec_user_agent: str = "PharmaAnalogUptakeWorkbench Michael Allen Company syadav@michaelallencompany.com"
     # Unzipped Financial Statement and Notes Data Set directories, separated by
     # os.pathsep. Each holds sub.tsv, dim.tsv and num.tsv as downloaded from
     # sec.gov. Unset means the bulk tagged reader contributes nothing, which is
