@@ -55,6 +55,27 @@ Then in the app go to **Progress → Gold rows** and choose `tools/verification-
       insert into app_config values ('sec_contact', 'Team name contact@company.com')
         on conflict (key) do update set value = excluded.value;
 
+### Exporting the tracker workbook
+
+The export rebuilds `exports/gold_verification_tracker.xlsx` from current gold with the app's verdicts filled in. Run it whenever you want a fresh copy.
+
+- **Reviewer columns:** Manually Verified, Verified By, Date Verified and Reviewer Notes, plus a reviewed-of-total count per product.
+- **Rows sheet:** each row's verdicts and resolution.
+- **Human Verdicts sheet:** every verdict on any kind of row, including whether the gold figure changed since it was given.
+
+There are three ways to run it:
+
+- **GitHub:** Actions → *Export gold tracker* → Run workflow. The workbook is attached to the run. Tick *commit* to also save the verdict snapshot to the branch. This needs the repository secrets `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`.
+- **Locally, from Supabase:**
+
+      SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... scripts/sourcing/export_gold_tracker.sh
+
+- **Locally, without keys:** download the CSV from **Progress → Download all verdicts**, then run:
+
+      scripts/sourcing/export_gold_tracker.sh gold-verdicts-YYYY-MM-DD.csv
+
+Each run writes `docs/sourcing/human_verdicts.json`, a snapshot of the verdicts. Committing it lets anyone rebuild the same tracker from git.
+
 ### Tests
 
     cd backend

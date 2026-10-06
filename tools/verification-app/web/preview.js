@@ -27,7 +27,7 @@ export function figureVariants(value) {
     if (Math.abs(scaled - Math.round(scaled)) > 1e-6) continue;
     const [int, frac] = n.toFixed(dp).split(".");
     const grouped = int.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    for (const body of [int, grouped, grouped.replace(/,/g, " "), grouped.replace(/,/g, " ")]) {
+    for (const body of [int, grouped, grouped.replace(/,/g, " "), grouped.replace(/,/g, "\u00a0")]) {
       out.add(frac ? `${body}.${frac}` : body);
     }
     // Continental style: 1.234,5
@@ -38,7 +38,7 @@ export function figureVariants(value) {
 
 /** Numbers printed in the row's quote, for derived rows whose result is not in the document. */
 function quoteNumbers(quote) {
-  return (quote.match(/\d[\d,.  ]*\d|\d/g) || [])
+  return (quote.match(/\d[\d,.\u00a0 ]*\d|\d/g) || [])
     .map((t) => t.trim())
     .filter((t) => !/^(19|20)\d\d$/.test(t) && t.length > 0);
 }
@@ -167,7 +167,7 @@ function locateInHtml(doc, t) {
       if (text.length > 4000) continue;
       if (!t.hasName(text)) continue;
       rx.lastIndex = 0;
-      if (rx.test(el.textContent.replace(/ /g, " ")) || (rx.lastIndex = 0, rx.test(el.textContent))) return el;
+      if (rx.test(el.textContent.replace(/\u00a0/g, " ")) || (rx.lastIndex = 0, rx.test(el.textContent))) return el;
     }
     return null;
   };

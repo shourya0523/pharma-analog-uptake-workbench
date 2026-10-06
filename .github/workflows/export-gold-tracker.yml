@@ -1,0 +1,53 @@
+# Run on demand (Actions -> Export gold tracker -> Run workflow) to get the
+# gold verification tracker with the verification app's current verdicts.
+# The workbook is attached to the run as an artifact; with "commit" ticked the
+# verdict snapshot is also committed to the branch the workflow ran on.
+#
+# Needs two repository secrets: SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY.
+name: Export gold tracker
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit:
+        description: Commit the verdict snapshot (docs/sourcing/human_verdicts.json)
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - name: Install
+        working-directory: backend
+        run: uv sync --frozen
+      - name: Pull verdicts and rebuild the tracker
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          PYTHON: backend/.venv/bin/python
+        run: |
+          test -n "$SUPABASE_URL" && test -n "$SUPABASE_SERVICE_ROLE_KEY" \
+            || { echo "set the SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY repository secrets"; exit 1; }
+          scripts/sourcing/export_gold_tracker.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gold-verification-tracker
+          path: |
+            exports/gold_verification_tracker.xlsx
+            docs/sourcing/human_verdicts.json
+      - name: Commit the verdict snapshot
+        if: inputs.commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add docs/sourcing/human_verdicts.json
+          git diff --cached --quiet || git commit -m "Snapshot verification app verdicts"
+          git push

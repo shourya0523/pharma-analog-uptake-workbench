@@ -322,7 +322,7 @@ async function renderBatch(batchId, wanted) {
 
   async function saveFlag() {
     const card = section.querySelector("#card");
-    const raw = card.querySelector("#seen")?.value.replace(/[,  ]/g, "") || "";
+    const raw = card.querySelector("#seen")?.value.replace(/[, \u00a0]/g, "") || "";
     const valueSeen = raw === "" ? null : Number(raw);
     if (raw !== "" && !Number.isFinite(valueSeen)) { toast("The value you read must be a number", { error: true }); return; }
     if (pending === "wrong_value" && valueSeen === null) { card.querySelector("#seen").focus(); toast("Enter the value you read", { error: true }); return; }
