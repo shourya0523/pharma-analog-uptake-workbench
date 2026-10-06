@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { figureVariants, locateInHtml, locateQuoteInHtml, spacedText, targetsFor } from './sourcePreview'
+import { figureVariants, locateInHtml, locateQuoteInHtml, reveal, spacedText, targetsFor } from './sourcePreview'
 
 const doc = (body: string) => new DOMParser().parseFromString(`<html><body>${body}</body></html>`, 'text/html')
 const row = (over: Record<string, unknown> = {}) => ({
@@ -61,5 +61,19 @@ describe('locateQuoteInHtml', () => {
     const hit = locateQuoteInHtml(d, targetsFor(row({ source_quote: 'net product sales of Calderon were strong', value_reported: null })))
     expect(hit?.tagName).toBe('P')
     expect(hit?.textContent).toContain('Net product sales')
+  })
+})
+
+describe('reveal', () => {
+  it('opens a section the page collapsed, so a figure inside it can be seen', () => {
+    document.body.innerHTML = `<div class="read-more" style="display: none"><details><p hidden>
+      <span id="fig">Calderon sales were 248</span></p></details></div>`
+    const fig = document.getElementById('fig')!
+    reveal(fig)
+    for (let n: HTMLElement | null = fig; n && n !== document.body; n = n.parentElement) {
+      expect(getComputedStyle(n).display).not.toBe('none')
+      expect(n.hasAttribute('hidden')).toBe(false)
+    }
+    expect(document.querySelector('details')!.open).toBe(true)
   })
 })

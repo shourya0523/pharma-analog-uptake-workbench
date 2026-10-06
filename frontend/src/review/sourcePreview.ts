@@ -226,7 +226,25 @@ function stripActive(html: string, baseUrl: string): string {
 
 /** Scroll only the document pane (never the page) so el sits mid-view; sideways
  * only when it would otherwise be off screen. */
+/**
+ * Undo whatever keeps el out of sight in a source page: a collapsed "read
+ * more" section, a closed <details>, a hidden attribute. The page's own button
+ * for it needs the scripts the preview removes.
+ */
+export function reveal(el: Element) {
+  const win = el.ownerDocument.defaultView
+  if (!win) return
+  for (let node: Element | null = el; node; node = node.parentElement) {
+    if (node instanceof win.HTMLDetailsElement) node.open = true
+    node.removeAttribute('hidden')
+    const style = win.getComputedStyle(node)
+    if (style.display === 'none') (node as HTMLElement).style.setProperty('display', 'block', 'important')
+    if (style.visibility === 'hidden') (node as HTMLElement).style.setProperty('visibility', 'visible', 'important')
+  }
+}
+
 function centerIn(el: Element) {
+  reveal(el)
   const doc = el.ownerDocument
   const r = el.getBoundingClientRect()
   if (doc !== document) {
