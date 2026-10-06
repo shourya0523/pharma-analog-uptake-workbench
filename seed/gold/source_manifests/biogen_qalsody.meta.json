@@ -1,0 +1,33 @@
+{
+  "drug_name": "Qalsody",
+  "generic_name": "tofersen",
+  "manufacturer": "Biogen",
+  "benchmark_identity": "biogen_qalsody_worldwide_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Amyotrophic lateral sclerosis (SOD1-ALS)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide as printed (U.S. only until the E.U. launch in 2024Q2)",
+  "formulation": "injection (solution)",
+  "route_of_administration": "intrathecal",
+  "moa": "Antisense oligonucleotide targeting SOD1 mRNA to reduce SOD1 protein synthesis",
+  "moa_class": "antisense_oligonucleotide",
+  "first_approval_year": 2023,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=215887",
+    "quote": "Approval Date(s) and History, Letters, Labels, Reviews for NDA 215887 ... Original Approvals or Tentative Approvals 04/25/2023 Approval (QALSODY, tofersen)"
+  },
+  "launch_quarter": "2023Q2",
+  "commercial_start_quarter": "2023Q2",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "Listed Biogen (CIK 0000875045) filings from data.sec.gov/submissions (recent + older files), keeping every 8-K and 8-K/A with item 2.02, or 9.01 exhibits, 2013-04 onward; the 2022-07-20 8-K/A (0000875045-22-000023) carries the same exhibit as the original 8-K with a one-character year fix in unrelated text, original 8-K used.",
+    "Fetched each filing's index.json, took the earnings-release exhibit (EX-99.1; file names q<N><YYYY>pressrelease.htm, ye2013pressrelease.htm, exhibit991-q<N><YYYY>pressrele.htm), parsed every table row, selected the product row.",
+    "Row selection rule: first row in the release whose label equals the product name; for releases that carry both a whole-million summary table and a one-decimal U.S./Rest of World/Total table, the one-decimal table row; value is the Total column for the current quarter (first triple).",
+    "Biogen's own 2023Q2 and 2023Q3 releases fold QALSODY into 'Total Other Product Revenue (FUMADERM and QALSODY)' / '(ADUHELM, FUMADERM and QALSODY)' with no QALSODY row; first separate row is the 2023Q4 release.",
+    "2023Q2 and 2023Q3 values are the year-earlier columns of the 2024Q2 and 2024Q3 releases (derivation direct_prior_year_column); the 2024Q1 release prints a nil year-earlier column (2023Q1, pre-approval).",
+    "Cross-check: 0.9 + 1.7 + 3.3 = 5.9 equals the full-year 2023 QALSODY total printed in the 2023Q4 release."
+  ]
+}

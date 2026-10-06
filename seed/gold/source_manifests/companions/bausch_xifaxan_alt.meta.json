@@ -1,0 +1,14 @@
+{
+  "drug_name": "Xifaxan",
+  "line_label": "Xifaxan",
+  "issuer": "Bausch Health",
+  "benchmark_identity": "bausch_xifaxan_alt",
+  "revenue_scope": "U.S.",
+  "geography": "United States (Salix slide: U.S. sales only)",
+  "why_separate": "Bausch Health printed U.S. Xifaxan only for 2018Q1-2021Q4; thirteen quarters separate it from the Salix series that ends 2014Q3, so it cannot be joined.",
+  "search_log": [
+    "Bausch Health releases, 10-Qs and 10-Ks print no quarterly Xifaxan figure (10-K prints annual revenue only); the IR earnings presentations print Xifaxan in the 'Top 10 Products - Salix' slide (trailing five quarters) through the 4Q21 deck; decks 1Q22-2Q26 contain no quarterly Xifaxan figure (scripts/decks_late.py). Decks 1Q19-4Q21 parsed with pdfplumber (scripts/xifalt.py).",
+    "2018 quarters come from the 1Q19 deck's trailing columns (2018 decks not enumerated); 2Q20 from the 3Q20 deck (2Q20 deck not located). Four quarters of each year sum to the FY figure printed on the 4Q decks (FY18 1,195; FY19 1,452; FY20 1,482; FY21 1,644; checked by hand).",
+    "Salix Pharmaceuticals' own series (2004Q3-2014Q4) is delivered under the plain stem salix_xifaxan because it is the longest contiguous series; 2015Q1-2017Q4 are not cited here (Valeant 2015-2017 decks were not enumerated; a 4Q15 deck shows Xifaxan 2Q15 148, 3Q15 220, 4Q15 205)."
+  ]
+}

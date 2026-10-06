@@ -167,3 +167,32 @@ def scored_products() -> set[str]:
     for path in answer_key_paths():
         names |= products_in(path)
     return names
+
+
+def retirement(path: Path) -> dict | None:
+    """The retirement record a held-out set carries once it is spent, if any.
+
+    A set is retired, not deleted, when its issuers enter another answer key:
+    it keeps its history and can still find defects, but can no longer score
+    a change. The record sits at the top of the file under ``retired``.
+    """
+    payload = json.loads(path.read_text())
+    return payload.get("retired") if isinstance(payload, dict) else None
+
+
+def assert_retirement_is_real(path: Path, issuer_key: str) -> None:
+    """A retired set must say when and why, and must actually be spent.
+
+    Retiring is what a guard would be tempted to do to pass, so the record is
+    held to the fact that justifies it: at least one of the set's issuers is
+    now scored by another answer key.
+    """
+    record = retirement(path)
+    assert record and record.get("on") and record.get("why"), path.name
+    scored = scored_words(excluding=path)
+    spent = [
+        case[issuer_key]
+        for case in cases_in(path)
+        if scored & identifying(case[issuer_key])
+    ]
+    assert spent, f"{path.name} is marked retired but none of its issuers is scored elsewhere"

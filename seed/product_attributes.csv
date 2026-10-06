@@ -61,3 +61,181 @@ Olumiant,JAK1/JAK2 inhibitor,kinase_inhibitor,Oral,2017,Immune-mediated inflamma
 Emgality,Anti-CGRP monoclonal antibody,monoclonal_antibody,Subcutaneous,2018,Migraine,curated_reference,distinct_product
 Forteo,Parathyroid hormone analogue (anabolic),bone_anabolic,Subcutaneous,2002,Osteoporosis,curated_reference,distinct_product
 Cialis,PDE5 inhibitor,nitric_oxide_pathway,Oral,2002,Erectile dysfunction and BPH,curated_reference,distinct_product
+Eylea,VEGF trap (VEGF-A / PlGF inhibitor),vegf_inhibitor,Intravitreal,2011,Ophthalmology (retina),curated_reference,distinct_product
+Libtayo,PD-1 inhibitor,immune_checkpoint_inhibitor,Intravenous,2018,Oncology (solid),curated_reference,distinct_product
+Gardasil 9,"HPV L1 virus-like-particle vaccine (types 6, 11, 16, 18, 31, 33, 45, 52, 58)",hpv_vaccine,Intramuscular,2014,HPV-related cancers and disease (vaccine),curated_reference,distinct_product
+Januvia,DPP-4 inhibitor,dpp4_inhibitor,Oral,2006,Type 2 diabetes,curated_reference,distinct_product
+Keytruda,PD-1 inhibitor,immune_checkpoint_inhibitor,Intravenous,2014,Oncology (solid),curated_reference,distinct_product
+Vaxneuvance,15-valent pneumococcal polysaccharide-CRM197 conjugate vaccine,pneumococcal_conjugate_vaccine,Intramuscular,2021,Pneumococcal disease (vaccine),curated_reference,distinct_product
+Abrysvo,bivalent RSV prefusion F protein subunit vaccine,recombinant_protein_vaccine,Intramuscular,2023,Infectious disease (RSV vaccine),curated_reference,distinct_product
+Comirnaty,nucleoside-modified mRNA vaccine encoding SARS-CoV-2 spike protein,mrna_vaccine,Intramuscular,2021,Infectious disease (COVID-19 vaccine),curated_reference,distinct_product
+Ibrance,CDK4/6 inhibitor,cdk4_6_inhibitor,Oral,2015,Oncology (breast cancer),curated_reference,distinct_product
+Lorbrena,third-generation ALK/ROS1 tyrosine kinase inhibitor,alk_inhibitor,Oral,2018,"Oncology (lung cancer, ALK-positive NSCLC)",curated_reference,distinct_product
+Prevnar 20,20-valent pneumococcal polysaccharide-CRM197 conjugate vaccine,pneumococcal_conjugate_vaccine,Intramuscular,2021,Infectious disease (pneumococcal vaccine),curated_reference,distinct_product
+Vyndaqel / Vyndamax,transthyretin (TTR) stabilizer,ttr_stabilizer,Oral,2019,Cardiology (transthyretin amyloid cardiomyopathy),curated_reference,distinct_product
+Eliquis,direct factor Xa inhibitor,factor_xa_inhibitor,Oral,2012,"Anticoagulation (stroke prevention in atrial fibrillation, VTE)",curated_reference,distinct_product
+Opdivo,PD-1 inhibitor,pd1_inhibitor,Intravenous,2014,Oncology (solid and hematologic),curated_reference,distinct_product
+Orencia,selective T-cell costimulation modulator (CTLA-4 Ig fusion protein),t_cell_costimulation_modulator,Intravenous,2005,Rheumatology (rheumatoid arthritis),curated_reference,distinct_product
+Sotyktu,selective allosteric TYK2 inhibitor,tyk2_inhibitor,Oral,2022,Dermatology (plaque psoriasis),curated_reference,distinct_product
+Yervoy,CTLA-4 inhibitor,ctla4_inhibitor,Intravenous,2011,Oncology (solid),curated_reference,distinct_product
+Abecma,BCMA-directed genetically modified autologous T cell immunotherapy,bcma_car_t,Intravenous,2021,Oncology (hematologic),curated_reference,distinct_product
+Breyanzi,CD19-directed genetically modified autologous T cell immunotherapy,cd19_car_t,Intravenous,2021,Oncology (hematologic),curated_reference,distinct_product
+Krazati,KRAS G12C inhibitor,kras_g12c_inhibitor,Oral,2022,Oncology (solid),curated_reference,distinct_product
+Pomalyst,Immunomodulatory agent (cereblon E3 ligase modulator),cereblon_e3_ligase_modulator,Oral,2013,Oncology (hematologic),curated_reference,distinct_product
+Revlimid,Immunomodulatory agent (cereblon E3 ligase modulator),cereblon_e3_ligase_modulator,Oral,2005,Oncology (hematologic),curated_reference,distinct_product
+Nurtec ODT,Calcitonin gene-related peptide (CGRP) receptor antagonist,cgrp_receptor_antagonist,Oral,2020,Neurology (migraine),curated_reference,distinct_product
+Cibinqo,Janus kinase 1 (JAK1) inhibitor,jak_inhibitor,Oral,2022,Inflammation & immunology (atopic dermatitis),curated_reference,distinct_product
+Velsipity,Sphingosine 1-phosphate (S1P) receptor modulator,s1p_receptor_modulator,Oral,2023,Inflammation & immunology (ulcerative colitis),curated_reference,distinct_product
+Xeljanz,Janus kinase (JAK) inhibitor,jak_inhibitor,Oral,2012,Inflammation & immunology (rheumatoid arthritis),curated_reference,distinct_product
+Adcetris,CD30-directed antibody-drug conjugate,cd30_directed_adc,Intravenous,2011,Oncology (hematologic),curated_reference,distinct_product
+Padcev,Nectin-4-directed antibody-drug conjugate,nectin4_directed_adc,Intravenous,2019,Oncology (solid),curated_reference,distinct_product
+Ozempic,GLP-1 receptor agonist,glp1_receptor_agonist,Subcutaneous,2017,Type 2 diabetes,curated_reference,distinct_product
+Rybelsus,GLP-1 receptor agonist,glp1_receptor_agonist,Oral,2019,Type 2 diabetes,curated_reference,distinct_product
+Saxenda,GLP-1 receptor agonist,glp1_receptor_agonist,Subcutaneous,2014,Obesity / chronic weight management,curated_reference,distinct_product
+Tresiba,Ultra-long-acting basal insulin analogue,basal_insulin_analogue,Subcutaneous,2015,Diabetes (insulin),curated_reference,distinct_product
+Victoza,GLP-1 receptor agonist,glp1_receptor_agonist,Subcutaneous,2010,Type 2 diabetes,curated_reference,distinct_product
+Wegovy,GLP-1 receptor agonist,glp1_receptor_agonist,Subcutaneous,2021,Obesity / chronic weight management,curated_reference,distinct_product
+Esperoct,"Recombinant factor VIII, glycoPEGylated",factor_viii_replacement,Intravenous,2019,Hemophilia A,curated_reference,distinct_product
+Elahere,Folate receptor alpha (FRalpha)-directed antibody-drug conjugate,fra_directed_adc,Intravenous,2022,Oncology (solid; ovarian cancer),curated_reference,distinct_product
+Humira,TNF-alpha inhibitor,tnf_inhibitor,Subcutaneous,2002,Immunology (rheumatology / inflammatory disease),curated_reference,distinct_product
+Linzess,Guanylate cyclase-C agonist,guanylate_cyclase_c_agonist,Oral,2012,Gastroenterology (IBS-C / chronic idiopathic constipation),curated_reference,distinct_product
+Mavyret,HCV NS3/4A protease inhibitor (glecaprevir) plus NS5A inhibitor (pibrentasvir),hcv_ns3_4a_ns5a_combination,Oral,2017,Infectious disease (hepatitis C),curated_reference,distinct_product
+Rinvoq,Janus kinase 1 (JAK1) inhibitor,jak_inhibitor,Oral,2019,Immunology (rheumatology / dermatology / gastroenterology),curated_reference,distinct_product
+Skyrizi,Interleukin-23 (p19) inhibitor,il23_inhibitor,Subcutaneous,2019,Immunology (dermatology / gastroenterology),curated_reference,distinct_product
+Ubrelvy,Calcitonin gene-related peptide (CGRP) receptor antagonist,cgrp_receptor_antagonist,Oral,2019,Neuroscience (migraine),curated_reference,distinct_product
+Venclexta,BCL-2 inhibitor,bcl2_inhibitor,Oral,2016,Oncology (hematologic),curated_reference,distinct_product
+Vraylar,Dopamine D3/D2 receptor partial agonist (atypical antipsychotic),dopamine_d3_d2_partial_agonist,Oral,2015,Neuroscience (psychiatry),curated_reference,distinct_product
+Restasis,Calcineurin inhibitor immunomodulator (cyclosporine),calcineurin_inhibitor,Topical ophthalmic,2002,Ophthalmology (dry eye disease),curated_reference,distinct_product
+Blincyto,"CD19-directed CD3 T-cell engager (bispecific, BiTE)",bispecific_t_cell_engager,Intravenous,2014,Oncology (hematologic: acute lymphoblastic leukemia),curated_reference,distinct_product
+Enbrel,TNF-alpha blocker (soluble TNF receptor fusion protein),tnf_inhibitor,Subcutaneous,1998,"Immunology/inflammation (rheumatoid arthritis, psoriatic arthritis, plaque psoriasis)",curated_reference,distinct_product
+Kyprolis,Proteasome inhibitor,proteasome_inhibitor,Intravenous,2012,Oncology (hematologic: multiple myeloma),curated_reference,distinct_product
+Lumakras,KRAS G12C inhibitor,kras_g12c_inhibitor,Oral,2021,Oncology (solid: KRAS G12C-mutated non-small cell lung cancer),curated_reference,distinct_product
+Otezla,Phosphodiesterase 4 (PDE4) inhibitor,pde4_inhibitor,Oral,2014,"Immunology/inflammation (psoriatic arthritis, plaque psoriasis, Behcet's disease)",curated_reference,distinct_product
+Repatha,PCSK9 inhibitor (monoclonal antibody),pcsk9_inhibitor,Subcutaneous,2015,Cardiovascular (hyperlipidemia / LDL-C lowering),curated_reference,distinct_product
+Uplizna,CD19-directed cytolytic antibody (B-cell depleting),cd19_directed_antibody,Intravenous,2020,Neuroimmunology (neuromyelitis optica spectrum disorder; also IgG4-related disease),curated_reference,distinct_product
+Brukinsa,Bruton's tyrosine kinase (BTK) inhibitor,btk_inhibitor,Oral,2019,Oncology (hematologic),curated_reference,distinct_product
+Cabometyx,"multi-targeted receptor tyrosine kinase inhibitor (VEGFR, MET, AXL, RET)",multikinase_tki,Oral,2016,Oncology (solid),curated_reference,distinct_product
+Livdelzi,peroxisome proliferator-activated receptor delta (PPAR-delta) agonist,ppar_delta_agonist,Oral,2024,Hepatology (primary biliary cholangitis),curated_reference,distinct_product
+Trodelvy,"Trop-2-directed antibody-drug conjugate (SN-38, topoisomerase I inhibitor payload)",trop2_antibody_drug_conjugate,Intravenous,2020,Oncology (solid),curated_reference,distinct_product
+Yescarta,CD19-directed genetically modified autologous T cell immunotherapy (CAR T),cd19_car_t,Intravenous,2017,Oncology (hematologic),curated_reference,distinct_product
+Jakafi,JAK1/JAK2 inhibitor,jak1_jak2_inhibitor,Oral,2011,Oncology (hematologic),curated_reference,distinct_product
+Rezdiffra,thyroid hormone receptor beta (THR-beta) selective agonist,thr_beta_agonist,Oral,2024,Hepatology (MASH/NASH),curated_reference,distinct_product
+Spikevax,lipid nanoparticle-encapsulated mRNA vaccine encoding the SARS-CoV-2 spike glycoprotein,mrna_vaccine,Intramuscular,2022,"Infectious disease (vaccine, COVID-19)",curated_reference,distinct_product
+Ingrezza,vesicular monoamine transporter 2 (VMAT2) inhibitor,vmat2_inhibitor,Oral,2017,Neurology (movement disorders),curated_reference,distinct_product
+Cosentyx,Interleukin-17A inhibitor,il17a_inhibitor,Subcutaneous,2015,"Immunology and dermatology (psoriasis, PsA, axSpA)",curated_reference,distinct_product
+Entresto,Angiotensin receptor-neprilysin inhibitor,arni,Oral,2015,Heart failure,curated_reference,distinct_product
+Gilenya,Sphingosine 1-phosphate receptor modulator,s1p_receptor_modulator,Oral,2010,Multiple sclerosis,curated_reference,distinct_product
+Kesimpta,Anti-CD20 monoclonal antibody,anti_cd20_antibody,Subcutaneous,2020,Multiple sclerosis,curated_reference,distinct_product
+Kisqali,CDK4/6 inhibitor,cdk4_6_inhibitor,Oral,2017,Oncology (breast cancer),curated_reference,distinct_product
+Leqvio,Small interfering RNA targeting PCSK9 synthesis,sirna_pcsk9,Subcutaneous,2021,Hypercholesterolemia / ASCVD,curated_reference,distinct_product
+Mayzent,Sphingosine 1-phosphate receptor modulator,s1p_receptor_modulator,Oral,2019,Multiple sclerosis,curated_reference,distinct_product
+Qalsody,Antisense oligonucleotide targeting SOD1 mRNA to reduce SOD1 protein synthesis,antisense_oligonucleotide,Intrathecal,2023,Amyotrophic lateral sclerosis (SOD1-ALS),curated_reference,distinct_product
+Skyclarys,Nrf2 activator,nrf2_pathway_activator,Oral,2023,Friedreich's ataxia,curated_reference,distinct_product
+Spinraza,Antisense oligonucleotide that modifies SMN2 pre-mRNA splicing to increase full-length SMN protein,antisense_oligonucleotide,Intrathecal,2016,Spinal muscular atrophy,curated_reference,distinct_product
+Tecfidera,Fumaric acid ester; activates the Nrf2 antioxidant response pathway (mechanism in MS not fully established),nrf2_pathway_activator,Oral,2013,Multiple sclerosis (relapsing forms),curated_reference,distinct_product
+Vumerity,Fumaric acid ester prodrug of monomethyl fumarate; activates the Nrf2 antioxidant response pathway (mechanism in MS not fully established),nrf2_pathway_activator,Oral,2019,Multiple sclerosis (relapsing forms),curated_reference,distinct_product
+Amondys 45,Phosphorodiamidate morpholino oligomer (PMO) antisense that skips exon 45 of the dystrophin gene,antisense_oligonucleotide_exon_skipping,Intravenous,2021,Duchenne muscular dystrophy (exon 45 skipping amenable),curated_reference,distinct_product
+Elevidys,AAV (rh74) vector gene therapy delivering a shortened micro-dystrophin transgene,aav_gene_therapy,Intravenous,2023,Duchenne muscular dystrophy (gene therapy),curated_reference,distinct_product
+Exondys 51,Phosphorodiamidate morpholino oligomer (PMO) antisense that skips exon 51 of the dystrophin gene,antisense_oligonucleotide_exon_skipping,Intravenous,2016,Duchenne muscular dystrophy (exon 51 skipping amenable),curated_reference,distinct_product
+Vyondys 53,Phosphorodiamidate morpholino oligomer (PMO) antisense that skips exon 53 of the dystrophin gene,antisense_oligonucleotide_exon_skipping,Intravenous,2019,Duchenne muscular dystrophy (exon 53 skipping amenable),curated_reference,distinct_product
+Apretude,Long-acting HIV-1 integrase strand transfer inhibitor,insti_long_acting_injectable,Intramuscular,2021,HIV pre-exposure prophylaxis,curated_reference,distinct_product
+Cabenuva,Long-acting HIV-1 integrase strand transfer inhibitor (cabotegravir) plus non-nucleoside reverse transcriptase inhibitor (rilpivirine),insti_nnrti_long_acting_injectable,Intramuscular,2021,HIV,curated_reference,distinct_product
+Dovato,HIV-1 integrase strand transfer inhibitor (dolutegravir) plus nucleoside reverse transcriptase inhibitor (lamivudine),insti_nrti_fixed_dose_combination,Oral,2019,HIV,curated_reference,distinct_product
+Jemperli,PD-1 blocking antibody,pd1_inhibitor,Intravenous,2021,Oncology (solid),curated_reference,distinct_product
+Triumeq,"HIV-1 integrase strand transfer inhibitor (dolutegravir) plus two nucleoside reverse transcriptase inhibitors (abacavir, lamivudine)",insti_nrti_fixed_dose_combination,Oral,2014,HIV,curated_reference,distinct_product
+Zejula,Poly (ADP-ribose) polymerase (PARP) inhibitor,parp_inhibitor,Oral,2017,Oncology (solid),curated_reference,distinct_product
+Carvykti,BCMA-directed genetically modified autologous T cell immunotherapy (CAR-T),bcma_car_t,Intravenous,2022,Oncology (hematologic),curated_reference,distinct_product
+Rybrevant,EGFR x MET bispecific antibody,egfr_met_bispecific_antibody,Intravenous,2021,Oncology (solid),curated_reference,distinct_product
+Talvey,GPRC5D x CD3 bispecific T-cell engager,gprc5d_cd3_bispecific_antibody,Subcutaneous,2023,Oncology (hematologic),curated_reference,distinct_product
+Tecvayli,BCMA x CD3 bispecific T-cell engager,bcma_cd3_bispecific_antibody,Subcutaneous,2022,Oncology (hematologic),curated_reference,distinct_product
+Omvoh,IL-23 p19 antagonist,il23_p19_antagonist,Subcutaneous,2023,Inflammatory bowel disease,curated_reference,distinct_product
+Tradjenta,DPP-4 inhibitor,dpp4_inhibitor,Oral,2011,Type 2 diabetes,curated_reference,distinct_product
+Ajovy,Calcitonin gene-related peptide (CGRP) antagonist monoclonal antibody,cgrp_antagonist_antibody,Subcutaneous,2018,Migraine prevention,curated_reference,distinct_product
+Austedo,Vesicular monoamine transporter 2 (VMAT2) inhibitor,vmat2_inhibitor,Oral,2017,"Movement disorders (Huntington disease chorea, tardive dyskinesia)",curated_reference,distinct_product
+Cinqair,Interleukin-5 (IL-5) antagonist monoclonal antibody,il5_antagonist_antibody,Intravenous,2016,Severe eosinophilic asthma,curated_reference,distinct_product
+Advair Diskus,Inhaled corticosteroid + long-acting beta2-agonist (combination),ics_laba_combination,Inhaled,2000,"Respiratory (asthma, COPD)",curated_reference,distinct_product
+Arexvy,Recombinant prefusion F protein subunit vaccine with AS01E adjuvant system,adjuvanted_recombinant_subunit_vaccine,Intramuscular,2023,Infectious disease (RSV lower respiratory tract disease prevention),curated_reference,distinct_product
+Breo Ellipta,Inhaled corticosteroid + long-acting beta2-agonist (combination),ics_laba_combination,Inhaled,2013,"Respiratory (COPD, asthma)",curated_reference,distinct_product
+Nucala,Anti-interleukin-5 (IL-5) monoclonal antibody,il5_antagonist_mab,Subcutaneous,2015,Respiratory / Immunology (severe eosinophilic asthma and other eosinophilic diseases),curated_reference,distinct_product
+Shingrix,Recombinant glycoprotein E subunit vaccine with AS01B adjuvant system,adjuvanted_recombinant_subunit_vaccine,Intramuscular,2017,Infectious disease (herpes zoster prevention),curated_reference,distinct_product
+Trelegy Ellipta,Inhaled corticosteroid + long-acting muscarinic antagonist + long-acting beta2-agonist (triple combination),ics_lama_laba_triple_combination,Inhaled,2017,"Respiratory (COPD, asthma)",curated_reference,distinct_product
+Beovu,VEGF-A inhibitor (single-chain antibody fragment),vegf_inhibitor,Intravitreal,2019,"Ophthalmology (retina, neovascular AMD)",curated_reference,distinct_product
+Kymriah,CD19-directed genetically modified autologous T cell immunotherapy,car_t_cell_therapy,Intravenous,2017,Oncology (hematologic),curated_reference,distinct_product
+Lucentis,VEGF-A inhibitor (antibody fragment),vegf_inhibitor,Intravitreal,2006,"Ophthalmology (retina, neovascular AMD/DME/RVO)",curated_reference,distinct_product
+Lutathera,Somatostatin receptor-targeted radioligand therapy delivering lutetium-177,radioligand_therapy,Intravenous,2018,Oncology (neuroendocrine tumors),curated_reference,distinct_product
+Pluvicto,PSMA-targeted radioligand therapy delivering lutetium-177,radioligand_therapy,Intravenous,2022,"Oncology (solid, prostate)",curated_reference,distinct_product
+Xiidra,LFA-1 antagonist,lfa1_antagonist,Topical ophthalmic,2016,Ophthalmology (dry eye disease),curated_reference,distinct_product
+Xolair,Anti-IgE monoclonal antibody,anti_ige_antibody,Subcutaneous,2003,"Respiratory and allergy (severe allergic asthma, CSU, nasal polyps, food allergy)",curated_reference,distinct_product
+Zolgensma,AAV9 vector-based SMN1 gene replacement therapy,gene_therapy_aav,Intravenous,2019,Neuromuscular (spinal muscular atrophy),curated_reference,distinct_product
+Actemra,interleukin-6 receptor antagonist,il6_receptor_antagonist,Intravenous,2010,Immunology (rheumatoid arthritis),curated_reference,distinct_product
+Alecensa,ALK tyrosine kinase inhibitor,alk_inhibitor,Oral,2015,Oncology (solid),curated_reference,distinct_product
+Enspryng,interleukin-6 receptor antagonist,il6_receptor_antagonist,Subcutaneous,2020,Neurology (neuromyelitis optica spectrum disorder),curated_reference,distinct_product
+Evrysdi,SMN2 splicing modifier,smn2_splicing_modifier,Oral,2020,Neurology (spinal muscular atrophy),curated_reference,distinct_product
+Hemlibra,bispecific factor IXa/X-directed antibody,bispecific_factor_viii_mimetic,Subcutaneous,2017,Hematology (haemophilia A),curated_reference,distinct_product
+Kadcyla,HER2-targeted antibody-drug conjugate,her2_antibody_drug_conjugate,Intravenous,2013,Oncology (solid),curated_reference,distinct_product
+Ocrevus,anti-CD20 monoclonal antibody,cd20_antibody,Intravenous,2017,Neurology (multiple sclerosis),curated_reference,distinct_product
+Polivy,CD79b-targeted antibody-drug conjugate,cd79b_antibody_drug_conjugate,Intravenous,2019,Oncology (hematologic),curated_reference,distinct_product
+Tecentriq,PD-L1 inhibitor,pdl1_inhibitor,Intravenous,2016,Oncology (solid),curated_reference,distinct_product
+Vabysmo,bispecific angiopoietin-2/VEGF-A inhibitor,ang2_vegfa_bispecific_antibody,Intravitreal,2022,Ophthalmology (retinal),curated_reference,distinct_product
+Brilinta,P2Y12 receptor antagonist,p2y12_antagonist,Oral,2011,"Cardiovascular (antithrombotic, acute coronary syndrome)",curated_reference,distinct_product
+Calquence,BTK inhibitor,btk_inhibitor,Oral,2017,Oncology (hematologic),curated_reference,distinct_product
+Farxiga,SGLT2 inhibitor,sglt2_inhibitor,Oral,2014,Metabolic (type 2 diabetes; also heart failure and chronic kidney disease),curated_reference,distinct_product
+Imfinzi,PD-L1 inhibitor (human monoclonal antibody),pdl1_inhibitor,Intravenous,2017,Oncology (solid),curated_reference,distinct_product
+Lynparza,PARP inhibitor,parp_inhibitor,Oral,2014,Oncology (solid),curated_reference,distinct_product
+Tagrisso,EGFR tyrosine kinase inhibitor,egfr_tki,Oral,2015,Oncology (solid),curated_reference,distinct_product
+Enhertu,HER2-directed antibody-drug conjugate (topoisomerase I inhibitor payload),her2_adc,Intravenous,2019,Oncology (solid),curated_reference,distinct_product
+Soliris,Terminal complement C5 inhibitor monoclonal antibody,c5_complement_inhibitor,Intravenous,2007,"Rare disease (PNH, aHUS, gMG, NMOSD)",curated_reference,distinct_product
+Airsupra,Short-acting beta2-agonist plus inhaled corticosteroid as-needed rescue combination,saba_ics_combination,Inhaled,2023,Respiratory (asthma),curated_reference,distinct_product
+Breztri Aerosphere,Inhaled corticosteroid / long-acting muscarinic antagonist / long-acting beta2-agonist triple combination,ics_lama_laba_triple,Inhaled,2020,Respiratory (COPD),curated_reference,distinct_product
+Daliresp,Phosphodiesterase-4 (PDE4) inhibitor,pde4_inhibitor,Oral,2011,Respiratory (COPD),curated_reference,distinct_product
+Fasenra,Interleukin-5 receptor alpha antagonist monoclonal antibody (eosinophil depletion),il5r_antagonist,Subcutaneous,2017,Respiratory (severe eosinophilic asthma),curated_reference,distinct_product
+Symbicort,Inhaled corticosteroid plus long-acting beta2-agonist fixed-dose combination,ics_laba_combination,Inhaled,2006,Respiratory (asthma/COPD),curated_reference,distinct_product
+Tezspire,Anti-thymic stromal lymphopoietin (TSLP) monoclonal antibody,tslp_antagonist,Subcutaneous,2021,Respiratory (severe asthma),curated_reference,distinct_product
+Ultomiris,Long-acting terminal complement C5 inhibitor monoclonal antibody,c5_complement_inhibitor,Intravenous,2018,"Rare disease (PNH, aHUS, gMG)",curated_reference,distinct_product
+Alprolix,Recombinant factor IX Fc fusion protein (extended half-life factor IX replacement),factor_ix_replacement,Intravenous,2014,Hematology (hemophilia B),curated_reference,distinct_product
+Beyfortus,RSV F protein-directed fusion inhibitor monoclonal antibody,rsv_monoclonal_antibody,Intramuscular,2023,Infectious disease (RSV prevention in infants),curated_reference,distinct_product
+Eloctate,Recombinant factor VIII Fc fusion protein (extended half-life factor VIII replacement),factor_viii_replacement,Intravenous,2014,Hematology (hemophilia A),curated_reference,distinct_product
+Fabrazyme,Recombinant human alpha-galactosidase A enzyme replacement therapy,enzyme_replacement_therapy,Intravenous,2003,"Rare diseases (Fabry disease, enzyme replacement)",curated_reference,distinct_product
+Sarclisa,CD38-directed cytolytic monoclonal antibody,cd38_antibody,Intravenous,2020,"Oncology (hematologic, multiple myeloma)",curated_reference,distinct_product
+Aubagio,Dihydroorotate dehydrogenase (DHODH) inhibitor; pyrimidine synthesis inhibitor,dhodh_inhibitor,Oral,2012,Relapsing multiple sclerosis,curated_reference,distinct_product
+Dupixent,Interleukin-4 receptor alpha antagonist (blocks IL-4 and IL-13 signalling),il4r_alpha_antagonist,Subcutaneous,2017,"Type 2 inflammatory diseases (atopic dermatitis first; asthma, CRSwNP, others)",curated_reference,distinct_product
+Kevzara,Interleukin-6 receptor antagonist,il6_receptor_antagonist,Subcutaneous,2017,Rheumatoid arthritis; polymyalgia rheumatica; polyarticular juvenile idiopathic arthritis,curated_reference,distinct_product
+Lantus,Long-acting basal insulin analog,basal_insulin_analog,Subcutaneous,2000,Diabetes (type 1 and type 2),curated_reference,distinct_product
+Praluent,PCSK9 (proprotein convertase subtilisin/kexin type 9) inhibitor monoclonal antibody,pcsk9_inhibitor,Subcutaneous,2015,Hypercholesterolemia / LDL-C lowering; cardiovascular risk reduction,curated_reference,distinct_product
+Toujeo,Long-acting basal insulin analog (concentrated 300 U/mL),basal_insulin_analog,Subcutaneous,2015,Diabetes (type 1 and type 2),curated_reference,distinct_product
+Viberzi,Mu-opioid receptor agonist / delta-opioid receptor antagonist,opioid_receptor_modulator,Oral,2015,Irritable bowel syndrome with diarrhea,curated_reference,distinct_product
+Aimovig,CGRP receptor antagonist monoclonal antibody,cgrp_receptor_antibody,Subcutaneous,2018,Preventive treatment of migraine,curated_reference,distinct_product
+Galafold,Pharmacological chaperone of alpha-galactosidase A,pharmacological_chaperone,Oral,2018,Fabry disease (amenable GLA variants),curated_reference,distinct_product
+Syfovre,Complement C3 inhibitor,complement_c3_inhibitor,Intravitreal,2023,Geographic atrophy secondary to age-related macular degeneration,curated_reference,distinct_product
+Miebo,"Semifluorinated alkane (evaporation inhibitor, tear-film lipid layer)",semifluorinated_alkane,Topical ophthalmic,2023,Dry eye disease (meibomian gland dysfunction),curated_reference,distinct_product
+Trulance,Guanylate cyclase-C agonist,guanylate_cyclase_c_agonist,Oral,2017,Chronic idiopathic constipation; IBS with constipation,curated_reference,distinct_product
+Roctavian,AAV5 vector-based gene therapy delivering factor VIII,aav_gene_therapy,Intravenous,2023,Severe hemophilia A,curated_reference,distinct_product
+Vimizim,Enzyme replacement therapy (recombinant N-acetylgalactosamine-6-sulfatase),enzyme_replacement_therapy,Intravenous,2014,Mucopolysaccharidosis IVA (Morquio A syndrome),curated_reference,distinct_product
+Voxzogo,C-type natriuretic peptide (CNP) analog,cnp_analog,Subcutaneous,2021,Achondroplasia,curated_reference,distinct_product
+Ocaliva,Farnesoid X receptor (FXR) agonist,fxr_agonist,Oral,2016,Primary biliary cholangitis,curated_reference,distinct_product
+Xifaxan,"Rifamycin antibacterial (RNA polymerase inhibitor), minimally absorbed",rifamycin_antibiotic,Oral,2004,Travelers' diarrhea; hepatic encephalopathy; IBS-D,curated_reference,distinct_product
+Luxturna,AAV2 vector-based gene therapy delivering RPE65,aav_gene_therapy,Intravitreal,2017,RPE65 mutation-associated inherited retinal dystrophy,curated_reference,distinct_product
+Tyrvaya,Nicotinic acetylcholine receptor agonist (trigeminal parasympathetic pathway activation),nicotinic_acetylcholine_receptor_agonist,Intranasal,2021,Dry eye disease,curated_reference,distinct_product
+Izervay,complement C5 inhibitor (RNA aptamer),complement_c5_inhibitor,Intravitreal,2023,Geographic atrophy secondary to age-related macular degeneration,curated_reference,distinct_product
+Myrbetriq,beta-3 adrenergic receptor agonist,beta3_adrenergic_receptor_agonist,Oral,2012,Overactive bladder,curated_reference,distinct_product
+Veozah,neurokinin 3 (NK3) receptor antagonist,nk3_receptor_antagonist,Oral,2023,Vasomotor symptoms associated with menopause,curated_reference,distinct_product
+Xtandi,androgen receptor signalling inhibitor,androgen_receptor_inhibitor,Oral,2012,Oncology (prostate cancer),curated_reference,distinct_product
+Adynovate,PEGylated recombinant factor VIII replacement,pegylated_recombinant_factor_viii,Intravenous,2015,Hemophilia A,curated_reference,distinct_product
+Entyvio,integrin receptor antagonist (alpha4beta7 integrin),integrin_receptor_antagonist,Intravenous,2014,"Inflammatory bowel disease (ulcerative colitis, Crohn's disease)",curated_reference,distinct_product
+Gattex,glucagon-like peptide-2 (GLP-2) receptor agonist,glp2_receptor_agonist,Subcutaneous,2012,Short bowel syndrome,curated_reference,distinct_product
+Motegrity,selective serotonin 5-HT4 receptor agonist,serotonin_5ht4_receptor_agonist,Oral,2018,Chronic idiopathic constipation,curated_reference,distinct_product
+Vyvgart,neonatal Fc receptor (FcRn) blocker,fcrn_antagonist,Intravenous,2021,"Neurology (generalized myasthenia gravis, CIDP)",curated_reference,distinct_product
+Hemgenix,AAV5 vector gene therapy delivering Factor IX Padua variant,aav_gene_therapy,Intravenous,2022,Hematology (hemophilia B),curated_reference,distinct_product
+Leqembi,anti-amyloid-beta protofibril monoclonal antibody,anti_amyloid_beta_antibody,Intravenous,2023,Neurology (Alzheimer's disease),curated_reference,distinct_product
+Mavenclad,purine antimetabolite; selective lymphocyte depletion,purine_analog_immunomodulator,Oral,2019,Neurology (multiple sclerosis),curated_reference,distinct_product
+Radicava ORS,free radical scavenger,free_radical_scavenger,Oral,2022,Neurology (amyotrophic lateral sclerosis),curated_reference,distinct_product
+Gemtesa,beta-3 adrenergic receptor agonist,beta3_adrenergic_agonist,Oral,2020,Urology (overactive bladder),curated_reference,distinct_product
+Ilumya,IL-23 p19 inhibitor,il23_p19_inhibitor,Subcutaneous,2018,Immunology (plaque psoriasis),curated_reference,distinct_product
+Bimzelx,humanized monoclonal antibody inhibiting IL-17A and IL-17F,il17a_f_inhibitor,Subcutaneous,2023,"Immunology (psoriasis, psoriatic arthritis, axial spondyloarthritis, hidradenitis suppurativa)",curated_reference,distinct_product
+Cimzia,PEGylated anti-TNF Fab' fragment,tnf_inhibitor,Subcutaneous,2008,"Immunology (rheumatology, Crohn's disease, psoriasis)",curated_reference,distinct_product
+Rystiggo,neonatal Fc receptor blocker,fcrn_antagonist,Subcutaneous,2023,Neurology (generalized myasthenia gravis),curated_reference,distinct_product
+Jivi,PEGylated recombinant factor VIII replacement,factor_viii_replacement,Intravenous,2018,Hemophilia A,curated_reference,distinct_product
+Nubeqa,Androgen receptor inhibitor,androgen_receptor_inhibitor,Oral,2019,Oncology (solid),curated_reference,distinct_product
+Lenvima,"Multi-kinase inhibitor (VEGFR, FGFR, PDGFR-alpha, RET, KIT)",multikinase_inhibitor,Oral,2015,Oncology (solid),curated_reference,distinct_product
+Crysvita,Anti-FGF23 monoclonal antibody,fgf23_blocking_antibody,Subcutaneous,2018,X-linked hypophosphatemia (rare metabolic bone disease),curated_reference,distinct_product
+Spiriva,Long-acting muscarinic antagonist,lama,Inhaled,2004,"Respiratory (COPD, asthma)",curated_reference,distinct_product

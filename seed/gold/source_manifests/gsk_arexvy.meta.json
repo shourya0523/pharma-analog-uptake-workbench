@@ -1,0 +1,33 @@
+{
+  "drug_name": "Arexvy",
+  "generic_name": "respiratory syncytial virus vaccine, adjuvanted",
+  "therapeutic_area": "Infectious Disease / Vaccines",
+  "indication_area": "Infectious disease (RSV lower respiratory tract disease prevention)",
+  "formulation": "suspension for injection (recombinant RSVPreF3 antigen with AS01E adjuvant)",
+  "route_of_administration": "intramuscular",
+  "moa": "Recombinant prefusion F protein subunit vaccine with AS01E adjuvant system",
+  "moa_class": "adjuvanted_recombinant_subunit_vaccine",
+  "first_approval_year": 2023,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/news-events/press-announcements/fda-approves-first-respiratory-syncytial-virus-rsv-vaccine",
+    "quote": "For Immediate Release: May 03, 2023 ... Today, the U.S. Food and Drug Administration approved Arexvy, the first respiratory syncytial virus (RSV) vaccine approved for use in the United States."
+  },
+  "manufacturer": "GSK plc",
+  "benchmark_identity": "gsk_arexvy_worldwide_reported",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "launch_quarter": "2023Q3",
+  "commercial_start_quarter": "2023Q3",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "launch_quarter 2023Q3: the Q3 2023 release (6-K 2023-11-01) prints Arexvy Q3 2023 = 709 and nine months 2023 = 709, so no sales in Q1-Q2 2023; the Q2 2023 release (6-K 2023-07-26) describes only the May 2023 approval and launch preparation and prints no Arexvy sales row. The brief suggested 2023Q2/Q3; first sales are in Q3. FDA approved 2023-05-03.",
+  "search_log": [
+    "fetched data.sec.gov submissions CIK0001131399 (recent + 3 history pages, 2001-2026): 6,124 6-K and 39 6-K/A filings; 20-F 25",
+    "2003-2011: fetched every 6-K filed in the 4 results windows each year and kept those whose text contains 'Seretide' and 'turnover' (40 documents matched, 4 of them excluded below; the 2001-2002 6-Ks are paper placeholders on EDGAR)",
+    "2012-2026: selected 6-Ks whose primaryDocDescription is 1ST/2ND/3RD QUARTER RESULTS, HALF YEARLY/HALF-YEAR REPORT or FINAL RESULTS; 2012-02-07 6-K (Q4 2011) added by hand because its description is generic ('FORM 6-K')",
+    "excluded as duplicates/restatements: 6-K 2004-10-29 and 2005-02-10 (IFRS restatements of 2003-2004), 6-K 2008-05-06 (second filing of the Q1 2008 release), 2008-02-07 text-only copy of Q4 2007",
+    "per release: product row taken from the 'Pharmaceuticals/Vaccines turnover' regional tables (Total column = worldwide); each quarter cross-checked: Q1+Q2 = printed six-month row, +Q3 = printed nine-month row, +Q4 = printed full-year row"
+  ]
+}

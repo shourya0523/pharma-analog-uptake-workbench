@@ -1,0 +1,32 @@
+{
+  "drug_name": "Farxiga",
+  "generic_name": "dapagliflozin",
+  "manufacturer": "AstraZeneca",
+  "benchmark_identity": "az_farxiga_worldwide_reported",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Metabolic (type 2 diabetes; also heart failure and chronic kidney disease)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "tablet (5 mg and 10 mg)",
+  "route_of_administration": "oral",
+  "moa": "SGLT2 inhibitor",
+  "moa_class": "sglt2_inhibitor",
+  "first_approval_year": 2014,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2014/202293Orig1s000ltr.pdf",
+    "quote": "NDA 202293 NDA APPROVAL ... for Farxiga (dapagliflozin) tablets 5 mg and 10 mg ... It is approved, effective on the date of this letter [signed CURTIS J ROSEBRAUGH 01/08/2014]"
+  },
+  "launch_quarter": "2013Q1",
+  "commercial_start_quarter": "2015Q1",
+  "series_start_reason": "AstraZeneca prints no Farxiga/Forxiga line in its product tables for Q1 to Q4 2014 (AstraZeneca completed the acquisition of BMS's share of the diabetes alliance on 1 February 2014), and the Q2-Q4 2015 results print growth percentages only against 2014 (the Q1 2015 results alone print a Q1 2014 value of 13). The longest contiguous run of own-document rows therefore starts 2015Q1. The 2013 quarters (Forxiga as AstraZeneca then printed it) are delivered separately as az_farxiga_alt. (az_farxiga_alt: Companion Series sheet, cited but not scored.)",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "launch_quarter 2013Q1 from the Q1 2013 results (6-K 0001191638-13-000511): 'Sales of Forxiga were $1 million in the first quarter, reflecting the fact that the launch rollout in Europe is in its very early stages following approval in November 2012.' US approval 2014-01-08 (Farxiga, then BMS-held NDA). The line is printed 'Farxiga / Forxiga' in 2015 and 'Farxiga' later: worldwide dapagliflozin (single-ingredient Farxiga/Forxiga) as AstraZeneca books it, which includes the US after the alliance ended. Whether dapagliflozin combination products are inside the Farxiga line is not stated in the product-sales tables (no separate Xigduo/Qtern product-sales row was found).",
+  "search_log": [
+    "Listed every AstraZeneca PLC (CIK 0000901832) filing, all form types, via data.sec.gov/submissions/CIK0000901832.json plus the older page CIK0000901832-submissions-001.json (2,050 filings, 1995-2026; scripts/list_filings.py). Quarterly/half-year/full-year results announcements are furnished on Form 6-K; most H1 results 6-Ks (2018, 2019 and 2021-2026, accession prefix 0001104659) carry only a generic EDGAR description ('6-K' / 'FORM 6-K' / 'FORM 6K') and were identified by opening them, not by description. 69 results documents 2010-02-05 to 2026-07-27 were selected (scripts/catalog.py); the H1 2021 6-K/A (0001104659-21-097940) was not used.",
+    "Every document was fetched from sec.gov and flattened to table rows (scripts/rows.py, extract.py). In each results document the product-sales analysis by region prints a year-to-date table (H1/9M/FY) followed by the single-quarter table with a World column; the quarter value is the World column of the single-quarter table (first wide table for Q1 documents, second wide table otherwise), found with a row-label match that tolerates 'Brilinta / Brilique' style labels and a leading dash (scripts/series.py).",
+    "Checked every quarter against the same document's year-to-date row (YTD minus previous YTD equals the quarter, tolerance 2) and, for each year with four quarters, the sum of the four quarters against the full-year row of the Q4 document; all agree to within 1 (printed-rounding); no larger difference exists. Checked that the table is the Product Sales table: its total row is 'TOTAL PRODUCT SALES' / 'Total Product Sales' / 'Total Medicines', not Total Revenue.",
+    "Searched 2014 results documents (Q1-Q4 2014 6-Ks) for Farxiga/Forxiga rows with figures and text mentions: only pipeline rows; the 2014 product tables list Onglyza, Byetta, Bydureon but no dapagliflozin line. Q1 2015 results (azn201504246k2.htm) print 'Farxiga / Forxiga | 76 | 13 | n/m | n/m' (Q1 2015, Q1 2014, % change); the 2014Q1 value alone cannot join the series (Q2-Q4 2014 not printed), so it is not used."
+  ]
+}

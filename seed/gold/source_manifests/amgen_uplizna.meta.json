@@ -1,0 +1,31 @@
+{
+  "drug_name": "Uplizna",
+  "generic_name": "inebilizumab",
+  "manufacturer": "Amgen",
+  "benchmark_identity": "amgen_uplizna_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Neuroimmunology (neuromyelitis optica spectrum disorder; also IgG4-related disease)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection",
+  "route_of_administration": "intravenous",
+  "moa": "CD19-directed cytolytic antibody (B-cell depleting)",
+  "moa_class": "cd19_directed_antibody",
+  "first_approval_year": 2020,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2020/761142s000lbl.pdf",
+    "quote": "Initial U.S. Approval: 2020"
+  },
+  "launch_quarter": "2020Q2",
+  "commercial_start_quarter": "2023Q4",
+  "series_start_reason": "Amgen acquired Horizon on Oct. 6, 2023 and first reports Uplizna for 2023Q4 (65, covering Oct. 6-Dec. 31 per the release footnote). Earlier quarters are in horizon_uplizna (2021Q2-2023Q2) and viela_uplizna (2020Q3-2020Q4). Not citable: 2021Q1 (Horizon's 1.8 covers Mar. 15-31 only; Viela published no Q1 2021 results), 2023Q3 (Horizon published no third-quarter 2023 results) and Oct. 1-5, 2023. (horizon_uplizna, viela_uplizna: Companion Series sheet, cited but not scored.)",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "listed Amgen (CIK 0000318154) filings via data.sec.gov/submissions (recent + older pages), keeping every form starting '8-K' (8-K and 8-K/A) or '10-' (10-Q, 10-K, amendments): 323 8-K, 2 8-K/A, 98 10-Q, 31 10-K; the two 8-K/As are dated 1995 and 2020 and are not earnings releases",
+    "took every 8-K carrying Item 2.02 from 2012-01-26 to 2026-08-04, fetched each filing's index.json, and kept the exhibit that contains both 'Enbrel' and 'Repatha' or 'Prolia': 59 earnings-release exhibits covering the fourth quarter of 2011 through the second quarter of 2026, no quarter missing",
+    "parsed each release's HTML table rows; the product table ('$Millions, except percentages' with U.S., ROW and TOTAL columns) was checked for every quarter, and for each fiscal year the four quarters were summed and compared with the full-year table in the fourth-quarter release (all matched exactly for the rows used)",
+    "Uplizna row first appears in the Q4 2023 release (footnote '**': products acquired from Horizon on Oct. 6, 2023, sales from the acquisition date through Dec. 31, 2023); Q4 2024 release prints the prior-year Q4 2023 as 65 and full-year 2024 379 = 80+92+106+101"
+  ]
+}

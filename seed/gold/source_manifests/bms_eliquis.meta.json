@@ -1,0 +1,41 @@
+{
+  "drug_name": "Eliquis",
+  "generic_name": "apixaban",
+  "manufacturer": "Bristol-Myers Squibb",
+  "benchmark_identity": "bms_eliquis_worldwide_reported",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Anticoagulation (stroke prevention in atrial fibrillation, VTE)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "direct factor Xa inhibitor",
+  "moa_class": "factor_xa_inhibitor",
+  "first_approval_year": 2012,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2012/202155Orig1s000ltr.pdf",
+    "quote": "NDA 202155 NDA APPROVAL ... submitted under section 505(b)(1) of the Federal Food, Drug, and Cosmetic Act for Eliquis (apixaban) 2.5 and 5 mg Tablets"
+  },
+  "launch_quarter": "2011Q3",
+  "commercial_start_quarter": "2012Q2",
+  "series_start_reason": "First quarter in which BMS prints an Eliquis row in its product sales table is Q2 2012 (worldwide 1, U.S. nil, i.e. ex-U.S. sales after EU approval); the Q1 2012 and earlier tables have no Eliquis row. The U.S. approval letter is from 2012, and U.S. sales appear from Q4 2012 onward in the table, so the requested 2013Q1 start is later than the first printed quarter.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "Listed BMY (CIK 0000014272) 8-K, 8-K/A, 10-Q, 10-K, 10-K/A, 10-Q/A filings from data.sec.gov submissions (recent + older pages): 3534 filings of all forms, 1994-2026",
+    "Selected 8-K/8-K/A with item 2.02 filed 2006-2026 (96 filings); cross-checked against 10-Q/10-K filing dates: every quarter's 10-Q/10-K has a 2.02 earnings 8-K within 10 days except the Q1 2014 release (8-K 0000014272-14-000172, item 9.01 only), which was added by hand; 10-K filings sit weeks after the Q4 releases so those matched the January/February releases",
+    "Fetched each filing's index.json and downloaded all EX-99.x exhibits; extraction script scripts/extract.py reads the first labelled product row of each EX-99.1 and scripts/audit2.py cross-checks it",
+    "8-K/A filings of 2006-2008 (restated EX-99.2 schedules) were not used as sources; each quarter is cited from its own original EX-99.1",
+    "Audit: 244 prior-year-column comparisons across the five products (each release's prior-year figure vs the value taken from that quarter's own release) had 0 mismatches; 61 fourth-quarter FY-sum checks (four quarters vs the FY figure in the Q4 release) had 0 mismatches",
+    "Alliance: BMS 10-K FY2025 (0000014272-26-000004) states BMS and Pfizer jointly develop and commercialize Eliquis, profits and losses are shared equally globally except in certain countries where Pfizer commercializes Eliquis and pays BMS a sales-based fee. The series is the Eliquis row BMS prints in its own table; I did not establish from a document where the sales-based fee is recorded within that row.",
+    "2012Q3 is a printed dash (nil) in the worldwide cell while the nine-month column shows 1; recorded as 0."
+  ],
+  "reviewed_anomalies": {
+    "2012Q3": "Printed as a dash (nil) in the worldwide column of BMS's third-quarter 2012 release; the nine-month column shows 1, equal to 2012Q2. Read at source."
+  },
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/14272/000119312511200164/d10q.htm",
+    "quote": "ELIQUIS* was approved in the EU for VTE prevention in May 2011 and launched in July 2011."
+  }
+}

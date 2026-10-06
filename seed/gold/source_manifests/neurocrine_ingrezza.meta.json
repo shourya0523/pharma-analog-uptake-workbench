@@ -1,0 +1,33 @@
+{
+  "drug_name": "Ingrezza",
+  "generic_name": "valbenazine",
+  "manufacturer": "Neurocrine Biosciences",
+  "benchmark_identity": "neurocrine_ingrezza_worldwide_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Neurology (movement disorders)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide as printed (no regional split; marketed by Neurocrine in the United States)",
+  "formulation": "capsule",
+  "route_of_administration": "oral",
+  "moa": "vesicular monoamine transporter 2 (VMAT2) inhibitor",
+  "moa_class": "vmat2_inhibitor",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2017/209241Orig1s000ltr.pdf",
+    "quote": "NDA 209241 ... Ingrezza (valbenazine) 40mg Capsules ... for the treatment of tardive dyskinesia ... It is approved, effective on the date of this letter (electronic signature dated 04/11/2017)"
+  },
+  "launch_quarter": "2017Q2",
+  "commercial_start_quarter": "2017Q2",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "2017Q2-2020Q2: Neurocrine's only product, so its 'Product sales, net' table line is used (INGREZZA labelled line where printed)",
+    "2020Q3 onward the total includes ONGENTYS (and CRENESSITY from 2025); the INGREZZA line is used. 2020Q3, 2021Q1 and 2024Q4 are read from later documents' prior-year columns because the own-period documents print only totals or annual INGREZZA; 2020Q4, 2021Q4, 2022Q4, 2023Q4 are derived (10-K annual less nine months), approximate to one decimal",
+    "2025Q4 INGREZZA taken from the Q4 2025 release table; Q2 2026 release prints whole millions (716) so the Q2 2026 10-Q (716.5) is cited"
+  ],
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/914475/000119312517247437/d253292d10q.htm",
+    "quote": "INGREZZA became available for prescription in late April 2017."
+  }
+}

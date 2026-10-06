@@ -1,0 +1,33 @@
+{
+  "drug_name": "Breyanzi",
+  "generic_name": "lisocabtagene maraleucel",
+  "manufacturer": "Bristol-Myers Squibb",
+  "benchmark_identity": "bms_breyanzi_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (hematologic)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "cell suspension for infusion (autologous CAR T)",
+  "route_of_administration": "intravenous",
+  "moa": "CD19-directed genetically modified autologous T cell immunotherapy",
+  "moa_class": "cd19_car_t",
+  "first_approval_year": 2021,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/vaccines-blood-biologics/cellular-gene-therapy-products/breyanzi-lisocabtagene-maraleucel",
+    "quote": "STN: BLA 125714 Proper Name: lisocabtagene maraleucel Tradename: BREYANZI ... February 5, 2021 Approval Letter - BREYANZI"
+  },
+  "launch_quarter": "2021Q2",
+  "commercial_start_quarter": "2021Q2",
+  "launch_evidence": "BMS Q2 2021 release (q22021ex991.htm) prints Breyanzi 17 for the quarter and 17 for the six months, so no earlier quarter had sales; the Q1 2021 release prints no Breyanzi sales row",
+  "series_start_reason": "First quarter with a printed sales figure: BMS's second-quarter 2021 release prints Breyanzi $17 million for the quarter and $17 million for the six months (so none in Q1 2021), and the first-quarter 2021 release has no Breyanzi product row (approval was February 5, 2021).",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "",
+  "search_log": [
+    "listed CIK 14272 (BMS), 816284 (Celgene) and 1576263 (Mirati) filings via data.sec.gov/submissions (recent + older pages), all form types incl. 8-K/A; selected every filing with Item 2.02 (earnings results) and fetched its EX-99 exhibits via the filing index",
+    "Celgene 8-K/8-K/A with Item 2.02 span 2004-10 to 2019-10-31; no Celgene earnings release or 10-K exists for 2019Q4 (last Celgene filing in the submissions index is dated 2020-07-13)",
+    "BMS Item 2.02 8-Ks from 2019-10-31 to 2026-07-30 (2026Q2 release) fetched; Ex 99.1 holds the product table, Ex 99.2 (through the 2022 releases) the quarterly trend tables",
+    "Breyanzi product row present in every BMS Ex 99.1 table from 2021Q2 to 2026Q2"
+  ]
+}

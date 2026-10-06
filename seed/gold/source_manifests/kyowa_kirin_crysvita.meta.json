@@ -1,0 +1,34 @@
+{
+  "drug_name": "Crysvita",
+  "generic_name": "burosumab",
+  "manufacturer": "Kyowa Kirin",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "X-linked hypophosphatemia (rare metabolic bone disease)",
+  "formulation": "injection",
+  "route_of_administration": "subcutaneous",
+  "moa": "Anti-FGF23 monoclonal antibody",
+  "moa_class": "fgf23_blocking_antibody",
+  "first_approval_year": 2018,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2018/761068s000lbl.pdf",
+    "quote": "CRYSVITA (burosumab-twza) injection, for subcutaneous use ... is a fibroblast growth factor 23 (FGF23) blocking antibody indicated for the treatment of X-linked hypophosphatemia (XLH) | Revised: 04/2018 (BLA 761068 approval letter: https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2018/761068Orig1s000ltr.pdf, 'We have approved your BLA for CRYSVITA (burosumab-twza) injection effective this date')"
+  },
+  "launch_quarter": "2018Q2",
+  "notes": "launch_quarter: Kyowa Kirin FY2019 Q4 presentation https://ir.kyowakirin.com/en/library/earnings/earnings0/main/010/teaserItems1/00/linkList/01/link/presentation_2019_q4_en3.pdf prints 'Crysvita*1 ... Launched in Apr 2018' (International line). Japan launch Dec 2019 (same document).",
+  "benchmark_identity": "kyowa_kirin_crysvita_worldwide_reported",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "commercial_start_quarter": "2020Q1",
+  "series_start_reason": "Kyowa Kirin first prints a single worldwide Crysvita line in its FY2021 Q1 results appendix (which carries FY2020 quarters as prior-year columns). Before that, Crysvita is printed only as a Japan row and a separate International (outside Japan) row; no total is printed and the verifier-safe rule is not to sum rows. The 2018Q2-2020Q4 International line is delivered under kyowa_kirin_crysvita_alt.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "fetched https://ir.kyowakirin.com/en/library/earnings.html (HTTP 200, browser UA) and listed every appendix_/summary_/presentation_ PDF 2018Q1-2026Q2",
+    "downloaded 102 PDFs from ir.kyowakirin.com/en/library/earnings/... and extracted text with pdftotext",
+    "grepped every appendix for Crysvita; global line (Japan + North America + EMEA beneath it) appears in the <Quarterly> table from the 2021Q1 appendix onward",
+    "2018Q1-2020Q4 appendices and presentations print Japan and International rows separately (presentation_2020_q4 shows 'Crysvita*1 North America / EMEA' as International only); no worldwide total",
+    "consistency check: each 2020-2025 quarter value identical across every later document that reprints it (no restatement found)",
+    "FDA approval from accessdata.fda.gov BLA 761068 label and approval letter"
+  ]
+}

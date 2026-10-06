@@ -1,0 +1,46 @@
+{
+  "drug_name": "Kyprolis",
+  "generic_name": "carfilzomib",
+  "manufacturer": "Amgen",
+  "benchmark_identity": "amgen_kyprolis_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (hematologic: multiple myeloma)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection (lyophilized powder)",
+  "route_of_administration": "intravenous",
+  "moa": "Proteasome inhibitor",
+  "moa_class": "proteasome_inhibitor",
+  "first_approval_year": 2012,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2012/202714lbl.pdf",
+    "quote": "Initial U.S. Approval: 2012"
+  },
+  "launch_quarter": "2012Q3",
+  "commercial_start_quarter": "2012Q3",
+  "search_log": [
+    "listed Amgen (CIK 0000318154) filings via data.sec.gov/submissions (recent + older pages), keeping every form starting '8-K' (8-K and 8-K/A) or '10-' (10-Q, 10-K, amendments): 323 8-K, 2 8-K/A, 98 10-Q, 31 10-K; the two 8-K/As are dated 1995 and 2020 and are not earnings releases",
+    "took every 8-K carrying Item 2.02 from 2012-01-26 to 2026-08-04, fetched each filing's index.json, and kept the exhibit that contains both 'Enbrel' and 'Repatha' or 'Prolia': 59 earnings-release exhibits covering the fourth quarter of 2011 through the second quarter of 2026, no quarter missing",
+    "parsed each release's HTML table rows; the product table ('$Millions, except percentages' with U.S., ROW and TOTAL columns) was checked for every quarter, and for each fiscal year the four quarters were summed and compared with the full-year table in the fourth-quarter release (all matched exactly for the rows used)",
+    "Onyx (CIK 0001012140; note the CIK in the task brief, 0001104506, is Insmed) filings listed via data.sec.gov submissions: last 10-Q filed 2013-08-09, no 10-Q or earnings release for Q3 2013, final 8-K 2013-10-01 (acquisition closing)",
+    "Kyprolis row checked in every Amgen release from the Q4 2013 release (2014-01-28) to Q2 2026; FY sums matched the full-year tables for 2014-2025; the Q4 2013 prior-year column prints 0 because Amgen consolidates Onyx only from Oct. 1, 2013",
+    "[Onyx Pharmaceuticals piece] listed Onyx (CIK 0001012140) 8-K, 8-K/A, 10-Q, 10-K from 2011 to 2013-10-01 via data.sec.gov submissions",
+    "[Onyx Pharmaceuticals piece] fetched the Item 2.02 EX-99.1 for 2012-11-01, 2013-02-21, 2013-05-07, 2013-08-08 and read the 'Product revenue' income statement line (USD thousands); the release text states Kyprolis net sales that agree ($18.6M, $64.0M for full-year and Q4 2012 as printed, $64.0M, $61.0M); full-year 2012 product revenue 63,955 = 18,636 + 45,319",
+    "[Onyx Pharmaceuticals piece] Kyprolis was approved July 20, 2012 (stated in the Q3 2012 release), after the second quarter of 2012 ended, so no earlier quarter has product sales; the Q3 2012 release text says the $18.6 million represents orders placed and received by end customers post approval"
+  ],
+  "unreported_quarters": {
+    "2013Q3": "Ownership change Onyx Pharmaceuticals to Amgen; no full-quarter figure is published. Amgen acquired Onyx on Oct. 1, 2013; Onyx published no third-quarter 2013 results. Amgen's own series (amgen_kyprolis) starts 2013Q4; 2013Q3 is not citable. Amgen acquired Onyx, Kyprolis's seller, on Oct. 1, 2013 and first reports Kyprolis (73) for the fourth quarter of 2013; the earlier quarters 2012Q3-2013Q2 are in the separate onyx_kyprolis file (Onyx's own earnings releases, USD thousands); 2013Q3 is in no published document because Onyx released no third-quarter 2013 results (acquired Oct. 1) and Amgen reports Kyprolis only from Oct. 1"
+  },
+  "joined_issuers": [
+    {
+      "issuer": "Onyx Pharmaceuticals",
+      "first_quarter": "2012Q3",
+      "last_quarter": "2013Q2"
+    },
+    {
+      "issuer": "Amgen",
+      "first_quarter": "2013Q4",
+      "last_quarter": "2026Q2"
+    }
+  ]
+}

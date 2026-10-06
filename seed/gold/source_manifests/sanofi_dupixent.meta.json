@@ -1,0 +1,31 @@
+{
+  "manufacturer": "Sanofi",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "series_start_reason": "The Q1 2017 release prints no Dupixent sales row (the product was launched in the U.S. at the end of the quarter, after the 28 March 2017 approval). The Q2 2017 release prints Dupixent Q2 2017 = 26 and H1 2017 = 26, so Q1 2017 sales were nil; the series starts with the first printed quarter, 2017Q2.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "drug_name": "Dupixent",
+  "generic_name": "dupilumab",
+  "benchmark_identity": "sanofi_dupixent_worldwide_reported",
+  "therapeutic_area": "Immunology / Inflammation",
+  "indication_area": "Type 2 inflammatory diseases (atopic dermatitis first; asthma, CRSwNP, others)",
+  "formulation": "injection",
+  "route_of_administration": "subcutaneous",
+  "moa": "Interleukin-4 receptor alpha antagonist (blocks IL-4 and IL-13 signalling)",
+  "moa_class": "il4r_alpha_antagonist",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761055",
+    "quote": "Original Approvals or Tentative Approvals: 03/28/2017 ORIG-1 Approval (Dupixent, BLA 761055, Drugs@FDA overview)"
+  },
+  "launch_quarter": "2017Q1",
+  "commercial_start_quarter": "2017Q2",
+  "notes": "Launch: Q2 2017 release (https://www.sec.gov/Archives/edgar/data/1121404/000119312517242074/d431208dex991.htm): 'Dupixent which was launched in the U.S. in March for the treatment of moderate to severe adult atopic dermatitis generated sales of EUR 26 million in the second quarter'. Sanofi books Dupixent worldwide net sales; Regeneron shares profits and reports its own collaboration line, which is not used here. Sanofi's releases print Dupixent worldwide in the quarter table and (2020Q2-2022Q4) in a worldwide/U.S./Europe/Rest of World table, where the first figure is the worldwide total.",
+  "search_log": [
+    "listed Sanofi (CIK 1121404) 6-K/6-K/A/20-F/20-F/A filings via data.sec.gov submissions; fetched every exhibit and counted 'Dupixent' hits",
+    "each quarter taken from that quarter's own results release (first table naming Dupixent with figures)",
+    "checked the Q1 2017 release for a Dupixent sales row (none) and H1 2017 vs Q2 2017 (both 26)"
+  ]
+}

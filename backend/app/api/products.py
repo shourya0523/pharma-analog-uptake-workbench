@@ -547,6 +547,11 @@ def review_queue(
                         "reason": task.reason,
                         "confidence": task.confidence_score,
                         "value_normalized_usd_millions": dp.value_normalized_usd_millions,
+                        # As the source printed it, which is what a reader
+                        # looks for in the document.
+                        "value_reported": dp.value_reported,
+                        "currency": dp.currency,
+                        "unit": dp.unit,
                         "period_type": dp.period_type,
                         "revenue_scope": dp.revenue_scope,
                         "geography": dp.geography,

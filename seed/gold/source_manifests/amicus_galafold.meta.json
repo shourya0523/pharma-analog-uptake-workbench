@@ -1,0 +1,32 @@
+{
+  "drug_name": "Galafold",
+  "generic_name": "migalastat",
+  "manufacturer": "Amicus Therapeutics",
+  "benchmark_identity": "amicus_galafold_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Fabry disease (amenable GLA variants)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "capsule",
+  "route_of_administration": "oral",
+  "moa": "Pharmacological chaperone of alpha-galactosidase A",
+  "moa_class": "pharmacological_chaperone",
+  "first_approval_year": 2018,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=208623",
+    "quote": "GALAFOLD MIGALASTAT HYDROCHLORIDE EQ 123MG BASE CAPSULE;ORAL ... 08/10/2018 ORIG-1 Approval"
+  },
+  "launch_quarter": "2016Q3",
+  "commercial_start_quarter": "2016Q3",
+  "series_start_reason": null,
+  "series_end_quarter": "2025Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Amicus was acquired by BioMarin (closed 2026-04-27) and deregistered (Form 15-12G 2026-05-07); the last Amicus report is the FY2025 10-K / Q4 2025 release. BioMarin prints no Galafold row.",
+  "search_log": [
+    "Listed every Amicus filing (all forms) for CIK 0001178879 via data.sec.gov/submissions; earnings 8-Ks by item 2.02; product rows parsed from Exhibit 99.1 tables and from 10-Q/10-K tables (scripts/amicus.py).",
+    "2016Q3 is the first quarter with net product sales (2,127 thousand vs nil); the 2016-08-09 release says Galafold was available commercially in Germany as of July 31, 2016. 2016Q2 prints no product sales.",
+    "The 2018Q2 and 2018Q3 earnings exhibits print their tables as images (no table rows), so those quarters are cited to the 10-Qs (also the quarter's own document). Q4 2016-2021 are derived as 10-K full year less 10-Q nine months because neither 10-K nor release prints a Q4 figure; Q4 2022 is the 'Net Product Revenues' quarterly row of the release.",
+    "From 2023Q3 the release prints a separate 'Galafold' row (Pombiliti + Opfolda split out), used from then on; before that the total net product sales line is used (Galafold plus negligible early-access Pombiliti: 60 thousand in 2022Q3). The 2023Q4 release's Galafold full-year figure 387,777 differs from the sum of the four quarters as cited (388,106) by 329 thousand because Q1-Q2 2023 are on the older total line.",
+    "Amicus was acquired by BioMarin (closing 2026-04-27, 8-K accession on EDGAR 2026-04-27; Form 15-12G 2026-05-07); the last Amicus periodic report is the FY2025 10-K filed 2026-02-20, and no Q1 2026 report exists. BioMarin's 2026 releases carry no Galafold revenue row (scanned for 'galafold' in BioMarin releases from 2026-04), and BioMarin's post-closing period would be a partial quarter."
+  ]
+}

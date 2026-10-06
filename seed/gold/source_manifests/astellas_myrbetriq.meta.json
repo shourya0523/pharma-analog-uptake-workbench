@@ -1,0 +1,37 @@
+{
+  "drug_name": "Myrbetriq",
+  "generic_name": "mirabegron",
+  "manufacturer": "Astellas",
+  "benchmark_identity": "astellas_betanis_myrbetriq_betmiga_global_reported",
+  "therapeutic_area": "GI / Liver / Women's Health / Urology",
+  "indication_area": "Overactive bladder",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "extended-release tablet",
+  "route_of_administration": "oral",
+  "moa": "beta-3 adrenergic receptor agonist",
+  "moa_class": "beta3_adrenergic_receptor_agonist",
+  "first_approval_year": 2012,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2012/202611Orig1s000ltr.pdf",
+    "quote": "This new drug application provides for the use of Myrbetriq (mirabegron), 25 mg and 50 mg, for the treatment of overactive bladder. (FDA approval letter, NDA 202611, signed 06/28/2012)"
+  },
+  "launch_quarter": "2011Q3",
+  "commercial_start_quarter": "2017Q2",
+  "series_start_reason": "Astellas' financial-results library on astellas.com begins with Q1 FY2017 (April-June 2017); earlier quarters (Japan launch of Betanis in 2011, U.S. 2012) are not citable from documents located (searched legacy URL patterns returned 404). The FY2017 Q1 document prints the April-June 2016 quarter only as a prior-year column, with no other FY2016 quarters printed individually.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Printed label is 'Betanis/Myrbetriq/BETMIGA' (Japan, U.S., Europe brand names of mirabegron on one global line; spelled 'Betanis/Myrabetriq/BETMIGA' in some FY2018-FY2019 supplementary documents). Row is in the 'Global' sales-of-major-products table (billions of JPY).",
+  "search_log": [
+    "read https://www.astellas.com/en/investors/financial-results-library (146 PDF links) and cached every financial-results PDF (main release, supplementary documents, presentation, earnings-call scripts); earliest linked quarter is Q1 FY2017 (April-June 2017)",
+    "guessed legacy astellas.com/en/ir/library/pdf/... URLs for FY2013-FY2016 documents: all returned 404, so no earlier Astellas document was found",
+    "extracted the 'Global' sales-of-major-products table in each quarter's supplementary document (billions of JPY, one decimal) with pdfplumber, the verifier's extractor",
+    "where the quarter's own document text layer splits the digits of the row, the same quarter was read from a later document of the same fiscal year, or derived from year-to-date figures (rows are labelled accordingly)",
+    "cross-check: for every complete fiscal year the four quarters were summed and compared with the full-year figure on the same table (differences at most 0.2 billion JPY from rounding)"
+  ],
+  "launch_evidence": {
+    "url": "https://www.astellas.com/content/dam/astellas-com/global/en/documents/integrated-reports/about-astellas-integrated-report-2012.pdf",
+    "quote": "Betanis (launched in September 2011)"
+  }
+}

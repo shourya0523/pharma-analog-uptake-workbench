@@ -1,0 +1,36 @@
+{
+  "drug_name": "Lynparza",
+  "generic_name": "olaparib",
+  "manufacturer": "AstraZeneca",
+  "benchmark_identity": "az_lynparza_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (solid)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "capsule (50 mg; tablets later)",
+  "route_of_administration": "oral",
+  "moa": "PARP inhibitor",
+  "moa_class": "parp_inhibitor",
+  "first_approval_year": 2014,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2014/206162Orig1s000ltr.pdf",
+    "quote": "NDA 206162 ACCELERATED APPROVAL ... for Lynparza (olaparib), 50 mg capsules ... It is approved under the provisions of accelerated approval regulations (21 CFR 314.500), effective on the date of this letter [signed RICHARD PAZDUR 12/19/2014]"
+  },
+  "launch_quarter": "2014Q4",
+  "commercial_start_quarter": "2015Q1",
+  "series_start_reason": "AstraZeneca prints a Lynparza line in its Product Sales tables from Q1 2015 (Q1 2015 results show Q1 2014 as nil). FDA approval was 2014-12-19 and the FY2014 results (6-K 0001191638-15-000137, filed 2015-02-05) list Lynparza as launched in the US, but that document prints no Lynparza product-sales row for Q4 2014 (the line is not in its product table), so any December 2014 sales are not citable.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Lynparza is co-commercialised with Merck (from 2017); the series is AstraZeneca's own printed 'Lynparza' line in its Product Sales table (sales AstraZeneca books), not Merck's. launch_quarter left null because no document states the launch quarter; first printed product-sales row is Q1 2015 ($9m); FY2015 quarters sum to the printed full year.",
+  "search_log": [
+    "Listed every AstraZeneca PLC (CIK 0000901832) filing, all form types, via data.sec.gov/submissions/CIK0000901832.json plus the older page CIK0000901832-submissions-001.json (2,050 filings, 1995-2026; scripts/list_filings.py). Quarterly/half-year/full-year results announcements are furnished on Form 6-K; most H1 results 6-Ks (2018, 2019 and 2021-2026, accession prefix 0001104659) carry only a generic EDGAR description ('6-K' / 'FORM 6-K' / 'FORM 6K') and were identified by opening them, not by description. 69 results documents 2010-02-05 to 2026-07-27 were selected (scripts/catalog.py); the H1 2021 6-K/A (0001104659-21-097940) was not used.",
+    "Every document was fetched from sec.gov and flattened to table rows (scripts/rows.py, extract.py). In each results document the product-sales analysis by region prints a year-to-date table (H1/9M/FY) followed by the single-quarter table with a World column; the quarter value is the World column of the single-quarter table (first wide table for Q1 documents, second wide table otherwise), found with a row-label match that tolerates 'Brilinta / Brilique' style labels and a leading dash (scripts/series.py).",
+    "Checked every quarter against the same document's year-to-date row (YTD minus previous YTD equals the quarter, tolerance 2) and, for each year with four quarters, the sum of the four quarters against the full-year row of the Q4 document; all agree to within 1 (printed-rounding); no larger difference exists. Checked that the table is the Product Sales table: its total row is 'TOTAL PRODUCT SALES' / 'Total Product Sales' / 'Total Medicines', not Total Revenue.",
+    "FY2014 results (azn201502056k.htm) searched for Lynparza rows: only pipeline-table rows (US 'Launched', EU 'Approved'), no product-sales row; Q1 2015 results print Q1 2014 as '-'."
+  ],
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/901832/000119163815000551/azn201504246k2.htm",
+    "quote": "Lynparza Product Sales reached $9m following the launch in the US at the end of 2014."
+  }
+}

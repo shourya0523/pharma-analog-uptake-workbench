@@ -1,0 +1,33 @@
+{
+  "drug_name": "Skyclarys",
+  "generic_name": "omaveloxolone",
+  "manufacturer": "Biogen",
+  "benchmark_identity": "biogen_skyclarys_worldwide_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Friedreich's ataxia",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (U.S. only in 2023Q4; U.S. plus Rest of World from 2024Q1)",
+  "formulation": "capsule",
+  "route_of_administration": "oral",
+  "moa": "Nrf2 activator",
+  "moa_class": "nrf2_pathway_activator",
+  "first_approval_year": 2023,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2023/216718Orig1s000ltr.pdf",
+    "quote": "NDA 216718 NDA APPROVAL Reata Pharmaceuticals, Inc. ... for Skyclarys (omaveloxolone) capsules ... It is approved, effective on the date of this letter (electronic signature page dated 02/28/2023)"
+  },
+  "launch_quarter": "2023Q2",
+  "commercial_start_quarter": "2023Q4",
+  "series_start_reason": "Launched by Reata (CIK 0001358762) in 2023Q2. Reata's 10-Q for the quarter ended June 30, 2023 prints 'Product revenues, net' of 20,038 thousand USD (https://www.sec.gov/Archives/edgar/data/1358762/000095017023039225/reta-20230630.htm) but Reata, acquired by Biogen on 2023-09-26, filed no 10-Q, earnings release or other document with 2023Q3 (July 1 to the acquisition) product revenue. Biogen's release footnote says it began recognizing SKYCLARYS revenue in the fourth quarter of 2023, and Biogen's 2024Q3 release prints a nil for 2023Q3. 2023Q3 therefore has no citable value, so the contiguous citable series is Biogen's from 2023Q4; the single Reata quarter is not spliced because the two issuers' lines are not summed or joined.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "Listed Biogen (CIK 0000875045) filings from data.sec.gov/submissions (recent + older files), keeping every 8-K and 8-K/A with item 2.02, or 9.01 exhibits, 2013-04 onward; the 2022-07-20 8-K/A (0000875045-22-000023) carries the same exhibit as the original 8-K with a one-character year fix in unrelated text, original 8-K used.",
+    "Fetched each filing's index.json, took the earnings-release exhibit (EX-99.1; file names q<N><YYYY>pressrelease.htm, ye2013pressrelease.htm, exhibit991-q<N><YYYY>pressrele.htm), parsed every table row, selected the product row.",
+    "Row selection rule: first row in the release whose label equals the product name; for releases that carry both a whole-million summary table and a one-decimal U.S./Rest of World/Total table, the one-decimal table row; value is the Total column for the current quarter (first triple).",
+    "Listed Reata filings (data.sec.gov submissions) 2023-02 to 2023-10: 10-K 2023-02-24, 10-Q 2023-05-10 (Q1), 10-Q 2023-08-08 (Q2), merger 8-Ks, Form 25/15 in Sept-Oct 2023; no Q3 document.",
+    "Reata 10-Q Q1 2023 predates launch (approved 2023-02-28); Reata Q2 2023 10-Q product revenue is 20,038 thousand USD (read via parsed table row 'Product revenues, net | 20,038 | \u2014 | 20,038 | \u2014').",
+    "Biogen's 2023Q4 release prints SKYCLARYS 55.9 for both the quarter and the full year 2023, confirming no Biogen revenue before 2023Q4."
+  ]
+}

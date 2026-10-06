@@ -1,0 +1,30 @@
+{
+  "drug_name": "Miebo",
+  "generic_name": "perfluorohexyloctane",
+  "manufacturer": "Bausch + Lomb",
+  "benchmark_identity": "bausch_lomb_miebo_reported",
+  "therapeutic_area": "Ophthalmology",
+  "indication_area": "Dry eye disease (meibomian gland dysfunction)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide as printed (marketed in the U.S.)",
+  "formulation": "ophthalmic solution (drops)",
+  "route_of_administration": "topical ophthalmic",
+  "moa": "Semifluorinated alkane (evaporation inhibitor, tear-film lipid layer)",
+  "moa_class": "semifluorinated_alkane",
+  "first_approval_year": 2023,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=216675",
+    "quote": "MIEBO PERFLUOROHEXYLOCTANE 1.338GM/ML SOLUTION/DROPS;OPHTHALMIC ... 05/18/2023 ORIG-1 Approval"
+  },
+  "launch_quarter": "2023Q3",
+  "commercial_start_quarter": "2023Q3",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "Bausch + Lomb (CIK 0001860742) 8-K earnings Exhibit 99.1 (2023Q1-2026Q2) tables print only segment lines (Vision Care / Surgical / Pharmaceuticals); 10-Q/10-K 2023-2026 and the releases print no Miebo/Xiidra table row (prose mentions only, e.g. 'MIEBO sales of $112 million in the fourth quarter' in the 2026-02-18 release).",
+    "Quarterly product revenue is printed in the 'Top 10 Revenues' slide of the earnings presentations on ir.bausch.com (listing pages per year via field_event_year_target_id); decks 3Q23-2Q26 parsed with pdfplumber (scripts/bl.py, decks_bl.py). The 4Q23 and 3Q23 decks print no product figure; the 1Q25 and 4Q25 decks could not be located on the IR site (guessed paths returned 404), so quarters without own-deck figures use the trailing columns of a later deck (direct_retrospective_table).",
+    "Launch: B+L 10-Q for 2023Q3 states the U.S. launch occurred in September 2023; the first printed revenue is $1M for 3Q23 (3Q24 deck trailing column)."
+  ]
+}

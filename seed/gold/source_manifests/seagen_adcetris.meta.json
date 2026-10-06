@@ -1,0 +1,33 @@
+{
+  "drug_name": "Adcetris",
+  "generic_name": "brentuximab vedotin",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (hematologic)",
+  "formulation": "lyophilized powder for injection",
+  "route_of_administration": "intravenous",
+  "moa": "CD30-directed antibody-drug conjugate",
+  "moa_class": "cd30_directed_adc",
+  "manufacturer": "Seagen",
+  "benchmark_identity": "seagen_adcetris_us_canada_net_product_sales",
+  "revenue_scope": "U.S. and Canada",
+  "geography": "United States and Canada",
+  "first_approval_year": 2011,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2011/125388s000,125399s000ltr.pdf",
+    "quote": "BLA ACCELERATED APPROVAL BL 125388/0 ... August 19, 2011 ... Seattle Genetics, Inc. ... for ADCETRIS (brentuximab vedotin)"
+  },
+  "launch_quarter": "2011Q3",
+  "commercial_start_quarter": "2011Q3",
+  "series_start_reason": null,
+  "series_end_quarter": "2023Q3",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Pfizer completed the acquisition of Seagen on Dec 14, 2023; Seagen filed no report for 2023Q4 (last 10-Q is for 2023Q3, Form 15 filed Dec 26, 2023). Pfizer's later Adcetris line (companion series pfizer_adcetris, from 2024Q1) is worldwide and includes royalty revenue, a different scope, so the series is not spliced. (pfizer_adcetris: Companion Series sheet, cited but not scored.)",
+  "companion_series": "pfizer_adcetris",
+  "search_log": [
+    "listed Seagen (CIK 0001060736) filings via data.sec.gov submissions, all forms: 8-K Item 2.02 releases 2011-08 to 2023-11 and 10-Q/10-K 2011-2023 fetched",
+    "Before 2019Q4 Seagen prints only a 'Net product sales' row (ADCETRIS was the only product); the fiscal 2019 10-K prints ADCETRIS rows equal to it for 2018, 2017 and earlier",
+    "2019Q4 is read from the ADCETRIS row of the 2020Q4 release because the quarter's own 'Net product sales' includes PADCEV's first sales",
+    "From 2020Q1 the 10-Q ADCETRIS row is used for Q1-Q3 (thousands) and the release row for Q4 (millions)",
+    "Quarter sums agree with the full-year ADCETRIS figures (2020: 658.6, 2021: 705.6, 2022: 839.3, quarter sum 839.4 from rounding)"
+  ]
+}

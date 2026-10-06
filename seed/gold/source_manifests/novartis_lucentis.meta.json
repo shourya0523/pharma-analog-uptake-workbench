@@ -1,0 +1,34 @@
+{
+  "manufacturer": "Novartis",
+  "currency": "USD",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "series_start_reason": null,
+  "drug_name": "Lucentis",
+  "generic_name": "ranibizumab",
+  "benchmark_identity": "novartis_lucentis_exus_reported",
+  "therapeutic_area": "Ophthalmology",
+  "indication_area": "Ophthalmology (retina, neovascular AMD/DME/RVO)",
+  "revenue_scope": "Ex-U.S.",
+  "geography": "Ex-U.S.",
+  "formulation": "injection",
+  "route_of_administration": "intravitreal",
+  "moa": "VEGF-A inhibitor (antibody fragment)",
+  "moa_class": "vegf_inhibitor",
+  "first_approval_year": 2006,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2006/125156ltr.pdf",
+    "quote": "BLA 125156 ... We have approved your biologics' license application for Lucentis (ranibizumab injection) effective this date."
+  },
+  "launch_quarter": "2007Q1",
+  "commercial_start_quarter": "2007Q1",
+  "notes": "Q1 2007 report (0001104659-07-031601): 'Lucentis ... is being launched in Europe after approval in January 2007 ... Genentech holds the US rights'. Novartis prints small 2006 figures as prior-year columns (Q2 2006 2, Q3 2006 5, Q4 2006 11, FY2006 19) before the January 2007 EU approval; they are excluded as pre-launch. 2007Q1 (29) is the prior-year column of the Q1 2008 report. FDA letter year 2006 is from the BLA 125156 approval (the letter text shows no year on its date line).",
+  "search_log": [
+    "listed NVS (CIK 0001114448) filings via data.sec.gov submissions incl. 6-K, 6-K/A, 20-F, 20-F/A (all forms, not filtered to one type)",
+    "indexed every 6-K 2005-2026 filed in the late Jan-Feb, Apr-May, Jul-Aug, Oct-Nov windows plus every 6-K 2017-07 onward; downloaded each quarterly interim financial report exhibit (EX-99.2 / nvs-*-99_2.htm, or the 6-K body for 2006-2011)",
+    "extracted product rows by script (scripts/build.py, extract.py): first cell equals the brand (optionally plus footnote digit), header row above names the quarter first with no year-to-date column",
+    "cross-checked every quarter's own figure against the prior-year column of the following year's report: no differences (no restatement of these product lines found)",
+    "no Lucentis sales row in the Q1 2007 own report"
+  ]
+}

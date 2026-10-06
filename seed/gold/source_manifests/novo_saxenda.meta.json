@@ -1,0 +1,34 @@
+{
+  "manufacturer": "Novo Nordisk",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "series_start_reason": "US launch was May 2015 (Q2 2015 report), but the 2015 reports print Saxenda only inside 'other diabetes and obesity care'; the first quarter with a printed Saxenda figure is Q1 2016.",
+  "drug_name": "Saxenda",
+  "generic_name": "liraglutide 3 mg",
+  "benchmark_identity": "novo_saxenda_worldwide_reported",
+  "indication_area": "Obesity / chronic weight management",
+  "formulation": "injection (pen)",
+  "route_of_administration": "subcutaneous",
+  "moa": "GLP-1 receptor agonist",
+  "moa_class": "glp1_receptor_agonist",
+  "first_approval_year": 2014,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=206321",
+    "quote": "12/23/2014 ORIG-1 Approval STANDARD"
+  },
+  "launch_quarter": "2015Q2",
+  "commercial_start_quarter": "2016Q1",
+  "search_log": [
+    "listed all CIK 0000353278 filings via data.sec.gov/submissions (recent + CIK0000353278-submissions-001.json): 2,045 filings, of which 1,788 are 6-K and 25 are 20-F and 4 are 20-F/A; zero 8-K, 8-K/A or 10-Q forms (foreign private issuer)",
+    "6-K quarterly financial reports (company announcements): 2019Q1-2026Q2 are exhibits named caq{q}{yyyy}.htm; 2009-2018 identified by size filter on the submissions index (reports are the 6-Ks >200 kB filed in each reporting window), then confirmed by opening each",
+    "the EDGAR copies of the Q1 2018 and Q2 2018 reports (0001628280-18-005610, 0001628280-18-010747) render all tables as JPEG page images (about 30 page images each, no text tables); the same reports as published on novonordisk.com (PDF) were used for those two quarters",
+    "every figure was read programmatically from a cached copy of the cited document; full-year totals printed in each Q4 report were compared with the sum of the four quarters in this series (see report)",
+    "2021Q2-Q4: the 2021 reports print 'Obesity care (Saxenda and Wegovy)' combined; Saxenda alone is read from the 2022 reports' quarterly-numbers tables (same-quarter prior-year column)",
+    "row labels: 'Obesity (Saxenda)' 2017-2019, 'Obesity care (Saxenda)' 2020-Q1 2021, 'Saxenda' from 2022; same product, same scope",
+    "2026 reports: Q1 2026 reported sales 574 (adjusted 421; 340B provision reversal 153); Q2 2026 450 (reported = adjusted)"
+  ]
+}

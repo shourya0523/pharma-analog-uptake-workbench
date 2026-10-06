@@ -20,7 +20,7 @@ import re
 from datetime import date, timedelta
 from pathlib import Path
 
-from tests.answer_keys import identifying, scored_words
+from tests.answer_keys import assert_retirement_is_real, cases_in, identifying, retirement, scored_words
 
 REPO = Path(__file__).resolve().parents[2]
 HOLDOUT = REPO / "seed" / "cases" / "shapes_holdout.json"
@@ -30,10 +30,18 @@ _PERIOD_RE = re.compile(r"^(\d{4})Q([1-4])$")
 
 
 def _cases() -> list[dict]:
-    return json.loads(HOLDOUT.read_text())
+    return cases_in(HOLDOUT)
 
 
 def test_no_case_comes_from_a_scored_issuer():
+    """While the set is live, none of its issuers may be scored elsewhere.
+
+    Once retired - its issuers having entered another answer key - the check
+    becomes that the retirement is real, and the set no longer scores changes.
+    """
+    if retirement(HOLDOUT):
+        assert_retirement_is_real(HOLDOUT, "manufacturer")
+        return
     scored = scored_words(excluding=HOLDOUT)
     assert scored, "no answer keys found; this test would pass vacuously"
     for case in _cases():

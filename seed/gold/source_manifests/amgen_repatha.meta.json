@@ -1,0 +1,32 @@
+{
+  "drug_name": "Repatha",
+  "generic_name": "evolocumab",
+  "manufacturer": "Amgen",
+  "benchmark_identity": "amgen_repatha_worldwide_reported",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Cardiovascular (hyperlipidemia / LDL-C lowering)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection",
+  "route_of_administration": "subcutaneous",
+  "moa": "PCSK9 inhibitor (monoclonal antibody)",
+  "moa_class": "pcsk9_inhibitor",
+  "first_approval_year": 2015,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2015/125522Orig1s000lbl.pdf",
+    "quote": "Initial U.S. Approval: 2015"
+  },
+  "launch_quarter": "2015Q3",
+  "commercial_start_quarter": "2015Q3",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "listed Amgen (CIK 0000318154) filings via data.sec.gov/submissions (recent + older pages), keeping every form starting '8-K' (8-K and 8-K/A) or '10-' (10-Q, 10-K, amendments): 323 8-K, 2 8-K/A, 98 10-Q, 31 10-K; the two 8-K/As are dated 1995 and 2020 and are not earnings releases",
+    "took every 8-K carrying Item 2.02 from 2012-01-26 to 2026-08-04, fetched each filing's index.json, and kept the exhibit that contains both 'Enbrel' and 'Repatha' or 'Prolia': 59 earnings-release exhibits covering the fourth quarter of 2011 through the second quarter of 2026, no quarter missing",
+    "parsed each release's HTML table rows; the product table ('$Millions, except percentages' with U.S., ROW and TOTAL columns) was checked for every quarter, and for each fiscal year the four quarters were summed and compared with the full-year table in the fourth-quarter release (all matched exactly for the rows used)",
+    "Repatha is not on its own line in the third- and fourth-quarter 2015 releases (the releases' footnote lists it inside 'Other'); 2015Q3 (3) and 2015Q4 (7) are read from the prior-year columns of the 2016Q3 and 2016Q4 releases (direct_prior_year_column); the 2016Q2 release prints the second quarter 2015 as 0, so the first sales quarter is 2015Q3",
+    "fourth quarters 2015 and later: 2016Q1 onward are read from each quarter's own release as current"
+  ]
+}

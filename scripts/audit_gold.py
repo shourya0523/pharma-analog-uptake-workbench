@@ -62,6 +62,9 @@ _YEAR_PATTERNS = (
 )
 
 
+_FISCAL_Q4 = re.compile(r"(?i)fy((?:19|20)\d{2})(?![_-]?q[1-3])(?!\d)")
+
+
 def years_named_by(url: str) -> set[int]:
     """Years the URL actually names, not digit runs that happen to look like one.
 
@@ -74,6 +77,11 @@ def years_named_by(url: str) -> set[int]:
     found: set[int] = set()
     for pattern in _YEAR_PATTERNS:
         found.update(int(match) for match in pattern.findall(url))
+    # A fiscal year that starts in April is named for the year it began, so
+    # its fourth quarter and its full-year document ("FY2020_Q4", "FY2019
+    # Reference Data") reach into January to March of the following year.
+    for match in _FISCAL_Q4.findall(url):
+        found.add(int(match) + 1)
     return {year for year in found if 1990 <= year <= 2035}
 
 
@@ -107,8 +115,13 @@ def audit_derivation_labels(quarterly: list[dict]) -> list[str]:
         if not years_in_url:
             continue
         # A quarter is cited by its own filing, or by the release that reports
-        # it, which for a fourth quarter is published the following year.
-        if not years_in_url & {year, year + 1}:
+        # it, which for a fourth quarter is published the following year. An
+        # issuer whose fiscal year starts in April reports January to March as
+        # the fourth quarter of the year before, and its row says so.
+        allowed = {year, year + 1}
+        if row["calendar_quarter"] == 1 and "fiscal" in (row.get("gold_notes") or "").lower():
+            allowed.add(year - 1)
+        if not years_in_url & allowed:
             finding(
                 out,
                 f"{row['gold_id']}: labelled {row['derivation']} but cites a "
@@ -167,7 +180,9 @@ def audit_precision(quarterly: list[dict]) -> list[str]:
             # the series is denominated in millions. The decimals are a unit
             # conversion, not a precision claim.
             continue
-        value = float(row["value_reported"])
+        # Compared in the unit the quote is written in: a quarter printed in
+        # thousands is exact to three decimals once it is in millions.
+        value = float(row.get("source_value_reported", row["value_reported"]))
         quote = row.get("source_quote") or ""
         quoted = [
             float(n.replace(",", ""))
@@ -304,6 +319,7 @@ def audit_citation_period(rows: list[dict]) -> list[str]:
 
 
 _NUMBER = re.compile(r"\d[\d,]*(?:\.\d+)?")
+_BRACKETED = re.compile(r"\((\d[\d,]*(?:\.\d+)?)\)")
 
 
 def audit_value_appears_in_its_quote(rows: list[dict]) -> list[str]:
@@ -327,6 +343,10 @@ def audit_value_appears_in_its_quote(rows: list[dict]) -> list[str]:
             continue
         found = [
             float(token.replace(",", "")) for token in _NUMBER.findall(quote)
+        ]
+        # Accounts print a negative figure in parentheses: "(322)" is -322.
+        found += [
+            -float(token.replace(",", "")) for token in _BRACKETED.findall(quote)
         ]
         if not any(abs(value - float(expected)) < 1e-6 for value in found):
             finding(
@@ -394,10 +414,19 @@ def audit_series_consistency(quarterly: list[dict]) -> list[str]:
     out: list[str] = []
     attributes = defaultdict(lambda: defaultdict(set))
     for row in quarterly:
-        for field in ("benchmark_identity", "revenue_scope", "geography", "currency", "unit"):
+        for field in ("benchmark_identity", "revenue_scope", "geography", "unit"):
             attributes[row["drug_name"]][field].add(row[field])
+        # A series joined across an ownership change reports in each owner's
+        # currency, so currency is held constant per issuer rather than per
+        # series; value_normalized_usd_millions is what makes it one series.
+        attributes[row["drug_name"]]["currency"].add((row.get("issuer"), row["currency"]))
     for drug, fields in sorted(attributes.items()):
         for field, values in fields.items():
+            if field == "currency":
+                by_issuer = defaultdict(set)
+                for issuer, currency in values:
+                    by_issuer[issuer].add(currency)
+                values = {c for cs in by_issuer.values() if len(cs) > 1 for c in cs}
             if len(values) > 1:
                 finding(out, f"{drug}: {field} varies within the series {sorted(values)}")
 
@@ -430,7 +459,12 @@ def audit_manifest_round_trip(quarterly: list[dict]) -> list[str]:
         # gold still "matched" Opsumit and the loss went unreported. A mutation
         # test caught that; the filename was the answer all along.
         stem = path.stem.lower()
-        owners = [drug for drug in gold_periods if drug.lower().replace(" ", "_") in stem]
+        # A product name's punctuation cannot appear in a filename, so
+        # "Calderon / Calderon XR" is looked for as calderon_calderon_xr.
+        owners = [
+            drug for drug in gold_periods
+            if re.sub(r"[^a-z0-9]+", "_", drug.lower()).strip("_") in stem
+        ]
         if not owners:
             finding(out, f"{path.name}: no product in gold matches this manifest's name")
             continue
@@ -462,15 +496,24 @@ def audit_sources(quarterly: list[dict], annual: list[dict]) -> list[str]:
 
 
 def audit_values(quarterly: list[dict]) -> list[str]:
-    """Values that are not plausible revenue for a quarter."""
+    """Values that are not plausible revenue for a quarter.
+
+    A row that was checked at source and found to be what the issuer printed -
+    a nil printed as a dash, a negative provision quarter, a one-off reversal -
+    carries ``reviewed_anomaly`` with the reason, and is not flagged again. The
+    reason travels with the row, so a reader sees why it stands.
+    """
     out: list[str] = []
     for row in quarterly:
+        if row.get("reviewed_anomaly"):
+            continue
         value = row["value_reported"]
         if value < 0:
             finding(out, f"{row['gold_id']}: negative value {value}")
         if value == 0:
             finding(out, f"{row['gold_id']}: zero value - absent or genuinely nil?")
     by_drug: dict[str, list[tuple[str, float]]] = defaultdict(list)
+    reviewed = {(row["drug_name"], row["period"]) for row in quarterly if row.get("reviewed_anomaly")}
     for row in quarterly:
         by_drug[row["drug_name"]].append((row["period"], row["value_reported"]))
     for drug, series in sorted(by_drug.items()):
@@ -480,6 +523,8 @@ def audit_values(quarterly: list[dict]) -> list[str]:
         # from $205k to $8.7m across its FDA approval, and Tyvaso DPI from 3 to
         # 63 in its first two quarters on sale.
         for (prev_period, prev), (period, current) in zip(series[4:], series[5:]):
+            if {(drug, prev_period), (drug, period)} & reviewed:
+                continue
             if prev > 0 and (current / prev > 10 or current / prev < 0.1):
                 finding(
                     out,

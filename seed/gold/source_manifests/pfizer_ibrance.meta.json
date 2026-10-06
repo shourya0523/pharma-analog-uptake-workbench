@@ -1,0 +1,31 @@
+{
+  "drug_name": "Ibrance",
+  "generic_name": "palbociclib",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (breast cancer)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "capsule/tablet",
+  "route_of_administration": "oral",
+  "moa": "CDK4/6 inhibitor",
+  "moa_class": "cdk4_6_inhibitor",
+  "first_approval_year": 2015,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2015/207103s000lbl.pdf",
+    "quote": "IBRANCE is a kinase inhibitor indicated in combination with letrozole for the treatment of postmenopausal women with estrogen receptor (ER)-positive, human epidermal growth factor receptor 2 (HER2)-negative advanced breast cancer as initial endocrine-based therapy for their metastatic disease"
+  },
+  "launch_quarter": "2015Q1",
+  "search_log": [
+    "listed PFE (CIK 0000078003) 8-K, 8-K/A, 10-Q, 10-K via data.sec.gov submissions (recent + older pages): 6671 filings; selected 8-Ks with Item 2.02 filed 2015-01 to 2026-08 (53, of which 48 carry an EX-99.1 earnings release; 2022-04-20, 2023-10-13 and 2023-12-14 filings are not quarterly earnings releases; the 2016-02-16 8-K/A carries no usable product table and the original 2016-02-02 release was used)",
+    "parsed every release's product tables with scripts/extract.py; quarter row = first occurrence of the product row, year-to-date row = third occurrence (or second where sub-region tables are absent); checked by summing quarters to the printed twelve-month figure",
+    "scanned 10-Q/10-K 2018-2021 for product rows (scripts/scan_periodic.py)",
+    "2015Q1 release prints Ibrance 38 (WW), dash a year earlier: first quarter of sales"
+  ],
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "commercial_start_quarter": "2015Q1",
+  "manufacturer": "Pfizer",
+  "benchmark_identity": "pfizer_ibrance_reported"
+}

@@ -1,0 +1,6 @@
+drug_name,period,value_reported,currency,unit,revenue_scope,geography,source_url,source_quote,derivation,series_role
+Bimzelx,2021,4,EUR,millions,Worldwide,Worldwide,https://www.ucb.com/sites/default/files/2023-08/FY21_Integrated-Annual-Report_ENG.pdf,BIMZELX® 4 0 n/a n/a,direct_reported,peak_benchmark
+Bimzelx,2022,35,EUR,millions,Worldwide,Worldwide,https://www.ucb.com/sites/default/files/2023-03/2022_Full-Year_Integrated_Annual_Report.pdf,BIMZELX®* 35 4 >100% >100%,direct_reported,peak_benchmark
+Bimzelx,2023,148,EUR,millions,Worldwide,Worldwide,https://www.ucb.com/sites/default/files/2024-03/2023_Full-Year_Integrated_Annual_Report-ENG_0.pdf,BIMZELX® 148 35,direct_reported,peak_benchmark
+Bimzelx,2024,607,EUR,millions,Worldwide,Worldwide,https://www.ucb.com/sites/default/files/2025-06/ucb_iar_2024_eng_final_0.pdf,BIMZELX® 607 148,direct_reported,peak_benchmark
+Bimzelx,2025,2227,EUR,millions,Worldwide,Worldwide,https://www.ucb.com/sites/default/files/2026-02/iar_2025-web.pdf,"BIMZELX® 2 227 607 >100% >100% (digits grouped by a space as printed; 2,227 recorded)",direct_reported,peak_benchmark

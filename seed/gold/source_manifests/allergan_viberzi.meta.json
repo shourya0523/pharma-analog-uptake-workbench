@@ -1,0 +1,29 @@
+{
+  "drug_name": "Viberzi",
+  "generic_name": "eluxadoline",
+  "manufacturer": "Allergan plc",
+  "benchmark_identity": "allergan_viberzi_worldwide_reported",
+  "therapeutic_area": "GI / Liver / Women's Health / Urology",
+  "indication_area": "Irritable bowel syndrome with diarrhea",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (almost entirely U.S.)",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Mu-opioid receptor agonist / delta-opioid receptor antagonist",
+  "moa_class": "opioid_receptor_modulator",
+  "first_approval_year": 2015,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=206940",
+    "quote": "VIBERZI ELUXADOLINE 75MG TABLET;ORAL ... 05/27/2015 ORIG-1 Approval"
+  },
+  "launch_quarter": "2015Q4",
+  "commercial_start_quarter": "2015Q4",
+  "series_start_reason": null,
+  "series_end_quarter": "2020Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Allergan plc was acquired by AbbVie on 2020-05-08 and filed its last 10-Q for 2020Q1; AbbVie does not print a Viberzi line.",
+  "search_log": [
+    "Listed every Allergan plc filing (CIK 0001578845, all forms) via data.sec.gov/submissions; Viberzi rows read from 10-Q tables (Q1-Q3) and Q4 earnings release tables (scripts/vib.py); Q4 2015 and Q1 2016 own documents print no Viberzi figure (Q4 2015 release text: 'Allergan launched Viberzi in December 2015'), so those two quarters are prior-year columns of the Q4 2016 release and Q1 2017 10-Q.",
+    "Allergan plc was acquired by AbbVie on 2020-05-08; its last periodic report is the 10-Q for 2020Q1 (filed 2020-05-07). AbbVie (CIK 0001551152) earnings releases carry no Viberzi row and AbbVie 10-Q/10-K filings from 2020-08 to 2021-02 contain no Viberzi mention with a figure, so the series ends 2020Q1."
+  ]
+}

@@ -20,6 +20,7 @@ from tests.answer_keys import (
     cases_in,
     identifying,
     issuers_in,
+    retirement,
     scored_words,
 )
 
@@ -46,8 +47,21 @@ def test_the_holdout_is_discovered_at_all():
 
 
 def test_no_case_comes_from_a_scored_issuer():
+    """While the set is live, none of its issuers may be scored elsewhere.
+
+    Once retired - its issuers having entered another answer key - the check
+    becomes that the retirement is real: some issuer of the set is scored by
+    a key outside the set's own two shapes.
+    """
     scored = scored_words(excluding=_the_same_set())
     assert scored, "no answer keys found; this test would pass vacuously"
+    if retirement(HOLDOUT):
+        record = retirement(HOLDOUT)
+        assert record.get("on") and record.get("why")
+        assert any(scored & identifying(i) for i in issuers_in(HOLDOUT)), (
+            "marked retired but none of its issuers is scored elsewhere"
+        )
+        return
     for issuer in sorted(issuers_in(HOLDOUT)):
         overlap = scored & identifying(issuer)
         assert not overlap, f"{issuer} is already scored: {overlap}"

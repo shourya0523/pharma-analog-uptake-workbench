@@ -1,0 +1,33 @@
+{
+  "manufacturer": "Novartis",
+  "currency": "USD",
+  "series_end_quarter": "2025Q3",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "From Q4 2025 Novartis prints the line as 'Zolgensma Group' (Zolgensma IV plus the intrathecal formulation Itvisma, approved Q4 2025; Q2 2026 report cites Itvisma launch momentum inside the line). The Q4 2025-Q2 2026 'Zolgensma Group' rows is kept in the Companion Series sheet as novartis_zolgensma_group_alt. (novartis_zolgensma_group_alt: Companion Series sheet, cited but not scored.)",
+  "series_start_reason": null,
+  "drug_name": "Zolgensma",
+  "generic_name": "onasemnogene abeparvovec",
+  "benchmark_identity": "novartis_zolgensma_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Neuromuscular (spinal muscular atrophy)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "suspension for intravenous infusion (AAV9 gene therapy)",
+  "route_of_administration": "intravenous",
+  "moa": "AAV9 vector-based SMN1 gene replacement therapy",
+  "moa_class": "gene_therapy_aav",
+  "first_approval_year": 2019,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/news-events/press-announcements/fda-approves-innovative-gene-therapy-treat-pediatric-patients-spinal-muscular-atrophy-rare-disease",
+    "quote": "For Immediate Release: May 24, 2019 The U.S. Food and Drug Administration today approved Zolgensma (onasemnogene abeparvovec-xioi)"
+  },
+  "launch_quarter": "2019Q2",
+  "commercial_start_quarter": "2019Q2",
+  "notes": "2019Q2 value (15) is the prior-year column of the Q2 2020 report; Q2 2019 report text: 'Zolgensma ... was approved and launched in the US in Q2'.",
+  "search_log": [
+    "listed NVS (CIK 0001114448) filings via data.sec.gov submissions incl. 6-K, 6-K/A, 20-F, 20-F/A (all forms, not filtered to one type)",
+    "indexed every 6-K 2005-2026 filed in the late Jan-Feb, Apr-May, Jul-Aug, Oct-Nov windows plus every 6-K 2017-07 onward; downloaded each quarterly interim financial report exhibit (EX-99.2 / nvs-*-99_2.htm, or the 6-K body for 2006-2011)",
+    "extracted product rows by script (scripts/build.py, extract.py): first cell equals the brand (optionally plus footnote digit), header row above names the quarter first with no year-to-date column",
+    "cross-checked every quarter's own figure against the prior-year column of the following year's report: no differences (no restatement of these product lines found)"
+  ]
+}

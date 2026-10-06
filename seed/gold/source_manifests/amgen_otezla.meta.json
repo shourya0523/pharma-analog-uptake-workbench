@@ -1,0 +1,46 @@
+{
+  "drug_name": "Otezla",
+  "generic_name": "apremilast",
+  "manufacturer": "Amgen",
+  "benchmark_identity": "amgen_otezla_worldwide_reported",
+  "therapeutic_area": "Immunology / Inflammation",
+  "indication_area": "Immunology/inflammation (psoriatic arthritis, plaque psoriasis, Behcet's disease)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Phosphodiesterase 4 (PDE4) inhibitor",
+  "moa_class": "pde4_inhibitor",
+  "first_approval_year": 2014,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2014/205437s000lbl.pdf",
+    "quote": "Initial US Approval: 2014"
+  },
+  "launch_quarter": "2014Q2",
+  "commercial_start_quarter": "2014Q2",
+  "search_log": [
+    "listed Amgen (CIK 0000318154) filings via data.sec.gov/submissions (recent + older pages), keeping every form starting '8-K' (8-K and 8-K/A) or '10-' (10-Q, 10-K, amendments): 323 8-K, 2 8-K/A, 98 10-Q, 31 10-K; the two 8-K/As are dated 1995 and 2020 and are not earnings releases",
+    "took every 8-K carrying Item 2.02 from 2012-01-26 to 2026-08-04, fetched each filing's index.json, and kept the exhibit that contains both 'Enbrel' and 'Repatha' or 'Prolia': 59 earnings-release exhibits covering the fourth quarter of 2011 through the second quarter of 2026, no quarter missing",
+    "parsed each release's HTML table rows; the product table ('$Millions, except percentages' with U.S., ROW and TOTAL columns) was checked for every quarter, and for each fiscal year the four quarters were summed and compared with the full-year table in the fourth-quarter release (all matched exactly for the rows used)",
+    "Celgene (CIK 0000816284) listed via data.sec.gov submissions (1995-2019-11-22; 282 8-K, 10 8-K/A, 75 10-Q, 24 10-K), earnings-release exhibits for 2014-2019 read: see celgene_otezla",
+    "Q4 2019 Amgen release row: Otezla 139 | 39 | 178 | \u2014 (stub, not used)",
+    "[Celgene piece] listed Celgene 8-K/8-K/A/10-Q/10-K via data.sec.gov submissions (incl. older pages), fetched the EX-99.1 of every Item 2.02 8-K from 2014-04-24 to 2019-10-31",
+    "[Celgene piece] the 2014-04-24 release (Q1 2014) does not mention Otezla; the first release with an Otezla table is 2014-07-24 (Q2 2014, 4.6); the table is a heading row 'OTEZLA' followed by 'U.S.', 'International', 'Worldwide' rows, so row_label is 'Worldwide' (the verifier matches that label to the figures)",
+    "[Celgene piece] sums of the four quarters equal the full-year table for 2014-2018 (69.8, 471.7, 1,017.2, 1,279, 1,608)"
+  ],
+  "unreported_quarters": {
+    "2019Q4": "Ownership change Celgene to Amgen; no full-quarter figure is published. Bristol-Myers Squibb acquired Celgene on Nov. 20, 2019 and Otezla was sold to Amgen on Nov. 21, 2019; Celgene's last earnings release is for the third quarter of 2019. Amgen's series (amgen_otezla) starts 2020Q1; 2019Q4 is not a full quarter in any document. Amgen acquired Otezla from Celgene on Nov. 21, 2019. Its fourth-quarter 2019 release prints 178 (U.S. 139, ROW 39) 'for the period' Nov. 21-Dec. 31 only; that part-quarter is left out of this series and no document gives Otezla sales for Oct. 1-Nov. 20, 2019 (Celgene's last release is third-quarter 2019, BMS closed on Nov. 20). Celgene's own quarterly series, 2014Q2-2019Q3, is in celgene_otezla."
+  },
+  "joined_issuers": [
+    {
+      "issuer": "Celgene",
+      "first_quarter": "2014Q2",
+      "last_quarter": "2019Q3"
+    },
+    {
+      "issuer": "Amgen",
+      "first_quarter": "2020Q1",
+      "last_quarter": "2026Q2"
+    }
+  ]
+}

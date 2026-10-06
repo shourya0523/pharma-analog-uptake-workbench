@@ -1,0 +1,20 @@
+drug_name,period,value_reported,currency,unit,revenue_scope,geography,source_url,source_quote,derivation,series_role
+Cimzia,2007,1,EUR,millions,Worldwide,Worldwide,https://www.ucb.com/sites/default/files/2023-08/FY08_Annual-Report_ENG.pdf,Cimzia® 10 1,direct_prior_year_column,peak_benchmark
+Cimzia,2008,10,EUR,millions,Worldwide,Worldwide,https://www.ucb.com/sites/default/files/2023-08/FY08_Annual-Report_ENG.pdf,Cimzia® 10 1,direct_reported,peak_benchmark
+Cimzia,2009,75,EUR,millions,Worldwide,Worldwide,https://www.ucb.com/sites/default/files/2023-08/FY09_Annual-Report_ENG.pdf,Cimzia® 75 10 n.s. n.s.,direct_reported,peak_benchmark
+Cimzia,2010,198,EUR,millions,Worldwide,Worldwide,https://www.ucb.com/sites/default/files/2023-08/FY10_Annual-Report_ENG.pdf,Cimzia® 198 75 163% 151%,direct_reported,peak_benchmark
+Cimzia,2011,312,EUR,millions,Worldwide,Worldwide,https://www.ucb.com/sites/default/files/2023-08/FY11_Annual-Report_ENG.pdf,Cimzia® 312 198 58% 63%,direct_reported,peak_benchmark
+Cimzia,2012,467,EUR,millions,Worldwide,Worldwide,https://www.ucb.com/sites/default/files/2023-08/FY12_Annual-Report_ENG.pdf,Cimzia® 467 312 50% 41%,direct_reported,peak_benchmark
+Cimzia,2013,594,EUR,millions,Worldwide,Worldwide,https://www.ucb.com/sites/default/files/2023-08/FY13_Annual-Report_ENG.pdf,Cimzia® 594 467 27% 32%,direct_reported,peak_benchmark
+Cimzia,2014,797,EUR,millions,Worldwide,Worldwide,https://www.ucb.com/sites/default/files/2023-08/FY14_Annual-Report_ENG.pdf,Cimzia® 797 594 34% 35%,direct_reported,peak_benchmark
+Cimzia,2015,1083,EUR,millions,Worldwide,Worldwide,https://www.ucb.com/sites/default/files/2023-08/FY15_Annual-Report_ENG.pdf,"Cimzia® 1 083 797 36% 21% (digits grouped by a space as printed; 1,083 recorded)",direct_reported,peak_benchmark
+Cimzia,2016,1307,EUR,millions,Worldwide,Worldwide,https://www.ucb.com/sites/default/files/2023-08/FY16_Annual-Report_ENG.pdf,"Cimzia® 1 307 1 083 (digits grouped by a space as printed; 1,307 recorded)",direct_reported,peak_benchmark
+Cimzia,2017,1424,EUR,millions,Worldwide,Worldwide,https://www.ucb.com/sites/default/files/2023-08/FY17_Annual-Report_ENG.pdf,"Cimzia® 1 424 1 304 (digits grouped by a space as printed; 1,424 recorded)",direct_reported,peak_benchmark
+Cimzia,2018,1446,EUR,millions,Worldwide,Worldwide,https://www.ucb.com/sites/default/files/2023-08/FY18_Integrated-Annual-Report_ENG.pdf,Cimzia® 1446 1424 2% 5%,direct_reported,peak_benchmark
+Cimzia,2019,1712,EUR,millions,Worldwide,Worldwide,https://www.ucb.com/sites/default/files/2023-08/FY19_Integrated-Annual-Report_ENG.pdf,Cimzia® 1712 1446 18% 14%,direct_reported,peak_benchmark
+Cimzia,2020,1799,EUR,millions,Worldwide,Worldwide,https://www.ucb.com/sites/default/files/2023-08/FY20_Integrated-Annual-Report_ENG.pdf,"Cimzia® 1 799 1 712 (digits grouped by a space as printed; 1,799 recorded)",direct_reported,peak_benchmark
+Cimzia,2021,1841,EUR,millions,Worldwide,Worldwide,https://www.ucb.com/sites/default/files/2023-08/FY21_Integrated-Annual-Report_ENG.pdf,"CIMZIA® 1 841 1 799 2% 5% (digits grouped by a space as printed; 1,841 recorded)",direct_reported,peak_benchmark
+Cimzia,2022,2085,EUR,millions,Worldwide,Worldwide,https://www.ucb.com/sites/default/files/2023-03/2022_Full-Year_Integrated_Annual_Report.pdf,"CIMZIA®** € 2 085 million (digits grouped by a space as printed; 2,085 recorded)",direct_reported,peak_benchmark
+Cimzia,2023,2087,EUR,millions,Worldwide,Worldwide,https://www.ucb.com/sites/default/files/2024-03/2023_Full-Year_Integrated_Annual_Report-ENG_0.pdf,"CIMZIA® 2 087 2 085 0% 3% (digits grouped by a space as printed; 2,087 recorded)",direct_reported,peak_benchmark
+Cimzia,2024,2033,EUR,millions,Worldwide,Worldwide,https://www.ucb.com/sites/default/files/2025-06/ucb_iar_2024_eng_final_0.pdf,"CIMZIA® € 2 033 million (digits grouped by a space as printed; 2,033 recorded)",direct_reported,peak_benchmark
+Cimzia,2025,1954,EUR,millions,Worldwide,Worldwide,https://www.ucb.com/sites/default/files/2026-02/iar_2025-web.pdf,"CIMZIA® 1 954 2 033 -4 % 0 % (digits grouped by a space as printed; 1,954 recorded)",direct_reported,peak_benchmark

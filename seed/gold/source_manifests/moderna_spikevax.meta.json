@@ -1,0 +1,34 @@
+{
+  "drug_name": "Spikevax",
+  "generic_name": "COVID-19 vaccine, mRNA (mRNA-1273, elasomeran)",
+  "manufacturer": "Moderna",
+  "benchmark_identity": "moderna_spikevax_worldwide_reported",
+  "therapeutic_area": "Infectious Disease / Vaccines",
+  "indication_area": "Infectious disease (vaccine, COVID-19)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injectable suspension",
+  "route_of_administration": "intramuscular",
+  "moa": "lipid nanoparticle-encapsulated mRNA vaccine encoding the SARS-CoV-2 spike glycoprotein",
+  "moa_class": "mrna_vaccine",
+  "first_approval_year": 2022,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/vaccines-blood-biologics/spikevax",
+    "quote": "STN: 125752 ... Tradename: SPIKEVAX ... Manufacturer: Moderna Tx, Inc ... Supporting Documents: 'January 31, 2022 Approval Letter - SPIKEVAX' (earliest listed). Moderna's FY2020 10-K: product sales began after FDA emergency use authorization in December 2020."
+  },
+  "launch_quarter": "2020Q4",
+  "commercial_start_quarter": "2020Q4",
+  "series_start_reason": null,
+  "series_end_quarter": "2025Q2",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "From the third quarter of 2025 Moderna's 'COVID' product-sales row carries the footnote 'Includes sales of Spikevax and mNEXSPIKE', so the line is no longer Spikevax alone; the series ends at the last quarter of the earlier definition. The combined COVID rows for 2025Q3 onward are not spliced in.",
+  "search_log": [
+    "Moderna releases and 10-Qs print only total 'Product sales' / 'Net product sales' through 2024Q2 (the COVID-19 vaccine was the only product until mRESVIA approval in May 2024); from 2024Q3 the 10-Q/10-K 'net product sales by product type' table gives COVID and RSV rows",
+    "2022Q3 8-K (filed 2022-11-03) is tagged Item 9.01 only, so the 10-Q for the quarter is cited; 2024Q4 derived as FY2024 COVID (10-K) less nine months 2024 COVID-19 (Q3 2024 10-Q)",
+    "first_approval_year 2022 is the BLA (Spikevax) approval; the vaccine was authorized for emergency use in December 2020 before approval - verifier may prefer 2020"
+  ],
+  "reviewed_anomalies": {
+    "2024Q1": "Seasonal COVID vaccine: 167 after 2,793 in 2023Q4; both read at source in Moderna's own releases (2024Q1 prints 167 against 1,828 a year earlier).",
+    "2025Q1": "Seasonal COVID vaccine: 84 after 923 in 2024Q4; read at source (the 2025Q1 10-Q prints 84 against 167 a year earlier)."
+  }
+}

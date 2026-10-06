@@ -1,0 +1,34 @@
+{
+  "drug_name": "Vyondys 53",
+  "generic_name": "golodirsen",
+  "manufacturer": "Sarepta Therapeutics",
+  "benchmark_identity": "sarepta_vyondys_53_net_product_revenue_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Duchenne muscular dystrophy (exon 53 skipping amenable)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Sarepta net product revenue for the product; no regional split printed per product)",
+  "formulation": "injection (solution)",
+  "route_of_administration": "intravenous",
+  "moa": "Phosphorodiamidate morpholino oligomer (PMO) antisense that skips exon 53 of the dystrophin gene",
+  "moa_class": "antisense_oligonucleotide_exon_skipping",
+  "first_approval_year": 2019,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2019/211970Orig1s000ltr.pdf",
+    "quote": "NDA 211970 ACCELERATED APPROVAL Sarepta Therapeutics ... for Vyondys 53 (golodirsen) injection ... (electronic signature page dated 12/12/2019)"
+  },
+  "launch_quarter": "2019Q4",
+  "commercial_start_quarter": "2019Q4",
+  "series_start_reason": null,
+  "series_end_quarter": "2024Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "From the second-quarter 2024 Form 10-Q on, Sarepta's product revenue note and MD&A table print EXONDYS 51, VYONDYS 53 and AMONDYS 45 only as one combined line, 'PMO Products' (note: 'EXONDYS 51, VYONDYS 53 and AMONDYS 45 (collectively, the PMO Products)'; Q2 2024: 'Total PMO product revenues, net $238,827' thousand). The last quarter with the product's own line is 2024Q1. Scanned every 10-Q, 10-K and 8-K exhibit filed 2024-05 to 2026-09 for a per-product figure and found none. Evidence: PMO Products | $ | 238,827 | $ | 238,988 | $ | (161 | ) (Form 10-Q for the quarter ended June 30, 2024, https://www.sec.gov/Archives/edgar/data/873303/000095017024092720/srpt-20240630.htm)",
+  "search_log": [
+    "Listed Sarepta (CIK 0000873303) filings via data.sec.gov/submissions (recent + older files): every 8-K and 8-K/A from 2016-10 on (all items; exhibits of each fetched and searched for product-level net product revenue) and every 10-Q, 10-K, 10-Q/A, 10-K/A from 2016-11 on.",
+    "Sarepta files earnings-release 8-Ks only irregularly (item 2.02 on 2016-10-27, 2017-01-10, 2017-02-28, 2017-04-27, 2017-07-19, then 2018-01-08, 2019-01-07, 2019-02-27, 2020-01-13, 2021-01-11, 2021-10-15, 2022-01-10, 2023-01-09, 2024-01-08, 2025-01-13, 2025-02-26, 2025-07-16, 2025-11-03, 2026-01-12, 2026-02-25, 2026-05-06, 2026-08-05); their tables show total revenues, not product lines (checked), so the 10-Q/10-K tables are the quarterly source.",
+    "The issuer's IR site (investorrelations.sarepta.com) could not be reached from this environment (connection failed through the proxy), so no IR-site release was consulted.",
+    "10-Q/10-K product tables are in thousands; Q4 is the 10-K full year less the nine months of the third-quarter 10-Q (annual_less_reported_first_nine_months); the 10-Q/A for 2018Q2 is exhibit-only (no financial change).",
+    "Cross-checks measured: EXONDYS 51 + VYONDYS 53 equals the printed 'Products, net' line in 2020Q1-Q4 and 2019Q4; EXONDYS 51 + VYONDYS 53 + AMONDYS 45 + ELEVIDYS equals 'Total product revenues, net' in 2021Q1-Q3 and 2021Q4 to 2023Q4 (Q4 = full year less nine months), 2022Q1-Q3, 2023Q1-Q3 and 2024Q1.",
+    "2019Q4 (115 thousand USD) is the full-year 2019 figure in the FY2021 10-K three-year table less a nil nine months; the 2019 10-K says 'we had commenced shipment of VYONDYS 53 but revenue ... was immaterial'. The nil nine-month figure is inferred from the approval date (the combined 'Product, net' for nine months 2019 equals EXONDYS 51 alone); the quarter ties to the printed Q4 2019 'Product, net' of 100,113 = 99,998 (EXONDYS 51) + 115.",
+    "2020Q1-Q3 are prior-year columns of the 2021 10-Qs because the 2020 10-Qs print only 'Products, net'; 2020Q4 derived from FY2020 (33,858) less nine months 2020 (18,889)."
+  ]
+}

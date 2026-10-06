@@ -405,12 +405,26 @@ def main() -> int:
                          "not one per run")
     ap.add_argument("--out", default="/tmp/eval.json")
     ap.add_argument("--quiet", action="store_true")
+    ap.add_argument("--allow-retired", action="store_true",
+                    help="score against a held-out set marked retired; the number "
+                         "cannot score a change, only describe the pipeline")
     ap.add_argument("--attach", action="store_true",
                     help="score runs already on the server for these cases' windows "
                          "instead of starting them again")
     args = ap.parse_args()
     if bool(args.cases) == bool(args.members):
         ap.error("give exactly one of --cases or --members")
+
+    chosen = pathlib.Path(args.members or args.cases)
+    chosen = chosen if chosen.is_absolute() else REPO / chosen
+    payload = json.loads(chosen.read_text())
+    retired = payload.get("retired") if isinstance(payload, dict) else None
+    if retired and not args.allow_retired:
+        # Rule 4: a spent set cannot score a change. Say so instead of
+        # printing a number that reads as a measurement.
+        print(f"{chosen.name} was retired on {retired.get('on')}: {retired.get('why')}")
+        print("pass --allow-retired to run it anyway, for description only")
+        return 3
 
     if args.members:
         path = pathlib.Path(args.members)

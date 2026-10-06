@@ -1,0 +1,16 @@
+{
+  "drug_name": "Enhertu",
+  "line_label": "Enhertu",
+  "issuer": "AstraZeneca",
+  "benchmark_identity": "az_enhertu_alt",
+  "revenue_scope": "Ex-US territories booked by AstraZeneca",
+  "geography": "Territories where AstraZeneca books Enhertu product sales (Emerging Markets, Europe, Established RoW; US column nil)",
+  "why_separate": "AstraZeneca books Enhertu sales in its own ex-U.S. territories; the gold series is Daiichi Sankyo company-booked sales. Different territories, overlapping quarters.",
+  "notes": "ALTERNATIVE to daiichi_enhertu. launch_quarter 2020Q1 is from Daiichi Sankyo's FY2019 results (https://www.daiichisankyo.com/files/investors/library/quarterly_result/2019/pdf/FY2019%20Financial%20Results.pdf: 'in January 2020, Daiichi Sankyo, Inc. launched ENHERTU'). AstraZeneca books Enhertu product sales only outside the US (US column nil) and records the US/Japan profit share as separate 'Alliance Revenue' (not product sales); Daiichi Sankyo books US, Japan, EU and ASCA product sales, i.e. the widest territory, so the plain-stem series is Daiichi Sankyo's. This file is AstraZeneca's printed Enhertu line in its Product Sales table only.",
+  "search_log": [
+    "Listed every AstraZeneca PLC (CIK 0000901832) filing, all form types, via data.sec.gov/submissions/CIK0000901832.json plus the older page CIK0000901832-submissions-001.json (2,050 filings, 1995-2026; scripts/list_filings.py). Quarterly/half-year/full-year results announcements are furnished on Form 6-K; most H1 results 6-Ks (2018, 2019 and 2021-2026, accession prefix 0001104659) carry only a generic EDGAR description ('6-K' / 'FORM 6-K' / 'FORM 6K') and were identified by opening them, not by description. 69 results documents 2010-02-05 to 2026-07-27 were selected (scripts/catalog.py); the H1 2021 6-K/A (0001104659-21-097940) was not used.",
+    "Every document was fetched from sec.gov and flattened to table rows (scripts/rows.py, extract.py). In each results document the product-sales analysis by region prints a year-to-date table (H1/9M/FY) followed by the single-quarter table with a World column; the quarter value is the World column of the single-quarter table (first wide table for Q1 documents, second wide table otherwise), found with a row-label match that tolerates 'Brilinta / Brilique' style labels and a leading dash (scripts/series.py).",
+    "Checked every quarter against the same document's year-to-date row (YTD minus previous YTD equals the quarter, tolerance 2) and, for each year with four quarters, the sum of the four quarters against the full-year row of the Q4 document; all agree to within 1 (printed-rounding); no larger difference exists. Checked that the table is the Product Sales table: its total row is 'TOTAL PRODUCT SALES' / 'Total Product Sales' / 'Total Medicines', not Total Revenue.",
+    "Product Sales table vs Alliance Revenue table checked in the H1 2025 results (0001104659-25-071432): Enhertu product sales H1 2025 = 428 (US nil); 'Alliance Revenue' Enhertu = 834 is a separate table and is excluded."
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "drug_name": "Uplizna",
+  "line_label": "Uplizna",
+  "issuer": "Viela Bio",
+  "benchmark_identity": "viela_uplizna",
+  "revenue_scope": "Worldwide (U.S. launch)",
+  "geography": "Worldwide",
+  "why_separate": "Viela booked the U.S. launch quarters 2020Q3-2020Q4; eleven quarters separate it from the Amgen series that starts 2023Q4.",
+  "search_log": [
+    "listed Viela Bio (CIK 0001734517) filings via data.sec.gov submissions: 10-Q for 2019Q3, 2020Q1-Q3, 10-K 2019 and 2020 (+10-K/A), Item 2.02 8-Ks 2019-11-14 .. 2021-03-01",
+    "read 'Product revenue, net' in the releases of 2020-11-10 (Q3: 2,316 thousand; nine months 2,316) and 2021-03-01 (full-year 2020: 11,652 thousand); Q4 2020 = 11,652 - 2,316 = 9,336 thousand (derived; two documents)",
+    "2020-08-12 release: total revenue '\u2014' for the three and six months ended June 30, 2020"
+  ]
+}

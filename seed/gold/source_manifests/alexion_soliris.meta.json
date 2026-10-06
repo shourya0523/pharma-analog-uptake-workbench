@@ -1,0 +1,48 @@
+{
+  "drug_name": "Soliris",
+  "generic_name": "eculizumab",
+  "manufacturer": "AstraZeneca",
+  "benchmark_identity": "alexion_soliris_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Rare disease (PNH, aHUS, gMG, NMOSD)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection (concentrate for infusion)",
+  "route_of_administration": "intravenous",
+  "moa": "Terminal complement C5 inhibitor monoclonal antibody",
+  "moa_class": "c5_complement_inhibitor",
+  "first_approval_year": 2007,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=125166",
+    "quote": "Original Approvals or Tentative Approvals ... 03/16/2007 ORIG-1 Approval N/A; Orphan (BLA 125166, Company: ALEXION PHARM)"
+  },
+  "launch_quarter": "2007Q2",
+  "commercial_start_quarter": "2007Q2",
+  "notes": "Launch: Q1 2007 release states Soliris was approved by FDA on 16 March 2007 and 'the Company began commercial sale of Soliris in the U.S. during April 2007' (Ex.99.1 of 8-K 0001193125-07-098784). Through 2015Q2 the table row 'Net product sales' is Soliris only (Alexion's sole marketed product); from 2015Q3 the 'Soliris' / 'Total Soliris' row is used because other products were added. 2014Q1 includes $87.8m for reimbursement of prior-year shipments as printed.",
+  "search_log": [
+    "listed Alexion (CIK 0000899866) filings via data.sec.gov submissions incl. filings.files older pages: 8-K, 8-K/A, 10-Q, 10-K, 10-K/A, 10-Q/A all counted; Alexion changed from a July to a December fiscal year in 2005, so calendar quarters are used from 2007",
+    "for every 8-K with Item 2.02 from 2007-04 to 2021-07 fetched the EX-99.1 earnings release via the filing index.json and read the quarter column of the net-product-sales table",
+    "2007Q1: no table row (named-patient sales $1.0m in text only); commercial launch April 2007 per the Q1 2007 release, so the series starts 2007Q2",
+    "2021Q2: Alexion's 8-K of 2021-07-20 (Item 2.02, one day before the AstraZeneca acquisition closed) prints preliminary Q2 2021 SOLIRIS/ULTOMIRIS revenue; no later Alexion earnings release or 10-Q exists (Form 15-12G filed 2021-08-02)",
+    "[AstraZeneca piece] listed AstraZeneca (CIK 0000901832) filings via data.sec.gov submissions incl. filings.files older page: 1,614 6-K, 6 6-K/A, 24 20-F (all form types counted, 6-K/A included)",
+    "[AstraZeneca piece] fetched the main document of every 6-K/20-F filed 2003-2026 (monthly 6-Ks of 2003-2011 embed the full results press releases; 2012+ one 6-K per results announcement); 2002 6-Ks before Nov 2002 are 'AUTO-GENERATED PAPER DOCUMENT' (not on EDGAR)",
+    "[AstraZeneca piece] located each quarterly results release by the product-sales table containing Symbicort; extracted the product row from the table anchored on the Symbicort row of the same release (table index + row stored in scripts/az_onepass.py output)",
+    "[AstraZeneca piece] cross-checked Symbicort chain: era-A releases print the prior-year quarter, which equals the earlier release's current quarter for every year 2003-2014",
+    "[AstraZeneca piece] Soliris/Ultomiris AZ lines first appear in the Q3 2021 results release (Alexion consolidated from 21 July 2021); stub quarter 2021Q3 (Soliris 798 / Ultomiris 297 in the release) deliberately excluded from the CSV"
+  ],
+  "unreported_quarters": {
+    "2021Q3": "Ownership change Alexion Pharmaceuticals to AstraZeneca; no full-quarter figure is published. Alexion was acquired by AstraZeneca on 21 July 2021 and stopped reporting; the AstraZeneca continuation is delivered as astrazeneca_soliris_alt (from 2021Q4; the 2021Q3 stub from 21 July is not a full quarter). Alternative continuation of the Alexion series (alexion_soliris, 2007Q2-2021Q2). AstraZeneca consolidated Alexion from 21 July 2021, so 2021Q3 is a stub quarter (not delivered); the first full AstraZeneca quarter is 2021Q4. 2021Q2 to 2021Q3 is not covered by either series."
+  },
+  "joined_issuers": [
+    {
+      "issuer": "Alexion Pharmaceuticals",
+      "first_quarter": "2007Q2",
+      "last_quarter": "2021Q2"
+    },
+    {
+      "issuer": "AstraZeneca",
+      "first_quarter": "2021Q4",
+      "last_quarter": "2026Q2"
+    }
+  ]
+}

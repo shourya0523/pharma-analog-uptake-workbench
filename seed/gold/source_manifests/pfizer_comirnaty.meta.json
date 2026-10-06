@@ -1,0 +1,37 @@
+{
+  "drug_name": "Comirnaty",
+  "generic_name": "COVID-19 vaccine, mRNA (tozinameran / BNT162b2)",
+  "therapeutic_area": "Infectious Disease / Vaccines",
+  "indication_area": "Infectious disease (COVID-19 vaccine)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection (suspension)",
+  "route_of_administration": "intramuscular",
+  "moa": "nucleoside-modified mRNA vaccine encoding SARS-CoV-2 spike protein",
+  "moa_class": "mrna_vaccine",
+  "first_approval_year": 2021,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/news-events/press-announcements/fda-approves-first-covid-19-vaccine",
+    "quote": "Today, the U.S. Food and Drug Administration approved the first COVID-19 vaccine. The vaccine has been known as the Pfizer-BioNTech COVID-19 Vaccine, and will now be marketed as Comirnaty"
+  },
+  "launch_quarter": "2020Q4",
+  "search_log": [
+    "listed PFE (CIK 0000078003) 8-K, 8-K/A, 10-Q, 10-K via data.sec.gov submissions (recent + older pages): 6671 filings; selected 8-Ks with Item 2.02 filed 2015-01 to 2026-08 (53, of which 48 carry an EX-99.1 earnings release; 2022-04-20, 2023-10-13 and 2023-12-14 filings are not quarterly earnings releases; the 2016-02-16 8-K/A carries no usable product table and the original 2016-02-02 release was used)",
+    "parsed every release's product tables with scripts/extract.py; quarter row = first occurrence of the product row, year-to-date row = third occurrence (or second where sub-region tables are absent); checked by summing quarters to the printed twelve-month figure",
+    "scanned 10-Q/10-K 2018-2021 for product rows (scripts/scan_periodic.py)",
+    "line printed under several labels (BNT162b2 -> BNT162b2 alliance revenues and direct sales -> Comirnaty direct sales and alliance revenues -> Comirnaty) for the same vaccine; treated as one series, labels documented per row; Pfizer's line is direct sales plus alliance revenues (BioNTech), not product sales only. First EUA 2020-12 (EUA, not approval); FDA approval 2021-08-23"
+  ],
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "commercial_start_quarter": "2020Q4",
+  "manufacturer": "Pfizer",
+  "benchmark_identity": "pfizer_comirnaty_reported",
+  "reviewed_anomalies": {
+    "2024Q1": "Step from 5,361 (2023Q4) to 354 is real: both figures read at source in Pfizer's own releases (post-pandemic demand collapse)."
+  },
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/78003/000007800321000003/pfe-12312020xex99.htm",
+    "quote": "BNT162b2, which was granted an emergency use authorization (EUA) in the U.S. in December 2020, and which contributed $154 million in sales in the fourth quarter"
+  }
+}

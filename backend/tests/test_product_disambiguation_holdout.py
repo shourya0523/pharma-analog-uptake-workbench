@@ -15,7 +15,7 @@ import json
 
 from app.parsing.evidence import product_aliases
 from app.quality.candidate_filters import names_a_competing_product
-from tests.answer_keys import SEED, identifying, issuers_in, scored_words
+from tests.answer_keys import SEED, assert_retirement_is_real, identifying, issuers_in, retirement, scored_words
 
 FIXTURE = SEED / "holdout_labels" / "product_labels.json"
 
@@ -27,6 +27,11 @@ def test_no_case_comes_from_a_scored_issuer():
     whose issuers another key already scored measures nothing, and prose does
     not notice when a new key is added that spends one of them.
     """
+    if retirement(FIXTURE):
+        # Retired once its issuers entered another key: the check becomes that
+        # the retirement is real, and the set no longer scores changes.
+        assert_retirement_is_real(FIXTURE, "issuer")
+        return
     scored = scored_words(excluding=FIXTURE)
     assert scored, "no answer keys found; this test would pass vacuously"
     for issuer in sorted(issuers_in(FIXTURE)):

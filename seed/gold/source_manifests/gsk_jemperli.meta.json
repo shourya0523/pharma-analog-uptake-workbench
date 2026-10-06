@@ -1,0 +1,31 @@
+{
+  "manufacturer": "GSK plc",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "drug_name": "Jemperli",
+  "generic_name": "dostarlimab-gxly",
+  "benchmark_identity": "gsk_jemperli_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (solid)",
+  "formulation": "injection",
+  "route_of_administration": "intravenous",
+  "moa": "PD-1 blocking antibody",
+  "moa_class": "pd1_inhibitor",
+  "first_approval_year": 2021,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761174",
+    "quote": "04/22/2021 ORIG-1 Approval (BLA 761174, JEMPERLI DOSTARLIMAB-GXLY)"
+  },
+  "launch_quarter": "2021Q2",
+  "commercial_start_quarter": "2021Q2",
+  "notes": "launch_quarter: GSK Q1 2021 release (6-K 0001654954-21-004723, filed 2021-04-28) reports the US FDA approval of Jemperli; first turnover (GBP 1m) appears in the Q2 2021 release 0001654954-21-008267. The Q1 2021 release prints no Jemperli turnover row.",
+  "search_log": [
+    "listed GSK (CIK 0001131399) filings via data.sec.gov submissions incl. paginated older files, all form types (6-K, 6-K/A, 20-F, 20-F/A counted); selected 6-Ks by primaryDocDescription matching 1ST/2ND/3RD QUARTER RESULTS, FINAL RESULTS, HALF-YEAR(LY) REPORT, PUBLICATION OF FULL YEAR 2021 RESULTS (2014Q1-2026Q2 all present)",
+    "fetched the main .htm document of each results 6-K from sec.gov Archives and parsed table rows; first matching row of the product label with all-numeric cells chosen for Q1-Q3, and for Q4 the fourth-quarter column (combined full-year/Q4 row where printed, otherwise second row of the regional table)",
+    "arithmetic check: sum of the four quarters equals the printed full-year row for every full year in the series; year-to-date rows in Q2/Q3 releases equal cumulative quarters (differences only possible from rounding; none found beyond +/-2)"
+  ]
+}

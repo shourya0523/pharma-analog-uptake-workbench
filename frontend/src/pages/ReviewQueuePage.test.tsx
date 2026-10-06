@@ -1,13 +1,16 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { render, screen, within } from '@testing-library/react'
+import { cleanup, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { api } from '../api/client'
 import ReviewQueuePage from './ReviewQueuePage'
 
 vi.mock('../api/client', () => ({
-  api: { reviewQueue: vi.fn() },
+  api: { reviewQueue: vi.fn(), validationAction: vi.fn() },
+}))
+vi.mock('../review/SourcePane', () => ({
+  default: ({ row }: { row: { datapoint_id: string } }) => <div data-testid="pane">{row.datapoint_id}</div>,
 }))
 
 const contested = {
@@ -76,6 +79,7 @@ function renderQueue() {
 }
 
 describe('ReviewQueuePage', () => {
+  afterEach(cleanup)
   beforeEach(() => {
     vi.mocked(api.reviewQueue).mockImplementation(async (params) =>
       params?.offset ? page([gap], params.offset) : page([contested], 0),
@@ -106,5 +110,26 @@ describe('ReviewQueuePage', () => {
       expect.objectContaining({ offset: 50, limit: 50 }),
     )
     expect(screen.queryByText('2 figures in question')).not.toBeInTheDocument()
+  })
+
+  it('works the flagged figures on the page one by one beside their documents', async () => {
+    const user = userEvent.setup()
+    renderQueue()
+    await user.click(await screen.findByRole('button', { name: 'Review 2 flagged with their documents' }))
+    expect(screen.getByTestId('pane')).toHaveTextContent('dp-1')
+    expect(screen.getByText('1 of 2 · 0 done')).toBeInTheDocument()
+    await user.keyboard('j')
+    expect(screen.getByTestId('pane')).toHaveTextContent('dp-2')
+    await user.keyboard('{Escape}')
+    expect(await screen.findByText('2 questions to work')).toBeInTheDocument()
+  })
+
+  it('opens one figure beside its document from the queue', async () => {
+    const user = userEvent.setup()
+    renderQueue()
+    await screen.findByText('2 questions to work')
+    await user.click(screen.getByText('recent_period', { selector: '.queue-item-head .pill.reason' }))
+    await user.click(screen.getByRole('button', { name: 'Review beside the document' }))
+    expect(screen.getByTestId('pane')).toHaveTextContent('dp-2')
   })
 })

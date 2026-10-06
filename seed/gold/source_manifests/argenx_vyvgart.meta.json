@@ -1,0 +1,30 @@
+{
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "launch_quarter": "2022Q1",
+  "commercial_start_quarter": "2022Q1",
+  "notes": "argenx prints a single 'Product net sales' line = global net sales of Vyvgart (IV) plus Vyvgart Hytrulo (subcutaneous, also marketed as Vyvgart in other regions); no Vyvgart-only line. First product sales recognized Q1 2022 (prior-year column nil; release cites FDA approval Dec 17, 2021). Press releases are 6-K exhibits (argenx is an SEC foreign private issuer; CIK 0001697862).",
+  "drug_name": "Vyvgart",
+  "generic_name": "efgartigimod alfa",
+  "manufacturer": "argenx",
+  "benchmark_identity": "argenx_vyvgart_family_global_product_net_sales_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Neurology (generalized myasthenia gravis, CIDP)",
+  "revenue_scope": "Product family",
+  "geography": "Worldwide",
+  "formulation": "injection",
+  "route_of_administration": "intravenous",
+  "moa": "neonatal Fc receptor (FcRn) blocker",
+  "moa_class": "fcrn_antagonist",
+  "first_approval_year": 2021,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2021/761195Orig1s000ltr.pdf",
+    "quote": "BLA 761195, argenx BV, Efgartigimod alfa-fcab, approval letter signed 12/17/2021"
+  },
+  "search_log": [
+    "listed argenx 6-K and 20-F via data.sec.gov submissions (recent + files pages); every 6-K 2022-2026 index.json fetched and exhibits scanned for 'product net sales'",
+    "18 quarterly earnings press releases located (Q1 2022 .. Q2 2026), all print 'Product net sales' directly"
+  ]
+}

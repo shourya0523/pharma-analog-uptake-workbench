@@ -1,0 +1,31 @@
+{
+  "drug_name": "Xeljanz",
+  "generic_name": "tofacitinib",
+  "therapeutic_area": "Immunology / Inflammation",
+  "indication_area": "Inflammation & immunology (rheumatoid arthritis)",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Janus kinase (JAK) inhibitor",
+  "moa_class": "jak_inhibitor",
+  "manufacturer": "Pfizer",
+  "benchmark_identity": "pfizer_xeljanz_worldwide_reported",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "first_approval_year": 2012,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2012/203214Orig1s000ltr.pdf",
+    "quote": "NDA APPROVAL ... for Xeljanz (tofacitinib) Tablets, 5 mg ... NDA 203214 provides for the use of Xeljanz ... (electronically signed 11/06/2012)"
+  },
+  "launch_quarter": "2012Q4",
+  "commercial_start_quarter": "2012Q4",
+  "series_start_reason": "2012Q4 is the first quarter of sales (approved Nov 2012). The quarter's own release prints no Xeljanz line (it is not printed), so 2012Q4 and 2013Q1 are read from the prior-year columns of the 2013Q4 and 2014Q1 releases (direct_prior_year_column). From 2013Q2 each quarter is the release's own current-quarter figure.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "listed filings of the issuer via data.sec.gov submissions (recent + older pages), all forms incl. 8-K and 8-K/A (CIK 0000078003), 8-K Item 2.02 filings 2012-11 to 2026-08, one EX-99 per quarter fetched and the Xeljanz rows parsed",
+    "Q4 2012 and Q1 2013 own releases and the 10-K 2012 / 10-Q Q1 2013 checked: no Xeljanz revenue line (10-Q Q2 2013 first prints 'Xeljanz | 22 | - | 33 | -')",
+    "2016-02-16 8-K/A is a short re-filing, not a replacement of the 2016-02-02 release; the original release is cited",
+    "Quarter sums checked against the twelve-month rows of each Q4 release (differences of 1 or less are rounding)"
+  ]
+}

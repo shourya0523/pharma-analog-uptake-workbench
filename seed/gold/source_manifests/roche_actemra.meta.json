@@ -1,0 +1,38 @@
+{
+  "drug_name": "Actemra",
+  "generic_name": "tocilizumab",
+  "manufacturer": "Roche",
+  "benchmark_identity": "roche_actemra_worldwide_reported",
+  "therapeutic_area": "Immunology",
+  "indication_area": "Immunology (rheumatoid arthritis)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection (intravenous and subcutaneous)",
+  "route_of_administration": "intravenous",
+  "moa": "interleukin-6 receptor antagonist",
+  "moa_class": "il6_receptor_antagonist",
+  "first_approval_year": 2010,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=125276",
+    "quote": "01/08/2010 ORIG-1 Approval (Drugs@FDA, Original Approvals or Tentative Approvals)"
+  },
+  "launch_quarter": "2005Q2",
+  "commercial_start_quarter": "2010Q3",
+  "series_start_reason": "First quarter for which a Roche release read prints a CHF figure is 2010Q3 (column of the Q3 2011 media release of 13 Oct 2011); Roche releases from 2010 and the 2011 results releases print growth rates only for earlier quarters, and the 2010 releases were not found on roche.com asset hosts.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "US first approval 8 Jan 2010 (EU 2009 per brief; no Roche document read states the launch quarter). Printed line is \"Actemra/RoActemra\".",
+  "search_log": [
+    "listed Roche investor event pages (roche.com/investors/events/{q1,hy,q3,annual-results}-YYYY, 2016-2026) and downloaded every Investor update PDF",
+    "probed legacy roche.com/investors/updates/inv-update-YYYY-MM-DD.htm (2016-2017 hits) and assets.cwp.roche.com/imported/en/med-cor-YYYY-MM-DD-e.pdf for 2009-2015 weekday dates in Jan-Feb, Apr-early May, Jul-early Aug, Oct-early Nov; results releases found for 2011-2015, none found for 2009-2010",
+    "parsed the worldwide \"Top 20 Pharmaceuticals Division quarterly product sales\" table (5 quarterly columns) of every release plus the year-to-date product tables; quarters taken from the own release column when listed, else Q1 three-month table, else the earliest later release column, else year-to-date differences",
+    "cross-checked every chosen quarter against all other printed values for the same quarter (see report)",
+    "presentations (irp*.pdf) and half-year/annual reports not used for rows",
+    "rows: 64 from 2010Q3 to 2026Q2"
+  ],
+  "launch_evidence": {
+    "url": "https://www.chugai-pharm.co.jp/english/news/detail/20230925150000_1006.html",
+    "quote": "First launched in June 2005, the intravenous injection is approved for seven indications in Japan"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "drug_name": "Kisqali",
+  "generic_name": "ribociclib",
+  "manufacturer": "Novartis",
+  "benchmark_identity": "novartis_kisqali_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (breast cancer)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "CDK4/6 inhibitor",
+  "moa_class": "cdk4_6_inhibitor",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2017/209092s000lbl.pdf",
+    "quote": "Initial U.S. Approval: 2017 ... Revised: 3/2017"
+  },
+  "launch_quarter": "2017Q1",
+  "commercial_start_quarter": "2017Q1",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Q1 2017 report: \"Kisqali (ribociclib) ... was approved and launched in March 2017\" (https://www.sec.gov/Archives/edgar/data/1114448/000137036817000038/a170425-99_2.htm). Q1 2017 value 7 is the prior-year column of the Q1 2018 report; Q2 2017 report YTD 15 less Q2 8 = 7.",
+  "search_log": [
+    "Listed all 6-K/6-K/A/20-F/20-F/A filings for CIK 1114448 (data.sec.gov submissions incl. older page, 2010-10 to 2026-09; 454 filings), fetched index.json of every 6-K from 2012 on and identified the results exhibit (EX-99.2 interim financial report) for each quarter 2010Q3-2026Q2 (64 documents)",
+    "Parsed every table row of each of the 64 results documents and extracted the row labelled with the brand; compared each quarter's own value against the next year's prior-year column: no restatement difference found for any of these brands",
+    "No Sandoz/Alcon spin-off restatement affected these lines as printed: own-quarter values equal the later prior-year columns",
+    "Q1 2017 report prints no Kisqali sales figure"
+  ]
+}

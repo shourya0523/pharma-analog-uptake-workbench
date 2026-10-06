@@ -98,11 +98,36 @@ def test_every_quarterly_benchmark_series_has_exact_full_coverage():
                 row["commercial_start_quarter"],
                 row.get("series_end_quarter", row["as_of_quarter"]),
             )
-        )
+        ) - set(row.get("unreported_quarters", []))
         assert by_drug[row["drug_name"]] == expected
         assert row["observed_quarters"] == row["expected_quarters"] == len(expected)
         assert not row["missing_quarters"]
         assert row["coverage_pct"] == manifest["quarterly_coverage_pct"]
+
+
+def test_an_unreported_quarter_is_an_ownership_change_with_a_reason():
+    """A hole is excused only where one owner stopped reporting and another began.
+
+    Every quarter a series declares unreported must have rows on both sides,
+    printed by different issuers, and the metadata must say why in words.
+    """
+    builder = load_builder()
+    manifest = json.loads((GOLD / "manifest.json").read_text())
+    revenue = load_jsonl(manifest["reported_rows_file"])
+    coverage = load_jsonl(manifest["coverage_file"])
+    issuer = {(r["drug_name"], r["period"]): r["manufacturer"] for r in revenue}
+    declared = 0
+    for row in coverage:
+        reasons = builder.PRODUCT_METADATA[row["drug_name"]].get("unreported_quarters") or {}
+        assert sorted(reasons) == row.get("unreported_quarters", [])
+        periods = sorted(p for d, p in issuer if d == row["drug_name"])
+        for hole in row.get("unreported_quarters", []):
+            declared += 1
+            before = max(p for p in periods if p < hole)
+            after = min(p for p in periods if p > hole)
+            assert issuer[(row["drug_name"], before)] != issuer[(row["drug_name"], after)], (row["drug_name"], hole)
+            assert len(reasons[hole]) > 40, (row["drug_name"], hole)
+    assert declared, "no series declares an unreported quarter, so this test checks nothing"
 
 
 def test_gold_rows_have_independent_provenance_and_citations():
@@ -131,9 +156,19 @@ def test_quarterly_rows_are_unique_and_preserve_reported_units():
     assert len(keys) == len(rows)
     for row in rows:
         assert row["period_type"] == "quarterly"
-        assert row["currency"] == "USD"
         assert row["unit"] == "millions"
-        assert row["source_unit"] in {"units", "thousands", "millions"}
+        # value_reported stays in the issuer's own currency; only the
+        # normalized column is USD, and a converted row names its rate.
+        if row["currency"] == "USD":
+            assert row["value_normalized_usd_millions"] == row["value_reported"], row["gold_id"]
+            assert "fx_rate_to_usd" not in row, row["gold_id"]
+        else:
+            assert row["fx_rate_to_usd"] > 0, row["gold_id"]
+            assert row["fx_rate_source"], row["gold_id"]
+            assert row["value_normalized_usd_millions"] == round(
+                row["value_reported"] * row["fx_rate_to_usd"], 6
+            ), row["gold_id"]
+        assert row["source_unit"] in {"units", "thousands", "millions", "billions"}
         assert row["sources"]
         # test_gold_rows_have_independent_provenance_and_citations only checks
         # that source_quote contains source_value_reported (the pre-conversion
@@ -146,7 +181,7 @@ def test_quarterly_rows_are_unique_and_preserve_reported_units():
         # scale a filing uses for an amount too small to print in millions:
         # Remodulin's first quarter on sale was "$205,000". It needs its own
         # divisor here or it would be read as 205,000 million.
-        scale = {"units": 1_000_000, "thousands": 1000, "millions": 1}
+        scale = {"units": 1_000_000, "thousands": 1000, "millions": 1, "billions": 0.001}
         expected = row["source_value_reported"] / scale[row["source_unit"]]
         assert row["value_reported"] == round(expected, 6), row["gold_id"]
 

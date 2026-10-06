@@ -1,0 +1,33 @@
+{
+  "drug_name": "Veozah",
+  "generic_name": "fezolinetant",
+  "manufacturer": "Astellas",
+  "benchmark_identity": "astellas_veozah_veoza_global_reported",
+  "therapeutic_area": "GI / Liver / Women's Health / Urology",
+  "indication_area": "Vasomotor symptoms associated with menopause",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "neurokinin 3 (NK3) receptor antagonist",
+  "moa_class": "nk3_receptor_antagonist",
+  "first_approval_year": 2023,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2023/216578Orig1s000ltr.pdf",
+    "quote": "This NDA provides for the use of Veozah (fezolinetant) 45 mg tablets for the treatment of moderate to severe vasomotor symptoms due to menopause. (FDA approval letter, NDA 216578, signed 05/12/2023)"
+  },
+  "launch_quarter": "2023Q2",
+  "commercial_start_quarter": "2023Q2",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Launch quarter: Astellas' Q1 FY2023 financial results release (https://www.astellas.com/content/dam/astellas-com/global/en/documents/financial-results/1q-fy2023-financial-results-en.pdf, page 6) states 'VEOZAH was launched in the United States in May 2023'. Printed line is the 'VEOZAH' row of the Global table (Veoza, the ex-U.S. name, is included in the same line per Astellas' footnote 'VEOZAH: Approved as VEOZA in ex-US').",
+  "search_log": [
+    "read https://www.astellas.com/en/investors/financial-results-library (146 PDF links) and cached every financial-results PDF (main release, supplementary documents, presentation, earnings-call scripts); earliest linked quarter is Q1 FY2017 (April-June 2017)",
+    "guessed legacy astellas.com/en/ir/library/pdf/... URLs for FY2013-FY2016 documents: all returned 404, so no earlier Astellas document was found",
+    "extracted the 'Global' sales-of-major-products table in each quarter's supplementary document (billions of JPY, one decimal) with pdfplumber, the verifier's extractor",
+    "where the quarter's own document text layer splits the digits of the row, the same quarter was read from a later document of the same fiscal year, or derived from year-to-date figures (rows are labelled accordingly)",
+    "cross-check: for every complete fiscal year the four quarters were summed and compared with the full-year figure on the same table (differences at most 0.2 billion JPY from rounding)"
+  ]
+}

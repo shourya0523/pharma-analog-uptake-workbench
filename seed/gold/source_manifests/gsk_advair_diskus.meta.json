@@ -1,0 +1,34 @@
+{
+  "drug_name": "Advair Diskus",
+  "generic_name": "fluticasone propionate/salmeterol",
+  "therapeutic_area": "Respiratory / Allergy",
+  "indication_area": "Respiratory (asthma, COPD)",
+  "formulation": "inhalation powder / pressurised inhaler",
+  "route_of_administration": "inhaled",
+  "moa": "Inhaled corticosteroid + long-acting beta2-agonist (combination)",
+  "moa_class": "ics_laba_combination",
+  "first_approval_year": 2000,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=021077",
+    "quote": "Approval Date(s) and History, Letters, Labels, Reviews for NDA 021077 ... 08/24/2000 ORIG-1 Approval Type 4 - New Combination; ADVAIR DISKUS 100/50 FLUTICASONE PROPIONATE; SALMETEROL XINAFOATE POWDER;INHALATION"
+  },
+  "manufacturer": "GSK plc",
+  "benchmark_identity": "gsk_advair_seretide_worldwide_reported",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "launch_quarter": null,
+  "commercial_start_quarter": "2002Q4",
+  "series_start_reason": "Series starts at 2002Q4 because GSK's quarterly results announcements before the one for Q4 2002 (furnished on Form 6-K 2003-02-12) are not electronically available on EDGAR (the CIK 1131399 index lists 2001-2002 6-Ks as 'AUTO-GENERATED PAPER DOCUMENT'), and no later release prints the prior-year quarter in GBP millions (only CER growth %).",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Seretide launched in Europe in 1999 and Advair in the US (FDA approval 2000-08-24); no cited GSK document states the launch quarter, so launch_quarter is null. UK GAAP applies to 2002Q4-2004Q4 as printed in those releases and IFRS from 2005Q1; the Seretide/Advair definition did not change.",
+  "search_log": [
+    "fetched data.sec.gov submissions CIK0001131399 (recent + 3 history pages, 2001-2026): 6,124 6-K and 39 6-K/A filings; 20-F 25",
+    "2003-2011: fetched every 6-K filed in the 4 results windows each year and kept those whose text contains 'Seretide' and 'turnover' (40 documents matched, 4 of them excluded below; the 2001-2002 6-Ks are paper placeholders on EDGAR)",
+    "2012-2026: selected 6-Ks whose primaryDocDescription is 1ST/2ND/3RD QUARTER RESULTS, HALF YEARLY/HALF-YEAR REPORT or FINAL RESULTS; 2012-02-07 6-K (Q4 2011) added by hand because its description is generic ('FORM 6-K')",
+    "excluded as duplicates/restatements: 6-K 2004-10-29 and 2005-02-10 (IFRS restatements of 2003-2004), 6-K 2008-05-06 (second filing of the Q1 2008 release), 2008-02-07 text-only copy of Q4 2007",
+    "per release: product row taken from the 'Pharmaceuticals/Vaccines turnover' regional tables (Total column = worldwide); each quarter cross-checked: Q1+Q2 = printed six-month row, +Q3 = printed nine-month row, +Q4 = printed full-year row",
+    "Launch quarter not established from an issuer document: Series is worldwide Seretide/Advair; first sale anywhere was in Europe before the U.S.; U.S. (measured): GSK 20-F filed 2003-03-28 (https://www.sec.gov/Archives/edgar/data/1131399/000102123103000405/b701404-20f.htm): 'Advair/Seretide launched in mid-April 2001 achieved sales of \u00a3328 million', i.e. U.S. 2001Q2.; Europe (measured, undated): GSK Annual Report 2001 (https://www.gsk.com/media/j1ghxkvx/annual-report-2001.pdf) says that in the UK and Germany Seretide 'had been available for over a year' in its 2000 discussion, so launch was before 2001 but no quarter is stated.; Glaxo Wellcome (CIK 9"
+  ]
+}

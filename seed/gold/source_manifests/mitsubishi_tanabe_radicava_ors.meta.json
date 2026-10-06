@@ -1,0 +1,35 @@
+{
+  "series_start_reason": "Series is the issuer-group 'Radicava' line (IV edaravone launched in the U.S. in 2017 plus ORS from 2022), a Product family. Mitsubishi Tanabe Pharma's own IR site (mt-pharma.co.jp) returns HTTP 403 from this environment, so the figures are taken from its parent Mitsubishi Chemical Group's Operational Summaries, which first print a Radicava row in the FY2020 first-quarter summary (Apr-Jun 2020); FY2019 summaries print no quarterly Radicava row and FY2020's own full-year summary has no Radicava table row.",
+  "series_end_quarter": "2025Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Mitsubishi Chemical Group's FY2025 summaries (after the Tanabe divestiture) print no Radicava row; the last quarter derivable is Jan-Mar 2025 from the FY2024 summary.",
+  "launch_quarter": "2017Q3",
+  "commercial_start_quarter": "2020Q2",
+  "notes": "Parent-company document, not Mitsubishi Tanabe Pharma's own; scope = Radicava IV + ORS (no separate ORS line printed). JPY billions; fiscal Apr-Mar mapped to calendar quarters. Please have the verifier judge whether the parent's disclosure is acceptable.",
+  "drug_name": "Radicava ORS",
+  "generic_name": "edaravone",
+  "manufacturer": "Mitsubishi Tanabe Pharma",
+  "benchmark_identity": "mitsubishi_tanabe_radicava_family_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Neurology (amyotrophic lateral sclerosis)",
+  "revenue_scope": "Product family",
+  "geography": "Worldwide (overseas ethical drugs line, predominantly U.S.)",
+  "formulation": "oral suspension",
+  "route_of_administration": "oral",
+  "moa": "free radical scavenger",
+  "moa_class": "free_radical_scavenger",
+  "first_approval_year": 2022,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2022/215446Orig1s000ltr.pdf",
+    "quote": "Please refer to your new drug application (NDA) dated and received November 12, 2021 ... Radicava ORS (NDA 215446, letter signed 05/12/2022)"
+  },
+  "search_log": [
+    "mt-pharma.co.jp and tanabe-pharma.com IR: 403/no results pages",
+    "mcgc.com/english/ir/library/operating_summaries.html: 53 Operational Summary PDFs listed; 36 FY2017-FY2026 downloaded; 'Radicava' table row present in FY2019 FY, FY2020 Q1-Q3, FY2021 Q1-FY2024 FY only",
+    "Merck/others not used"
+  ],
+  "launch_evidence": {
+    "url": "https://www.mcgc.com/english/ir/pdf/01583/01834.pdf",
+    "quote": "Launched RADICAVA (IV*1 infusion) in the U.S. in August 2017, and"
+  }
+}

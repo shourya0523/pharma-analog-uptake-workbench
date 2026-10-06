@@ -1,0 +1,31 @@
+{
+  "series_start_reason": "Series starts at the first quarter with a printed non-nil figure. J&J's 2022 schedules do not print Carvykti separately (absent from 2022Q1-2022Q4 documents, measured); the 2023Q2, 2023Q3 and 2023Q4 schedules print 2022Q2-2022Q4 as prior-year columns (24, 55, 54; the 2023Q1 schedule prints 2022Q1 as a dash, i.e. nil, and a retrospective table in the same document gives 2022 FY 133 = 24+55+54).",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "launch_quarter": "2022Q2",
+  "drug_name": "Carvykti",
+  "generic_name": "ciltacabtagene autoleucel",
+  "manufacturer": "Johnson & Johnson",
+  "benchmark_identity": "jnj_carvykti_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (hematologic)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "suspension for infusion (autologous cell therapy)",
+  "route_of_administration": "intravenous",
+  "moa": "BCMA-directed genetically modified autologous T cell immunotherapy (CAR-T)",
+  "moa_class": "bcma_car_t",
+  "first_approval_year": 2022,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/vaccines-blood-biologics/cellular-gene-therapy-products/carvykti",
+    "quote": "Approval Letter - CARVYKTI February 28, 2022"
+  },
+  "search_log": [
+    "Downloaded J&J's quarterly sales schedule PDFs 2021Q1-2026Q2 from the URLs of the existing J&J manifest (investor-site q4cdn); parsed every page with pdfplumber and searched case-insensitively for CARVYKTI, TECVAYLI, TALVEY, RYBREVANT, and the generic names (cache/jnj_rows.json).",
+    "Listed J&J 10-Q and 10-K filings 2021-2026 via data.sec.gov submissions (form 10-Q and 10-K only, no 8-K scan) and searched the primary documents for the four brand names: they appear only in prose or litigation text, only in narrative sentences (the only lines with a brand name and a number were prose).",
+    "Supplemental Sales Information schedules (Schedule 2 / 'Supplemental Sales Information' page) in the 2024Q1 and 2025Q1 schedules restate product lines quarterly; the 2024Q1 one carries Tecvayli, the 2025Q1 one carries Rybrevant/Lazcluze and Talvey.",
+    "2022Q2-2022Q4 are direct_prior_year_column rows from the 2023Q2-2023Q4 schedules; 2023Q1 onward from each quarter's own schedule."
+  ],
+  "commercial_start_quarter": "2022Q2"
+}

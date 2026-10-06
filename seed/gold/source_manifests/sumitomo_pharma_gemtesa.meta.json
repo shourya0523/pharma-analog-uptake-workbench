@@ -1,0 +1,30 @@
+{
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "launch_quarter": "2021Q2",
+  "commercial_start_quarter": "2021Q2",
+  "notes": "Sumitomo Pharma FY2021 Q1 summary (ebr20210729.1.pdf): GEMTESA 'launched in the quarter under review' (Apr-Jun 2021). Series is the USD 'Products sales in North America (based on local currency)' reference table (U.S. sales; Millions of dollar). Sumitomo also prints a JPY line from FY2025 Q1; not used to keep one currency.",
+  "drug_name": "Gemtesa",
+  "generic_name": "vibegron",
+  "manufacturer": "Sumitomo Pharma",
+  "benchmark_identity": "sumitomo_pharma_gemtesa_us_reported",
+  "therapeutic_area": "GI / Liver / Women's Health / Urology",
+  "indication_area": "Urology (overactive bladder)",
+  "revenue_scope": "U.S.",
+  "geography": "U.S. (printed as 'North America' / 'U.S.', based on local currency)",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "beta-3 adrenergic receptor agonist",
+  "moa_class": "beta3_adrenergic_agonist",
+  "first_approval_year": 2020,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2020/213006Orig1s000ltr.pdf",
+    "quote": "It is approved, effective on the date of this letter, for use as recommended in the enclosed agreed-upon labeling. (NDA 213006, letter signed 12/23/2020; applicant Urovant Sciences)"
+  },
+  "search_log": [
+    "sumitomo-pharma.com/ir/library/financial_results_summary/ lists 160 PDFs; ebr*.2.pdf (supplementary data) 2021-07-29..2026-07-31 downloaded (21 docs)",
+    "'GEMTESA' row found in each; trend table 'Changes in Quarterly Results' present from FY2023 Q1"
+  ]
+}

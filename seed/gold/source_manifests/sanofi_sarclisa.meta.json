@@ -1,0 +1,31 @@
+{
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "series_start_reason": null,
+  "drug_name": "Sarclisa",
+  "generic_name": "isatuximab",
+  "manufacturer": "Sanofi",
+  "benchmark_identity": "sanofi_sarclisa_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (hematologic, multiple myeloma)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection (concentrate for infusion)",
+  "route_of_administration": "intravenous",
+  "moa": "CD38-directed cytolytic monoclonal antibody",
+  "moa_class": "cd38_antibody",
+  "first_approval_year": 2020,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2020/761113s000lbl.pdf",
+    "quote": "SARCLISA\u00ae (isatuximab-irfc) injection, for intravenous use Initial U.S. Approval: 2020"
+  },
+  "launch_quarter": "2020Q1",
+  "commercial_start_quarter": "2020Q1",
+  "notes": "Q1 2020 is the first quarter with a Sarclisa net sales row (EUR 1 million); the Q4 2019 release lists Sarclisa only as an expected regulatory milestone. EUR as printed.",
+  "search_log": [
+    "listed Sanofi (CIK 0001121404) 6-K, 6-K/A, 20-F and 20-F/A filings from data.sec.gov submissions (recent plus older page); fetched each filing index from 2011 onward",
+    "scanned every .htm exhibit filed in the late-Jan/Feb, late-Apr/May, late-Jul/early-Aug, late-Oct/early-Nov windows for 'Fabrazyme', 'Alprolix', 'Eloctate', 'Sarclisa', 'Beyfortus' to identify each quarterly results release (60 releases 2011Q2-2026Q2, one per quarter)",
+    "extracted the product's row from the first 'Net sales' table of each release (worldwide column); checked that quarters sum to the printed full-year figure for every full year"
+  ]
+}

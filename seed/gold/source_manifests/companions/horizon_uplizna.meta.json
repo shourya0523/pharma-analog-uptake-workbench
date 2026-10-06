@@ -1,0 +1,14 @@
+{
+  "drug_name": "Uplizna",
+  "line_label": "Uplizna",
+  "issuer": "Horizon Therapeutics",
+  "benchmark_identity": "horizon_uplizna",
+  "revenue_scope": "Worldwide (includes revenue and milestone payments from international partners in 2022, see row context)",
+  "geography": "Worldwide",
+  "why_separate": "Horizon net sales 2021Q2-2023Q2 include revenue and milestone payments from international partners in 2022, a broader quantity than Amgen product sales.",
+  "search_log": [
+    "listed Horizon (CIK 0001492426) 8-K, 8-K/A, 10-Q, 10-K to 2023-10-06; fetched the Item 2.02 EX-99.1 for every earnings release 2021-02-24 to 2023-08-08 and read the UPLIZNA row",
+    "Q1 2021 row (1.8, '\u2014' prior year) excluded as a part-quarter; sum check: 1.8+14.5+18.7+25.8 = 60.8 equals the full-year 2021 figure printed in the Q4 2021 release; 2022 quarters sum to 154.7 vs printed 154.6 (rounding)",
+    "2022 footnotes: second-quarter and year-to-date 2022 net sales included $8.6M and $13.8M of revenue and milestone payments from international partners (footnote text kept in the row context)"
+  ]
+}

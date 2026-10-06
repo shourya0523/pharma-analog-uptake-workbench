@@ -1,0 +1,16 @@
+{
+  "drug_name": "Rybelsus",
+  "line_label": "Ozempic pill / Rybelsus",
+  "issuer": "Novo Nordisk",
+  "benchmark_identity": "novo_ozempic_pill_rybelsus",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "why_separate": "In 2026Q2 Novo Nordisk relabels the line \"Ozempic pill / Rybelsus\"; the gold series is Rybelsus as printed through 2026Q1.",
+  "search_log": [
+    "listed all CIK 0000353278 filings via data.sec.gov/submissions (recent + CIK0000353278-submissions-001.json): 2,045 filings, of which 1,788 are 6-K and 25 are 20-F and 4 are 20-F/A; zero 8-K, 8-K/A or 10-Q forms (foreign private issuer)",
+    "6-K quarterly financial reports (company announcements): 2019Q1-2026Q2 are exhibits named caq{q}{yyyy}.htm; 2009-2018 identified by size filter on the submissions index (reports are the 6-Ks >200 kB filed in each reporting window), then confirmed by opening each",
+    "the EDGAR copies of the Q1 2018 and Q2 2018 reports (0001628280-18-005610, 0001628280-18-010747) render all tables as JPEG page images (about 30 page images each, no text tables); the same reports as published on novonordisk.com (PDF) were used for those two quarters",
+    "every figure was read programmatically from a cached copy of the cited document; full-year totals printed in each Q4 report were compared with the sum of the four quarters in this series (see report)",
+    "Q2 2026 report: reported sales = adjusted sales = 5,228 (no 340B reversal in the quarter)"
+  ]
+}

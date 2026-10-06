@@ -1,0 +1,33 @@
+{
+  "drug_name": "Abecma",
+  "generic_name": "idecabtagene vicleucel",
+  "manufacturer": "Bristol-Myers Squibb",
+  "benchmark_identity": "bms_abecma_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (hematologic)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "cell suspension for infusion (autologous CAR T)",
+  "route_of_administration": "intravenous",
+  "moa": "BCMA-directed genetically modified autologous T cell immunotherapy",
+  "moa_class": "bcma_car_t",
+  "first_approval_year": 2021,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/vaccines-blood-biologics/abecma-idecabtagene-vicleucel",
+    "quote": "STN: BLA 125736 Proper Name: Idecabtagene Vicleucel Tradename: ABECMA ... March 26, 2021 Approval Letter - ABECMA"
+  },
+  "launch_quarter": "2021Q2",
+  "commercial_start_quarter": "2021Q2",
+  "launch_evidence": "BMS Q2 2021 release (q22021ex991.htm) prints Abecma 24 for the quarter and 24 for the six months, so no earlier quarter had sales; the Q1 2021 release prints no Abecma sales row",
+  "series_start_reason": "First quarter with a printed sales figure: BMS's second-quarter 2021 release prints Abecma $24 million for the quarter and $24 million for the six months (so none in Q1 2021), and the first-quarter 2021 release has no Abecma product row (approval was March 26, 2021).",
+  "series_end_quarter": "2025Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "BMS's first-quarter 2026 and second-quarter 2026 releases no longer print an Abecma row; footnote (a) of those releases says 'Other Growth Products' includes Abecma, Augtyro, Onureg, Inrebic, Nulojix, Empliciti and royalty revenues.",
+  "notes": "",
+  "search_log": [
+    "listed CIK 14272 (BMS), 816284 (Celgene) and 1576263 (Mirati) filings via data.sec.gov/submissions (recent + older pages), all form types incl. 8-K/A; selected every filing with Item 2.02 (earnings results) and fetched its EX-99 exhibits via the filing index",
+    "Celgene 8-K/8-K/A with Item 2.02 span 2004-10 to 2019-10-31; no Celgene earnings release or 10-K exists for 2019Q4 (last Celgene filing in the submissions index is dated 2020-07-13)",
+    "BMS Item 2.02 8-Ks from 2019-10-31 to 2026-07-30 (2026Q2 release) fetched; Ex 99.1 holds the product table, Ex 99.2 (through the 2022 releases) the quarterly trend tables",
+    "Abecma product row present in every BMS Ex 99.1 table from 2021Q2 to 2025Q4; absent as a row in 2026Q1 and 2026Q2 releases (folded into Other Growth Products), confirmed by searching the releases' text for 'Abecma'"
+  ]
+}

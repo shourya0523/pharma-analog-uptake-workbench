@@ -1,0 +1,30 @@
+{
+  "drug_name": "Ocaliva",
+  "generic_name": "obeticholic acid",
+  "manufacturer": "Intercept Pharmaceuticals",
+  "benchmark_identity": "intercept_ocaliva_worldwide_reported",
+  "therapeutic_area": "GI / Liver / Women's Health / Urology",
+  "indication_area": "Primary biliary cholangitis",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (U.S., Europe, Canada)",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Farnesoid X receptor (FXR) agonist",
+  "moa_class": "fxr_agonist",
+  "first_approval_year": 2016,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=207999",
+    "quote": "OCALIVA OBETICHOLIC ACID 5MG TABLET;ORAL ... 05/27/2016 ORIG-1 Approval"
+  },
+  "launch_quarter": "2016Q2",
+  "commercial_start_quarter": "2016Q2",
+  "series_start_reason": null,
+  "series_end_quarter": "2022Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "From the Q2 2022 release Intercept recasts product revenue, net to U.S. only after selling its international business on 2022-07-01 (prior periods recast); the worldwide definition ends with 2022Q1. The U.S.-only recast series is intercept_ocaliva_alt. (intercept_ocaliva_alt: Companion Series sheet, cited but not scored.)",
+  "search_log": [
+    "Listed every Intercept filing (CIK 0001270073, all forms) via data.sec.gov/submissions; 'Product revenue, net' (Ocaliva only) read from the Exhibit 99.1 of each earnings 8-K 2016Q2-2023Q2 and from the 2023Q3 10-Q (scripts/icpt.py). Ocaliva first sold 2016Q2 (75 thousand; approved 2016-05-27).",
+    "Definition change: the 2022-08-03 release recasts prior periods for the 2022-07-01 sale of the international business (Europe/Canada) to discontinued operations, so 'Product revenue, net' becomes U.S. only (e.g. 2022Q2 release prior-year column 68,178 vs 96,576 originally reported for 2021Q2). Per contract the worldwide series is ended at 2022Q1 (intercept_ocaliva) and the U.S.-only recast series is delivered as intercept_ocaliva_alt (2021Q2-2023Q3; 2021Q1 recast is not printed in any document).",
+    "Last Intercept report: 10-Q for 2023Q3 (filed 2023-11-06); Alfasigma acquisition closed 2023-11-08 (8-K items 2.01/3.01/5.01), Form 15-12G filed 2023-11-20."
+  ]
+}

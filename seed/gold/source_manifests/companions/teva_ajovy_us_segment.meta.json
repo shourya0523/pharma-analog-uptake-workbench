@@ -1,0 +1,17 @@
+{
+  "drug_name": "Ajovy",
+  "line_label": "Ajovy",
+  "issuer": "Teva",
+  "benchmark_identity": "teva_ajovy_us_segment",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "why_separate": "Teva re-based its segment from North America to United States in 2024 and restated 2023; the gold series is the North America line, and the two overlap in 2023 with different values.",
+  "search_log": [
+    "Listed every Teva filing via data.sec.gov submissions (all forms): 6-K, 6-K/A, 8-K, 8-K/A, 10-Q, 10-K, 20-F from 2016-04 through 2026-09 (293 filings; 6-K to 2017, 8-K and 10-Q/10-K from 2018).",
+    "Fetched every htm document of those filings and counted hits for the brand and generic names (cache/teva_scan.json); then extracted every table row whose first cell names the product (scripts/teva_rows.py).",
+    "Revenue rows for AUSTEDO and AJOVY first appear in the first-quarter 2018 10-Q / release (AUSTEDO) and the first-quarter 2019 10-Q (AJOVY); Teva's 2017 6-K quarterly reports carry no product revenue row for either.",
+    "Read the segment table of each 10-Q (Q1-Q3) and of the earnings release filed after year-end (Q4); cross-checked year-to-date columns, next-year prior-year columns and the release full-year row (scripts/teva_build.py).",
+    "Scope caveat: the Europe segment row is larger than the United States row in 2024Q1, 2024Q2, 2025Q1 and 2025Q2 (see teva_ajovy); segments are not summed and Teva prints no worldwide AJOVY total in its tables.",
+    "Same tables as teva_ajovy; the United States segment row from the first-quarter 2024 10-Q on, and the restated 2023 quarters from the prior-year columns of the 2024 10-Qs and Q4 2024 release."
+  ]
+}

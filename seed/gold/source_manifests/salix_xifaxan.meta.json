@@ -1,0 +1,32 @@
+{
+  "drug_name": "Xifaxan",
+  "generic_name": "rifaximin",
+  "manufacturer": "Salix Pharmaceuticals",
+  "benchmark_identity": "salix_xifaxan_us_reported",
+  "therapeutic_area": "GI / Liver / Women's Health / Urology",
+  "indication_area": "Travelers' diarrhea; hepatic encephalopathy; IBS-D",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Rifamycin antibacterial (RNA polymerase inhibitor), minimally absorbed",
+  "moa_class": "rifamycin_antibiotic",
+  "first_approval_year": 2004,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=21361",
+    "quote": "XIFAXAN RIFAXIMIN 200MG TABLET;ORAL ... 05/25/2004 ORIG-1 Approval"
+  },
+  "launch_quarter": "2004Q3",
+  "commercial_start_quarter": "2004Q3",
+  "series_start_reason": null,
+  "series_end_quarter": "2014Q3",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Salix restated 2013-2014 and was acquired by Valeant on 1 April 2015 without filing a 2015 report; the only fourth-quarter 2014 figure is the 10-K full year less restated nine months, which gives a negative quarter (-7.3) from mixed bases rather than a real one, so the series ends at the last quarter Salix printed directly. Bausch Health prints no quarterly Xifaxan in its SEC filings; its earnings presentations print U.S. Xifaxan only for 2018Q1-2021Q4, thirteen quarters later (bausch_xifaxan_alt: Companion Series sheet, cited but not scored).",
+  "search_log": [
+    "Listed every Salix filing (all forms incl. 10-Q/A, 10-K/A, 8-K) for CIK 0001009356 via data.sec.gov/submissions incl. older pages (scripts/common.py); product rows parsed from the net-product-revenue-by-product table of each 10-Q/10-K/10-Q/A/10-K/A (scripts/salix.py). Salix earnings 8-Ks print Xifaxan mostly in prose, so the periodic reports are the cited documents.",
+    "Xifaxan first sold in 2004Q3 (Salix 10-Q for 2004Q3: Xifaxan product revenues for the three- and nine-month periods ended September 30, 2004 were $9.7 million; Xifaxan launched in the US in 2004); 2004Q1-Q2 had no sales. 2004Q3 is cited to the 2005Q3 10-Q prior-year column because the 2004 10-Q prints it only in text.",
+    "Q4 of every year derived as 10-K full year less 10-Q nine months (no Q4 table row in the 10-Ks). 2013Q4 uses the 10-K/A (restated FY2013 635,941); 2014Q1-Q3 use the 10-Q/As filed 2015-03-02 (restated), 2014Q4 = FY2014 10-K 405,442 less restated nine months 412,740 = (7,298) thousand. Original (pre-restatement) values are given in each row's context.",
+    "Series ends 2014Q4: Valeant acquired Salix on 2015-04-01, Salix filed no Q1 2015 report (last filing 2015-04-23). Valeant/Bausch Health 8-K releases, 10-Qs and 10-Ks (CIK 885590, scanned 2015-2026 for rows labelled Xifaxan) print no quarterly Xifaxan table row; the 10-K prints annual Xifaxan revenue only (FY2021 10-K: $1,644 million, $1,482 million, $1,452 million for 2021, 2020, 2019). Bausch IR earnings decks (ir.bauschhealth.com) print quarterly Xifaxan in 'Top 10 products' slides only through the 4Q21 deck (checked decks 1Q21 through 1Q24 and 2Q26: none from 1Q22 on), and the Valeant 4Q15 deck shows Xifaxan 2Q15 148, 3Q15 220, 4Q15 205; no contiguous Bausch series to 2026Q2 exists, and 2015Q1 is not reported by either company, so no splice is made.",
+    "Not sourced: a Bausch Health slide-based Xifaxan series 2015Q2-2021Q4 (decks 2016-2020 were not enumerated)."
+  ]
+}

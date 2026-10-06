@@ -137,6 +137,13 @@ def test_the_peak_is_the_larger_of_the_two_comparable_inputs(sheet, gold, publis
 
         assert row["consensus_estimate_count"] == len(usable), drug
         assert row["consensus_peak_usd_mm"] == consensus, drug
+        if observed is None:
+            # Fewer than four consecutive quarters: nothing observed to compare,
+            # so a comparable estimate is the peak, and without one there is none.
+            assert row["observed_peak_4q_usd_mm"] is None, drug
+            assert row["peak_basis"] == (CONSENSUS if consensus is not None else None), drug
+            assert row["selected_peak_usd_mm"] == consensus, drug
+            continue
         assert row["observed_peak_4q_usd_mm"] == pytest.approx(round(observed, 1)), drug
 
         if consensus is not None and consensus > observed:
@@ -217,7 +224,7 @@ def test_every_percentage_is_a_gold_quarter_over_that_row_s_benchmark(sheet, gol
     anchor quarter and reads Year 1 Q1, so a row anchored at 2019Q1 puts
     2019Q3 at Year 1 Q3.
     """
-    seen = 0
+    seen = unmeasured = 0
     for row in sheet["rows"]:
         anchor = quarter_index(row["launch_anchor_quarter"])
         benchmark = row["quarterly_benchmark_usd_mm"]
@@ -229,13 +236,19 @@ def test_every_percentage_is_a_gold_quarter_over_that_row_s_benchmark(sheet, gol
             year, quarter = label.split()[1], label.split()[2]
             index = anchor + (int(year) - 1) * 4 + int(quarter[1:]) - 1
             found[f"{index // 4}Q{index % 4 + 1}"] = value
+        if benchmark is None:
+            # No peak to divide by: the row is listed, and no quarter of it is a percentage.
+            assert found == {}, row["drug_name"]
+            unmeasured += len(reported)
+            continue
         assert set(found) == set(reported), row["drug_name"]
         for period, percentage in found.items():
             assert percentage == pytest.approx(round(reported[period] / benchmark * 100, 1)), (
                 f"{row['drug_name']} {period}"
             )
         seen += len(found)
-    assert seen == sum(len(values) for values in gold["values"].values())
+    assert seen + unmeasured == sum(len(values) for values in gold["values"].values())
+    assert seen, "no quarter is a percentage, so nothing above was checked"
 
 
 def test_no_estimate_is_sourced_from_a_document_gold_cites():

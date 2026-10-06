@@ -1,0 +1,50 @@
+{
+  "drug_name": "Linzess",
+  "generic_name": "linaclotide",
+  "manufacturer": "AbbVie",
+  "benchmark_identity": "abbvie_linzess_constella_worldwide_reported",
+  "therapeutic_area": "GI / Liver / Women's Health / Urology",
+  "indication_area": "Gastroenterology (IBS-C / chronic idiopathic constipation)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (U.S. Linzess plus Int'l., labelled Linzess/Constella)",
+  "formulation": "capsule",
+  "route_of_administration": "oral",
+  "moa": "Guanylate cyclase-C agonist",
+  "moa_class": "guanylate_cyclase_c_agonist",
+  "first_approval_year": 2012,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=202811",
+    "quote": "08/30/2012 ORIG-1 Approval (NDA 202811, LINZESS LINACLOTIDE)"
+  },
+  "commercial_start_quarter": "2014Q3",
+  "series_start_reason": "Series starts 2014Q3, the first full quarter after Actavis plc closed the Forest Laboratories acquisition on July 1, 2014 (Actavis 2014-11-05 release: 'Third quarter 2014 results ... include the contribution from the Forest acquisition, which closed on July 1, 2014'). Pre-acquisition quarters belong to Forest Laboratories (CIK 38074), which was not searched.",
+  "search_log": [
+    "Listed every filing (all forms, incl. 8-K, 8-K/A, 10-Q, 10-K) for CIK 0001551152 (AbbVie), 0000001800 (Abbott), 0001578845 (Allergan plc / Actavis plc), 0000855654 (ImmunoGen) and 0000850693 (Allergan, Inc.) via data.sec.gov/submissions incl. the older 'files' pages (scripts/list_filings.py); earnings 8-Ks selected by item 2.02 (also item 12 / 7,9 for 2003-2004 Abbott and Allergan, Inc. filings), exhibits resolved from each filing's index.json (scripts/earnings.py, exhibits.py).",
+    "Product rows pulled by table-row parsing of each earnings exhibit (scripts/abbvie_extract.py, abbott_extract.py, allergan_extract.py, allerganinc_extract.py); the quarter of an AbbVie block is read from the document's own '% Change vs. nQyy' header row; every series was checked for gaps and, where the Q4 release prints a full-year figure, quarters were summed against it (scripts/build_all.py).",
+    "AbbVie's line is 'Linzess/Constella' (U.S. + Int'l. columns, Total) through the 2025Q4 release and 'Linzess' from the 2026Q1 release; the Int'l. column continues smoothly across the rename (e.g. 9 in 2025Q1, 11 in 2026Q1), so it is kept as one series. NOTE for the verifier: the user brief expected a U.S.-only Linzess line, but AbbVie/Allergan print a Total (worldwide) column and the contract says to use worldwide where printed; U.S. is the first column of each quote.",
+    "Four quarters of 2021-2025 sum to the printed full-year figures.",
+    "[Allergan plc piece] Listed every filing (all forms, incl. 8-K, 8-K/A, 10-Q, 10-K) for CIK 0001551152 (AbbVie), 0000001800 (Abbott), 0001578845 (Allergan plc / Actavis plc), 0000855654 (ImmunoGen) and 0000850693 (Allergan, Inc.) via data.sec.gov/submissions incl. the older 'files' pages (scripts/list_filings.py); earnings 8-Ks selected by item 2.02 (also item 12 / 7,9 for 2003-2004 Abbott and Allergan, Inc. filings), exhibits resolved from each filing's index.json (scripts/earnings.py, exhibits.py).",
+    "[Allergan plc piece] Product rows pulled by table-row parsing of each earnings exhibit (scripts/abbvie_extract.py, abbott_extract.py, allergan_extract.py, allerganinc_extract.py); the quarter of an AbbVie block is read from the document's own '% Change vs. nQyy' header row; every series was checked for gaps and, where the Q4 release prints a full-year figure, quarters were summed against it (scripts/build_all.py).",
+    "[Allergan plc piece] Quarters match the prior-year comparative columns of the following year's releases; four quarters of 2016 (642.9) and 2017 (723.0) sum to the full-year figures printed in the Q4 releases; the FY2014 total printed in the 2015-02-18 release is 174.4 = 80.0 + 94.4."
+  ],
+  "unreported_quarters": {
+    "2020Q2": "Ownership change Allergan plc to AbbVie; no full-quarter figure is published. Allergan plc was acquired by AbbVie on May 8, 2020; last periodic report is the 10-Q for the quarter ended March 31, 2020. AbbVie-era series is abbvie_linzess (2020Q3 on). AbbVie-reported series starts 2020Q3. AbbVie's 2020Q2 release prints 'Linzess/Constella' $133 million covering only the post-close period from May 8, 2020 (footnote 'Net revenues include Allergan product revenues from the date of the acquisition, May 8, 2020, through June 30, 2020'), so 2020Q2 is excluded. Allergan plc's own series 2014Q3-2020Q1 is staged as allergan_linzess. Forest Laboratories (the pre-July-2014 U.S. owner) was not searched."
+  },
+  "joined_issuers": [
+    {
+      "issuer": "Allergan plc",
+      "first_quarter": "2014Q3",
+      "last_quarter": "2020Q1"
+    },
+    {
+      "issuer": "AbbVie",
+      "first_quarter": "2020Q3",
+      "last_quarter": "2026Q2"
+    }
+  ],
+  "launch_quarter": "2012Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1446847/000110465913031578/a13-8198_110q.htm",
+    "quote": "Although we launched LINZESS in the U.S. in December 2012, we believe that it will take us some time to attain profitability and positive cash flow from operations."
+  }
+}

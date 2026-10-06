@@ -1,0 +1,30 @@
+{
+  "drug_name": "Jakafi",
+  "generic_name": "ruxolitinib",
+  "manufacturer": "Incyte",
+  "benchmark_identity": "incyte_jakafi_us_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (hematologic)",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "JAK1/JAK2 inhibitor",
+  "moa_class": "jak1_jak2_inhibitor",
+  "first_approval_year": 2011,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2011/202192s000ltr.pdf",
+    "quote": "NDA 202192 ... Jakafi (ruxolitinib) Tablets ... It is approved, effective on the date of this letter (electronic signature dated 11/16/2011)"
+  },
+  "launch_quarter": "2011Q4",
+  "commercial_start_quarter": "2011Q4",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "listed Incyte 8-K and 8-K/A Item 2.02 exhibits 2012-2026; the 8-K/A of 2012-08-03 repeats the 2012-08-02 table, original used",
+    "2011Q4-2015Q1 releases print only 'Product revenues, net' (text calls it Jakafi net product revenues; Jakafi was the only marketed product); from 2015Q2 a separate 'Jakafi net product revenue(s)' line is printed; Iclusig (from 2016) is excluded because the Jakafi line is used",
+    "Incyte's Q4 2011 release states $2.0 million of net Q4 revenue from Jakafi (approved 16 November 2011)"
+  ]
+}

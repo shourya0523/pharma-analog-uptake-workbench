@@ -1,0 +1,31 @@
+{
+  "manufacturer": "Sanofi",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "drug_name": "Kevzara",
+  "generic_name": "sarilumab",
+  "benchmark_identity": "sanofi_kevzara_worldwide_reported",
+  "therapeutic_area": "Immunology / Inflammation",
+  "indication_area": "Rheumatoid arthritis; polymyalgia rheumatica; polyarticular juvenile idiopathic arthritis",
+  "formulation": "injection",
+  "route_of_administration": "subcutaneous",
+  "moa": "Interleukin-6 receptor antagonist",
+  "moa_class": "il6_receptor_antagonist",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761037",
+    "quote": "Original Approvals or Tentative Approvals: 05/22/2017 ORIG-1 Approval (Kevzara, BLA 761037, Drugs@FDA overview)"
+  },
+  "launch_quarter": "2017Q2",
+  "commercial_start_quarter": "2017Q2",
+  "notes": "Launch: Q2 2017 release (https://www.sec.gov/Archives/edgar/data/1121404/000119312517242074/d431208dex991.htm): 'Kevzara, an anti IL6 treatment for rheumatoid arthritis, was launched in June in the U.S.'; the same release prints Kevzara Q2 2017 sales of EUR 1 million.",
+  "search_log": [
+    "listed Sanofi (CIK 1121404) 6-K/6-K/A/20-F/20-F/A filings via data.sec.gov submissions; fetched every exhibit",
+    "each quarter taken from that quarter's own results release (first table naming Kevzara with figures)",
+    "checked the Q1 2017 release: Kevzara appears only in the pipeline table"
+  ]
+}

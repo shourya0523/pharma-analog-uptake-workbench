@@ -1,0 +1,46 @@
+{
+  "series_start_reason": "Scanning Genzyme's 10-Qs and 10-Ks for 2001-2002 and the 2003 earnings 8-Ks found no Fabrazyme table row for those quarters (the ones read describe it in prose, e.g. within other therapeutics); the first quarter citable as a table figure is 2002Q3 (prior-year column of the Q3 2003 10-Q). Full-year 2001 (5,793) and 2002 (26,101) thousands appear in the Q4 2003 release.",
+  "drug_name": "Fabrazyme",
+  "generic_name": "agalsidase beta",
+  "manufacturer": "Sanofi",
+  "benchmark_identity": "sanofi_fabrazyme_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Rare diseases (Fabry disease, enzyme replacement)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "lyophilized powder for injection",
+  "route_of_administration": "intravenous",
+  "moa": "Recombinant human alpha-galactosidase A enzyme replacement therapy",
+  "moa_class": "enzyme_replacement_therapy",
+  "first_approval_year": 2003,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2021/103979s5309lbl.pdf",
+    "quote": "FABRAZYME (agalsidase beta) for injection, for intravenous use Initial U.S. Approval: 2003"
+  },
+  "commercial_start_quarter": "2002Q3",
+  "notes": "2011Q2-2011Q4: Genzyme franchise table, growth on constant structure basis. The Q2 2012 release prints the column header 'Q2 2011 net sales' over Q2 2012 figures (Q1 2012 47 + Q2 2012 74 = H1 2012 121).",
+  "search_log": [
+    "listed Sanofi (CIK 0001121404) 6-K, 6-K/A, 20-F and 20-F/A filings from data.sec.gov submissions (recent plus older page); fetched each filing index from 2011 onward",
+    "scanned every .htm exhibit filed in the late-Jan/Feb, late-Apr/May, late-Jul/early-Aug, late-Oct/early-Nov windows for 'Fabrazyme', 'Alprolix', 'Eloctate', 'Sarclisa', 'Beyfortus' to identify each quarterly results release (60 releases 2011Q2-2026Q2, one per quarter)",
+    "extracted the product's row from the first 'Net sales' table of each release (worldwide column); checked that quarters sum to the printed full-year figure for every full year",
+    "Genzyme CIK 0000732485: listed 10-K, 10-Q and 8-K (all items) 2001-2011; no 2011Q1 10-Q or earnings 8-K exists",
+    "[Genzyme piece] Genzyme CIK 0000732485: listed 10-K/10-Q and all 8-K exhibits 2001-2011; scanned every exhibit for 'Fabrazyme' table rows",
+    "[Genzyme piece] checked 2003 earnings 8-Ks (Items 7,9): Fabrazyme is in prose only",
+    "Launch quarter not established from an issuer document: Genzyme General (CIK 732485) filings 2000-2002: FY2000 10-K says Genzyme 'began treating patients in France with Fabrazyme under an Authorisation Temporaire d'Utilisation' (undated); Q1 2001 10-Q lists 'the addition of sales of Fabrazyme enzyme in France under an Authorisation Temporaire d'utilisation' as a driver of Q1 2001 other revenue; EC marketing approval August 2001; FY2001 10-K says launched in 19 countries outside the U.S.; U.S. approval April 2003.; Early-access (ATU) sales began between Q4 2000 and Q1 2001 and the commercial European launch followed the Aug 2001 approval; no documen"
+  ],
+  "unreported_quarters": {
+    "2011Q1": "Ownership change Genzyme to Sanofi; no full-quarter figure is published. Sanofi acquired Genzyme in April 2011; no Genzyme 2011Q1 10-Q or earnings 8-K exists on EDGAR. Sanofi's own EUR line begins 2011Q2 (sanofi_fabrazyme). Sanofi consolidates Genzyme from April 2011; its Q2 2011 release is the first to print a Fabrazyme line (EUR 30 million, 'Net sales since April 1st 2011' table). Genzyme-era quarters 2002Q3-2010Q4 (USD, Genzyme's own filings) are delivered under sanofi_fabrazyme_alt; Genzyme published no 2011Q1 financials (acquired April 2011), so the two cannot be joined contiguously and are in different currencies. Launch quarter not established: Genzyme's 10-K states Fabrazyme was marketed in Europe since 2001 and the US approval was April 2003."
+  },
+  "joined_issuers": [
+    {
+      "issuer": "Genzyme",
+      "first_quarter": "2002Q3",
+      "last_quarter": "2010Q4"
+    },
+    {
+      "issuer": "Sanofi",
+      "first_quarter": "2011Q2",
+      "last_quarter": "2026Q2"
+    }
+  ]
+}

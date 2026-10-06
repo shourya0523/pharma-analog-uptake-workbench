@@ -110,14 +110,71 @@ LAYER_TWO_DEFAULTS = {
 # company_tickers.json lists for each issuer gold names; it goes stale when
 # gold names an issuer that is not here, and `_ticker` stops rather than
 # writing a case whose issuer cannot be resolved.
-ISSUER_TICKERS = {
+ISSUER_TICKERS: dict[str, str | None] = {
+    "AbbVie": "ABBV",
     "Actelion/J&J": "JNJ",
+    # No ticker for an issuer that was acquired and delisted (Allergan,
+    # Alexion, Seagen and the like): its symbol went with it, so a case naming
+    # one is resolved by issuer name instead.
+    "Alexion Pharmaceuticals": None,
+    "Bioverativ": None,
+    "Celgene": None,
+    "Genzyme": None,
+    "ImmunoGen": None,
+    "Onyx Pharmaceuticals": None,
+    "Synergy Pharmaceuticals": None,
+    "Tesaro": None,
+    "Viatris": "VTRS",
+    "Allergan": None,
+    "Allergan plc": None,
+    "Amicus Therapeutics": None,
+    "Apellis Pharmaceuticals": None,
+    "Amgen": "AMGN",
+    "Astellas": None,
+    "AstraZeneca": "AZN",
+    "Bausch + Lomb": "BLCO",
+    "Bayer": None,
+    "Bausch Health": "BHC",
+    "BeiGene": "ONC",
+    "BioMarin": "BMRN",
+    "Biogen": "BIIB",
+    "Bristol-Myers Squibb": "BMY",
+    # Not SEC registrants (no listing of their own on EDGAR; likewise Astellas,
+    # Bayer, Eisai, Kyowa Kirin, Merck KGaA, Mitsubishi Tanabe, Roche and
+    # Sumitomo Pharma): resolved by name.
+    "Daiichi Sankyo": None,
+    "Eisai": None,
     "Eli Lilly": "LLY",
+    "Exelixis": "EXEL",
+    "GSK plc": "GSK",
     "Gilead": "GILD",
+    "Incyte": "INCY",
     "Johnson & Johnson": "JNJ",
+    "Kyowa Kirin": None,
     "Liquidia": "LQDA",
+    "Intercept Pharmaceuticals": None,
+    "Madrigal Pharmaceuticals": "MDGL",
     "Merck": "MRK",
+    "Merck KGaA": None,
+    "Mitsubishi Tanabe Pharma": None,
+    "Moderna": "MRNA",
+    "Neurocrine Biosciences": "NBIX",
+    "Novartis": "NVS",
+    "Oyster Point Pharma": None,
+    "Novo Nordisk": "NVO",
+    "Pfizer": "PFE",
+    "Regeneron Pharmaceuticals": "REGN",
+    "Roche": None,
+    "Salix Pharmaceuticals": None,
+    "Sanofi": "SNY",
+    "Sarepta Therapeutics": "SRPT",
+    "Seagen": None,
+    "Spark Therapeutics": None,
+    "Sumitomo Pharma": None,
+    "Takeda": "TAK",
+    "Teva": "TEVA",
     "United Therapeutics": "UTHR",
+    "argenx": "ARGX",
 }
 
 # The series ends because the issuer stopped printing the line, not because
@@ -148,7 +205,7 @@ def window(year: int) -> dict[str, str]:
     }
 
 
-def _ticker(manufacturer: str) -> str:
+def _ticker(manufacturer: str) -> str | None:
     if manufacturer not in ISSUER_TICKERS:
         raise SystemExit(
             f"gold names an issuer this builder has no ticker for: {manufacturer!r}. "

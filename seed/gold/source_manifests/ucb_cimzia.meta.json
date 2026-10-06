@@ -1,0 +1,27 @@
+{
+  "drug_name": "Cimzia",
+  "generic_name": "certolizumab pegol",
+  "manufacturer": "UCB",
+  "benchmark_identity": "ucb_cimzia_worldwide_annual",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "period_type": "annual",
+  "series_role": "peak_benchmark",
+  "annual_basis": "Every calendar year from the first year UCB printed a Cimzia figure (2007) through 2025, from UCB's annual reports.",
+  "launch_evidence": {
+    "year": 2008,
+    "url": "https://www.ucb.com/sites/default/files/2023-08/FY08_Annual-Report_ENG.pdf",
+    "quote": "New products Cimzia\u00ae (certolizumab pegol) and Vimpat\u00ae (lacosamide) were launched in 2008 (in April in the U.S."
+  },
+  "search_log": [
+    "Listed UCB reports via https://www.ucb.com/investors/download-center (pages 0-8): FY04-FY25 annual reports are on ucb.com; downloaded FY08-FY25 with curl and read with pdftotext -layout.",
+    "Each year taken from that year's own annual report, current-year column of the net sales by product table (EUR million). Every year cross-checked against the next year's prior-year column; only difference is 2016 (own report 1 307; FY2017 report prints 2016 restated as 1 304, own-year used).",
+    "2022 and 2024 quote is the report's net-sales call-out because the by-product table prints the figure on the line below the label."
+  ],
+  "no_quarterly_series": {
+    "reason_code": "half_year_reporting_only",
+    "source_url": "https://www.ucb.com/sites/default/files/2025-07/ucb_half-year_2025_report-en-final.pdf",
+    "source_quote": "UCB half-year report 2025, table 'For the six months ended June 30, Actual, Variance; EUR million; 2025, 2024, actual rates, CER' | CIMZIA\u00ae 959 997 -4% -2%",
+    "details": "UCB publishes product net sales in half-year reports (six months ended June 30) and annual reports; no quarterly product table was found on the UCB download center. Quarters are not interpolated per contract."
+  }
+}

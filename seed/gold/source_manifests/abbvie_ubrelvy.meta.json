@@ -1,0 +1,44 @@
+{
+  "drug_name": "Ubrelvy",
+  "generic_name": "ubrogepant",
+  "manufacturer": "AbbVie",
+  "benchmark_identity": "abbvie_ubrelvy_worldwide_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Neuroscience (migraine)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (U.S. in practice; small Int'l. column)",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Calcitonin gene-related peptide (CGRP) receptor antagonist",
+  "moa_class": "cgrp_receptor_antagonist",
+  "first_approval_year": 2019,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=211765",
+    "quote": "12/23/2019 ORIG-1 Approval (NDA 211765, UBRELVY UBROGEPANT)"
+  },
+  "launch_quarter": "2020Q1",
+  "commercial_start_quarter": "2020Q1",
+  "search_log": [
+    "Listed every filing (all forms, incl. 8-K, 8-K/A, 10-Q, 10-K) for CIK 0001551152 (AbbVie), 0000001800 (Abbott), 0001578845 (Allergan plc / Actavis plc), 0000855654 (ImmunoGen) and 0000850693 (Allergan, Inc.) via data.sec.gov/submissions incl. the older 'files' pages (scripts/list_filings.py); earnings 8-Ks selected by item 2.02 (also item 12 / 7,9 for 2003-2004 Abbott and Allergan, Inc. filings), exhibits resolved from each filing's index.json (scripts/earnings.py, exhibits.py).",
+    "Product rows pulled by table-row parsing of each earnings exhibit (scripts/abbvie_extract.py, abbott_extract.py, allergan_extract.py, allerganinc_extract.py); the quarter of an AbbVie block is read from the document's own '% Change vs. nQyy' header row; every series was checked for gaps and, where the Q4 release prints a full-year figure, quarters were summed against it (scripts/build_all.py).",
+    "Four quarters of 2021-2025 sum to the printed full-year figures.",
+    "[Allergan plc piece] Listed every filing (all forms, incl. 8-K, 8-K/A, 10-Q, 10-K) for CIK 0001551152 (AbbVie), 0000001800 (Abbott), 0001578845 (Allergan plc / Actavis plc), 0000855654 (ImmunoGen) and 0000850693 (Allergan, Inc.) via data.sec.gov/submissions incl. the older 'files' pages (scripts/list_filings.py); earnings 8-Ks selected by item 2.02 (also item 12 / 7,9 for 2003-2004 Abbott and Allergan, Inc. filings), exhibits resolved from each filing's index.json (scripts/earnings.py, exhibits.py).",
+    "[Allergan plc piece] Product rows pulled by table-row parsing of each earnings exhibit (scripts/abbvie_extract.py, abbott_extract.py, allergan_extract.py, allerganinc_extract.py); the quarter of an AbbVie block is read from the document's own '% Change vs. nQyy' header row; every series was checked for gaps and, where the Q4 release prints a full-year figure, quarters were summed against it (scripts/build_all.py).",
+    "[Allergan plc piece] The 2019-11-05 Allergan release lists ubrogepant only in the pipeline table ('FDA Action Date in December, 2019'); the 2020-02-10 release prints no Ubrelvy revenue; first revenue is the 2020Q1 10-Q."
+  ],
+  "unreported_quarters": {
+    "2020Q2": "Ownership change Allergan plc to AbbVie; no full-quarter figure is published. Allergan plc was acquired by AbbVie on May 8, 2020 and its 10-Q for the quarter ended March 31, 2020 is its last report; AbbVie's 2020Q2 figure covers only the post-close period. AbbVie-era series is abbvie_ubrelvy (2020Q3 on). AbbVie-reported series starts 2020Q3. Ubrelvy's first sales quarter is 2020Q1 (Allergan plc 10-Q for the quarter ended March 31, 2020 prints Ubrelvy $11.1 million; staged as allergan_ubrelvy, one row). AbbVie's 2020Q2 release prints Ubrelvy $22 million covering only the post-close period from May 8, 2020 to June 30, 2020 (footnote: 'Net revenues include Allergan product revenues from the date of the acquisition, May 8, 2020, through June 30, 2020'), so 2020Q2 is not a full quarter and is excluded."
+  },
+  "joined_issuers": [
+    {
+      "issuer": "Allergan plc",
+      "first_quarter": "2020Q1",
+      "last_quarter": "2020Q1"
+    },
+    {
+      "issuer": "AbbVie",
+      "first_quarter": "2020Q3",
+      "last_quarter": "2026Q2"
+    }
+  ]
+}

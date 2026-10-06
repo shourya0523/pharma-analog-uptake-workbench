@@ -1,0 +1,37 @@
+{
+  "drug_name": "Fasenra",
+  "generic_name": "benralizumab",
+  "manufacturer": "AstraZeneca",
+  "benchmark_identity": "astrazeneca_fasenra_worldwide_reported",
+  "therapeutic_area": "Respiratory / Allergy",
+  "indication_area": "Respiratory (severe eosinophilic asthma)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection (prefilled syringe/autoinjector)",
+  "route_of_administration": "subcutaneous",
+  "moa": "Interleukin-5 receptor alpha antagonist monoclonal antibody (eosinophil depletion)",
+  "moa_class": "il5r_antagonist",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761070",
+    "quote": "Original Approvals or Tentative Approvals ... 11/14/2017 ORIG-1 Approval (BLA 761070, Company: ASTRAZENECA AB)"
+  },
+  "launch_quarter": "2017Q4",
+  "commercial_start_quarter": "2018Q1",
+  "series_start_reason": "Fasenra was approved in the US on 14 Nov 2017 and launched in Q4 2017, but AstraZeneca's Q4 2017 results release (6-K of 2 Feb 2018) prints no Fasenra product-sales row (no Fasenra figure appears in its product tables; sales are inside the unnamed 'Others'); the first printed quarter is 2018Q1.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Worldwide Fasenra product sales as totalled by AstraZeneca.",
+  "search_log": [
+    "listed AstraZeneca (CIK 0000901832) filings via data.sec.gov submissions incl. filings.files older page: 1,614 6-K, 6 6-K/A, 24 20-F (all form types counted, 6-K/A included)",
+    "fetched the main document of every 6-K/20-F filed 2003-2026 (monthly 6-Ks of 2003-2011 embed the full results press releases; 2012+ one 6-K per results announcement); 2002 6-Ks before Nov 2002 are 'AUTO-GENERATED PAPER DOCUMENT' (not on EDGAR)",
+    "located each quarterly results release by the product-sales table containing Symbicort; extracted the product row from the table anchored on the Symbicort row of the same release (table index + row stored in scripts/az_onepass.py output)",
+    "cross-checked Symbicort chain: era-A releases print the prior-year quarter, which equals the earlier release's current quarter for every year 2003-2014",
+    "checked the Q4 2017 release (azn.htm) for Fasenra: only pipeline/regulatory/launch text, no sales row"
+  ],
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/901832/000165495418005620/a4988o.htm",
+    "quote": "In November 2017, the Company received approval for Fasenra as a treatment for patients with severe, eosinophilic asthma; the approval was followed immediately by the launch of the medicine."
+  }
+}

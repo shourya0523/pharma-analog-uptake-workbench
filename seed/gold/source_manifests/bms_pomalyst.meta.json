@@ -1,0 +1,34 @@
+{
+  "drug_name": "Pomalyst",
+  "generic_name": "pomalidomide",
+  "manufacturer": "Bristol-Myers Squibb",
+  "benchmark_identity": "bms_pomalyst_imnovid_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (hematologic)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "capsule",
+  "route_of_administration": "oral",
+  "moa": "Immunomodulatory agent (cereblon E3 ligase modulator)",
+  "moa_class": "cereblon_e3_ligase_modulator",
+  "first_approval_year": 2013,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=204026",
+    "quote": "02/08/2013 ORIG-1 Approval Type 1 - New Molecular Entity PRIORITY; Orphan"
+  },
+  "launch_quarter": "2013Q1",
+  "commercial_start_quarter": "2013Q1",
+  "launch_evidence": "https://www.sec.gov/Archives/edgar/data/816284/000110465913032725/a13-10761_1ex99d1.htm : 'POMALYST first quarter sales were $29 million' (first quarter 2013, following the February 8 2013 approval)",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Line is named POMALYST in 2013Q1-Q2 (U.S. only), POMALYST/IMNOVID from 2013Q3. 2019Q4 is a BMS pro forma figure (see row context): GAAP post-close stub 322, Celgene pre-close 370 (263 + 107). For 2013Q3-2016Q4 the sentence prints the label across a registered-mark boundary and the matching row_label is 'Imnovid' (the label printed is POMALYST/IMNOVID).",
+  "search_log": [
+    "listed CIK 14272 (BMS), 816284 (Celgene) and 1576263 (Mirati) filings via data.sec.gov/submissions (recent + older pages), all form types incl. 8-K/A; selected every filing with Item 2.02 (earnings results) and fetched its EX-99 exhibits via the filing index",
+    "Celgene 8-K/8-K/A with Item 2.02 span 2004-10 to 2019-10-31; no Celgene earnings release or 10-K exists for 2019Q4 (last Celgene filing in the submissions index is dated 2020-07-13)",
+    "BMS Item 2.02 8-Ks from 2019-10-31 to 2026-07-30 (2026Q2 release) fetched; Ex 99.1 holds the product table, Ex 99.2 (through the 2022 releases) the quarterly trend tables",
+    "Pomalyst launch quarter established from Celgene 2013Q1 release; Celgene quarterly figures from release narrative sentences 2013Q1-2019Q3; BMS table rows 2020Q1-2026Q2; 2019Q4 from BMS Ex 99.2 pro forma + footnotes",
+    "arithmetic cross-checks measured: calendar-year sums equal full-year figures printed in the Q4 releases for 2017 (1,614) and 2018 (2,040)"
+  ]
+}

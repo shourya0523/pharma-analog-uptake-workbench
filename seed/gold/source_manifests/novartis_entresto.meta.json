@@ -1,0 +1,34 @@
+{
+  "drug_name": "Entresto",
+  "generic_name": "sacubitril/valsartan",
+  "manufacturer": "Novartis",
+  "benchmark_identity": "novartis_entresto_worldwide_reported",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Heart failure",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Angiotensin receptor-neprilysin inhibitor",
+  "moa_class": "arni",
+  "first_approval_year": 2015,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2015/207620Orig1s000ltr.pdf",
+    "quote": "NDA 207620 NDA APPROVAL ... ENTRESTO (sacubitril/valsartan) Tablets ... It is approved, effective on the date of this letter"
+  },
+  "launch_quarter": "2015Q3",
+  "commercial_start_quarter": "2015Q3",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "First printed sales row is Q3 2015 (USD 16m); Q2 2015 report lists Entresto only in the approvals table (US Jul. 2015). Q4 2025 onward values fall because of US generic entry; same line definition.",
+  "search_log": [
+    "Listed all 6-K/6-K/A/20-F/20-F/A filings for CIK 1114448 (data.sec.gov submissions incl. older page, 2010-10 to 2026-09; 454 filings), fetched index.json of every 6-K from 2012 on and identified the results exhibit (EX-99.2 interim financial report) for each quarter 2010Q3-2026Q2 (64 documents)",
+    "Parsed every table row of each of the 64 results documents and extracted the row labelled with the brand; compared each quarter's own value against the next year's prior-year column: no restatement difference found for any of these brands",
+    "No Sandoz/Alcon spin-off restatement affected these lines as printed: own-quarter values equal the later prior-year columns"
+  ],
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1114448/000137036815000055/a150721-99_1.htm",
+    "quote": "Novartis started shipping in the US in July."
+  }
+}

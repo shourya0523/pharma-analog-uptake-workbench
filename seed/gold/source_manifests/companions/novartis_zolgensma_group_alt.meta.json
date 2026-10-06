@@ -1,0 +1,16 @@
+{
+  "drug_name": "Zolgensma",
+  "line_label": "Zolgensma",
+  "issuer": "Novartis",
+  "benchmark_identity": "novartis_zolgensma_group_alt",
+  "revenue_scope": "Product family",
+  "geography": "Worldwide",
+  "why_separate": "From 2025Q4 Novartis prints \"Zolgensma Group\", which adds the intrathecal formulation Itvisma; the gold series is Zolgensma alone and ends 2025Q3.",
+  "notes": "Novartis footnote defining the group was not found; inclusion of Itvisma is inferred from the Q2 2026 text 'continued launch momentum from Itvisma' within the Zolgensma Group paragraph.",
+  "search_log": [
+    "listed NVS (CIK 0001114448) filings via data.sec.gov submissions incl. 6-K, 6-K/A, 20-F, 20-F/A (all forms, not filtered to one type)",
+    "indexed every 6-K 2005-2026 filed in the late Jan-Feb, Apr-May, Jul-Aug, Oct-Nov windows plus every 6-K 2017-07 onward; downloaded each quarterly interim financial report exhibit (EX-99.2 / nvs-*-99_2.htm, or the 6-K body for 2006-2011)",
+    "extracted product rows by script (scripts/build.py, extract.py): first cell equals the brand (optionally plus footnote digit), header row above names the quarter first with no year-to-date column",
+    "cross-checked every quarter's own figure against the prior-year column of the following year's report: no differences (no restatement of these product lines found)"
+  ]
+}

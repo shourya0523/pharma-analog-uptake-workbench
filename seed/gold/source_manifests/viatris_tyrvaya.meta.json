@@ -1,0 +1,45 @@
+{
+  "drug_name": "Tyrvaya",
+  "generic_name": "varenicline nasal spray",
+  "manufacturer": "Viatris",
+  "benchmark_identity": "oyster_point_tyrvaya_us_reported",
+  "therapeutic_area": "Ophthalmology",
+  "indication_area": "Dry eye disease",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "nasal spray",
+  "route_of_administration": "intranasal",
+  "moa": "Nicotinic acetylcholine receptor agonist (trigeminal parasympathetic pathway activation)",
+  "moa_class": "nicotinic_acetylcholine_receptor_agonist",
+  "first_approval_year": 2021,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=213978",
+    "quote": "TYRVAYA VARENICLINE TARTRATE EQ 0.03MG BASE/SPRAY SPRAY;NASAL ... 10/15/2021 ORIG-1 Approval"
+  },
+  "launch_quarter": "2021Q4",
+  "commercial_start_quarter": "2021Q4",
+  "series_end_quarter": "2023Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Viatris states Tyrvaya net sales in prose in the 2023 10-Qs and the FY2023 10-K only; no Tyrvaya net sales figure is printed in any 2024-2026 earnings release, 10-Q or 10-K.",
+  "search_log": [
+    "Listed every Oyster Point filing (CIK 0001720725, all forms) via data.sec.gov/submissions; 'Product revenue, net' (Tyrvaya was its only product; the 2021Q3 revenue of 17,943 thousand is license revenue) read from the Exhibit 99.1 earnings release of each quarter 2021Q4-2022Q3 (scripts/oyster.py).",
+    "Viatris (CIK 0001792044) earnings exhibits 2023Q4-2026Q2 and 10-Q/10-K 2023-2026 were scanned for rows or sentences naming Tyrvaya (scripts/viatris.py): table rows none; prose quarterly net sales only in the 2023 10-Qs and FY2023 10-K, delivered as viatris_tyrvaya_alt. Series length is equal (4 quarters each); the launch-quarter series is given the plain stem.",
+    "[Viatris piece] Viatris 10-Q/10-K 2023-2026 and earnings Exhibit 99.1 (2023Q4-2026Q2 releases) scanned for sentences and table rows containing Tyrvaya (scripts/viatris.py).",
+    "[Viatris piece] The figures are prose sentences ('Net sales from Tyrvaya totaled $X million during the current quarter'), not table rows; 2023Q4 = full year 41.7 less nine months 26.9."
+  ],
+  "unreported_quarters": {
+    "2022Q4": "Ownership change Oyster Point Pharma to Viatris; no full-quarter figure is published. Oyster Point was acquired by Viatris (closed 2023-01-03, Form 15-12G 2023-01-13) and filed no report for 2022Q4; Viatris prints Tyrvaya net sales only in prose for 2023 (see viatris_tyrvaya_alt), so the two pieces are separated by an uncovered 2022Q4. Series starts 2023Q1, the first quarter under Viatris after the 2023-01-03 acquisition of Oyster Point; 2022Q4 is reported by neither company; launch-period quarters are in viatris_tyrvaya."
+  },
+  "joined_issuers": [
+    {
+      "issuer": "Oyster Point Pharma",
+      "first_quarter": "2021Q4",
+      "last_quarter": "2022Q3"
+    },
+    {
+      "issuer": "Viatris",
+      "first_quarter": "2023Q1",
+      "last_quarter": "2023Q4"
+    }
+  ]
+}

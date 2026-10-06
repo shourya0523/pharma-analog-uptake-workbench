@@ -91,6 +91,10 @@ export type ReviewItem = {
   confidence: number
   datapoint_id?: string
   value_normalized_usd_millions?: number | null
+  /** As the source printed it, in its own currency and unit. */
+  value_reported?: number | null
+  currency?: string | null
+  unit?: string | null
   period_type?: string
   revenue_scope?: string
   geography?: string | null

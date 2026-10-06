@@ -16,13 +16,21 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from tests.answer_keys import identifying, scored_words
+from tests.answer_keys import assert_retirement_is_real, cases_in, identifying, retirement, scored_words
 
 REPO = Path(__file__).resolve().parents[2]
 HOLDOUT = REPO / "seed" / "holdout_members" / "combined_name_members.json"
 
 
 def test_no_case_comes_from_a_scored_issuer():
+    """While the set is live, none of its issuers may be scored elsewhere.
+
+    Once retired - its issuers having entered another answer key - the check
+    becomes that the retirement is real, and the set no longer scores changes.
+    """
+    if retirement(HOLDOUT):
+        assert_retirement_is_real(HOLDOUT, "issuer")
+        return
     payload = json.loads(HOLDOUT.read_text())
     # Every other answer key under seed/ is discovered rather than named:
     # naming three files by hand is how this test once passed while the

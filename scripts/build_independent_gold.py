@@ -1040,12 +1040,7 @@ PRODUCT_METADATA = {
         "benchmark_identity": "lilly_emgality_worldwide_reported",
         "therapeutic_area": "Neuroscience",
         "commercial_start_quarter": "2018Q4",
-        "series_start_reason": (
-            "The series starts in the first quarter Lilly states this product on a "
-            "Selected Products line of its own. Whether that is the product's "
-            "launch quarter is not established here, so the span is not read as "
-            "launch-to-date."
-        ),
+        "launch_quarter": "2018Q4",
         "series_end_quarter": "2023Q4",
         "series_end_basis": "issuer_stopped_reporting",
         "series_end_reason": (
@@ -1053,7 +1048,6 @@ PRODUCT_METADATA = {
             "2024 release - Mounjaro, Trulicity, Verzenio, Jardiance, Taltz, "
             "Humalog and Zepbound - and this product is not among them."
         ),
-        "peak_eligible": False,
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
         "formulation": "injection",
@@ -1090,13 +1084,9 @@ PRODUCT_METADATA = {
         "manufacturer": "Eli Lilly",
         "benchmark_identity": "lilly_humalog_worldwide_reported",
         "therapeutic_area": "Diabetes",
-        "commercial_start_quarter": "2017Q4",
-        "series_start_reason": (
-            "The fourth quarter of 2017 is the earliest Lilly release sourced here, "
-            "and this series starts there because sourcing does, not because the "
-            "product launched then. No launch quarter is established for it, so the "
-            "span is a window on the product's life and not a launch-to-date curve."
-        ),
+        "commercial_start_quarter": "2002Q1",
+        "series_start_reason": "No issuer document fixes the launch quarter, so the series is not read as launch-to-date. It starts 2002Q1: 2002Q1 is the earliest quarter taken. Lilly's earnings releases were first filed as 8-K exhibits for Q1 2003; the 2002 quarters come from the prior-year columns of the 2003 releases. The 10-Qs for 2001 and 2002 and the 10-K for 2001 give Humalog only as sentences of narrative text (e.g. 'Worldwide Humalog sales of $164.3 million for the quarter'), not as revenue-table rows, and Q4 2001 would have to be derived from a narrative annual figure, so the series stops at 2002Q1 by choice of source type rather than because Lilly stopped reporting the product; the 1996-2001 quarters were not sourced.",
+        "peak_eligible": False,
         "series_end_quarter": "2024Q4",
         "series_end_basis": "issuer_stopped_reporting",
         "series_end_reason": (
@@ -1106,7 +1096,6 @@ PRODUCT_METADATA = {
             "immunology and neuroscience. Humalog sits inside Other cardiometabolic "
             "health from that quarter and is no longer a line of its own."
         ),
-        "peak_eligible": False,
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
         "formulation": "injection",
@@ -1143,13 +1132,9 @@ PRODUCT_METADATA = {
         "manufacturer": "Eli Lilly",
         "benchmark_identity": "lilly_jardiance_worldwide_reported",
         "therapeutic_area": "Diabetes",
-        "commercial_start_quarter": "2017Q4",
-        "series_start_reason": (
-            "The fourth quarter of 2017 is the earliest Lilly release sourced here, "
-            "and this series starts there because sourcing does, not because the "
-            "product launched then. No launch quarter is established for it, so the "
-            "span is a window on the product's life and not a launch-to-date curve."
-        ),
+        "commercial_start_quarter": "2015Q1",
+        "launch_quarter": "2014Q3",
+        "series_start_reason": "Launched 2014Q3 (The product was launched in certain European countries and the U.S. in the third quarter of 2014. - https://www.sec.gov/Archives/edgar/data/59478/000005947815000100/lly-20141231x10k.htm); the series starts 2015Q1. 2015Q1 is the earliest quarter for which any Lilly document prints a Jardiance revenue figure: the Q1 2016 release prints Q1 2016 and the prior-year Q1 2015 (19.3); the Q4 2015 release and every 2014-2015 release, 10-Q and 10-K print no Jardiance revenue row, so 2014Q3 and 2014Q4 (launch quarters) cannot be cited. 2015 quarters are direct_prior_year_column rows.",
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
@@ -1162,13 +1147,7 @@ PRODUCT_METADATA = {
         "benchmark_identity": "lilly_mounjaro_worldwide_reported",
         "therapeutic_area": "Diabetes",
         "commercial_start_quarter": "2022Q2",
-        "series_start_reason": (
-            "The series starts in the first quarter Lilly states this product on a "
-            "Selected Products line of its own. Whether that is the product's "
-            "launch quarter is not established here, so the span is not read as "
-            "launch-to-date."
-        ),
-        "peak_eligible": False,
+        "launch_quarter": "2022Q2",
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
         "formulation": "injection",
@@ -1179,13 +1158,8 @@ PRODUCT_METADATA = {
         "manufacturer": "Eli Lilly",
         "benchmark_identity": "lilly_olumiant_worldwide_reported",
         "therapeutic_area": "Immunology",
-        "commercial_start_quarter": "2017Q4",
-        "series_start_reason": (
-            "The fourth quarter of 2017 is the earliest Lilly release sourced here, "
-            "and this series starts there because sourcing does, not because the "
-            "product launched then. No launch quarter is established for it, so the "
-            "span is a window on the product's life and not a launch-to-date curve."
-        ),
+        "commercial_start_quarter": "2017Q1",
+        "launch_quarter": "2017Q1",
         "series_end_quarter": "2023Q4",
         "series_end_basis": "issuer_stopped_reporting",
         "series_end_reason": (
@@ -1193,7 +1167,6 @@ PRODUCT_METADATA = {
             "2024 release - Mounjaro, Trulicity, Verzenio, Jardiance, Taltz, "
             "Humalog and Zepbound - and this product is not among them."
         ),
-        "peak_eligible": False,
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
         "formulation": "tablet",
@@ -1229,13 +1202,8 @@ PRODUCT_METADATA = {
         "manufacturer": "Eli Lilly",
         "benchmark_identity": "lilly_taltz_worldwide_reported",
         "therapeutic_area": "Immunology",
-        "commercial_start_quarter": "2017Q4",
-        "series_start_reason": (
-            "The fourth quarter of 2017 is the earliest Lilly release sourced here, "
-            "and this series starts there because sourcing does, not because the "
-            "product launched then. No launch quarter is established for it, so the "
-            "span is a window on the product's life and not a launch-to-date curve."
-        ),
+        "commercial_start_quarter": "2016Q2",
+        "launch_quarter": "2016Q2",
         "series_end_quarter": "2025Q3",
         "series_end_basis": "issuer_stopped_reporting",
         "series_end_reason": (
@@ -1250,7 +1218,6 @@ PRODUCT_METADATA = {
             "sum two regional columns into a full year Lilly never printed as a "
             "total, then subtract nine months from that."
         ),
-        "peak_eligible": False,
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
         "formulation": "injection",
@@ -1261,13 +1228,8 @@ PRODUCT_METADATA = {
         "manufacturer": "Eli Lilly",
         "benchmark_identity": "lilly_trulicity_worldwide_reported",
         "therapeutic_area": "Diabetes",
-        "commercial_start_quarter": "2017Q4",
-        "series_start_reason": (
-            "The fourth quarter of 2017 is the earliest Lilly release sourced here, "
-            "and this series starts there because sourcing does, not because the "
-            "product launched then. No launch quarter is established for it, so the "
-            "span is a window on the product's life and not a launch-to-date curve."
-        ),
+        "commercial_start_quarter": "2014Q4",
+        "launch_quarter": "2014Q4",
         "series_end_quarter": "2025Q3",
         "series_end_basis": "issuer_stopped_reporting",
         "series_end_reason": (
@@ -1282,7 +1244,6 @@ PRODUCT_METADATA = {
             "sum two regional columns into a full year Lilly never printed as a "
             "total, then subtract nine months from that."
         ),
-        "peak_eligible": False,
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
         "formulation": "injection",
@@ -1294,13 +1255,7 @@ PRODUCT_METADATA = {
         "benchmark_identity": "lilly_verzenio_worldwide_reported",
         "therapeutic_area": "Oncology",
         "commercial_start_quarter": "2017Q4",
-        "series_start_reason": (
-            "The fourth quarter of 2017 is the earliest Lilly release sourced here, "
-            "and this series starts there because sourcing does, not because the "
-            "product launched then. No launch quarter is established for it, so the "
-            "span is a window on the product's life and not a launch-to-date curve."
-        ),
-        "peak_eligible": False,
+        "launch_quarter": "2017Q4",
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
         "formulation": "tablet",
@@ -1312,19 +1267,67 @@ PRODUCT_METADATA = {
         "benchmark_identity": "lilly_zepbound_worldwide_reported",
         "therapeutic_area": "Obesity",
         "commercial_start_quarter": "2023Q4",
-        "series_start_reason": (
-            "The series starts in the first quarter Lilly states this product on a "
-            "Selected Products line of its own. Whether that is the product's "
-            "launch quarter is not established here, so the span is not read as "
-            "launch-to-date."
-        ),
-        "peak_eligible": False,
+        "launch_quarter": "2023Q4",
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
         "formulation": "injection",
         "route_of_administration": "subcutaneous",
     },
 }
+
+# Products researched into seed/gold/source_manifests as a pair of files: a
+# ``<stem>_quarterly.csv`` of cited rows and a ``<stem>.meta.json`` describing
+# the series. The set is whatever pairs are on disk, read at import, so a
+# product is added by adding its files and never by extending a dict here.
+RESEARCHED_SERIES_FIELDS = (
+    "generic_name",
+    "manufacturer",
+    "benchmark_identity",
+    "therapeutic_area",
+    "revenue_scope",
+    "geography",
+    "formulation",
+    "route_of_administration",
+    "launch_quarter",
+    "commercial_start_quarter",
+    "series_start_reason",
+    "series_end_quarter",
+    "series_end_basis",
+    "series_end_reason",
+    "peak_eligible",
+    "reviewed_anomalies",
+    "unreported_quarters",
+)
+
+
+def researched_metadata() -> dict[str, dict[str, Any]]:
+    """Series metadata for every researched product that has a quarterly manifest.
+
+    A field the research left null is dropped rather than stored as None, so
+    the defaults the rest of the builder applies with ``meta.get`` still hold.
+    A series that starts after its stated launch cannot locate a peak, so it
+    is never peak-eligible whatever the file says.
+    """
+    out: dict[str, dict[str, Any]] = {}
+    for path in sorted(SOURCE_DIR.glob("*.meta.json")):
+        stem = path.name.removesuffix(".meta.json")
+        manifest = SOURCE_DIR / f"{stem}_quarterly.csv"
+        if not manifest.is_file():
+            continue
+        raw = json.loads(path.read_text())
+        name = raw["drug_name"]
+        if name in PRODUCT_METADATA or name in out:
+            raise ValueError(f"{name} is described by more than one series metadata file")
+        meta = {field: raw[field] for field in RESEARCHED_SERIES_FIELDS if raw.get(field) is not None}
+        if raw.get("series_start_reason"):
+            meta["peak_eligible"] = False
+        meta["manifest"] = manifest.name
+        out[name] = meta
+    return out
+
+
+RESEARCHED_METADATA = researched_metadata()
+PRODUCT_METADATA.update(RESEARCHED_METADATA)
 
 ANNUAL_METADATA = {
     "Letairis": {
@@ -1404,6 +1407,33 @@ ANNUAL_METADATA = {
     },
 }
 
+def researched_annual_metadata() -> dict[str, dict[str, Any]]:
+    """Series metadata for every product researched into an annual manifest.
+
+    An issuer that publishes product sales only for half-years and full years
+    has no quarterly series; its full years are read from ``<stem>_annual.csv``
+    beside ``<stem>.meta.json``.
+    """
+    out: dict[str, dict[str, Any]] = {}
+    for path in sorted(SOURCE_DIR.glob("*.meta.json")):
+        manifest = SOURCE_DIR / f"{path.name.removesuffix('.meta.json')}_annual.csv"
+        if not manifest.is_file():
+            continue
+        raw = json.loads(path.read_text())
+        if raw["drug_name"] in ANNUAL_METADATA:
+            raise ValueError(f"{raw['drug_name']} is described by more than one annual metadata file")
+        out[raw["drug_name"]] = {
+            "generic_name": raw["generic_name"],
+            "manufacturer": raw["manufacturer"],
+            "benchmark_identity": raw["benchmark_identity"],
+            "manifest": manifest.name,
+        }
+    return out
+
+
+ANNUAL_METADATA.update(researched_annual_metadata())
+
+
 # Annual-average exchange rates for the non-USD annual manifests (Tracleer in
 # CHF, Flolan in GBP). Actelion and GSK never disclosed these figures in USD,
 # so no citable USD quote exists to reuse; these rates convert the reported
@@ -1452,7 +1482,43 @@ def usd_normalized(value: float, currency: str, year: int) -> tuple[float | None
     if currency == "GBP" and year in FX_RATE_USD_PER_GBP:
         rate = FX_RATE_USD_PER_GBP[year]
         return round(value * rate, 6), rate
+    # Any other currency uses the mean of the year's four quarterly H.10
+    # averages, the same rates the quarterly rows convert at.
+    quarters = [QUARTERLY_FX.get((currency, f"{year}Q{q}")) for q in range(1, 5)]
+    if all(quarters):
+        rate = round(sum(quarters) / 4, 6)
+        return round(value * rate, 6), rate
     return None, None
+
+
+# USD per one unit of each currency, by calendar quarter: FRED's quarterly
+# average of the Federal Reserve H.10 noon buying rate, written by
+# scripts/sourcing/fetch_fx_quarterly.py with the FRED URL on every row.
+QUARTERLY_FX_FILE = SOURCE_DIR / "fx_quarterly_usd.csv"
+QUARTERLY_FX_SOURCE = "federal_reserve_h10_quarterly_average_via_fred"
+
+
+def quarterly_fx() -> dict[tuple[str, str], float]:
+    if not QUARTERLY_FX_FILE.is_file():
+        return {}
+    return {
+        (row["currency"], row["quarter"]): float(row["usd_per_unit"])
+        for row in read_csv(QUARTERLY_FX_FILE)
+    }
+
+
+def quarterly_usd(value: float, currency: str, period: str) -> tuple[float, float | None]:
+    """(value_normalized_usd_millions, fx_rate_to_usd) for one quarter's figure.
+
+    A currency or quarter the table does not hold raises, because a row without
+    a rate would otherwise ship an unconverted figure under a USD column.
+    """
+    if currency == "USD":
+        return round(value, 6), None
+    rate = QUARTERLY_FX.get((currency, period))
+    if rate is None:
+        raise ValueError(f"No quarterly {currency} rate for {period} in {QUARTERLY_FX_FILE.name}")
+    return round(value * rate, 6), rate
 
 
 def slug(*parts: object) -> str:
@@ -1496,6 +1562,10 @@ def quote_contains_number(quote: str, value: float) -> bool:
         f"{value:.1f}",
         f"{value:.3f}",
     }
+    # :g writes a large whole figure in exponent form (1.02178e+06), so a
+    # figure printed in thousands needs its plain integer spelling too.
+    if float(value).is_integer():
+        forms.add(f"{value:.0f}")
     return any(re.search(rf"(?<!\d){re.escape(form)}(?!\d)", normalized) for form in forms)
 
 
@@ -1568,6 +1638,9 @@ def find_direct_rows(html: bytes) -> dict[str, tuple[float, str]]:
     return found
 
 
+QUARTERLY_FX = quarterly_fx()
+
+
 def revenue_row(
     *,
     drug_name: str,
@@ -1583,14 +1656,20 @@ def revenue_row(
     sources: list[dict[str, str]] | None = None,
     bridge_components: list[dict[str, Any]] | None = None,
     notes: str = "",
+    currency: str = "USD",
+    issuer: str | None = None,
 ) -> dict[str, Any]:
     meta = PRODUCT_METADATA[drug_name]
     year, quarter = int(period[:4]), int(period[-1])
+    normalized, fx_rate = quarterly_usd(float(value), currency, period)
     return {
         "gold_id": slug(meta["benchmark_identity"], period),
         "drug_name": drug_name,
         "generic_name": meta["generic_name"],
-        "manufacturer": meta["manufacturer"],
+        "manufacturer": issuer or meta["manufacturer"],
+        # Set only on a series joined across an ownership change, where each
+        # row is the issuer that printed it rather than the current owner.
+        **({"issuer": issuer} if issuer else {}),
         "benchmark_identity": meta["benchmark_identity"],
         "period": period,
         "fiscal_year": year,
@@ -1598,8 +1677,14 @@ def revenue_row(
         "calendar_year": year,
         "calendar_quarter": quarter,
         "value_reported": round(float(value), 6),
-        "value_normalized_usd_millions": round(float(value), 6),
-        "currency": "USD",
+        "value_normalized_usd_millions": normalized,
+        "currency": currency,
+        # Only a non-USD row carries a rate; a USD row is already normalized.
+        **(
+            {"fx_rate_to_usd": fx_rate, "fx_rate_source": QUARTERLY_FX_SOURCE}
+            if fx_rate is not None
+            else {}
+        ),
         "unit": "millions",
         "metric": "revenue",
         "period_type": "quarterly",
@@ -2181,7 +2266,7 @@ def build_letairis() -> list[dict[str, Any]]:
             value=float(source["value_reported"]),
             source_url=source["source_url"],
             source_quote=source["source_quote"],
-            source_type=source.get("source_type") or "company_ir",
+            source_type=source.get("source_type") or ("sec_filing" if "sec.gov" in source["source_url"] else "company_ir"),
             derivation=source["derivation"],
             source_unit=source.get("source_unit") or "millions",
             source_value=float(source["source_value_reported"])
@@ -2230,7 +2315,7 @@ def gilead_row(drug_name: str, source: dict[str, str]) -> dict[str, Any]:
         value=float(source["value_reported"]),
         source_url=source["source_url"],
         source_quote=source["source_quote"],
-        source_type=source.get("source_type") or "company_ir",
+        source_type=source.get("source_type") or ("sec_filing" if "sec.gov" in source["source_url"] else "company_ir"),
         derivation=source["derivation"],
         source_unit=unit,
         source_value=float(reported) if reported else None,
@@ -2290,7 +2375,7 @@ def build_jnj_comparators() -> list[dict[str, Any]]:
                 value=float(source["value_reported"]),
                 source_url=source["source_url"],
                 source_quote=source["source_quote"],
-                source_type=source.get("source_type") or "company_ir",
+                source_type=source.get("source_type") or ("sec_filing" if "sec.gov" in source["source_url"] else "company_ir"),
                 derivation=source["derivation"],
                 precision=source.get("precision") or "as_reported",
                 notes=source["context"],
@@ -2308,7 +2393,8 @@ def build_jnj_comparators() -> list[dict[str, Any]]:
 LILLY_COMPARATORS = {
     drug_name: f"{meta['benchmark_identity'].removesuffix('_worldwide_reported')}_quarterly.csv"
     for drug_name, meta in PRODUCT_METADATA.items()
-    if meta["manufacturer"] == "Eli Lilly"
+    # A researched Lilly product names its own manifest in its meta file.
+    if meta["manufacturer"] == "Eli Lilly" and drug_name not in RESEARCHED_METADATA
 }
 
 
@@ -2343,9 +2429,98 @@ def build_lilly_comparators() -> list[dict[str, Any]]:
     return rows
 
 
+def build_researched_products() -> list[dict[str, Any]]:
+    """Every product researched into a manifest pair, read as its rows declare.
+
+    Unit, currency and source type come from each row rather than from the
+    issuer, because one series can cross from thousands to millions or from a
+    filing to a release partway through.
+    """
+    rows: list[dict[str, Any]] = []
+    for drug_name, meta in RESEARCHED_METADATA.items():
+        for source in read_csv(SOURCE_DIR / meta["manifest"]):
+            reported = source.get("source_value_reported")
+            rows.append(
+                revenue_row(
+                    drug_name=drug_name,
+                    period=source["period"],
+                    value=float(source["value_reported"]),
+                    source_url=source["source_url"],
+                    source_quote=source["source_quote"],
+                    source_type=source["source_type"],
+                    derivation=source["derivation"],
+                    precision=source.get("precision") or "as_reported",
+                    source_unit=source.get("source_unit") or "millions",
+                    source_value=float(reported) if reported else None,
+                    notes=source["context"],
+                    currency=source.get("currency") or "USD",
+                    issuer=source.get("issuer") or None,
+                )
+            )
+            # A value checked at source and kept although it looks wrong (a
+            # printed nil, a negative quarter, a one-off reversal) says why.
+            reason = meta.get("reviewed_anomalies", {}).get(source["period"])
+            if reason:
+                rows[-1]["reviewed_anomaly"] = reason
+    return rows
+
+
+COMPANION_DIR = SOURCE_DIR / "companions"
+
+
+def build_companion_rows() -> list[dict[str, Any]]:
+    """Lines a product's issuer printed that are not the product's gold series.
+
+    A different territory, a recast definition, a product family, or a piece
+    too far from the series to join: each is kept, as printed and with its
+    own citations, but under its own identity and never scored. Its meta says
+    why it is not part of the series.
+    """
+    rows: list[dict[str, Any]] = []
+    for path in sorted(COMPANION_DIR.glob("*.meta.json")):
+        meta = json.loads(path.read_text())
+        if meta["drug_name"] not in PRODUCT_METADATA:
+            raise ValueError(f"{path.name}: companion of {meta['drug_name']}, which has no gold series")
+        if not meta.get("why_separate"):
+            raise ValueError(f"{path.name}: a companion line must say why it is not the series")
+        manifest = COMPANION_DIR / f"{path.name.removesuffix('.meta.json')}_quarterly.csv"
+        for source in read_csv(manifest):
+            reported = source.get("source_value_reported")
+            row = revenue_row(
+                drug_name=meta["drug_name"],
+                period=source["period"],
+                value=float(source["value_reported"]),
+                source_url=source["source_url"],
+                source_quote=source["source_quote"],
+                source_type=source["source_type"],
+                derivation=source["derivation"],
+                precision=source.get("precision") or "as_reported",
+                source_unit=source.get("source_unit") or "millions",
+                source_value=float(reported) if reported else None,
+                notes=source["context"],
+                currency=source.get("currency") or "USD",
+                issuer=meta["issuer"],
+            )
+            row.update(
+                gold_id=slug(meta["benchmark_identity"], source["period"]),
+                benchmark_identity=meta["benchmark_identity"],
+                line_label=meta["line_label"],
+                revenue_scope=meta["revenue_scope"],
+                geography=meta["geography"],
+                series_role="companion",
+                why_separate=meta["why_separate"],
+            )
+            rows.append(row)
+    return rows
+
+
 def build_annual_rows() -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
-    for source in read_csv(SOURCE_DIR / "annual_product_sales.csv"):
+    sources = read_csv(SOURCE_DIR / "annual_product_sales.csv")
+    for meta in ANNUAL_METADATA.values():
+        if "manifest" in meta:
+            sources += read_csv(SOURCE_DIR / meta["manifest"])
+    for source in sources:
         meta = ANNUAL_METADATA[source["drug_name"]]
         value = float(source["value_reported"])
         source_unit = "thousands" if "thousands" in source["source_quote"].lower() else source["unit"]
@@ -2417,6 +2592,8 @@ def refresh_metadata_fields(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
         for field in METADATA_FIELDS:
             if field == "therapeutic_area":
                 row[field] = meta.get(field, "Pulmonary hypertension")
+            elif field == "manufacturer" and row.get("issuer"):
+                row[field] = row["issuer"]
             else:
                 row[field] = meta[field]
     return rows
@@ -2450,7 +2627,11 @@ def full_annual_totals(rows: list[dict[str, Any]], drug_name: str) -> list[dict[
         totals.append(
             {
                 "period": str(year),
-                "value_reported": round(sum(row["value_reported"] for row in year_rows), 6),
+                # Normalized, so a non-USD series peaks where its USD value does,
+                # as the annual Tracleer benchmark already does.
+                "value_reported": round(
+                    sum(row["value_normalized_usd_millions"] for row in year_rows), 6
+                ),
                 "currency": "USD",
                 "unit": "millions",
                 "input_ids": [row["gold_id"] for row in sorted(year_rows, key=lambda row: row["period"])],
@@ -2463,6 +2644,13 @@ def observed_peak(drug_name: str, annual: list[dict[str, Any]], scope: str, geog
     maximum = max(annual, key=lambda row: row["value_reported"])
     later = [row for row in annual if row["period"] > maximum["period"]]
     observed = len(later) >= 2 and all(row["value_reported"] < maximum["value_reported"] for row in later)
+    # A year missing from inside the span (an ownership change left one of its
+    # quarters unreported) may itself have been the peak, so a maximum beside
+    # one is only the highest value either side of a hole.
+    years = sorted(int(row["period"]) for row in annual)
+    holes = set(range(years[0], years[-1] + 1)) - set(years)
+    beside_hole = bool(holes & {int(maximum["period"]) - 1, int(maximum["period"]) + 1})
+    observed = observed and not beside_hole
     return {
         "gold_id": slug(drug_name, "peak"),
         "drug_name": drug_name,
@@ -2477,7 +2665,10 @@ def observed_peak(drug_name: str, annual: list[dict[str, Any]], scope: str, geog
         "highest_observed_value": maximum["value_reported"],
         "annual_observations": len(annual),
         "post_peak_years": len(later) if observed else 0,
-        "selection_method": "independent_max_with_two_later_lower_years",
+        "selection_method": (
+            "maximum_beside_an_unreported_year" if beside_hole
+            else "independent_max_with_two_later_lower_years"
+        ),
         "input_ids": maximum["input_ids"],
         "benchmark_eligible": True,
         "numeric_peak_available": observed,
@@ -2520,7 +2711,14 @@ def build_peaks(quarterly: list[dict[str, Any]], annual: list[dict[str, Any]]) -
             continue
         peaks.append(observed_peak(drug_name, totals, meta["revenue_scope"], meta["geography"]))
 
-    for drug_name in ("Letairis", "Revatio", "Tracleer"):
+    # A product is peaked on its annual figures when those figures are its
+    # benchmark: annual rows marked peak_benchmark, and no quarterly series
+    # that can carry the peak itself.
+    annual_benchmarks = sorted(
+        {row["drug_name"] for row in annual if row["series_role"] == "peak_benchmark"}
+        - {name for name, meta in PRODUCT_METADATA.items() if meta.get("peak_eligible", True)}
+    )
+    for drug_name in annual_benchmarks:
         # Peak selection compares value_normalized_usd_millions, not the raw
         # as-reported currency: Tracleer is CHF-denominated, and a strong-franc
         # year can outrank a nominally larger CHF year once converted (e.g.
@@ -2722,12 +2920,28 @@ def coverage_rows(quarterly: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """
     rows: list[dict[str, Any]] = []
     by_drug: dict[str, set[str]] = defaultdict(set)
+    issuer_of: dict[tuple[str, str], str] = {}
     for row in quarterly:
         by_drug[row["drug_name"]].add(row["period"])
+        issuer_of[(row["drug_name"], row["period"])] = row.get("manufacturer")
     for drug_name, meta in PRODUCT_METADATA.items():
         end_quarter = series_end_quarter(meta)
         expected = quarter_range(meta["commercial_start_quarter"], end_quarter)
         observed = by_drug[drug_name]
+        # A quarter split by an ownership change, which neither owner reported
+        # in full, is a stated hole rather than a missing one: it is listed,
+        # with the documents' own reason, and does not cost the series its
+        # benchmark status. It has to sit between rows of two different
+        # issuers, so the field cannot be used to excuse an ordinary gap.
+        unreported = meta.get("unreported_quarters") or {}
+        for period, reason in unreported.items():
+            if not reason or period in observed or period not in expected:
+                raise ValueError(f"{drug_name} {period}: an unreported quarter needs a reason and must lie inside the series without a row")
+            prior = [p for p in sorted(observed) if p < period]
+            later = [p for p in sorted(observed) if p > period]
+            if not prior or not later or issuer_of.get((drug_name, prior[-1])) == issuer_of.get((drug_name, later[0])):
+                raise ValueError(f"{drug_name} {period}: an unreported quarter must separate two issuers")
+        expected = [period for period in expected if period not in unreported]
         missing = [period for period in expected if period not in observed]
         # Values after a bounded series ends are not part of its span, and
         # would silently extend a series past the point its basis changed.
@@ -2742,6 +2956,7 @@ def coverage_rows(quarterly: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "observed_quarters": len(observed & set(expected)),
             "coverage_pct": round(100 * len(observed & set(expected)) / len(expected), 1),
             "missing_quarters": missing,
+            "unreported_quarters": sorted(unreported),
             "quarters_beyond_series_end": beyond,
             "benchmark_eligible": not missing and not beyond,
         }
@@ -2795,21 +3010,27 @@ def catalog_coverage(
     at all. Reporting the excluded products alongside keeps that visible.
     """
     quarterly_products = sorted(row["drug_name"] for row in coverage)
-    excluded = sorted(row["drug_name"] for row in exclusions)
+    # An exclusion outside the seed catalog is a comparator that has no
+    # citable series. It is reported beside the catalog, never in it.
+    seed = seed_catalog()
+    all_excluded = {row["drug_name"] for row in exclusions}
+    excluded = sorted(all_excluded & seed)
     # An excluded product may still appear in ANNUAL_METADATA to supply context
     # rows - Flolan does - so it is not an annual-only benchmark. Counting it as
     # both would overstate the catalog.
-    annual_only = sorted(
-        ANNUAL_METADATA.keys() - {row["drug_name"] for row in coverage} - set(excluded)
+    # As with exclusions, an annual benchmark outside the seed catalog is a
+    # comparator, reported beside the catalog and never in it.
+    all_annual_only = (
+        ANNUAL_METADATA.keys() - {row["drug_name"] for row in coverage} - all_excluded
     )
+    annual_only = sorted(all_annual_only & seed)
     # Comparators from other therapy areas are in the dataset but not in the
     # catalog, and mixing them in would flatter the coverage percentage: three
     # products added from outside would read as three more of the twenty
     # covered. The catalog is the seed file, and the percentage is measured
     # against it.
-    seed = seed_catalog()
     comparators = sorted(
-        (set(quarterly_products) | set(annual_only)) - set(excluded) - seed
+        (set(quarterly_products) | all_annual_only | all_excluded) - seed
     )
     in_catalog = [drug for drug in quarterly_products if drug in seed]
     total = len(seed)
@@ -2818,7 +3039,9 @@ def catalog_coverage(
         "quarterly_series_products": quarterly_products,
         "comparator_products": comparators,
         "annual_only_products": annual_only,
+        "annual_only_comparator_products": sorted(all_annual_only - seed),
         "excluded_products": excluded,
+        "excluded_comparator_products": sorted(all_excluded - seed),
         "quarterly_series_pct": round(100 * len(in_catalog) / total, 1),
         "quarterly_observations": sum(row["observed_quarters"] for row in coverage),
         "bounded_series": sorted(
@@ -2904,7 +3127,7 @@ def gold_completeness(
     # is what exposed that - a tautology only shows itself when something
     # arrives that it should have excluded.
     seed_products = seed_catalog()
-    comparators = sorted((quarterly | annual_only) - seed_products)
+    comparators = sorted((quarterly | annual_only | excluded) - seed_products)
     unaccounted = sorted(seed_products - accounted)
     incomplete = sorted(row["drug_name"] for row in coverage if row["missing_quarters"])
     return {
@@ -2971,7 +3194,7 @@ def main() -> int:
         # free - and reusing them instead would silently ignore an edit to
         # those manifests, which is exactly the kind of staleness this flag
         # must not introduce.
-        rebuilt = build_yutrepia() + build_winrevair() + build_adempas() + build_opsumit() + build_tracleer() + build_letairis() + build_gilead_comparators() + build_jnj_comparators() + build_lilly_comparators()
+        rebuilt = build_yutrepia() + build_winrevair() + build_adempas() + build_opsumit() + build_tracleer() + build_letairis() + build_gilead_comparators() + build_jnj_comparators() + build_lilly_comparators() + build_researched_products()
         # Remodulin is only partly manifest-backed, so it is refreshed by
         # period rather than by dropping the whole product.
         early = build_remodulin_early()
@@ -3005,6 +3228,7 @@ def main() -> int:
                 + build_gilead_comparators()
                 + build_jnj_comparators()
                 + build_lilly_comparators()
+                + build_researched_products()
             )
             quarterly = apply_acquisition_bridges(quarterly)
         finally:
@@ -3038,6 +3262,7 @@ def main() -> int:
 
     write_jsonl(out_dir / "quarterly_revenue.jsonl", quarterly)
     write_jsonl(out_dir / "annual_revenue.jsonl", annual)
+    write_jsonl(out_dir / "companion_series.jsonl", build_companion_rows())
     write_jsonl(out_dir / "series_coverage.jsonl", coverage)
     write_jsonl(out_dir / "peak_sales.jsonl", peaks)
     write_jsonl(out_dir / "excluded_products.jsonl", exclusions)
@@ -3085,6 +3310,7 @@ def main() -> int:
         "quarterly_coverage_pct": 100.0,
         "reported_rows_file": "quarterly_revenue.jsonl",
         "annual_rows_file": "annual_revenue.jsonl",
+        "companion_rows_file": "companion_series.jsonl",
         "coverage_file": "series_coverage.jsonl",
         "peak_sales_file": "peak_sales.jsonl",
         "excluded_products_file": "excluded_products.jsonl",
