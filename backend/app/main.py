@@ -18,6 +18,8 @@ from sqlalchemy.orm import Session, selectinload
 
 from app.api.members import router as members_router
 from app.api.products import router as products_router
+from app.api.sources import SOURCE_HEADERS
+from app.api.sources import router as sources_router
 from app.config import get_settings
 from app.dashboard.series import build_dashboard_preview
 from app.db.models import (
@@ -78,10 +80,12 @@ app.add_middleware(
     allow_credentials=not _cors_star,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=list(SOURCE_HEADERS),
 )
 
 app.include_router(products_router)
 app.include_router(members_router)
+app.include_router(sources_router)
 
 job_queue = get_job_queue()
 file_store = get_file_store()

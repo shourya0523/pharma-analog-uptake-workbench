@@ -430,3 +430,43 @@ a.pill:hover { outline: 2px solid #93c5fd; }
 .pager { display: flex; align-items: center; gap: 0.75rem; margin: 0.5rem 0; }
 .filter-check { flex-direction: row; align-items: center; gap: 0.5rem; }
 .filter-check input { width: auto; }
+
+/* Review beside the document: one flagged figure at a time, its stored source on the right. */
+.review-focus { display: grid; grid-template-columns: minmax(360px, 440px) minmax(0, 1fr); gap: 1rem; padding: 1rem 1.25rem; align-items: start; }
+.rf-card { background: #fff; border: 1px solid #cbd5e1; padding: 1rem; position: sticky; top: 1rem; max-height: calc(100vh - 6rem); overflow: auto; }
+.rf-nav { display: flex; gap: 0.4rem; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; }
+.rf-nav button { padding: 0.3rem 0.6rem; font-size: 0.85rem; }
+.rf-spacer { flex: 1; }
+.rf-product { margin: 0; font-size: 1.3rem; }
+.rf-pills { display: flex; gap: 0.35rem; flex-wrap: wrap; margin: 0.5rem 0; }
+.rf-value { display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; font-size: 2rem; font-weight: 700; margin: 0.6rem 0; font-variant-numeric: tabular-nums; }
+.rf-keys { margin-top: 0.9rem; line-height: 1.8; }
+kbd { font: 600 0.7rem ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; padding: 0.05rem 0.35rem; border: 1px solid #94a3b8; border-bottom-width: 2px; background: #f8fafc; color: #334155; }
+button kbd { margin-left: 0.3rem; background: transparent; color: inherit; border-color: currentColor; opacity: 0.8; }
+
+.source-pane { background: #fff; border: 1px solid #cbd5e1; display: flex; flex-direction: column; height: calc(100vh - 6rem); position: sticky; top: 1rem; }
+.sp-bar { display: flex; gap: 0.5rem; align-items: center; padding: 0.45rem 0.6rem; border-bottom: 1px solid #e2e8f0; flex-wrap: wrap; }
+.sp-status { flex: 1; min-width: 12rem; font-size: 0.82rem; color: #334155; }
+.sp-status.ok { color: #065f46; }
+.sp-status.warn { color: #92400e; }
+.sp-find { width: 13rem; margin: 0; padding: 0.3rem 0.5rem; font-size: 0.85rem; }
+.sp-open { font-size: 0.85rem; white-space: nowrap; }
+.sp-body { flex: 1; min-height: 0; overflow: auto; background: #f1f5f9; }
+.sp-frame { width: 100%; height: 100%; border: 0; background: #fff; display: block; }
+.sp-empty { padding: 2rem 1.5rem; text-align: center; color: #475569; }
+.sp-pdf { display: flex; flex-direction: column; min-height: 100%; }
+.sp-pdfbar { display: flex; gap: 0.5rem; align-items: center; justify-content: center; padding: 0.35rem; position: sticky; top: 0; background: #f1f5f9; z-index: 1; }
+.sp-pdfbar button { padding: 0.25rem 0.6rem; font-size: 0.8rem; }
+.sp-pages { padding: 0.75rem; display: flex; justify-content: center; }
+.sp-page { position: relative; background: #fff; box-shadow: 0 1px 3px rgba(15, 23, 42, 0.2); }
+.sp-hl { position: absolute; pointer-events: none; }
+.sp-hl.fig { background: rgba(253, 230, 138, 0.55); outline: 2px solid #b45309; }
+.sp-hl.label { background: rgba(147, 197, 253, 0.35); }
+.sp-hl.row { outline: 2px solid #1d4ed8; }
+.sp-hl.find { background: rgba(251, 146, 60, 0.35); }
+
+@media (max-width: 1000px) {
+  .review-focus { grid-template-columns: 1fr; }
+  .rf-card, .source-pane { position: static; max-height: none; }
+  .source-pane { height: 70vh; }
+}

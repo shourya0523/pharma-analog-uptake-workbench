@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useSearchParams } from 'react-router-dom'
 import { api, type ReviewGroup, type ReviewItem } from '../api/client'
+import ReviewFocus from '../review/ReviewFocus'
 
 const PAGE_SIZE = 50
 
@@ -13,6 +14,9 @@ export default function ReviewQueuePage() {
   const [reason, setReason] = useState('')
   const [offset, setOffset] = useState(0)
   const [expanded, setExpanded] = useState<Record<string, boolean>>({})
+  // The flagged figures being worked one by one, fixed when the mode opens:
+  // the queue refetches after each decision and would drop them mid-walk.
+  const [focus, setFocus] = useState<{ items: ReviewItem[]; start: number } | null>(null)
 
   const q = useQuery({
     queryKey: ['review-queue', productId, itemType, reason, offset],
@@ -45,6 +49,22 @@ export default function ReviewQueuePage() {
 
   if (q.isLoading) return <div className="page">Loading review queue…</div>
   if (q.error) return <div className="page error">{(q.error as Error).message}</div>
+
+  const flaggedOnPage = groups.flatMap((g) => g.items).filter((i) => i.type === 'flagged' && i.datapoint_id)
+  const openFocus = (itemId?: string) =>
+    setFocus({ items: flaggedOnPage, start: Math.max(0, flaggedOnPage.findIndex((i) => i.id === itemId)) })
+
+  if (focus) {
+    return (
+      <ReviewFocus
+        items={focus.items}
+        start={focus.start}
+        help={q.data?.reason_help || {}}
+        onClose={() => setFocus(null)}
+        onResolved={invalidate}
+      />
+    )
+  }
 
   return (
     <div className="dash-layout">
@@ -127,6 +147,11 @@ export default function ReviewQueuePage() {
               Reasons come from the pipeline's own validation pass.
             </p>
           </div>
+          {flaggedOnPage.length > 0 && (
+            <button onClick={() => openFocus()}>
+              Review {flaggedOnPage.length} flagged with their documents
+            </button>
+          )}
           <Pager
             from={groupsTotal ? offset + 1 : 0}
             to={pageEnd}
@@ -144,6 +169,7 @@ export default function ReviewQueuePage() {
             expanded={expanded}
             onToggle={(id) => setExpanded({ ...expanded, [id]: !expanded[id] })}
             onResolved={invalidate}
+            onFocus={openFocus}
           />
         ))}
 
@@ -202,12 +228,14 @@ function QueueGroup({
   expanded,
   onToggle,
   onResolved,
+  onFocus,
 }: {
   group: ReviewGroup
   help: Record<string, string>
   expanded: Record<string, boolean>
   onToggle: (id: string) => void
   onResolved: () => void
+  onFocus: (itemId: string) => void
 }) {
   const single = group.items.length === 1
   return (
@@ -232,6 +260,7 @@ function QueueGroup({
           expanded={!!expanded[item.id]}
           onToggle={() => onToggle(item.id)}
           onResolved={onResolved}
+          onFocus={() => onFocus(item.id)}
         />
       ))}
     </section>
@@ -244,6 +273,7 @@ function QueueItem({
   expanded,
   onToggle,
   onResolved,
+  onFocus,
 }: {
   item: ReviewItem
   /** Why it is in the queue, in the words of the stage that put it there. */
@@ -251,6 +281,8 @@ function QueueItem({
   expanded: boolean
   onToggle: () => void
   onResolved: () => void
+  /** Open this figure beside its source document. */
+  onFocus: () => void
 }) {
   const isFlagged = item.type === 'flagged'
   const [editing, setEditing] = useState(false)
@@ -361,6 +393,9 @@ function QueueItem({
             <div className="actions">
               {isFlagged ? (
                 <>
+                  {item.datapoint_id && (
+                    <button onClick={onFocus}>Review beside the document</button>
+                  )}
                   <button disabled={pending} onClick={() => flaggedAction.mutate('confirm')}>
                     Confirm as-is
                   </button>
