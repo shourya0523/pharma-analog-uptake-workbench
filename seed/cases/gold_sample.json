@@ -775,6 +775,41 @@
   ]
  },
  {
+  "drug_name": "Avonex",
+  "manufacturer": "Biogen, Inc.",
+  "ticker": null,
+  "generic_name": "interferon beta-1a",
+  "options": {
+   "earnings_since": "2002-04-05",
+   "earnings_until": "2003-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2002Q1",
+    "value_normalized_usd_millions": 265.985,
+    "gold_id": "biogen-avonex-worldwide-reported-2002q1"
+   },
+   {
+    "period": "2002Q2",
+    "value_normalized_usd_millions": 250.542,
+    "gold_id": "biogen-avonex-worldwide-reported-2002q2"
+   },
+   {
+    "period": "2002Q3",
+    "value_normalized_usd_millions": 261.563,
+    "gold_id": "biogen-avonex-worldwide-reported-2002q3"
+   },
+   {
+    "period": "2002Q4",
+    "value_normalized_usd_millions": 256.267,
+    "gold_id": "biogen-avonex-worldwide-reported-2002q4"
+   }
+  ]
+ },
+ {
   "drug_name": "Eloctate",
   "manufacturer": "Bioverativ",
   "ticker": null,
@@ -2220,6 +2255,31 @@
   ]
  },
  {
+  "drug_name": "Yupelri",
+  "manufacturer": "Theravance Biopharma",
+  "ticker": "TBPH",
+  "generic_name": "revefenacin",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 62.43,
+    "gold_id": "theravance-yupelri-us-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 70.666,
+    "gold_id": "theravance-yupelri-us-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Tyvaso DPI",
   "manufacturer": "United Therapeutics",
   "ticker": "UTHR",
@@ -2381,25 +2441,25 @@
     "period": "2025Q1",
     "value_normalized_usd_millions": null,
     "gold_id": "akeega-excluded",
-    "why": "aggregated_with_other_products: J&J, the only company that sells Akeega (niraparib/abiraterone acetate, approved by FDA in 2023), lists no Akeega line in its most detailed product tables. Measured: AKEEGA occurs once in the FY2025 10-K (a pipeline/approvals table) and not at all in the 2Q26 10-Q; it occurs in none of the 50 quarterly sales-schedule PDFs 2015Q3-2026Q2, including the 2025-2026 schedules whose footnote marks brands moved out of Other Oncology (Rybrevant, Lazcluze, Talvey); and no partner or royalty holder prints its net sales (Bigdata.com search 'Akeega niraparib abiraterone sales revenue' returned only J&J regulatory press-release lists). Annual-only reporting was also checked: the 10-K carries no Akeega figure."
+    "why": "aggregated_with_other_products: J&J, sole marketer of Akeega (FDA August 2023), never prints an Akeega sales figure. Its most detailed product tables - the quarterly sales schedules and the 10-Q/10-K Innovative Medicine sales-by-product tables - name the larger oncology brands and fold the rest into 'Other Oncology'; AKEEGA appears in them only in regulatory-approval text. No isolated figure exists (no quarter, no year, no prose). No licensor or royalty holder printing its net sales was found."
    },
    {
     "period": "2025Q2",
     "value_normalized_usd_millions": null,
     "gold_id": "akeega-excluded",
-    "why": "aggregated_with_other_products: J&J, the only company that sells Akeega (niraparib/abiraterone acetate, approved by FDA in 2023), lists no Akeega line in its most detailed product tables. Measured: AKEEGA occurs once in the FY2025 10-K (a pipeline/approvals table) and not at all in the 2Q26 10-Q; it occurs in none of the 50 quarterly sales-schedule PDFs 2015Q3-2026Q2, including the 2025-2026 schedules whose footnote marks brands moved out of Other Oncology (Rybrevant, Lazcluze, Talvey); and no partner or royalty holder prints its net sales (Bigdata.com search 'Akeega niraparib abiraterone sales revenue' returned only J&J regulatory press-release lists). Annual-only reporting was also checked: the 10-K carries no Akeega figure."
+    "why": "aggregated_with_other_products: J&J, sole marketer of Akeega (FDA August 2023), never prints an Akeega sales figure. Its most detailed product tables - the quarterly sales schedules and the 10-Q/10-K Innovative Medicine sales-by-product tables - name the larger oncology brands and fold the rest into 'Other Oncology'; AKEEGA appears in them only in regulatory-approval text. No isolated figure exists (no quarter, no year, no prose). No licensor or royalty holder printing its net sales was found."
    },
    {
     "period": "2025Q3",
     "value_normalized_usd_millions": null,
     "gold_id": "akeega-excluded",
-    "why": "aggregated_with_other_products: J&J, the only company that sells Akeega (niraparib/abiraterone acetate, approved by FDA in 2023), lists no Akeega line in its most detailed product tables. Measured: AKEEGA occurs once in the FY2025 10-K (a pipeline/approvals table) and not at all in the 2Q26 10-Q; it occurs in none of the 50 quarterly sales-schedule PDFs 2015Q3-2026Q2, including the 2025-2026 schedules whose footnote marks brands moved out of Other Oncology (Rybrevant, Lazcluze, Talvey); and no partner or royalty holder prints its net sales (Bigdata.com search 'Akeega niraparib abiraterone sales revenue' returned only J&J regulatory press-release lists). Annual-only reporting was also checked: the 10-K carries no Akeega figure."
+    "why": "aggregated_with_other_products: J&J, sole marketer of Akeega (FDA August 2023), never prints an Akeega sales figure. Its most detailed product tables - the quarterly sales schedules and the 10-Q/10-K Innovative Medicine sales-by-product tables - name the larger oncology brands and fold the rest into 'Other Oncology'; AKEEGA appears in them only in regulatory-approval text. No isolated figure exists (no quarter, no year, no prose). No licensor or royalty holder printing its net sales was found."
    },
    {
     "period": "2025Q4",
     "value_normalized_usd_millions": null,
     "gold_id": "akeega-excluded",
-    "why": "aggregated_with_other_products: J&J, the only company that sells Akeega (niraparib/abiraterone acetate, approved by FDA in 2023), lists no Akeega line in its most detailed product tables. Measured: AKEEGA occurs once in the FY2025 10-K (a pipeline/approvals table) and not at all in the 2Q26 10-Q; it occurs in none of the 50 quarterly sales-schedule PDFs 2015Q3-2026Q2, including the 2025-2026 schedules whose footnote marks brands moved out of Other Oncology (Rybrevant, Lazcluze, Talvey); and no partner or royalty holder prints its net sales (Bigdata.com search 'Akeega niraparib abiraterone sales revenue' returned only J&J regulatory press-release lists). Annual-only reporting was also checked: the 10-K carries no Akeega figure."
+    "why": "aggregated_with_other_products: J&J, sole marketer of Akeega (FDA August 2023), never prints an Akeega sales figure. Its most detailed product tables - the quarterly sales schedules and the 10-Q/10-K Innovative Medicine sales-by-product tables - name the larger oncology brands and fold the rest into 'Other Oncology'; AKEEGA appears in them only in regulatory-approval text. No isolated figure exists (no quarter, no year, no prose). No licensor or royalty holder printing its net sales was found."
    }
   ]
  }

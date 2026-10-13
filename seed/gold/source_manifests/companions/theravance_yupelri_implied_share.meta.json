@@ -1,0 +1,15 @@
+{
+  "drug_name": "Yupelri",
+  "line_label": "Share of Total YUPELRI Net Sales",
+  "issuer": "Theravance Biopharma",
+  "benchmark_identity": "theravance_yupelri_implied_share",
+  "revenue_scope": "Theravance Biopharma's implied 35% share of total U.S. YUPELRI net sales recognized by Mylan/Viatris",
+  "geography": "United States",
+  "why_separate": "This is Theravance's 35% share, not total product sales; the gold series theravance_yupelri carries printed totals from 2019Q2. The share is the only line printed for 2019Q1 and the only line Theravance printed for 2019-2022 in its filings at the time.",
+  "notes": "Values as printed, in thousands, not divided by 0.35. 2019 quarters come from the FY2020 10-K's prior-year row (the FY2019 10-K has no such table); 2020 and 2021 from each year's own 10-K. The same figures appear as current-quarter share sentences in the Q3 2020-Q4 2021 releases (e.g. Q3 2020 'approximately $13.0 million'). 2019Q1 = $1 thousand.",
+  "search_log": [
+    "Read the 'Share of Total YUPELRI Net Sales' quarterly tables in the FY2020 10-K (0001558370-21-002006) and FY2021 10-K (0001558370-22-002373); the FY2019 10-K (0001558370-20-001644) has none.",
+    "Checked the Q3 2020 to Q4 2021 releases' share sentences against the tables (13.0, 13.6, 12.9, 14.6, 13.8, 15.3 million): all agree.",
+    "Q3 2020 10-Q prints the 2019 Q3 and nine-month shares ($5.8 million and $8.9 million), consistent with 1+3,184+5,763."
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "drug_name": "Ilumya",
+  "generic_name": "tildrakizumab",
+  "manufacturer": "Almirall",
+  "benchmark_identity": "almirall_ilumya_europe_reported",
+  "therapeutic_area": "Immunology / Inflammation",
+  "indication_area": "Immunology (plaque psoriasis)",
+  "revenue_scope": "Europe - Almirall's Ilumetri net sales, the ex-U.S. partner scope of Ilumya, not Sun Pharma's sales",
+  "geography": "Europe",
+  "formulation": "injection (prefilled syringe)",
+  "route_of_administration": "subcutaneous",
+  "moa": "IL-23 p19 inhibitor",
+  "moa_class": "il23_p19_inhibitor",
+  "first_approval_year": 2018,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761067",
+    "quote": "03/20/2018 ORIG-1 Approval"
+  },
+  "launch_quarter": "2018Q4",
+  "launch_evidence": {
+    "url": "https://blob.almirall.com/files/documents/190225_FY%20Results_ENG4153005.pdf",
+    "quote": "Almirall started to market ILUMETRI\u00ae in Germany on 15th November, the first country to launch"
+  },
+  "commercial_start_quarter": "2019Q1",
+  "series_start_reason": "Almirall launched Ilumetri in Germany on 15 November 2018 (FY 2018 results). No 2018 Ilumetri figure is printed: the FY 2018 release has no product table and the FY 2019 report prints FY 2018 Ilumetri as 0, so the series starts with Q1 2019, the first quarter whose report prints a figure (3).",
+  "series_end_quarter": "2026Q2",
+  "series_end_basis": "sourcing_boundary",
+  "series_end_reason": "Latest published quarter at sourcing time (H1 2026 results presentation, July 2026).",
+  "notes": "This series is the ex-U.S. partner scope of Ilumya: Almirall's European net sales of Ilumetri (tildrakizumab), the brand it in-licenses from Sun Pharma for Europe. Every figure is the 'Ilumetri' row printed under the Europe heading of Almirall's 'Dermatology sales breakdown' table; Almirall prints no U.S. or RoW Ilumetri row. Almirall reports year-to-date (Q1, H1, 9M, FY); except where a quarter column is printed (Q3 2020, Q4 2020, and the Q3 2019 prior-year column of the 9M 2020 report), quarters are year-to-date differences, each with both inputs quoted. 2019 and Q1-Q3 2020 figures are printed as integers; because of that rounding the four 2020 quarters sum to 44.4 against the printed full year of 43.9 (later restatements in the 2021 reports: Q1 2020 8.9, H1 2020 17.8), and the derived Q4 2019 (7) differs from the 6.4 that the FY 2020 report prints for Q4 2019. All other years' quarters sum exactly to the printed full year. Sun Pharma, the licensor and U.S. marketer, does not print Ilumya in any quarterly table; its annual reports print only a 'global Ilumya sales' prose figure for some fiscal years (April-March): US$ 315 million FY2021-22 (Annual Report 2021-22), US$ 477 million FY2022-23 (Annual Report 2022-23), US$ 580 million FY2023-24 (Annual Report 2023-24); the 2024-25 report gives no figure and the 2025-26 report gives only growth (16.7%). Sun's figure excludes partners' in-market sales (stated on its FY24 earnings call, not citable), so it and this series are disjoint scopes and are not spliced. Sun's annual figures were not built into a series because FY2024-25 is not printed, which would leave a gap.",
+  "search_log": [
+    "Almirall IR: the results page is rendered client-side; the Azure blob container behind blob.almirall.com/files is listable (restype=container&comp=list), which gave the file names of every quarterly 'Financial Results & Business Update' presentation from Q1 2019 to H1 2026 (listing stopped after 10,000 of more names when the host refused further pages; no needed quarter was missing).",
+    "Downloaded 32 Almirall documents (FY 2018 results release and 2018 share release, Q1/H1/9M/FY presentations 2019-2026, the 9M 2019 and 9M 2021 press releases) and read every Ilumetri line with pdfplumber, the same extractor the verifier uses.",
+    "Ilumetri row found in the 'Dermatology sales breakdown' appendix of every presentation from Q1 2019; it sits under the Europe heading in every table read.",
+    "9M 2019 and 9M 2021 were published as press releases without product tables: 9M 2019 prose gives 'EUR 13 MM of net sales during the first nine months of 2019'; 9M 2021 prose says only 'Net Sales of over EUR 20MM during Q3'. Q3 2019 is therefore read from the prior-year quarter column of the 9M 2020 report (5), and 9M 2021 (56.8) from the prior-year column of the 9M 2022 report.",
+    "FY 2018: the FY 2018 results release dates the German launch (15 November 2018) but prints no Ilumetri sales; the FY 2019 report's prior-year column prints 0.",
+    "Cross-check: the H1 2025 presentation's quarterly Ilumetri bar chart (42 42 44 49 52 52 56 55 58 for Q2 2023-Q2 2025) matches the derived quarters 42.4, 41.8, 44.2, 48.9, 51.6, 52.0, 56.3, 55.1, 58.2.",
+    "Sun Pharma (rung a/b): the Q1 FY27 press release and presentation name Ilumya only as a growth driver of 'Global Innovative Medicines'; Q4 FY25 press release has no Ilumya sales figure. Annual reports 2021-22 to 2025-26 read: global Ilumya prose figures as listed in notes; no quarterly Ilumya figure in any Sun document read.",
+    "Other partners (rung c): Hikma (MENA licence) and Sun's China partner were not searched in this pass; Almirall was taken as the partner that prints the brand."
+  ]
+}

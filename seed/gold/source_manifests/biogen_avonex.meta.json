@@ -1,0 +1,67 @@
+{
+  "drug_name": "Avonex",
+  "generic_name": "interferon beta-1a",
+  "manufacturer": "Biogen",
+  "benchmark_identity": "biogen_avonex_worldwide_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Multiple sclerosis (relapsing forms)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection (solution, intramuscular)",
+  "route_of_administration": "intramuscular",
+  "moa": "Interferon beta-1a; type I interferon receptor agonist",
+  "moa_class": "interferon_beta",
+  "first_approval_year": 1996,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/nda/2014/125499Orig1s000SumR.pdf",
+    "quote": "Avonex was initially approved in 1996. It is one of the primary treatments for MS with extensive clinical use."
+  },
+  "launch_quarter": "1996Q2",
+  "commercial_start_quarter": "1996Q2",
+  "series_start_reason": "1996Q2 is the launch quarter and the first quarter any document prints the line: Biogen, Inc. (CIK 714655) began selling AVONEX in the U.S. in May 1996, and its second-quarter 1996 10-Q prints Product revenue of 6,125 thousand for the quarter (with -- for 1995), described in the MD&A as the first six weeks of AVONEX sales; the first-quarter 1996 10-Q (accession 0000714655-96-000012) has no product revenue line. 1996Q2-2002Q4 are Biogen, Inc.'s own reported quarters (10-Q for Q1-Q3, the 10-K Quarterly Financial Data note for Q4). Biogen, Inc.'s product revenue was AVONEX alone through 2002; from 2003 it includes AMEVIVE (approved January 2003), so 2003Q1-2003Q4 are taken from the successor registrant (CIK 875045), whose 2004 releases print an AVONEX-only line with the former Biogen, Inc. pre-merger figure in the 2003 columns. 2004Q1 onward are the successor's own GAAP quarters.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Worldwide AVONEX sales throughout. 1996Q2-2002Q4 are Biogen, Inc.'s (CIK 714655) income-statement product revenue line ('Product', 'Product sales' or, in the 10-K quarterly note, 'Product revenue'), USD thousands; Biogen, Inc. had no other marketed product before 2003 (10-Qs 1999-2002: 'The Company currently derives product revenues from sales of its AVONEX product'; 2003Q2 10-Q: 'All product revenue in 2002 related to AVONEX'), and the line includes ex-U.S. sales from the 1997 EU launch (10-K text: about 99%, 92%, 77%, 71% and 73% of AVONEX sales were U.S. in 1996-2000; the 2002 10-K segment note prints product revenue from external customers in US, Europe, Asia and Other columns (2002: 743,419 / 275,657 / \u2014 / 15,281, total 1,034,357)). The 10-K text gives AVONEX revenues of $240.0 million (1997), $394.9 million (1998), $620.6 million (1999), $761.1 million (2000) and about $1,034.4 million (2002), matching the line's full years; for 1996 see reviewed_anomalies. Each Biogen, Inc. Q4 is the fourth-quarter column of the Quarterly Financial Data (unaudited) note in that year's annual report (10-K Exhibit 13); its Q1-Q3 columns equal the 10-Qs in every year. Issuer 'Biogen, Inc.' is the pre-merger company (CIK 714655, later Biogen Idec MA Inc.); issuer 'Biogen' is CIK 875045 (IDEC Pharmaceuticals, Biogen Idec Inc. from November 2003, Biogen Inc. from 2015). The 2001 10-K on EDGAR is accession 0000950135-03-001532 (filed as of 2002-03-29, accepted 2003-03-03) and prints the 2001 quarters as originally reported. From 2004Q1: Worldwide total as printed (U.S. plus outside-U.S.): the 2004Q1 and 2005Q1 release texts give U.S. and international Avonex sales that sum to the table total, and from 2020Q4 the release prints U.S., Rest of World and Total columns, of which the Total is used. Figures are thousands of USD in the releases through 2014Q3 and millions from 2014Q4. 2003Q1-2003Q4 are pro forma combined (former Biogen, Inc. plus the registrant); 2004Q1 onward are the registrant's U.S. GAAP quarters. Quarters were not adjusted for shipping weeks or inventory changes that the releases narrate. Two quarters have a same-day 8-K/A with the same Avonex figures (2010Q4, 2012Q2); the original 8-K is cited.",
+  "search_log": [
+    "Took the Biogen (CIK 0000875045) quarterly earnings release list (2013Q2-2026Q2, 53 documents) from the Tecfidera manifest in seed/gold/source_manifests, the same Exhibit 99.1 press releases the existing Biogen manifests cite; fetched all 53 and parsed the PRODUCT REVENUES table rows for AVONEX, TYSABRI and PLEGRIDY with the verifier's own extractor logic.",
+    "Each quarter's value is the current-quarter figure in that quarter's own release (derivation direct_reported). From 2020Q4 the release prints U.S., Rest of World and Total for each product; the Total (third) figure is the worldwide value recorded. The verifier cannot detect a U.S.-for-Total swap because the U.S. figure is also printed on the same line, so this was checked by hand against the Total column and the FY sums below.",
+    "Annual cross-check: sum of four quarters against the full-year row printed in each Q4 release, 2014-2025: within 1.0 million USD in every year (differences are integer rounding of the 2016-2019 whole-million releases), except that 2014 for PLEGRIDY is not checked (FY2014 44.5 = 3.382 (Q3) + 41.1 (Q4) per the 2014Q4 release).",
+    "Bigdata.com: one smart search for the PLEGRIDY U.S. launch returned no results with its filing filters; the launch and scope wording was read from the release text itself (grep of each release document).",
+    "FDA: web search located accessdata.fda.gov pages; the Tysabri label, the Plegridy label and the Avonex summary review were fetched and the approval-year text confirmed in the PDF text layer.",
+    "Re-sourcing to the earliest quarter: listed every 8-K with item 2.02 (and 8-K/A) for CIK 875045 from data.sec.gov submissions (current file plus CIK0000875045-submissions-001.json) filed before 2013-09-01; the list begins 2004-10-27. Fetched the exhibit of each (2004-10-27 through 2013-01-28) and read the Avonex row of the first Product Revenues table; the 2013Q1 release is accession 0000875045-13-000016 (q12013pressrelease.htm), which prints 746,098 with 661,620 for the year-earlier quarter.",
+    "Releases before the 2.02 list: listed all 8-Ks of CIK 875045 filed before 2004-11 (items 12, 5, 7, 9). The fourth-quarter 2003 releases (2004-02-13, accession 0000950135-04-000740, and 2004-03-04, accession 0000950135-04-001111) print Avonex 142,603 / 167,513 / 310,116 for 2003 and 256,267 for 2002Q4; the first-quarter 2004 release (2004-04-30) and the second- and third-quarter 2004 releases print the 2003 pre-merger and pro forma combined quarters (274,357; 286,276; 297,728). 2003 quarters sum to 1,168,477, the 2003 pro forma full-year Avonex figure printed in the same year-end release. The 2003-10-14 8-K of this CIK is IDEC Pharmaceuticals' own third-quarter 2003 release (no Avonex line); the registrant was IDEC until the November 2003 merger. The 2003-04-15 and 2003-07-17 8-Ks of this CIK could not be fetched (SEC rate limit) and were not read.",
+    "Predecessor: CIK 714655 (Biogen, Inc., later Biogen Idec MA Inc) filings 1994-2003 were downloaded (10-K, 10-Q, 8-K). Their income statements carry a 'Product' / 'Product sales' line (which includes other products from 2003) and Avonex-specific figures only in prose (rounded, or ex-U.S. only in 1998-1999), so no Avonex-named line of consistent scope runs before 2002Q4; the series was not extended into those filings.",
+    "Fiscal-year cross-check of the new quarters against the full-year Avonex row of each Q4 release: 2004 sums to 1,417,157; 2005 to 1,543,084 against 1,543,085 printed; 2006 to 1,706,718 against 1,706,719; 2007 to 1,867,842; 2008 to 2,202,533; 2009 to 2,322,894; 2010 to 2,518,356; 2011 to 2,686,624; 2012 to 2,913,098 against 2,913,105 printed (the 2013Q1 release restates 2012Q1 from 661,613 to 661,620, which accounts for the 7 thousand).",
+    "Extension (opus): listed CIK 714655 submissions (data.sec.gov, 249 filings, no older-filings file) and downloaded every 10-Q, 10-Q/A, 10-K, 10-K/A and 8-K filed 1996-04 to 2003-10 (63 filings, full submission .txt). The filter was form in 10-Q, 10-Q/A, 10-K, 10-K/A, 8-K; no 8-K/A exists for this CIK in that window.",
+    "Read the Revenues block of each 10-Q income statement: 1996Q1 10-Q has no product line; 1996Q2 Product 6,125; 1996Q3 Product sales 27,517; each later 10-Q through 2003Q3 prints the line. Read the Quarterly Financial Data (unaudited) note of each 10-K Exhibit 13 for 1996-2002 for the fourth quarter.",
+    "Scope check by year: grepped every 10-Q/10-K for 'derives product revenues' and 'Revenues from sales of AVONEX'. 1999Q1-2002Q3 10-Qs say product revenue is AVONEX; 2003 10-Qs say 'primarily' AVONEX plus AMEVIVE, and print AVONEX only in prose ($286.3M 2003Q2, $297.7M 2003Q3; nothing for 2003Q1), so Biogen, Inc.'s 2003 Product line was not used.",
+    "1996 product revenue vs AVONEX: 1996 10-K and 1997 10-K text give approximately $76.5 million of 1996 AVONEX revenue against 78,202 Product; searched all 1996-1998 filings for 42.9 / 42,9xx / 1.7 million product items and an explanation; none found. Bigdata.com smart search for Biogen Inc. AVONEX fourth quarter 1996 sales returned no results.",
+    "Restatement check: 2002 10-Qs and 2002 10-K reprint 2001 quarters lower after EITF 01-09 (2002Q2 10-Q text). Each quarter kept from the document that reports it as current.",
+    "2002Q4 re-sourced from Biogen, Inc.'s 2002 10-K Exhibit 13 quarterly note (256,267, the same figure as the successor's prior-year pro forma column that the staged series cited).",
+    "Verifier on the extended series: 121 rows, 121 pass, no series problems. Annual sums 1997-2002 equal the 10-K total-year column exactly."
+  ],
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/714655/0000950135-97-000902.txt",
+    "quote": "Biogen began selling AVONEX(TM) in the United States in May 1996, upon receipt of a product license from the United States Food and Drug Administration (\"FDA\")."
+  },
+  "joined_issuers": [
+    {
+      "issuer": "Biogen, Inc.",
+      "first_quarter": "1996Q2",
+      "last_quarter": "2002Q4"
+    },
+    {
+      "issuer": "Biogen",
+      "first_quarter": "2003Q1",
+      "last_quarter": "2026Q2"
+    }
+  ],
+  "reviewed_anomalies": {
+    "1996Q4": "Biogen, Inc.'s 1996 10-K prints Product revenue 44,560 thousand for the fourth quarter (78,202 for the year) but states twice that 1996 AVONEX revenues were approximately $76.5 million; the 1996Q2 and 1996Q3 10-Qs put AVONEX at $6.1 and $33.6 million (quarter and nine months), equal to the product line. About $1.7 million of 1996Q4 product revenue is therefore not identified as AVONEX, and no document read (1996 10-K, 1997 and 1998 10-Ks, 1997 10-Qs) says what it is. The figure as printed is kept; the AVONEX-only quarter would be about 42.9.",
+    "2002Q2": "250,542 after 265,985 in 2002Q1: a decline read at source in the 2002Q2 10-Q (and in the 2002 10-K quarterly note, which prints the same four quarters).",
+    "2003Q1": "2002 and earlier are Biogen, Inc.'s own figures; 2003Q1-2003Q3 are the AVONEX-only pre-merger Biogen, Inc. figures as reprinted in the successor's 2004 releases, because Biogen, Inc.'s own 2003 10-Q Product line includes AMEVIVE (278,177 in 2003Q1 against 274,357 AVONEX). Biogen, Inc.'s 2003Q2 and 2003Q3 10-Qs state AVONEX product revenues of $286.3 and $297.7 million, agreeing with 286,276 and 297,728.",
+    "2003Q4": "Pro forma combined: 142,603 successor GAAP from the November 13, 2003 merger plus 167,513 former Biogen, Inc. pre-merger revenue = 310,116. The 2003 four quarters (1,168,477) equal the pro forma full-year AVONEX figure printed in the 2003 year-end release.",
+    "2001Q1": "Biogen, Inc.'s 2001 quarters are as originally reported. From 2002 Biogen, Inc. adopted EITF 01-09 (certain vendor consideration reclassified from expense to a reduction of revenue, 'not significant') and its 2002 filings reprint 2001 as 219,997 / 243,140 / 248,107 / 259,302 (970,546) against the original 219,997 / 243,217 / 249,203 / 259,177 (971,594); the 2002 10-K also reprints 2000 at 760,292 against 761,079."
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "drug_name": "Yupelri",
+  "line_label": "Yupelri",
+  "issuer": "Viatris",
+  "benchmark_identity": "viatris_yupelri_consolidated",
+  "revenue_scope": "Viatris consolidated Yupelri net sales (Key Product Net Sales, on a Consolidated Basis)",
+  "geography": "Viatris consolidated (all territories where Viatris books Yupelri; U.S. only before ex-U.S. launches)",
+  "why_separate": "Viatris's consolidated line differs slightly from Theravance's 'U.S. net sales recognized by Viatris' line from 2022Q4 (56.0 vs 55.700; 2023Q4 60.5 vs 60.644; 2025Q2 66.6 vs 66.330), so it is not joined to the gold series theravance_yupelri, which keeps one issuer and one U.S. scope from 2019Q2.",
+  "notes": "Printed by Viatris from its first product table as Viatris (Q1 2021 release); Mylan N.V. printed no YUPELRI figure for 2019-2020. 2021 quarters equal Theravance's retrospective chart (36.9, 41.8, 39.4, 43.8). The cause of the post-2022Q3 differences is not stated in either issuer's documents; Theravance began recognizing non-U.S. YUPELRI royalties in Q4 2022, which is consistent with but does not prove an ex-U.S. component.",
+  "search_log": [
+    "Listed Viatris (CIK 0001792044) filings via data.sec.gov; fetched every Item 2.02 8-K exhibit 2021-01 to 2026-10 and every 10-K/10-Q 2020-2023; extracted the Yupelri row from each 'Key Product Net Sales, on a Consolidated Basis' table.",
+    "2020 10-K/10-Qs (filed under CIK 1792044 before and after the November 2020 combination) print no Yupelri figure; the FY2020 10-K mentions YUPELRI only in narrative.",
+    "Year checks: 36.9+41.8+39.4+43.8 = 161.9 (FY2021 printed 161.9); 2022 sum 202.2 vs 202.1; 2023 sum 220.8; 2024 sum 238.5; 2025 sum 266.9."
+  ]
+}

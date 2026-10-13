@@ -1,0 +1,41 @@
+{
+  "drug_name": "Yupelri",
+  "generic_name": "revefenacin",
+  "manufacturer": "Theravance Biopharma",
+  "benchmark_identity": "theravance_yupelri_us_reported",
+  "therapeutic_area": "Respiratory / Allergy",
+  "indication_area": "Respiratory (COPD)",
+  "revenue_scope": "Total U.S. YUPELRI net sales recognized by the commercial partner (Mylan N.V., then Viatris), as printed by Theravance Biopharma: 2019Q2-2021Q4 from Theravance's retrospective quarterly chart 'Total YUPELRI Net Sales ($M)' (Q4 2023 earnings presentation), 2022Q1-Q4 from the prior-year columns of the 2023 releases' 'YUPELRI net sales (100% recorded by Viatris)' row, 2023Q1 onward from each quarter's own release. Theravance books only a 35% share as collaboration revenue; that share line is the companion theravance_yupelri_implied_share.",
+  "geography": "United States",
+  "formulation": "inhalation solution (nebulized)",
+  "route_of_administration": "inhaled",
+  "moa": "long-acting muscarinic antagonist (LAMA), nebulized once-daily",
+  "moa_class": "lama",
+  "first_approval_year": 2018,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2018/210598s000lbl.pdf",
+    "quote": "YUPELRI (revefenacin) inhalation solution ... Initial U.S. Approval: 2018"
+  },
+  "launch_quarter": "2019Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1583107/000155837020001644/tbph-20191231x10kc43919.htm",
+    "quote": "In the first quarter of 2019, we formally launched our commercial sales and marketing efforts for YUPELRI with our partner Mylan N.V."
+  },
+  "commercial_start_quarter": "2019Q2",
+  "series_start_reason": "Series starts at 2019Q2, the first quarter for which any issuer document prints total YUPELRI net sales: Theravance's quarterly chart 'Total YUPELRI Net Sales ($M)' begins at Q2'19 (first printed in the Q3 2023 earnings presentation, 8-K 0001104659-23-115296 Exhibit 99.2, and repeated in the Q4 2023 presentation cited here, 0001104659-24-027510 Exhibit 99.2). For 2019Q1 every issuer document prints only Theravance's implied 35% share ($1 thousand, FY2020 10-K quarterly table), which is in the companion file; no total for 2019Q1 is printed anywhere checked. Mylan printed no YUPELRI sales figure in any 2019-2020 10-K/10-Q, and Viatris's product table begins with 2021Q1.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Seller of record is Mylan N.V. (Viatris from November 2020), which books YUPELRI net sales; Theravance co-promotes under a 65%/35% U.S. profit-and-loss share and books its share as collaboration revenue. Every row is a printed total: 2019Q2-2021Q4 direct_retrospective_table (Theravance chart, $0.1 million), 2022Q1-Q4 direct_prior_year_column (2023 release tables, thousands), 2023Q1-2026Q2 direct_reported (each quarter's own release table, thousands). No row is computed from the 35% share. Cross-checks: the chart bars equal Theravance's printed implied 35% share divided by 0.35 to the printed $0.1 million for all 11 quarters (e.g. 3,184/0.35=9,097 vs 9.1; 15,344/0.35=43,840 vs 43.8); Viatris's own as-current 'Select Key Segment Products' figures (Viatris releases, USD millions) match the chart for 2021Q1-Q4 (36.9, 41.8, 39.4, 43.8; Viatris FY2021 161.9 = sum of the four chart quarters) and the 2022Q1-Q3 Theravance totals to rounding (43.7, 49.1, 53.4). Viatris's line diverges slightly from Theravance's 'U.S. net sales' line from 2022Q4 (Viatris 56.0 vs Theravance 55.700; 2023Q4 60.5 vs 60.644; 2025Q2 66.6 vs 66.330; FY2025 266.9 vs 266.6), so the two are not joined; Viatris's consolidated line 2021Q1-2026Q2 is the companion viatris_yupelri_consolidated. Isolated as-current totals in Theravance decks: 'Q3 2021 net sales of $ 39 million' (Jan 2022 investor deck, 0001104659-22-002405) and 'Q4 2021 net sales of $44 million' (Q4 2021 earnings deck, 0001104659-22-026089 Ex 99.2), both consistent with the chart. Mylan's FY2019 10-K says YUPELRI 'was launched in December 2018'; Theravance dates the formal launch to Q1 2019 and its 2018 collaboration revenue to 'initial channel buildout'. Ex-U.S. YUPELRI royalties (from 2022Q4) are not in this line. Theravance was acquired by Zymeworks (completed 2026-09-28); the series ends at the latest published quarter, 2026Q2, so this is not a reporting stop.",
+  "search_log": [
+    "Listed every Theravance Biopharma (CIK 0001583107) filing via data.sec.gov submissions (all forms incl. 8-K/A, 10-K/A, 10-Q/A); fetched every .htm document of every 8-K with Item 2.02/7.01/8.01 and every 10-K/10-Q from 2018-10 to 2026-10 (354 documents) and searched the text for YUPELRI/revefenacin near 'net sales' and dollar figures.",
+    "2019-02 to 2020-08 releases, 10-Qs and the FY2019 10-K print no YUPELRI sales figure of any kind (only collaboration revenue; FY2019 10-K: 'In 2019, we recognized $13.7 million in revenue from the Mylan collaboration agreement'). From the Q3 2020 release (0001104659-20-121807) to the Q4 2022 release (0001104659-23-026064) Theravance prints only its implied 35% share (Q3 2020 release: 'Going forward, Theravance Biopharma will report its implied 35% of Net Sales').",
+    "Retrospective totals: the quarterly bar chart 'Total YUPELRI Net Sales ($M)' first runs back to Q2'19 in the Q3 2023 earnings presentation (0001104659-23-115296 Ex 99.2: $9.1 ... $58.3); the Q4 2023 presentation (0001104659-24-027510 Ex 99.2) repeats it through Q4'23 and is cited because the verifier's year check needs the year written in the document; the Q1 2024 through Q4 2024 presentations start the chart at Q3'19. Earlier 2023 decks (May, Aug, Sep 2023) chart only from Q1'22/Q2'22.",
+    "Isolated as-current totals: Jan 2022 investor deck 'Q3 2021 net sales of $ 39 million'; Q4 2021 earnings deck 'Q4 2021 net sales of $44 million'. Not used (whole millions; the chart gives $0.1 million for the same quarters).",
+    "Viatris (CIK 0001792044): fetched all 10-K/10-Q 2020-2023 and every Item 2.02 8-K exhibit 2021-2026. 'Key Product Net Sales, on a Consolidated Basis' table prints 'Yupelri' under Select Key Segment Products from the Q1 2021 release (36.9) onward; the Q3 2021 earnings 8-K (2021-11-08) is filed under Item 9.01 only, so 2021Q3 was read from the Q3 2021 10-Q (39.4 | 118.1). Viatris's FY2020 10-K and its 2020 10-Qs (filed as Viatris/Upjohn before the combination) print no YUPELRI figure.",
+    "Mylan N.V. (CIK 0001623613): fetched every 10-K, 10-K/A and 10-Q 2019-2020; YUPELRI appears only in narrative ('launched in December 2018', volume growth drivers, licensing payments); no YUPELRI sales figure is printed.",
+    "Bigdata.com searches (Viatris Yupelri net sales 2021; Mylan Yupelri net sales 2019; Theravance Yupelri net sales recorded by Mylan Q1 2020) returned only 2025-2026 Theravance filings and transcripts; transcripts not cited.",
+    "Cross-checks: 2021 chart quarters sum to 161.9 = Viatris FY2021 161.9; 2023 quarters 46.955+55.038+58.325+60.644 = 220.962 = printed FY 220,962; 2024 sum 238.625 vs printed 238,626; 2025 sum 266.600 vs printed 266,600; 2022 prior-year columns 43,666+49,077+53,423+55,700 = 201,866 = printed 2022 year column.",
+    "2023Q1-2024Q2 now read from the release footnote table row 'YUPELRI net sales (100% recorded by Viatris)' (thousands) instead of the rounded headline sentence; values agree with the sentences (47.0, 55.0, 58.3, 60.6, 55.2, 54.5)."
+  ]
+}

@@ -289,7 +289,7 @@ Zulresso,neuroactive steroid GABA-A receptor positive modulator,gaba_a_positive_
 Briumvi,CD20-directed cytolytic antibody,anti_cd20_antibody,Intravenous,2022,Multiple sclerosis (relapsing forms),curated_reference,distinct_product
 Horizant,Gabapentin prodrug; alpha-2-delta calcium channel subunit ligand,alpha2delta_ligand,Oral,2011,Restless legs syndrome; postherpetic neuralgia,curated_reference,distinct_product
 Akeega,PARP inhibitor (niraparib) with CYP17 inhibitor (abiraterone) fixed-dose combination,parp_inhibitor,Oral,2023,Oncology (prostate cancer),curated_reference,distinct_product
-Aristada Initio,D2/5-HT2A antagonist long-acting injectable,atypical_antipsychotic,Intramuscular,2018,Schizophrenia,curated_reference,distinct_product
+Aristada Initio,dopamine D2 and serotonin 5-HT1A partial agonist (aripiprazole prodrug),dopamine_serotonin_partial_agonist,Intramuscular,2018,Schizophrenia,curated_reference,distinct_product
 Invega Trinza,D2/5-HT2A antagonist long-acting injectable,atypical_antipsychotic,Intramuscular,2015,Schizophrenia,curated_reference,distinct_product
 Litfulo,Janus kinase (JAK3/TEC family) inhibitor,jak_inhibitor,Oral,2023,Dermatology (alopecia areata),curated_reference,distinct_product
 Lyumjev,Rapid-acting insulin analogue,insulin,Subcutaneous,2020,Diabetes (type 1 and type 2),curated_reference,distinct_product
@@ -331,3 +331,6 @@ Lupkynis,Calcineurin inhibitor,calcineurin_inhibitor,Oral,2021,Lupus nephritis,c
 Rezlidhia,IDH1 inhibitor,idh1_inhibitor,Oral,2022,Oncology (hematologic): relapsed or refractory IDH1-mutated AML,curated_reference,distinct_product
 Tavalisse,oral spleen tyrosine kinase (SYK) inhibitor,syk_inhibitor,Oral,2018,Chronic immune thrombocytopenia (ITP),curated_reference,distinct_product
 Ponvory,Selective sphingosine-1-phosphate receptor 1 (S1P1) modulator,s1p_receptor_modulator,Oral,2021,Neurology (multiple sclerosis),curated_reference,distinct_product
+Avonex,Interferon beta-1a; type I interferon receptor agonist,interferon_beta,Intramuscular,1996,Multiple sclerosis (relapsing forms),curated_reference,distinct_product
+Sunlenca,"HIV-1 capsid inhibitor (lenacapavir), long-acting subcutaneous injection every six months after oral loading",hiv_capsid_inhibitor,Subcutaneous,2022,"HIV (heavily treatment-experienced, multidrug-resistant HIV-1)",curated_reference,distinct_product
+Yupelri,"long-acting muscarinic antagonist (LAMA), nebulized once-daily",lama,Inhaled,2018,Respiratory (COPD),curated_reference,distinct_product
