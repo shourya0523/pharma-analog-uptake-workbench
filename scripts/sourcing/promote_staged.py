@@ -6,6 +6,8 @@ manifest directory and carries each product's curated attributes into
 ``seed/product_attributes.csv``:
 
 * ``<stem>_quarterly.csv`` and ``<stem>.meta.json`` -> source_manifests/
+* ``<stem>_annual.csv`` and ``<stem>.meta.json`` (a product the issuer prints
+  only for full years) -> source_manifests/
 * ``<stem>.exclusion.json`` -> a row of source_manifests/excluded_products.csv
 * the meta's moa, moa_class, route, first approval year and indication ->
   a ``curated_reference`` row of seed/product_attributes.csv
@@ -35,6 +37,10 @@ MANIFEST_COLUMNS = [
     "period", "value_reported", "source_url", "source_quote", "derivation",
     "precision", "context", "source_type", "source_unit",
     "source_value_reported", "currency", "row_label",
+]
+ANNUAL_COLUMNS = [
+    "drug_name", "period", "value_reported", "currency", "unit", "revenue_scope",
+    "geography", "source_url", "source_quote", "derivation", "series_role",
 ]
 
 
@@ -143,6 +149,7 @@ def main() -> int:
     for stem in stems:
         meta_path = args.staging / f"{stem}.meta.json"
         quarterly = args.staging / f"{stem}_quarterly.csv"
+        annual = args.staging / f"{stem}_annual.csv"
         exclusion = args.staging / f"{stem}.exclusion.json"
         meta = json.loads(meta_path.read_text()) if meta_path.is_file() else None
 
@@ -165,6 +172,20 @@ def main() -> int:
                 meta["therapeutic_area"] = area
             (MANIFESTS / meta_path.name).write_text(json.dumps(meta, indent=2) + "\n")
             print(f"promoted {stem}: {len(rows)} quarters")
+        elif annual.is_file() and meta:
+            if (MANIFESTS / annual.name).exists():
+                raise SystemExit(f"{annual.name} is already in gold; refusing to overwrite")
+            rows = read_rows(annual)
+            missing = [c for c in ANNUAL_COLUMNS if c not in rows[0]]
+            if missing:
+                raise SystemExit(f"{annual.name} lacks columns {missing}")
+            shutil.copyfile(annual, MANIFESTS / annual.name)
+            tidy_meta(meta)
+            area = target_areas().get(meta["drug_name"])
+            if area:
+                meta["therapeutic_area"] = area
+            (MANIFESTS / meta_path.name).write_text(json.dumps(meta, indent=2) + "\n")
+            print(f"promoted {stem}: {len(rows)} years (annual)")
         elif exclusion.is_file():
             record = json.loads(exclusion.read_text())
             if record["drug_name"] in excluded:
@@ -172,7 +193,7 @@ def main() -> int:
             new_exclusions.append(record)
             print(f"promoted {stem}: exclusion ({record['reason_code']})")
         else:
-            print(f"skipped {stem}: no quarterly manifest or exclusion")
+            print(f"skipped {stem}: no quarterly or annual manifest, or exclusion")
             continue
 
         if meta and meta["drug_name"] not in attributes:

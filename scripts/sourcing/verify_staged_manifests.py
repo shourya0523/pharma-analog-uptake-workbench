@@ -1,7 +1,8 @@
 """Hold every row of a staged manifest up against the document it cites.
 
 A sourcing agent hands back one CSV per product plus a ``.meta.json`` beside
-it. Nothing it wrote is trusted: each row's ``source_url`` is fetched and the
+it: ``<stem>_quarterly.csv``, or ``<stem>_annual.csv`` for a product the issuer
+prints only for full years. Nothing it wrote is trusted: each row's ``source_url`` is fetched and the
 row passes only if the document itself prints the row.
 
 What "prints the row" means, per row:
@@ -10,13 +11,13 @@ What "prints the row" means, per row:
 * **row_match** - one line of that document carries the row's ``row_label``
   and every figure the quote lists after its first ``|``, in that order. For
   HTML a line is a table row; for a PDF it is a text line, joined with the
-  next two because PDF tables wrap.
+  next two because PDF tables wrap; for a spreadsheet it is a worksheet row.
 * **value_in_quote** - for a direct read, the row's own figure is one of the
   figures quoted. A derived row instead has to quote at least two figures,
   because its arithmetic must be visible.
 * **year_named** - the document mentions the row's year at all.
 
-Then per series: no duplicate or missing quarter between first and last, and
+Then per series: no duplicate or missing period between first and last, and
 where a fourth-quarter quote states a full year, the four quarters sum to it
 within the rounding of the printed figures.
 
@@ -96,7 +97,18 @@ def numbers_in(text: str) -> list[float]:
 
 
 def document_lines(raw: bytes) -> list[str]:
-    """Candidate lines: table rows for HTML, wrapped text lines for PDF."""
+    """Candidate lines: table rows for HTML and spreadsheets, wrapped text lines for PDF."""
+    if raw[:2] == b"PK":
+        import openpyxl
+
+        workbook = openpyxl.load_workbook(io.BytesIO(raw), read_only=True, data_only=True)
+        rows = []
+        for sheet in workbook.worksheets:
+            for values in sheet.iter_rows(values_only=True):
+                cells = [str(v).strip() for v in values if v is not None and str(v).strip()]
+                if cells:
+                    rows.append(normalize(" | ".join(cells)))
+        return rows
     if raw[:5] == b"%PDF-":
         import pdfplumber
 
@@ -210,7 +222,12 @@ def check_series(rows: list[dict]) -> list[str]:
     problems = []
     periods = [r["period"] for r in rows]
     for period in {p for p in periods if periods.count(p) > 1}:
-        problems.append(f"duplicate quarter {period}")
+        problems.append(f"duplicate period {period}")
+    if periods and all(len(p) == 4 for p in periods):
+        missing = sorted(set(map(str, range(int(min(periods)), int(max(periods)) + 1))) - set(periods))
+        if missing:
+            problems.append(f"missing years {', '.join(missing)}")
+        return problems
     if periods:
         missing = sorted(set(quarters_between(min(periods), max(periods))) - set(periods))
         if missing:
@@ -250,7 +267,8 @@ def main() -> int:
     failed = 0
     client = httpx.Client(headers={"User-Agent": USER_AGENT}, follow_redirects=True, timeout=90)
     documents: dict[str, tuple[bytes, list[str]] | None] = {}
-    for manifest in sorted(args.staging.glob("*_quarterly.csv")):
+    manifests = sorted(args.staging.glob("*_quarterly.csv")) + sorted(args.staging.glob("*_annual.csv"))
+    for manifest in manifests:
         rows = list(csv.DictReader(manifest.open(newline="")))
         product: dict = {"rows": {}, "series_problems": check_series(rows)}
         failed += len(product["series_problems"])
