@@ -1,0 +1,34 @@
+{
+  "drug_name": "Delstrigo",
+  "generic_name": "doravirine/lamivudine/tenofovir disoproxil fumarate",
+  "manufacturer": "Merck",
+  "benchmark_identity": "merck_delstrigo_worldwide_reported",
+  "therapeutic_area": "Infectious Disease / Vaccines",
+  "indication_area": "HIV-1 infection (antiretroviral therapy)",
+  "revenue_scope": "Product",
+  "geography": "Worldwide",
+  "formulation": "oral fixed-dose combination tablet",
+  "route_of_administration": "oral",
+  "moa": "non-nucleoside reverse transcriptase inhibitor (doravirine) with two nucleoside reverse transcriptase inhibitors (lamivudine, tenofovir disoproxil fumarate)",
+  "moa_class": "nnrti_nrti_fixed_dose_combination",
+  "first_approval_year": 2018,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2018/210807Orig1s000ltr.pdf",
+    "quote": "NDA 210807 ... DELSTRIGO (doravirine, lamivudine, and tenofovir disoproxil fumarate) tablets as a complete regimen for the treatment of HIV-1 infection in adult patients with no antiretroviral treatment history (FDA approval letter, signed 08/30/2018)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2023Q1",
+  "series_start_reason": "Merck prints Delstrigo on its own sales line only from the first-quarter 2024 earnings release and Form 10-Q, which carry the four 2023 quarters as prior-year columns, so the series starts at 2023Q1. Merck's releases and 10-Qs through the fourth-quarter 2023 print no Delstrigo sales, and the FY2023 10-K does not either. The FY2024 10-K prints annual Delstrigo sales 2022 of 151, which cannot be split into quarters; 2018-2021 annual figures were not found in a Merck sales table.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Worldwide (U.S. plus international) Delstrigo sales in USD millions from Merck's product sales table, which the 10-Q/10-K tables split into U.S. and international columns. Pifeltro (doravirine alone) is a separate line and is not included. 2023 quarters come from prior-year columns of the 2024 releases (2023Q1 from the Q1 2024 release, and so on). Quarters sum to the printed year within rounding of 1 (2023 202 vs 201, 2024 250 vs 249); 2025 equals the printed 306.",
+  "search_log": [
+    "Local copy of every Merck item 2.02 8-K exhibit (99.1 and 99.2) for 2005-2026-08-04 (CIK 310158 and legacy CIK 64978), plus every 10-K, 10-K/A and 10-Q Merck filed 2015-02-27 to 2026-08-07 (48 filings, listed with data.sec.gov submissions, all forms); product rows read from the HTML table rows, the same reading as the verifier",
+    "Bigdata.com smart searches (one product per call, filings) located no sales document beyond the releases and 10-Q/10-K tables cited; its app.bigdata.com links are not cited",
+    "no partner, licensor or royalty holder was found that prints this product's net sales (rule 12c): Merck is the marketing authorisation holder and sole seller",
+    "scanned every release 2005-2026 and every 2015-2026 10-Q/10-K for a Delstrigo table row: first printed in the 2024-04-25 release and the 2024-05-03 Form 10-Q; FY2024 and FY2025 10-Ks give annual figures (2022 151, 2023 201, 2024 249, 2025 306)",
+    "grepped the text of 2018-2023 releases, 10-Qs and 10-Ks for Delstrigo: only approval, regulatory, patent-table and clinical text, no sales figure",
+    "Launch quarter not established from an issuer document: Merck's FY2018 10-K states the August 2018 FDA approval; no document located dating the first sale; launch_quarter null."
+  ]
+}

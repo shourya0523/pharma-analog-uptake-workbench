@@ -1,0 +1,37 @@
+{
+  "drug_name": "Orladeyo",
+  "generic_name": "berotralstat",
+  "manufacturer": "BioCryst Pharmaceuticals",
+  "benchmark_identity": "biocryst_orladeyo_us_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Hereditary angioedema (HAE) attack prophylaxis",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "oral capsule",
+  "route_of_administration": "oral",
+  "moa": "Plasma kallikrein inhibitor",
+  "moa_class": "plasma_kallikrein_inhibitor",
+  "first_approval_year": 2020,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2020/214094s000lbl.pdf",
+    "quote": "ORLADEYO (berotralstat) capsules, for oral use Initial U.S. Approval: 2020"
+  },
+  "launch_quarter": "2020Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/882796/000162828023016458/bcrx-20230331.htm",
+    "quote": "sales of ORLADEYO, which the Company began shipping to patients in December 2020"
+  },
+  "commercial_start_quarter": "2022Q1",
+  "series_start_reason": "The U.S. and outside-U.S. split first appears in the Q1 2023 10-Q. Its 2022 quarters are prior-year columns; 2021 quarterly U.S. figures are not printed (only the annual U.S. figure for 2021 in the FY2024 10-K), and the 2021-2022 filings print a combined ORLADEYO line, so the series does not splice onto it. Series therefore starts 2022Q1.",
+  "series_end_quarter": "2025Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The 2026 10-Qs print only a combined ORLADEYO line (Q1 2026 148,347; Q2 2026 158,202) with no U.S. row, and the FY2025 10-K is the last filing with a U.S. row for ORLADEYO.",
+  "notes": "Scope is ORLADEYO U.S. product revenues, the U.S. row under the ORLADEYO heading. Outside-U.S. ORLADEYO (Europe and other markets) is excluded and not spliced. The 2026 combined line includes outside-U.S. sales and is not used. Q4 figures are derived from the full-year U.S. row less nine months, using the annual figures printed in the FY2023, FY2024 and FY2025 10-Ks.",
+  "search_log": [
+    "Bigdata search for ORLADEYO net product revenue by quarter; results confirmed the product's U.S. and outside-U.S. split from 2023.",
+    "Listed every 10-Q and 10-K for CIK 882796 via data.sec.gov submissions; read the ORLADEYO U.S. row of each 2023 to 2025 filing and the ORLADEYO line of the 2021-2022 filings.",
+    "Checked the 2026 10-Qs for a U.S. row: none; they print only the combined ORLADEYO line.",
+    "2022 quarters from the prior-year columns of the 2023 10-Qs; Q4 2022 derived from the FY2024-filing three-year table less nine months.",
+    "FDA label for NDA 214094 read for the approval year; the approval letter text layer was unreadable."
+  ]
+}

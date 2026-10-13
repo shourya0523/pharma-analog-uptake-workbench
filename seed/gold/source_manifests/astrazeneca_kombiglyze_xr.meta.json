@@ -1,0 +1,45 @@
+{
+  "drug_name": "Kombiglyze XR",
+  "generic_name": "saxagliptin/metformin",
+  "manufacturer": "AstraZeneca",
+  "benchmark_identity": "astrazeneca_kombiglyze_xr_us_annual",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Metabolic (type 2 diabetes)",
+  "revenue_scope": "US product sales",
+  "geography": "United States",
+  "formulation": "extended-release fixed-dose combination tablet",
+  "route_of_administration": "oral",
+  "moa": "DPP-4 inhibitor plus biguanide fixed-dose combination",
+  "moa_class": "dpp4_metformin_combination",
+  "first_approval_year": 2010,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=200678",
+    "quote": "Original Approvals or Tentative Approvals ... 11/05/2010 ORIG-1 Approval Type 4 - New Combination STANDARD (NDA 200678, Company: ASTRAZENECA AB; KOMBIGLYZE XR METFORMIN HYDROCHLORIDE; SAXAGLIPTIN HYDROCHLORIDE TABLET, EXTENDED RELEASE;ORAL)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2011Q1",
+  "period_type": "annual",
+  "series_role": "peak_benchmark",
+  "annual_basis": "Calendar years 2020-2023 from the US product sales column of the 'Patent Expiries of Key Marketed Products' table in AstraZeneca's annual report / Form 20-F for each year.",
+  "series_start_reason": "Longest gap-free run ending at the latest printed year. The US column prints a dash for 2018 and 2019 (annual reports for 2018, 2019; 20-F for 2021 prints a dash for 2019), so 2020-2023 is the gap-free run. An earlier run exists (US 159, 154, 145, 111 for 2014-2017 in the 2016 report and the 2018 report) but a US-column dash for 2015 in the 2015 report ('included in Onglyza') and the 2018-2019 dashes break continuity, so it is not spliced on.",
+  "series_end_quarter": null,
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The 20-F filed 2025-02-18 (2024) has no Komboglyze/Kombiglyze XR row in the key-marketed-products table; 2023 (17) is the last year printed.",
+  "notes": "US column of the row 'Komboglyze/ Kombiglyze XR' (Komboglyze is the ex-US brand; Kombiglyze XR the US one, FDA NDA 200678). The footnote on the row states 'Komboglyze / Kombiglyze XR Product Sales is included in the Onglyza Product Sales figure', so these US sales are a component of the Onglyza line, not additional to it. 2020 is 55 in the 2020 annual report (own-year) and 56 as restated in the 2021 20-F. Before February 2014 BMS printed a combined 'Onglyza/Kombiglyze' line (BMS 10-K for 2013, 877 for 2013), which is not a Kombiglyze figure.",
+  "no_quarterly_series": {
+    "reason_code": "aggregated_in_quarterly_product_sales",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/901832/000110465923023818/azn-20221231x20f.htm",
+    "source_quote": "Komboglyze / Kombiglyze XR Product Sales is included in the Onglyza Product Sales figure.",
+    "details": "AstraZeneca's quarterly results releases (6-K, 2014Q1-2026Q2) contain no numeric row for the brand: every occurrence is a pipeline/launch-status row or text. Only the annual Report/20-F 'Patent Expiries of Key Marketed Products' table gives US and ex-US sales per year, as shown in this series."
+  },
+  "search_log": [
+    "Listed every AstraZeneca PLC (CIK 0000901832) filing via data.sec.gov submissions (recent plus older pages; 2,052 filings, all form types).",
+    "Downloaded the main document of all 1,646 filings of form 6-K, 6-K/A, 20-F and 20-F/A that carry a primary document (2002-2026) and scanned them: HTML table rows by label, plain text for the 2002-2003 .txt releases; 2002 6-Ks before November 2002 are scanned paper documents (.paper) and were not readable.",
+    "Latest results document used: the Q2 2026 results 6-K filed 2026-07-27 (0001104659-26-086846); no later results release exists as of the search date.",
+    "Bigdata.com was available but not needed; every figure was read from the sec.gov original, never from a Bigdata.com link.",
+    "Scanned all 75 HTML results documents mentioning Xigduo, Kombiglyze or Komboglyze: no quarterly release prints a numeric Kombiglyze row; the Onglyza line includes it.",
+    "BMS (CIK 14272) 10-K for 2012 and 2013 fetched: BMS prints 'Onglyza/Kombiglyze (saxagliptin/saxagliptin and metformin)' as one line (709 for 2012, 877 for 2013), so no standalone pre-2014 figure exists.",
+    "Annual reports 2015-2020 and 20-Fs 2021-2025 checked for the row: 2015 report US '-' (included in Onglyza); 2016 report US 145/154/159; 2018 report US '-', 111, 145; 2019 report '-', '-', 111; 2020 report 55, '-', '-'; 20-Fs 2021-2023 32, 25, 17; 20-F 2024 and later no row.",
+    "2020 value taken from the 2020 report text block (first US figure of the row) and cross-checked against the 20-F for 2021 (56 restated)."
+  ]
+}

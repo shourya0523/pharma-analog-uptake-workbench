@@ -8,7 +8,9 @@ manifest directory and carries each product's curated attributes into
 * ``<stem>_quarterly.csv`` and ``<stem>.meta.json`` -> source_manifests/
 * ``<stem>_annual.csv`` and ``<stem>.meta.json`` (a product the issuer prints
   only for full years) -> source_manifests/
-* ``<stem>.exclusion.json`` -> a row of source_manifests/excluded_products.csv
+* ``<stem>.exclusion.json`` -> a row of source_manifests/excluded_products.csv,
+  and its ``attributes`` (an excluded product still serves as an analog
+  comparator) -> a row of seed/product_attributes.csv
 * the meta's moa, moa_class, route, first approval year and indication ->
   a ``curated_reference`` row of seed/product_attributes.csv
 
@@ -95,6 +97,25 @@ def tidy_meta(meta: dict) -> None:
         meta["series_end_basis"] = "issuer_stopped_reporting"
 
 
+def meta_problems(meta: dict, rows: list[dict[str, str]]) -> list[str]:
+    """What the gold builder would reject in a quarterly series, caught before copying.
+
+    ``commercial_start_quarter`` is the first quarter the series covers, not the
+    launch (that is ``launch_quarter``); a series that changes issuer names the
+    issuer of every row, so an ownership gap can be told from an ordinary one.
+    """
+    problems = []
+    first = min(row["period"] for row in rows)
+    if meta.get("commercial_start_quarter") != first:
+        problems.append(f"commercial_start_quarter is {meta.get('commercial_start_quarter')!r}, first row is {first}")
+    for field in ("moa", "moa_class", "route_of_administration", "first_approval_year", "indication_area"):
+        if meta.get(field) in (None, ""):
+            problems.append(f"{field} is empty")
+    if meta.get("joined_issuers") and not all(row.get("issuer") for row in rows):
+        problems.append("joined_issuers is set but rows lack an issuer column")
+    return problems
+
+
 def route_label(route: str) -> str:
     """The attributes file capitalises routes ("Oral", "Intravenous")."""
     return route.strip().capitalize()
@@ -165,6 +186,9 @@ def main() -> int:
             missing = [c for c in MANIFEST_COLUMNS if c not in rows[0]]
             if missing:
                 raise SystemExit(f"{quarterly.name} lacks columns {missing}")
+            problems = meta_problems(meta, rows)
+            if problems:
+                raise SystemExit(f"{stem}: " + "; ".join(problems))
             write_with_stated_results(rows, MANIFESTS / quarterly.name)
             tidy_meta(meta)
             area = target_areas().get(meta["drug_name"])
@@ -190,8 +214,11 @@ def main() -> int:
             record = json.loads(exclusion.read_text())
             if record["drug_name"] in excluded:
                 raise SystemExit(f"{record['drug_name']} is already excluded")
+            attributes_of = record.pop("attributes", None)
             new_exclusions.append(record)
             print(f"promoted {stem}: exclusion ({record['reason_code']})")
+            if attributes_of and record["drug_name"] not in attributes:
+                meta = {"drug_name": record["drug_name"], **attributes_of}
         else:
             print(f"skipped {stem}: no quarterly or annual manifest, or exclusion")
             continue

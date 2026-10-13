@@ -1,0 +1,36 @@
+{
+  "drug_name": "Sovaldi",
+  "generic_name": "sofosbuvir",
+  "manufacturer": "Gilead",
+  "benchmark_identity": "gilead_sovaldi_worldwide_reported",
+  "therapeutic_area": "Infectious Disease / Vaccines",
+  "indication_area": "Chronic hepatitis C",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "oral tablet",
+  "route_of_administration": "oral",
+  "moa": "HCV nucleotide NS5B polymerase inhibitor (sofosbuvir)",
+  "moa_class": "hcv_nucleotide_ns5b_polymerase_inhibitor",
+  "first_approval_year": 2013,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2013/204671Orig1s000ltr.pdf",
+    "quote": "NDA 204671 ... We have completed our review of this application, as amended. It is approved, effective on the date of this letter. (EDWARD M COX 12/06/2013)"
+  },
+  "launch_quarter": "2013Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/882095/000088209514000035/exhibit991earningspressrel.htm",
+    "quote": "Sovaldi \u00ae (sofosbuvir 400 mg), which launched in December 2013."
+  },
+  "commercial_start_quarter": "2013Q4",
+  "series_start_reason": "First quarter with Sovaldi sales: the fourth-quarter 2013 release (8-K Ex 99.1, 2014-02-04) prints a labelled Sovaldi line of 139,435 thousand USD, and the launch in December 2013 is stated in the second-quarter 2014 release.",
+  "series_end_quarter": "2017Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The first-quarter 2018 release (8-K Ex 99.1, 2018-05-01) prints no Sovaldi line. Sovaldi is counted inside the HCV product sales aggregate of that release (Epclusa, Harvoni, Vosevi and Sovaldi, $1,046 million). From the second-quarter 2018 release it sits in Other product sales, with footnote (3) reading 'Includes Cayston, Hepsera and Sovaldi'.",
+  "notes": "Scope: worldwide brand total. 2013Q4 to 2014Q3 releases print a labelled Sovaldi line in thousands (converted to millions). From 2014Q4 the releases print Sovaldi U.S., Europe, Other International (Japan shown separately in 2016 releases) and an unlabelled total; the total is the sum of the printed regions in every quarter checked and includes Japan where Japan is printed. Four-quarter sums match the printed full years for 2014 (10,283), 2015 (5,276), 2016 (4,001) and 2017 (964).",
+  "search_log": [
+    "Pulled data.sec.gov submissions for CIK 0000882095 and listed Item 2.02 8-Ks from 2013 to 2018; downloaded each earnings-release exhibit.",
+    "Sovaldi rows read from the 2013Q4 to 2017Q4 releases; the 2014 Q1 to Q3 releases use the labelled thousands line in the product sales summary.",
+    "Q1 2018 release searched for a Sovaldi row: none; the product appears only in the HCV aggregate.",
+    "Launch statement from the Q2 2014 release; FDA letter NDA 204671 (appletter/2013/204671Orig1s000ltr.pdf) read: signature 12/06/2013."
+  ]
+}

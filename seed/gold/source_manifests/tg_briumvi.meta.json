@@ -1,0 +1,37 @@
+{
+  "drug_name": "Briumvi",
+  "generic_name": "ublituximab",
+  "manufacturer": "TG Therapeutics",
+  "benchmark_identity": "tg_briumvi_us_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Multiple sclerosis (relapsing forms)",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "injection",
+  "route_of_administration": "intravenous",
+  "moa": "CD20-directed cytolytic antibody",
+  "moa_class": "anti_cd20_antibody",
+  "first_approval_year": 2022,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2022/761238s000lbl.pdf",
+    "quote": "BRIUMVI is a CD20-directed cytolytic antibody ... for intravenous use ... Initial U.S. Approval: 2022"
+  },
+  "launch_quarter": "2023Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1001316/000155837023007393/tgtx-20230501xex99d1.htm",
+    "quote": "Product revenue, net for the three months ended March 31, 2023, consisted of net product sales of BRIUMVI in the United States, which was commercially launched in late January 2023"
+  },
+  "commercial_start_quarter": "2023Q1",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "TG Therapeutics' BRIUMVI U.S. net product sales. Where a release prints both a U.S. figure and product revenue including Neuraxpharm (ex-U.S. partner) sales, the U.S. figure is used (e.g. 2026Q1: U.S. 194.8 of 201.3 product revenue, net). The 2023Q2 figure is printed to the whole million ('$16 million') and is recorded at that precision.",
+  "search_log": [
+    "Bigdata.com search located TG Therapeutics' quarterly results; each quarter from its own EX-99.1 of the Item 2.02 8-K (data.sec.gov submissions for CIK 0001001316; accessions listed in the staged rows).",
+    "Scope check: 2023Q3 release states '$25.1 million in BRIUMVI net sales in the U.S.' next to total product revenue of $48.9 million (incl. Neuraxpharm sales); 2023Q4 states 'net product sales of BRIUMVI in the U.S. of $39.9 million'; the U.S. line was used throughout.",
+    "Launch: 2023-05-01 release, 'commercially launched in late January 2023'; approval letter label 761238s000lbl.pdf 'Initial U.S. Approval: 2022' (openFDA BLA 761238 original approval 2022-12-28).",
+    "Cross-check: 2024 quarters 50.5+72.6+83.3+103.6 = 310.0; not compared to a printed full year in this batch (the FY2024 10-K was not opened).",
+    "Not used: 'total net revenue' and 'license, milestone, royalty' lines; Neuraxpharm sales were not added to the U.S. line."
+  ]
+}

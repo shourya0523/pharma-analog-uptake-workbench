@@ -1,0 +1,33 @@
+{
+  "drug_name": "Empaveli",
+  "generic_name": "pegcetacoplan",
+  "manufacturer": "Apellis Pharmaceuticals",
+  "benchmark_identity": "apellis_empaveli_us_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Paroxysmal nocturnal hemoglobinuria; C3 glomerulopathy and primary IC-MPGN from 2025",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "solution for subcutaneous infusion",
+  "route_of_administration": "subcutaneous",
+  "moa": "Complement C3 inhibitor",
+  "moa_class": "complement_c3_inhibitor",
+  "first_approval_year": 2021,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2021/215014Orig1s000ltr.pdf",
+    "quote": "This new drug application provides for the use of Empaveli (pegcetacoplan) injection for the treatment of adult patients with paroxysmal nocturnal hemoglobinuria (PNH)."
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2021Q2",
+  "series_start_reason": "Q1 2021 product revenue is nil (the 10-Q prints a dash); the first printed EMPAVELI sales are in the second quarter 2021 10-Q, after the May 2021 approval. Series starts there.",
+  "series_end_quarter": "2026Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Biogen acquired Apellis through a tender offer that expired 2026-05-13 and closed on 2026-05-14 (Apellis 8-K accession 0001193125-26-222923, dated 2026-05-14). Apellis filed a Form 15-12G on 2026-05-26 and no 10-Q for 2026Q2 exists in EDGAR.",
+  "notes": "Scope is EMPAVELI U.S. net product revenue. Each 10-Q and 10-K states the product revenue is derived from sales in the United States. From 2025 the product line includes C3G and IC-MPGN sales after the July 2025 approval for those indications, in the same U.S. line. Ex-U.S. systemic pegcetacoplan (Aspaveli) is partnered to Sobi and is not in this line; Sobi royalties are reported separately by Apellis and are not used. Q4 figures derived from the full-year line less nine months.",
+  "search_log": [
+    "Bigdata search for EMPAVELI net product revenue by quarter; results confirmed the U.S. product revenue and the Sobi ex-U.S. arrangement.",
+    "Listed every 10-Q and 10-K for CIK 1492422 via data.sec.gov submissions; fetched each primary document and read the EMPAVELI row (2021 and 2022 filings print the total product revenue line, which was EMPAVELI only before SYFOVRE was approved in February 2023).",
+    "Fourth quarters derived as full-year 10-K less nine months from the Q3 10-Q; the four quarters match each full-year figure.",
+    "2026Q2 not sourced: the tender offer closed 2026-05-14 (8-K) and no later 10-Q exists; series ends 2026Q1.",
+    "FDA approval letter for NDA 215014 read for the indication sentence; signature time 05/14/2021 04:19:32 PM."
+  ]
+}

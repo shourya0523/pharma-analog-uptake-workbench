@@ -1,0 +1,34 @@
+{
+  "drug_name": "Zepatier",
+  "generic_name": "elbasvir/grazoprevir",
+  "manufacturer": "Merck",
+  "benchmark_identity": "merck_zepatier_worldwide_reported",
+  "therapeutic_area": "Infectious Disease / Vaccines",
+  "indication_area": "Chronic hepatitis C virus infection (genotype 1 or 4)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "NS5A inhibitor (elbasvir) plus NS3/4A protease inhibitor (grazoprevir) fixed-dose combination",
+  "moa_class": "hcv_ns5a_protease_combination",
+  "first_approval_year": 2016,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2016/208261Orig1s000lbl.pdf",
+    "quote": "Initial U.S. Approval: 2016"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2016Q1",
+  "series_start_reason": "First quarter the issuer prints a Zepatier line is 2016Q1 (first-quarter 2016 release, filed 2016-05-05, Zepatier 50). Worldwide line in the first dollar column of the product table. Zepatier is Merck's own product from launch, so no prior-owner or partner line is involved.",
+  "series_end_quarter": "2020Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "No product table in any Merck earnings release from the first-quarter 2021 release (2021-04-29) onward prints a Zepatier row (every 2.02 exhibit checked through 2026-08-04). The 2021 10-Qs for Q1, Q2 and Q3 (accessions 0000310158-21-000009, 0000310158-21-000028, 0000310158-21-000032) and the Q1 2022 10-Q (0000310158-22-000011) print no Zepatier sales figure, only narrative percentages. The FY2021 10-K (accession 0000310158-22-000003) prints a full-year Zepatier row (2021: 128; 2020: 167; 2019: 370), which is annual and is not written as a quarterly figure. Quarters 2016Q1-2020Q4 sum to the printed full years 2016 (555), 2017 (1,659 vs 1,660), 2018 (456 vs 455), 2019 (371 vs 370) and 2020 (167).",
+  "notes": "The quarterly series ends at the last quarter in which a Zepatier row is printed. Annual full-year values for 2021 onward appear in the 10-K; later 10-K years were not checked. Scope: the row labelled Zepatier in each product table, first dollar column (worldwide); the 2016-2017 release lines label the product in upper case in the summary table and in title case in the detailed table, both read as the same line. The 2016 and early-2017 values for Q1 2016 include a zero prior-year column (no sales in Q1 2015).",
+  "search_log": [
+    "bigdata_search (smart) 'Merck Zepatier sales quarter product table': returned release and 10-K passages; the 2021 10-K passage states Zepatier sales declined 23% in 2021 without a figure.",
+    "EDGAR submissions and every 8-K item 2.02 exhibit for CIK 310158 downloaded; Zepatier row parsed from each release (2016-05-05 through 2021-02-04 found; none from 2021-04-29 onward).",
+    "2016Q1-2020Q4 from each quarter's own release (current-quarter column). Q1 2016 from 2016-05-05 exhibit 99.1 ('Zepatier | 50 | 0 | 0 ...'); Q2 2016 from the 2016-07-29 release, second column.",
+    "Exhaustion for 2021Q1 onward: releases (no row); 10-Qs for 2021Q1, 2021Q2, 2021Q3 and 2022Q1 (no numeric row); FY2021 10-K (annual only, 128). Zepatier is Merck-only, so no partner or royalty source applies.",
+    "Verifier run and any failed rows are reported in the batch report, not here."
+  ],
+  "launch_evidence": null
+}

@@ -1,0 +1,38 @@
+{
+  "drug_name": "Lybalvi",
+  "generic_name": "olanzapine and samidorphan",
+  "manufacturer": "Alkermes plc",
+  "benchmark_identity": "alkermes_lybalvi_us_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Schizophrenia and bipolar I disorder",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "oral tablet (olanzapine/samidorphan bilayer)",
+  "route_of_administration": "oral",
+  "moa": "atypical antipsychotic (olanzapine) combined with opioid antagonist (samidorphan)",
+  "moa_class": "atypical_antipsychotic_combination",
+  "first_approval_year": 2021,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2021/213378s000lbl.pdf",
+    "quote": "Initial U.S. Approval: 2021 (LYBALVI, olanzapine and samidorphan tablets, highlights)"
+  },
+  "launch_quarter": "2021Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1520262/000095017022021003/alks-20220930.htm",
+    "quote": "product sales, net consist of sales in the U.S. of VIVITROL, ARISTADA and ARISTADA INITIO and, following its commercial launch in October 2021, LYBALVI, primarily to wholesalers"
+  },
+  "commercial_start_quarter": "2021Q4",
+  "series_start_reason": "First quarter with a LYBALVI sales figure. The 2022 Q2 and Q3 10-Qs print the 2021 six- and nine-month LYBALVI columns as nil, and the fourth-quarter 2021 release prints 8,215 thousand USD for the quarter and the year.",
+  "series_end_quarter": "2026Q2",
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "One line only: the LYBALVI row of the product sales, net table, U.S. product sales (the note states product sales are sales in the U.S.). Not a company total: VIVITROL, ARISTADA and LUMRYZ are separate rows and are not in this series. Calendar quarters = fiscal quarters (Alkermes plc reports on the calendar year). Q1-Q3 of each year come from that quarter's own 10-Q; Q4 comes from the fourth-quarter earnings release, which prints the quarter as current. Each year's four quarters sum to the full-year figure printed in the same release or the 10-K (checked by script, exact). The verifier's Q4 sum check reads the fifth figure of a five-figure release line as the year total and so reports every year 2022 to 2025 as a mismatch; the arithmetic above is correct and that check is a layout limitation.",
+  "search_log": [
+    "data.sec.gov submissions for Alkermes plc (CIK 0001520262) listed every 10-Q, 10-K, 10-K/A and Item 2.02 8-K from 2015 to 2026; every primary document was downloaded from sec.gov Archives and the LYBALVI row searched in each table (bs4 over table rows).",
+    "Each earnings-release 8-K's EX-99.1 was downloaded from its index.json and searched for the LYBALVI row; Q4 values were taken from the quarterly table of the fourth-quarter release (2021 to 2025).",
+    "No LYBALVI dollar line appears in the 2015-2021 filings before the 2021 Q1 10-Q (the 2021 10-Qs print LYBALVI only as a percentage-change row); the first dollar figure is 8,215 thousand USD in the fourth-quarter 2021 release.",
+    "Full-year cross-check: 2022 quarters sum to 96,022 (FY2022 10-K), 2023 to 191,889, 2024 to 280,032, 2025 to 346,687, each as printed in the 10-K.",
+    "FDA: accessdata label 213378s000lbl.pdf (2021) prints 'Initial U.S. Approval: 2021' (text checked with pdfplumber).",
+    "Launch month October 2021 from the 2022 10-Q note (launch_evidence)."
+  ]
+}

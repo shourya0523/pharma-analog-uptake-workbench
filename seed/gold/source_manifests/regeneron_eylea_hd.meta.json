@@ -1,0 +1,39 @@
+{
+  "drug_name": "Eylea HD",
+  "generic_name": "aflibercept 8 mg",
+  "manufacturer": "Regeneron Pharmaceuticals",
+  "benchmark_identity": "regeneron_eylea_hd_us_reported",
+  "therapeutic_area": "Ophthalmology",
+  "indication_area": "Ophthalmology (retina)",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "injection (aflibercept 8 mg/0.07 mL)",
+  "route_of_administration": "intravitreal",
+  "moa": "VEGF trap (VEGF-A / PlGF inhibitor)",
+  "moa_class": "vegf_inhibitor",
+  "first_approval_year": 2023,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2023/761355Orig1s000ltr.pdf",
+    "quote": "BLA 761355 ... Container Labeling for approved BLA 761355 ... (electronic signature 08/18/2023 05:30:09 PM; the approval sentence is on page 1, which has no text layer)"
+  },
+  "launch_quarter": "2023Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/872589/000180422023000029/exhibit991q32023.htm",
+    "quote": "strong initial uptake of EYLEA HD following its late August launch"
+  },
+  "commercial_start_quarter": "2023Q3",
+  "series_start_reason": "First quarter in which Regeneron prints an EYLEA HD line (the Q3 2023 release, after the August 18, 2023 approval). Earlier quarters have no such product.",
+  "series_end_quarter": "2026Q2",
+  "series_end_basis": null,
+  "series_end_reason": "Latest published quarter at sourcing: the Q2 2026 release (filed 2026-07-30).",
+  "notes": "U.S. net sales only: Regeneron records EYLEA HD and EYLEA sales in the United States and Bayer records sales outside. The series uses the summary table's 'EYLEA HD - U.S.' line, which prints whole millions. The detail table prints the same product with decimals under the footnote label 'EYLEA HD (a)' or '(b)' beside combined totals; the two agree to rounding (checked 2025Q2: 393 vs 393.2; 2026Q2: 596 vs 596.3). Q4 quotes tie to full-year figures; 2025 quarters sum to the printed FY 1,637.",
+  "search_log": [
+    "data.sec.gov submissions for CIK 0000872589 (REGENERON PHARMACEUTICALS) listed every 8-K with Item 2.02 from 2021-08 onward; each EX-99.1 was downloaded from the filing index",
+    "searched each release for 'EYLEA HD': first row in the Q3 2023 release (EYLEA HD - U.S. 43); no EYLEA HD line in the Q2 2023 release (pre-approval)",
+    "one release per quarter used, the quarter's own release; the 2024 quarters use the EYLEA HD - U.S. summary row, which is printed separately in every 2024 release (no combined row in the summary)",
+    "sums: 2024 quarters 200+304+392+305 = 1,201 (FY 2024 printed); 2025 quarters 307+393+431+506 = 1,637 (FY 2025 printed); 2023 Q3+Q4 = 166 (FY 2023 printed)",
+    "FDA approval: Drugs@FDA BLA 761355 overview lists ORIG-1 approval 08/18/2023; the letter appletter/2023/761355Orig1s000ltr.pdf was fetched. Page 1 of the letter has no text layer, so the approval sentence is not quoted; the signature block and the page 2 reference to approved BLA 761355 are quoted",
+    "launch: Regeneron's Q3 2023 release refers to EYLEA HD 'following its late August launch'; the Q4 2023 release gives 166 million in FY 2023 from EYLEA HD following its August 2023 approval",
+    "not searched: whether the 2mg EYLEA series or the Bayer ex-U.S. line is affected; both are out of scope for this product"
+  ]
+}

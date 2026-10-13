@@ -1,0 +1,33 @@
+{
+  "drug_name": "Nplate",
+  "generic_name": "romiplostim",
+  "manufacturer": "Amgen",
+  "benchmark_identity": "amgen_nplate_us_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Chronic immune thrombocytopenia (ITP)",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "injection (single-use vial)",
+  "route_of_administration": "subcutaneous",
+  "moa": "thrombopoietin receptor agonist (peptibody)",
+  "moa_class": "thrombopoietin_receptor_agonist",
+  "first_approval_year": 2008,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=125268",
+    "quote": "Original Approvals or Tentative Approvals ... 08/22/2008 ORIG-1 Approval N/A; Orphan"
+  },
+  "launch_quarter": null,
+  "launch_evidence": null,
+  "commercial_start_quarter": "2010Q1",
+  "series_start_reason": "Amgen prints a U.S. Nplate line from the 2010 Q3 10-Q; 2010 Q1 and Q2 are the prior-year columns of the 2011 Q1 and Q2 10-Qs. Earlier years are printed only as worldwide totals in the 10-Qs.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "U.S. line of Amgen's product sales table; the ROW line and the worldwide total are not used. 2022 Q4 (374) is derived as FY2022 U.S. 848 less nine months 474 and is about 2.3 times Q3 2022 (162); the FY2022 10-K attributes the 2022 increase to volume growth and does not split Q4. Verify before relying on that quarter. The 2010 Q4 value is derived from the FY2010 10-K.",
+  "search_log": [
+    "Same Amgen 10-Q/10-K pass as Vectibix (CIK 0000318154, scripts amgen_final.py): 'Nplate \u2014 U.S.' row, three-month current and prior-year columns from each 10-Q, FY figures from each 10-K.",
+    "2010 Q1 and Q2 from the prior-year columns of the 2011 Q1 and Q2 10-Qs (direct_prior_year_column); 2010 Q3 from its own 10-Q; 2010 Q4 = FY2010 10-K 129 less nine months 2010 95.",
+    "FDA approval: Drugs@FDA overview (ApplNo=125268) lists 08/22/2008 ORIG-1 Approval for BLA 125268, Nplate; the label PDF (label/2008/125268lbl.pdf) states 'Initial U.S. Approval: 2008'.",
+    "Not used: ROW line, worldwide total (Nplate worldwide total is printed from 2011 and would splice ROW into the series)."
+  ]
+}

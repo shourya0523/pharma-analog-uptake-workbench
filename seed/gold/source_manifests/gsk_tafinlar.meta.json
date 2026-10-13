@@ -1,0 +1,38 @@
+{
+  "drug_name": "Tafinlar",
+  "generic_name": "dabrafenib",
+  "manufacturer": "GSK plc",
+  "benchmark_identity": "gsk_tafinlar_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (BRAF V600 mutation-positive melanoma, NSCLC and other solid tumours)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "capsule",
+  "route_of_administration": "oral",
+  "moa": "BRAF kinase inhibitor",
+  "moa_class": "braf_inhibitor",
+  "first_approval_year": 2013,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2013/202806Orig1s000ltr.pdf",
+    "quote": "NDA 202806 NDA APPROVAL ... for Tafinlar (dabrafenib) capsules, 50 mg and 75 mg"
+  },
+  "launch_quarter": "2013Q2",
+  "launch_evidence": {
+    "quarter": "2013Q2",
+    "url": "https://www.sec.gov/Archives/edgar/data/1131399/000119163814000145/gsk201402056k.htm",
+    "quote": "Tafinlar and Mekinist, which were both launched in Q2 2013 as monotherapy treatments"
+  },
+  "commercial_start_quarter": "2013Q3",
+  "series_start_reason": "2013Q3 is the first quarter whose own GSK results announcement prints a Tafinlar turnover row as current; the Q2 2013 announcement (0001191638-13-000943) lists the US approval but prints no Tafinlar sales figure, so Q2 2013 is left out rather than derived.",
+  "series_end_quarter": "2014Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "GSK's oncology portfolio passed to Novartis in 2015. From the Q1 2015 report onward the brand is reported by Novartis only inside the combined line 'Tafinlar + Mekinist' (first printed as 'Mekinist/Tafinlar' 40 for Q1 2015, 0001370368-15-000043), which adds the two brands together and is a different scope, so it is not spliced onto this single-brand GSK series.",
+  "notes": "GSK Group worldwide turnover of Tafinlar in GBP millions; the only issuer that printed Tafinlar on its own line. Check: 2014 = 22+33+37+43 = 135 equals the 2014 figure printed in the Q4 2014 announcement (135); 2013 Q3+Q4 = 4+11 = 15 against FY 2013 16 printed in the Q4 2013 announcement (the difference of 1 is Q2 2013, not printed in its own announcement). Novartis (owner since 2015) prints one combined 'Tafinlar + Mekinist' line (footnote: 'Majority of sales for Mekinist and Tafinlar are combination, but both can be used as monotherapy') through 2026Q2 (581 for Q2 2026 in 0001114448-26-000012); that combined line is not this brand's own sales and is not used. US launch was Q2 2013; GSK states European launch of Tafinlar in Q3 2013. First-approval-year evidence is the FDA NDA approval letter.",
+  "search_log": [
+    "Novartis EX-99.2 interim reports 2012Q2-2026Q2 (CIK 1114448) scanned by script for rows labelled Tafinlar or Mekinist: only the combined 'Tafinlar/Mekinist' / 'Tafinlar + Mekinist' row exists (Q1 2015 onward); no single-brand Novartis row, no Odomzo-style separate listing.",
+    "Novartis 20-F annual reports FY2014-FY2017 searched for single-brand Tafinlar or Mekinist sales: only 'Tafinlar/Mekinist' combined from FY2015.",
+    "Rung d (prior owner): GSK (CIK 1131399) 6-K filings 2013-04 to 2015-06 indexed via data.sec.gov submissions (all 6-K forms); the quarterly results announcements (0001191638-13-000943 Q2 2013, -13-001342 Q3 2013, -14-000145 Q4 2013, -14-000647 Q1 2014, -14-001050 Q2 2014, -14-001364 Q3 2014, -15-000135 Q4 2014) were downloaded and each Tafinlar/Mekinist row read from the HTML table.",
+    "Q2 2013 announcement prints no Tafinlar or Mekinist figure; Q3 2013 announcement prints Tafinlar 4 and Mekinist 3 with nine months 5 and 3.",
+    "Bigdata.com used to locate the Q4 2014 GSK results (product sales Tafinlar 135, Mekinist 68 for 2014); cited URLs are sec.gov Archives originals."
+  ]
+}

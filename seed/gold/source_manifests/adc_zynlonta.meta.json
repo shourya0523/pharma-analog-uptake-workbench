@@ -1,0 +1,37 @@
+{
+  "drug_name": "Zynlonta",
+  "generic_name": "loncastuximab tesirine",
+  "manufacturer": "ADC Therapeutics",
+  "benchmark_identity": "adc_zynlonta_us_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Relapsed or refractory diffuse large B-cell lymphoma",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "injection (lyophilized powder for intravenous infusion)",
+  "route_of_administration": "intravenous",
+  "moa": "CD19-directed antibody-drug conjugate (pyrrolobenzodiazepine dimer payload)",
+  "moa_class": "cd19_antibody_drug_conjugate",
+  "first_approval_year": 2021,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761196",
+    "quote": "ZYNLONTA LONCASTUXIMAB TESIRINE-LPYL 10MG INJECTABLE;INJECTION ... 04/23/2021 ORIG-1 Approval"
+  },
+  "launch_quarter": "2021Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1771910/000177191022000004/adc-20211231.htm",
+    "quote": "our only source of product revenue, which commenced during May 2021, has been from sales of ZYNLONTA"
+  },
+  "commercial_start_quarter": "2021Q2",
+  "series_start_reason": "First quarter with product revenue: Zynlonta was approved 23 April 2021 and its U.S. sales commenced in May 2021 (Q2 2021 product revenue 3,760 KUSD). Q1 2021 had no product sales, so no earlier quarter exists.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "The series is the income-statement line 'Product revenues, net'. ADC states Zynlonta is its only product revenue and that the sales are U.S. only; ex-U.S. income (Japan, licence and royalty items) is reported as license/royalty revenue and is not in this line. Quarters 2021Q2-2023Q3 are from each quarter's own 6-K detail document (inline XBRL _d2 file, KUSD); 2021Q4, 2022Q4 from the earnings-release tables; 2024Q1-2026Q2 from 10-Q income statements in thousands. The 2023Q4, 2024Q4 and 2025Q4 values are full-year 10-K figures less nine months. Quarterly figures are recorded in millions (value_reported) with the printed thousands in source_value_reported.",
+  "search_log": [
+    "Listed ADC Therapeutics (CIK 0001771910, ADCT) filings from data.sec.gov/submissions; the company filed 20-F and 6-K through 2023 and 10-Q/10-K from 2024. Bigdata was not used for this product; EDGAR documents were read directly.",
+    "A first pass grepped 'ZYNLONTA' table rows and found rows labelled ZYNLONTA with figures (for example 14,999 in Q1 2024). Those are research-and-development expense rows by program (followed by 'Cami' and 'ADCT-601' rows), not revenue, and were rejected; the revenue line is 'Product revenues, net'.",
+    "2021-2023 quarters: each quarter's own 6-K detail document (adc-YYYYMMDD_d2.htm, the financial statements in the filing's index), income statement row 'Product revenues, net' (KUSD). Q4 2021 and Q4 2022 are the earnings-release tables (6-K, 2022-03-03 and 2023-02-28).",
+    "2023Q4, 2024Q4, 2025Q4 derived as full-year 10-K product revenues less the nine-month figure from the third-quarter 10-Q or 6-K (annual_less_reported_first_nine_months); the nine-month figures are printed in those reports.",
+    "FDA: Drugs@FDA overview for BLA 761196 lists 04/23/2021 ORIG-1 Approval. Launch date from the 2021 Form 20-F text."
+  ]
+}

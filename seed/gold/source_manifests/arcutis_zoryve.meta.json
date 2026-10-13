@@ -1,0 +1,39 @@
+{
+  "drug_name": "Zoryve",
+  "generic_name": "roflumilast",
+  "manufacturer": "Arcutis Biotherapeutics",
+  "benchmark_identity": "arcutis_zoryve_us_canada_reported",
+  "therapeutic_area": "Immunology / Inflammation",
+  "indication_area": "Psoriasis / atopic dermatitis",
+  "revenue_scope": "U.S. and Canada",
+  "geography": "United States and Canada",
+  "formulation": "topical cream 0.3%, cream 0.15%, cream 0.05% and foam 0.3%, reported on one brand line",
+  "route_of_administration": "topical",
+  "moa": "phosphodiesterase-4 (PDE4) inhibitor, per the company's description of ZORYVE as a highly potent and selective PDE4 inhibitor",
+  "moa_class": "pde4_inhibitor",
+  "first_approval_year": 2022,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2022/215985Orig1s000ltr.pdf",
+    "quote": "NDA 215985 ... Zoryve (roflumilast) cream, 0.3% ... This NDA provides for the use of Zoryve (roflumilast) cream, 0.3% for topical treatment of plaque psoriasis (signed SHARI L TARGUM 07/29/2022)"
+  },
+  "launch_quarter": "2022Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1787306/000178730623000023/arqt-20221231.htm",
+    "quote": "We commercially launched ZORYVE in August 2022 after obtaining FDA approval for the treatment of plaque psoriasis"
+  },
+  "commercial_start_quarter": "2022Q3",
+  "series_start_reason": "Arcutis first prints a product revenue line in the third quarter of 2022, the quarter ZORYVE launched (August 2022); the 2022Q2 release has no product revenue line.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "The 'Product revenue, net' line is total ZORYVE net product revenue, all formulations (2026Q2 release splits it as cream 0.3% 35.3, cream 0.15% 24.2, cream 0.05% 2.9 and foam 67.4, USD millions). Scope is U.S. only for 2022Q3-2023Q1; Health Canada approval was announced in the Q1 2023 release with launch 'in the coming weeks', so Canada enters the line from about 2023Q2 and is small. The issuer does not split the line by country. License revenue is on a separate line and excluded. The 2026Q1 figure is from the Form 10-Q (the 2026-05-06 8-K carries Item 9.01 only). Calendar quarters throughout.",
+  "search_log": [
+    "pulled data.sec.gov submissions for CIK 1787306 (Arcutis Biotherapeutics, Inc.) and listed every 8-K, 10-Q, 10-K from 2020; 28 earnings-related 8-K and 8-K/A filings fetched via index.json and EX-99.1 earnings releases downloaded",
+    "product revenue read from each quarter's own release (three-month column) for 2022Q3-2026Q2 except 2026Q1 (10-Q statement of operations, three-month column)",
+    "2022Q2 release (8-K 2022-08-04) searched for a product revenue line: none printed; 2022Q3 release prints the first one (725 thousand, launch quarter)",
+    "sums of four quarters checked against each Q4 release's full-year product revenue: 2022 (3,686), 2023 (29,186), 2024 (166,542), 2025 (372,072)",
+    "FDA approval letter for NDA 215985 (signed 07/29/2022) fetched from accessdata.fda.gov; openFDA drugsfda record lists ORIG approval 2022-07-29 for NDA 215985",
+    "FY2022 10-K read for the August 2022 launch and for the 'single product approved for commercial sale' wording",
+    "2026 10-Q and Q2 2026 release read for the U.S. and Canada approval and launch wording; no geographic split of product revenue found (search for 'geograph', 'Canada' sales and disaggregation returned none)"
+  ]
+}

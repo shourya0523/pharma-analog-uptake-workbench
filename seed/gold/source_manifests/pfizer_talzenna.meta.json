@@ -1,0 +1,35 @@
+{
+  "drug_name": "Talzenna",
+  "generic_name": "talazoparib",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (germline BRCA-mutated HER2-negative breast cancer; HRR gene-mutated mCRPC with Xtandi)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "capsule",
+  "route_of_administration": "oral",
+  "moa": "poly (ADP-ribose) polymerase (PARP) inhibitor",
+  "moa_class": "parp_inhibitor",
+  "first_approval_year": 2018,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2018/211651Orig1s000ltr.pdf",
+    "quote": "NDA 211651 NDA APPROVAL ... for Talzenna (talazoparib) capsules, 0.25 mg and 1 mg ... for the treatment of adult patients with deleterious or suspected deleterious germline breast cancer susceptibility gene (BRCA)-mutated (gBRCAm) HER2-negative locally advanced or metastatic breast cancer (electronically signed 10/16/2018)"
+  },
+  "launch_quarter": null,
+  "series_start_reason": "Pfizer's quarterly earnings releases and periodic reports print no Talzenna row before the first-quarter 2024 release. The April 2024 'Recasted Product Revenue Tables' (investor-relations PDF) print Talzenna for each quarter of 2023 and 2022, so the contiguous series starts 2022Q1. The full-year figures printed in the 2025 Form 10-K (2024: 117, 2023: 64, 2022: 48) agree with the quarters within rounding. No document found prints 2018-2021 Talzenna revenue (approved October 2018); those years sit in 'All other Oncology' in the releases.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Worldwide revenue line named for the brand in Pfizer's Oncology product table under the column groups WORLDWIDE | UNITED STATES | TOTAL INTERNATIONAL; the same table prints U.S. and International columns, both nonzero throughout, so the line is a company worldwide total for the brand (breast cancer and, from the June 2023 US approval, mCRPC with Xtandi as listed in the 10-Q of 2023-08-09). 2022 and 2023 quarters come from the recasted table, which states it conforms 2023 to the 2024 presentation (royalty income reclassified into revenues); the 2023 figures equal the prior-year columns printed in the 2024 quarterly releases (10, 12, 20, 22). From 2024Q1 each quarter is read from its own release.",
+  "search_log": [
+    "Listed Pfizer (CIK 0000078003) filings via data.sec.gov submissions (recent + older pages), all forms incl. 8-K, 8-K/A, 10-K, 10-Q; selected 8-Ks with Item 2.02 filed 2018-01 to 2026-08 (35 earnings releases read; the 2022-04-20, 2023-10-13 and 2023-12-14 filings are not quarterly earnings releases) and read each EX-99.1; fetched every 10-Q/10-K filed 2019-02 to 2026-08 and scanned table rows for the product names.",
+    "Table rows were taken from the HTML <tr> rows of each exhibit; the quarter figure is the first occurrence of the product row (the quarter block under WORLDWIDE | UNITED STATES | TOTAL INTERNATIONAL); later occurrences are international sub-regions and year-to-date blocks.",
+    "Releases 2018-01 to 2023-10 and 10-Q/10-K rows 2019-2023 print no Talzenna revenue row (only pipeline and approval text); the first revenue row is 'Talzenna | 23 | 10' in the first-quarter 2024 release.",
+    "Found the investor-relations PDF 'Recasted 2023 Product Revenue Tables' (s206.q4cdn.com ... /2024/04/Recasted-2023-Product-Revenue-Tables.pdf): Talzenna 2023 and 2022 by quarter and full year (64 and 48); used for 2022Q1-2023Q4.",
+    "The investor-relations 'Historical Financials for Product Revenues' file dated 2021-10-21 is listed on investors.pfizer.com but the site returns HTTP 403 to automated requests and its URL could not be found by search; it was not read, so 2018-2021 quarters may exist there and were not checked.",
+    "Annual check: 2022 quarters 11+13+13+11 = 48 and 2023 quarters 10+12+20+22 = 64 equal the recast full-year columns; 2024 quarters 23+32+36+27 = 118 against 117 printed (rounding); 2025 quarters 40+46+47+49 = 182 equals the printed 182.",
+    "Launch quarter not established from an issuer document: none of the Pfizer documents read states a first-sale date."
+  ],
+  "commercial_start_quarter": "2022Q1",
+  "manufacturer": "Pfizer",
+  "benchmark_identity": "pfizer_talzenna_worldwide_reported"
+}

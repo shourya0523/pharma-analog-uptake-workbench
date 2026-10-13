@@ -1,0 +1,33 @@
+{
+  "drug_name": "Zykadia",
+  "generic_name": "ceritinib",
+  "manufacturer": "Novartis",
+  "benchmark_identity": "novartis_zykadia_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (ALK-positive non-small cell lung cancer)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "capsule",
+  "route_of_administration": "oral",
+  "moa": "Anaplastic lymphoma kinase (ALK) tyrosine kinase inhibitor",
+  "moa_class": "alk_inhibitor",
+  "first_approval_year": 2014,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2014/205755Orig1s000ltr.pdf",
+    "quote": "NDA 205755 ACCELERATED APPROVAL ... for Zykadia (ceritinib) capsules, 150 mg"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2014Q2",
+  "series_start_reason": "First Novartis interim report that prints a Zykadia sales row is the Q2 2014 report (7, with the prior-year column 0); the Q1 2014 report prints no Zykadia row (FDA approval was April 2014, per the Q2 2014 report text).",
+  "series_end_quarter": "2016Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "From the Q1 2017 interim report (0001370368-17-000038, a170425-99_2.htm) Novartis no longer prints a Zykadia net sales row: the Oncology product table lists Tasigna, Tafinlar + Mekinist, Votrient, Promacta/Revolade, Jakavi and 'Other 223 | 251', and Zykadia appears only in pipeline/approval tables. The Q4 2016 report (0001370368-17-000004) is the last with a Zykadia row (Q4 2016 22; FY 2016 91).",
+  "notes": "Novartis group net sales of Zykadia as a single row of the product net sales table; no regional split is printed on that table, and the table is the group's third-party net sales. Four-quarter checks against the Q4 reports' own FY columns: 2014 Q2+Q3+Q4 = 7+12+12 = 31 (FY 2014 31; Q1 2014 not printed); 2015 = 16+18+21+24 = 79 (FY 79); 2016 = 24+24+21+22 = 91 (FY 91). The FY2017 20-F was searched for a Zykadia sales figure and prints none (no annual series extension). Cross-check: every quarter's own figure equals the next year's prior-year column (e.g. Q2 2015 report prior-year column 7, Q3 2015 12, Q4 2015 12, Q1 2016 16, Q2 2016 18, Q3 2016 21, Q4 2016 24).",
+  "search_log": [
+    "Listed Novartis (CIK 1114448) 6-K and 6-K/A filings from 2012-06 on via data.sec.gov submissions (current and older pages, 287 filings, no form filter beyond the 6-K family); fetched index.json for each and downloaded the EX-99.2 interim financial report (nvs-*-99_2.htm or a*-99_2.htm) of every quarter 2012Q2 through 2026Q2 (58 htm documents).",
+    "Extracted every table row whose first cell equals the brand by script (BeautifulSoup) and read the header above it; Zykadia has a numeric row from the Q2 2014 report through the Q4 2016 report and none after.",
+    "Searched all 2017-2026 reports for the word Zykadia: it appears only in pipeline and regulatory tables (Q1 and Q2 2017 reports).",
+    "Searched Novartis 20-F annual reports FY2014-FY2017 (0001047469-15-000433, -16-009872, -17-000338, -18-000380) for a Zykadia sales figure: FY2014 31, FY2015 79 (consistent with the quarters); no FY2017 figure printed.",
+    "Bigdata.com used to locate the filings; all cited URLs are the sec.gov Archives originals."
+  ]
+}

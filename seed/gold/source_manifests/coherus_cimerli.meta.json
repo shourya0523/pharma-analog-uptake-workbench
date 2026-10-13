@@ -1,0 +1,32 @@
+{
+  "drug_name": "Cimerli",
+  "generic_name": "ranibizumab-eqrn",
+  "manufacturer": "Coherus BioSciences",
+  "benchmark_identity": "coherus_cimerli_net_product_revenue_reported",
+  "therapeutic_area": "Ophthalmology",
+  "indication_area": "Retinal disease (biosimilar to Lucentis)",
+  "revenue_scope": "Net product revenue as printed",
+  "geography": "Not split by the issuer",
+  "formulation": "solution for intravitreal injection",
+  "route_of_administration": "intravitreal",
+  "moa": "VEGF-A inhibitor (ranibizumab biosimilar)",
+  "moa_class": "vegf_inhibitor",
+  "first_approval_year": 2022,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2022/761165Orig1s000ltr.pdf",
+    "quote": "We have approved your BlA for CIMERLI (ranibizumab-eqrn) effective this date."
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2022Q4",
+  "series_start_reason": "No CIMERLI sales are printed before the fourth quarter of 2022 (nil in the 2022 10-Qs and in the nine-month comparatives); series starts 2022Q4 from the FY2022 10-K.",
+  "series_end_quarter": "2024Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Coherus sold the CIMERLI ophthalmology franchise to Sandoz on 2024-03-01; the Q1 2024 10-Q states 'CIMERLI sales ceased on March 1, 2024 in connection with the Sale Transaction', and later filings print the divested line only as a discontinued comparative.",
+  "notes": "Coherus is the filer under the name Coherus BioSciences, now Coherus Oncology (same CIK). The Q1 2024 figure (28,194) is the figure the Q1 2024 10-Q prints for the quarter, which contains only the two months before the sale; the FY2024 10-K prints 27,079 for the divested period, a different figure, and the quarter's own document is used. Series is from the issuer's own product revenue, after sale to Sandoz it is not continued. Q4 figures derived from the full-year line less nine months.",
+  "search_log": [
+    "Bigdata search was not needed; listed every 10-Q and 10-K for CIK 1512762 via data.sec.gov submissions and read each CIMERLI row.",
+    "Found the sale of the franchise to Sandoz on 2024-03-01 in the Q1 2024 10-Q text and the FY2024 10-K discontinued-operations table.",
+    "Q4 2022 from the FY2022 10-K (6,946) less a nil nine-month figure; Q4 2023 derived from the FY2023 10-K less the Q3 2023 nine-month figure.",
+    "FDA BLA 761165 approval letter read for the approval sentence; year from the letter's effective-date sentence and the 2022 approval date of the BLA."
+  ]
+}

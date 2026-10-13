@@ -1,0 +1,34 @@
+{
+  "drug_name": "Saphnelo",
+  "generic_name": "anifrolumab",
+  "manufacturer": "AstraZeneca",
+  "benchmark_identity": "astrazeneca_saphnelo_worldwide_reported",
+  "therapeutic_area": "Immunology / Inflammation",
+  "indication_area": "Immunology (systemic lupus erythematosus)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (World column; predominantly US, regional columns printed beside it)",
+  "formulation": "intravenous infusion (300 mg/2 mL vial)",
+  "route_of_administration": "intravenous",
+  "moa": "Type I interferon receptor (IFNAR1) blocking monoclonal antibody",
+  "moa_class": "ifnar_antagonist_mab",
+  "first_approval_year": 2021,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761123",
+    "quote": "Original Approvals or Tentative Approvals ... 07/30/2021 ORIG-1 Approval (BLA 761123, Company: ASTRAZENECA AB; SAPHNELO ANIFROLUMAB-FNIA 300MG/2ML(150MG/ML) INJECTABLE;INJECTION)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2021Q3",
+  "series_start_reason": "FDA approval 30 Jul 2021; the Q3 2021 results (0001654954-21-012039) print the first Saphnelo row (1 for the quarter and the year to date, all in the US column). The Q2 2021 release prints no Saphnelo sales row.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Every row is the first (World) column of the Saphnelo line in the Product Sales table (BioPharmaceuticals, Respiratory & Immunology) of that quarter's own release. Annual sums of the quarters equal the full-year figures printed in the Q4 releases: 2021 8, 2022 116, 2023 280, 2024 474, 2025 686. Launch quarter is not stated by quarter in an issuer document, so launch_quarter is null.",
+  "search_log": [
+    "Listed every AstraZeneca PLC (CIK 0000901832) filing via data.sec.gov submissions (recent plus older pages; 2,052 filings, all form types).",
+    "Downloaded the main document of all 1,646 filings of form 6-K, 6-K/A, 20-F and 20-F/A that carry a primary document (2002-2026) and scanned them: HTML table rows by label, plain text for the 2002-2003 .txt releases; 2002 6-Ks before November 2002 are scanned paper documents (.paper) and were not readable.",
+    "Latest results document used: the Q2 2026 results 6-K filed 2026-07-27 (0001104659-26-086846); no later results release exists as of the search date.",
+    "Bigdata.com was available but not needed; every figure was read from the sec.gov original, never from a Bigdata.com link.",
+    "Saphnelo rows: located in every results release Q3 2021-Q2 2026 (20 quarters, no gaps); Q4 values cross-checked against the full-year figures in the same releases.",
+    "Q1-Q2 2021 releases: no Saphnelo sales row (the Q3 2021 release prints dashes for Q1 and Q2 2021 in its quarterly history table)."
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "drug_name": "Rytelo",
+  "generic_name": "imetelstat",
+  "manufacturer": "Geron",
+  "benchmark_identity": "geron_rytelo_total_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (hematologic, lower-risk MDS)",
+  "revenue_scope": "Company product revenue, net",
+  "geography": "Company total as printed (no geographic split in the table)",
+  "formulation": "injection",
+  "route_of_administration": "intravenous",
+  "moa": "telomerase inhibitor (oligonucleotide)",
+  "moa_class": "telomerase_inhibitor",
+  "first_approval_year": 2024,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2024/217779Orig1s000ltr.pdf",
+    "quote": "NDA 217779 ... This NDA provides for the use of RYTELO (imetelstat) for injection for the treatment of adult patients with low- to intermediate-1 risk myelodysplastic syndromes (MDS) with transfusion-dependent anemia ... We have completed our review of this application, as amended. It is approv"
+  },
+  "launch_quarter": "2024Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/886744/000095017024093307/gern-ex99_1.htm",
+    "quote": "U.S. commercial launch of RYTELO(TM) (imetelstat) began in June 2024"
+  },
+  "commercial_start_quarter": "2024Q2",
+  "series_start_reason": "First quarter with a RYTELO product revenue line: the 2024Q2 release prints 780 for three months and six months (no Q1 2024 revenue), following the June 2024 U.S. launch.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Geron prints a single 'Product revenue, net' line that is RYTELO only. The 2026Q1 row is taken from the 10-Q, which prints it as the current quarter. Sum of 2025 quarters equals the printed FY2025 183,623 and sum of 2024 quarters equals 76,495 within rounding of 1.",
+  "search_log": [
+    "Bigdata smart search for Geron RYTELO net product revenue by quarter 2024-2026 (leads only; cited figures taken from the original sec.gov exhibits).",
+    "Listed Geron 8-K Item 2.02 and 10-Q filings from data.sec.gov submissions (CIK 0000886744); used the Ex. 99.1 of each earnings 8-K for 2024Q2-2025Q4 and 2026Q2, and the 10-Q for 2026Q1 (no 2.02 8-K found for 2026Q1 in the listing).",
+    "Grepped each exhibit for 'Product revenue, net'; the row carries the current-quarter figure first.",
+    "Cross-checks: 2025 quarters 39,436 + 49,007 + 47,167 + 48,013 = 183,623 (FY2025 printed); 2024 quarters 780 + 28,209 + 47,507 = 76,496 vs 76,495 printed.",
+    "FDA approval letter NDA 217779 fetched and read (approval text quoted from the letter's approval paragraph)."
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "drug_name": "Opzelura",
+  "generic_name": "ruxolitinib cream",
+  "manufacturer": "Incyte",
+  "benchmark_identity": "incyte_opzelura_worldwide_reported",
+  "therapeutic_area": "Immunology / Inflammation",
+  "indication_area": "Dermatology (atopic dermatitis, vitiligo)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "cream (ruxolitinib 1.5%)",
+  "route_of_administration": "topical",
+  "moa": "JAK1/JAK2 inhibitor",
+  "moa_class": "jak1_jak2_inhibitor",
+  "first_approval_year": 2021,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2021/215309Orig1s000ltr.pdf",
+    "quote": "NDA 215309 ... This NDA provides for the use of OPZELURA (ruxolitinib) cream for the short-term and non-continuous chronic treatment of mild to moderate atopic dermatitis ... It is approved, effective on the date of this letter, for use as recommended in the enclosed agreed-upon labeling with minor editorial revisions reflected in the enclosed labeling. (signed 09/21/2021 02:05:47 PM)"
+  },
+  "launch_quarter": "2021Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/879169/000155837022000883/incy-20220208xex99d1.htm",
+    "quote": "Successful U.S. launch of Opzelura TM (ruxolitinib) cream in atopic dermatitis with nearly 19,000 patients treated from launch (October 11th) through the end of the year"
+  },
+  "commercial_start_quarter": "2021Q4",
+  "series_start_reason": "Incyte prints an Opzelura net product revenues row from the Q4 2021 release, the first quarter of U.S. sales (launch October 11, 2021). The Q3 2021 release, the approval quarter, prints no Opzelura row.",
+  "series_end_quarter": "2026Q2",
+  "series_end_basis": null,
+  "series_end_reason": "Latest published quarter at sourcing: the Q2 2026 release (filed 2026-07-28). The Q3 2026 release is not yet published as of this batch.",
+  "notes": "Series is the single Opzelura line Incyte prints in its net product revenues table. Incyte holds worldwide rights; the line includes ex-U.S. sales from 2023, when Opzelura was approved in Europe. Q2 2026 includes a one-time, non-cash benefit of $246 million (CMS agreement, accrual reversal through March 31, 2026), recorded as printed; the release states Opzelura net sales of $204 million excluding it. Q4 quotes tie to full-year figures; the four quarters of each year sum to the printed twelve-month value.",
+  "search_log": [
+    "data.sec.gov submissions for CIK 0000879169 (INCYTE CORP) listed every 8-K with Item 2.02 from 2021-08 onward (20 filings); each exhibit index.json was read and the EX-99.1 downloaded",
+    "searched every Incyte earnings exhibit for 'Opzelura': no row in the 2021-11-02 release (Q3 2021); first row in the 2022-02-08 release (Q4 2021, 4,668 thousand)",
+    "one release per quarter used, the quarter's own release, not the later comparative column; Q4 releases checked against the prior-year and sum of four quarters for 2022-2025 (exact match)",
+    "2026Q2: sum of Q1 2026 (143,015) and Q2 2026 (449,736) equals the six-month figure printed in the Q2 2026 release (592,751)",
+    "FDA approval: Drugs@FDA NDA 215309 overview lists the original approval 09/21/2021 (ORIG-1); the approval letter appletter/2021/215309Orig1s000ltr.pdf was fetched and the approval sentence read from its text layer",
+    "launch: the Q4 2021 release states the U.S. launch from October 11, 2021",
+    "prior-year columns of each later release (2023 to 2025) were compared with the earlier quarter release for the same quarter: all matched, so no restatement is visible in the quarters used"
+  ],
+  "reviewed_anomalies": {
+    "2026Q2": "Reported net product revenue of 449,736 thousand includes a one-time, non-cash benefit of about USD 246 million tied to Incyte's CMS agreement; the release states Opzelura net product revenue of about USD 204 million excluding it. The reported figure is kept as printed."
+  }
+}

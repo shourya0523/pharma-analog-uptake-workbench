@@ -1,0 +1,32 @@
+{
+  "generic_name": "ozanimod",
+  "therapeutic_area": "Immunology / Inflammation",
+  "indication_area": "Immunology (ulcerative colitis, multiple sclerosis)",
+  "formulation": "oral capsule",
+  "route_of_administration": "oral",
+  "moa": "sphingosine 1-phosphate receptor modulator",
+  "moa_class": "s1p_receptor_modulator",
+  "first_approval_year": 2020,
+  "drug_name": "Zeposia",
+  "manufacturer": "Bristol-Myers Squibb",
+  "benchmark_identity": "bms_zeposia_worldwide_reported",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "approval_evidence": {
+    "url": null,
+    "quote": null
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2020Q2",
+  "series_start_reason": "First quarter the batch's BMS release prints the Zeposia row is 2020Q2: earlier releases in the batch are not separately sourced beyond this quarter.",
+  "series_end_quarter": "2026Q2",
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Series runs to the latest release (2026Q2).",
+  "search_log": [
+    "listed CIK 14272 filings via data.sec.gov/submissions (recent and paged files), all 8-K and 8-K/A with Item 2.02; fetched each filing's index.json and its earnings exhibit (Exhibit 99.1 / ex991)",
+    "read each product row from the exhibit's first product-table line with two or more printed figures; for 2023 onward the U.S., Int'l and worldwide triplet is read with worldwide as the third figure (checked that U.S. + Int'l = worldwide on every row)",
+    "prior-year columns of each release checked against the prior-year quarter's own release (no mismatch); the Q1 2014 values come from the 2014-04-29 release (q12014ex991.htm), which is not in the first index pass",
+    "FDA approval evidence NOT verified: accessdata.fda.gov returned HTTP 503 during this run and the web search tool rejected its arguments, so first_approval_year is set from general knowledge and approval_evidence is left null for follow-up"
+  ]
+}

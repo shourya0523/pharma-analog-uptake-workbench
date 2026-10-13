@@ -1,5 +1,30 @@
 [
  {
+  "drug_name": "Zynlonta",
+  "manufacturer": "ADC Therapeutics",
+  "ticker": "ADCT",
+  "generic_name": "loncastuximab tesirine",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 20.033,
+    "gold_id": "adc-zynlonta-us-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 18.634,
+    "gold_id": "adc-zynlonta-us-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Vraylar",
   "manufacturer": "AbbVie",
   "ticker": "ABBV",
@@ -80,6 +105,31 @@
   ]
  },
  {
+  "drug_name": "Lybalvi",
+  "manufacturer": "Alkermes plc",
+  "ticker": "ALKS",
+  "generic_name": "olanzapine and samidorphan",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 92.364,
+    "gold_id": "alkermes-lybalvi-us-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 93.979,
+    "gold_id": "alkermes-lybalvi-us-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Restasis",
   "manufacturer": "Allergan",
   "ticker": null,
@@ -141,6 +191,31 @@
     "period": "2020Q4",
     "value_normalized_usd_millions": 401.0,
     "gold_id": "abbvie-vraylar-worldwide-reported-2020q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Seysara",
+  "manufacturer": "Almirall",
+  "ticker": null,
+  "generic_name": "sarecycline",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 4.56612,
+    "gold_id": "almirall-seysara-us-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 5.23395,
+    "gold_id": "almirall-seysara-us-reported-2026q2"
    }
   ]
  },
@@ -240,6 +315,31 @@
   ]
  },
  {
+  "drug_name": "Zoryve",
+  "manufacturer": "Arcutis Biotherapeutics",
+  "ticker": "ARQT",
+  "generic_name": "roflumilast",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 105.398,
+    "gold_id": "arcutis-zoryve-us-canada-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 129.861,
+    "gold_id": "arcutis-zoryve-us-canada-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Xtandi",
   "manufacturer": "Astellas",
   "ticker": null,
@@ -286,6 +386,31 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 1314.0,
     "gold_id": "astrazeneca-ultomiris-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Auvelity",
+  "manufacturer": "Axsome Therapeutics",
+  "ticker": "AXSM",
+  "generic_name": "dextromethorphan hydrobromide and bupropion hydrochloride",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 152.696,
+    "gold_id": "axsome-auvelity-us-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 180.282,
+    "gold_id": "axsome-auvelity-us-reported-2026q2"
    }
   ]
  },
@@ -400,6 +525,41 @@
   ]
  },
  {
+  "drug_name": "Orladeyo",
+  "manufacturer": "BioCryst Pharmaceuticals",
+  "ticker": "BCRX",
+  "generic_name": "berotralstat",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 120.159,
+    "gold_id": "biocryst-orladeyo-us-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 140.338,
+    "gold_id": "biocryst-orladeyo-us-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 141.557,
+    "gold_id": "biocryst-orladeyo-us-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 146.725,
+    "gold_id": "biocryst-orladeyo-us-reported-2025q4"
+   }
+  ]
+ },
+ {
   "drug_name": "Voxzogo",
   "manufacturer": "BioMarin",
   "ticker": "BMRN",
@@ -485,10 +645,10 @@
   ]
  },
  {
-  "drug_name": "Yervoy",
+  "drug_name": "Zeposia",
   "manufacturer": "Bristol-Myers Squibb",
   "ticker": "BMY",
-  "generic_name": "ipilimumab",
+  "generic_name": "ozanimod",
   "options": {
    "earnings_since": "2026-04-05",
    "earnings_until": "2027-05-05",
@@ -499,13 +659,13 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 651.0,
-    "gold_id": "bms-yervoy-worldwide-reported-2026q1"
+    "value_normalized_usd_millions": 118.0,
+    "gold_id": "bms-zeposia-worldwide-reported-2026q1"
    },
    {
     "period": "2026Q2",
-    "value_normalized_usd_millions": 769.0,
-    "gold_id": "bms-yervoy-worldwide-reported-2026q2"
+    "value_normalized_usd_millions": 169.0,
+    "gold_id": "bms-zeposia-worldwide-reported-2026q2"
    }
   ]
  },
@@ -536,6 +696,66 @@
     "period": "2019Q3",
     "value_normalized_usd_millions": 547.0,
     "gold_id": "amgen-otezla-worldwide-reported-2019q3"
+   }
+  ]
+ },
+ {
+  "drug_name": "Tavneos",
+  "manufacturer": "ChemoCentryx",
+  "ticker": null,
+  "generic_name": "avacopan",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 5.353,
+    "gold_id": "amgen-tavneos-us-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 9.093,
+    "gold_id": "amgen-tavneos-us-reported-2022q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cimerli",
+  "manufacturer": "Coherus BioSciences",
+  "ticker": "CHRS",
+  "generic_name": "ranibizumab-eqrn",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 28.194,
+    "gold_id": "coherus-cimerli-net-product-revenue-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2024Q1. Coherus sold the CIMERLI ophthalmology franchise to Sandoz on 2024-03-01; the Q1 2024 10-Q states 'CIMERLI sales ceased on March 1, 2024 in connection with the Sale Transaction', and later filings print the divested line only as a discontinued comparative."
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2024Q1. Coherus sold the CIMERLI ophthalmology franchise to Sandoz on 2024-03-01; the Q1 2024 10-Q states 'CIMERLI sales ceased on March 1, 2024 in connection with the Sale Transaction', and later filings print the divested line only as a discontinued comparative."
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2024Q1. Coherus sold the CIMERLI ophthalmology franchise to Sandoz on 2024-03-01; the Q1 2024 10-Q states 'CIMERLI sales ceased on March 1, 2024 in connection with the Sale Transaction', and later filings print the divested line only as a discontinued comparative."
    }
   ]
  },
@@ -700,6 +920,31 @@
   ]
  },
  {
+  "drug_name": "Rytelo",
+  "manufacturer": "Geron",
+  "ticker": "GERN",
+  "generic_name": "imetelstat",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 51.771,
+    "gold_id": "geron-rytelo-total-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 57.473,
+    "gold_id": "geron-rytelo-total-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Yescarta",
   "manufacturer": "Gilead",
   "ticker": "GILD",
@@ -755,10 +1000,10 @@
   ]
  },
  {
-  "drug_name": "Jakafi",
+  "drug_name": "Opzelura",
   "manufacturer": "Incyte",
   "ticker": "INCY",
-  "generic_name": "ruxolitinib",
+  "generic_name": "ruxolitinib cream",
   "options": {
    "earnings_since": "2026-04-05",
    "earnings_until": "2027-05-05",
@@ -769,13 +1014,13 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 757.755,
-    "gold_id": "incyte-jakafi-us-reported-2026q1"
+    "value_normalized_usd_millions": 143.015,
+    "gold_id": "incyte-opzelura-worldwide-reported-2026q1"
    },
    {
     "period": "2026Q2",
-    "value_normalized_usd_millions": 816.659,
-    "gold_id": "incyte-jakafi-us-reported-2026q2"
+    "value_normalized_usd_millions": 449.736,
+    "gold_id": "incyte-opzelura-worldwide-reported-2026q2"
    }
   ]
  },
@@ -811,6 +1056,31 @@
     "period": "2022Q4",
     "value_normalized_usd_millions": null,
     "why": "The issuer reports no line for this product after 2022Q1. From the Q2 2022 release Intercept recasts product revenue, net to U.S. only after selling its international business on 2022-07-01 (prior periods recast); the worldwide definition ends with 2022Q1. The U.S.-only recast series is intercept_ocaliva_alt. (intercept_ocaliva_alt: Companion Series sheet, cited but not scored.)"
+   }
+  ]
+ },
+ {
+  "drug_name": "Vyxeos",
+  "manufacturer": "Jazz Pharmaceuticals",
+  "ticker": "JAZZ",
+  "generic_name": "daunorubicin and cytarabine liposome",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 26.6,
+    "gold_id": "jazz-vyxeos-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 31.4,
+    "gold_id": "jazz-vyxeos-worldwide-reported-2026q2"
    }
   ]
  },
@@ -915,10 +1185,10 @@
   ]
  },
  {
-  "drug_name": "Winrevair",
+  "drug_name": "Zerbaxa",
   "manufacturer": "Merck",
   "ticker": "MRK",
-  "generic_name": "sotatercept-csrk",
+  "generic_name": "ceftolozane/tazobactam",
   "options": {
    "earnings_since": "2026-04-05",
    "earnings_until": "2027-05-05",
@@ -929,13 +1199,13 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 525.0,
-    "gold_id": "merck-winrevair-worldwide-reported-2026q1"
+    "value_normalized_usd_millions": 82.0,
+    "gold_id": "merck-zerbaxa-worldwide-reported-2026q1"
    },
    {
     "period": "2026Q2",
-    "value_normalized_usd_millions": 588.0,
-    "gold_id": "merck-winrevair-worldwide-reported-2026q2"
+    "value_normalized_usd_millions": 77.0,
+    "gold_id": "merck-zerbaxa-worldwide-reported-2026q2"
    }
   ]
  },
@@ -1255,6 +1525,41 @@
   ]
  },
  {
+  "drug_name": "Zulresso",
+  "manufacturer": "Sage Therapeutics",
+  "ticker": null,
+  "generic_name": "brexanolone",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 1.69,
+    "gold_id": "sage-zulresso-us-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 0.6,
+    "gold_id": "sage-zulresso-us-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 0.843,
+    "gold_id": "sage-zulresso-us-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 0.442,
+    "gold_id": "sage-zulresso-us-reported-2024q4"
+   }
+  ]
+ },
+ {
   "drug_name": "Xifaxan",
   "manufacturer": "Salix Pharmaceuticals",
   "ticker": null,
@@ -1465,6 +1770,31 @@
   ]
  },
  {
+  "drug_name": "Briumvi",
+  "manufacturer": "TG Therapeutics",
+  "ticker": "TGTX",
+  "generic_name": "ublituximab",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 194.8,
+    "gold_id": "tg-briumvi-us-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 227.7,
+    "gold_id": "tg-briumvi-us-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Motegrity",
   "manufacturer": "Takeda",
   "ticker": "TAK",
@@ -1615,6 +1945,41 @@
   ]
  },
  {
+  "drug_name": "Horizant",
+  "manufacturer": "XenoPort",
+  "ticker": null,
+  "generic_name": "gabapentin enacarbil",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 13.678,
+    "gold_id": "xenoport-horizant-us-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2016Q1. XenoPort signed a merger agreement dated 2016-05-21 with Arbor Pharmaceuticals, announced 2016-05-23 (Form 8-K, accession 0001193125-16-598130) and filed a Form 15-12G on 2016-07-15 (accession 0001193125-16-649125); its last earnings release and 10-Q cover Q1 2016. Arbor is privately held and publishes no Horizant sales figure."
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2016Q1. XenoPort signed a merger agreement dated 2016-05-21 with Arbor Pharmaceuticals, announced 2016-05-23 (Form 8-K, accession 0001193125-16-598130) and filed a Form 15-12G on 2016-07-15 (accession 0001193125-16-649125); its last earnings release and 10-Q cover Q1 2016. Arbor is privately held and publishes no Horizant sales figure."
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2016Q1. XenoPort signed a merger agreement dated 2016-05-21 with Arbor Pharmaceuticals, announced 2016-05-23 (Form 8-K, accession 0001193125-16-598130) and filed a Form 15-12G on 2016-07-15 (accession 0001193125-16-649125); its last earnings release and 10-Q cover Q1 2016. Arbor is privately held and publishes no Horizant sales figure."
+   }
+  ]
+ },
+ {
   "drug_name": "Vyvgart",
   "manufacturer": "argenx",
   "ticker": "ARGX",
@@ -1640,7 +2005,7 @@
   ]
  },
  {
-  "drug_name": "Alyq",
+  "drug_name": "Akeega",
   "manufacturer": null,
   "ticker": null,
   "generic_name": null,
@@ -1655,26 +2020,26 @@
    {
     "period": "2025Q1",
     "value_normalized_usd_millions": null,
-    "gold_id": "alyq-excluded",
-    "why": "no_standalone_product_sales: Do not assign Adcirca market sales or Teva generic-portfolio revenue to Alyq."
+    "gold_id": "akeega-excluded",
+    "why": "aggregated_with_other_products: J&J, the only company that sells Akeega (niraparib/abiraterone acetate, approved by FDA in 2023), lists no Akeega line in its most detailed product tables. Measured: AKEEGA occurs once in the FY2025 10-K (a pipeline/approvals table) and not at all in the 2Q26 10-Q; it occurs in none of the 50 quarterly sales-schedule PDFs 2015Q3-2026Q2, including the 2025-2026 schedules whose footnote marks brands moved out of Other Oncology (Rybrevant, Lazcluze, Talvey); and no partner or royalty holder prints its net sales (Bigdata.com search 'Akeega niraparib abiraterone sales revenue' returned only J&J regulatory press-release lists). Annual-only reporting was also checked: the 10-K carries no Akeega figure."
    },
    {
     "period": "2025Q2",
     "value_normalized_usd_millions": null,
-    "gold_id": "alyq-excluded",
-    "why": "no_standalone_product_sales: Do not assign Adcirca market sales or Teva generic-portfolio revenue to Alyq."
+    "gold_id": "akeega-excluded",
+    "why": "aggregated_with_other_products: J&J, the only company that sells Akeega (niraparib/abiraterone acetate, approved by FDA in 2023), lists no Akeega line in its most detailed product tables. Measured: AKEEGA occurs once in the FY2025 10-K (a pipeline/approvals table) and not at all in the 2Q26 10-Q; it occurs in none of the 50 quarterly sales-schedule PDFs 2015Q3-2026Q2, including the 2025-2026 schedules whose footnote marks brands moved out of Other Oncology (Rybrevant, Lazcluze, Talvey); and no partner or royalty holder prints its net sales (Bigdata.com search 'Akeega niraparib abiraterone sales revenue' returned only J&J regulatory press-release lists). Annual-only reporting was also checked: the 10-K carries no Akeega figure."
    },
    {
     "period": "2025Q3",
     "value_normalized_usd_millions": null,
-    "gold_id": "alyq-excluded",
-    "why": "no_standalone_product_sales: Do not assign Adcirca market sales or Teva generic-portfolio revenue to Alyq."
+    "gold_id": "akeega-excluded",
+    "why": "aggregated_with_other_products: J&J, the only company that sells Akeega (niraparib/abiraterone acetate, approved by FDA in 2023), lists no Akeega line in its most detailed product tables. Measured: AKEEGA occurs once in the FY2025 10-K (a pipeline/approvals table) and not at all in the 2Q26 10-Q; it occurs in none of the 50 quarterly sales-schedule PDFs 2015Q3-2026Q2, including the 2025-2026 schedules whose footnote marks brands moved out of Other Oncology (Rybrevant, Lazcluze, Talvey); and no partner or royalty holder prints its net sales (Bigdata.com search 'Akeega niraparib abiraterone sales revenue' returned only J&J regulatory press-release lists). Annual-only reporting was also checked: the 10-K carries no Akeega figure."
    },
    {
     "period": "2025Q4",
     "value_normalized_usd_millions": null,
-    "gold_id": "alyq-excluded",
-    "why": "no_standalone_product_sales: Do not assign Adcirca market sales or Teva generic-portfolio revenue to Alyq."
+    "gold_id": "akeega-excluded",
+    "why": "aggregated_with_other_products: J&J, the only company that sells Akeega (niraparib/abiraterone acetate, approved by FDA in 2023), lists no Akeega line in its most detailed product tables. Measured: AKEEGA occurs once in the FY2025 10-K (a pipeline/approvals table) and not at all in the 2Q26 10-Q; it occurs in none of the 50 quarterly sales-schedule PDFs 2015Q3-2026Q2, including the 2025-2026 schedules whose footnote marks brands moved out of Other Oncology (Rybrevant, Lazcluze, Talvey); and no partner or royalty holder prints its net sales (Bigdata.com search 'Akeega niraparib abiraterone sales revenue' returned only J&J regulatory press-release lists). Annual-only reporting was also checked: the 10-K carries no Akeega figure."
    }
   ]
  }

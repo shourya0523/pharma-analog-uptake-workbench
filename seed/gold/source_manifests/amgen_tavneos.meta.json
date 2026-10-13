@@ -1,0 +1,54 @@
+{
+  "drug_name": "Tavneos",
+  "generic_name": "avacopan",
+  "manufacturer": "Amgen",
+  "benchmark_identity": "amgen_tavneos_us_reported",
+  "therapeutic_area": "Immunology / Inflammation",
+  "indication_area": "ANCA-associated vasculitis (GPA, MPA)",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "capsule",
+  "route_of_administration": "oral",
+  "moa": "Complement 5a receptor (C5aR) antagonist",
+  "moa_class": "c5a_receptor_antagonist",
+  "first_approval_year": 2021,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=214487",
+    "quote": "TAVNEOS AVACOPAN 10MG CAPSULE;ORAL ... 10/07/2021 ORIG-1 Approval Type 1 - New Molecular Entity"
+  },
+  "launch_quarter": "2021Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1340652/000119312522061339/d155708dex991.htm",
+    "quote": "The Company launched TAVNEOS several weeks into the fourth quarter of 2021 following FDA approval on October 8, 2021"
+  },
+  "commercial_start_quarter": "2021Q4",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "joined_issuers": [
+    {
+      "issuer": "ChemoCentryx",
+      "first_quarter": "2021Q4",
+      "last_quarter": "2022Q2"
+    },
+    {
+      "issuer": "Amgen",
+      "first_quarter": "2023Q1",
+      "last_quarter": "2026Q2"
+    }
+  ],
+  "unreported_quarters": {
+    "2022Q3": "Ownership change ChemoCentryx to Amgen; no figure is published. Amgen completed its acquisition of ChemoCentryx on October 20, 2022 (Amgen Form 10-K FY2022, accession 0000318154-23-000017: 'On October 20, 2022, we completed our acquisition of ChemoCentryx'); ChemoCentryx's last periodic report is the Form 10-Q for the quarter ended 2022-06-30 and it filed no 10-Q for Q3 2022; Amgen's Form 10-Q for Q3 2022 (accession 0000318154-22-000055) is pre-closing and prints no TAVNEOS sales line.",
+    "2022Q4": "Ownership change ChemoCentryx to Amgen; only a stub quarter is published. Amgen's FY2022 10-K prints 'TAVNEOS \u2014 U.S. (1)' 16 for 2022, consolidating ChemoCentryx only from October 20, 2022, so it is not a full quarter and is excluded; the first full Amgen quarter is 2023Q1."
+  },
+  "notes": "Series is U.S. TAVNEOS net product sales: ChemoCentryx 'Product sales, net' (2021Q4-2022Q2, all U.S. commercial sales, USD thousands) then Amgen 'TAVNEOS \u2014 U.S.' (2023Q1-2026Q2, USD millions). Amgen's 10-Qs and 10-K print the row; its earnings releases list TAVNEOS only in the pipeline text, so 2023Q4, 2024Q4 and 2025Q4 are full-year 10-K figures less the nine-month figures of the quarter's own Q3 10-Q (84, 180, 281); the four quarters of each year sum to the 10-K full year by construction. Amgen also prints 'TAVNEOS \u2014 ROW' (2023: 8; 2024: 27; 2025: 36, from 10-K) which is not included (scope U.S.). Outside the U.S. Vifor holds exclusive commercialization rights (with Kissei in Japan per the ChemoCentryx FY2021 Form 10-K); ChemoCentryx booked the Vifor agreements as collaboration and license revenue from related party, not product sales. The gap 2022Q3-2022Q4 is an ownership-change gap, so the verifier reports missing quarters for it.",
+  "search_log": [
+    "Listed every ChemoCentryx filing (CIK 0001340652) and every Amgen filing (CIK 0000318154) via data.sec.gov/submissions (all forms incl. 8-K/A); downloaded Item 2.02 8-K exhibits and 10-Q/10-K for ChemoCentryx 2021-08 to 2022-08 and for Amgen 2022-10 to 2026-08.",
+    "ChemoCentryx: 'Product sales, net' appears first in the Q4 2021 release (965 thousand); Q1 2022 release 5,353; Q2 2022 10-Q 9,093 (no Q2 2022 earnings release was filed: the 2022-08-04 8-K was the Amgen merger agreement, items 1.01/7.01/9.01).",
+    "Amgen: grep of every release and 10-Q/10-K for 'TAVNEOS \u2014 U.S.'; Q1-Q3 read from the quarter's own 10-Q; Q4 derived (annual less nine months) because no three-month Q4 figure is printed; 2022Q4 (16) is a partial quarter from 2022-10-20 and excluded.",
+    "Rung c: Vifor (ex-U.S. rights holder, with Kissei in Japan) sells ex-U.S.; not searched for quarterly sales since the series is scoped to U.S.; ex-U.S. is not part of this series.",
+    "Bigdata.com not needed; all cited documents are sec.gov originals.",
+    "Verifier run; see batch report."
+  ]
+}

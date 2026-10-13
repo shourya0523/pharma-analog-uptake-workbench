@@ -1,0 +1,40 @@
+{
+  "drug_name": "Iressa",
+  "generic_name": "gefitinib",
+  "manufacturer": "AstraZeneca",
+  "benchmark_identity": "astrazeneca_iressa_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (EGFR-mutation non-small cell lung cancer)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (World column of AstraZeneca's quarterly Product Sales table; the regional columns beside it show emerging markets, US, Europe and established rest of world)",
+  "formulation": "tablet (250 mg)",
+  "route_of_administration": "oral",
+  "moa": "EGFR tyrosine kinase inhibitor",
+  "moa_class": "egfr_tyrosine_kinase_inhibitor",
+  "first_approval_year": 2003,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=021399",
+    "quote": "Original Approvals or Tentative Approvals ... 05/05/2003 ORIG-1 Approval Type 1 - New Molecular Entity PRIORITY (NDA 021399, Company: ASTRAZENECA; IRESSA GEFITINIB 250MG TABLET;ORAL)"
+  },
+  "launch_quarter": "2002Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/901832/000095010302001074/nov0102_6k.txt",
+    "quote": "Full launch of Iressa(TM) in Japan occurred on 30 August following NHI price listing. The uptake has been encouraging, with sales in the quarter reaching $26 million."
+  },
+  "commercial_start_quarter": "2002Q3",
+  "series_start_reason": "The Q3 2002 results (6-K of 5 Nov 2002) print the first Iressa row: 26 for the third quarter and for the nine months, i.e. the Japan launch quarter. AstraZeneca's Q1 and Q2 2002 releases are scanned paper 6-Ks that cannot be read, but the Q3 2002 row shows nine months equal to the quarter, so no earlier sales existed.",
+  "series_end_quarter": "2022Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "From the Q1 2023 results AstraZeneca no longer prints an Iressa row: the Oncology table there lists 'Other Oncology' with the note 'Includes Iressa, Arimidex, Casodex and other older medicines' (0001654954-23-005296, a6110x.htm). The Q4 2022 release (0001654954-23-001503) is the last with an Iressa row.",
+  "notes": "Every row is the first (World) column of the Iressa line in the Product Sales table of the release for that quarter, read as current. The World column includes whatever markets sold Iressa in each quarter (Japan only in 2002; the regional columns, where printed, show the US, Europe and emerging markets joining); no territory-entry date is asserted here beyond the Japan launch evidence. Each calendar year's quarters sum to the full-year figure printed in that year's Q4 release for 2002-2020 (2002: 67 = 26+41); 2021 quarters sum to 184 against a printed 183 and 2022 to 115 against a printed 114, which is rounding of the quarterly figures. The 20-Fs filed 2023-2025 print Iressa only for 2022 and earlier; no figure for 2023 or later is published.",
+  "search_log": [
+    "Listed every AstraZeneca PLC (CIK 0000901832) filing via data.sec.gov submissions (recent plus older pages; 2,052 filings, all form types).",
+    "Downloaded the main document of all 1,646 filings of form 6-K, 6-K/A, 20-F and 20-F/A that carry a primary document (2002-2026) and scanned them: HTML table rows by label, plain text for the 2002-2003 .txt releases; 2002 6-Ks before November 2002 are scanned paper documents (.paper) and were not readable.",
+    "Latest results document used: the Q2 2026 results 6-K filed 2026-07-27 (0001104659-26-086846); no later results release exists as of the search date.",
+    "Bigdata.com was available but not needed; every figure was read from the sec.gov original, never from a Bigdata.com link.",
+    "Iressa rows: located the Iressa row in the quarter's own table of every results release 2002Q3-2022Q4 and cross-checked each calendar year's four quarters against the full-year (FY/Q4 release) figure.",
+    "2002Q3 and 2002Q4 come from plain-text 6-Ks (nov0102_6k.txt, feb0503_6k.txt) where the row label is 'Iressa(TM)'.",
+    "Q1 2023 onwards: scanned the Q1 2023 to Q2 2026 results releases and the 20-Fs for FY2023-FY2025; no Iressa row after Q4 2022 (Q1 2023 release folds Iressa into 'Other Oncology').",
+    "Fallbacks (partner, royalty holder, prior owner) not needed: AstraZeneca has been the sole reporting issuer for the whole span."
+  ]
+}

@@ -468,6 +468,12 @@ def audit_manifest_round_trip(quarterly: list[dict]) -> list[str]:
         if not owners:
             finding(out, f"{path.name}: no product in gold matches this manifest's name")
             continue
+        # A name contained in a longer matching name ("calderon" inside
+        # "calderon_xr") is the shorter product's prefix, not a second owner.
+        slugs = {drug: re.sub(r"[^a-z0-9]+", "_", drug.lower()).strip("_") for drug in owners}
+        owners = [drug for drug in owners if not any(
+            slugs[drug] != slugs[other] and slugs[drug] in slugs[other] for other in owners
+        )]
         if len(owners) > 1:
             finding(out, f"{path.name}: name matches several products {sorted(owners)}")
             continue

@@ -1,0 +1,37 @@
+{
+  "drug_name": "Auvelity",
+  "generic_name": "dextromethorphan hydrobromide and bupropion hydrochloride",
+  "manufacturer": "Axsome Therapeutics",
+  "benchmark_identity": "axsome_auvelity_us_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Major depressive disorder",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "extended-release oral tablet",
+  "route_of_administration": "oral",
+  "moa": "NMDA receptor antagonist and sigma-1 receptor agonist (dextromethorphan) combined with bupropion",
+  "moa_class": "nmda_receptor_antagonist",
+  "first_approval_year": 2022,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2022/215430s000lblCorrect3.pdf",
+    "quote": "AUVELITY (dextromethorphan hydrobromide and bupropion hydrochloride) extended-release tablets, for oral use Initial U.S. Approval: 2022"
+  },
+  "launch_quarter": "2022Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1579428/000095017023018976/axsm-20230331.htm",
+    "quote": "Auvelity was launched on October 19, 2022"
+  },
+  "commercial_start_quarter": "2022Q4",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Scope is Auvelity U.S. net sales as the issuer prints them. Sunosi is a separate line and is excluded. Q1 and Q2 2023 are printed in the own 10-Qs only as rounded text ($15.7 million and $27.6 million); the exact figures are the prior-year columns of the 2024 Q1 and Q2 10-Qs, so those derivations are direct_prior_year_column. Q4 2022 equals the full year 2022 because there were no sales before the October 2022 launch; the full year 2022 figure is the prior-year column of the FY2023 10-K. Q4 values for later years are derived from the annual figure less nine months.",
+  "search_log": [
+    "Bigdata search for Auvelity net sales by quarter; results confirmed Auvelity U.S. net sales and the Sunosi split.",
+    "Listed every 10-Q and 10-K for CIK 1579428 via data.sec.gov submissions; read each Auvelity row of the product sales table.",
+    "Confirmed the launch date from the Q1 2023 10-Q text and the absence of 2022 quarterly sales from the 2023 comparative statements.",
+    "FDA label for NDA 215430 read for the approval year; the approval letter itself was unavailable at the time of sourcing (503 response).",
+    "Quarterly values verified against the nine-month and full-year figures printed in the 2023, 2024 and 2025 filings."
+  ]
+}

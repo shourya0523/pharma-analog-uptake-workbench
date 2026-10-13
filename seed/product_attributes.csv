@@ -239,3 +239,63 @@ Nubeqa,Androgen receptor inhibitor,androgen_receptor_inhibitor,Oral,2019,Oncolog
 Lenvima,"Multi-kinase inhibitor (VEGFR, FGFR, PDGFR-alpha, RET, KIT)",multikinase_inhibitor,Oral,2015,Oncology (solid),curated_reference,distinct_product
 Crysvita,Anti-FGF23 monoclonal antibody,fgf23_blocking_antibody,Subcutaneous,2018,X-linked hypophosphatemia (rare metabolic bone disease),curated_reference,distinct_product
 Spiriva,Long-acting muscarinic antagonist,lama,Inhaled,2004,"Respiratory (COPD, asthma)",curated_reference,distinct_product
+Zynlonta,CD19-directed antibody-drug conjugate (pyrrolobenzodiazepine dimer payload),cd19_antibody_drug_conjugate,Intravenous,2021,Relapsed or refractory diffuse large B-cell lymphoma,curated_reference,distinct_product
+Lybalvi,atypical antipsychotic (olanzapine) combined with opioid antagonist (samidorphan),atypical_antipsychotic_combination,Oral,2021,Schizophrenia and bipolar I disorder,curated_reference,distinct_product
+Seysara,Narrow-spectrum tetracycline-class antibiotic,tetracycline_class_antibiotic,Oral,2018,Inflammatory lesions of moderate to severe acne vulgaris,curated_reference,distinct_product
+Nplate,thrombopoietin receptor agonist (peptibody),thrombopoietin_receptor_agonist,Subcutaneous,2008,Chronic immune thrombocytopenia (ITP),curated_reference,distinct_product
+Tavneos,Complement 5a receptor (C5aR) antagonist,c5a_receptor_antagonist,Oral,2021,"ANCA-associated vasculitis (GPA, MPA)",curated_reference,distinct_product
+Empaveli,Complement C3 inhibitor,complement_c3_inhibitor,Subcutaneous,2021,Paroxysmal nocturnal hemoglobinuria; C3 glomerulopathy and primary IC-MPGN from 2025,curated_reference,distinct_product
+Zoryve,"phosphodiesterase-4 (PDE4) inhibitor, per the company's description of ZORYVE as a highly potent and selective PDE4 inhibitor",pde4_inhibitor,Topical,2022,Psoriasis / atopic dermatitis,curated_reference,distinct_product
+Xospata,FLT3/AXL tyrosine kinase inhibitor,flt3_kinase_inhibitor,Oral,2018,Relapsed or refractory FLT3-mutated acute myeloid leukemia,curated_reference,distinct_product
+Iressa,EGFR tyrosine kinase inhibitor,egfr_tyrosine_kinase_inhibitor,Oral,2003,Oncology (EGFR-mutation non-small cell lung cancer),curated_reference,distinct_product
+Kombiglyze XR,DPP-4 inhibitor plus biguanide fixed-dose combination,dpp4_metformin_combination,Oral,2010,Metabolic (type 2 diabetes),curated_reference,distinct_product
+Saphnelo,Type I interferon receptor (IFNAR1) blocking monoclonal antibody,ifnar_antagonist_mab,Intravenous,2021,Immunology (systemic lupus erythematosus),curated_reference,distinct_product
+Xigduo XR,SGLT2 inhibitor plus biguanide fixed-dose combination,sglt2_metformin_combination,Oral,2014,Metabolic (type 2 diabetes),curated_reference,distinct_product
+Auvelity,NMDA receptor antagonist and sigma-1 receptor agonist (dextromethorphan) combined with bupropion,nmda_receptor_antagonist,Oral,2022,Major depressive disorder,curated_reference,distinct_product
+Orladeyo,Plasma kallikrein inhibitor,plasma_kallikrein_inhibitor,Oral,2020,Hereditary angioedema (HAE) attack prophylaxis,curated_reference,distinct_product
+Plegridy,Pegylated interferon beta-1a; type I interferon receptor agonist,interferon_beta,Subcutaneous,2014,Multiple sclerosis (relapsing forms),curated_reference,distinct_product
+Tysabri,Alpha-4 integrin antagonist: binds alpha-4 integrin and blocks its adhesion to VCAM-1 and to MAdCAM-1 (alpha-4 beta-7),integrin_antagonist,Intravenous,2004,Multiple sclerosis (relapsing forms) / Crohn's disease,curated_reference,distinct_product
+Onureg,oral hypomethylating agent (azacitidine prodrug),hypomethylating_agent,Oral,2020,Oncology (hematologic),curated_reference,distinct_product
+Reblozyl,erythroid maturation agent (activin receptor type IIB ligand trap),erythroid_maturation_agent,Subcutaneous,2019,Hematology (anemia in MDS and beta thalassemia),curated_reference,distinct_product
+Sprycel,BCR-ABL tyrosine kinase inhibitor,bcr_abl_tyrosine_kinase_inhibitor,Oral,2006,Oncology (hematologic),curated_reference,distinct_product
+Zeposia,sphingosine 1-phosphate receptor modulator,s1p_receptor_modulator,Oral,2020,"Immunology (ulcerative colitis, multiple sclerosis)",curated_reference,distinct_product
+Cimerli,VEGF-A inhibitor (ranibizumab biosimilar),vegf_inhibitor,Intravitreal,2022,Retinal disease (biosimilar to Lucentis),curated_reference,distinct_product
+Rytelo,telomerase inhibitor (oligonucleotide),telomerase_inhibitor,Intravenous,2024,"Oncology (hematologic, lower-risk MDS)",curated_reference,distinct_product
+Sovaldi,HCV nucleotide NS5B polymerase inhibitor (sofosbuvir),hcv_nucleotide_ns5b_polymerase_inhibitor,Oral,2013,Chronic hepatitis C,curated_reference,distinct_product
+Vemlidy,nucleotide analog reverse transcriptase inhibitor (tenofovir alafenamide prodrug),nucleotide_reverse_transcriptase_inhibitor,Oral,2016,Chronic hepatitis B (adults with compensated liver disease),curated_reference,distinct_product
+Vosevi,"fixed-dose HCV direct-acting antiviral (sofosbuvir NS5B nucleotide polymerase inhibitor, velpatasvir NS5A inhibitor, voxilaprevir NS3/4A protease inhibitor)",hcv_direct_acting_antiviral_combination,Oral,2017,Chronic hepatitis C (genotypes 1 to 6),curated_reference,distinct_product
+Benlysta,B-lymphocyte stimulator (BLyS)-specific inhibitor monoclonal antibody,blys_inhibitor_mab,Intravenous / subcutaneous,2011,Systemic lupus erythematosus / lupus nephritis,curated_reference,distinct_product
+Juluca,HIV-1 integrase strand transfer inhibitor (dolutegravir) plus non-nucleoside reverse transcriptase inhibitor (rilpivirine),insti_nnrti_fixed_dose_combination,Oral,2017,HIV,curated_reference,distinct_product
+Mekinist,MEK1/MEK2 kinase inhibitor,mek_inhibitor,Oral,2013,"Oncology (BRAF V600 mutation-positive melanoma, NSCLC and other solid tumours)",curated_reference,distinct_product
+Rukobia,HIV-1 gp120-directed attachment inhibitor (prodrug of temsavir),attachment_inhibitor,Oral,2020,HIV (heavily treatment-experienced adults with multidrug-resistant HIV-1),curated_reference,distinct_product
+Tafinlar,BRAF kinase inhibitor,braf_inhibitor,Oral,2013,"Oncology (BRAF V600 mutation-positive melanoma, NSCLC and other solid tumours)",curated_reference,distinct_product
+Tivicay,HIV-1 integrase strand transfer inhibitor,insti,Oral,2013,HIV,curated_reference,distinct_product
+Opzelura,JAK1/JAK2 inhibitor,jak1_jak2_inhibitor,Topical,2021,"Dermatology (atopic dermatitis, vitiligo)",curated_reference,distinct_product
+Vyxeos,liposomal fixed-ratio daunorubicin and cytarabine (anthracycline plus antimetabolite),anthracycline_cytarabine_liposome,Intravenous,2017,"Oncology (hematologic, AML)",curated_reference,distinct_product
+Doxil,Liposome-encapsulated anthracycline topoisomerase II inhibitor,liposomal_anthracycline,Intravenous,1995,Oncology (solid),curated_reference,distinct_product
+Delstrigo,"non-nucleoside reverse transcriptase inhibitor (doravirine) with two nucleoside reverse transcriptase inhibitors (lamivudine, tenofovir disoproxil fumarate)",nnrti_nrti_fixed_dose_combination,Oral,2018,HIV-1 infection (antiretroviral therapy),curated_reference,distinct_product
+Dificid,narrow-spectrum macrolide antibacterial that inhibits bacterial RNA polymerase,macrolide_rna_polymerase_inhibitor_antibacterial,Oral,2011,Clostridioides difficile-associated diarrhea,curated_reference,distinct_product
+Janumet,DPP-4 inhibitor (sitagliptin) combined with a biguanide (metformin),dpp4_inhibitor_biguanide_combination,Oral,2007,Type 2 diabetes,curated_reference,distinct_product
+Zepatier,NS5A inhibitor (elbasvir) plus NS3/4A protease inhibitor (grazoprevir) fixed-dose combination,hcv_ns5a_protease_combination,Oral,2016,Chronic hepatitis C virus infection (genotype 1 or 4),curated_reference,distinct_product
+Zerbaxa,cephalosporin antibacterial (ceftolozane) with a beta-lactamase inhibitor (tazobactam),cephalosporin_beta_lactamase_inhibitor_combination,Intravenous,2014,"Complicated Gram-negative bacterial infections (cIAI, cUTI, HABP/VABP)",curated_reference,distinct_product
+Tabrecta,MET (mesenchymal-epithelial transition) receptor tyrosine kinase inhibitor,met_inhibitor,Oral,2020,Oncology (METex14 skipping non-small cell lung cancer),curated_reference,distinct_product
+Zykadia,Anaplastic lymphoma kinase (ALK) tyrosine kinase inhibitor,alk_inhibitor,Oral,2014,Oncology (ALK-positive non-small cell lung cancer),curated_reference,distinct_product
+Bosulif,Src/Abl tyrosine kinase inhibitor,tyrosine_kinase_inhibitor,Oral,2012,Oncology (chronic myelogenous leukemia),curated_reference,distinct_product
+Braftovi,BRAF V600E/K kinase inhibitor,braf_inhibitor,Oral,2018,"Oncology (BRAF V600-mutant melanoma, colorectal and lung cancer)",curated_reference,distinct_product
+Mektovi,MEK1/2 kinase inhibitor,mek_inhibitor,Oral,2018,"Oncology (BRAF V600-mutant melanoma, colorectal and lung cancer)",curated_reference,distinct_product
+Talzenna,poly (ADP-ribose) polymerase (PARP) inhibitor,parp_inhibitor,Oral,2018,Oncology (germline BRCA-mutated HER2-negative breast cancer; HRR gene-mutated mCRPC with Xtandi),curated_reference,distinct_product
+Eylea HD,VEGF trap (VEGF-A / PlGF inhibitor),vegf_inhibitor,Intravitreal,2023,Ophthalmology (retina),curated_reference,distinct_product
+Zulresso,neuroactive steroid GABA-A receptor positive modulator,gaba_a_positive_modulator_neurosteroid,Intravenous,2019,Postpartum depression,curated_reference,distinct_product
+Briumvi,CD20-directed cytolytic antibody,anti_cd20_antibody,Intravenous,2022,Multiple sclerosis (relapsing forms),curated_reference,distinct_product
+Horizant,Gabapentin prodrug; alpha-2-delta calcium channel subunit ligand,alpha2delta_ligand,Oral,2011,Restless legs syndrome; postherpetic neuralgia,curated_reference,distinct_product
+Akeega,PARP inhibitor (niraparib) with CYP17 inhibitor (abiraterone) fixed-dose combination,parp_inhibitor,Oral,2023,Oncology (prostate cancer),curated_reference,distinct_product
+Aristada Initio,D2/5-HT2A antagonist long-acting injectable,atypical_antipsychotic,Intramuscular,2018,Schizophrenia,curated_reference,distinct_product
+Invega Trinza,D2/5-HT2A antagonist long-acting injectable,atypical_antipsychotic,Intramuscular,2015,Schizophrenia,curated_reference,distinct_product
+Litfulo,Janus kinase (JAK3/TEC family) inhibitor,jak_inhibitor,Oral,2023,Dermatology (alopecia areata),curated_reference,distinct_product
+Lyumjev,Rapid-acting insulin analogue,insulin,Subcutaneous,2020,Diabetes (type 1 and type 2),curated_reference,distinct_product
+Nexletol,ATP citrate lyase (ACL) inhibitor,acl_inhibitor,Oral,2020,Cardiovascular (hyperlipidemia / LDL-C lowering),curated_reference,distinct_product
+Nexlizet,ATP citrate lyase (ACL) inhibitor with cholesterol absorption inhibitor (ezetimibe) fixed-dose combination,acl_inhibitor_cholesterol_absorption_inhibitor_combination,Oral,2020,Cardiovascular (hyperlipidemia / LDL-C lowering),curated_reference,distinct_product
+Odomzo,Hedgehog pathway (Smoothened) inhibitor,hedgehog_pathway_inhibitor,Oral,2015,Oncology (solid; basal cell carcinoma),curated_reference,distinct_product
+Recarbrio,"Carbapenem antibacterial (imipenem, with cilastatin) with beta-lactamase inhibitor (relebactam)",carbapenem_beta_lactamase_inhibitor_combination,Intravenous,2019,"Complicated Gram-negative bacterial infections (cUTI, cIAI, HABP/VABP)",curated_reference,distinct_product
+Vizimpro,EGFR tyrosine kinase inhibitor,egfr_tki,Oral,2018,Oncology (EGFR-mutation non-small cell lung cancer),curated_reference,distinct_product
+Zinplava,Monoclonal antibody binding Clostridioides difficile toxin B,monoclonal_antibody,Intravenous,2016,Clostridioides difficile infection (recurrence prevention),curated_reference,distinct_product

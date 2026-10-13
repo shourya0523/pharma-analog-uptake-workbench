@@ -1,0 +1,32 @@
+{
+  "drug_name": "Vosevi",
+  "generic_name": "sofosbuvir/velpatasvir/voxilaprevir",
+  "manufacturer": "Gilead",
+  "benchmark_identity": "gilead_vosevi_worldwide_reported",
+  "therapeutic_area": "Infectious Disease / Vaccines",
+  "indication_area": "Chronic hepatitis C (genotypes 1 to 6)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "oral tablet (single-tablet regimen)",
+  "route_of_administration": "oral",
+  "moa": "fixed-dose HCV direct-acting antiviral (sofosbuvir NS5B nucleotide polymerase inhibitor, velpatasvir NS5A inhibitor, voxilaprevir NS3/4A protease inhibitor)",
+  "moa_class": "hcv_direct_acting_antiviral_combination",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2017/209195Orig1s000ltr.pdf",
+    "quote": "We have completed our review of this application, as amended. It is approved, effective on the date of this letter. (JOHN J FARLEY 07/18/2017)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2017Q3",
+  "series_start_reason": "First quarter the issuer prints a Vosevi line: the third-quarter 2017 release (8-K Ex 99.1, 2017-10-26). The 2017Q1 and Q2 comparatives in the 2018 releases are nil ('\u2014'), so no earlier quarter is sourced.",
+  "series_end_quarter": "2020Q3",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The fourth-quarter 2020 release (8-K Ex 99.1, 2021-02-04) prints no Vosevi line. Its liver table carries footnote (5) 'Includes Vosevi and Sovaldi.' under Other Liver Disease, and the 2021 to 2026 releases mention Vosevi only in footnotes.",
+  "notes": "Scope: worldwide brand total, the unlabelled total beneath the U.S., Europe and Other International lines. Printed in millions. The regional lines sum to the printed total in all 13 quarters.",
+  "search_log": [
+    "Pulled data.sec.gov submissions for CIK 0000882095; every Item 2.02 8-K from 2017 to 2021 read for a Vosevi row.",
+    "Vosevi rows found in 2017Q3 to 2020Q3 releases only; the Q4 2020 release onward carries Vosevi in footnotes.",
+    "FDA approval letter NDA 209195 (appletter/2017/209195Orig1s000ltr.pdf) read: signature 07/18/2017.",
+    "2017Q1 and 2017Q2 comparatives: nil ('\u2014') in the 2018 releases; no sales before launch, so not included."
+  ]
+}

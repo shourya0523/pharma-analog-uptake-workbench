@@ -1,0 +1,35 @@
+{
+  "drug_name": "Braftovi",
+  "generic_name": "encorafenib",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (BRAF V600-mutant melanoma, colorectal and lung cancer)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "capsule",
+  "route_of_administration": "oral",
+  "moa": "BRAF V600E/K kinase inhibitor",
+  "moa_class": "braf_inhibitor",
+  "first_approval_year": 2018,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2018/210496Orig1s000ltr.pdf",
+    "quote": "NDA 210496 NDA APPROVAL ... for Braftovi (encorafenib) capsules, 50 mg and 75 mg ... in combination with binimetinib, for the treatment of patients with unresectable or metastatic melanoma with a BRAF V600E or V600K mutation (electronically signed 06/27/2018)"
+  },
+  "launch_quarter": null,
+  "series_start_reason": "Pfizer completed its acquisition of Array BioPharma on July 30, 2019 and first prints the brand as its own line in the fourth-quarter 2019 release (current quarter, prior-year column a nil dash). The third-quarter 2019 release (2019-10-29) and the third-quarter 2019 10-Q print no row for the brand; 2019Q3 is read from the prior-year column of the third-quarter 2020 release. The series therefore starts 2019Q3, the first quarter Pfizer held the product. Array BioPharma (CIK 0001100412) printed net product sales per brand in its own 10-Qs for fiscal quarters ended September 30, 2018, December 31, 2018 and March 31, 2019 (accessions 0001100412-18-000037, 0001100412-19-000005 and 0001100412-19-000021, in thousands: Braftovi 7,015, 11,371 and 17,351; Mektovi 6,978, 11,342 and 17,727). Array's fiscal year ended June 30 and it was acquired on July 30, 2019; its filing list shows no 10-K or 10-Q after the 2019-05-07 10-Q (Form 15 on 2019-08-09), and Pfizer's first release carrying the products is the third-quarter 2019 release, so 2019Q2 (April-June 2019) is printed by no issuer. Those three Array quarters therefore cannot be joined to Pfizer's series without a gap and are not in the CSV.",
+  "series_end_quarter": "2023Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "From the first-quarter 2024 release Pfizer prints one combined line 'Braftovi/Mektovi' (first quarter 2024: 116 against 103 a year earlier) instead of separate lines. The combined line is not the sum of the separate lines it replaces: for the first quarter of 2023 the separate lines print 49 and 40 (sum 89) while the combined line's prior-year column prints 103, and for full-year 2023 the separate lines sum to 387 against 477 on the combined line (Recasted Product Revenue Tables, April 2024). No document reconciles the difference; the same recast document says royalty income was reclassified into revenues from January 1, 2024, which is consistent with but not stated to explain it. The combined line is a different scope, so the brand series stops at 2023Q4.",
+  "notes": "Pfizer's worldwide revenue line named for the brand; Braftovi is also approved with Erbitux for BRAF V600E mutant metastatic colorectal cancer (the quarterly releases and the 10-Q dated 2020-05-07 give April 2020 for that US approval) and for BRAF V600E NSCLC (October 2023); the line is the brand total across indications. Scope proved from the table: every Worldwide figure is the first column of the product row under the column groups WORLDWIDE | UNITED STATES | TOTAL INTERNATIONAL. The International columns of the row print a nil dash in every release through the first-quarter 2022 release; the first nonzero International figure is printed in the second-quarter 2022 release (six-month row), so the Worldwide figure is essentially the U.S. figure before then and includes a small international part (1 to 3) afterwards. The United States column is a narrower line but is not used; the series is kept on the one Worldwide scope throughout. Pfizer prints both brands as separate lines; the other brand of the pair is in its own manifest.",
+  "search_log": [
+    "Listed Pfizer (CIK 0000078003) filings via data.sec.gov submissions (recent + older pages), all forms incl. 8-K, 8-K/A, 10-K, 10-Q; selected 8-Ks with Item 2.02 filed 2018-01 to 2026-08 (35 earnings releases read; the 2022-04-20, 2023-10-13 and 2023-12-14 filings are not quarterly earnings releases) and read each EX-99.1; fetched every 10-Q/10-K filed 2019-02 to 2026-08 and scanned table rows for the product names.",
+    "Table rows were taken from the HTML <tr> rows of each exhibit; the quarter figure is the first occurrence of the product row (the quarter block under WORLDWIDE | UNITED STATES | TOTAL INTERNATIONAL); later occurrences are international sub-regions and year-to-date blocks.",
+    "Releases for 2019Q1-2019Q3 and the 10-Qs for those quarters print no brand row (Pfizer owned neither product before July 30, 2019); the third-quarter 2019 release only mentions the Array acquisition in prose.",
+    "Annual check: quarters sum to the twelve-month figures printed in the fourth-quarter releases within rounding of whole millions: 2019 48 (18+30), 2020 160, 2021 187, 2022 194, 2023 212 against 213 printed.",
+    "Searched Array BioPharma (CIK 1100412) filings 2018-08 to 2019-08: per-brand net product sales exist for three quarters but not 2019Q2; see series_start_reason.",
+    "Launch quarter not established from a Pfizer document: Pfizer's own documents start at its 2019 ownership; Array's launch statements were not searched beyond the 10-Qs above, so launch_quarter is left null.",
+    "Checked the combined Braftovi/Mektovi line (first-quarter 2024 release onward, through the second-quarter 2026 release: 174 and 136 for the first quarters 2026 and 2025, 223 and 182 for the second quarters) and the Recasted 2023 and 2025/2024 Product Revenue Tables (investor-relations PDFs); not used, see series_end_reason."
+  ],
+  "commercial_start_quarter": "2019Q3",
+  "manufacturer": "Pfizer",
+  "benchmark_identity": "pfizer_braftovi_worldwide_reported"
+}

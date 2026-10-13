@@ -112,6 +112,22 @@ LAYER_TWO_DEFAULTS = {
 # writing a case whose issuer cannot be resolved.
 ISSUER_TICKERS: dict[str, str | None] = {
     "AbbVie": "ABBV",
+    "ADC Therapeutics": "ADCT",
+    "Alkermes plc": "ALKS",
+    "Almirall": None,
+    "Arcutis Biotherapeutics": "ARQT",
+    "Aurinia Pharmaceuticals": "AUPH",
+    "Axsome Therapeutics": "AXSM",
+    "BioCryst Pharmaceuticals": "BCRX",
+    "ChemoCentryx": None,
+    "Coherus BioSciences": "CHRS",
+    "Geron": "GERN",
+    "Jazz Pharmaceuticals": "JAZZ",
+    "Rigel Pharmaceuticals": "RIGL",
+    "Sage Therapeutics": None,
+    "TG Therapeutics": "TGTX",
+    "Vanda Pharmaceuticals": "VNDA",
+    "XenoPort": None,
     "Actelion/J&J": "JNJ",
     # No ticker for an issuer that was acquired and delisted (Allergan,
     # Alexion, Seagen and the like): its symbol went with it, so a case naming

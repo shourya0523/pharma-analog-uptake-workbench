@@ -1,0 +1,34 @@
+{
+  "drug_name": "Doxil",
+  "generic_name": "doxorubicin hydrochloride liposome injection",
+  "manufacturer": "Johnson & Johnson",
+  "benchmark_identity": "jnj_doxil_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (solid)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "liposomal injection",
+  "route_of_administration": "intravenous",
+  "moa": "Liposome-encapsulated anthracycline topoisomerase II inhibitor",
+  "moa_class": "liposomal_anthracycline",
+  "first_approval_year": 1995,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=050718",
+    "quote": "11/17/1995 ORIG-1 Approval Type 3 - New Dosage Form"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2010Q1",
+  "series_start_reason": "J&J first prints a DOXIL/CAELYX line in the 2011Q1 earnings exhibit (Form 8-K, 2011-04-19), which also prints 2010Q1. The 2011Q2, Q3 and Q4 exhibits print 2010Q2-Q4 as prior-year columns (88, 85, 67), so the series starts at 2010Q1. None of the J&J earnings 8-Ks filed 2009-01 to 2011-01 contains the line (measured), and none of the 2005-2011 10-Q/10-K documents used for sibling J&J series prints it.",
+  "series_end_quarter": "2012Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "J&J's 2013Q1 earnings exhibit and every later earnings exhibit checked (8-K, 2013-04 to 2014-04) carry no DOXIL/CAELYX line, and the 2013Q1 Form 10-Q mentions the product only in prose ('Other Oncology increased, primarily due to DOXIL/CAELYX'): the line was folded into Other Oncology. No J&J schedule from 2015Q3 onward contains it (0 occurrences across 50 schedule PDFs, measured).",
+  "notes": "Annual cross-check: J&J's FY2012 Form 10-K (ex13) prints DOXIL/CAELYX 83 (2012), 402 (2011), 320 (2010); the four quarters sum to 83 (2012: 24+13+16+30), 402 (2011: 139+138+86+39) and 320 (2010: 80+88+85+67). Scope is worldwide (US plus Intl); the US and Intl rows are printed in each exhibit. Ownership after the series: Baxter International acquired the U.S. rights in 2019 and the ex-U.S. rights from a J&J subsidiary on 2021-02-17; Baxter's Form 10-K/10-Q print only acquisition-note net sales for the ex-U.S. rights in 2021 (Q1 13 partial quarter from 2021-02-17, Q2 28, Q3 32, nine months 73, year 108) and a $20 million U.S. figure for 2019, which are not a continuous line of the same scope and are not spliced in.",
+  "search_log": [
+    "Bigdata.com search 'Doxil net sales by quarter' (filings): returned only Baxter International documents describing the 2019 U.S. and 2021 ex-U.S. acquisitions of Doxil/Caelyx rights from J&J; no quarterly product line.",
+    "Downloaded 50 J&J quarterly sales schedule PDFs (2015Q3-2026Q2) and searched every page for DOXIL/CAELYX: 0 occurrences, so the line is not printed in any schedule from 2015Q3 on.",
+    "Fetched J&J 10-Q/10-K documents 2005Q1-2014Q2 (the URLs of the sibling J&J manifests) and searched for DOXIL: the product line appears in the 2012Q1-2012Q4 10-Q/10-K tables (24, 13, 16, FY 83) and only in prose in 2013Q1 and 2013Q4; nothing in 2005-2011 10-Qs.",
+    "Listed J&J Form 8-K Item 2.02 filings 2009-01 to 2014-06 via data.sec.gov submissions and searched every exhibit for DOXIL/CAELYX: present in the Exhibit 99.2 segment-sales schedule of the 2011Q1 to 2012Q4 releases (including a Q2 2011 release on accession 0000200406-11-000091), absent before and after.",
+    "Checked sums against the FY2012 10-K annual line (83/402/320); all three years reconcile exactly.",
+    "Baxter International (CIK 10456) 10-K FY2023 Note 3 and the 2021 10-Qs print acquisition-note net sales for the ex-U.S. rights (2021 only); judged a different, partial scope and not used."
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "drug_name": "Xospata",
+  "generic_name": "gilteritinib",
+  "manufacturer": "Astellas",
+  "benchmark_identity": "astellas_xospata_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Relapsed or refractory FLT3-mutated acute myeloid leukemia",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (United States, Japan, Established Markets, China, International Markets)",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "FLT3/AXL tyrosine kinase inhibitor",
+  "moa_class": "flt3_kinase_inhibitor",
+  "first_approval_year": 2018,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=211349",
+    "quote": "XOSPATA GILTERITINIB FUMARATE EQ 40MG BASE TABLET;ORAL ... 11/28/2018 ORIG-1 Approval Type 1 - New Molecular Entity PRIORITY; Orphan"
+  },
+  "launch_quarter": "2018Q4",
+  "launch_evidence": {
+    "url": "https://www.astellas.com/content/dam/astellas-com/global/en/documents/financial-results/full-year-and-4q-fy2018-financial-results-en.pdf",
+    "quote": "XOSPATA, which was launched in Japan and the United States in December 2018"
+  },
+  "commercial_start_quarter": "2018Q4",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Astellas reports JPY billions to one decimal, cumulative within its April-March fiscal year (Q1 YTD, first half, nine months, full year). Fiscal Q1 (April-June) is the first-quarter YTD and is a direct read (calendar Q2); every other quarter is the YTD less the preceding YTD, so each fiscal year's four quarters sum exactly to the printed full-year figure (FY2018 2.5, FY2019 14.3, FY2020 23.8, FY2021 34.1, FY2022 46.6, FY2023 55.1, FY2024 68.0, FY2025 71.8) and a derived quarter carries up to 0.1 billion yen of rounding. Fiscal-to-calendar mapping: fiscal Q1 = calendar Q2, Q2 = Q3, Q3 = Q4, Q4 = next year's Q1. 2018Q4 (0.6) is read from the prior-year column of the Q3 FY2019 document because Astellas's own Q3 FY2018 document prints no XOSPATA sales line, only the December 2018 launch statement; Q1 and Q2 FY2018 predate the launch (the Q1 FY2019 and Q2 FY2019 documents print a dash for the prior year). Global line: the supplementary documents break XOSPATA into United States, Japan, Established Markets, China and International Markets and the regions sum to the total (Q1 FY2026: 9.6 + 1.5 + 6.5 + 1.5 + 2.6 = 21.7 against 21.6 printed, rounding). Latest point 2026Q2 is fiscal Q1 FY2026 (results of 2026-08-05 per Bigdata.com transcript).",
+  "search_log": [
+    "Bigdata.com search 'Astellas Xospata revenue by region quarterly financial results' located the Q1 FY2026 earnings call (XOSPATA JPY 21.6 billion) and showed Astellas reports cumulative YTD figures; originals were then taken from astellas.com.",
+    "Collected every financial-results PDF link on https://www.astellas.com/en/investors/financial-results-library (138 files: results, presentations, supplementary documents, call scripts for FY2017-FY2026), downloaded them and extracted text with pdfplumber; read the 'XOSPATA' row of the '<Sales of Main Products> (Billions of yen)' table in each main results document.",
+    "Q3 FY2018 results (October-December 2018) mention the December 2018 launch but print no XOSPATA figure; the Q3 FY2019 results document's prior-year column (0.6) is used and flagged direct_prior_year_column.",
+    "Astellas is not an SEC registrant, so no 6-K/20-F exists; SEC EDGAR was not searched. Rung c (partners) was not searched because Astellas itself prints a worldwide line for the whole span.",
+    "Cross-check: for each fiscal year, four derived/direct quarters sum to the printed full-year XOSPATA figure.",
+    "Verifier run on the staging directory; see batch report."
+  ]
+}

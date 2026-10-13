@@ -1,0 +1,33 @@
+{
+  "drug_name": "Vemlidy",
+  "generic_name": "tenofovir alafenamide",
+  "manufacturer": "Gilead",
+  "benchmark_identity": "gilead_vemlidy_worldwide_reported",
+  "therapeutic_area": "Infectious Disease / Vaccines",
+  "indication_area": "Chronic hepatitis B (adults with compensated liver disease)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "oral tablet",
+  "route_of_administration": "oral",
+  "moa": "nucleotide analog reverse transcriptase inhibitor (tenofovir alafenamide prodrug)",
+  "moa_class": "nucleotide_reverse_transcriptase_inhibitor",
+  "first_approval_year": 2016,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2016/208464Orig1s000ltr.pdf",
+    "quote": "This new drug application provides for the use of VEMLIDY\u00ae for treatment of hepatitis B infection in adults with compensated liver disease. ... It is approved, effective on the date of this letter. (JEFFREY S MURRAY 11/10/2016)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2017Q1",
+  "series_start_reason": "No release from 2017 prints a Vemlidy line, and the first-quarter 2018 release (8-K Ex 99.1, 2018-05-01) is the first to print one, with a 2017 comparative column. The 2017 quarters are therefore read from the prior-year columns of the 2018 releases (2017Q1 11, Q2 22, Q3 37, Q4 52). The full-year comparative in the Q4 2018 release (122) equals their sum.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Scope: worldwide brand total, the unlabelled total beneath the regional lines (U.S., Europe and Other International in 2018 to 2023; U.S., Europe and Rest of World from 2024). The 2026 releases print the Vemlidy heading on the 'U.S.' line with the regional lines beneath and the total unlabelled. Printed totals are used; they can differ from the regional sums by one unit. Four-quarter sums: 2018 (321), 2019 (488), 2020 (657) and 2021 (814) match the printed full years; 2022 (843 against a printed 842), 2023 (863 against 862), 2024 (960 against 959) and 2025 (1,071 against 1,070) differ by one unit of rounding.",
+  "search_log": [
+    "Pulled data.sec.gov submissions for CIK 0000882095 and listed every Item 2.02 8-K from 2013 to 2026 (10-Q and 10-K from 2023 onward); downloaded each earnings-release exhibit.",
+    "Searched all 2017 releases and 10-Qs for a Vemlidy row: none; the first Vemlidy row is in the Q1 2018 release.",
+    "Vemlidy 2026 layout (heading row 'Vemlidy | U.S.', regional rows, unlabelled total) read from the Q1 and Q2 2026 releases; Q1 2026 total 237 read from the unlabelled line 237 | 252 and checked against six-month 2026 total 526 less Q2 289 (= 237).",
+    "No Vemlidy launch statement found in the 2017 releases; launch_quarter left null.",
+    "FDA approval letter NDA 208464 (appletter/2016/208464Orig1s000ltr.pdf) read: approval signature 11/10/2016."
+  ]
+}

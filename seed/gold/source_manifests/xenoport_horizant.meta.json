@@ -1,0 +1,37 @@
+{
+  "drug_name": "Horizant",
+  "generic_name": "gabapentin enacarbil",
+  "manufacturer": "XenoPort",
+  "benchmark_identity": "xenoport_horizant_us_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Restless legs syndrome; postherpetic neuralgia",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "extended-release tablet",
+  "route_of_administration": "oral",
+  "moa": "Gabapentin prodrug; alpha-2-delta calcium channel subunit ligand",
+  "moa_class": "alpha2delta_ligand",
+  "first_approval_year": 2011,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=022399",
+    "quote": "HORIZANT GABAPENTIN ENACARBIL 600MG TABLET, EXTENDED RELEASE;ORAL ... 04/06/2011 ORIG-1 Approval Type 1 - New Molecular Entity"
+  },
+  "launch_quarter": "2011Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1130591/000119312513324553/d543591d10q.htm",
+    "quote": "Horizant, since its commercial launch by GSK in the second quarter of 2011."
+  },
+  "commercial_start_quarter": "2013Q2",
+  "series_start_reason": "XenoPort regained U.S. commercial rights from GSK and began selling Horizant in May 2013; 2013Q2 is the first quarter its earnings release prints a 'Product sales, net' line (Q1 2013 release prints none). Under GSK (launched 2011Q2) sales were booked by GSK, whose turnover tables do not break Horizant out, and XenoPort recorded collaboration revenue instead.",
+  "series_end_quarter": "2016Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "XenoPort signed a merger agreement dated 2016-05-21 with Arbor Pharmaceuticals, announced 2016-05-23 (Form 8-K, accession 0001193125-16-598130) and filed a Form 15-12G on 2016-07-15 (accession 0001193125-16-649125); its last earnings release and 10-Q cover Q1 2016. Arbor is privately held and publishes no Horizant sales figure.",
+  "notes": "XenoPort's 'Product sales, net' line is Horizant only (XenoPort had no other marketed product; 'Right to the Horizant business' is a balance-sheet intangible). Series is XenoPort's net product sales, U.S. Years sum correctly: 2013 Q2-Q4 = 6,414, 2014 quarters = 20,173, 2015 quarters = 39,459 thousand, each equal to the full-year figure printed in that year's Q4 release. Not spliced with GSK (2011Q2-2013Q1) because GSK does not print Horizant sales.",
+  "search_log": [
+    "Listed every XenoPort filing (CIK 0001130591, all forms) via data.sec.gov/submissions; downloaded all Item 2.02 8-K earnings exhibits 2011-2016 and all 10-Q/10-K 2011-2016; read the 'Product sales, net' row of each release.",
+    "Q1 2013 release (accession 0001157523-13-001973) prints no product sales; the Q2 2013 10-Q states 'The Company began selling Horizant to wholesalers in May 2013 following the return of the Company's commercial rights from GSK'.",
+    "Rung c/d: GSK Q4 2011 annual report/earnings call (via Bigdata.com search) describes the Horizant launch but GSK's pharmaceutical turnover tables list no Horizant line; no Arbor filing exists (private).",
+    "Four quarters of each of 2014 and 2015 sum to the full-year product sales printed in the Q4 releases (20,173 and 39,459 thousand); 2013Q2-Q4 sum to 6,414.",
+    "Verifier run on the staging directory; see batch report."
+  ]
+}

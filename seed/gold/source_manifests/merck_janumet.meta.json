@@ -1,0 +1,37 @@
+{
+  "drug_name": "Janumet",
+  "generic_name": "sitagliptin/metformin hydrochloride",
+  "manufacturer": "Merck",
+  "benchmark_identity": "merck_janumet_worldwide_reported",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Type 2 diabetes",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "DPP-4 inhibitor (sitagliptin) combined with a biguanide (metformin)",
+  "moa_class": "dpp4_inhibitor_biguanide_combination",
+  "first_approval_year": 2007,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2007/022044lbl.pdf",
+    "quote": "Initial U.S. Approval: 2007"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2007Q2",
+  "series_start_reason": "First quarter the issuer prints a Janumet-only line is 2007Q2: the first-quarter 2007 release (filed 2007-04-19) has no Janumet row in any product table, and the second-quarter 2007 release (exhibit 99.2, NET PRODUCT SALES DETAIL) prints JANUMET for the quarter. Series is worldwide. Legacy Merck & Co., Inc. (CIK 64978) before its November 2009 merger with Schering-Plough; the surviving filer CIK 310158 from the 2009Q4 release onward.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Scope: the product-table row labelled JANUMET (2007-2010 legacy NET PRODUCT SALES DETAIL, 2010+ quarterly product tables) whose first dollar column is worldwide; the release summary tables from 2011 headline JANUVIA/JANUMET combined and are not used. Janumet XR is not printed as a separate line in any release checked; whether the Janumet line includes Janumet XR is not stated in the tables and was not verified. 2014Q3 is taken from the 2014 quarterly columns of the 2014Q4 release because the 2014Q3 release prints only the combined Januvia/Janumet line. 2009Q4 is read from the quarterly data table in exhibit 99.2 of the 2009Q4 release (accession 0001193125-10-031545), which prints the four 2009 quarters. Quarters sum to the printed full year for 2014 (2,070 vs 2,071), 2015-2022, 2023 (1,178 vs 1,177), 2024 (934 vs 935) and 2025 (rounding only).",
+  "search_log": [
+    "bigdata_search (smart) 'Merck Janumet worldwide sales product table quarter': returned only combined Januvia and Janumet passages; used to locate the Janumet line in the release tables, not cited.",
+    "EDGAR submissions for CIK 310158 and 64978 listed; every 8-K with item 2.02 from 2005 to 2026-08-04 downloaded with its exhibits (cache in staging work directory). 1) Product tables read by table-row parsing of the exhibits (HTML), taking the row whose label is exactly Janumet.",
+    "2007Q2-2009Q3: legacy CIK 64978 releases (exhibit 99.2, NET PRODUCT SALES DETAIL, TOTAL $ column). 2007Q1 release has no Janumet row, so the series starts 2007Q2.",
+    "2009Q4 onward: CIK 310158 releases. The 2009Q4 summary table has only the combined JANUVIA/JANUMET line; the Janumet line is taken from the quarterly data table of the 2009Q4 release (exhibit 99.2, table with 1Q-4Q 2009 columns).",
+    "2010Q1-2026Q2: each quarter read from the quarter's own release, the column for the current quarter (first column for Q1 releases; second column for Q2 releases after the 1Q column; the third and fourth for Q3 and Q4 where the table lists quarter columns before the year-to-date total). Cross-checked: each quarter equals the prior-year figure printed in the following year's release for the same quarter.",
+    "2014Q3: the 2014Q3 release (2014-10-27) prints only a combined Januvia / Janumet line; the value 505 is read from the 2014 quarterly columns of the 2014Q4 release (accession 0001104659-15-006465, exhibit 99.1), which also prints the 2013 quarters.",
+    "No quarter is missing between 2007Q2 and 2026Q2. Latest quarter 2026Q2 from the 2026-08-04 release.",
+    "No Janumet XR row in any release checked (grep over all 2.02 exhibits)."
+  ],
+  "launch_evidence": null
+}

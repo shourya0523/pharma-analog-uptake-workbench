@@ -1,0 +1,36 @@
+{
+  "drug_name": "Zulresso",
+  "generic_name": "brexanolone",
+  "manufacturer": "Sage Therapeutics",
+  "benchmark_identity": "sage_zulresso_us_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Postpartum depression",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "injection, 5 mg/mL, continuous intravenous infusion",
+  "route_of_administration": "intravenous",
+  "moa": "neuroactive steroid GABA-A receptor positive modulator",
+  "moa_class": "gaba_a_positive_modulator_neurosteroid",
+  "first_approval_year": 2019,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2019/211371Orig1s000ltr.pdf",
+    "quote": "NDA 211371 NDA APPROVAL ... Zulresso (brexanolone) injection 5 mg/ml ... It is approved, effective on the date of this letter ... ELLIS F UNGER on behalf of ROBERT TEMPLE 03/19/2019"
+  },
+  "launch_quarter": "2019Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1597553/000095017025060158/sage-20250331.htm",
+    "quote": "We began to generate revenue from product sales in the second quarter of 2019 in conjunction with launch of our product ZULRESSO, which commenced in June 2019."
+  },
+  "commercial_start_quarter": "2019Q2",
+  "series_start_reason": null,
+  "series_end_quarter": "2024Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Sage discontinued commercial availability of ZULRESSO in the U.S. as of December 31, 2024 (Q1 2025 10-Q, 'We discontinued commercial availability of ZULRESSO in the U.S. as of December 31, 2024'); the Q1 2025 release prints Product revenue, net as a dash (nil).",
+  "notes": "Sage's ZULRESSO product revenue, net, from the statement of operations (USD thousands; the line is ZULRESSO only, Zurzuvae sales are collaboration revenue). Sales were to U.S. distributors and specialty pharmacies. Series 2019Q2-2024Q4 is contiguous; 2019Q1 printed no product revenue.",
+  "search_log": [
+    "Bigdata.com search (ZULRESSO net product sales) led to the Sage 10-Q/10-K revenue notes; each quarter's figure taken from its own Item 2.02 EX-99.1 statement of operations (data.sec.gov submissions for CIK 0001597553).",
+    "Cross-check: the release figures sum to the year columns printed in each Q4 release (2019 1,997+1,960 = 3,957; 2020 6,700; 2023 10,454 incl. Q4 1,985; 2024 3,574).",
+    "Series end: discontinued as of 2024-12-31 (quoted from the Q1 2025 10-Q). No Zulresso sales were printed for 2025 quarters.",
+    "Not found: no ex-U.S. ZULRESSO line (none was marketed by Sage). Q1 2019 printed no product revenue, so the series starts at the launch quarter."
+  ]
+}

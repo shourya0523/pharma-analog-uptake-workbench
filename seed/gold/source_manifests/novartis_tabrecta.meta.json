@@ -1,0 +1,32 @@
+{
+  "drug_name": "Tabrecta",
+  "generic_name": "capmatinib",
+  "manufacturer": "Novartis",
+  "benchmark_identity": "novartis_tabrecta_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (METex14 skipping non-small cell lung cancer)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "MET (mesenchymal-epithelial transition) receptor tyrosine kinase inhibitor",
+  "moa_class": "met_inhibitor",
+  "first_approval_year": 2020,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2020/213591Orig1s000ltr.pdf",
+    "quote": "NDA 213591 ACCELERATED APPROVAL ... for Tabrecta (capmatinib), 150 mg and 200 mg tablets"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2020Q2",
+  "series_start_reason": "Tabrecta's first sales (6) are printed only as the Q2 2020 prior-year column of the Q2 2021 report: the Q2 2020 report itself (0001370368-20-000069) prints no Tabrecta sales row. Q3 2020 is the first quarter printed as current (12; the Q3 2020 report says 'Tabrecta (USD 12 million) US launch progressed well').",
+  "series_end_quarter": "2023Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "From the Q1 2024 interim report (0001370368-24-000017, a240423-99_2.htm) Novartis no longer prints a Tabrecta net sales row: its Oncology table lists Kisqali, Promacta/Revolade, Jakavi, Tafinlar + Mekinist, Tasigna, Lutathera, Kymriah and 'Other', and Tabrecta does not occur anywhere in that report or in the Q2 2024 through Q2 2026 reports. The Q4 2023 report (0001370368-24-000007) is the last with a Tabrecta row (Q4 2023 41; FY 2023 154).",
+  "notes": "Novartis group net sales of Tabrecta as a single row of the product net sales table. Checks against the Q4 reports' FY columns: 2020 = 6+12+17 = 35 (FY 2020 35; Q1 2020 pre-launch, not printed); 2021 = 17+22+24+27 = 90 (FY 90); 2022 = 31+30+36+36 = 133 (FY 133); 2023 = 36+41+36+41 = 154 (FY 154). The 2020Q2 row is a direct_prior_year_column read because no own-quarter row exists; it is also implied by nine months 2020 (18) less Q3 2020 (12).",
+  "search_log": [
+    "Same Novartis 6-K index and EX-99.2 downloads as Zykadia (CIK 1114448, 58 interim report exhibits, 2012Q2-2026Q2).",
+    "Tabrecta rows extracted by script from every report: numeric rows from the Q3 2020 report to the Q4 2023 report; the Q2 2020 report mentions Tabrecta only in an approvals table; the Q1 2024 and later reports do not contain the word.",
+    "Compared each quarter's own value with the following year's prior-year column: no restatement difference.",
+    "Bigdata.com used to locate documents; cited URLs are sec.gov Archives originals."
+  ]
+}

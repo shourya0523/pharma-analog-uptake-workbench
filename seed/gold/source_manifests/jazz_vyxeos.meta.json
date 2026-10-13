@@ -1,0 +1,37 @@
+{
+  "drug_name": "Vyxeos",
+  "generic_name": "daunorubicin and cytarabine liposome",
+  "manufacturer": "Jazz Pharmaceuticals",
+  "benchmark_identity": "jazz_vyxeos_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (hematologic, AML)",
+  "revenue_scope": "Worldwide net product sales of Vyxeos as printed in Jazz's product sales table",
+  "geography": "Worldwide (U.S. plus approved ex-U.S. markets per Jazz's 10-K)",
+  "formulation": "liposome for injection",
+  "route_of_administration": "intravenous",
+  "moa": "liposomal fixed-ratio daunorubicin and cytarabine (anthracycline plus antimetabolite)",
+  "moa_class": "anthracycline_cytarabine_liposome",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2017/209401Orig1s000ltr.pdf",
+    "quote": "NDA 209401 ... This new drug application provides for the use of VYXEOS (daunorubicin and cytarabine) liposome for injection for the treatment of adults with newly-diagnosed therapy-related acute myeloid leukemia (t-AML) or AML with myelodysplasia-related changes (AML-MRC). ... It is approved, effective on the date of this letter"
+  },
+  "launch_quarter": "2017Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1232524/000123252417000178/a3q17financialpr.htm",
+    "quote": "Vyxeos net product sales in the third quarter of 2017 were $9.7 million. Vyxeos launched in the U.S. on August 11, 2017."
+  },
+  "commercial_start_quarter": "2017Q3",
+  "series_start_reason": "First quarter with a Vyxeos line: the 2017Q2 release has no Vyxeos line (pre-launch); the Vyxeos launch in the U.S. on August 11, 2017 falls in Q3 2017.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Jazz prints Vyxeos on its own line in every quarterly release from 2017Q3. Units: thousands USD through 2025Q4, millions USD in the 2026 releases (declared 'In millions'). Sum of printed quarters equals each full-year figure for 2018-2025 (checked).",
+  "search_log": [
+    "Listed Jazz 8-K Item 2.02 filings from data.sec.gov (CIK 0001232524) back to 2018 and scanned every Ex. 99.1 financial press release for 'Vyxeos' rows (scan of 45 Item 2.02 filings 2018-2026 with January outlook releases carrying no table).",
+    "Each quarter taken from that quarter's own release (current three months, first figure); prior-year and year-to-date columns used only as cross-checks.",
+    "Cross-checks: each year's four quarters sum to the twelve-month figure printed in the Q4 release (2018 100,835; 2019 121,407; 2020 121,105; 2021 134,060; 2022 127,980; 2023 147,495; 2024 162,595; 2025 146,709).",
+    "FDA approval letter NDA 209401 fetched; approval paragraph quoted. The letter's signature date was not extracted.",
+    "Jazz 10-K FY2025 scope text checked: Vyxeos is commercialized in the U.S. and in approved markets in Europe and Australia and in Canada, which makes the printed line worldwide."
+  ]
+}

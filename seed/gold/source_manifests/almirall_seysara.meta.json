@@ -1,0 +1,40 @@
+{
+  "drug_name": "Seysara",
+  "generic_name": "sarecycline",
+  "manufacturer": "Almirall",
+  "benchmark_identity": "almirall_seysara_us_reported",
+  "therapeutic_area": "Immunology / Inflammation",
+  "indication_area": "Inflammatory lesions of moderate to severe acne vulgaris",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Narrow-spectrum tetracycline-class antibiotic",
+  "moa_class": "tetracycline_class_antibiotic",
+  "first_approval_year": 2018,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=209521",
+    "quote": "SEYSARA SARECYCLINE HYDROCHLORIDE EQ 60MG BASE TABLET;ORAL ... 10/01/2018 ORIG-1 Approval Type 1 - New Molecular Entity STANDARD"
+  },
+  "launch_quarter": "2019Q1",
+  "launch_evidence": {
+    "url": "https://blob.almirall.com/files/documents/20022020%20Financial%20Results%202019_English4382788.pdf",
+    "quote": "In January 2019 in the US, Almirall launched Seysara"
+  },
+  "commercial_start_quarter": "2021Q1",
+  "series_start_reason": "Series starts 2021Q1, the first quarter whose own Almirall results presentation prints the US 'Seysara' row of the Dermatology Sales breakdown to one decimal, and runs without a gap to 2026Q2. Seysara launched in the US in January 2019; Almirall's 2019 and 2020 documents print it only as whole EUR millions (a bar chart of quarterly net sales, an integer US row from the H1 2020 and 9M 2020 decks, and 'EUR 23 million' for 2019) and their prior-year comparators disagree between decks (the 2020 first half is 6.8 in the H1 2021 US breakdown, 7.6 in the same deck's product table, 7 in the H1 2020 deck and 8 in the 9M 2021 bar chart), so no consistent 2019-2020 quarterly line is spliced in.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "US Seysara net sales (EUR millions, one decimal) from the US block of Almirall's Dermatology Sales breakdown; the table footnote says it includes product consignment, royalties from authorized generics and up-fronts. Almirall publishes the breakdown cumulatively (first quarter, first half, nine months, full year): the first quarter is a direct read and every other quarter is the YTD less the preceding YTD, so each year's four quarters sum to the printed full-year figure (2021 25.5, 2022 23.6, 2023 19.5, 2024 22.9, 2025 18.6). Fiscal year equals calendar year. 2023Q3 and 2023Q4 use the nine-month 2023 figure (14.5) printed as the prior-year column of the 9M 2024 deck, because no 9M 2023 presentation was found on a host that can be fetched without a browser. Scope change: from 2024 the deck also prints a global 'Seysara' product line that adds China licence income (nine months 2024 20.6 against US 16.8; the H1 2024 deck prints 15.1 against US 11.3) and Almirall received China approval for Seysara in 2025 (2025 results press release, https://blob.almirall.com/files/documents/2025-results-PR-23-02-26_FINAL6331481.pdf); the US row is used so the scope is constant. Later decks restate a few prior-year figures (FY2024 is 22.9 in its own deck and 22.6 in the FY2025 deck); the quarter's own deck is used. Almirall acquired its US dermatology portfolio, including Seysara, in 2018 (Annual Report 2019: 'the acne portfolio (most of which was acquired in 2018)').",
+  "search_log": [
+    "Bigdata.com smart searches ('Almirall Seysara net sales quarterly results', 'Almirall US Seysara net sales ... slides table') located Almirall's quarterly results presentations and showed they print a 'Dermatology Sales Breakdown' with a US > Seysara row, cumulative within the year; its app.bigdata.com links were not cited.",
+    "almirall.com is behind an anti-bot challenge that returns an empty page to non-browser clients, so documents were taken from the same files mirrored on blob.almirall.com (Almirall's own file host): .../files/communications/<name>, .../files/documents_pdf/<name><uuid>.pdf, .../files/2026-0x/<name>; the uuid is the one in the corresponding www.almirall.com/documents/... link.",
+    "Downloaded and read with pdfplumber: Q1/H1/9M/FY decks for 2019 (H1, FY, 9M via CNMV), 2020 (H1, 9M), 2021 (all four), 2022 (all four), 2023 (Q1, H1, FY), 2024 (all four), 2025 (all four), 2026 (Q1, H1). Not found on a fetchable host: Q1 2019, Q1 2020, FY2020 and 9M 2023 decks.",
+    "The 2019-2020 decks print integer EUR millions only and disagree with later comparators (see series_start_reason), so they are listed here but not used: FY2019 'EUR 23 million'; H1 2020 deck 'Seysara 7 8 (19.0%)'; 9M 2020 deck 'Seysara 12 15 (22.3%) 5 7 (26.2%)'; 9M 2021 bar chart quarterly 2,6,7,8,5,3,5,7,6,6,6 for Q1 2019-Q3 2021 (net sales incl. consignment).",
+    "Almirall's quarterly press releases (blob.almirall.com/files/documents/*PR*.pdf) print Seysara only in prose for some quarters and not at all for others (the Q1 2026 release has no Seysara figure), so the presentations are the line source.",
+    "Rung c (another issuer printing Seysara sales) was not searched beyond Almirall, which prints a US line for the whole span used.",
+    "Cross-checks: quarterly sums equal the printed full-year US figure for 2021 (25.5), 2022 (23.6), 2023 (19.5), 2024 (22.9) and 2025 (18.6); Q1 values equal the prior-year column of the next year's Q1 deck for 2022-2025 (4.3, 4.8, 4.9, 4.9).",
+    "Verifier run on the staging directory; see batch report."
+  ]
+}

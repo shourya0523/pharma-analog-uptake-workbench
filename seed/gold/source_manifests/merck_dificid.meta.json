@@ -1,0 +1,35 @@
+{
+  "drug_name": "Dificid",
+  "generic_name": "fidaxomicin",
+  "manufacturer": "Merck",
+  "benchmark_identity": "merck_dificid_worldwide_reported",
+  "therapeutic_area": "Infectious Disease / Vaccines",
+  "indication_area": "Clostridioides difficile-associated diarrhea",
+  "revenue_scope": "Product",
+  "geography": "Worldwide",
+  "formulation": "oral tablet and granules for oral suspension",
+  "route_of_administration": "oral",
+  "moa": "narrow-spectrum macrolide antibacterial that inhibits bacterial RNA polymerase",
+  "moa_class": "macrolide_rna_polymerase_inhibitor_antibacterial",
+  "first_approval_year": 2011,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2011/201699s000ltr.pdf",
+    "quote": "NDA 201699 ... Dificid (fidaxomicin) Tablet for the treatment of Clostridium difficile-associated diarrhea in adults (FDA approval letter to Optimer Pharmaceuticals, signed 05/27/2011)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2021Q1",
+  "series_start_reason": "Merck prints Dificid on its own sales line only from the first-quarter 2022 earnings release and Form 10-Q, which carry the four 2021 quarters as prior-year columns, so the series starts at 2021Q1. Merck's 2015-2021 releases, 10-Qs and 10-Ks print no Dificid sales figure by quarter (the request lists Cubist as the pre-2015 owner; ownership was not researched here). The FY2022 Form 10-K prints annual Dificid sales 2020 of 110, which cannot be split into quarters. Cubist and Optimer, the earlier owners, printed their own Dificid sales before 2015; that history is a different issuer and scope, and it is not spliced onto Merck's series (it was not sourced here).",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Worldwide (U.S. plus international) Dificid sales in USD millions from Merck's product sales table, which the 10-Q/10-K tables split into U.S. and international columns. 2021 quarters come from prior-year columns of the 2022 releases. Quarters sum to the printed year within rounding of 1 (2022 262 vs 263); 2021 sums to 175 as printed in the FY2022 10-K; 2023-2025 equal the printed years. Sales fall sharply in 2025Q3-2026Q2 against the prior-year quarters as printed in the releases (2025Q3 43 vs 96).",
+  "search_log": [
+    "Local copy of every Merck item 2.02 8-K exhibit (99.1 and 99.2) for 2005-2026-08-04 (CIK 310158 and legacy CIK 64978), plus every 10-K, 10-K/A and 10-Q Merck filed 2015-02-27 to 2026-08-07 (48 filings, listed with data.sec.gov submissions, all forms); product rows read from the HTML table rows, the same reading as the verifier",
+    "Bigdata.com smart searches (one product per call, filings) located no sales document beyond the releases and 10-Q/10-K tables cited; its app.bigdata.com links are not cited",
+    "no partner, licensor or royalty holder was found that prints this product's net sales (rule 12c): Merck is the marketing authorisation holder and sole seller",
+    "scanned every release 2005-2026 and every 2015-2026 10-Q/10-K for a Dificid table row: first printed in the 2022-04-28 release and the 2022-05-05 Form 10-Q; the FY2022 10-K gives the annual figures 2020 110, 2021 175, 2022 263",
+    "grepped the text of 2015-2021 releases, 10-Qs and 10-Ks for Dificid: only acquired-intangible balances and regulatory text, no sales",
+    "Cubist/Optimer history (rule 12d) not searched in this batch because it would be a different issuer and scope, with a gap from 2015 to 2020 that cannot be filled",
+    "Launch quarter not established from an issuer document: no Merck document states Dificid's launch quarter ; launch_quarter null."
+  ]
+}

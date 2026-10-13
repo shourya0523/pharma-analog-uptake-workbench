@@ -1,0 +1,39 @@
+{
+  "drug_name": "Zerbaxa",
+  "generic_name": "ceftolozane/tazobactam",
+  "manufacturer": "Merck",
+  "benchmark_identity": "merck_zerbaxa_worldwide_reported",
+  "therapeutic_area": "Infectious Disease / Vaccines",
+  "indication_area": "Complicated Gram-negative bacterial infections (cIAI, cUTI, HABP/VABP)",
+  "revenue_scope": "Product",
+  "geography": "Worldwide",
+  "formulation": "powder for intravenous infusion",
+  "route_of_administration": "intravenous",
+  "moa": "cephalosporin antibacterial (ceftolozane) with a beta-lactamase inhibitor (tazobactam)",
+  "moa_class": "cephalosporin_beta_lactamase_inhibitor_combination",
+  "first_approval_year": 2014,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2014/206829Orig1s000ltr.pdf",
+    "quote": "NDA 206829 ... ZERBAXA (ceftolozane/tazobactam) Injection for Intravenous Use ... (FDA approval letter, signed 12/19/2014)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2019Q1",
+  "series_start_reason": "Merck prints Zerbaxa on its own sales line only from the first-quarter 2020 earnings release (and the first-quarter 2020 Form 10-Q); that release carries the four 2019 quarters as prior-year columns, so the series starts at 2019Q1. Merck's 2015-2019 earnings releases, 10-Qs and 10-Ks mention Zerbaxa only in regulatory, intangible-asset and contingent-consideration text; none prints a Zerbaxa sales figure.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Worldwide (U.S. plus international) product sales in USD millions from Merck's product sales table; the same row is split into U.S. and international columns in the 10-Q/10-K tables. 2019 quarters come from prior-year columns of the 2020 releases. 2021Q1-2021Q3 are negative figures as printed in the quarterly 10-Q Hospital Acute Care table (the 10-Q is cited because the release markup splits the parenthesis from the figure); the FY2021 10-K (https://www.sec.gov/Archives/edgar/data/310158/000031015822000003/mrk-20211231.htm) states 'the suspension of sales in 2020 of hospital acute care product Zerbaxa' among the factors for lower 2021 sales. Quarters sum to the printed year within rounding of 1 (2019 120 vs 121, 2020 131 vs 130, 2022 168 vs 169); 2021 sums to -1 as printed; 2023-2025 equal the printed years.",
+  "search_log": [
+    "Local copy of every Merck item 2.02 8-K exhibit (99.1 and 99.2) for 2005-2026-08-04 (CIK 310158 and legacy CIK 64978), plus every 10-K, 10-K/A and 10-Q Merck filed 2015-02-27 to 2026-08-07 (48 filings, listed with data.sec.gov submissions, all forms); product rows read from the HTML table rows, the same reading as the verifier",
+    "Bigdata.com smart searches (one product per call, filings) located no sales document beyond the releases and 10-Q/10-K tables cited; its app.bigdata.com links are not cited",
+    "no partner, licensor or royalty holder was found that prints this product's net sales (rule 12c): Merck is the marketing authorisation holder and sole seller",
+    "scanned every release 2005-2026 for a Zerbaxa table row: none before the 2020-04-28 release; 10-Q/10-K table rows first appear in the Form 10-Q for 2020Q1 (2020-05-06)",
+    "grepped the text of every 2015-2019 release, 10-Q and 10-K for Zerbaxa: only approval/pipeline text, '$50 million of contingent consideration related to the first commercial sale of Zerbaxa in the United States' paid in the first quarter of 2015 and intangible-asset balances; no sales figure",
+    "Launch quarter not established from an issuer document: the Merck Q1 2015 10-Q says the $50 million contingent consideration for the first commercial sale in the United States was paid in the first quarter of 2015, which does not date the first sale to a quarter; launch_quarter null."
+  ],
+  "reviewed_anomalies": {
+    "2021Q1": "Merck prints Zerbaxa worldwide sales for the quarter as a negative figure in parentheses, net of returns after the December 2020 recall and suspension of sales of hospital acute care products (FY2021 10-K). The reported figure is kept as printed.",
+    "2021Q2": "Merck prints Zerbaxa worldwide sales for the quarter as a negative figure in parentheses, net of returns after the December 2020 recall and suspension of sales of hospital acute care products (FY2021 10-K). The reported figure is kept as printed.",
+    "2021Q3": "Merck prints Zerbaxa worldwide sales for the quarter as a negative figure in parentheses, net of returns after the December 2020 recall and suspension of sales of hospital acute care products (FY2021 10-K). The reported figure is kept as printed."
+  }
+}
