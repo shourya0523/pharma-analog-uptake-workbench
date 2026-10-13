@@ -1,0 +1,39 @@
+{
+  "drug_name": "Nuzyra",
+  "generic_name": "omadacycline",
+  "manufacturer": "Paratek Pharmaceuticals",
+  "benchmark_identity": "paratek_nuzyra_us_reported",
+  "therapeutic_area": "Infectious Disease / Vaccines",
+  "indication_area": "Bacterial infections / antibiotic (community-acquired bacterial pneumonia; acute bacterial skin and skin structure infections)",
+  "revenue_scope": "NUZYRA net U.S. sales: Paratek's 'Product revenue, net' line ('Net product revenue recognized on sales of NUZYRA in the U.S.'), including NUZYRA courses sold to BARDA under the Project BioShield contract when delivered; SEYSARA (Almirall) reaches Paratek only as royalties in a separate line",
+  "geography": "United States",
+  "formulation": "tablet, injection (oral and intravenous)",
+  "route_of_administration": "oral and intravenous",
+  "moa": "aminomethylcycline tetracycline-class antibiotic (ribosomal protein synthesis inhibitor)",
+  "moa_class": "tetracycline_class_antibiotic",
+  "first_approval_year": 2018,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2018/209816Orig1s000,209817Orig1s000ltr.pdf",
+    "quote": "NDA 209816 NDA 209817 NDA APPROVAL ... for NUZYRA (omadacycline) tablets, 150 mg (NDA 209816) and NUZYRA (omadacycline) for injection, 100 mg (NDA 209817) ... They are approved, effective on the date of this letter"
+  },
+  "launch_quarter": "2019Q1",
+  "commercial_start_quarter": "2019Q1",
+  "series_start_reason": "2019Q1 is the first quarter with a product revenue line: Paratek's Q1 2019 10-Q prints 1,347 against a dash for 2018Q1, and the 10-Q states NUZYRA was launched in the U.S. in February 2019. The FY2019 10-K prints a dash for the whole of 2018.",
+  "series_end_quarter": "2023Q2",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The last periodic filing is the Q2 2023 10-Q (0001628280-23-027035, filed 2023-08-03); the EDGAR submissions list shows no Q3 2023 10-Q or FY2023 10-K, and an 8-K filed 2023-09-21 (0001193125-23-239185, items 2.01, 3.01, 5.01) follows the completion of the company's acquisition.",
+  "notes": "Quarterly NUZYRA net U.S. sales, USD thousands converted to millions. Q1-Q3 are read from the quarter's own 10-Q; Q4 2019 and Q4 2020 from the Q4 earnings releases (8-K Exhibit 99.1: 0001564590-20-006381 and 0001564590-21-008182); Q4 2021 and Q4 2022 are derived (derived_ytd_difference) as the 10-K year less the Q3 10-Q nine-month figure, because the earnings releases for those quarters are not among the company's EDGAR 8-K filings and no citable copy was found (Bigdata.com indexes the Q4 2022 release, which gives NUZYRA net U.S. sales of $66.4 million for Q4 2022 against $20.6 million for Q4 2021, equal to the derived 66.365 and 20.643). Full-year checks (thousands): 2019 1,347+1,702+3,053+5,415 = 11,517 against 11,517; 2020 7,303+8,133+10,895+12,422 = 38,753 against 38,753; 2021 sums to 106,085 against 106,084 (the six-month figure printed in the Q2 2021 10-Q, 66,009, is one thousand below the sum of its two quarters, rounding in the filing); 2022 19,918+25,082+25,455+66,365 = 136,820 against 136,820. Composition: the line includes BARDA procurements, so it is not purely commercial sales: the first 2,500-course procurement ($37.9 million) was delivered in June 2021 and is recognised in 2021Q2 (52,803), and the second 2,500-course procurement ($38.1 million per the Q4 2022 release) is in 2022Q4 (66,365); the FY2022 10-K says net product revenue includes 2,500 treatment courses sold to BARDA in each of 2022 and 2021. Excluding them, 2021 core commercial sales were 68.2 million and 2022 98.7 million (Q4 2022 release). SEYSARA is Almirall's product and reaches Paratek only as royalty and collaboration revenue (separate line). The Zai Lab collaboration for Greater China is a separate arrangement and is not separated here. Government contract service and grant revenue (BARDA) are separate lines and not in the series. The Q2 2023 10-Q is the last published quarter.",
+  "search_log": [
+    "Paratek (CIK 0001178711, found through EDGAR company search after the name was absent from company_tickers.json) submissions: 10-Q and 10-K 2018-2023 (21 filings) downloaded.",
+    "Searched every filing for a NUZYRA table row: none; the product line is the income-statement row 'Product revenue, net'. Extracted its quarter, prior-year and year-to-date figures from every 10-Q and 10-K (Q1 2019 to Q2 2023).",
+    "Listed 8-K filings 2019-2023 in the EDGAR submissions list: the only ones carrying earnings exhibits are 0001564590-20-006381 (2020-02-25) and 0001564590-21-008182 (2021-02-24); no 8-K Item 2.02 and no earnings-release exhibit is listed for the other quarters or for Q4 2021 and Q4 2022. Fetched both exhibits (prtk-ex991_7.htm): Q4 2019 product revenue 5,415 (year 11,517), Q4 2020 12,422 (year 38,753).",
+    "Bigdata.com searches for the Q4 2021 and Q4 2022 earnings releases returned only third-party transcripts and 10-K/10-Q text (app.bigdata.com links are not citable): the Q4 2022 release gives NUZYRA net U.S. sales of $66.4 million (Q4 2022) and $20.6 million (Q4 2021), $136.8 million for 2022 of which $38.1 million is the second BARDA procurement and $98.7 million core commercial. These were used only as a cross-check of the derived rows.",
+    "Bigdata.com search for NUZYRA revenue in Q3 2023 returned no results (the company was taken private in late 2023; no Q3 2023 10-Q appears in EDGAR).",
+    "FDA approval letter NDA 209816/209817 fetched from accessdata.fda.gov (appletter/2018/209816Orig1s000,209817Orig1s000ltr.pdf) and read with pdfplumber; the approval date, October 2, 2018, is given by the FDA approval package and by the 10-Q wording 'approved by the FDA in October 2018'.",
+    "Launch: the Q1 2021 10-Q states NUZYRA was 'launched in the U.S. in February 2019'."
+  ],
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1178711/000156459021028178/prtk-10q_20210331.htm",
+    "quote": "NUZYRA, which was approved by the FDA in October 2018 and launched in the U.S. in February 2019"
+  }
+}

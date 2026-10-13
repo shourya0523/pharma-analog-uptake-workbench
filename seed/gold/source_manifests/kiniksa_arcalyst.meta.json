@@ -1,0 +1,37 @@
+{
+  "drug_name": "Arcalyst",
+  "generic_name": "rilonacept",
+  "manufacturer": "Kiniksa Pharmaceuticals",
+  "benchmark_identity": "kiniksa_arcalyst_total_reported",
+  "therapeutic_area": "Immunology / Inflammation",
+  "indication_area": "Recurrent pericarditis / IL-1 blockade",
+  "revenue_scope": "Kiniksa 'Product revenue, net' line (ARCALYST is Kiniksa's only product); excludes license and collaboration revenue, which Kiniksa prints as a separate line",
+  "geography": "Product revenue line carries no geographic split; the FY2025 10-K revenue-by-customer-location note prints United States 676,750 of total revenue 677,564 (thousands), so the line is substantially U.S.",
+  "formulation": "injection",
+  "route_of_administration": "subcutaneous",
+  "moa": "IL-1 alpha/beta ligand trap (interleukin-1 inhibitor)",
+  "moa_class": "il1_inhibitor",
+  "first_approval_year": 2008,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=125249",
+    "quote": "02/27/2008 ORIG-1 Approval (BLA 125249, ARCALYST RILONACEPT 220MG VIAL; SINGLE-USE)"
+  },
+  "launch_quarter": "2021Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1730430/000110465921099173/tm2123663d1_ex99-1.htm",
+    "quote": "ARCALYST, which became commercially available through Kiniksa on April 1, 2021"
+  },
+  "commercial_start_quarter": "2021Q2",
+  "series_start_reason": "First quarter with an ARCALYST product revenue line: the 2021Q1 release has no product revenue line (ARCALYST became commercially available April 1, 2021); the 2021Q2 release prints 7,704 for three months and six months.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Kiniksa prints 'Product revenue, net' separately from 'License and collaboration revenue' (FY2025 10-K: 2025 nil, 2024 6,210, 2023 37,083 thousands), so the product line used here excludes license revenue. Sum of 2023 quarters equals the printed 233,176 and of 2024 quarters 417,029; sum of 2021 Q2-Q4 equals 38,544 printed for 2021. The FY2025 10-K geographic note (https://www.sec.gov/Archives/edgar/data/1730430/000110465926019168/knsa-20251231x10k.htm) prints United States 676,750, United Kingdom 814, Rest of world nil against total revenue 677,564 for 2025. A prior owner (Regeneron) reportedly printed its own U.S. ARCALYST net product sales for earlier periods; not extended here because that line is a different issuer and a narrower (CAPS-only) scope than Kiniksa's product revenue line, and Rule 11 allows joining only same-scope lines. Not verified in this repair pass.",
+  "search_log": [
+    "Listed Kiniksa 8-K Item 2.02 filings from data.sec.gov (CIK 0001730430; the CIK in the first draft was wrong and was replaced after a ticker lookup).",
+    "Grepped every Item 2.02 Ex. 99.1 from 2021 to 2026 for 'Product revenue, net'; each quarter's own release gives the current-quarter figure as the first number.",
+    "Cross-checks: 2022 quarters 22,189 + 26,972 + 33,424 + 39,939 = 122,524 printed FY2022; 2023 sum 233,176; 2024 sum 417,029; 2025 sum 677,564 (2025 Q4 release prints 677,564 for twelve months).",
+    "FDA approval date read from the Drugs@FDA overview page (verifier fix).",
+    "Repair pass: fetched the FY2025 10-K and confirmed the geographic note (United States 676,750 of 677,564) and the separate license and collaboration revenue line; corrected the earlier note that said license revenue was nil in all years. Regeneron's earlier ARCALYST history was not fetched, so the joined-issuer extension was left out and flagged."
+  ]
+}

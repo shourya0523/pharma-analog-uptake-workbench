@@ -1,0 +1,46 @@
+{
+  "drug_name": "Relyvrio",
+  "generic_name": "sodium phenylbutyrate and taurursodiol",
+  "manufacturer": "Amylyx Pharmaceuticals",
+  "benchmark_identity": "amylyx_relyvrio_us_canada_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Amyotrophic lateral sclerosis (ALS)",
+  "revenue_scope": "Product revenue, net: RELYVRIO in the U.S. plus ALBRIOZA in Canada combined",
+  "geography": "United States and Canada (combined; no split printed)",
+  "formulation": "oral powder (co-packaged packets)",
+  "route_of_administration": "oral",
+  "moa": "combination of sodium phenylbutyrate and taurursodiol (proposed endoplasmic reticulum stress and mitochondrial modulation)",
+  "moa_class": "er_stress_mitochondrial_combination",
+  "first_approval_year": 2022,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=216660",
+    "quote": "RELYVRIO SODIUM PHENYLBUTYRATE; TAURURSODIOL ... 09/29/2022 ORIG-1 Approval Type 1 - New Molecular Entity"
+  },
+  "launch_quarter": "2022Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1658551/000095017022024465/amlx-20220930.htm",
+    "quote": "the Company launched RELYVRIO in the United States of America, or U.S., on October 24, 2022"
+  },
+  "commercial_start_quarter": "2022Q4",
+  "series_start_reason": "The 'Product revenue, net' line covers ALBRIOZA in Canada from July 29, 2022 and RELYVRIO in the U.S. from October 24, 2022 (Q3 2022 Form 10-Q). The 2022Q3 row (345 thousand) is attributable to ALBRIOZA in Canada only (Q3 2022 earnings release and Form 10-Q MD&A), so it is outside the U.S.+Canada scope and is dropped; the series starts at 2022Q4, the first quarter in which both territories contribute.",
+  "series_end_quarter": "2025Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Relyvrio was withdrawn in 2024 (stated in the 2024 Form 10-Q). The 2026 Form 10-Qs no longer print the product revenue line; the Q2 2026 10-Q states 'following its withdrawal, we will no longer generate revenues from this product'. Last printed quarter is 2025Q4 (derived nil).",
+  "notes": "Scope is U.S. (RELYVRIO) plus Canada (ALBRIOZA) combined for every row: FY2022 Form 10-K note 3 says shipments began in Canada in July 2022 and the U.S. in October 2022, and the FY2023 and FY2024 Form 10-K MD&A attribute the line to units of RELYVRIO and ALBRIOZA sold in the U.S. and Canada respectively. No filing, earnings release or Bigdata.com result read prints a U.S./Canada split, so no U.S.-only series exists. The 2022Q3 line (345 thousand, Canada only) is excluded from the series. Amylyx has no other product revenue (total revenues equal this line in 2022-2025). 2024Q2 (-1,023) and 2024Q4 (-665) are negative as printed. 2025 quarters are printed nil and kept as printed zeros. The series is in thousands of USD, recorded in millions.",
+  "search_log": [
+    "Listed Amylyx Pharmaceuticals (CIK 0001658551) 10-Q/10-K/8-K filings from data.sec.gov/submissions; read 'Product revenue, net' in each 10-Q (three-month and nine-month columns) and each 10-K.",
+    "2024Q2 derived from six-month 2024 (87,620) less Q1 2024 (88,643), because the Q2 2024 three-month figure is printed as a split parenthesised negative that the source-check cannot read as a negative.",
+    "FDA: Drugs@FDA NDA 216660 lists 09/29/2022 ORIG-1 Approval for RELYVRIO (approval_evidence); an earlier lookup under NDA 215887 / 216113 returned other products.",
+    "Launch and commercial start: first printed sales are the three-month figure ended September 30, 2022 (345 thousand).",
+    "Scope re-check: read the Q3 2022 earnings release (8-K 0000950170-22-024448: Q3 net product revenue 'attributable to sales of ALBRIOZA in Canada'), the Q1/Q2 2023 releases ('RELYVRIO in the U.S. and ALBRIOZA in Canada'), the Q3 2023 10-Q MD&A, the FY2022/FY2023/FY2024 10-K notes and MD&A, and the Q4 2022, Q4 2023-Q3 2024 and Q4 2024 releases (0000950170-23-007580, -24-018409, -24-056254, -24-093304, -24-122779, -25-031303), plus every 10-Q/10-K cited in the CSV, for a regex of dollar amounts or percentages next to 'Canad'. None prints a U.S./Canada revenue split or a geographic disaggregation."
+  ],
+  "reviewed_anomalies": {
+    "2024Q2": "Relyvrio was withdrawn from the U.S. and Canadian markets in April 2024. From 2024Q2 Amylyx's 'Product revenue, net' line prints returns and other adjustments (negative quarters) and then nil (a dash). Kept as printed.",
+    "2024Q3": "Relyvrio was withdrawn from the U.S. and Canadian markets in April 2024. From 2024Q2 Amylyx's 'Product revenue, net' line prints returns and other adjustments (negative quarters) and then nil (a dash). Kept as printed.",
+    "2024Q4": "Relyvrio was withdrawn from the U.S. and Canadian markets in April 2024. From 2024Q2 Amylyx's 'Product revenue, net' line prints returns and other adjustments (negative quarters) and then nil (a dash). Kept as printed.",
+    "2025Q1": "Relyvrio was withdrawn from the U.S. and Canadian markets in April 2024. From 2024Q2 Amylyx's 'Product revenue, net' line prints returns and other adjustments (negative quarters) and then nil (a dash). Kept as printed.",
+    "2025Q2": "Relyvrio was withdrawn from the U.S. and Canadian markets in April 2024. From 2024Q2 Amylyx's 'Product revenue, net' line prints returns and other adjustments (negative quarters) and then nil (a dash). Kept as printed.",
+    "2025Q3": "Relyvrio was withdrawn from the U.S. and Canadian markets in April 2024. From 2024Q2 Amylyx's 'Product revenue, net' line prints returns and other adjustments (negative quarters) and then nil (a dash). Kept as printed.",
+    "2025Q4": "Relyvrio was withdrawn from the U.S. and Canadian markets in April 2024. From 2024Q2 Amylyx's 'Product revenue, net' line prints returns and other adjustments (negative quarters) and then nil (a dash). Kept as printed."
+  }
+}

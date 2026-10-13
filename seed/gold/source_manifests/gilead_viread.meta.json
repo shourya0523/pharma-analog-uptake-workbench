@@ -1,0 +1,43 @@
+{
+  "drug_name": "Viread",
+  "generic_name": "tenofovir disoproxil fumarate",
+  "manufacturer": "Gilead",
+  "benchmark_identity": "gilead_viread_worldwide_reported",
+  "therapeutic_area": "Infectious Disease / Vaccines",
+  "indication_area": "HIV-1 infection; chronic hepatitis B",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "oral tablet",
+  "route_of_administration": "oral",
+  "moa": "nucleotide analog reverse transcriptase inhibitor (tenofovir disoproxil fumarate prodrug)",
+  "moa_class": "nucleotide_reverse_transcriptase_inhibitor",
+  "first_approval_year": 2001,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2001/21356ltr.pdf",
+    "quote": "NDA 21-356 ... for the treatment of HIV-1 infection in adults ... Accordingly, the application is approved effective on the date of this letter."
+  },
+  "launch_quarter": "2001Q4",
+  "commercial_start_quarter": "2002Q1",
+  "series_start_reason": "Series starts at 2002Q1, the first quarter for which Gilead prints a Viread sales figure of its own: the Q1 2002 10-Q calls it 'the first full quarter on the market for Viread' and states $27.2 million. Viread revenue began in November 2001 (2001Q4, see launch_evidence), but the 2001 10-K prints only a full-year 2001 figure ($15.6 million, covering access-program sales and initial U.S. sales) and no quarterly split, and the Q3 2001 10-Q prints no Viread amount, so 2001Q4 is not sourced. 2002Q1 to 2002Q3 are read from Gilead's own 10-Qs (prose); 2002Q4 from the prior-year comparison in the Q4 2003 release; 2003Q1 to 2004Q4 (except 2004Q3) and 2005Q1 from each quarter's own earnings-release prose; 2004Q3 from the prior-year column of the Q3 2005 release table; 2005Q3 onward as before (2005Q2, 2005Q4 and 2006Q1 from later prior-year columns).",
+  "series_end_quarter": "2023Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "From the first-quarter 2024 release (8-K Ex 99.1, 2024-04-25) Viread has no line of its own. Footnote (4) of that release's liver table reads 'Includes ledipasvir/sofosbuvir (Harvoni and the authorized generic version of Harvoni sold by Asegua), Hepcludex, Hepsera, Sovaldi, Viread and Vosevi'. No Viread figure was found in the 2024 and 2025 10-Q and 10-K product tables; Viread appears there only in footnotes.",
+  "notes": "Scope: worldwide brand total. The 2005 and 2006 releases print U.S. and International lines beneath the Viread heading with an unlabelled total; the 2007 to 2014 releases print U.S., Europe and Other International lines (2013 to 2014 also a labelled Viread total in the product sales summary); from the 2014Q4 release the same three regional lines are printed with an unlabelled total. Quarters up to 2005Q1 are prose sentences rounded to 0.1 million (derivation direct_reported); figures from 2005Q2 on are table rows. Figures printed in thousands up to 2014Q3 and converted to millions. The printed total can differ from the sum of its regional lines by one unit: 2023Q4 prints the total as 21 while its regional lines are 4, 6 and 12 (sum 22); the printed total is used. Four-quarter sums against the printed full years agree within rounding for every year checked (2013 to 2023); 2023 sums to 82 against a printed 83.",
+  "search_log": [
+    "Pulled data.sec.gov submissions for CIK 0000882095 (recent plus submissions-001 and -002) and listed every 8-K with Item 2.02 from 2002 to 2026; downloaded each earnings-release exhibit from the filing index.",
+    "Parsed the product-sales tables with BeautifulSoup and matched Viread rows; 2005Q3 onward read from the release of the same quarter, with prior-year columns used for 2005Q2, 2005Q4 and 2006Q1.",
+    "Searched the 10-Qs and 10-Ks from 2023-06 to 2026-08 for Viread: the Viread figures end with the 2023 quarters; from 2024 Viread appears only in footnotes.",
+    "FDA approval: NDA 21-356 approval letter (accessdata appletter/2001/21356ltr.pdf) read; it states the application is approved effective on the date of the letter. The letter's signature date is not in the extracted text; the year 2001 rests on the letter's submission chain (last submission 26 October 2001) and the label revised October 2001 (label 21356lbl.pdf, 'Revised: October 2001').",
+    "Re-read the 2003 to 2005 earnings releases (EDGAR 8-K Ex 99.1, accessions 0001104659-03-007080, -03-016308, -03-023931, -04-002120, -04-010958, -04-021540, -04-031392, -05-002943, -05-017077). They print Viread quarterly sales as prose sentences ('Sales of Viread were $X million in the ... quarter'), not as table rows; the earlier extractor looked only for table rows. Q2 2004 and Q1 2005 releases are in different accessions from the 8-K exhibits first downloaded (the earlier files for those dates were short non-release exhibits).",
+    "2002 quarters: no earnings-release 8-K for Q1 to Q4 2002 appears in the EDGAR submissions list (8-Ks filed 2002-01-04, 2002-12-10/12/13 and 2003-01-29 carry acquisition and financing exhibits only). Read the 10-Qs of 2002-05-15, 2002-08-13 and 2002-11-14, which state Viread sales for the quarter. The 2002 10-K (0001047469-03-008695) was searched and does not state the Q4 2002 figure; Q4 2002 is taken from the prior-year comparison in the Q4 2003 release.",
+    "2001: the 2001 10-K (0000912057-02-011690) states Viread sales of $15.6 million for the year and that revenue recognition began in November 2001; the Q3 2001 10-Q (0000912057-01-538726) prints no Viread sales amount. No document found that gives a Q4 2001 Viread figure, so the series does not include 2001Q4.",
+    "2004Q3: the Q3 2004 release prints U.S. Viread sales of $108.5 million and outside-U.S. sales of $85.4 million but no total; the total 193,880 (thousands) is read from the prior-year column of the Q3 2005 release table.",
+    "2005Q2: the Q2 2005 release exhibit (0001193125-05-151008) contains no Viread figure; the existing prior-year-column row from the Q2 2006 release is kept.",
+    "Cross-checks: 2002 quarters 27.2 + 44.7 + 68.9 + 85.0 = 225.8 against the 2003 release's stated 2002 total of $225.8 million; 2003 quarters sum to 566.5 against the stated $566.5 million; 2004 quarters (193.1, 197.2, 193.88, 198.8) sum to 783.0 against the stated $782.9 million (rounding).",
+    "Correction after review: the Q2 2005 release (accession 0001193125-05-144526) does print the quarter in prose ('Sales of Viread were $209.1 million in the second quarter of 2005'); the 2005Q2 row cites the 2006 prior-year column, whose figure (209.111) agrees with it."
+  ],
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/882095/000091205702011690/a2073842z10-k.htm",
+    "quote": "We did not begin recognizing revenues from commercial sales of Viread until November 2001."
+  }
+}

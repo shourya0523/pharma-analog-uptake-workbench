@@ -1,0 +1,41 @@
+{
+  "drug_name": "Voquezna",
+  "generic_name": "vonoprazan",
+  "manufacturer": "Phathom",
+  "benchmark_identity": "phathom_voquezna_us_reported",
+  "therapeutic_area": "GI / Liver / Women's Health / Urology",
+  "indication_area": "Gastroesophageal reflux disease (erosive esophagitis, non-erosive reflux); H. pylori",
+  "revenue_scope": "U.S. product revenue, net",
+  "geography": "United States",
+  "formulation": "oral tablet (VOQUEZNA, VOQUEZNA DUAL PAK and VOQUEZNA TRIPLE PAK)",
+  "route_of_administration": "oral",
+  "moa": "potassium-competitive acid blocker (P-CAB)",
+  "moa_class": "potassium_competitive_acid_blocker",
+  "first_approval_year": 2022,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2023/215151s000lbl.pdf",
+    "quote": "VOQUEZNA (vonoprazan) tablets, for oral use | Initial U.S. Approval: 2022 (FDA label of NDA 215151, revised 11/2023). The VOQUEZNA TRIPLE PAK and VOQUEZNA DUAL PAK label (NDA 215152 and 215153, https://www.accessdata.fda.gov/drugsatfda_docs/nda/2022/215152Orig1s000,215153Orig1s000lbl.pdf, revised 5/2022) also reads 'Initial U.S. Approval: 2022'."
+  },
+  "launch_quarter": "2023Q4",
+  "launch_evidence": {
+    "year": 2023,
+    "url": "https://www.sec.gov/Archives/edgar/data/1783183/000119312526324867/phat-20260630.htm",
+    "quote": "To date, our only source of revenue has been from the U.S. sales of VOQUEZNA products, which the Company began selling during the fourth quarter of 2023."
+  },
+  "commercial_start_quarter": "2023Q4",
+  "series_start_reason": "Phathom first prints product revenue in the Q4 2023 release (682 thousand, the only revenue in 2023); the series starts at that first sales quarter. Earlier quarters carry no revenue line.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Scope: the company's only revenue line is 'Product revenue, net', and the 2026 Q2 10-Q states the company's only revenue source is U.S. sales of VOQUEZNA products (VOQUEZNA, VOQUEZNA DUAL PAK and VOQUEZNA TRIPLE PAK). The Dual and Triple Paks are formulations of the brand sold in the same line; no separate line is printed. Full-year checks: 2024 quarters sum to 55,252 (printed FY2024 55,252); 2025 quarters sum to 175,110 (printed FY2025 175,110). Phathom also issued 2026 revenue guidance of $310-325 million to $320-345 million in the Q2 2026 release; guidance is not used. Q1 2026 and Q2 2026 are read from their own releases. Approval year: the brand's first FDA approval is the VOQUEZNA TRIPLE PAK and VOQUEZNA DUAL PAK co-packs (NDA 215152 and 215153, label revised 5/2022, 'Initial U.S. Approval: 2022'); the FDA label for the stand-alone VOQUEZNA tablets (NDA 215151) carries the same 'Initial U.S. Approval: 2022', although that NDA was approved November 1, 2023 (Q4 2023 release: 'The FDA approved VOQUEZNA 10 mg and 20 mg tablets on November 1, 2023'). first_approval_year therefore follows the FDA's own 'Initial U.S. Approval' year, 2022, and not the tablet NDA's 2023 action date. The series' first quarter (2023Q4) is the tablet launch in November 2023.",
+  "search_log": [
+    "Bigdata smart search for Voquezna net product revenue by quarter returned the 10-Q and Q2 2026 release text; used to find the filings, not cited.",
+    "Listed Phathom (CIK 0001783183) 8-K Item 2.02 and 10-Q/10-K filings from data.sec.gov submissions (recent page) from 2023-06; downloaded each 2024-2026 earnings exhibit (EX-99.1) from the filing index.",
+    "Scanned every release for the revenue line; 'Product revenue, net' is the only revenue line in every release, and it is present from the 2024-03-07 release onward.",
+    "Confirmed the scope sentence in the Q2 2026 10-Q, Note 8 Revenue Recognition (phat-20260630.htm): 'our only source of revenue has been from the U.S. sales of VOQUEZNA products'.",
+    "Confirmed the Q4 2023 column of the 2024-03-07 release: product revenue, net 682 (three months and year 2023), prior periods a dash.",
+    "FDA approval letter NDA 215151 fetched from accessdata.fda.gov, (the letter text reads 'It is approved, effective on the date of this letter' and carries no date in the extracted text; the November 1, 2023 approval date comes from the Q4 2023 release, 0001193125-24-061512). The earlier statement that the letter is dated October 23, 2023 was wrong and is withdrawn.",
+    "Sum check: 2024 and 2025 quarters match the printed twelve-month figures in the Q4 2024 and Q4 2025 releases.",
+    "Approval-year check: FDA label of VOQUEZNA tablets (215151s000lbl.pdf) prints 'Initial U.S. Approval: 2022'; the Triple Pak/Dual Pak label (215152Orig1s000,215153Orig1s000lbl.pdf, revised 5/2022) prints 'Initial U.S. Approval: 2022'. The FDA letter URL guess .../appletter/2022/215152Orig1s000ltr.pdf returned 404 and was not used."
+  ]
+}

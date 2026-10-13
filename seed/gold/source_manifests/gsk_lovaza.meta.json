@@ -1,0 +1,35 @@
+{
+  "manufacturer": "GSK plc",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "series_end_quarter": "2016Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The 2017-02-08 results 6-K (0001654954-17-000843) prints Lovaza in 'Established products' (Q4 2016 GBP 8m; full-year 2016 GBP 43m). The Q1 2017 release (0001654954-17-003652) lists Coreg, Imigran/Imitrex, Lamictal, Requip, Serevent, Seroxat/Paxil, Valtrex, Zeffix and Other in the same 'Established products' table with no Lovaza row, and no Lovaza table row appears in any later GSK results release (2017Q2-2026Q2 releases parsed).",
+  "drug_name": "Lovaza",
+  "generic_name": "omega-3-acid ethyl esters",
+  "benchmark_identity": "gsk_lovaza_worldwide_reported",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Severe hypertriglyceridemia",
+  "formulation": "oral capsule (1 g)",
+  "route_of_administration": "oral",
+  "moa": "Omega-3 fatty acid ethyl esters (EPA/DHA) reducing hepatic triglyceride synthesis",
+  "moa_class": "omega3_fatty_acid_triglyceride_lowering",
+  "first_approval_year": 2004,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=021654",
+    "quote": "11/10/2004 ORIG-1 Approval Type 1 - New Molecular Entity STANDARD (NDA 021654, LOVAZA OMEGA-3-ACID ETHYL ESTERS)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2008Q1",
+  "series_start_reason": "GSK acquired Reliant Pharmaceuticals (US marketing rights to Lovaza) on 18 December 2007 (FY2007 results 6-K 0001191638-08-000196: 'In December, GSK acquired Reliant Pharmaceuticals ... including US marketing rights to Lovaza'; 'On 18th December 2007, GSK acquired all of the share capital of Reliant Pharmaceuticals Inc.'). The FY2007 release prints no Lovaza table row (only Reliant's 2007 net sales of GBP 157m in narrative, for the pre-acquisition owner); the first Lovaza turnover row is Q1 2008 (6-K 0001156973-08-000471). Reliant was a private company; no Reliant quarterly sales document was found.",
+  "notes": "Row is GSK's Lovaza turnover from its pharmaceuticals turnover table (Total column; the US column printed beside it is equal to or within GBP 1-3m of the Total in the rows read, Lovaza being a US product). Brand total, one formulation (oral capsule).",
+  "search_log": [
+    "Bigdata.com smart search ('GSK Benlysta turnover third quarter 2021', filings) returned no chunks for GSK Q3 2021; document discovery therefore done directly on EDGAR.",
+    "listed GSK (CIK 0001131399) filings via data.sec.gov submissions incl. paginated older files, all form types (6-K, 6-K/A, 20-F counted); 6,839 filings listed",
+    "2012-2026: selected 6-Ks whose primaryDocDescription matches 1ST/2ND/3RD QUARTER RESULTS, HALF-YEAR(LY) REPORT, FINAL RESULTS (the 2022-02-07 'PUBLICATION OF FULL YEAR 2021 RESULTS' 6-K was skipped in favour of the 2022-02-09 FINAL RESULTS 6-K); 2008-2011: results 6-Ks identified by hand from filings in the late-Jan/Feb, late-Apr, late-Jul and late-Oct windows (descriptions are generic 'FORM 6-K'/'6-K'); 2010-09-10 'historical quarterly turnover by product' 6-K not used as a source, each quarter is read from its own results announcement",
+    "fetched each main document from sec.gov Archives and parsed table rows; the product's regional turnover rows (Total, growth %, US, Europe, International where printed) were taken: Q1 release first such row; Q2/Q3 releases first row = quarter, second = year-to-date; Q4 release first row = full year, second row = fourth quarter",
+    "arithmetic check run on every year: Q1+Q2 = printed six-month row, +Q3 = printed nine-month row, +Q4 = printed full-year row; no mismatch beyond rounding found",
+    "Lovaza rows found in every results release Q1 2008 - Q4 2016 (36 quarters); none from Q1 2017 on (searched all 2017-2026 results 6-Ks for 'Lovaza')",
+    "prior owner: Reliant Pharmaceuticals was acquired 2007-12-18 and was private; no public quarterly sales document exists for it"
+  ]
+}

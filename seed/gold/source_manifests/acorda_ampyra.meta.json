@@ -1,0 +1,40 @@
+{
+  "drug_name": "Ampyra",
+  "generic_name": "dalfampridine",
+  "manufacturer": "Acorda Therapeutics",
+  "benchmark_identity": "acorda_ampyra_us_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Improvement of walking in multiple sclerosis",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "extended-release oral tablet (10 mg)",
+  "route_of_administration": "oral",
+  "moa": "potassium channel blocker (aminopyridine)",
+  "moa_class": "potassium_channel_blocker",
+  "first_approval_year": 2010,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=022250",
+    "quote": "AMPYRA DALFAMPRIDINE 10MG TABLET, EXTENDED RELEASE;ORAL ... 01/22/2010 ORIG-1 Approval"
+  },
+  "launch_quarter": "2010Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1008848/000100884810000030/form8kearningsrelease093010.htm",
+    "quote": "Acorda began shipping AMPYRA to specialty pharmacies on March 1, 2010 and recognized gross sales of $3.4 million in the first quarter"
+  },
+  "commercial_start_quarter": "2010Q1",
+  "series_start_reason": "Acorda began shipping Ampyra on March 1, 2010 (Q3 2010 earnings release), so 2010Q1 is the launch quarter and the first row. The 2010 Form 10-Qs and releases for Q1-Q3 2010 print Ampyra gross sales and discounts and allowances, not a net figure; the net figures for 2010Q1-Q3 are the prior-year comparatives printed in the 2011 Q1-Q3 Form 10-Qs. From 2010Q4 through 2017Q4 each quarter is read from that quarter's own earnings release (Form 8-K Exhibit 99.1), which prints 'AMPYRA net revenue'. From 2018Q1 the series continues on the Ampyra line of the net product revenues table in the Form 10-Qs and 10-Ks (read from the 2019 filings' comparatives for 2018).",
+  "series_end_quarter": "2024Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Acorda's last periodic report is the Form 10-Q for the quarter ended March 31, 2024 (filed 2024-05-14). The company commenced voluntary Chapter 11 proceedings on April 1, 2024 (Form 8-K filed 2024-04-02, accession 0000950170-24-039674, Item 1.03) and filed a Form 15-12G on 2024-08-13; no Q2 2024 Form 10-Q was filed.",
+  "notes": "Ampyra net revenue is U.S. net product sales of Ampyra tablets, net of discounts and allowances; ex-U.S. Fampyra income is royalty revenue and the Biogen collaboration license revenue is a separate line, neither is in this line. The same line runs the whole span: 2010Q1-Q3 from the 2011 Form 10-Q comparatives, 2010Q4-2017Q4 from the quarterly earnings releases ('the Company reported AMPYRA net revenue of $X million'), 2018Q1 onward from the Form 10-Q/10-K product table. Continuity checks: 2010 quarters sum to the stated full-year 133.1; 2011-2017 quarters sum to the stated full years within rounding; 2017 quarters sum to 543.4 (stated 543); 2018 quarters from the 10-Q table (102.819, 150.265, 137.815, 64.196) match the releases' 102.8, 150.3, 137.8, 64.2. 2010Q3 is 49.7 per the Q3 2011 Form 10-Q (and gross 52,584,094 less allowances 2,846,762 in the Q3 2010 10-Q); the Q3 2011 earnings release prints the same comparative as 49.8. 2013Q2 and 2013Q3 are both 77.8 as printed in their own releases. 2019 Q3 as first reported (37,647) differs from the 2020 Q3 10-Q prior-year column (39,322), which restates it; the value at the time is used. FY2020 and FY2019 annual columns also differ between the 2020 and 2021 10-Ks (FY2019 163,162 vs 164,850); the figures from each year's own 10-K are used for the Q4 derivations.",
+  "search_log": [
+    "Listed Acorda Therapeutics (CIK 0001008848, data.sec.gov/submissions) 10-Q and 10-K filings from 2009 on, read the 'Ampyra' line of the product revenue table in each filing where printed (lines first printed in the Q2 2019 10-Q and in 10-Ks from FY2019).",
+    "2018: the Ampyra line appears only as prior-year columns of the 2019 10-Qs and the FY2019 10-K. 2018Q1 derived from the six-month 2018 figure less Q2 2018.",
+    "2024Q2 onward: no periodic report in the submissions list after the Q1 2024 10-Q.",
+    "2010-2017 re-sourced: listed Acorda 8-Ks with Item 2.02 from 2010-07 to 2019-12 (data.sec.gov submissions) and read the Exhibit 99.1 of every earnings release; each from Q4 2010 (filed 2011-02-17) to Q4 2017 (filed 2018-02-15) prints 'the Company reported AMPYRA net revenue of $X million' for the quarter. The Q2 and Q3 2010 releases (0001008848-10-000014, -000030) print only gross sales ($29.7M, $52.6M) and the Q1 2010 10-Q (0001008848-10-000002) gross sales $3,446,250 less allowances $377,791; the net comparatives are in the 2011 Q1-Q3 10-Qs (0001008848-11-000037, -000067, -000082). The earlier log entry that 2011-2017 filings print no Ampyra line was about the 10-Q/10-K product tables only; the releases do print it.",
+    "Definition continuity at the splice: FY2017 stated net revenue 543 against quarters 112.0+131.6+132.6+167.2 = 543.4; FY2018 455,096 in the FY2019 10-K against 2018 release quarters 102.8+150.3+137.8+64.2 = 455.1.",
+    "FDA: Drugs@FDA overview for NDA 022250 re-fetched; lists 01/22/2010 ORIG-1 Approval, Type 1 - New Molecular Entity.",
+    "Chapter 11 verified: Form 8-K filed 2024-04-02 (0000950170-24-039674) Item 1.03 states the company and certain subsidiaries commenced voluntary Chapter 11 proceedings on April 1, 2024; Form 15-12G filed 2024-08-13; the Q1 2024 10-Q is the last periodic report.",
+    "2024Q2 onward: no periodic report in the submissions list after the Q1 2024 10-Q."
+  ]
+}

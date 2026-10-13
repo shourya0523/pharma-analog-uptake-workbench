@@ -1,0 +1,36 @@
+{
+  "manufacturer": "Eli Lilly",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "route_of_administration": "intravenous",
+  "launch_quarter": null,
+  "commercial_start_quarter": "2024Q4",
+  "series_end_quarter": "2026Q2",
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "drug_name": "Kisunla",
+  "generic_name": "donanemab",
+  "benchmark_identity": "lilly_kisunla_worldwide_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Alzheimer disease",
+  "formulation": "injection",
+  "moa": "amyloid beta-directed monoclonal antibody",
+  "moa_class": "anti_amyloid_antibody",
+  "first_approval_year": 2024,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2024/761248s000lbl.pdf",
+    "quote": "KISUNLA (donanemab-azbt) injection, for intravenous use ... Initial U.S. Approval: 2024 (prescribing information, Highlights; Revised 7/2024)"
+  },
+  "series_start_reason": "2024Q4 is the first quarter in which any Lilly document prints a Kisunla sales figure: the Q4 2024 earnings presentation ('Q4 2024 sales increased to $8 million'). The Q3 2024 presentation, the quarter of U.S. approval, prints only 'Approved in the U.S. in Q3 2024' with no sales, and the Q3 2024 release has no Kisunla row. Launch quarter is left null because no issuer document read states a launch quarter. Quarters 2024Q4-2025Q4 come from Lilly's earnings slides (company_ir) and 2026Q1-2026Q2 from the earnings releases (sec_filing).",
+  "notes": "Printed label 'Kisunla' (slides print 'KISUNLA'). Lilly's own product revenue for donanemab, worldwide, no geographic split printed. Source mix: slides for 2024Q4-2025Q4, press-release Selected Products table for 2026Q1-2026Q2. 2025Q1: the Q1 2025 slide prints 21 while the Q1 2026 release prior-year column prints 22; the quarter's own document (21) is used, and 21 + 49 matches the 70 six-month figure printed in the Q2 2026 release. Q3 2025 (70) and Q4 2025 (109) are from the issuer's own slides on investor.lilly.com.",
+  "search_log": [
+    "Fetched Lilly's investor.lilly.com/financial-information/quarterly-results page: lists an Earnings Presentation (slides) and a Financial Workbook (xlsx) for every quarter Q1 2024 - Q2 2026. investor.lilly.com returns 403 to direct curl from the sourcing host; the slide PDFs were read through a web-fetch tool that returned their extracted text.",
+    "Read in full the slide decks for Q3 2024, Q4 2024, Q1 2025, Q2 2025, Q3 2025, Q4 2025 (static-files ids cdedba2e-c4a7-4047-9e61-4ac3b1e2cd73, 09d156c0-f88d-420b-b5f1-1ed2b417461b, 761fadb8-b911-46d5-85b3-8bac4e054d73, b7c7e82b-e667-42ba-827c-1faecba3e4c8, 81645112-510f-4ce8-a860-c74596c1caa2, 45a92498-43d0-4e2d-a4e6-a9131841cfd6).",
+    "Q3 2024 deck (cdedba2e-...): the 'Q3 2024 Update on Select Products' slide prints sales for Omvoh (41) and a Jaypirca line (81) but for Ebglyss and Kisunla prints only 'Approved in the U.S. in Q3 2024'; no Ebglyss or Kisunla sales figure for 2024Q3. The Q3 2024 earnings release (q324 8-K Ex. 99.1) Selected Products table also has no row for either product.",
+    "Q4 2024 deck (09d156c0-...) is the first document printing sales: Ebglyss 'Q4 2024 sales of $20 million with launches in the U.S. and international markets'; Kisunla 'Q4 2024 sales increased to $8 million'. The Q4 2024 release (q424 8-K Ex. 99.1) prints neither product's sales.",
+    "The Q1-Q4 2025 earnings releases on EDGAR (q125, q225, q325, q425 Ex. 99.1) mention the products only in the Key Products definition and news bullets; the 2025 quarterly figures come from the slide decks, which print each as the current quarter.",
+    "Cross-check: Q2 2026 release prints YTD 2025 Kisunla 70 against 49 for 2025Q2; Q4 2025 slide: 109 'grew 54% vs. Q3 2025' (109/70 = 1.56).",
+    "FDA label 761248s000lbl.pdf read with pdfplumber for Initial U.S. Approval: 2024."
+  ],
+  "launch_evidence": null
+}

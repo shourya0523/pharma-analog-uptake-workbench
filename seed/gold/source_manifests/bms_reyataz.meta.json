@@ -1,0 +1,34 @@
+{
+  "generic_name": "atazanavir",
+  "therapeutic_area": "Infectious Disease / Vaccines",
+  "indication_area": "Infectious disease (HIV)",
+  "formulation": "oral capsule",
+  "route_of_administration": "oral",
+  "moa": "HIV-1 protease inhibitor",
+  "moa_class": "hiv_protease_inhibitor",
+  "first_approval_year": 2003,
+  "drug_name": "Reyataz",
+  "manufacturer": "Bristol-Myers Squibb",
+  "benchmark_identity": "bms_reyataz_worldwide_reported",
+  "revenue_scope": "Worldwide net sales of Reyataz alone (the row labelled \"Reyataz\"), excluding Evotaz",
+  "geography": "Worldwide",
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=021567",
+    "quote": "Original Approvals or Tentative Approvals: 06/20/2003 ORIG-1 Approval Type 1 - New Molecular Entity PRIORITY (NDA 021567, REYATAZ ATAZANAVIR SULFATE, Bristol Myers Squibb)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2003Q2",
+  "series_start_reason": "2003Q2 is the earliest quarter BMS prints a Reyataz figure: 1, in the prior-year column of the 2004Q2 release (8-K filed 2004-07-29). The 2003Q1 release (8-K filed 2003-04-29) has no Reyataz and the 2004Q1 release prints a dash for 2003Q1. The 2003Q2 release (2003-07-24) and 10-Q (2003-08-08) print no figure. U.S. launch was July 2003 (2003Q3 release); quarterly rows from 2003Q3 are read from each quarter's own release.",
+  "series_end_quarter": "2014Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "BMS printed a line labelled 'Reyataz' through the 2014Q4 release (8-K filed 2015-01-27). From the 2015Q1 release (8-K filed 2015-04-28) the line is labelled 'Reyataz Franchise', which the FY2014 10-K defines as including Reyataz and combination therapy Evotaz, so the scope changed after 2014Q4.",
+  "notes": "Scope is Reyataz alone, worldwide, for the whole series. Rows 2015Q1 to 2018Q4 were removed: the printed line in those 16 quarters is 'Reyataz Franchise' (Reyataz plus Evotaz, approved in the U.S. January 2015 and in the EU July 2015; FY2014 10-K, https://www.sec.gov/Archives/edgar/data/14272/000001427215000055/bmy-20141231x10xk.htm), and no release prints Reyataz separately from Evotaz. The 2015Q1 release's prior-year column prints 344 for 2014Q1 under the new label, equal to the 'Reyataz' value in the 2014Q1 release. The franchise line continued to 2018Q4 and is folded into aggregate Other Brands from 2019Q1. 2003 quarters: Q2 is a prior-year-column print (1); Q3 (39) and Q4 (49) are from their own releases; the 2004Q3 release's prior-year column prints 38 for 2003Q3, and the 2003 full year is printed as 88 in the 2004-01-29 release, so Q3+Q4 own-release figures sum to 88 with Q2 absent there. Full-year checks: 2004 quarters 75+85+106+148=414 and 2005 quarters 149+183+176+188=696 match the printed full years (414, 696). Launch quarter is left null: the first row (2003Q2, 1) is a pre-launch quarter BMS printed later as a prior-year figure, ahead of the dated U.S. launch ('Sales for REYATAZ, a novel protease inhibitor for the treatment of HIV/AIDS launched in the United States in July 2003, were $39 million.', https://www.sec.gov/Archives/edgar/data/14272/000104746903034077/a2120884zex-99_1.htm).",
+  "search_log": [
+    "listed CIK 14272 filings via data.sec.gov/submissions (recent and paged files), all 8-K and 8-K/A with Item 2.02; fetched each filing's index.json and its earnings exhibit (Exhibit 99.1 / ex991)",
+    "read each product row from the exhibit's first product-table line with two or more printed figures; for 2023 onward the U.S., Int'l and worldwide triplet is read with worldwide as the third figure (checked that U.S. + Int'l = worldwide on every row)",
+    "prior-year columns of each release checked against the prior-year quarter's own release (no mismatch); the Q1 2014 values come from the 2014-04-29 release (q12014ex991.htm), which is not in the first index pass",
+    "FDA: Drugs@FDA overview for NDA 021567 (accessdata.fda.gov, ApplNo=021567) read in this repair run; original approval 06/20/2003 ORIG-1",
+    "Repair: fetched the earnings 8-K exhibits for 2003Q2-2005Q4 (8-Ks filed 2003-07-24, 2003-10-23, 2004-01-29, 2004-04-28, 2004-07-29, 2004-10-29, 2005-01-27, 2005-04-28, 2005-07-28, 2005-10-28, 2006-01-25) and the 8-K/As filed 2005-05-10, 2005-09-01, 2005-12-01; checked the 2003Q1 release (2003-04-29) and the 2003Q2 and Q3 10-Qs for Reyataz sales",
+    "Repair: compared labels across 2014Q4 to 2018Q4 releases: 'Reyataz' through the 2014Q4 release, 'Reyataz Franchise' from the 2015Q1 release; read the 10-K for FY2014, FY2015, FY2016, FY2017, FY2018 and the 10-Qs for 2015Q1 and 2016Q1 for the franchise composition (Reyataz and Evotaz); no document gives Reyataz separately from Evotaz after 2014Q4"
+  ]
+}

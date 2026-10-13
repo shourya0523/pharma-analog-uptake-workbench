@@ -1,0 +1,34 @@
+{
+  "generic_name": "entecavir",
+  "therapeutic_area": "Infectious Disease / Vaccines",
+  "indication_area": "Infectious disease (hepatitis B)",
+  "formulation": "oral tablet",
+  "route_of_administration": "oral",
+  "moa": "guanosine nucleoside analogue (HBV polymerase inhibitor)",
+  "moa_class": "hbv_nucleoside_analogue",
+  "first_approval_year": 2005,
+  "drug_name": "Baraclude",
+  "manufacturer": "Bristol-Myers Squibb",
+  "benchmark_identity": "bms_baraclude_worldwide_reported",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=021797",
+    "quote": "Original Approvals or Tentative Approvals: 03/29/2005 ORIG-1 Approval Type 1 - New Molecular Entity PRIORITY (NDA 021797, BARACLUDE ENTECAVIR tablets, Bristol Myers Squibb; oral solution NDA 021798 approved the same day)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2005Q2",
+  "series_start_reason": "First quarter BMS prints a Baraclude row: 2005Q2 (8-K filed 2005-07-28); the 2005Q1 release (8-K filed 2005-04-28) prints no Baraclude row. Verifier fix: agent had started at 2006Q1.",
+  "series_end_quarter": "2021Q3",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Baraclude is printed on its own worldwide line through the 2021Q3 release (8-K filed 2021-10-27). From the 2021Q4 release the product table has no Baraclude row and Baraclude is not named anywhere in the release; the table's 'Other Brands' row carries a footnote 'Includes products that have lost exclusivity in major markets, over-the-counter (OTC) brands and royalty revenue', which does not name it.",
+  "notes": "Baraclude is printed on its own worldwide line from 2005Q2 (first sales; U.S. approval 2005-03-29) through the 2021Q3 release. The 2005Q1 release prints no Baraclude row. The 2005 8-K/A filings (2005-05-10, 2005-09-01, 2005-12-01) restate the 2005 schedules and print the same Baraclude values (2005Q2 5, 2005Q3 2) as the original releases; the 2005-05-10 8-K/A prints no Baraclude row. 2005 quarters 5+2+5 = 12 match the full year printed in the 2005Q4 release. After 2021Q3 the word Baraclude does not occur in the 2021Q4 (2022-02-04), 2022Q1 (2022-04-29) releases, in the FY2021 10-K (2022-02-09), the 2022 10-Qs (2022-04-29, 2022-07-27, 2022-10-26) or the FY2022 10-K (2023-02-14); the brand is folded into the aggregate Other Brands row, whose footnote does not name it, so the end is a stop in reporting rather than a stop in sales.",
+  "search_log": [
+    "listed CIK 14272 filings via data.sec.gov/submissions (recent and paged files), all 8-K and 8-K/A with Item 2.02; fetched each filing's index.json and its earnings exhibit (Exhibit 99.1 / ex991)",
+    "read each product row from the exhibit's first product-table line with two or more printed figures; for 2023 onward the U.S., Int'l and worldwide triplet is read with worldwide as the third figure (checked that U.S. + Int'l = worldwide on every row)",
+    "prior-year columns of each release checked against the prior-year quarter's own release (no mismatch); the Q1 2014 values come from the 2014-04-29 release (q12014ex991.htm), which is not in the first index pass",
+    "FDA: Drugs@FDA overview for NDA 021797 (accessdata.fda.gov, ApplNo=021797) read in this repair run; original approval 03/29/2005",
+    "Repair: re-read the 2005 earnings 8-K exhibits (8-Ks filed 2005-04-28, 2005-07-28, 2005-10-28, 2006-01-25) and the 8-K/As filed 2005-05-10, 2005-09-01, 2005-12-01 for Baraclude rows; 2005Q2 5, 2005Q3 2, 2005Q4 5 confirmed, 2005Q1 absent",
+    "Repair: searched the text of the 2021Q4 and 2022Q1 releases, the FY2021 and FY2022 10-Ks and the 2022 10-Qs (2022-04-29, 2022-07-27, 2022-10-26) for 'Baraclude': no occurrence; the 2021Q3 10-Q (2021-10-27) still lists Baraclude 105 for the quarter"
+  ]
+}

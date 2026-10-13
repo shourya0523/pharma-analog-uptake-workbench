@@ -1,0 +1,41 @@
+{
+  "drug_name": "Aristada",
+  "generic_name": "aripiprazole lauroxil",
+  "manufacturer": "Alkermes plc",
+  "benchmark_identity": "alkermes_aristada_us_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Schizophrenia (long-acting injectable)",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "extended-release injectable suspension",
+  "route_of_administration": "intramuscular",
+  "moa": "dopamine D2 and serotonin 5-HT1A partial agonist (aripiprazole prodrug)",
+  "moa_class": "dopamine_serotonin_partial_agonist",
+  "first_approval_year": 2015,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2020/207533s017,209830s005lbl.pdf",
+    "quote": "Initial U.S. Approval: 2015 (ARISTADA, aripiprazole lauroxil extended-release injectable suspension, highlights)"
+  },
+  "launch_quarter": "2015Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1520262/000155837016003492/alks-20160225ex991ed9c48.htm",
+    "quote": "Net sales of ARISTADA were $4.6 million, following its launch in October 2015."
+  },
+  "commercial_start_quarter": "2015Q4",
+  "series_start_reason": "First quarter with an ARISTADA dollar figure: the fourth-quarter 2015 release prints 4,589 thousand USD for Q4 2015 and a dash for each earlier 2015 quarter, and states the launch was in October 2015, so commercial_start_quarter equals launch_quarter. 2016 quarters come from the fourth-quarter 2016 release table (identical row in the fourth-quarter 2017 release). The 2015-2017 10-Qs print only a percentage-change row for ARISTADA, so those quarters are taken from the earnings releases.",
+  "series_end_quarter": "2026Q2",
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "The ARISTADA row of the product sales, net table: U.S. product sales (the note states product sales are sales in the U.S.). Scope and label: printed 'ARISTADA' (FY2017 to FY2019), 'ARISTADA/ARISTADA INITIO' (2020), 'ARISTADA and ARISTADA INITIO' (2021 onward). ARISTADA INITIO is inside this line in every period from 2020 onward as printed; no separate ARISTADA INITIO figure is printed in any document (see the separate exclusion record for ARISTADA INITIO). Per the 2026 Q2 10-Q the line carries 'ARISTADA and ARISTADA INITIO' sales of 96,719 thousand USD for three months ended June 30, 2026. 2015Q4 comes from the fourth-quarter 2015 release (own quarter); 2016 quarters from the fourth-quarter 2016 release (Q1-Q3 retrospective, Q4 own quarter; 2016 sum 47,164 equals the printed year); 2017 quarters come from the fourth-quarter 2017 release's retrospective table (Q1-Q3 are retrospective, Q4 is the release's own quarter); 2017 Q3 is 24,503 in that release and 24,504 in the 2018 Q3 10-Q prior-year column (rounding, release figure used). Full-year sums (checked by script): 2015 4,589 (Q4 only), 2016 47,164, 2017 93,512 (release), 2018 147,725, 2019 189,135, 2020 241,038, 2021 275,355, 2022 302,052, 2023 327,690, 2024 346,187, 2025 370,044; 2019 and 2023 quarters differ from the printed year total by 1 thousand USD (rounding between the release and the 10-K); all other years agree exactly.",
+  "search_log": [
+    "data.sec.gov submissions for Alkermes plc (CIK 0001520262) listed every 10-Q, 10-K, 10-K/A and Item 2.02 8-K from 2015 to 2026; every primary document and EX-99.1 was downloaded and the ARISTADA row searched.",
+    "2017 quarters: fourth-quarter 2017 release (8-K 2018-02-14, EX-99.1) Key Commercial Product Revenues table, in thousands of USD, ARISTADA row 18,000 | 22,685 | 24,503 | 28,324 | 93,512.",
+    "Cross-checked 2018 Q1-Q3 10-Q prior-year columns: 18,000 | 22,685 and 65,189 nine-month 2017, matching the release.",
+    "Q4 values from each fourth-quarter release; each year's quarters summed and compared with the full-year figure in the same release and the 10-K.",
+    "FDA: accessdata label 207533s017,209830s005lbl.pdf (2020) prints 'Initial U.S. Approval: 2015' (text checked with pdfplumber).",
+    "2015-2017 10-Qs and 10-Ks print ARISTADA only as a percentage-change row ('ARISTADA and ARISTADA line extensions'); the dollar rows before 2017 come from earnings releases (EX-99.1).",
+    "Fourth-quarter 2015 release (8-K 0001558370-16-003492, EX-99.1): Revenues for Calendar Year 2015 table, ARISTADA row '\u2014 | \u2014 | \u2014 | 4,589 | 4,589' (thousands); text 'Net sales of ARISTADA were $4.6 million, following its launch in October 2015'. No 2015 quarter earlier than Q4 has a figure (dashes).",
+    "Fourth-quarter 2016 release (8-K 0001520262-17-000003, EX-99.1): ARISTADA row 5,547 | 10,277 | 13,998 | 17,342 | 47,164 (thousands); sum of four quarters equals 47,164. The same row is reprinted in the fourth-quarter 2017 release (8-K 0001520262-18-000009). The first-quarter 2016 release (8-K 0001558370-16-004920) prints 'Net sales of ARISTADA were $5.5 million' for Q1 2016, consistent with 5,547.",
+    "FY2015 10-K: 'In October 2015, ARISTADA was approved by the FDA and commercially launched by us.' Q4 2016 release: 'up from $4.6 million in the fourth quarter of 2015, which was the quarter of launch.'"
+  ]
+}

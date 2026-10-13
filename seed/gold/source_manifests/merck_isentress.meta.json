@@ -1,0 +1,39 @@
+{
+  "drug_name": "Isentress",
+  "generic_name": "raltegravir",
+  "manufacturer": "Merck",
+  "benchmark_identity": "merck_isentress_worldwide_reported",
+  "therapeutic_area": "Infectious Disease / Vaccines",
+  "indication_area": "HIV-1 infection",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "tablet (Isentress and Isentress HD)",
+  "route_of_administration": "oral",
+  "moa": "HIV-1 integrase strand transfer inhibitor",
+  "moa_class": "integrase_inhibitor",
+  "first_approval_year": 2007,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2007/022145lbl.pdf",
+    "quote": "Initial U.S. Approval: 2007"
+  },
+  "launch_quarter": "2007Q4",
+  "commercial_start_quarter": "2007Q4",
+  "series_start_reason": "The fourth-quarter 2007 release (filed 2008-01-30) states Isentress worldwide sales of $29 million for the quarter in its text ('including $29 million in sales recorded during the fourth quarter when the Company launched the medicine in the United States'); its product table has no Isentress row. $12 million of the $41 million full-year 2007 total was recorded before the fourth quarter and is not attributed to a quarter, so the series starts at 2007Q4. Series is worldwide. Legacy Merck & Co., Inc. (CIK 64978) before its November 2009 merger with Schering-Plough; the surviving filer CIK 310158 from the 2009Q4 release onward.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Scope: the product-table row labelled ISENTRESS (2008-2016), and ISENTRESS / ISENTRESS HD or Isentress/Isentress HD from the 2017 releases; the first dollar column is worldwide. The label change is printed in the tables; the date the HD formulation entered the line was not verified. 2008-2009 come from the legacy NET PRODUCT SALES DETAIL tables (millions of dollars). 2009Q4 is read from the quarterly data table of exhibit 99.2 of the 2009Q4 release (accession 0001193125-10-031545). 2022 quarters sum to 633, 2023 to 483, 2024 to 394 and 2025 to 325 against printed full years 633, 483, 394 and 325. 2010-2021 Q4 releases do not print a full-year column in the Isentress row; each quarter was checked against the prior-year column of the following year's release.",
+  "search_log": [
+    "bigdata_search (smart) 'Merck Isentress worldwide sales quarter product table': returned release passages naming Isentress and combined Isentress/Isentress HD lines; used to locate the line, not cited.",
+    "EDGAR submissions and every 8-K item 2.02 exhibit for CIK 310158 and 64978 downloaded and parsed for the Isentress row.",
+    "2008Q1-2009Q3: legacy CIK 64978 releases, NET PRODUCT SALES DETAIL (millions of dollars). 2007Q4: no Isentress row in the product table of the 2008-01-30 release (accession 0000950123-08-000919, exhibit 99.2, checked by row label), but exhibit 99.1 prose states full-year worldwide sales of $41 million including $29 million recorded in the fourth quarter, and exhibit 99.2 footnote (2) reads 'Includes Isentress $29m' (4Q '07) and 'Includes Isentress $41m' (FY '07). The Q2 2007 release (0000950123-07-010119) and the Q3 2007 approval release (0000950123-07-014053) mention Isentress with no sales figure, so no earlier quarter is published.",
+    "2009Q4: quarterly data table of exhibit 99.2 of the 2009Q4 release (accession 0001193125-10-031545), quarter columns 148 / 172 / 197 / 234 and full year 752.",
+    "2010Q1-2026Q2: each quarter read from its own release's product table, current-quarter column (first column in Q1 releases; second column after the 1Q column in Q2 releases; the same rule for Q3 and Q4). Each quarter equals the prior-year figure printed in the following year's release for that quarter (146 testable quarters across the three products within rounding; the 2007-2008 legacy quarters are not testable this way).",
+    "No quarter missing from 2008Q1 to 2026Q2. Latest quarter 2026Q2 from the 2026-08-04 release (row 'Isentress/Isentress HD': 59 | 60 | 119 | 90 | 86, second column the 2Q 2026 figure).",
+    "Bigdata Q4 2021 10-K passage (accession 0000310158-22-000003) states Isentress sales declined 10% in 2021; not used for a figure."
+  ],
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/64978/000095012308000919/y47535exv99w1.htm",
+    "quote": "including $29 million in sales recorded during the fourth quarter when the Company launched the medicine in the United States"
+  }
+}

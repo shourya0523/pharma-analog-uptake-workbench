@@ -1,0 +1,50 @@
+{
+  "drug_name": "Qtern",
+  "generic_name": "dapagliflozin/saxagliptin",
+  "manufacturer": "AstraZeneca",
+  "benchmark_identity": "astrazeneca_qtern_worldwide_annual",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Metabolic (type 2 diabetes)",
+  "revenue_scope": "Worldwide product sales",
+  "geography": "Worldwide (2017 from the World column of the Q4 2017 results; 2018-2019 and 2020 from worldwide figures in the annual reports' CVRM text; 2021 as the sum of the US and ex-US columns of the 20-F patent-expiry table)",
+  "formulation": "fixed-dose combination tablet (dapagliflozin 10 mg / saxagliptin 5 mg)",
+  "route_of_administration": "oral",
+  "moa": "SGLT2 inhibitor plus DPP-4 inhibitor fixed-dose combination",
+  "moa_class": "sglt2_dpp4_combination",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=209091",
+    "quote": "Original Approvals or Tentative Approvals ... 02/27/2017 ORIG-1 Approval Type 4 - New Combination STANDARD (NDA 209091, Company: ASTRAZENECA AB; QTERN DAPAGLIFLOZIN; SAXAGLIPTIN HYDROCHLORIDE 10MG;EQ 5MG BASE TABLET;ORAL)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2017Q4",
+  "series_start_reason": "The FY 2017 / Q4 2017 results (6-K 0001654954-18-001029) are the first document to print a Qtern sales figure: 5 for FY 2017 and for Q4 2017, with dashes for Q1 to Q3 2017. The annual report for 2016 and earlier carry no Qtern sales (FDA approval was 27 February 2017).",
+  "series_end_quarter": null,
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The 20-F for 2021 is the last annual document that prints Qtern sales (US 4, ex-US 37 for 2021); the 20-F for 2022 and later have no Qtern row in the Patent Expiries of Key Marketed Products table, and no later results release prints a Qtern line.",
+  "notes": "Worldwide scope throughout. 2017 = 5 (FY 2017 column of the Q4 2017 release; US 4 of World 5 in the Q4 2017 regional columns). 2018 = 5 is derived, not printed: the 2019 report prints 2019 Qtern of $18m, up 261%, so 2018 = 18/3.61 = 4.99; the 2018 annual report's patent-expiry table, read cell by cell with its dashes, gives US nil and an aggregate for China, Japan and Europe of 5, which is consistent (worldwide cannot be below 5) but is a narrower aggregate, not the worldwide figure. 2019 = 18 and 2020 = 27 are the worldwide sales printed in the CVRM key-marketed-products text of the 2019 and 2020 annual reports (exhibit 15.1). 2021 = 41 is derived as the 2021 US cell (4) plus ex-US cell (37) of the 2021 20-F patent-expiry table; the same table gives 2020 as 5+22 = 27 and 2019 as 6+12 = 18, which equal the worldwide figures printed in the 2020 and 2019 reports, so the sum reproduces the printed worldwide scope. The ex-US column definition changed (aggregate for China, Japan and Europe in the 2017-2020 reports, all non-US from the 2021 20-F), so the 2018-2020 patent-expiry columns are not used for values. Qternmet XR / Qtrilmet (the triple combination with metformin, approved 2019 and withdrawn 2020) are named in the 2019 and 2020 report text next to the Qtern line but carry no separate sales figure and are not part of this series.",
+  "search_log": [
+    "Listed every AstraZeneca PLC (CIK 0000901832) filing via data.sec.gov submissions (recent plus older pages; 2,052 filings, all form types).",
+    "Downloaded the main document of all 1,646 filings of form 6-K, 6-K/A, 20-F and 20-F/A that carry a primary document (2002-2026) and scanned them: HTML table rows by label, plain text for the 2002-2003 .txt releases; 2002 6-Ks before November 2002 are scanned paper documents (.paper) and were not readable.",
+    "Latest results document used: the Q2 2026 results 6-K filed 2026-07-27 (0001104659-26-086846); no later results release exists as of the search date.",
+    "Bigdata.com was available but not needed; every figure was read from the sec.gov original, never from a Bigdata.com link.",
+    "Qtern rows with figures in the results releases: only the Q4 2017 release prints a current Qtern value (table Q4 2017: World 5, Emerging Markets 1, US 4); later releases show it only in the Q1-Q4 2017 history table.",
+    "20-F 2021 key-marketed-products table prints annual Qtern figures (US and ex-US) for 2019-2021; the 20-F for 2022 and later has no Qtern row.",
+    "Fallbacks: no partner or royalty holder reports Qtern sales; BMS had sold its share of the diabetes alliance to AstraZeneca in 2014, before Qtern's approval.",
+    "Re-sourced as an annual series after review: read Qtern in the annual report exhibits 15.1 for 2017, 2018, 2019 and 2020 (sec.gov Archives 000110465918015257, 000110465919012881, 000110465920028557, 000110465921022456) and the 20-F for 2021 (000110465922025720).",
+    "2019 report CVRM text: 'Qtern (metformin hydrochloride, saxagliptin and dapagliflozin) Type-2 diabetes $18m, up 261% (276% at CER)'. 2020 report: 'Qtern (saxagliptin and dapagliflozin) Type-2 diabetes $27m, up 50% (50% at CER)'. The 2018 report and the 2021 20-F have no worldwide Qtern prose line.",
+    "Patent-expiry table cells read in order (US three years, then ex-US three years): 2017 report '4 - - - - -'; 2018 report '- 4 - 5 - -'; 2019 report '6 - 4 9 5 -'; 2020 report '5 6 - 13 9 5'; 2021 20-F '4 5 6 37 22 12'. Dashes are nil cells; the cell sequences are consistent across overlapping years.",
+    "The Q4 2017 results release (6-K 0001654954-18-001029) FY 2017 table prints Qtern 5 for the full year and the quarterly history table prints dashes for Q1-Q3 2017 and 5 for Q4 2017, so FY 2017 = 5.",
+    "No 2018 worldwide figure is printed anywhere read (annual report for 2018 has no Qtern prose line; 2018 quarterly releases print Qtern only as a prior-year column): 2018 derived from the 2019 figure and growth rate.",
+    "20-F for 2022 and later: no Qtern row in the Patent Expiries of Key Marketed Products table."
+  ],
+  "period_type": "annual",
+  "series_role": "peak_benchmark",
+  "annual_basis": "Calendar years 2017-2021: 2017 from the full-year column of the FY 2017 results release, 2019 and 2020 from the worldwide sales printed in the annual report for that year, 2018 derived from the 2019 figure and its printed growth rate, 2021 derived as US plus ex-US from the 2021 Form 20-F.",
+  "no_quarterly_series": {
+    "reason_code": "individual_reporting_discontinued",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/901832/000165495418005620/a4988o.htm",
+    "source_quote": "Q1 2018 results (Form 6-K), Product Sales table, CVRM section, $m: Byetta 31 1 (33) (35) Symlin 9 - (36) (36) Legacy: Crestor 389 8 (38) (42) - the Qtern row printed in the Q4 2017 release is absent from the current-period table",
+    "details": "Only the Q4 2017 results release prints a current-period Qtern quarter (5). The Q1 2018 to Q4 2018 releases and every later results release list no Qtern row in their CVRM tables (Qtern appears only in the prior-year quarterly history table of the 2018 releases, e.g. 6-K 0001654954-19-001546), so no quarterly figure exists after 2017Q4. Annual figures are in the annual reports as shown in this series."
+  }
+}

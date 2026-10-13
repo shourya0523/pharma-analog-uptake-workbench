@@ -1,0 +1,38 @@
+{
+  "drug_name": "Afrezza",
+  "generic_name": "insulin human (inhalation powder)",
+  "manufacturer": "MannKind",
+  "benchmark_identity": "mannkind_afrezza_reported",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Diabetes (inhaled insulin)",
+  "revenue_scope": "MannKind net revenue from Afrezza: the 'Net revenue - commercial product sales' line of the statements of operations from 2016Q3 to 2022Q1",
+  "geography": "Not split by the issuer (single company line)",
+  "formulation": "inhalation powder",
+  "route_of_administration": "inhalation",
+  "moa": "rapid-acting human insulin delivered by oral inhalation",
+  "moa_class": "insulin_inhaled",
+  "first_approval_year": 2014,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2014/022472Orig1s000ltr.pdf",
+    "quote": "NDA 022472 ... Afrezza (insulin human) Inhalation Powder ... It is approved, effective on the date of this letter, for use as recommended in the enclosed agreed-upon labeling text."
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2016Q3",
+  "series_start_reason": "2016Q3 is the first quarter MannKind itself reports Afrezza product sales: the Q4 2016 release says 'Commercial product sales commenced in August 2016, after Afrezza transitioned from Sanofi to MannKind', and the Q3 2016 release says net revenue from commercial product sales 'represents $0.6 million of net sales of Afrezza dispensed to patients'. The prior-year columns of the Q1 2017 and Q2 2017 releases print a nil for 2016Q1 and 2016Q2. Between 2016Q3 and 2022Q1 the quarter's own release prints Afrezza as the 'commercial product sales' line (V-Go was acquired on 2022-05-31, so no other product is in it); from 2022Q2 that line includes V-Go (Q2 2022 release: 12,722, with Afrezza 'net revenue of $10.6 million, V-Go net revenue of $2.1 million'), so 2022Q2 and 2022Q3 are read from the Afrezza-only prior-year columns of the 2023 releases and 2022Q4 onward from the Afrezza line. The series does not reach earlier because MannKind printed no Afrezza revenue before Q3 2016; Sanofi distributed Afrezza until then.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Series is the Afrezza net revenue of MannKind, USD thousands converted to millions. 2016Q3-2022Q1 is the 'Net revenue - commercial product sales' line; the equivalence with Afrezza alone is shown by the Q4 2022 release (0001564590-23-002306), which prints 'Net revenue - Afrezza' of 11,340 for Q4 2021 and 39,168 for FY2021, the same figures the Q4 2021 release (0001564590-22-006688) prints on its 'Net revenue - commercial product sales' line, and by the Q1 2023 release, which prints Q1 2022 Afrezza as 9,826, the figure on the Q1 2022 release's commercial product sales line. The 2019-2021 releases also print a 'Net revenue - Afrezza' line with the same figures as the commercial product sales line for the same quarters (for example 7,761 for Q4 2019, 7,275 for Q3 2020). Bulk insulin sales ('Revenue - bulk insulin sales' in the Q4 2016 release, 'Revenue - other' in 2017) and collaboration revenue are separate lines and are not in the series. From Q2 2022 the commercial product sales line also holds V-Go, so 2022Q2 and 2022Q3 are taken from the 2023 releases' prior-year Afrezza columns. Full-year checks: 2016 (573+1,322 = 1,895), 2017 sums to 9,191 against 9,192 printed (1 thousand, not explained by the document), 2018 to 17,276, 2019 to 25,304, 2020 to 32,324 and 2021 to 39,168, each equal to the twelve-month figure printed in the Q4 release except where noted. 2022 quarters sum to 43,312 against 43,316 printed for FY2022 (difference 4 thousand, not explained by the document); 2023 sums to 54,913 against 54,914; 2024 sums to 64,041 against 64,041; 2025 sums to 74,587 against 74,587 printed in the Q4 2025 release. The line is labelled with the document's own wording and the label changes over time (row_label follows each document). The Afrezza pediatric indication was approved 2026-05-29 and is inside the printed line from Q2 2026. V-Go, Furoscix and royalties are separate lines and are not in this series.",
+  "search_log": [
+    "Bigdata smart search for MannKind Afrezza net revenue by quarter: returned the Q2 2025 and Q1 2026 releases; used only to locate the releases, not cited.",
+    "Listed MannKind (CIK 0000899460) 8-K Item 2.02 filings 2004-2026 from data.sec.gov (recent and older submissions pages): 89 filings; downloaded every EX-99 exhibit from each filing's index.json (scripts in staging work/).",
+    "Q3 2023 and Q3 2024 values read from the Q3 2023 release (13,476) and Q3 2024 release (15,035) text and table, after a scan that initially missed the 'Net revenue' label.",
+    "FDA approval letter NDA 022472 fetched from accessdata.fda.gov and read with pdfplumber: 'It is approved, effective on the date of this letter'.",
+    "Parsed the revenue table rows of every MannKind earnings release exhibit 2016-2026 (the 89 filings listed above, downloaded to work/mnkd). Rows labelled 'Net revenue - commercial product sales' (any dash style) exist from the Q3 2016 release (filed 2016-11-14) to the Q3 2022 release; 'Net revenue - Afrezza' lines appear from the Q4 2022 release.",
+    "Q1 2017 and Q2 2017 releases are exhibit exh_991.htm of 0001171843-17-002926 and 0001171843-17-004778 (the primary 8-K documents carry no figures); read their statements of operations: 1,196 and 1,548, with a nil printed for 2016.",
+    "Checked the 2015-2016 releases before Q3 2016 (2015-11-09, 2016-01-08, 2016-03-16, 2016-05-09, 2016-08-10): none prints a commercial product sales line; the Q2 2016 release speaks of the 'relaunch of Afrezza in the third quarter of 2016'.",
+    "Checked V-Go: the Q2 2022 release (0001564590-22-028748) says 'V-Go acquired May 31' and splits Afrezza net revenue of $10.6 million from V-Go net revenue of $2.1 million inside the 12,722 commercial product sales line; the Q4 2022 release prints 'Net revenue - V-Go' as its own line. V-Go therefore is in the line from Q2 2022 only, and no pre-2022 period contains it.",
+    "Equivalence check across releases: Q1 2022 release commercial product sales 9,826 equals the Afrezza figure for Q1 2022 in the Q1 2023 release; Q4 2021 and FY2021 (11,340; 39,168) equal the Afrezza figures in the Q4 2022 release.",
+    "launch_quarter left null: no MannKind document read here states the quarter Afrezza was first launched (by Sanofi); MannKind's own sales start is dated in series_start_reason."
+  ]
+}

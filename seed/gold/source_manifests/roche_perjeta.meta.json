@@ -1,0 +1,40 @@
+{
+  "drug_name": "Perjeta",
+  "generic_name": "pertuzumab",
+  "manufacturer": "Roche",
+  "benchmark_identity": "roche_perjeta_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (solid)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection (intravenous infusion)",
+  "route_of_administration": "intravenous",
+  "moa": "HER2 dimerisation inhibitor (HER2-directed monoclonal antibody)",
+  "moa_class": "her2_antibody",
+  "first_approval_year": 2012,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=125409",
+    "quote": "06/08/2012 ORIG-1 Approval (Drugs@FDA, Original Approvals or Tentative Approvals)"
+  },
+  "launch_quarter": "2012Q2",
+  "commercial_start_quarter": "2012Q2",
+  "series_start_reason": "First sales are in the half-year 2012 release (prose: Perjeta, 4 million Swiss francs; US approval June 2012; Q1 2012 release prints no Perjeta sales), read as 2012Q2. 2012Q3 is nine months 26 less first half 4. 2012Q4 onward are quarter columns.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Printed line is \"Perjeta\" in the worldwide Top 20 Pharmaceuticals Division table (2012Q4 onward) and in the year-to-date tables and key-products text of the 2012 releases. The first two rows (2012Q2, 2012Q3) are read from year-to-date or half-year figures, not from quarter columns; see their context. Full-year 2012 sales of 56 are printed in the Roche full-year 2012 release (key-products table) and equal 4 + 22 + 30. The United States table that follows the worldwide table is a separate table and is not used.",
+  "search_log": [
+    "reused the crawl in work/events.json of roche.com/investors/events/{q1,hy,q3,annual-results}-YYYY (2016-2026) and downloaded every Investor update PDF it links (work/pdf), plus assets.cwp.roche.com/imported/en/med-cor-YYYY-MM-DD-e.pdf releases for 2011-2015 and the 2016-2017 investor updates",
+    "probed assets.cwp.roche.com/imported/en/med-cor-YYYY-MM-DD-e.pdf (HTTP HEAD, then fetched) for weekdays in 20 Jan-15 Feb and 10-31 Jul of 2009-2015, 8-25 Apr and 10-25 Oct of 2009, 2010 and 2014, and 10-25 Oct 2014; this found the results releases dated 2011-02-02, 2011-07-21, 2012-02-01, 2012-07-26, 2013-01-30, 2014-07-24, 2014-10-16 and 2015-07-23, which print year-to-date product tables only (no five-quarter table); no 2009 or 2010 release was found",
+    "tried www.roche.com/med-cor-YYYY-MM-DD-e.pdf, www.roche.com/med-cor-YYYY-MM-DDe.pdf, assets.cwp.roche.com/imported/en/med-cor-YYYY-MM-DDe.pdf and www.roche.com/media/releases/med-cor-YYYY-MM-DD.htm for weekdays in late Jan-12 Feb, 15-30 Apr, 15-30 Jul and 10-28 Oct 2010: none answered",
+    "read the Roche Half-Year Report 2010 (assets.cwp.roche.com/f/126832/f796568dac/hy10e.pdf): it prints six-month product sales only, no quarterly columns",
+    "parsed the worldwide \"Top 20 Pharmaceuticals Division quarterly product sales\" table (five quarterly columns; the United States, Europe, Japan and International tables that follow it are separate) of every release retrieved; a quarter is taken from the column of the release that reports it as current, else the Q1 three-month key-products table, else the earliest later release that prints it",
+    "checked the first-half and nine-month 2012 releases and the Q1 2012 release for Perjeta: Q1 2012 (12 Apr 2012) prints no Perjeta sales; the half-year release (26 Jul 2012) states Perjeta sales of 4 million Swiss francs for the first half; the nine-month release (16 Oct 2012) prints 26; full year 2012 prints 56",
+    "cross-checked every quarter against every other release that prints it: no differing value found; the four quarters of each year equal the full-year figure printed in that year's results release wherever a full-year row for the product exists",
+    "rows: 57 from 2012Q2 to 2026Q2 ({'direct_reported': 49, 'derived_ytd_difference': 1, 'direct_prior_year_column': 1, 'direct_retrospective_table': 6})"
+  ],
+  "launch_evidence": {
+    "url": "https://assets.cwp.roche.com/imported/en/med-cor-2012-07-26-e.pdf",
+    "quote": "Perjeta was approved in the US in June 2012 after FDApriority review. Upon approval Roche made the product immediately available to patients."
+  }
+}

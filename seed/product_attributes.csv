@@ -299,3 +299,30 @@ Odomzo,Hedgehog pathway (Smoothened) inhibitor,hedgehog_pathway_inhibitor,Oral,2
 Recarbrio,"Carbapenem antibacterial (imipenem, with cilastatin) with beta-lactamase inhibitor (relebactam)",carbapenem_beta_lactamase_inhibitor_combination,Intravenous,2019,"Complicated Gram-negative bacterial infections (cUTI, cIAI, HABP/VABP)",curated_reference,distinct_product
 Vizimpro,EGFR tyrosine kinase inhibitor,egfr_tki,Oral,2018,Oncology (EGFR-mutation non-small cell lung cancer),curated_reference,distinct_product
 Zinplava,Monoclonal antibody binding Clostridioides difficile toxin B,monoclonal_antibody,Intravenous,2016,Clostridioides difficile infection (recurrence prevention),curated_reference,distinct_product
+Ampyra,potassium channel blocker (aminopyridine),potassium_channel_blocker,Oral,2010,Improvement of walking in multiple sclerosis,curated_reference,distinct_product
+Iluvien,fluocinolone acetonide intravitreal implant (corticosteroid),corticosteroid_intravitreal_implant,Intravitreal,2014,Diabetic macular edema,curated_reference,distinct_product
+Aristada,dopamine D2 and serotonin 5-HT1A partial agonist (aripiprazole prodrug),dopamine_serotonin_partial_agonist,Intramuscular,2015,Schizophrenia (long-acting injectable),curated_reference,distinct_product
+Vascepa,Purified EPA (eicosapentaenoic acid) ethyl ester; lowers triglycerides and reduces cardiovascular events,omega3_epa_ethyl_ester,Oral,2012,Severe hypertriglyceridemia; cardiovascular risk reduction in statin-treated patients with elevated triglycerides,curated_reference,distinct_product
+Vectibix,human monoclonal antibody against the epidermal growth factor receptor (EGFR),egfr_antibody,Intravenous,2006,Oncology (metastatic colorectal cancer),curated_reference,distinct_product
+Relyvrio,combination of sodium phenylbutyrate and taurursodiol (proposed endoplasmic reticulum stress and mitochondrial modulation),er_stress_mitochondrial_combination,Oral,2022,Amyotrophic lateral sclerosis (ALS),curated_reference,distinct_product
+Qtern,SGLT2 inhibitor plus DPP-4 inhibitor fixed-dose combination,sglt2_dpp4_combination,Oral,2017,Metabolic (type 2 diabetes),curated_reference,distinct_product
+Baraclude,guanosine nucleoside analogue (HBV polymerase inhibitor),hbv_nucleoside_analogue,Oral,2005,Infectious disease (hepatitis B),curated_reference,distinct_product
+Reyataz,HIV-1 protease inhibitor,hiv_protease_inhibitor,Oral,2003,Infectious disease (HIV),curated_reference,distinct_product
+Viread,nucleotide analog reverse transcriptase inhibitor (tenofovir disoproxil fumarate prodrug),nucleotide_reverse_transcriptase_inhibitor,Oral,2001,HIV-1 infection; chronic hepatitis B,curated_reference,distinct_product
+Lovaza,Omega-3 fatty acid ethyl esters (EPA/DHA) reducing hepatic triglyceride synthesis,omega3_fatty_acid_triglyceride_lowering,Oral,2004,Severe hypertriglyceridemia,curated_reference,distinct_product
+Zepzelca,alkylating agent (DNA minor groove binder),alkylating_agent_dna_binder,Intravenous,2020,Oncology (small-cell lung cancer),curated_reference,distinct_product
+Caplyta,Atypical antipsychotic: serotonin 5-HT2A receptor antagonist with dopamine D2 receptor presynaptic partial agonist and postsynaptic antagonist activity,atypical_antipsychotic,Oral,2019,"Psychiatry (schizophrenia, bipolar depression)",curated_reference,distinct_product
+Arcalyst,IL-1 alpha/beta ligand trap (interleukin-1 inhibitor),il1_inhibitor,Subcutaneous,2008,Recurrent pericarditis / IL-1 blockade,curated_reference,distinct_product
+Ebglyss,interleukin-13 (IL-13) antagonist monoclonal antibody,il13_antagonist,Subcutaneous,2024,Atopic dermatitis,curated_reference,distinct_product
+Kisunla,amyloid beta-directed monoclonal antibody,anti_amyloid_antibody,Intravenous,2024,Alzheimer disease,curated_reference,distinct_product
+Afrezza,rapid-acting human insulin delivered by oral inhalation,insulin_inhaled,Inhalation,2014,Diabetes (inhaled insulin),curated_reference,distinct_product
+Isentress,HIV-1 integrase strand transfer inhibitor,integrase_inhibitor,Oral,2007,HIV-1 infection,curated_reference,distinct_product
+Nuzyra,aminomethylcycline tetracycline-class antibiotic (ribosomal protein synthesis inhibitor),tetracycline_class_antibiotic,Oral and intravenous,2018,Bacterial infections / antibiotic (community-acquired bacterial pneumonia; acute bacterial skin and skin structure infections),curated_reference,distinct_product
+Xalkori,ALK / ROS1 / MET receptor tyrosine kinase inhibitor,tyrosine_kinase_inhibitor,Oral,2011,Oncology (ALK-positive / ROS1-positive non-small cell lung cancer),curated_reference,distinct_product
+Voquezna,potassium-competitive acid blocker (P-CAB),potassium_competitive_acid_blocker,Oral,2022,"Gastroesophageal reflux disease (erosive esophagitis, non-erosive reflux); H. pylori",curated_reference,distinct_product
+Evkeeza,ANGPTL3 inhibitor (monoclonal antibody),angptl3_inhibitor,Intravenous,2021,Homozygous familial hypercholesterolemia (HoFH),curated_reference,distinct_product
+Avastin,VEGF-A inhibitor (anti-VEGF monoclonal antibody),vegf_inhibitor,Intravenous,2004,Oncology (solid),curated_reference,distinct_product
+Herceptin,HER2-directed monoclonal antibody,her2_antibody,Intravenous,1998,Oncology (solid),curated_reference,distinct_product
+Perjeta,HER2 dimerisation inhibitor (HER2-directed monoclonal antibody),her2_antibody,Intravenous,2012,Oncology (solid),curated_reference,distinct_product
+Phesgo,Fixed-dose combination of two HER2-directed monoclonal antibodies (pertuzumab and trastuzumab) with hyaluronidase for subcutaneous administration,her2_antibody,Subcutaneous,2020,Oncology (solid),curated_reference,distinct_product
+Rituxan,Anti-CD20 monoclonal antibody,cd20_antibody,Intravenous,1997,Oncology (hematologic),curated_reference,distinct_product

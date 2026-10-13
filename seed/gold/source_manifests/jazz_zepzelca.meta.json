@@ -1,0 +1,37 @@
+{
+  "drug_name": "Zepzelca",
+  "generic_name": "lurbinectedin",
+  "manufacturer": "Jazz Pharmaceuticals",
+  "benchmark_identity": "jazz_zepzelca_total_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (small-cell lung cancer)",
+  "revenue_scope": "Company-level Zepzelca net product sales as printed in Jazz's product sales table",
+  "geography": "Company line as printed (no geographic split in the table); Jazz's Zepzelca rights cover the U.S. and, from the October 2020 license amendment, Canada, so the line is effectively U.S. plus Canada",
+  "formulation": "injection",
+  "route_of_administration": "intravenous",
+  "moa": "alkylating agent (DNA minor groove binder)",
+  "moa_class": "alkylating_agent_dna_binder",
+  "first_approval_year": 2020,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=213702",
+    "quote": "06/15/2020 ORIG-1 Approval (NDA 213702, ZEPZELCA LURBINECTEDIN 4MG/VIAL POWDER;INTRAVENOUS)"
+  },
+  "launch_quarter": "2020Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1232524/000123252420000070/a3q20financialpr.htm",
+    "quote": "Strong Demand for Zepzelca Following July Launch"
+  },
+  "commercial_start_quarter": "2020Q3",
+  "series_start_reason": "First quarter with a Zepzelca line: the 2020Q2 release has no Zepzelca line; the 2020Q3 release prints 36,941 for three and nine months after the July 2020 launch.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Jazz prints Zepzelca in its product table from 2020Q3 onward. Units: thousands USD through 2025Q4, millions USD in the 2026 releases (declared 'In millions'). Sums of the printed quarters equal each full-year figure for 2021-2025 (checked). Jazz's FY2025 10-K (https://www.sec.gov/Archives/edgar/data/1232524/000123252426000013/jazz-20251231.htm) states exclusive U.S. rights and, via the October 2020 amendment, rights in Canada; the product sales table itself prints no geography.",
+  "search_log": [
+    "Listed Jazz 8-K Item 2.02 filings from data.sec.gov and scanned each Ex. 99.1 for 'Zepzelca' rows (2018-2026).",
+    "Each quarter taken from that quarter's own release; cross-checked against the next year's prior-year column and each year's full-year figure.",
+    "Cross-checks: 2021 sum 246,808; 2022 sum 269,912; 2023 sum 289,533; 2024 sum 320,318; 2025 sum 307,309, all as printed in the Q4 release.",
+    "FDA approval date read from the Drugs@FDA overview page (verifier fix).",
+    "Repair pass: read the FY2025 10-K and confirmed rights are U.S. and Canada (Canada added by the October 2020 PharmaMar amendment); replaced the 'Worldwide' geography label with the table-faithful wording."
+  ]
+}

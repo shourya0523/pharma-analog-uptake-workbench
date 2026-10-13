@@ -1,0 +1,52 @@
+{
+  "drug_name": "Caplyta",
+  "generic_name": "lumateperone",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Psychiatry (schizophrenia, bipolar depression)",
+  "geography": "United States",
+  "formulation": "capsule",
+  "route_of_administration": "oral",
+  "moa": "Atypical antipsychotic: serotonin 5-HT2A receptor antagonist with dopamine D2 receptor presynaptic partial agonist and postsynaptic antagonist activity",
+  "moa_class": "atypical_antipsychotic",
+  "first_approval_year": 2019,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2019/209500Orig1s000ltr.pdf",
+    "quote": "NDA 209500 NDA APPROVAL Intra-Cellular Therapies, Inc. ... Caplyta (lumateperone) capsules ... It is approved, effective on the date of this letter"
+  },
+  "launch_quarter": null,
+  "manufacturer": "Johnson & Johnson",
+  "benchmark_identity": "jnj_caplyta_us_reported",
+  "revenue_scope": "U.S. net product sales: Intra-Cellular Therapies' 'Product sales, net' (its only product line, CAPLYTA, sold in the U.S.) through 2024Q4, then Johnson & Johnson's CAPLYTA US row (Intl row nil) from 2025Q2",
+  "commercial_start_quarter": "2020Q1",
+  "series_start_reason": "2020Q1 is the first quarter of sales: the 2020Q1 release states net product sales of approximately $882,500 and that none were reported for the comparable period of 2019. J&J acquired Intra-Cellular Therapies on April 2, 2025 (schedule footnote (5)); 2025Q2 is the first J&J schedule that prints a CAPLYTA line.",
+  "series_end_quarter": "2026Q2",
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "unreported_quarters": {
+    "2025Q1": "No document prints the quarter: Intra-Cellular Therapies was acquired on 2025-04-02 before reporting 2025Q1 and filed no 2025Q1 results; Johnson & Johnson's 2Q25 schedule prints CAPLYTA 'SIX MONTHS' 2025 as 211, equal to the second-quarter figure, because the product is consolidated only from April 2, 2025."
+  },
+  "joined_issuers": [
+    {
+      "issuer": "Intra-Cellular Therapies",
+      "first_quarter": "2020Q1",
+      "last_quarter": "2024Q4"
+    },
+    {
+      "issuer": "Johnson & Johnson",
+      "first_quarter": "2025Q2",
+      "last_quarter": "2026Q2"
+    }
+  ],
+  "notes": "Issuer column marks who reported each row. Same scope across the join: both lines are U.S. CAPLYTA net product sales (ITCI sold only in the U.S.; J&J's Intl row is a dash). 2020Q1-2021Q3 come from the 10-Q MD&A tables in thousands (the releases and statements print whole dollars: 2020Q1 882,516; 2020Q2 1,875,889; 2020Q3 7,368,594), so those rows carry up to 0.001M truncation/rounding versus the dollar figures. 2020Q4 is the release text figure 12.4 (dollars 12,403,754 are printed only in whole-dollar statements). 2021Q4 is the prior-year column of the 2022 release (thousands) because the 2021Q4 release prints whole dollars. 2022Q1-2024Q4 are the quarters' own releases. Annual checks: 2022 quarters sum to 249.132 (printed 249,132); 2023 sum 462.175 (printed 462,175); 2024 sum 680.501 (printed 680,501); 2021 sum 81.708 (printed 81,708). The 2024Q4 release restates 2023Q4 as 131,507 (own 2023 release: 131,506). J&J: 2025Q2-Q4 sum to 700 (211+240+249), the twelve-month column in the 4Q25 schedule; 2026Q1 270 plus 2026Q2 361 equals the 631 six-month column in the 2Q26 schedule. J&J's 10-K FY2025 XBRL tags CAPLYTA revenue with a US-country member only.",
+  "search_log": [
+    "Bigdata.com search 'Intra-Cellular Therapies Caplyta net product sales first quarter 2025' (filings): no results, consistent with no 2025Q1 filing.",
+    "Listed Intra-Cellular Therapies filings via data.sec.gov submissions (CIK 1567514, all 8-K/8-K/A with item 2.02 plus 10-Q/10-K) and downloaded every earnings-release exhibit 99.1 from 2020-03 to 2025-02; extracted the 'Product sales, net' row and the CAPLYTA net product sales sentences.",
+    "Earnings releases for 2020Q1 to 2021Q4 print whole dollars in the tables (unit outside the verifier's thousands/millions/billions set); releases from 2022Q1 declare thousands.",
+    "No 10-Q or earnings release exists for 2025Q1 (acquisition completed 2025-04-02); J&J schedules checked for a 2025Q1 CAPLYTA figure: none.",
+    "Downloaded J&J's quarterly sales schedule PDFs 2015Q3-2026Q2 (investor-site q4cdn URLs from the existing J&J manifests); parsed every page with pdfplumber and searched case-insensitively for CAPLYTA, lumateperone, AKEEGA, DOXIL, PONVORY, TRINZA, ponesimod, niraparib: CAPLYTA first appears in the 2Q25 schedule.",
+    "Bigdata.com smart search for Caplyta first-quarter 2025 net product sales returned nothing; Intra-Cellular Therapies filing list (data.sec.gov) shows no 2025Q1 results.",
+    "J&J 2Q25 schedule footnote (5): 'Acquired with Intra-Cellular Therapies on April 2, 2025'.",
+    "2020Q1-2021Q3: fetched the 10-Qs (CIK 1567514, accessions 0001193125-20-135603, -20-214163, -20-288507, -21-155623, -21-239867, -21-323812); each prints a results-of-operations table in thousands with 'Product sales, net' (882; 1,876; 7,368; 15,579; 19,007; 21,606), while statements of operations and releases print whole dollars.",
+    "2021Q4: the 2022-03-01 release (d285345) prints whole dollars (25,516,026), so the 2022Q4 release prior-year column in thousands is kept; the FY2021 10-K statements also print whole dollars."
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "drug_name": "Vascepa",
+  "generic_name": "icosapent ethyl",
+  "manufacturer": "Amarin",
+  "benchmark_identity": "amarin_vascepa_worldwide_total_reported",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Severe hypertriglyceridemia; cardiovascular risk reduction in statin-treated patients with elevated triglycerides",
+  "revenue_scope": "Worldwide: Amarin company-total net product revenue",
+  "geography": "Worldwide (substantially all U.S. through 2019; ex-U.S. sales enter from 2018 and Europe from 2021, see notes)",
+  "formulation": "capsule",
+  "route_of_administration": "oral",
+  "moa": "Purified EPA (eicosapentaenoic acid) ethyl ester; lowers triglycerides and reduces cardiovascular events",
+  "moa_class": "omega3_epa_ethyl_ester",
+  "first_approval_year": 2012,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=202057",
+    "quote": "VASCEPA ICOSAPENT ETHYL 1GM CAPSULE;ORAL ... 07/26/2012 ORIG-1 Approval Type 5 - New Formulation or New Manufacturer"
+  },
+  "launch_quarter": "2013Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/897448/000119312513210988/d535033dex991.htm",
+    "quote": "Launched Vascepa (icosapent ethyl) capsules in the United States on January 28, 2013 for the MARINE indication"
+  },
+  "commercial_start_quarter": "2013Q1",
+  "series_start_reason": "Series starts 2013Q1, the first quarter Amarin printed product revenue (Q1 2013 Form 10-Q: 'Product revenues' 2,341 thousand; the launch was January 2013 and the 2012 periods show no revenue). It runs without a gap to 2026Q2 on one line, the company-total net product revenue, because that is the only line printed every quarter; a U.S.-labelled line exists only from 2022Q1.",
+  "series_end_quarter": "2026Q2",
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Company-total net product revenue, one scope for all 54 quarters (2013Q1-2026Q2). Amarin's only product is VASCEPA (VAZKEPA outside the U.S.), so the line is product-specific, but its geographic composition changes: per the FY2020 Form 10-K (https://www.sec.gov/Archives/edgar/data/897448/000156459021008382/amrn-10k_20201231.htm) net product revenue outside the United States was approximately $0.1 million (2018), $0.7 million (2019) and $8.9 million (2020); the Q1 2020 release (accession 0001564590-20-019933) attributes $6.7 million of Q1 2020 to an initial Canada order; VAZKEPA sales in Germany began at the end of Q3 2021 (Q3 2021 Form 10-Q, accession 0000950170-21-002721); from the Q1 2025 Form 10-Q the filings print the line split into 'US product revenue, net' and 'Europe product revenue, net' (Europe licensed to Recordati from June 2025 per the Q2 2025 release). Early quarters are therefore U.S. in practice and later quarters include Europe and rest of world; users needing a U.S.-only line must use the U.S.-labelled quarterly figures Amarin prints from 2022Q1, which were the previous version of this series (2022Q1-2026Q2) and are kept as a cross-check: they are never above the total for the same quarter. 2013 revenue is recognised on a resale (prescription fill) basis with the excess of wholesaler sales deferred (deferred revenue of $1.7 million at 2013-12-31, Q4 2013 release), and this ended in 2014 when the deferral was fully recognised; 2013 quarters are therefore not on the same recognition basis as later quarters. Row labels differ by document ('Product revenues' in the 2013-2014 10-Qs, 'Revenues' in the Q4 2013 release, 'Product revenues, net' in the Q4 2014 release, 'Product revenue, net' thereafter). Q1-Q3 quarters are read from each quarter's own Form 10-Q income statement and Q4 quarters from the Q4 earnings release (8-K Ex. 99.1), each as the current-period column. Full-year checks: the four quarters sum to the twelve-month figure printed in the Q4 release for every year 2013-2025 (2018 sums to 228,372 thousand against 228,371 printed, a one-thousand rounding difference in the filings); the 2013 Q4 release prints 26,351 for the year. The Q3 2019 original earnings release duplicated Q2 2019 figures and was corrected by an 8-K/A (accession 0001564590-19-040492); the Q3 2019 Form 10-Q is used here.",
+  "search_log": [
+    "Listed every Amarin filing (CIK 0000897448, all forms incl. 8-K/A and 10-K/A) via data.sec.gov/submissions; downloaded every Item 2.02 earnings release exhibit 2013-2026 and every 10-Q/10-K 2013-2026 and searched them for U.S.-labelled product revenue.",
+    "Re-sourced 2013Q1-2021Q4 after review: the company-total 'Product revenue, net' (10-Q statements of operations) is printed every quarter; read Q1-Q3 from each quarter's own Form 10-Q (accessions listed in the CSV urls, 2013-2026) and Q4 from each year's Q4 earnings release exhibit 99.1 (accessions 0001193125-14-072943, 0001193125-15-075052, 0001193125-16-476858, 0001193125-17-060177, 0001564590-18-003381, 0001564590-19-004652, 0001564590-20-006386, 0001564590-21-008376, 0000950170-22-002396, 0000950170-23-005329, 0000950170-24-022635, 0000950170-25-037618, 0001193125-26-068511).",
+    "Q4 documents do not need the prior-year-column fallback: every Q4 release prints the quarter as the current column of the statements of operations, so no quarter is read from a comparative column or derived.",
+    "Scope check: FY2020 Form 10-K gives ex-U.S. product revenue (0.1/0.7/8.9 million for 2018-2020); 2025-2026 10-Qs print US and Europe product revenue lines. Listed every Amarin 8-K item 2.02 and checked 8-K/A (only the Q3 2019 correction) via data.sec.gov/submissions.",
+    "Considered splicing the U.S.-labelled 2022Q1-2026Q2 rows onto the total line and rejected it (mixed scope); the total line is used for the whole span.",
+    "Bigdata.com was not needed for discovery: EDGAR indexes were complete; documents cited are the sec.gov originals.",
+    "Run scripts/sourcing/verify_staged_manifests.py on this directory (result in the batch report)."
+  ]
+}

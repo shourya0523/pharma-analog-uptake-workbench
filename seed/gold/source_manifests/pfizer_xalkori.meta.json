@@ -1,0 +1,35 @@
+{
+  "drug_name": "Xalkori",
+  "generic_name": "crizotinib",
+  "manufacturer": "Pfizer",
+  "benchmark_identity": "pfizer_xalkori_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (ALK-positive / ROS1-positive non-small cell lung cancer)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "capsule",
+  "route_of_administration": "oral",
+  "moa": "ALK / ROS1 / MET receptor tyrosine kinase inhibitor",
+  "moa_class": "tyrosine_kinase_inhibitor",
+  "first_approval_year": 2011,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2011/202570s000lbl.pdf",
+    "quote": "Initial U.S. Approval: August 2011"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2012Q1",
+  "series_start_reason": "2012Q1 is the earliest quarter Pfizer prints a Xalkori revenue figure. The first release with a Xalkori table line is the Q1 2013 release (8-K 0001157523-13-002129, a50620601-ex99.htm: Worldwide 53 against 17 a year earlier), and that release carries 2013Q1 as current and 2012Q1 as the prior-year column; 2012Q2, 2012Q4 are read from the prior-year columns of the Q2 2013 and Q4 2013 releases (23 and 45), and 2012Q3 from the quarter's own Form 10-Q prose (38; the Q3 2013 release prior-year column also prints 38). The four 2012 quarters sum to 123, the FY2012 figure in the Q4 2013 release and in the FY2012 annual report (Exhibit 13: 'Xalkori recorded worldwide revenues of $123 million in 2012'). Earlier releases (Q3 2011, Q4 2011, Q1-Q3 2012, Q4 2012) mention Xalkori only in prose without a revenue figure, and the FY2011 annual report prints none, so no 2011 quarter is sourced.",
+  "series_end_quarter": "2023Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The Q1 2024 release (2024-05-01) and every later Pfizer earnings release prints no Xalkori line, and the Q1 2024, Q2 2024, Q3 2024 10-Qs and the FY2024 10-K contain no Xalkori member or product row (the 10-Q/10-K product lines name Bosulif and Lorbrena but not Xalkori). Xalkori is mentioned only in prose comparing it with Lorbrena in the CROWN trial in the Q2 2024 and Q2 2026 releases.",
+  "notes": "Worldwide line from the Worldwide block of each release (Worldwide quarter column, first figure). Full-year checks: quarters sum to the printed full year within rounding in 2012 (123, equal to the FY2012 column of the Q4 2013 release), 2013 (282), 2014 (437 vs 438), 2015 (487 vs 488), 2016 (561), 2017 (595 vs 594), 2018 (524), 2019 (531 vs 530), 2020 (544), 2021 (492 vs 493), 2022 (466 vs 465), 2023 (374). Pfizer prints the line as 'Xalkori' with footnote markers in some releases; the marker is not a figure.",
+  "search_log": [
+    "Listed Pfizer (CIK 0000078003) 8-K Item 2.02 filings from data.sec.gov (recent page and submissions-001/002 pages): 2011-02 to 2026-08; downloaded every EX-99 exhibit from each filing index (work/pfe and work/pfe_early).",
+    "Scanned every release for table rows whose label starts with 'Xalkori': the first release with such a row is the Q1 2013 release (8-K 0001157523-13-002129, filed 2013-04-30, a50620601-ex99.htm: 53 against 17); present in every release from then through the Q4 2023 release; absent from every release from the Q1 2024 release onward. The earlier statement that the Q1 2013 release was not on EDGAR was wrong: it was missing from the first listing, which started at 2013-07.",
+    "Checked every earlier release from 2011-02 to 2013-01 (2011-02-01, 2011-05-03, 2011-08-02, 2011-11-01, 2012-01-31, 2012-05-01, 2012-07-31, 2012-11-01, 2013-01-29): no Xalkori table row and no revenue figure; Xalkori appears only in prose and in a footnote naming it as an Oncology unit product.",
+    "Checked the Form 10-Qs for Q3 2011, Q1 2012, Q2 2012, Q3 2012, Q1 2013 and the FY2011 and FY2012 10-Ks with Exhibit 13: the only prose revenue figures are Q3 2012 ($38 million; nine months $78 million, from pfe-9302012x10q.htm), FY2012 ($123 million) and Q1 2013 ($53 million). No FY2011 or 2011 quarterly Xalkori figure is printed, so 2011Q3 and 2011Q4 are not sourced.",
+    "Prior-year columns for 2012Q1, Q2, Q4 read from the Q1, Q2 and Q4 2013 releases: Xalkori 17, 23 and 45; Q3 2013 release prints 38 for Q3 2012. Sum 17+23+38+45 = 123 = FY2012 in the Q4 2013 release.",
+    "FDA label 202570s000lbl.pdf (Xalkori): 'Initial U.S. Approval: August 2011'. The approval letter PDF path returned an error; the label was used for the approval year.",
+    "Launch quarter not established from an issuer document in this batch; left null."
+  ]
+}

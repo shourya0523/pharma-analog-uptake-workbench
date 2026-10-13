@@ -1,0 +1,37 @@
+{
+  "manufacturer": "Eli Lilly",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "route_of_administration": "subcutaneous",
+  "launch_quarter": null,
+  "commercial_start_quarter": "2024Q4",
+  "series_end_quarter": "2026Q2",
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "drug_name": "Ebglyss",
+  "generic_name": "lebrikizumab",
+  "benchmark_identity": "lilly_ebglyss_worldwide_reported",
+  "therapeutic_area": "Immunology / Inflammation",
+  "indication_area": "Atopic dermatitis",
+  "formulation": "injection",
+  "moa": "interleukin-13 (IL-13) antagonist monoclonal antibody",
+  "moa_class": "il13_antagonist",
+  "first_approval_year": 2024,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2024/761306s000lbl.pdf",
+    "quote": "EBGLYSS (lebrikizumab-lbkz), injection, for subcutaneous use ... Initial U.S. Approval: 2024 (prescribing information, Highlights; Revised 09/2024)"
+  },
+  "series_start_reason": "2024Q4 is the first quarter in which any Lilly document prints an Ebglyss sales figure: the Q4 2024 earnings presentation. The Q3 2024 presentation, the quarter of U.S. approval, prints only 'Approved in the U.S. in Q3 2024' with no sales, and the Q3 2024 release has no Ebglyss row. Launch quarter is left null because the Q4 2024 slide says 'launches in the U.S. and international markets' without naming the launch quarter; Q3 2024 is the approval quarter, not a stated launch quarter. Quarters 2024Q4-2025Q4 come from Lilly's earnings slides (company_ir) and 2026Q1-2026Q2 from the earnings releases (sec_filing); both print the same worldwide product figure (2025Q1 60 and 2025Q2 87 agree between slides and the 2026 release prior-year columns).",
+  "notes": "Printed label 'Ebglyss' (slides print 'EBGLYSS'). Lilly's own sales of lebrikizumab worldwide. Almirall books European sales under its license (Lilly receives royalties recorded as collaboration revenue), so the line should not be read as total European market. Source mix: slides for 2024Q4-2025Q4, press-release Selected Products table for 2026Q1-2026Q2. Worldwide scope: the Q1 2026 Selected Products table prints Mounjaro 8,662 which the release text splits into U.S. and outside-U.S. parts, so the table is company worldwide revenue.",
+  "search_log": [
+    "Fetched Lilly's investor.lilly.com/financial-information/quarterly-results page: lists an Earnings Presentation (slides) and a Financial Workbook (xlsx) for every quarter Q1 2024 - Q2 2026. investor.lilly.com returns 403 to direct curl from the sourcing host; the slide PDFs were read through a web-fetch tool that returned their extracted text.",
+    "Read in full the slide decks for Q3 2024, Q4 2024, Q1 2025, Q2 2025, Q3 2025, Q4 2025 (static-files ids cdedba2e-c4a7-4047-9e61-4ac3b1e2cd73, 09d156c0-f88d-420b-b5f1-1ed2b417461b, 761fadb8-b911-46d5-85b3-8bac4e054d73, b7c7e82b-e667-42ba-827c-1faecba3e4c8, 81645112-510f-4ce8-a860-c74596c1caa2, 45a92498-43d0-4e2d-a4e6-a9131841cfd6).",
+    "Q3 2024 deck (cdedba2e-...): the 'Q3 2024 Update on Select Products' slide prints sales for Omvoh (41) and a Jaypirca line (81) but for Ebglyss and Kisunla prints only 'Approved in the U.S. in Q3 2024'; no Ebglyss or Kisunla sales figure for 2024Q3. The Q3 2024 earnings release (q324 8-K Ex. 99.1) Selected Products table also has no row for either product.",
+    "Q4 2024 deck (09d156c0-...) is the first document printing sales: Ebglyss 'Q4 2024 sales of $20 million with launches in the U.S. and international markets'; Kisunla 'Q4 2024 sales increased to $8 million'. The Q4 2024 release (q424 8-K Ex. 99.1) prints neither product's sales.",
+    "The Q1-Q4 2025 earnings releases on EDGAR (q125, q225, q325, q425 Ex. 99.1) mention the products only in the Key Products definition and news bullets; the 2025 quarterly figures come from the slide decks, which print each as the current quarter.",
+    "Cross-check: 2026 release prior-year columns print Ebglyss 60 (2025Q1) and 87 (2025Q2); Q2 2026 YTD 2025 column prints 147 = 60 + 87.",
+    "FDA label 761306s000lbl.pdf read with pdfplumber for Initial U.S. Approval: 2024.",
+    "Not read: the Q3 2024 Financial Workbook (xlsx) could not be fetched as text; the Q3 2024 slide and release show no Ebglyss sales, so 2024Q3 is not staged."
+  ],
+  "launch_evidence": null
+}

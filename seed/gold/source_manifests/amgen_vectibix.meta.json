@@ -1,0 +1,35 @@
+{
+  "drug_name": "Vectibix",
+  "generic_name": "panitumumab",
+  "manufacturer": "Amgen",
+  "benchmark_identity": "amgen_vectibix_us_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (metastatic colorectal cancer)",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "injection",
+  "route_of_administration": "intravenous",
+  "moa": "human monoclonal antibody against the epidermal growth factor receptor (EGFR)",
+  "moa_class": "egfr_antibody",
+  "first_approval_year": 2006,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=125147",
+    "quote": "VECTIBIX PANITUMUMAB ... 09/27/2006 ORIG-1 Approval"
+  },
+  "launch_quarter": null,
+  "launch_evidence": null,
+  "commercial_start_quarter": "2009Q3",
+  "series_start_reason": "Amgen first prints a U.S. Vectibix line in the third-quarter 2010 Form 10-Q, whose prior-year columns give 2009Q3 (23) and nine months 2009 (72); the full-year 2009 U.S. figure (97) in the Form 10-K for 2010 gives 2009Q4 (25). The Q1 and Q2 2010 Form 10-Qs and all 2009 Form 10-Qs and the Form 10-K for 2009 print only a total or fold Vectibix into 'Other', and the nine-month 2009 figure is not split between the first two quarters, so 2009Q3 is the earliest quarter the U.S. line supports. 2010Q1 and 2010Q2 come from the prior-year columns of the 2011 Q1 and Q2 10-Qs.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "U.S. line of Amgen's product sales table. Non-U.S. line is 'International' in the 2010-2011 filings and 'ROW' from 2012; same ex-U.S. scope, not used. The 2009 Q4 and 2010 Q4 values are derived from the FY2010 10-K. The U.S. line is contiguous 2009Q3-2026Q2 with one label definition.",
+  "search_log": [
+    "Listed every Amgen 10-Q and 10-K (CIK 0000318154, data.sec.gov/submissions) from 2009 on; read the 'Vectibix \u2014 U.S.' row of the product sales table in each 10-Q (three-month current and prior-year columns) and in each 10-K (three fiscal years). Scripts in scratchpad work/ (amgen_final.py).",
+    "2010 Q1 and Q2: the 2010 10-Qs print only a worldwide Vectibix line; U.S. figures taken from the prior-year columns of the 2011 Q1 and Q2 10-Qs (direct_prior_year_column). 2010 Q3 from its own 10-Q.",
+    "2010 Q4 = FY2010 10-K U.S. 115 less nine months 2010 U.S. 84 (Q3 2010 10-Q) = 31. Q4 2011-2025 derived the same way from each FY 10-K less the Q3 10-Q nine-month figure; no Q4 earnings release was read for these rows.",
+    "FDA approval: the Drugs@FDA overview page for BLA 125147 (accessdata.fda.gov, ApplNo=125147) lists 09/27/2006 ORIG-1 Approval, which confirms first_approval_year 2006. An earlier draft of this log cited BLA 125114, which is the wrong application number.",
+    "Not used: worldwide Vectibix total (Amgen prints it throughout), Vectibix ROW line (scope mismatch).",
+    "Extension to 2009: read the Vectibix rows of the 2009 Q1-Q3 10-Qs (0001193125-09-107323, -169378, -227739), the FY2009 10-K (0001193125-10-044311) and the 2010 Q1 and Q2 10-Qs (0001193125-10-112950, 0000950123-10-074870) for a U.S. split; none prints one (the 2009 10-Qs fold Vectibix into 'Other'; the 2010 Q1 10-Q prints only a total Vectibix line). The Q3 2010 10-Q prints Vectibix - U.S. 30 | 23 | 84 | 72 and the FY2010 10-K prints 115 | 97 | 108, giving 2009Q3 = 23 and 2009Q4 = 97 less 72 = 25. 2009Q1/Q2 are not separable: nine months 2009 is 72 and no document prints the first-half 2009 U.S. figure by quarter."
+  ]
+}

@@ -108,6 +108,8 @@ def meta_problems(meta: dict, rows: list[dict[str, str]]) -> list[str]:
     first = min(row["period"] for row in rows)
     if meta.get("commercial_start_quarter") != first:
         problems.append(f"commercial_start_quarter is {meta.get('commercial_start_quarter')!r}, first row is {first}")
+    if meta.get("launch_quarter") and meta["launch_quarter"] > first:
+        problems.append(f"launch_quarter {meta['launch_quarter']} is after the first row {first}; a launch anchor cannot follow a sale")
     for field in ("moa", "moa_class", "route_of_administration", "first_approval_year", "indication_area"):
         if meta.get(field) in (None, ""):
             problems.append(f"{field} is empty")

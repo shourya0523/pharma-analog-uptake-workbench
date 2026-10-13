@@ -1,0 +1,34 @@
+{
+  "drug_name": "Evkeeza",
+  "generic_name": "evinacumab",
+  "manufacturer": "Regeneron Pharmaceuticals",
+  "benchmark_identity": "regeneron_evkeeza_us_reported",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Homozygous familial hypercholesterolemia (HoFH)",
+  "revenue_scope": "U.S. net product sales of Evkeeza (the 'Net Product Sales in the United States' table and 'Evkeeza - U.S.' rows of Regeneron's 10-Qs; the U.S. column of Table 5 of the Q4 2021 release; the 'Evkeeza - U.S.' row of the Q4 releases from 2022). Ex-U.S. sales are recorded by Ultragenyx under a January 2022 agreement and are not in the series",
+  "geography": "United States",
+  "formulation": "injection (intravenous infusion)",
+  "route_of_administration": "intravenous",
+  "moa": "ANGPTL3 inhibitor (monoclonal antibody)",
+  "moa_class": "angptl3_inhibitor",
+  "first_approval_year": 2021,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2021/761181Orig1s000ltr.pdf",
+    "quote": "BLA 761181 ... We have approved your BLA for Evkeeza (evinacumab-dgnb) effective this date. ... Evkeeza is indicated as an adjunct to other low-density lipoprotein-cholesterol (LDL-C) lowering therapies for the treatment of adult and pediatric patients, aged 12 years and older, with homozygous familial hypercholesterolemia (HoFH)."
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2021Q1",
+  "series_start_reason": "2021Q1 is the first quarter Regeneron prints Evkeeza sales (0.5 in the Q1 2021 10-Q; the dash for 2020 is printed in the same row). The FDA approved Evkeeza in February 2021 (Q1 2021 release: 'In February 2021, the FDA approved Evkeeza'), so the first printed quarter is the approval quarter.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Quarterly U.S. Evkeeza net product sales, USD millions. Q1-Q3 of each year are read from the quarter's own 10-Q (one decimal). Q4 is printed in no 10-Q or 10-K, only in the Q4 earnings release (8-K Exhibit 99.1): Q4 2021 comes from Table 5 of that release with one decimal (9.3), and Q4 2022-Q4 2025 from the release's net product sales table, which prints whole millions (15, 24, 38, 48), so those four rows carry derivation direct_reported_rounded and are less precise than the Q1-Q3 rows; the other years' Q4 quote lines omit the twelve-month columns because the whole-million quarter cannot be summed exactly against the 10-K annual total. Full-year checks against the annual figure printed in the 10-K (millions): 2021 0.5+2.0+6.6+9.3 = 18.4 against 18.4; 2022 8.5+11.1+13.6+15 = 48.2 against 48.6 (0.4, within the rounding of the whole-million Q4); 2023 14.9+19.3+19.1+24 = 77.3 against 77.3; 2024 24.8+30.4+32.4+38 = 125.6 against 125.7; 2025 30.9+41.2+42.8+48 = 162.9 against 162.2 (0.7, more than rounding of one whole-million figure explains: FY2025 less the nine months 114.9 printed in the Q3 2025 10-Q gives 47.3, while the Q4 2025 release prints 48; the document does not explain the difference). Scope: Regeneron records Evkeeza net product sales in the United States (footnote (f) of Table 5 in the Q1-Q4 2021 releases) and Ultragenyx records them outside the United States from the January 2022 agreement, so every row is U.S.-only; the labels read 'Evkeeza' under a 'Net Product Sales in the United States' heading up to Q2 2022 and 'Evkeeza - U.S.' from Q3 2022. Regeneron's quarterly earnings releases for Q1-Q3 also print an Evkeeza row but only in whole millions from 2022 (for example 8, 11, 14 for Q1-Q3 2022), so the 10-Qs are used for those quarters. Q3 2026 is not yet published at the time of sourcing.",
+  "search_log": [
+    "Listed Regeneron (CIK 0000872589) 8-K Item 2.02 filings 2020-2026 from data.sec.gov (39 filings) and downloaded the EX-99.1 earnings exhibit of each from the filing index (exhibit991q*.htm); an earlier scan of only the 8-K primary documents had found no Evkeeza row because the table sits in the exhibit.",
+    "Scanned every exhibit for an Evkeeza table row: Q1-Q3 2021 releases print a detailed U.S./ROW/Total row with one decimal (0.5, 2.0, 6.6); the Q4 2021 release prints 9.3 (U.S.), a dash for ROW, and 18.4 for the year; the Q1 2022 through Q2 2026 releases print 'Evkeeza - U.S.' in whole millions (Q4: 15, 24, 38, 48 for 2022-2025).",
+    "Extracted the Evkeeza row from every 10-Q and 10-K 2021-2026 (23 filings from data.sec.gov submissions): the 10-Qs carry one decimal for Q1-Q3 (0.5, 2.0, 6.6 in 2021; 8.5, 11.1, 13.6 in 2022; 14.9, 19.3, 19.1 in 2023; 24.8, 30.4, 32.4 in 2024; 30.9, 41.2, 42.8 in 2025; 45.7 and 53.3 in 2026), the 10-Ks the full year (18.4, 48.6, 77.3, 125.7, 162.2).",
+    "Checked the scope: footnote (f) of the 2021 releases and 10-Qs: 'Regeneron records net product sales of Evkeeza in the United States'; the Q4 2021 release adds that under a January 2022 agreement Ultragenyx records net product sales outside the United States.",
+    "Cross-checked every Q4 against FY (10-K) less nine months (Q3 10-Q): 2021 9.3, 2022 15.4, 2023 24.0, 2024 38.1, 2025 47.3 against the printed 9.3, 15, 24, 38, 48; only 2025 differs by more than rounding (0.7), recorded in notes and left unresolved.",
+    "FDA approval letter BLA 761181 fetched from accessdata.fda.gov (appletter/2021/761181Orig1s000ltr.pdf): 'We have approved your BLA for Evkeeza (evinacumab-dgnb) effective this date'; the Q1 2021 release dates the approval to February 2021. launch_quarter left null: no document read states a launch quarter."
+  ]
+}
