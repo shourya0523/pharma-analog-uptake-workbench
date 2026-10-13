@@ -1,0 +1,31 @@
+{
+  "drug_name": "Ponvory",
+  "generic_name": "ponesimod",
+  "manufacturer": "Vanda Pharmaceuticals",
+  "benchmark_identity": "vanda_ponvory_us_canada_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Neurology (multiple sclerosis)",
+  "revenue_scope": "PONVORY net product sales",
+  "geography": "United States and Canada",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Selective sphingosine-1-phosphate receptor 1 (S1P1) modulator",
+  "moa_class": "s1p_receptor_modulator",
+  "first_approval_year": 2021,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2021/213498Orig1s000ltr.pdf",
+    "quote": "NDA 213498 NDA APPROVAL Janssen Pharmaceuticals, Inc. ... Ponvory (ponesimod) tablets ... It is approved, effective on the date of this letter"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2024Q1",
+  "series_start_reason": "Vanda is the only holder to print a PONVORY line. It completed the acquisition on December 7, 2023; the 2023Q4 release prints 1,600 for that partial period only (not a full quarter), so the series starts at 2024Q1, the first full quarter. Johnson & Johnson (Actelion) launched ponesimod in 2021 but never printed it separately (Other Neuroscience in its schedules; the 2021Q2-2023Q3 quarters are not published by any issuer).",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Annual checks: 2024 quarters sum to 27.800 (printed full year 27,800); 2025 quarters sum to 27.372 (printed full year 27,372). The scope is the net product sales of the U.S. and Canadian rights Vanda holds; the revenue table has one PONVORY line and no geographic split. Vanda's 2024Q4 includes approximately $3 million of variable consideration subject to dispute (release text). Idorsia received an 8% revenue share of ponesimod net sales from J&J until 2024 but prints only the CHF revenue-share income, not net sales, so it is not used.",
+  "search_log": [
+    "Bigdata.com search 'Ponvory ponesimod net sales Johnson & Johnson' (filings) returned Idorsia revenue-share disclosures (8% of J&J ponesimod net sales; CHF 0.5m 2021, 2.0m 2022, 4.8m 2023) and Vanda's acquisition notice: no J&J sales figure.",
+    "Searched all J&J quarterly sales schedules 2015Q3-2026Q2 (50 PDFs) for PONVORY/ponesimod: 0 occurrences; PONVORY appears in J&J's FY2025 10-K only as an XBRL legal-proceedings member, with no sales line.",
+    "Bigdata.com search 'Vanda Pharmaceuticals PONVORY net product sales quarter' located Vanda's earnings releases and calls; downloaded every Vanda Form 8-K item 2.02 exhibit 99.1 from 2024-02 to 2026-08 from data.sec.gov and read the 'PONVORY net product sales' row."
+  ]
+}

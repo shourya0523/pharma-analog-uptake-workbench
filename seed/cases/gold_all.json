@@ -12695,6 +12695,171 @@
   ]
  },
  {
+  "drug_name": "Ibsrela",
+  "manufacturer": "Ardelyx",
+  "ticker": "ARDX",
+  "generic_name": "tenapanor",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 0.45,
+    "gold_id": "ardelyx-ibsrela-us-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 1.564,
+    "gold_id": "ardelyx-ibsrela-us-reported-2022q2"
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": 4.885,
+    "gold_id": "ardelyx-ibsrela-us-reported-2022q3"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 8.701,
+    "gold_id": "ardelyx-ibsrela-us-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Ibsrela",
+  "manufacturer": "Ardelyx",
+  "ticker": "ARDX",
+  "generic_name": "tenapanor",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 11.355,
+    "gold_id": "ardelyx-ibsrela-us-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 18.309,
+    "gold_id": "ardelyx-ibsrela-us-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 22.285,
+    "gold_id": "ardelyx-ibsrela-us-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 28.113,
+    "gold_id": "ardelyx-ibsrela-us-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Ibsrela",
+  "manufacturer": "Ardelyx",
+  "ticker": "ARDX",
+  "generic_name": "tenapanor",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 28.361,
+    "gold_id": "ardelyx-ibsrela-us-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 35.445,
+    "gold_id": "ardelyx-ibsrela-us-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 40.638,
+    "gold_id": "ardelyx-ibsrela-us-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 53.842,
+    "gold_id": "ardelyx-ibsrela-us-reported-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Ibsrela",
+  "manufacturer": "Ardelyx",
+  "ticker": "ARDX",
+  "generic_name": "tenapanor",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 44.403,
+    "gold_id": "ardelyx-ibsrela-us-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 65.045,
+    "gold_id": "ardelyx-ibsrela-us-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 78.158,
+    "gold_id": "ardelyx-ibsrela-us-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 86.601,
+    "gold_id": "ardelyx-ibsrela-us-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Ibsrela",
+  "manufacturer": "Ardelyx",
+  "ticker": "ARDX",
+  "generic_name": "tenapanor",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 70.074,
+    "gold_id": "ardelyx-ibsrela-us-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 86.243,
+    "gold_id": "ardelyx-ibsrela-us-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Izervay",
   "manufacturer": "Astellas",
   "ticker": null,
@@ -19541,6 +19706,206 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 1314.0,
     "gold_id": "astrazeneca-ultomiris-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Lupkynis",
+  "manufacturer": "Aurinia Pharmaceuticals",
+  "ticker": "AUPH",
+  "generic_name": "voclosporin",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 0.884,
+    "gold_id": "aurinia-lupkynis-total-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 6.591,
+    "gold_id": "aurinia-lupkynis-total-reported-2021q2"
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": 14.638,
+    "gold_id": "aurinia-lupkynis-total-reported-2021q3"
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": 23.375,
+    "gold_id": "aurinia-lupkynis-total-reported-2021q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Lupkynis",
+  "manufacturer": "Aurinia Pharmaceuticals",
+  "ticker": "AUPH",
+  "generic_name": "voclosporin",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 21.492,
+    "gold_id": "aurinia-lupkynis-total-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 28.148,
+    "gold_id": "aurinia-lupkynis-total-reported-2022q2"
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": 25.502,
+    "gold_id": "aurinia-lupkynis-total-reported-2022q3"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 28.326,
+    "gold_id": "aurinia-lupkynis-total-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Lupkynis",
+  "manufacturer": "Aurinia Pharmaceuticals",
+  "ticker": "AUPH",
+  "generic_name": "voclosporin",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 34.337,
+    "gold_id": "aurinia-lupkynis-total-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 41.1,
+    "gold_id": "aurinia-lupkynis-total-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 40.781,
+    "gold_id": "aurinia-lupkynis-total-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 42.315,
+    "gold_id": "aurinia-lupkynis-total-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Lupkynis",
+  "manufacturer": "Aurinia Pharmaceuticals",
+  "ticker": "AUPH",
+  "generic_name": "voclosporin",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 48.073,
+    "gold_id": "aurinia-lupkynis-total-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 55.028,
+    "gold_id": "aurinia-lupkynis-total-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 55.503,
+    "gold_id": "aurinia-lupkynis-total-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 57.582,
+    "gold_id": "aurinia-lupkynis-total-reported-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Lupkynis",
+  "manufacturer": "Aurinia Pharmaceuticals",
+  "ticker": "AUPH",
+  "generic_name": "voclosporin",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 59.971,
+    "gold_id": "aurinia-lupkynis-total-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 66.574,
+    "gold_id": "aurinia-lupkynis-total-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 70.627,
+    "gold_id": "aurinia-lupkynis-total-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 74.173,
+    "gold_id": "aurinia-lupkynis-total-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Lupkynis",
+  "manufacturer": "Aurinia Pharmaceuticals",
+  "ticker": "AUPH",
+  "generic_name": "voclosporin",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 73.563,
+    "gold_id": "aurinia-lupkynis-total-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 79.412,
+    "gold_id": "aurinia-lupkynis-total-reported-2026q2"
    }
   ]
  },
@@ -78030,6 +78395,456 @@
   ]
  },
  {
+  "drug_name": "Rezlidhia",
+  "manufacturer": "Rigel Pharmaceuticals",
+  "ticker": "RIGL",
+  "generic_name": "olutasidenib",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 0.9,
+    "gold_id": "rigel-rezlidhia-us-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Rezlidhia",
+  "manufacturer": "Rigel Pharmaceuticals",
+  "ticker": "RIGL",
+  "generic_name": "olutasidenib",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 1.5,
+    "gold_id": "rigel-rezlidhia-us-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 2.6,
+    "gold_id": "rigel-rezlidhia-us-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 2.7,
+    "gold_id": "rigel-rezlidhia-us-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 3.9,
+    "gold_id": "rigel-rezlidhia-us-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Rezlidhia",
+  "manufacturer": "Rigel Pharmaceuticals",
+  "ticker": "RIGL",
+  "generic_name": "olutasidenib",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 4.9,
+    "gold_id": "rigel-rezlidhia-us-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 5.2,
+    "gold_id": "rigel-rezlidhia-us-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 5.5,
+    "gold_id": "rigel-rezlidhia-us-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 7.4,
+    "gold_id": "rigel-rezlidhia-us-reported-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Rezlidhia",
+  "manufacturer": "Rigel Pharmaceuticals",
+  "ticker": "RIGL",
+  "generic_name": "olutasidenib",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 6.1,
+    "gold_id": "rigel-rezlidhia-us-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 7.0,
+    "gold_id": "rigel-rezlidhia-us-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 8.3,
+    "gold_id": "rigel-rezlidhia-us-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 9.6,
+    "gold_id": "rigel-rezlidhia-us-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Rezlidhia",
+  "manufacturer": "Rigel Pharmaceuticals",
+  "ticker": "RIGL",
+  "generic_name": "olutasidenib",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 8.0,
+    "gold_id": "rigel-rezlidhia-us-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 8.9,
+    "gold_id": "rigel-rezlidhia-us-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Tavalisse",
+  "manufacturer": "Rigel Pharmaceuticals",
+  "ticker": "RIGL",
+  "generic_name": "fostamatinib",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 1.8,
+    "gold_id": "rigel-tavalisse-us-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 4.865,
+    "gold_id": "rigel-tavalisse-us-reported-2018q3"
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": 7.295,
+    "gold_id": "rigel-tavalisse-us-reported-2018q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Tavalisse",
+  "manufacturer": "Rigel Pharmaceuticals",
+  "ticker": "RIGL",
+  "generic_name": "fostamatinib",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q1",
+    "value_normalized_usd_millions": 8.054,
+    "gold_id": "rigel-tavalisse-us-reported-2019q1"
+   },
+   {
+    "period": "2019Q2",
+    "value_normalized_usd_millions": 10.173,
+    "gold_id": "rigel-tavalisse-us-reported-2019q2"
+   },
+   {
+    "period": "2019Q3",
+    "value_normalized_usd_millions": 11.716,
+    "gold_id": "rigel-tavalisse-us-reported-2019q3"
+   },
+   {
+    "period": "2019Q4",
+    "value_normalized_usd_millions": 13.829,
+    "gold_id": "rigel-tavalisse-us-reported-2019q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Tavalisse",
+  "manufacturer": "Rigel Pharmaceuticals",
+  "ticker": "RIGL",
+  "generic_name": "fostamatinib",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 12.68,
+    "gold_id": "rigel-tavalisse-us-reported-2020q1"
+   },
+   {
+    "period": "2020Q2",
+    "value_normalized_usd_millions": 14.974,
+    "gold_id": "rigel-tavalisse-us-reported-2020q2"
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": 16.289,
+    "gold_id": "rigel-tavalisse-us-reported-2020q3"
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": 17.753,
+    "gold_id": "rigel-tavalisse-us-reported-2020q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Tavalisse",
+  "manufacturer": "Rigel Pharmaceuticals",
+  "ticker": "RIGL",
+  "generic_name": "fostamatinib",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 12.376,
+    "gold_id": "rigel-tavalisse-us-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 17.053,
+    "gold_id": "rigel-tavalisse-us-reported-2021q2"
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": 16.012,
+    "gold_id": "rigel-tavalisse-us-reported-2021q3"
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": 17.569,
+    "gold_id": "rigel-tavalisse-us-reported-2021q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Tavalisse",
+  "manufacturer": "Rigel Pharmaceuticals",
+  "ticker": "RIGL",
+  "generic_name": "fostamatinib",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 16.197,
+    "gold_id": "rigel-tavalisse-us-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 18.55,
+    "gold_id": "rigel-tavalisse-us-reported-2022q2"
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": 19.188,
+    "gold_id": "rigel-tavalisse-us-reported-2022q3"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 21.9,
+    "gold_id": "rigel-tavalisse-us-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Tavalisse",
+  "manufacturer": "Rigel Pharmaceuticals",
+  "ticker": "RIGL",
+  "generic_name": "fostamatinib",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 22.3,
+    "gold_id": "rigel-tavalisse-us-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 21.3,
+    "gold_id": "rigel-tavalisse-us-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 24.5,
+    "gold_id": "rigel-tavalisse-us-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 25.7,
+    "gold_id": "rigel-tavalisse-us-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Tavalisse",
+  "manufacturer": "Rigel Pharmaceuticals",
+  "ticker": "RIGL",
+  "generic_name": "fostamatinib",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 21.1,
+    "gold_id": "rigel-tavalisse-us-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 26.4,
+    "gold_id": "rigel-tavalisse-us-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 26.3,
+    "gold_id": "rigel-tavalisse-us-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 31.0,
+    "gold_id": "rigel-tavalisse-us-reported-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Tavalisse",
+  "manufacturer": "Rigel Pharmaceuticals",
+  "ticker": "RIGL",
+  "generic_name": "fostamatinib",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 28.5,
+    "gold_id": "rigel-tavalisse-us-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 40.1,
+    "gold_id": "rigel-tavalisse-us-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 44.7,
+    "gold_id": "rigel-tavalisse-us-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 45.6,
+    "gold_id": "rigel-tavalisse-us-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Tavalisse",
+  "manufacturer": "Rigel Pharmaceuticals",
+  "ticker": "RIGL",
+  "generic_name": "fostamatinib",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 37.3,
+    "gold_id": "rigel-tavalisse-us-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 47.4,
+    "gold_id": "rigel-tavalisse-us-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Actemra",
   "manufacturer": "Roche",
   "ticker": null,
@@ -95556,6 +96371,101 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 326.6,
     "gold_id": "uthr-tyvaso-dpi-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Ponvory",
+  "manufacturer": "Vanda Pharmaceuticals",
+  "ticker": "VNDA",
+  "generic_name": "ponesimod",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 6.83,
+    "gold_id": "vanda-ponvory-us-canada-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 8.616,
+    "gold_id": "vanda-ponvory-us-canada-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 5.862,
+    "gold_id": "vanda-ponvory-us-canada-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 6.492,
+    "gold_id": "vanda-ponvory-us-canada-reported-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Ponvory",
+  "manufacturer": "Vanda Pharmaceuticals",
+  "ticker": "VNDA",
+  "generic_name": "ponesimod",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 5.624,
+    "gold_id": "vanda-ponvory-us-canada-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 7.104,
+    "gold_id": "vanda-ponvory-us-canada-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 7.035,
+    "gold_id": "vanda-ponvory-us-canada-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 7.609,
+    "gold_id": "vanda-ponvory-us-canada-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Ponvory",
+  "manufacturer": "Vanda Pharmaceuticals",
+  "ticker": "VNDA",
+  "generic_name": "ponesimod",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 6.211,
+    "gold_id": "vanda-ponvory-us-canada-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 7.935,
+    "gold_id": "vanda-ponvory-us-canada-reported-2026q2"
    }
   ]
  },

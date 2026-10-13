@@ -455,6 +455,31 @@
   ]
  },
  {
+  "drug_name": "Ibsrela",
+  "manufacturer": "Ardelyx",
+  "ticker": "ARDX",
+  "generic_name": "tenapanor",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 70.074,
+    "gold_id": "ardelyx-ibsrela-us-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 86.243,
+    "gold_id": "ardelyx-ibsrela-us-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Xtandi",
   "manufacturer": "Astellas",
   "ticker": null,
@@ -501,6 +526,31 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 1314.0,
     "gold_id": "astrazeneca-ultomiris-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Lupkynis",
+  "manufacturer": "Aurinia Pharmaceuticals",
+  "ticker": "AUPH",
+  "generic_name": "voclosporin",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 73.563,
+    "gold_id": "aurinia-lupkynis-total-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 79.412,
+    "gold_id": "aurinia-lupkynis-total-reported-2026q2"
    }
   ]
  },
@@ -1760,6 +1810,31 @@
   ]
  },
  {
+  "drug_name": "Tavalisse",
+  "manufacturer": "Rigel Pharmaceuticals",
+  "ticker": "RIGL",
+  "generic_name": "fostamatinib",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 37.3,
+    "gold_id": "rigel-tavalisse-us-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 47.4,
+    "gold_id": "rigel-tavalisse-us-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Vabysmo",
   "manufacturer": "Roche",
   "ticker": null,
@@ -2166,6 +2241,31 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 326.6,
     "gold_id": "uthr-tyvaso-dpi-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Ponvory",
+  "manufacturer": "Vanda Pharmaceuticals",
+  "ticker": "VNDA",
+  "generic_name": "ponesimod",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 6.211,
+    "gold_id": "vanda-ponvory-us-canada-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 7.935,
+    "gold_id": "vanda-ponvory-us-canada-reported-2026q2"
    }
   ]
  },

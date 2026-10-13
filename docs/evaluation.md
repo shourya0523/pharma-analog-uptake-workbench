@@ -130,6 +130,11 @@ can no longer score a change:
 - `seed/holdout_labels/product_labels.json`
 - `seed/holdout_foreign_xbrl.json` and its case-file shape `seed/cases/foreign_xbrl.json`
 
+Expanding the list again, to 500 products (D201-D500), did the same to:
+
+- `seed/cases/holdout_2026_09_judging.json`
+- `seed/cases/holdout_2026_09_retrieval.json`
+
 Each file carries a `retired` record saying when and why. Its guard test now
 checks that the retirement is real (at least one of its issuers is scored
 elsewhere) instead of that its issuers are unscored, and `scripts/eval.py`

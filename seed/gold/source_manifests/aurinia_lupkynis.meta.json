@@ -1,0 +1,37 @@
+{
+  "drug_name": "Lupkynis",
+  "generic_name": "voclosporin",
+  "manufacturer": "Aurinia Pharmaceuticals",
+  "benchmark_identity": "aurinia_lupkynis_total_reported",
+  "therapeutic_area": "Immunology / Inflammation",
+  "indication_area": "Lupus nephritis",
+  "revenue_scope": "Total net product sales as printed",
+  "geography": "United States and Otsuka Territories, not split",
+  "formulation": "oral capsule",
+  "route_of_administration": "oral",
+  "moa": "Calcineurin inhibitor",
+  "moa_class": "calcineurin_inhibitor",
+  "first_approval_year": 2021,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2021/213716Orig1s000ltr.pdf",
+    "quote": "This new drug application provides for the use of Lupkynis in combination with a background immunosuppressive therapy regimen"
+  },
+  "launch_quarter": "2021Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1600620/000160062025000106/auph-20250930.htm",
+    "quote": "In January 2021, the Company introduced LUPKYNIS"
+  },
+  "commercial_start_quarter": "2021Q1",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "The printed line is 'Product revenue, net' (2021 to 2024 filings) and 'Net product sales' (from the FY2024 annual report). It is LUPKYNIS total product sales: U.S. specialty pharmacy and distributor sales plus inventory sold to Otsuka for the Otsuka Territories. Aurinia's 10-Q for 2025 Q3 says the product sales line includes sales to Otsuka, and the 2025 10-K geographic note splits only total revenue (U.S. vs Japan), so no U.S.-only quarterly figure is printed and none is derived. The Otsuka component is not separated; the supply agreement is dated August 2022 (10-Q for 2025 Q3). Q4 figures are derived from the annual report less the nine-month figure.",
+  "search_log": [
+    "Bigdata search for LUPKYNIS net product revenue by quarter; Quartr and EDGAR results matched Aurinia's own 10-Q and 8-K lines.",
+    "Listed every 10-Q and 10-K for CIK 1600620 via data.sec.gov submissions; fetched each primary document and read the income-statement row for the three-month figure.",
+    "Fourth quarters derived as full-year 10-K figure less the nine-month figure in the Q3 10-Q; the sum of four quarters matches each full year.",
+    "Checked for a U.S.-only quarterly product line: none printed (geographic split only annually, total revenue).",
+    "FDA approval letter for NDA 213716 read for the approval date; the launch quarter comes from the 2025 Q3 10-Q wording."
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "drug_name": "Ibsrela",
+  "generic_name": "tenapanor",
+  "manufacturer": "Ardelyx",
+  "benchmark_identity": "ardelyx_ibsrela_us_reported",
+  "therapeutic_area": "GI / Liver / Women's Health / Urology",
+  "indication_area": "Irritable bowel syndrome with constipation (IBS-C)",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "oral tablet",
+  "route_of_administration": "oral",
+  "moa": "Sodium/hydrogen exchanger 3 (NHE3) inhibitor",
+  "moa_class": "nhe3_inhibitor",
+  "first_approval_year": 2019,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2019/211801Orig1s000ltr.pdf",
+    "quote": "This new drug application provides for the use of Ibsrela (tenapanor) tablets for"
+  },
+  "launch_quarter": "2022Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1437402/000162828023015212/ardx-20230331.htm",
+    "quote": "We recognized our first sales of IBSRELA in the U.S. in March 2022."
+  },
+  "commercial_start_quarter": "2022Q1",
+  "series_start_reason": "IBSRELA sales began in March 2022. The first printed product sales line is the Q1 2022 10-Q (450 thousand), so the series starts 2022Q1.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Scope is IBSRELA U.S. net product sales. The product sales line was IBSRELA only until XPHOZAH launched in November 2023; from the FY2023 annual report IBSRELA is printed on its own row, and the FY2023 and later Q4 figures are derived from that row less nine months. Ex-U.S. product supply revenue and Kyowa Kirin royalties are not in this series.",
+  "search_log": [
+    "Bigdata search for IBSRELA net product revenue by quarter; results confirmed U.S. net product sales and the XPHOZAH split from Q4 2023.",
+    "Listed every 10-Q and 10-K for CIK 1437402 via data.sec.gov submissions; read the IBSRELA or product sales row of each filing.",
+    "2022 quarters: Q2 and Q3 from the 2022 10-Qs; Q1 2022 from the Q1 2022 10-Q; Q4 2022 derived from the FY2022 10-K less nine months.",
+    "Q4 2023, 2024 and 2025 derived from the full-year IBSRELA line less the nine-month figure.",
+    "FDA approval letter for NDA 211801 read for the indication sentence; approval year 2019 from the original approval letter."
+  ]
+}

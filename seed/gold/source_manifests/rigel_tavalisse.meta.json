@@ -1,0 +1,38 @@
+{
+  "drug_name": "Tavalisse",
+  "generic_name": "fostamatinib",
+  "manufacturer": "Rigel Pharmaceuticals",
+  "benchmark_identity": "rigel_tavalisse_us_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Chronic immune thrombocytopenia (ITP)",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "oral tablet",
+  "route_of_administration": "oral",
+  "moa": "oral spleen tyrosine kinase (SYK) inhibitor",
+  "moa_class": "syk_inhibitor",
+  "first_approval_year": 2018,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2018/209299Orig1s000ltr.pdf",
+    "quote": "NDA 209299 NDA APPROVAL ... TAVALISSE (fostamatinib disodium hexahydrate) tablets ... It is approved, effective on the date of this letter ... ANN T FARRELL 04/17/2018"
+  },
+  "launch_quarter": "2018Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465918050532/a18-18515_1ex99d1.htm",
+    "quote": "On May 29, Rigel launched TAVALISSE (fostamatinib disodium hexahydrate) for the treatment of thrombocytopenia in adult patients with chronic immune thrombocytopenia (ITP)"
+  },
+  "commercial_start_quarter": "2018Q2",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Rigel's TAVALISSE net product sales. 2018Q2-2022Q3 use the statement-of-operations line 'Product sales, net' in thousands (Tavalisse was Rigel's only product line then); 2018Q2 uses the release sentence (1.8). From 2022Q4 Rezlidhia sales enter the product total, so the brand figure is the release sentence. Ex-U.S. Tavalisse sales through Kissei, Grifols and Medison are collaboration revenue, not product sales. Q1 2018 printed no product sales, so 2018Q2 is the first quarter.",
+  "search_log": [
+    "Bigdata.com search located Rigel's quarterly releases; all 2018Q2-2026Q2 quarters were taken from each quarter's own Item 2.02 EX-99.1 (data.sec.gov submissions for CIK 0001034842; index.json for each accession).",
+    "2018Q3-2022Q3: 'Product sales, net' statement line (USD thousands) in each release, current-quarter column; the figures sum to the full-year statements (e.g. 2020 quarters 12,680+14,974+16,289+17,753 = 61,696; 2021 = 63,010).",
+    "2022Q4-2026Q2: release sentence 'TAVALISSE net product sales of/were $X million' (the statement line includes Rezlidhia from Q4 2022 and Gavreto from Q2 2024, so it is not the brand line).",
+    "Cross-checks: 2024 quarters 21.1+26.4+26.3+31.0 = 104.8 (printed FY 104.8); 2025 quarters 28.5+40.1+44.7+45.6 = 158.9 vs printed FY 158.8 (rounding of one-decimal figures, within 0.2).",
+    "Launch: 'On May 29, Rigel launched TAVALISSE' (2018-08-08 release). FDA approval letter NDA 209299 signed 04/17/2018 (appletter 209299Orig1s000ltr.pdf); openFDA original approval 2018-04-17.",
+    "Not found: no printed Tavalisse-specific line before 2018Q2 (pre-launch); no exclusion considered."
+  ]
+}

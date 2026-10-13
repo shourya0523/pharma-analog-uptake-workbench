@@ -27,8 +27,10 @@ from pathlib import Path
 from tests.answer_keys import (
     accessions_in,
     answer_key_paths,
+    assert_retirement_is_real,
     cases_in,
     identifying,
+    retirement,
     scored_words,
 )
 
@@ -56,6 +58,14 @@ def test_the_file_says_what_it_is_for_and_what_would_spend_it():
 
 
 def test_no_case_comes_from_a_scored_issuer():
+    """While the set is live, none of its issuers may be scored elsewhere.
+
+    Once retired - its issuers having entered another answer key - the check
+    becomes that the retirement is real, and the set no longer scores changes.
+    """
+    if retirement(HOLDOUT):
+        assert_retirement_is_real(HOLDOUT, "manufacturer")
+        return
     scored = scored_words(excluding=HOLDOUT)
     assert scored, "no answer keys found; this test would pass vacuously"
     for case in _cases():

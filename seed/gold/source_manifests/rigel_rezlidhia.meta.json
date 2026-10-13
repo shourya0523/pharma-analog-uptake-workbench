@@ -1,0 +1,37 @@
+{
+  "drug_name": "Rezlidhia",
+  "generic_name": "olutasidenib",
+  "manufacturer": "Rigel Pharmaceuticals",
+  "benchmark_identity": "rigel_rezlidhia_us_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (hematologic): relapsed or refractory IDH1-mutated AML",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "oral capsule",
+  "route_of_administration": "oral",
+  "moa": "IDH1 inhibitor",
+  "moa_class": "idh1_inhibitor",
+  "first_approval_year": 2022,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2022/215814s000lbl.pdf",
+    "quote": "REZLIDHIA capsules, for oral use ... Initial U.S. Approval: 2022"
+  },
+  "launch_quarter": "2022Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1034842/000110465923029558/tm238702d1_ex99-1.htm",
+    "quote": "Rigel initiated the commercialization of REZLIDHIA in the U.S. ... recognized net product sales of $0.9 million in the fourth quarter of 2022"
+  },
+  "commercial_start_quarter": "2022Q4",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Rigel's own REZLIDHIA net product sales from the quarterly release text (one decimal, USD millions). Rigel's ex-U.S. REZLIDHIA sales are partner sales reported as collaboration revenue (Kissei, Dr. Reddy's) and are not in this line. The 2022Q4-2026Q2 series is contiguous; the sum of 2024 and 2025 quarters matches the full-year REZLIDHIA figures printed in the Q4 releases (23.0 and 31.0).",
+  "search_log": [
+    "Bigdata.com search for Rigel REZLIDHIA quarterly net product sales located the earnings releases; every quarter was then taken from the issuer's own EX-99.1 exhibit for that quarter (data.sec.gov submissions, Item 2.02 8-K filings, 2023-01 to 2026-08).",
+    "Each quarter read from its own release as current (sentence 'REZLIDHIA net product sales of $X million' or 'were $X million'); comparative prior-year figures in the same sentence were checked for consistency (e.g. the Q1 2026 release's comparative for Q1 2025 is 6.1, matching the Q1 2025 release; the Q4 2025 release's comparative for Q4 2024 is 7.4, matching the Q4 2024 release).",
+    "Rigel's product statement-of-operations line 'Product sales, net' includes Gavreto from 2024Q2 and is not a REZLIDHIA line, so it was not used for this product.",
+    "Launch: Q4 2022 first sale stated in the 2023-03-07 release ('initiated the commercialization of REZLIDHIA in the U.S.'); FDA approval letter label reads 'Initial U.S. Approval: 2022' (label 215814s000lbl.pdf); openFDA drugsatfda lists the original NDA 215814 approval date 2022-12-01.",
+    "Fallbacks not needed: the brand is printed quarterly in the releases from its first sale; no exclusion considered."
+  ]
+}

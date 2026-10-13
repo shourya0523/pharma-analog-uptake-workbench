@@ -326,3 +326,8 @@ Herceptin,HER2-directed monoclonal antibody,her2_antibody,Intravenous,1998,Oncol
 Perjeta,HER2 dimerisation inhibitor (HER2-directed monoclonal antibody),her2_antibody,Intravenous,2012,Oncology (solid),curated_reference,distinct_product
 Phesgo,Fixed-dose combination of two HER2-directed monoclonal antibodies (pertuzumab and trastuzumab) with hyaluronidase for subcutaneous administration,her2_antibody,Subcutaneous,2020,Oncology (solid),curated_reference,distinct_product
 Rituxan,Anti-CD20 monoclonal antibody,cd20_antibody,Intravenous,1997,Oncology (hematologic),curated_reference,distinct_product
+Ibsrela,Sodium/hydrogen exchanger 3 (NHE3) inhibitor,nhe3_inhibitor,Oral,2019,Irritable bowel syndrome with constipation (IBS-C),curated_reference,distinct_product
+Lupkynis,Calcineurin inhibitor,calcineurin_inhibitor,Oral,2021,Lupus nephritis,curated_reference,distinct_product
+Rezlidhia,IDH1 inhibitor,idh1_inhibitor,Oral,2022,Oncology (hematologic): relapsed or refractory IDH1-mutated AML,curated_reference,distinct_product
+Tavalisse,oral spleen tyrosine kinase (SYK) inhibitor,syk_inhibitor,Oral,2018,Chronic immune thrombocytopenia (ITP),curated_reference,distinct_product
+Ponvory,Selective sphingosine-1-phosphate receptor 1 (S1P1) modulator,s1p_receptor_modulator,Oral,2021,Neurology (multiple sclerosis),curated_reference,distinct_product
