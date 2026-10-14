@@ -72,6 +72,25 @@ All 20 products in `seed/example_drugs.csv` have one explicit disposition:
   matters for Tracleer, whose CHF-nominal peak year (2010) is not its
   USD-normalized peak year (2011, when the franc's surge made a smaller CHF
   figure worth more).
+- `companion_series.jsonl`: lines an issuer printed for a product that are not
+  its gold series - another territory, a recast definition, a product family -
+  cited like gold rows and never scored. Source:
+  `source_manifests/companions/<stem>.meta.json` plus `<stem>_quarterly.csv`;
+  the meta's `why_separate` says why the line is not the series.
+  A companion whose meta carries a `continuation` block is the line the product
+  went on being reported in after its own series stopped, and its rows have
+  `series_role: continuation`:
+
+      "continuation": {
+        "relation": "broader_line",        # or successor_issuer, renamed_line, narrower_line
+        "line_includes": ["NuVessa"],      # required for broader_line
+        "evidence": "footnote quoted from the first document printing the line"
+      }
+
+  The builder refuses a continuation that starts on or before the series' last
+  quarter, a broader line that does not name what else it holds, or one with
+  no quoted evidence. Refresh Status reports a series carried on this way as
+  continued, with the last quarter the continuation reaches.
 - `series_coverage.jsonl`: exact commercial-start-to-as-of coverage assertions.
 - `peak_sales.jsonl`: independent observed/not-yet-observed peak labels.
 - `excluded_products.jsonl`: evidence-backed benchmark exclusions.

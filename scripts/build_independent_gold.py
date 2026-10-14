@@ -2488,15 +2488,62 @@ def build_researched_products() -> list[dict[str, Any]]:
 
 COMPANION_DIR = SOURCE_DIR / "companions"
 
+# How a continuation relates to the series it carries on from. Each names a way
+# a product's own line can stop while the product goes on being reported:
+#   broader_line       folded into a line that also holds other products, which
+#                      the issuer names (Calderon inside "Calderon and NuVessa")
+#   successor_issuer   the same product reported by a new owner or rights holder,
+#                      possibly in another currency or territory
+#   renamed_line       the same line under a new label, possibly gaining a new
+#                      formulation ("Calderon" becoming "Calderon Group")
+#   narrower_line      the line split, and the part kept is one piece of it
+CONTINUATION_RELATIONS = frozenset({"broader_line", "successor_issuer", "renamed_line", "narrower_line"})
 
-def build_companion_rows() -> list[dict[str, Any]]:
+
+def continuation_problems(meta: dict[str, Any], periods: list[str], series_end: str | None) -> list[str]:
+    """Why a companion meta's ``continuation`` block cannot stand, if it cannot.
+
+    A continuation picks up where the product's gold series stops, so it must
+    start after that series' last quarter; a line overlapping the series is an
+    alternative reading of it, which a plain companion already holds. A broader
+    line must say what else it holds, because that is what keeps anyone from
+    reading its figures as the product's own.
+    """
+    block = meta.get("continuation")
+    if block is None:
+        return []
+    problems = []
+    if block.get("relation") not in CONTINUATION_RELATIONS:
+        problems.append(f"relation must be one of {sorted(CONTINUATION_RELATIONS)}")
+    if block.get("relation") == "broader_line" and not block.get("line_includes"):
+        problems.append("a broader_line continuation must list line_includes, the other products the line holds")
+    if not block.get("evidence"):
+        problems.append("a continuation must quote the document that shows the relation")
+    if series_end is None:
+        problems.append(f"{meta['drug_name']} has no quarterly gold series to continue")
+    elif periods and min(periods) <= series_end:
+        problems.append(f"starts {min(periods)}, not after the series' last quarter {series_end}")
+    return problems
+
+
+def build_companion_rows(quarterly: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Lines a product's issuer printed that are not the product's gold series.
 
     A different territory, a recast definition, a product family, or a piece
     too far from the series to join: each is kept, as printed and with its
     own citations, but under its own identity and never scored. Its meta says
     why it is not part of the series.
+
+    A companion whose meta carries a ``continuation`` block is the line the
+    product went on being reported in after its own series stopped. Its rows
+    are ``series_role`` "continuation" and say how the line relates to the
+    product; they are still never scored, because none of the relations makes
+    the figure the product's own.
     """
+    series_end: dict[str, str] = {}
+    for row in quarterly:
+        if row["period"] > series_end.get(row["drug_name"], ""):
+            series_end[row["drug_name"]] = row["period"]
     rows: list[dict[str, Any]] = []
     for path in sorted(COMPANION_DIR.glob("*.meta.json")):
         meta = json.loads(path.read_text())
@@ -2504,8 +2551,13 @@ def build_companion_rows() -> list[dict[str, Any]]:
             raise ValueError(f"{path.name}: companion of {meta['drug_name']}, which has no gold series")
         if not meta.get("why_separate"):
             raise ValueError(f"{path.name}: a companion line must say why it is not the series")
-        manifest = COMPANION_DIR / f"{path.name.removesuffix('.meta.json')}_quarterly.csv"
-        for source in read_csv(manifest):
+        sources = read_csv(COMPANION_DIR / f"{path.name.removesuffix('.meta.json')}_quarterly.csv")
+        problems = continuation_problems(
+            meta, [source["period"] for source in sources], series_end.get(meta["drug_name"]))
+        if problems:
+            raise ValueError(f"{path.name}: " + "; ".join(problems))
+        continuation = meta.get("continuation")
+        for source in sources:
             reported = source.get("source_value_reported")
             row = revenue_row(
                 drug_name=meta["drug_name"],
@@ -2528,9 +2580,15 @@ def build_companion_rows() -> list[dict[str, Any]]:
                 line_label=meta["line_label"],
                 revenue_scope=meta["revenue_scope"],
                 geography=meta["geography"],
-                series_role="companion",
+                series_role="continuation" if continuation else "companion",
                 why_separate=meta["why_separate"],
             )
+            if continuation:
+                row.update(
+                    continuation_relation=continuation["relation"],
+                    continuation_line_includes=continuation.get("line_includes") or [],
+                    continuation_evidence=continuation["evidence"],
+                )
             rows.append(row)
     return rows
 
@@ -3316,7 +3374,7 @@ def main() -> int:
 
     write_jsonl(out_dir / "quarterly_revenue.jsonl", quarterly)
     write_jsonl(out_dir / "annual_revenue.jsonl", annual)
-    write_jsonl(out_dir / "companion_series.jsonl", build_companion_rows())
+    write_jsonl(out_dir / "companion_series.jsonl", build_companion_rows(quarterly))
     write_jsonl(out_dir / "series_coverage.jsonl", coverage)
     write_jsonl(out_dir / "peak_sales.jsonl", peaks)
     write_jsonl(out_dir / "excluded_products.jsonl", exclusions)

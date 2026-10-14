@@ -203,8 +203,10 @@ write_sheet(
 
 for row in companions:
     row["sources"] = None
+    row["continuation_line_includes"] = ", ".join(row.get("continuation_line_includes") or [])
 CS_COLS = [
-    "drug_name", "line_label", "manufacturer", "period", "benchmark_identity", "revenue_scope",
+    "drug_name", "line_label", "manufacturer", "period", "benchmark_identity", "series_role",
+    "continuation_relation", "continuation_line_includes", "continuation_evidence", "revenue_scope",
     "geography", "why_separate", "value_normalized_usd_millions", "currency", "value_reported",
     "source_value_reported", "source_unit", "derivation", "source_type", "source_url",
     "source_quote", "gold_notes", "gold_id",
@@ -213,14 +215,19 @@ write_sheet(
     wb, "Companion Series", CS_COLS, companions,
     note="Lines an issuer printed for a product that are not its gold series: another territory, "
          "a recast definition, a product family, or a piece too far from the series to join. "
-         "Each is cited like any gold row but kept apart and never scored; why_separate says why.",
+         "Each is cited like any gold row but kept apart and never scored; why_separate says why. "
+         "Rows with series_role 'continuation' are the line the product went on being reported in "
+         "after its own series stopped: a broader line (continuation_line_includes names what else "
+         "it holds), a successor issuer, a renamed line or a narrower one.",
     widths={"drug_name": 16, "line_label": 22, "manufacturer": 20, "benchmark_identity": 30,
+            "series_role": 13, "continuation_relation": 18, "continuation_line_includes": 30,
+            "continuation_evidence": 50,
             "revenue_scope": 26, "geography": 16, "why_separate": 60,
             "value_normalized_usd_millions": 14, "derivation": 30, "source_url": 52,
             "source_quote": 70, "gold_notes": 40, "gold_id": 34},
     formats={"value_normalized_usd_millions": MONEY, "value_reported": MONEY,
              "source_value_reported": '#,##0.0##'},
-    wrap=("why_separate", "source_quote", "gold_notes"),
+    wrap=("why_separate", "source_quote", "gold_notes", "continuation_evidence"),
 )
 
 P_COLS = [
@@ -289,6 +296,11 @@ for row in quarterly:
     observed_periods[row["drug_name"]].add(row["period"])
     series_facts[row["drug_name"]] = (row["benchmark_identity"], row.get("manufacturer"))
 
+continued = defaultdict(list)
+for row in companions:
+    if row.get("series_role") == "continuation":
+        continued[row["drug_name"]].append(row)
+
 refresh = []
 for drug_name, periods in observed_periods.items():
     seen = coverage_by_name.get(drug_name)
@@ -303,6 +315,11 @@ for drug_name, periods in observed_periods.items():
         outlook = "unknown - series has no coverage row"
     else:
         outlook = REFRESH_OUTLOOK.get(basis, f"unstated basis: {basis}")
+    carried = continued.get(drug_name, [])
+    continued_to = max((row["period"] for row in carried), default=None)
+    if carried and end_quarter != latest_quarter:
+        relations = sorted({row["continuation_relation"] for row in carried})
+        outlook = f"continued to {continued_to} on a {' / '.join(relations)} line (Companion Series)"
     identity, manufacturer = series_facts[drug_name]
     refresh.append({
         "drug_name": drug_name,
@@ -317,11 +334,15 @@ for drug_name, periods in observed_periods.items():
         "series_end_basis": basis,
         "in_series_coverage": seen is not None,
         "series_end_reason": (seen or {}).get("series_end_reason"),
+        "continued_to_quarter": continued_to,
+        "continuation_relation": ", ".join(sorted({row["continuation_relation"] for row in carried})) or None,
     })
 refresh.sort(key=lambda item: (-item["quarters_behind_latest"], item["drug_name"]))
 
 behind = [item for item in refresh if item["quarters_behind_latest"] > 0]
-extendable = [item for item in behind if item["series_end_basis"] == "sourcing_boundary"]
+extendable = [item for item in behind if item["series_end_basis"] == "sourcing_boundary"
+              and not item["continued_to_quarter"]]
+carried_on = [item for item in behind if item["continued_to_quarter"]]
 uncovered = [item for item in refresh if not item["in_series_coverage"]]
 write_sheet(
     wb, "Refresh Status", list(refresh[0].keys()), refresh,
@@ -329,13 +350,16 @@ write_sheet(
          f"anywhere in gold is {latest_quarter}; {len(behind)} of {len(refresh)} series end "
          f"before it. Of those, {len(extendable)} are marked sourcing_boundary, meaning the "
          f"issuer kept publishing and this dataset stopped - those are the ones a refresh can "
-         f"move. {len(uncovered)} series have no Series Coverage row at all, so no end quarter "
+         f"move. {len(carried_on)} of the series that end early are carried on by a "
+         f"continuation line in Companion Series. {len(uncovered)} series have no Series "
+         f"Coverage row at all, so no end quarter "
          f"or reason was ever stated for them. Sorted by how far behind each series sits.",
     widths={"drug_name": 20, "benchmark_identity": 34, "manufacturer": 20,
             "first_reported_quarter": 14, "last_reported_quarter": 14,
             "series_end_quarter": 14, "latest_quarter_in_gold": 14,
             "quarters_behind_latest": 13, "refresh_outlook": 40,
-            "series_end_basis": 24, "in_series_coverage": 13, "series_end_reason": 60},
+            "series_end_basis": 24, "in_series_coverage": 13, "series_end_reason": 60,
+            "continued_to_quarter": 14, "continuation_relation": 18},
     formats={"quarters_behind_latest": "0"},
     wrap=("refresh_outlook", "series_end_reason"),
 )
