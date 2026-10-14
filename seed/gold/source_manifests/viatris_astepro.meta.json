@@ -1,0 +1,36 @@
+{
+  "drug_name": "Astepro",
+  "generic_name": "azelastine hydrochloride nasal spray",
+  "manufacturer": "Meda AB",
+  "benchmark_identity": "meda_astepro_us_reported",
+  "therapeutic_area": "Respiratory / Allergy",
+  "indication_area": "Allergic and non-allergic rhinitis",
+  "revenue_scope": "Astepro brand net sales as printed by Meda AB, in SEK. Meda's prose labels the figure 'US sales' from 2008Q4 to 2010Q4; from 2011Q1 the figure is the Astepro row of Meda's group 'Sales trends for major products' table, which carries no geography label, and it equals the earlier US prose figure wherever the two overlap.",
+  "geography": "United States",
+  "formulation": "nasal spray, 0.1% and 0.15% azelastine hydrochloride (brand total)",
+  "route_of_administration": "Intranasal",
+  "moa": "Histamine H1-receptor antagonist (azelastine hydrochloride)",
+  "moa_class": "h1_antihistamine_nasal",
+  "first_approval_year": 2008,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=022203",
+    "quote": "ASTEPRO AZELASTINE HYDROCHLORIDE 0.137MG/SPRAY SPRAY, METERED;NASAL ... 10/15/2008 ORIG-1 Approval"
+  },
+  "launch_quarter": null,
+  "launch_evidence": null,
+  "commercial_start_quarter": "2008Q4",
+  "series_start_reason": "2008Q4 is the earliest quarter in which Meda prints an Astepro sales figure: the Q1 2009 interim report (published 2009-05-05) says Astepro sales to wholesalers started in Q4 at SEK 45 million, and the 2009 year-end report prints the prior-year figure 45. Meda's own year-end 2008 report prints the same quarter as USD 7 million (not SEK), so the SEK figure from the later reports is used. The launch to patients is dated in the year-end 2008 report as mid-January 2009 (distributors began ordering in December 2008), which is later than the first row, so launch_quarter is left null.",
+  "series_end_quarter": "2014Q2",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "2014Q2 is the last quarter in which a Meda document prints an Astepro figure. The Interim Report January-September 2014 table of the 20 best-selling products ends at 128 for January-September and lists no Astepro row; the Year-end Report 2014, the Q1 2015, H1 2015 and year-end 2015 reports print no Astepro row either and mention Astepro only as a declining product under generic competition. No later Meda, Mylan or Viatris document read prints an Astepro figure.",
+  "notes": "Currency is SEK (Meda's reporting currency); value_reported is SEK millions and is not converted. Each quarter is read from the report for that quarter. Calendar-year sums agree with printed annual figures: 2009 46+123+75+172=416 (year-end 2009 report prints 416); 2010 97+128+96+133=454 (year-end 2010 prints 454); 2011 120+88+96+138=442 (year-end 2011 prints 442); 2012 134+113+91+108=446 (year-end 2012 prints 446); 2013 93+79+74+42=288 (year-end 2013 prints 288). The brand total includes both formulations: 0.1% (US launch from mid-January 2009) and 0.15% (once-daily; FDA approval 2009-08-31, launch started October 2009 per the 2009 year-end report). Unresolved: Meda's reports say Astepro was approved in Europe in 2012 with a launch expected in spring 2013, but no report read states European Astepro sales, and the 2014 reports describe Astepro's decline only in terms of US generic competition; the unlabelled table rows from 2011 onward are therefore treated as US sales but this is inferred from continuity with the labelled figures, not stated by a table heading. The Viatris and Mylan documents read (10-K, 10-Q and earnings releases 2016-2026) print no Astepro figure, so the series is Meda's alone and no issuer join is needed. The Viatris 4Q/10-K product tables do not list Astepro.",
+  "search_log": [
+    "Viatris (CIK 0001792044) and Mylan N.V. (CIK 0001623613) 10-K, 10-Q and 8-K Exhibit 99 releases 2016-2026, converted to text and searched for the brand name: no Astepro figure or table row in any of them (the earlier attempt had only found Meda prose figures and stopped).",
+    "Meda AB (publ) press-release index on news.cision.com/meda, paged with the pageIx parameter (the earlier attempt could not paginate); every interim, year-end and half-year report from 2008 to 2015 was identified from it and the PDF attachments downloaded from Cision.",
+    "Year-end report 2008 (news.cision.com c410376): Astepro Q4 2008 sales given as USD 7 million; Interim report January-March 2009 and Year-end 2009 give SEK 45 million for the same quarter.",
+    "2009Q1-2010Q4: Astepro US sales read from the key-product prose of each interim and year-end report (c424274, c441719, c456099, c472734, c488512, c505318, c522805, c546724); each quarter's own paragraph, with the year-to-date paragraph used only as a cross-check (H1 2009: 169 = 46+123; year 2009: 416; year 2010: 454).",
+    "2011Q1-2014Q2: Astepro row of the 'Sales trends for major products' / '20 largest (best-selling) products' table in each report (c568932, c9148269, c9181673, c9221705, c9257393, c9289007, c9332458, c9372296, c9411124, c9447458, c9494755, c9539055, c9580367, c9627199), current-quarter column.",
+    "After 2014Q2: Interim Report January-September 2014 (c9675215) and Year-end Report 2014 (c9722407) product tables checked line by line: no Astepro row. Q1 2015 (c9769124), H1 2015 (c9807366) and year-end 2015 (c9912097) tables also have no Astepro row.",
+    "Bigdata.com had no Meda coverage; web search used only to confirm the existence of report titles. globenewswire.com copies of the same reports were not used because the verifier host blocks them."
+  ]
+}

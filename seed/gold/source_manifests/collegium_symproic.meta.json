@@ -1,0 +1,51 @@
+{
+  "drug_name": "Symproic",
+  "generic_name": "naldemedine",
+  "therapeutic_area": "GI / Liver / Women's Health / Urology",
+  "indication_area": "Opioid-induced constipation (adults with chronic non-cancer pain)",
+  "formulation": "oral tablet",
+  "route_of_administration": "oral",
+  "moa": "Peripherally acting mu-opioid receptor antagonist",
+  "moa_class": "peripherally_acting_mu_opioid_antagonist",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2017/208854Orig1s000ltr.pdf",
+    "quote": "NDA 208854 NDA APPROVAL Shionogi Inc. ... Symproic (naldemedine), 0.2 mg oral tablets ... for the treatment of opioid-induced constipation (OIC) in adult patients with chronic non-cancer pain ... It is approved, effective on the date of this letter ... JULIE G BEITZ 03/23/2017"
+  },
+  "manufacturer": "Collegium Pharmaceutical",
+  "benchmark_identity": "collegium_symproic_us_reported",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "launch_quarter": null,
+  "commercial_start_quarter": "2019Q2",
+  "series_start_reason": "BDSI licensed Symproic from Shionogi for the U.S. (including Puerto Rico) in April 2019 and 2019Q2 was 'the initial quarter of commercialization following the acquisition of the product' (Q2 2019 release); BDSI's 10-K lists 'BDSI markets in U.S.; licensed from Shionogi in April 2019'. Earlier U.S. sales (Purdue Pharma co-commercialised from 2017 until Shionogi regained full U.S. rights in July 2018, then Shionogi Inc.) are not printed as a Symproic figure by any public issuer: Shionogi's own SYMPROIC row is a non-consolidated (Japan domestic) prescription-drug line, and Purdue is private.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "U.S. net sales of Symproic (naldemedine), one scope across two filers: BDSI's 'Symproic' row of the net sales by product table in each Form 10-Q (2019Q2-2021Q3), the fourth-quarter release sentence for 2019Q4 and 2020Q4 (one decimal in millions; the 10-K year figures 8,061 and 14,709 less the nine months give 2,713 and 3,663, consistent), and 10-K year 16,409 less nine months 12,562 for 2021Q4; then Collegium's revenue-by-product table in the Form 10-Q (2022Q2-2026Q2), with fourth quarters derived (10-K year less Q3 10-Q nine months: 12,267-7,740; 16,495-11,409; 15,104-10,850; 14,452-10,562) because Collegium prints no quarterly product table in the 10-K or the 8-K releases. Both issuers license Symproic for the U.S. (including Puerto Rico) from Shionogi. Label change: the FY2025 10-K prints the year row as 'Symproic and other' (14,452, 15,104, 16,495) where the FY2024 10-K printed 'Symproic' (15,104, 16,495, 12,267); the 2024 and 2023 values are identical, so 'other' was nil in those years, but the 10-K does not say what 'other' contains in 2025, so 2025Q4 (3,890, derived against the Q3 2025 10-Q 'Symproic' nine-month figure 10,562) carries that unverified residual. Launch quarter not stated by a BDSI or Collegium document for the U.S. brand launch (Shionogi's partner launched the product before BDSI's license); left null.",
+  "search_log": [
+    "EDGAR submissions CIK 1103021 (BDSI): read every 8-K Item 2.02 exhibit 2019-05 to 2022-01 and every Form 10-Q/10-K 2019-2021; Symproic is not in any earnings-release table (text only), so the 10-Q tables are used.",
+    "Q3 2019 release (2019-11-12) prints 'Symproic Net Sales in the third quarter were $2.2 million'; the Form 10-Q table (2,172 thousand) is cited for precision. 2019 total 8,061 = Q2 3,175 + Q3 2,172 + Q4 2,713, so Q1 2019 (before the April 2019 license) was nil. Q4 2019 and Q4 2020 come from the Q4 release sentences.",
+    "No Q4 2021 earnings release was filed as an 8-K Item 2.02 (only the 2022-01-20 pre-announcement without a Symproic dollar figure); 2021Q4 derived from the 10-K.",
+    "Pre-2019 U.S. sales (Shionogi / Purdue): Bigdata.com search found only the 2018-07-09 news that Shionogi regained full U.S. rights from Purdue Pharma; no sales figure. Shionogi's own documents were read: the FY2017 supplement (https://www.shionogi.com/content/dam/shionogi/global/investors/pdf/sup18_05_e.pdf, p.4) lists 'SYMPROIC' (0.6 billion yen) under 'Prescription drugs', and the Q3 FY2018 financial results (https://www.shionogi.com/content/dam/shionogi/global/investors/pdf/con19_02_e.pdf, p.10-11) lists SYMPROIC under 'Prescription drugs' with the note 'Sales of prescription drugs are shown on non-consolidated basis' and a separate 'Shionogi Inc.' line for all U.S. products. That SYMPROIC row is Shionogi & Co.'s non-consolidated (Japan domestic) sales in billions of yen, not U.S. sales, and Shionogi Inc. prints no Symproic line. Purdue Pharma is private. No public document prints U.S. Symproic sales before 2019Q2.",
+    "Collegium EDGAR CIK 1267565: read the product revenue tables of every Form 10-Q and 10-K from 2022-05 to 2026-08; the earnings-release exhibits print the product table only for the headline brands (no Symproic row), checked 2022-05 to 2026-08 8-Ks.",
+    "Form 10-Q of Q1 2022: Symproic 300 thousand for the part-quarter after March 22, 2022 (not used); BDSI published no Q1 2022 report.",
+    "FY2025 10-K (coll-20251231.htm) product revenue table: 'Symproic and other' 14,452 | 15,104 | 16,495; FY2024 10-K (coll-20241231x10k.htm): 'Symproic' 15,104 | 16,495 | 12,267.",
+    "Q2 2026 10-Q row 'Symproic' 3,020 for the three months and 7,213 for six months (2026Q1 4,194)."
+  ],
+  "joined_issuers": [
+    {
+      "issuer": "BioDelivery Sciences International",
+      "first_quarter": "2019Q2",
+      "last_quarter": "2021Q4"
+    },
+    {
+      "issuer": "Collegium Pharmaceutical",
+      "first_quarter": "2022Q2",
+      "last_quarter": "2026Q2"
+    }
+  ],
+  "unreported_quarters": {
+    "2022Q1": "Ownership change BioDelivery Sciences International to Collegium Pharmaceutical; no full-quarter figure is published. BDSI filed its FY2021 10-K on 2022-03-09 and no 2022 quarterly report; Collegium acquired BDSI on March 22, 2022 and its Q1 2022 Form 10-Q prints only 300 thousand of Symproic for the part-quarter after the acquisition."
+  }
+}

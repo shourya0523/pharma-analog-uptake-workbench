@@ -1,0 +1,38 @@
+{
+  "drug_name": "Amitiza",
+  "generic_name": "lubiprostone",
+  "manufacturer": "Takeda",
+  "benchmark_identity": "takeda_amitiza_us_reported",
+  "therapeutic_area": "GI / Liver / Women's Health / Urology",
+  "indication_area": "Gastroenterology (chronic idiopathic constipation, IBS-C, opioid-induced constipation)",
+  "revenue_scope": "Amitiza net sales as Takeda prints them: the 'United States' / 'U.S.' region column of the product-sales tables from FY2015, and for FY2011-FY2014 the Amitiza product line labelled 'U.S.' in the FY2011-FY2013 statements and communications and printed in the FY2013-FY2014 statements and data books under 'Global major products' sales'. Takeda's FY2015 data book splits FY2014 Amitiza into United States 31.9, Europe and Canada 0.0 and Total 32.0, so the FY2011-FY2014 product line exceeds the U.S. column by at most 0.1 bn JPY. From FY2013 the sales amount includes royalty income, and from FY2014 royalty and service income, per the table notes; from FY2019 Takeda states the same.",
+  "geography": "United States (FY2011-FY2014 rows are the Amitiza product line, which Takeda's FY2015 data book shows as U.S. 31.9 of a 32.0 total for FY2014)",
+  "formulation": "soft gelatin capsules",
+  "route_of_administration": "Oral",
+  "moa": "chloride channel (ClC-2) activator",
+  "moa_class": "chloride_channel_activator",
+  "first_approval_year": 2006,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2006/021908s000ltr.pdf",
+    "quote": "This new drug application provides for the use of Amitiza (Lubiprostone Capsules) for the treatment of chronic idiopathic constipation in the adult population. ... It is approved, effective on the date of this letter (NDA 21-908, signed 1/31/2006)."
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2011Q2",
+  "series_start_reason": "2011Q2 (Takeda fiscal Q1 FY2011) is the earliest quarter the published Takeda documents support. Takeda's FY2012 documents print Amitiza for FY2008 onward as annual figures only, plus the April-June, first-half and April-December 2011 figures, so quarters can be differenced from FY2011 Q1; FY2008-FY2010 are annual figures with no interim cumulative figure, and no Takeda document for fiscal years before FY2012 is published on takeda.com. 2011Q2 comes from the prior-year column of the FY2012 Q1 statements; later quarters are read from the quarter's own statements where Takeda prints a three-month column (Q1 and Q3) and are differenced from cumulative figures otherwise (Q2 from first half less Q1, Q4 from full year less nine months). 2015Q2 onward are the original rows, unchanged.",
+  "series_end_quarter": "2022Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Takeda's quarterly financial report for FY2021 Q4 (April 2021-March 2022; qr2021_q4_qfr_en.pdf) prints AMITIZA (U.S. 0.5 billion JPY in the quarter), whereas the FY2022 Q1 report (qr2022_q1_qfr_en.pdf) and every later quarterly report contain no AMITIZA revenue line (pdftotext finds zero mentions of Amitiza in each, except the FY2026 Q1 report, qr2026_q1_qfr_en.pdf, which mentions AMITIZA only in notes on a provision for the AMITIZA antitrust litigation).",
+  "notes": "Takeda commercializes Amitiza in the U.S. under the Sucampo (now Mallinckrodt) license; this series is Takeda's own U.S. sales. Sucampo's and, after its acquisition, Mallinckrodt's 10-Q lines are royalty revenue on Takeda's sales ('Net sales of Amitiza ... decreased ... driven primarily by a decline in royalties associated with decreased sales to Takeda Pharmaceuticals') and are a different scope, not used. U.S. region column in JPY billions; the FY2015-FY2018 Q3 data books also print a US$ quarterly table (Amitiza FY15 Q1-Q4 77, 79, 81, 70 million USD), not used so the series keeps one currency. FY2018 Q4 (2019Q1) is derived as full-year U.S. less the first three quarters, and FY2019 Q2 (2019Q3) as first half less Q1. Full-year checks: FY2015 quarters sum to 37.1 (printed 37.2); FY2016 sum 33.8 (printed 33.7); FY2017 33.7 (printed 33.7); FY2018 sum 32.9 (printed 32.9); FY2019 sum 27.8 (printed U.S. 27.8); FY2020 sum 20.8 (printed 20.8); FY2021 sum 5.8 (printed 5.8). Generic competition began in 2021 and sales fell from FY2020 Q4. No launch quarter is cited. Rows 2011Q2-2015Q1 (FY2011-FY2014) were added: FY2011 quarters sum to 18.7 (printed 18.7); FY2012 22.3 (printed 22.3); FY2013 25.6 (printed 25.7); FY2014 31.9 (printed 32.0), the last two differing by rounding of 0.1 bn JPY inputs. Second-quarter rows are first half less Q1; for FY2013 and FY2014 the three-term difference (nine months less Q1 less Q3) is 0.1 higher (6.0 and 7.4), which is rounding. Takeda labels these tables 'U.S.' in FY2011-FY2013 communications and statements and 'Global' in FY2013-FY2014 statements and data books; the FY2012 Q2 data book heads its table 'Sales of products outside Japan'. Takeda's regional split of Amitiza exists only from the FY2015 documents (FY2014 comparatives); the non-U.S. part there is 0.0-0.1 bn JPY.",
+  "search_log": [
+    "Same Takeda document set as Dexilant: takeda.com quarterly-results pages FY2012-FY2020 (all PDFs) and the FY2020-FY2026 quarterly financial reports, read with pdftotext/pdfplumber.",
+    "Amitiza US rows first appear as quarterly values in the FY2016 Q1 data book; FY2015 data books print annual and half-year U.S. values only.",
+    "FY2018 Q4 data book contains no Amitiza row; FY2018 Q4 derived from qr2018_q4_f_en.pdf (U.S. 32.9) and the Q3 data book (nine-month U.S. 25.8).",
+    "FY2022 Q1 report onward (qr2022_q1_qfr_en.pdf through qr2026_q1_qfr_en.pdf, 17 reports): no AMITIZA revenue line (FY2026 Q1 mentions AMITIZA only in notes on the antitrust-litigation provision), so Takeda stopped reporting the line after FY2021 Q4.",
+    "Mallinckrodt Form 10-Q (Q1 2024, via Bigdata.com) prints 'Net sales of Amitiza' of $19.4 million for the quarter; this is royalty revenue from Takeda's sales, a different scope; Mallinckrodt and Sucampo filings were not used.",
+    "Reopened to extend the start: read the FY2012 Q1/Q2/Q3/full-year statements, data books and communications (qr2012_q1_f_en-3, qr2012_q2_d_en, qr2012_q3_c_en, qr2012_q3_f_en, qr2012_full_d_en), the FY2013 Q1 communication, Q2 data book, Q3 statements and full-year data book, and the FY2014 Q1/Q3 statements, Q2 and full-year data books, all pdftotext/pdfplumber, for Amitiza rows.",
+    "FY2012 Q2 data book (qr2012_q2_d_en.pdf) prints Amitiza FY08 21.0, FY09 19.8, FY10 18.6, FY11 18.7, first half FY2011 9.5, FY2012 10.7 under 'Sales of products outside Japan'; FY2012 Q3 communication prints Amitiza U.S. FY2009 19.8, FY2010 18.6, FY2011 18.7, April-December FY2011 13.9, FY2012 16.5. No document gives interim figures for FY2008-FY2010, so 2011Q2 is the earliest quarter.",
+    "FY2012 Q2 quarterly statements (qr2012_q2_f_en.pdf), FY2012 full-year statements (qr2012_full_f_en.pdf) and the FY2013 Q2 and full-year statements carry no Amitiza row in their product tables (pdftotext finds no Amitiza row in those tables). Q2 is therefore differenced from the data books' first-half figures.",
+    "takeda.com fiscal-year pages for FY2008-FY2011 return an error page (no documents listed), so the FY2011 Q1-Q4 documents could not be read as current; FY2011 quarters use prior-year columns (Q1, Q3) and differencing (Q2, Q4).",
+    "Scope check: FY2015 data book (data-book.pdf) prints Amitiza FY2014 United States 31.9, Europe and Canada 0.0, Total 32.0, and the FY2015 Q3 presentation prints nine months FY2014 United States 22.8, Total 22.9, so the pre-FY2015 product line differs from the U.S. column by 0.0-0.1 bn JPY."
+  ]
+}

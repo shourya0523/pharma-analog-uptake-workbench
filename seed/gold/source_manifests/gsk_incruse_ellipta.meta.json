@@ -1,0 +1,34 @@
+{
+  "drug_name": "Incruse Ellipta",
+  "generic_name": "umeclidinium",
+  "therapeutic_area": "Respiratory / Allergy",
+  "indication_area": "Respiratory (COPD)",
+  "formulation": "inhalation powder (Ellipta dry powder inhaler)",
+  "route_of_administration": "inhaled",
+  "moa": "Long-acting muscarinic antagonist (LAMA)",
+  "moa_class": "lama",
+  "first_approval_year": 2014,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=205382",
+    "quote": "Approval Date(s) and History, Letters, Labels, Reviews for NDA 205382 ... 04/30/2014 ORIG-1 Approval Type 5 - New Formulation or New Manufacturer; INCRUSE ELLIPTA"
+  },
+  "manufacturer": "GSK plc",
+  "benchmark_identity": "gsk_incruse_ellipta_worldwide_reported",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "launch_quarter": null,
+  "commercial_start_quarter": "2015Q1",
+  "series_start_reason": "The Q1 2015 release (6-K 2015-05-06) is the first GSK results release that prints an Incruse Ellipta sales row; the Q4 2014 release (6-K 2015-02-04) and Q3 2014 release (6-K 2014-10-22) print none.",
+  "series_end_quarter": "2023Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "From the Q1 2024 release (6-K 2024-05-01) GSK's respiratory table lists Anoro, Flixotide/Flovent, Relvar/Breo, Seretide/Advair, Trelegy, Ventolin and 'Other Respiratory' only; Incruse Ellipta is no longer a separate row (folded into Other Respiratory). The Q4 2023 release (6-K 2024-01-31) is the last that prints it.",
+  "notes": "Worldwide GSK turnover for Incruse Ellipta in GBP millions. 2015Q1-2015Q4 come from the 'Sales from New Pharmaceutical and Vaccine products' table (Q1 2015 shows one period, Q2/Q3 the quarter then year-to-date, Q4 the full year then the quarter); from 2016Q1 the product is a row of the regional 'Pharmaceuticals turnover' table (Total column used). FDA approval 2014-04-30; Q1 2014-Q4 2014 releases print no Incruse sales row (checked 6-K 2014-10-22 and 2015-02-04), and no cited document dates a launch quarter, so launch_quarter is null. The first-approval FDA record lists the Type 5 (new formulation) approval; umeclidinium monotherapy was first approved as Incruse.",
+  "search_log": [
+    "fetched data.sec.gov submissions CIK0001131399 (GSK plc) recent + history pages; selected 6-K / 6-K/A filings whose primaryDocDescription is a quarterly/half-year/final results announcement (plus 2010-2012 6-Ks matching RESULT/TURNOVER/FORM 6-K/QUARTER/HALF); downloaded each and converted tables to text",
+    "per release: product row located by exact row label in the 'Pharmaceuticals turnover' regional table (Total column = worldwide) or, where the product is absent from it, in the 'Sales from New Pharmaceutical and Vaccine products' table; Q1 taken from the Q1 release, Q2/Q3 from the 3-month column of the Q2/Q3 release, Q4 from the 3-month column of the Q4/full-year release (the same release prints the full-year row)",
+    "cross-check: Q1+Q2+Q3+Q4 equals the full-year row printed in the Q4 release for every complete year, and Q1+Q2 / +Q3 equal the printed six-/nine-month rows",
+    "FDA approval: fetched the Drugs@FDA overview page for the NDA",
+    "2024-2026 releases searched (6-K 2024-05-01, 2024-07-31, 2024-10-30, 2025-02-05 and later): no 'Incruse' row; respiratory table shows 'Other Respiratory' instead",
+    "Q1 2015 release is first with an Incruse row; pre-2015 releases (2014-10-22, 2015-02-04) contain no row"
+  ]
+}

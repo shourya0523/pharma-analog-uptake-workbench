@@ -1,0 +1,41 @@
+{
+  "drug_name": "Exkivity",
+  "generic_name": "mobocertinib",
+  "manufacturer": "Takeda",
+  "benchmark_identity": "takeda_exkivity_us_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "EGFR exon 20 insertion-positive non-small cell lung cancer",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "oral capsule",
+  "route_of_administration": "oral",
+  "moa": "EGFR exon 20 insertion-targeted tyrosine kinase inhibitor",
+  "moa_class": "egfr_tki",
+  "first_approval_year": 2021,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2021/215310Orig1s000ltr.pdf",
+    "quote": "This NDA provides for the use of EXKIVITY (mobocertinib) capsules for treatment of adult patients with locally advanced or metastatic non-small cell lung cancer (NSCLC) with EGFR exon 20 insertion mutations, as detected by an FDA-approved test, whose disease has progressed on or after platinum-based chemotherapy. (FDA approval letter, NDA 215310)"
+  },
+  "launch_quarter": "2021Q3",
+  "launch_evidence": {
+    "url": "https://assets-dam.takeda.com/raw/upload/v1662727330/legacy-dotcom/siteassets/system/investors/report/quarterlyannouncements/fy2021/qr2021_q3_qfr_en_ver1.pdf",
+    "quote": "LIVTENCITY (for post-transplant cytomegalovirus (\u201cCMV\u201d) infection/disease) was launched in the U.S. in December 2021, following the launch of EXKIVITY (for non-small cell lung cancer) in the U.S. in September 2021."
+  },
+  "commercial_start_quarter": "2021Q3",
+  "series_start_reason": null,
+  "series_end_quarter": "2024Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Takeda decided to withdraw Exkivity globally (FY2023 Q3 quarterly financial report: 'Takeda intends to similarly initiate voluntary withdrawal globally'), and its FY2024 Q1 quarterly financial report lists no Exkivity row in the Oncology product table (rows ADCETRIS, LEUPLIN/ENANTONE, NINLARO, ICLUSIG, ALUNBRIG, VECTIBIX, ZEJULA, FRUZAQLA, CABOMETYX, Others); the last quarter Takeda prints is fiscal Q4 FY2023 (January-March 2024).",
+  "notes": "Scope is the U.S. column of Takeda's Exkivity row (first regional column, headed 'US', of the three-month product sales table), JPY billions to one decimal at actual exchange rates. U.S. was chosen over the total because the total includes ex-U.S. amounts that turn negative (total (0.1) against U.S. 0.8 in FY2023 Q3) once the global withdrawal began. Fiscal Q2-Q4 FY2021 (2021Q3-2022Q1) are read from the prior-year columns of the FY2022 reports because Takeda's FY2021 reports print no quarterly Exkivity line; those columns are totals, and the FY2022 U.S. values with their U.S. growth rates imply the same figures (0.7 at +206.1% implies 0.2; 0.8 at +284.2% implies 0.2; 1.0 at +85.3% implies 0.5). FY2021 quarters add to 0.9 against a printed full-year 1.0 (rounding). The FY2022 U.S. quarters (2022Q2-2023Q1) add to the printed U.S. full-year 3.2 and the FY2023 U.S. quarters (2023Q2-2024Q1) to the printed 2.7.",
+  "search_log": [
+    "reused the takeda.com quarterly-results link list (all PDF/XLSX links on the 2014-2025 and current pages, plus the 2012 and 2013 pages fetched here) and the PDFs downloaded earlier into the sibling staging cache; every cited page was re-read with pdfplumber (the verifier's extractor) so quoted figures match its text layer",
+    "Takeda prints the brand on its own line in the product sales analysis of its own quarterly documents: data books FY2017-FY2019, quarterly financial reports FY2020-FY2026; no fuller supplement or other issuer was needed for the quarters cited",
+    "each quarter was read from the quarter's own document as current unless the row's derivation says otherwise (prior-year column, retrospective table or derived)",
+    "FY2025 Q4 exists in two versions on takeda.com (2026-05-13 and the version amended 2026-06-05 for a subsequent event); the amended version is cited, and the product-line figures are identical in both",
+    "Bigdata.com was not used: the issuer's own IR documents were located directly from the takeda.com pages",
+    "EDGAR (Takeda CIK 0001395064) was not searched: the takeda.com quarterly documents were sufficient for every quarter",
+    "FY2021 Q2-Q4 reports (qr2021_q2/q3/q4) searched for an Exkivity sales line: only prose, a pipeline row and (Q4) a one-line new-launch table with the full year 1.0; no quarterly figures",
+    "FY2024 Q1-Q4 reports mention Exkivity only in impairment and termination prose (three lines each, no product sales row); the FY2025 and FY2026 Q1 reports contain no mention",
+    "cross-check of the U.S. quarters against the FY2022 and FY2023 full-year U.S. figures printed in the Q4 reports was made; the FY2022 U.S. quarters add to 3.2 and the FY2023 U.S. quarters to 2.7, both equal to the U.S. full-year figures printed in the Q4 reports"
+  ]
+}

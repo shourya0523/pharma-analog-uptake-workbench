@@ -1,0 +1,33 @@
+{
+  "drug_name": "Anoro Ellipta",
+  "generic_name": "umeclidinium/vilanterol",
+  "therapeutic_area": "Respiratory / Allergy",
+  "indication_area": "Respiratory (COPD)",
+  "formulation": "inhalation powder (Ellipta dry powder inhaler)",
+  "route_of_administration": "inhaled",
+  "moa": "Long-acting muscarinic antagonist + long-acting beta2-agonist (fixed-dose combination)",
+  "moa_class": "lama_laba_combination",
+  "first_approval_year": 2013,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=203975",
+    "quote": "Approval Date(s) and History, Letters, Labels, Reviews for NDA 203975 ... 12/18/2013 ORIG-1 Approval Type 1 - New Molecular Entity and Type 4 - New Combination; ANORO ELLIPTA"
+  },
+  "manufacturer": "GSK plc",
+  "benchmark_identity": "gsk_anoro_ellipta_worldwide_reported",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "launch_quarter": null,
+  "commercial_start_quarter": "2014Q2",
+  "series_start_reason": "The 2014Q1 release (6-K 2014-04-30) prints no Anoro Ellipta sales row (the product appears there only in pipeline/launch prose), so the first printed sales are Q2 2014 in the 6-K of 2014-07-23.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Worldwide GSK turnover for Anoro Ellipta in GBP millions. Rows 2014Q2-2014Q4 come from the 'Sales from New Pharmaceutical and Vaccine products' table (the regional turnover tables did not yet list the product, so no regional split is printed); from 2015Q1 the product is a row of the regional 'Pharmaceuticals turnover' table and the Total column is used. The Q1 2014 release states 'Announced launch of Anoro Ellipta for COPD in the US'; no cited document dates the launch to a quarter, so launch_quarter is null. FDA approval 2013-12-18. The latest quarter in the series is 2026Q2 (6-K 2026-07-28).",
+  "search_log": [
+    "fetched data.sec.gov submissions CIK0001131399 (GSK plc) recent + history pages; selected 6-K / 6-K/A filings whose primaryDocDescription is a quarterly/half-year/final results announcement (plus 2010-2012 6-Ks matching RESULT/TURNOVER/FORM 6-K/QUARTER/HALF); downloaded each and converted tables to text",
+    "per release: product row located by exact row label in the 'Pharmaceuticals turnover' regional table (Total column = worldwide) or, where the product is absent from it, in the 'Sales from New Pharmaceutical and Vaccine products' table; Q1 taken from the Q1 release, Q2/Q3 from the 3-month column of the Q2/Q3 release, Q4 from the 3-month column of the Q4/full-year release (the same release prints the full-year row)",
+    "cross-check: Q1+Q2+Q3+Q4 equals the full-year row printed in the Q4 release for every complete year, and Q1+Q2 / +Q3 equal the printed six-/nine-month rows",
+    "FDA approval: fetched the Drugs@FDA overview page for the NDA",
+    "Q1 2014 release (6-K 2014-04-30) and Q4 2013 release (6-K 2014-02-05) searched for an Anoro sales row: none; 2014 full-year (17) = Q2 5 + Q3 1 + Q4 11 confirms no Q1 sales"
+  ]
+}

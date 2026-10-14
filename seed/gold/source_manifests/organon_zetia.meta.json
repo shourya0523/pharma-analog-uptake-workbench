@@ -1,0 +1,57 @@
+{
+  "drug_name": "Zetia",
+  "generic_name": "ezetimibe",
+  "manufacturer": "Organon",
+  "benchmark_identity": "organon_zetia_worldwide_reported",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Cardiovascular (hyperlipidemia / LDL-C lowering)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Selective cholesterol absorption inhibitor (NPC1L1 inhibitor)",
+  "moa_class": "cholesterol_absorption_inhibitor",
+  "first_approval_year": 2002,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2002/21445ltr.pdf",
+    "quote": "NDA 21-445 ... This new drug application provides for the use of Zetia (ezetimibe) Tablets, 10 mg, for the following indications: Primary hypercholesterolemia (FDA approval letter, electronic signature 10/25/02)"
+  },
+  "launch_quarter": "2002Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/310158/000031015803000004/presrelb.htm",
+    "quote": "Zetia, a novel cholesterol absorption inhibitor, was launched in the United States and several international markets in November."
+  },
+  "commercial_start_quarter": "2002Q4",
+  "series_start_reason": "Series starts 2002Q4, the launch quarter: Schering-Plough's fourth-quarter 2002 earnings release (filed 2003-01-23) says Zetia was launched in November and gives the quarter's sales as 23. Zetia was sold through the Merck/Schering-Plough cholesterol partnership, so the first twenty-one quarters are Schering-Plough's report of partnership (global franchise) sales, not its own recorded sales.",
+  "joined_issuers": [
+    {
+      "issuer": "Schering-Plough",
+      "first_quarter": "2002Q4",
+      "last_quarter": "2009Q3"
+    },
+    {
+      "issuer": "Merck",
+      "first_quarter": "2009Q4",
+      "last_quarter": "2021Q1"
+    },
+    {
+      "issuer": "Organon",
+      "first_quarter": "2021Q2",
+      "last_quarter": "2026Q2"
+    }
+  ],
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Worldwide brand total in USD millions, one line under three reporters. Schering-Plough (CIK 310158, renamed Merck & Co. after the 2009-11-03 merger) printed 'Global Zetia' partnership sales, plus its own sales outside the partnership (its footnote: Latin America and Japan), because it equity-accounted the partnership; Merck printed Zetia as a consolidated product from 2010Q1 and for 2009Q4 in a supplemental combined column; Organon printed it from the 2021 spin-off. Merck's table splits each row into U.S. and international (2010Q4: 629 = 329 U.S. + 299 international in the 2011-02-03 exhibit 99.2); Organon's Total column is its U.S. + Non-U.S. columns (U.S. is 1-4 each quarter). Handovers agree: Schering-Plough's 2009Q1-Q3 (509, 555, 562) are 1 below the Supplemental Combined columns Merck printed for the same quarters in 2010 (510, 556, 563), the difference being a 1 in Merck's own GAAP column; Merck's own prints for 2020Q1-2021Q1 (145, 137, 103, 98, 92) equal the prior-year columns Organon printed later (145 in its first 10-Q, 137, 103, 98 in the 2021 releases, 92 in the 2022Q1 release). Early quarters use mixed forms of the same figure: 2002Q4, 2003Q2, 2003Q3, 2003Q4, 2004Q1 and 2004Q4 are sentences in Schering-Plough releases (whole millions); 2003Q1 is the prior-year comparison in the 2004Q1 release (no 2003Q1 Schering-Plough earnings release was located); 2004Q2 and 2004Q3 are prior-year columns of the 2005Q2 table because the 2004Q2 release (franchise 247, which the release says includes Zetia and Vytorin) and the 2004Q3 release (344, which includes Vytorin) print only combined franchise figures; 2005Q1 is the first-quarter column of the 2005Q2 table because the 2005Q1 release prints only the combined Zetia + Vytorin figure (505). Scope change inside the series: Organon's release for 2024Q1 (filed 2024-05-02, footnote (1) on the Zetia row) states 'Sales of the authorized generic versions of NuvaRing, Zetia and Nasonex were previously included in other and have been reclassified to their respective brand name product.' Rows 2024Q1 onward therefore include authorized-generic Zetia sales; rows through 2023Q4 do not. Organon's restated prior-year columns show the size: 2023Q1 83 as first printed vs 89 restated, 2023Q2 90 vs 95, 2023Q3 66 vs 69, 2023Q4 67 vs 67 (restated values are in the 2024Q1-2024Q4 releases; the series keeps each quarter's own first print). Zetia/Vytorin is also printed as a combined line in some Merck and Organon tables; the separate Zetia row is used.",
+  "search_log": [
+    "Listed Schering-Plough/Merck (CIK 310158) 8-K filings 2002-10 to 2021-06 from data.sec.gov submissions (including the older submission pages) and downloaded the earnings exhibits: Item 2.02 filings for 2004-10 to 2021-04, and for 2003-2004 the Item 12 / Item 7,9 filings dated 2003-01-10, 2003-01-21, 2003-01-23, 2003-04-21, 2003-05-13, 2003-07-23, 2003-08-12, 2003-10-22, 2004-01-26, 2004-04-22, 2004-07-21.",
+    "2002Q4 (23) is a sentence in the 2003-01-23 release; the 2003-01-10 and 2003-01-21 8-Ks and the 2003-04-21 and 2003-05-13 8-Ks print no Zetia figure; the 2003-08-12 8-K is a Q&A transcript that repeats the 123 and was not used. No Schering-Plough earnings release for 2003Q1 was found among the 8-Ks listed for 2003.",
+    "2004Q2 and 2004Q3 current-quarter releases (2004-07-21, 2004-10-21) give only combined franchise figures (247, 344); the 2005-01-25 release gives 2004Q4 Zetia 328 and Vytorin 75; the 2005-04-21 release (and its 8-K/A of 2005-04-22) gives the 2005Q1 joint venture total 505 with no Zetia split.",
+    "From the 2005-07-21 release through 2009-10-22 the second exhibit prints a 'Global Zetia' row in every release (2005Q2-2009Q3); the label in the HTML is split across cells in some releases ('Global Z etia') and is quoted as the verifier reads it.",
+    "Merck's fourth-quarter 2009 release (2010-02-16) prints Zetia only as GAAP (399, post-merger days), adjustment (215) and supplemental combined (614) columns; 614 is used for 2009Q4. Merck's releases from 2010-05-04 (2010Q1) through 2021-04-29 (2021Q1) print Zetia on its own row; the 2021Q1 figure 92 is also printed in Organon's first 10-Q (ogn-20210331.htm).",
+    "Listed Organon (CIK 1821825) 8-K and 8-K/A filings with Item 2.02 (20 releases, 2021-08-12 to 2026-04-30) and downloaded exhibits 99.1/99.2; the 2026-07-31 8-K (0001104659-26-089008) carries only the non-GAAP reconciliation, so 2026Q2 is read from the 10-Q filed 2026-07-31 (ogn-20260630.htm), whose product table prints Zetia 2 / 95 / 96.",
+    "Year check, four quarters vs the year printed in a Q4 document: 2003 471 (no printed year); 2004 1,053 vs 1,052; 2005 1,397 vs 1,396; 2006 1,925 vs 1,925; 2007 2,435 vs 2,436; 2008 2,280 vs 2,279; 2009 2,240 vs 2,244 (Merck combined, 4 below because Schering-Plough's JV figures are 1 per quarter lower than Merck's combined columns); 2010 2,298 vs 2,297; 2011 2,428 vs 2,428; 2012 2,567 vs 2,567; 2013 2,657 vs 2,658; 2014 2,650 vs 2,650; 2015 2,527 vs 2,526; 2016 2,560 vs 2,560; 2017 1,344 vs 1,344; 2018 858 vs 857; 2019 589 vs 590; 2020 483 vs 482; 2021 378 vs 378; 2022 358 vs 357; 2023 306 vs 306; 2024 317 vs 317; 2025 343 vs 342.",
+    "Organon 10-K/A (2025-11-10) opened: its 2024 Zetia row repeats the release's 7 / 310 / 317 (U.S. / Non-U.S. / Total)."
+  ]
+}

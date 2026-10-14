@@ -1,0 +1,39 @@
+{
+  "drug_name": "Rubraca",
+  "generic_name": "rucaparib",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (solid)",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "PARP inhibitor",
+  "moa_class": "parp_inhibitor",
+  "first_approval_year": 2016,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2016/209115Orig1s000ltr.pdf",
+    "quote": "NDA 209115 ACCELERATED APPROVAL ... Rubraca (rucaparib), 200 mg and 300 mg tablets as monotherapy for the treatment of patients with deleterious BRCA mutation (germline and/or somatic) associated advanced ovarian cancer ... RICHARD PAZDUR 12/19/2016"
+  },
+  "manufacturer": "Clovis Oncology",
+  "benchmark_identity": "clovis_rubraca_us_reported",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "launch_quarter": "2016Q4",
+  "launch_evidence": {
+    "year": 2016,
+    "url": "https://www.sec.gov/Archives/edgar/data/1466301/000115752317000578/a51514483ex99_1.htm",
+    "quote": "Rubraca (rucaparib) approved and launched in the U.S. on December 19, 2016"
+  },
+  "commercial_start_quarter": "2016Q4",
+  "series_start_reason": null,
+  "series_end_quarter": "2022Q3",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Clovis's last periodic report is the Form 10-Q for the quarter ended September 30, 2022 (no Q3 2022 earnings release was filed as an 8-K Item 2.02). Clovis filed for Chapter 11 on December 2022, its plan of liquidation became effective in July 2023 and the 8-K of 2023-07-11 states the company would 'promptly file a Form 15 with the Securities and Exchange Commission to deregister its securities ... and suspend its reporting obligations'. No FY2022 10-K or later quarterly report exists.",
+  "notes": "Clovis's U.S. net product revenue of Rubraca, one scope for the whole span. Clovis's only revenue line is 'Product revenue' (global Rubraca net product revenue); it equals U.S. product revenue until ex-U.S. product revenue first appears in the 2019Q1 release (ex-U.S. launch stocking in March 2019, per the Q2 2019 release), so the global line is NOT used: it changes composition in 2019. Source by period: 2016Q4-2018Q4 the 'Product revenue' line of each quarter's release (equal to U.S. sales: the FY2019 release says 2018 product revenue of $95.4 million was 'all of which were in the' U.S.); 2019Q1-2020Q4 the 'U.S. (net) product revenue' figure printed in the quarter's release text (one decimal, millions); 2021Q1-2022Q3 the U.S. column of the product-revenue-by-geography table of the Form 10-Q (2021Q4 = 10-K U.S. year 115,673 less 10-Q nine months 88,080). Global line, for reference, is in the same documents (e.g. 2022Q3 30,663 thousand). Sum checks: 2017 quarters 55,511 = FY2017; 2018 95,388 = FY2018; U.S. 2019 quarters 31.9+32.7+36.5+36.1=137.2 vs FY2019 U.S. 137.2 printed in the Q4 2019 release; U.S. 2020 quarters 39.3+36.7+33.9+36.4=146.3 vs FY2020 U.S. 146,259 (10-K).",
+  "search_log": [
+    "EDGAR submissions for Clovis Oncology (CIK 1466301): listed every 8-K and 8-K/A with Item 2.02 from 2017 to 2022 and every 10-Q/10-K; downloaded every exhibit and read the 'Product revenue' row and the sentences naming U.S. and ex-U.S. product revenue.",
+    "Searched each release 2018-2022 for 'U.S.'/'ex-U.S.' product revenue sentences: present for 2019Q1-2020Q4 (current-quarter sentence), absent for 2021Q1-2022Q3 releases (those are covered by the Form 10-Q geography tables, which exist from the FY2020 10-K onward) and absent for the 2021Q4 release (derived from the FY2021 10-K).",
+    "Form 10-Q/10-K 2017-2019 carry no U.S./ex-U.S. split table (checked 2018-05, 2019-05, 2019-08, 2019-11 10-Qs and the FY2017-FY2019 10-Ks: only 'Product revenue' rows); hence the release text is the source for 2019-2020.",
+    "No 8-K Item 2.02 exists after 2022-08-08 (listed all filings to the 15-12G of 2023-07-11); the Q3 2022 figures come from the Form 10-Q filed 2022-11-09.",
+    "FDA approval letter 209115Orig1s000ltr.pdf read for the approval date (signature 12/19/2016); the Q4 2016 release states launch on the same day.",
+    "Ex-U.S. (Europe) sales were not used; pharma& (the later owner) is private and was not searched for figures."
+  ]
+}

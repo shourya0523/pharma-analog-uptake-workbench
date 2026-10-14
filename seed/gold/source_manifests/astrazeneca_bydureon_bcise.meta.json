@@ -1,0 +1,41 @@
+{
+  "drug_name": "Bydureon BCise",
+  "generic_name": "exenatide extended-release",
+  "manufacturer": "AstraZeneca",
+  "benchmark_identity": "astrazeneca_bydureon_bcise_worldwide_reported",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Metabolic (type 2 diabetes)",
+  "revenue_scope": "Worldwide product sales of the Bydureon franchise",
+  "geography": "Worldwide",
+  "formulation": "extended-release injectable suspension, once weekly (BCise single-dose autoinjector)",
+  "route_of_administration": "subcutaneous",
+  "moa": "Glucagon-like peptide-1 (GLP-1) receptor agonist",
+  "moa_class": "glp1_receptor_agonist",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=209210",
+    "quote": "Original Approvals or Tentative Approvals ... 10/20/2017 ORIG-1 Approval Type 3 - New Dosage Form STANDARD (NDA 209210, Company: ASTRAZENECA AB; BYDUREON BCISE EXENATIDE SYNTHETIC SUSPENSION, EXTENDED RELEASE;SUBCUTANEOUS)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2014Q2",
+  "series_start_reason": "AstraZeneca never prints Bydureon BCise on its own row; the only line is the Bydureon row, which contained the original Bydureon formulation (FDA NDA 022200, approved 2012-01-27) for the whole of 2014-2017 and the BCise autoinjector from 2018 (FDA approval 2017-10-20; AstraZeneca's 23 October 2017 announcement says Bydureon BCise 'will be available for patients in the US in the first quarter of 2018'; the Q1 2018 announcement of 2018-05-18 calls it 'recently-launched'). The series starts in 2014Q2, the first full quarter of one consistent worldwide product-sales line: AstraZeneca printed Byetta and Bydureon rows from the Q4 2012 announcement (0001191638-13-000103), but until 2014 they are its share of the Bristol-Myers Squibb alliance revenue ('The Company's share of Byetta and Bydureon revenues was $85 million in the second quarter' of 2013, US only before April 2013 when 'the alliance assumed responsibility for promotion in Rest of World'), and the Q1 2014 announcement (0001191638-14-000608) blends one month of that share with two months after AstraZeneca 'began reflecting 100 percent ownership' on 1 February 2014.",
+  "series_end_quarter": "2023Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The Q1 2024 results announcement (6-K filed 2024-04-25, 0001654954-24-004975) lists the CVRM medicines Farxiga, Brilinta, Crestor, Seloken/Toprol-XL, Lokelma, roxadustat, Andexxa, Wainua and 'Other CVRM' with no Bydureon row, and no 6-K filed after 2024-02-09 contains a numeric Bydureon row. The last quarterly row is Q4 2023 (39). The later Forms 20-F print Bydureon only as 2023 and earlier comparatives (163 for 2023).",
+  "notes": "Series is the whole Bydureon franchise (one row labelled Bydureon, World column, all markets, USD at actual exchange rates; Bydureon vial/pen plus, from 2018, the BCise autoinjector), not BCise alone: launch_quarter is null because the BCise US launch (first quarter of 2018 per the AstraZeneca announcements cited in series_start_reason) is later than the first row (2014Q2), and sales before 2018 are the original formulation (Bydureon Dual Chamber Pen was approved in the US in March 2014 per the Q1 2014 announcement). BCise was approved in the EU on 30 August 2018 (6-K of 2018-08-30). AstraZeneca's 2018 announcements attribute growth in Bydureon sales to the BCise device (Q3 2018: 'an encouraging Bydureon BCise device launch in the US earlier in the year'). Quarters read from the World column of the quarter's own announcement (2014: 'Product Revenue Analysis'; 2015 onward: 'Product Sales'); 2016Q1-2017Q1 are cited from the announcement's first Product Sales table, which agrees with the later regional table. Each year's quarters sum to the full-year figure in the Q4 announcement within 1 (2021: 384 vs 385; 2023: 162 vs 163). Bristol-Myers Squibb (CIK 14272) printed Byetta and Bydureon net sales from the Q3 2012 10-Q (Bydureon 20) through 2013 (for example 87 for Q3 2013 and 78 for 2012 in the 10-K filed 2013-02-15) but with no stated geography and no line for 2014Q1, so they are not joined.",
+  "search_log": [
+    "Listed AstraZeneca PLC (CIK 0000901832) filings via data.sec.gov submissions (recent plus older pages): 2,052 filings of every form type, 6-K/A and 20-F/A included.",
+    "Fetched the main document of 1,638 of them (1,607 6-K, 6 6-K/A, 24 20-F, 1 20-F/A; filed 2002-11-05 to 2026-10-05) into a local cache and scanned them as table rows (cells joined by ' | ') by row label; AstraZeneca 6-Ks before November 2002 are not in the cache.",
+    "Located each quarterly results announcement as the 6-K in the filing window of the quarter that contains the Symbicort product-sales row, then read the brand row from that same announcement (the quarter's own release), not from a later comparative column.",
+    "Latest results document used for the end of the data: the Q2 2026 results 6-K filed 2026-07-27 (0001104659-26-086846); no later results announcement is in the filing list (latest filing 2026-10-08, not a results release).",
+    "Checked AstraZeneca's investor-relations results page (astrazeneca.com/investor-relations/results-and-presentations.html): the only Excel files it links are two epidemiology workbooks, and no product-sales Excel data book was found, so the sec.gov 6-K tables are the source.",
+    "Bigdata.com was not needed; every figure was read from the sec.gov original document.",
+    "Scanned every cached 6-K for rows labelled Bydureon: first numeric row is the Q4 2012 announcement (26, FY 37), a share-of-alliance-revenue measure; consolidated product sales begin after 1 February 2014.",
+    "Searched all cached AstraZeneca filings for 'BCise': the product is described in 2017-2019 text and pipeline tables but has no separate numeric sales row anywhere; the Bydureon row includes it.",
+    "Compared each quarter's first medicine table with the World column of the regional Product Sales analysis table: identical in all 39 quarters (for 2016Q1-2017Q1, against the later World-column row of the same announcement).",
+    "Summed quarters against the full-year figures printed in the Q4 announcements and Forms 20-F: equal or within 1.",
+    "Searched 6-K and 20-F filings from 2024-02-09 for a numeric Bydureon row: only Forms 20-F with 2023 and earlier comparatives; none in a quarterly 6-K. The Q1 2024 announcement's CVRM list has no Bydureon row.",
+    "Read Bristol-Myers Squibb 10-Q/10-K filings 2012-2013 for Byetta/Bydureon (net sales from Q3 2012); not joined (scope not stated, 2014Q1 gap).",
+    "Fetched FDA Drugs@FDA overviews for NDA 209210 (BCise) and NDA 022200 (original Bydureon) for approval dates."
+  ]
+}

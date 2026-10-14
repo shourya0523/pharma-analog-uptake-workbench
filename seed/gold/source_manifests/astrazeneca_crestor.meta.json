@@ -1,0 +1,43 @@
+{
+  "drug_name": "Crestor",
+  "generic_name": "rosuvastatin calcium",
+  "manufacturer": "AstraZeneca",
+  "benchmark_identity": "astrazeneca_crestor_worldwide_reported",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Cardiovascular (hyperlipidemia / LDL-C lowering)",
+  "revenue_scope": "Worldwide product sales",
+  "geography": "Worldwide",
+  "formulation": "oral tablet",
+  "route_of_administration": "oral",
+  "moa": "HMG-CoA reductase inhibitor (statin)",
+  "moa_class": "hmg_coa_reductase_inhibitor",
+  "first_approval_year": 2003,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=021366",
+    "quote": "Original Approvals or Tentative Approvals ... 08/12/2003 ORIG-1 Approval Type 1 - New Molecular Entity STANDARD (NDA 021366; CRESTOR ROSUVASTATIN CALCIUM TABLET;ORAL)"
+  },
+  "launch_quarter": "2003Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/901832/000095010303001305/may1203_6k.htm",
+    "quote": "Crestor\u2122 was successfully launched in Canada on 19 February, followed by the Netherlands and the UK in March. Sales were $3 million."
+  },
+  "commercial_start_quarter": "2003Q1",
+  "series_start_reason": "First quarter in which an AstraZeneca results announcement prints a Crestor sales row (Q1 2003 announcement, 6-K filed 2003-05-13: $3 million); the Q3 2002 and Q4 2002 releases in the cache carry Crestor only in regulatory and pipeline text. This is also the launch quarter.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "US FDA approval is 2003-08-12 (NDA 021366); the first sales in 2003Q1 were launches in Canada (19 February 2003), the Netherlands and the UK, so the early rows are ex-US. AstraZeneca's first approval was in Europe in December 2002 (6-K of 2002-12-10: 'ASTRAZENECA'S NEW STATIN, CRESTOR(TM), RECEIVES FIRST APPROVAL IN EUROPE'). The line is worldwide product sales throughout. Basis: 2003-2013 rows come from the sales-by-product tables of the announcement; 2014 onward from the World column of the Product Sales analysis table (headed 'Product Revenue Analysis' in 2014 and 'Product Sales' from 2015); 2016Q1-2017Q1 are cited from the announcement's first Product Sales table, which agrees with the regional table. In 2020Q1-Q3, 2024Q2 and 2025Q1-2026Q2 the announcement's first medicine table (headed Total Revenue in 2020 and 2024, Product Revenue from 2025) prints a figure $1m above the Product Sales table; the series uses the Product Sales table in every quarter (for example 2026Q2: 331 in Table 24, 332 on the Product Revenue basis). The Q1 2026 announcement also prints 'Crestor: sales milestones' of $32m as Collaboration Revenue; that is not product sales and is excluded. Each year's quarters sum to the full-year figure printed in the Q4 announcement exactly for 2003-2023 and within 1 for 2024 (1,154 vs 1,153) and 2025 (1,215 vs 1,216).",
+  "search_log": [
+    "Listed AstraZeneca PLC (CIK 0000901832) filings via data.sec.gov submissions (recent plus older pages): 2,052 filings of every form type, 6-K/A and 20-F/A included.",
+    "Fetched the main document of 1,638 of them (1,607 6-K, 6 6-K/A, 24 20-F, 1 20-F/A; filed 2002-11-05 to 2026-10-05) into a local cache and scanned them as table rows (cells joined by ' | ') by row label; AstraZeneca 6-Ks before November 2002 are not in the cache.",
+    "Located each quarterly results announcement as the 6-K in the filing window of the quarter that contains the Symbicort product-sales row, then read the brand row from that same announcement (the quarter's own release), not from a later comparative column.",
+    "Latest results document used for the end of the data: the Q2 2026 results 6-K filed 2026-07-27 (0001104659-26-086846); no later results announcement is in the filing list (latest filing 2026-10-08, not a results release).",
+    "Checked AstraZeneca's investor-relations results page (astrazeneca.com/investor-relations/results-and-presentations.html): the only Excel files it links are two epidemiology workbooks, and no product-sales Excel data book was found, so the sec.gov 6-K tables are the source.",
+    "Bigdata.com was not needed; every figure was read from the sec.gov original document.",
+    "Scanned the cached 6-Ks of November 2002 to March 2003 for a Crestor sales row: the Q3 2002 release (6-K of 2002-11-05), the 2002-12-10 first-approval release and the Q4 2002 release (6-K of 2003-02-07) mention Crestor only in text; first numeric row is the Q1 2003 announcement.",
+    "Chose each quarter's value from the announcement's Product Sales table (World column) and cross-checked it against the first medicine table: 84 of 94 quarters are identical; the 10 differing quarters (2020Q1-Q3, 2024Q2, 2025Q1-2026Q2) differ by 1 because the first table is on a Total Revenue or Product Revenue basis, and the Product Sales figure is used.",
+    "Compared every year's four quarters with the full-year figure printed in the Q4 announcement: 2003-2023 exact; 2024 and 2025 within 1.",
+    "Checked the 2024-2026 announcements: Crestor stays on its own row in every quarterly announcement through Q2 2026 (e.g. Q2 2026: Product Sales 331 in Table 24).",
+    "Fetched FDA Drugs@FDA overview for NDA 021366 for the approval date."
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "drug_name": "Zyflo CR",
+  "generic_name": "zileuton",
+  "therapeutic_area": "Respiratory / Allergy",
+  "indication_area": "Asthma (prophylaxis and chronic treatment)",
+  "formulation": "extended-release tablet",
+  "route_of_administration": "oral",
+  "moa": "5-lipoxygenase inhibitor",
+  "moa_class": "5_lipoxygenase_inhibitor",
+  "first_approval_year": 2007,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2007/022052s000ltr.pdf",
+    "quote": "NDA 22-052 Critical Therapeutics, Inc. ... Zyflo CR (zileuton) extended release tablets for the prophylaxis and chronic treatment of asthma in adults and children 12 years of age and older ... It is approved, effective on the date of this letter ... Badrul Chowdhury 5/30/2007"
+  },
+  "manufacturer": "Cornerstone Therapeutics",
+  "benchmark_identity": "cornerstone_zyflo_cr_us_reported",
+  "revenue_scope": "U.S. net product sales of the ZYFLO product family",
+  "geography": "United States",
+  "launch_quarter": null,
+  "launch_evidence": null,
+  "commercial_start_quarter": "2005Q4",
+  "series_start_reason": "2005Q4 is the first quarter the issuer prints the 'Net product sales' line: Critical Therapeutics' Q4 2005 release (8-K, 2006-02-09) prints 387 thousand against 0 a year earlier, and the Q3 2005 release (2005-11-03) and every earlier release print no product sales (all prior revenue was collaboration revenue). The line is ZYFLO immediate release only through 2007Q2; ZYFLO CR launched in the U.S. on September 27, 2007 (Critical's Q3 2007 release: 'launched ZYFLO CR in the U.S. on September 27, 2007'), so from 2007Q3 the line is ZYFLO and ZYFLO CR together. launch_quarter is null because the first rows precede the 2007Q3 launch.",
+  "series_end_quarter": "2013Q3",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Chiesi Farmaceutici acquired Cornerstone: the 8-K filed 2014-02-04 states 'The Merger was consummated following the approval and adoption of the Merger Agreement by Cornerstone's stockholders', Form 25-NSE was filed 2014-02-04 and Form 15-12G on 2014-02-14. The last periodic report is the Form 10-Q for Q3 2013; no FY2013 10-K was filed. Chiesi is private and publishes no Zyflo CR figure.",
+  "notes": "Net product sales of the ZYFLO family in the U.S., one line across two filers of the same CIK (1145404): Critical Therapeutics' 'Net product sales' statement-of-operations line for 2005Q4-2008Q3 and Cornerstone Therapeutics' ZYFLO product family row of the MD&A net product sales table for 2009Q1-2013Q3. Formulation entry dates: the line is ZYFLO (immediate release) only 2005Q4-2007Q2; ZYFLO CR was launched on September 27, 2007 and is in the line from 2007Q3 (the Q3 2007 release recognises 870 thousand of net product sales from ZYFLO CR in that quarter); Cornerstone's row is 'ZYFLO CR and ZYFLO' / 'ZYFLO product family' and no per-formulation line is printed at any date. The row is therefore a brand-family total, and the quarters before 2007Q3 contain no ZYFLO CR. U.S. scope: Critical's FY2006 and FY2007 Forms 10-K (segment note) state 'All of the Company's revenues are generated in the United States'; the revenue tables themselves carry no geographic column. For Cornerstone's years the 10-K segment note says 'The majority of the Company's revenues are generated in the United States' and the only international revenue it names is royalty revenue (not ZYFLO product sales), while the FY2008 10-K says DEY holds the right to promote ZYFLO CR and ZYFLO 'in the United States' and Patheon manufactures ZYFLO CR 'for sale in the United States'. Fourth quarters 2009-2012 are the 10-K year less the Q3 10-Q nine-month figure (Cornerstone printed quarterly rows only in 10-Qs): 17,959; 30,619; 30,674; 53,553. Sum checks: 2006 quarters 1,022+1,809+1,879+1,937 = 6,647 (FY2006 printed in the Q4 2006 release); 2007 quarters 2,894+2,291+3,126+2,697 = 11,008 (FY2007 printed in the Q4 2007 release). The 2012-2013 level (14-20 million per quarter) is far above 2010-2011; the table labels it the same product family and the breakdown rows are unchanged.",
+  "search_log": [
+    "EDGAR submissions CIK 1145404 (Critical Therapeutics, later Cornerstone Therapeutics): read the Item 2.02 exhibits of 2008-03-27, 2008-05-08, 2008-08-11 and 2008-10-21 and the 2008 10-K/10-Qs.",
+    "Table row 'Net product sales' is the only product revenue line; text lines confirm it is ZYFLO CR plus ZYFLO.",
+    "2008-10-21 release is Critical's Q3 2008 result; the merger closed in the same month and no Critical Q4 2008 report exists; Cornerstone's FY2008 10-K prints 888 thousand for the post-merger period only.",
+    "EDGAR submissions CIK 1145404: listed all 10-Q/10-K and 8-K Item 2.02 filings 2008-2013; read the net product sales breakdown tables of each 10-Q and 10-K (rows 'ZYFLO CR and ZYFLO (1)' / 'ZYFLO product family').",
+    "Earnings-release exhibits (2009-2013) were scanned for a Zyflo row; the 10-Q/10-K tables carry the comparison used here, so the 10-Q/10-K are cited (quarter as current).",
+    "Searched filings after 2013-11 for a Q4 2013 or FY2013 report: none (8-K 2014-02-04 closing, 25-NSE 2014-02-04, 15-12G 2014-02-14).",
+    "Chiesi (private, Parma) and Chiesi USA: no public document prints Zyflo CR sales (not searched beyond the issuer's deregistration).",
+    "Extension back to the first printed quarter: read the Item 2.02 exhibits of 2005-05-10, 2005-08-04, 2005-11-03 (no product sales, ZYFLO launch 'in the fourth quarter of 2005'), 2006-02-09 (Q4 2005: Net product sales 387 vs 0), 2006-05-04, 2006-08-03, 2006-11-09, 2007-02-08, 2007-05-08, 2007-08-08 and 2007-11-08; each quarter is taken from its own release as the current column and the prior-year columns of the following year's releases agree (2006Q1 1,022; 2006Q2 1,809; 2006Q3 1,879).",
+    "The 2005-05-10, 2005-08-04 and 2005-11-03 releases print no 'Net product sales' row (grep of each for product-sales lines found none; the 2005-05 release says ZYFLO launches in the fourth quarter of 2005); the 10-Qs of 2004-2005 were not read. Critical's revenue before the fourth quarter of 2005 was collaboration revenue only (FY2006 10-K: 'All of our revenues prior to October 2005, when we commercially launched ZYFLO, were derived from our collaboration agreements').",
+    "Launch date: Critical's Q3 2007 release (8-K 2007-11-08) and Q4 2007 release (8-K 2008-03-27) state ZYFLO CR was launched on September 27, 2007; the Cornerstone FY2012 10-K says 'October 2007', which the issuer's own releases contradict.",
+    "Segment notes: Critical FY2006 10-K and FY2007 10-K state all revenues are generated in the United States."
+  ],
+  "joined_issuers": [
+    {
+      "issuer": "Critical Therapeutics",
+      "first_quarter": "2005Q4",
+      "last_quarter": "2008Q3"
+    },
+    {
+      "issuer": "Cornerstone Therapeutics",
+      "first_quarter": "2009Q1",
+      "last_quarter": "2013Q3"
+    }
+  ],
+  "unreported_quarters": {
+    "2008Q4": "Critical Therapeutics merged with Cornerstone BioPharma in the fourth quarter of 2008 and published no Q4 2008 results; the post-merger company's FY2008 10-K prints 888 thousand of ZYFLO product-family sales for the post-merger part of the quarter only, with footnote (1) stating the figure does not include the historical sales of ZYFLO CR and ZYFLO made by Critical Therapeutics. No full-quarter figure exists in any filing."
+  }
+}

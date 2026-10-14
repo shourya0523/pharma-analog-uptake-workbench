@@ -1,0 +1,56 @@
+{
+  "drug_name": "Dulera",
+  "generic_name": "mometasone furoate / formoterol fumarate",
+  "manufacturer": "Organon",
+  "benchmark_identity": "organon_dulera_worldwide_reported",
+  "therapeutic_area": "Respiratory / Allergy",
+  "indication_area": "Respiratory (asthma)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "inhalation aerosol",
+  "route_of_administration": "inhaled",
+  "moa": "Inhaled corticosteroid plus long-acting beta2-agonist (combination)",
+  "moa_class": "ics_laba_combination",
+  "first_approval_year": 2010,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2010/022518s000ltr.pdf",
+    "quote": "NDA 22-518 NDA APPROVAL ... This new drug application provides for the use of Dulera (mometasone furoate and formoterol fumarate) Inhalation Aerosol for the treatment of asthma, in adults and children 12 years of age and older (electronic signature 06/22/2010)"
+  },
+  "launch_quarter": "2010Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/310158/000119312510240544/dex991.htm",
+    "quote": "In the quarter, the company also launched three new medicines: ... DULERA (mometasone furoate and formoterol fumarate dihydrate) for the treatment of asthma in the United States"
+  },
+  "commercial_start_quarter": "2010Q3",
+  "series_start_reason": "Series starts 2010Q3, the launch quarter (Merck's third-quarter 2010 release, filed 2010-10-29, says Dulera was launched in the United States in the quarter). That release and the fourth-quarter 2010 release print no Dulera row, so 2010Q3 (2) and 2010Q4 (6) are read from the prior-year columns of the first-quarter 2011 release (filed 2011-04-29), whose 2010 columns read 0, 0, 2, 6.",
+  "joined_issuers": [
+    {
+      "issuer": "Merck",
+      "first_quarter": "2010Q3",
+      "last_quarter": "2018Q4"
+    },
+    {
+      "issuer": "Organon",
+      "first_quarter": "2020Q1",
+      "last_quarter": "2026Q2"
+    }
+  ],
+  "unreported_quarters": {
+    "2019Q1": "Merck's earnings releases and 10-Qs/10-K for 2019 print no Dulera row (the last Merck row is 2018Q4, in the release of 2019-02-01; no Dulera row appears in Merck's releases of 2019-04-30 to 2021-04-29 or in its 10-Q/10-K tables for 2017-2021 beyond the FY2018 10-K), and Organon's first documents give 2019 only as a full year (Form 10 information statement Dulera 217 for 2019), so no 2019 quarter is published; Organon's own series resumes with 2020Q1 read from its comparative columns.",
+    "2019Q2": "Merck's earnings releases and 10-Qs/10-K for 2019 print no Dulera row (the last Merck row is 2018Q4, in the release of 2019-02-01; no Dulera row appears in Merck's releases of 2019-04-30 to 2021-04-29 or in its 10-Q/10-K tables for 2017-2021 beyond the FY2018 10-K), and Organon's first documents give 2019 only as a full year (Form 10 information statement Dulera 217 for 2019), so no 2019 quarter is published; Organon's own series resumes with 2020Q1 read from its comparative columns.",
+    "2019Q3": "Merck's earnings releases and 10-Qs/10-K for 2019 print no Dulera row (the last Merck row is 2018Q4, in the release of 2019-02-01; no Dulera row appears in Merck's releases of 2019-04-30 to 2021-04-29 or in its 10-Q/10-K tables for 2017-2021 beyond the FY2018 10-K), and Organon's first documents give 2019 only as a full year (Form 10 information statement Dulera 217 for 2019), so no 2019 quarter is published; Organon's own series resumes with 2020Q1 read from its comparative columns.",
+    "2019Q4": "Merck's earnings releases and 10-Qs/10-K for 2019 print no Dulera row (the last Merck row is 2018Q4, in the release of 2019-02-01; no Dulera row appears in Merck's releases of 2019-04-30 to 2021-04-29 or in its 10-Q/10-K tables for 2017-2021 beyond the FY2018 10-K), and Organon's first documents give 2019 only as a full year (Form 10 information statement Dulera 217 for 2019), so no 2019 quarter is published; Organon's own series resumes with 2020Q1 read from its comparative columns."
+  },
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Worldwide brand total in USD millions (outside the U.S. the product is marketed as Zenhale, per Organon's 10-K). Merck's companion table splits the row into U.S. and international; Organon's Total column is its U.S. + Non-U.S. columns. Both issuers print one line for the brand; no formulation or territory enters partway. Two Merck-era caveats. (1) 2019 is a hole: Merck stopped printing a Dulera row after 2018Q4 and Organon's documents give 2019 only as a year, so it is listed in unreported_quarters even though no ownership change occurred in 2019; the owner changed to Organon with the June 2021 spin-off. (2) 2020Q1-2020Q4 come from Organon's prior-year columns (Organon's first 10-Q and its 2021 releases), because Merck's own 2020 releases print no Dulera row. The Organon prior-year columns for 2020 sum to 222, equal to the 2020 year in Organon's Form 10 information statement (Dulera 222, 217, 227 for 2020, 2019, 2018).",
+  "search_log": [
+    "Downloaded and parsed every Merck 8-K Item 2.02 exhibit 99.x from 2009-02 to 2021-04 (CIK 310158): Dulera has a row in the first exhibit of every release from 2011-04-29 (2011Q1) to 2019-02-01 (2018Q4), and none in the releases of 2019-04-30 through 2021-04-29.",
+    "Checked the Merck 10-K/10-Q tables for 2017-2021 (downloaded): Dulera rows appear through the FY2018 10-K (2019-02-27) and not afterwards.",
+    "Organon (CIK 1821825): 20 earnings releases 2021-08-12 to 2026-04-30 parsed for the Dulera row; 2021Q1 and the 2020 quarters from the first 10-Q (filed 2021-06-21) and the 2021 releases' prior-year columns; 2026Q2 from the 10-Q filed 2026-07-31 (the 2026-07-31 8-K has no product table).",
+    "Organon Form 10 information statement (10-12B/A filed 2021-04-29, exhibit 99.1) read for 2019 quarterly Dulera figures: it prints annual figures only (222 / 217 / 227 for 2020 / 2019 / 2018), so 2019 quarters were not found.",
+    "Year check: 2011 97 vs 96 printed; 2012 208 vs 207; 2013 324 vs 324; 2014 461 vs 460; 2015 536 vs 536; 2016 436 vs 436; 2017 287 vs 287; 2018 214 vs 214; 2020 222 vs 222; 2021 190 vs 190; 2022 179 vs 180; 2023 193 vs 194; 2024 203 vs 203; 2025 153 vs 153 (rounding).",
+    "2010Q1 and 2010Q2 print 0 (pre-launch) in the 2011-04-29 release and are not rows."
+  ]
+}

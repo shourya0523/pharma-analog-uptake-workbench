@@ -1,0 +1,68 @@
+{
+  "drug_name": "Tudorza Pressair",
+  "generic_name": "aclidinium bromide",
+  "manufacturer": "AstraZeneca",
+  "benchmark_identity": "astrazeneca_tudorza_us_reported",
+  "therapeutic_area": "Respiratory / Allergy",
+  "indication_area": "Respiratory (COPD)",
+  "revenue_scope": "U.S. net product sales of Tudorza (Tudorza Pressair) as each owner printed them: Forest Laboratories and Actavis net sales/net revenues of the Tudorza line (exclusive U.S. rights), then AstraZeneca's US column of its combined Tudorza/Eklira Product Sales row",
+  "geography": "US",
+  "formulation": "breath-actuated dry powder inhaler (Pressair)",
+  "route_of_administration": "inhaled",
+  "moa": "Long-acting muscarinic antagonist",
+  "moa_class": "lama",
+  "first_approval_year": 2012,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=202450",
+    "quote": "Original Approvals or Tentative Approvals ... 07/23/2012 ORIG-1 Approval Type 1 - New Molecular Entity STANDARD (NDA 202450, Tudorza Pressair aclidinium bromide 0.4MG/INH powder, metered)"
+  },
+  "launch_quarter": "2012Q4",
+  "commercial_start_quarter": "2012Q4",
+  "series_start_reason": "Forest Laboratories launched Tudorza in December 2012 (FY2013 10-K) and prints the product's net sales from that fiscal third quarter (quarter ended 31 December 2012, calendar 2012Q4); Forest's FY2013 10-K shows a nil prior-year column, so no earlier quarter exists. Forest's 10-Qs and releases give 2012Q4-2014Q1, Actavis's 10-Q and release give 2014Q3-2014Q4 after it acquired Forest on 1 July 2014, and AstraZeneca acquired the US rights from Actavis on 3 March 2015 and prints a 'Tudorza/Eklira' row from its Q1 2015 release (2015Q1 is a partial quarter and is listed in unreported_quarters).",
+  "series_end_quarter": "2019Q3",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "AstraZeneca printed the Tudorza/Eklira row in its quarterly Product Sales by region tables through the Q3 2019 release (24 October 2019) and prints no such row in the Q4 2019 / FY2019 release (0001654954-20-001577), whose respiratory table lists Duaklir, Bevespi and Breztri but not Tudorza/Eklira; Tudorza/Eklira is named there only among royalty sources. Circassia's option to sub-license the US rights completed in Q1 2019, but AstraZeneca's text says it still records Product Sales in the US under the collaboration, and the 2019 US figures are printed in the same row and column as 2015-2018, so the scope is unchanged to the end.",
+  "notes": "AstraZeneca prints one combined 'Tudorza/Eklira' row (Eklira Genuair is the ex-US brand), so the world column is not the US brand; the US column of the regional table is used. Column order of the regional table: World, US, Europe, Established RoW, Emerging Markets through the Q4 2016 release; World, Emerging Markets, US, Europe, Established RoW from the Q1 2017 release. Check: US quarters sum to the printed year-to-date US figure each year (2015 103, 2016 77, 2017 66, 2018 25; 2019 nine months 1 = 2 + (2) + 1 from the Q3 2019 release year-to-date table). 2018Q3 (-1), 2018Q4 (-3) and 2019Q2 (-2) are negative US Product Sales (AstraZeneca attributes the decline to the impact of federal purchases). The world line also ran to 2019Q3 (last printed) and is not used because it adds Eklira in Europe. AstraZeneca kept the global rights until Covis completed the acquisition in January 2022; Circassia's own reports show Tudorza as profit-share revenue, not net sales. Scope across issuers: Forest and Actavis print Tudorza as a product line (Forest net sales; Actavis within North American Brands net revenues, a segment that does not split Canada out) and held the exclusive U.S. rights; AstraZeneca's US column is the same U.S. brand. Forest series (thousands) is stored in millions. Actavis consolidated Forest from 1 July 2014; Actavis's 2014 total 58.6 is 28.4 (Q3) plus 30.2 (Q4). 2015Q1: AstraZeneca's 10 covers only the weeks after it acquired the US rights on 3 March 2015; the Allergan plc 10-Q for Q1 2015 (0001193125-15-180860) prints Tudorza 28.2 with the footnote 'Products were divested March 2, 2015 as part of the Respiratory Sale', i.e. the earlier part of the same quarter, so a full-quarter 2015Q1 would be about 38 (28.2 + 10, not stored). Circassia's FY2019 preliminary results (2020-06-16) print Tudorza 'net in-market sales totalled GBP27.0 million' for 2019, a different issuer, currency and basis, not spliced in.",
+  "search_log": [
+    "listed AstraZeneca (CIK 0000901832) filings via data.sec.gov submissions incl. the older filings pages: 2,052 filings of all forms; downloaded the main document of every 6-K, 6-K/A, 20-F and 20-F/A filed from 2002-11-01 (1,638 documents); 6-Ks filed before Nov 2002 are .paper entries (scanned paper, not on EDGAR)",
+    "located each quarterly results release as the document that carries both a Symbicort and the product's own table row; Q1/Q2/Q3/Q4 releases of 2002-11 to 2026-07 all found (release chain identical to the one already used for the Symbicort series)",
+    "re-issued copies of annual results (20-F extracts, 6-Ks dated Feb-Mar, 2008-06-19 re-issue, 2007-08-31 restated H1) and 20-F filings were excluded as sources; each quarter is read from the first results announcement that reports it as current",
+    "grep of every downloaded release for Tudorza, Eklira, Duaklir: AstraZeneca prints 'Tudorza/Eklira' from the Q1 2015 release to the Q3 2019 release; none earlier (Almirall respiratory acquisition 2014 did not add a separate row) and none from the Q4 2019 release",
+    "regional rows of the quarter table read by column position; layout change at the Q1 2017 release confirmed with the Pulmicort row of the same table (Pulmicort Emerging Markets and US columns)",
+    "Circassia (LSE: CIR) web search: reports Tudorza revenue as profit share and, from 2021, as discontinued; products handed back to AstraZeneca 27 May 2020 (Covis then acquired the rights from AstraZeneca, completed Jan 2022); its FY2019 preliminary results headline states Tudorza net in-market sales GBP27.0 million for 2019 (GBP, different basis, not used)",
+    "Forest Laboratories (CIK 38074) filings list read from data.sec.gov submissions: 10-K FY2013 (0000038074-13-000014) gives Tudorza 22,996 for fiscal 2013 against a nil prior year; 10-K FY2014 (0000038074-14-000019) gives 78,405 against 22,996; 10-Qs for the quarters ended 2012-12-31 (no Tudorza product line, prose only), 2013-06-30 (15,935), 2013-09-30 (16,705) and 2013-12-31 (20,422 against 12,191); fiscal Q4 earnings releases (8-K exhibit 99, 2013-04-23 and 2014-04-29) print Tudorza sales of $10.8 million and $25.3 million. No earlier quarter carries sales: fiscal 2013 sales 22,996 equals 12,191 (quarter ended 2012-12-31) plus 10,805 (quarter ended 2013-03-31), and the 10-Q for 2012-12-31 says Tudorza launched in the third quarter of fiscal 2013",
+    "Actavis plc (CIK 1578845, now Allergan plc) 10-Qs and releases read: Q2 2014 10-Q has no Tudorza line; Q3 2014 10-Q prints Tudorza 28.4 (prior year nil); Q4 2014 release (8-K ex 99.1 filed 2015-02-18) prints 30.2 and 58.6 for the year; Q1 2015 10-Q prints 28.2 with the divested-March-2, 2015 footnote",
+    "No Forest filing after 8-K 2014-07-03 and no Forest 10-Q or results release for the quarter ended 2014-06-30 (acquired 1 July 2014), so 2014Q2 is listed in unreported_quarters",
+    "AstraZeneca Q1, Q2 and Q3 2019 releases (0001654954-19-004837, 0001104659-19-041809, 0001654954-19-011972) read for the Tudorza/Eklira US column (2, (2), 1), column order confirmed from the 'World | Emerging Markets | US | Europe | Established RoW' header and by the regional columns summing to the world figure; the Q3 2019 year-to-date table prints US 1, matching the three quarters; the Q4 2019 / FY2019 release (0001654954-20-001577) prints no Tudorza/Eklira row in its product tables, so the series ends at 2019Q3"
+  ],
+  "joined_issuers": [
+    {
+      "issuer": "Forest Laboratories",
+      "first_quarter": "2012Q4",
+      "last_quarter": "2014Q1"
+    },
+    {
+      "issuer": "Actavis",
+      "first_quarter": "2014Q3",
+      "last_quarter": "2014Q4"
+    },
+    {
+      "issuer": "AstraZeneca",
+      "first_quarter": "2015Q2",
+      "last_quarter": "2019Q3"
+    }
+  ],
+  "unreported_quarters": {
+    "2014Q2": "Ownership change Forest to Actavis; no document prints Tudorza for the quarter ended 30 June 2014. Actavis closed the Forest acquisition on 1 July 2014; Forest's last periodic filings are the FY2014 10-K (2014-05-30) and 10-K/A (2014-06-30) and its EDGAR filing list shows only 8-Ks afterwards (last 2014-07-03), with no 10-Q or results release for the June 2014 quarter. Actavis's Q2 2014 10-Q (0001193125-14-295884, d757905d10q.htm) contains no Tudorza line because Forest was not yet consolidated, and its Q3 2014 10-Q starts Tudorza at 28.4 with a nil prior-year column.",
+    "2015Q1": "Ownership change Actavis/Allergan to AstraZeneca on 3 March 2015; no full-quarter figure is published. AstraZeneca's Q1 2015 release prints Tudorza/Eklira US 10 for the partial quarter after the acquisition ('included $10m in the US following the completion of the acquisition of the Actavis product rights on 3 March 2015'); Allergan's Q1 2015 10-Q (0001193125-15-180860) prints 28.2 for the part before the divestiture on 2 March 2015. Partial-quarter row dropped, as for other ownership-change quarters in gold."
+  },
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/38074/000003807413000014/forest10k2013.htm",
+    "quote": "Tudorza was launched in December 2012"
+  },
+  "reviewed_anomalies": {
+    "2019Q2": "Read at source: AstraZeneca's Q2 2019 results print Tudorza/Eklira US product sales as (2), a negative quarter, while the world total is 13. Kept as printed.",
+    "2018Q3": "Read at source: AstraZeneca's third quarter 2018 results print Tudorza/Eklira US product sales as (1), a negative quarter, while the world total is 18. Kept as printed.",
+    "2018Q4": "Read at source: AstraZeneca's fourth quarter 2018 results print Tudorza/Eklira US product sales as (3), a negative quarter, while the world total is 19. Kept as printed."
+  }
+}

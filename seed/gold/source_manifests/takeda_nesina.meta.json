@@ -1,0 +1,44 @@
+{
+  "drug_name": "Nesina",
+  "generic_name": "alogliptin (alogliptin benzoate)",
+  "manufacturer": "Takeda",
+  "benchmark_identity": "takeda_nesina_japan_reported",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Type 2 diabetes",
+  "revenue_scope": "Japan",
+  "geography": "Japan",
+  "formulation": "oral tablet",
+  "route_of_administration": "oral",
+  "moa": "dipeptidyl peptidase-4 (DPP-4) inhibitor",
+  "moa_class": "dpp4_inhibitor",
+  "first_approval_year": 2013,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2013/022271Orig1s000ltr.pdf",
+    "quote": "Please refer to your New Drug Application (NDA) dated and received December 27, 2007, submitted under section 505(b) of the Federal Food, Drug, and Cosmetic Act (FDCA) for Nesina (alogliptin) tablets, 6.25 mg, 12.5 mg, and 25 mg. (FDA approval letter, NDA 022271)"
+  },
+  "launch_quarter": "2010Q2",
+  "launch_evidence": {
+    "url": "https://assets-dam.takeda.com/raw/upload/v1662727523/legacy-dotcom/siteassets/system/investors/quarterly-announcements/fy2012/qr2012_q1_f_en-3.pdf",
+    "quote": "Nesina 6/2010 Diabetes 1.9 7.1 5.2 275.6% (FY2012 Q1 summary of financial statements, domestic product table; the second column is the month and year of launch)"
+  },
+  "commercial_start_quarter": "2011Q2",
+  "series_start_reason": "Launch was June 2010 (2010Q2, launch month printed in Takeda's product table) but the first quarter Takeda documents currently on takeda.com print is fiscal Q1 FY2011 (April-June 2011), as the prior-year column of the FY2012 Q1 summary; the oldest results pages on takeda.com are FY2012 (the FY2011 and FY2010 pages return 404). FY2010 (April 2010-March 2011) is printed only as a full-year figure (1.6 billion JPY) in the FY2012 data books, so 2010Q2-2011Q1 are not in the series.",
+  "series_end_quarter": "2021Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Takeda divested its Japan diabetes portfolio (NESINA, LIOVEL, INISYNC and ZAFATEK) to Teijin Pharma at the beginning of April 2021; the FY2021 Q1 report has no Nesina product row and states that net sales from the portfolio are excluded from the FY2020 comparison, so the last quarter Takeda prints is fiscal Q4 FY2020 (January-March 2021).",
+  "notes": "Scope is Takeda's Japan line for Nesina in JPY billions to one decimal: the 'Nesina 6/2010 Diabetes' row of the domestic product table in the Japan GAAP/IFRS summaries (FY2011-FY2015), the 'Nesina Japan' row of the data books (FY2016-FY2018) and the Japan column of the three-month tables (FY2019-FY2020). A Japan line was chosen because it is the only Nesina line printed over the whole span; Takeda prints a Nesina total including overseas sales from the FY2013 documents (40.4 for FY2013 against Japan 38.0) and regional rows (United States, Europe and Canada, Emerging Markets) in the data books from FY2015 (FY2015 full-year data book: United States 5.3, Europe and Canada 3.5), so no regional or worldwide line spans FY2011-FY2020. Basis changes: (1) from FY2018 Takeda discloses certain Japan product sales net of discounts and rebates, restating FY2017 retrospectively (Japan FY2017 30.1 as originally printed, 26.6 net; the FY2017 quarters 8.0, 7.2, 8.8, 6.1 are as originally printed and the net-basis restated quarters are 7.3, 6.2, 8.0, 5.1), so year-on-year comparisons across 2018Q2-2019Q1 mix bases (FY2018 Q1 is 7.8, +6.8% against the restated 7.3 but -2.5% against the 8.0 as originally printed); FY2018 quarters onward are net basis. (2) Fixed-dose combinations: through FY2013 Takeda printed the Liovel combination on its own row ('<Liovel> 9/2011'), separate from Nesina; from the FY2014 summaries no Liovel row is printed and no document located states where it is reported, while the Nesina figures themselves were not restated (first quarter FY2013 is 7.3 in both the FY2013 and FY2014 Q1 documents). In the FY2020 reports the row is labelled NESINA-F (and NESINA/VIPIDIA-F in the Q4 report) with a footnote that the figures include fixed dose combinations and blister packs; the FY2019 comparative columns in the FY2020 reports equal the FY2019 data books, so that label change did not restate. Whether combinations entered the Japan line at some point between FY2014 and FY2020 is not established from the documents read. (3) The FY2013 annual summary (year ended March 31, 2014) is IFRS while the FY2013 Q1-Q3 summaries are Japan GAAP; the Japan GAAP quarters FY2011-FY2013 Q3 and the IFRS quarters agree where both are printed (7.3 and 29.5). Quarters in 2011Q3, 2012Q1, 2012Q3, 2013Q1, 2013Q3, 2014Q1, 2014Q3, 2015Q1 and 2019Q1 are derived (year-to-date less earlier quarters) because the quarter's own document prints only cumulative figures; their inputs and the second document are named in each row. FY2011 quarters are prior-year columns of FY2012 documents. The sum of the four quarters equals the printed full-year Japan figure to within 0.1 for FY2013 to FY2020 (FY2013, FY2014 and FY2018 by construction). Label printed: 'Nesina', 'NESINA' (FY2015-FY2016 summaries) and 'NESINA-F' / 'NESINA/VIPIDIA-F' (FY2020 reports). Worldwide Nesina sales including overseas were 40.4 for FY2013 against Japan 38.0, so Japan is the narrower line.",
+  "search_log": [
+    "reused the takeda.com quarterly-results link list (all PDF/XLSX links on the 2014-2025 and current pages, plus the 2012 and 2013 pages fetched here) and the PDFs downloaded earlier into the sibling staging cache; every cited page was re-read with pdfplumber (the verifier's extractor) so quoted figures match its text layer",
+    "Takeda prints the brand on its own line in the product sales analysis of its own quarterly documents: data books FY2017-FY2019, quarterly financial reports FY2020-FY2026; no fuller supplement or other issuer was needed for the quarters cited",
+    "each quarter was read from the quarter's own document as current unless the row's derivation says otherwise (prior-year column, retrospective table or derived)",
+    "FY2025 Q4 exists in two versions on takeda.com (2026-05-13 and the version amended 2026-06-05 for a subsequent event); the amended version is cited, and the product-line figures are identical in both",
+    "Bigdata.com was not used: the issuer's own IR documents were located directly from the takeda.com pages",
+    "EDGAR (Takeda CIK 0001395064) was not searched: the takeda.com quarterly documents were sufficient for every quarter",
+    "downloaded the takeda.com FY2012 and FY2013 quarterly-results pages (the pages for 2009, 2010 and 2011 return 404) and plumbed every PDF on them; the FY2013 page carries generically named files (financial-statements-download-entire-file_01/_02/_03 are the FY2013 Q1, H1 and 9M summaries, download-financial-statements.pdf the FY2013 annual summary)",
+    "FY2010 and FY2011 quarterly documents (including the FY2010 and FY2011 first-quarter releases that would carry the June 2010 launch quarter) were not located on takeda.com; FY2011 quarters are read from prior-year columns of the FY2012 summaries and data books",
+    "the FY2012-FY2013 H1 and annual Japan GAAP summaries print only cumulative Nesina figures (H1, full year), the FY2012 and FY2013 Q3 summaries print three-month figures; quarters without a printed three-month figure are derived and say so in their context",
+    "EDGAR and Bigdata.com were not used; no partner or royalty holder reporting was searched because Takeda's Japan line spans the whole period",
+    "FY2021 Q1-Q4 reports checked for a Nesina product row: only the Teijin divestiture text (three lines per report), no product sales row",
+    "US alogliptin (Nesina/Kazano/Oseni) sales: Takeda prints them in the product sales analysis from the FY2015 data book (US column) and the FY2018 data books give FY2015-FY2017 history; a US or worldwide series was not built because it starts later than the Japan line"
+  ]
+}

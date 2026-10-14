@@ -1,0 +1,44 @@
+{
+  "drug_name": "Bevespi Aerosphere",
+  "generic_name": "glycopyrrolate/formoterol fumarate (glycopyrronium/formoterol)",
+  "manufacturer": "AstraZeneca",
+  "benchmark_identity": "astrazeneca_bevespi_aerosphere_worldwide_reported",
+  "therapeutic_area": "Respiratory / Allergy",
+  "indication_area": "Respiratory (COPD)",
+  "revenue_scope": "Worldwide product sales",
+  "geography": "Worldwide",
+  "formulation": "pressurised metered-dose inhalation aerosol (co-suspension delivery)",
+  "route_of_administration": "inhaled",
+  "moa": "Long-acting muscarinic antagonist (LAMA) / long-acting beta2-agonist (LABA) fixed-dose combination",
+  "moa_class": "lama_laba_combination",
+  "first_approval_year": 2016,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=208294",
+    "quote": "Original Approvals or Tentative Approvals ... 04/25/2016 ORIG-1 Approval Type 4 - New Combination STANDARD (NDA 208294, Company: ASTRAZENECA; BEVESPI AEROSPHERE FORMOTEROL FUMARATE; GLYCOPYRROLATE AEROSOL, METERED;INHALATION)"
+  },
+  "launch_quarter": "2017Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/901832/000165495417000700/a8087v.htm",
+    "quote": "Bevespi Aerosphere inhalation aerosol was launched commercially in the US in January 2017"
+  },
+  "commercial_start_quarter": "2017Q1",
+  "series_start_reason": "The Q1 2017 announcement (6-K filed 2017-04-27, 0001654954-17-003685) is the first to print a Bevespi Aerosphere sales figure: 'Bevespi Aerosphere Product Sales of $1m; launched in 2017', in the respiratory commentary text, with no sales-table row. Series starts at the launch quarter. From the Q2 2017 announcement (0001654954-17-006697) the product has a table row labelled 'Bevespi' (first half 4, second quarter 3), consistent with 1 for Q1.",
+  "series_end_quarter": "2023Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The Q1 2024 results announcement (6-K filed 2024-04-25, 0001654954-24-004975) lists the R&I medicines Symbicort, Fasenra, Pulmicort, Breztri, Tezspire, Saphnelo, Airsupra and 'Other R&I' with no Bevespi row, and no 6-K filed after 2024-02-09 contains a numeric Bevespi row. The last quarterly row is Q4 2023 (15). The later Forms 20-F print Bevespi only as 2023 and earlier comparatives (58 for 2023).",
+  "notes": "The row is labelled 'Bevespi' in AstraZeneca's tables (the brand is Bevespi Aerosphere). Sales are worldwide: for 2023 the regional columns show US 34, Europe 17, Emerging Markets 6 (Form 20-F for 2023). Quarters are read from the World column of the quarter's own announcement; 2017Q2-2017Q4 are the second row of the announcement's regional analysis (the first-half or nine-month row precedes it, and the quarters reconcile to the full-year 16 printed for 2017 as 3+4+8 plus the first quarter of 1 printed in text in the Q1 2017 announcement). Each later year's quarters sum to the full-year figure printed in the Q4 announcement exactly (2018: 33; 2020: 48; 2021: 54; 2022: 58; 2023: 58). Approval: FDA NDA 208294 on 2016-04-25.",
+  "search_log": [
+    "Listed AstraZeneca PLC (CIK 0000901832) filings via data.sec.gov submissions (recent plus older pages): 2,052 filings of every form type, 6-K/A and 20-F/A included.",
+    "Fetched the main document of 1,638 of them (1,607 6-K, 6 6-K/A, 24 20-F, 1 20-F/A; filed 2002-11-05 to 2026-10-05) into a local cache and scanned them as table rows (cells joined by ' | ') by row label; AstraZeneca 6-Ks before November 2002 are not in the cache.",
+    "Located each quarterly results announcement as the 6-K in the filing window of the quarter that contains the Symbicort product-sales row, then read the brand row from that same announcement (the quarter's own release), not from a later comparative column.",
+    "Latest results document used for the end of the data: the Q2 2026 results 6-K filed 2026-07-27 (0001104659-26-086846); no later results announcement is in the filing list (latest filing 2026-10-08, not a results release).",
+    "Checked AstraZeneca's investor-relations results page (astrazeneca.com/investor-relations/results-and-presentations.html): the only Excel files it links are two epidemiology workbooks, and no product-sales Excel data book was found, so the sec.gov 6-K tables are the source.",
+    "Bigdata.com was not needed; every figure was read from the sec.gov original document.",
+    "Scanned every cached AstraZeneca 6-K and 20-F for rows labelled Bevespi before the Q2 2017 announcement: only pipeline-table rows (status approved/launched) and no sales-table row (the Q1 2017 prose figure is recorded in the verification entry below); the Q4 2016 release describes the US launch in text without a figure (the Q1 2017 release prints a $1m figure in text, see the verification entry).",
+    "Compared each quarter's first medicine table with the World column of the regional Product Sales analysis table: identical for all 27 quarters.",
+    "Summed quarters against full-year figures printed in the Q4 announcements and Forms 20-F: equal for 2018, 2020-2023; 2019 sum 42 equals the printed 42.",
+    "Searched 6-K and 20-F filings from 2024-02-09 for a numeric Bevespi row: only Forms 20-F with 2023 and earlier comparatives; none in a quarterly 6-K.",
+    "Fetched FDA Drugs@FDA overview for NDA 208294 for the approval date.",
+    "Verification fix: the original scan read table rows only and missed the Q1 2017 prose figure; the verifier read the Q1 2017 6-K (a4745d.htm) and found 'Bevespi Aerosphere Product Sales of $1m'. Row 2017Q1 added; commercial_start_quarter moved to 2017Q1; launch_quarter 2017Q1 unchanged."
+  ]
+}

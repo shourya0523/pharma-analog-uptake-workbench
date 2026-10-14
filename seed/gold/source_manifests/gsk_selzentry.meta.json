@@ -1,0 +1,35 @@
+{
+  "drug_name": "Selzentry",
+  "generic_name": "maraviroc",
+  "therapeutic_area": "Infectious Disease / Vaccines",
+  "indication_area": "HIV-1 infection (CCR5-tropic)",
+  "formulation": "film-coated tablet",
+  "route_of_administration": "oral",
+  "moa": "CCR5 co-receptor antagonist (HIV entry inhibitor)",
+  "moa_class": "ccr5_antagonist",
+  "first_approval_year": 2007,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=022128",
+    "quote": "Approval Date(s) and History, Letters, Labels, Reviews for NDA 022128 ... 08/06/2007 ORIG-1 Approval Type 1 - New Molecular Entity PRIORITY; SELZENTRY TABLET;ORAL"
+  },
+  "manufacturer": "GSK plc",
+  "benchmark_identity": "gsk_selzentry_celsentri_worldwide_reported",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "launch_quarter": null,
+  "commercial_start_quarter": "2010Q1",
+  "series_start_reason": "Series starts at 2010Q1, the first quarter of the ViiV Healthcare era in GSK's quarterly releases. The original owner marketed Selzentry before ViiV was formed (Nov 2009); GSK releases of 2008-2009 and the Q4 2009 release (6-K 2010-02-04) print no Selzentry row, and no prior-owner quarterly figures were located.",
+  "series_end_quarter": "2020Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "From the Q1 2021 release (6-K 2021-04-28) the HIV section lists Dolutegravir products, Rukobia, Cabenuva and 'Other' only; Selzentry and Epzicom/Kivexa are no longer separate rows. The Q4 2020 release (6-K 2021-02-03) is the last that prints Selzentry.",
+  "notes": "Worldwide GSK (ViiV Healthcare) turnover for Selzentry in GBP millions, taken from the 'Pharmaceuticals turnover' regional tables (Total column). ViiV Healthcare was formed on 1 November 2009; the product is sold as Selzentry in the U.S. and Celsentri elsewhere, but GSK prints the single label 'Selzentry'. FDA approval 2007-08-06. launch_quarter is null: no cited document dates the launch.",
+  "search_log": [
+    "fetched data.sec.gov submissions CIK0001131399 (GSK plc) recent + history pages; selected 6-K / 6-K/A filings whose primaryDocDescription is a quarterly/half-year/final results announcement (plus 2010-2012 6-Ks matching RESULT/TURNOVER/FORM 6-K/QUARTER/HALF); downloaded each and converted tables to text",
+    "per release: product row located by exact row label in the 'Pharmaceuticals turnover' regional table (Total column = worldwide) or, where the product is absent from it, in the 'Sales from New Pharmaceutical and Vaccine products' table; Q1 taken from the Q1 release, Q2/Q3 from the 3-month column of the Q2/Q3 release, Q4 from the 3-month column of the Q4/full-year release (the same release prints the full-year row)",
+    "cross-check: Q1+Q2+Q3+Q4 equals the full-year row printed in the Q4 release for every complete year, and Q1+Q2 / +Q3 equal the printed six-/nine-month rows",
+    "FDA approval: fetched the Drugs@FDA overview page for the NDA",
+    "checked GSK releases 2008-02-07 to 2010-02-04 (docs2 set) for a Selzentry/Celsentri row: none",
+    "prior owner fallback: one Bigdata.com smart search for Pfizer Selzentry 2008 product revenues returned no documents; Pfizer filings were not otherwise read, so any 2007-2009 prior-owner figures are unverified and not included",
+    "2021-2026 releases: no Selzentry row (HIV section shows 'Other')"
+  ]
+}

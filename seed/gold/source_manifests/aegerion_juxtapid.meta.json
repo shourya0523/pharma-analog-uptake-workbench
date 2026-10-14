@@ -1,0 +1,39 @@
+{
+  "drug_name": "Juxtapid",
+  "generic_name": "lomitapide",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Homozygous familial hypercholesterolemia (HoFH)",
+  "formulation": "capsule",
+  "route_of_administration": "oral",
+  "moa": "Microsomal triglyceride transfer protein (MTP) inhibitor",
+  "moa_class": "mtp_inhibitor",
+  "first_approval_year": 2012,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2012/203858Orig1s000ltr.pdf",
+    "quote": "NDA 203858 NDA APPROVAL Aegerion Pharmaceuticals, Inc. ... Juxtapid (lomitapide) capsules 5 mg, 10 mg, and 20 mg ... It is approved, effective on the date of this letter ... CHRISTINE P NGUYEN 12/21/2012"
+  },
+  "manufacturer": "Aegerion Pharmaceuticals",
+  "benchmark_identity": "aegerion_juxtapid_worldwide_reported",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "launch_quarter": "2013Q1",
+  "launch_evidence": {
+    "year": 2013,
+    "url": "https://www.sec.gov/Archives/edgar/data/1338042/000119312513112185/d447885d10k.htm",
+    "quote": "The FDA approved our first product, JUXTAPID, on December 21, 2012, and we launched the product in late January 2013."
+  },
+  "commercial_start_quarter": "2013Q1",
+  "series_start_reason": null,
+  "series_end_quarter": "2016Q3",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Aegerion's last periodic report is its Form 10-Q for the quarter ended September 30, 2016 (filed 2016-11-04); Aegerion was acquired by QLT/Novelion on 2016-11-29 (Form 25-NSE filed that day) and filed no later report. Novelion's and then Amryt's Juxtapid lines have a different scope (see notes), so they are not spliced.",
+  "notes": "Aegerion's global net product sales of Juxtapid (lomitapide), the company's brand figure in each document. 2013Q1-2014Q4: the single revenue line 'Net product sales' of the statements of operations (Juxtapid was the only marketed product; the release text calls the same amount net product sales of JUXTAPID, e.g. $27.0 million for 2014Q1 = 26,973). 2015Q1-2016Q3: the table line also carries Myalept (acquired January 2015), so the Juxtapid-named sentence is used (one decimal in millions): 2015Q1 57.3 vs table 59,384 including Myalept. The global figure includes ex-U.S. and named-patient sales (releases state between 66% and 96% of net product sales, by quarter, were from U.S. prescriptions). After 2016Q3 the line changes: Novelion's Q4 2016 release gives GAAP Juxtapid sales of $8.6 million for 29 November-31 December only plus pro forma $22.4 million; Novelion's 2017 and 2018Q1-Q2 releases print 'net revenues of JUXTAPID' (the 2018Q2 figure includes $0.8 million of royalty revenue from Amryt's Juxtapid sales in EMEA); Amryt prints combined 'Juxtapid/Lojuxta (lomitapide) revenues' including EMEA. Those are different scopes and were not sourced. Chiesi (owner since 2023) is private. Checks: 2013 quarters sum to 48,546 = FY2013; 2014 sum to 158,373 = FY2014; 2015 sum 212.9 vs FY2015 213.0 (rounding).",
+  "search_log": [
+    "EDGAR submissions for Aegerion (CIK 1338042): read every 8-K Item 2.02 exhibit (including the 8-K/A of 2015-08-17, which carries a different exhibit and no quarterly Juxtapid figure) and the Forms 10-K/10-Q for 2013-2016.",
+    "2015-2016 10-Qs and 10-K: no Juxtapid/Myalept split table (only 'Net product sales'); 2016Q3 uses the 10-Q MD&A sentence 'net product sales of lomitapide of $22.0 million' because the release sentence names JUXTAPID after the figure.",
+    "Row_label 'JUXTAPID' for 2015-2016 prose rows: for several releases the product name follows the figure in the first sentence and is matched through an earlier line of the same release; the verifier passes all rows.",
+    "Novelion (CIK 827809) 8-K Item 2.02 exhibits 2017-2019 read: Juxtapid is given as 'net revenues of JUXTAPID' (royalties included from 2018); no Juxtapid net product sales series with the Aegerion scope.",
+    "Amryt Pharma (Form 6-K 2020-08-06, 2021-03-04; Forms 20-F FY2020/FY2021) searched through Bigdata.com: reports 'Juxtapid/Lojuxta (lomitapide)' combined revenues quarterly and annually; scope differs (adds EMEA), not sourced. Chiesi Farmaceutici is private and publishes no Juxtapid figure (not searched beyond that).",
+    "FDA approval letter 203858Orig1s000ltr.pdf read for the approval date (12/21/2012)."
+  ]
+}

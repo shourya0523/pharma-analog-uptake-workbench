@@ -1,0 +1,44 @@
+{
+  "drug_name": "Onglyza",
+  "generic_name": "saxagliptin",
+  "manufacturer": "AstraZeneca",
+  "benchmark_identity": "astrazeneca_onglyza_worldwide_reported",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Metabolic (type 2 diabetes)",
+  "revenue_scope": "Worldwide product sales",
+  "geography": "Worldwide",
+  "formulation": "oral tablet",
+  "route_of_administration": "oral",
+  "moa": "Dipeptidyl peptidase-4 (DPP-4) inhibitor",
+  "moa_class": "dpp4_inhibitor",
+  "first_approval_year": 2009,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=022350",
+    "quote": "Original Approvals or Tentative Approvals ... 07/31/2009 ORIG-1 Approval Type 1 - New Molecular Entity STANDARD (NDA 022350, Company: ASTRAZENECA AB; ONGLYZA SAXAGLIPTIN HYDROCHLORIDE TABLET;ORAL)"
+  },
+  "launch_quarter": "2009Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/14272/000119312509211734/d10q.htm",
+    "quote": "In August 2009, the Company and AstraZeneca launched ONGLYZA in the U.S."
+  },
+  "commercial_start_quarter": "2014Q2",
+  "series_start_reason": "Launch was in 2009Q3 (Bristol-Myers Squibb 10-Q filed 2009-10-22), but AstraZeneca printed a different measure until 2014 and its Q1 2014 line is a mixed quarter. AstraZeneca's Q4 2011 announcement (0000950103-12-000573) describes the Onglyza row as 'Alliance revenue from the ONGLYZA collaboration with Bristol-Myers Squibb' ($71 million in that quarter), i.e. a profit-share measure rather than product sales, and the Q4 2012 and Q1 2013 announcements use the same wording. The Q1 2014 announcement (0001191638-14-000608) states 'AstraZeneca completed the acquisition of BMS's share of the global diabetes alliance on 1 February 2014 and began reflecting 100 percent ownership at that point', and its note 4 says the results were consolidated from 1 February 2014, so the $162m Q1 2014 figure mixes the two bases. Q2 2014 is the first full quarter of one consistent worldwide product-sales line.",
+  "series_end_quarter": "2023Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The Q1 2024 results announcement (6-K filed 2024-04-25, 0001654954-24-004975) lists the CVRM medicines Farxiga, Brilinta, Crestor, Seloken/Toprol-XL, Lokelma, roxadustat, Andexxa, Wainua and 'Other CVRM' with no Onglyza row, and no 6-K filed after 2024-02-09 contains a numeric Onglyza row. The last quarterly row is Q4 2023 (47), in the Q4 2023 announcement of 2024-02-08. The Forms 20-F for 2024 and 2025 print Onglyza only for 2023 and earlier years (227 for 2023).",
+  "notes": "AstraZeneca's own footnote in its Form 20-F for 2022 states 'Komboglyze/Kombiglyze XR Product Sales is included in the Onglyza Product Sales figure', so this line contains the saxagliptin/metformin combinations. Quarters 2014Q2 to 2023Q4 are read from the World column of the quarter's own announcement (2014: 'Product Revenue Analysis' tables; 2015 onward: 'Product Sales' tables); for 2016Q1 to 2017Q1 the first Product Sales table of the announcement is cited because the later regional table is headed differently, and the figures agree with it. Each year's quarters sum to the full-year figure printed in the Q4 announcement within 1 (2021: 359 vs 360; 2023: 228 vs 227, rounding of $m figures). Not joined: Bristol-Myers Squibb (CIK 14272) printed ONGLYZA alone in its 2009-2010 10-Qs (20 for Q3 2009) and an 'Onglyza/Kombiglyze' line from the 10-K filed 2011-02-18 on (709 for 2012 in the 10-K filed 2013-02-15); those are its own recorded net sales with no stated geography, and no BMS or AstraZeneca product-sales line exists for 2014Q1, so they are not spliced on. AstraZeneca's own Onglyza rows before 2014 (first printed for Q3 2009) are described in its 2011-2013 announcements as alliance revenue and are not used.",
+  "search_log": [
+    "Listed AstraZeneca PLC (CIK 0000901832) filings via data.sec.gov submissions (recent plus older pages): 2,052 filings of every form type, 6-K/A and 20-F/A included.",
+    "Fetched the main document of 1,638 of them (1,607 6-K, 6 6-K/A, 24 20-F, 1 20-F/A; filed 2002-11-05 to 2026-10-05) into a local cache and scanned them as table rows (cells joined by ' | ') by row label; AstraZeneca 6-Ks before November 2002 are not in the cache.",
+    "Located each quarterly results announcement as the 6-K in the filing window of the quarter that contains the Symbicort product-sales row, then read the brand row from that same announcement (the quarter's own release), not from a later comparative column.",
+    "Latest results document used for the end of the data: the Q2 2026 results 6-K filed 2026-07-27 (0001104659-26-086846); no later results announcement is in the filing list (latest filing 2026-10-08, not a results release).",
+    "Checked AstraZeneca's investor-relations results page (astrazeneca.com/investor-relations/results-and-presentations.html): the only Excel files it links are two epidemiology workbooks, and no product-sales Excel data book was found, so the sec.gov 6-K tables are the source.",
+    "Bigdata.com was not needed; every figure was read from the sec.gov original document.",
+    "Scanned every cached AstraZeneca 6-K for rows labelled Onglyza: first numeric row is the Q3 2009 announcement (ONGLYZA 9, alliance revenue); Q2 2014 is the first release after full consolidation.",
+    "Compared each quarter's first medicine table with the World column of the regional Product Sales analysis table of the same announcement: identical in all 39 quarters (for 2016Q1-2017Q1, against the later World-column row of the same announcement).",
+    "Summed the four quarters of each year and compared them with the full-year figure printed in the Q4 announcement or the Form 20-F: equal or within 1.",
+    "Searched the 6-K and 20-F filings from 2024-02-09 for a numeric Onglyza row: only the Form 20-F for 2023 (filed 2024-02-20) and later Forms 20-F with 2023/2022 comparatives; none in any quarterly 6-K. Checked the Q1 2024 announcement's CVRM product list by eye (no Onglyza).",
+    "Fetched Bristol-Myers Squibb 10-Q/10-K filings 2009-2013 (list from data.sec.gov for CIK 14272) and read the Onglyza rows to decide whether to join issuers; not joined for the reasons in notes.",
+    "Fetched FDA Drugs@FDA overview for NDA 022350 for the approval date."
+  ]
+}

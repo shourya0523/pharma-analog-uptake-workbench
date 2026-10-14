@@ -1,0 +1,34 @@
+{
+  "drug_name": "Movantik",
+  "generic_name": "naloxegol",
+  "manufacturer": "AstraZeneca",
+  "benchmark_identity": "astrazeneca_movantik_us_reported",
+  "therapeutic_area": "GI / Liver / Women's Health / Urology",
+  "indication_area": "Opioid-induced constipation (adults with chronic non-cancer pain)",
+  "revenue_scope": "US column of AstraZeneca's product sales by region table",
+  "geography": "United States",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Peripherally acting mu-opioid receptor antagonist (PAMORA)",
+  "moa_class": "pamora_mu_opioid_antagonist",
+  "first_approval_year": 2014,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2014/204760s000lbl.pdf",
+    "quote": "MOVANTIK (naloxegol) tablets, for oral use, C-II. Initial US Approval: 2014 ... MOVANTIK (naloxegol) is indicated for the treatment of opioid-induced constipation (OIC) ... Revised: 09/2014"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2015Q2",
+  "series_start_reason": "Series starts at 2015Q2, the first quarter in which AstraZeneca prints a sales row for the product by region (second-quarter 2015 release, US 1). AstraZeneca's first-quarter 2015 release (2015-04-24) lists the product as launched in the US but carries no sales row; its later quarterly history table prints a world figure of 3 for 2015Q1 (and the 2015 US column 28 less the quarters 1 + 9 + 15 leaves 3), which is not recorded because no document prints a US-column row for that quarter. No issuer document found dates the launch.",
+  "series_end_quarter": "2019Q3",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "AstraZeneca's full-year 2019 results (6-K 0001654954-20-001577) and first-quarter 2020 results (0001654954-20-004573) print no Movantik sales row in their product tables; the product appears only in litigation and subsequent-events text. AstraZeneca announced on 2020-02-25 the divestment of global rights excluding Europe, Canada and Israel to RedHill (0001654954-20-001896), completed in April 2020.",
+  "notes": "Scope: US column, which is the narrowest geography AstraZeneca prints; through 2017Q2 the World figure equals the US figure (Europe and other columns print dashes). Full-year check against the US column of the full-year releases: 2015 28 (Q1 3 + 1 + 9 + 15), 2016 90 (17+23+24+26), 2017 120 (30+32+29+29), 2018 108 (28+23+30+27). Successor: RedHill Biopharma (CIK 1553846) reported 'Movantik revenues' (US$ thousands) in its interim financial statements: 2020Q2 19,951 (6-K 0001558370-20-010480), 2020Q3 19,396 (0001171843-20-007899), 2021Q1 18,898 (0001178913-21-001921), 2021Q2 19,212 (0001558370-21-012075), 2021Q3 19,395 (0001178913-21-003741), 2022Q2 16,125 (0001558370-22-016536) and 2022Q3 16,006 (0001178913-22-004193), 2022Q1 restated to 9,329 from 14,614 for overstated net revenues (6-K/A 0001558370-22-016533); fourth quarters are printed only inside full-year totals (2020 59,356; 2021 76,767; 2022 52,098 in the 20-F). That line is not joined here because its table does not state a geography (the 20-F text says RedHill commercializes Movantik in the U.S.), its fourth quarters would all be derived, and 2019Q4-2020Q1 is unpublished by either issuer (RedHill's 6-K 0001171843-20-001228 states 'In 2019, Movantik generated net sales of $96 million in the U.S.'). RedHill's ownership ended 2023-02-06 (6-K 0001178913-23-001555: 'Revenues for Movantik were recorded up to and including February 1, 2023'); the successor is Movantik Acquisition Co., an affiliate of HCR, a private entity (the listed Valinor not checked). AstraZeneca's co-commercialisation agreement for Movantik in the US is referenced in its Q1 2015 release.",
+  "search_log": [
+    "Listed AstraZeneca 6-K/20-F filings 2014-2021 (CIK 901832) and extracted every table row whose first cell begins 'Movantik' (work/azq.py): regional product-sales tables exist for every quarter from 2015Q2 to 2019Q3.",
+    "Read the US column of each quarter's own results release (Q1-Q4); Q4 from the Q4/full-year release's quarter table. Column layout changed between 2016 and 2017 (World, US, Europe, ... to World, Emerging Markets, US, ...); header rows were checked for each document.",
+    "FY2019 and Q1 2020 releases: no Movantik sales row (only text hits: litigation, and a subsequent-events note in the Q1 2020 release).",
+    "Rung c: RedHill Biopharma 6-K/20-F filings 2020-2023 scanned for 'Movantik'; quarterly 'Movantik revenues' lines extracted (work/rhy.py) and listed in notes. RedHill's fourth-quarter releases print total net revenues only.",
+    "Rung d: ownership after RedHill is Movantik Acquisition Co. (HCR affiliate), a private company; no public figure was searched for.",
+    "Licensees of Moventig in Europe not checked."
+  ]
+}

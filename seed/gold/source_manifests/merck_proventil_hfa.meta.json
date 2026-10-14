@@ -1,0 +1,45 @@
+{
+  "drug_name": "Proventil HFA",
+  "generic_name": "albuterol sulfate",
+  "manufacturer": "Merck",
+  "benchmark_identity": "merck_proventil_hfa_worldwide_reported",
+  "therapeutic_area": "Respiratory / Allergy",
+  "indication_area": "Respiratory (asthma, bronchospasm)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "inhalation aerosol (HFA metered-dose inhaler)",
+  "route_of_administration": "inhaled",
+  "moa": "Short-acting beta2-adrenergic receptor agonist",
+  "moa_class": "short_acting_beta2_agonist",
+  "first_approval_year": 1996,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/ob/results_product.cfm?Appl_No=020503&Appl_Type=N",
+    "quote": "Product Details for NDA 020503 PROVENTIL-HFA (ALBUTEROL SULFATE) EQ 0.09MG BASE/INH ... Application Number: N020503 Product Number: 001 Approval Date: Aug 15, 1996"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2006Q1",
+  "series_start_reason": "Series starts 2006Q1: the first quarter printed for the line. The line first appears as a current-quarter row in Schering-Plough's release filed 2007-04-19, and its prior-year columns in the 2007 releases give the four 2006 quarters (41, 63, 45, 55); the releases filed 2005-07-21 to 2007-01-29 print no Proventil row. The product was approved in 1996 and no issuer document located here dates its launch. An earlier, disconnected print exists: the Schering-Plough release filed 2004-01-26 lists 'Proventil' in its fourth-quarter 2003 net sales table (43, with 17 for 2002Q4), but the releases filed 2004-04-22, 2004-07-21, 2005-01-25, 2005-04-21, 2005-07-21, 2005-10-24, 2006-01-30, 2006-04-20, 2006-07-24, 2006-10-20 and 2007-01-29 print no Proventil row, so 2004Q1-2005Q4 are unpublished and the series cannot extend back across that gap.",
+  "series_end_quarter": "2011Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Merck's earnings release for 2011Q4 (filed 2012-02-02) is the last to print a Proventil row (38); no Merck earnings release from 2012-04-27 to 2021-04-29, and no Merck 10-K/10-Q table for 2017-2021, mentions Proventil.",
+  "notes": "Worldwide line in USD millions as printed: 'Proventil / Albuterol CFC' in Schering-Plough releases through 2009Q1 (the 'CFC' marks that generic albuterol CFC inhalers were part of the line), 'Proventil / Albuterol' in 2009Q2-2009Q3 and 'Proventil' from the 2009Q4 release on. The numbers continue without a break across the renames (for example 2009Q1 is 54 in the 2009-04-21 release and again 54 in Merck's 2010-05-04 comparative column; 2008 quarters 50, 38, 38, 63 agree with the prior-year columns of the 2009 releases), so the line is treated as one scope, but the part of it that is generic CFC albuterol, rather than the Proventil HFA brand, is not separated by any document found. Issuer: Schering-Plough through 2009Q3 and Merck from 2009Q4; both are the same registrant (CIK 310158, renamed Merck & Co. after the 2009-11-03 merger). 2009Q4 is the 'Supplemental Combined Non-GAAP' column of Merck's 2010-02-16 release (56); its GAAP column (26) holds only the post-merger days. Year check: 2007 207 vs 207; 2008 189 vs 190; 2009 225 vs 225; 2010 210 vs 210; 2011 155 vs 155 (printed years). 2006 year check: the four 2006 quarters (41, 63, 45, 55) sum to 204 against the 203 printed as the 2006 year-to-date prior-year column in the 2008-02-12 release, a rounding difference of 1.",
+  "search_log": [
+    "Downloaded and parsed the exhibit 99.x of every CIK 310158 8-K Item 2.02 from 2004-10 to 2021-04 (SEC EDGAR); the pre-2005-07 filings are paper-format text and were read as full submission text.",
+    "Proventil row first appears in the release of 2007-04-19; 2007Q1 through 2009Q3 from the first table of each Schering-Plough release, 2009Q4 to 2011Q4 from Merck's releases.",
+    "grep for 'Proventil' over every Merck release 2012-04 to 2021-04, Merck 10-K/10-Q 2017-2021 and all Organon documents found nothing, which fixes the end at 2011Q4. Merck 10-K/10-Q for 2012-2016 were not downloaded.",
+    "Cross-check of overlapping columns: 2008Q1-Q4 as first printed (50, 38, 38, 63) equal the prior-year columns of the 2009 releases; 2009Q1-Q3 (54, 56, 59) equal the 2010 releases' Supplemental Combined columns.",
+    "Checked for an earlier start: grep for 'Proventil' and 'albuterol' in the exhibits of the Schering-Plough 8-Ks filed 2004-04-22, 2004-07-21, 2005-01-25, 2005-04-21, 2005-07-21, 2005-10-24, 2006-01-30, 2006-04-20, 2006-07-24, 2006-10-20 and 2007-01-29 found no Proventil row; the release filed 2004-01-26 (2003 and 2002 quarters) does print 'Proventil', leaving a gap of 2004Q1-2005Q4 before the 2006 prior-year-column quarters, so the series starts at 2006Q1."
+  ],
+  "joined_issuers": [
+    {
+      "issuer": "Schering-Plough",
+      "first_quarter": "2006Q1",
+      "last_quarter": "2009Q3"
+    },
+    {
+      "issuer": "Merck",
+      "first_quarter": "2009Q4",
+      "last_quarter": "2011Q4"
+    }
+  ]
+}

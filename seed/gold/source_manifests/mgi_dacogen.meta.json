@@ -1,0 +1,42 @@
+{
+  "drug_name": "Dacogen",
+  "generic_name": "decitabine",
+  "manufacturer": "MGI Pharma",
+  "benchmark_identity": "mgi_dacogen_us_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (hematologic)",
+  "revenue_scope": "U.S. product sales",
+  "geography": "United States",
+  "formulation": "for injection (50 mg/vial)",
+  "route_of_administration": "intravenous",
+  "moa": "DNA methyltransferase inhibitor (hypomethylating nucleoside analogue)",
+  "moa_class": "hypomethylating_agent",
+  "first_approval_year": 2006,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2006/021790s000ltr.pdf",
+    "quote": "NDA 21-790 ... Dacogen (decitabine) for Injection 50 mg/vial ... for myelodysplastic syndrome (MDS) ... It is approved, effective on the date of this letter (electronic signature dated 5/2/2006)"
+  },
+  "launch_quarter": "2006Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/702131/000095013307001925/w34056e10vq.htm",
+    "quote": "We began our commercial launch of Dacogen during the second quarter of 2006 and therefore did not have sales of Dacogen for the three months ended March 31, 2006."
+  },
+  "commercial_start_quarter": "2006Q2",
+  "series_start_reason": null,
+  "series_end_quarter": "2007Q3",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "MGI PHARMA was acquired by Eisai Co., Ltd. effective 2008-01-28 (8-K filed 2008-01-28, Item 2.01: 'Effective as of January 28, 2008, MGI PHARMA was acquired by Eisai Co., Ltd.') and filed Form 15 on 2008-02-08 (https://www.sec.gov/Archives/edgar/data/702131/000110465908008213/a08-4915_11512g.htm); its last periodic report is the 10-Q for the quarter ended 2007-09-30 and no FY2007 10-K or fourth-quarter 2007 release was filed. Eisai (not an SEC filer) is the successor seller of the product; its Dacogen figures are in yen in Eisai documents that could not be fetched (eisai.com/ir and eisai.co.jp/ir redirect to the home page), and a yen series would not be the same unit, so the series is not extended.",
+  "notes": "MGI PHARMA's MD&A revenue table lists 'Dacogen' under 'Product sales' with 2006 and 2007 comparatives; the FY2006 10-K sentence 'Sales of Dacogen in the United States provided $36.1 million' equals the 10-K table's 'Dacogen Injection 36,102' (thousands), which is the basis for the U.S. scope (the quarterly tables print no geography; the 10-K lists the MDS product's marketing as North America: MGI PHARMA, Rest of World: Cilag GmbH). 2006Q4 is the figure in the 2007-02-07 earnings release text ($19.0 million), rounded to one decimal; the quarters 2006Q2 + 2006Q3 + 2006Q4 sum to 36.134 against the 10-K's 36,102. SuperGen/Astex Dacogen royalty revenue and Eisai/Otsuka figures are not sales and are not used. Otsuka acquired the U.S., Canada and Japan rights from Eisai Inc. in March 2014 but no Otsuka FACT BOOK (63 downloaded, 2011-2026) names Dacogen. Scope: the product-sales line is MGI PHARMA's own sales; no table heading names a geography, and the evidence for the U.S. scope is the FY2006 10-K sentence 'Sales of Dacogen in the United States provided $36.1 million', which equals the table's 36,102, together with the 10-Qs of 2007, which book revenue from the Dacogen license agreement with Cilag (the ex-North America licensee) outside the product-sales table ('revenue from the Dacogen license agreement with Cilag'). 2006Q4 is the rounded figure of the earnings release (direct_reported_rounded); the 10-K year (36,102) less the nine months in the Q3 2006 10-Q (17,134) gives 18,968 thousand, consistent with it. Eisai (successor seller from 2008-01-28) prints Dacogen sales in yen: the Eisai quarterly release dated 2008-07-31 (https://www.sec.gov/Archives/edgar/vprr/0800/08004219.pdf, an image-only PDF the verifier's text extractor cannot open) states Dacogen sales of 4,361 million yen for its first quarter (April to June 2008); a yen series on an April-March fiscal year cannot be appended to this dollar series without a currency conversion, so it is not joined. Later Eisai periods were not sourced.",
+  "search_log": [
+    "Bigdata.com smart search for Dacogen net sales returned no documents; EDGAR was used directly",
+    "listed MGI Pharma (CIK 0000702131) filings through data.sec.gov/submissions: 10-Q for 2006Q1 to 2007Q3 (plus 10-Q/A for 2006Q2 and 2006Q3 filed 2007-03-01, which print the same Dacogen figures), 10-K FY2006, earnings 8-Ks with exhibit 99.1; no 10-K for FY2007 exists (Form 15-12G filed 2008-02-08)",
+    "read the 'Product sales' table of each 10-Q (original filings used) and the earnings-release text for the fourth quarter of 2006, because the 10-K prints only the year (36,102)",
+    "Q1 2006 10-Q (filed 2006-05-09) prints no Dacogen sales row (FDA approval was 2006-05-02); Q1 2007 10-Q states Dacogen had no sales in the three months ended 2006-03-31",
+    "Eisai IR (eisai.com/ir/*, eisai.co.jp/ir/*) answers 301/302 redirects to the home page from this environment, so Eisai's yen Dacogen figures for 2008 to 2014 could not be read",
+    "searched all 63 Otsuka FACT BOOKs (2011-2026) with pdftotext: none names Dacogen",
+    "SuperGen/Astex 8-Ks and 10-Qs print Dacogen royalty revenue only, not net sales",
+    "Parallel web search for Eisai data books and reference data listing Dacogen: found the SEC-hosted image-only Eisai release of 2008-07-31 (Dacogen 4,361 million yen for April-June 2008, read from the search engine's OCR excerpt, not verified by the verifier's extractor) and Eisai's TDnet reference data for FY2013 to FY2015 (fs2.magicalir.net), whose Americas major-products tables list Aloxi, Halaven, Banzel, AcipHex, Lenvima and BELVIQ and no Dacogen (FY2015 release checked with pdftotext: no 'Dacogen')",
+    "SuperGen/Astex 10-Qs and 10-Ks state worldwide royalty revenue recognised on a cash basis (royalties of 20% to 30% of net worldwide Dacogen sales), not U.S. product sales; no net-sales figure was found there either",
+    "FY2006 10-K Note 15 splits total company revenue by customer location (United States 331,238 of 342,788 thousand) and is not product-specific; 2007 10-Qs print no sentence tying the Dacogen line to the United States"
+  ]
+}

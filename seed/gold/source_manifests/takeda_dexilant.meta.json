@@ -1,0 +1,38 @@
+{
+  "drug_name": "Dexilant",
+  "generic_name": "dexlansoprazole",
+  "manufacturer": "Takeda",
+  "benchmark_identity": "takeda_dexilant_us_reported",
+  "therapeutic_area": "GI / Liver / Women's Health / Urology",
+  "indication_area": "Gastroenterology (GERD, erosive esophagitis)",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "delayed-release capsules (dual delayed-release)",
+  "route_of_administration": "Oral",
+  "moa": "proton pump inhibitor (dual delayed-release dexlansoprazole)",
+  "moa_class": "proton_pump_inhibitor",
+  "first_approval_year": 2009,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2009/022287s000ltr.pdf",
+    "quote": "submitted under section 505(b) of the Federal Food, Drug, and Cosmetic Act (FDCA) for Kapidex (dexlansoprazole) Delayed Release Capsules ... It is approved for the 30 and 60 mg doses, effective on the date of this letter (NDA 22-287, signed 1/30/2009); Drugs@FDA lists NDA 022287 under the name DEXILANT (https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=022287)."
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2014Q4",
+  "series_start_reason": "2014Q4 (Takeda fiscal Q3 FY2014) is the earliest quarter for which Takeda prints a U.S.-only figure. Before FY2015 Takeda's Dexilant lines are product totals: the FY2014 data book prints Dexilant under 'Global major products' sales' (FY2012 32.7, FY2013 50.3, FY2014 62.3), and the FY2015 data book splits that FY2014 62.3 into United States 53.5, Europe and Canada 4.9 and Emerging Markets 3.9. The U.S.-labelled ('U.S.' major sales region, 'Americas') FY2008-FY2013 lines equal those totals (FY2012 32.7), so they are a wider scope and are not spliced. The FY2015 Q3 statements and presentation print the FY2014 U.S. figures (Q3 15.3, nine months 38.9, full year 53.5), giving 2014Q4 directly and 2015Q1 as full year less nine months. FY2014 Q1 and Q2 U.S. figures are not printed separately (only their sum, 38.9 less 15.3 = 23.6), so the series cannot start earlier. 2015Q2 onward are the original rows, unchanged.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "U.S. region column in JPY billions (Takeda translates U.S. sales into yen; the data books of FY2015-FY2018 Q3 also print a 'US major products in US$ (Quarterly)' table, e.g. Dexilant FY15 Q1-Q4 135, 113, 151, 132 million USD, not used so the series keeps one currency). The worldwide Dexilant line is not used because its composition changes (Japan launch August 2021, Growth and Emerging Markets); the U.S. column is the constant scope. FY2018 Q4 (2019Q1) is derived as the printed full-year U.S. figure less the first three quarters; FY2019 Q2 (2019Q3) as the first-half U.S. figure less Q1. Full-year checks: FY2015 quarters sum to 64.0 (printed 64.0); FY2016 sum 49.7 (printed 49.7); FY2017 sum 49.5 (printed 49.5); FY2018 sum 49.8 (printed 49.8); FY2019 sum 42.6 (printed 42.6); FY2020 34.1 (printed 34.1); FY2021 28.4 (printed 28.4); FY2022 39.0 (printed 38.9); FY2023 13.3 (printed 13.3); FY2024 8.0 (printed 8.1); FY2025 8.2 (printed 8.3), the last three differing by rounding of the 0.1 billion JPY inputs. No launch quarter is cited from an issuer document. Rows 2014Q4 and 2015Q1 were added from the FY2015 Q3 statements and presentation: the FY2014 first half (38.9 less 15.3 = 23.6) is not split into quarters, so there is no full-year sum check for FY2014. The product-total (global) Dexilant line for FY2012-FY2014 is not used because its composition differs from the U.S. column by 14.1 percent in FY2014 (62.3 against 53.5).",
+  "search_log": [
+    "Downloaded takeda.com quarterly-results pages for FY2012-FY2020 and the current page (every PDF linked) plus the quarterly financial reports FY2020-FY2026 cited by existing Takeda manifests; searched all with pdftotext for Dexilant and Amitiza and read the product tables with pdfplumber (the verifier's extractor).",
+    "FY2012-FY2014 data books print Dexilant sales outside Japan as half-year and annual JPY figures; the FY2012-FY2014 quarterly financial statements print DEXILANT (Americas) / Dexilant (worldwide) cumulative lines, not U.S.-only quarters.",
+    "U.S. quarterly rows first appear in the FY2016 Q1 data book (download-data-book.pdf), with FY2015 Q1-Q4 as prior-year columns; FY2015 data books (data-book.pdf, data-book-download-file.pdf) print annual and half-year U.S. values only.",
+    "FY2018 Q4 data book (qr2018_q4_d_en.pdf) contains no Dexilant row; FY2018 Q4 is derived from the Q4 financial statements (qr2018_q4_f_en.pdf, U.S. 49.8) and the Q3 data book (nine-month U.S. 40.3).",
+    "FY2019 Q2 data book has the first-half table only; Q2 derived from first half 20.8 less Q1 10.9 (9.9 agrees with the Q2 column of the FY2019 Q3 data book).",
+    "No other issuer prints Dexilant net sales (Takeda markets it itself); From FY2019 Takeda's table note says sales include royalty and service income.",
+    "Reopened to extend the start: read the FY2012-FY2014 Q1, Q2, Q3 and full-year statements, data books and communications for Dexilant lines (qr2012_q3_c_en prints 'Dexilant U.S.' FY2009 8.5, FY2010 18.1, FY2011 24.1, April-December FY2011 17.4, FY2012 23.5; the matching statements print 'DEXILANT (Americas)' 17.4 and 23.5).",
+    "Scope test of the early lines: the FY2014 data book (qr2014_full_d_en.pdf) prints 'Global major products' sales' Dexilant FY12 32.7, FY13 50.3, FY14 62.3, and 'US major products' sales (in US$)' Dexilant 362, 449, 488 million US$; the FY2015 data book prints FY2014 Dexilant United States 53.5, Europe and Canada 4.9, Emerging Markets 3.9, Total 62.3. The early 'U.S.'/'Americas' lines equal the global totals, so they are not the U.S. scope of the series.",
+    "FY2015 Q3 statements (qr2015_q3_f_en.pdf) print Dexilant United States nine months FY2014 38.9, FY2015 48.4, three months 15.3 and 18.3; the FY2015 Q3 presentation prints United States FY14 full year 53.5, FY14 YTD 38.9, FY15 YTD 48.4. No document prints FY2014 Q1 or Q2 U.S. alone: the FY2015 Q2 statements and presentation carry product totals only (31.7 to 35.4 in the presentation), and the FY2015 Q2 data book prints a half-year US$ table only.",
+    "US$ quarterly U.S. tables exist in the FY2015-FY2018 data books but are a different currency and are not spliced into the JPY series."
+  ]
+}

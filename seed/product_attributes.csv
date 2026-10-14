@@ -490,3 +490,43 @@ Zilbrysq,Complement C5 inhibitor (macrocyclic peptide),c5_complement_inhibitor,S
 Perforomist,"Long-acting beta2-adrenergic agonist (LABA), nebulized",long_acting_beta2_agonist,Inhalation,2007,COPD (maintenance treatment of bronchoconstriction),curated_reference,distinct_product
 Semglee,Long-acting basal insulin analog (insulin glargine biosimilar),basal_insulin_analog,Subcutaneous,2020,Diabetes mellitus (type 1 and type 2),curated_reference,distinct_product
 Wixela Inhub,Inhaled corticosteroid + long-acting beta2-agonist (generic of fluticasone/salmeterol dry powder inhaler),ics_laba_combination,Inhalation,2019,"Respiratory (asthma, COPD)",curated_reference,distinct_product
+Juxtapid,Microsomal triglyceride transfer protein (MTP) inhibitor,mtp_inhibitor,Oral,2012,Homozygous familial hypercholesterolemia (HoFH),curated_reference,distinct_product
+Bevespi Aerosphere,Long-acting muscarinic antagonist (LAMA) / long-acting beta2-agonist (LABA) fixed-dose combination,lama_laba_combination,Inhaled,2016,Respiratory (COPD),curated_reference,distinct_product
+Bydureon BCise,Glucagon-like peptide-1 (GLP-1) receptor agonist,glp1_receptor_agonist,Subcutaneous,2017,Metabolic (type 2 diabetes),curated_reference,distinct_product
+Byetta,Glucagon-like peptide-1 (GLP-1) receptor agonist,glp1_receptor_agonist,Subcutaneous,2005,Metabolic (type 2 diabetes),curated_reference,distinct_product
+Crestor,HMG-CoA reductase inhibitor (statin),hmg_coa_reductase_inhibitor,Oral,2003,Cardiovascular (hyperlipidemia / LDL-C lowering),curated_reference,distinct_product
+Movantik,Peripherally acting mu-opioid receptor antagonist (PAMORA),pamora_mu_opioid_antagonist,Oral,2014,Opioid-induced constipation (adults with chronic non-cancer pain),curated_reference,distinct_product
+Onglyza,Dipeptidyl peptidase-4 (DPP-4) inhibitor,dpp4_inhibitor,Oral,2009,Metabolic (type 2 diabetes),curated_reference,distinct_product
+Tudorza Pressair,Long-acting muscarinic antagonist,lama,Inhaled,2012,Respiratory (COPD),curated_reference,distinct_product
+Rubraca,PARP inhibitor,parp_inhibitor,Oral,2016,Oncology (solid),curated_reference,distinct_product
+Symproic,Peripherally acting mu-opioid receptor antagonist,peripherally_acting_mu_opioid_antagonist,Oral,2017,Opioid-induced constipation (adults with chronic non-cancer pain),curated_reference,distinct_product
+Zyflo CR,5-lipoxygenase inhibitor,5_lipoxygenase_inhibitor,Oral,2007,Asthma (prophylaxis and chronic treatment),curated_reference,distinct_product
+Anoro Ellipta,Long-acting muscarinic antagonist + long-acting beta2-agonist (fixed-dose combination),lama_laba_combination,Inhaled,2013,Respiratory (COPD),curated_reference,distinct_product
+Arnuity Ellipta,Inhaled corticosteroid (ICS),ics,Inhaled,2014,Respiratory (asthma),curated_reference,distinct_product
+Incruse Ellipta,Long-acting muscarinic antagonist (LAMA),lama,Inhaled,2014,Respiratory (COPD),curated_reference,distinct_product
+Selzentry,CCR5 co-receptor antagonist (HIV entry inhibitor),ccr5_antagonist,Oral,2007,HIV-1 infection (CCR5-tropic),curated_reference,distinct_product
+Proventil HFA,Short-acting beta2-adrenergic receptor agonist,short_acting_beta2_agonist,Inhaled,1996,"Respiratory (asthma, bronchospasm)",curated_reference,distinct_product
+Dacogen,DNA methyltransferase inhibitor (hypomethylating nucleoside analogue),hypomethylating_agent,Intravenous,2006,Oncology (hematologic),curated_reference,distinct_product
+Asmanex HFA,Inhaled corticosteroid (glucocorticoid receptor agonist),inhaled_corticosteroid,Inhaled,2014,Respiratory (asthma),curated_reference,distinct_product
+Dulera,Inhaled corticosteroid plus long-acting beta2-agonist (combination),ics_laba_combination,Inhaled,2010,Respiratory (asthma),curated_reference,distinct_product
+Vtama,Aryl hydrocarbon receptor (AhR) agonist,ahr_agonist,Topical,2022,"Dermatology (plaque psoriasis, atopic dermatitis)",curated_reference,distinct_product
+Zetia,Selective cholesterol absorption inhibitor (NPC1L1 inhibitor),cholesterol_absorption_inhibitor,Oral,2002,Cardiovascular (hyperlipidemia / LDL-C lowering),curated_reference,distinct_product
+Inqovi,Oral hypomethylating agent: DNA methyltransferase inhibitor (decitabine) combined with a cytidine deaminase inhibitor (cedazuridine),hypomethylating_agent,Oral,2020,Oncology (hematologic),curated_reference,distinct_product
+Gavreto,RET kinase inhibitor,kinase_inhibitor,Oral,2020,Oncology (solid),curated_reference,distinct_product
+Xopenex HFA,short-acting beta2-adrenergic receptor agonist (R-albuterol),saba,Inhaled,2005,"Respiratory (asthma, bronchospasm in reversible obstructive airway disease)",curated_reference,distinct_product
+Brovana,"long-acting beta2-adrenergic receptor agonist (R,R-formoterol), nebulized",laba,Inhaled,2006,"Respiratory (COPD, maintenance treatment of bronchoconstriction)",curated_reference,distinct_product
+Alunbrig,"anaplastic lymphoma kinase (ALK) tyrosine kinase inhibitor, also active against EGFR and ROS1",alk_inhibitor,Oral,2017,ALK-positive non-small cell lung cancer,curated_reference,distinct_product
+Exkivity,EGFR exon 20 insertion-targeted tyrosine kinase inhibitor,egfr_tki,Oral,2021,EGFR exon 20 insertion-positive non-small cell lung cancer,curated_reference,distinct_product
+Fruzaqla,"selective inhibitor of vascular endothelial growth factor receptors 1, 2 and 3 (VEGFR-1/2/3) tyrosine kinases",vegfr_tyrosine_kinase_inhibitor,Oral,2023,Previously treated metastatic colorectal cancer,curated_reference,distinct_product
+Iclusig,BCR-ABL tyrosine kinase inhibitor active against the T315I mutation,bcr_abl_tyrosine_kinase_inhibitor,Oral,2012,Chronic myeloid leukemia and Philadelphia chromosome-positive acute lymphoblastic leukemia,curated_reference,distinct_product
+Nesina,dipeptidyl peptidase-4 (DPP-4) inhibitor,dpp4_inhibitor,Oral,2013,Type 2 diabetes,curated_reference,distinct_product
+Trogarzo,CD4-directed post-attachment HIV-1 inhibitor (humanized monoclonal antibody),hiv_post_attachment_inhibitor,Intravenous,2018,HIV (heavily treatment-experienced adults with multidrug resistant HIV-1),curated_reference,distinct_product
+Astepro,Histamine H1-receptor antagonist (azelastine hydrochloride),h1_antihistamine_nasal,Intranasal,2008,Allergic and non-allergic rhinitis,curated_reference,distinct_product
+Dymista,Histamine H1-receptor antagonist (azelastine) plus corticosteroid (fluticasone propionate) fixed-dose nasal combination,antihistamine_corticosteroid_nasal_combination,Intranasal,2012,Seasonal allergic rhinitis,curated_reference,distinct_product
+Erbitux,EGFR-targeting chimeric IgG1 monoclonal antibody,egfr_antibody,Intravenous,2004,Oncology (metastatic colorectal cancer; head and neck cancer),curated_reference,distinct_product
+Abilify Maintena,"Atypical antipsychotic (aripiprazole): partial agonist at dopamine D2 and serotonin 5-HT1A receptors, antagonist at 5-HT2A receptors; extended-release injectable suspension",dopamine_serotonin_partial_agonist,Intramuscular,2013,Schizophrenia and bipolar I disorder (long-acting injectable),curated_reference,distinct_product
+Nuedexta,NMDA receptor antagonist and sigma-1 receptor agonist (dextromethorphan) combined with a CYP2D6 inhibitor (quinidine) that raises dextromethorphan exposure,nmda_receptor_antagonist,Oral,2010,Neurology (pseudobulbar affect),curated_reference,distinct_product
+Rexulti,"Serotonin-dopamine activity modulator: partial agonist at 5-HT1A and dopamine D2 receptors, antagonist at 5-HT2A receptors",dopamine_serotonin_partial_agonist,Oral,2015,Psychiatry (schizophrenia; adjunctive treatment of major depressive disorder; agitation associated with dementia due to Alzheimer's disease),curated_reference,distinct_product
+Amitiza,chloride channel (ClC-2) activator,chloride_channel_activator,Oral,2006,"Gastroenterology (chronic idiopathic constipation, IBS-C, opioid-induced constipation)",curated_reference,distinct_product
+Dexilant,proton pump inhibitor (dual delayed-release dexlansoprazole),proton_pump_inhibitor,Oral,2009,"Gastroenterology (GERD, erosive esophagitis)",curated_reference,distinct_product
+ProAir RespiClick,Short-acting beta2-adrenergic agonist (albuterol) rescue bronchodilator,saba_bronchodilator,Inhaled,2015,Respiratory (asthma: bronchospasm and exercise-induced bronchospasm),curated_reference,distinct_product

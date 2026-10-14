@@ -1,0 +1,34 @@
+{
+  "drug_name": "Inqovi",
+  "generic_name": "decitabine and cedazuridine",
+  "manufacturer": "Otsuka",
+  "benchmark_identity": "otsuka_inqovi_product_line_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (hematologic)",
+  "revenue_scope": "Product line as printed, no regional sub-rows",
+  "geography": "Not stated in the table",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Oral hypomethylating agent: DNA methyltransferase inhibitor (decitabine) combined with a cytidine deaminase inhibitor (cedazuridine)",
+  "moa_class": "hypomethylating_agent",
+  "first_approval_year": 2020,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2020/212576Orig1s000ltr.pdf",
+    "quote": "NDA 212576 ... INQOVI (decitabine and cedazuridine) tablet ... for the treatment of adult patients with myelodysplastic syndromes (MDS) ... It is approved, effective on the date of this letter (electronic signature dated 07/07/2020)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2020Q3",
+  "series_start_reason": "Series starts at 2020Q3, the first quarter with a non-zero INQOVI figure in Otsuka's FACT BOOK quarterly table (1Q 2020 and 2Q 2020 are printed as dashes). FDA approved Inqovi on 2020-07-07; no Otsuka or Taiho document read here dates the launch quarter, so launch_quarter is null.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Otsuka prints one INQOVI line under the Oncology heading with company 'Taiho Pharmaceutical / Otsuka Pharmaceutical' ; no regional sub-rows are printed. The printed label widens from 'INQOVI' to 'INQOVI/ INAQOVI' in the FACT BOOK dated 2023-10-31 (INAQOVI is the EU name) while the figures for earlier quarters are unchanged in that and later FACT BOOKs, so the line is treated as one series; no document read here states that ex-US sales entered the line or when. Values are in billions of yen with one decimal; the recorded value is that figure times 1,000 (millions of yen). The FACT BOOKs dated 2020-11-13 to 2021-11-12 list INQOVI only in the pipeline table; the first FACT BOOK with an INQOVI sales line is the one dated 2022-02-10 (4Q 2021), so every 2020 and 2021 quarter is a prior-year column of that edition or of the 2022-05-13 edition. 1Q 2020 and 2Q 2020 are printed as dashes. Full-year check: for the years 2020 to 2022 (where the full-year figure is printed in the FACT BOOK for the fourth quarter) the four quarterly figures sum to the printed full year exactly.",
+  "search_log": [
+    "otsuka.com/en/ir/library/materials.html builds its document list in the browser from a JSON feed (https://ssl4.eir-parts.net/Custom/public/v5parts/4578/en/20210609/app/conf/common_conf.js names it as http://v4.eir-parts.net/V4Public/eir/4578/en/announcement/announcement_4.js, fetched over https); that feed lists 1,070 items; the 63 items titled 'FACT BOOK' (2011-02-14 to 2026-07-31, ir_material_for_fiscal_ym3) were all downloaded and read with pdfplumber (the verifier's extractor) and pdftotext",
+    "the seven FACT BOOKs dated 2011-05-12 to 2012-11-13 yield no text from pdftotext (no text layer) and those dated 2013-02 to 2019-05 print year-to-date columns (3 months, 1H, 9 months, full year) with no quarterly table; the first FACT BOOK with a 'Pharmaceutical business <Reference> Quarterly Data' table is the one dated 2019-08-08 (2Q 2019). FACT BOOKs dated 2018-08, 2018-11 and 2025-07 have unmapped-glyph text layers for the figures; 2019-05 and 2022-02 split the digits of many figures with spaces",
+    "Quarterly values come from the quarterly-data table of each FACT BOOK: the last column is the FACT BOOK's own quarter and earlier columns are the prior-year and year-to-date quarters; where a quarter's own FACT BOOK was unreadable or lacked the line, the first later FACT BOOK that prints the quarter in a readable table is cited and the row's context says why",
+    "Otsuka's quarterly earnings release (Kessan Tanshin, TDnet) and the Financial Results Presentation were not used: the Tanshin prints year-to-date product sales in prose (for example the FY2025 one at https://fs2.magicalir.net/tdnet/2026/4578/20260213559778.pdf) and the FACT BOOK carries the single-quarter table",
+    "searched all 63 FACT BOOKs (pdftotext) for the brand name; the 'Sales of Major Products' tables name the brand from the 2013 editions on for Abilify Maintena and later for the others",
+    "FACT BOOK for 2Q 2026 (dated 2026-07-31) is the latest published at the time of the search; the Q3 2026 results are not yet released"
+  ]
+}

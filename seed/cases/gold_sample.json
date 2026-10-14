@@ -25,6 +25,36 @@
   ]
  },
  {
+  "drug_name": "Iclusig",
+  "manufacturer": "ARIAD Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "ponatinib",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 33.633,
+    "gold_id": "takeda-iclusig-worldwide-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 65.326,
+    "gold_id": "takeda-iclusig-worldwide-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 34.3,
+    "gold_id": "takeda-iclusig-worldwide-reported-2016q3"
+   }
+  ]
+ },
+ {
   "drug_name": "Vraylar",
   "manufacturer": "AbbVie",
   "ticker": "ABBV",
@@ -166,6 +196,41 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 494.0,
     "gold_id": "actelion-jnj-uptravi-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Juxtapid",
+  "manufacturer": "Aegerion Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "lomitapide",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 26.2,
+    "gold_id": "aegerion-juxtapid-worldwide-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 31.1,
+    "gold_id": "aegerion-juxtapid-worldwide-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 22.0,
+    "gold_id": "aegerion-juxtapid-worldwide-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2016Q3. Aegerion's last periodic report is its Form 10-Q for the quarter ended September 30, 2016 (filed 2016-11-04); Aegerion was acquired by QLT/Novelion on 2016-11-29 (Form 25-NSE filed that day) and filed no later report. Novelion's and then Amryt's Juxtapid lines have a different scope (see notes), so they are not spliced."
    }
   ]
  },
@@ -890,6 +955,41 @@
   ]
  },
  {
+  "drug_name": "Symproic",
+  "manufacturer": "BioDelivery Sciences International",
+  "ticker": null,
+  "generic_name": "naldemedine",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 4.402,
+    "gold_id": "collegium-symproic-us-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 4.019,
+    "gold_id": "collegium-symproic-us-reported-2021q2"
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": 4.142,
+    "gold_id": "collegium-symproic-us-reported-2021q3"
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": 3.847,
+    "gold_id": "collegium-symproic-us-reported-2021q4"
+   }
+  ]
+ },
+ {
   "drug_name": "Voxzogo",
   "manufacturer": "BioMarin",
   "ticker": "BMRN",
@@ -1155,6 +1255,41 @@
   ]
  },
  {
+  "drug_name": "Rubraca",
+  "manufacturer": "Clovis Oncology",
+  "ticker": null,
+  "generic_name": "rucaparib",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 24.509,
+    "gold_id": "clovis-rubraca-us-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 22.736,
+    "gold_id": "clovis-rubraca-us-reported-2022q2"
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": 23.019,
+    "gold_id": "clovis-rubraca-us-reported-2022q3"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2022Q3. Clovis's last periodic report is the Form 10-Q for the quarter ended September 30, 2022 (no Q3 2022 earnings release was filed as an 8-K Item 2.02). Clovis filed for Chapter 11 on December 2022, its plan of liquidation became effective in July 2023 and the 8-K of 2023-07-11 states the company would 'promptly file a Form 15 with the Securities and Exchange Commission to deregister its securities ... and suspend its reporting obligations'. No FY2022 10-K or later quarterly report exists."
+   }
+  ]
+ },
+ {
   "drug_name": "Cimerli",
   "manufacturer": "Coherus BioSciences",
   "ticker": "CHRS",
@@ -1186,6 +1321,96 @@
     "period": "2024Q4",
     "value_normalized_usd_millions": null,
     "why": "The issuer reports no line for this product after 2024Q1. Coherus sold the CIMERLI ophthalmology franchise to Sandoz on 2024-03-01; the Q1 2024 10-Q states 'CIMERLI sales ceased on March 1, 2024 in connection with the Sale Transaction', and later filings print the divested line only as a discontinued comparative."
+   }
+  ]
+ },
+ {
+  "drug_name": "Symproic",
+  "manufacturer": "Collegium Pharmaceutical",
+  "ticker": "COLL",
+  "generic_name": "naldemedine",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 4.194,
+    "gold_id": "collegium-symproic-us-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 3.02,
+    "gold_id": "collegium-symproic-us-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Zyflo CR",
+  "manufacturer": "Cornerstone Therapeutics",
+  "ticker": null,
+  "generic_name": "zileuton",
+  "options": {
+   "earnings_since": "2013-04-05",
+   "earnings_until": "2014-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2013Q1",
+    "value_normalized_usd_millions": 14.624,
+    "gold_id": "cornerstone-zyflo-cr-us-reported-2013q1"
+   },
+   {
+    "period": "2013Q2",
+    "value_normalized_usd_millions": 14.755,
+    "gold_id": "cornerstone-zyflo-cr-us-reported-2013q2"
+   },
+   {
+    "period": "2013Q3",
+    "value_normalized_usd_millions": 19.78,
+    "gold_id": "cornerstone-zyflo-cr-us-reported-2013q3"
+   },
+   {
+    "period": "2013Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2013Q3. Chiesi Farmaceutici acquired Cornerstone: the 8-K filed 2014-02-04 states 'The Merger was consummated following the approval and adoption of the Merger Agreement by Cornerstone's stockholders', Form 25-NSE was filed 2014-02-04 and Form 15-12G on 2014-02-14. The last periodic report is the Form 10-Q for Q3 2013; no FY2013 10-K was filed. Chiesi is private and publishes no Zyflo CR figure."
+   }
+  ]
+ },
+ {
+  "drug_name": "Zyflo CR",
+  "manufacturer": "Critical Therapeutics",
+  "ticker": null,
+  "generic_name": "zileuton",
+  "options": {
+   "earnings_since": "2008-04-05",
+   "earnings_until": "2009-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2008Q1",
+    "value_normalized_usd_millions": 3.333,
+    "gold_id": "cornerstone-zyflo-cr-us-reported-2008q1"
+   },
+   {
+    "period": "2008Q2",
+    "value_normalized_usd_millions": 3.894,
+    "gold_id": "cornerstone-zyflo-cr-us-reported-2008q2"
+   },
+   {
+    "period": "2008Q3",
+    "value_normalized_usd_millions": 5.993,
+    "gold_id": "cornerstone-zyflo-cr-us-reported-2008q3"
    }
   ]
  },
@@ -2035,6 +2260,41 @@
   ]
  },
  {
+  "drug_name": "Dacogen",
+  "manufacturer": "MGI Pharma",
+  "ticker": null,
+  "generic_name": "decitabine",
+  "options": {
+   "earnings_since": "2007-04-05",
+   "earnings_until": "2008-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2007Q1",
+    "value_normalized_usd_millions": 23.097,
+    "gold_id": "mgi-dacogen-us-reported-2007q1"
+   },
+   {
+    "period": "2007Q2",
+    "value_normalized_usd_millions": 30.202,
+    "gold_id": "mgi-dacogen-us-reported-2007q2"
+   },
+   {
+    "period": "2007Q3",
+    "value_normalized_usd_millions": 34.598,
+    "gold_id": "mgi-dacogen-us-reported-2007q3"
+   },
+   {
+    "period": "2007Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2007Q3. MGI PHARMA was acquired by Eisai Co., Ltd. effective 2008-01-28 (8-K filed 2008-01-28, Item 2.01: 'Effective as of January 28, 2008, MGI PHARMA was acquired by Eisai Co., Ltd.') and filed Form 15 on 2008-02-08 (https://www.sec.gov/Archives/edgar/data/702131/000110465908008213/a08-4915_11512g.htm); its last periodic report is the 10-Q for the quarter ended 2007-09-30 and no FY2007 10-K or fourth-quarter 2007 release was filed. Eisai (not an SEC filer) is the successor seller of the product; its Dacogen figures are in yen in Eisai documents that could not be fetched (eisai.com/ir and eisai.co.jp/ir redirect to the home page), and a yen series would not be the same unit, so the series is not extended."
+   }
+  ]
+ },
+ {
   "drug_name": "Rezdiffra",
   "manufacturer": "Madrigal Pharmaceuticals",
   "ticker": "MDGL",
@@ -2081,6 +2341,41 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 17.021,
     "gold_id": "mannkind-afrezza-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Astepro",
+  "manufacturer": "Meda AB",
+  "ticker": null,
+  "generic_name": "azelastine hydrochloride nasal spray",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q1",
+    "value_normalized_usd_millions": 10.365901,
+    "gold_id": "meda-astepro-us-reported-2014q1"
+   },
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": 5.149798,
+    "gold_id": "meda-astepro-us-reported-2014q2"
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2014Q2. 2014Q2 is the last quarter in which a Meda document prints an Astepro figure. The Interim Report January-September 2014 table of the 20 best-selling products ends at 128 for January-September and lists no Astepro row; the Year-end Report 2014, the Q1 2015, H1 2015 and year-end 2015 reports print no Astepro row either and mention Astepro only as a declining product under generic competition. No later Meda, Mylan or Viatris document read prints an Astepro figure."
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2014Q2. 2014Q2 is the last quarter in which a Meda document prints an Astepro figure. The Interim Report January-September 2014 table of the 20 best-selling products ends at 128 for January-September and lists no Astepro row; the Year-end Report 2014, the Q1 2015, H1 2015 and year-end 2015 reports print no Astepro row either and mention Astepro only as a declining product under generic competition. No later Meda, Mylan or Viatris document read prints an Astepro figure."
    }
   ]
  },
@@ -2425,6 +2720,31 @@
   ]
  },
  {
+  "drug_name": "Zetia",
+  "manufacturer": "Organon",
+  "ticker": "OGN",
+  "generic_name": "ezetimibe",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 87.0,
+    "gold_id": "organon-zetia-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 96.0,
+    "gold_id": "organon-zetia-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Singulair",
   "manufacturer": "Organon & Co.",
   "ticker": "OGN",
@@ -2446,6 +2766,31 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 48.0,
     "gold_id": "organon-singulair-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Rexulti",
+  "manufacturer": "Otsuka",
+  "ticker": null,
+  "generic_name": "brexpiprazole",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 605.8226,
+    "gold_id": "otsuka-rexulti-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 616.265884,
+    "gold_id": "otsuka-rexulti-worldwide-reported-2026q2"
    }
   ]
  },
@@ -2725,6 +3070,36 @@
   ]
  },
  {
+  "drug_name": "Vtama",
+  "manufacturer": "Roivant",
+  "ticker": "ROIV",
+  "generic_name": "tapinarof",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 19.308,
+    "gold_id": "organon-vtama-us-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 18.367,
+    "gold_id": "organon-vtama-us-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 20.936,
+    "gold_id": "organon-vtama-us-reported-2024q3"
+   }
+  ]
+ },
+ {
   "drug_name": "Zulresso",
   "manufacturer": "Sage Therapeutics",
   "ticker": null,
@@ -2845,6 +3220,41 @@
   ]
  },
  {
+  "drug_name": "Zetia",
+  "manufacturer": "Schering-Plough",
+  "ticker": null,
+  "generic_name": "ezetimibe",
+  "options": {
+   "earnings_since": "2009-04-05",
+   "earnings_until": "2010-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2009Q1",
+    "value_normalized_usd_millions": 509.0,
+    "gold_id": "organon-zetia-worldwide-reported-2009q1"
+   },
+   {
+    "period": "2009Q2",
+    "value_normalized_usd_millions": 555.0,
+    "gold_id": "organon-zetia-worldwide-reported-2009q2"
+   },
+   {
+    "period": "2009Q3",
+    "value_normalized_usd_millions": 562.0,
+    "gold_id": "organon-zetia-worldwide-reported-2009q3"
+   },
+   {
+    "period": "2009Q4",
+    "value_normalized_usd_millions": 614.0,
+    "gold_id": "organon-zetia-worldwide-reported-2009q4"
+   }
+  ]
+ },
+ {
   "drug_name": "Padcev",
   "manufacturer": "Seagen",
   "ticker": null,
@@ -2880,10 +3290,10 @@
   ]
  },
  {
-  "drug_name": "Alvesco",
+  "drug_name": "Xopenex HFA",
   "manufacturer": "Sepracor",
   "ticker": null,
-  "generic_name": "ciclesonide",
+  "generic_name": "levalbuterol tartrate",
   "options": {
    "earnings_since": "2009-04-05",
    "earnings_until": "2010-05-05",
@@ -2894,23 +3304,23 @@
   "expect": [
    {
     "period": "2009Q1",
-    "value_normalized_usd_millions": 0.0,
-    "gold_id": "sepracor-alvesco-us-reported-2009q1"
+    "value_normalized_usd_millions": 20.1,
+    "gold_id": "sepracor-xopenex-hfa-reported-2009q1"
    },
    {
     "period": "2009Q2",
-    "value_normalized_usd_millions": 0.0,
-    "gold_id": "sepracor-alvesco-us-reported-2009q2"
+    "value_normalized_usd_millions": 14.8,
+    "gold_id": "sepracor-xopenex-hfa-reported-2009q2"
    },
    {
     "period": "2009Q3",
-    "value_normalized_usd_millions": 0.0,
-    "gold_id": "sepracor-alvesco-us-reported-2009q3"
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2009Q2. Sepracor became an indirect wholly-owned subsidiary of Dainippon Sumitomo Pharma when the merger took effect on October 20, 2009 (Form 8-K filed 2009-10-20, https://www.sec.gov/Archives/edgar/data/877357/000110465909059627/a09-31878_18k.htm); its last periodic filing is the Form 10-Q for the quarter ended June 30, 2009 (filed 2009-08-05). Sumitomo's later supplementary financial data print a single 'XOPENEX' line (levalbuterol HCI) with no XOPENEX HFA split and do not say which formulations it holds, so that line is a different scope and is not spliced."
    },
    {
     "period": "2009Q4",
     "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2009Q3. Dainippon Sumitomo Pharma acquired Sepracor in October 2009 and its later fact books (FY2010 to FY2017 checked) and quarterly results do not itemise ALVESCO. Later owners did not publish a product figure: AstraZeneca (rights to 2018) printed only a combined Alvesco/Omnaris/Zetonna figure in a press release and no Alvesco line in its product-sales tables; Covis Pharma (owner since 2018) is private."
+    "why": "The issuer reports no line for this product after 2009Q2. Sepracor became an indirect wholly-owned subsidiary of Dainippon Sumitomo Pharma when the merger took effect on October 20, 2009 (Form 8-K filed 2009-10-20, https://www.sec.gov/Archives/edgar/data/877357/000110465909059627/a09-31878_18k.htm); its last periodic filing is the Form 10-Q for the quarter ended June 30, 2009 (filed 2009-08-05). Sumitomo's later supplementary financial data print a single 'XOPENEX' line (levalbuterol HCI) with no XOPENEX HFA split and do not say which formulations it holds, so that line is a different scope and is not spliced."
    }
   ]
  },
@@ -3266,6 +3676,41 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 77.0,
     "gold_id": "teva-uzedy-us-segment-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Trogarzo",
+  "manufacturer": "Theratechnologies",
+  "ticker": null,
+  "generic_name": "ibalizumab-uiyk",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 5.167,
+    "gold_id": "theratechnologies-trogarzo-net-sales-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 6.598,
+    "gold_id": "theratechnologies-trogarzo-net-sales-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2025Q2. Theratechnologies' last results are fiscal Q2 2025 (quarter ended May 31, 2025, 6-K filed 2025-07-09). On 2025-09-25 it announced completion of its acquisition by CB Biotechnology, LLC, an affiliate of Future Pak (6-K 0001193125-25-217171) and filed Form 15-12G on 2025-11-26; no fiscal Q3 2025 results appear in its EDGAR filings."
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2025Q2. Theratechnologies' last results are fiscal Q2 2025 (quarter ended May 31, 2025, 6-K filed 2025-07-09). On 2025-09-25 it announced completion of its acquisition by CB Biotechnology, LLC, an affiliate of Future Pak (6-K 0001193125-25-217171) and filed Form 15-12G on 2025-11-26; no fiscal Q3 2025 results appear in its EDGAR filings."
    }
   ]
  },

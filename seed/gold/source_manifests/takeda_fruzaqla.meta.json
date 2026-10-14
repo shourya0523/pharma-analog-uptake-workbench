@@ -1,0 +1,41 @@
+{
+  "drug_name": "Fruzaqla",
+  "generic_name": "fruquintinib",
+  "manufacturer": "Takeda",
+  "benchmark_identity": "takeda_fruzaqla_us_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Previously treated metastatic colorectal cancer",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "oral capsule",
+  "route_of_administration": "oral",
+  "moa": "selective inhibitor of vascular endothelial growth factor receptors 1, 2 and 3 (VEGFR-1/2/3) tyrosine kinases",
+  "moa_class": "vegfr_tyrosine_kinase_inhibitor",
+  "first_approval_year": 2023,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2023/217564Orig1s000ltr.pdf",
+    "quote": "This NDA provides for the use of FRUZAQLA (fruquintinib) capsules for the treatment of adult patients with metastatic colorectal cancer (mCRC) who have been previously treated with fluoropyrimidine, oxaliplatin, and irinotecan based chemotherapy, an anti-VEGF therapy, and, if RAS wild type and medically appropriate, an anti-EGFR therapy. (FDA approval letter, NDA 217564)"
+  },
+  "launch_quarter": "2023Q4",
+  "launch_evidence": {
+    "url": "https://assets-dam.takeda.com/image/upload/v1715219664/Global/Investor/Financial-Results/FY2023/Q4/qr2023_q4_qfr_en.pdf",
+    "quote": "Sales of FRUZAQLA (for colorectal cancer), which newly launched in November 2023 in the U.S., were JPY 10.1 billion."
+  },
+  "commercial_start_quarter": "2023Q4",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Scope is the U.S. column of Takeda's Fruzaqla row (first regional column, headed 'US', of the three-month product sales table), JPY billions to one decimal at actual exchange rates. U.S. was chosen over the worldwide total because the total changes composition: Takeda's FY2024 Q2 report shows non-U.S. revenue for the first time in the Europe column (1.0 of 11.1 in the quarter; the European Commission approval was announced in June 2024 and the Japanese approval in September 2024), with Japan, Europe and Other columns growing afterwards (U.S. 7.6 of 12.2 in FY2025 Q4). The first two quarters (2023Q4, 2024Q1) are read from the prior-year columns of the FY2024 Q1 quarterly trend table (total), since Takeda's FY2023 reports print no quarterly Fruzaqla line, only the full year 10.1; Fruzaqla was marketed only in the U.S. in FY2023 (FY2023 Q3 report: 'FRUZAQLA [marketed in the U.S.'), and the FY2024 Q3 and Q4 three-month rows show U.S. equal to the total prior-year figure (U.S. 10.5 and 8.9, total prior year 2.2 and 7.8, at +368.4 and +13.3 percent). Quarters of FY2023 add to 10.0 against a printed 10.1, and FY2024 U.S. quarters add to 41.4 against the printed 41.4.",
+  "search_log": [
+    "reused the takeda.com quarterly-results link list (all PDF/XLSX links on the 2014-2025 and current pages, plus the 2012 and 2013 pages fetched here) and the PDFs downloaded earlier into the sibling staging cache; every cited page was re-read with pdfplumber (the verifier's extractor) so quoted figures match its text layer",
+    "Takeda prints the brand on its own line in the product sales analysis of its own quarterly documents: data books FY2017-FY2019, quarterly financial reports FY2020-FY2026; no fuller supplement or other issuer was needed for the quarters cited",
+    "each quarter was read from the quarter's own document as current unless the row's derivation says otherwise (prior-year column, retrospective table or derived)",
+    "FY2025 Q4 exists in two versions on takeda.com (2026-05-13 and the version amended 2026-06-05 for a subsequent event); the amended version is cited, and the product-line figures are identical in both",
+    "Bigdata.com was not used: the issuer's own IR documents were located directly from the takeda.com pages",
+    "EDGAR (Takeda CIK 0001395064) was not searched: the takeda.com quarterly documents were sufficient for every quarter",
+    "FY2023 Q3 and Q4 quarterly financial reports searched for a Fruzaqla sales line: Q3 has prose only ('a product newly launched in the U.S. in November 2023'); Q4 has the full year (JPY 10.1 billion) and a one-line new-launch table, no quarterly figure",
+    "the Fruzaqla trend row (Oncology, 'Q1 Q2 Q3 Q4 Q1' header) in the FY2024 Q1 report prints FY2023 Q1 and Q2 as nil, FY2023 Q3 2.2, FY2023 Q4 7.8",
+    "cross-check: FY2024 and FY2025 U.S. quarters were summed against the U.S. full-year figure printed in the Q4 reports (41.4 and 36.3; differences at most 0.1)"
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "drug_name": "Brovana",
+  "generic_name": "arformoterol tartrate",
+  "manufacturer": "Sumitomo Pharma",
+  "benchmark_identity": "sunovion_brovana_north_america_reported",
+  "therapeutic_area": "Respiratory / Allergy",
+  "indication_area": "Respiratory (COPD, maintenance treatment of bronchoconstriction)",
+  "revenue_scope": "Net sales of BROVANA",
+  "geography": "United States and Canada (Sepracor: 'All of our revenues in 2008, 2007 and 2006 were received from unaffiliated customers located in the United States and Canada'; Sumitomo prints the line in its 'North America' sales-of-products table in USD, based on local currency)",
+  "formulation": "inhalation solution for nebulization (15 mcg/2 mL unit-dose vial)",
+  "route_of_administration": "Inhaled",
+  "moa": "long-acting beta2-adrenergic receptor agonist (R,R-formoterol), nebulized",
+  "moa_class": "laba",
+  "first_approval_year": 2006,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2006/021912s000tr.pdf",
+    "quote": "This new drug application provides for the use of Brovana (arformoterol tartrate) Inhalation Solution for the treatment of bronchoconstriction associated with chronic obstructive pulmonary disease. ... It is approved, effective on the date of this letter (NDA 21-912, signed 10/6/2006)."
+  },
+  "launch_quarter": "2007Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/877357/000110465907060806/a07-19018_110q.htm",
+    "quote": "Sales of BROVANA were $5.5 million and $0 million for the three months ended June 30, 2007 and 2006, respectively. We introduced BROVANA commercially in April 2007."
+  },
+  "commercial_start_quarter": "2007Q2",
+  "series_start_reason": null,
+  "series_end_quarter": "2022Q3",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Sumitomo's North America table prints cumulative BROVANA sales of USD 21 million at the first half of FY2022 (ebr20221031.2.pdf), unchanged at the first nine months (ebr20230131.2.pdf) and for the full year (ebr20230515.2.pdf), so sales were below USD 0.5 million in each of the last two quarters of FY2022; the line is not printed in the later supplementary data (the FY2023 Q1 file ebr20230731.2.pdf and every later file listed on the Sumitomo page, through ebr20251031.2.pdf, contain no BROVANA row). The last quarter with a non-zero derived figure is 2022Q3 (Jul-Sep 2022); the two zero-difference quarters 2022Q4 and 2023Q1 are not written as rows.",
+  "joined_issuers": [
+    {
+      "issuer": "Sepracor",
+      "first_quarter": "2007Q2",
+      "last_quarter": "2009Q2"
+    },
+    {
+      "issuer": "Sumitomo Pharma",
+      "first_quarter": "2010Q1",
+      "last_quarter": "2022Q3"
+    }
+  ],
+  "unreported_quarters": {
+    "2009Q3": "Ownership change: Sumitomo (then Dainippon Sumitomo Pharma) completed its acquisition of Sepracor on October 20, 2009 (Form 8-K filed 2009-10-20, https://www.sec.gov/Archives/edgar/data/877357/000110465909059627/a09-31878_18k.htm). Sepracor's last periodic report is the Form 10-Q for the quarter ended June 30, 2009 (filed 2009-08-05); it filed no 10-Q or results release for the third quarter. Sumitomo's FY2009 release prints Sepracor only in yen and only from the acquisition date (' By acquisition of Sepracor inc. in Oct. 2009, US subsidiaries (including Sepracor inc.) are newly added', ebr20100203_4.pdf), and does not break out BROVANA in USD for 2009.",
+    "2009Q4": "Same ownership gap. Sumitomo's FY2009 full-year supplementary data (ebr20100510_4.pdf) prints BROVANA at 1.7 billion yen for the part of Sepracor's 2009 that was consolidated, a partial period in a different currency that is not used; the first USD quarter Sumitomo prints is Jan-Mar 2010."
+  },
+  "notes": "Sepracor (2007Q2-2009Q2) and Sumitomo/Sunovion (2010Q1-2022Q3) are the same product, formulation and customer base, in USD. Sepracor rows: 10-Q product-sales sentences for 2007Q2-Q3 and 2008Q1-Q3 and 2009Q1-Q2; fourth quarters 2007 and 2008 derived as 10-K annual less nine months. Sumitomo rows: until the year ended March 2013 the U.S. subsidiary was consolidated on a calendar-year basis and the table names calendar months, so 2010Q1-2013Q1 are direct or derived calendar quarters; from FY2013 the subsidiary's year-end is March 31 and fiscal Q1 (Apr-Jun) maps to calendar Q2 (ebr20130509_4.pdf states the change; the Jan-Mar 2013 quarter is printed there separately and is row 2013Q1). Quarters derived from cumulative figures carry the rounding of USD 1 million inputs. Checks against printed totals: calendar 2010 rows sum to 105 (printed Jan-Dec 2010: 105), 2011 to 127 (printed 127), 2012 to 160 (printed 160); fiscal years FY2013-FY2022 rows sum to the printed full-year figures (168, 202, 249, 305, 299, 304, 317, 274, 129, 21), except where FY2020 is restated from 274 to 278 in a later release (the as-reported 274 is used). Sepracor 2007 rows (2007Q2-Q4) sum to 14.28 and 2008 rows to 57.239, matching the printed annual figures by construction of the derived fourth quarters. Sumitomo also prints BROVANA in yen (a different currency, not used). Sepracor/Sunovion releases give Q4 2007 as $6.3 million and Q4 2008 as $19.3 million; the rows derived from the 10-K are 6.38 and 19.239.",
+  "search_log": [
+    "Sepracor (CIK 877357, now Sunovion Pharmaceuticals Inc.) submissions listed via data.sec.gov; all 10-Q, 10-Q/A, 10-K and Item 2.02 8-K from 2005 to 2009 read; BROVANA sales sentences first appear in the Form 10-Q for June 30, 2007 (launch April 2007; the March 31, 2007 10-Q has no BROVANA sales sentence).",
+    "Sepracor 8-K Exhibit 99.1 releases for Q4 2007 and Q4 2008 give BROVANA fourth-quarter revenue in prose, but the text is split across HTML nodes so the product label and figure do not share a line; the 10-K product table (with the nine-month 10-Q figures) is cited instead.",
+    "Sumitomo Pharma financial-results-summary page (sumitomo-pharma.com/ir/library/financial_results_summary/) lists supplementary files from 2006; every supplementary file 2010-2023 downloaded and searched for BROVANA/XOPENEX with pdftotext, then re-read with pdfplumber; BROVANA is absent from the FY2023 Q1 file (ebr20230731.2.pdf) and every later file listed on the page (through ebr20251031.2.pdf).",
+    "FY2020 full-year BROVANA is 274 in ebr20210512.2.pdf but 278 as the prior-year column of ebr20220513.2.pdf; the as-current 274 is used.",
+    "Yen tables in the same files (billions of yen) not used; USD 'based on local currency' rows only.",
+    "Other issuers: no partner or royalty holder prints BROVANA sales (Sepracor owned and sold it; Mylan/Viatris generic arformoterol is a different product).",
+    "FDA approval letter for NDA 21-912 (signed 10/6/2006) read for the approval wording."
+  ]
+}

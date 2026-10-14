@@ -1,0 +1,32 @@
+{
+  "drug_name": "Asmanex HFA",
+  "generic_name": "mometasone furoate",
+  "manufacturer": "Organon",
+  "benchmark_identity": "organon_asmanex_hfa_worldwide_reported",
+  "therapeutic_area": "Respiratory / Allergy",
+  "indication_area": "Respiratory (asthma)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "inhalation aerosol (HFA); the printed line also covers Asmanex Twisthaler",
+  "route_of_administration": "inhaled",
+  "moa": "Inhaled corticosteroid (glucocorticoid receptor agonist)",
+  "moa_class": "inhaled_corticosteroid",
+  "first_approval_year": 2014,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2014/205641Orig1s000ltr.pdf",
+    "quote": "NDA 205641 NDA APPROVAL ... for Asmanex HFA (mometasone furoate) Inhalation Aerosol 100 mcg and 200 mcg ... approved, effective on the date of this letter (electronic signature 04/25/2014)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2020Q1",
+  "series_start_reason": "Series starts 2020Q1: the first quarters that a printed Asmanex line covers the HFA inhaler (approved 2014-04-25) are 2020Q1-2020Q4 in Organon's prior-year columns. Merck printed an Asmanex row only through 2013Q4 (its release of 2014-02-05; the 2014-04-29 release and every later release and 10-K/10-Q table checked have none), a period when only Asmanex Twisthaler was approved, so those rows are not this product and are not spliced. Merck's own 2020 releases print no Asmanex row, so 2020 is read from Organon's comparative columns. No issuer document located dates the HFA launch, so launch_quarter is null.",
+  "series_end_quarter": "2021Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Organon's release of 2022-05-05 (2022Q1) lists Singulair, Nasonex, Dulera, Clarinex and Other Respiratory under Respiratory and has no Asmanex row, whereas the release of 2022-02-17 (2021Q4) prints 'Asmanex 14 2 16'; the 2022Q1 10-Q contains no mention of Asmanex, and the FY2022 10-K (ogn-20221231.htm) still names Asmanex as part of the respiratory portfolio, so the brand is marketed but folded into Other Respiratory.",
+  "notes": "Worldwide brand line in USD millions. The line is the printed brand 'Asmanex', which Organon does not split by formulation, so it contains both Asmanex HFA and Asmanex Twisthaler; the HFA alone is not reported anywhere found. The U.S. column is 13-16 of the 14-18 total each quarter, ex-U.S. 1-2. Quarters sum to the printed years: 2020 84 vs 83 (rounding), 2021 63 vs 63. Merck's Twisthaler-era history (Asmanex row 2010Q1-2013Q4: 51, 56, 48, 53; 60, 47, 42, 57; 48, 51, 42, 44; 40, 49, 43, 51) is outside this series because the HFA was not yet approved.",
+  "search_log": [
+    "Merck (CIK 310158) 8-K Item 2.02 exhibit 99.x 2009-2021 parsed for an Asmanex row: present from 2009 through the release of 2014-02-05 (2013Q4), absent from the releases of 2014-04-29 to 2021-04-29; Merck 10-K/10-Q tables 2017-2021 carry only the pipeline/approval mention of Asmanex, no sales row. Merck 10-K/10-Q for 2014-2016 were not downloaded.",
+    "Organon (CIK 1821825): Asmanex row present in the releases of 2021-08-12, 2021-11-12 and 2022-02-17 and in the first 10-Q (filed 2021-06-21); absent from the release of 2022-05-05 and later, from the 2022Q1 10-Q, and the FY2021 10-K (filed 2022-03-21) prints Asmanex 57 / 7 / 63 for 2021 (U.S. / Non-U.S. / Total).",
+    "Looked for a stand-alone HFA sales figure or an HFA launch date in Merck releases 2014-2015 and Organon documents: none found.",
+    "Year check: 2020 quarters 29 + 14 + 21 + 20 = 84 vs 83 printed in the FY2021 10-K prior-year column; 2021 quarters 18 + 14 + 15 + 16 = 63 vs 63 printed."
+  ]
+}

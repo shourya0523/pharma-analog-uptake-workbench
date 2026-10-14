@@ -1,0 +1,67 @@
+{
+  "drug_name": "Iclusig",
+  "generic_name": "ponatinib",
+  "manufacturer": "Takeda",
+  "benchmark_identity": "takeda_iclusig_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Chronic myeloid leukemia and Philadelphia chromosome-positive acute lymphoblastic leukemia",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "oral tablet",
+  "route_of_administration": "oral",
+  "moa": "BCR-ABL tyrosine kinase inhibitor active against the T315I mutation",
+  "moa_class": "bcr_abl_tyrosine_kinase_inhibitor",
+  "first_approval_year": 2012,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2012/203469Orig1s000ltr.pdf",
+    "quote": "This new drug application provides for the use of Iclusig (ponatinib), 15 mg and 45 mg tablets for the treatment of adult patients with chronic phase, accelerated phase, or blast phase chronic myeloid leukemia (CML) that is resistant or intolerant to prior tyrosine kinase inhibitor therapy or Philadelphia chromosome positive acute lymphoblastic leukemia (Ph+ALL) that is resistant or intolerant to prior tyrosine kinase inhibitor therapy. (FDA approval letter, NDA 203469)"
+  },
+  "launch_quarter": "2013Q1",
+  "commercial_start_quarter": "2013Q1",
+  "series_start_reason": "The series starts with the first quarter in which the product had sales: ARIAD (CIK 884731, the earlier owner and the original developer) commenced U.S. sales in January 2013 after FDA approval on December 14, 2012, and its Q1 2013 Form 10-Q prints Product revenue, net of 6,363 thousand USD against a nil prior-year column. The Q4 2013 release prints the 2012 fourth-quarter product revenue as nil. ARIAD's last reported quarter is 2016Q3; Takeda closed the acquisition on 2017-02-16 and Takeda's first full-quarter figure is 2017Q2 (fiscal Q1 FY2017, JPY). Takeda's 2017Q1 figure (2.9 billion JPY) covers only the one and a half months after the close and is not used as a quarter.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Joined series: ARIAD Pharmaceuticals (USD) 2013Q1-2016Q3 and Takeda (JPY) 2017Q2-2026Q2; each row keeps its issuer's currency and the CSV has an issuer column. Both issuers print worldwide Iclusig net sales as the owner of the product, but the lines are not identical and the differences are dated. ARIAD era: 'Product revenue, net' is the whole of ARIAD's product revenue, which its releases describe as net sales of Iclusig. Per the Q4 2013 release, 2013 includes U.S. sales from January through October (U.S. sales were suspended after October) and EU sales from July through December; shipments to patients in France were deferred and not in the line until pricing approval in May 2016, when approximately $25.5 million of cumulative French shipments was recorded in 2016Q2 (so 2016Q2 is not a clean quarter). 2015Q1 includes approximately $1.2 million one-time from moving to the sell-in method in the U.S. On June 1, 2016 ARIAD out-licensed European rights to Incyte, so from 2016Q3 the line is U.S. sales plus other distributors (U.S. $33.6 million of 34.3 in 2016Q3) and European royalties sit in license and other revenue. Takeda era: scope is Takeda's worldwide (Total) Iclusig line, JPY billions to one decimal at actual exchange rates; Takeda's note states that sales amounts include royalty income and service income. The U.S. share stays near 85-90 percent (U.S. 6.7 of 7.6 in FY2019 Q1, 16.1 of 18.7 in FY2026 Q1); the U.S. row is printed alongside in every quarter. ARIAD does not print a U.S. split for 2013, so a U.S.-only line could not be sourced across the whole span. Takeda basis: from FY2018 Takeda discloses certain Japan product sales net of discounts and rebates and restated FY2017 on that basis (FY2018 Q4 summary footnote), so quarters 2017Q3-2018Q1 are read from the net-basis FY17 columns of the FY2018 Q2 data book (they add to the printed 23.1) while 2017Q2 is the figure stated in Takeda's own FY2017 Q1 results text (the same 5.2 appears as the first FY17 quarter in that data book). Dated launch: ARIAD commenced U.S. sales in January 2013 (FDA approval December 14, 2012). Labels printed: 'Product revenue, net' (ARIAD), 'Iclusig' (Takeda FY2017-FY2019 documents), 'ICLUSIG' (Takeda FY2020 onward).",
+  "search_log": [
+    "reused the takeda.com quarterly-results link list (all PDF/XLSX links on the 2014-2025 and current pages, plus the 2012 and 2013 pages fetched here) and the PDFs downloaded earlier into the sibling staging cache; every cited page was re-read with pdfplumber (the verifier's extractor) so quoted figures match its text layer",
+    "Takeda prints the brand on its own line in the product sales analysis of its own quarterly documents: data books FY2017-FY2019, quarterly financial reports FY2020-FY2026; no fuller supplement or other issuer was needed for the quarters cited",
+    "each quarter was read from the quarter's own document as current unless the row's derivation says otherwise (prior-year column, retrospective table or derived)",
+    "FY2025 Q4 exists in two versions on takeda.com (2026-05-13 and the version amended 2026-06-05 for a subsequent event); the amended version is cited, and the product-line figures are identical in both",
+    "Bigdata.com was not used: the issuer's own IR documents were located directly from the takeda.com pages",
+    "EDGAR (Takeda CIK 0001395064) was not searched: the takeda.com quarterly documents were sufficient for every quarter",
+    "2017Q1 and 2017Q2 are prose figures in Takeda's own results summaries (FY2016 Q4: 'recorded revenue of 2.9 billion JPY during the one and half month period after the close of the acquisition'; FY2017 Q1: 'recorded revenue of 5.2 billion JPY'); the FY2017 Q2 and Q3 summaries print only cumulative text figures (10.9 and 17.3 billion JPY), consistent with 5.2+5.7 and 5.2+5.7+6.4",
+    "2019Q1 (fiscal Q4 FY2018) uses the prior-year column of the FY2019 Q1 data book trend table: the FY2018 Q4 summary of financial statements prints only the full-year figure (28.7), though the four FY2018 quarters add to it",
+    "cross-check: the four quarters of every fiscal year FY2018-FY2025 were summed against the full-year figure printed in the Q4 report (differences at most 0.1 billion JPY, rounding); FY2017 quarters add to 23.1",
+    "prior-owner rung (rule 12d): ARIAD Pharmaceuticals (CIK 884731). Listed the filings through data.sec.gov/submissions/CIK0000884731.json (recent block, forms 10-K, 10-Q, 10-K/A, 10-Q/A, 8-K, 8-K/A all included) and read the Exhibit 99.1 earnings release of each quarter 2013Q1 to 2016Q3 plus the Form 10-Q for 2013Q1, 2014Q1, 2014Q2 and 2014Q3, whose releases print total revenue without a Product revenue, net row.",
+    "ARIAD per-quarter sources: 2013Q1 10-Q 0001193125-13-214315; 2013Q2 8-K 0001157523-13-003921; 2013Q3 8-K 0001157523-13-005450; 2013Q4 8-K 0001157523-14-000769; 2014Q1 10-Q 0001193125-14-192554; 2014Q2 10-Q 0001193125-14-303215; 2014Q3 10-Q 0001193125-14-403566; 2014Q4 8-K 0001157523-15-000623; 2015Q1 8-K 0001193125-15-175944; 2015Q2 8-K 0001193125-15-277745; 2015Q3 8-K 0001193125-15-363335; 2015Q4 8-K 0001157523-16-004696; 2016Q1 8-K 0001157523-16-005558; 2016Q2 8-K 0001157523-16-006275; 2016Q3 8-K 0001157523-16-007275.",
+    "nothing before 2013Q1: the Q1 2013 10-Q prints a nil prior-year column and the Q4 2013 release prints the Q4 2012 product revenue as nil (FDA approval was December 14, 2012; U.S. sales commenced January 2013). ARIAD did not print quarterly Iclusig revenue before 2013.",
+    "ARIAD scope check (rules 7-10): Product revenue, net equals the 'net sales of Iclusig' figure in each release; the Q4 2013 release dates U.S. sales (January-October 2013) and EU sales (from July 2013); the Q2 2016 release dates the one-time French revenue (May 2016) and the Europe out-licence to Incyte (June 1, 2016); the Q1 2015 release dates the sell-in transition. ARIAD prints a U.S. split only from 2014Q1 onward, so a U.S.-only line cannot span the series.",
+    "annual cross-check of ARIAD quarters against the Q4 releases: 2013 quarters add to 45.236 million USD against 45.238 printed; 2014 add to 55.721 against 55.720; 2015 add to 112.528 against 112.527 (rounding of thousands).",
+    "2016Q4 and 2017Q1: ARIAD filed no Q4 2016 release or FY2016 Form 10-K (submissions list: last earnings 8-K 2016-11-07; 8-K 2017-01-10 merger agreement; 8-K 2017-02-06 brigatinib MAA; 8-K 2017-02-16 completion; Form 15-12B 2017-02-27) and Takeda prints only the 1.5-month post-close figure of 2.9 billion JPY in its FY2016 Q4 text; both quarters are listed in unreported_quarters. The 10-Q/A filed 2017-02-13 for the quarter ended June 30, 2016 amends exhibits only (its explanatory note) and changes no figure.",
+    "currency: ARIAD rows are USD and Takeda rows JPY, each as the issuer printed it, with no conversion; precedent in gold is the VPRIV series (Shire USD, then Takeda JPY)."
+  ],
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/884731/000119312513214315/d508928d10q.htm",
+    "quote": "On December 14, 2012, we obtained accelerated approval from the FDA to sell Iclusig in the United States, and we commenced sales in the United States in January 2013. (ARIAD Form 10-Q for the quarter ended March 31, 2013, accession 0001193125-13-214315)"
+  },
+  "joined_issuers": [
+    {
+      "issuer": "ARIAD Pharmaceuticals",
+      "first_quarter": "2013Q1",
+      "last_quarter": "2016Q3"
+    },
+    {
+      "issuer": "Takeda",
+      "first_quarter": "2017Q2",
+      "last_quarter": "2026Q2"
+    }
+  ],
+  "unreported_quarters": {
+    "2016Q4": "Ownership change ARIAD to Takeda; no full-quarter figure is published. ARIAD's last earnings release is for Q3 2016 (8-K 0001157523-16-007275, 2016-11-07); the filings after it are the merger agreement 8-K (0001104659-17-001730, 2017-01-10), a brigatinib MAA press release (8-K 0001157523-17-000360, 2017-02-06, no financial results), the completion 8-K (0001193125-17-046700, 2017-02-16) and Form 15 (0001193125-17-057984, 2017-02-27); no Q4 2016 release or FY2016 Form 10-K was filed.",
+    "2017Q1": "Ownership change ARIAD to Takeda: ARIAD filed no report for 2017Q1 (Form 15 filed 2017-02-27) and Takeda's FY2016 Q4 results state Iclusig revenue of 2.9 billion JPY only for 'the one and half month period after the close of the acquisition' (qr2016_q4_f1_en.pdf), which is a partial quarter and is kept out of the series."
+  },
+  "reviewed_anomalies": {
+    "2017Q2": "First Takeda quarter: the line changes from ARIAD's USD millions to Takeda's JPY millions, so the value as reported steps by the exchange rate, not by sales; the USD-normalised series is continuous."
+  }
+}

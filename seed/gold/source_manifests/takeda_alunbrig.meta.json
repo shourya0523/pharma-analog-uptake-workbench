@@ -1,0 +1,42 @@
+{
+  "drug_name": "Alunbrig",
+  "generic_name": "brigatinib",
+  "manufacturer": "Takeda",
+  "benchmark_identity": "takeda_alunbrig_us_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "ALK-positive non-small cell lung cancer",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "oral tablet",
+  "route_of_administration": "oral",
+  "moa": "anaplastic lymphoma kinase (ALK) tyrosine kinase inhibitor, also active against EGFR and ROS1",
+  "moa_class": "alk_inhibitor",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2017/208772Orig1s000ltr.pdf",
+    "quote": "This new drug application provides for the use of Alunbrig (brigatinib) tablets, 30 and 90 mg for treatment of patients with anaplastic lymphoma kinase (ALK)-positive metastatic non-small cell lung cancer (NSCLC) who have progressed on or are intolerant to crizotinib. (FDA approval letter, NDA 208772)"
+  },
+  "launch_quarter": "2017Q2",
+  "launch_evidence": {
+    "url": "https://assets-dam.takeda.com/raw/upload/v1662727440/legacy-dotcom/siteassets/system/investors/quarterly-announcements/fy2017/qr2017_q1_f_en.pdf",
+    "quote": "ALUNBRIG (for lung cancer), obtained through the acquisition of ARIAD Pharmaceuticals, Inc. (\u201cARIAD\u201d) in February 2017, was granted marketing authorization by the U.S. Food and Drug Administration (FDA) in April 2017, and was launched in May."
+  },
+  "commercial_start_quarter": "2017Q2",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Scope is Takeda's U.S. line for Alunbrig (the 'U.S.' row of the FY2017-FY2018 data books and the first regional column, headed 'US', of the FY2019-FY2026 product sales tables), JPY billions to one decimal at actual exchange rates. A U.S. line was chosen over Takeda's worldwide total because the total changes composition: Takeda's own tables show the product only in the U.S. through FY2017, then ex-U.S. revenue (Europe and Canada 0.3 and Growth and Emerging Markets 0.1 in the FY2018 full year, Japan from FY2021 Q1), so the U.S. share falls (U.S. 1.2 of 1.7 in FY2019 Q1, 3.1 of 9.7 in FY2026 Q1); the worldwide total is printed in the same rows. Takeda's note beneath the tables states that sales amounts include royalty income and service income. Alunbrig was obtained with the February 2017 ARIAD acquisition and launched in the U.S. in May 2017, so Takeda is the only issuer of the line. Rounding: the quarters of FY2018 add to 4.9 against the printed full-year 4.8 (2018Q2-2019Q1); FY2020 adds to 5.8 against 5.9. Label printed: 'Alunbrig' (FY2017-FY2019 documents) and 'ALUNBRIG' (FY2020 onward). FY2017 quarters are read from the FY2018 Q2 data book retrospective table because Takeda's FY2017 documents print Alunbrig only in US$ millions.",
+  "search_log": [
+    "reused the takeda.com quarterly-results link list (all PDF/XLSX links on the 2014-2025 and current pages, plus the 2012 and 2013 pages fetched here) and the PDFs downloaded earlier into the sibling staging cache; every cited page was re-read with pdfplumber (the verifier's extractor) so quoted figures match its text layer",
+    "Takeda prints the brand on its own line in the product sales analysis of its own quarterly documents: data books FY2017-FY2019, quarterly financial reports FY2020-FY2026; no fuller supplement or other issuer was needed for the quarters cited",
+    "each quarter was read from the quarter's own document as current unless the row's derivation says otherwise (prior-year column, retrospective table or derived)",
+    "FY2025 Q4 exists in two versions on takeda.com (2026-05-13 and the version amended 2026-06-05 for a subsequent event); the amended version is cited, and the product-line figures are identical in both",
+    "Bigdata.com was not used: the issuer's own IR documents were located directly from the takeda.com pages",
+    "EDGAR (Takeda CIK 0001395064) was not searched: the takeda.com quarterly documents were sufficient for every quarter",
+    "FY2017 own documents: Alunbrig appears only in the US$ millions U.S. product table of the data books (e.g. FY2017 Q1 data book 'Alunbrig - - - - 2') and in prose, with no JPY quarterly line, so FY2017 quarters use the FY2018 Q2 data book retrospective JPY table (derivation direct_retrospective_table)",
+    "2019Q1 (fiscal Q4 FY2018) is derived: the FY2018 Q4 summary prints only the full-year U.S. figure (4.8) and no quarterly line; the FY2019 Q1 data book trend table is total-only; nine-month U.S. (3.7) is printed in the FY2018 Q3 data book. The FY2019 Q4 data book prints FY2019 Q4 U.S. 1.5 at +35.7% year on year, which implies 1.1 and agrees",
+    "cross-check: the four quarters of each of FY2019, FY2021, FY2022, FY2023, FY2024 and FY2025 were summed against the full-year U.S. figure printed in the Q4 report (differences at most 0.1 billion JPY, rounding)",
+    "ARIAD never reported Alunbrig sales (the U.S. launch followed the acquisition), so no prior-owner history exists"
+  ]
+}

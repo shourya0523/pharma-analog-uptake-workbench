@@ -1,0 +1,34 @@
+{
+  "drug_name": "Trogarzo",
+  "generic_name": "ibalizumab-uiyk",
+  "manufacturer": "Theratechnologies",
+  "benchmark_identity": "theratechnologies_trogarzo_net_sales_reported",
+  "therapeutic_area": "Infectious Disease / Vaccines",
+  "indication_area": "HIV (heavily treatment-experienced adults with multidrug resistant HIV-1)",
+  "revenue_scope": "Trogarzo net sales as printed in Theratechnologies' revenue summary table",
+  "geography": "Predominantly United States; the company's revenue-by-geography note (all products) also shows Canada and, from 2020, Europe",
+  "formulation": "injection (single-dose vial, 200 mg/1.33 mL)",
+  "route_of_administration": "intravenous",
+  "moa": "CD4-directed post-attachment HIV-1 inhibitor (humanized monoclonal antibody)",
+  "moa_class": "hiv_post_attachment_inhibitor",
+  "first_approval_year": 2018,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2018/761065lbl.pdf",
+    "quote": "TROGARZO (ibalizumab-uiyk) injection, for intravenous use. Initial U.S. Approval: [2018] ... TROGARZO, a CD4-directed post-attachment HIV-1 inhibitor, in combination with other antiretroviral(s), is indicated for the treatment of HIV-1 infection in heavily treatment-experienced adults with multidrug resistant HIV-1 infection ... Revised: 03/2018"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2018Q3",
+  "series_start_reason": "Series starts at 2018Q3 (fiscal third quarter ended August 31, 2018), the first quarter whose Trogarzo net sales can be read from a document on EDGAR: Theratechnologies' first EDGAR filing is dated 2019-10-08, and its report for that quarter appears there as the prior-year column (3,713; nine months 4,637). Trogarzo was approved by FDA in March 2018 and the company paid TaiMed a milestone 'payable after the first commercial sale of Trogarzo in the United States' on May 15, 2018 (FY2021 Form 40-F financial statements, note on commercialization rights), so sales began in fiscal Q2 2018 (calendar 2018Q2). Nine months 4,637 less the third quarter 3,713 gives 924 for the first half of fiscal 2018, but the split between fiscal Q1 and Q2 is not printed in any fetched document, so no row is recorded for 2018Q2.",
+  "series_end_quarter": "2025Q2",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Theratechnologies' last results are fiscal Q2 2025 (quarter ended May 31, 2025, 6-K filed 2025-07-09). On 2025-09-25 it announced completion of its acquisition by CB Biotechnology, LLC, an affiliate of Future Pak (6-K 0001193125-25-217171) and filed Form 15-12G on 2025-11-26; no fiscal Q3 2025 results appear in its EDGAR filings.",
+  "notes": "Fiscal calendar: Theratechnologies' fiscal year ends November 30. Each fiscal quarter (Dec-Feb, Mar-May, Jun-Aug, Sep-Nov) is mapped to the calendar quarter holding two of its three months (Q1 Dec-Feb -> calendar Q1 etc.), so 2025Q2 is the quarter ended May 31, 2025. Currency: reporting currency is US dollars ('In thousands of U.S. dollars' in the MD&A). Scope: the 'Trogarzo net sales' line is the company's consolidated Trogarzo sales. Revenue by geography (all products, FY2021 40-F note 3): United States 68,099, Canada 269, Europe 1,455 of 69,823 total (FY2020: 65,455 / 354 / 244 of 66,053), so Europe/Canada are small and not separable by product; the 20-F for FY2024 states that Theratechnologies ceased commercial sales of Trogarzo in Europe effective December 2022. Annual checks against the fiscal-year-end documents: FY2019 6,134+6,970+6,923+7,669 = 27,696; FY2020 30,654; FY2021 26,814; FY2022 29,603; FY2023 28,059; FY2024 25,719 (all equal the printed fiscal-year Trogarzo net sales). 2018Q3-2019Q2 are prior-year columns of later documents (derivation direct_prior_year_column). Later publication: none (acquired). TaiMed Biologics (licensor) was not checked for a separate sales line.",
+  "search_log": [
+    "data.sec.gov submissions for Theratechnologies (CIK 1512717): every filing listed (6-K, 40-F, 20-F, 13G, etc.); the earliest 6-K/40-F is dated 2019-10-08, so nothing earlier than fiscal Q3 2019 is on EDGAR.",
+    "Fetched every htm exhibit of 6-K/40-F/20-F filings from 2019-10 to 2025-09 and extracted lines matching 'Trogarzo ... net sales' (work/thx.py); each fiscal quarter's own press release or MD&A exhibit prints 'Trogarzo net sales' in the revenue summary table.",
+    "theratech.com returned HTTP 403 to automated requests, so the issuer's own earlier press releases (fiscal Q1 2018-fiscal Q2 2019) could not be read; those quarters are taken from the prior-year columns where available (2018Q3, 2018Q4, 2019Q1, 2019Q2) and fiscal Q2 2018 is left unrecorded.",
+    "Fiscal Q4 rows 2018Q4, 2019Q4 and 2021Q4 come from the Form 40-F exhibits filed with the year-end results (2021Q4's press-release table merges the EGRIFTA and Trogarzo cells into one row, so the 40-F MD&A line was used); 2020Q4 comes from the 6-K results press release.",
+    "Check of other issuers (rung c): TaiMed Biologics is the licensor/manufacturer; its sales line was not searched.",
+    "Check of series end: filings after 2025-07-09 are 6-Ks about the arrangement, 25-NSE (2025-09-25) and 15-12G (2025-11-26); no results release."
+  ]
+}

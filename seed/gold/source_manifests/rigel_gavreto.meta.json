@@ -1,0 +1,55 @@
+{
+  "drug_name": "Gavreto",
+  "generic_name": "pralsetinib",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (solid)",
+  "formulation": "capsule",
+  "route_of_administration": "oral",
+  "moa": "RET kinase inhibitor",
+  "moa_class": "kinase_inhibitor",
+  "first_approval_year": 2020,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2020/213721Orig1s000ltr.pdf",
+    "quote": "NDA 213721 ACCELERATED APPROVAL ... Gavreto (pralsetinib), 100 mg capsules ... for the treatment of adult patients with metastatic RET fusion-positive non-small cell lung cancer (NSCLC) as detected by an FDA approved test ... MARC R THEORET 09/04/2020"
+  },
+  "manufacturer": "Rigel Pharmaceuticals",
+  "benchmark_identity": "rigel_gavreto_us_reported",
+  "revenue_scope": "U.S. net sales of Gavreto",
+  "geography": "United States",
+  "launch_quarter": "2020Q3",
+  "launch_evidence": {
+    "year": 2020,
+    "url": "https://www.sec.gov/Archives/edgar/data/1597264/000155837020012041/bpmc-20200930x10q.htm",
+    "quote": "We started generating revenue from sales of GAVRETO in the third quarter of 2020 following FDA approval of GAVRETO"
+  },
+  "commercial_start_quarter": "2020Q3",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "U.S. net sales of Gavreto (pralsetinib) read from whoever booked them: Blueprint Medicines as principal through 2021Q2 (the Gavreto-named sentence of each release or 10-Q, USD millions to one decimal; the income statement line 'Product revenue, net' also carries Ayvakit); Roche as principal from July 1, 2021 to the first quarter of 2024 (the US column of the product-sales table in Roche's investor updates, CHF millions, whole millions, year-to-date tables differenced into quarters); Rigel from 2024Q2 (the Gavreto-named sentence of each earnings release, USD millions to one decimal). Currency: Blueprint and Rigel rows are USD, Roche rows are CHF as Roche reports; each row carries its own currency and the CHF rows are not converted. Roche's Global column (which includes Europe) is not used. Roche's Gavreto row is absent from its half-year 2024 investor update product table (https://assets.roche.com/f/176343/08c1909ac8/240725_ir_hy.pdf), consistent with Rigel booking U.S. sales from June 2024; Roche's first quarter of 2024 US figure (7) precedes that handover. Blueprint's 2020Q3 figure is the 10-Q sentence (0.2 million); the Q3 2021 10-Q prior-year column prints 207 thousand for the same quarter, which is not used because the quarter's own document is preferred. Sum checks: Roche 2021 quarters 5+4 = FY2021 US 9; 2022 quarters 4+5+6+7 = FY2022 US 22; 2023 quarters 6+7+5+7 = FY2023 US 25; Rigel 2024 quarters 1.9+7.1+8.1 = 17.1 (FY2024); Rigel 2025 quarters 9.0+11.8+11.1+10.2 = 42.1 (FY2025). Rigel's Form 10-Q for 2025Q3 prints $11.0 million for the quarter where the earnings release prints $11.1 million; the release is used because it agrees with the nine-month 31.9 and full-year 42.1 totals. Ex-U.S. Gavreto rights are held by Roche/CStone and are not in this line. 2024Q2 (Rigel 1.9) is a partial quarter covering only the days after June 27, 2024; Roche's April-June 2024 U.S. sales are not published, so that quarter is understated relative to its neighbours (Roche 7 in 2024Q1, Rigel 7.1 in 2024Q3).",
+  "search_log": [
+    "Blueprint Medicines (CIK 1597264): read each 8-K Item 2.02 exhibit 99.1 from 2020-10 to 2022-11 and the Forms 10-Q/10-K for Q3 2020 to FY2021; Q3 2021 10-Q table shows GAVRETO '-' for Q3 2021 against 207 thousand a year earlier, and 4,706 for nine months (Roche became principal for U.S. sales on July 1, 2021).",
+    "Roche (principal 2021Q3-2024Q1): located the investor-update PDFs on roche.com/investors/updates (inv-update-2021-10-20, 2022-02-03, 2022-04-25, 2022-07-21, 2022-10-18, 2023-02-02, 2023-04-26, 2023-07-27, 2023-10-19, 2024-02-01, 2024-04-24, 2024-07-25) and read each product-sales table for the Gavreto row. YTD US column (CHF m): 9M21 5; FY21 9; Q1 22 4; H1 22 9; 9M22 15; FY22 22; Q1 23 6; H1 23 13; 9M23 18; FY23 25; Q1 24 7. The half-year 2021 update (irp210722.pdf) and half-year 2024 update (240725_ir_hy.pdf) print no Gavreto row. The half-year 2023 figures are in 230727_ir_hy.pdf (irp230727.pdf, the other half-year 2023 PDF, has no Gavreto row).",
+    "Rigel (CIK 1034842): read every 8-K Item 2.02 exhibit from 2023-08 to 2026-08. The 2025-2026 earnings releases print 'GAVRETO net product sales were $X million' for each quarter (2025Q1 9.0, Q2 11.8, Q3 11.1, Q4 10.2; 2026Q1 9.6, Q2 10.7) and are the source for those quarters; the Q1 2024 release (2024-05-07) printed no Gavreto sales (rights acquired February 2024, product available June 2024).",
+    "Royalty Pharma (royalties on ex-U.S. Gavreto net sales since June 2022) was not checked because the series is U.S. sales.",
+    "FDA approval letter 213721Orig1s000ltr.pdf read for the approval date (09/04/2020)."
+  ],
+  "joined_issuers": [
+    {
+      "issuer": "Blueprint Medicines",
+      "first_quarter": "2020Q3",
+      "last_quarter": "2021Q2"
+    },
+    {
+      "issuer": "Roche",
+      "first_quarter": "2021Q3",
+      "last_quarter": "2024Q1"
+    },
+    {
+      "issuer": "Rigel Pharmaceuticals",
+      "first_quarter": "2024Q2",
+      "last_quarter": "2026Q2"
+    }
+  ]
+}

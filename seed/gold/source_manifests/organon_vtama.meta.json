@@ -1,0 +1,52 @@
+{
+  "drug_name": "Vtama",
+  "generic_name": "tapinarof",
+  "manufacturer": "Organon",
+  "benchmark_identity": "organon_vtama_us_reported",
+  "therapeutic_area": "Immunology / Inflammation",
+  "indication_area": "Dermatology (plaque psoriasis, atopic dermatitis)",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "cream",
+  "route_of_administration": "topical",
+  "moa": "Aryl hydrocarbon receptor (AhR) agonist",
+  "moa_class": "ahr_agonist",
+  "first_approval_year": 2022,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2022/215272Orig1s000ltr.pdf",
+    "quote": "NDA 215272 NDA APPROVAL ... This NDA provides for the use of Vtama (tapinarof) cream for the topical treatment of plaque psoriasis in adults ... approved, effective on the date of this letter (electronic signature 05/23/2022)"
+  },
+  "launch_quarter": "2022Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1635088/000119312522220561/d383218d10q.htm",
+    "quote": "We began generating product revenue, net from sales of VTAMA in the United States in May 2022."
+  },
+  "commercial_start_quarter": "2022Q2",
+  "series_start_reason": null,
+  "joined_issuers": [
+    {
+      "issuer": "Roivant",
+      "first_quarter": "2022Q2",
+      "last_quarter": "2024Q3"
+    },
+    {
+      "issuer": "Organon",
+      "first_quarter": "2025Q1",
+      "last_quarter": "2026Q2"
+    }
+  ],
+  "unreported_quarters": {
+    "2024Q4": "Ownership change Roivant (Dermavant) to Organon; neither owner published a full-quarter figure. Organon's acquisition of Dermavant closed on October 28, 2024 (Organon release of 2025-02-13: 'Vtama was acquired as part of Organon's acquisition of Dermavant Sciences Inc., which closed on October 28, 2024'), so Organon's 2024Q4 Vtama figure (U.S. 10) covers only the post-close days, while Roivant's 10-Q for the quarter ended December 31, 2024 (filed 2025-02-10) prints product revenue of 2,296 thousand for the pre-close days. Roivant's full quarters end with 2024Q3 and Organon's series resumes with 2025Q1."
+  },
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "U.S. net product revenue of Vtama in USD millions. Roivant (parent of Dermavant) printed 'Product revenue, net' / 'VTAMA revenues, net' as its U.S. VTAMA sales (its 10-Q says VTAMA is sold in the U.S.; its other revenue lines are license and subscription revenue and are not used); values are in thousands in Roivant's documents and divided by 1,000. Organon prints Vtama in a U.S. / Non-U.S. / Total split, and its U.S. column is used so that the scope stays U.S.-only: the Total column adds 1-8 of non-U.S. sales each quarter. Dated scope changes: atopic dermatitis was added to the U.S. label in December 2024 (Organon 10-K for 2025: 'In December 2024, the FDA approved Vtama for the treatment of atopic dermatitis'), so U.S. figures from 2025Q1 cover both indications and earlier ones psoriasis only. Roivant's fiscal year ends March 31, so its fiscal quarters ended June 30 / September 30 / December 31 / March 31 are the calendar quarters 2Q / 3Q / 4Q / 1Q of the same name, no remapping needed. 2022Q2 (141 thousand) comes from the prior-year column of the June 2023 10-Q because the June 2022 10-Q (filed 2022-08-15) prints only total revenue. Roivant's total revenue lines also carry license revenue and are not used. Year checks: Roivant fiscal 2023 (2022Q2-2023Q1) 0.141 + 4.969 + 9.244 + 13.657 = 28.011 vs 28,011 printed; fiscal 2024 (2023Q2-2024Q1) 16.659 + 18.424 + 20.666 + 19.308 = 75.057 vs 75,057 printed. Organon 2025 quarters 20 + 29 + 31 + 31 = 111 vs 111 U.S. printed in the 2026-02-12 release.",
+  "search_log": [
+    "Roivant Sciences (CIK 1635088): downloaded the 10-Q/10-K filings from 2022-06 to 2025-05 and the earnings-release exhibits of 2023-06-28 and 2024-05-30; Vtama product revenue lines read from each. The 10-K filings give fiscal-year totals only; the March quarters (2023Q1, 2024Q1) come from the earnings releases, which print the quarter directly.",
+    "Roivant 10-Q for the quarter ended December 31, 2024 (filed 2025-02-10) prints product revenue of 2,296 for the quarter (Dermavant sold 2024-10-28) and 41,599 for nine months: confirms 2024Q4 is a partial quarter for both owners.",
+    "Organon (CIK 1821825): earnings releases 2025-02-13 to 2026-04-30 give Vtama U.S./Non-U.S./Total; 2024Q4 release carries 10 / 1 / 12 for the post-acquisition days only; 2026Q2 from the 10-Q filed 2026-07-31 (Vtama 34 / 1 / 35).",
+    "Looked for a Vtama figure from Dermavant Sciences before Roivant's June 2022 quarter: none (launch followed the 2022-05-23 approval).",
+    "Organon prints 'Vtama - Psoriasis', 'Vtama - Atopic Dermatitis' and 'Vtama - International' split lines in its 10-K/A and 10-K tables; those were not used because they are not on the same basis as the U.S. column in the quarterly releases."
+  ]
+}
