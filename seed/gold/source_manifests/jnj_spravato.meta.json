@@ -1,0 +1,34 @@
+{
+  "drug_name": "Spravato",
+  "generic_name": "esketamine",
+  "manufacturer": "Johnson & Johnson",
+  "benchmark_identity": "jnj_spravato_worldwide_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Treatment-resistant depression",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "nasal spray (28 mg single-use device)",
+  "route_of_administration": "intranasal",
+  "moa": "NMDA receptor antagonist (esketamine)",
+  "moa_class": "nmda_receptor_antagonist",
+  "first_approval_year": 2019,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2019/211243Orig1s000ltr.pdf",
+    "quote": "NDA 211243 NDA APPROVAL Janssen Pharmaceuticals, Inc. ... for Spravato (esketamine) nasal spray ... provides for the use of Spravato (esketamine) nasal spray for treatment of treatment-resistant depression. APPROVAL & LABELING We have completed our review of this application, as amended."
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2022Q1",
+  "series_start_reason": "J&J prints a SPRAVATO line in no schedule before 2023Q1 (absent from every 2014Q3-2022Q4 schedule, measured; esketamine was approved in 2019, so 2019-2021 sales sit in an undisclosed other line - inferred, J&J's 2023Q1 schedule footnote says only that prior-year amounts were reclassified). The 2023Q1 schedule prints 2022Q1 and its supplemental table prints the 2022 quarters and full-year 2021 (224, whole year only). The 2023 quarterly schedules print 2022Q1-Q4 as prior-year columns (70, 85, 100, 119). No document found prints a 2019-2021 quarterly figure, so the series starts at 2022Q1.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Scope is the worldwide (US + Intl) row; J&J prints the same US and Intl rows for every quarter, so the scope is constant. Latest quarter: 2026Q3 comes from Exhibit 99.2 of J&J's 8-K filed 2026-10-13 (the q4cdn PDF for 3Q26 was not yet at the guessed URL, HTTP 404). 2022Q1-Q4 are prior-year columns of the 2023 schedules (the 2022 schedules did not print the product); 2023Q1 onward are each quarter's own schedule. Annual checks: 2022 quarters 70+85+100+119 = 374 (printed in the 4Q23 schedule's 12-month column); 2023: 131+169+183+206 = 689; 2024: 225+271+284+297 = 1,077; 2025: 320+414+459+503 = 1,696, each equal to the 12-month column printed in that year's Q4 schedule. FY2021 = 224 is printed in the 2023Q1 schedule's supplemental table but with no quarterly split, so it is not a row. Date of the US launch (2019) is not asserted: no J&J document read states a launch quarter. Gold is as of 2026Q2; J&J's 2026Q3 schedule (https://www.sec.gov/Archives/edgar/data/200406/000020040626000189/a2026q3exhibit992.htm) prints SPRAVATO WW 624.0, left for the next refresh.",
+  "search_log": [
+    "Downloaded J&J's quarterly sales schedule PDFs 2014Q3-2026Q2 (50 PDFs: 'Sales of Key Products/Franchises' through 1Q22, 'Other Financial Disclosures' from 2Q22, plus the 2017Q2 Actelion Historical Sales Schedule) from the J&J investor-site q4cdn URLs used by the existing J&J manifests; parsed every page with pdfplumber and grepped case-insensitively for SPRAVATO, esketamine, INVEGA, HAFYERA, ZAVESCA, miglustat, SYMTUZA, PREZCOBIX, PREZISTA.",
+    "Listed J&J (CIK 200406) filings via data.sec.gov submissions and downloaded every 10-Q, 10-K (2017-02 to 2024-02) and every 8-K / 8-K/A exhibit from 2017-01 through the 2026-10-13 8-K (form filter: any form starting 8-K, plus 10-Q and 10-K; 344 exhibit files); grepped for the same names. Product rows with figures exist only for SPRAVATO (10-Qs of 2023 and later, 8-K ex 99.2 of 2023 and later) and for the combined PREZISTA / PREZCOBIX / REZOLSTA / SYMTUZA line.",
+    "Absence claim for 2019Q1-2022Q4: J&J schedules 2019Q1 (inside the 1Q19 press-release attachment) through 2022Q4 contain no SPRAVATO row (0 line hits besides press-release headings in 1Q19); the 2022 10-Qs and the FY2022 10-K have no SPRAVATO row; 8-K ex 99.1 for 2019Q1-2022Q4 mention SPRAVATO only as regulatory-news bullet headings ('(press release)'), no sales figure. Comparative columns of the 2023 schedules (the first to print the product) were used for 2022.",
+    "Supplemental Sales Information page of the 2023Q1 schedule prints SPRAVATO 2021 Full Year, 2022 Q1-Q4 and 2022 Full Year (WW 224; 70, 85, 100, 119; 374; the text layer splits some figures with a space, e.g. '2 24').",
+    "Other issuers: no partner or royalty holder prints SPRAVATO sales (Janssen develops and sells it; esketamine is not licensed in).",
+    "Bigdata.com was not needed for this product: the schedules and EDGAR exhibits located every figure directly."
+  ]
+}

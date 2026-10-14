@@ -1,0 +1,36 @@
+{
+  "drug_name": "Idhifa",
+  "generic_name": "enasidenib",
+  "manufacturer": "Bristol-Myers Squibb",
+  "benchmark_identity": "bms_idhifa_us_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (hematologic; relapsed or refractory IDH2-mutated acute myeloid leukemia)",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Isocitrate dehydrogenase-2 (IDH2) inhibitor",
+  "moa_class": "idh2_inhibitor",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=209606",
+    "quote": "08/01/2017 ORIG-1 Approval Type 1 - New Molecular Entity PRIORITY; Orphan (IDHIFA ENASIDENIB MESYLATE EQ 50MG BASE TABLET;ORAL)"
+  },
+  "launch_quarter": "2017Q3",
+  "commercial_start_quarter": "2017Q3",
+  "launch_evidence": "https://www.sec.gov/Archives/edgar/data/816284/000110465917063874/a17-24464_1ex99d1.htm : the third-quarter 2017 table prints IDHIFA U.S. 7 against a prior-year column of nil, with footnote 'IDHIFA was approved in August 2017 in the U.S. for the treatment of adult patients with R/R AML with an isocitrate dehydrogenase-2 mutuation as detected by an FDA approved test'",
+  "series_start_reason": null,
+  "series_end_quarter": "2019Q3",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Celgene's third-quarter 2019 release (2019-10-31) is the last document to print an IDHIFA sales line. Celgene filed no fourth-quarter 2019 release and BMS's fourth-quarter 2019 release (https://www.sec.gov/Archives/edgar/data/14272/000001427220000075/q42019ex992.htm) has no Idhifa row; its brand table ends in 'Other brands (a)', whose footnote reads '(a) | includes sustiva, reyataz, daklinza and all other bms and celgene products acquired as part of the celgene acquisition that have lost exclusivity in major markets, over-the-counter (otc) brands and royalty revenue'. BMS's 10-Ks for 2019 and 2020 mention IDHIFA only in pipeline and partner lists and the 2021 10-K does not mention it. Agios, the licensor, prints only royalty revenue on IDHIFA net sales (e.g. $3.3 million for the second quarter of 2020), not the net sales.",
+  "notes": "U.S. net product sales of Idhifa, contiguous 2017Q3-2019Q3, from the U.S. row of Celgene's U.S./International/Worldwide table, chosen over the Worldwide row because International sales are nil until the second quarter of 2018, so the Worldwide total changes composition inside the series. International is 1 (2018Q2), 1 (2018Q3), 2 (2018Q4), 3 (2019Q1), 3 (2019Q2) and 3 (2019Q3), and Worldwide for the nine quarters is 7, 13, 14, 17, 19, 22, 22, 28, 27. Sums: U.S. 2017Q3+Q4 = 20 equals the full-year U.S. figure printed in the 2018-01-25 release; 2018 U.S. = 68 equals the full-year figure printed in the 2019-01-31 release; 2019Q1-Q3 U.S. = 68 equals the nine-month figure printed in the 2019-10-31 release. Idhifa is licensed from Agios, which co-commercialized it with Celgene in the U.S.; Celgene recorded the net sales.",
+  "search_log": [
+    "Listed CIK 14272 (Bristol-Myers Squibb) and CIK 816284 (Celgene) filings via data.sec.gov/submissions (recent plus older pages), all form types including 8-K/A; selected every filing carrying Item 2.02 and resolved its exhibits through each filing's index.json. Celgene Item 2.02 filings run to 2019-10-31 and BMS to 2026-07-30 (2026Q2 release); Celgene filed no fourth-quarter 2019 release because the acquisition closed 2019-11-20.",
+    "Celgene's January 7-13 8-Ks (preliminary results) were not used as the source for any quarter; each quarter is read from the earnings release filed after quarter end (the quarter's own release).",
+    "Celgene releases 2017Q3-2019Q3: Idhifa U.S./International/Worldwide table rows read; the third-quarter 2017 release is the first to print Idhifa sales and the earlier releases (2017Q1, 2017Q2) mention Idhifa only as a regulatory or trial item (NDA filing, PDUFA date, trial data).",
+    "BMS Ex 99.1 and 99.2 for 2019Q4-2026Q2 searched for 'Idhifa' / 'enasidenib': no sales row (the 2020-11-05 release names IDHIFA only in a clinical bullet about the IDHENTIFY trial); BMS Form 10-K for fiscal 2019 and 2020 searched for 'IDHIFA': pipeline and partner lists only; fiscal 2021: no match.",
+    "Agios Pharmaceuticals (CIK 1439222) earnings releases 2019-08 to 2022-11 read: they print royalty revenue 'from net global sales of IDHIFA' (2019Q3 $2.7 million, 2019Q4 $3.0 million, 2020Q1 $3.3 million, 2020Q2 $3.3 million, 2020Q3 $0.7 million) and, from 2020, the sale of the IDHIFA royalty to Royalty Pharma; none prints net sales, and sales are not inferred from the tiered royalty.",
+    "Drugs@FDA overview page for NDA 209606 fetched for the approval date.",
+    "Verifier (scripts/sourcing/verify_staged_manifests.py) run on the staged CSV: every row's label and quoted figures were found on one line of the cited document."
+  ]
+}

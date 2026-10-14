@@ -3600,6 +3600,41 @@
   ]
  },
  {
+  "drug_name": "Namenda XR",
+  "manufacturer": "Actavis plc",
+  "ticker": null,
+  "generic_name": "memantine hydrochloride extended-release",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q1",
+    "value_normalized_usd_millions": 150.6,
+    "gold_id": "allergan-namenda-xr-us-reported-2015q1"
+   },
+   {
+    "period": "2015Q2",
+    "value_normalized_usd_millions": 204.7,
+    "gold_id": "allergan-namenda-xr-us-reported-2015q2"
+   },
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 214.5,
+    "gold_id": "allergan-namenda-xr-us-reported-2015q3"
+   },
+   {
+    "period": "2015Q4",
+    "value_normalized_usd_millions": 189.5,
+    "gold_id": "allergan-namenda-xr-us-reported-2015q4"
+   }
+  ]
+ },
+ {
   "drug_name": "Tracleer",
   "manufacturer": "Actelion/J&J",
   "ticker": "JNJ",
@@ -6090,6 +6125,421 @@
   ]
  },
  {
+  "drug_name": "Aczone",
+  "manufacturer": "Allergan plc",
+  "ticker": null,
+  "generic_name": "dapsone",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q1",
+    "value_normalized_usd_millions": 6.0,
+    "gold_id": "allergan-aczone-global-reported-2015q1"
+   },
+   {
+    "period": "2015Q2",
+    "value_normalized_usd_millions": 60.3,
+    "gold_id": "allergan-aczone-global-reported-2015q2"
+   },
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 48.0,
+    "gold_id": "allergan-aczone-global-reported-2015q3"
+   },
+   {
+    "period": "2015Q4",
+    "value_normalized_usd_millions": 56.5,
+    "gold_id": "allergan-aczone-global-reported-2015q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Aczone",
+  "manufacturer": "Allergan plc",
+  "ticker": null,
+  "generic_name": "dapsone",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 33.0,
+    "gold_id": "allergan-aczone-global-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 54.1,
+    "gold_id": "allergan-aczone-global-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 69.0,
+    "gold_id": "allergan-aczone-global-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 61.2,
+    "gold_id": "allergan-aczone-global-reported-2016q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Aczone",
+  "manufacturer": "Allergan plc",
+  "ticker": null,
+  "generic_name": "dapsone",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 40.6,
+    "gold_id": "allergan-aczone-global-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 41.1,
+    "gold_id": "allergan-aczone-global-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 46.9,
+    "gold_id": "allergan-aczone-global-reported-2017q3"
+   },
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": 38.2,
+    "gold_id": "allergan-aczone-global-reported-2017q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Aczone",
+  "manufacturer": "Allergan plc",
+  "ticker": null,
+  "generic_name": "dapsone",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 16.1,
+    "gold_id": "allergan-aczone-global-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 21.2,
+    "gold_id": "allergan-aczone-global-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 17.5,
+    "gold_id": "allergan-aczone-global-reported-2018q3"
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": 0.7,
+    "gold_id": "allergan-aczone-global-reported-2018q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Aczone",
+  "manufacturer": "Allergan plc",
+  "ticker": null,
+  "generic_name": "dapsone",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q1",
+    "value_normalized_usd_millions": 1.6,
+    "gold_id": "allergan-aczone-global-reported-2019q1"
+   },
+   {
+    "period": "2019Q2",
+    "value_normalized_usd_millions": 1.8,
+    "gold_id": "allergan-aczone-global-reported-2019q2"
+   },
+   {
+    "period": "2019Q3",
+    "value_normalized_usd_millions": 3.4,
+    "gold_id": "allergan-aczone-global-reported-2019q3"
+   },
+   {
+    "period": "2019Q4",
+    "value_normalized_usd_millions": 2.5,
+    "gold_id": "allergan-aczone-global-reported-2019q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Aczone",
+  "manufacturer": "Allergan plc",
+  "ticker": null,
+  "generic_name": "dapsone",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 3.0,
+    "gold_id": "allergan-aczone-global-reported-2020q1"
+   },
+   {
+    "period": "2020Q2",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2020Q1. Allergan plc was acquired by AbbVie on 2020-05-08 (see AbbVie filings); its last periodic report is the Form 10-Q for the quarter ended 2020-03-31 (filed 2020-05-07). AbbVie's 47 earnings-release exhibits from 2020-05-01 to 2026-10-05 and its 25 Forms 10-Q/10-K from 2020-06-30 to 2026-06-30 print no row for this brand (case-insensitive text search of each exhibit/main document)."
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2020Q1. Allergan plc was acquired by AbbVie on 2020-05-08 (see AbbVie filings); its last periodic report is the Form 10-Q for the quarter ended 2020-03-31 (filed 2020-05-07). AbbVie's 47 earnings-release exhibits from 2020-05-01 to 2026-10-05 and its 25 Forms 10-Q/10-K from 2020-06-30 to 2026-06-30 print no row for this brand (case-insensitive text search of each exhibit/main document)."
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2020Q1. Allergan plc was acquired by AbbVie on 2020-05-08 (see AbbVie filings); its last periodic report is the Form 10-Q for the quarter ended 2020-03-31 (filed 2020-05-07). AbbVie's 47 earnings-release exhibits from 2020-05-01 to 2026-10-05 and its 25 Forms 10-Q/10-K from 2020-06-30 to 2026-06-30 print no row for this brand (case-insensitive text search of each exhibit/main document)."
+   }
+  ]
+ },
+ {
+  "drug_name": "Avycaz",
+  "manufacturer": "Allergan plc",
+  "ticker": null,
+  "generic_name": "ceftazidime/avibactam",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q2",
+    "value_normalized_usd_millions": 5.4,
+    "gold_id": "allergan-avycaz-us-general-medicine-reported-2015q2"
+   },
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 7.5,
+    "gold_id": "allergan-avycaz-us-general-medicine-reported-2015q3"
+   },
+   {
+    "period": "2015Q4",
+    "value_normalized_usd_millions": 9.7,
+    "gold_id": "allergan-avycaz-us-general-medicine-reported-2015q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Avycaz",
+  "manufacturer": "Allergan plc",
+  "ticker": null,
+  "generic_name": "ceftazidime/avibactam",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 8.4,
+    "gold_id": "allergan-avycaz-us-general-medicine-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 13.7,
+    "gold_id": "allergan-avycaz-us-general-medicine-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 4.8,
+    "gold_id": "allergan-avycaz-us-general-medicine-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 9.2,
+    "gold_id": "allergan-avycaz-us-general-medicine-reported-2016q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Avycaz",
+  "manufacturer": "Allergan plc",
+  "ticker": null,
+  "generic_name": "ceftazidime/avibactam",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 11.3,
+    "gold_id": "allergan-avycaz-us-general-medicine-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 14.5,
+    "gold_id": "allergan-avycaz-us-general-medicine-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 16.9,
+    "gold_id": "allergan-avycaz-us-general-medicine-reported-2017q3"
+   },
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": 18.5,
+    "gold_id": "allergan-avycaz-us-general-medicine-reported-2017q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Avycaz",
+  "manufacturer": "Allergan plc",
+  "ticker": null,
+  "generic_name": "ceftazidime/avibactam",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 21.8,
+    "gold_id": "allergan-avycaz-us-general-medicine-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 23.5,
+    "gold_id": "allergan-avycaz-us-general-medicine-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 24.7,
+    "gold_id": "allergan-avycaz-us-general-medicine-reported-2018q3"
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": 24.6,
+    "gold_id": "allergan-avycaz-us-general-medicine-reported-2018q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Avycaz",
+  "manufacturer": "Allergan plc",
+  "ticker": null,
+  "generic_name": "ceftazidime/avibactam",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q1",
+    "value_normalized_usd_millions": 29.7,
+    "gold_id": "allergan-avycaz-us-general-medicine-reported-2019q1"
+   },
+   {
+    "period": "2019Q2",
+    "value_normalized_usd_millions": 26.7,
+    "gold_id": "allergan-avycaz-us-general-medicine-reported-2019q2"
+   },
+   {
+    "period": "2019Q3",
+    "value_normalized_usd_millions": 29.6,
+    "gold_id": "allergan-avycaz-us-general-medicine-reported-2019q3"
+   },
+   {
+    "period": "2019Q4",
+    "value_normalized_usd_millions": 30.7,
+    "gold_id": "allergan-avycaz-us-general-medicine-reported-2019q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Avycaz",
+  "manufacturer": "Allergan plc",
+  "ticker": null,
+  "generic_name": "ceftazidime/avibactam",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 11.8,
+    "gold_id": "allergan-avycaz-us-general-medicine-reported-2020q1"
+   },
+   {
+    "period": "2020Q2",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2020Q1. Allergan plc was acquired by AbbVie on 2020-05-08 (see AbbVie filings); its last periodic report is the Form 10-Q for the quarter ended 2020-03-31 (filed 2020-05-07). AbbVie's 47 earnings-release exhibits from 2020-05-01 to 2026-10-05 and its 25 Forms 10-Q/10-K from 2020-06-30 to 2026-06-30 print no row for this brand (case-insensitive text search of each exhibit/main document)."
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2020Q1. Allergan plc was acquired by AbbVie on 2020-05-08 (see AbbVie filings); its last periodic report is the Form 10-Q for the quarter ended 2020-03-31 (filed 2020-05-07). AbbVie's 47 earnings-release exhibits from 2020-05-01 to 2026-10-05 and its 25 Forms 10-Q/10-K from 2020-06-30 to 2026-06-30 print no row for this brand (case-insensitive text search of each exhibit/main document)."
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2020Q1. Allergan plc was acquired by AbbVie on 2020-05-08 (see AbbVie filings); its last periodic report is the Form 10-Q for the quarter ended 2020-03-31 (filed 2020-05-07). AbbVie's 47 earnings-release exhibits from 2020-05-01 to 2026-10-05 and its 25 Forms 10-Q/10-K from 2020-06-30 to 2026-06-30 print no row for this brand (case-insensitive text search of each exhibit/main document)."
+   }
+  ]
+ },
+ {
   "drug_name": "Linzess",
   "manufacturer": "Allergan plc",
   "ticker": null,
@@ -6316,6 +6766,111 @@
     "period": "2020Q4",
     "value_normalized_usd_millions": 286.0,
     "gold_id": "abbvie-linzess-constella-worldwide-reported-2020q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Namenda XR",
+  "manufacturer": "Allergan plc",
+  "ticker": null,
+  "generic_name": "memantine hydrochloride extended-release",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 173.1,
+    "gold_id": "allergan-namenda-xr-us-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 166.5,
+    "gold_id": "allergan-namenda-xr-us-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 146.9,
+    "gold_id": "allergan-namenda-xr-us-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 141.1,
+    "gold_id": "allergan-namenda-xr-us-reported-2016q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Namenda XR",
+  "manufacturer": "Allergan plc",
+  "ticker": null,
+  "generic_name": "memantine hydrochloride extended-release",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 122.0,
+    "gold_id": "allergan-namenda-xr-us-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 118.7,
+    "gold_id": "allergan-namenda-xr-us-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 114.3,
+    "gold_id": "allergan-namenda-xr-us-reported-2017q3"
+   },
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": 97.8,
+    "gold_id": "allergan-namenda-xr-us-reported-2017q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Namenda XR",
+  "manufacturer": "Allergan plc",
+  "ticker": null,
+  "generic_name": "memantine hydrochloride extended-release",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 40.5,
+    "gold_id": "allergan-namenda-xr-us-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 3.4,
+    "gold_id": "allergan-namenda-xr-us-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 16.2,
+    "gold_id": "allergan-namenda-xr-us-reported-2018q3"
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2018Q3. From 2018Q4 Allergan plc prints a single 'Namenda' row that its footnote defines as 'Includes Namenda XR and Namenda IR' (2019Q1 release, footnote 3 on the Namenda row), and no separate Namenda XR row; the last Namenda XR row is the 2018Q3 release (16.2). After the AbbVie acquisition (2020-05-08) AbbVie's earnings exhibits print no Namenda row."
    }
   ]
  },
@@ -18351,6 +18906,1761 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 829.0,
     "gold_id": "az-lynparza-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nexium",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "esomeprazole",
+  "options": {
+   "earnings_since": "2001-04-05",
+   "earnings_until": "2002-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2001Q3",
+    "value_normalized_usd_millions": 168.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2001q3"
+   },
+   {
+    "period": "2001Q4",
+    "value_normalized_usd_millions": 278.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2001q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nexium",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "esomeprazole",
+  "options": {
+   "earnings_since": "2002-04-05",
+   "earnings_until": "2003-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2002Q1",
+    "value_normalized_usd_millions": 347.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2002q1"
+   },
+   {
+    "period": "2002Q2",
+    "value_normalized_usd_millions": 464.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2002q2"
+   },
+   {
+    "period": "2002Q3",
+    "value_normalized_usd_millions": 493.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2002q3"
+   },
+   {
+    "period": "2002Q4",
+    "value_normalized_usd_millions": 686.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2002q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nexium",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "esomeprazole",
+  "options": {
+   "earnings_since": "2003-04-05",
+   "earnings_until": "2004-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2003Q1",
+    "value_normalized_usd_millions": 835.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2003q1"
+   },
+   {
+    "period": "2003Q2",
+    "value_normalized_usd_millions": 631.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2003q2"
+   },
+   {
+    "period": "2003Q3",
+    "value_normalized_usd_millions": 1000.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2003q3"
+   },
+   {
+    "period": "2003Q4",
+    "value_normalized_usd_millions": 836.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2003q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nexium",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "esomeprazole",
+  "options": {
+   "earnings_since": "2004-04-05",
+   "earnings_until": "2005-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2004Q1",
+    "value_normalized_usd_millions": 935.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2004q1"
+   },
+   {
+    "period": "2004Q2",
+    "value_normalized_usd_millions": 891.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2004q2"
+   },
+   {
+    "period": "2004Q3",
+    "value_normalized_usd_millions": 951.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2004q3"
+   },
+   {
+    "period": "2004Q4",
+    "value_normalized_usd_millions": 1106.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2004q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nexium",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "esomeprazole",
+  "options": {
+   "earnings_since": "2005-04-05",
+   "earnings_until": "2006-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2005Q1",
+    "value_normalized_usd_millions": 1055.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2005q1"
+   },
+   {
+    "period": "2005Q2",
+    "value_normalized_usd_millions": 1204.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2005q2"
+   },
+   {
+    "period": "2005Q3",
+    "value_normalized_usd_millions": 1127.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2005q3"
+   },
+   {
+    "period": "2005Q4",
+    "value_normalized_usd_millions": 1247.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2005q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nexium",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "esomeprazole",
+  "options": {
+   "earnings_since": "2006-04-05",
+   "earnings_until": "2007-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2006Q1",
+    "value_normalized_usd_millions": 1189.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2006q1"
+   },
+   {
+    "period": "2006Q2",
+    "value_normalized_usd_millions": 1283.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2006q2"
+   },
+   {
+    "period": "2006Q3",
+    "value_normalized_usd_millions": 1280.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2006q3"
+   },
+   {
+    "period": "2006Q4",
+    "value_normalized_usd_millions": 1430.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2006q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nexium",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "esomeprazole",
+  "options": {
+   "earnings_since": "2007-04-05",
+   "earnings_until": "2008-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2007Q1",
+    "value_normalized_usd_millions": 1308.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2007q1"
+   },
+   {
+    "period": "2007Q2",
+    "value_normalized_usd_millions": 1312.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2007q2"
+   },
+   {
+    "period": "2007Q3",
+    "value_normalized_usd_millions": 1293.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2007q3"
+   },
+   {
+    "period": "2007Q4",
+    "value_normalized_usd_millions": 1303.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2007q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nexium",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "esomeprazole",
+  "options": {
+   "earnings_since": "2008-04-05",
+   "earnings_until": "2009-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2008Q1",
+    "value_normalized_usd_millions": 1238.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2008q1"
+   },
+   {
+    "period": "2008Q2",
+    "value_normalized_usd_millions": 1323.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2008q2"
+   },
+   {
+    "period": "2008Q3",
+    "value_normalized_usd_millions": 1315.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2008q3"
+   },
+   {
+    "period": "2008Q4",
+    "value_normalized_usd_millions": 1324.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2008q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nexium",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "esomeprazole",
+  "options": {
+   "earnings_since": "2009-04-05",
+   "earnings_until": "2010-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2009Q1",
+    "value_normalized_usd_millions": 1192.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2009q1"
+   },
+   {
+    "period": "2009Q2",
+    "value_normalized_usd_millions": 1246.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2009q2"
+   },
+   {
+    "period": "2009Q3",
+    "value_normalized_usd_millions": 1243.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2009q3"
+   },
+   {
+    "period": "2009Q4",
+    "value_normalized_usd_millions": 1278.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2009q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nexium",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "esomeprazole",
+  "options": {
+   "earnings_since": "2010-04-05",
+   "earnings_until": "2011-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2010Q1",
+    "value_normalized_usd_millions": 1239.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2010q1"
+   },
+   {
+    "period": "2010Q2",
+    "value_normalized_usd_millions": 1257.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2010q2"
+   },
+   {
+    "period": "2010Q3",
+    "value_normalized_usd_millions": 1242.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2010q3"
+   },
+   {
+    "period": "2010Q4",
+    "value_normalized_usd_millions": 1231.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2010q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nexium",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "esomeprazole",
+  "options": {
+   "earnings_since": "2011-04-05",
+   "earnings_until": "2012-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2011Q1",
+    "value_normalized_usd_millions": 1161.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2011q1"
+   },
+   {
+    "period": "2011Q2",
+    "value_normalized_usd_millions": 1112.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2011q2"
+   },
+   {
+    "period": "2011Q3",
+    "value_normalized_usd_millions": 1089.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2011q3"
+   },
+   {
+    "period": "2011Q4",
+    "value_normalized_usd_millions": 1067.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2011q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nexium",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "esomeprazole",
+  "options": {
+   "earnings_since": "2012-04-05",
+   "earnings_until": "2013-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2012Q1",
+    "value_normalized_usd_millions": 953.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2012q1"
+   },
+   {
+    "period": "2012Q2",
+    "value_normalized_usd_millions": 949.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2012q2"
+   },
+   {
+    "period": "2012Q3",
+    "value_normalized_usd_millions": 995.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2012q3"
+   },
+   {
+    "period": "2012Q4",
+    "value_normalized_usd_millions": 1047.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2012q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nexium",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "esomeprazole",
+  "options": {
+   "earnings_since": "2013-04-05",
+   "earnings_until": "2014-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2013Q1",
+    "value_normalized_usd_millions": 940.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2013q1"
+   },
+   {
+    "period": "2013Q2",
+    "value_normalized_usd_millions": 1023.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2013q2"
+   },
+   {
+    "period": "2013Q3",
+    "value_normalized_usd_millions": 918.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2013q3"
+   },
+   {
+    "period": "2013Q4",
+    "value_normalized_usd_millions": 991.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2013q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nexium",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "esomeprazole",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q1",
+    "value_normalized_usd_millions": 930.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2014q1"
+   },
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": 971.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2014q2"
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 922.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2014q3"
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": 832.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2014q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nexium",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "esomeprazole",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q1",
+    "value_normalized_usd_millions": 644.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2015q1"
+   },
+   {
+    "period": "2015Q2",
+    "value_normalized_usd_millions": 647.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2015q2"
+   },
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 641.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2015q3"
+   },
+   {
+    "period": "2015Q4",
+    "value_normalized_usd_millions": 564.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2015q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nexium",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "esomeprazole",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 463.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 562.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 516.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 491.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2016q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nexium",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "esomeprazole",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 461.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 595.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 469.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2017q3"
+   },
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": 427.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2017q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nexium",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "esomeprazole",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 448.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 442.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 422.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2018q3"
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": 390.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2018q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nexium",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "esomeprazole",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q1",
+    "value_normalized_usd_millions": 363.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2019q1"
+   },
+   {
+    "period": "2019Q2",
+    "value_normalized_usd_millions": 393.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2019q2"
+   },
+   {
+    "period": "2019Q3",
+    "value_normalized_usd_millions": 374.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2019q3"
+   },
+   {
+    "period": "2019Q4",
+    "value_normalized_usd_millions": 353.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2019q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nexium",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "esomeprazole",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 338.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2020q1"
+   },
+   {
+    "period": "2020Q2",
+    "value_normalized_usd_millions": 377.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2020q2"
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": 401.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2020q3"
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": 377.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2020q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nexium",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "esomeprazole",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 403.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 336.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2021q2"
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": 259.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2021q3"
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": 328.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2021q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nexium",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "esomeprazole",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 332.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 343.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2022q2"
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": 311.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2022q3"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 300.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nexium",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "esomeprazole",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 244.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 248.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 244.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 209.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nexium",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "esomeprazole",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 240.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 219.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 212.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 197.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nexium",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "esomeprazole",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 228.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 198.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 200.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 190.0,
+    "gold_id": "astrazeneca-nexium-worldwide-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Pulmicort Flexhaler",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "budesonide",
+  "options": {
+   "earnings_since": "2001-04-05",
+   "earnings_until": "2002-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2001Q3",
+    "value_normalized_usd_millions": 161.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2001q3"
+   },
+   {
+    "period": "2001Q4",
+    "value_normalized_usd_millions": 203.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2001q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Pulmicort Flexhaler",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "budesonide",
+  "options": {
+   "earnings_since": "2002-04-05",
+   "earnings_until": "2003-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2002Q1",
+    "value_normalized_usd_millions": 227.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2002q1"
+   },
+   {
+    "period": "2002Q2",
+    "value_normalized_usd_millions": 199.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2002q2"
+   },
+   {
+    "period": "2002Q3",
+    "value_normalized_usd_millions": 150.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2002q3"
+   },
+   {
+    "period": "2002Q4",
+    "value_normalized_usd_millions": 237.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2002q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Pulmicort Flexhaler",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "budesonide",
+  "options": {
+   "earnings_since": "2003-04-05",
+   "earnings_until": "2004-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2003Q1",
+    "value_normalized_usd_millions": 251.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2003q1"
+   },
+   {
+    "period": "2003Q2",
+    "value_normalized_usd_millions": 239.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2003q2"
+   },
+   {
+    "period": "2003Q3",
+    "value_normalized_usd_millions": 184.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2003q3"
+   },
+   {
+    "period": "2003Q4",
+    "value_normalized_usd_millions": 294.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2003q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Pulmicort Flexhaler",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "budesonide",
+  "options": {
+   "earnings_since": "2004-04-05",
+   "earnings_until": "2005-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2004Q1",
+    "value_normalized_usd_millions": 282.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2004q1"
+   },
+   {
+    "period": "2004Q2",
+    "value_normalized_usd_millions": 244.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2004q2"
+   },
+   {
+    "period": "2004Q3",
+    "value_normalized_usd_millions": 211.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2004q3"
+   },
+   {
+    "period": "2004Q4",
+    "value_normalized_usd_millions": 313.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2004q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Pulmicort Flexhaler",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "budesonide",
+  "options": {
+   "earnings_since": "2005-04-05",
+   "earnings_until": "2006-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2005Q1",
+    "value_normalized_usd_millions": 314.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2005q1"
+   },
+   {
+    "period": "2005Q2",
+    "value_normalized_usd_millions": 276.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2005q2"
+   },
+   {
+    "period": "2005Q3",
+    "value_normalized_usd_millions": 234.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2005q3"
+   },
+   {
+    "period": "2005Q4",
+    "value_normalized_usd_millions": 338.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2005q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Pulmicort Flexhaler",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "budesonide",
+  "options": {
+   "earnings_since": "2006-04-05",
+   "earnings_until": "2007-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2006Q1",
+    "value_normalized_usd_millions": 328.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2006q1"
+   },
+   {
+    "period": "2006Q2",
+    "value_normalized_usd_millions": 301.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2006q2"
+   },
+   {
+    "period": "2006Q3",
+    "value_normalized_usd_millions": 263.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2006q3"
+   },
+   {
+    "period": "2006Q4",
+    "value_normalized_usd_millions": 400.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2006q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Pulmicort Flexhaler",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "budesonide",
+  "options": {
+   "earnings_since": "2007-04-05",
+   "earnings_until": "2008-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2007Q1",
+    "value_normalized_usd_millions": 401.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2007q1"
+   },
+   {
+    "period": "2007Q2",
+    "value_normalized_usd_millions": 320.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2007q2"
+   },
+   {
+    "period": "2007Q3",
+    "value_normalized_usd_millions": 286.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2007q3"
+   },
+   {
+    "period": "2007Q4",
+    "value_normalized_usd_millions": 447.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2007q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Pulmicort Flexhaler",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "budesonide",
+  "options": {
+   "earnings_since": "2008-04-05",
+   "earnings_until": "2009-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2008Q1",
+    "value_normalized_usd_millions": 411.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2008q1"
+   },
+   {
+    "period": "2008Q2",
+    "value_normalized_usd_millions": 383.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2008q2"
+   },
+   {
+    "period": "2008Q3",
+    "value_normalized_usd_millions": 304.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2008q3"
+   },
+   {
+    "period": "2008Q4",
+    "value_normalized_usd_millions": 397.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2008q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Pulmicort Flexhaler",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "budesonide",
+  "options": {
+   "earnings_since": "2009-04-05",
+   "earnings_until": "2010-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2009Q1",
+    "value_normalized_usd_millions": 292.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2009q1"
+   },
+   {
+    "period": "2009Q2",
+    "value_normalized_usd_millions": 311.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2009q2"
+   },
+   {
+    "period": "2009Q3",
+    "value_normalized_usd_millions": 320.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2009q3"
+   },
+   {
+    "period": "2009Q4",
+    "value_normalized_usd_millions": 387.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2009q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Pulmicort Flexhaler",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "budesonide",
+  "options": {
+   "earnings_since": "2010-04-05",
+   "earnings_until": "2011-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2010Q1",
+    "value_normalized_usd_millions": 243.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2010q1"
+   },
+   {
+    "period": "2010Q2",
+    "value_normalized_usd_millions": 216.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2010q2"
+   },
+   {
+    "period": "2010Q3",
+    "value_normalized_usd_millions": 180.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2010q3"
+   },
+   {
+    "period": "2010Q4",
+    "value_normalized_usd_millions": 233.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2010q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Pulmicort Flexhaler",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "budesonide",
+  "options": {
+   "earnings_since": "2011-04-05",
+   "earnings_until": "2012-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2011Q1",
+    "value_normalized_usd_millions": 248.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2011q1"
+   },
+   {
+    "period": "2011Q2",
+    "value_normalized_usd_millions": 236.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2011q2"
+   },
+   {
+    "period": "2011Q3",
+    "value_normalized_usd_millions": 185.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2011q3"
+   },
+   {
+    "period": "2011Q4",
+    "value_normalized_usd_millions": 223.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2011q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Pulmicort Flexhaler",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "budesonide",
+  "options": {
+   "earnings_since": "2012-04-05",
+   "earnings_until": "2013-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2012Q1",
+    "value_normalized_usd_millions": 227.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2012q1"
+   },
+   {
+    "period": "2012Q2",
+    "value_normalized_usd_millions": 206.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2012q2"
+   },
+   {
+    "period": "2012Q3",
+    "value_normalized_usd_millions": 191.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2012q3"
+   },
+   {
+    "period": "2012Q4",
+    "value_normalized_usd_millions": 242.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2012q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Pulmicort Flexhaler",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "budesonide",
+  "options": {
+   "earnings_since": "2013-04-05",
+   "earnings_until": "2014-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2013Q1",
+    "value_normalized_usd_millions": 233.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2013q1"
+   },
+   {
+    "period": "2013Q2",
+    "value_normalized_usd_millions": 213.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2013q2"
+   },
+   {
+    "period": "2013Q3",
+    "value_normalized_usd_millions": 176.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2013q3"
+   },
+   {
+    "period": "2013Q4",
+    "value_normalized_usd_millions": 245.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2013q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Pulmicort Flexhaler",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "budesonide",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q1",
+    "value_normalized_usd_millions": 263.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2014q1"
+   },
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": 209.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2014q2"
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 205.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2014q3"
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": 269.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2014q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Pulmicort Flexhaler",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "budesonide",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q1",
+    "value_normalized_usd_millions": 286.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2015q1"
+   },
+   {
+    "period": "2015Q2",
+    "value_normalized_usd_millions": 232.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2015q2"
+   },
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 222.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2015q3"
+   },
+   {
+    "period": "2015Q4",
+    "value_normalized_usd_millions": 274.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2015q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Pulmicort Flexhaler",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "budesonide",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 310.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 239.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 224.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 288.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2016q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Pulmicort Flexhaler",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "budesonide",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 337.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 226.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 242.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2017q3"
+   },
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": 371.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2017q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Pulmicort Flexhaler",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "budesonide",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 346.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 287.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 264.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2018q3"
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": 389.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2018q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Pulmicort Flexhaler",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "budesonide",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q1",
+    "value_normalized_usd_millions": 383.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2019q1"
+   },
+   {
+    "period": "2019Q2",
+    "value_normalized_usd_millions": 333.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2019q2"
+   },
+   {
+    "period": "2019Q3",
+    "value_normalized_usd_millions": 337.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2019q3"
+   },
+   {
+    "period": "2019Q4",
+    "value_normalized_usd_millions": 413.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2019q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Pulmicort Flexhaler",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "budesonide",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 380.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2020q1"
+   },
+   {
+    "period": "2020Q2",
+    "value_normalized_usd_millions": 97.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2020q2"
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": 151.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2020q3"
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": 368.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2020q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Pulmicort Flexhaler",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "budesonide",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 330.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 167.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2021q2"
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": 217.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2021q3"
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": 248.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2021q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Pulmicort Flexhaler",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "budesonide",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 217.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 116.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2022q2"
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": 145.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2022q3"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 166.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Pulmicort Flexhaler",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "budesonide",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 221.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 124.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 148.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 219.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Pulmicort Flexhaler",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "budesonide",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 224.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 155.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 138.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 164.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Pulmicort Flexhaler",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "budesonide",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 158.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 106.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 93.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 161.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Pulmicort Flexhaler",
+  "manufacturer": "AstraZeneca",
+  "ticker": "AZN",
+  "generic_name": "budesonide",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 149.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 120.0,
+    "gold_id": "astrazeneca-pulmicort-worldwide-reported-2026q2"
    }
   ]
  },
@@ -32520,6 +34830,101 @@
   ]
  },
  {
+  "drug_name": "Idhifa",
+  "manufacturer": "Celgene",
+  "ticker": null,
+  "generic_name": "enasidenib",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 7.0,
+    "gold_id": "bms-idhifa-us-reported-2017q3"
+   },
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": 13.0,
+    "gold_id": "bms-idhifa-us-reported-2017q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Idhifa",
+  "manufacturer": "Celgene",
+  "ticker": null,
+  "generic_name": "enasidenib",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 14.0,
+    "gold_id": "bms-idhifa-us-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 16.0,
+    "gold_id": "bms-idhifa-us-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 18.0,
+    "gold_id": "bms-idhifa-us-reported-2018q3"
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": 20.0,
+    "gold_id": "bms-idhifa-us-reported-2018q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Idhifa",
+  "manufacturer": "Celgene",
+  "ticker": null,
+  "generic_name": "enasidenib",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q1",
+    "value_normalized_usd_millions": 19.0,
+    "gold_id": "bms-idhifa-us-reported-2019q1"
+   },
+   {
+    "period": "2019Q2",
+    "value_normalized_usd_millions": 25.0,
+    "gold_id": "bms-idhifa-us-reported-2019q2"
+   },
+   {
+    "period": "2019Q3",
+    "value_normalized_usd_millions": 24.0,
+    "gold_id": "bms-idhifa-us-reported-2019q3"
+   },
+   {
+    "period": "2019Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2019Q3. Celgene's third-quarter 2019 release (2019-10-31) is the last document to print an IDHIFA sales line. Celgene filed no fourth-quarter 2019 release and BMS's fourth-quarter 2019 release (https://www.sec.gov/Archives/edgar/data/14272/000001427220000075/q42019ex992.htm) has no Idhifa row; its brand table ends in 'Other brands (a)', whose footnote reads '(a) | includes sustiva, reyataz, daklinza and all other bms and celgene products acquired as part of the celgene acquisition that have lost exclusivity in major markets, over-the-counter (otc) brands and royalty revenue'. BMS's 10-Ks for 2019 and 2020 mention IDHIFA only in pipeline and partner lists and the 2021 10-K does not mention it. Agios, the licensor, prints only royalty revenue on IDHIFA net sales (e.g. $3.3 million for the second quarter of 2020), not the net sales."
+   }
+  ]
+ },
+ {
   "drug_name": "Otezla",
   "manufacturer": "Celgene",
   "ticker": null,
@@ -38801,6 +41206,256 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 570.648,
     "gold_id": "exelixis-cabometyx-us-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Fetzima",
+  "manufacturer": "Forest Laboratories",
+  "ticker": null,
+  "generic_name": "levomilnacipran extended-release",
+  "options": {
+   "earnings_since": "2013-04-05",
+   "earnings_until": "2014-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2013Q4",
+    "value_normalized_usd_millions": 8.0,
+    "gold_id": "forest-fetzima-us-reported-2013q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Fetzima",
+  "manufacturer": "Forest Laboratories",
+  "ticker": null,
+  "generic_name": "levomilnacipran extended-release",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q1",
+    "value_normalized_usd_millions": 3.7,
+    "gold_id": "forest-fetzima-us-reported-2014q1"
+   },
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2014Q1. Forest Laboratories' last results release is for the quarter ended 2014-03-31; Actavis plc acquired Forest on 2014-07-01 and, from the 2014Q3 release (v393196_ex99-1.htm) through Allergan plc's 2020Q1 Form 10-Q, prints Fetzima only on a combined 'Viibryd/Fetzima' row. AbbVie's earnings exhibits print no Fetzima row."
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2014Q1. Forest Laboratories' last results release is for the quarter ended 2014-03-31; Actavis plc acquired Forest on 2014-07-01 and, from the 2014Q3 release (v393196_ex99-1.htm) through Allergan plc's 2020Q1 Form 10-Q, prints Fetzima only on a combined 'Viibryd/Fetzima' row. AbbVie's earnings exhibits print no Fetzima row."
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2014Q1. Forest Laboratories' last results release is for the quarter ended 2014-03-31; Actavis plc acquired Forest on 2014-07-01 and, from the 2014Q3 release (v393196_ex99-1.htm) through Allergan plc's 2020Q1 Form 10-Q, prints Fetzima only on a combined 'Viibryd/Fetzima' row. AbbVie's earnings exhibits print no Fetzima row."
+   }
+  ]
+ },
+ {
+  "drug_name": "Namenda XR",
+  "manufacturer": "Forest Laboratories",
+  "ticker": null,
+  "generic_name": "memantine hydrochloride extended-release",
+  "options": {
+   "earnings_since": "2013-04-05",
+   "earnings_until": "2014-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2013Q2",
+    "value_normalized_usd_millions": 14.0,
+    "gold_id": "allergan-namenda-xr-us-reported-2013q2"
+   },
+   {
+    "period": "2013Q3",
+    "value_normalized_usd_millions": 11.5,
+    "gold_id": "allergan-namenda-xr-us-reported-2013q3"
+   },
+   {
+    "period": "2013Q4",
+    "value_normalized_usd_millions": 37.8,
+    "gold_id": "allergan-namenda-xr-us-reported-2013q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Namenda XR",
+  "manufacturer": "Forest Laboratories",
+  "ticker": null,
+  "generic_name": "memantine hydrochloride extended-release",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q1",
+    "value_normalized_usd_millions": 72.5,
+    "gold_id": "allergan-namenda-xr-us-reported-2014q1"
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 120.6,
+    "gold_id": "allergan-namenda-xr-us-reported-2014q3"
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": 148.9,
+    "gold_id": "allergan-namenda-xr-us-reported-2014q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Viibryd",
+  "manufacturer": "Forest Laboratories",
+  "ticker": null,
+  "generic_name": "vilazodone hydrochloride",
+  "options": {
+   "earnings_since": "2011-04-05",
+   "earnings_until": "2012-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2011Q2",
+    "value_normalized_usd_millions": 7.3,
+    "gold_id": "forest-viibryd-us-reported-2011q2"
+   },
+   {
+    "period": "2011Q3",
+    "value_normalized_usd_millions": 5.3,
+    "gold_id": "forest-viibryd-us-reported-2011q3"
+   },
+   {
+    "period": "2011Q4",
+    "value_normalized_usd_millions": 18.9,
+    "gold_id": "forest-viibryd-us-reported-2011q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Viibryd",
+  "manufacturer": "Forest Laboratories",
+  "ticker": null,
+  "generic_name": "vilazodone hydrochloride",
+  "options": {
+   "earnings_since": "2012-04-05",
+   "earnings_until": "2013-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2012Q1",
+    "value_normalized_usd_millions": 24.9,
+    "gold_id": "forest-viibryd-us-reported-2012q1"
+   },
+   {
+    "period": "2012Q2",
+    "value_normalized_usd_millions": 37.4,
+    "gold_id": "forest-viibryd-us-reported-2012q2"
+   },
+   {
+    "period": "2012Q3",
+    "value_normalized_usd_millions": 39.9,
+    "gold_id": "forest-viibryd-us-reported-2012q3"
+   },
+   {
+    "period": "2012Q4",
+    "value_normalized_usd_millions": 40.6,
+    "gold_id": "forest-viibryd-us-reported-2012q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Viibryd",
+  "manufacturer": "Forest Laboratories",
+  "ticker": null,
+  "generic_name": "vilazodone hydrochloride",
+  "options": {
+   "earnings_since": "2013-04-05",
+   "earnings_until": "2014-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2013Q1",
+    "value_normalized_usd_millions": 44.6,
+    "gold_id": "forest-viibryd-us-reported-2013q1"
+   },
+   {
+    "period": "2013Q2",
+    "value_normalized_usd_millions": 46.1,
+    "gold_id": "forest-viibryd-us-reported-2013q2"
+   },
+   {
+    "period": "2013Q3",
+    "value_normalized_usd_millions": 47.4,
+    "gold_id": "forest-viibryd-us-reported-2013q3"
+   },
+   {
+    "period": "2013Q4",
+    "value_normalized_usd_millions": 52.7,
+    "gold_id": "forest-viibryd-us-reported-2013q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Viibryd",
+  "manufacturer": "Forest Laboratories",
+  "ticker": null,
+  "generic_name": "vilazodone hydrochloride",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q1",
+    "value_normalized_usd_millions": 52.8,
+    "gold_id": "forest-viibryd-us-reported-2014q1"
+   },
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2014Q1. Forest Laboratories published its last results for the quarter ended 2014-03-31 and was acquired by Actavis plc on 2014-07-01. Actavis plc and then Allergan plc print Viibryd only on a combined 'Viibryd/Fetzima' row (2014Q3 release v393196_ex99-1.htm, 'Viibyrd / Fetzima' 66.4, through the 2020Q1 Form 10-Q), which is a different scope, so the separate series ends at 2014Q1. AbbVie's earnings exhibits print no Viibryd row."
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2014Q1. Forest Laboratories published its last results for the quarter ended 2014-03-31 and was acquired by Actavis plc on 2014-07-01. Actavis plc and then Allergan plc print Viibryd only on a combined 'Viibryd/Fetzima' row (2014Q3 release v393196_ex99-1.htm, 'Viibyrd / Fetzima' 66.4, through the 2020Q1 Form 10-Q), which is a different scope, so the separate series ends at 2014Q1. AbbVie's earnings exhibits print no Viibryd row."
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2014Q1. Forest Laboratories published its last results for the quarter ended 2014-03-31 and was acquired by Actavis plc on 2014-07-01. Actavis plc and then Allergan plc print Viibryd only on a combined 'Viibryd/Fetzima' row (2014Q3 release v393196_ex99-1.htm, 'Viibyrd / Fetzima' 66.4, through the 2020Q1 Form 10-Q), which is a different scope, so the separate series ends at 2014Q1. AbbVie's earnings exhibits print no Viibryd row."
    }
   ]
  },
@@ -59706,6 +62361,171 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 618.0,
     "gold_id": "jnj-simponi-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Spravato",
+  "manufacturer": "Johnson & Johnson",
+  "ticker": "JNJ",
+  "generic_name": "esketamine",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 70.0,
+    "gold_id": "jnj-spravato-worldwide-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 85.0,
+    "gold_id": "jnj-spravato-worldwide-reported-2022q2"
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": 100.0,
+    "gold_id": "jnj-spravato-worldwide-reported-2022q3"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 119.0,
+    "gold_id": "jnj-spravato-worldwide-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Spravato",
+  "manufacturer": "Johnson & Johnson",
+  "ticker": "JNJ",
+  "generic_name": "esketamine",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 131.0,
+    "gold_id": "jnj-spravato-worldwide-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 169.0,
+    "gold_id": "jnj-spravato-worldwide-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 183.0,
+    "gold_id": "jnj-spravato-worldwide-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 206.0,
+    "gold_id": "jnj-spravato-worldwide-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Spravato",
+  "manufacturer": "Johnson & Johnson",
+  "ticker": "JNJ",
+  "generic_name": "esketamine",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 225.0,
+    "gold_id": "jnj-spravato-worldwide-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 271.0,
+    "gold_id": "jnj-spravato-worldwide-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 284.0,
+    "gold_id": "jnj-spravato-worldwide-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 297.0,
+    "gold_id": "jnj-spravato-worldwide-reported-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Spravato",
+  "manufacturer": "Johnson & Johnson",
+  "ticker": "JNJ",
+  "generic_name": "esketamine",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 320.0,
+    "gold_id": "jnj-spravato-worldwide-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 414.0,
+    "gold_id": "jnj-spravato-worldwide-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 459.0,
+    "gold_id": "jnj-spravato-worldwide-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 503.0,
+    "gold_id": "jnj-spravato-worldwide-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Spravato",
+  "manufacturer": "Johnson & Johnson",
+  "ticker": "JNJ",
+  "generic_name": "esketamine",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 468.0,
+    "gold_id": "jnj-spravato-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 584.0,
+    "gold_id": "jnj-spravato-worldwide-reported-2026q2"
    }
   ]
  },
@@ -81860,6 +84680,66 @@
   ]
  },
  {
+  "drug_name": "Enjaymo",
+  "manufacturer": "Recordati",
+  "ticker": null,
+  "generic_name": "sutimlimab-jome",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 33.58113,
+    "gold_id": "sanofi-enjaymo-worldwide-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 42.55125,
+    "gold_id": "sanofi-enjaymo-worldwide-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 40.43356,
+    "gold_id": "sanofi-enjaymo-worldwide-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 49.22028,
+    "gold_id": "sanofi-enjaymo-worldwide-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Enjaymo",
+  "manufacturer": "Recordati",
+  "ticker": null,
+  "generic_name": "sutimlimab-jome",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 51.409828,
+    "gold_id": "sanofi-enjaymo-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 54.750606,
+    "gold_id": "sanofi-enjaymo-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Evkeeza",
   "manufacturer": "Regeneron Pharmaceuticals",
   "ticker": "REGN",
@@ -91500,6 +94380,211 @@
   ]
  },
  {
+  "drug_name": "Adlyxin",
+  "manufacturer": "Sanofi",
+  "ticker": "SNY",
+  "generic_name": "lixisenatide",
+  "options": {
+   "earnings_since": "2013-04-05",
+   "earnings_until": "2014-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2013Q2",
+    "value_normalized_usd_millions": 1.3068,
+    "gold_id": "sanofi-lyxumia-adlyxin-worldwide-reported-2013q2"
+   },
+   {
+    "period": "2013Q3",
+    "value_normalized_usd_millions": 3.9765,
+    "gold_id": "sanofi-lyxumia-adlyxin-worldwide-reported-2013q3"
+   },
+   {
+    "period": "2013Q4",
+    "value_normalized_usd_millions": 6.8075,
+    "gold_id": "sanofi-lyxumia-adlyxin-worldwide-reported-2013q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Adlyxin",
+  "manufacturer": "Sanofi",
+  "ticker": "SNY",
+  "generic_name": "lixisenatide",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q1",
+    "value_normalized_usd_millions": 6.852,
+    "gold_id": "sanofi-lyxumia-adlyxin-worldwide-reported-2014q1"
+   },
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": 8.229,
+    "gold_id": "sanofi-lyxumia-adlyxin-worldwide-reported-2014q2"
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 10.5968,
+    "gold_id": "sanofi-lyxumia-adlyxin-worldwide-reported-2014q3"
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": 9.9944,
+    "gold_id": "sanofi-lyxumia-adlyxin-worldwide-reported-2014q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Adlyxin",
+  "manufacturer": "Sanofi",
+  "ticker": "SNY",
+  "generic_name": "lixisenatide",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q1",
+    "value_normalized_usd_millions": 9.0088,
+    "gold_id": "sanofi-lyxumia-adlyxin-worldwide-reported-2015q1"
+   },
+   {
+    "period": "2015Q2",
+    "value_normalized_usd_millions": 11.072,
+    "gold_id": "sanofi-lyxumia-adlyxin-worldwide-reported-2015q2"
+   },
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 10.0089,
+    "gold_id": "sanofi-lyxumia-adlyxin-worldwide-reported-2015q3"
+   },
+   {
+    "period": "2015Q4",
+    "value_normalized_usd_millions": 12.0428,
+    "gold_id": "sanofi-lyxumia-adlyxin-worldwide-reported-2015q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Adlyxin",
+  "manufacturer": "Sanofi",
+  "ticker": "SNY",
+  "generic_name": "lixisenatide",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 9.9243,
+    "gold_id": "sanofi-lyxumia-adlyxin-worldwide-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 9.0376,
+    "gold_id": "sanofi-lyxumia-adlyxin-worldwide-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 10.044,
+    "gold_id": "sanofi-lyxumia-adlyxin-worldwide-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 7.5488,
+    "gold_id": "sanofi-lyxumia-adlyxin-worldwide-reported-2016q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Adlyxin",
+  "manufacturer": "Sanofi",
+  "ticker": "SNY",
+  "generic_name": "lixisenatide",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 7.4613,
+    "gold_id": "sanofi-lyxumia-adlyxin-worldwide-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 7.6993,
+    "gold_id": "sanofi-lyxumia-adlyxin-worldwide-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 8.2264,
+    "gold_id": "sanofi-lyxumia-adlyxin-worldwide-reported-2017q3"
+   },
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": 5.889,
+    "gold_id": "sanofi-lyxumia-adlyxin-worldwide-reported-2017q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Adlyxin",
+  "manufacturer": "Sanofi",
+  "ticker": "SNY",
+  "generic_name": "lixisenatide",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 6.145,
+    "gold_id": "sanofi-lyxumia-adlyxin-worldwide-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 7.1544,
+    "gold_id": "sanofi-lyxumia-adlyxin-worldwide-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2018Q2. The Q3 2018 release (accession 0001193125-18-313798) Diabetes table lists Soliqua and Admelog but no Lyxumia row, and no Lyxumia or Adlyxin line appears in the tables of the Q3 2018, Q4 2018, Q1 2019 or Q4 2019 releases. The last printed quarter is Q2 2018 (EUR 6 million)."
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2018Q2. The Q3 2018 release (accession 0001193125-18-313798) Diabetes table lists Soliqua and Admelog but no Lyxumia row, and no Lyxumia or Adlyxin line appears in the tables of the Q3 2018, Q4 2018, Q1 2019 or Q4 2019 releases. The last printed quarter is Q2 2018 (EUR 6 million)."
+   }
+  ]
+ },
+ {
   "drug_name": "Alprolix",
   "manufacturer": "Sanofi",
   "ticker": "SNY",
@@ -93026,6 +96111,101 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 97.7004,
     "gold_id": "sanofi-eloctate-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Enjaymo",
+  "manufacturer": "Sanofi",
+  "ticker": "SNY",
+  "generic_name": "sutimlimab-jome",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 3.1938,
+    "gold_id": "sanofi-enjaymo-worldwide-reported-2022q2"
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": 7.0455,
+    "gold_id": "sanofi-enjaymo-worldwide-reported-2022q3"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 11.2332,
+    "gold_id": "sanofi-enjaymo-worldwide-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Enjaymo",
+  "manufacturer": "Sanofi",
+  "ticker": "SNY",
+  "generic_name": "sutimlimab-jome",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 17.168,
+    "gold_id": "sanofi-enjaymo-worldwide-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 18.513,
+    "gold_id": "sanofi-enjaymo-worldwide-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 17.4128,
+    "gold_id": "sanofi-enjaymo-worldwide-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 24.7572,
+    "gold_id": "sanofi-enjaymo-worldwide-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Enjaymo",
+  "manufacturer": "Sanofi",
+  "ticker": "SNY",
+  "generic_name": "sutimlimab-jome",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 31.4766,
+    "gold_id": "sanofi-enjaymo-worldwide-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 27.9916,
+    "gold_id": "sanofi-enjaymo-worldwide-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 30.772,
+    "gold_id": "sanofi-enjaymo-worldwide-reported-2024q3"
    }
   ]
  },
@@ -95245,6 +98425,346 @@
   ]
  },
  {
+  "drug_name": "Soliqua 100/33",
+  "manufacturer": "Sanofi",
+  "ticker": "SNY",
+  "generic_name": "insulin glargine and lixisenatide",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 4.2636,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 5.4995,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 9.4016,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2017q3"
+   },
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": 10.6002,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2017q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Soliqua 100/33",
+  "manufacturer": "Sanofi",
+  "ticker": "SNY",
+  "generic_name": "insulin glargine and lixisenatide",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 11.061,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 20.2708,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 23.266,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2018q3"
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": 30.8097,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2018q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Soliqua 100/33",
+  "manufacturer": "Sanofi",
+  "ticker": "SNY",
+  "generic_name": "insulin glargine and lixisenatide",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q1",
+    "value_normalized_usd_millions": 24.9788,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2019q1"
+   },
+   {
+    "period": "2019Q2",
+    "value_normalized_usd_millions": 31.4692,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2019q2"
+   },
+   {
+    "period": "2019Q3",
+    "value_normalized_usd_millions": 36.6861,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2019q3"
+   },
+   {
+    "period": "2019Q4",
+    "value_normalized_usd_millions": 43.1886,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2019q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Soliqua 100/33",
+  "manufacturer": "Sanofi",
+  "ticker": "SNY",
+  "generic_name": "insulin glargine and lixisenatide",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 40.7666,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2020q1"
+   },
+   {
+    "period": "2020Q2",
+    "value_normalized_usd_millions": 41.8456,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2020q2"
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": 46.804,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2020q3"
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": 54.8366,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2020q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Soliqua 100/33",
+  "manufacturer": "Sanofi",
+  "ticker": "SNY",
+  "generic_name": "insulin glargine and lixisenatide",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 53.0552,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 55.4438,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2021q2"
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": 60.0984,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2021q3"
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": 61.7706,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2021q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Soliqua 100/33",
+  "manufacturer": "Sanofi",
+  "ticker": "SNY",
+  "generic_name": "insulin glargine and lixisenatide",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 59.5084,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 56.4238,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2022q2"
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": 54.351,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2022q3"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 56.166,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Soliqua 100/33",
+  "manufacturer": "Sanofi",
+  "ticker": "SNY",
+  "generic_name": "insulin glargine and lixisenatide",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 67.599,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 46.827,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 54.415,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 65.6604,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Soliqua 100/33",
+  "manufacturer": "Sanofi",
+  "ticker": "SNY",
+  "generic_name": "insulin glargine and lixisenatide",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 62.9532,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 60.2896,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 60.445,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 61.8454,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Soliqua 100/33",
+  "manufacturer": "Sanofi",
+  "ticker": "SNY",
+  "generic_name": "insulin glargine and lixisenatide",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 73.689,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 74.8902,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 72.4532,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 97.7424,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Soliqua 100/33",
+  "manufacturer": "Sanofi",
+  "ticker": "SNY",
+  "generic_name": "insulin glargine and lixisenatide",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 92.4932,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 100.0266,
+    "gold_id": "sanofi-soliqua-suliqua-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Toujeo",
   "manufacturer": "Sanofi",
   "ticker": "SNY",
@@ -95651,6 +99171,126 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 411.7374,
     "gold_id": "sanofi-toujeo-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Tzield",
+  "manufacturer": "Sanofi",
+  "ticker": "SNY",
+  "generic_name": "teplizumab-mzwv",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 9.7947,
+    "gold_id": "sanofi-tzield-worldwide-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 10.764,
+    "gold_id": "sanofi-tzield-worldwide-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Tzield",
+  "manufacturer": "Sanofi",
+  "ticker": "SNY",
+  "generic_name": "teplizumab-mzwv",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 10.854,
+    "gold_id": "sanofi-tzield-worldwide-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 11.8426,
+    "gold_id": "sanofi-tzield-worldwide-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 16.485,
+    "gold_id": "sanofi-tzield-worldwide-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 19.1934,
+    "gold_id": "sanofi-tzield-worldwide-reported-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Tzield",
+  "manufacturer": "Sanofi",
+  "ticker": "SNY",
+  "generic_name": "teplizumab-mzwv",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 11.5797,
+    "gold_id": "sanofi-tzield-worldwide-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 20.4246,
+    "gold_id": "sanofi-tzield-worldwide-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 21.0348,
+    "gold_id": "sanofi-tzield-worldwide-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 18.6176,
+    "gold_id": "sanofi-tzield-worldwide-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Tzield",
+  "manufacturer": "Sanofi",
+  "ticker": "SNY",
+  "generic_name": "teplizumab-mzwv",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 16.3912,
+    "gold_id": "sanofi-tzield-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 26.7513,
+    "gold_id": "sanofi-tzield-worldwide-reported-2026q2"
    }
   ]
  },
@@ -98135,6 +101775,276 @@
   ]
  },
  {
+  "drug_name": "Cinryze",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "C1 esterase inhibitor (human)",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q1",
+    "value_normalized_usd_millions": 28.135383,
+    "gold_id": "takeda-cinryze-worldwide-reported-2019q1"
+   },
+   {
+    "period": "2019Q2",
+    "value_normalized_usd_millions": 66.427737,
+    "gold_id": "takeda-cinryze-worldwide-reported-2019q2"
+   },
+   {
+    "period": "2019Q3",
+    "value_normalized_usd_millions": 43.786798,
+    "gold_id": "takeda-cinryze-worldwide-reported-2019q3"
+   },
+   {
+    "period": "2019Q4",
+    "value_normalized_usd_millions": 63.478275,
+    "gold_id": "takeda-cinryze-worldwide-reported-2019q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cinryze",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "C1 esterase inhibitor (human)",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 49.546836,
+    "gold_id": "takeda-cinryze-worldwide-reported-2020q1"
+   },
+   {
+    "period": "2020Q2",
+    "value_normalized_usd_millions": 54.880856,
+    "gold_id": "takeda-cinryze-worldwide-reported-2020q2"
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": 57.495855,
+    "gold_id": "takeda-cinryze-worldwide-reported-2020q3"
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": 49.77492,
+    "gold_id": "takeda-cinryze-worldwide-reported-2020q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cinryze",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "C1 esterase inhibitor (human)",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 43.414708,
+    "gold_id": "takeda-cinryze-worldwide-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 51.178344,
+    "gold_id": "takeda-cinryze-worldwide-reported-2021q2"
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": 41.789298,
+    "gold_id": "takeda-cinryze-worldwide-reported-2021q3"
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": 39.598785,
+    "gold_id": "takeda-cinryze-worldwide-reported-2021q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cinryze",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "C1 esterase inhibitor (human)",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 39.57794,
+    "gold_id": "takeda-cinryze-worldwide-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 36.229574,
+    "gold_id": "takeda-cinryze-worldwide-reported-2022q2"
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": 35.39809,
+    "gold_id": "takeda-cinryze-worldwide-reported-2022q3"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 37.463686,
+    "gold_id": "takeda-cinryze-worldwide-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cinryze",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "C1 esterase inhibitor (human)",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 27.193212,
+    "gold_id": "takeda-cinryze-worldwide-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 32.776065,
+    "gold_id": "takeda-cinryze-worldwide-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 26.985777,
+    "gold_id": "takeda-cinryze-worldwide-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 33.84065,
+    "gold_id": "takeda-cinryze-worldwide-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cinryze",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "C1 esterase inhibitor (human)",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 24.903072,
+    "gold_id": "takeda-cinryze-worldwide-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 27.586564,
+    "gold_id": "takeda-cinryze-worldwide-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 26.189943,
+    "gold_id": "takeda-cinryze-worldwide-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 30.169376,
+    "gold_id": "takeda-cinryze-worldwide-reported-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cinryze",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "C1 esterase inhibitor (human)",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 23.62662,
+    "gold_id": "takeda-cinryze-worldwide-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 26.29828,
+    "gold_id": "takeda-cinryze-worldwide-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 23.0486,
+    "gold_id": "takeda-cinryze-worldwide-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 21.409542,
+    "gold_id": "takeda-cinryze-worldwide-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cinryze",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "C1 esterase inhibitor (human)",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 17.855824,
+    "gold_id": "takeda-cinryze-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 21.337108,
+    "gold_id": "takeda-cinryze-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Entyvio",
   "manufacturer": "Takeda",
   "ticker": "TAK",
@@ -98845,6 +102755,276 @@
   ]
  },
  {
+  "drug_name": "Firazyr",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "icatibant (icatibant acetate)",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q1",
+    "value_normalized_usd_millions": 58.085952,
+    "gold_id": "takeda-firazyr-worldwide-reported-2019q1"
+   },
+   {
+    "period": "2019Q2",
+    "value_normalized_usd_millions": 81.89721,
+    "gold_id": "takeda-firazyr-worldwide-reported-2019q2"
+   },
+   {
+    "period": "2019Q3",
+    "value_normalized_usd_millions": 58.692942,
+    "gold_id": "takeda-firazyr-worldwide-reported-2019q3"
+   },
+   {
+    "period": "2019Q4",
+    "value_normalized_usd_millions": 68.998125,
+    "gold_id": "takeda-firazyr-worldwide-reported-2019q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Firazyr",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "icatibant (icatibant acetate)",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 90.835866,
+    "gold_id": "takeda-firazyr-worldwide-reported-2020q1"
+   },
+   {
+    "period": "2020Q2",
+    "value_normalized_usd_millions": 75.344904,
+    "gold_id": "takeda-firazyr-worldwide-reported-2020q2"
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": 66.921405,
+    "gold_id": "takeda-firazyr-worldwide-reported-2020q3"
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": 47.8605,
+    "gold_id": "takeda-firazyr-worldwide-reported-2020q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Firazyr",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "icatibant (icatibant acetate)",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 63.234466,
+    "gold_id": "takeda-firazyr-worldwide-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 63.059031,
+    "gold_id": "takeda-firazyr-worldwide-reported-2021q2"
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": 68.134725,
+    "gold_id": "takeda-firazyr-worldwide-reported-2021q3"
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": 62.478083,
+    "gold_id": "takeda-firazyr-worldwide-reported-2021q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Firazyr",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "icatibant (icatibant acetate)",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 44.74028,
+    "gold_id": "takeda-firazyr-worldwide-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 52.417256,
+    "gold_id": "takeda-firazyr-worldwide-reported-2022q2"
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": 47.67906,
+    "gold_id": "takeda-firazyr-worldwide-reported-2022q3"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 45.239168,
+    "gold_id": "takeda-firazyr-worldwide-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Firazyr",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "icatibant (icatibant acetate)",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 36.257616,
+    "gold_id": "takeda-firazyr-worldwide-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 40.059635,
+    "gold_id": "takeda-firazyr-worldwide-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 42.900466,
+    "gold_id": "takeda-firazyr-worldwide-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 37.224715,
+    "gold_id": "takeda-firazyr-worldwide-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Firazyr",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "icatibant (icatibant acetate)",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 26.92224,
+    "gold_id": "takeda-firazyr-worldwide-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 32.0774,
+    "gold_id": "takeda-firazyr-worldwide-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 32.233776,
+    "gold_id": "takeda-firazyr-worldwide-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 28.201808,
+    "gold_id": "takeda-firazyr-worldwide-reported-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Firazyr",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "icatibant (icatibant acetate)",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 26.2518,
+    "gold_id": "takeda-firazyr-worldwide-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 31.1427,
+    "gold_id": "takeda-firazyr-worldwide-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 27.7939,
+    "gold_id": "takeda-firazyr-worldwide-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 29.19483,
+    "gold_id": "takeda-firazyr-worldwide-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Firazyr",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "icatibant (icatibant acetate)",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 18.493532,
+    "gold_id": "takeda-firazyr-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 21.96467,
+    "gold_id": "takeda-firazyr-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Gattex",
   "manufacturer": "Takeda",
   "ticker": "TAK",
@@ -99111,6 +103291,146 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 259.810668,
     "gold_id": "takeda-gattex-revestive-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Kalbitor",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "ecallantide",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q1",
+    "value_normalized_usd_millions": 10.891116,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2019q1"
+   },
+   {
+    "period": "2019Q2",
+    "value_normalized_usd_millions": 10.009659,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2019q2"
+   },
+   {
+    "period": "2019Q3",
+    "value_normalized_usd_millions": 12.111242,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2019q3"
+   },
+   {
+    "period": "2019Q4",
+    "value_normalized_usd_millions": 10.119725,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2019q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Kalbitor",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "ecallantide",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 9.17534,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2020q1"
+   },
+   {
+    "period": "2020Q2",
+    "value_normalized_usd_millions": 10.232024,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2020q2"
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": 8.482995,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2020q3"
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": 10.52931,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2020q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Kalbitor",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "ecallantide",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 7.550384,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 10.052889,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2021q2"
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": 9.993093,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2021q3"
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": 8.79973,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2021q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Kalbitor",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "ecallantide",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 10.32468,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2022Q1. Takeda's FY2021 Q4 quarterly financial report (January-March 2022; qr2021_q4_qfr_en.pdf) is the last to print a KALBITOR line; its FY2022 forecast table already folds the product into 'Others' with the footnote 'Others in Rare Genetics and Other includes NATPARA/NATPAR, KALBITOR', and Takeda's FY2022 Q1 quarterly financial report (qr2022_q1_qfr_en.pdf) and every later report contain no KALBITOR line (zero text lines mention Kalbitor in the FY2022 Q1 and FY2026 Q1 reports as read with pdfplumber; pdftotext finds the name in no quarterly financial report after FY2021 Q4)."
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2022Q1. Takeda's FY2021 Q4 quarterly financial report (January-March 2022; qr2021_q4_qfr_en.pdf) is the last to print a KALBITOR line; its FY2022 forecast table already folds the product into 'Others' with the footnote 'Others in Rare Genetics and Other includes NATPARA/NATPAR, KALBITOR', and Takeda's FY2022 Q1 quarterly financial report (qr2022_q1_qfr_en.pdf) and every later report contain no KALBITOR line (zero text lines mention Kalbitor in the FY2022 Q1 and FY2026 Q1 reports as read with pdfplumber; pdftotext finds the name in no quarterly financial report after FY2021 Q4)."
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2022Q1. Takeda's FY2021 Q4 quarterly financial report (January-March 2022; qr2021_q4_qfr_en.pdf) is the last to print a KALBITOR line; its FY2022 forecast table already folds the product into 'Others' with the footnote 'Others in Rare Genetics and Other includes NATPARA/NATPAR, KALBITOR', and Takeda's FY2022 Q1 quarterly financial report (qr2022_q1_qfr_en.pdf) and every later report contain no KALBITOR line (zero text lines mention Kalbitor in the FY2022 Q1 and FY2026 Q1 reports as read with pdfplumber; pdftotext finds the name in no quarterly financial report after FY2021 Q4)."
    }
   ]
  },
@@ -99391,6 +103711,681 @@
     "period": "2026Q4",
     "value_normalized_usd_millions": null,
     "why": "The issuer reports no line for this product after 2026Q1. Takeda's quarterly financial report for FY2026 Q1 (April-June 2026; qr2026_q1_qfr_en.pdf) contains no RESOLOR/MOTEGRITY line (zero text lines mention Resolor or Motegrity), whereas the FY2025 Q4 report prints it (RESOLOR/MOTEGRITY FY2025 7.3 billion JPY). The GI table of the FY2026 Q1 report lists 'Others' rows instead."
+   }
+  ]
+ },
+ {
+  "drug_name": "Takhzyro",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "lanadelumab (lanadelumab-flyo)",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q1",
+    "value_normalized_usd_millions": 88.036521,
+    "gold_id": "takeda-takhzyro-worldwide-reported-2019q1"
+   },
+   {
+    "period": "2019Q2",
+    "value_normalized_usd_millions": 131.945505,
+    "gold_id": "takeda-takhzyro-worldwide-reported-2019q2"
+   },
+   {
+    "period": "2019Q3",
+    "value_normalized_usd_millions": 150.924708,
+    "gold_id": "takeda-takhzyro-worldwide-reported-2019q3"
+   },
+   {
+    "period": "2019Q4",
+    "value_normalized_usd_millions": 167.43545,
+    "gold_id": "takeda-takhzyro-worldwide-reported-2019q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Takhzyro",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "lanadelumab (lanadelumab-flyo)",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 178.001596,
+    "gold_id": "takeda-takhzyro-worldwide-reported-2020q1"
+   },
+   {
+    "period": "2020Q2",
+    "value_normalized_usd_millions": 215.802688,
+    "gold_id": "takeda-takhzyro-worldwide-reported-2020q2"
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": 193.223775,
+    "gold_id": "takeda-takhzyro-worldwide-reported-2020q3"
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": 211.54341,
+    "gold_id": "takeda-takhzyro-worldwide-reported-2020q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Takhzyro",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "lanadelumab (lanadelumab-flyo)",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 196.309984,
+    "gold_id": "takeda-takhzyro-worldwide-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 233.044245,
+    "gold_id": "takeda-takhzyro-worldwide-reported-2021q2"
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": 200.770323,
+    "gold_id": "takeda-takhzyro-worldwide-reported-2021q3"
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": 271.911657,
+    "gold_id": "takeda-takhzyro-worldwide-reported-2021q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Takhzyro",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "lanadelumab (lanadelumab-flyo)",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 213.37672,
+    "gold_id": "takeda-takhzyro-worldwide-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 262.08628,
+    "gold_id": "takeda-takhzyro-worldwide-reported-2022q2"
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": 280.29508,
+    "gold_id": "takeda-takhzyro-worldwide-reported-2022q3"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 311.726142,
+    "gold_id": "takeda-takhzyro-worldwide-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Takhzyro",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "lanadelumab (lanadelumab-flyo)",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 263.623083,
+    "gold_id": "takeda-takhzyro-worldwide-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 300.811441,
+    "gold_id": "takeda-takhzyro-worldwide-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 316.909894,
+    "gold_id": "takeda-takhzyro-worldwide-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 333.668809,
+    "gold_id": "takeda-takhzyro-worldwide-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Takhzyro",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "lanadelumab (lanadelumab-flyo)",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 284.029632,
+    "gold_id": "takeda-takhzyro-worldwide-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 359.26688,
+    "gold_id": "takeda-takhzyro-worldwide-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 369.34535,
+    "gold_id": "takeda-takhzyro-worldwide-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 373.83792,
+    "gold_id": "takeda-takhzyro-worldwide-reported-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Takhzyro",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "lanadelumab (lanadelumab-flyo)",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 361.618545,
+    "gold_id": "takeda-takhzyro-worldwide-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 381.32506,
+    "gold_id": "takeda-takhzyro-worldwide-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 394.5378,
+    "gold_id": "takeda-takhzyro-worldwide-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 372.396276,
+    "gold_id": "takeda-takhzyro-worldwide-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Takhzyro",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "lanadelumab (lanadelumab-flyo)",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 339.898364,
+    "gold_id": "takeda-takhzyro-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 375.909638,
+    "gold_id": "takeda-takhzyro-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Trintellix",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "vortioxetine",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q2",
+    "value_normalized_usd_millions": 41.20585,
+    "gold_id": "takeda-trintellix-us-reported-2015q2"
+   },
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 50.755556,
+    "gold_id": "takeda-trintellix-us-reported-2015q3"
+   },
+   {
+    "period": "2015Q4",
+    "value_normalized_usd_millions": 55.993784,
+    "gold_id": "takeda-trintellix-us-reported-2015q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Trintellix",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "vortioxetine",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 56.395365,
+    "gold_id": "takeda-trintellix-us-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 59.304832,
+    "gold_id": "takeda-trintellix-us-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 76.16856,
+    "gold_id": "takeda-trintellix-us-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 77.661355,
+    "gold_id": "takeda-trintellix-us-reported-2016q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Trintellix",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "vortioxetine",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 80.12914,
+    "gold_id": "takeda-trintellix-us-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 100.825648,
+    "gold_id": "takeda-trintellix-us-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 109.903334,
+    "gold_id": "takeda-trintellix-us-reported-2017q3"
+   },
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": 124.898787,
+    "gold_id": "takeda-trintellix-us-reported-2017q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Trintellix",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "vortioxetine",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 99.726768,
+    "gold_id": "takeda-trintellix-us-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 129.196467,
+    "gold_id": "takeda-trintellix-us-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 116.55189,
+    "gold_id": "takeda-trintellix-us-reported-2018q3"
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": 155.20645,
+    "gold_id": "takeda-trintellix-us-reported-2018q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Trintellix",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "vortioxetine",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q1",
+    "value_normalized_usd_millions": 117.079497,
+    "gold_id": "takeda-trintellix-us-reported-2019q1"
+   },
+   {
+    "period": "2019Q2",
+    "value_normalized_usd_millions": 158.334606,
+    "gold_id": "takeda-trintellix-us-reported-2019q2"
+   },
+   {
+    "period": "2019Q3",
+    "value_normalized_usd_millions": 160.241048,
+    "gold_id": "takeda-trintellix-us-reported-2019q3"
+   },
+   {
+    "period": "2019Q4",
+    "value_normalized_usd_millions": 179.395125,
+    "gold_id": "takeda-trintellix-us-reported-2019q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Trintellix",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "vortioxetine",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 147.722974,
+    "gold_id": "takeda-trintellix-us-reported-2020q1"
+   },
+   {
+    "period": "2020Q2",
+    "value_normalized_usd_millions": 154.410544,
+    "gold_id": "takeda-trintellix-us-reported-2020q2"
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": 166.832235,
+    "gold_id": "takeda-trintellix-us-reported-2020q3"
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": 163.68291,
+    "gold_id": "takeda-trintellix-us-reported-2020q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Trintellix",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "vortioxetine",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 145.344892,
+    "gold_id": "takeda-trintellix-us-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 152.621133,
+    "gold_id": "takeda-trintellix-us-reported-2021q2"
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": 189.868767,
+    "gold_id": "takeda-trintellix-us-reported-2021q3"
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": 188.314222,
+    "gold_id": "takeda-trintellix-us-reported-2021q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Trintellix",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "vortioxetine",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 154.00981,
+    "gold_id": "takeda-trintellix-us-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 150.31419,
+    "gold_id": "takeda-trintellix-us-reported-2022q2"
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": 190.71624,
+    "gold_id": "takeda-trintellix-us-reported-2022q3"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 195.093912,
+    "gold_id": "takeda-trintellix-us-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Trintellix",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "vortioxetine",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 138.987528,
+    "gold_id": "takeda-trintellix-us-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 158.053469,
+    "gold_id": "takeda-trintellix-us-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 166.06632,
+    "gold_id": "takeda-trintellix-us-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 178.001819,
+    "gold_id": "takeda-trintellix-us-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Trintellix",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "vortioxetine",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 148.07232,
+    "gold_id": "takeda-trintellix-us-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 178.991892,
+    "gold_id": "takeda-trintellix-us-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 201.4611,
+    "gold_id": "takeda-trintellix-us-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 199.380224,
+    "gold_id": "takeda-trintellix-us-reported-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Trintellix",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "vortioxetine",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 160.792275,
+    "gold_id": "takeda-trintellix-us-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 169.5547,
+    "gold_id": "takeda-trintellix-us-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 170.8308,
+    "gold_id": "takeda-trintellix-us-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 197.227296,
+    "gold_id": "takeda-trintellix-us-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Trintellix",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "vortioxetine",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 172.18116,
+    "gold_id": "takeda-trintellix-us-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 205.840336,
+    "gold_id": "takeda-trintellix-us-reported-2026q2"
    }
   ]
  },
@@ -104160,6 +109155,91 @@
   ]
  },
  {
+  "drug_name": "Casgevy",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "exagamglogene autotemcel",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 2.0,
+    "gold_id": "vertex-casgevy-worldwide-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 8.0,
+    "gold_id": "vertex-casgevy-worldwide-reported-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Casgevy",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "exagamglogene autotemcel",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 14.2,
+    "gold_id": "vertex-casgevy-worldwide-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 30.4,
+    "gold_id": "vertex-casgevy-worldwide-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 16.9,
+    "gold_id": "vertex-casgevy-worldwide-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 54.3,
+    "gold_id": "vertex-casgevy-worldwide-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Casgevy",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "exagamglogene autotemcel",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 42.9,
+    "gold_id": "vertex-casgevy-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 76.4,
+    "gold_id": "vertex-casgevy-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Tyrvaya",
   "manufacturer": "Viatris",
   "ticker": "VTRS",
@@ -104191,6 +109271,311 @@
     "period": "2023Q4",
     "value_normalized_usd_millions": 14.8,
     "gold_id": "oyster-point-tyrvaya-us-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Qsymia",
+  "manufacturer": "Vivus",
+  "ticker": null,
+  "generic_name": "phentermine and topiramate extended-release",
+  "options": {
+   "earnings_since": "2012-04-05",
+   "earnings_until": "2013-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2012Q3",
+    "value_normalized_usd_millions": 0.041,
+    "gold_id": "vivus-qsymia-us-reported-2012q3"
+   },
+   {
+    "period": "2012Q4",
+    "value_normalized_usd_millions": 1.971,
+    "gold_id": "vivus-qsymia-us-reported-2012q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Qsymia",
+  "manufacturer": "Vivus",
+  "ticker": null,
+  "generic_name": "phentermine and topiramate extended-release",
+  "options": {
+   "earnings_since": "2013-04-05",
+   "earnings_until": "2014-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2013Q1",
+    "value_normalized_usd_millions": 4.112,
+    "gold_id": "vivus-qsymia-us-reported-2013q1"
+   },
+   {
+    "period": "2013Q2",
+    "value_normalized_usd_millions": 5.534,
+    "gold_id": "vivus-qsymia-us-reported-2013q2"
+   },
+   {
+    "period": "2013Q3",
+    "value_normalized_usd_millions": 6.379,
+    "gold_id": "vivus-qsymia-us-reported-2013q3"
+   },
+   {
+    "period": "2013Q4",
+    "value_normalized_usd_millions": 7.693,
+    "gold_id": "vivus-qsymia-us-reported-2013q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Qsymia",
+  "manufacturer": "Vivus",
+  "ticker": null,
+  "generic_name": "phentermine and topiramate extended-release",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q1",
+    "value_normalized_usd_millions": 9.138,
+    "gold_id": "vivus-qsymia-us-reported-2014q1"
+   },
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": 10.983,
+    "gold_id": "vivus-qsymia-us-reported-2014q2"
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 12.454,
+    "gold_id": "vivus-qsymia-us-reported-2014q3"
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": 12.702,
+    "gold_id": "vivus-qsymia-us-reported-2014q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Qsymia",
+  "manufacturer": "Vivus",
+  "ticker": null,
+  "generic_name": "phentermine and topiramate extended-release",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q1",
+    "value_normalized_usd_millions": 12.628,
+    "gold_id": "vivus-qsymia-us-reported-2015q1"
+   },
+   {
+    "period": "2015Q2",
+    "value_normalized_usd_millions": 14.013,
+    "gold_id": "vivus-qsymia-us-reported-2015q2"
+   },
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 14.011,
+    "gold_id": "vivus-qsymia-us-reported-2015q3"
+   },
+   {
+    "period": "2015Q4",
+    "value_normalized_usd_millions": 13.97,
+    "gold_id": "vivus-qsymia-us-reported-2015q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Qsymia",
+  "manufacturer": "Vivus",
+  "ticker": null,
+  "generic_name": "phentermine and topiramate extended-release",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 12.412,
+    "gold_id": "vivus-qsymia-us-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 12.749,
+    "gold_id": "vivus-qsymia-us-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 12.294,
+    "gold_id": "vivus-qsymia-us-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 11.046,
+    "gold_id": "vivus-qsymia-us-reported-2016q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Qsymia",
+  "manufacturer": "Vivus",
+  "ticker": null,
+  "generic_name": "phentermine and topiramate extended-release",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 17.62,
+    "gold_id": "vivus-qsymia-us-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 8.518,
+    "gold_id": "vivus-qsymia-us-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 9.911,
+    "gold_id": "vivus-qsymia-us-reported-2017q3"
+   },
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": 8.934,
+    "gold_id": "vivus-qsymia-us-reported-2017q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Qsymia",
+  "manufacturer": "Vivus",
+  "ticker": null,
+  "generic_name": "phentermine and topiramate extended-release",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 9.632,
+    "gold_id": "vivus-qsymia-us-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 11.134,
+    "gold_id": "vivus-qsymia-us-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 9.737,
+    "gold_id": "vivus-qsymia-us-reported-2018q3"
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": 10.055,
+    "gold_id": "vivus-qsymia-us-reported-2018q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Qsymia",
+  "manufacturer": "Vivus",
+  "ticker": null,
+  "generic_name": "phentermine and topiramate extended-release",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q1",
+    "value_normalized_usd_millions": 8.423,
+    "gold_id": "vivus-qsymia-us-reported-2019q1"
+   },
+   {
+    "period": "2019Q2",
+    "value_normalized_usd_millions": 9.994,
+    "gold_id": "vivus-qsymia-us-reported-2019q2"
+   },
+   {
+    "period": "2019Q3",
+    "value_normalized_usd_millions": 9.583,
+    "gold_id": "vivus-qsymia-us-reported-2019q3"
+   },
+   {
+    "period": "2019Q4",
+    "value_normalized_usd_millions": 9.75,
+    "gold_id": "vivus-qsymia-us-reported-2019q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Qsymia",
+  "manufacturer": "Vivus",
+  "ticker": null,
+  "generic_name": "phentermine and topiramate extended-release",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 8.914,
+    "gold_id": "vivus-qsymia-us-reported-2020q1"
+   },
+   {
+    "period": "2020Q2",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2020Q1. Vivus filed voluntary Chapter 11 petitions on July 7, 2020 and its Form 12b-25 (NT 10-Q, filed 2020-08-17, https://www.sec.gov/Archives/edgar/data/881524/000110465920096093/a20-27697_1nt10q.htm) states it 'is unable to file its Quarterly Report on Form 10-Q for the quarterly period ended June 30, 2020'; no later 10-Q, 10-K or earnings 8-K exists on EDGAR (last filings: Form 25-NSE 2020-08-11, Form 15-12B 2021-01-08)."
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2020Q1. Vivus filed voluntary Chapter 11 petitions on July 7, 2020 and its Form 12b-25 (NT 10-Q, filed 2020-08-17, https://www.sec.gov/Archives/edgar/data/881524/000110465920096093/a20-27697_1nt10q.htm) states it 'is unable to file its Quarterly Report on Form 10-Q for the quarterly period ended June 30, 2020'; no later 10-Q, 10-K or earnings 8-K exists on EDGAR (last filings: Form 25-NSE 2020-08-11, Form 15-12B 2021-01-08)."
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2020Q1. Vivus filed voluntary Chapter 11 petitions on July 7, 2020 and its Form 12b-25 (NT 10-Q, filed 2020-08-17, https://www.sec.gov/Archives/edgar/data/881524/000110465920096093/a20-27697_1nt10q.htm) states it 'is unable to file its Quarterly Report on Form 10-Q for the quarterly period ended June 30, 2020'; no later 10-Q, 10-K or earnings 8-K exists on EDGAR (last filings: Form 25-NSE 2020-08-11, Form 15-12B 2021-01-08)."
    }
   ]
  },
@@ -104326,6 +109711,86 @@
     "period": "2016Q4",
     "value_normalized_usd_millions": null,
     "why": "The issuer reports no line for this product after 2016Q1. XenoPort signed a merger agreement dated 2016-05-21 with Arbor Pharmaceuticals, announced 2016-05-23 (Form 8-K, accession 0001193125-16-598130) and filed a Form 15-12G on 2016-07-15 (accession 0001193125-16-649125); its last earnings release and 10-Q cover Q1 2016. Arbor is privately held and publishes no Horizant sales figure."
+   }
+  ]
+ },
+ {
+  "drug_name": "Olpruva",
+  "manufacturer": "Zevra Therapeutics",
+  "ticker": "ZVRA",
+  "generic_name": "sodium phenylbutyrate",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 0.1,
+    "gold_id": "zevra-olpruva-net-revenue-reported-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Olpruva",
+  "manufacturer": "Zevra Therapeutics",
+  "ticker": "ZVRA",
+  "generic_name": "sodium phenylbutyrate",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 0.1,
+    "gold_id": "zevra-olpruva-net-revenue-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 0.3,
+    "gold_id": "zevra-olpruva-net-revenue-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 0.1,
+    "gold_id": "zevra-olpruva-net-revenue-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 0.4,
+    "gold_id": "zevra-olpruva-net-revenue-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Olpruva",
+  "manufacturer": "Zevra Therapeutics",
+  "ticker": "ZVRA",
+  "generic_name": "sodium phenylbutyrate",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 0.3,
+    "gold_id": "zevra-olpruva-net-revenue-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 0.2,
+    "gold_id": "zevra-olpruva-net-revenue-reported-2026q2"
    }
   ]
  },
@@ -104850,6 +110315,45 @@
   ]
  },
  {
+  "drug_name": "Duaklir Pressair",
+  "manufacturer": null,
+  "ticker": null,
+  "generic_name": null,
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/excluded_products.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": null,
+    "gold_id": "duaklir-pressair-excluded",
+    "why": "not_reported_separately: AstraZeneca's 'Duaklir' row is Duaklir Genuair, sold almost entirely in Europe; the US brand Duaklir Pressair (FDA approval 29 Mar 2019, US launch 21 Oct 2019) was commercialised by Circassia, with AstraZeneca manufacturing and supplying. Rungs tried, in order. (a) AstraZeneca quarterly results releases 2015-2026: the Duaklir row exists to Q4 2019 only; its US column is 3 in Q4 2019 and for the full year 2019 (supply to the commercialising partner, not end-market sales), no Duaklir row in the Q1 2020 and later releases. (b) AstraZeneca fuller tables: the same releases' regional Product Sales tables are its most detailed product list; no AstraZeneca annual or data-book table prints a US end-market figure. (c) Partner: Circassia's 9 Jan 2020 trading update says only 'a modest contribution from Duaklir'; its 16 Jun 2020 preliminary results headline gives Tudorza 'net in-market sales totalled GBP27.0 million' but for Duaklir only 'NDA approved H1 2019 with launch Q4 2019'; its 24 Mar 2021 results report Tudorza and Duaklir together as one discontinued COPD segment ('the Tudorza and Duaklir Pressair products'). The full FY2019 preliminary-results PDF and FY2019 annual report could not be retrieved (HTTP 202 / bot wall from investors.niox.com and circassia.com), so a Duaklir figure inside them is not ruled out, and a document the verifier cannot fetch could not be cited anyway. Covis Pharma (acquirer of the rights from AstraZeneca, completed Jan 2022) is private and publishes no sales. (d) Prior owner: Almirall licensed the product to AstraZeneca; no Almirall document was read. (e) Annual series: no issuer document read prints an annual US figure for the brand. Not searched: Almirall annual reports."
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": null,
+    "gold_id": "duaklir-pressair-excluded",
+    "why": "not_reported_separately: AstraZeneca's 'Duaklir' row is Duaklir Genuair, sold almost entirely in Europe; the US brand Duaklir Pressair (FDA approval 29 Mar 2019, US launch 21 Oct 2019) was commercialised by Circassia, with AstraZeneca manufacturing and supplying. Rungs tried, in order. (a) AstraZeneca quarterly results releases 2015-2026: the Duaklir row exists to Q4 2019 only; its US column is 3 in Q4 2019 and for the full year 2019 (supply to the commercialising partner, not end-market sales), no Duaklir row in the Q1 2020 and later releases. (b) AstraZeneca fuller tables: the same releases' regional Product Sales tables are its most detailed product list; no AstraZeneca annual or data-book table prints a US end-market figure. (c) Partner: Circassia's 9 Jan 2020 trading update says only 'a modest contribution from Duaklir'; its 16 Jun 2020 preliminary results headline gives Tudorza 'net in-market sales totalled GBP27.0 million' but for Duaklir only 'NDA approved H1 2019 with launch Q4 2019'; its 24 Mar 2021 results report Tudorza and Duaklir together as one discontinued COPD segment ('the Tudorza and Duaklir Pressair products'). The full FY2019 preliminary-results PDF and FY2019 annual report could not be retrieved (HTTP 202 / bot wall from investors.niox.com and circassia.com), so a Duaklir figure inside them is not ruled out, and a document the verifier cannot fetch could not be cited anyway. Covis Pharma (acquirer of the rights from AstraZeneca, completed Jan 2022) is private and publishes no sales. (d) Prior owner: Almirall licensed the product to AstraZeneca; no Almirall document was read. (e) Annual series: no issuer document read prints an annual US figure for the brand. Not searched: Almirall annual reports."
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": null,
+    "gold_id": "duaklir-pressair-excluded",
+    "why": "not_reported_separately: AstraZeneca's 'Duaklir' row is Duaklir Genuair, sold almost entirely in Europe; the US brand Duaklir Pressair (FDA approval 29 Mar 2019, US launch 21 Oct 2019) was commercialised by Circassia, with AstraZeneca manufacturing and supplying. Rungs tried, in order. (a) AstraZeneca quarterly results releases 2015-2026: the Duaklir row exists to Q4 2019 only; its US column is 3 in Q4 2019 and for the full year 2019 (supply to the commercialising partner, not end-market sales), no Duaklir row in the Q1 2020 and later releases. (b) AstraZeneca fuller tables: the same releases' regional Product Sales tables are its most detailed product list; no AstraZeneca annual or data-book table prints a US end-market figure. (c) Partner: Circassia's 9 Jan 2020 trading update says only 'a modest contribution from Duaklir'; its 16 Jun 2020 preliminary results headline gives Tudorza 'net in-market sales totalled GBP27.0 million' but for Duaklir only 'NDA approved H1 2019 with launch Q4 2019'; its 24 Mar 2021 results report Tudorza and Duaklir together as one discontinued COPD segment ('the Tudorza and Duaklir Pressair products'). The full FY2019 preliminary-results PDF and FY2019 annual report could not be retrieved (HTTP 202 / bot wall from investors.niox.com and circassia.com), so a Duaklir figure inside them is not ruled out, and a document the verifier cannot fetch could not be cited anyway. Covis Pharma (acquirer of the rights from AstraZeneca, completed Jan 2022) is private and publishes no sales. (d) Prior owner: Almirall licensed the product to AstraZeneca; no Almirall document was read. (e) Annual series: no issuer document read prints an annual US figure for the brand. Not searched: Almirall annual reports."
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": null,
+    "gold_id": "duaklir-pressair-excluded",
+    "why": "not_reported_separately: AstraZeneca's 'Duaklir' row is Duaklir Genuair, sold almost entirely in Europe; the US brand Duaklir Pressair (FDA approval 29 Mar 2019, US launch 21 Oct 2019) was commercialised by Circassia, with AstraZeneca manufacturing and supplying. Rungs tried, in order. (a) AstraZeneca quarterly results releases 2015-2026: the Duaklir row exists to Q4 2019 only; its US column is 3 in Q4 2019 and for the full year 2019 (supply to the commercialising partner, not end-market sales), no Duaklir row in the Q1 2020 and later releases. (b) AstraZeneca fuller tables: the same releases' regional Product Sales tables are its most detailed product list; no AstraZeneca annual or data-book table prints a US end-market figure. (c) Partner: Circassia's 9 Jan 2020 trading update says only 'a modest contribution from Duaklir'; its 16 Jun 2020 preliminary results headline gives Tudorza 'net in-market sales totalled GBP27.0 million' but for Duaklir only 'NDA approved H1 2019 with launch Q4 2019'; its 24 Mar 2021 results report Tudorza and Duaklir together as one discontinued COPD segment ('the Tudorza and Duaklir Pressair products'). The full FY2019 preliminary-results PDF and FY2019 annual report could not be retrieved (HTTP 202 / bot wall from investors.niox.com and circassia.com), so a Duaklir figure inside them is not ruled out, and a document the verifier cannot fetch could not be cited anyway. Covis Pharma (acquirer of the rights from AstraZeneca, completed Jan 2022) is private and publishes no sales. (d) Prior owner: Almirall licensed the product to AstraZeneca; no Almirall document was read. (e) Annual series: no issuer document read prints an annual US figure for the brand. Not searched: Almirall annual reports."
+   }
+  ]
+ },
+ {
   "drug_name": "Durysta",
   "manufacturer": null,
   "ticker": null,
@@ -105002,6 +110506,45 @@
     "value_normalized_usd_millions": null,
     "gold_id": "gilotrif-excluded",
     "why": "not_reported_separately: Boehringer Ingelheim prints sales for only its five largest Human Pharma products and Gilotrif (Giotrif ex-U.S.) is not among them; it is not broken out in any annual report read. Boehringer Ingelheim is family-owned and files nothing with the SEC. Annual report PDFs for 2013-2016 and 2017-2023 were downloaded from annualreports.com (boehringer-ingelheim_<year>.pdf; 2014 and 2024 also) and pdftotext-scanned for giotrif/gilotrif/afatinib, spiolto/stiolto, striverdi/olodaterol: every hit is clinical or portfolio prose (product-portfolio tables list brand, ingredient and indication only) and none carries a net-sales figure. The only product sales tables are 'Top 4 products' (2013-2022 summary pages) and 'Human Pharma: Net sales Top 5 products' (2021-2023 management reports). 2025 annual report and H1 2025/2026 releases were not readable (bot challenge). No partner or royalty holder reports these brands: the former Spiriva co-promoter reports Spiriva only, and the 2016 Pfizer 10-K exhibit cites only the Spiriva co-promotion. Half-year-only and annual-only reporting was ruled out because no brand figure is printed in any year read."
+   }
+  ]
+ },
+ {
+  "drug_name": "Invega Hafyera",
+  "manufacturer": null,
+  "ticker": null,
+  "generic_name": null,
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/excluded_products.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": null,
+    "gold_id": "invega-hafyera-excluded",
+    "why": "aggregated_with_other_products: Johnson & Johnson's most detailed product table (the quarterly sales schedule, 50 PDFs 2014Q3-2026Q2 plus the 2026Q3 8-K exhibit 99.2) never prints an INVEGA HAFYERA line; its paliperidone line is labelled 'INVEGA SUSTENNA / XEPLION / INVEGA TRINZA / TREVICTA' (2Q26 schedule, WW 1,015 992 for the quarter) and Hafyera's sales are either inside it or inside OTHER NEUROSCIENCE (the schedule does not say which; not inferred). The 10-Q/10-K segment tables (2021-2023 reviewed) and the 8-K/A filings carry no Hafyera figure; the FY2022 10-K says only 'the launch of INVEGA HAFYERA' with no number. The royalty holder Alkermes reports royalty revenue on the pooled 'long-acting INVEGA products' (10-K FY2023: 486.1 million for 2023), never on Hafyera alone. No public document searched prints Hafyera's own sales, quarterly or annual."
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": null,
+    "gold_id": "invega-hafyera-excluded",
+    "why": "aggregated_with_other_products: Johnson & Johnson's most detailed product table (the quarterly sales schedule, 50 PDFs 2014Q3-2026Q2 plus the 2026Q3 8-K exhibit 99.2) never prints an INVEGA HAFYERA line; its paliperidone line is labelled 'INVEGA SUSTENNA / XEPLION / INVEGA TRINZA / TREVICTA' (2Q26 schedule, WW 1,015 992 for the quarter) and Hafyera's sales are either inside it or inside OTHER NEUROSCIENCE (the schedule does not say which; not inferred). The 10-Q/10-K segment tables (2021-2023 reviewed) and the 8-K/A filings carry no Hafyera figure; the FY2022 10-K says only 'the launch of INVEGA HAFYERA' with no number. The royalty holder Alkermes reports royalty revenue on the pooled 'long-acting INVEGA products' (10-K FY2023: 486.1 million for 2023), never on Hafyera alone. No public document searched prints Hafyera's own sales, quarterly or annual."
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": null,
+    "gold_id": "invega-hafyera-excluded",
+    "why": "aggregated_with_other_products: Johnson & Johnson's most detailed product table (the quarterly sales schedule, 50 PDFs 2014Q3-2026Q2 plus the 2026Q3 8-K exhibit 99.2) never prints an INVEGA HAFYERA line; its paliperidone line is labelled 'INVEGA SUSTENNA / XEPLION / INVEGA TRINZA / TREVICTA' (2Q26 schedule, WW 1,015 992 for the quarter) and Hafyera's sales are either inside it or inside OTHER NEUROSCIENCE (the schedule does not say which; not inferred). The 10-Q/10-K segment tables (2021-2023 reviewed) and the 8-K/A filings carry no Hafyera figure; the FY2022 10-K says only 'the launch of INVEGA HAFYERA' with no number. The royalty holder Alkermes reports royalty revenue on the pooled 'long-acting INVEGA products' (10-K FY2023: 486.1 million for 2023), never on Hafyera alone. No public document searched prints Hafyera's own sales, quarterly or annual."
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": null,
+    "gold_id": "invega-hafyera-excluded",
+    "why": "aggregated_with_other_products: Johnson & Johnson's most detailed product table (the quarterly sales schedule, 50 PDFs 2014Q3-2026Q2 plus the 2026Q3 8-K exhibit 99.2) never prints an INVEGA HAFYERA line; its paliperidone line is labelled 'INVEGA SUSTENNA / XEPLION / INVEGA TRINZA / TREVICTA' (2Q26 schedule, WW 1,015 992 for the quarter) and Hafyera's sales are either inside it or inside OTHER NEUROSCIENCE (the schedule does not say which; not inferred). The 10-Q/10-K segment tables (2021-2023 reviewed) and the 8-K/A filings carry no Hafyera figure; the FY2022 10-K says only 'the launch of INVEGA HAFYERA' with no number. The royalty holder Alkermes reports royalty revenue on the pooled 'long-acting INVEGA products' (10-K FY2023: 486.1 million for 2023), never on Hafyera alone. No public document searched prints Hafyera's own sales, quarterly or annual."
    }
   ]
  },
@@ -105474,6 +111017,45 @@
   ]
  },
  {
+  "drug_name": "Prezcobix",
+  "manufacturer": null,
+  "ticker": null,
+  "generic_name": null,
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/excluded_products.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": null,
+    "gold_id": "prezcobix-excluded",
+    "why": "aggregated_with_other_products: Johnson & Johnson prints PREZCOBIX only inside the single combined line 'PREZISTA / PREZCOBIX / REZOLSTA / SYMTUZA' (US, Intl, WW rows): measured in every schedule PDF from 2015Q1 (where it was 'PREZISTA / PREZCOBIX') to 2026Q2, in the 10-Q/10-K segment tables 2017-2023 and in the 2026Q3 8-K exhibit 99.2. No schedule or filing read prints a PREZCOBIX-only row. No other issuer prints Prezcobix: Gilead's 10-K text mentions no Prezcobix revenue line."
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": null,
+    "gold_id": "prezcobix-excluded",
+    "why": "aggregated_with_other_products: Johnson & Johnson prints PREZCOBIX only inside the single combined line 'PREZISTA / PREZCOBIX / REZOLSTA / SYMTUZA' (US, Intl, WW rows): measured in every schedule PDF from 2015Q1 (where it was 'PREZISTA / PREZCOBIX') to 2026Q2, in the 10-Q/10-K segment tables 2017-2023 and in the 2026Q3 8-K exhibit 99.2. No schedule or filing read prints a PREZCOBIX-only row. No other issuer prints Prezcobix: Gilead's 10-K text mentions no Prezcobix revenue line."
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": null,
+    "gold_id": "prezcobix-excluded",
+    "why": "aggregated_with_other_products: Johnson & Johnson prints PREZCOBIX only inside the single combined line 'PREZISTA / PREZCOBIX / REZOLSTA / SYMTUZA' (US, Intl, WW rows): measured in every schedule PDF from 2015Q1 (where it was 'PREZISTA / PREZCOBIX') to 2026Q2, in the 10-Q/10-K segment tables 2017-2023 and in the 2026Q3 8-K exhibit 99.2. No schedule or filing read prints a PREZCOBIX-only row. No other issuer prints Prezcobix: Gilead's 10-K text mentions no Prezcobix revenue line."
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": null,
+    "gold_id": "prezcobix-excluded",
+    "why": "aggregated_with_other_products: Johnson & Johnson prints PREZCOBIX only inside the single combined line 'PREZISTA / PREZCOBIX / REZOLSTA / SYMTUZA' (US, Intl, WW rows): measured in every schedule PDF from 2015Q1 (where it was 'PREZISTA / PREZCOBIX') to 2026Q2, in the 10-Q/10-K segment tables 2017-2023 and in the 2026Q3 8-K exhibit 99.2. No schedule or filing read prints a PREZCOBIX-only row. No other issuer prints Prezcobix: Gilead's 10-K text mentions no Prezcobix revenue line."
+   }
+  ]
+ },
+ {
   "drug_name": "Recarbrio",
   "manufacturer": null,
   "ticker": null,
@@ -105743,6 +111325,45 @@
     "value_normalized_usd_millions": null,
     "gold_id": "sunlenca-excluded",
     "why": "aggregated_with_other_products: Gilead never prints Sunlenca (lenacapavir for treatment of multidrug-resistant HIV-1) on a revenue line of its own. In every quarterly release and Supplementary Information PDF from Q4 2022 (first quarter after the 22 Dec 2022 approval) to Q2 2026 Sunlenca is named only in the footnote to 'Other HIV' (Q4 2022 to Q4 2023: 'Includes Atripla, Emtriva, Sunlenca and Tybost.'; from Q1 2024 the footnote also lists Complera/Eviplera, Stribild and Truvada; Q2 and Q3 2025 also Yeztugo; the Q2 2026 footnote no longer lists Yeztugo). The 10-K and 10-Q revenue notes (FY2023, FY2024, FY2025 10-K; Q2 2026 10-Q) carry the same 'Other HIV' line and footnote. Isolated figure: exactly one Gilead-published Sunlenca sales amount exists, in the Q1 2023 Prepared Remarks PDF (https://s29.q4cdn.com/585078350/files/doc_financials/2023/q1/GILD-Q123-Prepared-Remarks-27-April-2023.pdf: 'Turning to Sunlenca, first quarter sales of $4 million were very much in-line with our expectations.') and the matching Summary of Prepared Remarks ('Sunlenca sales of $4M, in line with expectations.'). No other quarter's prepared remarks (Q4 2022, Q2 2023 to Q2 2026, 14 further quarters) states a Sunlenca amount, so a single quarter is all that exists and is not a series. No annual figure exists either. Inferred, not measured: Sunlenca revenue sits inside 'Other HIV'."
+   }
+  ]
+ },
+ {
+  "drug_name": "Symtuza",
+  "manufacturer": null,
+  "ticker": null,
+  "generic_name": null,
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/excluded_products.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": null,
+    "gold_id": "symtuza-excluded",
+    "why": "aggregated_with_other_products: Johnson & Johnson prints SYMTUZA only inside the single combined line 'PREZISTA / PREZCOBIX / REZOLSTA / SYMTUZA' (US, Intl, WW rows): measured in every schedule PDF from 2015Q1 (where it was 'PREZISTA / PREZCOBIX') to 2026Q2, in the 10-Q/10-K segment tables 2017-2023 and in the 2026Q3 8-K exhibit 99.2. No schedule or filing read prints a SYMTUZA-only row. Gilead Sciences, which licenses cobicistat, emtricitabine and tenofovir alafenamide to Janssen for Symtuza, reports 'Symtuza - Revenue share' in its 10-K revenue disaggregation (FY2025 10-K row: 363 | 120 | 12 | 495 by region, 2025 total; a footnote calls it 'our revenue from cobicistat, emtricitabine and tenofovir alafenamide in Symtuza ... commercialized by Janssen'). That is Gilead's share of revenue under a revenue-sharing formula, not Symtuza's net sales, and Janssen sets the price; it was not converted into a net sales figure."
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": null,
+    "gold_id": "symtuza-excluded",
+    "why": "aggregated_with_other_products: Johnson & Johnson prints SYMTUZA only inside the single combined line 'PREZISTA / PREZCOBIX / REZOLSTA / SYMTUZA' (US, Intl, WW rows): measured in every schedule PDF from 2015Q1 (where it was 'PREZISTA / PREZCOBIX') to 2026Q2, in the 10-Q/10-K segment tables 2017-2023 and in the 2026Q3 8-K exhibit 99.2. No schedule or filing read prints a SYMTUZA-only row. Gilead Sciences, which licenses cobicistat, emtricitabine and tenofovir alafenamide to Janssen for Symtuza, reports 'Symtuza - Revenue share' in its 10-K revenue disaggregation (FY2025 10-K row: 363 | 120 | 12 | 495 by region, 2025 total; a footnote calls it 'our revenue from cobicistat, emtricitabine and tenofovir alafenamide in Symtuza ... commercialized by Janssen'). That is Gilead's share of revenue under a revenue-sharing formula, not Symtuza's net sales, and Janssen sets the price; it was not converted into a net sales figure."
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": null,
+    "gold_id": "symtuza-excluded",
+    "why": "aggregated_with_other_products: Johnson & Johnson prints SYMTUZA only inside the single combined line 'PREZISTA / PREZCOBIX / REZOLSTA / SYMTUZA' (US, Intl, WW rows): measured in every schedule PDF from 2015Q1 (where it was 'PREZISTA / PREZCOBIX') to 2026Q2, in the 10-Q/10-K segment tables 2017-2023 and in the 2026Q3 8-K exhibit 99.2. No schedule or filing read prints a SYMTUZA-only row. Gilead Sciences, which licenses cobicistat, emtricitabine and tenofovir alafenamide to Janssen for Symtuza, reports 'Symtuza - Revenue share' in its 10-K revenue disaggregation (FY2025 10-K row: 363 | 120 | 12 | 495 by region, 2025 total; a footnote calls it 'our revenue from cobicistat, emtricitabine and tenofovir alafenamide in Symtuza ... commercialized by Janssen'). That is Gilead's share of revenue under a revenue-sharing formula, not Symtuza's net sales, and Janssen sets the price; it was not converted into a net sales figure."
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": null,
+    "gold_id": "symtuza-excluded",
+    "why": "aggregated_with_other_products: Johnson & Johnson prints SYMTUZA only inside the single combined line 'PREZISTA / PREZCOBIX / REZOLSTA / SYMTUZA' (US, Intl, WW rows): measured in every schedule PDF from 2015Q1 (where it was 'PREZISTA / PREZCOBIX') to 2026Q2, in the 10-Q/10-K segment tables 2017-2023 and in the 2026Q3 8-K exhibit 99.2. No schedule or filing read prints a SYMTUZA-only row. Gilead Sciences, which licenses cobicistat, emtricitabine and tenofovir alafenamide to Janssen for Symtuza, reports 'Symtuza - Revenue share' in its 10-K revenue disaggregation (FY2025 10-K row: 363 | 120 | 12 | 495 by region, 2025 total; a footnote calls it 'our revenue from cobicistat, emtricitabine and tenofovir alafenamide in Symtuza ... commercialized by Janssen'). That is Gilead's share of revenue under a revenue-sharing formula, not Symtuza's net sales, and Janssen sets the price; it was not converted into a net sales figure."
    }
   ]
  },

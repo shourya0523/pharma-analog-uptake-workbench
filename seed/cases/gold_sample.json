@@ -85,6 +85,41 @@
   ]
  },
  {
+  "drug_name": "Namenda XR",
+  "manufacturer": "Actavis plc",
+  "ticker": null,
+  "generic_name": "memantine hydrochloride extended-release",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q1",
+    "value_normalized_usd_millions": 150.6,
+    "gold_id": "allergan-namenda-xr-us-reported-2015q1"
+   },
+   {
+    "period": "2015Q2",
+    "value_normalized_usd_millions": 204.7,
+    "gold_id": "allergan-namenda-xr-us-reported-2015q2"
+   },
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 214.5,
+    "gold_id": "allergan-namenda-xr-us-reported-2015q3"
+   },
+   {
+    "period": "2015Q4",
+    "value_normalized_usd_millions": 189.5,
+    "gold_id": "allergan-namenda-xr-us-reported-2015q4"
+   }
+  ]
+ },
+ {
   "drug_name": "Uptravi",
   "manufacturer": "Actelion/J&J",
   "ticker": "JNJ",
@@ -870,10 +905,10 @@
   ]
  },
  {
-  "drug_name": "Otezla",
+  "drug_name": "Idhifa",
   "manufacturer": "Celgene",
   "ticker": null,
-  "generic_name": "apremilast",
+  "generic_name": "enasidenib",
   "options": {
    "earnings_since": "2019-04-05",
    "earnings_until": "2020-05-04",
@@ -884,18 +919,23 @@
   "expect": [
    {
     "period": "2019Q1",
-    "value_normalized_usd_millions": 389.0,
-    "gold_id": "amgen-otezla-worldwide-reported-2019q1"
+    "value_normalized_usd_millions": 19.0,
+    "gold_id": "bms-idhifa-us-reported-2019q1"
    },
    {
     "period": "2019Q2",
-    "value_normalized_usd_millions": 493.0,
-    "gold_id": "amgen-otezla-worldwide-reported-2019q2"
+    "value_normalized_usd_millions": 25.0,
+    "gold_id": "bms-idhifa-us-reported-2019q2"
    },
    {
     "period": "2019Q3",
-    "value_normalized_usd_millions": 547.0,
-    "gold_id": "amgen-otezla-worldwide-reported-2019q3"
+    "value_normalized_usd_millions": 24.0,
+    "gold_id": "bms-idhifa-us-reported-2019q3"
+   },
+   {
+    "period": "2019Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2019Q3. Celgene's third-quarter 2019 release (2019-10-31) is the last document to print an IDHIFA sales line. Celgene filed no fourth-quarter 2019 release and BMS's fourth-quarter 2019 release (https://www.sec.gov/Archives/edgar/data/14272/000001427220000075/q42019ex992.htm) has no Idhifa row; its brand table ends in 'Other brands (a)', whose footnote reads '(a) | includes sustiva, reyataz, daklinza and all other bms and celgene products acquired as part of the celgene acquisition that have lost exclusivity in major markets, over-the-counter (otc) brands and royalty revenue'. BMS's 10-Ks for 2019 and 2020 mention IDHIFA only in pipeline and partner lists and the 2021 10-K does not mention it. Agios, the licensor, prints only royalty revenue on IDHIFA net sales (e.g. $3.3 million for the second quarter of 2020), not the net sales."
    }
   ]
  },
@@ -1056,6 +1096,41 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 570.648,
     "gold_id": "exelixis-cabometyx-us-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Viibryd",
+  "manufacturer": "Forest Laboratories",
+  "ticker": null,
+  "generic_name": "vilazodone hydrochloride",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q1",
+    "value_normalized_usd_millions": 52.8,
+    "gold_id": "forest-viibryd-us-reported-2014q1"
+   },
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2014Q1. Forest Laboratories published its last results for the quarter ended 2014-03-31 and was acquired by Actavis plc on 2014-07-01. Actavis plc and then Allergan plc print Viibryd only on a combined 'Viibryd/Fetzima' row (2014Q3 release v393196_ex99-1.htm, 'Viibyrd / Fetzima' 66.4, through the 2020Q1 Form 10-Q), which is a different scope, so the separate series ends at 2014Q1. AbbVie's earnings exhibits print no Viibryd row."
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2014Q1. Forest Laboratories published its last results for the quarter ended 2014-03-31 and was acquired by Actavis plc on 2014-07-01. Actavis plc and then Allergan plc print Viibryd only on a combined 'Viibryd/Fetzima' row (2014Q3 release v393196_ex99-1.htm, 'Viibyrd / Fetzima' 66.4, through the 2020Q1 Form 10-Q), which is a different scope, so the separate series ends at 2014Q1. AbbVie's earnings exhibits print no Viibryd row."
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2014Q1. Forest Laboratories published its last results for the quarter ended 2014-03-31 and was acquired by Actavis plc on 2014-07-01. Actavis plc and then Allergan plc print Viibryd only on a combined 'Viibryd/Fetzima' row (2014Q3 release v393196_ex99-1.htm, 'Viibyrd / Fetzima' 66.4, through the 2020Q1 Form 10-Q), which is a different scope, so the separate series ends at 2014Q1. AbbVie's earnings exhibits print no Viibryd row."
    }
   ]
  },
@@ -1940,6 +2015,31 @@
   ]
  },
  {
+  "drug_name": "Enjaymo",
+  "manufacturer": "Recordati",
+  "ticker": null,
+  "generic_name": "sutimlimab-jome",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 51.409828,
+    "gold_id": "sanofi-enjaymo-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 54.750606,
+    "gold_id": "sanofi-enjaymo-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Libtayo",
   "manufacturer": "Regeneron Pharmaceuticals",
   "ticker": "REGN",
@@ -2085,10 +2185,10 @@
   ]
  },
  {
-  "drug_name": "Toujeo",
+  "drug_name": "Tzield",
   "manufacturer": "Sanofi",
   "ticker": "SNY",
-  "generic_name": "insulin glargine 300 U/mL",
+  "generic_name": "teplizumab-mzwv",
   "options": {
    "earnings_since": "2026-04-05",
    "earnings_until": "2027-05-05",
@@ -2099,13 +2199,13 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 439.05,
-    "gold_id": "sanofi-toujeo-worldwide-reported-2026q1"
+    "value_normalized_usd_millions": 16.3912,
+    "gold_id": "sanofi-tzield-worldwide-reported-2026q1"
    },
    {
     "period": "2026Q2",
-    "value_normalized_usd_millions": 411.7374,
-    "gold_id": "sanofi-toujeo-worldwide-reported-2026q2"
+    "value_normalized_usd_millions": 26.7513,
+    "gold_id": "sanofi-tzield-worldwide-reported-2026q2"
    }
   ]
  },
@@ -2550,6 +2650,31 @@
   ]
  },
  {
+  "drug_name": "Casgevy",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "exagamglogene autotemcel",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 42.9,
+    "gold_id": "vertex-casgevy-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 76.4,
+    "gold_id": "vertex-casgevy-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Tyrvaya",
   "manufacturer": "Viatris",
   "ticker": "VTRS",
@@ -2585,6 +2710,41 @@
   ]
  },
  {
+  "drug_name": "Qsymia",
+  "manufacturer": "Vivus",
+  "ticker": null,
+  "generic_name": "phentermine and topiramate extended-release",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 8.914,
+    "gold_id": "vivus-qsymia-us-reported-2020q1"
+   },
+   {
+    "period": "2020Q2",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2020Q1. Vivus filed voluntary Chapter 11 petitions on July 7, 2020 and its Form 12b-25 (NT 10-Q, filed 2020-08-17, https://www.sec.gov/Archives/edgar/data/881524/000110465920096093/a20-27697_1nt10q.htm) states it 'is unable to file its Quarterly Report on Form 10-Q for the quarterly period ended June 30, 2020'; no later 10-Q, 10-K or earnings 8-K exists on EDGAR (last filings: Form 25-NSE 2020-08-11, Form 15-12B 2021-01-08)."
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2020Q1. Vivus filed voluntary Chapter 11 petitions on July 7, 2020 and its Form 12b-25 (NT 10-Q, filed 2020-08-17, https://www.sec.gov/Archives/edgar/data/881524/000110465920096093/a20-27697_1nt10q.htm) states it 'is unable to file its Quarterly Report on Form 10-Q for the quarterly period ended June 30, 2020'; no later 10-Q, 10-K or earnings 8-K exists on EDGAR (last filings: Form 25-NSE 2020-08-11, Form 15-12B 2021-01-08)."
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2020Q1. Vivus filed voluntary Chapter 11 petitions on July 7, 2020 and its Form 12b-25 (NT 10-Q, filed 2020-08-17, https://www.sec.gov/Archives/edgar/data/881524/000110465920096093/a20-27697_1nt10q.htm) states it 'is unable to file its Quarterly Report on Form 10-Q for the quarterly period ended June 30, 2020'; no later 10-Q, 10-K or earnings 8-K exists on EDGAR (last filings: Form 25-NSE 2020-08-11, Form 15-12B 2021-01-08)."
+   }
+  ]
+ },
+ {
   "drug_name": "Horizant",
   "manufacturer": "XenoPort",
   "ticker": null,
@@ -2616,6 +2776,31 @@
     "period": "2016Q4",
     "value_normalized_usd_millions": null,
     "why": "The issuer reports no line for this product after 2016Q1. XenoPort signed a merger agreement dated 2016-05-21 with Arbor Pharmaceuticals, announced 2016-05-23 (Form 8-K, accession 0001193125-16-598130) and filed a Form 15-12G on 2016-07-15 (accession 0001193125-16-649125); its last earnings release and 10-Q cover Q1 2016. Arbor is privately held and publishes no Horizant sales figure."
+   }
+  ]
+ },
+ {
+  "drug_name": "Olpruva",
+  "manufacturer": "Zevra Therapeutics",
+  "ticker": "ZVRA",
+  "generic_name": "sodium phenylbutyrate",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 0.3,
+    "gold_id": "zevra-olpruva-net-revenue-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 0.2,
+    "gold_id": "zevra-olpruva-net-revenue-reported-2026q2"
    }
   ]
  },

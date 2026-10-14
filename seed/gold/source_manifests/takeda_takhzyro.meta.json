@@ -1,0 +1,41 @@
+{
+  "drug_name": "Takhzyro",
+  "generic_name": "lanadelumab (lanadelumab-flyo)",
+  "manufacturer": "Takeda",
+  "benchmark_identity": "takeda_takhzyro_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Hereditary angioedema (prophylaxis of attacks)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "solution for subcutaneous injection (vial and prefilled syringe)",
+  "route_of_administration": "subcutaneous",
+  "moa": "fully human monoclonal antibody inhibitor of plasma kallikrein",
+  "moa_class": "plasma_kallikrein_inhibitor",
+  "first_approval_year": 2018,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2018/761090Orig1s000ltr.pdf",
+    "quote": "We have completed our review of this application, as amended. It is approved, effective on the date of this letter, for use as recommended in the enclosed agreed-upon labeling text. (FDA approval letter, BLA 761090, TAKHZYRO (lanadelumab), signed 08/23/2018)"
+  },
+  "launch_quarter": "2018Q3",
+  "launch_evidence": {
+    "url": "https://assets-dam.takeda.com/image/upload/v1687364169/Global/Investor/Legacy-Shire/2018/FY2018_Q3_Press_Release.pdf",
+    "quote": "Encouraging early trajectory of TAKHZYRO since U.S. launch on August 23, 2018 with $51 million in initial launch"
+  },
+  "commercial_start_quarter": "2019Q1",
+  "series_start_reason": "Takeda prints a Takhzyro line only from fiscal Q4 FY2018 (January-March 2019), the first quarter after it completed the Shire acquisition; the product was launched in the U.S. on 2018-08-23 under Shire, whose own USD quarterly releases (FY2018 Q3 press release on the takeda.com Shire page) are a different issuer and currency and are not spliced. The FY2018 column of the FY2018 Q4 table is headed 'Takeda 12 Months @ Actual rate, Shire 3 Months @ Actual rate', so the Takhzyro figure in it is the 3 months from the January 8, 2019 consolidation to March 31, 2019.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Scope is Takeda's worldwide Takhzyro line: the total column of the 'Product Sales Analysis' table (Bn JPY, 'Sales amount includes royalty income and service income'). The table also prints US, Japan, EUCAN and GEM columns from the FY2019 Q1 data book on; the regional split of the first quarter (2019Q1) is not printed, so a U.S.-only series would start one quarter later. The brand total grows as the brand is launched in further regions (the regional columns show it); no document dating each regional launch was gathered. From FY2020 the table's therapeutic-area grouping was re-cut (footnote 'From FY2020, the classification of therapeutic area for product sales has been reviewed') without changing the brand line. Labels printed: 'Takhzyro' (FY2018-FY2019 documents), 'TAKHZYRO' (FY2020 onward, with footnote marker *1 in FY2025-FY2026 for Core In-line Brands). Yen amounts are as reported at actual exchange rates.",
+  "search_log": [
+    "fetched the takeda.com quarterly-results pages for 2014-2025 and the current page, plus the legacy Shire financial-results page, and collected every PDF/XLSX link (work/takeda_links.json); downloaded the PDFs from FY2014 onward and the Shire press releases/presentations from FY2013 onward (work/pdf), scanned them with pdftotext for the brand names, then re-read each cited page with pdfplumber (the verifier's extractor) so quoted figures match its text layer",
+    "Bigdata.com was not used: the issuer's own IR documents were located directly from the takeda.com pages",
+    "ladder rung a/b: Takeda prints the brand on its own line in the product sales analysis of every quarterly document from the FY2018 Q4 summary of financial statements onward (FY2018 Q4 summary; FY2019 data books; FY2020-FY2026 quarterly financial reports); no fuller supplement or other issuer was needed",
+    "each quarter was read from the quarter's own document (the FY2018 Q4 summary of financial statements, the FY2019 Q1-Q4 data books, the FY2020 Q1 - FY2026 Q1 quarterly financial reports) as current, not from a later comparative column, unless stated in that row's context",
+    "cross-check: for each fiscal year FY2019-FY2025 the four quarterly values were summed and compared with the full-year product figure printed in the Q4 document (differences at most 0.1 billion JPY, rounding)",
+    "FY2025 Q4 has two versions on takeda.com (original of 2026-05-13, marked as superseded, and the version amended on 2026-06-05 for a subsequent event); the cited document is the amended version, the product-line figures are identical in both",
+    "Shire (the prior owner) printed this brand in USD in its own quarterly press releases (legacy Shire documents on the takeda.com Shire page, FY2013-FY2018); those documents were located but not extracted or spliced, because the issuer, currency and revenue definition differ from Takeda's JPY line",
+    "EDGAR was not searched: the Takeda quarterly documents on takeda.com were sufficient for every quarter",
+    "the FY2018 Q4 summary of financial statements (qr2018_q4_f_en.pdf) was used for 2019Q1 because it prints the FY18 column with Shire consolidated for 3 months; the FY2018 Q4 data book (qr2018_q4_d_en.pdf) is a pipeline supplement with no sales table"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "drug_name": "Qsymia",
+  "generic_name": "phentermine and topiramate extended-release",
+  "manufacturer": "Vivus",
+  "benchmark_identity": "vivus_qsymia_us_reported",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Chronic weight management (obesity)",
+  "revenue_scope": "Qsymia net product revenue as printed by Vivus: the line labelled 'Net product revenue' through 2015 (Qsymia only, except the fourth quarter of 2013 which also held STENDRA sales) and 'Qsymia ... net product revenue' from 2016",
+  "geography": "United States (Vivus's Q1 2020 10-Q revenue-by-geography note, https://www.sec.gov/Archives/edgar/data/881524/000155837020005397/vvus-20200331x10q.htm, shows Qsymia net product revenue wholly in the U.S. column for 2020 and 2019 and states Qsymia is licensed for sale only in the U.S.; earlier years rest on the same statement)",
+  "formulation": "extended-release capsule",
+  "route_of_administration": "oral",
+  "moa": "Fixed-dose combination of phentermine, a sympathomimetic amine anorectic, and topiramate extended-release, an antiepileptic with appetite-suppressant effect (GABA-A modulation, carbonic anhydrase inhibition)",
+  "moa_class": "sympathomimetic_anorectic_antiepileptic_combination",
+  "first_approval_year": 2012,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2012/022580Origs000ltr.pdf",
+    "quote": "NDA 022580 NDA APPROVAL Vivus, Inc. ... This new drug application provides for the use of Qsymia (phentermine and topiramate extended-release) capsules CIV as an adjunct to a reduced-calorie diet and increased physical activity (FDA approval letter, Drugs@FDA original approval 2012-07-17)"
+  },
+  "launch_quarter": "2012Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/881524/000110465912074455/a12-26246_1ex99d1.htm",
+    "quote": "On September 17, 2012, we announced the U.S. market availability of Qsymia"
+  },
+  "commercial_start_quarter": "2012Q3",
+  "series_start_reason": null,
+  "series_end_quarter": "2020Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Vivus filed voluntary Chapter 11 petitions on July 7, 2020 and its Form 12b-25 (NT 10-Q, filed 2020-08-17, https://www.sec.gov/Archives/edgar/data/881524/000110465920096093/a20-27697_1nt10q.htm) states it 'is unable to file its Quarterly Report on Form 10-Q for the quarterly period ended June 30, 2020'; no later 10-Q, 10-K or earnings 8-K exists on EDGAR (last filings: Form 25-NSE 2020-08-11, Form 15-12B 2021-01-08).",
+  "notes": "Values are USD thousands converted to millions. Pre-2016 releases label the line 'Net product revenue'; fourth-quarter 2013 total net product revenue was 9,219, of which the same release says $7.7 million was Qsymia and the rest STENDRA, so 2013Q4 uses the Qsymia-only comparative 7,693 printed in the fourth-quarter 2014 release (direct_prior_year_column). First through third quarters of 2013 and all 2014 figures reconcile to later Qsymia-only columns (2013 nine months 16,025 + 7,693 = 23,718; 2014 quarters sum to 45,277 as printed in the 2015 Qsymia line). From the second quarter of 2018 PANCREAZE (acquired June 8, 2018; later PANCREAZE/PANCREASE MT) has its own line and the total 'Net product revenue' line is not used. 2017Q1 includes a one-time $7.3 million adjustment for the change to sell-in revenue recognition. Annual checks pass in the verifier for 2014, 2015 and 2016 (quarters sum to the printed twelve-month Qsymia figure); 2017 quarters 17,620 + 8,518 + 9,911 + 8,934 = 44,983, the printed 2017 net product revenue.",
+  "search_log": [
+    "Listed Vivus (CIK 881524) 8-K Item 2.02, 10-Q and 10-K filings 2012-09 to 2020-12 through data.sec.gov submissions (including the older-files pages); opened exhibit 99.1 of every quarterly earnings 8-K from 2012-11-06 to 2020-05-06 and read the revenue table rows",
+    "Q3 2012 release prints 'Net product revenue 41 (thousands)' with the text 'we recognized net product revenues of $41,000'; no Qsymia sales before September 17, 2012 (U.S. availability announcement)",
+    "Fourth-quarter 2013 release (2014-02-24) and its 2014-02-28 re-issue: total net product revenue 9,219 includes STENDRA; Qsymia $7.7 million in text; 7,693 taken from the Q4 2014 release comparative",
+    "Second-quarter 2013 release (2013-08-06) prints Net product revenue 5,534; a second 8-K filed 2013-08-09 repeats only the six-month text figure ($9.6 million)",
+    "From 2016 releases print a separate 'Qsymia, net product revenue' line; from Q2 2018 'PANCREAZE net product revenue' is separate and the total is not used",
+    "No Q2 2020 release: filings after 2020-05-08 are 8-Ks on the bankruptcy (2020-07-07), NT 10-Q (2020-08-17), Form 25-NSE and Form 15-12B; nothing reports a Q2 2020 Qsymia figure",
+    "Bigdata.com was not used; documents were located directly through EDGAR"
+  ]
+}

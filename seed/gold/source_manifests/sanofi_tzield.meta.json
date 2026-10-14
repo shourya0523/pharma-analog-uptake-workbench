@@ -1,0 +1,38 @@
+{
+  "drug_name": "Tzield",
+  "generic_name": "teplizumab-mzwv",
+  "manufacturer": "Sanofi",
+  "benchmark_identity": "sanofi_tzield_worldwide_reported",
+  "therapeutic_area": "Immunology / Inflammation",
+  "indication_area": "Type 1 diabetes (delay of Stage 3 onset)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "intravenous infusion",
+  "route_of_administration": "intravenous",
+  "moa": "anti-CD3 monoclonal antibody (CD3-directed antibody) that modulates T-cell activity",
+  "moa_class": "anti_cd3_antibody",
+  "first_approval_year": 2022,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2022/761183Orig1s000ltr.pdf",
+    "quote": "BLA 761183 BLA APPROVAL ... for Tzield (teplizumab-mzwv) injection. ... Tzield is indicated to delay the onset of Stage 3 type 1 diabetes (T1D) in adults and pediat[ric patients]"
+  },
+  "launch_quarter": "2023Q1",
+  "launch_evidence": {
+    "quarter": "2023Q1",
+    "url": "https://www.sec.gov/Archives/edgar/data/1695357/000149315223009516/form10-k.htm",
+    "quote": "In December 2022 we began shipping TZIELD to our distributors in the United States ... The full commercial launch of TZIELD began in mid-January 2023."
+  },
+  "commercial_start_quarter": "2023Q3",
+  "series_start_reason": "Sanofi completed the Provention Bio acquisition on April 27, 2023. Its Q2 2023 release (accession 0001121404-23-000021) says only that TZIELD sales were in 'gradual ramp-up' and prints no figure; the first printed quarterly figure is the Q3 2023 sentence 'TZIELD sales were EUR 9 million'. Provention Bio's own filings print product revenue only for FY2022 (USD 1,183 thousand, shipments from December 2022 in its 10-K, accession 0001493152-23-009516) and it filed no Q1 2023 10-Q before the acquisition, so no earlier consistent quarter exists. 2023Q2: Consolidated by Sanofi from April 27, 2023; the Q2 2023 release prints no TZIELD sales figure (only 'gradual sales ramp-up'). Residual of the printed 2023 figure of 25 less Q3 9 and Q4 10 would be about 6, not published as a quarter, so not used.",
+  "series_end_quarter": "2026Q2",
+  "series_end_basis": null,
+  "series_end_reason": "Latest published quarter (Q2 2026 release).",
+  "notes": "Worldwide Tzield net sales as consolidated by Sanofi from April 27, 2023; the printed label is 'TZIELD' (2023), 'Tzield' (2024-2025) and 'Tzield/Teizeild' from Q1 2026. 2023Q3 is from a prose sentence (no table row in that release); from 2023Q4 it is the table row. Q4 2023 release states 'In 2023, consolidated sales of TZIELD were EUR 25 million' (Q4 10 plus Q3 9 leaves about 6 for the partial Q2, not published and not used). Full years 2024 and 2025 sum to the printed 54 and 63. First sales: Provention shipped to U.S. distributors in December 2022.",
+  "search_log": [
+    "listed Sanofi (CIK 0001121404) 6-K and 6-K/A filings from data.sec.gov submissions (recent plus older pages) and reused the one earnings-release exhibit per quarter 2015Q1-2026Q2 that the existing Sanofi gold manifests (e.g. sanofi_toujeo) cite; downloaded each and extracted table rows",
+    "for each quarter took the first table row whose label begins with the brand from the release; confirmed that the four quarters of every full year sum to the full-year figure printed beside the Q4 value (or, for 2023 onward, in the Q4 release's full-year table)",
+    "Sanofi Q2 2023, Q3 2023 and Q4 2023 releases: checked every TZIELD mention (Q2: no figure; Q3: 'EUR 9 million' in prose; Q4: table row 10 | 25 and sentence 'In 2023, consolidated sales of TZIELD were EUR 25 million')",
+    "Provention Bio (CIK 0001695357) filings from 2022-10-01: 10-Q 2022-11-03, 10-K 2023-03-29 (FY2022 Product revenues, net 1,183 thousand), 8-K 2023-04-27 (merger completion); no Q1 2023 10-Q or earnings release exists",
+    "Provention's USD FY2022 figure is a different currency and a single partial year, so it is not spliced into the EUR series"
+  ]
+}

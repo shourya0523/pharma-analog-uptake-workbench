@@ -1,0 +1,34 @@
+{
+  "drug_name": "Pulmicort Flexhaler",
+  "generic_name": "budesonide",
+  "manufacturer": "AstraZeneca",
+  "benchmark_identity": "astrazeneca_pulmicort_worldwide_reported",
+  "therapeutic_area": "Respiratory / Allergy",
+  "indication_area": "Respiratory (asthma)",
+  "revenue_scope": "Worldwide Pulmicort brand total (all formulations: Turbuhaler, Respules, Flexhaler); Flexhaler is not printed separately",
+  "geography": "Worldwide",
+  "formulation": "breath-actuated dry powder inhaler (Flexhaler); brand total also includes Turbuhaler and Respules nebuliser suspension",
+  "route_of_administration": "inhaled",
+  "moa": "Inhaled corticosteroid",
+  "moa_class": "inhaled_corticosteroid",
+  "first_approval_year": 2006,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=021949",
+    "quote": "Original Approvals or Tentative Approvals ... 07/12/2006 ORIG-1 Approval Type 5 - New Formulation or New Manufacturer STANDARD (NDA 021949, Pulmicort Flexhaler budesonide 0.08MG/INH and 0.16MG/INH powder, metered)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2001Q3",
+  "series_start_reason": "AstraZeneca has printed the Pulmicort brand total as a single worldwide line since before the first EDGAR-available release. Its own 2001 and Q1/Q2 2002 releases are scanned paper 6-Ks, and Q1 and Q2 2001 are not separable (nine-month 2001 less Q3 2001), so the series starts 2001Q3: 2001Q3, 2001Q4, 2002Q1, 2002Q2 from prior-year columns of the Q3 2002, Q4 2002, Q1 2003, Q2 2003 releases (direct_prior_year_column), 2002Q3 onward from each quarter's own release.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "AstraZeneca prints no Flexhaler-only figure in any document searched; the narrowest line that covers the product is the Pulmicort brand total. Pulmicort Flexhaler was approved 12 Jul 2006 (NDA 021949); the Q1 2007 release says 'US sales in the first quarter also included initial stocking sales for the new Pulmicort Flexhaler dry powder inhaler' and the Q1 2008 release says it 'replaces Pulmicort Turbuhaler in the market', so rows before 2007Q1 contain no Flexhaler sales and launch_quarter is left null (the dated first sales are 2007Q1, stocking). Scope change: the US commercial rights to Pulmicort Flexhaler were disposed of to Cheplapharm during Q1 2023 (Q1 2023 release: 'completed ... the disposal of US commercial rights to Pulmicort Flexhaler to Cheplapharm'), so rows from 2023Q1 exclude Flexhaler US sales (partially in 2023Q1). Respules (US nebuliser) and Turbuhaler (ex-US, China) remain in the line throughout. Regional tables give a US Pulmicort column from 2012Q3 (not used: it also contains Respules and earlier quarters are not separable). Four quarters sum to the printed full year for every year 2003-2025 (2022-2024 within 1, rounding). Original figures are used for 2002Q3 (150; restated 149 in the Q3 2003 prior-year column).",
+  "search_log": [
+    "listed AstraZeneca (CIK 0000901832) filings via data.sec.gov submissions incl. the older filings pages: 2,052 filings of all forms; downloaded the main document of every 6-K, 6-K/A, 20-F and 20-F/A filed from 2002-11-01 (1,638 documents); 6-Ks filed before Nov 2002 are .paper entries (scanned paper, not on EDGAR)",
+    "located each quarterly results release as the document that carries both a Symbicort and the product's own table row; Q1/Q2/Q3/Q4 releases of 2002-11 to 2026-07 all found (release chain identical to the one already used for the Symbicort series)",
+    "re-issued copies of annual results (20-F extracts, 6-Ks dated Feb-Mar, 2008-06-19 re-issue, 2007-08-31 restated H1) and 20-F filings were excluded as sources; each quarter is read from the first results announcement that reports it as current",
+    "Pulmicort row selected the same way as Nexium (quarter table, World column); 2026Q1 from the Q1 2026 release Table 25 (149) and 2026Q2 from the H1 2026 release quarter table (120; H1 269)",
+    "grep for 'Flexhaler' across all downloaded releases: only the Q1 2007 and Q1 2008 releases (stocking / replaces Turbuhaler), the 2011 20-F device note, and 2023-2026 disposal references; no Flexhaler sales figure anywhere",
+    "checked every year 2003-2025: four quarters sum to the full-year Pulmicort row"
+  ]
+}

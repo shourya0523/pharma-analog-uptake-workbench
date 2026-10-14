@@ -1,0 +1,36 @@
+{
+  "drug_name": "Cinryze",
+  "generic_name": "C1 esterase inhibitor (human)",
+  "manufacturer": "Takeda",
+  "benchmark_identity": "takeda_cinryze_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Hereditary angioedema (routine prophylaxis of attacks)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "lyophilized powder for intravenous injection after reconstitution",
+  "route_of_administration": "intravenous",
+  "moa": "plasma-derived C1 esterase inhibitor replacement (regulates the contact and complement cascades)",
+  "moa_class": "c1_esterase_inhibitor_replacement",
+  "first_approval_year": 2008,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/media/75907/download?attachment",
+    "quote": "CINRYZE (C1 Esterase Inhibitor [Human]) For Intravenous Use, Freeze-Dried Powder for Reconstitution Initial U.S. Approval: 2008. (CINRYZE package insert, FDA CBER product page https://www.fda.gov/vaccines-blood-biologics/approved-blood-products/cinryze, STN 125267)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2019Q1",
+  "series_start_reason": "Takeda prints a Cinryze line only from fiscal Q4 FY2018 (January-March 2019), the first quarter after it completed the Shire acquisition (Shire held the product earlier, after acquiring ViroPharma; USD, different issuer). The FY2018 column of that table is headed 'Takeda 12 Months @ Actual rate, Shire 3 Months @ Actual rate', so the figure is the 3 months from the January 8, 2019 consolidation to March 31, 2019. Pre-2019 Shire history was not sourced in this batch and is not spliced.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Scope is Takeda's worldwide Cinryze line: the total column of the 'Product Sales Analysis' table (Bn JPY, 'Sales amount includes royalty income and service income'). Takeda marks Cinryze as a plasma-derived (PDT) product by footnote (e.g. '*6 PDT products' in the FY2023 Q4 report). The regional split of 2019Q1 is not printed. No launch quarter is cited (the dated U.S. launch is not in a document gathered here). Label printed: 'Cinryze *1' / 'Cinryze *2' (FY2018-FY2019), 'CINRYZE *n' (FY2020 onward); the footnote marker changes with the table, the line does not.",
+  "search_log": [
+    "fetched the takeda.com quarterly-results pages for 2014-2025 and the current page, plus the legacy Shire financial-results page, and collected every PDF/XLSX link (work/takeda_links.json); downloaded the PDFs from FY2014 onward and the Shire press releases/presentations from FY2013 onward (work/pdf), scanned them with pdftotext for the brand names, then re-read each cited page with pdfplumber (the verifier's extractor) so quoted figures match its text layer",
+    "Bigdata.com was not used: the issuer's own IR documents were located directly from the takeda.com pages",
+    "ladder rung a/b: Takeda prints the brand on its own line in the product sales analysis of every quarterly document from the FY2018 Q4 summary of financial statements onward (FY2018 Q4 summary; FY2019 data books; FY2020-FY2026 quarterly financial reports); no fuller supplement or other issuer was needed",
+    "each quarter was read from the quarter's own document (the FY2018 Q4 summary of financial statements, the FY2019 Q1-Q4 data books, the FY2020 Q1 - FY2026 Q1 quarterly financial reports) as current, not from a later comparative column, unless stated in that row's context",
+    "cross-check: for each fiscal year FY2019-FY2025 the four quarterly values were summed and compared with the full-year product figure printed in the Q4 document (differences at most 0.1 billion JPY, rounding)",
+    "FY2025 Q4 has two versions on takeda.com (original of 2026-05-13, marked as superseded, and the version amended on 2026-06-05 for a subsequent event); the cited document is the amended version, the product-line figures are identical in both",
+    "Shire (the prior owner) printed this brand in USD in its own quarterly press releases (legacy Shire documents on the takeda.com Shire page, FY2013-FY2018); those documents were located but not extracted or spliced, because the issuer, currency and revenue definition differ from Takeda's JPY line",
+    "EDGAR was not searched: the Takeda quarterly documents on takeda.com were sufficient for every quarter"
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "drug_name": "Viibryd",
+  "generic_name": "vilazodone hydrochloride",
+  "manufacturer": "Forest Laboratories",
+  "benchmark_identity": "forest_viibryd_us_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Major depressive disorder",
+  "revenue_scope": "Viibryd sales as stated in Forest Laboratories' earnings-release prose",
+  "geography": "U.S.",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Selective serotonin reuptake inhibitor and 5-HT1A receptor partial agonist",
+  "moa_class": "ssri_5ht1a_partial_agonist",
+  "first_approval_year": 2011,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=022567",
+    "quote": "01/21/2011 ORIG-1 Approval Type 1 - New Molecular Entity"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2011Q2",
+  "series_start_reason": "Series starts 2011Q2, the first quarter with a printed Viibryd figure: Forest's release for the quarter ended June 30, 2011 states Viibryd 'recorded sales of $7.3 million, primarily' trade stocking, the product having become available to patients in June 2011. The formal launch was August 2011 (2012-04-17 release: 'formally launched in August 2011'), which is after the first row, so launch_quarter is null.",
+  "series_end_quarter": "2014Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Forest Laboratories published its last results for the quarter ended 2014-03-31 and was acquired by Actavis plc on 2014-07-01. Actavis plc and then Allergan plc print Viibryd only on a combined 'Viibryd/Fetzima' row (2014Q3 release v393196_ex99-1.htm, 'Viibyrd / Fetzima' 66.4, through the 2020Q1 Form 10-Q), which is a different scope, so the separate series ends at 2014Q1. AbbVie's earnings exhibits print no Viibryd row.",
+  "notes": "Every quarter is a prose figure from Forest's earnings release for the same quarter (Forest's fiscal quarters end June, September, December and March, so they coincide with calendar quarters; 'first quarter of fiscal 2012' is 2011Q2). Full years check against Forest's Form 10-K for fiscal 2014 (forest10k2014.htm): fiscal 2014 199.0 = 46.1+47.4+52.7+52.8; fiscal 2013 162.5 = 37.4+39.9+40.6+44.6 (10-K prints 162,511 thousand); fiscal 2012 56.5 printed versus 56.4 from the quarters 7.3+5.3+18.9+24.9 (rounding of the quarterly prose). Viibryd was formally launched in August 2011 and became available in June 2011. Actavis plc spelled it 'Viibyrd' in its combined row.",
+  "search_log": [
+    "Listed every filing (all forms incl. 8-K, 8-K/A, 10-Q, 10-K) for CIK 0001578845 (Actavis plc / Allergan plc), 0000038074 (Forest Laboratories) and 0000850693 (Allergan, Inc.) via data.sec.gov/submissions including the older 'files' pages; earnings 8-Ks selected by item 2.02 and their exhibits resolved from each filing's index.json.",
+    "Listed AbbVie (CIK 0001551152) filings: 25 Forms 10-Q/10-K from 2020-06-30 to 2026-06-30 and 47 item 2.02 earnings 8-Ks from 2020-05-01 to 2026-10-05 (every Exhibit 99 scanned, case-insensitive) searched for Aczone, Namenda, Viibryd, Fetzima and Avycaz: no earnings exhibit matches any; the 10-Q/10-K main documents match 'Namenda' (case-insensitive counts fall from 6 to 0 by the 2025Q2 filing; the matching passages were not read) and never match Aczone, Viibryd, Fetzima or Avycaz.",
+    "Forest Laboratories (CIK 38074) item 2.02 releases from 2011-04-19 (Viibryd appears only in fiscal 2012 guidance, no quarterly sales) to 2014-04-28 read as text; Viibryd first appears in the release of 2011-07-22; each quarter's sentence 'Viibryd ... recorded sales of $X million' extracted, including 2013Q3 (47.4, release 2013-10-22).",
+    "Actavis plc 2014Q3 and 2014Q4 releases and 2015Q1 release: Viibryd only in the combined 'Viibyrd / Fetzima' row; Allergan plc 2015Q2 onward 'Viibryd/Fetzima' combined; no separate quarterly Viibryd figure after 2014Q1.",
+    "Forest's Form 10-K for fiscal 2014 and fiscal 2013 compared with the quarterly sums (see notes)."
+  ]
+}

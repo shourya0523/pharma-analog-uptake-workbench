@@ -1,0 +1,36 @@
+{
+  "drug_name": "Firazyr",
+  "generic_name": "icatibant (icatibant acetate)",
+  "manufacturer": "Takeda",
+  "benchmark_identity": "takeda_firazyr_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Hereditary angioedema (acute attacks)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "solution for subcutaneous injection (prefilled syringe)",
+  "route_of_administration": "subcutaneous",
+  "moa": "selective bradykinin B2 receptor antagonist",
+  "moa_class": "bradykinin_b2_receptor_antagonist",
+  "first_approval_year": 2011,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2011/022150s000ltr.pdf",
+    "quote": "This new drug application provides for the use of Firazyr (icatibant) Injection for the treatment of acute attacks of hereditary angioedema in adults 18 years of age and older. (FDA approval letter, NDA 022150, Shire Orphan Therapies, signed 08/25/2011)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2019Q1",
+  "series_start_reason": "Takeda prints a Firazyr line only from fiscal Q4 FY2018 (January-March 2019), the first quarter after it completed the Shire acquisition (Shire held the product earlier; USD, different issuer). The FY2018 column of that table is headed 'Takeda 12 Months @ Actual rate, Shire 3 Months @ Actual rate', so the figure is the 3 months from the January 8, 2019 consolidation to March 31, 2019. Pre-2019 Shire history was not sourced in this batch and is not spliced.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Scope is Takeda's worldwide Firazyr line: the total column of the 'Product Sales Analysis' table (Bn JPY, 'Sales amount includes royalty income and service income'). The table's regional columns show the line includes U.S., Japan, EUCAN and GEM sales; the regional split of 2019Q1 is not printed. The line is Takeda's brand line as printed; whether it includes any authorised generic icatibant sales was not established from the documents. Takeda's FY2018 Q4 presentation (qr2018_q4_p01_en.pdf) lists FIRAZYR among the products assumed to face U.S. loss of exclusivity in FY2019. No launch quarter is cited. Label printed: 'Firazyr' (FY2018-FY2019), 'FIRAZYR' (FY2020 onward).",
+  "search_log": [
+    "fetched the takeda.com quarterly-results pages for 2014-2025 and the current page, plus the legacy Shire financial-results page, and collected every PDF/XLSX link (work/takeda_links.json); downloaded the PDFs from FY2014 onward and the Shire press releases/presentations from FY2013 onward (work/pdf), scanned them with pdftotext for the brand names, then re-read each cited page with pdfplumber (the verifier's extractor) so quoted figures match its text layer",
+    "Bigdata.com was not used: the issuer's own IR documents were located directly from the takeda.com pages",
+    "ladder rung a/b: Takeda prints the brand on its own line in the product sales analysis of every quarterly document from the FY2018 Q4 summary of financial statements onward (FY2018 Q4 summary; FY2019 data books; FY2020-FY2026 quarterly financial reports); no fuller supplement or other issuer was needed",
+    "each quarter was read from the quarter's own document (the FY2018 Q4 summary of financial statements, the FY2019 Q1-Q4 data books, the FY2020 Q1 - FY2026 Q1 quarterly financial reports) as current, not from a later comparative column, unless stated in that row's context",
+    "cross-check: for each fiscal year FY2019-FY2025 the four quarterly values were summed and compared with the full-year product figure printed in the Q4 document (differences at most 0.1 billion JPY, rounding)",
+    "FY2025 Q4 has two versions on takeda.com (original of 2026-05-13, marked as superseded, and the version amended on 2026-06-05 for a subsequent event); the cited document is the amended version, the product-line figures are identical in both",
+    "Shire (the prior owner) printed this brand in USD in its own quarterly press releases (legacy Shire documents on the takeda.com Shire page, FY2013-FY2018); those documents were located but not extracted or spliced, because the issuer, currency and revenue definition differ from Takeda's JPY line",
+    "EDGAR was not searched: the Takeda quarterly documents on takeda.com were sufficient for every quarter"
+  ]
+}

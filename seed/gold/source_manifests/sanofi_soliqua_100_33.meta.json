@@ -1,0 +1,37 @@
+{
+  "drug_name": "Soliqua 100/33",
+  "generic_name": "insulin glargine and lixisenatide",
+  "manufacturer": "Sanofi",
+  "benchmark_identity": "sanofi_soliqua_suliqua_worldwide_reported",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Type 2 diabetes mellitus",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "fixed-ratio subcutaneous injection (pen)",
+  "route_of_administration": "subcutaneous",
+  "moa": "fixed-ratio combination of a long-acting basal insulin analog (insulin glargine) and a GLP-1 receptor agonist (lixisenatide)",
+  "moa_class": "basal_insulin_glp1_receptor_agonist_combination",
+  "first_approval_year": 2016,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2016/208673Orig1s000ltr.pdf",
+    "quote": "NDA 208673 NDA APPROVAL ... for Soliqua 100/33 (insulin glargine and lixisenatide injection). ... This new drug application provides for the use of a long-acting human insulin analog with a glucagon-like peptide-1 (GLP-1) receptor agonist indicated as an adjunct to diet and exercise to improve glycemic control in adults with type 2 diabetes mellitus inadequately controlled on basal insulin (less than 60 units daily) or lixisenatide."
+  },
+  "launch_quarter": "2017Q1",
+  "launch_evidence": {
+    "quarter": "2017Q1",
+    "url": "https://www.sec.gov/Archives/edgar/data/1121404/000119312517034246/d314575dex993.htm",
+    "quote": "Since January 2017, Soliqua 100/33 (insulin glargine 100 Units/mL & lixisenatide 33 mcg/mL injection; lixisenatide was in-licensed from Zealand Pharma) has been available in the U.S."
+  },
+  "commercial_start_quarter": "2017Q1",
+  "series_start_reason": "First quarter in which Sanofi prints a Soliqua net sales row (EUR 4 million); the Q4 2016 release (accession 0001193125-17-034246) prints none and says the U.S. launch followed in January 2017.",
+  "series_end_quarter": "2026Q2",
+  "series_end_basis": null,
+  "series_end_reason": "Latest published quarter (Q2 2026 release).",
+  "notes": "Worldwide Soliqua 100/33 (U.S.) and Suliqua (ex-U.S.) as one line; the Q3 2018 release text reads 'Soliqua 100/33 ... and Suliqua sales were EUR 20 million and EUR 46 million' for the quarter and nine months. The printed label is 'Soliqua' through Q4 2022 and 'Soliqua/iGlarLixi' from Q1 2023. Through 2022Q4 the value is the first column of the top-products Diabetes table; from 2023Q1 the release no longer carries it in a headline table and the value is the Total Sales column of the quarter's product-by-geography table. Full years 2017-2025 sum to the full-year figure printed in the Q4 release (26, 73, 122, 161, 195, 215, 217, 227, 282).",
+  "search_log": [
+    "listed Sanofi (CIK 0001121404) 6-K and 6-K/A filings from data.sec.gov submissions (recent plus older pages) and reused the one earnings-release exhibit per quarter 2015Q1-2026Q2 that the existing Sanofi gold manifests (e.g. sanofi_toujeo) cite; downloaded each and extracted table rows",
+    "for each quarter took the first table row whose label begins with the brand from the release; confirmed that the four quarters of every full year sum to the full-year figure printed beside the Q4 value (or, for 2023 onward, in the Q4 release's full-year table)",
+    "Q4 2016 release (accession 0001193125-17-034246) and Q3 2016 release: checked for a Soliqua row: none (launch January 2017)",
+    "Verified the Soliqua row exists in every release 2017Q1-2026Q2 (38 consecutive quarters)"
+  ]
+}

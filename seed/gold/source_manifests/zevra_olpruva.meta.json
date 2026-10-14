@@ -1,0 +1,38 @@
+{
+  "drug_name": "Olpruva",
+  "generic_name": "sodium phenylbutyrate",
+  "manufacturer": "Zevra Therapeutics",
+  "benchmark_identity": "zevra_olpruva_net_revenue_reported",
+  "therapeutic_area": "Immunology / Inflammation",
+  "indication_area": "Urea cycle disorders",
+  "revenue_scope": "OLPRUVA net revenue as Zevra prints it: a product-named amount in the earnings-release 'Revenue, Net' bullet and in the revenue-recognition note 'sales of OLPRUVA', stated in millions to one decimal place",
+  "geography": "Not stated in the revenue amounts. Zevra's text says OLPRUVA is available in the U.S. and that Relief holds European rights (no European sales are reported)",
+  "formulation": "oral suspension",
+  "route_of_administration": "oral",
+  "moa": "Nitrogen-binding agent: sodium phenylbutyrate is a prodrug of phenylacetate, which conjugates with glutamine to form phenylacetylglutamine that is excreted in urine, lowering blood ammonia",
+  "moa_class": "nitrogen_binding_agent",
+  "first_approval_year": 2022,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2022/214860Orig1s000ltr.pdf",
+    "quote": "NDA 214860 NDA APPROVAL Acer Therapeutics Inc. ... for Olpruva (sodium phenylbutyrate) for oral suspension ... It is approved, effective on the date of this letter, for use as recommended in the enclosed agreed-upon labeling. (Drugs@FDA lists the original approval as 2022-12-22; Zevra's documents give December 27, 2022.)"
+  },
+  "launch_quarter": "2024Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1434647/000143774924015210/ex_669682.htm",
+    "quote": "The full commercial launch of OLPRUVA was initiated at the end of January 2024"
+  },
+  "commercial_start_quarter": "2024Q4",
+  "series_start_reason": "Zevra prints a numeric OLPRUVA amount only from the fourth quarter of 2024. Acer (the issuer before the Zevra merger closed November 17, 2023) booked 'Product revenue, net' of 371,790 US dollars (statement of operations with no thousands or millions scale, so US dollars) in the quarter ended September 30, 2023 (Acer 10-Q filed 2023-11-20); Zevra's fourth-quarter 2023 release says only 'some initial sales of OLPRUVA' and its first-, second- and third-quarter 2024 releases and 10-Qs say OLPRUVA revenue was 'de minimis'. Those quarters carry no figure, so the series starts at the first quarter after them to leave no gap; the Acer figure is not spliced in.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "All figures are printed to one decimal place in USD millions, so every row is rounded to $0.1 million; quarterly values are therefore coarse. 2025 quarters 0.1 + 0.3 + 0.1 + 0.4 add to 0.9 against the printed full-year 0.8 (the 10-K and the fourth-quarter 2025 release), a rounding difference of 0.1. The 2024 full-year figure printed in the FY2025 10-K is $0.1 million, equal to the single 2024Q4 amount. 2024Q4 and 2025Q4 rows quote the earnings release bullet 'Revenue, Net' because the OLPRUVA amount follows the MIPLYFFA amount in that sentence; the other rows quote the 10-Q note 'sales of OLPRUVA'. The brand first sold in July 2023 per Zevra's Q1 2025 release ('initial product availability in July 2023'). Scale-back: Zevra's 2026 10-Qs say it decided to scale back sales and marketing efforts for OLPRUVA. The series runs to 2026Q2, Zevra's second-quarter 2026 10-Q filed 2026-08-05, the latest quarter published.",
+  "search_log": [
+    "Listed Zevra (CIK 1434647) and Acer (CIK 1069308) 8-K Item 2.02 / 10-Q / 10-K filings 2022-2026 through data.sec.gov submissions; opened exhibit 99.1 of each Zevra earnings 8-K from Q4 2023 (2024-03-28) to Q2 2026 (2026-08-05) and the 10-Qs/10-Ks for text and table rows",
+    "Acer 10-Q for the period ended 2023-09-30 prints 'Product revenue, net 371,790' (no thousands/millions scale, so US dollars); the same table shows nine-month 2023 equal to the three-month figure and a dash for 2022, so no earlier Acer product revenue and 'we began generating revenue from the sale of OLPRUVA in the U.S.' in the quarter ended September 30, 2023",
+    "Zevra Q4 2023 release: 'some initial sales of OLPRUVA' (no amount); Q1 2024 release: 'de minimis sales of OLPRUVA'; Q2 and Q3 2024 10-Qs: 'OLPRUVA revenue was de minimis'; Zevra FY2023 and FY2024 10-K statements of operations show only total 'Revenue, net' (27,461 and 23,612 thousand) with no OLPRUVA row",
+    "Q4 2024 release: '$0.1 million in OLPRUVA net revenue' for the quarter and the year; Q1 2025 10-Q: 'sales of OLPRUVA were $0.1 million and de minimis' for 2025 and 2024",
+    "Searched for a separate OLPRUVA table or segment note with exact thousands: none; the only OLPRUVA table rows are intangible-asset lines",
+    "Bigdata.com was not used; documents were located directly through EDGAR"
+  ]
+}

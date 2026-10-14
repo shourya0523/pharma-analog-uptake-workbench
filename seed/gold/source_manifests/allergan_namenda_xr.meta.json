@@ -1,0 +1,56 @@
+{
+  "drug_name": "Namenda XR",
+  "generic_name": "memantine hydrochloride extended-release",
+  "manufacturer": "Allergan plc",
+  "benchmark_identity": "allergan_namenda_xr_us_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Alzheimer disease (moderate to severe dementia of the Alzheimer's type)",
+  "revenue_scope": "Namenda XR net sales",
+  "geography": "U.S.",
+  "formulation": "extended-release capsule",
+  "route_of_administration": "oral",
+  "moa": "NMDA receptor antagonist",
+  "moa_class": "nmda_receptor_antagonist",
+  "first_approval_year": 2010,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=022525",
+    "quote": "06/21/2010 ORIG-1 Approval Type 3 - New Dosage Form"
+  },
+  "launch_quarter": "2013Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/38074/000003807414000015/exhibit99.htm",
+    "quote": "Namenda XR was launched in June 2013"
+  },
+  "commercial_start_quarter": "2013Q2",
+  "series_start_reason": "Series starts 2013Q2, the quarter in which Forest launched Namenda XR (June 2013) and recorded initial trade stocking of $14.0 million.",
+  "series_end_quarter": "2018Q3",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "From 2018Q4 Allergan plc prints a single 'Namenda' row that its footnote defines as 'Includes Namenda XR and Namenda IR' (2019Q1 release, footnote 3 on the Namenda row), and no separate Namenda XR row; the last Namenda XR row is the 2018Q3 release (16.2). After the AbbVie acquisition (2020-05-08) AbbVie's earnings exhibits print no Namenda row.",
+  "joined_issuers": [
+    {
+      "issuer": "Forest Laboratories",
+      "first_quarter": "2013Q2",
+      "last_quarter": "2014Q1"
+    },
+    {
+      "issuer": "Actavis plc / Allergan plc",
+      "first_quarter": "2014Q3",
+      "last_quarter": "2018Q3"
+    }
+  ],
+  "unreported_quarters": {
+    "2014Q2": "Ownership gap. Forest Laboratories' fiscal year ended 2014-03-31; after its Form 10-K filed 2014-05-30 it filed no Form 10-Q or earnings 8-K (its last filings are 8-Ks of June 2014 and a Form 15-12B on 2014-07-15, per data.sec.gov/submissions CIK 38074), and Actavis plc closed the Forest acquisition on July 1, 2014: Actavis's own 2014Q2 Form 10-Q (d757905d10q.htm) says Forest's results 'will be included in the three months ending September 30, 2014' and its 2015Q2 release prints the 2014Q2 comparative Namenda XR as '-' (v417293_ex99-1.htm)."
+  },
+  "notes": "Series joins Forest Laboratories (2013Q2-2014Q1, quarters stated in its earnings-release prose) to Actavis plc / Allergan plc (2014Q3-2018Q3, product revenue tables). Both lines are Namenda XR sales in the U.S. only (Allergan's table prints '-' in the International column). Quarter 2014Q2 is unpublished by either issuer. Actavis printed only a combined 'Namenda franchise' row for 2014Q3 and 2014Q4 (v393196_ex99-1.htm, v401917_ex99-1.htm), so those two quarters (120.6 and 148.9) are the prior-year columns of the 2015Q3 and 2015Q4 releases; they sum to the full-year 2014 figure 269.5 printed in the 2015 Form 10-K. Full years checked against the quarters: Forest fiscal 2014 (April 2013-March 2014) 135.8 in Forest's Form 10-K equals 14.0+11.5+37.8+72.5; 2015 759.3, 2016 627.6 and 2017 452.8 equal their four quarters; 2018 is incomplete because the row ends at 2018Q3 (nine months 60.1). 2015Q1 is read from Actavis plc's North America Brands segment revenue table (current-quarter column 150.6 against a nil prior-year column). Namenda IR is a separate line and is not included.",
+  "search_log": [
+    "Listed every filing (all forms incl. 8-K, 8-K/A, 10-Q, 10-K) for CIK 0001578845 (Actavis plc / Allergan plc), 0000038074 (Forest Laboratories) and 0000850693 (Allergan, Inc.) via data.sec.gov/submissions including the older 'files' pages; earnings 8-Ks selected by item 2.02 and their exhibits resolved from each filing's index.json.",
+    "Listed AbbVie (CIK 0001551152) filings: 25 Forms 10-Q/10-K from 2020-06-30 to 2026-06-30 and 47 item 2.02 earnings 8-Ks from 2020-05-01 to 2026-10-05 (every Exhibit 99 scanned, case-insensitive) searched for Aczone, Namenda, Viibryd, Fetzima and Avycaz: no earnings exhibit matches any; the 10-Q/10-K main documents match 'Namenda' (case-insensitive counts fall from 6 to 0 by the 2025Q2 filing; the matching passages were not read) and never match Aczone, Viibryd, Fetzima or Avycaz.",
+    "Forest Laboratories' item 2.02 releases 2011-04 to 2014-04 (exhibit99.htm) read as text: Namenda XR first appears in the 2013-07-22 release (launched June 2013, initial trade stocking $14.0 million); the quarter figures 11.5, 37.8 and 72.5 are in the following releases; Forest's Form 10-K for fiscal 2014 (forest10k2014.htm) prints fiscal-2014 Namenda XR sales of $135.8 million (135,770 thousand).",
+    "Actavis plc 2014Q2 Form 10-Q and 2014Q2 release: Forest not yet owned, no Namenda XR figure; 2014Q3 release and 10-Q and 2014Q4 release print only 'Namenda franchise' (427.6 and 471.7).",
+    "Allergan plc Q4 2018 release (tv511761_ex99-1.htm): the Namenda row's prior-year column (97.8) equals the 2017Q4 Namenda XR figure, and the footnote shows the row is XR plus IR; so the series ends at 2018Q3.",
+    "Rows read by table-row parsing of each release; every row verified by scripts/sourcing/verify_staged_manifests.py (the only series problem reported is the 2014Q2 ownership gap listed above)."
+  ],
+  "reviewed_anomalies": {
+    "2018Q2": "Read at source: Allergan plc's Q2 2018 release prints Namenda XR at 3.4 (16.2 in 2018Q3). The release does not state the cause. Kept as printed."
+  }
+}

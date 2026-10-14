@@ -113,6 +113,10 @@ def meta_problems(meta: dict, rows: list[dict[str, str]]) -> list[str]:
     for field in ("moa", "moa_class", "route_of_administration", "first_approval_year", "indication_area"):
         if meta.get(field) in (None, ""):
             problems.append(f"{field} is empty")
+    last = max(row["period"] for row in rows)
+    outside = [q for q in (meta.get("unreported_quarters") or {}) if not first < q < last]
+    if outside:
+        problems.append(f"unreported_quarters {outside} lie outside the series; a quarter before the first row belongs in series_start_reason")
     if meta.get("joined_issuers") and not all(row.get("issuer") for row in rows):
         problems.append("joined_issuers is set but rows lack an issuer column")
     return problems

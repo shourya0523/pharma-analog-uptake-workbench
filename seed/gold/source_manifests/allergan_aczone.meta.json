@@ -1,0 +1,41 @@
+{
+  "drug_name": "Aczone",
+  "generic_name": "dapsone",
+  "manufacturer": "Allergan plc",
+  "benchmark_identity": "allergan_aczone_global_reported",
+  "therapeutic_area": "Immunology / Inflammation",
+  "indication_area": "Acne vulgaris",
+  "revenue_scope": "Global net revenues",
+  "geography": "Worldwide (the table's International column is nil to 0.2 per quarter, so effectively U.S.)",
+  "formulation": "topical gel",
+  "route_of_administration": "topical",
+  "moa": "Sulfone antibacterial with anti-inflammatory activity (dapsone), applied topically",
+  "moa_class": "topical_dapsone_antibacterial_anti_inflammatory",
+  "first_approval_year": 2005,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=021794",
+    "quote": "07/07/2005 ORIG-1 Approval Type 3 - New Dosage Form"
+  },
+  "launch_quarter": "2008Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/850693/000119312510043126/d10k.htm",
+    "quote": "sales of Aczone \u00ae , which we launched in the fourth quarter of 2008"
+  },
+  "commercial_start_quarter": "2015Q1",
+  "series_start_reason": "Series starts 2015Q1, the first quarter in which Actavis plc (later Allergan plc, CIK 1578845) consolidated Aczone: it completed the acquisition of Allergan, Inc. on March 17, 2015 (Form 10-Q for 2015Q1), so 2015Q1 is a partial quarter of about two weeks. Aczone launched in 2008Q4 under Allergan, Inc. (CIK 850693), which published no Aczone sales level: its Forms 10-K for 2008-2014 and its item 2.02 earnings exhibits from 2008-07 to 2015-03 give only year-over-year dollar changes (for example 'an increase of $47.5 million in sales of Aczone' in 2013) and no quarterly or annual level, so the 2008-2014 history is not sourced.",
+  "series_end_quarter": "2020Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Allergan plc was acquired by AbbVie on 2020-05-08 (see AbbVie filings); its last periodic report is the Form 10-Q for the quarter ended 2020-03-31 (filed 2020-05-07). AbbVie's 47 earnings-release exhibits from 2020-05-01 to 2026-10-05 and its 25 Forms 10-Q/10-K from 2020-06-30 to 2026-06-30 print no row for this brand (case-insensitive text search of each exhibit/main document).",
+  "notes": "Sourced from the issuer's own current-quarter documents wherever they print an Aczone row (releases for 2015Q2-2019Q4, the Form 10-Q for 2020Q1); 2015Q1 is the prior-year column of the 2016Q1 release because the 2015Q1 release prints no Aczone row. Four quarters sum to the full year for 2015 (170.8), 2016 (217.3), 2017 (166.8), 2018 (55.5) and 2019 (9.3) as printed in the Q4 releases. The line is the issuer's own 'Aczone' row of the product revenue table (US Specialized Therapeutics segment, with 0.0-0.2 per quarter International), not a total of other products. Allergan, Inc. launched Aczone in 2008Q4; the current NDA holder shown on the FDA page is Almirall.",
+  "search_log": [
+    "Listed every filing (all forms incl. 8-K, 8-K/A, 10-Q, 10-K) for CIK 0001578845 (Actavis plc / Allergan plc), 0000038074 (Forest Laboratories) and 0000850693 (Allergan, Inc.) via data.sec.gov/submissions including the older 'files' pages; earnings 8-Ks selected by item 2.02 and their exhibits resolved from each filing's index.json.",
+    "Listed AbbVie (CIK 0001551152) filings: 25 Forms 10-Q/10-K from 2020-06-30 to 2026-06-30 and 47 item 2.02 earnings 8-Ks from 2020-05-01 to 2026-10-05 (every Exhibit 99 scanned, case-insensitive) searched for Aczone, Namenda, Viibryd, Fetzima and Avycaz: no earnings exhibit matches any; the 10-Q/10-K main documents match 'Namenda' (case-insensitive counts fall from 6 to 0 by the 2025Q2 filing; the matching passages were not read) and never match Aczone, Viibryd, Fetzima or Avycaz.",
+    "Aczone rows read by table-row parsing of Allergan plc's item 2.02 earnings exhibits 2015-05 to 2020-02 and the Form 10-Q for 2020Q1; layouts: 2015Q2 'Global net revenues top promoted products', 2015Q3-2016Q3 Global/U.S./International columns, 2016Q4 onward segment columns US Specialized Therapeutics / US General Medicine / International / Corporate / Total.",
+    "Allergan, Inc. (CIK 850693): scanned every 10-K for 2008-2014 and every item 2.02 8-K exhibit from 2008-07 to 2015-03 for 'Aczone' next to a dollar figure: only year-over-year changes appear, no level; no Aczone row exists in its product tables.",
+    "Checked each Q4 release's stated full year against the four quarters: all five years sum exactly as listed in notes.",
+    "2015Q1: the Actavis plc 2015Q1 release (v410082_ex99-1.htm) and Form 10-Q (d912920d10q.htm) print no Aczone row (the only 'Aczone' text in the 10-Q is an acquired-intangible fair value, not sales); the figure 6.0 is from the 2016Q1 release's prior-year column."
+  ],
+  "reviewed_anomalies": {
+    "2018Q4": "Read at source: Allergan plc's Q4 2018 release prints Aczone at 0.7, and 2018's four quarters sum to the 55.5 the same release prints for the full year. The release does not state the cause of the fall from 17.5. Kept as printed."
+  }
+}

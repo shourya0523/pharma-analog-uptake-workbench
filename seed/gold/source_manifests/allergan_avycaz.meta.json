@@ -1,0 +1,34 @@
+{
+  "drug_name": "Avycaz",
+  "generic_name": "ceftazidime/avibactam",
+  "manufacturer": "Allergan plc",
+  "benchmark_identity": "allergan_avycaz_us_general_medicine_reported",
+  "therapeutic_area": "Infectious Disease / Vaccines",
+  "indication_area": "Complicated Gram-negative bacterial infections (cIAI, cUTI, HABP/VABP)",
+  "revenue_scope": "Avycaz net revenues, entirely in the US General Medicine segment",
+  "geography": "U.S. (US General Medicine segment; International column '-' in every segment table)",
+  "formulation": "lyophilized powder for solution for injection",
+  "route_of_administration": "intravenous",
+  "moa": "Cephalosporin antibacterial (ceftazidime) with a beta-lactamase inhibitor (avibactam)",
+  "moa_class": "cephalosporin_beta_lactamase_inhibitor_combination",
+  "first_approval_year": 2015,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=206494",
+    "quote": "02/25/2015 ORIG-1 Approval Type 1 - New Molecular Entity and Type 4 - New Combination"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2015Q2",
+  "series_start_reason": "Series starts 2015Q2, the first quarter with a printed Avycaz figure (5.4). The six months ended June 30, 2015 also print 5.4 in the prior-year column of the 2016Q2 release, so 2015Q1 is nil. No Allergan or Actavis document dating the U.S. launch was found (Avycaz does not appear in the 2015Q1-2015Q3 filings), so launch_quarter is null.",
+  "series_end_quarter": "2020Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Allergan plc was acquired by AbbVie on 2020-05-08 (see AbbVie filings); its last periodic report is the Form 10-Q for the quarter ended 2020-03-31 (filed 2020-05-07). AbbVie's 47 earnings-release exhibits from 2020-05-01 to 2026-10-05 and its 25 Forms 10-Q/10-K from 2020-06-30 to 2026-06-30 print no row for this brand (case-insensitive text search of each exhibit/main document).",
+  "notes": "The 2015 quarters and 2016Q1 are prior-year columns because the own-quarter documents (2015 Forms 10-Q/10-K and releases, and the 2016Q1 release/10-Q) print no Avycaz row; from 2016Q2 each quarter is read from its own release (US General Medicine product revenue table for 2016Q2-2016Q3, segment table with a Total column from 2016Q4; 2020Q1 from the Form 10-Q). Full-year checks against the Q4 releases: 2015 22.6, 2016 36.1, 2017 61.2, 2018 94.6, 2019 116.7, all matching the sum of the four quarters.",
+  "search_log": [
+    "Listed every filing (all forms incl. 8-K, 8-K/A, 10-Q, 10-K) for CIK 0001578845 (Actavis plc / Allergan plc), 0000038074 (Forest Laboratories) and 0000850693 (Allergan, Inc.) via data.sec.gov/submissions including the older 'files' pages; earnings 8-Ks selected by item 2.02 and their exhibits resolved from each filing's index.json.",
+    "Listed AbbVie (CIK 0001551152) filings: 25 Forms 10-Q/10-K from 2020-06-30 to 2026-06-30 and 47 item 2.02 earnings 8-Ks from 2020-05-01 to 2026-10-05 (every Exhibit 99 scanned, case-insensitive) searched for Aczone, Namenda, Viibryd, Fetzima and Avycaz: no earnings exhibit matches any; the 10-Q/10-K main documents match 'Namenda' (case-insensitive counts fall from 6 to 0 by the 2025Q2 filing; the matching passages were not read) and never match Aczone, Viibryd, Fetzima or Avycaz.",
+    "Avycaz rows read by table-row parsing of Allergan plc item 2.02 earnings exhibits 2016-08 to 2020-02, the 2016-2017 prior-year columns, and the Form 10-Q for 2020Q1.",
+    "Searched the 2015Q1, 2015Q2 and 2015Q3 Forms 10-Q and the 2015 Form 10-K for 'Avycaz' (case-insensitive text): 0 matches; the 2015Q1-2015Q4 releases have no table row beginning 'Avycaz'; the 2016 Form 10-K (agn-10k_20161231.htm) prints the 2015 total 22.6 in US General Medicine with every other segment nil.",
+    "Searched the same 2015 documents and the 2016Q2 Form 10-Q for a launch sentence naming Avycaz or ceftazidime: none, so no launch quarter is cited.",
+    "Q4 quarters taken from the Q4 releases (three-month columns); each full year checked against the four quarters (see notes)."
+  ]
+}

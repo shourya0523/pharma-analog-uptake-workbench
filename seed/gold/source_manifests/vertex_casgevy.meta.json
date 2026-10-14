@@ -1,0 +1,34 @@
+{
+  "drug_name": "Casgevy",
+  "generic_name": "exagamglogene autotemcel",
+  "manufacturer": "Vertex",
+  "benchmark_identity": "vertex_casgevy_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Sickle cell disease and transfusion-dependent beta thalassemia",
+  "revenue_scope": "CASGEVY net product revenue as printed by Vertex: a product-named line inside consolidated product revenues, in 'Other product revenues' until the first quarter 2026 release and as its own CASGEVY table row from then",
+  "geography": "Worldwide (consolidated line; the release prints no regional split of CASGEVY revenue)",
+  "formulation": "autologous CD34+ cell suspension for infusion",
+  "route_of_administration": "intravenous",
+  "moa": "Autologous CD34+ hematopoietic stem and progenitor cell therapy edited ex vivo with non-viral CRISPR/Cas9 at the erythroid-specific BCL11A enhancer, increasing fetal hemoglobin",
+  "moa_class": "crispr_cas9_gene_edited_cell_therapy",
+  "first_approval_year": 2023,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/media/174618/download?attachment",
+    "quote": "Our STN: BL 125787/0 BLA APPROVAL December 08, 2023 ... Vertex Pharmaceuticals Inc ... exagamglogene autotemcel (exa-cel) ... indicated for treatment of sickle cell disease (SCD) in patients 12 years of age or older with recurrent vaso-occlusive crises (VOCs). (CBER biologics are not on accessdata.fda.gov; this is the approval letter linked from https://www.fda.gov/vaccines-blood-biologics/casgevy)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2024Q3",
+  "series_start_reason": "FDA approval was December 8, 2023, but Vertex printed no CASGEVY revenue before the third quarter of 2024: its third-quarter 2024 release says product revenue 'included revenue from the first patient infused with CASGEVY', and its first- and second-quarter 2025 releases state there were no revenues for CASGEVY and JOURNAVX in the first quarter and in the three and six months ended June 30, 2024.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Series is worldwide CASGEVY revenue in USD millions. 2024Q3 (2.0) is read from the revenue note of the quarter's own 10-Q (the earnings release prints no amount); 2024Q4 (8.0) is printed in the fourth-quarter 2024 release text. 2025Q1-2025Q4 are printed in release/10-Q sentences saying 'Other product revenues' included the CASGEVY amount (no CASGEVY table row existed), so their row_label is 'Other product revenues'. 2026Q1 and 2026Q2 are rows of the release's revenue table. Full-year checks: 2024 quarters 2.0 + 8.0 = 10.0 as printed ($10.0 million); 2025 quarters 14.2 + 30.4 + 16.9 + 54.3 = 115.8, equal to the printed $115.8 million. The 10-K lists CASGEVY under patents (2034/2035), not as a revenue table. The series runs to 2026Q2, Vertex's second-quarter 2026 release filed 2026-08-03, the latest quarter published.",
+  "search_log": [
+    "EDGAR submissions for Vertex (CIK 875320) listed; opened the exhibit 99.1 of every earnings 8-K from Q4 2023 (filed 2024-02-05) to Q2 2026 (filed 2026-08-03) and scanned table rows and sentences for CASGEVY",
+    "Q4 2023, Q1 2024 and Q2 2024 releases: CASGEVY appears only in guidance/launch prose, no revenue amount; Q3 2024 release: 'Vertex's product revenue included revenue from the first patient infused with CASGEVY' with no amount",
+    "Q3 2024 10-Q (vrtx-20240930.htm) revenue note: 'Other product revenues included CASGEVY product revenues of $2.0 million' for the three and nine months (verifier-side correction; the Q3 2025 10-Q repeats it as the prior-year comparative)",
+    "Q1 2025 release: 'In the first quarter of 2024, there were no revenues for these products'; Q2 2025 release: 'In the three and six months ended June 30, 2024, there were no revenues for these products' - so no CASGEVY revenue before 2024Q3",
+    "Q4 2024 release: 'The three and twelve month periods ending December 31, 2024, included CASGEVY revenue of $8.0 million and $10.0 million'; FY2024 10-K (vrtx-20241231.htm) and FY2025 10-K (vrtx-20251231.htm) scanned: no CASGEVY revenue table, 10-K FY2025 text '$115.8 million of CASGEVY product revenues'",
+    "Bigdata.com was not used; documents were located directly through EDGAR submissions and Archives indexes"
+  ]
+}

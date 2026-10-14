@@ -1,0 +1,49 @@
+{
+  "drug_name": "Enjaymo",
+  "generic_name": "sutimlimab-jome",
+  "manufacturer": "Sanofi",
+  "benchmark_identity": "sanofi_enjaymo_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Cold agglutinin disease",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "intravenous infusion",
+  "route_of_administration": "intravenous",
+  "moa": "humanized monoclonal antibody that inhibits complement component C1s (classical pathway)",
+  "moa_class": "c1s_complement_inhibitor",
+  "first_approval_year": 2022,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2022/761164Orig1s000ltr.pdf",
+    "quote": "BLA 761164 BLA APPROVAL ... for Enjaymo (sutimlimab-jome) injection. ... Enjaymo is indicated to decrease the need for red blood cell (RBC) transfusion due to hemolysis in adults with cold agglutinin disease (CAD)."
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2022Q2",
+  "series_start_reason": "First quarter with a printed Enjaymo row: Sanofi's Q2 2022 release prints 3 (Q2) and 4 (first half). The Q1 2022 release (accession 0001121404-22-000009) prints no Enjaymo sales row; the first-half figure implies about EUR 1 million in Q1 but that is a difference of rounded figures and is not used. The FDA approval was in February 2022; no issuer document located dates a first sale.",
+  "series_end_quarter": "2026Q2",
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Worldwide Enjaymo in-market sales in EUR: Sanofi's net sales line 2022Q2-2024Q3, then Recordati's Enjaymo net revenue line 2025Q1-2026Q2 (Recordati closed the acquisition of the global rights on November 29, 2024; both lines are worldwide and in EUR). 2024Q4 is an ownership-gap quarter and has no row. Recordati's quarters are read from its own releases: 2025Q1 and 2026Q1 are printed as the quarter; 2025Q2 (first half less Q1), 2025Q3 (nine months less first half), 2025Q4 (full year less nine months) and 2026Q2 (first half less Q1) are derived from year-to-date figures. 2025 figures are in EUR millions to one decimal and 2026 figures are printed in EUR thousands. 2023 full year sums to the printed 72, 2024Q1-Q3 sum to the nine-month figure 83, and the four 2025 quarters sum to the printed full year 146.3. Recordati's line is its net revenue from Enjaymo and Sanofi's is net sales; the sources do not describe any difference in what they include.",
+  "unreported_quarters": {
+    "2024Q4": "Sanofi booked in-market sales only until November 29, 2024 (EUR 22 million printed for the part quarter in its Q4 2024 release, accession 0001121404-25-000002, left out as a part-quarter). Recordati's FY 2024 preliminary release prints only Enjaymo sales in December 2024 of EUR 10.9 million, a one-month figure; no document prints a full-quarter figure, and splicing the two issuers' part-quarters is not done."
+  },
+  "search_log": [
+    "listed Sanofi (CIK 0001121404) 6-K and 6-K/A filings from data.sec.gov submissions (recent plus older pages) and reused the one earnings-release exhibit per quarter 2015Q1-2026Q2 that the existing Sanofi gold manifests (e.g. sanofi_toujeo) cite; downloaded each and extracted table rows",
+    "for each quarter took the first table row whose label begins with the brand from the release; confirmed that the four quarters of every full year sum to the full-year figure printed beside the Q4 value (or, for 2023 onward, in the Q4 release's full-year table)",
+    "Q4 2024 and Q1 2025 Sanofi releases: Enjaymo row present in Q4 2024 (22, with the Recordati closing sentence) and absent from Q1 2025",
+    "Enjaymo launch date: no issuer document located dates the first U.S. sale",
+    "Recordati (not on EDGAR): listed recordati.com/investors-presentations-and-reports and /media and downloaded the press releases, results presentations and interim reports for FY2024 preliminary, Q1 2025, H1 2025, 9M 2025, FY2025, Q1 2026 and H1 2026 with pdfplumber. Lines with Enjaymo and a figure: Q1 2025 presentation 'Enjaymo (sutimlimab) 31.9'; H1 2025 press release 'contribution of Enjaymo of EUR 69.4 million' and presentation '69.4'; 9M 2025 interim report 'net revenue from sales of Enjaymo amounting to EUR 104.0 million' and presentation '104.0'; FY 2025 presentation 'Enjaymo (sutimlimab) 146.3 10.9' and press release '146.3 million'; Q1 2026 press release table '43,910 31,913 37.6'; H1 2026 press release table '90,983 69,402 31.1'. The earlier statement that quarters other than the first were underivable was wrong: the year-to-date figures in successive releases give 2025Q2-2025Q4 and 2026Q2 by subtraction.",
+    "Recordati FY 2024 preliminary release and presentation: Enjaymo sales in December 2024 EUR 10.9 million (one month); no Q4 2024 quarter figure, so 2024Q4 stays a gap."
+  ],
+  "joined_issuers": [
+    {
+      "issuer": "Sanofi",
+      "first_quarter": "2022Q2",
+      "last_quarter": "2024Q3"
+    },
+    {
+      "issuer": "Recordati",
+      "first_quarter": "2025Q1",
+      "last_quarter": "2026Q2"
+    }
+  ]
+}

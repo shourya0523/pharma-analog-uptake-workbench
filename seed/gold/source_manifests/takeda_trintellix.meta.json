@@ -1,0 +1,44 @@
+{
+  "drug_name": "Trintellix",
+  "generic_name": "vortioxetine",
+  "manufacturer": "Takeda",
+  "benchmark_identity": "takeda_trintellix_us_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Major depressive disorder",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "oral tablet",
+  "route_of_administration": "oral",
+  "moa": "multimodal serotonergic antidepressant: serotonin transporter inhibitor with 5-HT1A receptor agonist and 5-HT3 receptor antagonist activity",
+  "moa_class": "serotonin_modulator_and_stimulator",
+  "first_approval_year": 2013,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2013/204447Orig1s000ltr.pdf",
+    "quote": "This new drug application provides for the use of Brintellix (vortioxetine) tablets for the treatment of major depressive disorder (MDD). (FDA approval letter, NDA 204447, Takeda Pharmaceuticals USA, signed 09/30/2013; marketed as Trintellix from June 2016)"
+  },
+  "launch_quarter": "2014Q1",
+  "launch_evidence": {
+    "url": "https://assets-dam.takeda.com/raw/upload/v1662727509/legacy-dotcom/siteassets/system/investors/quarterly-announcements/fy2014/qr2014_q1_f_en.pdf",
+    "quote": "In the U.S., Takeda also launched BRINTELLIX, a treatment for major depressive disorder, in January 2014."
+  },
+  "commercial_start_quarter": "2015Q2",
+  "series_start_reason": "Takeda's first quarterly figure for the product in JPY that could be tied to a Takeda document with no gap is fiscal Q1 FY2015 (April-June 2015). Launch was in January 2014 (launch_quarter 2014Q1), but the FY2014 documents print the product in USD, and Takeda's JPY quarterly figures exist only for FY2014 Q3 (3.8, printed as the prior-year column in the FY2015 Q3 report) and nine months (9.1), not for FY2014 Q1, Q2 or Q4, so a gap-free JPY series cannot start earlier.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Scope is Takeda's U.S. Trintellix line: through FY2017 the product table prints only a 'United States'/'U.S.' row (the Total row repeats it); from FY2018 the table has a total column and a US column, and this series uses the US column throughout (the total column is not used because it adds a Japan column value from the FY2019 Q3 table, where 0.2 first appears, and the Japan share grows in later tables, so its composition changes). Total and US are equal in the FY2018 tables (57.6 both in the FY2018 Q4 summary). Takeda's footnote: 'Trintellix is in-licensed from Lundbeck; Takeda has co-marketing rights in the U.S. and Japan' (qr2018_q4_p01_en.pdf); sales amounts include royalty income and service income. Printed label: 'Brintellix' in FY2015 documents, 'Trintellix' from the FY2016 Q1 data book (renamed in the U.S. from June 2016), 'TRINTELLIX' from FY2020. Lundbeck, the licensor, also reports on this brand; its documents were not searched in this batch and would be a different issuer, currency and definition. Quarterly values for FY2015 Q1, Q2 and Q4 and for FY2018 Q4 come from prior-year columns/trend rows of the following year's documents (derivation direct_prior_year_column) because no JPY document of that quarter itself prints them. Quarterly values sum to the printed full-year U.S. figure within 0.1 billion JPY in every year checked.",
+  "search_log": [
+    "fetched the takeda.com quarterly-results pages for 2014-2025 and the current page, plus the legacy Shire financial-results page, and collected every PDF/XLSX link (work/takeda_links.json); downloaded the PDFs from FY2014 onward and the Shire press releases/presentations from FY2013 onward (work/pdf), scanned them with pdftotext for the brand names, then re-read each cited page with pdfplumber (the verifier's extractor) so quoted figures match its text layer",
+    "Bigdata.com was not used: the issuer's own IR documents were located directly from the takeda.com pages",
+    "ladder rung a/b: Takeda prints the brand on its own line in the product sales analysis of every quarterly document from the FY2018 Q4 summary of financial statements onward (FY2018 Q4 summary; FY2019 data books; FY2020-FY2026 quarterly financial reports); no fuller supplement or other issuer was needed",
+    "each quarter was read from the quarter's own document (the FY2018 Q4 summary of financial statements, the FY2019 Q1-Q4 data books, the FY2020 Q1 - FY2026 Q1 quarterly financial reports) as current, not from a later comparative column, unless stated in that row's context",
+    "cross-check: for each fiscal year FY2019-FY2025 the four quarterly values were summed and compared with the full-year product figure printed in the Q4 document (differences at most 0.1 billion JPY, rounding)",
+    "FY2025 Q4 has two versions on takeda.com (original of 2026-05-13, marked as superseded, and the version amended on 2026-06-05 for a subsequent event); the cited document is the amended version, the product-line figures are identical in both",
+    "Shire (the prior owner) printed this brand in USD in its own quarterly press releases (legacy Shire documents on the takeda.com Shire page, FY2013-FY2018); those documents were located but not extracted or spliced, because the issuer, currency and revenue definition differ from Takeda's JPY line",
+    "EDGAR was not searched: the Takeda quarterly documents on takeda.com were sufficient for every quarter",
+    "Trintellix FY2014-FY2015: the FY2014 data book and the FY2015 half-year data book print the product in USD millions only (e.g. 'Brintellix - 4 124 52 92 40 76.2%'); JPY figures first appear in the FY2015 Q3 report (qr2015_q3_f_en.pdf), the FY2015 full-year data book (annual 13.6 and 24.5) and the FY2016 data books (quarterly trend); the FY2015 Q1 documents listed on the takeda.com 2015 page are spreadsheets without the product",
+    "FY2015 Q4: the full-year documents print only the annual 24.5; the quarter 6.5 is read from the FY2015 quarterly trend in the FY2016 Q2 data book; four quarters 5.0+6.2+6.8+6.5 = 24.5",
+    "FY2018 Q4: the FY2018 Q4 summary prints the full year 57.6 (US 57.6) only; the quarter 12.9 is read from the FY2018 quarters in the FY2019 Q1 data book trend (14.1 13.0 17.5 12.9)",
+    "FY2019 Q2: the three-month Q2 table is in the additional data book (qr2019_q2_d_additional_en.pdf); the main FY2019 Q2 data book (qr2019_q2_d_en.pdf) prints half-year and trend rows only"
+  ]
+}

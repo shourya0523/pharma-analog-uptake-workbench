@@ -1,0 +1,37 @@
+{
+  "drug_name": "Fetzima",
+  "generic_name": "levomilnacipran extended-release",
+  "manufacturer": "Forest Laboratories",
+  "benchmark_identity": "forest_fetzima_us_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Major depressive disorder",
+  "revenue_scope": "Fetzima sales as stated in Forest Laboratories' earnings-release prose",
+  "geography": "U.S.",
+  "formulation": "extended-release capsule",
+  "route_of_administration": "oral",
+  "moa": "Serotonin and norepinephrine reuptake inhibitor (SNRI)",
+  "moa_class": "serotonin_norepinephrine_reuptake_inhibitor",
+  "first_approval_year": 2013,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=204168",
+    "quote": "07/25/2013 ORIG-1 Approval Type 2 - New Active Ingredient"
+  },
+  "launch_quarter": "2013Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/38074/000003807414000005/exhibit99.htm",
+    "quote": "was commercially launched in December 2013"
+  },
+  "commercial_start_quarter": "2013Q4",
+  "series_start_reason": "Series starts 2013Q4, the launch quarter: Fetzima was commercially launched in December 2013 and its first release figure is the initial trade stocking of $8.0 million.",
+  "series_end_quarter": "2014Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Forest Laboratories' last results release is for the quarter ended 2014-03-31; Actavis plc acquired Forest on 2014-07-01 and, from the 2014Q3 release (v393196_ex99-1.htm) through Allergan plc's 2020Q1 Form 10-Q, prints Fetzima only on a combined 'Viibryd/Fetzima' row. AbbVie's earnings exhibits print no Fetzima row.",
+  "notes": "Only two quarters exist as a separate Fetzima line. 2013Q4 (8.0) is the initial trade stocking after the December 2013 launch, as the release words it; 2014Q1 is 3.7. Their sum 11.7 equals the fiscal 2014 Fetzima sales printed in Forest's Form 10-K (forest10k2014.htm: 11,700 thousand, 'recorded sales of $11.7 million in fiscal 2014'). Forest's fiscal quarters coincide with calendar quarters (third quarter of fiscal 2014 is 2013Q4). The combined Viibryd/Fetzima line that follows (Actavis/Allergan 2014Q3-2020Q1) is a different scope and is not spliced.",
+  "search_log": [
+    "Listed every filing (all forms incl. 8-K, 8-K/A, 10-Q, 10-K) for CIK 0001578845 (Actavis plc / Allergan plc), 0000038074 (Forest Laboratories) and 0000850693 (Allergan, Inc.) via data.sec.gov/submissions including the older 'files' pages; earnings 8-Ks selected by item 2.02 and their exhibits resolved from each filing's index.json.",
+    "Listed AbbVie (CIK 0001551152) filings: 25 Forms 10-Q/10-K from 2020-06-30 to 2026-06-30 and 47 item 2.02 earnings 8-Ks from 2020-05-01 to 2026-10-05 (every Exhibit 99 scanned, case-insensitive) searched for Aczone, Namenda, Viibryd, Fetzima and Avycaz: no earnings exhibit matches any; the 10-Q/10-K main documents match 'Namenda' (case-insensitive counts fall from 6 to 0 by the 2025Q2 filing; the matching passages were not read) and never match Aczone, Viibryd, Fetzima or Avycaz.",
+    "Forest Laboratories (CIK 38074) item 2.02 releases 2011-04 to 2014-04: Fetzima first appears in the 2014-01-21 release (quarter ended 2013-12-31); the 2014-04-28 release prints the quarter ended 2014-03-31.",
+    "Actavis plc 2014Q3 release, 10-Q and 2014Q4 release print 'Viibyrd / Fetzima' combined (66.4 and 73.9); no table row beginning 'Fetzima' with quarterly sales was found after 2014Q1 in the Actavis/Allergan 10-Q and 10-K tables searched (2014Q3-2020Q1); the Fetzima rows found were product lists and an acquired-intangible table.",
+    "Forest Form 10-K for fiscal 2014 full-year Fetzima sales 11.7 compared with the two quarters."
+  ]
+}
