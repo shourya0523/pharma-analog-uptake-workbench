@@ -1,0 +1,40 @@
+{
+  "drug_name": "Zilbrysq",
+  "generic_name": "zilucoplan",
+  "manufacturer": "UCB",
+  "benchmark_identity": "ucb_zilbrysq_worldwide_annual",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Generalized myasthenia gravis (anti-AChR antibody positive adults)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "period_type": "annual",
+  "series_role": "peak_benchmark",
+  "annual_basis": "Calendar years 2024 and 2025 from UCB's annual reports (table 'Net sales by product', worldwide, EUR million); 2023 is printed as 0 in the 2024 report and is not recorded as a row.",
+  "formulation": "injection (prefilled syringe)",
+  "route_of_administration": "subcutaneous",
+  "moa": "Complement C5 inhibitor (macrocyclic peptide)",
+  "moa_class": "c5_complement_inhibitor",
+  "first_approval_year": 2023,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2023/216834s000lbl.pdf",
+    "quote": "ZILBRYSQ (zilucoplan) injection, for subcutaneous use. Initial U.S. Approval: 2023 ... ZILBRYSQ is a complement inhibitor indicated for the treatment of generalized myasthenia gravis (gMG) in adult patients who are anti-acetylcholine receptor (AChR) antibody positive. Revised: 10/2023"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": null,
+  "notes": "Series begins in 2024 because the 2024 annual report prints the 2023 figure as 0 (US approval October 2023; no Zilbrysq net-sales line was found in the 2023 annual report). Worldwide sum of regions in the geographic table of the same reports: 2024 U.S. 56 + Europe 8 + Japan 8 = 72; 2025 U.S. 157 + Europe 35 + Japan 24 = 216 against 217 printed (International markets and rounding; the product table is the one recorded). Half-year figures exist (H1 2025 93, H1 2024 15 in the half-year report) but UCB prints no quarterly product net sales, so no quarterly series is built. Reported in EUR; no USD conversion applied.",
+  "no_quarterly_series": {
+    "reason_code": "half_year_reporting_only",
+    "source_url": "https://www.ucb.com/sites/default/files/2025-07/ucb_half-year_2025_report-en-final.pdf",
+    "source_quote": "UCB half-year report 2025, Top product net sales, EUR million, six months ended June 30 | ZILBRYSQ\u00ae 93 15 >100% >100%",
+    "details": "UCB publishes product net sales only in half-year and annual reports; its download centre lists no Q1 or Q3 report, and the HY26 Excel file gives six-month figures (ZILBRYSQ 139.3 EUR million H1 2026, 93.3 H1 2025). Half-years cannot be split into quarters with gold's derivations. Quarters are not interpolated."
+  },
+  "search_log": [
+    "Downloaded UCB's FY2023, FY2024 and FY2025 integrated annual reports and the 2025 half-year report and extracted every line naming ZILBRYSQ/zilucoplan (work/ucb.py). FY2023 report: launch text only, no net-sales line. FY2024 report: product table 72 (2023: 0). FY2025 report: 217 (2024: 72); regional table lines agree (U.S. 157, Europe 35, Japan 24 in 2025).",
+    "Half-year 2025 report prints ZILBRYSQ 93 for H1 2025 against 15 for H1 2024.",
+    "Searched Bigdata.com for UCB nine-month / third-quarter 2025 Zilbrysq net sales: no quarterly or nine-month product document found.",
+    "Did not check the FY2022 or earlier reports (no product before 2023) or the half-year 2024 report URL.",
+    "Rechecked here: UCB's download centre lists only half-year and full-year reports (HY26 documents: slides, transcript, press release, half-year report, Excel file, facts and figures); there is no first- or third-quarter report. The HY26 Excel file (sheet 'Net Sales - Prod', columns 2026 and 2025, six months) prints ZILBRYSQ\u00ae 139,272,605 against 93,332,113 EUR; no quarter is printed.",
+    "Earlier owner: Ra Pharmaceuticals (acquired by UCB; its SEC filings predate the 2023 approval); full-text search for 'zilucoplan' and 'Zilbrysq' finds Ra's pre-approval filings and competitors (Immunovant, Dianthus, argenx, Apellis), no sales figure.",
+    "Half-year-only reporting cannot give quarters, so the annual series is kept. 2026 is not complete and is not added."
+  ]
+}

@@ -478,3 +478,15 @@ Treanda,Bifunctional alkylating agent (nitrogen mustard derivative with a purine
 Uzedy,Atypical antipsychotic: serotonin 5-HT2A and dopamine D2 receptor antagonist (risperidone),atypical_antipsychotic,Subcutaneous,2023,Schizophrenia (long-acting injectable),curated_reference,distinct_product
 Protonix,Proton pump inhibitor (H+/K+ ATPase inhibitor),proton_pump_inhibitor,Oral,2000,"Gastroenterology (gastroesophageal reflux disease, erosive esophagitis)",curated_reference,distinct_product
 Zavesca,"Glucosylceramide synthase inhibitor (substrate reduction therapy, miglustat)",glucosylceramide_synthase_inhibitor,Oral,2003,Gaucher disease type 1 (Niemann-Pick type C outside the US),curated_reference,distinct_product
+Glyxambi,SGLT2 inhibitor plus DPP-4 inhibitor fixed-dose combination,sglt2_dpp4_combination,Oral,2015,Type 2 diabetes,curated_reference,distinct_product
+Rezvoglar,"Long-acting basal insulin analog (insulin glargine-aglr, interchangeable biosimilar to Lantus)",insulin,Subcutaneous,2021,Diabetes,curated_reference,distinct_product
+Synjardy,SGLT2 inhibitor plus biguanide (metformin) fixed-dose combination,sglt2_metformin_combination,Oral,2015,Type 2 diabetes,curated_reference,distinct_product
+Zyprexa Relprevv,Atypical antipsychotic (D2/5-HT2A antagonist) given as a long-acting intramuscular olanzapine pamoate depot,atypical_antipsychotic,Intramuscular,2009,Schizophrenia,curated_reference,distinct_product
+Seebri Neohaler,Long-acting muscarinic antagonist,lama,Inhaled,2015,"Respiratory (COPD, LAMA)",curated_reference,distinct_product
+Utibron Neohaler,Long-acting beta2-agonist plus long-acting muscarinic antagonist fixed-dose combination (indacaterol/glycopyrronium),laba_lama_combination,Inhaled,2015,"Respiratory (COPD, LABA/LAMA fixed-dose combination)",curated_reference,distinct_product
+Winlevi,topical androgen receptor inhibitor (clascoterone),androgen_receptor_inhibitor,Topical,2020,Dermatology (acne vulgaris),curated_reference,distinct_product
+AirDuo RespiClick,Inhaled corticosteroid + long-acting beta2-agonist (fluticasone propionate/salmeterol) fixed-dose combination,ics_laba_combination,Inhaled,2017,Respiratory (asthma),curated_reference,distinct_product
+Zilbrysq,Complement C5 inhibitor (macrocyclic peptide),c5_complement_inhibitor,Subcutaneous,2023,Generalized myasthenia gravis (anti-AChR antibody positive adults),curated_reference,distinct_product
+Perforomist,"Long-acting beta2-adrenergic agonist (LABA), nebulized",long_acting_beta2_agonist,Inhalation,2007,COPD (maintenance treatment of bronchoconstriction),curated_reference,distinct_product
+Semglee,Long-acting basal insulin analog (insulin glargine biosimilar),basal_insulin_analog,Subcutaneous,2020,Diabetes mellitus (type 1 and type 2),curated_reference,distinct_product
+Wixela Inhub,Inhaled corticosteroid + long-acting beta2-agonist (generic of fluticasone/salmeterol dry powder inhaler),ics_laba_combination,Inhalation,2019,"Respiratory (asthma, COPD)",curated_reference,distinct_product

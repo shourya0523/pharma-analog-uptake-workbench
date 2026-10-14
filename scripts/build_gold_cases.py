@@ -230,6 +230,7 @@ ISSUER_TICKERS: dict[str, str | None] = {
     "Pfizer": "PFE",
     "Regeneron Pharmaceuticals": "REGN",
     "Roche": None,
+    "Shionogi": None,
     "Salix Pharmaceuticals": None,
     "Sanofi": "SNY",
     "Sarepta Therapeutics": "SRPT",

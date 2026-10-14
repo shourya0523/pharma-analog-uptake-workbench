@@ -21,7 +21,7 @@
   "launch_quarter": "2020Q1",
   "launch_evidence": {
     "url": "https://www.sec.gov/Archives/edgar/data/1553846/000155837022003806/rdhl-20211231x20f.htm",
-    "quote": "an increase in units sold for both Movantik\u00ae, which was acquired by us in April 2020, and Talicia\u00ae, which we launched in March 2020"
+    "quote": "an increase in units sold for both Movantik®, which was acquired by us in April 2020, and Talicia®, which we launched in March 2020"
   },
   "commercial_start_quarter": "2022",
   "annual_basis": "Calendar years 2022 to 2024 from the Talicia net revenue sentences in RedHill's annual reports on Form 20-F for 2023 and 2024; the 2022 figure is the prior-year figure in the 2023 report.",
@@ -29,12 +29,14 @@
   "series_end_quarter": null,
   "series_end_basis": "issuer_stopped_reporting",
   "series_end_reason": "The 2025 annual report (rdhl-20251231x20f.htm) classifies the Talicia operations as discontinued operations after the Talicia Holdings transaction with Cumberland and prints continuing revenues of $0.3 million from a different licence; it states no Talicia net revenue for 2025. RedHill's half-year 2025 release states Talicia net revenues of $3.8 million for the first half only.",
-  "notes": "Two series were considered: the 20-F sentence 'net revenues from sales of other products (mainly Talicia)' (US$9.0 million 2021, 7.7 2022, 9.1 2023) is a wider line that is not Talicia alone (2023: 9.1 against 8.8 stated for Talicia), so only the explicit Talicia net revenue sentences are used. Half-year Talicia net revenues are also printed (H1 2022 4.0, H1 2023 5.1, H1 2024 3.5, H1 2025 3.8) but half years are not quarters.",
+  "notes": "Two series were considered: the 20-F sentence 'net revenues from sales of other products (mainly Talicia)' (US$9.0 million 2021, 7.7 2022, 9.1 2023) is a wider line that is not Talicia alone (2023: 9.1 against 8.8 stated for Talicia), so only the explicit Talicia net revenue sentences are used. Half-year Talicia net revenues are also printed (H1 2022 4.0, H1 2023 5.1, H1 2024 3.5, H1 2025 3.8) but half years are not quarters. A quarterly Talicia line exists from a later issuer but is not used: after the Talicia Holdings, Inc. transaction (October 20, 2025) Cumberland Pharmaceuticals records Talicia U.S. product sales and prints a Talicia row in its revenue note: full year 2025 3,311,235 (10-K 2025, cpix-20251231.htm, with no Talicia row in the 10-Q for September 30, 2025, so this is about ten weeks of Q4 2025), Q1 2026 1,916,481 (10-Q cpix-20260331.htm) and Q2 2026 2,349,890 (10-Q cpix-20260630.htm; six months 4,266,370), USD. Cumberland sold its branded products including Talicia to Apotex on July 1, 2026 and classifies them as discontinued operations. That is at most three quarters (one partial) under a different issuer and cannot be spliced onto RedHill's annual figures, so the RedHill annual series stands; the Cumberland quarters could support a separate short quarterly series if gold wants one.",
   "search_log": [
     "listed all RedHill 6-K filings on EDGAR from 2020-09 and read the exhibits of every one that mentions both Talicia and net revenues (quarterly results releases for Q3 2020 to Q3 2021 and FY2021, the H1/22 update, and the H1 2023, 2024 and 2025 and H1 2026 releases): the quarterly releases print only total net revenues, and no Talicia amount appears before the H1 2023 release",
     "read the Form 20-F for fiscal 2020 to fiscal 2025: Talicia net revenue sentences appear in the 2023 and 2024 reports only",
     "searched all downloaded text for Talicia-attributed dollar amounts of 7.7, 8.8, 9.0, 8.9 and 9.1 million",
-    "rows: 3 from 2022 to 2024"
+    "rows: 3 from 2022 to 2024",
+    "Opus re-check 2026-10: Cumberland Pharmaceuticals (CIK 1087294) 10-K 2025 and 10-Qs for 2025Q3, 2026Q1 and 2026Q2 read; Talicia row present in the 10-K 2025 (3,311,235) and the 2026 10-Qs (1,916,481; 2,349,890; six months 4,266,370); no Talicia row in the 10-Q for September 30, 2025. 10-K text: 'Through a co-commercialization agreement, we assumed responsibility for the distribution and sale of Talicia in the U.S. Cumberland records Talicia product sales and equally shares Talicia's net revenues.'",
+    "RedHill quarterly releases (2020-2021) print total net revenues only; from 2022 RedHill reports half-years and years, so no RedHill quarter can be derived (H1 and full year give only H2)."
   ],
   "no_quarterly_series": {
     "reason_code": "half_year_reporting_only",

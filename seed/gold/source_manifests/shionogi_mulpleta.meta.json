@@ -2,14 +2,11 @@
   "drug_name": "Mulpleta",
   "generic_name": "lusutrombopag",
   "manufacturer": "Shionogi",
-  "benchmark_identity": "shionogi_mulpleta_japan_annual",
+  "benchmark_identity": "shionogi_mulpleta_japan_reported",
   "therapeutic_area": "Rare Disease / Hematology",
   "indication_area": "Thrombocytopenia in adult patients with chronic liver disease scheduled to undergo a procedure",
-  "revenue_scope": "Japan domestic prescription-drug sales of Mulpleta by Shionogi, fiscal year April-March; period is the calendar year in which the fiscal year begins",
+  "revenue_scope": "Mulpleta line in Shionogi's 'Sales of Prescription Drugs in Japan' table",
   "geography": "Japan",
-  "period_type": "annual",
-  "series_role": "peak_benchmark",
-  "annual_basis": "Shionogi's fiscal years 2016-2023 (April-March) from the 'Sales of Prescription Drugs in Japan' table of each year's own results presentation or supplement, where Mulpleta is itemised in Japan. Each period is relabelled as the year in which the April-March fiscal year ends (FY2016 = April 2016-March 2017 is period 2017).",
   "formulation": "tablet",
   "route_of_administration": "oral",
   "moa": "thrombopoietin (TPO) receptor agonist",
@@ -25,24 +22,18 @@
     "url": "https://www.shionogi.com/content/dam/shionogi/global/investors/pdf/sup16_05.pdf",
     "quote": "S-888711 (lusutrombopag) [Japan: Mulpleta] Thrombopoetin (TPO) receptor agonist (oral) Thrombocytopenia associated with chronic liver disease Japan: Approval (Sep. 2015)"
   },
-  "commercial_start_quarter": null,
-  "series_start_reason": "FY2016 is the first fiscal year in which a Mulpleta figure was found; Mulpleta was approved in Japan in September 2015 (FY2015) and the FY2015 supplement (sup16_05.pdf) and presentation (e_p160511.pdf) were searched and print no Mulpleta sales figure.",
-  "series_end_quarter": null,
+  "commercial_start_quarter": "2016Q2",
+  "series_start_reason": "Mulpleta was approved in Japan in September 2015 (launch_evidence). The first quarter for which a figure can be read is FY2016 Q1 (April-June 2016 = 2016Q2), from the prior-year column of the FY2017 Q1 presentation (e_p170731.pdf). The FY2015 results documents (sup16_05.pdf, e_p160511.pdf) and the FY2016 Q1-Q3 presentations (e_p160801.pdf, e_p161031_1/_2.pdf, e_p161101.pdf, e_p170202.pdf) name Mulpleta only in text or pipeline pages, with no sales figure; the FY2016 results presentation (e_p170510.pdf) prints the year only to one decimal (0.1). No Shionogi document located dates the Japanese launch quarter, so launch_quarter is null.",
+  "series_end_quarter": "2020Q1",
   "series_end_basis": "issuer_stopped_reporting",
-  "series_end_reason": "The FY2023 supplement (FY2023.4Q_Supplement.pdf) prints '-' as the FY2024 forecast for Mulpleta and states 'Others in prescription drugs for FY2024 include revenue from MULPLETA and PIRESPA'; the FY2024 results presentation (E_FY2024_financial results_f1.pdf) has no Mulpleta line. The last fiscal year with a figure is FY2023 (period 2023, April 2023-March 2024); series_end_quarter is null because the series is annual.",
-  "notes": "Japan-only series in billions of yen. Values are 0.1-0.2 B yen (100-200 million yen) a year and are printed to one decimal place from FY2020, so rounding is a large share of each value (two decimals are printed for FY2018 and FY2019). FY2017 is 0.2 in its own supplement and 0.16 in the FY2018 presentation's prior-year column. A separate U.S. Mulpleta line exists but is not used: e_p200511.pdf p11 ('Sales by Segment', B yen) prints 'Mulpleta 1.0 1.0 0.54 54.3 0.08* -* 0.5' on the row directly beneath 'Shionogi Inc.' (columns FY2019 forecast, revised forecast, FY2019 results, achievement %, FY2018 results, changes), i.e. U.S. FY2019 0.54 and FY2018 0.08, with the footnote '* The full-scale promotion was initiated in Dec. 2018'; e_p190509.pdf p15 prints 'Mulpleta 1.0 0.25 0.08' for FY2018. That line covers only FY2018-FY2019 and the Q1 FY2020 presentation says 'US: Decrease in Mulpleta sales' without a figure, so the Japan series is kept as the longer consistent span. The Japan series is 0.1-0.2 B yen, so rounding to one decimal can be up to about 50 percent of a value. Mulpleta is also sold in China by Eddingpharm (partner), with no sales figure found.",
-  "no_quarterly_series": {
-    "reason_code": "quarterly_values_below_reporting_precision",
-    "source_url": "https://www.shionogi.com/content/dam/shionogi/global/investors/ir-library/presentation/2022/4q/E_FY2022.4Q_Supplement.pdf",
-    "source_quote": "Shionogi FY2022 supplement, 9-1 quarterly trend for FY2021 and FY2022 (revenue by segment), B yen, actual and year-on-year change % for 1Q-4Q | MULPLETA 0.0 (12.4) 0.0 (3.0) 0.0 (23.2) 0.0 (29.1)",
-    "details": "Shionogi's quarterly-trend tables print Mulpleta for each quarter as 0.0 billion yen (to one decimal), i.e. below the precision of the table, so no quarterly value can be read; the annual figures are used instead."
-  },
+  "series_end_reason": "From FY2020 Shionogi prints the Japan Mulpleta line to one decimal of a billion yen only: the FY2020 cumulative figures are 0.0 (three months, e-P-200731.pdf), 0.1 (six months, e_201102.pdf), 0.1 (nine months, e_210201.pdf) and 0.1 (twelve months, e_210510.pdf), and the supplements' quarterly-trend tables print every quarter from FY2020 as 0.0 (e.g. E_FY2022.4Q_Supplement.pdf 'MULPLETA 0.0 (12.4) 0.0 (3.0) 0.0 (23.2) 0.0 (29.1)'). A quarter can no longer be resolved, so the series ends at FY2019 Q4 (January-March 2020 = 2020Q1). Full-year figures continue at 0.1 B yen through FY2023 (see notes); the FY2023 supplement states that from FY2024 Mulpleta is included in 'Others'.",
+  "notes": "FY2016-FY2019 presentations print the Japan line as fiscal year-to-date cumulative figures in billions of yen to two decimals. Fiscal Q1 rows are read directly; later quarters are cumulative less the previous cumulative figure (year_to_date_less_reported_quarters). FY2016 cumulative figures (0.03, 0.06, 0.09, 0.13) are the prior-year columns of the FY2017 documents. Each cumulative figure carries up to 0.005 B yen of rounding, so a derived quarter of 0.02-0.05 B yen can be off by 0.01 B yen (up to half its value). The FY2018 Q1 presentation is published at a URL named e_p170730.pdf although its title is 'Overview of 1Q FY2018 Financial Results'. Prior-year columns agree with the figures printed the year before, except FY2017 full year: 0.16 in the FY2017 presentation and in the FY2018 presentation's prior-year column, 0.2 in the FY2017 supplement (one decimal). Annual Japan figures after the series end (one decimal, B yen): FY2020 0.1, FY2021 0.1, FY2022 0.1, FY2023 0.1. A separate U.S. Mulpleta line under Shionogi Inc. exists for FY2018-FY2019 only (FY2018 0.08; FY2019 cumulative 0.15, 0.34, 0.43, 0.54 in e_p190729.pdf, e_p191030.pdf, e_p200203.pdf, e_p200511.pdf); it is shorter and a different scope, so it is not used. Mulpleta is sold in China by a licensee (Eddingpharm); no figure found. Replaces the annual series shionogi_mulpleta_annual.csv.",
   "search_log": [
-    "Scanned ~130 of the 359 English documents linked from shionogi.com's presentation-materials and financial-results-supplement pages for Mulpleta lines, then opened each fiscal year's Q4 presentation or supplement directly (FY2016-FY2023 under /content/dam/shionogi/global/investors/pdf/ and /ir-library/presentation/).",
-    "Mulpleta appears under 'Sales of Prescription Drugs in Japan' (or 'Revenue of Prescription Drugs in Japan') in B yen; no Japan or worldwide quarterly figure above 0.0/0.1 is printed.",
-    "FY2015 Q4 documents (sup16_05.pdf, e_p160511.pdf) searched: no Mulpleta figure.",
-    "Other issuers: Eddingpharm (China licensee) was not searched; no U.S. or worldwide Mulpleta net sales document was located.",
-    "Re-read e_p200511.pdf p11 with pdfplumber: 'Sales by Segment' lists 'Shionogi Inc.' and then 'Mulpleta' (0.54 FY2019, 0.08 FY2018), so the earlier unidentified line is the U.S. (Shionogi Inc.) line; its span is FY2018-FY2019 only, so it was not used for the series."
-  ],
-  "annual_period_basis": "fiscal_year_ending_march"
+    "Downloaded the 210 English PDFs linked from shionogi.com's presentation-materials and financial-results-supplement pages from FY2015 onward and extracted all pages with pdfplumber; listed every line naming Mulpleta with a figure.",
+    "Japan line 'Mulpleta' with two-decimal cumulative figures found in: e_p170731.pdf (FY2017 Q1: 0.05, prior 0.03), e_p171030.pdf (H1: 0.08, prior 0.06), e_p180205.pdf (nine months: 0.13, prior 0.09), e_p180510_e.pdf (FY: 0.16, prior 0.13), e_p170730.pdf (FY2018 Q1: 0.05), e_p181029.pdf (0.08), e_p190131.pdf (0.13), e_p190509.pdf (0.15, prior 0.16), e_p190729.pdf (FY2019 Q1: 0.03, prior 0.05), e_p191030.pdf (0.07, prior 0.08), e_p200203.pdf (0.11, prior 0.13), e_p200511.pdf (0.13, prior 0.15).",
+    "FY2016 own documents (e_p160801.pdf, e_p161031_1.pdf, e_p161031_2.pdf, e_p161101.pdf, e_p170202.pdf, sup16_10.pdf) checked: Mulpleta named in text or pipeline only, no sales figure. FY2015 Q4 documents (sup16_05.pdf, e_p160511.pdf): no figure.",
+    "FY2020 onward: presentations print one decimal (0.0/0.1) and supplements' quarterly-trend tables print 0.0 for every quarter; no quarter can be resolved.",
+    "Other issuers: Eddingpharm (China) is not a reporting issuer in EDGAR; no partner figure found for Japan or China.",
+    "Verifier run on staging: 16 rows, 16 pass."
+  ]
 }

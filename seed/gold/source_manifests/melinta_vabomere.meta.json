@@ -25,7 +25,7 @@
   "series_end_quarter": "2018",
   "series_end_basis": "issuer_stopped_reporting",
   "series_end_reason": "Melinta filed 10-Qs for 2019 Q1-Q3 (the last filing in EDGAR submissions is the 10-Q of 2019-11-12) and no FY2019 10-K; none of those 10-Qs has a by-product table, and Melinta's Q1-Q3 2019 releases and 10-Qs give only total product sales. Melinta went through bankruptcy in December 2019 and the product is now sold under Menarini, a private company.",
-  "notes": "The royalty-agreement sentence '$74,178 for 2018' in the same 10-K is a royalty threshold, not Vabomere sales. FY2018 product sales by product: Baxdela 6,485; Vabomere 7,416; Orbactiv 22,951; Minocin for injection 9,728; total 46,580 (USD thousands).",
+  "notes": "The royalty-agreement sentence '$74,178 for 2018' in the same 10-K is a royalty threshold, not Vabomere sales. FY2018 product sales by product: Baxdela 6,485; Vabomere 7,416; Orbactiv 22,951; Minocin for injection 9,728; total 46,580 (USD thousands). Re-checked: Melinta's quarterly releases and 10-Qs give only total product sales (e.g. Q1 2019 release 'Product sales, net $ 11,775 $ 11,846'), and The Medicines Company's 2018-2019 filings carry only the royalty terms ('tiered royalty payments of 5% to 25% on worldwide net sales of (a) Vabomere'), never a sales amount. No quarterly, half-year or other annual Vabomere figure exists, so the single-year annual series stands.",
   "no_quarterly_series": {
     "reason_code": "annual_product_split_only",
     "source_url": "https://www.sec.gov/Archives/edgar/data/1461993/000146199319000059/mlnt-093019x10q.htm",
@@ -38,6 +38,9 @@
     "The Medicines Company (CIK 1113481) FY2017 10-K, Q2/Q3 2017 and Q1 2018 10-Qs searched: Vabomere appears only in the royalty/sale-of-business description, no sales figure",
     "No FY2019 report exists (last Melinta filing 2019-11-12 10-Q); Menarini is private",
     "Bigdata.com search for Vabomere net product sales returned nothing",
-    "FDA approval letter NDA 209776 fetched and read (08/29/2017)"
+    "FDA approval letter NDA 209776 fetched and read (08/29/2017)",
+    "Opus re-check 2026-10: listed Melinta (CIK 1461993) 10-K/10-K/A/10-Q/8-K/8-K/A from 2018 (49 filings), downloaded each primary document and every ex99 exhibit (76 files), and listed every table row and sentence naming Vabomere near a dollar figure: the only Vabomere sales figure is the FY2018 10-K product table (7,416); release tables (Q1 2018-Q2 2019) print 'Product sales, net' in total; the 10-K/A 2017 rows 'U.S. net sales of Vabomere:' are milestone thresholds.",
+    "The Medicines Company (CIK 1113481) 10-K 2017 and 2018 and 10-Qs Q3 2017-Q3 2019 searched for Vabomere near 'net sales'/'royalt' with a dollar figure: royalty and milestone terms only, no Vabomere sales or royalty-income amount.",
+    "Menarini (ex-U.S. licensee from September 2018, and U.S. owner after Melinta's 2019-2020 restructuring) is private; no published figure. Bigdata.com was unavailable (credits exhausted) for this re-check."
   ]
 }

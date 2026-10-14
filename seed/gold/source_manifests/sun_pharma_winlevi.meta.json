@@ -1,0 +1,51 @@
+{
+  "drug_name": "Winlevi",
+  "generic_name": "clascoterone",
+  "manufacturer": "Sun Pharmaceutical Industries Ltd. (U.S. licensee); licensor and supplier Cosmo Pharmaceuticals N.V.",
+  "benchmark_identity": "sun_pharma_winlevi_partner_net_sales_reported",
+  "therapeutic_area": "Immunology / Inflammation",
+  "indication_area": "Dermatology (acne vulgaris)",
+  "revenue_scope": "Net sales of Winlevi by licensee Sun Pharma, as stated in Cosmo's revenue discussion",
+  "geography": "United States (Sun Pharma's only market until its September 2023 Canadian launch)",
+  "formulation": "cream 1%",
+  "route_of_administration": "Topical",
+  "moa": "topical androgen receptor inhibitor (clascoterone)",
+  "moa_class": "androgen_receptor_inhibitor",
+  "first_approval_year": 2020,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2020/213433Orig1s000ltr.pdf",
+    "quote": "This new drug application provides for the use of Winlevi (clascoterone) cream for the topical treatment of acne vulgaris in patients 12 years of age and older. ... It is approved, effective on the date of this letter (NDA 213433, signed 08/26/2020)."
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": null,
+  "period_type": "annual",
+  "series_role": "peak_benchmark",
+  "annual_basis": "Calendar years 2021 and 2022 from the partner-net-sales sentence in Cosmo Pharmaceuticals' Annual Report 2022; 2021 is the comparative figure in that sentence (Sun launched on 1 November 2021, so 2021 covers about two months).",
+  "launch_evidence": {
+    "year": 2021,
+    "url": "https://cdn.sanity.io/files/7t16jqp9/production/3f685c222bd95bf67eed66626f6a3bfe6e1063c8.pdf",
+    "quote": "Sun Pharma launched Winlevi\u00ae in the U.S. on 1 November 2021."
+  },
+  "series_start_reason": "2021 is the launch year (Sun Pharma launched in the U.S. on 1 November 2021); 2021 is a partial year.",
+  "series_end_quarter": null,
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Cosmo's Annual Reports 2023, 2024 and 2025 and its half-year reports 2022-2026 give Winlevi revenue to Cosmo (supply, royalties, milestones) but no longer print Sun Pharma's net sales; Sun Pharma does not report Winlevi separately.",
+  "no_quarterly_series": {
+    "reason_code": "aggregated_with_other_products",
+    "source_url": "https://sunpharma.com/wp-content/uploads/2025/05/Press-Release-Sun-Pharma-Q4FY25-Financial-Result.pdf",
+    "source_quote": "Sun Pharma Q4FY25 results press release, Global Specialty paragraph: Global Specialty sales were US$ 295 million for Q4FY25, up 8.6% over Q4 last year and accounted for 19.9% of total consolidated sales for the quarter. (Winlevi is not broken out.)",
+    "details": "Sun Pharma reports Winlevi inside Global Specialty (FY2022-FY2025) and Global Innovative Medicines (FY2026 onward) with no product line; on its Q3 FY2022 earnings call (31 Jan 2022, Bigdata.com document 13534ED27D345E6FDF5E957A402682A5) management said 'For competitive and strategic reasons, we will not be able to share granular details on WINLEVI on this call' and repeated that on the Q4 FY2022 call. Cosmo prints Winlevi revenue to itself, and annual partner net sales only in the 2022 report."
+  },
+  "notes": "Cosmo's 'Winlevi (Derma)' revenue line (EUR 17,170 thousand in 2025, 13,561 in 2024) is Cosmo's own supply, royalty and milestone income, a different scope, and is not used. Only the 2022 report states partner net sales.",
+  "search_log": [
+    "Reopened because the earlier exclusion searched only Cosmo's 2025 annual report and 2026 half-year report. Downloaded every report linked from Cosmo's key-financial-reports page (annual reports 2019-2025, half-year reports 2020-2026, pro forma statements, ESG reports) and searched each with pdftotext for 'net sales' near Winlevi or Sun Pharma, and for 'US$ ... million' near Winlevi.",
+    "Annual Report and Accounts 2022 (rung c, partner/licensor): 'Winlevi net sales by our partner Sun Pharmaceuticals Ltd. (Sun Pharma) were US$25.1 million (2021: US$2.8 million)', printed twice (Directors' report and revenue note); this gives 2021 and 2022.",
+    "Annual Reports 2023, 2024, 2025 and the preliminary 2023 report: Winlevi appears as Cosmo revenue (EUR 19.5 million 2023, 17.4 million 2024, 17.2 million recurring 2025), prescriptions written, and approvals; the only 'net sales by' sentences name Ferring, Bausch Health and Medtronic. Annual Report 2021 prints no Winlevi net sales (launch was November 2021). Half-year reports 2021-2026 print no Winlevi partner net sales. So no figure for 2023-2025 was found.",
+    "Rung a/b: Sun Pharma quarterly press releases Q1FY25, Q4FY25, Q4FY26, Q1FY27 and investor presentations print only segment totals (Global Specialty, Global Innovative Medicines); earnings calls decline to give Winlevi detail. Web searches for 2023-2025 Winlevi net sales returned no company document that prints one.",
+    "Exclusion withdrawn because rung c (partner net sales in the licensor's annual report) and rung e (annual series) apply.",
+    "Rechecked here: SEC full-text search for 'Winlevi' and 'clascoterone' (all forms, 2001-2026): hits are Sol-Gel, Sagimet, Novan, VYNE, Sienna and others naming it as a competitor; no SEC filer prints its sales. Sun Pharma and Cosmo are not SEC registrants.",
+    "Re-read Cosmo half-year reports 2022-2026 and annual reports 2023-2025 (s-mixed-14/work/cosmo2) for any 'net sales' sentence with a US$ figure: the only ones name Bausch Health (Uceris), Ferring (Cortiment) and Medtronic. HY2022 gives cumulative prescriptions (about 258,000 TRx) and Cosmo's own Winlevi income (EUR 5.6 million), not Sun's net sales.",
+    "Earlier owner: Winlevi came to Cosmo with its acquisition of Cassiopea S.p.A. (Cosmo AR 2022: 'Breezula and Winlevi were acquired as part of the acquisition of Cassiopea'); Cassiopea's own reports were not read, and Sun launched on 1 November 2021, so any Cassiopea figure could cover at most the 2021 stub already in the series.",
+    "Bigdata.com search for Winlevi net sales in 2023 returned only Sun Pharma's FY23 annual-report text (product description, 'Current Markets: US') and no figure. Quarterly derivation is impossible: no quarter, half-year or nine-month partner net-sales figure is printed anywhere; the annual series stays at 2021-2022."
+  ]
+}

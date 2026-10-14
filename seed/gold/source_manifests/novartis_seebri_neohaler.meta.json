@@ -1,0 +1,33 @@
+{
+  "drug_name": "Seebri Neohaler",
+  "generic_name": "glycopyrrolate",
+  "manufacturer": "Novartis",
+  "currency": "USD",
+  "geography": "Worldwide (combined ex-US Seebri Breezhaler and US Seebri Neohaler line; no split printed)",
+  "benchmark_identity": "novartis_seebri_neohaler_worldwide_reported",
+  "therapeutic_area": "Respiratory / Allergy",
+  "revenue_scope": "Worldwide net sales of Novartis's combined Seebri Breezhaler/Seebri Neohaler line as printed in its interim report product table. Not a US-only Seebri Neohaler line; Novartis prints no US/ex-US split, and the line is predominantly the ex-US Seebri Breezhaler brand.",
+  "route_of_administration": "inhaled",
+  "indication_area": "Respiratory (COPD, LAMA)",
+  "formulation": "inhalation powder",
+  "moa": "Long-acting muscarinic antagonist",
+  "moa_class": "lama",
+  "first_approval_year": 2015,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2015/207923Orig1s000ltr.pdf",
+    "quote": "NDA 207923 NDA APPROVAL Novartis Pharmaceuticals Corporation ... for Seebri Neohaler (glycopyrrolate) inhalation powder"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2012Q4",
+  "series_start_reason": "The ex-US brand Seebri Breezhaler has no row in the Q4 2012 or Q1 2013 reports (0001370368-13-000002, -13-000033); its Q4 2012 value (3) is the prior-year cell of the Q4 2013 report and its Q1 2013 value (6) the prior-year cell of the Q1 2014 report; the Q3 2012 prior-year cell in the Q3 2013 report is 0. The first own-report row is Q2 2013. No document dating a launch was read, so launch_quarter is null.",
+  "series_end_quarter": "2016Q4",
+  "series_end_basis": "sourcing_boundary",
+  "series_end_reason": "Novartis out-licensed US commercialization of its COPD portfolio to Sunovion: the Q2 2017 report (0001370368-17-000062) states 'In the US, Sunovion Pharmaceuticals Inc. has assumed as of December 21, 2016 US commercialization rights for Utibron Neohaler, Arcapta Neohaler and Seebri Neohaler. Novartis will continue to bring Ultibro Breezhaler, Onbrez Breezhaler and Seebri Breezhaler to patients with COPD outside of the US.' From 2017Q1 the Novartis row is therefore ex-US and a different scope, so the worldwide series ends at 2016Q4. Novartis also stopped printing the three brand rows after the Q4 2019 report, replacing them from Q1 2020 (0001370368-20-000061) with a combined 'Ultibro Group' row.",
+  "notes": "Judgement call, following the gold convention for Arcapta Neohaler: the only Novartis figure for this product is the combined Seebri Breezhaler/Seebri Neohaler line, so the series is that line and not a US-brand-only measure. No Novartis report states a US launch of Seebri Neohaler before US rights passed to Sunovion on December 21, 2016. Scope is the Novartis worldwide row, which includes US sales under the Neohaler names while Novartis held US rights: the report text names the portfolio as 'Ultibro Breezhaler/Utibron Neohaler, Onbrez Breezhaler/Arcapta Neohaler and Seebri Breezhaler/Seebri Neohaler' (Q4 2016 report, 0001370368-17-000004). The US-only figure is not printed by Novartis. Rows for 2017Q1 to 2019Q4 exist but are ex-US (see series_end_reason) and are not used. Four quarters sum to the full years printed in the Q4 reports: 2014 146, 2015 150, 2016 149; 2013 is 6+12+15+25=58 against the printed 58, and 2012 is 3.",
+  "search_log": [
+    "Listed all Novartis (CIK 1114448) filings via data.sec.gov submissions (all forms, current and older pages, not filtered to one form). Downloaded the quarterly interim financial report exhibit of every results 6-K from 2010Q2 to 2026Q2 (EX-99.2 / a*-99_2.htm, or the 6-K body for 2010) and parsed every HTML table by script, taking the row whose first cell is the brand label in the table whose header begins with the quarter (Qn YYYY).",
+    "Bigdata.com was used to locate documents; every cited URL is the sec.gov Archives original. Compared each quarter's own value with the prior-year column of the same quarter one year later and with the printed full-year totals; differences are named in notes.",
+    "Looked for a US partner or licensee that prints the brand's own sales (rung c): Sunovion (Sumitomo Pharma) assumed US commercialization rights as of 2016-12-21 per the Novartis Q2 2017 report; a Bigdata.com search of Sumitomo Pharma filings for Utibron, Seebri and Arcapta Neohaler returned no result and no Sumitomo document was obtained, so no US-only line is used.",
+    "Q4 2012 report (0001370368-13-000002) searched for Seebri: no occurrence; Q1 2013 report (0001370368-13-000033) mentions Seebri Breezhaler only in a trial narrative with no sales figure."
+  ]
+}

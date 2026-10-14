@@ -2,14 +2,11 @@
   "drug_name": "Fetroja",
   "generic_name": "cefiderocol",
   "manufacturer": "Shionogi",
-  "benchmark_identity": "shionogi_fetroja_us_annual",
+  "benchmark_identity": "shionogi_fetroja_shionogi_inc_us_reported",
   "therapeutic_area": "Infectious Disease / Vaccines",
   "indication_area": "Drug-resistant Gram-negative bacterial infections (complicated urinary tract infections; hospital-acquired and ventilator-associated bacterial pneumonia)",
-  "revenue_scope": "Shionogi Inc.",
-  "geography": "United States",
-  "period_type": "annual",
-  "series_role": "peak_benchmark",
-  "annual_basis": "Shionogi's fiscal years 2019-2025 (April-March), read from each fiscal year's own results presentation 'Revenue by Segment' table, where Fetroja is itemised under Shionogi Inc. (U.S.); FY2019 is the prior-year column of the FY2020 presentation. Each period is relabelled as the year in which the April-March fiscal year ends (FY2016 = April 2016-March 2017 is period 2017).",
+  "revenue_scope": "Fetroja line under Shionogi Inc. (U.S. subsidiary) in Shionogi's Revenue by Segment table",
+  "geography": "United States (the table's Shionogi Inc. section; Shionogi's FY2025 Q1 presentation labels it 'ShionogiInc. (US)')",
   "formulation": "powder for solution for injection",
   "route_of_administration": "intravenous",
   "moa": "siderophore cephalosporin antibacterial (cell-wall synthesis inhibitor)",
@@ -19,30 +16,23 @@
     "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2019/209445Orig1s000ltr.pdf",
     "quote": "NDA 209445 NDA APPROVAL ... FETROJA (cefiderocol) for injection ... This new drug application provides for the use of FETROJA (cefiderocol) for injection"
   },
-  "launch_quarter": null,
-  "launch_evidence": {
-    "year": 2020,
-    "url": "https://www.shionogi.com/content/dam/shionogi/global/investors/ir-library/presentation/2021/e_210510.pdf",
-    "quote": "Fetroja ** ... ** Launched in Feb. 2020"
-  },
-  "commercial_start_quarter": null,
-  "series_start_reason": "FY2019 (April 2019-March 2020) is the year containing the February 2020 U.S. launch; Shionogi prints 0.0 B yen for it.",
+  "launch_quarter": "2020Q1",
+  "commercial_start_quarter": "2020Q2",
+  "series_start_reason": "Fetroja launched in the U.S. in February 2020 (FY2019 Q4, calendar 2020Q1). The first quarter a figure can be read for is FY2020 Q1 (April-June 2020 = 2020Q2), from the prior-year column of the FY2021 Q1 presentation. FY2019 is printed only as a full year, 0.0 B yen (prior-year column of the FY2020 results presentation e_210510.pdf), so calendar 2020Q1 has no figure above the table's precision and the series starts at 2020Q2. The FY2020 Q1, Q2 and Q3 presentations (e-P-200731.pdf, e_201102.pdf, e_210201.pdf) print Shionogi Inc. but no Fetroja line.",
   "series_end_quarter": null,
   "series_end_basis": null,
   "series_end_reason": null,
-  "notes": "The line is the Fetroja row under 'Shionogi Inc.' in 'Overseas subsidiaries/export'; European sales are a separate line under the brand name Fetcroja (Shionogi B.V.) and are not included. Figures are billions of yen to one decimal place, so each year carries up to +/-50 million yen of rounding. Shionogi prints cumulative year-to-date figures only (see no_quarterly_series), so this is an annual series; quarterly values could be derived by differencing year-to-date figures from separate presentations but were not, because no single document prints both inputs. Shionogi Inc. is a subsidiary reporting inside Shionogi & Co.; Fetroja is also sold in Japan by Shionogi (approved there later), which this line does not include.",
-  "no_quarterly_series": {
-    "reason_code": "cumulative_ytd_reporting_only",
-    "source_url": "https://www.shionogi.com/content/dam/shionogi/global/investors/ir-library/presentation/2022/e_2q/e_wide_2Q_20221031_v2.pdf",
-    "source_quote": "Shionogi 2Q FY2022 presentation, Revenue by Segment (April-September cumulative) | Fetroja \u00ae - - 4.7 - 2.9 65.0 1.9",
-    "details": "Each Shionogi quarterly presentation prints the Fetroja line for the cumulative fiscal year to date (three, six, nine or twelve months), never for the single quarter; the supplements' quarterly-trend tables list Shionogi Inc. in total but not Fetroja. Quarters are not interpolated per contract."
-  },
+  "notes": "Shionogi prints the Fetroja line only as a fiscal year-to-date cumulative figure (three, six, nine or twelve months from April). Each fiscal Q1 row is the three-month figure read directly; each later quarter is that document's cumulative figure less the previous quarter's cumulative figure (year_to_date_less_reported_quarters), with the previous figure's document named in the quote. Figures are billions of yen to one decimal, so a derived quarter carries up to 0.1 B yen (100 million yen) of rounding. FY2020 cumulative figures (0.1, 0.4, 0.9) are the prior-year columns of the FY2021 Q1-Q3 presentations; the FY2020 twelve-month figure 1.7 is read from the FY2020 results presentation itself. Cross-checks: each fiscal year's quarters sum to the twelve-month figure by construction, and every prior-year column checked agrees with the figure printed the year before (e.g. FY2023 presentations print FY2022 as 1.8, 4.7, 7.3, 10.0). European sales are a separate Fetcroja line (Shionogi B.V.) and are not included; Japanese sales are not in this line. The FY2026 Q1 transcript states 'U.S. sales of Fetroja totaled ¥7.7 billion', matching 2026Q2. Replaces the annual series shionogi_fetroja_annual.csv (fiscal years 2019-2025).",
   "search_log": [
-    "Scanned the English quarterly financial-results presentations, supplements, transcripts and press-conference decks linked from shionogi.com/global/en/investors/ir-library/presentation-materials.html and financial-results-supplement.html (first ~130 documents, in alphabetical-path order, with pdfplumber) for Fetroja/Fetcroja/Mulpleta lines; not all 359 linked documents were scanned.",
-    "Fetroja appears as a separate line under Shionogi Inc. in the Revenue by Segment tables from the FY2020 results (May 2021) onward; FY2020 presentation footnote: 'Launched in Feb. 2020'.",
-    "FY2019 results presentation (e_p200511.pdf) was searched and prints no Fetroja figure; FY2019 comes from the FY2020 presentation's prior-year column (0.0).",
-    "Looked for a quarterly Fetroja figure: the 4. Quarterly trend (Revenue by segment) tables of FY2022-FY2025 supplements carry Shionogi Inc. in total, not Fetroja; the quarterly presentations carry cumulative figures only.",
-    "No other issuer was searched for Fetroja U.S. net sales (Zai Lab, the Greater China licensee, was not checked)."
+    "Fetched shionogi.com/global/en/investors/ir-library/presentation-materials.html and financial-results-supplement.html, downloaded all 210 English PDFs linked there from FY2015 onward (presentations, supplements, tanshin, transcripts) and extracted every page with pdfplumber; listed every line containing Fetroja or Fetcroja per document.",
+    "Fetroja line with figures found in each quarterly results presentation from FY2021 Q1 (e_wide_1Q..._20210802_final.pdf) to FY2026 Q1 (E_FY2026_1Q_...pdf), and in the FY2020 results presentation (e_210510.pdf); columns are forecast(s), cumulative results, achievement %, prior-year cumulative results, change %, change.",
+    "FY2020 Q1-Q3 presentations (e-P-200731.pdf, e_201102.pdf/e_201030.pdf, e_210201.pdf) and supplements sup20_10.pdf, con20_10.pdf, con21_02_e.pdf: Shionogi Inc. printed, no Fetroja line; FY2019 results (e_p200511.pdf): no Fetroja line.",
+    "Quarterly-trend tables in the FY2022-FY2025 supplements list Shionogi Inc. in total but not Fetroja, so no single-quarter figure is printed; quarters are derived from cumulative figures.",
+    "Other issuers: no partner prints U.S. Fetroja sales (Shionogi sells it itself in the U.S.); not searched further because Shionogi's own documents cover every quarter of the span.",
+    "Verifier run on staging: 25 rows, 25 pass."
   ],
-  "annual_period_basis": "fiscal_year_ending_march"
+  "launch_evidence": {
+    "url": "https://www.shionogi.com/content/dam/shionogi/global/investors/ir-library/presentation/2021/e_210510.pdf",
+    "quote": "Fetroja ** ... ** Launched in Feb. 2020"
+  }
 }

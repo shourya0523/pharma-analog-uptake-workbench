@@ -2950,6 +2950,31 @@
   ]
  },
  {
+  "drug_name": "Fetroja",
+  "manufacturer": "Shionogi",
+  "ticker": null,
+  "generic_name": "cefiderocol",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 41.45102,
+    "gold_id": "shionogi-fetroja-shionogi-inc-us-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 48.322274,
+    "gold_id": "shionogi-fetroja-shionogi-inc-us-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Vpriv",
   "manufacturer": "Shire",
   "ticker": null,
@@ -3601,25 +3626,25 @@
     "period": "2025Q1",
     "value_normalized_usd_millions": null,
     "gold_id": "adbry-excluded",
-    "why": "aggregated_with_other_products: LEO Pharma (private, files annual and interim reports) sells tralokinumab as Adbry in the U.S. and Adtralza elsewhere and prints it only inside a 'Strategic brands' line and as a growth percentage (for example 'Revenue from Adtralza/Adbry increased by 69% (CER)'); the annual reports for 2022, 2024 and 2025 were searched for a DKK figure on the brand and none is printed. No partner or royalty holder was found that prints its sales (originator AstraZeneca/MedImmune does not)."
+    "why": "aggregated_with_other_products: LEO Pharma (private, publishes annual reports and quarterly result releases) sells tralokinumab as Adbry in the U.S. and Adtralza elsewhere, and never prints a DKK figure for the brand. Its most detailed product table, the revenue note of the annual report, has carried a 'Strategic brands' line since the 2024 report (2023 comparative 1,234, 2024 2,091, 2025 3,023), but that line changes composition: the 2025 report names the strategic brands as Adtralza/Adbry, Anzupgo (launched in Germany in Q4 2024, U.S. September 2025) and Spevigo (consolidated from 30 September 2025), so it is not a brand series. The 2023 comparative predates Anzupgo's launch, but no report says the 2023 line holds Adtralza/Adbry alone, so it is not cited as an isolated brand figure. Elsewhere the brand appears only as growth rates ('Revenue from Adtralza/Adbry increased by 69% (CER)', 2024; '70% (CER)', Q3 2024; '90%', Q1 2024) and as a share ('In 2023, Adtralza/Adbry accounted for 43% of revenue for our eczema portfolio', AR 2023, which prints the eczema portfolio as DKK 2,900 million); a share is not a printed figure and was not used to derive one. Licensor AstraZeneca prints only milestones it received ('tralokinumab: sales milestones' 20 in 2023 and 110 in 2022, USD m, 20-F 2024 collaboration revenue table), not net sales."
    },
    {
     "period": "2025Q2",
     "value_normalized_usd_millions": null,
     "gold_id": "adbry-excluded",
-    "why": "aggregated_with_other_products: LEO Pharma (private, files annual and interim reports) sells tralokinumab as Adbry in the U.S. and Adtralza elsewhere and prints it only inside a 'Strategic brands' line and as a growth percentage (for example 'Revenue from Adtralza/Adbry increased by 69% (CER)'); the annual reports for 2022, 2024 and 2025 were searched for a DKK figure on the brand and none is printed. No partner or royalty holder was found that prints its sales (originator AstraZeneca/MedImmune does not)."
+    "why": "aggregated_with_other_products: LEO Pharma (private, publishes annual reports and quarterly result releases) sells tralokinumab as Adbry in the U.S. and Adtralza elsewhere, and never prints a DKK figure for the brand. Its most detailed product table, the revenue note of the annual report, has carried a 'Strategic brands' line since the 2024 report (2023 comparative 1,234, 2024 2,091, 2025 3,023), but that line changes composition: the 2025 report names the strategic brands as Adtralza/Adbry, Anzupgo (launched in Germany in Q4 2024, U.S. September 2025) and Spevigo (consolidated from 30 September 2025), so it is not a brand series. The 2023 comparative predates Anzupgo's launch, but no report says the 2023 line holds Adtralza/Adbry alone, so it is not cited as an isolated brand figure. Elsewhere the brand appears only as growth rates ('Revenue from Adtralza/Adbry increased by 69% (CER)', 2024; '70% (CER)', Q3 2024; '90%', Q1 2024) and as a share ('In 2023, Adtralza/Adbry accounted for 43% of revenue for our eczema portfolio', AR 2023, which prints the eczema portfolio as DKK 2,900 million); a share is not a printed figure and was not used to derive one. Licensor AstraZeneca prints only milestones it received ('tralokinumab: sales milestones' 20 in 2023 and 110 in 2022, USD m, 20-F 2024 collaboration revenue table), not net sales."
    },
    {
     "period": "2025Q3",
     "value_normalized_usd_millions": null,
     "gold_id": "adbry-excluded",
-    "why": "aggregated_with_other_products: LEO Pharma (private, files annual and interim reports) sells tralokinumab as Adbry in the U.S. and Adtralza elsewhere and prints it only inside a 'Strategic brands' line and as a growth percentage (for example 'Revenue from Adtralza/Adbry increased by 69% (CER)'); the annual reports for 2022, 2024 and 2025 were searched for a DKK figure on the brand and none is printed. No partner or royalty holder was found that prints its sales (originator AstraZeneca/MedImmune does not)."
+    "why": "aggregated_with_other_products: LEO Pharma (private, publishes annual reports and quarterly result releases) sells tralokinumab as Adbry in the U.S. and Adtralza elsewhere, and never prints a DKK figure for the brand. Its most detailed product table, the revenue note of the annual report, has carried a 'Strategic brands' line since the 2024 report (2023 comparative 1,234, 2024 2,091, 2025 3,023), but that line changes composition: the 2025 report names the strategic brands as Adtralza/Adbry, Anzupgo (launched in Germany in Q4 2024, U.S. September 2025) and Spevigo (consolidated from 30 September 2025), so it is not a brand series. The 2023 comparative predates Anzupgo's launch, but no report says the 2023 line holds Adtralza/Adbry alone, so it is not cited as an isolated brand figure. Elsewhere the brand appears only as growth rates ('Revenue from Adtralza/Adbry increased by 69% (CER)', 2024; '70% (CER)', Q3 2024; '90%', Q1 2024) and as a share ('In 2023, Adtralza/Adbry accounted for 43% of revenue for our eczema portfolio', AR 2023, which prints the eczema portfolio as DKK 2,900 million); a share is not a printed figure and was not used to derive one. Licensor AstraZeneca prints only milestones it received ('tralokinumab: sales milestones' 20 in 2023 and 110 in 2022, USD m, 20-F 2024 collaboration revenue table), not net sales."
    },
    {
     "period": "2025Q4",
     "value_normalized_usd_millions": null,
     "gold_id": "adbry-excluded",
-    "why": "aggregated_with_other_products: LEO Pharma (private, files annual and interim reports) sells tralokinumab as Adbry in the U.S. and Adtralza elsewhere and prints it only inside a 'Strategic brands' line and as a growth percentage (for example 'Revenue from Adtralza/Adbry increased by 69% (CER)'); the annual reports for 2022, 2024 and 2025 were searched for a DKK figure on the brand and none is printed. No partner or royalty holder was found that prints its sales (originator AstraZeneca/MedImmune does not)."
+    "why": "aggregated_with_other_products: LEO Pharma (private, publishes annual reports and quarterly result releases) sells tralokinumab as Adbry in the U.S. and Adtralza elsewhere, and never prints a DKK figure for the brand. Its most detailed product table, the revenue note of the annual report, has carried a 'Strategic brands' line since the 2024 report (2023 comparative 1,234, 2024 2,091, 2025 3,023), but that line changes composition: the 2025 report names the strategic brands as Adtralza/Adbry, Anzupgo (launched in Germany in Q4 2024, U.S. September 2025) and Spevigo (consolidated from 30 September 2025), so it is not a brand series. The 2023 comparative predates Anzupgo's launch, but no report says the 2023 line holds Adtralza/Adbry alone, so it is not cited as an isolated brand figure. Elsewhere the brand appears only as growth rates ('Revenue from Adtralza/Adbry increased by 69% (CER)', 2024; '70% (CER)', Q3 2024; '90%', Q1 2024) and as a share ('In 2023, Adtralza/Adbry accounted for 43% of revenue for our eczema portfolio', AR 2023, which prints the eczema portfolio as DKK 2,900 million); a share is not a printed figure and was not used to derive one. Licensor AstraZeneca prints only milestones it received ('tralokinumab: sales milestones' 20 in 2023 and 110 in 2022, USD m, 20-F 2024 collaboration revenue table), not net sales."
    }
   ]
  }
