@@ -1,0 +1,33 @@
+{
+  "drug_name": "Kineret",
+  "generic_name": "anakinra",
+  "manufacturer": "Sobi",
+  "benchmark_identity": "sobi_kineret_worldwide_reported",
+  "therapeutic_area": "Immunology / Inflammation",
+  "indication_area": "Autoinflammatory and rheumatic disease (rheumatoid arthritis, CAPS/NOMID, Still's disease, FMF; IL-1 blockade)",
+  "revenue_scope": "Worldwide Kineret product revenue as recorded by Sobi (its 'Kineret' / 'Inflammation: Kineret' line), SEK",
+  "geography": "Worldwide",
+  "formulation": "prefilled syringe, solution for injection",
+  "route_of_administration": "subcutaneous",
+  "moa": "recombinant human interleukin-1 receptor antagonist (blocks IL-1 alpha and beta)",
+  "moa_class": "il1_inhibitor",
+  "first_approval_year": 2001,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2012/103950s5136lbl.pdf",
+    "quote": "Kineret (anakinra) for injection, for subcutaneous use ... Initial U.S. Approval: 2001"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2011Q1",
+  "series_start_reason": "First quarter of the series, not the launch (Kineret was approved in the U.S. in 2001 and was already sold by Sobi before this series). Sobi's 2010 reports also print a Kineret line, but those quarters use comma decimals and mangled digit grouping in their text layer (Q2 2010 '113,0', Q4 2010 '1 01,3'), which the verifier reads as thousands, so the series is started at the first quarter whose line reads unambiguously. No launch quarter is cited.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Currency SEK (millions). The 2011-2017 quarters print one decimal until 2014 and integers after. Sobi's reports in this span show Kineret sales in both Europe and North America (Q4 2012 report: 'growth in both North America and ...'); co-promotion revenue from Savient (2013) and Kineret-related royalty are separate lines and are not in the Kineret line. 2011Q4 comes from the prior-year column of the Q4 2012 report because the Q4 2011 report prints only the full year. 2018Q4, 2019Q1 and 2019Q2 are read from the quarter's own results presentation (Kineret slide: 'Q4 revenue SEK 335 M', 'Revenues of SEK 346 M', 'Revenue of SEK 419 M') because the full-report PDFs of those quarters yielded no Kineret line under pdfplumber; 2019Q3-2020Q4 are read from the sobi.com report web pages (highlights text). Q4 sums vs full-year: 2011 421.9 vs printed 422.0; 2013 561.8 vs 561.7; 2014 609.4 vs 609.3; 2015 806 vs 805; 2018 1,319 vs 1,320 (Q4 2019 page); 2019 1,570 vs 1,571; 2020 2,080 vs 2,079; 2022 2,285 vs 2,284. All within rounding. 2012 quarters sum to 484.3 while the Q4 2012 report prints a full-year 484.7 (and a quarterly table showing Q4 as 130.6); the 0.4 difference is unexplained, so the full-year figure is not quoted on the 2012Q4 row. Amgen (prior owner of the product before Sobi) was not sourced; the Sobi series is continuous from 2011Q1.",
+  "search_log": [
+    "Enumerated Sobi's financial-reports pages on sobi.com (listing page /en/financial-reports plus slug probes) for every quarter 2010Q1-2026Q2 and opened the 'Read full report' PDF of each; extracted every line containing Kineret with pdfplumber.",
+    "2018Q4-2020Q4 full reports have no text layer on the product pages (pdfplumber extracted no Kineret line from any of them): the sobi.com web page of each report was read instead; Q3 2019, Q4 2019, Q1-Q4 2020 pages print the quarter's own Kineret sales in the highlights text.",
+    "Q4 2018, Q1 2019 and Q2 2019 report web pages carry no Kineret figure; the quarter's own results presentation PDFs (2018_Q4_sobi_presentation.pdf, 2019_Q1_sobi_presentation.pdf, 2019_Q2_sobi_presentation.pdf) print it on the Kineret slide and were used.",
+    "Reports before 2011 (2010Q1-Q4) print a Kineret line but with comma decimals; not used because the verifier strips commas as thousands separators.",
+    "Did not search for Amgen history or any other issuer that prints Kineret: Amgen is the licensor/manufacturer, not a seller after Sobi's takeover; not researched in this batch."
+  ]
+}

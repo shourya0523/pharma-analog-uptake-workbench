@@ -1,0 +1,42 @@
+{
+  "drug_name": "Zelnorm",
+  "generic_name": "tegaserod",
+  "manufacturer": "Novartis",
+  "benchmark_identity": "novartis_zelnorm_zelmac_worldwide_reported",
+  "therapeutic_area": "GI / Liver / Women's Health / Urology",
+  "indication_area": "Irritable bowel syndrome with constipation (IBS-C)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "oral tablet",
+  "route_of_administration": "oral",
+  "moa": "serotonin 5-HT4 receptor partial agonist",
+  "moa_class": "serotonin_5ht4_receptor_agonist",
+  "first_approval_year": 2002,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2002/21200ltr.pdf",
+    "quote": "NDA 21-200 ... Zelnorm (tegaserod maleate) Tablets ... the application is approved effective on the date of this letter (the letter refers to telephone conferences held July 18, 2002, and July 23, 2002)"
+  },
+  "launch_quarter": "2002Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1114448/000104746903004310/a2102051z6-k.htm",
+    "quote": "Zelnorm/Zelmac (constipation prone irritable bowel syndrome) has now gained approval in 28 countries including the US where it was launched in September."
+  },
+  "commercial_start_quarter": "2003Q1",
+  "series_start_reason": "Novartis prints Zelmac/Zelnorm as its own row in the quarterly top-twenty products table from the first quarter of 2004. For 2003 it prints cumulative text figures: first quarter 'USD 20 million' (6-K 0001047469-03-013548), first half 'USD 58 million', nine months 'exceeded USD 104 million' (6-K 0001047469-03-033781), full year 'exceeded USD 165 million' (6-K 0001047469-04-001627; the 20-F for 2003 says 'reached $165 million'). 2003Q1 is the direct reading; 2003Q2-Q4 are the differences between successive cumulative figures, and the nine-month and full-year inputs carry the 'exceeded' rounding caveat. The series therefore starts at 2003Q1, the earliest quarter that can be separated: the 2002 text figure (USD 45 million, September launch to year end) covers 2002Q3 and 2002Q4 together and cannot be split.",
+  "series_end_quarter": "2008Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The 2008Q4 release (6-K filed 2009-01-29) is the last to print a Zelnorm/Zelmac row. Novartis's 6-K filings from 2009-04-27 through 2011-10-25 (quarterly releases and annual-report 6-Ks) mention Zelnorm only in the product-liability litigation note and print no Zelnorm/Zelmac product row. Alfasigma, which holds Zelnorm from 2020, is a private Italian company and no public document with its Zelnorm sales was found.",
+  "notes": "Worldwide Total column of Novartis's Zelmac/Zelnorm brand line (US + Rest of world). From 2004Q1 to 2007Q1 the top-twenty table also prints the U.S. column (for example 2004Q3: US 71, Rest of world 12, Total 83); from 2007Q2 only the worldwide figure is printed, so the worldwide line is the only one that runs the whole span. Zelnorm sales in the U.S. were suspended in March 2007 (FDA request); 2007Q2 and 2007Q3 are negative as printed (returns/reserves). The quarters reconcile to the full-year figures Novartis prints: 2004 299, 2005 418, 2006 561, 2007 88, 2008 10. 2003Q1-2003Q4 are text figures and differences of cumulative text figures (20, 38, 46, 61; they sum to the 165 full year), described in series_start_reason; the U.S. portion is printed in the same sentences (first half 45, nine months 81, full year 132) but is not used.",
+  "search_log": [
+    "EDGAR submissions CIK 1114448 (Novartis AG): listed every 6-K and 20-F 2001-2012; opened every 6-K filed in the weeks after each quarter end (Jan 15-Feb 15, Apr 10-May 10, Jul 10-Aug 12, Oct 10-Nov 12) for 2002-2012 and searched all documents of each for 'Zelnorm'/'Zelmac'. Annual-report 6-Ks outside those windows were not scanned.",
+    "2002Q3-2002Q4: the 2002 fourth-quarter 6-K (0001047469-03-002458) prints only 'sales reached CHF 70 million (USD 45 million)' for the period since the September launch, so the two quarters cannot be split and are not rows. 2003Q1-2003Q4: first-quarter, first-half, nine-month and full-year 2003 6-Ks give cumulative text figures; rows are the direct 2003Q1 reading and differences of the cumulative figures (see series_start_reason).",
+    "2004Q1-2007Q1: quarter top-twenty table (US / Rest of world / Total). 2007Q2-2008Q4: franchise table, quarter column. Each row read from the quarter's own release.",
+    "Reconciliation: 2004 68+76+83+72=299; 2005 80+102+113+123=418; 2006 109+154+145+153=561; 2007 105-14-8+5=88; 2008 2+3+3+2=10, each equal to the full-year figure in the fourth-quarter release (2005-01-21: 299; 2006-01-20: 418; 2007-01-24: 561; 2008-01-23: 88; 2009-01-29: 10).",
+    "Bigdata.com used only to locate the Novartis releases; figures read from the sec.gov 6-K documents. Alfasigma / Novartis 2019-2020 hand-over: no public sales figure located.",
+    "Form 20-F for 2002 (0001047469-03-006549) and for 2003 (0001047469-04-002525) searched for every Zelnorm/Zelmac mention: they print no quarterly figure; the 2003 20-F prints the full year 'reached $165 million (US: $132 million)', used as the Q4 2003 input. Other 20-Fs 2004-2009 were not scanned."
+  ],
+  "reviewed_anomalies": {
+    "2007Q2": "Read at source: Novartis's results release prints the Zelnorm/Zelmac row as a negative figure for the quarter. Kept as printed.",
+    "2007Q3": "Read at source: Novartis's results release prints the Zelnorm/Zelmac row as a negative figure for the quarter. Kept as printed."
+  }
+}

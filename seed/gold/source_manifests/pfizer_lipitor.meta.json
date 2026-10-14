@@ -1,0 +1,55 @@
+{
+  "drug_name": "Lipitor",
+  "generic_name": "atorvastatin calcium",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Dyslipidemia / cardiovascular risk reduction",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "HMG-CoA reductase inhibitor (statin)",
+  "moa_class": "hmg_coa_reductase_inhibitor",
+  "manufacturer": "Pfizer",
+  "benchmark_identity": "pfizer_viatris_lipitor_worldwide_reported",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "first_approval_year": 1996,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2024/020702s081lbl.pdf",
+    "quote": "LIPITOR (atorvastatin calcium) tablets, for oral use  Initial U.S. Approval: 1996"
+  },
+  "launch_quarter": null,
+  "launch_evidence": null,
+  "commercial_start_quarter": "1998Q1",
+  "series_start_reason": "1998Q1 is the earliest quarter Pfizer prints Lipitor as its own worldwide product line. Pfizer's 8-K filed 2000-08-28 (https://www.sec.gov/Archives/edgar/data/78003/0000078003-00-000045.txt) re-presents the 1999 and 1998 quarterly product-revenue exhibits restated for the June 2000 Warner-Lambert pooling of interests; those exhibits print 1999Q1-Q4 as current columns and 1998Q1-Q4 as prior-year columns. Pfizer's pre-merger filings (the first-quarter 2000 Form 10-Q and the FY1999 Form 10-K) describe Lipitor as co-promotion revenue, a different scope, and the 1998 and 1999 annual totals in the restated exhibits (2,208 and 3,795) are the same as the 1998 and 1999 columns printed in the FY2001 annual report. The restated exhibits cover 1999 and 1998 only, so no earlier Pfizer-printed quarter was found. Lipitor was launched in 1997 by Warner-Lambert, whose own filings were not searched here (different issuer).",
+  "series_end_quarter": "2026Q2",
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "joined_issuers": [
+    {
+      "issuer": "Pfizer",
+      "first_quarter": "1998Q1",
+      "last_quarter": "2020Q3"
+    },
+    {
+      "issuer": "Viatris",
+      "first_quarter": "2021Q1",
+      "last_quarter": "2026Q2"
+    }
+  ],
+  "unreported_quarters": {
+    "2020Q4": "Ownership change Pfizer to Viatris. Pfizer's last Lipitor row is the third-quarter 2020 release (2020-10-27: 'Lipitor | 356 | 476'); the Upjohn business combined with Mylan to form Viatris on 2020-11-16, and Pfizer's fourth-quarter 2020 release (2021-02-02) prints no Lipitor row. Viatris first prints Lipitor in its first-quarter 2021 earnings release (2021-05-10: 'Lipitor | 464.6', no prior-year figure). Viatris's FY2020 Form 10-K (https://www.sec.gov/Archives/edgar/data/1792044/000179204421000009/vtrs-20201231.htm) names Lipitor in its business and segment text with no revenue figure, and the 2021-02-22 8-K (https://www.sec.gov/Archives/edgar/data/1792044/000119312521049856/0001193125-21-049856-index.htm) has a press release (Exhibit 99.2) that does not mention Lipitor and a slide deck (Exhibit 99.1) whose slides are images, so any Lipitor figure on a slide could not be read as text. Viatris's fourth-quarter 2021 release prints 390.3 and 1,663.2 (quarter and year) with no 2020 comparative. No text document read gives a 2020Q4 figure; the slides of the 2021-02-22 deck are the one unread possibility."
+  },
+  "notes": "Worldwide brand revenues on the pooled Pfizer / Warner-Lambert basis from 1998Q1 (Pfizer's post-June-2000 tables eliminate the intercompany Lipitor marketing transactions). Pfizer's tables print Lipitor with U.S. and international columns; the worldwide column is used for every Pfizer row. The 2000Q2-2000Q3 and 2001Q1-2001Q2 and 2002Q1 and 2002Q3 figures are read from the quarter's own Form 10-Q (product table without a U.S./international split, as the first figure of the Lipitor row); 2000Q4 is read from the fourth-quarter 2000 earnings exhibit; 2000Q1 is derived from the second-quarter 2000 Form 10-Q (six months less second quarter) and 2001Q4 from the FY2001 annual report less the nine-month 10-Q figure, because Pfizer filed no first-quarter-2000 post-merger or fourth-quarter-2001 earnings exhibit. Pfizer rows carry the printed footnote letter ('Lipitor (b)') in 2012Q2-2013Q2; the footnote states Lipitor lost exclusivity in the U.S. in November 2011 and various other markets in 2011-2012. Viatris prints Lipitor in its 'Key Product Net Sales, on a Consolidated Basis' table (Select Key Global Products, USD millions with one decimal). Scope across the handoff: the Upjohn Business Form 10 financials (Viatris CIK 1792044, https://www.sec.gov/Archives/edgar/data/1792044/000119312520167802/d781435dex991.htm) state 'Lipitor generated approximately $2.0 billion in revenues in 2019' for the business that moved to Viatris, and Pfizer's four 2019 quarters here sum to 1,973; both are worldwide brand revenue. Annual sums of Pfizer quarters: 1998 2,208 and 1999 3,796 against 3,795 printed, 2000 5,031 against 5,031 in the fourth-quarter 2000 release, 2001 6,449 against 6,449 in the annual report; later years match the twelve-month rows of each fourth-quarter release within rounding (2002 7,972; 2003 9,230 vs 9,231; 2009 11,434; 2012 3,948; 2019 1,973; others exact or off by 1). Viatris quarters sum to the FY2021 figure printed in its fourth-quarter release (1,663.2).",
+  "search_log": [
+    "EDGAR submissions index for Pfizer (CIK 0000078003, recent plus older pages) read for every filing form 1999-2002, not only 8-K earnings exhibits: 10-K, 10-K405, 10-Q, 8-K, 8-K/A.",
+    "Pfizer 10-Q second quarter 2000 (0000078003-00-000039) prints Lipitor 1,262 for the quarter and 2,381 for six months; 10-Q third quarter 2000 (0000078003-00-000049) prints 1,216 and nine months 3,597; both are post-merger pooled documents. 2000Q1 = 2,381 - 1,262 = 1,119, cross-checked by 3,597 - 1,216 - 1,262.",
+    "Pfizer 10-Q first quarter 2000 (0000078003-00-000023, filed 2000-05-17, pre-merger): no Lipitor product line; Lipitor described as co-promotion revenue. Pfizer 10-K FY1999 (0000930413-00-000548): Lipitor described in prose with third-party sales of approximately $3.7 billion (annual, alliance). Neither used.",
+    "Pfizer 8-K filed 2000-08-28 (0000078003-00-000045): five exhibits of restated segment/product revenues for first to fourth quarter and full year 1999 and 1998; Lipitor worldwide 1999: 767, 900, 995, 1,134 (full year 3,795); 1998: 375, 536, 578, 719 (full year 2,208). Used for 1998Q1-1999Q4. 8-Ks filed 2000-06-29 (0000078003-00-000031), 2000-08-16 (0000078003-00-000041) and 2000-09-01 (0000950123-00-008264) have no Lipitor product table.",
+    "Pfizer 8-K filed 2001-01-24 (0000078003-01-000004): fourth quarter 2000 Lipitor 1,434 (1,134 prior year) and full year 5,031. Pfizer 10-Q first quarter 2001 (0000078003-01-500031) 1,467; second quarter 2001 (0000078003-01-500064) 1,439; third quarter 2001 (0000078003-01-500081) 1,660 and nine months 4,566.",
+    "Pfizer FY2001 annual report Exhibit 13 (0000950123-02-003116, y58494ex13.htm) prints Lipitor 2001 6,449, 2000 5,030, 1999 3,795; the FY2001 Form 10-K main document prints no Lipitor sales figure. No Pfizer 8-K earnings exhibit was filed between 2001-10-24 and 2002-07-16, so 2001Q4 = 6,449 - 4,566 = 1,883 (equal to the prior-year column of the fourth-quarter 2002 release).",
+    "Pfizer 10-Q first quarter 2002 (0000078003-02-000025) 1,852; second quarter 2002 (0000078003-02-000069) 1,783; third quarter 2002 (0000078003-02-000102) 2,020; each equal to the prior-year column of the corresponding 2003 release. 2001Q3, 2002Q2 and 2002Q4 onward are read from the quarter's own earnings exhibit.",
+    "Pfizer 2020Q4: Q4 2020 release (2021-02-02) and Q1-Q4 2021 releases checked - no Lipitor row (Upjohn divested 2020-11-16).",
+    "Viatris (CIK 0001792044): listed all 8-K Item 2.02 filings plus the 2021-11-08 8-K (Item 9.01, EX-99.1 third-quarter 2021 release); Lipitor row read from every earnings release 2021Q1-2026Q2; Upjohn Inc. 2020-05-29 8-K exhibit 99.1 and 2020-06-12 Form 10 exhibit 99.1 searched for quarterly Lipitor sales: only 'approximately $2.0 billion in revenues in 2019' (annual, prose); Viatris FY2020 10-K searched for Lipitor revenue: none; Viatris 8-K 2021-02-22 exhibits 99.1 (slide images) and 99.2 (no Lipitor mention) read.",
+    "Not searched: Warner-Lambert Company filings for 1997-1999 (the issuer before the merger), so the series is not extended before 1998Q1.",
+    "Fallbacks a-e not needed: the series is a printed line from 1998Q1 to 2026Q2."
+  ]
+}

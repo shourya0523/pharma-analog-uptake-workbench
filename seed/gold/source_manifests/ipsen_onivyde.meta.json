@@ -1,0 +1,38 @@
+{
+  "drug_name": "Onivyde",
+  "generic_name": "irinotecan liposome injection",
+  "manufacturer": "Ipsen",
+  "benchmark_identity": "ipsen_onivyde_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (solid, metastatic pancreatic adenocarcinoma)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "liposomal injection",
+  "route_of_administration": "intravenous",
+  "moa": "Liposome-encapsulated topoisomerase I inhibitor (irinotecan)",
+  "moa_class": "liposomal_topoisomerase_i_inhibitor",
+  "first_approval_year": 2015,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2015/207793Orig1s000ltr.pdf",
+    "quote": "This new drug application provides for the use of Onivyde (irinotecan liposome injection), in combination with 5-fluorouracil and leucovorin, for the treatment of patients with metastatic adenocarcinoma of the pancreas that has progressed following gemcitabine-based therapy."
+  },
+  "launch_quarter": "2015Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1274792/000119312516478329/d135186dex991.htm",
+    "quote": "launched ONIVYDE in the United States on October 26, 2015"
+  },
+  "commercial_start_quarter": "2017Q2",
+  "series_start_reason": "Series starts at the first quarter Ipsen owned the product: Ipsen's H1 2018 announcement states the first-half 2017 figure of EUR 19.3 million 'includes only one quarter of sales following the acquisition completed in early April 2017'. Onivyde launched in the U.S. in October 2015 under Merrimack Pharmaceuticals, which printed U.S. commercial net product revenue in USD (2015Q4 4,328 thousand; 2016Q1 9,968 thousand; 2016Q2 12.9 million; 2016Q3 14.5 million; 2016Q4 15,752 thousand; Merrimack 8-K exhibits 99.1). That series is a different scope (U.S. commercial sales only) and a different currency, so it is not spliced onto Ipsen's EUR group line (rule: keep the longest consistent span).",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Scope is Ipsen's Group net sales of Onivyde in EUR millions, as printed in the 'Total sales by therapy area and medicine' table of each results announcement. The line includes U.S. direct sales and sales to Ipsen's partner for territories outside the United States (Ipsen annual report 2020: 'This figure includes direct sales in the United States as well as sales to Servier, at supplier prices'; earlier releases name Shire as the ex-U.S. partner). Ipsen's geographic appendix splits the line into North America, Europe and Rest of World columns that sum to the total (FY2025: 173.2 + 32.4 + 1.8 = 207.4), so the total is the worldwide line. Annual cross-check against the stated full year: 2017 19.3+17.9+19.7=56.9, 2018 109.5 (printed 109.4, rounding), 2019 134.7, 2020 123.3, 2021 127.4, 2022 162.4, 2023 163.7, 2024 202.3, 2025 207.5 (printed 207.4, rounding). Q2, Q3 and Q4 are read from the quarter column of the half-year, nine-month and full-year announcements, which print the quarter as current. No fiscal mapping: Ipsen reports on calendar quarters. The 2017Q2 figure is the prior-year column of the H1 2018 announcement and 2017Q3 comes from the regulator-hosted copy of the Q3 2017 announcement, because Ipsen's own 2017 half-year announcement was not located.",
+  "search_log": [
+    "Bigdata.com smart searches 'Ipsen Onivyde net sales first quarter 2018' and 'Merrimack ONIVYDE net product revenue fourth quarter 2015' returned no chunks; 'Ipsen Onivyde sales growth million euros' located the 2019-2021 Ipsen releases and the 2020 annual report sentence on scope. App.bigdata.com links were not cited.",
+    "Ipsen: listed the press_release post type of ipsen.com through its WordPress REST API (search terms sales, results, quarter, first half, nine months, full-year, years 2017-2021) and opened every results and sales announcement page 2018-02-15 to 2026-07-30 (35 announcements: FY, Q1, H1, nine-month for each year, with the first PDF of each page being the results announcement); extracted every line beginning 'Onivyde' with pdfplumber (the text the verifier reads). Each of the 35 prints the quarter as current.",
+    "Ipsen's pre-2018 announcements are not on the current ipsen.com press-release list. Q3 2017 (26 October 2017) was found as a regulator-hosted copy in the AMF open data (echanges.dila.gouv.fr, BWR 2017/10). The H1 2017 announcement was not located: scanned the first page of every PDF in the AMF BWR 2017/07 index for 'Ipsen' (only two Somatuline announcements of 2017-07-03 and two of 2017-07-21 matched) and a web search; the Q1 2017 announcement was not read in full (the acquisition closed in April 2017, so Ipsen reports no Onivyde sales of its own before 2017Q2 - the H1 2018 announcement states the first half of 2017 included one quarter of sales).",
+    "Rung 12d prior owner: Merrimack (CIK 1274792) Form 8-K exhibit 99.1 earnings releases 2015-11 to 2018-05 and Form 10-Q/10-K 2015-11 to 2018-05 downloaded; ONIVYDE U.S. net product revenue is printed for 2015Q4 to 2016Q4 (USD); no Onivyde revenue sentence was found in the Q1 2017 Form 10-Q (filed 2017-05-10) or later. Not spliced (see series_start_reason).",
+    "The FY2017 announcement says Onivyde sales of EUR 56.9 million represent 'three quarters of sales in the U.S. following the completion of the acquisition from Merrimack in April 2017', which matches 2017Q2-Q4 being the first three consolidated quarters.",
+    "Sums of the four quarters were compared with the full-year figure of each Q4 announcement (see notes); differences are at most 0.1 from rounding."
+  ]
+}

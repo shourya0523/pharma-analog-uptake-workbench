@@ -1,0 +1,43 @@
+{
+  "drug_name": "Vabomere",
+  "generic_name": "meropenem and vaborbactam",
+  "manufacturer": "Melinta",
+  "benchmark_identity": "melinta_vabomere_product_sales_annual",
+  "therapeutic_area": "Infectious Disease / Vaccines",
+  "indication_area": "Complicated urinary tract infections (cUTI), including pyelonephritis",
+  "revenue_scope": "Product sales, net, by product",
+  "geography": "Not labelled in the table; the note states Vabomere is distributed commercially in the United States",
+  "period_type": "annual",
+  "series_role": "peak_benchmark",
+  "annual_basis": "Calendar year 2018, the only year in which a Vabomere product-sales figure is printed: Melinta's FY2018 10-K product table.",
+  "formulation": "powder for intravenous injection",
+  "route_of_administration": "intravenous",
+  "moa": "Carbapenem antibacterial (meropenem) with a beta-lactamase inhibitor (vaborbactam)",
+  "moa_class": "carbapenem_beta_lactamase_inhibitor_combination",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2017/209776Orig1s000ltr.pdf",
+    "quote": "This new drug application provides for the use of VABOMERE powder for injection, for treatment of patients 18 years of age and older with complicated Urinary Tract Infections (cUTI), including pyelonephritis. (FDA approval letter, NDA 209776, signed 08/29/2017)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2018",
+  "series_start_reason": "Melinta acquired Vabomere with The Medicines Company's infectious disease business on January 5, 2018 and first prints a Vabomere product line in the FY2018 10-K. The Medicines Company (which held the product in 2017) treated the business as held for sale and its FY2017 10-K and Q1 2018 10-Q contain no Vabomere sales figure.",
+  "series_end_quarter": "2018",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Melinta filed 10-Qs for 2019 Q1-Q3 (the last filing in EDGAR submissions is the 10-Q of 2019-11-12) and no FY2019 10-K; none of those 10-Qs has a by-product table, and Melinta's Q1-Q3 2019 releases and 10-Qs give only total product sales. Melinta went through bankruptcy in December 2019 and the product is now sold under Menarini, a private company.",
+  "notes": "The royalty-agreement sentence '$74,178 for 2018' in the same 10-K is a royalty threshold, not Vabomere sales. FY2018 product sales by product: Baxdela 6,485; Vabomere 7,416; Orbactiv 22,951; Minocin for injection 9,728; total 46,580 (USD thousands).",
+  "no_quarterly_series": {
+    "reason_code": "annual_product_split_only",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1461993/000146199319000059/mlnt-093019x10q.htm",
+    "source_quote": "Melinta Therapeutics 10-Q for September 30, 2019, statement of operations, product sales, net, three months ended September 30 2019 then 2018, then nine months 2019 then 2018, USD thousands (total product sales; no by-product row) | 15,770 | 11,028 | 41,370 | 32,026",
+    "details": "Melinta's quarterly 10-Qs and earnings releases (Q1 2018 through Q3 2019) print only total net product sales; Vabomere appears by name only in text. The by-product table exists only in the FY2018 10-K. Quarters are not interpolated."
+  },
+  "search_log": [
+    "EDGAR submissions for Melinta (CIK 1461993): downloaded every 10-K, 10-K/A and 10-Q from 2017 to 2019 and read all table rows; the only row labelled Vabomere with a sales figure is in the FY2018 10-K (7,416)",
+    "Earnings-release exhibits for Q4 2017 through Q2 2019 (8-Ks listed in the submissions) searched for Vabomere: mentions only qualitatively, no sales figure",
+    "The Medicines Company (CIK 1113481) FY2017 10-K, Q2/Q3 2017 and Q1 2018 10-Qs searched: Vabomere appears only in the royalty/sale-of-business description, no sales figure",
+    "No FY2019 report exists (last Melinta filing 2019-11-12 10-Q); Menarini is private",
+    "Bigdata.com search for Vabomere net product sales returned nothing",
+    "FDA approval letter NDA 209776 fetched and read (08/29/2017)"
+  ]
+}

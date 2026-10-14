@@ -1,0 +1,39 @@
+{
+  "manufacturer": "Novo Nordisk",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "series_end_quarter": "2025Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "From the Q1 2026 report the brand is no longer a separate line; it sits within a therapy-class line whose footnote names it (long-acting insulin 'Comprises Tresiba, Xultophy, Levemir and Awiqli'). Q1 2026 and Q2 2026 contain no row for the brand.",
+  "series_start_reason": "Q1 2018 is the first report with Fiasp as its own table line. The 2017 reports (Q1-Q4 6-Ks f6k_050417, f6k_080917, f6k_110117, f6k_020118) mention Fiasp only in approval, launch-country and pipeline text with no sales figure; the 2017 sales of 3 (Q1), 16 (H1), 49 (9M) and 99 (FY) appear only as prior-year columns of the 2018 reports and are not used.",
+  "drug_name": "Fiasp",
+  "generic_name": "insulin aspart",
+  "benchmark_identity": "novo_fiasp_worldwide_reported",
+  "indication_area": "Diabetes (rapid-acting mealtime insulin)",
+  "formulation": "injection (pen/cartridge/vial)",
+  "route_of_administration": "subcutaneous",
+  "moa": "Rapid-acting insulin analogue (insulin aspart with niacinamide for faster onset)",
+  "moa_class": "insulin",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=208751",
+    "quote": "09/29/2017 ORIG-1 Approval N/A"
+  },
+  "launch_quarter": "2017Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/353278/000117184317002818/f6k_050417.htm",
+    "quote": "In the first quarter of 2017, Fiasp, fast-acting insulin aspart, received marketing authorisation from the European Commission as well as approvals in Norway, Iceland and Canada. Fiasp has now been launched in the first European countries as well as Canada."
+  },
+  "commercial_start_quarter": "2018Q1",
+  "notes": "Worldwide net sales in DKK million as printed. 2018Q2 and 2018Q3 are year-to-date less the preceding year-to-date; the Q4 2018 report prints the first quarter-only regional row, and every later quarter is read directly. 2024Q4 (343, US column (92)) and 2025Q1 (834, US column 406) show large US-column swings against the adjacent quarters; they are kept as printed and the cause was not established from the documents read. The first_approval_year is the FDA approval (the EU authorisation was January 2017).",
+  "search_log": [
+    "listed all CIK 0000353278 filings via data.sec.gov/submissions (recent + CIK0000353278-submissions-001.json): foreign private issuer, quarterly reports are Form 6-K exhibits; no 8-K, 8-K/A or 10-Q forms",
+    "each quarter read from that quarter's own financial report: 2009Q1-2017Q4 6-K exhibits (c1005xx..f6k_*.htm names), 2018Q1 and 2018Q2 from the novonordisk.com PDFs (the EDGAR copies render tables as images), 2018Q3-2025Q4 caq{q}{yyyy}.htm exhibits",
+    "every figure was read programmatically from a cached copy of the cited document; for each year the four quarters were summed and compared with the full-year figure in that year's Q4 report (all years equal)",
+    "Q1 2026 and Q2 2026 reports (caq12026.htm, caq22026.htm): no product row for this brand in any table; footnotes read 'Comprises Tresiba, Xultophy, Levemir and Awiqli' (long-acting), 'Comprises Ryzodeg and NovoMix' (premix), 'Comprises Fiasp and NovoRapid' (fast-acting), so the brand lines end with Q4 2025",
+    "2017Q1-2017Q4 6-Ks grepped for Fiasp: prose only (EU authorisation 9 January 2017, launch countries, US resubmission, September 2017 US approval), no sales figure and no table row",
+    "2018Q1 PDF (20180502_Financial statement_Q1 2018_UK.pdf) is the first report with '- Fiasp 83 3' in the sales split per therapy table",
+    "FDA Drugs@FDA NDA 208751 page fetched: '09/29/2017 ORIG-1 Approval N/A'"
+  ]
+}

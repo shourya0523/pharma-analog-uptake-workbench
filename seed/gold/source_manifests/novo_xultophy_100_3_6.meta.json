@@ -1,0 +1,36 @@
+{
+  "manufacturer": "Novo Nordisk",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "series_end_quarter": "2025Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "From the Q1 2026 report the brand is no longer a separate line; it sits within a therapy-class line whose footnote names it (long-acting insulin 'Comprises Tresiba, Xultophy, Levemir and Awiqli'). Q1 2026 and Q2 2026 contain no row for the brand.",
+  "series_start_reason": "Q1 2017 is the first report with Xultophy as its own table line. The 2014-2016 reports print Xultophy only inside the combined 'new-generation insulin' line (footnote: 'comprises Tresiba, Ryzodeg and Xultophy'), in which no Xultophy-only figure was found; the Q4 2016 report records the FDA approval of Xultophy 100/3.6 in November 2016.",
+  "drug_name": "Xultophy 100/3.6",
+  "generic_name": "insulin degludec/liraglutide",
+  "benchmark_identity": "novo_xultophy_worldwide_reported",
+  "indication_area": "Type 2 diabetes",
+  "formulation": "injection (pen), fixed-ratio combination",
+  "route_of_administration": "subcutaneous",
+  "moa": "Fixed-ratio combination of a basal insulin analogue (insulin degludec) and a GLP-1 receptor agonist (liraglutide)",
+  "moa_class": "insulin_glp1_fixed_combination",
+  "first_approval_year": 2016,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=208583",
+    "quote": "11/21/2016 ORIG-1 Approval N/A"
+  },
+  "launch_quarter": null,
+  "launch_evidence": null,
+  "commercial_start_quarter": "2017Q1",
+  "notes": "Worldwide net sales in DKK million as printed. Quarters 2017Q2, 2017Q3, 2017Q4, 2018Q2 and 2018Q3 are year-to-date less the preceding year-to-date, because the report prints no quarter-only row for Xultophy until the Q4 2018 report; all other quarters are read directly. Xultophy is printed worldwide only (Total column); the regional columns that follow show US and international splits and are not used to change scope. The European Commission authorisation (September 2014) predates the series; the 2014-2016 sales are inside the combined line and are not separable.",
+  "search_log": [
+    "listed all CIK 0000353278 filings via data.sec.gov/submissions (recent + CIK0000353278-submissions-001.json): foreign private issuer, quarterly reports are Form 6-K exhibits; no 8-K, 8-K/A or 10-Q forms",
+    "each quarter read from that quarter's own financial report: 2009Q1-2017Q4 6-K exhibits (c1005xx..f6k_*.htm names), 2018Q1 and 2018Q2 from the novonordisk.com PDFs (the EDGAR copies render tables as images), 2018Q3-2025Q4 caq{q}{yyyy}.htm exhibits",
+    "every figure was read programmatically from a cached copy of the cited document; for each year the four quarters were summed and compared with the full-year figure in that year's Q4 report (all years equal)",
+    "Q1 2026 and Q2 2026 reports (caq12026.htm, caq22026.htm): no product row for this brand in any table; footnotes read 'Comprises Tresiba, Xultophy, Levemir and Awiqli' (long-acting), 'Comprises Ryzodeg and NovoMix' (premix), 'Comprises Fiasp and NovoRapid' (fast-acting), so the brand lines end with Q4 2025",
+    "2014Q1-2016Q4 6-Ks grepped for any Xultophy line carrying a figure: none; only the combined 'new-generation insulin' line (Tresiba, Ryzodeg, Xultophy) and a running-text combined figure",
+    "2017Q1 report is the first with '- Xultophy | 103' in the sales split per therapy table; 2017Q2-Q4 and 2018Q1-Q3 reports print year-to-date rows only; the Q4 2018 report prints the first quarter-only regional row (452)",
+    "FDA Drugs@FDA NDA 208583 page fetched: '11/21/2016 ORIG-1 Approval N/A'"
+  ]
+}

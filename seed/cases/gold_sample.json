@@ -50,6 +50,31 @@
   ]
  },
  {
+  "drug_name": "Abraxane",
+  "manufacturer": "Abraxis BioScience",
+  "ticker": null,
+  "generic_name": "paclitaxel protein-bound particles for injectable suspension (albumin-bound)",
+  "options": {
+   "earnings_since": "2010-04-05",
+   "earnings_until": "2011-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2010Q1",
+    "value_normalized_usd_millions": 87.947,
+    "gold_id": "bms-abraxane-worldwide-reported-2010q1"
+   },
+   {
+    "period": "2010Q2",
+    "value_normalized_usd_millions": 82.061,
+    "gold_id": "bms-abraxane-worldwide-reported-2010q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Ampyra",
   "manufacturer": "Acorda Therapeutics",
   "ticker": null,
@@ -141,6 +166,76 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 494.0,
     "gold_id": "actelion-jnj-uptravi-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Rhopressa",
+  "manufacturer": "Aerie Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "netarsudil",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q1",
+    "value_normalized_usd_millions": 10.9,
+    "gold_id": "aerie-rhopressa-us-reported-2019q1"
+   },
+   {
+    "period": "2019Q2",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2019Q1. From the second quarter of 2019 (Rocklatan launched May 2019) Aerie's releases print only the combined glaucoma franchise: 'The Aerie glaucoma franchise, including Rhopressa and Rocklatan, generated second quarter 2019 net revenues ... of $15.8 million' (000162828019010281/aeri-2q19earningsreleaseex.htm). Every later Aerie release and 10-Q to 2022Q3 prints Product revenues, net for both products together. Alcon (owner from November 2022) prints no Rhopressa figure in its 20-F filings for 2022-2025."
+   },
+   {
+    "period": "2019Q3",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2019Q1. From the second quarter of 2019 (Rocklatan launched May 2019) Aerie's releases print only the combined glaucoma franchise: 'The Aerie glaucoma franchise, including Rhopressa and Rocklatan, generated second quarter 2019 net revenues ... of $15.8 million' (000162828019010281/aeri-2q19earningsreleaseex.htm). Every later Aerie release and 10-Q to 2022Q3 prints Product revenues, net for both products together. Alcon (owner from November 2022) prints no Rhopressa figure in its 20-F filings for 2022-2025."
+   },
+   {
+    "period": "2019Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2019Q1. From the second quarter of 2019 (Rocklatan launched May 2019) Aerie's releases print only the combined glaucoma franchise: 'The Aerie glaucoma franchise, including Rhopressa and Rocklatan, generated second quarter 2019 net revenues ... of $15.8 million' (000162828019010281/aeri-2q19earningsreleaseex.htm). Every later Aerie release and 10-Q to 2022Q3 prints Product revenues, net for both products together. Alcon (owner from November 2022) prints no Rhopressa figure in its 20-F filings for 2022-2025."
+   }
+  ]
+ },
+ {
+  "drug_name": "Tibsovo",
+  "manufacturer": "Agios Pharmaceuticals",
+  "ticker": "AGIO",
+  "generic_name": "ivosidenib",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 36.909,
+    "gold_id": "agios-tibsovo-us-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2021Q1. Agios sold its oncology business, including TIBSOVO, to Servier on March 31, 2021 (Q1 2021 Form 10-Q). Agios's Q2 2021 release (0001193125-21-228150) reports only '$2.0 million from TIBSOVO (ivosidenib) royalties' and no TIBSOVO net sales; Agios no longer reports a TIBSOVO product line and no Servier document with TIBSOVO net sales was found."
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2021Q1. Agios sold its oncology business, including TIBSOVO, to Servier on March 31, 2021 (Q1 2021 Form 10-Q). Agios's Q2 2021 release (0001193125-21-228150) reports only '$2.0 million from TIBSOVO (ivosidenib) royalties' and no TIBSOVO net sales; Agios no longer reports a TIBSOVO product line and no Servier document with TIBSOVO net sales was found."
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2021Q1. Agios sold its oncology business, including TIBSOVO, to Servier on March 31, 2021 (Q1 2021 Form 10-Q). Agios's Q2 2021 release (0001193125-21-228150) reports only '$2.0 million from TIBSOVO (ivosidenib) royalties' and no TIBSOVO net sales; Agios no longer reports a TIBSOVO product line and no Servier document with TIBSOVO net sales was found."
    }
   ]
  },
@@ -331,6 +426,41 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 39.077,
     "gold_id": "amarin-vascepa-worldwide-total-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Abraxane",
+  "manufacturer": "American Pharmaceutical Partners",
+  "ticker": null,
+  "generic_name": "paclitaxel protein-bound particles for injectable suspension (albumin-bound)",
+  "options": {
+   "earnings_since": "2005-04-05",
+   "earnings_until": "2006-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2005Q1",
+    "value_normalized_usd_millions": 34.8,
+    "gold_id": "bms-abraxane-worldwide-reported-2005q1"
+   },
+   {
+    "period": "2005Q2",
+    "value_normalized_usd_millions": 19.4,
+    "gold_id": "bms-abraxane-worldwide-reported-2005q2"
+   },
+   {
+    "period": "2005Q3",
+    "value_normalized_usd_millions": 32.1,
+    "gold_id": "bms-abraxane-worldwide-reported-2005q3"
+   },
+   {
+    "period": "2005Q4",
+    "value_normalized_usd_millions": 47.5,
+    "gold_id": "bms-abraxane-worldwide-reported-2005q4"
    }
   ]
  },
@@ -905,10 +1035,10 @@
   ]
  },
  {
-  "drug_name": "Idhifa",
+  "drug_name": "Vidaza",
   "manufacturer": "Celgene",
   "ticker": null,
-  "generic_name": "enasidenib",
+  "generic_name": "azacitidine",
   "options": {
    "earnings_since": "2019-04-05",
    "earnings_until": "2020-05-04",
@@ -919,23 +1049,23 @@
   "expect": [
    {
     "period": "2019Q1",
-    "value_normalized_usd_millions": 19.0,
-    "gold_id": "bms-idhifa-us-reported-2019q1"
+    "value_normalized_usd_millions": 151.0,
+    "gold_id": "bms-vidaza-worldwide-reported-2019q1"
    },
    {
     "period": "2019Q2",
-    "value_normalized_usd_millions": 25.0,
-    "gold_id": "bms-idhifa-us-reported-2019q2"
+    "value_normalized_usd_millions": 164.0,
+    "gold_id": "bms-vidaza-worldwide-reported-2019q2"
    },
    {
     "period": "2019Q3",
-    "value_normalized_usd_millions": 24.0,
-    "gold_id": "bms-idhifa-us-reported-2019q3"
+    "value_normalized_usd_millions": 148.0,
+    "gold_id": "bms-vidaza-worldwide-reported-2019q3"
    },
    {
     "period": "2019Q4",
-    "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2019Q3. Celgene's third-quarter 2019 release (2019-10-31) is the last document to print an IDHIFA sales line. Celgene filed no fourth-quarter 2019 release and BMS's fourth-quarter 2019 release (https://www.sec.gov/Archives/edgar/data/14272/000001427220000075/q42019ex992.htm) has no Idhifa row; its brand table ends in 'Other brands (a)', whose footnote reads '(a) | includes sustiva, reyataz, daklinza and all other bms and celgene products acquired as part of the celgene acquisition that have lost exclusivity in major markets, over-the-counter (otc) brands and royalty revenue'. BMS's 10-Ks for 2019 and 2020 mention IDHIFA only in pipeline and partner lists and the 2021 10-K does not mention it. Agios, the licensor, prints only royalty revenue on IDHIFA net sales (e.g. $3.3 million for the second quarter of 2020), not the net sales."
+    "value_normalized_usd_millions": 149.0,
+    "gold_id": "bms-vidaza-worldwide-reported-2019q4"
    }
   ]
  },
@@ -1000,10 +1130,10 @@
   ]
  },
  {
-  "drug_name": "Enhertu",
+  "drug_name": "Vanflyta",
   "manufacturer": "Daiichi Sankyo",
   "ticker": null,
-  "generic_name": "trastuzumab deruxtecan",
+  "generic_name": "quizartinib",
   "options": {
    "earnings_since": "2026-04-05",
    "earnings_until": "2027-05-05",
@@ -1014,13 +1144,83 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 1221.848528,
-    "gold_id": "daiichi-enhertu-company-booked-product-sales-reported-2026q1"
+    "value_normalized_usd_millions": 14.029576,
+    "gold_id": "daiichi-vanflyta-oncology-business-unit-reported-2026q1"
    },
    {
     "period": "2026Q2",
-    "value_normalized_usd_millions": 1375.615904,
-    "gold_id": "daiichi-enhertu-company-booked-product-sales-reported-2026q2"
+    "value_normalized_usd_millions": 18.199298,
+    "gold_id": "daiichi-vanflyta-oncology-business-unit-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Provenge",
+  "manufacturer": "Dendreon",
+  "ticker": null,
+  "generic_name": "sipuleucel-T",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q1",
+    "value_normalized_usd_millions": 68.78,
+    "gold_id": "dendreon-provenge-net-product-revenue-reported-2014q1"
+   },
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": 82.163,
+    "gold_id": "dendreon-provenge-net-product-revenue-reported-2014q2"
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 73.118,
+    "gold_id": "dendreon-provenge-net-product-revenue-reported-2014q3"
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": 79.8,
+    "gold_id": "dendreon-provenge-net-product-revenue-reported-2014q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Gralise",
+  "manufacturer": "Depomed",
+  "ticker": null,
+  "generic_name": "gabapentin extended release",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q1",
+    "value_normalized_usd_millions": 13.278,
+    "gold_id": "depomed-gralise-reported-2019q1"
+   },
+   {
+    "period": "2019Q2",
+    "value_normalized_usd_millions": 17.8,
+    "gold_id": "depomed-gralise-reported-2019q2"
+   },
+   {
+    "period": "2019Q3",
+    "value_normalized_usd_millions": 14.931,
+    "gold_id": "depomed-gralise-reported-2019q3"
+   },
+   {
+    "period": "2019Q4",
+    "value_normalized_usd_millions": 17.116,
+    "gold_id": "depomed-gralise-reported-2019q4"
    }
   ]
  },
@@ -1096,6 +1296,41 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 570.648,
     "gold_id": "exelixis-cabometyx-us-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Yutiq",
+  "manufacturer": "EyePoint Pharmaceuticals",
+  "ticker": "EYPT",
+  "generic_name": "fluocinolone acetonide intravitreal implant 0.18 mg",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 7.4,
+    "gold_id": "eyepoint-yutiq-us-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2023Q1. EyePoint sold the YUTIQ franchise to Alimera Sciences in May 2023 ('Sold YUTIQ franchise to Alimera Sciences in May 2023 for $82.5 million plus future royalties', 2023Q2 release). The 2023Q2 EyePoint 10-Q prints only 'Product sales, net' 5,273 thousand (a partial quarter, 'primarily from sales of YUTIQ') with no YUTIQ-only row. Alimera's 10-Qs and releases for 2023Q3-2024Q2 and ANI Pharmaceuticals' filings from 2024Q3 print YUTIQ only together with ILUVIEN ('ILUVIEN and YUTIQ' in ANI's 10-Q and 10-K tables); no Yutiq-only figure exists after EyePoint's 2023Q1."
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2023Q1. EyePoint sold the YUTIQ franchise to Alimera Sciences in May 2023 ('Sold YUTIQ franchise to Alimera Sciences in May 2023 for $82.5 million plus future royalties', 2023Q2 release). The 2023Q2 EyePoint 10-Q prints only 'Product sales, net' 5,273 thousand (a partial quarter, 'primarily from sales of YUTIQ') with no YUTIQ-only row. Alimera's 10-Qs and releases for 2023Q3-2024Q2 and ANI Pharmaceuticals' filings from 2024Q3 print YUTIQ only together with ILUVIEN ('ILUVIEN and YUTIQ' in ANI's 10-Q and 10-K tables); no Yutiq-only figure exists after EyePoint's 2023Q1."
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2023Q1. EyePoint sold the YUTIQ franchise to Alimera Sciences in May 2023 ('Sold YUTIQ franchise to Alimera Sciences in May 2023 for $82.5 million plus future royalties', 2023Q2 release). The 2023Q2 EyePoint 10-Q prints only 'Product sales, net' 5,273 thousand (a partial quarter, 'primarily from sales of YUTIQ') with no YUTIQ-only row. Alimera's 10-Qs and releases for 2023Q3-2024Q2 and ANI Pharmaceuticals' filings from 2024Q3 print YUTIQ only together with ILUVIEN ('ILUVIEN and YUTIQ' in ANI's 10-Q and 10-K tables); no Yutiq-only figure exists after EyePoint's 2023Q1."
    }
   ]
  },
@@ -1241,6 +1476,36 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 346.0,
     "gold_id": "gilead-yescarta-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Oxbryta",
+  "manufacturer": "Global Blood Therapeutics",
+  "ticker": null,
+  "generic_name": "voxelotor",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 55.16,
+    "gold_id": "pfizer-gbt-oxbryta-us-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 71.55,
+    "gold_id": "pfizer-gbt-oxbryta-us-reported-2022q2"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 72.0,
+    "gold_id": "pfizer-gbt-oxbryta-us-reported-2022q4"
    }
   ]
  },
@@ -1395,6 +1660,31 @@
   ]
  },
  {
+  "drug_name": "Onivyde",
+  "manufacturer": "Ipsen",
+  "ticker": null,
+  "generic_name": "irinotecan liposome injection",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 62.16948,
+    "gold_id": "ipsen-onivyde-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 63.85419,
+    "gold_id": "ipsen-onivyde-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Zepzelca",
   "manufacturer": "Jazz Pharmaceuticals",
   "ticker": "JAZZ",
@@ -1441,6 +1731,41 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 664.0,
     "gold_id": "jnj-xarelto-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Zilxi",
+  "manufacturer": "Journey Medical",
+  "ticker": "DERM",
+  "generic_name": "minocycline",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 0.426,
+    "gold_id": "journey-zilxi-us-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 0.256,
+    "gold_id": "journey-zilxi-us-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2025Q2. From the Q3 2025 Form 10-Q (filed 2025-11-12, accession 0001104659-25-110457) Journey prints the two products as one line, 'Foam franchise products (Amzeeq & Zilxi)' (1,311 thousand for Q3 2025 vs 2,100), replacing the separate lines it printed through the Q2 2025 10-Q. The combined line is a different scope and is not split or spliced."
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2025Q2. From the Q3 2025 Form 10-Q (filed 2025-11-12, accession 0001104659-25-110457) Journey prints the two products as one line, 'Foam franchise products (Amzeeq & Zilxi)' (1,311 thousand for Q3 2025 vs 2,100), replacing the separate lines it printed through the Q2 2025 10-Q. The combined line is a different scope and is not split or spliced."
    }
   ]
  },
@@ -1990,6 +2315,41 @@
   ]
  },
  {
+  "drug_name": "Vidaza",
+  "manufacturer": "Pharmion",
+  "ticker": null,
+  "generic_name": "azacitidine",
+  "options": {
+   "earnings_since": "2007-04-05",
+   "earnings_until": "2008-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2007Q1",
+    "value_normalized_usd_millions": 37.7,
+    "gold_id": "bms-vidaza-worldwide-reported-2007q1"
+   },
+   {
+    "period": "2007Q2",
+    "value_normalized_usd_millions": 40.5,
+    "gold_id": "bms-vidaza-worldwide-reported-2007q2"
+   },
+   {
+    "period": "2007Q3",
+    "value_normalized_usd_millions": 42.3,
+    "gold_id": "bms-vidaza-worldwide-reported-2007q3"
+   },
+   {
+    "period": "2007Q4",
+    "value_normalized_usd_millions": 44.8,
+    "gold_id": "bms-vidaza-worldwide-reported-2007q4"
+   }
+  ]
+ },
+ {
   "drug_name": "Voquezna",
   "manufacturer": "Phathom",
   "ticker": "PHAT",
@@ -2335,6 +2695,31 @@
   ]
  },
  {
+  "drug_name": "Kineret",
+  "manufacturer": "Sobi",
+  "ticker": null,
+  "generic_name": "anakinra",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 85.305361,
+    "gold_id": "sobi-kineret-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 91.972442,
+    "gold_id": "sobi-kineret-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Luxturna",
   "manufacturer": "Spark Therapeutics",
   "ticker": null,
@@ -2650,6 +3035,31 @@
   ]
  },
  {
+  "drug_name": "Ohtuvayre",
+  "manufacturer": "Verona Pharma",
+  "ticker": null,
+  "generic_name": "ensifentrine",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 71.256,
+    "gold_id": "ohtuvayre-product-sales-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 102.939,
+    "gold_id": "ohtuvayre-product-sales-reported-2025q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Casgevy",
   "manufacturer": "Vertex",
   "ticker": "VRTX",
@@ -2675,37 +3085,27 @@
   ]
  },
  {
-  "drug_name": "Tyrvaya",
+  "drug_name": "Lyrica",
   "manufacturer": "Viatris",
   "ticker": "VTRS",
-  "generic_name": "varenicline nasal spray",
+  "generic_name": "pregabalin",
   "options": {
-   "earnings_since": "2023-04-05",
-   "earnings_until": "2024-05-04",
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
    "openfda": true,
    "product_metadata": true
   },
   "source": "seed/gold/quarterly_revenue.jsonl",
   "expect": [
    {
-    "period": "2023Q1",
-    "value_normalized_usd_millions": 6.3,
-    "gold_id": "oyster-point-tyrvaya-us-reported-2023q1"
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 120.6,
+    "gold_id": "pfizer-viatris-lyrica-worldwide-reported-2026q1"
    },
    {
-    "period": "2023Q2",
-    "value_normalized_usd_millions": 10.2,
-    "gold_id": "oyster-point-tyrvaya-us-reported-2023q2"
-   },
-   {
-    "period": "2023Q3",
-    "value_normalized_usd_millions": 10.4,
-    "gold_id": "oyster-point-tyrvaya-us-reported-2023q3"
-   },
-   {
-    "period": "2023Q4",
-    "value_normalized_usd_millions": 14.8,
-    "gold_id": "oyster-point-tyrvaya-us-reported-2023q4"
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 120.6,
+    "gold_id": "pfizer-viatris-lyrica-worldwide-reported-2026q2"
    }
   ]
  },
@@ -2865,7 +3265,7 @@
   ]
  },
  {
-  "drug_name": "Akeega",
+  "drug_name": "Adbry",
   "manufacturer": null,
   "ticker": null,
   "generic_name": null,
@@ -2880,26 +3280,26 @@
    {
     "period": "2025Q1",
     "value_normalized_usd_millions": null,
-    "gold_id": "akeega-excluded",
-    "why": "aggregated_with_other_products: J&J, sole marketer of Akeega (FDA August 2023), never prints an Akeega sales figure. Its most detailed product tables - the quarterly sales schedules and the 10-Q/10-K Innovative Medicine sales-by-product tables - name the larger oncology brands and fold the rest into 'Other Oncology'; AKEEGA appears in them only in regulatory-approval text. No isolated figure exists (no quarter, no year, no prose). No licensor or royalty holder printing its net sales was found."
+    "gold_id": "adbry-excluded",
+    "why": "aggregated_with_other_products: LEO Pharma (private, files annual and interim reports) sells tralokinumab as Adbry in the U.S. and Adtralza elsewhere and prints it only inside a 'Strategic brands' line and as a growth percentage (for example 'Revenue from Adtralza/Adbry increased by 69% (CER)'); the annual reports for 2022, 2024 and 2025 were searched for a DKK figure on the brand and none is printed. No partner or royalty holder was found that prints its sales (originator AstraZeneca/MedImmune does not)."
    },
    {
     "period": "2025Q2",
     "value_normalized_usd_millions": null,
-    "gold_id": "akeega-excluded",
-    "why": "aggregated_with_other_products: J&J, sole marketer of Akeega (FDA August 2023), never prints an Akeega sales figure. Its most detailed product tables - the quarterly sales schedules and the 10-Q/10-K Innovative Medicine sales-by-product tables - name the larger oncology brands and fold the rest into 'Other Oncology'; AKEEGA appears in them only in regulatory-approval text. No isolated figure exists (no quarter, no year, no prose). No licensor or royalty holder printing its net sales was found."
+    "gold_id": "adbry-excluded",
+    "why": "aggregated_with_other_products: LEO Pharma (private, files annual and interim reports) sells tralokinumab as Adbry in the U.S. and Adtralza elsewhere and prints it only inside a 'Strategic brands' line and as a growth percentage (for example 'Revenue from Adtralza/Adbry increased by 69% (CER)'); the annual reports for 2022, 2024 and 2025 were searched for a DKK figure on the brand and none is printed. No partner or royalty holder was found that prints its sales (originator AstraZeneca/MedImmune does not)."
    },
    {
     "period": "2025Q3",
     "value_normalized_usd_millions": null,
-    "gold_id": "akeega-excluded",
-    "why": "aggregated_with_other_products: J&J, sole marketer of Akeega (FDA August 2023), never prints an Akeega sales figure. Its most detailed product tables - the quarterly sales schedules and the 10-Q/10-K Innovative Medicine sales-by-product tables - name the larger oncology brands and fold the rest into 'Other Oncology'; AKEEGA appears in them only in regulatory-approval text. No isolated figure exists (no quarter, no year, no prose). No licensor or royalty holder printing its net sales was found."
+    "gold_id": "adbry-excluded",
+    "why": "aggregated_with_other_products: LEO Pharma (private, files annual and interim reports) sells tralokinumab as Adbry in the U.S. and Adtralza elsewhere and prints it only inside a 'Strategic brands' line and as a growth percentage (for example 'Revenue from Adtralza/Adbry increased by 69% (CER)'); the annual reports for 2022, 2024 and 2025 were searched for a DKK figure on the brand and none is printed. No partner or royalty holder was found that prints its sales (originator AstraZeneca/MedImmune does not)."
    },
    {
     "period": "2025Q4",
     "value_normalized_usd_millions": null,
-    "gold_id": "akeega-excluded",
-    "why": "aggregated_with_other_products: J&J, sole marketer of Akeega (FDA August 2023), never prints an Akeega sales figure. Its most detailed product tables - the quarterly sales schedules and the 10-Q/10-K Innovative Medicine sales-by-product tables - name the larger oncology brands and fold the rest into 'Other Oncology'; AKEEGA appears in them only in regulatory-approval text. No isolated figure exists (no quarter, no year, no prose). No licensor or royalty holder printing its net sales was found."
+    "gold_id": "adbry-excluded",
+    "why": "aggregated_with_other_products: LEO Pharma (private, files annual and interim reports) sells tralokinumab as Adbry in the U.S. and Adtralza elsewhere and prints it only inside a 'Strategic brands' line and as a growth percentage (for example 'Revenue from Adtralza/Adbry increased by 69% (CER)'); the annual reports for 2022, 2024 and 2025 were searched for a DKK figure on the brand and none is printed. No partner or royalty holder was found that prints its sales (originator AstraZeneca/MedImmune does not)."
    }
   ]
  }

@@ -1,0 +1,49 @@
+{
+  "drug_name": "Lyrica",
+  "generic_name": "pregabalin",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Neuropathic pain / epilepsy / fibromyalgia",
+  "formulation": "capsule (also oral solution, extended-release tablet)",
+  "route_of_administration": "oral",
+  "moa": "Alpha-2-delta calcium channel subunit ligand",
+  "moa_class": "alpha2delta_ligand",
+  "manufacturer": "Pfizer",
+  "benchmark_identity": "pfizer_viatris_lyrica_worldwide_reported",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "first_approval_year": 2004,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2004/21446ltr.pdf",
+    "quote": "NDA 21-446 ... LYRICA (pregabalin) Capsules ... management of neuropathic pain associated with diabetic peripheral neuropathy ... it is approved, effective on the date of this letter (signed 12/30/04)"
+  },
+  "launch_quarter": null,
+  "launch_evidence": null,
+  "commercial_start_quarter": "2004Q3",
+  "series_start_reason": "Pfizer's own releases for the third and fourth quarters of 2004 print no Lyrica row. The first row in a release is the first-quarter 2005 release (Lyrica 20 | 0); the prior-year columns of the third-quarter 2005 and fourth-quarter 2005 releases print 2 and 11 for 2004Q3 and 2004Q4 (the earlier 2004 quarters print 0 in the 2005 releases' prior-year columns), so the series starts 2004Q3. No issuer document dating the first sale was cited; the 2005-10-20 release says Lyrica was 'First launched one year ago in Germany and the U.K.' (approximate), so launch_quarter is null.",
+  "series_end_quarter": "2026Q2",
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "joined_issuers": [
+    {
+      "issuer": "Pfizer",
+      "first_quarter": "2004Q3",
+      "last_quarter": "2020Q3"
+    },
+    {
+      "issuer": "Viatris",
+      "first_quarter": "2021Q1",
+      "last_quarter": "2026Q2"
+    }
+  ],
+  "unreported_quarters": {
+    "2020Q4": "Ownership change Pfizer to Viatris. Pfizer's last Lyrica row is the third-quarter 2020 release (2020-10-27: 'Lyrica | 352 | 527'); the Upjohn business combined with Mylan to form Viatris on 2020-11-16; Pfizer's fourth-quarter 2020 release (2021-02-02) prints no Lyrica row. Viatris first prints Lyrica in its first-quarter 2021 release (2021-05-10: 'Lyrica | 187.8', no prior-year figure); its FY2020 10-K carries no Lyrica revenue and its fourth-quarter 2021 release has no 2020 comparative. No document gives a full 2020Q4 figure."
+  },
+  "notes": "Worldwide total Lyrica. Pfizer printed a single Lyrica line to 2015Q2; from 2015Q3 to 2018Q4 it printed Lyrica-GIP/IH and Lyrica-GEP/EH separately plus a 'Total Lyrica' row (footnote: 'Total Lyrica revenues represent the aggregate of worldwide revenues from Lyrica-GIP and Lyrica-GEP'), and from 2019Q1 a single Lyrica row again. The Total Lyrica row is used for 2015Q3-2018Q4; 2016Q4 is not printed in its own release (2017-01-31 prints only the IH and EH rows) and is read from the prior-year column of the 2017Q4 release (Total Lyrica 1,236). The U.S. loss of exclusivity (multi-source generics from July 2019) lowers the series from 2019Q3. Annual sums of Pfizer quarters match the Q4 release twelve-month rows within rounding (2005 291, 2008 2,573, 2013 4,595, 2015 4,839, 2016 4,966 vs the 4,966 prior-year column of the 2017Q4 release, 2019 3,321). Viatris prints Lyrica in its Key Product Net Sales table.",
+  "search_log": [
+    "listed Pfizer filings via data.sec.gov submissions (recent + older pages, CIK 0000078003), every 8-K and 8-K/A with Item 2.02 from 2010-02 to 2026-08 and the earnings 8-Ks of 2003-2009 (Items 12/9/2.02) and 2001-10-24 / 2002-07-16; downloaded each EX-99 and parsed the product-revenue table rows",
+    "Pfizer: single Lyrica row to 2015Q2 (plain or 'Lyrica (c)'/'(d)' with a GIP/GEP cell); 'Total Lyrica (c)' rows 2015Q3-2018Q4 except 2016Q4; plain 'Lyrica' 2019Q1-2020Q3; each quarter from its own release except 2004Q3, 2004Q4 and 2016Q4 (prior-year columns)",
+    "Pre-2005 releases (2004-10-20, 2005-01-19) searched for a Lyrica row: none; Q4 2004 value 11 and Q3 2004 value 2 come from the prior-year columns of 2006-01-19 and 2005-10-20",
+    "Pfizer 2020Q4 and Viatris: same evidence as Lipitor (Pfizer Q4 2020 release has no Lyrica row; Viatris 8-K releases 2021-05-10 onward; Viatris FY2020 10-K has no Lyrica revenue)",
+    "Fallbacks a-e not needed"
+  ]
+}

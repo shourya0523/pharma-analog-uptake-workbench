@@ -1,0 +1,37 @@
+{
+  "drug_name": "Rhopressa",
+  "generic_name": "netarsudil",
+  "manufacturer": "Aerie Pharmaceuticals",
+  "benchmark_identity": "aerie_rhopressa_us_reported",
+  "therapeutic_area": "Ophthalmology",
+  "indication_area": "Ophthalmology (glaucoma)",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "ophthalmic solution 0.02%",
+  "route_of_administration": "topical ophthalmic",
+  "moa": "Rho kinase (ROCK) inhibitor",
+  "moa_class": "rho_kinase_inhibitor",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2017/208254Orig1s000ltr.pdf",
+    "quote": "NDA 208254 ... Rhopressa (netarsudil ophthalmic solution) 0.02% ... It is approved, effective on the date of this letter (electronic signature dated 12/18/2017)"
+  },
+  "launch_quarter": "2018Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1337553/000162828018010790/aeri-080818ex991.htm",
+    "quote": "The Rhopressa (netarsudil ophthalmic solution) 0.02% U.S. commercial launch commenced on April 30, 2018, and second quarter net revenues on a U.S. GAAP basis totaled $2.4 million"
+  },
+  "commercial_start_quarter": "2018Q2",
+  "series_start_reason": null,
+  "series_end_quarter": "2019Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "From the second quarter of 2019 (Rocklatan launched May 2019) Aerie's releases print only the combined glaucoma franchise: 'The Aerie glaucoma franchise, including Rhopressa and Rocklatan, generated second quarter 2019 net revenues ... of $15.8 million' (000162828019010281/aeri-2q19earningsreleaseex.htm). Every later Aerie release and 10-Q to 2022Q3 prints Product revenues, net for both products together. Alcon (owner from November 2022) prints no Rhopressa figure in its 20-F filings for 2022-2025.",
+  "notes": "Rhopressa net revenues are printed as prose in the releases (one decimal place, USD millions); Aerie's income-statement table carries a single 'Product revenues, net' line. Aerie sold only in the U.S. in this period. Full-year 2018 net revenues of $24.2 million (printed in the 2019-02-25 release) equal the three quarters. No Q1 2018 revenue: launch commenced April 30, 2018. Rocklatan (D485) is not separable and is written as an exclusion.",
+  "search_log": [
+    "EDGAR submissions CIK 1337553: listed every 8-K (Item 2.02) 2013-2022 and the 10-K/10-Q filings 2018-2022; the Item 2.02 listing was not filtered by form beyond 8-K/8-K/A, no 8-K/A with Item 2.02 appears.",
+    "Opened every earnings-release exhibit 2018Q1-2022Q3. 2018Q1 release: no revenue, launch planned mid-Q2 2018 ('Rhopressa commercial launch planned for mid-second quarter 2018'). 2018Q2-2019Q1: Rhopressa-only net revenue sentence (used). 2019Q2 onwards: sentence and income-statement table carry the combined franchise / 'Product revenues, net' only.",
+    "Searched the 10-K text (FY2019, FY2020, FY2021) and the 2019Q2 and 2019Q3 10-Qs for sentences giving a Rhopressa-only or Rocklatan-only net revenue figure in dollars: none found; the filings say revenue relates to 'Rhopressa and Rocklatan' together.",
+    "Alcon (acquirer, November 2022): searched the 20-F filings for FY2022, FY2023, FY2024, FY2025 for Rhopressa and Rocklatan; they are named as acquired products with no sales figure. Alcon's quarterly 6-K releases were not individually opened.",
+    "Bigdata.com used only to locate documents; every cited figure was read from the sec.gov exhibit."
+  ]
+}

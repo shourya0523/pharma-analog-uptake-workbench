@@ -1,0 +1,37 @@
+{
+  "series_start_reason": "The Q1 2023 release (https://www.sec.gov/Archives/edgar/data/1121404/000112140423000010/pressreleaseq12023english.htm) says ALTUVIIIO 'was launched at the end of March in the U.S.' but its tables have no ALTUVIIIO row. The Q2 2023 release is the first to print a row (Q2 2023 = 18, H1 2023 = 19). The one-million difference for Q1 2023 comes from two rounded figures and is not entered as a quarter; the series starts with 2023Q2, the first printed quarter.",
+  "drug_name": "Altuviiio",
+  "generic_name": "efanesoctocog alfa (antihemophilic factor recombinant, Fc-VWF-XTEN fusion protein-ehtl)",
+  "manufacturer": "Sanofi",
+  "benchmark_identity": "sanofi_altuviiio_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Hematology (hemophilia A)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "lyophilized powder for solution",
+  "route_of_administration": "intravenous",
+  "moa": "Recombinant factor VIII Fc-VWF-XTEN fusion protein (high-sustained factor VIII replacement, von Willebrand factor-independent)",
+  "moa_class": "factor_viii_replacement",
+  "first_approval_year": 2023,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/media/165594/download",
+    "quote": "ALTUVIIIO [antihemophilic factor (recombinant), Fc-VWF-XTEN fusion protein-ehtl], lyophilized powder for solution, for intravenous use ... Initial U.S. Approval: 2023"
+  },
+  "launch_quarter": "2023Q1",
+  "launch_evidence": "Q1 2023 release (https://www.sec.gov/Archives/edgar/data/1121404/000112140423000010/pressreleaseq12023english.htm): 'ALTUVIIIO, a once-weekly new class of factor VIII therapy for hemophilia A ... was launched at the end of March in the U.S.'",
+  "commercial_start_quarter": "2023Q2",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Scope: Sanofi's worldwide ALTUVIIIO net sales in EUR as printed in the headline Net sales table. The line is the issuer's worldwide total. Sanofi's appendix table of net sales by region first lists ALTUVIIIO in the Q1 2024 release (122 total: 115 United States, dash Europe, 7 Rest of the world; the row is spelled 'Altuviio' there) and not in the 2023 releases, so no regional split is printed for 2023Q2-2023Q4 and the U.S. share of those quarters is not shown by a table. The Q2 2024 release (https://www.sec.gov/Archives/edgar/data/1121404/000112140424000018/pressreleaseq22024english.htm) states: 'ALTUVIIIO (hemophilia A) sales were EUR 158 million, predominantly in the US ... Sales also benefited from supply to the partner in Europe where the medicine obtained regulatory approval'; the appendix prints 144 United States, dash Europe, 14 Rest of the world for that quarter. Rest of the world is therefore non-zero from 2024Q1 (7) and the release does not say what it contains in that quarter; the share is 6% (2024Q1), 9% (2024Q2) and 7% (2024Q3) of the total. A U.S.-only line is printed from 2024Q1 only. Q1 2023 (launch quarter, not in the series) is the one-million difference between H1 2023 (19) and Q2 2023 (18); FY 2023 = 159 equals that 1 plus the three series quarters 18, 46 and 94. Full-year sums for 2024 (682) and 2025 (1,160) match the Q4 releases.",
+  "search_log": [
+    "reused the list of Sanofi (CIK 0001121404) quarterly-results releases 2011Q2-2026Q2 (one exhibit per quarter, 61 releases) already established for sanofi_fabrazyme (urls from seed/gold/source_manifests/sanofi_fabrazyme_quarterly.csv), re-fetched every one of the 61 from sec.gov Archives and parsed every table row (bs4) whose first cell starts with the product name",
+    "for each release took the product's row from the first table headed 'Net sales (\u20ac million)' (worldwide, one row per product; 2011-2015 headers read '(millions of euros) / Q2 2011 net sales' or '\u20ac million'), quarter figure first, then the H1 / 9M / FY / YTD column where printed; where a product has no row in that table (see below) used the Total Sales column of the appendix table of net sales by region",
+    "checked for every full year in which all four quarters are in the series that the four quarters equal the full-year figure printed in the Q4 release; all matched exactly (see notes where the series starts or ends mid-year)",
+    "Bigdata.com was not used; the releases were located from the existing Sanofi manifest and read directly",
+    "ALTUVIIIO row absent from every release before 2023Q2 (2023Q1 mentions the approval and the end-of-March launch in prose only, with no sales figure); present in 2023Q2-2026Q2 (13 consecutive releases)",
+    "2023Q2 row prints '18 | \u2014 | 19 | \u2014' (Q2 and H1 columns); the 2023Q2 label is 'ALTUVIIIO TM', 2023Q3 'ALTUVIIIO \u00ae', then 'ALTUVIIIO' from 2023Q4 (a (*) footnote marker follows the name in the appendix from the Q3 2024 release)",
+    "FDA: fda.gov product page for ALTUVIIIO (STN 125771) lists the approval letter dated February 22, 2023 and the package insert prints 'Initial U.S. Approval: 2023' (CBER product, so no accessdata.fda.gov label exists)",
+    "Not searched: the European partner's own reporting of Altuvoct sales (a separate brand name and territory); not needed because Sanofi prints the ALTUVIIIO line for the whole span"
+  ]
+}

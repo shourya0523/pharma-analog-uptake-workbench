@@ -1,0 +1,38 @@
+{
+  "drug_name": "Zilxi",
+  "generic_name": "minocycline",
+  "manufacturer": "Journey Medical",
+  "benchmark_identity": "journey_zilxi_us_reported",
+  "therapeutic_area": "Immunology / Inflammation",
+  "indication_area": "Dermatology (inflammatory lesions of rosacea)",
+  "revenue_scope": "U.S. net product revenues",
+  "geography": "United States",
+  "formulation": "minocycline topical foam, 1.5%",
+  "route_of_administration": "topical",
+  "moa": "Tetracycline-class antibiotic (minocycline) with anti-inflammatory activity, topical foam",
+  "moa_class": "tetracycline_class_antibiotic",
+  "first_approval_year": 2020,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2020/213690Orig1s000ltr.pdf",
+    "quote": "This new drug application provides for the use of ZILXITM (minocycline) topical foam, 1.5% for the treatment of inflammatory lesions of rosacea in adults."
+  },
+  "launch_quarter": "2020Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1566044/000156604421000034/vyne-20210630.htm",
+    "quote": "The Company also launched ZILXI in the United States in October 2020 and commenced generating revenues in the fourth quarter of 2020."
+  },
+  "commercial_start_quarter": "2022Q1",
+  "series_start_reason": "Series starts at the first quarter Journey Medical owned the product: Journey acquired Zilxi and Amzeeq from VYNE Therapeutics in January 2022 (Journey Form 10-Q, Q3 2025, product-acquisition note: 'In January 2022, the Company entered into an asset purchase agreement with VYNE Therapeutics, Inc. to acquire two FDA approved products'). The product launched earlier under Foamix/VYNE (launch_quarter, per VYNE's 10-Q); VYNE's per-product history is not available (see search_log), so the series begins at 2022Q1. The prior-year column of the Q1 2022 10-Q is nil.",
+  "series_end_quarter": "2025Q2",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "From the Q3 2025 Form 10-Q (filed 2025-11-12, accession 0001104659-25-110457) Journey prints the two products as one line, 'Foam franchise products (Amzeeq & Zilxi)' (1,311 thousand for Q3 2025 vs 2,100), replacing the separate lines it printed through the Q2 2025 10-Q. The combined line is a different scope and is not split or spliced.",
+  "notes": "Scope: Journey Medical's Zilxi line in its revenues-by-product table, in USD thousands (converted to millions), net product revenues; Journey states 'All of the Company's product revenues are recorded in the U.S.' (Form 10-K FY2022, revenues note). Amounts exclude Journey's separately reported Other revenue (e.g. supply of Amzeeq to Cutia Therapeutics from August 2025, after the series end). Fourth quarters are derived as the 10-K full year less the Q3 10-Q nine-month column. Sibling product Amzeeq comes from the same tables. Prior owner: Foamix, then VYNE Therapeutics (Menlo), which did not print a per-product line (search_log).",
+  "search_log": [
+    "Listed Journey Medical (CIK 1867066) filings via data.sec.gov submissions and downloaded every 10-Q, 10-K and Item 2.02 8-K exhibit (form filter: any form starting 8-K with item 2.02, plus 10-Q and 10-K, 2021-11 to 2026-08). The earnings-release exhibits 99.1 carry no product table (searched for Amzeeq/Zilxi rows: none; only prose); the 10-Q revenues-by-product tables carry the three-month figures, and the 10-K carries full years.",
+    "Journey did not own either product before January 2022, so its first filing with a product line is the Q1 2022 10-Q (filed 2022-05-10). Its Q3 2021 10-Q (filed 2021-12-16) predates the acquisition.",
+    "Fourth quarters are derived (full year in the 10-K less the nine-month column of the Q3 10-Q) because no Journey document prints a stand-alone fourth quarter by product (checked the 8-K exhibit 99.1 of each year-end release, 2023-03 to 2026-03).",
+    "From the Q3 2025 10-Q (filed 2025-11-12) the revenues-by-product table prints one line 'Foam franchise products (Amzeeq & Zilxi)' (1,311 for the quarter, 2,100 a year earlier), and the 10-K FY2025 and 10-Qs of 2026 use the same combined XBRL member (FoamFranchiseProductsAmzeeqZilxiMember); no separate Amzeeq or Zilxi line was found there.",
+    "Prior owner: downloaded VYNE Therapeutics (formerly Menlo/Foamix, CIK 1566044) 10-Q, 10-K and Item 2.02 8-K exhibits 2019-10 to 2022-05 and searched for Amzeeq/Zilxi rows. VYNE prints product revenue in prose ('product revenue of $1.8 million for the three months ended March 31, 2020') and a combined AMZEEQ and ZILXI product revenue from the fourth quarter of 2020, with no per-product line; the prior-owner history is therefore not a continuous per-product series and is not spliced.",
+    "Annual cross-check: the four quarters of each year sum to the 10-K full year by construction for 2022-2024 (fourth quarter derived); the first three quarters of each year equal the nine-month column of the Q3 10-Q."
+  ]
+}

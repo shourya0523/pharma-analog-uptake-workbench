@@ -2535,6 +2535,32 @@ def build_companion_rows() -> list[dict[str, Any]]:
     return rows
 
 
+FISCAL_YEAR_END_MONTH = {"fiscal_year_ending_march": 3, "fiscal_year_ending_june": 6, "fiscal_year_ending_september": 9}
+
+
+def fiscal_year_usd(value: float, currency: str, year: int, period_basis: str) -> tuple[float | None, float | None]:
+    """Convert a fiscal year at the mean of its own four quarterly H.10 rates.
+
+    ``year`` is the year in which the fiscal year ends, so a year ending in
+    March 2024 averages 2023Q2, 2023Q3, 2023Q4 and 2024Q1.
+    """
+    end_month = FISCAL_YEAR_END_MONTH.get(period_basis)
+    if end_month is None:
+        return None, None
+    end_quarter = (end_month - 1) // 3 + 1
+    quarters = []
+    q_year, q = year, end_quarter
+    for _ in range(4):
+        quarters.append(QUARTERLY_FX.get((currency, f"{q_year}Q{q}")))
+        q -= 1
+        if q == 0:
+            q_year, q = q_year - 1, 4
+    if not all(quarters):
+        return None, None
+    rate = round(sum(quarters) / 4, 6)
+    return round(value * rate, 6), rate
+
+
 def build_annual_rows() -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     sources = read_csv(SOURCE_DIR / "annual_product_sales.csv")
@@ -2544,14 +2570,16 @@ def build_annual_rows() -> list[dict[str, Any]]:
     for source in sources:
         meta = ANNUAL_METADATA[source["drug_name"]]
         value = float(source["value_reported"])
-        source_unit = "thousands" if "thousands" in source["source_quote"].lower() else source["unit"]
-        source_value = value * 1000 if source_unit == "thousands" else value
+        if source.get("source_unit") and source.get("source_value_reported"):
+            source_unit, source_value = source["source_unit"], float(source["source_value_reported"])
+        else:
+            source_unit = "thousands" if "thousands" in source["source_quote"].lower() else source["unit"]
+            source_value = value * 1000 if source_unit == "thousands" else value
         period_basis = meta.get("period_basis", "calendar")
-        # The annual FX rate is a calendar-year average, so a fiscal year in a
-        # foreign currency would convert at the wrong year's rate.
-        if period_basis != "calendar" and source["currency"] != "USD":
-            raise ValueError(f"{source['drug_name']} {source['period']}: a {period_basis} year in {source['currency']} has no matching FX rate")
-        normalized_usd, fx_rate = usd_normalized(value, source["currency"], int(source["period"]))
+        if period_basis == "calendar" or source["currency"] == "USD":
+            normalized_usd, fx_rate = usd_normalized(value, source["currency"], int(source["period"]))
+        else:
+            normalized_usd, fx_rate = fiscal_year_usd(value, source["currency"], int(source["period"]), period_basis)
         if normalized_usd is None:
             raise ValueError(
                 f"No FX rate for {source['drug_name']} {source['period']} ({source['currency']}); "

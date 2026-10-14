@@ -1,0 +1,33 @@
+{
+  "drug_name": "Eucrisa",
+  "generic_name": "crisaborole",
+  "therapeutic_area": "Immunology / Inflammation",
+  "indication_area": "Atopic dermatitis (mild to moderate)",
+  "formulation": "ointment, 2%",
+  "route_of_administration": "topical",
+  "moa": "Phosphodiesterase 4 (PDE4) inhibitor",
+  "moa_class": "pde4_inhibitor",
+  "manufacturer": "Pfizer",
+  "benchmark_identity": "pfizer_eucrisa_worldwide_reported",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "first_approval_year": 2016,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2016/207695Orig1s000ltr.pdf",
+    "quote": "NDA 207695 NDA APPROVAL ... for Eucrisa (crisaborole) ointment, 2% ... topical treatment of mild to moderate atopic dermatitis in patients 2 years of age and older ... (electronically signed 12/14/2016)"
+  },
+  "launch_quarter": null,
+  "launch_evidence": null,
+  "commercial_start_quarter": "2017Q1",
+  "series_start_reason": "FDA approved Eucrisa on 2016-12-14 (Anacor, acquired by Pfizer June 2016). Pfizer's fourth-quarter 2016 release (2017-01-31) mentions the approval in text and prints no Eucrisa revenue row; the first row is the first-quarter 2017 release (2017-05-02: 'Eucrisa | 9 | \u2014 ...'). No issuer document dating the first sale was located, so launch_quarter is null.",
+  "series_end_quarter": "2019Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The fourth-quarter 2019 release (2020-01-28) is the last Pfizer earnings release with an Eucrisa row (Eucrisa | 45 | 43). The first-quarter 2020 release (2020-04-28) and every later release through 2026-08-04 print no Eucrisa row in the product revenue tables (only a regulatory text mention in 2020-04), and the 10-Q/10-K revenue notes 2020-2026 carry no Eucrisa revenue figure.",
+  "notes": "Worldwide column of Pfizer's product-revenue table; the same row prints a U.S. column (identical to worldwide through 2019Q1; in 2019Q2-2019Q4 the worldwide figure exceeds the U.S. figure by 1, the international amount). Pfizer recorded a $2.6 billion Eucrisa intangible impairment in the fourth quarter of 2019 (10-K FY2021, note on impairment charges) - a cost item, not a revenue scope change. Annual sums vs twelve-month rows in the Q4 releases: 2017 67 vs 67, 2018 148 vs 147, 2019 137 vs 138 (rounding).",
+  "search_log": [
+    "listed Pfizer filings via data.sec.gov submissions (recent + older pages, CIK 0000078003), every 8-K and 8-K/A with Item 2.02 from 2010-02 to 2026-08 and the earnings 8-Ks of 2003-2009 (Items 12/9/2.02) and 2001-10-24 / 2002-07-16; downloaded each EX-99 and parsed the product-revenue table rows",
+    "Eucrisa rows: first printed in the 2017-05-02 release (first-quarter 2017); each quarter 2017Q1-2019Q4 read from its own release; 2018-2019 prior-year columns agree with the earlier releases (no restatement)",
+    "Absence after 2019Q4: no Eucrisa row in the product revenue tables of the 8-K releases of 2020-04-28, 2020-07-28, 2020-10-27, 2021-02-02 ... 2026-08-04; 10-Q/10-K 2020-2026 searched for Eucrisa (only patent litigation, intangible impairment and category listings)",
+    "Pfizer's most detailed product list is the release product-revenue table; no partner or royalty holder (Anacor was acquired) prints Eucrisa sales; Bigdata.com search not needed beyond EDGAR"
+  ]
+}

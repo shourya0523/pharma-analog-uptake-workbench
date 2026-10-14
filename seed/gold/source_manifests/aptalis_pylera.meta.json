@@ -40,5 +40,6 @@
     "source_url": "https://www.sec.gov/Archives/edgar/data/1444570/000119312511345928/d257254d10k.htm",
     "source_quote": "We reported net sales in the United States of $13.0 million, $10.5 million and $8.2 million for PYLERA in fiscal years 2011, 2010 and 2009, respectively.",
     "details": "Aptalis printed Pylera net sales only as fiscal-year figures in the Forms 10-K; its Forms 10-Q (December 2008 through December 2011) mention Pylera without a sales figure, and the later owners (Forest Laboratories, Actavis/Allergan plc, AbbVie) print no Pylera line. No quarterly figure is interpolated."
-  }
+  },
+  "annual_period_basis": "fiscal_year_ending_september"
 }

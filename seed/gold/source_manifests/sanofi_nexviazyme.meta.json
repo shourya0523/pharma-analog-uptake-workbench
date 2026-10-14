@@ -1,0 +1,36 @@
+{
+  "series_start_reason": "The Q3 2021 release (https://www.sec.gov/Archives/edgar/data/1121404/000112140421000017/pressreleaseq32021english.htm) reports the U.S. approval and launch but its tables have no Nexviazyme row. The Q4 2021 release is the first to print a row (Q4 2021 = 15, full year 2021 = 17), so the series starts with 2021Q4. The earlier part of 2021 is not printed as a quarter and is not derived (the full-year figure less the fourth quarter is rounded to a whole million).",
+  "drug_name": "Nexviazyme",
+  "generic_name": "avalglucosidase alfa (avalglucosidase alfa-ngpt)",
+  "manufacturer": "Sanofi",
+  "benchmark_identity": "sanofi_nexviazyme_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Pompe disease (late-onset, enzyme replacement)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "lyophilized powder for injection",
+  "route_of_administration": "intravenous",
+  "moa": "Recombinant human acid alpha-glucosidase enzyme replacement therapy with enhanced mannose-6-phosphate content",
+  "moa_class": "enzyme_replacement_therapy",
+  "first_approval_year": 2021,
+  "approval_evidence": {
+    "url": "http://www.accessdata.fda.gov/drugsatfda_docs/label/2021/761194s000lbl.pdf",
+    "quote": "NEXVIAZYME (avalglucosidase alfa-ngpt) for injection, for intravenous use ... Initial U.S. Approval: 2021"
+  },
+  "launch_quarter": "2021Q3",
+  "launch_evidence": "Q3 2021 release (https://www.sec.gov/Archives/edgar/data/1121404/000112140421000017/pressreleaseq32021english.htm): 'the U.S. approval and launch of Nexviazyme in Pompe disease'",
+  "commercial_start_quarter": "2021Q4",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Scope: worldwide net sales in EUR as Sanofi prints them, brand total. The label reads 'Nexviazyme' in the 2021Q4-2022Q2 releases, 'Nexviazyme /Nexviadyme' from 2022Q3 to 2023Q3 and 'Nexviazyme/Nexviadyme' from 2023Q4; the row_label of each row is the label that release prints. Sanofi reports the Pompe franchise (Nexviazyme/Nexviadyme plus Myozyme/Lumizyme) separately; this series is the Nexviazyme line only. Full-year sums match the Q4 releases for 2022-2025.",
+  "search_log": [
+    "reused the list of Sanofi (CIK 0001121404) quarterly-results releases 2011Q2-2026Q2 (one exhibit per quarter, 61 releases) already established for sanofi_fabrazyme (urls from seed/gold/source_manifests/sanofi_fabrazyme_quarterly.csv), re-fetched every one of the 61 from sec.gov Archives and parsed every table row (bs4) whose first cell starts with the product name",
+    "for each release took the product's row from the first table headed 'Net sales (\u20ac million)' (worldwide, one row per product; 2011-2015 headers read '(millions of euros) / Q2 2011 net sales' or '\u20ac million'), quarter figure first, then the H1 / 9M / FY / YTD column where printed; where a product has no row in that table (see below) used the Total Sales column of the appendix table of net sales by region",
+    "checked for every full year in which all four quarters are in the series that the four quarters equal the full-year figure printed in the Q4 release; all matched exactly (see notes where the series starts or ends mid-year)",
+    "Bigdata.com was not used; the releases were located from the existing Sanofi manifest and read directly",
+    "Nexviazyme row absent from every release before 2021Q4 (2021Q3 mentions the approval and launch in prose only); present in 2021Q4-2026Q2 (19 consecutive releases)",
+    "2021Q4 row prints '15 | ns | 17 | ns' (Q4 and full-year columns); the Q3 2021 release and the earlier releases were checked for a quarterly Nexviazyme figure and print none",
+    "FDA: Drugs@FDA BLA 761194 original label (2021) prints 'Initial U.S. Approval: 2021'; approval 2021-08-06 per the Drugs@FDA submission record"
+  ]
+}

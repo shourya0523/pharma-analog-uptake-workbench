@@ -1,0 +1,37 @@
+{
+  "drug_name": "Tibsovo",
+  "generic_name": "ivosidenib",
+  "manufacturer": "Agios Pharmaceuticals",
+  "benchmark_identity": "agios_tibsovo_us_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (hematologic): relapsed or refractory IDH1-mutated AML; also IDH1-mutated cholangiocarcinoma",
+  "revenue_scope": "U.S. net product sales",
+  "geography": "United States",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "IDH1 inhibitor",
+  "moa_class": "idh1_inhibitor",
+  "first_approval_year": 2018,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2018/211192Orig1s000ltr.pdf",
+    "quote": "NDA 211192 NDA APPROVAL ... Tibsovo (ivosidenib) tablets; 250 mg ... It is approved, effective on the date of this letter"
+  },
+  "launch_quarter": "2018Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1439222/000119312518314801/d645728dex991.htm",
+    "quote": "Launched TIBSOVO (ivosidenib) for the treatment of adult patients with relapsed or refractory (R/R) acute myeloid leukemia (AML) with a susceptible isocitrate dehydrogenase-1 (IDH1) mutation"
+  },
+  "commercial_start_quarter": "2018Q3",
+  "series_start_reason": "First quarter with product revenue: FDA approval 2018-07-20; the Q2 2018 release (filed 2018-08-02) reports no product revenue and says the launch was underway.",
+  "series_end_quarter": "2021Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Agios sold its oncology business, including TIBSOVO, to Servier on March 31, 2021 (Q1 2021 Form 10-Q). Agios's Q2 2021 release (0001193125-21-228150) reports only '$2.0 million from TIBSOVO (ivosidenib) royalties' and no TIBSOVO net sales; Agios no longer reports a TIBSOVO product line and no Servier document with TIBSOVO net sales was found.",
+  "notes": "Agios 'Product revenue, net' equals TIBSOVO U.S. net sales: it was Agios's only marketed product for the whole span. Sum checks: 2018 4.465+9.376=13.841 (printed full year 13,841); 2019 quarters sum to 59.851 (printed 59,851); 2020 quarters sum to 121.089 (printed 121,089). 2021Q1 is the rounded '$37 million' in the release text and 36.909 in the 10-Q. Ex-U.S. TIBSOVO rights belong to Servier (its sales are not in this series). Company-level line was checked for scope change: collaboration/royalty revenue are separate lines in every period.",
+  "search_log": [
+    "Listed Agios (CIK 1439222) 8-K Item 2.02 filings 2018-08 through 2021-04 from data.sec.gov submissions (no form filter beyond 8-K/10-Q/10-K prefix, so 8-K/A and 10-Q/A were shown too: only a 10-Q/A of 2021-05-07 appears, not used).",
+    "Read the EX-99.1 earnings release of every quarter 2018Q3-2020Q4 and extracted the 'Product revenue, net' row; read the Q1 2021 10-Q (agio-20210331.htm) for the discontinued-operations 'Product revenue, net' row (36,909 vs 22,674).",
+    "Q2 2018 release (0001193125-18-235609) prints no product revenue; Q3 2018 release says 'Reported Revenue of $4.5M in First Partial Quarter of Launch'.",
+    "FY2020 10-K (agio-20201231.htm) revenue note: product revenue 121,089 / 59,851 / 13,841 for 2020/2019/2018, all from TIBSOVO sales after U.S. approval July 20, 2018.",
+    "Post-2021: Agios Q2 2021 release and Q1 2025 10-Q mention TIBSOVO only as royalties from Servier / pre-sale history; no Servier or other document printing TIBSOVO net sales was located (Servier sales not searched beyond this)."
+  ]
+}

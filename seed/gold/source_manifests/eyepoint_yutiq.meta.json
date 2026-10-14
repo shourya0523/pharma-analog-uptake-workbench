@@ -1,0 +1,39 @@
+{
+  "drug_name": "Yutiq",
+  "generic_name": "fluocinolone acetonide intravitreal implant 0.18 mg",
+  "manufacturer": "EyePoint Pharmaceuticals",
+  "benchmark_identity": "eyepoint_yutiq_us_reported",
+  "therapeutic_area": "Ophthalmology",
+  "indication_area": "Ophthalmology (uveitis)",
+  "revenue_scope": "Predominantly U.S.",
+  "geography": "United States (predominantly; includes immaterial ex-U.S. supply sales to Ocumension)",
+  "formulation": "intravitreal implant 0.18 mg",
+  "route_of_administration": "intravitreal",
+  "moa": "corticosteroid (fluocinolone acetonide) intravitreal implant",
+  "moa_class": "corticosteroid_intravitreal_implant",
+  "first_approval_year": 2018,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2018/210331Orig1s000ltr.pdf",
+    "quote": "NDA 210331 ... Yutiq (fluocinolone acetonide intravitreal implant) 0.18 mg ... It is approved, effective on the date of this letter (electronic signature dated 10/12/2018)"
+  },
+  "launch_quarter": "2019Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1314102/000119312519078454/d701050d10kt.htm",
+    "quote": "YUTIQ | NIPU | FDA-approved; U.S. product launch in February 2019"
+  },
+  "commercial_start_quarter": "2019Q1",
+  "series_start_reason": null,
+  "series_end_quarter": "2023Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "EyePoint sold the YUTIQ franchise to Alimera Sciences in May 2023 ('Sold YUTIQ franchise to Alimera Sciences in May 2023 for $82.5 million plus future royalties', 2023Q2 release). The 2023Q2 EyePoint 10-Q prints only 'Product sales, net' 5,273 thousand (a partial quarter, 'primarily from sales of YUTIQ') with no YUTIQ-only row. Alimera's 10-Qs and releases for 2023Q3-2024Q2 and ANI Pharmaceuticals' filings from 2024Q3 print YUTIQ only together with ILUVIEN ('ILUVIEN and YUTIQ' in ANI's 10-Q and 10-K tables); no Yutiq-only figure exists after EyePoint's 2023Q1.",
+  "notes": "EyePoint's own YUTIQ line, 2019Q1-2023Q1, no gaps. 2019Q1-Q3, 2020Q1-Q3, 2021Q1-Q3 and 2022Q1-Q3 are YUTIQ rows of the 10-Q net product revenues by product table (thousands). The fourth quarters (the 10-K prints full years only) are derived as the 10-K full-year YUTIQ row less the nine-month 10-Q figure, in thousands: 2019 12,046 less 7,303 = 4,743; 2020 13,878 less 9,920 = 3,958; 2021 16,959 less 11,124 = 5,835; 2022 28,329 less 19,305 = 9,024. The 2019 row cites the prior-year column of the FY2020 10-K because the FY2019 10-K prints only one figure on the row. 2023Q1 (7.4) is the YUTIQ sentence of the first-quarter 2023 earnings release (millions, one decimal); the 2023Q1 10-Q prints only total 'Product sales, net' 7,394 thousand, so the release is the only YUTIQ-labelled source. Reconciliation to the 10-K full years (thousands): the four quarters sum to 12,046, 13,878, 16,958 and 28,329 for 2019-2022 (2021 differs by 1 from rounding in the 10-Q figures). Scope: the YUTIQ line is not strictly U.S.-only. The table footnotes state the line includes YUTIQ product sales to Ocumension (ex-U.S.) under a supply agreement: full-year 2019 about $91 thousand and 2020 about $205 thousand (FY2020 10-K), second quarter 2021 about $14 thousand (10-Q), second quarter 2022 about $11 thousand and third quarter 2022 about $4 thousand, nine months 2022 about $71 thousand (10-Qs). The 10-K footnotes also give full-year ex-U.S. supply sales of about $25 thousand for 2021 and $343 thousand for 2022. As shares of the printed YUTIQ full-year line these are about 0.8% (2019), 1.5% (2020), 0.1% (2021) and 1.2% (2022); the implied 2022 fourth-quarter amount (343 less the 71 thousand nine-month figure) is about 272 thousand, about 3% of that quarter. Each is small, so the scope is recorded as predominantly U.S.; footnotes of the other quarters were not all read. 2019Q2 (6,705) includes the initial stocking sale after the February 2019 launch. DEXYCU (EyePoint's other product) is a separate line and is excluded.",
+  "search_log": [
+    "EDGAR submissions CIK 1314102 (EyePoint / pSivida): listed Item 2.02 8-K and 8-K/A 2007-2026; opened every earnings release 2019Q1-2023Q2 and searched for YUTIQ sentences and table rows. The releases print no YUTIQ table row; the sentences are in millions.",
+    "Opened the 10-KT (2018 transition), 10-K FY2019-FY2022 and every 10-Q 2019Q1-2023Q3 and read the YUTIQ / DEXYCU rows of the net product revenue by product table; the 10-K FY2019 table is 'YUTIQ $12,046, DEXYCU 4,778' (full year only).",
+    "Acquirer: Alimera Sciences (CIK 1267602) 10-Q/10-K 2023Q1-2024Q2 and 8-K releases: no YUTIQ-only revenue figure (releases say only 'driven by the addition of YUTIQ in the U.S.'). ANI Pharmaceuticals (CIK 1023024) 10-Q/10-K 2024Q3-2026Q2: YUTIQ appears only as 'ILUVIEN and YUTIQ' combined revenue.",
+    "Bigdata.com not needed beyond locating filings.",
+    "Fourth quarters: FY2019-FY2022 10-K YUTIQ rows read (12,046 / 13,878 / 16,959 / 28,329 thousand) and combined with the nine-month YUTIQ figures of the Q3 10-Qs; the FY2019 release sentence '$4.8 million for YUTIQ' is a rounded version of the derived 4,743 and is no longer used.",
+    "Scope check: footnote (A)/(a) of the net product revenues table read in the 10-Qs for 2021Q2, 2022Q2 and 2022Q3 and in the FY2020 10-K: YUTIQ product sales to Ocumension are included in the YUTIQ line.",
+    "2023Q1 10-Q (0000950170-23-017724) read: prints only total 'Product sales, net' 7,394 thousand with no YUTIQ row, so 2023Q1 stays on the earnings-release sentence. The claim that Alimera and ANI print YUTIQ only combined with ILUVIEN was taken from the earlier search and not re-verified in this pass."
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "drug_name": "Oxbryta",
+  "generic_name": "voxelotor",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Sickle cell disease",
+  "formulation": "tablet and tablet for oral suspension",
+  "route_of_administration": "oral",
+  "moa": "Hemoglobin S (HbS) polymerization inhibitor",
+  "moa_class": "hemoglobin_s_polymerization_inhibitor",
+  "manufacturer": "Pfizer",
+  "benchmark_identity": "pfizer_gbt_oxbryta_us_reported",
+  "revenue_scope": "U.S. net product sales",
+  "geography": "United States",
+  "first_approval_year": 2019,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2019/213137Orig1s000ltr.pdf",
+    "quote": "NDA 213137 ACCELERATED APPROVAL ... OXBRYTA (voxelotor) tablets ... treatment of sickle cell disease in adults and pediatric patients 12 years of age and older (signed 11/25/2019)"
+  },
+  "launch_quarter": "2019Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1629137/000119312520050084/d843865d10k.htm",
+    "quote": "Oxbryta and fully launched with a deployed sales force in December 2019"
+  },
+  "commercial_start_quarter": "2019Q4",
+  "series_start_reason": "GBT began shipping Oxbryta in December 2019 (FY2019 10-K: 'Our product sales consist of U.S. sales of Oxbryta, which we began shipping to customers in December 2019. Prior to December 2019, we had no product sales'); 2019Q4 is the first row.",
+  "series_end_quarter": "2024Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Pfizer announced the voluntary withdrawal of all lots of Oxbryta in September 2024 (release footnote to the 2024Q4 row). The fourth-quarter 2024 release (2025-02-04) prints the last Oxbryta row (8 worldwide, 2 U.S.); the first-quarter 2025 release (2025-04-29) and later releases print no Oxbryta row.",
+  "joined_issuers": [
+    {
+      "issuer": "Global Blood Therapeutics",
+      "first_quarter": "2019Q4",
+      "last_quarter": "2022Q2"
+    },
+    {
+      "issuer": "Pfizer",
+      "first_quarter": "2022Q4",
+      "last_quarter": "2024Q4"
+    }
+  ],
+  "unreported_quarters": {
+    "2022Q3": "Ownership change Global Blood Therapeutics to Pfizer. GBT's last periodic report is the Form 10-Q for the quarter ended June 30, 2022 (filed 2022-08-08); Pfizer completed the acquisition on 2022-10-05 (GBT filed Form 25-NSE on 2022-10-05 and Form 15-12G on 2022-10-17 and no 10-Q for the third quarter), and Pfizer's third-quarter 2022 release and 10-Q print no Oxbryta figure (its 2023-10-31 release prints a dash for the 2022Q3 prior-year column). No document gives a 2022Q3 figure."
+  },
+  "notes": "U.S. scope chosen because GBT's 'Product sales, net' consists of U.S. sales of Oxbryta (FY2019 10-K) and Pfizer's table prints a U.S. column on the same row; the Pfizer rows use that U.S. column. Pfizer's worldwide column is 73, 71, 77, 85, 96, 84, 92, 17, 8 for 2022Q4-2024Q4 (international 1-6; negative in 2024Q3 after returns). Pfizer's 2022Q4 figure covers the period from the 2022-10-05 acquisition. GBT amounts are printed in thousands. Oxbryta (tablets for oral suspension, December 2021) is part of the same brand line. Sums: GBT 2020 quarters 123.803 = twelve months 2020 123,803; 2021 194.749 = 194,749; Pfizer 2024 worldwide 84+92+17+8 = 201 printed twelve-month 201.",
+  "search_log": [
+    "GBT (CIK 0001629137): listed filings (10-K, 10-Q, 8-K Item 2.02) 2019-10 to 2022-10; Product sales, net read from the earnings-release exhibit of each quarter 2019Q4-2022Q1 and from the 10-Q for 2022Q2 (no 2022-08 earnings 8-K is listed among the issuer's Item 2.02 filings)",
+    "GBT filings after 2022-08-08: only proxy material, Forms 4, S-8 POS, 25-NSE, 15-12G - no third-quarter 2022 report",
+    "listed Pfizer filings via data.sec.gov submissions (recent + older pages, CIK 0000078003), every 8-K and 8-K/A with Item 2.02 from 2010-02 to 2026-08 and the earnings 8-Ks of 2003-2009 (Items 12/9/2.02) and 2001-10-24 / 2002-07-16; downloaded each EX-99 and parsed the product-revenue table rows",
+    "Pfizer: Oxbryta row first printed in the 2023-01-31 release (fourth quarter 2022); rows through 2024Q4 (2024-10-29 footnote (g), 2025-02-04 footnote (f) on the withdrawal); 2025-04-29 and later releases and 10-Qs checked: no Oxbryta row",
+    "Pfizer 10-K FY2024 revenue table lists Oxbryta 2022 73, 2023 328, 2024 201 (worldwide) - consistent with the quarterly worldwide column; a worldwide series was not used because GBT is U.S.-only"
+  ],
+  "reviewed_anomalies": {
+    "2024Q4": "Read at source: Pfizer's fourth-quarter 2024 release prints Oxbryta U.S. revenue of 2 (21 in the third quarter). Kept as printed."
+  }
+}

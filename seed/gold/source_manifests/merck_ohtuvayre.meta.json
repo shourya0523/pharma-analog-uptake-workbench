@@ -1,0 +1,56 @@
+{
+  "drug_name": "Ohtuvayre",
+  "generic_name": "ensifentrine",
+  "therapeutic_area": "Respiratory / Allergy",
+  "formulation": "inhalation suspension (nebulized)",
+  "first_approval_year": 2024,
+  "moa": "Dual phosphodiesterase 3 and 4 (PDE3/PDE4) inhibitor with bronchodilator and non-steroidal anti-inflammatory activity",
+  "moa_class": "pde3_pde4_inhibitor",
+  "route_of_administration": "inhaled",
+  "indication_area": "Chronic obstructive pulmonary disease (maintenance treatment)",
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2024/217389Orig1s000ltr.pdf",
+    "quote": "This NDA provides for the use of Ohtuvayre (ensifentrine) inhalation suspension, a phosphodiesterase 3 (PDE3) inhibitor and phosphodiesterase 4 (PDE4) inhibitor, for the maintenance treatment of chronic obstructive pulmonary disease (COPD) in adult patients. (FDA approval letter, NDA 217389, signed 06/26/2024)"
+  },
+  "manufacturer": "Verona Pharma; Merck & Co.",
+  "benchmark_identity": "ohtuvayre_product_sales_reported",
+  "revenue_scope": "U.S. net product sales of Ohtuvayre: Verona Pharma's product sales line (U.S.-only commercialisation, sole product) and the U.S. column of Merck's product sales table in its 10-Q.",
+  "geography": "U.S. Verona's 10-Qs state Ohtuvayre is commercialised in the U.S. only; Merck's 10-Q sales-by-product table has U.S., Int'l and Total columns and prints Int'l as nil for Ohtuvayre in 2026Q1 and 2026Q2 (so U.S. equals Total).",
+  "launch_quarter": "2024Q3",
+  "commercial_start_quarter": "2024Q3",
+  "series_start_reason": "First quarter with product sales; Verona's Q3 2024 release states the August 2024 launch (FDA approval June 26, 2024); 2024Q2 has no sales.",
+  "series_end_quarter": "2026Q2",
+  "series_end_basis": "sourcing_boundary",
+  "series_end_reason": "Latest published quarter at the time of sourcing (Merck 10-Q for the quarter ended 2026-06-30, filed 2026-08-07).",
+  "unreported_quarters": {
+    "2025Q3": "Verona was acquired on October 7, 2025 and filed no Q3 2025 10-Q or release (EDGAR submissions list ends with the Oct 2025 8-K, S-8 POS and 15-12G filings). Merck's Q3 2025 earnings release (https://www.sec.gov/Archives/edgar/data/310158/000110465925103974/tm2529620d1_ex99-1.htm) mentions the acquisition only as an October event and has no Ohtuvayre sales line.",
+    "2025Q4": "Merck's Q4 2025 release prints OHTUVAYRE 178 but labels it 'Represents sales following the Company's Oct. 7, 2025 acquisition of Verona Pharma plc', a partial quarter, so it is not spliced into a full-quarter series."
+  },
+  "notes": "Scope is consistent across the join: both issuers' rows are U.S. net sales. Merck's earnings-release table is worldwide, but its 10-Qs split U.S. and Int'l and print Int'l as nil for Ohtuvayre in 2026Q1 and 2026Q2, so the 10-Q U.S. column is used (equal to the release figures 131 and 204). Merck's 2025 10-K prints Ohtuvayre 178 in the U.S. column for the post-acquisition period. Verona 2024 quarterly values 5.624 + 36.637 = 42.261, equal to the 2024 year printed in the Q4 2024 release (42,261). Verona's Q3 2024 release prints no separate 'Product sales' row; its only revenue line is 'Revenue' 5,624 and the text calls it Ohtuvayre net sales. Q1/Q2 2025 total revenue also includes Other revenue (5,000 and 199 respectively), excluded here. Merck's Q4 2025 release prints OHTUVAYRE 178 (https://www.sec.gov/Archives/edgar/data/310158/000110465926009495/tm264564d1_ex99-1.htm) labelled as sales following the October 7, 2025 acquisition, a partial quarter, deliberately not included (same treatment as abbvie_elahere).",
+  "search_log": [
+    "EDGAR submissions for Verona Pharma (CIK 1657312): listed every 8-K, 8-K/A, 10-Q, 10-K from 2021 to the 15-12G in 2025; Q3 2024, Q4 2024 and Q1 2025 earnings releases found as 8-K exhibits (items 2.02); no Q2 2025 earnings 8-K present in the submissions, so the Q2 2025 10-Q is cited; no Q3 2025 filing exists",
+    "Read each release's tables and text with BeautifulSoup row extraction; figures in the quotes are copied from those rows",
+    "Bigdata.com search for Merck Ohtuvayre Q4 2025 located Merck's Q4 2025 release (sales 178M, partial quarter); Merck 8-K exhibits for Q3 2025, Q4 2025, Q1 2026, Q2 2026 read directly from sec.gov",
+    "FDA approval letter NDA 217389 fetched from accessdata.fda.gov and read (approval 06/26/2024)",
+    "[Merck piece] EDGAR submissions for Merck (CIK 310158): earnings 8-Ks of 2025-10-30, 2026-02-03, 2026-04-30, 2026-08-04 downloaded; OHTUVAYRE row read in Q4 2025, Q1 2026 and Q2 2026 releases; Q3 2025 release has no Ohtuvayre sales line",
+    "[Merck piece] Bigdata.com search 'Merck Ohtuvayre sales fourth quarter 2025' pointed to the Q4 2025 call and slides ($178M)",
+    "Scope check: Merck release table is headed worldwide, so Merck 10-Qs (CIK 310158, accessions 0001628280-26-029802 and 0000310158-26-000212) and the FY2025 10-K (0000310158-26-000063) were downloaded from sec.gov and the Ohtuvayre row read: U.S. 131 / Int'l nil / Total 131 (Q1 2026), U.S. 204 / Int'l nil / Total 204 (Q2 2026), U.S. 178 / Total 178 (2025 post-acquisition). Verona's Q2 2025 10-Q states Ohtuvayre is commercialised in the U.S.",
+    "Merck EDGAR submissions listed 10-Q/10-K filings 2025-11-05 (Q3 2025), 2026-02-24, 2026-05-04, 2026-08-07; Q3 2025 10-Q period precedes the Oct 7 close."
+  ],
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1657312/000165731224000028/a20241104vrna-10xqq3xpress.htm",
+    "quote": "In August 2024, the Company launched Ohtuvayre for the maintenance treatment of COPD in the US."
+  },
+  "joined_issuers": [
+    {
+      "issuer": "Verona Pharma",
+      "first_quarter": "2024Q3",
+      "last_quarter": "2025Q2"
+    },
+    {
+      "issuer": "Merck",
+      "first_quarter": "2026Q1",
+      "last_quarter": "2026Q2"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "series_start_reason": "Sanofi's own line begins with the Q2 2011 release, the first reporting period after it consolidated Genzyme on April 1, 2011 (the Genzyme table of that release is headed 'Q2 2011 net sales'; 'Net sales since April 1st 2011' in the Q3 2011 release). Genzyme's own filings printed Cerezyme before the acquisition (USD, a different issuer and currency); they were not sourced in this batch and are not spliced, as with sanofi_fabrazyme.",
+  "drug_name": "Cerezyme",
+  "generic_name": "imiglucerase",
+  "manufacturer": "Sanofi",
+  "benchmark_identity": "sanofi_cerezyme_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Gaucher disease (enzyme replacement)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "lyophilized powder for injection",
+  "route_of_administration": "intravenous",
+  "moa": "Recombinant analogue of human beta-glucocerebrosidase enzyme replacement therapy",
+  "moa_class": "enzyme_replacement_therapy",
+  "first_approval_year": 1994,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2024/020367s122lbl.pdf",
+    "quote": "CEREZYME (imiglucerase) for injection, for intravenous use ... Initial U.S. Approval: 1994"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2011Q2",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Scope: worldwide net sales in EUR as Sanofi prints them. The headline Net sales table carries one worldwide figure per product; where the release also prints the appendix table of net sales by region, its Total Sales column repeats the same figure (Q1 2024: 214 in both). A search for statements of a territory or formulation joining the Cerezyme line was not made beyond reading the table rows. Launch quarter is null: the product launched in the U.S. in 1994 (label 'Initial U.S. Approval: 1994'), long before Sanofi's series. 2011 quarters carry the Genzyme table 'Net sales since April 1st 2011'; the three printed 2011 quarters (166, 141, 133) differ by 1 from the 441 printed as the Q4 2011 'net sales since April 1st' total, a rounding difference between printed figures. 2012Q2: the release prints the header 'Q2 2011 net sales' over Q2 2012 figures; Q1 2012 (149) plus Q2 2012 (150) equals the printed H1 2012 figure 299.",
+  "search_log": [
+    "reused the list of Sanofi (CIK 0001121404) quarterly-results releases 2011Q2-2026Q2 (one exhibit per quarter, 61 releases) already established for sanofi_fabrazyme (urls from seed/gold/source_manifests/sanofi_fabrazyme_quarterly.csv), re-fetched every one of the 61 from sec.gov Archives and parsed every table row (bs4) whose first cell starts with the product name",
+    "for each release took the product's row from the first table headed 'Net sales (\u20ac million)' (worldwide, one row per product; 2011-2015 headers read '(millions of euros) / Q2 2011 net sales' or '\u20ac million'), quarter figure first, then the H1 / 9M / FY / YTD column where printed; where a product has no row in that table (see below) used the Total Sales column of the appendix table of net sales by region",
+    "checked for every full year in which all four quarters are in the series that the four quarters equal the full-year figure printed in the Q4 release; all matched exactly (see notes where the series starts or ends mid-year)",
+    "Bigdata.com was not used; the releases were located from the existing Sanofi manifest and read directly",
+    "Cerezyme row present in the headline Net sales table of every release 2011Q2-2026Q2 (61 of 61); no gaps; no release prints a different label than 'Cerezyme' (with or without the registered mark)",
+    "FDA: Drugs@FDA BLA 020367 label 2024 (s122) prints 'Initial U.S. Approval: 1994'",
+    "Not searched in this batch: Genzyme Corporation 10-K/10-Q filings (CIK 0000732485) before 2011Q2 and any partner or royalty holder; they are not needed because Sanofi prints the line for the whole span used"
+  ]
+}

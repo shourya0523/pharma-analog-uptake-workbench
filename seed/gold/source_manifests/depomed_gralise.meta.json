@@ -1,0 +1,37 @@
+{
+  "drug_name": "Gralise",
+  "generic_name": "gabapentin extended release",
+  "manufacturer": "Depomed",
+  "benchmark_identity": "depomed_gralise_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Postherpetic neuralgia",
+  "revenue_scope": "Gralise product sales, net",
+  "geography": "As reported; the revenue tables do not label a territory (Gralise became commercially available in October 2011 following U.S. FDA approval)",
+  "formulation": "once-daily extended-release tablet",
+  "route_of_administration": "oral",
+  "moa": "gabapentin (alpha-2-delta calcium channel subunit ligand)",
+  "moa_class": "alpha2delta_ligand",
+  "first_approval_year": 2011,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2011/022544s000ltr.pdf",
+    "quote": "NDA 022544 ... Gralise (gabapentin) Tablets 300 mg and 600 mg ... it is approved, effective on the date of this letter (electronic signature dated 01/28/2011)"
+  },
+  "launch_quarter": "2011Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1005201/000100520120000021/asrt-12312019x10k.htm",
+    "quote": "We made Gralise commercially available in October 2011, following its U.S. Food and Drug Administration (FDA) approval in January 2011."
+  },
+  "commercial_start_quarter": "2011Q4",
+  "series_start_reason": null,
+  "series_end_quarter": "2019Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Assertio sold Gralise to Alvogen on January 10, 2020 (2019Q4 release: 'On January 10, 2020, the Company completed the sale of Gralise to Alvogen'). The 2020Q1 release prints a Gralise row of 547 (thousands) for the stub, which is not a quarter of ownership and is not in the series; no later Assertio release prints Gralise. The acquirer is a private company and no document with a Gralise sales figure was found for it.",
+  "notes": "Depomed's own 'Gralise' product-sales line, 2011Q4-2019Q4, no gaps. 2011Q4-2013Q1 are prose figures in USD millions (revenue recognized on a prescription basis until the change to a sell-in model in 2012Q4, which added a one-time $1.6 million); 2013Q2 onward are table rows in USD thousands. 2017Q1 uses the restated 17,600 from the 2018Q1 release's prior-year column (the quarter's own release printed 18,552); the series then reconciles to each printed full year: 2013 36,188 (6.1 + 8.554 + 9.812 + 11.733 = 36.199), 2014 60,411, 2015 81,054, 2016 88,446, 2017 77,034, 2018 58,077, 2019 63,124. 2012: 1.75 + 3.2 + 4.8 + 7.6 = 17.35 against the printed full year 17.3 (the first-quarter figure is printed to two decimals). Gabapentin's first approval was 1993 (Initial U.S. Approval of the Gralise label); first_approval_year here is that of this product's NDA 022544.",
+  "search_log": [
+    "EDGAR submissions CIK 1005201 (Depomed / Assertio Therapeutics, to 2020-05) and CIK 1808665 (new Assertio Holdings, from 2020-08): listed Item 2.02 8-K and 8-K/A; opened every earnings-release exhibit 2011Q3-2020Q1. The 2018-08-17 8-K/A repeats the 2018-08-08 table; the original was used.",
+    "2011Q4-2013Q1 releases carry no Gralise table row; the figure is stated in text (searched each release for 'Gralise' sentences).",
+    "The 2014-02-25 8-K is a preliminary Q4 2013 product-sales total with no Gralise figure; the 2014-03-12 release is the fourth-quarter release used.",
+    "Cross-check: for each year the four quarters were summed and compared with the full-year figure printed in the fourth-quarter release (see notes). The 2017Q1 original value (18,552) did not reconcile; the restated 17,600 does.",
+    "Gralise was sold in January 2020; the 2020Q1 Assertio release prints a Gralise row of 547 and was not used. Almatica / Alvogen: no public document with a Gralise sales figure was found (private company); not pursued further."
+  ]
+}

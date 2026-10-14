@@ -1,0 +1,57 @@
+{
+  "drug_name": "Vidaza",
+  "generic_name": "azacitidine",
+  "manufacturer": "Bristol-Myers Squibb",
+  "benchmark_identity": "bms_vidaza_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (hematologic; myelodysplastic syndromes)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (U.S. plus international)",
+  "formulation": "lyophilized powder for injectable suspension",
+  "route_of_administration": "intravenous or subcutaneous",
+  "moa": "DNA hypomethylating agent (nucleoside metabolic inhibitor)",
+  "moa_class": "hypomethylating_agent",
+  "first_approval_year": 2004,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=050794",
+    "quote": "05/19/2004 ORIG-1 Approval Type 1 - New Molecular Entity PRIORITY; Orphan (VIDAZA AZACITIDINE 100MG/VIAL POWDER;INTRAVENOUS, SUBCUTANEOUS)"
+  },
+  "launch_quarter": "2004Q3",
+  "commercial_start_quarter": "2004Q3",
+  "series_start_reason": "Pharmion launched Vidaza in the U.S. on July 1, 2004 and its third-quarter 2004 release is the first to print Vidaza sales (launch quarter). Pharmion rows run 2004Q3-2007Q4; Celgene closed the Pharmion acquisition on March 7, 2008 and rows resume at 2008Q2 (see unreported_quarters). The line is the total Vidaza figure from the first quarter; 2004Q3-2005Q3 are U.S. only because ex-U.S. named-patient sales began in 2005Q4 (see notes).",
+  "series_end_quarter": "2021Q3",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "BMS's fourth-quarter 2021 release (https://www.sec.gov/Archives/edgar/data/14272/000001427222000047/q42021ex991.htm) no longer prints a Vidaza row: its product table runs Yervoy, Abraxane, Reblozyl, Empliciti, Abecma, Zeposia, Breyanzi, Inrebic, Onureg, 'Mature and other brands (a)', with footnote '(a) Includes products that have lost exclusivity in major markets, over-the-counter (OTC) brands and royalty revenue'. The third-quarter 2021 release (q32021ex991.htm) still prints a Vidaza row (36).",
+  "notes": "Worldwide Vidaza net product sales, contiguous 2008Q2-2021Q3 (U.S. plus international, one definition). Celgene rows are read from each release's narrative sentence (2008Q2-2015Q2), then from the release's U.S./International/Worldwide table (2015Q3-2019Q3, where the figures carry one decimal until 2017Q1); 2010Q1 is cited to the Form 10-Q's thousands table because the release narrative splits the label from its figure across lines. 2019Q4 is BMS's full-quarter figure from the Ex 99.2 trend table (Celgene Oct 1-Nov 19 = 91 plus BMS Nov 20-Dec 31 = 58, both printed in that release), recast by BMS to exclude foreign currency hedge gains and losses. BMS rows 2020Q1-2021Q3 are table rows (worldwide and U.S. column groups). An authorized generic of VIDAZA drug product is reported by Celgene inside 'all other product sales' (first stated in the fourth-quarter 2013 release) and, from the 2015-11-05 release, as a separate 'azacitidine for injection' table row, not in the Vidaza line. Calendar-year sums equal the full-year figures printed in the releases: 2009 387.2, 2012 823, 2013 803, 2014 612, 2016 608.0, 2017 628, 2018 594, with 2010 summing to 533.9 against a printed 534.0. Verifier reviewer addition: 2004Q3-2007Q4 are Pharmion's own Vidaza sales (moved in from extras/pharmion_vidaza). Pharmion's 2007 releases label the line worldwide sales of Vidaza (2007 full year 165.3, of which U.S. 131.4 and named patient/compassionate use in Europe and other international markets 33.9; 2006: 142.2, U.S. 130.6, international 11.6); the 2004 and 2005 releases print Vidaza sales without a regional split and describe a U.S. launch, so the early Pharmion quarters are predominantly U.S. and the international share enters over 2006-2007. 2004 quarters sum to 47.0 against a printed 47.1. Scope (repair): the line is the issuer's total Vidaza net sales in every quarter, so it is worldwide throughout; what changes is the territory it covers. Pharmion's 2004Q3-2005Q3 quarters are U.S. sales only because Vidaza was approved and sold only in the U.S. then: the Form 10-K for 2005 states 'We began named patient and compassionate use sales of Vidaza in the fourth quarter of 2005 in the E.U. pending a marketing authorization for Vidaza in the EU', which dates the first ex-U.S. sales to 2005Q4 (https://www.sec.gov/Archives/edgar/data/1203866/000103570406000180/d34101e10vk.htm). From 2005Q4 the total includes those named-patient sales (Pharmion's 2007 fourth-quarter release: 2006 worldwide 142.2, of which U.S. 130.6 and international 11.6; 2007 worldwide 165.3, of which U.S. 131.4 and international 33.9; fourth quarter 2007 worldwide 44.8, U.S. 34.2, international 10.6; fourth quarter 2006 worldwide 36.6, U.S. 32.0, international 4.6). Celgene and BMS print the global line. A U.S.-only line cannot be built for the whole span: Celgene's 2008Q2-2015Q2 releases print a worldwide Vidaza figure, and the one 10-Q read for that period (2012Q3) comments on U.S. and international growth without figures; U.S. figures are printed from the 2015Q3 release table. The worldwide total, which every issuer prints, is therefore the longest consistent line, and the 2004Q3-2005Q3 rows equal the worldwide total because no other territory had sales.",
+  "search_log": [
+    "Listed CIK 14272 (Bristol-Myers Squibb) and CIK 816284 (Celgene) filings via data.sec.gov/submissions (recent plus older pages), all form types including 8-K/A; selected every filing carrying Item 2.02 and resolved its exhibits through each filing's index.json. Celgene Item 2.02 filings run to 2019-10-31 and BMS to 2026-07-30 (2026Q2 release); Celgene filed no fourth-quarter 2019 release because the acquisition closed 2019-11-20.",
+    "Celgene's January 7-13 8-Ks (preliminary results) were not used as the source for any quarter; each quarter is read from the earnings release filed after quarter end (the quarter's own release).",
+    "Celgene releases 2008Q2-2019Q3: Vidaza figure read from the narrative sentence through 2015Q2 and from the Worldwide table row afterwards (the narrative stops stating a Vidaza quarter figure in the 2015-11-05 release); the 2008Q1 release (2008-05-08) and the 2008Q2 release were read for a first-quarter stub and none is printed as a quarter.",
+    "BMS Ex 99.1 product tables 2020Q1-2021Q3 carry a Vidaza row; searched the 2021Q4-2026Q2 releases (Ex 99.1 and 99.2 where filed) for 'Vidaza': no match.",
+    "Pharmion Corp (CIK 1203866) releases fetched: Vidaza sales printed quarterly 2004Q3-2007Q4 (staged as extras/pharmion_vidaza); Pharmion filed no first-quarter 2008 release (acquired March 7, 2008), so the Pharmion and Celgene series cannot be joined without a gap at 2008Q1.",
+    "Drugs@FDA overview page for NDA 050794 fetched for the approval date.",
+    "Verifier (scripts/sourcing/verify_staged_manifests.py) run on the staged CSV: every row's label and quoted figures were found on one line of the cited document.",
+    "Repair, scope: Pharmion Form 10-K for 2005 (https://www.sec.gov/Archives/edgar/data/1203866/000103570406000180/d34101e10vk.htm) dates the first ex-U.S. Vidaza sales (named patient and compassionate use, E.U.) to the fourth quarter of 2005; Pharmion's 2004 and 2005 releases print one Vidaza figure per quarter with no regional split and describe a U.S. launch; the 2007 fourth-quarter release (https://www.sec.gov/Archives/edgar/data/1203866/000103570408000076/d54119exv99w1.htm) prints worldwide, U.S. and international Vidaza sales for 2006, 2007 and the fourth quarters. Celgene's second-quarter 2010 release and the 2012 third-quarter 10-Q (https://www.sec.gov/Archives/edgar/data/816284/000110465912071891/a12-19056_110q.htm) were read for a quarterly U.S. Vidaza figure and print the global figure only, with U.S. and international trends in prose."
+  ],
+  "joined_issuers": [
+    {
+      "issuer": "Pharmion",
+      "first_quarter": "2004Q3",
+      "last_quarter": "2007Q4"
+    },
+    {
+      "issuer": "Celgene",
+      "first_quarter": "2008Q2",
+      "last_quarter": "2019Q3"
+    },
+    {
+      "issuer": "Bristol-Myers Squibb",
+      "first_quarter": "2019Q4",
+      "last_quarter": "2021Q3"
+    }
+  ],
+  "launch_evidence": "https://www.sec.gov/Archives/edgar/data/1203866/000095013404015610/d19366exv99w1.htm : 'Sales of Vidaza (azacitidine for injectable suspension), which the Company launched in the U.S. on July 1, 2004, totaled $20.4 million for the third quarter.'",
+  "unreported_quarters": {
+    "2008Q1": "Ownership change Pharmion to Celgene; no full-quarter figure is published. Celgene closed the Pharmion acquisition on March 7, 2008; Pharmion's last release is the fourth-quarter 2007 release filed 2008-02-19 and it filed no first-quarter 2008 release; Celgene's first-quarter 2008 release (https://www.sec.gov/Archives/edgar/data/816284/000136231008002540/c73296exv99w1.htm) prints no Vidaza sales figure, and its second-quarter 2008 release implies only about 13.8 for the three weeks from March 8."
+  }
+}

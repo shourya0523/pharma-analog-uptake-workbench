@@ -1,0 +1,37 @@
+{
+  "drug_name": "Provenge",
+  "generic_name": "sipuleucel-T",
+  "manufacturer": "Dendreon",
+  "benchmark_identity": "dendreon_provenge_net_product_revenue_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (solid)",
+  "revenue_scope": "Dendreon Corporation 'Product revenue' / 'Product revenue, net' line of its statements of operations; Dendreon's filings call PROVENGE its only commercialized product",
+  "geography": "The statements of operations print no geographic split. Dendreon's press release of January 14, 2015 (Exhibit 99.1 to the Form 8-K filed 2015-01-22) announces the first commercial European patient in early January 2015, so every quarter in this series precedes commercial treatment outside the United States.",
+  "formulation": "autologous cellular suspension for intravenous infusion",
+  "route_of_administration": "intravenous",
+  "moa": "autologous cellular immunotherapy: patient's own antigen-presenting cells activated with the PAP-GM-CSF fusion protein",
+  "moa_class": "autologous_cellular_immunotherapy",
+  "first_approval_year": 2010,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/media/78511/download",
+    "quote": "PROVENGE (sipuleucel-T) ... Initial U.S. Approval: 2010 ... PROVENGE is an autologous cellular immunotherapy"
+  },
+  "launch_quarter": "2010Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1107332/000095012310071774/v56319e10vq.htm",
+    "quote": "Prior to the launch of PROVENGE in May 2010, we had never sold or marketed our own pharmaceutical product."
+  },
+  "commercial_start_quarter": "2010Q2",
+  "series_start_reason": "First quarter with a product revenue line: the Form 10-Q for the quarter ended March 31, 2010 prints total revenue of 21 (thousand) and no product revenue; the Form 10-Q for the quarter ended June 30, 2010 prints product revenue of 2,790 (thousand).",
+  "series_end_quarter": "2014Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Dendreon filed for Chapter 11 on November 10, 2014 and sold substantially all assets to a Valeant subsidiary on February 23, 2015 (Form 8-K filed 2015-02-23, accession 0001193125-15-057476); it filed no Form 10-Q or 10-K after the quarter ended September 30, 2014, and the fourth quarter of 2014 comes from its January 14, 2015 earnings press release. Valeant's Form 10-K for 2016 (accession 0000885590-17-000015) prints Provenge revenues only for full years ('$303 million, $250 million and $0 in 2016, 2015 and 2014'); the 2015 figure covers only the period after the February 23, 2015 acquisition. Its Form 10-Q filed 2016-11-09 mentions Provenge product sales only in prose without an amount.",
+  "notes": "US dollars. Fourth quarters 2010-2013 are derived as the full-year product revenue of the Form 10-K less the nine-month figure of the third-quarter Form 10-Q (Dendreon's 10-Ks print quarterly total revenue, which includes small non-product revenue, but no quarterly product revenue). Cross-check: the 2013 fourth quarter derived this way (74,828 thousand) agrees with the 74.8 million comparative in the January 14, 2015 press release; the four 2014 quarters sum to 303.86 million against a printed 303.8 million year. The PROVENGE United States / European Union lines in Dendreon's later filings are research and development costs, not sales, and are not used.",
+  "search_log": [
+    "EDGAR (Dendreon CIK 0001107332, data.sec.gov submissions): downloaded every Form 10-Q and 10-K filed from 2010-05-10 through 2014-11-10 (19 documents) and read the 'Product revenue' / 'Product revenue, net' row of each statement of operations; the form filter was 10-Q and 10-K only, then 8-Ks from 2014-11 to 2015-06 were listed separately.",
+    "Quarterly product revenue for Q1 2010: not printed (10-Q shows only total revenue 21 thousand). Q4 of each year 2010-2013: the 10-K quarterly information note prints total revenue per quarter, not product revenue, so Q4 is annual less nine months.",
+    "8-K items 2.02 and 7.01 from November 2014 to June 2015 were opened: the January 22, 2015 8-K carries the fourth-quarter 2014 press release with net product revenue of $79.8 million; the later 8-Ks attach bankruptcy monthly operating reports and plan documents and were not read for revenue.",
+    "Valeant Pharmaceuticals (CIK 0000885590) Forms 10-Q filed 2016-06-07, 2016-08-09, 2016-11-09 and 2017-05-09 were downloaded and the Form 10-Q of 2016-11-09 and Form 10-K filed 2017-03-01 were read for 'Provenge': annual revenues only ($303 million 2016, $250 million 2015) and no quarterly Provenge amount, so no successor quarters were added; the other three Forms 10-Q were counted for mentions but not read. Valeant's Forms 10-Q for 2015 and its 10-K for 2015 were not downloaded.",
+    "FDA approval evidence from the Provenge package insert on fda.gov (Initial U.S. Approval: 2010); the FDA approval letter itself is inside a zip of review documents and is not a direct document URL."
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "drug_name": "Abraxane",
+  "generic_name": "paclitaxel protein-bound particles for injectable suspension (albumin-bound)",
+  "manufacturer": "Bristol-Myers Squibb",
+  "benchmark_identity": "bms_abraxane_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (solid; breast cancer, non-small cell lung cancer, pancreatic cancer)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (U.S. plus international)",
+  "formulation": "lyophilized powder for injectable suspension (albumin-bound paclitaxel nanoparticles)",
+  "route_of_administration": "intravenous",
+  "moa": "Albumin-bound paclitaxel nanoparticle; microtubule stabilizing taxane",
+  "moa_class": "taxane_microtubule_inhibitor",
+  "first_approval_year": 2005,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=021660",
+    "quote": "01/07/2005 ORIG-1 Approval Type 5 - New Formulation or New Manufacturer STANDARD; Orphan (ABRAXANE PACLITAXEL 100MG/VIAL POWDER;INTRAVENOUS)"
+  },
+  "launch_quarter": "2005Q1",
+  "commercial_start_quarter": "2005Q1",
+  "series_start_reason": "Launch quarter. The licensee's first-quarter 2005 release dates the launch to February 8, 2005 and prints ABRAXANE net sales of 34.8 for the quarter; every quarter since is printed by the issuer. 2005Q1-2006Q2 are net sales as printed in each quarter's own release (no AstraZeneca deferred revenue was recognised before July 1, 2006); 2006Q3 onward the line is ABRAXANE revenue excluding recognised deferred revenue: 2006Q3 is the 43.2 comparative in the 2007 third-quarter release, 2006Q4 is full-year 2006 net sales 156.7 less nine months, 2007Q1-2007Q3 are the net-sales portion printed in each quarter's own release (61.8, 69.6, 77.3), 2007Q4 is the 2007 Form 10-K figure excluding deferred revenue (288.3) less those nine months. 2008Q1-2008Q4 are the ex-deferred comparatives in the 2009 releases, because the 2008 releases print the line with deferred revenue included. 2009Q1 onward the statement-of-operations line carries the same definition because Abraxis stopped recognising deferred revenue after it re-acquired the U.S. rights on 2 January 2009. Celgene supplies 2011Q1 onward.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "2005Q1-2006Q4 were added at repair: the earlier draft started at 2008Q1 on the belief that no ex-deferred figure existed before it; the 2005-2007 releases print one. 2005Q1-2006Q1 are American Pharmaceutical Partners (renamed Abraxis BioScience on the April 2006 merger with American BioScience; ABRAXANE was sold in North America under licence from American BioScience), each from the quarter's own release. The first-quarter 2005 figure is 34.8 in the quarter's own release against a 34.1 comparative in the 2006 first-quarter 10-Q; the first-half 2005 total of 54.2 printed twice supports 34.8. The four 2005 quarters sum to 133.8 against a printed 133.7. 2006Q1 is 30.1 in the quarter's own release and 30.3 in the 2007 prior-year comparison. Worldwide ABRAXANE revenue from sales, 2005Q1-2010Q2 (American Pharmaceutical Partners, then Abraxis BioScience) and 2011Q1-2026Q2 (Celgene, then Bristol-Myers Squibb), ownership gap 2010Q3-2010Q4 declared in unreported_quarters. Scope is the consolidated product line in every period: Abraxis's statement of operations has a single 'Abraxane revenue' row with Other revenue separate and no regional split (2009 releases state ABRAXANE launches in the U.K., Germany, China and Australia alongside the U.S.), and Celgene/BMS print U.S., international and worldwide. Abraxis 2009Q1-2010Q2 are read from each quarter's own release (2010Q2 from the Form 10-Q because Abraxis filed no earnings release for it); 2008Q1-2008Q4 are the ex-deferred comparative sentences in the 2009 releases (derivation direct_prior_year_column) because the 2008 releases print the line with deferred revenue included. Abraxis's 2009 full year sums to the printed 314.5 (70.618+75.155+82.854+85.918 = 314.545) and the 2008 ex-deferred quarters sum to 299.1 against the 299.3 the fourth-quarter 2009 release prints; the 2010 prior-year columns print 2009Q1 as 70.093 and 2009Q2 as 75.680 against 70.618 and 75.155 in the 2009 releases (reclassification, reason not stated), and the 2009 rows keep each quarter's own release. Launch: the 2005 first-quarter release dates the launch to February 8, 2005 (launch_evidence), so launch_quarter is 2005Q1, the first row. Geography: ABRAXANE was launched in the U.S. in 2005 under a North American licence, and the ex-U.S. launches are first stated in the 2009 releases; none of the 2005-2007 releases read prints a regional split of the line, so the early rows are the same consolidated line. Celgene 2011Q1-2019Q3 are read from each quarter's release narrative sentence ('ABRAXANE sales for the fourth quarter were $106 million', with U.S. and international parts printed in the same sentence from 2011Q3, and a U.S./International/Worldwide table from 2015Q3); 2019Q4 is BMS's full-quarter figure from the Ex 99.2 trend table (Celgene Oct 1-Nov 19 = 170 plus BMS Nov 20-Dec 31 = 166, both printed in that release) and the 4th-quarter 2019 column is recast by BMS to exclude foreign currency hedge gains and losses, so 2019 rows sum to 1,256 where BMS's recast full-year column prints 1,252; BMS table rows 2020Q1-2026Q2 (worldwide and U.S. columns through 2022Q4, U.S./Int'l/Worldwide from 2023Q1). Celgene's 2010Q4 figure of 71.4 covers only the period since the 15 October 2010 closing and is excluded. Sums checked: calendar-year sums equal the full-year figures the Q4 releases print for 2012 (427 vs 426), 2013 (649 vs 650), 2014 (848), 2015 (967), 2016 (973), 2017 (992), 2018 (1,062) and BMS 2020 (1,247), 2021 (1,181), 2022 (811), 2023 (1,004), 2024 (875), 2025 (368), within rounding of the printed integers.",
+  "search_log": [
+    "Listed CIK 14272 (Bristol-Myers Squibb) and CIK 816284 (Celgene) filings via data.sec.gov/submissions (recent plus older pages), all form types including 8-K/A; selected every filing carrying Item 2.02 and resolved its exhibits through each filing's index.json. Celgene Item 2.02 filings run to 2019-10-31 and BMS to 2026-07-30 (2026Q2 release); Celgene filed no fourth-quarter 2019 release because the acquisition closed 2019-11-20.",
+    "Celgene's January 7-13 8-Ks (preliminary results) were not used as the source for any quarter; each quarter is read from the earnings release filed after quarter end (the quarter's own release).",
+    "Celgene releases 2011Q1-2019Q3: Abraxane quarter figure read from the narrative sentence; the fourth-quarter 2010 release (2011-01-27) prints the partial quarter since the October 15, 2010 close ($71.4 million) and no earlier Celgene release prints Abraxane sales (the 2010-10-28 release for 2010Q3 mentions Abraxane once, in a patent bullet).",
+    "BMS Ex 99.1 product tables 2020Q1-2026Q2: Abraxane row present in every release through the 2026-07-30 (2026Q2) release; no release folds it into 'Other'. BMS Ex 99.2 trend table (2020-02-06) used for 2019Q4.",
+    "Drugs@FDA overview page for NDA 021660 fetched for the approval date.",
+    "Verifier (scripts/sourcing/verify_staged_manifests.py) run on the staged CSV: every row's label and quoted figures were found on one line of the cited document.",
+    "Abraxis BioScience (CIK 1141399 for the releases through 2007Q3, CIK 1409012 from the 2008-04-01 release) filings listed via data.sec.gov/submissions, all form types: Item 2.02 releases (not exhaustive of 8-K/A amendments) 2006-11-06 (2006Q3), 2007-02-26 (2006Q4), 2007-05-10 (2007Q1), 2007-08-09 (2007Q2), 2007-11-08 (2007Q3), 2008-04-01 (2007Q4), 2008-05-15, 2008-08-13, 2008-11-14, 2009-03-03, 2009-05-07, 2009-08-06, 2009-11-05, 2010-03-11, 2010-05-06; Form 10-Q 2010-08-05 (2010Q2) is the last periodic report. Every release was fetched and the 'Abraxane revenue' row and the deferred-revenue sentences read.",
+    "Definition check: the 2006Q3 to 2008Q4 releases state ABRAXANE revenue included recognised deferred revenue (2006Q3: $9.1 million of $52.3 million; 2007Q1 $9.1 million; 2007Q2 $9.1 million; 2008Q3 $9.2 million; 2008 full year $39.5 million of net revenue). The 2009Q1 to 2009Q4 releases print the quarter excluding deferred revenue and the same figure as the statement-of-operations row, and state that from 2009 the company no longer recognises it. The 2008Q1-Q4 ex-deferred figures (70.8, 64.7, 82.9, 80.7) are printed only as comparatives in the 2009 releases. For 2007, the Q1-Q3 releases print net sales in their own text (61.8, 69.6, 77.3) and the 2007 Form 10-K prints 288.3 excluding deferred revenue; the 2007 fourth-quarter release (2008-04-01) prints no quarterly ex-deferred figure. For 2006, deferred revenue starts with the AstraZeneca co-promotion term on July 1, 2006 (Form 10-Q for 2006Q2: 'a term of five and one-half years beginning July 1, 2006'); the second-quarter 2006 release and 10-Q print 36.3 as net sales/revenue with no deferred component, the third-quarter 2006 release prints 9.1 recognised, and the full-year 2006 release prints revenue 174.9 including 156.7 of net sales.",
+    "Repair, extension before 2007: lists of CIK 1141399 filings (all forms including 8-K/A and 10-Q/A) show Item 2.02 releases for 2006Q3 (2006-11-06) and 2006Q4 (2007-02-26) and releases filed as Exhibit 99.1 to 8-Ks (Items 7.01 or 1.01 rather than 2.02) for 2005Q1 (2005-05-04), 2005Q2 (2005-07-22), 2005Q3 (2005-11-01), 2005Q4 (2006-02-17), 2006Q1 (2006-04-28) and 2006Q2 (2006-08-03). Each was fetched and the ABRAXANE sentence read; 2005Q1-2006Q2 net sales are 34.8, 19.4, 32.1, 47.5, 30.1, 36.3.",
+    "Repair, launch: the 2005 first-quarter release states 'ABRAXANE NDA approved for filed indication on January 7, 2005 and product launched February 8, 2005' (the 2006 first-quarter 10-Q says February 7, 2005); the segment table in the FY2006 Form 10-K prints Abraxane revenue of nil for the year ended December 31, 2004, so no quarter precedes 2005Q1.",
+    "Repair, 2006Q3: the quarter's own release prints net sales 40.2, deferred revenue 9.1 and a 3.0 chargeback reserve reduction (sum 52.3); the 2007Q3 release restates the same quarter as 'revenue of $52.3 million, which included $43.2 million in net sales', which is used. Also checked and not used for these quarters: Forms 10-Q for 2005Q1-2006Q2, which print the same net sales in MD&A text (2005Q1 34.8, 2005Q2 19.4, 2005Q3 32.1, 2006Q1 30.1, 2006Q2 36.3) or only an Oncology product-line total.",
+    "Gap 2010Q3-2010Q4: the filings list for CIK 1409012 after 2010-08-05 holds only proxy material (DEFM14A 2010-09-14), the 8-K for the 2010-10-15 merger closing, Form 25-NSE (2010-10-15) and Form 15-12B (2010-10-25); no 10-Q or Item 2.02 8-K for 2010Q3. Celgene's fourth-quarter 2010 release (https://www.sec.gov/Archives/edgar/data/816284/000095012311005798/c11516exv99w1.htm) prints $71.4 million 'since the October 15, 2010 closing', a partial quarter.",
+    "Verifier: Abraxis releases for 2007Q1, 2007Q2 and 2007Q3 (CIK 1141399 accessions 0001193125-07-109915, -07-177457, -07-239723) print 'ABRAXANE revenue ... which included $X million of net sales' (61.8, 69.6, 77.3); the 2007 Form 10-K (CIK 1409012, 0001193125-08-071377) prints 288.3 ex-deferred for 2007, giving 2007Q4 = 79.6."
+  ],
+  "joined_issuers": [
+    {
+      "issuer": "American Pharmaceutical Partners",
+      "first_quarter": "2005Q1",
+      "last_quarter": "2005Q4"
+    },
+    {
+      "issuer": "Abraxis BioScience",
+      "first_quarter": "2006Q1",
+      "last_quarter": "2010Q2"
+    },
+    {
+      "issuer": "Celgene",
+      "first_quarter": "2011Q1",
+      "last_quarter": "2019Q3"
+    },
+    {
+      "issuer": "Bristol-Myers Squibb",
+      "first_quarter": "2019Q4",
+      "last_quarter": "2026Q2"
+    }
+  ],
+  "unreported_quarters": {
+    "2010Q3": "Ownership change Abraxis BioScience to Celgene; no figure is published. Celgene closed the Abraxis acquisition on October 15, 2010; Abraxis's last periodic report is its Form 10-Q for the quarter ended June 30, 2010 (filed 2010-08-05), it filed no earnings release or 10-Q for the quarter ended September 30, 2010, and filed Form 15 on 2010-10-25; Celgene's third-quarter 2010 release (2010-10-28) does not print an ABRAXANE sales figure.",
+    "2010Q4": "Ownership change Abraxis BioScience to Celgene; no full-quarter figure is published. Celgene's fourth-quarter 2010 release (https://www.sec.gov/Archives/edgar/data/816284/000095012311005798/c11516exv99w1.htm) prints ABRAXANE net sales of $71.4 million only 'since the October 15, 2010 closing', and Abraxis printed nothing for October 1-14, so the full quarter is not published."
+  },
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1141399/000119312505094552/dex991.htm",
+    "quote": "ABRAXANE NDA approved for filed indication on January 7, 2005 and product launched February 8, 2005, with more than 2,700 patients having initiated treatment since launch"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "drug_name": "Doptelet",
+  "generic_name": "avatrombopag",
+  "manufacturer": "Sobi",
+  "benchmark_identity": "sobi_doptelet_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Thrombocytopenia: chronic immune thrombocytopenia (ITP) and thrombocytopenia in chronic liver disease patients scheduled for a procedure",
+  "revenue_scope": "Doptelet product revenue as recorded by Sobi (its 'Doptelet' line, U.S. and Sobi's other markets), SEK; the line is the total Doptelet revenue Sobi recorded and also contains sales of Doptelet to Sobi's partner in China (volatile, low-margin, none in some quarters) and, in 2020Q2, a SEK 87 M milestone",
+  "geography": "Worldwide (Sobi-recorded)",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "thrombopoietin receptor agonist",
+  "moa_class": "thrombopoietin_receptor_agonist",
+  "first_approval_year": 2018,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2018/210238Orig1s000ltr.pdf",
+    "quote": "NDA 210238 NDA APPROVAL ... Doptelet (avatrombopag) tablets, 20 mg ... It is approved, effective on the date of this letter"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2019Q4",
+  "series_start_reason": "Sobi consolidated Dova Pharmaceuticals (the U.S. owner and seller of Doptelet) in Q4 2019; Sobi's Q4 2019 presentation prints Doptelet sales of SEK 34 M for 12 November-31 December 2019. Dova's own U.S. net sales (USD, U.S. only, from the 2018 U.S. launch to Q3 2019) are a different issuer, currency and scope and are not spliced. No launch quarter is cited.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Currency SEK (millions). 2019Q4 is read from the Q4 2019 results presentation ('Doptelet sales of SEK 34 M (12 November-31 December)': sales began with Sobi's ownership of Dova, so the first quarter is partial) and 2020Q1 from the Q1 2020 presentation ('Doptelet sales were SEK 65 M for the quarter'). 2020Q2 and 2020Q3 come from the prior-year columns of the Q2 and Q3 2021 reports (the quarters' own presentations print 186 and 145 on slides whose text does not carry the product name next to the figure); 2020Q2 includes a milestone revenue of SEK 87 M related to the China CLD approval according to the Q2 2020 presentation (slide 12), which is inside the printed Doptelet figure. 2020Q4 is read from the sobi.com web page of the Q4 2020 report. Full-year checks: 2020 65+186+145+191=587; 2021 1,116; 2022 2,525 vs printed 2,526; 2023 2,996 vs 2,997; 2024 3,870; 2025 5,265. Dova Pharmaceuticals (SEC filer) printed U.S. Doptelet net sales in USD from 2018Q2 to 2019Q3; that is a separate U.S.-only series and was not sourced in this batch. The line includes Sobi's sales of Doptelet to its partner in China: the Q2 2023 report attributes the margin decline to 'higher low-margin Doptelet sales to the partner in China' and the Q1 2023 and Q3 2023 reports state there were no such sales in those quarters, so quarterly values are volatile for that reason. Sobi does print the China-partner amounts in prose: Q3 2022 report p6 'Doptelet sales to the partner in China were SEK 145 M (214) in the quarter' (year-to-date SEK 784 M vs 319); Q2 2023 report p6 'phasing of sales to the partner in China, SEK 577 M (281) and SEK 577 M (639) in the half year'; Q4 2023 report p6 states no China sales in the quarter. From the Q2 2024 report (p27, strategic-portfolio table) and the Q4 2024 report (p26) Sobi prints a separate 'Doptelet excluding China' line: 2023Q2 567, H1 2023 1,043, FY2023 2,420, 2024Q2 928, 2024Q4 1,147, FY2024 3,818; the Q4 2024 report p6 also states a SEK 53 M China-partner milestone in 2024 (Q3 2024 report p6 places it in the quarter), which is inside the printed Doptelet figure for 2024Q3. The total line is kept because the ex-China line exists only from 2023.",
+  "search_log": [
+    "Enumerated Sobi report pages and PDFs for 2019Q4-2026Q2 (same crawl as Kineret) and extracted every Doptelet line with pdfplumber; the product table row 'Doptelet' is readable from the Q1 2021 report onward.",
+    "Q4 2019-Q4 2020 full-report PDFs yielded no Doptelet line under pdfplumber; Q4 2019 and Q1-Q3 2020 report web pages carry no Doptelet sales figure (only guidance text). The quarter presentations for Q4 2019, Q1 2020, Q2 2020 and Q3 2020 were opened: the first two print the figure beside the product name; Q4 2020 web page prints 'Sales for Doptelet were SEK 191 M (34)'.",
+    "Did not read Dova Pharmaceuticals 10-Qs (CIK for Dova not looked up) because the series was kept to one issuer, one currency and one scope.",
+    "Scope check of the China-partner sales: opened the Q1 2023 (202304267262-1.pdf), Q2 2023 (202307174925-1.pdf) and Q3 2023 (202310284168-1.pdf) reports. Q2 p4 states 'The margin decline was mainly driven by higher low-margin Doptelet sales to the partner in China'; Q1 and Q3 state there were no sales of Doptelet to the partner in China in the quarter. Only the 2020Q2 milestone and these China-partner sales were found disclosed as non-end-market items; China-partner amounts are printed for some quarters (see notes), but no quarter of the series is adjusted.",
+    "Dova Pharmaceuticals U.S. series (USD, 2018Q2-2019Q3) kept out on purpose: a different issuer, currency and U.S.-only scope from Sobi's worldwide SEK line (rule 11); the earliest quarter Sobi itself prints is 2019Q4 (12 November-31 December).",
+    "Verifier-side check: Q2 2024 report (202407155901-1.pdf p27) and Q4 2024 report (202502041852-1.pdf p26) print 'Doptelet excluding China'; Q3 2022 (202210262802-1.pdf) and Q2 2023 (202307174925-1.pdf) reports print China-partner sales in prose; Q2 2020 presentation (Sobi_Q2_2020_results_presentation.pdf slide 12) prints 'Doptelet revenue reached SEK 186 M for the quarter' including an SEK 87 M China milestone."
+  ]
+}

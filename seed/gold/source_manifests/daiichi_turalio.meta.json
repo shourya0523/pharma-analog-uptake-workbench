@@ -1,0 +1,37 @@
+{
+  "drug_name": "Turalio",
+  "generic_name": "pexidartinib",
+  "manufacturer": "Daiichi Sankyo",
+  "benchmark_identity": "daiichi_turalio_oncology_business_unit_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (solid)",
+  "revenue_scope": "Turalio revenue row in Daiichi Sankyo's table 'Revenue by Business Units and Products', Oncology Business Unit section",
+  "geography": "The table prints no geography for the row. Daiichi Sankyo's pipeline pages in the same documents give the brand as 'TURALIO (US)'.",
+  "formulation": "oral capsule (200 mg)",
+  "route_of_administration": "oral",
+  "moa": "CSF-1 receptor / KIT / FLT3 tyrosine kinase inhibitor (Daiichi Sankyo pipeline page: 'CSF-1/KIT/FLT3 inhibitor')",
+  "moa_class": "csf1r_kinase_inhibitor",
+  "first_approval_year": 2019,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2019/211810Orig1s000ltr.pdf",
+    "quote": "NDA 211810 NDA APPROVAL ... for TURALIO (pexidartinib), capsules, 200 mg ... for the treatment of adult patients with symptomatic tenosynovial giant cell tumor (TGCT) ... [electronically signed 08/02/2019]"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2020Q2",
+  "series_start_reason": "Daiichi Sankyo prints a Turalio revenue row only from its FY2021 Q1 Reference Data, whose prior-year columns begin at FY2020 Q1 (April-June 2020 = 2020Q2); FY2020 Reference Data print no Turalio revenue row and the five-year history prints '-' for earlier fiscal years. No Daiichi Sankyo document located gives the launch quarter, so launch_quarter is null.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Currency JPY, not converted; values are printed to 0.1 billion JPY, so single-quarter precision is coarse (0.3 billion JPY is 300 million JPY). The row sits under the Oncology Business Unit heading with no geographic label. The FY2020 quarters (2020Q2-2021Q1) are comparative columns of the FY2021 documents because FY2020 documents have no Turalio revenue row. The USD Mn 'Revenue in Local Currency' table of the same documents prints the same line in integer US dollars millions.",
+  "search_log": [
+    "Read the Daiichi Sankyo quarterly-results index (daiichisankyo.com/investors/library/quarterly_result/) and used the Reference Data PDFs of FY2019 (full year), FY2020 Q1-Q4, FY2021 Q1-Q4, FY2022 Q1-Q4, FY2023 Q1-Q4, FY2024 Q1-Q4, FY2025 Q1-Q4 and FY2026 Q1 (26 documents); every document was opened with pdfplumber (the verifier's extractor) and every line mentioning the brand or its generic name was listed per page. Not scanned: Reference Data of FY2019 Q1-Q3 and earlier, which were not located on the index pages available; the FY2019 full-year document prints no revenue row for either Daiichi Sankyo oncology brand in this batch.",
+    "Fiscal year runs April to March: fiscal Q1 = April-June = calendar Q2, Q2 = July-September = calendar Q3, Q3 = October-December = calendar Q4, Q4 = January-March = calendar Q1 of the next year.",
+    "Each Reference Data PDF carries the table '3. Revenue by Business Units and Products (2)' in JPY Bn with columns for the four quarters and full year of the prior fiscal year and of the current fiscal year, and a parallel table '3. Revenue by Business Units and Products (3)' marked '[Reference] Revenue in Local Currency' in USD Mn. The JPY Bn table was used for the whole series so one currency runs throughout; the USD Mn table is the same line in integer US dollars millions and is not delivered.",
+    "Column position (not text order) was used to read each quarter: blank future cells print nothing or '-' so the current-quarter cell is the Nth cell after the five prior-year cells.",
+    "Turalio: FY2020 Q1-Q4 Reference Data (urls under /2020/) list Turalio only in the pipeline page ('Brand name: TURALIO (US)') and never as a revenue row; the first revenue row is in the FY2021 Q1 document, whose prior-year columns print FY2020 Q1-Q4 as 0.3, 0.5, 0.5, 0.5 (full year 1.8). Those four quarters are therefore direct_prior_year_column rows, each read from the FY2021 document of the same fiscal quarter (FY2021 Q1, Q2, Q3 and the FY2021 Q4 document); FY2021 Q1 onward are read as current.",
+    "The five-year history table in the FY2021 Q4 document prints Turalio as '-' for fiscal years before FY2020 and 1.8 for FY2020; no earlier Turalio revenue is printed in any document scanned.",
+    "Fiscal-year checks: FY2020 0.3+0.5+0.5+0.5=1.8 (printed 1.8); FY2021 sum 2.8 (2.8); FY2022 sum 3.7 (3.8); FY2023 sum 5.3 (5.3); FY2024 sum 6.6 (6.6); FY2025 sum 5.1 (5.2). Differences are rounding of quarterly cells to 0.1.",
+    "Latest quarter: FY2026 Q1 (April-June 2026) = calendar 2026Q2 = 1.0, from FY2026Q1_Reference_Data_E.pdf (2026 index entry).",
+    "Other issuers: no partner or royalty holder was searched for, because Daiichi Sankyo prints the brand itself in every quarter of the span."
+  ]
+}

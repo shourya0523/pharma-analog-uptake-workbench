@@ -1,0 +1,37 @@
+{
+  "series_start_reason": "The Q3 2014 release (https://www.sec.gov/Archives/edgar/data/1121404/000110465914074327/a14-23195_1ex99d1.htm) says Cerdelga was approved by the FDA in August and 'is now available in the U.S.' but prints no sales row or figure for it. The Q4 2014 release is the first to print a Cerdelga row (Q4 2014 = 4, full year 2014 = 4), so the series starts with 2014Q4.",
+  "drug_name": "Cerdelga",
+  "generic_name": "eliglustat (eliglustat tartrate)",
+  "manufacturer": "Sanofi",
+  "benchmark_identity": "sanofi_cerdelga_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Gaucher disease type 1 (substrate reduction therapy)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "capsule",
+  "route_of_administration": "oral",
+  "moa": "Glucosylceramide synthase inhibitor (substrate reduction therapy)",
+  "moa_class": "glucosylceramide_synthase_inhibitor",
+  "first_approval_year": 2014,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2018/205494Orig1s000lbl.pdf",
+    "quote": "CERDELGA (eliglustat) capsules, for oral use ... Initial U.S. Approval: 2014"
+  },
+  "launch_quarter": "2014Q3",
+  "launch_evidence": "Q3 2014 release (https://www.sec.gov/Archives/edgar/data/1121404/000110465914074327/a14-23195_1ex99d1.htm): 'In August, the FDA approved Cerdelga, the only first-line oral therapy for Gaucher disease type 1 patients (GD1)... which is now available in the U.S.'",
+  "commercial_start_quarter": "2014Q4",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Scope: worldwide net sales in EUR as Sanofi prints them. 2014Q4-2022Q4 and 2024Q1-2025Q4 are read from the headline 'Net sales' table (one worldwide figure per quarter); in 2023Q1-2023Q4 and 2026Q1-2026Q2 the headline table has no Cerdelga row and the figure is read from the Total Sales column of the appendix table of net sales by region ('Q1 2023 (\u20ac million) / Total Sales / % CER / % reported / United States / Europe / Rest of the world'), the same worldwide figure for the same product (where both tables print the product the figures agree, for example Q1 2024: 83 in the headline table and the appendix). The 2023 quarters 73, 77, 73 and 75 sum to 298, the full-year 2023 figure printed in the appendix. Launch: the U.S. launch followed FDA approval in August 2014 (Q3 2014 release); the Q3 2014 release prints no sales figure for Cerdelga (prose only), and the Q4 2014 release prints Q4 2014 = 4 and FY 2014 = 4, so the series starts with 2014Q4, the first printed quarter.",
+  "search_log": [
+    "reused the list of Sanofi (CIK 0001121404) quarterly-results releases 2011Q2-2026Q2 (one exhibit per quarter, 61 releases) already established for sanofi_fabrazyme (urls from seed/gold/source_manifests/sanofi_fabrazyme_quarterly.csv), re-fetched every one of the 61 from sec.gov Archives and parsed every table row (bs4) whose first cell starts with the product name",
+    "for each release took the product's row from the first table headed 'Net sales (\u20ac million)' (worldwide, one row per product; 2011-2015 headers read '(millions of euros) / Q2 2011 net sales' or '\u20ac million'), quarter figure first, then the H1 / 9M / FY / YTD column where printed; where a product has no row in that table (see below) used the Total Sales column of the appendix table of net sales by region",
+    "checked for every full year in which all four quarters are in the series that the four quarters equal the full-year figure printed in the Q4 release; all matched exactly (see notes where the series starts or ends mid-year)",
+    "Bigdata.com was not used; the releases were located from the existing Sanofi manifest and read directly",
+    "Cerdelga row absent from every release before 2014Q4 (Q3 2014 mentions it only in prose and in the pipeline table); present in 2014Q4-2026Q2 (47 consecutive releases, no gaps)",
+    "Cerdelga has no row in the headline Net sales table of the 2023Q1, 2023Q2, 2023Q3, 2023Q4, 2026Q1 and 2026Q2 releases; for those quarters the appendix table's Total Sales column is cited",
+    "FDA: Drugs@FDA NDA 205494 original label (2014) and the 2018 label both print 'Initial U.S. Approval: 2014'; approval 2014-08-19 per the Drugs@FDA submission record",
+    "Not searched: any partner or royalty holder; not needed because Sanofi prints the worldwide line from the first quarter used"
+  ]
+}
