@@ -1,12 +1,12 @@
 {
   "generation": "independent_issuer_research",
   "as_of_quarter": "2026Q2",
-  "quarterly_rows": 13963,
-  "annual_rows": 161,
-  "complete_quarterly_series": 405,
+  "quarterly_rows": 14011,
+  "annual_rows": 165,
+  "complete_quarterly_series": 406,
   "quarterly_coverage_pct": 100.0,
-  "observed_peaks": 35,
-  "not_yet_observed_peaks": 133,
+  "observed_peaks": 36,
+  "not_yet_observed_peaks": 132,
   "excluded_products": 56,
   "catalog_coverage": {
     "catalog_products": 20,
@@ -271,6 +271,7 @@
       "Repatha",
       "Restasis",
       "Retevmo",
+      "Revatio",
       "Revlimid",
       "Reyataz",
       "Rezdiffra",
@@ -877,9 +878,7 @@
       "Zynteglo",
       "Zytiga"
     ],
-    "annual_only_products": [
-      "Revatio"
-    ],
+    "annual_only_products": [],
     "annual_only_comparator_products": [
       "Berinert",
       "Bimzelx",
@@ -958,8 +957,8 @@
       "Yesafili",
       "Zinplava"
     ],
-    "quarterly_series_pct": 65.0,
-    "quarterly_observations": 13963,
+    "quarterly_series_pct": 70.0,
+    "quarterly_observations": 14011,
     "bounded_series": [
       "Abecma",
       "Aczone",
@@ -1052,6 +1051,7 @@
       "Relyvrio",
       "Restasis",
       "Retevmo",
+      "Revatio",
       "Reyataz",
       "Rhopressa",
       "Rukobia",
@@ -1105,11 +1105,11 @@
     "catalog_products": 20,
     "accounted_for": 20,
     "unaccounted_products": [],
-    "complete_quarterly_series": 405,
-    "quarterly_observations": 13963,
+    "complete_quarterly_series": 406,
+    "quarterly_observations": 14011,
     "series_missing_quarters": [],
-    "annual_benchmark_series": 17,
-    "annual_observations": 161,
+    "annual_benchmark_series": 16,
+    "annual_observations": 165,
     "evidence_backed_exclusions": 56,
     "comparator_products": [
       "Abecma",
@@ -1600,7 +1600,7 @@
     "complete": true
   },
   "concentration": {
-    "quarters": 13963,
+    "quarters": 14011,
     "largest_issuer": "Novartis",
     "largest_issuer_share": 6.7,
     "largest_issuer_within_target": true,
@@ -1608,7 +1608,7 @@
     "largest_product_share": 0.9,
     "largest_product_within_target": true,
     "largest_therapeutic_area": "Oncology",
-    "largest_therapeutic_area_share": 25.4,
+    "largest_therapeutic_area_share": 25.3,
     "largest_therapeutic_area_within_target": true,
     "therapeutic_area_count": 24,
     "therapeutic_areas_within_target": true,

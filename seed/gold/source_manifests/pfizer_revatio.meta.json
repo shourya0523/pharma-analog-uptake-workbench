@@ -1,0 +1,35 @@
+{
+  "drug_name": "Revatio",
+  "generic_name": "sildenafil",
+  "manufacturer": "Pfizer",
+  "benchmark_identity": "pfizer_revatio_worldwide_quarterly",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Pulmonary arterial hypertension",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "tablet; oral suspension; injection",
+  "route_of_administration": "oral",
+  "moa": "PDE5 inhibitor",
+  "moa_class": "nitric_oxide_pathway",
+  "first_approval_year": 2005,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=021845",
+    "quote": "Original Approvals or Tentative Approvals ... 06/03/2005 ORIG-1 Approval Type 5 - New Formulation or New Manufacturer PRIORITY (NDA 021845, REVATIO)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2008Q1",
+  "series_start_reason": "Revatio was approved in the U.S. in June 2005 (Pfizer's 2006 Form 10-K), but no Pfizer document prints a quarterly Revatio figure before the second-quarter 2009 release (8-K filed 2009-07-22), whose product table carries a REVATIO row for the second quarter and six months of 2009 with 2008 prior-year columns. 2008Q2 to 2009Q1 are therefore prior-year columns of the 2009 and 2010Q1 releases, and 2008Q1 is derived from that release's six-month 2008 column less second quarter 2008. The 2005Q3-2007Q4 quarters are printed nowhere (releases name Revatio only in prose; Forms 10-Q 2005-2009Q1 list it only in pipeline/approval tables) and annual figures for 2007 (201) exist only in the 2009 annual report exhibit 13.",
+  "series_end_quarter": "2019Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The fourth-quarter 2019 release (8-K filed 2020-01-28) is the last Pfizer release with a Revatio row. From the first-quarter 2020 release (filed 2020-04-28) Revatio sits in the Upjohn business without its own line (no Revatio row in the 2020Q1, Q2, Q3 or Q4 releases; the 2020 Forms 10-Q mention it only in revenue-change prose), and Upjohn combined with Mylan to form Viatris in November 2020.",
+  "notes": "Worldwide Revatio brand line of Pfizer's product revenue table (U.S. and International columns also printed). The same line covers tablets, oral suspension and injection (the 2020 Forms 10-Q attribute declines to U.S. Oral Suspension sales). From 2013 U.S. Revatio was moved from Specialty Care to the Established Products unit; the worldwide line is continuous (2013Q1 release restates 2012Q1 as 136, as first printed). Quarter sums match the twelve-month figures in each fourth-quarter release within rounding (2009: 449 vs 450; 2014: 275 vs 276; 2018: 228 vs 227; others exact) and the annual gold series. Upjohn/Viatris documents (Form 10 information statement exhibit 99.1, 8-K/A filed 2021-01-29) print Revatio in a different scope (Upjohn: 2019 136, 2018 214 versus Pfizer's 144 and 227; nine months 2020 67), so they are not spliced on. 2008Q1 and 2019Q1 are derived (year-to-date less reported quarter) because neither quarter's own release prints a Revatio row.",
+  "search_log": [
+    "Listed every Pfizer (CIK 0000078003) filing via data.sec.gov submissions (recent plus the three older pages, 1994-2026); selected all 8-K / 8-K/A with Item 2.02 filed 2004-10 to 2021-02 (67 filings) and fetched every EX-99 exhibit (70 documents including two .txt duplicates).",
+    "Parsed each exhibit's HTML table rows whose first cell is 'Revatio'/'REVATIO': first row = quarter (Worldwide current, prior year), third row (or second where no regional table) = year-to-date. First row found: 2009-07-22 release (Q2 2009 94, Q2 2008 73; six months 208, 146). Releases 2005-2009Q1 mention Revatio only in prose (approval, launch, 'new products' lists).",
+    "Forms 10-Q and 10-K 2005-2010 (main documents) grepped for Revatio: only pipeline/approval tables and prose until the Q2 2009 10-Q (variance prose) and the Q3 2009 10-Q (Revatio 111 / 319 row). No 2008 or 2009Q1 quarterly figure in its own document.",
+    "2019Q1: the 8-K filed 2019-04-30 (pfe-03312019xex99.htm) and the Q1 2019 10-Q contain no 'Revatio' string; quarter derived from the Q2 2019 release.",
+    "2020: Q1-Q4 2020 releases contain no 'Revatio' string; Q2 and Q3 2020 10-Qs mention Revatio only in revenue-change prose.",
+    "Viatris (CIK 0001792044) EDGAR full-text search for 'Revatio': 15 hits, all Upjohn separation documents (Form 10, S-4, 8-K 2020-05-29 and 2020-08-06, 8-K/A 2021-01-29); these print Upjohn-scope Revatio (FY2017-2019, Q1 2020, nine months 2020), a different scope from Pfizer's line; no Viatris quarterly Revatio row after the combination.",
+    "Bigdata.com not needed; every figure read from the sec.gov exhibit cited."
+  ]
+}

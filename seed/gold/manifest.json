@@ -30,8 +30,8 @@
     "Type 2 diabetes",
     "Urology"
   ],
-  "quarterly_series_count": 405,
-  "annual_only_series_count": 1,
+  "quarterly_series_count": 406,
+  "annual_only_series_count": 0,
   "excluded_product_count": 56,
   "quarterly_coverage_pct": 100.0,
   "reported_rows_file": "quarterly_revenue.jsonl",
