@@ -49729,8 +49729,33 @@
    },
    {
     "period": "2025Q4",
-    "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2025Q3. The break is one quarter wide and the issuer's, not this dataset's. Lilly's fourth-quarter 2025 release narrows Selected Products to Mounjaro, Zepbound and Verzenio, and the 2025 Form 10-K states this product only as full-year U.S. and outside-U.S. columns with no worldwide total, so no worldwide 2025Q4 figure is published at all. The line returns in the first quarter of 2026, where Lilly prints U.S., outside-U.S. and Total by therapeutic area. The series cannot cross the missing quarter without inventing it: the only route would sum two regional columns into a full year Lilly never printed as a total, then subtract nine months from that."
+    "value_normalized_usd_millions": 1037.0,
+    "gold_id": "lilly-trulicity-worldwide-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Trulicity",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "dulaglutide",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 919.0,
+    "gold_id": "lilly-trulicity-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 1219.0,
+    "gold_id": "lilly-trulicity-worldwide-reported-2026q2"
    }
   ]
  },

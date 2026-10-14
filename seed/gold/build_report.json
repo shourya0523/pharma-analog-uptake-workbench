@@ -1,7 +1,7 @@
 {
   "generation": "independent_issuer_research",
   "as_of_quarter": "2026Q2",
-  "quarterly_rows": 15656,
+  "quarterly_rows": 15659,
   "annual_rows": 168,
   "complete_quarterly_series": 449,
   "quarterly_coverage_pct": 100.0,
@@ -1064,7 +1064,7 @@
       "Zyprexa Relprevv"
     ],
     "quarterly_series_pct": 70.0,
-    "quarterly_observations": 15656,
+    "quarterly_observations": 15659,
     "bounded_series": [
       "Abecma",
       "Aczone",
@@ -1191,7 +1191,6 @@
       "Tresiba",
       "Trogarzo",
       "Trulance",
-      "Trulicity",
       "Truvada",
       "Tudorza Pressair",
       "Tyrvaya",
@@ -1227,7 +1226,7 @@
     "accounted_for": 20,
     "unaccounted_products": [],
     "complete_quarterly_series": 449,
-    "quarterly_observations": 15656,
+    "quarterly_observations": 15659,
     "series_missing_quarters": [],
     "annual_benchmark_series": 17,
     "annual_observations": 168,
@@ -1774,7 +1773,7 @@
     "complete": true
   },
   "concentration": {
-    "quarters": 15656,
+    "quarters": 15659,
     "largest_issuer": "AstraZeneca",
     "largest_issuer_share": 7.0,
     "largest_issuer_within_target": true,

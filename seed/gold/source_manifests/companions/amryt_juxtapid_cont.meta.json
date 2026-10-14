@@ -1,0 +1,26 @@
+{
+  "drug_name": "Juxtapid",
+  "line_label": "Lomitapide",
+  "issuer": "Amryt Pharma plc",
+  "benchmark_identity": "amryt_juxtapid_global_reported",
+  "revenue_scope": "Amryt's 'Lomitapide' row of its revenue-by-product table (Juxtapid in the U.S. and other markets, Lojuxta in the EU): global lomitapide revenues in the table's own columns U.S., EMEA and Other, summing to the Total column, in US$ thousands. Q1 2020 comes from a Form F-1 table that prints the Total only.",
+  "geography": "Worldwide (table columns U.S., EMEA, Other)",
+  "why_separate": "Aegerion's gold series (2013Q1-2016Q3) is global net product sales of Juxtapid. Amryt's line is also global and includes the EMEA sales Novelion did not book, but it is printed by a different issuer after a break (Novelion's last report is for 2019Q1 and Amryt completed the Aegerion acquisition on 2019-09-24), so it is a successor_issuer continuation, not part of the series, and not joined to the Novelion continuation, whose scope excludes EU product sales.",
+  "commercial_start_quarter": "2019Q4",
+  "series_start_reason": "First full quarter in which Amryt owned Aegerion: the U.S. business joined on 2019-09-24, so 2019Q3 (6,705 thousand; nine months 2019 15,598 less six months 8,893, with U.S. 1,319 for about one week) carries only a few days of U.S. sales and is not a comparable quarter. Q1 and Q2 2019 are Amryt's EMEA-only Lojuxta sales (4,419 and 4,474).",
+  "series_end_quarter": "2022Q3",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Amryt's last results release is Q3 2022 (6-K 0001171843-22-007045, 2022-11-03). Its EDGAR filings after that (6-Ks of 2023-01-03, 2023-01-09, 2023-02-16, 2023-03-23, 2023-04-03 and 2023-04-12) are scheme and acquisition documents and print no lomitapide revenue; no 20-F for 2022 was filed.",
+  "notes": "Quarters 2019Q4-2022Q3 are contiguous. Annual checks: 2020 quarters 17,421+18,052+19,113+20,164 = 74,750 (printed FY 2020 total); 2021 quarters 18,184+19,450+18,538+17,695 = 73,867 (printed FY 2021 total in the 20-F 0001140361-22-016877). The FY 2020 release states FY 2019 lomitapide revenues of $68.0M on a pro forma basis that includes Aegerion for the full year; it is not used. 2019Q4 is read from the prior-year table of the FY 2020 release and 2020Q1 from the Form F-1, because no Amryt release for those quarters is on EDGAR; both are labelled accordingly. Amryt was acquired by Chiesi (scheme completed April 2023); Q4 2022 and later are not printed on EDGAR.",
+  "search_log": [
+    "Amryt Pharma plc (CIK 1783010) filing list read via data.sec.gov (recent filings, no older-file pages): F-1 (2020-06-23, 2021-01-08), F-4, 20-F (2021-04-30, 2022-04-29) and 6-Ks from 2020-07 to 2023-04. Every .htm exhibit of those filings was fetched and searched for table rows labelled Lomitapide, Juxtapid or Lojuxta.",
+    "Quarterly rows found in: F-1 0001140361-20-014573 (Q1 2020), 6-K 0001140361-20-017624 (Q2 2020), 0001171843-20-007633 (Q3 2020), 0001171843-21-001524 (Q4 and FY 2020, with Q4 2019 and FY 2019 columns), 0001171843-21-003140 (Q1 2021), 0001171843-21-005625 (Q2 2021), 0001171843-21-007430 (Q3 2021), 0001171843-22-001727 (Q4 and FY 2021), 0001171843-22-003171 (Q1 2022), 0001171843-22-005344 (Q2 2022), 0001171843-22-007045 (Q3 2022).",
+    "Q3 2019 and earlier: the Q3 2020 release prints Q3 2019 as 1,319 | 5,143 | 243 | 6,705 and the Q2 2020 release prints Q2 2019 as 4,474 (EMEA only); not entered because the U.S. line only joined on 2019-09-24.",
+    "Q4 2022: 6-Ks of 2023-01-03, 2023-01-09, 2023-02-16, 2023-03-23, 2023-04-03 and 2023-04-12 searched for lomitapide revenue lines: none. Web search for an Amryt FY 2022 results release returned only the Q2 2022 and Q3 2022 releases.",
+    "Not checked: Amryt's own investor site, which may hold FY 2019 and FY 2022 documents that are not on EDGAR."
+  ],
+  "continuation": {
+    "relation": "successor_issuer",
+    "evidence": "Amryt Pharma plc Form 6-K Exhibit 99.1, Q1 2022 results (accession 0001171843-22-003171): revenue table 'Q1 2022 (unaudited) | US | EMEA | Other | Total | US$'000' with row 'Lomitapide | 8,054 | 7,190 | 2,572 | 17,816'; and Form 20-F (0001140361-21-015121): 'On September 24, 2019, we completed the acquisition (\"Acquisition\") of Aegerion Pharmaceuticals, Inc.' https://www.sec.gov/Archives/edgar/data/1783010/000117184322003171/exh_991.htm"
+  }
+}

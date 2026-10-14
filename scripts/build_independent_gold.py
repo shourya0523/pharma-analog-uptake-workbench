@@ -1221,19 +1221,14 @@ PRODUCT_METADATA = {
         "therapeutic_area": "Diabetes",
         "commercial_start_quarter": "2014Q4",
         "launch_quarter": "2014Q4",
-        "series_end_quarter": "2025Q3",
-        "series_end_basis": "issuer_stopped_reporting",
+        "series_end_quarter": "2026Q2",
+        "series_end_basis": None,
         "series_end_reason": (
-            "The break is one quarter wide and the issuer's, not this dataset's. "
-            "Lilly's fourth-quarter 2025 release narrows Selected Products to "
-            "Mounjaro, Zepbound and Verzenio, and the 2025 Form 10-K states this "
-            "product only as full-year U.S. and outside-U.S. columns with no "
-            "worldwide total, so no worldwide 2025Q4 figure is published at all. "
-            "The line returns in the first quarter of 2026, where Lilly prints "
-            "U.S., outside-U.S. and Total by therapeutic area. The series cannot "
-            "cross the missing quarter without inventing it: the only route would "
-            "sum two regional columns into a full year Lilly never printed as a "
-            "total, then subtract nine months from that."
+            "2026Q2 is the latest quarter published as of the gold date. The series "
+            "is unbroken from 2014Q4: 2025Q4, absent from the Q4 2025 release table "
+            "and the 2025 Form 10-K (U.S. and outside-U.S. columns only), is printed "
+            "in Lilly's Q4 2025 Financial Workbook, and 2026Q1-2026Q2 come from the "
+            "Form 10-Qs."
         ),
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
