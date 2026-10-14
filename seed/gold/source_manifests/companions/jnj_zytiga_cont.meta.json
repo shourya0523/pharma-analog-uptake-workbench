@@ -1,0 +1,23 @@
+{
+  "drug_name": "Zytiga",
+  "line_label": "OTHER ONCOLOGY",
+  "issuer": "Johnson & Johnson",
+  "benchmark_identity": "jnj_zytiga_continuation",
+  "revenue_scope": "Worldwide Other Oncology line of the Innovative Medicine segment, including Zytiga (US + Intl = WW rows of the key-products exhibit)",
+  "geography": "Worldwide",
+  "why_separate": "Zytiga is no longer a line of its own from 2026Q1; its sales are inside Other Oncology together with products the issuer does not itemise, so the figure is a broader line, not Zytiga's own sales.",
+  "notes": "Measured: the 1Q26 and 2Q26 Other Financial Disclosures PDFs have no ZYTIGA row; the OTHER ONCOLOGY row carries footnote (3) 'Includes the sales of ZYTIGA which were previously disclosed separately'. The same footnote appears in the Forms 10-Q for 2026Q1 (0000200406-26-000087) and 2026Q2 (0000200406-26-000153). The 4Q25 exhibit still printed ZYTIGA (WW 119 for Q4) and a separate OTHER ONCOLOGY row (WW 100), so the 2026 line is not comparable with the 2025 Other Oncology row. J&J names no other product inside the line.",
+  "search_log": [
+    "Downloaded 1Q26 and 2Q26 Other-Financial-Disclosures PDFs from the J&J q4cdn IR host and extracted text with pdfplumber; searched for 'zytiga' and 'abiraterone': only footnote (3) matched, on page 8, and no product row.",
+    "Located the row carrying footnote (3): OTHER ONCOLOGY (WW 192 in 1Q26, 226 in 2Q26; six months 418).",
+    "Downloaded the Forms 10-Q for 2026Q1 and 2026Q2 (CIK 200406) and searched for Zytiga, abiraterone, Balversa, Akeega: the same footnote and a litigation paragraph only; no component names for Other Oncology.",
+    "Compared with the 4Q25 exhibit (Zytiga and Other Oncology as separate rows)."
+  ],
+  "continuation": {
+    "relation": "broader_line",
+    "line_includes": [
+      "Other Oncology"
+    ],
+    "evidence": "Footnote (3) on the OTHER ONCOLOGY row: 'Includes the sales of ZYTIGA which were previously disclosed separately' (https://s203.q4cdn.com/636242992/files/doc_financials/2026/q1/1Q26-Other-Financial-Disclosures.pdf, page 8)."
+  }
+}

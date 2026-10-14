@@ -18,17 +18,19 @@
   },
   "launch_quarter": "2017Q1",
   "commercial_start_quarter": "2017Q1",
-  "series_end_quarter": "2021Q4",
+  "series_end_quarter": "2022Q3",
   "series_end_basis": "issuer_stopped_reporting",
-  "series_end_reason": "Bausch Health's earnings presentations stop printing quarterly Trulance revenue after the 4Q21 deck, and its SEC releases and filings never print a Trulance figure.",
+  "series_end_reason": "Bausch Health's Forms 10-Q print Trulance revenue in prose ('Trulance revenues were $77 million and $74 million for the nine months ended September 30, 2022 and 2021') through the 3Q22 10-Q, which is the last filing to do so. The FY2022 Form 10-K prints no Trulance dollar figure, no later 10-Q or 10-K does either, and the 4Q22 to 3Q25 earnings decks print growth percentages and mix shares only. The Salix Segment slides of the 4Q25, 1Q26 and 2Q26 decks print a dollar figure beside the product's logo; those three quarters are kept in the companion line bausch_trulance_alt because 12 quarters (4Q22 to 3Q25) separate them from this series.",
   "search_log": [
-    "Bausch Health SEC releases/10-Qs print Trulance only inside the Salix segment total; the quarterly product figure is printed in the IR earnings presentations' 'Top 10 Products - Salix' slide on ir.bauschhealth.com, decks 1Q19-4Q21 parsed with pdfplumber (scripts/trul.py, scripts/pdfx.py).",
-    "Decks 1Q22 through 2Q26 were scanned for lines carrying Trulance or Xifaxan with a $...M figure (scripts/decks_late.py): none carry a quarterly product figure (only narrative mentions such as inventory drawdown), so the quarterly series ends with the 4Q21 deck.",
+    "Bausch Health's Forms 10-Q print Trulance revenue in prose (an MD&A sentence 'Trulance revenues were $X million and $Y million for the <period> ended ...') from the FY2021 10-K through the 3Q22 10-Q; 8-K earnings releases print growth wording only. The quarterly product figure through 4Q21 is printed in the IR earnings presentations' 'Top 10 Products - Salix' slide on ir.bauschhealth.com, decks 1Q19-4Q21 parsed with pdfplumber (scripts/trul.py, scripts/pdfx.py).",
+    "Decks 1Q22 through 3Q25 carry no Trulance dollar figure (growth percentages and mix shares only; Salix slides of 4Q24, 1Q25 and 3Q25 rendered and read). The 4Q25, 1Q26 and 2Q26 Salix Segment slides print Trulance $30, $31 and $41 beside a product logo, read from rendered pages and kept in companion bausch_trulance_alt.",
     "Bausch acquired Trulance on 2019-03-07 (Synergy asset sale); the 1Q19 deck shows $6M for a partial quarter, excluded. The 2Q20 deck could not be located (guessed URL patterns on the IR media path returned no document), so 2Q20 comes from the 3Q20 deck's trailing columns (direct_retrospective_table).",
     "Synergy's own series 2017Q1-2018Q3 is delivered as synergy_trulance_alt; 2018Q4 (no Synergy report) and 2019Q1 (partial quarter) are not citable, so the pieces are not spliced.",
     "[Synergy Pharmaceuticals piece] Listed every Synergy filing (CIK 0001347613, all forms) via data.sec.gov/submissions; 'Net sales' read from 10-Q statements of operations (Trulance was Synergy's only product); Q4 2017 derived from the FY2017 10-K less nine months (scripts/syn.py).",
     "[Synergy Pharmaceuticals piece] Last periodic report is the 10-Q for 2018Q3 (filed 2018-11-09); later filings through 2019-05-02 are bankruptcy/asset-sale 8-Ks.",
-    "[Synergy Pharmaceuticals piece] Alternate (shorter, earlier) series: the longest contiguous series is Bausch Health's 2019Q2-2021Q4 (11 quarters) in bausch_trulance."
+    "[Synergy Pharmaceuticals piece] Alternate (shorter, earlier) series: the longest contiguous series is Bausch Health's 2019Q2-2021Q4 (11 quarters) in bausch_trulance.",
+    "Forms 10-Q for 1Q22 (0000885590-22-000025), 2Q22 (0000885590-22-000039, and the 10-Q/A 0000885590-22-000042) and 3Q22 (0000885590-22-000061) were read as HTML text: each prints the Trulance sentence quoted in the rows. The FY2022 Form 10-K (0000885590-23-000009) and every 10-Q and 10-K filed 2023-05 to 2026-07 were searched with the pattern '(revenues|sales) (were|was|of) $<n>' within 200 characters of the product name and print no Trulance figure (the three 10-K hits are the neighbouring Xifaxan revenue sentence), so 4Q22 is not available.",
+    "Bausch Health Form 10-Q and 10-K 2022-2026, and the Exhibit 99.1 earnings releases of the 8-Ks filed 2025-02 to 2026-07 (accessions 0000885590-25-000004, -25-000018, -25-000030, -25-000048, -26-000020, -26-000051, -26-000105): the releases do not name the product; in the periodic filings, the sentence pattern '(revenues|sales) (were|was|of) $<n>' within 200 characters of the product name occurs only in the Trulance sentences of the FY2021 10-K and the 1Q22 to 3Q22 10-Qs (the 10-K hits for the product descriptions are the neighbouring Xifaxan sentence)."
   ],
   "unreported_quarters": {
     "2018Q4": "Ownership change Synergy Pharmaceuticals to Bausch Health; no full-quarter figure is published. Synergy filed for Chapter 11 on 2018-12-12 and never filed a Q4 2018 report or FY2018 10-K; its Trulance assets were sold to Bausch Health on 2019-03-07. Series starts 2019Q2, the first full quarter under Bausch Health (Trulance acquired from Synergy on 2019-03-07; 1Q19 is a partial quarter). Synergy's own 2017Q1-2018Q3 series is in synergy_trulance_alt; 2018Q4 is not reported by either company.",
@@ -43,7 +45,8 @@
     {
       "issuer": "Bausch Health",
       "first_quarter": "2019Q2",
-      "last_quarter": "2021Q4"
+      "last_quarter": "2022Q3"
     }
-  ]
+  ],
+  "notes": "The quarters 1Q22 to 3Q22 are Bausch Health's own prose figures in its Forms 10-Q (1Q22 24 as a three-month figure; 2Q22 and 3Q22 as six- and nine-month figures less the earlier reported quarters), and the same sentences carry the prior-year figures 21, 49 and 74, which equal the sum of the gold 2021 quarters (21; 21+28; 21+28+25), so the prose line and the deck line are the same U.S. line. Second quarter 2022 is also printed in the Form 10-Q/A filed 2022-09-02 (accession 0000885590-22-000042) with the same $47 million. The Salix Segment slides printed from 4Q25 let the prior-year quarters 4Q24 1Q25 and 2Q25 be backed out as the current figure less the printed dollar change; those are not entered because no derivation label covers it and each input is rounded."
 }

@@ -1,0 +1,21 @@
+{
+  "drug_name": "Luxturna",
+  "line_label": "Luxturna",
+  "issuer": "Roche",
+  "benchmark_identity": "spark_luxturna_continuation",
+  "revenue_scope": "Roche Group Pharmaceuticals Division sales of Luxturna, reported in Swiss francs; the regional columns put all of it in the United States",
+  "geography": "United States (Roche's Europe, Japan and International columns for Luxturna are nil in every table checked; ex-U.S. rights are Novartis's)",
+  "why_separate": "Spark Therapeutics stopped reporting at the Roche acquisition (2019-12-17). Roche prints no Luxturna figure of any period between 2019Q4 and 2022Q4 in its quarterly appendices, so the successor's line cannot be joined to the Spark series without a thirteen-quarter hole, and it is in Swiss francs; it is kept as a successor_issuer continuation.",
+  "notes": "Contiguous quarterly Luxturna sales in CHF millions, 2025Q1-2026Q2, from Roche's quarterly workbook. Roche's appendix tables also print Luxturna as year-to-date amounts from the first quarter of 2023 (CHF millions: Q1 2023 4, H1 2023 8, nine months 2023 43, FY 2023 44; Q1 2024 1, H1 2024 10, nine months 2024 15, FY 2024 18; Q1 2025 35, H1 2025 36, nine months 2025 39, FY 2025 41; Q1 2026 20, H1 2026 22). Quarters 2023Q2-2024Q4 follow from those by subtraction but are not rows here because no single document prints both inputs of each difference; the Finance Report 2023 prints full-year 2022 Luxturna sales of CHF 46 million. The workbook sums to the printed years (35+1+3+2=41). Luxturna sales are lumpy (gene-therapy treatments), so a nil Roche cell ('-') is an unreported-or-zero quarter, not a missing document.",
+  "search_log": [
+    "Roche media/investor releases and Appendix: Tables (assets.roche.com) for every results date 2020-01 to 2026-07 (FY, Q1, HY, Q3 releases), pdfplumber text searched for 'Luxturna': no match in any 2020, 2021 or 2022 release or appendix (including the HY 2022 half-year report); first match is the Q1 2023 appendix ('Luxturna 4 -23 4 -23 - - - - - -'), then every release to HY 2026.",
+    "Roche group financial data workbook (assets.roche.com/f/176343/x/bb0cb9f7bc/roche-group-financial-data.xlsx): quarterly block gives Luxturna 35, 1, 3, 2, 20, 2 for Q1 2025-Q2 2026.",
+    "Older versions of the workbook were not located, so 2023Q1-2024Q4 are not carried as quarterly rows.",
+    "Novartis (ex-U.S. rights holder): named Luxturna a key growth driver in its Q4 2020 presentation; no Novartis per-product Luxturna sales figure was located (a different territory in any case).",
+    "Spark (CIK 1609351) filed no report after the Q3 2019 10-Q (Form 15 filed 2019-12-27)."
+  ],
+  "continuation": {
+    "relation": "successor_issuer",
+    "evidence": "Roche first-quarter 2023 results, Appendix: Tables (https://assets.roche.com/f/176343/c3d606612d/01_communications_appendix_tables_q1_2023_sales_v2.pdf), Product sales Pharmaceuticals Division table, row 'Luxturna 4 -23 4 -23 - - - - - -' (total, United States, Europe, Japan, International; CHF millions and % change at CER); the earlier Roche appendices carry no Luxturna row. Workbook for the cited rows: https://assets.roche.com/f/176343/x/bb0cb9f7bc/roche-group-financial-data.xlsx."
+  }
+}

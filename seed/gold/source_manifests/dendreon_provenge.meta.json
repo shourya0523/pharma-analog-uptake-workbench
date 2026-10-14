@@ -5,8 +5,8 @@
   "benchmark_identity": "dendreon_provenge_net_product_revenue_reported",
   "therapeutic_area": "Oncology",
   "indication_area": "Oncology (solid)",
-  "revenue_scope": "Dendreon Corporation 'Product revenue' / 'Product revenue, net' line of its statements of operations; Dendreon's filings call PROVENGE its only commercialized product",
-  "geography": "The statements of operations print no geographic split. Dendreon's press release of January 14, 2015 (Exhibit 99.1 to the Form 8-K filed 2015-01-22) announces the first commercial European patient in early January 2015, so every quarter in this series precedes commercial treatment outside the United States.",
+  "revenue_scope": "Dendreon Corporation 'Product revenue' / 'Product revenue, net' line of its statements of operations; Dendreon's filings call PROVENGE its only commercialized product; from 2015Q2 the Provenge line of Valeant's quarterly earnings-deck slides (Top 20 / Top 30 brands, Top 10 products - Branded Rx)",
+  "geography": "The statements of operations print no geographic split. Dendreon's press release of January 14, 2015 (Exhibit 99.1 to the Form 8-K filed 2015-01-22) announces the first commercial European patient in early January 2015, so every quarter in this series precedes commercial treatment outside the United States. Valeant's Q1 2016 and Q2 2016 decks print '% Sold outside US' as 0% for Provenge.",
   "formulation": "autologous cellular suspension for intravenous infusion",
   "route_of_administration": "intravenous",
   "moa": "autologous cellular immunotherapy: patient's own antigen-presenting cells activated with the PAP-GM-CSF fusion protein",
@@ -23,15 +23,37 @@
   },
   "commercial_start_quarter": "2010Q2",
   "series_start_reason": "First quarter with a product revenue line: the Form 10-Q for the quarter ended March 31, 2010 prints total revenue of 21 (thousand) and no product revenue; the Form 10-Q for the quarter ended June 30, 2010 prints product revenue of 2,790 (thousand).",
-  "series_end_quarter": "2014Q4",
+  "series_end_quarter": "2017Q2",
   "series_end_basis": "issuer_stopped_reporting",
-  "series_end_reason": "Dendreon filed for Chapter 11 on November 10, 2014 and sold substantially all assets to a Valeant subsidiary on February 23, 2015 (Form 8-K filed 2015-02-23, accession 0001193125-15-057476); it filed no Form 10-Q or 10-K after the quarter ended September 30, 2014, and the fourth quarter of 2014 comes from its January 14, 2015 earnings press release. Valeant's Form 10-K for 2016 (accession 0000885590-17-000015) prints Provenge revenues only for full years ('$303 million, $250 million and $0 in 2016, 2015 and 2014'); the 2015 figure covers only the period after the February 23, 2015 acquisition. Its Form 10-Q filed 2016-11-09 mentions Provenge product sales only in prose without an amount.",
-  "notes": "US dollars. Fourth quarters 2010-2013 are derived as the full-year product revenue of the Form 10-K less the nine-month figure of the third-quarter Form 10-Q (Dendreon's 10-Ks print quarterly total revenue, which includes small non-product revenue, but no quarterly product revenue). Cross-check: the 2013 fourth quarter derived this way (74,828 thousand) agrees with the 74.8 million comparative in the January 14, 2015 press release; the four 2014 quarters sum to 303.86 million against a printed 303.8 million year. The PROVENGE United States / European Union lines in Dendreon's later filings are research and development costs, not sales, and are not used.",
+  "series_end_reason": "Valeant completed the sale of Dendreon Pharmaceuticals LLC on 28 June 2017 (Form 10-Q for 2Q17, accession 0000885590-17-000055); its FY17 results deck prints Provenge as $0M for 3Q17 and 4Q17 with footnote 'Divested asset' (ir.valeant.com q4-2017-earning-results-presentation.pdf), and the purchaser is not named in any document read here as publishing Provenge sales.",
+  "notes": "US dollars. Fourth quarters 2010-2013 are derived as the full-year product revenue of the Form 10-K less the nine-month figure of the third-quarter Form 10-Q (Dendreon's 10-Ks print quarterly total revenue, which includes small non-product revenue, but no quarterly product revenue). Cross-check: the 2013 fourth quarter derived this way (74,828 thousand) agrees with the 74.8 million comparative in the January 14, 2015 press release; the four 2014 quarters sum to 303.86 million against a printed 303.8 million year. The PROVENGE United States / European Union lines in Dendreon's later filings are research and development costs, not sales, and are not used. EXTENSION 2015Q2-2017Q2: Valeant's decks print Provenge in whole millions. Cross-checks: 2016 quarters 72+77+77+77 = 303 and 2015Q1(30, post-closing only)+74+69+77 = 250, matching the full years ($303 million and $250 million for 2016 and 2015) that Valeant's 2016 Form 10-K prints; 2017Q3 and 2017Q4 print $0M after the sale.",
   "search_log": [
     "EDGAR (Dendreon CIK 0001107332, data.sec.gov submissions): downloaded every Form 10-Q and 10-K filed from 2010-05-10 through 2014-11-10 (19 documents) and read the 'Product revenue' / 'Product revenue, net' row of each statement of operations; the form filter was 10-Q and 10-K only, then 8-Ks from 2014-11 to 2015-06 were listed separately.",
     "Quarterly product revenue for Q1 2010: not printed (10-Q shows only total revenue 21 thousand). Q4 of each year 2010-2013: the 10-K quarterly information note prints total revenue per quarter, not product revenue, so Q4 is annual less nine months.",
-    "8-K items 2.02 and 7.01 from November 2014 to June 2015 were opened: the January 22, 2015 8-K carries the fourth-quarter 2014 press release with net product revenue of $79.8 million; the later 8-Ks attach bankruptcy monthly operating reports and plan documents and were not read for revenue.",
+    "8-K items 2.02 and 7.01 from November 2014 to June 2015 were listed (data.sec.gov, all forms) and the Chapter 11 monthly operating reports (8-K Exhibit 99.1, 'Product Revenue, net', $ thousands) were read after the first pass: December 2014 28,765 (0001193125-15-015565 d855036dex991.htm, period 12/1/14-12/31/14); January 2015 21,337 (0001193125-15-050650 d874782dex991.htm, period 1/1/15-1/31/15); February 2015 13,842 (0001193125-15-103995 d895601dex991.htm, period 2/1/15-2/28/15, whose Note 1 states the sale to a Valeant subsidiary completed on 23 February 2015); 2/28/15-3/27/15 (0001193125-15-139210) and 3/28/15-5/1/15 (0001193125-15-196066) print no product revenue. The January 22, 2015 8-K (0001193125-15-016583) carries the fourth-quarter 2014 press release with net product revenue of $79.8 million. Other post-bankruptcy 8-Ks (plan and disclosure-statement documents) were not read for revenue.",
     "Valeant Pharmaceuticals (CIK 0000885590) Forms 10-Q filed 2016-06-07, 2016-08-09, 2016-11-09 and 2017-05-09 were downloaded and the Form 10-Q of 2016-11-09 and Form 10-K filed 2017-03-01 were read for 'Provenge': annual revenues only ($303 million 2016, $250 million 2015) and no quarterly Provenge amount, so no successor quarters were added; the other three Forms 10-Q were counted for mentions but not read. Valeant's Forms 10-Q for 2015 and its 10-K for 2015 were not downloaded.",
-    "FDA approval evidence from the Provenge package insert on fda.gov (Initial U.S. Approval: 2010); the FDA approval letter itself is inside a zip of review documents and is not a direct document URL."
-  ]
+    "FDA approval evidence from the Provenge package insert on fda.gov (Initial U.S. Approval: 2010); the FDA approval letter itself is inside a zip of review documents and is not a direct document URL.",
+    "EXTENSION (outcome A): Valeant (CIK 885590) Item 2.02 8-K releases from 2015-04 to 2018-02 print no Provenge quarterly sales; the IR earnings decks do. Decks read with pdfplumber: Q2 2015 (Aug 2015 revision), Q3 2015, Q4/FY2015 final v4, Q1 2016, Q2 2016, Q3 2016, 4Q/FY2016, 1Q17, 2Q17, FY17.",
+    "2015Q1: Valeant's Q2 2015 and Q3 2015 decks print 30 for Q1 2015, covering only the post-23-February-2015 period. Dendreon's monthly operating reports print product revenue for January 2015 (21,337 thousand) and for 1-28 February 2015 (13,842 thousand, with the 23 February sale noted), so the pre-closing part is printed, but only as two monthly court-filed figures in a different document type from the quarterly series. No document prints the whole quarter and the sourcing derivation labels have none for a sum of monthly reports from one issuer and a deck figure from another, so the quarter is left unreported rather than assembled.",
+    "Valeant Form 10-Q for 2Q17 (0000885590-17-000055) read for 'Dendreon': sale of all equity interests in Dendreon Pharmaceuticals LLC completed 28 June 2017 for $820 million in cash, Dendreon having been part of the Branded Rx segment.",
+    "Not found: any purchaser document printing Provenge sales after 2017Q2; the purchaser is not identified in the documents read."
+  ],
+  "joined_issuers": [
+    {
+      "issuer": "Dendreon",
+      "first_quarter": "2010Q2",
+      "last_quarter": "2014Q4"
+    },
+    {
+      "issuer": "Valeant Pharmaceuticals International",
+      "first_quarter": "2015Q2",
+      "last_quarter": "2017Q2"
+    }
+  ],
+  "unreported_quarters": {
+    "2015Q1": "Ownership change Dendreon to Valeant on 23 February 2015: Dendreon filed no quarterly report after its September 2014 Form 10-Q other than the 2015-01-22 release (4Q14), and Valeant's Q1 2015 column for Provenge (30 on the Q2 2015 and Q3 2015 decks) covers only the period after the closing. The pre-closing part exists only as Chapter 11 monthly operating reports (Exhibit 99.1 to 8-Ks): January 2015 product revenue, net 21,337 thousand (0001193125-15-050650) and 1-28 February 2015 13,842 thousand (0001193125-15-103995). No document prints the whole quarter, and the quarter would be a sum across two reporters and two document types, which none of the permitted derivation labels covers, so it is not entered."
+  },
+  "reviewed_anomalies": {
+    "2015Q2": "First Valeant quarter; the line is Valeant's 'Provenge' revenue and not Dendreon's 'Product revenue, net', so the value steps from 79.8 (2014Q4) to 74 across the ownership change; both are Provenge-only (Dendreon's only product)."
+  }
 }

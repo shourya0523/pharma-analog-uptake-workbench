@@ -1,0 +1,21 @@
+{
+  "drug_name": "Adcetris",
+  "line_label": "Adcetris",
+  "issuer": "Pfizer",
+  "benchmark_identity": "seagen_adcetris_continuation",
+  "revenue_scope": "Worldwide Adcetris revenues as printed by Pfizer (product revenues and royalty revenues)",
+  "geography": "Worldwide",
+  "why_separate": "The gold series is Seagen's net product sales of Adcetris in the U.S. and Canada. Pfizer, which acquired Seagen on December 14, 2023, prints Adcetris worldwide, and the line carries a footnote 'Reflects product revenues and royalty revenues' (royalties are paid by Takeda on its ex-U.S. net sales). Pfizer's U.S. column is not a like-for-like piece either: Pfizer's total royalty revenues are shown almost entirely in its U.S. column, and Canada, which Seagen included, falls outside it.",
+  "notes": "First Pfizer quarter is 2024Q1; the 2023Q4 release prints only a December 14-31 stub (46, footnote (i)), which is not a quarter and is not a row. Rows are the worldwide figure of each quarter's own release (the same rows as companion pfizer_adcetris, which remains cited but not scored). Pfizer prints U.S. and International columns on the same row; neither was substituted because the U.S. column holds royalty revenue and excludes Canada. The footnote 'Reflects product revenues and royalty revenues' is attached to the Adcetris row from the 2024Q4 release on; the 2024Q1-2024Q3 releases print the row without a footnote marker. Pfizer's FY2025 Form 10-K (https://www.sec.gov/Archives/edgar/data/78003/000007800326000026/pfe-20251231.htm) states 'Pfizer has commercialization rights for Adcetris in the U.S. and its territories and in Canada. Takeda has commercialization rights in the rest of the world and pays Pfizer a royalty'.",
+  "search_log": [
+    "Seagen (CIK 0001060736): last periodic report is the 10-Q for 2023Q3; Form 15 filed 2023-12-26; no 2023Q4 report",
+    "Pfizer (CIK 0000078003) 8-K Exhibit 99 releases for 4Q23 and 2024Q1-2026Q2 fetched; Adcetris row read for Worldwide, U.S. and International columns",
+    "4Q23 release (https://www.sec.gov/Archives/edgar/data/78003/000007800324000017/pfe-12312023xex99.htm): Adcetris (i) 46 for the post-acquisition stub only",
+    "Pfizer FY2025 Form 10-K searched for the Adcetris collaboration wording (Takeda royalty) and the revenue-by-product commentary",
+    "Total royalty revenues shown in each release's 'included above' line are almost wholly in the U.S. column (for example 2024Q4: 431 worldwide, 429 U.S., 2 International), so the U.S. column of Adcetris was not treated as product sales only"
+  ],
+  "continuation": {
+    "relation": "successor_issuer",
+    "evidence": "Pfizer Q4 2023 earnings release, Revenues by product: 'Adcetris (i) 46 | — | * | * | 46 | — | * | — | — | — | —' with footnote '(i) Represents revenues from legacy Seagen products subsequent to the acquisition on December 14, 2023.' (https://www.sec.gov/Archives/edgar/data/78003/000007800324000017/pfe-12312023xex99.htm); first full quarter 2024Q1 at https://www.sec.gov/Archives/edgar/data/78003/000007800324000103/pfe-3312024xex99.htm"
+  }
+}

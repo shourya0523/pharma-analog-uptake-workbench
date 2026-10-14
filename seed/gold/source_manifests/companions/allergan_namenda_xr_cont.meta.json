@@ -1,0 +1,23 @@
+{
+  "drug_name": "Namenda XR",
+  "line_label": "Namenda (printed 'Namenda\u00ae'; footnote: 'Includes Namenda XR and Namenda IR')",
+  "issuer": "Allergan plc",
+  "benchmark_identity": "allergan_namenda_xr_continuation",
+  "revenue_scope": "Combined Namenda line: Namenda XR plus Namenda IR net revenues, Total column of Allergan plc's product revenue tables",
+  "geography": "U.S. (the International column prints '-' on every row)",
+  "why_separate": "From 2018Q4 Allergan plc stopped printing a Namenda XR row and prints one 'Namenda' row that its footnote defines as including both Namenda XR and Namenda IR, so the figure is a broader line and not Namenda XR alone.",
+  "notes": "Continuation runs 2018Q4-2020Q1, the last quarter Allergan plc reported (Form 10-Q filed 2020-05-07; AbbVie closed the acquisition on 2020-05-08). The 2018Q4 release prints the row without a footnote and prior-year column 97.8, equal to the 2017Q4 value (97.8) of the Namenda XR gold series; the footnote 'Includes Namenda XR and Namenda IR' is first printed in the 2019Q1 release. Full-year 2019 check: 9.5+6.1+4.0+3.2 = 22.8, as printed in the 2019Q4 release. AbbVie (CIK 1551152) prints no Namenda row after the acquisition: no earnings exhibit and no Form 10-Q/10-K from 2020-05-01 to 2026-10-05 carries a revenue row for Namenda; the main documents mention Namenda only in the antitrust and False Claims Act litigation notes. No continuation after 2020Q1.",
+  "search_log": [
+    "Allergan plc (CIK 0001578845) earnings 8-Ks and 10-Qs listed via data.sec.gov/submissions from 2018-10 to 2020-05; Exhibit 99.1 of the 2019-01-29, 2019-05-07, 2019-08-06, 2019-11-05 and 2020-02-10 releases and the 2020-05-07 Form 10-Q parsed for rows containing 'Namenda'; each prints a single 'Namenda' row and no Namenda XR row.",
+    "Footnote text 'Includes Namenda XR and Namenda IR' found on the Namenda row of the 2019-05-07, 2019-08-06, 2019-11-05 and 2020-02-10 releases and the 2020-05-07 Form 10-Q; the 2019-01-29 release prints the row without a footnote.",
+    "AbbVie (CIK 0001551152): all Item 2.02 8-K exhibits and Forms 10-Q/10-K from 2020-05-01 to 2026-10-05 (75 filings, every main document and Exhibit 99 downloaded and searched case-insensitively for Namenda, Aczone, Avycaz, Viberzi, eluxadoline, dapsone): Namenda appears only in the litigation notes of the 10-Q/10-K main documents, never in a revenue table; AbbVie's product tables carry no Namenda line.",
+    "Checked forms 8-K, 8-K/A, 10-Q and 10-K."
+  ],
+  "continuation": {
+    "relation": "broader_line",
+    "line_includes": [
+      "Namenda IR"
+    ],
+    "evidence": "Allergan plc Q1 2019 earnings release, table row 'Namenda \u00ae (3)' with footnote '(3) Includes Namenda XR \u00ae and Namenda \u00ae IR.' (https://www.sec.gov/Archives/edgar/data/1578845/000114420419024034/tv520757_ex99-1.htm). The line first appears, without the footnote, in the Q4 2018 release: 'NAMENDA \u00ae net revenues in the fourth quarter of 2018 were $10.7 million compared to $97.8 million in the prior year quarter, impacted by loss of patent exclusivity for NAMENDA XR \u00ae in February 2018' (https://www.sec.gov/Archives/edgar/data/1578845/000114420419003275/tv511761_ex99-1.htm)."
+  }
+}

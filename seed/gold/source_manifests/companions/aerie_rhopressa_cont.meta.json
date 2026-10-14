@@ -1,0 +1,23 @@
+{
+  "drug_name": "Rhopressa",
+  "line_label": "Product revenues, net (Rhopressa and Rocklatan combined; 'Aerie glaucoma franchise')",
+  "issuer": "Aerie Pharmaceuticals",
+  "benchmark_identity": "aerie_rhopressa_continuation",
+  "revenue_scope": "Aerie's total product revenues, net: Rhopressa and Rocklatan together (U.S. glaucoma franchise)",
+  "geography": "United States (Aerie's product sales; ex-U.S. rights were licensed out and appear outside this line)",
+  "why_separate": "From 2019Q2, after Rocklatan launched, Aerie prints Rhopressa only combined with Rocklatan; the figure cannot be split back into Rhopressa's own sales, so it is not the Rhopressa series.",
+  "notes": "2019Q2-2022Q3, Aerie's last quarterly release before Alcon acquired it on 2022-11-21 (Aerie filed no later quarterly report). Each figure is the 'Product revenues, net' row of that quarter's own release; the 2021Q4 release also prints $82.0 million licensing revenue on a separate row, which is excluded. Quarterly sums agree with the printed full years: 2019 10.852 (2019Q1, from the 2020Q1 prior-year column; the gold Rhopressa row is 10.9) + 15.835 + 18.544 + 24.657 = 69.888 (printed 69,888); 2020 20.341+18.033+20.081+24.683 = 83.138 (printed 83,138); 2021 22.970+27.185+29.313+32.666 = 112.134 (printed 112,134). After the acquisition Alcon prints no Rhopressa or Rocklatan sales figure in its 6-K quarterly reports or 20-F filings for 2022-2025 (named only as acquired products; the 2025Q3 release names Rocklatan as a growth driver with no figure), so the line ends at 2022Q3.",
+  "search_log": [
+    "EDGAR CIK 1337553: opened the Item 2.02 earnings-release exhibit of every quarter 2019Q2-2022Q3 and read the 'Product revenues, net' row and the franchise sentence; no Rhopressa-only or Rocklatan-only figure is printed after 2019Q1.",
+    "Aerie filed no earnings release for 2022Q4 (acquired by Alcon 2022-11-21; Form 15 filed 2022-12-01).",
+    "Alcon (CIK 1167379) 6-K filings 2022-11 to 2026-08 and 20-F filings for fiscal 2022-2025 (list of Item/form 6-K and 20-F from data.sec.gov submissions) searched for Rhopressa, Rocklatan, Roclanda, Rhokiinsa and netarsudil: mentions are acquisition, litigation and qualitative growth text only, no sales figure.",
+    "Partner Santen (Japan and Asia licence signed October 2020) was not checked for product sales."
+  ],
+  "continuation": {
+    "relation": "broader_line",
+    "line_includes": [
+      "Rocklatan"
+    ],
+    "evidence": "Aerie second quarter 2019 earnings release (https://www.sec.gov/Archives/edgar/data/1337553/000162828019010281/aeri-2q19earningsreleaseex.htm): 'The Aerie glaucoma franchise, including Rhopressa (netarsudil ophthalmic solution) 0.02% and Rocklatan (netarsudil and latanoprost ophthalmic solution) 0.02%/0.005%, generated second quarter 2019 net revenues on a U.S. GAAP basis of $15.8 million'; Product revenues, net 15,835."
+  }
+}

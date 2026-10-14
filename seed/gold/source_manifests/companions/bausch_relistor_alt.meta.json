@@ -1,0 +1,17 @@
+{
+  "drug_name": "Relistor",
+  "line_label": "Relistor",
+  "issuer": "Bausch Health",
+  "benchmark_identity": "bausch_relistor_alt",
+  "revenue_scope": "U.S.",
+  "geography": "United States (Salix segment, defined as sales in the U.S. of GI products)",
+  "why_separate": "Bausch Health prints a Relistor dollar figure again only from 4Q25, in the Salix Segment slide, and 15 quarters (1Q22 to 3Q25) with no printed figure separate it from the series that ends 2021Q4, so the two cannot be joined without a gap.",
+  "notes": "Rows 2025Q4 to 2026Q2 are the same U.S. Salix line as the Relistor gold series. The gap quarters 1Q22 to 3Q25 have no printed dollar figure in any document checked (see search_log). The product is identified in each row by its logo, because the text layer of the deck PDF carries no product label beside the figures; the 3Q25 slide prints percentages only. Segment cross-check: the three products sum to less than the printed segment total in each slide (4Q25 607+52+30 of 693; 1Q26 559+40+31 of 639; 2Q26 664+41+41 of 758), the remainder being the 'Other' slice of the segment mix.",
+  "search_log": [
+    "The Salix Segment slides of the 4Q25 (page 17), 1Q26 (page 12) and 2Q26 (page 15) decks print a 'Revenue vs. prior-year quarter' table with columns REPORTED REVENUE, CHANGE ($), CHANGE (%) whose product cells are logos (Xifaxan, Relistor, Trulance, in that order). The PDF text layer drops the logos, so the rows were read from rendered images of the pages.",
+    "Earnings decks 1Q22 to 3Q25 (1Q22, 2Q22, 3Q22, 4Q22/FY22, 1Q23, 2Q23, 3Q23, 4Q23/FY23, 1Q24, 2Q24, 3Q24, 4Q24, 1Q25, 2Q25, 3Q25) were text-extracted with pdfplumber and every page naming the product was searched for a dollar figure within 80 characters of the name; the Salix slides of 4Q24, 1Q25 and 3Q25 were also rendered and read: they print growth percentages and segment-mix shares per product, and a dollar total for the whole Salix segment, never a product dollar figure.",
+    "Bausch Health Form 10-Q and 10-K 2022-2026, and the Exhibit 99.1 earnings releases of the 8-Ks filed 2025-02 to 2026-07 (accessions 0000885590-25-000004, -25-000018, -25-000030, -25-000048, -26-000020, -26-000051, -26-000105): the releases do not name the product; in the periodic filings, the sentence pattern '(revenues|sales) (were|was|of) $<n>' within 200 characters of the product name occurs only in the Trulance sentences of the FY2021 10-K and the 1Q22 to 3Q22 10-Qs (the 10-K hits for the product descriptions are the neighbouring Xifaxan sentence).",
+    "Segment definition: the FY2025 Form 10-K (0000885590-26-000023) and 2Q26 Form 10-Q state 'The Salix segment consists of sales in the U.S. of GI products.'",
+    "Lantheus 8-K Exhibit 99.1 of 2023-08-03 prints Relistor royalty revenue ($22.3 million for 2022, $13.2 million for the first half of 2023), which is royalty revenue and not net sales; not used."
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "drug_name": "Viibryd",
+  "line_label": "Viibryd/Fetzima",
+  "issuer": "Actavis plc / Allergan plc",
+  "benchmark_identity": "allergan_viibryd_continuation",
+  "revenue_scope": "U.S. net revenues of the combined Viibryd/Fetzima row (US Specialized Therapeutics plus US General Medicine from 2016Q4; U.S. column from 2015Q3; North American Brands segment or global-without-international table before that)",
+  "geography": "U.S.",
+  "why_separate": "From the quarter after Forest Laboratories' last results Actavis/Allergan print Viibryd only together with Fetzima; the row cannot be split, so it is a different scope from the Viibryd series, which ends at 2014Q1.",
+  "notes": "Line printed by Actavis plc (renamed Allergan plc in June 2015) after it acquired Forest Laboratories on 2014-07-01, on one row that holds both Viibryd and Fetzima; the issuer never prints either product alone after the Forest series ends at 2014Q1. The figure used is the U.S. figure: for 2014Q3-2015Q2 the table is the North American Brands segment or global with no international split, and the later releases' U.S. columns repeat the same figures for those quarters; from 2015Q3 the U.S. column is read; from 2016Q4 it is US Specialized Therapeutics plus US General Medicine (the row is printed only in US General Medicine). The global/total column is higher by the International figure from 2016Q2 on (e.g. 2019Q4 117.8 against 114.2). Quarters sum to the U.S. full-year figures printed in the Form 10-K: 2014 140.3, 2015 327.6, 2016 342.3, 2017 333.2, 2018 342.4, 2019 412.1. Printed spelling is 'Viibyrd / Fetzima' in the 2014-2015Q1 releases and 'Viibryd/Fetzima' afterwards; row_label follows the printed text. 2014Q2 is not printed: Actavis' Q2 2014 release (filed 2014-08-05) and Form 10-Q predate the closing and carry no Viibryd or Fetzima row, and Forest filed no results for its April-June 2014 quarter. 2020Q1 comes from the Form 10-Q because Allergan plc filed no earnings release before AbbVie completed the acquisition on 2020-05-08. After that AbbVie's earnings exhibits and Form 10-Qs print no Viibryd or Fetzima row.",
+  "search_log": [
+    "EDGAR submissions for CIK 1578845 (Actavis plc / Allergan plc) listed in full; every Item 2.02 8-K from 2014-08-05 to 2020-02-10 and every 10-Q/10-K from 2014-08-05 to 2020-05-07 downloaded and every 'Viibr?yd' and 'Fetzima' occurrence extracted from the text (earnings-release exhibit 99.1 and the filing's main document).",
+    "Q2 2014 release (v385688_ex99-1.htm) has no Viibryd/Fetzima row; 2014Q3 release is the first. Rows read from the earnings release that publishes the quarter as current; 2020Q1 from the Form 10-Q (agn-10q_20200331.htm).",
+    "Sum check of the quarterly U.S. figures against the Form 10-K annual rows for 2014-2019 (see notes).",
+    "No separate Viibryd or Fetzima row exists in any Actavis/Allergan release or filing after 2014Q1; the Fetzima/Viibryd matches elsewhere are product lists and the acquired-intangible table.",
+    "AbbVie (CIK 1551152) earnings exhibits and 10-Q/10-K searched (see the series meta's search_log): no Viibryd or Fetzima row after the Allergan acquisition."
+  ],
+  "continuation": {
+    "relation": "broader_line",
+    "line_includes": [
+      "Fetzima"
+    ],
+    "evidence": "Actavis plc earnings release of 2014-11-05, Table 2 North American Brands segment revenue (CNS): 'Viibyrd / Fetzima 66.4 - 66.4 -' for the three and nine months ended September 30 2014 and 2013; no separate Viibryd or Fetzima row is printed. https://www.sec.gov/Archives/edgar/data/1578845/000114420414065121/v393196_ex99-1.htm"
+  }
+}

@@ -3900,6 +3900,101 @@
   ]
  },
  {
+  "drug_name": "Qutenza",
+  "manufacturer": "Acorda Therapeutics",
+  "ticker": null,
+  "generic_name": "capsaicin",
+  "options": {
+   "earnings_since": "2013-04-05",
+   "earnings_until": "2014-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2013Q3",
+    "value_normalized_usd_millions": 0.103,
+    "gold_id": "neurogesx-qutenza-us-reported-2013q3"
+   },
+   {
+    "period": "2013Q4",
+    "value_normalized_usd_millions": 0.304,
+    "gold_id": "neurogesx-qutenza-us-reported-2013q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Qutenza",
+  "manufacturer": "Acorda Therapeutics",
+  "ticker": null,
+  "generic_name": "capsaicin",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q1",
+    "value_normalized_usd_millions": 0.209,
+    "gold_id": "neurogesx-qutenza-us-reported-2014q1"
+   },
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": 0.276,
+    "gold_id": "neurogesx-qutenza-us-reported-2014q2"
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 0.284,
+    "gold_id": "neurogesx-qutenza-us-reported-2014q3"
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": 0.178,
+    "gold_id": "neurogesx-qutenza-us-reported-2014q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Qutenza",
+  "manufacturer": "Acorda Therapeutics",
+  "ticker": null,
+  "generic_name": "capsaicin",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q1",
+    "value_normalized_usd_millions": 0.222,
+    "gold_id": "neurogesx-qutenza-us-reported-2015q1"
+   },
+   {
+    "period": "2015Q2",
+    "value_normalized_usd_millions": 0.251,
+    "gold_id": "neurogesx-qutenza-us-reported-2015q2"
+   },
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 0.4,
+    "gold_id": "neurogesx-qutenza-us-reported-2015q3"
+   },
+   {
+    "period": "2015Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2015Q3. Acorda Therapeutics prints a Qutenza net revenue figure for a quarter in its Forms 10-Q for 2013Q3 to 2015Q3 (whole dollars to 2015Q2, '$0.4 million' for 2015Q3). No later Form 10-Q read prints a quarterly Qutenza figure; its Forms 10-K give full years only, at $0.1 million precision: 2015 $1.0 million, 2016 $1.1 million, 2017 $0.7 million, 2018 $0.5 million (FY2018 10-K, https://www.sec.gov/Archives/edgar/data/1008848/000156459019004986/acor-10k_20181231.htm). The fourth quarter of 2015 is not derived because full-year ($1.0 million) and nine-month ($0.9 million) figures are both rounded to $0.1 million. Acorda sold the rights on 2018-10-30 to Averitas Pharma (Grunenthal, private), which publishes no Qutenza figure."
+   }
+  ]
+ },
+ {
   "drug_name": "Namenda XR",
   "manufacturer": "Actavis plc",
   "ticker": null,
@@ -26650,6 +26745,41 @@
   ]
  },
  {
+  "drug_name": "Trulance",
+  "manufacturer": "Bausch Health",
+  "ticker": "BHC",
+  "generic_name": "plecanatide",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 24.0,
+    "gold_id": "bausch-trulance-us-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 23.0,
+    "gold_id": "bausch-trulance-us-reported-2022q2"
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": 30.0,
+    "gold_id": "bausch-trulance-us-reported-2022q3"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2022Q3. Bausch Health's Forms 10-Q print Trulance revenue in prose ('Trulance revenues were $77 million and $74 million for the nine months ended September 30, 2022 and 2021') through the 3Q22 10-Q, which is the last filing to do so. The FY2022 Form 10-K prints no Trulance dollar figure, no later 10-Q or 10-K does either, and the 4Q22 to 3Q25 earnings decks print growth percentages and mix shares only. The Salix Segment slides of the 4Q25, 1Q26 and 2Q26 decks print a dollar figure beside the product's logo; those three quarters are kept in the companion line bausch_trulance_alt because 12 quarters (4Q22 to 3Q25) separate them from this series."
+   }
+  ]
+ },
+ {
   "drug_name": "Betaseron",
   "manufacturer": "Bayer",
   "ticker": null,
@@ -30321,6 +30451,31 @@
     "period": "2025Q4",
     "value_normalized_usd_millions": 4.3,
     "gold_id": "biogen-byooviz-us-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Byooviz",
+  "manufacturer": "Biogen",
+  "ticker": "BIIB",
+  "generic_name": "ranibizumab-nuna",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 0.0,
+    "gold_id": "biogen-byooviz-us-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 0.1,
+    "gold_id": "biogen-byooviz-us-reported-2026q2"
    }
   ]
  },
@@ -67385,6 +67540,101 @@
   ]
  },
  {
+  "drug_name": "Xerava",
+  "manufacturer": "Innoviva",
+  "ticker": "INVA",
+  "generic_name": "eravacycline",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 3.286,
+    "gold_id": "tetraphase-xerava-us-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 3.965,
+    "gold_id": "tetraphase-xerava-us-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 2.363,
+    "gold_id": "tetraphase-xerava-us-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 3.163,
+    "gold_id": "tetraphase-xerava-us-reported-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Xerava",
+  "manufacturer": "Innoviva",
+  "ticker": "INVA",
+  "generic_name": "eravacycline",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 3.234,
+    "gold_id": "tetraphase-xerava-us-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 3.129,
+    "gold_id": "tetraphase-xerava-us-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 3.189,
+    "gold_id": "tetraphase-xerava-us-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 3.789,
+    "gold_id": "tetraphase-xerava-us-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Xerava",
+  "manufacturer": "Innoviva",
+  "ticker": "INVA",
+  "generic_name": "eravacycline",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 2.455,
+    "gold_id": "tetraphase-xerava-us-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 3.265,
+    "gold_id": "tetraphase-xerava-us-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Ocaliva",
   "manufacturer": "Intercept Pharmaceuticals",
   "ticker": null,
@@ -86161,11 +86411,6 @@
     "period": "2012Q3",
     "value_normalized_usd_millions": 0.583,
     "gold_id": "neurogesx-qutenza-us-reported-2012q3"
-   },
-   {
-    "period": "2012Q4",
-    "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2012Q3. NeurogesX filed no periodic report after the Form 10-Q for the quarter ended September 30, 2012. Its Form 8-K of 2013-03-27 states the company 'does not currently expect to be in a position to file its Annual Report on Form 10-K for the year ended December 31, 2012', and its Form 8-K of 2013-07-11 followed the sale of its assets. No NeurogesX document prints 2012Q4 or 2013Q1-Q2."
    }
   ]
  },
@@ -105540,6 +105785,101 @@
   ]
  },
  {
+  "drug_name": "Padcev",
+  "manufacturer": "Pfizer",
+  "ticker": "PFE",
+  "generic_name": "enfortumab vedotin",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 334.0,
+    "gold_id": "seagen-padcev-us-net-product-sales-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 387.0,
+    "gold_id": "seagen-padcev-us-net-product-sales-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 407.0,
+    "gold_id": "seagen-padcev-us-net-product-sales-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 433.0,
+    "gold_id": "seagen-padcev-us-net-product-sales-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Padcev",
+  "manufacturer": "Pfizer",
+  "ticker": "PFE",
+  "generic_name": "enfortumab vedotin",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 419.0,
+    "gold_id": "seagen-padcev-us-net-product-sales-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 534.0,
+    "gold_id": "seagen-padcev-us-net-product-sales-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 449.0,
+    "gold_id": "seagen-padcev-us-net-product-sales-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 500.0,
+    "gold_id": "seagen-padcev-us-net-product-sales-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Padcev",
+  "manufacturer": "Pfizer",
+  "ticker": "PFE",
+  "generic_name": "enfortumab vedotin",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 585.0,
+    "gold_id": "seagen-padcev-us-net-product-sales-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 648.0,
+    "gold_id": "seagen-padcev-us-net-product-sales-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Prevnar 20",
   "manufacturer": "Pfizer",
   "ticker": "PFE",
@@ -118426,11 +118766,6 @@
     "period": "2014Q3",
     "value_normalized_usd_millions": 155.815,
     "gold_id": "salix-xifaxan-us-reported-2014q3"
-   },
-   {
-    "period": "2014Q4",
-    "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2014Q3. Salix restated 2013-2014 and was acquired by Valeant on 1 April 2015 without filing a 2015 report; the only fourth-quarter 2014 figure is the 10-K full year less restated nine months, which gives a negative quarter (-7.3) from mixed bases rather than a real one, so the series ends at the last quarter Salix printed directly. Bausch Health prints no quarterly Xifaxan in its SEC filings; its earnings presentations print U.S. Xifaxan only for 2018Q1-2021Q4, thirteen quarters later (bausch_xifaxan_alt: Companion Series sheet, cited but not scored)."
    }
   ]
  },
@@ -126416,11 +126751,6 @@
     "period": "2023Q3",
     "value_normalized_usd_millions": 199.516,
     "gold_id": "seagen-padcev-us-net-product-sales-2023q3"
-   },
-   {
-    "period": "2023Q4",
-    "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2023Q3. Pfizer completed the acquisition of Seagen on Dec 14, 2023; Seagen filed no report for 2023Q4. Pfizer's later Padcev line (companion series pfizer_padcev, from 2024Q1) is worldwide, a different scope, and its 2023Q4 line is a Dec 14-31 stub, so the series is not spliced. (pfizer_padcev: Companion Series sheet, cited but not scored.)"
    }
   ]
  },
@@ -126606,11 +126936,6 @@
     "period": "2009Q3",
     "value_normalized_usd_millions": 0.0,
     "gold_id": "sepracor-alvesco-us-reported-2009q3"
-   },
-   {
-    "period": "2009Q4",
-    "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2009Q3. Dainippon Sumitomo Pharma acquired Sepracor in October 2009 and its later fact books (FY2010 to FY2017 checked) and quarterly results do not itemise ALVESCO. Later owners did not publish a product figure: AstraZeneca (rights to 2018) printed only a combined Alvesco/Omnaris/Zetonna figure in a press release and no Alvesco line in its product-sales tables; Covis Pharma (owner since 2018) is private."
    }
   ]
  },
@@ -126854,13 +127179,13 @@
    },
    {
     "period": "2009Q3",
-    "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2009Q2. Sepracor became an indirect wholly-owned subsidiary of Dainippon Sumitomo Pharma when the merger took effect on October 20, 2009 (Form 8-K filed 2009-10-20, https://www.sec.gov/Archives/edgar/data/877357/000110465909059627/a09-31878_18k.htm); its last periodic filing is the Form 10-Q for the quarter ended June 30, 2009 (filed 2009-08-05). Sumitomo's later supplementary financial data print a single 'XOPENEX' line (levalbuterol HCI) with no XOPENEX HFA split and do not say which formulations it holds, so that line is a different scope and is not spliced."
+    "value_normalized_usd_millions": 22.825,
+    "gold_id": "sepracor-xopenex-hfa-reported-2009q3"
    },
    {
     "period": "2009Q4",
     "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2009Q2. Sepracor became an indirect wholly-owned subsidiary of Dainippon Sumitomo Pharma when the merger took effect on October 20, 2009 (Form 8-K filed 2009-10-20, https://www.sec.gov/Archives/edgar/data/877357/000110465909059627/a09-31878_18k.htm); its last periodic filing is the Form 10-Q for the quarter ended June 30, 2009 (filed 2009-08-05). Sumitomo's later supplementary financial data print a single 'XOPENEX' line (levalbuterol HCI) with no XOPENEX HFA split and do not say which formulations it holds, so that line is a different scope and is not spliced."
+    "why": "The issuer reports no line for this product after 2009Q3. Sepracor became an indirect wholly-owned subsidiary of Dainippon Sumitomo Pharma when the merger took effect on October 20, 2009 (Form 8-K filed 2009-10-20, https://www.sec.gov/Archives/edgar/data/877357/000110465909059627/a09-31878_18k.htm), so its last periodic filing is the Form 10-Q for the quarter ended June 30, 2009 (filed 2009-08-05). The Sepracor Fact Book 2009 (November 2009, on the Sumitomo Pharma IR site) itemises XOPENEX HFA for the quarter ended September 30, 2009 and is the last document to do so. From 2010Q1 Sumitomo Pharma's supplementary financial data print one XOPENEX line (levalbuterol HCI) with no XOPENEX HFA split, which is held as the continuation companion sepracor_xopenex_hfa_cont."
    }
   ]
  },
@@ -128531,6 +128856,216 @@
     "period": "2019Q4",
     "value_normalized_usd_millions": null,
     "why": "The issuer reports no line for this product after 2019Q3. Spark was acquired by Roche on 2019-12-17 and deregistered; no 10-K for 2019 exists. Roche prints no quarterly Luxturna sales (half-year level only, in CHF)."
+   }
+  ]
+ },
+ {
+  "drug_name": "Alvesco",
+  "manufacturer": "Sumitomo Pharma",
+  "ticker": null,
+  "generic_name": "ciclesonide",
+  "options": {
+   "earnings_since": "2010-04-05",
+   "earnings_until": "2011-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2010Q1",
+    "value_normalized_usd_millions": 7.0,
+    "gold_id": "sepracor-alvesco-us-reported-2010q1"
+   },
+   {
+    "period": "2010Q2",
+    "value_normalized_usd_millions": 6.0,
+    "gold_id": "sepracor-alvesco-us-reported-2010q2"
+   },
+   {
+    "period": "2010Q3",
+    "value_normalized_usd_millions": 8.0,
+    "gold_id": "sepracor-alvesco-us-reported-2010q3"
+   },
+   {
+    "period": "2010Q4",
+    "value_normalized_usd_millions": 8.0,
+    "gold_id": "sepracor-alvesco-us-reported-2010q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Alvesco",
+  "manufacturer": "Sumitomo Pharma",
+  "ticker": null,
+  "generic_name": "ciclesonide",
+  "options": {
+   "earnings_since": "2011-04-05",
+   "earnings_until": "2012-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2011Q1",
+    "value_normalized_usd_millions": 9.0,
+    "gold_id": "sepracor-alvesco-us-reported-2011q1"
+   },
+   {
+    "period": "2011Q2",
+    "value_normalized_usd_millions": 8.0,
+    "gold_id": "sepracor-alvesco-us-reported-2011q2"
+   },
+   {
+    "period": "2011Q3",
+    "value_normalized_usd_millions": 8.0,
+    "gold_id": "sepracor-alvesco-us-reported-2011q3"
+   },
+   {
+    "period": "2011Q4",
+    "value_normalized_usd_millions": 10.0,
+    "gold_id": "sepracor-alvesco-us-reported-2011q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Alvesco",
+  "manufacturer": "Sumitomo Pharma",
+  "ticker": null,
+  "generic_name": "ciclesonide",
+  "options": {
+   "earnings_since": "2012-04-05",
+   "earnings_until": "2013-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2012Q1",
+    "value_normalized_usd_millions": 9.0,
+    "gold_id": "sepracor-alvesco-us-reported-2012q1"
+   },
+   {
+    "period": "2012Q2",
+    "value_normalized_usd_millions": 10.0,
+    "gold_id": "sepracor-alvesco-us-reported-2012q2"
+   },
+   {
+    "period": "2012Q3",
+    "value_normalized_usd_millions": 9.0,
+    "gold_id": "sepracor-alvesco-us-reported-2012q3"
+   },
+   {
+    "period": "2012Q4",
+    "value_normalized_usd_millions": 10.0,
+    "gold_id": "sepracor-alvesco-us-reported-2012q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Alvesco",
+  "manufacturer": "Sumitomo Pharma",
+  "ticker": null,
+  "generic_name": "ciclesonide",
+  "options": {
+   "earnings_since": "2013-04-05",
+   "earnings_until": "2014-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2013Q1",
+    "value_normalized_usd_millions": 8.0,
+    "gold_id": "sepracor-alvesco-us-reported-2013q1"
+   },
+   {
+    "period": "2013Q2",
+    "value_normalized_usd_millions": 11.0,
+    "gold_id": "sepracor-alvesco-us-reported-2013q2"
+   },
+   {
+    "period": "2013Q3",
+    "value_normalized_usd_millions": 11.0,
+    "gold_id": "sepracor-alvesco-us-reported-2013q3"
+   },
+   {
+    "period": "2013Q4",
+    "value_normalized_usd_millions": 11.0,
+    "gold_id": "sepracor-alvesco-us-reported-2013q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Alvesco",
+  "manufacturer": "Sumitomo Pharma",
+  "ticker": null,
+  "generic_name": "ciclesonide",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q1",
+    "value_normalized_usd_millions": 9.0,
+    "gold_id": "sepracor-alvesco-us-reported-2014q1"
+   },
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": 9.0,
+    "gold_id": "sepracor-alvesco-us-reported-2014q2"
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 10.0,
+    "gold_id": "sepracor-alvesco-us-reported-2014q3"
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": 11.0,
+    "gold_id": "sepracor-alvesco-us-reported-2014q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Alvesco",
+  "manufacturer": "Sumitomo Pharma",
+  "ticker": null,
+  "generic_name": "ciclesonide",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q1",
+    "value_normalized_usd_millions": 8.0,
+    "gold_id": "sepracor-alvesco-us-reported-2015q1"
+   },
+   {
+    "period": "2015Q2",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2015Q1. Sumitomo Pharma prints ALVESCO on its own line in its North America segment table through the FY2014 results (ebr20150511_4.pdf: FY2014 38). From the FY2015 first-quarter release (ebr20150729_4.pdf) it prints one 'Ciclesonide' row defined by the footnote '* Total of 3 ciclesonide products (ALVESCO, OMNARIS, ZETONNA)', which is held as the continuation companion sepracor_alvesco_cont (2015Q2 to 2018Q1). AstraZeneca (rights to 2018) printed only a combined Alvesco/Omnaris/Zetonna figure in a press release and no Alvesco line in its product-sales tables; Covis Pharma (owner since 2018) is private."
+   },
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2015Q1. Sumitomo Pharma prints ALVESCO on its own line in its North America segment table through the FY2014 results (ebr20150511_4.pdf: FY2014 38). From the FY2015 first-quarter release (ebr20150729_4.pdf) it prints one 'Ciclesonide' row defined by the footnote '* Total of 3 ciclesonide products (ALVESCO, OMNARIS, ZETONNA)', which is held as the continuation companion sepracor_alvesco_cont (2015Q2 to 2018Q1). AstraZeneca (rights to 2018) printed only a combined Alvesco/Omnaris/Zetonna figure in a press release and no Alvesco line in its product-sales tables; Covis Pharma (owner since 2018) is private."
+   },
+   {
+    "period": "2015Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2015Q1. Sumitomo Pharma prints ALVESCO on its own line in its North America segment table through the FY2014 results (ebr20150511_4.pdf: FY2014 38). From the FY2015 first-quarter release (ebr20150729_4.pdf) it prints one 'Ciclesonide' row defined by the footnote '* Total of 3 ciclesonide products (ALVESCO, OMNARIS, ZETONNA)', which is held as the continuation companion sepracor_alvesco_cont (2015Q2 to 2018Q1). AstraZeneca (rights to 2018) printed only a combined Alvesco/Omnaris/Zetonna figure in a press release and no Alvesco line in its product-sales tables; Covis Pharma (owner since 2018) is private."
    }
   ]
  },
@@ -139976,6 +140511,346 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 326.6,
     "gold_id": "uthr-tyvaso-dpi-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Provenge",
+  "manufacturer": "Valeant Pharmaceuticals International",
+  "ticker": "BHC",
+  "generic_name": "sipuleucel-T",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q2",
+    "value_normalized_usd_millions": 74.0,
+    "gold_id": "dendreon-provenge-net-product-revenue-reported-2015q2"
+   },
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 69.0,
+    "gold_id": "dendreon-provenge-net-product-revenue-reported-2015q3"
+   },
+   {
+    "period": "2015Q4",
+    "value_normalized_usd_millions": 77.0,
+    "gold_id": "dendreon-provenge-net-product-revenue-reported-2015q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Provenge",
+  "manufacturer": "Valeant Pharmaceuticals International",
+  "ticker": "BHC",
+  "generic_name": "sipuleucel-T",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 72.0,
+    "gold_id": "dendreon-provenge-net-product-revenue-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 77.0,
+    "gold_id": "dendreon-provenge-net-product-revenue-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 77.0,
+    "gold_id": "dendreon-provenge-net-product-revenue-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 77.0,
+    "gold_id": "dendreon-provenge-net-product-revenue-reported-2016q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Provenge",
+  "manufacturer": "Valeant Pharmaceuticals International",
+  "ticker": "BHC",
+  "generic_name": "sipuleucel-T",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 81.0,
+    "gold_id": "dendreon-provenge-net-product-revenue-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 83.0,
+    "gold_id": "dendreon-provenge-net-product-revenue-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2017Q2. Valeant completed the sale of Dendreon Pharmaceuticals LLC on 28 June 2017 (Form 10-Q for 2Q17, accession 0000885590-17-000055); its FY17 results deck prints Provenge as $0M for 3Q17 and 4Q17 with footnote 'Divested asset' (ir.valeant.com q4-2017-earning-results-presentation.pdf), and the purchaser is not named in any document read here as publishing Provenge sales."
+   },
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2017Q2. Valeant completed the sale of Dendreon Pharmaceuticals LLC on 28 June 2017 (Form 10-Q for 2Q17, accession 0000885590-17-000055); its FY17 results deck prints Provenge as $0M for 3Q17 and 4Q17 with footnote 'Divested asset' (ir.valeant.com q4-2017-earning-results-presentation.pdf), and the purchaser is not named in any document read here as publishing Provenge sales."
+   }
+  ]
+ },
+ {
+  "drug_name": "Xifaxan",
+  "manufacturer": "Valeant Pharmaceuticals International (renamed Bausch Health Companies in 2018)",
+  "ticker": "BHC",
+  "generic_name": "rifaximin",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q2",
+    "value_normalized_usd_millions": 148.0,
+    "gold_id": "salix-xifaxan-us-reported-2015q2"
+   },
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 220.0,
+    "gold_id": "salix-xifaxan-us-reported-2015q3"
+   },
+   {
+    "period": "2015Q4",
+    "value_normalized_usd_millions": 205.0,
+    "gold_id": "salix-xifaxan-us-reported-2015q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Xifaxan",
+  "manufacturer": "Valeant Pharmaceuticals International (renamed Bausch Health Companies in 2018)",
+  "ticker": "BHC",
+  "generic_name": "rifaximin",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 208.0,
+    "gold_id": "salix-xifaxan-us-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 200.0,
+    "gold_id": "salix-xifaxan-us-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 273.0,
+    "gold_id": "salix-xifaxan-us-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 251.0,
+    "gold_id": "salix-xifaxan-us-reported-2016q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Xifaxan",
+  "manufacturer": "Valeant Pharmaceuticals International (renamed Bausch Health Companies in 2018)",
+  "ticker": "BHC",
+  "generic_name": "rifaximin",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 185.0,
+    "gold_id": "salix-xifaxan-us-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 233.0,
+    "gold_id": "salix-xifaxan-us-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 286.0,
+    "gold_id": "salix-xifaxan-us-reported-2017q3"
+   },
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": 275.0,
+    "gold_id": "salix-xifaxan-us-reported-2017q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Xifaxan",
+  "manufacturer": "Valeant Pharmaceuticals International (renamed Bausch Health Companies in 2018)",
+  "ticker": "BHC",
+  "generic_name": "rifaximin",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 275.0,
+    "gold_id": "salix-xifaxan-us-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 294.0,
+    "gold_id": "salix-xifaxan-us-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 318.0,
+    "gold_id": "salix-xifaxan-us-reported-2018q3"
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": 308.0,
+    "gold_id": "salix-xifaxan-us-reported-2018q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Xifaxan",
+  "manufacturer": "Valeant Pharmaceuticals International (renamed Bausch Health Companies in 2018)",
+  "ticker": "BHC",
+  "generic_name": "rifaximin",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q1",
+    "value_normalized_usd_millions": 306.0,
+    "gold_id": "salix-xifaxan-us-reported-2019q1"
+   },
+   {
+    "period": "2019Q2",
+    "value_normalized_usd_millions": 356.0,
+    "gold_id": "salix-xifaxan-us-reported-2019q2"
+   },
+   {
+    "period": "2019Q3",
+    "value_normalized_usd_millions": 394.0,
+    "gold_id": "salix-xifaxan-us-reported-2019q3"
+   },
+   {
+    "period": "2019Q4",
+    "value_normalized_usd_millions": 396.0,
+    "gold_id": "salix-xifaxan-us-reported-2019q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Xifaxan",
+  "manufacturer": "Valeant Pharmaceuticals International (renamed Bausch Health Companies in 2018)",
+  "ticker": "BHC",
+  "generic_name": "rifaximin",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 375.0,
+    "gold_id": "salix-xifaxan-us-reported-2020q1"
+   },
+   {
+    "period": "2020Q2",
+    "value_normalized_usd_millions": 315.0,
+    "gold_id": "salix-xifaxan-us-reported-2020q2"
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": 381.0,
+    "gold_id": "salix-xifaxan-us-reported-2020q3"
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": 411.0,
+    "gold_id": "salix-xifaxan-us-reported-2020q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Xifaxan",
+  "manufacturer": "Valeant Pharmaceuticals International (renamed Bausch Health Companies in 2018)",
+  "ticker": "BHC",
+  "generic_name": "rifaximin",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 366.0,
+    "gold_id": "salix-xifaxan-us-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 402.0,
+    "gold_id": "salix-xifaxan-us-reported-2021q2"
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": 426.0,
+    "gold_id": "salix-xifaxan-us-reported-2021q3"
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": 450.0,
+    "gold_id": "salix-xifaxan-us-reported-2021q4"
    }
   ]
  },

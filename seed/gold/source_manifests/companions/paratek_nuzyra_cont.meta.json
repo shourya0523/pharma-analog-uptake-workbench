@@ -1,0 +1,19 @@
+{
+  "drug_name": "Nuzyra",
+  "line_label": "NUZYRA",
+  "issuer": "Zai Lab Limited",
+  "benchmark_identity": "paratek_nuzyra_continuation",
+  "revenue_scope": "Zai Lab net product revenue of NUZYRA (omadacycline) in its licensed territory, Greater China, net of sales rebates and returns",
+  "geography": "Greater China",
+  "why_separate": "The gold series is Paratek's NUZYRA net U.S. sales (2019Q1-2023Q2). Paratek was taken private in September 2023 and stopped filing. Zai Lab, Paratek's licensee for Greater China, prints NUZYRA on its own line every quarter; it is a different issuer and a different territory (Greater China, not the United States), so it cannot extend the U.S. series.",
+  "notes": "Zai Lab is a licensee of Paratek's omadacycline rights in Greater China, not Paratek's acquirer; relation successor_issuer is the nearest of the four allowed relations (a different issuer printing the same brand on a different territory after the series stopped). Zai Lab has printed NUZYRA since 2021 (2022: 5,200 thousand; 2021: 3 thousand per the FY2023 10-K), so the line began before the gold series ended; only quarters after 2023Q2 are carried. Q4 of each year is the full year less the nine-month figure. Zai Lab's table label is NUZYRA throughout; the table has no geographic split, and Greater China is taken from the license field quoted in the FY2023 Form 10-K and from the statement that its commercial products are launched in territories in Greater China. Other issuers checked: Paratek filed no periodic report after the Q2 2023 Form 10-Q; Almirall prints SEYSARA (a different product).",
+  "search_log": [
+    "EDGAR submissions of Zai Lab (CIK 1704292): every Form 10-Q and 10-K filed 2023-08 to 2026-08 fetched and the NUZYRA row read from the 'net revenue by product / commercial program' table of each.",
+    "Paratek Pharmaceuticals (CIK 1178711) has no periodic report after the Q2 2023 Form 10-Q (see paratek_nuzyra.meta.json); Zai Lab's FY2023 10-K names the later owners as Gurnet Point Capital and Novo Holdings.",
+    "Zai Lab's tables are not split by territory; all other Zai Lab quarters before 2023Q3 are outside the continuation window."
+  ],
+  "continuation": {
+    "relation": "successor_issuer",
+    "evidence": "Zai Lab Form 10-Q for the quarter ended September 30, 2023, net revenue by product, three and nine months ended September 30, 2023 and 2022 (USD thousands): 'NUZYRA 5,483 1,546 15,588 3,596' - https://www.sec.gov/Archives/edgar/data/1704292/000162828023037358/zlab-20230930.htm"
+  }
+}

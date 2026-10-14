@@ -1,0 +1,24 @@
+{
+  "drug_name": "Tracleer",
+  "line_label": "OTHER PULMONARY HYPERTENSION",
+  "issuer": "Johnson & Johnson",
+  "benchmark_identity": "jnj_tracleer_continuation",
+  "revenue_scope": "Worldwide net sales of J&J's 'Other Pulmonary Hypertension' line, which includes Tracleer and other pulmonary hypertension products not itemised by the issuer",
+  "geography": "Worldwide",
+  "why_separate": "From 2020Q1 J&J stopped printing Tracleer on its own and reports it inside 'Other Pulmonary Hypertension' together with products it does not name; the line cannot be split back into Tracleer's own sales, so it is not the Tracleer series.",
+  "notes": "Quarterly worldwide figures 2020Q1-2026Q2 read from the earnings-release sales schedule (Exhibit 99.2) of each quarter, in USD millions, each from the quarter's own release. Quarterly sums agree with the printed full years: 2020 106+101+97+112=416 (printed 416), 2021 105+95+101+94=395 (395), 2022 83+78+78+73=312 (313, rounding), 2023 70+66+63+61=260 (260), 2024 56+67+60+57=240 (240, the full-year column of the 2025Q1 supplemental schedule), 2025 52+55+53+49=209 (209, 2025 annual report). The last Tracleer-only quarter in gold is 2019Q4 (WW 56); the same schedule restates 2019Q4 Other PH as 88, so the 2019 Tracleer plus residual (56 + 32) equals the 2020Q4 prior-year column. Scope break handled: OPSYNVI (macitentan/tadalafil) sat in this line in 2024 Q2-Q4, and the 2024 releases print 71, 72 and 82 with it. The 2025 releases moved OPSYNVI into 'OPSUMIT / OPSYNVI' (2025 annual report footnote: 'OPSYNVI was previously in Other Pulmonary Hypertension') and restate those quarters at 67, 60 and 57 (2025Q1 supplemental schedule: 56, 67, 60, 57, 240). The series uses the restated 67, 60, 57 so that all 26 rows are on the post-reclassification scope, which is also the scope of 2020Q1-2024Q1 (OPSYNVI had no sales before its 2024 launch). J&J names no other member of the line. No Tracleer-only figure is printed by J&J after 2019Q4; J&J's fiscal 2020 Form 10-K states that sales of TRACLEER were negatively impacted by generics and migration to OPSUMIT.",
+  "search_log": [
+    "Scope-break check: 2025Q1 supplemental schedule (a2025q1exhibit992.htm) other pulmonary hypertension ww row prints 2024 as 56 | 67 | 60 | 57 | 240; prior-year columns of the 2025Q2, 2025Q3 and 2025Q4 releases print 67, 60, 57; 2024 releases printed 71, 72, 82. Fiscal 2025 Form 10-K footnote: OPSYNVI was previously in Other Pulmonary Hypertension. Searched the 2025Q1-2026Q2 releases and the FY2025 10-K for any other named member of the line: none.",
+    "J&J (CIK 200406) 8-K Item 2.02 filings 2020-04 to 2026-07: opened Exhibit 99.2 (sales schedule) of every quarterly release 2020Q1-2026Q2 and read the OTHER PULMONARY HYPERTENSION worldwide row; searched the same exhibits for a TRACLEER row (none after 2019Q4).",
+    "J&J Sales of Key Products/Franchises 1Q2020 schedule (q4cdn.com) and the SEC Exhibit 99.2 of the 2020-04-14 8-K: footnote 'Other PAH is inclusive of TRACLEER, which was previously disclosed separately'.",
+    "J&J Forms 10-K for fiscal 2019-2025: 'Inclusive of TRACLEER which was previously disclosed separately' (FY2020); 'Growth in Other Pulmonary Hypertension was driven by OPSYNVI' (FY2024); 'OPSYNVI was previously in Other Pulmonary Hypertension' (FY2025). No 10-K itemises other members of the line (searched for Veletri, Ventavis, Zavesca: no match).",
+    "Partners and other issuers: no other issuer's Tracleer net-sales disclosure was found; the search covered J&J documents only and no partner or royalty holder was checked."
+  ],
+  "continuation": {
+    "relation": "broader_line",
+    "line_includes": [
+      "Other pulmonary hypertension products that J&J does not itemise; no J&J document names a member other than Tracleer"
+    ],
+    "evidence": "J&J first-quarter 2020 sales schedule, Exhibit 99.2 to the 8-K filed 2020-04-14 (https://www.sec.gov/Archives/edgar/data/200406/000020040620000026/a2020q1exhibit992.htm): OTHER PULMONARY HYPERTENSION (3) worldwide 106 vs 152; '(3) Other PAH is inclusive of TRACLEER, which was previously disclosed separately'. The line is therefore wider than Tracleer: 2019 restated Other PH columns (152, 140, 96, 88) exceed gold Tracleer for the same quarters by about 35 a quarter. J&J names no other member; OPSYNVI, the one product it names as having sat in the line (fiscal 2025 Form 10-K, https://www.sec.gov/Archives/edgar/data/200406/000020040626000016/jnj-20251228.htm: 'OPSYNVI was previously in Other Pulmonary Hypertension'), is excluded from every row by using the restated 2024 quarters."
+  }
+}

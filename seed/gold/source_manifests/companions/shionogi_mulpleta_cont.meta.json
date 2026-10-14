@@ -1,0 +1,24 @@
+{
+  "drug_name": "Mulpleta",
+  "line_label": "Others",
+  "issuer": "Shionogi",
+  "benchmark_identity": "shionogi_mulpleta_continuation",
+  "revenue_scope": "'Others' within prescription drugs in Shionogi's quarterly-trend revenue-by-segment table (Japan prescription drugs, non-consolidated basis), billions of yen, definition of the FY2023-FY2024 supplements",
+  "geography": "Japan",
+  "why_separate": "Shionogi stopped printing a resolvable Mulpleta quarter after FY2019 and states that from FY2024 Mulpleta revenue sits inside 'Others' in prescription drugs, a catch-all that also holds other products (Pirespa is named), so the figure is the line's, not the product's.",
+  "notes": "The first document to state the folding is the FY2023 supplement (published 2024-05-13), whose revenue-by-segment table prints 'MULPLETA 0.1 0.1 － (0.0) － －' (FY2022 actual, FY2023 actual, FY2024 forecast, change, change %, ...) with no value for FY2024 and the footnote 'Others in prescription drugs for FY2024 include revenue from MULPLETA and PIRESPA.' Rows are the prescription-drugs 'Others' line of the quarterly-trend table in each quarter's own supplement, read as printed in that period's document (FY2024 1Q to 4Q = 2024Q2 to 2025Q1). The continuation ends at 2025Q1 because the FY2024 4Q supplement's FY2025-forecast page and the FY2025 supplements regroup infectious-disease products (Acute Respiratory Virus Infection Treatment becomes its own line and 'Others' is restated: FY2024 1Q Others is 6.2 in the FY2024 supplements and 9.4 in the FY2025 4Q supplement), and no document from FY2025 on repeats the Mulpleta footnote. Between the series end (2020Q1) and 2024Q2 Shionogi printed Mulpleta on its own Japan line but only to one decimal of a billion yen (annual 0.1 B yen FY2020-FY2023; every quarter in the supplements' quarterly trend 0.0), so no quarter is carried for 2020Q2-2024Q1. Mulpleta is a small part of the line (about 0.1 B yen a year against 6 B yen a quarter for the line).",
+  "search_log": [
+    "Downloaded the Shionogi English results presentations and supplements for FY2020 to FY2026 1Q (links on shionogi.com/global/en/investors/ir-library/financial-results-supplement.html and in other gold manifests) and extracted every page with pdfplumber; listed every line naming Mulpleta: presentations from FY2020 to FY2023 print 'Mulpleta 0.1 0.1 ...' (one decimal); the FY2024, FY2025 and FY2026 presentations and supplements print no Mulpleta row.",
+    "FY2023 supplement (FY2023.4Q_Supplement.pdf): page 4 row 'MULPLETA 0.1 0.1 － (0.0) － －' and footnote 'Others in prescription drugs for FY2024 include revenue from MULPLETA and PIRESPA.'; page 10 quarterly trend 'MULPLETA 0.0 (12.4) 0.0 (3.0) 0.0 (23.2) 0.0 (29.1)' for FY2022 and 'MULPLETA 0.0 5.8 0.0 (19.7) 0.0 (45.6) 0.0 (50.4)' for FY2023.",
+    "Prescription-drugs 'Others' quarterly values read from the FY2024 1Q, 2Q, 3Q and 4Q supplements (6.2, 6.0, 7.1, 5.9 billion yen); FY2025 1Q-4Q and FY2026 1Q supplements checked: their 'Others' is on a restated definition and none repeats the Mulpleta footnote.",
+    "Other issuers: Eddingpharm (China licensee) publishes no sales figure; Shionogi Inc. printed a U.S. Mulpleta line for FY2018-FY2019 only (see the gold series notes).",
+    "Verifier run on staging companions."
+  ],
+  "continuation": {
+    "relation": "broader_line",
+    "line_includes": [
+      "Pirespa"
+    ],
+    "evidence": "Shionogi 'Financial results for the year ended March 31, 2024 < Supplement >' (https://www.shionogi.com/content/dam/shionogi/global/investors/ir-library/presentation/2023/4q/FY2023.4Q_Supplement.pdf), page 4: 'Others in prescription drugs for FY2024 include revenue from MULPLETA and PIRESPA.' after the table row 'MULPLETA 0.1 0.1 － (0.0) － －'."
+  }
+}

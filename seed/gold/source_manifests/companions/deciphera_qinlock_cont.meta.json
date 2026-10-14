@@ -1,0 +1,21 @@
+{
+  "drug_name": "Qinlock",
+  "line_label": "Qinlock (printed QINLOCK in later documents)",
+  "issuer": "Ono Pharmaceutical Co., Ltd.",
+  "benchmark_identity": "deciphera_qinlock_continuation",
+  "revenue_scope": "QINLOCK sales as consolidated by Ono, listed in the <Overseas> section of Ono's table of sales revenue of major products, net sales basis, billions of yen; the table gives no territory split",
+  "geography": "Not split in the table; listed under the <Overseas> products section",
+  "why_separate": "The gold series is Deciphera's U.S. QINLOCK net product revenue in US dollars. Ono, which completed its acquisition of Deciphera on June 11, 2024, prints one QINLOCK line in yen with no U.S. split, so the territory differs from the gold series and the currency changes; the line is not spliced into it.",
+  "notes": "First quarter printed is July to September 2024 (2024Q3). 2024Q2 is printed by nobody: Deciphera filed no Q2 2024 10-Q or release, and Ono's 1Q FY2024 results (July 31, 2024, April to June 2024) carry no QINLOCK sales figure. Quarters are Ono's own fiscal quarters (April-March year) mapped to calendar quarters and are read from the document that publishes the quarter as current: 2024Q3, 2024Q4, 2025Q2, 2025Q3, 2025Q4 and 2026Q2 from the quarterly results; 2025Q1 and 2026Q1 are the January-March column of the full-year results, where Ono prints the fourth quarter as its own column. Ono's host serves the PDFs directly (www.ono-pharma.com). Figures are one-decimal billions of yen. No Deciphera filing with sales exists after the acquisition (Form 15-12G filed 2024-06-21).",
+  "search_log": [
+    "Deciphera CIK 1654151 via data.sec.gov: last periodic report is the 10-Q filed 2024-05-10 (Q1 2024); after it only the acquisition closing 8-K (2024-06-11), S-8 POS/POS AM deregistrations and Form 15-12G (2024-06-21); no later 10-Q, 10-K or 8-K with sales",
+    "Ono IR library page https://www.ono-pharma.com/en/ir/library/financial_results listed 13 results documents from FY2023 full year to FY2026 1Q; all 13 downloaded and read with pdfplumber (every QINLOCK-bearing line listed)",
+    "Ono 1Q FY2024 results (July 31, 2024, 2025_1r_en%24.pdf) mention QINLOCK in the acquisition text only and print no sales row; first sales row is the 2Q FY2024 results (October 31, 2024)",
+    "Ono FY2024 full-year results table prints April-June as a dash, then 8.1, 9.2, 8.1 (cumulative 25.5)",
+    "Ono FY2025 documents and 1Q FY2026 results print 8.9, 9.2, 10.5, 9.7 (cumulative 38.4) and 11.7"
+  ],
+  "continuation": {
+    "relation": "successor_issuer",
+    "evidence": "Ono Pharmaceutical consolidated financial results for 2Q FY2024 (October 31, 2024): 'Sales of Qinlock for gastrointestinal stromal tumor, acquired through the acquisition of Deciphera Pharmaceuticals, Inc., were ¥8.1 billion for the period from July 2024 to September 2024.' https://www.ono-pharma.com/sites/default/files/en/ir/library/financial_results/2025_2r_en%25_1.pdf"
+  }
+}

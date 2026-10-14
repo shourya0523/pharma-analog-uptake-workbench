@@ -1,0 +1,21 @@
+{
+  "drug_name": "Radicava ORS",
+  "line_label": "RADICAVA",
+  "issuer": "Shionogi & Co., Ltd.",
+  "benchmark_identity": "mitsubishi_tanabe_radicava_ors_continuation",
+  "revenue_scope": "RADICAVA brand revenue consolidated by Shionogi, listed under Shionogi Inc. (US) in the revenue by segment table; the same page's footnote and the RADICAVA business slide describe RADICAVA revenue in the U.S. and Canada. No separate oral suspension (ORS) line is printed",
+  "geography": "United States and Canada (footnote 'UP rate of RADICAVA revenue in the U.S. and Canada' and slide title 'RADICAVA Sales Trend in U.S. and Canada'); the table row sits under Shionogi Inc. (US)",
+  "why_separate": "The gold series is the Mitsubishi Chemical Group 'Radicava' row of the overseas ethical drugs line (IV plus ORS, mainly U.S.), which stops after the Tanabe divestiture. Shionogi, the successor owner of the global edaravone rights from April 1, 2026, reports a differently scoped line (U.S. and Canada RADICAVA revenue inside Shionogi Inc. (US)), and the quarters between are printed by no one in a figure, so it is not spliced.",
+  "notes": "Only one quarter, 2026Q2, is printed as a figure on the line in yen. Quarters 2025Q2 to 2026Q1: Mitsubishi Chemical Group's FY2025 summaries (1Q FY2025 to FY2025, plus 1Q FY2026) classify the Pharma business as a discontinued operation (Mitsubishi Tanabe Pharma was transferred July 1, 2025) and print no Radicava row; Tanabe Pharma is privately held. Shionogi's presentation prints Tanabe Pharma's U.S. and Canada RADICAVA sales for April-June 2025 as 132.5 million USD (footnote on the revenue-by-segment page, labelled 'RADICAVA sales at Tanabe Pharma') and 151.9 million USD for April-June 2026 (sales at the Shionogi group); these are in a different currency from the yen row, are not carried as rows, and the quarterly bar chart on the RADICAVA business progress page carries no data labels, so no other quarter is readable without estimating from bar heights, which was not done. Shionogi's FY2025 Q3 deck prints a fiscal-year (April-March) U.S. RADICAVA chart for FY2022 to FY2024 only. Shionogi Japan's RADICUT (IV edaravone in Japan) is a separate line and is not included.",
+  "search_log": [
+    "Mitsubishi Chemical Group operating summaries (mcgc.com/english/ir/library/operating_summaries.html): downloaded and read the FY2024 summary (the last with a Radicava row), 1Q FY2025, 1H FY2025, 3Q FY2025, FY2025 and 1Q FY2026 summaries; the five FY2025-and-later summaries print no Radicava or edaravone line (the Pharma business is a discontinued operation; 'MTPC and its subsidiaries and affiliates have been transferred on July 1, 2025')",
+    "Tanabe Pharma (mt-pharma.co.jp / tanabe-pharma.com): private since the transfer; web search found press releases (2025-12-22 agreement with Shionogi, 2026-04-01 transfer completion) and no sales table",
+    "Shionogi IR: read the 3Q FY2025 presentation (January 30, 2026), the FY2025 presentation (May 12, 2026), the 1Q FY2026 presentation and supplement (August 3, 2026); the supplement's quarterly trend table prints RADICAVA as dashes for FY2025 1Q-4Q and 24.2 for FY2026 1Q",
+    "Shionogi 1Q FY2026 presentation p7 revenue by segment line 'RADICAVA* 101.7 51.8 24.2 46.7 - - 24.2'; footnote 'Apr.-Jun. 2026: 151.9 MUSD (sales at SHIONOGI Group), Apr.-Jun. 2025: 132.5 MUSD (RADICAVA sales at Tanabe Pharma)'",
+    "Shionogi 10-Q equivalents: Shionogi is a Japanese filer with no SEC quarterly report; Shionogi's tanshin and supplement were not needed beyond the presentation and supplement above"
+  ],
+  "continuation": {
+    "relation": "successor_issuer",
+    "evidence": "Shionogi 1st Quarter of Fiscal 2026 Financial Results presentation (August 3, 2026), revenue by segment, Shionogi Inc. (US), 'RADICAVA* 101.7 51.8 24.2 46.7 - - 24.2'; footnote: '*UP rate of RADICAVA revenue in the U.S. and Canada: 14.6% Apr.-Jun. 2026: 151.9 MUSD (sales at SHIONOGI Group), Apr.-Jun. 2025: 132.5 MUSD (RADICAVA sales at Tanabe Pharma)'. https://www.shionogi.com/content/dam/shionogi/global/investors/ir-library/presentation/2026/1q/E_FY2026_1Q_%e6%b1%ba%E7%AE%97%E8%B3%87%E6%96%99.pdf"
+  }
+}

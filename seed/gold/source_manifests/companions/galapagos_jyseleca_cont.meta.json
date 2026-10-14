@@ -1,0 +1,20 @@
+{
+  "drug_name": "Jyseleca",
+  "line_label": "Jyseleca",
+  "issuer": "Eisai Co., Ltd.",
+  "benchmark_identity": "galapagos_jyseleca_continuation",
+  "revenue_scope": "Eisai revenue from Jyseleca within the Japan pharmaceutical business segment (Japan prescription medicines, revenue from major products)",
+  "geography": "Japan",
+  "why_separate": "The gold series is Galapagos' Europe-wide Jyseleca product net sales in EUR (2022Q1-2023Q4), which ended when Galapagos transferred the Jyseleca business to Alfasigma on 31 January 2024. Eisai, the Japan licensee, prints Jyseleca on its own line every quarter; it is a different issuer in a different territory (Japan), in yen, and cannot extend the European series.",
+  "notes": "Eisai is the issuer of the Japan line (the gold series' own notes say Eisai's Japan sales are not in the Galapagos line), not the acquirer of the European business; relation successor_issuer is the nearest of the four allowed relations (a different issuer printing the same brand on a different territory after the series stopped). Eisai's FY2023 Reference Data already prints Jyseleca for FY2022 (7.3 billion yen), so the line pre-dates the end of the gold series; only quarters after 2023Q4 are carried. Eisai prints Japan product revenue cumulatively (Q1, six months, nine months, full year) in billions of yen to one decimal, so quarters other than April-June are differences of cumulative figures and carry up to 0.1 billion yen rounding; the quarterly-revenue table of the Reference Data lists only Lenvima, Leqembi, Dayvigo and other neurology and oncology products, not Jyseleca. Eisai's own host (eisai.com/ir/library/settlement/pdf/...) returns an HTML shell to automated downloads, so the same Reference Data PDFs are cited from TDnet mirrors (tdnet-pdf.kabutan.jp; fs2.magicalir.net for FY2024 Q1; newsfile.futunn.com for FY2023 full year). In the PDF text the Jyseleca row is a stacked label: the class line 'Janus kinase inhibitor', the figures line, then the brand line 'Jyseleca'. Each CSV row_label is therefore 'Janus kinase inhibitor' (the label that precedes the figures on that row); line_label stays 'Jyseleca'. The FY2023 full-year document is cited from the futunn mirror, which resets some automated connections.",
+  "search_log": [
+    "Eisai Co., Ltd. 'Reference Data' PDFs for FY2023 full year, FY2024 Q1, six months, Q3 and full year, FY2025 Q1, six months, Q3 and full year, FY2026 Q1 read with pdfplumber: Jyseleca row of 'Japan prescription medicines - revenue from major products' (page 5) cumulative columns; page 'Changes in Quarterly Revenue from Major Products' checked and does not list Jyseleca.",
+    "Eisai FY2023 Q3 Reference Data (February 2024) not found among the mirrors searched; its nine-month figure 9.6 is taken from the prior-year column of the FY2024 Q3 Reference Data.",
+    "Eisai Tanshin (consolidated financial reports) state Jyseleca only as a cumulative prose figure (for example 18.4 billion yen for FY2025).",
+    "Alfasigma, the buyer of the European business, is not an SEC filer and no Alfasigma quarterly figure was found (per the gold series' end reason); Galapagos' January-only 2024 amount is in the gold series' end reason and is not carried. Gilead was not searched for this continuation."
+  ],
+  "continuation": {
+    "relation": "successor_issuer",
+    "evidence": "Eisai FY2023 (ended March 31, 2024) full-year Reference Data, 'Japan prescription medicines - revenue from major products', billions of yen, FY2022 full year, FY2023 full year, YOY (%): 'Janus kinase inhibitor ... 7.3 12.6 171.2 Jyseleca' - https://newsfile.futunn.com/public/NN-PersistNoticeAttachment/7781/20240515/JPX/20240515597382.PDF"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "drug_name": "Amzeeq",
+  "line_label": "Foam franchise products (Amzeeq & Zilxi)",
+  "issuer": "Journey Medical",
+  "revenue_scope": "U.S. net product revenues (combined Amzeeq and Zilxi line)",
+  "geography": "United States",
+  "why_separate": "From the third quarter of 2025 Journey Medical prints Amzeeq and Zilxi as one line, 'Foam franchise products (Amzeeq & Zilxi)', in place of the separate lines it printed through the second quarter of 2025. The combined line holds both products and cannot be split, so it is a different scope from the single-product gold series.",
+  "search_log": [
+    "Listed Journey Medical (CIK 1867066) filings via data.sec.gov submissions: 10-Q for Q3 2025 (0001104659-25-110457), 10-K FY2025 (0001104659-26-034629), 10-Q Q1 2026 (0001104659-26-060297), 10-Q Q2 2026 (0001104659-26-094948); downloaded each and read every table row naming Amzeeq, Zilxi or the foam franchise.",
+    "All four documents print only the combined line 'Foam franchise products (Amzeeq & Zilxi)' in the revenues-by-product table; no separate Amzeeq or Zilxi row appears in any of them. Continuity check: 2025Q1 Amzeeq 1,100 plus Zilxi 426 equals the 1,526 printed as the 2025Q1 comparative of the combined line, and 2025Q2 879 plus 256 equals the 1,135 comparative.",
+    "Q3 2025 10-Q nine-month column prints 3,973 against first-three-quarter sum 1,526 + 1,135 + 1,311 = 3,972; the one-thousand difference is rounding in the printed figures. Fourth quarter 2025 is derived from the 10-K full year less the nine-month column; no Journey document prints a stand-alone fourth quarter by product.",
+    "Separate lines 'Cutia supply of Amzeeq' (Q3 2025 606 thousand, in Other revenue) and 'Royalties on sales of Amzeeq by Cutia' (Q4 2025 onward) are not product revenue of the combined line and are excluded.",
+    "No other issuer prints Amzeeq or Zilxi sales: Cutia Therapeutics (Amzeeq in China) is a different territory and is not a continuation of the U.S. line. Gold is as of 2026Q2; no later quarter is included."
+  ],
+  "benchmark_identity": "journey_amzeeq_continuation",
+  "notes": "Journey Medical's combined line holds Amzeeq and Zilxi; the value is the combined figure and is not an estimate of Amzeeq alone. Fourth quarter 2025 is derived from the 10-K less the Q3 10-Q nine-month column. Quarters are calendar quarters (Journey's fiscal year is the calendar year). The first row is 2025Q3, the quarter after the last separately printed quarter of the gold series (2025Q2).",
+  "continuation": {
+    "relation": "broader_line",
+    "line_includes": [
+      "Zilxi"
+    ],
+    "evidence": "Foam franchise products (Amzeeq & Zilxi) | 1,311 | 2,100 | 3,973 | 4,703 (revenues-by-product table, three and nine months ended September 30, 2025 and 2024, in thousands, Form 10-Q filed 2025-11-12: https://www.sec.gov/Archives/edgar/data/1867066/000110465925110457/derm-20250930x10q.htm)"
+  }
+}

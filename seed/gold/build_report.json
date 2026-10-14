@@ -1,7 +1,7 @@
 {
   "generation": "independent_issuer_research",
   "as_of_quarter": "2026Q2",
-  "quarterly_rows": 15564,
+  "quarterly_rows": 15656,
   "annual_rows": 168,
   "complete_quarterly_series": 449,
   "quarterly_coverage_pct": 100.0,
@@ -1064,7 +1064,7 @@
       "Zyprexa Relprevv"
     ],
     "quarterly_series_pct": 70.0,
-    "quarterly_observations": 15564,
+    "quarterly_observations": 15656,
     "bounded_series": [
       "Abecma",
       "Aczone",
@@ -1096,7 +1096,6 @@
       "Brovana",
       "Bydureon BCise",
       "Byetta",
-      "Byooviz",
       "Cialis",
       "Cimerli",
       "Complera",
@@ -1153,7 +1152,6 @@
       "Orladeyo",
       "Oxbryta",
       "Ozurdex",
-      "Padcev",
       "Pifeltro",
       "Praluent",
       "Prezista",
@@ -1207,7 +1205,6 @@
       "Vowst",
       "Vyondys 53",
       "Xalkori",
-      "Xerava",
       "Xifaxan",
       "Xofigo",
       "Xopenex HFA",
@@ -1230,7 +1227,7 @@
     "accounted_for": 20,
     "unaccounted_products": [],
     "complete_quarterly_series": 449,
-    "quarterly_observations": 15564,
+    "quarterly_observations": 15656,
     "series_missing_quarters": [],
     "annual_benchmark_series": 17,
     "annual_observations": 168,
@@ -1777,7 +1774,7 @@
     "complete": true
   },
   "concentration": {
-    "quarters": 15564,
+    "quarters": 15656,
     "largest_issuer": "AstraZeneca",
     "largest_issuer_share": 7.0,
     "largest_issuer_within_target": true,
@@ -1785,7 +1782,7 @@
     "largest_product_share": 0.8,
     "largest_product_within_target": true,
     "largest_therapeutic_area": "Oncology",
-    "largest_therapeutic_area_share": 24.5,
+    "largest_therapeutic_area_share": 24.4,
     "largest_therapeutic_area_within_target": true,
     "therapeutic_area_count": 24,
     "therapeutic_areas_within_target": true,

@@ -840,32 +840,32 @@
   "ticker": "BHC",
   "generic_name": "plecanatide",
   "options": {
-   "earnings_since": "2021-04-05",
-   "earnings_until": "2022-05-05",
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
    "openfda": true,
    "product_metadata": true
   },
   "source": "seed/gold/quarterly_revenue.jsonl",
   "expect": [
    {
-    "period": "2021Q1",
-    "value_normalized_usd_millions": 21.0,
-    "gold_id": "bausch-trulance-us-reported-2021q1"
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 24.0,
+    "gold_id": "bausch-trulance-us-reported-2022q1"
    },
    {
-    "period": "2021Q2",
-    "value_normalized_usd_millions": 28.0,
-    "gold_id": "bausch-trulance-us-reported-2021q2"
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 23.0,
+    "gold_id": "bausch-trulance-us-reported-2022q2"
    },
    {
-    "period": "2021Q3",
-    "value_normalized_usd_millions": 25.0,
-    "gold_id": "bausch-trulance-us-reported-2021q3"
+    "period": "2022Q3",
+    "value_normalized_usd_millions": 30.0,
+    "gold_id": "bausch-trulance-us-reported-2022q3"
    },
    {
-    "period": "2021Q4",
-    "value_normalized_usd_millions": 29.0,
-    "gold_id": "bausch-trulance-us-reported-2021q4"
+    "period": "2022Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2022Q3. Bausch Health's Forms 10-Q print Trulance revenue in prose ('Trulance revenues were $77 million and $74 million for the nine months ended September 30, 2022 and 2021') through the 3Q22 10-Q, which is the last filing to do so. The FY2022 Form 10-K prints no Trulance dollar figure, no later 10-Q or 10-K does either, and the 4Q22 to 3Q25 earnings decks print growth percentages and mix shares only. The Salix Segment slides of the 4Q25, 1Q26 and 2Q26 decks print a dollar figure beside the product's logo; those three quarters are kept in the companion line bausch_trulance_alt because 12 quarters (4Q22 to 3Q25) separate them from this series."
    }
   ]
  },
@@ -1955,6 +1955,31 @@
   ]
  },
  {
+  "drug_name": "Xerava",
+  "manufacturer": "Innoviva",
+  "ticker": "INVA",
+  "generic_name": "eravacycline",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 2.455,
+    "gold_id": "tetraphase-xerava-us-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 3.265,
+    "gold_id": "tetraphase-xerava-us-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Ocaliva",
   "manufacturer": "Intercept Pharmaceuticals",
   "ticker": null,
@@ -2586,11 +2611,6 @@
     "period": "2012Q3",
     "value_normalized_usd_millions": 0.583,
     "gold_id": "neurogesx-qutenza-us-reported-2012q3"
-   },
-   {
-    "period": "2012Q4",
-    "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2012Q3. NeurogesX filed no periodic report after the Form 10-Q for the quarter ended September 30, 2012. Its Form 8-K of 2013-03-27 states the company 'does not currently expect to be in a position to file its Annual Report on Form 10-K for the year ended December 31, 2012', and its Form 8-K of 2013-07-11 followed the sale of its assets. No NeurogesX document prints 2012Q4 or 2013Q1-Q2."
    }
   ]
  },
@@ -3161,11 +3181,6 @@
     "period": "2014Q3",
     "value_normalized_usd_millions": 155.815,
     "gold_id": "salix-xifaxan-us-reported-2014q3"
-   },
-   {
-    "period": "2014Q4",
-    "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2014Q3. Salix restated 2013-2014 and was acquired by Valeant on 1 April 2015 without filing a 2015 report; the only fourth-quarter 2014 figure is the 10-K full year less restated nine months, which gives a negative quarter (-7.3) from mixed bases rather than a real one, so the series ends at the last quarter Salix printed directly. Bausch Health prints no quarterly Xifaxan in its SEC filings; its earnings presentations print U.S. Xifaxan only for 2018Q1-2021Q4, thirteen quarters later (bausch_xifaxan_alt: Companion Series sheet, cited but not scored)."
    }
   ]
  },
@@ -3255,10 +3270,10 @@
   ]
  },
  {
-  "drug_name": "Padcev",
+  "drug_name": "Adcetris",
   "manufacturer": "Seagen",
   "ticker": null,
-  "generic_name": "enfortumab vedotin",
+  "generic_name": "brentuximab vedotin",
   "options": {
    "earnings_since": "2023-04-05",
    "earnings_until": "2024-05-04",
@@ -3269,23 +3284,23 @@
   "expect": [
    {
     "period": "2023Q1",
-    "value_normalized_usd_millions": 118.706,
-    "gold_id": "seagen-padcev-us-net-product-sales-2023q1"
+    "value_normalized_usd_millions": 243.062,
+    "gold_id": "seagen-adcetris-us-canada-net-product-sales-2023q1"
    },
    {
     "period": "2023Q2",
-    "value_normalized_usd_millions": 161.23,
-    "gold_id": "seagen-padcev-us-net-product-sales-2023q2"
+    "value_normalized_usd_millions": 261.853,
+    "gold_id": "seagen-adcetris-us-canada-net-product-sales-2023q2"
    },
    {
     "period": "2023Q3",
-    "value_normalized_usd_millions": 199.516,
-    "gold_id": "seagen-padcev-us-net-product-sales-2023q3"
+    "value_normalized_usd_millions": 246.071,
+    "gold_id": "seagen-adcetris-us-canada-net-product-sales-2023q3"
    },
    {
     "period": "2023Q4",
     "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2023Q3. Pfizer completed the acquisition of Seagen on Dec 14, 2023; Seagen filed no report for 2023Q4. Pfizer's later Padcev line (companion series pfizer_padcev, from 2024Q1) is worldwide, a different scope, and its 2023Q4 line is a Dec 14-31 stub, so the series is not spliced. (pfizer_padcev: Companion Series sheet, cited but not scored.)"
+    "why": "The issuer reports no line for this product after 2023Q3. Pfizer completed the acquisition of Seagen on Dec 14, 2023; Seagen filed no report for 2023Q4 (last 10-Q is for 2023Q3, Form 15 filed Dec 26, 2023). Pfizer's later Adcetris line (companion series pfizer_adcetris, from 2024Q1) is worldwide and includes royalty revenue, a different scope, so the series is not spliced. (pfizer_adcetris: Companion Series sheet, cited but not scored.)"
    }
   ]
  },
@@ -3314,13 +3329,13 @@
    },
    {
     "period": "2009Q3",
-    "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2009Q2. Sepracor became an indirect wholly-owned subsidiary of Dainippon Sumitomo Pharma when the merger took effect on October 20, 2009 (Form 8-K filed 2009-10-20, https://www.sec.gov/Archives/edgar/data/877357/000110465909059627/a09-31878_18k.htm); its last periodic filing is the Form 10-Q for the quarter ended June 30, 2009 (filed 2009-08-05). Sumitomo's later supplementary financial data print a single 'XOPENEX' line (levalbuterol HCI) with no XOPENEX HFA split and do not say which formulations it holds, so that line is a different scope and is not spliced."
+    "value_normalized_usd_millions": 22.825,
+    "gold_id": "sepracor-xopenex-hfa-reported-2009q3"
    },
    {
     "period": "2009Q4",
     "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2009Q2. Sepracor became an indirect wholly-owned subsidiary of Dainippon Sumitomo Pharma when the merger took effect on October 20, 2009 (Form 8-K filed 2009-10-20, https://www.sec.gov/Archives/edgar/data/877357/000110465909059627/a09-31878_18k.htm); its last periodic filing is the Form 10-Q for the quarter ended June 30, 2009 (filed 2009-08-05). Sumitomo's later supplementary financial data print a single 'XOPENEX' line (levalbuterol HCI) with no XOPENEX HFA split and do not say which formulations it holds, so that line is a different scope and is not spliced."
+    "why": "The issuer reports no line for this product after 2009Q3. Sepracor became an indirect wholly-owned subsidiary of Dainippon Sumitomo Pharma when the merger took effect on October 20, 2009 (Form 8-K filed 2009-10-20, https://www.sec.gov/Archives/edgar/data/877357/000110465909059627/a09-31878_18k.htm), so its last periodic filing is the Form 10-Q for the quarter ended June 30, 2009 (filed 2009-08-05). The Sepracor Fact Book 2009 (November 2009, on the Sumitomo Pharma IR site) itemises XOPENEX HFA for the quarter ended September 30, 2009 and is the last document to do so. From 2010Q1 Sumitomo Pharma's supplementary financial data print one XOPENEX line (levalbuterol HCI) with no XOPENEX HFA split, which is held as the continuation companion sepracor_xopenex_hfa_cont."
    }
   ]
  },
@@ -3761,6 +3776,76 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 326.6,
     "gold_id": "uthr-tyvaso-dpi-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Provenge",
+  "manufacturer": "Valeant Pharmaceuticals International",
+  "ticker": "BHC",
+  "generic_name": "sipuleucel-T",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 81.0,
+    "gold_id": "dendreon-provenge-net-product-revenue-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 83.0,
+    "gold_id": "dendreon-provenge-net-product-revenue-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2017Q2. Valeant completed the sale of Dendreon Pharmaceuticals LLC on 28 June 2017 (Form 10-Q for 2Q17, accession 0000885590-17-000055); its FY17 results deck prints Provenge as $0M for 3Q17 and 4Q17 with footnote 'Divested asset' (ir.valeant.com q4-2017-earning-results-presentation.pdf), and the purchaser is not named in any document read here as publishing Provenge sales."
+   },
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2017Q2. Valeant completed the sale of Dendreon Pharmaceuticals LLC on 28 June 2017 (Form 10-Q for 2Q17, accession 0000885590-17-000055); its FY17 results deck prints Provenge as $0M for 3Q17 and 4Q17 with footnote 'Divested asset' (ir.valeant.com q4-2017-earning-results-presentation.pdf), and the purchaser is not named in any document read here as publishing Provenge sales."
+   }
+  ]
+ },
+ {
+  "drug_name": "Xifaxan",
+  "manufacturer": "Valeant Pharmaceuticals International (renamed Bausch Health Companies in 2018)",
+  "ticker": "BHC",
+  "generic_name": "rifaximin",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 366.0,
+    "gold_id": "salix-xifaxan-us-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 402.0,
+    "gold_id": "salix-xifaxan-us-reported-2021q2"
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": 426.0,
+    "gold_id": "salix-xifaxan-us-reported-2021q3"
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": 450.0,
+    "gold_id": "salix-xifaxan-us-reported-2021q4"
    }
   ]
  },

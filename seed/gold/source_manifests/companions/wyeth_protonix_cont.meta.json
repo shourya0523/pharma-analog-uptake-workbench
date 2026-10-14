@@ -1,0 +1,22 @@
+{
+  "drug_name": "Protonix",
+  "line_label": "Protonix (2010-2012, flagged *** as a legacy Wyeth product in 2010); Protonix/Pantoprazole in the GEP segment table (2013-2014 as printed from 2014)",
+  "issuer": "Pfizer",
+  "benchmark_identity": "wyeth_protonix_continuation",
+  "revenue_scope": "Pfizer's Protonix product revenue as its revenues-by-product table prints it: worldwide Total column, equal to the U.S. column in every row (International nil). Not documented to be Wyeth's branded-only scope.",
+  "geography": "Worldwide (table heading Total); entirely the U.S. column",
+  "why_separate": "Wyeth's gold series (2002Q1-2009Q2) is the branded PROTONIX product, read from the footnote to Wyeth's 'PROTONIX family' row, which excludes Wyeth's own generic pantoprazole. Pfizer prints a single Protonix row with no footnote separating brand from generic: its 2010Q1 value 158 compares with Wyeth's branded 86.966 and family total 237 for 2009Q2, so the row is not documented to be the branded-only scope. The owner also changed (Wyeth to Pfizer) and Pfizer renamed the line Protonix/Pantoprazole in 2014.",
+  "notes": "Quarters 2010Q1-2010Q2 are read from prior-year columns of the 2011 releases because Pfizer's own 2010 first- and second-quarter releases print no Protonix row; 2010Q3 and 2010Q4 carry a *** flag (legacy Wyeth product, nil in the 2009 column because the acquisition closed 2009-10-15). The stub period after 2009-10-15 (68, printed as the 2009 column of the fourth-quarter 2010 release) is a partial quarter and is not recorded. Quarters 2011Q4, 2012Q1 and 2012Q2 are not recorded: no Pfizer release, Form 10-Q or Form 10-K for those periods prints a Protonix row, and only the six-month 2012 sum (140 nine months less 50 third quarter = 90) is derivable. 2012Q4 is the full year 2012 (188, third column of the 2014 Form 10-K Exhibit 13 table) less the nine months 140 from the third-quarter 2012 release. 2013Q1-2013Q4 come from the prior-year columns of the 2014 releases (2013Q1 from the six-month row less the second quarter); 2013 sums to 185, the full-year 2013 column of the same 10-K table. 2014Q1 is the six-month figure less the second quarter. 2014 sums to 199 against a printed 198 (rounding). Pfizer's releases and Forms 10-Q and 10-K from 2015 print no Protonix row; the 2015 documents mention Protonix only in litigation text (the fourth-quarter 2015 release, 8-K 0000078003-16-000072).",
+  "search_log": [
+    "Listed all Pfizer (CIK 78003) 8-K Item 2.02, 10-Q and 10-K filings 2009-10 to 2016-12 via data.sec.gov/submissions (recent plus the older-filings files); read each filing's exhibits and main documents named in its index.json, skipping the XBRL R pages.",
+    "Table-row search for 'Protonix' followed by figures in every such document: rows exist in the releases/10-Qs of 2010-11-02, 2011-02-01, 2011-05-03, 2011-08-02, 2011-11-01 and 2012-11-01, and in the 10-Qs of 2010-11-12, 2011-05-12, 2011-08-11, 2011-11-10 and 2012-11-09; none in the releases or 10-Qs of 2010-05, 2010-08, 2011-02-28 10-K aside from its annual 2010 row (690), 2012-01 to 2012-08, or 2013-01 to 2014-05.",
+    "2014-07-29, 2014-10-28 and 2015-01-27 releases, the 2014-08-07 and 2014-11-06 10-Qs and the 2015-02-27 Form 10-K Exhibit 13 print the row as 'Protonix/Pantoprazole' in the GEP segment.",
+    "2015-04-28, 2015-07-28, 2015-10-27 and 2016-02-02 releases, the 2015 Forms 10-Q and the Form 10-K for fiscal 2015: no Protonix row under the same table-row filter.",
+    "Pfizer's footnote to the *** rows says only that they are legacy Wyeth products; no Pfizer document states whether the Protonix row includes the authorised or Wyeth generic pantoprazole.",
+    "Bigdata.com credits were exhausted during the session; EDGAR documents were read directly."
+  ],
+  "continuation": {
+    "relation": "successor_issuer",
+    "evidence": "Pfizer third-quarter 2010 earnings release, revenues by product table, row 'Protonix*** | 203 | - | * | * | 203 | - | * | - | - | - | -' (Total columns, then U.S. 203, then International nil); the *** flag marks legacy Wyeth products. https://www.sec.gov/Archives/edgar/data/78003/000114420410056785/v200593_ex99.htm"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "drug_name": "Praluent",
+  "line_label": "Praluent",
+  "issuer": "Sanofi",
+  "benchmark_identity": "sanofi_praluent_continuation",
+  "revenue_scope": "Praluent net sales booked by Sanofi outside the U.S.; read from the same top-products net sales table as the gold series. Through 2021Q1 the line also carries sales of product to Regeneron for the U.S. (stated in the Q2 2020 release) and the 2022Q2 quarter includes a U.S. gross-to-net true-up (stated in the Q2 2022 release); no other U.S. sales are in it.",
+  "geography": "Outside the U.S. (Sanofi-consolidated); U.S. sales are recorded by Regeneron from 2020Q2",
+  "why_separate": "The gold series is Sanofi's worldwide Praluent line and ends 2020Q1 because, effective April 1, 2020, Sanofi no longer consolidates Praluent in the U.S. (Q1 2020 release: 'Sanofi will no longer consolidate Praluent sales in the U.S. from April 1'). The same Sanofi row from 2020Q2 is a narrower territory, so it is not the worldwide series continued.",
+  "notes": "Relation narrower_line: the worldwide line was split by territory on 2020-04-01 and Sanofi kept the ex-U.S. piece. The U.S. piece is booked by Regeneron, whose 2026 Forms 10-Q (accessions 0000872589-26-000016 and 0000872589-26-000025) state 'We record net product sales of Praluent in the United States. Sanofi records net product sales of Praluent outside the United States'; Regeneron's U.S. line was not spliced in because it is a second issuer on a complementary territory and would need a worldwide sum the issuers never print. Rows are the same as companions/sanofi_praluent_alt_quarterly.csv, 2020Q2 to 2026Q2 (no 2026Q3 row used). Sanofi's quarterly press releases (EX-99 to Form 6-K) are the source for every row, each read from the release that reports the quarter as current.",
+  "search_log": [
+    "Sanofi (CIK 1121404) Form 6-K and 20-F filings listed from data.sec.gov submissions; earnings-release exhibits for 2020Q2 to 2026Q2 read for the Praluent row of the top-products net sales table (see sanofi_praluent_alt for the per-row citations).",
+    "Regeneron Inc. (CIK 872589) Forms 10-Q for 2026Q1 and 2026Q2 read for the statement of which issuer records Praluent in which territory.",
+    "Relation judged narrower_line (same issuer, same product, territory split on 2020-04-01), not successor_issuer, because Sanofi is the issuer of both the gold series and this line."
+  ],
+  "continuation": {
+    "relation": "narrower_line",
+    "evidence": "Sanofi Q2 2020 results press release, top-products net sales table, row 'Praluent | 73 | 146' (Q2 2020, H1 2020; EUR millions), the first document printing the ex-U.S. line after the Q1 2020 release stated 'Sanofi will no longer consolidate Praluent sales in the U.S. from April 1' (https://www.sec.gov/Archives/edgar/data/1121404/000112140420000017/pressreleaseq22020engl.htm)."
+  }
+}

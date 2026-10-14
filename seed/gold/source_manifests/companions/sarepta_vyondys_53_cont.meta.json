@@ -1,0 +1,24 @@
+{
+  "drug_name": "Vyondys 53",
+  "line_label": "PMO Products",
+  "issuer": "Sarepta Therapeutics",
+  "benchmark_identity": "sarepta_vyondys_53_continuation",
+  "revenue_scope": "Worldwide net product revenues of the three PMO Products combined (United States plus Rest of World); excludes ELEVIDYS",
+  "geography": "Worldwide (the product revenue note splits the line into United States and Rest of World)",
+  "why_separate": "From the Form 10-Q for the quarter ended June 30, 2024 Sarepta prints Vyondys 53 only inside the combined 'PMO Products' line with Amondys 45 and Exondys 51; the line is about three times the size of Vyondys 53 alone and cannot be read as its own revenue.",
+  "notes": "Quarters 2024Q4 and 2025Q4 are the full year less the nine months, because Sarepta files no fourth-quarter 10-Q and the earnings-release exhibit prints the quarter only rounded to $0.1 million (254.0 and 259.2); every other quarter is the quarter's own Form 10-Q. The identical series is delivered for each of the three PMO products. The 2026Q2 10-Q is the last quarter in scope. No 10-Q or 10-K filed 2024-05 onward prints a per-product dollar figure. The eight Exhibit 99.1 earnings releases filed 2025-01 to 2026-08 (accessions 0001193125-25-005160, 0000950170-25-027717, 0000950170-25-096257, 0001193125-25-262591, 0001193125-26-010116, 0001193125-26-071566, 0001193125-26-208966, 0001193125-26-335056) print only the combined PMO figure, never a per-product dollar figure; the two fourth-quarter releases print the PMO quarter rounded to $0.1 million (254.0 and 259.2). Earnings releases filed before 2025-01 were not read.",
+  "search_log": [
+    "data.sec.gov submissions for CIK 873303: downloaded 10-Qs for 2Q24, 3Q24, 1Q25, 2Q25, 3Q25, 1Q26, 2Q26 and 10-Ks for FY24 and FY25; grepped each for the product names next to dollar figures and found only the combined PMO Products line.",
+    "Each document's product revenue note splits PMO Products into United States and Rest of World but never by product; the MD&A table lists PMO Products and ELEVIDYS only.",
+    "Fourth quarters: FY2024 PMO Products 967,169 less nine months 713,163 gives 254,006; FY2025 965,565 less nine months 706,355 gives 259,210.",
+    "Read the Exhibit 99.1 of the eight earnings 8-Ks filed 2025-01 to 2026-08 (listed in notes): each prints the combined PMO net product revenue only (second quarter 2026 230.6, first quarter 2026 228.6, fourth quarter 2025 259.2 and full year 965.6, third quarter 2025 238.5, second quarter 2025 231, fourth quarter 2024 254.0 and full year 967.2); a search of their text for the three product names beside dollar figures found none."
+  ],
+  "continuation": {
+    "relation": "broader_line",
+    "line_includes": [
+      "Amondys 45",
+      "Exondys 51"
+    ],
+    "evidence": "EXONDYS 51, VYONDYS 53 and AMONDYS 45 (collectively, the “PMO Products”) | PMO Products | $ | 238,827 | $ | 238,988 | $ | (161 | ) (Form 10-Q for the quarter ended June 30, 2024, https://www.sec.gov/Archives/edgar/data/873303/000095017024092720/srpt-20240630.htm)"
+  }
+}

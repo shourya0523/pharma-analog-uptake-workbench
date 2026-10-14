@@ -1,0 +1,27 @@
+{
+  "drug_name": "Asmanex HFA",
+  "line_label": "Other Respiratory",
+  "issuer": "Organon",
+  "benchmark_identity": "organon_asmanex_hfa_continuation",
+  "revenue_scope": "Worldwide 'Other Respiratory' line of Organon's revenues-by-product table (Total column of U.S./Non-U.S./Total), USD millions",
+  "geography": "Worldwide",
+  "why_separate": "From the first quarter of 2022 Organon prints no Asmanex row; the brand's sales are inside 'Other Respiratory', which Organon defines as sales of products not listed separately and which holds other, unnamed products, so the figure is the line's, never the product's own.",
+  "notes": "Evidence that Asmanex sits inside this line, from Organon's own filings: the FY2021 10-K prints Asmanex 63 and Other Respiratory 26 for 2021 and Asmanex 83 and Other Respiratory 35 for 2020, and the FY2022 10-K prints Other Respiratory 89 for 2021 and 118 for 2020 with no Asmanex row, i.e. 63 + 26 = 89 for 2021 and 83 + 35 = 118 for 2020 (U.S./Non-U.S./Total columns, FY2021 10-K: 'Asmanex 57 7 63 76 8 83 84 9 94 Other Respiratory (1) — 26 26 3 32 35 1 25 25'; FY2022 10-K: 'Other Respiratory (1) 46 36 83 56 33 89 79 40 118'). The FY2022-FY2025 10-Ks still name Asmanex as part of the respiratory portfolio. Definition steps: the 2024-05-02 release (first quarter 2024) footnote says 'Sales of the authorized generic versions of NuvaRing, Zetia and Nasonex were previously included in other and have been reclassified to their respective brand name product', and its prior-year column recasts 2023Q1 from 17 (as first printed) to 15; later 2024 releases recast 2023Q2 from 19 to 17, 2023Q3 from 25 to 20 and the 2025-02-13 release 2023Q4 from 15 to 11. Rows 2022Q1-2023Q4 are as first printed (old definition) and 2024Q1 onward are on the narrower definition; recast values for 2023 are in the prior-year columns of the 2024 releases and are not used as rows. Quarters sum to the printed years within rounding: 2022 22+22+21+17=82 vs 83, 2023 17+19+25+15=76 vs 77, 2024 9+13+14+17=53 vs 53, 2025 13+14+12+13=52 vs 52. 2026Q2 is read from the Form 10-Q because Organon furnished no earnings release for the quarter. The scope rows are the Total column; U.S. and Non-U.S. columns are quoted in each row.",
+  "reviewed_anomalies": {
+    "2024Q1": "Step down from 17 (2023Q4 first printed 15) to 9: authorized-generic Nasonex moved out of Other Respiratory into Nasonex per the release footnote; the same release's prior-year column shows 2023Q1 recast from 17 to 15."
+  },
+  "search_log": [
+    "Listed Organon (CIK 1821825) filings through data.sec.gov/submissions (all forms) and opened Exhibit 99.1 of every Item 2.02 8-K from 2022-05-05 to 2026-04-30 (17 releases); in each, read the 'Other Respiratory' row of the revenues-by-product table and searched the text for 'Asmanex': no release from 2022-05-05 on contains the word.",
+    "Footnotes of the Other Respiratory row: 2022-05-05 '(1) Includes sales of products not listed separately'; 2024-05-02 adds the authorized-generic reclassification footnote. No footnote names Asmanex or any other product held in the line.",
+    "FY2021, FY2022, FY2023, FY2024 and FY2025 10-Ks opened: Asmanex has a sales row only in the FY2021 10-K; the later 10-Ks name Asmanex only in the business description.",
+    "Organon filed no Item 2.02 8-K for the quarter ended June 30, 2026 (8-K of 2026-07-31 is Items 7.01/9.01, Exhibit 99.1 is supplemental non-GAAP information); the quarter is read from the Form 10-Q filed 2026-07-31, whose revenues-by-product table prints Other Respiratory.",
+    "Merck (the previous owner) reported Asmanex only up to the 2013 quarters and is not a source after 2021Q4; no partner or royalty holder reports Asmanex sales."
+  ],
+  "continuation": {
+    "relation": "broader_line",
+    "line_includes": [
+      "products Organon does not list separately (unnamed in its release footnote)"
+    ],
+    "evidence": "Organon release of 2022-05-05 (https://www.sec.gov/Archives/edgar/data/1821825/000110465922056278/tm2214364d1_ex99-1.htm) lists Singulair, Nasonex, Dulera, Clarinex and 'Other Respiratory (1)' with footnote '(1) Includes sales of products not listed separately', and no Asmanex row, whereas the release of 2022-02-17 prints 'Asmanex 14 2 16'. FY2022 10-K (https://www.sec.gov/Archives/edgar/data/1821825/000182182523000003/ogn-20221231.htm) prints 'Other Respiratory (1) 46 36 83 56 33 89 79 40 118' against the FY2021 10-K (https://www.sec.gov/Archives/edgar/data/1821825/000182182522000002/ogn-20211231.htm) 'Asmanex 57 7 63 76 8 83 84 9 94 Other Respiratory (1) — 26 26 3 32 35 1 25 25', so 2021 Asmanex 63 + Other Respiratory 26 = 89 and 2020 83 + 35 = 118."
+  }
+}

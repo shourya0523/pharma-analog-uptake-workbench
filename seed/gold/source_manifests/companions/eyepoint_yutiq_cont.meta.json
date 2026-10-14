@@ -1,0 +1,41 @@
+{
+  "drug_name": "Yutiq",
+  "line_label": "ILUVIEN and YUTIQ (Alimera 'Net revenue'; ANI 'ILUVIEN and YUTIQ', 'ILUVIEN' from the Q4 2025 release)",
+  "issuer": "Alimera Sciences (2023Q2-2024Q2), then ANI Pharmaceuticals (2024Q4-2025Q2)",
+  "benchmark_identity": "eyepoint_yutiq_continuation",
+  "revenue_scope": "Worldwide net revenue of ILUVIEN and YUTIQ together (Alimera: total company net revenue, U.S. plus International segments; ANI: the 'ILUVIEN and YUTIQ' line of its revenue disaggregation)",
+  "geography": "Worldwide",
+  "why_separate": "EyePoint sold YUTIQ to Alimera in May 2023. Alimera and then ANI print YUTIQ only together with ILUVIEN (the gold series is YUTIQ-only U.S. product revenue from EyePoint), so the combined line is a broader line.",
+  "notes": "Per-row issuer column; the line is ILUVIEN plus YUTIQ worldwide, not YUTIQ alone, and YUTIQ's share is not printed (the one exception is Alimera's 10-Q for March 31, 2024: YUTIQ net revenue of $6.5 million for that quarter). The rows end at 2025Q2, the quarter in which ANI moved U.S. promotion from YUTIQ to ILUVIEN; ANI's first explicit statement of no YUTIQ sales is the Q1 2026 10-Q, and whether 2025Q3 and 2025Q4 hold YUTIQ is not stated, so those quarters are left out rather than assumed. 2024Q3 is a gap (see search_log). EyePoint's Form 10-Q for June 30, 2023 prints only 'Product sales, net' 5,273 thousand for a partial quarter ('primarily from sales of YUTIQ') with no YUTIQ-only row, so no EyePoint row follows the gold series.",
+  "search_log": [
+    "Alimera Sciences (CIK 1267602) submissions: 10-Q for 2023Q2, 2023Q3, 2024Q1, 2024Q2, 10-K 2023, 10-K/A 2023-05-01 and 2024-04-29, and Item 2.02 8-Ks to 2024-08-06 read. After the Form 10-Q for June 30, 2024 (filed 2024-08-07) Alimera filed no periodic report (ANI completed the acquisition on September 16, 2024).",
+    "Alimera's statements print one revenue line ('Product revenue, net' in the 2023Q2 10-Q, 'Net revenue' afterwards) for ILUVIEN and YUTIQ together; the statements of operations print no YUTIQ-only or ILUVIEN-only revenue line for 2023Q2-2024Q2 (see the correction below for one MD&A sentence).",
+    "2024Q3 is not written: Alimera published nothing for July 1-September 15, 2024, and ANI's 10-Q for September 30, 2024 prints 'ILUVIEN and YUTIQ' 3,871 thousand for the partial quarter from September 16 only.",
+    "ANI Pharmaceuticals (CIK 1023024) 10-Q for 2024Q3, 2025Q1-Q3, 2026Q1-Q2, 10-K 2024 and 2025 and earnings-release exhibits for 2024Q4 and 2025Q4 read. Q4 values are the quarter's own release rows (27,643; 19,843), which agree with full year less nine months (31,514 less 3,871; 74,868 less 55,025).",
+    "Sum check: 2025 quarters 16,109 + 22,316 + 16,600 + 19,843 = 74,868, the full year printed in ANI's Form 10-K for 2025.",
+    "EyePoint Pharmaceuticals (CIK 1314102) 10-Q for 2023Q2-2025Q3, 10-K 2023 and 2024, and Item 2.02 8-Ks to 2026-08-05 read for a YUTIQ figure after 2023Q1: no YUTIQ-labelled sales row. From 2023Q3 EyePoint's 'Product sales, net' (0.7 million for 2024Q1, 1.1 million for 2024Q2, 0.7 million for 2024Q3, 3.2 million for 2024) is a company-total line that EyePoint's MD&A attributes to the agreement that granted license and rights to YUTIQ to Alimera; it carries no YUTIQ label, so it is not used.",
+    "Correction found at verification: Alimera's 10-Q for March 31, 2024 (https://www.sec.gov/Archives/edgar/data/1267602/000126760224000032/alim-20240331x10q.htm, U.S. segment results) prints 'YUTIQ net revenue for the three months ended March 31, 2024 was $6.5 million', one YUTIQ-only figure inside the 2023Q2-2024Q2 span; no other quarter's YUTIQ-only figure was found in the 10-Qs for 2023Q2, 2023Q3, 2024Q2 or the 2023Q4 release."
+  ],
+  "continuation": {
+    "relation": "broader_line",
+    "line_includes": [
+      "Iluvien"
+    ],
+    "evidence": "Alimera Sciences Form 10-Q for June 30, 2023 (https://www.sec.gov/Archives/edgar/data/1267602/000126760223000107/alim-20230630x10q.htm): 'The increase was primarily due to sales of YUTIQ beginning in May 2023 in the U.S. as well as increased unit sales volume of ILUVIEN in both the U.S. and International segments'; the statement of operations prints the single line 'PRODUCT REVENUE, NET' 17,538 for the quarter. ANI Form 10-Q for September 30, 2024 prints the line 'ILUVIEN and YUTIQ' (https://www.sec.gov/Archives/edgar/data/1023024/000102302424000102/anip-20240930.htm)."
+  },
+  "unreported_quarters": {
+    "2024Q3": "Ownership change Alimera Sciences to ANI Pharmaceuticals; neither published a full-quarter figure. Alimera's last periodic report is the 10-Q for June 30, 2024 (filed 2024-08-07); ANI completed the acquisition on September 16, 2024 and its 10-Q for September 30, 2024 prints 'ILUVIEN and YUTIQ' 3,871 thousand for the partial period from that date only."
+  },
+  "joined_issuers": [
+    {
+      "issuer": "Alimera Sciences",
+      "first_quarter": "2023Q2",
+      "last_quarter": "2024Q2"
+    },
+    {
+      "issuer": "ANI Pharmaceuticals",
+      "first_quarter": "2024Q4",
+      "last_quarter": "2025Q2"
+    }
+  ]
+}

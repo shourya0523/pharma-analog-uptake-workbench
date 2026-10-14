@@ -19,13 +19,36 @@
   "launch_quarter": "2019Q4",
   "commercial_start_quarter": "2019Q4",
   "series_start_reason": null,
-  "series_end_quarter": "2023Q3",
-  "series_end_basis": "issuer_stopped_reporting",
-  "series_end_reason": "Pfizer completed the acquisition of Seagen on Dec 14, 2023; Seagen filed no report for 2023Q4. Pfizer's later Padcev line (companion series pfizer_padcev, from 2024Q1) is worldwide, a different scope, and its 2023Q4 line is a Dec 14-31 stub, so the series is not spliced. (pfizer_padcev: Companion Series sheet, cited but not scored.)",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
   "companion_series": "pfizer_padcev",
   "search_log": [
     "listed Seagen (CIK 0001060736) filings via data.sec.gov submissions, all forms; 8-K Item 2.02 releases and 10-Q/10-K 2019-2023 parsed for the PADCEV row",
     "2019Q4 read from the prior-year column of the 2020Q4 release (the quarter's own release prints no PADCEV row); the fiscal 2019 10-K prints 244 (thousand) for 2019",
-    "Quarter sums agree with the full-year PADCEV figures (2020: 222.4, 2021: 339.9, 2022: 451.4)"
-  ]
+    "Quarter sums agree with the full-year PADCEV figures (2020: 222.4, 2021: 339.9, 2022: 451.4)",
+    "Pfizer (CIK 0000078003) Form 8-K Exhibit 99 earnings releases for 2023Q4 and 2024Q1-2026Q2 fetched and the Padcev row read for Worldwide and U.S. columns (10 quarters in the verified companion pfizer_padcev; U.S. column added here)",
+    "2023Q4 release prints a Dec 14-31 stub (footnote (i)); no Seagen 2023Q4 report exists (Form 15 filed 2023-12-26), so 2023Q4 is declared unreported",
+    "Pfizer FY2025 Form 10-K searched for Padcev: product revenues vs alliance revenues wording and the wholesaler-distribution one-time impact"
+  ],
+  "joined_issuers": [
+    {
+      "issuer": "Seagen",
+      "first_quarter": "2019Q4",
+      "last_quarter": "2023Q3"
+    },
+    {
+      "issuer": "Pfizer",
+      "first_quarter": "2024Q1",
+      "last_quarter": "2026Q2"
+    }
+  ],
+  "unreported_quarters": {
+    "2023Q4": "Ownership change Seagen to Pfizer; no full-quarter figure is published. Pfizer completed the acquisition of Seagen on December 14, 2023 and Seagen filed no report for 2023Q4 (last 10-Q is for 2023Q3, Form 15 filed Dec 26, 2023). Pfizer's 4Q23 release (https://www.sec.gov/Archives/edgar/data/78003/000007800324000017/pfe-12312023xex99.htm) prints Padcev '52' under footnote (i): 'Represents revenues from legacy Seagen products subsequent to the acquisition on December 14, 2023', a December 14-31 stub that is kept out of the series."
+  },
+  "reviewed_anomalies": {
+    "2024Q1": "First Pfizer quarter: the source changes from Seagen's 'Net product sales' (U.S.) to the U.S. column of Pfizer's worldwide revenue-by-product table. Pfizer reports Padcev mostly as product revenues (FY2025 Form 10-K: 'except for the majority of revenues for Comirnaty and Padcev, which are included in product revenues'), so the step is a change of reporter, not of territory.",
+    "2025Q3": "Pfizer's FY2025 Form 10-K (https://www.sec.gov/Archives/edgar/data/78003/000007800326000026/pfe-20251231.htm) attributes part of the 2025 Padcev increase to 'a one-time favorable impact associated with transition to a wholesaler distribution model in the U.S.'; the release does not date the effect to a quarter. Kept as printed."
+  },
+  "notes": "Series continues from Seagen to Pfizer on the U.S. scope. Pfizer prints Padcev in its revenue-by-product table with Worldwide, U.S. and International columns; the U.S. column is used from 2024Q1 so the territory matches Seagen's U.S. net product sales. Pfizer's worldwide line, which adds the International column, is kept as companion pfizer_padcev. Each quarter is read from the release for that quarter. Pfizer's own wording that revenues for Padcev are 'the majority' product revenues leaves open that a small part of the U.S. column is alliance revenue; this is not itemised."
 }

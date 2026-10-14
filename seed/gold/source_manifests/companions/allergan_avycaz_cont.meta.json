@@ -1,0 +1,20 @@
+{
+  "drug_name": "Avycaz",
+  "line_label": "Zavicefta (printed 'Zavicefta'; 'Zavicefta (Outside the U.S. and Canada)' from the 2025Q1 release)",
+  "issuer": "Pfizer Inc.",
+  "benchmark_identity": "allergan_avycaz_continuation",
+  "revenue_scope": "Zavicefta (ceftazidime-avibactam) revenues in the Worldwide column of Pfizer's revenues-by-product table; the United States column is a printed nil, so the line is sales outside the U.S. (the 2025 releases label it 'Outside the U.S. and Canada')",
+  "geography": "Outside the U.S. (U.S. column prints '\u2014'; labelled 'Outside the U.S. and Canada' from the 2025Q1 release)",
+  "why_separate": "The gold series is Allergan plc's U.S. Avycaz net revenues. Allergan plc's last report was the 2020Q1 Form 10-Q and the U.S. brand's later owner, AbbVie, prints no Avycaz line. The same compound is sold outside the U.S. by Pfizer under the brand Zavicefta, a different brand, territory and issuer that is not a successor to Allergan, so these figures are not the U.S. series continued.",
+  "notes": "Pfizer holds the ex-U.S. rights to ceftazidime-avibactam and prints it as Zavicefta. The line covers a different territory from the gold series (U.S. only); both are reported in USD. The first document to print the line is the Pfizer 2020Q4 release (accession 0000078003-21-000003) and the Form 10-K for 2020 (Zavicefta, 212 for 2020 against 108 for 2019); the 2020Q2 and 2020Q3 figures (46 and 49) are therefore prior-year columns of the 2021Q2 and 2021Q3 releases, since the own-quarter releases and the Forms 10-Q for those quarters print no Zavicefta row. Full-year checks: 2020 quarters (2020Q1 49 from the prior-year column of the 2021Q1 release, then 46, 49, 68) sum to the 212 printed; 2021 94+104+107+107 = 412 against 413 printed; 2022 104+100+98+109 = 411 against 412; 2023 116+132+130+133 = 511; 2024 125+150+152+159 = 586; 2025 135+163+158+181 = 637 against 638 (rounding). Pfizer's releases print further Zavicefta rows in later tables (regional split of international revenues); only the Worldwide table's quarter row is used. Pfizer's fiscal quarters end a few days off the calendar quarter end (for example April 4, 2021) and are mapped to the calendar quarter they close.",
+  "search_log": [
+    "AbbVie (CIK 0001551152) Item 2.02 8-K exhibits and Forms 10-Q/10-K from 2020-05-01 to 2026-10-05 (75 filings; every main document and Exhibit 99 downloaded and searched case-insensitively for Avycaz): no match, so the U.S. brand has no line after Allergan plc's 2020Q1 Form 10-Q. AbbVie's 2020Q2 release (accession 0001551152-20-000019) is the first to omit it.",
+    "Pfizer Inc. (CIK 0000078003) Item 2.02 8-K exhibits from 2020-04-28 to 2026-08-04 (including 8-K/A; the 2022-04-20 and 2023-10-13 8-Ks yielded no revenue-by-product exhibit to parse) parsed for rows containing 'Zavicefta' or 'Avycaz': Zavicefta rows begin with the 2021-02-02 release (2020Q4); the 2020-04-28, 2020-07-28 and 2020-10-27 releases and the Forms 10-Q for the quarters ended 2020-06-28 and 2020-09-27 print none; the Form 10-K for 2020 prints Zavicefta 212 / 108 in its product table. Pfizer prints no Avycaz row.",
+    "Relation judged successor_issuer (rights holder of the same compound in another territory); not a continuation of the U.S. figures, which stop with Allergan plc's 2020Q1 report.",
+    "Checked forms 8-K, 8-K/A, 10-Q and 10-K."
+  ],
+  "continuation": {
+    "relation": "successor_issuer",
+    "evidence": "Pfizer Inc. 2020Q4 earnings release revenues-by-product table, row 'Zavicefta | 68 | 41 | 64% | 68% | \u2014 | \u2014 | \u2014 | 68 | 41 | 65% | 68%' (Worldwide 68, prior 41; United States nil; Total International 68, 41), the first Pfizer document to print the line (https://www.sec.gov/Archives/edgar/data/78003/000007800321000003/pfe-12312020xex99.htm)."
+  }
+}

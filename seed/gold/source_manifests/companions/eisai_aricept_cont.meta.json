@@ -1,0 +1,19 @@
+{
+  "drug_name": "Aricept",
+  "line_label": "Aricept (East Asia Global South - revenue from major products)",
+  "issuer": "Eisai",
+  "benchmark_identity": "eisai_aricept_continuation",
+  "revenue_scope": "Aricept revenue in Eisai's East Asia Global South (EAGS) segment, Eisai-recorded",
+  "geography": "East Asia Global South (primarily South Korea, Taiwan, India, ASEAN, Central and South America, South Africa)",
+  "why_separate": "The gold series is Eisai's global Aricept brand total (with Japan, China and Asia sub-rows). From the FY2026 Q1 Reference Data the global total is no longer printed; Aricept survives only as regional lines in the segment tables, here EAGS, which is one piece of the former total.",
+  "notes": "Narrower line: one piece of the former brand total. The same document prints a second piece, Aricept in China, JPY 2.9 billion for FY2026 Q1 (FY2025 Q1 2.4, full year 8.8; page 7), which is not used because only one line can be carried; it is recorded here only. Aricept in Japan is not printed in the Japan prescription medicines major-products list of this document, and no global Aricept total appears anywhere in it. The document's 'Revenue from Major Products' and 'Changes in Quarterly Revenue from Major Products' tables list only Lenvima, Leqembi and Dayvigo ('Major Products (3L)'). EAGS full-year Aricept for FY2025 is 14.6 in both this document and the FY2025 Q4 document (https://www2.jpx.co.jp/disc/45230/140120260514534240.pdf), so the line is consistent with the earlier regional table. Only one quarter (2026Q2) falls after the series end.",
+  "search_log": [
+    "Read Eisai Reference Data filed 2026-07-31 (140120260731505609) end to end with pdfplumber: 'Aricept' occurs twice, China (page 7) and EAGS (page 8); no Japan line, no global total",
+    "Read the FY2025 Q4 Reference Data (140120260514534240): global Aricept total row 6.2 for FY2025 Q4 with Japan, China and Asia sub-rows; regional full-year Aricept China 8.8, EAGS 14.6",
+    "Only the Reference Data of 2026-07-31 falls after the series end among the Eisai documents examined; other Eisai disclosures for FY2026 Q1 (financial results summary, press releases) were not searched"
+  ],
+  "continuation": {
+    "relation": "narrower_line",
+    "evidence": "Eisai Reference Data filed 2026-07-31, 'EAGS - revenue from major products': 'Alzheimer's disease treatment 3.7 14.6 3.6 (4.0) － －' with the product name 'Aricept <(8.6)>' on the following line; the 'Changes in Quarterly Revenue from Major Products' table lists 'Major Products (3L) Total 120.7 116.0 130.9 127.2 145.5' and no Aricept total (https://www2.jpx.co.jp/disc/45230/140120260731505609.pdf)"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "drug_name": "Spikevax",
+  "line_label": "COVID",
+  "issuer": "Moderna",
+  "benchmark_identity": "moderna_spikevax_continuation",
+  "revenue_scope": "Worldwide COVID net product sales: the 'COVID' row of the net product sales by product table, which Moderna footnotes as including sales of Spikevax and mNEXSPIKE",
+  "geography": "Worldwide",
+  "why_separate": "From the third quarter of 2025 the 'COVID' row carries the footnote 'Includes sales of Spikevax and mNEXSPIKE', so it is no longer Spikevax alone; the series (Spikevax-only definition) ends at 2025Q2 and this combined line begins at 2025Q3.",
+  "notes": "Same issuer, same currency (USD millions) and same worldwide table as the end of the gold series; only the product definition widened. Rows 2025Q3, 2026Q1 and 2026Q2 are read from the quarter's own 10-Q as current; 2025Q4 is the 2025 10-K full year less the nine months in the Q3 2025 10-Q (the Q4 release prints no COVID row). Q4 2025 check: the 10-K RSV row gives 8 for the year and the Q3 10-Q gives 4 for nine months, and 642 + 4 = 646 against the 645 total net product sales printed for the quarter in the Q4 release (whole-million rounding of the inputs). Moderna prints no Spikevax-only or mNEXSPIKE-only sales figure in any document read: the 10-K, the three later 10-Qs and the Q3 2025 and Q4 2025 releases name mNEXSPIKE only in the footnote and in prose without a sales figure.",
+  "search_log": [
+    "Moderna CIK 1682852 via data.sec.gov submissions: 10-Q filed 2025-11-06 (0001682852-25-000075), 10-K filed 2026-02-20 (0001682852-26-000033), 10-Q filed 2026-05-01 (0001682852-26-000060), 10-Q filed 2026-07-31 (0001682852-26-000150); earnings 8-Ks of 2025-11-06 (exhibit9912025q3pressrelea.htm) and 2026-02-13 (exhibit9912025q4pressrelea.htm)",
+    "Each 10-Q/10-K 'net product sales by product' table: rows COVID (1), RSV, Net product sales; the footnote text 'Includes sales of Spikevax and mNEXSPIKE' appears in all four filings; no Spikevax or mNEXSPIKE row exists in any table (HTML tables searched for rows beginning Spikevax, mNEXSPIKE, COVID)",
+    "Q3 2025 release table prints only Net product sales (973 | 1,820 | 1,172 | 2,171); Q4 2025 release prints Net product sales (645 | 938 | 1,818 | 3,109) and no product split",
+    "Quarterly COVID figures were checked against the prior-year columns of the following 10-Qs (Q1 2026 10-Q prints 84 for Q1 2025, Q2 2026 10-Q prints 114 for Q2 2025), consistent with the gold series"
+  ],
+  "continuation": {
+    "relation": "broader_line",
+    "line_includes": [
+      "mNEXSPIKE"
+    ],
+    "evidence": "Moderna Form 10-Q for the quarter ended September 30, 2025, net product sales by product, row 'COVID (1)' 971 | 1,810 | 1,168 | 2,161, footnote (1): 'Includes sales of Spikevax and mNEXSPIKE'. https://www.sec.gov/Archives/edgar/data/1682852/000168285225000075/mrna-20250930.htm"
+  }
+}

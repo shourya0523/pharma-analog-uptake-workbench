@@ -1,0 +1,21 @@
+{
+  "drug_name": "Syfovre",
+  "line_label": "SYFOVRE",
+  "issuer": "Biogen",
+  "benchmark_identity": "apellis_syfovre_continuation",
+  "revenue_scope": "U.S. net product revenue, post-acquisition period only (May 14 to June 30 2026)",
+  "geography": "United States",
+  "why_separate": "Apellis was acquired by Biogen on 2026-05-14 and filed no report for 2026Q2. Biogen, the successor issuer, prints SYFOVRE for the three months ended June 30 2026, but only from the closing date, so the figure covers about 48 of the quarter's 91 days and is a different period scope from the full-quarter gold series.",
+  "notes": "Biogen prints the SYFOVRE row with United States, Rest of World and Total columns; Rest of World is nil, so the scope is the same U.S. net product revenue Apellis reported. The single row is the only quarter after the gold series' last quarter (2026Q1). Apellis' pre-closing April 1 to May 13 2026 results are in no filing located (Apellis filed no Q2 report; Biogen states Apellis' contribution was immaterial and gives no pro forma). Ex-U.S. systemic pegcetacoplan is sold by Sobi as ASPAVELI and is a different territory and brand, not part of this line. Gold is as of 2026Q2.",
+  "search_log": [
+    "Listed Apellis (CIK 1492422) filings via data.sec.gov submissions: last periodic report is the 10-Q for Q1 2026 (0001492422-26-000108); then 8-K 2026-05-14 (0001193125-26-222923) and Form 15-12G 2026-05-26. No 10-Q, 10-K or earnings 8-K for 2026Q2 exists.",
+    "Listed Biogen (CIK 875045) filings: 10-Q for Q2 2026 filed 2026-07-29 (0000875045-26-000075) and 8-K Item 2.02 of the same date; downloaded the 10-Q and read every row and sentence naming EMPAVELI, SYFOVRE, Apellis or pegcetacoplan.",
+    "The 10-Q Note 5 revenue-by-product tables (three and six months ended June 30 2026) print SYFOVRE 97.4 and EMPAVELI 30.4, all in the United States column, with a footnote that both products were obtained in the Apellis acquisition in May 2026; the six-month column equals the three-month column, confirming no pre-acquisition sales are included.",
+    "The 10-Q states that Apellis' results are included 'since the closing of the Apellis acquisition on May 14, 2026', that the impact was immaterial, and that no pro forma information is given; so no Biogen document prints the April 1 to May 13 stub.",
+    "Sobi (ASPAVELI, ex-U.S.) was not used: different territory and brand."
+  ],
+  "continuation": {
+    "relation": "successor_issuer",
+    "evidence": "SYFOVRE (1) | 97.4 | \u2014 | 97.4 | \u2014 | \u2014 | \u2014 in the Note 5 revenue-by-product table of Biogen's Form 10-Q for the quarter ended June 30 2026, with footnote '(1) EMPAVELI and SYFOVRE were obtained as part of our acquisition of Apellis in May 2026'; the same 10-Q states Apellis' results are included 'since the closing of the Apellis acquisition on May 14, 2026' (https://www.sec.gov/Archives/edgar/data/875045/000087504526000075/biib-20260630.htm)."
+  }
+}

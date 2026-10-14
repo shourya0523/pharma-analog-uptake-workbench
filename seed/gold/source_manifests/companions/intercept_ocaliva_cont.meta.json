@@ -1,0 +1,20 @@
+{
+  "drug_name": "Ocaliva",
+  "line_label": "Product revenue, net",
+  "issuer": "Intercept Pharmaceuticals",
+  "benchmark_identity": "intercept_ocaliva_continuation",
+  "revenue_scope": "U.S. (Product revenue, net of continuing operations after Intercept sold its international business on 2022-07-01; Ocaliva was Intercept's only product)",
+  "geography": "United States",
+  "why_separate": "After the 2022-07-01 sale of the ex-U.S. business Intercept's Ocaliva line no longer holds Europe and Canada, so it is one piece (the U.S.) of the worldwide line that the gold series carries to 2022Q1.",
+  "notes": "The gold series ends with 2022Q1 (worldwide); 2022Q2 is not a row because the worldwide figure would be the sum of two printed lines (71,757 continuing plus 28,628 discontinued). The Form 10-Q for the quarter ended September 30, 2022 prints discontinued-operations product revenue of nil for the third quarter of 2022 (28,628 for the second quarter and 58,065 for the nine months), so from 2022Q3 the Ocaliva line is U.S. only. Rows are read from the release or 10-Q that prints the quarter as current. The last quarter Intercept reported is 2023Q3 (10-Q filed 2023-11-06); Alfasigma completed its acquisition on 2023-11-08 and Intercept filed Form 15-12G on 2023-11-20. The same U.S.-only line for 2021Q2-2022Q2 is in the companion intercept_ocaliva_alt.",
+  "search_log": [
+    "Intercept (CIK 1270073) filings listed through data.sec.gov/submissions; earnings 8-K Exhibit 99.1 for 2022Q2 to 2023Q2 and the 10-Q for 2023Q3 read for 'Product revenue, net'.",
+    "Form 10-Q for the quarter ended June 30, 2022 (icpt-20220630x10q.htm): continuing operations product revenue 71,757 and discontinued-operations product revenue 28,628 for the quarter; the worldwide 2022Q2 sum is not a series row; see the main meta notes.",
+    "Form 10-Q for the quarter ended September 30, 2022 (icpt-20220930x10q.htm): discontinued-operations product revenue for the three months ended September 30, 2022 is nil ('$ —'), 58,065 for the nine months.",
+    "Successors after 2023-11-08: Alfasigma (private, acquirer of Intercept) and the buyer of the ex-U.S. business publish no quarterly Ocaliva net sales that was found; Intercept filed Form 15-12G on 2023-11-20."
+  ],
+  "continuation": {
+    "relation": "narrower_line",
+    "evidence": "Intercept 10-Q for the quarter ended June 30, 2022 (https://www.sec.gov/Archives/edgar/data/1270073/000155837022011857/icpt-20220630x10q.htm): 'For the three months ended June 30, 2022 and 2021, product revenue, net was solely comprised of U.S. Ocaliva net sales.', with the international business reported in discontinued operations (three-month product revenue, net 28,628 and 28,398)."
+  }
+}

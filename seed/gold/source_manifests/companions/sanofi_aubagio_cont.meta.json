@@ -1,0 +1,24 @@
+{
+  "drug_name": "Aubagio",
+  "line_label": "Others",
+  "issuer": "Sanofi",
+  "benchmark_identity": "sanofi_aubagio_continuation",
+  "revenue_scope": "Sanofi 'Others' line of the net sales by product table (Pharma), worldwide total column, EUR million. A residual line holding Aubagio's remaining sales together with every other product the table does not itemise; it is NOT Aubagio's own sales.",
+  "geography": "Worldwide (total column; the table also splits United States, Europe, Rest of the World)",
+  "why_separate": "The gold series is Sanofi's own Aubagio line and ends 2025Q4. Sanofi's Q4 2025 release states 'Individual sales reporting for Aubagio is anticipated to discontinue in 2026 with any remaining sales to be included in ‘Others’'; the Q1 and Q2 2026 releases have no Aubagio row. Aubagio's remainder is only a small and unquantified part of this residual line, so it is a weak analog for Aubagio itself.",
+  "notes": "Rows cover 2026Q1 and 2026Q2, the latest published quarters. For scale only: the Q4 2025 release printed Aubagio 51 and Others 901 in the same table as separate rows (Aubagio was not inside Others then), so Others of 865 and 835 is roughly 17 times the last Aubagio figure and its movement says almost nothing about Aubagio. Sanofi does not decompose Others, so Aubagio's remaining sales are not recoverable. line_includes holds a descriptive entry rather than product names because Sanofi names no product list; the second entry is an inference from the line being the table's residual, not a Sanofi statement. Each quarter is read from the release that reports it as current; no 2026Q3 figure used.",
+  "search_log": [
+    "Q4 2025 release (accession 0001121404-26-000001): Aubagio row 'Neurology Aubagio 51 -30.8 % -34.6 % 34 ... 12 ... 5 ...' and the sentence naming 'Others' as the destination; Others row 'Others 901 -10.0 % -12.7 % 83 ... 276 ... 542' (Aubagio itemised separately at that date).",
+    "Q1 2026 release (0001121404-26-000004) and Q2 2026 release (0001121404-26-000008): no Aubagio row (0 occurrences); 'Others 865 ...' and 'Others 835 ...' read from the net sales tables.",
+    "Footnotes and text of the three releases searched for a statement of what 'Others' holds: none found beyond the Q4 2025 sentence about Aubagio.",
+    "No partner or royalty holder searched: Aubagio is Sanofi (Genzyme) only; the continuation is the issuer's own folded line."
+  ],
+  "continuation": {
+    "relation": "broader_line",
+    "evidence": "Q4 2025 results press release: 'Individual sales reporting for Aubagio is anticipated to discontinue in 2026 with any remaining sales to be included in ‘Others’' (https://www.sec.gov/Archives/edgar/data/1121404/000112140426000001/pressreleaseq42025english.htm); first line printed after the stop is 'Others 865' in the Q1 2026 release (https://www.sec.gov/Archives/edgar/data/1121404/000112140426000004/pressreleaseq12026english.htm).",
+    "line_includes": [
+      "Aubagio (remaining sales only, per Sanofi's Q4 2025 release)",
+      "every other Sanofi product the net sales table does not itemise (residual line; inferred from the label, Sanofi lists none)"
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "drug_name": "Orladeyo",
+  "line_label": "ORLADEYO",
+  "issuer": "BioCryst Pharmaceuticals",
+  "benchmark_identity": "biocryst_orladeyo_us_continuation",
+  "revenue_scope": "Worldwide ORLADEYO revenue as printed in the Note 3 revenue table: product sales and royalties, all territories (U.S. share stated only as an approximate percentage)",
+  "geography": "Worldwide (U.S. approximately 94% in 2026Q1 and 97% in 2026Q2 of the line, per the note)",
+  "why_separate": "The gold series is ORLADEYO U.S. product revenues. From the 2026 10-Qs BioCryst prints only a combined ORLADEYO line that also holds product sales outside the U.S. and royalties; no U.S. figure is printed, only an approximate share.",
+  "notes": "USD thousands, converted to millions. The U.S. share (approximately 94% for 2026Q1 and 97% for 2026Q2) is a rounded percentage and is not multiplied out into a U.S. figure. The 2025 comparison columns (134,243 and 156,837) are restated onto this combined definition and are not the gold U.S. values (2025Q1 and 2025Q2). BioCryst sold its European ORLADEYO business to Neopharmed on 2025-10-01; the quarterly royalty payments from BioCryst Ireland that follow are reported in License revenue (License and other revenues), not in the ORLADEYO line, so the 2025 comparatives (which still hold European product sales) are not comparable to 2026. The footnote to the ORLADEYO line says only that it includes product sales and royalties. The 2026 10-Q income statements show only ORLADEYO, License revenue and Other revenues, with no U.S. row. No U.S. product revenue row was found in Note 3 or by text search of the MD&A of either 2026 10-Q. The 2026 earnings releases (8-K Ex. 99.1 of 2026-05-06 and 2026-08-05) were read and print no U.S. ORLADEYO row either; the Q1 2026 release's non-GAAP reconciliation and the 10-Q MD&A revenue table both show 2025Q1 ORLADEYO of 134,243 less 11,536 for the European ORLADEYO business, or 122,707 excluding Europe (2025Q2: 156,837 less 13,310, or 143,527). That ex-Europe line still includes non-U.S. product sales and royalties, is a different scope from the gold U.S. series (120.159 and 140.338), and is not used. The 2026 line equals the MD&A 'ORLADEYO' row because the European business no longer exists in 2026.",
+  "search_log": [
+    "BioCryst CIK 0000882796 submissions to 2026-09: 10-Q Q1 2026 (0001628280-26-031238), 10-Q Q2 2026 (0001628280-26-053300), 8-K Item 2.02 releases 2026-05-06 and 2026-08-05 listed.",
+    "Note 3 Revenue of both 10-Qs read: line 'ORLADEYO' with footnote 'ORLADEYO revenue includes product sales and royalties' and the sentence 'Revenues from customers in the U.S. represented approximately 94 % ... of ORLADEYO revenues' (Q1) / '97 %' (Q2); no U.S. dollar row printed anywhere in either filing.",
+    "Earnings releases (8-K Ex. 99.1) of 2026-05-06 and 2026-08-05 read: no U.S. ORLADEYO dollar row; the Q1 release reconciliation prints 2025Q1 ORLADEYO GAAP 134,243, adjustment 11,536, non-GAAP 122,707 (excludes European revenue; different scope from the gold U.S. value).",
+    "10-Q Q1 2026 Note 3 footnotes: 'ORLADEYO revenue includes product sales and royalties. License revenue includes quarterly royalty payments from BioCryst Ireland Limited'; the Q2 10-Q footnote places Neopharmed License Agreement revenue in 'License and other revenues'. The Neopharmed/BioCryst Ireland royalties therefore sit outside the ORLADEYO line.",
+    "Other issuers printing ORLADEYO net sales (Neopharmed, Torii, royalty holders): not searched beyond the BioCryst filings; none was encountered.",
+    "10-Q MD&A revenue tables (Q1 and Q2 2026) read: rows 'ORLADEYO', 'European ORLADEYO business', 'Total ORLADEYO' (2025 comparatives only for Europe); no U.S. row. Releases state guidance as 'global net ORLADEYO revenue'."
+  ],
+  "continuation": {
+    "relation": "broader_line",
+    "line_includes": [
+      "product sales outside the U.S.",
+      "royalties"
+    ],
+    "evidence": "BioCryst Form 10-Q for the quarter ended March 31, 2026, Note 3 Revenue: 'ORLADEYO $ 148,347 $ 134,243' followed by 'ORLADEYO revenue includes product sales and royalties' and 'Revenues from customers in the U.S. represented approximately 94 % and 90 % of ORLADEYO revenues'. https://www.sec.gov/Archives/edgar/data/882796/000162828026031238/bcrx-20260331.htm"
+  }
+}

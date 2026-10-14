@@ -1,0 +1,23 @@
+{
+  "drug_name": "Rukobia",
+  "line_label": "Other (HIV)",
+  "issuer": "GSK plc",
+  "benchmark_identity": "gsk_rukobia_continuation",
+  "revenue_scope": "Worldwide Group turnover of the HIV 'Other' row (ViiV Healthcare consolidated in GSK), GBP millions",
+  "geography": "Worldwide",
+  "why_separate": "From the Q1 2026 release GSK no longer prints a Rukobia row; the HIV 'Other' row is a residual line, not Rukobia's own sales.",
+  "notes": "INFERRED, not stated by GSK: no GSK sentence says Rukobia moved into 'Other'. The inference rests on printed numbers. The 1Q25 release printed Rukobia 38 and Other 5 (sum 43); the 1Q26 release prints Other 41 at (5)% AER, a base of about 43, not 5. The 2Q25 release printed Rukobia 44 and Other 8 (sum 52); 2Q26 Other 44 at (15)% AER is a base of about 52. Six months 2025: 82 + 13 = 95; six-month 2026 Other 85 at (11)% is about 95. The 1Q26 and 2Q26 releases still list Rukobia in the pipeline/product appendix but print no sales. The 'Other' line before 2026 (5, 8, ...) is not the same scope as this line, so the pre-2026 'Other' figures are not part of the continuation. Residual products inside Other are not named by GSK. Measured from the staged release HTML: HIV, Dolutegravir products, Long Acting Injectables and Other rows of the Q1 2026, Q2 2026, Q1 2025 and Q2 2025 releases.",
+  "search_log": [
+    "Fetched the Q1 2026 (0001654954-26-004051) and Q2 2026 (0001654954-26-006949) 6-K results documents from sec.gov and parsed every table row; searched for 'rukobia' and 'fostemsavir': only the appendix row 'Rukobia | fostemsavir | Specialty medicines | HIV/AIDS'.",
+    "Printed the HIV block of both releases: Dolutegravir products, Long Acting Injectables, Other; no Rukobia row.",
+    "Compared with the Q4 2025, Q1 2025 and Q2 2025 releases (Rukobia 169 FY, 38, 44; Other 29 FY, 5, 8) to test where Rukobia went; arithmetic above.",
+    "Partners: Shionogi and Pfizer are ViiV minority shareholders and do not report Rukobia sales; not searched in their documents beyond that."
+  ],
+  "continuation": {
+    "relation": "broader_line",
+    "line_includes": [
+      "Other"
+    ],
+    "evidence": "INFERRED FROM ARITHMETIC; GSK states no footnote or sentence saying where Rukobia is reported from 2026. HIV table, Q1 2026 release (https://www.sec.gov/Archives/edgar/data/1131399/000165495426004051/a2755c.htm): 'HIV | 1,824', 'Dolutegravir products | 1,295', 'Long Acting Injectables | 488', 'Other | 41 | (5) | (2)'; 1,295 + 488 + 41 = 1,824, so no further HIV row exists and Rukobia, no longer printed, can only sit in Other. Q2 2026 release: 1,441 + 593 + 44 = 2,078. Q1 2025 release printed 'Rukobia | 38' and 'Other | 5' (HIV 1,714; 1,824 against 1,714 is the printed +6%, so the HIV total is like for like); 1Q26 Other 41 at (5)% implies a base of about 43 = 38 + 5, and 2Q26 Other 44 at (15)% implies about 52 = 44 + 8. The row is a residual that also holds the products that were in Other before 2026; Rukobia's own share is not printed."
+  }
+}
