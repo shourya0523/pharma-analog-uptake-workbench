@@ -52,8 +52,8 @@ SCALE = {"thousands": 1000, "millions": 1, "billions": 0.001}
 DIRECT = {"direct_reported", "direct_reported_rounded", "direct_prior_year_column",
           "direct_retrospective_table", "direct_prior_year_schedule"}
 # A table that sets the closing parenthesis of a negative in its own cell
-# renders "(71)" as "(71 | )".
-SPLIT_PARENTHESIS = re.compile(r"\((\d[\d,]*(?:\.\d+)?)\s*\|\s*\)")
+# renders "(71)" as "(71 | )", and a typeset one may pad it as "( 71 )".
+SPLIT_PARENTHESIS = re.compile(r"\(\s*(\d[\d,]*(?:\.\d+)?)\s*(?:\|\s*)?\)")
 NUMBER = re.compile(r"\(?-?[\d][\d,]*(?:\.\d+)?\)?")
 
 
