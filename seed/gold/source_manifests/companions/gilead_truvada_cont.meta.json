@@ -1,0 +1,29 @@
+{
+  "drug_name": "Truvada",
+  "line_label": "Other HIV",
+  "issuer": "Gilead",
+  "benchmark_identity": "gilead_truvada_continuation",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "why_separate": "From the 2024Q1 release Gilead no longer prints Truvada on a line of its own: it is one of seven products inside 'Other HIV', so the line is a combined line and not the Truvada series.",
+  "notes": "Gilead's PRODUCT SALES SUMMARY 'Other HIV' line, worldwide, USD millions, 2024Q1 to 2026Q2. Scope proof: the table prints Other HIV as U.S., Europe and Rest of World rows followed by an unlabelled total, and the total is the figure recorded. The line holds several products and the figures are NOT the product's own sales. The footnote in the first release (2024Q1) names Atripla, Complera/Eviplera, Emtriva, Sunlenca, Stribild, Truvada and Tybost; line_includes lists the other six. Dated changes to the footnote, read from the release of the quarter named: Yeztugo is added from the 2025Q2 release ('Includes Atripla, Complera/Eviplera, Emtriva, Sunlenca, Stribild, Truvada, Tybost and Yeztugo') and 2025Q3 reads 'Yeztugo/Yeytuo'; the 2025Q4 release lists the 2024Q1 products plus Yeztugo/Yeytuo (Stribild and Sunlenca in a different order), and the 2026Q1 and 2026Q2 releases list the 2024Q1 products without Yeztugo/Yeytuo. The 2026Q2 release restates the 2025Q2 comparative of the line to 92 (the 2025Q2 row here, read from its own release, is 107), so the 2025Q2 to 2025Q4 rows include Yeztugo and the 2026 rows do not. The line is therefore a different mix of products from 2025Q2 on and its movements cannot be read as this product's trend. The 2024Q1 comparative column (2023Q1 = 108) shows the same line existed before the fold; 2023 and earlier quarters are not part of this continuation because the gold series covers them. Four-quarter sums: 2024 433 against a printed 434; 2025 500 against a printed 500 (rounding).",
+  "search_log": [
+    "Listed every Gilead 8-K with Item 2.02 from data.sec.gov submissions (CIK 0000882095, recent plus older files): 2024-02-06 (2023Q4, last quarter of the gold series), then 2024-04-25, 2024-08-08, 2024-11-06, 2025-02-11, 2025-04-24, 2025-08-07, 2025-10-30, 2026-02-10, 2026-05-07 and 2026-08-04 (2026Q2). No 8-K/A with Item 2.02 in that window. Downloaded Exhibit 99.1 of each of the ten releases from 2024Q1 to 2026Q2 and searched the whole text of each for the brand: it appears only in the trademark list and in the footnote quoted in the continuation evidence; no release has a row labelled with the brand.",
+    "Read the PRODUCT SALES SUMMARY of each of the ten releases: the line the footnote belongs to is printed as U.S., Europe and Rest of World rows with an unlabelled total, and the current-quarter column of each release is the source of each row (derivation direct_reported). Cross-checks: the four quarters of 2024 and of 2025 reconcile to the full-year column printed in the Q4 release within rounding, and the six-month columns of the 2026Q2 release equal 2026Q1 plus 2026Q2 for the line.",
+    "Searched the 10-Q and 10-K filings from 2024-02-23 to 2026-08-06 (FY2023 10-K, 10-Qs for 2024Q1-Q3, FY2024 10-K, 10-Qs for 2025Q1-Q3, FY2025 10-K, 10-Qs for 2026Q1 and 2026Q2) for the brand name next to a dollar figure. After the FY2023 10-K (which still prints 2023 and earlier) the brand appears only in the same footnote to the product sales table; no filing prints a figure for it alone.",
+    "No partner or royalty-holder fallback was found to print the brand's net sales on its own: see notes for the one Gilead disclosure that names a related product pair.",
+    "Truvada for PrEP is not printed separately either; both appear in the release trademark list only."
+  ],
+  "continuation": {
+    "relation": "broader_line",
+    "line_includes": [
+      "Atripla",
+      "Complera/Eviplera",
+      "Emtriva",
+      "Sunlenca",
+      "Stribild",
+      "Tybost"
+    ],
+    "evidence": "Footnote (2) to 'Other HIV' in the product sales summary of Gilead's first quarter 2024 earnings release (8-K Exhibit 99.1, 2024-04-25), https://www.sec.gov/Archives/edgar/data/882095/000088209524000010/exhibit991earningspressrel.htm: 'Includes Atripla, Complera/Eviplera, Emtriva, Sunlenca, Stribild, Truvada and Tybost.'"
+  }
+}

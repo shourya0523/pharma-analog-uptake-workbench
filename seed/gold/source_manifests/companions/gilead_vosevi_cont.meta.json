@@ -1,0 +1,23 @@
+{
+  "drug_name": "Vosevi",
+  "line_label": "Other HCV",
+  "issuer": "Gilead",
+  "benchmark_identity": "gilead_vosevi_continuation",
+  "revenue_scope": "Worldwide: Gilead's 'Other HCV' line, which holds Vosevi together with Sovaldi",
+  "geography": "Worldwide",
+  "why_separate": "Gilead stopped printing Vosevi on its own after 2020Q3; from the fourth-quarter 2020 release it sits in 'Other HCV' together with Sovaldi, so the figure is the sum of two products and not Vosevi's own sales.",
+  "notes": "Rows cover 2020Q4 to 2023Q4, the quarters in which footnote (5) reads 'Includes Vosevi and Sovaldi.' Gilead relabels the line 'Other Liver Disease' from the first-quarter 2024 release and adds Hepcludex, Viread and ledipasvir/sofosbuvir (and, in 2024, Hepsera and Livdelzi) to it, so the two lines are different quantities and the later one is not included. The 2020Q4 release is the first with the 'Other HCV' line (the label there is 'Other HCV (5)').",
+  "search_log": [
+    "Pulled data.sec.gov submissions for CIK 0000882095 (recent and older pages); downloaded the Exhibit 99.1 of every Item 2.02 8-K from 2018-02 to 2026-08 (the 2022-02-01 duplicate 8-K from another filer agent and the 2021-01-11 guidance release carry no product table) and parsed the product sales tables.",
+    "Downloaded every 10-Q and 10-K filed 2021-02 to 2026-08 and searched the revenue-disaggregation notes for the product; no separate line after the stop dates stated below.",
+    "Web search for a partner, licensee or royalty holder printing the product's net sales after the stop (Gilead is sole seller; Atripla JV partner history only in 2010-era 10-K); nothing found.",
+    "Fourth-quarter 2020 release (8-K 0000882095-21-000005): no Vosevi row; footnote (5) names Vosevi and Sovaldi under Other HCV. Releases 2024Q1 onward searched: Vosevi named only inside the 'Other Liver Disease' footnote."
+  ],
+  "continuation": {
+    "relation": "broader_line",
+    "evidence": "Footnote (5) of the fourth quarter 2020 release: 'Includes Vosevi and Sovaldi.' under the 'Other HCV (5)' U.S., Europe and Other International lines. https://www.sec.gov/Archives/edgar/data/882095/000088209521000005/exhibit991earningspressrel.htm",
+    "line_includes": [
+      "Sovaldi"
+    ]
+  }
+}

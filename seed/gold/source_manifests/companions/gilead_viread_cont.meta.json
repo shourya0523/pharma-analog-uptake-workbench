@@ -1,0 +1,28 @@
+{
+  "drug_name": "Viread",
+  "line_label": "Other Liver Disease",
+  "issuer": "Gilead",
+  "benchmark_identity": "gilead_viread_continuation",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "why_separate": "From the 2024Q1 release Gilead no longer prints Viread on a line of its own: it is one of six product groups inside 'Other Liver Disease', so the line is a combined line and not the Viread series.",
+  "notes": "Gilead's PRODUCT SALES SUMMARY 'Other Liver Disease' line, worldwide, USD millions, 2024Q1 to 2026Q2. Scope proof: the table prints the line as U.S., Europe and Rest of World rows followed by an unlabelled total, which is the figure recorded. The figures are NOT Viread's own sales. The first release (2024Q1) footnote names ledipasvir/sofosbuvir (Harvoni and the authorized generic of Harvoni sold by Asegua), Hepcludex, Hepsera, Sovaldi, Viread and Vosevi. Dated changes to the footnote: Livdelzi is added from the 2024Q3 release, written Livdelzi/Lyvdelzi from 2025Q1; the 2026Q1 release drops Livdelzi/Lyvdelzi from the footnote and 2026Q2 also drops Hepsera, so from 2026Q1 the line no longer holds Livdelzi (the 2026Q1 release prints Livdelzi on a row of its own, so the line's composition changes in 2026Q1, which is a change of scope in the line and not of Viread). Four-quarter sums: 2024 466 against a printed 467; 2025 874 against a printed 874. The 2026Q1 and 2026Q2 releases restate the 2025 comparatives of the line without Livdelzi (2025Q1 121 against the 161 recorded here from its own release; 2025Q2 123 against 201), so the 2024Q3 to 2025Q4 rows include Livdelzi and the 2024Q1, 2024Q2 and 2026 rows do not.",
+  "search_log": [
+    "Listed every Gilead 8-K with Item 2.02 from data.sec.gov submissions (CIK 0000882095, recent plus older files): 2024-02-06 (2023Q4, last quarter of the gold series), then 2024-04-25, 2024-08-08, 2024-11-06, 2025-02-11, 2025-04-24, 2025-08-07, 2025-10-30, 2026-02-10, 2026-05-07 and 2026-08-04 (2026Q2). No 8-K/A with Item 2.02 in that window. Downloaded Exhibit 99.1 of each of the ten releases from 2024Q1 to 2026Q2 and searched the whole text of each for the brand: it appears only in the trademark list and in the footnote quoted in the continuation evidence; no release has a row labelled with the brand.",
+    "Read the PRODUCT SALES SUMMARY of each of the ten releases: the line the footnote belongs to is printed as U.S., Europe and Rest of World rows with an unlabelled total, and the current-quarter column of each release is the source of each row (derivation direct_reported). Cross-checks: the four quarters of 2024 and of 2025 reconcile to the full-year column printed in the Q4 release within rounding, and the six-month columns of the 2026Q2 release equal 2026Q1 plus 2026Q2 for the line.",
+    "Searched the 10-Q and 10-K filings from 2024-02-23 to 2026-08-06 (FY2023 10-K, 10-Qs for 2024Q1-Q3, FY2024 10-K, 10-Qs for 2025Q1-Q3, FY2025 10-K, 10-Qs for 2026Q1 and 2026Q2) for the brand name next to a dollar figure. After the FY2023 10-K (which still prints 2023 and earlier) the brand appears only in the same footnote to the product sales table; no filing prints a figure for it alone.",
+    "No partner or royalty-holder fallback was found to print the brand's net sales on its own: see notes for the one Gilead disclosure that names a related product pair.",
+    "The gold series' own end reason cites the same footnote; the 2024 and 2025 10-Q and 10-K product tables were re-read and Viread appears only in that footnote."
+  ],
+  "continuation": {
+    "relation": "broader_line",
+    "line_includes": [
+      "ledipasvir/sofosbuvir (Harvoni and the authorized generic version of Harvoni sold by Asegua)",
+      "Hepcludex",
+      "Hepsera",
+      "Sovaldi",
+      "Vosevi"
+    ],
+    "evidence": "Footnote (4) to 'Other Liver Disease' in the product sales summary of Gilead's first quarter 2024 earnings release (8-K Exhibit 99.1, 2024-04-25), https://www.sec.gov/Archives/edgar/data/882095/000088209524000010/exhibit991earningspressrel.htm: 'Includes ledipasvir/sofosbuvir (Harvoni and the authorized generic version of Harvoni sold by Asegua), Hepcludex, Hepsera, Sovaldi, Viread and Vosevi.'"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "drug_name": "Iressa",
+  "line_label": "Others (Oncology); printed as 'Other Oncology' in the narrative table",
+  "issuer": "AstraZeneca",
+  "benchmark_identity": "astrazeneca_iressa_continuation",
+  "revenue_scope": "Worldwide Product Sales of AstraZeneca's Oncology 'Others' line, which holds Iressa, Arimidex, Casodex and other older medicines; Zoladex, Faslodex and Orpathys are separate rows",
+  "geography": "Worldwide (World column of the quarterly Product Sales table)",
+  "why_separate": "From the Q1 2023 release AstraZeneca stopped printing an Iressa row and folded it into the Oncology 'Others' line, so the figure is the sum of several older medicines and is not Iressa's own sales.",
+  "notes": "Rows cover 2023Q1-2023Q4, the quarters in which the line has one definition. Q2 is read from the Q2 column of the H1 2023 release, Q3 from the Q3 column of the 9M release and Q4 from the Q4 column of the FY release; each sums to the YTD figure printed in the same release (66+54=120 H1, +54=174 9M, +50=224 FY). The footnote naming Iressa is printed in the Q1 2023 and H1 2023 narrative tables (Q1 release: 'Other Oncology 66 (32%) (27%) Includes Iressa , Arimidex , Casodex and other older medicines'); the 9M and FY 2023 releases print the same line with the commentary 'Generic competition' and no list. The line is not carried past 2023Q4 because its definition changes: the Q1 2024 release drops the separate Faslodex row (Other Oncology 107 a fall of 24 percent implying a Q1 2023 base of about 141, consistent with 66 plus the separately printed Faslodex 75; the base is inferred, not printed) with the commentary 'Decline in use of Iressa in China', and from 2025 Orpathys is folded in as well (H1 2025 release: 'Other Oncology includes $16m of Total Revenue from Orpathys'). Those later quarters were read but not recorded, because splicing them would change the scope inside one line. AstraZeneca's FY2023 20-F prints Iressa regionally for 2023 (US 5, China 66 in the product table of key marketed products) but no worldwide Iressa figure, and no document prints an Iressa-only quarter after 2022Q4.",
+  "search_log": [
+    "listed AstraZeneca (CIK 0000901832) filings via data.sec.gov submissions (recent block, 1,000 filings, covering 2019-06 to 2026-10) and selected every 6-K results announcement and 20-F filed after the series' last quarter through the 2026 Q2 / H1 release (6-K 0001104659-26-086846, filed 2026-07-27)",
+    "downloaded and text-searched: results announcements for Q4 2019, Q1 2020, H1 2020, Q3 2020, FY2020, Q1 2021, Q1 2022, H1 2022, Q3 2022, FY2022, Q1 2023, H1 2023, Q3 2023, FY2023, Q1 2024, H1 2024, Q3 2024, FY2024, Q1 2025, H1 2025, Q3 2025, FY2025, Q1 2026, H1 2026; and the 20-Fs for FY2021 through FY2025",
+    "filter used: form in (6-K, 20-F) from the submissions recent block, matched by primaryDocDescription containing RESULTS / H1 / Q2 / Q3 / FINAL / 20-F; H1 releases were found as 'FORM 6-K' documents named azn-<year>0630x6k.htm because their description is not 'results'; 8-K and 6-K/A are not issued by AstraZeneca for results",
+    "Q4 2022 release (0001654954-23-001503) is the last with an Iressa row (24 for Q4 2022); Q1 2023 release (0001654954-23-005296) Product Sales table lists Oncology rows Tagrisso, Imfinzi, Lynparza, Calquence, Enhertu, Orpathys, Zoladex, Faslodex, Others, and the narrative footnote names Iressa within Other Oncology",
+    "H1 2023 release (0001104659-23-085104): Oncology table Q2 column 'Others 54 (42) (39)'; narrative repeats 'Includes Iressa, Arimidex, Casodex and other older medicines'",
+    "9M 2023 release (0001654954-23-013969): Q3 column 'Others 54 (33) (30)', 9M 174; FY 2023 release (0001654954-24-001467): Q4 column 'Others 50 (22) (19)', FY 224",
+    "Q1 2024 release (0001654954-24-004975): Faslodex row gone, 'Other Oncology 107 (24%) (19%) Decline in use of Iressa in China'; Q1 2025 (0001654954-25-004737) and later: 'Other Oncology' with Faslodex generic erosion commentary and Orpathys folded in (H1 2025 footnote)",
+    "no other issuer prints Iressa sales: AstraZeneca owns the product worldwide"
+  ],
+  "continuation": {
+    "relation": "broader_line",
+    "line_includes": [
+      "Arimidex",
+      "Casodex"
+    ],
+    "evidence": "Other Oncology 66 (32%) (27%) ∗ Includes Iressa , Arimidex , Casodex and other older medicines (AstraZeneca Q1 2023 results, Form 6-K 0001654954-23-005296): https://www.sec.gov/Archives/edgar/data/901832/000165495423005296/a6110x.htm"
+  }
+}

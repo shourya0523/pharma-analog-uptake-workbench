@@ -3,9 +3,9 @@
   "therapeutic_area": "Cardiometabolic / Renal",
   "revenue_scope": "Worldwide",
   "geography": "Worldwide",
-  "series_end_quarter": "2025Q4",
-  "series_end_basis": "issuer_stopped_reporting",
-  "series_end_reason": "From the Q1 2026 report the line 'Wegovy' is split into 'Wegovy injectable' and 'Wegovy pill' and no combined Wegovy line is printed; the injectable line is kept in the Companion Series sheet as novo_wegovy_injectable (2026Q1-2026Q2) rather than spliced. (novo_wegovy_injectable: Companion Series sheet, cited but not scored.)",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
   "series_start_reason": null,
   "drug_name": "Wegovy",
   "generic_name": "semaglutide",
@@ -28,6 +28,10 @@
     "the EDGAR copies of the Q1 2018 and Q2 2018 reports (0001628280-18-005610, 0001628280-18-010747) render all tables as JPEG page images (about 30 page images each, no text tables); the same reports as published on novonordisk.com (PDF) were used for those two quarters",
     "every figure was read programmatically from a cached copy of the cited document; full-year totals printed in each Q4 report were compared with the sum of the four quarters in this series (see report)",
     "Q2 2021 report: 'Wegovy was launched in the US in June 2021'; the 2021 reports print Saxenda and Wegovy on one combined line, so 2021Q2-Q4 are read from the 2022 reports' quarterly-numbers tables (same-quarter prior-year column); Q1 2021 column is nil",
-    "Wegovy 2021 quarters (85+519+782=1,386) plus Saxenda 2021 (7,014) equal the combined 'Saxenda and Wegovy' 2021 total printed in the FY2021 report (8,400)"
-  ]
+    "Wegovy 2021 quarters (85+519+782=1,386) plus Saxenda 2021 (7,014) equal the combined 'Saxenda and Wegovy' 2021 total printed in the FY2021 report (8,400)",
+    "Q4 2025 report (caq42025.htm, 0000353278-26-000006): 'On 22 December, the US FDA approved ... oral semaglutide 25 mg, under the brand name of Wegovy pill' and 'launched on 5 January 2026'; its 'Wegovy' row (21,864) therefore pre-dates the pill; FY2025 row 79,106",
+    "Q1 2026 (caq12026.htm, 0000353278-26-000018) and Q2 2026 (caq22026.htm, 0000353278-26-000023) reports: 'Wegovy injectable' and 'Wegovy pill' are separate rows (Appendix 6 Sales split per therapy); no combined Wegovy row. Injectable 20,513 (reported; 2,278 340B reversal; 18,235 adjusted) and 19,484; pill 2,256 and 3,218 excluded",
+    "series extended rather than kept as a continuation or companion: same worldwide scope and formulation as the 2021Q2-2025Q4 rows"
+  ],
+  "notes": "Worldwide reported net sales of Wegovy injectable (formulation 'injection (pen)'). Up to 2025Q4 Novo Nordisk prints one 'Wegovy' row; the oral Wegovy pill was approved by the US FDA on 22 December 2025 and launched on 5 January 2026 (Q4 2025 report, caq42025.htm), so no pill sales are in the 'Wegovy' rows and the line is injectable only. From the Q1 2026 report the row is labelled 'Wegovy injectable' and the pill is printed as its own row ('Wegovy pill': 2,256 in Q1 2026, 3,218 in Q2 2026), which is excluded from this series; the 2026 rows are the same product and scope, not a narrower line. Reported sales are recorded throughout; 2026Q1 reported sales (20,513) include a one-off 340B provision reversal of DKK 2,278 million (adjusted sales 18,235); 2026Q2 reported and adjusted are both 19,484. Supersedes the companion series novo_wegovy_injectable (same two 2026 rows), which should be retired when this is promoted."
 }

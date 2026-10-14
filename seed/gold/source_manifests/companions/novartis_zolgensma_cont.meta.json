@@ -1,0 +1,19 @@
+{
+  "drug_name": "Zolgensma",
+  "line_label": "Zolgensma Group",
+  "issuer": "Novartis",
+  "benchmark_identity": "novartis_zolgensma_continuation",
+  "revenue_scope": "Product family: Zolgensma (IV) plus the intrathecal formulation Itvisma, as the 'Zolgensma Group' row of Novartis' product net sales tables",
+  "geography": "Worldwide",
+  "why_separate": "From 2025Q4 Novartis prints the line as 'Zolgensma Group', which holds the IV formulation and the intrathecal formulation Itvisma (approved Q4 2025); the gold series is the IV line alone under the label Zolgensma and ends 2025Q3.",
+  "notes": "The prior-year columns of the group rows (Q4 2024 262; FY 2024 1,214) equal the plain Zolgensma figures printed in the 2024 reports, so the relabelling does not restate history. The Q2 2026 report states 'Zolgensma sales were stable' inside the Zolgensma Group paragraph without a figure. Novartis prints no footnote defining the group; the inclusion of Itvisma is read from the paragraph quoted in continuation.evidence and from the Q2 2026 sentence 'Zolgensma Group (USD 365 million, +23%, +20% cc) sales grew driven by continued launch momentum from Itvisma in the US and UAE'.",
+  "search_log": [
+    "Listed Novartis (CIK 1114448) filings via data.sec.gov submissions (all 6-K and 20-F forms from 2024-01-15) and downloaded the results exhibits of Q3 2025, Q4 2025, Q1 2026 and Q2 2026; read the Neuroscience table and the Zolgensma paragraph of each.",
+    "Searched the Q4 2025 report for 'Zolgensma Group', 'Itvisma' and any footnote defining the group: no definitional footnote exists; the Zolgensma Group paragraph is the nearest statement.",
+    "Rows copied from the companion novartis_zolgensma_group_alt already in the gold manifests (same three documents), re-checked against the cited tables."
+  ],
+  "continuation": {
+    "relation": "renamed_line",
+    "evidence": "Q4 2025 report (Novartis interim financial report, Form 6-K exhibit 0001114448-26-000007), https://www.sec.gov/Archives/edgar/data/1114448/000111444826000007/a260204-99_2.htm: 'Zolgensma Group (USD 307 million, +17%, +12% cc) sales grew, reflecting strong demand for the IV formulation in the incident SMA population. Itvisma, the intrathecal formulation, was approved in both the US and UAE in Q4 2025'; Neuroscience table row 'Zolgensma Group 307 262 17 12 1 232 1 214 1 0'."
+  }
+}

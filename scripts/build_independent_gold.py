@@ -273,21 +273,25 @@ PRODUCT_METADATA = {
             "quarter of 2009. The series starts where the issuer first reports "
             "it separately."
         ),
-        "series_end_quarter": "2020Q2",
+        "series_end_quarter": "2021Q4",
         "series_end_basis": "issuer_stopped_reporting",
         "series_end_reason": (
-            "Gilead prints an em dash for Ranexa from the third quarter of 2020 - "
-            "the fourth-quarter 2021 summary shows the line as 5 for the quarter "
-            "against a dash a year earlier - and a dash is not a figure: it is "
-            "either nil or not stated, and the table does not say which. The "
-            "series stops at the last quarter carrying a number rather than "
-            "recording a zero the issuer did not print."
+            "Gilead prints Ranexa on its own line through the fourth quarter of 2021:"
+            " figures of 3 (2021Q1), 2 (2021Q2) and 5 (2021Q4), and an em dash for "
+            "2020Q3, 2020Q4 and 2021Q3, each read as nil because the year-to-date "
+            "figures printed beside them do not move (nine months 2020 of 9 equals "
+            "six months 2020 of 9; full year 2020 of 9 equals nine months; nine "
+            "months 2021 of 5 equals six months 2021 of 5). The first-quarter 2022 "
+            "release (8-K Ex 99.1, 2022-04-28) prints no Ranexa line; footnote (7) on"
+            " its 'Other' line reads 'Includes Cayston, Jyseleca, Ranexa and "
+            "Zydelig.'"
         ),
         "peak_eligible": False,
         "revenue_scope": "U.S.",
         "geography": "United States",
         "formulation": "extended-release tablet",
         "route_of_administration": "oral",
+        "reviewed_anomalies": {'2020Q3': 'Read at source: Gilead prints an em dash for Ranexa in 2020Q3; the year-to-date figures beside it do not move (nine months 2020 of 9 equals six months 2020 of 9), so the dash is a printed nil. Kept as 0.', '2020Q4': 'Read at source: Gilead prints an em dash for Ranexa in 2020Q4; the year-to-date figures beside it do not move (full year 2020 of 9 equals nine months 2020 of 9), so the dash is a printed nil. Kept as 0.', '2021Q3': 'Read at source: Gilead prints an em dash for Ranexa in 2021Q3; the year-to-date figures beside it do not move (nine months 2021 of 5 equals six months 2021 of 5), so the dash is a printed nil. Kept as 0.'},
     },
     "Letairis": {
         "generic_name": "ambrisentan",
@@ -970,13 +974,15 @@ PRODUCT_METADATA = {
             "product launched then. No launch quarter is established for it, so the "
             "span is a window on the product's life and not a launch-to-date curve."
         ),
-        "series_end_quarter": "2022Q4",
+        "series_end_quarter": "2024Q4",
         "series_end_basis": "issuer_stopped_reporting",
         "series_end_reason": (
-            "Lilly's Selected Products table in the first-quarter 2023 release "
-            "prints thirteen lines - Trulicity, Verzenio, Jardiance, Mounjaro, "
-            "Taltz, Humalog, Cyramza, Olumiant, Emgality, Tyvyt, Alimta, Retevmo "
-            "and COVID-19 antibodies - and this product is not among them."
+            "Lilly's Form 10-Q for the first quarter of 2025 prints revenue by "
+            "product as Mounjaro, Zepbound, Trulicity, Jardiance, Verzenio and Taltz "
+            "by name, with Other cardiometabolic health, Other oncology, Other "
+            "immunology, Neuroscience and Other, and Basaglar is not among them. The "
+            "series ends at 2024Q4, the last quarter derivable from the Form 10-K for"
+            " 2024 and the Form 10-Q for the third quarter of 2024."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -996,12 +1002,17 @@ PRODUCT_METADATA = {
             "product launched then. No launch quarter is established for it, so the "
             "span is a window on the product's life and not a launch-to-date curve."
         ),
-        "series_end_quarter": "2019Q4",
+        "series_end_quarter": "2024Q3",
         "series_end_basis": "issuer_stopped_reporting",
         "series_end_reason": (
-            "Lilly's Selected Products table in the first-quarter 2020 release "
-            "prints fifteen product lines and Cialis is not among them. The brand "
-            "stopped being stated separately after 2019Q4."
+            "Lilly's Form 10-K for 2024 prints revenue by product for Mounjaro, "
+            "Verzenio, Trulicity, Zepbound, Jardiance, Taltz, Humalog, Cyramza, "
+            "Olumiant, Humulin, Emgality, Basaglar, Erbitux, Tyvyt, Zyprexa and "
+            "Baqsimi, with the remainder in Other products, and Cialis is not among "
+            "them; the Form 10-Q for the first quarter of 2025 then prints only "
+            "Mounjaro, Zepbound, Trulicity, Jardiance, Verzenio and Taltz by name. "
+            "The fourth quarter of 2024 is not printed or derivable, so the series "
+            "ends at 2024Q3."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -1021,12 +1032,15 @@ PRODUCT_METADATA = {
             "product launched then. No launch quarter is established for it, so the "
             "span is a window on the product's life and not a launch-to-date curve."
         ),
-        "series_end_quarter": "2023Q4",
+        "series_end_quarter": "2024Q4",
         "series_end_basis": "issuer_stopped_reporting",
         "series_end_reason": (
-            "Lilly narrowed Selected Products to seven lines in the first-quarter "
-            "2024 release - Mounjaro, Trulicity, Verzenio, Jardiance, Taltz, "
-            "Humalog and Zepbound - and this product is not among them."
+            "Lilly's Form 10-Q for the first quarter of 2025 prints revenue by "
+            "product as Mounjaro, Zepbound, Trulicity, Jardiance, Verzenio and Taltz "
+            "by name, with Other cardiometabolic health, Other oncology, Other "
+            "immunology, Neuroscience and Other, and Cyramza is not among them. The "
+            "series ends at 2024Q4, the last quarter derivable from the Form 10-K for"
+            " 2024 and the Form 10-Q for the third quarter of 2024."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -1041,13 +1055,9 @@ PRODUCT_METADATA = {
         "therapeutic_area": "Neuroscience",
         "commercial_start_quarter": "2018Q4",
         "launch_quarter": "2018Q4",
-        "series_end_quarter": "2023Q4",
-        "series_end_basis": "issuer_stopped_reporting",
-        "series_end_reason": (
-            "Lilly narrowed Selected Products to seven lines in the first-quarter "
-            "2024 release - Mounjaro, Trulicity, Verzenio, Jardiance, Taltz, "
-            "Humalog and Zepbound - and this product is not among them."
-        ),
+        "series_end_quarter": None,
+        "series_end_basis": None,
+        "series_end_reason": None,
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
         "formulation": "injection",
@@ -1065,13 +1075,17 @@ PRODUCT_METADATA = {
             "product launched then. No launch quarter is established for it, so the "
             "span is a window on the product's life and not a launch-to-date curve."
         ),
-        "series_end_quarter": "2022Q4",
+        "series_end_quarter": "2024Q3",
         "series_end_basis": "issuer_stopped_reporting",
         "series_end_reason": (
-            "Lilly's Selected Products table in the first-quarter 2023 release "
-            "prints thirteen lines - Trulicity, Verzenio, Jardiance, Mounjaro, "
-            "Taltz, Humalog, Cyramza, Olumiant, Emgality, Tyvyt, Alimta, Retevmo "
-            "and COVID-19 antibodies - and this product is not among them."
+            "Lilly's Form 10-K for 2024 prints revenue by product for Mounjaro, "
+            "Verzenio, Trulicity, Zepbound, Jardiance, Taltz, Humalog, Cyramza, "
+            "Olumiant, Humulin, Emgality, Basaglar, Erbitux, Tyvyt, Zyprexa and "
+            "Baqsimi, with the remainder in Other products, and Forteo is not among "
+            "them; the Form 10-Q for the first quarter of 2025 then prints only "
+            "Mounjaro, Zepbound, Trulicity, Jardiance, Verzenio and Taltz by name. "
+            "The fourth quarter of 2024 is not printed or derivable, so the series "
+            "ends at 2024Q3."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -1087,15 +1101,9 @@ PRODUCT_METADATA = {
         "commercial_start_quarter": "2002Q1",
         "series_start_reason": "No issuer document fixes the launch quarter, so the series is not read as launch-to-date. It starts 2002Q1: 2002Q1 is the earliest quarter taken. Lilly's earnings releases were first filed as 8-K exhibits for Q1 2003; the 2002 quarters come from the prior-year columns of the 2003 releases. The 10-Qs for 2001 and 2002 and the 10-K for 2001 give Humalog only as sentences of narrative text (e.g. 'Worldwide Humalog sales of $164.3 million for the quarter'), not as revenue-table rows, and Q4 2001 would have to be derived from a narrative annual figure, so the series stops at 2002Q1 by choice of source type rather than because Lilly stopped reporting the product; the 1996-2001 quarters were not sourced.",
         "peak_eligible": False,
-        "series_end_quarter": "2024Q4",
-        "series_end_basis": "issuer_stopped_reporting",
-        "series_end_reason": (
-            "From the first quarter of 2025 Lilly reports by therapeutic area - "
-            "Mounjaro, Zepbound, Trulicity and Jardiance by name, then Other and "
-            "Total cardiometabolic health, and the same shape for oncology, "
-            "immunology and neuroscience. Humalog sits inside Other cardiometabolic "
-            "health from that quarter and is no longer a line of its own."
-        ),
+        "series_end_quarter": None,
+        "series_end_basis": None,
+        "series_end_reason": None,
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
         "formulation": "injection",
@@ -1113,13 +1121,15 @@ PRODUCT_METADATA = {
             "product launched then. No launch quarter is established for it, so the "
             "span is a window on the product's life and not a launch-to-date curve."
         ),
-        "series_end_quarter": "2022Q4",
+        "series_end_quarter": "2024Q4",
         "series_end_basis": "issuer_stopped_reporting",
         "series_end_reason": (
-            "Lilly's Selected Products table in the first-quarter 2023 release "
-            "prints thirteen lines - Trulicity, Verzenio, Jardiance, Mounjaro, "
-            "Taltz, Humalog, Cyramza, Olumiant, Emgality, Tyvyt, Alimta, Retevmo "
-            "and COVID-19 antibodies - and this product is not among them."
+            "Lilly's Form 10-Q for the first quarter of 2025 prints revenue by "
+            "product as Mounjaro, Zepbound, Trulicity, Jardiance, Verzenio and Taltz "
+            "by name, with Other cardiometabolic health, Other oncology, Other "
+            "immunology, Neuroscience and Other, and Humulin is not among them. The "
+            "series ends at 2024Q4, the last quarter derivable from the Form 10-K for"
+            " 2024 and the Form 10-Q for the third quarter of 2024."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -1160,13 +1170,9 @@ PRODUCT_METADATA = {
         "therapeutic_area": "Immunology",
         "commercial_start_quarter": "2017Q1",
         "launch_quarter": "2017Q1",
-        "series_end_quarter": "2023Q4",
-        "series_end_basis": "issuer_stopped_reporting",
-        "series_end_reason": (
-            "Lilly narrowed Selected Products to seven lines in the first-quarter "
-            "2024 release - Mounjaro, Trulicity, Verzenio, Jardiance, Taltz, "
-            "Humalog and Zepbound - and this product is not among them."
-        ),
+        "series_end_quarter": None,
+        "series_end_basis": None,
+        "series_end_reason": None,
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
         "formulation": "tablet",
@@ -1184,13 +1190,9 @@ PRODUCT_METADATA = {
             "launch quarter is not established here, so the span is not read as "
             "launch-to-date."
         ),
-        "series_end_quarter": "2023Q4",
-        "series_end_basis": "issuer_stopped_reporting",
-        "series_end_reason": (
-            "Lilly narrowed Selected Products to seven lines in the first-quarter "
-            "2024 release - Mounjaro, Trulicity, Verzenio, Jardiance, Taltz, "
-            "Humalog and Zepbound - and this product is not among them."
-        ),
+        "series_end_quarter": None,
+        "series_end_basis": None,
+        "series_end_reason": None,
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
@@ -1204,20 +1206,9 @@ PRODUCT_METADATA = {
         "therapeutic_area": "Immunology",
         "commercial_start_quarter": "2016Q2",
         "launch_quarter": "2016Q2",
-        "series_end_quarter": "2025Q3",
-        "series_end_basis": "issuer_stopped_reporting",
-        "series_end_reason": (
-            "The break is one quarter wide and the issuer's, not this dataset's. "
-            "Lilly's fourth-quarter 2025 release narrows Selected Products to "
-            "Mounjaro, Zepbound and Verzenio, and the 2025 Form 10-K states this "
-            "product only as full-year U.S. and outside-U.S. columns with no "
-            "worldwide total, so no worldwide 2025Q4 figure is published at all. "
-            "The line returns in the first quarter of 2026, where Lilly prints "
-            "U.S., outside-U.S. and Total by therapeutic area. The series cannot "
-            "cross the missing quarter without inventing it: the only route would "
-            "sum two regional columns into a full year Lilly never printed as a "
-            "total, then subtract nine months from that."
-        ),
+        "series_end_quarter": None,
+        "series_end_basis": None,
+        "series_end_reason": None,
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
         "formulation": "injection",
@@ -2344,6 +2335,19 @@ def gilead_row(drug_name: str, source: dict[str, str]) -> dict[str, Any]:
     )
 
 
+def mark_reviewed(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Attach the reviewed-anomaly note a product's metadata gives for a quarter.
+
+    A value checked at source and kept although it looks wrong (a printed nil,
+    a negative quarter, a one-off reversal) says why, whichever builder made it.
+    """
+    for row in rows:
+        reason = PRODUCT_METADATA.get(row["drug_name"], {}).get("reviewed_anomalies", {}).get(row["period"])
+        if reason:
+            row["reviewed_anomaly"] = reason
+    return rows
+
+
 def build_gilead_comparators() -> list[dict[str, Any]]:
     """Gilead products outside pulmonary hypertension, 2016-2019."""
     rows: list[dict[str, Any]] = []
@@ -2352,7 +2356,7 @@ def build_gilead_comparators() -> list[dict[str, Any]]:
             gilead_row(drug_name, source)
             for source in read_csv(SOURCE_DIR / manifest)
         )
-    return rows
+    return mark_reviewed(rows)
 
 
 # The same eleven exhibit lines the J&J metadata block describes, one manifest
@@ -2403,7 +2407,7 @@ def build_jnj_comparators() -> list[dict[str, Any]]:
             )
             for source in read_csv(SOURCE_DIR / manifest)
         )
-    return rows
+    return mark_reviewed(rows)
 
 
 # Lilly prints one Selected Products table per quarterly release, so - like the
@@ -2447,7 +2451,7 @@ def build_lilly_comparators() -> list[dict[str, Any]]:
             )
             for source in read_csv(SOURCE_DIR / manifest)
         )
-    return rows
+    return mark_reviewed(rows)
 
 
 def build_researched_products() -> list[dict[str, Any]]:

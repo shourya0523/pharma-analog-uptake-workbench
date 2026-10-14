@@ -1,0 +1,19 @@
+{
+  "drug_name": "Utibron Neohaler",
+  "line_label": "Ultibro Breezhaler",
+  "issuer": "Novartis",
+  "benchmark_identity": "novartis_utibron_neohaler_continuation",
+  "revenue_scope": "Novartis net sales of Ultibro Breezhaler outside the US: the rest-of-world piece of the line the gold series carries worldwide (Sunovion assumed US commercialization rights on December 21, 2016)",
+  "geography": "Worldwide excluding the US",
+  "why_separate": "The gold series is Novartis's worldwide row, which included US sales while Novartis held US rights and ends 2016Q4. From 2017Q1 Novartis prints the same brand row for the territories it kept, so the rows are a narrower scope and are not spliced onto the series. The line stops at 2019Q4 because from 2020Q1 Novartis prints only the Ultibro Group (see novartis_utibron_neohaler_cont_group).",
+  "notes": "Quarters read from the quarter's own interim report (Form 6-K exhibit 99.2), quarter-only table. Four quarters sum to the full years printed in the fourth-quarter reports: 2017 91+99+101+120=411 (FY 411), 2018 106+116+110+122=454 (FY 454), 2019 104+112+97+114=427 (FY 427).",
+  "search_log": [
+    "Listed Novartis (CIK 1114448) filings via data.sec.gov submissions (all forms, all pages, not filtered to one form); took every 6-K and 6-K/A filed in the four results windows (mid-Jan to mid-Feb, mid-Apr to mid-May, mid-Jul to mid-Aug, mid-Oct to mid-Nov) from 2009 through 2026-07-21, fetched each filing's index.json and downloaded every .htm/.pdf document that is not an XBRL R-file, then searched all of them for each brand name and parsed the product net sales tables by script (row label equal to the brand, header naming the quarter and no H1/9M/FY column).",
+    "Downloaded the Forms 20-F filed 2018 to 2026 (FY2017 to FY2025) and searched their tables and text for the brand and group names: the FY2018 to FY2022 filings print the rows with full-year figures equal to the fourth-quarter reports, and the FY2023 to FY2025 filings print no row for them.",
+    "Looked for a US successor line (rung c): Sumitomo Pharma (owner of Sunovion) supplementary financial data ebr20170127.2, ebr20170511.2 to ebr20200130.2 (pdfplumber text of the North America sales pages). It prints one US row for the three brands together: 'New products for COPD' in FY2016-FY2017 (footnote: UTIBRON, SEEBRI, ARCAPTA and a fourth product, glycopyrronium bromide / LONHALA MAGNAIR), then 'Therapeutic agent for COPD (in-licensed 3 products)' (footnote UTIBRON, SEEBRI, ARCAPTA) in the FY2018 files ebr20180511.2 to ebr20190510.2, and no such row from ebr20190729.2 (FY2019 first quarter), where 'Therapeutic agent for COPD' labels LONHALA MAGNAIR alone. The columns are cumulative year-to-date, in billions of yen to one decimal and in integer millions of dollars (for example Apr.-Dec. 2018 '4', full year FY2018 '5'), so every quarter would be a difference of two rounded integers of the same size as the quarter itself. Not written as a continuation: it is a combined three-brand US line whose quarters cannot be derived without estimating."
+  ],
+  "continuation": {
+    "relation": "narrower_line",
+    "evidence": "'In the US, Sunovion Pharmaceuticals Inc. assumes US commercialization rights for Utibron Neohaler, Arcapta Neohaler and Seebri Neohaler. Novartis will continue to bring Ultibro Breezhaler, Onbrez Breezhaler and Seebri Breezhaler to patients with COPD outside of the US.' (Novartis Q1 2017 interim report, https://www.sec.gov/Archives/edgar/data/1114448/000137036817000038/a170425-99_2.htm; the same report prints the brand rows 'Ultibro Breezhaler | 91 | 78', 'Seebri Breezhaler | 36 | 35', 'Onbrez Breezhaler/Arcapta Neohaler | 28 | 33')."
+  }
+}

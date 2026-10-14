@@ -1,0 +1,25 @@
+{
+  "drug_name": "Sovaldi",
+  "line_label": "Other",
+  "issuer": "Gilead",
+  "benchmark_identity": "gilead_sovaldi_continuation",
+  "revenue_scope": "Worldwide: Gilead's residual 'Other' product line, which holds Sovaldi together with the products its footnote names",
+  "geography": "Worldwide",
+  "why_separate": "Gilead stopped printing Sovaldi after 2017Q4. From the second-quarter 2018 release it sits in an unlabelled residual line 'Other', whose footnote names Sovaldi with Cayston and Hepsera, so the figure is the sum of those products and not Sovaldi's own sales.",
+  "notes": "Rows cover 2018Q1 to 2020Q3 and stop where the line stops holding Sovaldi alongside only residual products. The footnote reads 'Cayston, Hepsera and Sovaldi' except in 2020Q3 (third quarter 2020), which adds Tecartus (launched 2020). From the fourth-quarter 2020 release Sovaldi moves to 'Other HCV' (footnote 'Includes Vosevi and Sovaldi.', 2020Q4 to 2023Q4) and from the first-quarter 2024 release to 'Other Liver Disease' (which also holds Hepcludex, Viread and ledipasvir/sofosbuvir); those later lines are not part of this file. The first-quarter 2018 release prints the HCV aggregate (Epclusa, Harvoni, Vosevi and Sovaldi, $1,046 million) in prose and lists the residual as 'Other Antiviral' without a footnote, so 2018Q1 is read from the 2019Q1 prior-year column.",
+  "search_log": [
+    "Pulled data.sec.gov submissions for CIK 0000882095 (recent and older pages); downloaded the Exhibit 99.1 of every Item 2.02 8-K from 2018-02 to 2026-08 (the 2022-02-01 duplicate 8-K from another filer agent and the 2021-01-11 guidance release carry no product table) and parsed the product sales tables.",
+    "Downloaded every 10-Q and 10-K filed 2021-02 to 2026-08 and searched the revenue-disaggregation notes for the product; no separate line after the stop dates stated below.",
+    "Web search for a partner, licensee or royalty holder printing the product's net sales after the stop (Gilead is sole seller; Atripla JV partner history only in 2010-era 10-K); nothing found.",
+    "First-quarter 2018 release (8-K 0000882095-18-000012): no Sovaldi row; HCV aggregate in prose; table residual 'Other Antiviral' unfootnoted. Second-quarter 2018 release is the first to print 'Other (3)' with the Sovaldi footnote."
+  ],
+  "continuation": {
+    "relation": "broader_line",
+    "evidence": "Footnote (3) of the second quarter 2018 release: 'Includes Cayston, Hepsera and Sovaldi' under the 'Other (3)' U.S., Europe and Other International lines. https://www.sec.gov/Archives/edgar/data/882095/000088209518000019/exhibit991earningspressrel.htm",
+    "line_includes": [
+      "Cayston",
+      "Hepsera",
+      "Tecartus"
+    ]
+  }
+}

@@ -1192,9 +1192,10 @@ def test_every_comparator_year_reconciles_to_its_stated_full_year():
     comparators = {**builder.GILEAD_COMPARATORS, **builder.JNJ_COMPARATORS}
     # "quarter | prior-year quarter | year-to-date | prior-year year-to-date":
     # a direct fourth-quarter reading's third value is the stated full year.
+    # A prior-year column may print an em-dash for a nil quarter or year.
     quote_pattern = re.compile(
         r"twelve months (\d{4}) and \d{4}.*?"
-        r"\|\s*[\d,]+\s*\|\s*[\d,]+\s*\|\s*([\d,]+)\s*\|\s*[\d,]+\s*$"
+        r"\|\s*[\d,]+\s*\|\s*(?:[\d,]+|—|-)\s*\|\s*([\d,]+)\s*\|\s*(?:[\d,]+|—|-)\s*$"
     )
     # The backfilled quarters are quoted from the SEC exhibit rather than
     # Gilead's newsroom, and the exhibit announces its columns in a header row -

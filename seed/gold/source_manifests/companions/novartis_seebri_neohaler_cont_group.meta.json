@@ -1,0 +1,23 @@
+{
+  "drug_name": "Seebri Neohaler",
+  "line_label": "Ultibro Group",
+  "issuer": "Novartis",
+  "benchmark_identity": "novartis_seebri_neohaler_continuation_group",
+  "revenue_scope": "Novartis net sales of the Ultibro Group: Ultibro Breezhaler, Seebri Breezhaler and Onbrez Breezhaler, the three brands Novartis kept outside the US",
+  "geography": "Worldwide excluding the US (inferred, see notes)",
+  "why_separate": "From the Q1 2020 report Novartis stops printing Seebri Breezhaler on its own row and prints one 'Ultibro Group' row for the three inhaled COPD brands, so the figure is the combined line and not Seebri Neohaler's own.",
+  "notes": "Group definition quoted from the Q1 2020 report. The territory is inferred, not printed: Q1 2020's group figure for Q1 2019 is 157, which equals the sum of the three ex-US brand rows printed in the Q1 2019 report (Ultibro Breezhaler 104 + Seebri Breezhaler 31 + Onbrez Breezhaler 22); the 2020 reports do not restate the territory. Four quarters sum to the full years printed in the fourth-quarter reports: 2020 160+149+154+160=623 (FY 623), 2021 149+150+137+148=584 (FY 584), 2022 132+126+108+113=479 (FY 479). The line ends at 2023Q3: the Q4 2023 report (accession 0001370368-24-000007) prints no Ultibro Group row, its established brands table lists Exforge Group, Galvus Group, Diovan Group, Gleevec/Glivec and 'Other', and the FY2023 Form 20-F (0001370368-24-000004) prints no FY2023 figure for the group, so 2023Q4 can be neither read nor derived. Later reports name the group nowhere.",
+  "search_log": [
+    "Listed Novartis (CIK 1114448) filings via data.sec.gov submissions (all forms, all pages, not filtered to one form); took every 6-K and 6-K/A filed in the four results windows (mid-Jan to mid-Feb, mid-Apr to mid-May, mid-Jul to mid-Aug, mid-Oct to mid-Nov) from 2009 through 2026-07-21, fetched each filing's index.json and downloaded every .htm/.pdf document that is not an XBRL R-file, then searched all of them for each brand name and parsed the product net sales tables by script (row label equal to the brand, header naming the quarter and no H1/9M/FY column).",
+    "Downloaded the Forms 20-F filed 2018 to 2026 (FY2017 to FY2025) and searched their tables and text for the brand and group names: the FY2018 to FY2022 filings print the rows with full-year figures equal to the fourth-quarter reports, and the FY2023 to FY2025 filings print no row for them.",
+    "Looked for a US successor line (rung c): Sumitomo Pharma (owner of Sunovion) supplementary financial data ebr20170127.2, ebr20170511.2 to ebr20200130.2 (pdfplumber text of the North America sales pages). It prints one US row for the three brands together: 'New products for COPD' in FY2016-FY2017 (footnote: UTIBRON, SEEBRI, ARCAPTA and a fourth product, glycopyrronium bromide / LONHALA MAGNAIR), then 'Therapeutic agent for COPD (in-licensed 3 products)' (footnote UTIBRON, SEEBRI, ARCAPTA) in the FY2018 files ebr20180511.2 to ebr20190510.2, and no such row from ebr20190729.2 (FY2019 first quarter), where 'Therapeutic agent for COPD' labels LONHALA MAGNAIR alone. The columns are cumulative year-to-date, in billions of yen to one decimal and in integer millions of dollars (for example Apr.-Dec. 2018 '4', full year FY2018 '5'), so every quarter would be a difference of two rounded integers of the same size as the quarter itself. Not written as a continuation: it is a combined three-brand US line whose quarters cannot be derived without estimating."
+  ],
+  "continuation": {
+    "relation": "broader_line",
+    "line_includes": [
+      "Ultibro Breezhaler",
+      "Onbrez Breezhaler"
+    ],
+    "evidence": "'Ultibro Group is consisting of inhaled COPD therapies Ultibro Breezhaler, Seebri Breezhaler and Onbrez Breezhaler.' (Novartis Q1 2020 interim report, https://www.sec.gov/Archives/edgar/data/1114448/000137036820000061/a200428-99_2.htm, row 'Ultibro Group | 160 | 157 | 2 | 5')."
+  }
+}

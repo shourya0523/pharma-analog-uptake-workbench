@@ -1,0 +1,25 @@
+{
+  "drug_name": "Atripla",
+  "line_label": "Other HIV",
+  "issuer": "Gilead",
+  "benchmark_identity": "gilead_atripla_continuation",
+  "revenue_scope": "Worldwide: Gilead's 'Other HIV' line, which holds Atripla together with the products its footnote names",
+  "geography": "Worldwide",
+  "why_separate": "Gilead stopped printing Atripla on its own after 2021Q4; from the first-quarter 2022 release it sits in 'Other HIV', so the figure is the sum of the products the footnote names and not Atripla's own sales.",
+  "notes": "Rows cover 2022Q1 to 2023Q4. The footnote reads 'Includes Atripla, Emtriva and Tybost.' for 2022Q1 to 2022Q3 and adds Sunlenca from the fourth-quarter 2022 release. From the first-quarter 2024 release the footnote adds Complera/Eviplera, Stribild and Truvada and the line steps up several-fold, so it is a different quantity and is not included. In the 10-Qs and 10-Ks filed after 2021 Atripla appears only in the trademark list, litigation text and this footnote, never in a revenue table.",
+  "search_log": [
+    "Pulled data.sec.gov submissions for CIK 0000882095 (recent and older pages); downloaded the Exhibit 99.1 of every Item 2.02 8-K from 2018-02 to 2026-08 (the 2022-02-01 duplicate 8-K from another filer agent and the 2021-01-11 guidance release carry no product table) and parsed the product sales tables.",
+    "Downloaded every 10-Q and 10-K filed 2021-02 to 2026-08 and searched the revenue-disaggregation notes for the product; no separate line after the stop dates stated below.",
+    "Web search for a partner, licensee or royalty holder printing the product's net sales after the stop (Gilead is sole seller; Atripla JV partner history only in 2010-era 10-K); nothing found.",
+    "First-quarter 2022 release (8-K 0000882095-22-000010): no Atripla row; footnote on Other HIV names Atripla, Emtriva and Tybost."
+  ],
+  "continuation": {
+    "relation": "broader_line",
+    "evidence": "Footnote (2) of the first quarter 2022 release: 'Includes Atripla, Emtriva and Tybost.' under the 'Other HIV (2)' U.S., Europe and Other International lines. https://www.sec.gov/Archives/edgar/data/882095/000088209522000010/exhibit991earningspressrel.htm",
+    "line_includes": [
+      "Emtriva",
+      "Tybost",
+      "Sunlenca"
+    ]
+  }
+}

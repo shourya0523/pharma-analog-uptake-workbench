@@ -1,0 +1,20 @@
+{
+  "drug_name": "Epclusa",
+  "line_label": "Sofosbuvir/Velpatasvir",
+  "issuer": "Gilead",
+  "benchmark_identity": "gilead_epclusa_continuation",
+  "revenue_scope": "Worldwide: Epclusa plus the authorized generic sold by Gilead's subsidiary Asegua Therapeutics LLC",
+  "geography": "Worldwide",
+  "why_separate": "From 2019Q1 the line is relabelled Sofosbuvir/Velpatasvir and its footnote states it consists of sales of Epclusa and of the authorized generic sold by Asegua, which the published figures do not separate, so it is not Epclusa the brand.",
+  "notes": "Rows 2019Q1 to 2026Q2. Spacing of the label changes to 'Sofosbuvir / Velpatasvir' from the fourth-quarter 2020 release and the third region is labelled 'Rest of World' instead of 'Other International' from the first-quarter 2024 release; the 2026Q1 release prints the region lines under a heading row. Four-quarter sums match the full years printed in each fourth-quarter release.",
+  "search_log": [
+    "Pulled data.sec.gov submissions for CIK 0000882095 (recent and older pages); downloaded the Exhibit 99.1 of every Item 2.02 8-K from 2018-02 to 2026-08 (the 2022-02-01 duplicate 8-K from another filer agent and the 2021-01-11 guidance release carry no product table) and parsed the product sales tables.",
+    "Downloaded every 10-Q and 10-K filed 2021-02 to 2026-08 and searched the revenue-disaggregation notes for the product; no separate line after the stop dates stated below.",
+    "Web search for a partner, licensee or royalty holder printing the product's net sales after the stop (Gilead is sole seller; Atripla JV partner history only in 2010-era 10-K); nothing found.",
+    "First-quarter 2019 release (8-K 0000882095-19-000011) is the first with the renamed line; its prior-year column (536) equals the 2018Q1 Epclusa worldwide total."
+  ],
+  "continuation": {
+    "relation": "renamed_line",
+    "evidence": "Footnote (4) of the first quarter 2019 release: 'Amounts consist of sales of Epclusa and the authorized generic version of Epclusa sold by Gilead's separate subsidiary, Asegua Therapeutics LLC' on the 'Sofosbuvir/Velpatasvir (4)' lines. https://www.sec.gov/Archives/edgar/data/882095/000088209519000011/exhibit991earningspressrel.htm"
+  }
+}

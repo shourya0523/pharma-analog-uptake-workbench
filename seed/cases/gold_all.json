@@ -44750,6 +44750,76 @@
   ]
  },
  {
+  "drug_name": "Basaglar",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "insulin glargine",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 209.3,
+    "gold_id": "lilly-basaglar-worldwide-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 154.2,
+    "gold_id": "lilly-basaglar-worldwide-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 179.6,
+    "gold_id": "lilly-basaglar-worldwide-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 185.2,
+    "gold_id": "lilly-basaglar-worldwide-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Basaglar",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "insulin glargine",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 157.6,
+    "gold_id": "lilly-basaglar-worldwide-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 180.8,
+    "gold_id": "lilly-basaglar-worldwide-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 161.6,
+    "gold_id": "lilly-basaglar-worldwide-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 176.9,
+    "gold_id": "lilly-basaglar-worldwide-reported-2024q4"
+   }
+  ]
+ },
+ {
   "drug_name": "Cialis",
   "manufacturer": "Eli Lilly",
   "ticker": "LLY",
@@ -44836,6 +44906,181 @@
     "period": "2019Q4",
     "value_normalized_usd_millions": 197.8,
     "gold_id": "lilly-cialis-worldwide-reported-2019q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cialis",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "tadalafil",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 193.0,
+    "gold_id": "lilly-cialis-worldwide-reported-2020q1"
+   },
+   {
+    "period": "2020Q2",
+    "value_normalized_usd_millions": 130.7,
+    "gold_id": "lilly-cialis-worldwide-reported-2020q2"
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": 162.5,
+    "gold_id": "lilly-cialis-worldwide-reported-2020q3"
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": 120.9,
+    "gold_id": "lilly-cialis-worldwide-reported-2020q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cialis",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "tadalafil",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 126.8,
+    "gold_id": "lilly-cialis-worldwide-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 281.0,
+    "gold_id": "lilly-cialis-worldwide-reported-2021q2"
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": 130.9,
+    "gold_id": "lilly-cialis-worldwide-reported-2021q3"
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": 179.7,
+    "gold_id": "lilly-cialis-worldwide-reported-2021q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cialis",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "tadalafil",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 217.7,
+    "gold_id": "lilly-cialis-worldwide-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 147.0,
+    "gold_id": "lilly-cialis-worldwide-reported-2022q2"
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": 115.7,
+    "gold_id": "lilly-cialis-worldwide-reported-2022q3"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 106.9,
+    "gold_id": "lilly-cialis-worldwide-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cialis",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "tadalafil",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 100.3,
+    "gold_id": "lilly-cialis-worldwide-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 115.6,
+    "gold_id": "lilly-cialis-worldwide-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 86.8,
+    "gold_id": "lilly-cialis-worldwide-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 78.8,
+    "gold_id": "lilly-cialis-worldwide-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cialis",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "tadalafil",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 139.3,
+    "gold_id": "lilly-cialis-worldwide-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 87.7,
+    "gold_id": "lilly-cialis-worldwide-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 91.5,
+    "gold_id": "lilly-cialis-worldwide-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2024Q3. Lilly's Form 10-K for 2024 prints revenue by product for Mounjaro, Verzenio, Trulicity, Zepbound, Jardiance, Taltz, Humalog, Cyramza, Olumiant, Humulin, Emgality, Basaglar, Erbitux, Tyvyt, Zyprexa and Baqsimi, with the remainder in Other products, and Cialis is not among them; the Form 10-Q for the first quarter of 2025 then prints only Mounjaro, Zepbound, Trulicity, Jardiance, Verzenio and Taltz by name. The fourth quarter of 2024 is not printed or derivable, so the series ends at 2024Q3."
    }
   ]
  },
@@ -45066,6 +45311,41 @@
     "period": "2023Q4",
     "value_normalized_usd_millions": 253.6,
     "gold_id": "lilly-cyramza-worldwide-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cyramza",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "ramucirumab",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 229.9,
+    "gold_id": "lilly-cyramza-worldwide-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 248.9,
+    "gold_id": "lilly-cyramza-worldwide-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 236.0,
+    "gold_id": "lilly-cyramza-worldwide-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 258.6,
+    "gold_id": "lilly-cyramza-worldwide-reported-2024q4"
    }
   ]
  },
@@ -45345,6 +45625,101 @@
   ]
  },
  {
+  "drug_name": "Emgality",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "galcanezumab",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 225.7,
+    "gold_id": "lilly-emgality-worldwide-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 192.0,
+    "gold_id": "lilly-emgality-worldwide-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 202.9,
+    "gold_id": "lilly-emgality-worldwide-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 249.8,
+    "gold_id": "lilly-emgality-worldwide-reported-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Emgality",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "galcanezumab",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 124.6,
+    "gold_id": "lilly-emgality-worldwide-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 201.1,
+    "gold_id": "lilly-emgality-worldwide-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 175.7,
+    "gold_id": "lilly-emgality-worldwide-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 246.0,
+    "gold_id": "lilly-emgality-worldwide-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Emgality",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "galcanezumab",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 174.0,
+    "gold_id": "lilly-emgality-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 191.0,
+    "gold_id": "lilly-emgality-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Forteo",
   "manufacturer": "Eli Lilly",
   "ticker": "LLY",
@@ -45536,6 +45911,76 @@
     "period": "2022Q4",
     "value_normalized_usd_millions": 160.0,
     "gold_id": "lilly-forteo-worldwide-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Forteo",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "teriparatide",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 122.3,
+    "gold_id": "lilly-forteo-worldwide-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 148.0,
+    "gold_id": "lilly-forteo-worldwide-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 146.4,
+    "gold_id": "lilly-forteo-worldwide-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 116.4,
+    "gold_id": "lilly-forteo-worldwide-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Forteo",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "teriparatide",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 61.3,
+    "gold_id": "lilly-forteo-worldwide-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 69.9,
+    "gold_id": "lilly-forteo-worldwide-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 118.1,
+    "gold_id": "lilly-forteo-worldwide-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2024Q3. Lilly's Form 10-K for 2024 prints revenue by product for Mounjaro, Verzenio, Trulicity, Zepbound, Jardiance, Taltz, Humalog, Cyramza, Olumiant, Humulin, Emgality, Basaglar, Erbitux, Tyvyt, Zyprexa and Baqsimi, with the remainder in Other products, and Forteo is not among them; the Form 10-Q for the first quarter of 2025 then prints only Mounjaro, Zepbound, Trulicity, Jardiance, Verzenio and Taltz by name. The fourth quarter of 2024 is not printed or derivable, so the series ends at 2024Q3."
    }
   ]
  },
@@ -46345,6 +46790,66 @@
   ]
  },
  {
+  "drug_name": "Humalog",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "insulin lispro",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 537.2,
+    "gold_id": "lilly-humalog-worldwide-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 503.1,
+    "gold_id": "lilly-humalog-worldwide-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 599.1,
+    "gold_id": "lilly-humalog-worldwide-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 529.0,
+    "gold_id": "lilly-humalog-worldwide-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Humalog",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "insulin lispro",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 442.0,
+    "gold_id": "lilly-humalog-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 410.0,
+    "gold_id": "lilly-humalog-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Humulin",
   "manufacturer": "Eli Lilly",
   "ticker": "LLY",
@@ -46536,6 +47041,76 @@
     "period": "2022Q4",
     "value_normalized_usd_millions": 234.0,
     "gold_id": "lilly-humulin-worldwide-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Humulin",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "human insulin",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 252.0,
+    "gold_id": "lilly-humulin-worldwide-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 205.3,
+    "gold_id": "lilly-humulin-worldwide-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 206.7,
+    "gold_id": "lilly-humulin-worldwide-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 188.1,
+    "gold_id": "lilly-humulin-worldwide-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Humulin",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "human insulin",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 206.2,
+    "gold_id": "lilly-humulin-worldwide-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 223.6,
+    "gold_id": "lilly-humulin-worldwide-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 207.1,
+    "gold_id": "lilly-humulin-worldwide-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 280.3,
+    "gold_id": "lilly-humulin-worldwide-reported-2024q4"
    }
   ]
  },
@@ -47435,6 +48010,101 @@
   ]
  },
  {
+  "drug_name": "Olumiant",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "baricitinib",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 217.4,
+    "gold_id": "lilly-olumiant-worldwide-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 227.7,
+    "gold_id": "lilly-olumiant-worldwide-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 250.8,
+    "gold_id": "lilly-olumiant-worldwide-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 261.5,
+    "gold_id": "lilly-olumiant-worldwide-reported-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Olumiant",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "baricitinib",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 228.7,
+    "gold_id": "lilly-olumiant-worldwide-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 246.4,
+    "gold_id": "lilly-olumiant-worldwide-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 268.9,
+    "gold_id": "lilly-olumiant-worldwide-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 267.0,
+    "gold_id": "lilly-olumiant-worldwide-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Olumiant",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "baricitinib",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 246.0,
+    "gold_id": "lilly-olumiant-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 258.0,
+    "gold_id": "lilly-olumiant-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Omvoh",
   "manufacturer": "Eli Lilly",
   "ticker": "LLY",
@@ -47591,6 +48261,101 @@
     "period": "2023Q4",
     "value_normalized_usd_millions": 73.4,
     "gold_id": "lilly-retevmo-worldwide-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Retevmo",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "selpercatinib",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 69.2,
+    "gold_id": "lilly-retevmo-worldwide-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 91.2,
+    "gold_id": "lilly-retevmo-worldwide-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 114.0,
+    "gold_id": "lilly-retevmo-worldwide-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 90.0,
+    "gold_id": "lilly-retevmo-worldwide-reported-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Retevmo",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "selpercatinib",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 91.0,
+    "gold_id": "lilly-retevmo-worldwide-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 125.3,
+    "gold_id": "lilly-retevmo-worldwide-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 112.0,
+    "gold_id": "lilly-retevmo-worldwide-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 128.0,
+    "gold_id": "lilly-retevmo-worldwide-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Retevmo",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "selpercatinib",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 130.0,
+    "gold_id": "lilly-retevmo-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 144.0,
+    "gold_id": "lilly-retevmo-worldwide-reported-2026q2"
    }
   ]
  },
@@ -47934,8 +48699,33 @@
    },
    {
     "period": "2025Q4",
-    "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2025Q3. The break is one quarter wide and the issuer's, not this dataset's. Lilly's fourth-quarter 2025 release narrows Selected Products to Mounjaro, Zepbound and Verzenio, and the 2025 Form 10-K states this product only as full-year U.S. and outside-U.S. columns with no worldwide total, so no worldwide 2025Q4 figure is published at all. The line returns in the first quarter of 2026, where Lilly prints U.S., outside-U.S. and Total by therapeutic area. The series cannot cross the missing quarter without inventing it: the only route would sum two regional columns into a full year Lilly never printed as a total, then subtract nine months from that."
+    "value_normalized_usd_millions": 1051.0,
+    "gold_id": "lilly-taltz-worldwide-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Taltz",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "ixekizumab",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 733.0,
+    "gold_id": "lilly-taltz-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 856.0,
+    "gold_id": "lilly-taltz-worldwide-reported-2026q2"
    }
   ]
  },
@@ -48319,8 +49109,68 @@
    },
    {
     "period": "2024Q4",
-    "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2024Q3. The Form 10-K for 2024 and every Form 10-Q and 10-K from 2025 on contain no mention of Trajenta or linagliptin (counted 0 occurrences in each of the FY2024 10-K, the 2025Q1-Q3 and 2026Q1-Q2 10-Qs, the FY2025 10-K and the Q4 2024 earnings release; the 2025-2026 earnings releases were not individually counted), so no 2024Q4 figure exists and the quarter cannot be derived."
+    "value_normalized_usd_millions": 96.6,
+    "gold_id": "lilly-tradjenta-collaboration-revenue-reported-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Tradjenta",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "linagliptin",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 76.3,
+    "gold_id": "lilly-tradjenta-collaboration-revenue-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 91.8,
+    "gold_id": "lilly-tradjenta-collaboration-revenue-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 71.3,
+    "gold_id": "lilly-tradjenta-collaboration-revenue-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 79.0,
+    "gold_id": "lilly-tradjenta-collaboration-revenue-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Tradjenta",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "linagliptin",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 76.0,
+    "gold_id": "lilly-tradjenta-collaboration-revenue-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 73.0,
+    "gold_id": "lilly-tradjenta-collaboration-revenue-reported-2026q2"
    }
   ]
  },
@@ -62329,13 +63179,48 @@
    },
    {
     "period": "2020Q3",
-    "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2020Q2. Gilead prints an em dash for Ranexa from the third quarter of 2020 - the fourth-quarter 2021 summary shows the line as 5 for the quarter against a dash a year earlier - and a dash is not a figure: it is either nil or not stated, and the table does not say which. The series stops at the last quarter carrying a number rather than recording a zero the issuer did not print."
+    "value_normalized_usd_millions": 0.0,
+    "gold_id": "gilead-ranexa-us-reported-2020q3"
    },
    {
     "period": "2020Q4",
-    "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2020Q2. Gilead prints an em dash for Ranexa from the third quarter of 2020 - the fourth-quarter 2021 summary shows the line as 5 for the quarter against a dash a year earlier - and a dash is not a figure: it is either nil or not stated, and the table does not say which. The series stops at the last quarter carrying a number rather than recording a zero the issuer did not print."
+    "value_normalized_usd_millions": 0.0,
+    "gold_id": "gilead-ranexa-us-reported-2020q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Ranexa",
+  "manufacturer": "Gilead",
+  "ticker": "GILD",
+  "generic_name": "ranolazine",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 3.0,
+    "gold_id": "gilead-ranexa-us-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 2.0,
+    "gold_id": "gilead-ranexa-us-reported-2021q2"
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": 0.0,
+    "gold_id": "gilead-ranexa-us-reported-2021q3"
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": 5.0,
+    "gold_id": "gilead-ranexa-us-reported-2021q4"
    }
   ]
  },
@@ -98151,6 +99036,31 @@
     "period": "2025Q4",
     "value_normalized_usd_millions": 3406.562499,
     "gold_id": "novo-wegovy-worldwide-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Wegovy",
+  "manufacturer": "Novo Nordisk",
+  "ticker": "NVO",
+  "generic_name": "semaglutide",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 3214.498486,
+    "gold_id": "novo-wegovy-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 3032.340318,
+    "gold_id": "novo-wegovy-worldwide-reported-2026q2"
    }
   ]
  },
