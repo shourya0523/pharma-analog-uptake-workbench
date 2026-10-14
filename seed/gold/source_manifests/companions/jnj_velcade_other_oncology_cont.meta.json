@@ -1,0 +1,35 @@
+{
+  "drug_name": "Velcade",
+  "line_label": "OTHER ONCOLOGY",
+  "issuer": "Johnson & Johnson",
+  "benchmark_identity": "jnj_velcade_other_oncology_continuation",
+  "revenue_scope": "Worldwide (US + Intl) 'OTHER ONCOLOGY' line of J&J's Oncology franchise, which holds VELCADE from 2021Q1 together with other oncology products that change over time.",
+  "geography": "Worldwide",
+  "why_separate": "J&J stopped printing VELCADE on its own line after 2020Q4 ('Other Oncology is inclusive of VELCADE, which was previously disclosed separately'); this residual OTHER ONCOLOGY line also holds other products and changes composition, so it is a broader line, not Velcade's own sales. The product-named continuation is Takeda's VELCADE line (jnj_velcade_cont); this residual is kept as an extra companion.",
+  "notes": "Span 2021Q1-2026Q2, each quarter read from its own schedule as current. The line's composition changes and the rows are not restated: (1) from the 2021Q1 schedule it holds VELCADE (the 2021Q1 supplemental schedule restates 2020 OTHER ONCOLOGY WW to 212, 204, 203, 202, full year 821); (2) CARVYKTI had its own line from the 2023Q1 schedule, whose supplemental table gives 2022 CARVYKTI quarters and restates 2022 OTHER ONCOLOGY WW to 118, 106, 100, 114 (the 2022 rows here, 118, 130, 155, 168, are as first printed and include CARVYKTI); (3) TECVAYLI had its own line from the 2024Q1 schedule (footnote 4: See Supplemental Sales Information Schedule), restating 2023; the 2023 rows include it; (4) RYBREVANT / LAZCLUZE and TALVEY had their own lines from the 2025Q1 schedule, whose supplemental table restates 2024 OTHER ONCOLOGY WW to 73, 83, 86, 75 (the 2024 rows here, 178, 221, 250, 282, are as first printed and include them; 2024Q1 178 - 73 = 105 = RYBREVANT/LAZCLUZE 47 + TALVEY 58); (5) from the 2026Q1 schedule the line is 'Includes the sales of ZYTIGA which were previously disclosed separately'. The line therefore steps down at 2025Q1 (282 to 89) and up at 2026Q1 (100 to 192) without any product leaving or joining the underlying sales. Annual checks: each Q4 schedule's twelve-month figure equals the sum of that year's four rows (2021 568, 2022 571, 2023 879, 2024 931, 2025 376). Only Zytiga (from 2026Q1) and Velcade itself are stated by issuer footnotes as being inside the line; the other products named in continuation.line_includes_inferred_not_footnoted are inferred from restated comparatives.",
+  "search_log": [
+    "Reused the J&J investor-site quarterly schedule PDFs 2014Q3-2026Q2 already downloaded for the sibling J&J manifests (48 files; 2023Q2 downloaded again from its sibling-manifest URL) and extracted every page with pdfplumber into text; searched all 49 documents case-insensitively for the product names (counts reported per product below).",
+    "Fetched each J&J schedule row from the document's own text: the first occurrence of the line's name line followed by its WW row (the main Reported Sales vs. Prior Period table, ahead of any supplemental table).",
+    "Searched the 49 schedule PDFs for VELCADE: present as its own line 2014Q3-2020Q4 and, after that, only in the 2021Q1 footnote and its supplemental table; absent from every schedule 2021Q2-2026Q2 (checked by text search over all pages).",
+    "Located OTHER ONCOLOGY in every schedule 2021Q1-2026Q2 and read the footnotes and supplemental tables of the 2021Q1, 2023Q1, 2024Q1, 2025Q1 and 2026Q1 schedules for composition changes.",
+    "Ex-U.S. partner/royalty rung: Takeda (Millennium) prints a quarterly VELCADE line in its Quarterly Financial Reports (see jnj_velcade_cont, the product-named continuation); it is a different scope from J&J's line and is not mixed into these rows.",
+    "Bigdata.com search was unavailable (credits exhausted); documents located from the local caches."
+  ],
+  "continuation": {
+    "relation": "broader_line",
+    "line_includes": [
+      "Zytiga"
+    ],
+    "evidence": "J&J first-quarter 2021 Sales of Key Products/Franchises schedule (https://s203.q4cdn.com/636242992/files/doc_financials/2021/q1/Sales-of-Key-Products-Franchises-1Q2021.pdf), supplemental schedule: OTHER ONCOLOGY(2) WW 1,158 212 204 203 202 (2019 full year, 2020 quarters); footnote '(2) Other Oncology is inclusive of VELCADE, which was previously disclosed separately'; main table OTHER ONCOLOGY (5) WW 182 | 212.",
+    "line_includes_basis": {
+      "Zytiga": "footnoted: J&J 1Q2026 Sales of Key Products/Franchises schedule, OTHER ONCOLOGY 'Includes the sales of ZYTIGA which were previously disclosed separately'; applies from 2026Q1 only.",
+      "Velcade": "footnoted: J&J 1Q2021 schedule, 'Other Oncology is inclusive of VELCADE, which was previously disclosed separately'."
+    },
+    "line_includes_inferred_not_footnoted": {
+      "Carvykti": "inferred from restated comparatives: the 1Q2023 schedule's supplemental table restates 2022 OTHER ONCOLOGY WW to 118, 106, 100, 114 when it first gives CARVYKTI its own line; no footnote states the earlier inclusion.",
+      "Tecvayli": "inferred from restated comparatives: the 1Q2024 schedule gives TECVAYLI its own line and restates 2023; no footnote states the earlier inclusion.",
+      "Rybrevant": "inferred from restated comparatives: the 1Q2025 schedule's supplemental table restates 2024 OTHER ONCOLOGY WW to 73, 83, 86, 75 (2024Q1 178 - 73 = 105 = RYBREVANT/LAZCLUZE 47 + TALVEY 58); no footnote states the earlier inclusion.",
+      "Talvey": "inferred from restated comparatives, as Rybrevant (same 1Q2025 schedule); no footnote states the earlier inclusion."
+    }
+  }
+}

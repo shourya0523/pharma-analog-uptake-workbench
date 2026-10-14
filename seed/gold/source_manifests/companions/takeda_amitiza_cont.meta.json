@@ -1,0 +1,21 @@
+{
+  "drug_name": "Amitiza",
+  "line_label": "Amitiza",
+  "issuer": "Mallinckrodt plc (EDGAR CIK 1567892; the registrant is now named Keenova Therapeutics plc)",
+  "benchmark_identity": "takeda_amitiza_continuation",
+  "revenue_scope": "Mallinckrodt's own 'Amitiza' net sales line in USD millions, which its filings describe as consisting of both product net sales and royalties; Mallinckrodt licenses rights to Amitiza (lubiprostone) to third parties for royalties, and its filings name Takeda as the customer whose purchases drive the line.",
+  "geography": "As consolidated by Mallinckrodt; its product tables are not split by territory and its filings mention Amitiza sales in the U.S. and in Japan.",
+  "why_separate": "The gold series is Takeda's U.S. Amitiza sales in JPY, which Takeda stopped printing after fiscal Q4 FY2021 (January-March 2022). Mallinckrodt, the rights holder and licensor, has printed an Amitiza line throughout and goes on printing it, but it is the owner's revenue (product supplied plus royalties, in USD) and not Takeda's sales to U.S. customers, so it carries the product on without being the same measure. The two lines overlap in 2022Q1 (Mallinckrodt 47.7 million USD against Takeda's 0.5 billion JPY), which shows they are not the same quantity.",
+  "notes": "Sixteen quarters, 2022Q2 to 2026Q1. Twelve quarters are read from the quarter's own 10-Q and four fourth quarters (2022Q4, 2023Q4, 2024Q4, 2025Q4) are derived as the year less the nine months printed in the third-quarter 10-Q, with the inputs quoted. Mallinckrodt emerged from Chapter 11 twice (June 16, 2022 and November 14, 2023) and applied fresh-start accounting each time, so 2022Q2 and 2022Q4 and 2023Q4 draw on the non-GAAP combined successor-plus-predecessor columns that Mallinckrodt itself prints. Fiscal quarters end within days of the calendar quarter end and map one for one. The series stops at 2026Q1: the second-quarter 2026 10-Q (accession 0001628280-26-055614) no longer lists Amitiza in its net sales by product family or its key products table (those list Acthar Gel, XIAFLEX, INOmax, Other Products and License Revenue), and Amitiza appears there only in patent-litigation text; no Amitiza figure for 2026Q2 is printed or derivable. The Takeda reports from FY2022 Q1 to FY2026 Q1 print no Amitiza revenue line, only the antitrust-litigation provision.",
+  "search_log": [
+    "Takeda quarterly financial reports qr2022_q1 to qr2026_q1 (pdfplumber text): no AMITIZA product row; AMITIZA appears only in notes on the antitrust-litigation provision (qr2025_q4 20260605 version and qr2026_q1). The FY2021 Q4 forecast table footnote '*3 Others in GI include PREVACID/TAKEPRON, AMITIZA' names it inside Others for the FY2022 forecast only; no actual quarter is footnoted that way.",
+    "Takeda Forms 20-F for the years ended March 2022 to March 2026 (data.sec.gov CIK 0001395064): AMITIZA in patent and litigation text only after the year ended March 2022; no sales line.",
+    "EDGAR submissions for CIK 1567892: all 10-Q and 10-K filings from 2021-11 to 2026-08 downloaded (20 documents) and the Amitiza line read in each; the 10-K/A filed 2021-04 and 10-Qs before the third quarter of 2021 were not needed.",
+    "Mallinckrodt's 10-Q for the first quarter of 2022 (accession 0001567892-22-000015) prints Amitiza 47.7 for the quarter ended April 1, 2022; it is the same quarter as Takeda's last and is not part of this line, which starts after the gold series.",
+    "Mallinckrodt's 10-Q for the second quarter of 2026 (accession 0001628280-26-055614): Amitiza row absent from both product tables (Other Products rose 67.0 million USD driven by products acquired in the business combination); stop of this line at 2026Q1."
+  ],
+  "continuation": {
+    "relation": "successor_issuer",
+    "evidence": "Mallinckrodt plc Form 10-Q for the quarter ended July 1, 2022 (first quarter after Takeda's last printed Amitiza quarter), MD&A table 'Net sales for Specialty Brands by key products', columns period from June 17 through July 1, 2022 (successor), period from April 2 through June 16, 2022 (predecessor), combined three months ended July 1, 2022 (non-GAAP), three months ended June 25, 2021: 'Amitiza | 5.8 | 33.8 | 39.6 | 44.8 | (11.6)'. URL: https://www.sec.gov/Archives/edgar/data/1567892/000156789222000039/mnk-20220701.htm"
+  }
+}

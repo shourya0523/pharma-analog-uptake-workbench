@@ -1,0 +1,22 @@
+{
+  "drug_name": "Vidaza",
+  "line_label": "VIDAZA",
+  "issuer": "BeiGene",
+  "benchmark_identity": "beigene_vidaza_continuation",
+  "revenue_scope": "Net product revenue of BeiGene from Vidaza in China, as the row 'VIDAZA' of BeiGene's product revenue by product note; BeiGene distributes Vidaza under an exclusive licence from BMS (Celgene)",
+  "geography": "China (the licensed territory excludes Hong Kong, Macau and Taiwan, per the FY2023 Form 10-K description of the Celgene license and supply agreement)",
+  "why_separate": "The gold series is BMS's worldwide Vidaza line and ends 2021Q3, when BMS stopped printing a Vidaza row. BeiGene, which sells Vidaza in China under licence from BMS, prints its own Vidaza line, which is a single-territory subset of worldwide sales and not the same scope as the series.",
+  "notes": "Nine quarters, 2021Q4-2023Q4. 2022Q1-Q3 and 2023Q1-Q3 are read from the Form 10-Q for each quarter. 2021Q4, 2022Q4 and 2023Q4 are derived as the full-year figure of the Form 10-K less the nine-month figure of the Q3 Form 10-Q, because BeiGene prints no fourth-quarter figure; the three-quarter figures of each year plus the derived fourth quarter sum to the 10-K full year (2022: 5,512+3,434+3,314+2,953 = 15,213; 2023: 3,189+3,930+4,320+2,521 = 13,960; 2021: nine months 12,771 + 6,820 = 19,591). Amounts are thousands of U.S. dollars as printed, stored in millions. The series ends at 2023Q4: the FY2023 Form 10-K states that a settlement agreement terminated the license and supply agreement on December 31, 2023, with a right to sell remaining Vidaza inventory until sold out or December 31, 2024, whichever is earlier; the Forms 10-Q for 2024 and 2025, the 2026 first and second quarter Forms 10-Q and the Forms 10-K for FY2024 and FY2025 print no Vidaza figure. BeiGene also printed Vidaza for 2021Q1-2021Q3 (3,706; 3,255; 5,810 thousand) and earlier quarters since Vidaza became commercially available in China in January 2018 (FY2021 Form 10-K), inside the period BMS reports worldwide; those quarters are not rows here because a continuation starts after the series' last quarter. BMS does not print Vidaza in any release from the 2021Q4 release on.",
+  "search_log": [
+    "Listed BMS (CIK 14272) earnings releases 2015-2026 and read every product-table row: Vidaza has no row from the 2021Q4 release on and the word does not occur in the releases or the FY2021 and FY2024 Forms 10-K.",
+    "Rung c (another issuer printing the same product): BeiGene (CIK 1651308) was identified from the checker's lead; listed its Forms 10-K and 10-Q 2020-2026 through data.sec.gov/submissions and fetched the filings for 2021Q1 to 2024Q1, reading each 'VIDAZA' row of the product revenue by product table.",
+    "Searched the BeiGene Forms 10-Q for 2024Q1-2026Q2 and Forms 10-K for FY2024 and FY2025 for rows carrying Vidaza with figures: none.",
+    "Checked each quarter's Form 10-Q three-month column; the fourth quarters are not printed and are derived from the Form 10-K full year less the Q3 nine-month figure. Checked the sums of four quarters against the 10-K for 2022 and 2023.",
+    "Read the FY2023 Form 10-K description of the Celgene license and supply agreement for the territory and the termination date."
+  ],
+  "continuation": {
+    "relation": "successor_issuer",
+    "line_includes": [],
+    "evidence": "The FY2022 Form 10-K (https://www.sec.gov/Archives/edgar/data/1651308/000165130823000036/bgne-20221231.htm) prints the row 'VIDAZA 15,213 19,591' in its product revenue by product note, and the FY2023 Form 10-K describes the license and supply agreement under which BeiGene was 'granted the right to exclusively distribute and promote bms's approved cancer therapies, revlimid, vidaza and abraxane in china, excluding hong kong, macau and taiwan'; BMS prints no Vidaza row after its 2021Q3 release."
+  }
+}

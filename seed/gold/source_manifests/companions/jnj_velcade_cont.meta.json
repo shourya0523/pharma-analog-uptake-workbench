@@ -1,0 +1,26 @@
+{
+  "drug_name": "Velcade",
+  "line_label": "VELCADE",
+  "issuer": "Takeda Pharmaceutical Company Limited",
+  "benchmark_identity": "takeda_velcade_continuation",
+  "revenue_scope": "Takeda's VELCADE row of the product revenue table in its Quarterly Financial Reports: the product's total revenue as Takeda reports it, JPY billions, with a US column and an ex-US column and no further regional split (footnote: 'License-out product : Regional breakdown is not available due to contract.'). Takeda holds VELCADE in the U.S.; J&J's gold series is J&J's own WW row, so the two lines are different scopes and different currencies.",
+  "geography": "Takeda's total for the product: the table prints a US column and an ex-US column (Japan, EUCAN and GEM columns are blank for VELCADE). The row is predominantly the US column (FY2021 Q3: US 28.3 of a total 29.3), so it is Takeda's own U.S. line plus a small ex-US amount, the complement of J&J's gold series rather than a continuation of its territory.",
+  "why_separate": "The gold series is J&J's WW VELCADE row (USD), which ends at 2020Q4 when J&J folded VELCADE into OTHER ONCOLOGY ('Other Oncology is inclusive of VELCADE, which was previously disclosed separately'). Takeda prints its own VELCADE line in JPY on a different territory scope, so it cannot be joined to the series; it carries the product past the end of its own series.",
+  "notes": "Span 2021Q1-2024Q1, thirteen quarters, each read from the current-quarter column of the quarter's own Takeda Quarterly Financial Report. Takeda's fiscal year runs April-March, so FY2020 Q4 is 2021Q1 and FY2023 Q4 is 2024Q1. Annual checks against the full-year row printed in the same reports: FY2021 110.0 = 30.1 + 25.0 + 29.3 + 25.6; FY2022 27.8 against 16.5 + 4.3 + 3.9 + 3.0 = 27.7 (one-decimal rounding); FY2023 5.5 = 1.8 + 1.1 + 1.2 + 1.4. Takeda stopped printing a VELCADE row after FY2023 Q4: the FY2024 Q1 oncology table lists ADCETRIS, LEUPLIN/ENANTONE, NINLARO, ICLUSIG, ALUNBRIG, VECTIBIX, ZEJULA, FRUZAQLA, CABOMETYX and Others; no VELCADE line carrying a figure appears in any of the eight reports FY2024 Q1 to FY2026 Q1 (text search over every page), and the FY2024 Q1, FY2024 Q4, FY2025 Q4 and FY2026 Q1 reports contain no occurrence of the word at all. J&J's residual OTHER ONCOLOGY line (2021Q1-2026Q2) is kept as the extra companion jnj_velcade_other_oncology_cont.",
+  "series_start_quarter": "2021Q1",
+  "series_end_quarter": "2024Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Takeda's reports for FY2024 Q1 (April-June 2024) onward print no VELCADE row; the last row is FY2023 Q4 (January-March 2024) in the FY2023 Q4 Quarterly Financial Report.",
+  "search_log": [
+    "Started from the checker's lead: Takeda's FY2022 Q4 Quarterly Financial Report (qr2022_q4_qfr_en.pdf) prints a VELCADE row. Confirmed by pdfplumber text search: page 60 'VELCADE *2 110.0 27.8 (74.8) %', pages 62-68 the four FY2022 quarters, page 70 the eight-quarter trend, with footnote '*2 License-out product : Regional breakdown is not available due to contract.'",
+    "Downloaded Takeda Quarterly Financial Reports FY2021 Q1-Q4 and FY2022 Q1-Q4 (assets-dam.takeda.com legacy-dotcom paths), FY2020 Q4 and FY2023 Q1-FY2026 Q1 (links taken from takeda.com/investors/financial-results/quarterly-results-2020, -2023, -2024, -2025 and the current page) and searched every page of each case-insensitively for VELCADE, keeping lines that carry a digit.",
+    "FY2020 Q4 Quarterly Financial Report page 74 gives the Jan-Mar 2021 quarter (25.2), which is the first quarter after the gold series' last quarter 2020Q4.",
+    "FY2024 Q1 to FY2026 Q1 reports: no VELCADE line with a figure in any of them (FY2024 Q1 page 50 oncology table shown to list the products named in notes without VELCADE); the FY2024 Q1, FY2024 Q4, FY2025 Q4 and FY2026 Q1 reports were searched again without the digit filter and contain no occurrence of the word. FY2025 Q4 was read from the original 2026-05-13 version (the 2026-06-05 amended version was not read).",
+    "Takeda's FY2019 and earlier reports were not read: the gold series is J&J's through 2020Q4, so the continuation starts at 2021Q1.",
+    "Bigdata.com search was not used for this repair; documents were located from Takeda's investor pages."
+  ],
+  "continuation": {
+    "relation": "successor_issuer",
+    "evidence": "Takeda Quarterly Financial Report for the fiscal year ended March 31, 2021 (https://assets-dam.takeda.com/raw/upload/v1662727335/legacy-dotcom/siteassets/system/investors/quarterly-announcements/fy2020/qr2020_q4_qfr_en.pdf), page 74, Q4 table: 'VELCADE *1 27.5 25.2 -8.4% 24.1 -8.6% 1.1 -3.5%' with footnote '*1 License-out product : Regional breakdown is not available due to contract.' J&J stopped printing the line after 2020Q4: first-quarter 2021 Sales of Key Products/Franchises schedule footnote '(2) Other Oncology is inclusive of VELCADE, which was previously disclosed separately' (https://s203.q4cdn.com/636242992/files/doc_financials/2021/q1/Sales-of-Key-Products-Franchises-1Q2021.pdf)."
+  }
+}

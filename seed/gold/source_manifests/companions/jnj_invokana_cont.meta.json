@@ -1,0 +1,25 @@
+{
+  "drug_name": "Invokana",
+  "line_label": "OTHER",
+  "issuer": "Johnson & Johnson",
+  "benchmark_identity": "jnj_invokana_continuation",
+  "revenue_scope": "Worldwide (US + Intl) 'OTHER' line of J&J's Cardiovascular / Metabolism / Other franchise (the franchise's residual line after XARELTO), which holds INVOKANA from 2023Q1 and PROCRIT / EPREX from 2022Q1.",
+  "geography": "Worldwide",
+  "why_separate": "J&J stopped printing INVOKANA / INVOKAMET on its own line after 2022Q4 ('Other is inclusive of INVOKANA, which was previously disclosed separately'); the continuation is the franchise's residual OTHER line, which also holds PROCRIT / EPREX and other products. It is a broader line, not Invokana's own sales.",
+  "notes": "Span 2023Q1-2026Q2. Composition of the line: footnote (3) of the 2022Q1 schedule says 'Other is inclusive of PROCRIT / EPREX, which was previously disclosed separately', and footnote (3) of the 2023Q1 schedule says 'Other is inclusive of INVOKANA, which was previously disclosed separately'. J&J printed INVOKANA / INVOKAMET on its own line through 2022Q4, so the 2022 'Other' rows (first printed 274, 243, 236, 213) include PROCRIT / EPREX but not INVOKANA, while the 2023Q1 schedule restates 2022 'Other' to 402, 363, 345, 304 (for 2022Q4 213 + INVOKANA / INVOKAMET 91 = 304). Each quarter is recorded as first printed, so the line steps up at 2023Q1 by the INVOKANA amount. The same OTHER rows are the continuation of the Procrit series (jnj_procrit_cont), which starts a year earlier. The franchise is printed as 'CARDIOVASCULAR / METABOLISM / OTHER' and from 2026Q1 as 'CARDIOVASCULAR / METABOLISM / OTHER (CVM)'; the 'OTHER' row recorded is the one under that franchise (not 'OTHER CARDIOVASCULAR', a MedTech line). Annual checks: each Q4 schedule's twelve-month figure equals the sum of that year's four rows (2023 1,306, 2024 1,189, 2025 1,145). Other products in the line are not named by J&J. Mitsubishi Tanabe markets canagliflozin in Japan under a different brand (Canaglu), a different label and territory, and was not used.",
+  "search_log": [
+    "Reused the J&J investor-site quarterly schedule PDFs 2014Q3-2026Q2 already downloaded for the sibling J&J manifests (48 files; 2023Q2 downloaded again from its sibling-manifest URL) and extracted every page with pdfplumber into text; searched all 49 documents case-insensitively for the product names (counts reported per product below).",
+    "Fetched each J&J schedule row from the document's own text: the first occurrence of the line's name line followed by its WW row (the main Reported Sales vs. Prior Period table, ahead of any supplemental table).",
+    "Searched the 49 schedule PDFs for INVOKANA: own line 2015Q1-2022Q4, then only the 2023Q1 footnote; absent from every schedule 2023Q2-2026Q2.",
+    "Located the franchise's OTHER row in every schedule 2023Q1-2026Q2 and read the footnote of the 2023Q1 schedule.",
+    "Partner/successor rung: no other issuer reports Invokana net sales as a quarterly line in the documents searched (the J&J schedules are the only source located); Mitsubishi Tanabe's Japanese brand Canaglu is not the same label or territory and was not pursued as a line.",
+    "Bigdata.com search was unavailable (credits exhausted); documents located from the local caches."
+  ],
+  "continuation": {
+    "relation": "broader_line",
+    "line_includes": [
+      "Procrit"
+    ],
+    "evidence": "J&J first-quarter 2023 Other Financial Disclosures schedule (https://s203.q4cdn.com/636242992/files/doc_financials/2023/q1/1Q23-Other-Financial-Disclosures.pdf): the Cardiovascular / Metabolism / Other franchise prints XARELTO and OTHER (WW 349 | 402) with no INVOKANA / INVOKAMET line; supplemental schedule footnote '(3) Other is inclusive of INVOKANA, which was previously disclosed separately'."
+  }
+}

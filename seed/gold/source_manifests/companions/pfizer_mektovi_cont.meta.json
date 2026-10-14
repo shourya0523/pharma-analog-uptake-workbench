@@ -1,0 +1,24 @@
+{
+  "drug_name": "Mektovi",
+  "line_label": "Braftovi/Mektovi",
+  "issuer": "Pfizer",
+  "benchmark_identity": "pfizer_mektovi_continuation",
+  "revenue_scope": "Worldwide revenues of the combined Braftovi/Mektovi line (first column of the product row under the column groups WORLDWIDE | UNITED STATES | TOTAL INTERNATIONAL)",
+  "geography": "Worldwide",
+  "why_separate": "From the first-quarter 2024 release Pfizer prints Mektovi only inside the combined 'Braftovi/Mektovi' line, which holds Braftovi as well and does not equal the sum of the separate lines it replaced (first quarter 2023: 49 + 40 = 89 separately against 103 on the combined line), so it cannot be spliced onto the Mektovi series, which ends 2023Q4.",
+  "notes": "Same figures as the pfizer_braftovi and pfizer_mektovi continuations; both products point at the one combined line. The line is Pfizer's total for the pair, with the International columns printed in the same row (U.S. 111 and International 5 of the 116 in 2024Q1). The royalty-income reclassification into revenues from January 1, 2024 (note (a) of the release) is the only recast Pfizer states; no document reconciles the combined line to the earlier separate lines. Quarterly releases through the second-quarter 2026 release (filed 2026-08-04) were read; the series ends 2026Q2.",
+  "search_log": [
+    "Listed Pfizer (CIK 0000078003) filings via data.sec.gov submissions (recent + older pages) filed 2020-01-15 to 2026-08; downloaded every 8-K Item 2.02 exhibit 99 and every 10-Q/10-K (56 documents) into work/docs and counted occurrences of Braftovi and Mektovi per document.",
+    "Extracted every table row whose first cell begins 'Braftovi' or 'Mektovi' from the 8-K releases filed 2024-01-30 onward: the 2024-01-30 release (fourth quarter 2023) is the last with separate rows; each release from 2024-05-01 through 2026-08-04 prints one 'Braftovi/Mektovi' row (first row in the document = the quarter block; the second = year to date). Quarter figures read from the first row of each release.",
+    "Annual check: quarters sum to the twelve-month figure in each fourth-quarter release within rounding: 2024 116+148+173+170 = 607 against 607 printed; 2025 136+182+202+197 = 717 against 716 printed.",
+    "The combined line is not the sum of the separate lines it replaces (first quarter 2023: separate rows 49 and 40, sum 89, against 103 as the combined line's prior-year column in the first-quarter 2024 release), so it is kept as a continuation line, not joined to the brand series; the royalty reclassification in note (a) is the only stated change and is not stated to explain the gap.",
+    "Another issuer printing the pair separately was not searched: licensees outside Pfizer's territories (Pfizer states exclusive rights in the U.S., Canada, Latin America and other markets in the FY2025 10-K) would report a different territory, not this worldwide scope. The Parallel web search tool was rate-limited, so the check rests on the EDGAR documents above."
+  ],
+  "continuation": {
+    "relation": "broader_line",
+    "line_includes": [
+      "Braftovi"
+    ],
+    "evidence": "Pfizer first-quarter 2024 earnings release (8-K Exhibit 99.1, 2024-05-01), Oncology table of revenues by product, USD millions, columns WORLDWIDE current quarter, WORLDWIDE prior-year quarter, percentage changes, then U.S. and international: 'Braftovi/Mektovi | 116 | 103 | 13% | 13% | 111 | 99 | 11% | 5 | 3 | 57% | 54%'. The release prints no separate Braftovi or Mektovi row (the fourth-quarter 2023 release, 8-K filed 2024-01-30, printed 'Braftovi | 57 | 37 ...' and 'Mektovi | 46 | 46 ...'). Notes to the same table: '(a) In the first quarter of 2024, we reclassified royalty income (substantially all of which related to Biopharma) from Other (income)/deductions--net and began presenting Royalty revenues as a separate line item within Total revenues in our consolidated statements of income. Prior-period amounts have been recast to conform to the current period presentation.' URL: https://www.sec.gov/Archives/edgar/data/78003/000007800324000103/pfe-3312024xex99.htm"
+  }
+}

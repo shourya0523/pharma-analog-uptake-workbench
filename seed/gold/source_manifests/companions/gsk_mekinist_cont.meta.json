@@ -1,0 +1,25 @@
+{
+  "drug_name": "Mekinist",
+  "line_label": "Tafinlar + Mekinist",
+  "issuer": "Novartis AG",
+  "benchmark_identity": "gsk_mekinist_continuation",
+  "revenue_scope": "Novartis Group net sales to third parties of the combined Tafinlar + Mekinist line (both brands added together), worldwide, USD millions, as printed in the Oncology table of each interim financial report",
+  "geography": "Worldwide",
+  "why_separate": "The gold series is GSK's single-brand Mekinist turnover in GBP (ends 2014Q4). From Q1 2015 Novartis prints Mekinist only inside one combined 'Tafinlar + Mekinist' line that also holds Tafinlar, in USD, so the figures are not Mekinist's own sales and cannot be joined to the single-brand GSK series.",
+  "notes": "The main Oncology table prints the line as 'Tafinlar/Mekinist' in the Q1 and Q2 2015 reports and as 'Tafinlar + Mekinist' from the Q3 2015 report (the Q1 2015 report also prints a 'Mekinist/Tafinlar' row in a second table); the label change is cosmetic, the figures continue. Q1 2015 includes only March sales (footnote: products acquired in the GSK transaction, only March sales included). Every quarter Q1 2015 to Q2 2026 is read from that quarter's own Novartis interim financial report (Form 6-K exhibit 99.2). Reports from Q3 2025 are filed under accession prefix 0001114448 after a filer-agent change; the table is unchanged.",
+  "search_log": [
+    "Prior-owner and acquirer rung: Novartis (CIK 1114448) 6-K filings 2015-2026 indexed through data.sec.gov submissions; the 46 quarterly results 6-Ks Q1 2015-Q2 2026 (accessions 0001370368-15-000043 to 0001114448-26-000012) were downloaded, exhibits 99.1 (release) and 99.2 (interim financial report) parsed for table rows starting 'Tafinlar' or 'Mekinist'. Only the combined row exists in every one of the 46 quarters; no single-brand Tafinlar or Mekinist row appears in any.",
+    "Quarter sums checked against printed full years: 2015 = 40+131+135+147 = 453 equals the 453 in the Q4 2015 report; 2016 = 150+172+172+178 = 672 equals the 672 printed in the Q4 2016 report.",
+    "GSK (CIK 1131399) results 6-Ks and 20-Fs 2017-2026 searched as text for Tafinlar and Mekinist after the 2015 transfer: GSK prints neither (oncology sold to Novartis 2 March 2015).",
+    "Novartis 20-F annual reports not separately searched beyond the interim reports; the interim reports carry the same product table with the same combined line.",
+    "Other issuers: no partner or royalty holder prints either brand's net sales on its own line in the documents reached; no Japanese data book was searched (Novartis Pharma K.K. is a Novartis subsidiary, covered by the Group line).",
+    "Bigdata.com was out of credits during this run; document discovery done directly on EDGAR."
+  ],
+  "continuation": {
+    "relation": "broader_line",
+    "line_includes": [
+      "Tafinlar"
+    ],
+    "evidence": "Tafinlar/Mekinist 1;2 | 40 | 0 | nm | nm ... 2 Majority of sales for Mekinist and Tafinlar are combination, but both can be used as a monotherapy (https://www.sec.gov/Archives/edgar/data/1114448/000137036815000043/a150423-99_2.htm)"
+  }
+}

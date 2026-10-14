@@ -1,0 +1,47 @@
+{
+  "drug_name": "Ajovy",
+  "line_label": "AJOVY",
+  "issuer": "Teva",
+  "benchmark_identity": "teva_ajovy_worldwide_reported",
+  "revenue_scope": "Worldwide AJOVY revenues, as stated in the highlights bullets of Teva's quarterly earnings releases ('global revenues of $X million'); Q4 is the full-year bullet less the three quarterly bullets",
+  "geography": "Worldwide",
+  "why_separate": "The gold series teva_ajovy is the North America segment line and ends 2023Q4; the worldwide line starts 2024Q1, is a broader territory than that line, and is not spliced onto it. The companion teva_ajovy_us_segment (2023Q1 onward, United States segment) is a different, narrower scope and is not repeated here.",
+  "notes": "Worldwide scope, 2024Q1-2026Q2. Direct quarters are the release highlight bullets; 2024Q4 (142 = 507 - 365) and 2025Q4 (211 = 673 - 462) are the full-year bullet less the three quarterly bullets. Full-year 2023 global AJOVY is 435 (Q4 2023 release bullet, annual only) and is not a quarterly row. The United States segment rows for the same quarters (2024Q1 45, 2024Q2 42, 2024Q3 58, 2024Q4 63, 2025Q1 53, 2025Q2 63, 2025Q3 73, 2025Q4 105, 2026Q1 87, 2026Q2 116) are a narrower line, kept in the companion teva_ajovy_us_segment, and are not in this file. Teva's segment tables print no worldwide AJOVY row; the worldwide figure is printed in release highlight text only. 2025Q4 is cited from the issuer's IR-hosted PDF of the same release because the SEC exhibit HTML wraps the bullet across lines (an HTML-extraction issue, not a content difference).",
+  "search_log": [
+    "Listed every Teva filing from data.sec.gov submissions (CIK 818686) filed 2016-04-01 to 2026-09-01 and fetched every htm document of every 10-Q, 10-K, 10-K/A, 20-F, 20-F/A, 8-K/A, 6-K and 6-K/A and of every 8-K carrying item 2.02 (929 documents). 8-Ks without item 2.02 were not opened.",
+    "Table scan: extracted the AJOVY row of every segment table (United States, Europe, International Markets/Growth Markets). No table prints a worldwide AJOVY row. An earlier version of this file claimed Teva prints no worldwide total; that claim covered tables only and was wrong for release prose.",
+    "Prose scan: searched the cached release exhibits for sentences pairing AJOVY with 'global' or 'worldwide'. Highlights bullets with a worldwide AJOVY figure are in the releases for Q1 2024 (113, no 'global' wording), Q2 2024 (115), Q3 2024 (137), FY2024 (507, annual), Q1 2025 (139), Q2 2025 (155), Q3 2025 (168), FY2025 (673, annual), Q1 2026 (196) and Q2 2026 (244); the Q4 2023 release has FY2023 only (435).",
+    "Earlier quarters: the 2019 to 2023 quarterly releases (accessions 0001157523-19-001739 through 0001157523-23-001677) print AJOVY only as 'revenues in our North America segment' and 'revenues in our Europe segment' sentences, with no worldwide figure; the 2024 releases' comparisons to 2023 are percentages only, so no 2023 quarterly global figure is printed.",
+    "Q4 2024 and Q4 2025: the Q4 releases print a full-year global figure and no Q4-only global figure, so the fourth quarters are the full year less the three quarterly bullets (annual_less_reported_first_nine_months).",
+    "Partners and royalty holders were not searched: Teva reports AJOVY itself and no partner prints a worldwide total.",
+    "Cross-check of the derived fourth quarters, not a derivation: the Q4 2025 release prints AJOVY United States 105, Europe 76 and International Markets 30, which sum to the derived 211; for 2024Q4 the segment rows are 63 (Q4 2024 release), 58 and 22 (prior-year columns of the Q4 2025 release), which sum to 143 against the derived 142, a difference of one that is within whole-million rounding."
+  ],
+  "generic_name": "fremanezumab-vfrm",
+  "manufacturer": "Teva",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Migraine prevention",
+  "formulation": "injection",
+  "route_of_administration": "subcutaneous",
+  "moa": "Calcitonin gene-related peptide (CGRP) antagonist monoclonal antibody",
+  "moa_class": "cgrp_antagonist_antibody",
+  "first_approval_year": 2018,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2018/761089s000lbl.pdf",
+    "quote": "AJOVYTM (fremanezumab-vfrm) injection, for subcutaneous use ... Initial U.S. Approval: 2018"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2024Q1",
+  "series_start_reason": "First quarter in which a release prints a worldwide AJOVY revenue figure: the Q1 2024 release bullet (accession 0001193125-24-133759). Earlier quarters carry only per-segment rows: the Q4 2023 release (accession 0001157523-24-000137) prints a full-year 2023 global figure of 435 and no quarterly global figure, and the 2023 quarterly releases print North America and Europe segment sentences with no global bullet. Dated launch (Q3 2018, U.S.) is in the companion gold series teva_ajovy.",
+  "series_end_quarter": "2026Q2",
+  "series_end_basis": "sourcing_boundary",
+  "series_end_reason": "Gold is as of 2026Q2; the Q2 2026 release (accession 0001171843-26-004974) is the latest quarter printed.",
+  "continuation": {
+    "relation": "broader_line",
+    "line_includes": [
+      "United States segment",
+      "Europe segment",
+      "International Markets segment"
+    ],
+    "evidence": "https://www.sec.gov/Archives/edgar/data/818686/000117184324004270/exh_991.htm: \"AJOVY - global revenues of $115 million in Q2 2024\" alongside the segment sentences \"AJOVY revenues in our United States segment in the second quarter of 2024 were $42 million\" and \"AJOVY revenues in our Europe segment in the second quarter of 2024 increased by 33% to $52 million\"."
+  }
+}

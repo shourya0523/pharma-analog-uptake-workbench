@@ -1,0 +1,23 @@
+{
+  "drug_name": "Reyataz",
+  "line_label": "Reyataz Franchise",
+  "issuer": "Bristol-Myers Squibb",
+  "benchmark_identity": "bms_reyataz_continuation",
+  "revenue_scope": "Worldwide net sales of the Reyataz Franchise (Reyataz plus the combination therapy Evotaz), as the row labelled 'Reyataz Franchise'",
+  "geography": "Worldwide (the row's first column; U.S. is printed in a second column group)",
+  "why_separate": "The gold series is the line labelled 'Reyataz' (Reyataz alone) and ends 2014Q4. From 2015Q1 BMS prints only the franchise, which also holds Evotaz (FDA approval January 2015), so the figures are not the same scope as the series.",
+  "notes": "Sixteen quarters, 2015Q1-2018Q4, each read from the release for that quarter. Full-year check: 2015 294+303+270+272 = 1,139, 2016 221+247+238+206 = 912, 2017 193+188+174+143 = 698, 2018 124+117+87+99 = 427, equal to the full-year rows of the Q4 releases (1,139; 912; 698; 427). The 2015Q1 release's prior-year column prints 344 for 2014Q1, equal to the Reyataz-only value of the 2014Q1 release, so Evotaz is immaterial at the step. From the 2019Q1 release (8-K filed 2019-04-25) the row is gone and footnote (a) of 'Other Brands' reads 'Includes Sustiva, Reyataz, Daklinza and all other products that have lost exclusivity in major markets, over-the-counter brands and royalty revenue', which names Reyataz without a figure, so the continuation ends at 2018Q4. Evotaz is not printed on its own row in any release.",
+  "search_log": [
+    "Listed BMS (CIK 14272) filings through data.sec.gov/submissions (recent plus the paged 2006-2019 file), keeping every 8-K and 8-K/A with Item 2.02: 48 earnings releases from 2015-01-27 to 2026-07-30 (2026Q2). Fetched each Exhibit 99.1 via the filing index and read every product-table row.",
+    "Fetched the 10-K and 10-Q filings of 2022-2026 and the Exhibit 99.2 trend tables of 2021-10 to 2023-02 and searched each for the product names.",
+    "Web search for other issuers printing these products' sales returned only BMS pages; no partner or royalty holder was identified.",
+    "Searched every release 2015Q1-2026Q2 for 'Reyataz' and 'Evotaz': the franchise row appears in the releases of 2015-04-28 to 2019-01-24; the releases from 2019-04-25 name Reyataz only inside the Other Brands footnote."
+  ],
+  "continuation": {
+    "relation": "broader_line",
+    "line_includes": [
+      "Evotaz"
+    ],
+    "evidence": "2015Q1 release (8-K filed 2015-04-28) https://www.sec.gov/Archives/edgar/data/14272/000001427215000177/q12015ex991.htm prints the row 'Reyataz Franchise | 294 | 344' where the 2014Q4 release printed 'Reyataz | 318 | 384'. The Form 10-Q filed the same day (https://www.sec.gov/Archives/edgar/data/14272/000001427215000178/bmy-20150331x10q.htm) states: 'Reyataz Franchise - a protease inhibitor for the treatment of the HIV, which includes Reyataz and is also included in the combination therapy, Evotaz (atazanavir 300 mg and cobicistat 150 mg).'"
+  }
+}

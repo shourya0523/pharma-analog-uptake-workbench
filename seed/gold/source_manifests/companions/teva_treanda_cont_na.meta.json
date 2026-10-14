@@ -1,0 +1,24 @@
+{
+  "drug_name": "Treanda",
+  "line_label": "BENDEKA / TREANDA",
+  "issuer": "Teva",
+  "benchmark_identity": "teva_treanda_continuation_north_america",
+  "revenue_scope": "North America segment: Teva's combined Bendeka and Treanda row in the table of revenues by major products and activities",
+  "geography": "North America (United States and Canada)",
+  "why_separate": "The line combines Treanda with Bendeka and, from 2018, covers only Teva's North America segment (United States and Canada) rather than the worldwide specialty medicines segment, so it is neither the Treanda series nor the worldwide combined line.",
+  "notes": "Covers 2018Q1-2023Q4. Teva stopped printing the worldwide product-type table in 2018 and prints the line inside the North America segment table; the Q1 2018 release gives Q1 2017 as 156 on this basis against 157 worldwide as first printed. Labels vary by document ('BENDEKA / TREANDA', 'TREANDA/BENDEKA', 'BENDEKA/TREANDA', 'BENDEKA and TREANDA') and row_label follows each row. Annual checks against the 10-K full-year rows: 2018 181+160+161+140=642 (10-K 642); 2020 105+103+105+102=415 (415); 2021 91+106+95+93=385 (385); 2022 82+83+77+75=317 (316, rounding); 2023 63+69+57+53=242 (241, rounding). 2019: the quarters as first printed (122, 115, 124, 125) sum to 486 while the 2019 10-K prints 496; the Q2 2019 release prints 115 for the quarter but 229 for six months (122+115=237), the Q3 2019 release 353 for nine months, and the Q4 2019 release 496 for the year with Q4 at 125; the 2020 releases then print the 2019 comparatives as Q2 125, six months 247 and nine months 371 (122+125+124=371, plus Q4 125 equals 496). The first-printed quarter figures are kept, as in the Treanda series, and 2019Q2 was later printed as 125. From 1 January 2024 Teva reports Canada in International Markets and renames this segment United States (see teva_treanda_cont_us); 2023 on that basis is 62, 67, 56 and 52 for the four quarters (prior-year columns of the 2024 releases), not scored here.",
+  "search_log": [
+    "Listed every Teva filing from data.sec.gov submissions (CIK 818686, recent file and the 1996-2017 history file) filed 2016-04-01 to 2026-09-01. Fetched every htm document of every 10-Q, 10-K, 10-K/A, 20-F, 20-F/A, 8-K/A, 6-K and 6-K/A, and of every 8-K that carries item 2.02 (929 documents). 8-Ks without item 2.02 were not opened, so an absence below holds only for the documents read. Exhibits 3x/21/23/10 and XBRL R files were skipped.",
+    "Extracted every table row whose first cell names the product (and, for Treanda, BENDEKA) from those documents and read the heading above each table for the segment it belongs to; each quarter was taken from that quarter's own earnings release (8-K Exhibit 99.1, or the 6-K body/exhibit in 2016-2017), where the quarter is the current-period column.",
+    "Partners and royalty holders (for the bendamustine products, Eagle Pharmaceuticals) were not searched: that licence is for royalties on Bendeka and no Eagle document was read.",
+    "Segment attribution: in each release the Bendeka/Treanda row sits in the table headed 'revenues for our North America segment by major products and activities'; Europe and International Markets tables carry no Bendeka or Treanda row.",
+    "Compared each quarter with the prior-year column of the following year's release: 2018-2022 all agree except 2019Q2 (115 first printed, 125 in the 2020 comparative)."
+  ],
+  "continuation": {
+    "relation": "broader_line",
+    "line_includes": [
+      "Bendeka"
+    ],
+    "evidence": "https://www.sec.gov/Archives/edgar/data/818686/000115752318000962/a51800447ex99_1.htm: \"The following table presents revenues for our North America segment by major products and activities for the three months ended March 31, 2018 and 2017: ... BENDEKA / TREANDA 181 156 16%\""
+  }
+}

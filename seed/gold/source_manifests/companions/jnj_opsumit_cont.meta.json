@@ -1,0 +1,22 @@
+{
+  "drug_name": "Opsumit",
+  "line_label": "OPSUMIT / OPSYNVI",
+  "issuer": "Johnson & Johnson",
+  "benchmark_identity": "jnj_opsumit_continuation",
+  "revenue_scope": "Worldwide (US + Intl) 'OPSUMIT / OPSYNVI' line of J&J's Pulmonary Hypertension franchise: macitentan (Opsumit) plus the macitentan/tadalafil fixed-dose combination (Opsynvi).",
+  "geography": "Worldwide",
+  "why_separate": "The gold series is OPSUMIT alone, last printed for 2024Q4. From 2025Q1 J&J prints one line that also holds OPSYNVI, a formulation of macitentan combined with tadalafil, and restates FY2024 from 2,184 to 2,225.",
+  "notes": "Span 2025Q1-2026Q2, each quarter read from its own schedule as current. The 2025Q1 supplemental table restates 2024 to 524, 548, 583, 570 (full year 2,225) against the OPSUMIT-only 2024 rows of the gold series (Q2 544, Q3 571, Q4 545; full year 2,184), so the combination added 4, 12 and 25 in 2024Q2-Q4 (2024Q1 524 is the same as the OPSUMIT-only first quarter, 1,068 six months less 544). Annual check: the 2025Q4 schedule's twelve-month figure 2,325 equals 522+582+578+643. The product is the same macitentan line under a new label with a formulation added, so the relation is renamed_line.",
+  "search_log": [
+    "Reused the J&J investor-site quarterly schedule PDFs 2014Q3-2026Q2 already downloaded for the sibling J&J manifests (48 files; 2023Q2 downloaded again from its sibling-manifest URL) and extracted every page with pdfplumber into text; searched all 49 documents case-insensitively for the product names (counts reported per product below).",
+    "Fetched each J&J schedule row from the document's own text: the first occurrence of the line's name line followed by its WW row (the main Reported Sales vs. Prior Period table, ahead of any supplemental table).",
+    "Searched the 49 schedule PDFs for OPSYNVI: present only from the 2025Q1 schedule on, always inside the combined line.",
+    "Compared the restated 2024 quarters in the 2025Q1 supplemental table with the OPSUMIT-only 2024 rows of the gold series.",
+    "Partner/royalty rung: no other issuer prints Opsumit net sales (Actelion, the prior owner, is part of J&J since 2017).",
+    "Bigdata.com search was unavailable (credits exhausted); documents located from the local caches."
+  ],
+  "continuation": {
+    "relation": "renamed_line",
+    "evidence": "J&J first-quarter 2025 Other Financial Disclosures schedule (https://s203.q4cdn.com/636242992/files/doc_financials/2025/q1/1Q25-Other-Financial-Disclosures.pdf): the Pulmonary Hypertension franchise prints 'OPSUMIT / OPSYNVI (3)' WW 522 | 524 with no OPSUMIT-only line; the supplemental schedule restates the line to 2024 full year 2,225 (524, 548, 583, 570)."
+  }
+}

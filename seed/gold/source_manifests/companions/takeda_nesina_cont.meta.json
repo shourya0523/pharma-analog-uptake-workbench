@@ -1,0 +1,22 @@
+{
+  "drug_name": "Nesina",
+  "line_label": "Nesina",
+  "issuer": "Teijin Limited (sales made by its subsidiary Teijin Pharma Limited)",
+  "benchmark_identity": "takeda_nesina_continuation",
+  "revenue_scope": "Japan sales of Nesina (alogliptin tablets) as Teijin lists them on the 'Nesina' row of its 'Sales of principal pharmaceuticals in Japan' supplementary table, Billions of Yen. Teijin prints the alogliptin combination tablets (Inisync, Liovel) and the trelagliptin tablet (Zafatek) on separate rows, which this line does not include.",
+  "geography": "Japan",
+  "why_separate": "Takeda's gold series is its 'Nesina Japan' line, which Takeda labels NESINA-F and footnotes as including fixed dose combinations and blister packs; Teijin, which bought the Japan sales of Nesina, Liovel, Inisync and Zafatek from Takeda at the beginning of April 2021, prints Nesina alone and the combinations on their own rows. The step from Takeda's last quarter (6.0 billion JPY for NESINA-F) to Teijin's first (3.6 billion JPY) is a change of definition, not a change in sales, so the Teijin line continues the product but is not spliced onto the Takeda series.",
+  "notes": "All 21 quarters 2021Q2 to 2026Q2 are read from Teijin's quarterly presentations ('Flash Report - Results of FY... & Outlook'), supplementary-information table 'Sales of principal pharmaceuticals in Japan', hosted by Teijin's IR agent (ircms.irstreet.com); Teijin's own site lists the same documents on https://www.teijin.com/ir/library/presentation-materials/ but loads the links by script, so the irstreet copies are cited. Each quarter is read from the report issued for that quarter, except 2021Q2 (the FY2021 1Q report prints only the combined four-product 'Diabetes drugs' row, 7.5 billion JPY, so the Nesina figure for that quarter comes from the 1Q column of the FY2021 2Q report). Rows are one-decimal billions of yen. The four quarters of FY2021 sum to the full-year 13.1 and FY2023 to 11.1 and FY2024 to 9.8, FY2022 to 12.3 against a printed 12.2 and FY2025 to 8.4 against a printed 8.5 (rounding). The Teijin table prints Inisync, Liovel and Zafatek too; they were not added to Nesina because no document states that Takeda's NESINA-F equals the sum of Teijin's rows. Teijin's quarter definitions are April-June, July-September, October-December and January-March, matching Takeda's fiscal quarters.",
+  "search_log": [
+    "Takeda quarterly financial reports qr2021_q1 to qr2026_q1 (pdfplumber text): Nesina appears only in the divestiture text (qr2021_q1 to qr2021_q4, three lines each) and the FY2021 Q1 statement that net sales of the diabetes portfolio are excluded from the FY2020 comparison; no Nesina row. Zero mentions from qr2022_q1 on.",
+    "Takeda Forms 20-F for the years ended March 2022 to March 2026 (data.sec.gov CIK 0001395064): Nesina appears in the divestiture text; the year-ended-March-2022 report also prints NESINA/VIPIDIA-F 58.0 and 57.7 billion JPY, which are the fiscal 2019 and 2020 worldwide figures of its prior-year comparison; no Nesina sales line for fiscal 2021 or later.",
+    "Teijin Limited news/IR list (https://www.teijin.com/news/ir) and the IR agent's presentation index (https://ircms.irstreet.com/contents/export.php?template=1912&brand=94): 22 'Results of FY... & Outlook' presentations from FY2020 to FY2026 1Q downloaded; Nesina has its own row in every one from the FY2021 2Q report to the FY2026 1Q report.",
+    "Teijin FY2021 1Q report (src_data=311823): the same table has a single 'Diabetes drugs*1' row (7.5) with footnote '*1 Total of four products: Inisync, Nesina, Liovel, and Zafatek'; no Nesina row.",
+    "Teijin asset transfer notice (https://www.teijin.com/news/2021/02/26/20210226_02.pdf) read for the product list and the transfer date of April 1, 2021.",
+    "Other issuers not searched: Nesina in the U.S. and Europe is Takeda's/its licensees' and Takeda stopped printing it with the portfolio sale."
+  ],
+  "continuation": {
+    "relation": "successor_issuer",
+    "evidence": "Teijin Limited, 'Flash Report Results of FY2021 2Q & Outlook for FY2021' (November 8, 2021), 4. Supplementary information, 'Sales of principal pharmaceuticals in Japan (Billions of Yen)', row: 'Nesina Type 2 Diabetes - - - - - 3.6 3.3 6.9' under the columns FY2020 1Q 2Q 3Q 4Q Total, FY2021 1Q (Apr.-Jun.) 2Q (Jul.-Sep.) 1H. URL: https://ircms.irstreet.com/contents/data_file.php?template=1912&brand=94&folder_contents=11354&src_data=319186&filename=pdf_file1.pdf"
+  }
+}

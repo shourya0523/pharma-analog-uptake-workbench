@@ -1,0 +1,27 @@
+{
+  "drug_name": "Onureg",
+  "line_label": "Other Growth Products",
+  "issuer": "Bristol-Myers Squibb",
+  "benchmark_identity": "bms_onureg_continuation",
+  "revenue_scope": "Worldwide net sales of BMS's 'Other Growth Products' line as constituted in the 2024 releases, which holds Onureg together with the other products named in footnote (a): Nulojix, Inrebic, Empliciti and royalty revenue. Augtyro is a separate row in those releases and is not in the line",
+  "geography": "Worldwide (the third column of the U.S., Int'l, worldwide group)",
+  "why_separate": "The gold series is Onureg on its own row and ends 2023Q4. From 2024Q1 Onureg has no row and is one of several products inside Other Growth Products, so these figures are a multi-product line, not Onureg sales.",
+  "notes": "Four quarters, 2024Q1-2024Q4, each read from the release for that quarter, all on one composition: footnote (a) of each 2024 release reads 'Includes Nulojix, Onureg, Inrebic, Empliciti and royalty revenue', and Augtyro is printed as its own row in the same tables (2024Q1 'Augtyro 6 - 6'). Full-year check: 319+341+433+512 = 1,605, equal to the full-year row of the 2024Q4 release (1,605). The series stops at 2024Q4 because the composition changes after it, each time with the prior-year column restated in the same release: the 2025Q1 release adds Augtyro to footnote (a) and restates 2024Q1 from 319 to 325; the 2026Q1 release adds Abecma and restates 2025Q1 from 403 to 507. Rows from 2025Q1 are on a different composition from these rows and are not carried here; the 2026Q1-2026Q2 rows belong to the Abecma continuation, whose figures they duplicate, so they are not repeated in this file. Onureg is named in the 10-K/10-Q revenue note footnote of the same line, with no figure of its own.",
+  "search_log": [
+    "Listed BMS (CIK 14272) filings through data.sec.gov/submissions (recent plus the paged 2006-2019 file), keeping every 8-K and 8-K/A with Item 2.02: 48 earnings releases from 2015-01-27 to 2026-07-30 (2026Q2). Fetched each Exhibit 99.1 via the filing index and read every product-table row.",
+    "Fetched the 10-K and 10-Q filings of 2022-2026 and the Exhibit 99.2 trend tables of 2021-10 to 2023-02 and searched each for the product names.",
+    "Web search for other issuers printing these products' sales returned only BMS pages; no partner or royalty holder was identified.",
+    "Searched every release from 2024Q1 on for 'Onureg': it appears only in footnote (a) of Other Growth Products and in pipeline text; the FY2024 and FY2025 10-Ks and the 2026 10-Qs print no Onureg figure.",
+    "Compared footnote (a) and the Augtyro row across the 2024Q1-2024Q4 releases and the 2025Q1 release (prior-year column) to date each composition change; confirmed the 2026Q1 and 2026Q2 rows are the tail of the Abecma continuation file."
+  ],
+  "continuation": {
+    "relation": "broader_line",
+    "line_includes": [
+      "Nulojix",
+      "Inrebic",
+      "Empliciti",
+      "royalty revenue"
+    ],
+    "evidence": "The 2024Q1 release (https://www.sec.gov/Archives/edgar/data/14272/000001427224000094/q12024ex991-filing.htm) no longer has an Onureg row; its product table prints 'Other Growth Products (a) | 148 | 171 | 319' with footnote '(a) Includes Nulojix, Onureg, Inrebic, Empliciti and royalty revenue.'"
+  }
+}

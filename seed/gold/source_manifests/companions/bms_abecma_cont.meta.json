@@ -1,0 +1,27 @@
+{
+  "drug_name": "Abecma",
+  "line_label": "Other Growth Products",
+  "issuer": "Bristol-Myers Squibb",
+  "benchmark_identity": "bms_abecma_continuation",
+  "revenue_scope": "Worldwide net sales of BMS's 'Other Growth Products' line, which from 2026Q1 holds Abecma together with the other products named in the table footnote",
+  "geography": "Worldwide (the third column of the U.S., Int'l, worldwide group)",
+  "why_separate": "The gold series is Abecma on its own row and ends 2025Q4. The 2026Q1 and 2026Q2 releases have no Abecma row and fold it into Other Growth Products, so these figures are a multi-product line, not Abecma sales.",
+  "notes": "Two quarters, 2026Q1-2026Q2, from the release for each quarter. The 2026Q1 release restates the prior-year quarter (2025Q1) to 507, against 403 in the 2025Q1 release, because Abecma moved into the line. The same two rows are the tail of the Onureg continuation, which starts in 2024Q1 on the line before Abecma joined. Footnote (a) of the 2026Q1 and 2026Q2 releases names Abecma, Augtyro, Onureg, Inrebic, Nulojix, Empliciti and royalty revenues; the 2026Q1 and 2026Q2 10-Qs repeat it in the revenue note.",
+  "search_log": [
+    "Listed BMS (CIK 14272) filings through data.sec.gov/submissions (recent plus the paged 2006-2019 file), keeping every 8-K and 8-K/A with Item 2.02: 48 earnings releases from 2015-01-27 to 2026-07-30 (2026Q2). Fetched each Exhibit 99.1 via the filing index and read every product-table row.",
+    "Fetched the 10-K and 10-Q filings of 2022-2026 and the Exhibit 99.2 trend tables of 2021-10 to 2023-02 and searched each for the product names.",
+    "Web search for other issuers printing these products' sales returned only BMS pages; no partner or royalty holder was identified.",
+    "Searched the 2026Q1 and 2026Q2 releases and 10-Qs for 'Abecma': no product row; it is named in footnote (a) of Other Growth Products. 2seventy bio, which printed U.S. Abecma sales until BMS acquired it on 2025-05-13 (2026Q2 10-Q, acquisitions note), is no longer a separate reporter."
+  ],
+  "continuation": {
+    "relation": "broader_line",
+    "line_includes": [
+      "Augtyro",
+      "Onureg",
+      "Inrebic",
+      "Nulojix",
+      "Empliciti"
+    ],
+    "evidence": "The 2026Q1 release (https://www.sec.gov/Archives/edgar/data/14272/000001427226000008/a2026q1ex991.htm) has no Abecma row; its product table prints 'Other Growth Products (a) | 212 | 369 | 581' with footnote '(a) Includes Abecma, Augtyro, Onureg, Inrebic, Nulojix, Empliciti and royalty revenues.'"
+  }
+}

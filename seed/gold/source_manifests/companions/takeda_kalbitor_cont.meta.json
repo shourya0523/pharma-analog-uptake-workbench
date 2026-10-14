@@ -1,0 +1,24 @@
+{
+  "drug_name": "Kalbitor",
+  "line_label": "Others (Rare Genetics and Other)",
+  "issuer": "Takeda Pharmaceutical Company Limited",
+  "benchmark_identity": "takeda_kalbitor_continuation",
+  "revenue_scope": "Worldwide revenue of the 'Others' row of Takeda's Rare Genetics and Other business area (Bn JPY, total of regions; the amount includes royalty income and service income as Takeda's product sales analysis states). The row holds Kalbitor with NATPARA/NATPAR and any other Rare Genetics and Other products Takeda does not list individually.",
+  "geography": "Worldwide (all regions)",
+  "why_separate": "Takeda stopped listing Kalbitor on its own row after fiscal Q4 FY2021; the product's revenue then sits inside an 'Others' row together with other products, so the figure is not Kalbitor's sales and is never scored as such.",
+  "notes": "Eight quarters, 2022Q2 to 2024Q1, each read from the quarter's own report (the trend-table row whose last figure is the quarter). The link to Kalbitor is by identity of the row and not by a footnote on these quarters: the FY2021 Q4 report's forecast table prints 'Others *7 9.7' for fiscal 2021 for Rare Genetics and Other with footnote '*7 Others in Rare Genetics and Other includes NATPARA/NATPAR, KALBITOR'; the FY2022 reports print the fiscal 2021 quarters of the closing 'Others' row of the same block as 2.2, 2.4, 2.4, 2.6 (9.6) and the FY2022 Q4 report prints its fiscal 2021 value as 9.7, so it is the row the footnote describes. No report after FY2021 Q4 mentions Kalbitor by name, so that the row still holds Kalbitor in later quarters is inferred from the row staying the same, not read. The row's composition is not stated after fiscal 2021 and other unnamed products are in it. The line ends at 2024Q1: from the FY2024 Q1 report Takeda merges Rare Hematology and Rare Genetics and Other into one 'Rare Diseases' block with a different 'Others' row (9.2 for the quarter the old row had at 3.2). The fiscal 2022 quarters sum to the 13.0 printed for the year; fiscal 2023 sums to 12.9.",
+  "search_log": [
+    "Takeda quarterly financial reports qr2021_q1 to qr2026_q1 (pdfplumber and pdftotext): KALBITOR appears as a row through qr2021_q4 (1.1, 1.0, 1.2 in the last three quarters) and in the qr2021_q4 forecast-table footnote; zero mentions in qr2022_q1 and every later quarterly report.",
+    "qr2022_q1 to qr2023_q4: located the closing 'Others' row of the Rare Genetics and Other block in each trend table and checked that the prior-year columns equal the earlier reports' values (3.2 for FY22Q1 in qr2022_q1 and qr2023_q1; 2.7 for FY22Q4 in qr2022_q4 and qr2023_q1).",
+    "qr2024_q1: Rare Diseases block restructured (TAKHZYRO, ADVATE, ADYNOVATE/ADYNOVI, ELAPRASE, REPLAGAL, VPRIV, FIRAZYR, LIVTENCITY, VONVENDI, RECOMBINATE, ADZYNMA, Others) with Others 9.2 for FY23Q1; the old row is no longer reported.",
+    "Takeda Forms 20-F for the years ended March 2022 to March 2026 (data.sec.gov CIK 0001395064): KALBITOR appears once, in the year ended March 2022 report's table of product patents; no sales line.",
+    "No partner or royalty holder was found that prints Kalbitor sales: Kalbitor is Takeda's own (from Shire, from Dyax)."
+  ],
+  "continuation": {
+    "relation": "broader_line",
+    "line_includes": [
+      "NATPARA/NATPAR"
+    ],
+    "evidence": "Takeda quarterly financial report FY2021 Q4, forecast table, Rare Genetics and Other: 'Others *7 9.7 -20% to -10% -30% to -20%' with the footnote '*7 Others in Rare Genetics and Other includes NATPARA/NATPAR, KALBITOR'. URL: https://assets-dam.takeda.com/raw/upload/v1662727332/legacy-dotcom/siteassets/system/investors/report/quarterlyannouncements/fy2021/qr2021_q4_qfr_en.pdf . The first report after the gold series, FY2022 Q1, prints the same row as 'Others 2.2 2.4 2.4 2.6 3.2' in its Rare Genetics and Other quarterly trend table (https://assets-dam.takeda.com/raw/upload/v1662727303/legacy-dotcom/siteassets/system/investors/report/quarterlyannouncements/fy2022/qr2022_q1_qfr_en.pdf)."
+  }
+}

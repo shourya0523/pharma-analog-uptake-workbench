@@ -1,0 +1,21 @@
+{
+  "drug_name": "Revatio",
+  "line_label": "Revatio",
+  "issuer": "Viatris",
+  "benchmark_identity": "pfizer_revatio_continuation",
+  "revenue_scope": "Worldwide revenues of the Upjohn Business's Revatio line (the Upjohn Business's own combined financial statements, product table 'significant revenues by major product', with a Total column across U.S., Developed Markets, Greater China and Emerging Markets segments)",
+  "geography": "Worldwide",
+  "why_separate": "After 2019Q4 Pfizer prints no Revatio row because the brand moved into the Upjohn business. The only later figure is the Upjohn Business's own Revatio line for 2020Q1, a narrower scope than Pfizer's worldwide line (2019: 136 in the Upjohn tables against 144 in Pfizer's series; 2018: 214 against 227), so it cannot be spliced onto the Pfizer series, which ends 2019Q4.",
+  "notes": "Single quarter: 2020Q1 = 18 (prior-year 2019Q1 column 44, against 42 in the Pfizer series). The 8-K/A filed 2021-01-29 (Exhibit 99.1, https://www.sec.gov/Archives/edgar/data/1792044/000119312521022743/d321704dex991.htm) prints nine months ended September 27, 2020 as Revatio 67 against 126 for the nine months ended September 29, 2019; subtracting the first quarter leaves 49 for 2020Q2 and 2020Q3 together, with no six-month figure printed, so those two quarters are not given. Not a row: the 49 is a derived total of two quarters. The Forms 10-Q filed by Pfizer on 2020-05-12 and 2020-08-12 carry no Revatio level. Viatris (from 2020-11-16) prints no Revatio row in any later 10-K or release and states it does not disclose net sales for products considered competitively sensitive. Pfizer's own Revatio series ends 2019Q4.",
+  "search_log": [
+    "Confirmed in the Upjohn Form 8-K filed 2020-08-06 (Exhibit 99.1, Viatris CIK 1792044): the note table 'significant revenues by major product' prints 'Revatio | 18 | 44' for three months ended March 29, 2020 and March 31, 2019, and the MD&A product table prints 'Revatio 18 44 (59) (59) 136 214 252 ...' (2020Q1, 2019Q1, changes, then 2019, 2018, 2017). Downloaded and read both tables.",
+    "Confirmed in the 8-K/A filed 2021-01-29 (Exhibit 99.1): the nine-months table prints 'Revatio | 67 | 126' for September 27, 2020 and September 29, 2019. No three- or six-month column is printed, so 2020Q2 and 2020Q3 are not separable and are not invented.",
+    "The Pfizer 2020 Forms 10-Q filed 2020-05-12 and 2020-08-12 and the Pfizer 2020 releases carry no Revatio level (checked in the earlier scan of the stop file); the Viatris scan of 52 documents found no Revatio row after the combination.",
+    "Rungs tried before this continuation: Pfizer press-release tables (last row 2019Q4), Pfizer 10-Q/10-K (prose only), Viatris releases and filings (no row), Upjohn separation documents (this file)."
+  ],
+  "continuation": {
+    "relation": "successor_issuer",
+    "line_includes": [],
+    "evidence": "Upjohn Business condensed combined financial statements (Exhibit 99.1 to the Form 8-K filed 2020-08-06), table of significant revenues by major product, USD millions, three months ended March 29, 2020 and March 31, 2019: 'Revatio | 18 | 44'. Pfizer's last own Revatio row is the fourth-quarter 2019 release; the Upjohn Business, which then held Revatio, combined with Mylan to form Viatris in November 2020. URL: https://www.sec.gov/Archives/edgar/data/1792044/000119312520212083/d159300dex991.htm"
+  }
+}

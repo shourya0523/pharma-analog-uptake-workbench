@@ -1,0 +1,25 @@
+{
+  "drug_name": "Procrit",
+  "line_label": "OTHER",
+  "issuer": "Johnson & Johnson",
+  "benchmark_identity": "jnj_procrit_continuation",
+  "revenue_scope": "Worldwide (US + Intl) 'OTHER' line of J&J's Cardiovascular / Metabolism / Other franchise (the franchise's residual line after XARELTO), which holds PROCRIT / EPREX from 2022Q1 and INVOKANA from 2023Q1.",
+  "geography": "Worldwide",
+  "why_separate": "J&J stopped printing PROCRIT / EPREX on its own line after 2021Q4 ('Other is inclusive of PROCRIT / EPREX, which was previously disclosed separately'); the continuation is the franchise's residual OTHER line, which holds other products and joined INVOKANA in 2023Q1. It is a broader line, not Procrit's own sales.",
+  "notes": "Span 2022Q1-2026Q2. Composition of the line: footnote (3) of the 2022Q1 schedule says 'Other is inclusive of PROCRIT / EPREX, which was previously disclosed separately', and footnote (3) of the 2023Q1 schedule says 'Other is inclusive of INVOKANA, which was previously disclosed separately'. J&J printed INVOKANA / INVOKAMET on its own line through 2022Q4, so the 2022 'Other' rows (first printed 274, 243, 236, 213) include PROCRIT / EPREX but not INVOKANA, while the 2023Q1 schedule restates 2022 'Other' to 402, 363, 345, 304 (for 2022Q4 213 + INVOKANA / INVOKAMET 91 = 304). Each quarter is recorded as first printed, so the line steps up at 2023Q1 by the INVOKANA amount. The franchise is printed as 'CARDIOVASCULAR / METABOLISM / OTHER' and from 2026Q1 as 'CARDIOVASCULAR / METABOLISM / OTHER (CVM)'; the 'OTHER' row recorded is the one under that franchise (not 'OTHER CARDIOVASCULAR', a MedTech line). Annual checks: each Q4 schedule's twelve-month figure equals the sum of that year's four rows (2022 966, 2023 1,306, 2024 1,189, 2025 1,145). The 2026Q1 'Other' row (233 against a restated prior-year 323) falls with no footnote on the line; the cause is not stated by J&J. Other products in the line are not named by J&J.",
+  "search_log": [
+    "Reused the J&J investor-site quarterly schedule PDFs 2014Q3-2026Q2 already downloaded for the sibling J&J manifests (48 files; 2023Q2 downloaded again from its sibling-manifest URL) and extracted every page with pdfplumber into text; searched all 49 documents case-insensitively for the product names (counts reported per product below).",
+    "Fetched each J&J schedule row from the document's own text: the first occurrence of the line's name line followed by its WW row (the main Reported Sales vs. Prior Period table, ahead of any supplemental table).",
+    "Searched the 49 schedule PDFs for PROCRIT: own line 2014Q3-2021Q4, then only the 2022Q1 footnote and supplemental table (the footnote text appears once); absent from every schedule 2022Q2-2026Q2.",
+    "Located the franchise's OTHER row in every schedule 2022Q1-2026Q2 and read the footnotes of the 2022Q1 and 2023Q1 schedules.",
+    "Partner/successor rung: EPREX outside the U.S. is sold by J&J subsidiaries (Janssen-Cilag) and PROCRIT in the U.S. by Janssen; no other issuer prints these sales as a quarterly line.",
+    "Bigdata.com search was unavailable (credits exhausted); documents located from the local caches."
+  ],
+  "continuation": {
+    "relation": "broader_line",
+    "line_includes": [
+      "Invokana"
+    ],
+    "evidence": "J&J first-quarter 2022 Sales of Key Products/Franchises schedule (https://s203.q4cdn.com/636242992/files/doc_financials/2022/q1/Sales-of-Key-Products-Franchises-1Q2022.pdf): the Cardiovascular / Metabolism / Other franchise prints XARELTO, INVOKANA / INVOKAMET and OTHER (WW 274 | 305) with no PROCRIT / EPREX line; supplemental schedule footnote '(3) Other is inclusive of PROCRIT / EPREX, which was previously disclosed separately'. INVOKANA joins the line in the first-quarter 2023 schedule (https://s203.q4cdn.com/636242992/files/doc_financials/2023/q1/1Q23-Other-Financial-Disclosures.pdf): '(3) Other is inclusive of INVOKANA, which was previously disclosed separately'."
+  }
+}

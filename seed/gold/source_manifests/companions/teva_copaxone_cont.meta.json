@@ -1,0 +1,22 @@
+{
+  "drug_name": "Copaxone",
+  "line_label": "COPAXONE",
+  "issuer": "Teva",
+  "benchmark_identity": "teva_copaxone_continuation",
+  "revenue_scope": "North America segment: Teva's COPAXONE row in the table of revenues by major products and activities",
+  "geography": "North America (United States and Canada)",
+  "why_separate": "From 2018 Teva prints COPAXONE only inside its geographic segment tables, one row per segment (North America, Europe, International Markets), and no worldwide row; the North America row is one piece of the worldwide line the series recorded, so it is a narrower line and is not spliced.",
+  "notes": "Covers 2018Q1-2023Q4. The Europe and International Markets rows (Q1 2018: 153 and 16) are separate rows of the same kind and are not summed here. Check on the shares Teva states in text: Europe 153 of 476+153+16 is 23.7%, stated 24% for Q1 2018; Europe 124 of 463+124+14 is 20.6%, stated 21% for Q3 2018, so the three rows are consistent with the stated global total. From 2024 Teva reports Canada in International Markets and renames the segment United States (see teva_copaxone_cont_us); 2023 on that basis is 71, 56, 98 and 72 (prior-year columns of the 2024 releases, not scored). Annual checks against the 10-K segment rows: 2018 476+464+463+356=1,759 (1,759); 2019 208+274+271+264=1,017 (1,017); 2020 198+238+236+213=885 (884, rounding); 2021 164+152+133+129=578 (577, rounding); 2022 86+94+105+101=386 (387, rounding); 2023 76+64+103+78=321 (320, rounding).",
+  "search_log": [
+    "Listed every Teva filing from data.sec.gov submissions (CIK 818686, recent file and the 1996-2017 history file) filed 2016-04-01 to 2026-09-01. Fetched every htm document of every 10-Q, 10-K, 10-K/A, 20-F, 20-F/A, 8-K/A, 6-K and 6-K/A, and of every 8-K that carries item 2.02 (929 documents). 8-Ks without item 2.02 were not opened, so an absence below holds only for the documents read. Exhibits 3x/21/23/10 and XBRL R files were skipped.",
+    "Extracted every table row whose first cell names the product (and, for Treanda, BENDEKA) from those documents and read the heading above each table for the segment it belongs to; each quarter was taken from that quarter's own earnings release (8-K Exhibit 99.1, or the 6-K body/exhibit in 2016-2017), where the quarter is the current-period column.",
+    "Partners and royalty holders (for the bendamustine products, Eagle Pharmaceuticals) were not searched: that licence is for royalties on Bendeka and no Eagle document was read.",
+    "Global COPAXONE revenue is not printed in dollars after 2017Q4: the 10-Q and 10-K text gives only shares ('Revenues of COPAXONE in our Europe segment were 24% of global COPAXONE revenues in the first quarter of 2018'; 'COPAXONE global sales accounted for approximately 13% of our global revenues'). Sum of the three segment rows is not recorded as a row because the verifier needs every quoted figure on one printed line.",
+    "Segment attribution: in every release the first COPAXONE row sits under 'Three months ended' in the North America segment table; the Europe and International Markets tables follow in that order."
+  ],
+  "continuation": {
+    "relation": "narrower_line",
+    "line_includes": [],
+    "evidence": "https://www.sec.gov/Archives/edgar/data/818686/000115752318000962/a51800447ex99_1.htm: \"The following table presents revenues for our North America segment by major products and activities for the three months ended March 31, 2018 and 2017: ... COPAXONE 476 797 (40%)\"; https://www.sec.gov/Archives/edgar/data/818686/000119312518150803/d331981d10q.htm: \"Revenues of COPAXONE in our Europe segment were 24% of global COPAXONE revenues in the first quarter of 2018\""
+  }
+}

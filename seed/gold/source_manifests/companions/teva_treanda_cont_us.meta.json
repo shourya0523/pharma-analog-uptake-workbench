@@ -1,0 +1,24 @@
+{
+  "drug_name": "Treanda",
+  "line_label": "BENDEKA and TREANDA",
+  "issuer": "Teva",
+  "benchmark_identity": "teva_treanda_continuation_united_states",
+  "revenue_scope": "United States segment: Teva's combined Bendeka and Treanda row in the table of revenues by major products and activities",
+  "geography": "United States",
+  "why_separate": "The line combines Treanda with Bendeka and, from 1 January 2024, covers only Teva's United States segment (Canada moved to International Markets), a narrower territory than the earlier North America segment line.",
+  "notes": "Covers 2024Q1-2026Q2. Teva: 'as of January 1, 2024, Canada is reported as part of Teva's International Markets segment and not as part of Teva's North America segment, which has been renamed as Teva's United States segment'. Annual checks: 2024 46+41+40+41=168 (10-K row 168); 2025 36+40+35+35=146 (147, rounding). Rows read from the quarter's own release; 2026Q2 is the latest quarter in the gold as-of date.",
+  "search_log": [
+    "Listed every Teva filing from data.sec.gov submissions (CIK 818686, recent file and the 1996-2017 history file) filed 2016-04-01 to 2026-09-01. Fetched every htm document of every 10-Q, 10-K, 10-K/A, 20-F, 20-F/A, 8-K/A, 6-K and 6-K/A, and of every 8-K that carries item 2.02 (929 documents). 8-Ks without item 2.02 were not opened, so an absence below holds only for the documents read. Exhibits 3x/21/23/10 and XBRL R files were skipped.",
+    "Extracted every table row whose first cell names the product (and, for Treanda, BENDEKA) from those documents and read the heading above each table for the segment it belongs to; each quarter was taken from that quarter's own earnings release (8-K Exhibit 99.1, or the 6-K body/exhibit in 2016-2017), where the quarter is the current-period column.",
+    "Partners and royalty holders (for the bendamustine products, Eagle Pharmaceuticals) were not searched: that licence is for royalties on Bendeka and no Eagle document was read.",
+    "Segment attribution: the row sits in the table headed 'revenues for our United States segment by major products and activities'; no Bendeka or Treanda row appears in the Europe or International Markets tables.",
+    "Compared each quarter with the prior-year column of the following year's release; all agree."
+  ],
+  "continuation": {
+    "relation": "broader_line",
+    "line_includes": [
+      "Bendeka"
+    ],
+    "evidence": "https://www.sec.gov/Archives/edgar/data/818686/000119312524134200/d776015d10q.htm: \"The following table presents revenues for our United States segment by major products and activities for the three months ended March 31, 2024 and 2023: ... BENDEKA and TREANDA 46 62 (26 %)\""
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "drug_name": "Prezista",
+  "line_label": "PREZISTA / PREZCOBIX / REZOLSTA / SYMTUZA",
+  "issuer": "Johnson & Johnson",
+  "benchmark_identity": "jnj_prezista_continuation",
+  "revenue_scope": "Worldwide (US + Intl) combined darunavir-containing line: 'PREZISTA / PREZCOBIX' (2015Q1, Q2), 'PREZISTA / PREZCOBIX / REZOLSTA' (2015Q3-2017Q3), 'PREZISTA / PREZCOBIX / REZOLSTA / SYMTUZA' (2017Q4 on).",
+  "geography": "Worldwide",
+  "why_separate": "The gold series is PREZISTA alone, last printed for 2014Q4. From 2015Q1 J&J prints only a combined line that adds PREZCOBIX, then REZOLSTA, then SYMTUZA, so it holds more than Prezista's own sales.",
+  "notes": "Span 2015Q1-2026Q2, each quarter read from its own schedule as current; the row label changes as products join, dated by the headings (PREZCOBIX from the 2015Q1 schedule, REZOLSTA from 2015Q3, SYMTUZA from 2017Q4). The 2015Q1 schedule's prior-year figure (2014Q1) is 445, equal to the PREZISTA-only 2014Q1 row of the gold series, so the first two quarters differ from Prezista alone only by PREZCOBIX. 2015Q3 is read from the 2016Q3 schedule's prior-year column (468) because the 2015Q3 PDF text splits the digits ('4 68'); the value is the same quarter's figure. J&J's schedules print no separate PREZCOBIX, REZOLSTA or SYMTUZA line (the sibling gold exclusions record PREZCOBIX and SYMTUZA as not reported separately); Gilead's revenue share on Symtuza is a different measure and was not used. Annual checks: each Q4 schedule's twelve-month figure equals the sum of that year's four rows (2015 1,810; 2016 1,851; 2017 1,821; 2018 1,955; 2019 2,110; 2020 2,184; 2021 2,083; 2022 1,943; 2023 1,854; 2024 1,712; 2025 1,579).",
+  "search_log": [
+    "Reused the J&J investor-site quarterly schedule PDFs 2014Q3-2026Q2 already downloaded for the sibling J&J manifests (48 files; 2023Q2 downloaded again from its sibling-manifest URL) and extracted every page with pdfplumber into text; searched all 49 documents case-insensitively for the product names (counts reported per product below).",
+    "Fetched each J&J schedule row from the document's own text: the first occurrence of the line's name line followed by its WW row (the main Reported Sales vs. Prior Period table, ahead of any supplemental table).",
+    "Searched the 49 schedule PDFs for PREZISTA: PREZISTA-only line through 2014Q4; 'PREZISTA / PREZCOBIX' 2015Q1-Q2; with REZOLSTA 2015Q3-2017Q3; with SYMTUZA 2017Q4-2026Q2. No PREZISTA-only row after 2014Q4 in any schedule.",
+    "Compared the 2015Q1 schedule's prior-year column with the gold row for 2014Q1 (445 = 445).",
+    "Partner rung: Gilead's Symtuza and Rezolsta partners print a revenue share, not net sales of darunavir; no other issuer prints PREZISTA net sales.",
+    "Bigdata.com search was unavailable (credits exhausted); documents located from the local caches."
+  ],
+  "continuation": {
+    "relation": "broader_line",
+    "line_includes": [
+      "Prezcobix",
+      "Rezolsta",
+      "Symtuza"
+    ],
+    "evidence": "J&J first-quarter 2015 Sales of Key Products/Franchises schedule (https://s203.q4cdn.com/636242992/files/doc_financials/2015/q1/Sales_of_Key_Products_Franchises_1Q2015.pdf): 'PREZISTA / PREZCOBIX' WW 427 445 -4.0% 3.7% -7.7%, the first quarter with no PREZISTA-only line (the fourth-quarter 2014 schedule printed PREZISTA WW 448 461). REZOLSTA joins the heading in the third-quarter 2015 schedule and SYMTUZA in the fourth-quarter 2017 schedule (https://s203.q4cdn.com/636242992/files/doc_financials/2017/q4/Sales_of_Key_Products_Franchises_4Q2017.pdf)."
+  }
+}

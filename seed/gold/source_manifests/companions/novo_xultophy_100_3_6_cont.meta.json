@@ -1,0 +1,24 @@
+{
+ "drug_name": "Xultophy 100/3.6",
+ "line_label": "Long-acting insulin",
+ "issuer": "Novo Nordisk",
+ "benchmark_identity": "novo_xultophy_100_3_6_continuation",
+ "revenue_scope": "Worldwide sales of the long-acting insulin therapy class (Tresiba, Xultophy, Levemir and Awiqli), reported sales in DKK",
+ "geography": "Worldwide",
+ "why_separate": "From the Q1 2026 report Novo Nordisk no longer prints Xultophy as a line of its own; it is reported inside the long-acting insulin class line, which also holds Tresiba, Levemir and Awiqli. The class figure is not Xultophy's own sales and is not the series.",
+ "notes": "The gold series ends 2025Q4 (Xultophy 1,158, DKK million). The Q4 2025 report (caq42025.htm) prints the same class line as a header (Long-acting insulin 4,700 for the quarter) with Awiqli, Tresiba and Xultophy as sub-lines; the Q1 and Q2 2026 reports print the class line with no sub-lines. Q1 2026 reported sales include a one-off 340B provision reversal (3,880 in this class); the figure recorded is reported sales, as for the other Novo Nordisk 2026Q1 rows in gold, and the adjusted figure (4,232) is in the quote.",
+ "search_log": [
+  "Q1 2026 report (0000353278-26-000018, caq12026.htm): text search for 'Xultophy' returns only the footnote 'Comprises Tresiba, Xultophy, Levemir and Awiqli' under the long-acting insulin row of the therapy, regional and half-year tables; no Xultophy row in the sales split per region tables",
+  "Q2 2026 report (0000353278-26-000023, caq22026.htm): same result; the half-year column of the class line is 12,524 reported, 3,880 reversal, 8,644 adjusted, and 8,112 + 4,412 = 12,524",
+  "Q4 2025 report (0000353278-26-000006, caq42025.htm): Xultophy printed as its own row (1,158) under Long-acting insulin"
+ ],
+ "continuation": {
+  "relation": "broader_line",
+  "line_includes": [
+   "Tresiba",
+   "Levemir",
+   "Awiqli"
+  ],
+  "evidence": "Q1 2026 report, Sales split per therapy, Long-acting insulin row footnote: '1) Comprises Tresiba, Xultophy, Levemir and Awiqli.' with row 'Long-acting insulin 8,112 3,880 4,232'. URL: https://www.sec.gov/Archives/edgar/data/353278/000035327826000018/caq12026.htm"
+ }
+}

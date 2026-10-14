@@ -1,0 +1,24 @@
+{
+  "drug_name": "Treanda",
+  "line_label": "Treanda and Bendeka",
+  "issuer": "Teva",
+  "benchmark_identity": "teva_treanda_continuation",
+  "revenue_scope": "Worldwide: Teva's single combined Treanda and Bendeka line in the specialty medicines segment revenue breakdown by therapeutic area and key products",
+  "geography": "Worldwide",
+  "why_separate": "From the first quarter of 2016 Teva prints one line for Treanda and Bendeka together (Bendeka launched in the United States in January 2016); Treanda alone is not printed again, so the line is broader than the product and is not spliced onto the Treanda series, which ends 2015Q4.",
+  "notes": "Covers 2016Q1-2017Q4, the quarters in which Teva still printed this combined line on a worldwide, product-type basis (the specialty medicines segment). From 2018Q1 Teva prints the line only inside geographic segment tables (see teva_treanda_cont_na, 2018Q1-2023Q4, and teva_treanda_cont_us, 2024Q1-2026Q2, which have different territories). Labels as printed: 'Treanda and Bendeka' through 2017Q3, 'Bendeka and Treanda' for 2017Q4 (the Q4 2017 release). Teva's text compares the combined 2016 quarters with the prior-year quarter 'Treanda only'. Annual checks: 155+207+149+150=661, equal to the 661 printed for 2016 in the Q4 2016 release and the 2016 20-F; 157+163+181+157=658, equal to the 658 printed for 2017 in the Q4 2017 release. The Q1 2017 comparative column in the Q1 2018 release (156, North America segment) differs by 1 from the 157 printed here (the two are different territories).",
+  "search_log": [
+    "Listed every Teva filing from data.sec.gov submissions (CIK 818686, recent file and the 1996-2017 history file) filed 2016-04-01 to 2026-09-01. Fetched every htm document of every 10-Q, 10-K, 10-K/A, 20-F, 20-F/A, 8-K/A, 6-K and 6-K/A, and of every 8-K that carries item 2.02 (929 documents). 8-Ks without item 2.02 were not opened, so an absence below holds only for the documents read. Exhibits 3x/21/23/10 and XBRL R files were skipped.",
+    "Extracted every table row whose first cell names the product (and, for Treanda, BENDEKA) from those documents and read the heading above each table for the segment it belongs to; each quarter was taken from that quarter's own earnings release (8-K Exhibit 99.1, or the 6-K body/exhibit in 2016-2017), where the quarter is the current-period column.",
+    "Partners and royalty holders (for the bendamustine products, Eagle Pharmaceuticals) were not searched: that licence is for royalties on Bendeka and no Eagle document was read.",
+    "Q1 2016 6-K (the first document printing the combined line): the row reads 'Treanda and Bendeka 155 157' and the text says 'Treanda and Bendeka combined sales in the first quarter of 2016 amounted to $155 million, compared to $157 million in the first quarter of 2015 (Treanda only)'.",
+    "Checked the 2016 20-F: its annual table reads 'Treanda 661 741 767' for 2016, 2015, 2014 and its text says 'Treanda and Bendeka combined revenues were $661 million in 2016'; the label is Treanda but the 2016 figure is the combined one, so no separate Treanda-only figure exists for any 2016 period in the documents read."
+  ],
+  "continuation": {
+    "relation": "broader_line",
+    "line_includes": [
+      "Bendeka"
+    ],
+    "evidence": "https://www.sec.gov/Archives/edgar/data/818686/000119312516583103/d172918d6k.htm: \"Treanda and Bendeka combined sales in the first quarter of 2016 amounted to $155 million, compared to $157 million in the first quarter of 2015 (Treanda only)\"; \"Bendeka, which was launched in the United States in January 2016, is a liquid, low-volume (50 mL) and short-time 10-minute infusion formulation of bendamustine hydrochloride that we licensed from Eagle to complement our Treanda franchise.\""
+  }
+}
