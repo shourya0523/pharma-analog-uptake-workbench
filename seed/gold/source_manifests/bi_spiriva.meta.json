@@ -3,22 +3,45 @@
   "generic_name": "tiotropium",
   "manufacturer": "Boehringer Ingelheim",
   "benchmark_identity": "bi_spiriva_worldwide_annual",
+  "therapeutic_area": "Respiratory / Allergy",
+  "indication_area": "Respiratory (COPD, asthma)",
   "revenue_scope": "Worldwide",
   "geography": "Worldwide",
-  "period_type": "annual",
-  "series_role": "partial_context",
-  "annual_basis": "Boehringer Ingelheim prints Spiriva only in selected years' reports and releases that could be read at source (2009, 2018, 2021-2023), several rounded to EUR 0.1 billion; the years do not run from the 2002 launch, so these are annual context and not a peak benchmark.",
+  "formulation": "inhalation powder (HandiHaler) and inhalation spray (Respimat)",
+  "route_of_administration": "inhaled",
+  "moa": "Long-acting muscarinic antagonist",
+  "moa_class": "lama",
+  "first_approval_year": 2004,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=021395",
+    "quote": "New Drug Application (NDA): 021395 Company: BOEHRINGER INGELHEIM ... SPIRIVA TIOTROPIUM ... Original Approvals or Tentative Approvals ... 01/30/2004 ORIG-1 Approval Type 1 - New Molecular Entity STANDARD"
+  },
+  "launch_quarter": null,
   "launch_evidence": {
     "year": 2002,
     "url": "https://www.boehringer-ingelheim.com/in/about-us/who-we-are/history/1988-2015",
     "quote": "2002: Launch of Spiriva\u00ae The COPD product Spiriva\u00ae is launched."
   },
+  "commercial_start_quarter": null,
+  "period_type": "annual",
+  "series_role": "partial_context",
+  "annual_basis": "Calendar years 2012-2024 from the Human Pharma net-sales-by-product table of Boehringer Ingelheim's annual report for each year (EUR million, worldwide); 2012 is the prior-year column of the 2013 report. Years before 2012 are not continuous at any fetchable source, so the series does not start at the 2002 launch and stays context rather than a peak benchmark.",
+  "series_start_reason": "The 2013 annual report is the earliest full annual report readable at source; it prints Spiriva for 2013 (3,552) and 2012 (3,562). The 2010, 2011 and 2012 reports are not hosted at annualreports.com (404) and boehringer-ingelheim.com serves a bot challenge; 2009 (EUR 2.4 billion, rounded, in the 2009 results press release) is known but 2010-2011 are not, so 2009 is not joined to the series.",
+  "series_end_quarter": null,
+  "series_end_basis": "sourcing_boundary",
+  "series_end_reason": "2024 is the latest annual report readable at source; the 2025 annual report (published in 2026) is not hosted at annualreports.com and the issuer site blocks plain requests.",
+  "notes": "Boehringer Ingelheim is privately held and reports half-year and full-year results only; Spiriva is printed as a full-year figure in the annual reports, so no quarterly series is possible. The line is the Spiriva brand total (HandiHaler and Respimat). Each year is read from its own report; later reports' prior-year columns agree except 2017 (own report 2,826; 2018 report restates 2,828; own-year used). This series replaces the earlier gold rows (2009 and 2018 rounded to EUR 0.1 billion from press releases, 2021-2023 from annualreport.boehringer-ingelheim.com) with exact figures for a gap-free 2012-2024 run; the old 2021-2023 values are identical. Pfizer, the U.S. co-promoter until early 2014, never printed a Spiriva figure: its releases and Forms 10-K/10-Q include Spiriva only inside the aggregated 'Alliance revenues' line. Source PDFs are Boehringer Ingelheim's own annual reports as archived at annualreports.com, because the issuer's own host refuses scripted requests. Years without a citable copy on Boehringer's own site cite annualreports.com's archived copy of the same annual report, because boehringer-ingelheim.com blocks automated downloads.",
+  "no_quarterly_series": {
+    "reason_code": "half_year_reporting_only",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/78003/000115752313003660/a50679919ex99.htm",
+    "source_quote": "(c) Includes Enbrel (in the U.S. and Canada), Spiriva, Rebif, Aricept and Eliquis.",
+    "details": "Boehringer Ingelheim files nothing with the SEC and publishes product sales only for full years (annual report) and, for some products, half-years. The only quarterly reporter, Pfizer (U.S. and selected-country co-promoter, collaboration expiring 2012-2016), prints Spiriva only inside its aggregated Alliance revenues line in every quarterly release 2004-2015 (e.g. 'ALLIANCE REVENUE (Aricept, Mirapex, Rebif and Spiriva) 245' in the Q4 2004 release, and footnote (c) above in the Q2 2013 release). No quarterly Spiriva figure exists; none is interpolated."
+  },
   "search_log": [
-    "boehringer-ingelheim.com and annualreport.boehringer-ingelheim.com block plain HTTP (Incapsula; annualreport host 301s to www.boehringer-ingelheim.com/annualreport/2025/): curl returned a bot-challenge stub, so all BI text was read via Tavily search/extract.",
-    "Tavily searches restricted to boehringer-ingelheim.com and annualreport.boehringer-ingelheim.com, queries per year (2002-2025) for Spiriva net sales / annual results / summary report / group management report. Documents the index returned that print a Spiriva figure: 2009 press release, 2018 press release, Summary Report 2020, Summary Report 2021, Summary/Group Management Report 2022, Highlights 2023.",
-    "Years 2009 and 2018 are rounded figures as printed (EUR 2.4 billion / 2.4 billion euros); recorded as printed, not refined.",
-    "2024 and 2025: Highlights 2024 PDF (www.boehringer-ingelheim.com/annualreport/2024/files/figures/BOE_Highlights_2024_EN.pdf) and Highlights 2025 PDF (.../annualreport/2025/files/Boehringer-Ingelheim-Annual-Report-Highlights-2025.pdf) exist but Tavily extract returns only the 'Pardon Our Interruption' bot page; the 2024 and 2025 results press releases found (2024-results-research-and-development-investment-rise, boehringer-ingelheim-reports-2025-growth-and-pipeline-progress) print no Spiriva figure in the text returned. Not readable at source, left out.",
-    "2019 Summary/Annual Report and all reports for 2002-2008, 2010-2017 (annual reports, annual press conference releases) did not surface in any search and Tavily extract of guessed URLs failed; left out, not estimated. The US-site press releases for 2011, 2013-2015, 2017 surfaced only as boilerplate net-sales-of-group sentences with no Spiriva figure.",
-    "Other figures seen in the 2023 and 2022 reports as comparatives (2022: 1,560; 2021: 1,548) agree with the own-year reports used."
+    "Pfizer (CIK 0000078003): fetched all 70 EX-99 exhibits of 8-K Item 2.02 filings 2004-10 to 2021-02 and grepped 'Spiriva': every table hit is the Alliance revenues aggregate row or its footnote; Q&A prose ('How is Spiriva performing?') carries no figure. Pfizer Forms 10-K 2011 and 2013 and 10-Q Q2 2013 grepped: Spiriva only in co-promotion prose and the Alliance revenues footnote; the 10-Q Q2 2013 states a combined Spiriva/Aricept alliance revenue decline (~$210 million), not a Spiriva figure.",
+    "annualreports.com archive (boehringer-ingelheim_<year>.pdf): 2013-2024 downloaded and read with pdfplumber; 2008-2012 and 2025 return 404. Spiriva rows: 2013 report 3,552 / 3,562; 2014 3,237 / 3,552; 2015 3,553 / 3,237; 2016 2,995 / 3,553; 2017 2,826 / 2,995; 2018 2,412 / 2,828; 2019 2,058 / 2,412; 2020 1,793 / 2,058; 2021 1,548 / 1,793; 2022 1,560 / 1,548; 2023 1,290 / 1,560; 2024 1,062 / 1,290.",
+    "Earlier years: the 2009 results press release prints 'EUR 2.4 billion' (rounded); the 2010-2012 annual reports surfaced only on yumpu.com (not an issuer host) and were not used.",
+    "Half-year: BI half-year releases print only top products for six months; a half-year cannot be split into quarters, so they were not pursued for values.",
+    "Bigdata.com not used for values; every figure read from the cited PDF."
   ]
 }

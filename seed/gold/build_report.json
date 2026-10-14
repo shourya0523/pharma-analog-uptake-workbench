@@ -2,10 +2,10 @@
   "generation": "independent_issuer_research",
   "as_of_quarter": "2026Q2",
   "quarterly_rows": 14011,
-  "annual_rows": 165,
+  "annual_rows": 179,
   "complete_quarterly_series": 406,
   "quarterly_coverage_pct": 100.0,
-  "observed_peaks": 36,
+  "observed_peaks": 37,
   "not_yet_observed_peaks": 132,
   "excluded_products": 56,
   "catalog_coverage": {
@@ -859,6 +859,7 @@
       "Yescarta",
       "Yupelri",
       "Yutiq",
+      "Zavesca",
       "Zejula",
       "Zelboraf",
       "Zelnorm",
@@ -895,7 +896,8 @@
       "Rystiggo",
       "Talicia",
       "Vabomere",
-      "Xigduo XR"
+      "Xigduo XR",
+      "Zavesca"
     ],
     "excluded_products": [
       "Alyq",
@@ -1108,8 +1110,8 @@
     "complete_quarterly_series": 406,
     "quarterly_observations": 14011,
     "series_missing_quarters": [],
-    "annual_benchmark_series": 16,
-    "annual_observations": 165,
+    "annual_benchmark_series": 17,
+    "annual_observations": 179,
     "evidence_backed_exclusions": 56,
     "comparator_products": [
       "Abecma",
@@ -1552,6 +1554,7 @@
       "Yescarta",
       "Yupelri",
       "Yutiq",
+      "Zavesca",
       "Zejula",
       "Zelboraf",
       "Zelnorm",
@@ -1615,7 +1618,7 @@
     "balanced": true
   },
   "product_profiles": {
-    "products": 478,
+    "products": 479,
     "moa_classes": 280,
     "routes": [
       "Inhalation",

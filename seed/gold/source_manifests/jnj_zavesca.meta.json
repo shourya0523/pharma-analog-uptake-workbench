@@ -1,0 +1,46 @@
+{
+  "drug_name": "Zavesca",
+  "generic_name": "miglustat",
+  "manufacturer": "Actelion",
+  "benchmark_identity": "actelion_zavesca_worldwide_annual",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Gaucher disease type 1 (Niemann-Pick type C outside the US)",
+  "revenue_scope": "Actelion Ltd worldwide product sales of Zavesca",
+  "geography": "Worldwide",
+  "formulation": "Capsule",
+  "route_of_administration": "oral",
+  "moa": "Glucosylceramide synthase inhibitor (substrate reduction therapy, miglustat)",
+  "moa_class": "glucosylceramide_synthase_inhibitor",
+  "first_approval_year": 2003,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2014/021348s010lbl.pdf",
+    "quote": "ZAVESCA (miglustat) capsules, for oral use ... Initial U.S. Approval: 2003"
+  },
+  "launch_quarter": null,
+  "period_type": "annual",
+  "series_role": "peak_benchmark",
+  "commercial_start_quarter": "2011",
+  "series_start_reason": "2011 is the earliest year in a contiguous run of Actelion full-year results releases whose text is served by a host the verifier can fetch: the FY2012 release prints FY2012 and FY2011 on a row labelled 'Zavesca sales'. Actelion printed Zavesca earlier (the FY2004 release gives 2004 CHF 6.1 million and 2003 CHF 0.7 million; the FY2008 and FY2010 releases are on MarketScreener, which returns HTTP 403 to the verifier), but no fetchable copy of the FY2009-FY2011 releases was located, so earlier years are not added.",
+  "series_end_quarter": "2016",
+  "series_end_basis": "sourcing_boundary",
+  "series_end_reason": "2016 is the last year sourced. Actelion was acquired by Johnson & Johnson in June 2017; no Actelion 2017 first-quarter release was located on a fetchable host, and the J&J sales schedules (2014Q3-2026Q2) and the 2017Q2 Actelion historical sales schedule carry no Zavesca row. The series therefore stops at a sourcing boundary, not at a documented end of reporting.",
+  "annual_basis": "Each year from Actelion's full-year results release for that year (CHF, Sales by product table), except 2011, which is the prior-year column of the FY2012 release; the FY2011 release itself is hosted on fiercebiotech.com, which returns HTTP 403 to the verifier. 2012 is the current-year figure of the FY2012 release, printed to one decimal (84.7); the FY2013 release's prior-year column rounds it to 85.",
+  "notes": "Currency is CHF, not USD. Citations use the Yahoo Finance copies of Actelion's own GlobeNewswire releases because the canonical GlobeNewswire pages return HTTP 403 to automated fetchers (see search_log); Yahoo is a republisher, not the issuer, so the text of each release should be re-confirmed against GlobeNewswire by hand if the aggregator is not acceptable. Release dates: FY2013 11 Feb 2014, FY2014 16 Feb 2015, FY2015 9 Feb 2016, FY2016 14 Feb 2017 (canonical URL for the last: https://www.globenewswire.com/news-release/2017/02/14/916716/0/en/actelion-announces-excellent-financial-results-for-2016.html). Restatement: the FY2014 release prints 2014 as 103 while the FY2015 release prints 2014 as 102; each year here is taken from its own release. Actelion also printed Zavesca quarterly (the FY2016 and FY2015 releases print Q4 columns), so a quarterly series exists in principle; the releases that would complete it are not on a host the verifier can fetch (see search_log). No royalty-holder source was found. The FY2012 release (14 Feb 2013) prints 2012 as 84.7 and 2011 as 68.4.",
+  "search_log": [
+    "Prior attempt (exclusion): J&J sales schedules 2014Q3-2026Q2 and all J&J 10-Q/10-K/8-K exhibits 2017-2026 grepped for Zavesca/miglustat: no row. J&J 8-K/A 0000200406-17-000046 exhibit 99.1 (Actelion FY2016 statements) has no per-product revenue.",
+    "Rung 12a/12b: Actelion Ltd was a Swiss filer with no SEC filings; the quarterly press-release Sales by product table is the fullest product table it published.",
+    "Rung 12c: Web searches for UCB Zavesca royalty/miglustat returned UCB reports showing royalty income only as a total (EUR 88 million in 2025); no UCB document printing Zavesca sales was found (UCB documents were not read end to end, so this is not proof of absence). Shire and Amicus 10-K hits mention Zavesca only as a competitor.",
+    "Rung 12d: Actelion releases found via web search. Canonical GlobeNewswire pages (e.g. 2017/02/14/916716, 2005/02/24/323443) return HTTP 403 to curl with a browser and a research User-Agent; actelion.com and www1.actelion.com redirect to https://www.jnj.com/innovativemedicine/; web.archive.org connection reset through the proxy; ptacts.uspto.gov copy of the FY2014 Financial Report returns 403; takeover.ch fairness opinion (nr/3018) fetched but groups Zavesca into Other products.",
+    "Fetchable copies found at finance.yahoo.com (HTTP 200): FY2013, FY2014, FY2015, FY2016 full-year releases, plus Q1 2014, H1 2014, Q1 2015, 9M 2015, Q1 2016, 9M 2016 releases. Zavesca rows read from each FY release with an HTML parser: FY2013 96/85, FY2014 103/96, FY2015 92/102, FY2016 104/92.",
+    "Review follow-up: the FY2012 release was located at https://finance.yahoo.com/news/actelion-delivers-strong-performance-2012-060302284.html (the news.yahoo.com form of the same slug returns 404; the finance.yahoo.com form returns 200 and prints 'Zavesca sales | 84.7 | 68.4 | 24 | 24'). The earlier note that it was not found was wrong; 2012 is now a direct row and 2011 is added.",
+    "Re-tested with the verifier's own client (httpx, research User-Agent, redirects followed): globenewswire.com release pages 403; fiercebiotech.com and fiercepharma.com copies (FY2011, 9M 2013, 9M 2014, H1 2015) 403; marketscreener.com (H1 2015, FY2016) 403; ptacts.uspto.gov Actelion annual report downloads 403; finance.yahoo.com copies 200.",
+    "Quarterly build attempted and not completed: Q1 releases (2014, 2015, 2016) and the FY releases (Q4 columns) are fetchable on Yahoo, but a Yahoo copy of the half-year releases for 2015 and 2016, the 9M 2014 release, the 2012-2013 interim releases and the Q1 2017 release was not located (search for these returned only Fierce, MarketScreener or GlobeNewswire URLs), and Q2/Q3 cannot be derived without them. Fiercepharma/MarketScreener snippets print H1 2015 Zavesca 44 and 9M 2014 Zavesca 81 (9M 2013 73) but those pages are not fetchable by the verifier, so they are not cited.",
+    "UCB royalty rung (12c): web search only; no UCB document printing Zavesca net sales was found, and the UCB documents were not read end to end, so this is not proof of absence."
+  ],
+  "no_quarterly_series": {
+    "reason_code": "quarterly_series_not_sourceable_from_fetchable_host",
+    "source_url": "https://finance.yahoo.com/news/actelion-announces-excellent-financial-results-060202815.html",
+    "source_quote": "Actelion full-year 2016 results release, Sales by product - Q4 2016 table, in CHF millions, columns Q4 2016, Q4 2015, % variance in CHF, at CER, Zavesca row | 26 | 24 | 10 | 10",
+    "details": "Actelion did print Zavesca quarterly, so this is not a claim that no quarterly figure exists. The quarterly releases are hosted on GlobeNewswire, Fierce and MarketScreener (HTTP 403 to the verifier's client) and only a scattered subset has a fetchable Yahoo copy; Q2 and Q3 of 2014-2016 and every 2012-2013 interim quarter could not be sourced from a fetchable host, so an annual series is written instead (rung 12e as far as the fetchable record goes)."
+  }
+}
