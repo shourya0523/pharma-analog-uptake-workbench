@@ -1,0 +1,54 @@
+{
+  "drug_name": "Ayvakit",
+  "generic_name": "avapritinib",
+  "manufacturer": "Blueprint Medicines",
+  "benchmark_identity": "blueprint_ayvakit_ayvakyt_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Gastrointestinal stromal tumor and systemic mastocytosis",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "oral tablet",
+  "route_of_administration": "oral",
+  "moa": "selective inhibitor of KIT and PDGFRA mutant kinases",
+  "moa_class": "kit_pdgfra_kinase_inhibitor",
+  "first_approval_year": 2020,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2020/212608Orig1s000ltr.pdf",
+    "quote": "NDA 212608/Original 1 provides for the use of Ayvakit (avapritinib) tablets, 100mg, 200mg, and 300mg, for oral use, for the treatment of adults with unresectable or metastatic gastrointestinal stromal tumor (GIST) harboring a platelet-derived growth factor receptor alpha (PDGFRA) exon 18 mutation, including PDGFRA D842V mutations."
+  },
+  "launch_quarter": "2020Q1",
+  "launch_evidence": {
+    "quarter": "2020Q1",
+    "url": "https://www.sec.gov/Archives/edgar/data/1597264/000155837020005283/bpmc-20200506xex99d1.htm",
+    "quote": "Launched AYVAKIT in the U.S. for the treatment of adults with unresectable or metastatic GIST harboring a PDGFRA exon 18 mutations, including PDGFRA D842V mutations, and achieved net product revenue of $3.5 million in the first quarter"
+  },
+  "commercial_start_quarter": "2020Q1",
+  "series_start_reason": "First quarter of sales: Blueprint's Q1 2020 release (approval January 2020) prints USD 3,458 thousand of product revenue, all AYVAKIT.",
+  "series_end_quarter": "2026Q2",
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Series is Blueprint's worldwide AYVAKIT (U.S. from February 2020) / AYVAKYT (EU from September 2020) product revenue in USD. Scope proof: from Q3 2021 the 10-Q has a table of revenue recognized from sales of AYVAKIT/AYVAKYT (US and Rest of World) with a separate GAVRETO row, which is nil from Q3 2021; GAVRETO (approved September 2020) is included in the company's 'Product revenue, net' only in 2020Q3-2021Q2, so those four quarters use the AYVAKIT/AYVAKYT row (2020Q3, 2021Q1, 2021Q2 from the following year's 10-Q prior-year column; 2020Q4 from the release prose rounded to USD 0.1 million). For 2020Q1-Q2 and for Q4s the company 'Product revenue, net' line equals AYVAKIT/AYVAKYT because no other product was sold in those periods. Full years sum to the AYVAKIT/AYVAKYT figure: 2021 52,981; 2022 110,993; 2023 204,207; 2024 478,949 vs 478,950 printed (rounding). From 2025Q4 the series continues as Sanofi's worldwide Ayvakit net sales in EUR (EUR 168 million Q4 2025, 177 Q1 2026, 190 Q2 2026); the currency changes from USD to EUR at the issuer change, and 2025Q3 (EUR 137 million, consolidated only from mid-July 2025) is a part-quarter and is listed in unreported_quarters. Sanofi's Q2 2025 row is Blueprint's pre-acquisition USD figure as stated by Sanofi.",
+  "search_log": [
+    "listed Blueprint Medicines (CIK 0001597264) 8-K and 8-K/A filings 2020-2025 via data.sec.gov submissions and scanned each exhibit for 'net product revenue'; the 21 earnings releases found are Q1 2020-Q1 2025",
+    "listed Blueprint 10-Q and 10-K filings 2020-2025 and dumped their AYVAKIT/AYVAKYT and 'Total product revenue' table rows; the AYVAKIT/AYVAKYT row exists in 10-Qs from Q3 2021 to Q3 2022, and from Q1 2023 the table is headed as revenue recognized from sales of AYVAKIT/AYVAKYT with a single 'Total product revenue' row",
+    "Q1 2020, Q2 2020 and Q3 2020 10-Q/10-K tables carry only 'Product revenue, net'; the prose names AYVAKIT as the only product sold in Q1-Q2 2020 and GAVRETO (USD 0.2m Q3 2020) from Q3 2020",
+    "Sanofi Q2 2025 release (6-K exhibit): paragraph on the Blueprint acquisition prints 'net revenues of $479 million in 2024 and $175 million in Q2 2025'; Sanofi Q3 2025 to Q2 2026 releases print Ayvakit EUR 137, 168, 177, 190 million (Q3 2025 consolidated from mid-July, left out as a part-quarter)",
+    "No Blueprint release or 10-Q exists for Q2 2025 (Sanofi closed the acquisition in July 2025)",
+    "Verifier review: Sanofi releases for Q3 2025 through Q2 2026 read; EDGAR submissions for Blueprint (CIK 1597264) list no periodic report after the Q1 2025 10-Q; the Q3 2026 release is not yet published"
+  ],
+  "joined_issuers": [
+    {
+      "issuer": "Blueprint Medicines",
+      "first_quarter": "2020Q1",
+      "last_quarter": "2025Q2"
+    },
+    {
+      "issuer": "Sanofi",
+      "first_quarter": "2025Q4",
+      "last_quarter": "2026Q2"
+    }
+  ],
+  "unreported_quarters": {
+    "2025Q3": "Ownership change Blueprint to Sanofi; no full-quarter figure is published. Blueprint filed no 10-Q or release for Q2 or Q3 2025 after Sanofi completed the acquisition on 2025-07-18 (EDGAR submissions list a 15-12G on 2025-07-29 and no later periodic report). Sanofi's Q3 2025 release (accession 0001121404-25-000026) prints Ayvakit sales of EUR 137 million but states 'Ayvakit was consolidated by Sanofi from mid-July', so it is a part-quarter and is left out, as for the other Sanofi acquisitions."
+  }
+}

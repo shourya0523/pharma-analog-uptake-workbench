@@ -1,0 +1,33 @@
+{
+  "drug_name": "Copaxone",
+  "generic_name": "glatiramer acetate",
+  "manufacturer": "Teva",
+  "benchmark_identity": "teva_copaxone_worldwide_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Multiple sclerosis (relapsing forms)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection (prefilled syringe)",
+  "route_of_administration": "subcutaneous",
+  "moa": "Immunomodulator; mechanism in multiple sclerosis not fully established (glatiramer acetate, a random polymer of four amino acids, modifies immune processes thought to drive MS pathogenesis)",
+  "moa_class": "glatiramoid_immunomodulator",
+  "first_approval_year": 1996,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2014/020622s089lbl.pdf",
+    "quote": "COPAXONE (glatiramer acetate injection) for subcutaneous use ... Initial U.S. Approval: 1996"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2010Q4",
+  "series_start_reason": "First quarter of the earliest quarterly table of revenues recorded by Teva for Copaxone. Teva's fourth-quarter 2011 release (6-K of 2012-02-15) prints Q4 2010 to Q4 2011 side by side; the Q4 2010, Q1 2011 and Q2 2011 releases (6-Ks of 2011-02-08, 2011-05-11, 2011-07-27) state Copaxone only as global in-market sales and have no table row for it (the third-quarter 2011 release was not identified among the documents read) (e.g. $957 million for Q2 2011 against $877 million recorded by Teva), a different measure, and are not used. Copaxone launched in the U.S. in the 1990s, long before the first row; no Teva document read dates the launch quarter, so launch_quarter is null.",
+  "series_end_quarter": "2017Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "From the first-quarter 2018 release (8-K of 2018-05-03, https://www.sec.gov/Archives/edgar/data/818686/000115752318000962/a51800447ex99_1.htm) Teva prints COPAXONE only inside its geographic segment tables (North America 476, Europe 153, Growth Markets 16 for Q1 2018) and no worldwide row; the fourth-quarter 2017 release (8-K of 2018-02-08) is the last to print the worldwide line.",
+  "notes": "Scope is worldwide: through 2013Q3 the rows are Teva's Revenues by Product Line table, whose generic, API, specialty and other lines sum to a Total row with no geographic split; from 2014 the rows are the specialty medicines segment breakdown (a product-type segment spanning all regions); the Q4 releases print the same worldwide figures. The Q4 2012 release says 'Global revenues recorded by Teva for Copaxone'. Calendar year sums of the quarters agree with the annual figures printed in the 20-F or release: 2011 3,570; 2012 3,996; 2013 4,328; 2014 4,237; 2015 4,023; 2016 4,223; 2017 3,801 (all equal, no rounding gap). 2012Q4 is read from the prior-year column of the Q4 2013 release because the filed exhibit of the Q4 2012 release (6-K of 2013-02-07) states only '$1.1 billion'. Not scored and not spliced: the segment continuation from 2018Q1 (North America segment, which includes Canada, 2018Q1-2023Q4; relabelled United States in the 2024 documents with restated 2023 quarters, e.g. 2023Q1 71 against 76 first printed; plus separate Europe and International Markets rows).",
+  "search_log": [
+    "Listed Teva's filings from data.sec.gov submissions (CIK 818686, recent and the 1996-2017 history file). Fetched and read: every 10-Q, 10-K, 20-F and 8-K/A from 2016 on; every 8-K that carries item 2.02 (results) from 2016 on; every 6-K and 6-K/A filed 2016-2017; and, for 2003-2015, only the 6-K and 20-F filings filed in the calendar windows around quarterly results (15 Jan-5 Mar, 15 Apr-20 May, 15 Jul-20 Aug, 10 Oct-20 Nov). 8-Ks without item 2.02 and 2003-2015 6-Ks filed outside those windows were not opened, so an absence below holds only for the documents read.",
+    "Extracted every table row whose first cell names COPAXONE, QVAR, TREANDA/BENDEKA or UZEDY from those documents, and read the table headings and the sentence before each table for scope.",
+    "Pre-2011 Teva releases (2004-2006 6-Ks) print 'Copaxone (in market) Sales' in prose only (e.g. '$208 million, up 33%' in the 6-K of 2004-02-17); no recorded-revenue quarterly table exists before the Q4 2011 release in the documents read, so the series starts there.",
+    "Q4 2012 quarter: the exhibit of the 6-K filed 2013-02-07 (https://www.sec.gov/Archives/edgar/data/818686/000130901413000104/exhibit1.htm) has no product table in its text and says 'to $1.1 billion'; the Q4 2013 release prints 1,059 as the prior-year column and nine months 2,937 plus 1,059 equals the 20-F's 3,996.",
+    "Checked the first-quarter 2018 and later 8-K/10-Q tables: COPAXONE appears only per segment, so the worldwide line ends at 2017Q4."
+  ]
+}

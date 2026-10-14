@@ -1,0 +1,38 @@
+{
+  "drug_name": "Qinlock",
+  "generic_name": "ripretinib",
+  "manufacturer": "Deciphera Pharmaceuticals",
+  "benchmark_identity": "deciphera_qinlock_us_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Gastrointestinal stromal tumor (advanced GIST)",
+  "revenue_scope": "U.S. QINLOCK net product revenue",
+  "geography": "United States",
+  "formulation": "oral tablet",
+  "route_of_administration": "oral",
+  "moa": "Switch-control kinase inhibitor of KIT and PDGFRA",
+  "moa_class": "tyrosine_kinase_inhibitor",
+  "first_approval_year": 2020,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2020/213973Orig1s000ltr.pdf",
+    "quote": "NDA 213973 NDA APPROVAL ... for QINLOCK (ripretinib) tablet. This new drug application provides for the use of QINLOCK (ripretinib) tablet for the treatment of adult patients with advanced gastrointestinal stromal tumor (GIST)"
+  },
+  "launch_quarter": "2020Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1654151/000119312520209292/d35635dex991.htm",
+    "quote": "Launched QINLOCK in the U.S. for the treatment of fourth-line GIST and achieved net product revenue of $4.8 million in the first partial quarter of the launch."
+  },
+  "commercial_start_quarter": "2020Q2",
+  "series_start_reason": "2020Q2 is the first partial quarter after the U.S. launch (Q2 2020 earnings release).",
+  "series_end_quarter": "2024Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Ono Pharmaceutical completed its acquisition of Deciphera Pharmaceuticals on June 11, 2024; Deciphera filed no Q2 2024 10-Q or release, and after the acquisition QINLOCK sales are reported by Ono in yen and worldwide, a different currency and scope that is not spliced.",
+  "notes": "U.S. scope chosen because the worldwide line (Product revenues, net) gains rest-of-world sales from the third quarter of 2020 (Q3 2021 10-Q prior-year column shows rest of world 517 thousand for Q3 2020 and a dash for Q2 2020) and international sales grow to 10,714 thousand by Q1 2024. Worldwide totals are printed in the same 10-Qs (Q1 2024: 42,550 thousand) and the same releases. Precision is mixed by source: first, second and third quarters of 2021 onward are exact thousands from the 10-Q geography table; the fourth quarters (2020, 2021, 2022, 2023) and Q3 2020 are the one-decimal US$ million figures in the quarter's release (no fourth-quarter 10-Q exists). Annual check: 2020 U.S. 37,989 thousand (FY2021 10-K) vs 4.825 + 14.7 + 18.5 = 38.025; 2021 U.S. 81,476 vs 19.287 + 20.732 + 19.975 + 21.5 = 81.494; 2022 U.S. 97,216 vs 97.220; 2023 U.S. 121,546 vs 121.501; all within the one-decimal rounding of the release figures. Ono (4528) prints QINLOCK worldwide in yen from July 2024 onward (e.g. 8.1 billion yen for July to September 2024, https://prd.ono-pharma.com/sites/default/files/en/ir/library/financial_results/2025_2r_en%25_1.pdf); not spliced.",
+  "search_log": [
+    "Deciphera Pharmaceuticals CIK 1654151: listed 8-K, 8-K/A, 10-Q and 10-K filings from 2020-04 via data.sec.gov submissions; opened every earnings 8-K exhibit 99.1 (Q2 2020 to Q4 2023) and the 10-Qs from Q2 2020 to Q1 2024",
+    "2020 10-Qs (Q2 and Q3 2020) print no U.S. row; Q2 2020 U.S. read from the prior-year column of the Q2 2021 10-Q; Q3 2020 from its own release text",
+    "The Q4 2023 release (8-K 2024-02-06) is the last Deciphera earnings release; the 8-K of 2024-04-29 announces the Ono acquisition and prints no quarterly figure; Q1 2024 is in the 10-Q filed 2024-05-10",
+    "Release text splits US and international revenue only in prose from Q3 2020; income statement tables carry only total Product revenues, net",
+    "FDA approval letter NDA 213973 read from accessdata.fda.gov"
+  ],
+  "unreported_quarters": []
+}

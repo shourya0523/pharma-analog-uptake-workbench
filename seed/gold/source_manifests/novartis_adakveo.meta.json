@@ -1,0 +1,33 @@
+{
+  "drug_name": "Adakveo",
+  "generic_name": "crizanlizumab",
+  "manufacturer": "Novartis",
+  "currency": "USD",
+  "geography": "Worldwide",
+  "benchmark_identity": "novartis_adakveo_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Hematology (sickle cell disease, vaso-occlusive crises)",
+  "revenue_scope": "Worldwide",
+  "formulation": "injection",
+  "route_of_administration": "intravenous",
+  "moa": "P-selectin inhibitor (humanized monoclonal antibody)",
+  "moa_class": "p_selectin_inhibitor",
+  "first_approval_year": 2019,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2019/761128Orig1s000ltr.pdf",
+    "quote": "BLA 761128 BLA APPROVAL ... for ADAKVEO (crizanlizumab-tmca) injection, for intravenous use ... approved your BLA for ADAKVEO"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2019Q4",
+  "series_start_reason": "The Q4 2019 report (0001370368-20-000007) lists Adakveo only as a US approval in Nov 2019 and prints no sales row; the first table row is in the Q1 2020 report (15, prior-year cell nm). The Q4 2020 report (0001370368-21-000008) prints the Q4 2019 quarter as 1, so the series starts at 2019Q4 from that prior-year column. No document dating the commercial launch was read, so launch_quarter is null.",
+  "series_end_quarter": "2023Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The Q4 2023 report (0001370368-24-000007) is the last with an Adakveo sales row (Q4 2023 45; full year 195) and says sales 'declined due to withdrawal in Europe'. The ten results documents from Q1 2024 (0001370368-24-000017) to Q2 2026 (0001114448-26-000012) contain no occurrence of the string Adakveo.",
+  "notes": "Group-level worldwide net sales to third parties as one row of the Oncology business unit table of Novartis's product net sales (Adakveo is listed there although it is a sickle cell disease product). Four quarters sum to the full year printed in the Q4 reports: 2020 105 (15+21+35+34), 2021 164, 2022 194, 2023 195. Own-quarter values equal the next year's prior-year columns throughout.",
+  "search_log": [
+    "Listed all Novartis (CIK 1114448) filings via data.sec.gov submissions (all forms, current and older pages, not filtered to one form). Downloaded the quarterly interim financial report exhibit of every results 6-K from 2010Q2 to 2026Q2 (EX-99.2 / a*-99_2.htm, or the 6-K body for 2010) and parsed every HTML table by script, taking the row whose first cell is the brand label in the table whose header begins with the quarter (Qn YYYY).",
+    "Bigdata.com was used to locate documents; every cited URL is the sec.gov Archives original. Compared each quarter's own value with the prior-year column of the same quarter one year later and with the printed full-year totals; differences are named in notes.",
+    "Looked for a US partner or licensee that prints the brand's own sales (rung c): Sunovion (Sumitomo Pharma) assumed US commercialization rights as of 2016-12-21 per the Novartis Q2 2017 report; a Bigdata.com search of Sumitomo Pharma filings for Utibron, Seebri and Arcapta Neohaler returned no result and no Sumitomo document was obtained, so no US-only line is used.",
+    "Q1 2020 to Q4 2023 reports each read for the Adakveo row. Absence after 2023: the string Adakveo does not occur in any of the ten results documents from Q1 2024 to Q2 2026 (checked by script over the downloaded exhibits)."
+  ]
+}

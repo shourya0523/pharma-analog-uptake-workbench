@@ -1,0 +1,36 @@
+{
+  "drug_name": "Qvar RediHaler",
+  "generic_name": "beclomethasone dipropionate",
+  "manufacturer": "Teva",
+  "benchmark_identity": "teva_qvar_redihaler_north_america_segment_reported",
+  "therapeutic_area": "Respiratory / Allergy",
+  "indication_area": "Asthma (maintenance treatment and prophylaxis)",
+  "revenue_scope": "North America segment",
+  "geography": "North America (United States and Canada)",
+  "formulation": "breath-actuated inhalation aerosol (RediHaler)",
+  "route_of_administration": "inhaled",
+  "moa": "Inhaled corticosteroid (glucocorticoid receptor agonist; anti-inflammatory)",
+  "moa_class": "inhaled_corticosteroid",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2017/207921Orig1s000ltr.pdf",
+    "quote": "NDA 207921 ... for QVAR REDIHALER (beclomethasone dipropionate), inhalation aerosol, 40 mcg, 80 mcg ... It is approved, effective on the date of this letter (signed 08/03/2017)"
+  },
+  "launch_quarter": "2018Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/818686/000115752318000962/a51800447ex99_1.htm",
+    "quote": "We launched QVAR RediHaler in the first quarter of 2018."
+  },
+  "commercial_start_quarter": "2018Q1",
+  "series_start_reason": "Launch quarter of QVAR RediHaler, and the first quarter Teva prints QVAR inside geographic segment tables (the first per-segment product tables are in the first-quarter 2018 10-Q and release). Teva printed a worldwide QVAR (breath-actuated inhaler) line each quarter from 2010Q4 to 2017Q4 (e.g. 2017Q4 61); that line is a different scope (worldwide, and the pre-RediHaler device) and is not spliced.",
+  "series_end_quarter": "2020Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The first-quarter 2021 10-Q (https://www.sec.gov/Archives/edgar/data/818686/000119312521136842/d26234d10q.htm) lists the North America rows Generic products, AJOVY, AUSTEDO, BENDEKA/TREANDA, COPAXONE, ProAir, Anda, Other and Total with no QVAR row, and every later quarterly table read lacks it; QVAR is folded into Other.",
+  "notes": "The QVAR line is the whole QVAR family in the North America segment, which Teva defines as including the United States and Canada. Teva stated in 2017 that it planned to discontinue the QVAR MDI formulation upon the launch of QVAR RediHaler in the first quarter of 2018 (6-K of 2017-08-07, https://www.sec.gov/Archives/edgar/data/818686/000130901417000672/exhibit1.htm), so the line is RediHaler from the transition on; 2018Q1 includes wholesaler stocking for the launch and the releases call 2018Q2-Q3 a transition period. Annual sums: 2018 107+30+36+9=182 and 2019 64+60+60+67=251 against the 2019 10-K's 250 for 2019 (rounding of three-month figures); 2020 45+51+42+40=178 against 179 in the 2020 10-K (rounding). Not scored: the worldwide QVAR line 2010Q4-2017Q4 (in the same Teva tables as Copaxone), and the 2021 onward folded into Other.",
+  "search_log": [
+    "Listed Teva's filings from data.sec.gov submissions (CIK 818686, recent and the 1996-2017 history file). Fetched and read: every 10-Q, 10-K, 20-F and 8-K/A from 2016 on; every 8-K that carries item 2.02 (results) from 2016 on; every 6-K and 6-K/A filed 2016-2017; and, for 2003-2015, only the 6-K and 20-F filings filed in the calendar windows around quarterly results (15 Jan-5 Mar, 15 Apr-20 May, 15 Jul-20 Aug, 10 Oct-20 Nov). 8-Ks without item 2.02 and 2003-2015 6-Ks filed outside those windows were not opened, so an absence below holds only for the documents read.",
+    "Extracted every table row whose first cell names COPAXONE, QVAR, TREANDA/BENDEKA or UZEDY from those documents, and read the table headings and the sentence before each table for scope.",
+    "Searched all cached Teva documents for the phrase 'QVAR RediHaler' near 'launch': launch is stated in the first-quarter 2018 release and 10-Q; later 2018-2019 documents call 2018Q2-Q3 a transition period.",
+    "Read the first-quarter 2021 8-K and 10-Q North America tables: no QVAR row; the 10-Q mentions QVAR Digihaler only in the pipeline list."
+  ]
+}

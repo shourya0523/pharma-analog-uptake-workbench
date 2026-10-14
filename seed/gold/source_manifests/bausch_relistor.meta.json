@@ -1,0 +1,35 @@
+{
+  "drug_name": "Relistor",
+  "generic_name": "methylnaltrexone bromide",
+  "manufacturer": "Bausch Health",
+  "benchmark_identity": "bausch_relistor_us_reported",
+  "therapeutic_area": "GI / Liver / Women's Health / Urology",
+  "indication_area": "Opioid-induced constipation",
+  "revenue_scope": "U.S.",
+  "geography": "United States (U.S. sales of Salix products; the Salix segment is defined as sales in the U.S. of GI products)",
+  "formulation": "subcutaneous injection and oral tablet (aggregated in one row)",
+  "route_of_administration": "subcutaneous and oral",
+  "moa": "Peripherally acting mu-opioid receptor antagonist",
+  "moa_class": "peripheral_mu_opioid_receptor_antagonist",
+  "first_approval_year": 2008,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=021964",
+    "quote": "RELISTOR METHYLNALTREXONE BROMIDE 12MG/0.6ML SOLUTION;SUBCUTANEOUS ... 04/24/2008 ORIG-1 Approval"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2017Q1",
+  "series_start_reason": "First quarter of a U.S.-only, citable Relistor line. The 3Q17 earnings presentation prints Relistor (injection and tablet products aggregated, footnote 2 of its Branded Rx slide) for 3Q16 to 3Q17; the Branded Rx segment is defined as U.S. sales of Salix, Ortho Dermatologics and other products in the FY2017 10-K (valeant2017form10-k.htm) but the FY2016 10-K (valeant2016form10-k.htm) defines it to include branded products sold in Canada, so 3Q16 (22) and 4Q16 (15) are not used. 1Q17 and 2Q17 come from the 3Q17 presentation's trailing columns because the 1Q17 and 2Q17 presentations print no Relistor row (it was two separate products below the top-10 cut until aggregated).",
+  "series_end_quarter": "2021Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The 4Q21 presentation is the last to print a Relistor row in a 'Top 10 Products' table. From 1Q22 the realigned segment structure dropped the per-segment top-10 tables; the 1Q22 to 2Q25 presentations print only growth rates and segment-mix shares for Relistor, and the 8-K earnings releases print only growth wording. From 3Q25 the Salix segment slide prints dollar figures for the three Salix products in an unlabelled chart table (the product names are graphics, not text, so no row can be tied to the label 'Relistor'), which would also leave 1Q22-2Q25 empty.",
+  "notes": "Scope proof: every row is the Salix (or, 1Q17-1Q18, Branded Rx) slide; the Salix segment is 'sales in the U.S. of GI products' (FY2018 to FY2021 10-Ks) and the Salix slides of the 1Q20 to 4Q21 presentations carry the footnote 'U.S. sales only'. The 'Top 10 Products - Total BAUSCH Health' slide also prints a global Relistor row for 1Q20 to 4Q21 that is $0-1M higher in some quarters (1Q20 32 vs 31; 2Q20 27 vs 26; 1Q21 32 vs 30), so the U.S. line was used. Aggregation: the row combines Relistor injection and Relistor tablets (3Q17 presentation footnote 2); the FY2016 10-K reports a $50 million milestone paid in the third quarter of 2016 for the FDA approval of Oral Relistor. Issuer: Valeant Pharmaceuticals International, Inc. (renamed Bausch Health Companies Inc. in 2018) is one filer (CIK 885590) so no join. FY sums of the quarterly rows match the printed fiscal-year columns: 2017 71, 2018 97, 2019 110, 2020 114, 2021 129. Independent cross-check, not used as a source: Progenics Pharmaceuticals, the licensor, prints 'RELISTOR U.S.' net sales reported by its licensee in its 10-Qs (e.g. 1Q18 20.3, 2Q18 23.5, 3Q18 32.4, 1Q19 26.4, 2Q19 23.8, 3Q19 32.6, 1Q20 31.1 million USD), which agree with the rounded deck figures; Progenics (CIK 835887) could extend the history to 2016 in a separate series but is a different issuer and unit precision.",
+  "search_log": [
+    "Bigdata.com smart search for Bausch Health Relistor revenue located the Salix segment slides; the Q2 2026 deck prints 'RELISTOR $41' for 2Q26 (change -$6M) in a graphic table whose product names are images.",
+    "Listed every Bausch Health filing for CIK 0000885590 via data.sec.gov/submissions (all forms incl. 8-K/A and 10-K/A); downloaded all 10-Ks 2016-2026 and every 8-K exhibit 99.x 2016-2026. 10-Ks and 8-K releases print Relistor only in prose (e.g. growth percentages); no product-level dollar row.",
+    "Quarterly product dollar figures are printed in the 'Top 10 Products' slides of the earnings presentations on ir.bauschhealth.com (events-and-presentations/<year>. pages list the files); decks 3Q17, 4Q17, 1Q18, 2Q18, 3Q18, 4Q18 (FY18), 1Q19-4Q19, 1Q20-4Q20, 1Q21-4Q21 parsed with pdfplumber (work/scan.py, work/build.py) from the header columns of each slide; the 1Q17 and 2Q17 presentations print no Relistor row.",
+    "Earnings decks on ir.bauschhealth.com for every quarter 1Q22 through 2Q26 (1Q22, 2Q22, 3Q22, 4Q22/FY22, 1Q23, 2Q23, 3Q23, 4Q23/FY23, 1Q24, 2Q24, 3Q24, 4Q24/FY24, 1Q25, 2Q25, 3Q25, 4Q25/FY25, 1Q26, 2Q26) were text-extracted with pdfplumber; none of 1Q22 to 2Q25 carries a Relistor dollar figure (growth rates and mix shares only); 3Q25 onward prints figures without a text label (see series_end_reason).",
+    "Prior owner: Salix Pharmaceuticals (CIK 1009356) 10-Qs and 10-Ks for 2013-2014 fold Relistor into a row 'Other - Anusol/Azasan/Diuril/Pepcid/Proctocort/Relistor/Deflux/Solesta/Fulyzaq/Metozolv' (e.g. 10-Q filed 2014-11-07), so there is no Salix Relistor line.",
+    "Royalty holder: Progenics 10-Qs print quarterly U.S. and worldwide Relistor net sales as reported by the licensee from 2016; used only as a cross-check of the deck figures (notes).",
+    "Fiscal-year checks against the printed FY column of each Q4 slide: 2017 71, 2018 97, 2019 110, 2020 114, 2021 129 all equal the sum of the four quarterly rows."
+  ]
+}

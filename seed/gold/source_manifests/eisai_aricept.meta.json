@@ -1,0 +1,34 @@
+{
+  "drug_name": "Aricept",
+  "generic_name": "donepezil",
+  "manufacturer": "Eisai",
+  "benchmark_identity": "eisai_aricept_brand_total_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Neurology (Alzheimer's disease)",
+  "revenue_scope": "Brand total",
+  "geography": "Worldwide (Eisai-recorded; Japan, China and Asia / Asia and Latin America itemised)",
+  "formulation": "tablet and orally disintegrating tablet",
+  "route_of_administration": "oral",
+  "moa": "Acetylcholinesterase inhibitor",
+  "moa_class": "acetylcholinesterase_inhibitor",
+  "first_approval_year": 1996,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2018/020690s042,021720s014,022568s011lbl.pdf",
+    "quote": "ARICEPT\u00ae (donepezil hydrochloride) tablets, for oral use | Initial U.S. Approval: 1996 | ARICEPT is an acetylcholinesterase inhibitor indicated for the treatment of dementia of the Alzheimer's type"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2015Q2",
+  "series_start_reason": "Earliest quarter delivered is Eisai FY2015 Q1 (Apr-Jun 2015, calendar 2015Q2), the earliest quarter in any Eisai Reference Data copy that could be fetched from the Japan Exchange Group (JPX returned documents for 21 Reference Data filings, the first filed 2017-01-05). eisai.com/ir/* answers HTTP 302 to the home page from this environment, so earlier quarters are not citable. Aricept was approved in the U.S. in 1996, so the series does not start at launch.",
+  "series_end_quarter": "2026Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Eisai's Reference Data filed 2026-07-31 (FY2026 Q1, Apr-Jun 2026; https://www2.jpx.co.jp/disc/45230/140120260731505609.pdf) replaces the neurology table with 'Major Products (3L)' (Lenvima, Leqembi, Dayvigo) in 'Changes in Quarterly Revenue from Major Products' and prints no Aricept total row; Aricept appears only as separate Japan and EAGS lines in the regional product tables. The last total is FY2025 Q4 (Jan-Mar 2026), calendar 2026Q1 (filed 2026-05-14).",
+  "notes": "Eisai prints one global 'Aricept' row with regional sub-rows. The total is larger than the printed sub-rows (FY2015 Q1: 18.0 against Japan 11.4 + China 1.4 + Asia 2.6 = 15.4), so the total includes revenue not itemised by region; the total row is used as printed. The printed label reads 'Aricept (Alzheimer's disease / Dementia with Lewy bodies treatment)' until the filing of 2024-05-15 and 'Aricept (Alzheimer's disease treatment)' from the filing of 2024-08-02; every quarter is identical in every document that prints it (44 quarters, checked across all 21 documents). Values are Eisai's consolidated revenue in JPY billions to one decimal, so each is precise only to JPY 0.1 billion. Fiscal April-March quarters mapped to calendar quarters (FY Q1 Apr-Jun = calendar Q2).",
+  "search_log": [
+    "eisai.com/ir/* answers HTTP 302 (redirect to home page); eisai.com/news is reachable but carries no quarterly product table",
+    "JPX-hosted Eisai Reference Data (www2.jpx.co.jp/disc/45230/<TDnet id>.pdf): the 21 TDnet ids already used by the Lenvima and Leqembi manifests were fetched and read with pdfplumber; each prints 'Changes in Quarterly Revenue from Major Products' with Aricept rows",
+    "Bigdata.com smart search 'Eisai Aricept revenue by region quarterly reference data' returned no chunks",
+    "Per quarter, the document whose latest column is that quarter is used (direct_reported); where that document was not among the 21 copies the earliest copy printing the quarter is used (direct_retrospective_table)",
+    "Cross-check: each quarter's value is identical in every one of the 21 documents that prints it; FY2015 four quarters 18.0+16.0+17.6+11.7 = 63.3 equals the full-year Aricept figure printed in the FY2016 Q4 document",
+    "FY2026 Q1 document (140120260731505609) searched for 'Aricept': only regional lines (Japan 2.4 / 2.9, EAGS 3.7 / 3.6); no global total"
+  ]
+}

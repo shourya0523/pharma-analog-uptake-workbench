@@ -1,0 +1,41 @@
+{
+  "drug_name": "Elelyso",
+  "generic_name": "taliglucerase alfa",
+  "manufacturer": "Protalix",
+  "benchmark_identity": "protalix_elelyso_worldwide_annual",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Rare disease (Gaucher disease type 1, enzyme replacement)",
+  "revenue_scope": "Worldwide product sales of Elelyso as printed by Protalix",
+  "geography": "Worldwide",
+  "period_type": "annual",
+  "series_role": "peak_benchmark",
+  "formulation": "lyophilized powder for injection",
+  "route_of_administration": "intravenous",
+  "moa": "Recombinant glucocerebrosidase enzyme replacement therapy (plant-cell expressed)",
+  "moa_class": "enzyme_replacement_therapy",
+  "first_approval_year": 2012,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2012/022458s000ltr.pdf",
+    "quote": "NDA 022458 NDA APPROVAL Protalix Ltd. ... for ELELYSO (taliglucerase alfa) for injection for use as a long-term enzyme replacement therapy in patients with Type 1 Gaucher disease ... approved, effective on the date of this letter (electronically signed 05/01/2012)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": null,
+  "annual_basis": "Calendar years 2013 and 2014 only: Protalix's full-year 2014 results release (Form 8-K exhibit 99.1, 2015-03-12) prints Elelyso worldwide product sales for 2014 and 2013. No document found prints 2012 or any year from 2015.",
+  "series_start_reason": "2013 is the first year any document found prints; Pfizer licensed the product in November 2009, FDA approval was May 1, 2012, and no 2012 figure was found.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "no_quarterly_series": {
+    "reason_code": "annual_and_half_year_figures_only",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1006281/000114420415047786/v417672_ex99-1.htm",
+    "source_quote": "Protalix second quarter 2015 results release: 'Total worldwide sales of Elelyso during the six months ended June 30, 2015 were $15.8 million, an increase of $2.7 million, or 21%, compared to worldwide sales of $13.1 million for the six months ended June 30, 2014.'",
+    "details": "The only worldwide Elelyso sales figures found are full-year 2014 and 2013 (2015-03-12 release) and six months 2015 and 2014 (2015-08-10 release); no quarterly figure was found. Pfizer, the marketer, prints no Elelyso row in any quarterly release or 10-Q scanned. Protalix's sales to Pfizer and Fiocruz in its own revenue line are supply revenue, not Elelyso net sales."
+  },
+  "notes": "Scope proof: the sentence quoted reads 'Elelyso worldwide product sales for the full year ended December 31, 2014 were $25.9 million ... compared to sales of $20.0 million for the full year ended December 31, 2013'; the release does not itemise geography, so the scope is the issuer's own 'worldwide product sales' wording. The release does not state who books the sales. Protalix sold its share of the Pfizer collaboration to Pfizer in October 2015 and reports Elelyso revenue only as supply sales to Pfizer and Fiocruz (Brazil) afterward, which is a different line, so the series ends at 2014. The 2013 figure is read from the prior-year comparative in the 2014 release because Protalix's own 2013 full-year release is not on EDGAR (not an 8-K) and was not found; its derivation is recorded as direct_prior_year_column. Half-year figures (six months 2014 13.1, 2015 15.8) are cited in no_quarterly_series.",
+  "search_log": [
+    "Listed Protalix (CIK 0001006281) filings via data.sec.gov submissions, all forms; fetched and text-searched every 8-K/exhibit 2012-01 to 2026-08 and every 10-K and 10-Q 2012-2016 for 'Elelyso' near sales, worldwide, Pfizer. Worldwide product sales appear only in the 2015-03-12 release (2014 25.9, 2013 20.0) and the 2015-08-10 release (six months 2015 15.8, 2014 13.1).",
+    "Protalix 8-Ks of 2012-2014 contain no quarterly results release (results releases of that period are not on EDGAR as 8-Ks); 10-Qs and 10-Ks 2012-2016 contain no Pfizer-reported or worldwide Elelyso sales figure; from 2019 Protalix quotes 'sales of Elelyso to Pfizer' (supply revenue) only.",
+    "Pfizer (CIK 0000078003): scanned table rows of all 8-K exhibit 99 / 10-Q / 10-K exhibit 13 2010-2026 for 'Elelyso': only a product-pipeline/approval table row (approval May 2012, license from Protalix) appears, never a revenue row. Pfizer's fuller product tables therefore do not break out Elelyso.",
+    "A Bigdata.com query for quarterly Elelyso worldwide sales returned only 2026 Protalix guidance (full-year 2026 Elelyso sales $20-23 million, which are Protalix's supply revenue, not worldwide net sales). The Protalix investor-relations site and 2012-2013 annual figures were not checked."
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "drug_name": "Treanda",
+  "generic_name": "bendamustine hydrochloride",
+  "manufacturer": "Teva",
+  "benchmark_identity": "teva_treanda_product_net_sales_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Chronic lymphocytic leukemia and indolent B-cell non-Hodgkin lymphoma",
+  "revenue_scope": "Worldwide product net sales as reported by the owner",
+  "geography": "Worldwide",
+  "formulation": "for injection (lyophilized powder)",
+  "route_of_administration": "intravenous",
+  "moa": "Bifunctional alkylating agent (nitrogen mustard derivative with a purine-like benzimidazole ring) causing DNA damage",
+  "moa_class": "alkylating_agent_nitrogen_mustard",
+  "first_approval_year": 2008,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2008/022249lbl.pdf",
+    "quote": "TREANDA (bendamustine hydrochloride) for Injection, for intravenous infusion ... Initial U.S. Approval: 2008"
+  },
+  "launch_quarter": "2008Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/873364/000110465908029072/a08-13141_1ex99d1.htm",
+    "quote": "Oncology franchise sales were $27.5 million and do not include sales of TREANDA (bendamustine hydrochloride), which was launched in April."
+  },
+  "commercial_start_quarter": "2008Q2",
+  "series_start_reason": "Launch quarter: Cephalon's first-quarter 2008 release says first-quarter oncology sales exclude TREANDA, which was launched in April 2008, and the second-quarter 2008 release prints the first TREANDA sales.",
+  "series_end_quarter": "2015Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "From the first-quarter 2016 6-K (https://www.sec.gov/Archives/edgar/data/818686/000119312516583103/d172918d6k.htm) Teva prints one combined line 'Treanda and Bendeka' (155 for Q1 2016), after the FDA approved Bendeka in December 2015; Treanda alone is not printed again (later tables read 'BENDEKA/TREANDA' or 'BENDEKA and TREANDA'). The combined line is not spliced onto this series.",
+  "joined_issuers": [
+    {
+      "issuer": "Cephalon",
+      "first_quarter": "2008Q2",
+      "last_quarter": "2011Q2"
+    },
+    {
+      "issuer": "Teva",
+      "first_quarter": "2011Q4",
+      "last_quarter": "2015Q4"
+    }
+  ],
+  "unreported_quarters": {
+    "2011Q3": "Ownership gap: Cephalon was acquired by Teva in October 2011 and its last periodic report is the second-quarter 2011 10-Q (filed 2011-08-03); Teva's fourth-quarter 2011 release prints Treanda as a dash for Q3 2011 (row 'Treanda | - | - | - | - | 131' in https://www.sec.gov/Archives/edgar/data/818686/000115752312000780/a50169837.htm) because Cephalon was not yet consolidated, and Teva's 131 for Q4 2011 covers only the post-acquisition part of the quarter. No document read prints Treanda sales for the full third quarter of 2011."
+  },
+  "notes": "Cephalon quarters are from its earnings releases (8-K Exhibit 99.1, 'Consolidated Sales Detail', in USD thousands; TREANDA sits entirely in the United States column, Europe is nil). Teva quarters are Treanda lines of Teva's worldwide product tables (Revenues by Product Line through 2013Q3, specialty medicines breakdown afterwards). Both are the product's whole reported sales, so the two issuers are joined. Annual checks: Cephalon 2008 75,132, 2009 222,112, 2010 393,473 (thousands) equal the sums of the quarters; Teva 2012 608, 2013 709 and 2015 741 equal the sums. 2014: the quarters as first printed sum to 776 but the Q4 2014 release prints 767 for the year, because Teva restated 2014Q2 from 190 (first printed) to 181 in the third-quarter 2014 nine-month column and the 2015 comparatives; the first-printed 190 is kept. 2011Q4 (131) is a partial quarter. Bendeka was approved December 2015 and is never printed on its own line (see teva_bendeka exclusion).",
+  "search_log": [
+    "Listed Teva's filings from data.sec.gov submissions (CIK 818686, recent and the 1996-2017 history file). Fetched and read: every 10-Q, 10-K, 20-F and 8-K/A from 2016 on; every 8-K that carries item 2.02 (results) from 2016 on; every 6-K and 6-K/A filed 2016-2017; and, for 2003-2015, only the 6-K and 20-F filings filed in the calendar windows around quarterly results (15 Jan-5 Mar, 15 Apr-20 May, 15 Jul-20 Aug, 10 Oct-20 Nov). 8-Ks without item 2.02 and 2003-2015 6-Ks filed outside those windows were not opened, so an absence below holds only for the documents read.",
+    "Extracted every table row whose first cell names COPAXONE, QVAR, TREANDA/BENDEKA or UZEDY from those documents, and read the table headings and the sentence before each table for scope.",
+    "Read Cephalon's filings (CIK 873364): all 10-Q and 10-K 2007-2011 and the 8-K earnings releases (item 2.02) 2007-2011; TREANDA first appears in the second-quarter 2008 release.",
+    "Teva documents read for 2011Q4-2015Q4 print Treanda as its own row; rows for Q1 2016 onward are combined with Bendeka.",
+    "Did not search Cephalon filings before 2007 (TREANDA was approved in 2008) or Cephalon 10-Q/A amendments."
+  ]
+}

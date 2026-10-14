@@ -1,0 +1,41 @@
+{
+  "drug_name": "Rebyota",
+  "generic_name": "fecal microbiota, live-jslm",
+  "manufacturer": "Ferring",
+  "benchmark_identity": "ferring_rebyota_us_annual",
+  "therapeutic_area": "Infectious Disease / Vaccines",
+  "indication_area": "Recurrent Clostridioides difficile infection",
+  "revenue_scope": "U.S. net sales",
+  "geography": "United States",
+  "formulation": "rectal suspension (single 150 mL dose)",
+  "route_of_administration": "rectal",
+  "moa": "Live fecal microbiota suspension restoring gut microbiome composition",
+  "moa_class": "live_microbiota_therapeutic",
+  "first_approval_year": 2022,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/vaccines-blood-biologics/vaccines/rebyota",
+    "quote": "STN: 125739 Proper Name: fecal microbiota, live-jslm Tradename: REBYOTA Manufacturer: Ferring Pharmaceuticals Inc. | November 30, 2022 Approval Letter - REBYOTA"
+  },
+  "launch_quarter": "2023Q1",
+  "period_type": "annual",
+  "series_role": "peak_benchmark",
+  "annual_basis": "The only full year for which any public document prints a Rebyota sales figure is 2025, stated in an issuer press release (6-K) of RedHill Biopharma, which acquired the commercialization rights from Ferring (private) in 2026.",
+  "launch_evidence": {
+    "url": "https://www.ferring.com/wp-content/uploads/2026/03/Ferring-Pharmaceuticals-Annual-Report-2025.pdf",
+    "quote": "More than 5,000 patients have been treated with Rebyota in the three years since it was launched in the US in January 2023. (Ferring Group Annual Report 2025, page 15 of the PDF; read with pdfplumber, where the two-column layout interleaves the sentence across lines)"
+  },
+  "notes": "Single-year series. The figure is RedHill's prose statement 'generated approximately $16.9 million in 2025 U.S. net sales' (also printed in RedHill's 6-K of 30 September 2026, 0001104659-26-112334), so it is approximate (one decimal); it is Ferring's U.S. net sales, not RedHill's. Combined Rebyota + Clenpiq 2025 net sales are stated as approximately $37.5 million; Clenpiq is not part of this series. Ferring (private, Swiss) Annual Report 2025 prints Gastroenterology franchise sales of EUR 456 million (2024: 467) and its franchise table itemises only 'of which Pentasa' under Gastroenterology, so no Ferring-published Rebyota figure was found; the Ferring 2025 annual-report PDF returns HTTP 403 to a bare research User-Agent but downloads with a browser User-Agent and was re-read directly with pdfplumber (the 2024 and 2023 report URLs tried returned 404); it contains no Rebyota sales figure, so no Ferring URL is cited as a data row. 2023 and 2024 Rebyota sales: no public document found. RedHill reports from the third quarter 2026; the 2026 third-quarter report was not yet published at the time of sourcing.",
+  "search_log": [
+    "Ferring Pharmaceuticals is privately held (Ferring Holding SA, Swiss); no SEC filings. Ferring Annual Report 2025 (ferring.com PDF) read via text extraction: Gastroenterology franchise EUR 456m, Pentasa 336, Rebyota named only in prose ('Volume growth in Rebyota in the US offset by lower sales of Picoprep'), impairment charges 'including those related to Rebyota'; no Rebyota sales figure",
+    "Partner / licensee: RedHill Biopharma (Nasdaq: RDHL, CIK 1553846) 6-K Exhibit 99.1 of 2026-09-01 (0001178913-26-004369) and 6-K of 2026-09-30 (0001104659-26-112334) print 'approximately $16.9 million in 2025 U.S. net sales' for Rebyota and $37.5 million combined with Clenpiq",
+    "EDGAR full-text search for 'Rebyota' with 'net sales' (2023-2026): other hits are Seres, Acurx, Finch and Immuron (competitor mentions), none print Rebyota sales",
+    "No quarterly Rebyota figure found in any public document; no 2023 or 2024 annual figure found",
+    "Ferring Annual Report 2025 PDF fetched directly with a browser User-Agent and read with pdfplumber: Rebyota appears in prose and in impairment/licence notes only, no sales figure; page 15 states 'it was launched in the US in January 2023', which supports launch_quarter 2023Q1"
+  ],
+  "no_quarterly_series": {
+    "reason_code": "issuer_not_public_annual_third_party_disclosure",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1553846/000117891326004369/exhibit_99-1.htm",
+    "source_quote": "RedHill Biopharma 6-K Exhibit 99.1 (1 September 2026), Rebyota paragraph | Rebyota ... generated approximately $16.9 million in 2025 U.S. net sales",
+    "details": "Ferring is privately held and publishes group and franchise sales only (Annual Report 2025: Gastroenterology EUR 456 million). The only product-level figure is one annual number given by the new licensee. No quarterly Rebyota sales figure exists in a public document; none are interpolated."
+  }
+}

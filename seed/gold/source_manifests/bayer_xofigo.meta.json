@@ -1,0 +1,35 @@
+{
+  "drug_name": "Xofigo",
+  "generic_name": "radium Ra 223 dichloride",
+  "manufacturer": "Bayer",
+  "benchmark_identity": "bayer_xofigo_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (prostate cancer)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection",
+  "route_of_administration": "intravenous",
+  "moa": "Alpha-particle-emitting radiopharmaceutical (radium-223) that is taken up in bone metastases",
+  "moa_class": "alpha_emitter_radiopharmaceutical",
+  "first_approval_year": 2013,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2013/203971Orig1s000ltr.pdf",
+    "quote": "NDA 203971 NDA APPROVAL Bayer HealthCare Pharmaceuticals ... for Xofigo (radium Ra 223 dichloride) Injection ... for the treatment of patients with castration-resistant prostate cancer, symptomatic bone metastases and no known visceral metastatic disease. It is approved, effective on the date of this letter (signature date 05/15/2013)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2013Q3",
+  "series_start_reason": "Series starts 2013Q3, the first quarter for which Bayer prints a Xofigo quarterly sales figure (12, the Q3 2013 prior-year column of the Interim Report Q3 2014). FDA approved Xofigo on 2013-05-15. The Interim Report Q2 2014 prints 'Q2 2013: EUR 0 million' in prose and the Q3 2014 report prints 9M 2013 as 13 against Q3 2013 of 12, so the first half of 2013 together is 1 and is not a quarterly sale; no quarterly figure is printed for 2013Q1. No Bayer document read dates the first commercial sale, so launch_quarter is null.",
+  "series_end_quarter": "2018Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Bayer's Best-Selling Pharmaceuticals Products table drops Xofigo for the first two quarters of 2019 and prints only their sum (156, from the Q3 2020 statement's nine months 2019 of 232 less Q3 2019 of 76). The continuous series therefore ends at 2018Q4; Bayer's 2019Q3-2021Q4 rows are kept as the companion series bayer_xofigo_2019q3_on. Bayer's Best-Selling Pharmaceuticals Products tables dropped Xofigo in 2019: the Quarterly Statement Q1 2019 table has no Xofigo row (earlier search: its rows sum to the printed total of 3,496 without it) and no later document read prints the first-quarter 2019 figure. Together the first two quarters of 2019 are 156 (Quarterly Statement Q3 2020 prior-year column: nine months 2019 of 232 less Q3 2019 of 76), but the split is not printed. Bayer resumes the row with Q3 2019 (prior-year column of the Q3 2020 statement).",
+  "notes": "Bayer Group worldwide Xofigo sales, EUR million. Scope proof: the Best-Selling Pharmaceuticals Products table has no region column; in the 2016 to 2018 reports every product row is followed by an 'of which U.S.A.' sub-row (read in the Annual Report 2016 table), which makes the product row the all-region total. The row label and the values are unchanged when that sub-row is dropped from the 2019 reports onward. The series joins the two periods in which Bayer prints Xofigo, 2013Q3 to 2018Q4 and 2019Q3 to 2021Q4, around the two unreported quarters 2019Q1 and 2019Q2; the scope and the line are the same on both sides of the gap. Quarters from 2014Q3 to 2018Q4 and 2020Q3 to 2021Q4 are read from the report that publishes the quarter as current, except that 2014Q1 and 2014Q2 are prose figures of the 2014 interim reports (Xofigo was not among the 15 table rows then). 2013Q3, 2014Q4, 2019Q3, 2019Q4, 2020Q1 and 2020Q2 are prior-year columns because the quarter's own report prints no Xofigo row; 2013Q4 is the full year 2013 (41) less nine months 2013 (13), derived. Quarterly figures sum to the printed full-year figures: 2014 157, 2015 257, 2016 331, 2017 408, 2018 351, 2020 262, 2021 261 (EUR million); 2019 is 76 + 71 plus 156 for the first half, which equals the printed full year 303; 2013 is 12 + 28 = 40 against the printed 41 (1 in the first half). After 2021 Xofigo is not among the named products of the Annual Report 2022-2025 'Sales by product - Pharmaceuticals' note, so it is inside 'Other' there.",
+  "search_log": [
+    "bayer.com answers HTTP 403 to direct requests from this environment (curl with the project User-Agent), so every bayer.com PDF cited here was read through the Parallel Search web_fetch tool, which returned the text of the bayer.com PDF itself. The staged verifier cannot fetch those URLs from here and reports them as fetch failures. The rows citing reports.bayer.com (Annual Report 2025, Q1 2026, Q2 2026) and the sitecorecontenthub copy of the 2020 Half-Year Report were fetched directly and checked by the verifier.",
+    "Report archive: bayer.com/en/investors/quarterly-reports lists the Q1, Q2 and Q3 financial reports for 2014 to 2026 (2016 and 2015 included) and says reports before 2014 are available through Investor Downloads or the IR team; the earlier note that 2016-and-earlier reports were not located was wrong. Annual Reports 2012 to 2016 were read at bayer.com/sites/default/files/2020-05/ar-2012.pdf, ar-2013.pdf, ar-2014.pdf, ar-2016.pdf and gb-2015-en.pdf. Interim Reports 2013 (Q1 to Q3) were not found in the public archive.",
+    "Quarters before 2017 were read in this pass: Interim Reports Q1 to Q3 2014, 2015 and 2016 (Xofigo is a table row from the Q3 2014 report on; the Q1 and Q2 2014 reports print it in prose only), Annual Reports 2013 to 2016. The Annual Report 2013 prints 'Xofigo (2013 sales: EUR 41 million)'; the Annual Report 2014 prints 'Xofigo (sales in 2014: EUR 157 million; 2013: EUR 41 million)'.",
+    "2019 to 2021 quarters were read in this pass from the Quarterly Statement Q3 2020, Annual Report 2020, Quarterly Statement Q1 2021, Half-Year Financial Report Q2 2021, Quarterly Statement Q3 2021 and Annual Report 2021 (Best-Selling Pharmaceuticals Products tables with an Xofigo row). The Q1 2019 Investor Conference Call presentation was also searched: it prints no Xofigo figure.",
+    "Gap quarters: Q1 2019 table (bayer_ag_quarterly_statement_q1_2019.pdf) has no Xofigo row (rows sum to the printed total of 3,496 without it); Q2 2019 (ab-q2-2019-en.pdf, 15 rows read in full) and Q3 2019 (quartely-statement-q3-2019.pdf) have none; Q1 2020 (bayer-ag-quarterly-statement-q1-2020.pdf) has none; the Q2 2020 half-year report has no Xofigo line anywhere. These checks were made by the earlier search and not repeated in this pass. Q1 2021 prints Q1 2020 (78) and Q2 2021 prints Q2 2020 (61) as prior-year columns.",
+    "Every quarter is read from the report that publishes it as current unless stated otherwise in the row context. Sum check: the four quarters of each full year equal the printed full-year figure (see notes).",
+    "Partner/royalty fallback: Xofigo is sold by Bayer itself in all markets; no partner or royalty holder was identified and none was searched exhaustively. It was not needed, because Bayer prints the line in 2019Q3 to 2021Q4 and the 2019 first half is the only part unprinted."
+  ]
+}

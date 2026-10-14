@@ -805,10 +805,10 @@
   ]
  },
  {
-  "drug_name": "Nubeqa",
+  "drug_name": "Stivarga",
   "manufacturer": "Bayer",
   "ticker": null,
-  "generic_name": "darolutamide",
+  "generic_name": "regorafenib",
   "options": {
    "earnings_since": "2026-04-05",
    "earnings_until": "2027-05-05",
@@ -819,13 +819,13 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 876.9292,
-    "gold_id": "bayer-nubeqa-worldwide-reported-2026q1"
+    "value_normalized_usd_millions": 88.9808,
+    "gold_id": "bayer-stivarga-worldwide-reported-2026q1"
    },
    {
     "period": "2026Q2",
-    "value_normalized_usd_millions": 1023.528,
-    "gold_id": "bayer-nubeqa-worldwide-reported-2026q2"
+    "value_normalized_usd_millions": 83.7432,
+    "gold_id": "bayer-stivarga-worldwide-reported-2026q2"
    }
   ]
  },
@@ -1010,6 +1010,36 @@
   ]
  },
  {
+  "drug_name": "Ayvakit",
+  "manufacturer": "Blueprint Medicines",
+  "ticker": null,
+  "generic_name": "avapritinib",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 149.413,
+    "gold_id": "blueprint-ayvakit-ayvakyt-worldwide-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 175.0,
+    "gold_id": "blueprint-ayvakit-ayvakyt-worldwide-reported-2025q2"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 195.4848,
+    "gold_id": "blueprint-ayvakit-ayvakyt-worldwide-reported-2025q4"
+   }
+  ]
+ },
+ {
   "drug_name": "Zeposia",
   "manufacturer": "Bristol-Myers Squibb",
   "ticker": "BMY",
@@ -1066,6 +1096,36 @@
     "period": "2019Q4",
     "value_normalized_usd_millions": 149.0,
     "gold_id": "bms-vidaza-worldwide-reported-2019q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Treanda",
+  "manufacturer": "Cephalon",
+  "ticker": null,
+  "generic_name": "bendamustine hydrochloride",
+  "options": {
+   "earnings_since": "2011-04-05",
+   "earnings_until": "2012-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2011Q1",
+    "value_normalized_usd_millions": 117.725,
+    "gold_id": "teva-treanda-product-net-sales-reported-2011q1"
+   },
+   {
+    "period": "2011Q2",
+    "value_normalized_usd_millions": 125.847,
+    "gold_id": "teva-treanda-product-net-sales-reported-2011q2"
+   },
+   {
+    "period": "2011Q4",
+    "value_normalized_usd_millions": 131.0,
+    "gold_id": "teva-treanda-product-net-sales-reported-2011q4"
    }
   ]
  },
@@ -1155,6 +1215,41 @@
   ]
  },
  {
+  "drug_name": "Qinlock",
+  "manufacturer": "Deciphera Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "ripretinib",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 31.836,
+    "gold_id": "deciphera-qinlock-us-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2024Q1. Ono Pharmaceutical completed its acquisition of Deciphera Pharmaceuticals on June 11, 2024; Deciphera filed no Q2 2024 10-Q or release, and after the acquisition QINLOCK sales are reported by Ono in yen and worldwide, a different currency and scope that is not spliced."
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2024Q1. Ono Pharmaceutical completed its acquisition of Deciphera Pharmaceuticals on June 11, 2024; Deciphera filed no Q2 2024 10-Q or release, and after the acquisition QINLOCK sales are reported by Ono in yen and worldwide, a different currency and scope that is not spliced."
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2024Q1. Ono Pharmaceutical completed its acquisition of Deciphera Pharmaceuticals on June 11, 2024; Deciphera filed no Q2 2024 10-Q or release, and after the acquisition QINLOCK sales are reported by Ono in yen and worldwide, a different currency and scope that is not spliced."
+   }
+  ]
+ },
+ {
   "drug_name": "Provenge",
   "manufacturer": "Dendreon",
   "ticker": null,
@@ -1225,10 +1320,10 @@
   ]
  },
  {
-  "drug_name": "Leqembi",
+  "drug_name": "Aricept",
   "manufacturer": "Eisai",
   "ticker": null,
-  "generic_name": "lecanemab",
+  "generic_name": "donepezil",
   "options": {
    "earnings_since": "2026-04-05",
    "earnings_until": "2027-05-05",
@@ -1239,13 +1334,23 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 167.079496,
-    "gold_id": "eisai-leqembi-worldwide-reported-2026q1"
+    "value_normalized_usd_millions": 39.537896,
+    "gold_id": "eisai-aricept-brand-total-reported-2026q1"
    },
    {
     "period": "2026Q2",
-    "value_normalized_usd_millions": 183.875666,
-    "gold_id": "eisai-leqembi-worldwide-reported-2026q2"
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2026Q1. Eisai's Reference Data filed 2026-07-31 (FY2026 Q1, Apr-Jun 2026; https://www2.jpx.co.jp/disc/45230/140120260731505609.pdf) replaces the neurology table with 'Major Products (3L)' (Lenvima, Leqembi, Dayvigo) in 'Changes in Quarterly Revenue from Major Products' and prints no Aricept total row; Aricept appears only as separate Japan and EAGS lines in the regional product tables. The last total is FY2025 Q4 (Jan-Mar 2026), calendar 2026Q1 (filed 2026-05-14)."
+   },
+   {
+    "period": "2026Q3",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2026Q1. Eisai's Reference Data filed 2026-07-31 (FY2026 Q1, Apr-Jun 2026; https://www2.jpx.co.jp/disc/45230/140120260731505609.pdf) replaces the neurology table with 'Major Products (3L)' (Lenvima, Leqembi, Dayvigo) in 'Changes in Quarterly Revenue from Major Products' and prints no Aricept total row; Aricept appears only as separate Japan and EAGS lines in the regional product tables. The last total is FY2025 Q4 (Jan-Mar 2026), calendar 2026Q1 (filed 2026-05-14)."
+   },
+   {
+    "period": "2026Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2026Q1. Eisai's Reference Data filed 2026-07-31 (FY2026 Q1, Apr-Jun 2026; https://www2.jpx.co.jp/disc/45230/140120260731505609.pdf) replaces the neurology table with 'Major Products (3L)' (Lenvima, Leqembi, Dayvigo) in 'Changes in Quarterly Revenue from Major Products' and prints no Aricept total row; Aricept appears only as separate Japan and EAGS lines in the regional product tables. The last total is FY2025 Q4 (Jan-Mar 2026), calendar 2026Q1 (filed 2026-05-14)."
    }
   ]
  },
@@ -1391,6 +1496,41 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 135.643,
     "gold_id": "gsk-zejula-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Jyseleca",
+  "manufacturer": "Galapagos",
+  "ticker": "LKFT",
+  "generic_name": "filgotinib",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 28.6491,
+    "gold_id": "galapagos-jyseleca-europe-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 30.0564,
+    "gold_id": "galapagos-jyseleca-europe-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 30.25474,
+    "gold_id": "galapagos-jyseleca-europe-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 32.50728,
+    "gold_id": "galapagos-jyseleca-europe-reported-2023q4"
    }
   ]
  },
@@ -1870,6 +2010,31 @@
   ]
  },
  {
+  "drug_name": "Abilify Asimtufii",
+  "manufacturer": "Lundbeck",
+  "ticker": null,
+  "generic_name": "aripiprazole",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 10.029148,
+    "gold_id": "lundbeck-abilify-asimtufii-us-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 10.738631,
+    "gold_id": "lundbeck-abilify-asimtufii-us-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Rezdiffra",
   "manufacturer": "Madrigal Pharmaceuticals",
   "ticker": "MDGL",
@@ -1945,10 +2110,45 @@
   ]
  },
  {
-  "drug_name": "Mavenclad",
+  "drug_name": "Singulair",
+  "manufacturer": "Merck & Co., Inc.",
+  "ticker": "MRK",
+  "generic_name": "montelukast sodium",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 107.0,
+    "gold_id": "organon-singulair-worldwide-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 92.0,
+    "gold_id": "organon-singulair-worldwide-reported-2021q2"
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": 100.0,
+    "gold_id": "organon-singulair-worldwide-reported-2021q3"
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": 113.0,
+    "gold_id": "organon-singulair-worldwide-reported-2021q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Rebif",
   "manufacturer": "Merck KGaA",
   "ticker": null,
-  "generic_name": "cladribine",
+  "generic_name": "interferon beta-1a",
   "options": {
    "earnings_since": "2026-04-05",
    "earnings_until": "2027-05-05",
@@ -1959,13 +2159,13 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 298.554,
-    "gold_id": "merck-kgaa-mavenclad-worldwide-reported-2026q1"
+    "value_normalized_usd_millions": 112.16264,
+    "gold_id": "merck-kgaa-rebif-worldwide-reported-2026q1"
    },
    {
     "period": "2026Q2",
-    "value_normalized_usd_millions": 319.8525,
-    "gold_id": "merck-kgaa-mavenclad-worldwide-reported-2026q2"
+    "value_normalized_usd_millions": 123.87015,
+    "gold_id": "merck-kgaa-rebif-worldwide-reported-2026q2"
    }
   ]
  },
@@ -2225,6 +2425,31 @@
   ]
  },
  {
+  "drug_name": "Singulair",
+  "manufacturer": "Organon & Co.",
+  "ticker": "OGN",
+  "generic_name": "montelukast sodium",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 40.0,
+    "gold_id": "organon-singulair-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 48.0,
+    "gold_id": "organon-singulair-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Tyrvaya",
   "manufacturer": "Oyster Point Pharma",
   "ticker": null,
@@ -2311,6 +2536,31 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 251.0,
     "gold_id": "pfizer-xeljanz-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Ruconest",
+  "manufacturer": "Pharming",
+  "ticker": "PHAR",
+  "generic_name": "conestat alfa (C1 esterase inhibitor, recombinant)",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 58.4,
+    "gold_id": "pharming-ruconest-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 72.3,
+    "gold_id": "pharming-ruconest-worldwide-reported-2026q2"
    }
   ]
  },
@@ -2665,6 +2915,41 @@
   ]
  },
  {
+  "drug_name": "Vowst",
+  "manufacturer": "Seres Therapeutics",
+  "ticker": "MCRB",
+  "generic_name": "fecal microbiota spores, live-brpk",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 10.1,
+    "gold_id": "seres-vowst-us-net-sales-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 14.4,
+    "gold_id": "seres-vowst-us-net-sales-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2024Q2. Seres sold the VOWST business to Nestle Health Science on 2024-09-30 (Q3 2024 10-Q, Note 3: the VOWST Business is reported as discontinued operations). The Q2 2024 release is the last Seres document printing a quarterly VOWST net sales figure; the Q3 2024 10-Q prints none (its only 'net sales' mentions are milestone thresholds and the profit-share definition)."
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2024Q2. Seres sold the VOWST business to Nestle Health Science on 2024-09-30 (Q3 2024 10-Q, Note 3: the VOWST Business is reported as discontinued operations). The Q2 2024 release is the last Seres document printing a quarterly VOWST net sales figure; the Q3 2024 10-Q prints none (its only 'net sales' mentions are milestone thresholds and the profit-share definition)."
+   }
+  ]
+ },
+ {
   "drug_name": "Vpriv",
   "manufacturer": "Shire",
   "ticker": null,
@@ -2935,10 +3220,10 @@
   ]
  },
  {
-  "drug_name": "Austedo",
+  "drug_name": "Uzedy",
   "manufacturer": "Teva",
   "ticker": "TEVA",
-  "generic_name": "deutetrabenazine",
+  "generic_name": "risperidone extended-release injectable suspension",
   "options": {
    "earnings_since": "2026-04-05",
    "earnings_until": "2027-05-05",
@@ -2949,13 +3234,13 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 559.0,
-    "gold_id": "teva-austedo-us-segment-reported-2026q1"
+    "value_normalized_usd_millions": 63.0,
+    "gold_id": "teva-uzedy-us-segment-reported-2026q1"
    },
    {
     "period": "2026Q2",
-    "value_normalized_usd_millions": 676.0,
-    "gold_id": "teva-austedo-us-segment-reported-2026q2"
+    "value_normalized_usd_millions": 77.0,
+    "gold_id": "teva-uzedy-us-segment-reported-2026q2"
    }
   ]
  },
@@ -3141,6 +3426,41 @@
     "period": "2020Q4",
     "value_normalized_usd_millions": null,
     "why": "The issuer reports no line for this product after 2020Q1. Vivus filed voluntary Chapter 11 petitions on July 7, 2020 and its Form 12b-25 (NT 10-Q, filed 2020-08-17, https://www.sec.gov/Archives/edgar/data/881524/000110465920096093/a20-27697_1nt10q.htm) states it 'is unable to file its Quarterly Report on Form 10-Q for the quarterly period ended June 30, 2020'; no later 10-Q, 10-K or earnings 8-K exists on EDGAR (last filings: Form 25-NSE 2020-08-11, Form 15-12B 2021-01-08)."
+   }
+  ]
+ },
+ {
+  "drug_name": "Protonix",
+  "manufacturer": "Wyeth",
+  "ticker": null,
+  "generic_name": "pantoprazole sodium",
+  "options": {
+   "earnings_since": "2009-04-05",
+   "earnings_until": "2010-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2009Q1",
+    "value_normalized_usd_millions": 91.945,
+    "gold_id": "wyeth-protonix-branded-net-revenue-reported-2009q1"
+   },
+   {
+    "period": "2009Q2",
+    "value_normalized_usd_millions": 86.966,
+    "gold_id": "wyeth-protonix-branded-net-revenue-reported-2009q2"
+   },
+   {
+    "period": "2009Q3",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2009Q2. Pfizer completed its acquisition of Wyeth on October 15, 2009 (Wyeth Form 8-K filed 2009-10-15); Wyeth's last periodic report is the second-quarter 2009 Form 10-Q. Pfizer's own Protonix line (companion, not spliced) starts with a stub for the period after October 15, 2009 (68 for 2009Q4) and prints 158 for 2010Q1 against Wyeth's branded 86.966 for 2009Q2 and family total 237 for the same quarter, so Pfizer's line is not documented to be on the branded-only scope; it is also printed for only some quarters (2010Q1-2011Q3 and 2012Q3, 2014Q2-Q4 as quarterly rows, annual rows 2012-2014) and not at all in releases from 2015."
+   },
+   {
+    "period": "2009Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2009Q2. Pfizer completed its acquisition of Wyeth on October 15, 2009 (Wyeth Form 8-K filed 2009-10-15); Wyeth's last periodic report is the second-quarter 2009 Form 10-Q. Pfizer's own Protonix line (companion, not spliced) starts with a stub for the period after October 15, 2009 (68 for 2009Q4) and prints 158 for 2010Q1 against Wyeth's branded 86.966 for 2009Q2 and family total 237 for the same quarter, so Pfizer's line is not documented to be on the branded-only scope; it is also printed for only some quarters (2010Q1-2011Q3 and 2012Q3, 2014Q2-Q4 as quarterly rows, annual rows 2012-2014) and not at all in releases from 2015."
    }
   ]
  },

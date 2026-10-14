@@ -1,0 +1,45 @@
+{
+  "drug_name": "Talicia",
+  "generic_name": "omeprazole magnesium, amoxicillin and rifabutin",
+  "manufacturer": "RedHill Biopharma",
+  "benchmark_identity": "redhill_talicia_us_annual",
+  "therapeutic_area": "GI / Liver / Women's Health / Urology",
+  "indication_area": "Helicobacter pylori infection (gastroenterology)",
+  "revenue_scope": "Talicia net revenues as stated by RedHill",
+  "geography": "United States",
+  "period_type": "annual",
+  "series_role": "peak_benchmark",
+  "formulation": "capsule (fixed-dose triple combination)",
+  "route_of_administration": "oral",
+  "moa": "proton pump inhibitor (omeprazole) combined with two antibiotics (amoxicillin, rifabutin)",
+  "moa_class": "ppi_antibiotic_triple_combination",
+  "first_approval_year": 2019,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=213004",
+    "quote": "11/01/2019 ORIG-1 Approval (Drugs@FDA, Original Approvals or Tentative Approvals)"
+  },
+  "launch_quarter": "2020Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1553846/000155837022003806/rdhl-20211231x20f.htm",
+    "quote": "an increase in units sold for both Movantik\u00ae, which was acquired by us in April 2020, and Talicia\u00ae, which we launched in March 2020"
+  },
+  "commercial_start_quarter": "2022",
+  "annual_basis": "Calendar years 2022 to 2024 from the Talicia net revenue sentences in RedHill's annual reports on Form 20-F for 2023 and 2024; the 2022 figure is the prior-year figure in the 2023 report.",
+  "series_start_reason": "RedHill's annual reports for 2020, 2021 and 2022 and its quarterly releases name Talicia only as a driver of total net revenues (the 2021 20-F 'Other products' line is not Talicia alone and no Talicia amount is printed); the first printed Talicia net revenues figure for a full year is 2022, in the 2023 report. Launch was March 2020.",
+  "series_end_quarter": null,
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The 2025 annual report (rdhl-20251231x20f.htm) classifies the Talicia operations as discontinued operations after the Talicia Holdings transaction with Cumberland and prints continuing revenues of $0.3 million from a different licence; it states no Talicia net revenue for 2025. RedHill's half-year 2025 release states Talicia net revenues of $3.8 million for the first half only.",
+  "notes": "Two series were considered: the 20-F sentence 'net revenues from sales of other products (mainly Talicia)' (US$9.0 million 2021, 7.7 2022, 9.1 2023) is a wider line that is not Talicia alone (2023: 9.1 against 8.8 stated for Talicia), so only the explicit Talicia net revenue sentences are used. Half-year Talicia net revenues are also printed (H1 2022 4.0, H1 2023 5.1, H1 2024 3.5, H1 2025 3.8) but half years are not quarters.",
+  "search_log": [
+    "listed all RedHill 6-K filings on EDGAR from 2020-09 and read the exhibits of every one that mentions both Talicia and net revenues (quarterly results releases for Q3 2020 to Q3 2021 and FY2021, the H1/22 update, and the H1 2023, 2024 and 2025 and H1 2026 releases): the quarterly releases print only total net revenues, and no Talicia amount appears before the H1 2023 release",
+    "read the Form 20-F for fiscal 2020 to fiscal 2025: Talicia net revenue sentences appear in the 2023 and 2024 reports only",
+    "searched all downloaded text for Talicia-attributed dollar amounts of 7.7, 8.8, 9.0, 8.9 and 9.1 million",
+    "rows: 3 from 2022 to 2024"
+  ],
+  "no_quarterly_series": {
+    "reason_code": "half_year_reporting_only",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1553846/000155837023015048/rdhl-20230630xex99d1.htm",
+    "source_quote": "Talicia net revenues for the six months ended June 30, 2023, were $5.1 million, as compared to $4 million for the six months ended June 30, 2022",
+    "details": "RedHill's quarterly results releases for 2020 and 2021 print total net revenues only (Talicia and Movantik combined), and from 2023 it reports Talicia net revenues for the six months and the full year; no quarterly Talicia product revenue figure was found in any 6-K or 20-F. Quarters are not interpolated."
+  }
+}

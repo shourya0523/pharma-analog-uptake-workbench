@@ -1,0 +1,35 @@
+{
+  "drug_name": "Erivedge",
+  "generic_name": "vismodegib",
+  "manufacturer": "Roche",
+  "benchmark_identity": "roche_erivedge_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (solid; basal cell carcinoma)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "capsule",
+  "route_of_administration": "oral",
+  "moa": "Hedgehog pathway (Smoothened) inhibitor",
+  "moa_class": "hedgehog_pathway_inhibitor",
+  "first_approval_year": 2012,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=203388",
+    "quote": "01/30/2012 ORIG-1 Approval (Drugs@FDA, Original Approvals or Tentative Approvals)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2018Q1",
+  "series_start_reason": "Roche prints an Erivedge row in its year-to-date product sales table from the Q1 2012 release (med-cor-2012-04-12-e.pdf) to the FY2022 release, but the series starts at 2018Q1 because the 2017 releases (f_inv-update-2017-04-27, f_inv-update-2017-07-27-e, f_171019_ir_q3_2017_en, f_180201_ir_fy_release_en) carry only a top-selling-products table with no Erivedge row, so 2017Q1-2017Q4 cannot be read from any release; the longest run without a missing quarter is 2018Q1-2022Q4. The earlier printed run 2013Q1-2016Q4 (also 2012Q1 and 2012Q4; the half-year 2012 release med-cor-2012-07-26-e.pdf has no Erivedge sales row so 2012Q2 and 2012Q3 cannot be separated) is shorter and is separated from this one by the 2017 gap.",
+  "series_end_quarter": "2022Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The FY2022 release (230202_ir_fy22_en.pdf) is the last Roche results release with an Erivedge row in the product sales table (full year 271); the Q1 2023, half-year 2023, Q3 2023, FY2023 and every later release read (q1_2023, 230727_ir_hy, 231019_ir_q3, 240201_ir_fy23_en, 240424_ir_q1, 240725_ir_hy, 231024_ir_q3, 250130_ir_fy24_en, 240425_ir_q1, 250724_ir_hy, 251023_ir_q3, 260129_ir_fy25_en, q1_2026, 260723_ir_hy) contains no Erivedge row. Roche's half-year reports (176343_hy23e to hy26e text) still print Erivedge for the six months only, which gives no quarter split.",
+  "notes": "Printed line is 'Erivedge', worldwide Total column of Roche's reported Pharmaceuticals Division product sales (the United States, Europe, Japan and International tables are separate); one formulation (capsule), all indications. Erivedge never appears in Roche's quarterly Top 20 table, so Q1 of each year is the three-month table and Q2-Q4 are year-to-date differences between consecutive releases. US FDA approval 30 Jan 2012; no Roche document read states a launch quarter, so launch_quarter is null. Roche printed Erivedge for 2012Q1, 2012Q4 and 2013Q1-2016Q4 as well (see series_start_reason); those quarters are not part of this series.",
+  "search_log": [
+    "reused the Roche crawl already on disk from earlier batches (roche.com/investors/events/{q1,hy,q3,annual-results}-YYYY and dated assets.cwp.roche.com/imported/en/med-cor-YYYY-MM-DD-e.pdf probes); 63 Roche results releases from the FY2010 release (2011-02-02) to the half-year 2026 release (2026-07-23) were read as text",
+    "per release read the year-to-date Pharmaceuticals Division product sales table (Total, United States, Europe, Japan, International) and, where the product is in it, the five-column worldwide Top 20 quarterly table; quarters taken from the Q1 three-month table or by year-to-date differences within consecutive Roche releases",
+    "for every calendar year in the series the four quarters sum to the full-year (January-December) figure of that year's FY release",
+    "Roche half-year and annual reports (finance reports) and the 2009-2010 results releases were not used for quarterly rows",
+    "Erivedge absence in 2017: the Q1, half-year, nine-month and FY 2017 releases print only a top-selling table (Actemra, Xolair, Esbriet, Tarceva ...) with no Erivedge string",
+    "Erivedge absence for 2012Q2/2012Q3: med-cor-2012-07-26-e.pdf has Erivedge only in regulatory/pipeline text, no sales row; the 9M 2012 release prints 18 and Q1 2012 printed 5",
+    "rows: 20 from 2018Q1 to 2022Q4 ({'direct_reported': 5, 'year_to_date_less_reported_quarters': 10, 'annual_less_reported_first_nine_months': 5})"
+  ]
+}

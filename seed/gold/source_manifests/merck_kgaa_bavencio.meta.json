@@ -1,0 +1,36 @@
+{
+  "drug_name": "Bavencio",
+  "generic_name": "avelumab",
+  "manufacturer": "Merck KGaA",
+  "benchmark_identity": "merck_kgaa_bavencio_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (urothelial carcinoma and Merkel cell carcinoma)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection (intravenous infusion)",
+  "route_of_administration": "intravenous",
+  "moa": "PD-L1 inhibitor (human monoclonal antibody)",
+  "moa_class": "pdl1_inhibitor",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2017/761049s000lbl.pdf",
+    "quote": "BAVENCIO (avelumab) injection, for intravenous use Initial U.S. Approval: 2017 (BLA 761049 label, Issued 03/2017; marketed by EMD Serono and Pfizer)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2018Q1",
+  "series_start_reason": "Merck KGaA's quarterly reports print Bavencio on its own 'thereof: Bavencio' line of the Healthcare product table from the first-quarter 2018 report. The 2017 quarterly reports print no Bavencio sales line (the 2017 Q3 report mentions only expected contributions; the 2017 annual report states 'sales of EUR 21 million with Bavencio (2016: EUR 0 million)'); the 2018 reports carry 2017 quarters only as prior-year columns (Q2 2017 4, Q3 2017 7) so the series starts at 2018Q1, the first quarter whose own document prints the line.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Net sales of Bavencio worldwide as recorded by Merck KGaA, Darmstadt, Germany (Healthcare sector, Oncology, 'thereof' line; EUR million). Merck KGaA's consolidated statements say that under the Pfizer collaboration 'the Group realizes the majority of sales from the commercialization of Bavencio while the Group and Pfizer evenly split the net amount of sales less defined expense components'; Pfizer separately prints 'Bavencio alliance revenues', which are Pfizer's share and not the product's net sales, so Pfizer is not used (rule 12c). Rights returned to Merck KGaA as of June 30, 2023 (FY2023 report). Currency EUR. Precision is whole EUR million to 2022Q4 (Q4 derived, approximate) and one decimal from 2023Q1.",
+  "search_log": [
+    "emdgroup.com reports-and-financials page (browser User-Agent required; the project User-Agent gets the connection dropped) lists every quarterly Report 2014Q1-2026Q2 plus 'Regional-Sector-Sales' workbooks 2017Q2-2026Q2; downloaded the Report PDF of every quarter 2014Q1-2026Q2 (2016Q4 is published only as '2016-Q4-US.pdf' and was not used) and the Regional-Sector-Sales workbook of every quarter 2017Q2-2026Q2; PDF text read with pdfplumber, workbook rows read with openpyxl (the same reading as the verifier).",
+    "2018Q1-2022Q4: the table 'Net sales by major product lines/products' (line 'thereof: <brand>') of each quarter's own Report PDF; Q4 is not printed separately in the Q4 report, so Q4 = full year (Q4 report) less nine months (Q3 report), flagged approximate because inputs are rounded to EUR 1 million.",
+    "2023Q1-2026Q2: each quarter's own Regional-Sector-Sales workbook (worksheet 'HC Sales BU'), which prints the quarter to one decimal including Q4; the 2017Q2-2022Q4 workbooks store unrounded floats (e.g. 61.61788802) that are not what the sheet shows, so they were not used as sources.",
+    "Bigdata.com smart searches were not needed beyond locating the issuer; app.bigdata.com links are not cited.",
+    "line first appears in the 2018-Q1 report; 2017-Q3 and 2017-Q4 reports searched for Bavencio: no quarterly sales figure (the 2017-Q4 report states EUR 21 million for the year in prose); 2018-Q2/Q3 reports carry prior-year 2017 columns of 4 (Q2), 7 (Q3) and 21 for 2017 in the 2018-Q4 report",
+    "four quarters sum to the printed full year for 2018 (69), 2019 (103), 2020 (156), 2021 (373), 2022 (611) by construction of the derived Q4; 2023 quarters sum to 713.1 against 713 printed, 2024 to 734.8 against 735, 2025 to 612.1 against 612",
+    "Pfizer 10-Ks 2018-2026: 'Bavencio alliance revenues' only (Pfizer's share), no Bavencio net sales table",
+    "Launch quarter not established from an issuer document in the files searched (FDA label dated 03/2017; EU approval September 2017); launch_quarter null."
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "drug_name": "Belviq",
+  "generic_name": "lorcaserin",
+  "manufacturer": "Eisai",
+  "benchmark_identity": "eisai_belviq_us_reported",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Obesity / chronic weight management",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "tablet (Belviq 10 mg; Belviq XR 20 mg)",
+  "route_of_administration": "oral",
+  "moa": "Selective serotonin 5-HT2C receptor agonist",
+  "moa_class": "serotonin_5ht2c_receptor_agonist",
+  "first_approval_year": 2012,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2012/022529Orig1s000ltr.pdf",
+    "quote": "NDA 022529 NDA APPROVAL ... for Belviq (lorcaserin hydrochloride) Tablets, 10 mg ... It is approved, effective on the date of this letter (letter signed 06/27/2012)"
+  },
+  "launch_quarter": "2013Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1080709/000119312513317504/d548387d10q.htm",
+    "quote": "In June 2013, BELVIQ was made available to patients by prescription in the United States."
+  },
+  "commercial_start_quarter": "2015Q2",
+  "series_start_reason": "Earliest quarter in Eisai's own quarterly product table is FY2015 Q1 (Apr-Jun 2015, calendar 2015Q2); the Reference Data copies that print a Belviq quarterly row are the six filed 2017-01-05 to 2020-05-12, the earliest column being FY2015 Q1. The U.S. launch (June 2013) predates the series. Arena Pharmaceuticals' earnings releases print Eisai's U.S. net product sales of BELVIQ in USD for 2013Q3 and 2014Q1-2015Q1 (see notes), but a USD series from a different issuer cannot be joined to this JPY series without a currency splice, and the contiguous USD span is shorter, so the longer Eisai JPY series is kept.",
+  "series_end_quarter": "2020Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "FDA requested withdrawal of Belviq on 13 Feb 2020 and Eisai Inc. submitted a request to withdraw it (https://www.fda.gov/drugs/drug-safety-and-availability/fda-requests-withdrawal-weight-loss-drug-belviq-belviq-xr-lorcaserin-market). Eisai's FY2019 Q4 (Jan-Mar 2020) Reference Data filed 2020-05-12 prints the last Belviq row (United States 0.3); the FY2020 Q4 document (140120210512412549) and every later document contain no Belviq row.",
+  "notes": "Series is the United States line only. Older Reference Data print the single row 'BELVIQ (Antiobesity agent) - United States' (in the filings of 2017-01-05 and 2017-05-09); from the filing of 2018-01-26 onward Eisai prints a brand total 'BELVIQ (Antiobesity agent)' with a 'United States' sub-row, and the sub-row repeats the earlier US values exactly (FY2016 Q1-Q3 1.0, 0.7, 1.1 in both layouts). The brand total is slightly larger than the U.S. row in some quarters (e.g. FY2018 Q3 2.0 against 1.0) and was not used because its composition outside the U.S. is not itemised and the earliest filings print only the U.S. row. The final quarter (FY2019 Q4, Jan-Mar 2020) spans the 13 Feb 2020 withdrawal request, which is why it is 0.3 against 1.1 in the prior quarter. The Eisai Reference Data (FY2019 Q4 filing) states 'All the above revenue of AcipHex and BELVIQ is in the United States' beside the annual table. Arena's own 'net product sales of BELVIQ' (e.g. $4.4 million for Q1 2015, 10-Q 0001193125-15-182233) are Arena's sales of drug to Eisai, a supply line, and are not used. Values are JPY billions to one decimal (precise to JPY 0.1 billion); fiscal Apr-Mar quarters mapped to calendar quarters. JUDGEMENT CALL FOR THE PROMOTER (not spliced): Arena prints Eisai's own U.S. net product sales of BELVIQ in USD millions in these original exhibits: 2013Q3 5.4 ('31.5% of Eisai's net product sales (which were $5.4 million)', https://www.sec.gov/Archives/edgar/data/1080709/000119312513433247/d624828dex991.htm); 2014Q1 8.4 (https://www.sec.gov/Archives/edgar/data/1080709/000119312514194818/d722304dex991.htm); 2014Q2 9.9 (https://www.sec.gov/Archives/edgar/data/1080709/000119312514290615/d769727dex991.htm); 2014Q3 16.8 (https://www.sec.gov/Archives/edgar/data/1080709/000119312514392835/d814368dex991.htm); 2014Q4 10.0 (https://www.sec.gov/Archives/edgar/data/1080709/000119312515073293/d883286dex991.htm); 2015Q1 12.8 ('net US product sales', https://www.sec.gov/Archives/edgar/data/1080709/000119312515181996/d923785dex991.htm). 2013Q2 and 2013Q4 are printed only as Arena's 31.5% share ($1.3M and $2.3M, 8-Ks 0001193125-13-313961 and 0001193125-14-073171) and Eisai's total is not printed, so no USD figure exists for them and the USD series would have a gap at 2013Q4; the contiguous USD run is 2014Q1-2015Q1 (5 quarters). Arena prints no Eisai-level net sales from 2015Q2 onward in the releases or 10-Q/10-K filings checked. The alternative is therefore a 5-quarter USD series (Arena) against this 20-quarter JPY series (Eisai); the two are not combined. Eisai's annual Reference Data (FY2014 Q4, TDnet 140120150511469724) also prints BELVIQ revenue of JPY 2.5 billion for FY2013 and 5.4 billion for FY2014, annual only, which cannot extend a quarterly series.",
+  "search_log": [
+    "eisai.com/ir/* answers HTTP 302; JPX copies of 21 Eisai Reference Data filings fetched and read with pdfplumber (the same TDnet ids as the Lenvima and Leqembi manifests)",
+    "Belviq row located in the 'Changes in Quarterly Revenue from Major Products' table of the 6 documents filed 2017-01-05, 2017-05-09, 2018-01-26, 2018-05-14, 2019-05-13 and 2020-05-12; absent from the 2021-05-12 filing and all later ones (15 documents)",
+    "Each quarter's value is identical in every document that prints it (20 quarters)",
+    "Arena CIK 1080709 submissions listed; earnings-release 8-K exhibits 99.1 for 2013Q2-2016Q1 fetched and read (accessions 0001193125-13-313961, -13-433247, -14-073171, -14-194818, -14-290615, -14-392835, -15-073293, -15-181996, 0001628280-15-006126, -15-008614, -16-011962, -16-015931)",
+    "Arena releases print Eisai's net product sales in USD for 2013Q3 (5.4), 2014Q1 (8.4), 2014Q2 (9.9), 2014Q3 (16.8), 2014Q4 (10.0), 2015Q1 (12.8); 2013Q2 and 2013Q4 are only a 31.5% share ($1.3M, $2.3M); releases from August 2015 onward print no Eisai net sales (earlier note that Arena prints none was wrong for 2013Q3-2015Q1)",
+    "Arena 10-Qs (2013Q2, 2013Q3, 2014Q1, 2015Q1, 2015Q2, 2015Q3, 2016Q1) and 10-Ks (FY2013, FY2014, FY2015) searched for Eisai total net sales: only the 31.5% share and annual 'of the $X net product sales, $Y represented 31.5% of Eisai's net product sales' wording, no Eisai total for 2013Q2 or 2013Q4",
+    "Eisai FY2014 Q4 Reference Data (TDnet 140120150511469724, 2015-05-14; JPX copy returns 404, read from a TDnet mirror) prints BELVIQ only as annual revenue (FY2013 2.5, FY2014 5.4 JPY billions) with no quarterly Belviq row; Eisai FY2015 Q4 Reference Data (TDnet 20160513487673, 2016-05-13) 'Changes in Quarterly Revenue from Major Products' lists oncology, epilepsy, Pariet/AcipHex and Aricept only, with no BELVIQ row, so no Eisai JPY quarter before FY2015 Q1 was found",
+    "Decision: JPY Eisai series kept (20 quarters, one issuer, one currency); USD Arena run (5 contiguous quarters) recorded in notes, not spliced"
+  ]
+}

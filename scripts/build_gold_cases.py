@@ -112,6 +112,16 @@ LAYER_TWO_DEFAULTS = {
 # writing a case whose issuer cannot be resolved.
 ISSUER_TICKERS: dict[str, str | None] = {
     "AbbVie": "ABBV",
+    "Blueprint Medicines": None,
+    "Cephalon": None,
+    "Deciphera Pharmaceuticals": None,
+    "Galapagos": "LKFT",
+    "Lundbeck": None,
+    "Merck & Co., Inc.": "MRK",
+    "Organon & Co.": "OGN",
+    "Pharming": "PHAR",
+    "Seres Therapeutics": "MCRB",
+    "Wyeth": None,
     "Abraxis BioScience": None,
     "Aerie Pharmaceuticals": None,
     "Agios Pharmaceuticals": "AGIO",

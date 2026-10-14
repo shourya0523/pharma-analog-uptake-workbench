@@ -1,0 +1,36 @@
+{
+  "drug_name": "Rebif",
+  "generic_name": "interferon beta-1a",
+  "manufacturer": "Merck KGaA",
+  "benchmark_identity": "merck_kgaa_rebif_worldwide_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Multiple sclerosis (relapsing forms)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection (pre-filled syringe or pen)",
+  "route_of_administration": "subcutaneous",
+  "moa": "Interferon beta-1a; type I interferon receptor agonist",
+  "moa_class": "interferon_beta",
+  "first_approval_year": 2002,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2002/ifnbser030702L.htm",
+    "quote": "This letter hereby issues ... U.S. License No. 1574 to Serono, Incorporated ... Interferon beta-1a is indicated for the treatment of patients with relapsing forms of multiple sclerosis ... your product will bear the proprietary name Rebif (FDA CBER letter dated March 7, 2002)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2018Q1",
+  "series_start_reason": "Series starts at the first quarter (2018Q1) for which the issuer's own report prints Rebif on a 'thereof: Rebif' line of the Healthcare product table. Rebif was approved in the U.S. in 2002 (FDA letter), well before the series start, and Merck KGaA's 2014-2017 quarterly reports do print Rebif quarterly sales (EUR million, e.g. 'Sales and organic growth of Rebif and Erbitux by region' tables, total column), but there the value sits on a different text line from the label 'Rebif' (and in 2015-2017 only in a chart or text paragraph), so a row cannot be tied to one printed line the verifier can read; those years are left out rather than quoted loosely.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Net sales of Rebif worldwide, Merck KGaA, Darmstadt, Germany (Healthcare sector, Neurology & Immunology, 'thereof' line; EUR million). Currency EUR. Precision is whole EUR million to 2022Q4 (Q4 derived, approximate) and one decimal from 2023Q1. Pre-2018 quarters exist in the issuer's 2014-2017 reports but are not included (see series_start_reason).",
+  "search_log": [
+    "emdgroup.com reports-and-financials page (browser User-Agent required; the project User-Agent gets the connection dropped) lists every quarterly Report 2014Q1-2026Q2 plus 'Regional-Sector-Sales' workbooks 2017Q2-2026Q2; downloaded the Report PDF of every quarter 2014Q1-2026Q2 (2016Q4 is published only as '2016-Q4-US.pdf' and was not used) and the Regional-Sector-Sales workbook of every quarter 2017Q2-2026Q2; PDF text read with pdfplumber, workbook rows read with openpyxl (the same reading as the verifier).",
+    "2018Q1-2022Q4: the table 'Net sales by major product lines/products' (line 'thereof: <brand>') of each quarter's own Report PDF; Q4 is not printed separately in the Q4 report, so Q4 = full year (Q4 report) less nine months (Q3 report), flagged approximate because inputs are rounded to EUR 1 million.",
+    "2023Q1-2026Q2: each quarter's own Regional-Sector-Sales workbook (worksheet 'HC Sales BU'), which prints the quarter to one decimal including Q4; the 2017Q2-2022Q4 workbooks store unrounded floats (e.g. 61.61788802) that are not what the sheet shows, so they were not used as sources.",
+    "Bigdata.com smart searches were not needed beyond locating the issuer; app.bigdata.com links are not cited.",
+    "line first read in the 2018-Q1 report; 2014-2017 reports searched for a 'thereof: Rebif' product-table line: none (those reports present Rebif in a region table and a chart: 2014Q1 459.3, 2014Q2 464.3, 2015Q1 429.8, 2015Q2 460.8, 2015Q3 467.5, 2016Q1 422, 2016Q2 441, 2016Q3 436, 2017Q1 415, 2017Q2 425, 2017Q3 389 EUR million, values read in the region-table total column; not cited in the series)",
+    "four quarters sum to the printed full year for 2018 (1,438), 2019 (1,273), 2020 (1,131), 2021 (952), 2022 (887) by construction of the derived Q4; 2023 quarters sum to 709.0 against 709 printed, 2024 to 626.4 against 626, 2025 to 465.0 against 465",
+    "no partner, licensor or royalty holder was found that prints Rebif net sales (rule 12c): Pfizer's 10-K mentions Rebif only in a patent context",
+    "Launch quarter not established from an issuer document in the files searched; launch_quarter null (the series start is later than any launch)."
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "drug_name": "Uzedy",
+  "generic_name": "risperidone extended-release injectable suspension",
+  "manufacturer": "Teva",
+  "benchmark_identity": "teva_uzedy_us_segment_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Schizophrenia (long-acting injectable)",
+  "revenue_scope": "United States segment",
+  "geography": "United States",
+  "formulation": "extended-release injectable suspension (long-acting)",
+  "route_of_administration": "subcutaneous",
+  "moa": "Atypical antipsychotic: serotonin 5-HT2A and dopamine D2 receptor antagonist (risperidone)",
+  "moa_class": "atypical_antipsychotic",
+  "first_approval_year": 2023,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2023/213586Orig1s000ltr.pdf",
+    "quote": "This NDA provides for the use of Uzedy (risperidone) extended-release injectable suspension, for subcutaneous use, for treatment of schizophrenia in adults. (approval letter signed 04/28/2023)"
+  },
+  "launch_quarter": "2023Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/818686/000115752323001212/a53501990ex99_1.htm",
+    "quote": "UZEDY (risperidone) extended-release injectable suspension was approved by the FDA on April 28, 2023 for the treatment of schizophrenia in adults, and was launched in the U.S. in May 2023."
+  },
+  "commercial_start_quarter": "2023Q2",
+  "series_start_reason": "Launch was in May 2023 (2023Q2) and the series starts there. UZEDY has no single-quarter line for 2023Q2 in any document; it is derived in the third-quarter 2024 10-Q (https://www.sec.gov/Archives/edgar/data/818686/000119312524252039/d874174d10q.htm) as nine months 2023 (14) less three months ended September 30, 2023 (2) = 12, with first-quarter 2023 taken as zero because approval (2023-04-28) came after the quarter closed and the first-quarter 2023 10-Q says the product was 'expected to be available in the U.S. in the coming weeks'. The zero is an inference from dates, not a printed line. 2023Q3 (2) is the prior-year column of the same 10-Q.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "UZEDY has no row in the tables of Teva's releases and 10-Qs before the third-quarter 2024 documents (earlier tables fold it into Other), so 2023Q3-2024Q2 are read from the prior-year columns of the 2024Q3-2025Q2 documents; from 2024Q3 the quarter's own document is used. The tables are headed United States (the segment relabelled from North America in 2024); the UZEDY row first appears in the 2024Q3 documents, under United States. Teva's Q4 releases state 'UZEDY revenues in our United States segment in the fourth quarter'. Annual checks: 2024 15+24+35+43=117 equals the 117 printed in the 2024 10-K; 2025 39+54+43+55=191 equals the 191 in the 2025 10-K; 2023: 12+2+9=23 equals the 23 printed as the prior-year column of the 2024 10-K (2023Q2 is derived, see series_start_reason). Teva states UZEDY revenues are U.S. revenues (e.g. 'U.S. revenues of $35 million in Q3 2024').",
+  "search_log": [
+    "Listed Teva's filings from data.sec.gov submissions (CIK 818686, recent and the 1996-2017 history file). Fetched and read: every 10-Q, 10-K, 20-F and 8-K/A from 2016 on; every 8-K that carries item 2.02 (results) from 2016 on; every 6-K and 6-K/A filed 2016-2017; and, for 2003-2015, only the 6-K and 20-F filings filed in the calendar windows around quarterly results (15 Jan-5 Mar, 15 Apr-20 May, 15 Jul-20 Aug, 10 Oct-20 Nov). 8-Ks without item 2.02 and 2003-2015 6-Ks filed outside those windows were not opened, so an absence below holds only for the documents read.",
+    "Extracted every table row whose first cell names COPAXONE, QVAR, TREANDA/BENDEKA or UZEDY from those documents, and read the table headings and the sentence before each table for scope.",
+    "Searched all cached Teva documents for UZEDY with a dollar amount: figures appear in table rows from the 2024Q3 documents and in prose for 2024Q3 onward; none for 2023Q2-2024Q2 as the quarter's own figure.",
+    "Read the 10-Q tables of 2023Q2-2024Q2 and found no UZEDY row; the 2024-07-31 release gives only an outlook (~$80 million for 2024).",
+    "Re-sourcing 2023Q2: read the third-quarter 2024 10-Q three-month (35 | 2) and nine-month (75 | 14) UZEDY rows under United States; read the first-quarter 2023 10-Q and release (UZEDY approved 2023-04-28, 'expected to be available in the U.S. in the coming weeks', no UZEDY sales row) and the second-quarter and third-quarter 2023 releases and 10-Qs (launch May 2023, no UZEDY revenue figure); read the 2024 10-K row (117 | 23) to confirm the 2023 full year of 23."
+  ]
+}

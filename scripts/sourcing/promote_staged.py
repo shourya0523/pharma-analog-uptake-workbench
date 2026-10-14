@@ -173,6 +173,21 @@ def main() -> int:
     )
     if args.only is not None:
         stems = [stem for stem in stems if stem in set(args.only)]
+    # Check every quarterly manifest before copying any, so a refusal leaves
+    # gold untouched rather than half-promoted.
+    refusals = []
+    for stem in stems:
+        meta_path = args.staging / f"{stem}.meta.json"
+        quarterly = args.staging / f"{stem}_quarterly.csv"
+        exclusion = args.staging / f"{stem}.exclusion.json"
+        if meta_path.is_file() and quarterly.is_file():
+            problems = meta_problems(json.loads(meta_path.read_text()), read_rows(quarterly))
+            if problems:
+                refusals.append(f"{stem}: " + "; ".join(problems))
+        if exclusion.is_file() and json.loads(exclusion.read_text())["drug_name"] in excluded:
+            refusals.append(f"{stem}: {json.loads(exclusion.read_text())['drug_name']} is already excluded")
+    if refusals:
+        raise SystemExit("nothing promoted:\n" + "\n".join(refusals))
     for stem in stems:
         meta_path = args.staging / f"{stem}.meta.json"
         quarterly = args.staging / f"{stem}_quarterly.csv"

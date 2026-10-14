@@ -1,0 +1,35 @@
+{
+  "drug_name": "Betaseron",
+  "generic_name": "interferon beta-1b",
+  "manufacturer": "Bayer",
+  "benchmark_identity": "bayer_betaseron_worldwide_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Multiple sclerosis",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "lyophilized powder for injection",
+  "route_of_administration": "subcutaneous",
+  "moa": "Interferon beta-1b; type I interferon receptor agonist",
+  "moa_class": "interferon_beta",
+  "first_approval_year": 1993,
+  "approval_evidence": {
+    "url": "http://www.accessdata.fda.gov/drugsatfda_docs/nda/pre96/103471s0000TOC.html",
+    "quote": "Drug Approval Package: BETASERON INTERFERON BETA-1B SUBCUTANEOUS COMPANY: CHIRON CORPORATION; application number 103471; approval date 07/23/1993 (Drugs@FDA pre-1996 approval package)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2012Q4",
+  "series_start_reason": "Series starts 2012Q4, the earliest quarter from which a contiguous series can be sourced. Betaseron was FDA approved on 1993-07-23 (the application was then held by Chiron; Bayer's line is the Betaferon/Betaseron product after the 2006 Schering AG acquisition) and Bayer printed the line long before 2012: the Annual Report 2012 table prints Q4 2011 (281) and full-year 2011 (1,117). No document reachable here prints the first three quarters of 2012 individually (Bayer's 2012 and 2013 interim reports are not in the public archive), so earlier quarters would leave a gap. No Bayer document read here dates the first sale.",
+  "series_end_quarter": "2024Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "From the Quarterly Statement Q1 2025 on, Bayer's Best-Selling Pharmaceuticals Products table (A 8) no longer has a Betaferon/Betaseron row: its 15 printed rows are Eylea, Xarelto, Nubeqa, Mirena/Kyleena/Jaydess, Aspirin Cardio, YAZ/Yasmin/Yasminelle, Adempas, Kerendia, Kovaltry/Jivi, Adalat, CT Fluid Delivery, Ultravist, Gadovist, Stivarga, Glucobay, then Total (the whole Q1 2025 document was read; Betaferon/Betaseron appears nowhere in it). The earlier search also found no Betaferon/Betaseron row in the Q2 2025, Q3 2025, Annual Report 2025, Q1 2026 and Q2 2026 reports. The last printed quarter is Q4 2024 (Annual Report 2024).",
+  "notes": "Bayer Group worldwide Betaferon (EU) / Betaseron (U.S.) sales on one line, EUR million. Scope proof: the Best-Selling Pharmaceuticals Products table has no region column; in the 2016 to 2018 reports every product row is followed by an 'of which U.S.A.' sub-row (read in the Annual Report 2016 table), which makes the product row the all-region total. The row label and the values are unchanged when that sub-row is dropped from the 2019 reports onward. Printed label is 'Betaferon/Betaseron' without spaces in the Q1 2014 report, 'Betaferon / Betaseron' with spaces from the Q2 2014 report up to the Q3 2021 report and 'Betaferon/Betaseron' from the Annual Report 2021 on; row_label follows the printed spelling. Quarters 2013Q1 to 2013Q3 are read from prior-year columns of the 2014 interim reports because Bayer's 2013 interim reports are not in the public archive; 2012Q4 and 2013Q4 to 2024Q4 are read from the report that publishes the quarter as current. The Annual Report 2015 prior-year columns print Q4 2014 as 191 and full-year 2014 as 823 against 190 and 819 in the Annual Report 2014; the current-report figures are used. Quarterly figures sum to the printed full-year figures: 2013 1,038, 2014 819, 2015 824, 2016 734, 2017 651, 2018 544, 2019 457, 2020 404, 2021 337, 2022 311, 2023 232, 2024 192 (EUR million); 2012 full year is 1,216 against the single printed quarter 329.",
+  "search_log": [
+    "bayer.com answers HTTP 403 to direct requests from this environment (curl with the project User-Agent), so every bayer.com PDF cited here was read through the Parallel Search web_fetch tool, which returned the text of the bayer.com PDF itself. The staged verifier cannot fetch those URLs from here and reports them as fetch failures. The rows citing reports.bayer.com (Annual Report 2025, Q1 2026, Q2 2026) and the sitecorecontenthub copy of the 2020 Half-Year Report were fetched directly and checked by the verifier.",
+    "Report archive: bayer.com/en/investors/quarterly-reports lists the Q1, Q2 and Q3 financial reports for 2014 to 2026 (2016 and 2015 included) and says reports before 2014 are available through Investor Downloads or the IR team; the earlier note that 2016-and-earlier reports were not located was wrong. Annual Reports 2012 to 2016 were read at bayer.com/sites/default/files/2020-05/ar-2012.pdf, ar-2013.pdf, ar-2014.pdf, ar-2016.pdf and gb-2015-en.pdf. Interim Reports 2013 (Q1 to Q3) were not found in the public archive.",
+    "Quarters before 2017 were read in this pass: Interim Reports Q1 to Q3 2014, 2015 and 2016, Annual Reports 2012 to 2016 (Best-Selling Pharmaceuticals Products tables, Betaferon/Betaseron is a row in every one).",
+    "Every quarter from 2013Q4 is read from the report that publishes it as current: first-quarter statements, half-year reports (Q2 column), third-quarter statements, and the Annual Report for Q4. The following year's prior-year columns were compared with the values used: the only difference found is Q4 2014 (190 in the Annual Report 2014, 191 in the Annual Report 2015).",
+    "Sum check: the four quarters of each year 2013 to 2024 equal the full-year figure printed in the Annual Report's Best-Selling Pharmaceuticals Products table (and, for 2022-2024, the 'Sales by Product - Pharmaceuticals' segment note).",
+    "End of series: read the Betaferon/Betaseron row through the Annual Report 2024 (Q4 2024 57 48; 2024 232 192). Read the complete Quarterly Statement Q1 2025 (text of the whole document, table A 8 listed row by row in series_end_reason): no Betaferon/Betaseron row and no mention of the product. Checked earlier the Pharmaceuticals best-selling tables of the Q2 2025 and Q3 2025 reports (the row after Stivarga is Glucobay), the Annual Report 2025 (best-selling table and segment note B 4/6 by product; extracted text of the whole PDF has no Betaferon line with a figure), and the Q1 2026 and Q2 2026 reports (Stivarga then Glucobay). Bayer prints no figure for the product after 2024.",
+    "Partner/royalty fallback (Novartis distributes the U.S. Extavia, not Betaseron): no other issuer prints Betaseron net sales; not pursued further."
+  ]
+}

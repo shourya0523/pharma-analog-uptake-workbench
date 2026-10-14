@@ -1,0 +1,35 @@
+{
+  "drug_name": "Stivarga",
+  "generic_name": "regorafenib",
+  "manufacturer": "Bayer",
+  "benchmark_identity": "bayer_stivarga_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (solid)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Multi-kinase inhibitor (VEGFR, TIE2, KIT, RET, RAF, PDGFR, FGFR)",
+  "moa_class": "multikinase_inhibitor",
+  "first_approval_year": 2012,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2012/203085Orig1s000ltr.pdf",
+    "quote": "NDA 203085 NDA APPROVAL Bayer HealthCare Pharmaceuticals, Inc. ... for Stivarga (regorafenib) tablets, 40 mg. ... for the treatment of patients with metastatic colorectal cancer (CRC) ... It is approved, effective on the date of this letter (signature date 09/27/2012)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2012Q4",
+  "series_start_reason": "Series starts 2012Q4, the first quarter for which Bayer prints a Stivarga quarterly figure. FDA approved Stivarga on 2012-09-27; the Annual Report 2012 prints only full-year 2012 sales of EUR 32 million ('initial sales ... in the United States') and the Annual Report 2013 prints Q4 2012 as 31, so the first nine months of 2012 together are 1 and are not printed by quarter. No Bayer document read dates the first sale, so launch_quarter is null.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Bayer Group worldwide Stivarga sales, EUR million, Pharmaceuticals segment. Scope proof: the Best-Selling Pharmaceuticals Products table has no region column; in the 2016 to 2018 reports every product row is followed by an 'of which U.S.A.' sub-row (read in the Annual Report 2016 table), which makes the product row the all-region total. The row label and the values are unchanged when that sub-row is dropped from the 2019 reports onward. Quarters 2012Q4 and 2013Q1 to 2013Q3 are read from prior-year columns (Annual Report 2013 and the 2014 interim reports) because Bayer's 2013 interim reports are not in the public archive; 2013Q4 to 2016Q4 are each read from the report that publishes the quarter as current. 2017Q1 is read from the Pharmaceuticals commentary of the Interim Report as of March 31, 2017, because Stivarga is not one of the 15 rows of the table that quarter. All other quarters are table rows. Quarterly figures sum to the printed full-year figures: 2013 197, 2014 224, 2015 313, 2016 275, 2017 315, 2018 315, 2019 411, 2020 475, 2021 477, 2022 613, 2023 523, 2024 463, 2025 338 (EUR million); H1 2026 148. 2012 full year is 32 against the single printed quarter 31. Row labels are printed 'Stivarga' with a trademark sign. The Q1 2026 and Q2 2026 rows cite Bayer's digital report pages on reports.bayer.com; the same figures appear in the PDF half-year report.",
+  "search_log": [
+    "bayer.com answers HTTP 403 to direct requests from this environment (curl with the project User-Agent), so every bayer.com PDF cited here was read through the Parallel Search web_fetch tool, which returned the text of the bayer.com PDF itself. The staged verifier cannot fetch those URLs from here and reports them as fetch failures. The rows citing reports.bayer.com (Annual Report 2025, Q1 2026, Q2 2026) and the sitecorecontenthub copy of the 2020 Half-Year Report were fetched directly and checked by the verifier.",
+    "Report archive: bayer.com/en/investors/quarterly-reports lists the Q1, Q2 and Q3 financial reports for 2014 to 2026 (2016 and 2015 included) and says reports before 2014 are available through Investor Downloads or the IR team; the earlier note that 2016-and-earlier reports were not located was wrong. Annual Reports 2012 to 2016 were read at bayer.com/sites/default/files/2020-05/ar-2012.pdf, ar-2013.pdf, ar-2014.pdf, ar-2016.pdf and gb-2015-en.pdf. Interim Reports 2013 (Q1 to Q3) were not found in the public archive.",
+    "Quarters before 2017 were read in this pass: Interim Reports Q1 to Q3 2014, 2015 and 2016, Annual Reports 2012 to 2016 (Best-Selling Pharmaceuticals Products tables; Stivarga is absent from the Annual Report 2012 table and from the Q1 2017 table, present in all others read). Stivarga rows were checked against the following year's prior-year columns where both exist: 2014 to 2016 current figures equal the prior-year columns of the next year's reports.",
+    "Every quarter from 2013Q4 is read from the report that publishes it as current: first-quarter statements, half-year reports (Q2 column), third-quarter statements, and the Annual Report for Q4 (Q4 columns exist in every Annual Report 2013-2025). The following year's prior-year columns were compared with the values used: no restatement of any used Stivarga figure was found.",
+    "Sum check: the four quarters of each year 2013 to 2025 equal the full-year figure printed in the Annual Report's Best-Selling Pharmaceuticals Products table (and, for 2022-2025, the 'Sales by Product - Pharmaceuticals' segment note).",
+    "Table membership: Bayer prints only its 15 best-selling Pharmaceuticals products each quarter. In the Q1 2017 report Stivarga is absent from the table and is read from the commentary (rows checked against the printed total).",
+    "Vitrakvi, Xofigo, Betaseron are covered by separate files in this batch."
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "drug_name": "Singulair",
+  "generic_name": "montelukast sodium",
+  "manufacturer": "Organon",
+  "benchmark_identity": "organon_singulair_worldwide_reported",
+  "therapeutic_area": "Respiratory / Allergy",
+  "indication_area": "Asthma and allergic rhinitis",
+  "revenue_scope": "Worldwide Singulair product sales",
+  "geography": "Worldwide",
+  "formulation": "oral tablet (also chewable tablet and granules)",
+  "route_of_administration": "oral",
+  "moa": "Cysteinyl leukotriene receptor 1 (CysLT1) antagonist",
+  "moa_class": "leukotriene_receptor_antagonist",
+  "first_approval_year": 1998,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=020829",
+    "quote": "02/20/1998 ORIG-1 Approval Type 1 - New Molecular Entity STANDARD"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2002Q3",
+  "series_start_reason": "2002Q3 is the first quarter whose own release prints a net product sales table: the Q3 2002 Merck release prints both a gross table (Singulair 380) and a net table (350), and every later release uses the net table. Merck releases from Q3 2000 to Q2 2002 print a single 'Product Sales Detail' table (Q3 2000 235, Q4 2000 245, Q1 2001 300, Q2 2001 375, Q3 2001 350, Q4 2001 350, Q1 2002 470, Q2 2002 250; https://www.sec.gov/Archives/edgar/data/64978/000095012300009578/y41577ex99-b.txt and the releases of 2001-01-23, 2001-04-20, 2001-07-20, 2001-10-18, 2002-01-22, 2002-04-18, 2002-07-19); the Q3 2001 figure 350 matches the gross basis (380 / 1.09 = 349) rather than the net basis, so they are not spliced onto the net series.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "joined_issuers": [
+    {
+      "issuer": "Merck & Co., Inc.",
+      "first_quarter": "2002Q3",
+      "last_quarter": "2021Q1"
+    },
+    {
+      "issuer": "Organon & Co.",
+      "first_quarter": "2021Q2",
+      "last_quarter": "2026Q2"
+    }
+  ],
+  "unreported_quarters": [],
+  "notes": "Each quarter is read from the issuer's own earnings release (Organon's Q2 2026 figure from its Form 10-Q: the Q2 2026 release exhibit prints no Singulair row). Merck's rows are the Total column of the Singulair line; 2002Q3 and 2002Q4 are rounded to the nearest $5 million as the tables state. Merck's Q1 2021 release (2021-04-29) prints 107; Organon's own Q1 2021 10-Q (filed 2021-06-21) prints the same 107, so the two issuers' lines are the same scope. Annual cross-checks against the full-year figure printed in each Q4 document: 2004 2,623 vs 2,622; 2005 2,976 vs 2,976; 2006 3,579; 2007 4,266; 2008 4,337; 2009 4,659 vs 4,660; 2010 4,987; 2011 5,479; 2012 3,853; 2013 1,196; 2014 1,092; 2015 931; 2016 915; 2017 732; 2018 708; 2019 698; 2020 461 vs 462; 2022 411; 2023 405 vs 404; 2024 360 vs 359; 2025 252, all matching within rounding. 2021 sums to 412 (Merck Q1 107 plus Organon Q2 to Q4 305) against 413 printed in Organon's 10-K. 2003 sums to 2,024 while the Q4 2003 release prints 2,009: the Q3 2003 release implies the first-half figure was restated downward (nine months 1,502 less third quarter 616 gives 886, against 474 + 427 = 901 printed in the first two quarters' own releases), and the quarters are kept as first printed. 2002 is a partial year (Q3 and Q4 only). Singulair lost U.S. exclusivity in August 2012 (Q3 2012 602 vs Q3 2011 1,336, U.S. column 249 vs 901 in the Q3 2012 release).",
+  "search_log": [
+    "Merck & Co. (CIK 64978, to 2009): opened every 8-K exhibit filed in the earnings windows (mid-January to mid-February, April to early May, July to early August, October to early November) from 1998 to 2010 and the primary documents of every 10-Q and 10-K; the first document with a Singulair product sales table is the 2000-10-20 release (exhibit 99(b)); earlier 10-Qs (to Q2 2000) mention Singulair in prose only with no figure; EX-13 annual report exhibits were not scanned",
+    "Merck & Co. (CIK 310158, formerly Schering-Plough, issuer after the Nov 2009 merger): scanned 8-K exhibits in the same windows from 2009 to 2021; the Q4 2009 release (filed 2010-02-16, outside the first window) was found by listing 8-Ks for Jan to Apr 2010; the Singulair row of exhibit 99.2 (Total, U.S., international columns) gives the quarter",
+    "Schering-Plough releases before the merger mention Singulair only as the MSP partnership product and print no Singulair sales; not used",
+    "Organon & Co. (CIK 1821825): listed 8-K, 10-Q and 10-K; earnings release exhibits 99.1 from Q2 2021 to Q1 2026 carry a Singulair row (U.S., Non-U.S., Total); the 2026-07-31 8-K exhibit prints no Singulair row, so Q2 2026 comes from the 10-Q filed 2026-07-31",
+    "the net product sales detail exhibit was identified by its title in each release; the 2002-10-18 release prints gross and net tables, the net row was selected by value",
+    "FDA: NDA 020829 original approval 02/20/1998 read from accessdata.fda.gov"
+  ]
+}

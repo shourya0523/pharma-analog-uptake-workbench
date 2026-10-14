@@ -1,0 +1,36 @@
+{
+  "drug_name": "Jyseleca",
+  "generic_name": "filgotinib",
+  "manufacturer": "Galapagos",
+  "benchmark_identity": "galapagos_jyseleca_europe_reported",
+  "therapeutic_area": "Immunology / Inflammation",
+  "indication_area": "Rheumatoid arthritis (also ulcerative colitis)",
+  "revenue_scope": "Product net sales",
+  "geography": "Europe",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Preferential Janus kinase 1 (JAK1) inhibitor",
+  "moa_class": "jak_inhibitor",
+  "first_approval_year": 2020,
+  "approval_evidence": {
+    "url": "https://www.ema.europa.eu/en/medicines/human/EPAR/jyseleca",
+    "quote": "Name of medicine Jyseleca Active substance filgotinib maleate | Opinion adopted 23/07/2020 Marketing authorisation issued 24/09/2020 (EU marketing authorisation; filgotinib has no FDA approval, so the EMA page is the approval evidence)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2022Q1",
+  "series_start_reason": "Series starts at 2022Q1, the first quarter in which Galapagos records Europe-wide product net sales of Jyseleca. Galapagos' own 6-K of 15 Dec 2020 (https://www.sec.gov/Archives/edgar/data/1421876/000117184320008552/exh_991.htm) states that Gilead's rights to filgotinib in Europe 'will transfer to Galapagos as of January 1, 2022'. The 2021 comparative columns printed in the 2022 releases (Q1 2021 0.1, H1 2021 0.5, nine months 2021 6.1, full year 2021 14.8, EUR million) sit on the same 'Product net sales' line, but the FY2021 release (https://www.sec.gov/Archives/edgar/data/1421876/000117184322001330/exh_991.htm) states 'Jyseleca sales booked by Galapagos in Europe were \u20ac14.8 million out of a total in-market performance of \u20ac25.7 million', i.e. in 2021 Galapagos booked only part of the European sales, and the rights to the rest transfer to Galapagos on 1 January 2022. The line's territory composition therefore changes on a dated boundary (1 Jan 2022), so 2021 (quarters 0.1, 0.4, 5.6, 8.7 by year-to-date differences) is not spliced onto the 2022-2023 line. Whether to prepend 2021 as a smaller-territory span is left to the promoter.",
+  "series_end_quarter": "2023Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Galapagos transferred the Jyseleca business to Alfasigma on 31 January 2024 (6-K of 2 May 2024, https://www.sec.gov/Archives/edgar/data/1421876/000117184324002516/exh_991.htm); the Q1 2024 'Product net sales' of 11.3 covers January only, is presented under discontinued operations and is not a full quarter, so the series ends at 2023Q4. Alfasigma is private and prints no quarterly figure; Galapagos' Q2 2024 release (0001193125-24-192845) repeats 11.3 as the six-month figure.",
+  "notes": "Galapagos prints year-to-date figures only (three, six, nine, twelve months), so Q2-Q4 of each year are differences of consecutive year-to-date figures and each such row quotes the later document with the earlier figure named in the quote text. Four-quarter sums equal the printed full-year figures (2022: 14.4+21.0+25.1+27.1=87.6; 2023: 26.7+27.6+27.8+30.2=112.3). The row 'Product net sales' is described in the same releases as 'Product net sales of Jyseleca in Europe'; Gilead (outside Europe) and Eisai (Japan) sales are not in this line. Q1 2023 table also prints thousands (26,698). Currency EUR.",
+  "search_log": [
+    "EDGAR full-text search (efts.sec.gov, CIK 1421876) for 'Jyseleca net sales' and 'Jyseleca net product sales': listed every 6-K results release 2020-11 to 2024-10 plus 20-F filings; fetched 19 EX-99.1/99.2 exhibits and read the 'Product net sales' row of the consolidated results table with BeautifulSoup",
+    "Dec 2020 announcement, FY2020 (Feb 2021), Q1 2021 and H1 2021 6-K exhibits (0001171843-20-008552, 0001171843-21-001152, 0001193125-21-157376, 0001558370-21-010527): no 'Product net sales' table row matched; the FY2021 release shows the 2020 comparative as '-'",
+    "9M 2021 release (0001193125-21-323012) first prints Product net sales (6.1 vs nil); FY2021 release (0001171843-22-001330) prints 14.8 vs '-'",
+    "Q1/H1/9M/FY 2022 and 2023 releases each print the year-to-date row; each quarter is its own year-to-date minus the prior one; FY2022 and FY2023 sums checked against the printed full-year figures",
+    "2024 releases (Q1, H1, 9M; 0001171843-24-002516, 0001193125-24-192845, 0001171843-24-005897) show only 11.3 / 11.3 / 11.4 as January 2024 sales after the transfer to Alfasigma on 1 Feb 2024",
+    "Alfasigma S.p.A. is privately held: no public document found that prints Jyseleca sales after January 2024",
+    "Not used: Gilead revenue (collaboration revenue, not product sales), Eisai (Japan) product line",
+    "2021 comparatives re-checked against the FY2021 release (0001171843-22-001330) and the 9M 2021 release (0001193125-21-323012): 'Product net sales' 14.8 (FY2021) and 6.1 (9M 2021) are Galapagos-booked sales only, against total in-market sales of 25.7 for 2021; the earlier wording that the transfer was 'phased' during 2021 is not supported by those documents and was removed"
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "drug_name": "Tukysa",
+  "generic_name": "tucatinib",
+  "therapeutic_area": "GI / Liver / Women's Health / Urology",
+  "indication_area": "Oncology (solid: HER2-positive breast cancer and RAS wild-type HER2-positive colorectal cancer)",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "HER2 (ERBB2) tyrosine kinase inhibitor",
+  "moa_class": "her2_tki",
+  "manufacturer": "Pfizer",
+  "benchmark_identity": "pfizer_tukysa_worldwide_reported",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "first_approval_year": 2020,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2020/213411Orig1s000ltr.pdf",
+    "quote": "NDA 213411 NDA APPROVAL ... for TUKYSA (tucatinib), 50 mg and 150 mg tablets ... in combination with trastuzumab and capecitabine for treatment of adult patients with advanced unresectable or metastatic HER2-positive breast cancer, including patients with brain metastases (electronically signed 04/17/2020)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2020Q2",
+  "series_start_reason": "Approved April 17, 2020; Seagen's first-quarter 2020 Form 10-Q (filed 2020-04-30) prints no TUKYSA net product sales row (only an R&D-cost row), and the second-quarter 2020 10-Q prints the first TUKYSA net product sales (15,755 thousand against a nil dash a year earlier). The launch quarter is not stated in an issuer document, so launch_quarter is left null.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "joined_issuers": [
+    {
+      "issuer": "Seagen",
+      "first_quarter": "2020Q2",
+      "last_quarter": "2023Q3"
+    },
+    {
+      "issuer": "Pfizer",
+      "first_quarter": "2024Q1",
+      "last_quarter": "2026Q2"
+    }
+  ],
+  "unreported_quarters": {
+    "2023Q4": "Ownership change Seagen to Pfizer on December 14, 2023. Seagen filed no report for the fourth quarter of 2023 (its last periodic report is the Form 10-Q for the third quarter, filed 2023-11-01). Pfizer's fourth-quarter 2023 release prints Tukysa 17 against a nil dash a year earlier, footnoted '(i) Represents revenues from legacy Seagen products subsequent to the acquisition on December 14, 2023', i.e. a stub of about two weeks; Pfizer's fourth-quarter 2024 release restates the 2023 comparative as 18. No document prints October 1 to December 13, 2023, so no full-quarter figure exists and the stub is not entered as a quarter."
+  },
+  "notes": "Scope and its proof. Seagen: the TUKYSA row of the 'Net product sales' table is the company total; the Form 10-Q for the third quarter of 2023 states 'We recognize product sales revenue ... from TUKYSA in the U.S., Europe and Canada' and that Merck holds exclusive rights in Asia, the Middle East, Latin America and other regions outside the U.S., Canada and Europe (Merck's sales reach Seagen only as royalties, in a different revenue line). The 10-Q gives no geographic split of the row; the fiscal 2022 Form 10-K says European launches began in 2021, so the row is U.S.-only from 2020Q2 and gains Europe (and Canada) at dates the 10-K does not give by quarter. Pfizer: the figures are the WORLDWIDE column of its revenues-by-product table (U.S. and TOTAL INTERNATIONAL columns sit beside it and sum to it). Pfizer's table does not itself say which territories its Tukysa line covers; the join is supported only by continuity (102 in 2023Q3 against 106 in 2024Q1) and by the common company-total character of both lines, not by an issuer statement that the territories are identical. Pfizer also prints a U.S. column (89, 97, 97, 106 for 2024Q1-Q4 and so on) that is narrower and was not used because Seagen printed no U.S. split. Quarter sums agree with printed full years: Seagen 2020 119.537 against 119.6 (release) / 119,585 (10-K), 2021 333.949 against 334.0, 2022 353.235 against 353 (release) / 353,083 (10-K), 2023 nine months 288.651 against 288,651; Pfizer 2024 480 against 480, 2025 463 against 463. The fourth-quarter 2022 value is the release's whole-million 86; the 10-K full year less nine months would be 85.848.",
+  "search_log": [
+    "Listed Seagen (CIK 0001060736) and Pfizer (CIK 0000078003) filings via data.sec.gov submissions, all forms incl. 8-K and 8-K/A, 10-K and 10-Q; scanned the table rows (HTML <tr>) of every Seagen 10-Q/10-K and Item 2.02 exhibit 99 filed 2020-01 to 2024-12 and every Pfizer one filed 2018-01 to 2026-08 for rows containing 'tukysa'.",
+    "Seagen: first TUKYSA net product sales row is the second-quarter 2020 10-Q and release (15,755 thousand / 15.8 million); the first-quarter 2020 10-Q and release (filed 2020-04-30) print TUKYSA only in prose and an R&D row. Each quarter 2020Q2-2023Q3 is read from its own 10-Q (Q1-Q3) or its own fourth-quarter release (Q4, which has no 10-Q).",
+    "Seagen fourth quarter 2023: no report exists (Pfizer completed the acquisition 2023-12-14); Pfizer's FY2023 release (2024-01-30, exhibit pfe-12312023xex99.htm) prints the stub 'Tukysa (i) 17 \u2014 ...' with footnote (i) cited in unreported_quarters. Pfizer's 10-K for 2023 (filed 2024-02-22) prints the same 17.",
+    "Pfizer 2024Q1-2026Q2: each quarter from that quarter's own release; Pfizer 10-Qs repeat the figures (e.g. 106, 121, 124, 110, 122, 138) and agree.",
+    "Annual check: Pfizer 10-K 2024 prints Tukysa 480 and 10-K 2025 prints 463, equal to the quarter sums.",
+    "Launch quarter not established from an issuer document (no search beyond the filings above for a launch statement); launch_quarter left null.",
+    "Tukysa royalty/ex-territory sales by Merck are printed in no Seagen or Pfizer table checked; not part of either line."
+  ]
+}

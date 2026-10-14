@@ -1,0 +1,37 @@
+{
+  "drug_name": "Vowst",
+  "generic_name": "fecal microbiota spores, live-brpk",
+  "manufacturer": "Seres Therapeutics",
+  "benchmark_identity": "seres_vowst_us_net_sales_reported",
+  "therapeutic_area": "Infectious Disease / Vaccines",
+  "indication_area": "Recurrent C. difficile infection (prevention of recurrence)",
+  "revenue_scope": "VOWST net sales as printed in Seres' earnings releases",
+  "geography": "United States",
+  "formulation": "oral capsules (purified Firmicutes bacterial spores)",
+  "route_of_administration": "oral",
+  "moa": "Orally administered live biotherapeutic (purified Firmicutes spores) that restores the gut microbiome",
+  "moa_class": "microbiome_therapeutic",
+  "first_approval_year": 2023,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/vaccines-blood-biologics/vowst",
+    "quote": "STN: 125757 Proper Name: fecal microbiota spores, live-brpk Tradename: VOWST Manufacturer: Seres Therapeutics, Inc. ... April 26, 2023 Approval Letter - VOWST"
+  },
+  "launch_quarter": "2023Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1609809/000119312523205557/d541674dex991.htm",
+    "quote": "VOWST became commercially available in the U.S. in early June 2023."
+  },
+  "commercial_start_quarter": "2023Q2",
+  "series_start_reason": "2023Q2 is the first quarter in which Seres printed a VOWST net sales figure (the first partial quarter after the early June 2023 launch).",
+  "series_end_quarter": "2024Q2",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Seres sold the VOWST business to Nestle Health Science on 2024-09-30 (Q3 2024 10-Q, Note 3: the VOWST Business is reported as discontinued operations). The Q2 2024 release is the last Seres document printing a quarterly VOWST net sales figure; the Q3 2024 10-Q prints none (its only 'net sales' mentions are milestone thresholds and the profit-share definition).",
+  "notes": "Sales are VOWST net sales recorded by Nestle Health Science and reported in Seres' releases; Q1 and Q2 2024 are printed as approximately. Q4 2023 release prints 19.6 since launch, equal to 1.6 + 7.6 + 10.4. The US/Canada profit-share definition in the Q3 2024 10-Q is a post-sale term, not part of this series; no table in the cited releases is a geographic disaggregation, so geography is the U.S. launch market as stated in the Q2 2023 release ('commercially available in the U.S.').",
+  "search_log": [
+    "Seres Therapeutics CIK 1609809: read the Q2 2023 to Q2 2024 8-K exhibit 99.1 earnings releases (d541674dex991, d559654dex991, d806486dex991, d812139dex991, d881755dex991) and located the VOWST net sales sentence in each",
+    "checked the 10-Q for Q3 2024 (mcrb-20240930): VOWST reported as discontinued operations after the 2024-09-30 sale; no quarterly VOWST net sales figure printed",
+    "Q1 2023 and earlier: product not yet approved (FDA approval April 26, 2023), no sales",
+    "Nestle Health Science is a Nestle S.A. subsidiary and does not report VOWST sales on its own line in the documents searched (not exhaustively searched beyond the Nestle-provided metrics Seres printed)",
+    "FDA CBER product page fetched for approval evidence"
+  ]
+}

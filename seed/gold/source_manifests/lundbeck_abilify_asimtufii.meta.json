@@ -1,0 +1,37 @@
+{
+  "drug_name": "Abilify Asimtufii",
+  "generic_name": "aripiprazole",
+  "manufacturer": "Lundbeck",
+  "benchmark_identity": "lundbeck_abilify_asimtufii_us_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Schizophrenia and bipolar I disorder (long-acting injectable, every two months)",
+  "revenue_scope": "United States revenue for Abilify Asimtufii as reported by Lundbeck",
+  "geography": "United States",
+  "formulation": "extended-release injectable suspension (every two months)",
+  "route_of_administration": "intramuscular",
+  "moa": "dopamine D2 and serotonin 5-HT1A partial agonist, 5-HT2A antagonist (aripiprazole)",
+  "moa_class": "dopamine_serotonin_partial_agonist",
+  "first_approval_year": 2023,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=217006",
+    "quote": "04/27/2023 ORIG-1 Approval (Drugs@FDA, Original Approvals or Tentative Approvals)"
+  },
+  "launch_quarter": "2023Q2",
+  "launch_evidence": {
+    "url": "https://www.lundbeck.com/content/dam/lundbeck-com/masters/global-site/global-site/investors/financial-events/q32023/Q3%202023_Corporate%20Release_FINAL.pdf",
+    "quote": "On April 27, 2023 FDA approved a New Drug Application (NDA) for aripiprazole as an every-two-months injection branded as Abilify Asimtufii which was launched in the U.S. in June 2023."
+  },
+  "commercial_start_quarter": "2024Q1",
+  "series_start_reason": "Launch was June 2023 (2023Q2), but the Q3 2023, FY2023, Q1 2024 and Q2 2024 workbooks print a combined 'Abilify Maintena/Asimtufii' line, and the Q3 2024, Q4 2024 and Q1 to Q3 2025 workbooks print only an 'Abilify LAI franchise' line with no Asimtufii line; the first Lundbeck document with a separate US Abilify Asimtufii line is the FY2025 workbook (4 Feb 2026), whose 2024 columns start at Q1 2024. Quarters 2023Q2 to 2023Q4 are therefore not printed separately by Lundbeck.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "The series is Lundbeck's United States revenue line for Abilify Asimtufii in DKK, not Otsuka's worldwide brand sales. Otsuka Holdings (the NDA holder) prints a separate worldwide 'ABILIFY ASIMTUFII' sales figure in yen millions from its first-half 2024 results (cumulative only: H1 2024 7,547, nine months 2024 12,929, FY2024 18,937, Q1 2025 7,699, H1 2025 16,163, nine months 2025 25,769, FY2025 34,786, Q1 2026 12,273, H1 2026 26,681), which gives quarters only from 2024Q3 by year-to-date differences, so the longer Lundbeck series was kept. The global Lundbeck line 'Abilify Asimtufii / Abilify Maintena 960 mg' also exists but mixes a second product. 2024 quarters are prior-year columns of the FY2025 workbook; the 2025 quarters are read from the same workbook because the interim 2025 workbooks have no separate line.",
+  "search_log": [
+    "searched Bigdata.com for Abilify Asimtufii revenue; found Lundbeck and Otsuka Q2 2026 reports naming the brand",
+    "downloaded every Lundbeck financial workbook listed on https://www.lundbeck.com/global/investors/reports-and-presentations (Q1 2023 EBITDA reconciliation, Q3 2023, FY2023, Q1 2024 to Q4 2024, Q1 2025 to Q4 2025, Q1 2026, Q2 2026) and searched every cell for 'simtufii': separate Asimtufii cells appear only in the FY2025, Q1 2026 and Q2 2026 workbooks, earlier workbooks print 'Abilify Maintena/Asimtufii' as one line",
+    "downloaded Otsuka Holdings tanshin and presentations 2023-05 to 2026-07 (ssl4.eir-parts.net/doc/4578): text prints Asimtufii sales separately only from the H1 2024 report and the Q1 2024 report prints 'ABILIFY MAINTENA/ABILIFY ASIMTUFII' combined, so Otsuka's quarters would start at 2024Q3 by year-to-date differences",
+    "FDA approval from Drugs@FDA NDA 217006",
+    "rows: 10 from 2024Q1 to 2026Q2"
+  ]
+}

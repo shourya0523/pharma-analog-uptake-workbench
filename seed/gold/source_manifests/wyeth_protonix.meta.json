@@ -1,0 +1,40 @@
+{
+  "drug_name": "Protonix",
+  "generic_name": "pantoprazole sodium",
+  "therapeutic_area": "GI / Liver / Women's Health / Urology",
+  "indication_area": "Gastroenterology (gastroesophageal reflux disease, erosive esophagitis)",
+  "formulation": "delayed-release tablet and intravenous injection",
+  "route_of_administration": "oral",
+  "moa": "Proton pump inhibitor (H+/K+ ATPase inhibitor)",
+  "moa_class": "proton_pump_inhibitor",
+  "manufacturer": "Wyeth",
+  "benchmark_identity": "wyeth_protonix_branded_net_revenue_reported",
+  "revenue_scope": "Worldwide net revenue of the branded PROTONIX product as Wyeth's product tables print it",
+  "geography": "Worldwide (table heading); substantially United States",
+  "first_approval_year": 2000,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2000/20987ltr.pdf",
+    "quote": "NDA 20-987 Wyeth-Ayerst Laboratories ... for Protonix (pantoprazole sodium) Delayed-Release Tablets ... for the short-term treatment (up to 8 weeks) in the healing and symptomatic relief of erosive esophagitis ... the application is approved effective on the date of this letter (the letter text lists submissions through January 28, 2000 and carries no printed date; Wyeth's 2001 Form 10-Qs state the product was introduced in the second quarter of 2000)"
+  },
+  "launch_quarter": "2000Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/5187/000000518701500006/q1st2001.txt",
+    "quote": "PROTONIX (introduced in the 2000 second quarter)"
+  },
+  "commercial_start_quarter": "2002Q1",
+  "series_start_reason": "Launched in the second quarter of 2000 (Wyeth first-quarter 2001 Form 10-Q). The first quarterly net revenue level for PROTONIX that any document prints is 2002Q1 (247.1, the prior-year column of the first-quarter 2003 Form 10-Q). Wyeth's 2000 and 2001 quarterly filings that could be read print PROTONIX only in prose without a level, and the 2002 10-Qs print only the dollar increase over the prior-year period; full-year levels are printed (2000: 145.0, 2001: 561.3 in the 2003 annual report exhibit) but no quarterly level, so 2000Q2-2001Q4 are not in the series.",
+  "series_end_quarter": "2009Q2",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Pfizer completed its acquisition of Wyeth on October 15, 2009 (Wyeth Form 8-K filed 2009-10-15); Wyeth's last periodic report is the second-quarter 2009 Form 10-Q. Pfizer's own Protonix line (companion, not spliced) starts with a stub for the period after October 15, 2009 (68 for 2009Q4) and prints 158 for 2010Q1 against Wyeth's branded 86.966 for 2009Q2 and family total 237 for the same quarter, so Pfizer's line is not documented to be on the branded-only scope; it is also printed for only some quarters (2010Q1-2011Q3 and 2012Q3, 2014Q2-Q4 as quarterly rows, annual rows 2012-2014) and not at all in releases from 2015.",
+  "notes": "Scope. 2002Q1-2007Q4: the PROTONIX row of Wyeth's principal-products tables (10-Q MD&A and earnings releases); the 2003 annual report exhibit heads the annual table 'Worldwide net revenue by product: Pharmaceuticals'. The 2001 annual report states PROTONIX is licensed from Byk Gulden for marketing in the United States, so the worldwide heading is effectively U.S. sales. 2008Q1-2009Q2: from 2008Q1 Wyeth prints a 'PROTONIX family' row that adds revenue from its own generic pantoprazole (launched 2008Q1) to the brand; the family total is not used. The branded-product amount is printed in a footnote to that row and is used instead, so the series stays on the brand. 2008Q1 is read from the Wyeth first-quarter 2008 Form 10-Q (accession 0001193125-08-102093), whose footnote to the PROTONIX family row prints the branded amount (83,336 thousand) as the current-quarter figure; the 2009 first-quarter 10-Q prints it again as the prior-year column. Formulations: oral delayed-release tablets from the 2000 launch and an intravenous formulation from 2001 (Wyeth third-quarter 2001 10-Q: 'oral and intravenous formulas introduced in the second quarter of 2000 and 2001, respectively'); the row is the brand total. Fourth quarters 2002, 2003, 2004 and 2005 are the annual-report full year less the nine months printed in the third-quarter 10-Q (both to one decimal, two documents each, named in the row context); 2006Q4, 2007Q4 and 2008Q4 are printed in the fourth-quarter releases. Annual checks: 2002 sum 1,070.8 against 1,070.8 printed; 2003 1,493.3; 2004 1,590.6; 2005 1,684.9 against 1,685.0 summed; 2006 1,795.0 against 1,795.0; 2007 1,910.7 against 1,911.2 (whole-million fourth quarter); 2008 branded 394.4 against 395 stated in the fourth-quarter release. Pfizer, the likely issuer named in the request, prints a Protonix line only after the acquisition; see series_end_reason.",
+  "search_log": [
+    "Listed Wyeth (CIK 0000005187) and Pfizer (CIK 0000078003) filings via data.sec.gov submissions (all forms); fetched every Wyeth 10-Q, 10-K and 10-K405 from 2001 to 2009, their exhibits (the annual-report exhibits 13 carry the financial tables), and every 8-K exhibit filed 2002-12 to 2009-12 with earnings items (7/9/12/2.02); extracted rows containing 'PROTONIX'.",
+    "Wyeth 2001-2002: first-quarter 2001, second-quarter 2001 and third-quarter 2001 10-Qs mention PROTONIX only in prose ('introduced in the 2000 second quarter'); the 2002 first-quarter 10-Q names PROTONIX in prose among the drivers of growth with no figure; the 2002 second- and third-quarter 10-Qs print dollar increases only ('PROTONIX 60.1 45% 147.0 50%', 'PROTONIX $182.8 113% $329.8 73%'). The filings of 2000 and the fiscal 2000 10-K405 (filed 2001-03-16) were not readable from the EDGAR file index and were not searched, so no claim is made about 2000.",
+    "First level for each quarter 2002Q1-2002Q3: prior-year columns of the 2003 10-Qs; the 2002 annual report exhibit (filed 2003-03-31) prints 1,070.8 for 2002, 561.3 for 2001 and 145.0 for 2000.",
+    "2003Q1-2007Q3: each quarter from its own 10-Q table; 2006Q4, 2007Q4 from the fourth-quarter 8-K exhibits 99.1 (2007-01-30, 2008-01-31). Releases filed 2004-01-22, 2005-01-31 and 2006-01-31 for the fourth quarters of 2003-2005 print prose or annual figures only, so those fourth quarters are derived.",
+    "2008-2009: 'PROTONIX family' rows (family totals 159.2, 228.0, 233.5, 185, 215.3, 237.1) and their branded-product footnotes.",
+    "Pfizer 2009-2017: rows 'Protonix' in Pfizer 8-K and 10-Q tables 2011-02 to 2012-11 and 'Protonix/Pantoprazole GEP' 2014-07 to 2015-01; no Protonix row in the 2013 releases, in 2015-2017 releases or in 10-Qs, and none in the 2018-2026 releases scanned. Not used because the scope after the acquisition is not documented to match; see series_end_reason.",
+    "Quarter 2009Q3 is not in the series: Wyeth filed no report for it (acquisition closed 2009-10-15) and Pfizer's third-quarter 2009 release precedes consolidation.",
+    "2008Q1 re-checked at source: the first-quarter 2008 Form 10-Q (0001193125-08-102093) footnote reads 'PROTONIX family reflects revenue from both the branded product ($83,336) and the Company's own generic version ($75,828)', so the quarter's own filing is used (direct_reported), not the 2009 comparative column."
+  ]
+}

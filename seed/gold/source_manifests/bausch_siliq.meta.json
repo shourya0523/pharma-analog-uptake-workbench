@@ -1,0 +1,38 @@
+{
+  "drug_name": "Siliq",
+  "generic_name": "brodalumab",
+  "manufacturer": "Bausch Health",
+  "benchmark_identity": "bausch_siliq_us_reported",
+  "therapeutic_area": "Immunology / Inflammation",
+  "indication_area": "Moderate-to-severe plaque psoriasis",
+  "revenue_scope": "U.S.",
+  "geography": "United States (Ortho Dermatologics segment pharmaceutical products are U.S. sales)",
+  "formulation": "subcutaneous injection (prefilled syringe)",
+  "route_of_administration": "subcutaneous",
+  "moa": "Interleukin-17 receptor A (IL-17RA) antagonist monoclonal antibody",
+  "moa_class": "il17_receptor_antagonist",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761032",
+    "quote": "SILIQ BRODALUMAB 210MG/1.5ML INJECTABLE;INJECTION ... 02/15/2017 ORIG-1 Approval"
+  },
+  "launch_quarter": "2017Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/885590/000088559018000017/valeant2017form10-k.htm",
+    "quote": "Dermatology - On July 27, 2017, we launched Siliq in the U.S."
+  },
+  "commercial_start_quarter": "2018Q1",
+  "series_start_reason": "Launched in the U.S. on 27 July 2017, but the earliest presentation to print a Siliq row (2Q18) shows 2Q17, 3Q17 and 4Q17 as $0M (rounded to whole millions) and 1Q18 as $1M, so the series starts at the first quarter printed above zero.",
+  "series_end_quarter": "2021Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The 4Q21 presentation is the last to print a Siliq dollar figure. From 1Q22 the Ortho Dermatologics segment was realigned into Diversified and Solta and the per-segment top-10 tables were dropped; later presentations (for example the 3Q23 presentation: 'SILIQ revenue 46%') and the 8-K releases give growth rates only.",
+  "notes": "Scope proof: rows are the 'Top 10 Products - Ortho Dermatologics' slide. The FY2018 to FY2021 10-Ks define that segment as '(i) sales in the U.S. of Ortho Dermatologics (dermatological) products and (ii) global sales of Solta medical aesthetic devices'; Siliq is the former. Siliq also appears on a separate 'Top 10 Products - International Rx' slide in the 1Q21 to 4Q21 presentations (FY21 22, FY20 17 USD millions); that ex-U.S. line is not part of this series and not added. 3Q18 (3) and 4Q18 (6) come from the 1Q19 presentation's trailing columns because the 3Q18 and FY18 presentations print no Siliq row; the 2Q18 slide footnote says Siliq 'Rounds to $4M and sits in the number 12 position'. FY sums of the quarterly rows match the printed FY columns: 2018 14, 2019 28, 2020 39, 2021 31. Values are rounded to whole millions by the issuer, so early quarters (1, 4, 3) carry large rounding error.",
+  "search_log": [
+    "Bigdata.com search for Bausch Health Siliq revenue returned only filings without a product row; located the product tables in the earnings presentations on ir.bauschhealth.com.",
+    "All Bausch Health 10-Ks 2016-2026 and 8-K exhibit 99.x 2016-2026 (CIK 0000885590) scanned for Siliq: launch statements and R&D discussion only, no product revenue.",
+    "Presentations 2Q18, 1Q19, 2Q19, 3Q19, 4Q19 (FY19), 1Q20, 2Q20, 3Q20, 4Q20 (FY20), 1Q21, 2Q21, 3Q21, 4Q21 (FY21) carry a Siliq row on the Ortho Dermatologics slide; the 3Q17, 4Q17, 1Q18, 3Q18 and 4Q18 presentations print no Siliq row (the 2Q18 footnote states it ranks 12th). 3Q17 and 4Q17 are printed as $0M in the 2Q18 deck, so no earlier non-zero quarter exists.",
+    "Earnings decks on ir.bauschhealth.com for every quarter 1Q22 through 2Q26 (1Q22, 2Q22, 3Q22, 4Q22/FY22, 1Q23, 2Q23, 3Q23, 4Q23/FY23, 1Q24, 2Q24, 3Q24, 4Q24/FY24, 1Q25, 2Q25, 3Q25, 4Q25/FY25, 1Q26, 2Q26) were text-extracted with pdfplumber; Siliq appears only as growth percentages (for example 3Q23 'SILIQ revenue 46%').",
+    "Other issuers: Siliq is licensed from AstraZeneca/Amgen (Valeant holds U.S. and Canada rights) and LEO Pharma holds Europe; neither is a filer that prints Siliq sales in the documents fetched; not searched beyond the Bausch Health documents.",
+    "April 2019 investor deck (8-K 2019-04-30) prose 'SILIQ: Reported $6M in U.S. sales during 4Q18' agrees with the 4Q18 value 6 used."
+  ]
+}

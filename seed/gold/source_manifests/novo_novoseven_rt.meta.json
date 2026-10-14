@@ -1,0 +1,38 @@
+{
+  "drug_name": "NovoSeven RT",
+  "generic_name": "eptacog alfa (activated); coagulation factor VIIa (recombinant)",
+  "manufacturer": "Novo Nordisk",
+  "benchmark_identity": "novo_novoseven_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Hemophilia A or B with inhibitors, congenital factor VII deficiency, Glanzmann's thrombasthenia, acquired hemophilia (bleeding episodes and surgery)",
+  "revenue_scope": "Worldwide NovoSeven net sales",
+  "geography": "Worldwide",
+  "formulation": "lyophilized powder for solution (room-temperature-stable presentation)",
+  "route_of_administration": "intravenous",
+  "moa": "Recombinant activated coagulation factor VII (bypassing agent) that activates factor X on activated platelets to generate thrombin in patients with inhibitors",
+  "moa_class": "factor_viia_bypassing_agent",
+  "first_approval_year": 1999,
+  "approval_evidence": {
+    "url": "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=ea65c32f-8518-4383-b621-17056c0eebc0",
+    "quote": "NOVOSEVEN RT (coagulation Factor VIIa, recombinant) lyophilized powder for solution, for intravenous use Initial U.S. Approval: 1999"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2002Q3",
+  "series_start_reason": "2002Q3 is the earliest quarter whose own report is an electronic EDGAR filing (Q3 2002 6-K, filed 2002-10-31); earlier Novo Nordisk filings on EDGAR are paper. NovoSeven itself launched years earlier, so the series starts at a sourcing boundary, not at launch. The Q3 2002 report also prints earlier quarters as comparatives; they are not used because their own reports were not located.",
+  "series_end_quarter": "2025Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Novo Nordisk's Q1 2026 and Q2 2026 reports (caq12026.htm, caq22026.htm) print no NovoSeven row: the rare disease table carries only 'Rare blood disorders' and a footnote lists NovoSeven among its components; the Q4 2025 report (caq42025.htm) still prints a NovoSeven row of 1,803.",
+  "notes": "Worldwide sales in DKK million. The product line is printed as NovoSeven (earlier reports: 'Haemostasis management', which the 2002 to 2003 reports name as NovoSeven); NovoSeven RT is the room-temperature-stable presentation sold under the same line, so the line is the brand total and the drug_name NovoSeven RT is the product the attributes describe. Accounting basis: 2004Q1-2004Q3 are Danish GAAP figures from the quarter's own report; the FY2004 report (first IFRS report) restates those quarters, so the 2004 quarters sum to 4,385 while the FY2004 report prints 4,359 (1,170 + 1,086 + 1,084 + 1,019). All other years' quarters sum to the full-year figure printed in the Q4 report (2003: 3,875; 2005: 5,064; 2006: 5,635; 2007: 5,865; 2008: 6,396; 2009: 7,072; 2010: 8,030; 2011: 8,347; 2012: 8,933; 2013: 9,256; 2014: 9,142; 2015: 10,064; 2016: 9,492; 2017: 9,206; 2018: 7,881; 2019: 8,119; 2020: 7,203; 2021: 7,221; 2022: 8,308; 2023: 7,958; 2024: 7,983; 2025: 7,326). 2002 is a partial year (Q3 and Q4 only). 2015Q2-Q4, 2016Q2-Q4 and 2008Q4 are derived from year-to-date figures (see rows). 2015Q1 onward the sales-by-therapy table nests NovoSeven under Haemophilia ('Hereof NovoSeven' in 2015); the 2015 line change was +18% in DKK against 2014Q1 2,247, consistent with the same scope. 2018Q1 and 2018Q2 cite PDFs on novonordisk.com because the EDGAR copies render tables as images.",
+  "search_log": [
+    "listed Novo Nordisk (CIK 0000353278) 6-K, 20-F and 20-F/A filings via data.sec.gov submissions; filings before 2002-10 are .paper (no text); electronic reports from 2002-10 onward were opened",
+    "2002Q3-2003Q4: quarterly numbers table in each quarter's own 6-K (rows labelled Haemostasis management); a EUR table sits beside it and was not used; 2004Q1-2014Q4: NovoSeven row of the quarterly numbers table, current quarter first (2009Q4: FY2009 report table runs oldest to newest)",
+    "2015-2016: the reports print NovoSeven only as a year-to-date line in the sales-by-therapy table (Hereof NovoSeven / NovoSeven under Haemophilia); no quarterly numbers table row was found for NovoSeven in those reports, so 2015Q2-Q4 and 2016Q2-Q4 are year-to-date differences",
+    "2017Q1-2025Q4: NovoSeven row of the sales-by-geographical-area table, first (Total) column of the quarter",
+    "2008Q4: the quarterly table of the FY2008 6-K prints 1.774 (decimal point for thousands separator), so the quarter is derived as full year 6,396 less nine months 4,622; the 2009Q1 report prints 1,774 for the quarter",
+    "2026Q1 and 2026Q2: opened caq12026.htm and caq22026.htm; no NovoSeven row (rare blood disorders aggregate only), so the series ends at 2025Q4; a separate Novo Nordisk Excel sales supplement was not searched for",
+    "Full-year check: quarters summed per year against the full-year NovoSeven figure printed in the Q4 report; all agree except 2004 (IFRS restatement, see notes)",
+    "FDA: NovoSeven BL 103665 (fda.gov/vaccines-blood-biologics/approved-blood-products/novosevenrt); label 'Initial U.S. Approval: 1999' on DailyMed",
+    "launch quarter not established from an issuer document in this series (series starts 2002Q3 while the product predates it), so launch_quarter is null"
+  ],
+  "unreported_quarters": []
+}

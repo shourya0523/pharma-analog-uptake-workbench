@@ -1,0 +1,34 @@
+{
+  "drug_name": "Ruconest",
+  "generic_name": "conestat alfa (C1 esterase inhibitor, recombinant)",
+  "manufacturer": "Pharming",
+  "benchmark_identity": "pharming_ruconest_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Hereditary angioedema (acute attack treatment)",
+  "revenue_scope": "Worldwide RUCONEST revenue",
+  "geography": "Worldwide",
+  "formulation": "lyophilized powder for intravenous injection",
+  "route_of_administration": "intravenous",
+  "moa": "recombinant human C1 esterase inhibitor (replaces deficient C1-INH to inhibit complement and contact-system activation)",
+  "moa_class": "c1_esterase_inhibitor",
+  "first_approval_year": 2014,
+  "approval_evidence": {
+    "url": "https://purplebooksearch.fda.gov/index.cfm?blaNo=125495&event=productdetails",
+    "quote": "Proper Name C1 Esterase Inhibitor (Recombinant) BLA Number 125495 Applicant Pharming Americas BV Original Approval Date July 16, 2014 Date of First Licensure 07/16/2014 (FDA Purple Book)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2020Q1",
+  "series_start_reason": "Pharming changed its presentation currency from euro to US dollars on 1 January 2021 and prints US dollar comparatives for 2020 in its 2021 reports; the series starts at 2020Q1 (the earliest quarter available in US dollars) so that one currency is used throughout. Pharming's reports for earlier periods are in euros and were not retrieved or used; Pharming says RUCONEST was first commercialized in the United States in 2014 (FY2022 report), which is before the first row.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Scope is RUCONEST revenue in all territories. Through 2023Q1 Pharming prints only a total Revenues line, and its segment note says the business is exclusively recombinant human C1 esterase inhibitor; from 2023Q2 Joenja (leniolisib) revenue is a separate line and the RUCONEST line is used. Quarters not printed as a quarter figure are year-to-date differences with every input quoted. Q4 2024 is 79.6 in the FY2024 report and 79.7 as the prior-year column of the FY2025 report; the quarter's own report is used. No US partner printed sales for the 2020-2026 period; Bausch/Salix, the former US licensee, was not searched for 2014-2019 history because that period is in euros. Pharming's US marketing licence history and the pre-2020 euro series are not part of this file.",
+  "search_log": [
+    "listed every Pharming 6-K on EDGAR (CIK 1828316, 2020-12 to 2026-09) and downloaded the primary document of each; the quarterly, half-year and nine-month results releases (23 documents, 2021-03 to 2026-07) were read as text",
+    "each release's financial summary and statement of profit and loss was read for the Revenues line, and from the 2023 half-year release the Revenue - RUCONEST line; prose quarter figures were used where the report states the quarter (H1 2021 and Q3 2021 reports)",
+    "for each year whose four quarters are in the series the quarters sum to the full-year figure within rounding (2020 212.3 vs 212.2, 2021 198.9, 2022 205.6, 2023 227.1, 2024 252.2, 2025 317.9)",
+    "Pharming's pre-2021 reports (euro) and the FY2020 report (6-K 0001628280-21-003890, euro) were not used for rows",
+    "FDA CBER page https://www.fda.gov/vaccines-blood-biologics/approved-blood-products/ruconest gives BL 125495 without a date; the Purple Book gives the original approval date",
+    "rows: 26 from 2020Q1 to 2026Q2"
+  ]
+}
