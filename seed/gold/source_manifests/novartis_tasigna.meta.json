@@ -1,0 +1,37 @@
+{
+  "drug_name": "Tasigna",
+  "generic_name": "nilotinib",
+  "manufacturer": "Novartis",
+  "benchmark_identity": "novartis_tasigna_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (chronic myeloid leukemia)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "capsule",
+  "route_of_administration": "oral",
+  "moa": "BCR-ABL tyrosine kinase inhibitor",
+  "moa_class": "bcr_abl_inhibitor",
+  "first_approval_year": 2007,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2007/022068s000ltr.pdf",
+    "quote": "NDA 22-068 ... new drug application dated September 29, 2006 ... for Tasigna (nilotinib) 200 mg. oral capsules"
+  },
+  "launch_quarter": "2007Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1114448/000110465908003981/a08-3399_16k.htm",
+    "quote": "Tasigna was launched during the fourth quarter of 2007 in the US and Europe"
+  },
+  "commercial_start_quarter": "2008Q4",
+  "series_start_reason": "Novartis first prints a Tasigna table row in the Q4 2009 report. Earlier quarters appear only as narrative text: Q1 2008 USD 10 million, first half 2008 USD 29 million, first nine months 2008 USD 57 million, full year 2008 USD 89 million. Q2 2008 and Q3 2008 can be derived only from two different documents (YTD in one report, prior YTD in another), so they are not rows; the series starts with Q4 2008 (32, the prior-year column of the Q4 2009 report) and runs unbroken from there. 2009Q1 is the Q1 2009 report's own narrative figure; 2009Q2 and 2009Q3 are prior-year columns of the Q2 2010 and Q3 2010 reports because the 2009 reports give year-to-date narrative figures only (H1 2009 88, nine months 2009 144).",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Group-level worldwide net sales to third parties as one row of Novartis's product net sales table (in the Oncology business unit until 2025; the 2026 reports list Tasigna with a footnote marker and the XBRL tags it as an Established Brands member, with the same row label and scope). Four-quarter sums equal the full-year figures in the same reports (2008 89 with Q1-Q3 sum 57 from narrative; 2009 212; 2010 399; 2011 716; 2012 998; 2013 1,266; 2014 1,529; 2015 1,632; 2016 1,739; 2017 1,841; 2018 1,874; 2019 1,880; 2020 1,958; 2021 2,060; 2022 1,923; 2023 1,848; 2024 1,671; 2025 1,104). Own-quarter values equal the next year's prior-year columns throughout. Q1 2008 USD 10 million is in the Q1 2008 report (0001104659-08-025717) but Q2 and Q3 2008 are not separately printed, so the quarters before 2008Q4 are not in this series.",
+  "search_log": [
+    "Listed all Novartis (CIK 1114448) filings via data.sec.gov submissions (current and older pages, all forms); downloaded the quarterly results 6-K of every quarter from 2002Q2 to 2026Q2 (2012Q2 onward the EX-99.2 interim financial report; before that the 6-K primary document) and parsed every HTML table row by script, taking the row whose first cell is the brand and the pure quarter table (header 'Qn YYYY'), or before 2005Q2 the supplementary top-products table (US / Rest of world / Total).",
+    "Compared every quarter's own value with the prior-year column of the same quarter one year later; they agree except where noted in notes.",
+    "Bigdata.com used to locate documents and to check the 20-F for any additional disclosure; all cited URLs are sec.gov Archives originals.",
+    "2008-2009 reports (0001104659-08-025717, -08-046283, -08-064720, -09-004874, -09-026234, -09-043532, -09-060429) read for Tasigna: no table row; narrative figures 10 (Q1 2008), 29 (H1 2008), 57 (9M 2008), 89 (FY 2008), 35 (Q1 2009), 88 (H1 2009), 144 (9M 2009).",
+    "Q4 2007 report (0001104659-08-003981) states the Q4 2007 launch but prints no Tasigna sales figure."
+  ]
+}

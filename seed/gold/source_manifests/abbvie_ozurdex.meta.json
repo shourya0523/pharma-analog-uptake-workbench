@@ -1,0 +1,56 @@
+{
+  "drug_name": "Ozurdex",
+  "generic_name": "dexamethasone intravitreal implant",
+  "manufacturer": "AbbVie",
+  "benchmark_identity": "abbvie_ozurdex_worldwide_reported",
+  "therapeutic_area": "Ophthalmology",
+  "indication_area": "Ophthalmology (retinal vein occlusion; diabetic macular edema)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (U.S. plus International, the printed Total column)",
+  "formulation": "biodegradable intravitreal implant (0.7 mg) in applicator",
+  "route_of_administration": "intravitreal",
+  "moa": "Corticosteroid (dexamethasone) sustained-release intravitreal implant",
+  "moa_class": "corticosteroid_intravitreal_implant",
+  "first_approval_year": 2009,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=022315",
+    "quote": "06/17/2009 ORIG-1 Approval (NDA 022315, OZURDEX DEXAMETHASONE 0.7MG IMPLANT;INTRAVITREAL)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2015Q2",
+  "series_start_reason": "Allergan, Inc. (the legacy owner) was acquired by Allergan plc on 2015-03-17 and neither issuer printed an Ozurdex sales figure before that: the Allergan, Inc. earnings releases 2012-2015 name Ozurdex only in prose about approvals and trials. Allergan plc's first Ozurdex figures are in its 2016 releases: 2016Q1 as current and 2015Q1-2015Q4 as prior-year columns. 2015Q1 (7.0) covers only the days after the acquisition close and is not used, so the series starts at the first full quarter, 2015Q2. No launch quarter is dated by an issuer document (launch_quarter null).",
+  "series_end_quarter": "2025Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "AbbVie's 2025Q4 release (https://www.sec.gov/Archives/edgar/data/1551152/000155115226000004/abbv-20251231xexhibit991.htm) is the last to print an Ozurdex row ('Ozurdex 32 | 96 | 128'). The 2026Q1 release (https://www.sec.gov/Archives/edgar/data/1551152/000155115226000013/abbv-20260331xexhibit991.htm) has no Eye Care block (case-insensitive search of its raw HTML: zero hits for 'ozurdex', 'eye' and 'lumigan'); the 2026Q2 release (https://www.sec.gov/Archives/edgar/data/1551152/000155115226000023/abbv-20260630xexhibit991.htm) and the Forms 10-Q for 2026Q1 and 2026Q2 contain no 'ozurdex'.",
+  "notes": "One scope throughout: worldwide Ozurdex net revenues, the printed Total (or Global) column, which is the sum of U.S. and International (Allergan plc added the US Specialized Therapeutics, US General Medicine and Corporate columns; AbbVie's U.S. column). Both issuers also print a U.S. split, but the worldwide total is the only column present for the whole span. 2018Q3-2018Q4 are low because International fell (25.8 and 29.6 against 50.2 and 60.9 a year earlier, same rows); the Allergan plc Q2 2019 supplemental deck (https://www.sec.gov/Archives/edgar/data/1578845/000119312519213617/d788632dex991.htm) says 'Ozurdex grew 22.4% to $111M with supply normalization achieved in the quarter'. Full-year checks: 2016 quarters sum to 263.4, 2017 to 311.8, 2018 to 298.7, 2019 to 400.1 (each equals the full-year Ozurdex row printed in that year's Q4 release); 2023 sum 472, 2024 sum 494, 2025 sum 493 (each equals the full-year row in AbbVie's Q4 release and 10-K); the 2015 quarters 51.0, 51.6 and 58.8 plus the 7.0 stub equal the 168.4 printed for 2015 in the Q4 2016 release. 2022 quarters are not printed by AbbVie in 2022: they are the prior-year columns of the 2023 Forms 10-Q (107, 110, 106) and 2022Q4 is the 2022 full year in the 2023 Form 10-K (428) less nine months (323) = 105. The Form 10-K for 2023 also prints full-year 2021 Ozurdex (418) but no 2021 quarters.",
+  "search_log": [
+    "Listed every Allergan plc filing (CIK 0001578845; 10-Q, 10-K, 10-K/A and every 8-K/8-K/A with item 2.02 from 2015-01-01) and every AbbVie filing (CIK 0001551152; 10-Q, 10-K, and every 8-K with item 2.02 from 2020-05-01 through 2026-10-05) via data.sec.gov/submissions; downloaded each 8-K Exhibit 99.1/99.2 and each 10-Q/10-K main document and counted case-insensitive 'ozurdex' hits in the raw HTML, then read the Ozurdex table rows with a table-row parser.",
+    "Allergan plc releases: 2015Q2 (2015-08-06) and 2015Q3 (2015-11-04) and 2015Q4 (2016-02-22) 8-K Exhibit 99.1 print no Ozurdex product row (the Q3 and Q4 releases name Ozurdex only in prose about International Brands growth), nor do the 2015Q2, 2015Q3 or FY2015 10-Q/10-K; the 2015 quarters are therefore the prior-year columns of the 2016Q2, 2016Q3 and 2016Q4 releases (direct_prior_year_column).",
+    "Allergan plc 2016Q1 through 2019Q4: each quarter's own earnings release (8-K Exhibit 99.1) prints an Ozurdex row in the net revenues by product table; 2020Q1 comes from the Form 10-Q for the period ended 2020-03-31 (no earnings release was filed before AbbVie closed the acquisition on 2020-05-08).",
+    "Allergan, Inc. (CIK 0000850693) earnings releases 2012-02 through 2015-02 searched for 'ozurdex': only prose mentions (approval, filing, awards); no sales figure.",
+    "AbbVie 2020Q2 through 2022Q4: the quarterly releases (2020-07-31, 2020-10-30, 2021-02-03, 2021-04-30, 2021-07-30, 2021-10-29, 2022-02-02, 2022-04-29, 2022-07-29, 2022-10-28, 2023-02-09), all Forms 10-Q for those quarters, and the Forms 10-K for 2019-2022 contain no Ozurdex product row; the 10-Ks for 2020, 2021 and 2022 name it once, in prose, 'Other eye care products include ... Ozurdex ...'. AbbVie first prints an Ozurdex row in the 2023Q1 release (2023-04-27).",
+    "Prior-year coverage of the 2020Q2-2021Q4 hole: the 2022 Forms 10-Q (which would carry 2021 quarters) contain no Ozurdex; the Form 10-K for 2023 carries full-year 2021 (418) only. No document prints any quarter of 2020Q2-2021Q4.",
+    "2026: AbbVie 2026Q1 and 2026Q2 releases and Forms 10-Q checked for 'ozurdex': zero hits; the 2026Q1 release carries no Eye Care block."
+  ],
+  "unreported_quarters": {
+    "2020Q2": "AbbVie closed the acquisition of Allergan plc on 2020-05-08 (Form 10-Q for 2020Q2) and Allergan filed its last report for 2020Q1. No document of either issuer prints Ozurdex for this quarter: AbbVie's releases and Forms 10-Q for 2020Q2-2022Q3 have no Ozurdex row (Ozurdex sat in 'Other eye care'; Forms 10-K for 2020-2022 name it only in prose), and AbbVie first prints an Ozurdex row in its 2023Q1 release (2023-04-27). The 2022 quarters are recoverable from 2023 comparative columns; 2020Q2-2021Q4 are not (the Form 10-K for 2023 prints full-year 2021 = 418 and no quarters).",
+    "2020Q3": "AbbVie closed the acquisition of Allergan plc on 2020-05-08 (Form 10-Q for 2020Q2) and Allergan filed its last report for 2020Q1. No document of either issuer prints Ozurdex for this quarter: AbbVie's releases and Forms 10-Q for 2020Q2-2022Q3 have no Ozurdex row (Ozurdex sat in 'Other eye care'; Forms 10-K for 2020-2022 name it only in prose), and AbbVie first prints an Ozurdex row in its 2023Q1 release (2023-04-27). The 2022 quarters are recoverable from 2023 comparative columns; 2020Q2-2021Q4 are not (the Form 10-K for 2023 prints full-year 2021 = 418 and no quarters).",
+    "2020Q4": "AbbVie closed the acquisition of Allergan plc on 2020-05-08 (Form 10-Q for 2020Q2) and Allergan filed its last report for 2020Q1. No document of either issuer prints Ozurdex for this quarter: AbbVie's releases and Forms 10-Q for 2020Q2-2022Q3 have no Ozurdex row (Ozurdex sat in 'Other eye care'; Forms 10-K for 2020-2022 name it only in prose), and AbbVie first prints an Ozurdex row in its 2023Q1 release (2023-04-27). The 2022 quarters are recoverable from 2023 comparative columns; 2020Q2-2021Q4 are not (the Form 10-K for 2023 prints full-year 2021 = 418 and no quarters).",
+    "2021Q1": "AbbVie closed the acquisition of Allergan plc on 2020-05-08 (Form 10-Q for 2020Q2) and Allergan filed its last report for 2020Q1. No document of either issuer prints Ozurdex for this quarter: AbbVie's releases and Forms 10-Q for 2020Q2-2022Q3 have no Ozurdex row (Ozurdex sat in 'Other eye care'; Forms 10-K for 2020-2022 name it only in prose), and AbbVie first prints an Ozurdex row in its 2023Q1 release (2023-04-27). The 2022 quarters are recoverable from 2023 comparative columns; 2020Q2-2021Q4 are not (the Form 10-K for 2023 prints full-year 2021 = 418 and no quarters).",
+    "2021Q2": "AbbVie closed the acquisition of Allergan plc on 2020-05-08 (Form 10-Q for 2020Q2) and Allergan filed its last report for 2020Q1. No document of either issuer prints Ozurdex for this quarter: AbbVie's releases and Forms 10-Q for 2020Q2-2022Q3 have no Ozurdex row (Ozurdex sat in 'Other eye care'; Forms 10-K for 2020-2022 name it only in prose), and AbbVie first prints an Ozurdex row in its 2023Q1 release (2023-04-27). The 2022 quarters are recoverable from 2023 comparative columns; 2020Q2-2021Q4 are not (the Form 10-K for 2023 prints full-year 2021 = 418 and no quarters).",
+    "2021Q3": "AbbVie closed the acquisition of Allergan plc on 2020-05-08 (Form 10-Q for 2020Q2) and Allergan filed its last report for 2020Q1. No document of either issuer prints Ozurdex for this quarter: AbbVie's releases and Forms 10-Q for 2020Q2-2022Q3 have no Ozurdex row (Ozurdex sat in 'Other eye care'; Forms 10-K for 2020-2022 name it only in prose), and AbbVie first prints an Ozurdex row in its 2023Q1 release (2023-04-27). The 2022 quarters are recoverable from 2023 comparative columns; 2020Q2-2021Q4 are not (the Form 10-K for 2023 prints full-year 2021 = 418 and no quarters).",
+    "2021Q4": "AbbVie closed the acquisition of Allergan plc on 2020-05-08 (Form 10-Q for 2020Q2) and Allergan filed its last report for 2020Q1. No document of either issuer prints Ozurdex for this quarter: AbbVie's releases and Forms 10-Q for 2020Q2-2022Q3 have no Ozurdex row (Ozurdex sat in 'Other eye care'; Forms 10-K for 2020-2022 name it only in prose), and AbbVie first prints an Ozurdex row in its 2023Q1 release (2023-04-27). The 2022 quarters are recoverable from 2023 comparative columns; 2020Q2-2021Q4 are not (the Form 10-K for 2023 prints full-year 2021 = 418 and no quarters)."
+  },
+  "joined_issuers": [
+    {
+      "issuer": "Allergan plc",
+      "first_quarter": "2015Q2",
+      "last_quarter": "2020Q1"
+    },
+    {
+      "issuer": "AbbVie",
+      "first_quarter": "2022Q1",
+      "last_quarter": "2025Q4"
+    }
+  ]
+}

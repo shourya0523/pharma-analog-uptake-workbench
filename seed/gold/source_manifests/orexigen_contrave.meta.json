@@ -1,0 +1,38 @@
+{
+  "drug_name": "Contrave",
+  "generic_name": "naltrexone/bupropion",
+  "manufacturer": "Orexigen",
+  "benchmark_identity": "orexigen_contrave_us_reported",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Obesity (chronic weight management)",
+  "revenue_scope": "U.S. net sales of Contrave, as printed in Orexigen's releases and 10-K (recorded by Takeda through July 2016, by Orexigen from August 2016); ex-U.S. partner sales excluded",
+  "geography": "United States",
+  "formulation": "extended-release tablet",
+  "route_of_administration": "oral",
+  "moa": "Opioid antagonist (naltrexone) plus aminoketone antidepressant / norepinephrine-dopamine reuptake inhibitor (bupropion) fixed-dose combination",
+  "moa_class": "opioid_antagonist_ndri_combination",
+  "first_approval_year": 2014,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2014/200063Orig1s000ltr.pdf",
+    "quote": "NDA 200063 ... Contrave (naltrexone hydrochloride/bupropion hydrochloride) extended-release tablets, 8mg/90mg ... It is approved, effective on the date of this letter (9/10/2014)"
+  },
+  "launch_quarter": "2014Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1382911/000119312515061003/d880843dex991.htm",
+    "quote": "Orexigen's partner for North America, Takeda Pharmaceuticals, launched Contrave in the United States on October 20, 2014."
+  },
+  "commercial_start_quarter": "2014Q4",
+  "series_start_reason": null,
+  "series_end_quarter": "2017Q3",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Orexigen filed for Chapter 11 on 12 March 2018 (8-K 0001193125-18-078131) and published no fourth-quarter 2017 earnings release or 2017 10-K; its January 2018 business update presentation (0001564590-18-000238, exhibit 99.1) gives prescription growth but no 2017 fourth-quarter sales. Substantially all assets were sold in 2018 through the Chapter 11 process to Nalpropion Pharmaceuticals, Inc. (8-K 0001193125-18-233370, Items 1.01/2.01); no sales figure from the purchaser was found.",
+  "notes": "Series is U.S. net sales of Contrave, 2014Q4-2017Q3, from Orexigen's releases throughout. Seller changes: Takeda recorded U.S. sales (and paid Orexigen royalties) from launch on 20 October 2014 to July 2016; Orexigen reacquired the U.S. rights in August 2016 (Q3 2016 release: 'In August, Orexigen began recording U.S. net sales of Contrave for the first time') and changed the revenue-recognition point from sale to wholesaler to sale to pharmacy, which the release says reduced reported sales. Quarters 2014Q4-2015Q4 are the figure Orexigen printed in that quarter's release as recorded or reported by Takeda; 2016Q1-2016Q3 are taken from comparisons in the 2017 releases; 2016Q4 is derived. 2016Q3 is a combined (Takeda July plus Orexigen August-September) figure. Orexigen's income-statement line 'Net product sales' is NOT used because it also includes ex-U.S. partner product shipments (2016Q2 net product sales of 2,935 thousand are entirely ex-U.S.). Several values are printed rounded to $0.1 million or $1 million. No sales document from the 2018 purchaser (Nalpropion Pharmaceuticals, named in 8-K 0001193125-18-233370) was found; the Currax name in the batch brief was not confirmed by a document read here.",
+  "search_log": [
+    "Listed Orexigen (CIK 1382911) filings via data.sec.gov submissions; downloaded every Item 2.02 8-K exhibit 99.1 from 2014-11 to 2017-11 (Q3 2014 to Q3 2017 releases; the 2014-03/05/08 releases pre-date launch) and the January 2018 business update (Item 2.02/7.01 8-K).",
+    "Q4 2014 to Q4 2015 releases print Takeda-recorded U.S. net sales in text ($6.5M, $11.5M, $16.0M, $12.8M, $13M; FY2015 $53M).",
+    "Q1 2016 and Q2 2016 releases print only royalties; the U.S. sales for those quarters come from the Q1 and Q2 2017 releases' prior-year comparisons ('approximately $13.2 million', '$12.3 million'). Q3 2016 combined $9.6M from the Q3 2017 release. Q4 2016: the Q4 2016 release (0001193125-17-099847) prints net product sales of 13,807 thousand (all products incl. ex-U.S. partners) with no U.S. split; the FY2016 10-K (0001564590-17-005547) prints $17.3M of U.S. net sales for the five months to 31 December 2016, from which Q4 is derived.",
+    "Not used: income-statement 'Net product sales' (includes ex-U.S. partner sales: Kwang Dong $2.8M and Valeant $1.9M for 2016 per the 10-K).",
+    "Checked for fourth-quarter 2017: no earnings 8-K between 2017-11-13 and the Chapter 11 8-K of 2018-03-12; no 10-K for 2017 in the submissions list through 2019. Takeda (Contrave's U.S. seller until 2016) was not found to itemise Contrave sales in its own reports (not exhaustively searched).",
+    "Bigdata.com smart search returned no documents for this product; EDGAR directly."
+  ]
+}

@@ -750,10 +750,10 @@
   ]
  },
  {
-  "drug_name": "Vumerity",
+  "drug_name": "Zurzuvae",
   "manufacturer": "Biogen",
   "ticker": "BIIB",
-  "generic_name": "diroximel fumarate",
+  "generic_name": "zuranolone",
   "options": {
    "earnings_since": "2026-04-05",
    "earnings_until": "2027-05-05",
@@ -764,13 +764,13 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 179.0,
-    "gold_id": "biogen-vumerity-worldwide-reported-2026q1"
+    "value_normalized_usd_millions": 55.3,
+    "gold_id": "biogen-zurzuvae-us-reported-2026q1"
    },
    {
     "period": "2026Q2",
-    "value_normalized_usd_millions": 196.5,
-    "gold_id": "biogen-vumerity-worldwide-reported-2026q2"
+    "value_normalized_usd_millions": 70.7,
+    "gold_id": "biogen-zurzuvae-us-reported-2026q2"
    }
   ]
  },
@@ -1225,6 +1225,31 @@
   ]
  },
  {
+  "drug_name": "Perseris",
+  "manufacturer": "Indivior",
+  "ticker": "INDV",
+  "generic_name": "risperidone",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 5.0,
+    "gold_id": "indivior-perseris-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 5.0,
+    "gold_id": "indivior-perseris-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Ocaliva",
   "manufacturer": "Intercept Pharmaceuticals",
   "ticker": null,
@@ -1391,6 +1416,31 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 458.747822,
     "gold_id": "kyowa-kirin-crysvita-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Xerava",
+  "manufacturer": "La Jolla",
+  "ticker": null,
+  "generic_name": "eravacycline",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 2.7,
+    "gold_id": "tetraphase-xerava-us-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 3.2,
+    "gold_id": "tetraphase-xerava-us-reported-2022q2"
    }
   ]
  },
@@ -1615,6 +1665,41 @@
   ]
  },
  {
+  "drug_name": "Qutenza",
+  "manufacturer": "NeurogesX",
+  "ticker": null,
+  "generic_name": "capsaicin",
+  "options": {
+   "earnings_since": "2012-04-05",
+   "earnings_until": "2013-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2012Q1",
+    "value_normalized_usd_millions": 0.831,
+    "gold_id": "neurogesx-qutenza-us-reported-2012q1"
+   },
+   {
+    "period": "2012Q2",
+    "value_normalized_usd_millions": 0.844,
+    "gold_id": "neurogesx-qutenza-us-reported-2012q2"
+   },
+   {
+    "period": "2012Q3",
+    "value_normalized_usd_millions": 0.583,
+    "gold_id": "neurogesx-qutenza-us-reported-2012q3"
+   },
+   {
+    "period": "2012Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2012Q3. NeurogesX filed no periodic report after the Form 10-Q for the quarter ended September 30, 2012. Its Form 8-K of 2013-03-27 states the company 'does not currently expect to be in a position to file its Annual Report on Form 10-K for the year ended December 31, 2012', and its Form 8-K of 2013-07-11 followed the sale of its assets. No NeurogesX document prints 2012Q4 or 2013Q1-Q2."
+   }
+  ]
+ },
+ {
   "drug_name": "Xolair",
   "manufacturer": "Novartis",
   "ticker": "NVS",
@@ -1701,6 +1786,41 @@
     "period": "2013Q4",
     "value_normalized_usd_millions": 73.0,
     "gold_id": "amgen-kyprolis-worldwide-reported-2013q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Contrave",
+  "manufacturer": "Orexigen",
+  "ticker": null,
+  "generic_name": "naltrexone/bupropion",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 14.8,
+    "gold_id": "orexigen-contrave-us-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 20.7,
+    "gold_id": "orexigen-contrave-us-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 17.8,
+    "gold_id": "orexigen-contrave-us-reported-2017q3"
+   },
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2017Q3. Orexigen filed for Chapter 11 on 12 March 2018 (8-K 0001193125-18-078131) and published no fourth-quarter 2017 earnings release or 2017 10-K; its January 2018 business update presentation (0001564590-18-000238, exhibit 99.1) gives prescription growth but no 2017 fourth-quarter sales. Substantially all assets were sold in 2018 through the Chapter 11 process to Nalpropion Pharmaceuticals, Inc. (8-K 0001193125-18-233370, Items 1.01/2.01); no sales figure from the purchaser was found."
    }
   ]
  },
@@ -2050,6 +2170,71 @@
   ]
  },
  {
+  "drug_name": "Alvesco",
+  "manufacturer": "Sepracor",
+  "ticker": null,
+  "generic_name": "ciclesonide",
+  "options": {
+   "earnings_since": "2009-04-05",
+   "earnings_until": "2010-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2009Q1",
+    "value_normalized_usd_millions": 0.0,
+    "gold_id": "sepracor-alvesco-us-reported-2009q1"
+   },
+   {
+    "period": "2009Q2",
+    "value_normalized_usd_millions": 0.0,
+    "gold_id": "sepracor-alvesco-us-reported-2009q2"
+   },
+   {
+    "period": "2009Q3",
+    "value_normalized_usd_millions": 0.0,
+    "gold_id": "sepracor-alvesco-us-reported-2009q3"
+   },
+   {
+    "period": "2009Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2009Q3. Dainippon Sumitomo Pharma acquired Sepracor in October 2009 and its later fact books (FY2010 to FY2017 checked) and quarterly results do not itemise ALVESCO. Later owners did not publish a product figure: AstraZeneca (rights to 2018) printed only a combined Alvesco/Omnaris/Zetonna figure in a press release and no Alvesco line in its product-sales tables; Covis Pharma (owner since 2018) is private."
+   }
+  ]
+ },
+ {
+  "drug_name": "Vpriv",
+  "manufacturer": "Shire",
+  "ticker": null,
+  "generic_name": "velaglucerase alfa",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 89.9,
+    "gold_id": "takeda-vpriv-worldwide-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 89.6,
+    "gold_id": "takeda-vpriv-worldwide-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 87.8,
+    "gold_id": "takeda-vpriv-worldwide-reported-2018q3"
+   }
+  ]
+ },
+ {
   "drug_name": "Luxturna",
   "manufacturer": "Spark Therapeutics",
   "ticker": null,
@@ -2226,6 +2411,41 @@
     "period": "2018Q3",
     "value_normalized_usd_millions": 63.226,
     "gold_id": "gsk-zejula-worldwide-reported-2018q3"
+   }
+  ]
+ },
+ {
+  "drug_name": "Xerava",
+  "manufacturer": "Tetraphase",
+  "ticker": null,
+  "generic_name": "eravacycline",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 1.755,
+    "gold_id": "tetraphase-xerava-us-reported-2020q1"
+   },
+   {
+    "period": "2020Q2",
+    "value_normalized_usd_millions": 1.5,
+    "gold_id": "tetraphase-xerava-us-reported-2020q2"
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": 2.7,
+    "gold_id": "tetraphase-xerava-us-reported-2020q3"
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": 2.3,
+    "gold_id": "tetraphase-xerava-us-reported-2020q4"
    }
   ]
  },
@@ -2421,6 +2641,41 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 1516.0,
     "gold_id": "argenx-vyvgart-family-global-product-net-sales-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Zynteglo",
+  "manufacturer": "bluebird bio",
+  "ticker": null,
+  "generic_name": "betibeglogene autotemcel",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 26.307,
+    "gold_id": "bluebird-zynteglo-us-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2025Q1. bluebird bio filed its last periodic report, the Form 10-Q for the quarter ended March 31, 2025 (filed 2025-05-14), which discloses the pending Merger Agreement with Beacon Parent Holdings, L.P.; it then filed a Form 15 'Certification and Notice of Termination of Registration' on 2025-06-12 (https://www.sec.gov/Archives/edgar/data/1293971/000119312525139516/d13380d1512g.htm). No 2025Q2 report exists."
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2025Q1. bluebird bio filed its last periodic report, the Form 10-Q for the quarter ended March 31, 2025 (filed 2025-05-14), which discloses the pending Merger Agreement with Beacon Parent Holdings, L.P.; it then filed a Form 15 'Certification and Notice of Termination of Registration' on 2025-06-12 (https://www.sec.gov/Archives/edgar/data/1293971/000119312525139516/d13380d1512g.htm). No 2025Q2 report exists."
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2025Q1. bluebird bio filed its last periodic report, the Form 10-Q for the quarter ended March 31, 2025 (filed 2025-05-14), which discloses the pending Merger Agreement with Beacon Parent Holdings, L.P.; it then filed a Form 15 'Certification and Notice of Termination of Registration' on 2025-06-12 (https://www.sec.gov/Archives/edgar/data/1293971/000119312525139516/d13380d1512g.htm). No 2025Q2 report exists."
    }
   ]
  },

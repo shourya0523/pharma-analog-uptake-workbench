@@ -1,0 +1,36 @@
+{
+  "drug_name": "Ilaris",
+  "generic_name": "canakinumab",
+  "manufacturer": "Novartis",
+  "benchmark_identity": "novartis_ilaris_worldwide_reported",
+  "therapeutic_area": "Immunology / Inflammation",
+  "indication_area": "Immunology (periodic fever syndromes, Still's disease, gout flares)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection",
+  "route_of_administration": "subcutaneous",
+  "moa": "Interleukin-1 beta inhibitor",
+  "moa_class": "il1b_inhibitor",
+  "first_approval_year": 2009,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2009/125319s000ltr.pdf",
+    "quote": "BLA 125319 BLA APPROVAL June 17, 2009 ... biologics license application ... for Ilaris (canakinumab)"
+  },
+  "launch_quarter": "2009Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1114448/000110465909060429/a09-32227_26k.htm",
+    "quote": "Ilaris (canakinumab, ACZ885), a human antibody targeting IL-1 beta, was launched in the US and Switzerland in August 2009"
+  },
+  "commercial_start_quarter": "2009Q3",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Group-level worldwide net sales to third parties as one row of Novartis's product net sales table. 2009Q3 (1) and 2009Q4 (2) are prior-year columns of the Q3 2010 and Q4 2010 reports because the 2009 reports print no Ilaris figure; 2010Q1 (4) is the Q1 2010 report's own narrative figure (also the prior-year column of the Q1 2011 report); from 2010Q2 each quarter is the own-report table row. Q2 2009 was 0 (prior-year column of the Q2 2010 report). Four-quarter sums equal the full-year figures in the same reports (2009 3; 2010 26; 2011 48; 2012 72; 2013 119; 2014 199; 2015 236; 2016 283; 2017 402; 2018 554; 2019 671; 2020 873; 2021 1,059; 2022 1,133; 2023 1,355; 2024 1,509; 2025 1,883). Own-quarter values equal the next year's prior-year columns throughout. Indications widened over time (CAPS first, later periodic fever syndromes, Still's disease, gout flares); the line is the brand total.",
+  "search_log": [
+    "Listed all Novartis (CIK 1114448) filings via data.sec.gov submissions (current and older pages, all forms); downloaded the quarterly results 6-K of every quarter from 2002Q2 to 2026Q2 (2012Q2 onward the EX-99.2 interim financial report; before that the 6-K primary document) and parsed every HTML table row by script, taking the row whose first cell is the brand and the pure quarter table (header 'Qn YYYY'), or before 2005Q2 the supplementary top-products table (US / Rest of world / Total).",
+    "Compared every quarter's own value with the prior-year column of the same quarter one year later; they agree except where noted in notes.",
+    "Bigdata.com used to locate documents and to check the 20-F for any additional disclosure; all cited URLs are sec.gov Archives originals.",
+    "Q3 2009 and Q4 2009 reports (0001104659-09-060429, 0001104659-10-002886) mention Ilaris launch and approvals in narrative with no sales figure; Q1 2010 report (0001104659-10-020578) prints 'Ilaris (ACZ885) (USD 4 million)'."
+  ]
+}

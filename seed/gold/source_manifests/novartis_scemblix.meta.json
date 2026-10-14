@@ -1,0 +1,32 @@
+{
+  "drug_name": "Scemblix",
+  "generic_name": "asciminib",
+  "manufacturer": "Novartis",
+  "benchmark_identity": "novartis_scemblix_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (chronic myeloid leukemia)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Allosteric BCR-ABL1 inhibitor (STAMP inhibitor, binds the myristoyl pocket)",
+  "moa_class": "bcr_abl_inhibitor",
+  "first_approval_year": 2021,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2021/215358Orig1s000ltr.pdf",
+    "quote": "NDA 215358/Original 1 ACCELERATED APPROVAL ... for SCEMBLIX (asciminib) tablets"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2022Q1",
+  "series_start_reason": "The Q4 2021 report (0001370368-22-000009) lists Scemblix as a US approval in October 2021 and prints no Scemblix sales row; the first table row is in the Q1 2022 report (25, with Q1 2021 'nm'), so the series starts at 2022Q1. No document dating the commercial launch was found, so launch_quarter is null.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Group-level worldwide net sales to third parties as one row of Novartis's product net sales table. Four-quarter sums equal the full-year figures in the same reports (2022 149; 2023 413; 2024 689; 2025 1,285). Own-quarter values equal the next year's prior-year columns throughout. Indications widened from third-line to first-line CML during the series.",
+  "search_log": [
+    "Listed all Novartis (CIK 1114448) filings via data.sec.gov submissions (current and older pages, all forms); downloaded the quarterly results 6-K of every quarter from 2002Q2 to 2026Q2 (2012Q2 onward the EX-99.2 interim financial report; before that the 6-K primary document) and parsed every HTML table row by script, taking the row whose first cell is the brand and the pure quarter table (header 'Qn YYYY'), or before 2005Q2 the supplementary top-products table (US / Rest of world / Total).",
+    "Compared every quarter's own value with the prior-year column of the same quarter one year later; they agree except where noted in notes.",
+    "Bigdata.com used to locate documents and to check the 20-F for any additional disclosure; all cited URLs are sec.gov Archives originals.",
+    "Q3 2021 and Q4 2021 reports (0001370368-21-000072, -22-000009) searched for Scemblix: only pipeline and approval tables, no sales row."
+  ]
+}

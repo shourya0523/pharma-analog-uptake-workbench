@@ -1,0 +1,33 @@
+{
+  "manufacturer": "bluebird bio",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "route_of_administration": "Intravenous",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "moa_class": "lentiviral_gene_therapy",
+  "series_end_quarter": "2025Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "bluebird bio filed its last periodic report, the Form 10-Q for the quarter ended March 31, 2025 (filed 2025-05-14), which discloses the pending Merger Agreement with Beacon Parent Holdings, L.P.; it then filed a Form 15 'Certification and Notice of Termination of Registration' on 2025-06-12 (https://www.sec.gov/Archives/edgar/data/1293971/000119312525139516/d13380d1512g.htm). No 2025Q2 report exists.",
+  "drug_name": "Zynteglo",
+  "generic_name": "betibeglogene autotemcel",
+  "benchmark_identity": "bluebird_zynteglo_us_reported",
+  "indication_area": "Beta-thalassemia requiring regular red blood cell transfusions",
+  "formulation": "autologous CD34+ cell suspension for intravenous infusion",
+  "moa": "autologous CD34+ hematopoietic stem cell gene therapy; BB305 lentiviral vector adds functional copies of a modified beta-globin (beta-A-T87Q-globin) gene",
+  "first_approval_year": 2022,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/media/160994/download?attachment",
+    "quote": "BLA APPROVAL August 17, 2022 ... submitted under section 351(a) of the Public Health Service Act (PHS Act) for betibeglogene autotemcel ... indicated for the treatment of adult and pediatric patients with beta-thalassemia who require regular red blood cell (RBC) transfusions"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2023Q2",
+  "series_start_reason": "2023Q2 is the first quarter with U.S. ZYNTEGLO revenue: the 2024Q1 Form 10-Q prints the 2023Q1 ZYNTEGLO figure as a dash and the 2024Q2 Form 10-Q prints 2023Q2 as 4,180. The earlier ZYNTEGLO revenue (full year 2022, 2,739 thousand) was from Germany and is excluded from the U.S. scope; the FY2023 10-K says 2022 revenue was 'product revenues associated with the sale of ZYNTEGLO in Germany' and 2023 revenue was 'sales of SKYSONA and ZYNTEGLO in the United States'.",
+  "notes": "FDA approval August 17, 2022 (U.S.); no issuer document located that dates the U.S. commercial launch quarter, so launch_quarter is null. Revenue is recognised upon infusion. The series is U.S. only: ZYNTEGLO was previously sold in Germany (revenue through 2022; the company exited Europe in 2022), and those amounts are not in this series. Rows 2023Q2 and 2023Q3 are prior-year columns from the 2024 Form 10-Qs; 2023Q4 and 2024Q4 are derived as full year less nine months. The same note table also prints LYFGENIA and SKYSONA; they are separate products.",
+  "search_log": [
+    "Listed bluebird bio (CIK 1293971) 10-K and 10-Q filings from 2021 on and downloaded those for 2022Q3-2025Q1; grepped each for 'by therapy', product revenue tables and per-product revenue sentences.",
+    "The 'Product revenue by therapy' note table first appears in the FY2023 Form 10-K (filed 2024-09-13) and the 2024 and 2025 Form 10-Qs; the 2022-2023 Form 10-Qs and the FY2022 10-K print only total product revenue (zero 'by therapy' matches), so 2023Q2 and 2023Q3 come from the prior-year columns of the 2024 Form 10-Qs.",
+    "bluebird 8-K earnings releases were not read; the per-therapy figures come from the 10-Q and 10-K notes. A Bigdata.com smart search returned the Q1 2025 10-Q note table, matching the SEC document read directly.",
+    "Sum checks: ZYNTEGLO 2024 quarters 18,561 + 11,158 + 5,493 + 27,061 = 62,273 (FY2024 10-K); 2023 quarters 0 + 4,180 + 4,851 + 7,661 = 16,692 (FY2023 10-K); LYFGENIA 2024 quarters 0 + 0 + 2,632 + 8,973 = 11,605.",
+    "Checked for 8-Ks, 10-Q or 10-K filed after 2025-05-14: only Forms 4, S-8 POS, POS AM, EFFECT and Form 15-12G."
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "drug_name": "Zurzuvae",
+  "generic_name": "zuranolone",
+  "manufacturer": "Biogen",
+  "benchmark_identity": "biogen_zurzuvae_us_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Postpartum depression",
+  "revenue_scope": "U.S.",
+  "geography": "United States (the 'U.S.' column of Biogen's product revenue table; Biogen's Total column also holds Rest of World from 2026Q1)",
+  "formulation": "capsule",
+  "route_of_administration": "oral",
+  "moa": "neuroactive steroid GABA-A receptor positive modulator",
+  "moa_class": "gaba_a_positive_modulator_neurosteroid",
+  "first_approval_year": 2023,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=217369",
+    "quote": "Approval Date(s) and History, Letters, Labels, Reviews for NDA 217369 Original Approvals or Tentative Approvals ... 08/04/2023 ORIG-2 Approval Type 1 - New Molecular Entity PRIORITY"
+  },
+  "launch_quarter": "2023Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/875045/000087504524000016/biib-20240331.htm",
+    "quote": "ZURZUVAE for PPD became commercially available in the U.S. during the fourth quarter of 2023."
+  },
+  "commercial_start_quarter": "2023Q4",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Biogen records ZURZUVAE sales as its own product revenue (Sage, then Supernus, receives 50% of U.S. net collaboration results through collaboration profit sharing, per the Biogen releases). Scope is the U.S. column (USD millions, one decimal). Total (U.S.+Rest of World) differs only from 2026Q1: 2026Q1 55.4, 2026Q2 70.8. Biogen's releases fold ZURZUVAE into 'Total Other Product Revenue (ADUHELM, FUMADERM and ZURZUVAE)' for 2023Q4 and 2024Q1 and print a rounded prose figure only (2023Q4 'approximately $2 million', 2024Q1 'approximately $12 million'); the first separate table row is the 2024Q2 release. 2023Q4 (1.6) and 2024Q1 (12.4) are therefore the year-earlier columns of the 2024Q4 and 2025Q1 releases (direct_prior_year_column). Cross-checks: 2024 12.4+14.9+22.0+22.9=72.2 and 2025 27.7+46.4+55.3+65.7=195.1 equal the full-year U.S. figures printed in the Q4 releases; the FY2024 10-K prints 1.6 for full-year 2023 (all in Q4). Sage's own filings record Zurzuvae as collaboration revenue and were not used.",
+  "search_log": [
+    "Listed Biogen (CIK 0000875045) filings from data.sec.gov/submissions (recent + older files), keeping every 8-K and 8-K/A with item 2.02: 25 filings 2022-02 to 2026-07; the 2022-07-20 8-K/A (0000875045-22-000023) is a re-filing of the same release and the original 8-K was used.",
+    "Downloaded the EX-99.1 earnings release of each quarter's 8-K from 2021Q4 to 2026Q2 (exhibit991-q<N><YYYY>pressrele.htm) and parsed every table row; selected the first row whose label equals the product (the three-month table; the year-to-date table follows it).",
+    "Downloaded all Biogen 10-K and 10-Q filings 2023-02 to 2026-07 and searched the text for the brand names and the revenue-note product tables.",
+    "Biogen prints no ZURZUVAE row before the 2024Q2 release; the 2023Q4 and 2024Q1 releases and the matching 10-K/10-Q carry only 'Other (FUMADERM, ADUHELM and ZURZUVAE)'. The exact quarterly values come from the year-earlier columns of the 2025Q4 and 2025Q1 releases (rows 22.9 / nil / 22.9 / 1.6 / nil / 1.6 and 27.7 / nil / 27.7 / 12.4 / nil / 12.4).",
+    "Checked the FY2024 10-K revenue note: ZURZUVAE 72.2 (2024) and 1.6 (2023), matching the releases.",
+    "Sage (CIK 0001597553) and Supernus were not needed: the line exists at Biogen for the whole span. Existing gold has sage_zulresso (a different product, brexanolone)."
+  ]
+}

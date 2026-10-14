@@ -1,0 +1,33 @@
+{
+  "drug_name": "Gleevec",
+  "generic_name": "imatinib",
+  "manufacturer": "Novartis",
+  "benchmark_identity": "novartis_gleevec_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (chronic myeloid leukemia, gastrointestinal stromal tumors)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "BCR-ABL tyrosine kinase inhibitor",
+  "moa_class": "bcr_abl_inhibitor",
+  "first_approval_year": 2001,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2001/21335ltr.pdf",
+    "quote": "NDA 21-335 ... new drug application dated February 27, 2001 ... for Gleevec (imatinib mesylate) 50 mg and 100 mg capsules"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2003Q1",
+  "series_start_reason": "Novartis reported its product tables in Swiss francs through the Q4 2002 release (0001047469-03-002458 states 'All USD figures are convenience translations of CHF into USD at a rate of 1.55'; the Q2 2002 and Q3 2002 reports, 0000912057-02-028083 and 0000912057-02-038942, are the same). The Q1 2003 report (0001047469-03-013548) is the first with the product table in USD as the reporting currency, so the single-currency series starts there. Gleevec was approved by FDA in May 2001 and has earlier CHF-denominated quarterly rows (for example Q2 2002 CHF 235 million, Q3 2002 CHF 243 million) that are not spliced onto this USD series.",
+  "series_end_quarter": "2023Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The Q4 2023 report (0001370368-24-000007) is the last Novartis interim report with a Gleevec/Glivec row (Q4 2023 128; FY 2023 561). The Q1 2024 report (0001370368-24-000017), Q2 2024 (0001370368-24-000019) and Q2 2025 (0001370368-25-000012) contain no occurrence of Gleevec or Glivec, and no Q3 2024 to Q2 2026 report has a Gleevec row.",
+  "notes": "Group-level worldwide net sales to third parties as one row of Novartis's product net sales table (Pharmaceuticals division before 2018, Innovative Medicines from 2018; no regional split in the quarter table). Before 2005Q2 the cited table is the supplementary top-products table with US and rest-of-world columns; the value is its Total column. Four-quarter sums equal the full-year figures printed in the same reports (2003 1,128; 2004 1,634; 2005 2,170; 2006 2,554; 2007 3,050; 2008 3,670; 2009 3,944; 2010 4,265; 2011 4,659; 2012 4,675; 2013 4,693; 2014 4,746; 2015 4,658; 2016 3,323; 2017 1,943; 2018 1,561; 2019 1,263; 2020 1,188; 2021 1,024; 2022 745; 2023 561). Prior-year comparative columns differ from the own-quarter values by 1 to 2 in three quarters of 2004 (Q1 2004 351 vs 352, Q2 406 vs 404, Q3 411 vs 412 in the 2005 reports); the own-quarter figures are used. The Q3 2013 results were furnished twice (0001370368-13-000059 and -000065 with identical figures); the first is cited.",
+  "search_log": [
+    "Listed all Novartis (CIK 1114448) filings via data.sec.gov submissions (current and older pages, all forms); downloaded the quarterly results 6-K of every quarter from 2002Q2 to 2026Q2 (2012Q2 onward the EX-99.2 interim financial report; before that the 6-K primary document) and parsed every HTML table row by script, taking the row whose first cell is the brand and the pure quarter table (header 'Qn YYYY'), or before 2005Q2 the supplementary top-products table (US / Rest of world / Total).",
+    "Compared every quarter's own value with the prior-year column of the same quarter one year later; they agree except where noted in notes.",
+    "Bigdata.com used to locate documents and to check the 20-F for any additional disclosure; all cited URLs are sec.gov Archives originals.",
+    "Pre-2003: Q2 2002 and Q3 2002 reports print Glivec/Gleevec in CHF m (235 and 243); the 2001 and Q1 2002 6-Ks downloaded (0000947871-01-*, 0000947871-02-*) carry no product table with a Gleevec row; not used because of the CHF reporting currency.",
+    "Post-2023: Q1 2024 to Q2 2026 results documents scanned for the strings Gleevec and Glivec: none. The FY2023 20-F (Bigdata.com) prints Gleevec/Glivec 561 for 2023 in the Established Brands table; no later annual figure located."
+  ]
+}

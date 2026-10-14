@@ -1,0 +1,34 @@
+{
+  "drug_name": "Gazyva",
+  "generic_name": "obinutuzumab",
+  "manufacturer": "Roche",
+  "benchmark_identity": "roche_gazyva_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (hematologic)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection (intravenous infusion)",
+  "route_of_administration": "intravenous",
+  "moa": "Anti-CD20 monoclonal antibody (type II, glycoengineered)",
+  "moa_class": "cd20_antibody",
+  "first_approval_year": 2013,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=125486",
+    "quote": "11/01/2013 ORIG-1 Approval (Drugs@FDA, Original Approvals or Tentative Approvals)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2013Q4",
+  "series_start_reason": "Roche's FY2013 results release (30 Jan 2014) prints the first Gazyva sales (full year 3, all United States); the nine-month 2013 and half-year 2013 releases have no Gazyva row, and FDA approval was 1 Nov 2013, so the full-year figure is read as 2013Q4. This is an inference from the absence of earlier rows.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Printed line is 'Gazyva' in the quarterly Top 20 tables and 'Gazyva/Gazyvaro' (sometimes with a footnote digit) in the year-to-date tables; one brand line, all indications and territories in the Total column, and the tables do not break it down by indication. Quarters from 2013Q4 to 2017Q2 are year-to-date arithmetic because Gazyva enters the quarterly Top 20 table from the Q3 2018 release; 2017Q3 to 2018Q2 are read from that release's earlier columns. FDA approval 1 Nov 2013. launch_quarter left null because no Roche document read states a launch quarter.",
+  "search_log": [
+    "reused the earlier Roche crawl (roche.com/investors/events/{q1,hy,q3,annual-results}-YYYY, 2016-2026) and its downloaded Investor update PDFs, plus the assets.cwp.roche.com/imported/en/med-cor-YYYY-MM-DD-e.pdf results releases for 2011-2015 found by dated probing; 63 results releases from the FY2010 release (2011-02-02) to the half-year 2026 release (2026-07-23) were read as text",
+    "per release read two tables: the worldwide 'Top 20 Pharmaceuticals Division quarterly product sales' table (five quarter columns, Total table that precedes the United States/Europe/Japan/International tables) and the year-to-date product sales table (Total, United States, Europe, Japan, International); quarters taken from the own release quarter column when printed, else the Q1 year-to-date table (three months), else the earliest later release that prints the quarter, else year-to-date differences",
+    "wherever both a printed quarter and a year-to-date difference existed they were compared: no difference found; for every calendar year whose four quarters are in the series the sum equals the full-year (January-December) figure of that year's FY release",
+    "Roche half-year/annual reports and Finance Reports, and the 2009-2010 quarterly results releases, were not retrieved or used for rows; Chugai/Genentech documents were not used",
+    "Gazyva absence before FY2013: med-cor-2013-07-25-e.pdf (half-year 2013) and med-cor-2013-10-17-e.pdf (nine-month 2013) contain no 'Gazyva' string",
+    "rows: 51 from 2013Q4 to 2026Q2 ({'annual_less_reported_first_nine_months': 4, 'direct_reported': 37, 'year_to_date_less_reported_quarters': 7, 'direct_prior_year_column': 1, 'direct_retrospective_table': 2})"
+  ]
+}

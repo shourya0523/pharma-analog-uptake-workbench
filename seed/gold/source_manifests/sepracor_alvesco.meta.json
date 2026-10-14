@@ -1,0 +1,44 @@
+{
+  "drug_name": "Alvesco",
+  "generic_name": "ciclesonide",
+  "manufacturer": "Sepracor",
+  "benchmark_identity": "sepracor_alvesco_us_reported",
+  "therapeutic_area": "Respiratory / Allergy",
+  "indication_area": "Respiratory (asthma)",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "HFA inhalation aerosol (metered-dose inhaler)",
+  "route_of_administration": "inhalation",
+  "moa": "Inhaled corticosteroid (ciclesonide, prodrug activated in the lung)",
+  "moa_class": "inhaled_corticosteroid",
+  "first_approval_year": 2008,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2008/021658s000ltr.pdf",
+    "quote": "NDA 21-658 ... Alvesco (ciclesonide) Inhalation Aerosol 80 mcg and 160 mcg ... It is approved, effective on the date of this letter (electronic signature 1/10/2008)"
+  },
+  "launch_quarter": "2008Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/877357/000110465908066081/a08-26979_1ex99d1.htm",
+    "quote": "Sepracor also commercially introduced ALVESCO brand ciclesonide HFA Inhalation Aerosol in September 2008"
+  },
+  "commercial_start_quarter": "2008Q3",
+  "series_start_reason": null,
+  "series_end_quarter": "2009Q3",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Dainippon Sumitomo Pharma acquired Sepracor in October 2009 and its later fact books (FY2010 to FY2017 checked) and quarterly results do not itemise ALVESCO. Later owners did not publish a product figure: AstraZeneca (rights to 2018) printed only a combined Alvesco/Omnaris/Zetonna figure in a press release and no Alvesco line in its product-sales tables; Covis Pharma (owner since 2018) is private.",
+  "notes": "Series is the U.S. line printed by Sepracor, 2008Q3-2009Q3. The 2009Q1-2009Q3 values are printed zeros (the company states no revenue was recorded while launch-phase inventory was worked down), included so the series has no gap. 2008Q4 is negative ($(0.3) million) because of product returns. FY2008 total printed in the Sepracor 10-K (ALVESCO HFA Inhalation Aerosol 16,809 thousand) equals 17.1 less 0.3 within rounding. Ownership: Nycomed/Takeda owned the brand, Sepracor distributed it in the U.S.; Sunovion (Sepracor renamed) divested U.S. rights to Covis in 2017. Quarterly series for 2008Q3-2009Q3 only.",
+  "search_log": [
+    "Listed Sepracor (CIK 877357) filings via data.sec.gov submissions: 8-K Item 2.02 and 10-Q/10-K 2007-07 to 2009-08; fetched every EX-99.1 earnings release (2007-07 to 2009-07) and grep'd for ALVESCO; sales appear first in the 2008-10-28 release (Q3 2008, launched September 2008). The 2008-07-29 release says launch is planned for fall 2008, so no sales before 2008Q3.",
+    "Q3 2008 from the 10-Q (0001047469-08-011809) MD&A: 'Sales of ALVESCO HFA Inhalation Aerosol were $17.1 million and $0 for the three months ended September 30, 2008 and 2007'; the 10-K (0001047469-09-001949) product table prints ALVESCO HFA Inhalation Aerosol 16,809 for 2008; the Q4 2008 release prints $(0.3) million for Q4 and $16.8 million for September-December 2008.",
+    "Q1 and Q2 2009 10-Qs print sales of $0; no Q3 2009 10-Q was located because Sepracor was acquired in October 2009; the Q3 2009 figure comes from the Sepracor Fact Book on the Sumitomo Pharma IR site (Product Revenue - Alvesco 0 / 17,100).",
+    "Checked Sumitomo Pharma fact books fb201006 to fb201712_rev2 (pdftotext): ALVESCO appears only in pipeline/launch-history text, with no sales; AstraZeneca 6-K results 2017-02 to 2019-02 (8 releases) contain no Alvesco line in product tables, only divestment text; AstraZeneca's 2018-11-06 press release gives a combined 2017 figure for Alvesco, Omnaris and Zetonna ($106 million), not usable for Alvesco alone.",
+    "Covis Pharma (owner from 2018) is private and publishes no sales figure; Takeda/Nycomed ex-U.S. rights were not found in Takeda product tables (not exhaustively searched).",
+    "Bigdata.com smart searches returned no documents for this product; EDGAR and company IR sites were used directly."
+  ],
+  "reviewed_anomalies": {
+    "2008Q4": "Sepracor's ALVESCO line after it stopped selling the product: the fourth quarter of 2008 prints a net return (negative) and 2009 prints nil. Kept as printed.",
+    "2009Q1": "Sepracor's ALVESCO line after it stopped selling the product: the fourth quarter of 2008 prints a net return (negative) and 2009 prints nil. Kept as printed.",
+    "2009Q2": "Sepracor's ALVESCO line after it stopped selling the product: the fourth quarter of 2008 prints a net return (negative) and 2009 prints nil. Kept as printed.",
+    "2009Q3": "Sepracor's ALVESCO line after it stopped selling the product: the fourth quarter of 2008 prints a net return (negative) and 2009 prints nil. Kept as printed."
+  }
+}

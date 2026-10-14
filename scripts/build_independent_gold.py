@@ -1412,7 +1412,9 @@ def researched_annual_metadata() -> dict[str, dict[str, Any]]:
 
     An issuer that publishes product sales only for half-years and full years
     has no quarterly series; its full years are read from ``<stem>_annual.csv``
-    beside ``<stem>.meta.json``.
+    beside ``<stem>.meta.json``. Where the issuer's year is not the calendar
+    year the meta says so in ``annual_period_basis`` (``fiscal_year_ending_june``),
+    and each period is the year in which that fiscal year ends.
     """
     out: dict[str, dict[str, Any]] = {}
     for path in sorted(SOURCE_DIR.glob("*.meta.json")):
@@ -1427,6 +1429,7 @@ def researched_annual_metadata() -> dict[str, dict[str, Any]]:
             "manufacturer": raw["manufacturer"],
             "benchmark_identity": raw["benchmark_identity"],
             "manifest": manifest.name,
+            "period_basis": raw.get("annual_period_basis", "calendar"),
         }
     return out
 
@@ -2543,6 +2546,11 @@ def build_annual_rows() -> list[dict[str, Any]]:
         value = float(source["value_reported"])
         source_unit = "thousands" if "thousands" in source["source_quote"].lower() else source["unit"]
         source_value = value * 1000 if source_unit == "thousands" else value
+        period_basis = meta.get("period_basis", "calendar")
+        # The annual FX rate is a calendar-year average, so a fiscal year in a
+        # foreign currency would convert at the wrong year's rate.
+        if period_basis != "calendar" and source["currency"] != "USD":
+            raise ValueError(f"{source['drug_name']} {source['period']}: a {period_basis} year in {source['currency']} has no matching FX rate")
         normalized_usd, fx_rate = usd_normalized(value, source["currency"], int(source["period"]))
         if normalized_usd is None:
             raise ValueError(
@@ -2565,7 +2573,7 @@ def build_annual_rows() -> list[dict[str, Any]]:
                 "fx_rate_source": FX_RATE_SOURCE if fx_rate is not None else None,
                 "metric": "revenue",
                 "period_type": "annual",
-                "period_basis": "calendar",
+                "period_basis": period_basis,
                 "revenue_scope": source["revenue_scope"],
                 "geography": source["geography"],
                 "source_type": "sec_filing" if "sec.gov" in source["source_url"] else "company_ir",

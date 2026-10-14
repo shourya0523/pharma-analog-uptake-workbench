@@ -1,0 +1,44 @@
+{
+  "drug_name": "Hemgenix",
+  "generic_name": "etranacogene dezaparvovec",
+  "manufacturer": "CSL",
+  "benchmark_identity": "csl_hemgenix_worldwide_annual",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Hematology (hemophilia B)",
+  "revenue_scope": "Worldwide (CSL Behring product sales)",
+  "geography": "Worldwide",
+  "formulation": "single-dose intravenous infusion (AAV5 gene therapy)",
+  "route_of_administration": "intravenous",
+  "moa": "AAV5 vector gene therapy delivering Factor IX Padua variant",
+  "moa_class": "aav_gene_therapy",
+  "first_approval_year": 2022,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/vaccines-blood-biologics/vaccines/hemgenix",
+    "quote": "STN: BLA 125772 Proper Name: etranacogene dezaparvovec-drlb Tradename: HEMGENIX ... November 22, 2022 Approval Letter - HEMGENIX"
+  },
+  "period_type": "annual",
+  "series_role": "peak_benchmark",
+  "annual_basis": "CSL fiscal years ending 30 June, labelled by the calendar year in which they end (2025 = July 2024-June 2025; 2026 = July 2025-June 2026), each from that year's full-year results presentation 'CSL Behring Key Products' table.",
+  "launch_quarter": null,
+  "commercial_start_quarter": null,
+  "series_start_reason": "CSL first prints a Hemgenix row in the FY25 (year to 30 June 2025) Key Products table. The FY24 Key Products table (13 August 2024 presentation) and the 1H25 table (11 February 2025) end with Haemate and carry no Hemgenix row; the FY24 results announcement says only that HEMGENIX 'launched in FY23' and 'continues to build momentum'. No FY23 or FY24 figure is printed; the FY25 change of 189% at constant currency is not converted into a FY24 value.",
+  "series_end_quarter": null,
+  "series_end_basis": "sourcing_boundary",
+  "series_end_reason": "FY26 (year to 30 June 2026) is the latest full year published at sourcing time.",
+  "no_quarterly_series": {
+    "reason_code": "half_year_reporting_only",
+    "source_url": "https://investors.csl.com/pdf/8de0cb12-3422-4aa2-976b-2208c153eb0c/CSL-Half-Year-Results-Investor-Presentation.pdf?Platform=ListPage",
+    "source_quote": "CSL half-year results presentation 11 February 2026, CSL Behring Key Products, Sales $m, PCP Change % | Hemgenix | Haemophilia | 57 | 16%",
+    "details": "CSL reports half-year (to 31 December) and full-year (to 30 June) results only; it publishes no quarterly sales. Hemgenix is a row only in the 1H26 (57), FY25 (92) and FY26 (118) tables. With one printed half-year, no half-year series is possible and the second half is not derived. uniQure, the licensor, reports only its own royalty-based license revenue on HEMGENIX (e.g. $15.9 million, $10.1 million and $2.8 million for 2025, 2024 and 2023 in its FY2025 10-K; $5.8 million in Q2 2026), never CSL's net sales, and royalties are not back-calculated into sales."
+  },
+  "notes": "Fiscal-year labelling: CSL's fiscal year ends 30 June, so period 2025 covers July 2024 to June 2025. Hemgenix was approved by the FDA on 22 November 2022 and CSL says it launched in FY23 (year to June 2023), but CSL prints no Hemgenix sales before FY25. 1H26 (six months to 31 December 2025) Hemgenix sales were US$ 57 million (half-year presentation, 11 February 2026). Growth percentages in the quotes are CSL's constant-currency changes.",
+  "search_log": [
+    "CSL IR (investors.csl.com): downloaded and read with pdfplumber the FY2026 results presentation and announcement, FY25 results presentation, FY25 results and strategic initiatives announcement, 1H26 presentation and announcement, 1H25 presentation, FY24 results presentation and announcement, 1H24 presentation and 1H23 presentation.",
+    "Hemgenix rows found: FY25 presentation 'Hemgenix Haemophilia 92 189%'; 1H26 presentation 'Hemgenix Haemophilia 57 16%'; FY26 presentation 'Hemgenix Haemophilia 118 25%'.",
+    "No Hemgenix row in: FY24 presentation Key Products table (ends 'Haemate Haemophilia 118 10%'); 1H25 presentation Key Products table (ends 'Haemate Haemophilia 66 15%'); 1H24 and 1H23 presentations (Hemgenix named only in text). FY24 results announcement: launch in FY23 and momentum, no figure.",
+    "CSL annual reports (FlippingBook HTML at investors.csl.com/annualreport/<year>) were not read page by page; segment note seen for 2023 gives segment totals only.",
+    "uniQure (licensor, royalty holder): Bigdata.com search of its 10-K/10-Q filings shows royalty-based license revenue on HEMGENIX and the HemB SPV royalty financing, never CSL's net sales figure.",
+    "FY23 results presentation (15 August 2023) not downloaded; since the FY24 and 1H25 Key Products tables carry no Hemgenix row, FY23 was not pursued further."
+  ],
+  "annual_period_basis": "fiscal_year_ending_june"
+}

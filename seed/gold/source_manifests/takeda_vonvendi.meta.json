@@ -1,0 +1,35 @@
+{
+  "drug_name": "Vonvendi",
+  "generic_name": "von Willebrand factor (recombinant); vonicog alfa",
+  "manufacturer": "Takeda",
+  "benchmark_identity": "takeda_vonvendi_veyvondi_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "von Willebrand disease",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "lyophilized powder for solution for intravenous injection",
+  "route_of_administration": "intravenous",
+  "moa": "recombinant von Willebrand factor replacement",
+  "moa_class": "recombinant_von_willebrand_factor_replacement",
+  "first_approval_year": 2015,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/media/94863/download?attachment",
+    "quote": "Initial U.S. Approval: 2015 (VONVENDI package insert, FDA CBER product page https://www.fda.gov/vaccines-blood-biologics/approved-blood-products/vonvendi, STN 125577)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2022Q2",
+  "series_start_reason": "Takeda prints a VONVENDI row only from its FY2023 Q1 report, which carries the FY2022 quarters as prior-year columns; before FY2022 Q1 the product is inside 'Others in Rare Hematology' (FY2021 Q4 report footnote lists VONVENDI among the products in Others). The FY2022 quarters (2022Q2-2023Q1) are therefore prior-year columns of the FY2023 reports. Shire's U.S. launch (August 2016) and Baxalta/Shire/Takeda sales before FY2022 were never printed as a product line.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "One worldwide row printed 'VONVENDI'. The row's own regional columns show sales in Europe and Canada and Japan beside the U.S. (the EU brand name of the same molecule is VEYVONDI), so the line is the product's total across both brand names; there is no separate VEYVONDI row (see takeda_veyvondi.exclusion.json). launch_quarter null: first row is FY2022 Q1, six years after the U.S. launch.",
+  "search_log": [
+    "reused the Takeda quarterly-results PDF set already downloaded for the sibling batch (takeda.com assets-dam files for FY2018 Q4 through FY2026 Q1: financial statements, data books FY2019, quarterly financial reports FY2020 on) and re-extracted text with pdfplumber (the verifier's extractor); every cited URL is the takeda.com copy of the document",
+    "for each Takeda fiscal quarter the product-sales analysis page was read: FY2018 Q4 financial statements (Shire 3 months), FY2019 data books (quarterly trend table), FY2020 onward quarterly financial reports (three-month FY(n-1) vs FY(n) table)",
+    "EDGAR (Takeda CIK 0001395064) 6-K earnings exhibits were not individually resolved; the takeda.com copies of the same quarterly documents were cited instead",
+    "cross-check: for each fiscal year the four quarterly values were summed against the full-year product figure printed in the Q4 document (differences at most 0.2 billion JPY from rounding)",
+    "grep of every FY2019-FY2022 Takeda report for a numeric VONVENDI row: none; the earliest numeric row is in the FY2022 Q4 report's forecast table (FY2022 actual 12.2 billion JPY, FY2023 forecast 15.0) and in the FY2023 Q1 report",
+    "Takeda 20-F FY2018-FY2021 and annual securities reports searched for VONVENDI/OBIZUR/VEYVONDI sales figures: no figures",
+    "Baxalta and Shire filings 2015-2018 searched: VONVENDI appears only in pipeline and launch text (U.S. launch announced 2016-08-09), never with a sales figure"
+  ]
+}

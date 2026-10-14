@@ -1,0 +1,33 @@
+{
+  "drug_name": "Feiba",
+  "generic_name": "anti-inhibitor coagulant complex (plasma-derived)",
+  "manufacturer": "Takeda",
+  "benchmark_identity": "takeda_feiba_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Hemophilia A and B with inhibitors",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "lyophilized powder for solution for intravenous injection",
+  "route_of_administration": "intravenous",
+  "moa": "plasma-derived activated prothrombin complex (inhibitor bypassing agent)",
+  "moa_class": "plasma_derived_bypassing_agent",
+  "first_approval_year": 1986,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/media/78852/download?attachment",
+    "quote": "Initial U.S. Approval: 1986 (FEIBA package insert, FDA CBER product page https://www.fda.gov/vaccines-blood-biologics/approved-blood-products/feiba, BL 101447)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2019Q1",
+  "series_start_reason": "Takeda prints a FEIBA line only from fiscal Q4 FY2018 (January-March 2019), the first quarter after the Shire acquisition (Shire 3 months column). No earlier line exists in a public document: Baxalta (CIK 1620546) and Shire (CIK 936402) printed FEIBA only inside the 'Inhibitor Therapies' / hematology categories (see search_log).",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "From the FY2023 reports Takeda re-grouped plasma-derived products (FEIBA, CINRYZE, immunoglobulin, albumin) under a 'PDT' heading; the FEIBA row and its definition are unchanged and its quarterly values continue the FY2019-FY2022 line (FY2022 Q4 doc prints FEIBA 8.7 for Jan-Mar 2023 in the Rare Hematology table; FY2023 docs show the same prior-year values). Printed label is 'FEIBA' with a PDT footnote marker. launch_quarter null: FEIBA was licensed in the US in 1986, long before any series quarter.",
+  "search_log": [
+    "reused the Takeda quarterly-results PDF set already downloaded for the sibling batch (takeda.com assets-dam files for FY2018 Q4 through FY2026 Q1: financial statements, data books FY2019, quarterly financial reports FY2020 on) and re-extracted text with pdfplumber (the verifier's extractor); every cited URL is the takeda.com copy of the document",
+    "for each Takeda fiscal quarter the product-sales analysis page was read: FY2018 Q4 financial statements (Shire 3 months), FY2019 data books (quarterly trend table), FY2020 onward quarterly financial reports (three-month FY(n-1) vs FY(n) table)",
+    "EDGAR (Takeda CIK 0001395064) 6-K earnings exhibits were not individually resolved; the takeda.com copies of the same quarterly documents were cited instead",
+    "cross-check: for each fiscal year the four quarterly values were summed against the full-year product figure printed in the Q4 document (differences at most 0.2 billion JPY from rounding)",
+    "Baxalta 10-K FY2015 (0001193125-16-491806), 10-Qs and Q2 2015-Q1 2016 earnings exhibits searched for FEIBA: sales appear only inside the 'Inhibitor Therapies' category (FEIBA plus OBIZUR), not as a product line; Shire 8-K earnings exhibits and 10-K/10-Q 2016-2018 print no FEIBA sales line"
+  ]
+}

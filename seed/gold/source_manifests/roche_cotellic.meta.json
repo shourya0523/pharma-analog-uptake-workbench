@@ -1,0 +1,34 @@
+{
+  "drug_name": "Cotellic",
+  "generic_name": "cobimetinib",
+  "manufacturer": "Roche",
+  "benchmark_identity": "roche_cotellic_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (solid)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "MEK1/MEK2 kinase inhibitor",
+  "moa_class": "mek_inhibitor",
+  "first_approval_year": 2015,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=206192",
+    "quote": "11/10/2015 ORIG-1 Approval (Drugs@FDA, Original Approvals or Tentative Approvals)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2015Q4",
+  "series_start_reason": "Roche's FY2015 investor update (28 Jan 2016) prints the first Cotellic sales (full year 2); the nine-month 2015 release (med-cor-2015-10-22-e.pdf) mentions Cotellic only in regulatory text and prints no sales row, and FDA approval was 10 Nov 2015, so the full-year figure is read as 2015Q4. This is an inference from the absence of earlier rows.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Printed line is 'Cotellic'; worldwide Total column. Roche prints Cotellic in year-to-date tables only (Top-selling/Recent new launches and later Product sales tables) and never in the quarterly Top 20 table, so Q2 to Q4 of every year are year-to-date differences and Q1 of each year is the three-month table. launch_quarter left null because no Roche document read states a launch quarter (FDA approval 10 Nov 2015).",
+  "search_log": [
+    "reused the earlier Roche crawl (roche.com/investors/events/{q1,hy,q3,annual-results}-YYYY, 2016-2026) and its downloaded Investor update PDFs, plus the assets.cwp.roche.com/imported/en/med-cor-YYYY-MM-DD-e.pdf results releases for 2011-2015 found by dated probing; 63 results releases from the FY2010 release (2011-02-02) to the half-year 2026 release (2026-07-23) were read as text",
+    "per release read two tables: the worldwide 'Top 20 Pharmaceuticals Division quarterly product sales' table (five quarter columns, Total table that precedes the United States/Europe/Japan/International tables) and the year-to-date product sales table (Total, United States, Europe, Japan, International); quarters taken from the own release quarter column when printed, else the Q1 year-to-date table (three months), else the earliest later release that prints the quarter, else year-to-date differences",
+    "wherever both a printed quarter and a year-to-date difference existed they were compared: no difference found; for every calendar year whose four quarters are in the series the sum equals the full-year (January-December) figure of that year's FY release",
+    "Roche half-year/annual reports and Finance Reports, and the 2009-2010 quarterly results releases, were not retrieved or used for rows; Chugai/Genentech documents were not used",
+    "Cotellic absence before FY2015: med-cor-2015-10-22-e.pdf (nine-month 2015) mentions Cotellic only in text and prints no sales row",
+    "rows: 43 from 2015Q4 to 2026Q2 ({'annual_less_reported_first_nine_months': 11, 'direct_reported': 11, 'year_to_date_less_reported_quarters': 21})"
+  ]
+}

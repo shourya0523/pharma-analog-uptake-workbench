@@ -1,0 +1,35 @@
+{
+  "drug_name": "Zelboraf",
+  "generic_name": "vemurafenib",
+  "manufacturer": "Roche",
+  "benchmark_identity": "roche_zelboraf_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (solid)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "BRAF V600 kinase inhibitor",
+  "moa_class": "braf_inhibitor",
+  "first_approval_year": 2011,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=202429",
+    "quote": "08/17/2011 ORIG-1 Approval (Drugs@FDA, Original Approvals or Tentative Approvals)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2011Q3",
+  "series_start_reason": "Roche's nine-month 2011 release (13 Oct 2011) prints the first Zelboraf sales (nine months 11, all United States); the half-year 2011 release (21 Jul 2011) has no Zelboraf sales row (the product appears only in regulatory text), and FDA approval was 17 Aug 2011, so the nine-month figure is read as 2011Q3. This is an inference from the absence of an earlier row.",
+  "series_end_quarter": "2016Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The Roche Q1 2017 investor update (https://assets.roche.com/f/176343/9c1645bdf0/inv-update-2017-04-27.pdf) and every later results release read prints no Zelboraf sales row; the last row is the FY2016 release (inv-update-2017-02-01-e.pdf), where Zelboraf shows 213. Not checked: Roche Finance Reports / Annual Reports.",
+  "notes": "Printed line is 'Zelboraf'; worldwide Total column. Quarterly Top 20 table lists it only in the releases from Q1 2013 to FY2014 (the table's columns cover 2012Q1 to 2014Q4); all other quarters are read from Q1 year-to-date tables or year-to-date differences. launch_quarter left null because no Roche document read states a launch quarter (FDA approval 17 Aug 2011).",
+  "search_log": [
+    "reused the earlier Roche crawl (roche.com/investors/events/{q1,hy,q3,annual-results}-YYYY, 2016-2026) and its downloaded Investor update PDFs, plus the assets.cwp.roche.com/imported/en/med-cor-YYYY-MM-DD-e.pdf results releases for 2011-2015 found by dated probing; 63 results releases from the FY2010 release (2011-02-02) to the half-year 2026 release (2026-07-23) were read as text",
+    "per release read two tables: the worldwide 'Top 20 Pharmaceuticals Division quarterly product sales' table (five quarter columns, Total table that precedes the United States/Europe/Japan/International tables) and the year-to-date product sales table (Total, United States, Europe, Japan, International); quarters taken from the own release quarter column when printed, else the Q1 year-to-date table (three months), else the earliest later release that prints the quarter, else year-to-date differences",
+    "wherever both a printed quarter and a year-to-date difference existed they were compared: no difference found; for every calendar year whose four quarters are in the series the sum equals the full-year (January-December) figure of that year's FY release",
+    "Roche half-year/annual reports and Finance Reports, and the 2009-2010 quarterly results releases, were not retrieved or used for rows; Chugai/Genentech documents were not used",
+    "Zelboraf absence before 2011Q3: med-cor-2011-07-21-e.pdf (half-year 2011) mentions Zelboraf only in regulatory/pipeline text and prints no sales row",
+    "end of series: no Zelboraf sales row in f_inv-update-2017-04-27 (Q1 2017) or f_inv-update-2017-07-27-e (half-year 2017) - the Q1 2017 'Top-selling pharmaceuticals and recent new launches' table lists Gazyva and Cotellic but no Zelboraf; no later results release (38 read) prints a Zelboraf sales row (text mentions only)",
+    "rows: 22 from 2011Q3 to 2016Q4 ({'year_to_date_less_reported_quarters': 5, 'annual_less_reported_first_nine_months': 3, 'direct_reported': 9, 'direct_retrospective_table': 5})"
+  ]
+}

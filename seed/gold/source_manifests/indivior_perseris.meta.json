@@ -1,0 +1,37 @@
+{
+  "drug_name": "Perseris",
+  "generic_name": "risperidone",
+  "manufacturer": "Indivior",
+  "benchmark_identity": "indivior_perseris_worldwide_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Schizophrenia",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "extended-release injectable suspension",
+  "route_of_administration": "subcutaneous",
+  "moa": "Atypical antipsychotic: dopamine D2 and serotonin 5-HT2A receptor antagonist (risperidone), long-acting subcutaneous injection",
+  "moa_class": "atypical_antipsychotic",
+  "first_approval_year": 2018,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2018/210655Orig1s000ltr.pdf",
+    "quote": "NDA 210655 ... This new drug application provides for the use of Perseris (risperidone) extended-release injectable suspension for the treatment of schizophrenia ... It is approved, effective on the date of this letter (electronic signature dated 07/27/2018)"
+  },
+  "launch_quarter": "2019Q1",
+  "launch_evidence": {
+    "url": "https://prod.indivior.com/admin/resources/dam/id/694/Indivior-Q1-2019-Indivior-Financial-Results-Release.pdf",
+    "quote": "PERSERIS (risperidone) extended release injection was launched with a field force of 50 representatives (Indivior Q1 2019 results release; Indivior's press-release index also lists 'Indivior Announces Launch of PERSERIS (risperidone) for the Treatment of Schizophrenia in Adults', February 20 2019)"
+  },
+  "commercial_start_quarter": "2019Q4",
+  "series_start_reason": "Indivior first prints a PERSERIS net revenue figure in the FY 2020 release, whose prior-year column gives Q4 2019 (3) and full-year 2019 (6). The 2019 quarterly releases (Q1, H1, Q3, FY) contain no PERSERIS revenue figure, so 2019Q1-2019Q3 are not printed individually (full-year 2019 less Q4 2019 leaves about 3 across the three quarters, which is not attributable to quarters and is not used).",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Line is Indivior Group net revenue from PERSERIS in USD, printed in whole millions ('Net revenue by major product line'); the Group is a single reportable segment and does not split the product by country. Indivior licensed PERSERIS in Canada to HLS Therapeutics (press-release index, May 2019) and the FY 2020 release notes shipments to rest-of-world geographies, so the scope is the Group line, mostly U.S. Indivior states marketing and promotion of PERSERIS was discontinued in July 2024 (2024Q2 and later releases); the product line is still printed through 2026Q2. 2019Q4 and 2020Q1-2020Q3 come from prior-year columns of later releases because the quarter's own release prints no PERSERIS line (the FY 2020 release is the first with a PERSERIS row; the Q1 2020, H1 2020 and Q3 2020 releases print only year-to-date prose such as 'PERSERIS net revenue of $7m'); 2023Q1 is from the Q1 2024 release's prior-year column (the Q1 2023 release PDF was not located; 2023 H1 19 less Q2 11 also gives 8). Whole-million rounding: annual sums versus the printed full years are 2020 13 vs 14, 2021 17 vs 17, 2022 28 vs 28, 2023 42 vs 42, 2024 41 vs 40, 2025 24 vs 24. 2019-2022 releases were taken from prod.indivior.com (Indivior's own site); 2023 onward from Form 6-K / 8-K exhibits on sec.gov.",
+  "search_log": [
+    "Indivior (CIK 1625297) SEC submissions: Form 6-K earnings exhibits exist from Q2 2023 (filed 2023-07-27) and Form 8-K Item 2.02 from 2025-04; releases for 2019Q1-2023Q1 are not on EDGAR under this CIK, so Indivior's own press-release index (prod.indivior.com/en/media/press-releases) was walked and each results PDF read with pdfplumber.",
+    "Scanned the Q1 2019, H1 2019, Q3 2019, FY 2019, Q1 2020, H1 2020, Q3 2020 releases for any PERSERIS revenue line: none prints a quarterly PERSERIS figure (only guidance and year-to-date prose); first product-line row is in the FY 2020 release.",
+    "Q1 2023 release: ir.indivior.com page for the release carries no PERSERIS text and no results PDF; used the Q1 2024 prior-year column instead.",
+    "Searched Luye/other owners: Indivior still reports the PERSERIS line in Q2 2026 (Form 8-K Exhibit 99.1, filed 2026-08-03), so no ownership change within the series.",
+    "Cross-check: each year's four quarters were summed against the full-year PERSERIS figure printed in the Q4 release; all within whole-million rounding."
+  ]
+}

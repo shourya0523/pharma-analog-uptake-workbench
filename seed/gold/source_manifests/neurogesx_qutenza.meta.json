@@ -1,0 +1,39 @@
+{
+  "drug_name": "Qutenza",
+  "generic_name": "capsaicin",
+  "manufacturer": "NeurogesX",
+  "benchmark_identity": "neurogesx_qutenza_us_reported",
+  "therapeutic_area": "Neurology / Psychiatry",
+  "indication_area": "Neuropathic pain (postherpetic neuralgia)",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "8% capsaicin dermal patch",
+  "route_of_administration": "Topical",
+  "moa": "TRPV1 (transient receptor potential vanilloid 1) agonist; capsaicin defunctionalises cutaneous nociceptor fibres",
+  "moa_class": "trpv1_agonist",
+  "first_approval_year": 2009,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2009/022395s000ltr.pdf",
+    "quote": "NDA 022395 ... QUTENZA (capsaicin) 8% patch ... It is approved, effective on the date of this letter (electronic signature dated 11/16/2009)"
+  },
+  "launch_quarter": "2010Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1385830/000119312510185974/d10q.htm",
+    "quote": "Since the U.S. launch of Qutenza on April 5, 2010, we recorded sales of Qutenza to its specialty distributor and specialty pharmacy customers totaling $308,000, of which $33,000 was recorded as Qutenza revenue for the second quarter 2010."
+  },
+  "commercial_start_quarter": "2010Q2",
+  "series_start_reason": "2010Q2 is the U.S. launch quarter (April 5, 2010) and the first quarter NeurogesX printed Net product revenue; the first quarter of 2010 is a printed nil in the fiscal 2010 Form 10-K quarterly table.",
+  "series_end_quarter": "2012Q3",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "NeurogesX filed no periodic report after the Form 10-Q for the quarter ended September 30, 2012. Its Form 8-K of 2013-03-27 states the company 'does not currently expect to be in a position to file its Annual Report on Form 10-K for the year ended December 31, 2012', and its Form 8-K of 2013-07-11 followed the sale of its assets. No NeurogesX document prints 2012Q4 or 2013Q1-Q2.",
+  "notes": "Scope is the line NeurogesX itself labels 'Net product revenue' (Qutenza sold by NeurogesX in the United States). Ex-U.S. Qutenza was licensed to Astellas; amounts from that agreement are reported in separate 'Revenue from the Astellas Agreement' lines and are not in this series. Acorda Therapeutics acquired the U.S., Canada and Latin America rights in July 2013 (Acorda FY2013 10-K, https://www.sec.gov/Archives/edgar/data/1008848/000100884814000011/report_annual-123113.htm) and sold them on October 30, 2018 (FY2018 10-K, https://www.sec.gov/Archives/edgar/data/1008848/000156459019004986/acor-10k_20181231.htm). Acorda printed Qutenza net revenue only as annual prose figures at 0.1 million precision (2013 $0.4 million, 2014 $0.9 million, 2015 $1.0 million, 2016 $1.1 million, 2017 $0.7 million, 2018 $0.5 million) plus third-quarter-2015 ($0.4 million) and third-quarter-2014 ($0.3 million) prose figures; these are not spliced because the scope and precision differ and quarters are missing. Averitas Pharma (Grunenthal), the buyer in 2018, is private. Series therefore ends 2012Q3. The fiscal 2010 and 2011 fourth quarters are taken from the unaudited quarterly financial data table of each year's Form 10-K, where the fourth quarter is the current column.",
+  "search_log": [
+    "Bigdata.com smart searches for 'Acorda Qutenza net revenue' and 'NeurogesX Qutenza net product sales' returned no documents; EDGAR submissions JSON was used directly.",
+    "Listed NeurogesX (CIK 1385830) 10-K, 10-K/A, 10-Q and 8-K filings from 2010 onward: 10-Qs for 2010Q1-2012Q3, 10-Ks for FY2009-FY2011, no FY2012 10-K. Read the revenue table of each 10-Q and the quarterly financial data table of the FY2010 and FY2011 10-Ks.",
+    "The Q1 2010 10-Q (0001193125-10-119068) carries no net product revenue row: Qutenza launched in the U.S. on April 5, 2010, and the FY2010 10-K quarterly table prints the first quarter as a dash.",
+    "Sum checks: 2010 quarters 33 + 197 + 458 = 688 (FY2010 10-K); 2011 quarters 575 + 486 + 763 + 801 = 2,625 (FY2011 10-K).",
+    "Listed Acorda (CIK 1008848) 10-K and 10-Q filings 2013-07 to 2019-05 and grepped each for Qutenza revenue sentences: only annual figures (and third-quarter 2014 and 2015 prose figures) are printed, at 0.1 million precision; no Acorda quarterly table or release line was found for Qutenza (8-K Item 2.02 exhibits were not individually read).",
+    "Averitas Pharma (Grunenthal) is private; no filing located. Astellas ex-U.S. sales are not printed as a Qutenza line in the NeurogesX documents read.",
+    "Checked NeurogesX filings after 2012-11-14: only 8-Ks (2012-11-30, 2013-01-08, 2013-03-05, 2013-03-11, 2013-03-27, 2013-04-01, 2013-04-17, 2013-06-24, 2013-07-11) and registration-termination forms; no 10-K or 10-Q."
+  ]
+}

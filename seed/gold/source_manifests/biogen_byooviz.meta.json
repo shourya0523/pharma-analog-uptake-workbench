@@ -1,0 +1,39 @@
+{
+  "drug_name": "Byooviz",
+  "generic_name": "ranibizumab-nuna",
+  "manufacturer": "Biogen",
+  "benchmark_identity": "biogen_byooviz_us_reported",
+  "therapeutic_area": "Ophthalmology",
+  "indication_area": "Neovascular age-related macular degeneration and other retinal disease (biosimilar to Lucentis)",
+  "revenue_scope": "U.S.",
+  "geography": "United States (the 'U.S.' column of Biogen's product revenue table; Biogen's Total column also holds Rest of World from 2023Q1)",
+  "formulation": "injection, 10 mg/mL solution in a single-dose vial",
+  "route_of_administration": "intravitreal",
+  "moa": "VEGF-A inhibitor (ranibizumab antibody fragment, biosimilar to Lucentis)",
+  "moa_class": "vegf_inhibitor",
+  "first_approval_year": 2021,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761202",
+    "quote": "Approval Date(s) and History, Letters, Labels, Reviews for BLA 761202 Original Approvals or Tentative Approvals ... 09/17/2021 ORIG-1 Approval"
+  },
+  "launch_quarter": "2022Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/875045/000087504522000020/exhibit991-q22022pressrele.htm",
+    "quote": "In the second quarter of 2022 Biogen and Samsung Bioepis Co., Ltd. launched BYOOVIZ (ranibizumab-nuna), a biosimilar referencing LUCENTIS, in the United States."
+  },
+  "commercial_start_quarter": "2022Q2",
+  "series_start_reason": null,
+  "series_end_quarter": "2025Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Biogen divested the product in 2025: the FY2025 10-K says transfer of commercialization rights for BYOOVIZ in the U.S. and Canada back to Samsung Bioepis was completed as of December 31, 2025, and that in October 2025 Biogen completed the sale of its remaining commercial rights (Europe). Biogen's 2026Q1 and 2026Q2 releases still print a BYOOVIZ row (U.S. nil in 2026Q1, 0.1 in 2026Q2) but these are residual items after the divestiture, not commercial sales, and the footnote there reads 'In 2025 we completed the sale of our rights to TOFIDENCE and BYOOVIZ'; the series ends at the last commercial quarter.",
+  "notes": "Scope is the U.S. column of Biogen's product revenue table (USD millions, one decimal). The Total column adds a Rest of World component (0.4 in 2023Q1, rising to 19.4 for 2025) that Biogen's 2024 releases date to 'certain international markets in 2023', so the Total is not constant-scope; the U.S. column is printed in every release from 2022Q2 and is used for the whole series. Totals (U.S.+Rest of World) as printed: 2022Q2 0.5, 2022Q3 0.7, 2022Q4 3.1, 2023Q1 8.6, 2023Q2 7.0, 2023Q3 6.9, 2023Q4 9.2, 2024Q1 5.6, 2024Q2 13.7, 2024Q3 8.0, 2024Q4 9.3, 2025Q1 8.9, 2025Q2 8.6, 2025Q3 7.0, 2025Q4 7.9. 2022Q2 is pre-availability stocking (release footnote: launched in June 2022, commercially available in July 2022). Cross-checks: calendar-year U.S. sums 2022 0.5+0.7+3.1=4.3, 2023 8.2+7.0+6.1+7.9=29.2, 2024 3.7+10.3+4.1+4.9=23.0, 2025 4.2+2.5+2.0+4.3=13.0 equal the full-year U.S. figures printed in the Q4 releases (4.3, 29.2, 23.0, 13.0). Brand total is a single formulation (ranibizumab-nuna 10 mg/mL vial).",
+  "search_log": [
+    "Listed Biogen (CIK 0000875045) filings from data.sec.gov/submissions (recent + older files), keeping every 8-K and 8-K/A with item 2.02: 25 filings 2022-02 to 2026-07; the 2022-07-20 8-K/A (0000875045-22-000023) is a re-filing of the same release and the original 8-K was used.",
+    "Downloaded the EX-99.1 earnings release of each quarter's 8-K from 2021Q4 to 2026Q2 (exhibit991-q<N><YYYY>pressrele.htm) and parsed every table row; selected the first row whose label equals the product (the three-month table; the year-to-date table follows it).",
+    "Downloaded all Biogen 10-K and 10-Q filings 2023-02 to 2026-07 and searched the text for the brand names and the revenue-note product tables.",
+    "Biogen first prints BYOOVIZ in the 2022Q2 release (rows 0.5 / nil / 0.5); the 2022Q1 release (filed 2022-05-03) has no BYOOVIZ row, consistent with the June 2022 launch.",
+    "Every quarter 2022Q2-2025Q4 is read from that quarter's own release (direct_reported); no gap between first and last quarter.",
+    "FDA: Drugs@FDA overview page for BLA 761202 prints the 09/17/2021 original approval.",
+    "Fallbacks not needed (a separately printed line exists for the whole span). Samsung Bioepis (the licensor) reports company revenue only."
+  ]
+}

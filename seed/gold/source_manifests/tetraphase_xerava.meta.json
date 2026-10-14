@@ -1,0 +1,49 @@
+{
+  "drug_name": "Xerava",
+  "generic_name": "eravacycline",
+  "manufacturer": "Tetraphase Pharmaceuticals",
+  "benchmark_identity": "tetraphase_xerava_us_reported",
+  "therapeutic_area": "Infectious Disease / Vaccines",
+  "indication_area": "Complicated intra-abdominal infections (cIAI)",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "formulation": "injection (lyophilized powder for intravenous infusion)",
+  "route_of_administration": "intravenous",
+  "moa": "Fluorocycline (tetracycline-class) antibacterial; binds the bacterial 30S ribosomal subunit and inhibits protein synthesis",
+  "moa_class": "tetracycline_class_antibiotic",
+  "first_approval_year": 2018,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2018/211109Orig1s000ltr.pdf",
+    "quote": "NDA 211109 ... This new drug application provides for the use of XERAVA (eravacycline) for injection, 50 mg per vial, for the treatment of complicated intra-abdominal infections in patients 18 years of age and older ... It is approved, effective on the date of this letter (electronic signature page dated 08/27/2018)"
+  },
+  "launch_quarter": "2018Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/920465/000092046520000127/ljpc-2020q210xq.htm",
+    "quote": "U.S. net sales of XERAVA, which was launched in October 2018, were $1.5 million and $3.2 million"
+  },
+  "commercial_start_quarter": "2018Q4",
+  "series_start_reason": null,
+  "series_end_quarter": "2022Q2",
+  "series_end_basis": "sourcing_boundary",
+  "series_end_reason": "La Jolla was acquired by Innoviva on August 22, 2022 and filed no report after its Q2 2022 10-Q. Innoviva's XERAVA line from 2022Q3 to 2024Q2 is 'net sales of XERAVA' for all customers, and Innoviva's own statements show ex-U.S. customers in the mix (U.S. share of total net product sales about 96% for August 22-December 31 2022, 94% for 2023Q2, 86% for 2023Q3, 87% for 2024Q2); the quarters before and after are U.S.-only lines, so the series stops where the scope would change rather than splice a worldwide line onto a U.S. one. Innoviva labels XERAVA as 'U.S. net product sales' from 2024Q3 (see notes).",
+  "joined_issuers": [
+    {
+      "issuer": "Tetraphase",
+      "first_quarter": "2018Q4",
+      "last_quarter": "2020Q1"
+    },
+    {
+      "issuer": "La Jolla",
+      "first_quarter": "2020Q2",
+      "last_quarter": "2022Q2"
+    }
+  ],
+  "notes": "Scope is U.S. XERAVA net sales throughout. Tetraphase books ex-U.S. partner payments as 'License and collaboration revenue', so its 'Product revenue, net' is U.S. product sales; La Jolla labels the line 'XERAVA U.S. net sales' (renamed 'XERAVA U.S. net product sales' in 2022). Tetraphase's Q3 2018 release (2018-11-08) has no 'Product revenue, net' row (rows read: license revenue and total revenue only), and the launch was October 2018, so 2018Q4 is the first quarter. 2019Q4 comes from the quarterly table in the 10-K because no Q4 2019 release was found among Tetraphase's 8-K exhibits. 2020Q2 and 2020Q3 are La Jolla's own full-quarter figures including the days before its July 28, 2020 closing (post-closing portion of Q3 was 1.9); the four 2020 quarters (1.755, 1.5, 2.7, 2.3) sum to 8.255 against the 8.2 stated for the year in the 10-K, within the rounding of the one-decimal figures. 2021 quarters (1.8, 2.5, 2.9, 2.9) sum to the stated 10.1. La Jolla's 10-Qs and 10-K print these in millions to one decimal; no thousands-level figure exists for 2020Q2-2022Q2. After the series end: Innoviva (CIK 1080014) prints 'net sales of XERAVA' of 1.3 for August 22-September 30 2022 (partial quarter), 5.5 for August 22-December 31 2022, then 2.5, 4.5, 5.1, 5.2 for 2023Q1-Q4 and 4.8, 6.2, 4.2 for 2024Q1-Q3 (all customers, not U.S.-only). Its releases give XERAVA as a component of 'U.S. net product sales' for 2024Q3 2.3, 2024Q4 3.1, 2025Q1 3.2, 2025Q2 3.1, 2025Q3 3.2, 2025Q4 3.8, 2026Q1 2.5, 2026Q2 3.3 (millions). The U.S.-labelled figures for 2022Q3-2024Q2 are not printed anywhere found, so no U.S. line is claimed across that gap.",
+  "search_log": [
+    "Tetraphase (CIK 1373707) submissions: listed 8-K Item 2.02 exhibits and 10-Q/10-K 2018-2020. Releases for 2018Q3 (2018-11-08), 2018Q4 (2019-03-14), 2019Q1 (2019-05-08), 2019Q2 (2019-08-08), 2019Q3 (2019-11-12) read; 2018Q3 prints no product revenue row; 2018Q4 is the first 'Product revenue, net' (178). No Q4 2019 or Q1 2020 earnings-release exhibit exists in the 8-K list (2020-03-16 8-K exhibits are agreements); 2019Q4 taken from the 10-K quarterly table, 2020Q1 from the 10-Q.",
+    "No Tetraphase Q2 2020 report exists (acquired 2020-07-28); La Jolla's Q2 2020 10-Q (2020-08-06) prints 'U.S. net sales of XERAVA ... were $1.5 million' for the quarter.",
+    "La Jolla (CIK 920465) stopped filing earnings 8-Ks after 2020-01; XERAVA U.S. net sales read from MD&A prose of every 10-Q/10-K 2020Q2-2022Q2. Note the 'XERAVA | 511 | 866' rows in La Jolla's 10-Q/10-K tables are selling-and-marketing expense by product, not sales, and were not used.",
+    "Innoviva (CIK 1080014) 10-Q/10-K and 8-K Item 2.02 releases 2022Q3-2026Q2 read: XERAVA is printed on its own line but as all-customer 'net sales' until 2024Q3 and the customer mix includes ex-U.S. (Innoviva states the U.S. share of net product sales per period), so Innoviva is not joined.",
+    "Checked La Jolla 2020 10-K and 2021 10-K for pre-closing XERAVA: 10-K 2020 states 8.2 for twelve months including pre-acquisition, 4.2 after July 28, consistent with the quarters used."
+  ]
+}

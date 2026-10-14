@@ -1,0 +1,44 @@
+{
+  "drug_name": "Pylera",
+  "generic_name": "bismuth subcitrate potassium / metronidazole / tetracycline hydrochloride",
+  "manufacturer": "Aptalis Pharma",
+  "benchmark_identity": "aptalis_pylera_us_annual",
+  "therapeutic_area": "GI / Liver / Women's Health / Urology",
+  "indication_area": "Helicobacter pylori eradication (duodenal ulcer disease)",
+  "revenue_scope": "U.S. net sales, fiscal year ended September 30",
+  "geography": "United States",
+  "period_type": "annual",
+  "series_role": "peak_benchmark",
+  "annual_basis": "Aptalis fiscal years 2007 to 2011 (each ended September 30), from the net sales sentence in the Pylera section of Aptalis Pharma Inc.'s Forms 10-K for fiscal 2008 through 2011; fiscal 2007 is the prior-year figure in the fiscal 2008 Form 10-K because Aptalis' first Form 10-K is for fiscal 2008. Periods are labelled by the fiscal year, not by calendar year.",
+  "formulation": "capsule (three-in-one capsule-within-capsule)",
+  "route_of_administration": "oral",
+  "moa": "Bismuth subcitrate potassium plus metronidazole and tetracycline antibacterial triple combination for H. pylori eradication",
+  "moa_class": "h_pylori_bismuth_antibiotic_combination",
+  "first_approval_year": 2006,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=050786",
+    "quote": "09/28/2006 ORIG-1 Approval (NDA 050786, PYLERA BISMUTH SUBCITRATE POTASSIUM; METRONIDAZOLE; TETRACYCLINE HYDROCHLORIDE 140MG;125MG;125MG CAPSULE;ORAL; Type 1 - New Molecular Entity and Type 4 - New Combination)"
+  },
+  "launch_quarter": null,
+  "launch_evidence": {
+    "year": 2007,
+    "url": "https://www.sec.gov/Archives/edgar/data/1444570/000119312508258292/d10k.htm",
+    "quote": "Since May 7, 2007, we have been marketing as PYLERA a 3-in-1 capsule therapy for the eradication of Helicobacter pylori"
+  },
+  "series_start_reason": "Fiscal 2007 (October 2006 to September 2007) is the launch year (marketing began May 7, 2007) and the earliest year any document prints.",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Aptalis Pharma Inc. (CIK 0001444570) filed its last Form 10-K for fiscal 2011 (filed 2011-12-20) and its last Form 10-Q for the quarter ended 2011-12-31 (filed 2012-02-10); no fiscal 2012 or 2013 figure was found. Forest Laboratories, which acquired Aptalis, prints only a two-month stub (sales from February 2014 of $2.4 million U.S. and $1.2 million EU in its fiscal 2014 Form 10-K, https://www.sec.gov/Archives/edgar/data/38074/000003807414000019/forest10k2014.htm), which is neither a year nor a quarter and is not used. Allergan plc and AbbVie print no Pylera sales.",
+  "notes": "U.S. scope: the fiscal 2008 and fiscal 2011 Forms 10-K say 'in the United States'; the fiscal 2011 Form 10-K restates fiscal 2009 (8.2) and fiscal 2010 (10.5) as U.S. net sales, matching the values printed in the fiscal 2009 and fiscal 2010 Forms 10-K. Forest Laboratories' fiscal 2014 Form 10-K says Pylera was launched in Germany in January 2013 and France in April 2013, after the last Aptalis fiscal year in this series. Pylera was sold by AbbVie to Laboratories Juvise Pharmaceuticals in June 2022 (AbbVie Form 10-Q for 2022Q2). Aptalis' fiscal year runs October to September, so the years are not calendar years.",
+  "search_log": [
+    "Listed all Aptalis Pharma Inc. filings (CIK 0001444570): Forms 10-K for fiscal 2008-2011, Forms 10-Q Dec 2008 through Dec 2011, 8-Ks 2009-2012; searched each 10-K/10-Q for 'pylera' and read every sentence carrying a dollar figure. Only the 10-Ks print Pylera net sales; the 10-Qs and the 2011-01-25 earnings release print no Pylera figure.",
+    "Listed Allergan plc filings (CIK 0001578845; every 10-Q/10-K 2013-2020, every item 2.02 8-K 2015-2020): Pylera appears only in risk-factor and patent-litigation prose (Forms 10-K for 2016-2019), never with a sales figure or a table row. AbbVie (CIK 0001551152) 8-Ks and 10-Q/10-K 2020-2026: Pylera appears only as the 2022 divestiture gain ($172 million pre-tax) and Juvise sale note.",
+    "Forest Laboratories (CIK 0000038074) Form 10-K for fiscal 2014 (filed 2014-05-21; https://www.sec.gov/Archives/edgar/data/38074/000003807414000019/forest10k2014.htm): 'we recorded sales of Pylera in the U.S. of $2.4 million in fiscal 2014' and 'total EU sales of Pylera of $1.2 million in fiscal 2014' (sales commenced February 2014 after the Aptalis acquisition): a two-month stub, not used.",
+    "No quarterly Pylera figure exists in any Aptalis, Forest, Actavis, Allergan or AbbVie document searched."
+  ],
+  "no_quarterly_series": {
+    "reason_code": "annual_reporting_only",
+    "source_url": "https://www.sec.gov/Archives/edgar/data/1444570/000119312511345928/d257254d10k.htm",
+    "source_quote": "We reported net sales in the United States of $13.0 million, $10.5 million and $8.2 million for PYLERA in fiscal years 2011, 2010 and 2009, respectively.",
+    "details": "Aptalis printed Pylera net sales only as fiscal-year figures in the Forms 10-K; its Forms 10-Q (December 2008 through December 2011) mention Pylera without a sales figure, and the later owners (Forest Laboratories, Actavis/Allergan plc, AbbVie) print no Pylera line. No quarterly figure is interpolated."
+  }
+}

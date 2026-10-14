@@ -1,0 +1,56 @@
+{
+  "drug_name": "Vpriv",
+  "generic_name": "velaglucerase alfa",
+  "manufacturer": "Takeda",
+  "benchmark_identity": "takeda_vpriv_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Gaucher disease",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "lyophilized powder for solution for intravenous infusion",
+  "route_of_administration": "intravenous",
+  "moa": "recombinant human glucocerebrosidase (velaglucerase alfa) enzyme replacement therapy",
+  "moa_class": "enzyme_replacement_therapy",
+  "first_approval_year": 2010,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2010/022575s000ltr.pdf",
+    "quote": "This new drug application provides for the use of VPRIV (velaglucerase alfa for injection) for long-term enzyme replacement therapy (ERT) for pediatric and adult patients with type 1 Gaucher disease. (FDA approval letter, NDA 022575, Shire Human Genetic Therapies)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2009Q4",
+  "series_start_reason": "Shire's Q4 2009 release (8-K 0000950103-10-000434) is the first to print a VPRIV line: $2.5 million from early-access programs before US/EU approval (the Q4 2008 comparative is nil and the release states the Q4 2009 and full-year 2009 figures are equal). A launch quarter is therefore not used as the anchor.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Printed label is 'Vpriv' in the FY2018-FY2019 documents and 'VPRIV' from FY2020. Line is worldwide (the same row carries US, Japan, Europe and Canada, and Growth and Emerging Markets columns from FY2020). launch_quarter is null: the series starts nine years after launch; launch was by Shire in 2010 (see shire_vpriv). Joined with Shire's own worldwide VPRIV line (USD, 2009Q4-2018Q3); Takeda prints JPY from 2019Q1. Each row keeps its issuer's currency. Shire-era notes: USD millions; the 2016 and later releases split the line into U.S. and International columns with a Total, earlier releases print the consolidated line. Annual sums of the four quarters equal the full-year figures printed in the Q4 releases (2010-2017). Dated launch: FDA approved VPRIV on 2010-02-26 (Shire 8-K 0000950103-10-001248, 2010-04-29: 'On February 26, 2010 the U.S. Food and Drug Administration granted marketing approval for VPRIV'); the 2009Q4 row precedes it, so launch_quarter is null.",
+  "search_log": [
+    "listed Shire plc (CIK 936402) filings via data.sec.gov submissions and downloaded every 8-K with Item 2.02 from 2010-02 to 2018-11 plus the 2016-2018 10-K/10-Q set; extracted the VPRIV table row from the 3-month net product sales table of each release",
+    "Q4 2009 release (2010-02-19) is the earliest with a VPRIV row; the Q3 2009 release (2009-10-30) was not downloaded in this batch, and the 2010-02-19 note states 2009 sales of $2.5 million came from early access programs, all printed in Q4 2009",
+    "cross-check: four quarters summed to the full-year figure in each Q4 release for 2010-2017",
+    "2018Q4: no Shire release or filing exists on EDGAR after 2018-11-01 other than deregistration forms (25, 15-12B, 15-15D)",
+    "reused the Takeda quarterly-results PDF set already downloaded for the sibling batch (takeda.com assets-dam files for FY2018 Q4 through FY2026 Q1: financial statements, data books FY2019, quarterly financial reports FY2020 on) and re-extracted text with pdfplumber (the verifier's extractor); every cited URL is the takeda.com copy of the document",
+    "for each Takeda fiscal quarter the product-sales analysis page was read: FY2018 Q4 financial statements (Shire 3 months), FY2019 data books (quarterly trend table), FY2020 onward quarterly financial reports (three-month FY(n-1) vs FY(n) table)",
+    "EDGAR (Takeda CIK 0001395064) 6-K earnings exhibits were not individually resolved; the takeda.com copies of the same quarterly documents were cited instead",
+    "cross-check: for each fiscal year the four quarterly values were summed against the full-year product figure printed in the Q4 document (differences at most 0.2 billion JPY from rounding)",
+    "checked Shire 8-K earnings exhibits (CIK 936402, Items 2.02, 2010-2018) and found a VPRIV line every quarter 2009Q4-2018Q3: staged separately as shire_vpriv",
+    "Shire 2018Q4 not available: submissions index for CIK 936402 shows Form 25 (2019-01-22) and Form 15 (2019-02-07) and no 10-K or 8-K earnings release after 2018-11-01"
+  ],
+  "joined_issuers": [
+    {
+      "issuer": "Shire",
+      "first_quarter": "2009Q4",
+      "last_quarter": "2018Q3"
+    },
+    {
+      "issuer": "Takeda",
+      "first_quarter": "2019Q1",
+      "last_quarter": "2026Q2"
+    }
+  ],
+  "unreported_quarters": {
+    "2018Q4": "Ownership change Shire to Takeda; no figure is published. Shire's last earnings release is for Q3 2018 (8-K 0000936402-18-000094, 2018-11-01). Takeda completed the acquisition on 2019-01-08 and Shire filed Form 25 (2019-01-22) and Form 15 (2019-02-07) with no FY2018 10-K or release; the 2018Q4 quarter is not published by either issuer in a citable form. Takeda's continuation (JPY, from 2019Q1) is delivered as takeda_vpriv."
+  },
+  "reviewed_anomalies": {
+    "2019Q1": "First Takeda quarter: the line changes from Shire's USD millions to Takeda's JPY millions, so the value as reported steps by the exchange rate, not by sales; the USD-normalised series is continuous."
+  }
+}

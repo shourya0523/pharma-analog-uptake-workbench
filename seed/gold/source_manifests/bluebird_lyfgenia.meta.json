@@ -1,0 +1,33 @@
+{
+  "manufacturer": "bluebird bio",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "route_of_administration": "Intravenous",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "moa_class": "lentiviral_gene_therapy",
+  "series_end_quarter": "2025Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "bluebird bio filed its last periodic report, the Form 10-Q for the quarter ended March 31, 2025 (filed 2025-05-14), which discloses the pending Merger Agreement with Beacon Parent Holdings, L.P.; it then filed a Form 15 'Certification and Notice of Termination of Registration' on 2025-06-12 (https://www.sec.gov/Archives/edgar/data/1293971/000119312525139516/d13380d1512g.htm). No 2025Q2 report exists.",
+  "drug_name": "Lyfgenia",
+  "generic_name": "lovotibeglogene autotemcel",
+  "benchmark_identity": "bluebird_lyfgenia_us_reported",
+  "indication_area": "Sickle cell disease (history of vaso-occlusive events)",
+  "formulation": "autologous CD34+ cell suspension for intravenous infusion",
+  "moa": "autologous CD34+ hematopoietic stem cell gene therapy; BB305 lentiviral vector adds a modified beta-globin (beta-A-T87Q-globin) gene to increase anti-sickling hemoglobin",
+  "first_approval_year": 2023,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/media/174617/download?attachment",
+    "quote": "BLA APPROVAL December 08, 2023 ... Biologics License Application (BLA) received April 21, 2023, submitted under section 351(a) of the Public Health Service Act (PHS Act) for lovotibeglogene autotemcel ... The effective approval date will remain December 08, 2023"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2024Q3",
+  "series_start_reason": "2024Q3 is the first quarter with LYFGENIA revenue: the Form 10-Q for the quarter ended September 30, 2024 prints nine-month 2024 LYFGENIA revenue (2,632) equal to the third-quarter figure, and the Form 10-Q for the quarter ended June 30, 2024 has no LYFGENIA row. The Form 10-Q for the quarter ended March 31, 2025 prints 2024Q1 as a dash. FDA approval was December 8, 2023; no issuer document located dates the commercial launch quarter.",
+  "notes": "FDA approval December 8, 2023 (U.S.); launch_quarter is null because no issuer document located gives it. Revenue is recognised upon infusion and the issuer states all product revenue is within the United States. 2024Q4 is derived as full year 2024 less nine months 2024. The same note table prints ZYNTEGLO and SKYSONA; they are separate products.",
+  "search_log": [
+    "Listed bluebird bio (CIK 1293971) 10-K and 10-Q filings from 2021 on and downloaded those for 2022Q3-2025Q1; grepped each for 'by therapy', product revenue tables and per-product revenue sentences.",
+    "The 'Product revenue by therapy' note table first appears in the FY2023 Form 10-K (filed 2024-09-13) and the 2024 and 2025 Form 10-Qs; the 2022-2023 Form 10-Qs and the FY2022 10-K print only total product revenue (zero 'by therapy' matches), so 2023Q2 and 2023Q3 come from the prior-year columns of the 2024 Form 10-Qs.",
+    "bluebird 8-K earnings releases were not read; the per-therapy figures come from the 10-Q and 10-K notes. A Bigdata.com smart search returned the Q1 2025 10-Q note table, matching the SEC document read directly.",
+    "Sum checks: ZYNTEGLO 2024 quarters 18,561 + 11,158 + 5,493 + 27,061 = 62,273 (FY2024 10-K); 2023 quarters 0 + 4,180 + 4,851 + 7,661 = 16,692 (FY2023 10-K); LYFGENIA 2024 quarters 0 + 0 + 2,632 + 8,973 = 11,605.",
+    "Checked for 8-Ks, 10-Q or 10-K filed after 2025-05-14: only Forms 4, S-8 POS, POS AM, EFFECT and Form 15-12G."
+  ]
+}

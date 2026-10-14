@@ -1,0 +1,43 @@
+{
+  "drug_name": "Haegarda",
+  "generic_name": "C1 esterase inhibitor subcutaneous (human)",
+  "manufacturer": "CSL",
+  "benchmark_identity": "csl_haegarda_worldwide_annual",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Hereditary angioedema (prophylaxis)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "subcutaneous lyophilized powder for solution",
+  "route_of_administration": "subcutaneous",
+  "moa": "Plasma-derived C1 esterase inhibitor replacement (prophylaxis of HAE attacks)",
+  "moa_class": "c1_esterase_inhibitor_replacement",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/media/105611/download",
+    "quote": "HAEGARDA, C1 Esterase Inhibitor Subcutaneous (Human) ... Initial U.S. Approval: 2017 ... indicated for routine prophylaxis to prevent Hereditary Angioedema (HAE) attacks in patients 6 years of age and older (FDA-hosted package insert, BLA 125563)"
+  },
+  "launch_quarter": null,
+  "commercial_start_quarter": "2024",
+  "series_start_reason": "CSL prints product-level dollar sales for this brand only from the full-year FY2024 results presentation (year ended 30 June 2024) onward, in the Appendix 'CSL Behring Key Products' table; earlier presentations and annual reports print only percentage growth. Years are CSL fiscal years ending 30 June (period 2024 = July 2023 to June 2024), not calendar years.",
+  "series_end_quarter": "2026",
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "period_type": "annual",
+  "series_role": "peak_benchmark",
+  "annual_basis": "CSL fiscal years FY2024, FY2025 and FY2026 (each ending 30 June), each read from that year's own full-year results presentation; the period label is the fiscal-year-end year.",
+  "notes": "Worldwide Haegarda sales include U.S., Europe, Japan and other markets as one line; the brand is also marketed as Berinert SC in some countries per a CSL newsroom release, and any such sales would be printed under the label the CSL table uses. No launch quarter is cited; CSL's 2017 AGM presentation lists 'HAEGARDA approved' (investors.csl.com/PDF/4c2c0a8f-28ca-4b6b-895a-fd3a3021dc52/CEO39sAGMPresentation) but no first-sale date. FY2024 is labelled therapy group 'Specialty' and FY2025-26 'HAE' in the same table.",
+  "launch_evidence": null,
+  "search_log": [
+    "CSL files with the ASX, not the SEC, so no 10-K/10-Q exists; documents are CSL investor-relations PDFs (investors.csl.com). Downloaded FY2024, FY2025 and FY2026 full-year results presentations and the 1H26 half-year presentation and read them with pdftotext/pdfplumber.",
+    "Appendix A 'CSL Behring Key Products' prints the brand in US$ millions with change % at constant currency: FY24 Haegarda 491 / Berinert 242 (therapy group 'Specialty'); FY25 490 / 248; FY26 431 / 213 (therapy group 'HAE'). 1H24 presentation prints 245 / 120 and the 1H26 presentation 239 / 109 for the half-year (not used).",
+    "Earlier years not usable: FY2020, FY2021 and FY2022 results presentations print only growth percentages for HAEGARDA and BERINERT (for example HAEGARDA +14% and BERINERT -5% in FY2021, HAEGARDA +5% and BERINERT -6% in FY2022) and a chart of 'HAE' within 'Specialty Products' of $1.8B; FY2022 was seen only through search-result excerpts of the presentation. The FY2023 results presentation PDF could not be located, and the annual-report pages surfaced by search (2021, 2022, 2023) mention the brands with growth percentages only; the full annual reports were not read end to end, so a dollar line for FY2023 or earlier may exist. No figure was estimated from percentages.",
+    "Bigdata.com smart search returned no documents; sourcing used web search results pointing to investors.csl.com and direct PDF downloads."
+  ],
+  "no_quarterly_series": {
+    "reason_code": "half_year_reporting_only",
+    "source_url": "https://investors.csl.com/pdf/8de0cb12-3422-4aa2-976b-2208c153eb0c/CSL-Half-Year-Results-Investor-Presentation.pdf",
+    "source_quote": "CSL results presentation for the half-year ended 31 December 2025, Appendix A CSL Behring Key Products, 1H26 Revenue By Therapy Group $m | Haegarda HAE 239 (4%)",
+    "details": "CSL reports on a half-yearly and full-year basis (ASX Appendix 4D/4E); the investor presentations carry product sales for the half and the full year only. No quarterly product table was found. Quarters are not interpolated."
+  },
+  "annual_period_basis": "fiscal_year_ending_june"
+}
