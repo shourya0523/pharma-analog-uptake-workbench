@@ -51,6 +51,9 @@ USER_AGENT = os.environ.get(
 SCALE = {"thousands": 1000, "millions": 1, "billions": 0.001}
 DIRECT = {"direct_reported", "direct_reported_rounded", "direct_prior_year_column",
           "direct_retrospective_table", "direct_prior_year_schedule"}
+# A table that sets the closing parenthesis of a negative in its own cell
+# renders "(71)" as "(71 | )".
+SPLIT_PARENTHESIS = re.compile(r"\((\d[\d,]*(?:\.\d+)?)\s*\|\s*\)")
 NUMBER = re.compile(r"\(?-?[\d][\d,]*(?:\.\d+)?\)?")
 
 
@@ -82,6 +85,7 @@ DASH_CELL = re.compile(r"(?:(?<=\|)|^)\s*[—–-]\s*(?=\||$)")
 def numbers_in(text: str) -> list[float]:
     """Figures in reading order; a cell that is only a dash is a printed nil."""
     text = DASH_CELL.sub(" 0 ", text)
+    text = SPLIT_PARENTHESIS.sub(r"(\1)", text)
     out = []
     for token in NUMBER.findall(text):
         negative = token.startswith("(") and token.endswith(")") or token.startswith("-")
