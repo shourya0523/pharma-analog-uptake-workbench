@@ -2640,10 +2640,10 @@
   ]
  },
  {
-  "drug_name": "Rybelsus",
+  "drug_name": "Wegovy",
   "manufacturer": "Novo Nordisk",
   "ticker": "NVO",
-  "generic_name": "semaglutide (oral)",
+  "generic_name": "semaglutide",
   "options": {
    "earnings_since": "2026-04-05",
    "earnings_until": "2027-05-05",
@@ -2654,23 +2654,13 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 801.548274,
-    "gold_id": "novo-rybelsus-worldwide-reported-2026q1"
+    "value_normalized_usd_millions": 3214.498486,
+    "gold_id": "novo-wegovy-worldwide-reported-2026q1"
    },
    {
     "period": "2026Q2",
-    "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2026Q1. The Q2 2026 report relabels the line 'Ozempic pill / Rybelsus'; that quarter is kept in the Companion Series sheet as novo_ozempic_pill_rybelsus rather than spliced. (novo_ozempic_pill_rybelsus: Companion Series sheet, cited but not scored.)"
-   },
-   {
-    "period": "2026Q3",
-    "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2026Q1. The Q2 2026 report relabels the line 'Ozempic pill / Rybelsus'; that quarter is kept in the Companion Series sheet as novo_ozempic_pill_rybelsus rather than spliced. (novo_ozempic_pill_rybelsus: Companion Series sheet, cited but not scored.)"
-   },
-   {
-    "period": "2026Q4",
-    "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2026Q1. The Q2 2026 report relabels the line 'Ozempic pill / Rybelsus'; that quarter is kept in the Companion Series sheet as novo_ozempic_pill_rybelsus rather than spliced. (novo_ozempic_pill_rybelsus: Companion Series sheet, cited but not scored.)"
+    "value_normalized_usd_millions": 3032.340318,
+    "gold_id": "novo-wegovy-worldwide-reported-2026q2"
    }
   ]
  },

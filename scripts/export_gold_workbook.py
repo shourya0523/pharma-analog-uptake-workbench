@@ -301,6 +301,15 @@ for row in companions:
     if row.get("series_role") == "continuation":
         continued[row["drug_name"]].append(row)
 
+# A series that stops before the as-of quarter because its issuer stopped
+# reporting the product's own line is kept to its last individual quarter. If
+# that history is too short to fit an uptake curve, or it does not start near
+# launch, it is flagged for an exclusion decision rather than excluded here:
+# the threshold is a review aid, so a reader can see what it caught.
+MIN_UPTAKE_QUARTERS = 12
+LATE_START_YEARS = 2
+approval_year = {row["drug_name"]: row.get("first_approval_year") for row in load("product_profiles")}
+
 refresh = []
 for drug_name, periods in observed_periods.items():
     seen = coverage_by_name.get(drug_name)
@@ -334,6 +343,15 @@ for drug_name, periods in observed_periods.items():
         "series_end_basis": basis,
         "in_series_coverage": seen is not None,
         "series_end_reason": (seen or {}).get("series_end_reason"),
+        "uptake_history_flag": (
+            None if end_quarter == latest_quarter or basis != "issuer_stopped_reporting"
+            else "; ".join(flag for flag in (
+                f"only {len(periods)} quarters" if len(periods) < MIN_UPTAKE_QUARTERS else None,
+                f"starts {int(min(periods)[:4]) - int(approval_year[drug_name])} years after first approval"
+                if approval_year.get(drug_name)
+                and int(min(periods)[:4]) - int(approval_year[drug_name]) >= LATE_START_YEARS else None,
+            ) if flag) or None
+        ),
         "continued_to_quarter": continued_to,
         "continuation_relation": ", ".join(sorted({row["continuation_relation"] for row in carried})) or None,
     })
@@ -353,13 +371,16 @@ write_sheet(
          f"move. {len(carried_on)} of the series that end early are carried on by a "
          f"continuation line in Companion Series. {len(uncovered)} series have no Series "
          f"Coverage row at all, so no end quarter "
-         f"or reason was ever stated for them. Sorted by how far behind each series sits.",
+         f"or reason was ever stated for them. uptake_history_flag marks a series that ends early "
+         f"because the issuer stopped reporting it and has fewer than {MIN_UPTAKE_QUARTERS} quarters "
+         f"or starts {LATE_START_YEARS}+ years after first approval: a candidate for exclusion from uptake-curve fitting, "
+         f"for review. Sorted by how far behind each series sits.",
     widths={"drug_name": 20, "benchmark_identity": 34, "manufacturer": 20,
             "first_reported_quarter": 14, "last_reported_quarter": 14,
             "series_end_quarter": 14, "latest_quarter_in_gold": 14,
             "quarters_behind_latest": 13, "refresh_outlook": 40,
             "series_end_basis": 24, "in_series_coverage": 13, "series_end_reason": 60,
-            "continued_to_quarter": 14, "continuation_relation": 18},
+            "uptake_history_flag": 26, "continued_to_quarter": 14, "continuation_relation": 18},
     formats={"quarters_behind_latest": "0"},
     wrap=("refresh_outlook", "series_end_reason"),
 )

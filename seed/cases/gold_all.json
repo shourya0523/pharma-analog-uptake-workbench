@@ -97439,18 +97439,8 @@
    },
    {
     "period": "2026Q2",
-    "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2026Q1. The Q2 2026 report relabels the line 'Ozempic pill / Rybelsus'; that quarter is kept in the Companion Series sheet as novo_ozempic_pill_rybelsus rather than spliced. (novo_ozempic_pill_rybelsus: Companion Series sheet, cited but not scored.)"
-   },
-   {
-    "period": "2026Q3",
-    "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2026Q1. The Q2 2026 report relabels the line 'Ozempic pill / Rybelsus'; that quarter is kept in the Companion Series sheet as novo_ozempic_pill_rybelsus rather than spliced. (novo_ozempic_pill_rybelsus: Companion Series sheet, cited but not scored.)"
-   },
-   {
-    "period": "2026Q4",
-    "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2026Q1. The Q2 2026 report relabels the line 'Ozempic pill / Rybelsus'; that quarter is kept in the Companion Series sheet as novo_ozempic_pill_rybelsus rather than spliced. (novo_ozempic_pill_rybelsus: Companion Series sheet, cited but not scored.)"
+    "value_normalized_usd_millions": 813.645821,
+    "gold_id": "novo-rybelsus-worldwide-reported-2026q2"
    }
   ]
  },

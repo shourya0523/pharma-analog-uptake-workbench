@@ -3,10 +3,7 @@
   "therapeutic_area": "Cardiometabolic / Renal",
   "revenue_scope": "Worldwide",
   "geography": "Worldwide",
-  "series_end_quarter": "2026Q1",
-  "series_end_basis": "issuer_stopped_reporting",
-  "series_end_reason": "The Q2 2026 report relabels the line 'Ozempic pill / Rybelsus'; that quarter is kept in the Companion Series sheet as novo_ozempic_pill_rybelsus rather than spliced. (novo_ozempic_pill_rybelsus: Companion Series sheet, cited but not scored.)",
-  "series_start_reason": null,
+  "series_end_quarter": "2026Q2",
   "drug_name": "Rybelsus",
   "generic_name": "semaglutide (oral)",
   "benchmark_identity": "novo_rybelsus_worldwide_reported",
@@ -29,5 +26,6 @@
     "every figure was read programmatically from a cached copy of the cited document; full-year totals printed in each Q4 report were compared with the sum of the four quarters in this series (see report)",
     "Q4 2019 report: 'Rybelsus was launched in the USA in the fourth quarter of 2019'; Q3 2019 columns are nil in every column of the prior-year table printed in the Q3 2020 report, so the series starts 2019Q4",
     "Q1 2026: reported sales 5,115 recorded (adjusted 4,572; 340B provision reversal 543)"
-  ]
+  ],
+  "notes": " From 2026Q2 Novo Nordisk prints the line as 'Ozempic pill / Rybelsus' after re-branding Rybelsus as Ozempic pill; the row is the same worldwide product line under a new label (Q2 2026 report: 'Sales of Ozempic pill/Rybelsus increased by 7% at CER in Q2 2026, driven by the re-branding and re-launch of Ozempic pill'), so it continues the series."
 }

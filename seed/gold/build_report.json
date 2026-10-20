@@ -1,7 +1,7 @@
 {
   "generation": "independent_issuer_research",
   "as_of_quarter": "2026Q2",
-  "quarterly_rows": 15659,
+  "quarterly_rows": 15660,
   "annual_rows": 168,
   "complete_quarterly_series": 449,
   "quarterly_coverage_pct": 100.0,
@@ -1064,7 +1064,7 @@
       "Zyprexa Relprevv"
     ],
     "quarterly_series_pct": 70.0,
-    "quarterly_observations": 15659,
+    "quarterly_observations": 15660,
     "bounded_series": [
       "Abecma",
       "Aczone",
@@ -1173,7 +1173,6 @@
       "Rhopressa",
       "Rubraca",
       "Rukobia",
-      "Rybelsus",
       "Ryzodeg 70/30",
       "Seebri Neohaler",
       "Selzentry",
@@ -1226,7 +1225,7 @@
     "accounted_for": 20,
     "unaccounted_products": [],
     "complete_quarterly_series": 449,
-    "quarterly_observations": 15659,
+    "quarterly_observations": 15660,
     "series_missing_quarters": [],
     "annual_benchmark_series": 17,
     "annual_observations": 168,
@@ -1773,7 +1772,7 @@
     "complete": true
   },
   "concentration": {
-    "quarters": 15659,
+    "quarters": 15660,
     "largest_issuer": "AstraZeneca",
     "largest_issuer_share": 7.0,
     "largest_issuer_within_target": true,
