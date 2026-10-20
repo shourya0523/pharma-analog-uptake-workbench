@@ -53,7 +53,14 @@ def rolling_windows(rows: list[dict]) -> list[tuple[str, str, float]]:
     return windows
 
 
-def main() -> None:
+def peak_records() -> list[dict]:
+    """One record per product gold has revenue for, in the order the export lists them.
+
+    Quarterly products carry their best and latest rolling windows; annual-only
+    peak-benchmark products carry their highest complete year in
+    ``best_annual_usd_m`` and ``quarters`` of 0. Sorted not-yet-peaked first,
+    then peak observed, then not judged, each by best rolling year descending.
+    """
     quarterly = load("quarterly_revenue.jsonl")
     peaks = {row["drug_name"]: row for row in load("peak_sales.jsonl")}
     coverage = {row["drug_name"]: row for row in load("series_coverage.jsonl")}
@@ -135,6 +142,11 @@ def main() -> None:
 
     order = {"not yet peaked": 0, "peak observed": 1, "not judged - series starts after launch": 2}
     records.sort(key=lambda r: (order[r["peak_status"]], -(r["best_rolling_4q_usd_m"] or 0)))
+    return records
+
+
+def main() -> None:
+    records = peak_records()
     sheets = {
         "Not yet peaked": [r for r in records if r["peak_status"] == "not yet peaked"],
         "Peak observed": [r for r in records if r["peak_status"] == "peak observed"],
