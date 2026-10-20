@@ -11580,6 +11580,41 @@
   "ticker": "AMGN",
   "generic_name": "romiplostim",
   "options": {
+   "earnings_since": "2009-04-05",
+   "earnings_until": "2010-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2009Q1",
+    "value_normalized_usd_millions": 13.0,
+    "gold_id": "amgen-nplate-us-reported-2009q1"
+   },
+   {
+    "period": "2009Q2",
+    "value_normalized_usd_millions": 19.0,
+    "gold_id": "amgen-nplate-us-reported-2009q2"
+   },
+   {
+    "period": "2009Q3",
+    "value_normalized_usd_millions": 22.0,
+    "gold_id": "amgen-nplate-us-reported-2009q3"
+   },
+   {
+    "period": "2009Q4",
+    "value_normalized_usd_millions": 24.0,
+    "gold_id": "amgen-nplate-us-reported-2009q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nplate",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "romiplostim",
+  "options": {
    "earnings_since": "2010-04-05",
    "earnings_until": "2011-05-05",
    "openfda": true,
@@ -13045,6 +13080,96 @@
   "ticker": "AMGN",
   "generic_name": "panitumumab",
   "options": {
+   "earnings_since": "2006-04-05",
+   "earnings_until": "2007-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2006Q4",
+    "value_normalized_usd_millions": 39.0,
+    "gold_id": "amgen-vectibix-us-reported-2006q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Vectibix",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "panitumumab",
+  "options": {
+   "earnings_since": "2007-04-05",
+   "earnings_until": "2008-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2007Q1",
+    "value_normalized_usd_millions": 51.0,
+    "gold_id": "amgen-vectibix-us-reported-2007q1"
+   },
+   {
+    "period": "2007Q2",
+    "value_normalized_usd_millions": 45.0,
+    "gold_id": "amgen-vectibix-us-reported-2007q2"
+   },
+   {
+    "period": "2007Q3",
+    "value_normalized_usd_millions": 41.0,
+    "gold_id": "amgen-vectibix-us-reported-2007q3"
+   },
+   {
+    "period": "2007Q4",
+    "value_normalized_usd_millions": 33.0,
+    "gold_id": "amgen-vectibix-us-reported-2007q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Vectibix",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "panitumumab",
+  "options": {
+   "earnings_since": "2008-04-05",
+   "earnings_until": "2009-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2008Q1",
+    "value_normalized_usd_millions": 32.0,
+    "gold_id": "amgen-vectibix-us-reported-2008q1"
+   },
+   {
+    "period": "2008Q2",
+    "value_normalized_usd_millions": 25.0,
+    "gold_id": "amgen-vectibix-us-reported-2008q2"
+   },
+   {
+    "period": "2008Q3",
+    "value_normalized_usd_millions": 26.0,
+    "gold_id": "amgen-vectibix-us-reported-2008q3"
+   },
+   {
+    "period": "2008Q4",
+    "value_normalized_usd_millions": 25.0,
+    "gold_id": "amgen-vectibix-us-reported-2008q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Vectibix",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "panitumumab",
+  "options": {
    "earnings_since": "2009-04-05",
    "earnings_until": "2010-05-05",
    "openfda": true,
@@ -13052,6 +13177,16 @@
   },
   "source": "seed/gold/quarterly_revenue.jsonl",
   "expect": [
+   {
+    "period": "2009Q1",
+    "value_normalized_usd_millions": 25.0,
+    "gold_id": "amgen-vectibix-us-reported-2009q1"
+   },
+   {
+    "period": "2009Q2",
+    "value_normalized_usd_millions": 24.0,
+    "gold_id": "amgen-vectibix-us-reported-2009q2"
+   },
    {
     "period": "2009Q3",
     "value_normalized_usd_millions": 23.0,
@@ -14905,6 +15040,36 @@
   "ticker": null,
   "generic_name": "mirabegron",
   "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 218.686568,
+    "gold_id": "astellas-betanis-myrbetriq-betmiga-global-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 215.81092,
+    "gold_id": "astellas-betanis-myrbetriq-betmiga-global-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 236.638717,
+    "gold_id": "astellas-betanis-myrbetriq-betmiga-global-reported-2016q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Myrbetriq",
+  "manufacturer": "Astellas",
+  "ticker": null,
+  "generic_name": "mirabegron",
+  "options": {
    "earnings_since": "2017-04-05",
    "earnings_until": "2018-05-05",
    "openfda": true,
@@ -14912,6 +15077,11 @@
   },
   "source": "seed/gold/quarterly_revenue.jsonl",
   "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 239.50688,
+    "gold_id": "astellas-betanis-myrbetriq-betmiga-global-reported-2017q1"
+   },
    {
     "period": "2017Q2",
     "value_normalized_usd_millions": 244.862288,
@@ -15655,6 +15825,36 @@
   "ticker": null,
   "generic_name": "enzalutamide",
   "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 594.901596,
+    "gold_id": "astellas-xtandi-global-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 603.48936,
+    "gold_id": "astellas-xtandi-global-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 577.435016,
+    "gold_id": "astellas-xtandi-global-reported-2016q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Xtandi",
+  "manufacturer": "Astellas",
+  "ticker": null,
+  "generic_name": "enzalutamide",
+  "options": {
    "earnings_since": "2017-04-05",
    "earnings_until": "2018-05-05",
    "openfda": true,
@@ -15662,6 +15862,11 @@
   },
   "source": "seed/gold/quarterly_revenue.jsonl",
   "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 553.85966,
+    "gold_id": "astellas-xtandi-global-reported-2017q1"
+   },
    {
     "period": "2017Q2",
     "value_normalized_usd_millions": 611.255491,
@@ -26785,6 +26990,181 @@
   "ticker": null,
   "generic_name": "interferon beta-1b",
   "options": {
+   "earnings_since": "2007-04-05",
+   "earnings_until": "2008-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2007Q1",
+    "value_normalized_usd_millions": 319.7864,
+    "gold_id": "bayer-betaseron-worldwide-reported-2007q1"
+   },
+   {
+    "period": "2007Q2",
+    "value_normalized_usd_millions": 345.1904,
+    "gold_id": "bayer-betaseron-worldwide-reported-2007q2"
+   },
+   {
+    "period": "2007Q3",
+    "value_normalized_usd_millions": 360.3548,
+    "gold_id": "bayer-betaseron-worldwide-reported-2007q3"
+   },
+   {
+    "period": "2007Q4",
+    "value_normalized_usd_millions": 385.4872,
+    "gold_id": "bayer-betaseron-worldwide-reported-2007q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Betaseron",
+  "manufacturer": "Bayer",
+  "ticker": null,
+  "generic_name": "interferon beta-1b",
+  "options": {
+   "earnings_since": "2008-04-05",
+   "earnings_until": "2009-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2008Q1",
+    "value_normalized_usd_millions": 411.0548,
+    "gold_id": "bayer-betaseron-worldwide-reported-2008q1"
+   },
+   {
+    "period": "2008Q2",
+    "value_normalized_usd_millions": 428.0702,
+    "gold_id": "bayer-betaseron-worldwide-reported-2008q2"
+   },
+   {
+    "period": "2008Q3",
+    "value_normalized_usd_millions": 437.0529,
+    "gold_id": "bayer-betaseron-worldwide-reported-2008q3"
+   },
+   {
+    "period": "2008Q4",
+    "value_normalized_usd_millions": 401.807,
+    "gold_id": "bayer-betaseron-worldwide-reported-2008q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Betaseron",
+  "manufacturer": "Bayer",
+  "ticker": null,
+  "generic_name": "interferon beta-1b",
+  "options": {
+   "earnings_since": "2009-04-05",
+   "earnings_until": "2010-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2009Q1",
+    "value_normalized_usd_millions": 392.203,
+    "gold_id": "bayer-betaseron-worldwide-reported-2009q1"
+   },
+   {
+    "period": "2009Q2",
+    "value_normalized_usd_millions": 435.84,
+    "gold_id": "bayer-betaseron-worldwide-reported-2009q2"
+   },
+   {
+    "period": "2009Q3",
+    "value_normalized_usd_millions": 405.0013,
+    "gold_id": "bayer-betaseron-worldwide-reported-2009q3"
+   },
+   {
+    "period": "2009Q4",
+    "value_normalized_usd_millions": 457.839,
+    "gold_id": "bayer-betaseron-worldwide-reported-2009q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Betaseron",
+  "manufacturer": "Bayer",
+  "ticker": null,
+  "generic_name": "interferon beta-1b",
+  "options": {
+   "earnings_since": "2010-04-05",
+   "earnings_until": "2011-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2010Q1",
+    "value_normalized_usd_millions": 391.6437,
+    "gold_id": "bayer-betaseron-worldwide-reported-2010q1"
+   },
+   {
+    "period": "2010Q2",
+    "value_normalized_usd_millions": 384.5668,
+    "gold_id": "bayer-betaseron-worldwide-reported-2010q2"
+   },
+   {
+    "period": "2010Q3",
+    "value_normalized_usd_millions": 398.5212,
+    "gold_id": "bayer-betaseron-worldwide-reported-2010q3"
+   },
+   {
+    "period": "2010Q4",
+    "value_normalized_usd_millions": 425.4296,
+    "gold_id": "bayer-betaseron-worldwide-reported-2010q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Betaseron",
+  "manufacturer": "Bayer",
+  "ticker": null,
+  "generic_name": "interferon beta-1b",
+  "options": {
+   "earnings_since": "2011-04-05",
+   "earnings_until": "2012-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2011Q1",
+    "value_normalized_usd_millions": 374.8868,
+    "gold_id": "bayer-betaseron-worldwide-reported-2011q1"
+   },
+   {
+    "period": "2011Q2",
+    "value_normalized_usd_millions": 393.0927,
+    "gold_id": "bayer-betaseron-worldwide-reported-2011q2"
+   },
+   {
+    "period": "2011Q3",
+    "value_normalized_usd_millions": 408.0102,
+    "gold_id": "bayer-betaseron-worldwide-reported-2011q3"
+   },
+   {
+    "period": "2011Q4",
+    "value_normalized_usd_millions": 378.8442,
+    "gold_id": "bayer-betaseron-worldwide-reported-2011q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Betaseron",
+  "manufacturer": "Bayer",
+  "ticker": null,
+  "generic_name": "interferon beta-1b",
+  "options": {
    "earnings_since": "2012-04-05",
    "earnings_until": "2013-05-05",
    "openfda": true,
@@ -26792,6 +27172,21 @@
   },
   "source": "seed/gold/quarterly_revenue.jsonl",
   "expect": [
+   {
+    "period": "2012Q1",
+    "value_normalized_usd_millions": 362.0844,
+    "gold_id": "bayer-betaseron-worldwide-reported-2012q1"
+   },
+   {
+    "period": "2012Q2",
+    "value_normalized_usd_millions": 409.4684,
+    "gold_id": "bayer-betaseron-worldwide-reported-2012q2"
+   },
+   {
+    "period": "2012Q3",
+    "value_normalized_usd_millions": 365.6716,
+    "gold_id": "bayer-betaseron-worldwide-reported-2012q3"
+   },
    {
     "period": "2012Q4",
     "value_normalized_usd_millions": 426.9433,
@@ -43365,6 +43760,71 @@
   "ticker": null,
   "generic_name": "donepezil",
   "options": {
+   "earnings_since": "2013-04-05",
+   "earnings_until": "2014-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2013Q2",
+    "value_normalized_usd_millions": 235.20508,
+    "gold_id": "eisai-aricept-brand-total-reported-2013q2"
+   },
+   {
+    "period": "2013Q3",
+    "value_normalized_usd_millions": 223.46194,
+    "gold_id": "eisai-aricept-brand-total-reported-2013q3"
+   },
+   {
+    "period": "2013Q4",
+    "value_normalized_usd_millions": 209.09133,
+    "gold_id": "eisai-aricept-brand-total-reported-2013q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Aricept",
+  "manufacturer": "Eisai",
+  "ticker": null,
+  "generic_name": "donepezil",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q1",
+    "value_normalized_usd_millions": 159.623004,
+    "gold_id": "eisai-aricept-brand-total-reported-2014q1"
+   },
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": 160.629472,
+    "gold_id": "eisai-aricept-brand-total-reported-2014q2"
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 148.986155,
+    "gold_id": "eisai-aricept-brand-total-reported-2014q3"
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": 152.7722,
+    "gold_id": "eisai-aricept-brand-total-reported-2014q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Aricept",
+  "manufacturer": "Eisai",
+  "ticker": null,
+  "generic_name": "donepezil",
+  "options": {
    "earnings_since": "2015-04-05",
    "earnings_until": "2016-05-04",
    "openfda": true,
@@ -43372,6 +43832,11 @@
   },
   "source": "seed/gold/quarterly_revenue.jsonl",
   "expect": [
+   {
+    "period": "2015Q1",
+    "value_normalized_usd_millions": 136.819755,
+    "gold_id": "eisai-aricept-brand-total-reported-2015q1"
+   },
    {
     "period": "2015Q2",
     "value_normalized_usd_millions": 148.34106,
@@ -58746,6 +59211,426 @@
     "period": "2023Q4",
     "value_normalized_usd_millions": 32.50728,
     "gold_id": "galapagos-jyseleca-europe-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cerezyme",
+  "manufacturer": "Genzyme",
+  "ticker": null,
+  "generic_name": "imiglucerase",
+  "options": {
+   "earnings_since": "1999-04-05",
+   "earnings_until": "2000-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "1999Q1",
+    "value_normalized_usd_millions": 113.754,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-1999q1"
+   },
+   {
+    "period": "1999Q2",
+    "value_normalized_usd_millions": 116.904,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-1999q2"
+   },
+   {
+    "period": "1999Q3",
+    "value_normalized_usd_millions": 121.058,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-1999q3"
+   },
+   {
+    "period": "1999Q4",
+    "value_normalized_usd_millions": 126.822,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-1999q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cerezyme",
+  "manufacturer": "Genzyme",
+  "ticker": null,
+  "generic_name": "imiglucerase",
+  "options": {
+   "earnings_since": "2000-04-05",
+   "earnings_until": "2001-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2000Q1",
+    "value_normalized_usd_millions": 128.605,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2000q1"
+   },
+   {
+    "period": "2000Q2",
+    "value_normalized_usd_millions": 134.854,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2000q2"
+   },
+   {
+    "period": "2000Q3",
+    "value_normalized_usd_millions": 136.744,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2000q3"
+   },
+   {
+    "period": "2000Q4",
+    "value_normalized_usd_millions": 136.665,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2000q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cerezyme",
+  "manufacturer": "Genzyme",
+  "ticker": null,
+  "generic_name": "imiglucerase",
+  "options": {
+   "earnings_since": "2001-04-05",
+   "earnings_until": "2002-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2001Q1",
+    "value_normalized_usd_millions": 139.631,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2001q1"
+   },
+   {
+    "period": "2001Q2",
+    "value_normalized_usd_millions": 141.312,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2001q2"
+   },
+   {
+    "period": "2001Q3",
+    "value_normalized_usd_millions": 143.048,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2001q3"
+   },
+   {
+    "period": "2001Q4",
+    "value_normalized_usd_millions": 145.896,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2001q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cerezyme",
+  "manufacturer": "Genzyme",
+  "ticker": null,
+  "generic_name": "imiglucerase",
+  "options": {
+   "earnings_since": "2002-04-05",
+   "earnings_until": "2003-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2002Q1",
+    "value_normalized_usd_millions": 148.066,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2002q1"
+   },
+   {
+    "period": "2002Q2",
+    "value_normalized_usd_millions": 154.717,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2002q2"
+   },
+   {
+    "period": "2002Q3",
+    "value_normalized_usd_millions": 157.471,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2002q3"
+   },
+   {
+    "period": "2002Q4",
+    "value_normalized_usd_millions": 158.93,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2002q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cerezyme",
+  "manufacturer": "Genzyme",
+  "ticker": null,
+  "generic_name": "imiglucerase",
+  "options": {
+   "earnings_since": "2003-04-05",
+   "earnings_until": "2004-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2003Q1",
+    "value_normalized_usd_millions": 167.187,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2003q1"
+   },
+   {
+    "period": "2003Q2",
+    "value_normalized_usd_millions": 184.724,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2003q2"
+   },
+   {
+    "period": "2003Q3",
+    "value_normalized_usd_millions": 189.223,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2003q3"
+   },
+   {
+    "period": "2003Q4",
+    "value_normalized_usd_millions": 192.683,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2003q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cerezyme",
+  "manufacturer": "Genzyme",
+  "ticker": null,
+  "generic_name": "imiglucerase",
+  "options": {
+   "earnings_since": "2004-04-05",
+   "earnings_until": "2005-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2004Q1",
+    "value_normalized_usd_millions": 202.97,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2004q1"
+   },
+   {
+    "period": "2004Q2",
+    "value_normalized_usd_millions": 209.371,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2004q2"
+   },
+   {
+    "period": "2004Q3",
+    "value_normalized_usd_millions": 208.378,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2004q3"
+   },
+   {
+    "period": "2004Q4",
+    "value_normalized_usd_millions": 218.647,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2004q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cerezyme",
+  "manufacturer": "Genzyme",
+  "ticker": null,
+  "generic_name": "imiglucerase",
+  "options": {
+   "earnings_since": "2005-04-05",
+   "earnings_until": "2006-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2005Q1",
+    "value_normalized_usd_millions": 225.951,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2005q1"
+   },
+   {
+    "period": "2005Q2",
+    "value_normalized_usd_millions": 235.953,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2005q2"
+   },
+   {
+    "period": "2005Q3",
+    "value_normalized_usd_millions": 238.329,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2005q3"
+   },
+   {
+    "period": "2005Q4",
+    "value_normalized_usd_millions": 232.089,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2005q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cerezyme",
+  "manufacturer": "Genzyme",
+  "ticker": null,
+  "generic_name": "imiglucerase",
+  "options": {
+   "earnings_since": "2006-04-05",
+   "earnings_until": "2007-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2006Q1",
+    "value_normalized_usd_millions": 239.009,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2006q1"
+   },
+   {
+    "period": "2006Q2",
+    "value_normalized_usd_millions": 253.989,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2006q2"
+   },
+   {
+    "period": "2006Q3",
+    "value_normalized_usd_millions": 252.227,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2006q3"
+   },
+   {
+    "period": "2006Q4",
+    "value_normalized_usd_millions": 261.811,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2006q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cerezyme",
+  "manufacturer": "Genzyme",
+  "ticker": null,
+  "generic_name": "imiglucerase",
+  "options": {
+   "earnings_since": "2007-04-05",
+   "earnings_until": "2008-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2007Q1",
+    "value_normalized_usd_millions": 263.791,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2007q1"
+   },
+   {
+    "period": "2007Q2",
+    "value_normalized_usd_millions": 282.979,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2007q2"
+   },
+   {
+    "period": "2007Q3",
+    "value_normalized_usd_millions": 286.071,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2007q3"
+   },
+   {
+    "period": "2007Q4",
+    "value_normalized_usd_millions": 300.312,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2007q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cerezyme",
+  "manufacturer": "Genzyme",
+  "ticker": null,
+  "generic_name": "imiglucerase",
+  "options": {
+   "earnings_since": "2008-04-05",
+   "earnings_until": "2009-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2008Q1",
+    "value_normalized_usd_millions": 304.303,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2008q1"
+   },
+   {
+    "period": "2008Q2",
+    "value_normalized_usd_millions": 319.36,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2008q2"
+   },
+   {
+    "period": "2008Q3",
+    "value_normalized_usd_millions": 309.28,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2008q3"
+   },
+   {
+    "period": "2008Q4",
+    "value_normalized_usd_millions": 306.034,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2008q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cerezyme",
+  "manufacturer": "Genzyme",
+  "ticker": null,
+  "generic_name": "imiglucerase",
+  "options": {
+   "earnings_since": "2009-04-05",
+   "earnings_until": "2010-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2009Q1",
+    "value_normalized_usd_millions": 295.97,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2009q1"
+   },
+   {
+    "period": "2009Q2",
+    "value_normalized_usd_millions": 298.087,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2009q2"
+   },
+   {
+    "period": "2009Q3",
+    "value_normalized_usd_millions": 93.599,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2009q3"
+   },
+   {
+    "period": "2009Q4",
+    "value_normalized_usd_millions": 105.368,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2009q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cerezyme",
+  "manufacturer": "Genzyme",
+  "ticker": null,
+  "generic_name": "imiglucerase",
+  "options": {
+   "earnings_since": "2010-04-05",
+   "earnings_until": "2011-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2010Q1",
+    "value_normalized_usd_millions": 179.147,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2010q1"
+   },
+   {
+    "period": "2010Q2",
+    "value_normalized_usd_millions": 138.736,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2010q2"
+   },
+   {
+    "period": "2010Q3",
+    "value_normalized_usd_millions": 179.781,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2010q3"
+   },
+   {
+    "period": "2010Q4",
+    "value_normalized_usd_millions": 221.966,
+    "gold_id": "sanofi-cerezyme-worldwide-reported-2010q4"
    }
   ]
  },
@@ -78730,6 +79615,161 @@
   ]
  },
  {
+  "drug_name": "Dymista",
+  "manufacturer": "Meda AB",
+  "ticker": null,
+  "generic_name": "azelastine hydrochloride / fluticasone propionate nasal spray",
+  "options": {
+   "earnings_since": "2012-04-05",
+   "earnings_until": "2013-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2012Q3",
+    "value_normalized_usd_millions": 4.598929,
+    "gold_id": "viatris-dymista-worldwide-reported-2012q3"
+   },
+   {
+    "period": "2012Q4",
+    "value_normalized_usd_millions": 4.965019,
+    "gold_id": "viatris-dymista-worldwide-reported-2012q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Dymista",
+  "manufacturer": "Meda AB",
+  "ticker": null,
+  "generic_name": "azelastine hydrochloride / fluticasone propionate nasal spray",
+  "options": {
+   "earnings_since": "2013-04-05",
+   "earnings_until": "2014-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2013Q1",
+    "value_normalized_usd_millions": 9.792188,
+    "gold_id": "viatris-dymista-worldwide-reported-2013q1"
+   },
+   {
+    "period": "2013Q2",
+    "value_normalized_usd_millions": 17.386265,
+    "gold_id": "viatris-dymista-worldwide-reported-2013q2"
+   },
+   {
+    "period": "2013Q3",
+    "value_normalized_usd_millions": 16.647829,
+    "gold_id": "viatris-dymista-worldwide-reported-2013q3"
+   },
+   {
+    "period": "2013Q4",
+    "value_normalized_usd_millions": 25.042249,
+    "gold_id": "viatris-dymista-worldwide-reported-2013q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Dymista",
+  "manufacturer": "Meda AB",
+  "ticker": null,
+  "generic_name": "azelastine hydrochloride / fluticasone propionate nasal spray",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q1",
+    "value_normalized_usd_millions": 24.135531,
+    "gold_id": "viatris-dymista-worldwide-reported-2014q1"
+   },
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": 28.626821,
+    "gold_id": "viatris-dymista-worldwide-reported-2014q2"
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 21.873337,
+    "gold_id": "viatris-dymista-worldwide-reported-2014q3"
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": 30.148048,
+    "gold_id": "viatris-dymista-worldwide-reported-2014q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Dymista",
+  "manufacturer": "Meda AB",
+  "ticker": null,
+  "generic_name": "azelastine hydrochloride / fluticasone propionate nasal spray",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q1",
+    "value_normalized_usd_millions": 23.14926,
+    "gold_id": "viatris-dymista-worldwide-reported-2015q1"
+   },
+   {
+    "period": "2015Q2",
+    "value_normalized_usd_millions": 33.409425,
+    "gold_id": "viatris-dymista-worldwide-reported-2015q2"
+   },
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 26.286941,
+    "gold_id": "viatris-dymista-worldwide-reported-2015q3"
+   },
+   {
+    "period": "2015Q4",
+    "value_normalized_usd_millions": 35.988568,
+    "gold_id": "viatris-dymista-worldwide-reported-2015q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Dymista",
+  "manufacturer": "Meda AB",
+  "ticker": null,
+  "generic_name": "azelastine hydrochloride / fluticasone propionate nasal spray",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 27.081361,
+    "gold_id": "viatris-dymista-worldwide-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 41.533701,
+    "gold_id": "viatris-dymista-worldwide-reported-2016q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Adempas",
   "manufacturer": "Merck",
   "ticker": "MRK",
@@ -96270,6 +97310,41 @@
   "ticker": "NVO",
   "generic_name": "eptacog alfa (activated); coagulation factor VIIa (recombinant)",
   "options": {
+   "earnings_since": "2001-04-05",
+   "earnings_until": "2002-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2001Q1",
+    "value_normalized_usd_millions": 90.137925,
+    "gold_id": "novo-novoseven-worldwide-reported-2001q1"
+   },
+   {
+    "period": "2001Q2",
+    "value_normalized_usd_millions": 90.007843,
+    "gold_id": "novo-novoseven-worldwide-reported-2001q2"
+   },
+   {
+    "period": "2001Q3",
+    "value_normalized_usd_millions": 90.217284,
+    "gold_id": "novo-novoseven-worldwide-reported-2001q3"
+   },
+   {
+    "period": "2001Q4",
+    "value_normalized_usd_millions": 101.345258,
+    "gold_id": "novo-novoseven-worldwide-reported-2001q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "NovoSeven RT",
+  "manufacturer": "Novo Nordisk",
+  "ticker": "NVO",
+  "generic_name": "eptacog alfa (activated); coagulation factor VIIa (recombinant)",
+  "options": {
    "earnings_since": "2002-04-05",
    "earnings_until": "2003-05-05",
    "openfda": true,
@@ -96277,6 +97352,16 @@
   },
   "source": "seed/gold/quarterly_revenue.jsonl",
   "expect": [
+   {
+    "period": "2002Q1",
+    "value_normalized_usd_millions": 94.36856,
+    "gold_id": "novo-novoseven-worldwide-reported-2002q1"
+   },
+   {
+    "period": "2002Q2",
+    "value_normalized_usd_millions": 114.408559,
+    "gold_id": "novo-novoseven-worldwide-reported-2002q2"
+   },
    {
     "period": "2002Q3",
     "value_normalized_usd_millions": 120.394159,
@@ -108681,6 +109766,26 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 74.274,
     "gold_id": "phathom-voquezna-us-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Tzield",
+  "manufacturer": "Provention Bio",
+  "ticker": null,
+  "generic_name": "teplizumab-mzwv",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 1.183,
+    "gold_id": "sanofi-tzield-worldwide-reported-2022q4"
    }
   ]
  },
@@ -125198,6 +126303,11 @@
   "source": "seed/gold/quarterly_revenue.jsonl",
   "expect": [
    {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 6.534,
+    "gold_id": "sanofi-tzield-worldwide-reported-2023q2"
+   },
+   {
     "period": "2023Q3",
     "value_normalized_usd_millions": 9.7947,
     "gold_id": "sanofi-tzield-worldwide-reported-2023q3"
@@ -126056,6 +127166,236 @@
     "period": "2024Q4",
     "value_normalized_usd_millions": null,
     "why": "The issuer reports no line for this product after 2024Q1. From the second-quarter 2024 Form 10-Q on, Sarepta's product revenue note and MD&A table print EXONDYS 51, VYONDYS 53 and AMONDYS 45 only as one combined line, 'PMO Products' (note: 'EXONDYS 51, VYONDYS 53 and AMONDYS 45 (collectively, the PMO Products)'; Q2 2024: 'Total PMO product revenues, net $238,827' thousand). The last quarter with the product's own line is 2024Q1. Scanned every 10-Q, 10-K and 8-K exhibit filed 2024-05 to 2026-09 for a per-product figure and found none. Evidence: PMO Products | $ | 238,827 | $ | 238,988 | $ | (161 | ) (Form 10-Q for the quarter ended June 30, 2024, https://www.sec.gov/Archives/edgar/data/873303/000095017024092720/srpt-20240630.htm)"
+   }
+  ]
+ },
+ {
+  "drug_name": "Betaseron",
+  "manufacturer": "Schering AG",
+  "ticker": null,
+  "generic_name": "interferon beta-1b",
+  "options": {
+   "earnings_since": "2000-04-05",
+   "earnings_until": "2001-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2000Q4",
+    "value_normalized_usd_millions": 132.9111,
+    "gold_id": "bayer-betaseron-worldwide-reported-2000q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Betaseron",
+  "manufacturer": "Schering AG",
+  "ticker": null,
+  "generic_name": "interferon beta-1b",
+  "options": {
+   "earnings_since": "2001-04-05",
+   "earnings_until": "2002-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2001Q1",
+    "value_normalized_usd_millions": 147.536,
+    "gold_id": "bayer-betaseron-worldwide-reported-2001q1"
+   },
+   {
+    "period": "2001Q2",
+    "value_normalized_usd_millions": 145.0176,
+    "gold_id": "bayer-betaseron-worldwide-reported-2001q2"
+   },
+   {
+    "period": "2001Q3",
+    "value_normalized_usd_millions": 147.081,
+    "gold_id": "bayer-betaseron-worldwide-reported-2001q3"
+   },
+   {
+    "period": "2001Q4",
+    "value_normalized_usd_millions": 170.012,
+    "gold_id": "bayer-betaseron-worldwide-reported-2001q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Betaseron",
+  "manufacturer": "Schering AG",
+  "ticker": null,
+  "generic_name": "interferon beta-1b",
+  "options": {
+   "earnings_since": "2002-04-05",
+   "earnings_until": "2003-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2002Q1",
+    "value_normalized_usd_millions": 161.3312,
+    "gold_id": "bayer-betaseron-worldwide-reported-2002q1"
+   },
+   {
+    "period": "2002Q2",
+    "value_normalized_usd_millions": 187.6188,
+    "gold_id": "bayer-betaseron-worldwide-reported-2002q2"
+   },
+   {
+    "period": "2002Q3",
+    "value_normalized_usd_millions": 183.0426,
+    "gold_id": "bayer-betaseron-worldwide-reported-2002q3"
+   },
+   {
+    "period": "2002Q4",
+    "value_normalized_usd_millions": 209.1254,
+    "gold_id": "bayer-betaseron-worldwide-reported-2002q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Betaseron",
+  "manufacturer": "Schering AG",
+  "ticker": null,
+  "generic_name": "interferon beta-1b",
+  "options": {
+   "earnings_since": "2003-04-05",
+   "earnings_until": "2004-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2003Q1",
+    "value_normalized_usd_millions": 205.0385,
+    "gold_id": "bayer-betaseron-worldwide-reported-2003q1"
+   },
+   {
+    "period": "2003Q2",
+    "value_normalized_usd_millions": 198.87,
+    "gold_id": "bayer-betaseron-worldwide-reported-2003q2"
+   },
+   {
+    "period": "2003Q3",
+    "value_normalized_usd_millions": 221.8614,
+    "gold_id": "bayer-betaseron-worldwide-reported-2003q3"
+   },
+   {
+    "period": "2003Q4",
+    "value_normalized_usd_millions": 246.4749,
+    "gold_id": "bayer-betaseron-worldwide-reported-2003q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Betaseron",
+  "manufacturer": "Schering AG",
+  "ticker": null,
+  "generic_name": "interferon beta-1b",
+  "options": {
+   "earnings_since": "2004-04-05",
+   "earnings_until": "2005-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2004Q1",
+    "value_normalized_usd_millions": 222.7314,
+    "gold_id": "bayer-betaseron-worldwide-reported-2004q1"
+   },
+   {
+    "period": "2004Q2",
+    "value_normalized_usd_millions": 234.8775,
+    "gold_id": "bayer-betaseron-worldwide-reported-2004q2"
+   },
+   {
+    "period": "2004Q3",
+    "value_normalized_usd_millions": 250.6535,
+    "gold_id": "bayer-betaseron-worldwide-reported-2004q3"
+   },
+   {
+    "period": "2004Q4",
+    "value_normalized_usd_millions": 264.588,
+    "gold_id": "bayer-betaseron-worldwide-reported-2004q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Betaseron",
+  "manufacturer": "Schering AG",
+  "ticker": null,
+  "generic_name": "interferon beta-1b",
+  "options": {
+   "earnings_since": "2005-04-05",
+   "earnings_until": "2006-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2005Q1",
+    "value_normalized_usd_millions": 237.2367,
+    "gold_id": "bayer-betaseron-worldwide-reported-2005q1"
+   },
+   {
+    "period": "2005Q2",
+    "value_normalized_usd_millions": 280.9354,
+    "gold_id": "bayer-betaseron-worldwide-reported-2005q2"
+   },
+   {
+    "period": "2005Q3",
+    "value_normalized_usd_millions": 271.837,
+    "gold_id": "bayer-betaseron-worldwide-reported-2005q3"
+   },
+   {
+    "period": "2005Q4",
+    "value_normalized_usd_millions": 285.384,
+    "gold_id": "bayer-betaseron-worldwide-reported-2005q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Betaseron",
+  "manufacturer": "Schering AG",
+  "ticker": null,
+  "generic_name": "interferon beta-1b",
+  "options": {
+   "earnings_since": "2006-04-05",
+   "earnings_until": "2007-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2006Q1",
+    "value_normalized_usd_millions": 279.1192,
+    "gold_id": "bayer-betaseron-worldwide-reported-2006q1"
+   },
+   {
+    "period": "2006Q2",
+    "value_normalized_usd_millions": 312.9183,
+    "gold_id": "bayer-betaseron-worldwide-reported-2006q2"
+   },
+   {
+    "period": "2006Q3",
+    "value_normalized_usd_millions": 313.3548,
+    "gold_id": "bayer-betaseron-worldwide-reported-2006q3"
+   },
+   {
+    "period": "2006Q4",
+    "value_normalized_usd_millions": 340.6392,
+    "gold_id": "bayer-betaseron-worldwide-reported-2006q4"
    }
   ]
  },
@@ -128546,6 +129886,76 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 173.903758,
     "gold_id": "sobi-doptelet-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Kineret",
+  "manufacturer": "Sobi",
+  "ticker": null,
+  "generic_name": "anakinra",
+  "options": {
+   "earnings_since": "2009-04-05",
+   "earnings_until": "2010-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2009Q1",
+    "value_normalized_usd_millions": 12.369908,
+    "gold_id": "sobi-kineret-worldwide-reported-2009q1"
+   },
+   {
+    "period": "2009Q2",
+    "value_normalized_usd_millions": 13.915898,
+    "gold_id": "sobi-kineret-worldwide-reported-2009q2"
+   },
+   {
+    "period": "2009Q3",
+    "value_normalized_usd_millions": 14.509082,
+    "gold_id": "sobi-kineret-worldwide-reported-2009q3"
+   },
+   {
+    "period": "2009Q4",
+    "value_normalized_usd_millions": 17.254913,
+    "gold_id": "sobi-kineret-worldwide-reported-2009q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Kineret",
+  "manufacturer": "Sobi",
+  "ticker": null,
+  "generic_name": "anakinra",
+  "options": {
+   "earnings_since": "2010-04-05",
+   "earnings_until": "2011-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2010Q1",
+    "value_normalized_usd_millions": 14.538076,
+    "gold_id": "sobi-kineret-worldwide-reported-2010q1"
+   },
+   {
+    "period": "2010Q2",
+    "value_normalized_usd_millions": 14.912374,
+    "gold_id": "sobi-kineret-worldwide-reported-2010q2"
+   },
+   {
+    "period": "2010Q3",
+    "value_normalized_usd_millions": 14.263446,
+    "gold_id": "sobi-kineret-worldwide-reported-2010q3"
+   },
+   {
+    "period": "2010Q4",
+    "value_normalized_usd_millions": 14.933955,
+    "gold_id": "sobi-kineret-worldwide-reported-2010q4"
    }
   ]
  },

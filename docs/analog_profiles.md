@@ -23,6 +23,8 @@ fetched, never from a search-result excerpt or a summary page.
 
 ## Market conditions
 
+Market-condition matching establishes whether products operate within comparable disease and commercial environments, which provides the foundation for deciding whether a same-market comparator is sufficient or whether the search can defensibly expand into other therapeutic areas.
+
 | Criterion | Options | Decided by |
 |---|---|---|
 | Disease Category | Oncology / Infectious Disease / Immunology & Inflammatory / Cardiovascular & Metabolic / Neurology / Other Specialty | The launch indication. Psychiatry is Neurology; vaccines are Infectious Disease; pulmonary arterial hypertension is Cardiovascular & Metabolic; non-malignant hematology, respiratory, ophthalmology, GI, dermatology, urology and women's health are Other Specialty unless the indication is immune-mediated (psoriasis, Crohn's) - then Immunology & Inflammatory. |
@@ -37,6 +39,8 @@ fetched, never from a search-result excerpt or a summary page.
 
 ## Treatment dynamics
 
+Treatment-dynamic matching determines whether patients enter, receive and remain on treatment through comparable pathways, which helps ensure that observed uptake differences are not primarily driven by fundamentally different treatment-delivery models.
+
 | Criterion | Options | Decided by |
 |---|---|---|
 | Treatment Pattern | Continuous / Fixed-Duration / Episodic or As-Needed | The label's dosing: until progression or indefinitely is Continuous; a stated course length (8-12 weeks, 6 cycles, one dose) is Fixed-Duration; dosing on symptoms or events is Episodic or As-Needed. |
@@ -49,6 +53,8 @@ fetched, never from a search-result excerpt or a summary page.
 | Treatment Initiation | Self-Administered After Prescription / HCP-Administered / Inpatient Initiation / Mixed | How the first dose is given under the label. |
 
 ## Product positioning
+
+Product-positioning matching assesses whether the analog and target asset play comparable roles within their respective treatment environments, which helps distinguish between products creating a new treatment opportunity and those competing for adoption within an established market.
 
 | Criterion | Options | Decided by |
 |---|---|---|
@@ -64,6 +70,8 @@ fetched, never from a search-result excerpt or a summary page.
 | Orphan Designation | Yes / No / Not Applicable | Read from the FDA Orphan Drug Designations and Approvals database: Yes if it lists a designation for the product covering the launch indication; No if a search of the database by product and generic name finds none; Unknown if the database could not be searched. Never inferred from prevalence. Not Applicable for a product not approved by FDA. |
 
 ## Launch environment
+
+Launch-environment assessment contextualizes how external conditions affected the realized uptake trajectory. Rather than automatically excluding an analog, these factors help explain whether the target asset should be expected to perform above, below or in line with the historical benchmark.
 
 | Criterion | Options | Decided by |
 |---|---|---|

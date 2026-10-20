@@ -1,7 +1,7 @@
 {
   "generation": "independent_issuer_research",
   "as_of_quarter": "2026Q2",
-  "quarterly_rows": 15693,
+  "quarterly_rows": 15852,
   "annual_rows": 168,
   "complete_quarterly_series": 449,
   "quarterly_coverage_pct": 100.0,
@@ -1064,7 +1064,7 @@
       "Zyprexa Relprevv"
     ],
     "quarterly_series_pct": 70.0,
-    "quarterly_observations": 15693,
+    "quarterly_observations": 15852,
     "bounded_series": [
       "Abecma",
       "Aczone",
@@ -1225,7 +1225,7 @@
     "accounted_for": 20,
     "unaccounted_products": [],
     "complete_quarterly_series": 449,
-    "quarterly_observations": 15693,
+    "quarterly_observations": 15852,
     "series_missing_quarters": [],
     "annual_benchmark_series": 17,
     "annual_observations": 168,
@@ -1772,15 +1772,15 @@
     "complete": true
   },
   "concentration": {
-    "quarters": 15693,
+    "quarters": 15852,
     "largest_issuer": "AstraZeneca",
-    "largest_issuer_share": 7.0,
+    "largest_issuer_share": 6.9,
     "largest_issuer_within_target": true,
     "largest_product": "Avonex",
     "largest_product_share": 0.8,
     "largest_product_within_target": true,
     "largest_therapeutic_area": "Oncology",
-    "largest_therapeutic_area_share": 24.4,
+    "largest_therapeutic_area_share": 24.3,
     "largest_therapeutic_area_within_target": true,
     "therapeutic_area_count": 24,
     "therapeutic_areas_within_target": true,

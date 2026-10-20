@@ -18,16 +18,19 @@
   },
   "launch_quarter": null,
   "launch_evidence": null,
-  "commercial_start_quarter": "2010Q1",
-  "series_start_reason": "Amgen prints a U.S. Nplate line from the 2010 Q3 10-Q; 2010 Q1 and Q2 are the prior-year columns of the 2011 Q1 and Q2 10-Qs. Earlier years are printed only as worldwide totals in the 10-Qs.",
+  "commercial_start_quarter": "2009Q1",
+  "series_start_reason": "Amgen's earnings releases and Forms 10-Q for 2009 carry no Nplate line (Nplate sits in 'Other product sales'); the first release with a 'Nplate - U.S.' row is the Q1 2010 release (filed 2010-04-21), whose prior-year column prints Q1 2009 (13). The Q2, Q3 and Q4 2010 releases give Q2-Q4 2009 the same way (19, 22, 24), so 2009Q1 is the earliest quarter the U.S. line supports. The Form 10-K for 2010 prints a 2008 U.S. figure (13) only as a full year, and no document located splits 2008 into quarters.",
   "series_end_quarter": null,
   "series_end_basis": null,
   "series_end_reason": null,
-  "notes": "U.S. line of Amgen's product sales table; the ROW line and the worldwide total are not used. 2022 Q4 (374) is derived as FY2022 U.S. 848 less nine months 474 and is about 2.3 times Q3 2022 (162); the FY2022 10-K attributes the 2022 increase to volume growth and does not split Q4. Verify before relying on that quarter. The 2010 Q4 value is derived from the FY2010 10-K.",
+  "notes": "U.S. line of Amgen's product sales table; the ROW line and the worldwide total are not used. 2022 Q4 (374) is derived as FY2022 U.S. 848 less nine months 474 and is about 2.3 times Q3 2022 (162); the FY2022 10-K attributes the 2022 increase to volume growth and does not split Q4. Verify before relying on that quarter. The 2010 Q4 value is derived from the FY2010 10-K. Existing rows 2010Q1 and 2010Q2 are taken from 2011 prior-year columns, although the Q1 and Q2 2010 earnings releases print the same figures as the current quarter (28 and 32).",
   "search_log": [
-    "Same Amgen 10-Q/10-K pass as Vectibix (CIK 0000318154, scripts amgen_final.py): 'Nplate \u2014 U.S.' row, three-month current and prior-year columns from each 10-Q, FY figures from each 10-K.",
+    "Same Amgen 10-Q/10-K pass as Vectibix (CIK 0000318154, scripts amgen_final.py): 'Nplate — U.S.' row, three-month current and prior-year columns from each 10-Q, FY figures from each 10-K.",
     "2010 Q1 and Q2 from the prior-year columns of the 2011 Q1 and Q2 10-Qs (direct_prior_year_column); 2010 Q3 from its own 10-Q; 2010 Q4 = FY2010 10-K 129 less nine months 2010 95.",
     "FDA approval: Drugs@FDA overview (ApplNo=125268) lists 08/22/2008 ORIG-1 Approval for BLA 125268, Nplate; the label PDF (label/2008/125268lbl.pdf) states 'Initial U.S. Approval: 2008'.",
-    "Not used: ROW line, worldwide total (Nplate worldwide total is printed from 2011 and would splice ROW into the series)."
+    "Not used: ROW line, worldwide total (Nplate worldwide total is printed from 2011 and would splice ROW into the series).",
+    "Amgen Form 8-K earnings releases for 2009 (filed 2009-04-23, 2009-07-27, 2009-10-21, 2010-01-25) searched for the text 'Nplate': no occurrences; Q1 2010 to Q4 2010 releases (2010-04-21, 2010-07-29, 2010-10-25, 2011-01-24) print 'Nplate - U.S.' with 2009 prior-year columns (13, 19, 22, 24)",
+    "cross-check: 13+19+22+24 = 78 equals the 2009 U.S. figure printed in the Form 10-K for 2010; the six- and nine-month prior-year columns of the Q2 and Q3 2010 releases (32, 54) equal the running sums",
+    "Form 10-K for 2010 prints Nplate U.S. 129 | 78 | 13 for 2010, 2009, 2008 (2008 annual only); Forms 10-Q/10-K for 2008 and Q1 2009 (0001193125-08-228861, -09-041091, -09-107323) mention Nplate only in regulatory text, no sales line"
   ]
 }

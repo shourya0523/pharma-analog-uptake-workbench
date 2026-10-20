@@ -2370,37 +2370,27 @@
   ]
  },
  {
-  "drug_name": "Astepro",
+  "drug_name": "Dymista",
   "manufacturer": "Meda AB",
   "ticker": null,
-  "generic_name": "azelastine hydrochloride nasal spray",
+  "generic_name": "azelastine hydrochloride / fluticasone propionate nasal spray",
   "options": {
-   "earnings_since": "2014-04-05",
-   "earnings_until": "2015-05-05",
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
    "openfda": true,
    "product_metadata": true
   },
   "source": "seed/gold/quarterly_revenue.jsonl",
   "expect": [
    {
-    "period": "2014Q1",
-    "value_normalized_usd_millions": 10.365901,
-    "gold_id": "meda-astepro-us-reported-2014q1"
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 27.081361,
+    "gold_id": "viatris-dymista-worldwide-reported-2016q1"
    },
    {
-    "period": "2014Q2",
-    "value_normalized_usd_millions": 5.149798,
-    "gold_id": "meda-astepro-us-reported-2014q2"
-   },
-   {
-    "period": "2014Q3",
-    "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2014Q2. 2014Q2 is the last quarter in which a Meda document prints an Astepro figure. The Interim Report January-September 2014 table of the 20 best-selling products ends at 128 for January-September and lists no Astepro row; the Year-end Report 2014, the Q1 2015, H1 2015 and year-end 2015 reports print no Astepro row either and mention Astepro only as a declining product under generic competition. No later Meda, Mylan or Viatris document read prints an Astepro figure."
-   },
-   {
-    "period": "2014Q4",
-    "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2014Q2. 2014Q2 is the last quarter in which a Meda document prints an Astepro figure. The Interim Report January-September 2014 table of the 20 best-selling products ends at 128 for January-September and lists no Astepro row; the Year-end Report 2014, the Q1 2015, H1 2015 and year-end 2015 reports print no Astepro row either and mention Astepro only as a declining product under generic competition. No later Meda, Mylan or Viatris document read prints an Astepro figure."
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 41.533701,
+    "gold_id": "viatris-dymista-worldwide-reported-2016q2"
    }
   ]
  },
@@ -2980,6 +2970,26 @@
   ]
  },
  {
+  "drug_name": "Tzield",
+  "manufacturer": "Provention Bio",
+  "ticker": null,
+  "generic_name": "teplizumab-mzwv",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 1.183,
+    "gold_id": "sanofi-tzield-worldwide-reported-2022q4"
+   }
+  ]
+ },
+ {
   "drug_name": "Enjaymo",
   "manufacturer": "Recordati",
   "ticker": null,
@@ -3221,6 +3231,41 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 98.125,
     "gold_id": "sarepta-elevidys-us-net-product-revenue-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Betaseron",
+  "manufacturer": "Schering AG",
+  "ticker": null,
+  "generic_name": "interferon beta-1b",
+  "options": {
+   "earnings_since": "2006-04-05",
+   "earnings_until": "2007-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2006Q1",
+    "value_normalized_usd_millions": 279.1192,
+    "gold_id": "bayer-betaseron-worldwide-reported-2006q1"
+   },
+   {
+    "period": "2006Q2",
+    "value_normalized_usd_millions": 312.9183,
+    "gold_id": "bayer-betaseron-worldwide-reported-2006q2"
+   },
+   {
+    "period": "2006Q3",
+    "value_normalized_usd_millions": 313.3548,
+    "gold_id": "bayer-betaseron-worldwide-reported-2006q3"
+   },
+   {
+    "period": "2006Q4",
+    "value_normalized_usd_millions": 340.6392,
+    "gold_id": "bayer-betaseron-worldwide-reported-2006q4"
    }
   ]
  },
