@@ -2,11 +2,11 @@
   "drug_name": "Tysabri",
   "generic_name": "natalizumab",
   "manufacturer": "Biogen",
-  "benchmark_identity": "biogen_tysabri_worldwide_reported",
+  "benchmark_identity": "biogen_tysabri_worldwide_in_market_reported",
   "therapeutic_area": "Immunology / Inflammation",
   "indication_area": "Multiple sclerosis (relapsing forms) / Crohn's disease",
   "revenue_scope": "Worldwide",
-  "geography": "Worldwide",
+  "geography": "Worldwide. 2006Q3-2013Q1: global in-market net sales of TYSABRI (Biogen plus Elan end-user sales at 100%) as stated in Biogen's earnings releases; 2013Q2 onward: Biogen's TYSABRI product revenue, worldwide total, which is the same 100% quantity once Biogen booked all of it.",
   "formulation": "injection (concentrate for intravenous infusion)",
   "route_of_administration": "intravenous",
   "moa": "Alpha-4 integrin antagonist: binds alpha-4 integrin and blocks its adhesion to VCAM-1 and to MAdCAM-1 (alpha-4 beta-7)",
@@ -17,17 +17,31 @@
     "quote": "TYSABRI (natalizumab) injection for intravenous use. Initial U.S. Approval: 2004"
   },
   "launch_quarter": null,
-  "commercial_start_quarter": "2013Q2",
-  "series_start_reason": "2013Q2 is the first quarter of the series. The 2013Q2 release states that Biogen 'started booking 100% of TYSABRI revenues' after acquiring Elan's rights; the 2012 comparatives printed in that release are Biogen's prior share basis and are not spliced in.",
+  "commercial_start_quarter": "2006Q3",
+  "series_start_reason": "2006Q3 is the first quarter whose own Biogen release prints global in-market net sales of TYSABRI (8 million; the product was reintroduced in the U.S. in mid-2006). The Q4 2004 to Q2 2006 releases (filed 2005-02-07, 2005-04-27, 2005-07-26, 2005-10-26, 2006-02-15, 2006-04-26, 2006-07-26) print only Biogen's booked TYSABRI revenue, its collaboration share, and no in-market sales line, so there is nothing earlier to read from Biogen. Scope continuity: the 2013Q2 release states that Biogen 'started booking 100% of TYSABRI revenues' and prints booked TYSABRI revenue and global in-market sales as the same 387 million (218 million U.S., 169 million outside the U.S.). The in-market line is therefore the same 100% quantity before and after 2013Q2; the pre-2013Q2 booked share (e.g. 312 million booked against 456 million in-market in 2013Q1) is the different line and is not used.",
   "series_end_quarter": null,
   "series_end_basis": null,
   "series_end_reason": null,
-  "notes": "Worldwide total as printed in Biogen's product table (U.S. and outside-U.S. columns are not used except to check the Total). Two one-off items are narrated in the releases and are inside the reported quarter: 2014Q2 includes $54 million of previously deferred outside-U.S. revenue recognised after an agreement with AIFA (2014Q2 release); 2017Q1 outside-U.S. revenue benefitted by about $45 million from an AIFA agreement on prior-period sales (2017Q1 release). Quarters were not adjusted. Figures are thousands of USD in the 2013Q2-2014Q3 releases and millions from 2014Q4.",
+  "notes": "Worldwide total as printed in Biogen's product table (U.S. and outside-U.S. columns are not used except to check the Total). Two one-off items are narrated in the releases and are inside the reported quarter: 2014Q2 includes $54 million of previously deferred outside-U.S. revenue recognised after an agreement with AIFA (2014Q2 release); 2017Q1 outside-U.S. revenue benefitted by about $45 million from an AIFA agreement on prior-period sales (2017Q1 release). Quarters were not adjusted. Figures are thousands of USD in the 2013Q2-2014Q3 releases and millions from 2014Q4. Rows 2006Q3-2013Q1 are prose figures in whole millions from the 'Global in-market net sales/sales of TYSABRI' sentence of each quarter's own Biogen release (8-K exhibit 99.1); from 2013Q2 the rows are Biogen's booked product revenue table, in thousands to 2014Q3. 2009Q3 is read from Elan Corporation plc's Q3 2009 release (Form 6-K), because Biogen's own Q3 2009 release and 10-Q print no global in-market figure; Elan's 281.6 million is consistent with the FY2009 Biogen 10-K total of 1,059.2 million less Biogen's 227, 254 and 296 for the other quarters (282.2). Sanity checks on the prose years: 2007 quarters sum to 342 against 343 million stated for the year; 2008 quarters sum to 814 against 813. Elan's own 2005 releases were not searched for earlier in-market figures; the series start is Biogen's. Biogen's Q2 2013 release also notes in-market sales were down 2% on Q2 2012 as comparator.",
   "search_log": [
-    "Took the Biogen (CIK 0000875045) quarterly earnings release list (2013Q2-2026Q2, 53 documents) from the Tecfidera manifest in seed/gold/source_manifests, the same Exhibit 99.1 press releases the existing Biogen manifests cite; fetched all 53 and parsed the PRODUCT REVENUES table rows for AVONEX, TYSABRI and PLEGRIDY with the verifier's own extractor logic.",
-    "Each quarter's value is the current-quarter figure in that quarter's own release (derivation direct_reported). From 2020Q4 the release prints U.S., Rest of World and Total for each product; the Total (third) figure is the worldwide value recorded. The verifier cannot detect a U.S.-for-Total swap because the U.S. figure is also printed on the same line, so this was checked by hand against the Total column and the FY sums below.",
-    "Annual cross-check: sum of four quarters against the full-year row printed in each Q4 release, 2014-2025: within 1.0 million USD in every year (differences are integer rounding of the 2016-2019 whole-million releases), except that 2014 for PLEGRIDY is not checked (FY2014 44.5 = 3.382 (Q3) + 41.1 (Q4) per the 2014Q4 release).",
-    "Bigdata.com: one smart search for the PLEGRIDY U.S. launch returned no results with its filing filters; the launch and scope wording was read from the release text itself (grep of each release document).",
-    "FDA: web search located accessdata.fda.gov pages; the Tysabri label, the Plegridy label and the Avonex summary review were fetched and the approval-year text confirmed in the PDF text layer."
+    "Challenge to the earlier range_confirmed finding (series start 2013Q2): Biogen's own releases print 'Global in-market (net) sales of TYSABRI' every quarter from Q3 2006. Downloaded and text-searched for 'in-market' every Biogen earnings 8-K exhibit 99.1 from 2004-10-27 to 2013-07-25 (Item 2.02 filings, including 8-K/A of 2011-02-01 and 2012-07-24).",
+    "Q4 2004 to Q2 2006 releases: no in-market sentence; TYSABRI printed only as Biogen product revenue (3,121 / 6 million / (897) / (196) thousands etc.). Q3 2006 release (2006-10-31) is the first with 'Global in-market net sales of TYSABRI in the third quarter of 2006 were $8 million'.",
+    "2007Q3 exhibit initially downloaded empty; re-fetched and found '$93 million'. 2009Q3: Biogen's release (2009-10-20) prints only U.S. in-market sales (131 million) and Q3 2009 10-Q prints U.S. 130.7 million; no global in-market figure. Biogen FY2009 10-K prints 1,059.2 million for the year. Elan's Q3 2009 release (6-K 0000950162-09-000448) prints 'Total Tysabri in-market net sales' 281.6 million; used for 2009Q3.",
+    "Scope check: Q2 2013 release (0000875045-13-000025) prints booked TYSABRI revenue of 387 million and global in-market sales of 387 million; Q1 2013 release (0000875045-13-000016) prints booked 312 million against in-market 456 million (US 257 + ex-US 199).",
+    "Existing gold rows 2013Q2-2026Q2 were carried over unchanged from seed/gold/source_manifests/biogen_tysabri_quarterly.csv; their sourcing is described in the original manifest (53 Biogen releases, PRODUCT REVENUES table).",
+    "Later end: series runs to 2026Q2, the as-of quarter.",
+    "Bigdata.com credits were exhausted during this repair; documents were located through data.sec.gov submissions and filing indexes instead."
+  ],
+  "joined_issuers": [
+    {
+      "issuer": "Biogen",
+      "first_quarter": "2006Q3",
+      "last_quarter": "2026Q2"
+    },
+    {
+      "issuer": "Elan Corporation, plc",
+      "first_quarter": "2009Q3",
+      "last_quarter": "2009Q3"
+    }
   ]
 }

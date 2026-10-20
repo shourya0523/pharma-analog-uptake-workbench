@@ -195,6 +195,56 @@
   ]
  },
  {
+  "drug_name": "Iluvien",
+  "manufacturer": "ANI Pharmaceuticals",
+  "ticker": "ANIP",
+  "generic_name": "fluocinolone acetonide",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 16.6,
+    "gold_id": "alimera-iluvien-worldwide-product-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 19.843,
+    "gold_id": "alimera-iluvien-worldwide-product-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Iluvien",
+  "manufacturer": "ANI Pharmaceuticals",
+  "ticker": "ANIP",
+  "generic_name": "fluocinolone acetonide",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 19.255,
+    "gold_id": "alimera-iluvien-worldwide-product-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 18.718,
+    "gold_id": "alimera-iluvien-worldwide-product-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Iclusig",
   "manufacturer": "ARIAD Pharmaceuticals",
   "ticker": null,
@@ -32485,6 +32535,241 @@
   "ticker": "BIIB",
   "generic_name": "natalizumab",
   "options": {
+   "earnings_since": "2006-04-05",
+   "earnings_until": "2007-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2006Q3",
+    "value_normalized_usd_millions": 8.0,
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2006q3"
+   },
+   {
+    "period": "2006Q4",
+    "value_normalized_usd_millions": 30.0,
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2006q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Tysabri",
+  "manufacturer": "Biogen",
+  "ticker": "BIIB",
+  "generic_name": "natalizumab",
+  "options": {
+   "earnings_since": "2007-04-05",
+   "earnings_until": "2008-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2007Q1",
+    "value_normalized_usd_millions": 48.0,
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2007q1"
+   },
+   {
+    "period": "2007Q2",
+    "value_normalized_usd_millions": 72.0,
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2007q2"
+   },
+   {
+    "period": "2007Q3",
+    "value_normalized_usd_millions": 93.0,
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2007q3"
+   },
+   {
+    "period": "2007Q4",
+    "value_normalized_usd_millions": 129.0,
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2007q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Tysabri",
+  "manufacturer": "Biogen",
+  "ticker": "BIIB",
+  "generic_name": "natalizumab",
+  "options": {
+   "earnings_since": "2008-04-05",
+   "earnings_until": "2009-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2008Q1",
+    "value_normalized_usd_millions": 160.0,
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2008q1"
+   },
+   {
+    "period": "2008Q2",
+    "value_normalized_usd_millions": 200.0,
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2008q2"
+   },
+   {
+    "period": "2008Q3",
+    "value_normalized_usd_millions": 236.0,
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2008q3"
+   },
+   {
+    "period": "2008Q4",
+    "value_normalized_usd_millions": 218.0,
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2008q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Tysabri",
+  "manufacturer": "Biogen",
+  "ticker": "BIIB",
+  "generic_name": "natalizumab",
+  "options": {
+   "earnings_since": "2009-04-05",
+   "earnings_until": "2010-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2009Q1",
+    "value_normalized_usd_millions": 227.0,
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2009q1"
+   },
+   {
+    "period": "2009Q2",
+    "value_normalized_usd_millions": 254.0,
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2009q2"
+   },
+   {
+    "period": "2009Q3",
+    "value_normalized_usd_millions": 281.6,
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2009q3"
+   },
+   {
+    "period": "2009Q4",
+    "value_normalized_usd_millions": 296.0,
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2009q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Tysabri",
+  "manufacturer": "Biogen",
+  "ticker": "BIIB",
+  "generic_name": "natalizumab",
+  "options": {
+   "earnings_since": "2010-04-05",
+   "earnings_until": "2011-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2010Q1",
+    "value_normalized_usd_millions": 292.0,
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2010q1"
+   },
+   {
+    "period": "2010Q2",
+    "value_normalized_usd_millions": 298.0,
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2010q2"
+   },
+   {
+    "period": "2010Q3",
+    "value_normalized_usd_millions": 307.0,
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2010q3"
+   },
+   {
+    "period": "2010Q4",
+    "value_normalized_usd_millions": 333.0,
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2010q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Tysabri",
+  "manufacturer": "Biogen",
+  "ticker": "BIIB",
+  "generic_name": "natalizumab",
+  "options": {
+   "earnings_since": "2011-04-05",
+   "earnings_until": "2012-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2011Q1",
+    "value_normalized_usd_millions": 349.0,
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2011q1"
+   },
+   {
+    "period": "2011Q2",
+    "value_normalized_usd_millions": 389.0,
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2011q2"
+   },
+   {
+    "period": "2011Q3",
+    "value_normalized_usd_millions": 393.0,
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2011q3"
+   },
+   {
+    "period": "2011Q4",
+    "value_normalized_usd_millions": 380.0,
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2011q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Tysabri",
+  "manufacturer": "Biogen",
+  "ticker": "BIIB",
+  "generic_name": "natalizumab",
+  "options": {
+   "earnings_since": "2012-04-05",
+   "earnings_until": "2013-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2012Q1",
+    "value_normalized_usd_millions": 399.0,
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2012q1"
+   },
+   {
+    "period": "2012Q2",
+    "value_normalized_usd_millions": 395.0,
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2012q2"
+   },
+   {
+    "period": "2012Q3",
+    "value_normalized_usd_millions": 404.0,
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2012q3"
+   },
+   {
+    "period": "2012Q4",
+    "value_normalized_usd_millions": 433.0,
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2012q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Tysabri",
+  "manufacturer": "Biogen",
+  "ticker": "BIIB",
+  "generic_name": "natalizumab",
+  "options": {
    "earnings_since": "2013-04-05",
    "earnings_until": "2014-05-05",
    "openfda": true,
@@ -32493,19 +32778,24 @@
   "source": "seed/gold/quarterly_revenue.jsonl",
   "expect": [
    {
+    "period": "2013Q1",
+    "value_normalized_usd_millions": 456.0,
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2013q1"
+   },
+   {
     "period": "2013Q2",
     "value_normalized_usd_millions": 386.741,
-    "gold_id": "biogen-tysabri-worldwide-reported-2013q2"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2013q2"
    },
    {
     "period": "2013Q3",
     "value_normalized_usd_millions": 400.995,
-    "gold_id": "biogen-tysabri-worldwide-reported-2013q3"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2013q3"
    },
    {
     "period": "2013Q4",
     "value_normalized_usd_millions": 426.621,
-    "gold_id": "biogen-tysabri-worldwide-reported-2013q4"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2013q4"
    }
   ]
  },
@@ -32525,22 +32815,22 @@
    {
     "period": "2014Q1",
     "value_normalized_usd_millions": 441.045,
-    "gold_id": "biogen-tysabri-worldwide-reported-2014q1"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2014q1"
    },
    {
     "period": "2014Q2",
     "value_normalized_usd_millions": 533.44,
-    "gold_id": "biogen-tysabri-worldwide-reported-2014q2"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2014q2"
    },
    {
     "period": "2014Q3",
     "value_normalized_usd_millions": 501.237,
-    "gold_id": "biogen-tysabri-worldwide-reported-2014q3"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2014q3"
    },
    {
     "period": "2014Q4",
     "value_normalized_usd_millions": 483.9,
-    "gold_id": "biogen-tysabri-worldwide-reported-2014q4"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2014q4"
    }
   ]
  },
@@ -32560,22 +32850,22 @@
    {
     "period": "2015Q1",
     "value_normalized_usd_millions": 462.6,
-    "gold_id": "biogen-tysabri-worldwide-reported-2015q1"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2015q1"
    },
    {
     "period": "2015Q2",
     "value_normalized_usd_millions": 463.1,
-    "gold_id": "biogen-tysabri-worldwide-reported-2015q2"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2015q2"
    },
    {
     "period": "2015Q3",
     "value_normalized_usd_millions": 479.7,
-    "gold_id": "biogen-tysabri-worldwide-reported-2015q3"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2015q3"
    },
    {
     "period": "2015Q4",
     "value_normalized_usd_millions": 480.7,
-    "gold_id": "biogen-tysabri-worldwide-reported-2015q4"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2015q4"
    }
   ]
  },
@@ -32595,22 +32885,22 @@
    {
     "period": "2016Q1",
     "value_normalized_usd_millions": 477.0,
-    "gold_id": "biogen-tysabri-worldwide-reported-2016q1"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2016q1"
    },
    {
     "period": "2016Q2",
     "value_normalized_usd_millions": 497.0,
-    "gold_id": "biogen-tysabri-worldwide-reported-2016q2"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2016q2"
    },
    {
     "period": "2016Q3",
     "value_normalized_usd_millions": 515.0,
-    "gold_id": "biogen-tysabri-worldwide-reported-2016q3"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2016q3"
    },
    {
     "period": "2016Q4",
     "value_normalized_usd_millions": 474.0,
-    "gold_id": "biogen-tysabri-worldwide-reported-2016q4"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2016q4"
    }
   ]
  },
@@ -32630,22 +32920,22 @@
    {
     "period": "2017Q1",
     "value_normalized_usd_millions": 545.0,
-    "gold_id": "biogen-tysabri-worldwide-reported-2017q1"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2017q1"
    },
    {
     "period": "2017Q2",
     "value_normalized_usd_millions": 496.0,
-    "gold_id": "biogen-tysabri-worldwide-reported-2017q2"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2017q2"
    },
    {
     "period": "2017Q3",
     "value_normalized_usd_millions": 469.0,
-    "gold_id": "biogen-tysabri-worldwide-reported-2017q3"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2017q3"
    },
    {
     "period": "2017Q4",
     "value_normalized_usd_millions": 463.0,
-    "gold_id": "biogen-tysabri-worldwide-reported-2017q4"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2017q4"
    }
   ]
  },
@@ -32665,22 +32955,22 @@
    {
     "period": "2018Q1",
     "value_normalized_usd_millions": 462.0,
-    "gold_id": "biogen-tysabri-worldwide-reported-2018q1"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2018q1"
    },
    {
     "period": "2018Q2",
     "value_normalized_usd_millions": 467.0,
-    "gold_id": "biogen-tysabri-worldwide-reported-2018q2"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2018q2"
    },
    {
     "period": "2018Q3",
     "value_normalized_usd_millions": 470.0,
-    "gold_id": "biogen-tysabri-worldwide-reported-2018q3"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2018q3"
    },
    {
     "period": "2018Q4",
     "value_normalized_usd_millions": 464.0,
-    "gold_id": "biogen-tysabri-worldwide-reported-2018q4"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2018q4"
    }
   ]
  },
@@ -32700,22 +32990,22 @@
    {
     "period": "2019Q1",
     "value_normalized_usd_millions": 460.0,
-    "gold_id": "biogen-tysabri-worldwide-reported-2019q1"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2019q1"
    },
    {
     "period": "2019Q2",
     "value_normalized_usd_millions": 475.0,
-    "gold_id": "biogen-tysabri-worldwide-reported-2019q2"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2019q2"
    },
    {
     "period": "2019Q3",
     "value_normalized_usd_millions": 484.0,
-    "gold_id": "biogen-tysabri-worldwide-reported-2019q3"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2019q3"
    },
    {
     "period": "2019Q4",
     "value_normalized_usd_millions": 473.0,
-    "gold_id": "biogen-tysabri-worldwide-reported-2019q4"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2019q4"
    }
   ]
  },
@@ -32735,22 +33025,22 @@
    {
     "period": "2020Q1",
     "value_normalized_usd_millions": 522.0,
-    "gold_id": "biogen-tysabri-worldwide-reported-2020q1"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2020q1"
    },
    {
     "period": "2020Q2",
     "value_normalized_usd_millions": 432.0,
-    "gold_id": "biogen-tysabri-worldwide-reported-2020q2"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2020q2"
    },
    {
     "period": "2020Q3",
     "value_normalized_usd_millions": 516.0,
-    "gold_id": "biogen-tysabri-worldwide-reported-2020q3"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2020q3"
    },
    {
     "period": "2020Q4",
     "value_normalized_usd_millions": 475.2,
-    "gold_id": "biogen-tysabri-worldwide-reported-2020q4"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2020q4"
    }
   ]
  },
@@ -32770,22 +33060,22 @@
    {
     "period": "2021Q1",
     "value_normalized_usd_millions": 503.3,
-    "gold_id": "biogen-tysabri-worldwide-reported-2021q1"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2021q1"
    },
    {
     "period": "2021Q2",
     "value_normalized_usd_millions": 524.2,
-    "gold_id": "biogen-tysabri-worldwide-reported-2021q2"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2021q2"
    },
    {
     "period": "2021Q3",
     "value_normalized_usd_millions": 522.8,
-    "gold_id": "biogen-tysabri-worldwide-reported-2021q3"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2021q3"
    },
    {
     "period": "2021Q4",
     "value_normalized_usd_millions": 512.7,
-    "gold_id": "biogen-tysabri-worldwide-reported-2021q4"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2021q4"
    }
   ]
  },
@@ -32805,22 +33095,22 @@
    {
     "period": "2022Q1",
     "value_normalized_usd_millions": 520.8,
-    "gold_id": "biogen-tysabri-worldwide-reported-2022q1"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2022q1"
    },
    {
     "period": "2022Q2",
     "value_normalized_usd_millions": 516.2,
-    "gold_id": "biogen-tysabri-worldwide-reported-2022q2"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2022q2"
    },
    {
     "period": "2022Q3",
     "value_normalized_usd_millions": 505.5,
-    "gold_id": "biogen-tysabri-worldwide-reported-2022q3"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2022q3"
    },
    {
     "period": "2022Q4",
     "value_normalized_usd_millions": 488.4,
-    "gold_id": "biogen-tysabri-worldwide-reported-2022q4"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2022q4"
    }
   ]
  },
@@ -32840,22 +33130,22 @@
    {
     "period": "2023Q1",
     "value_normalized_usd_millions": 472.8,
-    "gold_id": "biogen-tysabri-worldwide-reported-2023q1"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2023q1"
    },
    {
     "period": "2023Q2",
     "value_normalized_usd_millions": 483.1,
-    "gold_id": "biogen-tysabri-worldwide-reported-2023q2"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2023q2"
    },
    {
     "period": "2023Q3",
     "value_normalized_usd_millions": 456.3,
-    "gold_id": "biogen-tysabri-worldwide-reported-2023q3"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2023q3"
    },
    {
     "period": "2023Q4",
     "value_normalized_usd_millions": 464.7,
-    "gold_id": "biogen-tysabri-worldwide-reported-2023q4"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2023q4"
    }
   ]
  },
@@ -32875,22 +33165,22 @@
    {
     "period": "2024Q1",
     "value_normalized_usd_millions": 431.3,
-    "gold_id": "biogen-tysabri-worldwide-reported-2024q1"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2024q1"
    },
    {
     "period": "2024Q2",
     "value_normalized_usd_millions": 462.2,
-    "gold_id": "biogen-tysabri-worldwide-reported-2024q2"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2024q2"
    },
    {
     "period": "2024Q3",
     "value_normalized_usd_millions": 406.1,
-    "gold_id": "biogen-tysabri-worldwide-reported-2024q3"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2024q3"
    },
    {
     "period": "2024Q4",
     "value_normalized_usd_millions": 415.4,
-    "gold_id": "biogen-tysabri-worldwide-reported-2024q4"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2024q4"
    }
   ]
  },
@@ -32910,22 +33200,22 @@
    {
     "period": "2025Q1",
     "value_normalized_usd_millions": 381.5,
-    "gold_id": "biogen-tysabri-worldwide-reported-2025q1"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2025q1"
    },
    {
     "period": "2025Q2",
     "value_normalized_usd_millions": 454.6,
-    "gold_id": "biogen-tysabri-worldwide-reported-2025q2"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2025q2"
    },
    {
     "period": "2025Q3",
     "value_normalized_usd_millions": 431.8,
-    "gold_id": "biogen-tysabri-worldwide-reported-2025q3"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2025q3"
    },
    {
     "period": "2025Q4",
     "value_normalized_usd_millions": 397.5,
-    "gold_id": "biogen-tysabri-worldwide-reported-2025q4"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2025q4"
    }
   ]
  },
@@ -32945,12 +33235,12 @@
    {
     "period": "2026Q1",
     "value_normalized_usd_millions": 441.5,
-    "gold_id": "biogen-tysabri-worldwide-reported-2026q1"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2026q1"
    },
    {
     "period": "2026Q2",
     "value_normalized_usd_millions": 450.8,
-    "gold_id": "biogen-tysabri-worldwide-reported-2026q2"
+    "gold_id": "biogen-tysabri-worldwide-in-market-reported-2026q2"
    }
   ]
  },
@@ -66286,6 +66576,26 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 289.0,
     "gold_id": "gilead-vemlidy-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Viread",
+  "manufacturer": "Gilead",
+  "ticker": "GILD",
+  "generic_name": "tenofovir disoproxil fumarate",
+  "options": {
+   "earnings_since": "2001-04-05",
+   "earnings_until": "2002-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2001Q4",
+    "value_normalized_usd_millions": 13.2,
+    "gold_id": "gilead-viread-worldwide-reported-2001q4"
    }
   ]
  },
@@ -109766,6 +110076,316 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 74.274,
     "gold_id": "phathom-voquezna-us-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Relistor",
+  "manufacturer": "Progenics Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "methylnaltrexone bromide",
+  "options": {
+   "earnings_since": "2008-04-05",
+   "earnings_until": "2009-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2008Q2",
+    "value_normalized_usd_millions": 1.9,
+    "gold_id": "bausch-relistor-us-reported-2008q2"
+   },
+   {
+    "period": "2008Q3",
+    "value_normalized_usd_millions": 0.1,
+    "gold_id": "bausch-relistor-us-reported-2008q3"
+   },
+   {
+    "period": "2008Q4",
+    "value_normalized_usd_millions": 0.8,
+    "gold_id": "bausch-relistor-us-reported-2008q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Relistor",
+  "manufacturer": "Progenics Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "methylnaltrexone bromide",
+  "options": {
+   "earnings_since": "2009-04-05",
+   "earnings_until": "2010-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2009Q1",
+    "value_normalized_usd_millions": 1.2,
+    "gold_id": "bausch-relistor-us-reported-2009q1"
+   },
+   {
+    "period": "2009Q2",
+    "value_normalized_usd_millions": 2.0,
+    "gold_id": "bausch-relistor-us-reported-2009q2"
+   },
+   {
+    "period": "2009Q3",
+    "value_normalized_usd_millions": 1.8,
+    "gold_id": "bausch-relistor-us-reported-2009q3"
+   },
+   {
+    "period": "2009Q4",
+    "value_normalized_usd_millions": 2.1,
+    "gold_id": "bausch-relistor-us-reported-2009q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Relistor",
+  "manufacturer": "Progenics Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "methylnaltrexone bromide",
+  "options": {
+   "earnings_since": "2010-04-05",
+   "earnings_until": "2011-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2010Q1",
+    "value_normalized_usd_millions": 2.4,
+    "gold_id": "bausch-relistor-us-reported-2010q1"
+   },
+   {
+    "period": "2010Q2",
+    "value_normalized_usd_millions": 2.3,
+    "gold_id": "bausch-relistor-us-reported-2010q2"
+   },
+   {
+    "period": "2010Q3",
+    "value_normalized_usd_millions": 2.4,
+    "gold_id": "bausch-relistor-us-reported-2010q3"
+   },
+   {
+    "period": "2010Q4",
+    "value_normalized_usd_millions": 2.3,
+    "gold_id": "bausch-relistor-us-reported-2010q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Relistor",
+  "manufacturer": "Progenics Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "methylnaltrexone bromide",
+  "options": {
+   "earnings_since": "2011-04-05",
+   "earnings_until": "2012-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2011Q1",
+    "value_normalized_usd_millions": 1.8,
+    "gold_id": "bausch-relistor-us-reported-2011q1"
+   },
+   {
+    "period": "2011Q2",
+    "value_normalized_usd_millions": 3.5,
+    "gold_id": "bausch-relistor-us-reported-2011q2"
+   },
+   {
+    "period": "2011Q3",
+    "value_normalized_usd_millions": 8.2,
+    "gold_id": "bausch-relistor-us-reported-2011q3"
+   },
+   {
+    "period": "2011Q4",
+    "value_normalized_usd_millions": 8.0,
+    "gold_id": "bausch-relistor-us-reported-2011q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Relistor",
+  "manufacturer": "Progenics Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "methylnaltrexone bromide",
+  "options": {
+   "earnings_since": "2012-04-05",
+   "earnings_until": "2013-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2012Q1",
+    "value_normalized_usd_millions": 11.3,
+    "gold_id": "bausch-relistor-us-reported-2012q1"
+   },
+   {
+    "period": "2012Q2",
+    "value_normalized_usd_millions": 10.0,
+    "gold_id": "bausch-relistor-us-reported-2012q2"
+   },
+   {
+    "period": "2012Q3",
+    "value_normalized_usd_millions": 3.8,
+    "gold_id": "bausch-relistor-us-reported-2012q3"
+   },
+   {
+    "period": "2012Q4",
+    "value_normalized_usd_millions": 4.1,
+    "gold_id": "bausch-relistor-us-reported-2012q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Relistor",
+  "manufacturer": "Progenics Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "methylnaltrexone bromide",
+  "options": {
+   "earnings_since": "2013-04-05",
+   "earnings_until": "2014-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2013Q1",
+    "value_normalized_usd_millions": 6.7,
+    "gold_id": "bausch-relistor-us-reported-2013q1"
+   },
+   {
+    "period": "2013Q2",
+    "value_normalized_usd_millions": 6.7,
+    "gold_id": "bausch-relistor-us-reported-2013q2"
+   },
+   {
+    "period": "2013Q3",
+    "value_normalized_usd_millions": 3.7,
+    "gold_id": "bausch-relistor-us-reported-2013q3"
+   },
+   {
+    "period": "2013Q4",
+    "value_normalized_usd_millions": 17.9,
+    "gold_id": "bausch-relistor-us-reported-2013q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Relistor",
+  "manufacturer": "Progenics Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "methylnaltrexone bromide",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q1",
+    "value_normalized_usd_millions": 3.6,
+    "gold_id": "bausch-relistor-us-reported-2014q1"
+   },
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": 8.2,
+    "gold_id": "bausch-relistor-us-reported-2014q2"
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 9.8,
+    "gold_id": "bausch-relistor-us-reported-2014q3"
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": -5.4,
+    "gold_id": "bausch-relistor-us-reported-2014q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Relistor",
+  "manufacturer": "Progenics Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "methylnaltrexone bromide",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q1",
+    "value_normalized_usd_millions": -0.2,
+    "gold_id": "bausch-relistor-us-reported-2015q1"
+   },
+   {
+    "period": "2015Q2",
+    "value_normalized_usd_millions": 11.2,
+    "gold_id": "bausch-relistor-us-reported-2015q2"
+   },
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 7.4,
+    "gold_id": "bausch-relistor-us-reported-2015q3"
+   },
+   {
+    "period": "2015Q4",
+    "value_normalized_usd_millions": 22.3,
+    "gold_id": "bausch-relistor-us-reported-2015q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Relistor",
+  "manufacturer": "Progenics Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "methylnaltrexone bromide",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 15.5,
+    "gold_id": "bausch-relistor-us-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 14.6,
+    "gold_id": "bausch-relistor-us-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 21.5,
+    "gold_id": "bausch-relistor-us-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 15.3,
+    "gold_id": "bausch-relistor-us-reported-2016q4"
    }
   ]
  },

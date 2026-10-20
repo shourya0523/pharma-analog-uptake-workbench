@@ -25,6 +25,31 @@
   ]
  },
  {
+  "drug_name": "Iluvien",
+  "manufacturer": "ANI Pharmaceuticals",
+  "ticker": "ANIP",
+  "generic_name": "fluocinolone acetonide",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 19.255,
+    "gold_id": "alimera-iluvien-worldwide-product-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 18.718,
+    "gold_id": "alimera-iluvien-worldwide-product-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Iclusig",
   "manufacturer": "ARIAD Pharmaceuticals",
   "ticker": null,
@@ -2966,6 +2991,41 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 74.274,
     "gold_id": "phathom-voquezna-us-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Relistor",
+  "manufacturer": "Progenics Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "methylnaltrexone bromide",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 15.5,
+    "gold_id": "bausch-relistor-us-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 14.6,
+    "gold_id": "bausch-relistor-us-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 21.5,
+    "gold_id": "bausch-relistor-us-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 15.3,
+    "gold_id": "bausch-relistor-us-reported-2016q4"
    }
   ]
  },

@@ -1555,6 +1555,9 @@ def quote_contains_number(quote: str, value: float) -> bool:
     # figure printed in thousands needs its plain integer spelling too.
     if float(value).is_integer():
         forms.add(f"{value:.0f}")
+    # Accounts print a negative figure in parentheses: "(200)" is -200.
+    if value < 0:
+        forms |= {f"({form.lstrip('-')})" for form in forms}
     return any(re.search(rf"(?<!\d){re.escape(form)}(?!\d)", normalized) for form in forms)
 
 
