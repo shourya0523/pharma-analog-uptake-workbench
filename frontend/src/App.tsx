@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom'
 import SetupPage from './pages/SetupPage'
@@ -13,6 +14,39 @@ import AddProductsPage from './pages/AddProductsPage'
 import './App.css'
 
 const qc = new QueryClient()
+
+type Theme = 'light' | 'dark'
+const THEME_KEY = 'wb-theme'
+
+function currentTheme(): Theme {
+  const set = document.documentElement.dataset.theme
+  if (set === 'light' || set === 'dark') return set
+  return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+}
+
+/** Flips light/dark and remembers the choice; index.html applies it before first paint. */
+function ThemeToggle() {
+  const [theme, setTheme] = useState<Theme>(currentTheme)
+  const next: Theme = theme === 'dark' ? 'light' : 'dark'
+  return (
+    <button
+      type="button"
+      className="ghost theme-toggle"
+      aria-label={`Switch to ${next} theme`}
+      onClick={() => {
+        document.documentElement.dataset.theme = next
+        try {
+          localStorage.setItem(THEME_KEY, next)
+        } catch {
+          // Storage can be blocked; the theme still applies for this visit.
+        }
+        setTheme(next)
+      }}
+    >
+      {theme === 'dark' ? 'Light' : 'Dark'}
+    </button>
+  )
+}
 
 export default function App() {
   return (
@@ -31,6 +65,7 @@ export default function App() {
               <NavLink to="/export">Export</NavLink>
               <NavLink to="/observability">Observability</NavLink>
             </nav>
+            <ThemeToggle />
           </header>
           <main>
             <Routes>

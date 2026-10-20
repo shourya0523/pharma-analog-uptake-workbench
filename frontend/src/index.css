@@ -1,1 +1,70 @@
-body { margin: 0; }
+/* Design tokens, taken from the gold verification app's style.css so the two
+   tools read as one system. Light by default; dark follows the OS unless the
+   user picks a theme, which App stores on <html data-theme>. */
+:root {
+  --bg: #f7f7f5;
+  --surface: #ffffff;
+  --surface-2: #f1f1ee;
+  --border: #e6e5e0;
+  --border-strong: #d4d3cc;
+  --text: #1f1f1d;
+  --text-2: #5f5e58;
+  --text-3: #8f8e86;
+  --accent: #2d5a87;
+  --accent-soft: #e8eef5;
+  --ok: #2f7a4f;   --ok-soft: #e5f1e9;
+  --flag: #c2410c; --flag-soft: #fdeee6;
+  --warn: #a16207; --warn-soft: #fbf3dc;
+  --p3: #5f6b7a;   --p3-soft: #eef0f3;
+  --claude: #6b5a3e; --claude-soft: #f5f0e6;
+  --on-accent: #ffffff;
+  --radius: 12px; --radius-sm: 8px; --radius-pill: 999px;
+  --shadow: 0 1px 2px rgba(20,20,15,.04), 0 1px 1px rgba(20,20,15,.03);
+  --shadow-pop: 0 8px 24px rgba(20,20,15,.12);
+  --font: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --serif: "Newsreader", Georgia, serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #161615; --surface: #1e1e1c; --surface-2: #262624;
+    --border: #2f2f2c; --border-strong: #3d3d39;
+    --text: #ecebe6; --text-2: #b3b2aa; --text-3: #7f7e77;
+    --accent: #8fb3d9; --accent-soft: #1f2a36;
+    --ok: #5cc78d; --ok-soft: #1c3226;
+    --flag: #f08a5d; --flag-soft: #3a2419;
+    --warn: #e0b54f; --warn-soft: #362d17;
+    --p3: #a3adbb; --p3-soft: #2a2d32;
+    --claude: #d2bf98; --claude-soft: #2a261e;
+    --on-accent: #10202f;
+    --shadow: none;
+    --shadow-pop: 0 8px 24px rgba(0,0,0,.5);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #161615; --surface: #1e1e1c; --surface-2: #262624;
+  --border: #2f2f2c; --border-strong: #3d3d39;
+  --text: #ecebe6; --text-2: #b3b2aa; --text-3: #7f7e77;
+  --accent: #8fb3d9; --accent-soft: #1f2a36;
+  --ok: #5cc78d; --ok-soft: #1c3226;
+  --flag: #f08a5d; --flag-soft: #3a2419;
+  --warn: #e0b54f; --warn-soft: #362d17;
+  --p3: #a3adbb; --p3-soft: #2a2d32;
+  --claude: #d2bf98; --claude-soft: #2a261e;
+  --on-accent: #10202f;
+  --shadow: none;
+  --shadow-pop: 0 8px 24px rgba(0,0,0,.5);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.5 var(--font);
+  font-feature-settings: "tnum" 1;
+  -webkit-font-smoothing: antialiased;
+}
