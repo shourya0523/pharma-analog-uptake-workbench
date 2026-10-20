@@ -28,6 +28,19 @@ h1 { font: 600 24px/1.2 var(--serif); letter-spacing: -.01em; }
 .theme-toggle { margin-left: auto; }
 
 main { margin-top: 16px; }
+.demo-banner {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  flex-wrap: wrap;
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--claude-soft);
+  color: var(--text-2);
+  font-size: 13px;
+}
+.demo-banner strong { color: var(--claude); }
 .page { padding: 8px 0; max-width: 1200px; margin: 0 auto; }
 .muted { color: var(--text-3); }
 .small { font-size: 12px; }
@@ -172,6 +185,7 @@ button.danger:hover { background: var(--flag-soft); filter: none; }
 }
 .chart-wrap .recharts-tooltip-label { color: var(--text-2); }
 .chart-wrap .recharts-active-dot circle { stroke: var(--surface); }
+.chart-too-many { max-width: 60ch; margin: 120px auto; text-align: center; }
 .table-scroll { overflow: auto; max-width: 100%; }
 .dash-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
 .dash-tabs button { flex: 1; min-width: 8rem; background: var(--surface); color: var(--text-2); border-color: var(--border-strong); }

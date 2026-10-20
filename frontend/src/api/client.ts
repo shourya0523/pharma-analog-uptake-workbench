@@ -1,6 +1,9 @@
+import { DEMO, demoRequest } from './demo'
+
 const API = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000'
 
 async function req<T>(path: string, init?: RequestInit): Promise<T> {
+  if (DEMO) return demoRequest<T>(path, init)
   const res = await fetch(`${API}${path}`, init)
   if (!res.ok) {
     const text = await res.text()

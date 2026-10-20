@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query'
+import { DEMO, demoAbout } from './api/demo'
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom'
 import SetupPage from './pages/SetupPage'
 import MonitorPage from './pages/MonitorPage'
@@ -48,6 +49,26 @@ function ThemeToggle() {
   )
 }
 
+/** Says what the demo is, so nobody reads gold as a pipeline run. */
+function DemoBanner() {
+  const about = useQuery({ queryKey: ['demo-about'], queryFn: demoAbout, staleTime: Infinity })
+  const a = about.data
+  return (
+    <div className="demo-banner" role="note">
+      <strong>Demo</strong>
+      <span>
+        Read-only, built from the hand-verified gold dataset rather than a pipeline run
+        {a
+          ? ` - ${a.products} products, ${a.quarterly_rows.toLocaleString()} quarterly figures, ${a.excluded_products} products excluded with reasons.`
+          : '.'}{' '}
+        Launch curves are drawn only where gold has observed a peak
+        {a ? ` (${a.uptake_products} products)` : ''}, with months counted from each series' first
+        quarter in gold.
+      </span>
+    </div>
+  )
+}
+
 export default function App() {
   return (
     <QueryClientProvider client={qc}>
@@ -67,6 +88,7 @@ export default function App() {
             </nav>
             <ThemeToggle />
           </header>
+          {DEMO && <DemoBanner />}
           <main>
             <Routes>
               <Route path="/" element={<LibraryPage />} />

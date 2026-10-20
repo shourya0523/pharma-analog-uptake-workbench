@@ -36,6 +36,10 @@ const FILTER_LABELS: Record<FilterKey, string> = {
 
 // Series colours are theme tokens (index.css --series-N), so a line keeps its
 // meaning and stays legible when the theme flips.
+// Past this many lines a curve cannot be told from its neighbours and the
+// legend outgrows the chart, so the chart asks for narrower filters instead.
+const MAX_CHART_LINES = 16
+
 const CHART_COLORS = Array.from({ length: 7 }, (_, i) => `var(--series-${i + 1})`)
 
 export default function DashboardPage() {
@@ -207,6 +211,12 @@ export default function DashboardPage() {
               {products.length === 0
                 ? 'No analogs match the current filters.'
                 : 'No series points for this view.'}
+            </p>
+          ) : names.length > MAX_CHART_LINES ? (
+            <p className="muted chart-too-many">
+              {names.length} products have points in this view. Narrow the filters - a product,
+              company, therapeutic area or MOA - to {MAX_CHART_LINES} or fewer to draw their
+              curves. Every product in view is still listed below.
             </p>
           ) : (
             <ResponsiveContainer width="100%" height={320}>
