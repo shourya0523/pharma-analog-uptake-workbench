@@ -157,6 +157,21 @@ button.danger:hover { background: var(--flag-soft); filter: none; }
   margin-bottom: 16px;
   min-height: 340px;
 }
+/* Recharts draws with presentation attributes; CSS outranks them. */
+.chart-wrap .recharts-cartesian-grid line { stroke: var(--border); }
+.chart-wrap .recharts-cartesian-axis-line,
+.chart-wrap .recharts-cartesian-axis-tick-line { stroke: var(--border-strong); }
+.chart-wrap .recharts-cartesian-axis-tick-value { fill: var(--text-3); font-size: 12px; }
+.chart-wrap .recharts-legend-item-text { font-size: 13px; }
+.chart-wrap .recharts-default-tooltip {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-pop);
+  font-size: 13px;
+}
+.chart-wrap .recharts-tooltip-label { color: var(--text-2); }
+.chart-wrap .recharts-active-dot circle { stroke: var(--surface); }
 .table-scroll { overflow: auto; max-width: 100%; }
 .dash-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
 .dash-tabs button { flex: 1; min-width: 8rem; background: var(--surface); color: var(--text-2); border-color: var(--border-strong); }

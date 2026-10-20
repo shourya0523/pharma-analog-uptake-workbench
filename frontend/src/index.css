@@ -18,6 +18,7 @@
   --p3: #5f6b7a;   --p3-soft: #eef0f3;
   --claude: #6b5a3e; --claude-soft: #f5f0e6;
   --on-accent: #ffffff;
+  --series-7: #7b4fa0;
   --radius: 12px; --radius-sm: 8px; --radius-pill: 999px;
   --shadow: 0 1px 2px rgba(20,20,15,.04), 0 1px 1px rgba(20,20,15,.03);
   --shadow-pop: 0 8px 24px rgba(20,20,15,.12);
@@ -38,6 +39,7 @@
     --p3: #a3adbb; --p3-soft: #2a2d32;
     --claude: #d2bf98; --claude-soft: #2a261e;
     --on-accent: #10202f;
+    --series-7: #b896d9;
     --shadow: none;
     --shadow-pop: 0 8px 24px rgba(0,0,0,.5);
     color-scheme: dark;
@@ -54,9 +56,19 @@
   --p3: #a3adbb; --p3-soft: #2a2d32;
   --claude: #d2bf98; --claude-soft: #2a261e;
   --on-accent: #10202f;
+  --series-7: #b896d9;
   --shadow: none;
   --shadow-pop: 0 8px 24px rgba(0,0,0,.5);
   color-scheme: dark;
+}
+/* Chart series: the status colours first, so each resolves per theme. */
+:root {
+  --series-1: var(--accent);
+  --series-2: var(--ok);
+  --series-3: var(--flag);
+  --series-4: var(--warn);
+  --series-5: var(--claude);
+  --series-6: var(--p3);
 }
 
 * { box-sizing: border-box; }

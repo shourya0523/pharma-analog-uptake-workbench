@@ -34,7 +34,9 @@ const FILTER_LABELS: Record<FilterKey, string> = {
   indication_count: 'Approved indication count',
 }
 
-const CHART_COLORS = ['#1d4ed8', '#0f766e', '#b45309', '#7c3aed', '#be123c', '#0369a1', '#c2410c']
+// Series colours are theme tokens (index.css --series-N), so a line keeps its
+// meaning and stays legible when the theme flips.
+const CHART_COLORS = Array.from({ length: 7 }, (_, i) => `var(--series-${i + 1})`)
 
 export default function DashboardPage() {
   const { runId } = useParams()
