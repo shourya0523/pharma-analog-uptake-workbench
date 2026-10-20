@@ -72,7 +72,7 @@ function DemoBanner() {
 export default function App() {
   return (
     <QueryClientProvider client={qc}>
-      <BrowserRouter>
+      <BrowserRouter basename={import.meta.env.BASE_URL}>
         <div className="shell">
           <header className="topbar">
             <div className="brand">Pharmaceutical Analog Uptake Workbench</div>

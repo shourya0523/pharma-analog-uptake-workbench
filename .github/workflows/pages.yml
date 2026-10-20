@@ -1,0 +1,56 @@
+# Publishes the read-only demo build (frontend/src/api/demo.ts) to GitHub
+# Pages. The demo needs no backend: its responses are the files
+# scripts/build_demo_data.py writes under frontend/demo-data/.
+name: Demo on Pages
+
+on:
+  push:
+    branches: [local/zen-ritchie-cgh4kf]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install
+        working-directory: frontend
+        run: npm ci
+      - name: Build the demo
+        working-directory: frontend
+        env:
+          VITE_DEMO: "1"
+          # Pages serves a project site under /<repository name>/.
+          VITE_BASE: /${{ github.event.repository.name }}/
+        # Pages has no rewrites. Its 404 page is served for any path it has no
+        # file for, so a copy of the app there lets a pasted deep link load.
+        run: |
+          npm run build
+          cp dist/index.html dist/404.html
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: frontend/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

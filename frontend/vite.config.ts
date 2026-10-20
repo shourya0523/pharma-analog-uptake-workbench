@@ -18,6 +18,9 @@ function demoData(): Plugin {
 
 // https://vite.dev/config/
 export default defineConfig({
+  // A site served under a subpath (GitHub Pages serves /<repo>/) sets VITE_BASE;
+  // the router and the demo's data fetches read it back as BASE_URL.
+  base: process.env.VITE_BASE || '/',
   plugins: [react(), ...(demo ? [demoData()] : [])],
   test: {
     environment: 'jsdom',
