@@ -17,22 +17,51 @@
     "quote": "This new drug application provides for the use of GATTEX (teduglutide [rDNA origin]) for injection, for subcutaneous use for the treatment of adult patients with Short Bowel Syndrome (SBS) who are dependent on parenteral support. (FDA approval letter, NDA 203441, signed 12/21/2012)"
   },
   "launch_quarter": "2013Q1",
-  "commercial_start_quarter": "2019Q1",
-  "series_start_reason": "Takeda prints a Gattex/Revestive product line only from fiscal Q4 FY2018 (January-March 2019), the first quarter after it completed the Shire acquisition; the first quarter contains Shire's product only from the acquisition date (the table header in qr2018_q4_f_en.pdf reads 'Takeda 12 Months @ Actual rate, Shire 3 Months @ Actual rate'). Earlier history (NPS Pharmaceuticals, then Shire; USD, different issuers) was not sourced in this batch and is not spliced into the Takeda JPY series.",
+  "commercial_start_quarter": "2013Q1",
+  "series_start_reason": "The series starts in the quarter of the U.S. launch: NPS Pharmaceuticals, which launched Gattex in February 2013, printed 'Product sales, net' (its only product line, described in its releases as net sales of Gattex, and of Gattex/Revestive from 2014) from the first quarter of 2013. Shire plc acquired NPS on February 21, 2015 and printed a worldwide GATTEX/REVESTIVE line from its first-quarter 2015 release; Shire's last results (fourth quarter 2018) were announced by Takeda on February 15, 2019, and Takeda prints the line from fiscal Q4 FY2018 (January-March 2019), the first quarter after it completed the Shire acquisition (the table header in qr2018_q4_f_en.pdf reads 'Takeda 12 Months @ Actual rate, Shire 3 Months @ Actual rate'). No earlier quarter exists: Gattex was approved in December 2012 and launched in February 2013 (launch_evidence), and the 2013 releases print a nil for the 2012 comparatives.",
   "series_end_quarter": null,
   "series_end_basis": null,
   "series_end_reason": null,
-  "notes": "Printed label is 'Gattex/Revestive' (U.S. and ex-U.S. brand names of teduglutide on one worldwide line). Takeda fiscal quarters align with calendar quarters (FY Q4 Jan-Mar maps to the next calendar year's Q1). No launch quarter is cited: no Takeda document read for this series states it.",
+  "notes": "Printed label is 'Gattex/Revestive' (U.S. and ex-U.S. brand names of teduglutide on one worldwide line). Takeda fiscal quarters align with calendar quarters (FY Q4 Jan-Mar maps to the next calendar year's Q1). No launch quarter is cited: no Takeda document read for this series states it. From 2013Q1 to 2018Q4 the rows are the previous owners' USD lines on the same worldwide scope (currency is recorded per row): NPS Pharmaceuticals 'Product sales, net' (2013Q1-2014Q4; 2014Q4 derived as the 2014 full year less the nine months), then Shire plc GATTEX/REVESTIVE (2015Q2-2018Q4; 2018Q4 from Shire's full-year 2018 results announced by Takeda). The NPS line is the company's total product sales, which its releases attribute entirely to Gattex (and Revestive from the second half of 2014); Natpara was approved only in January 2015.",
   "search_log": [
     "downloaded takeda.com quarterly-results pages for 2012-2025 and the current page (15 pages) and collected every PDF/XLSX link (cache/takeda_links.json)",
     "scanned every qr20xx_q?/full PDF on those pages with pdftotext for the product labels, then read the matching pages with pdfplumber (the verifier's extractor) so quoted figures match its text layer",
     "FY2014 (JGAAP) documents carry no Entyvio table line for Q1/Q2; FY2015 onward are IFRS; the product-table pages were located per fiscal quarter (data books FY2016-FY2019, quarterly financial reports FY2020-FY2026)",
     "EDGAR (Takeda CIK 0001395064) was indexed through data.sec.gov submissions (6-K, 6-K/A, 20-F, 20-F/A) but the takeda.com copies of the same quarterly documents were cited instead, because the 6-K earnings exhibits were not individually resolved",
     "cross-check: for every fiscal year the four quarterly values were summed and compared with the full-year product figure printed in the Q4 document (differences at most 0.2 billion JPY from rounding)",
-    "NPS Pharmaceuticals / Shire filings (SEC) for pre-2019 Gattex sales were NOT searched in this batch (different issuer and currency)"
+    "NPS Pharmaceuticals / Shire filings (SEC) for pre-2019 Gattex sales were NOT searched in this batch (different issuer and currency)",
+    "range extension: Shire plc CIK 936402 earnings 8-K Exhibit 99.1 for Q4 2014 through Q3 2018 (data.sec.gov submissions, items 2.02) scanned for GATTEX/REVESTIVE; the Q4 2014 release (2015-02-12) prints no GATTEX line; Q1 2015 prints 14.9 for the period from February 21, 2015",
+    "range extension: Shire's Q1 2016 release says sales before February 21, 2015 were recorded by NPS and gives a 97% pro-forma growth rate without a dollar figure; no pro-forma 2015Q1 dollar figure found, so 2015Q1 is declared unreported",
+    "range extension: NPS Pharmaceuticals CIK 890465 earnings 8-Ks (2013Q1-2014Q3) and Form 10-K for 2014 (filed 2015-02-18; no fourth-quarter release or 10-Q for 2014Q4/2015Q1 exists) read; Q4 2014 derived as full year less nine months",
+    "range extension: Shire published no Q4 2018 release; Takeda's 'Shire's Full Year 2018 Results' (2019-02-15) prints GATTEX/REVESTIVE for Q4 2018 (122.9) and FY2018 (449.7), which sums with the three 2018 quarterly releases",
+    "range extension: quarters were summed to each printed full year (2013 31.752, 2014 101.195, 2016 219.4, 2017 335.5, 2018 449.7) and agree"
   ],
   "launch_evidence": {
     "url": "https://www.sec.gov/Archives/edgar/data/890465/000113626113000211/body10q.htm",
     "quote": "We received approval from the FDA in December 2012 and subsequently launched Gattex in February 2013."
+  },
+  "joined_issuers": [
+    {
+      "issuer": "NPS Pharmaceuticals",
+      "first_quarter": "2013Q1",
+      "last_quarter": "2014Q4"
+    },
+    {
+      "issuer": "Shire plc",
+      "first_quarter": "2015Q2",
+      "last_quarter": "2018Q4"
+    },
+    {
+      "issuer": "Takeda",
+      "first_quarter": "2019Q1",
+      "last_quarter": "2026Q2"
+    }
+  ],
+  "unreported_quarters": {
+    "2015Q1": "Ownership change NPS Pharmaceuticals to Shire; no full-quarter figure is published. Shire completed the NPS acquisition on February 21, 2015 and NPS filed no first-quarter 2015 report. Shire's first-quarter 2015 release prints GATTEX/REVESTIVE 14.9 (USD millions) for the period from February 21 only (https://www.sec.gov/Archives/edgar/data/936402/000095010315003411/dp55582_ex9901.htm), and its first-quarter 2016 release states 'Sales prior to February 21, 2015 were recorded by NPS' and gives only a growth rate on a pro-forma basis (up 97%), no pro-forma dollar figure (https://www.sec.gov/Archives/edgar/data/936402/000095010316012957/dp65192_ex9901.htm). NPS's last report is the 2014 Form 10-K. The 14.9 stub is not a full quarter and is not delivered."
+  },
+  "reviewed_anomalies": {
+    "2015Q2": "Read at source: first full quarter reported by Shire after the NPS acquisition (February 21, 2015); the year-ago column of the release is a printed nil because Shire did not own the product, not because the product had no sales (NPS recorded them: see the 2014Q2 row).",
+    "2019Q1": "Currency and issuer step, read at source: the rows before 2019Q1 are USD millions (NPS Pharmaceuticals, then Shire plc) and from 2019Q1 are JPY (Takeda). The 2019Q1 JPY figure (12.8 billion) covers January 8 to March 31, 2019, while Shire's 122.9 USD million for the full fourth quarter of 2018 precedes it; the two are different currencies and are not to be compared directly."
   }
 }

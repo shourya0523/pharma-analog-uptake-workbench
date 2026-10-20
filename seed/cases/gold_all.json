@@ -26220,6 +26220,136 @@
   ]
  },
  {
+  "drug_name": "Nuedexta",
+  "manufacturer": "Avanir Pharmaceuticals, Inc.",
+  "ticker": null,
+  "generic_name": "dextromethorphan hydrobromide and quinidine sulfate",
+  "options": {
+   "earnings_since": "2011-04-05",
+   "earnings_until": "2012-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2011Q2",
+    "value_normalized_usd_millions": 1.9,
+    "gold_id": "otsuka-nuedexta-product-line-reported-2011q2"
+   },
+   {
+    "period": "2011Q3",
+    "value_normalized_usd_millions": 3.7,
+    "gold_id": "otsuka-nuedexta-product-line-reported-2011q3"
+   },
+   {
+    "period": "2011Q4",
+    "value_normalized_usd_millions": 5.5,
+    "gold_id": "otsuka-nuedexta-product-line-reported-2011q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nuedexta",
+  "manufacturer": "Avanir Pharmaceuticals, Inc.",
+  "ticker": null,
+  "generic_name": "dextromethorphan hydrobromide and quinidine sulfate",
+  "options": {
+   "earnings_since": "2012-04-05",
+   "earnings_until": "2013-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2012Q1",
+    "value_normalized_usd_millions": 9.1,
+    "gold_id": "otsuka-nuedexta-product-line-reported-2012q1"
+   },
+   {
+    "period": "2012Q2",
+    "value_normalized_usd_millions": 10.1,
+    "gold_id": "otsuka-nuedexta-product-line-reported-2012q2"
+   },
+   {
+    "period": "2012Q3",
+    "value_normalized_usd_millions": 12.393791,
+    "gold_id": "otsuka-nuedexta-product-line-reported-2012q3"
+   },
+   {
+    "period": "2012Q4",
+    "value_normalized_usd_millions": 14.9,
+    "gold_id": "otsuka-nuedexta-product-line-reported-2012q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nuedexta",
+  "manufacturer": "Avanir Pharmaceuticals, Inc.",
+  "ticker": null,
+  "generic_name": "dextromethorphan hydrobromide and quinidine sulfate",
+  "options": {
+   "earnings_since": "2013-04-05",
+   "earnings_until": "2014-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2013Q1",
+    "value_normalized_usd_millions": 16.5,
+    "gold_id": "otsuka-nuedexta-product-line-reported-2013q1"
+   },
+   {
+    "period": "2013Q2",
+    "value_normalized_usd_millions": 19.0,
+    "gold_id": "otsuka-nuedexta-product-line-reported-2013q2"
+   },
+   {
+    "period": "2013Q3",
+    "value_normalized_usd_millions": 20.2,
+    "gold_id": "otsuka-nuedexta-product-line-reported-2013q3"
+   },
+   {
+    "period": "2013Q4",
+    "value_normalized_usd_millions": 23.3,
+    "gold_id": "otsuka-nuedexta-product-line-reported-2013q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nuedexta",
+  "manufacturer": "Avanir Pharmaceuticals, Inc.",
+  "ticker": null,
+  "generic_name": "dextromethorphan hydrobromide and quinidine sulfate",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q1",
+    "value_normalized_usd_millions": 24.4,
+    "gold_id": "otsuka-nuedexta-product-line-reported-2014q1"
+   },
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": 26.5,
+    "gold_id": "otsuka-nuedexta-product-line-reported-2014q2"
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 31.223,
+    "gold_id": "otsuka-nuedexta-product-line-reported-2014q3"
+   }
+  ]
+ },
+ {
   "drug_name": "Auvelity",
   "manufacturer": "Axsome Therapeutics",
   "ticker": "AXSM",
@@ -44045,6 +44175,211 @@
   ]
  },
  {
+  "drug_name": "Kalbitor",
+  "manufacturer": "Dyax Corp",
+  "ticker": null,
+  "generic_name": "ecallantide",
+  "options": {
+   "earnings_since": "2010-04-05",
+   "earnings_until": "2011-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2010Q1",
+    "value_normalized_usd_millions": 1.243,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2010q1"
+   },
+   {
+    "period": "2010Q2",
+    "value_normalized_usd_millions": 1.931,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2010q2"
+   },
+   {
+    "period": "2010Q3",
+    "value_normalized_usd_millions": 2.622,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2010q3"
+   },
+   {
+    "period": "2010Q4",
+    "value_normalized_usd_millions": 3.039,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2010q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Kalbitor",
+  "manufacturer": "Dyax Corp",
+  "ticker": null,
+  "generic_name": "ecallantide",
+  "options": {
+   "earnings_since": "2011-04-05",
+   "earnings_until": "2012-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2011Q1",
+    "value_normalized_usd_millions": 4.107,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2011q1"
+   },
+   {
+    "period": "2011Q2",
+    "value_normalized_usd_millions": 5.184,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2011q2"
+   },
+   {
+    "period": "2011Q3",
+    "value_normalized_usd_millions": 6.597,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2011q3"
+   },
+   {
+    "period": "2011Q4",
+    "value_normalized_usd_millions": 6.996,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2011q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Kalbitor",
+  "manufacturer": "Dyax Corp",
+  "ticker": null,
+  "generic_name": "ecallantide",
+  "options": {
+   "earnings_since": "2012-04-05",
+   "earnings_until": "2013-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2012Q1",
+    "value_normalized_usd_millions": 8.01,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2012q1"
+   },
+   {
+    "period": "2012Q2",
+    "value_normalized_usd_millions": 9.164,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2012q2"
+   },
+   {
+    "period": "2012Q3",
+    "value_normalized_usd_millions": 10.814,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2012q3"
+   },
+   {
+    "period": "2012Q4",
+    "value_normalized_usd_millions": 11.795,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2012q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Kalbitor",
+  "manufacturer": "Dyax Corp",
+  "ticker": null,
+  "generic_name": "ecallantide",
+  "options": {
+   "earnings_since": "2013-04-05",
+   "earnings_until": "2014-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2013Q1",
+    "value_normalized_usd_millions": 8.587,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2013q1"
+   },
+   {
+    "period": "2013Q2",
+    "value_normalized_usd_millions": 8.568,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2013q2"
+   },
+   {
+    "period": "2013Q3",
+    "value_normalized_usd_millions": 10.772,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2013q3"
+   },
+   {
+    "period": "2013Q4",
+    "value_normalized_usd_millions": 12.599,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2013q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Kalbitor",
+  "manufacturer": "Dyax Corp",
+  "ticker": null,
+  "generic_name": "ecallantide",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q1",
+    "value_normalized_usd_millions": 12.507,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2014q1"
+   },
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": 16.582,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2014q2"
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 20.274,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2014q3"
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": 18.909,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2014q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Kalbitor",
+  "manufacturer": "Dyax Corp",
+  "ticker": null,
+  "generic_name": "ecallantide",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q1",
+    "value_normalized_usd_millions": 16.013,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2015q1"
+   },
+   {
+    "period": "2015Q2",
+    "value_normalized_usd_millions": 17.76,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2015q2"
+   },
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 17.807,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2015q3"
+   }
+  ]
+ },
+ {
   "drug_name": "Aricept",
   "manufacturer": "Eisai",
   "ticker": null,
@@ -45240,6 +45575,461 @@
   "ticker": "LLY",
   "generic_name": "pemetrexed",
   "options": {
+   "earnings_since": "2004-04-05",
+   "earnings_until": "2005-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2004Q1",
+    "value_normalized_usd_millions": 11.6,
+    "gold_id": "lilly-alimta-worldwide-reported-2004q1"
+   },
+   {
+    "period": "2004Q2",
+    "value_normalized_usd_millions": 17.8,
+    "gold_id": "lilly-alimta-worldwide-reported-2004q2"
+   },
+   {
+    "period": "2004Q3",
+    "value_normalized_usd_millions": 40.0,
+    "gold_id": "lilly-alimta-worldwide-reported-2004q3"
+   },
+   {
+    "period": "2004Q4",
+    "value_normalized_usd_millions": 73.1,
+    "gold_id": "lilly-alimta-worldwide-reported-2004q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Alimta",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "pemetrexed",
+  "options": {
+   "earnings_since": "2005-04-05",
+   "earnings_until": "2006-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2005Q1",
+    "value_normalized_usd_millions": 93.9,
+    "gold_id": "lilly-alimta-worldwide-reported-2005q1"
+   },
+   {
+    "period": "2005Q2",
+    "value_normalized_usd_millions": 111.2,
+    "gold_id": "lilly-alimta-worldwide-reported-2005q2"
+   },
+   {
+    "period": "2005Q3",
+    "value_normalized_usd_millions": 122.3,
+    "gold_id": "lilly-alimta-worldwide-reported-2005q3"
+   },
+   {
+    "period": "2005Q4",
+    "value_normalized_usd_millions": 135.8,
+    "gold_id": "lilly-alimta-worldwide-reported-2005q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Alimta",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "pemetrexed",
+  "options": {
+   "earnings_since": "2006-04-05",
+   "earnings_until": "2007-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2006Q1",
+    "value_normalized_usd_millions": 130.1,
+    "gold_id": "lilly-alimta-worldwide-reported-2006q1"
+   },
+   {
+    "period": "2006Q2",
+    "value_normalized_usd_millions": 153.0,
+    "gold_id": "lilly-alimta-worldwide-reported-2006q2"
+   },
+   {
+    "period": "2006Q3",
+    "value_normalized_usd_millions": 157.2,
+    "gold_id": "lilly-alimta-worldwide-reported-2006q3"
+   },
+   {
+    "period": "2006Q4",
+    "value_normalized_usd_millions": 171.4,
+    "gold_id": "lilly-alimta-worldwide-reported-2006q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Alimta",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "pemetrexed",
+  "options": {
+   "earnings_since": "2007-04-05",
+   "earnings_until": "2008-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2007Q1",
+    "value_normalized_usd_millions": 187.8,
+    "gold_id": "lilly-alimta-worldwide-reported-2007q1"
+   },
+   {
+    "period": "2007Q2",
+    "value_normalized_usd_millions": 207.1,
+    "gold_id": "lilly-alimta-worldwide-reported-2007q2"
+   },
+   {
+    "period": "2007Q3",
+    "value_normalized_usd_millions": 215.0,
+    "gold_id": "lilly-alimta-worldwide-reported-2007q3"
+   },
+   {
+    "period": "2007Q4",
+    "value_normalized_usd_millions": 244.1,
+    "gold_id": "lilly-alimta-worldwide-reported-2007q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Alimta",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "pemetrexed",
+  "options": {
+   "earnings_since": "2008-04-05",
+   "earnings_until": "2009-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2008Q1",
+    "value_normalized_usd_millions": 247.2,
+    "gold_id": "lilly-alimta-worldwide-reported-2008q1"
+   },
+   {
+    "period": "2008Q2",
+    "value_normalized_usd_millions": 275.0,
+    "gold_id": "lilly-alimta-worldwide-reported-2008q2"
+   },
+   {
+    "period": "2008Q3",
+    "value_normalized_usd_millions": 313.9,
+    "gold_id": "lilly-alimta-worldwide-reported-2008q3"
+   },
+   {
+    "period": "2008Q4",
+    "value_normalized_usd_millions": 318.7,
+    "gold_id": "lilly-alimta-worldwide-reported-2008q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Alimta",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "pemetrexed",
+  "options": {
+   "earnings_since": "2009-04-05",
+   "earnings_until": "2010-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2009Q1",
+    "value_normalized_usd_millions": 335.3,
+    "gold_id": "lilly-alimta-worldwide-reported-2009q1"
+   },
+   {
+    "period": "2009Q2",
+    "value_normalized_usd_millions": 385.3,
+    "gold_id": "lilly-alimta-worldwide-reported-2009q2"
+   },
+   {
+    "period": "2009Q3",
+    "value_normalized_usd_millions": 461.9,
+    "gold_id": "lilly-alimta-worldwide-reported-2009q3"
+   },
+   {
+    "period": "2009Q4",
+    "value_normalized_usd_millions": 523.6,
+    "gold_id": "lilly-alimta-worldwide-reported-2009q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Alimta",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "pemetrexed",
+  "options": {
+   "earnings_since": "2010-04-05",
+   "earnings_until": "2011-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2010Q1",
+    "value_normalized_usd_millions": 527.4,
+    "gold_id": "lilly-alimta-worldwide-reported-2010q1"
+   },
+   {
+    "period": "2010Q2",
+    "value_normalized_usd_millions": 551.8,
+    "gold_id": "lilly-alimta-worldwide-reported-2010q2"
+   },
+   {
+    "period": "2010Q3",
+    "value_normalized_usd_millions": 560.3,
+    "gold_id": "lilly-alimta-worldwide-reported-2010q3"
+   },
+   {
+    "period": "2010Q4",
+    "value_normalized_usd_millions": 569.0,
+    "gold_id": "lilly-alimta-worldwide-reported-2010q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Alimta",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "pemetrexed",
+  "options": {
+   "earnings_since": "2011-04-05",
+   "earnings_until": "2012-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2011Q1",
+    "value_normalized_usd_millions": 579.9,
+    "gold_id": "lilly-alimta-worldwide-reported-2011q1"
+   },
+   {
+    "period": "2011Q2",
+    "value_normalized_usd_millions": 613.4,
+    "gold_id": "lilly-alimta-worldwide-reported-2011q2"
+   },
+   {
+    "period": "2011Q3",
+    "value_normalized_usd_millions": 629.7,
+    "gold_id": "lilly-alimta-worldwide-reported-2011q3"
+   },
+   {
+    "period": "2011Q4",
+    "value_normalized_usd_millions": 638.1,
+    "gold_id": "lilly-alimta-worldwide-reported-2011q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Alimta",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "pemetrexed",
+  "options": {
+   "earnings_since": "2012-04-05",
+   "earnings_until": "2013-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2012Q1",
+    "value_normalized_usd_millions": 606.8,
+    "gold_id": "lilly-alimta-worldwide-reported-2012q1"
+   },
+   {
+    "period": "2012Q2",
+    "value_normalized_usd_millions": 659.5,
+    "gold_id": "lilly-alimta-worldwide-reported-2012q2"
+   },
+   {
+    "period": "2012Q3",
+    "value_normalized_usd_millions": 643.6,
+    "gold_id": "lilly-alimta-worldwide-reported-2012q3"
+   },
+   {
+    "period": "2012Q4",
+    "value_normalized_usd_millions": 684.3,
+    "gold_id": "lilly-alimta-worldwide-reported-2012q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Alimta",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "pemetrexed",
+  "options": {
+   "earnings_since": "2013-04-05",
+   "earnings_until": "2014-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2013Q1",
+    "value_normalized_usd_millions": 616.8,
+    "gold_id": "lilly-alimta-worldwide-reported-2013q1"
+   },
+   {
+    "period": "2013Q2",
+    "value_normalized_usd_millions": 669.4,
+    "gold_id": "lilly-alimta-worldwide-reported-2013q2"
+   },
+   {
+    "period": "2013Q3",
+    "value_normalized_usd_millions": 690.5,
+    "gold_id": "lilly-alimta-worldwide-reported-2013q3"
+   },
+   {
+    "period": "2013Q4",
+    "value_normalized_usd_millions": 726.2,
+    "gold_id": "lilly-alimta-worldwide-reported-2013q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Alimta",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "pemetrexed",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q1",
+    "value_normalized_usd_millions": 632.0,
+    "gold_id": "lilly-alimta-worldwide-reported-2014q1"
+   },
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": 711.6,
+    "gold_id": "lilly-alimta-worldwide-reported-2014q2"
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 723.4,
+    "gold_id": "lilly-alimta-worldwide-reported-2014q3"
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": 725.0,
+    "gold_id": "lilly-alimta-worldwide-reported-2014q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Alimta",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "pemetrexed",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q1",
+    "value_normalized_usd_millions": 573.0,
+    "gold_id": "lilly-alimta-worldwide-reported-2015q1"
+   },
+   {
+    "period": "2015Q2",
+    "value_normalized_usd_millions": 664.3,
+    "gold_id": "lilly-alimta-worldwide-reported-2015q2"
+   },
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 628.5,
+    "gold_id": "lilly-alimta-worldwide-reported-2015q3"
+   },
+   {
+    "period": "2015Q4",
+    "value_normalized_usd_millions": 627.2,
+    "gold_id": "lilly-alimta-worldwide-reported-2015q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Alimta",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "pemetrexed",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 564.2,
+    "gold_id": "lilly-alimta-worldwide-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 607.1,
+    "gold_id": "lilly-alimta-worldwide-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 570.4,
+    "gold_id": "lilly-alimta-worldwide-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 541.6,
+    "gold_id": "lilly-alimta-worldwide-reported-2016q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Alimta",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "pemetrexed",
+  "options": {
    "earnings_since": "2017-04-05",
    "earnings_until": "2018-05-05",
    "openfda": true,
@@ -45247,6 +46037,21 @@
   },
   "source": "seed/gold/quarterly_revenue.jsonl",
   "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 489.9,
+    "gold_id": "lilly-alimta-worldwide-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 532.9,
+    "gold_id": "lilly-alimta-worldwide-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 514.5,
+    "gold_id": "lilly-alimta-worldwide-reported-2017q3"
+   },
    {
     "period": "2017Q4",
     "value_normalized_usd_millions": 525.2,
@@ -45470,6 +46275,66 @@
   "ticker": "LLY",
   "generic_name": "insulin glargine",
   "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 3.8,
+    "gold_id": "lilly-basaglar-worldwide-reported-2015q3"
+   },
+   {
+    "period": "2015Q4",
+    "value_normalized_usd_millions": 7.3,
+    "gold_id": "lilly-basaglar-worldwide-reported-2015q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Basaglar",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "insulin glargine",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 10.9,
+    "gold_id": "lilly-basaglar-worldwide-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 16.3,
+    "gold_id": "lilly-basaglar-worldwide-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 19.4,
+    "gold_id": "lilly-basaglar-worldwide-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 39.5,
+    "gold_id": "lilly-basaglar-worldwide-reported-2016q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Basaglar",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "insulin glargine",
+  "options": {
    "earnings_since": "2017-04-05",
    "earnings_until": "2018-05-05",
    "openfda": true,
@@ -45477,6 +46342,21 @@
   },
   "source": "seed/gold/quarterly_revenue.jsonl",
   "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 46.0,
+    "gold_id": "lilly-basaglar-worldwide-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 86.6,
+    "gold_id": "lilly-basaglar-worldwide-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 145.7,
+    "gold_id": "lilly-basaglar-worldwide-reported-2017q3"
+   },
    {
     "period": "2017Q4",
     "value_normalized_usd_millions": 153.8,
@@ -45735,6 +46615,496 @@
   "ticker": "LLY",
   "generic_name": "tadalafil",
   "options": {
+   "earnings_since": "2003-04-05",
+   "earnings_until": "2004-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2003Q1",
+    "value_normalized_usd_millions": 21.5,
+    "gold_id": "lilly-cialis-worldwide-reported-2003q1"
+   },
+   {
+    "period": "2003Q2",
+    "value_normalized_usd_millions": 37.4,
+    "gold_id": "lilly-cialis-worldwide-reported-2003q2"
+   },
+   {
+    "period": "2003Q3",
+    "value_normalized_usd_millions": 50.2,
+    "gold_id": "lilly-cialis-worldwide-reported-2003q3"
+   },
+   {
+    "period": "2003Q4",
+    "value_normalized_usd_millions": 94.2,
+    "gold_id": "lilly-cialis-worldwide-reported-2003q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cialis",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "tadalafil",
+  "options": {
+   "earnings_since": "2004-04-05",
+   "earnings_until": "2005-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2004Q1",
+    "value_normalized_usd_millions": 108.3,
+    "gold_id": "lilly-cialis-worldwide-reported-2004q1"
+   },
+   {
+    "period": "2004Q2",
+    "value_normalized_usd_millions": 137.2,
+    "gold_id": "lilly-cialis-worldwide-reported-2004q2"
+   },
+   {
+    "period": "2004Q3",
+    "value_normalized_usd_millions": 154.1,
+    "gold_id": "lilly-cialis-worldwide-reported-2004q3"
+   },
+   {
+    "period": "2004Q4",
+    "value_normalized_usd_millions": 152.7,
+    "gold_id": "lilly-cialis-worldwide-reported-2004q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cialis",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "tadalafil",
+  "options": {
+   "earnings_since": "2005-04-05",
+   "earnings_until": "2006-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2005Q1",
+    "value_normalized_usd_millions": 150.1,
+    "gold_id": "lilly-cialis-worldwide-reported-2005q1"
+   },
+   {
+    "period": "2005Q2",
+    "value_normalized_usd_millions": 190.9,
+    "gold_id": "lilly-cialis-worldwide-reported-2005q2"
+   },
+   {
+    "period": "2005Q3",
+    "value_normalized_usd_millions": 195.1,
+    "gold_id": "lilly-cialis-worldwide-reported-2005q3"
+   },
+   {
+    "period": "2005Q4",
+    "value_normalized_usd_millions": 210.5,
+    "gold_id": "lilly-cialis-worldwide-reported-2005q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cialis",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "tadalafil",
+  "options": {
+   "earnings_since": "2006-04-05",
+   "earnings_until": "2007-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2006Q1",
+    "value_normalized_usd_millions": 222.7,
+    "gold_id": "lilly-cialis-worldwide-reported-2006q1"
+   },
+   {
+    "period": "2006Q2",
+    "value_normalized_usd_millions": 233.2,
+    "gold_id": "lilly-cialis-worldwide-reported-2006q2"
+   },
+   {
+    "period": "2006Q3",
+    "value_normalized_usd_millions": 245.6,
+    "gold_id": "lilly-cialis-worldwide-reported-2006q3"
+   },
+   {
+    "period": "2006Q4",
+    "value_normalized_usd_millions": 269.2,
+    "gold_id": "lilly-cialis-worldwide-reported-2006q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cialis",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "tadalafil",
+  "options": {
+   "earnings_since": "2007-04-05",
+   "earnings_until": "2008-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2007Q1",
+    "value_normalized_usd_millions": 265.8,
+    "gold_id": "lilly-cialis-worldwide-reported-2007q1"
+   },
+   {
+    "period": "2007Q2",
+    "value_normalized_usd_millions": 293.1,
+    "gold_id": "lilly-cialis-worldwide-reported-2007q2"
+   },
+   {
+    "period": "2007Q3",
+    "value_normalized_usd_millions": 311.4,
+    "gold_id": "lilly-cialis-worldwide-reported-2007q3"
+   },
+   {
+    "period": "2007Q4",
+    "value_normalized_usd_millions": 346.2,
+    "gold_id": "lilly-cialis-worldwide-reported-2007q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cialis",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "tadalafil",
+  "options": {
+   "earnings_since": "2008-04-05",
+   "earnings_until": "2009-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2008Q1",
+    "value_normalized_usd_millions": 336.9,
+    "gold_id": "lilly-cialis-worldwide-reported-2008q1"
+   },
+   {
+    "period": "2008Q2",
+    "value_normalized_usd_millions": 362.2,
+    "gold_id": "lilly-cialis-worldwide-reported-2008q2"
+   },
+   {
+    "period": "2008Q3",
+    "value_normalized_usd_millions": 376.6,
+    "gold_id": "lilly-cialis-worldwide-reported-2008q3"
+   },
+   {
+    "period": "2008Q4",
+    "value_normalized_usd_millions": 368.8,
+    "gold_id": "lilly-cialis-worldwide-reported-2008q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cialis",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "tadalafil",
+  "options": {
+   "earnings_since": "2009-04-05",
+   "earnings_until": "2010-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2009Q1",
+    "value_normalized_usd_millions": 358.8,
+    "gold_id": "lilly-cialis-worldwide-reported-2009q1"
+   },
+   {
+    "period": "2009Q2",
+    "value_normalized_usd_millions": 363.6,
+    "gold_id": "lilly-cialis-worldwide-reported-2009q2"
+   },
+   {
+    "period": "2009Q3",
+    "value_normalized_usd_millions": 397.2,
+    "gold_id": "lilly-cialis-worldwide-reported-2009q3"
+   },
+   {
+    "period": "2009Q4",
+    "value_normalized_usd_millions": 439.5,
+    "gold_id": "lilly-cialis-worldwide-reported-2009q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cialis",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "tadalafil",
+  "options": {
+   "earnings_since": "2010-04-05",
+   "earnings_until": "2011-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2010Q1",
+    "value_normalized_usd_millions": 408.3,
+    "gold_id": "lilly-cialis-worldwide-reported-2010q1"
+   },
+   {
+    "period": "2010Q2",
+    "value_normalized_usd_millions": 418.7,
+    "gold_id": "lilly-cialis-worldwide-reported-2010q2"
+   },
+   {
+    "period": "2010Q3",
+    "value_normalized_usd_millions": 406.5,
+    "gold_id": "lilly-cialis-worldwide-reported-2010q3"
+   },
+   {
+    "period": "2010Q4",
+    "value_normalized_usd_millions": 465.9,
+    "gold_id": "lilly-cialis-worldwide-reported-2010q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cialis",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "tadalafil",
+  "options": {
+   "earnings_since": "2011-04-05",
+   "earnings_until": "2012-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2011Q1",
+    "value_normalized_usd_millions": 434.4,
+    "gold_id": "lilly-cialis-worldwide-reported-2011q1"
+   },
+   {
+    "period": "2011Q2",
+    "value_normalized_usd_millions": 477.2,
+    "gold_id": "lilly-cialis-worldwide-reported-2011q2"
+   },
+   {
+    "period": "2011Q3",
+    "value_normalized_usd_millions": 469.8,
+    "gold_id": "lilly-cialis-worldwide-reported-2011q3"
+   },
+   {
+    "period": "2011Q4",
+    "value_normalized_usd_millions": 494.2,
+    "gold_id": "lilly-cialis-worldwide-reported-2011q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cialis",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "tadalafil",
+  "options": {
+   "earnings_since": "2012-04-05",
+   "earnings_until": "2013-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2012Q1",
+    "value_normalized_usd_millions": 461.8,
+    "gold_id": "lilly-cialis-worldwide-reported-2012q1"
+   },
+   {
+    "period": "2012Q2",
+    "value_normalized_usd_millions": 469.5,
+    "gold_id": "lilly-cialis-worldwide-reported-2012q2"
+   },
+   {
+    "period": "2012Q3",
+    "value_normalized_usd_millions": 482.1,
+    "gold_id": "lilly-cialis-worldwide-reported-2012q3"
+   },
+   {
+    "period": "2012Q4",
+    "value_normalized_usd_millions": 513.4,
+    "gold_id": "lilly-cialis-worldwide-reported-2012q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cialis",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "tadalafil",
+  "options": {
+   "earnings_since": "2013-04-05",
+   "earnings_until": "2014-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2013Q1",
+    "value_normalized_usd_millions": 515.0,
+    "gold_id": "lilly-cialis-worldwide-reported-2013q1"
+   },
+   {
+    "period": "2013Q2",
+    "value_normalized_usd_millions": 529.4,
+    "gold_id": "lilly-cialis-worldwide-reported-2013q2"
+   },
+   {
+    "period": "2013Q3",
+    "value_normalized_usd_millions": 526.7,
+    "gold_id": "lilly-cialis-worldwide-reported-2013q3"
+   },
+   {
+    "period": "2013Q4",
+    "value_normalized_usd_millions": 588.3,
+    "gold_id": "lilly-cialis-worldwide-reported-2013q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cialis",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "tadalafil",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q1",
+    "value_normalized_usd_millions": 532.4,
+    "gold_id": "lilly-cialis-worldwide-reported-2014q1"
+   },
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": 567.8,
+    "gold_id": "lilly-cialis-worldwide-reported-2014q2"
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 568.4,
+    "gold_id": "lilly-cialis-worldwide-reported-2014q3"
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": 622.4,
+    "gold_id": "lilly-cialis-worldwide-reported-2014q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cialis",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "tadalafil",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q1",
+    "value_normalized_usd_millions": 538.3,
+    "gold_id": "lilly-cialis-worldwide-reported-2015q1"
+   },
+   {
+    "period": "2015Q2",
+    "value_normalized_usd_millions": 567.9,
+    "gold_id": "lilly-cialis-worldwide-reported-2015q2"
+   },
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 566.1,
+    "gold_id": "lilly-cialis-worldwide-reported-2015q3"
+   },
+   {
+    "period": "2015Q4",
+    "value_normalized_usd_millions": 638.4,
+    "gold_id": "lilly-cialis-worldwide-reported-2015q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cialis",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "tadalafil",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 576.7,
+    "gold_id": "lilly-cialis-worldwide-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 630.5,
+    "gold_id": "lilly-cialis-worldwide-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 588.2,
+    "gold_id": "lilly-cialis-worldwide-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 676.3,
+    "gold_id": "lilly-cialis-worldwide-reported-2016q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cialis",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "tadalafil",
+  "options": {
    "earnings_since": "2017-04-05",
    "earnings_until": "2018-05-05",
    "openfda": true,
@@ -45742,6 +47112,21 @@
   },
   "source": "seed/gold/quarterly_revenue.jsonl",
   "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 533.6,
+    "gold_id": "lilly-cialis-worldwide-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 627.3,
+    "gold_id": "lilly-cialis-worldwide-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 564.9,
+    "gold_id": "lilly-cialis-worldwide-reported-2017q3"
+   },
    {
     "period": "2017Q4",
     "value_normalized_usd_millions": 597.4,
@@ -46000,6 +47385,106 @@
   "ticker": "LLY",
   "generic_name": "ramucirumab",
   "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": 13.7,
+    "gold_id": "lilly-cyramza-worldwide-reported-2014q2"
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 28.4,
+    "gold_id": "lilly-cyramza-worldwide-reported-2014q3"
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": 33.6,
+    "gold_id": "lilly-cyramza-worldwide-reported-2014q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cyramza",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "ramucirumab",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q1",
+    "value_normalized_usd_millions": 67.5,
+    "gold_id": "lilly-cyramza-worldwide-reported-2015q1"
+   },
+   {
+    "period": "2015Q2",
+    "value_normalized_usd_millions": 87.7,
+    "gold_id": "lilly-cyramza-worldwide-reported-2015q2"
+   },
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 111.2,
+    "gold_id": "lilly-cyramza-worldwide-reported-2015q3"
+   },
+   {
+    "period": "2015Q4",
+    "value_normalized_usd_millions": 117.5,
+    "gold_id": "lilly-cyramza-worldwide-reported-2015q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cyramza",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "ramucirumab",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 131.0,
+    "gold_id": "lilly-cyramza-worldwide-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 147.0,
+    "gold_id": "lilly-cyramza-worldwide-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 159.0,
+    "gold_id": "lilly-cyramza-worldwide-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 177.1,
+    "gold_id": "lilly-cyramza-worldwide-reported-2016q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cyramza",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "ramucirumab",
+  "options": {
    "earnings_since": "2017-04-05",
    "earnings_until": "2018-05-05",
    "openfda": true,
@@ -46007,6 +47492,21 @@
   },
   "source": "seed/gold/quarterly_revenue.jsonl",
   "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 171.2,
+    "gold_id": "lilly-cyramza-worldwide-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 186.3,
+    "gold_id": "lilly-cyramza-worldwide-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 196.0,
+    "gold_id": "lilly-cyramza-worldwide-reported-2017q3"
+   },
    {
     "period": "2017Q4",
     "value_normalized_usd_millions": 204.8,
@@ -46635,6 +48135,496 @@
   "ticker": "LLY",
   "generic_name": "teriparatide",
   "options": {
+   "earnings_since": "2003-04-05",
+   "earnings_until": "2004-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2003Q1",
+    "value_normalized_usd_millions": 4.1,
+    "gold_id": "lilly-forteo-worldwide-reported-2003q1"
+   },
+   {
+    "period": "2003Q2",
+    "value_normalized_usd_millions": 13.7,
+    "gold_id": "lilly-forteo-worldwide-reported-2003q2"
+   },
+   {
+    "period": "2003Q3",
+    "value_normalized_usd_millions": 21.6,
+    "gold_id": "lilly-forteo-worldwide-reported-2003q3"
+   },
+   {
+    "period": "2003Q4",
+    "value_normalized_usd_millions": 25.9,
+    "gold_id": "lilly-forteo-worldwide-reported-2003q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Forteo",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "teriparatide",
+  "options": {
+   "earnings_since": "2004-04-05",
+   "earnings_until": "2005-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2004Q1",
+    "value_normalized_usd_millions": 40.8,
+    "gold_id": "lilly-forteo-worldwide-reported-2004q1"
+   },
+   {
+    "period": "2004Q2",
+    "value_normalized_usd_millions": 65.3,
+    "gold_id": "lilly-forteo-worldwide-reported-2004q2"
+   },
+   {
+    "period": "2004Q3",
+    "value_normalized_usd_millions": 58.1,
+    "gold_id": "lilly-forteo-worldwide-reported-2004q3"
+   },
+   {
+    "period": "2004Q4",
+    "value_normalized_usd_millions": 74.3,
+    "gold_id": "lilly-forteo-worldwide-reported-2004q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Forteo",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "teriparatide",
+  "options": {
+   "earnings_since": "2005-04-05",
+   "earnings_until": "2006-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2005Q1",
+    "value_normalized_usd_millions": 66.8,
+    "gold_id": "lilly-forteo-worldwide-reported-2005q1"
+   },
+   {
+    "period": "2005Q2",
+    "value_normalized_usd_millions": 101.9,
+    "gold_id": "lilly-forteo-worldwide-reported-2005q2"
+   },
+   {
+    "period": "2005Q3",
+    "value_normalized_usd_millions": 102.6,
+    "gold_id": "lilly-forteo-worldwide-reported-2005q3"
+   },
+   {
+    "period": "2005Q4",
+    "value_normalized_usd_millions": 118.0,
+    "gold_id": "lilly-forteo-worldwide-reported-2005q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Forteo",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "teriparatide",
+  "options": {
+   "earnings_since": "2006-04-05",
+   "earnings_until": "2007-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2006Q1",
+    "value_normalized_usd_millions": 127.1,
+    "gold_id": "lilly-forteo-worldwide-reported-2006q1"
+   },
+   {
+    "period": "2006Q2",
+    "value_normalized_usd_millions": 146.1,
+    "gold_id": "lilly-forteo-worldwide-reported-2006q2"
+   },
+   {
+    "period": "2006Q3",
+    "value_normalized_usd_millions": 149.1,
+    "gold_id": "lilly-forteo-worldwide-reported-2006q3"
+   },
+   {
+    "period": "2006Q4",
+    "value_normalized_usd_millions": 172.1,
+    "gold_id": "lilly-forteo-worldwide-reported-2006q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Forteo",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "teriparatide",
+  "options": {
+   "earnings_since": "2007-04-05",
+   "earnings_until": "2008-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2007Q1",
+    "value_normalized_usd_millions": 153.4,
+    "gold_id": "lilly-forteo-worldwide-reported-2007q1"
+   },
+   {
+    "period": "2007Q2",
+    "value_normalized_usd_millions": 177.2,
+    "gold_id": "lilly-forteo-worldwide-reported-2007q2"
+   },
+   {
+    "period": "2007Q3",
+    "value_normalized_usd_millions": 180.5,
+    "gold_id": "lilly-forteo-worldwide-reported-2007q3"
+   },
+   {
+    "period": "2007Q4",
+    "value_normalized_usd_millions": 198.2,
+    "gold_id": "lilly-forteo-worldwide-reported-2007q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Forteo",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "teriparatide",
+  "options": {
+   "earnings_since": "2008-04-05",
+   "earnings_until": "2009-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2008Q1",
+    "value_normalized_usd_millions": 185.0,
+    "gold_id": "lilly-forteo-worldwide-reported-2008q1"
+   },
+   {
+    "period": "2008Q2",
+    "value_normalized_usd_millions": 206.6,
+    "gold_id": "lilly-forteo-worldwide-reported-2008q2"
+   },
+   {
+    "period": "2008Q3",
+    "value_normalized_usd_millions": 192.7,
+    "gold_id": "lilly-forteo-worldwide-reported-2008q3"
+   },
+   {
+    "period": "2008Q4",
+    "value_normalized_usd_millions": 194.5,
+    "gold_id": "lilly-forteo-worldwide-reported-2008q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Forteo",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "teriparatide",
+  "options": {
+   "earnings_since": "2009-04-05",
+   "earnings_until": "2010-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2009Q1",
+    "value_normalized_usd_millions": 187.5,
+    "gold_id": "lilly-forteo-worldwide-reported-2009q1"
+   },
+   {
+    "period": "2009Q2",
+    "value_normalized_usd_millions": 203.3,
+    "gold_id": "lilly-forteo-worldwide-reported-2009q2"
+   },
+   {
+    "period": "2009Q3",
+    "value_normalized_usd_millions": 213.1,
+    "gold_id": "lilly-forteo-worldwide-reported-2009q3"
+   },
+   {
+    "period": "2009Q4",
+    "value_normalized_usd_millions": 212.8,
+    "gold_id": "lilly-forteo-worldwide-reported-2009q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Forteo",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "teriparatide",
+  "options": {
+   "earnings_since": "2010-04-05",
+   "earnings_until": "2011-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2010Q1",
+    "value_normalized_usd_millions": 194.5,
+    "gold_id": "lilly-forteo-worldwide-reported-2010q1"
+   },
+   {
+    "period": "2010Q2",
+    "value_normalized_usd_millions": 209.6,
+    "gold_id": "lilly-forteo-worldwide-reported-2010q2"
+   },
+   {
+    "period": "2010Q3",
+    "value_normalized_usd_millions": 199.7,
+    "gold_id": "lilly-forteo-worldwide-reported-2010q3"
+   },
+   {
+    "period": "2010Q4",
+    "value_normalized_usd_millions": 226.3,
+    "gold_id": "lilly-forteo-worldwide-reported-2010q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Forteo",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "teriparatide",
+  "options": {
+   "earnings_since": "2011-04-05",
+   "earnings_until": "2012-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2011Q1",
+    "value_normalized_usd_millions": 216.1,
+    "gold_id": "lilly-forteo-worldwide-reported-2011q1"
+   },
+   {
+    "period": "2011Q2",
+    "value_normalized_usd_millions": 231.0,
+    "gold_id": "lilly-forteo-worldwide-reported-2011q2"
+   },
+   {
+    "period": "2011Q3",
+    "value_normalized_usd_millions": 240.3,
+    "gold_id": "lilly-forteo-worldwide-reported-2011q3"
+   },
+   {
+    "period": "2011Q4",
+    "value_normalized_usd_millions": 262.5,
+    "gold_id": "lilly-forteo-worldwide-reported-2011q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Forteo",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "teriparatide",
+  "options": {
+   "earnings_since": "2012-04-05",
+   "earnings_until": "2013-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2012Q1",
+    "value_normalized_usd_millions": 271.3,
+    "gold_id": "lilly-forteo-worldwide-reported-2012q1"
+   },
+   {
+    "period": "2012Q2",
+    "value_normalized_usd_millions": 276.4,
+    "gold_id": "lilly-forteo-worldwide-reported-2012q2"
+   },
+   {
+    "period": "2012Q3",
+    "value_normalized_usd_millions": 288.7,
+    "gold_id": "lilly-forteo-worldwide-reported-2012q3"
+   },
+   {
+    "period": "2012Q4",
+    "value_normalized_usd_millions": 314.6,
+    "gold_id": "lilly-forteo-worldwide-reported-2012q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Forteo",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "teriparatide",
+  "options": {
+   "earnings_since": "2013-04-05",
+   "earnings_until": "2014-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2013Q1",
+    "value_normalized_usd_millions": 281.5,
+    "gold_id": "lilly-forteo-worldwide-reported-2013q1"
+   },
+   {
+    "period": "2013Q2",
+    "value_normalized_usd_millions": 296.9,
+    "gold_id": "lilly-forteo-worldwide-reported-2013q2"
+   },
+   {
+    "period": "2013Q3",
+    "value_normalized_usd_millions": 306.7,
+    "gold_id": "lilly-forteo-worldwide-reported-2013q3"
+   },
+   {
+    "period": "2013Q4",
+    "value_normalized_usd_millions": 359.8,
+    "gold_id": "lilly-forteo-worldwide-reported-2013q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Forteo",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "teriparatide",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q1",
+    "value_normalized_usd_millions": 300.4,
+    "gold_id": "lilly-forteo-worldwide-reported-2014q1"
+   },
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": 308.6,
+    "gold_id": "lilly-forteo-worldwide-reported-2014q2"
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 332.2,
+    "gold_id": "lilly-forteo-worldwide-reported-2014q3"
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": 380.8,
+    "gold_id": "lilly-forteo-worldwide-reported-2014q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Forteo",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "teriparatide",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q1",
+    "value_normalized_usd_millions": 293.0,
+    "gold_id": "lilly-forteo-worldwide-reported-2015q1"
+   },
+   {
+    "period": "2015Q2",
+    "value_normalized_usd_millions": 328.4,
+    "gold_id": "lilly-forteo-worldwide-reported-2015q2"
+   },
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 348.9,
+    "gold_id": "lilly-forteo-worldwide-reported-2015q3"
+   },
+   {
+    "period": "2015Q4",
+    "value_normalized_usd_millions": 377.9,
+    "gold_id": "lilly-forteo-worldwide-reported-2015q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Forteo",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "teriparatide",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 318.6,
+    "gold_id": "lilly-forteo-worldwide-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 367.6,
+    "gold_id": "lilly-forteo-worldwide-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 391.2,
+    "gold_id": "lilly-forteo-worldwide-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 422.5,
+    "gold_id": "lilly-forteo-worldwide-reported-2016q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Forteo",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "teriparatide",
+  "options": {
    "earnings_since": "2017-04-05",
    "earnings_until": "2018-05-05",
    "openfda": true,
@@ -46642,6 +48632,21 @@
   },
   "source": "seed/gold/quarterly_revenue.jsonl",
   "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 347.5,
+    "gold_id": "lilly-forteo-worldwide-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 446.7,
+    "gold_id": "lilly-forteo-worldwide-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 441.7,
+    "gold_id": "lilly-forteo-worldwide-reported-2017q3"
+   },
    {
     "period": "2017Q4",
     "value_normalized_usd_millions": 513.2,
@@ -46891,6 +48896,146 @@
     "period": "2024Q4",
     "value_normalized_usd_millions": null,
     "why": "The issuer reports no line for this product after 2024Q3. Lilly's Form 10-K for 2024 prints revenue by product for Mounjaro, Verzenio, Trulicity, Zepbound, Jardiance, Taltz, Humalog, Cyramza, Olumiant, Humulin, Emgality, Basaglar, Erbitux, Tyvyt, Zyprexa and Baqsimi, with the remainder in Other products, and Forteo is not among them; the Form 10-Q for the first quarter of 2025 then prints only Mounjaro, Zepbound, Trulicity, Jardiance, Verzenio and Taltz by name. The fourth quarter of 2024 is not printed or derivable, so the series ends at 2024Q3."
+   }
+  ]
+ },
+ {
+  "drug_name": "Humalog",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "insulin lispro",
+  "options": {
+   "earnings_since": "1998-04-05",
+   "earnings_until": "1999-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "1998Q1",
+    "value_normalized_usd_millions": 25.0,
+    "gold_id": "lilly-humalog-worldwide-reported-1998q1"
+   },
+   {
+    "period": "1998Q2",
+    "value_normalized_usd_millions": 30.0,
+    "gold_id": "lilly-humalog-worldwide-reported-1998q2"
+   },
+   {
+    "period": "1998Q3",
+    "value_normalized_usd_millions": 32.0,
+    "gold_id": "lilly-humalog-worldwide-reported-1998q3"
+   },
+   {
+    "period": "1998Q4",
+    "value_normalized_usd_millions": 43.6,
+    "gold_id": "lilly-humalog-worldwide-reported-1998q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Humalog",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "insulin lispro",
+  "options": {
+   "earnings_since": "1999-04-05",
+   "earnings_until": "2000-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "1999Q1",
+    "value_normalized_usd_millions": 42.5,
+    "gold_id": "lilly-humalog-worldwide-reported-1999q1"
+   },
+   {
+    "period": "1999Q2",
+    "value_normalized_usd_millions": 50.4,
+    "gold_id": "lilly-humalog-worldwide-reported-1999q2"
+   },
+   {
+    "period": "1999Q3",
+    "value_normalized_usd_millions": 58.7,
+    "gold_id": "lilly-humalog-worldwide-reported-1999q3"
+   },
+   {
+    "period": "1999Q4",
+    "value_normalized_usd_millions": 72.9,
+    "gold_id": "lilly-humalog-worldwide-reported-1999q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Humalog",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "insulin lispro",
+  "options": {
+   "earnings_since": "2000-04-05",
+   "earnings_until": "2001-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2000Q1",
+    "value_normalized_usd_millions": 72.1,
+    "gold_id": "lilly-humalog-worldwide-reported-2000q1"
+   },
+   {
+    "period": "2000Q2",
+    "value_normalized_usd_millions": 76.7,
+    "gold_id": "lilly-humalog-worldwide-reported-2000q2"
+   },
+   {
+    "period": "2000Q3",
+    "value_normalized_usd_millions": 90.6,
+    "gold_id": "lilly-humalog-worldwide-reported-2000q3"
+   },
+   {
+    "period": "2000Q4",
+    "value_normalized_usd_millions": 110.9,
+    "gold_id": "lilly-humalog-worldwide-reported-2000q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Humalog",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "insulin lispro",
+  "options": {
+   "earnings_since": "2001-04-05",
+   "earnings_until": "2002-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2001Q1",
+    "value_normalized_usd_millions": 125.2,
+    "gold_id": "lilly-humalog-worldwide-reported-2001q1"
+   },
+   {
+    "period": "2001Q2",
+    "value_normalized_usd_millions": 145.6,
+    "gold_id": "lilly-humalog-worldwide-reported-2001q2"
+   },
+   {
+    "period": "2001Q3",
+    "value_normalized_usd_millions": 164.3,
+    "gold_id": "lilly-humalog-worldwide-reported-2001q3"
+   },
+   {
+    "period": "2001Q4",
+    "value_normalized_usd_millions": 192.7,
+    "gold_id": "lilly-humalog-worldwide-reported-2001q4"
    }
   ]
  },
@@ -47765,6 +49910,601 @@
   "ticker": "LLY",
   "generic_name": "human insulin",
   "options": {
+   "earnings_since": "2000-04-05",
+   "earnings_until": "2001-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2000Q1",
+    "value_normalized_usd_millions": 273.7,
+    "gold_id": "lilly-humulin-worldwide-reported-2000q1"
+   },
+   {
+    "period": "2000Q2",
+    "value_normalized_usd_millions": 265.0,
+    "gold_id": "lilly-humulin-worldwide-reported-2000q2"
+   },
+   {
+    "period": "2000Q3",
+    "value_normalized_usd_millions": 282.6,
+    "gold_id": "lilly-humulin-worldwide-reported-2000q3"
+   },
+   {
+    "period": "2000Q4",
+    "value_normalized_usd_millions": 293.2,
+    "gold_id": "lilly-humulin-worldwide-reported-2000q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Humulin",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "human insulin",
+  "options": {
+   "earnings_since": "2001-04-05",
+   "earnings_until": "2002-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2001Q1",
+    "value_normalized_usd_millions": 273.5,
+    "gold_id": "lilly-humulin-worldwide-reported-2001q1"
+   },
+   {
+    "period": "2001Q2",
+    "value_normalized_usd_millions": 264.7,
+    "gold_id": "lilly-humulin-worldwide-reported-2001q2"
+   },
+   {
+    "period": "2001Q3",
+    "value_normalized_usd_millions": 254.7,
+    "gold_id": "lilly-humulin-worldwide-reported-2001q3"
+   },
+   {
+    "period": "2001Q4",
+    "value_normalized_usd_millions": 267.8,
+    "gold_id": "lilly-humulin-worldwide-reported-2001q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Humulin",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "human insulin",
+  "options": {
+   "earnings_since": "2002-04-05",
+   "earnings_until": "2003-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2002Q1",
+    "value_normalized_usd_millions": 234.5,
+    "gold_id": "lilly-humulin-worldwide-reported-2002q1"
+   },
+   {
+    "period": "2002Q2",
+    "value_normalized_usd_millions": 257.6,
+    "gold_id": "lilly-humulin-worldwide-reported-2002q2"
+   },
+   {
+    "period": "2002Q3",
+    "value_normalized_usd_millions": 257.4,
+    "gold_id": "lilly-humulin-worldwide-reported-2002q3"
+   },
+   {
+    "period": "2002Q4",
+    "value_normalized_usd_millions": 254.5,
+    "gold_id": "lilly-humulin-worldwide-reported-2002q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Humulin",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "human insulin",
+  "options": {
+   "earnings_since": "2003-04-05",
+   "earnings_until": "2004-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2003Q1",
+    "value_normalized_usd_millions": 241.0,
+    "gold_id": "lilly-humulin-worldwide-reported-2003q1"
+   },
+   {
+    "period": "2003Q2",
+    "value_normalized_usd_millions": 255.5,
+    "gold_id": "lilly-humulin-worldwide-reported-2003q2"
+   },
+   {
+    "period": "2003Q3",
+    "value_normalized_usd_millions": 264.5,
+    "gold_id": "lilly-humulin-worldwide-reported-2003q3"
+   },
+   {
+    "period": "2003Q4",
+    "value_normalized_usd_millions": 299.3,
+    "gold_id": "lilly-humulin-worldwide-reported-2003q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Humulin",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "human insulin",
+  "options": {
+   "earnings_since": "2004-04-05",
+   "earnings_until": "2005-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2004Q1",
+    "value_normalized_usd_millions": 249.4,
+    "gold_id": "lilly-humulin-worldwide-reported-2004q1"
+   },
+   {
+    "period": "2004Q2",
+    "value_normalized_usd_millions": 259.3,
+    "gold_id": "lilly-humulin-worldwide-reported-2004q2"
+   },
+   {
+    "period": "2004Q3",
+    "value_normalized_usd_millions": 243.7,
+    "gold_id": "lilly-humulin-worldwide-reported-2004q3"
+   },
+   {
+    "period": "2004Q4",
+    "value_normalized_usd_millions": 245.2,
+    "gold_id": "lilly-humulin-worldwide-reported-2004q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Humulin",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "human insulin",
+  "options": {
+   "earnings_since": "2005-04-05",
+   "earnings_until": "2006-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2005Q1",
+    "value_normalized_usd_millions": 256.9,
+    "gold_id": "lilly-humulin-worldwide-reported-2005q1"
+   },
+   {
+    "period": "2005Q2",
+    "value_normalized_usd_millions": 249.8,
+    "gold_id": "lilly-humulin-worldwide-reported-2005q2"
+   },
+   {
+    "period": "2005Q3",
+    "value_normalized_usd_millions": 250.9,
+    "gold_id": "lilly-humulin-worldwide-reported-2005q3"
+   },
+   {
+    "period": "2005Q4",
+    "value_normalized_usd_millions": 247.2,
+    "gold_id": "lilly-humulin-worldwide-reported-2005q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Humulin",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "human insulin",
+  "options": {
+   "earnings_since": "2006-04-05",
+   "earnings_until": "2007-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2006Q1",
+    "value_normalized_usd_millions": 218.5,
+    "gold_id": "lilly-humulin-worldwide-reported-2006q1"
+   },
+   {
+    "period": "2006Q2",
+    "value_normalized_usd_millions": 219.8,
+    "gold_id": "lilly-humulin-worldwide-reported-2006q2"
+   },
+   {
+    "period": "2006Q3",
+    "value_normalized_usd_millions": 230.0,
+    "gold_id": "lilly-humulin-worldwide-reported-2006q3"
+   },
+   {
+    "period": "2006Q4",
+    "value_normalized_usd_millions": 257.0,
+    "gold_id": "lilly-humulin-worldwide-reported-2006q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Humulin",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "human insulin",
+  "options": {
+   "earnings_since": "2007-04-05",
+   "earnings_until": "2008-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2007Q1",
+    "value_normalized_usd_millions": 225.8,
+    "gold_id": "lilly-humulin-worldwide-reported-2007q1"
+   },
+   {
+    "period": "2007Q2",
+    "value_normalized_usd_millions": 242.8,
+    "gold_id": "lilly-humulin-worldwide-reported-2007q2"
+   },
+   {
+    "period": "2007Q3",
+    "value_normalized_usd_millions": 243.3,
+    "gold_id": "lilly-humulin-worldwide-reported-2007q3"
+   },
+   {
+    "period": "2007Q4",
+    "value_normalized_usd_millions": 273.4,
+    "gold_id": "lilly-humulin-worldwide-reported-2007q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Humulin",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "human insulin",
+  "options": {
+   "earnings_since": "2008-04-05",
+   "earnings_until": "2009-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2008Q1",
+    "value_normalized_usd_millions": 257.7,
+    "gold_id": "lilly-humulin-worldwide-reported-2008q1"
+   },
+   {
+    "period": "2008Q2",
+    "value_normalized_usd_millions": 271.4,
+    "gold_id": "lilly-humulin-worldwide-reported-2008q2"
+   },
+   {
+    "period": "2008Q3",
+    "value_normalized_usd_millions": 271.6,
+    "gold_id": "lilly-humulin-worldwide-reported-2008q3"
+   },
+   {
+    "period": "2008Q4",
+    "value_normalized_usd_millions": 262.4,
+    "gold_id": "lilly-humulin-worldwide-reported-2008q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Humulin",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "human insulin",
+  "options": {
+   "earnings_since": "2009-04-05",
+   "earnings_until": "2010-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2009Q1",
+    "value_normalized_usd_millions": 240.6,
+    "gold_id": "lilly-humulin-worldwide-reported-2009q1"
+   },
+   {
+    "period": "2009Q2",
+    "value_normalized_usd_millions": 248.1,
+    "gold_id": "lilly-humulin-worldwide-reported-2009q2"
+   },
+   {
+    "period": "2009Q3",
+    "value_normalized_usd_millions": 260.4,
+    "gold_id": "lilly-humulin-worldwide-reported-2009q3"
+   },
+   {
+    "period": "2009Q4",
+    "value_normalized_usd_millions": 273.0,
+    "gold_id": "lilly-humulin-worldwide-reported-2009q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Humulin",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "human insulin",
+  "options": {
+   "earnings_since": "2010-04-05",
+   "earnings_until": "2011-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2010Q1",
+    "value_normalized_usd_millions": 257.8,
+    "gold_id": "lilly-humulin-worldwide-reported-2010q1"
+   },
+   {
+    "period": "2010Q2",
+    "value_normalized_usd_millions": 265.2,
+    "gold_id": "lilly-humulin-worldwide-reported-2010q2"
+   },
+   {
+    "period": "2010Q3",
+    "value_normalized_usd_millions": 278.0,
+    "gold_id": "lilly-humulin-worldwide-reported-2010q3"
+   },
+   {
+    "period": "2010Q4",
+    "value_normalized_usd_millions": 287.9,
+    "gold_id": "lilly-humulin-worldwide-reported-2010q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Humulin",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "human insulin",
+  "options": {
+   "earnings_since": "2011-04-05",
+   "earnings_until": "2012-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2011Q1",
+    "value_normalized_usd_millions": 289.8,
+    "gold_id": "lilly-humulin-worldwide-reported-2011q1"
+   },
+   {
+    "period": "2011Q2",
+    "value_normalized_usd_millions": 311.8,
+    "gold_id": "lilly-humulin-worldwide-reported-2011q2"
+   },
+   {
+    "period": "2011Q3",
+    "value_normalized_usd_millions": 301.5,
+    "gold_id": "lilly-humulin-worldwide-reported-2011q3"
+   },
+   {
+    "period": "2011Q4",
+    "value_normalized_usd_millions": 345.6,
+    "gold_id": "lilly-humulin-worldwide-reported-2011q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Humulin",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "human insulin",
+  "options": {
+   "earnings_since": "2012-04-05",
+   "earnings_until": "2013-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2012Q1",
+    "value_normalized_usd_millions": 307.7,
+    "gold_id": "lilly-humulin-worldwide-reported-2012q1"
+   },
+   {
+    "period": "2012Q2",
+    "value_normalized_usd_millions": 303.0,
+    "gold_id": "lilly-humulin-worldwide-reported-2012q2"
+   },
+   {
+    "period": "2012Q3",
+    "value_normalized_usd_millions": 285.4,
+    "gold_id": "lilly-humulin-worldwide-reported-2012q3"
+   },
+   {
+    "period": "2012Q4",
+    "value_normalized_usd_millions": 343.0,
+    "gold_id": "lilly-humulin-worldwide-reported-2012q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Humulin",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "human insulin",
+  "options": {
+   "earnings_since": "2013-04-05",
+   "earnings_until": "2014-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2013Q1",
+    "value_normalized_usd_millions": 311.9,
+    "gold_id": "lilly-humulin-worldwide-reported-2013q1"
+   },
+   {
+    "period": "2013Q2",
+    "value_normalized_usd_millions": 327.5,
+    "gold_id": "lilly-humulin-worldwide-reported-2013q2"
+   },
+   {
+    "period": "2013Q3",
+    "value_normalized_usd_millions": 307.0,
+    "gold_id": "lilly-humulin-worldwide-reported-2013q3"
+   },
+   {
+    "period": "2013Q4",
+    "value_normalized_usd_millions": 369.5,
+    "gold_id": "lilly-humulin-worldwide-reported-2013q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Humulin",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "human insulin",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q1",
+    "value_normalized_usd_millions": 316.2,
+    "gold_id": "lilly-humulin-worldwide-reported-2014q1"
+   },
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": 352.4,
+    "gold_id": "lilly-humulin-worldwide-reported-2014q2"
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 335.9,
+    "gold_id": "lilly-humulin-worldwide-reported-2014q3"
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": 395.6,
+    "gold_id": "lilly-humulin-worldwide-reported-2014q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Humulin",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "human insulin",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q1",
+    "value_normalized_usd_millions": 315.7,
+    "gold_id": "lilly-humulin-worldwide-reported-2015q1"
+   },
+   {
+    "period": "2015Q2",
+    "value_normalized_usd_millions": 316.4,
+    "gold_id": "lilly-humulin-worldwide-reported-2015q2"
+   },
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 316.7,
+    "gold_id": "lilly-humulin-worldwide-reported-2015q3"
+   },
+   {
+    "period": "2015Q4",
+    "value_normalized_usd_millions": 358.6,
+    "gold_id": "lilly-humulin-worldwide-reported-2015q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Humulin",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "human insulin",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 356.4,
+    "gold_id": "lilly-humulin-worldwide-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 332.3,
+    "gold_id": "lilly-humulin-worldwide-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 322.0,
+    "gold_id": "lilly-humulin-worldwide-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 355.3,
+    "gold_id": "lilly-humulin-worldwide-reported-2016q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Humulin",
+  "manufacturer": "Eli Lilly",
+  "ticker": "LLY",
+  "generic_name": "human insulin",
+  "options": {
    "earnings_since": "2017-04-05",
    "earnings_until": "2018-05-05",
    "openfda": true,
@@ -47772,6 +50512,21 @@
   },
   "source": "seed/gold/quarterly_revenue.jsonl",
   "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 314.5,
+    "gold_id": "lilly-humulin-worldwide-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 357.8,
+    "gold_id": "lilly-humulin-worldwide-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 300.5,
+    "gold_id": "lilly-humulin-worldwide-reported-2017q3"
+   },
    {
     "period": "2017Q4",
     "value_normalized_usd_millions": 362.6,
@@ -51840,6 +54595,76 @@
   "ticker": "GSK",
   "generic_name": "fluticasone propionate/salmeterol",
   "options": {
+   "earnings_since": "2000-04-05",
+   "earnings_until": "2001-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2000Q1",
+    "value_normalized_usd_millions": 54.6312,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2000q1"
+   },
+   {
+    "period": "2000Q2",
+    "value_normalized_usd_millions": 72.0745,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2000q2"
+   },
+   {
+    "period": "2000Q3",
+    "value_normalized_usd_millions": 73.835,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2000q3"
+   },
+   {
+    "period": "2000Q4",
+    "value_normalized_usd_millions": 111.3728,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2000q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Advair Diskus",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone propionate/salmeterol",
+  "options": {
+   "earnings_since": "2001-04-05",
+   "earnings_until": "2002-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2001Q1",
+    "value_normalized_usd_millions": 142.9036,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2001q1"
+   },
+   {
+    "period": "2001Q2",
+    "value_normalized_usd_millions": 275.6934,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2001q2"
+   },
+   {
+    "period": "2001Q3",
+    "value_normalized_usd_millions": 345.264,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2001q3"
+   },
+   {
+    "period": "2001Q4",
+    "value_normalized_usd_millions": 458.6514,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2001q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Advair Diskus",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "fluticasone propionate/salmeterol",
+  "options": {
    "earnings_since": "2002-04-05",
    "earnings_until": "2003-05-05",
    "openfda": true,
@@ -51847,6 +54672,21 @@
   },
   "source": "seed/gold/quarterly_revenue.jsonl",
   "expect": [
+   {
+    "period": "2002Q1",
+    "value_normalized_usd_millions": 517.638,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2002q1"
+   },
+   {
+    "period": "2002Q2",
+    "value_normalized_usd_millions": 608.2336,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2002q2"
+   },
+   {
+    "period": "2002Q3",
+    "value_normalized_usd_millions": 607.5608,
+    "gold_id": "gsk-advair-seretide-worldwide-reported-2002q3"
+   },
    {
     "period": "2002Q4",
     "value_normalized_usd_millions": 722.936,
@@ -87570,6 +90410,76 @@
   ]
  },
  {
+  "drug_name": "Gattex",
+  "manufacturer": "NPS Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "teduglutide",
+  "options": {
+   "earnings_since": "2013-04-05",
+   "earnings_until": "2014-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2013Q1",
+    "value_normalized_usd_millions": 0.654,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2013q1"
+   },
+   {
+    "period": "2013Q2",
+    "value_normalized_usd_millions": 4.801,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2013q2"
+   },
+   {
+    "period": "2013Q3",
+    "value_normalized_usd_millions": 11.037,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2013q3"
+   },
+   {
+    "period": "2013Q4",
+    "value_normalized_usd_millions": 15.26,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2013q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Gattex",
+  "manufacturer": "NPS Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "teduglutide",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q1",
+    "value_normalized_usd_millions": 17.871,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2014q1"
+   },
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": 21.955,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2014q2"
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 28.091,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2014q3"
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": 33.278,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2014q4"
+   }
+  ]
+ },
+ {
   "drug_name": "Ingrezza",
   "manufacturer": "Neurocrine Biosciences",
   "ticker": "NBIX",
@@ -111615,6 +114525,61 @@
   ]
  },
  {
+  "drug_name": "Lovaza",
+  "manufacturer": "Reliant Pharmaceuticals, Inc.",
+  "ticker": null,
+  "generic_name": "omega-3-acid ethyl esters",
+  "options": {
+   "earnings_since": "2006-04-05",
+   "earnings_until": "2007-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2006Q3",
+    "value_normalized_usd_millions": 39.8,
+    "gold_id": "gsk-lovaza-worldwide-reported-2006q3"
+   },
+   {
+    "period": "2006Q4",
+    "value_normalized_usd_millions": 58.2,
+    "gold_id": "gsk-lovaza-worldwide-reported-2006q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Lovaza",
+  "manufacturer": "Reliant Pharmaceuticals, Inc.",
+  "ticker": null,
+  "generic_name": "omega-3-acid ethyl esters",
+  "options": {
+   "earnings_since": "2007-04-05",
+   "earnings_until": "2008-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2007Q1",
+    "value_normalized_usd_millions": 57.7,
+    "gold_id": "gsk-lovaza-worldwide-reported-2007q1"
+   },
+   {
+    "period": "2007Q2",
+    "value_normalized_usd_millions": 69.8,
+    "gold_id": "gsk-lovaza-worldwide-reported-2007q2"
+   },
+   {
+    "period": "2007Q3",
+    "value_normalized_usd_millions": 78.9,
+    "gold_id": "gsk-lovaza-worldwide-reported-2007q3"
+   }
+  ]
+ },
+ {
   "drug_name": "Gavreto",
   "manufacturer": "Rigel Pharmaceuticals",
   "ticker": "RIGL",
@@ -129925,6 +132890,551 @@
   ]
  },
  {
+  "drug_name": "Cinryze",
+  "manufacturer": "Shire",
+  "ticker": null,
+  "generic_name": "C1 esterase inhibitor (human)",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": 129.9,
+    "gold_id": "takeda-cinryze-worldwide-reported-2014q2"
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 145.1,
+    "gold_id": "takeda-cinryze-worldwide-reported-2014q3"
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": 142.4,
+    "gold_id": "takeda-cinryze-worldwide-reported-2014q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cinryze",
+  "manufacturer": "Shire",
+  "ticker": null,
+  "generic_name": "C1 esterase inhibitor (human)",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q1",
+    "value_normalized_usd_millions": 148.1,
+    "gold_id": "takeda-cinryze-worldwide-reported-2015q1"
+   },
+   {
+    "period": "2015Q2",
+    "value_normalized_usd_millions": 138.8,
+    "gold_id": "takeda-cinryze-worldwide-reported-2015q2"
+   },
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 187.5,
+    "gold_id": "takeda-cinryze-worldwide-reported-2015q3"
+   },
+   {
+    "period": "2015Q4",
+    "value_normalized_usd_millions": 143.3,
+    "gold_id": "takeda-cinryze-worldwide-reported-2015q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cinryze",
+  "manufacturer": "Shire",
+  "ticker": null,
+  "generic_name": "C1 esterase inhibitor (human)",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 164.2,
+    "gold_id": "takeda-cinryze-worldwide-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 173.0,
+    "gold_id": "takeda-cinryze-worldwide-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 165.4,
+    "gold_id": "takeda-cinryze-worldwide-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 177.6,
+    "gold_id": "takeda-cinryze-worldwide-reported-2016q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cinryze",
+  "manufacturer": "Shire",
+  "ticker": null,
+  "generic_name": "C1 esterase inhibitor (human)",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 225.9,
+    "gold_id": "takeda-cinryze-worldwide-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 175.9,
+    "gold_id": "takeda-cinryze-worldwide-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 56.9,
+    "gold_id": "takeda-cinryze-worldwide-reported-2017q3"
+   },
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": 240.6,
+    "gold_id": "takeda-cinryze-worldwide-reported-2017q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cinryze",
+  "manufacturer": "Shire",
+  "ticker": null,
+  "generic_name": "C1 esterase inhibitor (human)",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 147.0,
+    "gold_id": "takeda-cinryze-worldwide-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 136.0,
+    "gold_id": "takeda-cinryze-worldwide-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 117.0,
+    "gold_id": "takeda-cinryze-worldwide-reported-2018q3"
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": 45.231594,
+    "gold_id": "takeda-cinryze-worldwide-reported-2018q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Firazyr",
+  "manufacturer": "Shire",
+  "ticker": null,
+  "generic_name": "icatibant (icatibant acetate)",
+  "options": {
+   "earnings_since": "2008-04-05",
+   "earnings_until": "2009-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2008Q3",
+    "value_normalized_usd_millions": 0.2,
+    "gold_id": "takeda-firazyr-worldwide-reported-2008q3"
+   },
+   {
+    "period": "2008Q4",
+    "value_normalized_usd_millions": 0.3,
+    "gold_id": "takeda-firazyr-worldwide-reported-2008q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Firazyr",
+  "manufacturer": "Shire",
+  "ticker": null,
+  "generic_name": "icatibant (icatibant acetate)",
+  "options": {
+   "earnings_since": "2009-04-05",
+   "earnings_until": "2010-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2009Q1",
+    "value_normalized_usd_millions": 0.5,
+    "gold_id": "takeda-firazyr-worldwide-reported-2009q1"
+   },
+   {
+    "period": "2009Q2",
+    "value_normalized_usd_millions": 1.5,
+    "gold_id": "takeda-firazyr-worldwide-reported-2009q2"
+   },
+   {
+    "period": "2009Q3",
+    "value_normalized_usd_millions": 1.8,
+    "gold_id": "takeda-firazyr-worldwide-reported-2009q3"
+   },
+   {
+    "period": "2009Q4",
+    "value_normalized_usd_millions": 2.3,
+    "gold_id": "takeda-firazyr-worldwide-reported-2009q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Firazyr",
+  "manufacturer": "Shire",
+  "ticker": null,
+  "generic_name": "icatibant (icatibant acetate)",
+  "options": {
+   "earnings_since": "2010-04-05",
+   "earnings_until": "2011-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2010Q1",
+    "value_normalized_usd_millions": 2.2,
+    "gold_id": "takeda-firazyr-worldwide-reported-2010q1"
+   },
+   {
+    "period": "2010Q2",
+    "value_normalized_usd_millions": 2.6,
+    "gold_id": "takeda-firazyr-worldwide-reported-2010q2"
+   },
+   {
+    "period": "2010Q3",
+    "value_normalized_usd_millions": 2.9,
+    "gold_id": "takeda-firazyr-worldwide-reported-2010q3"
+   },
+   {
+    "period": "2010Q4",
+    "value_normalized_usd_millions": 3.4,
+    "gold_id": "takeda-firazyr-worldwide-reported-2010q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Firazyr",
+  "manufacturer": "Shire",
+  "ticker": null,
+  "generic_name": "icatibant (icatibant acetate)",
+  "options": {
+   "earnings_since": "2011-04-05",
+   "earnings_until": "2012-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2011Q1",
+    "value_normalized_usd_millions": 5.3,
+    "gold_id": "takeda-firazyr-worldwide-reported-2011q1"
+   },
+   {
+    "period": "2011Q2",
+    "value_normalized_usd_millions": 5.6,
+    "gold_id": "takeda-firazyr-worldwide-reported-2011q2"
+   },
+   {
+    "period": "2011Q3",
+    "value_normalized_usd_millions": 7.2,
+    "gold_id": "takeda-firazyr-worldwide-reported-2011q3"
+   },
+   {
+    "period": "2011Q4",
+    "value_normalized_usd_millions": 14.9,
+    "gold_id": "takeda-firazyr-worldwide-reported-2011q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Firazyr",
+  "manufacturer": "Shire",
+  "ticker": null,
+  "generic_name": "icatibant (icatibant acetate)",
+  "options": {
+   "earnings_since": "2012-04-05",
+   "earnings_until": "2013-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2012Q1",
+    "value_normalized_usd_millions": 19.7,
+    "gold_id": "takeda-firazyr-worldwide-reported-2012q1"
+   },
+   {
+    "period": "2012Q2",
+    "value_normalized_usd_millions": 31.7,
+    "gold_id": "takeda-firazyr-worldwide-reported-2012q2"
+   },
+   {
+    "period": "2012Q3",
+    "value_normalized_usd_millions": 30.3,
+    "gold_id": "takeda-firazyr-worldwide-reported-2012q3"
+   },
+   {
+    "period": "2012Q4",
+    "value_normalized_usd_millions": 34.6,
+    "gold_id": "takeda-firazyr-worldwide-reported-2012q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Firazyr",
+  "manufacturer": "Shire",
+  "ticker": null,
+  "generic_name": "icatibant (icatibant acetate)",
+  "options": {
+   "earnings_since": "2013-04-05",
+   "earnings_until": "2014-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2013Q1",
+    "value_normalized_usd_millions": 41.7,
+    "gold_id": "takeda-firazyr-worldwide-reported-2013q1"
+   },
+   {
+    "period": "2013Q2",
+    "value_normalized_usd_millions": 49.5,
+    "gold_id": "takeda-firazyr-worldwide-reported-2013q2"
+   },
+   {
+    "period": "2013Q3",
+    "value_normalized_usd_millions": 62.6,
+    "gold_id": "takeda-firazyr-worldwide-reported-2013q3"
+   },
+   {
+    "period": "2013Q4",
+    "value_normalized_usd_millions": 81.0,
+    "gold_id": "takeda-firazyr-worldwide-reported-2013q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Firazyr",
+  "manufacturer": "Shire",
+  "ticker": null,
+  "generic_name": "icatibant (icatibant acetate)",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q1",
+    "value_normalized_usd_millions": 74.9,
+    "gold_id": "takeda-firazyr-worldwide-reported-2014q1"
+   },
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": 89.0,
+    "gold_id": "takeda-firazyr-worldwide-reported-2014q2"
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 98.4,
+    "gold_id": "takeda-firazyr-worldwide-reported-2014q3"
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": 101.9,
+    "gold_id": "takeda-firazyr-worldwide-reported-2014q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Firazyr",
+  "manufacturer": "Shire",
+  "ticker": null,
+  "generic_name": "icatibant (icatibant acetate)",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q1",
+    "value_normalized_usd_millions": 92.5,
+    "gold_id": "takeda-firazyr-worldwide-reported-2015q1"
+   },
+   {
+    "period": "2015Q2",
+    "value_normalized_usd_millions": 104.1,
+    "gold_id": "takeda-firazyr-worldwide-reported-2015q2"
+   },
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 123.2,
+    "gold_id": "takeda-firazyr-worldwide-reported-2015q3"
+   },
+   {
+    "period": "2015Q4",
+    "value_normalized_usd_millions": 125.2,
+    "gold_id": "takeda-firazyr-worldwide-reported-2015q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Firazyr",
+  "manufacturer": "Shire",
+  "ticker": null,
+  "generic_name": "icatibant (icatibant acetate)",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 128.3,
+    "gold_id": "takeda-firazyr-worldwide-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 136.7,
+    "gold_id": "takeda-firazyr-worldwide-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 146.3,
+    "gold_id": "takeda-firazyr-worldwide-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 167.2,
+    "gold_id": "takeda-firazyr-worldwide-reported-2016q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Firazyr",
+  "manufacturer": "Shire",
+  "ticker": null,
+  "generic_name": "icatibant (icatibant acetate)",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 128.5,
+    "gold_id": "takeda-firazyr-worldwide-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 137.4,
+    "gold_id": "takeda-firazyr-worldwide-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 195.5,
+    "gold_id": "takeda-firazyr-worldwide-reported-2017q3"
+   },
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": 201.6,
+    "gold_id": "takeda-firazyr-worldwide-reported-2017q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Firazyr",
+  "manufacturer": "Shire",
+  "ticker": null,
+  "generic_name": "icatibant (icatibant acetate)",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 206.0,
+    "gold_id": "takeda-firazyr-worldwide-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 211.0,
+    "gold_id": "takeda-firazyr-worldwide-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 140.0,
+    "gold_id": "takeda-firazyr-worldwide-reported-2018q3"
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": 216.402136,
+    "gold_id": "takeda-firazyr-worldwide-reported-2018q4"
+   }
+  ]
+ },
+ {
   "drug_name": "Vpriv",
   "manufacturer": "Shire",
   "ticker": null,
@@ -130251,6 +133761,201 @@
     "period": "2018Q3",
     "value_normalized_usd_millions": 87.8,
     "gold_id": "takeda-vpriv-worldwide-reported-2018q3"
+   }
+  ]
+ },
+ {
+  "drug_name": "Gattex",
+  "manufacturer": "Shire plc",
+  "ticker": null,
+  "generic_name": "teduglutide",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q2",
+    "value_normalized_usd_millions": 37.3,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2015q2"
+   },
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 43.0,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2015q3"
+   },
+   {
+    "period": "2015Q4",
+    "value_normalized_usd_millions": 46.5,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2015q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Gattex",
+  "manufacturer": "Shire plc",
+  "ticker": null,
+  "generic_name": "teduglutide",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 51.7,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 44.5,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 58.1,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 65.1,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2016q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Gattex",
+  "manufacturer": "Shire plc",
+  "ticker": null,
+  "generic_name": "teduglutide",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 69.0,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 75.3,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 84.9,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2017q3"
+   },
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": 106.3,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2017q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Gattex",
+  "manufacturer": "Shire plc",
+  "ticker": null,
+  "generic_name": "teduglutide",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 96.2,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 133.5,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 97.1,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2018q3"
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": 122.9,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2018q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Kalbitor",
+  "manufacturer": "Shire plc",
+  "ticker": null,
+  "generic_name": "ecallantide",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 17.7,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 11.1,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 13.0,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2016q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Kalbitor",
+  "manufacturer": "Shire plc",
+  "ticker": null,
+  "generic_name": "ecallantide",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 11.7,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 20.6,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 16.0,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2017q3"
    }
   ]
  },
@@ -131196,6 +134901,136 @@
     "period": "2019Q4",
     "value_normalized_usd_millions": null,
     "why": "The issuer reports no line for this product after 2019Q3. Spark was acquired by Roche on 2019-12-17 and deregistered; no 10-K for 2019 exists. Roche prints no quarterly Luxturna sales (half-year level only, in CHF)."
+   }
+  ]
+ },
+ {
+  "drug_name": "Amitiza",
+  "manufacturer": "Sucampo Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "lubiprostone",
+  "options": {
+   "earnings_since": "2008-04-05",
+   "earnings_until": "2009-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2008Q3",
+    "value_normalized_usd_millions": 50.8,
+    "gold_id": "takeda-amitiza-us-reported-2008q3"
+   },
+   {
+    "period": "2008Q4",
+    "value_normalized_usd_millions": 58.7,
+    "gold_id": "takeda-amitiza-us-reported-2008q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Amitiza",
+  "manufacturer": "Sucampo Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "lubiprostone",
+  "options": {
+   "earnings_since": "2009-04-05",
+   "earnings_until": "2010-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2009Q1",
+    "value_normalized_usd_millions": 49.7,
+    "gold_id": "takeda-amitiza-us-reported-2009q1"
+   },
+   {
+    "period": "2009Q2",
+    "value_normalized_usd_millions": 49.5,
+    "gold_id": "takeda-amitiza-us-reported-2009q2"
+   },
+   {
+    "period": "2009Q3",
+    "value_normalized_usd_millions": 52.0,
+    "gold_id": "takeda-amitiza-us-reported-2009q3"
+   },
+   {
+    "period": "2009Q4",
+    "value_normalized_usd_millions": 58.0,
+    "gold_id": "takeda-amitiza-us-reported-2009q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Amitiza",
+  "manufacturer": "Sucampo Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "lubiprostone",
+  "options": {
+   "earnings_since": "2010-04-05",
+   "earnings_until": "2011-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2010Q1",
+    "value_normalized_usd_millions": 54.3,
+    "gold_id": "takeda-amitiza-us-reported-2010q1"
+   },
+   {
+    "period": "2010Q2",
+    "value_normalized_usd_millions": 53.4,
+    "gold_id": "takeda-amitiza-us-reported-2010q2"
+   },
+   {
+    "period": "2010Q3",
+    "value_normalized_usd_millions": 57.0,
+    "gold_id": "takeda-amitiza-us-reported-2010q3"
+   },
+   {
+    "period": "2010Q4",
+    "value_normalized_usd_millions": 55.3,
+    "gold_id": "takeda-amitiza-us-reported-2010q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Amitiza",
+  "manufacturer": "Sucampo Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "lubiprostone",
+  "options": {
+   "earnings_since": "2011-04-05",
+   "earnings_until": "2012-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2011Q1",
+    "value_normalized_usd_millions": 50.7,
+    "gold_id": "takeda-amitiza-us-reported-2011q1"
+   },
+   {
+    "period": "2011Q2",
+    "value_normalized_usd_millions": 61.2924,
+    "gold_id": "takeda-amitiza-us-reported-2011q2"
+   },
+   {
+    "period": "2011Q3",
+    "value_normalized_usd_millions": 57.93894,
+    "gold_id": "takeda-amitiza-us-reported-2011q3"
+   },
+   {
+    "period": "2011Q4",
+    "value_normalized_usd_millions": 56.896708,
+    "gold_id": "takeda-amitiza-us-reported-2011q4"
    }
   ]
  },
@@ -132260,6 +136095,36 @@
   "ticker": "TAK",
   "generic_name": "antihemophilic factor (recombinant), PEGylated (rurioctocog alfa pegol)",
   "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 120.949884,
+    "gold_id": "takeda-adynovate-adynovi-worldwide-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 138.069162,
+    "gold_id": "takeda-adynovate-adynovi-worldwide-reported-2018q3"
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": 136.581676,
+    "gold_id": "takeda-adynovate-adynovi-worldwide-reported-2018q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Adynovate",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "antihemophilic factor (recombinant), PEGylated (rurioctocog alfa pegol)",
+  "options": {
    "earnings_since": "2019-04-05",
    "earnings_until": "2020-05-04",
    "openfda": true,
@@ -132856,36 +136721,6 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 19.454422,
     "gold_id": "takeda-alunbrig-us-reported-2026q2"
-   }
-  ]
- },
- {
-  "drug_name": "Amitiza",
-  "manufacturer": "Takeda",
-  "ticker": "TAK",
-  "generic_name": "lubiprostone",
-  "options": {
-   "earnings_since": "2011-04-05",
-   "earnings_until": "2012-05-04",
-   "openfda": true,
-   "product_metadata": true
-  },
-  "source": "seed/gold/quarterly_revenue.jsonl",
-  "expect": [
-   {
-    "period": "2011Q2",
-    "value_normalized_usd_millions": 61.2924,
-    "gold_id": "takeda-amitiza-us-reported-2011q2"
-   },
-   {
-    "period": "2011Q3",
-    "value_normalized_usd_millions": 57.93894,
-    "gold_id": "takeda-amitiza-us-reported-2011q3"
-   },
-   {
-    "period": "2011Q4",
-    "value_normalized_usd_millions": 56.896708,
-    "gold_id": "takeda-amitiza-us-reported-2011q4"
    }
   ]
  },
@@ -134550,6 +138385,36 @@
   "ticker": "TAK",
   "generic_name": "anti-inhibitor coagulant complex (plasma-derived)",
   "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 197.001705,
+    "gold_id": "takeda-feiba-worldwide-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 154.207116,
+    "gold_id": "takeda-feiba-worldwide-reported-2018q3"
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": 144.563722,
+    "gold_id": "takeda-feiba-worldwide-reported-2018q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Feiba",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "anti-inhibitor coagulant complex (plasma-derived)",
+  "options": {
    "earnings_since": "2019-04-05",
    "earnings_until": "2020-05-04",
    "openfda": true,
@@ -135810,6 +139675,36 @@
   "ticker": "TAK",
   "generic_name": "ecallantide",
   "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 17.409453,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 20.620719,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2018q3"
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": 18.624774,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2018q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Kalbitor",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "ecallantide",
+  "options": {
    "earnings_since": "2019-04-05",
    "earnings_until": "2020-05-04",
    "openfda": true,
@@ -135941,6 +139836,36 @@
     "period": "2022Q4",
     "value_normalized_usd_millions": null,
     "why": "The issuer reports no line for this product after 2022Q1. Takeda's FY2021 Q4 quarterly financial report (January-March 2022; qr2021_q4_qfr_en.pdf) is the last to print a KALBITOR line; its FY2022 forecast table already folds the product into 'Others' with the footnote 'Others in Rare Genetics and Other includes NATPARA/NATPAR, KALBITOR', and Takeda's FY2022 Q1 quarterly financial report (qr2022_q1_qfr_en.pdf) and every later report contain no KALBITOR line (zero text lines mention Kalbitor in the FY2022 Q1 and FY2026 Q1 reports as read with pdfplumber; pdftotext finds the name in no quarterly financial report after FY2021 Q4)."
+   }
+  ]
+ },
+ {
+  "drug_name": "Motegrity",
+  "manufacturer": "Takeda",
+  "ticker": "TAK",
+  "generic_name": "prucalopride",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 6.414009,
+    "gold_id": "takeda-resolor-motegrity-worldwide-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 5.379318,
+    "gold_id": "takeda-resolor-motegrity-worldwide-reported-2018q3"
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": 7.095152,
+    "gold_id": "takeda-resolor-motegrity-worldwide-reported-2018q4"
    }
   ]
  },
@@ -144056,6 +147981,196 @@
     "period": "2023Q4",
     "value_normalized_usd_millions": 14.8,
     "gold_id": "oyster-point-tyrvaya-us-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cinryze",
+  "manufacturer": "ViroPharma",
+  "ticker": null,
+  "generic_name": "C1 esterase inhibitor (human)",
+  "options": {
+   "earnings_since": "2008-04-05",
+   "earnings_until": "2009-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2008Q4",
+    "value_normalized_usd_millions": 0.023,
+    "gold_id": "takeda-cinryze-worldwide-reported-2008q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cinryze",
+  "manufacturer": "ViroPharma",
+  "ticker": null,
+  "generic_name": "C1 esterase inhibitor (human)",
+  "options": {
+   "earnings_since": "2009-04-05",
+   "earnings_until": "2010-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2009Q1",
+    "value_normalized_usd_millions": 6.655,
+    "gold_id": "takeda-cinryze-worldwide-reported-2009q1"
+   },
+   {
+    "period": "2009Q2",
+    "value_normalized_usd_millions": 25.571,
+    "gold_id": "takeda-cinryze-worldwide-reported-2009q2"
+   },
+   {
+    "period": "2009Q3",
+    "value_normalized_usd_millions": 29.11,
+    "gold_id": "takeda-cinryze-worldwide-reported-2009q3"
+   },
+   {
+    "period": "2009Q4",
+    "value_normalized_usd_millions": 35.974,
+    "gold_id": "takeda-cinryze-worldwide-reported-2009q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cinryze",
+  "manufacturer": "ViroPharma",
+  "ticker": null,
+  "generic_name": "C1 esterase inhibitor (human)",
+  "options": {
+   "earnings_since": "2010-04-05",
+   "earnings_until": "2011-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2010Q1",
+    "value_normalized_usd_millions": 34.894,
+    "gold_id": "takeda-cinryze-worldwide-reported-2010q1"
+   },
+   {
+    "period": "2010Q2",
+    "value_normalized_usd_millions": 40.332,
+    "gold_id": "takeda-cinryze-worldwide-reported-2010q2"
+   },
+   {
+    "period": "2010Q3",
+    "value_normalized_usd_millions": 49.059,
+    "gold_id": "takeda-cinryze-worldwide-reported-2010q3"
+   },
+   {
+    "period": "2010Q4",
+    "value_normalized_usd_millions": 52.53,
+    "gold_id": "takeda-cinryze-worldwide-reported-2010q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cinryze",
+  "manufacturer": "ViroPharma",
+  "ticker": null,
+  "generic_name": "C1 esterase inhibitor (human)",
+  "options": {
+   "earnings_since": "2011-04-05",
+   "earnings_until": "2012-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2011Q1",
+    "value_normalized_usd_millions": 56.589,
+    "gold_id": "takeda-cinryze-worldwide-reported-2011q1"
+   },
+   {
+    "period": "2011Q2",
+    "value_normalized_usd_millions": 62.459,
+    "gold_id": "takeda-cinryze-worldwide-reported-2011q2"
+   },
+   {
+    "period": "2011Q3",
+    "value_normalized_usd_millions": 65.443,
+    "gold_id": "takeda-cinryze-worldwide-reported-2011q3"
+   },
+   {
+    "period": "2011Q4",
+    "value_normalized_usd_millions": 66.71,
+    "gold_id": "takeda-cinryze-worldwide-reported-2011q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cinryze",
+  "manufacturer": "ViroPharma",
+  "ticker": null,
+  "generic_name": "C1 esterase inhibitor (human)",
+  "options": {
+   "earnings_since": "2012-04-05",
+   "earnings_until": "2013-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2012Q1",
+    "value_normalized_usd_millions": 68.163,
+    "gold_id": "takeda-cinryze-worldwide-reported-2012q1"
+   },
+   {
+    "period": "2012Q2",
+    "value_normalized_usd_millions": 76.642,
+    "gold_id": "takeda-cinryze-worldwide-reported-2012q2"
+   },
+   {
+    "period": "2012Q3",
+    "value_normalized_usd_millions": 85.26,
+    "gold_id": "takeda-cinryze-worldwide-reported-2012q3"
+   },
+   {
+    "period": "2012Q4",
+    "value_normalized_usd_millions": 97.048,
+    "gold_id": "takeda-cinryze-worldwide-reported-2012q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cinryze",
+  "manufacturer": "ViroPharma",
+  "ticker": null,
+  "generic_name": "C1 esterase inhibitor (human)",
+  "options": {
+   "earnings_since": "2013-04-05",
+   "earnings_until": "2014-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2013Q1",
+    "value_normalized_usd_millions": 99.489,
+    "gold_id": "takeda-cinryze-worldwide-reported-2013q1"
+   },
+   {
+    "period": "2013Q2",
+    "value_normalized_usd_millions": 94.638,
+    "gold_id": "takeda-cinryze-worldwide-reported-2013q2"
+   },
+   {
+    "period": "2013Q3",
+    "value_normalized_usd_millions": 106.502,
+    "gold_id": "takeda-cinryze-worldwide-reported-2013q3"
    }
   ]
  },

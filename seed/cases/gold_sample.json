@@ -810,6 +810,36 @@
   ]
  },
  {
+  "drug_name": "Nuedexta",
+  "manufacturer": "Avanir Pharmaceuticals, Inc.",
+  "ticker": null,
+  "generic_name": "dextromethorphan hydrobromide and quinidine sulfate",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q1",
+    "value_normalized_usd_millions": 24.4,
+    "gold_id": "otsuka-nuedexta-product-line-reported-2014q1"
+   },
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": 26.5,
+    "gold_id": "otsuka-nuedexta-product-line-reported-2014q2"
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 31.223,
+    "gold_id": "otsuka-nuedexta-product-line-reported-2014q3"
+   }
+  ]
+ },
+ {
   "drug_name": "Auvelity",
   "manufacturer": "Axsome Therapeutics",
   "ticker": "AXSM",
@@ -1566,6 +1596,36 @@
     "period": "2019Q4",
     "value_normalized_usd_millions": 17.116,
     "gold_id": "depomed-gralise-reported-2019q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Kalbitor",
+  "manufacturer": "Dyax Corp",
+  "ticker": null,
+  "generic_name": "ecallantide",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q1",
+    "value_normalized_usd_millions": 16.013,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2015q1"
+   },
+   {
+    "period": "2015Q2",
+    "value_normalized_usd_millions": 17.76,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2015q2"
+   },
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 17.807,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2015q3"
    }
   ]
  },
@@ -2575,6 +2635,41 @@
   ]
  },
  {
+  "drug_name": "Gattex",
+  "manufacturer": "NPS Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "teduglutide",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q1",
+    "value_normalized_usd_millions": 17.871,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2014q1"
+   },
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": 21.955,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2014q2"
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 28.091,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2014q3"
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": 33.278,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2014q4"
+   }
+  ]
+ },
+ {
   "drug_name": "Ingrezza",
   "manufacturer": "Neurocrine Biosciences",
   "ticker": "NBIX",
@@ -3100,6 +3195,36 @@
   ]
  },
  {
+  "drug_name": "Lovaza",
+  "manufacturer": "Reliant Pharmaceuticals, Inc.",
+  "ticker": null,
+  "generic_name": "omega-3-acid ethyl esters",
+  "options": {
+   "earnings_since": "2007-04-05",
+   "earnings_until": "2008-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2007Q1",
+    "value_normalized_usd_millions": 57.7,
+    "gold_id": "gsk-lovaza-worldwide-reported-2007q1"
+   },
+   {
+    "period": "2007Q2",
+    "value_normalized_usd_millions": 69.8,
+    "gold_id": "gsk-lovaza-worldwide-reported-2007q2"
+   },
+   {
+    "period": "2007Q3",
+    "value_normalized_usd_millions": 78.9,
+    "gold_id": "gsk-lovaza-worldwide-reported-2007q3"
+   }
+  ]
+ },
+ {
   "drug_name": "Tavalisse",
   "manufacturer": "Rigel Pharmaceuticals",
   "ticker": "RIGL",
@@ -3495,10 +3620,10 @@
   ]
  },
  {
-  "drug_name": "Vpriv",
+  "drug_name": "Firazyr",
   "manufacturer": "Shire",
   "ticker": null,
-  "generic_name": "velaglucerase alfa",
+  "generic_name": "icatibant (icatibant acetate)",
   "options": {
    "earnings_since": "2018-04-05",
    "earnings_until": "2019-05-05",
@@ -3509,18 +3634,58 @@
   "expect": [
    {
     "period": "2018Q1",
-    "value_normalized_usd_millions": 89.9,
-    "gold_id": "takeda-vpriv-worldwide-reported-2018q1"
+    "value_normalized_usd_millions": 206.0,
+    "gold_id": "takeda-firazyr-worldwide-reported-2018q1"
    },
    {
     "period": "2018Q2",
-    "value_normalized_usd_millions": 89.6,
-    "gold_id": "takeda-vpriv-worldwide-reported-2018q2"
+    "value_normalized_usd_millions": 211.0,
+    "gold_id": "takeda-firazyr-worldwide-reported-2018q2"
    },
    {
     "period": "2018Q3",
-    "value_normalized_usd_millions": 87.8,
-    "gold_id": "takeda-vpriv-worldwide-reported-2018q3"
+    "value_normalized_usd_millions": 140.0,
+    "gold_id": "takeda-firazyr-worldwide-reported-2018q3"
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": 216.402136,
+    "gold_id": "takeda-firazyr-worldwide-reported-2018q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Gattex",
+  "manufacturer": "Shire plc",
+  "ticker": null,
+  "generic_name": "teduglutide",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 96.2,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 133.5,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 97.1,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2018q3"
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": 122.9,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2018q4"
    }
   ]
  },
@@ -3581,6 +3746,41 @@
     "period": "2019Q4",
     "value_normalized_usd_millions": null,
     "why": "The issuer reports no line for this product after 2019Q3. Spark was acquired by Roche on 2019-12-17 and deregistered; no 10-K for 2019 exists. Roche prints no quarterly Luxturna sales (half-year level only, in CHF)."
+   }
+  ]
+ },
+ {
+  "drug_name": "Amitiza",
+  "manufacturer": "Sucampo Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "lubiprostone",
+  "options": {
+   "earnings_since": "2011-04-05",
+   "earnings_until": "2012-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2011Q1",
+    "value_normalized_usd_millions": 50.7,
+    "gold_id": "takeda-amitiza-us-reported-2011q1"
+   },
+   {
+    "period": "2011Q2",
+    "value_normalized_usd_millions": 61.2924,
+    "gold_id": "takeda-amitiza-us-reported-2011q2"
+   },
+   {
+    "period": "2011Q3",
+    "value_normalized_usd_millions": 57.93894,
+    "gold_id": "takeda-amitiza-us-reported-2011q3"
+   },
+   {
+    "period": "2011Q4",
+    "value_normalized_usd_millions": 56.896708,
+    "gold_id": "takeda-amitiza-us-reported-2011q4"
    }
   ]
  },
@@ -4041,6 +4241,36 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 120.6,
     "gold_id": "pfizer-viatris-lyrica-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Cinryze",
+  "manufacturer": "ViroPharma",
+  "ticker": null,
+  "generic_name": "C1 esterase inhibitor (human)",
+  "options": {
+   "earnings_since": "2013-04-05",
+   "earnings_until": "2014-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2013Q1",
+    "value_normalized_usd_millions": 99.489,
+    "gold_id": "takeda-cinryze-worldwide-reported-2013q1"
+   },
+   {
+    "period": "2013Q2",
+    "value_normalized_usd_millions": 94.638,
+    "gold_id": "takeda-cinryze-worldwide-reported-2013q2"
+   },
+   {
+    "period": "2013Q3",
+    "value_normalized_usd_millions": 106.502,
+    "gold_id": "takeda-cinryze-worldwide-reported-2013q3"
    }
   ]
  },

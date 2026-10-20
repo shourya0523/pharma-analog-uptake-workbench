@@ -1,0 +1,10 @@
+{
+  "drug_name": "Opsumit",
+  "line_label": "Opsumit (Actelion sales by product, CHF)",
+  "issuer": "Actelion",
+  "benchmark_identity": "actelion_opsumit_chf_launch_reported",
+  "revenue_scope": "Worldwide Opsumit net sales",
+  "geography": "Worldwide",
+  "why_separate": "Actelion reported in Swiss francs; the gold series is the US-dollar history J&J republished from 2016Q1 after acquiring Actelion. Gold holds one currency per series identity, so the launch quarters 2013Q4-2015Q4 are kept beside the USD series rather than joined to it. value_normalized_usd_millions converts each row.",
+  "notes": "Each quarter is read from the Actelion release that reports it as current, except 2013Q4 (the fourth-quarter 2014 prior-year column). 2014Q2 is nine months 2014 (112) less Q3 (59) and Q1 (15); 2015Q2 is first half 2015 (208) less Q1 (95); both equal the 38 and 113 the half-year 2015 release prints in its quarterly table. 2014Q3 is the original 59, which the 2015 nine-month release restates to 58. The four 2015 quarters sum to 517 against a stated 516, a rounding difference."
+}
