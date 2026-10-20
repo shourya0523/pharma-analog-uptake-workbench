@@ -3975,6 +3975,41 @@
   ]
  },
  {
+  "drug_name": "Lipitor",
+  "manufacturer": "Warner-Lambert",
+  "ticker": null,
+  "generic_name": "atorvastatin calcium",
+  "options": {
+   "earnings_since": "1997-04-05",
+   "earnings_until": "1998-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "1997Q1",
+    "value_normalized_usd_millions": 49.0,
+    "gold_id": "pfizer-viatris-lipitor-worldwide-reported-1997q1"
+   },
+   {
+    "period": "1997Q2",
+    "value_normalized_usd_millions": 151.0,
+    "gold_id": "pfizer-viatris-lipitor-worldwide-reported-1997q2"
+   },
+   {
+    "period": "1997Q3",
+    "value_normalized_usd_millions": 257.0,
+    "gold_id": "pfizer-viatris-lipitor-worldwide-reported-1997q3"
+   },
+   {
+    "period": "1997Q4",
+    "value_normalized_usd_millions": 408.0,
+    "gold_id": "pfizer-viatris-lipitor-worldwide-reported-1997q4"
+   }
+  ]
+ },
+ {
   "drug_name": "Protonix",
   "manufacturer": "Wyeth",
   "ticker": null,

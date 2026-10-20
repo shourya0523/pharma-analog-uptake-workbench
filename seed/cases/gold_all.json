@@ -56000,6 +56000,216 @@
   ]
  },
  {
+  "drug_name": "Promacta",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "eltrombopag",
+  "options": {
+   "earnings_since": "2009-04-05",
+   "earnings_until": "2010-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2009Q1",
+    "value_normalized_usd_millions": 2.8702,
+    "gold_id": "novartis-promacta-worldwide-reported-2009q1"
+   },
+   {
+    "period": "2009Q2",
+    "value_normalized_usd_millions": 4.65,
+    "gold_id": "novartis-promacta-worldwide-reported-2009q2"
+   },
+   {
+    "period": "2009Q3",
+    "value_normalized_usd_millions": 4.9233,
+    "gold_id": "novartis-promacta-worldwide-reported-2009q3"
+   },
+   {
+    "period": "2009Q4",
+    "value_normalized_usd_millions": 8.173,
+    "gold_id": "novartis-promacta-worldwide-reported-2009q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Promacta",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "eltrombopag",
+  "options": {
+   "earnings_since": "2010-04-05",
+   "earnings_until": "2011-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2010Q1",
+    "value_normalized_usd_millions": 9.3666,
+    "gold_id": "novartis-promacta-worldwide-reported-2010q1"
+   },
+   {
+    "period": "2010Q2",
+    "value_normalized_usd_millions": 11.9384,
+    "gold_id": "novartis-promacta-worldwide-reported-2010q2"
+   },
+   {
+    "period": "2010Q3",
+    "value_normalized_usd_millions": 10.8633,
+    "gold_id": "novartis-promacta-worldwide-reported-2010q3"
+   },
+   {
+    "period": "2010Q4",
+    "value_normalized_usd_millions": 15.808,
+    "gold_id": "novartis-promacta-worldwide-reported-2010q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Promacta",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "eltrombopag",
+  "options": {
+   "earnings_since": "2011-04-05",
+   "earnings_until": "2012-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2011Q1",
+    "value_normalized_usd_millions": 19.2264,
+    "gold_id": "novartis-promacta-worldwide-reported-2011q1"
+   },
+   {
+    "period": "2011Q2",
+    "value_normalized_usd_millions": 27.727,
+    "gold_id": "novartis-promacta-worldwide-reported-2011q2"
+   },
+   {
+    "period": "2011Q3",
+    "value_normalized_usd_millions": 35.409,
+    "gold_id": "novartis-promacta-worldwide-reported-2011q3"
+   },
+   {
+    "period": "2011Q4",
+    "value_normalized_usd_millions": 37.728,
+    "gold_id": "novartis-promacta-worldwide-reported-2011q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Promacta",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "eltrombopag",
+  "options": {
+   "earnings_since": "2012-04-05",
+   "earnings_until": "2013-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2012Q1",
+    "value_normalized_usd_millions": 42.4359,
+    "gold_id": "novartis-promacta-worldwide-reported-2012q1"
+   },
+   {
+    "period": "2012Q2",
+    "value_normalized_usd_millions": 47.481,
+    "gold_id": "novartis-promacta-worldwide-reported-2012q2"
+   },
+   {
+    "period": "2012Q3",
+    "value_normalized_usd_millions": 55.349,
+    "gold_id": "novartis-promacta-worldwide-reported-2012q3"
+   },
+   {
+    "period": "2012Q4",
+    "value_normalized_usd_millions": 61.0432,
+    "gold_id": "novartis-promacta-worldwide-reported-2012q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Promacta",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "eltrombopag",
+  "options": {
+   "earnings_since": "2013-04-05",
+   "earnings_until": "2014-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2013Q1",
+    "value_normalized_usd_millions": 62.024,
+    "gold_id": "novartis-promacta-worldwide-reported-2013q1"
+   },
+   {
+    "period": "2013Q2",
+    "value_normalized_usd_millions": 69.1515,
+    "gold_id": "novartis-promacta-worldwide-reported-2013q2"
+   },
+   {
+    "period": "2013Q3",
+    "value_normalized_usd_millions": 76.0627,
+    "gold_id": "novartis-promacta-worldwide-reported-2013q3"
+   },
+   {
+    "period": "2013Q4",
+    "value_normalized_usd_millions": 84.2088,
+    "gold_id": "novartis-promacta-worldwide-reported-2013q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Promacta",
+  "manufacturer": "GSK plc",
+  "ticker": "GSK",
+  "generic_name": "eltrombopag",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q1",
+    "value_normalized_usd_millions": 79.4448,
+    "gold_id": "novartis-promacta-worldwide-reported-2014q1"
+   },
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": 92.5815,
+    "gold_id": "novartis-promacta-worldwide-reported-2014q2"
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 103.447,
+    "gold_id": "novartis-promacta-worldwide-reported-2014q3"
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": 104.478,
+    "gold_id": "novartis-promacta-worldwide-reported-2014q4"
+   }
+  ]
+ },
+ {
   "drug_name": "Rukobia",
   "manufacturer": "GSK plc",
   "ticker": "GSK",
@@ -102353,6 +102563,11 @@
   "source": "seed/gold/quarterly_revenue.jsonl",
   "expect": [
    {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 37.0,
+    "gold_id": "pfizer-bosulif-worldwide-reported-2016q1"
+   },
+   {
     "period": "2016Q2",
     "value_normalized_usd_millions": 41.0,
     "gold_id": "pfizer-bosulif-worldwide-reported-2016q2"
@@ -111140,6 +111355,26 @@
   "ticker": null,
   "generic_name": "bevacizumab",
   "options": {
+   "earnings_since": "2009-04-05",
+   "earnings_until": "2010-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2009Q4",
+    "value_normalized_usd_millions": 1505.628976,
+    "gold_id": "roche-avastin-worldwide-reported-2009q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Avastin",
+  "manufacturer": "Roche",
+  "ticker": null,
+  "generic_name": "bevacizumab",
+  "options": {
    "earnings_since": "2010-04-05",
    "earnings_until": "2011-05-05",
    "openfda": true,
@@ -113640,6 +113875,26 @@
   "ticker": null,
   "generic_name": "trastuzumab",
   "options": {
+   "earnings_since": "2009-04-05",
+   "earnings_until": "2010-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2009Q4",
+    "value_normalized_usd_millions": 1266.764561,
+    "gold_id": "roche-herceptin-worldwide-reported-2009q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Herceptin",
+  "manufacturer": "Roche",
+  "ticker": null,
+  "generic_name": "trastuzumab",
+  "options": {
    "earnings_since": "2010-04-05",
    "earnings_until": "2011-05-05",
    "openfda": true,
@@ -116040,6 +116295,26 @@
   "ticker": null,
   "generic_name": "rituximab",
   "options": {
+   "earnings_since": "2009-04-05",
+   "earnings_until": "2010-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2009Q4",
+    "value_normalized_usd_millions": 1449.828682,
+    "gold_id": "roche-rituxan-worldwide-reported-2009q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Rituxan",
+  "manufacturer": "Roche",
+  "ticker": null,
+  "generic_name": "rituximab",
+  "options": {
    "earnings_since": "2010-04-05",
    "earnings_until": "2011-05-05",
    "openfda": true,
@@ -117061,6 +117336,26 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 6.328313,
     "gold_id": "roche-susvimo-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Tarceva",
+  "manufacturer": "Roche",
+  "ticker": null,
+  "generic_name": "erlotinib",
+  "options": {
+   "earnings_since": "2009-04-05",
+   "earnings_until": "2010-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2009Q4",
+    "value_normalized_usd_millions": 334.801762,
+    "gold_id": "roche-tarceva-worldwide-reported-2009q4"
    }
   ]
  },
@@ -142036,6 +142331,41 @@
     "period": "2020Q4",
     "value_normalized_usd_millions": null,
     "why": "The issuer reports no line for this product after 2020Q1. Vivus filed voluntary Chapter 11 petitions on July 7, 2020 and its Form 12b-25 (NT 10-Q, filed 2020-08-17, https://www.sec.gov/Archives/edgar/data/881524/000110465920096093/a20-27697_1nt10q.htm) states it 'is unable to file its Quarterly Report on Form 10-Q for the quarterly period ended June 30, 2020'; no later 10-Q, 10-K or earnings 8-K exists on EDGAR (last filings: Form 25-NSE 2020-08-11, Form 15-12B 2021-01-08)."
+   }
+  ]
+ },
+ {
+  "drug_name": "Lipitor",
+  "manufacturer": "Warner-Lambert",
+  "ticker": null,
+  "generic_name": "atorvastatin calcium",
+  "options": {
+   "earnings_since": "1997-04-05",
+   "earnings_until": "1998-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "1997Q1",
+    "value_normalized_usd_millions": 49.0,
+    "gold_id": "pfizer-viatris-lipitor-worldwide-reported-1997q1"
+   },
+   {
+    "period": "1997Q2",
+    "value_normalized_usd_millions": 151.0,
+    "gold_id": "pfizer-viatris-lipitor-worldwide-reported-1997q2"
+   },
+   {
+    "period": "1997Q3",
+    "value_normalized_usd_millions": 257.0,
+    "gold_id": "pfizer-viatris-lipitor-worldwide-reported-1997q3"
+   },
+   {
+    "period": "1997Q4",
+    "value_normalized_usd_millions": 408.0,
+    "gold_id": "pfizer-viatris-lipitor-worldwide-reported-1997q4"
    }
   ]
  },
