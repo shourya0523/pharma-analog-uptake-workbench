@@ -546,9 +546,10 @@ def test_adempas_is_a_scoped_series_that_never_earns_a_peak():
     made this product unusable before - the old exclusion was right about the
     blend and wrong to conclude no series existed after the split.
 
-    The series starts after launch, so it is a scope-and-format benchmark, not
-    an uptake curve, and it must never acquire a peak row: its maximum is only
-    the largest value inside the window it happens to cover.
+    The series starts years after launch, far beyond what the launch-gap
+    review judges, so it is a scope-and-format benchmark, not an uptake curve,
+    and it must never acquire a peak row: its maximum is only the largest value
+    inside the window it happens to cover.
     """
     coverage = {row["drug_name"]: row for row in load_jsonl("series_coverage.jsonl")}
     rows = [r for r in load_jsonl("quarterly_revenue.jsonl") if r["drug_name"] == "Adempas"]

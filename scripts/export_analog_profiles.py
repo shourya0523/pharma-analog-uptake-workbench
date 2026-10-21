@@ -19,6 +19,11 @@ Sheets:
   Annual Revenue    the peak-benchmark years of products gold holds only annually
   Revenue Matrix    products by calendar quarter: USD millions, then a second
                     block of rolling four-quarter sums
+  Peak Benchmarks   per product: gold's peak status and launch-gap judgement,
+                    the observed rolling four-quarter high, the usable published
+                    estimates, and the peak selected by peak_benchmarks.select_peak
+  Uptake Curves     per product: the profile criteria, then each quarter from
+                    launch as a share of the quarterly benchmark (selected peak / 4)
 
 Profiled products gold holds no revenue for keep their row, with the reason in
 peak_status, and are printed when the workbook is written.
@@ -39,6 +44,7 @@ from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
 
 from export_peak_candidates import label, load, peak_records, quarter_index, rolling_windows
+from peak_benchmarks import load_consensus_estimates, select_peak
 
 REPO = Path(__file__).resolve().parents[1]
 RUBRIC = REPO / "docs" / "analog_profiles.md"
@@ -164,6 +170,113 @@ def revenue(names: list[str]) -> dict:
                 reason = "not in gold"
             out["missing"][name] = reason
     return out
+
+
+BENCHMARK_COLUMNS = [
+    "drug_name", "peak_status", "peak_judgement", "series_starts_after_launch", "launch_gap_quarters",
+    "launch_gap_band", "peak_year", "highest_calendar_year_usd_m", "observed_peak_4q_usd_m",
+    "observed_peak_window", "consensus_peak_usd_m", "consensus_estimate_count", "consensus_sources",
+    "estimates_set_aside", "selected_peak_usd_m", "peak_basis", "quarterly_benchmark_usd_m",
+    "launch_anchor_quarter", "alignment_basis", "revenue_scope", "geography",
+]
+CURVE_LEAD = ["peak_status", "peak_judgement", "selected_peak_usd_m", "peak_basis",
+              "quarterly_benchmark_usd_m", "launch_anchor_quarter", "alignment_basis"]
+ANCHOR_STATED = "launch quarter stated in gold"
+ANCHOR_ASSUMED = "no launch quarter in gold - anchored on first reported quarter"
+
+
+def benchmarks(gold: dict, profiles: list[dict]) -> list[dict]:
+    """The peak benchmark and launch anchor for every profiled product gold holds revenue for.
+
+    The anchor is gold's stated launch quarter, or the first reported quarter
+    where gold states none (and the row says so), as in the gold workbook's
+    Launch-Aligned Matrix.
+    """
+    estimates = load_consensus_estimates()
+    peaks = {row["drug_name"]: row for row in load("peak_sales.jsonl")}
+    coverage = {row["drug_name"]: row for row in load("series_coverage.jsonl")}
+    out = []
+    for profile in profiles:
+        name = profile["drug_name"]
+        rows = gold["quarters"].get(name)
+        record = gold["record"].get(name)
+        if not rows and not record:
+            continue
+        gold_name = (rows[0]["drug_name"] if rows else record["drug_name"])
+        peak, cov = peaks.get(gold_name, {}), coverage.get(gold_name, {})
+        geography = " | ".join(sorted({r["geography"] for r in rows})) if rows else record.get("geography")
+        on_file = estimates.get(gold_name, [])
+        choice = select_peak(on_file, geography, {r["period"]: r["value_normalized_usd_millions"] for r in rows or []})
+        selected, basis = choice["selected"], choice["basis"]
+        if rows is None and record.get("best_annual_usd_m") is not None and selected is None:
+            selected, basis = record["best_annual_usd_m"], "highest complete year - annual figures only"
+        observed = choice["observed"]
+        launch = cov.get("launch_quarter")
+        first = rows[0]["period"] if rows else None
+        out.append({
+            "drug_name": name,
+            "peak_status": profile.get("peak_status"),
+            "peak_judgement": cov.get("peak_judgement") or (
+                "peak_observed" if peak.get("peak_status") == "observed" else peak.get("peak_status")),
+            "series_starts_after_launch": bool(cov.get("series_starts_after_launch")),
+            "launch_gap_quarters": cov.get("launch_gap_quarters"),
+            "launch_gap_band": cov.get("launch_gap_band"),
+            "peak_year": peak.get("peak_year"),
+            "highest_calendar_year_usd_m": peak.get("highest_observed_value"),
+            "observed_peak_4q_usd_m": round(observed[0], 1) if observed else None,
+            "observed_peak_window": f"{observed[1]}-{observed[2]}" if observed else None,
+            "consensus_peak_usd_m": choice["consensus"],
+            "consensus_estimate_count": len(choice["usable"]),
+            "consensus_sources": " | ".join(f"{i['as_stated']}, {i['publisher']} ({i['attribution']}): {i['url']}"
+                                            for i in choice["usable"]),
+            "estimates_set_aside": " | ".join(f"{i['as_stated']} {i['publisher']} - {choice['reasons'][id(i)]}"
+                                              for i in on_file if choice["reasons"][id(i)] is not None),
+            "selected_peak_usd_m": round(selected, 1) if selected is not None else None,
+            "peak_basis": basis,
+            "quarterly_benchmark_usd_m": round(round(selected, 1) / 4, 1) if selected is not None else None,
+            "launch_anchor_quarter": (launch or first) if rows else None,
+            "alignment_basis": (ANCHOR_STATED if launch else ANCHOR_ASSUMED) if rows else None,
+            "revenue_scope": (rows[0] if rows else record).get("revenue_scope"),
+            "geography": geography,
+        })
+    return out
+
+
+def curves(ws, profiles: list[dict], marks: list[dict], gold: dict, parts: list[dict]) -> int:
+    """Profile criteria, the benchmark, then each quarter from launch as a share of it."""
+    criteria = [name for part in parts for name, _ in part["criteria"]]
+    by_name = {p["drug_name"]: p for p in profiles}
+    rows = [m for m in marks if m["quarterly_benchmark_usd_m"] and m["launch_anchor_quarter"]]
+    span = max((quarter_index(gold["quarters"][m["drug_name"]][-1]["period"])
+                - quarter_index(m["launch_anchor_quarter"]) + 1 for m in rows), default=0)
+    lead = ["drug_name"] + criteria + CURVE_LEAD
+    headers = lead + [f"Year {i // 4 + 1} Q{i % 4 + 1}" for i in range(span)]
+    cell(ws, 1, 1, "Each quarter's revenue as a share of the quarterly benchmark (selected peak / 4), "
+                   "aligned on launch: Year 1 Q1 is launch_anchor_quarter. Blank cells are quarters gold "
+                   "does not report, never zeros; above 100% is a quarter stronger than the average "
+                   "quarter of the peak year. Read peak_judgement and alignment_basis before comparing "
+                   "curves.", italic=True)
+    for col, name in enumerate(headers, start=1):
+        cell(ws, 2, col, name, bold=True, color="FFFFFF", fill=INK, wrap=True).border = GRID
+        ws.column_dimensions[get_column_letter(col)].width = (
+            18 if col == 1 else 16 if col <= len(lead) else 9)
+    for r, mark in enumerate(rows, start=3):
+        values = {**by_name[mark["drug_name"]], **mark}
+        for col, name in enumerate(lead, start=1):
+            c = cell(ws, r, col, values.get(name))
+            c.border = GRID
+            if number_format(name):
+                c.number_format = number_format(name)
+        anchor, benchmark = quarter_index(mark["launch_anchor_quarter"]), mark["quarterly_benchmark_usd_m"]
+        for row in gold["quarters"][mark["drug_name"]]:
+            offset = quarter_index(row["period"]) - anchor
+            if offset < 0:
+                continue
+            c = cell(ws, r, len(lead) + 1 + offset, row["value_normalized_usd_millions"] / benchmark)
+            c.number_format = "0.0%"
+    ws.freeze_panes = ws.cell(3, 2)
+    ws.auto_filter.ref = f"A2:{get_column_letter(len(headers))}{len(rows) + 2}"
+    return len(rows)
 
 
 def table(ws, columns, rows, *, top=1):
@@ -314,11 +427,15 @@ def main() -> None:
     annual_rows = [row for name in sorted(gold["annual"], key=str.lower) for row in gold["annual"][name]]
     table(wb.create_sheet("Annual Revenue"), ANNUAL_COLUMNS, annual_rows)
     matrix(wb.create_sheet("Revenue Matrix"), gold["quarters"])
+    marks = benchmarks(gold, profiles)
+    table(wb.create_sheet("Peak Benchmarks"), BENCHMARK_COLUMNS, marks)
+    curve_count = curves(wb.create_sheet("Uptake Curves"), profiles, marks, gold, parts)
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
     wb.save(args.out)
     print(f"wrote {args.out}: {len(profiles)} products, {len(evidence)} evidence rows, {len(parts)} sections, "
-          f"{len(quarter_rows)} quarterly and {len(annual_rows)} annual revenue rows")
+          f"{len(quarter_rows)} quarterly and {len(annual_rows)} annual revenue rows, "
+          f"{len(marks)} peak benchmarks, {curve_count} uptake curves")
     for name, reason in sorted(gold["missing"].items(), key=lambda kv: kv[0].lower()):
         print(f"  no gold revenue: {name} ({reason})")
 
