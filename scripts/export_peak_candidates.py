@@ -53,6 +53,16 @@ def rolling_windows(rows: list[dict]) -> list[tuple[str, str, float]]:
     return windows
 
 
+def best_reported(rows: list[dict], best: tuple[str, str, float]) -> tuple[float, str] | None:
+    """The best window summed in the currency the issuer reported, or None if it spans two."""
+    span = {label(i) for i in range(quarter_index(best[0]), quarter_index(best[1]) + 1)}
+    window = [r for r in rows if r["period"] in span]
+    currencies = {r["currency"] for r in window}
+    if len(currencies) != 1:
+        return None
+    return round(sum(r["value_reported"] for r in window), 3), currencies.pop()
+
+
 def peak_records() -> list[dict]:
     """One record per product gold has revenue for, in the order the export lists them.
 
@@ -86,6 +96,8 @@ def peak_records() -> list[dict]:
             status = "peak observed"
         else:
             status = "not yet peaked"
+        currencies = sorted({r["currency"] for r in rows if r.get("currency")})
+        reported = best_reported(rows, best) if best else None
         records.append({
             "drug_name": drug,
             "peak_status": status,
@@ -100,6 +112,9 @@ def peak_records() -> list[dict]:
             "best_rolling_4q_usd_m": round(best[2], 3) if best else None,
             "best_window": f"{best[0]}-{best[1]}" if best else None,
             "best_window_is_latest": bool(best and latest and best[1] == latest[1]),
+            "currencies_reported": ", ".join(currencies) or None,
+            "best_rolling_4q_reported": reported[0] if reported else None,
+            "best_window_currency": reported[1] if reported else None,
             "latest_rolling_4q_usd_m": round(latest[2], 3) if latest else None,
             "latest_window": f"{latest[0]}-{latest[1]}" if latest else None,
             "latest_vs_best": round(latest[2] / best[2], 3) if best and latest and best[2] else None,
@@ -145,14 +160,150 @@ def peak_records() -> list[dict]:
     return records
 
 
+# How many quarters may be missing between launch and the first reported
+# quarter before the gap stops being small, and before it is substantial. A
+# year missing leaves the launch shape mostly intact; more than two years
+# leaves an uptake curve without its early quarters.
+SMALL_GAP_QUARTERS = 4
+SUBSTANTIAL_GAP_QUARTERS = 8
+
+PEAK_FOUND = "peak identifiable from the reported years"
+STILL_GROWING = "not yet peaked - needs an external estimate"
+PEAK_BEFORE_SERIES = "highest year is the first complete year - the peak may predate the series"
+TOO_SHORT = "no complete calendar year reported"
+EXCLUDE = "substantial launch history missing - flag for exclusion"
+
+
+def launch_gap_review(records: list[dict]) -> list[dict]:
+    """For each series that starts after launch: how much is missing, and whether its peak can be read.
+
+    The launch reference is the series' stated launch quarter, or where none is
+    stated the fourth quarter of the first approval year, which makes the gap a
+    minimum. The peak test is gold's own calendar-year rule (``observed_peak``)
+    run on the reported years; a maximum with no lower complete year before it
+    is not read as a peak when quarters are missing before the series, because
+    the true peak may sit in them.
+    """
+    from build_independent_gold import full_annual_totals, observed_peak
+
+    quarterly = load("quarterly_revenue.jsonl")
+    coverage = {row["drug_name"]: row for row in load("series_coverage.jsonl")}
+    profiles = {row["drug_name"]: row for row in load("product_profiles.jsonl")}
+    out = []
+    for record in records:
+        if not record["peak_status"].startswith("not judged"):
+            continue
+        drug = record["drug_name"]
+        cov = coverage.get(drug, {})
+        if cov.get("launch_quarter"):
+            reference, basis = cov["launch_quarter"], "stated launch quarter"
+        else:
+            year = profiles.get(drug, {}).get("first_approval_year")
+            reference, basis = (f"{year}Q4", "approval year (gap is a minimum)") if year else (None, None)
+        gap = max(quarter_index(record["first_quarter"]) - quarter_index(reference), 0) if reference else None
+        totals = full_annual_totals(quarterly, drug)
+        peak = observed_peak(drug, totals, "", "") if totals else None
+        top = max(totals, key=lambda r: r["value_reported"]) if totals else None
+        lower_before = bool(top and any(r["value_reported"] < top["value_reported"]
+                                        for r in totals if r["period"] < top["period"]))
+        if gap is None or gap > SUBSTANTIAL_GAP_QUARTERS:
+            outcome = EXCLUDE
+        elif not totals:
+            outcome = TOO_SHORT
+        elif peak["peak_status"] != "observed":
+            outcome = STILL_GROWING
+        elif lower_before or gap == 0:
+            outcome = PEAK_FOUND
+        else:
+            outcome = PEAK_BEFORE_SERIES
+        out.append({
+            "drug_name": drug,
+            "outcome": outcome,
+            "launch_reference": reference,
+            "launch_reference_basis": basis,
+            "first_quarter": record["first_quarter"],
+            "launch_gap_quarters": gap,
+            "gap_band": (None if gap is None else "none" if gap == 0 else "small" if gap <= SMALL_GAP_QUARTERS
+                         else "moderate" if gap <= SUBSTANTIAL_GAP_QUARTERS else "substantial"),
+            "unreported_quarters_inside": len(cov.get("unreported_quarters") or []) + len(cov.get("missing_quarters") or []),
+            "quarters": record["quarters"],
+            "complete_years": len(totals),
+            "highest_calendar_year": int(top["period"]) if top else None,
+            "highest_calendar_year_usd_m": round(top["value_reported"], 3) if top else None,
+            "lower_year_before_highest": lower_before,
+            "lower_years_after_highest": sum(1 for r in totals if top and r["period"] > top["period"]
+                                             and r["value_reported"] < top["value_reported"]),
+            "calendar_year_rule": None if not peak else "observed" if peak["peak_status"] == "observed"
+                                  else "beside an unreported year"
+                                  if peak["selection_method"] == "maximum_beside_an_unreported_year"
+                                  else "not observed",
+            "best_rolling_4q_usd_m": record["best_rolling_4q_usd_m"],
+            "best_window": record["best_window"],
+            "best_window_is_latest": record["best_window_is_latest"],
+            "currencies_reported": record["currencies_reported"],
+            "revenue_scope": record["revenue_scope"],
+            "geography": record["geography"],
+            "series_start_reason": cov.get("series_start_reason"),
+        })
+    order = [PEAK_FOUND, STILL_GROWING, PEAK_BEFORE_SERIES, TOO_SHORT, EXCLUDE]
+    out.sort(key=lambda r: (order.index(r["outcome"]), r["launch_gap_quarters"] or 0, r["drug_name"].lower()))
+    return out
+
+
+def estimate_list(records: list[dict], review: list[dict]) -> list[dict]:
+    """Every series without an observed peak that an external estimate could be set against."""
+    growing = {r["drug_name"]: r for r in review if r["outcome"] == STILL_GROWING}
+    rows = []
+    for record in records:
+        if record["peak_status"] == "not yet peaked" or record["drug_name"] in growing:
+            gap = growing.get(record["drug_name"])
+            rows.append({
+                "drug_name": record["drug_name"],
+                "group": "starts after launch, gap " + gap["gap_band"] if gap else "peak-eligible, not yet peaked",
+                "best_rolling_4q_usd_m": record["best_rolling_4q_usd_m"],
+                "best_window": record["best_window"],
+                "best_rolling_4q_reported": record["best_rolling_4q_reported"],
+                "best_window_currency": record["best_window_currency"],
+                "currencies_reported": record["currencies_reported"],
+                "best_annual_usd_m": record["best_annual_usd_m"],
+                "best_window_is_latest": record["best_window_is_latest"],
+                "latest_vs_best": record["latest_vs_best"],
+                "geography": record["geography"],
+                "revenue_scope": record["revenue_scope"],
+                "manufacturer": record["manufacturer"],
+                "first_quarter": record["first_quarter"],
+                "last_quarter": record["last_quarter"],
+                "series_current": record["series_current"],
+                "first_approval_year": record["first_approval_year"],
+            })
+    rows.sort(key=lambda r: -(r["best_rolling_4q_usd_m"] or r["best_annual_usd_m"] or 0))
+    return rows
+
+
 def main() -> None:
     records = peak_records()
+    review = launch_gap_review(records)
     sheets = {
+        "For external estimates": estimate_list(records, review),
         "Not yet peaked": [r for r in records if r["peak_status"] == "not yet peaked"],
         "Peak observed": [r for r in records if r["peak_status"] == "peak observed"],
         "Not judged": [r for r in records if r["peak_status"].startswith("not judged")],
+        "Starts after launch review": review,
     }
     notes = {
+        "For external estimates": "Every series without an observed peak: the peak-eligible products not yet "
+                                  "peaked, and the series that start after launch whose reported years are "
+                                  "still growing with at most " + str(SUBSTANTIAL_GAP_QUARTERS) + " launch "
+                                  "quarters missing. best_rolling_4q_reported is the same window in the "
+                                  "issuer's own currency (best_window_currency); blank where the window spans "
+                                  "a currency change. Annual-only products carry best_annual_usd_m instead.",
+        "Starts after launch review": "Series that start after launch. launch_gap_quarters counts the quarters "
+                                      "between launch and the first reported quarter (small: up to "
+                                      + str(SMALL_GAP_QUARTERS) + "; moderate: up to "
+                                      + str(SUBSTANTIAL_GAP_QUARTERS) + "; substantial: more). outcome "
+                                      "applies gold's calendar-year peak rule to the reported years; a "
+                                      "highest year with no lower year before it is not read as a peak when "
+                                      "launch quarters are missing.",
         "Not yet peaked": "Peak-eligible products whose highest calendar year is not followed by two lower "
                           "complete years. best_rolling_4q_usd_m is the highest sum of four consecutive "
                           "quarters in USD millions; best_window_is_latest marks a product whose best "
@@ -168,7 +319,7 @@ def main() -> None:
     for title, rows in sheets.items():
         ws = wb.create_sheet(title)
         ws.cell(1, 1, notes[title]).font = Font(name="Arial", italic=True)
-        columns = list(dict.fromkeys(key for record in records for key in record))
+        columns = list(dict.fromkeys(key for record in (rows or records) for key in record))
         for c, name in enumerate(columns, start=1):
             cell = ws.cell(2, c, name)
             cell.font = head

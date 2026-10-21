@@ -1412,7 +1412,11 @@ def researched_metadata() -> dict[str, dict[str, Any]]:
         if name in PRODUCT_METADATA or name in out:
             raise ValueError(f"{name} is described by more than one series metadata file")
         meta = {field: raw[field] for field in RESEARCHED_SERIES_FIELDS if raw.get(field) is not None}
-        if raw.get("series_start_reason"):
+        starts_at_launch = bool(
+            raw.get("launch_quarter") and raw.get("commercial_start_quarter")
+            and raw["commercial_start_quarter"] <= raw["launch_quarter"]
+        )
+        if raw.get("series_start_reason") and not starts_at_launch:
             meta["peak_eligible"] = False
         meta["manifest"] = manifest.name
         out[name] = meta
