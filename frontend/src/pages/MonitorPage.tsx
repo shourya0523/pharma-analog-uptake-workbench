@@ -22,9 +22,12 @@ export default function MonitorPage() {
       <h1>Run monitor</h1>
       <p>
         Run <code>{data.id}</code> — {data.status}. Ready {data.aggregate.ready}/{data.aggregate.total}
+        {data.aggregate.failed ? <> · Failed {data.aggregate.failed}</> : null}
       </p>
       <p>
         <Link to={`/dashboard/${data.id}`}>Open dashboard</Link> · <Link to="/export">Export</Link>
+        {' · '}
+        <Link to="/observability">Live logs</Link>
       </p>
       <table className="grid">
         <thead>
@@ -38,6 +41,7 @@ export default function MonitorPage() {
             <th>Needs review</th>
             <th>Unresolved</th>
             <th>Completeness</th>
+            <th>Error / flags</th>
             <th></th>
           </tr>
         </thead>
@@ -53,6 +57,15 @@ export default function MonitorPage() {
               <td>{j.needs_review_count}</td>
               <td>{j.unresolved_count}</td>
               <td>{j.completeness_pct}%</td>
+              <td>
+                {j.error ? <div className="error">{j.error}</div> : null}
+                {(j.quality_flags || []).length ? (
+                  <div className="muted small">{(j.quality_flags || []).join(', ')}</div>
+                ) : null}
+                {!j.error && !(j.quality_flags || []).length ? (
+                  <span className="muted">—</span>
+                ) : null}
+              </td>
               <td>
                 <Link to={`/review/${j.id}`}>Review</Link>
               </td>

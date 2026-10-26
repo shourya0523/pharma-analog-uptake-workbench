@@ -8,7 +8,12 @@ from typing import Any
 from app.domain.claims import stated_text
 from app.domain.models import RevenueScope
 from app.extraction.members import split_camel
-from app.parsing.evidence import SCOPE_PATTERNS, TOTAL_REVENUE_RE, product_aliases
+from app.parsing.evidence import (
+    NON_PRODUCT_REVENUE_RE,
+    SCOPE_PATTERNS,
+    TOTAL_REVENUE_RE,
+    product_aliases,
+)
 
 # A label states more than one product by joining names with one of these. A
 # hyphen is deliberately absent: "Calderon - Europe" is one product under a
@@ -33,11 +38,13 @@ _JOINER_RE = re.compile(r"\s*(?:\+|&|;|,|\band\b|\bwith\b|\bplus\b)\s*", re.IGNO
 _SLASH_RE = re.compile(r"\s*/\s*")
 
 # Words that qualify a product rather than name one. A part made only of these
-# is not a competing brand.
+# is not a competing brand. Royalty / collaboration / contract / license cash
+# are deliberately absent: those words must remain residue on a label so a
+# product+royalty Total cannot compete as a clean whole with product sales.
 _QUALIFIER_WORDS = frozenset(
     {
         "net", "gross", "sales", "sale", "revenue", "revenues", "product",
-        "brand", "brands", "royalty", "royalties", "collaboration", "contract",
+        "brand", "brands",
         "the", "a", "an", "of", "in", "for", "from", "to", "its", "our",
         "inc", "corp", "corporation", "ltd", "co", "plc", "sa", "ag", "nv",
         "llc", "gmbh", "group", "segment", "division", "business", "unit",
@@ -69,6 +76,20 @@ _SCOPE_RE = re.compile(
 PRODUCT_SCOPES = frozenset(
     scope.value for scope in RevenueScope if scope is not RevenueScope.COMPANY_TOTAL
 )
+
+# A schedule that names no brand, only the product line, when the filer has
+# nothing else on the page. Kept only when the document's own peer scan is
+# empty; with siblings present the same label is ambiguous.
+_GENERIC_PRODUCT_REVENUE_RE = re.compile(
+    r"\b(?:net\s+)?product\s+revenues?(?:\s*,?\s*net)?\b"
+    r"|\bnet\s+product\s+(?:sales|revenues?)\b",
+    re.IGNORECASE,
+)
+
+
+def is_generic_product_revenue_label(quote: str) -> bool:
+    """Whether the quote is a bare product-revenue line, not a named brand."""
+    return bool(_GENERIC_PRODUCT_REVENUE_RE.search(quote or ""))
 
 
 def _strip_noise(part: str) -> str:
@@ -189,6 +210,27 @@ def peer_product_names(
     return sorted(_own_rows(labels, own))
 
 
+def _looks_like_peer_name(name: str) -> bool:
+    """Whether a stripped leftover is a brand-shaped token, not a metric residue.
+
+    Expense / R&D leftovers after `_strip_noise` are not peers. A peer has to
+    look like a name: at least one token that is not a common P&L residue word.
+    """
+    words = [w for w in name.split() if w]
+    if not words:
+        return False
+    residue = {
+        "cost", "costs", "expense", "expenses", "research", "development",
+        "sga", "sg&a", "operating", "interest", "tax", "taxes", "income",
+        "loss", "losses", "amortization", "depreciation", "impairment",
+        "restructuring", "inventory", "inventories", "litigation", "accrual",
+        "accruals", "royalty", "royalties", "collaboration", "license",
+        "licensing", "milestone", "milestones", "contract", "service",
+        "services", "fee", "fees", "payment", "payments",
+    }
+    return any(w not in residue for w in words)
+
+
 def _own_rows(siblings: Iterable[str] | None, own: set[str]) -> set[str]:
     """The names this table gives a row of their own, ours excluded."""
     rows: set[str] = set()
@@ -200,8 +242,35 @@ def _own_rows(siblings: Iterable[str] | None, own: set[str]) -> set[str]:
             continue
         if any(alias in name or name in alias for alias in own):
             continue
+        if not _looks_like_peer_name(name):
+            continue
         rows.add(name)
     return rows
+
+
+def schedule_local_peer_names(
+    tables: Iterable[list[list[str]]] | None,
+    *,
+    product: str,
+    quote: str,
+    generic: str | None = None,
+    extra_aliases: list[str] | None = None,
+) -> list[str]:
+    """Peers on schedules that carry this quote's row or a bare product-revenue line.
+
+    Document-wide peers still gate `other_brand`. Sole-generic keep uses this
+    narrower list so a brand named only on a different schedule cannot block
+    a bare "Net product revenue" line on the product-sales table.
+    """
+    from app.parsing.tables import clean_label, schedules_for_quote
+
+    own = {alias.lower() for alias in product_aliases(product, generic, extra=extra_aliases)}
+    labels: list[str] = []
+    for rows in schedules_for_quote(
+        tables, quote=quote, product=product, generic=generic, extra_aliases=extra_aliases
+    ):
+        labels.extend(clean_label(row[0]) for row in rows if row and clean_label(row[0]))
+    return sorted(_own_rows(labels, own))
 
 
 def _normalize(s: str) -> str:
@@ -305,6 +374,7 @@ def filter_revenue_candidates(
     extra_aliases: list[str] | None = None,
     source_text: str | None = None,
     peer_names: Iterable[str] | None = None,
+    tables: Iterable[list[list[str]]] | None = None,
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     """Return (kept, dropped) with drop reasons.
 
@@ -346,6 +416,10 @@ def filter_revenue_candidates(
             dropped.append({**cand, "_drop_reason": "model_marked_company_total"})
             continue
 
+        if NON_PRODUCT_REVENUE_RE.search(quote):
+            dropped.append({**cand, "_drop_reason": "non_product_revenue"})
+            continue
+
         mentions_product = quote_mentions_product(quote, product, generic, extra_aliases=extra_aliases)
         if cand.get("product_mentioned_in_quote") is False and not mentions_product:
             dropped.append({**cand, "_drop_reason": "model_product_not_in_quote"})
@@ -367,9 +441,36 @@ def filter_revenue_candidates(
             dropped.append({**cand, "_drop_reason": "company_total_not_product"})
             continue
 
+        local_peers = cand.get("_schedule_local_peers")
+        if local_peers is None and tables is not None and is_generic_product_revenue_label(quote):
+            local_peers = schedule_local_peer_names(
+                tables,
+                product=product,
+                quote=quote,
+                generic=generic,
+                extra_aliases=extra_aliases,
+            )
+
         if scope in PRODUCT_SCOPES and not mentions_product:
-            dropped.append({**cand, "_drop_reason": "product_scope_without_product_in_quote"})
-            continue
+            # A tagged fact already asserts the product via its member; the
+            # citation string names the axis, not the brand.
+            if cand.get("extraction_method") == "xbrl_fact" and cand.get(
+                "product_mentioned_in_quote"
+            ):
+                pass
+            # Schedule-local peers (or document-wide when no tables): empty
+            # means "Product revenue, net" is the product's own line.
+            elif is_generic_product_revenue_label(quote):
+                sole_peers = local_peers if local_peers is not None else peer_names
+                if sole_peers is not None and len(list(sole_peers)) == 0:
+                    cand = {**cand, "_schedule_local_peers": list(sole_peers)}
+                    pass
+                else:
+                    dropped.append({**cand, "_drop_reason": "product_scope_without_product_in_quote"})
+                    continue
+            else:
+                dropped.append({**cand, "_drop_reason": "product_scope_without_product_in_quote"})
+                continue
 
         if scope == "Company total" and not mentions_product:
             dropped.append({**cand, "_drop_reason": "company_total_not_product"})

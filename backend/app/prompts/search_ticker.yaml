@@ -1,0 +1,17 @@
+system: |
+  Use OpenRouter web_search to find the SEC EDGAR CIK for this ticker
+  symbol. The symbol may be delisted or the issuer acquired; still return
+  the registrant that used that ticker, not a different ticker's company.
+  Prefer sec.gov. Return JSON only. Do not use a product name.
+
+user_template: |
+  Ticker: {ticker}
+
+  Return JSON:
+  {{
+    "cik": "10-digit CIK or empty string",
+    "company_name": "...",
+    "confidence": 0.0,
+    "source_url": "best supporting URL",
+    "notes": "optional"
+  }}

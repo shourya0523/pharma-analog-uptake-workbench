@@ -24,18 +24,22 @@ class Settings(BaseSettings):
     openrouter_api_key: str | None = None
     openrouter_model_extract: str = "google/gemini-3.8-flash"
     openrouter_model_judge: str = "openai/gpt-4o-mini"
+    # chat = OpenRouter chat/completions; jev = TypeSafe System One via /systemone.
+    openrouter_decision_backend: str = "jev"  # chat | jev
+    openrouter_model_decision: str = "jev-1.13"
     openrouter_base_url: str = "https://openrouter.ai/api/v1"
     validation_sample_rate: float = 0.10
     max_concurrent_jobs: int = 1
-    # A ceiling on the filings any one quarter may cause to be fetched, not a
-    # count of filings per job. Retrieval covers the quarters a run asked for:
-    # a quarter an interim report states costs that one filing, and a fourth
-    # quarter costs the annual report and the interim report whose
-    # year-to-date column it is taken from, so a quarter that needs more
-    # documents than this is left uncovered rather than fetched around. With
-    # no window declared there is no quarter to cover and this bounds "the
-    # recent filings" instead.
+    # Ceiling on how many filings any one quarter may cause choose_filings to
+    # spend (an interim costs one; a fourth quarter costs annual + nine-month).
+    # Not a count of filings per job: the cover of the run's window decides that.
     sec_max_filings: int = 4
+    # Hard fuse on primary SEC pages fetched for one job even when a window
+    # cover is larger. Selection is the cover; this only stops a runaway index.
+    sec_filing_fuse: int = 80
+    # When the caller sets no earnings_since and openFDA wrote no approval
+    # date, the filing window ends today and starts this many years earlier.
+    filing_window_lookback_years: int = 5
     sec_include_8k: bool = False
     # Quarterly product revenue lives in 8-K item 2.02 exhibit 99.x earnings releases,
     # not in the 8-K primary document.

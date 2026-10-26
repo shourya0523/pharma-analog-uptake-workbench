@@ -30,7 +30,7 @@ def test_a_table_stating_no_period_is_dated_by_its_document():
         ["Selected Products", "2025", "2024"],
         ["Mounjaro", "3,841.8", "1,806.5"],
     ]
-    candidates, _findings, skips = extract_revenue_candidates(
+    candidates, _findings, skips, _pending = extract_revenue_candidates(
         [rows],
         product="Mounjaro",
         context="(Dollars in millions)",
@@ -54,7 +54,7 @@ def test_a_repeated_year_refuses_the_document_period():
         ["(MILLIONS)", "2026", "2025", "2026", "2025"],
         ["Eliquis", "2,000", "1,800", "1,200", "1,100"],
     ]
-    candidates, _findings, skips = extract_revenue_candidates(
+    candidates, _findings, skips, _pending = extract_revenue_candidates(
         [rows],
         product="Eliquis",
         context="(MILLIONS)",

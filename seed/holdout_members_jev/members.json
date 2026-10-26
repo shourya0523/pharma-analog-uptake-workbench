@@ -1,0 +1,136 @@
+{
+  "what": "Held-out XBRL member cases for scoring the Jev System One decision backend against chat. Issuers are absent from every other answer key under seed/; see issuers_deliberately_excluded.",
+  "issuers_deliberately_excluded": "Not listed here. backend/tests/answer_keys.py spent_issuers() derives the issuers every other answer key under seed/ spends, and test_jev_holdout_is_held_out.py test_no_member_case_comes_from_a_scored_issuer fails if any case in this file names one of them.",
+  "siblings_are": "the other product members in the SAME instance the member appears in",
+  "drawn_for": "openrouter_decision_backend chat vs jev on resolve_xbrl_member; spent on the first scored eval of that change",
+  "cases": [
+    {
+      "issuer": "Caldera Bioworks Inc",
+      "member": "caldera:CalderonNuVessaMember",
+      "siblings": [
+        "caldera:VeltrexaMember",
+        "caldera:OtherProductsMember"
+      ],
+      "candidates": ["Calderon", "NuVessa", "Veltrexa"],
+      "expected": "NuVessa",
+      "why": "trailing-words rule: NuVessa is the trailing product of CalderonNuVessa; neither is tagged alone"
+    },
+    {
+      "issuer": "Caldera Bioworks Inc",
+      "member": "caldera:CalderonXRMember",
+      "siblings": [
+        "caldera:CalderonMember",
+        "caldera:NuVessaMember",
+        "caldera:VeltrexaMember"
+      ],
+      "candidates": ["Calderon", "NuVessa", "Veltrexa"],
+      "expected": null,
+      "why": "Calderon XR must not resolve to Calderon; Calderon is tagged on its own"
+    },
+    {
+      "issuer": "Ironwood Pharmaceuticals Inc",
+      "member": "irwd:LinzessMember",
+      "siblings": [
+        "irwd:OtherProductsMember"
+      ],
+      "candidates": ["Linzess", "Zurampic"],
+      "expected": "Linzess",
+      "why": "single-product member naming the brand"
+    },
+    {
+      "issuer": "Ironwood Pharmaceuticals Inc",
+      "member": "irwd:LinzessAndCollaborativeMember",
+      "siblings": [
+        "irwd:LinzessMember",
+        "irwd:OtherProductsMember"
+      ],
+      "candidates": ["Linzess", "Zurampic"],
+      "expected": null,
+      "why": "roll-up: Linzess is also tagged alone, so the combined line is not Linzess alone"
+    },
+    {
+      "issuer": "Madrigal Pharmaceuticals Inc",
+      "member": "mdgl:RezdiffraMember",
+      "siblings": [
+        "mdgl:OtherMember"
+      ],
+      "candidates": ["Rezdiffra", "Resmetirom"],
+      "expected": "Rezdiffra",
+      "why": "brand member for the only commercial product"
+    },
+    {
+      "issuer": "Madrigal Pharmaceuticals Inc",
+      "member": "mdgl:OtherProductSalesMember",
+      "siblings": [
+        "mdgl:RezdiffraMember"
+      ],
+      "candidates": ["Rezdiffra", "Resmetirom"],
+      "expected": null,
+      "why": "category catch-all, not a product"
+    },
+    {
+      "issuer": "Apellis Pharmaceuticals Inc",
+      "member": "apls:SyfovreAndEmpaveliMember",
+      "siblings": [
+        "apls:SyfovreMember",
+        "apls:EmpaveliMember"
+      ],
+      "candidates": ["Syfovre", "Empaveli"],
+      "expected": null,
+      "why": "joined names with both products tagged alone; a figure covering both is not one product's"
+    },
+    {
+      "issuer": "Apellis Pharmaceuticals Inc",
+      "member": "apls:SyfovreMember",
+      "siblings": [
+        "apls:EmpaveliMember",
+        "apls:SyfovreEmpaveliMember"
+      ],
+      "candidates": ["Syfovre", "Empaveli"],
+      "expected": "Syfovre",
+      "why": "single brand member"
+    },
+    {
+      "issuer": "Verona Pharma plc",
+      "member": "vrna:OhtuvayreMember",
+      "siblings": [
+        "vrna:OtherMember"
+      ],
+      "candidates": ["Ohtuvayre", "Ensifentrine"],
+      "expected": "Ohtuvayre",
+      "why": "brand member"
+    },
+    {
+      "issuer": "Phathom Pharmaceuticals Inc",
+      "member": "phat:VoqueznaAndPacksMember",
+      "siblings": [
+        "phat:VoqueznaMember",
+        "phat:OtherMember"
+      ],
+      "candidates": ["Voquezna", "vonoprazan"],
+      "expected": null,
+      "why": "brand with packs when the brand alone is also tagged"
+    },
+    {
+      "issuer": "Phathom Pharmaceuticals Inc",
+      "member": "phat:VoqueznaMember",
+      "siblings": [
+        "phat:OtherMember"
+      ],
+      "candidates": ["Voquezna", "vonoprazan"],
+      "expected": "Voquezna",
+      "why": "brand member with no finer sibling"
+    },
+    {
+      "issuer": "Caldera Bioworks Inc",
+      "member": "caldera:HIVProductSalesMember",
+      "siblings": [
+        "caldera:CalderonMember",
+        "caldera:NuVessaMember"
+      ],
+      "candidates": ["Calderon", "NuVessa", "Veltrexa"],
+      "expected": null,
+      "why": "franchise/category total"
+    }
+  ]
+}

@@ -404,8 +404,9 @@ class ExtractionOptions(BaseModel):
     company_ir: bool = True
     openfda: bool = True
     earnings_releases: bool = True
-    # Bound earnings-exhibit retrieval to a filing-date window (ISO dates).
-    # Unset means the most recent earnings releases.
+    # Bound filing retrieval and completeness to a date window (ISO dates).
+    # Unset means the pipeline derives one: FDA approval→today when known,
+    # otherwise a fixed lookback ending today. Both ends may be set by the caller.
     earnings_since: date | None = None
     earnings_until: date | None = None
     transcripts: bool = False

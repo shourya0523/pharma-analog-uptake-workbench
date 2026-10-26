@@ -44,6 +44,20 @@ def test_bullets_are_sentences():
     assert sentence_carrying(block, 100.0).startswith("Entered")
 
 
+def test_a_brand_alone_on_its_line_continues_into_the_next():
+    """HTML often puts the brand in its own element, then the rest of the sentence.
+
+    Split naively, the product and the value landed in different sentences and
+    the hard veto held the correct figure.
+    """
+    block = "•\nCalderon\nrevenue in the second quarter of 2026 was $156 million, consistent with seasonality."
+    assert len(sentences(block)) == 1
+    assert sentence_carrying(block, 156.0) is not None
+    fine = _judged(block, 156.0)
+    assert fine["validation_status"] == "auto_pass", fine["issues"]
+    assert "hard_veto:value_and_product_in_different_sentences" not in fine["issues"]
+
+
 def test_a_table_row_printed_cell_per_line_is_one_sentence():
     """A table states rows, and HTML-to-text prints each cell on its own line.
 

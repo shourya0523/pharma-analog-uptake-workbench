@@ -13,8 +13,16 @@ def merge_aliases(
     formulations: Iterable[str] | None = None,
     parent_companies: Iterable[str] | None = None,
 ) -> list[str]:
-    extra: list[str] = []
-    for group in (llm_aliases, formulations, parent_companies):
-        if group:
-            extra.extend(str(x).strip() for x in group if x and str(x).strip())
+    """Spellings of the product for row/quote matching.
+
+    Formulations and parent companies are accepted so callers can keep passing
+    the expander's full payload, but they are not match aliases: a parent in
+    the list makes every corporate loss line read as product revenue, and a
+    formulation spelling makes a foam/cream slice read as the brand total.
+    Those groups stay on the stored expansion for retrieval and search.
+    """
+    del formulations, parent_companies
+    extra = [
+        str(x).strip() for x in (llm_aliases or ()) if x and str(x).strip()
+    ]
     return product_aliases(product, generic, extra=extra or None)

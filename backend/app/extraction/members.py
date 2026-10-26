@@ -202,6 +202,16 @@ _JOINING_MARKS = ("&", "+")
 _EXCLUDING = frozenset({"excluding", "excluded", "except", "excludes",
                         "other", "than", "outside", "without"})
 
+# Members that name "the product" without naming a brand. One filer's sole
+# marketed product; another's aggregate. Attribution needs the rest of the
+# instance (and the document's peers) before either reading is safe.
+_GENERIC_PRODUCT_MEMBERS = frozenset({"productmember", "productsmember"})
+
+
+def is_generic_product_member(member: str) -> bool:
+    """Whether the member is the taxonomy's bare ProductMember, not a brand."""
+    return member.split(":")[-1].lower() in _GENERIC_PRODUCT_MEMBERS
+
 
 def match(member: str, products: list[str]) -> Resolution:
     """Resolve one member against the products we track, or decline to."""

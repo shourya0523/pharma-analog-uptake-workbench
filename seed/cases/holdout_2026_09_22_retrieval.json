@@ -1,0 +1,116 @@
+{
+  "note": "Held-out set drawn 2026-09-22 for the residual SEC retrieval changes: own-year annual cover, 6-K budget from asked quarters, exact reportDate / HTML twin ranking, YoY 2.02 reach, and 8-K/A item 2.01|9.01 exhibits. It exists because those changes were diagnosed and tuned against /tmp/retrieval_eval_v3.json and the earlier holdouts under seed/cases/, and under rule 4 none of those may score the fix. Every issuer here is absent from every other answer key under seed/, derived through tests/answer_keys.spent_issuers rather than checked against a list. What spends it: the first scored measurement on this file. After that it is an oracle like the rest, and the next scored change needs a new set from issuers this file does not name. What each issuer is here for. Ultragenyx: a calendar 10-Q product-sales table that names several marketed brands in millions. Dynavax: a single-product issuer whose HEPLISAV-B line is stated in thousands on the 10-Q. BridgeBio: a newly commercial product (Attruby) whose series must stay empty before FDA approval and carry the net product revenue line after it. Both answers are here: quarters that carry a figure and a pre-approval quarter that must come back empty. No case states a CIK on purpose.",
+  "cases": [
+    {
+      "drug_name": "Crysvita",
+      "generic_name": "burosumab",
+      "manufacturer": "Ultragenyx",
+      "ticker": "RARE",
+      "options": {
+        "earnings_since": "2026-04-01",
+        "earnings_until": "2026-08-15",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "calendar 10-Q product sales table",
+        "product line stated in millions"
+      ],
+      "source": "0001193125-26-333233 (10-Q filed 2026-08-05, rare-20260630.htm) - product sales table, three months ended June 30, 2026: Crysvita $ 54",
+      "expect": [
+        {
+          "period": "2026Q2",
+          "value_normalized_usd_millions": 54.0,
+          "accession": "0001193125-26-333233",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1515673/000119312526333233/rare-20260630.htm",
+          "source_quote": "Product sales: Crysvita $ 54 $ 35 $ 100 $ 90",
+          "sources": [
+            {
+              "accession": "0001193125-26-333233",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1515673/000119312526333233/rare-20260630.htm",
+              "source_quote": "Product sales: Crysvita $ 54 $ 35 $ 100 $ 90"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "drug_name": "HEPLISAV-B",
+      "generic_name": "hepatitis B vaccine (recombinant), adjuvanted",
+      "manufacturer": "Dynavax Technologies Corporation",
+      "ticker": "DVAX",
+      "options": {
+        "earnings_since": "2025-07-01",
+        "earnings_until": "2025-12-01",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "single commercial product",
+        "product line stated in thousands"
+      ],
+      "source": "0001628280-25-049536 (10-Q filed 2025-11-05, dvax-20250930.htm) - product revenue table, three months ended September 30, 2025: HEPLISAV-B $ 89,954",
+      "expect": [
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": 89.954,
+          "accession": "0001628280-25-049536",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1029142/000162828025049536/dvax-20250930.htm",
+          "source_quote": "HEPLISAV-B $ 89,954",
+          "sources": [
+            {
+              "accession": "0001628280-25-049536",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1029142/000162828025049536/dvax-20250930.htm",
+              "source_quote": "HEPLISAV-B $ 89,954"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "drug_name": "Attruby",
+      "generic_name": "acoramidis",
+      "manufacturer": "BridgeBio Pharma, Inc.",
+      "ticker": "BBIO",
+      "options": {
+        "earnings_since": "2024-04-01",
+        "earnings_until": "2026-08-15",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "newly commercial product",
+        "pre-approval quarter must come back empty",
+        "net product revenue is the Attruby U.S. line"
+      ],
+      "source": "Attruby (acoramidis) received FDA approval in November 2024. 0001743881-26-000027 (10-Q filed 2026-08-10, bbio-20260630.htm) states net product revenue $ 222,440 (in thousands) for the three months ended June 30, 2026 after commercialization of Attruby in the U.S.",
+      "expect": [
+        {
+          "period": "2024Q2",
+          "value_normalized_usd_millions": null,
+          "why": "FDA approval of Attruby was in November 2024, so the second quarter of 2024 is before any commercial product revenue exists"
+        },
+        {
+          "period": "2026Q2",
+          "value_normalized_usd_millions": 222.44,
+          "accession": "0001743881-26-000027",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1743881/000174388126000027/bbio-20260630.htm",
+          "source_quote": "Net product revenue $ 222,440",
+          "sources": [
+            {
+              "accession": "0001743881-26-000027",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1743881/000174388126000027/bbio-20260630.htm",
+              "source_quote": "Net product revenue $ 222,440"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

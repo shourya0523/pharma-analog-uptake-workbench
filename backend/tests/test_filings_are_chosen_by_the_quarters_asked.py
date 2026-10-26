@@ -64,41 +64,72 @@ def _asked(first: str, last: str) -> list[str]:
 
 
 def test_a_twelve_quarter_window_takes_the_interim_reports_and_what_the_subtraction_needs():
-    """Twelve quarters over three years: nine an interim report states, three
-    fourth quarters.
+    """Twelve quarters over three years: nine an interim report states as its
+    own period, three fourth quarters.
 
-    Each interim report states one quarter slot in two adjacent years, so the
-    three years of one slot - first quarters, say - are a chain of three that
-    two reports cover and one cannot, whichever two are taken. Three slots,
-    six reports. The three fourth quarters then cost one annual report between
-    them, because it states its year and the two before it, and the nine-month
-    columns the subtraction needs belong to third-quarter reports the cover has
-    already taken for their own quarters.
+    Own-period cover takes one interim per Q1/Q2/Q3 slot per year (nine). Each
+    fourth quarter prefers the annual whose own year *is* that quarter, so
+    three annuals join the nine interims. The nine-month columns the
+    subtraction needs belong to third-quarter reports the cover has already
+    taken for their own quarters.
     """
     asked = _asked("2023-01-31", "2025-12-31")
     rows = _index_of_a_calendar_filer()
     chosen = choose_filings(rows, asked, ceiling=4)
     forms = [f.form for f in rows if f.row in chosen]
-    assert forms.count("10-Q") == 6
-    assert forms.count("10-K") == 1
+    assert forms.count("10-Q") == 9
+    assert forms.count("10-K") == 3
     assert set().union(*chosen.values()) == set(asked), "every quarter asked, covered"
-    # Nothing beyond what the cover needs; the index holds sixteen rows.
-    assert len(chosen) == 7
-    # The third-quarter report is chosen once and answers both its own quarter
-    # and the fourth quarter it is subtracted from.
+    assert len(chosen) == 12
+    # The third-quarter report is chosen for its own quarter and for the
+    # fourth quarter it is subtracted from.
     third_quarter = next(
-        f for f in rows if f.row in chosen and f.quarter % 4 == 2
+        f for f in rows if f.row in chosen and f.quarter % 4 == 2 and f.quarter // 4 == 2025
     )
-    assert chosen[third_quarter.row] == ["2024Q3", "2024Q4", "2025Q3", "2025Q4"]
+    assert "2025Q3" in chosen[third_quarter.row]
+    assert "2025Q4" in chosen[third_quarter.row]
 
 
-def test_a_quarter_another_row_already_answers_is_not_fetched_for_twice():
-    """One quarter, and two rows state it - its own interim report and the
-    next year's, as a comparative. One of them is taken."""
+def test_a_fourth_quarter_prefers_its_own_annual_over_a_comparative():
+    """A later annual that states the year comparatively loses to the
+    contemporaneous annual for that year end."""
+    asked = ["2023Q4"]
+    own = _row(0, "10-K", "2023-12-31")
+    later = _row(1, "10-K", "2025-12-31")
+    third = _row(2, "10-Q", "2023-09-30")
+    chosen = choose_filings([later, own, third], asked, ceiling=4)
+    assert own.row in chosen
+    assert later.row not in chosen
+    assert third.row in chosen
+
+
+def test_an_original_interim_is_preferred_over_its_amendment():
+    """Same period of report, 10-Q and 10-Q/A: the original is chosen."""
     asked = ["2025Q2"]
-    chosen = choose_filings(_index_of_a_calendar_filer(), asked, ceiling=4)
+    original = _row(0, "10-Q", "2025-06-30")
+    amendment = IndexedFiling(
+        row=1, form="10-Q/A", annual=False,
+        quarter=quarter_index(date(2025, 6, 30)),
+    )
+    chosen = choose_filings([amendment, original], asked, ceiling=4)
+    assert chosen == {0: ["2025Q2"]}
+
+
+
+def test_a_quarter_prefers_its_own_interim_over_a_comparative():
+    """One quarter, and two rows state it - its own interim report and the
+    next year's, as a comparative. The contemporaneous page is taken."""
+    asked = ["2025Q2"]
+    rows = _index_of_a_calendar_filer()
+    chosen = choose_filings(rows, asked, ceiling=4)
     assert len(chosen) == 1
     assert list(chosen.values()) == [["2025Q2"]]
+    own = next(f for f in rows if f.form == "10-Q" and f.quarter == quarter_index(date(2025, 6, 30)))
+    comparative = next(
+        f for f in rows if f.form == "10-Q" and f.quarter == quarter_index(date(2026, 6, 30))
+    )
+    assert own.row in chosen
+    assert comparative.row not in chosen
 
 
 def test_an_earnings_filing_is_never_chosen_by_its_period_of_report():
@@ -144,3 +175,23 @@ def test_the_cover_follows_the_filer_rather_than_the_calendar():
     third_quarter = _row(1, "10-Q", "2026-03-31")
     chosen = choose_filings([annual, third_quarter], ["2026Q2"], ceiling=4)
     assert chosen == {0: ["2026Q2"], 1: ["2026Q2"]}
+
+
+def test_a_report_date_in_the_first_week_names_the_quarter_before():
+    """EDGAR reportDate on April 1 or July 1 is the 52/53-week close, not the
+    next calendar quarter. Asked for Q2, the cover takes the July row, not the
+    April one that a raw calendar indexing would call Q2."""
+    from app.parsing.periods import period_of_report_quarter
+
+    april = IndexedFiling(
+        row=0, form="10-Q", annual=False,
+        quarter=period_of_report_quarter(date(2025, 4, 1)),
+    )
+    july = IndexedFiling(
+        row=1, form="10-Q", annual=False,
+        quarter=period_of_report_quarter(date(2025, 7, 1)),
+    )
+    chosen = choose_filings([april, july], ["2025Q2"], ceiling=4)
+    assert chosen == {1: ["2025Q2"]}
+    assert april.quarter == period_of_report_quarter(date(2025, 3, 31))
+    assert july.quarter == period_of_report_quarter(date(2025, 6, 30))

@@ -34,12 +34,29 @@ def test_the_spelled_form_is_read():
     assert (context.year, context.quarter) == (2024, 3)
 
 
+def test_a_hyphenated_quarter_heading_is_read():
+    context = detect_period_context("Acme Reports Second-Quarter 2025 Financial Results " * 2)
+    assert (context.months, context.year, context.quarter) == (3, 2025, 2)
+
+
 def test_a_phrase_still_wins_where_a_filing_states_one():
     """This only runs where there was no answer at all, so a filing using both
     is dated by the phrase exactly as before."""
     both = _doc("Three Months Ended September 30, 2024", "Q1 2025 " * 9)
     context = detect_period_context(both)
     assert (context.months, context.year, context.quarter) == (3, 2024, 3)
+
+
+def test_sparse_annual_boilerplate_does_not_outrank_a_quarter_heading():
+    """A release title names the quarter; a risk footnote cites the prior
+    year-end once. The document reports the quarter, not the year."""
+    doc = _doc(
+        "Acme Reports Second-Quarter 2025 Financial Results",
+        "Second-quarter 2025 net sales of $10 million.",
+        "See our Annual Report on Form 10-K for the year ended December 31, 2024.",
+    )
+    context = detect_period_context(doc)
+    assert (context.months, context.year, context.quarter) == (3, 2025, 2)
 
 
 class TestChoosingAmongWhatTheFilingNames:

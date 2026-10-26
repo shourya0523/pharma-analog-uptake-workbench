@@ -1,0 +1,179 @@
+{
+  "note": "Held-out set drawn 2026-09-22 for scoring the Jev System One decision backend (openrouter_decision_backend chat vs jev) on extract/judge paths. It may score that change and nothing else. Issuers here are absent from gold, seed/holdout*, seed/cases/holdout_2026_09*.json, shapes_holdout, and holdout_members — derived through tests/answer_keys.spent_issuers rather than checked against a list. What spends it: the first scored eval of the Jev decision-backend flip. After that it is an oracle like the rest. Both answers are represented: published product quarters and refusals (peer brand / non-product revenue). No case states a CIK on purpose.",
+  "cases": [
+    {
+      "drug_name": "Rezdiffra",
+      "generic_name": "resmetirom",
+      "manufacturer": "Madrigal Pharmaceuticals Inc",
+      "ticker": "MDGL",
+      "options": {
+        "earnings_since": "2025-01-01",
+        "earnings_until": "2025-08-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "single-product filer product revenue, net",
+        "comparative three-month and six-month columns"
+      ],
+      "source": "The 10-Q prints Product revenue, net for Rezdiffra under three months and six months ended June 30.",
+      "traps": [
+        {
+          "accession": "0001628280-25-037613",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1157601/000162828025037613/mdgl-20250630.htm",
+          "source_quote": "Product revenue, net | $ | 212,802 | $ | 14,638 | $ | 350,052 | $ | 14,638",
+          "why": "the six-month column is not a quarter; publishing 350.052 as 2025Q2 would double-count"
+        }
+      ],
+      "expect": [
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": 137.25,
+          "accession": "0001628280-25-021356",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1157601/000162828025021356/mdgl-20250331.htm",
+          "source_quote": "Product revenue, net | $ | 137,250 | $ | -",
+          "sources": [
+            {
+              "accession": "0001628280-25-021356",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1157601/000162828025021356/mdgl-20250331.htm",
+              "source_quote": "Product revenue, net | $ | 137,250 | $ | -"
+            }
+          ]
+        },
+        {
+          "period": "2025Q2",
+          "value_normalized_usd_millions": 212.802,
+          "accession": "0001628280-25-037613",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1157601/000162828025037613/mdgl-20250630.htm",
+          "source_quote": "Product revenue, net | $ | 212,802 | $ | 14,638 | $ | 350,052 | $ | 14,638",
+          "sources": [
+            {
+              "accession": "0001628280-25-037613",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1157601/000162828025037613/mdgl-20250630.htm",
+              "source_quote": "Product revenue, net | $ | 212,802 | $ | 14,638 | $ | 350,052 | $ | 14,638"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "drug_name": "Syfovre",
+      "generic_name": "pegcetacoplan",
+      "manufacturer": "Apellis Pharmaceuticals Inc",
+      "ticker": "APLS",
+      "options": {
+        "earnings_since": "2025-07-01",
+        "earnings_until": "2025-11-15",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "product revenue by brand table",
+        "peer brand Empaveli on the same schedule"
+      ],
+      "source": "The 10-Q breaks product revenue into SYFOVRE and EMPAVELI for the three and nine months ended September 30, 2025.",
+      "traps": [
+        {
+          "accession": "0001193125-25-257374",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1492422/000119312525257374/apls-20250930.htm",
+          "source_quote": "EMPAVELI | PNH, C3G, IC-MPGN | $ | 26,827 | $ | 24,611",
+          "why": "Empaveli is a sibling brand; its figure must never publish as Syfovre"
+        },
+        {
+          "accession": "0001193125-25-257374",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1492422/000119312525257374/apls-20250930.htm",
+          "source_quote": "Licensing and other revenue | 280,823 | 20,259",
+          "why": "licensing revenue is not Syfovre product sales"
+        }
+      ],
+      "expect": [
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": 150.928,
+          "accession": "0001193125-25-257374",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1492422/000119312525257374/apls-20250930.htm",
+          "source_quote": "SYFOVRE | Ophthalmology | $ | 150,928 | $ | 151,960",
+          "sources": [
+            {
+              "accession": "0001193125-25-257374",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1492422/000119312525257374/apls-20250930.htm",
+              "source_quote": "SYFOVRE | Ophthalmology | $ | 150,928 | $ | 151,960"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "drug_name": "Empaveli",
+      "generic_name": "pegcetacoplan",
+      "manufacturer": "Apellis Pharmaceuticals Inc",
+      "ticker": "APLS",
+      "options": {
+        "earnings_since": "2025-07-01",
+        "earnings_until": "2025-11-15",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "product revenue by brand table",
+        "peer brand Syfovre on the same schedule"
+      ],
+      "source": "Same Apellis 10-Q; Empaveli is the smaller therapeutic brand beside Syfovre.",
+      "traps": [
+        {
+          "accession": "0001193125-25-257374",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1492422/000119312525257374/apls-20250930.htm",
+          "source_quote": "SYFOVRE | Ophthalmology | $ | 150,928 | $ | 151,960",
+          "why": "Syfovre must not publish as Empaveli"
+        }
+      ],
+      "expect": [
+        {
+          "period": "2025Q3",
+          "value_normalized_usd_millions": 26.827,
+          "accession": "0001193125-25-257374",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1492422/000119312525257374/apls-20250930.htm",
+          "source_quote": "EMPAVELI | PNH, C3G, IC-MPGN | $ | 26,827 | $ | 24,611",
+          "sources": [
+            {
+              "accession": "0001193125-25-257374",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1492422/000119312525257374/apls-20250930.htm",
+              "source_quote": "EMPAVELI | PNH, C3G, IC-MPGN | $ | 26,827 | $ | 24,611"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "drug_name": "Ohtuvayre",
+      "generic_name": "ensifentrine",
+      "manufacturer": "Verona Pharma plc",
+      "ticker": "VRNA",
+      "options": {
+        "earnings_since": "2024-07-01",
+        "earnings_until": "2025-03-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "post-approval launch quarters",
+        "refusal before commercial sales"
+      ],
+      "source": "Ohtuvayre was approved mid-2024; quarters before launch must refuse product revenue.",
+      "traps": [],
+      "expect": []
+    }
+  ]
+}

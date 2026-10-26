@@ -48,8 +48,9 @@ import logging
 import re
 from collections.abc import Iterable
 from dataclasses import dataclass, field
+from datetime import date
 
-from app.connectors.sources import normalize_registrant
+from app.connectors.sources import REPORTING_LAG, normalize_registrant
 from app.domain.models import ParsedDocument, ParsingStatus, RetrievedSource
 from app.extraction.fingerprint import column_periods
 from app.parsing.labels import LabelReading, read_label
@@ -59,6 +60,7 @@ from app.parsing.periods import (
     period_months,
     period_span,
     quarter_of_month,
+    quarters_in_locator,
 )
 from app.parsing.tables import NIL_CELLS, cell_figure, clean_label
 
@@ -241,6 +243,44 @@ def record_coverage(
         ",".join(result.carried) or "-", ",".join(result.refuted) or "-", source.url,
     )
     return result
+
+
+def admits_asked_quarters(
+    *,
+    asked: Iterable[str],
+    carried: Iterable[str] = (),
+    title: str = "",
+    url: str = "",
+    source_date: date | None = None,
+    since: date | None = None,
+    until: date | None = None,
+) -> bool:
+    """Whether an IR or search document may enter for the quarters asked.
+
+    Coverage still expands asked quarters with annual keys when describing a
+    10-K; admission does not. A document whose coverage only carries ``2020``
+    does not answer 2020Q1. A locator that names other quarters is dropped
+    even if its date sits in the window.
+    """
+    wanted = {str(q) for q in asked if q}
+    if not wanted:
+        return True
+    if set(carried) & wanted:
+        return True
+    named = set(quarters_in_locator(title, url))
+    if named & wanted:
+        return True
+    if named:
+        return False
+    if source_date is None:
+        return False
+    earliest = since - REPORTING_LAG if since else None
+    latest = until + REPORTING_LAG if until else None
+    if earliest and source_date < earliest:
+        return False
+    if latest and source_date > latest:
+        return False
+    return True
 
 
 def _annual_keys(periods: Iterable[str]) -> list[str]:

@@ -301,3 +301,171 @@ async def test_what_the_search_decided_reaches_the_job_either_way(
 
     assert job.cik == cik
     assert job.quality_flags == [flag]
+
+
+@pytest.mark.asyncio
+async def test_the_product_model_is_not_asked_when_the_job_has_a_ticker(tmp_path, monkeypatch):
+    """A ticker names the issuer. The product LLM is not a second opinion."""
+    settings = pipeline.get_settings().model_copy(update={"enable_llm_search": True})
+    monkeypatch.setattr(pipeline, "get_settings", lambda: settings)
+    db, job = _job(ticker="ACMX", manufacturer=None)
+    orch = PipelineOrchestrator(db, file_store=LocalFileStore(str(tmp_path)))
+    asked: list[str] = []
+
+    async def _resolve(ticker=None, company_name=None):
+        return None
+
+    async def _ticker(**_kw):
+        asked.append("ticker")
+        return SearchedIdentity(cik=None, refused="cik_search_returned_no_cik")
+
+    async def _searched(**_kw):
+        asked.append("product")
+        return SearchedIdentity(cik="0000000007", confidence=0.95, refused=None)
+
+    monkeypatch.setattr(orch.sec, "resolve_cik", _resolve)
+    monkeypatch.setattr(orch.search, "resolve_ticker_from_search", _ticker)
+    monkeypatch.setattr(orch.search, "resolve_identity_from_search", _searched)
+    await orch._identity(job)
+    assert job.cik is None
+    assert asked == ["ticker"]
+
+
+@pytest.mark.asyncio
+async def test_a_cik_whose_tickers_do_not_include_the_job_ticker_is_refused(
+    tmp_path, monkeypatch
+):
+    """The name index answered a different registrant than the ticker named."""
+    settings = pipeline.get_settings().model_copy(update={"enable_llm_search": True})
+    monkeypatch.setattr(pipeline, "get_settings", lambda: settings)
+    db, job = _job(ticker="ACMX", manufacturer="Calderon Respiratory")
+    orch = PipelineOrchestrator(db, file_store=LocalFileStore(str(tmp_path)))
+    searched: list[str] = []
+
+    async def _resolve(ticker=None, company_name=None):
+        if ticker:
+            return None
+        if company_name:
+            return "0000059478"
+        return None
+
+    async def _record(cik):
+        return {"CLDN"}, "CALDERON RESPIRATORY"
+
+    async def _searched(**_kw):
+        searched.append("product")
+        return SearchedIdentity(cik="0000000007", confidence=0.95, refused=None)
+
+    monkeypatch.setattr(orch.sec, "resolve_cik", _resolve)
+    monkeypatch.setattr(orch.sec, "issuer_record", _record)
+    monkeypatch.setattr(orch.search, "resolve_identity_from_search", _searched)
+    await orch._identity(job)
+    assert job.cik is None
+    assert "cik_ticker_mismatch" in (job.quality_flags or [])
+    assert searched == []
+
+
+@pytest.mark.asyncio
+async def test_an_empty_issuer_ticker_set_is_not_a_mismatch(tmp_path, monkeypatch):
+    """A delisted registrant's submissions list no ticker. That is not a no."""
+    settings = pipeline.get_settings().model_copy(update={"enable_llm_search": True})
+    monkeypatch.setattr(pipeline, "get_settings", lambda: settings)
+    db, job = _job(ticker="ACMX", manufacturer="Acme Pharma")
+    orch = PipelineOrchestrator(db, file_store=LocalFileStore(str(tmp_path)))
+    product: list[str] = []
+
+    async def _resolve(ticker=None, company_name=None):
+        if ticker:
+            return None
+        if company_name:
+            return "0000999001"
+        return None
+
+    async def _record(cik):
+        return set(), "ACME PHARMA INC"
+
+    async def _searched(**_kw):
+        product.append("product")
+        return SearchedIdentity(cik="0000000007", confidence=0.95, refused=None)
+
+    monkeypatch.setattr(orch.sec, "resolve_cik", _resolve)
+    monkeypatch.setattr(orch.sec, "issuer_record", _record)
+    monkeypatch.setattr(orch.search, "resolve_identity_from_search", _searched)
+    await orch._identity(job)
+    assert job.cik == "0000999001"
+    assert "cik_ticker_mismatch" not in (job.quality_flags or [])
+    assert product == []
+
+
+@pytest.mark.asyncio
+async def test_a_ticker_the_map_dropped_is_asked_as_a_ticker(tmp_path, monkeypatch):
+    """Map and browse miss; search is asked what CIK the ticker is, not the product."""
+    settings = pipeline.get_settings().model_copy(update={"enable_llm_search": True})
+    monkeypatch.setattr(pipeline, "get_settings", lambda: settings)
+    db, job = _job(ticker="ACMX", manufacturer="Acme Pharma")
+    orch = PipelineOrchestrator(db, file_store=LocalFileStore(str(tmp_path)))
+    asked: list[str] = []
+
+    async def _resolve(ticker=None, company_name=None):
+        return None
+
+    async def _ticker(**_kw):
+        asked.append("ticker")
+        return SearchedIdentity(cik="0000999001", confidence=0.95, refused=None)
+
+    async def _product(**_kw):
+        asked.append("product")
+        return SearchedIdentity(cik="0000000007", confidence=0.95, refused=None)
+
+    monkeypatch.setattr(orch.sec, "resolve_cik", _resolve)
+    monkeypatch.setattr(orch.search, "resolve_ticker_from_search", _ticker)
+    monkeypatch.setattr(orch.search, "resolve_identity_from_search", _product)
+    await orch._identity(job)
+    assert job.cik == "0000999001"
+    assert asked == ["ticker"]
+    assert "cik_from_llm_search" in (job.quality_flags or [])
+
+
+@pytest.mark.asyncio
+async def test_ir_uses_the_ticker_that_named_the_issuer(tmp_path, monkeypatch):
+    """IR is keyed by the resolved issuer, not an independent job ticker."""
+    db, job = _job(cik="0000999001", ticker="ACMX", manufacturer="Acme Pharma")
+    orch = PipelineOrchestrator(db, file_store=LocalFileStore(str(tmp_path)))
+    orch._identity_via_ticker = True
+    orch._issuer_tickers = {"ACMX"}
+    asked: list[tuple] = []
+
+    async def _none(**_kw):
+        return []
+
+    async def _ir(**kw):
+        asked.append((kw.get("ticker"), kw.get("company_name")))
+        return []
+
+    monkeypatch.setattr(orch.sec, "retrieve", _none)
+    monkeypatch.setattr(orch.search, "fallback_retrieve", _none)
+    monkeypatch.setattr(orch.company_ir, "retrieve_for_issuer", _ir)
+    await orch._retrieve_filings(job, {"sec_filings": True, "company_ir": True})
+    assert asked == [("ACMX", "Acme Pharma")]
+
+
+@pytest.mark.asyncio
+async def test_ir_is_not_searched_under_a_ticker_with_no_issuer(tmp_path, monkeypatch):
+    """A refused identity does not fetch IR for the job ticker anyway."""
+    db, job = _job(ticker="ACMX", manufacturer="Acme Pharma")
+    orch = PipelineOrchestrator(db, file_store=LocalFileStore(str(tmp_path)))
+    asked: list[str] = []
+
+    async def _none(**_kw):
+        return []
+
+    async def _ir(**_kw):
+        asked.append("ir")
+        return []
+
+    monkeypatch.setattr(orch.sec, "retrieve", _none)
+    monkeypatch.setattr(orch.search, "fallback_retrieve", _none)
+    monkeypatch.setattr(orch.company_ir, "retrieve_for_issuer", _ir)
+    await orch._retrieve_filings(job, {"sec_filings": True, "company_ir": True})
+    assert asked == []
+    assert job.cik is None

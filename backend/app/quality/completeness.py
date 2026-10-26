@@ -114,7 +114,9 @@ def refresh_completeness(db: Session, job: DrugJobORM) -> Completeness:
     held = quarter_labels(period for (period,) in published)
     missing = quarter_labels(row.period for row in open_gaps)
     expected = quarters_the_run_asked_for(job) | held | missing
-    job.unresolved_count = len(open_gaps)
+    # Distinct open quarters, matching ``Completeness.gaps`` and the
+    # percentage's denominator. Two rows naming one quarter are one gap.
+    job.unresolved_count = len(missing)
     job.completeness_pct = round(100 * len(held) / len(expected), 1) if expected else 0.0
     return Completeness(job.completeness_pct, len(held), len(missing))
 

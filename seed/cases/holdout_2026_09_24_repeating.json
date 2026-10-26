@@ -1,0 +1,148 @@
+{
+  "note": "Held-out set drawn 2026-09-24 for scoring the repeating-failure extract/filter fixes (product+royalty preference, partner-cash drop, schedule-local bare net product, formulation vs brand total). It may score that change and nothing else. Issuers here are absent from gold, seed/holdout*, and seed/cases/holdout_2026_09*.json — derived through tests/answer_keys.spent_issuers. What spends it: the first scored eval of those repeating-failure changes. After that it is an oracle like the rest. Shapes covered: sole Product sales net; license/collaboration cash refuse; brand net product beside a combined product-revenue total; formulation-or-brand preference documented via brand-named OGSIVEO vs combined Product revenue net. Both answers are represented.",
+  "cases": [
+    {
+      "drug_name": "Caplyta",
+      "generic_name": "lumateperone",
+      "manufacturer": "Intra-Cellular Therapies Inc",
+      "ticker": "ITCI",
+      "options": {
+        "earnings_since": "2024-07-01",
+        "earnings_until": "2024-11-15",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "single-product filer Product sales, net",
+        "bare Product sales, net with no sibling brand on the product-revenue schedule"
+      ],
+      "source": "The 10-Q for the three months ended September 30, 2024 prints Product sales, net for CAPLYTA as the company's sole commercial product.",
+      "traps": [
+        {
+          "accession": "0001628280-24-044196",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1567514/000162828024044196/itci-20240930.htm",
+          "source_quote": "Product sales, net | $ | 175,159 | $ | 125,810 | $ | 481,278 | $ | 330,669 |",
+          "why": "the nine-month column 481.278 is not the quarter; publishing it as 2024Q3 would overstate the quarter"
+        }
+      ],
+      "expect": [
+        {
+          "period": "2024Q3",
+          "value_normalized_usd_millions": 175.159,
+          "accession": "0001628280-24-044196",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1567514/000162828024044196/itci-20240930.htm",
+          "source_quote": "Product sales, net | $ | 175,159 | $ | 125,810 | $ | 481,278 | $ | 330,669 |",
+          "sources": [
+            {
+              "accession": "0001628280-24-044196",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1567514/000162828024044196/itci-20240930.htm",
+              "source_quote": "Product sales, net | $ | 175,159 | $ | 125,810 | $ | 481,278 | $ | 330,669 |"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "drug_name": "Paltusotine",
+      "generic_name": "paltusotine",
+      "manufacturer": "Crinetics Pharmaceuticals Inc",
+      "ticker": "CRNX",
+      "options": {
+        "earnings_since": "2024-07-01",
+        "earnings_until": "2024-12-15",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "pre-commercial partner-cash / license revenue only",
+        "collaboration and license revenues beside a product that has not launched"
+      ],
+      "source": "Through Q3 2024 Crinetics recognizes license revenues from the Sanwa arrangement for paltusotine in Japan; U.S. commercial product sales of PALSONIFY had not begun.",
+      "traps": [
+        {
+          "accession": "0000950170-24-125420",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1658247/000095017024125420/crnx-20240930.htm",
+          "source_quote": "License revenues",
+          "why": "license / collaboration cash is not paltusotine product sales"
+        }
+      ],
+      "expect": []
+    },
+    {
+      "drug_name": "Ogsiveo",
+      "generic_name": "nirogacestat",
+      "manufacturer": "SpringWorks Therapeutics Inc",
+      "ticker": "SWTX",
+      "options": {
+        "earnings_since": "2025-01-01",
+        "earnings_until": "2025-05-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "brand-named product sales beside a combined Product revenue, net total",
+        "product+royalty-style rollup preference: prefer the named brand line over the family total that includes a sibling",
+        "formulation-or-brand preference analog: OGSIVEO line over Product revenue, net covering OGSIVEO and GOMEKLI"
+      ],
+      "source": "The 10-Q for the three months ended March 31, 2025 states OGSIVEO U.S. net product revenue of $44.1 million and Product revenue, net of $49.087 million from OGSIVEO and GOMEKLI combined.",
+      "traps": [
+        {
+          "accession": "0001773427-25-000015",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1773427/000177342725000015/swtx-20250331.htm",
+          "source_quote": "Product revenue, net | $49,087 | $21,006 |",
+          "why": "49.087 is OGSIVEO plus GOMEKLI combined; it is not OGSIVEO alone"
+        }
+      ],
+      "expect": [
+        {
+          "period": "2025Q1",
+          "value_normalized_usd_millions": 44.1,
+          "accession": "0001773427-25-000015",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1773427/000177342725000015/swtx-20250331.htm",
+          "source_quote": "net product revenue of $44.1 million from sales of OGSIVEO in the United States",
+          "sources": [
+            {
+              "accession": "0001773427-25-000015",
+              "form": "10-Q",
+              "source_url": "https://www.sec.gov/Archives/edgar/data/1773427/000177342725000015/swtx-20250331.htm",
+              "source_quote": "net product revenue of $44.1 million from sales of OGSIVEO in the United States"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "drug_name": "Qbrexza",
+      "generic_name": "glycopyrronium",
+      "manufacturer": "Journey Medical Corp",
+      "ticker": "DERM",
+      "options": {
+        "earnings_since": "2025-04-01",
+        "earnings_until": "2025-08-31",
+        "openfda": true,
+        "product_metadata": true
+      },
+      "shapes": [
+        "multi-product filer bare net product revenue with peer brands on other schedules",
+        "off-schedule peer must not block a product-sales schedule bare line when the quote names Qbrexza"
+      ],
+      "source": "Journey Medical's 10-Q for the six months ended June 30, 2025 reports net product revenues across a portfolio that includes QBREXZA; peer brands appear on the same commercial statements.",
+      "traps": [
+        {
+          "accession": "0001410578-25-001703",
+          "form": "10-Q",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1867066/000141057825001703/derm-20250630x10q.htm",
+          "source_quote": "Net product revenues",
+          "why": "a bare Net product revenues line covering the portfolio is not QBREXZA alone when sibling brands share the schedule"
+        }
+      ],
+      "expect": []
+    }
+  ]
+}

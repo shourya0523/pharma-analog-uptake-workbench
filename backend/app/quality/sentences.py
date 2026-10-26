@@ -33,6 +33,8 @@ _LINE_BREAK_RE = re.compile(r"\s*\n+\s*|\s*[•▪◦·]\s*")
 # Within a line, a full stop, a question or exclamation mark, or a semicolon
 # ends a sentence.
 _SENTENCE_END_RE = re.compile(r"(?<=[.!?;])[\"'”’)\]]*\s+")
+# A finished sentence ends with one of those marks (optional closers after).
+_ENDS_SENTENCE_RE = re.compile(r'[.!?;]["\'”’)\]]*$')
 # A line that states a word. A table's figure cells - "$", "34,974", "7", "%",
 # "(1)", "2024" - state none, and belong to the row the last such line opened.
 _STATES_A_WORD_RE = re.compile(r"[^\W\d_]")
@@ -49,12 +51,15 @@ _TO_LEVEL_RE = re.compile(r"\bto\s+(?:approximately\s+|about\s+)?(?:US)?\$\s*[\d
 
 
 def _lines(quote: str) -> list[str]:
-    """The quote's lines, with each wordless line joined onto the one it follows.
+    """The quote's lines, with continuations joined onto the line they follow.
 
     A quote lifted out of a table arrives one cell per line, and its figures
     are not statements of their own; joined back onto the label above them they
     are the row the filer printed. A quote lifted out of prose has a word on
-    every line and is unchanged.
+    every line - except when HTML put the brand alone on one line and the rest
+    of the sentence on the next (``Crysvita\\nrevenue ... was $156``). A line
+    that does not end a sentence and a next line that continues in lowercase
+    are one unit; a capital start is a new unit (the next bullet or sibling).
     """
     lines: list[str] = []
     for raw in _LINE_BREAK_RE.split(quote or ""):
@@ -62,6 +67,12 @@ def _lines(quote: str) -> list[str]:
         if not line:
             continue
         if lines and not _STATES_A_WORD_RE.search(line):
+            lines[-1] = f"{lines[-1]} {line}"
+        elif (
+            lines
+            and not _ENDS_SENTENCE_RE.search(lines[-1])
+            and line[:1].islower()
+        ):
             lines[-1] = f"{lines[-1]} {line}"
         else:
             lines.append(line)

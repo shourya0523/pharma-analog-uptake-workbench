@@ -59,6 +59,8 @@ def test_earnings_window_is_optional_and_plumbed_end_to_end():
     source = inspect.getsource(PipelineOrchestrator._retrieve_filings)
     assert 'earnings_since=parse_filing_date(options.get("earnings_since"))' in source
     assert 'earnings_until=parse_filing_date(options.get("earnings_until"))' in source
+    # Empty caller bounds are filled before filings are asked for.
+    assert "_ensure_filing_window" in inspect.getsource(PipelineOrchestrator.run_job)
 
     exhibits = inspect.getsource(SECConnector._retrieve_earnings_exhibits)
     assert "filed_on < since" in exhibits

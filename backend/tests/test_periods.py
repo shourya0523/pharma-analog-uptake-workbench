@@ -16,6 +16,7 @@ from app.parsing.periods import (
     period_months,
     period_span,
     quarter_of_month,
+    quarters_in_locator,
 )
 
 # Verbatim from the stored exhibit uthrq22024-ex991.htm revenue table
@@ -137,6 +138,43 @@ def test_unusable_labels_return_none():
     assert normalize_period(None) is None
 
 
+def test_unknown_is_not_a_quarterly_period_type():
+    from app.parsing.periods import period_type_from_label
+
+    assert period_type_from_label("unknown") == "unknown"
+    assert period_type_from_label("unknown") != "quarterly"
+    assert period_type_from_label("") == "unknown"
+    assert period_type_from_label("2020Q1") == "quarterly"
+
+
+def test_a_glued_filename_still_names_its_quarter():
+    """The grammar documents use, applied to a title and URL.
+
+    Compact `q42020` in a filename is Q4 2020; a bare year in a path is not
+    a quarter.
+    """
+    assert quarters_in_locator(
+        "Acme earnings",
+        "https://ir.acme.example/earningsreleaseq42020.htm",
+    ) == ["2020Q4"]
+    assert quarters_in_locator("", "https://ir.acme.example/q1-2020.htm") == ["2020Q1"]
+    assert "2020" not in quarters_in_locator("", "https://ir.acme.example/annual-2020.pdf")
+
+
+def test_a_bare_end_date_names_its_own_quarter_over_annual_context():
+    """The model often reports the column end date alone. Annual boilerplate
+    in the same release must not pull that date into Q4."""
+    annual = PeriodContext(months=12, month=12, year=2024)
+    assert (
+        normalize_period("June 30, 2025", period_type="quarterly", context=annual)
+        == "2025Q2"
+    )
+    assert (
+        normalize_period("June\xa030, 2025", period_type="quarterly", context=annual)
+        == "2025Q2"
+    )
+
+
 # Two headings taken verbatim from earnings exhibits, flattened the way the
 # document parser flattens them. Both used to date the document wrongly.
 SPLIT_HEADING = (
@@ -232,16 +270,29 @@ def test_a_period_ending_in_the_first_days_of_a_month_belongs_to_the_month_befor
     """A filer on a 52/53-week calendar states its first quarter as ending on
     April 1 or 2 and its year on January 3; read by the month alone, the first
     quarter becomes the second and the year the next one."""
+    from datetime import date
+
     from app.parsing.periods import (
         detect_period_context,
         fiscal_period_end,
+        is_period_of_report,
         normalize_period,
+        period_of_report_quarter,
+        quarter_end,
     )
 
     assert fiscal_period_end(4, 1) == (3, None)
     assert fiscal_period_end(1, 3, 2021) == (12, 2020)
     assert fiscal_period_end(4, 30, 2018) == (4, 2018)
     assert fiscal_period_end(3, None, 2018) == (3, 2018)
+
+    # Same snap the retrieval cover uses on EDGAR reportDate.
+    assert period_of_report_quarter(date(2018, 4, 1)) == 2018 * 4 + 0  # Q1
+    assert period_of_report_quarter(date(2018, 7, 1)) == 2018 * 4 + 1  # Q2
+    assert period_of_report_quarter(date(2018, 3, 31)) == 2018 * 4 + 0
+    assert is_period_of_report(date(2018, 6, 30), quarter_end(2018, 2))
+    assert is_period_of_report(date(2018, 7, 1), quarter_end(2018, 2))
+    assert not is_period_of_report(date(2018, 9, 21), quarter_end(2018, 3))
 
     first_quarter = ("Fiscal first quarter ended April 1, 2018. Sales for the three months "
                      "ended April 1, 2018 rose against the three months ended April 2, 2017.")
