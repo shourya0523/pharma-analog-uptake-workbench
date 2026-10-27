@@ -15,6 +15,15 @@ from typing import Any
 
 DEFAULT_MODEL = "gemini-3.8-flash"
 
+# Statuses worth retrying: a timeout or an overloaded server clears on its own.
+# 429 is left out on purpose - a spent quota or a tier without search grounding
+# does not, and retrying it only delays the error.
+RETRY_STATUSES = [408, 500, 502, 503, 504]
+
+
+class QuotaExceeded(RuntimeError):
+    """Gemini answered 429: the project's quota or rate limit is used up."""
+
 PROMPT = """\
 Find the net product revenue {issuer_clause}reported for {product} for {period}.
 
@@ -60,6 +69,7 @@ class RevenueAnswer:
     search_queries: list[str] = field(default_factory=list)
     usage: dict[str, Any] | None = None
     interaction_id: str | None = None
+    raw: dict[str, Any] | None = None
 
 
 def build_prompt(product: str, period: str, issuer: str | None = None) -> str:
@@ -77,22 +87,36 @@ def ask_revenue(
 ) -> RevenueAnswer:
     """Run one Google-Search-grounded call and return its answer and citations.
 
-    `client` defaults to a `google.genai.Client`, which reads `GEMINI_API_KEY`
-    from the environment. `model` defaults to `GEMINI_MODEL`, then
-    `DEFAULT_MODEL`.
+    `client` defaults to `make_client()`. `model` defaults to `GEMINI_MODEL`,
+    then `DEFAULT_MODEL`. Raises `QuotaExceeded` on a 429, without retrying.
     """
     model = model or os.environ.get("GEMINI_MODEL") or DEFAULT_MODEL
     if client is None:
-        from google import genai
-
-        client = genai.Client()
-    interaction = client.interactions.create(
-        model=model,
-        input=build_prompt(product, period, issuer),
-        tools=[{"type": "google_search"}],
-    )
+        client = make_client()
+    try:
+        interaction = client.interactions.create(
+            model=model,
+            input=build_prompt(product, period, issuer),
+            tools=[{"type": "google_search"}],
+        )
+    except Exception as exc:
+        if getattr(exc, "status_code", None) == 429:
+            raise QuotaExceeded(f"{model}: {exc}") from exc
+        raise
     data = interaction.model_dump(mode="json") if hasattr(interaction, "model_dump") else interaction
     return parse_interaction(data, product=product, period=period, model=model)
+
+
+def make_client() -> Any:
+    """A `google.genai.Client` that reads `GEMINI_API_KEY` and never retries a 429."""
+    from google import genai
+    from google.genai import types
+
+    return genai.Client(
+        http_options=types.HttpOptions(
+            retry_options=types.HttpRetryOptions(http_status_codes=RETRY_STATUSES)
+        )
+    )
 
 
 def parse_interaction(data: dict[str, Any], *, product: str, period: str, model: str) -> RevenueAnswer:
@@ -131,6 +155,7 @@ def parse_interaction(data: dict[str, Any], *, product: str, period: str, model:
         search_queries=queries,
         usage=data.get("usage"),
         interaction_id=data.get("id"),
+        raw=data,
     )
 
 

@@ -14,7 +14,7 @@ import sys
 from dataclasses import asdict
 from pathlib import Path
 
-from app.retrieval.gemini_search import ask_revenue
+from app.retrieval.gemini_search import QuotaExceeded, ask_revenue
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -26,7 +26,16 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--save", type=Path)
     args = parser.parse_args(argv)
 
-    answer = ask_revenue(args.product, args.period, args.issuer, model=args.model)
+    try:
+        answer = ask_revenue(args.product, args.period, args.issuer, model=args.model)
+    except QuotaExceeded as exc:
+        print(f"quota exceeded, not retried: {exc}", file=sys.stderr)
+        print(
+            "Search grounding needs a paid tier; check billing and usage at "
+            "https://ai.dev/rate-limit",
+            file=sys.stderr,
+        )
+        return 2
 
     print(f"model: {answer.model}")
     print(f"interaction: {answer.interaction_id}")

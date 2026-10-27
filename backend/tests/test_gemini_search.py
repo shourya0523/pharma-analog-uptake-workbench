@@ -81,3 +81,32 @@ def test_ask_revenue_sends_google_search_tool_and_the_prompt():
     assert calls[0]["input"] == build_prompt("Calderon", "Q2 2023", "Acme Pharma")
     assert "that Acme Pharma reported" in calls[0]["input"]
     assert answer.parsed["value"] == 412.5
+
+
+def test_a_429_raises_quota_exceeded_instead_of_returning():
+    import pytest
+
+    from app.retrieval.gemini_search import QuotaExceeded
+
+    class RateLimited(Exception):
+        status_code = 429
+
+    class Interactions:
+        def create(self, **kwargs):
+            raise RateLimited("You exceeded your current quota")
+
+    class Client:
+        interactions = Interactions()
+
+    with pytest.raises(QuotaExceeded, match="exceeded your current quota"):
+        ask_revenue("Calderon", "Q2 2023", model="m", client=Client())
+
+
+def test_make_client_retries_overload_but_not_429():
+    from app.retrieval.gemini_search import RETRY_STATUSES, make_client
+
+    # The Interactions client keeps its own retry list; the override has to reach it.
+    retry = make_client().interactions.sdk_configuration.retry_config
+    assert retry.status_codes_override == [str(code) for code in RETRY_STATUSES]
+    assert "429" not in retry.status_codes_override
+    assert "503" in retry.status_codes_override
