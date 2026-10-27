@@ -4,14 +4,42 @@ Five rules. They exist because each was broken, and the cost was not a wrong
 number - it was a measurement that had stopped meaning anything, or a
 conclusion asserted from something that looked like evidence.
 
-Rules 3 and 4 are enforced by tests. The rest are not enforceable, and are the
-ones that go wrong most. Rule 1 is how the others get broken.
+Rules 1 and 2 are not enforceable, and are the ones that go wrong most. Rules 3
+and 4 were enforced by tests in the previous codebase; this branch has none yet,
+so until the rebuild adds them they hold by review alone. Rule 1 is how the
+others get broken.
+
+---
+
+## Layout
+
+This branch is a greenfield rebuild. The previous codebase - backend, pipeline,
+tests, held-out sets and pipeline inputs - is on `main` and is not here. Where a
+rule below cites a file or function by name, it is from that codebase unless it
+appears in `git ls-files`.
+
+    seed/gold/        the answer key. Its own README.md says what each file is.
+    seed/cases/       eval cases built from gold - answer key.
+    seed/analog_profiles.csv, seed/analog_profile_evidence.csv
+                      hand-sourced analog profiles, one row per product, with
+                      a cited document per value. Rubric: docs/analog_profiles.md.
+    seed/consensus_peak_estimates.csv
+                      published peak-sales estimates, cited per row.
+    scripts/          builders and exporters for gold, profiles and workbooks.
+    exports/          workbooks those scripts write.
+    frontend/         the React + Vite app. Its backend does not exist yet.
+
+Nothing in this tree is a pipeline input yet. The profiles and consensus
+estimates cover only products gold holds, so they sit on the answer-key side
+of rule 3 until something shows otherwise:
+
+    python3 -I -c "import csv,json; g={json.loads(l)['drug_name'].lower() for l in open('seed/gold/product_profiles.jsonl')}; p={r['drug_name'].lower() for r in csv.DictReader(open('seed/analog_profiles.csv'))}; print(len(p - g), 'profiled products not in gold')"
 
 ---
 
 ## 1. Derive the list; do not write it down
 
-Auditing this branch end to end: every failure of rules 3 and 4 - the two about
+Auditing the previous codebase end to end: every failure of rules 3 and 4 - the two about
 the answer key - was a hand-maintained list. Rule 2's failures split, about
 evenly, between a list used as a filter and a generalisation from one or two
 observations. Nothing else accounted for any of them.
@@ -34,7 +62,7 @@ file.)
 Each of those reads at a glance as a reasonable list. Each produced a confident
 absence that belonged to the list rather than to the data.
 
-The same audit found the derived versions all held:
+The same audit found the derived versions all held (names from that codebase):
 
 - `test_capabilities_are_wired` rglobs for capabilities instead of naming four
 - `DOCUMENT_FITNESS` ranks the `SourceType` enum exhaustively
@@ -87,28 +115,27 @@ was, or the absence you found is the filter's, not the data's.
 
 ## 3. Nothing the pipeline reads may come from the answer key
 
-`seed/gold/` scores the pipeline. `seed/product_attributes.csv`,
-`seed/xbrl_members.csv` and `seed/example_drugs.csv` are what it runs on. The
-dependency runs one way: reference data may flow into gold, never back.
+`seed/gold/` scores the pipeline. Anything derived from gold, or built for
+the same products gold holds, is on the same side: `seed/cases/`, the gold
+workbooks in `exports/`, and - until shown otherwise - the analog profiles and
+consensus estimates. The dependency runs one way: reference data may flow into
+gold, never back.
 
-`backend/tests/test_gold_is_not_an_input.py` enforces this in three shapes -
-application code naming gold, a script that reads gold and writes an input, and
-a pipeline input whose text carries gold's own URLs or quotes. The third exists
-because the failure arrived as a hand-written file, which the first two do not
-watch.
+The previous codebase enforced this with `backend/tests/test_gold_is_not_an_input.py`
+(on `main`) in three shapes - application code naming gold, a script that reads
+gold and writes an input, and a pipeline input whose text carries gold's own
+URLs or quotes. The third exists because the failure arrived as a hand-written
+file, which the first two do not watch. The rebuild needs the same three before
+its first pipeline input lands.
 
 **Before adding any file the pipeline reads, answer the delete test in the
 commit message: remove the file, and does the pipeline still work on a product
 it has never seen?**
 
-- `seed/xbrl_members.csv` passes. Delete it and the members that the string
-  rules place still resolve; the rest go to the model that decided them
-  originally, at one call each. It is a **cache** in front of a procedure that
-  works without it. Do not quote a count here - the register grows and the
-  rules change under it, and the split is a `match` over the register away:
-
-        from app.extraction.members import load_register, load_products, match
-        sum(1 for _, m in load_register() if match(m, load_products()).resolved)
+- The previous codebase's `seed/xbrl_members.csv` passed. Delete it and the
+  members that the string rules placed still resolved; the rest went to the
+  model that decided them originally, at one call each. It was a **cache** in
+  front of a procedure that worked without it.
 
   A cache only holds if a stored decision cannot answer a question it was not
   asked. A negative recorded against one candidate list is not an answer for a
@@ -125,14 +152,15 @@ different hat.
 
 ## 4. Every scored change is measured on a set it was not built from
 
-Gold is an oracle for finding defects, never a scorer for the fix. `seed/holdout`,
-`seed/holdout2`, `seed/holdout_labels` and `seed/holdout_members` are each spent
-on the change they were built for.
+Gold is an oracle for finding defects, never a scorer for the fix. The
+previous codebase's held-out sets (`seed/holdout*` on `main`) were each spent on
+the change they were built for, and are not on this branch.
 
 A new change gets a new held-out set, drawn from issuers none of the existing
-answer keys use. `backend/tests/test_combined_name_holdout_is_held_out.py` is
-the shape: it checks the property that makes the number mean anything rather
-than the number.
+answer keys use - gold's and the old held-out sets' both. The previous
+codebase's `backend/tests/test_combined_name_holdout_is_held_out.py` is the
+shape: it checks the property that makes the number mean anything rather than
+the number.
 
 Two things that follow:
 
@@ -189,10 +217,10 @@ prose around it about the shape.
 
 ## Checks worth running
 
-    cd backend && ./.venv/bin/pytest -q                     # everything
-    ./.venv/bin/pytest tests/test_gold_is_not_an_input.py    # rules 3 and 4
+    python3 scripts/sourcing/validate_analog_profiles.py \
+        seed/analog_profiles.csv seed/analog_profile_evidence.csv
+    cd frontend && npm run lint && npm run test && npm run build
 
-`scripts/eval.py` scores against a case file or a held-out set, needs a
-running server and `OPENROUTER_API_KEY`, and is not part of the test run. A
-change to a prompt is not finished until it has been re-run and its number
-reported, with the configuration the run printed above it.
+There is no backend test suite or eval yet. When there is, list it here. A
+change to a prompt is not finished until it has been re-run on a held-out set
+and its number reported, with the configuration the run printed above it.
