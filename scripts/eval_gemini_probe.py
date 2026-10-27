@@ -73,17 +73,20 @@ def pick_cases(seed: int) -> list[dict]:
     used_products.add(row["drug_name"])
     cases.append({
         "kind": "annual", "gold_id": row["gold_id"], "product": row["drug_name"], "issuer": row.get("manufacturer"),
-        "period": f"FY{row['period']}", "gold_value": row["value_reported"], "gold_unit": row["unit"],
+        # A calendar-basis row is asked as calendar dates; a fiscal one by the
+        # issuer's own fiscal-year label.
+        "period": row["period"] if row["period_basis"] == "calendar" else f"FY{row['period']}",
+        "gold_value": row["value_reported"], "gold_unit": row["unit"],
         "gold_currency": row["currency"], "gold_url": row["source_url"], "expect_value": True,
     })
 
     # An excluded product has no period in gold; any year it was on the market
-    # has no standalone figure, so the most recent complete year is asked.
+    # has no standalone figure, so a recent complete calendar year is asked.
     row = rng.choice([r for r in excluded if r["reason_code"] == "aggregated_with_other_products"
                       and r.get("approval_era") not in (None, "2025+")])
     cases.append({
         "kind": "excluded_aggregated", "gold_id": row["gold_id"], "product": row["drug_name"], "issuer": None,
-        "period": "FY2023", "gold_value": None, "gold_unit": None, "gold_currency": None,
+        "period": "2023", "gold_value": None, "gold_unit": None, "gold_currency": None,
         "gold_url": row["source_url"], "expect_value": False, "gold_reason": row["reason_code"],
     })
     return cases

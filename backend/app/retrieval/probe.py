@@ -20,7 +20,10 @@ from app.retrieval.gemini_search import QuotaExceeded, ask_revenue
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("product")
-    parser.add_argument("period", help='as a person would write it, e.g. "Q2 2023" or "FY2021"')
+    parser.add_argument(
+        "period",
+        help='"Q2 2023" or "2021" are calendar dates; "FY2021" is the issuer\'s own fiscal year',
+    )
     parser.add_argument("--issuer")
     parser.add_argument("--model")
     parser.add_argument("--save", type=Path)

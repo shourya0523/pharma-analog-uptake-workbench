@@ -7,6 +7,7 @@ caller, against documents the citations point at.
 
 from __future__ import annotations
 
+import calendar
 import json
 import os
 import re
@@ -26,11 +27,11 @@ class QuotaExceeded(RuntimeError):
 
 PROMPT = """\
 Find the net product revenue {issuer_clause}reported for {product} for {period}.
-
-Use the issuer's own disclosure (an SEC filing, an annual report, or an earnings
-release) rather than a news article or an analyst estimate. If the issuer did
-not report the product on its own line for that period, say so instead of
-estimating.
+{period_note}
+Any source is fine - a filing, an earnings release, an annual report, a news
+article - as long as it prints the reported figure itself. Do not use an
+analyst estimate or forecast. If the product was not reported on its own line
+for that period, say so instead of estimating.
 
 Answer with one JSON object and nothing else:
 {{
@@ -72,9 +73,48 @@ class RevenueAnswer:
     raw: dict[str, Any] | None = None
 
 
+_QUARTER = re.compile(r"^\s*Q([1-4])\s*(\d{4})\s*$|^\s*(\d{4})\s*Q([1-4])\s*$", re.IGNORECASE)
+_CALENDAR_YEAR = re.compile(r"^\s*(?:CY\s*)?(\d{4})\s*$", re.IGNORECASE)
+
+FISCAL_NOTE = """
+These are calendar dates. An issuer whose fiscal year does not start in January
+labels this period with a different quarter or year (the three months ended
+June 30 can be its fiscal Q1); report the figure that covers these dates,
+whatever the issuer calls it.
+"""
+
+
+def describe_period(period: str) -> tuple[str, bool]:
+    """Spell a period out as dates where it names a calendar span.
+
+    "Q2 2020" and "2020Q2" become "the three months ended June 30, 2020
+    (calendar Q2 2020)"; "2020" and "CY2020" become the twelve months ended
+    December 31. Anything else, "FY2020" included, is passed through as written,
+    since an issuer's fiscal year is its own. The flag says whether dates were
+    given, and so whether the fiscal-year note applies.
+    """
+    quarter = _QUARTER.match(period)
+    if quarter:
+        q = int(quarter.group(1) or quarter.group(4))
+        year = int(quarter.group(2) or quarter.group(3))
+        month = q * 3
+        end = f"{calendar.month_name[month]} {calendar.monthrange(year, month)[1]}, {year}"
+        return f"the three months ended {end} (calendar Q{q} {year})", True
+    year = _CALENDAR_YEAR.match(period)
+    if year:
+        return f"the twelve months ended December 31, {year.group(1)} (calendar year {year.group(1)})", True
+    return period, False
+
+
 def build_prompt(product: str, period: str, issuer: str | None = None) -> str:
     issuer_clause = f"that {issuer} " if issuer else ""
-    return PROMPT.format(product=product, period=period, issuer_clause=issuer_clause)
+    described, dated = describe_period(period)
+    return PROMPT.format(
+        product=product,
+        period=described,
+        period_note=FISCAL_NOTE if dated else "",
+        issuer_clause=issuer_clause,
+    )
 
 
 def ask_revenue(

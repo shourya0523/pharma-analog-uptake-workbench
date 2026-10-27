@@ -110,3 +110,18 @@ def test_make_client_retries_overload_but_not_429():
     assert retry.status_codes_override == [str(code) for code in RETRY_STATUSES]
     assert "429" not in retry.status_codes_override
     assert "503" in retry.status_codes_override
+
+
+def test_calendar_periods_are_spelled_out_as_dates():
+    from app.retrieval.gemini_search import describe_period
+
+    assert describe_period("Q2 2020") == ("the three months ended June 30, 2020 (calendar Q2 2020)", True)
+    assert describe_period("2024q1")[0].startswith("the three months ended March 31, 2024")
+    assert describe_period("CY2010") == ("the twelve months ended December 31, 2010 (calendar year 2010)", True)
+    assert describe_period("FY2021") == ("FY2021", False)
+
+
+def test_the_fiscal_note_rides_only_with_dates():
+    dated = build_prompt("Calderon", "Q3 2023")
+    assert "September 30, 2023" in dated and "fiscal Q1" in dated
+    assert "fiscal Q1" not in build_prompt("Calderon", "FY2023")
