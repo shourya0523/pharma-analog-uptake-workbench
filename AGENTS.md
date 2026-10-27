@@ -26,6 +26,10 @@ Backend (`backend/`, Python, managed by `uv`):
 
 - Install: `cd backend && uv sync`.
 - Test: `uv run pytest -q` (offline; the Gemini client is faked).
+- XBRL first pass: `app.retrieval.xbrl.first_pass(product, "Q2 2023", issuer)`
+  reads the product's revenue from the issuer's 10-Q XBRL via EDGAR full-text
+  search. Needs `SEC_USER_AGENT` with a contact address; SEC answers 403
+  "Undeclared Automated Tool" without one.
 - Probe: `uv run python -m app.retrieval.probe "<product>" "<period>" --issuer "<issuer>"`
   calls Gemini with Google Search grounding. Needs `GEMINI_API_KEY`; the model
   is `GEMINI_MODEL` if set, else the default in `gemini_search.py`.

@@ -31,7 +31,8 @@ appears in `git ls-files`.
     scripts/          builders and exporters for gold, profiles and workbooks.
     exports/          workbooks those scripts write.
     backend/          the rebuild's Python code (uv). app/retrieval/ holds the
-                      Gemini Google-Search probe.
+                      XBRL first pass (xbrl.py), the Gemini Google-Search probe
+                      and the source check.
     frontend/         the React + Vite app. It has no API to call yet.
 
 Nothing in this tree is a pipeline input yet. The previous codebase's pipeline
@@ -230,6 +231,11 @@ prose around it about the shape.
 
     cd backend && uv run pytest -q
 
-There is no eval yet. When there is, list it here. A
+Evals (gold as a defect oracle, not a held-out score; both need network):
+
+    cd backend && uv run python ../scripts/eval_xbrl_first_pass.py --issuer --out /tmp/x.jsonl
+    cd backend && uv run python ../scripts/eval_gemini_probe.py --out /tmp/g.jsonl
+
+The Gemini eval needs `GEMINI_API_KEY`; both need `SEC_USER_AGENT`. A
 change to a prompt is not finished until it has been re-run on a held-out set
 and its number reported, with the configuration the run printed above it.
