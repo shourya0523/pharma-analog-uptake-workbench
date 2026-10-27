@@ -4,23 +4,29 @@ This directory is a source of truth built from issuer SEC filings and investor
 relations disclosures. It is not produced by the application extraction
 pipeline, an LLM, or pipeline post-processing.
 
-All 20 products in `seed/example_drugs.csv` have one explicit disposition:
+It holds a pulmonary arterial hypertension catalog, every product of which has
+one explicit disposition, plus comparator products from other therapeutic
+areas. Each product either has a complete quarter-by-quarter series from
+commercial start, an issuer-reported annual series, or an exclusion with a
+cited reason (aggregated, scope-incomparable, private, or incomplete before the
+possible peak). No sales are invented for an excluded product.
 
-- 12 have independently supported peak labels.
-- 13 have complete quarter-by-quarter sales from commercial start to the end of
-  each series, totalling 534 cited observations, every one of them at 100%
-  coverage against the span `series_coverage.jsonl` declares for it.
-- 6 labels are observed numeric peaks.
-- 6 labels are `not_yet_observed` because the complete reported history is
-  still growing or lacks enough post-peak years.
-- 8 products are excluded with a cited reason because public reporting is
-  aggregated, scope-incomparable, private, or incomplete before the possible
-  peak. No sales are invented for them.
+The current counts are in `build_report.json`, which the builder writes. Do not
+copy them into prose; print them:
+
+    python3 -I -c "import json; b=json.load(open('seed/gold/build_report.json')); print(json.dumps({k: v for k, v in b['gold_completeness'].items() if not isinstance(v, list)}, indent=1))"
+
+On this branch (a greenfield rebuild - see the repository's `CLAUDE.md`), the
+builder, its tests and the evals named below are not all present. Where this
+file names `backend/`, a test, `scripts/eval_*.py`, `seed/example_drugs.csv`
+or `seed/product_attributes.csv`, it is describing the previous codebase, which
+is on `main`.
 
 ## Files
 - `product_profiles.jsonl`: analog matching attributes, one row per product.
   Mechanism, mechanism class, route, first approval year and indication area
-  are **curated reference facts** from `seed/product_attributes.csv` — they do
+  are **curated reference facts** from `seed/product_attributes.csv` (on
+  `main`) — they do
   not cite a document and a quote the way every revenue row does, and each row
   says so in `attribute_provenance`. Do not read them as the same kind of
   evidence.
@@ -121,20 +127,26 @@ All 20 products in `seed/example_drugs.csv` have one explicit disposition:
 
 ## Rebuild
 
+The builder is `scripts/build_independent_gold.py`. It imports no `app`,
+orchestrator, extraction, quality-filter, or LLM code, and fails if any included
+quarterly series is incomplete.
+
+It cannot run on this branch yet: it reads the catalog from
+`seed/example_drugs.csv` and curated attributes from `seed/product_attributes.csv`,
+and neither is here. Its validation suite, `backend/tests/test_gold_dataset.py`,
+is on `main`. On `main`:
+
 ```bash
 cd backend
 uv run python ../scripts/build_independent_gold.py
-```
-
-The builder imports no `app`, orchestrator, extraction, quality-filter, or LLM
-code. It fails if any included quarterly series is incomplete.
-
-Validate with:
-
-```bash
-cd backend
 uv run pytest tests/test_gold_dataset.py
 ```
+
+## History
+
+The sections from here on record how the dataset was built and the decisions
+behind it. Counts quoted in them are as of when each section was written and
+are not maintained; `build_report.json` is current.
 
 ## Is this dataset complete?
 

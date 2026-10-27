@@ -1,26 +1,38 @@
 # AGENTS.md
 
-## Cursor Cloud specific instructions
+Read `CLAUDE.md` first: its rules apply to every change here, and its Layout
+section says what this branch holds.
 
-Monorepo with two runnable services: a FastAPI backend (`backend/`, Python 3.12, managed by `uv`) and a React + Vite frontend (`frontend/`, Node, npm). Standard commands live in `README.md`, `backend/pyproject.toml`, and `frontend/package.json` — prefer those rather than duplicating them here.
+## Runnable today
 
-### Services
+This branch is a greenfield rebuild. The only runnable service is the frontend;
+the backend it talks to has not been written yet (the previous one is on
+`main`).
 
 | Service | Dir | Dev command | Port |
 | --- | --- | --- | --- |
-| Backend API + in-process pipeline/worker | `backend/` | `uv run uvicorn app.main:app --reload --port 8000` | 8000 |
-| Frontend SPA | `frontend/` | `npm run dev` | 5173 |
+| Frontend SPA (React + Vite, Node, npm) | `frontend/` | `npm run dev` | 5173 |
 
-- Lint: backend `uv run ruff check .`; frontend `npm run lint` (oxlint).
-- Test: backend `uv run pytest` (no network needed); frontend `npm run test` (`vitest run`). `npm run build` (`tsc -b && vite build`) is the build check. Neither count is written here - `pytest -q` prints the backend's.
+Commands live in `frontend/package.json` - prefer those to duplicating them
+here.
 
-### Non-obvious caveats
+- Install: `cd frontend && npm ci`.
+- Lint: `npm run lint` (oxlint).
+- Test: `npm run test` (`vitest run`, jsdom; API calls are mocked, so no backend
+  is needed).
+- Build check: `npm run build` (`tsc -b && vite build`).
 
-- `uv` is installed to `~/.local/bin` (added to `~/.bashrc` by its installer). If `uv` is not found, run `export PATH="$HOME/.local/bin:$PATH"`.
-- `backend/.env` must exist before starting the backend: `cp backend/.env.example backend/.env`. It is gitignored, so it is recreated per VM (the update script handles this).
-- The Vite dev server binds to `localhost` only, not `127.0.0.1`. Health-check the frontend at `http://localhost:5173` (curling `127.0.0.1:5173` returns nothing).
-- No separate database or worker process: SQLite (`backend/storage/workbench.db`), local file store, and the extraction pipeline all run in-process inside the backend and are auto-created on startup.
-- The extraction pipeline runs **without** an `OPENROUTER_API_KEY` — every LLM step degrades gracefully to a safe empty/deterministic result. In that mode the pipeline still retrieves SEC/OpenFDA sources and extracts citation-backed profile fields from OpenFDA, but `candidates_extracted` (LLM-derived quarterly revenue) will be 0. Set `OPENROUTER_API_KEY` in `backend/.env` for full revenue extraction/judging.
-- `backend/ruff check .` currently reports pre-existing style findings (unsorted imports, etc.); these are not environment problems.
-- End-to-end runs need outbound internet to `openrouter.ai`, `data.sec.gov`/`www.sec.gov`, and `api.fda.gov`. If egress is restricted in a future VM, source retrieval will be limited but the app still starts and serves.
-- AWS S3/SQS/RDS paths (`STORAGE_BACKEND=s3`, `JOB_BACKEND=sqs`) and `infra/` are optional and not needed for local dev.
+The scripts in `scripts/` run with plain `python3` and need `openpyxl` for the
+workbook exporters. Not all of them run on this branch: some import the old
+backend or read seed inputs that were removed.
+
+## Non-obvious caveats
+
+- The frontend reads its API base from `VITE_API_URL`, defaulting to
+  `http://127.0.0.1:8000`. With no backend, pages that fetch data show their
+  error or empty state; that is expected, not an environment problem.
+- The production image (`frontend/Dockerfile`) builds with `VITE_API_URL=/api`
+  into a Caddy image. The Caddyfile that proxied `/api` to the backend lived in
+  `deploy/`, which is not on this branch, so the image is not deployable as is.
+- There is no Python environment, database or worker yet. When the backend
+  lands, add its service row, commands and caveats here.
