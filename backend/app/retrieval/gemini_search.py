@@ -11,6 +11,7 @@ import calendar
 import json
 import os
 import re
+import time
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -22,8 +23,20 @@ DEFAULT_MODEL = "gemini-3.8-flash"
 RETRY_STATUSES = [408, 500, 502, 503, 504]
 
 
+# A grounded call can run for minutes while the model searches. Held open as
+# one request it can be dropped by the server before it finishes, so the call
+# runs in background mode and is polled instead.
+POLL_SECONDS = 5
+MAX_WAIT_SECONDS = 15 * 60
+_FINISHED = {"completed", "failed", "cancelled", "incomplete"}
+
+
 class QuotaExceeded(RuntimeError):
     """Gemini answered 429: the project's quota or rate limit is used up."""
+
+
+class InteractionFailed(RuntimeError):
+    """The interaction ended in a state other than completed, or never ended."""
 
 PROMPT = """\
 Find the net product revenue {issuer_clause}reported for {product} for {period}.
@@ -128,7 +141,8 @@ def ask_revenue(
     """Run one Google-Search-grounded call and return its answer and citations.
 
     `client` defaults to `make_client()`. `model` defaults to `GEMINI_MODEL`,
-    then `DEFAULT_MODEL`. Raises `QuotaExceeded` on a 429, without retrying.
+    then `DEFAULT_MODEL`. Raises `QuotaExceeded` on a 429, without retrying,
+    and `InteractionFailed` if the call does not complete.
     """
     model = model or os.environ.get("GEMINI_MODEL") or DEFAULT_MODEL
     if client is None:
@@ -138,13 +152,27 @@ def ask_revenue(
             model=model,
             input=build_prompt(product, period, issuer),
             tools=[{"type": "google_search"}],
+            background=True,
         )
+        data = _as_dict(interaction)
+        waited = 0.0
+        while data.get("status") and data["status"] not in _FINISHED:
+            if waited >= MAX_WAIT_SECONDS:
+                raise InteractionFailed(f"{data.get('id')}: still {data['status']} after {waited:.0f} s")
+            time.sleep(POLL_SECONDS)
+            waited += POLL_SECONDS
+            data = _as_dict(client.interactions.get(data["id"]))
     except Exception as exc:
         if getattr(exc, "status_code", None) == 429:
             raise QuotaExceeded(f"{model}: {exc}") from exc
         raise
-    data = interaction.model_dump(mode="json") if hasattr(interaction, "model_dump") else interaction
+    if data.get("status") not in (None, "completed"):
+        raise InteractionFailed(f"{data.get('id')}: {data.get('status')}: {data.get('errors')}")
     return parse_interaction(data, product=product, period=period, model=model)
+
+
+def _as_dict(interaction: Any) -> dict[str, Any]:
+    return interaction.model_dump(mode="json") if hasattr(interaction, "model_dump") else interaction
 
 
 def make_client() -> Any:

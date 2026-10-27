@@ -125,3 +125,50 @@ def test_the_fiscal_note_rides_only_with_dates():
     dated = build_prompt("Calderon", "Q3 2023")
     assert "September 30, 2023" in dated and "fiscal Q1" in dated
     assert "fiscal Q1" not in build_prompt("Calderon", "FY2023")
+
+
+def test_a_background_interaction_is_polled_until_it_completes(monkeypatch):
+    import app.retrieval.gemini_search as gs
+
+    monkeypatch.setattr(gs, "POLL_SECONDS", 0)
+    states = iter(["in_progress", "completed"])
+    created = []
+
+    class Interactions:
+        def create(self, **kwargs):
+            created.append(kwargs)
+            return {"id": "int-1", "status": "in_progress"}
+
+        def get(self, interaction_id):
+            assert interaction_id == "int-1"
+            status = next(states)
+            body = _interaction(json.dumps(ANSWER)) if status == "completed" else {}
+            return {**body, "id": "int-1", "status": status}
+
+    class Client:
+        interactions = Interactions()
+
+    answer = gs.ask_revenue("Calderon", "Q2 2023", model="m", client=Client())
+    assert created[0]["background"] is True
+    assert answer.parsed == ANSWER
+
+
+def test_a_failed_interaction_raises(monkeypatch):
+    import pytest
+
+    import app.retrieval.gemini_search as gs
+
+    monkeypatch.setattr(gs, "POLL_SECONDS", 0)
+
+    class Interactions:
+        def create(self, **kwargs):
+            return {"id": "int-1", "status": "in_progress"}
+
+        def get(self, interaction_id):
+            return {"id": "int-1", "status": "failed", "errors": [{"message": "boom"}]}
+
+    class Client:
+        interactions = Interactions()
+
+    with pytest.raises(gs.InteractionFailed, match="boom"):
+        gs.ask_revenue("Calderon", "Q2 2023", model="m", client=Client())

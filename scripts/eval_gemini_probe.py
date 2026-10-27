@@ -147,9 +147,12 @@ def main() -> int:
     parser.add_argument("--workers", type=int, default=4)
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--dry-run", action="store_true", help="print the cases and stop")
+    parser.add_argument("--kinds", nargs="+", help="run only these kinds (the draw is unchanged)")
     args = parser.parse_args()
 
     cases = pick_cases(args.seed)
+    if args.kinds:
+        cases = [c for c in cases if c["kind"] in args.kinds]
     print(f"model={args.model} seed={args.seed} cases={len(cases)} workers={args.workers}")
     for c in cases:
         print(f"  {c['kind']:<26} {c['product']} | {c['period']} | {c['issuer']} | gold {c['gold_value']} "
