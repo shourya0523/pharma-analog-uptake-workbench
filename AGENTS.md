@@ -24,7 +24,7 @@ here.
 
 The scripts in `scripts/` run with plain `python3` and need `openpyxl` for the
 workbook exporters. `build_independent_gold.py` also needs `httpx`,
-`beautifulsoup4`, `pdfplumber` and network access, and writes into `seed/gold/`
+`beautifulsoup4`, `lxml`, `pdfplumber` and network access, and writes into `seed/gold/`
 unless given `--out-dir`. `build_gold_cases.py` imports the old backend and does
 not run on this branch.
 

@@ -130,9 +130,10 @@ orchestrator, extraction, quality-filter, or LLM code, and fails if any included
 quarterly series is incomplete.
 
 It reads the catalog from `seed/example_drugs.csv` and curated attributes from
-`seed/product_attributes.csv`, and re-fetches every cited source unless told to
-reuse the quarterly rows. It needs `httpx`, `beautifulsoup4` and `pdfplumber`
-and network access to the cited hosts. Write to a scratch directory first to
+`seed/product_attributes.csv`, and the researched rows from `source_manifests/`.
+It fetches the documents it parses directly (cached under `--cache-dir`) unless
+`--reuse-quarterly` is given. It needs `httpx`, `beautifulsoup4`, `lxml` and
+`pdfplumber`, and network access to the hosts it fetches from. Write to a scratch directory first to
 compare before overwriting gold:
 
 ```bash
