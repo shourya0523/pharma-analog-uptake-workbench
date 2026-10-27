@@ -25,11 +25,16 @@ appears in `git ls-files`.
                       a cited document per value. Rubric: docs/analog_profiles.md.
     seed/consensus_peak_estimates.csv
                       published peak-sales estimates, cited per row.
+    seed/example_drugs.csv, seed/product_attributes.csv
+                      the gold builder's catalog and curated attributes:
+                      reference data that flows into gold.
     scripts/          builders and exporters for gold, profiles and workbooks.
     exports/          workbooks those scripts write.
     frontend/         the React + Vite app. Its backend does not exist yet.
 
-Nothing in this tree is a pipeline input yet. The profiles and consensus
+Nothing in this tree is a pipeline input yet. The previous codebase's pipeline
+read `example_drugs.csv` and `product_attributes.csv`; a new pipeline that reads
+them again takes them as inputs under rule 3, delete test included. The profiles and consensus
 estimates cover only products gold holds, so they sit on the answer-key side
 of rule 3 until something shows otherwise:
 

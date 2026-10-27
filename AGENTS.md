@@ -23,8 +23,10 @@ here.
 - Build check: `npm run build` (`tsc -b && vite build`).
 
 The scripts in `scripts/` run with plain `python3` and need `openpyxl` for the
-workbook exporters. Not all of them run on this branch: some import the old
-backend or read seed inputs that were removed.
+workbook exporters. `build_independent_gold.py` also needs `httpx`,
+`beautifulsoup4`, `pdfplumber` and network access, and writes into `seed/gold/`
+unless given `--out-dir`. `build_gold_cases.py` imports the old backend and does
+not run on this branch.
 
 ## Non-obvious caveats
 

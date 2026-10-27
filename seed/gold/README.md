@@ -18,15 +18,13 @@ copy them into prose; print them:
 
 On this branch (a greenfield rebuild - see the repository's `CLAUDE.md`), the
 builder, its tests and the evals named below are not all present. Where this
-file names `backend/`, a test, `scripts/eval_*.py`, `seed/example_drugs.csv`
-or `seed/product_attributes.csv`, it is describing the previous codebase, which
-is on `main`.
+file names `backend/`, a test or `scripts/eval_*.py`, it is describing the
+previous codebase, which is on `main`.
 
 ## Files
 - `product_profiles.jsonl`: analog matching attributes, one row per product.
   Mechanism, mechanism class, route, first approval year and indication area
-  are **curated reference facts** from `seed/product_attributes.csv` (on
-  `main`) — they do
+  are **curated reference facts** from `seed/product_attributes.csv` — they do
   not cite a document and a quote the way every revenue row does, and each row
   says so in `attribute_provenance`. Do not read them as the same kind of
   evidence.
@@ -131,16 +129,18 @@ The builder is `scripts/build_independent_gold.py`. It imports no `app`,
 orchestrator, extraction, quality-filter, or LLM code, and fails if any included
 quarterly series is incomplete.
 
-It cannot run on this branch yet: it reads the catalog from
-`seed/example_drugs.csv` and curated attributes from `seed/product_attributes.csv`,
-and neither is here. Its validation suite, `backend/tests/test_gold_dataset.py`,
-is on `main`. On `main`:
+It reads the catalog from `seed/example_drugs.csv` and curated attributes from
+`seed/product_attributes.csv`, and re-fetches every cited source unless told to
+reuse the quarterly rows. It needs `httpx`, `beautifulsoup4` and `pdfplumber`
+and network access to the cited hosts. Write to a scratch directory first to
+compare before overwriting gold:
 
 ```bash
-cd backend
-uv run python ../scripts/build_independent_gold.py
-uv run pytest tests/test_gold_dataset.py
+python3 scripts/build_independent_gold.py --out-dir /path/to/scratch
 ```
+
+Its validation suite, `backend/tests/test_gold_dataset.py`, is on `main` and
+has no equivalent on this branch yet.
 
 ## History
 
