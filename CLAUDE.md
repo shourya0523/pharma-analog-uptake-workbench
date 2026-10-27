@@ -30,7 +30,9 @@ appears in `git ls-files`.
                       reference data that flows into gold.
     scripts/          builders and exporters for gold, profiles and workbooks.
     exports/          workbooks those scripts write.
-    frontend/         the React + Vite app. Its backend does not exist yet.
+    backend/          the rebuild's Python code (uv). app/retrieval/ holds the
+                      Gemini Google-Search probe.
+    frontend/         the React + Vite app. It has no API to call yet.
 
 Nothing in this tree is a pipeline input yet. The previous codebase's pipeline
 read `example_drugs.csv` and `product_attributes.csv`; a new pipeline that reads
@@ -226,6 +228,8 @@ prose around it about the shape.
         seed/analog_profiles.csv seed/analog_profile_evidence.csv
     cd frontend && npm run lint && npm run test && npm run build
 
-There is no backend test suite or eval yet. When there is, list it here. A
+    cd backend && uv run pytest -q
+
+There is no eval yet. When there is, list it here. A
 change to a prompt is not finished until it has been re-run on a held-out set
 and its number reported, with the configuration the run printed above it.

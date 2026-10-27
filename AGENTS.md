@@ -5,9 +5,9 @@ section says what this branch holds.
 
 ## Runnable today
 
-This branch is a greenfield rebuild. The only runnable service is the frontend;
-the backend it talks to has not been written yet (the previous one is on
-`main`).
+This branch is a greenfield rebuild. The frontend runs; the backend so far is
+a library and a command-line probe, with no API server (the previous backend
+is on `main`).
 
 | Service | Dir | Dev command | Port |
 | --- | --- | --- | --- |
@@ -21,6 +21,14 @@ here.
 - Test: `npm run test` (`vitest run`, jsdom; API calls are mocked, so no backend
   is needed).
 - Build check: `npm run build` (`tsc -b && vite build`).
+
+Backend (`backend/`, Python, managed by `uv`):
+
+- Install: `cd backend && uv sync`.
+- Test: `uv run pytest -q` (offline; the Gemini client is faked).
+- Probe: `uv run python -m app.retrieval.probe "<product>" "<period>" --issuer "<issuer>"`
+  calls Gemini with Google Search grounding. Needs `GEMINI_API_KEY`; the model
+  is `GEMINI_MODEL` if set, else the default in `gemini_search.py`.
 
 The scripts in `scripts/` run with plain `python3` and need `openpyxl` for the
 workbook exporters. `build_independent_gold.py` also needs `httpx`,
@@ -36,5 +44,5 @@ not run on this branch.
 - The production image (`frontend/Dockerfile`) builds with `VITE_API_URL=/api`
   into a Caddy image. The Caddyfile that proxied `/api` to the backend lived in
   `deploy/`, which is not on this branch, so the image is not deployable as is.
-- There is no Python environment, database or worker yet. When the backend
-  lands, add its service row, commands and caveats here.
+- There is no database, worker or API server yet. When they land, add their
+  service rows, commands and caveats here.
