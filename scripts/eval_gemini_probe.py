@@ -44,7 +44,7 @@ QUARTERLY_KINDS = {
     "derived_not_printed": lambda r: r["derivation"] == "annual_less_reported_first_nine_months",
     "pre_2010": lambda r: r["calendar_year"] < 2010 and r["derivation"] == "direct_reported",
     "company_ir_source": lambda r: r["source_type"] == "company_ir" and r["derivation"] == "direct_reported",
-    "product_family_scope": lambda r: r["revenue_scope"] == "Product family",
+    "product_family_scope": lambda r: r["revenue_scope"] == "Product family" and r["derivation"] == "direct_reported",
 }
 
 
@@ -63,7 +63,10 @@ def pick_cases(seed: int) -> list[dict]:
             "kind": kind, "gold_id": row["gold_id"], "product": row["drug_name"],
             "issuer": row.get("manufacturer"), "period": f"Q{row['calendar_quarter']} {row['calendar_year']}",
             "gold_value": row["source_value_reported"], "gold_unit": row["source_unit"],
-            "gold_currency": row["currency"], "gold_url": row["source_url"], "expect_value": True,
+            "gold_currency": row["currency"], "gold_url": row["source_url"],
+            # The probe asks what was reported. A quarter gold derives by
+            # subtraction was never printed, so declining it is the right answer.
+            "expect_value": row["derivation"].startswith("direct"),
         })
 
     row = rng.choice([r for r in annual if r["series_role"] == "peak_benchmark" and r["drug_name"] not in used_products])
@@ -98,13 +101,23 @@ def score(case: dict, parsed: dict | None) -> dict:
     except (TypeError, ValueError):
         probe_m = float("nan")
     gold_m = float(case["gold_value"]) * SCALE[case["gold_unit"]]
-    # Exact after scaling, allowing only for the last printed digit.
-    match = abs(probe_m - gold_m) <= max(abs(gold_m) * 1e-6, 0.5 * SCALE[case["gold_unit"]])
+    # Equal to within the last printed digit of either figure: 180.3 million
+    # and 180,282 thousand are the same number printed at two precisions.
+    slack = max(_half_last_digit(case["gold_value"], case["gold_unit"]),
+                _half_last_digit(value, str(parsed.get("unit", "")).lower()))
+    match = abs(probe_m - gold_m) <= slack + abs(gold_m) * 1e-9
     return {
         "value_match": bool(match),
         "currency_match": str(parsed.get("currency", "")).upper() == case["gold_currency"],
         "probe_value_millions": probe_m,
     }
+
+
+def _half_last_digit(value, unit: str) -> float:
+    """Half of one unit in the last printed place of `value`, in millions."""
+    text = value if isinstance(value, str) else repr(float(value))
+    decimals = len(text.split(".")[1].rstrip("0")) if "." in text else 0
+    return 0.5 * 10 ** -decimals * SCALE.get(unit, 0.0)
 
 
 def run_case(case: dict, model: str) -> dict:
