@@ -1,33 +1,53 @@
 {
-  "drug_name": "Promacta",
-  "generic_name": "eltrombopag",
-  "manufacturer": "Novartis",
-  "currency": "USD",
-  "geography": "Worldwide",
-  "benchmark_identity": "novartis_promacta_worldwide_reported",
-  "therapeutic_area": "Rare Disease / Hematology",
-  "indication_area": "Hematology (chronic immune thrombocytopenia, severe aplastic anemia)",
-  "revenue_scope": "Worldwide",
-  "formulation": "tablet",
-  "route_of_administration": "oral",
-  "moa": "Thrombopoietin receptor agonist (small molecule)",
-  "moa_class": "thrombopoietin_receptor_agonist",
-  "first_approval_year": 2008,
-  "approval_evidence": {
-    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2008/022291s000ltr.pdf",
-    "quote": "NDA 22-291 GlaxoSmithKline ... new drug application ... for Promacta (eltrombopag) Tablets, 25 mg and 50 mg"
-  },
-  "launch_quarter": null,
-  "commercial_start_quarter": "2015Q2",
-  "series_start_reason": "Novartis acquired the product in the GSK transaction. The Q1 2015 report (0001370368-15-000043) prints 'Revolade/Promacta' 36 with the footnote 'Products acquired in GSK transaction, only March sales included'; that is a one-month quarter, so the series starts at the first full quarter, 2015Q2 (116). Sales before the transaction were reported by GSK in pounds sterling and are not spliced onto this USD series.",
-  "series_end_quarter": null,
-  "series_end_basis": null,
-  "series_end_reason": null,
-  "notes": "Group-level worldwide net sales to third parties (Promacta in the US, Revolade elsewhere) as one row of the Oncology business unit table; the row label is 'Revolade/Promacta' in the 2015 reports and 'Promacta/Revolade' from the Q4 2015 report. Q1 2015 (March only) was 36. Four-quarter sums equal the full years printed in the Q4 reports where checked: 2016 635, 2017 867, 2018 1,174, 2023 2,269, 2024 2,216, 2025 1,636; 2015 is 36+116+117+133=402 against the printed 402. The fall from 2025Q3 is as printed. GSK history (the product's launch years) was not sourced.",
-  "search_log": [
-    "Listed all Novartis (CIK 1114448) filings via data.sec.gov submissions (all forms, current and older pages, not filtered to one form). Downloaded the quarterly interim financial report exhibit of every results 6-K from 2010Q2 to 2026Q2 (EX-99.2 / a*-99_2.htm, or the 6-K body for 2010) and parsed every HTML table by script, taking the row whose first cell is the brand label in the table whose header begins with the quarter (Qn YYYY).",
-    "Bigdata.com was used to locate documents; every cited URL is the sec.gov Archives original. Compared each quarter's own value with the prior-year column of the same quarter one year later and with the printed full-year totals; differences are named in notes.",
-    "Looked for a US partner or licensee that prints the brand's own sales (rung c): Sunovion (Sumitomo Pharma) assumed US commercialization rights as of 2016-12-21 per the Novartis Q2 2017 report; a Bigdata.com search of Sumitomo Pharma filings for Utibron, Seebri and Arcapta Neohaler returned no result and no Sumitomo document was obtained, so no US-only line is used.",
-    "Q1 2015 to Q3 2015 reports read: the row is 'Revolade/Promacta'; a first scan keyed on 'Promacta/Revolade' alone missed these three, which were then found under the other order of the label. GSK (prior owner, rung d): not sourced; its figures are in pounds sterling and a different filing family (20-F/6-K), outside the longest consistent USD span."
-  ]
+    "drug_name": "Promacta",
+    "generic_name": "eltrombopag",
+    "manufacturer": "Novartis",
+    "currency": "USD",
+    "geography": "Worldwide",
+    "benchmark_identity": "novartis_promacta_worldwide_reported",
+    "therapeutic_area": "Rare Disease / Hematology",
+    "indication_area": "Hematology (chronic immune thrombocytopenia, severe aplastic anemia)",
+    "revenue_scope": "Worldwide",
+    "formulation": "tablet",
+    "route_of_administration": "oral",
+    "moa": "Thrombopoietin receptor agonist (small molecule)",
+    "moa_class": "thrombopoietin_receptor_agonist",
+    "first_approval_year": 2008,
+    "approval_evidence": {
+        "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2008/022291s000ltr.pdf",
+        "quote": "NDA 22-291 GlaxoSmithKline ... new drug application ... for Promacta (eltrombopag) Tablets, 25 mg and 50 mg"
+    },
+    "launch_quarter": null,
+    "commercial_start_quarter": "2009Q1",
+    "series_start_reason": "First quarter in which GSK plc prints a Promacta turnover row (2009Q1, GBP 2 million, USA only; the FDA approved the product on 20 November 2008 per the pipeline table of the Q4 2008 release, 0001156973-09-000059, which has no Promacta turnover row). GSK rows run 2009Q1-2014Q4 in GBP; Novartis acquired the product in March 2015 and its Q1 2015 report (0001370368-15-000043) prints 'Revolade/Promacta' 36 with the footnote 'Products acquired in GSK transaction, only March sales included', a one-month quarter, so Novartis rows resume at the first full quarter, 2015Q2 (116) in USD; 2015Q1 is declared in unreported_quarters.",
+    "series_end_quarter": null,
+    "series_end_basis": null,
+    "series_end_reason": null,
+    "notes": "Group-level worldwide net sales to third parties (Promacta in the US, Revolade elsewhere) as one row of the Oncology business unit table; the row label is 'Revolade/Promacta' in the 2015 reports and 'Promacta/Revolade' from the Q4 2015 report. Q1 2015 (March only) was 36. Four-quarter sums equal the full years printed in the Q4 reports where checked: 2016 635, 2017 867, 2018 1,174, 2023 2,269, 2024 2,216, 2025 1,636; 2015 is 36+116+117+133=402 against the printed 402. The fall from 2025Q3 is as printed. 2009Q1-2014Q4 are GSK plc's 'Promacta' row of the quarterly Pharmaceuticals turnover table in GBP millions (worldwide total with USA, Europe and other-region columns). GSK's four quarters sum to the full years printed in its Q4 releases where the full-year row is printed: 2009 13, 2010 31, 2011 75, 2012 130, 2013 186, 2014 231. GSK's Q4 2008 release prints no Promacta turnover row, so any 2008Q4 sales are not published.",
+    "search_log": [
+        "Listed all Novartis (CIK 1114448) filings via data.sec.gov submissions (all forms, current and older pages, not filtered to one form). Downloaded the quarterly interim financial report exhibit of every results 6-K from 2010Q2 to 2026Q2 (EX-99.2 / a*-99_2.htm, or the 6-K body for 2010) and parsed every HTML table by script, taking the row whose first cell is the brand label in the table whose header begins with the quarter (Qn YYYY).",
+        "Bigdata.com was used to locate documents; every cited URL is the sec.gov Archives original. Compared each quarter's own value with the prior-year column of the same quarter one year later and with the printed full-year totals; differences are named in notes.",
+        "Looked for a US partner or licensee that prints the brand's own sales (rung c): Sunovion (Sumitomo Pharma) assumed US commercialization rights as of 2016-12-21 per the Novartis Q2 2017 report; a Bigdata.com search of Sumitomo Pharma filings for Utibron, Seebri and Arcapta Neohaler returned no result and no Sumitomo document was obtained, so no US-only line is used.",
+        "Q1 2015 to Q3 2015 Novartis reports read: the row is 'Revolade/Promacta' (a first scan keyed on 'Promacta/Revolade' alone missed these three, which were then found under the other order of the label).",
+        "Extension (rung d, prior owner): GSK plc (CIK 1131399) 6-K filings listed from data.sec.gov submissions (all pages); every 6-K filed in the results windows (late Jan-mid Feb, late Apr-early May, late Jul, late Oct-early Nov) from 2008 to 2015 downloaded and every table row labelled Promacta extracted. Promacta turnover rows exist from the Q1 2009 release (0001156973-09-000223) through the Q4 2014 release (0001191638-15-000135); the 2008 releases (0001156973-08-000159, -000471, -000723, -000887) and the Q4 2008 release (0001156973-09-000059) mention Promacta only in pipeline text. Quarter rows distinguished from year-to-date rows by the printed totals (quarters sum to the printed full years). The Q1 2012 results were furnished twice (0001191638-12-000550 and 0001193125-12-202925, identical row); the first is cited. The 2013-01-31 6-K (0001191638-13-000108) returned a server error and is not a results release used.",
+        "Q1 2015: GSK's Q1 2015 results release (6-K 0001191638-15-000622, filed 2015-05-06, https://www.sec.gov/Archives/edgar/data/1131399/000119163815000622/gsk201505066k.htm) was read in full: it contains no Promacta or Revolade turnover row and states 'Sales of Oncology products in the first two months, prior to the disposal to Novartis, amounted to GBP 216 million' (an aggregate for all oncology products, not Promacta). Novartis's Q1 2015 report prints only the one-month figure (36, 'only March sales included'). 2015Q1 is therefore declared unreported: neither owner printed a full-quarter Promacta figure."
+    ],
+    "joined_issuers": [
+        {
+            "issuer": "GSK plc",
+            "first_quarter": "2009Q1",
+            "last_quarter": "2014Q4"
+        },
+        {
+            "issuer": "Novartis",
+            "first_quarter": "2015Q2",
+            "last_quarter": "2026Q2"
+        }
+    ],
+    "unreported_quarters": {
+        "2015Q1": "Ownership change GSK plc to Novartis: Novartis acquired the GSK oncology portfolio in March 2015 and its Q1 2015 report (https://www.sec.gov/Archives/edgar/data/1114448/000137036815000043/a150423-99_2.htm) prints 'Revolade/Promacta' 36 with the footnote 'Products acquired in GSK transaction, only March sales included', a one-month figure; GSK's last full-quarter Promacta row is 2014Q4 (66, https://www.sec.gov/Archives/edgar/data/1131399/000119163815000135/gsk201502046k.htm). No document prints a full-quarter figure for 2015Q1. GSK's own Q1 2015 results release (https://www.sec.gov/Archives/edgar/data/1131399/000119163815000622/gsk201505066k.htm) prints no Promacta row and gives only an aggregate for the two months of oncology sales before the disposal."
+    },
+    "reviewed_anomalies": {
+        "2015Q2": "Issuer and reporting-currency step: 2009Q1-2014Q4 are GSK plc's Promacta turnover in GBP millions; from 2015Q2 Novartis reports the same worldwide product in USD millions. Rows carry their own currency and are not converted; the 2015Q1 quarter nobody printed in full is listed in unreported_quarters."
+    }
 }

@@ -168,12 +168,9 @@ PRODUCT_METADATA = {
         # Both ends of this series are bounded, and for different reasons.
         #
         # Start: Opsumit launched in 2013Q4 under Actelion, which reported it in
-        # CHF and only in part (see the excluded-products note for which
-        # quarters are stated and which are not). J&J acquired Actelion on
-        # 16 June 2017, so its first disclosure covers 16-30 June only - a
-        # 45-million stub that its 2Q2018 exhibit states outright as the 2017
-        # comparative. A 15-day stub is not a quarter, so the series starts at
-        # 2017Q3, the first full quarter J&J owned and reported the product.
+        # CHF; those launch quarters are a companion series, not joined here.
+        # J&J acquired Actelion on 16 June 2017 and republished its history in
+        # USD back to 2016Q1, which is where this series starts.
         #
         # End: from 2025Q1 J&J reports a combined "OPSUMIT / OPSYNVI" line and
         # restates FY2024 from 2,184 to 2,225 to match. Those later quarters are
@@ -183,7 +180,7 @@ PRODUCT_METADATA = {
         "launch_quarter": "2013Q4",
         "series_start_reason": (
             "Opsumit launched in 2013Q4 under Actelion, whose own disclosures "
-            "were in CHF and covered only scattered quarters. J&J republished "
+            "were in CHF; those quarters are a companion series. J&J republished "
             "Actelion's history in US dollars when it closed the acquisition, "
             "but that schedule reaches back only to 2016Q1, which is where this "
             "series starts. 2013Q4-2015Q4 has no US-dollar quarterly source, so "
@@ -942,12 +939,19 @@ PRODUCT_METADATA = {
         "manufacturer": "Eli Lilly",
         "benchmark_identity": "lilly_alimta_worldwide_reported",
         "therapeutic_area": "Oncology",
-        "commercial_start_quarter": "2017Q4",
+        "commercial_start_quarter": "2004Q1",
         "series_start_reason": (
-            "The fourth quarter of 2017 is the earliest Lilly release sourced here, "
-            "and this series starts there because sourcing does, not because the "
-            "product launched then. No launch quarter is established for it, so the "
-            "span is a window on the product's life and not a launch-to-date curve."
+            "The series starts 2004Q1, the quarter Lilly launched Alimta: its first-"
+            "quarter 2004 release says the product 'was launched in the U.S. in "
+            "February following its approval earlier that month', and that release is"
+            " the first Lilly document to print an Alimta sales figure (none of the "
+            "four releases for 2003 carries an Alimta sales line), so this is a "
+            "launch-to-date curve. 2004Q1, 2004Q2 and 2004Q4 are read from the "
+            "product paragraph of each quarter's release, 2004Q3 and 2006Q1 from the "
+            "net sales table of the Form 10-Q (no earnings release for the first "
+            "quarter of 2006 is among Lilly's 8-K filings), and 2005Q1 to 2017Q3 from"
+            " the product table of each quarter's own release, so the series runs "
+            "unbroken into the existing 2017Q4 row."
         ),
         "series_end_quarter": "2023Q4",
         "series_end_basis": "issuer_stopped_reporting",
@@ -961,18 +965,30 @@ PRODUCT_METADATA = {
         "geography": "Worldwide",
         "formulation": "injection",
         "route_of_administration": "intravenous",
+        "launch_evidence": {'url': 'https://www.sec.gov/Archives/edgar/data/59478/000095013704002910/c84575exv99w1.htm', 'quote': 'Alimta was launched in the U.S. in February following its approval earlier that month by the U.S. Food and Drug Administration (FDA) for the treatment of malignant pleural mesothelioma'},
+        "launch_quarter": "2004Q1",
+        "reviewed_anomalies": {'2004Q1': 'The first-quarter 2004 release states that the $11.6 million includes approximately $7 million of initial wholesaler stocking. Kept as printed.'},
+        "search_log": ['Listed every Lilly filing from the data.sec.gov submissions index (CIK 0000059478, every page of it) and took every 8-K filed January 2003 to January 2018 that carries an earnings-release exhibit, plus every 10-Q and 10-K from 1996 to 2017, each with all its exhibits.', "Lilly's earliest earnings-release exhibit on EDGAR is the 8-K filed 2003-04-22 for the first quarter of 2003 (accession 0000950137-03-002282); the 2002 and earlier filings are 10-Qs, 10-Ks and 8-Ks without a results release.", "Alimta sales rows: 2005Q1-2017Q3 are the Alimta row of the table of each quarter's own release (2006Q1 excepted, see below); the 2004 quarters are product paragraphs of the 2004 releases, and the fourth-quarter 2004 release splits the quarter into U.S. 59.3 and outside the U.S. 13.8 against the worldwide 73.1 recorded.", "2006Q1: the 8-K submissions list for 2006-03-15 to 2006-06-01 holds only Form 4s and the 10-Q (0000950137-06-005239), so the Form 10-Q net sales table (U.S. 77.9, outside the U.S. 52.2, total 130.1) is the quarter's own document; the prior-year totals printed by the 2007 release (130.1) agree.", '2004Q3: the Form 10-Q (0000950134-04-016493) prints Alimta U.S. 34.3, outside the U.S. 5.7, total 40.0 against a dash for 2003; the release prints the same 40.0 in text.', "Cross-check: for 2005Q1 to 2016Q3 each quarter's recorded value equals the prior-year column printed by the release four quarters later (the 2006Q1 Form 10-Q read on its total column).", 'Nothing before 2004Q1: approval and launch were in February 2004; the releases and 10-Qs for 2003 (0000950137-03-002282, -003932, -005353, 0000950134-04-000837) carry no Alimta sales line.'],
     },
     "Basaglar": {
         "generic_name": "insulin glargine",
         "manufacturer": "Eli Lilly",
         "benchmark_identity": "lilly_basaglar_worldwide_reported",
         "therapeutic_area": "Diabetes",
-        "commercial_start_quarter": "2017Q4",
+        "commercial_start_quarter": "2015Q3",
         "series_start_reason": (
-            "The fourth quarter of 2017 is the earliest Lilly release sourced here, "
-            "and this series starts there because sourcing does, not because the "
-            "product launched then. No launch quarter is established for it, so the "
-            "span is a window on the product's life and not a launch-to-date curve."
+            "Lilly's Form 10-Q for the third quarter of 2015 dates the first launch "
+            "(Europe) to the second quarter of 2015, so launch_quarter is 2015Q2, but"
+            " the first-quarter and second-quarter 2016 releases print a dash for the"
+            " first and second quarters of 2015, so the first quarter with revenue is"
+            " 2015Q3. Lilly's own releases for 2015 carry no Basaglar row, and its "
+            "Form 10-Q for the third quarter of 2015 states 'Our revenues related to "
+            "the Jardiance family of products and Basaglar were not significant for "
+            "the three and nine months ended September 30, 2015', so 2015Q3 (3.8) and"
+            " 2015Q4 (7.3) are read from the prior-year columns of the third- and "
+            "fourth-quarter 2016 releases. 2016Q1 to 2017Q3 are the Basaglar row of "
+            "each quarter's own release, so the series runs unbroken into the "
+            "existing 2017Q4 row."
         ),
         "series_end_quarter": "2024Q4",
         "series_end_basis": "issuer_stopped_reporting",
@@ -989,18 +1005,34 @@ PRODUCT_METADATA = {
         "geography": "Worldwide",
         "formulation": "injection",
         "route_of_administration": "subcutaneous",
+        "launch_evidence": {'url': 'https://www.sec.gov/Archives/edgar/data/59478/000005947815000175/lly-9302015x10q.htm', 'quote': 'First launch in Europe and Japan in second and third quarter of 2015, respectively.'},
+        "launch_quarter": "2015Q2",
+        "search_log": ['Listed every Lilly filing from the data.sec.gov submissions index (CIK 0000059478, every page of it) and took every 8-K filed January 2003 to January 2018 that carries an earnings-release exhibit, plus every 10-Q and 10-K from 1996 to 2017, each with all its exhibits.', "Lilly's earliest earnings-release exhibit on EDGAR is the 8-K filed 2003-04-22 for the first quarter of 2003 (accession 0000950137-03-002282); the 2002 and earlier filings are 10-Qs, 10-Ks and 8-Ks without a results release.", 'Searched every table row whose first cell starts with Basaglar in the Form 10-Qs for 2014Q1 to 2015Q3 and 2016Q1 and the Forms 10-K for 2014 and 2015, and the releases for 2014Q1 to 2016Q4: the only Basaglar revenue figures are the product-table rows of the 2016 releases (10.9, 16.3, 19.4, 39.5) and their prior-year columns (dash, dash, 3.8, 7.3).', 'The Form 10-K for 2015 and the Form 10-Q for 2015Q3 describe Basaglar launches (Europe in the second quarter, Japan in the third quarter of 2015, the U.S. on December 15, 2016) but print no revenue for it.'],
     },
     "Cialis": {
         "generic_name": "tadalafil",
         "manufacturer": "Eli Lilly",
         "benchmark_identity": "lilly_cialis_worldwide_reported",
         "therapeutic_area": "Urology",
-        "commercial_start_quarter": "2017Q4",
+        "commercial_start_quarter": "2003Q1",
         "series_start_reason": (
-            "The fourth quarter of 2017 is the earliest Lilly release sourced here, "
-            "and this series starts there because sourcing does, not because the "
-            "product launched then. No launch quarter is established for it, so the "
-            "span is a window on the product's life and not a launch-to-date curve."
+            "Lilly's first-quarter 2003 release says Cialis was launched in the "
+            "European Union, Australia and New Zealand in February and March 2003, so"
+            " the series starts at the launch quarter. Cialis was sold by the Lilly "
+            "ICOS LLC joint venture until Lilly acquired ICOS on January 29, 2007, so"
+            " the Cialis row of Lilly's product tables (and its reported revenue) "
+            "holds only the sales in the territories Lilly marketed exclusively until"
+            " then; the series therefore keeps the worldwide figure that Lilly prints"
+            " in the text of each release for 2003Q3 to 2007Q1 (and in the first-"
+            "quarter 2006 Form 10-Q footnote), which is the scope of the table row "
+            "from 2007Q2 on. Lilly's releases for 2003Q1 and 2003Q2 print only the "
+            "sales in Lilly's own territories ($4.9 million and $15.6 million) and "
+            "leave the joint-venture sales to ICOS, so those two quarters are taken "
+            "from the results release of ICOS Corporation, the joint-venture partner "
+            "(second quarter 2003 worldwide Cialis product sales $37.4 million, six "
+            "months $58.9 million; first quarter 2003 is six months less second "
+            "quarter, $21.5 million, which is also Lilly's $4.9 million plus ICOS's "
+            "$16.6 million of European joint-venture sales)."
         ),
         "series_end_quarter": "2024Q3",
         "series_end_basis": "issuer_stopped_reporting",
@@ -1019,18 +1051,30 @@ PRODUCT_METADATA = {
         "geography": "Worldwide",
         "formulation": "tablet",
         "route_of_administration": "oral",
+        "joined_issuers": [{'issuer': 'ICOS Corporation', 'first_quarter': '2003Q1', 'last_quarter': '2003Q2'}, {'issuer': 'Eli Lilly', 'first_quarter': '2003Q3', 'last_quarter': '2024Q3'}],
+        "launch_evidence": {'url': 'https://www.sec.gov/Archives/edgar/data/59478/000095013703002282/c76345exv99.txt', 'quote': 'During February and March 2003, Cialis was launched in the European Union, as well as Australia and New Zealand.'},
+        "launch_quarter": "2003Q1",
+        "reviewed_anomalies": {'2006Q4': 'The four 2006 quarters (222.7, 233.2, 245.6, 269.2) add to 970.7 against the 971.0 the fourth-quarter 2006 release gives for the year; the first-quarter figure comes from the Form 10-Q footnote. Kept as printed.', '2007Q1': "Worldwide sales of 265.8 (including 72.7 of joint-venture sales before the January 29, 2007 acquisition), not the 193.1 of the table row, which holds only sales Lilly itself reported. The four 2007 quarters therefore add to 1,216.5, not to the full-year figure in the fourth-quarter 2007 release's table, which is on Lilly's reported basis and starts from 193.1.", '2003Q1': "From ICOS Corporation's second-quarter 2003 release (six months less second quarter), cross-checked against Lilly's first-quarter 2003 release ($4.9 million in Lilly's territories) and ICOS's first-quarter 2003 release ($16.6 million of European joint-venture sales)."},
+        "search_log": ['Listed every Lilly filing from the data.sec.gov submissions index (CIK 0000059478, every page of it) and took every 8-K filed January 2003 to January 2018 that carries an earnings-release exhibit, plus every 10-Q and 10-K from 1996 to 2017, each with all its exhibits.', "Lilly's earliest earnings-release exhibit on EDGAR is the 8-K filed 2003-04-22 for the first quarter of 2003 (accession 0000950137-03-002282); the 2002 and earlier filings are 10-Qs, 10-Ks and 8-Ks without a results release.", "Lilly's releases for 2003Q3 to 2007Q1 state total worldwide Cialis sales in text; the four 2003 quarters (21.5, 37.4, 50.2, 94.2) add to the 203.3 the fourth-quarter 2003 release gives for the year, the 2004 quarters (108.3, 137.2, 154.1, 152.7) to 552.3, and the 2005 quarters (150.1, 190.9, 195.1, 210.5) to 746.6.", 'ICOS Corporation (CIK 0000874294): listed its filings, read its 8-Ks of 2003-04-30 (0001157523-03-001534: Lilly ICOS European product sales $16.6 million in the first quarter of 2003) and 2003-08-05 (0001157523-03-003665: worldwide product sales of Cialis $37.4 million and $58.9 million for the three and six months ended June 30, 2003).', "Lilly's table rows for Cialis through 2007Q1 are sales in Lilly's own territories only (the 2006Q1 Form 10-Q footnote and the 2007Q1 release say so), so they are not used; 2007Q2 onward the row is worldwide.", '2006Q1: the 8-K submissions list for 2006-03-15 to 2006-06-01 holds only Form 4s and the 10-Q (0000950137-06-005239), so the worldwide figure is the 10-Q footnote ($222.7 million); no first-quarter 2006 release is on EDGAR.'],
     },
     "Cyramza": {
         "generic_name": "ramucirumab",
         "manufacturer": "Eli Lilly",
         "benchmark_identity": "lilly_cyramza_worldwide_reported",
         "therapeutic_area": "Oncology",
-        "commercial_start_quarter": "2017Q4",
+        "commercial_start_quarter": "2014Q2",
         "series_start_reason": (
-            "The fourth quarter of 2017 is the earliest Lilly release sourced here, "
-            "and this series starts there because sourcing does, not because the "
-            "product launched then. No launch quarter is established for it, so the "
-            "span is a window on the product's life and not a launch-to-date curve."
+            "Lilly's Form 10-Q for the second quarter of 2014 says 'Product sales of "
+            "Cyramza began in the U.S. during the second quarter of 2014', and the "
+            "first-quarter 2015 release prints a dash for the first quarter of 2014, "
+            "so the series starts at the launch quarter, 2014Q2. Lilly's own "
+            "releases, 10-Qs and 10-K for 2014 print no Cyramza figure (no Cyramza "
+            "row in the Form 10-Qs for the first three quarters of 2014 or in the "
+            "Form 10-K for 2014), so 2014Q2 to 2014Q4 (13.7, 28.4, 33.6) are read "
+            "from the prior-year columns of the second-, third- and fourth-quarter "
+            "2015 releases; they add to the 75.6 the Form 10-K for 2015 gives for "
+            "2014. 2015Q1 to 2017Q3 are the Cyramza row of each quarter's own "
+            "release, so the series runs unbroken into the existing 2017Q4 row."
         ),
         "series_end_quarter": "2024Q4",
         "series_end_basis": "issuer_stopped_reporting",
@@ -1047,6 +1091,9 @@ PRODUCT_METADATA = {
         "geography": "Worldwide",
         "formulation": "injection",
         "route_of_administration": "intravenous",
+        "launch_evidence": {'url': 'https://www.sec.gov/Archives/edgar/data/59478/000005947814000129/lly-6302014x10q.htm', 'quote': 'Product sales of Cyramza began in the U.S. during the second quarter of 2014.'},
+        "launch_quarter": "2014Q2",
+        "search_log": ['Listed every Lilly filing from the data.sec.gov submissions index (CIK 0000059478, every page of it) and took every 8-K filed January 2003 to January 2018 that carries an earnings-release exhibit, plus every 10-Q and 10-K from 1996 to 2017, each with all its exhibits.', "Lilly's earliest earnings-release exhibit on EDGAR is the 8-K filed 2003-04-22 for the first quarter of 2003 (accession 0000950137-03-002282); the 2002 and earlier filings are 10-Qs, 10-Ks and 8-Ks without a results release.", 'Searched every table row whose first cell starts with Cyramza in the Form 10-Qs for 2014Q1-Q3, the Form 10-K for 2014 and the 2014 releases (0000059478-14-000100, -000126, -000164, 0000059478-15-000016): none carries a Cyramza revenue figure; the product table of the 2015 releases is the first to print one.', 'Form 10-Q for 2015Q2 prints Cyramza 87.7 against 13.7 for the quarter and 155.2 against 13.7 for six months, which agrees with the release; the Form 10-Q for 2015Q3 prints 111.2 against 28.4; the Form 10-K for 2015 prints 383.8 against 75.6 for the years.', 'First quarter 2014: the first-quarter 2015 release prints 67.5 against a dash, so no sale precedes the second quarter.'],
     },
     "Emgality": {
         "generic_name": "galcanezumab",
@@ -1068,12 +1115,21 @@ PRODUCT_METADATA = {
         "manufacturer": "Eli Lilly",
         "benchmark_identity": "lilly_forteo_worldwide_reported",
         "therapeutic_area": "Osteoporosis",
-        "commercial_start_quarter": "2017Q4",
+        "commercial_start_quarter": "2003Q1",
         "series_start_reason": (
-            "The fourth quarter of 2017 is the earliest Lilly release sourced here, "
-            "and this series starts there because sourcing does, not because the "
-            "product launched then. No launch quarter is established for it, so the "
-            "span is a window on the product's life and not a launch-to-date curve."
+            "Lilly launched Forteo in the U.S. in December 2002, so launch_quarter is"
+            " 2002Q4, but no Lilly document on EDGAR prints a fourth-quarter 2002 "
+            "sales figure: there is no fourth-quarter 2002 earnings release among its"
+            " 8-K filings, and the Form 10-K for 2002 and the Form 10-Q for the first"
+            " quarter of 2003 give none. The first printed figure is the first-"
+            "quarter 2003 release's $4.1 million ('following its December 2002 U.S. "
+            "launch and one-month sampling'), so the series starts 2003Q1. 2003Q1 to "
+            "2005Q3 except 2005Q2 are read from the product paragraph of each "
+            "quarter's release (Forteo has no row in those releases' product tables),"
+            " 2006Q1 from the Form 10-Q net sales table (no first-quarter 2006 "
+            "earnings release is among Lilly's 8-K filings), and 2005Q2 and 2005Q4 to"
+            " 2017Q3 (2006Q1 excepted) from the product table of each quarter's own "
+            "release, so the series runs unbroken into the existing 2017Q4 row."
         ),
         "series_end_quarter": "2024Q3",
         "series_end_basis": "issuer_stopped_reporting",
@@ -1092,14 +1148,36 @@ PRODUCT_METADATA = {
         "geography": "Worldwide",
         "formulation": "injection",
         "route_of_administration": "subcutaneous",
+        "launch_evidence": {'url': 'https://www.sec.gov/Archives/edgar/data/59478/000095013703002717/c76879e10vq.htm', 'quote': 'Forteo was officially launched in December 2002.'},
+        "launch_quarter": "2002Q4",
+        "reviewed_anomalies": {'2003Q1': 'Includes one month of sampling following the December 2002 launch, as the first-quarter 2003 release states. Kept as printed.'},
+        "search_log": ['Listed every Lilly filing from the data.sec.gov submissions index (CIK 0000059478, every page of it) and took every 8-K filed January 2003 to January 2018 that carries an earnings-release exhibit, plus every 10-Q and 10-K from 1996 to 2017, each with all its exhibits.', "Lilly's earliest earnings-release exhibit on EDGAR is the 8-K filed 2003-04-22 for the first quarter of 2003 (accession 0000950137-03-002282); the 2002 and earlier filings are 10-Qs, 10-Ks and 8-Ks without a results release.", 'Forteo sentences in every release 2003Q1-2005Q4 list sales for each quarter; the four 2003 quarters (4.1, 13.7, 21.6, 25.9) add to the 65.3 the fourth-quarter 2003 release gives for the year, and the four 2004 quarters (40.8, 65.3, 58.1, 74.3) add to 238.5 against 238.6 for the year in the fourth-quarter 2004 release.', 'The product table of the releases carries a Forteo row only from the second quarter of 2005 (and not in the third quarter of 2005); the other quarters are the product paragraph.', "2006Q1: the 8-K submissions list for 2006-03-15 to 2006-06-01 holds only Form 4s and the 10-Q (0000950137-06-005239), so the Form 10-Q net sales table (U.S. 87.2, outside the U.S. 39.9, total 127.1) is the quarter's own document; the 2007 release's prior-year column (127.1) agrees.", 'Fourth quarter 2002: Form 10-K for 2002 (0000950137-03-001575) and Form 10-Q for 2003Q1 (0000950137-03-002717) searched for a Forteo sales figure, none printed.'],
     },
     "Humalog": {
         "generic_name": "insulin lispro",
         "manufacturer": "Eli Lilly",
         "benchmark_identity": "lilly_humalog_worldwide_reported",
         "therapeutic_area": "Diabetes",
-        "commercial_start_quarter": "2002Q1",
-        "series_start_reason": "No issuer document fixes the launch quarter, so the series is not read as launch-to-date. It starts 2002Q1: 2002Q1 is the earliest quarter taken. Lilly's earnings releases were first filed as 8-K exhibits for Q1 2003; the 2002 quarters come from the prior-year columns of the 2003 releases. The 10-Qs for 2001 and 2002 and the 10-K for 2001 give Humalog only as sentences of narrative text (e.g. 'Worldwide Humalog sales of $164.3 million for the quarter'), not as revenue-table rows, and Q4 2001 would have to be derived from a narrative annual figure, so the series stops at 2002Q1 by choice of source type rather than because Lilly stopped reporting the product; the 1996-2001 quarters were not sourced.",
+        "commercial_start_quarter": "1998Q1",
+        "series_start_reason": (
+            "No issuer document fixes the launch quarter (the Form 10-K405 for 1996 "
+            "says only 'Humalog, approved in 1996'), so the series is not read as "
+            "launch-to-date. It starts 1998Q1, the first quarter for which a Lilly "
+            "document prints a Humalog sales figure: the Form 10-Q for the first "
+            "quarter of 1998 gives $25 million. The Form 10-Qs for the first three "
+            "quarters of 1996 and 1997 and the Forms 10-K for 1995, 1996 and 1997 "
+            "name Humalog but print no sales figure for it, and the Form 10-K for "
+            "1998 gives only the 1998 year ($129.6 million, up $61.9 million on "
+            "1997), not 1997 by quarter. The 1998 to 2001 quarters are sentences of "
+            "the narrative of each Form 10-Q (the first three quarters) and of the "
+            "Form 10-K or its Exhibit 13 (the year, from which the fourth quarter is "
+            "the year less the nine months); Lilly filed no earnings release for "
+            "those quarters with the SEC (its releases are first filed as 8-K "
+            "exhibits for the first quarter of 2003). The 1998 figures for the first "
+            "three quarters are printed in whole millions. The existing 2002Q1 row, "
+            "from the prior-year column of the 2003 release, follows 2001Q4 without a"
+            " gap."
+        ),
         "peak_eligible": False,
         "series_end_quarter": None,
         "series_end_basis": None,
@@ -1108,18 +1186,34 @@ PRODUCT_METADATA = {
         "geography": "Worldwide",
         "formulation": "injection",
         "route_of_administration": "subcutaneous",
+        "reviewed_anomalies": {'1998Q3': 'The 1998 Form 10-Qs print whole millions: 25, 30 and 32 add to 87 against the 86 the third-quarter 1998 Form 10-Q gives for the nine months.', '1998Q4': 'Derived from the 1998 year ($129.6 million) less the nine-month figure of $86 million printed in whole millions, so good to about half a million.'},
+        "search_log": ['Listed every Lilly filing from the data.sec.gov submissions index (CIK 0000059478, every page of it) and took every 8-K filed January 2003 to January 2018 that carries an earnings-release exhibit, plus every 10-Q and 10-K from 1996 to 2017, each with all its exhibits.', "Lilly's earliest earnings-release exhibit on EDGAR is the 8-K filed 2003-04-22 for the first quarter of 2003 (accession 0000950137-03-002282); the 2002 and earlier filings are 10-Qs, 10-Ks and 8-Ks without a results release.", 'Searched every Humalog mention with a dollar figure in the Form 10-Qs and Forms 10-K for 1995-2002 (all 10-Qs and 10-Ks in the submissions index for those years were downloaded): the first sales figure is in the 10-Q for the first quarter of 1998; the 1996 and 1997 10-Qs and the 10-K405 for 1996 and 10-K for 1997 mention Humalog only as launch costs, a growth driver or a product description.', 'Narrative sentences read: 1998Q1 25, 1998Q2 30 (six months 54), 1998Q3 32 (nine months 86), 1998 year 129.6; 1999Q1 42.5, 1999Q2 50.4 (92.9), 1999Q3 58.7 (151.6), 1999 year 224.5; 2000Q1 72.1, 2000Q2 76.7 (148.7), 2000Q3 90.6 (239.3), 2000 year 350.2; 2001Q1 125.2, 2001Q2 145.6 (270.8), 2001Q3 164.3 (435.1), 2001 year 627.8. The 2002 sentences (177.4, 204.8, 214.1) agree with the existing 2002 rows.'],
     },
     "Humulin": {
         "generic_name": "human insulin",
         "manufacturer": "Eli Lilly",
         "benchmark_identity": "lilly_humulin_worldwide_reported",
         "therapeutic_area": "Diabetes",
-        "commercial_start_quarter": "2017Q4",
+        "commercial_start_quarter": "2000Q1",
         "series_start_reason": (
-            "The fourth quarter of 2017 is the earliest Lilly release sourced here, "
-            "and this series starts there because sourcing does, not because the "
-            "product launched then. No launch quarter is established for it, so the "
-            "span is a window on the product's life and not a launch-to-date curve."
+            "The series starts at 2000Q1, the first quarter of an unbroken run of "
+            "Lilly-printed worldwide Humulin figures that reaches the existing 2017Q4"
+            " start. 2003Q1 to 2017Q3 are read from Lilly's quarterly earnings "
+            "releases (8-K exhibits) and 2006Q1 from the Form 10-Q; 2000Q1 to 2002Q3 "
+            "are the worldwide Humulin sales stated in the Form 10-Qs; 2000Q4 and "
+            "2001Q4 are derived from the annual figure printed in the Form 10-K "
+            "annual report less the nine months in the third-quarter Form 10-Q, and "
+            "2002Q4 is the prior-year column of the fourth-quarter 2003 release. "
+            "Before 2000Q1 the run breaks: the Form 10-Qs of 1997-1999 print "
+            "worldwide Humulin sales in dollars for some quarters (third quarter 1997"
+            " $226.4 million, first quarter 1998 $195 million, first to third "
+            "quarters 1999 $202.9, $278.3 and $292.3 million), but the second to "
+            "fourth quarters of 1998 are printed only as percentage changes and the "
+            "fourth quarter of 1999 only through the rounded annual figure of $1.09 "
+            "billion (1999 nine months $773.5 million), so no unbroken quarterly "
+            "series can be read back past 2000Q1 without estimating. Humulin was "
+            "first approved in 1982; the series is a window on the product's life, "
+            "not a launch-to-date curve."
         ),
         "series_end_quarter": "2024Q4",
         "series_end_basis": "issuer_stopped_reporting",
@@ -1136,6 +1230,19 @@ PRODUCT_METADATA = {
         "geography": "Worldwide",
         "formulation": "injection",
         "route_of_administration": "subcutaneous",
+        "launch_quarter": None,
+        "notes": (
+            "Worldwide Humulin sales as stated by Lilly, a single scope throughout "
+            "(the earnings-release product table, and in the Form 10-Qs the sentence "
+            "'Worldwide Humulin sales ...'). The label in the product table is "
+            "'Humulin'; Lilly's text calls the figure sales until 2012 and revenue "
+            "afterwards. Rows 2000Q1-2002Q3 and 2006Q1 cite Form 10-Q text or a Form "
+            "10-Q product table because Lilly filed no earnings-release 8-K for those"
+            " quarters that this search could find (the 8-K earnings-release exhibits"
+            " resume with the first quarter of 2003 and there is no first-quarter "
+            "2006 filing)."
+        ),
+        "search_log": ["Listed Lilly (CIK 0000059478) filings with data.sec.gov submissions (recent plus two history files) and fetched every 8-K whose items include 2.02 (or items 9 and 12 in 2003-2004) from 2003-04 to 2018-02, plus the 8-Ks filed 2016-01-28 and 2016-04-26 that carry only item 9.01; read the product table row 'Humulin' in each exhibit with the verifier's own line extractor: every quarter 2003Q1 to 2017Q3 is printed except 2006Q1 (April 2006 has no 8-K), which is read from the Form 10-Q filed 2006-05-02.", "Fetched every Form 10-Q and Form 10-K filed 1994-2002 (data.sec.gov history file) and searched for 'Worldwide Humulin sales': dollar quarterly figures exist for 1997Q3, 1998Q1 (whole millions), 1999Q1-Q3 and 2000Q1-2002Q3; the 2000Q2 and 2000Q3 text is in the -0001.txt documents of those Form 10-Q accessions (the primary-document name on the submissions index does not exist); the annual 2000 and 2001 figures come from the Annual Report exhibits (EX-13) of the Form 10-K filed 2001-03-28 (graph 'Humulin 1,114.5') and the Form 10-K405 filed 2002-03-28 (Humulin sales in the U.S. 578.5 and outside the U.S. 482.2).", "Limits of the run: 1998Q2, 1998Q3 and 1998Q4 are printed only as growth percentages in the Form 10-Qs and Form 10-K; 1999Q4 would need the 1999 annual figure to the tenth of a million, which the Form 10-K for 1999 prints only as '$1.09 billion' (the annual graph with decimals starts with the year 2000). No quarter before 2000Q1 was therefore added."],
     },
     "Jardiance": {
         "generic_name": "empagliflozin",
@@ -1305,7 +1412,11 @@ def researched_metadata() -> dict[str, dict[str, Any]]:
         if name in PRODUCT_METADATA or name in out:
             raise ValueError(f"{name} is described by more than one series metadata file")
         meta = {field: raw[field] for field in RESEARCHED_SERIES_FIELDS if raw.get(field) is not None}
-        if raw.get("series_start_reason"):
+        starts_at_launch = bool(
+            raw.get("launch_quarter") and raw.get("commercial_start_quarter")
+            and raw["commercial_start_quarter"] <= raw["launch_quarter"]
+        )
+        if raw.get("series_start_reason") and not starts_at_launch:
             meta["peak_eligible"] = False
         meta["manifest"] = manifest.name
         out[name] = meta
@@ -1480,11 +1591,12 @@ def usd_normalized(value: float, currency: str, year: int) -> tuple[float | None
     return None, None
 
 
-# USD per one unit of each currency, by calendar quarter: FRED's quarterly
-# average of the Federal Reserve H.10 noon buying rate, written by
-# scripts/sourcing/fetch_fx_quarterly.py with the FRED URL on every row.
+# USD per one unit of each currency, by calendar quarter: the mean of the
+# Federal Reserve Board's H.10 daily noon buying rates in the quarter, taken
+# from the Board's historical-rates pages by
+# scripts/sourcing/fetch_fx_quarterly.py with the page URL on every row.
 QUARTERLY_FX_FILE = SOURCE_DIR / "fx_quarterly_usd.csv"
-QUARTERLY_FX_SOURCE = "federal_reserve_h10_quarterly_average_via_fred"
+QUARTERLY_FX_SOURCE = "federal_reserve_h10_daily_quarterly_mean"
 
 
 def quarterly_fx() -> dict[tuple[str, str], float]:
@@ -1555,6 +1667,9 @@ def quote_contains_number(quote: str, value: float) -> bool:
     # figure printed in thousands needs its plain integer spelling too.
     if float(value).is_integer():
         forms.add(f"{value:.0f}")
+    # Accounts print a negative figure in parentheses: "(200)" is -200.
+    if value < 0:
+        forms |= {f"({form.lstrip('-')})" for form in forms}
     return any(re.search(rf"(?<!\d){re.escape(form)}(?!\d)", normalized) for form in forms)
 
 
@@ -2786,13 +2901,118 @@ def observed_peak(drug_name: str, annual: list[dict[str, Any]], scope: str, geog
     }
 
 
+# How many quarters may be missing between launch and a series' first quarter.
+# Up to SMALL the launch shape is mostly intact; beyond SUBSTANTIAL an uptake
+# curve has lost more than its first two years and the series is not judged.
+SMALL_LAUNCH_GAP_QUARTERS = 4
+SUBSTANTIAL_LAUNCH_GAP_QUARTERS = 8
+
+PEAK_OBSERVED = "peak_observed"
+NOT_YET_OBSERVED = "not_yet_observed"
+PEAK_MAY_PREDATE_SERIES = "highest_year_is_first_complete_year"
+NO_COMPLETE_YEAR = "no_complete_calendar_year"
+LAUNCH_HISTORY_MISSING = "launch_history_missing"
+
+
+def quarter_number(period: str) -> int:
+    return int(period[:4]) * 4 + int(period[-1]) - 1
+
+
+def approval_years() -> dict[str, int]:
+    return {row["drug_name"]: int(row["first_approval_year"]) for row in read_csv(ATTRIBUTES_FILE)}
+
+
+def launch_gap_review(drug_name: str, quarterly: list[dict[str, Any]], meta: dict[str, Any],
+                      approval_year: int | None) -> dict[str, Any]:
+    """How many launch quarters a series is missing, and whether its peak can be read.
+
+    The launch reference is the stated launch quarter, or where none is stated
+    the fourth quarter of the first approval year, which makes the gap a
+    minimum. The peak test is ``observed_peak`` on the reported years; when
+    launch quarters are missing, a highest year with no lower complete year
+    before it is not read as a peak, because the true peak may sit in them.
+    """
+    rows = [row for row in quarterly if row["drug_name"] == drug_name]
+    first = min(row["period"] for row in rows)
+    if meta.get("launch_quarter"):
+        reference, basis = meta["launch_quarter"], "stated_launch_quarter"
+    elif approval_year:
+        reference, basis = f"{approval_year}Q4", "approval_year_minimum"
+    else:
+        reference, basis = None, None
+    gap = max(quarter_number(first) - quarter_number(reference), 0) if reference else None
+    totals = full_annual_totals(quarterly, drug_name)
+    top = max(totals, key=lambda row: row["value_reported"]) if totals else None
+    lower_before = bool(top) and any(
+        row["value_reported"] < top["value_reported"] for row in totals if row["period"] < top["period"])
+    peak = observed_peak(drug_name, totals, "", "") if totals else None
+    if gap is None or gap > SUBSTANTIAL_LAUNCH_GAP_QUARTERS:
+        judgement = LAUNCH_HISTORY_MISSING
+    elif not totals:
+        judgement = NO_COMPLETE_YEAR
+    elif peak["peak_status"] != "observed":
+        judgement = NOT_YET_OBSERVED
+    elif lower_before or gap == 0:
+        judgement = PEAK_OBSERVED
+    else:
+        judgement = PEAK_MAY_PREDATE_SERIES
+    return {
+        "launch_reference_quarter": reference,
+        "launch_reference_basis": basis,
+        "launch_gap_quarters": gap,
+        "launch_gap_band": (None if gap is None else "none" if gap == 0
+                            else "small" if gap <= SMALL_LAUNCH_GAP_QUARTERS
+                            else "moderate" if gap <= SUBSTANTIAL_LAUNCH_GAP_QUARTERS else "substantial"),
+        "peak_judgement": judgement,
+    }
+
+
+def rolling_four_quarter_benchmark(quarterly: list[dict[str, Any]], drug_name: str) -> tuple[float, str] | None:
+    """The highest sum of four consecutive reported quarters in USD, and its window.
+
+    A window that spans an unreported quarter is skipped, never summed short.
+    """
+    values = {quarter_number(row["period"]): row["value_normalized_usd_millions"]
+              for row in quarterly if row["drug_name"] == drug_name}
+    best = None
+    for start in sorted(values):
+        window = [values.get(start + step) for step in range(4)]
+        if any(value is None for value in window):
+            continue
+        if best is None or sum(window) > best[0]:
+            best = (sum(window), start)
+    if best is None:
+        return None
+    label = lambda index: f"{index // 4}Q{index % 4 + 1}"
+    return round(best[0], 6), f"{label(best[1])}-{label(best[1] + 3)}"
+
+
+def with_benchmark(peak: dict[str, Any], quarterly: list[dict[str, Any]]) -> dict[str, Any]:
+    benchmark = rolling_four_quarter_benchmark(quarterly, peak["drug_name"])
+    peak["benchmark_rolling_4q_usd_millions"] = benchmark[0] if benchmark else None
+    peak["benchmark_window"] = benchmark[1] if benchmark else None
+    return peak
+
+
 def build_peaks(quarterly: list[dict[str, Any]], annual: list[dict[str, Any]]) -> list[dict[str, Any]]:
     peaks: list[dict[str, Any]] = []
+    years = approval_years()
+    annual_only = {row["drug_name"] for row in annual if row["series_role"] == "peak_benchmark"}
     for drug_name, meta in PRODUCT_METADATA.items():
         if not meta.get("peak_eligible", True):
-            # A series that starts after launch cannot say where the peak is:
-            # its maximum is only the highest value inside the window it
-            # happens to cover. Adempas is the case - see its metadata.
+            # A series that starts after launch is judged only when few enough
+            # launch quarters are missing; otherwise its maximum is only the
+            # highest value inside the window it happens to cover. A product
+            # peaked on its annual figures is left to that benchmark below.
+            if drug_name in annual_only or not any(row["drug_name"] == drug_name for row in quarterly):
+                continue
+            review = launch_gap_review(drug_name, quarterly, meta, years.get(drug_name))
+            if review["peak_judgement"] not in (PEAK_OBSERVED, NOT_YET_OBSERVED):
+                continue
+            peak = observed_peak(drug_name, full_annual_totals(quarterly, drug_name),
+                                 meta["revenue_scope"], meta["geography"])
+            peak["selection_method"] += "_after_launch_gap_review"
+            peaks.append(with_benchmark(peak | {"series_starts_after_launch": True} | review, quarterly))
             continue
         totals = full_annual_totals(quarterly, drug_name)
         if not totals:
@@ -2817,10 +3037,13 @@ def build_peaks(quarterly: list[dict[str, Any]], annual: list[dict[str, Any]]) -
                     "input_ids": [highest["gold_id"]],
                     "benchmark_eligible": True,
                     "numeric_peak_available": False,
+                    "series_starts_after_launch": False,
                 }
             )
+            with_benchmark(peaks[-1], quarterly)
             continue
-        peaks.append(observed_peak(drug_name, totals, meta["revenue_scope"], meta["geography"]))
+        peaks.append(with_benchmark(observed_peak(drug_name, totals, meta["revenue_scope"], meta["geography"])
+                                    | {"series_starts_after_launch": False}, quarterly))
 
     # A product is peaked on its annual figures when those figures are its
     # benchmark: annual rows marked peak_benchmark, and no quarterly series
@@ -2848,7 +3071,9 @@ def build_peaks(quarterly: list[dict[str, Any]], annual: list[dict[str, Any]]) -
             if row["drug_name"] == drug_name and row["series_role"] == "peak_benchmark"
         ]
         exemplar = next(row for row in annual if row["drug_name"] == drug_name)
-        peaks.append(observed_peak(drug_name, series, exemplar["revenue_scope"], exemplar["geography"]))
+        peaks.append(observed_peak(drug_name, series, exemplar["revenue_scope"], exemplar["geography"])
+                     | {"series_starts_after_launch": False, "benchmark_rolling_4q_usd_millions": None,
+                        "benchmark_window": None})
     return sorted(peaks, key=lambda row: row["drug_name"])
 
 
@@ -3357,6 +3582,18 @@ def main() -> int:
         }
         raise ValueError(f"Incomplete independently researched series: {details}")
     peaks = build_peaks(quarterly, annual)
+    # Every series that starts after launch carries its launch-gap review, so
+    # one left without a peak row says why.
+    years = approval_years()
+    annual_benchmark_names = {row["drug_name"] for row in annual if row["series_role"] == "peak_benchmark"}
+    for row in coverage:
+        meta = PRODUCT_METADATA.get(row["drug_name"], {})
+        after_launch = not meta.get("peak_eligible", True)
+        row["series_starts_after_launch"] = after_launch
+        if after_launch:
+            row.update(launch_gap_review(row["drug_name"], quarterly, meta, years.get(row["drug_name"])))
+            if row["drug_name"] in annual_benchmark_names:
+                row["peak_judgement"] = "peaked_on_annual_figures"
     exclusions = build_exclusions()
     catalog = catalog_coverage(coverage, exclusions)
 

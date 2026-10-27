@@ -16,14 +16,22 @@
     "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2024/020702s081lbl.pdf",
     "quote": "LIPITOR (atorvastatin calcium) tablets, for oral use  Initial U.S. Approval: 1996"
   },
-  "launch_quarter": null,
-  "launch_evidence": null,
-  "commercial_start_quarter": "1998Q1",
-  "series_start_reason": "1998Q1 is the earliest quarter Pfizer prints Lipitor as its own worldwide product line. Pfizer's 8-K filed 2000-08-28 (https://www.sec.gov/Archives/edgar/data/78003/0000078003-00-000045.txt) re-presents the 1999 and 1998 quarterly product-revenue exhibits restated for the June 2000 Warner-Lambert pooling of interests; those exhibits print 1999Q1-Q4 as current columns and 1998Q1-Q4 as prior-year columns. Pfizer's pre-merger filings (the first-quarter 2000 Form 10-Q and the FY1999 Form 10-K) describe Lipitor as co-promotion revenue, a different scope, and the 1998 and 1999 annual totals in the restated exhibits (2,208 and 3,795) are the same as the 1998 and 1999 columns printed in the FY2001 annual report. The restated exhibits cover 1999 and 1998 only, so no earlier Pfizer-printed quarter was found. Lipitor was launched in 1997 by Warner-Lambert, whose own filings were not searched here (different issuer).",
+  "launch_quarter": "1997Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/104669/0000950117-98-000602.txt",
+    "quote": "LIPITOR achieved worldwide sales of $865 million during 1997. The company began marketing LIPITOR in the U.S. in February 1997"
+  },
+  "commercial_start_quarter": "1997Q1",
+  "series_start_reason": "Warner-Lambert, which launched Lipitor and booked its sales, prints worldwide Lipitor sales from the first quarter of 1997 (marketing began in the U.S. in February 1997): second quarter 1997 and six months in its second-quarter Form 10-Q, third quarter and nine months in its third-quarter Form 10-Q, full year 1997 in its Form 10-K. 1997Q1 and 1997Q4 are derived from those year-to-date figures. Pfizer's own series starts 1998Q1, from its 8-K filed 2000-08-28 that re-presents 1999 and 1998 restated for the June 2000 Warner-Lambert pooling of interests; Pfizer's pre-merger filings describe Lipitor as co-promotion revenue, a different scope. Warner-Lambert's own printed 1998 figures (378, 533, 569 for the first three quarters) differ slightly from Pfizer's restated 1998 figures (375, 536, 578) because the restatement is on the pooled basis; the 1997 rows are on Warner-Lambert's stand-alone basis.",
   "series_end_quarter": "2026Q2",
   "series_end_basis": null,
   "series_end_reason": null,
   "joined_issuers": [
+    {
+      "issuer": "Warner-Lambert",
+      "first_quarter": "1997Q1",
+      "last_quarter": "1997Q4"
+    },
     {
       "issuer": "Pfizer",
       "first_quarter": "1998Q1",
@@ -50,6 +58,11 @@
     "Pfizer 2020Q4: Q4 2020 release (2021-02-02) and Q1-Q4 2021 releases checked - no Lipitor row (Upjohn divested 2020-11-16).",
     "Viatris (CIK 0001792044): listed all 8-K Item 2.02 filings plus the 2021-11-08 8-K (Item 9.01, EX-99.1 third-quarter 2021 release); Lipitor row read from every earnings release 2021Q1-2026Q2; Upjohn Inc. 2020-05-29 8-K exhibit 99.1 and 2020-06-12 Form 10 exhibit 99.1 searched for quarterly Lipitor sales: only 'approximately $2.0 billion in revenues in 2019' (annual, prose); Viatris FY2020 10-K searched for Lipitor revenue: none; Viatris 8-K 2021-02-22 exhibits 99.1 (slide images) and 99.2 (no Lipitor mention) read.",
     "Not searched: Warner-Lambert Company filings for 1997-1999 (the issuer before the merger), so the series is not extended before 1998Q1.",
-    "Fallbacks a-e not needed: the series is a printed line from 1998Q1 to 2026Q2."
-  ]
+    "Fallbacks a-e not needed: the series is a printed line from 1998Q1 to 2026Q2.",
+    "Range extension: Warner-Lambert (CIK 0000104669) EDGAR submissions listed; Forms 10-Q for 1997 Q1-Q3 and 1998 Q1-Q3, Form 10-K FY1997 and Form 10-K405 FY1998 read for Lipitor sales. First-quarter 1997 10-Q has no figure; second quarter 151 and six months 200; third quarter 257 and nine months 457; full year 1997 865.",
+    "Warner-Lambert 8-K filed 1999-01-28 has no Lipitor figure. Lipitor was first marketed in February 1997, so no earlier quarter exists."
+  ],
+  "reviewed_anomalies": {
+    "1998Q1": "Basis step between issuers: 1997 rows are Warner-Lambert stand-alone worldwide Lipitor sales as printed in its own filings; 1998 onward rows are Pfizer's restated pooled-basis figures. Warner-Lambert's own 1998 first-quarter figure is 378 against 375 restated (Form 10-Q first quarter 1998, 0000104669-98-000005). Kept as printed by each issuer."
+  }
 }

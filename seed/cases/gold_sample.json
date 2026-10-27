@@ -25,6 +25,31 @@
   ]
  },
  {
+  "drug_name": "Iluvien",
+  "manufacturer": "ANI Pharmaceuticals",
+  "ticker": "ANIP",
+  "generic_name": "fluocinolone acetonide",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 19.255,
+    "gold_id": "alimera-iluvien-worldwide-product-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 18.718,
+    "gold_id": "alimera-iluvien-worldwide-product-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Iclusig",
   "manufacturer": "ARIAD Pharmaceuticals",
   "ticker": null,
@@ -459,12 +484,12 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 4.56612,
+    "value_normalized_usd_millions": 4.563582,
     "gold_id": "almirall-seysara-us-reported-2026q1"
    },
    {
     "period": "2026Q2",
-    "value_normalized_usd_millions": 5.23395,
+    "value_normalized_usd_millions": 5.234314,
     "gold_id": "almirall-seysara-us-reported-2026q2"
    }
   ]
@@ -724,12 +749,12 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 1457.16278,
+    "value_normalized_usd_millions": 1456.333325,
     "gold_id": "astellas-xtandi-global-reported-2026q1"
    },
    {
     "period": "2026Q2",
-    "value_normalized_usd_millions": 1735.836492,
+    "value_normalized_usd_millions": 1735.670532,
     "gold_id": "astellas-xtandi-global-reported-2026q2"
    }
   ]
@@ -781,6 +806,36 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 79.412,
     "gold_id": "aurinia-lupkynis-total-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nuedexta",
+  "manufacturer": "Avanir Pharmaceuticals, Inc.",
+  "ticker": null,
+  "generic_name": "dextromethorphan hydrobromide and quinidine sulfate",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q1",
+    "value_normalized_usd_millions": 24.4,
+    "gold_id": "otsuka-nuedexta-product-line-reported-2014q1"
+   },
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": 26.5,
+    "gold_id": "otsuka-nuedexta-product-line-reported-2014q2"
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 31.223,
+    "gold_id": "otsuka-nuedexta-product-line-reported-2014q3"
    }
   ]
  },
@@ -884,12 +939,12 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 88.9808,
+    "value_normalized_usd_millions": 88.931338,
     "gold_id": "bayer-stivarga-worldwide-reported-2026q1"
    },
    {
     "period": "2026Q2",
-    "value_normalized_usd_millions": 83.7432,
+    "value_normalized_usd_millions": 83.749028,
     "gold_id": "bayer-stivarga-worldwide-reported-2026q2"
    }
   ]
@@ -1134,7 +1189,7 @@
    },
    {
     "period": "2025Q4",
-    "value_normalized_usd_millions": 195.4848,
+    "value_normalized_usd_millions": 195.576387,
     "gold_id": "blueprint-ayvakit-ayvakyt-worldwide-reported-2025q4"
    }
   ]
@@ -1429,12 +1484,12 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 14.029576,
+    "value_normalized_usd_millions": 14.02159,
     "gold_id": "daiichi-vanflyta-oncology-business-unit-reported-2026q1"
    },
    {
     "period": "2026Q2",
-    "value_normalized_usd_millions": 18.199298,
+    "value_normalized_usd_millions": 18.197558,
     "gold_id": "daiichi-vanflyta-oncology-business-unit-reported-2026q2"
    }
   ]
@@ -1545,6 +1600,36 @@
   ]
  },
  {
+  "drug_name": "Kalbitor",
+  "manufacturer": "Dyax Corp",
+  "ticker": null,
+  "generic_name": "ecallantide",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q1",
+    "value_normalized_usd_millions": 16.013,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2015q1"
+   },
+   {
+    "period": "2015Q2",
+    "value_normalized_usd_millions": 17.76,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2015q2"
+   },
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 17.807,
+    "gold_id": "takeda-kalbitor-worldwide-reported-2015q3"
+   }
+  ]
+ },
+ {
   "drug_name": "Aricept",
   "manufacturer": "Eisai",
   "ticker": null,
@@ -1559,7 +1644,7 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 39.537896,
+    "value_normalized_usd_millions": 39.51539,
     "gold_id": "eisai-aricept-brand-total-reported-2026q1"
    },
    {
@@ -1714,12 +1799,12 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 153.729,
+    "value_normalized_usd_millions": 153.651255,
     "gold_id": "gsk-zejula-worldwide-reported-2026q1"
    },
    {
     "period": "2026Q2",
-    "value_normalized_usd_millions": 135.643,
+    "value_normalized_usd_millions": 135.636427,
     "gold_id": "gsk-zejula-worldwide-reported-2026q2"
    }
   ]
@@ -1739,22 +1824,22 @@
   "expect": [
    {
     "period": "2023Q1",
-    "value_normalized_usd_millions": 28.6491,
+    "value_normalized_usd_millions": 28.648325,
     "gold_id": "galapagos-jyseleca-europe-reported-2023q1"
    },
    {
     "period": "2023Q2",
-    "value_normalized_usd_millions": 30.0564,
+    "value_normalized_usd_millions": 30.051669,
     "gold_id": "galapagos-jyseleca-europe-reported-2023q2"
    },
    {
     "period": "2023Q3",
-    "value_normalized_usd_millions": 30.25474,
+    "value_normalized_usd_millions": 30.258005,
     "gold_id": "galapagos-jyseleca-europe-reported-2023q3"
    },
    {
     "period": "2023Q4",
-    "value_normalized_usd_millions": 32.50728,
+    "value_normalized_usd_millions": 32.498665,
     "gold_id": "galapagos-jyseleca-europe-reported-2023q4"
    }
   ]
@@ -2064,12 +2149,12 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 62.16948,
+    "value_normalized_usd_millions": 62.134921,
     "gold_id": "ipsen-onivyde-worldwide-reported-2026q1"
    },
    {
     "period": "2026Q2",
-    "value_normalized_usd_millions": 63.85419,
+    "value_normalized_usd_millions": 63.858634,
     "gold_id": "ipsen-onivyde-worldwide-reported-2026q2"
    }
   ]
@@ -2199,12 +2284,12 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 291.432556,
+    "value_normalized_usd_millions": 291.266665,
     "gold_id": "kyowa-kirin-crysvita-worldwide-reported-2026q1"
    },
    {
     "period": "2026Q2",
-    "value_normalized_usd_millions": 458.747822,
+    "value_normalized_usd_millions": 458.703962,
     "gold_id": "kyowa-kirin-crysvita-worldwide-reported-2026q2"
    }
   ]
@@ -2274,12 +2359,12 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 10.029148,
+    "value_normalized_usd_millions": 10.023235,
     "gold_id": "lundbeck-abilify-asimtufii-us-reported-2026q1"
    },
    {
     "period": "2026Q2",
-    "value_normalized_usd_millions": 10.738631,
+    "value_normalized_usd_millions": 10.738822,
     "gold_id": "lundbeck-abilify-asimtufii-us-reported-2026q2"
    }
   ]
@@ -2370,37 +2455,27 @@
   ]
  },
  {
-  "drug_name": "Astepro",
+  "drug_name": "Dymista",
   "manufacturer": "Meda AB",
   "ticker": null,
-  "generic_name": "azelastine hydrochloride nasal spray",
+  "generic_name": "azelastine hydrochloride / fluticasone propionate nasal spray",
   "options": {
-   "earnings_since": "2014-04-05",
-   "earnings_until": "2015-05-05",
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
    "openfda": true,
    "product_metadata": true
   },
   "source": "seed/gold/quarterly_revenue.jsonl",
   "expect": [
    {
-    "period": "2014Q1",
-    "value_normalized_usd_millions": 10.365901,
-    "gold_id": "meda-astepro-us-reported-2014q1"
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 27.10411,
+    "gold_id": "viatris-dymista-worldwide-reported-2016q1"
    },
    {
-    "period": "2014Q2",
-    "value_normalized_usd_millions": 5.149798,
-    "gold_id": "meda-astepro-us-reported-2014q2"
-   },
-   {
-    "period": "2014Q3",
-    "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2014Q2. 2014Q2 is the last quarter in which a Meda document prints an Astepro figure. The Interim Report January-September 2014 table of the 20 best-selling products ends at 128 for January-September and lists no Astepro row; the Year-end Report 2014, the Q1 2015, H1 2015 and year-end 2015 reports print no Astepro row either and mention Astepro only as a declining product under generic competition. No later Meda, Mylan or Viatris document read prints an Astepro figure."
-   },
-   {
-    "period": "2014Q4",
-    "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2014Q2. 2014Q2 is the last quarter in which a Meda document prints an Astepro figure. The Interim Report January-September 2014 table of the 20 best-selling products ends at 128 for January-September and lists no Astepro row; the Year-end Report 2014, the Q1 2015, H1 2015 and year-end 2015 reports print no Astepro row either and mention Astepro only as a declining product under generic competition. No later Meda, Mylan or Viatris document read prints an Astepro figure."
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 41.526107,
+    "gold_id": "viatris-dymista-worldwide-reported-2016q2"
    }
   ]
  },
@@ -2479,12 +2554,12 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 112.16264,
+    "value_normalized_usd_millions": 112.100291,
     "gold_id": "merck-kgaa-rebif-worldwide-reported-2026q1"
    },
    {
     "period": "2026Q2",
-    "value_normalized_usd_millions": 123.87015,
+    "value_normalized_usd_millions": 123.878771,
     "gold_id": "merck-kgaa-rebif-worldwide-reported-2026q2"
    }
   ]
@@ -2504,7 +2579,7 @@
   "expect": [
    {
     "period": "2025Q1",
-    "value_normalized_usd_millions": 178.51224,
+    "value_normalized_usd_millions": 178.481776,
     "gold_id": "mitsubishi-tanabe-radicava-family-reported-2025q1"
    },
    {
@@ -2556,6 +2631,41 @@
     "period": "2025Q4",
     "value_normalized_usd_millions": null,
     "why": "The issuer reports no line for this product after 2025Q2. From the third quarter of 2025 Moderna's 'COVID' product-sales row carries the footnote 'Includes sales of Spikevax and mNEXSPIKE', so the line is no longer Spikevax alone; the series ends at the last quarter of the earlier definition. The combined COVID rows for 2025Q3 onward are not spliced in."
+   }
+  ]
+ },
+ {
+  "drug_name": "Gattex",
+  "manufacturer": "NPS Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "teduglutide",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q1",
+    "value_normalized_usd_millions": 17.871,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2014q1"
+   },
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": 21.955,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2014q2"
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 28.091,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2014q3"
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": 33.278,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2014q4"
    }
   ]
  },
@@ -2654,12 +2764,12 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 3214.498486,
+    "value_normalized_usd_millions": 3212.603495,
     "gold_id": "novo-wegovy-worldwide-reported-2026q1"
    },
    {
     "period": "2026Q2",
-    "value_normalized_usd_millions": 3032.340318,
+    "value_normalized_usd_millions": 3032.394288,
     "gold_id": "novo-wegovy-worldwide-reported-2026q2"
    }
   ]
@@ -2794,12 +2904,12 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 605.8226,
+    "value_normalized_usd_millions": 605.47775,
     "gold_id": "otsuka-rexulti-worldwide-reported-2026q1"
    },
    {
     "period": "2026Q2",
-    "value_normalized_usd_millions": 616.265884,
+    "value_normalized_usd_millions": 616.206964,
     "gold_id": "otsuka-rexulti-worldwide-reported-2026q2"
    }
   ]
@@ -2980,6 +3090,61 @@
   ]
  },
  {
+  "drug_name": "Relistor",
+  "manufacturer": "Progenics Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "methylnaltrexone bromide",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 15.5,
+    "gold_id": "bausch-relistor-us-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 14.6,
+    "gold_id": "bausch-relistor-us-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 21.5,
+    "gold_id": "bausch-relistor-us-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 15.3,
+    "gold_id": "bausch-relistor-us-reported-2016q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Tzield",
+  "manufacturer": "Provention Bio",
+  "ticker": null,
+  "generic_name": "teplizumab-mzwv",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 1.183,
+    "gold_id": "sanofi-tzield-worldwide-reported-2022q4"
+   }
+  ]
+ },
+ {
   "drug_name": "Enjaymo",
   "manufacturer": "Recordati",
   "ticker": null,
@@ -2994,12 +3159,12 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 51.409828,
+    "value_normalized_usd_millions": 51.38125,
     "gold_id": "sanofi-enjaymo-worldwide-reported-2026q1"
    },
    {
     "period": "2026Q2",
-    "value_normalized_usd_millions": 54.750606,
+    "value_normalized_usd_millions": 54.754417,
     "gold_id": "sanofi-enjaymo-worldwide-reported-2026q2"
    }
   ]
@@ -3026,6 +3191,36 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 342.6,
     "gold_id": "regeneron-libtayo-us-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Lovaza",
+  "manufacturer": "Reliant Pharmaceuticals, Inc.",
+  "ticker": null,
+  "generic_name": "omega-3-acid ethyl esters",
+  "options": {
+   "earnings_since": "2007-04-05",
+   "earnings_until": "2008-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2007Q1",
+    "value_normalized_usd_millions": 57.7,
+    "gold_id": "gsk-lovaza-worldwide-reported-2007q1"
+   },
+   {
+    "period": "2007Q2",
+    "value_normalized_usd_millions": 69.8,
+    "gold_id": "gsk-lovaza-worldwide-reported-2007q2"
+   },
+   {
+    "period": "2007Q3",
+    "value_normalized_usd_millions": 78.9,
+    "gold_id": "gsk-lovaza-worldwide-reported-2007q3"
    }
   ]
  },
@@ -3069,12 +3264,12 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 1307.456584,
+    "value_normalized_usd_millions": 1306.961439,
     "gold_id": "roche-vabysmo-worldwide-reported-2026q1"
    },
    {
     "period": "2026Q2",
-    "value_normalized_usd_millions": 1309.96076,
+    "value_normalized_usd_millions": 1309.852872,
     "gold_id": "roche-vabysmo-worldwide-reported-2026q2"
    }
   ]
@@ -3189,12 +3384,12 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 16.3912,
+    "value_normalized_usd_millions": 16.382089,
     "gold_id": "sanofi-tzield-worldwide-reported-2026q1"
    },
    {
     "period": "2026Q2",
-    "value_normalized_usd_millions": 26.7513,
+    "value_normalized_usd_millions": 26.753162,
     "gold_id": "sanofi-tzield-worldwide-reported-2026q2"
    }
   ]
@@ -3221,6 +3416,41 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 98.125,
     "gold_id": "sarepta-elevidys-us-net-product-revenue-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Betaseron",
+  "manufacturer": "Schering AG",
+  "ticker": null,
+  "generic_name": "interferon beta-1b",
+  "options": {
+   "earnings_since": "2006-04-05",
+   "earnings_until": "2007-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2006Q1",
+    "value_normalized_usd_millions": 279.155496,
+    "gold_id": "bayer-betaseron-worldwide-reported-2006q1"
+   },
+   {
+    "period": "2006Q2",
+    "value_normalized_usd_millions": 313.149404,
+    "gold_id": "bayer-betaseron-worldwide-reported-2006q2"
+   },
+   {
+    "period": "2006Q3",
+    "value_normalized_usd_millions": 313.433675,
+    "gold_id": "bayer-betaseron-worldwide-reported-2006q3"
+   },
+   {
+    "period": "2006Q4",
+    "value_normalized_usd_millions": 340.516567,
+    "gold_id": "bayer-betaseron-worldwide-reported-2006q4"
    }
   ]
  },
@@ -3379,21 +3609,21 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 41.45102,
+    "value_normalized_usd_millions": 41.427425,
     "gold_id": "shionogi-fetroja-shionogi-inc-us-reported-2026q1"
    },
    {
     "period": "2026Q2",
-    "value_normalized_usd_millions": 48.322274,
+    "value_normalized_usd_millions": 48.317654,
     "gold_id": "shionogi-fetroja-shionogi-inc-us-reported-2026q2"
    }
   ]
  },
  {
-  "drug_name": "Vpriv",
+  "drug_name": "Firazyr",
   "manufacturer": "Shire",
   "ticker": null,
-  "generic_name": "velaglucerase alfa",
+  "generic_name": "icatibant (icatibant acetate)",
   "options": {
    "earnings_since": "2018-04-05",
    "earnings_until": "2019-05-05",
@@ -3404,18 +3634,58 @@
   "expect": [
    {
     "period": "2018Q1",
-    "value_normalized_usd_millions": 89.9,
-    "gold_id": "takeda-vpriv-worldwide-reported-2018q1"
+    "value_normalized_usd_millions": 206.0,
+    "gold_id": "takeda-firazyr-worldwide-reported-2018q1"
    },
    {
     "period": "2018Q2",
-    "value_normalized_usd_millions": 89.6,
-    "gold_id": "takeda-vpriv-worldwide-reported-2018q2"
+    "value_normalized_usd_millions": 211.0,
+    "gold_id": "takeda-firazyr-worldwide-reported-2018q2"
    },
    {
     "period": "2018Q3",
-    "value_normalized_usd_millions": 87.8,
-    "gold_id": "takeda-vpriv-worldwide-reported-2018q3"
+    "value_normalized_usd_millions": 140.0,
+    "gold_id": "takeda-firazyr-worldwide-reported-2018q3"
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": 216.368708,
+    "gold_id": "takeda-firazyr-worldwide-reported-2018q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Gattex",
+  "manufacturer": "Shire plc",
+  "ticker": null,
+  "generic_name": "teduglutide",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 96.2,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 133.5,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 97.1,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2018q3"
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": 122.9,
+    "gold_id": "takeda-gattex-revestive-worldwide-reported-2018q4"
    }
   ]
  },
@@ -3434,12 +3704,12 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 85.305361,
+    "value_normalized_usd_millions": 85.226659,
     "gold_id": "sobi-kineret-worldwide-reported-2026q1"
    },
    {
     "period": "2026Q2",
-    "value_normalized_usd_millions": 91.972442,
+    "value_normalized_usd_millions": 91.977169,
     "gold_id": "sobi-kineret-worldwide-reported-2026q2"
    }
   ]
@@ -3476,6 +3746,41 @@
     "period": "2019Q4",
     "value_normalized_usd_millions": null,
     "why": "The issuer reports no line for this product after 2019Q3. Spark was acquired by Roche on 2019-12-17 and deregistered; no 10-K for 2019 exists. Roche prints no quarterly Luxturna sales (half-year level only, in CHF)."
+   }
+  ]
+ },
+ {
+  "drug_name": "Amitiza",
+  "manufacturer": "Sucampo Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "lubiprostone",
+  "options": {
+   "earnings_since": "2011-04-05",
+   "earnings_until": "2012-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2011Q1",
+    "value_normalized_usd_millions": 50.7,
+    "gold_id": "takeda-amitiza-us-reported-2011q1"
+   },
+   {
+    "period": "2011Q2",
+    "value_normalized_usd_millions": 61.30585,
+    "gold_id": "takeda-amitiza-us-reported-2011q2"
+   },
+   {
+    "period": "2011Q3",
+    "value_normalized_usd_millions": 57.97368,
+    "gold_id": "takeda-amitiza-us-reported-2011q3"
+   },
+   {
+    "period": "2011Q4",
+    "value_normalized_usd_millions": 56.891164,
+    "gold_id": "takeda-amitiza-us-reported-2011q4"
    }
   ]
  },
@@ -3574,7 +3879,7 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 9.56562,
+    "value_normalized_usd_millions": 9.560175,
     "gold_id": "takeda-resolor-motegrity-worldwide-reported-2026q1"
    },
    {
@@ -3940,6 +4245,36 @@
   ]
  },
  {
+  "drug_name": "Cinryze",
+  "manufacturer": "ViroPharma",
+  "ticker": null,
+  "generic_name": "C1 esterase inhibitor (human)",
+  "options": {
+   "earnings_since": "2013-04-05",
+   "earnings_until": "2014-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2013Q1",
+    "value_normalized_usd_millions": 99.489,
+    "gold_id": "takeda-cinryze-worldwide-reported-2013q1"
+   },
+   {
+    "period": "2013Q2",
+    "value_normalized_usd_millions": 94.638,
+    "gold_id": "takeda-cinryze-worldwide-reported-2013q2"
+   },
+   {
+    "period": "2013Q3",
+    "value_normalized_usd_millions": 106.502,
+    "gold_id": "takeda-cinryze-worldwide-reported-2013q3"
+   }
+  ]
+ },
+ {
   "drug_name": "Qsymia",
   "manufacturer": "Vivus",
   "ticker": null,
@@ -3971,6 +4306,41 @@
     "period": "2020Q4",
     "value_normalized_usd_millions": null,
     "why": "The issuer reports no line for this product after 2020Q1. Vivus filed voluntary Chapter 11 petitions on July 7, 2020 and its Form 12b-25 (NT 10-Q, filed 2020-08-17, https://www.sec.gov/Archives/edgar/data/881524/000110465920096093/a20-27697_1nt10q.htm) states it 'is unable to file its Quarterly Report on Form 10-Q for the quarterly period ended June 30, 2020'; no later 10-Q, 10-K or earnings 8-K exists on EDGAR (last filings: Form 25-NSE 2020-08-11, Form 15-12B 2021-01-08)."
+   }
+  ]
+ },
+ {
+  "drug_name": "Lipitor",
+  "manufacturer": "Warner-Lambert",
+  "ticker": null,
+  "generic_name": "atorvastatin calcium",
+  "options": {
+   "earnings_since": "1997-04-05",
+   "earnings_until": "1998-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "1997Q1",
+    "value_normalized_usd_millions": 49.0,
+    "gold_id": "pfizer-viatris-lipitor-worldwide-reported-1997q1"
+   },
+   {
+    "period": "1997Q2",
+    "value_normalized_usd_millions": 151.0,
+    "gold_id": "pfizer-viatris-lipitor-worldwide-reported-1997q2"
+   },
+   {
+    "period": "1997Q3",
+    "value_normalized_usd_millions": 257.0,
+    "gold_id": "pfizer-viatris-lipitor-worldwide-reported-1997q3"
+   },
+   {
+    "period": "1997Q4",
+    "value_normalized_usd_millions": 408.0,
+    "gold_id": "pfizer-viatris-lipitor-worldwide-reported-1997q4"
    }
   ]
  },

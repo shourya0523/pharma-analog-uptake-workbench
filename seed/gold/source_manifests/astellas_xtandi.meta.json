@@ -17,8 +17,8 @@
     "quote": "This new drug application provides for the use of Xtandi (enzalutamide) Capsules for the treatment of patients with metastatic castration-resistant prostate cancer who have previously received docetaxel. (FDA approval letter, NDA 203415, signed 08/31/2012)"
   },
   "launch_quarter": "2012Q3",
-  "commercial_start_quarter": "2017Q2",
-  "series_start_reason": "Astellas' financial-results library on astellas.com begins with Q1 FY2017 (April-June 2017). The FY2017 Q1 document also prints the prior-year quarter (64.2 billion JPY, April-June 2016) but the other FY2016 quarters are not printed individually in any document found, so no isolated 2016Q2 row is included. Launch (2012) to 2017Q1 is therefore not citable from Astellas documents located; searched legacy URL patterns returned 404.",
+  "commercial_start_quarter": "2016Q2",
+  "series_start_reason": "Astellas' financial-results library on astellas.com begins with Q1 FY2017 (April-June 2017). The Q1, Q2, Q3 and Q4 FY2017 financial results releases (and their supplementary documents) print the FY2016 comparatives (April-June, April-September, April-December and full-year FY2016), so FY2016 Q1-Q4 (calendar 2016Q2-2017Q1) are taken from them: the first quarter as printed, the others as year-to-date or annual differences. Nothing before April 2016 is printed as a quarter in any Astellas document located: the FY2016 and earlier results documents are not on astellas.com (every guessed legacy URL returned 404) and the FY2015 integrated report prints annual figures only.",
   "series_end_quarter": null,
   "series_end_basis": null,
   "series_end_reason": null,
@@ -28,7 +28,10 @@
     "guessed legacy astellas.com/en/ir/library/pdf/... URLs for FY2013-FY2016 documents: all returned 404, so no earlier Astellas document was found",
     "extracted the 'Global' sales-of-major-products table in each quarter's supplementary document (billions of JPY, one decimal) with pdfplumber, the verifier's extractor",
     "where the quarter's own document text layer splits the digits of the row, the same quarter was read from a later document of the same fiscal year, or derived from year-to-date figures (rows are labelled accordingly)",
-    "cross-check: for every complete fiscal year the four quarters were summed and compared with the full-year figure on the same table (differences at most 0.2 billion JPY from rounding)"
+    "cross-check: for every complete fiscal year the four quarters were summed and compared with the full-year figure on the same table (differences at most 0.2 billion JPY from rounding)",
+    "FY2017 Q1-Q4 supplementary documents (supplementary-documents-q1-2017.pdf to -q4-2017.pdf) read with pdfplumber: the 'Global' sales-of-major-products table prints FY2016 comparatives as April-June, April-September, April-December and full year, so FY2016 quarters 1-4 were added as 2016Q2 (printed), 2016Q3 and 2016Q4 (year-to-date differences) and 2017Q1 (full year less nine months)",
+    "FY2015 integrated report (about-astellas-integrated-report-2016.pdf, 158 pages) searched line by line for the product with Q1-Q4 or quarter markers: no quarterly lines, annual only; astellas.com paths for FY2016 releases (supplementary-documents-q1..q4-2016.pdf, financial-results-q*-2016.pdf, 1q2016_sup_en.pdf and similar under documents/financial-results and en/ir/library/pdf) returned 404; web.archive.org is blocked from this environment",
+    "cross-check: the four FY2016 quarters sum to the full-year FY2016 figure printed in the same table (differences nil at one decimal)"
   ],
   "launch_evidence": {
     "url": "https://www.sec.gov/Archives/edgar/data/1011835/000119312512463319/d436510dex991.htm",

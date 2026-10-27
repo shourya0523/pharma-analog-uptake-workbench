@@ -1,0 +1,10 @@
+{
+  "drug_name": "Xifaxan",
+  "line_label": "Xifaxan",
+  "issuer": "Bausch Health Companies",
+  "benchmark_identity": "bausch_xifaxan_isolated_quarters_reported",
+  "revenue_scope": "U.S.",
+  "geography": "United States",
+  "why_separate": "After 2021 Bausch Health prints Xifaxan for only some quarters: 2022Q1-Q2 only as a six-month total (775), 2022Q3 and 2022Q4 as differences of year-to-date figures, nothing quarterly for 2023Q1-2025Q3 (the decks show only percentage change), and the quarter again from 2025Q4. The series cannot run contiguously past 2021Q4, so these quarters are kept beside it rather than joined with undeclarable gaps.",
+  "notes": "2022Q3 441 = nine months 1,216 less six months 775; 2022Q4 476 = full year 1,692 less nine months 1,216 (10-Q 0000885590-22-000061, 10-K 0000885590-23-000009). 2025Q4 607, 2026Q1 559 and 2026Q2 664 are read from the Salix segment slides of the 4Q25, 1Q26 and 2Q26 earnings presentations."
+}

@@ -16,13 +16,13 @@
     "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2009/125277s000ltr.pdf",
     "quote": "BLA APPROVAL December 1, 2009 ... Kalbitor (ecallantide) injection is indicated for the treatment of acute attacks of hereditary angioedema in patients 16 years of age and older. (FDA approval letter, BLA 125277, Dyax Corporation)"
   },
-  "launch_quarter": null,
-  "commercial_start_quarter": "2019Q1",
-  "series_start_reason": "Takeda prints a Kalbitor line only from fiscal Q4 FY2018 (January-March 2019), the first quarter after it completed the Shire acquisition (Shire's acquisition of Dyax was announced in November 2015; USD, different issuer). The FY2018 column of that table is headed 'Takeda 12 Months @ Actual rate, Shire 3 Months @ Actual rate', so the figure is the 3 months from the January 8, 2019 consolidation to March 31, 2019. Pre-2019 Shire history was not sourced in this batch and is not spliced.",
+  "launch_quarter": "2010Q1",
+  "commercial_start_quarter": "2010Q1",
+  "series_start_reason": "The series starts in the quarter of the U.S. launch: Dyax Corp, which launched KALBITOR in February 2010, printed 'Product sales, net' (reported in its releases as KALBITOR net sales) from the first quarter of 2010. Shire plc acquired Dyax on January 22, 2016 and printed a KALBITOR line in its releases from the first quarter of 2016 to the third quarter of 2017, after which it prints none. Takeda's first printing is the FY2019 Q1 data book's pro-forma table (FY18 Q1-Q4, April 2018-March 2019, which are 2018Q2-2019Q1); the 2019Q1 value is also the 3-month actual in Takeda's FY2018 Q4 report, whose FY2018 column is headed 'Takeda 12 Months @ Actual rate, Shire 3 Months @ Actual rate' (consolidation from January 8, 2019). KALBITOR was approved in December 2009 and Dyax recorded no product sales before 2010 (2009 comparatives are printed nils).",
   "series_end_quarter": "2022Q1",
   "series_end_basis": "issuer_stopped_reporting",
   "series_end_reason": "Takeda's FY2021 Q4 quarterly financial report (January-March 2022; qr2021_q4_qfr_en.pdf) is the last to print a KALBITOR line; its FY2022 forecast table already folds the product into 'Others' with the footnote 'Others in Rare Genetics and Other includes NATPARA/NATPAR, KALBITOR', and Takeda's FY2022 Q1 quarterly financial report (qr2022_q1_qfr_en.pdf) and every later report contain no KALBITOR line (zero text lines mention Kalbitor in the FY2022 Q1 and FY2026 Q1 reports as read with pdfplumber; pdftotext finds the name in no quarterly financial report after FY2021 Q4).",
-  "notes": "Scope is Takeda's worldwide Kalbitor line: the total column of the 'Product Sales Analysis' table (Bn JPY, 'Sales amount includes royalty income and service income'); in the regional columns the line is entirely U.S. (US column equals the total in the FY2019-FY2021 tables). The regional split of 2019Q1 is not printed. Row amounts are small (about 1 billion JPY per quarter), so the one-decimal printing gives coarse values. No launch quarter is cited. Label printed: 'Kalbitor' (FY2018-FY2019), 'KALBITOR' (FY2020-FY2021).",
+  "notes": "Scope is Takeda's worldwide Kalbitor line: the total column of the 'Product Sales Analysis' table (Bn JPY, 'Sales amount includes royalty income and service income'); in the regional columns the line is entirely U.S. (US column equals the total in the FY2019-FY2021 tables). The regional split of 2019Q1 and of the 2018Q2-2018Q4 pro-forma quarters is not printed. Row amounts are small (about 1 billion JPY per quarter), so the one-decimal printing gives coarse values. No launch quarter is cited. Label printed: 'Kalbitor' (FY2018-FY2019), 'KALBITOR' (FY2020-FY2021). From 2010Q1 to 2017Q3 the rows are the previous owners' USD lines for the same product (currency is recorded per row): Dyax Corp 'Product sales, net' (2010Q1-2015Q3, which the Dyax releases report as KALBITOR net sales), then Shire plc KALBITOR (2016Q2-2017Q3). KALBITOR is sold only in the U.S. (Shire 2015 Form 10-K), so every issuer's line is the same U.S.-only scope. The quarters in unreported_quarters are the Dyax-to-Shire handover and the two quarters after Shire stopped printing the line and before Takeda's pro-forma table begins. Rows 2018Q2-2018Q4 come from the pro-forma table of the FY2019 Q1 data book (derivation direct_retrospective_table): legacy Shire U.S.-GAAP Kalbitor sales converted to JPY at the FY2018 actual rate, not Takeda-consolidated sales; the same table prints FY18 Q4 = 1.2, equal to the 3-month actual of 2019Q1, and its annual pro-forma column prints 7.4 against 1.9+2.3+2.1+1.2 = 7.5 (rounding). The series is USD through 2017Q3 and JPY from 2018Q2.",
   "search_log": [
     "fetched the takeda.com quarterly-results pages for 2014-2025 and the current page, plus the legacy Shire financial-results page, and collected every PDF/XLSX link (work/takeda_links.json); downloaded the PDFs from FY2014 onward and the Shire press releases/presentations from FY2013 onward (work/pdf), scanned them with pdftotext for the brand names, then re-read each cited page with pdfplumber (the verifier's extractor) so quoted figures match its text layer",
     "Bigdata.com was not used: the issuer's own IR documents were located directly from the takeda.com pages",
@@ -32,6 +32,44 @@
     "FY2025 Q4 has two versions on takeda.com (original of 2026-05-13, marked as superseded, and the version amended on 2026-06-05 for a subsequent event); the cited document is the amended version, the product-line figures are identical in both",
     "Shire (the prior owner) printed this brand in USD in its own quarterly press releases (legacy Shire documents on the takeda.com Shire page, FY2013-FY2018); those documents were located but not extracted or spliced, because the issuer, currency and revenue definition differ from Takeda's JPY line",
     "EDGAR was not searched: the Takeda quarterly documents on takeda.com were sufficient for every quarter",
-    "end of series: pdfplumber text of qr2022_q1_qfr_en.pdf and qr2026_q1_qfr_en.pdf has zero lines mentioning Kalbitor; pdftotext of all downloaded FY2022-FY2026 quarterly financial reports finds no KALBITOR; the FY2021 Q4 report's FY2022 forecast table footnote *7 names KALBITOR inside 'Others'; the Takeda 20-F of June 2022 (20-f_2022_06_29_eg.pdf) mentions KALBITOR once, in a patent/commercialisation table (not a sales figure)"
-  ]
+    "end of series: pdfplumber text of qr2022_q1_qfr_en.pdf and qr2026_q1_qfr_en.pdf has zero lines mentioning Kalbitor; pdftotext of all downloaded FY2022-FY2026 quarterly financial reports finds no KALBITOR; the FY2021 Q4 report's FY2022 forecast table footnote *7 names KALBITOR inside 'Others'; the Takeda 20-F of June 2022 (20-f_2022_06_29_eg.pdf) mentions KALBITOR once, in a patent/commercialisation table (not a sales figure)",
+    "range extension: Dyax Corp CIK 907562 earnings 8-K Exhibit 99.1 for Q4 2009 through Q3 2015 read: first product sales in Q1 2010 (Q4 2009 release has none); no Q4 2015 report exists (Form 15-12G filed 2016-02-01)",
+    "range extension: Shire plc earnings releases Q1 2016 through Q3 2018 and the 2017 Form 10-K scanned for KALBITOR: line printed Q1 2016-Q3 2017, then none (Q4 2017 and 2018 releases and 10-Qs carry no KALBITOR figure); Shire's Q1 2016 stub (10.4, from January 22) not delivered",
+    "range extension: quarters were summed to each printed full year (Dyax 2011 22,884, 2012 39,783, 2013 40,526, 2014 68,272 thousand; Shire 2016 52.2 including the 10.4 stub) and agree",
+    "range extension: 'Shire's Full Year 2018 Results' (Takeda, 2019-02-15) has no KALBITOR line, so Shire's own documents print nothing for 2017Q4-2018Q4",
+    "pro-forma review: Takeda FY2019 Q1 data book (qr2019_q1_d_en_revised.pdf) section 3 'Product Sales Analysis (vs FY2018 Pro-forma)', p.7 (line 'Kalbitor 1.9 2.3 2.1 1.2 1.1 -41.5% -42.7%') and section 4 'FY2018 Pro-forma and Product Forecasts', p.9 (line 'Kalbitor 1.9 2.3 2.1 1.2 7.4'), read with pdfplumber. FY18 Q1-Q4 are 2018Q2-2019Q1. Accepted: it is Takeda's own printed line for the same product on the same worldwide table, no other document prints those quarters (Shire's releases fold the product into the HEREDITARY ANGIOEDEMA franchise total), and its FY18 Q4 value equals the 3-month actual. Three rows (2018Q2-2018Q4) added as direct_retrospective_table",
+    "earlier statement that Takeda prints the line only from fiscal Q4 FY2018 is corrected: that is the first Takeda-consolidated quarter, the pro-forma table prints the preceding three; the FY2018 Q4 report (qr2018_q4_f_en.pdf p.41-43) has a 'Reported Actual / FY18 Pro-forma' section whose Kalbitor row shows only 1.2 (the 3 months)"
+  ],
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/907562/000104746910002143/a2196756z10-k.htm",
+    "quote": "We initiated the commercial launch of KALBITOR in the United States in February 2010."
+  },
+  "joined_issuers": [
+    {
+      "issuer": "Dyax Corp",
+      "first_quarter": "2010Q1",
+      "last_quarter": "2015Q3"
+    },
+    {
+      "issuer": "Shire plc",
+      "first_quarter": "2016Q2",
+      "last_quarter": "2017Q3"
+    },
+    {
+      "issuer": "Takeda",
+      "first_quarter": "2018Q2",
+      "last_quarter": "2022Q1"
+    }
+  ],
+  "unreported_quarters": {
+    "2015Q4": "Ownership change Dyax Corp to Shire; no figure is published. Shire completed the Dyax acquisition on January 22, 2016 (https://www.sec.gov/Archives/edgar/data/936402/000095010316011313/dp63589_10k.htm) and Dyax filed a Form 15 on February 1, 2016 (https://www.sec.gov/Archives/edgar/data/907562/000110465916092917/a16-3277_11512g.htm) without a fourth-quarter or full-year 2015 report; its last report is the third-quarter 2015 Form 10-Q.",
+    "2016Q1": "Ownership change Dyax Corp to Shire; no full-quarter figure is published. Shire's first-quarter 2016 release states 'Shire acquired KALBITOR through its acquisition of Dyax on January 22, 2016, and recorded sales of $10 million for the period subsequent to acquisition' (KALBITOR 10.4 in the product sales table, https://www.sec.gov/Archives/edgar/data/936402/000095010316012957/dp65192_ex9901.htm), which covers the period from January 22 only; the 10.4 stub is not delivered.",
+    "2017Q4": "Shire stopped printing a KALBITOR line after its third-quarter 2017 release. Its fourth-quarter 2017 release and the 2017 Form 10-K contain no KALBITOR sales figure (the franchise table has a HEREDITARY ANGIOEDEMA total, https://www.sec.gov/Archives/edgar/data/936402/000093640218000003/erq42017-exhibit991.htm).",
+    "2018Q1": "Shire printed no KALBITOR line in its first-quarter 2018 release (https://www.sec.gov/Archives/edgar/data/936402/000093640218000011/erq12018-exhibit991.htm); the product is inside the HEREDITARY ANGIOEDEMA franchise total. Takeda's pro-forma table starts with FY18 Q1 (April-June 2018), so January-March 2018 is not printed there either (https://assets-dam.takeda.com/raw/upload/v1675192491/legacy-dotcom/siteassets/system/investors/quarterly-announcements/fy2019/qr2019_q1_d_en_revised.pdf); 'Shire's Full Year 2018 Results' has no KALBITOR line (see 2017Q4)."
+  },
+  "reviewed_anomalies": {
+    "2019Q1": "Currency and issuer step, read at source: the rows before 2019Q1 are USD (Dyax Corp, then Shire plc) and from 2019Q1 are JPY (Takeda). The 2019Q1 JPY figure (1.2 billion) covers January 8 to March 31, 2019. The two currencies are not to be compared directly.",
+    "2018Q2-2018Q4": "Pro-forma basis, read at source: legacy Shire U.S.-GAAP sales converted to JPY at the FY2018 actual rate, from the FY2019 Q1 data book pro-forma table; not Takeda-consolidated sales and not comparable to the USD rows without conversion.",
+    "2018Q2": "Currency and issuer step, not growth: 2017Q3 is Shire's USD 16 million; 2018Q2 is Takeda's JPY 1,900 million (pro-forma FY2018 Q1). The two issuers' rows are separated by the declared unreported quarters and compare only in their own currencies; value_normalized_usd_millions puts them on one basis."
+  }
 }

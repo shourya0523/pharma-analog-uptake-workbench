@@ -17,8 +17,8 @@
     "quote": "02/26/2004 ORIG-1 Approval (Drugs@FDA, Original Approvals or Tentative Approvals)"
   },
   "launch_quarter": null,
-  "commercial_start_quarter": "2010Q1",
-  "series_start_reason": "First quarter printed: Q1 2010 is the first column of table 13 (Top 20 Pharmaceuticals Division quarterly product sales) of the Q1 2011 Roche media release; no earlier Roche quarterly figure was found (2009 and 2010 results releases could not be retrieved, and the Half-Year Report 2010 prints six-month totals only).",
+  "commercial_start_quarter": "2009Q4",
+  "series_start_reason": "First quarter printed: Q4 2009 is the first column of table 7 (Top 20 Pharmaceuticals Division quarterly product sales, five quarters Q4 2009 to Q4 2010) of the Roche Investor Update of 2 February 2011 (inv-update-2011-02-02-e.pdf). No earlier Roche quarterly CHF figure was found: Q1-Q3 2009 are printed only as local-currency growth rates (Q1 2010 vs. Q1 2009 and so on) in that update, the Half-Year Report 2010 prints six-month 2010 totals only, and Roche's 2009 and 2010 results releases could not be retrieved.",
   "series_end_quarter": null,
   "series_end_basis": null,
   "series_end_reason": null,
@@ -31,6 +31,9 @@
     "parsed the worldwide \"Top 20 Pharmaceuticals Division quarterly product sales\" table (five quarterly columns; the United States, Europe, Japan and International tables that follow it are separate) of every release retrieved; a quarter is taken from the column of the release that reports it as current, else the Q1 three-month key-products table, else the earliest later release that prints it",
     "series starts at 2010Q1 because the Q1 2011 media release (13 April 2011) prints five quarterly columns Q1 2010 to Q1 2011 and no retrieved Roche document prints an earlier quarter",
     "cross-checked every quarter against every other release that prints it: no differing value found; the four quarters of each year equal the full-year figure printed in that year's results release wherever a full-year row for the product exists",
-    "rows: 66 from 2010Q1 to 2026Q2 ({'direct_prior_year_column': 1, 'direct_retrospective_table': 11, 'direct_reported': 54})"
+    "rows: 66 from 2010Q1 to 2026Q2 ({'direct_prior_year_column': 1, 'direct_retrospective_table': 11, 'direct_reported': 54})",
+    "found the Roche Investor Update of 2 February 2011 (https://assets.cwp.roche.com/imported/en/inv-update-2011-02-02-e.pdf, FY2010 results) via search: its table 7 prints a five-quarter worldwide Top 20 table Q4 2009 to Q4 2010; the 2009Q4 value is taken from column 1 and the 2010 columns equal the rows already in the series",
+    "probed assets.cwp.roche.com/imported/en/{inv-update,med-cor}-YYYY-MM-DD-e.pdf for every weekday in 15 Jan-15 Feb, 10-30 Apr, 10-31 Jul and 10-31 Oct of 2009 and 2010 (HEAD): none answered, so no Roche results release or investor update dated 2009 or 2010 was retrievable; web.archive.org CDX listing is blocked by the egress policy",
+    "Q1-Q3 2009: the FY2010 investor update prints only growth rates against those quarters (Q1 2010 vs. Q1 2009 etc.) and the Half-Year Report 2010 prints 2010 six-month sales only, so no CHF figure for those quarters is printed in any retrieved document; none was derived or estimated"
   ]
 }

@@ -44,6 +44,7 @@ CONSENSUS = "consensus median - above what the series has reported"
 OBSERVED = "observed rolling four-quarter high - above the consensus median"
 NO_ESTIMATE = "observed rolling four-quarter high - no comparable estimate on file"
 PEAK_ESTIMATE = "peak_annual_sales"
+FREE_TO_READ = "free_to_read"
 
 
 def quarter_index(period):
@@ -121,7 +122,8 @@ def usable_for(estimates, geography):
     """The estimates a series of this geography may be normalized by."""
     return [row for row in estimates
             if row["estimate_kind"] == PEAK_ESTIMATE
-            and row["estimate_geography"] == geography]
+            and row["estimate_geography"] == geography
+            and row["source_access"] == FREE_TO_READ]
 
 
 def test_the_peak_is_the_larger_of_the_two_comparable_inputs(sheet, gold, published):
@@ -175,9 +177,13 @@ def test_an_estimate_is_used_or_set_aside_with_a_reason(sheet, published):
         for item in set_aside:
             assert item["estimate_as_stated"] in text, (row["drug_name"], item["source_url"])
             wrong_kind = item["estimate_kind"] != PEAK_ESTIMATE
-            assert (item["estimate_kind"].replace("_", " ") in text) if wrong_kind else (
-                item["estimate_geography"] in text and row["series_geography"] in text
-            ), row["drug_name"]
+            wrong_place = item["estimate_geography"] != row["series_geography"]
+            if wrong_kind:
+                assert item["estimate_kind"].replace("_", " ") in text, row["drug_name"]
+            elif wrong_place:
+                assert item["estimate_geography"] in text and row["series_geography"] in text, row["drug_name"]
+            else:
+                assert item["source_access"].replace("_", " ") in text, row["drug_name"]
         for item in used:
             assert item["source_url"] in (row["consensus_sources"] or ""), row["drug_name"]
 
