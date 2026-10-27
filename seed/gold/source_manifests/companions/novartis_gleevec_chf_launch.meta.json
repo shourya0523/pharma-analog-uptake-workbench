@@ -1,0 +1,10 @@
+{
+  "drug_name": "Gleevec",
+  "line_label": "Glivec/Gleevec",
+  "issuer": "Novartis",
+  "benchmark_identity": "novartis_gleevec_chf_launch_reported",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "why_separate": "Novartis reported its product sales in Swiss francs through the fourth quarter of 2002 and in US dollars from 2003; gold holds one currency per issuer within a series, so the launch quarters 2001Q2-2002Q4 (CHF) are kept beside the USD series that starts in 2003Q1 rather than joined to it. value_normalized_usd_millions converts each row.",
+  "notes": "2001Q2 is the cumulative 'CHF 58 million by the end of June' after the May 2001 launch; the Q1 2001 report shows approval still pending. 2001Q3 and 2001Q4 are derived from the nine-month (140) and full-year (257) figures. The 2002 quarters 183, 235, 243 and 292 sum to the printed CHF 953 million."
+}

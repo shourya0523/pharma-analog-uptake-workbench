@@ -16,13 +16,13 @@
     "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2011/022150s000ltr.pdf",
     "quote": "This new drug application provides for the use of Firazyr (icatibant) Injection for the treatment of acute attacks of hereditary angioedema in adults 18 years of age and older. (FDA approval letter, NDA 022150, Shire Orphan Therapies, signed 08/25/2011)"
   },
-  "launch_quarter": null,
-  "commercial_start_quarter": "2019Q1",
-  "series_start_reason": "Takeda prints a Firazyr line only from fiscal Q4 FY2018 (January-March 2019), the first quarter after it completed the Shire acquisition (Shire held the product earlier; USD, different issuer). The FY2018 column of that table is headed 'Takeda 12 Months @ Actual rate, Shire 3 Months @ Actual rate', so the figure is the 3 months from the January 8, 2019 consolidation to March 31, 2019. Pre-2019 Shire history was not sourced in this batch and is not spliced.",
+  "launch_quarter": "2008Q3",
+  "commercial_start_quarter": "2008Q3",
+  "series_start_reason": "Series starts 2008Q3, the first quarter Shire printed a FIRAZYR product-sales line: after acquiring Jerini AG during Q3 2008, Shire launched FIRAZYR in Germany and the UK in Q3 2008 (Shire's Q3 2008 release prints 0.2 US$ million for the quarter and the nine months). The release for Q2 2008 (0000950103-08-001994) carries FIRAZYR only as a trademark note and no sales line. The series joins two issuers on the same worldwide FIRAZYR scope: Shire (2008Q3-2018Q3, results releases to Q3 2017 and results presentations from Q4 2017) and Takeda (2018Q4 onward). Shire published nothing for the fourth quarter of 2018; the 2018Q4 row is Takeda's pro forma column for legacy Shire. Takeda's own line starts 2019Q1 (the first quarter after it completed the Shire acquisition; the FY2018 column of that table is headed 'Takeda 12 Months @ Actual rate, Shire 3 Months @ Actual rate').",
   "series_end_quarter": null,
   "series_end_basis": null,
   "series_end_reason": null,
-  "notes": "Scope is Takeda's worldwide Firazyr line: the total column of the 'Product Sales Analysis' table (Bn JPY, 'Sales amount includes royalty income and service income'). The table's regional columns show the line includes U.S., Japan, EUCAN and GEM sales; the regional split of 2019Q1 is not printed. The line is Takeda's brand line as printed; whether it includes any authorised generic icatibant sales was not established from the documents. Takeda's FY2018 Q4 presentation (qr2018_q4_p01_en.pdf) lists FIRAZYR among the products assumed to face U.S. loss of exclusivity in FY2019. No launch quarter is cited. Label printed: 'Firazyr' (FY2018-FY2019), 'FIRAZYR' (FY2020 onward).",
+  "notes": "Scope is Takeda's worldwide Firazyr line: the total column of the 'Product Sales Analysis' table (Bn JPY, 'Sales amount includes royalty income and service income'). The table's regional columns show the line includes U.S., Japan, EUCAN and GEM sales; the regional split of 2019Q1 is not printed. The line is Takeda's brand line as printed; whether it includes any authorised generic icatibant sales was not established from the documents. Takeda's FY2018 Q4 presentation (qr2018_q4_p01_en.pdf) lists FIRAZYR among the products assumed to face U.S. loss of exclusivity in FY2019. No launch quarter is cited. Label printed: 'Firazyr' (FY2018-FY2019), 'FIRAZYR' (FY2020 onward). Before Takeda: Shire's line is the FIRAZYR product-sales row (US$ millions, worldwide: EU and Latin America from 2008, the U.S. from its August 2011 approval); one decimal to Q4 2017 and whole US$ millions from Q1 2018, when Shire's releases and 10-Qs stopped printing product rows and the results presentations carry them. Shire's Q4 2017 row (201.6) equals the 10-K full-year figure (663.0) less the nine-month figure (461.4). 2018Q2-2018Q4 (and for Cinryze and Firazyr only 2018Q4) are Takeda's FY2018 pro forma columns in the FY2019 Q1 data book (qr2019_q1_d_en_revised.pdf): legacy Shire's product sales for April 2018-March 2019, US GAAP, excluding the oncology business divested in August 2018, converted to JPY at the FY2018 actual rate, as if the acquisition had occurred on April 1, 2018. Takeda warns that pro forma figures may not represent what sales would have been; the fiscal Q4 FY2018 pro forma figure equals the figure Takeda reports in its own FY2018 Q4 statements for the Shire three-month column, which is the existing first row of the series.",
   "search_log": [
     "fetched the takeda.com quarterly-results pages for 2014-2025 and the current page, plus the legacy Shire financial-results page, and collected every PDF/XLSX link (work/takeda_links.json); downloaded the PDFs from FY2014 onward and the Shire press releases/presentations from FY2013 onward (work/pdf), scanned them with pdftotext for the brand names, then re-read each cited page with pdfplumber (the verifier's extractor) so quoted figures match its text layer",
     "Bigdata.com was not used: the issuer's own IR documents were located directly from the takeda.com pages",
@@ -31,6 +31,28 @@
     "cross-check: for each fiscal year FY2019-FY2025 the four quarterly values were summed and compared with the full-year product figure printed in the Q4 document (differences at most 0.1 billion JPY, rounding)",
     "FY2025 Q4 has two versions on takeda.com (original of 2026-05-13, marked as superseded, and the version amended on 2026-06-05 for a subsequent event); the cited document is the amended version, the product-line figures are identical in both",
     "Shire (the prior owner) printed this brand in USD in its own quarterly press releases (legacy Shire documents on the takeda.com Shire page, FY2013-FY2018); those documents were located but not extracted or spliced, because the issuer, currency and revenue definition differ from Takeda's JPY line",
-    "EDGAR was not searched: the Takeda quarterly documents on takeda.com were sufficient for every quarter"
-  ]
+    "EDGAR was not searched: the Takeda quarterly documents on takeda.com were sufficient for every quarter",
+    "Reopened to extend the start. Shire plc (CIK 936402) item 2.02 8-Ks 2008-2018 listed through data.sec.gov submissions and every exhibit 99 downloaded; the FIRAZYR product row appears in each quarterly release from Q3 2008 (0000950103-08-002669) to Q3 2017 (0000936402-17-000037); the Q1 and Q2 2008 releases (0000950103-08-001124, -001994) print no FIRAZYR sales. The Q4 2017 release and the 2018 releases print franchise totals only, so 2017Q4-2018Q3 come from Shire's results presentations on takeda.com (Legacy-Shire pages).",
+    "Shire filed no Form 10-K for 2018 and no results for the fourth quarter of 2018 (filing list for CIK 936402 ends with the 2018-11-01 Form 10-Q, 25-NSE on 2019-01-08 and Form 15 on 2019-02-07); Takeda's FY2019 Q1 data book prints legacy Shire's Firazyr sales for fiscal Q1-Q4 FY2018 in a pro forma column, giving 2018Q4 (fiscal Q3 FY2018) of 24.4 Bn JPY. The fiscal Q1 and Q2 FY2018 pro forma figures (23.0, 15.6) are not used because Shire's own US$ presentations print those quarters (206, 211 and 140 US$ millions for Q1-Q3 2018).",
+    "Earlier than 2008Q3: Jerini AG (the developer, majority-acquired by Shire in Q3 2008) was not searched; Shire's Q3 2008 release states that FIRAZYR was launched in Germany and the UK in Q3 2008, so no earlier sales exist."
+  ],
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/936402/000095010308002669/dp11702_ex9901.htm",
+    "quote": "FIRAZYR (icatibant) which was launched in Germany and the UK in Q3, following the receipt of marketing authorization from the European Commission."
+  },
+  "joined_issuers": [
+    {
+      "issuer": "Shire",
+      "first_quarter": "2008Q3",
+      "last_quarter": "2018Q3"
+    },
+    {
+      "issuer": "Takeda",
+      "first_quarter": "2018Q4",
+      "last_quarter": "2026Q2"
+    }
+  ],
+  "reviewed_anomalies": {
+    "2018Q4": "Currency step: Shire's rows up to 2018Q3 are in US dollars, and this quarter is the first Takeda-published figure, in Japanese yen. Shire published no figure for the quarter (it was acquired on January 8, 2019 and filed no periodic report after the Q3 2018 Form 10-Q), and Takeda's FY2019 Q1 data book prints legacy Shire's product sales for October-December 2018 in its FY2018 pro forma column, converted to JPY at the FY2018 actual rate. The tenfold-plus jump in the as-reported number is the unit change, not a market move."
+  }
 }

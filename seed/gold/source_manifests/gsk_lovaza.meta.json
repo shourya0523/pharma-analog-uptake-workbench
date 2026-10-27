@@ -19,10 +19,10 @@
     "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=021654",
     "quote": "11/10/2004 ORIG-1 Approval Type 1 - New Molecular Entity STANDARD (NDA 021654, LOVAZA OMEGA-3-ACID ETHYL ESTERS)"
   },
-  "launch_quarter": null,
-  "commercial_start_quarter": "2008Q1",
-  "series_start_reason": "GSK acquired Reliant Pharmaceuticals (US marketing rights to Lovaza) on 18 December 2007 (FY2007 results 6-K 0001191638-08-000196: 'In December, GSK acquired Reliant Pharmaceuticals ... including US marketing rights to Lovaza'; 'On 18th December 2007, GSK acquired all of the share capital of Reliant Pharmaceuticals Inc.'). The FY2007 release prints no Lovaza table row (only Reliant's 2007 net sales of GBP 157m in narrative, for the pre-acquisition owner); the first Lovaza turnover row is Q1 2008 (6-K 0001156973-08-000471). Reliant was a private company; no Reliant quarterly sales document was found.",
-  "notes": "Row is GSK's Lovaza turnover from its pharmaceuticals turnover table (Total column; the US column printed beside it is equal to or within GBP 1-3m of the Total in the rows read, Lovaza being a US product). Brand total, one formulation (oral capsule).",
+  "launch_quarter": "2005Q4",
+  "commercial_start_quarter": "2006Q3",
+  "series_start_reason": "Series starts at 2006Q3, the first quarter that can be read or derived without estimating from the only filing in which Reliant Pharmaceuticals, the owner before GSK, printed Lovaza net product sales by period: its Form S-1/A of 2007-10-24, which prints 2005 (19.4), 2006 (154.2), the nine months to 30 September 2006 (96.0) and 2007 (206.3), the second half of 2006 (98.0), the six months to 30 June 2007 (127.5) and the quarters ended 30 June 2007 (69.8) and 30 September 2007 (78.9). That fixes 2006Q3 and 2006Q4 (by subtraction), 2007Q1 (127.5 less 69.8), 2007Q2 and 2007Q3. Earlier, Lovaza (then Omacor) was launched in October 2005 (shipments from September 2005); 2005 is printed only as a year (19.4) and the first half of 2006 only as a sum (56.2), so 2005Q3, 2005Q4, 2006Q1 and 2006Q2 are not separable. GSK acquired Reliant on 18 December 2007; 2007Q4 is printed by neither owner (see unreported_quarters) and GSK's first Lovaza turnover row is Q1 2008 (6-K 0001156973-08-000471). The Reliant quarters are in USD and the GSK quarters in GBP; each row carries its own currency.",
+  "notes": "Row is GSK's Lovaza turnover from its pharmaceuticals turnover table (Total column; the US column printed beside it is equal to or within GBP 1-3m of the Total in the rows read, Lovaza being a US product). Brand total, one formulation (oral capsule). Extension: the Reliant rows (2006Q3-2007Q3) are Reliant's net product sales of Lovaza in the United States and Puerto Rico, in USD millions as printed in its Form S-1/A filed 2007-10-24; Reliant had licensed the US and Puerto Rico rights from Pronova BioPharma in 2004, and rights elsewhere are held by other licensees of Pronova, so the product's sales are US-centred in both owners' lines. Pronova's reports give IMS Health end-user sales, not the licensee's net sales, and were not used.",
   "search_log": [
     "Bigdata.com smart search ('GSK Benlysta turnover third quarter 2021', filings) returned no chunks for GSK Q3 2021; document discovery therefore done directly on EDGAR.",
     "listed GSK (CIK 0001131399) filings via data.sec.gov submissions incl. paginated older files, all form types (6-K, 6-K/A, 20-F counted); 6,839 filings listed",
@@ -30,6 +30,31 @@
     "fetched each main document from sec.gov Archives and parsed table rows; the product's regional turnover rows (Total, growth %, US, Europe, International where printed) were taken: Q1 release first such row; Q2/Q3 releases first row = quarter, second = year-to-date; Q4 release first row = full year, second row = fourth quarter",
     "arithmetic check run on every year: Q1+Q2 = printed six-month row, +Q3 = printed nine-month row, +Q4 = printed full-year row; no mismatch beyond rounding found",
     "Lovaza rows found in every results release Q1 2008 - Q4 2016 (36 quarters); none from Q1 2017 on (searched all 2017-2026 results 6-Ks for 'Lovaza')",
-    "prior owner: Reliant Pharmaceuticals was acquired 2007-12-18 and was private; no public quarterly sales document exists for it"
-  ]
+    "prior owner: Reliant Pharmaceuticals was acquired 2007-12-18 and was private; no public quarterly sales document exists for it",
+    "Extension before 2008Q1: Reliant Pharmaceuticals, Inc. (CIK 0001290864) filed Form S-1 on 2005-05-20 (amendments to 2005-08-05, withdrawn 2005-11-17: pre-launch, no Lovaza/Omacor sales) and Form S-1 on 2007-08-10 with amendments of 2007-09-14, 2007-10-01, 2007-10-24 and 2007-10-26 (withdrawn 2007-11-21); fetched the 2005 and 2007 filings: no per-product quarterly table exists, but the 2007-10-24 amendment states the quarters ended 30 June and 30 September 2007 and the six months ended 31 December 2006, and its selected-data row 'Lovaza' prints 2005, 2006 and the nine months of 2006 and 2007. The earlier 2007 amendments stop at the six months to 30 June 2007. Reliant Pharmaceuticals LLC (CIK 0001121678) has only paper REGDEX and 425 filings.",
+    "GSK Form 6-K 2008-02-07 (FY2007 results): no Lovaza row and no Lovaza figure for 2007Q4. GSK's acquisition announcement (6-K 2007-11-21) states Lovaza net sales of $206 million for the nine months to 30 September 2007, the same figure as the S-1/A."
+  ],
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1290864/000104746907007914/a2179678zs-1a.htm",
+    "quote": "We commercially launched Lovaza in October 2005 under the brand name Omacor."
+  },
+  "joined_issuers": [
+    {
+      "issuer": "Reliant Pharmaceuticals, Inc.",
+      "first_quarter": "2006Q3",
+      "last_quarter": "2007Q3"
+    },
+    {
+      "issuer": "GSK plc",
+      "first_quarter": "2008Q1",
+      "last_quarter": "2016Q4"
+    }
+  ],
+  "unreported_quarters": {
+    "2007Q4": "Ownership change Reliant Pharmaceuticals to GSK; neither owner published a Lovaza figure for the quarter. GSK acquired all of the share capital of Reliant on 18 December 2007 (GSK Form 6-K 0001191638-08-000196, filed 2008-02-07: 'On 18th December 2007, GSK acquired all of the share capital of Reliant Pharmaceuticals Inc.'), the same release prints no Lovaza row, and Reliant, a private company, last printed Lovaza net product sales for the three months ended 30 September 2007 (Form S-1/A filed 2007-10-24, withdrawn on 2007-11-21 after the acquisition was agreed). GSK's Lovaza series resumes with 2008Q1."
+  },
+  "reviewed_anomalies": {
+    "2007Q1": "Derived, not printed: six months ended 30 June 2007 (127.5) less the three months ended 30 June 2007 (69.8) in Reliant's Form S-1/A of 2007-10-24. The nine months of 206.3 less the third quarter (78.9) and second quarter (69.8) gives 57.6, the rounding of the one-decimal figures.",
+    "2008Q1": "Issuer and currency step: the quarters to 2007Q3 are Reliant's net product sales of Lovaza in the United States and Puerto Rico in USD millions; from 2008Q1 they are GSK's Lovaza turnover in GBP millions (Total column, with the US column equal to or within GBP 1-3m of it). The step is a change of owner and reporting currency, not a change in the product's sales; 2007Q4 between them is unreported."
+  }
 }

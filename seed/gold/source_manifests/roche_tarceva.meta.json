@@ -17,8 +17,8 @@
     "quote": "11/18/2004 ORIG-1 Approval (Drugs@FDA, Original Approvals or Tentative Approvals)"
   },
   "launch_quarter": null,
-  "commercial_start_quarter": "2010Q1",
-  "series_start_reason": "First quarter printed: Q1 2010 is the first column of the quarterly Top 20 table (table 13) of the Q1 2011 Roche release (med-cor-2011-04-14-e.pdf). Roche's 2010 results releases and earlier releases could not be retrieved, so no earlier quarter is cited; the four 2010 quarters sum to the full-year 2010 figure of 1,325 printed in the FY2010 release.",
+  "commercial_start_quarter": "2009Q4",
+  "series_start_reason": "First quarter printed: Q4 2009 is the first column of table 7 (Top 20 Pharmaceuticals Division quarterly product sales, five quarters Q4 2009 to Q4 2010) of the Roche Investor Update of 2 February 2011 (inv-update-2011-02-02-e.pdf). No earlier Roche quarterly CHF figure was found: Q1-Q3 2009 are printed only as local-currency growth rates (Q1 2010 vs. Q1 2009 and so on) in that update, the Half-Year Report 2010 prints six-month 2010 totals only, and Roche's 2009 and 2010 results releases could not be retrieved.",
   "series_end_quarter": "2018Q4",
   "series_end_basis": "issuer_stopped_reporting",
   "series_end_reason": "Roche's FY2018 release (f_190131_ir_full_year_results_2018_en.pdf) is the last to print Tarceva (Q4 2018 113); the Q1 2019 release's Top 20 table ends at Xeloda 108 with no Tarceva row, and no later results release read mentions the brand. Not checked: Roche Finance Reports / Annual Reports.",
@@ -29,6 +29,9 @@
     "wherever both a printed quarter and a year-to-date difference existed they were compared: no difference found; for every calendar year whose four quarters are in the series the sum equals the full-year (January-December) figure of that year's FY release",
     "Roche half-year/annual reports and Finance Reports, and the 2009-2010 quarterly results releases, were not retrieved or used for rows; Chugai/Genentech documents were not used",
     "end of series: Q1 2019 release (f_190417_ir_q1_2019_en.pdf) Top 20 table runs from Avastin 1,798 to Xeloda 108 with no Tarceva row; no results release from Q1 2019 to half-year 2026 (30 read) contains the string 'Tarceva'. Not checked: Roche Finance Reports / Annual Reports for 2019 onward, which might still print the brand",
-    "rows: 36 from 2010Q1 to 2018Q4 ({'direct_prior_year_column': 1, 'direct_retrospective_table': 10, 'direct_reported': 25})"
+    "rows: 36 from 2010Q1 to 2018Q4 ({'direct_prior_year_column': 1, 'direct_retrospective_table': 10, 'direct_reported': 25})",
+    "found the Roche Investor Update of 2 February 2011 (https://assets.cwp.roche.com/imported/en/inv-update-2011-02-02-e.pdf, FY2010 results) via search: its table 7 prints a five-quarter worldwide Top 20 table Q4 2009 to Q4 2010; the 2009Q4 value is taken from column 1 and the 2010 columns equal the rows already in the series",
+    "probed assets.cwp.roche.com/imported/en/{inv-update,med-cor}-YYYY-MM-DD-e.pdf for every weekday in 15 Jan-15 Feb, 10-30 Apr, 10-31 Jul and 10-31 Oct of 2009 and 2010 (HEAD): none answered, so no Roche results release or investor update dated 2009 or 2010 was retrievable; web.archive.org CDX listing is blocked by the egress policy",
+    "Q1-Q3 2009: the FY2010 investor update prints only growth rates against those quarters (Q1 2010 vs. Q1 2009 etc.) and the Half-Year Report 2010 prints 2010 six-month sales only, so no CHF figure for those quarters is printed in any retrieved document; none was derived or estimated"
   ]
 }

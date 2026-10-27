@@ -1,0 +1,10 @@
+{
+  "drug_name": "Ruconest",
+  "line_label": "Revenues (Pharming total revenues, EUR)",
+  "issuer": "Pharming",
+  "benchmark_identity": "pharming_ruconest_eur_2017_2019_reported",
+  "revenue_scope": "Worldwide RUCONEST revenue",
+  "geography": "Worldwide",
+  "why_separate": "Pharming reported in euros until 2020 and changed its presentation currency to US dollars from 1 January 2021, with US dollar comparatives for 2020 onward; gold holds one currency per issuer within a series, so the euro quarters 2017Q1-2019Q4 are kept beside the US dollar series that starts in 2020Q1 rather than joined to it. value_normalized_usd_millions converts each row.",
+  "notes": "2017Q1 is the first full quarter in which Pharming took all US RUCONEST product sales after acquiring the commercialization rights from Valeant; earlier quarters are its supply-price revenue from licensees, a different scope. Pharming's total revenues are RUCONEST product sales plus amortised license fee income; the business is exclusively recombinant C1 esterase inhibitor. Quarters not printed as a quarter figure are year-to-date differences with every input quoted."
+}

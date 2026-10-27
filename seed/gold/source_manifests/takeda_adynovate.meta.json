@@ -17,22 +17,27 @@
     "quote": "Initial U.S. Approval: 2015 (ADYNOVATE package insert, FDA CBER product page https://www.fda.gov/vaccines-blood-biologics/approved-blood-products/adynovate, BLA 125566)"
   },
   "launch_quarter": "2015Q4",
-  "commercial_start_quarter": "2019Q1",
-  "series_start_reason": "Takeda prints an Adynovate line only from fiscal Q4 FY2018 (January-March 2019), the first quarter after it completed the Shire acquisition (Baxalta, then Shire, held the product earlier; USD, different issuers). The first quarter contains Shire's product only from the acquisition date (table header in qr2018_q4_f_en.pdf: 'Takeda 12 Months @ Actual rate, Shire 3 Months @ Actual rate'). Pre-2019 Baxalta/Shire history was not sourced in this batch and is not spliced.",
+  "commercial_start_quarter": "2018Q2",
+  "series_start_reason": "Series starts 2018Q2 (Takeda fiscal Q1 FY2018). Takeda's FY2019 Q1 data book (qr2019_q1_d_en_revised.pdf) prints Adynovate for fiscal Q1-Q4 FY2018 in a pro forma column of legacy Shire's product sales (April 2018-March 2019, US GAAP, excluding the divested oncology business, converted to JPY at the FY2018 actual rate, as if the acquisition had occurred on April 1, 2018); the fiscal Q4 FY2018 pro forma figure equals the existing first row, taken from Takeda's FY2018 Q4 statements (Shire 3-month column). Before April 2018 the line is not printed by anyone: Shire's results releases, 10-Qs and 10-K print hematology franchise totals only, and Baxalta's releases print only 'Hemophilia' and 'Inhibitor Therapies' (see search_log).",
   "series_end_quarter": null,
   "series_end_basis": null,
   "series_end_reason": null,
-  "notes": "Label printed by Takeda: 'Adynovate' in the FY2018-FY2019 data books and 'ADYNOVATE/ADYNOVI' from FY2020 (same product, U.S. and ex-U.S. names), treated as one relabelled line with the same definition. No launch quarter is cited. FDA approval year taken from the FDA package insert's 'Initial U.S. Approval' (CBER-regulated product, no Drugs@FDA letter).",
+  "notes": "Label printed by Takeda: 'Adynovate' in the FY2018-FY2019 data books and 'ADYNOVATE/ADYNOVI' from FY2020 (same product, U.S. and ex-U.S. names), treated as one relabelled line with the same definition. No launch quarter is cited. FDA approval year taken from the FDA package insert's 'Initial U.S. Approval' (CBER-regulated product, no Drugs@FDA letter). 2018Q2-2018Q4 (and for Cinryze and Firazyr only 2018Q4) are Takeda's FY2018 pro forma columns in the FY2019 Q1 data book (qr2019_q1_d_en_revised.pdf): legacy Shire's product sales for April 2018-March 2019, US GAAP, excluding the oncology business divested in August 2018, converted to JPY at the FY2018 actual rate, as if the acquisition had occurred on April 1, 2018. Takeda warns that pro forma figures may not represent what sales would have been; the fiscal Q4 FY2018 pro forma figure equals the figure Takeda reports in its own FY2018 Q4 statements for the Shire three-month column, which is the existing first row of the series.",
   "search_log": [
     "downloaded takeda.com quarterly-results pages for 2012-2025 and the current page (15 pages) and collected every PDF/XLSX link (cache/takeda_links.json)",
     "scanned every qr20xx_q?/full PDF on those pages with pdftotext for the product labels, then read the matching pages with pdfplumber (the verifier's extractor) so quoted figures match its text layer",
     "FY2014 (JGAAP) documents carry no Entyvio table line for Q1/Q2; FY2015 onward are IFRS; the product-table pages were located per fiscal quarter (data books FY2016-FY2019, quarterly financial reports FY2020-FY2026)",
     "EDGAR (Takeda CIK 0001395064) was indexed through data.sec.gov submissions (6-K, 6-K/A, 20-F, 20-F/A) but the takeda.com copies of the same quarterly documents were cited instead, because the 6-K earnings exhibits were not individually resolved",
     "cross-check: for every fiscal year the four quarterly values were summed and compared with the full-year product figure printed in the Q4 document (differences at most 0.2 billion JPY from rounding)",
-    "Baxalta / Shire filings (SEC) for pre-2019 Adynovate sales were NOT searched in this batch (different issuer and currency)"
+    "Baxalta / Shire filings (SEC) for pre-2019 Adynovate sales were NOT searched in this batch (different issuer and currency)",
+    "Reopened to extend the start. Takeda's FY2019 Q1 data book (qr2019_q1_d_en_revised.pdf, section 3 'Product Sales Analysis (vs FY2018 Pro-forma)', section 4 'FY2018 Pro-forma and Product Forecasts') prints Adynovate for FY18 Q1-Q4 pro forma; fiscal Q1-Q3 FY2018 give 2018Q2-2018Q4.",
+    "Shire plc (CIK 936402): every item 2.02 8-K exhibit 99 of 2008-2018, the Forms 10-Q and 10-K 2014-2018 and the results presentations of Q1 2016 to Q3 2018 were scanned for ADYNOVATE and FEIBA rows; none prints a sales figure for either product (the Q4 2017 presentation shows 2017 FEIBA at about $0.8 billion and ADVATE/ADYNOVATE combined at about $2.4 billion, annual and rounded to a tenth of a billion, which is not a quarterly series).",
+    "Baxalta (CIK 1620546): the five earnings 8-Ks of 2015-07-30 to 2016-04-28, with their exhibits 99.1 and 99.2, print the Hematology franchise as 'Hemophilia' and 'Inhibitor Therapies' (the latter contains FEIBA and OBIZUR) and mention ADYNOVATE only as a launch; no ADYNOVATE or FEIBA sales row exists.",
+    "Shire filed nothing for the fourth quarter of 2018 (no 2018 Form 10-K; Form 15 on 2019-02-07); the fiscal Q3 FY2018 pro forma figure is the only printed October-December 2018 figure."
   ],
   "launch_evidence": {
     "url": "https://www.sec.gov/Archives/edgar/data/1620546/000119312516491806/d102269d10k.htm",
     "quote": "the company launched ADYNOVATE in the United States in November 2015 following U.S. regulatory approval."
-  }
+  },
+  "reviewed_anomalies": null
 }

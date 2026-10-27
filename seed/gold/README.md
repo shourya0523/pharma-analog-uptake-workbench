@@ -92,7 +92,25 @@ All 20 products in `seed/example_drugs.csv` have one explicit disposition:
   no quoted evidence. Refresh Status reports a series carried on this way as
   continued, with the last quarter the continuation reaches.
 - `series_coverage.jsonl`: exact commercial-start-to-as-of coverage assertions.
-- `peak_sales.jsonl`: independent observed/not-yet-observed peak labels.
+  A series that starts after launch also carries its launch-gap review:
+  `launch_reference_quarter` (the stated launch quarter, or Q4 of the first
+  approval year, which makes the gap a minimum), `launch_gap_quarters`,
+  `launch_gap_band` (none / small up to 4 / moderate up to 8 / substantial)
+  and `peak_judgement`.
+- `peak_sales.jsonl`: independent observed/not-yet-observed peak labels. A
+  peak is observed when the highest calendar year is followed by two lower
+  complete years. A series that starts after launch gets a row only when its
+  review judged it (`series_starts_after_launch` is true on those rows): at
+  most 8 launch quarters missing, and, where any are missing, a lower year
+  before the highest. Every row with quarterly revenue carries
+  `benchmark_rolling_4q_usd_millions` and `benchmark_window`, the highest
+  four consecutive reported quarters in USD, which is the peak an uptake
+  curve divides by unless a comparable published estimate is higher
+  (`scripts/peak_benchmarks.py`).
+- Quarterly FX: `source_manifests/fx_quarterly_usd.csv` holds the mean of the
+  Federal Reserve Board's H.10 daily noon buying rates in each quarter, taken
+  from the Board's historical-rates pages by
+  `scripts/sourcing/fetch_fx_quarterly.py`.
 - `excluded_products.jsonl`: evidence-backed benchmark exclusions.
 - `source_manifests/`: researched source indexes and manually modeled
   direct/derived observations.
