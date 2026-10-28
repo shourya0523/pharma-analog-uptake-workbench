@@ -193,3 +193,26 @@ def test_the_most_precise_fact_wins_over_a_rounded_one_in_prose():
     table = Fact("us-gaap:Revenues", 2.3146e9, "iso4217:USD", "2023-04-01", "2023-06-30", product, "exact", -5)
     status, fact, _ = choose([prose, table], dt.date(2023, 6, 30))
     assert fact.value == 2.3146e9 and fact.decimals == -5
+
+
+def test_two_members_resolving_to_the_product_are_two_scopes_and_declined():
+    from app.retrieval.xbrl import Fact
+
+    def f(value, member):
+        return Fact("us-gaap:Revenues", value, "iso4217:USD", "2023-04-01", "2023-06-30",
+                    {"srt:ProductOrServiceAxis": member}, "exact", None, member)
+
+    status, fact, _ = choose([f(500, "acme:NebulizedCalderonMember"), f(1200, "acme:CalderonMember")], dt.date(2023, 6, 30))
+    assert (status, fact) == ("several_members", None)
+
+
+def test_an_adjustment_for_changes_in_estimates_is_not_the_periods_sales():
+    from app.retrieval.xbrl import is_revenue
+
+    assert not is_revenue("acme:PriorPeriodAdjustmentsForProductSalesResultingFromChangesInEstimates", "iso4217:USD")
+
+
+def test_product_facts_records_the_member_that_resolved():
+    contexts, facts = parse_facts(INLINE)
+    found = product_facts(contexts, facts, "Calderon")
+    assert {f.resolved for f in found} == {"acme:RespiratoryProductsCalderonMember"}

@@ -44,15 +44,17 @@ REQUEST_GAP_SECONDS = 0.15
 # concepts that also contain those words, and revenue a filer earns from
 # someone else's sales of the product - a royalty, a collaboration share, a
 # licence or milestone payment - which is not the product's sales - and
-# contract disclosures that carry revenue in their name without being a
-# period's sales (a transaction price allocated to performance obligations).
+# contract disclosures and corrections that carry revenue or sales in their
+# name without being a period's sales (a transaction price allocated to
+# performance obligations, an adjustment for a change in estimates).
 # A snapshot
 # of naming practice, not of any taxonomy: a filer naming its product revenue
 # otherwise is reported as no revenue fact.
 _REVENUE = re.compile(r"revenue|sales", re.IGNORECASE)
 _NOT_REVENUE = re.compile(
     r"cost|deferred|unearned|receivable|allowance|reserve|returns|percent"
-    r"|royalt|collaborat|alliance|licens|milestone|performanceobligation|transactionprice",
+    r"|royalt|collaborat|alliance|licens|milestone|performanceobligation|transactionprice"
+    r"|adjustment|changesinestimate",
     re.IGNORECASE,
 )
 # An axis splitting a figure by place. A product's figure carrying one is a
@@ -74,6 +76,7 @@ class Fact:
     members: dict[str, str]  # axis -> member, both as prefixed names
     match: str  # exact | combined
     decimals: int | None = None  # as the filer declared; None is exact (INF)
+    resolved: str | None = None  # the member that resolved to the product
 
 
 @dataclass
@@ -81,7 +84,8 @@ class XbrlAnswer:
     """The first pass's result for one product-quarter.
 
     `status`: found | other_filer | dimensioned_only | no_revenue_fact |
-    no_member | ambiguous | no_filing | not_a_quarter_in_10q, and from the
+    no_member | ambiguous | several_members | no_filing | not_a_quarter_in_10q,
+    and from the
     single-product reader multi_product | unconfirmed. `match` is exact,
     combined or single_product. `other_filer`
     means a filer other than the named issuer tags the product - a licensee or
@@ -278,11 +282,11 @@ def product_facts(contexts: dict[str, dict], facts: list[dict], product: str) ->
         ctx = contexts.get(f["context"])
         if not ctx:
             continue
-        matches = [member_match(m, product) for m in ctx["members"].values()]
-        match = next((m for m in matches if m), None)
-        if match:
-            found.append(Fact(f["concept"], f["value"], f["unit"], ctx["start"], ctx["end"], ctx["members"], match,
-                              f.get("decimals")))
+        hits = [(m, member_match(m, product)) for m in ctx["members"].values()]
+        hit = next(((m, how) for m, how in hits if how), None)
+        if hit:
+            found.append(Fact(f["concept"], f["value"], f["unit"], ctx["start"], ctx["end"], ctx["members"], hit[1],
+                              f.get("decimals"), hit[0]))
     return found
 
 
@@ -328,6 +332,12 @@ def choose(
     revenue = [f for f in found if is_revenue(f.concept, f.unit) and spans(f.start, f.end, filing_period_end, days)]
     if not revenue:
         return "no_revenue_fact", None, found
+    # Two different members resolving to the product - `CalderonMember` beside
+    # `NebulizedCalderonMember` - are two scopes, and nothing in the filing says
+    # which one the question means.
+    resolving = {f.resolved for f in revenue if f.resolved}
+    if len(resolving) > 1:
+        return "several_members", None, revenue
     dims = [set(f.members.items()) for f in revenue]
     whole = [
         f for f, d in zip(revenue, dims)
