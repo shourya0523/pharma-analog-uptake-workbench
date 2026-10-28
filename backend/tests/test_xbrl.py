@@ -134,7 +134,7 @@ def test_the_whole_figure_is_the_root_of_the_split_not_a_part():
 
     assert geography_parts(fact, candidates) == {"country:US": 700, "us-gaap:NonUsMember": 300}
 
-    status, fact, _ = choose(found[:2], dt.date(2023, 6, 30))
+    status, fact, _ = choose(found[1:2], dt.date(2023, 6, 30))
     assert (status, fact) == ("dimensioned_only", None)
 
 
@@ -163,3 +163,33 @@ def test_a_named_issuer_that_does_not_tag_the_product_yields_other_filer():
     assert answer.status == "other_filer" and answer.value is None
     assert answer.candidates[0]["value"] == 1_234_500_000
     assert first_pass("Calderon", "Q2 2023", "Acme Pharma", get=get).status == "found"
+
+
+def test_us_plus_non_us_is_summed_into_the_whole_when_no_whole_is_tagged():
+    product = {"srt:ProductOrServiceAxis": "acme:CalderonMember"}
+    found = [
+        _fact(700, **product, **{"srt:StatementGeographicalAxis": "country:US"}),
+        _fact(300, **product, **{"srt:StatementGeographicalAxis": "us-gaap:NonUsMember"}),
+    ]
+    status, fact, _ = choose(found, dt.date(2023, 6, 30))
+    assert (status, fact.value, fact.members) == ("found", 1000, product)
+
+    europe = [found[0], _fact(200, **product, **{"srt:StatementGeographicalAxis": "srt:EuropeMember"})]
+    assert choose(europe, dt.date(2023, 6, 30))[0] == "dimensioned_only"
+
+
+def test_an_allocated_transaction_price_is_not_revenue():
+    from app.retrieval.xbrl import is_revenue
+
+    assert not is_revenue("acme:RevenuePerformanceObligationAllocatedTransactionPrice", "iso4217:USD")
+    assert is_revenue("us-gaap:Revenues", "iso4217:USD")
+
+
+def test_the_most_precise_fact_wins_over_a_rounded_one_in_prose():
+    from app.retrieval.xbrl import Fact
+
+    product = {"srt:ProductOrServiceAxis": "acme:CalderonMember"}
+    prose = Fact("us-gaap:Revenues", 2.3e9, "iso4217:USD", "2023-04-01", "2023-06-30", product, "exact", -8)
+    table = Fact("us-gaap:Revenues", 2.3146e9, "iso4217:USD", "2023-04-01", "2023-06-30", product, "exact", -5)
+    status, fact, _ = choose([prose, table], dt.date(2023, 6, 30))
+    assert fact.value == 2.3146e9 and fact.decimals == -5

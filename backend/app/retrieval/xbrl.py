@@ -43,13 +43,16 @@ REQUEST_GAP_SECONDS = 0.15
 # Revenue or Sales. The exclusions are of two kinds: balance-sheet and cost
 # concepts that also contain those words, and revenue a filer earns from
 # someone else's sales of the product - a royalty, a collaboration share, a
-# licence or milestone payment - which is not the product's sales. A snapshot
+# licence or milestone payment - which is not the product's sales - and
+# contract disclosures that carry revenue in their name without being a
+# period's sales (a transaction price allocated to performance obligations).
+# A snapshot
 # of naming practice, not of any taxonomy: a filer naming its product revenue
 # otherwise is reported as no revenue fact.
 _REVENUE = re.compile(r"revenue|sales", re.IGNORECASE)
 _NOT_REVENUE = re.compile(
     r"cost|deferred|unearned|receivable|allowance|reserve|returns|percent"
-    r"|royalt|collaborat|alliance|licens|milestone",
+    r"|royalt|collaborat|alliance|licens|milestone|performanceobligation|transactionprice",
     re.IGNORECASE,
 )
 # An axis splitting a figure by place. A product's figure carrying one is a
@@ -70,6 +73,7 @@ class Fact:
     end: str | None
     members: dict[str, str]  # axis -> member, both as prefixed names
     match: str  # exact | combined
+    decimals: int | None = None  # as the filer declared; None is exact (INF)
 
 
 @dataclass
@@ -77,7 +81,9 @@ class XbrlAnswer:
     """The first pass's result for one product-quarter.
 
     `status`: found | other_filer | dimensioned_only | no_revenue_fact |
-    no_member | ambiguous | no_filing | not_a_quarter_in_10q. `other_filer`
+    no_member | ambiguous | no_filing | not_a_quarter_in_10q, and from the
+    single-product reader multi_product | unconfirmed. `match` is exact,
+    combined or single_product. `other_filer`
     means a filer other than the named issuer tags the product - a licensee or
     partner selling it in another territory - and its figure is in
     `candidates`, not `value`.
@@ -93,6 +99,7 @@ class XbrlAnswer:
     match: str | None = None
     period_start: str | None = None
     period_end: str | None = None
+    decimals: int | None = None
     filer: str | None = None
     cik: str | None = None
     accession: str | None = None
@@ -208,8 +215,9 @@ def parse_facts(document: bytes) -> tuple[dict[str, dict], list[dict]]:
     """Contexts and numeric facts from an inline-XBRL document or an XBRL instance.
 
     Returns `(contexts, facts)`. A context is `{start, end, members}`; a fact is
-    `{concept, value, unit, context}` with scale and sign already applied, and
-    `unit` resolved from the unit's id to its measure (`iso4217:USD`).
+    `{concept, value, unit, context, decimals}` with scale and sign already
+    applied, `unit` resolved from the unit's id to its measure (`iso4217:USD`),
+    and `decimals` an int, or None where the filer declared INF or nothing.
     """
     root = etree.fromstring(document, etree.XMLParser(recover=True, huge_tree=True))
     units: dict[str, str] = {}
@@ -256,7 +264,10 @@ def parse_facts(document: bytes) -> tuple[dict[str, dict], list[dict]]:
             prefix = el.prefix or ""
             concept = f"{prefix}:{_local(el.tag)}" if prefix else _local(el.tag)
         unit = units.get(el.get("unitRef", ""), el.get("unitRef"))
-        facts.append({"concept": concept, "value": value, "unit": unit, "context": el.get("contextRef")})
+        declared = (el.get("decimals") or "").strip()
+        decimals = int(declared) if re.fullmatch(r"-?\d+", declared) else None
+        facts.append({"concept": concept, "value": value, "unit": unit, "context": el.get("contextRef"),
+                      "decimals": decimals})
     return contexts, facts
 
 
@@ -270,7 +281,8 @@ def product_facts(contexts: dict[str, dict], facts: list[dict], product: str) ->
         matches = [member_match(m, product) for m in ctx["members"].values()]
         match = next((m for m in matches if m), None)
         if match:
-            found.append(Fact(f["concept"], f["value"], f["unit"], ctx["start"], ctx["end"], ctx["members"], match))
+            found.append(Fact(f["concept"], f["value"], f["unit"], ctx["start"], ctx["end"], ctx["members"], match,
+                              f.get("decimals")))
     return found
 
 
@@ -285,15 +297,26 @@ def quarter_end(period: str) -> dt.date | None:
     return dt.date(year, q * 3, calendar.monthrange(year, q * 3)[1])
 
 
-def _is_quarter(fact: Fact, filing_period_end: dt.date) -> bool:
-    if not (fact.start and fact.end):
+def spans(start: str | None, end: str | None, period_end: dt.date, days: range) -> bool:
+    """Whether a context runs `days` long and ends at `period_end`, give or take
+    a 52/53-week calendar's few days."""
+    if not (start and end):
         return False
-    start, end = dt.date.fromisoformat(fact.start[:10]), dt.date.fromisoformat(fact.end[:10])
-    return (end - start).days in QUARTER_DAYS and abs((end - filing_period_end).days) <= PERIOD_END_SLACK_DAYS
+    s, e = dt.date.fromisoformat(start[:10]), dt.date.fromisoformat(end[:10])
+    return (e - s).days in days and abs((e - period_end).days) <= PERIOD_END_SLACK_DAYS
 
 
-def choose(found: list[Fact], filing_period_end: dt.date) -> tuple[str, Fact | None, list[Fact]]:
-    """Pick the product's whole revenue for the filing's own quarter.
+def is_revenue(concept: str, unit: str | None) -> bool:
+    """A monetary fact under a concept that reads as the filer's own sales."""
+    name = concept.split(":")[-1]
+    return bool(_REVENUE.search(name)) and not _NOT_REVENUE.search(name) and (unit or "").startswith("iso4217:")
+
+
+def choose(
+    found: list[Fact], filing_period_end: dt.date, days: range = QUARTER_DAYS
+) -> tuple[str, Fact | None, list[Fact]]:
+    """Pick the product's whole revenue for the span `days` long ending at the
+    filing's period end - the quarter, by default.
 
     Filers place a product under segment, portfolio or sub-segment members as
     well as its own, and split it by place. The whole figure is the fact whose
@@ -302,12 +325,7 @@ def choose(found: list[Fact], filing_period_end: dt.date) -> tuple[str, Fact | N
     only parts were tagged, which is `dimensioned_only`. Returns
     `(status, fact, candidates)`.
     """
-    revenue = [
-        f for f in found
-        if _REVENUE.search(f.concept.split(":")[-1]) and not _NOT_REVENUE.search(f.concept.split(":")[-1])
-        and (f.unit or "").startswith("iso4217:")
-        and _is_quarter(f, filing_period_end)
-    ]
+    revenue = [f for f in found if is_revenue(f.concept, f.unit) and spans(f.start, f.end, filing_period_end, days)]
     if not revenue:
         return "no_revenue_fact", None, found
     dims = [set(f.members.items()) for f in revenue]
@@ -316,13 +334,51 @@ def choose(found: list[Fact], filing_period_end: dt.date) -> tuple[str, Fact | N
         if all(d <= other for other in dims) and not any(_GEOGRAPHY_AXIS.search(axis) for axis in f.members)
     ]
     if not whole:
+        summed = _us_plus_non_us(revenue)
+        if summed is not None:
+            return "found", summed, revenue
         return "dimensioned_only", None, revenue
-    # Several revenue concepts can carry the same member - a standard and an
-    # extension name for one figure, or a component beside the total. A us-gaap
-    # concept is taken over an extension, then the larger figure as the total;
-    # every alternative stays in `candidates` so the choice can be inspected.
-    whole.sort(key=lambda f: (not f.concept.startswith("us-gaap:"), -abs(f.value)))
+    # Several facts can carry the same member - a table's figure and a rounded
+    # one tagged in prose ("approximately $2.3 billion"), a standard and an
+    # extension name, a component beside the total. The most precise declared
+    # figure is taken, then a us-gaap concept over an extension, then the larger
+    # figure as the total; every alternative stays in `candidates`.
+    whole.sort(key=lambda f: (-precision(f.decimals), not f.concept.startswith("us-gaap:"), -abs(f.value)))
     return "found", whole[0], revenue
+
+
+# The two members that partition a figure by place on their own: the United
+# States and everything outside it. A split into other regions is not known to
+# be exhaustive, so only this pair is summed into a whole.
+_US, _NON_US = "country:US", "us-gaap:NonUsMember"
+
+
+def _us_plus_non_us(revenue: list[Fact]) -> Fact | None:
+    """The whole as the U.S. part plus the non-U.S. part, when those are the
+    finest split tagged - one concept, the same other dimensions."""
+    for us in revenue:
+        geo = [(a, m) for a, m in us.members.items() if _GEOGRAPHY_AXIS.search(a)]
+        if len(geo) != 1 or geo[0][1] != _US:
+            continue
+        axis = geo[0][0]
+        rest = {a: m for a, m in us.members.items() if a != axis}
+        for non_us in revenue:
+            if non_us.concept == us.concept and non_us.members == {**rest, axis: _NON_US}:
+                coarser = min((us.decimals, non_us.decimals), key=precision)
+                return Fact(us.concept, us.value + non_us.value, us.unit, us.start, us.end,
+                            rest, us.match, coarser)
+    return None
+
+
+def precision(decimals: int | None) -> float:
+    """Declared decimals as a sortable precision; INF (None) is the finest."""
+    return float("inf") if decimals is None else decimals
+
+
+def declared_slack(decimals: int | None) -> float:
+    """Half a unit of the last place the filer declared - how far the tagged
+    figure may sit from the exact one. Zero for INF."""
+    return 0.0 if decimals is None else 0.5 * 10.0 ** -decimals
 
 
 def geography_parts(whole: Fact, candidates: list[Fact]) -> dict[str, float]:
@@ -350,17 +406,27 @@ def sec_get(url: str, **params: Any) -> httpx.Response:
     agent = os.environ.get("SEC_USER_AGENT")
     if not agent:
         raise RuntimeError("SEC_USER_AGENT is not set; SEC refuses requests without a contact in the User-Agent")
-    time.sleep(REQUEST_GAP_SECONDS)
-    response = httpx.get(url, params=params or None, headers={"User-Agent": agent}, timeout=120, follow_redirects=True)
+    # SEC's servers answer a 5xx under load now and then; it clears on retry.
+    for attempt in range(3):
+        time.sleep(REQUEST_GAP_SECONDS + (2 ** attempt - 1))
+        response = httpx.get(url, params=params or None, headers={"User-Agent": agent}, timeout=120,
+                             follow_redirects=True)
+        if response.status_code < 500:
+            break
     response.raise_for_status()
     return response
 
 
 def find_10qs(product: str, end: dt.date, get: Callable = sec_get) -> list[dict]:
     """10-Qs mentioning the product whose period ends at this quarter's end."""
+    return find_filings(product, end, "10-Q", get)
+
+
+def find_filings(product: str, end: dt.date, form: str, get: Callable = sec_get) -> list[dict]:
+    """Filings of `form` mentioning the product whose period ends at `end`."""
     params = dict(
         q=f'"{product.split("/")[0].strip()}"',
-        forms="10-Q",
+        forms=form,
         dateRange="custom",
         startdt=end.isoformat(),
         enddt=(end + dt.timedelta(days=FILING_WINDOW_DAYS)).isoformat(),
@@ -398,11 +464,14 @@ def instance_document(filing: dict, get: Callable = sec_get) -> tuple[bytes, str
 
     An instance filed beside the document shares the stem of the filing's own
     `.xsd` schema, so it is found from the filing index without knowing the
-    ticker, the period or when the filer adopted inline XBRL.
+    ticker, the period or when the filer adopted inline XBRL. The primary
+    document itself is kept on the filing as `filing["primary"]`, for readers
+    of its text.
     """
     folder = f"{ARCHIVES}/{filing['cik']}/{filing['accession'].replace('-', '')}"
     primary = f"{folder}/{filing['document']}"
     content = get(primary).content
+    filing["primary"] = content
     if b"nonFraction" in content:
         return content, primary
     names = [item["name"] for item in get(f"{folder}/index.json").json()["directory"]["item"]]
@@ -417,40 +486,88 @@ def instance_document(filing: dict, get: Callable = sec_get) -> tuple[bytes, str
 # ---------------------------------------------------------------- entry point
 
 
-def first_pass(product: str, period: str, issuer: str | None = None, *, get: Callable = sec_get) -> XbrlAnswer:
+def first_pass(
+    product: str,
+    period: str,
+    issuer: str | None = None,
+    *,
+    get: Callable = sec_get,
+    confirm: Callable | None = None,
+) -> XbrlAnswer:
     """Read the product's revenue for a calendar quarter from 10-Q XBRL.
 
-    `period` is a calendar quarter ("Q2 2023"). Q4 has no 10-Q and is reported
-    as `not_a_quarter_in_10q`. `issuer`, when given, is the company whose
-    figure is wanted: only its filing can supply `value`.
+    `period` is a calendar quarter ("Q2 2023"). A calendar Q4 is looked for in
+    10-Qs too - a filer whose fiscal year ends in June files one for it - and
+    is `not_a_quarter_in_10q` when none exists. `issuer`, when given, is the
+    company whose figure is wanted: only its filing can supply `value`.
+    `confirm` is passed to the single-product reader; see `read_span`.
     """
     end = quarter_end(period)
-    answer = XbrlAnswer("no_filing", product, period)
-    if end is None or end.month == 12:
+    if end is None:
+        return XbrlAnswer("not_a_quarter_in_10q", product, period)
+    answer = read_span(product, period, end, "10-Q", QUARTER_DAYS, issuer, get=get, confirm=confirm)
+    if end.month == 12 and answer.status == "no_filing":
         answer.status = "not_a_quarter_in_10q"
-        return answer
+    return answer
 
+
+def read_span(
+    product: str,
+    label: str,
+    end: dt.date,
+    form: str,
+    days: range,
+    issuer: str | None = None,
+    *,
+    get: Callable = sec_get,
+    confirm: Callable | None = None,
+) -> XbrlAnswer:
+    """The product's revenue for the span `days` long ending at `end`, from
+    filings of `form` (a 10-Q's quarter or year to date, a 10-K's year).
+
+    When the named issuer's filing tags no member for the product, the
+    single-product reader is tried on it (`app.retrieval.single_product`):
+    a filer that sells only this product reports it as its product revenue.
+    It runs only with an issuer named, since otherwise nothing says which
+    filing mentioning the product is the seller's, and only when `confirm` is
+    given, since the figure is accepted only once the filing's own text says
+    no other product was sold.
+    """
+    answer = XbrlAnswer("no_filing", product, label)
     results: list[tuple[dict, str, Fact | None, list[Fact], str]] = []
-    for filing in find_10qs(product, end, get):
+    issuer_filings: list[tuple[dict, dict, list[dict], str]] = []
+    for filing in find_filings(product, end, form, get):
         answer.filings_checked.append(filing["accession"])
         try:
             document, url = instance_document(filing, get)
         except httpx.HTTPError:
             continue
         contexts, facts = parse_facts(document)
+        if issuer and names_issuer(filing["filer"], issuer):
+            issuer_filings.append((filing, contexts, facts, url))
         found = product_facts(contexts, facts, product)
         if not found:
             continue
-        status, fact, candidates = choose(found, dt.date.fromisoformat(filing["period_end"]))
+        status, fact, candidates = choose(found, dt.date.fromisoformat(filing["period_end"]), days)
         results.append((filing, status, fact, candidates, url))
 
-    if not results:
-        answer.status = "no_member" if answer.filings_checked else "no_filing"
-        return answer
-    winners = [r for r in results if r[1] == "found"]
     if issuer:
         named = [r for r in results if names_issuer(r[0]["filer"], issuer)]
-        if not named:
+        # A member that carries no revenue - a count of countries, a milestone -
+        # says nothing about whether the filer sells other products, so the
+        # single-product reader is tried then too. Failing, it leaves the
+        # answer as it was, so a quarter tagged only year to date can still be
+        # derived.
+        untagged_revenue = not named or all(r[1] == "no_revenue_fact" for r in named)
+        if untagged_revenue and issuer_filings and confirm is not None:
+            from app.retrieval.single_product import read_single_product
+
+            filing, contexts, facts, url = issuer_filings[0]
+            single = read_single_product(XbrlAnswer("no_member", product, label, filings_checked=list(answer.filings_checked)),
+                                         filing, contexts, facts, url, days, confirm)
+            if single.status == "found" or not named:
+                return single
+        if not named and results:
             answer.status = "other_filer"
             answer.candidates = [
                 {"filer": r[0]["filer"], "status": r[1], "value": r[2].value if r[2] else None,
@@ -459,7 +576,10 @@ def first_pass(product: str, period: str, issuer: str | None = None, *, get: Cal
             ]
             return answer
         results = named
-        winners = [r for r in named if r[1] == "found"]
+    if not results:
+        answer.status = "no_member" if answer.filings_checked else "no_filing"
+        return answer
+    winners = [r for r in results if r[1] == "found"]
     if len({w[0]["cik"] for w in winners}) > 1:
         answer.status = "ambiguous"
         answer.candidates = [{"filer": w[0]["filer"], "value": w[2].value, "concept": w[2].concept} for w in winners]
@@ -477,5 +597,6 @@ def first_pass(product: str, period: str, issuer: str | None = None, *, get: Cal
         answer.value, answer.unit, answer.concept, answer.member, answer.match = (
             fact.value, fact.unit, fact.concept, member, fact.match,
         )
+        answer.decimals = fact.decimals
         answer.period_start, answer.period_end = fact.start, fact.end
     return answer
