@@ -4,18 +4,32 @@ This directory is a source of truth built from issuer SEC filings and investor
 relations disclosures. It is not produced by the application extraction
 pipeline, an LLM, or pipeline post-processing.
 
-All 20 products in `seed/example_drugs.csv` have one explicit disposition:
+Gold covers two groups of products, one row each in `product_profiles.jsonl`:
 
-- 12 have independently supported peak labels.
-- 13 have complete quarter-by-quarter sales from commercial start to the end of
-  each series, totalling 534 cited observations, every one of them at 100%
-  coverage against the span `series_coverage.jsonl` declares for it.
-- 6 labels are observed numeric peaks.
-- 6 labels are `not_yet_observed` because the complete reported history is
-  still growing or lacks enough post-peak years.
-- 8 products are excluded with a cited reason because public reporting is
-  aggregated, scope-incomparable, private, or incomplete before the possible
-  peak. No sales are invented for them.
+- **Catalog products** - the targets listed in `seed/example_drugs.csv`.
+- **Comparator products** - the much larger analog universe the catalog is
+  matched against, spanning the therapeutic areas listed in `manifest.json`.
+
+Every product, in either group, has exactly one disposition:
+
+- **Quarterly series.** Quarter-by-quarter sales in `quarterly_revenue.jsonl`,
+  each series at 100% coverage of the span `series_coverage.jsonl` declares
+  for it. Most of these carry a peak label in `peak_sales.jsonl`, either an
+  observed numeric peak or `not_yet_observed` (still growing, or not enough
+  post-peak history). A series with too much launch history missing gets no
+  peak label; its `peak_judgement` in `series_coverage.jsonl` says why.
+- **Annual only.** No usable quarterly series. The peak label comes from
+  issuer-reported annual figures in `annual_revenue.jsonl`.
+- **Excluded.** Listed in `excluded_products.jsonl` with a cited reason:
+  public reporting is aggregated, scope-incomparable, private, or incomplete
+  before the possible peak. No sales are invented for them.
+
+The counts for each group and disposition are in `build_report.json`
+(`catalog_coverage` breaks them down for the catalog), which the builder
+rewrites on every run. Read them there rather than from this file:
+
+    python3 -c "import json; r = json.load(open('seed/gold/build_report.json')); \
+      print({k: v for k, v in r.items() if not isinstance(v, (list, dict))})"
 
 ## Files
 - `product_profiles.jsonl`: analog matching attributes, one row per product.
