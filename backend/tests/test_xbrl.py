@@ -249,15 +249,15 @@ def test_a_us_question_is_answered_from_a_us_part_tagged_without_a_whole():
     assert in_scope(answer, "worldwide").status == "dimensioned_only"
 
 
-def test_a_combined_member_is_kept_but_not_found():
+def test_a_combined_member_counts_as_found_and_says_so():
     from app.retrieval.xbrl import XbrlAnswer, in_scope
 
     combined = XbrlAnswer("dimensioned_only", "Calderon", "Q1 2026", match="combined",
                           by_geography={"country:US": 941})
     scoped = in_scope(combined, "us")
-    assert (scoped.status, scoped.value) == ("combined_member", 941)
+    assert (scoped.status, scoped.value, scoped.match) == ("found", 941, "combined")
 
     inline_doc = INLINE.replace(b"RespiratoryProductsCalderonMember", b"CalderonAndNuVessaMember")
     get = _fake_sec([("0000000001-23-000001", 1, "ACME PHARMA (CIK 1)", "acme-20230630.htm", inline_doc)])
     answer = first_pass("Calderon", "Q2 2023", "Acme Pharma", get=get)
-    assert answer.status == "combined_member" and answer.match == "combined" and answer.value == 1_234_500_000
+    assert answer.status == "found" and answer.match == "combined" and answer.value == 1_234_500_000

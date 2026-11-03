@@ -84,8 +84,7 @@ class XbrlAnswer:
     """The first pass's result for one product-quarter.
 
     `status`: found | other_filer | dimensioned_only | no_revenue_fact |
-    no_member | ambiguous | several_members | combined_member (value is a
-    member naming the product with a sibling) | no_filing | not_a_quarter_in_10q,
+    no_member | ambiguous | several_members | no_filing | not_a_quarter_in_10q,
     and from the
     single-product reader multi_product | unconfirmed. `match` is exact,
     combined or single_product. `other_filer`
@@ -441,11 +440,13 @@ def sec_get(url: str, **params: Any) -> httpx.Response:
     if not agent:
         raise RuntimeError("SEC_USER_AGENT is not set; SEC refuses requests without a contact in the User-Agent")
     # SEC's servers answer a 5xx under load now and then; it clears on retry.
-    for attempt in range(3):
+    for attempt in range(4):
         time.sleep(REQUEST_GAP_SECONDS + (2 ** attempt - 1))
         response = httpx.get(url, params=params or None, headers={"User-Agent": agent}, timeout=120,
                              follow_redirects=True)
-        if response.status_code < 500:
+        # Full-text search answers a burst with 403 rather than 429.
+        throttled = response.status_code == 403 and "efts.sec.gov" in url
+        if response.status_code < 500 and not throttled:
             break
     response.raise_for_status()
     return response
@@ -538,7 +539,7 @@ def in_scope(answer: XbrlAnswer, scope: str) -> XbrlAnswer:
     if us is None:
         scoped.status, scoped.value = ("no_us_part" if answer.status == "found" else answer.status), None
     else:
-        scoped.status, scoped.value = ("combined_member" if answer.match == "combined" else "found"), us
+        scoped.status, scoped.value = "found", us
     return scoped
 
 
@@ -659,8 +660,4 @@ def read_span(
         )
         answer.decimals = fact.decimals
         answer.period_start, answer.period_end = fact.start, fact.end
-        if fact.match == "combined":
-            # The figure covers the product and a sibling the member names; it
-            # answers a different question, so it is kept but not `found`.
-            answer.status = "combined_member"
     return answer

@@ -1,0 +1,109 @@
+"""The earnings-release reader, against invented exhibits and a scripted model."""
+
+from __future__ import annotations
+
+import datetime as dt
+
+from app.retrieval.earnings import check, find_exhibits, names_quarter, read_earnings
+from app.retrieval.single_product import filing_text
+from sec_fixtures import Response
+
+END = dt.date(2025, 6, 30)
+EXHIBIT = (b"<html><body><p>ACME PHARMA reports second quarter 2025 results</p>"
+           b"<table><tr><td>(in millions)</td><td>Three Months Ended June 30, 2025</td><td>2024</td></tr>"
+           b"<tr><td>Calderon</td><td>412.5</td><td>380.1</td></tr>"
+           b"<tr><td>NuVessa</td><td>90.0</td><td>70.0</td></tr></table></body></html>")
+ROYALTY = (b"<html><body><table><tr><td>(in millions)</td><td>Three Months Ended June 30, 2025</td></tr>"
+           b"<tr><td>Royalty revenue on Calderon</td><td>41.2</td></tr></table></body></html>")
+GOOD = {"found": True, "value": 412.5, "unit": "millions", "currency": "USD", "kind": "product_sales",
+        "row_quote": "Calderon 412.5 380.1", "period_labels": ["Three Months Ended June 30, 2025"]}
+
+
+def _hit(adsh, cik, name, doc, form="8-K", items=("2.02", "9.01"), file_type="EX-99.1"):
+    return {"_id": f"{adsh}:{doc}", "_source": {"adsh": adsh, "ciks": [f"000000{cik}"], "display_names": [name],
+                                                  "form": form, "items": list(items), "file_type": file_type}}
+
+
+def _sec(hits, documents):
+    def get(url, **params):
+        if "search-index" in url:
+            return Response(body={"hits": {"hits": hits}})
+        for name, content in documents.items():
+            if url.endswith(name):
+                return Response(content)
+        raise AssertionError(url)
+    return get
+
+
+def test_find_exhibits_keeps_results_exhibits_only():
+    hits = [_hit("0001-25-1", 1, "ACME PHARMA (CIK 1)", "ex99.htm"),
+            _hit("0001-25-2", 1, "ACME PHARMA (CIK 1)", "ex99b.htm", items=("8.01",)),
+            _hit("0001-25-3", 1, "ACME PHARMA (CIK 1)", "main.htm", file_type="8-K"),
+            _hit("0003-25-1", 3, "BETA AG (CIK 3)", "beta-99_1.htm", form="6-K", items=(), file_type="EX-99")]
+    found = find_exhibits("Calderon", END, get=_sec(hits, {}))
+    assert [f["url"].rsplit("/", 1)[-1] for f in found] == ["ex99.htm", "beta-99_1.htm"]
+
+
+def test_names_quarter():
+    assert names_quarter("Three Months Ended June 30, 2025", END)
+    assert names_quarter("Q2 2025", END) and names_quarter("2Q25", END) and names_quarter("Second Quarter 2025", END)
+    assert not names_quarter("Six Months Ended June 30, 2025", END)
+    assert not names_quarter("Three Months Ended June 30, 2024", END)
+
+
+def test_check_accepts_a_verified_row_and_refuses_each_failure():
+    text = filing_text(EXHIBIT)
+    assert check(GOOD, text, "Calderon", END)[0] == "accepted"
+    assert check({**GOOD, "row_quote": "Calderon $ 412.5 $ 380.1"}, text, "Calderon", END)[0] == "accepted"
+    assert check({**GOOD, "row_quote": "Calderon 999"}, text, "Calderon", END)[0] == "quote_not_in_exhibit"
+    assert check({**GOOD, "value": 400}, text, "Calderon", END)[0] == "value_not_in_quote"
+    assert check({**GOOD, "period_labels": ["2024"]}, text, "Calderon", END)[0] == "wrong_period"
+    assert check({**GOOD, "period_labels": ["Nine Months Ended"]}, text, "Calderon", END)[0] == "wrong_period"
+    assert check({**GOOD, "unit": "thousands"}, text, "Calderon", END)[0] == "unit_conflict"
+    assert check({"found": False}, text, "Calderon", END)[0] == "not_found"
+
+
+def test_a_royalty_line_is_refused_whatever_the_model_calls_it():
+    text = filing_text(ROYALTY)
+    royalty = {**GOOD, "value": 41.2, "row_quote": "Royalty revenue on Calderon 41.2"}
+    assert check(royalty, text, "Calderon", END)[0] == "not_own_sales"
+    assert check({**royalty, "kind": "royalty"}, text, "Calderon", END)[0] == "not_own_sales"
+
+
+def test_read_earnings_takes_the_issuers_reading_and_labels_the_others():
+    hits = [_hit("0002-25-1", 2, "BETA BIO (CIK 2)", "beta.htm"), _hit("0001-25-1", 1, "ACME PHARMA (CIK 1)", "acme.htm")]
+    get = _sec(hits, {"acme.htm": EXHIBIT, "beta.htm": ROYALTY})
+
+    def ask(prompt):
+        if "Royalty revenue" in prompt:
+            return {**GOOD, "value": 41.2, "kind": "royalty", "row_quote": "Royalty revenue on Calderon 41.2"}
+        return GOOD
+
+    answer = read_earnings("Calderon", "Q2 2025", "Acme Pharma", get=get, ask=ask)
+    assert (answer.status, answer.value, answer.currency) == ("found", 412.5e6, "USD")
+    assert answer.scope == "Calderon 412.5 380.1"
+    assert [r.status for r in answer.readings] == ["accepted", "not_own_sales"]
+    assert read_earnings("Calderon", "Q2 2025", "Gamma Labs", get=get, ask=ask).status == "other_filer"
+
+
+def test_disagreeing_sellers_without_an_issuer_are_not_picked_between():
+    other = EXHIBIT.replace(b"412.5", b"977.0")
+    hits = [_hit("0001-25-1", 1, "ACME PHARMA (CIK 1)", "acme.htm"), _hit("0002-25-1", 2, "BETA BIO (CIK 2)", "beta.htm")]
+    get = _sec(hits, {"acme.htm": EXHIBIT, "beta.htm": other})
+
+    def ask(prompt):
+        return {**GOOD, "value": 977.0, "row_quote": "Calderon 977.0 380.1"} if "977.0" in prompt else GOOD
+
+    answer = read_earnings("Calderon", "Q2 2025", get=get, ask=ask)
+    assert answer.status == "several_sellers" and len([r for r in answer.readings if r.status == "accepted"]) == 2
+
+
+def test_split_header_cells_and_self_dating_sentences_name_the_quarter():
+    split = filing_text(b"<table><tr><td>Three Months Ended June 30,</td></tr><tr><td>2025</td><td>2024</td></tr>"
+                        b"<tr><td>Calderon</td><td>412.5</td><td>380.1</td></tr></table>")
+    assert check({**GOOD, "period_labels": ["Three Months Ended June 30,", "2025"]}, split, "Calderon", END)[0] == "accepted"
+    prose = filing_text(b"<p>Recorded $41.2 million in Calderon net product revenue in the second quarter of 2025.</p>")
+    sentence = {**GOOD, "value": 41.2, "period_labels": [],
+                "row_quote": "Recorded $41.2 million in Calderon net product revenue in the second quarter of 2025."}
+    assert check(sentence, prose, "Calderon", END)[0] == "accepted"
+    assert names_quarter("4th Qtr 2015", dt.date(2015, 12, 31))

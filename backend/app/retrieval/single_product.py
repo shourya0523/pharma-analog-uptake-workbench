@@ -130,7 +130,8 @@ def product_line(contexts: dict[str, dict], facts: list[dict], period_end: dt.da
 def filing_text(document: bytes) -> str:
     """The filing's visible text, whitespace collapsed."""
     try:
-        text = lxml_html.fromstring(document).text_content()
+        # Each text node joined by a space: a table's cells stay apart.
+        text = " ".join(lxml_html.fromstring(document).itertext())
     except (ValueError, TypeError):
         text = re.sub(rb"<[^>]+>", b" ", document).decode("utf-8", "ignore")
     return re.sub(r"\s+", " ", text.replace("\xa0", " ")).strip()
