@@ -88,6 +88,9 @@ class RevenueAnswer:
 
 _QUARTER = re.compile(r"^\s*Q([1-4])\s*(\d{4})\s*$|^\s*(\d{4})\s*Q([1-4])\s*$", re.IGNORECASE)
 _CALENDAR_YEAR = re.compile(r"^\s*(?:CY\s*)?(\d{4})\s*$", re.IGNORECASE)
+# A calendar year to date: "6M 2024", "H1 2024", "9M 2024".
+_YEAR_TO_DATE = re.compile(r"^\s*(?:(\d{1,2})M|H(1))\s*(\d{4})\s*$", re.IGNORECASE)
+_SPAN_WORDS = {3: "three", 6: "six", 9: "nine", 12: "twelve"}
 
 FISCAL_NOTE = """
 These are calendar dates. An issuer whose fiscal year does not start in January
@@ -102,8 +105,9 @@ def describe_period(period: str) -> tuple[str, bool]:
 
     "Q2 2020" and "2020Q2" become "the three months ended June 30, 2020
     (calendar Q2 2020)"; "2020" and "CY2020" become the twelve months ended
-    December 31. Anything else, "FY2020" included, is passed through as written,
-    since an issuer's fiscal year is its own. The flag says whether dates were
+    December 31; "H1 2020", "6M 2020" and "9M 2020" become the six or nine
+    months ended June 30 or September 30. Anything else, "FY2020" included,
+    is passed through as written, since an issuer's fiscal year is its own. The flag says whether dates were
     given, and so whether the fiscal-year note applies.
     """
     quarter = _QUARTER.match(period)
@@ -113,6 +117,13 @@ def describe_period(period: str) -> tuple[str, bool]:
         month = q * 3
         end = f"{calendar.month_name[month]} {calendar.monthrange(year, month)[1]}, {year}"
         return f"the three months ended {end} (calendar Q{q} {year})", True
+    ytd = _YEAR_TO_DATE.match(period)
+    if ytd:
+        months = 6 if ytd.group(2) else int(ytd.group(1))
+        year_ = int(ytd.group(3))
+        if months in _SPAN_WORDS:
+            end = f"{calendar.month_name[months]} {calendar.monthrange(year_, months)[1]}, {year_}"
+            return f"the {_SPAN_WORDS[months]} months ended {end} (calendar year to date)", True
     year = _CALENDAR_YEAR.match(period)
     if year:
         return f"the twelve months ended December 31, {year.group(1)} (calendar year {year.group(1)})", True

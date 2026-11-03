@@ -19,13 +19,21 @@ import httpx
 # SEC asks automated clients to identify themselves with a contact address.
 DEFAULT_USER_AGENT = "pharma-analog-uptake-workbench research (set SEC_USER_AGENT)"
 
-# How many numbers after a mention of the product still belong to it. A
-# revenue row flattened to text prints the product's name and then its columns:
-# up to U.S., international and worldwide for the period and again for the
-# comparative period. Past that, the numbers are the next row's.
-NUMBERS_PER_ROW = 6
+# How far a product's row runs once flattened to text. A row prints the
+# product's name, then its columns - several periods, each perhaps split into
+# U.S., international and worldwide sub-rows, with percentage-change columns
+# between them. The row is read until the next row's label (a word longer than
+# a sub-row's short label, once figures have begun) or until this many figures,
+# percentages not counted.
+MAX_ROW_FIGURES = 12
+SUBROW_LABEL_MAX = 4
+# A sentence can name the product well before its figure ("Calderon, launched
+# in March, ... reached 46"); past this many words and figures, it has moved on.
+MAX_ROW_TOKENS = 80
 
 _NUMBER = re.compile(r"\(?-?\$?\d[\d,]*(?:\.\d+)?\)?")
+_TOKEN = re.compile(r"[a-z][a-z0-9.\-/&]*|\(?-?\$?\d[\d,]*(?:\.\d+)?\)?%?")
+_YEAR = re.compile(r"(?:19|20)\d\d")
 _ELISION = re.compile(r"\.\.\.|…|\|")
 
 
@@ -65,12 +73,10 @@ def verify_answer(answer: dict[str, Any] | None, product: str, *, fetch=None) ->
 
     flat = _flatten(text)
     mentions = [m.end() for m in re.finditer(re.escape(_flatten(product)), flat)]
-    numbers = list(_NUMBER.finditer(flat))
-    positions = [m for m in numbers if _same_number(m.group(), value)]
+    positions = [m for m in _NUMBER.finditer(flat) if _same_number(m.group(), value)]
     near = None
     for end in mentions:
-        following = [m for m in numbers if m.start() >= end][:NUMBERS_PER_ROW]
-        near = next((m for m in following if _same_number(m.group(), value)), None)
+        near = _in_row(flat, end, value)
         if near is not None:
             break
 
@@ -94,6 +100,36 @@ def verify_answer(answer: dict[str, Any] | None, product: str, *, fetch=None) ->
         quote_segments=len(segments),
         near_text=flat[max(0, near.start() - 80) : near.end() + 40] if near else None,
     )
+
+
+def _in_row(flat: str, start: int, value: Any) -> re.Match | None:
+    """The first figure equal to `value` in the row that begins at `start`.
+
+    `Calderon 107 176% 135 158% 129` is one row: percentages are skipped.
+    `Calderon us 1,042 599 intl 566 356 ww 1,608` is one row: short sub-row
+    labels do not end it. `Calderon 17 - 17 NuVessa 45` ends at NuVessa. A
+    word that carries digits (`q1`, `fy2024`) and a bare year are labels, not
+    figures.
+    """
+    figures = 0
+    for seen, token in enumerate(_TOKEN.finditer(flat, start)):
+        if seen >= MAX_ROW_TOKENS:
+            return None
+        text = token.group()
+        if text[0].isalpha():
+            if figures and len(text.strip(".-/&")) > SUBROW_LABEL_MAX:
+                return None
+            continue
+        if text.endswith("%"):
+            continue
+        if _same_number(text, value):
+            return token
+        if _YEAR.fullmatch(text):
+            continue
+        figures += 1
+        if figures >= MAX_ROW_FIGURES:
+            return None
+    return None
 
 
 def fetch_text(url: str) -> str:

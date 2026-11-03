@@ -17,7 +17,7 @@ import datetime as dt
 import os
 import re
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from typing import Any, Callable
 
 import httpx
@@ -84,7 +84,8 @@ class XbrlAnswer:
     """The first pass's result for one product-quarter.
 
     `status`: found | other_filer | dimensioned_only | no_revenue_fact |
-    no_member | ambiguous | several_members | no_filing | not_a_quarter_in_10q,
+    no_member | ambiguous | several_members | combined_member (value is a
+    member naming the product with a sibling) | no_filing | not_a_quarter_in_10q,
     and from the
     single-product reader multi_product | unconfirmed. `match` is exact,
     combined or single_product. `other_filer`
@@ -104,6 +105,7 @@ class XbrlAnswer:
     period_start: str | None = None
     period_end: str | None = None
     decimals: int | None = None
+    scope: str = "worldwide"
     filer: str | None = None
     cik: str | None = None
     accession: str | None = None
@@ -185,12 +187,23 @@ def names_issuer(filer: str, issuer: str) -> bool:
     the issuer's name appears in it. `Acme` names `ACME PHARMA INC (CIK 1)`;
     `Acme KGaA` does not name `ACME & CO`. Words are compared whole and without
     case, so `NuVessa Bio` names `NUVESSA BIO INC`; an issuer written with
-    alternatives (`Calderon Labs/Acme`) is named if any alternative is."""
-    def words(name: str) -> set[str]:
-        return set(re.findall(r"[a-z0-9]+", name.lower())) - _ENTITY_WORDS
+    alternatives (`Calderon Labs/Acme`) is named if any alternative is. An
+    alternative written as initials (`A&N`) names a filer whose distinctive
+    words have those initials in order (`ACME & NUVESSA INC`)."""
+    def words(name: str) -> list[str]:
+        return [w for w in re.findall(r"[a-z0-9]+", name.lower()) if w not in _ENTITY_WORDS]
 
     have = words(filer.split("(")[0])
-    return any(want and want <= have for want in map(words, issuer.split("/")))
+    for alternative in issuer.split("/"):
+        want = words(alternative)
+        if not want:
+            continue
+        if all(len(w) == 1 for w in want) and len(want) > 1:
+            if "".join(want) == "".join(w[0] for w in have):
+                return True
+        elif set(want) <= set(have):
+            return True
+    return False
 
 
 # ---------------------------------------------------------------- parsing
@@ -391,6 +404,17 @@ def declared_slack(decimals: int | None) -> float:
     return 0.0 if decimals is None else 0.5 * 10.0 ** -decimals
 
 
+def _parts_without_whole(candidates: list[Fact]) -> dict[str, float]:
+    """`{geography member: value}` from parts tagged with no whole above them:
+    facts whose only dimensions are the product's member and one place."""
+    parts = {}
+    for c in candidates:
+        geo = [(a, m) for a, m in c.members.items() if _GEOGRAPHY_AXIS.search(a)]
+        if len(geo) == 1 and len(c.members) == 2 and c.resolved in c.members.values():
+            parts.setdefault(geo[0][1], c.value)
+    return parts
+
+
 def geography_parts(whole: Fact, candidates: list[Fact]) -> dict[str, float]:
     """The whole figure's split by place, as `{member: value}`.
 
@@ -494,6 +518,28 @@ def instance_document(filing: dict, get: Callable = sec_get) -> tuple[bytes, str
 
 
 # ---------------------------------------------------------------- entry point
+
+
+US_MEMBER = "country:US"
+
+
+def in_scope(answer: XbrlAnswer, scope: str) -> XbrlAnswer:
+    """The answer at `scope`: "worldwide" as read, or "us", the tagged U.S.
+    part of the figure. A figure with no tagged U.S. part is `no_us_part`: a
+    product sold only in the U.S. tags none either, and nothing in the filing
+    says which case it is. A filer that tags only the parts, with no whole
+    (`dimensioned_only`), still answers a U.S. question from its U.S. part."""
+    if scope == "worldwide" or answer.status not in ("found", "dimensioned_only"):
+        return answer
+    if scope != "us":
+        raise ValueError(f"unknown scope {scope!r}")
+    us = answer.by_geography.get(US_MEMBER)
+    scoped = replace(answer, scope="us")
+    if us is None:
+        scoped.status, scoped.value = ("no_us_part" if answer.status == "found" else answer.status), None
+    else:
+        scoped.status, scoped.value = ("combined_member" if answer.match == "combined" else "found"), us
+    return scoped
 
 
 def first_pass(
@@ -601,6 +647,10 @@ def read_span(
         {"concept": c.concept, "value": c.value, "unit": c.unit, "start": c.start, "end": c.end, "members": c.members}
         for c in candidates
     ]
+    if not fact and status == "dimensioned_only":
+        answer.by_geography = _parts_without_whole(candidates)
+        if any(c.match == "combined" for c in candidates):
+            answer.match = "combined"
     if fact:
         answer.by_geography = geography_parts(fact, candidates)
         member = next(m for m in fact.members.values() if member_match(m, product))
@@ -609,4 +659,8 @@ def read_span(
         )
         answer.decimals = fact.decimals
         answer.period_start, answer.period_end = fact.start, fact.end
+        if fact.match == "combined":
+            # The figure covers the product and a sibling the member names; it
+            # answers a different question, so it is kept but not `found`.
+            answer.status = "combined_member"
     return answer

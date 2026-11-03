@@ -19,7 +19,7 @@ import datetime as dt
 from dataclasses import asdict, dataclass, field
 from typing import Any, Callable
 
-from app.retrieval.xbrl import XbrlAnswer, declared_slack, first_pass, quarter_end, read_span, sec_get
+from app.retrieval.xbrl import XbrlAnswer, declared_slack, first_pass, in_scope, quarter_end, read_span, sec_get
 
 # The largest share of a derived quarter its inputs' declared rounding may
 # account for. A year tagged as "approximately $2.3 billion" (decimals -8)
@@ -77,10 +77,16 @@ def _same_line(a: XbrlAnswer, b: XbrlAnswer) -> bool:
 
 
 def derive_quarter(
-    product: str, period: str, issuer: str | None = None, *, get: Callable = sec_get, confirm: Callable | None = None
+    product: str,
+    period: str,
+    issuer: str | None = None,
+    *,
+    get: Callable = sec_get,
+    confirm: Callable | None = None,
+    scope: str = "worldwide",
 ) -> Derived:
     """Compute calendar quarter `period` ("Q4 2023") as a stated year to date
-    less the stated year to date before it."""
+    less the stated year to date before it, both at `scope` (see `in_scope`)."""
     end = quarter_end(period)
     if end is None:
         return Derived("missing_input", product, period, reason="not a calendar quarter")
@@ -88,16 +94,17 @@ def derive_quarter(
     if n == 1:
         return Derived("missing_input", product, period, reason="a first quarter has no earlier year to date")
 
-    current = year_to_date(product, year, n, issuer, get=get, confirm=confirm)
+    current = in_scope(year_to_date(product, year, n, issuer, get=get, confirm=confirm), scope)
     if current.status != "found":
         return Derived("missing_input", product, period, inputs=[_input(current)],
                        reason=f"year to date through Q{n}: {current.status}")
-    previous = year_to_date(product, year, n - 1, issuer, get=get, confirm=confirm)
+    previous = in_scope(year_to_date(product, year, n - 1, issuer, get=get, confirm=confirm), scope)
     method = "full_year_less_nine_months" if n == 4 else "ytd_less_previous_ytd"
     inputs = [_input(current), _input(previous)]
 
     if previous.status != "found" and n == 4:
-        quarters = [first_pass(product, f"Q{q} {year}", issuer, get=get, confirm=confirm) for q in (1, 2, 3)]
+        quarters = [in_scope(first_pass(product, f"Q{q} {year}", issuer, get=get, confirm=confirm), scope)
+                    for q in (1, 2, 3)]
         inputs = [_input(current)] + [_input(q) for q in quarters]
         if any(q.status != "found" for q in quarters):
             return Derived("missing_input", product, period, inputs=inputs,
@@ -130,19 +137,26 @@ def derive_quarter(
 
 
 def xbrl_quarter(
-    product: str, period: str, issuer: str | None = None, *, get: Callable = sec_get, confirm: Callable | None = None
+    product: str,
+    period: str,
+    issuer: str | None = None,
+    *,
+    get: Callable = sec_get,
+    confirm: Callable | None = None,
+    scope: str = "worldwide",
 ) -> XbrlAnswer | Derived:
     """The quarter from XBRL: read where a 10-Q tags it, derived where none does.
 
     Derivation is tried for a calendar Q4 the issuer's 10-Qs do not give (most
     filers end their year in December, so none files one) and when the
     issuer's 10-Q tags the product but not for the three months alone.
+    `scope` is "worldwide" or "us"; see `in_scope`.
     """
     answer = first_pass(product, period, issuer, get=get, confirm=confirm)
     end = quarter_end(period)
     q4_without_10q = end is not None and end.month == 12 and answer.status != "found"
     if q4_without_10q or answer.status == "no_revenue_fact":
-        derived = derive_quarter(product, period, issuer, get=get, confirm=confirm)
+        derived = derive_quarter(product, period, issuer, get=get, confirm=confirm, scope=scope)
         if derived.status == "derived" or q4_without_10q:
             return derived
-    return answer
+    return in_scope(answer, scope)

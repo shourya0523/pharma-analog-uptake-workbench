@@ -75,3 +75,15 @@ def test_a_year_tagged_at_coarse_precision_is_refused_as_imprecise():
     filings[3]["content"] = rounded
     result = derive_quarter("Calderon", "Q4 2025", "Acme Pharma", get=fake_sec(filings))
     assert result.status == "imprecise_input" and result.value == 71e6
+
+
+def test_a_us_scope_quarter_is_derived_from_the_us_parts():
+    us = {**CAL, "srt:StatementGeographicalAxis": "country:US"}
+    year = _year()
+    year[2]["content"] = inline([(REV, 82e6, "2025-07-01", "2025-09-30", CAL),
+                                 (REV, 229e6, "2025-01-01", "2025-09-30", CAL),
+                                 (REV, 170e6, "2025-01-01", "2025-09-30", us)])
+    year[3]["content"] = inline([(REV, 312e6, "2025-01-01", "2025-12-31", CAL),
+                                 (REV, 240e6, "2025-01-01", "2025-12-31", us)])
+    result = derive_quarter("Calderon", "Q4 2025", "Acme Pharma", get=fake_sec(year), scope="us")
+    assert result.status == "derived" and result.value == 70e6

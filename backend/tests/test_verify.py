@@ -49,3 +49,17 @@ def test_no_value_and_unfetchable_are_their_own_verdicts():
 
     result = verify_answer(_answer(), "Calderon", fetch=broken)
     assert result.status == "unfetchable" and "connection refused" in result.error
+
+
+def test_percentage_columns_and_subrow_labels_stay_inside_the_row():
+    wide = "Calderon 107 176% 135 158% 129 111% 148 90% 156 69% NuVessa 20 30"
+    assert verify_answer(_answer(value=148), "Calderon", fetch=lambda url: wide).status == "verified"
+    subrows = "Calderon us 1,042 599 73.9% - intl 566 356 58.9% ww 1,608 956 NuVessa 5"
+    assert verify_answer(_answer(value=1608), "Calderon", fetch=lambda url: subrows).status == "verified"
+    assert verify_answer(_answer(value=20), "Calderon", fetch=lambda url: wide).status == "value_not_near_product"
+
+
+def test_prose_with_quarter_labels_and_years_reaches_its_figure():
+    prose = ("the most important products in q1 were: calderon (allergic rhinitis treatment) us market launch "
+             "is in full swing in 2009. sales in q1 reached sek 46 million, after sales of 12 in q4")
+    assert verify_answer(_answer(value=46), "Calderon", fetch=lambda url: prose).status == "verified"

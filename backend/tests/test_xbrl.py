@@ -216,3 +216,48 @@ def test_product_facts_records_the_member_that_resolved():
     contexts, facts = parse_facts(INLINE)
     found = product_facts(contexts, facts, "Calderon")
     assert {f.resolved for f in found} == {"acme:RespiratoryProductsCalderonMember"}
+
+
+def test_initials_name_the_filer_whose_words_they_abbreviate():
+    from app.retrieval.xbrl import names_issuer
+
+    assert names_issuer("ACME & NUVESSA INC (CIK 1)", "Calderon Labs/A&N")
+    assert not names_issuer("ACME & BETA INC (CIK 1)", "A&N")
+    assert not names_issuer("ACME INC (CIK 1)", "A")
+
+
+def test_in_scope_swaps_in_the_tagged_us_part_or_declines():
+    from app.retrieval.xbrl import XbrlAnswer, in_scope
+
+    found = XbrlAnswer("found", "Calderon", "Q2 2023", value=1000, by_geography={"country:US": 700})
+    assert (in_scope(found, "us").value, in_scope(found, "us").scope) == (700, "us")
+    assert in_scope(found, "worldwide").value == 1000
+    bare = XbrlAnswer("found", "Calderon", "Q2 2023", value=1000)
+    assert (in_scope(bare, "us").status, in_scope(bare, "us").value) == ("no_us_part", None)
+
+
+def test_a_us_question_is_answered_from_a_us_part_tagged_without_a_whole():
+    from app.retrieval.xbrl import Fact, XbrlAnswer, _parts_without_whole, in_scope
+
+    member = "acme:CalderonMember"
+    us = Fact("us-gaap:Revenues", 470, "iso4217:USD", "2026-01-01", "2026-03-31",
+              {"srt:ProductOrServiceAxis": member, "srt:StatementGeographicalAxis": "country:US"}, "exact", None, member)
+    parts = _parts_without_whole([us])
+    assert parts == {"country:US": 470}
+    answer = XbrlAnswer("dimensioned_only", "Calderon", "Q1 2026", by_geography=parts)
+    assert (in_scope(answer, "us").status, in_scope(answer, "us").value) == ("found", 470)
+    assert in_scope(answer, "worldwide").status == "dimensioned_only"
+
+
+def test_a_combined_member_is_kept_but_not_found():
+    from app.retrieval.xbrl import XbrlAnswer, in_scope
+
+    combined = XbrlAnswer("dimensioned_only", "Calderon", "Q1 2026", match="combined",
+                          by_geography={"country:US": 941})
+    scoped = in_scope(combined, "us")
+    assert (scoped.status, scoped.value) == ("combined_member", 941)
+
+    inline_doc = INLINE.replace(b"RespiratoryProductsCalderonMember", b"CalderonAndNuVessaMember")
+    get = _fake_sec([("0000000001-23-000001", 1, "ACME PHARMA (CIK 1)", "acme-20230630.htm", inline_doc)])
+    answer = first_pass("Calderon", "Q2 2023", "Acme Pharma", get=get)
+    assert answer.status == "combined_member" and answer.match == "combined" and answer.value == 1_234_500_000
