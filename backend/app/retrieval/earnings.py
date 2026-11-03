@@ -192,7 +192,7 @@ def names_quarter(header: str, end: dt.date) -> bool:
     month = calendar.month_name[end.month].lower()
     quarter_words = {1: "first", 2: "second", 3: "third", 4: "fourth"}[n]
     ordinal = {1: "1st", 2: "2nd", 3: "3rd", 4: "4th"}[n]
-    says_quarter = bool(re.search(rf"(?<![a-z0-9])(?:q{n}|{n}q)(?![a-z])|{quarter_words} quarter|{ordinal} q|"
+    says_quarter = bool(re.search(rf"(?<![a-z0-9])(?:q{n}|{n}q)(?![a-z])|{quarter_words}[- ]quarter|{ordinal} q|"
                                   rf"three months|3 months|\b{month[:3]}", h))
     longer_only = bool(re.search(r"six months|nine months|twelve months|full year|year to date|ytd|fy\b", h)) and not \
         re.search(r"three months|quarter|\bq\d", h)
@@ -228,10 +228,35 @@ def check(answer: dict[str, Any], exhibit_text: str, product: str, end: dt.date)
     unit = str(answer.get("unit") or "").lower()
     if unit not in _SCALES:
         return "unit_conflict", f"unit {unit!r} is not a scale"
+    # A sentence states its own scale ("$84.0 million"), whatever the tables
+    # declare; a table row takes the scale its exhibit declares.
+    stated = stated_scale(quote, answer.get("value"))
+    if stated:
+        if stated != unit:
+            return "unit_conflict", f"the row says {stated}, the answer says {unit}"
+        return "accepted", ""
     declared = declared_scale(exhibit_text)
     if len(declared) == 1 and unit != "units" and unit not in declared:
         return "unit_conflict", f"the exhibit declares {declared.pop()}, the answer says {unit}"
     return "accepted", ""
+
+
+def stated_scale(quote: str, value: Any) -> str | None:
+    """The scale word printed right after the value in the quote, if any:
+    `$84.0 million` says millions."""
+    try:
+        target = abs(float(value))
+    except (TypeError, ValueError):
+        return None
+    for m in re.finditer(r"(\d[\d,]*(?:\.\d+)?)\s*(thousand|million|billion|mn|bn|m|k)\b", quote, re.IGNORECASE):
+        try:
+            if abs(float(m.group(1).replace(",", "")) - target) < 1e-9:
+                word = m.group(2).lower()
+                return {"thousand": "thousands", "k": "thousands", "million": "millions", "mn": "millions",
+                        "m": "millions", "billion": "billions", "bn": "billions"}[word]
+        except ValueError:
+            continue
+    return None
 
 
 # ---------------------------------------------------------------- reading

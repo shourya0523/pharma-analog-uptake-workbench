@@ -107,3 +107,13 @@ def test_split_header_cells_and_self_dating_sentences_name_the_quarter():
                 "row_quote": "Recorded $41.2 million in Calderon net product revenue in the second quarter of 2025."}
     assert check(sentence, prose, "Calderon", END)[0] == "accepted"
     assert names_quarter("4th Qtr 2015", dt.date(2015, 12, 31))
+
+
+def test_a_sentence_states_its_own_scale_over_the_tables_heading():
+    text = filing_text(b"<p>(in thousands)</p><p>Net product revenues of Calderon were $84.0 million for the "
+                       b"quarter ended June 30, 2025.</p>")
+    prose = {**GOOD, "value": 84.0, "unit": "millions", "period_labels": [],
+             "row_quote": "Net product revenues of Calderon were $84.0 million for the quarter ended June 30, 2025."}
+    assert check(prose, text, "Calderon", END)[0] == "accepted"
+    assert check({**prose, "unit": "billions"}, text, "Calderon", END)[0] == "unit_conflict"
+    assert names_quarter("SECOND-QUARTER 2025 and 2024", END)
