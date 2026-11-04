@@ -60,7 +60,7 @@ from app.retrieval.gemini_search import QuotaExceeded, is_quota
 from app.retrieval.grid import _rows, cells
 from app.retrieval.single_product import filing_text
 from app.retrieval.verify import DEFAULT_USER_AGENT, _flatten, _in_row, _same_number
-from app.retrieval.xbrl import quarter_end, sec_get
+from app.retrieval.xbrl import first_name, quarter_end, sec_get
 
 # What is sent of an HTML or text document, in characters. A results exhibit
 # fits whole; an annual report does not, and is cut to its tables and the
@@ -205,7 +205,7 @@ def render_html(content: bytes, product: str, end: dt.date, cap: int = MAX_INPUT
     flat = re.sub(r"\s+", " ", " ".join(root.itertext()).replace("\xa0", " ")).strip()
     parts = re.split(r"@@TABLE(\d+)@@", flat)
     blocks: list[tuple[int, int, str]] = []  # (priority, order, text); lower priority is kept first
-    name = product.split("/")[0].strip().lower()
+    name = first_name(product).lower()
     prose = parts[0::2]
     for k, index in enumerate(parts[1::2]):
         body = rendered[int(index)]
@@ -248,7 +248,7 @@ def excerpt_text(text: str, product: str, end: dt.date, cap: int = MAX_INPUT_CHA
     says a quarter of the target year."""
     if len(text) <= cap:
         return text
-    name = product.split("/")[0].strip().lower()
+    name = first_name(product).lower()
     anchors, offset = [], 0
     for line in text.splitlines(keepends=True):
         low = line.lower()
@@ -411,7 +411,7 @@ def check_layout(answer: dict[str, Any], *, content: bytes, kind: str, text: str
         return "header_not_in_document", f"headers {headers} are not printed above the row", details
     above = flat[max(0, start - HEADER_WINDOW): start]
 
-    name = _flatten(product.split("/")[0])
+    name = _flatten(first_name(product))
     generic = name not in label
     details["generic_row"] = generic
 

@@ -48,7 +48,7 @@ from typing import Any, Callable
 from app.retrieval.gemini_search import QuotaExceeded, is_quota
 from app.retrieval.grid import Cell, cells
 from app.retrieval.single_product import filing_text
-from app.retrieval.xbrl import SEARCH_URL, names_issuer, quarter_end, sec_get
+from app.retrieval.xbrl import SEARCH_URL, first_name, names_issuer, quarter_end, sec_get
 
 # The weeks after a quarter in which its results release is filed.
 RELEASE_WINDOW_DAYS = 60
@@ -176,7 +176,7 @@ def find_exhibits(product: str, end: dt.date, *, get: Callable = sec_get) -> lis
     too: a foreign issuer often prints its results there rather than in an
     exhibit. All three properties come from the search response.
     """
-    body = get(SEARCH_URL, q=f'"{product.split("/")[0].strip()}"', forms="8-K,6-K", dateRange="custom",
+    body = get(SEARCH_URL, q=f'"{first_name(product)}"', forms="8-K,6-K", dateRange="custom",
                startdt=end.isoformat(), enddt=(end + dt.timedelta(days=RELEASE_WINDOW_DAYS)).isoformat()).json()
     found, seen = [], set()
     for hit in body.get("hits", {}).get("hits", []):
@@ -209,7 +209,7 @@ def passages(text: str, product: str) -> str:
     """The text around each mention of the product, joined, capped."""
     flat = re.sub(r"\s+", " ", text.replace("\xa0", " "))
     chunks, last = [], -(10 ** 9)
-    for m in re.finditer(re.escape(product.split("/")[0].strip()), flat, re.IGNORECASE):
+    for m in re.finditer(re.escape(first_name(product)), flat, re.IGNORECASE):
         if m.start() - last > PASSAGE_CHARS:
             chunks.append(flat[max(0, m.start() - PASSAGE_CHARS): m.start() + PASSAGE_CHARS])
             last = m.start()
@@ -426,7 +426,7 @@ def read_grid(raw: bytes, text: str, product: str, end: dt.date, label: str, ask
     With `scope` "us", the model still picks the product's cell for the
     quarter, and the answer is that row's U.S. column (`us_cell`); a row
     with none is refused as `no_us_column`."""
-    offered = [c for c in cells(raw, product.split("/")[0].strip()) if not c.text.endswith("%") and _figure(c.text) is not None]
+    offered = [c for c in cells(raw, first_name(product)) if not c.text.endswith("%") and _figure(c.text) is not None]
     if not offered:
         return None, "no table row names the product"
     offered = offered[:MAX_CELLS]

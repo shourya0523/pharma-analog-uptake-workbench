@@ -19,6 +19,7 @@ from typing import Any, Callable
 from lxml import html as lxml_html
 
 from app.retrieval.xbrl import (
+    _ALTERNATIVES,
     Fact,
     XbrlAnswer,
     _GEOGRAPHY_AXIS,
@@ -170,7 +171,7 @@ def _normal(text: str) -> str:
 def names_the_product(name: str, product: str) -> bool:
     """Whether a name the report gives is the product or one of its forms:
     `Calderon cream 1%` is Calderon; `NuVessa` is not."""
-    name, alternatives = _normal(name), [_normal(a) for a in re.split(r"\s*/\s*", product)]
+    name, alternatives = _normal(name), [_normal(a) for a in _ALTERNATIVES.split(product)]
     return any(a and (name == a or name.startswith(a + " ") or name.replace(" ", "") == a.replace(" ", ""))
                for a in alternatives)
 

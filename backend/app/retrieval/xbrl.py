@@ -130,6 +130,16 @@ class XbrlAnswer:
 # ---------------------------------------------------------------- matching
 
 
+# A "/" between names: "Calderon/NuVessa", "Calderon / NuVessa". One between
+# two figures is part of the name: "Calderon 100/3.6".
+_ALTERNATIVES = re.compile(r"\s*/\s*(?![\d.])|(?<![\d.])\s*/\s*")
+
+
+def first_name(product: str) -> str:
+    """The first of the names a product is given as, for searching text."""
+    return _ALTERNATIVES.split(product)[0].strip()
+
+
 def tokens(name: str) -> list[str]:
     """Lower-case word tokens of a CamelCase or spaced name."""
     return [t.lower() for t in _CAMEL.findall(name)]
@@ -164,7 +174,7 @@ def member_match(member: str, product: str, family: bool = False) -> str | None:
     local = local[: -len("Member")] if local.endswith("Member") else local
     letters = re.sub(r"[^A-Za-z0-9]", "", local)
     lower = letters.lower()
-    for alternative in re.split(r"\s*/\s*", product):
+    for alternative in _ALTERNATIVES.split(product):
         want = re.sub(r"[^a-z0-9]", "", alternative.lower())
         if not want:
             continue
@@ -262,7 +272,12 @@ def parse_facts(document: bytes) -> tuple[dict[str, dict], list[dict]]:
     applied, `unit` resolved from the unit's id to its measure (`iso4217:USD`),
     and `decimals` an int, or None where the filer declared INF or nothing.
     """
-    root = etree.fromstring(document, etree.XMLParser(recover=True, huge_tree=True))
+    try:
+        root = etree.fromstring(document, etree.XMLParser(recover=True, huge_tree=True))
+    except etree.XMLSyntaxError:
+        root = None
+    if root is None:  # nothing parseable: a filing from before XBRL, or an empty body
+        return {}, []
     units: dict[str, str] = {}
     for unit in root.iter():
         if _local(unit.tag) == "unit":
@@ -318,13 +333,13 @@ def prefixed(member: str, product: str) -> bool:
     """Whether the member names something before the product
     (`RespiratoryProductsCalderonMember`, `NuVessaMember` for Vessa)."""
     local = re.sub(r"[^a-z0-9]", "", member.split(":")[-1].lower().removesuffix("member"))
-    return not any(local.startswith(re.sub(r"[^a-z0-9]", "", a.lower())) for a in re.split(r"\s*/\s*", product))
+    return not any(local.startswith(re.sub(r"[^a-z0-9]", "", a.lower())) for a in _ALTERNATIVES.split(product))
 
 
 def printed_alone(product: str, text: str) -> bool:
     """Whether the filing prints the product as a word of its own."""
     return any(re.search(rf"(?<![a-z0-9]){re.escape(a.lower())}(?![a-z0-9])", text)
-               for a in re.split(r"\s*/\s*", product) if a)
+               for a in _ALTERNATIVES.split(product) if a)
 
 
 def product_facts(contexts: dict[str, dict], facts: list[dict], product: str, text: str | None = None,
@@ -574,7 +589,7 @@ def find_10qs(product: str, end: dt.date, get: Callable = sec_get) -> list[dict]
 def find_filings(product: str, end: dt.date, form: str, get: Callable = sec_get) -> list[dict]:
     """Filings of `form` mentioning the product whose period ends at `end`."""
     params = dict(
-        q=f'"{product.split("/")[0].strip()}"',
+        q=f'"{first_name(product)}"',
         forms=form,
         dateRange="custom",
         startdt=end.isoformat(),

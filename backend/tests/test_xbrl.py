@@ -369,3 +369,11 @@ def test_revenue_is_a_word_of_the_concept_not_letters_inside_it():
     assert is_revenue("us-gaap:Revenues", usd) and is_revenue("us-gaap:SalesRevenueGoodsNet", usd)
     assert is_revenue("acme:NetSales", usd) and is_revenue("acme:netproductsales", usd)
     assert not is_revenue("us-gaap:ProceedsFromSaleAndMaturityOfAvailableForSaleSecurities", usd)
+
+
+def test_a_slash_between_figures_is_part_of_the_name():
+    from app.retrieval.xbrl import first_name, parse_facts
+
+    assert first_name("Calderon 100/3.6") == "Calderon 100/3.6"
+    assert first_name("Calderon/NuVessa") == first_name("Calderon / NuVessa") == "Calderon"
+    assert parse_facts(b"") == ({}, [])

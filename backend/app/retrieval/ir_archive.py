@@ -68,7 +68,7 @@ from app.retrieval.gemini_search import (
     parse_json_answer,
 )
 from app.retrieval.verify import DEFAULT_USER_AGENT, REFUSALS
-from app.retrieval.xbrl import quarter_end
+from app.retrieval.xbrl import first_name, quarter_end
 
 # An archive page must list reports for at least this many distinct periods;
 # a page with one dated link is a single release, not the archive.
@@ -731,7 +731,7 @@ class IRReading:
 
 
 def _mentions(text: str, product: str) -> int:
-    return len(re.findall(re.escape(product.split("/")[0].strip()), text, re.IGNORECASE))
+    return len(re.findall(re.escape(first_name(product)), text, re.IGNORECASE))
 
 
 def read_document(document: Document, product: str, issuer: str | None, span: Span, fiscal: FiscalCalendar,
