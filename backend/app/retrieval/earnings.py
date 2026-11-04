@@ -243,8 +243,10 @@ def names_quarter(header: str, end: dt.date) -> bool:
     month = calendar.month_name[end.month].lower()
     quarter_words = {1: "first", 2: "second", 3: "third", 4: "fourth"}[n]
     ordinal = {1: "1st", 2: "2nd", 3: "3rd", 4: "4th"}[n]
+    # A numeric end date (`12/31/07`, `12-31-2007`) names the end month as the month's name does.
+    numeric = rf"(?<!\d)0?{end.month}([/.-]){end.day}\1(?:{year}|{str(year)[2:]})(?!\d)"
     says_quarter = bool(re.search(rf"(?<![a-z0-9])(?:q{n}|{n}q)(?![a-z])|{quarter_words}[- ]quarter|{ordinal} q|"
-                                  rf"three months|3 months|\b{month[:3]}", h))
+                                  rf"three months|3 months|\b{month[:3]}|{numeric}", h))
     longer_only = bool(re.search(r"six months|nine months|twelve months|full year|year to date|ytd|fy\b", h)) and not \
         re.search(r"three months|quarter|\bq\d", h)
     return has_year and says_quarter and not longer_only
