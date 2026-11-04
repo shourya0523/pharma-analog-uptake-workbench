@@ -1,5 +1,5 @@
 {
-  "series_start_reason": "Series starts at the first quarter with a printed non-nil figure. J&J's 2022 schedules do not print Carvykti separately (absent from 2022Q1-2022Q4 documents, measured); the 2023Q2, 2023Q3 and 2023Q4 schedules print 2022Q2-2022Q4 as prior-year columns (24, 55, 54; the 2023Q1 schedule prints 2022Q1 as a dash, i.e. nil, and a retrospective table in the same document gives 2022 FY 133 = 24+55+54).",
+  "series_start_reason": "Series starts at the first quarter with a printed non-nil figure. J&J's 2022 earnings exhibits 99.2 (Form 8-K, 2022-04-19 to 2023-01-24) print no CARVYKTI line (absent, measured); the 2023Q2, 2023Q3 and 2023Q4 exhibits 99.2 print 2022Q2-2022Q4 as prior-year columns, and the 2023Q1 exhibit prints 2022Q1 as a dash (nil).",
   "series_end_quarter": null,
   "series_end_basis": null,
   "series_end_reason": null,
@@ -25,7 +25,10 @@
     "Downloaded J&J's quarterly sales schedule PDFs 2021Q1-2026Q2 from the URLs of the existing J&J manifest (investor-site q4cdn); parsed every page with pdfplumber and searched case-insensitively for CARVYKTI, TECVAYLI, TALVEY, RYBREVANT, and the generic names (cache/jnj_rows.json).",
     "Listed J&J 10-Q and 10-K filings 2021-2026 via data.sec.gov submissions (form 10-Q and 10-K only, no 8-K scan) and searched the primary documents for the four brand names: they appear only in prose or litigation text, only in narrative sentences (the only lines with a brand name and a number were prose).",
     "Supplemental Sales Information schedules (Schedule 2 / 'Supplemental Sales Information' page) in the 2024Q1 and 2025Q1 schedules restate product lines quarterly; the 2024Q1 one carries Tecvayli, the 2025Q1 one carries Rybrevant/Lazcluze and Talvey.",
-    "2022Q2-2022Q4 are direct_prior_year_column rows from the 2023Q2-2023Q4 schedules; 2023Q1 onward from each quarter's own schedule."
+    "2022Q2-2022Q4 are direct_prior_year_column rows from the 2023Q2-2023Q4 schedules; 2023Q1 onward from each quarter's own schedule.",
+    "[SEC re-sourcing] Listed every Form 8-K of Johnson & Johnson (CIK 200406) via data.sec.gov submissions (all forms beginning '8-K'; earnings filings selected by item 2.02 from 2005, and by month for the 2003-2004 item 5/9/12/8.01 releases) and resolved each filing's exhibits from its index.json. Exhibit 99.2 of every quarterly earnings 8-K from the 2008-04-15 filing to the 2026-07-15 filing prints the same product sales schedule the investor-site PDFs carry (product line, then US / Intl / WW rows; '(Dollars in Millions)'; separate quarter and year-to-date tables). Each product row was read from the quarter table (header '<ORDINAL> QUARTER', current year then prior year) of the release for that quarter; where that release does not print the product's own line, from the prior-year column of the release four quarters later.",
+    "[SEC re-sourcing] Every row that cited J&J's investor website (s203.q4cdn.com, source_type company_ir) was replaced by the Form 8-K exhibit 99.2 that prints the same quarter; 17 rows replaced, and every replaced figure equals the website figure it replaces (compared row by row). No company_ir row remains.",
+    "[SEC re-sourcing] Q4 check: the fourth-quarter exhibit's twelve-month table WW (or US) figure equals the sum of the four quarterly rows: 2023: 72+117+152+159=500 vs FY 500; 2024: 157+186+286+334=963 vs FY 963; 2025: 369+439+524+555=1887 vs FY 1887"
   ],
   "commercial_start_quarter": "2022Q2"
 }

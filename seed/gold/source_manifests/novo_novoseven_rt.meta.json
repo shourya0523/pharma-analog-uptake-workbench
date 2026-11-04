@@ -36,7 +36,8 @@
     "Q3 2002 6-K (0001156973-02-000654) quarterly numbers table: columns Q3 2002 back to Q1 2001 on the Haemostasis management row (909, 926, 800, 843, 754, 769, 730); the FY2002 6-K (0001156973-03-000205) prints the same 2001 and 2002 quarters on the same row, confirming the figures",
     "EDGAR submissions index for CIK 0000353278: every Novo Nordisk 6-K filed before 2002-10-31 has primaryDocument ending .paper, so the 2001 and H1 2002 reports are not citable",
     "Annual Report 2000 (novonordisk.com, 20010221_Annual Report 2000_UK.pdf, 66 pages) searched for quarterly or haemostasis figures: none; the GlobeNewswire release of 2001-02-20 links its 2000 and 1999 quarterly table only through a tracker attachment that returns 403, so it is not citable",
-    "cross-check: 2001 quarters 730+769+754+843 = 3,096 and 2002 quarters 800+926+909+986 = 3,621 equal the annual haemostasis sales stated in the Annual Financial Report 2002 (3,621 for 2002, +17% on 2001)"
+    "cross-check: 2001 quarters 730+769+754+843 = 3,096 and 2002 quarters 800+926+909+986 = 3,621 equal the annual haemostasis sales stated in the Annual Financial Report 2002 (3,621 for 2002, +17% on 2001)",
+    "Fix (2018Q1, 2018Q2): the EDGAR copies of the Q1 2018 and H1 2018 reports (6-K 0001628280-18-005610 finalcaq12018upload.htm, 0001628280-18-010747 a6kfrontpageandcaq22018.htm) carry each page's text beneath the page image; the Appendix 6 regional sales split rows were read from that text and match the novonordisk.com PDFs figure for figure, so both rows now cite sec.gov (source_type sec_filing). Checked with scripts/sourcing/verify_staged_manifests.py."
   ],
   "unreported_quarters": []
 }

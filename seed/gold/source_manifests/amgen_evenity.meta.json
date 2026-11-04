@@ -1,0 +1,35 @@
+{
+  "drug_name": "Evenity",
+  "generic_name": "romosozumab-aqqg",
+  "manufacturer": "Amgen",
+  "benchmark_identity": "amgen_evenity_worldwide_reported",
+  "therapeutic_area": "GI / Liver / Women's Health / Urology",
+  "indication_area": "Osteoporosis (postmenopausal women at high risk of fracture)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection, 105 mg/1.17 mL prefilled syringe",
+  "route_of_administration": "subcutaneous",
+  "moa": "Sclerostin inhibitor (monoclonal antibody)",
+  "moa_class": "sclerostin_inhibitor",
+  "first_approval_year": 2019,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761062",
+    "quote": "04/09/2019 ORIG-1 Approval (BLA 761062, EVENITY ROMOSOZUMAB-AQQG 105MG/1.17ML)"
+  },
+  "launch_quarter": "2019Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/318154/000031815419000008/amgn-12312018x10kq42018.htm",
+    "quote": "Also in January 2019, the Japanese Ministry of Health, Labor and Welfare granted a marketing authorization for EVENITY TM for the treatment of osteoporosis in men and postmenopausal women at high risk of fracture."
+  },
+  "commercial_start_quarter": "2019Q1",
+  "series_start_reason": "Series starts at 2019Q1, the first quarter with EVENITY sales (Japan, after the January 2019 marketing authorization); the 10-K for 2019 states 'We launched EVENITY \u00ae in the United States and Japan'. 2019Q1 is printed only as the prior-year column of the first-quarter 2020 release.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "Listed every filing for Amgen Inc. (CIK 0000318154) from data.sec.gov/submissions (recent block plus older 'files' pages), no form filter at listing time; selected forms starting '8-K' (8-K and 8-K/A) carrying Item 2.02 and filed 2010-01-01 or later (68 filings), resolved each filing's exhibits from its index.json and kept the non-primary .htm exhibit (Exhibit 99.1; Exhibit 99.2 reconciliation exhibits dropped); also fetched every 10-Q, 10-K, 10-Q/A and 10-K/A primary document filed 2010-04-01 or later.",
+    "Each release's HTML table rows were parsed; the product row was located by a regex anchored on the brand at the start of the row (so a combined 'XGEVA / Prolia' row or a regional '- U.S.' row is not taken); the quarter of a release is the calendar quarter before its filing month; the first matching row in a release is the quarter table and the second (Q4 releases) the full-year table.",
+    "EVENITY is first on its own line in the second-quarter 2019 release; 2019Q1 (17) is the prior-year TOTAL column of the first-quarter 2020 release, and the first-quarter 2019 release has no EVENITY sales row.",
+    "Four quarters vs the full-year TOTAL line of each fourth-quarter release: 2019: 189 vs FY 189; 2020: 350 vs FY 350; 2021: 530 vs FY 530; 2022: 787 vs FY 787; 2023: 1160 vs FY 1160; 2024: 1563 vs FY 1563; 2025: 2100 vs FY 2100. 26 current-quarter rows compared with the prior-year TOTAL column of the following year's release: all equal."
+  ]
+}

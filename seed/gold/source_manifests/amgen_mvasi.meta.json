@@ -1,0 +1,35 @@
+{
+  "drug_name": "Mvasi",
+  "generic_name": "bevacizumab-awwb",
+  "manufacturer": "Amgen",
+  "benchmark_identity": "amgen_mvasi_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (colorectal, lung, renal, cervical cancer and glioblastoma; biosimilar to Avastin)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection for intravenous infusion, 100 mg/4 mL and 400 mg/16 mL single-dose vials",
+  "route_of_administration": "intravenous",
+  "moa": "VEGF-A inhibitor (bevacizumab biosimilar monoclonal antibody)",
+  "moa_class": "vegf_inhibitor",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761028",
+    "quote": "09/14/2017 ORIG-1 Approval (BLA 761028, MVASI BEVACIZUMAB-AWWB)"
+  },
+  "launch_quarter": "2019Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/318154/000031815420000017/amgn-12312019x10kq42019.htm",
+    "quote": "MVASI TM* (bevacizumab-awwb) \u2022 In July 2019, we and Allergan launched MVASI TM in the United States."
+  },
+  "commercial_start_quarter": "2019Q3",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "Listed every filing for Amgen Inc. (CIK 0000318154) from data.sec.gov/submissions (recent block plus older 'files' pages), no form filter at listing time; selected forms starting '8-K' (8-K and 8-K/A) carrying Item 2.02 and filed 2010-01-01 or later (68 filings), resolved each filing's exhibits from its index.json and kept the non-primary .htm exhibit (Exhibit 99.1; Exhibit 99.2 reconciliation exhibits dropped); also fetched every 10-Q, 10-K, 10-Q/A and 10-K/A primary document filed 2010-04-01 or later.",
+    "Each release's HTML table rows were parsed; the product row was located by a regex anchored on the brand at the start of the row (so a combined 'XGEVA / Prolia' row or a regional '- U.S.' row is not taken); the quarter of a release is the calendar quarter before its filing month; the first matching row in a release is the quarter table and the second (Q4 releases) the full-year table.",
+    "MVASI is first on its own line in the fourth-quarter 2019 release; 2019Q3 (43) is the prior-year TOTAL column of the third-quarter 2020 release; the 2020Q1 and 2020Q2 releases print the prior-year 2019Q1/Q2 MVASI totals as '\u2014', and FY2019 127 = 43 + 84.",
+    "Four quarters vs the full-year TOTAL line of each fourth-quarter release: 2020: 798 vs FY 798; 2021: 1166 vs FY 1166; 2022: 901 vs FY 901; 2023: 800 vs FY 800; 2024: 727 vs FY 727; 2025: 771 vs FY 771. 24 current-quarter rows compared with the prior-year TOTAL column of the following year's release: all equal."
+  ]
+}

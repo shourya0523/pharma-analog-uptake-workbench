@@ -555,10 +555,10 @@
   ]
  },
  {
-  "drug_name": "Vectibix",
+  "drug_name": "Xgeva",
   "manufacturer": "Amgen",
   "ticker": "AMGN",
-  "generic_name": "panitumumab",
+  "generic_name": "denosumab",
   "options": {
    "earnings_since": "2026-04-05",
    "earnings_until": "2027-05-05",
@@ -569,13 +569,13 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 136.0,
-    "gold_id": "amgen-vectibix-us-reported-2026q1"
+    "value_normalized_usd_millions": 411.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2026q1"
    },
    {
     "period": "2026Q2",
-    "value_normalized_usd_millions": 167.0,
-    "gold_id": "amgen-vectibix-us-reported-2026q2"
+    "value_normalized_usd_millions": 352.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2026q2"
    }
   ]
  },
@@ -1126,6 +1126,36 @@
     "period": "2002Q4",
     "value_normalized_usd_millions": 256.267,
     "gold_id": "biogen-avonex-worldwide-reported-2002q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nurtec ODT",
+  "manufacturer": "Biohaven",
+  "ticker": null,
+  "generic_name": "rimegepant",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 123.59,
+    "gold_id": "pfizer-nurtec-odt-worldwide-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 193.954,
+    "gold_id": "pfizer-nurtec-odt-worldwide-reported-2022q2"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 211.0,
+    "gold_id": "pfizer-nurtec-odt-worldwide-reported-2022q4"
    }
   ]
  },
@@ -1956,6 +1986,66 @@
     "period": "2022Q4",
     "value_normalized_usd_millions": 72.0,
     "gold_id": "pfizer-gbt-oxbryta-us-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Uplizna",
+  "manufacturer": "Horizon Therapeutics",
+  "ticker": null,
+  "generic_name": "inebilizumab",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 53.8,
+    "gold_id": "amgen-uplizna-worldwide-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 68.1,
+    "gold_id": "amgen-uplizna-worldwide-reported-2023q2"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 65.0,
+    "gold_id": "amgen-uplizna-worldwide-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Enbrel",
+  "manufacturer": "Immunex",
+  "ticker": null,
+  "generic_name": "etanercept",
+  "options": {
+   "earnings_since": "2002-04-05",
+   "earnings_until": "2003-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2002Q1",
+    "value_normalized_usd_millions": 216.5,
+    "gold_id": "amgen-enbrel-us-canada-reported-2002q1"
+   },
+   {
+    "period": "2002Q2",
+    "value_normalized_usd_millions": 192.0,
+    "gold_id": "amgen-enbrel-us-canada-reported-2002q2"
+   },
+   {
+    "period": "2002Q4",
+    "value_normalized_usd_millions": 204.0,
+    "gold_id": "amgen-enbrel-us-canada-reported-2002q4"
    }
   ]
  },
@@ -4195,10 +4285,10 @@
   ]
  },
  {
-  "drug_name": "Casgevy",
+  "drug_name": "Trikafta",
   "manufacturer": "Vertex",
   "ticker": "VRTX",
-  "generic_name": "exagamglogene autotemcel",
+  "generic_name": "elexacaftor/tezacaftor/ivacaftor and ivacaftor",
   "options": {
    "earnings_since": "2026-04-05",
    "earnings_until": "2027-05-05",
@@ -4209,13 +4299,13 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 42.9,
-    "gold_id": "vertex-casgevy-worldwide-reported-2026q1"
+    "value_normalized_usd_millions": 2354.7,
+    "gold_id": "vertex-trikafta-worldwide-reported-2026q1"
    },
    {
     "period": "2026Q2",
-    "value_normalized_usd_millions": 76.4,
-    "gold_id": "vertex-casgevy-worldwide-reported-2026q2"
+    "value_normalized_usd_millions": 2497.2,
+    "gold_id": "vertex-trikafta-worldwide-reported-2026q2"
    }
   ]
  },
@@ -4241,6 +4331,31 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 120.6,
     "gold_id": "pfizer-viatris-lyrica-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Uplizna",
+  "manufacturer": "Viela Bio",
+  "ticker": null,
+  "generic_name": "inebilizumab",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": 2.316,
+    "gold_id": "amgen-uplizna-worldwide-reported-2020q3"
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": 9.336,
+    "gold_id": "amgen-uplizna-worldwide-reported-2020q4"
    }
   ]
  },

@@ -1214,6 +1214,13 @@ def test_every_comparator_year_reconciles_to_its_stated_full_year():
         r"\|\s*[\d,]+\s*\|\s*(?:[\d,]+|—|-)\s*"
         r"\|\s*([\d,]+)\s*\|\s*(?:[\d,]+|—|-)\s*$"
     )
+    # A schedule that prints its quarter and twelve-month tables apart cannot
+    # quote both on one line, so its Q4 row carries the twelve-month line of the
+    # same exhibit in `full_year_quote`: "... twelve months 2012 then 2011 ... |
+    # FY | prior FY".
+    full_year_pattern = re.compile(
+        r"twelve months (\d{4}) then \d{4}.*?\|\s*([\d,]+(?:\.\d+)?)\s*\|\s*(?:[\d,]+(?:\.\d+)?|—|-)\s*$"
+    )
     stated: dict[tuple[str, int], float] = {}
     # Which units a product-year was reported in. Gilead moved from thousands
     # to millions partway through 2014, so a single year can mix the two.
@@ -1228,7 +1235,8 @@ def test_every_comparator_year_reconciles_to_its_stated_full_year():
                 if row["period"][-2:] != "Q4" or row["derivation"] != "direct_reported":
                     continue
                 match = (quote_pattern.search(row["source_quote"])
-                         or exhibit_pattern.search(row["source_quote"]))
+                         or exhibit_pattern.search(row["source_quote"])
+                         or full_year_pattern.search(row.get("full_year_quote") or ""))
                 assert match, f"{drug_name} {row['period']}: no stated full year in its own quote"
                 year = int(match.group(1))
                 total = float(match.group(2).replace(",", ""))

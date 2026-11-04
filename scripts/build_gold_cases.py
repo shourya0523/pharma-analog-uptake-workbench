@@ -113,6 +113,10 @@ LAYER_TWO_DEFAULTS = {
 ISSUER_TICKERS: dict[str, str | None] = {
     "AbbVie": "ABBV",
     "Progenics Pharmaceuticals": None,
+    "Horizon Therapeutics": None,
+    "Viela Bio": None,
+    "Biohaven": None,
+    "Immunex": None,
     "Provention Bio": None,
     "Sucampo Pharmaceuticals": None,
     "ViroPharma": None,

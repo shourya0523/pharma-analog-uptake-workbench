@@ -1,0 +1,36 @@
+{
+  "drug_name": "Trikafta",
+  "generic_name": "elexacaftor/tezacaftor/ivacaftor and ivacaftor",
+  "manufacturer": "Vertex",
+  "benchmark_identity": "vertex_trikafta_worldwide_reported",
+  "therapeutic_area": "Respiratory / Allergy",
+  "indication_area": "Cystic fibrosis (at least one F508del or responsive mutation)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (TRIKAFTA in the U.S., KAFTRIO outside it; one line)",
+  "formulation": "co-packaged tablets (elexacaftor/tezacaftor/ivacaftor and ivacaftor) and oral granules",
+  "route_of_administration": "oral",
+  "moa": "CFTR correctors (elexacaftor, tezacaftor) plus potentiator (ivacaftor)",
+  "moa_class": "cftr_corrector_potentiator_combination",
+  "first_approval_year": 2019,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=212273",
+    "quote": "10/21/2019 ORIG-1 Approval (NDA 212273, TRIKAFTA (COPACKAGED) ELEXACAFTOR, IVACAFTOR, TEZACAFTOR; IVACAFTOR TABLET;ORAL)"
+  },
+  "launch_quarter": "2019Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/875320/000087532020000003/ex-991q42019.htm",
+    "quote": "Total GAAP and Non-GAAP product revenues increased 63% and 45% , respectively, compared to the fourth quarter of 2018 , primarily driven by the early approval and launch of TRIKAFTA in the U.S. and the global uptake of SYMDEKO and SYMKEVI in patients ages 12 and older."
+  },
+  "commercial_start_quarter": "2019Q4",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "Listed every filing for Vertex Pharmaceuticals (CIK 0000875320) from data.sec.gov/submissions (recent block plus older 'files' pages), no form filter at listing time; selected forms starting '8-K' (8-K and 8-K/A) carrying Item 2.02 filed 2010-01-01 or later (75 filings) and fetched every non-primary .htm exhibit from each filing's index.json; fetched every 10-Q, 10-K, 10-Q/A and 10-K/A primary document filed 2011-01-01 or later.",
+    "Q1-Q3 rows are the current three-month column of the product row in each 10-Q's 'product revenues, net' by-product table (located as a row starting with the brand that is followed within ten rows by a 'Total product revenues' row). Q4 rows: the fourth-quarter release (the Item 2.02 8-K filed January-March whose exhibit prints a 'Twelve Months Ended December 31' column, which excludes the January preliminary releases) is used when one of its brand rows prints a figure within 1.0 of the 10-K full year less the three 10-Q quarters; otherwise the row is derived from the 10-K (annual_less_reported_first_nine_months).",
+    "Fourth-quarter 2019 is derived from the 10-K for every CF product, because the fourth-quarter 2019 release prints its by-product table under 'Non-GAAP Product revenues, net' (it excludes a $155.8 million ORKAMBI France early-access adjustment); the 10-K figures are GAAP.",
+    "The line is 'TRIKAFTA' through the second quarter of 2020 and 'TRIKAFTA/KAFTRIO' from the third quarter of 2020 (KAFTRIO is the EU name); one product line.",
+    "Four quarters vs the 10-K full-year line (USD millions): 2020 3864.3 vs 10-K 3863.8; 2021 5697.6 vs 10-K 5697.2; 2022 7687.3 vs 10-K 7686.8; 2023 8944.7 vs 10-K 8944.7; 2024 10238.6 vs 10-K 10238.6; 2025 10312.7 vs 10-K 10312.7 (differences are within the rounding of the release figures)."
+  ]
+}

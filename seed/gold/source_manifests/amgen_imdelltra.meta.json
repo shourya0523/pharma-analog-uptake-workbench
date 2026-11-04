@@ -1,0 +1,34 @@
+{
+  "drug_name": "Imdelltra",
+  "generic_name": "tarlatamab-dlle",
+  "manufacturer": "Amgen",
+  "benchmark_identity": "amgen_imdelltra_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (extensive-stage small cell lung cancer)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "lyophilized powder for intravenous infusion, 1 mg and 10 mg single-dose vials",
+  "route_of_administration": "intravenous",
+  "moa": "DLL3 x CD3 bispecific T-cell engager",
+  "moa_class": "bispecific_t_cell_engager",
+  "first_approval_year": 2024,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761344",
+    "quote": "05/16/2024 ORIG-1 Approval (BLA 761344, IMDELLTRA TARLATAMAB-DLLE)"
+  },
+  "launch_quarter": "2024Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/318154/000031815424000035/amgn-20240630.htm",
+    "quote": "Products/pipeline IMDELLTRA In May 2024, we announced IMDELLTRA received accelerated approval from the FDA for the treatment of adult patients with extensive-stage small cell lung cancer (ES-SCLC) with disease progression on or after platinum-based chemotherapy."
+  },
+  "commercial_start_quarter": "2024Q2",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "Listed every filing for Amgen Inc. (CIK 0000318154) from data.sec.gov/submissions (recent block plus older 'files' pages), no form filter at listing time; selected forms starting '8-K' (8-K and 8-K/A) carrying Item 2.02 and filed 2010-01-01 or later (68 filings), resolved each filing's exhibits from its index.json and kept the non-primary .htm exhibit (Exhibit 99.1; Exhibit 99.2 reconciliation exhibits dropped); also fetched every 10-Q, 10-K, 10-Q/A and 10-K/A primary document filed 2010-04-01 or later.",
+    "Each release's HTML table rows were parsed; the product row was located by a regex anchored on the brand at the start of the row (so a combined 'XGEVA / Prolia' row or a regional '- U.S.' row is not taken); the quarter of a release is the calendar quarter before its filing month; the first matching row in a release is the quarter table and the second (Q4 releases) the full-year table.",
+    "Four quarters vs the full-year TOTAL line of each fourth-quarter release: 2025: 627 vs FY 627. 6 current-quarter rows compared with the prior-year TOTAL column of the following year's release: all equal."
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "drug_name": "Kanjinti",
+  "generic_name": "trastuzumab-anns",
+  "manufacturer": "Amgen",
+  "benchmark_identity": "amgen_kanjinti_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (HER2-positive breast and gastric cancer; biosimilar to Herceptin)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "lyophilized powder for intravenous infusion (150 mg single-dose and 420 mg multiple-dose vials)",
+  "route_of_administration": "intravenous",
+  "moa": "HER2-directed monoclonal antibody (trastuzumab biosimilar)",
+  "moa_class": "her2_antibody",
+  "first_approval_year": 2019,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761073",
+    "quote": "06/13/2019 ORIG-1 Approval (BLA 761073, KANJINTI TRASTUZUMAB-ANNS)"
+  },
+  "launch_quarter": "2018Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/318154/000031815419000008/amgn-12312018x10kq42018.htm",
+    "quote": "In May 2018, the EC granted marketing authorization for KANJINTI TM , a biosimilar candidate to Herceptin \u00ae , for the treatment of HER2-positive metastatic breast cancer, HER2-positive early breast cancer and HER2-positive metastatic adenocarcinoma of the stomach or gastroesophageal junction. ... We also continued to advance our biosimilar program with the approval of MVASI TM for the treatment of five types of cancer in the United States and the EU, and the launches of KANJINTI TM and AMGEVITA TM in Europe."
+  },
+  "commercial_start_quarter": "2018Q4",
+  "series_start_reason": "Series starts at 2018Q4, two quarters after the European launch: the earliest quarter Amgen prints a KANJINTI figure for is Q4 2018 (prior-year TOTAL column of the fourth-quarter 2019 release, 23). The 10-K for 2019 prints full-year 2018 KANJINTI as ROW 44 only, so 2018Q2-2018Q3 are not printed by quarter. U.S. launch followed in July 2019 (10-K 2019: 'In 2019, Amgen, in collaboration with Allergan, launched in the United States MVASI TM ... and KANJINTI TM').",
+  "series_end_quarter": "2023Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "KANJINTI's last own line is the fourth-quarter 2023 release (filed 2024-02-06) and the 10-K for 2023 ('KANJINTI \u2014 U.S.' 109, 'KANJINTI \u2014 ROW' 50). The first-quarter 2024 release (https://www.sec.gov/Archives/edgar/data/318154/000031815424000018/amgn-20240331earningsrelea.htm) and the Form 10-Q for the quarter ended March 31, 2024 (https://www.sec.gov/Archives/edgar/data/318154/000031815424000020/amgn-20240331.htm) do not contain the word KANJINTI at all (case-insensitive text search of each document).",
+  "search_log": [
+    "Listed every filing for Amgen Inc. (CIK 0000318154) from data.sec.gov/submissions (recent block plus older 'files' pages), no form filter at listing time; selected forms starting '8-K' (8-K and 8-K/A) carrying Item 2.02 and filed 2010-01-01 or later (68 filings), resolved each filing's exhibits from its index.json and kept the non-primary .htm exhibit (Exhibit 99.1; Exhibit 99.2 reconciliation exhibits dropped); also fetched every 10-Q, 10-K, 10-Q/A and 10-K/A primary document filed 2010-04-01 or later.",
+    "Each release's HTML table rows were parsed; the product row was located by a regex anchored on the brand at the start of the row (so a combined 'XGEVA / Prolia' row or a regional '- U.S.' row is not taken); the quarter of a release is the calendar quarter before its filing month; the first matching row in a release is the quarter table and the second (Q4 releases) the full-year table.",
+    "KANJINTI is first on its own line in the fourth-quarter 2019 release; 2018Q4 and 2019Q1-2019Q3 are the prior-year TOTAL columns of the fourth-quarter 2019 and first- to third-quarter 2020 releases.",
+    "Four quarters vs the full-year TOTAL line of each fourth-quarter release: 2019: 226 vs FY 226; 2020: 567 vs FY 567; 2021: 572 vs FY 572; 2022: 316 vs FY 316; 2023: 159 vs FY 159. 13 current-quarter rows compared with the prior-year TOTAL column of the following year's release: all equal."
+  ]
+}

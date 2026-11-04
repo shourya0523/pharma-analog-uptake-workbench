@@ -1,0 +1,36 @@
+{
+  "drug_name": "Prolia",
+  "generic_name": "denosumab",
+  "manufacturer": "Amgen",
+  "benchmark_identity": "amgen_prolia_worldwide_reported",
+  "therapeutic_area": "GI / Liver / Women's Health / Urology",
+  "indication_area": "Postmenopausal osteoporosis and bone loss (bone health)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection, 60 mg/mL prefilled syringe",
+  "route_of_administration": "subcutaneous",
+  "moa": "RANK ligand inhibitor (monoclonal antibody)",
+  "moa_class": "rankl_inhibitor",
+  "first_approval_year": 2010,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=125320",
+    "quote": "06/01/2010 ORIG-1 Approval (BLA 125320, PROLIA DENOSUMAB 60MG/ML INJECTABLE; SUBCUTANEOUS)"
+  },
+  "launch_quarter": "2010Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/318154/000095012310074870/v56588e10vq.htm",
+    "quote": "On June 1, 2010, the FDA approved Prolia \u2122 for the treatment of postmenopausal women with osteoporosis at high risk for fracture, defined as a history of osteoporotic fracture, or multiple risk factors for fracture, or patients who have failed or are intolerant to other available osteoporosis therapy."
+  },
+  "commercial_start_quarter": "2010Q2",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "Listed every filing for Amgen Inc. (CIK 0000318154) from data.sec.gov/submissions (recent block plus older 'files' pages), no form filter at listing time; selected forms starting '8-K' (8-K and 8-K/A) carrying Item 2.02 and filed 2010-01-01 or later (68 filings), resolved each filing's exhibits from its index.json and kept the non-primary .htm exhibit (Exhibit 99.1; Exhibit 99.2 reconciliation exhibits dropped); also fetched every 10-Q, 10-K, 10-Q/A and 10-K/A primary document filed 2010-04-01 or later.",
+    "Each release's HTML table rows were parsed; the product row was located by a regex anchored on the brand at the start of the row (so a combined 'XGEVA / Prolia' row or a regional '- U.S.' row is not taken); the quarter of a release is the calendar quarter before its filing month; the first matching row in a release is the quarter table and the second (Q4 releases) the full-year table.",
+    "Prolia worldwide 2010Q2-2011Q3 is read from the 'Prolia' line of Amgen's 10-Q product sales tables (the releases of that period print only 'Prolia - U.S.' and 'Prolia - International'); 2010Q4 is the 10-K 2010 full-year 33 less the Q3 2010 10-Q nine-month 13; 2011Q4 and 2012Q1 come from the prior-year TOTAL columns of the fourth-quarter 2012 and first-quarter 2013 releases (the 10-K 2011 and 2012 10-Qs print regional rows only); the 10-K 2012 'Total Prolia' line prints 2011 as 203 = 27+44+51+81.",
+    "The Q2 2010 10-Q is the first filing with a Prolia product-sales line (3); the Q1 2010 10-Q has none.",
+    "Four quarters vs the full-year TOTAL line of each fourth-quarter release: 2012: 472 vs FY 472; 2013: 744 vs FY 744; 2014: 1030 vs FY 1030; 2015: 1312 vs FY 1312; 2016: 1635 vs FY 1635; 2017: 1968 vs FY 1968; 2018: 2291 vs FY 2291; 2019: 2672 vs FY 2672; 2020: 2763 vs FY 2763; 2021: 3248 vs FY 3248; 2022: 3628 vs FY 3628; 2023: 4048 vs FY 4048; 2024: 4374 vs FY 4374; 2025: 4414 vs FY 4414. 56 current-quarter rows compared with the prior-year TOTAL column of the following year's release: all equal."
+  ]
+}

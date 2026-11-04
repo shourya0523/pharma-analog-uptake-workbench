@@ -1470,6 +1470,31 @@
   "ticker": "ABBV",
   "generic_name": "glecaprevir/pibrentasvir",
   "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 95.0,
+    "gold_id": "abbvie-mavyret-worldwide-reported-2017q3"
+   },
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": 395.0,
+    "gold_id": "abbvie-mavyret-worldwide-reported-2017q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Mavyret",
+  "manufacturer": "AbbVie",
+  "ticker": "ABBV",
+  "generic_name": "glecaprevir/pibrentasvir",
+  "options": {
    "earnings_since": "2018-04-05",
    "earnings_until": "2019-05-05",
    "openfda": true,
@@ -1477,6 +1502,16 @@
   },
   "source": "seed/gold/quarterly_revenue.jsonl",
   "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 848.0,
+    "gold_id": "abbvie-mavyret-worldwide-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 932.0,
+    "gold_id": "abbvie-mavyret-worldwide-reported-2018q2"
+   },
    {
     "period": "2018Q3",
     "value_normalized_usd_millions": 839.0,
@@ -2770,6 +2805,31 @@
   "ticker": "ABBV",
   "generic_name": "venetoclax",
   "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 33.0,
+    "gold_id": "abbvie-venclexta-worldwide-reported-2017q3"
+   },
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": 44.0,
+    "gold_id": "abbvie-venclexta-worldwide-reported-2017q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Venclexta",
+  "manufacturer": "AbbVie",
+  "ticker": "ABBV",
+  "generic_name": "venetoclax",
+  "options": {
    "earnings_since": "2018-04-05",
    "earnings_until": "2019-05-05",
    "openfda": true,
@@ -2777,6 +2837,16 @@
   },
   "source": "seed/gold/quarterly_revenue.jsonl",
   "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 59.0,
+    "gold_id": "abbvie-venclexta-worldwide-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 65.0,
+    "gold_id": "abbvie-venclexta-worldwide-reported-2018q2"
+   },
    {
     "period": "2018Q3",
     "value_normalized_usd_millions": 96.0,
@@ -10985,6 +11055,561 @@
   ]
  },
  {
+  "drug_name": "Evenity",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "romosozumab-aqqg",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q1",
+    "value_normalized_usd_millions": 17.0,
+    "gold_id": "amgen-evenity-worldwide-reported-2019q1"
+   },
+   {
+    "period": "2019Q2",
+    "value_normalized_usd_millions": 28.0,
+    "gold_id": "amgen-evenity-worldwide-reported-2019q2"
+   },
+   {
+    "period": "2019Q3",
+    "value_normalized_usd_millions": 59.0,
+    "gold_id": "amgen-evenity-worldwide-reported-2019q3"
+   },
+   {
+    "period": "2019Q4",
+    "value_normalized_usd_millions": 85.0,
+    "gold_id": "amgen-evenity-worldwide-reported-2019q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Evenity",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "romosozumab-aqqg",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 100.0,
+    "gold_id": "amgen-evenity-worldwide-reported-2020q1"
+   },
+   {
+    "period": "2020Q2",
+    "value_normalized_usd_millions": 101.0,
+    "gold_id": "amgen-evenity-worldwide-reported-2020q2"
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": 59.0,
+    "gold_id": "amgen-evenity-worldwide-reported-2020q3"
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": 90.0,
+    "gold_id": "amgen-evenity-worldwide-reported-2020q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Evenity",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "romosozumab-aqqg",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 107.0,
+    "gold_id": "amgen-evenity-worldwide-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 131.0,
+    "gold_id": "amgen-evenity-worldwide-reported-2021q2"
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": 149.0,
+    "gold_id": "amgen-evenity-worldwide-reported-2021q3"
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": 143.0,
+    "gold_id": "amgen-evenity-worldwide-reported-2021q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Evenity",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "romosozumab-aqqg",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 170.0,
+    "gold_id": "amgen-evenity-worldwide-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 191.0,
+    "gold_id": "amgen-evenity-worldwide-reported-2022q2"
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": 201.0,
+    "gold_id": "amgen-evenity-worldwide-reported-2022q3"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 225.0,
+    "gold_id": "amgen-evenity-worldwide-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Evenity",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "romosozumab-aqqg",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 254.0,
+    "gold_id": "amgen-evenity-worldwide-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 281.0,
+    "gold_id": "amgen-evenity-worldwide-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 307.0,
+    "gold_id": "amgen-evenity-worldwide-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 318.0,
+    "gold_id": "amgen-evenity-worldwide-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Evenity",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "romosozumab-aqqg",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 342.0,
+    "gold_id": "amgen-evenity-worldwide-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 391.0,
+    "gold_id": "amgen-evenity-worldwide-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 399.0,
+    "gold_id": "amgen-evenity-worldwide-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 431.0,
+    "gold_id": "amgen-evenity-worldwide-reported-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Evenity",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "romosozumab-aqqg",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 442.0,
+    "gold_id": "amgen-evenity-worldwide-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 518.0,
+    "gold_id": "amgen-evenity-worldwide-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 541.0,
+    "gold_id": "amgen-evenity-worldwide-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 599.0,
+    "gold_id": "amgen-evenity-worldwide-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Evenity",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "romosozumab-aqqg",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 562.0,
+    "gold_id": "amgen-evenity-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 714.0,
+    "gold_id": "amgen-evenity-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Imdelltra",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "tarlatamab-dlle",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 12.0,
+    "gold_id": "amgen-imdelltra-worldwide-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 36.0,
+    "gold_id": "amgen-imdelltra-worldwide-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 67.0,
+    "gold_id": "amgen-imdelltra-worldwide-reported-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Imdelltra",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "tarlatamab-dlle",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 81.0,
+    "gold_id": "amgen-imdelltra-worldwide-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 134.0,
+    "gold_id": "amgen-imdelltra-worldwide-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 178.0,
+    "gold_id": "amgen-imdelltra-worldwide-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 234.0,
+    "gold_id": "amgen-imdelltra-worldwide-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Imdelltra",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "tarlatamab-dlle",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 258.0,
+    "gold_id": "amgen-imdelltra-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 288.0,
+    "gold_id": "amgen-imdelltra-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Kanjinti",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "trastuzumab-anns",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": 23.0,
+    "gold_id": "amgen-kanjinti-worldwide-reported-2018q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Kanjinti",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "trastuzumab-anns",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q1",
+    "value_normalized_usd_millions": 24.0,
+    "gold_id": "amgen-kanjinti-worldwide-reported-2019q1"
+   },
+   {
+    "period": "2019Q2",
+    "value_normalized_usd_millions": 30.0,
+    "gold_id": "amgen-kanjinti-worldwide-reported-2019q2"
+   },
+   {
+    "period": "2019Q3",
+    "value_normalized_usd_millions": 69.0,
+    "gold_id": "amgen-kanjinti-worldwide-reported-2019q3"
+   },
+   {
+    "period": "2019Q4",
+    "value_normalized_usd_millions": 103.0,
+    "gold_id": "amgen-kanjinti-worldwide-reported-2019q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Kanjinti",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "trastuzumab-anns",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 119.0,
+    "gold_id": "amgen-kanjinti-worldwide-reported-2020q1"
+   },
+   {
+    "period": "2020Q2",
+    "value_normalized_usd_millions": 123.0,
+    "gold_id": "amgen-kanjinti-worldwide-reported-2020q2"
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": 167.0,
+    "gold_id": "amgen-kanjinti-worldwide-reported-2020q3"
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": 158.0,
+    "gold_id": "amgen-kanjinti-worldwide-reported-2020q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Kanjinti",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "trastuzumab-anns",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 161.0,
+    "gold_id": "amgen-kanjinti-worldwide-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 156.0,
+    "gold_id": "amgen-kanjinti-worldwide-reported-2021q2"
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": 116.0,
+    "gold_id": "amgen-kanjinti-worldwide-reported-2021q3"
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": 139.0,
+    "gold_id": "amgen-kanjinti-worldwide-reported-2021q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Kanjinti",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "trastuzumab-anns",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 96.0,
+    "gold_id": "amgen-kanjinti-worldwide-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 85.0,
+    "gold_id": "amgen-kanjinti-worldwide-reported-2022q2"
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": 72.0,
+    "gold_id": "amgen-kanjinti-worldwide-reported-2022q3"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 63.0,
+    "gold_id": "amgen-kanjinti-worldwide-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Kanjinti",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "trastuzumab-anns",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 47.0,
+    "gold_id": "amgen-kanjinti-worldwide-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 50.0,
+    "gold_id": "amgen-kanjinti-worldwide-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 20.0,
+    "gold_id": "amgen-kanjinti-worldwide-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 42.0,
+    "gold_id": "amgen-kanjinti-worldwide-reported-2023q4"
+   }
+  ]
+ },
+ {
   "drug_name": "Kyprolis",
   "manufacturer": "Amgen",
   "ticker": "AMGN",
@@ -11621,6 +12246,266 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 111.0,
     "gold_id": "amgen-lumakras-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Mvasi",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "bevacizumab-awwb",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q3",
+    "value_normalized_usd_millions": 43.0,
+    "gold_id": "amgen-mvasi-worldwide-reported-2019q3"
+   },
+   {
+    "period": "2019Q4",
+    "value_normalized_usd_millions": 84.0,
+    "gold_id": "amgen-mvasi-worldwide-reported-2019q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Mvasi",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "bevacizumab-awwb",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 115.0,
+    "gold_id": "amgen-mvasi-worldwide-reported-2020q1"
+   },
+   {
+    "period": "2020Q2",
+    "value_normalized_usd_millions": 172.0,
+    "gold_id": "amgen-mvasi-worldwide-reported-2020q2"
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": 231.0,
+    "gold_id": "amgen-mvasi-worldwide-reported-2020q3"
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": 280.0,
+    "gold_id": "amgen-mvasi-worldwide-reported-2020q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Mvasi",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "bevacizumab-awwb",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 294.0,
+    "gold_id": "amgen-mvasi-worldwide-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 294.0,
+    "gold_id": "amgen-mvasi-worldwide-reported-2021q2"
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": 274.0,
+    "gold_id": "amgen-mvasi-worldwide-reported-2021q3"
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": 304.0,
+    "gold_id": "amgen-mvasi-worldwide-reported-2021q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Mvasi",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "bevacizumab-awwb",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 244.0,
+    "gold_id": "amgen-mvasi-worldwide-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 243.0,
+    "gold_id": "amgen-mvasi-worldwide-reported-2022q2"
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": 209.0,
+    "gold_id": "amgen-mvasi-worldwide-reported-2022q3"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 205.0,
+    "gold_id": "amgen-mvasi-worldwide-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Mvasi",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "bevacizumab-awwb",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 202.0,
+    "gold_id": "amgen-mvasi-worldwide-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 197.0,
+    "gold_id": "amgen-mvasi-worldwide-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 213.0,
+    "gold_id": "amgen-mvasi-worldwide-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 188.0,
+    "gold_id": "amgen-mvasi-worldwide-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Mvasi",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "bevacizumab-awwb",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 202.0,
+    "gold_id": "amgen-mvasi-worldwide-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 157.0,
+    "gold_id": "amgen-mvasi-worldwide-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 195.0,
+    "gold_id": "amgen-mvasi-worldwide-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 173.0,
+    "gold_id": "amgen-mvasi-worldwide-reported-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Mvasi",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "bevacizumab-awwb",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 179.0,
+    "gold_id": "amgen-mvasi-worldwide-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 191.0,
+    "gold_id": "amgen-mvasi-worldwide-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 213.0,
+    "gold_id": "amgen-mvasi-worldwide-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 188.0,
+    "gold_id": "amgen-mvasi-worldwide-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Mvasi",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "bevacizumab-awwb",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 150.0,
+    "gold_id": "amgen-mvasi-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 153.0,
+    "gold_id": "amgen-mvasi-worldwide-reported-2026q2"
    }
   ]
  },
@@ -12480,6 +13365,916 @@
   ]
  },
  {
+  "drug_name": "Parsabiv",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "etelcalcetide",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 2.0,
+    "gold_id": "amgen-parsabiv-worldwide-reported-2017q3"
+   },
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": 3.0,
+    "gold_id": "amgen-parsabiv-worldwide-reported-2017q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Parsabiv",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "etelcalcetide",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 41.0,
+    "gold_id": "amgen-parsabiv-worldwide-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 73.0,
+    "gold_id": "amgen-parsabiv-worldwide-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 102.0,
+    "gold_id": "amgen-parsabiv-worldwide-reported-2018q3"
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": 120.0,
+    "gold_id": "amgen-parsabiv-worldwide-reported-2018q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Parsabiv",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "etelcalcetide",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q1",
+    "value_normalized_usd_millions": 126.0,
+    "gold_id": "amgen-parsabiv-worldwide-reported-2019q1"
+   },
+   {
+    "period": "2019Q2",
+    "value_normalized_usd_millions": 168.0,
+    "gold_id": "amgen-parsabiv-worldwide-reported-2019q2"
+   },
+   {
+    "period": "2019Q3",
+    "value_normalized_usd_millions": 157.0,
+    "gold_id": "amgen-parsabiv-worldwide-reported-2019q3"
+   },
+   {
+    "period": "2019Q4",
+    "value_normalized_usd_millions": 179.0,
+    "gold_id": "amgen-parsabiv-worldwide-reported-2019q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Parsabiv",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "etelcalcetide",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 175.0,
+    "gold_id": "amgen-parsabiv-worldwide-reported-2020q1"
+   },
+   {
+    "period": "2020Q2",
+    "value_normalized_usd_millions": 186.0,
+    "gold_id": "amgen-parsabiv-worldwide-reported-2020q2"
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": 183.0,
+    "gold_id": "amgen-parsabiv-worldwide-reported-2020q3"
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": 172.0,
+    "gold_id": "amgen-parsabiv-worldwide-reported-2020q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Parsabiv",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "etelcalcetide",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 79.0,
+    "gold_id": "amgen-parsabiv-worldwide-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 71.0,
+    "gold_id": "amgen-parsabiv-worldwide-reported-2021q2"
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": 61.0,
+    "gold_id": "amgen-parsabiv-worldwide-reported-2021q3"
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": 69.0,
+    "gold_id": "amgen-parsabiv-worldwide-reported-2021q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Parsabiv",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "etelcalcetide",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 86.0,
+    "gold_id": "amgen-parsabiv-worldwide-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 103.0,
+    "gold_id": "amgen-parsabiv-worldwide-reported-2022q2"
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": 100.0,
+    "gold_id": "amgen-parsabiv-worldwide-reported-2022q3"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 93.0,
+    "gold_id": "amgen-parsabiv-worldwide-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Parsabiv",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "etelcalcetide",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 91.0,
+    "gold_id": "amgen-parsabiv-worldwide-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 87.0,
+    "gold_id": "amgen-parsabiv-worldwide-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 95.0,
+    "gold_id": "amgen-parsabiv-worldwide-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 89.0,
+    "gold_id": "amgen-parsabiv-worldwide-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Parsabiv",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "etelcalcetide",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 105.0,
+    "gold_id": "amgen-parsabiv-worldwide-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 106.0,
+    "gold_id": "amgen-parsabiv-worldwide-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 70.0,
+    "gold_id": "amgen-parsabiv-worldwide-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 75.0,
+    "gold_id": "amgen-parsabiv-worldwide-reported-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Parsabiv",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "etelcalcetide",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 88.0,
+    "gold_id": "amgen-parsabiv-worldwide-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 92.0,
+    "gold_id": "amgen-parsabiv-worldwide-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 84.0,
+    "gold_id": "amgen-parsabiv-worldwide-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 89.0,
+    "gold_id": "amgen-parsabiv-worldwide-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Parsabiv",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "etelcalcetide",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 87.0,
+    "gold_id": "amgen-parsabiv-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 101.0,
+    "gold_id": "amgen-parsabiv-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Prolia",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "denosumab",
+  "options": {
+   "earnings_since": "2010-04-05",
+   "earnings_until": "2011-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2010Q2",
+    "value_normalized_usd_millions": 3.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2010q2"
+   },
+   {
+    "period": "2010Q3",
+    "value_normalized_usd_millions": 10.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2010q3"
+   },
+   {
+    "period": "2010Q4",
+    "value_normalized_usd_millions": 20.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2010q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Prolia",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "denosumab",
+  "options": {
+   "earnings_since": "2011-04-05",
+   "earnings_until": "2012-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2011Q1",
+    "value_normalized_usd_millions": 27.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2011q1"
+   },
+   {
+    "period": "2011Q2",
+    "value_normalized_usd_millions": 44.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2011q2"
+   },
+   {
+    "period": "2011Q3",
+    "value_normalized_usd_millions": 51.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2011q3"
+   },
+   {
+    "period": "2011Q4",
+    "value_normalized_usd_millions": 81.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2011q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Prolia",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "denosumab",
+  "options": {
+   "earnings_since": "2012-04-05",
+   "earnings_until": "2013-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2012Q1",
+    "value_normalized_usd_millions": 88.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2012q1"
+   },
+   {
+    "period": "2012Q2",
+    "value_normalized_usd_millions": 120.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2012q2"
+   },
+   {
+    "period": "2012Q3",
+    "value_normalized_usd_millions": 110.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2012q3"
+   },
+   {
+    "period": "2012Q4",
+    "value_normalized_usd_millions": 154.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2012q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Prolia",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "denosumab",
+  "options": {
+   "earnings_since": "2013-04-05",
+   "earnings_until": "2014-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2013Q1",
+    "value_normalized_usd_millions": 142.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2013q1"
+   },
+   {
+    "period": "2013Q2",
+    "value_normalized_usd_millions": 188.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2013q2"
+   },
+   {
+    "period": "2013Q3",
+    "value_normalized_usd_millions": 178.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2013q3"
+   },
+   {
+    "period": "2013Q4",
+    "value_normalized_usd_millions": 236.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2013q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Prolia",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "denosumab",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q1",
+    "value_normalized_usd_millions": 196.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2014q1"
+   },
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": 264.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2014q2"
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 255.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2014q3"
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": 315.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2014q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Prolia",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "denosumab",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q1",
+    "value_normalized_usd_millions": 272.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2015q1"
+   },
+   {
+    "period": "2015Q2",
+    "value_normalized_usd_millions": 340.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2015q2"
+   },
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 320.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2015q3"
+   },
+   {
+    "period": "2015Q4",
+    "value_normalized_usd_millions": 380.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2015q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Prolia",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "denosumab",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 352.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 441.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 379.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 463.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2016q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Prolia",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "denosumab",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 425.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 505.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 464.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2017q3"
+   },
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": 574.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2017q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Prolia",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "denosumab",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 494.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 610.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 532.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2018q3"
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": 655.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2018q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Prolia",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "denosumab",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q1",
+    "value_normalized_usd_millions": 592.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2019q1"
+   },
+   {
+    "period": "2019Q2",
+    "value_normalized_usd_millions": 698.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2019q2"
+   },
+   {
+    "period": "2019Q3",
+    "value_normalized_usd_millions": 630.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2019q3"
+   },
+   {
+    "period": "2019Q4",
+    "value_normalized_usd_millions": 752.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2019q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Prolia",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "denosumab",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 654.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2020q1"
+   },
+   {
+    "period": "2020Q2",
+    "value_normalized_usd_millions": 659.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2020q2"
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": 701.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2020q3"
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": 749.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2020q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Prolia",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "denosumab",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 758.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 814.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2021q2"
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": 803.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2021q3"
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": 873.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2021q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Prolia",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "denosumab",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 852.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 922.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2022q2"
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": 862.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2022q3"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 992.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Prolia",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "denosumab",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 927.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 1028.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 986.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 1107.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Prolia",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "denosumab",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 999.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 1165.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 1045.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 1165.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Prolia",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "denosumab",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 1099.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 1122.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 1139.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 1054.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Prolia",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "denosumab",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 727.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 759.0,
+    "gold_id": "amgen-prolia-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Repatha",
   "manufacturer": "Amgen",
   "ticker": "AMGN",
@@ -13006,26 +14801,6 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 143.0,
     "gold_id": "amgen-tavneos-us-reported-2026q2"
-   }
-  ]
- },
- {
-  "drug_name": "Uplizna",
-  "manufacturer": "Amgen",
-  "ticker": "AMGN",
-  "generic_name": "inebilizumab",
-  "options": {
-   "earnings_since": "2023-04-05",
-   "earnings_until": "2024-05-04",
-   "openfda": true,
-   "product_metadata": true
-  },
-  "source": "seed/gold/quarterly_revenue.jsonl",
-  "expect": [
-   {
-    "period": "2023Q4",
-    "value_normalized_usd_millions": 65.0,
-    "gold_id": "amgen-uplizna-worldwide-reported-2023q4"
    }
   ]
  },
@@ -13831,6 +15606,576 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 167.0,
     "gold_id": "amgen-vectibix-us-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Xgeva",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "denosumab",
+  "options": {
+   "earnings_since": "2010-04-05",
+   "earnings_until": "2011-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2010Q4",
+    "value_normalized_usd_millions": 8.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2010q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Xgeva",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "denosumab",
+  "options": {
+   "earnings_since": "2011-04-05",
+   "earnings_until": "2012-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2011Q1",
+    "value_normalized_usd_millions": 42.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2011q1"
+   },
+   {
+    "period": "2011Q2",
+    "value_normalized_usd_millions": 73.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2011q2"
+   },
+   {
+    "period": "2011Q3",
+    "value_normalized_usd_millions": 102.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2011q3"
+   },
+   {
+    "period": "2011Q4",
+    "value_normalized_usd_millions": 134.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2011q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Xgeva",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "denosumab",
+  "options": {
+   "earnings_since": "2012-04-05",
+   "earnings_until": "2013-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2012Q1",
+    "value_normalized_usd_millions": 153.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2012q1"
+   },
+   {
+    "period": "2012Q2",
+    "value_normalized_usd_millions": 179.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2012q2"
+   },
+   {
+    "period": "2012Q3",
+    "value_normalized_usd_millions": 201.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2012q3"
+   },
+   {
+    "period": "2012Q4",
+    "value_normalized_usd_millions": 215.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2012q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Xgeva",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "denosumab",
+  "options": {
+   "earnings_since": "2013-04-05",
+   "earnings_until": "2014-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2013Q1",
+    "value_normalized_usd_millions": 223.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2013q1"
+   },
+   {
+    "period": "2013Q2",
+    "value_normalized_usd_millions": 249.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2013q2"
+   },
+   {
+    "period": "2013Q3",
+    "value_normalized_usd_millions": 261.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2013q3"
+   },
+   {
+    "period": "2013Q4",
+    "value_normalized_usd_millions": 286.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2013q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Xgeva",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "denosumab",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q1",
+    "value_normalized_usd_millions": 279.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2014q1"
+   },
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": 299.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2014q2"
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 318.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2014q3"
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": 325.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2014q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Xgeva",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "denosumab",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q1",
+    "value_normalized_usd_millions": 340.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2015q1"
+   },
+   {
+    "period": "2015Q2",
+    "value_normalized_usd_millions": 331.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2015q2"
+   },
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 378.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2015q3"
+   },
+   {
+    "period": "2015Q4",
+    "value_normalized_usd_millions": 356.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2015q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Xgeva",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "denosumab",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 378.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 381.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 394.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 376.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2016q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Xgeva",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "denosumab",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 402.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 395.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 387.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2017q3"
+   },
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": 391.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2017q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Xgeva",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "denosumab",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 445.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 452.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 433.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2018q3"
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": 456.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2018q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Xgeva",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "denosumab",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q1",
+    "value_normalized_usd_millions": 471.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2019q1"
+   },
+   {
+    "period": "2019Q2",
+    "value_normalized_usd_millions": 499.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2019q2"
+   },
+   {
+    "period": "2019Q3",
+    "value_normalized_usd_millions": 476.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2019q3"
+   },
+   {
+    "period": "2019Q4",
+    "value_normalized_usd_millions": 489.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2019q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Xgeva",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "denosumab",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 481.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2020q1"
+   },
+   {
+    "period": "2020Q2",
+    "value_normalized_usd_millions": 435.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2020q2"
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": 481.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2020q3"
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": 502.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2020q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Xgeva",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "denosumab",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 468.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 488.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2021q2"
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": 517.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2021q3"
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": 545.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2021q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Xgeva",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "denosumab",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 502.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 533.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2022q2"
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": 495.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2022q3"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 484.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Xgeva",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "denosumab",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 536.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 530.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 519.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 527.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Xgeva",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "denosumab",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 561.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 562.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 541.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 561.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Xgeva",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "denosumab",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 566.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 532.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 539.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 447.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Xgeva",
+  "manufacturer": "Amgen",
+  "ticker": "AMGN",
+  "generic_name": "denosumab",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 411.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 352.0,
+    "gold_id": "amgen-xgeva-worldwide-reported-2026q2"
    }
   ]
  },
@@ -33981,6 +36326,106 @@
     "period": "2002Q4",
     "value_normalized_usd_millions": 256.267,
     "gold_id": "biogen-avonex-worldwide-reported-2002q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nurtec ODT",
+  "manufacturer": "Biohaven",
+  "ticker": null,
+  "generic_name": "rimegepant",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 1.151,
+    "gold_id": "pfizer-nurtec-odt-worldwide-reported-2020q1"
+   },
+   {
+    "period": "2020Q2",
+    "value_normalized_usd_millions": 9.698,
+    "gold_id": "pfizer-nurtec-odt-worldwide-reported-2020q2"
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": 17.664,
+    "gold_id": "pfizer-nurtec-odt-worldwide-reported-2020q3"
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": 35.114,
+    "gold_id": "pfizer-nurtec-odt-worldwide-reported-2020q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nurtec ODT",
+  "manufacturer": "Biohaven",
+  "ticker": null,
+  "generic_name": "rimegepant",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 43.823,
+    "gold_id": "pfizer-nurtec-odt-worldwide-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 92.933,
+    "gold_id": "pfizer-nurtec-odt-worldwide-reported-2021q2"
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": 135.74,
+    "gold_id": "pfizer-nurtec-odt-worldwide-reported-2021q3"
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": 190.013,
+    "gold_id": "pfizer-nurtec-odt-worldwide-reported-2021q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Nurtec ODT",
+  "manufacturer": "Biohaven",
+  "ticker": null,
+  "generic_name": "rimegepant",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 123.59,
+    "gold_id": "pfizer-nurtec-odt-worldwide-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 193.954,
+    "gold_id": "pfizer-nurtec-odt-worldwide-reported-2022q2"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 211.0,
+    "gold_id": "pfizer-nurtec-odt-worldwide-reported-2022q4"
    }
   ]
  },
@@ -67803,6 +70248,11 @@
   "source": "seed/gold/quarterly_revenue.jsonl",
   "expect": [
    {
+    "period": "2012Q3",
+    "value_normalized_usd_millions": 17.511,
+    "gold_id": "gilead-stribild-worldwide-reported-2012q3"
+   },
+   {
     "period": "2012Q4",
     "value_normalized_usd_millions": 40.025,
     "gold_id": "gilead-stribild-worldwide-reported-2012q4"
@@ -70781,6 +73231,256 @@
     "period": "2022Q4",
     "value_normalized_usd_millions": 72.0,
     "gold_id": "pfizer-gbt-oxbryta-us-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Uplizna",
+  "manufacturer": "Horizon Therapeutics",
+  "ticker": null,
+  "generic_name": "inebilizumab",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 14.5,
+    "gold_id": "amgen-uplizna-worldwide-reported-2021q2"
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": 18.7,
+    "gold_id": "amgen-uplizna-worldwide-reported-2021q3"
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": 25.8,
+    "gold_id": "amgen-uplizna-worldwide-reported-2021q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Uplizna",
+  "manufacturer": "Horizon Therapeutics",
+  "ticker": null,
+  "generic_name": "inebilizumab",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 30.5,
+    "gold_id": "amgen-uplizna-worldwide-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 38.6,
+    "gold_id": "amgen-uplizna-worldwide-reported-2022q2"
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": 43.8,
+    "gold_id": "amgen-uplizna-worldwide-reported-2022q3"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 41.8,
+    "gold_id": "amgen-uplizna-worldwide-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Uplizna",
+  "manufacturer": "Horizon Therapeutics",
+  "ticker": null,
+  "generic_name": "inebilizumab",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 53.8,
+    "gold_id": "amgen-uplizna-worldwide-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 68.1,
+    "gold_id": "amgen-uplizna-worldwide-reported-2023q2"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 65.0,
+    "gold_id": "amgen-uplizna-worldwide-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Enbrel",
+  "manufacturer": "Immunex",
+  "ticker": null,
+  "generic_name": "etanercept",
+  "options": {
+   "earnings_since": "1998-04-05",
+   "earnings_until": "1999-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "1998Q4",
+    "value_normalized_usd_millions": 12.7,
+    "gold_id": "amgen-enbrel-us-canada-reported-1998q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Enbrel",
+  "manufacturer": "Immunex",
+  "ticker": null,
+  "generic_name": "etanercept",
+  "options": {
+   "earnings_since": "1999-04-05",
+   "earnings_until": "2000-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "1999Q1",
+    "value_normalized_usd_millions": 59.7,
+    "gold_id": "amgen-enbrel-us-canada-reported-1999q1"
+   },
+   {
+    "period": "1999Q2",
+    "value_normalized_usd_millions": 86.9,
+    "gold_id": "amgen-enbrel-us-canada-reported-1999q2"
+   },
+   {
+    "period": "1999Q3",
+    "value_normalized_usd_millions": 102.0,
+    "gold_id": "amgen-enbrel-us-canada-reported-1999q3"
+   },
+   {
+    "period": "1999Q4",
+    "value_normalized_usd_millions": 118.3,
+    "gold_id": "amgen-enbrel-us-canada-reported-1999q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Enbrel",
+  "manufacturer": "Immunex",
+  "ticker": null,
+  "generic_name": "etanercept",
+  "options": {
+   "earnings_since": "2000-04-05",
+   "earnings_until": "2001-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2000Q1",
+    "value_normalized_usd_millions": 131.1,
+    "gold_id": "amgen-enbrel-us-canada-reported-2000q1"
+   },
+   {
+    "period": "2000Q2",
+    "value_normalized_usd_millions": 155.1,
+    "gold_id": "amgen-enbrel-us-canada-reported-2000q2"
+   },
+   {
+    "period": "2000Q3",
+    "value_normalized_usd_millions": 172.1,
+    "gold_id": "amgen-enbrel-us-canada-reported-2000q3"
+   },
+   {
+    "period": "2000Q4",
+    "value_normalized_usd_millions": 194.1,
+    "gold_id": "amgen-enbrel-us-canada-reported-2000q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Enbrel",
+  "manufacturer": "Immunex",
+  "ticker": null,
+  "generic_name": "etanercept",
+  "options": {
+   "earnings_since": "2001-04-05",
+   "earnings_until": "2002-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2001Q1",
+    "value_normalized_usd_millions": 164.9,
+    "gold_id": "amgen-enbrel-us-canada-reported-2001q1"
+   },
+   {
+    "period": "2001Q2",
+    "value_normalized_usd_millions": 182.6,
+    "gold_id": "amgen-enbrel-us-canada-reported-2001q2"
+   },
+   {
+    "period": "2001Q3",
+    "value_normalized_usd_millions": 198.1,
+    "gold_id": "amgen-enbrel-us-canada-reported-2001q3"
+   },
+   {
+    "period": "2001Q4",
+    "value_normalized_usd_millions": 216.3,
+    "gold_id": "amgen-enbrel-us-canada-reported-2001q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Enbrel",
+  "manufacturer": "Immunex",
+  "ticker": null,
+  "generic_name": "etanercept",
+  "options": {
+   "earnings_since": "2002-04-05",
+   "earnings_until": "2003-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2002Q1",
+    "value_normalized_usd_millions": 216.5,
+    "gold_id": "amgen-enbrel-us-canada-reported-2002q1"
+   },
+   {
+    "period": "2002Q2",
+    "value_normalized_usd_millions": 192.0,
+    "gold_id": "amgen-enbrel-us-canada-reported-2002q2"
+   },
+   {
+    "period": "2002Q4",
+    "value_normalized_usd_millions": 204.0,
+    "gold_id": "amgen-enbrel-us-canada-reported-2002q4"
    }
   ]
  },
@@ -75265,6 +77965,41 @@
   "ticker": "JNJ",
   "generic_name": "paliperidone palmitate",
   "options": {
+   "earnings_since": "2011-04-05",
+   "earnings_until": "2012-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2011Q1",
+    "value_normalized_usd_millions": 65.0,
+    "gold_id": "jnj-invega-sustenna-worldwide-reported-2011q1"
+   },
+   {
+    "period": "2011Q2",
+    "value_normalized_usd_millions": 77.0,
+    "gold_id": "jnj-invega-sustenna-worldwide-reported-2011q2"
+   },
+   {
+    "period": "2011Q3",
+    "value_normalized_usd_millions": 101.0,
+    "gold_id": "jnj-invega-sustenna-worldwide-reported-2011q3"
+   },
+   {
+    "period": "2011Q4",
+    "value_normalized_usd_millions": 135.0,
+    "gold_id": "jnj-invega-sustenna-worldwide-reported-2011q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Invega Sustenna",
+  "manufacturer": "Johnson & Johnson",
+  "ticker": "JNJ",
+  "generic_name": "paliperidone palmitate",
+  "options": {
    "earnings_since": "2012-04-05",
    "earnings_until": "2013-05-05",
    "openfda": true,
@@ -78070,6 +80805,61 @@
   "ticker": "JNJ",
   "generic_name": "golimumab",
   "options": {
+   "earnings_since": "2010-04-05",
+   "earnings_until": "2011-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2010Q4",
+    "value_normalized_usd_millions": 65.0,
+    "gold_id": "jnj-simponi-worldwide-reported-2010q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Simponi",
+  "manufacturer": "Johnson & Johnson",
+  "ticker": "JNJ",
+  "generic_name": "golimumab",
+  "options": {
+   "earnings_since": "2011-04-05",
+   "earnings_until": "2012-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2011Q1",
+    "value_normalized_usd_millions": 95.0,
+    "gold_id": "jnj-simponi-worldwide-reported-2011q1"
+   },
+   {
+    "period": "2011Q2",
+    "value_normalized_usd_millions": 67.0,
+    "gold_id": "jnj-simponi-worldwide-reported-2011q2"
+   },
+   {
+    "period": "2011Q3",
+    "value_normalized_usd_millions": 129.0,
+    "gold_id": "jnj-simponi-worldwide-reported-2011q3"
+   },
+   {
+    "period": "2011Q4",
+    "value_normalized_usd_millions": 119.0,
+    "gold_id": "jnj-simponi-worldwide-reported-2011q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Simponi",
+  "manufacturer": "Johnson & Johnson",
+  "ticker": "JNJ",
+  "generic_name": "golimumab",
+  "options": {
    "earnings_since": "2012-04-05",
    "earnings_until": "2013-05-05",
    "openfda": true,
@@ -78741,6 +81531,61 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 584.0,
     "gold_id": "jnj-spravato-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Stelara",
+  "manufacturer": "Johnson & Johnson",
+  "ticker": "JNJ",
+  "generic_name": "ustekinumab",
+  "options": {
+   "earnings_since": "2010-04-05",
+   "earnings_until": "2011-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2010Q4",
+    "value_normalized_usd_millions": 120.0,
+    "gold_id": "jnj-stelara-worldwide-reported-2010q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Stelara",
+  "manufacturer": "Johnson & Johnson",
+  "ticker": "JNJ",
+  "generic_name": "ustekinumab",
+  "options": {
+   "earnings_since": "2011-04-05",
+   "earnings_until": "2012-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2011Q1",
+    "value_normalized_usd_millions": 166.0,
+    "gold_id": "jnj-stelara-worldwide-reported-2011q1"
+   },
+   {
+    "period": "2011Q2",
+    "value_normalized_usd_millions": 176.0,
+    "gold_id": "jnj-stelara-worldwide-reported-2011q2"
+   },
+   {
+    "period": "2011Q3",
+    "value_normalized_usd_millions": 189.0,
+    "gold_id": "jnj-stelara-worldwide-reported-2011q3"
+   },
+   {
+    "period": "2011Q4",
+    "value_normalized_usd_millions": 207.0,
+    "gold_id": "jnj-stelara-worldwide-reported-2011q4"
    }
   ]
  },
@@ -110105,26 +112950,6 @@
   "ticker": "PFE",
   "generic_name": "rimegepant",
   "options": {
-   "earnings_since": "2022-04-05",
-   "earnings_until": "2023-05-05",
-   "openfda": true,
-   "product_metadata": true
-  },
-  "source": "seed/gold/quarterly_revenue.jsonl",
-  "expect": [
-   {
-    "period": "2022Q4",
-    "value_normalized_usd_millions": 211.0,
-    "gold_id": "pfizer-nurtec-odt-worldwide-reported-2022q4"
-   }
-  ]
- },
- {
-  "drug_name": "Nurtec ODT",
-  "manufacturer": "Pfizer",
-  "ticker": "PFE",
-  "generic_name": "rimegepant",
-  "options": {
    "earnings_since": "2023-04-05",
    "earnings_until": "2024-05-04",
    "openfda": true,
@@ -140559,7 +143384,7 @@
    },
    {
     "period": "2019Q4",
-    "value_normalized_usd_millions": 167.457472,
+    "value_normalized_usd_millions": 166.537376,
     "gold_id": "takeda-takhzyro-worldwide-reported-2019q4"
    }
   ]
@@ -140579,22 +143404,22 @@
   "expect": [
    {
     "period": "2020Q1",
-    "value_normalized_usd_millions": 178.091224,
+    "value_normalized_usd_millions": 178.743001,
     "gold_id": "takeda-takhzyro-worldwide-reported-2020q1"
    },
    {
     "period": "2020Q2",
-    "value_normalized_usd_millions": 215.783432,
+    "value_normalized_usd_millions": 216.201977,
     "gold_id": "takeda-takhzyro-worldwide-reported-2020q2"
    },
    {
     "period": "2020Q3",
-    "value_normalized_usd_millions": 193.20717,
+    "value_normalized_usd_millions": 193.178896,
     "gold_id": "takeda-takhzyro-worldwide-reported-2020q3"
    },
    {
     "period": "2020Q4",
-    "value_normalized_usd_millions": 211.537001,
+    "value_normalized_usd_millions": 212.00602,
     "gold_id": "takeda-takhzyro-worldwide-reported-2020q4"
    }
   ]
@@ -140614,22 +143439,22 @@
   "expect": [
    {
     "period": "2021Q1",
-    "value_normalized_usd_millions": 195.9048,
+    "value_normalized_usd_millions": 196.159099,
     "gold_id": "takeda-takhzyro-worldwide-reported-2021q1"
    },
    {
     "period": "2021Q2",
-    "value_normalized_usd_millions": 233.02359,
+    "value_normalized_usd_millions": 232.740306,
     "gold_id": "takeda-takhzyro-worldwide-reported-2021q2"
    },
    {
     "period": "2021Q3",
-    "value_normalized_usd_millions": 200.776732,
+    "value_normalized_usd_millions": 200.42242,
     "gold_id": "takeda-takhzyro-worldwide-reported-2021q3"
    },
    {
     "period": "2021Q4",
-    "value_normalized_usd_millions": 271.904241,
+    "value_normalized_usd_millions": 271.860244,
     "gold_id": "takeda-takhzyro-worldwide-reported-2021q4"
    }
   ]
@@ -140649,22 +143474,22 @@
   "expect": [
    {
     "period": "2022Q1",
-    "value_normalized_usd_millions": 213.13988,
+    "value_normalized_usd_millions": 213.285984,
     "gold_id": "takeda-takhzyro-worldwide-reported-2022q1"
    },
    {
     "period": "2022Q2",
-    "value_normalized_usd_millions": 262.08628,
+    "value_normalized_usd_millions": 262.463993,
     "gold_id": "takeda-takhzyro-worldwide-reported-2022q2"
    },
    {
     "period": "2022Q3",
-    "value_normalized_usd_millions": 280.439416,
+    "value_normalized_usd_millions": 280.280404,
     "gold_id": "takeda-takhzyro-worldwide-reported-2022q3"
    },
    {
     "period": "2022Q4",
-    "value_normalized_usd_millions": 311.962959,
+    "value_normalized_usd_millions": 311.630481,
     "gold_id": "takeda-takhzyro-worldwide-reported-2022q4"
    }
   ]
@@ -140684,22 +143509,22 @@
   "expect": [
    {
     "period": "2023Q1",
-    "value_normalized_usd_millions": 263.521175,
+    "value_normalized_usd_millions": 263.67219,
     "gold_id": "takeda-takhzyro-worldwide-reported-2023q1"
    },
    {
     "period": "2023Q2",
-    "value_normalized_usd_millions": 300.687128,
+    "value_normalized_usd_millions": 300.898264,
     "gold_id": "takeda-takhzyro-worldwide-reported-2023q2"
    },
    {
     "period": "2023Q3",
-    "value_normalized_usd_millions": 316.882872,
+    "value_normalized_usd_millions": 316.626875,
     "gold_id": "takeda-takhzyro-worldwide-reported-2023q3"
    },
    {
     "period": "2023Q4",
-    "value_normalized_usd_millions": 333.600775,
+    "value_normalized_usd_millions": 333.851145,
     "gold_id": "takeda-takhzyro-worldwide-reported-2023q4"
    }
   ]
@@ -140719,7 +143544,7 @@
   "expect": [
    {
     "period": "2024Q1",
-    "value_normalized_usd_millions": 284.061704,
+    "value_normalized_usd_millions": 284.384807,
     "gold_id": "takeda-takhzyro-worldwide-reported-2024q1"
    },
    {
@@ -140729,12 +143554,12 @@
    },
    {
     "period": "2024Q3",
-    "value_normalized_usd_millions": 368.88445,
+    "value_normalized_usd_millions": 369.172851,
     "gold_id": "takeda-takhzyro-worldwide-reported-2024q3"
    },
    {
     "period": "2024Q4",
-    "value_normalized_usd_millions": 374.03799,
+    "value_normalized_usd_millions": 373.755821,
     "gold_id": "takeda-takhzyro-worldwide-reported-2024q4"
    }
   ]
@@ -140754,7 +143579,7 @@
   "expect": [
    {
     "period": "2025Q1",
-    "value_normalized_usd_millions": 361.556833,
+    "value_normalized_usd_millions": 361.970228,
     "gold_id": "takeda-takhzyro-worldwide-reported-2025q1"
    },
    {
@@ -140764,12 +143589,12 @@
    },
    {
     "period": "2025Q3",
-    "value_normalized_usd_millions": 394.551186,
+    "value_normalized_usd_millions": 394.537628,
     "gold_id": "takeda-takhzyro-worldwide-reported-2025q3"
    },
    {
     "period": "2025Q4",
-    "value_normalized_usd_millions": 372.552978,
+    "value_normalized_usd_millions": 372.565959,
     "gold_id": "takeda-takhzyro-worldwide-reported-2025q4"
    }
   ]
@@ -140789,7 +143614,7 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 339.704885,
+    "value_normalized_usd_millions": 339.220503,
     "gold_id": "takeda-takhzyro-worldwide-reported-2026q1"
    },
    {
@@ -147350,6 +150175,1436 @@
   ]
  },
  {
+  "drug_name": "Incivek",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "telaprevir",
+  "options": {
+   "earnings_since": "2011-04-05",
+   "earnings_until": "2012-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2011Q2",
+    "value_normalized_usd_millions": 74.5,
+    "gold_id": "vertex-incivek-worldwide-reported-2011q2"
+   },
+   {
+    "period": "2011Q3",
+    "value_normalized_usd_millions": 419.6,
+    "gold_id": "vertex-incivek-worldwide-reported-2011q3"
+   },
+   {
+    "period": "2011Q4",
+    "value_normalized_usd_millions": 456.8,
+    "gold_id": "vertex-incivek-worldwide-reported-2011q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Incivek",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "telaprevir",
+  "options": {
+   "earnings_since": "2012-04-05",
+   "earnings_until": "2013-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2012Q1",
+    "value_normalized_usd_millions": 356.927,
+    "gold_id": "vertex-incivek-worldwide-reported-2012q1"
+   },
+   {
+    "period": "2012Q2",
+    "value_normalized_usd_millions": 327.739,
+    "gold_id": "vertex-incivek-worldwide-reported-2012q2"
+   },
+   {
+    "period": "2012Q3",
+    "value_normalized_usd_millions": 254.34,
+    "gold_id": "vertex-incivek-worldwide-reported-2012q3"
+   },
+   {
+    "period": "2012Q4",
+    "value_normalized_usd_millions": 222.8,
+    "gold_id": "vertex-incivek-worldwide-reported-2012q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Incivek",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "telaprevir",
+  "options": {
+   "earnings_since": "2013-04-05",
+   "earnings_until": "2014-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2013Q1",
+    "value_normalized_usd_millions": 205.554,
+    "gold_id": "vertex-incivek-worldwide-reported-2013q1"
+   },
+   {
+    "period": "2013Q2",
+    "value_normalized_usd_millions": 155.816,
+    "gold_id": "vertex-incivek-worldwide-reported-2013q2"
+   },
+   {
+    "period": "2013Q3",
+    "value_normalized_usd_millions": 85.592,
+    "gold_id": "vertex-incivek-worldwide-reported-2013q3"
+   },
+   {
+    "period": "2013Q4",
+    "value_normalized_usd_millions": 19.3,
+    "gold_id": "vertex-incivek-worldwide-reported-2013q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Incivek",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "telaprevir",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q1",
+    "value_normalized_usd_millions": 3.946,
+    "gold_id": "vertex-incivek-worldwide-reported-2014q1"
+   },
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": 9.264,
+    "gold_id": "vertex-incivek-worldwide-reported-2014q2"
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 10.298,
+    "gold_id": "vertex-incivek-worldwide-reported-2014q3"
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": 0.6,
+    "gold_id": "vertex-incivek-worldwide-reported-2014q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Incivek",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "telaprevir",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q1",
+    "value_normalized_usd_millions": 0.701,
+    "gold_id": "vertex-incivek-worldwide-reported-2015q1"
+   },
+   {
+    "period": "2015Q2",
+    "value_normalized_usd_millions": 5.5,
+    "gold_id": "vertex-incivek-worldwide-reported-2015q2"
+   },
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 5.815,
+    "gold_id": "vertex-incivek-worldwide-reported-2015q3"
+   },
+   {
+    "period": "2015Q4",
+    "value_normalized_usd_millions": 5.971,
+    "gold_id": "vertex-incivek-worldwide-reported-2015q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Incivek",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "telaprevir",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 0.773,
+    "gold_id": "vertex-incivek-worldwide-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": -0.08,
+    "gold_id": "vertex-incivek-worldwide-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 0.035,
+    "gold_id": "vertex-incivek-worldwide-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": -0.118,
+    "gold_id": "vertex-incivek-worldwide-reported-2016q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Incivek",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "telaprevir",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 0.046,
+    "gold_id": "vertex-incivek-worldwide-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": -0.052,
+    "gold_id": "vertex-incivek-worldwide-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": -0.002,
+    "gold_id": "vertex-incivek-worldwide-reported-2017q3"
+   },
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2017Q3. The Form 10-Q for the quarter ended September 30, 2017 is the last to print an INCIVEK row ((2) thousand for the quarter). The 10-K for 2017 prints full-year 2017 INCIVEK as '\u2014' although the 2017 10-Q quarters sum to (8) thousand, so no fourth quarter can be derived consistently, and the Form 10-Q for the quarter ended March 31, 2018 (https://www.sec.gov/Archives/edgar/data/875320/000087532018000014/a2018q110-q.htm) has no INCIVEK row. The earnings releases stopped printing INCIVEK after the fourth-quarter 2014 release."
+   }
+  ]
+ },
+ {
+  "drug_name": "Kalydeco",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "ivacaftor",
+  "options": {
+   "earnings_since": "2012-04-05",
+   "earnings_until": "2013-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2012Q1",
+    "value_normalized_usd_millions": 18.448,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2012q1"
+   },
+   {
+    "period": "2012Q2",
+    "value_normalized_usd_millions": 45.534,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2012q2"
+   },
+   {
+    "period": "2012Q3",
+    "value_normalized_usd_millions": 49.161,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2012q3"
+   },
+   {
+    "period": "2012Q4",
+    "value_normalized_usd_millions": 58.5,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2012q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Kalydeco",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "ivacaftor",
+  "options": {
+   "earnings_since": "2013-04-05",
+   "earnings_until": "2014-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2013Q1",
+    "value_normalized_usd_millions": 61.827,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2013q1"
+   },
+   {
+    "period": "2013Q2",
+    "value_normalized_usd_millions": 98.973,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2013q2"
+   },
+   {
+    "period": "2013Q3",
+    "value_normalized_usd_millions": 101.061,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2013q3"
+   },
+   {
+    "period": "2013Q4",
+    "value_normalized_usd_millions": 109.5,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2013q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Kalydeco",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "ivacaftor",
+  "options": {
+   "earnings_since": "2014-04-05",
+   "earnings_until": "2015-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2014Q1",
+    "value_normalized_usd_millions": 99.515,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2014q1"
+   },
+   {
+    "period": "2014Q2",
+    "value_normalized_usd_millions": 113.055,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2014q2"
+   },
+   {
+    "period": "2014Q3",
+    "value_normalized_usd_millions": 126.801,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2014q3"
+   },
+   {
+    "period": "2014Q4",
+    "value_normalized_usd_millions": 124.4,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2014q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Kalydeco",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "ivacaftor",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q1",
+    "value_normalized_usd_millions": 130.174,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2015q1"
+   },
+   {
+    "period": "2015Q2",
+    "value_normalized_usd_millions": 154.888,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2015q2"
+   },
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 165.929,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2015q3"
+   },
+   {
+    "period": "2015Q4",
+    "value_normalized_usd_millions": 181.0,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2015q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Kalydeco",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "ivacaftor",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 170.509,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 180.235,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 175.608,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 177.0,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2016q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Kalydeco",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "ivacaftor",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 185.715,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 189.633,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 213.461,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2017q3"
+   },
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": 256.0,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2017q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Kalydeco",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "ivacaftor",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 249.539,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 253.093,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 245.733,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2018q3"
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": 259.0,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2018q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Kalydeco",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "ivacaftor",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q1",
+    "value_normalized_usd_millions": 243.971,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2019q1"
+   },
+   {
+    "period": "2019Q2",
+    "value_normalized_usd_millions": 262.107,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2019q2"
+   },
+   {
+    "period": "2019Q3",
+    "value_normalized_usd_millions": 249.403,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2019q3"
+   },
+   {
+    "period": "2019Q4",
+    "value_normalized_usd_millions": 235.581,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2019q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Kalydeco",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "ivacaftor",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 212.577,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2020q1"
+   },
+   {
+    "period": "2020Q2",
+    "value_normalized_usd_millions": 203.06,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2020q2"
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": 193.866,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2020q3"
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": 193.0,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2020q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Kalydeco",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "ivacaftor",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 186.342,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 183.288,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2021q2"
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": 162.416,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2021q3"
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": 152.0,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2021q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Kalydeco",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "ivacaftor",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 139.0,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 138.7,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2022q2"
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": 139.4,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2022q3"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 136.0,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Kalydeco",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "ivacaftor",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 125.0,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 125.3,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 112.8,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 112.4,
+    "gold_id": "vertex-kalydeco-worldwide-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Orkambi",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "lumacaftor/ivacaftor",
+  "options": {
+   "earnings_since": "2015-04-05",
+   "earnings_until": "2016-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2015Q3",
+    "value_normalized_usd_millions": 130.767,
+    "gold_id": "vertex-orkambi-worldwide-reported-2015q3"
+   },
+   {
+    "period": "2015Q4",
+    "value_normalized_usd_millions": 220.0,
+    "gold_id": "vertex-orkambi-worldwide-reported-2015q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Orkambi",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "lumacaftor/ivacaftor",
+  "options": {
+   "earnings_since": "2016-04-05",
+   "earnings_until": "2017-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2016Q1",
+    "value_normalized_usd_millions": 223.128,
+    "gold_id": "vertex-orkambi-worldwide-reported-2016q1"
+   },
+   {
+    "period": "2016Q2",
+    "value_normalized_usd_millions": 245.496,
+    "gold_id": "vertex-orkambi-worldwide-reported-2016q2"
+   },
+   {
+    "period": "2016Q3",
+    "value_normalized_usd_millions": 234.046,
+    "gold_id": "vertex-orkambi-worldwide-reported-2016q3"
+   },
+   {
+    "period": "2016Q4",
+    "value_normalized_usd_millions": 277.0,
+    "gold_id": "vertex-orkambi-worldwide-reported-2016q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Orkambi",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "lumacaftor/ivacaftor",
+  "options": {
+   "earnings_since": "2017-04-05",
+   "earnings_until": "2018-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2017Q1",
+    "value_normalized_usd_millions": 294.861,
+    "gold_id": "vertex-orkambi-worldwide-reported-2017q1"
+   },
+   {
+    "period": "2017Q2",
+    "value_normalized_usd_millions": 324.407,
+    "gold_id": "vertex-orkambi-worldwide-reported-2017q2"
+   },
+   {
+    "period": "2017Q3",
+    "value_normalized_usd_millions": 336.183,
+    "gold_id": "vertex-orkambi-worldwide-reported-2017q3"
+   },
+   {
+    "period": "2017Q4",
+    "value_normalized_usd_millions": 365.0,
+    "gold_id": "vertex-orkambi-worldwide-reported-2017q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Orkambi",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "lumacaftor/ivacaftor",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 354.066,
+    "gold_id": "vertex-orkambi-worldwide-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 311.261,
+    "gold_id": "vertex-orkambi-worldwide-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 281.859,
+    "gold_id": "vertex-orkambi-worldwide-reported-2018q3"
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": 315.0,
+    "gold_id": "vertex-orkambi-worldwide-reported-2018q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Orkambi",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "lumacaftor/ivacaftor",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q1",
+    "value_normalized_usd_millions": 293.007,
+    "gold_id": "vertex-orkambi-worldwide-reported-2019q1"
+   },
+   {
+    "period": "2019Q2",
+    "value_normalized_usd_millions": 316.441,
+    "gold_id": "vertex-orkambi-worldwide-reported-2019q2"
+   },
+   {
+    "period": "2019Q3",
+    "value_normalized_usd_millions": 296.711,
+    "gold_id": "vertex-orkambi-worldwide-reported-2019q3"
+   },
+   {
+    "period": "2019Q4",
+    "value_normalized_usd_millions": 425.732,
+    "gold_id": "vertex-orkambi-worldwide-reported-2019q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Orkambi",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "lumacaftor/ivacaftor",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 234.138,
+    "gold_id": "vertex-orkambi-worldwide-reported-2020q1"
+   },
+   {
+    "period": "2020Q2",
+    "value_normalized_usd_millions": 231.981,
+    "gold_id": "vertex-orkambi-worldwide-reported-2020q2"
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": 225.919,
+    "gold_id": "vertex-orkambi-worldwide-reported-2020q3"
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": 215.0,
+    "gold_id": "vertex-orkambi-worldwide-reported-2020q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Orkambi",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "lumacaftor/ivacaftor",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 218.697,
+    "gold_id": "vertex-orkambi-worldwide-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 220.966,
+    "gold_id": "vertex-orkambi-worldwide-reported-2021q2"
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": 184.561,
+    "gold_id": "vertex-orkambi-worldwide-reported-2021q3"
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": 147.0,
+    "gold_id": "vertex-orkambi-worldwide-reported-2021q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Orkambi",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "lumacaftor/ivacaftor",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 132.1,
+    "gold_id": "vertex-orkambi-worldwide-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 121.6,
+    "gold_id": "vertex-orkambi-worldwide-reported-2022q2"
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": 146.2,
+    "gold_id": "vertex-orkambi-worldwide-reported-2022q3"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 111.0,
+    "gold_id": "vertex-orkambi-worldwide-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Orkambi",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "lumacaftor/ivacaftor",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 122.5,
+    "gold_id": "vertex-orkambi-worldwide-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 96.3,
+    "gold_id": "vertex-orkambi-worldwide-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 63.0,
+    "gold_id": "vertex-orkambi-worldwide-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 44.2,
+    "gold_id": "vertex-orkambi-worldwide-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Symdeko",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "tezacaftor/ivacaftor",
+  "options": {
+   "earnings_since": "2018-04-05",
+   "earnings_until": "2019-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2018Q1",
+    "value_normalized_usd_millions": 34.124,
+    "gold_id": "vertex-symdeko-worldwide-reported-2018q1"
+   },
+   {
+    "period": "2018Q2",
+    "value_normalized_usd_millions": 185.558,
+    "gold_id": "vertex-symdeko-worldwide-reported-2018q2"
+   },
+   {
+    "period": "2018Q3",
+    "value_normalized_usd_millions": 254.919,
+    "gold_id": "vertex-symdeko-worldwide-reported-2018q3"
+   },
+   {
+    "period": "2018Q4",
+    "value_normalized_usd_millions": 294.0,
+    "gold_id": "vertex-symdeko-worldwide-reported-2018q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Symdeko",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "tezacaftor/ivacaftor",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q1",
+    "value_normalized_usd_millions": 320.275,
+    "gold_id": "vertex-symdeko-worldwide-reported-2019q1"
+   },
+   {
+    "period": "2019Q2",
+    "value_normalized_usd_millions": 361.832,
+    "gold_id": "vertex-symdeko-worldwide-reported-2019q2"
+   },
+   {
+    "period": "2019Q3",
+    "value_normalized_usd_millions": 403.714,
+    "gold_id": "vertex-symdeko-worldwide-reported-2019q3"
+   },
+   {
+    "period": "2019Q4",
+    "value_normalized_usd_millions": 331.847,
+    "gold_id": "vertex-symdeko-worldwide-reported-2019q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Symdeko",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "tezacaftor/ivacaftor",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 173.159,
+    "gold_id": "vertex-symdeko-worldwide-reported-2020q1"
+   },
+   {
+    "period": "2020Q2",
+    "value_normalized_usd_millions": 171.729,
+    "gold_id": "vertex-symdeko-worldwide-reported-2020q2"
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": 156.178,
+    "gold_id": "vertex-symdeko-worldwide-reported-2020q3"
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": 128.0,
+    "gold_id": "vertex-symdeko-worldwide-reported-2020q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Symdeko",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "tezacaftor/ivacaftor",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 125.049,
+    "gold_id": "vertex-symdeko-worldwide-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 133.505,
+    "gold_id": "vertex-symdeko-worldwide-reported-2021q2"
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": 81.415,
+    "gold_id": "vertex-symdeko-worldwide-reported-2021q3"
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": 80.0,
+    "gold_id": "vertex-symdeko-worldwide-reported-2021q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Symdeko",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "tezacaftor/ivacaftor",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 64.8,
+    "gold_id": "vertex-symdeko-worldwide-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 42.7,
+    "gold_id": "vertex-symdeko-worldwide-reported-2022q2"
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": 38.2,
+    "gold_id": "vertex-symdeko-worldwide-reported-2022q3"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 34.0,
+    "gold_id": "vertex-symdeko-worldwide-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Symdeko",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "tezacaftor/ivacaftor",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 30.6,
+    "gold_id": "vertex-symdeko-worldwide-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 31.2,
+    "gold_id": "vertex-symdeko-worldwide-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 33.4,
+    "gold_id": "vertex-symdeko-worldwide-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 27.8,
+    "gold_id": "vertex-symdeko-worldwide-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Trikafta",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "elexacaftor/tezacaftor/ivacaftor and ivacaftor",
+  "options": {
+   "earnings_since": "2019-04-05",
+   "earnings_until": "2020-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2019Q4",
+    "value_normalized_usd_millions": 420.105,
+    "gold_id": "vertex-trikafta-worldwide-reported-2019q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Trikafta",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "elexacaftor/tezacaftor/ivacaftor and ivacaftor",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q1",
+    "value_normalized_usd_millions": 895.233,
+    "gold_id": "vertex-trikafta-worldwide-reported-2020q1"
+   },
+   {
+    "period": "2020Q2",
+    "value_normalized_usd_millions": 917.715,
+    "gold_id": "vertex-trikafta-worldwide-reported-2020q2"
+   },
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": 960.308,
+    "gold_id": "vertex-trikafta-worldwide-reported-2020q3"
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": 1091.0,
+    "gold_id": "vertex-trikafta-worldwide-reported-2020q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Trikafta",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "elexacaftor/tezacaftor/ivacaftor and ivacaftor",
+  "options": {
+   "earnings_since": "2021-04-05",
+   "earnings_until": "2022-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2021Q1",
+    "value_normalized_usd_millions": 1193.217,
+    "gold_id": "vertex-trikafta-worldwide-reported-2021q1"
+   },
+   {
+    "period": "2021Q2",
+    "value_normalized_usd_millions": 1255.611,
+    "gold_id": "vertex-trikafta-worldwide-reported-2021q2"
+   },
+   {
+    "period": "2021Q3",
+    "value_normalized_usd_millions": 1555.772,
+    "gold_id": "vertex-trikafta-worldwide-reported-2021q3"
+   },
+   {
+    "period": "2021Q4",
+    "value_normalized_usd_millions": 1693.0,
+    "gold_id": "vertex-trikafta-worldwide-reported-2021q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Trikafta",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "elexacaftor/tezacaftor/ivacaftor and ivacaftor",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 1761.6,
+    "gold_id": "vertex-trikafta-worldwide-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 1893.2,
+    "gold_id": "vertex-trikafta-worldwide-reported-2022q2"
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": 2010.5,
+    "gold_id": "vertex-trikafta-worldwide-reported-2022q3"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": 2022.0,
+    "gold_id": "vertex-trikafta-worldwide-reported-2022q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Trikafta",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "elexacaftor/tezacaftor/ivacaftor and ivacaftor",
+  "options": {
+   "earnings_since": "2023-04-05",
+   "earnings_until": "2024-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2023Q1",
+    "value_normalized_usd_millions": 2096.7,
+    "gold_id": "vertex-trikafta-worldwide-reported-2023q1"
+   },
+   {
+    "period": "2023Q2",
+    "value_normalized_usd_millions": 2240.4,
+    "gold_id": "vertex-trikafta-worldwide-reported-2023q2"
+   },
+   {
+    "period": "2023Q3",
+    "value_normalized_usd_millions": 2274.3,
+    "gold_id": "vertex-trikafta-worldwide-reported-2023q3"
+   },
+   {
+    "period": "2023Q4",
+    "value_normalized_usd_millions": 2333.3,
+    "gold_id": "vertex-trikafta-worldwide-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Trikafta",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "elexacaftor/tezacaftor/ivacaftor and ivacaftor",
+  "options": {
+   "earnings_since": "2024-04-05",
+   "earnings_until": "2025-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2024Q1",
+    "value_normalized_usd_millions": 2483.6,
+    "gold_id": "vertex-trikafta-worldwide-reported-2024q1"
+   },
+   {
+    "period": "2024Q2",
+    "value_normalized_usd_millions": 2449.2,
+    "gold_id": "vertex-trikafta-worldwide-reported-2024q2"
+   },
+   {
+    "period": "2024Q3",
+    "value_normalized_usd_millions": 2585.0,
+    "gold_id": "vertex-trikafta-worldwide-reported-2024q3"
+   },
+   {
+    "period": "2024Q4",
+    "value_normalized_usd_millions": 2720.8,
+    "gold_id": "vertex-trikafta-worldwide-reported-2024q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Trikafta",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "elexacaftor/tezacaftor/ivacaftor and ivacaftor",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 2535.5,
+    "gold_id": "vertex-trikafta-worldwide-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 2551.1,
+    "gold_id": "vertex-trikafta-worldwide-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 2653.6,
+    "gold_id": "vertex-trikafta-worldwide-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 2572.5,
+    "gold_id": "vertex-trikafta-worldwide-reported-2025q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Trikafta",
+  "manufacturer": "Vertex",
+  "ticker": "VRTX",
+  "generic_name": "elexacaftor/tezacaftor/ivacaftor and ivacaftor",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 2354.7,
+    "gold_id": "vertex-trikafta-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 2497.2,
+    "gold_id": "vertex-trikafta-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Dymista",
   "manufacturer": "Viatris",
   "ticker": "VTRS",
@@ -147981,6 +152236,31 @@
     "period": "2023Q4",
     "value_normalized_usd_millions": 14.8,
     "gold_id": "oyster-point-tyrvaya-us-reported-2023q4"
+   }
+  ]
+ },
+ {
+  "drug_name": "Uplizna",
+  "manufacturer": "Viela Bio",
+  "ticker": null,
+  "generic_name": "inebilizumab",
+  "options": {
+   "earnings_since": "2020-04-05",
+   "earnings_until": "2021-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2020Q3",
+    "value_normalized_usd_millions": 2.316,
+    "gold_id": "amgen-uplizna-worldwide-reported-2020q3"
+   },
+   {
+    "period": "2020Q4",
+    "value_normalized_usd_millions": 9.336,
+    "gold_id": "amgen-uplizna-worldwide-reported-2020q4"
    }
   ]
  },

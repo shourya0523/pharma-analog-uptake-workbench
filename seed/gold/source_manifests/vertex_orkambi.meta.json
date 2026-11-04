@@ -1,0 +1,36 @@
+{
+  "drug_name": "Orkambi",
+  "generic_name": "lumacaftor/ivacaftor",
+  "manufacturer": "Vertex",
+  "benchmark_identity": "vertex_orkambi_worldwide_reported",
+  "therapeutic_area": "Respiratory / Allergy",
+  "indication_area": "Cystic fibrosis (F508del homozygous)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "fixed-dose combination tablet and oral granules",
+  "route_of_administration": "oral",
+  "moa": "CFTR corrector (lumacaftor) plus potentiator (ivacaftor)",
+  "moa_class": "cftr_corrector_potentiator_combination",
+  "first_approval_year": 2015,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=206038",
+    "quote": "07/02/2015 ORIG-1 Approval (NDA 206038, ORKAMBI IVACAFTOR; LUMACAFTOR TABLET;ORAL)"
+  },
+  "launch_quarter": "2015Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/875320/000087532015000056/a2015q310-q.htm",
+    "quote": "Our revenues increased in the third quarter of 2015 as compared to the third quarter of 2014 due to net product revenues from ORKAMBI, which was approved by the FDA in July 2015, and increased KALYDECO net product revenues, partially offset by decreased collaborative revenues."
+  },
+  "commercial_start_quarter": "2015Q3",
+  "series_start_reason": null,
+  "series_end_quarter": "2023Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Last own line is the 10-K for 2023 (full year); the Form 10-Q for the quarter ended March 31, 2024 (https://www.sec.gov/Archives/edgar/data/875320/000087532024000139/vrtx-20240331.htm) prints only TRIKAFTA/KAFTRIO and an 'Other CF products' row (207.0 for Q1 2024, 278.1 for Q1 2023 = KALYDECO 125.0 + ORKAMBI 122.5 + SYMDEKO/SYMKEVI 30.6 as printed in the Q1 2023 10-Q), and the earnings releases print only TRIKAFTA/KAFTRIO by name from the first quarter of 2023.",
+  "search_log": [
+    "Listed every filing for Vertex Pharmaceuticals (CIK 0000875320) from data.sec.gov/submissions (recent block plus older 'files' pages), no form filter at listing time; selected forms starting '8-K' (8-K and 8-K/A) carrying Item 2.02 filed 2010-01-01 or later (75 filings) and fetched every non-primary .htm exhibit from each filing's index.json; fetched every 10-Q, 10-K, 10-Q/A and 10-K/A primary document filed 2011-01-01 or later.",
+    "Q1-Q3 rows are the current three-month column of the product row in each 10-Q's 'product revenues, net' by-product table (located as a row starting with the brand that is followed within ten rows by a 'Total product revenues' row). Q4 rows: the fourth-quarter release (the Item 2.02 8-K filed January-March whose exhibit prints a 'Twelve Months Ended December 31' column, which excludes the January preliminary releases) is used when one of its brand rows prints a figure within 1.0 of the 10-K full year less the three 10-Q quarters; otherwise the row is derived from the 10-K (annual_less_reported_first_nine_months).",
+    "Fourth-quarter 2019 is derived from the 10-K for every CF product, because the fourth-quarter 2019 release prints its by-product table under 'Non-GAAP Product revenues, net' (it excludes a $155.8 million ORKAMBI France early-access adjustment); the 10-K figures are GAAP.",
+    "2019Q4 (GAAP, derived from the 10-K) includes the $155.8 million France early-access adjustment recognized in that quarter for prior-period shipments; the fourth-quarter 2019 release's Non-GAAP by-product table prints ORKAMBI 270 excluding it.",
+    "Four quarters vs the 10-K full-year line (USD millions): 2016 979.7 vs 10-K 979.6; 2017 1320.5 vs 10-K 1320.8; 2018 1262.2 vs 10-K 1262.2; 2019 1331.9 vs 10-K 1331.9; 2020 907.0 vs 10-K 907.5; 2021 771.2 vs 10-K 771.6; 2022 510.9 vs 10-K 510.7; 2023 326.0 vs 10-K 326.0 (differences are within the rounding of the release figures)."
+  ]
+}

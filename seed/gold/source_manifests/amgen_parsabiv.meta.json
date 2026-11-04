@@ -1,0 +1,35 @@
+{
+  "drug_name": "Parsabiv",
+  "generic_name": "etelcalcetide",
+  "manufacturer": "Amgen",
+  "benchmark_identity": "amgen_parsabiv_worldwide_reported",
+  "therapeutic_area": "Cardiometabolic / Renal",
+  "indication_area": "Secondary hyperparathyroidism in adults with chronic kidney disease on hemodialysis",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "solution for injection, single-dose vial",
+  "route_of_administration": "intravenous",
+  "moa": "Calcium-sensing receptor agonist (calcimimetic peptide)",
+  "moa_class": "calcimimetic",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=208325",
+    "quote": "02/07/2017 ORIG-1 Approval (NDA 208325, PARSABIV ETELCALCETIDE SOLUTION;INTRAVENOUS)"
+  },
+  "launch_quarter": "2017Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/318154/000119312517139540/d373079dex991.htm",
+    "quote": "Parsabiv\u2122 (etelcalcetide) \u2022 In February, FDA approved Parsabiv for the treatment of secondary hyperparathyroidism (sHPT) in adult patients with chronic kidney disease (CKD) on hemodialysis."
+  },
+  "commercial_start_quarter": "2017Q3",
+  "series_start_reason": "Series starts at 2017Q3, the first quarter with non-zero Parsabiv sales: the prior-year columns of the 2018 releases print Q1 2017 as 0 and Q2 2017 as '\u2014', then 2 (Q3 2017) and 3 (Q4 2017). launch_quarter 2017Q1 is the FDA approval quarter (February 2017).",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "Listed every filing for Amgen Inc. (CIK 0000318154) from data.sec.gov/submissions (recent block plus older 'files' pages), no form filter at listing time; selected forms starting '8-K' (8-K and 8-K/A) carrying Item 2.02 and filed 2010-01-01 or later (68 filings), resolved each filing's exhibits from its index.json and kept the non-primary .htm exhibit (Exhibit 99.1; Exhibit 99.2 reconciliation exhibits dropped); also fetched every 10-Q, 10-K, 10-Q/A and 10-K/A primary document filed 2010-04-01 or later.",
+    "Each release's HTML table rows were parsed; the product row was located by a regex anchored on the brand at the start of the row (so a combined 'XGEVA / Prolia' row or a regional '- U.S.' row is not taken); the quarter of a release is the calendar quarter before its filing month; the first matching row in a release is the quarter table and the second (Q4 releases) the full-year table.",
+    "Parsabiv is first on its own line in the first-quarter 2018 release; 2017Q3 and 2017Q4 are the prior-year TOTAL columns of the third- and fourth-quarter 2018 releases (the 2017 releases list Parsabiv only in the pipeline section).",
+    "Four quarters vs the full-year TOTAL line of each fourth-quarter release: 2018: 336 vs FY 336; 2019: 630 vs FY 630; 2020: 716 vs FY 716; 2021: 280 vs FY 280; 2022: 382 vs FY 382; 2023: 362 vs FY 362; 2024: 356 vs FY 356; 2025: 353 vs FY 353. 31 current-quarter rows compared with the prior-year TOTAL column of the following year's release: all equal."
+  ]
+}

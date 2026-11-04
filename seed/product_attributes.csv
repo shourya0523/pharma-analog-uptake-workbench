@@ -530,3 +530,15 @@ Rexulti,"Serotonin-dopamine activity modulator: partial agonist at 5-HT1A and do
 Amitiza,chloride channel (ClC-2) activator,chloride_channel_activator,Oral,2006,"Gastroenterology (chronic idiopathic constipation, IBS-C, opioid-induced constipation)",curated_reference,distinct_product
 Dexilant,proton pump inhibitor (dual delayed-release dexlansoprazole),proton_pump_inhibitor,Oral,2009,"Gastroenterology (GERD, erosive esophagitis)",curated_reference,distinct_product
 ProAir RespiClick,Short-acting beta2-adrenergic agonist (albuterol) rescue bronchodilator,saba_bronchodilator,Inhaled,2015,Respiratory (asthma: bronchospasm and exercise-induced bronchospasm),curated_reference,distinct_product
+Evenity,Sclerostin inhibitor (monoclonal antibody),sclerostin_inhibitor,Subcutaneous,2019,Osteoporosis (postmenopausal women at high risk of fracture),curated_reference,distinct_product
+Imdelltra,DLL3 x CD3 bispecific T-cell engager,bispecific_t_cell_engager,Intravenous,2024,Oncology (extensive-stage small cell lung cancer),curated_reference,distinct_product
+Kanjinti,HER2-directed monoclonal antibody (trastuzumab biosimilar),her2_antibody,Intravenous,2019,Oncology (HER2-positive breast and gastric cancer; biosimilar to Herceptin),curated_reference,distinct_product
+Mvasi,VEGF-A inhibitor (bevacizumab biosimilar monoclonal antibody),vegf_inhibitor,Intravenous,2017,"Oncology (colorectal, lung, renal, cervical cancer and glioblastoma; biosimilar to Avastin)",curated_reference,distinct_product
+Parsabiv,Calcium-sensing receptor agonist (calcimimetic peptide),calcimimetic,Intravenous,2017,Secondary hyperparathyroidism in adults with chronic kidney disease on hemodialysis,curated_reference,distinct_product
+Prolia,RANK ligand inhibitor (monoclonal antibody),rankl_inhibitor,Subcutaneous,2010,Postmenopausal osteoporosis and bone loss (bone health),curated_reference,distinct_product
+Xgeva,RANK ligand inhibitor (monoclonal antibody),rankl_inhibitor,Subcutaneous,2010,Oncology supportive care (prevention of skeletal-related events from bone metastases),curated_reference,distinct_product
+Incivek,HCV NS3/4A protease inhibitor,hcv_ns3_4a_protease_inhibitor,Oral,2011,Chronic hepatitis C (genotype 1),curated_reference,distinct_product
+Kalydeco,CFTR potentiator,cftr_potentiator,Oral,2012,Cystic fibrosis (CFTR gating and other ivacaftor-responsive mutations),curated_reference,distinct_product
+Orkambi,CFTR corrector (lumacaftor) plus potentiator (ivacaftor),cftr_corrector_potentiator_combination,Oral,2015,Cystic fibrosis (F508del homozygous),curated_reference,distinct_product
+Symdeko,CFTR corrector (tezacaftor) plus potentiator (ivacaftor),cftr_corrector_potentiator_combination,Oral,2018,Cystic fibrosis (F508del homozygous or tezacaftor/ivacaftor-responsive mutation),curated_reference,distinct_product
+Trikafta,"CFTR correctors (elexacaftor, tezacaftor) plus potentiator (ivacaftor)",cftr_corrector_potentiator_combination,Oral,2019,Cystic fibrosis (at least one F508del or responsive mutation),curated_reference,distinct_product

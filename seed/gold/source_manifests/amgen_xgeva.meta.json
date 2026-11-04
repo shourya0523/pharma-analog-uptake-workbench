@@ -1,0 +1,35 @@
+{
+  "drug_name": "Xgeva",
+  "generic_name": "denosumab",
+  "manufacturer": "Amgen",
+  "benchmark_identity": "amgen_xgeva_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology supportive care (prevention of skeletal-related events from bone metastases)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "injection, 120 mg/1.7 mL single-dose vial",
+  "route_of_administration": "subcutaneous",
+  "moa": "RANK ligand inhibitor (monoclonal antibody)",
+  "moa_class": "rankl_inhibitor",
+  "first_approval_year": 2010,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=125320",
+    "quote": "11/18/2010 SUPPL-7 Efficacy (BLA 125320; products on the BLA include XGEVA DENOSUMAB 70MG/ML INJECTABLE; SUBCUTANEOUS)"
+  },
+  "launch_quarter": "2010Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/318154/000095012311018800/v57113e10vk.htm",
+    "quote": "XGEVA tm On November 18, 2010, the FDA approved XGEVA tm for the prevention of SREs in patients with bone metastases from solid tumors. ... In addition, in 2010 we launched Prolia \u00ae (denosumab) and XGEVA tm (denosumab) both of which contain the same active ingredient but which are approved for different indications, patient populations, doses and frequencies of administration."
+  },
+  "commercial_start_quarter": "2010Q4",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "Listed every filing for Amgen Inc. (CIK 0000318154) from data.sec.gov/submissions (recent block plus older 'files' pages), no form filter at listing time; selected forms starting '8-K' (8-K and 8-K/A) carrying Item 2.02 and filed 2010-01-01 or later (68 filings), resolved each filing's exhibits from its index.json and kept the non-primary .htm exhibit (Exhibit 99.1; Exhibit 99.2 reconciliation exhibits dropped); also fetched every 10-Q, 10-K, 10-Q/A and 10-K/A primary document filed 2010-04-01 or later.",
+    "Each release's HTML table rows were parsed; the product row was located by a regex anchored on the brand at the start of the row (so a combined 'XGEVA / Prolia' row or a regional '- U.S.' row is not taken); the quarter of a release is the calendar quarter before its filing month; the first matching row in a release is the quarter table and the second (Q4 releases) the full-year table.",
+    "XGEVA worldwide 2011Q1-2011Q3 is read from the 'XGEVA' line of Amgen's 10-Q product sales tables; 2010Q4 is the 10-K 2010 full-year 8 (no XGEVA sales before its November 18, 2010 approval); 2011Q4 and 2012Q1 come from the prior-year TOTAL columns of the fourth-quarter 2012 and first-quarter 2013 releases; the 10-K 2012 'Total XGEVA' line prints 2011 as 351 = 42+73+102+134.",
+    "Four quarters vs the full-year TOTAL line of each fourth-quarter release: 2012: 748 vs FY 748; 2013: 1019 vs FY 1019; 2014: 1221 vs FY 1221; 2015: 1405 vs FY 1405; 2016: 1529 vs FY 1529; 2017: 1575 vs FY 1575; 2018: 1786 vs FY 1786; 2019: 1935 vs FY 1935; 2020: 1899 vs FY 1899; 2021: 2018 vs FY 2018; 2022: 2014 vs FY 2014; 2023: 2112 vs FY 2112; 2024: 2225 vs FY 2225; 2025: 2084 vs FY 2084. 56 current-quarter rows compared with the prior-year TOTAL column of the following year's release: all equal."
+  ]
+}

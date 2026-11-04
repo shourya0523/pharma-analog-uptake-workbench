@@ -1,30 +1,52 @@
 {
-  "drug_name": "Nurtec ODT",
-  "generic_name": "rimegepant",
-  "therapeutic_area": "Neurology / Psychiatry",
-  "indication_area": "Neurology (migraine)",
-  "formulation": "orally disintegrating tablet",
-  "route_of_administration": "oral",
-  "moa": "Calcitonin gene-related peptide (CGRP) receptor antagonist",
-  "moa_class": "cgrp_receptor_antagonist",
-  "manufacturer": "Pfizer",
-  "benchmark_identity": "pfizer_nurtec_odt_worldwide_reported",
-  "revenue_scope": "Worldwide",
-  "geography": "Worldwide",
-  "first_approval_year": 2020,
-  "approval_evidence": {
-    "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2020/212728Orig1s000ltr.pdf",
-    "quote": "NDA 212728 NDA APPROVAL ... for rimegepant orally disintegrating tablets. This NDA provides for the use of Nurtec ODT (rimegepant) tablets for the acute treatment of migraine with or without aura in adults (electronically signed 02/27/2020)"
+ "drug_name": "Nurtec ODT",
+ "generic_name": "rimegepant",
+ "therapeutic_area": "Neurology / Psychiatry",
+ "indication_area": "Neurology (migraine)",
+ "formulation": "orally disintegrating tablet",
+ "route_of_administration": "oral",
+ "moa": "Calcitonin gene-related peptide (CGRP) receptor antagonist",
+ "moa_class": "cgrp_receptor_antagonist",
+ "manufacturer": "Pfizer",
+ "benchmark_identity": "pfizer_nurtec_odt_worldwide_reported",
+ "revenue_scope": "Worldwide (issuer total)",
+ "geography": "Worldwide: Biohaven's total net product revenue 2020Q1-2022Q2 (Nurtec ODT only, sold principally in the U.S.; Biohaven had no ex-U.S. sales line), then Pfizer's worldwide 'Nurtec ODT/Vydura' line",
+ "first_approval_year": 2020,
+ "approval_evidence": {
+  "url": "https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2020/212728Orig1s000ltr.pdf",
+  "quote": "NDA 212728 NDA APPROVAL ... for rimegepant orally disintegrating tablets. This NDA provides for the use of Nurtec ODT (rimegepant) tablets for the acute treatment of migraine with or without aura in adults (electronically signed 02/27/2020)"
+ },
+ "launch_quarter": "2020Q1",
+ "commercial_start_quarter": "2020Q1",
+ "series_start_reason": "Series starts 2020Q1, the launch quarter (Biohaven's first-quarter 2020 Form 10-Q: 'Approved by the FDA on February 27, 2020 and commercialization begun March 2020'). Biohaven Pharmaceutical Holding (CIK 1689813) booked Nurtec ODT, its only product, through 2022Q2; Pfizer closed the acquisition on October 3, 2022 and prints 'Nurtec ODT/Vydura' from 2022Q4. 2022Q3 is unpublished (see unreported_quarters).",
+ "series_end_quarter": null,
+ "series_end_basis": null,
+ "series_end_reason": null,
+ "companion_series": "biohaven_nurtec_odt",
+ "search_log": [
+  "listed filings of the issuer via data.sec.gov submissions (recent + older pages), all forms incl. 8-K and 8-K/A (CIK 0000078003); Q4 2022 - Q2 2026 releases parsed for the Nurtec ODT/Vydura row",
+  "Pfizer Q3 2022 release/10-Q (Oct 2 2022 quarter end, one day before closing) carries no Nurtec revenue; Q3 2023 release prior-year column prints a dash for Q3 2022",
+  "[g4_us extension 2026-11] Joined Biohaven's series (rows of companions/biohaven_nurtec_odt_quarterly.csv, 2020Q1-2022Q2, Biohaven 8-K Exhibit 99.1 'Product revenue, net', each re-verified by verify_staged_manifests.py) to Pfizer's. Listed Biohaven (CIK 1689813) 10-Q/10-K 2020-2022 and read 'Product revenue, net': the 10-Qs print 1,151 / 9,698 / 17,664 (2020Q1-Q3), the 2020 10-K quarterly table 35,114 for 2020Q4, matching the releases; last 10-Q is for 2022-06-30.",
+  "Scope note: Biohaven prints one product revenue line, which is Nurtec ODT (its only commercial product) and is its company-wide total; Pfizer's line is worldwide Nurtec ODT/Vydura. Both are the issuer's total for the product, so the joined series is the issuer-total (worldwide) line; Biohaven's sales were principally U.S. Checks: 2020 quarters sum to 63,627 thousand and 2021 quarters to 462,509 thousand, the full years printed in the Q4 releases.",
+  "Pfizer 2022Q3 (release filed 2022-11-01) prints no Nurtec line; listed Pfizer item 2.02 8-Ks 2022-06 to 2023-06."
+ ],
+ "joined_issuers": [
+  {
+   "issuer": "Biohaven",
+   "first_quarter": "2020Q1",
+   "last_quarter": "2022Q2"
   },
-  "launch_quarter": "2020Q1",
-  "commercial_start_quarter": "2022Q4",
-  "series_start_reason": "Pfizer completed the acquisition of Biohaven on Oct 3, 2022 and its 2022Q4 release is the first to print the line 'Nurtec ODT/Vydura' (the line includes Vydura, the ex-U.S. brand of rimegepant). Biohaven's own U.S. series for 2020Q1-2022Q2 is the companion series biohaven_nurtec_odt (different scope); 2022Q3 is in neither company's filings. (biohaven_nurtec_odt: Companion Series sheet, cited but not scored.)",
-  "series_end_quarter": null,
-  "series_end_basis": null,
-  "series_end_reason": null,
-  "companion_series": "biohaven_nurtec_odt",
-  "search_log": [
-    "listed filings of the issuer via data.sec.gov submissions (recent + older pages), all forms incl. 8-K and 8-K/A (CIK 0000078003); Q4 2022 - Q2 2026 releases parsed for the Nurtec ODT/Vydura row",
-    "Pfizer Q3 2022 release/10-Q (Oct 2 2022 quarter end, one day before closing) carries no Nurtec revenue; Q3 2023 release prior-year column prints a dash for Q3 2022"
-  ]
+  {
+   "issuer": "Pfizer",
+   "first_quarter": "2022Q4",
+   "last_quarter": "2026Q2"
+  }
+ ],
+ "unreported_quarters": {
+  "2022Q3": "Ownership change Biohaven to Pfizer; no figure for the quarter is published. Pfizer completed the acquisition of Biohaven Pharmaceutical Holding on October 3, 2022; Biohaven's last periodic report is the Form 10-Q for the quarter ended June 30, 2022 (8-K closing 2022-10-03, 15-12G 2022-10-14), and Pfizer's third-quarter 2022 release prints no Nurtec ODT line (its first is the fourth-quarter 2022 release)."
+ },
+ "launch_evidence": {
+  "url": "https://www.sec.gov/Archives/edgar/data/1689813/000168981320000042/bhvn-20200331.htm",
+  "quote": "NURTEC ODT | CGRP | Acute treatment of migraine | Approved by the FDA on February 27, 2020 and commercialization begun March 2020."
+ }
 }

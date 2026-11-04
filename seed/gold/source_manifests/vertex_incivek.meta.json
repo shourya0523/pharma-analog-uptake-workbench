@@ -1,0 +1,44 @@
+{
+  "drug_name": "Incivek",
+  "generic_name": "telaprevir",
+  "manufacturer": "Vertex",
+  "benchmark_identity": "vertex_incivek_worldwide_reported",
+  "therapeutic_area": "Infectious Disease / Vaccines",
+  "indication_area": "Chronic hepatitis C (genotype 1)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide as printed (Vertex sold INCIVEK in North America; INCIVO outside it was sold by Janssen and earns Vertex royalties, not product revenue)",
+  "formulation": "tablet (375 mg)",
+  "route_of_administration": "oral",
+  "moa": "HCV NS3/4A protease inhibitor",
+  "moa_class": "hcv_ns3_4a_protease_inhibitor",
+  "first_approval_year": 2011,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=201917",
+    "quote": "05/23/2011 ORIG-1 Approval (NDA 201917, INCIVEK TELAPREVIR 375MG TABLET;ORAL)"
+  },
+  "launch_quarter": "2011Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/875320/000104746911007153/a2205008z10-q.htm",
+    "quote": "We began recognizing net product revenues on sales of INCIVEK in the United States in the second quarter of 2011."
+  },
+  "commercial_start_quarter": "2011Q2",
+  "series_start_reason": null,
+  "series_end_quarter": "2017Q3",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The Form 10-Q for the quarter ended September 30, 2017 is the last to print an INCIVEK row ((2) thousand for the quarter). The 10-K for 2017 prints full-year 2017 INCIVEK as '\u2014' although the 2017 10-Q quarters sum to (8) thousand, so no fourth quarter can be derived consistently, and the Form 10-Q for the quarter ended March 31, 2018 (https://www.sec.gov/Archives/edgar/data/875320/000087532018000014/a2018q110-q.htm) has no INCIVEK row. The earnings releases stopped printing INCIVEK after the fourth-quarter 2014 release.",
+  "search_log": [
+    "Listed every filing for Vertex Pharmaceuticals (CIK 0000875320) from data.sec.gov/submissions (recent block plus older 'files' pages), no form filter at listing time; selected forms starting '8-K' (8-K and 8-K/A) carrying Item 2.02 filed 2010-01-01 or later (75 filings) and fetched every non-primary .htm exhibit from each filing's index.json; fetched every 10-Q, 10-K, 10-Q/A and 10-K/A primary document filed 2011-01-01 or later.",
+    "Q1-Q3 rows are the current three-month column of the product row in each 10-Q's 'product revenues, net' by-product table (located as a row starting with the brand that is followed within ten rows by a 'Total product revenues' row). Q4 rows: the fourth-quarter release (the Item 2.02 8-K filed January-March whose exhibit prints a 'Twelve Months Ended December 31' column, which excludes the January preliminary releases) is used when one of its brand rows prints a figure within 1.0 of the 10-K full year less the three 10-Q quarters; otherwise the row is derived from the 10-K (annual_less_reported_first_nine_months).",
+    "Fourth-quarter 2019 is derived from the 10-K for every CF product, because the fourth-quarter 2019 release prints its by-product table under 'Non-GAAP Product revenues, net' (it excludes a $155.8 million ORKAMBI France early-access adjustment); the 10-K figures are GAAP.",
+    "2011Q2-2011Q4 are read from sentences in the 2011 earnings releases that name INCIVEK net revenues (the 2011 tables print only 'Product revenues, net'; INCIVEK was the only marketed product); the fourth-quarter 2011 release states 2011 INCIVEK net revenues of $950.9 million = 74.5 + 419.6 + 456.8.",
+    "From 2015 the INCIVEK line is residual (U.S. marketing ended in October 2014) and includes negative quarters ((80) thousand in 2016Q2, (52) thousand in 2017Q2, (2) thousand in 2017Q3) as printed.",
+    "Four quarters vs the 10-K full-year line (USD millions): 2012 1161.8 vs 10-K 1161.8; 2013 466.3 vs 10-K 466.4; 2014 24.1 vs 10-K 24.1; 2015 18.0 vs 10-K 18.0; 2016 0.6 vs 10-K 0.6 (differences are within the rounding of the release figures)."
+  ],
+  "reviewed_anomalies": {
+    "2016Q2": "Printed as a negative residual after INCIVEK was discontinued in the U.S. in October 2014 (returns and adjustments); checked at source and kept as printed.",
+    "2016Q4": "Printed as a negative residual after INCIVEK was discontinued in the U.S. in October 2014 (returns and adjustments); checked at source and kept as printed.",
+    "2017Q2": "Printed as a negative residual after INCIVEK was discontinued in the U.S. in October 2014 (returns and adjustments); checked at source and kept as printed.",
+    "2017Q3": "Printed as a negative residual after INCIVEK was discontinued in the U.S. in October 2014 (returns and adjustments); checked at source and kept as printed.",
+    "2014Q4": "INCIVEK was discontinued in the U.S. in October 2014; the drop from the third quarter is the withdrawal, checked at source and kept as printed."
+  }
+}

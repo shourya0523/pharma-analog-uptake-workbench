@@ -558,15 +558,8 @@ PRODUCT_METADATA = {
         "manufacturer": "Gilead",
         "benchmark_identity": "gilead_stribild_worldwide_reported",
         "therapeutic_area": "HIV",
-        "commercial_start_quarter": "2012Q4",
+        "commercial_start_quarter": "2012Q3",
         "launch_quarter": "2012Q3",
-        "series_start_reason": (
-            "Stribild was approved 27 August 2012. Gilead first breaks it out "
-            "in the fourth quarter 2012 release, whose twelve-month column of "
-            "57,536 thousand against a fourth quarter of 40,025 shows the "
-            "launch quarter did sell - it was simply not reported on its own "
-            "line."
-        ),
         "series_end_quarter": "2023Q4",
         "series_end_basis": "issuer_stopped_reporting",
         "series_end_reason": (
@@ -577,7 +570,6 @@ PRODUCT_METADATA = {
             "Atripla's was two years earlier. The series ends because the "
             "issuer stopped reporting it."
         ),
-        "peak_eligible": False,
         "revenue_scope": "Worldwide",
         "geography": "Worldwide",
         "formulation": "tablet",
@@ -698,14 +690,13 @@ PRODUCT_METADATA = {
         "manufacturer": "Johnson & Johnson",
         "benchmark_identity": "jnj_stelara_worldwide_reported",
         "therapeutic_area": "Immunology",
-        "commercial_start_quarter": "2012Q1",
+        "commercial_start_quarter": "2010Q4",
         "launch_quarter": "2009Q4",
         "series_start_reason": (
-            "J&J prints this product on its own line of the Major Pharmaceutical "
-            "Product Revenues table only from the first quarter of 2012Q1; the "
-            "earlier table carries a shorter list of products and folds this one "
-            "into Other. The series starts where the issuer first states it "
-            "separately, not at launch."
+            "The series starts 2010Q4, the earliest quarter for which J&J's filed "
+            "product sales schedule (8-K Exhibit 99.2) prints this product's own "
+            "line - read from the prior-year column of the following year's release "
+            "where the quarter's own release omits it. It starts after launch, not at it."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -738,14 +729,13 @@ PRODUCT_METADATA = {
         "manufacturer": "Johnson & Johnson",
         "benchmark_identity": "jnj_simponi_worldwide_reported",
         "therapeutic_area": "Immunology",
-        "commercial_start_quarter": "2012Q1",
+        "commercial_start_quarter": "2010Q4",
         "launch_quarter": "2009Q2",
         "series_start_reason": (
-            "J&J prints this product on its own line of the Major Pharmaceutical "
-            "Product Revenues table only from the first quarter of 2012Q1; the "
-            "earlier table carries a shorter list of products and folds this one "
-            "into Other. The series starts where the issuer first states it "
-            "separately, not at launch."
+            "The series starts 2010Q4, the earliest quarter for which J&J's filed "
+            "product sales schedule (8-K Exhibit 99.2) prints this product's own "
+            "line - read from the prior-year column of the following year's release "
+            "where the quarter's own release omits it. It starts after launch, not at it."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",
@@ -912,14 +902,13 @@ PRODUCT_METADATA = {
         "manufacturer": "Johnson & Johnson",
         "benchmark_identity": "jnj_invega_sustenna_worldwide_reported",
         "therapeutic_area": "Neuroscience",
-        "commercial_start_quarter": "2012Q1",
+        "commercial_start_quarter": "2011Q1",
         "launch_quarter": "2009Q3",
         "series_start_reason": (
-            "J&J prints this product on its own line of the Major Pharmaceutical "
-            "Product Revenues table only from the first quarter of 2012Q1; the "
-            "earlier table carries a shorter list of products and folds this one "
-            "into Other. The series starts where the issuer first states it "
-            "separately, not at launch."
+            "The series starts 2011Q1, the earliest quarter for which J&J's filed "
+            "product sales schedule (8-K Exhibit 99.2) prints this product's own "
+            "line - read from the prior-year column of the following year's release "
+            "where the quarter's own release omits it. It starts after launch, not at it."
         ),
         "peak_eligible": False,
         "revenue_scope": "Worldwide",

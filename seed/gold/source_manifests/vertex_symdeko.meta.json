@@ -1,0 +1,36 @@
+{
+  "drug_name": "Symdeko",
+  "generic_name": "tezacaftor/ivacaftor",
+  "manufacturer": "Vertex",
+  "benchmark_identity": "vertex_symdeko_worldwide_reported",
+  "therapeutic_area": "Respiratory / Allergy",
+  "indication_area": "Cystic fibrosis (F508del homozygous or tezacaftor/ivacaftor-responsive mutation)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (SYMDEKO in the U.S., SYMKEVI outside it; one line)",
+  "formulation": "co-packaged tablets (tezacaftor/ivacaftor and ivacaftor)",
+  "route_of_administration": "oral",
+  "moa": "CFTR corrector (tezacaftor) plus potentiator (ivacaftor)",
+  "moa_class": "cftr_corrector_potentiator_combination",
+  "first_approval_year": 2018,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=210491",
+    "quote": "02/12/2018 ORIG-1 Approval (NDA 210491, SYMDEKO (COPACKAGED) IVACAFTOR; IVACAFTOR, TEZACAFTOR TABLET;ORAL)"
+  },
+  "launch_quarter": "2018Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/875320/000087532018000014/a2018q110-q.htm",
+    "quote": "SYMDEKO was approved in the United Sates in February 2018. We expect SYMDEKO net product revenues to increase on a quarterly basis for the remainder of 2018 as additional patients initiate treatment with SYMDEKO."
+  },
+  "commercial_start_quarter": "2018Q1",
+  "series_start_reason": null,
+  "series_end_quarter": "2023Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Last own line is the 10-K for 2023 (full year); the Form 10-Q for the quarter ended March 31, 2024 (https://www.sec.gov/Archives/edgar/data/875320/000087532024000139/vrtx-20240331.htm) prints only TRIKAFTA/KAFTRIO and an 'Other CF products' row (207.0 for Q1 2024, 278.1 for Q1 2023 = KALYDECO 125.0 + ORKAMBI 122.5 + SYMDEKO/SYMKEVI 30.6 as printed in the Q1 2023 10-Q), and the earnings releases print only TRIKAFTA/KAFTRIO by name from the first quarter of 2023.",
+  "search_log": [
+    "Listed every filing for Vertex Pharmaceuticals (CIK 0000875320) from data.sec.gov/submissions (recent block plus older 'files' pages), no form filter at listing time; selected forms starting '8-K' (8-K and 8-K/A) carrying Item 2.02 filed 2010-01-01 or later (75 filings) and fetched every non-primary .htm exhibit from each filing's index.json; fetched every 10-Q, 10-K, 10-Q/A and 10-K/A primary document filed 2011-01-01 or later.",
+    "Q1-Q3 rows are the current three-month column of the product row in each 10-Q's 'product revenues, net' by-product table (located as a row starting with the brand that is followed within ten rows by a 'Total product revenues' row). Q4 rows: the fourth-quarter release (the Item 2.02 8-K filed January-March whose exhibit prints a 'Twelve Months Ended December 31' column, which excludes the January preliminary releases) is used when one of its brand rows prints a figure within 1.0 of the 10-K full year less the three 10-Q quarters; otherwise the row is derived from the 10-K (annual_less_reported_first_nine_months).",
+    "Fourth-quarter 2019 is derived from the 10-K for every CF product, because the fourth-quarter 2019 release prints its by-product table under 'Non-GAAP Product revenues, net' (it excludes a $155.8 million ORKAMBI France early-access adjustment); the 10-K figures are GAAP.",
+    "The line is 'SYMDEKO' through the third quarter of 2018 and 'SYMDEKO/SYMKEVI' from the 10-K for 2018 (SYMKEVI is the EU name); one product line.",
+    "Four quarters vs the 10-K full-year line (USD millions): 2018 768.6 vs 10-K 768.7; 2019 1417.7 vs 10-K 1417.7; 2020 629.1 vs 10-K 628.6; 2021 420.0 vs 10-K 420.4; 2022 179.7 vs 10-K 180.0; 2023 123.0 vs 10-K 123.0 (differences are within the rounding of the release figures)."
+  ]
+}
