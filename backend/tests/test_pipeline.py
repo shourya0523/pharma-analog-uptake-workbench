@@ -107,8 +107,17 @@ def test_an_alias_answers_when_the_name_itself_does_not():
 def test_a_us_question_skips_the_routes_that_cannot_show_a_us_part():
     def boom(*a, **k):
         raise AssertionError("should not run")
-    result = quarter_revenue("Calderon", "Q2 2023", "Acme", scope="us", xbrl=_miss, earnings=boom, search=boom, **BASE)
-    assert result.status == "not_found" and [a["route"] for a in result.attempts] == ["xbrl"]
+
+    asked = []
+
+    def earnings(name, period, issuer, **kwargs):
+        asked.append(kwargs)
+        return SimpleNamespace(status="not_found", readings=[])
+
+    result = quarter_revenue("Calderon", "Q2 2023", "Acme", scope="us", xbrl=_miss, earnings=earnings, search=boom,
+                             **BASE)
+    assert result.status == "not_found" and [a["route"] for a in result.attempts] == ["xbrl", "earnings"]
+    assert asked == [{"scope": "us"}]
 
 
 def test_an_alias_check_that_fails_leaves_the_route_its_own_answer():

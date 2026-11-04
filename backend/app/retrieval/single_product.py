@@ -33,6 +33,11 @@ _OTHER_REVENUE = re.compile(r"collaborat|licens|royalt|milestone|alliance|grant|
 # Concepts that name product sales as such, in us-gaap or filer extensions.
 _PRODUCT_CONCEPT = re.compile(r"goods|productsales|productrevenue|netproduct", re.IGNORECASE)
 _GROSS = re.compile(r"gross", re.IGNORECASE)
+# Axes that split revenue by kind: the product/service axis in any taxonomy
+# year, and a filer's own revenue-type axis (`acme:RevenueTypeAxis`). A member
+# on another axis - a counterparty, an arrangement - names a contract, not a
+# kind of revenue, so its name says nothing about what the total holds.
+_KIND_AXIS = re.compile(r"ProductOrService|Revenue", re.IGNORECASE)
 
 # Sentences that discuss product sales, for the model to read. A filing runs
 # to hundreds of thousands of characters; these are the passages that say what
@@ -113,7 +118,9 @@ def product_line(contexts: dict[str, dict], facts: list[dict], period_end: dt.da
         return line, parts_of(line), "product_sales_concept"
 
     other = any(
-        _OTHER_REVENUE.search(f.concept.split(":")[-1]) or any(_OTHER_REVENUE.search(m) for m in members(f))
+        _OTHER_REVENUE.search(f.concept.split(":")[-1])
+        or any(_KIND_AXIS.search(axis.split(":")[-1]) and _OTHER_REVENUE.search(m.split(":")[-1])
+               for axis, m in f.members.items())
         for f in in_span
     ) or any(
         # Royalty and collaboration concepts are not product revenue, so they

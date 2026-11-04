@@ -36,6 +36,14 @@ def test_total_revenue_is_the_line_only_without_other_kinds_of_revenue():
     assert (basis, line) == ("no_product_line", None)
 
 
+def test_a_counterparty_member_named_for_a_collaboration_does_not_veto_the_total():
+    contract = {"srt:CounterpartyNameAxis": "acme:BetaMember", "us-gaap:TypeOfArrangementAxis": "acme:CollaborationMember"}
+    line, _, basis = _line([(REV, 45e6, *Q, {}), (REV, 5e6, *Q, contract)])
+    assert (basis, line.value) == ("total_revenue", 45e6)
+    kind = {"srt:ProductOrServiceAxis": "acme:CollaborationRevenueMember"}
+    assert _line([(REV, 45e6, *Q, {}), (REV, 5e6, *Q, kind)])[2] == "no_product_line"
+
+
 def test_net_product_sales_are_taken_over_gross():
     line, _, basis = _line([("us-gaap:SalesRevenueGoodsGross", 50e6, *Q, {}),
                             ("us-gaap:SalesRevenueGoodsNet", 40e6, *Q, {})])

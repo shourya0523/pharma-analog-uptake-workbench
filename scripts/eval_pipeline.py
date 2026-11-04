@@ -26,6 +26,7 @@ from __future__ import annotations
 import argparse
 import json
 import random
+import re
 import sys
 import time
 from collections import Counter, defaultdict
@@ -64,10 +65,25 @@ def _half_last_digit(value: float, unit: str) -> float:
     return 0.5 * 10 ** -decimals * SCALE.get(unit, 1.0)
 
 
+# A case scope that opens with the United States ("U.S.", "Total U.S. ...",
+# "United States revenue for ..."); one joining another territory to it
+# ("U.S. and Canada") is not U.S. alone.
+_US_OPENING = re.compile(r"^\s*(?:total\s+)?(?:u\.\s?s\.|us\b|united states\b)", re.IGNORECASE)
+_JOINED = re.compile(r"^\s*(?:and\b|plus\b|&)", re.IGNORECASE)
+
+
+def question_scope(case: dict) -> str:
+    """The pipeline scope a case asks for, from its scope text."""
+    text = str(case.get("scope") or "")
+    opening = _US_OPENING.match(text)
+    return "us" if opening and not _JOINED.match(text[opening.end():]) else "worldwide"
+
+
 def run(case: dict, allow_search: bool) -> dict:
     started = time.monotonic()
     try:
-        result = quarter_revenue(case["product"], case["period"], case.get("issuer"), allow_search=allow_search)
+        result = quarter_revenue(case["product"], case["period"], case.get("issuer"), allow_search=allow_search,
+                                 scope=question_scope(case))
     except Exception as exc:
         return {**case, "outcome": "error", "route": None, "error": f"{type(exc).__name__}: {exc}"[:300]}
     out = {**case, "seconds": round(time.monotonic() - started, 1), "result": asdict(result), "route": result.route}

@@ -183,3 +183,24 @@ def test_depleted_prepaid_credits_stop_the_reading_like_a_spent_quota():
     get = _sec([_hit("0001-25-1", 1, "ACME PHARMA (CIK 1)", "acme.htm")], {"acme.htm": EXHIBIT})
     with pytest.raises(QuotaExceeded):
         read_earnings("Calderon", "Q2 2025", "Acme Pharma", get=get, ask=ask, later=False)
+
+
+def test_a_us_question_takes_the_rows_us_column():
+    table = (b"<table><tr><td>(in millions)</td><td colspan='3'>Three Months Ended June 30,</td></tr>"
+             b"<tr><td></td><td colspan='3'>2025</td></tr><tr><td></td><td>U.S.</td><td>ROW</td><td>Total</td></tr>"
+             b"<tr><td>Calderon</td><td>412.2</td><td>300.2</td><td>712.4</td></tr></table>")
+    get = _sec([_hit("0001-25-1", 1, "ACME PHARMA (CIK 1)", "acme.htm")], {"acme.htm": table})
+
+    def ask(prompt):
+        total = next(line.split(":")[0] for line in prompt.splitlines() if "712.4" in line and line.startswith("c"))
+        return {"cell": total, "unit": "millions", "currency": "USD", "kind": "product_sales"}
+
+    worldwide = read_earnings("Calderon", "Q2 2025", "Acme Pharma", get=get, ask=ask, later=False)
+    us = read_earnings("Calderon", "Q2 2025", "Acme Pharma", get=get, ask=ask, later=False, scope="us")
+    assert (worldwide.value, us.value) == (712.4e6, 412.2e6)
+
+    no_split = EXHIBIT
+    get = _sec([_hit("0001-25-1", 1, "ACME PHARMA (CIK 1)", "acme.htm")], {"acme.htm": no_split})
+    answer = read_earnings("Calderon", "Q2 2025", "Acme Pharma", get=get, ask=lambda p: {"cell": "c0", **GOOD},
+                           later=False, scope="us")
+    assert answer.status != "found" and answer.readings[0].status == "no_us_column"

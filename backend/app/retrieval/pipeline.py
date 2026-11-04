@@ -153,7 +153,8 @@ def quarter_revenue(
     """Run the routes for `product` in calendar quarter `period` ("Q2 2023").
 
     `scope` is "worldwide" or "us"; a U.S. figure is taken only where a route
-    can show it is the U.S. part (XBRL's tagged geography). `allow_search`
+    can show it is the U.S. part (XBRL's tagged geography, a release table's
+    U.S. column). `allow_search`
     turns off routes 3 and 4, which cost search fees. `line` is "brand" or
     "family" (the brand's forms summed); `booked_by` names the filer whose
     booking is wanted when partners report the product in different
@@ -223,7 +224,16 @@ def quarter_revenue(
                            evidence=None if derived else f"{outcome.concept} {outcome.member}",
                            identity=getattr(outcome, "identity", None))
 
-    # 2. Earnings releases (their lines are whole-product; a U.S. question is not answered here)
+    # 2. Earnings releases; a U.S. question only from a table's U.S. column
+    if scope == "us":
+        outcome = run("earnings", lambda: _with_aliases(
+            lambda name: earnings(name, period, issuer, scope="us"), product, period, end, describe_aliases))
+        if outcome is not None:
+            _record(result, "earnings", outcome)
+            if _found(outcome):
+                return _answer(result, end, usd, value=outcome.value, currency=outcome.currency,
+                               route="earnings:later" if outcome.later else "earnings", source=outcome.url,
+                               evidence=outcome.scope, identity=getattr(outcome, "identity", None))
     if scope == "worldwide":
         outcome = run("earnings", lambda: _with_aliases(
             lambda name: earnings(name, period, issuer), product, period, end, describe_aliases))

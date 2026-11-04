@@ -367,8 +367,32 @@ def check_cell(choice: dict[str, Any], cell: Cell, exhibit_text: str, end: dt.da
     return "accepted", ""
 
 
-def read_grid(raw: bytes, text: str, product: str, end: dt.date, label: str, ask: Callable) -> tuple[Reading | None, str]:
-    """A grid reading, or None with the reason the grid gave no answer."""
+# A column header naming the United States: "U.S.", "US", "United States",
+# "U.S. Net Product Sales".
+_US_COLUMN = re.compile(r"^(?:u\.\s?s\.?|us|united states)(?![a-z])", re.IGNORECASE)
+
+
+def us_cell(cell: Cell, offered: list[Cell]) -> Cell | None:
+    """The cell holding `cell`'s U.S. part: itself if its own column names the
+    United States, else the cell in the same table and row whose column path
+    differs only in a last label naming it. None if the table prints no U.S.
+    column for the row."""
+    if cell.column and _US_COLUMN.match(cell.column[-1].strip()):
+        return cell
+    for other in offered:
+        if (other.table == cell.table and other.row == cell.row and other.column[:-1] == cell.column[:-1]
+                and other.column and _US_COLUMN.match(other.column[-1].strip())):
+            return other
+    return None
+
+
+def read_grid(raw: bytes, text: str, product: str, end: dt.date, label: str, ask: Callable,
+              scope: str = "worldwide") -> tuple[Reading | None, str]:
+    """A grid reading, or None with the reason the grid gave no answer.
+
+    With `scope` "us", the model still picks the product's cell for the
+    quarter, and the answer is that row's U.S. column (`us_cell`); a row
+    with none is refused as `no_us_column`."""
     offered = [c for c in cells(raw, product.split("/")[0].strip()) if not c.text.endswith("%") and _figure(c.text) is not None]
     if not offered:
         return None, "no table row names the product"
@@ -380,6 +404,13 @@ def read_grid(raw: bytes, text: str, product: str, end: dt.date, label: str, ask
     if not re.fullmatch(r"c\d+", picked) or int(picked[1:]) >= len(offered):
         return None, "the model chose no cell"
     cell = offered[int(picked[1:])]
+    if scope == "us":
+        us = us_cell(cell, offered)
+        if us is None:
+            reading = Reading("", "", "", "no_us_column", method="grid", cell=cell.label())
+            reading.reason = f"no U.S. column beside {' > '.join(cell.column)!r}"
+            return reading, reading.reason
+        cell = us
     reading = Reading("", "", "", "error", method="grid", cell=cell.label())
     reading.status, reading.reason = check_cell(choice, cell, text, end)
     reading.row_quote = " > ".join(cell.row) + " | " + " > ".join(cell.column) + " = " + cell.text
@@ -390,16 +421,22 @@ def read_grid(raw: bytes, text: str, product: str, end: dt.date, label: str, ask
     return reading, reading.reason
 
 
-def read_exhibit(exhibit: dict, product: str, end: dt.date, label: str, *, get: Callable, ask: Callable) -> Reading:
-    """Read one exhibit: its tables as a grid first, its text if that fails."""
+def read_exhibit(exhibit: dict, product: str, end: dt.date, label: str, *, get: Callable, ask: Callable,
+                 scope: str = "worldwide") -> Reading:
+    """Read one exhibit: its tables as a grid first, its text if that fails.
+    A U.S. question is answered from a grid only: a sentence or a whole-line
+    reading does not say which part of the world it covers."""
     reading = Reading(exhibit["filer"], exhibit["cik"], exhibit["url"], "error")
     try:
         raw = get(exhibit["url"]).content
         text = filing_text(raw)
-        grid_reading, grid_reason = read_grid(raw, text, product, end, label, ask)
-        if grid_reading and grid_reading.status == "accepted":
+        grid_reading, grid_reason = read_grid(raw, text, product, end, label, ask, scope)
+        if grid_reading and (grid_reading.status == "accepted" or scope == "us"):
             grid_reading.filer, grid_reading.cik, grid_reading.url = exhibit["filer"], exhibit["cik"], exhibit["url"]
             return grid_reading
+        if scope == "us":
+            reading.status, reading.reason = "no_us_column", f"no table row names the product: {grid_reason}"
+            return reading
         answer = ask(PROMPT.format(product=product, end=f"{calendar.month_name[end.month]} {end.day}, {end.year}",
                                    label=label, passages=passages(text, product)))
     except Exception as exc:  # one unreadable exhibit leaves the others to answer
@@ -437,10 +474,11 @@ def read_earnings(
     get: Callable = sec_get,
     ask: Callable = gemini_reader,
     later: bool = True,
+    scope: str = "worldwide",
 ) -> EarningsAnswer:
     """The product's sales for calendar quarter `period` from results exhibits:
     its own quarter's releases first, then (with `later`) later releases'
-    comparative columns."""
+    comparative columns. `scope` is "worldwide" or "us" (see `read_grid`)."""
     end = quarter_end(period)
     if end is None:
         return EarningsAnswer("not_a_quarter", product, period)
@@ -450,7 +488,7 @@ def read_earnings(
         if issuer:
             exhibits.sort(key=lambda e: not names_issuer(e["filer"], issuer))
         exhibits = exhibits[:MAX_EXHIBITS]
-        readings = [read_exhibit(e, product, end, period, get=get, ask=ask) for e in exhibits]
+        readings = [read_exhibit(e, product, end, period, get=get, ask=ask, scope=scope) for e in exhibits]
         if release_end != end:
             for r in readings:
                 r.released_after = f"Q{release_end.month // 3} {release_end.year}"
