@@ -33,6 +33,7 @@ from collections import Counter, defaultdict
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict
 from pathlib import Path
+from urllib.parse import urlparse
 
 REPO = Path(__file__).resolve().parents[1]
 GOLD = REPO / "seed" / "gold"
@@ -43,10 +44,27 @@ from app.retrieval.pipeline import quarter_revenue  # noqa: E402
 SCALE = {"units": 1.0, "thousands": 1e3, "millions": 1e6, "billions": 1e9}
 
 
-def gold_sample(n: int, seed: int) -> list[dict]:
-    rows = [json.loads(line) for line in (GOLD / "quarterly_revenue.jsonl").open()]
-    rng, used, cases = random.Random(seed), set(), []
+def _by_kind(rows: list[dict], rng: random.Random) -> list[dict]:
+    """Rows reordered to take each derivation kind in turn, each kind shuffled:
+    a rare derivation is drawn as often as the common one."""
+    kinds: dict[str, list[dict]] = defaultdict(list)
     for r in rng.sample(rows, len(rows)):
+        kinds[r["derivation"]].append(r)
+    queues = [kinds[k] for k in sorted(kinds)]
+    ordered = []
+    while any(queues):
+        for q in queues:
+            if q:
+                ordered.append(q.pop())
+    return ordered
+
+
+def gold_sample(n: int, seed: int, sec_only: bool = False, by_kind: bool = False) -> list[dict]:
+    rows = [json.loads(line) for line in (GOLD / "quarterly_revenue.jsonl").open()]
+    if sec_only:
+        rows = [r for r in rows if urlparse(r.get("source_url") or "").hostname in ("www.sec.gov", "sec.gov")]
+    rng, used, cases = random.Random(seed), set(), []
+    for r in (_by_kind(rows, rng) if by_kind else rng.sample(rows, len(rows))):
         if len(cases) == n:
             break
         if r["drug_name"] in used:
@@ -104,6 +122,8 @@ def main() -> int:
     parser.add_argument("--cases", type=Path)
     parser.add_argument("--gold-sample", type=int)
     parser.add_argument("--seed", type=int, default=71)
+    parser.add_argument("--sec-only", action="store_true", help="gold sample: rows whose source is an SEC document")
+    parser.add_argument("--by-kind", action="store_true", help="gold sample: take each derivation kind in turn")
     parser.add_argument("--no-search", action="store_true")
     parser.add_argument("--workers", type=int, default=2)
     parser.add_argument("--out", type=Path, required=True)
@@ -112,8 +132,9 @@ def main() -> int:
         parser.error("give exactly one of --cases or --gold-sample")
 
     cases = ([json.loads(line) for line in args.cases.open() if line.strip()] if args.cases
-             else gold_sample(args.gold_sample, args.seed))
-    source = str(args.cases) if args.cases else f"gold sample n={args.gold_sample} seed={args.seed} (defect oracle)"
+             else gold_sample(args.gold_sample, args.seed, args.sec_only, args.by_kind))
+    source = str(args.cases) if args.cases else (f"gold sample n={args.gold_sample} seed={args.seed}"
+                                                 f"{' sec-only' if args.sec_only else ''}{' by-kind' if args.by_kind else ''} (defect oracle)")
     print(f"cases={len(cases)} source={source} search={'off' if args.no_search else 'on'} workers={args.workers}")
     with ThreadPoolExecutor(args.workers) as pool:
         results = list(pool.map(lambda c: run(c, not args.no_search), cases))
