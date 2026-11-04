@@ -37,6 +37,11 @@ INLINE = b"""<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ix="http://www.xbr
 </table></body></html>"""
 
 
+# The same filing with its second Calderon line replaced by another product,
+# so the category-prefixed Calderon member is the brand's only line.
+ONE_FORM = INLINE.replace(b"acme:CalderonXRMember", b"acme:NuVessaMember")
+
+
 def test_member_match_follows_the_shape_rule():
     assert member_match("acme:RespiratoryProductsCalderonMember", "Calderon") == "exact"
     assert member_match("acme:CalderonXRMember", "Calderon") is None
@@ -100,7 +105,7 @@ def test_first_pass_picks_the_filer_that_tags_the_product():
     competitor = b"<html><body>We compete with Calderon.</body></html>"
     get = _fake_sec([
         ("0000000002-23-000001", 2, "BETA BIO (CIK 2)", "beta-20230630.htm", competitor),
-        ("0000000001-23-000001", 1, "ACME PHARMA (CIK 1)", "acme-20230630.htm", INLINE),
+        ("0000000001-23-000001", 1, "ACME PHARMA (CIK 1)", "acme-20230630.htm", ONE_FORM),
     ])
     answer = first_pass("Calderon", "Q2 2023", get=get)
     assert answer.status == "found"
@@ -158,7 +163,7 @@ def test_names_issuer_needs_every_distinctive_word():
 
 
 def test_a_named_issuer_that_does_not_tag_the_product_yields_other_filer():
-    get = _fake_sec([("0000000001-23-000001", 1, "ACME PHARMA (CIK 1)", "acme-20230630.htm", INLINE)])
+    get = _fake_sec([("0000000001-23-000001", 1, "ACME PHARMA (CIK 1)", "acme-20230630.htm", ONE_FORM)])
     answer = first_pass("Calderon", "Q2 2023", "Beta Bio", get=get)
     assert answer.status == "other_filer" and answer.value is None
     assert answer.candidates[0]["value"] == 1_234_500_000
@@ -270,3 +275,88 @@ def test_a_brands_second_half_is_not_a_product_the_filing_never_prints_alone():
     contexts, facts = parse_facts(INLINE)
     assert product_facts(contexts, facts, "Calderon", text="respiratory products: calderon")
     assert product_facts(contexts, facts, "Calderon", text=None)
+
+
+# ---------------------------------------------------------------- family policy
+
+
+def _member_fact(value, member, decimals=None, **extra):
+    from app.retrieval.xbrl import Fact
+
+    return Fact("us-gaap:Revenues", value, "iso4217:USD", "2023-04-01", "2023-06-30",
+                {"srt:ProductOrServiceAxis": member, **extra}, "exact", decimals, member)
+
+
+def test_family_resolves_a_brand_followed_by_a_further_word():
+    assert member_match("acme:CalderonCreamMember", "Calderon") is None
+    assert member_match("acme:CalderonCreamMember", "Calderon", family=True) == "family"
+    assert member_match("acme:CALDERONFoamMember", "Calderon", family=True) == "family"
+    assert member_match("acme:Calderon0.15Member", "Calderon", family=True) == "family"
+    assert member_match("acme:CalderonXRMember", "Calderon", family=True) == "family"
+    assert member_match("acme:CalderonMember", "Calderon", family=True) == "exact"
+    assert member_match("acme:NebulizedCalderonMember", "Calderon", family=True) == "exact"
+    assert member_match("acme:CalderonFoamAndNuVessaMember", "Calderon", family=True) == "combined"
+    assert member_match("acme:CalderoneMember", "Calderon", family=True) is None
+
+
+def test_family_sums_each_members_whole_and_brand_still_declines():
+    found = [
+        _member_fact(300, "acme:CalderonCreamMember"),
+        _member_fact(500, "acme:CalderonFoamMember"),
+        _member_fact(200, "acme:CalderonFoamMember", **{"srt:StatementGeographicalAxis": "country:US"}),
+    ]
+    status, fact, _ = choose(found, dt.date(2023, 6, 30), family=True)
+    assert (status, fact.value, fact.match) == ("found", 800, "family")
+    assert {p.resolved for p in fact.parts} == {"acme:CalderonCreamMember", "acme:CalderonFoamMember"}
+    assert choose(found, dt.date(2023, 6, 30))[0] == "several_members"
+
+
+def test_a_family_total_over_its_presentations_is_taken_alone():
+    found = [_member_fact(1000, "acme:CalderonMember"), _member_fact(400, "acme:CalderonCreamMember"),
+             _member_fact(600, "acme:CalderonFoamMember")]
+    status, fact, _ = choose(found, dt.date(2023, 6, 30), family=True)
+    assert (status, fact.value, fact.resolved, fact.parts) == ("found", 1000, "acme:CalderonMember", [])
+
+
+def test_a_family_missing_a_members_whole_is_declined():
+    found = [_member_fact(300, "acme:CalderonCreamMember"),
+             _member_fact(200, "acme:CalderonFoamMember", **{"srt:StatementGeographicalAxis": "srt:EuropeMember"})]
+    assert choose(found, dt.date(2023, 6, 30), family=True)[0] == "several_members"
+
+
+def test_two_equal_members_are_not_read_as_a_total_and_its_part():
+    found = [_member_fact(500, "acme:CalderonMember"), _member_fact(500, "acme:NebulizedCalderonMember")]
+    assert choose(found, dt.date(2023, 6, 30), family=True)[0] == "several_members"
+
+
+def test_family_geography_sums_the_places_every_member_splits_out():
+    from app.retrieval.xbrl import family_geography
+
+    us = {"srt:StatementGeographicalAxis": "country:US"}
+    eu = {"srt:StatementGeographicalAxis": "srt:EuropeMember"}
+    found = [
+        _member_fact(300, "acme:CalderonCreamMember"), _member_fact(250, "acme:CalderonCreamMember", **us),
+        _member_fact(500, "acme:CalderonFoamMember"), _member_fact(450, "acme:CalderonFoamMember", **us),
+        _member_fact(50, "acme:CalderonFoamMember", **eu),
+    ]
+    _, fact, candidates = choose(found, dt.date(2023, 6, 30), family=True)
+    assert family_geography(fact, candidates) == {"country:US": 700}
+
+
+def test_first_pass_reads_the_family_only_when_asked():
+    doc = INLINE.replace(b"RespiratoryProductsCalderonMember", b"CalderonCreamMember").replace(
+        b"acme:CalderonXRMember", b"acme:CalderonFoamMember")
+    get = _fake_sec([("0000000001-23-000001", 1, "ACME PHARMA (CIK 1)", "acme-20230630.htm", doc)])
+    brand = first_pass("Calderon", "Q2 2023", "Acme Pharma", get=get)
+    assert brand.status == "no_member"
+    family = first_pass("Calderon", "Q2 2023", "Acme Pharma", get=get, family=True)
+    assert (family.status, family.value, family.match) == ("found", 1_234_500_000 + 77_000_000, "family")
+    assert family.member == "acme:CalderonCreamMember + acme:CalderonFoamMember"
+
+
+def test_one_forms_member_does_not_answer_for_a_brand_whose_other_forms_are_tagged():
+    two_forms = INLINE.replace(b"RespiratoryProductsCalderonMember", b"NebulizedCalderonMember").replace(
+        b"acme:CalderonXRMember", b"acme:CalderonDPIMember")
+    get = _fake_sec([("0000000001-23-000001", 1, "ACME PHARMA (CIK 1)", "acme-20230630.htm",
+                      two_forms.replace(b"</table>", b"</table><p>Calderon</p>"))])
+    assert first_pass("Calderon", "Q2 2023", "Acme Pharma", get=get).status == "several_members"

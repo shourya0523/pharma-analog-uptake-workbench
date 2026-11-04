@@ -77,9 +77,12 @@ class Fact:
     start: str | None
     end: str | None
     members: dict[str, str]  # axis -> member, both as prefixed names
-    match: str  # exact | combined
+    match: str  # exact | combined | family
     decimals: int | None = None  # as the filer declared; None is exact (INF)
     resolved: str | None = None  # the member that resolved to the product
+    # A family figure's addends, one whole per member of the family; empty
+    # for a figure read off one member.
+    parts: list[Fact] = field(default_factory=list)
 
 
 @dataclass
@@ -90,7 +93,8 @@ class XbrlAnswer:
     no_member | ambiguous | several_members | no_filing | not_a_quarter_in_10q,
     and from the
     single-product reader multi_product | unconfirmed. `match` is exact,
-    combined or single_product. `other_filer`
+    combined, family (a sum over the brand's presentations; see
+    `member_match`) or single_product. `other_filer`
     means a filer other than the named issuer tags the product - a licensee or
     partner selling it in another territory - and its figure is in
     `candidates`, not `value`.
@@ -126,7 +130,7 @@ def tokens(name: str) -> list[str]:
     return [t.lower() for t in _CAMEL.findall(name)]
 
 
-def member_match(member: str, product: str) -> str | None:
+def member_match(member: str, product: str, family: bool = False) -> str | None:
     """How a member's local name resolves to a product, or None.
 
     The product's name must close the member name, starting on a word boundary,
@@ -138,6 +142,18 @@ def member_match(member: str, product: str) -> str | None:
     read as a word break, `NuVessaMember` also resolves to a product named
     Vessa. A product written with
     alternatives (`Calderon / Calderon XR`) resolves if any alternative does.
+
+    With `family`, a member in which the product's name is followed by a
+    further word - `CalderonCreamMember`, `CalderonFoamMember`,
+    `CalderonXRMember`, `Calderon0.15Member` - is a presentation of the brand
+    and resolves as `family`; one whose further words join a sibling
+    (`CalderonFoamAndNuVessaMember`) is `combined`. The further word is not
+    checked against a vocabulary of dosage forms: any word starting after the
+    brand reads as one of its presentations, and a revenue concept that is not
+    the brand's sales (a royalty, a licence) is excluded by concept, not here.
+    In a name with no lower case, where word breaks cannot be seen, a longer
+    brand that begins with the product's name (`CALDERONEMember`) also
+    resolves as `family`.
     """
     local = member.split(":")[-1]
     local = local[: -len("Member")] if local.endswith("Member") else local
@@ -157,6 +173,8 @@ def member_match(member: str, product: str) -> str | None:
                     return "combined" if joined else "exact"
                 if after.startswith("and") and _boundary(letters, j):
                     return "combined"
+                if family and _boundary(letters, j):
+                    return "combined" if joined or "and" in tokens(letters[j:]) else "family"
             i = lower.find(want, i + 1)
     return None
 
@@ -304,7 +322,8 @@ def printed_alone(product: str, text: str) -> bool:
                for a in re.split(r"\s*/\s*", product) if a)
 
 
-def product_facts(contexts: dict[str, dict], facts: list[dict], product: str, text: str | None = None) -> list[Fact]:
+def product_facts(contexts: dict[str, dict], facts: list[dict], product: str, text: str | None = None,
+                  family: bool = False) -> list[Fact]:
     """Every fact whose context carries a member resolving to the product.
 
     A capital inside a member name reads as a word break, so `NuVessaMember`
@@ -312,7 +331,8 @@ def product_facts(contexts: dict[str, dict], facts: list[dict], product: str, te
     `RespiratoryProductsCalderonMember` resolves to Calderon. Given the
     filing's `text`, a member that names something before the product counts
     only if the filing also prints the product as a word of its own - which a
-    category prefix allows and a brand's own first half does not.
+    category prefix allows and a brand's own first half does not. `family` is
+    passed to `member_match`.
     """
     alone = printed_alone(product, text.lower()) if text is not None else True
     found = []
@@ -320,7 +340,7 @@ def product_facts(contexts: dict[str, dict], facts: list[dict], product: str, te
         ctx = contexts.get(f["context"])
         if not ctx:
             continue
-        hits = [(m, member_match(m, product)) for m in ctx["members"].values()
+        hits = [(m, member_match(m, product, family)) for m in ctx["members"].values()
                 if alone or not prefixed(m, product)]
         hit = next(((m, how) for m, how in hits if how), None)
         if hit:
@@ -356,7 +376,7 @@ def is_revenue(concept: str, unit: str | None) -> bool:
 
 
 def choose(
-    found: list[Fact], filing_period_end: dt.date, days: range = QUARTER_DAYS
+    found: list[Fact], filing_period_end: dt.date, days: range = QUARTER_DAYS, family: bool = False
 ) -> tuple[str, Fact | None, list[Fact]]:
     """Pick the product's whole revenue for the span `days` long ending at the
     filing's period end - the quarter, by default.
@@ -367,6 +387,11 @@ def choose(
     split - provided none of its own axes is geographic. Without such a fact
     only parts were tagged, which is `dimensioned_only`. Returns
     `(status, fact, candidates)`.
+
+    Several members resolving to the product are declined as
+    `several_members`, unless `family` is set: then the question is the whole
+    family, and the answer is the sum of each member's own whole (see
+    `_family_sum`).
     """
     revenue = [f for f in found if is_revenue(f.concept, f.unit) and spans(f.start, f.end, filing_period_end, days)]
     if not revenue:
@@ -376,6 +401,8 @@ def choose(
     # which one the question means.
     resolving = {f.resolved for f in revenue if f.resolved}
     if len(resolving) > 1:
+        if family:
+            return _family_sum(revenue, sorted(resolving), filing_period_end, days)
         return "several_members", None, revenue
     dims = [set(f.members.items()) for f in revenue]
     whole = [
@@ -394,6 +421,49 @@ def choose(
     # figure as the total; every alternative stays in `candidates`.
     whole.sort(key=lambda f: (-precision(f.decimals), not f.concept.startswith("us-gaap:"), -abs(f.value)))
     return "found", whole[0], revenue
+
+
+def _family_sum(
+    revenue: list[Fact], members: list[str], filing_period_end: dt.date, days: range
+) -> tuple[str, Fact | None, list[Fact]]:
+    """The family's figure: each resolving member's own whole, chosen as
+    `choose` would for that member alone, summed.
+
+    Every member must yield a whole, else the family is `several_members` - a
+    sum missing an addend is not the family. Every whole must be in one unit.
+    When one member's whole equals the others' sum within their declared
+    rounding, that member is the family's total and the others its parts
+    (`CalderonMember` over `CalderonCreamMember` and `CalderonFoamMember`), so
+    it is taken alone rather than counted twice. With only two members equal
+    within rounding, either reading fits, and the family is declined.
+    """
+    wholes = []
+    for member in members:
+        status, fact, _ = choose([f for f in revenue if f.resolved == member], filing_period_end, days)
+        if status != "found" or fact is None:
+            return "several_members", None, revenue
+        wholes.append(fact)
+    if len({w.unit for w in wholes}) > 1:
+        return "several_members", None, revenue
+    for total in wholes:
+        rest = [w for w in wholes if w is not total]
+        slack = declared_slack(total.decimals) + sum(declared_slack(w.decimals) for w in rest)
+        if abs(total.value - sum(w.value for w in rest)) <= slack:
+            if len(rest) == 1:
+                # Two equal figures: a total over its one part, or two
+                # presentations that sold the same - the filing does not say.
+                return "several_members", None, revenue
+            return "found", total, revenue
+    shared = set(wholes[0].members.items())
+    for w in wholes[1:]:
+        shared &= set(w.members.items())
+    concepts = {w.concept for w in wholes}
+    summed = Fact(
+        wholes[0].concept if len(concepts) == 1 else "+".join(sorted(concepts)),
+        sum(w.value for w in wholes), wholes[0].unit, wholes[0].start, wholes[0].end, dict(shared), "family",
+        min((w.decimals for w in wholes), key=precision), " + ".join(w.resolved or "" for w in wholes), wholes,
+    )
+    return "found", summed, revenue
 
 
 # The two members that partition a figure by place on their own: the United
@@ -428,6 +498,17 @@ def declared_slack(decimals: int | None) -> float:
     """Half a unit of the last place the filer declared - how far the tagged
     figure may sit from the exact one. Zero for INF."""
     return 0.0 if decimals is None else 0.5 * 10.0 ** -decimals
+
+
+def family_geography(whole: Fact, candidates: list[Fact]) -> dict[str, float]:
+    """A family figure's split by place: each place's parts summed across the
+    family's members, for the places every member splits out. A place some
+    member does not tag is left out, since its family figure is not known."""
+    if not whole.parts:
+        return geography_parts(whole, candidates)
+    each = [geography_parts(p, candidates) for p in whole.parts]
+    places = set(each[0]).intersection(*each[1:])
+    return {place: sum(e[place] for e in each) for place in places}
 
 
 def _parts_without_whole(candidates: list[Fact]) -> dict[str, float]:
@@ -570,6 +651,22 @@ def in_scope(answer: XbrlAnswer, scope: str) -> XbrlAnswer:
     return scoped
 
 
+def _one_form_of_several(contexts: dict[str, dict], facts: list[dict], product: str, text: str,
+                         found: list[Fact]) -> bool:
+    """Whether a brand question is being answered by one form's member while
+    the filing tags the brand's other forms too.
+
+    `NebulizedCalderonMember` resolves to Calderon, but beside a
+    `CalderonDPIMember` it is one of two forms, not the brand; with no member
+    named for the brand alone, the brand's figure is not tagged.
+    """
+    resolved = {f.resolved for f in found}
+    if not all(prefixed(m, product) for m in resolved):
+        return False
+    family = {f.resolved for f in product_facts(contexts, facts, product, text, True)}
+    return bool(family - resolved)
+
+
 def _visible_text(document: bytes) -> str:
     """The document's text, tags dropped, lower-cased - for word checks."""
     return re.sub(r"\s+", " ", re.sub(rb"<[^>]+>", b" ", document).decode("utf-8", "ignore")).lower()
@@ -582,6 +679,7 @@ def first_pass(
     *,
     get: Callable = sec_get,
     confirm: Callable | None = None,
+    family: bool = False,
 ) -> XbrlAnswer:
     """Read the product's revenue for a calendar quarter from 10-Q XBRL.
 
@@ -589,12 +687,13 @@ def first_pass(
     10-Qs too - a filer whose fiscal year ends in June files one for it - and
     is `not_a_quarter_in_10q` when none exists. `issuer`, when given, is the
     company whose figure is wanted: only its filing can supply `value`.
-    `confirm` is passed to the single-product reader; see `read_span`.
+    `confirm` is passed to the single-product reader; `family` selects the
+    family policy; see `read_span`.
     """
     end = quarter_end(period)
     if end is None:
         return XbrlAnswer("not_a_quarter_in_10q", product, period)
-    answer = read_span(product, period, end, "10-Q", QUARTER_DAYS, issuer, get=get, confirm=confirm)
+    answer = read_span(product, period, end, "10-Q", QUARTER_DAYS, issuer, get=get, confirm=confirm, family=family)
     if end.month == 12 and answer.status == "no_filing":
         answer.status = "not_a_quarter_in_10q"
     return answer
@@ -611,6 +710,7 @@ def read_span(
     get: Callable = sec_get,
     confirm: Callable | None = None,
     filing_end: dt.date | None = None,
+    family: bool = False,
 ) -> XbrlAnswer:
     """The product's revenue for the span `days` long ending at `end`, from
     filings of `form` (a 10-Q's quarter or year to date, a 10-K's year).
@@ -627,6 +727,11 @@ def read_span(
     competitor that mentions the product sells something else, and its own
     filing says so. It runs only when `confirm` is given, since the figure is
     accepted only once the filing's own text says no other product was sold.
+
+    `family` asks for the brand's whole family rather than the line named for
+    the brand alone: members naming a presentation of the brand resolve too
+    (`member_match`), and several resolving members are summed rather than
+    declined (`choose`). Off, the brand line alone is read.
     """
     answer = XbrlAnswer("no_filing", product, label)
     results: list[tuple[dict, str, Fact | None, list[Fact], str]] = []
@@ -645,10 +750,13 @@ def read_span(
             issuer_filings.append((filing, contexts, facts, url))
         all_filings.append((filing, contexts, facts, url))
         text = _visible_text(filing.get("primary") or document)
-        found = product_facts(contexts, facts, product, text)
+        found = product_facts(contexts, facts, product, text, family)
         if not found:
             continue
-        status, fact, candidates = choose(found, dt.date.fromisoformat(filing["period_end"]), days)
+        if not family and _one_form_of_several(contexts, facts, product, text, found):
+            results.append((filing, "several_members", None, found, url))
+            continue
+        status, fact, candidates = choose(found, dt.date.fromisoformat(filing["period_end"]), days, family)
         results.append((filing, status, fact, candidates, url))
 
     if issuer:
@@ -708,8 +816,9 @@ def read_span(
         if any(c.match == "combined" for c in candidates):
             answer.match = "combined"
     if fact:
-        answer.by_geography = geography_parts(fact, candidates)
-        member = next(m for m in fact.members.values() if member_match(m, product))
+        answer.by_geography = family_geography(fact, candidates)
+        member = fact.resolved if fact.parts else next(
+            m for m in fact.members.values() if member_match(m, product, family))
         answer.value, answer.unit, answer.concept, answer.member, answer.match = (
             fact.value, fact.unit, fact.concept, member, fact.match,
         )
