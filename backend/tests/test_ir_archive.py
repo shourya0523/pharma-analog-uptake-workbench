@@ -80,6 +80,8 @@ def test_a_calendar_unstated_is_read_from_release_dates():
     assert detect_calendar(page) == FiscalCalendar(4, True)
     assert detect_calendar("Q2/FY2026 results July 28, 2026") == FiscalCalendar(1)
     assert detect_calendar("Q2/FY2026 results") is None
+    stray = page + " Q3/FY2020) (831KB) download Q2/FY2020 Financial Results October 30, 2020"
+    assert detect_calendar(stray) == FiscalCalendar(4, True)
 
 
 def test_a_quarter_year_to_date_label():

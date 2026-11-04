@@ -24,10 +24,10 @@ Routes, most exact first; the first that produces a checked figure answers:
 Routes 1 and 2 are retried under the product's FDA-history aliases (a brand
 line that can only have been this form in that period).
 
-5. Parent brand - when every route declines and the product is one form of
-   an FDA-listed brand, the brand's own line from the issuer's release is
-   returned for review, labelled `parent_brand`: it covers the brand's other
-   forms too, so it is never `found`. Every route's result
+5. Parent brand - when every route declines and the product's name starts
+   with a shorter name ("Calderon XR" -> "Calderon"), the issuer's release
+   line for that name answers, labelled `parent_brand`: the brand's forms
+   are reported under one line. Every route's result
 is kept in `attempts`; a figure another filer reports for the product (a
 partner, a licensee) is kept in `alternatives` and never becomes the answer
 when an issuer is named. A spent Gemini quota stops the route that hit it and
@@ -45,7 +45,6 @@ from app.retrieval.derive import Derived, xbrl_quarter
 from app.retrieval.earnings import read_earnings
 from app.retrieval.gemini_search import QuotaExceeded, ask_revenue
 from app.retrieval.identity import aliases as fda_aliases
-from app.retrieval.identity import split_brand
 from app.retrieval.printed_derive import SCALE, derive_from_printed
 from app.retrieval.single_product import gemini_confirm
 from app.retrieval.verify import verify_answer
@@ -147,7 +146,7 @@ def quarter_revenue(
     verify: Callable = verify_answer,
     printed: Callable = derive_from_printed,
     describe_aliases: Callable = fda_aliases,
-    parent_brand: Callable = split_brand,
+    parent_brand: Callable | None = None,
     confirm: Callable | None = gemini_confirm,
     usd: Callable = fx.to_usd,
 ) -> QuarterResult:
@@ -265,7 +264,7 @@ def quarter_revenue(
 
     def declined() -> QuarterResult:
         if result.status == "not_found" and scope == "worldwide":
-            _parent_brand_line(result, product, period, issuer, parent_brand, earnings, run)
+            _parent_brand_line(result, end, usd, product, period, issuer, parent_brand or parent_names, earnings, run)
         return result
 
     if not allow_search or scope != "worldwide":
@@ -301,24 +300,27 @@ def quarter_revenue(
     return declined()
 
 
-def _parent_brand_line(result: QuarterResult, product: str, period: str, issuer: str | None, parent_brand: Callable,
-                       earnings: Callable, run: Callable) -> None:
-    """Fill `result` for review with the brand's own line when the product is
-    one form of it ("Calderon XR" of "Calderon") and the issuer prints only the
-    brand. Leaves `result` alone when there is no brand or no line."""
-    split = run("parent_brand", lambda: parent_brand(product))
-    if not split or not split[1]:
-        return
-    brand = split[0]
-    outcome = run("parent_brand", lambda: earnings(brand, period, issuer))
-    if outcome is None:
-        return
-    _record(result, "parent_brand", outcome)
-    if not _found(outcome):
-        return
-    result.status, result.route, result.match = "needs_review", "earnings:parent_brand", "parent_brand"
-    result.value, result.currency, result.source = outcome.value, outcome.currency, outcome.url
-    result.evidence = f"{brand} line, which also covers the brand's other forms: {outcome.scope}"
+def parent_names(product: str) -> list[str]:
+    """Each shorter leading run of the product's words, longest first:
+    `Calderon XR Pen` -> [`Calderon XR`, `Calderon`]."""
+    words = product.split()
+    return [" ".join(words[:n]) for n in range(len(words) - 1, 0, -1)]
+
+
+def _parent_brand_line(result: QuarterResult, end: dt.date, usd: Callable, product: str, period: str,
+                       issuer: str | None, parent_brand: Callable, earnings: Callable, run: Callable) -> None:
+    """Answer from the release line of a name the product's own name starts
+    with, when the issuer prints its forms under that one line. Leaves
+    `result` alone when no such line is found."""
+    for name in run("parent_brand", lambda: parent_brand(product)) or []:
+        outcome = run("parent_brand", lambda name=name: earnings(name, period, issuer))
+        if outcome is None:
+            continue
+        _record(result, "parent_brand", outcome)
+        if _found(outcome):
+            _answer(result, end, usd, value=outcome.value, currency=outcome.currency, route="earnings:parent_brand",
+                    match="parent_brand", source=outcome.url, evidence=f"{name} line: {outcome.scope}")
+            return
 
 
 def _printed_within(derived: Derived, product: str, period: str, issuer: str | None, earnings: Callable,

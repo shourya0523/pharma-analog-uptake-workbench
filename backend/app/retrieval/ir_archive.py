@@ -304,7 +304,8 @@ def detect_calendar(text: str) -> FiscalCalendar | None:
 
 # "Q2/FY2026 Financial results November 4, 2026": a fiscal quarter beside the
 # date its results came out.
-_RELEASED = re.compile(rf"(?<![a-z0-9])(?:q([1-4])|([1-4])q)\s*/\s*fy\s?{_Y4}(?![\d/]).{{0,60}}?"
+_RELEASED = re.compile(rf"(?<![a-z0-9])(?:q([1-4])|([1-4])q)\s*/\s*fy\s?{_Y4}(?![\d/])"
+                       rf"(?:(?!(?:q[1-4]|[1-4]q)\s*/\s*fy).){{0,60}}?"
                        rf"{_MONTH}\s+(\d{{1,2}}),?\s+{_Y4}", re.IGNORECASE | re.DOTALL)
 # A results release trails its quarter's close by at least the time it takes to
 # close the books, and by less than a third of a year; outside those bounds the
@@ -319,9 +320,11 @@ def calendar_from_release_dates(text: str) -> FiscalCalendar | None:
 
     "Q1/FY2026 ... August 5, 2026" fits a year starting in April and named by
     its start (Q1 closes June 30). Every calendar under which each release
-    falls a plausible time after its quarter's close is a candidate; the one
-    with the shortest lags wins, since a release cannot precede the close and
-    a later start month would put it too soon after.
+    falls a plausible time after its quarter's close is a candidate. The one
+    that fits the most pairs wins, so one mislabelled link cannot veto the
+    page; among those, the shortest lags win, since a release cannot precede
+    the close and a later start month would put it too soon after. A calendar
+    fitting no more than half the pairs is no answer.
     """
     pairs = []
     for m in _RELEASED.finditer(text):
@@ -340,9 +343,10 @@ def calendar_from_release_dates(text: str) -> FiscalCalendar | None:
             for quarter, fiscal_year, released in pairs:
                 first = _add(fiscal.year_start(fiscal_year), 3 * (quarter - 1))
                 lags.append((released - Span(first, _add(first, 2)).end_date()).days)
-            if all(MIN_RELEASE_LAG_DAYS <= lag <= MAX_RELEASE_LAG_DAYS for lag in lags):
-                if best is None or sum(lags) < best[0]:
-                    best = (sum(lags), fiscal)
+            fitting = [lag for lag in lags if MIN_RELEASE_LAG_DAYS <= lag <= MAX_RELEASE_LAG_DAYS]
+            key = (-len(fitting), sum(fitting))
+            if 2 * len(fitting) > len(lags) and (best is None or key < best[0]):
+                best = (key, fiscal)
     return best[1] if best else None
 
 

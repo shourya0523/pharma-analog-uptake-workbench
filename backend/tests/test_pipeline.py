@@ -8,7 +8,7 @@ import pytest
 
 from app.retrieval.derive import Derived
 from app.retrieval.gemini_search import QuotaExceeded
-from app.retrieval.pipeline import quarter_revenue
+from app.retrieval.pipeline import parent_names, quarter_revenue
 from app.retrieval.verify import Verification
 
 
@@ -43,7 +43,7 @@ def _no_ir(product, period, issuer):
     return SimpleNamespace(status="no_archive", value=None)
 
 
-BASE = dict(describe_aliases=lambda product, end: [], parent_brand=lambda product: None, usd=_usd, confirm=None, ir=_no_ir,
+BASE = dict(describe_aliases=lambda product, end: [], parent_brand=lambda product: [], usd=_usd, confirm=None, ir=_no_ir,
             layout=lambda url, product, period: SimpleNamespace(status="not_found"),
             sellers=lambda product, period: SimpleNamespace(status="unknown", sellers=[], evidence=[]))
 
@@ -199,17 +199,21 @@ def test_booked_by_names_the_filer_whose_figure_is_wanted():
     assert seen == ["Beta Bio"]
 
 
-def test_a_form_the_issuer_prints_only_under_its_brand_is_returned_for_review():
+def test_a_form_the_issuer_prints_only_under_its_brand_is_read_from_that_line():
     def earnings(name, period, issuer):
         if name == "Calderon":
             return SimpleNamespace(status="found", value=139e6, currency="USD", url="https://x/6k.htm",
                                    scope="Calderon 139", filer="ACME", later=False, readings=[])
         return SimpleNamespace(status="not_found", readings=[])
 
-    base = {**BASE, "parent_brand": lambda product: ("Calderon", "XR")}
-    result = quarter_revenue("Calderon XR", "Q2 2023", "Acme", xbrl=_miss, earnings=earnings, allow_search=False,
-                             **{k: v for k, v in base.items()})
-    assert (result.status, result.match, result.value) == ("needs_review", "parent_brand", 139e6)
-    base = {**BASE, "parent_brand": lambda product: ("Calderon", "")}
-    alone = quarter_revenue("Calderon", "Q2 2023", "Acme", xbrl=_miss, earnings=earnings, allow_search=False, **base)
-    assert alone.status == "found"
+    base = {**BASE, "parent_brand": parent_names}
+    result = quarter_revenue("Calderon XR Pen", "Q2 2023", "Acme", xbrl=_miss, earnings=earnings, allow_search=False,
+                             **base)
+    assert (result.status, result.match, result.value, result.route) == ("found", "parent_brand", 139e6,
+                                                                         "earnings:parent_brand")
+    assert [a["route"] for a in result.attempts][-2:] == ["parent_brand", "parent_brand"]
+
+
+def test_parent_names_are_the_shorter_leading_runs():
+    assert parent_names("Calderon XR Pen") == ["Calderon XR", "Calderon"]
+    assert parent_names("Calderon") == []
