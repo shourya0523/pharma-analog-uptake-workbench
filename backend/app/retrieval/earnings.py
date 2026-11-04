@@ -22,6 +22,14 @@ year on are then read for the same quarter; the period labels must still name
 it, and a column marked restated or re-presented is refused, since its basis
 is no longer the one first reported.
 
+Tables are read first as grids (`app.retrieval.grid`): every figure in a row
+naming the product, labelled with the heading above its table and the header
+cells above its column, is offered to the model as a numbered cell, and the
+model picks one. Code then reads the period from that cell's own labels - a
+table that prints its period once, in a heading, keeps it - and the value is
+the cell itself. The text reading above is the fallback, for a figure printed
+in a sentence rather than a table.
+
 Every filer whose exhibit passes is returned, labelled with its own row as
 printed, so a product sold by partners in different territories comes back as
 two readings rather than one guess. With an issuer named, its reading is the
@@ -37,6 +45,7 @@ import re
 from dataclasses import dataclass, field
 from typing import Any, Callable
 
+from app.retrieval.grid import Cell, cells
 from app.retrieval.single_product import filing_text
 from app.retrieval.xbrl import SEARCH_URL, names_issuer, quarter_end, sec_get
 
@@ -46,6 +55,9 @@ RELEASE_WINDOW_DAYS = 60
 # their releases too; with an issuer named, its exhibits are read first.
 MAX_EXHIBITS = 6
 PASSAGE_CHARS = 1500
+# Cells offered to the model per exhibit; a product's rows across a release's
+# quarter, year-to-date and regional tables run to a few dozen.
+MAX_CELLS = 150
 MAX_PASSAGE_TOTAL = 60_000
 
 # Words that mark revenue earned on another company's sales of the product.
@@ -86,6 +98,28 @@ Passages:
 """
 
 
+CELL_PROMPT = """\
+Below are the figures printed in a company's earnings-release tables for rows
+naming the product "{product}". Each is labelled [heading above its table]
+row | column headers = figure.
+
+Which cell is the net sales the company itself reports for "{product}" for the
+three months ended {end} ({label})? Prefer the total (worldwide) figure over a
+regional one when both are printed. If none is, or the only lines are royalty,
+collaboration, licence, milestone or alliance revenue on another company's
+sales, answer null.
+
+Answer with one JSON object and nothing else:
+{{"cell": "<cell id, e.g. c12>" or null,
+  "unit": "<thousands | millions | billions | units>",
+  "currency": "<ISO code>",
+  "kind": "<product_sales | royalty | collaboration | other>"}}
+
+Cells:
+{cells}
+"""
+
+
 @dataclass
 class Reading:
     """One filer's exhibit, and what checking the model's answer found."""
@@ -99,6 +133,8 @@ class Reading:
     row_quote: str | None = None
     period_labels: list[str] = field(default_factory=list)
     released_after: str | None = None  # the quarter whose release this is, when later than the target
+    method: str | None = None  # grid | text
+    cell: str | None = None  # the chosen cell's full label, for a grid reading
     reason: str = ""
 
 
@@ -290,16 +326,86 @@ def gemini_reader(prompt: str, *, client: Any = None, model: str | None = None) 
     return parse_json_answer(data.get("output_text") or "") or {}
 
 
+_YEAR = re.compile(r"(?<!\d)(?:19|20)\d\d(?!\d)")
+
+
+def _figure(text: str) -> float | None:
+    raw = text.replace("$", "").replace(",", "").replace(" ", "")
+    negative = raw.startswith("(") and raw.endswith(")")
+    try:
+        value = float(raw.strip("()"))
+    except ValueError:
+        return None
+    return -value if negative else value
+
+
+def check_cell(choice: dict[str, Any], cell: Cell, exhibit_text: str, end: dt.date) -> tuple[str, str]:
+    """`(status, reason)` for a cell the model chose, from the cell's own labels."""
+    context, column = " ".join(cell.context), " ".join(cell.column)
+    if cell.text.endswith("%") or _figure(cell.text) is None:
+        return "value_not_in_quote", f"the cell {cell.text!r} is not a figure"
+    column_years = set(_YEAR.findall(column))
+    if column_years and str(end.year) not in column_years:
+        return "wrong_period", f"the column is {column!r}, not {end.year}"
+    if not column_years and len(set(_YEAR.findall(context))) > 1:
+        return "wrong_period", f"the heading names several years and the column none: {context!r}"
+    if not names_quarter(f"{context} {column}", end):
+        return "wrong_period", f"{(context + ' | ' + column)[:120]!r} does not name the quarter"
+    labels = " ".join(cell.row) + " " + context
+    if choice.get("kind") != "product_sales" or _NOT_OWN_SALES.search(labels):
+        return "not_own_sales", f"kind {choice.get('kind')!r}; row {' > '.join(cell.row)!r}"
+    unit = str(choice.get("unit") or "").lower()
+    if unit not in _SCALES:
+        return "unit_conflict", f"unit {unit!r} is not a scale"
+    declared = declared_scale(f"{context} {column}") or declared_scale(exhibit_text)
+    if len(declared) == 1 and unit != "units" and unit not in declared:
+        return "unit_conflict", f"the exhibit declares {next(iter(declared))}, the answer says {unit}"
+    return "accepted", ""
+
+
+def read_grid(raw: bytes, text: str, product: str, end: dt.date, label: str, ask: Callable) -> tuple[Reading | None, str]:
+    """A grid reading, or None with the reason the grid gave no answer."""
+    offered = [c for c in cells(raw, product.split("/")[0].strip()) if not c.text.endswith("%") and _figure(c.text) is not None]
+    if not offered:
+        return None, "no table row names the product"
+    offered = offered[:MAX_CELLS]
+    listing = "\n".join(f"c{i}: {c.label()}" for i, c in enumerate(offered))
+    choice = ask(CELL_PROMPT.format(product=product, end=f"{calendar.month_name[end.month]} {end.day}, {end.year}",
+                                    label=label, cells=listing))
+    picked = str(choice.get("cell") or "")
+    if not re.fullmatch(r"c\d+", picked) or int(picked[1:]) >= len(offered):
+        return None, "the model chose no cell"
+    cell = offered[int(picked[1:])]
+    reading = Reading("", "", "", "error", method="grid", cell=cell.label())
+    reading.status, reading.reason = check_cell(choice, cell, text, end)
+    reading.row_quote = " > ".join(cell.row) + " | " + " > ".join(cell.column) + " = " + cell.text
+    reading.period_labels = [*cell.context, *cell.column]
+    if reading.status == "accepted":
+        reading.value = _figure(cell.text) * _SCALES[str(choice["unit"]).lower()]
+        reading.currency = str(choice.get("currency") or "").upper() or None
+    return reading, reading.reason
+
+
 def read_exhibit(exhibit: dict, product: str, end: dt.date, label: str, *, get: Callable, ask: Callable) -> Reading:
+    """Read one exhibit: its tables as a grid first, its text if that fails."""
     reading = Reading(exhibit["filer"], exhibit["cik"], exhibit["url"], "error")
     try:
-        text = filing_text(get(exhibit["url"]).content)
+        raw = get(exhibit["url"]).content
+        text = filing_text(raw)
+        grid_reading, grid_reason = read_grid(raw, text, product, end, label, ask)
+        if grid_reading and grid_reading.status == "accepted":
+            grid_reading.filer, grid_reading.cik, grid_reading.url = exhibit["filer"], exhibit["cik"], exhibit["url"]
+            return grid_reading
         answer = ask(PROMPT.format(product=product, end=f"{calendar.month_name[end.month]} {end.day}, {end.year}",
                                    label=label, passages=passages(text, product)))
     except Exception as exc:  # one unreadable exhibit leaves the others to answer
         reading.reason = f"{type(exc).__name__}: {exc}"
         return reading
+    reading.method = "text"
     reading.status, reading.reason = check(answer, text, product, end)
+    if reading.status != "accepted" and grid_reading is not None:
+        reading.reason = f"{reading.reason}; grid: {grid_reading.status}: {grid_reason}"
+        reading.cell = grid_reading.cell
     reading.row_quote = answer.get("row_quote")
     reading.period_labels = [str(x) for x in (answer.get("period_labels") or [])]
     if reading.status == "accepted":
