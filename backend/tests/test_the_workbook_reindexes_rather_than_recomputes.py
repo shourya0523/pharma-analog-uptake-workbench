@@ -1,11 +1,10 @@
-"""The exported workbook's derived matrices hold gold's own values, re-indexed.
+"""The exported workbook's matrices hold gold's own values, re-indexed, less what it withholds.
 
-`scripts/export_gold_workbook.py` writes two pivots of the same figures: one
-against the calendar, one against each product's launch. Both are generated in
-Python rather than written as Excel formulas, so nothing recalculates them and
-nothing else checks them - a re-indexing that dropped a quarter, doubled one,
-or anchored a series on the wrong quarter would look exactly like a correct
-sheet.
+`scripts/export_gold_workbook.py` writes Quarterly Matrix as values and every
+sheet after it as Excel formulas over those cells. A re-indexing that dropped a
+quarter, doubled one, anchored a series on the wrong quarter, or let a
+withheld quarter through would look exactly like a correct sheet, so the
+checks here compare the stored values with gold.
 
 The checks are on the committed workbook, so they also fail when gold moves and
 the export is not re-run. That is the case this file mainly exists for: the
@@ -19,11 +18,15 @@ import json
 import pathlib
 from collections import defaultdict
 
+import sys
+
 import pytest
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
 GOLD = REPO / "seed" / "gold"
 WORKBOOK = REPO / "exports" / "pah_gold_dataset.xlsx"
+sys.path.insert(0, str(REPO / "scripts"))
+from uptake_workbook import WITHHELD, is_withheld  # noqa: E402
 
 CALENDAR_LEAD = ["drug_name", "benchmark_identity", "revenue_scope", "first_approval_year"]
 LAUNCH_LEAD = CALENDAR_LEAD + [
@@ -73,7 +76,8 @@ def gold():
         observed[row["drug_name"]].add(row["period"])
     return {
         "values": {(row["drug_name"], row["period"]): row["value_normalized_usd_millions"]
-                   for row in quarterly},
+                   for row in quarterly if not is_withheld(row)},
+        "withheld": {(row["drug_name"], row["period"]) for row in quarterly if is_withheld(row)},
         "rows": quarterly,
         "observed": observed,
         "coverage": {row["drug_name"]: row for row in load_jsonl("series_coverage.jsonl")},
@@ -82,16 +86,19 @@ def gold():
 
 
 def test_the_calendar_matrix_is_exactly_the_quarterly_rows(workbook, gold):
-    """Every figure in the pivot is a figure in gold, and none is missing."""
-    assert len(gold["values"]) == len(gold["rows"]), "a series reports the same quarter twice"
+    """Every figure in the pivot is a figure in gold, none is missing, and every withheld quarter says so."""
+    assert len(gold["values"]) + len(gold["withheld"]) == len(gold["rows"]), (
+        "a series reports the same quarter twice")
+    assert gold["withheld"], "nothing is withheld, so the check that withheld quarters stay out cannot fail"
     periods, rows = sheet_rows(workbook, "Quarterly Matrix", CALENDAR_LEAD)
-    found = {
+    cells = {
         (row[0], period): value
         for row in rows
         for period, value in zip(periods, row[len(CALENDAR_LEAD):])
         if value is not None
     }
-    assert found == gold["values"]
+    assert {key: value for key, value in cells.items() if value != WITHHELD} == gold["values"]
+    assert {key for key, value in cells.items() if value == WITHHELD} == gold["withheld"]
 
 
 def test_the_launch_matrix_anchors_on_the_launch_gold_states(workbook, gold):
@@ -125,17 +132,22 @@ def test_the_launch_matrix_re_indexes_and_invents_nothing(workbook, gold):
     2019Q1 puts 2019Q3 at Year 1 Q3 and 2020Q1 at Year 2 Q1.
     """
     labels, rows = sheet_rows(workbook, "Launch-Aligned Matrix", LAUNCH_LEAD)
-    found = {}
+    found, withheld = {}, set()
     for row in rows:
         drug, anchor = row[0], row[4]
         for label, value in zip(labels, row[len(LAUNCH_LEAD):]):
-            if value is None:
+            if value in (None, ""):
                 continue
             year, quarter = label.split()[1], label.split()[2]
             offset = (int(year) - 1) * 4 + int(quarter[1:]) - 1
             period_index = quarter_index(anchor) + offset
-            found[(drug, f"{period_index // 4}Q{period_index % 4 + 1}")] = value
+            key = (drug, f"{period_index // 4}Q{period_index % 4 + 1}")
+            if value == WITHHELD:
+                withheld.add(key)
+            else:
+                found[key] = value
     assert found == gold["values"]
+    assert withheld == gold["withheld"]
 
 
 def test_the_workbook_never_invents_an_approval_year(workbook, gold):
@@ -181,3 +193,20 @@ def test_every_quarterly_series_reaches_the_refresh_sheet(workbook, gold):
         assert row[header.index("quarters_behind_latest")] == (
             quarter_index(latest) - quarter_index(end)
         ), drug
+
+
+def test_the_rolling_matrix_sums_four_carried_quarters_and_nothing_short(workbook, gold):
+    """A rolling total is the quarter and the three before it, all carried; otherwise blank."""
+    periods, rows = sheet_rows(workbook, "Rolling 4Q Matrix", CALENDAR_LEAD)
+    checked = 0
+    for row in rows:
+        drug = row[0]
+        for period, value in zip(periods, row[len(CALENDAR_LEAD):]):
+            index = quarter_index(period)
+            window = [gold["values"].get((drug, f"{(index - k) // 4}Q{(index - k) % 4 + 1}")) for k in range(4)]
+            if None in window:
+                assert value in (None, ""), (drug, period)
+            else:
+                assert value == pytest.approx(sum(window)), (drug, period)
+                checked += 1
+    assert checked, "no complete window anywhere, so nothing above was checked"

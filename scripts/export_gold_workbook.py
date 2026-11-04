@@ -1,22 +1,25 @@
 """Export the gold dataset to a single Excel workbook.
 
-Every data sheet is a faithful dump of a gold file - no re-derivation, no
-rounding, no reordering of values. Quarterly Matrix, Launch-Aligned Matrix,
-Refresh Status and Product Summary are views over those sheets, all generated
-here rather than written as Excel formulas, because an openpyxl-written formula
-carries no cached value and reads back blank to pandas and to previewers until
-something recalculates it. Regenerate the workbook instead of editing it - this
-script is the only thing that should write to exports/.
+The data sheets are gold's own rows, less any row whose source this workbook
+may not carry (``uptake_workbook.split``): those are withheld, and a withheld
+quarter reads "withheld" in Quarterly Matrix rather than vanishing. Quarterly
+Matrix holds values; Rolling 4Q Matrix, Launch-Aligned Matrix, Peak
+Benchmarks, Annual Peaks, Peak-Normalized Uptake and the peak and total
+columns of Product Summary are Excel formulas over it, driven by the inputs on
+Settings. openpyxl stores no value for a formula, so the saved file is
+recalculated in headless LibreOffice (``uptake_workbook.recalculate``) and
+reads back with every value present. Regenerate the workbook instead of
+editing it - this script is the only thing that should write to exports/.
 
 Reads seed/gold, plus seed/consensus_peak_estimates.csv for the published
-peak-sales estimates the Peak-Normalized Uptake sheet needs - external figures
-that no file in gold holds and no procedure here derives. It must never import
-from the gold builder or from application code, and must never name a file the
-pipeline reads: this is a presentation of the oracle, not part of it, and a
-script that touches both directions is what
-backend/tests/test_gold_is_not_an_input.py fails. That is why
-first_approval_year is taken from gold's own product_profiles rather than from
-the reference data those profiles were built out of.
+peak-sales estimates the peak sheet needs - external figures that no file in
+gold holds and no procedure here derives. It must never import from the gold
+builder or from application code, and must never name a file the pipeline
+reads: this is a presentation of the oracle, not part of it, and a script that
+touches both directions is what backend/tests/test_gold_is_not_an_input.py
+fails. That is why first_approval_year is taken from gold's own
+product_profiles rather than from the reference data those profiles were
+built out of.
 
     python scripts/export_gold_workbook.py
 """
@@ -29,6 +32,12 @@ from pathlib import Path
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
+
+from uptake_workbook import (
+    EXEMPT_PRODUCTS, NOT_YET, PEAK_OBSERVED, LINE_ENDED, RESTRICTED, WITHHELD,
+    recalculate, scrub_citation, scrub_prose, split, write_annual_peaks, write_peaks, write_quarterly_matrix,
+    write_rolling_matrix, write_settings, write_uptake,
+)
 
 REPO = Path(__file__).resolve().parents[1]
 GOLD = REPO / "seed" / "gold"
@@ -142,12 +151,22 @@ quarterly = load("quarterly_revenue")
 annual = load("annual_revenue")
 companions = load("companion_series")
 coverage = load("series_coverage")
-peaks = load("peak_sales")
 excluded = load("excluded_products")
 cases = load("adjudication_cases")
 unresolved = load("unresolved_quarters")
 manifest = json.loads((GOLD / "manifest.json").read_text())
 report = json.loads((GOLD / "build_report.json").read_text())
+
+# Rows from a source this workbook may not carry are withheld here, before any
+# sheet is written, so no sheet can show them or anything computed from them.
+quarterly_all, annual_all = quarterly, annual
+quarterly, quarterly_withheld = split(quarterly_all)
+annual, annual_withheld = split(annual_all)
+companions, companions_withheld = split(companions)
+excluded = [scrub_prose(scrub_citation(row), ("details",)) for row in excluded]
+coverage = [scrub_prose(row, ("series_end_reason", "series_start_reason")) for row in coverage]
+withheld_products = {row["drug_name"] for row in quarterly_withheld + annual_withheld + companions_withheld}
+settings = write_settings(wb, manifest["as_of_quarter"])
 
 # Quarterly rows carry a `sources` list; the primary source already has its own
 # columns, so only the extras need somewhere to go.
@@ -291,7 +310,7 @@ REFRESH_OUTLOOK = {
 coverage_by_name = {row["drug_name"]: row for row in coverage}
 observed_periods = defaultdict(set)
 series_facts = {}
-for row in quarterly:
+for row in quarterly_all:
     observed_periods[row["drug_name"]].add(row["period"])
     series_facts[row["drug_name"]] = (row["benchmark_identity"], row.get("manufacturer"))
 
@@ -384,28 +403,10 @@ write_sheet(
     wrap=("refresh_outlook", "series_end_reason"),
 )
 
-K_COLS = [
-    "drug_name", "moa", "moa_class", "route_of_administration", "approval_era",
-    "competitive_intensity_at_launch", "peak_status", "numeric_peak_available", "peak_value",
-    "peak_window", "quarters_after_peak", "peak_year", "highest_observed_value", "highest_observed_year", "highest_observed_period",
-    "post_peak_years", "annual_observations", "revenue_scope", "geography", "unit", "currency",
-    "selection_method", "benchmark_eligible", "input_ids", "gold_id",
-]
-write_sheet(
-    wb, "Peak Sales", K_COLS, peaks,
-    note="peak_status observed means the series has turned down and stayed down; "
-         "not_yet_observed means the highest value so far is still the latest value.",
-    widths={"drug_name": 20, "moa": 38, "moa_class": 26, "route_of_administration": 20,
-            "selection_method": 46, "input_ids": 60, "gold_id": 26, "revenue_scope": 22,
-            "peak_status": 18, "highest_observed_period": 18},
-    formats={"peak_value": MONEY, "highest_observed_value": MONEY},
-    wrap=("moa", "selection_method", "input_ids"),
-)
-
 E_COLS = [
     "drug_name", "benchmark_status", "reason_code", "details", "moa", "moa_class",
     "route_of_administration", "approval_era", "competitive_intensity_at_launch",
-    "extraction_method", "source_url", "source_quote", "gold_id",
+    "extraction_method", "source_url", "source_quote", "citation_withheld", "gold_id",
 ]
 write_sheet(
     wb, "Excluded Products", E_COLS, excluded,
@@ -417,9 +418,14 @@ write_sheet(
     wrap=("details", "source_quote"),
 )
 
+# A case is named for the product it is about. Where that product has rows
+# this workbook withholds, the case's figures may be among them.
+withheld_slugs = {name.lower().replace(" ", "-") for name in withheld_products}
 for case in cases:
     case["expect"] = flat(case.get("expect"))
     case["inputs"] = flat(case.get("inputs"))
+    if any(case["case_id"].startswith(slug + "-") for slug in withheld_slugs):
+        case["inputs"] = f"{WITHHELD} - the product has figures from a source this workbook does not carry"
 CASE_COLS = ["case_id", "kind", "provenance", "why", "inputs", "expect"]
 write_sheet(
     wb, "Adjudication Cases", CASE_COLS, cases,
@@ -472,91 +478,58 @@ write_sheet(
 )
 
 # ---------------------------------------------------------- quarterly matrix
-# A pivot of Quarterly Revenue, generated rather than written as SUMIFS: an
-# openpyxl formula carries no cached value, so the cells would read back blank
-# until something recalculated the file.
+# Every series gold holds, including one whose quarters are all withheld, so a
+# withheld quarter shows as withheld rather than as a series that is not there.
+# The matrix holds values; every sheet after it is formulas over these cells.
 
-periods = sorted({row["period"] for row in quarterly})
+periods = sorted({row["period"] for row in quarterly_all})
 series = sorted({(row["drug_name"], row["benchmark_identity"], row["revenue_scope"])
-                 for row in quarterly})
+                 for row in quarterly_all})
 # first_approval_year is a curated attribute, carried here from gold's own
 # profiles. A series whose product has no profile row leaves the column empty
 # rather than borrowing a year from somewhere else.
 approval_year = {row["drug_name"]: row.get("first_approval_year") for row in profiles}
-# The pivot reads from a dict keyed exactly as the data sheet stores each row,
-# so a value can only appear here if that same row appears there.
 cube = {(row["benchmark_identity"], row["period"]): row["value_normalized_usd_millions"]
         for row in quarterly}
 assert len(cube) == len(quarterly), "a series reports the same quarter twice"
+withheld_cells = {(row["benchmark_identity"], row["period"]) for row in quarterly_withheld}
+full_periods = defaultdict(set)
+for row in quarterly_all:
+    full_periods[row["drug_name"]].add(row["period"])
 
 LEAD = ["drug_name", "benchmark_identity", "revenue_scope", "first_approval_year"]
-
-ws = wb.create_sheet("Quarterly Matrix")
-ws.cell(1, 1, "Reported revenue by series and calendar quarter, USD millions. A pivot of the "
-              "Quarterly Revenue sheet - the same figures rearranged, nothing recomputed. A "
-              "blank cell means the quarter is outside that series' reported window, or a quarter "
-              "an ownership change left unreported (Series Coverage, unreported_quarters) - never a "
-              "reported zero. Launch-Aligned Matrix holds these same values against each "
-              "product's own launch instead of the calendar.").font = NOTE
-headers = LEAD + periods
-for index, name in enumerate(headers, start=1):
-    cell = ws.cell(2, index, name)
-    cell.font = HEAD
-    cell.fill = HEAD_FILL
-    cell.alignment = Alignment(vertical="center", horizontal="center", wrap_text=True)
-    cell.border = GRID
-ws.row_dimensions[2].height = 30
-
-for offset, (drug, identity, scope) in enumerate(series):
-    row_index = 3 + offset
-    for index, value in enumerate((drug, identity, scope, approval_year.get(drug)), start=1):
-        cell = ws.cell(row_index, index, value)
-        cell.font = BODY
-        cell.border = GRID
-        if index == 4:
-            cell.number_format = "0"
-        if offset % 2:
-            cell.fill = BAND_FILL
-    for index, period in enumerate(periods, start=len(LEAD) + 1):
-        cell = ws.cell(row_index, index, cube.get((identity, period)))
-        cell.number_format = MONEY
-        cell.font = BODY
-        cell.border = GRID
-        if offset % 2:
-            cell.fill = BAND_FILL
-
-for letter, width in zip("ABCD", (20, 34, 24, 13)):
-    ws.column_dimensions[letter].width = width
-for index in range(len(LEAD) + 1, len(LEAD) + 1 + len(periods)):
-    ws.column_dimensions[get_column_letter(index)].width = 10
-ws.freeze_panes = ws.cell(3, len(LEAD) + 1)
+series_rows = [{"drug_name": drug, "benchmark_identity": identity, "revenue_scope": scope,
+                "first_approval_year": approval_year.get(drug)} for drug, identity, scope in series]
+matrix = write_quarterly_matrix(
+    wb, "Quarterly Matrix", series_rows, LEAD, periods, cube, withheld_cells,
+    note="Reported revenue by series and calendar quarter, USD millions, as in Quarterly Revenue. "
+         "A blank cell is a quarter outside the series' reported window, or one an ownership change left "
+         "unreported - never a reported zero. A cell reading 'withheld' was reported, from a source this "
+         "workbook does not carry. Every rolling total, peak and uptake figure in the workbook is a formula "
+         "over these cells.")
+rolling = write_rolling_matrix(
+    wb, "Rolling 4Q Matrix", series_rows, LEAD, matrix,
+    note="Each cell is the sum of the quarter and the three before it in Quarterly Matrix, as a formula. "
+         "It is blank when any of the four is blank or withheld, never a sum of fewer quarters.")
 
 # ----------------------------------------------------- launch-aligned matrix
-# The same cube read against each product's own launch instead of the calendar,
-# so uptake curves can be compared side by side from their first quarter on
-# sale rather than from a shared date.
-#
-# The anchor is the launch quarter gold states, NOT the first quarter the
-# series reports. Those differ for most products here, and anchoring on the
-# first reported quarter would label a series that begins mid-life as Year 1 Q1
-# and align it against a genuine launch. Where the two differ the leading cells
-# are blank and quarters_from_launch_to_first_report says how many, so a reader
-# can see that the early curve is missing rather than flat.
+# The same cells read against each product's own launch instead of the
+# calendar. The anchor is the launch quarter gold states, NOT the first
+# quarter the series reports: anchoring on the first reported quarter would
+# label a series that begins mid-life as Year 1 Q1.
 #
 #     a series launching 2019Q1 and first reported 2019Q3 puts its first value
 #     at Year 1 Q3, with Year 1 Q1 and Year 1 Q2 blank
 #
 # Where gold states no launch quarter the anchor falls back to the first
-# reported quarter, and the row says so: its Year 1 Q1 is where reporting
-# starts, which need not be where the product launched. The fallback is not
-# read as a launch date, because nothing in gold says it is one.
+# reported quarter, and the row says so.
 
 ANCHOR_STATED = "launch quarter stated in gold"
 ANCHOR_ASSUMED = "no launch quarter in gold - anchored on first reported quarter"
 
 aligned = []
 for drug, identity, scope in series:
-    first_reported = min(observed_periods[drug])
+    first_reported = min(full_periods[drug])
     launch = coverage_by_name.get(drug, {}).get("launch_quarter")
     aligned.append({
         "drug_name": drug,
@@ -567,20 +540,21 @@ for drug, identity, scope in series:
         "alignment_basis": ANCHOR_STATED if launch else ANCHOR_ASSUMED,
         "quarters_from_launch_to_first_report":
             quarters_between(launch or first_reported, first_reported) - 1,
+        "first_period": first_reported,
+        "last_period": max(full_periods[drug]),
     })
 
-A_LEAD = list(aligned[0].keys())
-span = max(quarters_between(row["launch_anchor_quarter"], max(observed_periods[row["drug_name"]]))
-           for row in aligned)
+A_LEAD = ["drug_name", "benchmark_identity", "revenue_scope", "first_approval_year",
+          "launch_anchor_quarter", "alignment_basis", "quarters_from_launch_to_first_report"]
+span = max(quarters_between(row["launch_anchor_quarter"], row["last_period"]) for row in aligned)
 
 la = wb.create_sheet("Launch-Aligned Matrix")
-la.cell(1, 1, f"The Quarterly Matrix values re-indexed to each product's own launch: Year 1 Q1 "
-              f"is the anchor quarter in launch_anchor_quarter, Year 2 Q1 the fifth quarter "
-              f"after it. Same figures, same blanks-are-not-zeros rule - only the column "
-              f"headings change. Read alignment_basis before comparing curves: a row anchored "
-              f"on a stated launch quarter is launch-to-date, a row anchored on its first "
-              f"reported quarter is not. quarters_from_launch_to_first_report is how much of "
-              f"the early curve gold does not hold; it is 0 where the series starts at launch.").font = NOTE
+la.cell(1, 1, "The Quarterly Matrix cells re-indexed to each product's own launch: Year 1 Q1 is the "
+              "anchor quarter in launch_anchor_quarter, Year 2 Q1 the fifth quarter after it. Each cell "
+              "refers to its Quarterly Matrix cell, so the same blanks and 'withheld' marks carry over. "
+              "Read alignment_basis before comparing curves: a row anchored on a stated launch quarter is "
+              "launch-to-date, a row anchored on its first reported quarter is not. "
+              "quarters_from_launch_to_first_report is how much of the early curve gold does not hold.").font = NOTE
 headers = A_LEAD + [launch_label(offset) for offset in range(span)]
 for index, name in enumerate(headers, start=1):
     cell = la.cell(2, index, name)
@@ -589,7 +563,6 @@ for index, name in enumerate(headers, start=1):
     cell.alignment = Alignment(vertical="center", horizontal="center", wrap_text=True)
     cell.border = GRID
 la.row_dimensions[2].height = 30
-
 for offset, row in enumerate(aligned):
     row_index = 3 + offset
     for index, column in enumerate(A_LEAD, start=1):
@@ -598,76 +571,36 @@ for offset, row in enumerate(aligned):
         cell.border = GRID
         if column in ("first_approval_year", "quarters_from_launch_to_first_report"):
             cell.number_format = "0"
-        if offset % 2:
-            cell.fill = BAND_FILL
-    for period in sorted(observed_periods[row["drug_name"]]):
+    for period in periods:
+        if not row["first_period"] <= period <= row["last_period"]:
+            continue
+        source = f"'Quarterly Matrix'!{matrix.col(period)}{row_index}"
         index = len(A_LEAD) + quarters_between(row["launch_anchor_quarter"], period)
-        cell = la.cell(row_index, index, cube[(row["benchmark_identity"], period)])
+        cell = la.cell(row_index, index, f'=IF(ISBLANK({source}),"",{source})')
         cell.number_format = MONEY
         cell.font = BODY
-        cell.border = GRID
-    # The banding has to be painted across the whole row, not only where the
-    # series reports, or a short series loses its stripe past its last quarter.
-    if offset % 2:
-        for index in range(len(A_LEAD) + 1, len(headers) + 1):
-            la.cell(row_index, index).fill = BAND_FILL
-
 for index, width in enumerate((20, 34, 24, 13, 15, 30, 15), start=1):
     la.column_dimensions[get_column_letter(index)].width = width
 for index in range(len(A_LEAD) + 1, len(headers) + 1):
     la.column_dimensions[get_column_letter(index)].width = 11
 la.freeze_panes = la.cell(3, len(A_LEAD) + 1)
 
-# --------------------------------------------- peak-normalized uptake sheet
-# The launch-aligned values again, this time as a percentage of a per-quarter
-# peak benchmark, so a product still climbing and a product long past its peak
-# can be read on the same axis.
-#
-# The benchmark is an annual peak divided by four, and the annual peak is the
-# larger of two inputs:
-#
-#   observed  - the highest total over four consecutive reported quarters.
-#               Four consecutive, not four calendar quarters of one year: a
-#               product peaking mid-year has its peak split across two
-#               calendar years by a January-to-December window.
-#   consensus - the median of the published peak-sales estimates that are
-#               comparable to the series, where any are.
-#
-# Consensus wins only when it is the larger. An estimate below what the
-# product has already sold has been overtaken by the world and says nothing;
-# an estimate above it is the part of the curve the reported quarters do not
-# yet cover, which is exactly the case a highest-observed benchmark gets
-# wrong - it calls every product mature and reads a growing product as though
-# it were already at its peak.
-#
-# Comparable means two things, and an estimate failing either is set aside on
-# the row rather than dropped quietly:
-#
-#   the same geography - a worldwide estimate over a series reporting one
-#     country makes the denominator wider than the numerator can reach, and
-#     every quarter of that curve reads low for a reason that is not the
-#     product's. The series' geography is the one its own rows state, not a
-#     reading of its scope label: a line can be formulation-specific and
-#     worldwide at once.
-#   a peak - a market-size projection for a horizon year is a different
-#     quantity, and a curve normalized by one is not measuring uptake.
-#
-# An estimate from a paid report, subscription or licensed transcript
-# (source_access other than free_to_read) is set aside the same way.
-#
-# A quarter can print above 100%: the benchmark is an average quarter at the
-# peak year, and the strongest quarter of that year is above its own average.
+# ------------------------------------------------- peaks and uptake curves
+# Published estimates come from seed/consensus_peak_estimates.csv: external
+# figures no file in gold holds. Which of them are comparable to a series is
+# decided here (peak_benchmarks.select_peak); the consensus median is written
+# as a value, and whether it or the observed high becomes the benchmark is a
+# formula on the peak sheet.
 
-from peak_benchmarks import (  # noqa: E402 - shared with export_analog_profiles.py
-    CONSENSUS, NO_ESTIMATE, OBSERVED, load_consensus_estimates, select_peak,
-)
+from peak_benchmarks import load_consensus_estimates, select_peak  # noqa: E402
 
 estimates = load_consensus_estimates()
 values_by_series = defaultdict(dict)
 series_geography = defaultdict(set)
+for row in quarterly_all:
+    series_geography[row["benchmark_identity"]].add(row["geography"])
 for row in quarterly:
     values_by_series[row["benchmark_identity"]][row["period"]] = row["value_normalized_usd_millions"]
-    series_geography[row["benchmark_identity"]].add(row["geography"])
 
 normalized = []
 for row in aligned:
@@ -675,21 +608,15 @@ for row in aligned:
     geography = " | ".join(sorted(series_geography[identity]))
     on_file = estimates.get(drug, [])
     choice = select_peak(on_file, geography, values_by_series[identity])
-    observed, usable, reasons = choice["observed"], choice["usable"], choice["reasons"]
-    consensus, selected, basis = choice["consensus"], choice["selected"], choice["basis"]
-
-    normalized.append({
-        "drug_name": drug,
-        "benchmark_identity": identity,
-        "revenue_scope": row["revenue_scope"],
-        "series_geography": geography,
-        "launch_anchor_quarter": row["launch_anchor_quarter"],
-        "alignment_basis": row["alignment_basis"],
-        "observed_peak_4q_usd_mm": round(observed[0], 1) if observed else None,
-        "observed_peak_window": f"{observed[1]}-{observed[2]}" if observed else None,
-        "consensus_peak_usd_mm": consensus,
+    usable, reasons = choice["usable"], choice["reasons"]
+    cov = coverage_by_name.get(drug, {})
+    normalized.append(row | {
+        "geography": geography,
+        "series_end_quarter": cov.get("series_end_quarter") or row["last_period"],
+        "launch_gap_quarters": cov.get("launch_gap_quarters"),
+        "gold_launch_review": cov.get("peak_judgement"),
+        "consensus_peak_usd_m": choice["consensus"],
         "consensus_estimate_count": len(usable),
-        "consensus_estimates_as_stated": " | ".join(item["as_stated"] for item in usable),
         "consensus_sources": " | ".join(
             f"{item['as_stated']}, {item['publisher']}"
             f"{', ' + item['published_on'] if item['published_on'] else ''}"
@@ -698,95 +625,61 @@ for row in aligned:
         "estimates_set_aside": " | ".join(
             f"{item['as_stated']} {item['publisher']} - {reasons[id(item)]}"
             for item in on_file if reasons[id(item)] is not None),
-        "selected_peak_usd_mm": round(selected, 1) if selected is not None else None,
-        "peak_basis": basis,
-        # A quarter of the peak as printed beside it, so a reader dividing the
-        # column by four gets the benchmark the percentages use.
-        "quarterly_benchmark_usd_mm": round(round(selected, 1) / 4, 1) if selected is not None else None,
     })
-
-N_LEAD = list(normalized[0].keys())
 usable_for = {row["drug_name"] for row in normalized if row["consensus_estimate_count"]}
 unused = sorted(set(estimates) - usable_for)
-on_consensus = [row for row in normalized if row["peak_basis"] == CONSENSUS]
-overtaken = [row for row in normalized if row["peak_basis"] == OBSERVED]
 
-un = wb.create_sheet("Peak-Normalized Uptake")
-un.cell(1, 1, f"The Launch-Aligned Matrix as a percentage of each product's own quarterly peak "
-              f"benchmark, so a product mid-growth and a product past its peak can be compared "
-              f"on one axis. The benchmark is selected_peak_usd_mm / 4. The selected peak is the "
-              f"median of the published estimates in seed/consensus_peak_estimates.csv where "
-              f"that median is above the highest four-consecutive-quarter total the series "
-              f"reports, and that observed total otherwise - so a product that has already "
-              f"outsold what was forecast for it is measured against itself. An estimate counts "
-              f"only where it is a peak figure, states the same geography the series reports, and "
-              f"comes from a free-to-read source rather than a paid or licensed one; "
-              f"anything else on file for the product is named in estimates_set_aside rather "
-              f"than used. Of {len(normalized)} series, {len(on_consensus)} sit on a consensus "
-              f"estimate and {len(overtaken)} have overtaken the estimate written for them; the "
-              f"rest have none on file. "
-              f"Blanks are quarters outside the reported window, never zeros, and a quarter "
-              f"above 100% is a quarter stronger than the average quarter of the peak year. "
-              f"Estimates on file that no series can use: "
-              f"{', '.join(unused) if unused else 'none'}.").font = NOTE
+peak_sheet = write_peaks(
+    wb, "Peak Benchmarks", normalized, matrix, rolling, settings,
+    note=f"One row per series, in the matrices' order. The peak is the highest rolling four-quarter total "
+         f"(of equal totals, the earliest) and peak_status follows from the formulas beside it: "
+         f"'{PEAK_OBSERVED}' once the Settings number of later totals exist; '{LINE_ENDED}' when the series "
+         f"stopped before then; '{NOT_YET}' while it is live and short of them, or when an unreported quarter "
+         f"sits beside the high; '{RESTRICTED}' when a withheld quarter falls in, just before or after the "
+         f"highest window; 'not judged' when gold's launch-gap review found too much of the launch missing, or "
+         f"launch quarters are missing and no lower window precedes the high. The benchmark is the observed "
+         f"high for an observed peak, and otherwise the consensus median of comparable published estimates "
+         f"where it is higher. Estimates on file that no series can use: {', '.join(unused) or 'none'}.")
+uptake_count = write_uptake(
+    wb, "Peak-Normalized Uptake", normalized, A_LEAD, matrix, peak_sheet, settings,
+    note="Each quarter from launch as a share of the quarterly benchmark on Peak Benchmarks "
+         "(selected peak / 4), limited to 0-100%. For a product whose peak is observed, the curve is held "
+         "at 100% from the last quarter of the peak window on while Settings 'Flat after peak' is Yes. "
+         "Blanks are quarters outside the reported window or withheld, never zeros.")
 
-headers = N_LEAD + [launch_label(offset) for offset in range(span)]
-for index, name in enumerate(headers, start=1):
-    cell = un.cell(2, index, name)
-    cell.font = HEAD
-    cell.fill = HEAD_FILL
-    cell.alignment = Alignment(vertical="center", horizontal="center", wrap_text=True)
-    cell.border = GRID
-un.row_dimensions[2].height = 30
-
-for offset, row in enumerate(normalized):
-    row_index = 3 + offset
-    for index, column in enumerate(N_LEAD, start=1):
-        cell = un.cell(row_index, index, row[column])
-        cell.font = BODY
-        cell.border = GRID
-        if column.endswith("usd_mm"):
-            cell.number_format = MONEY
-        if column == "consensus_estimate_count":
-            cell.number_format = "0"
-        if column in ("consensus_sources", "estimates_set_aside"):
-            cell.alignment = Alignment(vertical="top", wrap_text=True)
-        else:
-            cell.alignment = Alignment(vertical="top")
-        if offset % 2:
-            cell.fill = BAND_FILL
-    benchmark = row["quarterly_benchmark_usd_mm"]
-    for period in sorted(values_by_series[row["benchmark_identity"]]):
-        index = len(N_LEAD) + quarters_between(row["launch_anchor_quarter"], period)
-        value = values_by_series[row["benchmark_identity"]][period]
-        cell = un.cell(row_index, index, round(value / benchmark * 100, 1) if benchmark else None)
-        cell.number_format = PCT
-        cell.font = BODY
-        cell.border = GRID
-    if offset % 2:
-        for index in range(len(N_LEAD) + 1, len(headers) + 1):
-            un.cell(row_index, index).fill = BAND_FILL
-
-for index, width in enumerate((20, 34, 24, 16, 15, 30, 15, 18, 15, 12, 20, 52, 40, 15, 34, 15),
-                              start=1):
-    un.column_dimensions[get_column_letter(index)].width = width
-for index in range(len(N_LEAD) + 1, len(headers) + 1):
-    un.column_dimensions[get_column_letter(index)].width = 11
-un.freeze_panes = un.cell(3, len(N_LEAD) + 1)
+# Products whose benchmark is annual keep the annual rule.
+annual_benchmarks = sorted({row["drug_name"] for row in annual_all if row["series_role"] == "peak_benchmark"})
+annual_years = sorted({row["period"] for row in annual_all if row["drug_name"] in annual_benchmarks})
+annual_meta = {row["drug_name"]: row for row in annual_all if row["series_role"] == "peak_benchmark"}
+annual_sheet = write_annual_peaks(
+    wb, "Annual Peaks",
+    [{"drug_name": name, "revenue_scope": annual_meta[name]["revenue_scope"],
+      "geography": annual_meta[name]["geography"]} for name in annual_benchmarks],
+    annual_years,
+    {(row["drug_name"], row["period"]): row["value_normalized_usd_millions"]
+     for row in annual if row["series_role"] == "peak_benchmark"},
+    {(row["drug_name"], row["period"]) for row in annual_withheld if row["series_role"] == "peak_benchmark"},
+    settings,
+    note="Products whose peak benchmark is annual, in USD millions by calendar year. The peak is observed "
+         "when the highest year is followed by at least two later years, none as high. A withheld year at "
+         "or after the highest leaves the peak unknown.")
+annual_row = {name: 3 + index for index, name in enumerate(annual_benchmarks)}
+series_row = {drug: 3 + index for index, (drug, _, _) in enumerate(series)}
 
 # ------------------------------------------------------- product summary
 # One row per product, joining the profile, the revenue sheets and the peak
-# sheet so a single product can be read without crossing four tabs. Every
-# number here is generated from those sheets' own rows, for the same reason the
+# sheet so a single product can be read without crossing four tabs. Counts are
+# of the rows this workbook carries; totals and peaks are formulas over the
+# matrix and peak sheets, for the same reason the
 # matrices are: a written formula would read back blank until recalculated.
 
 SUMMARY_STATUS = {}
-quarterly_products = {row["drug_name"] for row in quarterly}
-annual_products = {row["drug_name"] for row in annual}
+quarterly_products = {row["drug_name"] for row in quarterly_all}
+annual_products = {row["drug_name"] for row in annual_all}
 excluded_products = {row["drug_name"] for row in excluded}
 for row in profiles:
     name = row["drug_name"]
-    roles = {row["series_role"] for row in annual if row["drug_name"] == name}
+    roles = {row["series_role"] for row in annual_all if row["drug_name"] == name}
     if name in quarterly_products:
         SUMMARY_STATUS[name] = "quarterly series"
     elif "peak_benchmark" in roles:
@@ -808,16 +701,17 @@ REQUESTED = {
 
 ps = wb.create_sheet("Product Summary")
 ps.cell(1, 1, "One row per product, so a product can be read without crossing four tabs. "
-              "Attributes come from Product Profiles; counts, totals and peaks are a census of "
-              "the Quarterly Revenue, Annual Revenue and Peak Sales sheets, generated by "
-              "scripts/export_gold_workbook.py. A blank peak column means the product has no "
-              "peak row - it is either excluded or has not turned down yet.").font = NOTE
+              "Attributes come from Product Profiles; row counts are of the rows this workbook carries, "
+              "and 'withheld rows' counts those it does not. Total, peak status, value and window are "
+              "formulas over Quarterly Matrix, Peak Benchmarks and, for a product whose benchmark is "
+              "annual, Annual Peaks. A peak value is shown only for an observed peak or a line that ended "
+              "at its high.").font = NOTE
 
 S_HEAD = ["drug_name", "role in gold", "indication_area", "moa_class", "route_of_administration",
           "approval_era", "competitive_intensity_at_launch", "marketed_peers_at_launch",
           "quarterly rows", "annual rows", "first calendar year", "last calendar year",
-          "total reported (USD mm)", "peak status", "peak value (USD mm)", "peak year",
-          "in requested list"]
+          "total reported (USD mm)", "peak status", "peak value (USD mm)", "peak window or year",
+          "in requested list", "withheld rows"]
 for index, name in enumerate(S_HEAD, start=1):
     cell = ps.cell(2, index, name)
     cell.font = HEAD
@@ -826,14 +720,37 @@ for index, name in enumerate(S_HEAD, start=1):
     cell.border = GRID
 ps.row_dimensions[2].height = 32
 
-peak_index = {row["drug_name"]: row for row in peaks}
+withheld_count = defaultdict(int)
+for row in quarterly_withheld + annual_withheld:
+    withheld_count[row["drug_name"]] += 1
+annual_set = set(annual_benchmarks)
+
+
+def peak_cells(name):
+    """Formulas for a product's peak status, value and window, or Nones where it has no peak sheet row."""
+    if name in annual_set:
+        r = annual_row[name]
+        status = annual_sheet.cell("peak_status", r)
+        return (f"={status}",
+                f'=IF({status}="{PEAK_OBSERVED}",{annual_sheet.cell("highest_year_usd_m", r)},"")',
+                f'=IF({status}="{PEAK_OBSERVED}",{annual_sheet.cell("peak_year", r)},"")')
+    if name in series_row:
+        r = series_row[name]
+        status = peak_sheet.cell("peak_status", r)
+        shown = f'OR({status}="{PEAK_OBSERVED}",{status}="{LINE_ENDED}")'
+        return (f"={status}",
+                f'=IF({shown},{peak_sheet.cell("observed_peak_4q_usd_m", r)},"")',
+                f'=IF({shown},{peak_sheet.cell("peak_window_end", r)},"")')
+    return None, None, None
+
+
 for offset, row in enumerate(sorted(profiles, key=lambda item: item["drug_name"])):
     n = 3 + offset
     name = row["drug_name"]
     q_rows = [item for item in quarterly if item["drug_name"] == name]
     a_rows = [item for item in annual if item["drug_name"] == name]
-    peak = peak_index.get(name)
     years = [item["calendar_year"] for item in q_rows] or [int(item["period"]) for item in a_rows]
+    total = (f"=SUM({matrix.row_range(series_row[name])})" if name in series_row and q_rows else None)
     values = [
         name, SUMMARY_STATUS[name], row.get("indication_area"), row.get("moa_class"),
         row.get("route_of_administration"), row.get("approval_era"),
@@ -841,11 +758,9 @@ for offset, row in enumerate(sorted(profiles, key=lambda item: item["drug_name"]
         len(q_rows), len(a_rows),
         min(years) if years else None,
         max(years) if years else None,
-        round(sum(item["value_normalized_usd_millions"] for item in q_rows), 1) if q_rows else None,
-        peak["peak_status"] if peak else None,
-        peak["peak_value"] if peak else None,
-        peak["peak_year"] if peak else None,
+        total, *peak_cells(name),
         "yes" if name in REQUESTED else "no (reference)",
+        withheld_count.get(name, 0),
     ]
     for index, value in enumerate(values, start=1):
         cell = ps.cell(n, index, value)
@@ -855,13 +770,13 @@ for offset, row in enumerate(sorted(profiles, key=lambda item: item["drug_name"]
             cell.fill = BAND_FILL
         if index in (13, 15):
             cell.number_format = MONEY
-        if index in (11, 12, 16):
+        if index in (11, 12, 18):
             cell.number_format = "0"
         cell.alignment = Alignment(vertical="top")
 
-for index, width in enumerate([20, 22, 34, 26, 20, 13, 15, 13, 12, 11, 13, 13, 16, 18, 14, 11, 14], start=1):
+for index, width in enumerate([20, 22, 34, 26, 20, 13, 15, 13, 12, 11, 13, 13, 16, 26, 14, 16, 14, 11], start=1):
     ps.column_dimensions[get_column_letter(index)].width = width
-ps.auto_filter.ref = f"A2:Q{2 + len(profiles)}"
+ps.auto_filter.ref = f"A2:R{2 + len(profiles)}"
 ps.freeze_panes = "C3"
 
 # --------------------------------------------------------------- read me
@@ -896,7 +811,9 @@ read.cell(r, 1, f"Independently researched from issuer filings and releases. "
                 f"{len(REQUESTED & set(SUMMARY_STATUS))} requested products plus "
                 f"{len(set(SUMMARY_STATUS) - REQUESTED)} reference products from the original "
                 f"pulmonary-hypertension set and its comparators (Product Summary, "
-                f"'in requested list').").font = NOTE
+                f"'in requested list'). Rows whose source is a company website are withheld from this "
+                f"workbook, apart from those for {', '.join(sorted(EXEMPT_PRODUCTS))}: a withheld quarter "
+                f"reads 'withheld' in Quarterly Matrix, and nothing computed from one is shown.").font = NOTE
 r += 2
 
 read.cell(r, 1, "WHAT THIS IS").font = BOLD
@@ -946,8 +863,14 @@ CONTENTS = [
     ("Refresh Status", len(refresh),
      "How current each series is, and whether a series that stops early stops because the "
      "issuer did or because sourcing did. Start here when planning a quarterly refresh."),
-    ("Peak Sales", len(peaks),
-     "Peak value and year per product, and whether the peak has actually been observed."),
+    ("Settings", None,
+     "The inputs the peak and uptake formulas read: confirming quarters, flat after peak, as-of quarter."),
+    ("Rolling 4Q Matrix", len(series),
+     "Rolling four-quarter totals as formulas over Quarterly Matrix."),
+    ("Peak Benchmarks", len(normalized),
+     "Per series: the peak, its status and the benchmark an uptake curve divides by, all formulas."),
+    ("Annual Peaks", len(annual_benchmarks),
+     "Products whose peak benchmark is annual, with the annual peak rule as formulas."),
     ("Excluded Products", len(excluded),
      "Products kept out of the benchmark set, each with the evidence for why."),
     ("Adjudication Cases", len(cases),
@@ -1003,19 +926,22 @@ STATS = [
      f"{report['complete_quarterly_series']} of them, and those are complete."),
     ("Quarterly observations", len(quarterly),
      "Counted from the Quarterly Revenue sheet."),
+    ("Quarterly observations withheld", len(quarterly_withheld),
+     "Reported quarters from a source this workbook does not carry."),
     ("Quarterly coverage", report["quarterly_coverage_pct"],
      "No missing quarter in any series, each measured to its own series_end_quarter."),
     ("Series current to " + latest_quarter, len(refresh) - len(behind),
      f"Of {len(refresh)} quarterly series. {len(extendable)} of the rest stop at a sourcing "
      f"boundary rather than because the issuer stopped - see Refresh Status."),
     ("Annual observations", report["annual_rows"], ""),
-    ("Observed peaks", report["observed_peaks"],
-     "Products whose series has turned down and stayed down."),
-    ("Peaks not yet observed", report["not_yet_observed_peaks"],
-     "Still at their highest value; no peak claimed."),
-    ("Series on a consensus peak", len(on_consensus),
-     f"Of {len(normalized)} series: their published estimates sit above anything they have "
-     f"reported, so Peak-Normalized Uptake measures them against the estimate."),
+    ("Series with an observed peak", f'=COUNTIF({peak_sheet.column("peak_status")},"{PEAK_OBSERVED}")',
+     "Counted by formula from Peak Benchmarks, so it follows Settings."),
+    ("Series not yet peaked", f'=COUNTIF({peak_sheet.column("peak_status")},"{NOT_YET}")', ""),
+    ("Series whose line ended at its high", f'=COUNTIF({peak_sheet.column("peak_status")},"{LINE_ENDED}")', ""),
+    ("Series whose peak is unknown", f'=COUNTIF({peak_sheet.column("peak_status")},"{RESTRICTED}")',
+     "A withheld quarter falls at or after the highest window."),
+    ("Series on a consensus peak", f'=COUNTIF({peak_sheet.column("peak_basis")},"consensus estimate")',
+     f"Of {len(normalized)} series: their benchmark is a published estimate above anything they have reported."),
     ("Evidenced exclusions", report["excluded_products"], ""),
     ("Distinct sources cited", len(sources), ""),
     ("Products with attributes", report["product_profiles"]["products"], ""),
@@ -1035,7 +961,7 @@ for label, value, note in STATS:
 drift = [
     (label, stated, counted)
     for label, stated, counted in (
-        ("quarterly rows", report["quarterly_rows"], len(quarterly)),
+        ("quarterly rows", report["quarterly_rows"], len(quarterly_all)),
         ("quarterly series", report["complete_quarterly_series"], len(refresh)),
         ("products with attributes", report["product_profiles"]["products"], len(profiles)),
     )
@@ -1107,6 +1033,8 @@ mf.cell(row_index, 1, "unresolved_quarters.jsonl").font = BOLD
 mf.cell(row_index, 2, f"{len(unresolved)} rows - no quarter in any series is unresolved.").font = BODY
 
 wb.move_sheet("Read Me", offset=-wb.sheetnames.index("Read Me"))
+wb.move_sheet("Settings", offset=1 - wb.sheetnames.index("Settings"))
 OUT.parent.mkdir(parents=True, exist_ok=True)
 wb.save(OUT)
+recalculate(OUT)
 print("wrote", OUT, "sheets:", wb.sheetnames)
