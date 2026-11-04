@@ -188068,6 +188068,11 @@
   "source": "seed/gold/quarterly_revenue.jsonl",
   "expect": [
    {
+    "period": "2019Q1",
+    "value_normalized_usd_millions": 137.03703,
+    "gold_id": "shire-elaprase-worldwide-reported-2019q1"
+   },
+   {
     "period": "2019Q2",
     "value_normalized_usd_millions": 171.367613,
     "gold_id": "shire-elaprase-worldwide-reported-2019q2"

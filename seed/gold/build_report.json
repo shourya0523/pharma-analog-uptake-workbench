@@ -1,7 +1,7 @@
 {
   "generation": "independent_issuer_research",
   "as_of_quarter": "2026Q2",
-  "quarterly_rows": 22321,
+  "quarterly_rows": 22322,
   "annual_rows": 168,
   "complete_quarterly_series": 637,
   "quarterly_coverage_pct": 100.0,
@@ -1441,7 +1441,7 @@
       "Zyprexa Relprevv"
     ],
     "quarterly_series_pct": 70.0,
-    "quarterly_observations": 22321,
+    "quarterly_observations": 22322,
     "bounded_series": [
       "Abecma",
       "Aczone",
@@ -1680,7 +1680,7 @@
     "accounted_for": 20,
     "unaccounted_products": [],
     "complete_quarterly_series": 637,
-    "quarterly_observations": 22321,
+    "quarterly_observations": 22322,
     "series_missing_quarters": [],
     "annual_benchmark_series": 17,
     "annual_observations": 168,
@@ -2457,7 +2457,7 @@
     "complete": true
   },
   "concentration": {
-    "quarters": 22321,
+    "quarters": 22322,
     "largest_issuer": "AstraZeneca",
     "largest_issuer_share": 5.6,
     "largest_issuer_within_target": true,

@@ -12,12 +12,19 @@ series; a window that spans an unreported quarter is skipped rather than
 summed short. Values are ``value_normalized_usd_millions``, so a series that
 changes currency at an ownership change stays comparable across the step.
 
+Rows whose source is a company website are withheld here as in the
+workbooks (``uptake_workbook.split``): nothing is computed from them, a
+product shows how many it has, and a product whose highest window has a
+withheld quarter at or before it within a year, or after it, reads
+``peak unknown - restricted data`` - the rule Peak Benchmarks applies.
+
     python scripts/export_peak_candidates.py   # writes exports/peak_candidates.xlsx
 """
 
 from __future__ import annotations
 
 import json
+import sys
 from collections import defaultdict
 from pathlib import Path
 
@@ -26,6 +33,8 @@ from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.utils import get_column_letter
 
 REPO = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(REPO / "scripts"))
+from uptake_workbook import LAUNCH_HISTORY_MISSING, RESTRICTED, split  # noqa: E402
 GOLD = REPO / "seed" / "gold"
 OUT = REPO / "exports" / "peak_candidates.xlsx"
 
@@ -72,7 +81,10 @@ def peak_records() -> list[dict]:
     ``best_annual_usd_m`` and ``quarters`` of 0. Sorted not-yet-peaked first,
     then peak observed, then not judged, each by best rolling year descending.
     """
-    quarterly = load("quarterly_revenue.jsonl")
+    quarterly, withheld = split(load("quarterly_revenue.jsonl"))
+    held: dict[str, set[int]] = defaultdict(set)
+    for row in withheld:
+        held[row["drug_name"]].add(quarter_index(row["period"]))
     peaks = {row["drug_name"]: row for row in load("peak_sales.jsonl")}
     coverage = {row["drug_name"]: row for row in load("series_coverage.jsonl")}
     profiles = {row["drug_name"]: row for row in load("product_profiles.jsonl")}
@@ -81,6 +93,8 @@ def peak_records() -> list[dict]:
     series: dict[str, list[dict]] = defaultdict(list)
     for row in quarterly:
         series[row["drug_name"]].append(row)
+    for drug in held:
+        series.setdefault(drug, [])
 
     records = []
     for drug, rows in series.items():
@@ -89,9 +103,17 @@ def peak_records() -> list[dict]:
         windows = rolling_windows(rows)
         best = max(windows, key=lambda w: w[2]) if windows else None
         latest = windows[-1] if windows else None
-        first, last = rows[0], rows[-1]
+        first, last = (rows[0], rows[-1]) if rows else ({}, {})
         profile = profiles.get(drug, {})
-        if peak is None:
+        best_end = quarter_index(best[1]) if best else None
+        # The order of Peak Benchmarks' peak_status formula.
+        if coverage.get(drug, {}).get("peak_judgement") == LAUNCH_HISTORY_MISSING:
+            status = "not judged - launch history too short or missing"
+        elif held[drug] and (best is None or any(k >= best_end - 4 for k in held[drug])):
+            status = RESTRICTED
+        elif best is None:
+            status = "not yet peaked"
+        elif peak is None:
             status = "not judged - launch history too short or missing"
         elif peak["peak_status"] == "observed":
             status = "peak observed"
@@ -108,10 +130,11 @@ def peak_records() -> list[dict]:
             "therapeutic_area": first.get("therapeutic_area"),
             "revenue_scope": first.get("revenue_scope"),
             "geography": first.get("geography"),
-            "first_quarter": first["period"],
-            "last_quarter": last["period"],
-            "series_current": last["period"] == latest_in_gold,
+            "first_quarter": first.get("period"),
+            "last_quarter": last.get("period"),
+            "series_current": last.get("period") == latest_in_gold,
             "quarters": len(rows),
+            "quarters_withheld": len(held[drug]),
             "best_rolling_4q_usd_m": round(best[2], 3) if best else None,
             "best_window": f"{best[0]}-{best[1]}" if best else None,
             "best_window_is_latest": bool(best and latest and best[1] == latest[1]),
@@ -133,23 +156,30 @@ def peak_records() -> list[dict]:
     # Annual-only products carry a peak label but no quarters to roll, so they
     # are listed with their highest complete year instead.
     annual = defaultdict(list)
-    for row in load("annual_revenue.jsonl"):
-        if row.get("series_role") == "peak_benchmark":
-            annual[row["drug_name"]].append(row)
+    annual_held: dict[str, set[int]] = defaultdict(set)
+    kept, withheld_years = split([row for row in load("annual_revenue.jsonl") if row.get("series_role") == "peak_benchmark"])
+    for row in kept:
+        annual[row["drug_name"]].append(row)
+    for row in withheld_years:
+        annual_held[row["drug_name"]].add(int(row["period"]))
     for drug, peak in peaks.items():
         if drug in series or drug not in annual:
             continue
         years = sorted(annual[drug], key=lambda r: r["period"])
         top = max(years, key=lambda r: r["value_normalized_usd_millions"] or 0)
+        # Annual Peaks' rule: a withheld year from the one before the highest onward hides the peak.
+        restricted = any(y >= int(top["period"]) - 1 for y in annual_held[drug])
         records.append({key: None for key in records[0]} | {
             "drug_name": drug,
-            "peak_status": "peak observed" if peak["peak_status"] == "observed" else "not yet peaked",
+            "peak_status": RESTRICTED if restricted else
+                           "peak observed" if peak["peak_status"] == "observed" else "not yet peaked",
             "manufacturer": years[0].get("manufacturer"),
             "revenue_scope": years[0].get("revenue_scope"),
             "geography": years[0].get("geography"),
             "first_quarter": f"{years[0]['period']} (annual only)",
             "last_quarter": f"{years[-1]['period']} (annual only)",
             "quarters": 0,
+            "quarters_withheld": 0,
             "best_annual_usd_m": round(top["value_normalized_usd_millions"], 3),
             "highest_calendar_year": peak.get("highest_observed_year"),
             "peak_year": peak.get("peak_year"),
@@ -159,7 +189,7 @@ def peak_records() -> list[dict]:
         })
 
     order = {"not yet peaked": 0, "line ended at high": 1, "peak observed": 2,
-             "not judged - launch history too short or missing": 3}
+             "not judged - launch history too short or missing": 3, RESTRICTED: 4}
     records.sort(key=lambda r: (order[r["peak_status"]], -(r["best_rolling_4q_usd_m"] or 0)))
     return records
 
@@ -183,7 +213,7 @@ def launch_gap_review(records: list[dict]) -> list[dict]:
     """
     from build_independent_gold import full_annual_totals
 
-    quarterly = load("quarterly_revenue.jsonl")
+    quarterly, _ = split(load("quarterly_revenue.jsonl"))
     by_name = {record["drug_name"]: record for record in records}
     out = []
     for cov in load("series_coverage.jsonl"):
@@ -261,6 +291,7 @@ def main() -> None:
         "Peak observed": [r for r in records if r["peak_status"] == "peak observed"],
         "Line ended at high": [r for r in records if r["peak_status"] == "line ended at high"],
         "Not judged": [r for r in records if r["peak_status"].startswith("not judged")],
+        "Peak unknown - restricted": [r for r in records if r["peak_status"] == RESTRICTED],
         "Starts after launch review": review,
     }
     notes = {
@@ -280,6 +311,9 @@ def main() -> None:
                          "later totals, none higher.",
         "Line ended at high": "Products whose series stops before two totals follow its highest one. The "
                               "high is a benchmark; time to peak is not known.",
+        "Peak unknown - restricted": "Products with a quarter (or year) whose source is a company website "
+                                     "at or near their highest window; those rows are withheld from this "
+                                     "export, so the peak cannot be read. quarters_withheld counts them.",
         "Not judged": "Series that start after launch and that gold's launch-gap review does not judge: too "
                       "many launch quarters missing, no complete four-quarter window, or a highest window that "
                       "may not be the peak.",

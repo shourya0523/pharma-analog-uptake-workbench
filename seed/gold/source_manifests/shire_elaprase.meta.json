@@ -30,13 +30,10 @@
     },
     {
       "issuer": "Takeda",
-      "first_quarter": "2019Q2",
+      "first_quarter": "2019Q1",
       "last_quarter": "2025Q1"
     }
   ],
-  "unreported_quarters": {
-    "2019Q1": "Ownership change Shire plc to Takeda; no full-quarter figure is published. Takeda completed the Shire acquisition on January 8, 2019; Shire filed no report for 2019. Takeda's FY2018 Q4 summary (Form 6-K filed 2019-05-14, https://www.sec.gov/Archives/edgar/data/1395064/000119312519146473/d741893d6k.htm) prints ELAPRASE 15.1 Bn JPY in a column headed 'Shire 3 Months', covering only January 8 to March 31, 2019, so the quarter is not recorded."
-  },
   "series_end_quarter": "2025Q1",
   "series_end_basis": "issuer_stopped_reporting",
   "series_end_reason": "Takeda's FY2025 Q1 earnings release (Form 6-K filed 2025-07-30, https://www.sec.gov/Archives/edgar/data/1395064/000139506425000120/form-6k_073025.htm) contains no occurrence of 'ELAPRASE', and neither does the FY2026 Q1 release (https://www.sec.gov/Archives/edgar/data/1395064/000139506426000327/form6k_073026.htm); the FY2025 half-year report prints only the six-month figure ('Elaprase | 53,120 | 49,067') and the FY2025 Q3 release only nine months (JPY 74.2 billion), so no three-month figure for April-June 2025 or any later quarter can be read or derived from sec.gov documents. The last quarter with a three-month figure is January-March 2025 (FY2024 Q4).",
@@ -51,6 +48,6 @@
   ],
   "commercial_start_quarter": "2006Q3",
   "reviewed_anomalies": {
-    "2019Q2": "Reporting currency changes here from Shire's USD to Takeda's JPY; gold normalizes both to USD. Checked at source and kept as printed."
+    "2019Q1": "Reporting currency changes here from Shire's USD to Takeda's JPY; gold normalizes both to USD. Checked at source and kept as printed."
   }
 }

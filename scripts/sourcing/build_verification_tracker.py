@@ -42,6 +42,8 @@ TARGETS = REPO_ROOT / "docs" / "sourcing" / "target_products.csv"
 LOG = REPO_ROOT / "docs" / "sourcing" / "verification_log.json"
 OUT = REPO_ROOT / "exports" / "gold_verification_tracker.xlsx"
 VERDICTS = REPO_ROOT / "docs" / "sourcing" / "human_verdicts.json"
+sys.path.insert(0, str(REPO_ROOT / "scripts"))
+from uptake_workbook import EXEMPT_PRODUCTS, WITHHELD, is_withheld, split  # noqa: E402
 
 HEADER_FILL = PatternFill("solid", fgColor="1F3864")
 REVIEW_FILL = PatternFill("solid", fgColor="FFF2CC")
@@ -176,7 +178,12 @@ def main() -> int:
 
     targets = list(csv.DictReader(TARGETS.open(newline="")))
     log = json.loads(LOG.read_text()) if LOG.is_file() else {}
-    quarterly = load_jsonl("quarterly_revenue.jsonl")
+    # Website-sourced rows are withheld from this export as from the workbooks:
+    # a product shows how many it has, never their values or sources.
+    quarterly, withheld = split(load_jsonl("quarterly_revenue.jsonl"))
+    withheld_by_drug = defaultdict(int)
+    for row in withheld:
+        withheld_by_drug[row["drug_name"]] += 1
     coverage = {row["drug_name"]: row for row in load_jsonl("series_coverage.jsonl")}
     excluded = {row["drug_name"]: row for row in load_jsonl("excluded_products.jsonl")}
     annual = defaultdict(list)
@@ -193,7 +200,7 @@ def main() -> int:
     columns = [
         "ID", "Therapeutic Area", "Brand Name", "Generic / INN", "Gold Status",
         "Issuer", "Series (benchmark identity)", "Revenue Scope", "Currency",
-        "First Quarter", "Last Quarter", "Quarters", "Distinct Sources",
+        "First Quarter", "Last Quarter", "Quarters", "Quarters Withheld", "Distinct Sources",
         "Derived Rows", "Automated Check (rows passing / total)",
         "Claude Verification", "Claude Notes", "App Review (rows reviewed / total)",
     ] + review_columns
@@ -201,13 +208,16 @@ def main() -> int:
 
     detail_rows = []
     for target in targets:
-        drug = next((n for n in names_for(target["brand_name"]) if n in by_drug or n in excluded or n in annual), target["brand_name"])
+        drug = next((n for n in names_for(target["brand_name"])
+                     if n in by_drug or n in withheld_by_drug or n in excluded or n in annual), target["brand_name"])
         rows = sorted(by_drug.get(drug, []), key=lambda r: r["period"])
         entry = log.get(drug, {})
         automated = entry.get("automated", {})
         issuers = list(dict.fromkeys(r["manufacturer"] for r in rows))
         roles = {r["series_role"] for r in annual.get(drug, [])}
-        if rows:
+        if withheld_by_drug[drug] and not rows:
+            status = "Quarterly series (every quarter withheld)"
+        elif rows:
             status = "Quarterly series" + (f" (joined across {len(issuers)} owners)" if len(issuers) > 1 else "")
         elif "peak_benchmark" in roles:
             status = "Annual benchmark (no quarterly figures)"
@@ -229,6 +239,7 @@ def main() -> int:
             rows[0]["period"] if rows else "",
             rows[-1]["period"] if rows else "",
             len(rows) or "",
+            withheld_by_drug[drug] or "",
             len({r["source_url"] for r in rows}) or "",
             sum(not r["derivation"].startswith("direct") for r in rows) if rows else "",
             f"{sum(1 for v in automated.values() if v)} / {len(automated)}" if automated else "",
@@ -247,7 +258,7 @@ def main() -> int:
     sheet.add_data_validation(validation)
     col = get_column_letter(columns.index("Manually Verified") + 1)
     validation.add(f"{col}2:{col}{sheet.max_row}")
-    widths = [6, 22, 18, 26, 26, 18, 34, 16, 9, 11, 11, 9, 9, 9, 14, 18, 60, 14, 12, 18, 13, 60]
+    widths = [6, 22, 18, 26, 26, 18, 34, 16, 9, 11, 11, 9, 9, 9, 9, 14, 18, 60, 14, 12, 18, 13, 60]
     for index, width in enumerate(widths, start=1):
         sheet.column_dimensions[get_column_letter(index)].width = width
     sheet.auto_filter.ref = sheet.dimensions
@@ -294,12 +305,15 @@ def main() -> int:
     verdict_sheet.freeze_panes = "B2"
     for gold_id in sorted(reviews.by_row):
         gold_row = reviews.gold.get(gold_id, {})
+        held = bool(gold_row) and is_withheld(gold_row)
         for v in reviews.by_row[gold_id]:
             verdict_sheet.append([
                 gold_id, gold_row.get("drug_name", "(no longer in gold)"), gold_row.get("period", ""),
-                gold_row.get("value_reported"), reviews.name(v["reviewer"]), v["verdict"].replace("_", " "),
-                v.get("value_seen"), v.get("gold_value_seen"), "yes" if reviews.stale(v) else "",
-                v.get("note", ""), (v.get("updated_at") or "")[:19].replace("T", " "),
+                WITHHELD if held else gold_row.get("value_reported"), reviews.name(v["reviewer"]),
+                v["verdict"].replace("_", " "),
+                WITHHELD if held else v.get("value_seen"), WITHHELD if held else v.get("gold_value_seen"),
+                "yes" if reviews.stale(v) else "",
+                WITHHELD if held else v.get("note", ""), (v.get("updated_at") or "")[:19].replace("T", " "),
                 reviews.status(gold_id), reviews.resolution_text(gold_id),
             ])
     for index, width in enumerate([44, 18, 9, 12, 14, 14, 11, 12, 10, 50, 18, 11, 40], start=1):
@@ -312,6 +326,8 @@ def main() -> int:
         [],
         ["Drug Checklist", "One row per requested product. Yellow columns are yours: set Manually Verified to Yes once you have checked the product."],
         ["Rows", "Every quarterly row behind those products, with a clickable source. Spot-Check is optional per row."],
+        ["Withheld rows", "Rows whose source is a company website are not carried, apart from those for "
+         + ", ".join(sorted(EXEMPT_PRODUCTS)) + ": Quarters Withheld counts them per product, and gold keeps them."],
         [],
         ["Automated Check", "Every row's source was fetched and the row label plus every quoted figure was found on one line of that document, in order."],
         ["Claude Verification", "verified = automated check passed and Claude read the hand-checked rows at source; verified_with_notes = passed with a caveat in Claude Notes; excluded_verified = the exclusion evidence was read at source; pending = not yet reviewed."],
