@@ -1,0 +1,33 @@
+{
+  "drug_name": "Rotarix",
+  "generic_name": "rotavirus vaccine, live, oral (human strain RIX4414)",
+  "manufacturer": "GSK",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Total column of GSK's turnover tables)",
+  "therapeutic_area": "Vaccines / Infectious Disease",
+  "formulation": "oral suspension",
+  "benchmark_identity": "gsk_rotarix_worldwide_reported",
+  "indication_area": "Prevention of rotavirus gastroenteritis in infants",
+  "route_of_administration": "oral",
+  "moa": "Live attenuated human rotavirus vaccine (active immunisation)",
+  "moa_class": "live_attenuated_vaccine",
+  "first_approval_year": 2004,
+  "approval_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1131399/000102123104000527/b759154-6k.htm",
+    "quote": "Rotarix , a new vaccine for the prevention of rotavirus gastroenteritis in infants, has been filed in several Latin American markets and received its first approval in Mexico in July."
+  },
+  "approval_note": "First approval anywhere (Mexico, July 2004) as stated by GSK; US (FDA/CBER) approval followed in 2008 and was not fetched.",
+  "commercial_start_quarter": "2007Q1",
+  "launch_quarter": "2005Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1131399/000102123105000128/b78220x-6k.htm",
+    "quote": "Rotarix , the only 2 dose oral vaccine for the prevention of rotavirus gastroenteritis in infants, was launched in its first market \u2013 Mexico \u2013 on 10th January 2005."
+  },
+  "series_start_reason": "Series starts 2007Q1, eight quarters after the January 2005 launch in Mexico (2005Q1). GSK's Q1 2005 announcement prints a Rotarix row (Total 1), but the announcements for Q2 2005 to Q4 2006 carry no Rotarix row (Rotarix is mentioned only in prose, e.g. 'Sales of new vaccines (including Boostrix and Rotarix ) totalled \u00a323 million' for Q1 2006), and GSK's tables print growth percentages rather than prior-year amounts, so 2005Q2-2006Q4 cannot be read from sec.gov. The contiguous series therefore starts with the Q1 2007 announcement (filed 2007-04-25), the first of an unbroken run.",
+  "search_log": [
+    "Listed GSK plc (CIK 1131399) filings via data.sec.gov submissions (6,852 filings, 6,139 Form 6-K). Located quarterly results announcements with EDGAR full-text search restricted to CIK 1131399 for each of 'Boostrix', 'Rotarix', 'Cervarix', 'Synflorix' and 'Fluarix' (2001-2026); every Form 6-K HTML hit was fetched (118 documents) and every table parsed (bs4).",
+    "Quarter figure = Total (first) column of the product row in the turnover-by-product table whose nearest preceding heading reads 'Three months ended <date>' (2005-2016 'Pharmaceutical(s and Vaccines) turnover', from 2017 'Vaccines turnover \u2013 three months ended <date>'); six-month, nine-month and year tables are excluded by their heading. Where a period is printed in more than one filing, the earliest-filed announcement (the one reporting it as current) is used; the 2010-09-10 Form 6-K restating 2008-2010 quarters is not cited.",
+    "Rotarix rows: Q1 2005 (1) then every quarter from Q1 2007 to Q3 2026; checked announcements of 2005-07-28, 2005-10-27, 2006-02-08, 2006-04-27, 2006-07-26, 2006-10-26 and 2007-02-08: no Rotarix table row.",
+    "Full-year checks against the Total column of the 'year ended 31 December' table: 2007: 14+15+23+39=91 vs year-ended table 91 OK; 2008: 27+35+39+66=167 vs year-ended table 167 OK; 2009: 57+71+84+70=282 vs year-ended table 282 OK; 2010: 65+39+52+79=235 vs year-ended table 235 OK; 2011: 77+75+75+73=300 vs year-ended table 300 OK; 2012: 76+93+103+88=360 vs year-ended table 360 OK; 2013: 80+87+108+100=375 vs year-ended table 375 OK; 2014: 86+103+102+85=376 vs year-ended table 376 OK; 2015: 98+101+120+98=417 vs year-ended table 417 OK; 2016: 109+108+146+106=469 vs year-ended table 469 OK; 2017: 146+95+157+126=524 vs year-ended table 524 OK; 2018: 130+105+152+134=521 vs year-ended table 521 OK; 2019: 134+116+167+141=558 vs year-ended table 558 OK; 2020: 151+128+132+148=559 vs year-ended table 559 OK; 2021: 114+132+153+142=541 vs year-ended table 541 OK; 2022: 117+120+143+147=527 vs year-ended table 527 OK; 2023: 138+184+144+148=614 vs year-ended table 614 OK; 2024: 154+124+153+156=587 vs year-ended table 587 OK; 2025: 141+133+152+120=546 vs year-ended table 546 OK."
+  ]
+}

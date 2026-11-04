@@ -1,0 +1,34 @@
+{
+  "drug_name": "Invanz",
+  "generic_name": "ertapenem sodium",
+  "manufacturer": "Merck",
+  "benchmark_identity": "merck_invanz_worldwide_reported",
+  "therapeutic_area": "Infectious disease",
+  "indication_area": "Complicated bacterial infections (intra-abdominal, skin, pneumonia, UTI, pelvic) and surgical prophylaxis",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Merck Global column)",
+  "formulation": "lyophilized powder for injection",
+  "route_of_administration": "intravenous",
+  "moa": "carbapenem beta-lactam antibiotic (penicillin-binding protein inhibition)",
+  "moa_class": "carbapenem_antibiotic",
+  "first_approval_year": 2001,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=021337",
+    "quote": "11/21/2001 ORIG-1 Approval Type 1 - New Molecular Entity (NDA 021337, INVANZ ERTAPENEM SODIUM)"
+  },
+  "commercial_start_quarter": "2002Q1",
+  "series_start_reason": "The series starts at 2002Q1, the first quarter for which the legacy Merck filings searched (CIK 64978) print an Invanz sales figure. The FDA cleared Invanz in November 2001 (launch_evidence); no figure for the rest of 2001 appears in those filings.",
+  "launch_quarter": "2001Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/64978/000095013002001788/d10k405.txt",
+    "quote": "In November 2001, the FDA cleared Invanz (ertapenem sodium), a new once-a-day injectable antibiotic, for marketing in the United States for the treatment of adults with the following moderate to severe infections caused by susceptible strains of the designated organisms: complicated intra-abdominal infections, complicated skin and skin structure infections"
+  },
+  "series_end_quarter": "2022Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Merck's Table 3a prints an INVANZ row through the fourth-quarter 2022 release (8-K filed 2023-02-02); the first-quarter 2023 release (filed 2023-04-27, Ex. 99.1 and 99.2) and later releases contain no INVANZ text.",
+  "search_log": [
+    "Listed every filing of CIK 64978 (legacy Merck & Co., Inc., now Merck Sharp & Dohme LLC) 2000-2010 and CIK 310158 (Schering-Plough, renamed Merck & Co., Inc. in November 2009) 2000-2026, all forms; fetched every 10-Q/10-K main document and every htm/txt document of every 8-K/8-K/A with earnings items (2.02, 12, 7/9).",
+    "2002Q1-2009Q3 from the legacy Merck quarterly 'worldwide sales of selected products' schedule (Global amount; 2002 amounts are printed rounded to $5 million); 2009Q4 from the supplemental combined non-GAAP table of Merck's 4Q 2009 release (a full three months); 2010Q1-2022Q4 from Table 3a, Global current quarter. Quarter checked against each release's header.",
+    "Quarter sums vs printed full years: 2003 37/37, 2004 63/63, 2005 94/94, 2006 140/139, 2007 191/190, 2008 265/265, 2011 407/406, 2012 445/445, 2013 488/488, 2014 528/529, 2015 568/569, 2016 561/561, 2017 602/602, 2018 496/496, 2019 264/263, 2020 211/211, 2021 203/202, 2022 188/189 (rounding). 2002 sums to 20 against a printed 15, all 2002 amounts being rounded to $5 million."
+  ]
+}

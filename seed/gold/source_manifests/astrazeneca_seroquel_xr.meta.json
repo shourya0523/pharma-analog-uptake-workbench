@@ -1,0 +1,35 @@
+{
+  "drug_name": "Seroquel XR",
+  "generic_name": "quetiapine fumarate (extended-release)",
+  "manufacturer": "AstraZeneca",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (World column / Product Revenue as totalled by the issuer)",
+  "benchmark_identity": "astrazeneca_seroquel_xr_worldwide_reported",
+  "therapeutic_area": "Neuroscience / Psychiatry",
+  "indication_area": "Psychiatry (schizophrenia, bipolar disorder, adjunctive major depressive disorder)",
+  "formulation": "extended-release tablet",
+  "route_of_administration": "oral",
+  "moa": "Atypical antipsychotic; dopamine D2 and serotonin 5-HT2A receptor antagonist",
+  "moa_class": "atypical_antipsychotic",
+  "first_approval_year": 2007,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=022047",
+    "quote": "05/17/2007 ORIG-1 Approval (NDA 022047, SEROQUEL XR QUETIAPINE FUMARATE)"
+  },
+  "commercial_start_quarter": "2009Q1",
+  "launch_quarter": "2007Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/901832/000095010307002204/dp06795_6k.htm",
+    "quote": "The launch of Seroquel XR in the US took place in August 2007."
+  },
+  "series_start_reason": "Series starts 2009Q1, six quarters after the August 2007 US launch (2007Q3). Through the Q1 2010 announcement AstraZeneca printed only the combined 'Seroquel' line (IR plus XR); Seroquel XR first appears on its own line in the Q2 2010 announcement (filed 2010-08-09), whose summary table prints the Q2 2009 (157) and H1 2009 (283) prior-year figures. 2009Q2-2010Q1 are read from prior-year columns of the 2010 and Q1 2011 announcements and 2009Q1 is H1 2009 less Q2 2009. 2007Q3-2008Q4 are printed on sec.gov only inside the combined Seroquel line (the Q3 2007 announcement mentions 'around $80 million of stocking sales for the new Seroquel XR formulation' in prose), so they are not carried.",
+  "series_end_quarter": "2018Q3",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The Q3 2018 announcement (Form 6-K filed 2018-11-08, a7037g.htm) is the last to print a 'Seroquel XR' row; from the FY and Q4 2018 announcement (Form 6-K filed 2019-02-14, a9540p.htm) onward AstraZeneca prints only the combined line 'Seroquel XR/IR', a different scope.",
+  "search_log": [
+    "Listed AstraZeneca PLC (CIK 901832) filings via data.sec.gov submissions (2,057 filings, 1,620 of them Form 6-K). Located the quarterly results announcements with EDGAR full-text search restricted to CIK 901832 for each of 'Imjudo', 'Orpathys', 'Datroway' and 'Seroquel XR' (all forms, 2001-2026, yearly windows); every Form 6-K HTML hit was fetched from sec.gov (202 documents) and every table row parsed (bs4).",
+    "Quarter figure = World (first) column of the brand row in the regional 'Product Sales/Revenue analysis' table for the three months; the table's period is read from its header ('3 rd Quarter 2010 $m', 'Q3 2012 $m'). Cumulative (half-year, nine-month, full-year) tables are excluded by header.",
+    "Seroquel XR rows found as their own line in every quarterly announcement from Q2 2010 (2010-08-09) to Q3 2018 (2018-11-08); announcements from 2007 to Q1 2010 print only 'Seroquel'; from 2019-02-14 only 'Seroquel XR/IR'.",
+    "Full-year checks against the World column of the FY regional table: 2010: 256+303+279+316=1154 vs printed full-year 1154 OK; 2011: 339+387+366+398=1490 vs printed full-year 1490 OK; 2012: 384+370+373+382=1509 vs printed full-year 1509 OK; 2013: 322+339+339+337=1337 vs printed full-year 1337 OK; 2014: 292+304+319+309=1224 vs printed full-year 1224 OK; 2015: 262+264+258+241=1025 vs printed full-year 1025 OK; 2016: 202+225+190+118=735 vs printed full-year 735 OK; 2017: 67+95+62+108=332 vs printed full-year 332 OK; 2009: 126+157+192+220=695 vs the FY 2009 prior-year column 695 in the Q4 2010 summary table (2009Q1 is itself derived from H1 2009)."
+  ]
+}

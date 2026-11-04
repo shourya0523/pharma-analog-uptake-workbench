@@ -1,0 +1,35 @@
+{
+  "drug_name": "Amrix",
+  "generic_name": "cyclobenzaprine hydrochloride extended-release capsules",
+  "manufacturer": "Cephalon",
+  "benchmark_identity": "cephalon_amrix_worldwide_reported",
+  "therapeutic_area": "Musculoskeletal / Pain",
+  "indication_area": "Muscle spasm associated with acute, painful musculoskeletal conditions",
+  "formulation": "extended-release capsule",
+  "route_of_administration": "oral",
+  "moa": "centrally acting skeletal muscle relaxant (tricyclic, 5-HT2 antagonism at brainstem)",
+  "moa_class": "centrally_acting_muscle_relaxant",
+  "first_approval_year": 2007,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=021777",
+    "quote": "02/01/2007 ORIG-1 Approval Type 3 - New Dosage Form (NDA 021777, AMRIX CYCLOBENZAPRINE HYDROCHLORIDE)"
+  },
+  "launch_quarter": "2007Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/873364/000110465907081246/a07-25518_2ex99d1.htm",
+    "quote": "We also are launching this month our latest product, AMRIX\u2122, a once daily extended release muscle relaxant, and are excited about the continued development of our oncology business with TREANDA \u00ae."
+  },
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Cephalon Total column: United States plus Europe)",
+  "commercial_start_quarter": "2007Q4",
+  "series_start_reason": null,
+  "series_end_quarter": "2011Q2",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Cephalon (CIK 873364) was acquired by Teva on October 14, 2011 (8-K filed 2011-10-14, items 2.01/3.01/5.01) and filed Form 15-12G on 2011-10-19; its last periodic report is the 10-Q for the quarter ended June 30, 2011. Teva's quarterly releases and 6-K reports (fetched 2011-10..2017-12) print no AMRIX row, and Teva's 20-F mentions the product only in narrative text, so no later quarter of the product's own line is printed on sec.gov.",
+  "search_log": [
+    "Listed every filing of CIK 873364 (Cephalon) via data.sec.gov submissions incl. older 'files' pages, all forms; fetched every 10-Q/10-K main document and every htm/txt document of every 8-K and 8-K/A (items 2.02/7.01/8.01/9.01 etc.) filed 2006-01-01..2011-12-31.",
+    "Rows read from the 'Consolidated Sales Detail' table (In thousands) of each item-2.02 earnings release (8-K Ex. 99.1), first row carrying the product label (the three-months block precedes the year-to-date block); quarter checked against the release's 'three months ended' header. Total column = United States + Europe as printed.",
+    "Cephalon's last periodic report is the 10-Q for the quarter ended June 30, 2011 (filed 2011-08-03); the Teva merger closed 2011-10-14 (8-K items 2.01/3.01/5.01) and Cephalon filed Form 15-12G on 2011-10-19. Teva (CIK 818686): fetched every 6-K document filed in Feb/May/Jul/Aug/Oct/Nov 2011-10-25..2017-12-31 and its 20-Fs 2012-2017; Teva's quarterly tables print a NUVIGIL row from Q4 2011 but no row for FENTORA or AMRIX (those names appear only in litigation notes).",
+    "Quarters sum to the twelve-month totals printed in the Q4 releases / 10-Ks: 2008 73,641; 2009 114,435; 2010 109,235 (thousands) - all exact. 2007Q4 equals full year 2007 (8,401). The 2011Q2 row is the branded AMRIX line; Cephalon prints its own authorized 'Generic AMRIX' on a separate row, not included."
+  ]
+}

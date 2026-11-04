@@ -1,0 +1,34 @@
+{
+  "drug_name": "Admelog",
+  "generic_name": "insulin lispro",
+  "manufacturer": "Sanofi",
+  "benchmark_identity": "sanofi_admelog_worldwide_reported",
+  "therapeutic_area": "Diabetes / Metabolic",
+  "indication_area": "Diabetes mellitus (rapid-acting mealtime insulin)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Sanofi net sales line 'Admelog'; the 9M 2018 appendix splits it into Europe 5, United States 32 and Rest of World -1 EUR million)",
+  "formulation": "solution for injection (vial, SoloStar pen)",
+  "route_of_administration": "subcutaneous",
+  "moa": "Rapid-acting human insulin analog (insulin receptor agonist)",
+  "moa_class": "rapid_acting_insulin_analog",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=209196",
+    "quote": "12/11/2017 ORIG-1 Approval (BLA 209196, ADMELOG INSULIN LISPRO)"
+  },
+  "commercial_start_quarter": "2018Q3",
+  "launch_quarter": "2018Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1121404/000119312518313798/d647789dex991.htm",
+    "quote": "Admelog (insulin lispro injection) 100 Units/mL, which was launched in the U.S. in April, generated sales of \u20ac26 million in the third quarter mainly due to access in Managed Medicaid."
+  },
+  "series_start_reason": "Series starts 2018Q3, one quarter after the April 2018 US launch: the Q3 2018 release (filed 2018-10-31) is the first to print an 'Admelog' row (Q3 26, first nine months 36). The H1 2018 amount (36 - 26 = 10) is not printed as a quarter, so 2018Q2 is not carried.",
+  "series_end_quarter": "2020Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The Q4 2020 release (Form 6-K filed 2021-02-05, pressreleaseq42020english.htm) is the last to print an 'Admelog' row (Q4 46, full year 188); the Q1 2021 release (filed 2021-04-28) and later releases carry no Admelog row (EDGAR full-text search for 'Admelog' in CIK 1121404 finds after 2021-02-05 only Forms 20-F and a Q2 2022 release that names it in a price programme sentence).",
+  "search_log": [
+    "Sanofi quarterly results press releases: listed Sanofi (CIK 1121404) filings via data.sec.gov submissions (1,516 filings, 788 Form 6-K) and located releases with EDGAR full-text search restricted to CIK 1121404 for 'Lumizyme', 'Myozyme', 'Cablivi', 'Aldurazyme' and 'Admelog' (2011-2026); every Form 6-K HTML hit was fetched (116 documents) and parsed (bs4). One release per quarter (2011Q2-2026Q3) = the earliest-filed document with a net sales table headed 'Qn YYYY net sales' / 'Qn YYYY (\u20ac million)'; the quarter is taken from the filing date (the Q2 2012 release prints the header 'Q2 2011 net sales' over Q2 2012 figures).",
+    "The product's row is read from the first table in the release whose header starts with the quarter column (headline net sales table; from 2016 the appendix table whose first column is the worldwide total), first figure = the quarter.",
+    "Full-year checks: 2019: 66+77+51+56=250 vs full-year 250 OK; 2020: 50+44+48+46=188 vs full-year 188 OK; 2018 (Q3-Q4 only): 26+57=83 vs full-year 93, the difference being the 10 sold in H1 2018."
+  ]
+}

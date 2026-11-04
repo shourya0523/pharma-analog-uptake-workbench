@@ -1,0 +1,35 @@
+{
+  "drug_name": "Synflorix",
+  "generic_name": "pneumococcal polysaccharide conjugate vaccine (10-valent, adsorbed)",
+  "manufacturer": "GSK",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Total column of GSK's turnover tables)",
+  "therapeutic_area": "Vaccines / Infectious Disease",
+  "formulation": "suspension for intramuscular injection",
+  "benchmark_identity": "gsk_synflorix_worldwide_reported",
+  "indication_area": "Prevention of invasive pneumococcal disease and otitis media in infants",
+  "route_of_administration": "intramuscular",
+  "moa": "10-valent pneumococcal polysaccharide conjugate vaccine (protein D / tetanus / diphtheria carriers; active immunisation)",
+  "moa_class": "pneumococcal_conjugate_vaccine",
+  "first_approval_year": 2009,
+  "approval_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1131399/000115697309000223/u06749e6vk.htm",
+    "quote": "Synflorix S pneumoniae and NTHi prophylaxis n/a Approved Mar 2009 Approved in EU 31st March 2009."
+  },
+  "approval_note": "Synflorix has no US (FDA) approval; the EU approval of 31 March 2009 is quoted from GSK's Q1 2009 announcement.",
+  "commercial_start_quarter": "2009Q2",
+  "launch_quarter": "2009Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1131399/000115697309000223/u06749e6vk.htm",
+    "quote": "In Europe, we are in the midst of launching two significant new products: Synflorix , a competitive new vaccine that provides increased protection for infants against pneumococcal diseases; and alli , our new weight-loss treatment"
+  },
+  "series_end_quarter": "2025Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The Q4 2025 announcement (Form 6-K filed 2026-02-04) is the last with a Synflorix row; the Q1 2026 announcement (Form 6-K filed 2026-04-29, a2755c.htm) has no Synflorix turnover row and comments under 'Other Paediatric & Adult Vaccines': 'Sales decreased as a result of competitive pressure for Synflorix primarily in Emerging Markets'.",
+  "search_log": [
+    "Listed GSK plc (CIK 1131399) filings via data.sec.gov submissions (6,852 filings, 6,139 Form 6-K). Located quarterly results announcements with EDGAR full-text search restricted to CIK 1131399 for each of 'Boostrix', 'Rotarix', 'Cervarix', 'Synflorix' and 'Fluarix' (2001-2026); every Form 6-K HTML hit was fetched (118 documents) and every table parsed (bs4).",
+    "Quarter figure = Total (first) column of the product row in the turnover-by-product table whose nearest preceding heading reads 'Three months ended <date>' (2005-2016 'Pharmaceutical(s and Vaccines) turnover', from 2017 'Vaccines turnover \u2013 three months ended <date>'); six-month, nine-month and year tables are excluded by their heading. Where a period is printed in more than one filing, the earliest-filed announcement (the one reporting it as current) is used; the 2010-09-10 Form 6-K restating 2008-2010 quarters is not cited.",
+    "First Synflorix row: Q2 2009 announcement (three months 12, six months 12).",
+    "Full-year checks against the Total column of the 'year ended 31 December' table: 2010: 45+38+90+48=221 vs year-ended table 221 OK; 2011: 77+99+107+67=350 vs year-ended table 350 OK; 2012: 73+101+106+105=385 vs year-ended table 385 OK; 2013: 90+74+80+161=405 vs year-ended table 405 OK; 2014: 62+105+101+130=398 vs year-ended table 398 OK; 2015: 60+77+108+136=381 vs year-ended table 381 OK; 2016: 91+137+154+122=504 vs year-ended table 504 OK; 2017: 133+151+114+111=509 vs year-ended table 509 OK; 2018: 99+100+119+106=424 vs year-ended table 424 OK; 2019: 121+107+116+124=468 vs year-ended table 468 OK; 2020: 123+103+83+93=402 vs year-ended table 402 OK; 2021: 102+97+66+92=357 vs year-ended table 357 OK; 2022: 81+84+72+68=305 vs year-ended table 305 OK; 2023: 62+76+89+48=275 vs year-ended table 275 OK; 2024: 45+62+50+69=226 vs year-ended table 226 OK; 2025: 51+57+28+23=159 vs year-ended table 159 OK."
+  ]
+}

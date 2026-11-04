@@ -1,0 +1,32 @@
+{
+  "drug_name": "Cablivi",
+  "generic_name": "caplacizumab",
+  "manufacturer": "Sanofi",
+  "benchmark_identity": "sanofi_cablivi_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Hematology",
+  "indication_area": "Acquired thrombotic thrombocytopenic purpura (aTTP)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (total net sales column)",
+  "formulation": "lyophilized powder for injection",
+  "route_of_administration": "intravenous and subcutaneous",
+  "moa": "Anti-von Willebrand factor Nanobody (blocks vWF-platelet GPIb interaction)",
+  "moa_class": "anti_vwf_nanobody",
+  "first_approval_year": 2018,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761112",
+    "quote": "02/06/2019 ORIG-1 Approval (BLA 761112, CABLIVI CAPLACIZUMAB-YHDP)"
+  },
+  "approval_note": "First approval anywhere was the EU marketing authorisation (Sanofi Form 6-K 2019-02-07: 'Cablivi was approved in the European Union in August 2018.'); US approval 02/06/2019 per Drugs@FDA.",
+  "commercial_start_quarter": "2018Q4",
+  "launch_quarter": "2018Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1121404/000119312519030709/d713074dex991.htm",
+    "quote": "Cablivi (caplacizumab) for the treatment of adults with acquired thrombotic thrombocytopenic purpura (aTTP), received EU approval in September and was launched in its first market, Germany, in October."
+  },
+  "search_log": [
+    "Sanofi quarterly results press releases: listed Sanofi (CIK 1121404) filings via data.sec.gov submissions (1,516 filings, 788 Form 6-K) and located releases with EDGAR full-text search restricted to CIK 1121404 for 'Lumizyme', 'Myozyme', 'Cablivi', 'Aldurazyme' and 'Admelog' (2011-2026); every Form 6-K HTML hit was fetched (116 documents) and parsed (bs4). One release per quarter (2011Q2-2026Q3) = the earliest-filed document with a net sales table headed 'Qn YYYY net sales' / 'Qn YYYY (\u20ac million)'; the quarter is taken from the filing date (the Q2 2012 release prints the header 'Q2 2011 net sales' over Q2 2012 figures).",
+    "The product's row is read from the first table in the release whose header starts with the quarter column (headline net sales table; from 2016 the appendix table whose first column is the worldwide total), first figure = the quarter.",
+    "Cablivi rows in every release 2018Q4 (first: 3, with 2018 full year 4) to 2026Q2; Sanofi acquired Ablynx in 2018 before launch, so there is no earlier issuer.",
+    "Full-year checks: 2019: 5+15+20+16=56 vs full-year 56 OK; 2020: 24+28+31+30=113 vs full-year 113 OK; 2021: 38+46+42+38=164 vs full-year 164 OK; 2022: 46+51+52+62=211 vs full-year 211 OK; 2023: 58+55+56+58=227 vs full-year 227 OK; 2024: 59+54+63+73=249 vs full-year 249 OK; 2025: 67+69+66+69=271 vs full-year 271 OK."
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "drug_name": "Caduet",
+  "generic_name": "amlodipine besylate / atorvastatin calcium",
+  "manufacturer": "Pfizer",
+  "benchmark_identity": "pfizer_caduet_worldwide_reported",
+  "therapeutic_area": "Cardiovascular",
+  "indication_area": "Hypertension / angina with hyperlipidemia (combination therapy)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Pfizer Worldwide column)",
+  "formulation": "tablet (fixed-dose combination)",
+  "route_of_administration": "oral",
+  "moa": "calcium channel blocker plus HMG-CoA reductase inhibitor (fixed-dose combination)",
+  "moa_class": "ccb_statin_combination",
+  "first_approval_year": 2004,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=021540",
+    "quote": "01/30/2004 ORIG-1 Approval Type 4 - New Combination (NDA 021540, CADUET AMLODIPINE BESYLATE; ATORVASTATIN CALCIUM)"
+  },
+  "commercial_start_quarter": "2004Q1",
+  "series_start_reason": null,
+  "launch_quarter": "2004Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/78003/000089109204001720/e17523ex_99.txt",
+    "quote": "Caduet, dual therapy of Lipitor (atorvastatin) and Norvasc (amlodipine), was approved by the FDA on January 30, 2004, and achieved sales of $28 million in the first quarter of 2004."
+  },
+  "series_end_quarter": "2014Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Pfizer's product revenue tables print a CADUET row through the first-quarter 2014 release (8-K filed 2014-05-05). The second- and third-quarter 2014 releases (filed 2014-07-29 and 2014-10-28) and the 2014 10-Qs print no CADUET row, and the 2015 releases print none either, so 2014Q2 and 2014Q3 are printed nowhere on sec.gov; the row reappears only in the fourth-quarter 2014 release, so the contiguous series ends 2014Q1.",
+  "search_log": [
+    "Listed every filing of CIK 78003 (Pfizer), all forms; fetched every 10-Q/10-K main document and every htm/txt document of every earnings 8-K (items 2.02, and item 12 for 2002-2004) 2002-2026.",
+    "Rows read from the first (quarter) product revenues table of each release (plain-text exhibits to 2007, HTML from 2008), Worldwide current-quarter column. The first-quarter 2004 figure (28) is the initial trade sale after the January 30, 2004 approval; Pfizer's July 2004 release reports the promotional launch: 'Caduet ... was launched in May in the U.S.'",
+    "Quarter sums equal the full-year figures printed in the Q4 releases: 2004 50; 2005 185; 2006 370; 2007 568; 2008 589; 2009 548."
+  ]
+}

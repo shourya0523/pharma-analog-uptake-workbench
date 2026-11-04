@@ -1,0 +1,56 @@
+{
+  "drug_name": "Aldurazyme",
+  "generic_name": "laronidase",
+  "manufacturer": "Sanofi",
+  "benchmark_identity": "sanofi_aldurazyme_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Metabolic",
+  "indication_area": "Mucopolysaccharidosis I (enzyme replacement)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide net sales of Aldurazyme: the BioMarin/Genzyme LLC joint venture's revenue (2003-2007), Genzyme's product revenue line (2008-2010), Genzyme's net sales as reported by BioMarin (2011-2012), Sanofi's worldwide net sales line (2013 on)",
+  "formulation": "concentrate for solution for infusion",
+  "route_of_administration": "intravenous",
+  "moa": "Recombinant human alpha-L-iduronidase enzyme replacement therapy",
+  "moa_class": "enzyme_replacement_therapy",
+  "first_approval_year": 2003,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=125058",
+    "quote": "04/30/2003 ORIG-1 Approval (BLA 125058, ALDURAZYME LARONIDASE)"
+  },
+  "commercial_start_quarter": "2003Q2",
+  "launch_quarter": "2003Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1048477/000119312503005303/d10q.htm",
+    "quote": "Our first product, Aldurazyme, was approved by the FDA for commercial sale in the United States on April 30, 2003, and has only generated nominal sales revenue to date."
+  },
+  "series_start_reason": "Series starts at the 2003Q2 launch (FDA approval 30 April 2003). The joint venture's Q1 2003 revenue (334 USD thousands, printed as the prior-year column of BioMarin's Q1 2004 Form 10-Q) was pre-approval and is not carried.",
+  "notes": "One scope throughout: worldwide net sales of Aldurazyme. Until 31 December 2007 all Aldurazyme sales were recorded by BioMarin/Genzyme LLC, a 50/50 joint venture accounted for by equity method; BioMarin's Forms 10-Q and 10-K print the joint venture's results table ('Revenue', from 2007 'Net product sales'). From 1 January 2008 Genzyme records the net product sales (Genzyme Forms 10-Q and analyst schedules). For 2011-2012, after Genzyme stopped filing and before Sanofi printed Aldurazyme on its own line (from Q1 2013), the quarters are BioMarin's 'Aldurazyme revenue reported by Genzyme' line; that line equals Genzyme's own figures where both exist (BioMarin FY 2010 166.8 = Genzyme 39,897+43,651+40,766+42,466 USD thousands). BioMarin's own 'Aldurazyme' net product revenue (royalty and product transfer revenue) is a different measure and is not used. Currencies: USD for 2003Q2-2012Q4 (thousands for the joint venture and Genzyme rows, millions for the 2011-2012 rows), EUR for Sanofi from 2013Q1; values not converted.",
+  "joined_issuers": [
+    {
+      "issuer": "BioMarin",
+      "first_quarter": "2003Q2",
+      "last_quarter": "2007Q4"
+    },
+    {
+      "issuer": "Genzyme",
+      "first_quarter": "2008Q1",
+      "last_quarter": "2010Q4"
+    },
+    {
+      "issuer": "BioMarin",
+      "first_quarter": "2011Q1",
+      "last_quarter": "2012Q4"
+    },
+    {
+      "issuer": "Sanofi",
+      "first_quarter": "2013Q1",
+      "last_quarter": "2026Q2"
+    }
+  ],
+  "search_log": [
+    "BioMarin Pharmaceutical Inc. (CIK 1048477): EDGAR full-text search restricted to CIK 1048477 for 'Aldurazyme' (410 hits); the 112 Form 10-Q and 10-K HTML documents among them were fetched and parsed. Joint-venture results table rows ('Revenue' / 'Net product sales', prior-year column first) read for 2003Q2-2007Q3; fourth quarters 2003-2007 are the joint venture's annual revenue in the Form 10-K less the nine-month figure of the Q3 Form 10-Q (2003: 11,540-4,884; 2004: 42,583-26,968; 2005: 76,417-55,201; 2006: 96,291-69,891; 2007: 123,671-88,270). BioMarin's narrative confirms the figures (e.g. 'Aldurazyme net revenue recorded by our joint venture during the first quarter of 2005 totaled $15.9 million').",
+    "Genzyme Corporation (CIK 732485): Forms 10-Q 2008Q1-2010Q3 'Aldurazyme' product revenue row; fourth quarters from the analyst schedules (2009Q4 in the 2010-02-17 release, 2010Q4 in the 2011-02-16 release; 2008Q4 from the Q4-08 column of the 2009-04-22 schedule because the February 2009 release has no Aldurazyme row; it equals the 2008 Form 10-K annual 151,321 less nine months 113,742).",
+    "BioMarin 'Aldurazyme revenue reported by Genzyme' rows: Forms 10-Q 2011Q1-2012Q3 (current column first); 2011Q4 = 185.2 - 136.4 and 2012Q4 = 193.1 - 140.0 (Form 10-K annual less Q3 Form 10-Q nine months).",
+    "Sanofi (CIK 1121404): Aldurazyme has its own row in every quarterly results release from Q1 2013 (2013-05-02) to Q2 2026; the 2011 and 2012 releases print no Aldurazyme row (Genzyme table limited to Cerezyme, Myozyme/Lumizyme and Fabrazyme). Same release list and method as sanofi_lumizyme.",
+    "Full-year checks: joint venture 2004 7,395+9,241+10,332+15,615=42,583 (Q4 derived); Genzyme 2009 36,837+39,190+40,331+38,707=155,065 = FY 2009 in the 2010-02-17 schedule; 2010 39,897+43,651+40,766+42,466=166,780 = FY 2010 in the 2011-02-16 schedule; 2008 36,839+38,667+38,236+37,579=151,321 = Form 10-K; Sanofi 2013: 37+41+38+43=159 vs full-year 159 OK; 2014: 41+45+41+45=172 vs full-year 172 OK; 2015: 48+50+48+49=195 vs full-year 195 OK; 2016: 48+50+53+50=201 vs full-year 201 OK; 2017: 52+57+50+48=207 vs full-year 207 OK; 2018: 51+52+49+54=206 vs full-year 206 OK; 2019: 67+54+49+54=224 vs full-year 224 OK; 2020: 67+55+55+57=234 vs full-year 234 OK; 2021: 66+57+57+63=243 vs full-year 243 OK; 2022: 69+64+69+65=267 vs full-year 267 OK; 2023: 78+72+67+62=279 vs full-year 279 OK; 2024: 83+78+67+69=297 vs FY 2024 column 297 OK; 2025: 94+69+79+63=305 vs FY 2025 column 305 OK."
+  ]
+}

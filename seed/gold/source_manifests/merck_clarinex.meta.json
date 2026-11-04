@@ -1,0 +1,46 @@
+{
+  "drug_name": "Clarinex",
+  "generic_name": "desloratadine",
+  "manufacturer": "Merck",
+  "benchmark_identity": "merck_clarinex_worldwide_reported",
+  "therapeutic_area": "Respiratory / Allergy",
+  "indication_area": "Allergic rhinitis and chronic idiopathic urticaria",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (CLARINEX in the U.S. plus AERIUS outside the U.S.; printed 'Clarinex' 2002-2004Q1, 'Clarinex / Aerius' 2004Q2-2009Q3, 'Clarinex' from 2009Q4)",
+  "formulation": "tablet (also syrup, orally disintegrating tablet, -D combinations)",
+  "route_of_administration": "oral",
+  "moa": "second-generation peripheral histamine H1 receptor antagonist",
+  "moa_class": "h1_antihistamine",
+  "first_approval_year": 2001,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=021165",
+    "quote": "12/21/2001 ORIG-1 Approval Type 1 - New Molecular Entity (NDA 021165, CLARINEX DESLORATADINE)"
+  },
+  "commercial_start_quarter": "2002Q1",
+  "series_start_reason": "Series starts 2002Q1 (U.S. launch January 2002). Schering-Plough's international launches in the first half of 2001 were reported inside CLARITIN Rx: 2002 10-K (filed 2003-03-10) footnote: 'In 2001, sales of CLARINEX, launched in international markets only, are included in CLARITIN Rx sales.'",
+  "launch_quarter": "2001Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/310158/000031015801500010/finalqbody.htm",
+    "quote": "The increase in the CLARITIN line in both periods was due primarily to continued expansion in the U.S. antihistamine market and the international launch of CLARINEX, tempered by U.S. market share declines and changes in U.S. trade inventory levels."
+  },
+  "series_end_quarter": "2015Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Merck's Table 3a prints a CLARINEX row through the fourth-quarter 2015 release (8-K filed 2016-02-03); the first-quarter 2016 release (filed 2016-05-05, Ex. 99.1 and 99.2) and later releases contain no CLARINEX text.",
+  "joined_issuers": [
+    {
+      "issuer": "Schering-Plough",
+      "first_quarter": "2002Q1",
+      "last_quarter": "2009Q3"
+    },
+    {
+      "issuer": "Merck",
+      "first_quarter": "2009Q4",
+      "last_quarter": "2015Q4"
+    }
+  ],
+  "search_log": [
+    "Listed every filing of CIK 310158 (Schering-Plough Corporation, renamed Merck & Co., Inc. on the November 3, 2009 merger) 2000-2026, all forms; fetched every 10-Q/10-K main document and every htm/txt document of every 8-K/8-K/A with earnings items.",
+    "2002Q3-2009Q3 from the current-quarter column of Schering-Plough's worldwide net sales by product table in each earnings release; 2002Q1 and 2002Q2 from the prior-year columns of the 2003Q1 and 2003Q2 releases (Schering-Plough's 2002 first/second-quarter releases print no CLARINEX row); 2009Q4 from Merck's supplemental combined non-GAAP table (a full three months for both companies); 2010Q1-2015Q4 from Table 3a, Global current quarter. No quarter is missing across the merger.",
+    "Quarter sums vs printed full years: 2002 598/598, 2003 694/694, 2004 693/692, 2005 647/646, 2006 721/722, 2007 799/799, 2008 789/790, 2009 719/719 (combined), 2011 621/621, 2012 394/393, 2014 232/232, 2015 187/187 (rounding)."
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "drug_name": "Fentora",
+  "generic_name": "fentanyl buccal tablet (fentanyl citrate)",
+  "manufacturer": "Cephalon",
+  "benchmark_identity": "cephalon_fentora_worldwide_reported",
+  "therapeutic_area": "Pain / Oncology supportive care",
+  "indication_area": "Breakthrough cancer pain in opioid-tolerant patients",
+  "formulation": "buccal tablet",
+  "route_of_administration": "buccal",
+  "moa": "mu-opioid receptor agonist",
+  "moa_class": "opioid_agonist",
+  "first_approval_year": 2006,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=021947",
+    "quote": "09/25/2006 ORIG-1 Approval Type 3 - New Dosage Form (NDA 021947, FENTORA FENTANYL CITRATE)"
+  },
+  "launch_quarter": "2006Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/873364/000110465906072729/a06-21628_110q.htm",
+    "quote": "We received FDA approval of FENTORA\u2122 (fentanyl buccal tablet) [C-II] in late September 2006 and launched the product in the United States in early October."
+  },
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Cephalon Total column: United States plus Europe)",
+  "commercial_start_quarter": "2006Q4",
+  "series_start_reason": null,
+  "series_end_quarter": "2011Q2",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Cephalon (CIK 873364) was acquired by Teva on October 14, 2011 (8-K filed 2011-10-14, items 2.01/3.01/5.01) and filed Form 15-12G on 2011-10-19; its last periodic report is the 10-Q for the quarter ended June 30, 2011. Teva's quarterly releases and 6-K reports (fetched 2011-10..2017-12) print no FENTORA row, and Teva's 20-F mentions the product only in narrative text, so no later quarter of the product's own line is printed on sec.gov.",
+  "search_log": [
+    "Listed every filing of CIK 873364 (Cephalon) via data.sec.gov submissions incl. older 'files' pages, all forms; fetched every 10-Q/10-K main document and every htm/txt document of every 8-K and 8-K/A (items 2.02/7.01/8.01/9.01 etc.) filed 2006-01-01..2011-12-31.",
+    "Rows read from the 'Consolidated Sales Detail' table (In thousands) of each item-2.02 earnings release (8-K Ex. 99.1), first row carrying the product label (the three-months block precedes the year-to-date block); quarter checked against the release's 'three months ended' header. Total column = United States + Europe as printed.",
+    "Cephalon's last periodic report is the 10-Q for the quarter ended June 30, 2011 (filed 2011-08-03); the Teva merger closed 2011-10-14 (8-K items 2.01/3.01/5.01) and Cephalon filed Form 15-12G on 2011-10-19. Teva (CIK 818686): fetched every 6-K document filed in Feb/May/Jul/Aug/Oct/Nov 2011-10-25..2017-12-31 and its 20-Fs 2012-2017; Teva's quarterly tables print a NUVIGIL row from Q4 2011 but no row for FENTORA or AMRIX (those names appear only in litigation notes).",
+    "Quarters sum to the twelve-month totals printed in the Q4 releases / 10-Ks: 2007 135,136; 2008 155,246; 2009 140,677; 2010 181,622 (thousands) - all exact. 2006Q4 equals the full year 2006 (29,250), the product having launched in October 2006."
+  ]
+}

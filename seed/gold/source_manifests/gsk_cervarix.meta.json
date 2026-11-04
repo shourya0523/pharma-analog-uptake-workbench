@@ -1,0 +1,40 @@
+{
+  "drug_name": "Cervarix",
+  "generic_name": "human papillomavirus bivalent (types 16 and 18) vaccine, recombinant, AS04-adjuvanted",
+  "manufacturer": "GSK",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Total column of GSK's turnover tables)",
+  "therapeutic_area": "Vaccines / Infectious Disease",
+  "formulation": "suspension for intramuscular injection",
+  "benchmark_identity": "gsk_cervarix_worldwide_reported",
+  "indication_area": "Prevention of cervical cancer / HPV 16 and 18 infection",
+  "route_of_administration": "intramuscular",
+  "moa": "Recombinant HPV-16/18 L1 virus-like particle vaccine with AS04 adjuvant (active immunisation)",
+  "moa_class": "recombinant_vlp_vaccine",
+  "first_approval_year": 2007,
+  "approval_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1131399/000115697307001546/u53929e6vk.htm",
+    "quote": "Following approval by the EMEA in September, GSK has recently launched Cervarix , its vaccine to prevent cervical cancer, in 12 European markets, including the UK, Germany and Belgium."
+  },
+  "approval_note": "GSK's announcements state the first launch in Australia in July 2007 and EU approval in September 2007; US (FDA/CBER) approval followed in 2009 and was not fetched.",
+  "commercial_start_quarter": "2007Q4",
+  "launch_quarter": "2007Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1131399/000115697307001147/u53226-6k.htm",
+    "quote": "Cervarix \u2013 in July GSK launched Cervarix , for prevention of cervical cancer, in Australia for use in females aged 10 to 45 years."
+  },
+  "series_start_reason": "Series starts 2007Q4, one quarter after the July 2007 launch in Australia. The Q4 2007 announcement (filed 2008-02-07) is the first with a Cervarix row (three months 9; year 2007 10); the Q3 2007 amount (about 1) is not printed as a quarter.",
+  "series_end_quarter": "2025Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The Q4 2025 announcement (Form 6-K filed 2026-02-04) is the last with a Cervarix row; the Q1 2026 announcement (Form 6-K filed 2026-04-29, a2755c.htm) has no Cervarix turnover row and reports the smaller vaccines in 'Other Paediatric & Adult Vaccines' (713 for the quarter).",
+  "search_log": [
+    "Listed GSK plc (CIK 1131399) filings via data.sec.gov submissions (6,852 filings, 6,139 Form 6-K). Located quarterly results announcements with EDGAR full-text search restricted to CIK 1131399 for each of 'Boostrix', 'Rotarix', 'Cervarix', 'Synflorix' and 'Fluarix' (2001-2026); every Form 6-K HTML hit was fetched (118 documents) and every table parsed (bs4).",
+    "Quarter figure = Total (first) column of the product row in the turnover-by-product table whose nearest preceding heading reads 'Three months ended <date>' (2005-2016 'Pharmaceutical(s and Vaccines) turnover', from 2017 'Vaccines turnover \u2013 three months ended <date>'); six-month, nine-month and year tables are excluded by their heading. Where a period is printed in more than one filing, the earliest-filed announcement (the one reporting it as current) is used; the 2010-09-10 Form 6-K restating 2008-2010 quarters is not cited.",
+    "Cervarix 2019Q4 and 2025Q3 are printed as negative quarters ((13) and (11)), kept as printed.",
+    "Full-year checks against the Total column of the 'year ended 31 December' table: 2008: 12+15+43+55=125 vs year-ended table 125 OK; 2009: 48+73+28+38=187 vs year-ended table 187 OK; 2010: 77+50+48+67=242 vs year-ended table 242 OK; 2011: 109+65+232+100=506 vs year-ended table 506 OK; 2012: 131+50+45+44=270 vs year-ended table 270 OK; 2013: 40+46+41+45=172 vs year-ended table 172 OK; 2014: 34+22+31+31=118 vs year-ended table 118 OK; 2015: 28+18+25+17=88 vs year-ended table 88 OK; 2016: 17+17+24+23=81 vs year-ended table 81 OK; 2017: 17+18+37+62=134 vs year-ended table 134 OK; 2018: 52+16+55+15=138 vs year-ended table 138 OK; 2019: 20+28+15+-13=50 vs year-ended table 50 OK; 2020: 12+34+49+44=139 vs year-ended table 139 OK; 2021: 45+36+34+23=138 vs year-ended table 138 OK; 2022: 29+22+40+26=117 vs year-ended table 117 OK; 2023: 27+52+31+10=120 vs year-ended table 120 OK; 2024: 32+16+18+6=72 vs year-ended table 72 OK; 2025: 11+15+-11+8=23 vs year-ended table 23 OK."
+  ],
+  "reviewed_anomalies": {
+    "2019Q4": "A negative quarter as printed. Checked at source and kept as printed.",
+    "2025Q3": "A negative quarter as printed. Checked at source and kept as printed."
+  }
+}

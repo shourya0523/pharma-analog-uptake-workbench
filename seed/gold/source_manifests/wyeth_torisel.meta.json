@@ -1,0 +1,34 @@
+{
+  "drug_name": "Torisel",
+  "generic_name": "temsirolimus",
+  "manufacturer": "Pfizer",
+  "benchmark_identity": "wyeth_torisel_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Advanced renal cell carcinoma",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Wyeth net revenue by product, worldwide)",
+  "formulation": "solution for intravenous infusion (concentrate)",
+  "route_of_administration": "intravenous",
+  "moa": "mTOR kinase inhibitor",
+  "moa_class": "mtor_inhibitor",
+  "first_approval_year": 2007,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=022088",
+    "quote": "05/30/2007 ORIG-1 Approval Type 1 - New Molecular Entity (NDA 022088, TORISEL TEMSIROLIMUS)"
+  },
+  "commercial_start_quarter": "2007Q3",
+  "series_start_reason": null,
+  "launch_quarter": "2007Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/5187/000119312507173810/d10q.htm",
+    "quote": "Our New Drug Application (NDA) for TORISEL (temsirolimus) for the treatment of renal cell carcinoma was approved by the FDA on May 30, 2007, and the product became available to patients in the United States in July 2007."
+  },
+  "series_end_quarter": "2009Q2",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Wyeth (CIK 5187) was acquired by Pfizer on October 15, 2009 (8-K filed 2009-10-15, items 1.02/3.01/5.01) and filed Form 15-12B; its last periodic report is the 10-Q for the quarter ended June 30, 2009 (filed 2009-08-06). Pfizer (CIK 78003) prints no TORISEL row in any quarterly earnings release (8-K Ex. 99, 2009-2026) or 10-Q/10-K product table (all fetched and scanned), so no later quarter is printed on sec.gov.",
+  "search_log": [
+    "Listed every filing of CIK 5187 (Wyeth), all forms; fetched every 10-Q/10-K main document, every 10-K Exhibit 13 (annual Financial Report) 2006-2009 and every document of every 8-K filed 2005-01..2010-06. Listed every filing of CIK 78003 (Pfizer); fetched every 10-Q/10-K main document and every document of every earnings 8-K 2002-2026.",
+    "Wyeth's earnings releases print only principal products; TORISEL appears in the 10-Q net revenue by product table (millions) from the 2008 first-quarter 10-Q and in the 2008 Financial Report (Ex. 13) with full years 2008 and 2007. 2007Q3 is the prior-year column of the 2008Q3 10-Q (the 2007 10-Qs print no TORISEL row); 2007Q4 and 2008Q4 are full year less nine months.",
+    "Check: nine months 2007 (10.5) equals the third quarter 2007, consistent with July 2007 availability; 2008 quarters 21.5 + 31.8 + 34.0 + 34.8 = 122.1 = full year by construction."
+  ]
+}

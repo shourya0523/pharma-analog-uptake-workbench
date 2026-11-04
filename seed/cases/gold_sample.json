@@ -2110,10 +2110,10 @@
   ]
  },
  {
-  "drug_name": "Ojjaara",
+  "drug_name": "Rotarix",
   "manufacturer": "GSK",
   "ticker": "GSK",
-  "generic_name": "momelotinib",
+  "generic_name": "rotavirus vaccine, live, oral (human strain RIX4414)",
   "options": {
    "earnings_since": "2026-04-05",
    "earnings_until": "2027-05-05",
@@ -2124,13 +2124,13 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 194.085796,
-    "gold_id": "gsk-ojjaara-worldwide-reported-2026q1"
+    "value_normalized_usd_millions": 188.694524,
+    "gold_id": "gsk-rotarix-worldwide-reported-2026q1"
    },
    {
     "period": "2026Q2",
-    "value_normalized_usd_millions": 251.12883,
-    "gold_id": "gsk-ojjaara-worldwide-reported-2026q2"
+    "value_normalized_usd_millions": 169.2098,
+    "gold_id": "gsk-rotarix-worldwide-reported-2026q2"
    }
   ]
  },
@@ -2225,10 +2225,10 @@
   ]
  },
  {
-  "drug_name": "Fabrazyme",
+  "drug_name": "Lumizyme",
   "manufacturer": "Genzyme",
   "ticker": null,
-  "generic_name": "agalsidase beta",
+  "generic_name": "alglucosidase alfa",
   "options": {
    "earnings_since": "2010-04-05",
    "earnings_until": "2011-05-05",
@@ -2239,23 +2239,23 @@
   "expect": [
    {
     "period": "2010Q1",
-    "value_normalized_usd_millions": 53.241,
-    "gold_id": "sanofi-fabrazyme-worldwide-reported-2010q1"
+    "value_normalized_usd_millions": 86.059,
+    "gold_id": "sanofi-lumizyme-worldwide-reported-2010q1"
    },
    {
     "period": "2010Q2",
-    "value_normalized_usd_millions": 39.484,
-    "gold_id": "sanofi-fabrazyme-worldwide-reported-2010q2"
+    "value_normalized_usd_millions": 92.054,
+    "gold_id": "sanofi-lumizyme-worldwide-reported-2010q2"
    },
    {
     "period": "2010Q3",
-    "value_normalized_usd_millions": 33.882,
-    "gold_id": "sanofi-fabrazyme-worldwide-reported-2010q3"
+    "value_normalized_usd_millions": 106.223,
+    "gold_id": "sanofi-lumizyme-worldwide-reported-2010q3"
    },
    {
     "period": "2010Q4",
-    "value_normalized_usd_millions": 61.603,
-    "gold_id": "sanofi-fabrazyme-worldwide-reported-2010q4"
+    "value_normalized_usd_millions": 127.467,
+    "gold_id": "sanofi-lumizyme-worldwide-reported-2010q4"
    }
   ]
  },
@@ -5150,10 +5150,10 @@
   ]
  },
  {
-  "drug_name": "Protonix",
+  "drug_name": "Torisel",
   "manufacturer": "Wyeth",
   "ticker": null,
-  "generic_name": "pantoprazole sodium",
+  "generic_name": "temsirolimus",
   "options": {
    "earnings_since": "2009-04-05",
    "earnings_until": "2010-05-05",
@@ -5164,23 +5164,23 @@
   "expect": [
    {
     "period": "2009Q1",
-    "value_normalized_usd_millions": 91.945,
-    "gold_id": "wyeth-protonix-branded-net-revenue-reported-2009q1"
+    "value_normalized_usd_millions": 35.7,
+    "gold_id": "wyeth-torisel-worldwide-reported-2009q1"
    },
    {
     "period": "2009Q2",
-    "value_normalized_usd_millions": 86.966,
-    "gold_id": "wyeth-protonix-branded-net-revenue-reported-2009q2"
+    "value_normalized_usd_millions": 37.8,
+    "gold_id": "wyeth-torisel-worldwide-reported-2009q2"
    },
    {
     "period": "2009Q3",
     "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2009Q2. Pfizer completed its acquisition of Wyeth on October 15, 2009 (Wyeth Form 8-K filed 2009-10-15); Wyeth's last periodic report is the second-quarter 2009 Form 10-Q. Pfizer's own Protonix line (companion, not spliced) starts with a stub for the period after October 15, 2009 (68 for 2009Q4) and prints 158 for 2010Q1 against Wyeth's branded 86.966 for 2009Q2 and family total 237 for the same quarter, so Pfizer's line is not documented to be on the branded-only scope; it is also printed for only some quarters (2010Q1-2011Q3 and 2012Q3, 2014Q2-Q4 as quarterly rows, annual rows 2012-2014) and not at all in releases from 2015."
+    "why": "The issuer reports no line for this product after 2009Q2. Wyeth (CIK 5187) was acquired by Pfizer on October 15, 2009 (8-K filed 2009-10-15, items 1.02/3.01/5.01) and filed Form 15-12B; its last periodic report is the 10-Q for the quarter ended June 30, 2009 (filed 2009-08-06). Pfizer (CIK 78003) prints no TORISEL row in any quarterly earnings release (8-K Ex. 99, 2009-2026) or 10-Q/10-K product table (all fetched and scanned), so no later quarter is printed on sec.gov."
    },
    {
     "period": "2009Q4",
     "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2009Q2. Pfizer completed its acquisition of Wyeth on October 15, 2009 (Wyeth Form 8-K filed 2009-10-15); Wyeth's last periodic report is the second-quarter 2009 Form 10-Q. Pfizer's own Protonix line (companion, not spliced) starts with a stub for the period after October 15, 2009 (68 for 2009Q4) and prints 158 for 2010Q1 against Wyeth's branded 86.966 for 2009Q2 and family total 237 for the same quarter, so Pfizer's line is not documented to be on the branded-only scope; it is also printed for only some quarters (2010Q1-2011Q3 and 2012Q3, 2014Q2-Q4 as quarterly rows, annual rows 2012-2014) and not at all in releases from 2015."
+    "why": "The issuer reports no line for this product after 2009Q2. Wyeth (CIK 5187) was acquired by Pfizer on October 15, 2009 (8-K filed 2009-10-15, items 1.02/3.01/5.01) and filed Form 15-12B; its last periodic report is the 10-Q for the quarter ended June 30, 2009 (filed 2009-08-06). Pfizer (CIK 78003) prints no TORISEL row in any quarterly earnings release (8-K Ex. 99, 2009-2026) or 10-Q/10-K product table (all fetched and scanned), so no later quarter is printed on sec.gov."
    }
   ]
  },

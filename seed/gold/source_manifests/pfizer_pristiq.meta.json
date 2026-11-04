@@ -1,0 +1,34 @@
+{
+  "drug_name": "Pristiq",
+  "generic_name": "desvenlafaxine succinate",
+  "manufacturer": "Pfizer",
+  "benchmark_identity": "pfizer_pristiq_worldwide_reported",
+  "therapeutic_area": "Neuroscience / Psychiatry",
+  "indication_area": "Major depressive disorder",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Pfizer Worldwide column)",
+  "formulation": "extended-release tablet",
+  "route_of_administration": "oral",
+  "moa": "serotonin-norepinephrine reuptake inhibitor",
+  "moa_class": "snri",
+  "first_approval_year": 2008,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=021992",
+    "quote": "02/29/2008 ORIG-1 Approval Type 1 - New Molecular Entity (NDA 021992, PRISTIQ DESVENLAFAXINE SUCCINATE)"
+  },
+  "commercial_start_quarter": "2010Q1",
+  "series_start_reason": "Series starts 2010Q1, the first full quarter Pfizer reported after closing the Wyeth acquisition on October 15, 2009, seven quarters after the May 2008 launch. Wyeth (CIK 5187) printed a PRISTIQ row only in its 2009 second-quarter 10-Q (Q2 2009 61.9, Q2 2008 15.7, six months 111.2); it printed no 2008Q3/2008Q4 quarter, filed no report for 2009Q3, and Pfizer's 2009Q4 figure covers only the post-close period, so a joined series would carry a two-quarter ownership gap (2009Q3-2009Q4) and is not used.",
+  "launch_quarter": "2008Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/5187/000119312508164821/d10q.htm",
+    "quote": "In addition, in the United States, demand for EFFEXOR XR (extended release capsules) declined slightly in the 2008 second quarter as we shifted promotional support to the launch of PRISTIQ , our new product for the treatment of adult patients with major depressive disorder, which was launched in May 2008."
+  },
+  "series_end_quarter": "2018Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Pfizer's product revenue tables print a PRISTIQ row through the fourth-quarter 2018 release (8-K filed 2019-01-29). The releases for 2019Q1-2020Q4 (filed 2019-04-30 through 2021-02-02) and the 2019-2020 10-Qs print no PRISTIQ row; the line returns in the 2021 releases with 2020 comparatives only, so 2019Q1-2019Q4 are printed nowhere on sec.gov and the contiguous series ends 2018Q4.",
+  "search_log": [
+    "Listed every filing of CIK 78003 (Pfizer) and CIK 5187 (Wyeth), all forms; fetched every 10-Q/10-K main document and every htm/txt document of every earnings 8-K (items 2.02/12) 2002-2026 for Pfizer and 2005-2010 for Wyeth, plus Wyeth's 10-K Exhibit 13s.",
+    "Rows read from the first (quarter) product revenues table of each Pfizer earnings release (8-K Ex. 99), Worldwide current-quarter column; 2010Q1 is the prior-year column of the 2011Q1 release (the 2010Q1 release prints no PRISTIQ row). Quarter of each release taken from its filing month and checked against its own header.",
+    "Quarter sums: 2011 577, 2012 630, 2013 698, 2014 737, 2015 716, 2016 731, 2017 304, 2018 206 - consistent with the full-year columns of Pfizer's Q4 releases within rounding."
+  ]
+}

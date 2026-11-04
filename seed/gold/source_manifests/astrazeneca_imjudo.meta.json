@@ -1,0 +1,32 @@
+{
+  "drug_name": "Imjudo",
+  "generic_name": "tremelimumab",
+  "manufacturer": "AstraZeneca",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (World column / Product Revenue as totalled by the issuer)",
+  "benchmark_identity": "astrazeneca_imjudo_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (unresectable HCC, metastatic NSCLC; with Imfinzi)",
+  "formulation": "solution for intravenous infusion",
+  "route_of_administration": "intravenous",
+  "moa": "Anti-CTLA-4 monoclonal antibody (immune checkpoint inhibitor)",
+  "moa_class": "ctla4_inhibitor",
+  "first_approval_year": 2022,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761289",
+    "quote": "10/21/2022 ORIG-1 Approval (BLA 761289, IMJUDO TREMELIMUMAB-ACTL)"
+  },
+  "commercial_start_quarter": "2024Q1",
+  "launch_quarter": "2022Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/901832/000165495424001467/a4081c.htm",
+    "quote": "Includes $218m of Total Revenue from Imjudo, which launched in Q4 2022 following approvals in the US for patients with unresectable HCC (HIMALAYA) and Stage IV NSCLC (POSEIDON)"
+  },
+  "series_start_reason": "Series starts 2024Q1, five quarters after the Q4 2022 launch. Through the FY 2023 announcement AstraZeneca included Imjudo inside the Imfinzi revenue line (Q1 2023 announcement: 'The Imfinzi revenue line includes sales of Imjudo, which launched in Q4 2022'), giving only cumulative prose amounts ($100m in H1 2023, $161m in 9M 2023, $218m in FY 2023) in commentary cells; the Q1 2024 announcement (filed 2024-04-25) is the first with an 'Imjudo' row, and its tables print only percentage changes for the prior year, so 2022Q4-2023Q4 are not carried.",
+  "search_log": [
+    "Listed AstraZeneca PLC (CIK 901832) filings via data.sec.gov submissions (2,057 filings, 1,620 of them Form 6-K). Located the quarterly results announcements with EDGAR full-text search restricted to CIK 901832 for each of 'Imjudo', 'Orpathys', 'Datroway' and 'Seroquel XR' (all forms, 2001-2026, yearly windows); every Form 6-K HTML hit was fetched from sec.gov (202 documents) and every table row parsed (bs4).",
+    "Quarter figure = World (first) column of the 'Imjudo' row in the regional 'Product Sales year-on-year analysis' table for the quarter (period from the table title or the sentence above it, e.g. 'The Q2 2024 information in respect of the three months ended 30 June 2024 ...').",
+    "Announcements 2022-11-10 to 2024-02-08 were checked: no Imjudo table row; Imjudo is within Imfinzi.",
+    "Full-year checks (World column of FY tables): 2024: 62+74+72+73=281 vs printed full-year 281 OK; 2025: 80+89+84+93=346 vs printed full-year 346 OK."
+  ]
+}

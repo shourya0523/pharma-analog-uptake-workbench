@@ -1,0 +1,39 @@
+{
+  "drug_name": "Orpathys",
+  "generic_name": "savolitinib",
+  "manufacturer": "AstraZeneca",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (World column / Product Revenue as totalled by the issuer)",
+  "benchmark_identity": "astrazeneca_orpathys_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (MET exon 14 skipping NSCLC, China)",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Selective MET tyrosine kinase inhibitor",
+  "moa_class": "met_inhibitor",
+  "first_approval_year": 2021,
+  "approval_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/901832/000165495421007146/a8164c.htm",
+    "quote": "AstraZeneca and HUTCHMED's Orpathys (savolitinib) has been granted conditional approval in China to treat patients with non-small cell lung cancer (NSCLC) with MET exon 14 skipping alterations who have progressed following prio[r systemic therapy]"
+  },
+  "approval_note": "Orpathys has no FDA approval (Drugs@FDA has no savolitinib application); its first approval anywhere is the June 2021 conditional approval in China, quoted from AstraZeneca's Form 6-K of 2021-06-23.",
+  "commercial_start_quarter": "2021Q3",
+  "launch_quarter": "2021Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/901832/000165495421007146/a8164c.htm",
+    "quote": "We are proud that this first-ever regulatory approval of Orpathys is in China, where we have a long-standing commitment to improving patient outcomes and working with the right partners to achieve that goal."
+  },
+  "launch_note": "Approved in China on 22 June 2021 (Form 6-K 2021-06-23); the first Product Sales are in Q3 2021: the 9M 2021 table and the Q3 2021 table both print 10, and FY 2021 (16) = Q3 10 + Q4 6, so H1 2021 had none. launch_quarter is therefore set to the first selling quarter.",
+  "series_end_quarter": "2024Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The FY 2024 announcement (Form 6-K filed 2025-02-06) is the last to print an 'Orpathys' row; from Q1 2025 the product is inside 'Other Oncology' (H1 2025 announcement, Form 6-K filed 2025-07-29, azn-20250630x6k.htm: 'Other Oncology includes $16m of Total Revenue from Orpathys, partnered with HUTCHMED.').",
+  "search_log": [
+    "Listed AstraZeneca PLC (CIK 901832) filings via data.sec.gov submissions (2,057 filings, 1,620 of them Form 6-K). Located the quarterly results announcements with EDGAR full-text search restricted to CIK 901832 for each of 'Imjudo', 'Orpathys', 'Datroway' and 'Seroquel XR' (all forms, 2001-2026, yearly windows); every Form 6-K HTML hit was fetched from sec.gov (202 documents) and every table row parsed (bs4).",
+    "Quarter figure = World (first) column of the 'Orpathys' row in the regional 'Product Sales year-on-year analysis' table for the quarter; the period is read from the table title ('Table 52: Q3 2021 - Product Sales year-on-year analysis') or the sentence above it ('The Q4 2021 information in respect of the three months ended 31 December 2021 ...'). In the Q3 2023 announcement (a8671s.htm) the column header row is printed as a separate table, so the Q3 2023 table (table index 106, titled 'Table 28: Q3 2023 - Product Sales year-on-year analysis') was selected by hand; its Orpathys row is 12 and the 9M 2023 table prints 33.",
+    "2022Q4 is printed as (1), a negative quarter, kept as printed.",
+    "Full-year checks (World column of FY tables): 2022: 13+11+11+-1=34 vs printed full-year 33 OK; 2023: 8+13+12+11=44 vs printed full-year 44 OK; 2024: 12+12+10+9=43 vs printed full-year 44 OK (differences of 1 are rounding of printed figures)."
+  ],
+  "reviewed_anomalies": {
+    "2022Q4": "A negative quarter as printed. Checked at source and kept as printed."
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "drug_name": "Xyntha",
+  "generic_name": "antihemophilic factor (recombinant), plasma/albumin-free (moroctocog alfa; REFACTO AF outside the U.S.)",
+  "manufacturer": "Pfizer",
+  "benchmark_identity": "pfizer_xyntha_worldwide_reported",
+  "therapeutic_area": "Hematology / Rare disease",
+  "indication_area": "Hemophilia A",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Pfizer Worldwide column; line 'ReFacto AF/Xyntha', the U.S. and EU trade names of one product)",
+  "formulation": "lyophilized powder for injection",
+  "route_of_administration": "intravenous",
+  "moa": "recombinant coagulation factor VIII replacement",
+  "moa_class": "factor_viii_replacement",
+  "first_approval_year": 2008,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/media/70399/download?attachment",
+    "quote": "Initial U.S. Approval: 2008"
+  },
+  "commercial_start_quarter": "2010Q1",
+  "series_start_reason": "Series starts 2010Q1, the first full quarter Pfizer reported after closing the Wyeth acquisition (October 15, 2009), six quarters after the September 2008 U.S. launch. Wyeth (CIK 5187) printed only a 'ReFacto/Xyntha' footnote amount (2009Q1) and a 2008 full-year figure, a scope that also includes the original ReFacto; it filed no report for 2009Q3 and Pfizer's 2009Q4 row covers only the post-close period, so no joined series is formed.",
+  "launch_quarter": "2008Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/5187/000119312508226082/d10q.htm",
+    "quote": "Our NDA for XYNTHA was approved by the FDA in February 2008, and we began shipping the product in the United States in September 2008."
+  },
+  "series_end_quarter": "2023Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Pfizer's product revenue tables print a 'ReFacto AF/Xyntha' row through the fourth-quarter 2023 release (8-K filed 2024-01-30); no Pfizer earnings release or 10-Q filed from 2024-05-01 through 2026-11-03 contains the words XYNTHA or REFACTO (text of each searched).",
+  "search_log": [
+    "Listed every filing of CIK 78003 (Pfizer) and CIK 5187 (Wyeth), all forms; fetched every 10-Q/10-K main document and every htm/txt document of every earnings 8-K 2002-2026 (Pfizer) and 2005-2010 (Wyeth), plus Wyeth's 10-K Exhibit 13s.",
+    "Rows read from the first (quarter) product revenues table of each Pfizer release, Worldwide current-quarter column; labels 'ReFacto/Xyntha' (2010Q1), 'ReFacto / Xyntha' (2010Q2), 'ReFacto AF/Xyntha' (2010Q3 on). Wyeth 10-Q (2009-05-07): 'REFACTO AF (the EU trade name for XYNTHA, which we launched in the United States in 2008)', so the line is one product under two trade names.",
+    "Quarter sums 2011-2023: 506, 584, 602, 630, 533, 554, 551, 513, 425, 369, 304, 240, 229 - consistent with the full-year columns of Pfizer's Q4 releases within rounding."
+  ]
+}
