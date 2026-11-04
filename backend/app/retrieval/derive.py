@@ -36,7 +36,8 @@ class Derived:
     """A quarter computed from two stated periods, with both inputs kept.
 
     `status`: derived | missing_input | inputs_differ | negative |
-    imprecise_input. A first quarter is six months less the second quarter,
+    imprecise_input | no_sales (both inputs zero: the product had none to
+    report yet, which is not a figure of zero sales). A first quarter is six months less the second quarter,
     both stated in the second-quarter 10-Q (method six_months_less_q2).
     `method`: full_year_less_nine_months | ytd_less_previous_ytd |
     full_year_less_quarters (each quarter stated, the sum is ours - can be a
@@ -141,6 +142,9 @@ def derive_quarter(
     if value < 0:
         return Derived("negative", product, period, value=value, unit=current.unit, method=method, inputs=inputs,
                        reason="a later year to date smaller than the earlier one: a restatement or a change of scope")
+    if all(a.value == 0 for a in used):
+        return Derived("no_sales", product, period, method=method, inputs=inputs,
+                       reason="every input is zero: nothing was sold to report")
     return Derived("derived", product, period, value=value, unit=current.unit, method=method, inputs=inputs,
                    plus_minus=rounding)
 
@@ -159,6 +163,9 @@ def _first_quarter(product: str, period: str, year: int, issuer: str | None, *, 
         return Derived("inputs_differ", product, period, inputs=inputs, method=method,
                        reason="the six months and the quarter are not the same reported line")
     value = six.value - q2.value
+    if six.value == 0 and q2.value == 0:
+        return Derived("no_sales", product, period, method=method, inputs=inputs,
+                       reason="every input is zero: nothing was sold to report")
     rounding = declared_slack(six.decimals) + declared_slack(q2.decimals)
     if value < 0:
         return Derived("negative", product, period, value=value, unit=six.unit, method=method, inputs=inputs)

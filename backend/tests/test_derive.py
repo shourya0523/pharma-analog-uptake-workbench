@@ -103,3 +103,10 @@ def test_a_us_scope_quarter_is_derived_from_the_us_parts():
                                  (REV, 240e6, "2025-01-01", "2025-12-31", us)])
     result = derive_quarter("Calderon", "Q4 2025", "Acme Pharma", get=fake_sec(year), scope="us")
     assert result.status == "derived" and result.value == 70e6
+
+
+def test_zero_inputs_are_no_sales_not_a_figure_of_zero():
+    filings = [filing("10-Q", "2025-06-30", inline([(REV, 0, "2025-04-01", "2025-06-30", CAL),
+                                                    (REV, 0, "2025-01-01", "2025-06-30", CAL)]))]
+    result = derive_quarter("Calderon", "Q1 2025", "Acme Pharma", get=fake_sec(filings))
+    assert result.status == "no_sales" and result.value is None
