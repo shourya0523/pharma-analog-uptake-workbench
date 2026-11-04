@@ -32,7 +32,18 @@ _FINISHED = {"completed", "failed", "cancelled", "incomplete"}
 
 
 class QuotaExceeded(RuntimeError):
-    """Gemini answered 429: the project's quota or rate limit is used up."""
+    """Gemini refused for billing: 429 (a quota, rate limit or spend cap used
+    up) or 402 (prepaid credits depleted)."""
+
+
+# Statuses that mean the project cannot pay for more calls now; retrying or
+# moving on to the next document gets the same answer.
+BILLING_STATUSES = {402, 429}
+
+
+def is_quota(exc: BaseException) -> bool:
+    """Whether an exception is Gemini refusing for billing."""
+    return isinstance(exc, QuotaExceeded) or getattr(exc, "status_code", None) in BILLING_STATUSES
 
 
 class InteractionFailed(RuntimeError):
@@ -174,7 +185,7 @@ def ask_revenue(
             waited += POLL_SECONDS
             data = _as_dict(client.interactions.get(data["id"]))
     except Exception as exc:
-        if getattr(exc, "status_code", None) == 429:
+        if is_quota(exc):
             raise QuotaExceeded(f"{model}: {exc}") from exc
         raise
     if data.get("status") not in (None, "completed"):

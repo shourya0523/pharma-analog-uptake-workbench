@@ -225,6 +225,10 @@ def read_single_product(
     try:
         verdict = confirm(answer.product, passages)
     except Exception as exc:  # no confirmation is no single-product answer, not a broken read
+        from app.retrieval.gemini_search import QuotaExceeded, is_quota
+
+        if is_quota(exc):
+            raise QuotaExceeded(str(exc)) from exc
         verdict = Confirmation(False, [], f"confirmation failed: {type(exc).__name__}: {str(exc)[:120]}")
     answer.candidates = [{"basis": basis, "value": line.value, "concept": line.concept,
                           "confirmation": verdict.reason, "products": verdict.products}]

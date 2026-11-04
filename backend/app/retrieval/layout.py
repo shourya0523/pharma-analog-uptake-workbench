@@ -56,7 +56,7 @@ from app.retrieval.earnings import (
     stated_scale,
     value_in_quote,
 )
-from app.retrieval.gemini_search import QuotaExceeded
+from app.retrieval.gemini_search import QuotaExceeded, is_quota
 from app.retrieval.grid import _rows, cells
 from app.retrieval.single_product import filing_text
 from app.retrieval.verify import DEFAULT_USER_AGENT, _flatten, _in_row, _same_number
@@ -494,7 +494,7 @@ def read_layout(url: str, product: str, period: str, *, single_product_ok: bool 
             return reading
         answer = ask(contents_for(content, reading.method, text, product, end, period))
     except Exception as exc:  # a document that cannot be fetched or read declines; it does not raise
-        if getattr(exc, "status_code", None) == 429:
+        if is_quota(exc):
             raise QuotaExceeded(str(exc)) from exc
         reading.reason = f"{type(exc).__name__}: {exc}"
         return reading

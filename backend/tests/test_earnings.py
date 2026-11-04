@@ -165,3 +165,19 @@ def test_a_spent_quota_stops_the_reading_instead_of_declining():
     get = _sec([_hit("0001-25-1", 1, "ACME PHARMA (CIK 1)", "acme.htm")], {"acme.htm": EXHIBIT})
     with pytest.raises(QuotaExceeded):
         read_earnings("Calderon", "Q2 2025", "Acme Pharma", get=get, ask=ask, later=False)
+
+
+def test_depleted_prepaid_credits_stop_the_reading_like_a_spent_quota():
+    import pytest
+
+    from app.retrieval.gemini_search import QuotaExceeded
+
+    class Depleted(Exception):
+        status_code = 402
+
+    def ask(prompt):
+        raise Depleted("Your prepayment credits are depleted.")
+
+    get = _sec([_hit("0001-25-1", 1, "ACME PHARMA (CIK 1)", "acme.htm")], {"acme.htm": EXHIBIT})
+    with pytest.raises(QuotaExceeded):
+        read_earnings("Calderon", "Q2 2025", "Acme Pharma", get=get, ask=ask, later=False)

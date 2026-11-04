@@ -31,7 +31,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from app.retrieval.earnings import _flat, passages
-from app.retrieval.gemini_search import QuotaExceeded
+from app.retrieval.gemini_search import QuotaExceeded, is_quota
 from app.retrieval.single_product import filing_text
 from app.retrieval.xbrl import _ENTITY_WORDS, ARCHIVES, SEARCH_URL, quarter_end, sec_get
 
@@ -168,7 +168,7 @@ def _ask(ask: Callable, prompt: str) -> dict[str, Any] | None:
     try:
         return ask(prompt)
     except Exception as exc:
-        if isinstance(exc, QuotaExceeded) or getattr(exc, "status_code", None) == 429:
+        if is_quota(exc):
             raise QuotaExceeded(str(exc)) from exc
         return None
 

@@ -62,6 +62,7 @@ from app.retrieval.gemini_search import (
     InteractionFailed,
     QuotaExceeded,
     _as_dict,
+    is_quota,
     make_client,
     parse_interaction,
     parse_json_answer,
@@ -508,7 +509,7 @@ def grounded_json(prompt: str, *, client: Any = None, model: str | None = None) 
             waited += POLL_SECONDS
             data = _as_dict(client.interactions.get(data["id"]))
     except Exception as exc:
-        if getattr(exc, "status_code", None) == 429:
+        if is_quota(exc):
             raise QuotaExceeded(f"{model}: {exc}") from exc
         raise
     if data.get("status") not in (None, "completed"):
@@ -607,7 +608,7 @@ def document_reader(prompt: str, document: bytes | None = None, *, client: Any =
     try:
         reply = client.interactions.create(model=model, input=payload)
     except Exception as exc:
-        if getattr(exc, "status_code", None) == 429:
+        if is_quota(exc):
             raise QuotaExceeded(f"{model}: {exc}") from exc
         raise
     data = _as_dict(reply)
