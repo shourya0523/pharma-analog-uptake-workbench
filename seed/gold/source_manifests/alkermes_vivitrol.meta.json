@@ -1,0 +1,52 @@
+{
+  "drug_name": "Vivitrol",
+  "generic_name": "naltrexone for extended-release injectable suspension",
+  "manufacturer": "Alkermes",
+  "benchmark_identity": "alkermes_vivitrol_us_reported",
+  "therapeutic_area": "Neuroscience / Addiction",
+  "indication_area": "Addiction (alcohol dependence; prevention of relapse to opioid dependence)",
+  "revenue_scope": "United States",
+  "geography": "United States",
+  "formulation": "extended-release injectable suspension (microspheres)",
+  "route_of_administration": "intramuscular",
+  "moa": "Opioid receptor antagonist (extended-release naltrexone)",
+  "moa_class": "opioid_antagonist",
+  "first_approval_year": 2006,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=021897",
+    "quote": "04/13/2006 ORIG-1 Approval (NDA 021897, VIVITROL NALTREXONE)"
+  },
+  "launch_quarter": "2006Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/874663/000095012311071066/b86730e10vq.htm",
+    "quote": "April 2006 for the treatment of alcohol dependence and was launched in the U.S. in June 2006."
+  },
+  "series_start_reason": "Series starts 2008Q2, eight quarters after the June 2006 launch: Cephalon, which sold VIVITROL until December 2008, printed no VIVITROL net sales line in its 8-K exhibits or 10-Q/10-Ks for 2006-2008 (searched), and Alkermes, Inc.'s 2006-2008 releases print only gross sales and collaboration figures. The earliest net sales printed on sec.gov are Cephalon's 2008Q2 and 2008Q3 figures, quoted as prior-year comparisons in Alkermes' 2009Q2 and 2009Q3 releases.",
+  "unreported_quarters": {
+    "2008Q4": "Ownership change Cephalon to Alkermes; no full-quarter figure is published. Alkermes assumed VIVITROL from Cephalon effective December 1, 2008 ('Alkermes started to record net sales effective December 1, 2008. Alkermes deferred sales in the month of December', Alkermes release filed 2009-05-21); Cephalon's October-November 2008 sales are not printed and Alkermes recognized no product sales for December 2008."
+  },
+  "joined_issuers": [
+    {
+      "issuer": "Cephalon",
+      "first_quarter": "2008Q2",
+      "last_quarter": "2008Q3"
+    },
+    {
+      "issuer": "Alkermes, Inc.",
+      "first_quarter": "2009Q1",
+      "last_quarter": "2011Q2"
+    },
+    {
+      "issuer": "Alkermes",
+      "first_quarter": "2011Q3",
+      "last_quarter": "2026Q2"
+    }
+  ],
+  "search_log": [
+    "Listed every filing of Cephalon (CIK 873364), Alkermes, Inc. (CIK 874663) and Alkermes plc (CIK 1520262) via data.sec.gov/submissions; selected 8-Ks carrying item 2.02 (or legacy item 12) and every 10-Q/10-K (Cephalon 2006-2009, Alkermes, Inc. 2006-2011, Alkermes plc 2011-2026); parsed every table row and text line for VIVITROL.",
+    "2008Q2-2008Q3: Cephalon's net sales quoted in Alkermes' 2009 releases. 2009Q1: Alkermes release sentence. 2009Q2-2015Q3: 'Product sales, net' of each release (VIVITROL only; fiscal fourth quarters read from the quarterly breakdown table or the three-month table, not the fiscal-year column). 2015Q4-2017Q4: release sentence 'Net sales of VIVITROL were $X million' (ARISTADA shares the product sales line). 2018Q1 on: 'VIVITROL' row of each 10-Q product table; Q4 = 10-K full year less nine months.",
+    "Alkermes' fiscal year ended March 31 until it changed to a calendar year (transition period April-December 2013); fiscal quarters are calendar quarters, so periods map directly.",
+    "Checks: fiscal 2010 and 2011 quarterly breakdown tables sum to the printed fiscal years (20,245; 28,920); calendar 2015-2017 one-decimal quarters agree with the full years stated in the releases (144.4, 209.0, 269.3) to rounding; 2019: 69,183 + 88,199 + 85,164 + 92,819 = 335,365."
+  ],
+  "commercial_start_quarter": "2008Q2"
+}

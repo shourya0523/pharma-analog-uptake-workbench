@@ -1,0 +1,39 @@
+{
+  "manufacturer": "Biogen",
+  "therapeutic_area": "Immunology",
+  "revenue_scope": "Rest of World",
+  "route_of_administration": "intravenous",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "drug_name": "Flixabi",
+  "generic_name": "infliximab",
+  "benchmark_identity": "biogen_flixabi_row_reported",
+  "indication_area": "Immunology (rheumatoid arthritis, Crohn's disease, ulcerative colitis, ankylosing spondylitis, psoriatic arthritis, psoriasis; biosimilar to Remicade)",
+  "geography": "Europe (Biogen's 'Rest of World' column; the United States column is a dash in every release, so Total equals Rest of World)",
+  "formulation": "powder for concentrate for solution for infusion, 100 mg vial",
+  "moa": "TNF-alpha inhibitor (chimeric monoclonal antibody, biosimilar to Remicade)",
+  "moa_class": "tnf_alpha_inhibitor",
+  "first_approval_year": 2016,
+  "approval_evidence": {
+    "url": "https://www.ema.europa.eu/en/medicines/human/EPAR/flixabi",
+    "quote": "Flixabi ... International non-proprietary name (INN) or common name infliximab ... Marketing authorisation issued 26/05/2016"
+  },
+  "launch_quarter": "2016Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/875045/000087504516000069/q32016pressrelease.htm",
+    "quote": "In our biosimilars business, we are pleased to have launched two new treatments in Europe: FLIXABI \u00ae , a biosimilar of infliximab, and BENEPALI \u00ae , a biosimilar of etanercept."
+  },
+  "search_log": [
+    "Listed every filing for Biogen (CIK 875045) via data.sec.gov/submissions incl. older 'files' pages; selected 8-K/8-K/A with item 2.02 filed 2015-06 onward, then checked for a release in every filing quarter: the third-quarter 2019 release (8-K 2019-10-22, accession 0000875045-19-000038) carries item 9.01 only and was added by hand. Exhibits resolved from each filing's index.json (names matching ex99/pressrelease); 2025-2026 item-2.02 8-Ks without an exhibit are pre-announcements. The 2022-07-20 8-K/A repeats the 8-K's exhibit; the original 8-K is cited.",
+    "Each quarter is read from that quarter's own release, from the one-decimal product revenues table headed 'For the Three Months Ended <quarter end>' (United States | Rest of World | Total); the header date was asserted against the quarter for every row. Integer summary tables ('$' cells) earlier in the same releases were skipped.",
+    "Rows matched: label 'FLIXABI' (with or without \u2122/\u00ae) on its own line in every release 2016Q3-2026Q2; series contiguous, no gaps.",
+    "Full-year check against the 'For the Twelve Months Ended December 31' table of each Q4 release (Total column): 2017: 0.6+1.9+2.2+4.3 = 9 vs printed full year 9 (ok); 2018: 6.6+11.2+11.4+14.1 = 43.3 vs printed full year 43.2 (ok); 2019: 14.7+16.8+18.4+18.2 = 68.1 vs printed full year 68.1 (ok); 2020: 23.7+20.6+27.5+26.1 = 97.9 vs printed full year 97.9 (ok); 2021: 25.5+25.3+24.6+24 = 99.4 vs printed full year 99.4 (ok); 2022: 22.5+20.5+19+19.3 = 81.3 vs printed full year 81.3 (ok); 2023: 20.4+20.1+20.2+16.7 = 77.4 vs printed full year 77.4 (ok); 2024: 17.8+13.1+16.2+16.1 = 63.2 vs printed full year 63.2 (ok); 2025: 13.1+14.3+15.3+9.9 = 52.6 vs printed full year 52.6 (ok)",
+    "2016Q4 prints a dash (nil) in all three current-quarter columns of the FLIXABI row (2016Q3 0.1 was initial stocking after the Q3 launch); kept as a printed nil. 2016 twelve-months Total 0.1 = 0.1 + 0."
+  ],
+  "commercial_start_quarter": "2016Q3",
+  "reviewed_anomalies": {
+    "2016Q4": "A nil printed in the launch year. Checked at source and kept as printed."
+  }
+}

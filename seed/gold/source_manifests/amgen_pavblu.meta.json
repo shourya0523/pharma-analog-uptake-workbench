@@ -1,0 +1,35 @@
+{
+  "drug_name": "Pavblu",
+  "generic_name": "aflibercept-ayyh",
+  "manufacturer": "Amgen",
+  "benchmark_identity": "amgen_pavblu_worldwide_reported",
+  "therapeutic_area": "Ophthalmology",
+  "indication_area": "Neovascular age-related macular degeneration, macular edema following retinal vein occlusion, diabetic macular edema, diabetic retinopathy (biosimilar to Eylea)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (TOTAL column of Amgen's product sales detail table; U.S. is almost all of it, ROW from 2025Q2)",
+  "formulation": "injection, 2 mg (0.05 mL of 40 mg/mL) vial / prefilled syringe",
+  "route_of_administration": "intravitreal",
+  "moa": "VEGF-A/PlGF inhibitor (VEGF receptor-Fc fusion protein, biosimilar to Eylea)",
+  "moa_class": "vegf_inhibitor",
+  "first_approval_year": 2024,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761298",
+    "quote": "Application (BLA) : 761298 Company: AMGEN INC ... PAVBLU AFLIBERCEPT-AYYH ... 08/23/2024 ORIG-1 Approval"
+  },
+  "launch_quarter": "2024Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/318154/000031815425000018/amgn-20250331earningsrelea.htm",
+    "quote": "PAVBLU launched in the U.S. in the fourth quarter of 2024 and is the first available aflibercept biosimilar for the treatment of retinal conditions"
+  },
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "Listed every filing for Amgen (CIK 318154) via data.sec.gov/submissions incl. older 'files' pages; earnings releases = 8-K with item 2.02 filed 2020-01 onward (one per quarter, none missing), Exhibit 99.1 from each filing's index.json; also fetched every 10-Q/10-K from 2020. Searched all of them for table rows starting with RIABNI, AVSOLA, WEZLANA, PAVBLU.",
+    "PAVBLU has its own line from the 2025Q1 release; in the 2024Q4 release it is inside 'Other products' (footnote lists PAVBLU among the products in that line). 2024Q4 is therefore read from the prior-year TOTAL column of the 2025Q4 release (31); the 2025Q3 release prints a dash for the prior-year 2024Q3, consistent with the Q4 2024 launch.",
+    "Full-year checks: 2025: 99+130+213+258 = 700 vs printed full year 700 (ok); FY2024 printed 31 in the twelve-months row of the 2025Q4 release = 2024Q4 alone.",
+    "AVSOLA and RIABNI: never on their own line in any release or 10-Q/10-K 2020-2026 (only inside 'Other products', per the table footnotes) - reported unfixable."
+  ],
+  "commercial_start_quarter": "2024Q4"
+}

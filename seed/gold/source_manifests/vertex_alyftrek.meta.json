@@ -1,0 +1,33 @@
+{
+  "drug_name": "Alyftrek",
+  "generic_name": "vanzacaftor/tezacaftor/deutivacaftor",
+  "manufacturer": "Vertex",
+  "benchmark_identity": "vertex_alyftrek_worldwide_reported",
+  "therapeutic_area": "Respiratory / Rare Disease",
+  "indication_area": "Cystic fibrosis (patients 6+ with at least one F508del or another responsive CFTR mutation)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "CFTR corrector (vanzacaftor, tezacaftor) and potentiator (deutivacaftor) combination",
+  "moa_class": "cftr_modulator",
+  "first_approval_year": 2024,
+  "approval_evidence": {
+    "url": "https://api.fda.gov/drug/drugsfda.json?search=products.brand_name:%22ALYFTREK%22&limit=5",
+    "quote": "application_number NDA218730, brand_name ALYFTREK, submission_type ORIG, submission_status AP, submission_status_date 20241220 (openFDA Drugs@FDA record)"
+  },
+  "launch_quarter": "2025Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/875320/000087532025000171/ex-991_q12025.htm",
+    "quote": "Total revenue increased 3% to $2.77 billion compared to the first quarter of 2024, primarily driven by the continued performance of TRIKAFTA /KAFTRIO and an early contribution from the U.S. launch of ALYFTREK. (Vertex Q1 2025 release, Form 8-K Exhibit 99.1 filed 2025-05-05)"
+  },
+  "series_start_reason": "ALYFTREK was approved by the FDA on 2024-12-20; Vertex's FY2025 10-K product revenue table prints ALYFTREK 2024 as '\u2014', and the first release to print an ALYFTREK row is Q1 2025, which is the launch quarter.",
+  "search_log": [
+    "Listed every Vertex (CIK 875320) filing via data.sec.gov/submissions; scanned every 8-K with item 2.02 and every 10-Q/10-K filed 2024-10-01 to 2026-11-04 for 'ALYFTREK|JOURNAVX' in table rows and text (bin/scan.py).",
+    "ALYFTREK row printed in every quarterly release and 10-Q from Q1 2025 (53.9) on; 10-K FY2024 and the Q4 2024 release print no ALYFTREK revenue; FY2025 10-K prints ALYFTREK 837.8 with '\u2014' for 2024.",
+    "Each quarter taken from its own quarterly release three-months column; Q4 2025 is the printed three-months figure (380.1) of the Q4 2025 release.",
+    "Check: 2025 quarters 53.9 + 156.8 + 247.0 + 380.1 = 837.8, equal to the twelve months figure printed in the Q4 2025 release and the FY2025 10-K. Prior-year columns of the Q1/Q2 2026 releases (53.9, 156.8) match the 2025 rows.",
+    "Series ends 2026Q2 per the brief (Q3 2026 release filed 2026-11-02 exists but is outside the target window)."
+  ],
+  "commercial_start_quarter": "2025Q1"
+}

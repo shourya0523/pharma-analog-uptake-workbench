@@ -1,0 +1,35 @@
+{
+  "manufacturer": "Biogen",
+  "therapeutic_area": "Immunology",
+  "revenue_scope": "Rest of World",
+  "route_of_administration": "subcutaneous",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "drug_name": "Benepali",
+  "generic_name": "etanercept",
+  "benchmark_identity": "biogen_benepali_row_reported",
+  "indication_area": "Rheumatology / immunology (rheumatoid arthritis, psoriatic arthritis, axial spondyloarthritis, plaque psoriasis; biosimilar to Enbrel)",
+  "geography": "Europe (Biogen's 'Rest of World' column; the United States column is a dash in every release, so Total equals Rest of World)",
+  "formulation": "injection, 50 mg prefilled syringe/pen (also 25 mg)",
+  "moa": "TNF-alpha inhibitor (soluble TNF receptor-Fc fusion protein, biosimilar to Enbrel)",
+  "moa_class": "tnf_alpha_inhibitor",
+  "first_approval_year": 2016,
+  "approval_evidence": {
+    "url": "https://www.ema.europa.eu/en/medicines/human/EPAR/benepali",
+    "quote": "Benepali ... International non-proprietary name (INN) or common name etanercept ... Marketing authorisation issued 13/01/2016"
+  },
+  "launch_quarter": "2016Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/875045/000087504516000047/q12016pressrelease.htm",
+    "quote": "In January 2016, following approval from the European Commission, Biogen launched BENEPALI, the first etanercept biosimilar referencing Enbrel \u00ae to be approved in the EU."
+  },
+  "search_log": [
+    "Listed every filing for Biogen (CIK 875045) via data.sec.gov/submissions incl. older 'files' pages; selected 8-K/8-K/A with item 2.02 filed 2015-06 onward, then checked for a release in every filing quarter: the third-quarter 2019 release (8-K 2019-10-22, accession 0000875045-19-000038) carries item 9.01 only and was added by hand. Exhibits resolved from each filing's index.json (names matching ex99/pressrelease); 2025-2026 item-2.02 8-Ks without an exhibit are pre-announcements. The 2022-07-20 8-K/A repeats the 8-K's exhibit; the original 8-K is cited.",
+    "Each quarter is read from that quarter's own release, from the one-decimal product revenues table headed 'For the Three Months Ended <quarter end>' (United States | Rest of World | Total); the header date was asserted against the quarter for every row. Integer summary tables ('$' cells) earlier in the same releases were skipped.",
+    "Rows matched: label 'BENEPALI' (with or without \u2122/\u00ae) on its own line in every release 2016Q1-2026Q2; series contiguous, no gaps.",
+    "Full-year check against the 'For the Twelve Months Ended December 31' table of each Q4 release (Total column): 2016: 1.8+15.4+30.7+52.7 = 100.6 vs printed full year 100.6 (ok); 2017: 65.3+88.7+99.2+117.6 = 370.8 vs printed full year 370.8 (ok); 2018: 120.9+115.6+123.4+125.3 = 485.2 vs printed full year 485.2 (ok); 2019: 124+120.3+115.9+126 = 486.2 vs printed full year 486.2 (ok); 2020: 133.5+106.2+124.2+117.6 = 481.5 vs printed full year 481.6 (ok); 2021: 121.7+121.5+120.8+134.4 = 498.4 vs printed full year 498.3 (ok); 2022: 114.7+115.8+110.2+100.3 = 441 vs printed full year 441 (ok); 2023: 109+109.2+112.8+107.8 = 438.8 vs printed full year 438.8 (ok); 2024: 118.7+117.3+118.1+125 = 479.1 vs printed full year 479.1 (ok); 2025: 111.3+112.1+121.9+107.9 = 453.2 vs printed full year 453.2 (ok)"
+  ],
+  "commercial_start_quarter": "2016Q1"
+}

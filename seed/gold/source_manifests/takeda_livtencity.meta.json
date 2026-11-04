@@ -1,0 +1,34 @@
+{
+  "drug_name": "Livtencity",
+  "generic_name": "maribavir",
+  "manufacturer": "Takeda",
+  "benchmark_identity": "takeda_livtencity_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Infectious Disease (transplant)",
+  "indication_area": "Post-transplant cytomegalovirus (CMV) infection/disease refractory to treatment",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Cytomegalovirus pUL97 protein kinase inhibitor (benzimidazole riboside)",
+  "moa_class": "cmv_pul97_kinase_inhibitor",
+  "first_approval_year": 2021,
+  "approval_evidence": {
+    "url": "https://api.fda.gov/drug/drugsfda.json?search=products.brand_name:%22LIVTENCITY%22&limit=5",
+    "quote": "application_number NDA215596, brand_name LIVTENCITY, submission_type ORIG, submission_status AP, submission_status_date 20211123 (openFDA Drugs@FDA record)"
+  },
+  "launch_quarter": "2021Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1395064/000139506422000030/form6k-021022.htm",
+    "quote": "During the third quarter of the fiscal year ending March 31, 2022, LIVTENCITY (for post-transplant cytomegalovirus (\u201cCMV\u201d) infection/disease) was launched in the U.S. in December 2021, following the launch of EXKIVITY (for non-small cell lung cancer) in the U.S. in September 2021. (Takeda quarterly securities report for the nine months ended December 31, 2021, Form 6-K filed 2022-02-10)"
+  },
+  "series_start_reason": "Series starts at the launch quarter (U.S. launch December 2021 = fiscal Q3 FY2021 = 2021Q4).",
+  "notes": "JPY millions at actual rates, Takeda (CIK 1395064). 2021Q4 is the prior-year column of the FY2022 Q3 report (the quarter's own report prints no figure); 2022Q1 is FY2021 (1,325, prior-year column of the FY2022 20-F) less 190.",
+  "search_log": [
+    "Listed every Takeda (CIK 1395064) filing via data.sec.gov/submissions; counted brand hits in every 6-K/20-F document filed in Jan/Feb/Apr/May/Jul/Aug/Oct/Nov 2018-12 to 2026-10 (bin/tkscan.py, tk_hits.json; filter: those months, documents over 20,000 characters); read the earnings-material documents (FY2018 Q4 summary, FY2019-FY2023 quarterly securities reports, FY2024-FY2025 half-year reports, FY2024-FY2026 Q1/Q3 earnings releases, 20-Fs FY2019-FY2025) for the brand's table rows and prose (bin/tkrows.py).",
+    "FY2020-FY2023: three-month revenue-by-product notes of the Q1-Q3 quarterly securities reports; Q4 = 20-F full year less the nine-month note. FY2024 onward Takeda furnished no Q1/Q3 quarterly report: Q1 is the earnings-release prose figure, Q2 = half-year report less Q1, Q3 = nine-month prose figure less half-year, Q4 = 20-F full year less nine months; rows with a 0.1-billion input are approximate.",
+    "LIVTENCITY prose ('Sales of LIVTENCITY (for post-transplant cytomegalovirus ...) were JPY x billion') found in every Q1/Q3 release FY2024 Q1, FY2024 Q3, FY2025 Q1, FY2025 Q3, FY2026 Q1.",
+    "Checks: FY2022 2,214 + 2,014 + 3,084 + 3,189 = 10,501; FY2023 4,061 + 4,264 + 5,623 + 5,137 = 19,085 (20-F full years); FY2022 Q2/Q3 three-month figures add to the six/nine-month notes (2,214 + 2,014 = 4,228; + 3,084 = 7,312). FY2021: 190 + 1,135 = 1,325, consistent with the FY2021 20-F prose '1.3 billion JPY'.",
+    "Series runs to 2026Q2 per the brief."
+  ],
+  "commercial_start_quarter": "2021Q4"
+}

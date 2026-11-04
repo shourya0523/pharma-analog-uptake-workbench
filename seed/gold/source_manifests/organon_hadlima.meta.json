@@ -1,0 +1,35 @@
+{
+  "drug_name": "Hadlima",
+  "generic_name": "adalimumab-bwwd",
+  "manufacturer": "Organon",
+  "benchmark_identity": "organon_hadlima_worldwide_reported",
+  "therapeutic_area": "Immunology",
+  "indication_area": "Immunology (rheumatoid arthritis, juvenile idiopathic arthritis, psoriatic arthritis, ankylosing spondylitis, Crohn's disease, ulcerative colitis, plaque psoriasis; biosimilar to Humira)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Organon's Total column: International from the Feb 2021 launches in Australia and Canada, plus U.S. from the July 2023 U.S. launch)",
+  "formulation": "injection, 40 mg prefilled syringe/autoinjector (50 mg/mL and citrate-free 100 mg/mL)",
+  "route_of_administration": "subcutaneous",
+  "moa": "TNF-alpha inhibitor (human monoclonal antibody, biosimilar to Humira)",
+  "moa_class": "tnf_alpha_inhibitor",
+  "first_approval_year": 2019,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761059",
+    "quote": "Application (BLA) : 761059 Company: SAMSUNG BIOEPIS CO LTD ... HADLIMA ADALIMUMAB-BWWD 40MG/0.8ML ... 07/23/2019 ORIG-1 Approval"
+  },
+  "launch_quarter": "2021Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1821825/000182182522000002/ogn-20211231.htm",
+    "quote": "Hadlima was launched in Australia and Canada in February 2021. Following these launches, we recorded sales of $13 million during 2021, with no comparable sales during 2020."
+  },
+  "series_start_reason": "Organon was spun off from Merck on June 2, 2021; its filings report the 2021 quarters on a carve-out basis. Organon first prints Hadlima on its own line in the 2022Q1 release, so 2021Q1-2021Q4 are read from the prior-year columns of the 2022Q1-2022Q4 releases. The series starts at the launch quarter (Australia and Canada, February 2021).",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "Listed every filing for Organon (CIK 1821825) via data.sec.gov/submissions; earnings releases = 8-K with item 2.02 2021-08 to 2026-04 plus the 2026-07-31 and 2026-10-30 8-Ks (items 7.01/9.01), Exhibits 99.x from each index.json; fetched every 10-Q/10-K/10-Q/A/10-K/A 2021-2026.",
+    "The 2021Q2-2021Q4 releases have no Hadlima row (Biosimilars total only). From 2026Q2 Organon furnishes only non-GAAP supplemental information on 8-K (Exhibit 99.1 of 2026-07-31: 'furnishing this information in lieu of including such supplemental measures in a quarterly earnings release'), so 2026Q2 is read from the Form 10-Q filed 2026-07-31, whose sales table prints the same Hadlima row.",
+    "Full-year checks against the twelve-months Total columns of each Q4 release (and 2021 from the prior-year column of the 2022Q4 release): 2021: 2+2+5+4 = 13 vs printed full year 13 (ok, within rounding of the printed figures); 2022: 6+2+6+6 = 20 vs printed full year 19 (ok, within rounding of the printed figures); 2023: 5+7+8+23 = 43 vs printed full year 44 (ok, within rounding of the printed figures); 2024: 30+28+40+44 = 142 vs printed full year 142 (ok, within rounding of the printed figures); 2025: 47+50+63+68 = 228 vs printed full year 228 (ok, within rounding of the printed figures)",
+    "Merck (Organon's parent before June 2021) was not searched: the launch is February 2021, the first quarter is 2021Q1 and Organon's own filings print it."
+  ],
+  "commercial_start_quarter": "2021Q1"
+}

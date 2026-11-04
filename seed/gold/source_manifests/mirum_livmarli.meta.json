@@ -1,0 +1,31 @@
+{
+  "drug_name": "Livmarli",
+  "generic_name": "maralixibat",
+  "manufacturer": "Mirum Pharmaceuticals",
+  "benchmark_identity": "mirum_livmarli_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Hepatology",
+  "indication_area": "Hepatology (cholestatic pruritus in Alagille syndrome; PFIC)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Mirum's Livmarli product sales; U.S. from 2021, Europe and other markets later)",
+  "formulation": "oral solution / tablet",
+  "route_of_administration": "oral",
+  "moa": "Ileal bile acid transporter (IBAT) inhibitor",
+  "moa_class": "ibat_inhibitor",
+  "first_approval_year": 2021,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=214662",
+    "quote": "09/29/2021 ORIG-1 Approval (NDA 214662, LIVMARLI MARALIXIBAT CHLORIDE)"
+  },
+  "launch_quarter": "2021Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1759425/000095017022003229/mirm-20211231.htm",
+    "quote": "as a result of our commercial launch of Livmarli in the United States in September 2021."
+  },
+  "series_start_reason": "Series starts 2021Q4, the first quarter with product sales: Livmarli was approved September 29, 2021 and launched in the U.S. that month, and the 2022Q3 release prints the 2021Q3 prior-year column of 'Product sales, net' as nil.",
+  "search_log": [
+    "Listed every filing of Mirum Pharmaceuticals (CIK 1759425) via data.sec.gov/submissions; selected 8-Ks with item 2.02 (2021-10 to 2026-11) and every 10-Q/10-K; parsed every table row.",
+    "2021Q4-2023Q2: 'Product sales, net' of each quarter's release (Livmarli only). 2023Q3 on: 'Livmarli' row of the product sales by product table in each 10-Q (pinned to the table containing 'Total product sales, net', since R&D tables also carry a 'Livmarli' row); Q4 = 10-K full year less 10-Q nine months.",
+    "Checks: 2022 quarters 10,892 + 17,484 + 18,780 + 27,906 = 75,062 (printed full year, verify_staged_manifests sum check); 2025: 73,224 + 88,160 + 92,235 + 106,387 = 360,006 (10-K)."
+  ],
+  "commercial_start_quarter": "2021Q4"
+}

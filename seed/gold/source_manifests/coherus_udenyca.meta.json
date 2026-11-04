@@ -1,0 +1,33 @@
+{
+  "drug_name": "Udenyca",
+  "generic_name": "pegfilgrastim-cbqv",
+  "manufacturer": "Coherus BioSciences",
+  "benchmark_identity": "coherus_udenyca_us_reported",
+  "therapeutic_area": "Oncology supportive care",
+  "indication_area": "Oncology supportive care (febrile neutropenia prophylaxis)",
+  "revenue_scope": "United States",
+  "geography": "United States (Coherus sold UDENYCA only in the U.S.)",
+  "formulation": "prefilled syringe / autoinjector / on-body injector (biosimilar)",
+  "route_of_administration": "subcutaneous",
+  "moa": "Granulocyte colony-stimulating factor (pegylated G-CSF) biosimilar",
+  "moa_class": "g_csf",
+  "first_approval_year": 2018,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761039",
+    "quote": "11/02/2018 ORIG-1 Approval (BLA 761039, UDENYCA PEGFILGRASTIM-CBQV)"
+  },
+  "launch_quarter": "2019Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1512762/000155837025010803/chrs-20250630x10q.htm",
+    "quote": "The Company previously owned UDENYCA (pegfilgrastim-cbqv), which was launched commercially in a pre-filled syringe presentation in the United States in January 2019"
+  },
+  "series_end_quarter": "2025Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Coherus sold UDENYCA to Intas Pharmaceuticals (Accord BioPharma; not an SEC filer): its 2025Q1 10-Q states 'On April 11, 2025, we completed the divestiture of the UDENYCA Business to Intas'. 2025Q1 is the last full quarter of Coherus ownership; the UDENYCA lines Coherus prints afterwards in discontinued operations (2025Q2 23,190 covering April 1-11 plus post-closing adjustments, 2025Q3 10,663, 2026Q1 -847, 2026Q2 11,441 thousand) are post-divestiture true-ups, not quarterly sales.",
+  "search_log": [
+    "Listed every filing of Coherus BioSciences / Coherus Oncology (CIK 1512762) via data.sec.gov/submissions; selected 8-Ks with item 2.02 (2019-04 to 2026-11) and every 10-Q/10-K; parsed every table row.",
+    "2019Q1-2021Q3: 'Net product revenue' of each release (UDENYCA only). 2021Q4 and 2022Q4: 10-K for 2022 UDENYCA full year less nine months. 2022Q1-Q3: prior-year columns of the 2023 10-Qs, because 2022 filings print only 'Net revenue' including non-product revenue. 2023Q1-2024Q3: UDENYCA row of each 10-Q; 2023Q4 10-K derivation; 2024Q4 the 2025-03-10 release's UDENYCA (a) row; 2025Q1 prior-year column of the 2026Q1 10-Q.",
+    "Checks: 2019 and 2020 Q4 releases print full-year net product revenue (356,071; 475,824) equal to the sum of the quarters (verify_staged_manifests); 2024 quarters 42,667 + 50,917 + 66,089 + 46,278 = 205,951 equal the printed full year; 2023 26,179 + 31,729 + 32,967 + 36,189 = 127,064."
+  ],
+  "commercial_start_quarter": "2019Q1"
+}

@@ -1,0 +1,39 @@
+{
+  "drug_name": "Inflectra",
+  "generic_name": "infliximab-dyyb",
+  "manufacturer": "Pfizer",
+  "benchmark_identity": "pfizer_inflectra_worldwide_reported",
+  "therapeutic_area": "Immunology",
+  "indication_area": "Immunology (Crohn's disease, ulcerative colitis, rheumatoid arthritis, ankylosing spondylitis, psoriatic arthritis, plaque psoriasis; biosimilar to Remicade)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Pfizer's Worldwide column; labelled 'Inflectra/Remsima' through the 2022Q1 release and 'Inflectra' from 2022Q2)",
+  "formulation": "lyophilized powder for IV infusion, 100 mg vial",
+  "route_of_administration": "intravenous",
+  "moa": "TNF-alpha inhibitor (chimeric monoclonal antibody, biosimilar to Remicade)",
+  "moa_class": "tnf_alpha_inhibitor",
+  "first_approval_year": 2013,
+  "approval_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1274057/000127405713000025/hsp-2013930x10q.htm",
+    "quote": "in September 2013, the European Commission approved Inflectra TM for multiple indications, specifically, the treatment of inflammatory conditions including rheumatoid arthritis, ankylosing spondylitis, Crohn's disease, ulcerative colitis, psoriatic arthritis and psoriasis"
+  },
+  "approval_evidence_us": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=125544",
+    "quote": "Application (BLA) : 125544 Company: CELLTRION INC ... INFLECTRA INFLIXIMAB-DYYB 100MG ... 04/05/2016 ORIG-1 Approval"
+  },
+  "launch_quarter": "2013Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1274057/000127405714000008/hsp-201310xk.htm",
+    "quote": "Additionally, Hospira's third biosimilar, Inflectra\u2122 was launched in Europe during 2013 into several early-launch countries."
+  },
+  "series_start_reason": "Inflectra was launched by Hospira, Inc. (CIK 1274057) in Europe in 2013; Hospira's 10-K/10-Q filings 2013-2015 (all fetched) never print Inflectra sales on their own line. Pfizer acquired Hospira on September 3, 2015 (Pfizer 10-Q filed 2015-11-05: 'On September 3, 2015 (the acquisition date), we acquired Hospira, Inc. (Hospira) for approximately $16.0 billion in cash.'). Pfizer first prints the line in the 2016Q4 release, whose prior-year columns give 2015Q4 (30) and whose twelve-months row gives full-year 2015 = 30, so 2015Q4 is the first Pfizer quarter with Inflectra revenue; 2016Q1-Q3 come from the prior-year columns of the 2017Q1-Q3 releases. Launch quarter 2013Q4 is inferred: the EC approved Inflectra in September 2013, Hospira's 10-Q for the quarter ended September 30, 2013 (filed 2013-11-06) still says 'it will be launched throughout Europe at the earliest opportunity', and the 2013 10-K says it 'was launched in Europe during 2013'. 2015Q4 is 8 quarters after 2013Q4.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "search_log": [
+    "Listed every filing for Pfizer (CIK 78003) via data.sec.gov/submissions incl. older 'files' pages; earnings releases = 8-K with item 2.02 filed 2015-06 onward (one per quarter; non-earnings item-2.02 8-Ks of 2016-02-16, 2022-04-20, 2023-10-13 and 2023-12-14 carry no product table), Exhibit 99.1 resolved from each filing's index.json; also fetched every 10-Q/10-K primary document 2015-2026. Searched all of them for table rows starting with Retacrit, Ruxience, Zirabev, Inflectra, Trumenba, Nimenrix, Vyndamax/Vyndaqel.",
+    "Hospira (CIK 1274057): listed and fetched every 10-K/10-Q 2013-2015 and every item-2.02 8-K exhibit 2013-2015; no table row carries an Inflectra (or Retacrit) figure.",
+    "Each quarter from 2016Q4 is read from that quarter's own release (first row whose label starts 'Inflectra': the Worldwide/U.S./International table; the second row of the same label is a market-group breakdown, and later rows are the year-to-date block). Label history: Inflectra/Remsima, Inflectra.",
+    "Full-year checks against the twelve-months row of each Q4 release (Worldwide): 2016: 36+45+49+61 = 191 vs printed full year 192 (ok, within rounding of the printed figures); 2017: 78+94+112+135 = 419 vs printed full year 419 (ok, within rounding of the printed figures); 2018: 145+158+166+173 = 642 vs printed full year 642 (ok, within rounding of the printed figures); 2019: 138+153+155+179 = 625 vs printed full year 625 (ok, within rounding of the printed figures); 2020: 158+150+162+188 = 658 vs printed full year 659 (ok, within rounding of the printed figures); 2021: 177+136+172+171 = 656 vs printed full year 657 (ok, within rounding of the printed figures); 2022: 135+137+131+129 = 532 vs printed full year 532 (ok, within rounding of the printed figures); 2023: 178+74+121+117 = 490 vs printed full year 490 (ok, within rounding of the printed figures); 2024: 158+97+126+127 = 508 vs printed full year 509 (ok, within rounding of the printed figures); 2025: 153+139+173+181 = 646 vs printed full year 646 (ok, within rounding of the printed figures); FY2015 printed 30 = 2015Q4 alone."
+  ],
+  "commercial_start_quarter": "2015Q4"
+}

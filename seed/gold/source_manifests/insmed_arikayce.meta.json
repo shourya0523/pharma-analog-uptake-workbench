@@ -1,0 +1,30 @@
+{
+  "drug_name": "Arikayce",
+  "generic_name": "amikacin liposome inhalation suspension",
+  "manufacturer": "Insmed",
+  "benchmark_identity": "insmed_arikayce_worldwide_reported",
+  "therapeutic_area": "Respiratory / Infectious Disease",
+  "indication_area": "Infectious disease (refractory Mycobacterium avium complex lung disease)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (U.S. from 2018Q4; Europe from 2020Q4; Japan from 2021)",
+  "formulation": "liposomal inhalation suspension (nebulized)",
+  "route_of_administration": "inhalation",
+  "moa": "Aminoglycoside antibacterial (liposomal amikacin)",
+  "moa_class": "aminoglycoside_antibiotic",
+  "first_approval_year": 2018,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=207356",
+    "quote": "09/28/2018 ORIG-1 Approval (NDA 207356, ARIKAYCE KIT AMIKACIN SULFATE)"
+  },
+  "launch_quarter": "2018Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1104506/000110465919000991/a19-1332_1ex99d2.htm",
+    "quote": "U.S. Commercial Launch of ARIKAYCE 4Q 2018"
+  },
+  "search_log": [
+    "Listed every filing of Insmed (CIK 1104506) via data.sec.gov/submissions; selected 8-Ks with item 2.02 (2018-10 to 2026-11) and every 10-Q/10-K; parsed every table row.",
+    "2018Q4-2025Q2: the revenue line of each quarter's release ('Revenues' 2018Q4, 'Revenues, net' 2019Q1-2020Q3, 'Product revenues, net' from 2020Q4), ARIKAYCE being the only product. 2025Q3 on: 'Total' line of the ARIKAYCE block in the 10-Q product revenue table (thousands); 2025Q4 = 10-K full year less nine months. The releases from 2025Q3 print the ARIKAYCE block in millions to one decimal and are not used.",
+    "Checks: every Q4 release through 2024 prints the full year equal to the sum of its quarters (verify_staged_manifests sum check); 2025: 92,823 + 107,415 + 114,291 + 119,236 = 433,765, the 10-K's ARIKAYCE total."
+  ],
+  "commercial_start_quarter": "2018Q4"
+}

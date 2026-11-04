@@ -1,0 +1,51 @@
+{
+  "drug_name": "Vyvanse",
+  "generic_name": "lisdexamfetamine dimesylate",
+  "manufacturer": "Shire",
+  "benchmark_identity": "takeda_vyvanse_worldwide_reported",
+  "therapeutic_area": "Neuroscience / Psychiatry",
+  "indication_area": "ADHD (and moderate to severe binge eating disorder in adults)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Shire: VYVANSE line, worldwide product sales; Takeda: VYVANSE/ELVANSE line)",
+  "formulation": "capsule (and chewable tablet)",
+  "route_of_administration": "oral",
+  "moa": "CNS stimulant; prodrug of dextroamphetamine (lisdexamfetamine)",
+  "moa_class": "cns_stimulant_amphetamine_prodrug",
+  "first_approval_year": 2007,
+  "approval_evidence": {
+    "url": "https://api.fda.gov/drug/drugsfda.json?search=products.brand_name:%22VYVANSE%22&limit=5",
+    "quote": "application_number NDA021977, brand_name VYVANSE, dosage_form CAPSULE, route ORAL, submission_type ORIG, submission_status AP, submission_status_date 20070223 (openFDA Drugs@FDA record)"
+  },
+  "launch_quarter": "2007Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/936402/000095010307002650/dp07396_ex9901.htm",
+    "quote": "Our leading ADHD franchise continues to grow, capturing over 30% of the US market by September 30 following the success of our VYVANSE launch. (Shire plc Q3 2007 release, Form 8-K Exhibit 99.1 filed 2007-11-01; the Q2 2007 release filed 2007-07-26 prints no VYVANSE sales row and Q3 2007 is the first quarter with VYVANSE product sales, $10.6 million)"
+  },
+  "series_start_reason": "Series starts at the launch quarter: the Q3 2007 release is the first Shire release with a VYVANSE product sales row.",
+  "joined_issuers": [
+    {
+      "issuer": "Shire plc",
+      "first_quarter": "2007Q3",
+      "last_quarter": "2018Q4"
+    },
+    {
+      "issuer": "Takeda",
+      "first_quarter": "2019Q1",
+      "last_quarter": "2026Q2"
+    }
+  ],
+  "notes": "Shire rows are USD millions (Shire plc, CIK 936402; 2018Q4 from Shire's Full Year 2018 Results furnished by Takeda on Form 6-K). Takeda rows are JPY millions (CIK 1395064) at actual rates; the 2019Q1 Takeda figure covers January 8 - March 31, 2019 (Shire consolidated from the acquisition date). Units vary by Takeda document (Bn JPY to one decimal in the FY2018 summary, the FY2019 Q1 underlying-revenue table and FY2024-FY2026 earnings-release prose; JPY millions in quarterly securities report notes, half-year reports and 20-F revenue-by-product tables). From FY2024 Takeda furnished no quarterly report for Q1/Q3, so Q2 is half-year less Q1, Q3 is nine-month release figure less half-year, Q4 is full year (20-F) less nine months; rows with a 0.1-billion input are approximate.",
+  "search_log": [
+    "Listed every Shire plc (CIK 936402) and Takeda (CIK 1395064) filing via data.sec.gov/submissions; scanned every Shire 8-K with item 2.02 filed 2007-04 to 2018-12 for 'VYVANSE|NATPARA' table rows (bin/scan.py, shire_8k.txt); Takeda 6-K/20-F documents from the earnings-material list used for Takhzyro (FY2018 Q4 summary, FY2019-FY2023 quarterly securities reports, FY2024-FY2025 half-year reports, FY2024-FY2026 Q1/Q3 earnings releases, 20-Fs FY2019-FY2025) were read for VYVANSE rows and prose (bin/tkrows.py).",
+    "Shire: each quarter is the three-month figure of the quarter's own release (Q4 releases print a separate three-month table). 2018Q4: Shire filed no Q4 2018 release; Takeda's Form 6-K of 2019-02-15 ('Shire's Full Year 2018 Results') prints VYVANSE 626.4 for Q4 2018 and 2,406.2 for the year.",
+    "Shire year checks (sum of quarters vs full year printed in the Q4 release): 2007 76.5 = 76.5; 2008 318.8 vs 318.9; 2009 504.8 vs 504.7; 2010 634.2; 2011 805.0; 2012 1,029.8; 2013 1,227.8; 2014 1,449.0; 2015 1,722.2; 2016 2,013.9; 2017 2,161.1; 2018 2,406.2 (all equal except one-decimal rounding in 2008-2009).",
+    "Takeda FY2019: the Q1 underlying-revenue table prints the three-month figure (68.8 Bn); the H1 and Q3 reports print only year-to-date figures (131.5, 206.8 Bn), so 2019Q3 and 2019Q4 are the three-month prior-year columns of the FY2020 Q2/Q3 reports (62,714 and 75,299 JPY millions), which agree with the year-to-date differences (62.7, 75.3).",
+    "Takeda FY2020-FY2023: three-month revenue-by-product notes of the Q1-Q3 quarterly securities reports; Q4 = 20-F full year less the nine-month note. FY2024-FY2025: Q1 and Q3 prose ('Sales of VYVANSE/ELVANSE ... were JPY x billion') checked in every Q1/Q3 release FY2024-FY2026; Q2 = half-year report less Q1; Q4 = 20-F less nine months.",
+    "By construction each Takeda fiscal year FY2019-FY2025 sums to its 20-F full year (274,077; 271,531; 327,052; 459,289; 423,221; 350,607; 203,233 JPY millions); FY2019 check: 68,800 + 62,714 + 75,299 + 67,262 = 274,075 (68.8 Bn rounding).",
+    "Series runs to 2026Q2 per the brief."
+  ],
+  "commercial_start_quarter": "2007Q3",
+  "reviewed_anomalies": {
+    "2019Q1": "Reporting currency changes here from Shire's USD to Takeda's JPY; gold normalizes both to USD. Checked at source and kept as printed."
+  }
+}

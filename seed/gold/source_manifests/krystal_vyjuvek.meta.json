@@ -1,0 +1,31 @@
+{
+  "drug_name": "Vyjuvek",
+  "generic_name": "beremagene geperpavec-svdt",
+  "manufacturer": "Krystal Biotech",
+  "benchmark_identity": "krystal_vyjuvek_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Dermatology",
+  "indication_area": "Dermatology (wounds in dystrophic epidermolysis bullosa)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (U.S. from 2023; Germany from August 2025; France and Japan from October 2025)",
+  "formulation": "topical gel (HSV-1 vector gene therapy)",
+  "route_of_administration": "topical",
+  "moa": "Redosable HSV-1-vectored gene therapy delivering functional COL7A1 (type VII collagen)",
+  "moa_class": "topical_gene_therapy",
+  "first_approval_year": 2023,
+  "approval_evidence": {
+    "url": "https://www.fda.gov/vaccines-blood-biologics/vyjuvek",
+    "quote": "STN: 125774 Proper Name: beremagene geperpavec-svdt Tradename: VYJUVEK Manufacturer: Krystal Biotech, Inc. ... May 19, 2023 Approval Letter - VYJUVEK"
+  },
+  "launch_quarter": "2023Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1711279/000171127924000005/krys-20231231.htm",
+    "quote": "We launched VYJUVEK, the first FDA approved treatment for DEB and the first and only corrective therapy for DEB globally, in the United States in the second quarter of 2023."
+  },
+  "series_start_reason": "Series starts 2023Q3, the first quarter with product revenue: VYJUVEK launched in the U.S. in 2023Q2 (approved May 19, 2023), and the 2024Q2 release prints the 2023Q2 prior-year column of 'Product revenue, net' as nil.",
+  "search_log": [
+    "Listed every filing of Krystal Biotech (CIK 1711279) via data.sec.gov/submissions; selected 8-Ks with item 2.02 (2023-07 to 2026-11) and every 10-Q/10-K; parsed every table row.",
+    "Rows: Q1-Q3 'Product revenue(s), net' of each 10-Q statement of operations; Q4 rows from each fourth-quarter release (the 2024Q4 release, 2025-02-19, was filed under item 7.01 and was found by listing every 8-K filed 2025-01-15 to 2025-03-31). VYJUVEK is the only product; the 2026 10-Qs split the same total by region (United States, Europe, Japan).",
+    "Checks: 2024 quarters 45,250 + 70,284 + 83,841 + 91,139 = 290,515 (10-K); 2025 88,183 + 96,042 + 97,800 + 107,105 = 389,130 (10-K for 2025)."
+  ],
+  "commercial_start_quarter": "2023Q3"
+}

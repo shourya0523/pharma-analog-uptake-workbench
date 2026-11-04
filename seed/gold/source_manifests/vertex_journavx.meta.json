@@ -1,0 +1,33 @@
+{
+  "drug_name": "Journavx",
+  "generic_name": "suzetrigine",
+  "manufacturer": "Vertex",
+  "benchmark_identity": "vertex_journavx_worldwide_reported",
+  "therapeutic_area": "Pain / Neuroscience",
+  "indication_area": "Moderate-to-severe acute pain in adults",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Vertex net product revenues; the release describes JOURNAVX as approved in the U.S.)",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Selective NaV1.8 voltage-gated sodium channel inhibitor (non-opioid pain signal inhibitor)",
+  "moa_class": "nav1_8_sodium_channel_inhibitor",
+  "first_approval_year": 2025,
+  "approval_evidence": {
+    "url": "https://api.fda.gov/drug/drugsfda.json?search=products.brand_name:%22JOURNAVX%22&limit=5",
+    "quote": "application_number NDA219209, brand_name JOURNAVX, submission_type ORIG, submission_status AP, submission_status_date 20250130 (openFDA Drugs@FDA record)"
+  },
+  "launch_quarter": "2025Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/875320/000087532025000171/ex-991_q12025.htm",
+    "quote": "We continued to expand our leadership in CF and build global momentum for CASGEVY, and we launched JOURNAVX in moderate-to-severe acute pain,\u201d said Reshma Kewalramani, M.D., Chief Executive Officer and President of Vertex. (Vertex Q1 2025 release, Form 8-K Exhibit 99.1 filed 2025-05-05)"
+  },
+  "series_start_reason": "JOURNAVX was approved 2025-01-30 and launched in Q1 2025; the series starts at the launch quarter.",
+  "search_log": [
+    "Listed every Vertex (CIK 875320) filing via data.sec.gov/submissions; scanned every 8-K with item 2.02 and every 10-Q/10-K filed 2024-10-01 to 2026-11-04 for 'ALYFTREK|JOURNAVX' in table rows and text (bin/scan.py).",
+    "During 2025 Vertex reported JOURNAVX inside 'Other product revenues' and gave its amount only in sentences: Q1 2025 10-Q 'an insignificant amount from JOURNAVX' (no figure); Q2 and Q3 2025 10-Q MD&A sentences (three-month and year-to-date figures); Q4 2025 release footnote (three and twelve months). The 2025 releases for Q1-Q3 print no JOURNAVX figure. From Q1 2026 the releases print a JOURNAVX table row with the prior-year column.",
+    "2025Q1 is therefore the Q1 2026 release's prior-year column (1.3); 2025Q2-Q4 are the current-period sentences; 2026Q1-Q2 the table rows.",
+    "Checks: year-to-date sentences agree with the quarters (1.3 + 12.0 = 13.3; 13.3 + 19.6 = 32.9; 32.9 + 26.7 = 59.6, the twelve-month figure; FY2025 10-K also states $59.6 million from JOURNAVX). Prior-year columns of the Q2 2026 release (12.0; six months 13.3) match.",
+    "Series ends 2026Q2 per the brief."
+  ],
+  "commercial_start_quarter": "2025Q1"
+}

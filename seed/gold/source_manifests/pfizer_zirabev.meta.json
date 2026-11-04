@@ -1,0 +1,34 @@
+{
+  "drug_name": "Zirabev",
+  "generic_name": "bevacizumab-bvzr",
+  "manufacturer": "Pfizer",
+  "benchmark_identity": "pfizer_zirabev_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (metastatic colorectal cancer, non-squamous NSCLC, glioblastoma, renal cell carcinoma, cervical cancer; biosimilar to Avastin)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Pfizer's Worldwide column: U.S. plus International)",
+  "formulation": "injection for IV infusion, 100 mg/4 mL and 400 mg/16 mL vials",
+  "route_of_administration": "intravenous",
+  "moa": "VEGF-A inhibitor (humanized monoclonal antibody, biosimilar to Avastin)",
+  "moa_class": "vegf_inhibitor",
+  "first_approval_year": 2019,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761099",
+    "quote": "Application (BLA) : 761099 Company: PFIZER INC ... ZIRABEV BEVACIZUMAB-BVZR 100MG/4ML ... 06/27/2019 ORIG-1 Approval"
+  },
+  "launch_quarter": "2019Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/78003/000007800320000014/pfe-12312019x10kshell.htm",
+    "quote": "Some of the biosimilars that we currently market include Inflectra, Nivestym, Retacrit, Zirabev, Ruxience and Trazimera in the U.S.; Inflectra, Retacrit, Nivestim and Trazimera in the EU; and Ixifi, Trazimera, Zirabev and Ruxience in Japan."
+  },
+  "series_start_reason": "Pfizer first prints Zirabev in the 2020Q4 release; its prior-year column gives 2019Q4 = 1 (International), and 2020Q1-Q3 (6, 9, 48) come from the prior-year columns of the 2021Q1-Q3 releases. No earlier quarter is printed anywhere (releases and 10-Qs 2019 searched). Launch quarter 2019Q4 is inferred from the first non-nil printed quarter and from the 2019 10-K (filed 2020-02-27), the first filing to list Zirabev among products Pfizer 'currently market[s]' (U.S. and Japan); the EU approval is listed in the 10-Q for 2019Q1 ('Zirabev ... Application approved in the EU'), but no Zirabev figure for 2019Q1-Q3 is printed in any filing.",
+  "series_end_quarter": "2023Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Pfizer's quarterly releases print the line through the 2023Q4 release (8-K 2024-01-30). No release from 2024Q1 (8-K 2024-05-01) through 2026Q3 (8-K 2026-11-03), and no 10-Q or 10-K filed 2024-2026, has a table row starting with Ruxience, Zirabev, Retacrit, Nimenrix or Trumenba (searched; Inflectra and Vyndaqel family rows continue), so 2023Q4 is the last quarter printed on the product's own line.",
+  "search_log": [
+    "Listed every filing for Pfizer (CIK 78003) via data.sec.gov/submissions incl. older 'files' pages; earnings releases = 8-K with item 2.02 filed 2015-06 onward (one per quarter; non-earnings item-2.02 8-Ks of 2016-02-16, 2022-04-20, 2023-10-13 and 2023-12-14 carry no product table), Exhibit 99.1 resolved from each filing's index.json; also fetched every 10-Q/10-K primary document 2015-2026. Searched all of them for table rows starting with Retacrit, Ruxience, Zirabev, Inflectra, Trumenba, Nimenrix, Vyndamax/Vyndaqel.",
+    "Rows: first row whose label starts 'Zirabev' (Worldwide table) in each release.",
+    "Full-year checks (twelve-months row of each Q4 release): 2020: 6+9+48+79 = 142 vs printed full year 143 (ok, within rounding of the printed figures); 2021: 86+129+96+133 = 444 vs printed full year 444 (ok, within rounding of the printed figures); 2022: 147+138+146+130 = 561 vs printed full year 562 (ok, within rounding of the printed figures); 2023: 129+106+100+88 = 423 vs printed full year 424 (ok, within rounding of the printed figures)"
+  ],
+  "commercial_start_quarter": "2019Q4"
+}

@@ -1,0 +1,30 @@
+{
+  "drug_name": "Daybue",
+  "generic_name": "trofinetide",
+  "manufacturer": "ACADIA Pharmaceuticals",
+  "therapeutic_area": "Neuroscience / CNS",
+  "revenue_scope": "United States",
+  "geography": "United States (ACADIA sells only in the U.S.)",
+  "benchmark_identity": "acadia_daybue_us_reported",
+  "indication_area": "Neurology (Rett syndrome)",
+  "formulation": "oral solution",
+  "route_of_administration": "oral",
+  "moa": "Synthetic analog of glycine-proline-glutamate (IGF-1 N-terminal tripeptide)",
+  "moa_class": "igf1_tripeptide_analog",
+  "first_approval_year": 2023,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=217026",
+    "quote": "03/10/2023 ORIG-1 Approval (NDA 217026, DAYBUE TROFINETIDE)"
+  },
+  "launch_quarter": "2023Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1070494/000095017023037458/acad-20230630.htm",
+    "quote": "The FDA approved DAYBUE in March 2023 for the treatment of Rett syndrome and we launched the product in the United States in April 2023."
+  },
+  "search_log": [
+    "Listed every filing of ACADIA Pharmaceuticals (CIK 1070494) via data.sec.gov/submissions; selected 8-Ks carrying item 2.02 and every 10-Q/10-K; parsed every table row.",
+    "Rows: 'DAYBUE' (from the 2026Q2 10-Q 'DAYBUE products') of the net product sales by product table in each 10-Q, three-months column; Q4 = 10-K full year less the 10-Q nine months. Earnings releases print only total 'Product sales, net' except the 2026-02-25 release (DAYBUE Net Sales Q4 2025 109.6 million, matching the derived 109.633).",
+    "Checks: every NUPLAZID + DAYBUE quarter pair sums to the release's Product sales, net (e.g. 2023Q2 142,018 + 23,217 = 165,235)."
+  ],
+  "commercial_start_quarter": "2023Q2"
+}

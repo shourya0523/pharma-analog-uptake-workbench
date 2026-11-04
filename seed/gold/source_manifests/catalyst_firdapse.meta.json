@@ -1,0 +1,33 @@
+{
+  "drug_name": "Firdapse",
+  "generic_name": "amifampridine",
+  "manufacturer": "Catalyst Pharmaceuticals",
+  "benchmark_identity": "catalyst_firdapse_us_reported",
+  "therapeutic_area": "Neuroscience / Rare Disease",
+  "indication_area": "Neuromuscular (Lambert-Eaton myasthenic syndrome)",
+  "revenue_scope": "United States",
+  "geography": "United States (Catalyst holds North American rights; U.S. sales; Canada small and included where printed)",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Potassium channel blocker",
+  "moa_class": "potassium_channel_blocker",
+  "first_approval_year": 2018,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=208078",
+    "quote": "11/28/2018 ORIG-1 Approval (NDA 208078, FIRDAPSE AMIFAMPRIDINE PHOSPHATE)"
+  },
+  "launch_quarter": "2019Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1369568/000119312519144387/d609805d10q.htm",
+    "quote": "On January 15, 2019, the Company launched its first product, Firdapse, in the United States"
+  },
+  "series_end_quarter": "2026Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Catalyst was acquired by Angelini Pharma S.p.A. (not an SEC filer): the 8-K filed 2026-07-16 (accession 0001193125-26-304984) reports that 'on July 15, 2026, Merger Sub merged with and into the Company', and Catalyst filed a Form 15-12G on 2026-07-24. Its last periodic report is the 10-Q for the quarter ended March 31, 2026; no 2026Q2 figure is on sec.gov.",
+  "search_log": [
+    "Listed every filing of Catalyst Pharmaceuticals (CIK 1369568) via data.sec.gov/submissions. Catalyst files its earnings releases under item 8.01 (no 8-K in 2019-2026 carries item 2.02, counted from the items field), so 8-Ks with item 8.01, 2.02 or 7.01 filed within three days of a 10-Q/10-K were fetched (crawl_8k_catalyst.json), plus every 10-Q/10-K.",
+    "2019Q1-2020Q3: the releases and 10-Qs print the quarter only in whole dollars; the release's millions sentence for the quarter is used (one decimal). 2020Q4: prior-year column of the 2021Q4 release (thousands). 2021Q1-2022Q4: 'Product revenue, net' of each release (thousands), FIRDAPSE being the only product. 2023Q1 on: 'FIRDAPSE' row of each 10-Q product revenue table; Q4 = 10-K full year less 10-Q nine months.",
+    "Checks: Q4 2021 and Q4 2022 releases print full-year product revenue (137,997; 213,938) equal to the sum of the four quarters (verify_staged_manifests); 2019 one-decimal quarters 12.4 + 28.8 + 30.9 + 30.1 = 102.2 against full year 102.3 (rounding); 2020: 29.1 + 29.6 + 29.2 + 30.882 = 118.782 against the 118,790 thousand full year printed in the 2021Q4 release."
+  ],
+  "commercial_start_quarter": "2019Q1"
+}

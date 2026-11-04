@@ -1,0 +1,44 @@
+{
+  "drug_name": "Fampyra",
+  "generic_name": "fampridine (prolonged-release dalfampridine)",
+  "manufacturer": "Biogen",
+  "benchmark_identity": "biogen_fampyra_worldwide_reported",
+  "therapeutic_area": "Neurology",
+  "indication_area": "Multiple sclerosis (improvement of walking in adults with walking disability)",
+  "revenue_scope": "Worldwide",
+  "geography": "Rest of world (outside the U.S.)",
+  "formulation": "prolonged-release tablet",
+  "route_of_administration": "oral",
+  "moa": "Potassium channel blocker (4-aminopyridine)",
+  "moa_class": "potassium_channel_blocker",
+  "first_approval_year": 2011,
+  "approval_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/875045/000095012311092986/b87796e10vq.htm",
+    "quote": "FAMPYRA On July 20, 2011, the European Commission (EC) granted a conditional marketing authorization for FAMPYRA in the E.U., which triggered a $25.0 million milestone payment, which was paid to Acorda Therapeutics, Inc. (Acorda) in the third quarter of 2011. (Biogen Idec Form 10-Q for Q3 2011, filed 2011-10-28; FAMPYRA has no FDA approval - the U.S. product is Acorda's Ampyra)"
+  },
+  "launch_quarter": "2011Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/875045/000119312512039072/d272629d10k.htm",
+    "quote": "FAMPYRA was commercially launched in Australia, Denmark, Germany, Norway and the U.K. in 2011. (Biogen Idec Form 10-K for 2011, filed 2012-02-03; the EC granted the conditional marketing authorization on July 20, 2011, and the first FAMPYRA revenue, $3,136 thousand, is printed for the three months ended September 30, 2011 in the 8-K Exhibit 99 filed 2011-10-28.)"
+  },
+  "series_start_reason": "The EC granted FAMPYRA a conditional marketing authorization on July 20, 2011; Biogen's Q3 2011 release is the first to print a FAMPYRA revenue row (Q2 2011 release: no row), so the series starts at the launch quarter.",
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "notes": "Biogen's collaboration and license agreement for FAMPYRA global commercialization rights was terminated effective January 1, 2025 (10-Q for Q2 2026: 'Effective January 1, 2025, our collaboration and license agreement for FAMPYRA global commercialization rights was terminated.'). Biogen continued to print the FAMPYRA row; 2025 shows residual amounts and 2026 quarters print '\u2014' (nil), kept as 0.",
+  "search_log": [
+    "Listed every Biogen (CIK 875045) filing via data.sec.gov/submissions; scanned all 10-Q/10-K (2011-04 to 2026-11) and all 8-K with item 2.02 (2011-07 to 2026-11), plus the Q3 2019 earnings 8-K filed 2019-10-22 under item 9.01 only for 'FAMPYRA' in table rows and text (bin/scan.py; files biogen_periodic.txt, biogen_8k.txt).",
+    "Each quarter is the current three-month figure of that quarter's own earnings release (8-K Exhibit 99.1), including Q4, which every Q4 release prints as a three-month column; units are USD thousands in releases through Q3 2014 and USD millions from Q4 2014; from Q1 2016 the regional table (United States | Rest of world | Total) is used and Total taken.",
+    "Checks: quarters sum to the twelve-month figures printed in the Q4 releases / 10-Ks: 2011 3.136+10.433=13.569 (13.6 in 10-K); 2012 15.040+19.681+12.168+10.509=57.398; 2013 74.006; 2014 80.2; 2015 89.7; 2016 84.9; 2017 91.6; 2018 92.6 vs 92.7 printed; 2019 97.1; 2020 103.2 vs 103.1 printed; 2021 105.3 vs 105.2 printed (differences are rounding of one-decimal quarters); 2022 96.6; 2023 90.5; 2024 71.7; 2025 1.4 (computed in bin/b_biogen.py and printed below). 10-Q three-month figures match the releases where both exist.",
+    "Series runs to 2026Q2 because Biogen still prints the FAMPYRA row (as '\u2014')."
+  ],
+  "commercial_start_quarter": "2011Q3",
+  "reviewed_anomalies": {
+    "2025Q1": "Biogen's Fampyra licence ended on 1 January 2025; residual or nil figures are what Biogen printed. Checked at source and kept as printed.",
+    "2025Q2": "Biogen's Fampyra licence ended on 1 January 2025; residual or nil figures are what Biogen printed. Checked at source and kept as printed.",
+    "2025Q3": "Biogen's Fampyra licence ended on 1 January 2025; residual or nil figures are what Biogen printed. Checked at source and kept as printed.",
+    "2025Q4": "Biogen's Fampyra licence ended on 1 January 2025; residual or nil figures are what Biogen printed. Checked at source and kept as printed.",
+    "2026Q1": "Biogen's Fampyra licence ended on 1 January 2025; residual or nil figures are what Biogen printed. Checked at source and kept as printed.",
+    "2026Q2": "Biogen's Fampyra licence ended on 1 January 2025; residual or nil figures are what Biogen printed. Checked at source and kept as printed."
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "drug_name": "Wakix",
+  "generic_name": "pitolisant",
+  "manufacturer": "Harmony Biosciences",
+  "benchmark_identity": "harmony_wakix_us_reported",
+  "therapeutic_area": "Neuroscience / Sleep",
+  "indication_area": "Sleep medicine (excessive daytime sleepiness or cataplexy in narcolepsy)",
+  "revenue_scope": "United States",
+  "geography": "United States (Harmony holds U.S. rights)",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Histamine-3 (H3) receptor antagonist/inverse agonist",
+  "moa_class": "histamine_h3_antagonist_inverse_agonist",
+  "first_approval_year": 2019,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=211150",
+    "quote": "08/14/2019 ORIG-1 Approval (NDA 211150, WAKIX PITOLISANT HYDROCHLORIDE)"
+  },
+  "launch_quarter": "2019Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1802665/000155837022002257/hrmy-20211231x10k.htm",
+    "quote": "We launched WAKIX into the narcolepsy market in November 2019"
+  },
+  "search_log": [
+    "Listed every filing of Harmony Biosciences Holdings (CIK 1802665; first filing 2020-02, IPO August 2020) via data.sec.gov/submissions; selected 8-Ks with item 2.02 and every 10-Q/10-K; parsed every table row.",
+    "2019Q4: prior-year column of the 2020Q4 release; 2020Q1 and 2020Q2: prior-year columns of the 2021Q1 and 2021Q2 10-Qs (no Harmony periodic filing covers those quarters as current; the S-1 is not an allowed source). 2020Q3 on: 'Net product revenue(s)' of each quarter's release, or the 10-Q where no release table was filed (2021Q2).",
+    "Checks: every Q4 release prints the full year, and the four quarters sum to it (verify_staged_manifests sum check)."
+  ],
+  "commercial_start_quarter": "2019Q4"
+}

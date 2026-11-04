@@ -1,0 +1,35 @@
+{
+  "manufacturer": "Biogen",
+  "therapeutic_area": "Immunology",
+  "revenue_scope": "Rest of World",
+  "route_of_administration": "subcutaneous",
+  "series_start_reason": null,
+  "series_end_quarter": null,
+  "series_end_basis": null,
+  "series_end_reason": null,
+  "drug_name": "Imraldi",
+  "generic_name": "adalimumab",
+  "benchmark_identity": "biogen_imraldi_row_reported",
+  "indication_area": "Immunology (rheumatoid arthritis, psoriatic arthritis, axial spondyloarthritis, Crohn's disease, ulcerative colitis, psoriasis, hidradenitis suppurativa, uveitis; biosimilar to Humira)",
+  "geography": "Europe (Biogen's 'Rest of World' column; the United States column is a dash in every release, so Total equals Rest of World)",
+  "formulation": "injection, 40 mg prefilled syringe/pen",
+  "moa": "TNF-alpha inhibitor (human monoclonal antibody, biosimilar to Humira)",
+  "moa_class": "tnf_alpha_inhibitor",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://www.ema.europa.eu/en/medicines/human/EPAR/imraldi",
+    "quote": "Imraldi ... International non-proprietary name (INN) or common name adalimumab ... Marketing authorisation issued 24/08/2017"
+  },
+  "launch_quarter": "2018Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/875045/000087504518000029/q32018pressrelease.htm",
+    "quote": "In October 2018 Biogen and Samsung Bioepis Co. Ltd. announced the European launch of IMRALDI, an adalimumab biosimilar referencing Humira."
+  },
+  "search_log": [
+    "Listed every filing for Biogen (CIK 875045) via data.sec.gov/submissions incl. older 'files' pages; selected 8-K/8-K/A with item 2.02 filed 2015-06 onward, then checked for a release in every filing quarter: the third-quarter 2019 release (8-K 2019-10-22, accession 0000875045-19-000038) carries item 9.01 only and was added by hand. Exhibits resolved from each filing's index.json (names matching ex99/pressrelease); 2025-2026 item-2.02 8-Ks without an exhibit are pre-announcements. The 2022-07-20 8-K/A repeats the 8-K's exhibit; the original 8-K is cited.",
+    "Each quarter is read from that quarter's own release, from the one-decimal product revenues table headed 'For the Three Months Ended <quarter end>' (United States | Rest of World | Total); the header date was asserted against the quarter for every row. Integer summary tables ('$' cells) earlier in the same releases were skipped.",
+    "Rows matched: label 'IMRALDI' (with or without \u2122/\u00ae) on its own line in every release 2018Q4-2026Q2; series contiguous, no gaps.",
+    "Full-year check against the 'For the Twelve Months Ended December 31' table of each Q4 release (Total column): 2019: 35.7+47.3+49.3+51.7 = 184 vs printed full year 184 (ok); 2020: 61.6+44.8+56.2+53.7 = 216.3 vs printed full year 216.3 (ok); 2021: 57.9+55.6+57.4+62.5 = 233.4 vs printed full year 233.4 (ok); 2022: 57.1+57.6+57.7+52.1 = 224.5 vs printed full year 224.5 (ok); 2023: 54.4+58.8+54.4+54.5 = 222.1 vs printed full year 222.1 (ok); 2024: 54.8+53.2+54.1+51 = 213.1 vs printed full year 213.1 (ok); 2025: 47.4+46.7+52.6+43.5 = 190.2 vs printed full year 190.2 (ok)"
+  ],
+  "commercial_start_quarter": "2018Q4"
+}

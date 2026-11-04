@@ -1,5 +1,30 @@
 [
  {
+  "drug_name": "Nuplazid",
+  "manufacturer": "ACADIA Pharmaceuticals",
+  "ticker": "ACAD",
+  "generic_name": "pimavanserin",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 166.924,
+    "gold_id": "acadia-nuplazid-us-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 183.132,
+    "gold_id": "acadia-nuplazid-us-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Zynlonta",
   "manufacturer": "ADC Therapeutics",
   "ticker": "ADCT",
@@ -330,6 +355,41 @@
   ]
  },
  {
+  "drug_name": "Bylvay",
+  "manufacturer": "Albireo Pharma",
+  "ticker": null,
+  "generic_name": "odevixibat",
+  "options": {
+   "earnings_since": "2022-04-05",
+   "earnings_until": "2023-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2022Q1",
+    "value_normalized_usd_millions": 4.656,
+    "gold_id": "albireo-bylvay-worldwide-reported-2022q1"
+   },
+   {
+    "period": "2022Q2",
+    "value_normalized_usd_millions": 5.891,
+    "gold_id": "albireo-bylvay-worldwide-reported-2022q2"
+   },
+   {
+    "period": "2022Q3",
+    "value_normalized_usd_millions": 7.543,
+    "gold_id": "albireo-bylvay-worldwide-reported-2022q3"
+   },
+   {
+    "period": "2022Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2022Q3. Albireo was acquired by Ipsen (not an SEC filer). Its last periodic report is the 10-Q for the quarter ended September 30, 2022; it filed no fourth-quarter 2022 release or 2022 Form 10-K. The 8-K filed 2023-03-02 (accession 0001104659-23-027946, item 2.01) reports that Merger Sub 'merged with and into the Company ... with the Company continuing as the surviving corporation ... as a wholly owned subsidiary of Parent' (Ipsen Biopharmaceuticals, Inc.), and Albireo filed a Form 15-12G on 2023-03-14."
+   }
+  ]
+ },
+ {
   "drug_name": "Ultomiris",
   "manufacturer": "Alexion Pharmaceuticals",
   "ticker": null,
@@ -380,6 +440,31 @@
   ]
  },
  {
+  "drug_name": "Vivitrol",
+  "manufacturer": "Alkermes",
+  "ticker": "ALKS",
+  "generic_name": "naltrexone for extended-release injectable suspension",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 112.434,
+    "gold_id": "alkermes-vivitrol-us-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 124.454,
+    "gold_id": "alkermes-vivitrol-us-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Lybalvi",
   "manufacturer": "Alkermes plc",
   "ticker": "ALKS",
@@ -401,6 +486,41 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 93.979,
     "gold_id": "alkermes-lybalvi-us-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Vivitrol",
+  "manufacturer": "Alkermes, Inc.",
+  "ticker": null,
+  "generic_name": "naltrexone for extended-release injectable suspension",
+  "options": {
+   "earnings_since": "2011-04-05",
+   "earnings_until": "2012-05-04",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2011Q1",
+    "value_normalized_usd_millions": 8.518,
+    "gold_id": "alkermes-vivitrol-us-reported-2011q1"
+   },
+   {
+    "period": "2011Q2",
+    "value_normalized_usd_millions": 9.686,
+    "gold_id": "alkermes-vivitrol-us-reported-2011q2"
+   },
+   {
+    "period": "2011Q3",
+    "value_normalized_usd_millions": 9.887,
+    "gold_id": "alkermes-vivitrol-us-reported-2011q3"
+   },
+   {
+    "period": "2011Q4",
+    "value_normalized_usd_millions": 10.597,
+    "gold_id": "alkermes-vivitrol-us-reported-2011q4"
    }
   ]
  },
@@ -831,6 +951,41 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 79.412,
     "gold_id": "aurinia-lupkynis-total-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Lumryz",
+  "manufacturer": "Avadel Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "sodium oxybate (extended-release, once-nightly)",
+  "options": {
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 52.511,
+    "gold_id": "avadel-lumryz-us-reported-2025q1"
+   },
+   {
+    "period": "2025Q2",
+    "value_normalized_usd_millions": 68.129,
+    "gold_id": "avadel-lumryz-us-reported-2025q2"
+   },
+   {
+    "period": "2025Q3",
+    "value_normalized_usd_millions": 77.467,
+    "gold_id": "avadel-lumryz-us-reported-2025q3"
+   },
+   {
+    "period": "2025Q4",
+    "value_normalized_usd_millions": 81.032,
+    "gold_id": "avadel-lumryz-us-reported-2025q4"
    }
   ]
  },
@@ -1300,6 +1455,41 @@
   ]
  },
  {
+  "drug_name": "Firdapse",
+  "manufacturer": "Catalyst Pharmaceuticals",
+  "ticker": null,
+  "generic_name": "amifampridine",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 98.859,
+    "gold_id": "catalyst-firdapse-us-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2026Q1. Catalyst was acquired by Angelini Pharma S.p.A. (not an SEC filer): the 8-K filed 2026-07-16 (accession 0001193125-26-304984) reports that 'on July 15, 2026, Merger Sub merged with and into the Company', and Catalyst filed a Form 15-12G on 2026-07-24. Its last periodic report is the 10-Q for the quarter ended March 31, 2026; no 2026Q2 figure is on sec.gov."
+   },
+   {
+    "period": "2026Q3",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2026Q1. Catalyst was acquired by Angelini Pharma S.p.A. (not an SEC filer): the 8-K filed 2026-07-16 (accession 0001193125-26-304984) reports that 'on July 15, 2026, Merger Sub merged with and into the Company', and Catalyst filed a Form 15-12G on 2026-07-24. Its last periodic report is the 10-Q for the quarter ended March 31, 2026; no 2026Q2 figure is on sec.gov."
+   },
+   {
+    "period": "2026Q4",
+    "value_normalized_usd_millions": null,
+    "why": "The issuer reports no line for this product after 2026Q1. Catalyst was acquired by Angelini Pharma S.p.A. (not an SEC filer): the 8-K filed 2026-07-16 (accession 0001193125-26-304984) reports that 'on July 15, 2026, Merger Sub merged with and into the Company', and Catalyst filed a Form 15-12G on 2026-07-24. Its last periodic report is the 10-Q for the quarter ended March 31, 2026; no 2026Q2 figure is on sec.gov."
+   }
+  ]
+ },
+ {
   "drug_name": "Vidaza",
   "manufacturer": "Celgene",
   "ticker": null,
@@ -1425,37 +1615,37 @@
   ]
  },
  {
-  "drug_name": "Cimerli",
+  "drug_name": "Udenyca",
   "manufacturer": "Coherus BioSciences",
   "ticker": "CHRS",
-  "generic_name": "ranibizumab-eqrn",
+  "generic_name": "pegfilgrastim-cbqv",
   "options": {
-   "earnings_since": "2024-04-05",
-   "earnings_until": "2025-05-05",
+   "earnings_since": "2025-04-05",
+   "earnings_until": "2026-05-05",
    "openfda": true,
    "product_metadata": true
   },
   "source": "seed/gold/quarterly_revenue.jsonl",
   "expect": [
    {
-    "period": "2024Q1",
-    "value_normalized_usd_millions": 28.194,
-    "gold_id": "coherus-cimerli-net-product-revenue-reported-2024q1"
+    "period": "2025Q1",
+    "value_normalized_usd_millions": 31.462,
+    "gold_id": "coherus-udenyca-us-reported-2025q1"
    },
    {
-    "period": "2024Q2",
+    "period": "2025Q2",
     "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2024Q1. Coherus sold the CIMERLI ophthalmology franchise to Sandoz on 2024-03-01; the Q1 2024 10-Q states 'CIMERLI sales ceased on March 1, 2024 in connection with the Sale Transaction', and later filings print the divested line only as a discontinued comparative."
+    "why": "The issuer reports no line for this product after 2025Q1. Coherus sold UDENYCA to Intas Pharmaceuticals (Accord BioPharma; not an SEC filer): its 2025Q1 10-Q states 'On April 11, 2025, we completed the divestiture of the UDENYCA Business to Intas'. 2025Q1 is the last full quarter of Coherus ownership; the UDENYCA lines Coherus prints afterwards in discontinued operations (2025Q2 23,190 covering April 1-11 plus post-closing adjustments, 2025Q3 10,663, 2026Q1 -847, 2026Q2 11,441 thousand) are post-divestiture true-ups, not quarterly sales."
    },
    {
-    "period": "2024Q3",
+    "period": "2025Q3",
     "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2024Q1. Coherus sold the CIMERLI ophthalmology franchise to Sandoz on 2024-03-01; the Q1 2024 10-Q states 'CIMERLI sales ceased on March 1, 2024 in connection with the Sale Transaction', and later filings print the divested line only as a discontinued comparative."
+    "why": "The issuer reports no line for this product after 2025Q1. Coherus sold UDENYCA to Intas Pharmaceuticals (Accord BioPharma; not an SEC filer): its 2025Q1 10-Q states 'On April 11, 2025, we completed the divestiture of the UDENYCA Business to Intas'. 2025Q1 is the last full quarter of Coherus ownership; the UDENYCA lines Coherus prints afterwards in discontinued operations (2025Q2 23,190 covering April 1-11 plus post-closing adjustments, 2025Q3 10,663, 2026Q1 -847, 2026Q2 11,441 thousand) are post-divestiture true-ups, not quarterly sales."
    },
    {
-    "period": "2024Q4",
+    "period": "2025Q4",
     "value_normalized_usd_millions": null,
-    "why": "The issuer reports no line for this product after 2024Q1. Coherus sold the CIMERLI ophthalmology franchise to Sandoz on 2024-03-01; the Q1 2024 10-Q states 'CIMERLI sales ceased on March 1, 2024 in connection with the Sale Transaction', and later filings print the divested line only as a discontinued comparative."
+    "why": "The issuer reports no line for this product after 2025Q1. Coherus sold UDENYCA to Intas Pharmaceuticals (Accord BioPharma; not an SEC filer): its 2025Q1 10-Q states 'On April 11, 2025, we completed the divestiture of the UDENYCA Business to Intas'. 2025Q1 is the last full quarter of Coherus ownership; the UDENYCA lines Coherus prints afterwards in discontinued operations (2025Q2 23,190 covering April 1-11 plus post-closing adjustments, 2025Q3 10,663, 2026Q1 -847, 2026Q2 11,441 thousand) are post-divestiture true-ups, not quarterly sales."
    }
   ]
  },
@@ -1481,6 +1671,31 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 3.02,
     "gold_id": "collegium-symproic-us-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Korlym",
+  "manufacturer": "Corcept Therapeutics",
+  "ticker": "CORT",
+  "generic_name": "mifepristone",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 164.903,
+    "gold_id": "corcept-korlym-us-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 208.583,
+    "gold_id": "corcept-korlym-us-reported-2026q2"
    }
   ]
  },
@@ -2150,6 +2365,31 @@
   ]
  },
  {
+  "drug_name": "Wakix",
+  "manufacturer": "Harmony Biosciences",
+  "ticker": "HRMY",
+  "generic_name": "pitolisant",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 215.387,
+    "gold_id": "harmony-wakix-us-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 261.28,
+    "gold_id": "harmony-wakix-us-reported-2026q2"
+   }
+  ]
+ },
+ {
   "drug_name": "Uplizna",
   "manufacturer": "Horizon Therapeutics",
   "ticker": null,
@@ -2270,10 +2510,10 @@
   ]
  },
  {
-  "drug_name": "Opzelura",
+  "drug_name": "Pemazyre",
   "manufacturer": "Incyte",
   "ticker": "INCY",
-  "generic_name": "ruxolitinib cream",
+  "generic_name": "pemigatinib",
   "options": {
    "earnings_since": "2026-04-05",
    "earnings_until": "2027-05-05",
@@ -2284,13 +2524,13 @@
   "expect": [
    {
     "period": "2026Q1",
-    "value_normalized_usd_millions": 143.015,
-    "gold_id": "incyte-opzelura-worldwide-reported-2026q1"
+    "value_normalized_usd_millions": 22.543,
+    "gold_id": "incyte-pemazyre-worldwide-reported-2026q1"
    },
    {
     "period": "2026Q2",
-    "value_normalized_usd_millions": 449.736,
-    "gold_id": "incyte-opzelura-worldwide-reported-2026q2"
+    "value_normalized_usd_millions": 23.418,
+    "gold_id": "incyte-pemazyre-worldwide-reported-2026q2"
    }
   ]
  },
@@ -2341,6 +2581,31 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 3.265,
     "gold_id": "tetraphase-xerava-us-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Arikayce",
+  "manufacturer": "Insmed",
+  "ticker": "INSM",
+  "generic_name": "amikacin liposome inhalation suspension",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 98.11,
+    "gold_id": "insmed-arikayce-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 116.316,
+    "gold_id": "insmed-arikayce-worldwide-reported-2026q2"
    }
   ]
  },
@@ -2546,6 +2811,31 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 243.6,
     "gold_id": "kiniksa-arcalyst-total-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Vyjuvek",
+  "manufacturer": "Krystal Biotech",
+  "ticker": "KRYS",
+  "generic_name": "beremagene geperpavec-svdt",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 116.357,
+    "gold_id": "krystal-vyjuvek-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 119.222,
+    "gold_id": "krystal-vyjuvek-worldwide-reported-2026q2"
    }
   ]
  },
@@ -2841,6 +3131,31 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 123.878771,
     "gold_id": "merck-kgaa-rebif-worldwide-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Livmarli",
+  "manufacturer": "Mirum Pharmaceuticals",
+  "ticker": "MIRM",
+  "generic_name": "maralixibat",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 113.804,
+    "gold_id": "mirum-livmarli-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 128.721,
+    "gold_id": "mirum-livmarli-worldwide-reported-2026q2"
    }
   ]
  },
@@ -4045,10 +4360,10 @@
   ]
  },
  {
-  "drug_name": "Gattex",
+  "drug_name": "Vyvanse",
   "manufacturer": "Shire plc",
   "ticker": null,
-  "generic_name": "teduglutide",
+  "generic_name": "lisdexamfetamine dimesylate",
   "options": {
    "earnings_since": "2018-04-05",
    "earnings_until": "2019-05-05",
@@ -4059,23 +4374,23 @@
   "expect": [
    {
     "period": "2018Q1",
-    "value_normalized_usd_millions": 96.2,
-    "gold_id": "takeda-gattex-revestive-worldwide-reported-2018q1"
+    "value_normalized_usd_millions": 628.8,
+    "gold_id": "takeda-vyvanse-worldwide-reported-2018q1"
    },
    {
     "period": "2018Q2",
-    "value_normalized_usd_millions": 133.5,
-    "gold_id": "takeda-gattex-revestive-worldwide-reported-2018q2"
+    "value_normalized_usd_millions": 556.0,
+    "gold_id": "takeda-vyvanse-worldwide-reported-2018q2"
    },
    {
     "period": "2018Q3",
-    "value_normalized_usd_millions": 97.1,
-    "gold_id": "takeda-gattex-revestive-worldwide-reported-2018q3"
+    "value_normalized_usd_millions": 595.0,
+    "gold_id": "takeda-vyvanse-worldwide-reported-2018q3"
    },
    {
     "period": "2018Q4",
-    "value_normalized_usd_millions": 122.9,
-    "gold_id": "takeda-gattex-revestive-worldwide-reported-2018q4"
+    "value_normalized_usd_millions": 626.4,
+    "gold_id": "takeda-vyvanse-worldwide-reported-2018q4"
    }
   ]
  },
@@ -4486,6 +4801,31 @@
     "period": "2026Q2",
     "value_normalized_usd_millions": 141.078,
     "gold_id": "travere-filspari-us-reported-2026q2"
+   }
+  ]
+ },
+ {
+  "drug_name": "Mepsevii",
+  "manufacturer": "Ultragenyx Pharmaceutical",
+  "ticker": "RARE",
+  "generic_name": "vestronidase alfa-vjbk",
+  "options": {
+   "earnings_since": "2026-04-05",
+   "earnings_until": "2027-05-05",
+   "openfda": true,
+   "product_metadata": true
+  },
+  "source": "seed/gold/quarterly_revenue.jsonl",
+  "expect": [
+   {
+    "period": "2026Q1",
+    "value_normalized_usd_millions": 7.0,
+    "gold_id": "ultragenyx-mepsevii-worldwide-reported-2026q1"
+   },
+   {
+    "period": "2026Q2",
+    "value_normalized_usd_millions": 10.0,
+    "gold_id": "ultragenyx-mepsevii-worldwide-reported-2026q2"
    }
   ]
  },

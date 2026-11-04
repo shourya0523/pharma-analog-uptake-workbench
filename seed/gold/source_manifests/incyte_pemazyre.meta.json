@@ -1,0 +1,31 @@
+{
+  "drug_name": "Pemazyre",
+  "generic_name": "pemigatinib",
+  "manufacturer": "Incyte",
+  "benchmark_identity": "incyte_pemazyre_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology (FGFR2-rearranged cholangiocarcinoma; FGFR1-rearranged myeloid/lymphoid neoplasms)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Incyte's net product revenue line; U.S., Europe, Japan)",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Fibroblast growth factor receptor (FGFR1/2/3) kinase inhibitor",
+  "moa_class": "fgfr_inhibitor",
+  "first_approval_year": 2020,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=213736",
+    "quote": "04/17/2020 ORIG-1 Approval (NDA 213736, PEMAZYRE PEMIGATINIB)"
+  },
+  "launch_quarter": "2020Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/879169/000155837020009164/incy-20200630x10q.htm",
+    "quote": "We began capitalizing PEMAZYRE inventory after FDA approval in April 2020 as the related costs were expected to be recoverable through the commercialization of the product."
+  },
+  "series_start_reason": "Series starts 2020Q2, the quarter of FDA approval (April 17, 2020) and first sales: the 2020Q2 release prints 'Pemazyre net product revenue' of 3,786 thousand with a nil prior-year column, and the 2020Q3 release attributes revenue growth partly to 'the launch of Pemazyre'.",
+  "search_log": [
+    "Listed every filing of Incyte (CIK 879169) via data.sec.gov/submissions; selected 8-Ks with item 2.02 (2020-07 to 2026-11) and every 10-Q/10-K; parsed every table row.",
+    "Rows: 'Pemazyre net product revenue(s)' (to 2021Q3) / 'Pemazyre' of the net product revenues table in each quarter's own earnings release, three-month column; the second 'Pemazyre' row from 2023 sits in the royalty/milestone section and is not used.",
+    "Checks: the 2020Q4 release prints 2020 Pemazyre 25,884 = 3,786 + 8,089 + 14,009; later Q4 releases print full-year figures equal to the sum of the quarters (e.g. 2025: 18,440 + 22,192 + 22,741 + 23,354 = 86,727)."
+  ],
+  "commercial_start_quarter": "2020Q2"
+}

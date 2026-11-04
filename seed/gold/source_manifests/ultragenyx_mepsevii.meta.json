@@ -1,0 +1,32 @@
+{
+  "drug_name": "Mepsevii",
+  "generic_name": "vestronidase alfa-vjbk",
+  "manufacturer": "Ultragenyx Pharmaceutical",
+  "therapeutic_area": "Rare Disease / Metabolic",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (U.S. plus named-patient and ex-U.S. sales, as printed by product)",
+  "benchmark_identity": "ultragenyx_mepsevii_worldwide_reported",
+  "indication_area": "Metabolic (mucopolysaccharidosis VII / Sly syndrome)",
+  "formulation": "solution for intravenous infusion",
+  "route_of_administration": "intravenous",
+  "moa": "Recombinant human beta-glucuronidase enzyme replacement therapy",
+  "moa_class": "enzyme_replacement_therapy",
+  "first_approval_year": 2017,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761047",
+    "quote": "11/15/2017 ORIG-1 Approval (BLA 761047, MEPSEVII VESTRONIDASE ALFA-VJBK)"
+  },
+  "launch_quarter": "2017Q4",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1515673/000156459018002535/rare-10k_20171231.htm",
+    "quote": "Mepsevii is available to patients in the U.S. In order to support patients, we launched UltraCare, a comprehensive support service that provides ongoing support to patients and caregivers."
+  },
+  "series_start_reason": "Series starts 2017Q4, the quarter of U.S. approval (November 15, 2017) and launch. The Form 10-Q for 2018Q3 prints Mepsevii sales of 198 thousand for the three and nine months ended September 30, 2017 (pre-approval named-patient sales), which precede the launch and are excluded.",
+  "search_log": [
+    "Listed every filing of Ultragenyx Pharmaceutical (CIK 1515673) via data.sec.gov/submissions; selected 8-Ks carrying item 2.02 (2018-01 to 2026-11) and every 10-Q/10-K (crawl_8k_ultragenyx.json, crawl_periodic_ultragenyx.json); parsed every table row.",
+    "Releases before 2021Q1 print only total 'Product sales'; the 10-Q disaggregation-of-revenue table splits by product from 2018Q2. Q1-Q3 rows are from each quarter's 10-Q; Q4 2021-2024 from the fourth-quarter release (thousands); Q4 2025 from the release dated 2026-02-12 and 2026Q1-Q2 from the 10-Qs, which Ultragenyx prints in whole USD millions from the 2025 Form 10-K on; earlier Q4s are 10-K full year less 10-Q nine months.",
+    "Checks: 2021-2024 four quarters sum to the full year printed in the Q4 release (verify_staged_manifests sum check); 2025 quarters in thousands plus the millions-rounded Q4 agree with the printed whole-million full year to within rounding.",
+    "2017Q4 is derived (2017 Mepsevii 476 from the Form 10-K for 2018 less 198 for the first nine months of 2017); 2018Q1 is the prior-year column of the 2019Q1 10-Q because the 2018Q1 10-Q prints only total product sales."
+  ],
+  "commercial_start_quarter": "2017Q4"
+}

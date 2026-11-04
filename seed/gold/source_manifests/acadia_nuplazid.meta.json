@@ -1,0 +1,31 @@
+{
+  "drug_name": "Nuplazid",
+  "generic_name": "pimavanserin",
+  "manufacturer": "ACADIA Pharmaceuticals",
+  "therapeutic_area": "Neuroscience / CNS",
+  "revenue_scope": "United States",
+  "geography": "United States (ACADIA sells only in the U.S.)",
+  "benchmark_identity": "acadia_nuplazid_us_reported",
+  "indication_area": "Neurology (Parkinson's disease psychosis)",
+  "formulation": "capsule / tablet",
+  "route_of_administration": "oral",
+  "moa": "Selective serotonin 5-HT2A inverse agonist/antagonist",
+  "moa_class": "serotonin_5ht2a_inverse_agonist",
+  "first_approval_year": 2016,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=207318",
+    "quote": "04/29/2016 ORIG-1 Approval (NDA 207318, NUPLAZID PIMAVANSERIN TARTRATE)"
+  },
+  "launch_quarter": "2016Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1070494/000156459017002866/acad-10k_20161231.htm",
+    "quote": "We launched NUPLAZID in the United States in May 2016."
+  },
+  "search_log": [
+    "Listed every filing of ACADIA Pharmaceuticals (CIK 1070494) via data.sec.gov/submissions; selected 8-Ks carrying item 2.02 (2016-05 to 2026-11) and every 10-Q/10-K (crawl_8k_acadia.json, crawl_periodic_acadia.json); parsed every table row.",
+    "2016Q2-2023Q1: row 'Product sales, net' of each quarter's own earnings release (8-K Ex. 99.1), three-months column. NUPLAZID was ACADIA's only commercial product until DAYBUE (April 2023); the 10-K for 2023 product table prints NUPLAZID 2022 517,235 = Product sales, net 2022 517,235.",
+    "2023Q2 on: row 'NUPLAZID' of the net product sales by product table in each 10-Q; Q4 = 10-K full year less 10-Q nine months. ACADIA's earnings releases print no NUPLAZID quarterly row except the 2026-02-25 release (GAAP NUPLAZID Net Sales Q4 2025 174.4 million, matching the derived 174.356).",
+    "Checks: Q4 2016-2022 releases print full-year Product sales, net equal to the sum of the four quarters (verified by verify_staged_manifests); unit is thousands as each table header declares."
+  ],
+  "commercial_start_quarter": "2016Q2"
+}

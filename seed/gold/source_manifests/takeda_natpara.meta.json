@@ -1,0 +1,52 @@
+{
+  "drug_name": "Natpara",
+  "generic_name": "parathyroid hormone (rDNA origin)",
+  "manufacturer": "Shire",
+  "benchmark_identity": "takeda_natpara_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Endocrinology",
+  "indication_area": "Hypoparathyroidism (adjunct to calcium and vitamin D to control hypocalcemia)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Shire: NATPARA, later NATPARA/NATPAR line; Takeda: NATPARA/NATPAR line)",
+  "formulation": "powder and solvent for solution for injection (multiple-dose cartridge)",
+  "route_of_administration": "subcutaneous",
+  "moa": "Recombinant parathyroid hormone (PTH 1-84) replacement; PTH1 receptor agonist",
+  "moa_class": "parathyroid_hormone_analog",
+  "first_approval_year": 2015,
+  "approval_evidence": {
+    "url": "https://api.fda.gov/drug/drugsfda.json?search=products.brand_name:%22NATPARA%22&limit=5",
+    "quote": "application_number BLA125511, brand_name NATPARA, submission_type ORIG, submission_status AP, submission_status_date 20150123 (openFDA Drugs@FDA record)"
+  },
+  "launch_quarter": "2015Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/936402/000095010315005935/dp57819_10q.htm",
+    "quote": "Shire made NATPARA available on April 1, 2015, after acquiring the product through its acquisition of NPS Pharma. In the second quarter of 2015 sales of $6 million were recorded. (Shire plc Form 10-Q for Q2 2015, filed 2015-07-30)"
+  },
+  "series_start_reason": "Series starts at the launch quarter (NATPARA made available April 1, 2015; the Q1 2015 Shire release prints no NATPARA row).",
+  "series_end_quarter": "2022Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Takeda's last NATPARA/NATPAR line is in the Form 20-F for the fiscal year ended March 31, 2022 (FY2021, 5,353 JPY millions; filed 2022-06-29). The FY2022 quarterly securities reports (Form 6-K filed 2022-08-04, 2022-11-04, 2023-02-07) print no NATPARA row (brand not mentioned in the 2022-08-04 report), and the FY2022 20-F revenue-by-product table (filed 2023-06-28) carries no NATPARA line, so the last quarter with an own line is fiscal Q4 FY2021 = 2022Q1.",
+  "joined_issuers": [
+    {
+      "issuer": "Shire plc",
+      "first_quarter": "2015Q2",
+      "last_quarter": "2018Q4"
+    },
+    {
+      "issuer": "Takeda",
+      "first_quarter": "2019Q1",
+      "last_quarter": "2022Q1"
+    }
+  ],
+  "notes": "Shire rows USD millions (Shire plc, CIK 936402; 2018Q4 from Shire's Full Year 2018 Results furnished by Takeda on Form 6-K 2019-02-15). Takeda rows JPY millions (CIK 1395064); the 2019Q1 Takeda figure covers January 8 - March 31, 2019. The sharp fall from 2019Q4 coincides with the U.S. recall of NATPARA (not quantified here).",
+  "search_log": [
+    "Listed every Shire plc (CIK 936402) and Takeda (CIK 1395064) filing via data.sec.gov/submissions; scanned every Shire 8-K with item 2.02 filed 2007-04 to 2018-12 for 'VYVANSE|NATPARA' table rows (shire_8k.txt); Takeda earnings-material 6-K/20-F documents (FY2018 Q4 summary through FY2026 Q1) read for NATPARA rows (bin/tkrows.py); brand-hit counts over every Takeda 6-K/20-F document in Jan/Feb/Apr/May/Jul/Aug/Oct/Nov 2018-12 to 2026-10 (bin/tkscan.py, tk_hits.json).",
+    "Shire year checks: 2015 5.9 + 6.9 + 11.6 = 24.4 (full year printed in the Q4 2015 release); 2016 85.3; 2017 147.4; 2018 45.0 + 64.8 + 51.0 + 69.3 = 230.1 (Takeda 6-K of 2019-02-15).",
+    "Takeda FY2019: no NATPARA figure in the Q1 report; H1/Q3 reports print only year-to-date figures (12.4, 13.0 Bn JPY); quarters are the prior-year three-month columns of the FY2020 reports (7,868; 4,515; 622), which agree with the year-to-date figures (7,868 + 4,515 = 12,383; + 622 = 13,005); FY2019 Q4 = 13,635 - 13,005 = 630; FY2019 sums to 13,635.",
+    "Takeda FY2020 734 + 772 + 997 + 1,049 = 3,552; FY2021 1,150 + 1,329 + 1,446 + 1,427 = 5,353 (20-F full years).",
+    "No NATPARA row in any Takeda quarterly report from FY2022 Q1 or in the FY2022+ 20-F revenue-by-product tables; series ends 2022Q1 (see series_end_reason)."
+  ],
+  "commercial_start_quarter": "2015Q2",
+  "reviewed_anomalies": {
+    "2019Q1": "Reporting currency changes here from Shire's USD to Takeda's JPY; gold normalizes both to USD. Checked at source and kept as printed."
+  }
+}

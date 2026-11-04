@@ -1,0 +1,30 @@
+{
+  "drug_name": "Korlym",
+  "generic_name": "mifepristone",
+  "manufacturer": "Corcept Therapeutics",
+  "benchmark_identity": "corcept_korlym_us_reported",
+  "therapeutic_area": "Endocrinology",
+  "indication_area": "Endocrinology (hyperglycemia secondary to endogenous Cushing's syndrome)",
+  "revenue_scope": "United States",
+  "geography": "United States (Corcept sells Korlym only in the U.S.; from June 2024 the line includes Corcept's authorized generic of Korlym)",
+  "formulation": "tablet",
+  "route_of_administration": "oral",
+  "moa": "Glucocorticoid receptor antagonist (cortisol modulator)",
+  "moa_class": "glucocorticoid_receptor_antagonist",
+  "first_approval_year": 2012,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=202107",
+    "quote": "02/17/2012 ORIG-1 Approval (NDA 202107, KORLYM MIFEPRISTONE)"
+  },
+  "launch_quarter": "2012Q2",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1088856/000110262412000633/corcepttherapeutics.htm",
+    "quote": "For the second quarter of 2012, which was the first quarter with commercial sales of Korlym, Corcept recognized approximately $875,000 in net product sales, after deducting associated government rebates, chargebacks and other allowances."
+  },
+  "search_log": [
+    "Listed every filing of Corcept Therapeutics (CIK 1088856) via data.sec.gov/submissions; selected 8-Ks with item 2.02 (2012-04 to 2026-11) and every 10-Q/10-K; parsed every table row and, for releases filed through 2016 that set their statements as text rather than HTML tables, every text line.",
+    "Rows: 'Product sales, net' (to 2019Q2 except 2019Q1/Q4 releases) / 'Product revenue, net' of each quarter's own release, three-month column, Korlym being Corcept's only product through 2026Q1; 2026Q2 the 'Korlym and authorized generic' row, Lifyorli (approved March 2026; first sales 2026Q2 per the 2026Q2 10-Q six-month column) excluded. Where a quarter has both a January preliminary release and a full results release, the full results release (latest filed) is used.",
+    "Checks: each Q4 release prints the full-year figure, and the four quarters sum to it (verify_staged_manifests sum check)."
+  ],
+  "commercial_start_quarter": "2012Q2"
+}

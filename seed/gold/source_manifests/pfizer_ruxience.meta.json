@@ -1,0 +1,34 @@
+{
+  "drug_name": "Ruxience",
+  "generic_name": "rituximab-pvvr",
+  "manufacturer": "Pfizer",
+  "benchmark_identity": "pfizer_ruxience_worldwide_reported",
+  "therapeutic_area": "Oncology",
+  "indication_area": "Oncology / immunology (non-Hodgkin lymphoma, chronic lymphocytic leukemia, granulomatosis with polyangiitis and microscopic polyangiitis, rheumatoid arthritis; biosimilar to Rituxan)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (Pfizer's Worldwide column; almost all U.S.)",
+  "formulation": "injection for IV infusion, 100 mg/10 mL and 500 mg/50 mL vials",
+  "route_of_administration": "intravenous",
+  "moa": "Anti-CD20 monoclonal antibody (biosimilar to Rituxan)",
+  "moa_class": "anti_cd20_antibody",
+  "first_approval_year": 2019,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761103",
+    "quote": "Application (BLA) : 761103 Company: PFIZER INC ... RUXIENCE RITUXIMAB-PVVR 100MG/10ML(10MG/ML) ... 07/23/2019 ORIG-1 Approval"
+  },
+  "launch_quarter": "2020Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/78003/000007800320000014/pfe-12312019x10kshell.htm",
+    "quote": "Some of the biosimilars that we currently market include Inflectra, Nivestym, Retacrit, Zirabev, Ruxience and Trazimera in the U.S.; Inflectra, Retacrit, Nivestim and Trazimera in the EU; and Ixifi, Trazimera, Zirabev and Ruxience in Japan."
+  },
+  "series_start_reason": "Pfizer first prints Ruxience in the 2020Q3 release. 2020Q1 (7) and 2020Q2 (11) come from the prior-year columns of the 2021Q1 and 2021Q2 releases. The 2020Q4 release prints the prior-year 2019Q4 as (1), a net negative U.S. figure before any positive sales; the series starts with the first quarter of positive sales, 2020Q1. Launch quarter 2020Q1 is inferred from that and from the 2019 10-K (filed 2020-02-27), which is the first filing to list Ruxience among products Pfizer 'currently market[s]'; the 2020Q3 release credits growth to the 'launches of Ruxience (rituximab), Zirabev (bevacizumab) and Trazimera (trastuzumab) in the U.S.'",
+  "series_end_quarter": "2023Q4",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Pfizer's quarterly releases print the line through the 2023Q4 release (8-K 2024-01-30). No release from 2024Q1 (8-K 2024-05-01) through 2026Q3 (8-K 2026-11-03), and no 10-Q or 10-K filed 2024-2026, has a table row starting with Ruxience, Zirabev, Retacrit, Nimenrix or Trumenba (searched; Inflectra and Vyndaqel family rows continue), so 2023Q4 is the last quarter printed on the product's own line.",
+  "search_log": [
+    "Listed every filing for Pfizer (CIK 78003) via data.sec.gov/submissions incl. older 'files' pages; earnings releases = 8-K with item 2.02 filed 2015-06 onward (one per quarter; non-earnings item-2.02 8-Ks of 2016-02-16, 2022-04-20, 2023-10-13 and 2023-12-14 carry no product table), Exhibit 99.1 resolved from each filing's index.json; also fetched every 10-Q/10-K primary document 2015-2026. Searched all of them for table rows starting with Retacrit, Ruxience, Zirabev, Inflectra, Trumenba, Nimenrix, Vyndamax/Vyndaqel.",
+    "Rows: first row whose label starts 'Ruxience' (Worldwide table) in each release.",
+    "Full-year checks (twelve-months row of each Q4 release): 2020: 7+11+59+92 = 169 vs printed full year 170 (ok, within rounding of the printed figures); 2021: 98+120+124+148 = 490 vs printed full year 491 (ok, within rounding of the printed figures); 2022: 124+113+120+101 = 458 vs printed full year 458 (ok, within rounding of the printed figures); 2023: 114+100+88+88 = 390 vs printed full year 390 (ok, within rounding of the printed figures)"
+  ],
+  "commercial_start_quarter": "2020Q1"
+}

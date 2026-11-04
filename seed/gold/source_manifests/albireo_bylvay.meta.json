@@ -1,0 +1,33 @@
+{
+  "drug_name": "Bylvay",
+  "generic_name": "odevixibat",
+  "manufacturer": "Albireo Pharma",
+  "benchmark_identity": "albireo_bylvay_worldwide_reported",
+  "therapeutic_area": "Rare Disease / Hepatology",
+  "indication_area": "Hepatology (pruritus in progressive familial intrahepatic cholestasis; Alagille syndrome)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (U.S. plus international markets; Albireo prints one product revenue line)",
+  "formulation": "oral capsule / oral pellets",
+  "route_of_administration": "oral",
+  "moa": "Ileal bile acid transporter (IBAT) inhibitor",
+  "moa_class": "ibat_inhibitor",
+  "first_approval_year": 2021,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=215498",
+    "quote": "07/20/2021 ORIG-1 Approval (NDA 215498, BYLVAY ODEVIXIBAT)"
+  },
+  "launch_quarter": "2021Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1322505/000155837022016893/albo-20220930x10q.htm",
+    "quote": "We commenced our commercial launch of Bylvay for the treatment of pruritus in patients with PFIC ages 3 months or older in the United States in July 2021 after we received FDA approval of Bylvay on July 20, 2021."
+  },
+  "series_end_quarter": "2022Q3",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "Albireo was acquired by Ipsen (not an SEC filer). Its last periodic report is the 10-Q for the quarter ended September 30, 2022; it filed no fourth-quarter 2022 release or 2022 Form 10-K. The 8-K filed 2023-03-02 (accession 0001104659-23-027946, item 2.01) reports that Merger Sub 'merged with and into the Company ... with the Company continuing as the surviving corporation ... as a wholly owned subsidiary of Parent' (Ipsen Biopharmaceuticals, Inc.), and Albireo filed a Form 15-12G on 2023-03-14.",
+  "search_log": [
+    "Listed every filing of Albireo Pharma (CIK 1322505, formerly Biodel) via data.sec.gov/submissions; selected 8-Ks carrying item 2.02 (2021-08 to 2023-06) and every 10-Q/10-K; parsed every table row. All forms filed 2022-11-09 to 2023-03-31 were listed: 8-Ks (items 5.02/7.01; 1.01/7.01; 8.01; 2.01 etc.), SC TO/14D9 tender documents, S-8 POS, 15-12G - none carries a 2022Q4 figure.",
+    "Rows: 'Product revenue, net' of each quarterly earnings release (8-K Ex. 99.1). Bylvay was Albireo's only product; royalty and license revenue are separate lines and are excluded.",
+    "Checks: the 2021Q4 release prints full-year 2021 product revenue 6,993 = 1,060 + 5,933; each release's three-month figure equals the 10-Q statement of operations."
+  ],
+  "commercial_start_quarter": "2021Q3"
+}

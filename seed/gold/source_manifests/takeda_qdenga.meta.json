@@ -1,0 +1,34 @@
+{
+  "drug_name": "Qdenga",
+  "generic_name": "dengue tetravalent vaccine [live, attenuated] (TAK-003)",
+  "manufacturer": "Takeda",
+  "benchmark_identity": "takeda_qdenga_worldwide_reported",
+  "therapeutic_area": "Vaccines",
+  "indication_area": "Prevention of dengue disease (any serotype)",
+  "revenue_scope": "Worldwide",
+  "geography": "Worldwide (ex-U.S.; not approved in the U.S.)",
+  "formulation": "powder and solvent for solution for injection",
+  "route_of_administration": "subcutaneous",
+  "moa": "Live attenuated tetravalent dengue vaccine (active immunization)",
+  "moa_class": "live_attenuated_viral_vaccine",
+  "first_approval_year": 2022,
+  "approval_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1395064/000139506423000015/form6k_020723.htm",
+    "quote": "In August 2022, Takeda announced that its dengue vaccine, QDENGA, was approved by the Indonesian National Agency for Drug and Food Control, Badan Pengawas Obat dan Makanan (BPOM), for the prevention of dengue disease caused by any serotype in individuals six years to 45 years of age. (Takeda quarterly securities report, Form 6-K filed 2023-02-07; QDENGA has no FDA approval - Takeda withdrew the U.S. BLA in July 2023 per its Form 6-K filed 2023-08-01)"
+  },
+  "launch_quarter": "2023Q1",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/1395064/000139506423000030/form6k-1_051123.htm",
+    "quote": "They now include QDENGA, a dengue vaccine, which was approved in EU and countries including Indonesia and Brazil and launched in several non-endemic countries in the current fiscal year. (Takeda FY2022 earnings release, Form 6-K filed 2023-05-11; the fiscal year is April 2022-March 2023. Takeda's J.P. Morgan presentation furnished on Form 6-K 2023-01-10 still lists 'Launch in Indonesia, Europe' as a next step, and the FY2024 20-F revenue-by-product table prints FY2022 QDENGA revenue of 144 JPY millions, so the first sales fall in January-March 2023 = 2023Q1.)"
+  },
+  "series_start_reason": "Takeda first prints a QDENGA figure for a single quarter in the FY2024 Q1 earnings release (April-June 2024 = 2024Q2). Earlier quarters are not printed as quarters on sec.gov: the FY2022 Q3 and FY2023 Q1-Q3 quarterly securities reports carry no QDENGA revenue row, the FY2024 half-year report prints only the six-month FY2023 comparative (1,935 JPY millions) and the 20-Fs print FY2022 (144) and FY2023 (9,557) full years. The series starts 5 quarters after the 2023Q1 launch.",
+  "notes": "JPY millions at actual rates, Takeda (CIK 1395064). Q1 rows are prose figures (one decimal, billion JPY); Q2/Q3/Q4 rows derived from half-year, nine-month and 20-F full-year figures; rows with a 0.1-billion input are approximate.",
+  "search_log": [
+    "Listed every Takeda (CIK 1395064) filing via data.sec.gov/submissions; counted brand hits in every 6-K/20-F document filed in Jan/Feb/Apr/May/Jul/Aug/Oct/Nov 2018-12 to 2026-10 (bin/tkscan.py, tk_hits.json; filter: those months, documents over 20,000 characters); read the earnings-material documents (FY2018 Q4 summary, FY2019-FY2023 quarterly securities reports, FY2024-FY2025 half-year reports, FY2024-FY2026 Q1/Q3 earnings releases, 20-Fs FY2019-FY2025) for the brand's table rows and prose (bin/tkrows.py).",
+    "FY2020-FY2023: three-month revenue-by-product notes of the Q1-Q3 quarterly securities reports; Q4 = 20-F full year less the nine-month note. FY2024 onward Takeda furnished no Q1/Q3 quarterly report: Q1 is the earnings-release prose figure, Q2 = half-year report less Q1, Q3 = nine-month prose figure less half-year, Q4 = 20-F full year less nine months; rows with a 0.1-billion input are approximate.",
+    "QDENGA prose ('Sales of QDENGA (for ...) were JPY x billion') found in every Q1/Q3 release FY2024 Q1, FY2024 Q3, FY2025 Q1, FY2025 Q3, FY2026 Q1; no QDENGA revenue row in the FY2022 Q3 or FY2023 Q1-Q3 quarterly securities reports (only pipeline text).",
+    "Checks: by construction FY2024 sums to 35,580 and FY2025 to 40,767 (20-F full years); FY2024 Q1 prose delta (+8.8 on 9.5) and the half-year comparative (1,935) are consistent with the FY2023 20-F total (9,557) without being used as rows.",
+    "Series runs to 2026Q2 per the brief."
+  ],
+  "commercial_start_quarter": "2024Q2"
+}

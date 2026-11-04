@@ -1,0 +1,42 @@
+{
+  "manufacturer": "Biogen",
+  "therapeutic_area": "Neurology",
+  "revenue_scope": "Rest of World",
+  "route_of_administration": "subcutaneous",
+  "series_start_reason": null,
+  "series_end_quarter": "2019Q1",
+  "series_end_basis": "issuer_stopped_reporting",
+  "series_end_reason": "The first-quarter 2018 release (8-K 2018-04-24) states 'In March 2018 Biogen and AbbVie announced the voluntary worldwide withdrawal of ZINBRYTA for relapsing MS.' The three-months product revenue table prints the ZINBRYTA row with dashes (nil) for 2018Q2-2019Q1; from the second-quarter 2019 release (8-K 2019-07-23) the row appears only in the year-to-date table, so 2019Q1 is the last quarter Biogen prints the product's own line as current.",
+  "drug_name": "Zinbryta",
+  "generic_name": "daclizumab",
+  "benchmark_identity": "biogen_zinbryta_row_reported",
+  "indication_area": "Relapsing forms of multiple sclerosis",
+  "geography": "Rest of World as recorded by Biogen (the United States column is a dash in every release; Biogen co-commercialized ZINBRYTA with AbbVie), so Total equals Rest of World",
+  "formulation": "injection, 150 mg/mL prefilled syringe/pen, once monthly",
+  "moa": "Anti-CD25 (IL-2 receptor alpha) humanized monoclonal antibody",
+  "moa_class": "il2_receptor_cd25_antagonist",
+  "first_approval_year": 2016,
+  "approval_evidence": {
+    "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761029",
+    "quote": "Application (BLA) : 761029 Company: BIOGEN ... ZINBRYTA DACLIZUMAB 150MG/ML INJECTABLE;INJECTION ... 05/27/2016 ORIG-1 Approval"
+  },
+  "launch_quarter": "2016Q3",
+  "launch_evidence": {
+    "url": "https://www.sec.gov/Archives/edgar/data/875045/000087504516000069/q32016pressrelease.htm",
+    "quote": "We are also excited to be offering patients a new treatment option with the introduction of ZINBRYTA TM , a new therapy for multiple sclerosis."
+  },
+  "search_log": [
+    "Listed every filing for Biogen (CIK 875045) via data.sec.gov/submissions incl. older 'files' pages; selected 8-K/8-K/A with item 2.02 filed 2015-06 onward, then checked for a release in every filing quarter: the third-quarter 2019 release (8-K 2019-10-22, accession 0000875045-19-000038) carries item 9.01 only and was added by hand. Exhibits resolved from each filing's index.json (names matching ex99/pressrelease); 2025-2026 item-2.02 8-Ks without an exhibit are pre-announcements. The 2022-07-20 8-K/A repeats the 8-K's exhibit; the original 8-K is cited.",
+    "Each quarter is read from that quarter's own release, from the one-decimal product revenues table headed 'For the Three Months Ended <quarter end>' (United States | Rest of World | Total); the header date was asserted against the quarter for every row. Integer summary tables ('$' cells) earlier in the same releases were skipped.",
+    "Rows matched: label 'ZINBRYTA' (with or without \u2122/\u00ae) on its own line in every release 2016Q3-2019Q1; series contiguous, no gaps.",
+    "Full-year check against the 'For the Twelve Months Ended December 31' table of each Q4 release (Total column): 2017: 10.7+16.1+14.2+11.7 = 52.7 vs printed full year 52.7 (ok); 2018: 1.4+0+0+0 = 1.4 vs printed full year 1.4 (ok)",
+    "2016: 1.9 + 5.9 = 7.8, equal to the twelve-months 2016 Total (7.8) printed in the 2016Q4 release. The integer summary table of the 2016Q4 release also prints a second 'ZINBRYTA $5' line under Other Product Revenues; the detailed table prints SPINRAZA 4.6 there, so that summary line is not ZINBRYTA and was not used."
+  ],
+  "commercial_start_quarter": "2016Q3",
+  "reviewed_anomalies": {
+    "2018Q2": "Zinbryta was withdrawn worldwide in March 2018; the nils are what Biogen printed. Checked at source and kept as printed.",
+    "2018Q3": "Zinbryta was withdrawn worldwide in March 2018; the nils are what Biogen printed. Checked at source and kept as printed.",
+    "2018Q4": "Zinbryta was withdrawn worldwide in March 2018; the nils are what Biogen printed. Checked at source and kept as printed.",
+    "2019Q1": "Zinbryta was withdrawn worldwide in March 2018; the nils are what Biogen printed. Checked at source and kept as printed."
+  }
+}
