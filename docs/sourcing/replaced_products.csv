@@ -1,0 +1,196 @@
+id,therapeutic_area,sub_area,brand_name,generic_name,status_in_request,replaced_because
+D004,Oncology,,Tecentriq,atezolizumab,Completed,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D016,Oncology,,Enhertu,trastuzumab deruxtecan,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D020,Oncology,,Kadcyla,ado-trastuzumab emtansine,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D021,Oncology,,Polivy,polatuzumab vedotin,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D037,Oncology,,Alecensa,alectinib,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D039,Oncology,,Rybrevant,amivantamab,,not judged - too much launch history missing from SEC filings
+D045,Oncology,,Xtandi,enzalutamide,,not judged - too much launch history missing from SEC filings
+D047,Oncology,,Nubeqa,darolutamide,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D049,Oncology,,Lenvima,lenvatinib,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D057,Immunology / Inflammation,,Remicade,infliximab,,not judged - too much launch history missing from SEC filings
+D058,Immunology / Inflammation,,Entyvio,vedolizumab,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D059,Immunology / Inflammation,,Omvoh,mirikizumab,,not judged - too much launch history missing from SEC filings
+D060,Immunology / Inflammation,,Taltz,ixekizumab,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D061,Immunology / Inflammation,,Olumiant,baricitinib,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D065,Immunology / Inflammation,,Actemra,tocilizumab,,not judged - too much launch history missing from SEC filings
+D067,Immunology / Inflammation,,Cimzia,certolizumab pegol,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D071,Immunology / Inflammation,,Ilumya,tildrakizumab,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D072,Immunology / Inflammation,,Bimzelx,bimekizumab,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D075,Immunology / Inflammation,,Velsipity,etrasimod,,excluded from gold - no product-level figures published
+D081,Cardiometabolic / Renal,,Trulicity,dulaglutide,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D086,Cardiometabolic / Renal,,Tradjenta,linagliptin,,not judged - too much launch history missing from SEC filings
+D090,Cardiometabolic / Renal,,Tresiba,insulin degludec,,not judged - too much launch history missing from SEC filings
+D092,Cardiometabolic / Renal,,Humalog,insulin lispro,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D101,Neurology / Psychiatry,,Ocrevus,ocrelizumab,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D104,Neurology / Psychiatry,,Mavenclad,cladribine,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D110,Neurology / Psychiatry,,Evrysdi,risdiplam,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D112,Neurology / Psychiatry,,Radicava ORS,edaravone,,not judged - too much launch history missing from SEC filings
+D116,Neurology / Psychiatry,,Emgality,galcanezumab,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D122,Neurology / Psychiatry,,Leqembi,lecanemab,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D126,Rare Disease / Hematology,,Rystiggo,rozanolixizumab,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D128,Rare Disease / Hematology,,Enspryng,satralizumab,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D129,Rare Disease / Hematology,,Hemlibra,emicizumab,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D130,Rare Disease / Hematology,,Adynovate,antihemophilic factor PEGylated,,not judged - too much launch history missing from SEC filings
+D133,Rare Disease / Hematology,,Jivi,damoctocog alfa pegol,,excluded from gold - no product-level figures published
+D134,Rare Disease / Hematology,,Esperoct,turoctocog alfa pegol,,excluded from gold - no product-level figures published
+D136,Rare Disease / Hematology,,Hemgenix,etranacogene dezaparvovec,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D146,Rare Disease / Hematology,,Crysvita,burosumab,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D170,Respiratory / Allergy,,Spiriva,tiotropium,,excluded from gold - no product-level figures published
+D177,Respiratory / Allergy,,Cinqair,reslizumab,,excluded from gold - no product-level figures published
+D178,Respiratory / Allergy,,Daliresp,roflumilast,,not judged - too much launch history missing from SEC filings
+D180,Ophthalmology,,Vabysmo,faricimab,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D184,Ophthalmology,,Izervay,avacincaptad pegol,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D185,Ophthalmology,,Xiidra,lifitegrast,,not judged - too much launch history missing from SEC filings
+D188,Ophthalmology,,Miebo,perfluorohexyloctane ophthalmic solution,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D190,GI / Liver / Women's Health / Urology,,Trulance,plecanatide,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D191,GI / Liver / Women's Health / Urology,,Motegrity,prucalopride,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D192,GI / Liver / Women's Health / Urology,,Xifaxan,rifaximin,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D194,GI / Liver / Women's Health / Urology,,Gattex,teduglutide,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D197,GI / Liver / Women's Health / Urology,,Livdelzi,seladelpar,,no benchmark - fewer than four reported quarters and no comparable estimate
+D198,GI / Liver / Women's Health / Urology,,Myrbetriq,mirabegron,,not judged - too much launch history missing from SEC filings
+D199,GI / Liver / Women's Health / Urology,,Gemtesa,vibegron,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D200,GI / Liver / Women's Health / Urology,,Veozah,fezolinetant,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D201,Oncology,Solid tumors / VEGF,Avastin,bevacizumab,,not judged - too much launch history missing from SEC filings
+D202,Oncology,HER2+ breast / gastric,Herceptin,trastuzumab,,not judged - too much launch history missing from SEC filings
+D203,Oncology,HER2+ breast,Perjeta,pertuzumab,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D204,Oncology,HER2+ breast / SC,Phesgo,pertuzumab/trastuzumab/hyaluronidase,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D205,Oncology,B-cell malignancies,Rituxan,rituximab,,not judged - too much launch history missing from SEC filings
+D206,Oncology,CLL / follicular lymphoma,Gazyva,obinutuzumab,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D207,Oncology,CLL / NHL,Bendeka,bendamustine,,excluded from gold - no product-level figures published
+D209,Oncology,Urothelial / Merkel cell,Bavencio,avelumab,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D214,Oncology,Melanoma / BRAF,Zelboraf,vemurafenib,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D215,Oncology,Melanoma / MEK,Cotellic,cobimetinib,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D218,Oncology,ALK+ NSCLC,Alunbrig,brigatinib,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D219,Oncology,NTRK / ROS1 tumors,Rozlytrek,entrectinib,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D220,Oncology,NTRK fusion tumors,Vitrakvi,larotrectinib,,excluded from gold - no product-level figures published
+D221,Oncology,RET tumors,Retevmo,selpercatinib,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D224,Oncology,METex14 NSCLC,Tepmetko,tepotinib,,excluded from gold - no product-level figures published
+D225,Oncology,EGFR exon 20 / withdrawn,Exkivity,mobocertinib,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D226,Oncology,EGFR NSCLC,Tarceva,erlotinib,,not judged - too much launch history missing from SEC filings
+D228,Oncology,EGFR NSCLC,Gilotrif,afatinib,,excluded from gold - no product-level figures published
+D229,Oncology,EGFR NSCLC,Vizimpro,dacomitinib,,excluded from gold - no product-level figures published
+D231,Oncology,PARP / breast / prostate,Talzenna,talazoparib,,not judged - too much launch history missing from SEC filings
+D232,Oncology,Prostate / PARP,Akeega,niraparib/abiraterone,,excluded from gold - no product-level figures published
+D234,Oncology,Prostate / immunotherapy,Provenge,sipuleucel-T,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D235,Oncology,Prostate / radiopharmaceutical,Xofigo,radium Ra 223 dichloride,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D236,Oncology,Basal cell carcinoma,Erivedge,vismodegib,,not judged - too much launch history missing from SEC filings
+D237,Oncology,Basal cell carcinoma,Odomzo,sonidegib,,excluded from gold - no product-level figures published
+D238,Oncology,Colorectal / head and neck,Erbitux,cetuximab,,not judged - too much launch history missing from SEC filings
+D240,Oncology,Colorectal / GIST / HCC,Stivarga,regorafenib,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D241,Oncology,Colorectal / VEGFR,Fruzaqla,fruquintinib,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D243,Oncology,Pancreatic / liposomal,Onivyde,irinotecan liposome,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D245,Oncology,Ovarian / breast / myeloma,Doxil,doxorubicin liposomal,,not judged - too much launch history missing from SEC filings
+D250,Oncology,MDS / oral HMA,Inqovi,decitabine/cedazuridine,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D255,Oncology,FLT3 AML,Xospata,gilteritinib,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D256,Oncology,FLT3 AML,Vanflyta,quizartinib,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D257,Oncology,FLT3 AML / mastocytosis,Rydapt,midostaurin,,excluded from gold - no product-level figures published
+D258,Oncology,CML,Bosulif,bosutinib,,not judged - too much launch history missing from SEC filings
+D261,Oncology,CML / Ph+ ALL,Iclusig,ponatinib,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D266,Oncology,Tenosynovial giant cell tumor,Turalio,pexidartinib,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D271,Immunology / Inflammation,Alopecia areata,Litfulo,ritlecitinib,,excluded from gold - no product-level figures published
+D273,Immunology / Inflammation,Psoriasis / IL-17R,Siliq,brodalumab,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D274,Immunology / Inflammation,Autoinflammatory / IL-1,Kineret,anakinra,,not judged - too much launch history missing from SEC filings
+D282,Immunology / Inflammation,Atopic dermatitis,Ebglyss,lebrikizumab,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D283,Immunology / Inflammation,Atopic dermatitis,Adbry,tralokinumab,,excluded from gold - no product-level figures published
+D288,Immunology / Inflammation,Psoriasis / topical,Sernivo,betamethasone dipropionate spray,,excluded from gold - no product-level figures published
+D289,Immunology / Inflammation,Acne,Aczone,dapsone topical,,not judged - too much launch history missing from SEC filings
+D290,Immunology / Inflammation,Acne / topical antiandrogen,Winlevi,clascoterone,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D291,Immunology / Inflammation,Acne,Seysara,sarecycline,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D292,Immunology / Inflammation,Acne,Amzeeq,minocycline topical foam,,not judged - too much launch history missing from SEC filings
+D293,Immunology / Inflammation,Rosacea,Epsolay,benzoyl peroxide cream,,excluded from gold - no product-level figures published
+D294,Immunology / Inflammation,Rosacea,Zilxi,minocycline topical foam,,not judged - too much launch history missing from SEC filings
+D295,Cardiometabolic / Renal,Type 2 diabetes / SGLT2,Steglatro,ertugliflozin,,excluded from gold - no product-level figures published
+D296,Cardiometabolic / Renal,Type 2 diabetes / combination,Synjardy,empagliflozin/metformin,,excluded from gold - no product-level figures published
+D298,Cardiometabolic / Renal,Type 2 diabetes / combination,Glyxambi,empagliflozin/linagliptin,,excluded from gold - no product-level figures published
+D302,Cardiometabolic / Renal,Type 2 diabetes / DPP4,Onglyza,saxagliptin,,not judged - too much launch history missing from SEC filings
+D303,Cardiometabolic / Renal,Type 2 diabetes / DPP4,Nesina,alogliptin,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D305,Cardiometabolic / Renal,Type 2 diabetes / GLP-1,Byetta,exenatide,,not judged - too much launch history missing from SEC filings
+D310,Cardiometabolic / Renal,Diabetes / rapid insulin,NovoLog,insulin aspart,,not judged - too much launch history missing from SEC filings
+D311,Cardiometabolic / Renal,Diabetes / rapid insulin,Lyumjev,insulin lispro-aabc,,excluded from gold - no product-level figures published
+D314,Cardiometabolic / Renal,Diabetes / basal biosimilar,Semglee,insulin glargine-yfgn,,excluded from gold - no product-level figures published
+D315,Cardiometabolic / Renal,Diabetes / basal biosimilar,Rezvoglar,insulin glargine-aglr,,excluded from gold - no product-level figures published
+D319,Cardiometabolic / Renal,Obesity / withdrawn,Belviq,lorcaserin,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D320,Cardiometabolic / Renal,Hypercholesterolemia / ACL,Nexletol,bempedoic acid,,excluded from gold - no product-level figures published
+D321,Cardiometabolic / Renal,Hypercholesterolemia / combo,Nexlizet,bempedoic acid/ezetimibe,,excluded from gold - no product-level figures published
+D325,Cardiometabolic / Renal,Homozygous familial hypercholesterolemia,Kynamro,mipomersen,,excluded from gold - no product-level figures published
+D331,Neurology / Psychiatry,Multiple sclerosis / S1P,Ponvory,ponesimod,,not judged - too much launch history missing from SEC filings
+D332,Neurology / Psychiatry,Multiple sclerosis / fumarate,Bafiertam,monomethyl fumarate,,excluded from gold - no product-level figures published
+D333,Neurology / Psychiatry,Multiple sclerosis / injectable,Copaxone,glatiramer acetate,,not judged - too much launch history missing from SEC filings
+D336,Neurology / Psychiatry,Multiple sclerosis / interferon,Rebif,interferon beta-1a,,not judged - too much launch history missing from SEC filings
+D337,Neurology / Psychiatry,Multiple sclerosis / interferon,Betaseron,interferon beta-1b,,not judged - too much launch history missing from SEC filings
+D340,Neurology / Psychiatry,Pseudobulbar affect,Nuedexta,dextromethorphan/quinidine,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D341,Neurology / Psychiatry,ALS,Exservan,riluzole oral film,,excluded from gold - no product-level figures published
+D342,Neurology / Psychiatry,ALS,Tiglutik,riluzole oral suspension,,excluded from gold - no product-level figures published
+D347,Neurology / Psychiatry,Myasthenia gravis,Zilbrysq,zilucoplan,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D348,Neurology / Psychiatry,Alzheimer disease / anti-amyloid,Kisunla,donanemab,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D350,Neurology / Psychiatry,Alzheimer disease,Aricept,donepezil,,not judged - too much launch history missing from SEC filings
+D351,Neurology / Psychiatry,Schizophrenia / depression / Alzheimer agitation,Rexulti,brexpiprazole,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D357,Neurology / Psychiatry,Schizophrenia / LAI,Invega Trinza,paliperidone palmitate,,excluded from gold - no product-level figures published
+D358,Neurology / Psychiatry,Schizophrenia / LAI,Invega Hafyera,paliperidone palmitate,,excluded from gold - no product-level figures published
+D359,Neurology / Psychiatry,Schizophrenia / bipolar LAI,Abilify Maintena,aripiprazole monohydrate,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D360,Neurology / Psychiatry,Schizophrenia / bipolar LAI,Abilify Asimtufii,aripiprazole,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D362,Neurology / Psychiatry,Schizophrenia / LAI initiation,Aristada Initio,aripiprazole lauroxil,,excluded from gold - no product-level figures published
+D363,Neurology / Psychiatry,Schizophrenia / LAI,Zyprexa Relprevv,olanzapine pamoate,,excluded from gold - no product-level figures published
+D364,Neurology / Psychiatry,Treatment-resistant depression,Spravato,esketamine,,not judged - too much launch history missing from SEC filings
+D368,Neurology / Psychiatry,Major depressive disorder,Trintellix,vortioxetine,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D370,Neurology / Psychiatry,Major depressive disorder,Fetzima,levomilnacipran,,no benchmark - fewer than four reported quarters and no comparable estimate
+D373,Rare Disease / Hematology,Hereditary angioedema,Haegarda,C1 esterase inhibitor subcutaneous,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D374,Rare Disease / Hematology,Hereditary angioedema,Cinryze,C1 esterase inhibitor,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D375,Rare Disease / Hematology,Hereditary angioedema / acute,Berinert,C1 esterase inhibitor,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D376,Rare Disease / Hematology,Hereditary angioedema / acute,Ruconest,conestat alfa,,not judged - too much launch history missing from SEC filings
+D377,Rare Disease / Hematology,Hereditary angioedema / acute,Firazyr,icatibant,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D378,Rare Disease / Hematology,Hereditary angioedema / acute,Kalbitor,ecallantide,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D382,Rare Disease / Hematology,Sickle cell disease / gene therapy,Lyfgenia,lovotibeglogene autotemcel,,no benchmark - fewer than four reported quarters and no comparable estimate
+D387,Rare Disease / Hematology,Cold agglutinin disease,Enjaymo,sutimlimab,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D388,Rare Disease / Hematology,Chronic ITP / thrombocytopenia,Doptelet,avatrombopag,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D389,Rare Disease / Hematology,Thrombocytopenia / liver disease,Mulpleta,lusutrombopag,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D393,Rare Disease / Hematology,von Willebrand disease,Vonvendi,von Willebrand factor recombinant,,not judged - too much launch history missing from SEC filings
+D394,Rare Disease / Hematology,von Willebrand disease,Wilate,von Willebrand factor/coagulation factor VIII,,excluded from gold - no product-level figures published
+D395,Rare Disease / Hematology,von Willebrand disease / ex-US,Veyvondi,vonicog alfa,,excluded from gold - no product-level figures published
+D397,Rare Disease / Hematology,Hemophilia A / B,Hympavzi,marstacimab,,excluded from gold - no product-level figures published
+D398,Rare Disease / Hematology,Hemophilia A / B inhibitors,Alhemo,concizumab,,excluded from gold - no product-level figures published
+D399,Rare Disease / Hematology,Hemophilia with inhibitors,Sevenfact,coagulation factor VIIa recombinant-jncw,,excluded from gold - no product-level figures published
+D401,Rare Disease / Hematology,Hemophilia / inhibitor bypass,Feiba,anti-inhibitor coagulant complex,,not judged - too much launch history missing from SEC filings
+D402,Rare Disease / Hematology,Acquired hemophilia A,Obizur,susoctocog alfa,,excluded from gold - no product-level figures published
+D403,Rare Disease / Hematology,Gaucher disease,Vpriv,velaglucerase alfa,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D404,Rare Disease / Hematology,Gaucher disease,Cerezyme,imiglucerase,,not judged - too much launch history missing from SEC filings
+D407,Rare Disease / Hematology,Gaucher / Niemann-Pick C,Zavesca,miglustat,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D413,Infectious Disease / Vaccines,HIV / ART,Symtuza,darunavir/cobicistat/emtricitabine/tenofovir alafenamide,,excluded from gold - no product-level figures published
+D416,Infectious Disease / Vaccines,HIV / NNRTI,Pifeltro,doravirine,,not judged - too much launch history missing from SEC filings
+D417,Infectious Disease / Vaccines,HIV / ART,Delstrigo,doravirine/lamivudine/tenofovir disoproxil,,not judged - too much launch history missing from SEC filings
+D419,Infectious Disease / Vaccines,HIV / capsid inhibitor,Sunlenca,lenacapavir,,excluded from gold - no product-level figures published
+D421,Infectious Disease / Vaccines,HIV / CCR5,Selzentry,maraviroc,,not judged - too much launch history missing from SEC filings
+D423,Infectious Disease / Vaccines,HIV / protease inhibitor,Prezcobix,darunavir/cobicistat,,excluded from gold - no product-level figures published
+D432,Infectious Disease / Vaccines,C. difficile infection,Dificid,fidaxomicin,,not judged - too much launch history missing from SEC filings
+D433,Infectious Disease / Vaccines,C. difficile recurrence,Zinplava,bezlotoxumab,,excluded from gold - no product-level figures published
+D438,Infectious Disease / Vaccines,Drug-resistant bacterial infection,Fetroja,cefiderocol,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D439,Infectious Disease / Vaccines,Gram-negative bacterial infection,Zerbaxa,ceftolozane/tazobactam,,not judged - too much launch history missing from SEC filings
+D441,Infectious Disease / Vaccines,Gram-negative bacterial infection,Recarbrio,imipenem/cilastatin/relebactam,,excluded from gold - no product-level figures published
+D444,Respiratory / Allergy,COPD / LAMA LABA,Stiolto Respimat,tiotropium/olodaterol,,excluded from gold - no product-level figures published
+D446,Respiratory / Allergy,COPD / LAMA LABA,Duaklir Pressair,aclidinium/formoterol,,excluded from gold - no product-level figures published
+D451,Respiratory / Allergy,COPD / LABA,Striverdi Respimat,olodaterol,,excluded from gold - no product-level figures published
+D453,Respiratory / Allergy,COPD / nebulized LABA,Perforomist,formoterol fumarate,,excluded from gold - no product-level figures published
+D454,Respiratory / Allergy,COPD / nebulized LABA,Brovana,arformoterol,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D459,Respiratory / Allergy,Asthma / ICS,Alvesco,ciclesonide,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D461,Respiratory / Allergy,Asthma / ICS,Asmanex HFA,mometasone furoate,,not judged - too much launch history missing from SEC filings
+D463,Respiratory / Allergy,Asthma / COPD / generic-brand,Wixela Inhub,fluticasone/salmeterol,,excluded from gold - no product-level figures published
+D464,Respiratory / Allergy,Asthma / ICS LABA,AirDuo RespiClick,fluticasone/salmeterol,,excluded from gold - no product-level figures published
+D465,Respiratory / Allergy,Asthma / rescue SABA,Xopenex HFA,levalbuterol,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D466,Respiratory / Allergy,Asthma / rescue SABA,ProAir RespiClick,albuterol,,excluded from gold - no product-level figures published
+D467,Respiratory / Allergy,Asthma / rescue SABA,Proventil HFA,albuterol,,not judged - too much launch history missing from SEC filings
+D468,Respiratory / Allergy,Asthma / allergic rhinitis,Singulair,montelukast,,not judged - too much launch history missing from SEC filings
+D470,Respiratory / Allergy,Allergic rhinitis / nasal,Ryaltris,olopatadine/mometasone,,excluded from gold - no product-level figures published
+D472,Respiratory / Allergy,Allergic rhinitis / nasal,Astepro,azelastine,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D476,Ophthalmology,Retinal disease / biosimilar,Opuviz,aflibercept-yszy,,excluded from gold - no product-level figures published
+D477,Ophthalmology,Retinal disease / biosimilar,Yesafili,aflibercept-jbvf,,excluded from gold - no product-level figures published
+D478,Ophthalmology,Retinal disease / sustained delivery,Susvimo,ranibizumab implant,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D479,Ophthalmology,Retinal vein occlusion / DME,Ozurdex,dexamethasone intravitreal implant,,not judged - too much launch history missing from SEC filings
+D482,Ophthalmology,Uveitis,Xipere,triamcinolone acetonide suprachoroidal,,excluded from gold - no product-level figures published
+D483,Ophthalmology,Glaucoma / implant,Durysta,bimatoprost intracameral implant,,excluded from gold - no product-level figures published
+D484,Ophthalmology,Glaucoma / topical,Vyzulta,latanoprostene bunod,,excluded from gold - no product-level figures published
+D485,Ophthalmology,Glaucoma / topical combination,Rocklatan,netarsudil/latanoprost,,excluded from gold - no product-level figures published
+D487,GI / Liver / Women's Health / Urology,Chronic constipation / IBS-C,Amitiza,lubiprostone,,not judged - too much launch history missing from SEC filings
+D491,GI / Liver / Women's Health / Urology,Opioid-induced constipation,Relistor,methylnaltrexone,,"peak unknown - quarters only on a company website, withheld from the workbooks"
+D493,GI / Liver / Women's Health / Urology,GERD / OTC,Mylanta,aluminum hydroxide/magnesium hydroxide/simethicone,,excluded from gold - no product-level figures published
+D494,GI / Liver / Women's Health / Urology,GERD / PPI,Dexilant,dexlansoprazole,,not judged - too much launch history missing from SEC filings
