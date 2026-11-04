@@ -1,8 +1,9 @@
 """Export the products whose peak gold has not observed, with their best rolling year so far.
 
-Gold labels a peak observed only when the highest calendar year is followed by
-at least two lower complete years (``observed_peak`` in
-build_independent_gold.py). Every other peak-eligible product is listed here,
+Gold's peak is a product's highest rolling four-quarter total, and it is
+labelled observed once two later totals follow it, none higher
+(``quarterly_peak`` in build_independent_gold.py). A series that ends before
+then is labelled line ended at high. Every other peak-eligible product is listed here,
 with the highest sum of four consecutive quarters it has reached, so an
 external peak estimate can be set against it.
 
@@ -94,6 +95,8 @@ def peak_records() -> list[dict]:
             status = "not judged - launch history too short or missing"
         elif peak["peak_status"] == "observed":
             status = "peak observed"
+        elif peak["peak_status"] == "line_ended_at_high":
+            status = "line ended at high"
         else:
             status = "not yet peaked"
         currencies = sorted({r["currency"] for r in rows if r.get("currency")})
@@ -155,16 +158,18 @@ def peak_records() -> list[dict]:
             "moa_class": profiles.get(drug, {}).get("moa_class"),
         })
 
-    order = {"not yet peaked": 0, "peak observed": 1, "not judged - launch history too short or missing": 2}
+    order = {"not yet peaked": 0, "line ended at high": 1, "peak observed": 2,
+             "not judged - launch history too short or missing": 3}
     records.sort(key=lambda r: (order[r["peak_status"]], -(r["best_rolling_4q_usd_m"] or 0)))
     return records
 
 
 OUTCOMES = {
-    "peak_observed": "peak identifiable from the reported years",
+    "peak_observed": "peak identifiable from the reported quarters",
     "not_yet_observed": "not yet peaked - needs an external estimate",
-    "highest_year_is_first_complete_year": "highest year is the first complete year - the peak may predate the series",
-    "no_complete_calendar_year": "no complete calendar year reported",
+    "line_ended_at_high": "series ends at its highest window - a benchmark, not a confirmed peak",
+    "highest_window_is_first_window": "highest window is the first window - the peak may predate the series",
+    "no_complete_four_quarter_window": "no complete four-quarter window reported",
     "launch_history_missing": "substantial launch history missing - flag for exclusion",
 }
 
@@ -254,6 +259,7 @@ def main() -> None:
         "For external estimates": estimate_list(records),
         "Not yet peaked": [r for r in records if r["peak_status"] == "not yet peaked"],
         "Peak observed": [r for r in records if r["peak_status"] == "peak observed"],
+        "Line ended at high": [r for r in records if r["peak_status"] == "line ended at high"],
         "Not judged": [r for r in records if r["peak_status"].startswith("not judged")],
         "Starts after launch review": review,
     }
@@ -266,13 +272,17 @@ def main() -> None:
         "Starts after launch review": "Series that start after launch, with gold's launch-gap review: "
                                       "launch_gap_quarters counts the quarters between launch and the first "
                                       "reported quarter, and outcome is gold's peak judgement for the series.",
-        "Not yet peaked": "Products whose highest calendar year is not followed by two lower "
-                          "complete years. best_rolling_4q_usd_m is the highest sum of four consecutive "
+        "Not yet peaked": "Products whose highest rolling four-quarter total is not yet followed by "
+                          "two later totals. best_rolling_4q_usd_m is the highest sum of four consecutive "
                           "quarters in USD millions; best_window_is_latest marks a product whose best "
                           "window is still its latest, i.e. still growing.",
-        "Peak observed": "Products whose highest calendar year is followed by at least two lower years.",
+        "Peak observed": "Products whose highest rolling four-quarter total is followed by at least two "
+                         "later totals, none higher.",
+        "Line ended at high": "Products whose series stops before two totals follow its highest one. The "
+                              "high is a benchmark; time to peak is not known.",
         "Not judged": "Series that start after launch and that gold's launch-gap review does not judge: too "
-                      "many launch quarters missing, no complete year, or a highest year that may not be the peak.",
+                      "many launch quarters missing, no complete four-quarter window, or a highest window that "
+                      "may not be the peak.",
     }
 
     wb = Workbook()

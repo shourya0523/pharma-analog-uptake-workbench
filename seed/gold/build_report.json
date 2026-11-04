@@ -5,8 +5,9 @@
   "annual_rows": 168,
   "complete_quarterly_series": 449,
   "quarterly_coverage_pct": 100.0,
-  "observed_peaks": 115,
-  "not_yet_observed_peaks": 283,
+  "observed_peaks": 174,
+  "not_yet_observed_peaks": 182,
+  "line_ended_at_high_peaks": 42,
   "excluded_products": 65,
   "catalog_coverage": {
     "catalog_products": 20,

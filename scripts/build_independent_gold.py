@@ -2907,19 +2907,101 @@ def observed_peak(drug_name: str, annual: list[dict[str, Any]], scope: str, geog
 SMALL_LAUNCH_GAP_QUARTERS = 4
 SUBSTANTIAL_LAUNCH_GAP_QUARTERS = 8
 
+# How many rolling four-quarter totals must follow the highest one, none of
+# them higher, before that highest total counts as the product's peak.
+CONFIRMING_QUARTERS = 2
+
 PEAK_OBSERVED = "peak_observed"
 NOT_YET_OBSERVED = "not_yet_observed"
-PEAK_MAY_PREDATE_SERIES = "highest_year_is_first_complete_year"
-NO_COMPLETE_YEAR = "no_complete_calendar_year"
+LINE_ENDED_AT_HIGH = "line_ended_at_high"
+PEAK_MAY_PREDATE_SERIES = "highest_window_is_first_window"
+NO_COMPLETE_WINDOW = "no_complete_four_quarter_window"
 LAUNCH_HISTORY_MISSING = "launch_history_missing"
+# The judgements that leave a series with a peak row.
+JUDGED = (PEAK_OBSERVED, NOT_YET_OBSERVED, LINE_ENDED_AT_HIGH)
 
 
 def quarter_number(period: str) -> int:
     return int(period[:4]) * 4 + int(period[-1]) - 1
 
 
+def quarter_label(index: int) -> str:
+    return f"{index // 4}Q{index % 4 + 1}"
+
+
 def approval_years() -> dict[str, int]:
     return {row["drug_name"]: int(row["first_approval_year"]) for row in read_csv(ATTRIBUTES_FILE)}
+
+
+def rolling_four_quarter_totals(quarterly: list[dict[str, Any]], drug_name: str) -> dict[int, float]:
+    """Each complete four-quarter total in USD, keyed by the index of its last quarter.
+
+    A window that spans an unreported quarter is left out, never summed short.
+    """
+    values = {quarter_number(row["period"]): row["value_normalized_usd_millions"]
+              for row in quarterly if row["drug_name"] == drug_name}
+    return {end: sum(values[end - step] for step in range(4))
+            for end in sorted(values) if all(end - step in values for step in range(4))}
+
+
+def quarterly_peak(drug_name: str, quarterly: list[dict[str, Any]], meta: dict[str, Any]) -> dict[str, Any]:
+    """The highest rolling four-quarter total, and whether it is the product's peak.
+
+    The peak is the highest total; of equal totals, the earliest. It is
+    ``observed`` once ``CONFIRMING_QUARTERS`` later totals exist, none higher
+    by construction. A series that ends before that is ``line_ended_at_high``:
+    its high is a benchmark but not a confirmed peak. A live series still
+    short of them is ``not_yet_observed``, and so is any series with an
+    unreported quarter beside the highest window, which may have been higher.
+    """
+    rows = {quarter_number(row["period"]): row for row in quarterly if row["drug_name"] == drug_name}
+    windows = rolling_four_quarter_totals(quarterly, drug_name)
+    totals = full_annual_totals(quarterly, drug_name)
+    top_year = max(totals, key=lambda row: row["value_reported"]) if totals else None
+    base = {
+        "gold_id": slug(drug_name, "peak"),
+        "drug_name": drug_name,
+        "revenue_scope": meta.get("revenue_scope"),
+        "geography": meta.get("geography"),
+        "highest_observed_year": int(top_year["period"]) if top_year else None,
+        "highest_observed_value": top_year["value_reported"] if top_year else None,
+        "annual_observations": len(totals),
+        "benchmark_eligible": True,
+    }
+    if not windows:
+        return base | {
+            "peak_status": "not_yet_observed", "peak_window": None, "peak_year": None, "peak_value": None,
+            "currency": None, "unit": None, "quarters_after_peak": 0, "numeric_peak_available": False,
+            "selection_method": NO_COMPLETE_WINDOW,
+            "input_ids": [rows[max(rows, key=lambda k: rows[k]["value_normalized_usd_millions"])]["gold_id"]],
+        }
+    end = max(windows, key=lambda k: (windows[k], -k))
+    first, last = min(rows), max(rows)
+    beside_hole = (end - 4 >= first and end - 4 not in rows) or (end + 1 <= last and end + 1 not in rows)
+    after = sum(1 for k in windows if k > end)
+    live = series_end_quarter(meta) == AS_OF_QUARTER
+    if beside_hole:
+        status, method = "not_yet_observed", "maximum_beside_an_unreported_quarter"
+    elif after >= CONFIRMING_QUARTERS:
+        status, method = "observed", "all_time_high_r4q_with_two_later_quarters"
+    elif not live:
+        status, method = "line_ended_at_high", "all_time_high_r4q_at_series_end"
+    else:
+        status, method = "not_yet_observed", "all_time_high_r4q_in_latest_quarters"
+    valued = status in ("observed", "line_ended_at_high")
+    return base | {
+        "peak_status": status,
+        "peak_window": f"{quarter_label(end - 3)}-{quarter_label(end)}",
+        # The calendar year of the window's last quarter.
+        "peak_year": end // 4 if valued else None,
+        "peak_value": round(windows[end], 6) if valued else None,
+        "currency": "USD" if valued else None,
+        "unit": "millions" if valued else None,
+        "quarters_after_peak": after,
+        "numeric_peak_available": valued,
+        "selection_method": method,
+        "input_ids": [rows[end - step]["gold_id"] for step in range(3, -1, -1)],
+    }
 
 
 def launch_gap_review(drug_name: str, quarterly: list[dict[str, Any]], meta: dict[str, Any],
@@ -2928,9 +3010,9 @@ def launch_gap_review(drug_name: str, quarterly: list[dict[str, Any]], meta: dic
 
     The launch reference is the stated launch quarter, or where none is stated
     the fourth quarter of the first approval year, which makes the gap a
-    minimum. The peak test is ``observed_peak`` on the reported years; when
-    launch quarters are missing, a highest year with no lower complete year
-    before it is not read as a peak, because the true peak may sit in them.
+    minimum. The peak test is ``quarterly_peak``; when launch quarters are
+    missing, a highest window with no lower window before it is not read as a
+    peak, because the true peak may sit in them.
     """
     rows = [row for row in quarterly if row["drug_name"] == drug_name]
     first = min(row["period"] for row in rows)
@@ -2941,21 +3023,21 @@ def launch_gap_review(drug_name: str, quarterly: list[dict[str, Any]], meta: dic
     else:
         reference, basis = None, None
     gap = max(quarter_number(first) - quarter_number(reference), 0) if reference else None
-    totals = full_annual_totals(quarterly, drug_name)
-    top = max(totals, key=lambda row: row["value_reported"]) if totals else None
-    lower_before = bool(top) and any(
-        row["value_reported"] < top["value_reported"] for row in totals if row["period"] < top["period"])
-    peak = observed_peak(drug_name, totals, "", "") if totals else None
+    windows = rolling_four_quarter_totals(quarterly, drug_name)
+    peak = quarterly_peak(drug_name, quarterly, meta)
     if gap is None or gap > SUBSTANTIAL_LAUNCH_GAP_QUARTERS:
         judgement = LAUNCH_HISTORY_MISSING
-    elif not totals:
-        judgement = NO_COMPLETE_YEAR
-    elif peak["peak_status"] != "observed":
+    elif not windows:
+        judgement = NO_COMPLETE_WINDOW
+    elif peak["peak_status"] == "not_yet_observed":
         judgement = NOT_YET_OBSERVED
-    elif lower_before or gap == 0:
-        judgement = PEAK_OBSERVED
     else:
-        judgement = PEAK_MAY_PREDATE_SERIES
+        end = quarter_number(peak["peak_window"].split("-")[1])
+        lower_before = any(value < windows[end] for index, value in windows.items() if index < end)
+        if not (lower_before or gap == 0):
+            judgement = PEAK_MAY_PREDATE_SERIES
+        else:
+            judgement = PEAK_OBSERVED if peak["peak_status"] == "observed" else LINE_ENDED_AT_HIGH
     return {
         "launch_reference_quarter": reference,
         "launch_reference_basis": basis,
@@ -2970,21 +3052,14 @@ def launch_gap_review(drug_name: str, quarterly: list[dict[str, Any]], meta: dic
 def rolling_four_quarter_benchmark(quarterly: list[dict[str, Any]], drug_name: str) -> tuple[float, str] | None:
     """The highest sum of four consecutive reported quarters in USD, and its window.
 
-    A window that spans an unreported quarter is skipped, never summed short.
+    Of equal sums, the earliest window. A window that spans an unreported
+    quarter is skipped, never summed short.
     """
-    values = {quarter_number(row["period"]): row["value_normalized_usd_millions"]
-              for row in quarterly if row["drug_name"] == drug_name}
-    best = None
-    for start in sorted(values):
-        window = [values.get(start + step) for step in range(4)]
-        if any(value is None for value in window):
-            continue
-        if best is None or sum(window) > best[0]:
-            best = (sum(window), start)
-    if best is None:
+    windows = rolling_four_quarter_totals(quarterly, drug_name)
+    if not windows:
         return None
-    label = lambda index: f"{index // 4}Q{index % 4 + 1}"
-    return round(best[0], 6), f"{label(best[1])}-{label(best[1] + 3)}"
+    end = max(windows, key=lambda k: (windows[k], -k))
+    return round(windows[end], 6), f"{quarter_label(end - 3)}-{quarter_label(end)}"
 
 
 def with_benchmark(peak: dict[str, Any], quarterly: list[dict[str, Any]]) -> dict[str, Any]:
@@ -3007,42 +3082,13 @@ def build_peaks(quarterly: list[dict[str, Any]], annual: list[dict[str, Any]]) -
             if drug_name in annual_only or not any(row["drug_name"] == drug_name for row in quarterly):
                 continue
             review = launch_gap_review(drug_name, quarterly, meta, years.get(drug_name))
-            if review["peak_judgement"] not in (PEAK_OBSERVED, NOT_YET_OBSERVED):
+            if review["peak_judgement"] not in JUDGED:
                 continue
-            peak = observed_peak(drug_name, full_annual_totals(quarterly, drug_name),
-                                 meta["revenue_scope"], meta["geography"])
+            peak = quarterly_peak(drug_name, quarterly, meta)
             peak["selection_method"] += "_after_launch_gap_review"
             peaks.append(with_benchmark(peak | {"series_starts_after_launch": True} | review, quarterly))
             continue
-        totals = full_annual_totals(quarterly, drug_name)
-        if not totals:
-            observations = [row for row in quarterly if row["drug_name"] == drug_name]
-            highest = max(observations, key=lambda row: row["value_reported"])
-            peaks.append(
-                {
-                    "gold_id": slug(drug_name, "peak"),
-                    "drug_name": drug_name,
-                    "peak_status": "not_yet_observed",
-                    "peak_year": None,
-                    "peak_value": None,
-                    "currency": None,
-                    "unit": None,
-                    "revenue_scope": meta["revenue_scope"],
-                    "geography": meta["geography"],
-                    "highest_observed_period": highest["period"],
-                    "highest_observed_value": highest["value_reported"],
-                    "annual_observations": 0,
-                    "post_peak_years": 0,
-                    "selection_method": "insufficient_complete_years_product_still_growing",
-                    "input_ids": [highest["gold_id"]],
-                    "benchmark_eligible": True,
-                    "numeric_peak_available": False,
-                    "series_starts_after_launch": False,
-                }
-            )
-            with_benchmark(peaks[-1], quarterly)
-            continue
-        peaks.append(with_benchmark(observed_peak(drug_name, totals, meta["revenue_scope"], meta["geography"])
+        peaks.append(with_benchmark(quarterly_peak(drug_name, quarterly, meta)
                                     | {"series_starts_after_launch": False}, quarterly))
 
     # A product is peaked on its annual figures when those figures are its
@@ -3073,7 +3119,7 @@ def build_peaks(quarterly: list[dict[str, Any]], annual: list[dict[str, Any]]) -
         exemplar = next(row for row in annual if row["drug_name"] == drug_name)
         peaks.append(observed_peak(drug_name, series, exemplar["revenue_scope"], exemplar["geography"])
                      | {"series_starts_after_launch": False, "benchmark_rolling_4q_usd_millions": None,
-                        "benchmark_window": None})
+                        "benchmark_window": None, "peak_window": None, "quarters_after_peak": None})
     return sorted(peaks, key=lambda row: row["drug_name"])
 
 
@@ -3627,6 +3673,7 @@ def main() -> int:
         "quarterly_coverage_pct": 100.0,
         "observed_peaks": sum(row["peak_status"] == "observed" for row in peaks),
         "not_yet_observed_peaks": sum(row["peak_status"] == "not_yet_observed" for row in peaks),
+        "line_ended_at_high_peaks": sum(row["peak_status"] == "line_ended_at_high" for row in peaks),
         "excluded_products": len(exclusions),
         "catalog_coverage": catalog,
         "gold_completeness": completeness,

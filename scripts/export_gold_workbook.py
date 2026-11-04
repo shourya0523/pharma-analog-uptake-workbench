@@ -387,7 +387,7 @@ write_sheet(
 K_COLS = [
     "drug_name", "moa", "moa_class", "route_of_administration", "approval_era",
     "competitive_intensity_at_launch", "peak_status", "numeric_peak_available", "peak_value",
-    "peak_year", "highest_observed_value", "highest_observed_year", "highest_observed_period",
+    "peak_window", "quarters_after_peak", "peak_year", "highest_observed_value", "highest_observed_year", "highest_observed_period",
     "post_peak_years", "annual_observations", "revenue_scope", "geography", "unit", "currency",
     "selection_method", "benchmark_eligible", "input_ids", "gold_id",
 ]

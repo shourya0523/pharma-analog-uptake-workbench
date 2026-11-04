@@ -111,12 +111,25 @@ rewrites on every run. Read them there rather than from this file:
   approval year, which makes the gap a minimum), `launch_gap_quarters`,
   `launch_gap_band` (none / small up to 4 / moderate up to 8 / substantial)
   and `peak_judgement`.
-- `peak_sales.jsonl`: independent observed/not-yet-observed peak labels. A
-  peak is observed when the highest calendar year is followed by two lower
-  complete years. A series that starts after launch gets a row only when its
-  review judged it (`series_starts_after_launch` is true on those rows): at
-  most 8 launch quarters missing, and, where any are missing, a lower year
-  before the highest. Every row with quarterly revenue carries
+- `peak_sales.jsonl`: independent peak labels. For a product with quarterly
+  revenue the peak is its highest rolling four-quarter total in USD (of equal
+  totals, the earliest), given in `peak_window` and `peak_value`. Its
+  `peak_status` is:
+  - `observed` once two later totals follow it (`quarters_after_peak` >= 2),
+    none higher by construction;
+  - `line_ended_at_high` when the series stops, at a `series_end_quarter`
+    before the as-of quarter, before two totals follow. The high is a
+    benchmark, but time to peak is not known;
+  - `not_yet_observed` when a live series is still short of two later totals,
+    when an unreported quarter sits beside the highest window (it may have been
+    higher), or when the series has no complete window.
+
+  Products whose benchmark is annual (`series_role: peak_benchmark`) keep the
+  annual rule: the highest calendar year followed by two lower complete years.
+  A series that starts after launch gets a row only when its review judged it
+  (`series_starts_after_launch` is true on those rows): at most 8 launch
+  quarters missing, and, where any are missing, a lower window before the
+  highest. Every row with quarterly revenue carries
   `benchmark_rolling_4q_usd_millions` and `benchmark_window`, the highest
   four consecutive reported quarters in USD, which is the peak an uptake
   curve divides by unless a comparable published estimate is higher

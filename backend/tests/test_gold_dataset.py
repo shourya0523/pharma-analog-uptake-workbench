@@ -221,9 +221,13 @@ def test_peaks_rebuild_from_independent_gold_builder():
     assert stored == rebuilt
     observed = [row for row in stored if row["peak_status"] == "observed"]
     growing = [row for row in stored if row["peak_status"] == "not_yet_observed"]
-    assert len(observed) == json.loads((GOLD / "build_report.json").read_text())["observed_peaks"]
-    assert len(growing) == json.loads((GOLD / "build_report.json").read_text())["not_yet_observed_peaks"]
-    assert all(row["numeric_peak_available"] and row["peak_value"] is not None for row in observed)
+    ended = [row for row in stored if row["peak_status"] == "line_ended_at_high"]
+    report = json.loads((GOLD / "build_report.json").read_text())
+    assert len(observed) == report["observed_peaks"]
+    assert len(growing) == report["not_yet_observed_peaks"]
+    assert len(ended) == report["line_ended_at_high_peaks"]
+    assert len(observed) + len(growing) + len(ended) == len(stored)
+    assert all(row["numeric_peak_available"] and row["peak_value"] is not None for row in observed + ended)
     assert all(not row["numeric_peak_available"] and row["peak_value"] is None for row in growing)
 
 

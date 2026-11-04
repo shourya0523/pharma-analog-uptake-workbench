@@ -2,9 +2,9 @@
 
 The review decides whether such a series can carry a peak: how many quarters
 lie between launch and its first reported quarter, and whether its highest
-year can be read as the peak. A highest year with no lower year before it is
-not read as one when launch quarters are missing, because the true peak may
-sit in them. The checks below use invented products, so they state the rule
+rolling four-quarter window can be read as the peak. A highest window with no
+lower window before it is not read as one when launch quarters are missing,
+because the true peak may sit in them. The checks below use invented products, so they state the rule
 rather than any one series in gold.
 """
 
@@ -58,14 +58,14 @@ def test_a_series_still_rising_is_judged_not_yet_peaked():
     assert result["peak_judgement"] == BUILDER.NOT_YET_OBSERVED
 
 
-def test_a_highest_first_year_is_not_a_peak_once_launch_quarters_are_missing():
+def test_a_highest_first_window_is_not_a_peak_once_launch_quarters_are_missing():
     """The fall could be the tail of a peak the series never saw."""
     result = review([100, 90, 70], launch="2009Q1")
     assert result["launch_gap_quarters"] > 0
     assert result["peak_judgement"] == BUILDER.PEAK_MAY_PREDATE_SERIES
 
 
-def test_a_highest_first_year_is_a_peak_when_no_launch_quarter_is_missing():
+def test_a_highest_first_window_is_a_peak_when_no_launch_quarter_is_missing():
     result = review([100, 90, 70], launch="2010Q1")
     assert result["launch_gap_quarters"] == 0
     assert result["peak_judgement"] == BUILDER.PEAK_OBSERVED
@@ -91,14 +91,14 @@ def test_gold_peaks_after_launch_only_where_the_review_judged_the_series():
     coverage = {row["drug_name"]: row for row in
                 (json.loads(line) for line in (GOLD / "series_coverage.jsonl").read_text().splitlines() if line.strip())}
     after = [row for row in peaks if row.get("series_starts_after_launch")]
-    assert {row["peak_status"] for row in after} == {"observed", "not_yet_observed"}, (
-        "both judgements must be represented, or a check on one cannot fail")
+    assert {row["peak_status"] for row in after} == {"observed", "not_yet_observed", "line_ended_at_high"}, (
+        "every judgement must be represented, or a check on one cannot fail")
     for row in after:
-        assert coverage[row["drug_name"]]["peak_judgement"] in (BUILDER.PEAK_OBSERVED, BUILDER.NOT_YET_OBSERVED)
+        assert coverage[row["drug_name"]]["peak_judgement"] in BUILDER.JUDGED
         assert row["launch_gap_quarters"] <= BUILDER.SUBSTANTIAL_LAUNCH_GAP_QUARTERS
     unjudged = {name for name, row in coverage.items()
                 if row.get("series_starts_after_launch")
-                and row["peak_judgement"] not in (BUILDER.PEAK_OBSERVED, BUILDER.NOT_YET_OBSERVED)}
+                and row["peak_judgement"] not in BUILDER.JUDGED}
     assert unjudged, "no series is left unjudged, so the exclusion below cannot fail"
     assert unjudged.isdisjoint({row["drug_name"] for row in peaks if row.get("series_starts_after_launch")})
 
