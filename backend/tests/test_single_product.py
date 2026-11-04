@@ -98,3 +98,13 @@ def test_a_member_carrying_no_revenue_does_not_stop_the_single_product_reader():
         return Confirmation(False, [{"name": "NuVessa", "quote": "", "quote_found": False}])
 
     assert first_pass("Calderon", "Q2 2025", "Acme Pharma", get=get, confirm=refuse).status == "no_revenue_fact"
+
+
+def test_a_failed_confirmation_is_unconfirmed_not_a_broken_read():
+    get, _, _ = _single_filing(True)
+
+    def broken(product, passages):
+        raise RuntimeError("quota")
+
+    answer = first_pass("Calderon", "Q2 2025", "Acme Pharma", get=get, confirm=broken)
+    assert answer.status == "unconfirmed" and answer.value is None

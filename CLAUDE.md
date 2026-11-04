@@ -30,10 +30,13 @@ appears in `git ls-files`.
                       reference data that flows into gold.
     scripts/          builders and exporters for gold, profiles and workbooks.
     exports/          workbooks those scripts write.
-    backend/          the rebuild's Python code (uv). app/retrieval/ holds the
-                      XBRL reader (xbrl.py), the single-product reader, quarter
-                      derivation (derive.py, xbrl_quarter chains all three),
-                      the Gemini Google-Search probe and the source check.
+    backend/          the rebuild's Python code (uv). app/retrieval/pipeline.py
+                      runs every route for one product-quarter: XBRL (xbrl.py,
+                      single_product.py, derive.py), earnings releases
+                      (earnings.py, grid.py), grounded search checked against
+                      its source (gemini_search.py, verify.py), printed years
+                      to date (printed_derive.py); identity.py and fx.py serve
+                      them, ownership.py is a prototype.
     frontend/         the React + Vite app. It has no API to call yet.
 
 Nothing in this tree is a pipeline input yet. The previous codebase's pipeline

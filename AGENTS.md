@@ -26,6 +26,8 @@ Backend (`backend/`, Python, managed by `uv`):
 
 - Install: `cd backend && uv sync`.
 - Test: `uv run pytest -q` (offline; the Gemini client is faked).
+- Whole pipeline: `uv run python -m app.retrieval.pipeline "<product>" "Q2 2023" --issuer "<issuer>"`
+  (`--no-search` skips the paid grounded-search routes). Prints every route's attempt.
 - XBRL first pass: `app.retrieval.xbrl.first_pass(product, "Q2 2023", issuer)`
   reads the product's revenue from the issuer's 10-Q XBRL via EDGAR full-text
   search. Needs `SEC_USER_AGENT` with a contact address; SEC answers 403

@@ -222,7 +222,10 @@ def read_single_product(
         answer.candidates = [{"basis": basis}]
         return answer
     passages = sales_passages(filing_text(filing.get("primary") or b""))
-    verdict = confirm(answer.product, passages)
+    try:
+        verdict = confirm(answer.product, passages)
+    except Exception as exc:  # no confirmation is no single-product answer, not a broken read
+        verdict = Confirmation(False, [], f"confirmation failed: {type(exc).__name__}: {str(exc)[:120]}")
     answer.candidates = [{"basis": basis, "value": line.value, "concept": line.concept,
                           "confirmation": verdict.reason, "products": verdict.products}]
     if not verdict.single:
