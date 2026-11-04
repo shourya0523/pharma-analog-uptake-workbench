@@ -36,7 +36,8 @@ class Derived:
     """A quarter computed from two stated periods, with both inputs kept.
 
     `status`: derived | missing_input | inputs_differ | negative |
-    imprecise_input.
+    imprecise_input. A first quarter is six months less the second quarter,
+    both stated in the second-quarter 10-Q (method six_months_less_q2).
     `method`: full_year_less_nine_months | ytd_less_previous_ytd |
     full_year_less_quarters (each quarter stated, the sum is ours - can be a
     unit of the last digit off the issuer's own arithmetic).
@@ -50,6 +51,10 @@ class Derived:
     method: str | None = None
     inputs: list[dict[str, Any]] = field(default_factory=list)
     reason: str = ""
+    # How far the result may sit from the exact figure: half a unit of each
+    # input's declared last place, summed. A quarter the issuer printed itself
+    # can differ from the derived one by up to this much.
+    plus_minus: float | None = None
 
 
 def _period_end(year: int, n: int) -> dt.date:
@@ -92,7 +97,7 @@ def derive_quarter(
         return Derived("missing_input", product, period, reason="not a calendar quarter")
     n, year = end.month // 3, end.year
     if n == 1:
-        return Derived("missing_input", product, period, reason="a first quarter has no earlier year to date")
+        return _first_quarter(product, period, year, issuer, get=get, confirm=confirm, scope=scope)
 
     current = in_scope(year_to_date(product, year, n, issuer, get=get, confirm=confirm), scope)
     if current.status != "found":
@@ -133,7 +138,31 @@ def derive_quarter(
     if value < 0:
         return Derived("negative", product, period, value=value, unit=current.unit, method=method, inputs=inputs,
                        reason="a later year to date smaller than the earlier one: a restatement or a change of scope")
-    return Derived("derived", product, period, value=value, unit=current.unit, method=method, inputs=inputs)
+    return Derived("derived", product, period, value=value, unit=current.unit, method=method, inputs=inputs,
+                   plus_minus=rounding)
+
+
+def _first_quarter(product: str, period: str, year: int, issuer: str | None, *, get: Callable,
+                   confirm: Callable | None, scope: str) -> Derived:
+    """Q1 as the second-quarter 10-Q's six months less its own second quarter."""
+    six = in_scope(year_to_date(product, year, 2, issuer, get=get, confirm=confirm), scope)
+    q2 = in_scope(first_pass(product, f"Q2 {year}", issuer, get=get, confirm=confirm), scope)
+    inputs = [_input(six), _input(q2)]
+    method = "six_months_less_q2"
+    if six.status != "found" or q2.status != "found":
+        return Derived("missing_input", product, period, inputs=inputs, method=method,
+                       reason=f"six months: {six.status}; second quarter: {q2.status}")
+    if not _same_line(six, q2):
+        return Derived("inputs_differ", product, period, inputs=inputs, method=method,
+                       reason="the six months and the quarter are not the same reported line")
+    value = six.value - q2.value
+    rounding = declared_slack(six.decimals) + declared_slack(q2.decimals)
+    if value < 0:
+        return Derived("negative", product, period, value=value, unit=six.unit, method=method, inputs=inputs)
+    if value > 0 and rounding > MAX_ROUNDING_SHARE * value:
+        return Derived("imprecise_input", product, period, value=value, unit=six.unit, method=method, inputs=inputs)
+    return Derived("derived", product, period, value=value, unit=six.unit, method=method, inputs=inputs,
+                   plus_minus=rounding)
 
 
 def xbrl_quarter(
@@ -149,14 +178,24 @@ def xbrl_quarter(
 
     Derivation is tried for a calendar Q4 the issuer's 10-Qs do not give (most
     filers end their year in December, so none files one) and when the
-    issuer's 10-Q tags the product but not for the three months alone.
+    issuer's 10-Q gives no figure for the three months alone. Failing that, a
+    Q1-Q3 is read from the comparative column of the same quarter's 10-Q a
+    year on (`comparative` set on the answer).
     `scope` is "worldwide" or "us"; see `in_scope`.
     """
     answer = first_pass(product, period, issuer, get=get, confirm=confirm)
     end = quarter_end(period)
     q4_without_10q = end is not None and end.month == 12 and answer.status != "found"
-    if q4_without_10q or answer.status == "no_revenue_fact":
+    if q4_without_10q or answer.status in ("no_revenue_fact", "no_member", "no_filing"):
         derived = derive_quarter(product, period, issuer, get=get, confirm=confirm, scope=scope)
-        if derived.status == "derived" or q4_without_10q:
+        if derived.status == "derived":
+            return derived
+        if end is not None and not q4_without_10q:
+            later = in_scope(read_span(product, period, end, "10-Q", YTD_DAYS[1], issuer, get=get, confirm=confirm,
+                                       filing_end=dt.date(end.year + 1, end.month, end.day)), scope)
+            if later.status == "found":
+                later.comparative = True
+                return later
+        if q4_without_10q:
             return derived
     return in_scope(answer, scope)

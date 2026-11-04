@@ -63,6 +63,8 @@ class QuarterResult:
     source: str | None = None
     evidence: str | None = None
     identity: dict[str, Any] | None = None
+    plus_minus: float | None = None  # a derived figure's spread from the filer's declared rounding
+    corroboration: str | None = None  # a second route that agreed with the answer
     alternatives: list[dict[str, Any]] = field(default_factory=list)
     attempts: list[dict[str, Any]] = field(default_factory=list)
 
@@ -157,8 +159,18 @@ def quarter_revenue(
                 result.alternatives.append({"route": "xbrl", **c})
         if _found(outcome):
             derived = isinstance(outcome, Derived)
+            if derived and scope == "worldwide":
+                printed_figure = _printed_within(outcome, product, period, issuer, earnings, run)
+                if printed_figure is not None:
+                    _record(result, "earnings", printed_figure)
+                    return _answer(result, end, usd, value=printed_figure.value, currency=printed_figure.currency,
+                                   route="earnings", source=printed_figure.url, evidence=printed_figure.scope,
+                                   corroboration=f"xbrl:{outcome.method} {outcome.value:,.0f} "
+                                                 f"± {outcome.plus_minus or 0:,.0f}")
+            comparative = getattr(outcome, "comparative", False)
             return _answer(result, end, usd, value=outcome.value, currency=_currency_of(outcome.unit),
-                           route=f"xbrl:{outcome.method}" if derived else "xbrl",
+                           route=f"xbrl:{outcome.method}" if derived else ("xbrl:comparative" if comparative else "xbrl"),
+                           plus_minus=outcome.plus_minus if derived else None,
                            match=None if derived else outcome.match,
                            source=(outcome.inputs[0].get("filing_url") if derived and outcome.inputs else
                                    getattr(outcome, "filing_url", None)),
@@ -211,6 +223,21 @@ def quarter_revenue(
                 return _answer(result, end, usd, value=derived.value, currency=derived.unit,
                                route=f"printed:{derived.method}", source=derived.inputs[0].get("source_url"))
     return result
+
+
+def _printed_within(derived: Derived, product: str, period: str, issuer: str | None, earnings: Callable,
+                    run: Callable) -> Any:
+    """The issuer's printed quarter, if its release prints one within the derived
+    figure's declared spread: the issuer's own figure, which the derivation
+    corroborates, rather than ours, which can sit a unit of the last place
+    away from it."""
+    printed_figure = run("earnings", lambda: earnings(product, period, issuer))
+    if printed_figure is None or getattr(printed_figure, "status", None) != "found":
+        return None
+    if _currency_of(derived.unit) != printed_figure.currency:
+        return None
+    spread = (derived.plus_minus or 0.0) + 1e-6
+    return printed_figure if abs(printed_figure.value - derived.value) <= spread else None
 
 
 def _answer(result: QuarterResult, end: dt.date, usd: Callable, **fields: Any) -> QuarterResult:

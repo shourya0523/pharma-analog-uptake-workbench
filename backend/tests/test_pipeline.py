@@ -113,3 +113,19 @@ def test_an_alias_check_that_fails_leaves_the_route_its_own_answer():
     assert result.status == "not_found"
     assert [a["route"] for a in result.attempts] == ["xbrl", "earnings"]
     assert "descriptor check failed" in result.attempts[0]["alias_error"]
+
+
+def test_a_printed_quarter_within_the_derived_spread_is_the_answer():
+    derived = Derived("derived", "Calderon", "Q4 2013", value=52.048e6, unit="iso4217:USD",
+                      method="full_year_less_nine_months", inputs=[{"filing_url": "https://sec.example/10k.htm"}],
+                      plus_minus=1000.0)
+    printed_figure = SimpleNamespace(status="found", value=52.047e6, currency="USD", url="https://sec.example/ex99.htm",
+                                     scope="Calderon 52,047", later=False, readings=[], filer="ACME")
+    result = quarter_revenue("Calderon", "Q4 2013", "Acme", xbrl=lambda *a, **k: derived,
+                             earnings=lambda *a: printed_figure, **BASE)
+    assert (result.route, result.value) == ("earnings", 52.047e6)
+    assert result.corroboration.startswith("xbrl:full_year_less_nine_months 52,048,000 ± 1,000")
+
+    far = SimpleNamespace(**{**vars(printed_figure), "value": 60e6})
+    result = quarter_revenue("Calderon", "Q4 2013", "Acme", xbrl=lambda *a, **k: derived, earnings=lambda *a: far, **BASE)
+    assert (result.route, result.value, result.plus_minus) == ("xbrl:full_year_less_nine_months", 52.048e6, 1000.0)

@@ -35,6 +35,9 @@ PERIOD_END_SLACK_DAYS = 10
 # A quarter's context runs about 91 days; this admits 13-week and 14-week
 # fiscal quarters and nothing as long as a half year.
 QUARTER_DAYS = range(80, 100)
+# Filings tried by the single-product reader when no issuer is named; the
+# seller's own report is among the first full-text search returns.
+MAX_UNNAMED_SINGLE_PRODUCT = 3
 # SEC asks clients to stay under ten requests a second.
 REQUEST_GAP_SECONDS = 0.15
 
@@ -105,6 +108,7 @@ class XbrlAnswer:
     period_end: str | None = None
     decimals: int | None = None
     scope: str = "worldwide"
+    comparative: bool = False  # read from a later filing's prior-period column
     filer: str | None = None
     cik: str | None = None
     accession: str | None = None
@@ -287,14 +291,37 @@ def parse_facts(document: bytes) -> tuple[dict[str, dict], list[dict]]:
     return contexts, facts
 
 
-def product_facts(contexts: dict[str, dict], facts: list[dict], product: str) -> list[Fact]:
-    """Every fact whose context carries a member resolving to the product."""
+def prefixed(member: str, product: str) -> bool:
+    """Whether the member names something before the product
+    (`RespiratoryProductsCalderonMember`, `NuVessaMember` for Vessa)."""
+    local = re.sub(r"[^a-z0-9]", "", member.split(":")[-1].lower().removesuffix("member"))
+    return not any(local.startswith(re.sub(r"[^a-z0-9]", "", a.lower())) for a in re.split(r"\s*/\s*", product))
+
+
+def printed_alone(product: str, text: str) -> bool:
+    """Whether the filing prints the product as a word of its own."""
+    return any(re.search(rf"(?<![a-z0-9]){re.escape(a.lower())}(?![a-z0-9])", text)
+               for a in re.split(r"\s*/\s*", product) if a)
+
+
+def product_facts(contexts: dict[str, dict], facts: list[dict], product: str, text: str | None = None) -> list[Fact]:
+    """Every fact whose context carries a member resolving to the product.
+
+    A capital inside a member name reads as a word break, so `NuVessaMember`
+    would resolve to a product named Vessa as readily as
+    `RespiratoryProductsCalderonMember` resolves to Calderon. Given the
+    filing's `text`, a member that names something before the product counts
+    only if the filing also prints the product as a word of its own - which a
+    category prefix allows and a brand's own first half does not.
+    """
+    alone = printed_alone(product, text.lower()) if text is not None else True
     found = []
     for f in facts:
         ctx = contexts.get(f["context"])
         if not ctx:
             continue
-        hits = [(m, member_match(m, product)) for m in ctx["members"].values()]
+        hits = [(m, member_match(m, product)) for m in ctx["members"].values()
+                if alone or not prefixed(m, product)]
         hit = next(((m, how) for m, how in hits if how), None)
         if hit:
             found.append(Fact(f["concept"], f["value"], f["unit"], ctx["start"], ctx["end"], ctx["members"], hit[1],
@@ -543,6 +570,11 @@ def in_scope(answer: XbrlAnswer, scope: str) -> XbrlAnswer:
     return scoped
 
 
+def _visible_text(document: bytes) -> str:
+    """The document's text, tags dropped, lower-cased - for word checks."""
+    return re.sub(r"\s+", " ", re.sub(rb"<[^>]+>", b" ", document).decode("utf-8", "ignore")).lower()
+
+
 def first_pass(
     product: str,
     period: str,
@@ -578,31 +610,42 @@ def read_span(
     *,
     get: Callable = sec_get,
     confirm: Callable | None = None,
+    filing_end: dt.date | None = None,
 ) -> XbrlAnswer:
     """The product's revenue for the span `days` long ending at `end`, from
     filings of `form` (a 10-Q's quarter or year to date, a 10-K's year).
 
+    `filing_end`, when later than `end`, reads the span from a later filing's
+    comparative column: the 10-Q for the same quarter a year on tags the prior
+    year's quarter beside its own.
+
     When the named issuer's filing tags no member for the product, the
     single-product reader is tried on it (`app.retrieval.single_product`):
     a filer that sells only this product reports it as its product revenue.
-    It runs only with an issuer named, since otherwise nothing says which
-    filing mentioning the product is the seller's, and only when `confirm` is
-    given, since the figure is accepted only once the filing's own text says
-    no other product was sold.
+    With no issuer named, it is tried on each filing mentioning the product
+    when none tags it, and accepted only if exactly one filer is confirmed: a
+    competitor that mentions the product sells something else, and its own
+    filing says so. It runs only when `confirm` is given, since the figure is
+    accepted only once the filing's own text says no other product was sold.
     """
     answer = XbrlAnswer("no_filing", product, label)
     results: list[tuple[dict, str, Fact | None, list[Fact], str]] = []
     issuer_filings: list[tuple[dict, dict, list[dict], str]] = []
-    for filing in find_filings(product, end, form, get):
+    all_filings: list[tuple[dict, dict, list[dict], str]] = []
+    for filing in find_filings(product, filing_end or end, form, get):
         answer.filings_checked.append(filing["accession"])
         try:
             document, url = instance_document(filing, get)
         except httpx.HTTPError:
             continue
         contexts, facts = parse_facts(document)
+        if filing_end:
+            filing = {**filing, "period_end": end.isoformat()}
         if issuer and names_issuer(filing["filer"], issuer):
             issuer_filings.append((filing, contexts, facts, url))
-        found = product_facts(contexts, facts, product)
+        all_filings.append((filing, contexts, facts, url))
+        text = _visible_text(filing.get("primary") or document)
+        found = product_facts(contexts, facts, product, text)
         if not found:
             continue
         status, fact, candidates = choose(found, dt.date.fromisoformat(filing["period_end"]), days)
@@ -633,6 +676,18 @@ def read_span(
             ]
             return answer
         results = named
+    if not issuer and not results and confirm is not None and all_filings:
+        from app.retrieval.single_product import read_single_product
+
+        confirmed = []
+        for filing, contexts, facts, url in all_filings[:MAX_UNNAMED_SINGLE_PRODUCT]:
+            single = read_single_product(XbrlAnswer("no_member", product, label), filing, contexts, facts, url,
+                                         days, confirm)
+            if single.status == "found":
+                confirmed.append(single)
+        if len(confirmed) == 1:
+            confirmed[0].filings_checked = list(answer.filings_checked)
+            return confirmed[0]
     if not results:
         answer.status = "no_member" if answer.filings_checked else "no_filing"
         return answer

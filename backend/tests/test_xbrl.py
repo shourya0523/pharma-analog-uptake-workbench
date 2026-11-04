@@ -261,3 +261,12 @@ def test_a_combined_member_counts_as_found_and_says_so():
     get = _fake_sec([("0000000001-23-000001", 1, "ACME PHARMA (CIK 1)", "acme-20230630.htm", inline_doc)])
     answer = first_pass("Calderon", "Q2 2023", "Acme Pharma", get=get)
     assert answer.status == "found" and answer.match == "combined" and answer.value == 1_234_500_000
+
+
+def test_a_brands_second_half_is_not_a_product_the_filing_never_prints_alone():
+    contexts, facts = parse_facts(INLINE.replace(b"RespiratoryProductsCalderonMember", b"NuVessaMember"))
+    assert product_facts(contexts, facts, "Vessa", text="net sales of nuvessa rose") == []
+    assert product_facts(contexts, facts, "Vessa", text="net sales of vessa rose")
+    contexts, facts = parse_facts(INLINE)
+    assert product_facts(contexts, facts, "Calderon", text="respiratory products: calderon")
+    assert product_facts(contexts, facts, "Calderon", text=None)

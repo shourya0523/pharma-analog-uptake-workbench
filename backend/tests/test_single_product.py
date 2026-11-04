@@ -74,11 +74,22 @@ def test_an_unconfirmed_filer_yields_no_value():
     assert answer.status == "multi_product" and answer.value is None
 
 
-def test_without_a_confirmer_or_an_issuer_the_single_product_reader_is_not_used():
+def test_without_a_confirmer_the_single_product_reader_is_not_used():
     get, confirm, seen = _single_filing(True)
     assert first_pass("Calderon", "Q2 2025", "Acme Pharma", get=get).status == "no_member"
-    assert first_pass("Calderon", "Q2 2025", get=get, confirm=confirm).status == "no_member"
+    assert first_pass("Calderon", "Q2 2025", get=get).status == "no_member"
     assert not seen
+
+
+def test_with_no_issuer_named_a_single_confirmed_filer_answers_and_two_do_not():
+    get, confirm, seen = _single_filing(True)
+    answer = first_pass("Calderon", "Q2 2025", get=get, confirm=confirm)
+    assert answer.status == "found" and answer.match == "single_product" and answer.filer.startswith("ACME")
+
+    content = inline([(REV, 40e6, *Q, {"srt:ProductOrServiceAxis": "us-gaap:ProductMember"})], text=TEXT)
+    two = fake_sec([filing("10-Q", "2025-06-30", content),
+                    filing("10-Q", "2025-06-30", content, cik=2, filer="BETA BIO (CIK 2)")])
+    assert first_pass("Calderon", "Q2 2025", get=two, confirm=confirm).status == "no_member"
 
 
 def test_a_member_carrying_no_revenue_does_not_stop_the_single_product_reader():

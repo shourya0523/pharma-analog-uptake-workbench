@@ -53,7 +53,7 @@ def test_a_tagged_quarter_is_read_not_derived():
 def test_inputs_on_different_lines_are_refused():
     filings = _year()
     other = {"srt:ProductOrServiceAxis": "acme:RespiratoryCalderonMember"}
-    filings[3]["content"] = inline([(REV, 312e6, "2025-01-01", "2025-12-31", other)])
+    filings[3]["content"] = inline([(REV, 312e6, "2025-01-01", "2025-12-31", other)], text="Respiratory: Calderon")
     assert derive_quarter("Calderon", "Q4 2025", "Acme Pharma", get=fake_sec(filings)).status == "inputs_differ"
 
 
@@ -63,10 +63,26 @@ def test_a_shrinking_year_to_date_is_refused_as_negative():
     assert result.status == "negative" and result.value == -29e6
 
 
-def test_q1_and_a_missing_10k_are_missing_input():
+def test_q1_is_the_stated_six_months_less_q2_and_a_missing_10k_is_missing_input():
     get = fake_sec(_year()[:3])
-    assert derive_quarter("Calderon", "Q1 2025", "Acme Pharma", get=get).status == "missing_input"
+    q1 = derive_quarter("Calderon", "Q1 2025", "Acme Pharma", get=get)
+    assert (q1.status, q1.method, q1.value) == ("derived", "six_months_less_q2", 67e6)
     assert derive_quarter("Calderon", "Q4 2025", "Acme Pharma", get=get).status == "missing_input"
+
+
+def test_a_derived_quarter_carries_its_inputs_declared_rounding():
+    filings = _year()
+    for f in filings:
+        f["content"] = f["content"].replace(b'scale="0"', b'scale="0" decimals="-3"')
+    result = derive_quarter("Calderon", "Q4 2025", "Acme Pharma", get=fake_sec(filings))
+    assert result.status == "derived" and result.plus_minus == 1000.0
+
+
+def test_a_quarter_missing_from_its_own_10q_is_read_from_next_years_comparative_column():
+    later = filing("10-Q", "2026-06-30", inline([(REV, 95e6, "2026-04-01", "2026-06-30", CAL),
+                                                 (REV, 80e6, "2025-04-01", "2025-06-30", CAL)]))
+    result = xbrl_quarter("Calderon", "Q2 2025", "Acme Pharma", get=fake_sec([later]))
+    assert (result.status, result.value, result.comparative) == ("found", 80e6, True)
 
 
 def test_a_year_tagged_at_coarse_precision_is_refused_as_imprecise():
