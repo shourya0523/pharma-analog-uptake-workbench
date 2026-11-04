@@ -68,7 +68,8 @@ FONT = "Arial"
 THIN = Side(style="thin", color="BFBFBF")
 GRID = Border(left=THIN, right=THIN, top=THIN, bottom=THIN)
 REVENUE_FILL = "C55A11"
-ID_COLUMNS = ["drug_name", "generic_name", "launch_indication"]
+ID_COLUMNS = ["drug_name", "generic_name", "launch_indication", "in_requested_list"]
+TARGETS = REPO / "docs" / "sourcing" / "target_products.csv"
 # Fields of a peak_records() row, in the order the Revenue section shows them;
 # currencies_reported is added here from the product's gold rows.
 REVENUE_COLUMNS = [
@@ -298,7 +299,9 @@ def main() -> None:
                        "peak rule as formulas.")
     series_row = {item["drug_name"]: 3 + index for index, item in enumerate(series)}
     annual_row = {item["drug_name"]: 3 + index for index, item in enumerate(gold["annual_products"])}
+    requested = {row["brand_name"] for row in csv.DictReader(TARGETS.open(newline=""))}
     for profile in profiles:
+        profile["in_requested_list"] = "yes" if profile["drug_name"] in requested else "no"
         profile.update(revenue_cells(profile["drug_name"], gold, peak_sheet, annual_sheet, series_row, annual_row))
     row = 1
     cell(ws, row, 1, "Analog selection criteria", bold=True, size=14, color=INK)

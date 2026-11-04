@@ -186,7 +186,8 @@ Q_COLS = [
 ]
 write_sheet(
     wb, "Quarterly Revenue", Q_COLS, quarterly,
-    note="Every reported quarter in gold. value_normalized_usd_millions is the figure to use; "
+    note="Every reported quarter in gold that this workbook carries; website-sourced quarters are "
+         "withheld (Quarterly Matrix marks them). value_normalized_usd_millions is the figure to use; "
          "value_reported and source_value_reported preserve the issuer's own number and unit.",
     widths={"drug_name": 18, "generic_name": 18, "manufacturer": 20, "benchmark_identity": 30,
             "revenue_scope": 22, "geography": 16, "value_normalized_usd_millions": 14,
@@ -803,15 +804,30 @@ def line(row, label, value=None, *, font=BODY, note=None, fmt=None):
     return row + 1
 
 
+# The requested-list counts read Product Summary, where a product whose benchmark is
+# annual takes its status from Annual Peaks.
+SUMMARY_ROWS = f"{2 + 1}:{2 + len(profiles)}"
+status_col = f"'Product Summary'!$N$3:$N${2 + len(profiles)}"
+requested_col = f"'Product Summary'!$Q$3:$Q${2 + len(profiles)}"
+
+
+def requested_count(status):
+    return f'=COUNTIFS({status_col},"{status}",{requested_col},"yes")'
+
+
+requested_complete = "=" + "+".join(requested_count(s)[1:] for s in (PEAK_OBSERVED, NOT_YET, LINE_ENDED))
+REPLACED = list(csv.DictReader((REPO / "docs" / "sourcing" / "replaced_products.csv").open(newline="")))
+
 r = 1
 read.cell(r, 1, "Pharma Product Revenue - Gold Dataset").font = TITLE
 r += 1
 read.cell(r, 1, f"Independently researched from issuer filings and releases. "
                 f"As of {manifest['as_of_quarter']}. "
                 f"{len(REQUESTED & set(SUMMARY_STATUS))} requested products plus "
-                f"{len(set(SUMMARY_STATUS) - REQUESTED)} reference products from the original "
-                f"pulmonary-hypertension set and its comparators (Product Summary, "
-                f"'in requested list'). Rows whose source is a company website are withheld from this "
+                f"{len(set(SUMMARY_STATUS) - REQUESTED)} reference products: the original "
+                f"pulmonary-hypertension set, its comparators, and the {len(REPLACED)} requested products "
+                f"that could not be completed and were replaced (docs/sourcing/replaced_products.csv says "
+                f"why for each). Product Summary's 'in requested list' marks the requested products. Rows whose source is a company website are withheld from this "
                 f"workbook, apart from those for {', '.join(sorted(EXEMPT_PRODUCTS))}: a withheld quarter "
                 f"reads 'withheld' in Quarterly Matrix, and nothing computed from one is shown.").font = NOTE
 r += 2
@@ -850,7 +866,8 @@ CONTENTS = [
      "so uptake curves line up at the start of launch instead of at a shared date."),
     ("Peak-Normalized Uptake", len(normalized),
      "The launch-aligned values as a percentage of each product's quarterly peak benchmark, "
-     "so a product still growing is not read as though it were already mature."),
+     "limited to 0-100% and held at 100% after an observed peak while Settings says so, so a "
+     "product still growing is not read as though it were already mature."),
     ("Annual Revenue", len(annual),
      "Annual figures: peak benchmarks in their own right, plus annual context for quarterly series."),
     ("Companion Series", len(companions),
@@ -878,7 +895,8 @@ CONTENTS = [
     ("Source Index", len(sources),
      "Every distinct filing cited, and how many rows depend on it."),
     ("Build Manifest", None,
-     "The dataset's own manifest and build report, as generated."),
+     "Gold's own manifest and build report, as generated. Its counts are gold's, before this "
+     "workbook withholds website-sourced rows, so they differ from the counts on this sheet."),
 ]
 for label, ref, description in CONTENTS:
     link = read.cell(r, 1, label)
@@ -928,18 +946,29 @@ STATS = [
      "Counted from the Quarterly Revenue sheet."),
     ("Quarterly observations withheld", len(quarterly_withheld),
      "Reported quarters from a source this workbook does not carry."),
-    ("Quarterly coverage", report["quarterly_coverage_pct"],
-     "No missing quarter in any series, each measured to its own series_end_quarter."),
+    ("Quarterly coverage in gold", report["quarterly_coverage_pct"],
+     "Gold has no missing quarter in any series, each measured to its own series_end_quarter. "
+     "This workbook withholds website-sourced quarters, which read 'withheld' in Quarterly Matrix."),
     ("Series current to " + latest_quarter, len(refresh) - len(behind),
      f"Of {len(refresh)} quarterly series. {len(extendable)} of the rest stop at a sourcing "
      f"boundary rather than because the issuer stopped - see Refresh Status."),
-    ("Annual observations", report["annual_rows"], ""),
+    ("Annual observations", len(annual),
+     f"Counted from the Annual Revenue sheet; {len(annual_withheld)} more are withheld."),
+    ("Requested products complete", requested_complete,
+     "Of the requested list (Product Summary, 'in requested list'): a judged peak status and a "
+     "benchmark, so an uptake curve. Counted by formula, so it follows Settings."),
+    ("Requested: peak observed", requested_count(PEAK_OBSERVED), ""),
+    ("Requested: not yet peaked", requested_count(NOT_YET), ""),
+    ("Requested: line ended at its high", requested_count(LINE_ENDED), ""),
     ("Series with an observed peak", f'=COUNTIF({peak_sheet.column("peak_status")},"{PEAK_OBSERVED}")',
-     "Counted by formula from Peak Benchmarks, so it follows Settings."),
+     f"Of all {len(normalized)} quarterly series, counted by formula from Peak Benchmarks, so it "
+     f"follows Settings."),
     ("Series not yet peaked", f'=COUNTIF({peak_sheet.column("peak_status")},"{NOT_YET}")', ""),
     ("Series whose line ended at its high", f'=COUNTIF({peak_sheet.column("peak_status")},"{LINE_ENDED}")', ""),
     ("Series whose peak is unknown", f'=COUNTIF({peak_sheet.column("peak_status")},"{RESTRICTED}")',
      "A withheld quarter falls at or after the highest window."),
+    ("Series not judged", f'=COUNTIF({peak_sheet.column("peak_status")},"not judged")',
+     "Too much launch history missing for the peak to be read."),
     ("Series on a consensus peak", f'=COUNTIF({peak_sheet.column("peak_basis")},"consensus estimate")',
      f"Of {len(normalized)} series: their benchmark is a published estimate above anything they have reported."),
     ("Evidenced exclusions", report["excluded_products"], ""),
