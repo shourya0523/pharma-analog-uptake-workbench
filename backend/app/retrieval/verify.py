@@ -41,9 +41,11 @@ _ELISION = re.compile(r"\.\.\.|…|\|")
 class Verification:
     """What the cited document showed. `status` is the one-word verdict."""
 
-    status: str  # verified | value_not_near_product | value_absent | unfetchable | no_value | no_source
+    status: str  # verified | verified_from_archive | value_not_near_product | value_absent | refused_by_host | unfetchable | no_value | no_source
     source_url: str | None
     fetched: bool
+    needs_review: bool = False  # the host refused us; a person has to check the figure
+    archive_url: str | None = None
     product_mentions: int = 0
     value_anywhere: bool = False
     value_near_product: bool = False
@@ -53,11 +55,24 @@ class Verification:
     error: str | None = None
 
 
-def verify_answer(answer: dict[str, Any] | None, product: str, *, fetch=None) -> Verification:
+# Statuses a host answers a declared, non-browser client with when it will not
+# serve it: a refusal, not a missing page.
+REFUSALS = {401, 403, 429, 503}
+ARCHIVE_LOOKUP = "https://archive.org/wayback/available"
+
+
+def verify_answer(answer: dict[str, Any] | None, product: str, *, fetch=None, archive: Any = None) -> Verification:
     """Fetch `answer["source_url"]` and look for the answer's value and quote in it.
 
     `answer` is the parsed JSON object from the grounded call. `fetch` takes a
     URL and returns the document's text; it defaults to `fetch_text`.
+
+    A host that refuses the client is `refused_by_host` and `needs_review`:
+    the page exists, but this client may not read it, and it is not disguised
+    to get past that. With `archive` - a function from a URL to an archived
+    copy's `(text, archive_url)`, or None - the check runs on that copy and is
+    `verified_from_archive` if it holds; `archived_copy` is the one used in
+    practice.
     """
     answer = answer or {}
     url = answer.get("source_url")
@@ -66,10 +81,17 @@ def verify_answer(answer: dict[str, Any] | None, product: str, *, fetch=None) ->
         return Verification("no_value", url, fetched=False)
     if not url:
         return Verification("no_source", None, fetched=False)
+    archive_url = None
     try:
         text = (fetch or fetch_text)(url)
     except Exception as exc:  # any failure to read the page leaves nothing to check
-        return Verification("unfetchable", url, fetched=False, error=f"{type(exc).__name__}: {exc}")
+        refused = getattr(getattr(exc, "response", None), "status_code", None) in REFUSALS
+        error = f"{type(exc).__name__}: {exc}"
+        copy = archive(url) if (refused and archive) else None
+        if not copy:
+            return Verification("refused_by_host" if refused else "unfetchable", url, fetched=False,
+                                needs_review=refused, error=error)
+        text, archive_url = copy
 
     flat = _flatten(text)
     mentions = [m.end() for m in re.finditer(re.escape(_flatten(product)), flat)]
@@ -84,7 +106,7 @@ def verify_answer(answer: dict[str, Any] | None, product: str, *, fetch=None) ->
     found = sum(1 for s in segments if s in flat)
 
     if near is not None:
-        status = "verified"
+        status = "verified_from_archive" if archive_url else "verified"
     elif positions:
         status = "value_not_near_product"
     else:
@@ -99,6 +121,7 @@ def verify_answer(answer: dict[str, Any] | None, product: str, *, fetch=None) ->
         quote_segments_found=found,
         quote_segments=len(segments),
         near_text=flat[max(0, near.start() - 80) : near.end() + 40] if near else None,
+        archive_url=archive_url,
     )
 
 
@@ -130,6 +153,21 @@ def _in_row(flat: str, start: int, value: Any) -> re.Match | None:
         if figures >= MAX_ROW_FIGURES:
             return None
     return None
+
+
+def archived_copy(url: str) -> tuple[str, str] | None:
+    """The Internet Archive's closest snapshot of `url` as `(text, snapshot_url)`,
+    fetched with the same declared client, or None if there is none or it
+    cannot be reached."""
+    agent = os.environ.get("SEC_USER_AGENT") or DEFAULT_USER_AGENT
+    try:
+        found = httpx.get(ARCHIVE_LOOKUP, params={"url": url}, headers={"User-Agent": agent}, timeout=60).json()
+        snapshot = (found.get("archived_snapshots") or {}).get("closest") or {}
+        if not snapshot.get("available") or not snapshot.get("url"):
+            return None
+        return fetch_text(snapshot["url"]), snapshot["url"]
+    except Exception:  # an archive that cannot be reached is the same as no copy
+        return None
 
 
 def fetch_text(url: str) -> str:

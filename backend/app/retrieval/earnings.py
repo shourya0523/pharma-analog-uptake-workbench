@@ -15,6 +15,13 @@ it against the exhibit:
 - the line is the filer's own product sales, not a royalty, collaboration,
   licence, milestone or alliance line on someone else's sales.
 
+When the quarter's own releases do not print the product - it was still in
+the pipeline, or the release gave only a year to date - the figure often
+appears later as a comparative column. The next quarter's releases and those a
+year on are then read for the same quarter; the period labels must still name
+it, and a column marked restated or re-presented is refused, since its basis
+is no longer the one first reported.
+
 Every filer whose exhibit passes is returned, labelled with its own row as
 printed, so a product sold by partners in different territories comes back as
 two readings rather than one guess. With an issuer named, its reading is the
@@ -54,7 +61,9 @@ Below are passages from a company's earnings-release exhibit filed with the SEC.
 Find the net sales the company itself reports for the product "{product}" for
 the three months ended {end} ({label}). An issuer whose fiscal year does not
 start in January may call that quarter by another name; use the column for
-those dates.
+those dates. The passages may come from a later release that prints this
+quarter as a comparative column beside a newer one; then use the column for
+this quarter, not the newer one.
 
 If the company prints U.S. and international lines and a total, give the total.
 If the only line naming the product is a royalty, collaboration, licence,
@@ -89,12 +98,16 @@ class Reading:
     currency: str | None = None
     row_quote: str | None = None
     period_labels: list[str] = field(default_factory=list)
+    released_after: str | None = None  # the quarter whose release this is, when later than the target
     reason: str = ""
 
 
 @dataclass
 class EarningsAnswer:
     """The answer for one product-quarter, with every filer's reading.
+
+    `later` is true when the figure came from a later release's comparative
+    column.
 
     `status`: found | other_filer (only a filer other than the named issuer
     passed) | several_sellers (no issuer named, and filers disagree) |
@@ -111,6 +124,7 @@ class EarningsAnswer:
     filer: str | None = None
     url: str | None = None
     scope: str | None = None
+    later: bool = False
     readings: list[Reading] = field(default_factory=list)
 
 
@@ -208,6 +222,7 @@ def check(answer: dict[str, Any], exhibit_text: str, product: str, end: dt.date)
     """`(status, reason)` for a model answer against the exhibit it read."""
     if not answer.get("found"):
         return "not_found", "the model found no line for the product"
+    restated = re.compile(r"restat|re-present|represent|recast|as adjusted|revised", re.IGNORECASE)
     flat = _flat(exhibit_text)
     quote = str(answer.get("row_quote") or "")
     labels = [str(x) for x in (answer.get("period_labels") or []) if str(x).strip()]
@@ -223,6 +238,8 @@ def check(answer: dict[str, Any], exhibit_text: str, product: str, end: dt.date)
     evidence = " ".join(labels) if labels else quote
     if not names_quarter(evidence, end):
         return "wrong_period", f"{evidence[:120]!r} does not name the quarter"
+    if restated.search(evidence):
+        return "restated_basis", f"the column is marked {restated.search(evidence).group()!r}"
     if answer.get("kind") != "product_sales" or _NOT_OWN_SALES.search(quote):
         return "not_own_sales", f"kind {answer.get('kind')!r}; row: {quote[:80]!r}"
     unit = str(answer.get("unit") or "").lower()
@@ -291,6 +308,14 @@ def read_exhibit(exhibit: dict, product: str, end: dt.date, label: str, *, get: 
     return reading
 
 
+def _later_release_ends(end: dt.date) -> list[dt.date]:
+    """The next quarter's end and the same quarter's end a year on."""
+    month = end.month % 12 + 3
+    year = end.year + (1 if end.month == 12 else 0)
+    next_end = dt.date(year, month, calendar.monthrange(year, month)[1])
+    return [next_end, dt.date(end.year + 1, end.month, end.day)]
+
+
 def read_earnings(
     product: str,
     period: str,
@@ -298,32 +323,49 @@ def read_earnings(
     *,
     get: Callable = sec_get,
     ask: Callable = gemini_reader,
+    later: bool = True,
 ) -> EarningsAnswer:
-    """The product's sales for calendar quarter `period` from results exhibits."""
+    """The product's sales for calendar quarter `period` from results exhibits:
+    its own quarter's releases first, then (with `later`) later releases'
+    comparative columns."""
     end = quarter_end(period)
     if end is None:
         return EarningsAnswer("not_a_quarter", product, period)
-    exhibits = find_exhibits(product, end, get=get)
-    if issuer:
-        exhibits.sort(key=lambda e: not names_issuer(e["filer"], issuer))
-    exhibits = exhibits[:MAX_EXHIBITS]
-    answer = EarningsAnswer("no_exhibit" if not exhibits else "not_found", product, period)
-    answer.readings = [read_exhibit(e, product, end, period, get=get, ask=ask) for e in exhibits]
-    accepted = [r for r in answer.readings if r.status == "accepted"]
+    answer = EarningsAnswer("no_exhibit", product, period)
+    for release_end in [end] + (_later_release_ends(end) if later else []):
+        exhibits = find_exhibits(product, release_end, get=get)
+        if issuer:
+            exhibits.sort(key=lambda e: not names_issuer(e["filer"], issuer))
+        exhibits = exhibits[:MAX_EXHIBITS]
+        readings = [read_exhibit(e, product, end, period, get=get, ask=ask) for e in exhibits]
+        if release_end != end:
+            for r in readings:
+                r.released_after = f"Q{release_end.month // 3} {release_end.year}"
+        answer.readings += readings
+        if exhibits and answer.status == "no_exhibit":
+            answer.status = "not_found"
+        if _settle(answer, readings, issuer):
+            answer.later = release_end != end
+            return answer
+    return answer
+
+
+def _settle(answer: EarningsAnswer, readings: list[Reading], issuer: str | None) -> bool:
+    """Fill `answer` from this round's accepted readings; true once settled."""
+    accepted = [r for r in readings if r.status == "accepted"]
     if issuer:
         own = [r for r in accepted if names_issuer(r.filer, issuer)]
         if not own:
             if accepted:
                 answer.status = "other_filer"
-            return answer
+            return False
         accepted = own
     if not accepted:
-        return answer
+        return False
     if len({(r.value, r.currency) for r in accepted}) > 1 and not issuer:
         answer.status = "several_sellers"
-        return answer
+        return True
     chosen = accepted[0]
     answer.status, answer.value, answer.currency = "found", chosen.value, chosen.currency
     answer.filer, answer.url, answer.scope = chosen.filer, chosen.url, chosen.row_quote
-    return answer
-
+    return True

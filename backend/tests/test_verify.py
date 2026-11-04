@@ -63,3 +63,24 @@ def test_prose_with_quarter_labels_and_years_reaches_its_figure():
     prose = ("the most important products in q1 were: calderon (allergic rhinitis treatment) us market launch "
              "is in full swing in 2009. sales in q1 reached sek 46 million, after sales of 12 in q4")
     assert verify_answer(_answer(value=46), "Calderon", fetch=lambda url: prose).status == "verified"
+
+
+def _refusing(status):
+    import httpx
+
+    def fetch(url):
+        request = httpx.Request("GET", url)
+        raise httpx.HTTPStatusError("refused", request=request, response=httpx.Response(status, request=request))
+    return fetch
+
+
+def test_a_refusing_host_is_flagged_for_review_and_can_be_checked_on_an_archive_copy():
+    refused = verify_answer(_answer(), "Calderon", fetch=_refusing(403))
+    assert (refused.status, refused.needs_review) == ("refused_by_host", True)
+    missing = verify_answer(_answer(), "Calderon", fetch=_refusing(404))
+    assert (missing.status, missing.needs_review) == ("unfetchable", False)
+    archived = verify_answer(_answer(), "Calderon", fetch=_refusing(403),
+                             archive=lambda url: (TABLE, "https://web.archive.org/web/2020/" + url))
+    assert archived.status == "verified_from_archive" and archived.archive_url.startswith("https://web.archive.org")
+    nothing = verify_answer(_answer(), "Calderon", fetch=_refusing(403), archive=lambda url: None)
+    assert nothing.status == "refused_by_host"

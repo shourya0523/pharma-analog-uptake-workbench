@@ -79,11 +79,11 @@ def test_read_earnings_takes_the_issuers_reading_and_labels_the_others():
             return {**GOOD, "value": 41.2, "kind": "royalty", "row_quote": "Royalty revenue on Calderon 41.2"}
         return GOOD
 
-    answer = read_earnings("Calderon", "Q2 2025", "Acme Pharma", get=get, ask=ask)
+    answer = read_earnings("Calderon", "Q2 2025", "Acme Pharma", get=get, ask=ask, later=False)
     assert (answer.status, answer.value, answer.currency) == ("found", 412.5e6, "USD")
     assert answer.scope == "Calderon 412.5 380.1"
     assert [r.status for r in answer.readings] == ["accepted", "not_own_sales"]
-    assert read_earnings("Calderon", "Q2 2025", "Gamma Labs", get=get, ask=ask).status == "other_filer"
+    assert read_earnings("Calderon", "Q2 2025", "Gamma Labs", get=get, ask=ask, later=False).status == "other_filer"
 
 
 def test_disagreeing_sellers_without_an_issuer_are_not_picked_between():
@@ -94,7 +94,7 @@ def test_disagreeing_sellers_without_an_issuer_are_not_picked_between():
     def ask(prompt):
         return {**GOOD, "value": 977.0, "row_quote": "Calderon 977.0 380.1"} if "977.0" in prompt else GOOD
 
-    answer = read_earnings("Calderon", "Q2 2025", get=get, ask=ask)
+    answer = read_earnings("Calderon", "Q2 2025", get=get, ask=ask, later=False)
     assert answer.status == "several_sellers" and len([r for r in answer.readings if r.status == "accepted"]) == 2
 
 
@@ -117,3 +117,35 @@ def test_a_sentence_states_its_own_scale_over_the_tables_heading():
     assert check(prose, text, "Calderon", END)[0] == "accepted"
     assert check({**prose, "unit": "billions"}, text, "Calderon", END)[0] == "unit_conflict"
     assert names_quarter("SECOND-QUARTER 2025 and 2024", END)
+
+
+def test_a_figure_missing_from_its_own_release_is_read_from_a_later_comparative_column():
+    later = (b"<table><tr><td>(in millions)</td><td>Three Months Ended September 30,</td></tr>"
+             b"<tr><td>2026</td><td>2025</td></tr><tr><td>Calderon</td><td>500.0</td><td>412.5</td></tr></table>")
+    own = b"<p>Calderon remains in Phase 3.</p>"
+    calls = []
+
+    def get(url, **params):
+        if "search-index" in url:
+            calls.append(params["startdt"])
+            doc = "own.htm" if params["startdt"] == "2025-09-30" else "later.htm"
+            return Response(body={"hits": {"hits": [_hit(f"0001-{doc}", 1, "ACME PHARMA (CIK 1)", doc)]}})
+        return Response(own if url.endswith("own.htm") else later)
+
+    def ask(prompt):
+        if "Phase 3" in prompt:
+            return {"found": False}
+        return {**GOOD, "row_quote": "Calderon 500.0 412.5", "period_labels": ["Three Months Ended September 30,", "2025"],
+                "value": 412.5}
+
+    answer = read_earnings("Calderon", "Q3 2025", "Acme Pharma", get=get, ask=ask)
+    assert answer.status == "found" and answer.later and answer.value == 412.5e6
+    assert calls[:2] == ["2025-09-30", "2025-12-31"]
+    assert answer.readings[-1].released_after == "Q4 2025"
+
+
+def test_a_restated_comparative_column_is_refused():
+    text = filing_text(b"<table><tr><td>(in millions)</td><td>Three Months Ended June 30, 2025 (as restated)</td></tr>"
+                       b"<tr><td>Calderon</td><td>412.5</td></tr></table>")
+    restated = {**GOOD, "row_quote": "Calderon 412.5", "period_labels": ["Three Months Ended June 30, 2025 (as restated)"]}
+    assert check(restated, text, "Calderon", END)[0] == "restated_basis"

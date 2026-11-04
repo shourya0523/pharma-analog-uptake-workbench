@@ -64,7 +64,7 @@ def derive_from_printed(
         if stated["scaled"] is None:
             return Derived("missing_input", product, period, inputs=inputs, method=method,
                            reason=f"{stated['period']}: no printed figure found ({stated['verification']})")
-        if stated["verification"] != "verified":
+        if stated["verification"] not in ("verified", "verified_from_archive"):
             return Derived("unverified_input", product, period, inputs=inputs, method=method,
                            reason=f"{stated['period']}: {stated['verification']} in the cited document")
     if current["currency"] != previous["currency"]:
