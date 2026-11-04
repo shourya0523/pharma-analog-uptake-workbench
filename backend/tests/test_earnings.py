@@ -19,9 +19,10 @@ GOOD = {"found": True, "value": 412.5, "unit": "millions", "currency": "USD", "k
         "row_quote": "Calderon 412.5 380.1", "period_labels": ["Three Months Ended June 30, 2025"]}
 
 
-def _hit(adsh, cik, name, doc, form="8-K", items=("2.02", "9.01"), file_type="EX-99.1"):
+def _hit(adsh, cik, name, doc, form="8-K", items=("2.02", "9.01"), file_type="EX-99.1", filed="2025-07-30"):
     return {"_id": f"{adsh}:{doc}", "_source": {"adsh": adsh, "ciks": [f"000000{cik}"], "display_names": [name],
-                                                  "form": form, "items": list(items), "file_type": file_type}}
+                                                  "form": form, "items": list(items), "file_type": file_type,
+                                                  "file_date": filed}}
 
 
 def _sec(hits, documents):
@@ -230,3 +231,10 @@ def test_a_us_line_label_answers_and_a_rounded_summary_takes_its_precise_twin():
 
     us = read_earnings("Calderon", "Q2 2025", "Acme Pharma", get=get, ask=ask, later=False, scope="us")
     assert us.value == 412.2e6
+
+
+def test_an_8k_from_before_item_202_is_read_whatever_its_items():
+    hits = [_hit("0001-03-1", 1, "ACME PHARMA (CIK 1)", "ex99-2003.htm", items=("7", "9"), filed="2003-07-24"),
+            _hit("0001-25-2", 1, "ACME PHARMA (CIK 1)", "ex99-2025.htm", items=("8.01",))]
+    found = find_exhibits("Calderon", END, get=_sec(hits, {}))
+    assert [f["url"].rsplit("/", 1)[-1] for f in found] == ["ex99-2003.htm"]

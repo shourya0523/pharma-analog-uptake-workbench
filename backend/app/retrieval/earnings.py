@@ -50,6 +50,10 @@ from app.retrieval.grid import Cell, cells
 from app.retrieval.single_product import filing_text
 from app.retrieval.xbrl import SEARCH_URL, first_name, names_issuer, quarter_end, sec_get
 
+# The date Form 8-K Item 2.02 (results of operations) took effect. Before
+# it, results releases were furnished under Items 5, 9 or 12, beside every
+# other kind of announcement, so the item says nothing about an older 8-K.
+ITEM_202_EFFECTIVE = dt.date(2004, 8, 23)
 # The weeks after a quarter in which its results release is filed.
 RELEASE_WINDOW_DAYS = 60
 # Exhibits read per question. Competitors and partners mention a brand in
@@ -173,7 +177,8 @@ class EarningsAnswer:
 def find_exhibits(product: str, end: dt.date, *, get: Callable = sec_get) -> list[dict]:
     """Results exhibits mentioning the product, filed in the weeks after `end`.
 
-    An 8-K's exhibit counts when the 8-K reports Item 2.02; a 6-K's exhibit
+    An 8-K's exhibit counts when the 8-K reports Item 2.02, or was filed
+    before that item existed (`ITEM_202_EFFECTIVE`); a 6-K's exhibit
     counts as filed (6-Ks carry no items). A 6-K's own main document counts
     too: a foreign issuer often prints its results there rather than in an
     exhibit. All three properties come from the search response.
@@ -186,7 +191,9 @@ def find_exhibits(product: str, end: dt.date, *, get: Callable = sec_get) -> lis
         file_type, form = (src.get("file_type") or "").upper(), (src.get("form") or "").upper()
         if not (file_type.startswith("EX-99") or (form.startswith("6-K") and file_type == form)):
             continue
-        if src.get("form", "").startswith("8-K") and "2.02" not in (src.get("items") or []):
+        filed = dt.date.fromisoformat(src["file_date"]) if src.get("file_date") else None
+        if (src.get("form", "").startswith("8-K") and "2.02" not in (src.get("items") or [])
+                and (filed is None or filed >= ITEM_202_EFFECTIVE)):
             continue
         accession, document = hit["_id"].split(":", 1)
         url = f"https://www.sec.gov/Archives/edgar/data/{src['ciks'][0].lstrip('0')}/{accession.replace('-', '')}/{document}"
