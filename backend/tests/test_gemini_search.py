@@ -172,3 +172,24 @@ def test_a_failed_interaction_raises(monkeypatch):
 
     with pytest.raises(gs.InteractionFailed, match="boom"):
         gs.ask_revenue("Calderon", "Q2 2023", model="m", client=Client())
+
+
+def test_an_interaction_failed_before_any_step_is_asked_once_more(monkeypatch):
+    import app.retrieval.gemini_search as gs
+
+    monkeypatch.setattr(gs, "POLL_SECONDS", 0)
+    created = []
+
+    class Interactions:
+        def create(self, **kwargs):
+            created.append(kwargs)
+            if len(created) == 1:
+                return {"id": "int-1", "status": "failed", "steps": [{"type": "user_input"}],
+                        "errors": [{"code": "INVALID_ARGUMENT"}]}
+            return {**_interaction(json.dumps(ANSWER)), "id": "int-2", "status": "completed"}
+
+    class Client:
+        interactions = Interactions()
+
+    assert gs.ask_revenue("Calderon", "Q2 2023", model="m", client=Client()).parsed == ANSWER
+    assert len(created) == 2

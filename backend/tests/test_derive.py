@@ -110,3 +110,14 @@ def test_zero_inputs_are_no_sales_not_a_figure_of_zero():
                                                     (REV, 0, "2025-01-01", "2025-06-30", CAL)]))]
     result = derive_quarter("Calderon", "Q1 2025", "Acme Pharma", get=fake_sec(filings))
     assert result.status == "no_sales" and result.value is None
+
+
+def test_a_september_year_end_derives_calendar_q3_from_its_10k():
+    filings = [
+        filing("10-K", "2025-09-30", inline([(REV, 312e6, "2024-10-01", "2025-09-30", CAL)])),
+        filing("10-Q", "2025-06-30", inline([(REV, 80e6, "2025-04-01", "2025-06-30", CAL),
+                                             (REV, 229e6, "2024-10-01", "2025-06-30", CAL)])),
+    ]
+    result = xbrl_quarter("Calderon", "Q3 2025", "Acme Pharma", get=fake_sec(filings))
+    assert result.status == "derived" and result.method == "full_year_less_nine_months"
+    assert result.value == 83e6

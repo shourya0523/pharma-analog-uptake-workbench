@@ -105,6 +105,9 @@ def derive_quarter(
 
     current = in_scope(year_to_date(product, year, n, issuer, get=get, confirm=confirm, family=family), scope)
     if current.status != "found":
+        fiscal = _fiscal_quarter(product, period, end, n, issuer, get=get, confirm=confirm, scope=scope, family=family)
+        if fiscal is not None:
+            return fiscal
         return Derived("missing_input", product, period, inputs=[_input(current)],
                        reason=f"year to date through Q{n}: {current.status}")
     previous = in_scope(year_to_date(product, year, n - 1, issuer, get=get, confirm=confirm, family=family), scope)
@@ -147,6 +150,57 @@ def derive_quarter(
                        reason="every input is zero: nothing was sold to report")
     return Derived("derived", product, period, value=value, unit=current.unit, method=method, inputs=inputs,
                    plus_minus=rounding)
+
+
+def _shift_back(end: dt.date, months: int) -> dt.date:
+    month = (end.month - months - 1) % 12 + 1
+    year = end.year + (end.month - months - 1) // 12
+    return dt.date(year, month, calendar.monthrange(year, month)[1])
+
+
+def _fiscal_quarter(product: str, period: str, end: dt.date, n: int, issuer: str | None, *, get: Callable,
+                    confirm: Callable | None, scope: str, family: bool = False) -> Derived | None:
+    """The quarter for a filer whose fiscal year does not end in December.
+
+    Its year to date ending at `end` runs a different number of quarters than
+    the calendar's: a year ending September 30 states twelve months at the
+    calendar's third quarter, in a 10-K. Each length the calendar did not
+    already try is read, longest first; the first one the filer states is
+    paired with the year to date one quarter shorter ending three months
+    before. None when the filer states none of them.
+    """
+    for k in (4, 3, 2):
+        if k == n:
+            continue
+        form = "10-K" if k == 4 else "10-Q"
+        current = in_scope(read_span(product, f"YTD{k} ending {end}", end, form, YTD_DAYS[k], issuer, get=get,
+                                     confirm=confirm, family=family), scope)
+        if current.status != "found":
+            continue
+        before = _shift_back(end, 3)
+        previous = in_scope(read_span(product, f"YTD{k - 1} ending {before}", before, "10-Q", YTD_DAYS[k - 1], issuer,
+                                      get=get, confirm=confirm, family=family), scope)
+        method = "full_year_less_nine_months" if k == 4 else "ytd_less_previous_ytd"
+        inputs = [_input(current), _input(previous)]
+        if previous.status != "found":
+            return Derived("missing_input", product, period, method=method, inputs=inputs,
+                           reason=f"fiscal year to date ending {before}: {previous.status}")
+        if not _same_line(current, previous):
+            return Derived("inputs_differ", product, period, method=method, inputs=inputs,
+                           reason="the two periods are not the same reported line")
+        value = current.value - previous.value
+        rounding = declared_slack(current.decimals) + declared_slack(previous.decimals)
+        if value < 0:
+            return Derived("negative", product, period, value=value, unit=current.unit, method=method, inputs=inputs)
+        if current.value == 0 and previous.value == 0:
+            return Derived("no_sales", product, period, method=method, inputs=inputs,
+                           reason="every input is zero: nothing was sold to report")
+        if value > 0 and rounding > MAX_ROUNDING_SHARE * value:
+            return Derived("imprecise_input", product, period, value=value, unit=current.unit, method=method,
+                           inputs=inputs)
+        return Derived("derived", product, period, value=value, unit=current.unit, method=method, inputs=inputs,
+                       plus_minus=rounding)
+    return None
 
 
 def _first_quarter(product: str, period: str, year: int, issuer: str | None, *, get: Callable,

@@ -43,7 +43,7 @@ def _no_ir(product, period, issuer):
     return SimpleNamespace(status="no_archive", value=None)
 
 
-BASE = dict(describe_aliases=lambda product, end: [], usd=_usd, confirm=None, ir=_no_ir,
+BASE = dict(describe_aliases=lambda product, end: [], parent_brand=lambda product: None, usd=_usd, confirm=None, ir=_no_ir,
             layout=lambda url, product, period: SimpleNamespace(status="not_found"),
             sellers=lambda product, period: SimpleNamespace(status="unknown", sellers=[], evidence=[]))
 
@@ -197,3 +197,19 @@ def test_booked_by_names_the_filer_whose_figure_is_wanted():
         return _xbrl_found(name, period, issuer)
     quarter_revenue("Calderon", "Q2 2023", "Acme Pharma", booked_by="Beta Bio", xbrl=xbrl, **BASE)
     assert seen == ["Beta Bio"]
+
+
+def test_a_form_the_issuer_prints_only_under_its_brand_is_returned_for_review():
+    def earnings(name, period, issuer):
+        if name == "Calderon":
+            return SimpleNamespace(status="found", value=139e6, currency="USD", url="https://x/6k.htm",
+                                   scope="Calderon 139", filer="ACME", later=False, readings=[])
+        return SimpleNamespace(status="not_found", readings=[])
+
+    base = {**BASE, "parent_brand": lambda product: ("Calderon", "XR")}
+    result = quarter_revenue("Calderon XR", "Q2 2023", "Acme", xbrl=_miss, earnings=earnings, allow_search=False,
+                             **{k: v for k, v in base.items()})
+    assert (result.status, result.match, result.value) == ("needs_review", "parent_brand", 139e6)
+    base = {**BASE, "parent_brand": lambda product: ("Calderon", "")}
+    alone = quarter_revenue("Calderon", "Q2 2023", "Acme", xbrl=_miss, earnings=earnings, allow_search=False, **base)
+    assert alone.status == "found"

@@ -22,6 +22,10 @@ DEFAULT_MODEL = "gemini-3.8-flash"
 # does not, and retrying it only delays the error.
 RETRY_STATUSES = [408, 500, 502, 503, 504]
 
+# A grounded interaction the server fails before taking any step is its own
+# fault, not the question's; it is asked again this many times in all.
+FAILED_ATTEMPTS = 2
+
 
 # A grounded call can run for minutes while the model searches. Held open as
 # one request it can be dropped by the server before it finishes, so the call
@@ -169,10 +173,26 @@ def ask_revenue(
     model = model or os.environ.get("GEMINI_MODEL") or DEFAULT_MODEL
     if client is None:
         client = make_client()
+    for attempt in range(FAILED_ATTEMPTS):
+        data = _run_grounded(client, model, build_prompt(product, period, issuer))
+        if data.get("status") != "failed" or _did_work(data):
+            break
+    if data.get("status") not in (None, "completed"):
+        raise InteractionFailed(f"{data.get('id')}: {data.get('status')}: {data.get('errors')}")
+    return parse_interaction(data, product=product, period=period, model=model)
+
+
+def _did_work(data: dict[str, Any]) -> bool:
+    """Whether a finished interaction took any step beyond reading the input."""
+    return any(step.get("type") != "user_input" for step in data.get("steps") or [])
+
+
+def _run_grounded(client: Any, model: str, prompt: str) -> dict[str, Any]:
+    """Create one grounded interaction in background mode and poll it to an end."""
     try:
         interaction = client.interactions.create(
             model=model,
-            input=build_prompt(product, period, issuer),
+            input=prompt,
             tools=[{"type": "google_search"}],
             background=True,
         )
@@ -188,9 +208,7 @@ def ask_revenue(
         if is_quota(exc):
             raise QuotaExceeded(f"{model}: {exc}") from exc
         raise
-    if data.get("status") not in (None, "completed"):
-        raise InteractionFailed(f"{data.get('id')}: {data.get('status')}: {data.get('errors')}")
-    return parse_interaction(data, product=product, period=period, model=model)
+    return data
 
 
 def _as_dict(interaction: Any) -> dict[str, Any]:

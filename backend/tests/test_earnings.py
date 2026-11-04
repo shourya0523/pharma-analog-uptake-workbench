@@ -39,9 +39,11 @@ def test_find_exhibits_keeps_results_exhibits_only():
     hits = [_hit("0001-25-1", 1, "ACME PHARMA (CIK 1)", "ex99.htm"),
             _hit("0001-25-2", 1, "ACME PHARMA (CIK 1)", "ex99b.htm", items=("8.01",)),
             _hit("0001-25-3", 1, "ACME PHARMA (CIK 1)", "main.htm", file_type="8-K"),
-            _hit("0003-25-1", 3, "BETA AG (CIK 3)", "beta-99_1.htm", form="6-K", items=(), file_type="EX-99")]
+            _hit("0003-25-1", 3, "BETA AG (CIK 3)", "beta-99_1.htm", form="6-K", items=(), file_type="EX-99"),
+            _hit("0003-25-2", 3, "BETA AG (CIK 3)", "beta-6k.htm", form="6-K", items=(), file_type="6-K"),
+            _hit("0001-25-4", 1, "ACME PHARMA (CIK 1)", "main8k.htm", form="8-K", file_type="8-K")]
     found = find_exhibits("Calderon", END, get=_sec(hits, {}))
-    assert [f["url"].rsplit("/", 1)[-1] for f in found] == ["ex99.htm", "beta-99_1.htm"]
+    assert [f["url"].rsplit("/", 1)[-1] for f in found] == ["ex99.htm", "beta-99_1.htm", "beta-6k.htm"]
 
 
 def test_names_quarter():

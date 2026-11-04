@@ -583,7 +583,11 @@ def find_filings(product: str, end: dt.date, form: str, get: Callable = sec_get)
         time.sleep(2 ** attempt)
     else:
         raise RuntimeError(f"full-text search refused {product!r}: {str(body)[:200]}")
-    hits = body["hits"]["hits"]
+    # Each matching document of a filing is its own hit; the filing's main
+    # document (its file type is the form itself) is the one whose text says
+    # what the filer sold, so it is taken ahead of an exhibit.
+    hits = sorted(body["hits"]["hits"],
+                  key=lambda h: (h["_source"].get("file_type") or "").upper() != (h["_source"].get("form") or "").upper())
     filings, seen = [], set()
     for hit in hits:
         src = hit["_source"]

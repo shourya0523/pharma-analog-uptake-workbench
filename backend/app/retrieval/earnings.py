@@ -172,16 +172,17 @@ def find_exhibits(product: str, end: dt.date, *, get: Callable = sec_get) -> lis
     """Results exhibits mentioning the product, filed in the weeks after `end`.
 
     An 8-K's exhibit counts when the 8-K reports Item 2.02; a 6-K's exhibit
-    counts as filed (6-Ks carry no items). Both properties come from the
-    search response.
+    counts as filed (6-Ks carry no items). A 6-K's own main document counts
+    too: a foreign issuer often prints its results there rather than in an
+    exhibit. All three properties come from the search response.
     """
     body = get(SEARCH_URL, q=f'"{product.split("/")[0].strip()}"', forms="8-K,6-K", dateRange="custom",
                startdt=end.isoformat(), enddt=(end + dt.timedelta(days=RELEASE_WINDOW_DAYS)).isoformat()).json()
     found, seen = [], set()
     for hit in body.get("hits", {}).get("hits", []):
         src = hit["_source"]
-        file_type = (src.get("file_type") or "").upper()
-        if not file_type.startswith("EX-99"):
+        file_type, form = (src.get("file_type") or "").upper(), (src.get("form") or "").upper()
+        if not (file_type.startswith("EX-99") or (form.startswith("6-K") and file_type == form)):
             continue
         if src.get("form", "").startswith("8-K") and "2.02" not in (src.get("items") or []):
             continue

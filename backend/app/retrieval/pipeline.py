@@ -22,7 +22,12 @@ Routes, most exact first; the first that produces a checked figure answers:
    checked, subtracted (Q2-Q4).
 
 Routes 1 and 2 are retried under the product's FDA-history aliases (a brand
-line that can only have been this form in that period). Every route's result
+line that can only have been this form in that period).
+
+5. Parent brand - when every route declines and the product is one form of
+   an FDA-listed brand, the brand's own line from the issuer's release is
+   returned for review, labelled `parent_brand`: it covers the brand's other
+   forms too, so it is never `found`. Every route's result
 is kept in `attempts`; a figure another filer reports for the product (a
 partner, a licensee) is kept in `alternatives` and never becomes the answer
 when an issuer is named. A spent Gemini quota stops the route that hit it and
@@ -40,6 +45,7 @@ from app.retrieval.derive import Derived, xbrl_quarter
 from app.retrieval.earnings import read_earnings
 from app.retrieval.gemini_search import QuotaExceeded, ask_revenue
 from app.retrieval.identity import aliases as fda_aliases
+from app.retrieval.identity import split_brand
 from app.retrieval.printed_derive import SCALE, derive_from_printed
 from app.retrieval.single_product import gemini_confirm
 from app.retrieval.verify import verify_answer
@@ -141,6 +147,7 @@ def quarter_revenue(
     verify: Callable = verify_answer,
     printed: Callable = derive_from_printed,
     describe_aliases: Callable = fda_aliases,
+    parent_brand: Callable = split_brand,
     confirm: Callable | None = gemini_confirm,
     usd: Callable = fx.to_usd,
 ) -> QuarterResult:
@@ -256,8 +263,13 @@ def quarter_revenue(
                     return _answer(result, end, usd, value=site.value, currency=site.currency,
                                    route=f"ir_archive:{site.method}", source=site.url, evidence=site.evidence)
 
-    if not allow_search or scope != "worldwide":
+    def declined() -> QuarterResult:
+        if result.status == "not_found" and scope == "worldwide":
+            _parent_brand_line(result, product, period, issuer, parent_brand, earnings, run)
         return result
+
+    if not allow_search or scope != "worldwide":
+        return declined()
 
     # 3. Grounded search, checked against the cited document
     answer = run("search", lambda: search(product, period, issuer))
@@ -286,7 +298,27 @@ def quarter_revenue(
             if derived.status == "derived":
                 return _answer(result, end, usd, value=derived.value, currency=derived.unit,
                                route=f"printed:{derived.method}", source=derived.inputs[0].get("source_url"))
-    return result
+    return declined()
+
+
+def _parent_brand_line(result: QuarterResult, product: str, period: str, issuer: str | None, parent_brand: Callable,
+                       earnings: Callable, run: Callable) -> None:
+    """Fill `result` for review with the brand's own line when the product is
+    one form of it ("Calderon XR" of "Calderon") and the issuer prints only the
+    brand. Leaves `result` alone when there is no brand or no line."""
+    split = run("parent_brand", lambda: parent_brand(product))
+    if not split or not split[1]:
+        return
+    brand = split[0]
+    outcome = run("parent_brand", lambda: earnings(brand, period, issuer))
+    if outcome is None:
+        return
+    _record(result, "parent_brand", outcome)
+    if not _found(outcome):
+        return
+    result.status, result.route, result.match = "needs_review", "earnings:parent_brand", "parent_brand"
+    result.value, result.currency, result.source = outcome.value, outcome.currency, outcome.url
+    result.evidence = f"{brand} line, which also covers the brand's other forms: {outcome.scope}"
 
 
 def _printed_within(derived: Derived, product: str, period: str, issuer: str | None, earnings: Callable,

@@ -74,6 +74,19 @@ def test_detect_calendar():
     assert detect_calendar("Quarterly results archive") is None
 
 
+def test_a_calendar_unstated_is_read_from_release_dates():
+    page = ("Q2/FY2026 Financial results November 4, 2026 ... Q1/FY2026 Financial results August 5, 2026 "
+            "Full Year and Q4/FY2025 Financial results April 25, 2026")
+    assert detect_calendar(page) == FiscalCalendar(4, True)
+    assert detect_calendar("Q2/FY2026 results July 28, 2026") == FiscalCalendar(1)
+    assert detect_calendar("Q2/FY2026 results") is None
+
+
+def test_a_quarter_year_to_date_label():
+    assert spans("Supplementary Documents (Q2 YTD/FY2024)", APRIL) == [Span((2024, 4), (2024, 9))]
+    assert spans("Financial Results (3Q YTD FY2024)", APRIL) == [Span((2024, 4), (2024, 12))]
+
+
 def test_fiscal_label_names_a_span_the_issuer_way():
     assert APRIL.label(Q2_2023) == "Q1 FY2023"
     assert APRIL.label(Span((2024, 1), (2024, 3))) == "Q4 FY2023"

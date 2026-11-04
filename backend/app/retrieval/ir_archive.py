@@ -90,7 +90,7 @@ _MONTH_NUMBER = {name: i for i, name in enumerate(
     ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"], start=1)}
 _Y4 = r"((?:19|20)\d\d)"
 # A part of a year: its offset from the fiscal year's first month and length.
-_PART = (r"(q[1-4]|[1-4]q|h[12]|[12]h|hy|9m|6m|half[- ]?year(?:ly)?|first[- ]half|interim|nine[- ]months?|"
+_PART = (r"((?:q[1-4]|[1-4]q)[\s-]?ytd|q[1-4]|[1-4]q|h[12]|[12]h|hy|9m|6m|half[- ]?year(?:ly)?|first[- ]half|interim|nine[- ]months?|"
          r"(?:first|second|third|fourth|1st|2nd|3rd|4th)[- ]quarter|full[- ]year|annual|year[- ]end)")
 _YEAR = r"(fy|fiscal(?: year)?|cy)?\s?((?:19|20)\d\d|'?\d\d)(?:/(\d{1,2})(?![\d/]))?"
 _SEP = r"[\s_\-/,'.]{0,3}(?:of\s+|results\s+|report\s+)?"
@@ -187,6 +187,8 @@ def _year(text: str) -> int:
 def _part_span(part: str) -> tuple[int, int] | None:
     """(offset from the fiscal year's start, months) for a part-of-year word."""
     p = re.sub(r"[\s-]", "", part.lower())
+    if re.fullmatch(r"(?:q[1-4]|[1-4]q)ytd", p):
+        return 0, 3 * int(re.sub(r"\D", "", p))
     if re.fullmatch(r"q[1-4]|[1-4]q", p):
         return 3 * (int(re.sub(r"\D", "", p)) - 1), 3
     if p in ("h1", "1h", "hy", "6m", "halfyear", "halfyearly", "firsthalf", "interim"):
@@ -294,10 +296,54 @@ def detect_calendar(text: str) -> FiscalCalendar | None:
     for m in _Q1_OPENS.finditer(text):
         starts[_MONTH_NUMBER[m.group(1).lower()[:3]]] += 1
     if not starts:
-        return None
+        return calendar_from_release_dates(text)
     start = starts.most_common(1)[0][0]
     named_by_start = by_start.most_common(1)[0][0] if by_start else True
     return FiscalCalendar(start, named_by_start)
+
+
+# "Q2/FY2026 Financial results November 4, 2026": a fiscal quarter beside the
+# date its results came out.
+_RELEASED = re.compile(rf"(?<![a-z0-9])(?:q([1-4])|([1-4])q)\s*/\s*fy\s?{_Y4}(?![\d/]).{{0,60}}?"
+                       rf"{_MONTH}\s+(\d{{1,2}}),?\s+{_Y4}", re.IGNORECASE | re.DOTALL)
+# A results release trails its quarter's close by at least the time it takes to
+# close the books, and by less than a third of a year; outside those bounds the
+# pairing names a different calendar.
+MIN_RELEASE_LAG_DAYS = 14
+MAX_RELEASE_LAG_DAYS = 120
+
+
+def calendar_from_release_dates(text: str) -> FiscalCalendar | None:
+    """The fiscal calendar implied by fiscal quarters printed beside their
+    release dates, for a page that never states its fiscal year.
+
+    "Q1/FY2026 ... August 5, 2026" fits a year starting in April and named by
+    its start (Q1 closes June 30). Every calendar under which each release
+    falls a plausible time after its quarter's close is a candidate; the one
+    with the shortest lags wins, since a release cannot precede the close and
+    a later start month would put it too soon after.
+    """
+    pairs = []
+    for m in _RELEASED.finditer(text):
+        try:
+            released = dt.date(int(m.group(6)), _MONTH_NUMBER[m.group(4).lower()[:3]], int(m.group(5)))
+        except ValueError:
+            continue
+        pairs.append((int(m.group(1) or m.group(2)), int(m.group(3)), released))
+    if not pairs:
+        return None
+    best = None
+    for start in range(1, 13):
+        for by_start in ((True,) if start == 1 else (True, False)):
+            fiscal = FiscalCalendar(start, by_start)
+            lags = []
+            for quarter, fiscal_year, released in pairs:
+                first = _add(fiscal.year_start(fiscal_year), 3 * (quarter - 1))
+                lags.append((released - Span(first, _add(first, 2)).end_date()).days)
+            if all(MIN_RELEASE_LAG_DAYS <= lag <= MAX_RELEASE_LAG_DAYS for lag in lags):
+                if best is None or sum(lags) < best[0]:
+                    best = (sum(lags), fiscal)
+    return best[1] if best else None
 
 
 # ---------------------------------------------------------------- fetching

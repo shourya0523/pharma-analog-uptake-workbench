@@ -36,6 +36,12 @@ def test_total_revenue_is_the_line_only_without_other_kinds_of_revenue():
     assert (basis, line) == ("no_product_line", None)
 
 
+def test_net_product_sales_are_taken_over_gross():
+    line, _, basis = _line([("us-gaap:SalesRevenueGoodsGross", 50e6, *Q, {}),
+                            ("us-gaap:SalesRevenueGoodsNet", 40e6, *Q, {})])
+    assert (basis, line.concept) == ("product_sales_concept", "us-gaap:SalesRevenueGoodsNet")
+
+
 def test_names_the_product_accepts_its_forms_only():
     assert names_the_product("CALDERON® (calderon) cream 1%", "Calderon")
     assert names_the_product("Calderon XR", "Calderon")

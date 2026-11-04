@@ -32,6 +32,7 @@ _OTHER_REVENUE = re.compile(r"collaborat|licens|royalt|milestone|alliance|grant|
                             re.IGNORECASE)
 # Concepts that name product sales as such, in us-gaap or filer extensions.
 _PRODUCT_CONCEPT = re.compile(r"goods|productsales|productrevenue|netproduct", re.IGNORECASE)
+_GROSS = re.compile(r"gross", re.IGNORECASE)
 
 # Sentences that discuss product sales, for the model to read. A filing runs
 # to hundreds of thousands of characters; these are the passages that say what
@@ -103,6 +104,10 @@ def product_line(contexts: dict[str, dict], facts: list[dict], period_end: dt.da
 
     plain = [f for f in in_span if not f.members]
     named = [f for f in plain if _PRODUCT_CONCEPT.search(f.concept.split(":")[-1])]
+    # Gross sales are before the deductions that make them revenue; beside a
+    # net line they are not the figure reported.
+    net = [f for f in named if not _GROSS.search(f.concept.split(":")[-1])]
+    named = net or named
     if named:
         line = max(named, key=lambda f: f.value)
         return line, parts_of(line), "product_sales_concept"
