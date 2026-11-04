@@ -62,11 +62,13 @@ def _period_end(year: int, n: int) -> dt.date:
     return dt.date(year, month, calendar.monthrange(year, month)[1])
 
 
-def year_to_date(product: str, year: int, n: int, issuer: str | None, *, get: Callable, confirm: Callable | None) -> XbrlAnswer:
+def year_to_date(product: str, year: int, n: int, issuer: str | None, *, get: Callable, confirm: Callable | None,
+                 family: bool = False) -> XbrlAnswer:
     """The stated year to date through calendar quarter n: the 10-K's year for
     n = 4, the nth 10-Q's year to date otherwise."""
     form = "10-K" if n == 4 else "10-Q"
-    return read_span(product, f"YTD{n} {year}", _period_end(year, n), form, YTD_DAYS[n], issuer, get=get, confirm=confirm)
+    return read_span(product, f"YTD{n} {year}", _period_end(year, n), form, YTD_DAYS[n], issuer, get=get, confirm=confirm,
+                     family=family)
 
 
 def _input(answer: XbrlAnswer) -> dict[str, Any]:
@@ -89,6 +91,7 @@ def derive_quarter(
     get: Callable = sec_get,
     confirm: Callable | None = None,
     scope: str = "worldwide",
+    family: bool = False,
 ) -> Derived:
     """Compute calendar quarter `period` ("Q4 2023") as a stated year to date
     less the stated year to date before it, both at `scope` (see `in_scope`)."""
@@ -97,18 +100,18 @@ def derive_quarter(
         return Derived("missing_input", product, period, reason="not a calendar quarter")
     n, year = end.month // 3, end.year
     if n == 1:
-        return _first_quarter(product, period, year, issuer, get=get, confirm=confirm, scope=scope)
+        return _first_quarter(product, period, year, issuer, get=get, confirm=confirm, scope=scope, family=family)
 
-    current = in_scope(year_to_date(product, year, n, issuer, get=get, confirm=confirm), scope)
+    current = in_scope(year_to_date(product, year, n, issuer, get=get, confirm=confirm, family=family), scope)
     if current.status != "found":
         return Derived("missing_input", product, period, inputs=[_input(current)],
                        reason=f"year to date through Q{n}: {current.status}")
-    previous = in_scope(year_to_date(product, year, n - 1, issuer, get=get, confirm=confirm), scope)
+    previous = in_scope(year_to_date(product, year, n - 1, issuer, get=get, confirm=confirm, family=family), scope)
     method = "full_year_less_nine_months" if n == 4 else "ytd_less_previous_ytd"
     inputs = [_input(current), _input(previous)]
 
     if previous.status != "found" and n == 4:
-        quarters = [in_scope(first_pass(product, f"Q{q} {year}", issuer, get=get, confirm=confirm), scope)
+        quarters = [in_scope(first_pass(product, f"Q{q} {year}", issuer, get=get, confirm=confirm, family=family), scope)
                     for q in (1, 2, 3)]
         inputs = [_input(current)] + [_input(q) for q in quarters]
         if any(q.status != "found" for q in quarters):
@@ -143,10 +146,10 @@ def derive_quarter(
 
 
 def _first_quarter(product: str, period: str, year: int, issuer: str | None, *, get: Callable,
-                   confirm: Callable | None, scope: str) -> Derived:
+                   confirm: Callable | None, scope: str, family: bool = False) -> Derived:
     """Q1 as the second-quarter 10-Q's six months less its own second quarter."""
-    six = in_scope(year_to_date(product, year, 2, issuer, get=get, confirm=confirm), scope)
-    q2 = in_scope(first_pass(product, f"Q2 {year}", issuer, get=get, confirm=confirm), scope)
+    six = in_scope(year_to_date(product, year, 2, issuer, get=get, confirm=confirm, family=family), scope)
+    q2 = in_scope(first_pass(product, f"Q2 {year}", issuer, get=get, confirm=confirm, family=family), scope)
     inputs = [_input(six), _input(q2)]
     method = "six_months_less_q2"
     if six.status != "found" or q2.status != "found":
@@ -173,6 +176,7 @@ def xbrl_quarter(
     get: Callable = sec_get,
     confirm: Callable | None = None,
     scope: str = "worldwide",
+    family: bool = False,
 ) -> XbrlAnswer | Derived:
     """The quarter from XBRL: read where a 10-Q tags it, derived where none does.
 
@@ -181,18 +185,19 @@ def xbrl_quarter(
     issuer's 10-Q gives no figure for the three months alone. Failing that, a
     Q1-Q3 is read from the comparative column of the same quarter's 10-Q a
     year on (`comparative` set on the answer).
-    `scope` is "worldwide" or "us"; see `in_scope`.
+    `scope` is "worldwide" or "us"; see `in_scope`. `family` sums the
+    members naming the brand's forms (see `xbrl.member_match`).
     """
-    answer = first_pass(product, period, issuer, get=get, confirm=confirm)
+    answer = first_pass(product, period, issuer, get=get, confirm=confirm, family=family)
     end = quarter_end(period)
     q4_without_10q = end is not None and end.month == 12 and answer.status != "found"
     if q4_without_10q or answer.status in ("no_revenue_fact", "no_member", "no_filing"):
-        derived = derive_quarter(product, period, issuer, get=get, confirm=confirm, scope=scope)
+        derived = derive_quarter(product, period, issuer, get=get, confirm=confirm, scope=scope, family=family)
         if derived.status == "derived":
             return derived
         if end is not None and not q4_without_10q:
             later = in_scope(read_span(product, period, end, "10-Q", YTD_DAYS[1], issuer, get=get, confirm=confirm,
-                                       filing_end=dt.date(end.year + 1, end.month, end.day)), scope)
+                                       filing_end=dt.date(end.year + 1, end.month, end.day), family=family), scope)
             if later.status == "found":
                 later.comparative = True
                 return later

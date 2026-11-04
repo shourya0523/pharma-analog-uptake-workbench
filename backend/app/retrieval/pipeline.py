@@ -4,11 +4,17 @@
 
 Routes, most exact first; the first that produces a checked figure answers:
 
+0. Whose figure - the issuer named, or `booked_by`; with neither, the
+   seller the ownership timeline finds for that quarter. A quarter in which
+   the product changed hands is returned for review with both sellers.
 1. XBRL - the issuer's 10-Q/10-K tags (a member named for the product, else
    a single-product filer's product line, else a quarter derived from
-   stated years to date).
+   stated years to date, else a later 10-Q's comparative column).
 2. Earnings releases - the issuer's results exhibit read as a table grid,
-   then as text, then later releases' comparative columns.
+   then as text, then later releases' comparative columns; failing those,
+   the issuer's exhibits are read whole by Gemini (layout reader).
+2b. The issuer's own results archive, when the issuer files nothing with
+   the SEC.
 3. Grounded search - Gemini with Google Search, kept only if the figure is
    found beside the product in the document it cites. A page that refuses
    this client yields `needs_review`, never `found`.
@@ -37,7 +43,12 @@ from app.retrieval.identity import aliases as fda_aliases
 from app.retrieval.printed_derive import SCALE, derive_from_printed
 from app.retrieval.single_product import gemini_confirm
 from app.retrieval.verify import verify_answer
-from app.retrieval.xbrl import quarter_end
+from app.retrieval.layout import read_layout
+from app.retrieval.xbrl import names_issuer, quarter_end
+
+
+# Exhibits the layout reader is given per question, the issuer's first.
+MAX_LAYOUT_READS = 2
 
 
 @dataclass
@@ -117,8 +128,14 @@ def quarter_revenue(
     issuer: str | None = None,
     *,
     scope: str = "worldwide",
+    line: str = "brand",
+    booked_by: str | None = None,
     allow_search: bool = True,
+    find_seller: bool = True,
     xbrl: Callable = xbrl_quarter,
+    layout: Callable = read_layout,
+    ir: Callable | None = None,
+    sellers: Callable | None = None,
     earnings: Callable = read_earnings,
     search: Callable = ask_revenue,
     verify: Callable = verify_answer,
@@ -131,14 +148,19 @@ def quarter_revenue(
 
     `scope` is "worldwide" or "us"; a U.S. figure is taken only where a route
     can show it is the U.S. part (XBRL's tagged geography). `allow_search`
-    turns off routes 3 and 4, which cost search fees. The route functions are
+    turns off routes 3 and 4, which cost search fees. `line` is "brand" or
+    "family" (the brand's forms summed); `booked_by` names the filer whose
+    booking is wanted when partners report the product in different
+    territories (see `app.retrieval.question`). The route functions are
     parameters so the order can be tested without the network.
     """
+    issuer = booked_by or issuer
     result = QuarterResult("not_found", product, period, issuer)
     end = quarter_end(period)
     if end is None:
         result.attempts.append({"route": "input", "status": "not_a_calendar_quarter"})
         return result
+    family = line == "family"
 
     def run(route: str, attempt: Callable) -> Any:
         try:
@@ -149,9 +171,27 @@ def quarter_revenue(
             result.attempts.append({"route": route, "status": "error", "reason": f"{type(exc).__name__}: {exc}"[:200]})
         return None
 
+    # 0. Whose figure
+    if not issuer and find_seller:
+        if sellers is None:
+            from app.retrieval.ownership import seller_for as sellers
+        owners = run("ownership", lambda: sellers(product, period))
+        if owners is not None:
+            named = [s for s in owners.sellers if s.filer]
+            result.attempts.append({"route": "ownership", "status": owners.status,
+                                    "sellers": [{"filer": s.filer, "cik": s.cik, "start": str(s.start),
+                                                 "end": str(s.end), "note": s.note} for s in owners.sellers],
+                                    "evidence": owners.evidence[:3]})
+            if owners.status in ("split", "split_undated"):
+                result.status = "needs_review"
+                return result
+            if owners.status == "single" and len(named) == 1:
+                issuer = result.issuer = named[0].filer
+
     # 1. XBRL
     outcome = run("xbrl", lambda: _with_aliases(
-        lambda name: xbrl(name, period, issuer, confirm=confirm, scope=scope), product, period, end, describe_aliases))
+        lambda name: xbrl(name, period, issuer, confirm=confirm, scope=scope, family=family),
+        product, period, end, describe_aliases))
     if outcome is not None:
         _record(result, "xbrl", outcome)
         for c in getattr(outcome, "candidates", []) or []:
@@ -191,6 +231,30 @@ def quarter_revenue(
                 return _answer(result, end, usd, value=outcome.value, currency=outcome.currency,
                                route="earnings:later" if outcome.later else "earnings", source=outcome.url,
                                evidence=outcome.scope, identity=getattr(outcome, "identity", None))
+            readings = getattr(outcome, "readings", []) or []
+            own = [r.url for r in readings if not issuer or names_issuer(r.filer, issuer)]
+            for url in list(dict.fromkeys(own))[:MAX_LAYOUT_READS]:
+                reading = run("layout", lambda url=url: layout(url, product, period))
+                if reading is None:
+                    continue
+                _record(result, "layout", reading)
+                if reading.status == "accepted":
+                    return _answer(result, end, usd, value=reading.value, currency=reading.currency,
+                                   route="layout", source=reading.url, evidence=reading.row_label)
+            issuer_files_with_sec = any(names_issuer(r.filer, issuer) for r in readings) if issuer else True
+        else:
+            issuer_files_with_sec = True
+
+        # 2b. The issuer's own results archive
+        if issuer and not issuer_files_with_sec and allow_search:
+            if ir is None:
+                from app.retrieval.ir_archive import read_ir_quarter as ir
+            site = run("ir_archive", lambda: ir(product, period, issuer))
+            if site is not None:
+                _record(result, "ir_archive", site)
+                if site.status == "found":
+                    return _answer(result, end, usd, value=site.value, currency=site.currency,
+                                   route=f"ir_archive:{site.method}", source=site.url, evidence=site.evidence)
 
     if not allow_search or scope != "worldwide":
         return result

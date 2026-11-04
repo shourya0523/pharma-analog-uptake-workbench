@@ -39,7 +39,13 @@ def _usd(value, currency, year, quarter):
     return value * {"USD": 1.0, "EUR": 1.1, "CHF": 1.2}[currency]
 
 
-BASE = dict(describe_aliases=lambda product, end: [], usd=_usd, confirm=None)
+def _no_ir(product, period, issuer):
+    return SimpleNamespace(status="no_archive", value=None)
+
+
+BASE = dict(describe_aliases=lambda product, end: [], usd=_usd, confirm=None, ir=_no_ir,
+            layout=lambda url, product, period: SimpleNamespace(status="not_found"),
+            sellers=lambda product, period: SimpleNamespace(status="unknown", sellers=[], evidence=[]))
 
 
 def test_xbrl_answers_first_and_the_later_routes_do_not_run():
@@ -129,3 +135,65 @@ def test_a_printed_quarter_within_the_derived_spread_is_the_answer():
     far = SimpleNamespace(**{**vars(printed_figure), "value": 60e6})
     result = quarter_revenue("Calderon", "Q4 2013", "Acme", xbrl=lambda *a, **k: derived, earnings=lambda *a: far, **BASE)
     assert (result.route, result.value, result.plus_minus) == ("xbrl:full_year_less_nine_months", 52.048e6, 1000.0)
+
+
+def _seller(filer, cik="1"):
+    return SimpleNamespace(filer=filer, cik=cik, start=None, end=None, note=None)
+
+
+def test_with_no_issuer_the_ownership_timeline_names_whose_figure_to_read():
+    seen = []
+
+    def xbrl(name, period, issuer, **kwargs):
+        seen.append(issuer)
+        return _xbrl_found(name, period, issuer)
+    owners = lambda p, per: SimpleNamespace(status="single", sellers=[_seller("ACME PHARMA (CIK 1)")], evidence=["q"])
+    result = quarter_revenue("Calderon", "Q2 2023", xbrl=xbrl, **{**BASE, "sellers": owners})
+    assert seen == ["ACME PHARMA (CIK 1)"] and result.issuer == "ACME PHARMA (CIK 1)" and result.status == "found"
+
+
+def test_a_quarter_in_which_the_product_changed_hands_goes_to_review():
+    owners = lambda p, per: SimpleNamespace(status="split", sellers=[_seller("ACME (CIK 1)"), _seller("BETA (CIK 2)", "2")],
+                                            evidence=[])
+    result = quarter_revenue("Calderon", "Q2 2017", xbrl=_xbrl_found, **{**BASE, "sellers": owners})
+    assert result.status == "needs_review" and len(result.attempts[0]["sellers"]) == 2
+
+
+def test_the_layout_reader_answers_after_the_earnings_reader_declines():
+    reading = SimpleNamespace(status="not_found", filer="ACME PHARMA (CIK 1)", url="https://sec.example/ex99.htm",
+                              value=None, currency=None, row_quote=None)
+    declined = SimpleNamespace(status="not_found", readings=[reading], filer=None, later=False)
+    layout = lambda url, product, period: SimpleNamespace(status="accepted", value=954e6, currency="USD", url=url,
+                                                          row_label="Calderon")
+    result = quarter_revenue("Calderon", "Q4 2007", "Acme Pharma", xbrl=_miss, earnings=lambda *a: declined,
+                             **{**BASE, "layout": layout})
+    assert (result.route, result.value) == ("layout", 954e6)
+
+
+def test_the_issuers_own_archive_is_read_only_when_it_files_nothing_with_the_sec():
+    calls = []
+
+    def ir(product, period, issuer):
+        calls.append(issuer)
+        return SimpleNamespace(status="found", value=148e6, currency="CHF", url="https://ir.example/q2.pdf",
+                               method="direct", evidence="Calderon 148")
+    result = quarter_revenue("Calderon", "Q2 2011", "Beta AG", xbrl=_miss, earnings=_miss, **{**BASE, "ir": ir})
+    assert (result.route, result.currency) == ("ir_archive:direct", "CHF") and calls == ["Beta AG"]
+
+    on_sec = SimpleNamespace(status="not_found", filer=None, later=False,
+                             readings=[SimpleNamespace(status="not_found", filer="BETA AG (CIK 9)", url="u", value=None,
+                                                       currency=None, row_quote=None)])
+    calls.clear()
+    quarter_revenue("Calderon", "Q2 2011", "Beta AG", xbrl=_miss, earnings=lambda *a: on_sec, allow_search=False,
+                    **{**BASE, "ir": ir})
+    assert calls == []
+
+
+def test_booked_by_names_the_filer_whose_figure_is_wanted():
+    seen = []
+
+    def xbrl(name, period, issuer, **kwargs):
+        seen.append(issuer)
+        return _xbrl_found(name, period, issuer)
+    quarter_revenue("Calderon", "Q2 2023", "Acme Pharma", booked_by="Beta Bio", xbrl=xbrl, **BASE)
+    assert seen == ["Beta Bio"]
